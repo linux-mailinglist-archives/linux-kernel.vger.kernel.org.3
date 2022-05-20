@@ -2,105 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01BF052F078
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 18:22:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DE9852F07F
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 18:24:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351550AbiETQWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 12:22:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36998 "EHLO
+        id S1351573AbiETQXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 12:23:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231239AbiETQWU (ORCPT
+        with ESMTP id S1344508AbiETQXw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 12:22:20 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECB36B8BFD;
-        Fri, 20 May 2022 09:22:19 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id a38so5272727pgl.9;
-        Fri, 20 May 2022 09:22:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=GRvxtBN/C9wxWz5+ZhYYKzs9qnKHSKKBLmyxPMHQAq8=;
-        b=EVJShjdj2n3x/Soo5TXuwql9BCI8yhOyZtEgC2M223tHJRBeyW3JfqJKD16yOS8w/y
-         KPNdLNFwTdFgpYAJEH3nv7V24ne5X9pD0Jf+vLGi/INcnW3qI9H+YJNeIMOeaJf2tfMh
-         hvcFSndNB5EHwzp+uUtL0gBXHvkmp4PzqEHygYmFwkBV7cdjZcuMIp4QYc0YR3cmxnQq
-         t8b4jpNaPunP88msk0YHEGupLlzwC4T0r+/e9/mzb310q3xh05Bb7/aMlUGraFcei+LT
-         OSfIxVsUvBuYoVjJ6kaks1JWeKxAbcS2WpIxRtPWoK29Ucg28nNhegty33QujELsEFPg
-         FjgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=GRvxtBN/C9wxWz5+ZhYYKzs9qnKHSKKBLmyxPMHQAq8=;
-        b=zhg2ccfvTOOl7jHm+qaeQjyg4gHyczpNSWPPSn+NauKT1g46wybEbOjXZ2vqD7IFDq
-         BKiXJr0x+mv56C04iRpLrzdZowNHB1ADeInmlVtnsAahDAESOsNwi/21tQ6QMOCkXqei
-         pgpl76XNyv/Q0sXCNjYJn90asK85BwnJ8lZrkx6TcVRY2V5IVnO3mfuNxEpEk2R35AVb
-         Dy23imulf8xLDToX79CmS84I7pme09cBpI7bBKTg3yrlZp1R5iEmxMktXWj33oBfYRdl
-         +TCCe1FCfbIboGU+59KhtPgv+R4uEuImGW9qPMXOuPY0GFo0iccycglKq40Lo5lwu1Ho
-         eUFw==
-X-Gm-Message-State: AOAM530ENyl/ORISw3KNtTG6D/YkkAo1ea9BbGTnm0CsLRnlqU/XpUCV
-        m30xtE354xX85NHP0HiVDxw=
-X-Google-Smtp-Source: ABdhPJzFmTifJ7tfHIGxJCl5NOUo5AyBDgPrIqvsK0LvcAjT6ddjF9aC08Xm+T+kiHe/rfw04fQnDA==
-X-Received: by 2002:a05:6a00:114b:b0:4f7:915:3ec3 with SMTP id b11-20020a056a00114b00b004f709153ec3mr11099752pfm.8.1653063739326;
-        Fri, 20 May 2022 09:22:19 -0700 (PDT)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id cp19-20020a170902e79300b0015e8d4eb285sm5787012plb.207.2022.05.20.09.22.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 May 2022 09:22:18 -0700 (PDT)
-Message-ID: <912a5d2b-bc2d-677a-dd64-d66046fc734d@gmail.com>
-Date:   Fri, 20 May 2022 09:22:16 -0700
+        Fri, 20 May 2022 12:23:52 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C74A17CE57;
+        Fri, 20 May 2022 09:23:50 -0700 (PDT)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 373D8240002;
+        Fri, 20 May 2022 16:23:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1653063828;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lnXJNhghrx1dhcLkhDTNmBDZPflXUokalO1nWJ3s4+k=;
+        b=SKPLpt28Sb/Um45d4QG4H8g/rIibe8QVBogwAZ7BFs/5QKMl4zTzn754MGOOmkp6+Rlaxt
+        Dt+jAZ7hx6XFavaiVRdBnkgxVevohD1sP+EytpqorzkHV6mtkWrrvBvb480q62NScpvfA7
+        gEvf+CRn2Cw5yQoExikqQ8GyzKKgERbxQrDPnaiqlumVKo438lDAc4V7Le58Wv8DqNBuM1
+        zvI+rox7S7AV9nGup8VR02kPinVdmXU1puAwFxCkxCULXvQ6vHfrpA1cLt/pORVZp3hvui
+        LjERhJ2D1ZD5iDDPkb64Ea+2YEDCKRgFW+ypxzabzNFehFE4Yx9GruJJ9SN4cg==
+Date:   Fri, 20 May 2022 18:22:35 +0200
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?UTF-8?B?TWlxdcOobA==?= Raynal <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next v5 05/13] net: pcs: add Renesas MII converter
+ driver
+Message-ID: <20220520182235.0fadb7e6@fixe.home>
+In-Reply-To: <20220520155815.dtilf65h4dyo4md6@skbuf>
+References: <20220519153107.696864-1-clement.leger@bootlin.com>
+        <20220519153107.696864-6-clement.leger@bootlin.com>
+        <YoZvZj9sQL2GZAI3@shell.armlinux.org.uk>
+        <20220520095241.6bbccdf0@fixe.home>
+        <20220520084914.5x6bfu4qaza4tqcz@skbuf>
+        <20220520172244.1f17f736@fixe.home>
+        <20220520154440.jtswi6oyjpseffpu@skbuf>
+        <20220520174934.3b9feb88@fixe.home>
+        <20220520155815.dtilf65h4dyo4md6@skbuf>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 1/1] perf vendors events arm64: Update Cortex A57/A72
-Content-Language: en-US
-To:     Nick Forrington <nick.forrington@arm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org
-Cc:     John Garry <john.garry@huawei.com>, Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        James Clark <james.clark@arm.com>,
-        Andrew Kilroy <andrew.kilroy@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-References: <20220517135805.313184-1-nick.forrington@arm.com>
- <20220517135805.313184-2-nick.forrington@arm.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220517135805.313184-2-nick.forrington@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Le Fri, 20 May 2022 18:58:15 +0300,
+Vladimir Oltean <olteanv@gmail.com> a =C3=A9crit :
 
+> On Fri, May 20, 2022 at 05:49:34PM +0200, Cl=C3=A9ment L=C3=A9ger wrote:
+> > Le Fri, 20 May 2022 18:44:40 +0300,
+> > Vladimir Oltean <olteanv@gmail.com> a =C3=A9crit :
+> >  =20
+> > > On Fri, May 20, 2022 at 05:22:44PM +0200, Cl=C3=A9ment L=C3=A9ger wro=
+te: =20
+> > > > Le Fri, 20 May 2022 11:49:14 +0300,
+> > > > Vladimir Oltean <olteanv@gmail.com> a =C3=A9crit :
+> > > >   =20
+> > > > > On Fri, May 20, 2022 at 09:52:41AM +0200, Cl=C3=A9ment L=C3=A9ger=
+ wrote:   =20
+> > > > > > > Also, as a request to unbind this driver would be disasterous=
+ to users,
+> > > > > > > I think you should set ".suppress_bind_attrs =3D true" to pre=
+vent the
+> > > > > > > sysfs bind/unbind facility being available. This doesn't comp=
+letely
+> > > > > > > solve the problem.   =20
+> > > > > >
+> > > > > > Acked. What should I do to make it more robust ? Should I use a
+> > > > > > refcount per pdev and check that in the remove() callback to av=
+oid
+> > > > > > removing the pdev if used ?   =20
+> > > > >
+> > > > > I wonder, if you call device_link_add(ds->dev, miic->dev, DL_FLAG=
+_AUTOREMOVE_CONSUMER),
+> > > > > wouldn't that be enough to auto-unbind the DSA driver when the MII
+> > > > > converter driver unbinds?   =20
+> > > >
+> > > > I looiked at that a bit and I'm not sure how to achieve that cleanl=
+y. If
+> > > > I need to create this link, then I need to do it once for the dsa s=
+witch
+> > > > device. However, currently, the way I get the references to the MII
+> > > > converter are via the pcs-handle properties which are for each port.
+> > > >
+> > > > So, I'm not sure creating the link multiple times in miic_create() =
+would
+> > > > be ok and also, I'm not sure how to create the link once without ad=
+ding
+> > > > a specific property which points on the MII converter node and use =
+that
+> > > > to create the link by adding miic_device_add_link() for instance.
+> > > >
+> > > > Do you have any preference ?   =20
+> > >=20
+> > > The simplest (although not the most elegant) way would probably be to
+> > > pass the ds->dev as a second argument to miic_create(), and call
+> > > device_link_add() multiple times, letting all but the first call fail,
+> > > and ignoring the resulting NULL return code. Maybe others have a bett=
+er idea. =20
+> >=20
+> > That's indeed what I started to do although it's nasty to say the
+> > least... Moreover, the device_link_del() calls in miic_destroy() would
+> > have to be carefully made after all miic ports have been
+> > destroyed. Not sure this is going to be cleaner ! I'll try to think
+> > about it a bit more. =20
+>=20
+> Wait... the whole idea with AUTOREMOVE_CONSUMER is that you _don't_
+> remove the device link.. you let it sit there such that the device core
+> knows there are other consumers it needs to remove when this driver
+> unbinds from the device.
 
-On 5/17/2022 6:58 AM, Nick Forrington wrote:
-> Categorise and add missing PMU events for Cortex-A57/A72, based on:
-> https://github.com/ARM-software/data/blob/master/pmu/cortex-a57.json
-> https://github.com/ARM-software/data/blob/master/pmu/cortex-a72.json
-> 
-> These contain the same events, and are based on the Arm Technical
-> Reference Manuals for Cortex-A57 and Cortex-A72.
-> 
-> Signed-off-by: Nick Forrington <nick.forrington@arm.com>
+Hum ok, got it, so let's try this solution.
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+--=20
+Cl=C3=A9ment L=C3=A9ger,
+Embedded Linux and Kernel engineer at Bootlin
+https://bootlin.com

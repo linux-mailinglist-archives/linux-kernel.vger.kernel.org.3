@@ -2,100 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3341352F57E
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 00:10:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC61A52F582
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 00:10:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353825AbiETWKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 18:10:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50036 "EHLO
+        id S1353839AbiETWKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 18:10:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353796AbiETWJ6 (ORCPT
+        with ESMTP id S1353796AbiETWKQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 18:09:58 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F078719592A
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 15:09:56 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id e2so1540278wrc.1
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 15:09:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=philpotter-co-uk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EXIataNBxQzsiHab2Zt90bviLe04cA23imKlve17OxQ=;
-        b=kuJgYj5jPU9tZUpCMxOtSXfcrr7x4eWnvsbtT6Hd4x+edQlyh/Xj0CYwmwjo0R653Z
-         ToFH++1DUvVUy1z9rdtLZ/ZkJpOO/FsY3pds8cjiagSlPyLgfbssMAlfHiIZ9JOc+i6M
-         eKUPowmfoKNUydOQNeG1D4eo0RAM9qOVMeT/W3GdzTSWRi26GC/WFvWyBJEcsnRYlg4d
-         LMXq+D8+xivu0cge/UlNO+dK4GsNtqJLovaDtu1Mp3PGxsIrfirJtDRPQeMUo+0+FdmY
-         MatczTr+x4hbeuGecMVS1CyxRX+YiEmbb0VKBgGr6000akc8xUJAgKkN8iW88vDaefZ5
-         LOMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EXIataNBxQzsiHab2Zt90bviLe04cA23imKlve17OxQ=;
-        b=pn860W6AnpPumqnqKwKysTHiiocSMtyuxVPYAk6dG3t4Z4TsGi6VGT67Nb4UeeANZS
-         N5En7JWyN/nZOHyfO/RK+8buMLuzeurkS0hb5VnlshkSsWqwFniegGCc99FITiN3e9eA
-         kH8DSTEpuqbdvlsXsliURK83usvUPjpY0sPSlJMGMhycMwLVgXiOZOdCcMl6Mv/FeEp2
-         znfTMbukvHNvs0jZfpv3t3sQs7lNOyvZ6NPJdWjhW5fbYJr/AKr0yKqv0Eu9U6f49gSr
-         DvQKbOH1J76BXdbG6mnStNCUidfkH3nQpLC/mjKB0WHhEae82OXxEN/KoDRbVqTXxNyG
-         PA8Q==
-X-Gm-Message-State: AOAM531gOO8nJvMezmy2l6JuUIC+E1VafoCSUtAfNx+hXsfMUyYhXXEh
-        uYI/VSTC12y++C5kVfF9zZXW8A==
-X-Google-Smtp-Source: ABdhPJxr/aIMYpp6YAQxg9nkLfWM7p6UafKUTFg7cnGAsHEUpSbFOyCr2rFdAEtDXeelrbyfwKkVfg==
-X-Received: by 2002:a05:6000:1a8e:b0:20c:be8c:10a4 with SMTP id f14-20020a0560001a8e00b0020cbe8c10a4mr9633223wry.437.1653084595472;
-        Fri, 20 May 2022 15:09:55 -0700 (PDT)
-Received: from localhost.localdomain (3.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.6.1.f.d.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:df16::3])
-        by smtp.gmail.com with ESMTPSA id b3-20020a05600c4e0300b003973d425a7fsm1677206wmq.41.2022.05.20.15.09.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 15:09:54 -0700 (PDT)
-From:   Phillip Potter <phil@philpotter.co.uk>
-To:     gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, straube.linux@gmail.com,
-        martin@kaiser.cx, paskripkin@gmail.com,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: r8188eu: convert pr_info_once call in core/rtw_fw.c
-Date:   Fri, 20 May 2022 23:09:53 +0100
-Message-Id: <20220520220953.11840-1-phil@philpotter.co.uk>
-X-Mailer: git-send-email 2.35.3
+        Fri, 20 May 2022 18:10:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E5061A075F;
+        Fri, 20 May 2022 15:10:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A01D4B82E29;
+        Fri, 20 May 2022 22:10:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5CA44C34115;
+        Fri, 20 May 2022 22:10:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653084612;
+        bh=clr5/eeqDOssSIb7q2BDlSM1acoinPQZnJpbFkRjumo=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=TvP2S582NxDvAdUUOztoxtb6+Sq6arO/UZX0OwrvX1hz6DHBni8C+xpp4bb3GEma/
+         Bn7HLxdekdU43LVXsBviOS3pWP/hKPeptTOvmRE0csak7KcDhiCQMUeRCEuSAOfRkN
+         NTvrTEFghdeWoarIGz3MiTaXKD1dL+yn0TsJCnYuN1mghhEI80g1FkZ9biMGZ+e4ba
+         tmQUQX/JgdJ2vGFqlUifg13K5p679yA1D3ZRrs0tUSUUBuMK9qm8UY6YZgxSu4IunC
+         3TS08TW4gsSTzXPEcFf5WFFQocV79RwjVHgjMYTwvoALuGutbQXlD1tv1X6eJ4subf
+         VTTSrHw/rxClQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3B42AF03935;
+        Fri, 20 May 2022 22:10:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: fix some bugs in
+ map_lookup_percpu_elem testcase
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165308461223.21331.279651299076160105.git-patchwork-notify@kernel.org>
+Date:   Fri, 20 May 2022 22:10:12 +0000
+References: <20220518025053.20492-1-zhoufeng.zf@bytedance.com>
+In-Reply-To: <20220518025053.20492-1-zhoufeng.zf@bytedance.com>
+To:     Feng Zhou <zhoufeng.zf@bytedance.com>
+Cc:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, rostedt@goodmis.org,
+        mingo@redhat.com, jolsa@kernel.org, davemarchevsky@fb.com,
+        joannekoong@fb.com, geliang.tang@suse.com,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        duanxiongchun@bytedance.com, songmuchun@bytedance.com,
+        wangdongdong.6@bytedance.com, cong.wang@bytedance.com,
+        zhouchengming@bytedance.com, yosryahmed@google.com
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert pr_info_once call in core/rtw_fw.c to a dev_info_once call, as
-ultimately, this results in the printing of the driver name anyway
-(r8188eu) which is equally clear and removes the need for the "R8188EU: "
-part of the format string.
+Hello:
 
-Suggested-by: Pavel Skripkin <paskripkin@gmail.com>
-Signed-off-by: Phillip Potter <phil@philpotter.co.uk>
----
- drivers/staging/r8188eu/core/rtw_fw.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+This patch was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
 
-diff --git a/drivers/staging/r8188eu/core/rtw_fw.c b/drivers/staging/r8188eu/core/rtw_fw.c
-index 0451e5177644..87dc0e97652a 100644
---- a/drivers/staging/r8188eu/core/rtw_fw.c
-+++ b/drivers/staging/r8188eu/core/rtw_fw.c
-@@ -259,9 +259,9 @@ int rtl8188e_firmware_download(struct adapter *padapter)
- 	fwhdr = (struct rt_firmware_hdr *)dvobj->firmware.data;
- 
- 	if (IS_FW_HEADER_EXIST(fwhdr)) {
--		pr_info_once("R8188EU: Firmware Version %d, SubVersion %d, Signature 0x%x\n",
--			     le16_to_cpu(fwhdr->version), fwhdr->subversion,
--			     le16_to_cpu(fwhdr->signature));
-+		dev_info_once(device, "Firmware Version %d, SubVersion %d, Signature 0x%x\n",
-+			      le16_to_cpu(fwhdr->version), fwhdr->subversion,
-+			      le16_to_cpu(fwhdr->signature));
- 
- 		fw_data = fw_data + sizeof(struct rt_firmware_hdr);
- 		fw_size = fw_size - sizeof(struct rt_firmware_hdr);
+On Wed, 18 May 2022 10:50:53 +0800 you wrote:
+> From: Feng Zhou <zhoufeng.zf@bytedance.com>
+> 
+> comments from Andrii Nakryiko, details in here:
+> https://lore.kernel.org/lkml/20220511093854.411-1-zhoufeng.zf@bytedance.com/T/
+> 
+> use /* */ instead of //
+> use libbpf_num_possible_cpus() instead of sysconf(_SC_NPROCESSORS_ONLN)
+> use 8 bytes for value size
+> fix memory leak
+> use ASSERT_EQ instead of ASSERT_OK
+> add bpf_loop to fetch values on each possible CPU
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next,v2] selftests/bpf: fix some bugs in map_lookup_percpu_elem testcase
+    https://git.kernel.org/bpf/bpf-next/c/7aa424e02a04
+
+You are awesome, thank you!
 -- 
-2.35.3
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

@@ -2,146 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79CB652E1F9
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 03:31:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC1CF52E1FB
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 03:32:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344431AbiETBbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 21:31:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47778 "EHLO
+        id S1344485AbiETBcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 21:32:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344086AbiETBbf (ORCPT
+        with ESMTP id S1344481AbiETBcD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 21:31:35 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90AC895A08;
-        Thu, 19 May 2022 18:31:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653010293; x=1684546293;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=kyp3JRERShg4eTuUYYWrAsJejoTn+bDOBMBL5rwGgCI=;
-  b=dT8iAA//YoHwWdRowTKHH8WHp8WGDVOwLghm+geUmHqffKNjTKV4P3F+
-   Nhxxz0sSEvO5lNg4eWj/EhnJn1/Fm5jA3oJYxM5bD4We3r00QDhS7q7W3
-   tvMwU+sVRgM9uujUvA1Fnq6b9YxHPU8UZ7XK/E7aoL9PJeP0j9mXBleWF
-   nMIV4+UmT87bWuac8cPGoNlpFkvtLBWoR69mJQY7BM9aIclJ85e2s6Tio
-   /c6PhC0TnVr+2PE2zLxyUof7QaW64KeypY+vMENlZUG7xaLV+S7z6XNTs
-   gWjLSdFukn6CZ9ThKGwE2pPR3PE0Ws1dqvy19K4GhI1E0u+2tPRR3Bnr7
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="333067384"
-X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="333067384"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 18:31:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="524396205"
-Received: from unknown (HELO localhost.localdomain) ([10.226.216.90])
-  by orsmga003.jf.intel.com with ESMTP; 19 May 2022 18:31:24 -0700
-From:   tien.sung.ang@intel.com
-To:     christophe.jaillet@wanadoo.fr
-Cc:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
-        trix@redhat.com, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Ang Tien Sung <tien.sung.ang@intel.com>
-Subject: [PATCH v2] fpga: altera-cvp: Truncated bitstream error support
-Date:   Fri, 20 May 2022 09:30:40 +0800
-Message-Id: <20220520013040.2920835-1-tien.sung.ang@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <6939d35f-36a0-568e-bfec-4dd2e3a48604@wanadoo.fr>
-References: <6939d35f-36a0-568e-bfec-4dd2e3a48604@wanadoo.fr>
+        Thu, 19 May 2022 21:32:03 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A589AE49
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 18:32:02 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id nk9-20020a17090b194900b001df2fcdc165so10253367pjb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 18:32:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=T/ssDZXDd7/eY1p7k+SveQN0HGUJT39mZvyN4cT8bOs=;
+        b=MGDrvFhqVt1UaJVCqugH5mSYTS/PN5XNnCCEu83rTagPjTOjW5FKf8YAGySUgotOpx
+         R3egCdeVk0b6TNnmJhK+OHqnSKgSaPkZTwuf4N28K1EclMUtZW2ngCNJ9GKWb1M09NNM
+         p6yPYpspcTAIYLpqF9zbExjFFPXIWKrLwE6abB+MJ8B1ktXVMPJtQwAWYC8TOV0MK+vM
+         AnXXkajSjSnTpVMukTlLUDEeG1339zUOhmlTBh0CiSenS7giG2aExVZH20O7ZMbfWKJg
+         UShqmt0jZQaBtxnWY5z9PYRHcmdXTH3SaTwt0NOP8PeoCITIujj0O0klbRScpYOUoCfw
+         6Dlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=T/ssDZXDd7/eY1p7k+SveQN0HGUJT39mZvyN4cT8bOs=;
+        b=DdMW4pelUCm3a2T70lZ6+7O0U7l2ZfTv4TkHMLCYlaWnvBRnMx+BKH+pex+M4MH9aD
+         fwyBsPjhQDsqXum8QSZl/c1mOWxkbVzlb+WDGLvZGqg9SuMSJUErhyAtV55gAmfCfm5P
+         HmIzLVEhRU7nlsdmoeT2vYpdsKhWQ/6DSxXMTy+BgtQ44X4Atm83zHrBg9DTse5gE8AO
+         r6Rm6iGJMr50Zpb4PRGjuVvpXOqb9LMmCh4RHkbBUFNBgI/s4Izz+O3GSxLmbjg43Vy6
+         3n598mUxwCgW3F5RpxWrBl/IyqnwxTWl+rVrrUGp6UBEyxTgHVgjxUeVRzebfqnU2yYi
+         oasA==
+X-Gm-Message-State: AOAM531eu/lBv/q8p65yE4AtZSkCR884IJh6LiTveoEql+bvowYG/k7W
+        cA6OfbDUGGkMfPL5TCDTuVXudSctQvA5rXX9nX9l5gHyR0yu7g==
+X-Google-Smtp-Source: ABdhPJyUX6MZJuJbZsq4Wq1zFkX71UftjVuEG+BXp3xVM0yqi40RJuUAsM5Ayphy7+jawFiI5Sv+Y1md+q6m85oOssY=
+X-Received: by 2002:a17:90b:1d86:b0:1df:f670:dc51 with SMTP id
+ pf6-20020a17090b1d8600b001dff670dc51mr1126375pjb.126.1653010321917; Thu, 19
+ May 2022 18:32:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <Ynv7+VG+T2y9rpdk@carbon> <a17be77f-dc3b-d69a-16e2-f7309959c525@openvz.org>
+In-Reply-To: <a17be77f-dc3b-d69a-16e2-f7309959c525@openvz.org>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Thu, 19 May 2022 18:31:50 -0700
+Message-ID: <CALvZod5pFkm36r1nT2vmUX+Q1hy-MTKaGXOXpcT0Wra1oU=etw@mail.gmail.com>
+Subject: Re: [PATCH 3/4] memcg: enable accounting for struct cgroup
+To:     Vasily Averin <vvs@openvz.org>
+Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        kernel@openvz.org, LKML <linux-kernel@vger.kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@suse.com>,
+        Cgroups <cgroups@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ang Tien Sung <tien.sung.ang@intel.com>
+On Fri, May 13, 2022 at 8:52 AM Vasily Averin <vvs@openvz.org> wrote:
+>
+> Creating each new cgroup allocates 4Kb for struct cgroup. This is the
+> largest memory allocation in this scenario and is epecially important
+> for small VMs with 1-2 CPUs.
+>
+> Accounting of this memory helps to avoid misuse inside memcg-limited
+> containers.
+>
+> Signed-off-by: Vasily Averin <vvs@openvz.org>
+> ---
+>  kernel/cgroup/cgroup.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+> index adb820e98f24..7595127c5b3a 100644
+> --- a/kernel/cgroup/cgroup.c
+> +++ b/kernel/cgroup/cgroup.c
+> @@ -5353,7 +5353,7 @@ static struct cgroup *cgroup_create(struct cgroup *parent, const char *name,
+>
+>         /* allocate the cgroup and its ID, 0 is reserved for the root */
+>         cgrp = kzalloc(struct_size(cgrp, ancestor_ids, (level + 1)),
+> -                      GFP_KERNEL);
+> +                      GFP_KERNEL_ACCOUNT);
+>         if (!cgrp)
+>                 return ERR_PTR(-ENOMEM);
+>
 
-To support the error handling of a truncated bitstream sent.
-The current AIB CvP firmware is not capable of handling a
-data stream smaller than 4096bytes. The firmware's limitation
-causes a hung-up as it's DMA engine waits forever for the
-completion of the instructed 4096bytes.
-To resolve this design limitation, both firmware and CvP
-driver made several changes. At the CvP driver, we just
-have to ensure that anything lesser than 4096bytes are
-padded with extra bytes. The CvP will then, initiate the
-tear-down by clearing the START_XFER and CVP_CONFIG bits.
-We should also check for CVP_ERROR during the CvP completion.
-A send_buf which is always 4096bytes is used to copy the
-data during every transaction.
-
-Signed-off-by: Ang Tien Sung <tien.sung.ang@intel.com>
----
-changelog v2:
-* Alignment fix parameter 'conf' altera_cvp_send_block
----
- drivers/fpga/altera-cvp.c | 24 +++++++++++++++++++-----
- 1 file changed, 19 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/fpga/altera-cvp.c b/drivers/fpga/altera-cvp.c
-index 4ffb9da537d8..5169f9bcd726 100644
---- a/drivers/fpga/altera-cvp.c
-+++ b/drivers/fpga/altera-cvp.c
-@@ -81,6 +81,7 @@ struct altera_cvp_conf {
- 	u8			numclks;
- 	u32			sent_packets;
- 	u32			vsec_offset;
-+	u8			*send_buf;
- 	const struct cvp_priv	*priv;
- };
- 
-@@ -453,7 +454,11 @@ static int altera_cvp_write(struct fpga_manager *mgr, const char *buf,
- 		}
- 
- 		len = min(conf->priv->block_size, remaining);
--		altera_cvp_send_block(conf, data, len);
-+		/* Copy the requested host data into the transmit buffer */
-+
-+		memcpy(conf->send_buf, data, len);
-+		altera_cvp_send_block(conf, (const u32 *)conf->send_buf,
-+				      conf->priv->block_size);
- 		data += len / sizeof(u32);
- 		done += len;
- 		remaining -= len;
-@@ -492,10 +497,13 @@ static int altera_cvp_write_complete(struct fpga_manager *mgr,
- 	if (ret)
- 		return ret;
- 
--	/* STEP 16 - check CVP_CONFIG_ERROR_LATCHED bit */
--	altera_read_config_dword(conf, VSE_UNCOR_ERR_STATUS, &val);
--	if (val & VSE_UNCOR_ERR_CVP_CFG_ERR) {
--		dev_err(&mgr->dev, "detected CVP_CONFIG_ERROR_LATCHED!\n");
-+	/*
-+	 * STEP 16 - If bitstream error (truncated/miss-matched),
-+	 * we shall exit here.
-+	 */
-+	ret = altera_read_config_dword(conf, VSE_CVP_STATUS, &val);
-+	if (ret || (val & VSE_CVP_STATUS_CFG_ERR)) {
-+		dev_err(&mgr->dev, "CVP_CONFIG_ERROR!\n");
- 		return -EPROTO;
- 	}
- 
-@@ -661,6 +669,12 @@ static int altera_cvp_probe(struct pci_dev *pdev,
- 
- 	pci_set_drvdata(pdev, mgr);
- 
-+	/* Allocate the 4096 block size transmit buffer */
-+	conf->send_buf = devm_kzalloc(&pdev->dev, conf->priv->block_size, GFP_KERNEL);
-+	if (!conf->send_buf) {
-+		ret = -ENOMEM;
-+		goto err_unmap;
-+	}
- 	return 0;
- 
- err_unmap:
--- 
-2.25.1
-
+Please include cgroup_rstat_cpu as well.

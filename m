@@ -2,115 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39B4F52E182
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 03:06:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04ABA52E184
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 03:07:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344199AbiETBGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 21:06:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47846 "EHLO
+        id S1344208AbiETBHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 21:07:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344210AbiETBGB (ORCPT
+        with ESMTP id S1344201AbiETBHM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 21:06:01 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B61522BCC
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 18:06:00 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id i8so6139866plr.13
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 18:06:00 -0700 (PDT)
+        Thu, 19 May 2022 21:07:12 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0AFB91567
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 18:07:10 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2ff37db94e8so59046237b3.16
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 18:07:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=oQsGBHyg4anWhL9luyNRj4RxEeeygNWGDSk1a1ys5Tk=;
-        b=MNGMyo/iFIrtWF+ECjFPBilsERxattchuXUT025XovM9k07HVR3RMo4VWOOU+cEPCD
-         ZJU13q/OhRwAfhb0DkD0zanT9Ee8X6EOg4a+AG9tuNPXRSnt/mMzUn92eKl0FarYUaru
-         FsjiCOLqzKAyrzNSOmxVVRSh3lYS5EUWvCrZrkK6/tNcJyOeLtsjZ6kGAM4Jprjc4lkZ
-         JW2/KxbQqyo964jn+6p6lRfujN03/at+gow//h7gTd2+rl5kcn0zLk1vwFhQwDuOOhM/
-         /RnVWMyIWjE7Lx4ABkL4SGtg0HomDaQQ9ynsUPSjGNwinJw1F0+qpJ3mli6qpAJp2VTm
-         bmmw==
+        d=google.com; s=20210112;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=G6gtvqYNjnVwht1zFDxId2+CvU+SMvS0Nm0E4p7o9cM=;
+        b=Gq0rw+MrvLWVPrWEBXryZB1jQV/V1G9kqtZ5HVH9URkE6LQh50hBnHJMNqkGngRE1B
+         OKQFxrvMTob/C1c6Prc225WuKjE8WCTLx3fHin7rlnzNSeIOtlGLTu74nl6iciYuNa6V
+         wKGClUZev9JgvVbePXUNUNBu7Uz1/J49jE9sWsl47yg7HwP0TiOqv882QwVKD+FEXZY5
+         VRHfGsaPeQ8uLVWv02vR138ZcXZ+G+eh5CxwWdQnlEieVAYcg1VZgbsIj+VW85zoNOBM
+         wo1vIABj/7CfTuXAAnloVwGNjfYF36gl6mrEArXq+HVLQCpFYG1ejzHnmXk3KpUV9HEj
+         Th3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=oQsGBHyg4anWhL9luyNRj4RxEeeygNWGDSk1a1ys5Tk=;
-        b=iuZneZ58JzPLXl2qNQruld9+WYTsY1H6o9A90V6OWmgNyFmgGYSfGMkyT9Gu5Lomjn
-         QfCm7nwfYOQjZoFWkvFAjqQtMIGJBqZUzAU9zMqctWnUQJzdWlhWiFdKTqUbIyDcAaRm
-         AqPTFCQcm/B0pVaBYffREqw/+o1w8q6TX0EAOpdW0PhMslfeeqEdzNfoOiYM+kmZ9wkg
-         t62eboz0F3lDwfmOmaxbffqwwU88lZ1Ph3XClbMOZpyJyjlJIeqPwHyUaN13QIuKv4WN
-         gjPwmcLeYL4vfGWVayp7RuvvjPUBZElLHdAF1YiRq4kAOnGV3lw/GGmL5panAYu9nHBM
-         zyDQ==
-X-Gm-Message-State: AOAM53173nvta3bgOsme7/Gwlw7Vh4QACEgp3cayS9ffM+UtIDPD+KiE
-        +jY2a7IyKHDkZoivGCv2l5UOgg==
-X-Google-Smtp-Source: ABdhPJz3u5e4/xj2hM37upFEiwGVZ7O6bXtKDVpC84G3mV+nWP9TNVSQvt7BYFSUW4xR+17smPosuQ==
-X-Received: by 2002:a17:90b:4d11:b0:1dc:ec4f:a19c with SMTP id mw17-20020a17090b4d1100b001dcec4fa19cmr8587931pjb.117.1653008759671;
-        Thu, 19 May 2022 18:05:59 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 194-20020a6306cb000000b003db7de758besm4190792pgg.5.2022.05.19.18.05.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 May 2022 18:05:59 -0700 (PDT)
-Message-ID: <8f890747-c37f-2fd4-2428-4a9ffc865cac@kernel.dk>
-Date:   Thu, 19 May 2022 19:05:57 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCHSET 0/2] Fix splice from random/urandom
-Content-Language: en-US
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Theodore Ts'o <tytso@mit.edu>, Christoph Hellwig <hch@lst.de>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <YobPB27Ozl7uqUEu@zx2c4.com>
- <3553b935-0aca-3d3e-2495-12288f601b53@kernel.dk>
- <CAHmME9riX+YuqSVp64bhy=nX08_7d-m8es82BHy2qh-oWkqa8Q@mail.gmail.com>
- <aa7ae20c-a2d7-4959-b5fb-efe7b56294f1@kernel.dk>
- <CAHmME9oLPxzsnRezFPFVssmedOQUi2E9NWFbakEe92=Hdk1QuQ@mail.gmail.com>
- <03c7d6c9-0c86-d4b6-357d-d51be0143c80@kernel.dk>
- <CAHmME9qVQNkx-0J8rq_0ZVaSR+-eEgOUtcZhvq5dAY4-kJxSAA@mail.gmail.com>
- <13899409-e81b-8689-3380-249de46c0b6f@kernel.dk> <YobldmDn6pU9mr4f@zx2c4.com>
- <84d073aa-9937-1a58-dd7a-b1828874c21a@kernel.dk> <YoboEokc00YACuha@zx2c4.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <YoboEokc00YACuha@zx2c4.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=G6gtvqYNjnVwht1zFDxId2+CvU+SMvS0Nm0E4p7o9cM=;
+        b=B+OJdI2HUHnZWQkAWkWxSD7SNMVWvSLxVFvevv84i21+Uzdyma850EWLY0g6vY5Uk0
+         wD6HhHdpYyxixccEc5HXZnWdHESOew120pzU0FFK8IqdzeJ2Ip4Y9Yecvoa09qSxbRvl
+         DxhWijCwbR9utvwoylFQf1dcK8t57GhGB4hlh+I5pyKlTu57aHU6NzA4A4nsVrWLvRy8
+         BUsBcaifb90G/ZQv1ISBGjFGjarDABoWz/1FHfBzZxEx/Cd7mOiFHn/5skjRtgZZK78n
+         8ih4VnWf/lXxaXk11jgsUyCVuumNoLLtCRwNdmI26nW0xfx56jGeRUA/SMd7SnP+A3/b
+         QRgg==
+X-Gm-Message-State: AOAM533OCxzgZU2R8hHpYvD7obP+Hgs1dTHQn28fYemQu4nEeq/Ex3R4
+        bXVEZ8rNM2Ahox/DxxvjRHoFV3rVSDvNdA==
+X-Google-Smtp-Source: ABdhPJyR9Z86DoOKmunyVf1W/6GIyEHZTsm6haOiAELQ00SfT9U7iHEZekEdan2CrSC96iDk6GNAkAcC4XrGfQ==
+X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:28b])
+ (user=shakeelb job=sendgmr) by 2002:a25:2f16:0:b0:64c:b761:b440 with SMTP id
+ v22-20020a252f16000000b0064cb761b440mr7560583ybv.359.1653008830081; Thu, 19
+ May 2022 18:07:10 -0700 (PDT)
+Date:   Fri, 20 May 2022 01:07:07 +0000
+In-Reply-To: <212f1b74-7d4e-29f2-9e92-2a1820beff61@openvz.org>
+Message-Id: <20220520010707.77z5blxpbsddwmyo@google.com>
+Mime-Version: 1.0
+References: <Ynv7+VG+T2y9rpdk@carbon> <212f1b74-7d4e-29f2-9e92-2a1820beff61@openvz.org>
+Subject: Re: [PATCH 1/4] memcg: enable accounting for large allocations in mem_cgroup_css_alloc
+From:   Shakeel Butt <shakeelb@google.com>
+To:     Vasily Averin <vvs@openvz.org>
+Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
+        "Michal =?utf-8?Q?Koutn=C3=BD?=" <mkoutny@suse.com>,
+        kernel@openvz.org, linux-kernel@vger.kernel.org,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/19/22 7:00 PM, Jason A. Donenfeld wrote:
-> Hi Jens,
+On Fri, May 13, 2022 at 06:51:41PM +0300, Vasily Averin wrote:
+> cgroup mkdir can be misused inside memcg limited container. It can allocate
+> a lot of host memory without memcg accounting, cause global memory shortage
+> and force OOM to kill random host process.
 > 
-> On Thu, May 19, 2022 at 06:56:12PM -0600, Jens Axboe wrote:
->> On 5/19/22 6:48 PM, Jason A. Donenfeld wrote:
->>> sendfile() returns -EINVAL even with your patches. Only splicing to pipes
->>> seems to work.
->>
->> Huh, that really should work. Are you trying to sendfile() to random? If
->> so, you need that last write_iter patch too, and add the splice_write as
->> I mentioned.
->  
-> No, I've only tried the read side so far. I made a little program:
+> Below [1] is result of mkdir /sys/fs/cgroup/test tracing on VM with 4 cpus
 > 
-> #include <sys/sendfile.h>
-> #include <stdio.h>
+> number	bytes	$1*$2	sum	note	call_site
+> of	alloc
+> allocs
+> ------------------------------------------------------------
+> 1       14448   14448   14448   =       percpu_alloc_percpu:
+> 1       8192    8192    22640           (mem_cgroup_css_alloc+0x54)
+> 49      128     6272    28912           (__kernfs_new_node+0x4e)
+> 49      96      4704    33616           (simple_xattr_alloc+0x2c)
+> 49      88      4312    37928           (__kernfs_iattrs+0x56)
+> 1       4096    4096    42024           (cgroup_mkdir+0xc7)
+> 1       3840    3840    45864   =       percpu_alloc_percpu:
+> 4       512     2048    47912           (alloc_fair_sched_group+0x166)
+> 4       512     2048    49960           (alloc_fair_sched_group+0x139)
+> 1       2048    2048    52008           (mem_cgroup_css_alloc+0x109)
+> 	[smaller objects skipped]
+> ---
+> Total			61728
 > 
-> int main(int argc, char *argv[])
-> {
->         ssize_t s = sendfile(1, 0, NULL, 0xffff);
->         fprintf(stderr, "ret: %zd\n", s);
->         return 0;
-> }
+> '=' --  accounted allocations
 > 
-> Then I ran `./a.out < /dev/urandom > /dev/null`. Fails. OTOH, if I
-> replace /dev/urandom with an ordinary file, it succeeds.
+> This patch enabled accounting for one of the main memory hogs in this
+> experiment: allocation which are called inside mem_cgroup_css_alloc()
+> 
+> Signed-off-by: Vasily Averin <vvs@openvz.org>
+> Link: [1] https://lore.kernel.org/all/1aa4cd22-fcb6-0e8d-a1c6-23661d618864@openvz.org/
+> 
 
-Yeah I reproduced the same, doing it the other way works fine. Curious
-enough to see what it is, looking into it.
-
--- 
-Jens Axboe
-
+Acked-by: Shakeel Butt <shakeelb@google.com>

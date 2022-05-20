@@ -2,133 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CFBC52ECB2
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 14:53:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAB1852ECB5
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 14:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349639AbiETMxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 08:53:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41694 "EHLO
+        id S1344516AbiETMxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 08:53:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237024AbiETMxH (ORCPT
+        with ESMTP id S236511AbiETMx3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 08:53:07 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8310D65D09
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 05:53:06 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id n8so7295498plh.1
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 05:53:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=K48joKWWADzr7Z35QkCVv+Jn/yutrM6gsvgQnkpKmgg=;
-        b=nunV+LdbUf7j720DSbCSghOqk0h+xc/4NNS65gbBL3kzNHxP4rcBJuOI0Fm6k93XMR
-         Zt/SOAvlU791zjrXyYI7u5SRT5mvnnkwwfqwVPPPUehWRgVdGfNucC5jOeT1OyWeWv75
-         Hs7IPHPKhtUj8ewpZgV8cvgu8L9nXEev/IyjhCYGjBhkUbTLJRO+Q1tYGFfOmiLM+Hft
-         YRT/YgmLj6weisreBPK5SkasAVgDI7vMXvwFDrCxSRsdksTGgU+sQj6lH0ShrHVNxO6q
-         n4zICyhRJZYdtbs4eN6ek8bIPIjZu9FqGfodRtxmqOjiJJhxCGS2L+gFVIJ/c1VGeEbV
-         x3VA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=K48joKWWADzr7Z35QkCVv+Jn/yutrM6gsvgQnkpKmgg=;
-        b=in4B0ydyZ0L9RJr09DzgOI8C/PbgeeK3r9MAJml7b/onvyWUd3aF7EVxqM99rxAUMB
-         ptO8h0h7vbYDfpuJNkzfpbvrhJPuo8VeNhT1xERGAZ4ZIaHWIO6VKXIcqK8HPfC9aHP6
-         VlN9nk/qCqotiSGYe4OpHK4223LnnziZpROJqq5Xv1G7z4zQk1UsUSsdzg571ypVdt3f
-         jof+UEQEh/pIHy3vl+MZiu9eI7YO1qrU1zgcIfZwRg8MNBFkXZzD/43RwVNQG7y/nrCP
-         BjtT57NuoPpR1Dj2AK5K+ffDgrkTQq0H9mrtrYPClEhLXBUtZ1ckmSRX5f04Zqz2c0CG
-         OVCQ==
-X-Gm-Message-State: AOAM533gWPLrgq7wiAn5L1GkuotiMP9h2BhztjCIGStrMlHjz56nFF4v
-        Ts9FEv6rp+3EE6UCt99K12/wPQ==
-X-Google-Smtp-Source: ABdhPJyQUNHYw3StmP6ROMA2KN4boEIOCXmFcfjjUEFxR1dMLAzShchPWcCuIDfUGlArqKDrHBVuVQ==
-X-Received: by 2002:a17:90b:1d0c:b0:1dd:220b:bac9 with SMTP id on12-20020a17090b1d0c00b001dd220bbac9mr11603896pjb.36.1653051186006;
-        Fri, 20 May 2022 05:53:06 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id w22-20020a1709026f1600b0016189ed82c4sm5543374plk.79.2022.05.20.05.53.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 May 2022 05:53:05 -0700 (PDT)
-Message-ID: <eded9b07-24b4-8060-7e84-8f44ad2e379a@kernel.dk>
-Date:   Fri, 20 May 2022 06:53:03 -0600
+        Fri, 20 May 2022 08:53:29 -0400
+Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D308CCD0
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 05:53:27 -0700 (PDT)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed30:cdaa:735b:3efc:39fe])
+        by xavier.telenet-ops.be with bizsmtp
+        id Z0tP2700F38adXi010tPNB; Fri, 20 May 2022 14:53:25 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1ns28B-0010US-94; Fri, 20 May 2022 14:53:23 +0200
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1ns28A-0040pl-JZ; Fri, 20 May 2022 14:53:22 +0200
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+To:     Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Guenter Roeck <linux@roeck-us.net>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: [PATCH] drm/msm/adreno: Do not propagate void return values
+Date:   Fri, 20 May 2022 14:53:20 +0200
+Message-Id: <483795c4fb7d215a3f2089c55df29a0064eb021b.1653051029.git.geert@linux-m68k.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [syzbot] general protection fault in __io_arm_poll_handler
-Content-Language: en-US
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     syzbot <syzbot+ba74b85fa15fd7a96437@syzkaller.appspotmail.com>,
-        asml.silence@gmail.com, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        syzkaller <syzkaller@googlegroups.com>
-References: <000000000000f0da6305cb1feacb@google.com>
- <15a67989-9ad7-11ef-9472-8e16ca6ec11a@kernel.dk>
- <CACT4Y+bNGPfF-z-9fxCXQO7huMJ=yCknWm_-H=7CJNvKOne3qA@mail.gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <CACT4Y+bNGPfF-z-9fxCXQO7huMJ=yCknWm_-H=7CJNvKOne3qA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/20/22 2:41 AM, Dmitry Vyukov wrote:
-> On Sat, 4 Sept 2021 at 02:49, Jens Axboe <axboe@kernel.dk> wrote:
->>
->> On 9/3/21 5:47 PM, syzbot wrote:
->>> Hello,
->>>
->>> syzbot has tested the proposed patch and the reproducer did not trigger any issue:
->>>
->>> Reported-and-tested-by: syzbot+ba74b85fa15fd7a96437@syzkaller.appspotmail.com
->>>
->>> Tested on:
->>>
->>> commit:         31efe48e io_uring: fix possible poll event lost in mul..
->>> git tree:       git://git.kernel.dk/linux-block for-5.15/io_uring
->>> kernel config:  https://syzkaller.appspot.com/x/.config?x=914bb805fa8e8da9
->>> dashboard link: https://syzkaller.appspot.com/bug?extid=ba74b85fa15fd7a96437
->>> compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.1
->>>
->>> Note: testing is done by a robot and is best-effort only.
->>
->> Dmitry, I wonder if there's a way to have syzbot know about what it's
->> testing and be able to run the pending patches for that tree? I think
->> we're up to 4 reports now that are all just fallout from the same bug,
->> and where a patch has been queued up for a few days. Since they all look
->> different, I can't fault syzbot for thinking they are different, even if
->> they have the same root cause.
->>
->> Any way we can make this situation better? I can't keep replying that we
->> should test the current branch, and it'd be a shame to have a ton of
->> dupes.
-> 
-> Hi Jens,
-> 
-> This somehow fell through the cracks, but better late than never.
-> 
-> We could set up a syzbot instance for the io-uring tree.
-> It won't solve the problem directly, but if the branch contains both
-> new development ("for-next") and fixes, it will have good chances of
-> discovering issues before they reach mainline and spread to other
-> trees.
-> Do you think it's a good idea? Is there a branch that contains new
-> development and fixes?
+With sparse ("make C=2"), lots of
 
-My for-next stuff is always in linux-next, so I think as long as that is
-tested, that should be quite fine. It's _usually_ not a problem, it just
-sometimes happens that a broken patch ends up triggering a bunch of
-different things. And then we don't get them all attributed in a fix, or
-perhaps the patch itself is fixed up (or removed) and pushed out, then
-leaving the syzbot reports in limbo.
+  error: return expression in void function
 
-In short, I don't think we need to do anything special here for now.
+messages are seen.
 
+Fix this by removing the return statements to propagate void return
+values.
+
+Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+---
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.c | 2 +-
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.h | 4 ++--
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+index 3e325e2a2b1b68eb..d137136d93f3b4ca 100644
+--- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
++++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+@@ -504,7 +504,7 @@ static void a6xx_rpmh_stop(struct a6xx_gmu *gmu)
+ 
+ static inline void pdc_write(void __iomem *ptr, u32 offset, u32 value)
+ {
+-	return msm_writel(value, ptr + (offset << 2));
++	msm_writel(value, ptr + (offset << 2));
+ }
+ 
+ static void __iomem *a6xx_gmu_get_mmio(struct platform_device *pdev,
+diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.h b/drivers/gpu/drm/msm/adreno/a6xx_gmu.h
+index 84bd516f01e895b2..e034935b3986f9f2 100644
+--- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.h
++++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.h
+@@ -98,7 +98,7 @@ static inline u32 gmu_read(struct a6xx_gmu *gmu, u32 offset)
+ 
+ static inline void gmu_write(struct a6xx_gmu *gmu, u32 offset, u32 value)
+ {
+-	return msm_writel(value, gmu->mmio + (offset << 2));
++	msm_writel(value, gmu->mmio + (offset << 2));
+ }
+ 
+ static inline void
+@@ -138,7 +138,7 @@ static inline u32 gmu_read_rscc(struct a6xx_gmu *gmu, u32 offset)
+ 
+ static inline void gmu_write_rscc(struct a6xx_gmu *gmu, u32 offset, u32 value)
+ {
+-	return msm_writel(value, gmu->rscc + (offset << 2));
++	msm_writel(value, gmu->rscc + (offset << 2));
+ }
+ 
+ #define gmu_poll_timeout_rscc(gmu, addr, val, cond, interval, timeout) \
+diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+index ccc4fcf7a630f49a..d671b75f3289fdff 100644
+--- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
++++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+@@ -1446,7 +1446,7 @@ static void a6xx_llc_rmw(struct a6xx_gpu *a6xx_gpu, u32 reg, u32 mask, u32 or)
+ 
+ static void a6xx_llc_write(struct a6xx_gpu *a6xx_gpu, u32 reg, u32 value)
+ {
+-	return msm_writel(value, a6xx_gpu->llc_mmio + (reg << 2));
++	msm_writel(value, a6xx_gpu->llc_mmio + (reg << 2));
+ }
+ 
+ static void a6xx_llc_deactivate(struct a6xx_gpu *a6xx_gpu)
 -- 
-Jens Axboe
+2.25.1
 

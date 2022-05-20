@@ -2,174 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ED0052E617
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 09:21:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56E4A52E618
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 09:21:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346313AbiETHUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 03:20:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49484 "EHLO
+        id S1346340AbiETHVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 03:21:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346276AbiETHUs (ORCPT
+        with ESMTP id S1346276AbiETHVr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 03:20:48 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 89F07140C5;
-        Fri, 20 May 2022 00:20:45 -0700 (PDT)
-Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 0B96320F9C0D;
-        Fri, 20 May 2022 00:20:45 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0B96320F9C0D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1653031245;
-        bh=l3C4NInvgKvz4oi7EOLCuKiDCvtT7GIwKr04BZ3Yohk=;
-        h=From:To:Subject:Date:From;
-        b=WOzpWrc1VnMzae6Ns5L09zG0PwZGswch3brRhEKx3VaK3VEAJJYxiLLdzrFpkLY03
-         oigcapwqqaPR67ezwnSJ3jtrV1pZntK7/1PT+LaFHbFcAD8fM47nMhhxlq+d77BxC/
-         Oo9b+nTyDzatXyR959qwn0noqBErS3AREqQRoT6Y=
-From:   Saurabh Sengar <ssengar@linux.microsoft.com>
-To:     ssengar@microsoft.com, drawat.floss@gmail.com, airlied@linux.ie,
-        daniel@ffwll.ch, linux-hyperv@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        decui@microsoft.com, haiyangz@microsoft.com
-Subject: [PATCH] drm/hyperv : Removing the restruction of VRAM allocation with PCI bar size
-Date:   Fri, 20 May 2022 00:20:40 -0700
-Message-Id: <1653031240-13623-1-git-send-email-ssengar@linux.microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 20 May 2022 03:21:47 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE0699680
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 00:21:44 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 17B021F975;
+        Fri, 20 May 2022 07:21:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1653031303; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TBN5hB0/WPFsCGSSaSWI79+b/MCuCRipw2TznjIJXMM=;
+        b=UAPf2WrwRzaKaTOqud9B3Zxza6x0ksyxYqr57T0xLu4aZEgB+f2r3BsBe4mb1sofkwwOXh
+        MUB1lYGzME/Ar3aV4GRM9p8wJJyAc4PEV19TOAdIX5vzb6l0vGkoqq3PJf+sWb/LQuWH+N
+        uxCYlMHLQIyzCDF0TTs+0psO3Ofj5o0=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 9681D2C141;
+        Fri, 20 May 2022 07:21:42 +0000 (UTC)
+Date:   Fri, 20 May 2022 09:21:42 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Liam Howlett <liam.howlett@oracle.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "rientjes@google.com" <rientjes@google.com>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
+        "guro@fb.com" <guro@fb.com>,
+        "minchan@kernel.org" <minchan@kernel.org>,
+        "kirill@shutemov.name" <kirill@shutemov.name>,
+        "aarcange@redhat.com" <aarcange@redhat.com>,
+        "brauner@kernel.org" <brauner@kernel.org>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "shakeelb@google.com" <shakeelb@google.com>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "jhubbard@nvidia.com" <jhubbard@nvidia.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "kernel-team@android.com" <kernel-team@android.com>
+Subject: Re: [PATCH v2 1/2] mm: drop oom code from exit_mmap
+Message-ID: <YodBhjkyNtc+Une7@dhcp22.suse.cz>
+References: <20220516075619.1277152-1-surenb@google.com>
+ <20220519202149.3ywynqhbxlzp6uyn@revolver>
+ <CAJuCfpHeAXSLjrXxgRaTXOEPPipcFq5MhP=uU0wkqeBoPUAcsQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJuCfpHeAXSLjrXxgRaTXOEPPipcFq5MhP=uU0wkqeBoPUAcsQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There were two different approaches getting used in this driver to
-allocate vram:
-	1. VRAM allocation from PCI region for Gen1
-	2. VRAM alloaction from MMIO region for Gen2
-First approach limilts the vram to PCI BAR size, which is 64 MB in most
-legacy systems. This limits the maximum resolution to be restricted to
-64 MB size, and with recent conclusion on fbdev issue its concluded to have
-similar allocation strategy for both Gen1 and Gen2. This patch unifies
-the Gen1 and Gen2 vram allocation strategy.
+On Thu 19-05-22 14:33:03, Suren Baghdasaryan wrote:
+> On Thu, May 19, 2022 at 1:22 PM Liam Howlett <liam.howlett@oracle.com> wrote:
+[...]
+> > arch_exit_mmap() was called under the write lock before, is it safe to
+> > call it under the read lock?
+> 
+> Ah, good catch. I missed at least one call chain which I believe would
+> require arch_exit_mmap() to be called under write lock:
+> 
+> arch_exit_mmap
+>     ldt_arch_exit_mmap
+>         free_ldt_pgtables
+>             free_pgd_range
 
-Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
----
-FBdev patch Ref :
-https://lore.kernel.org/lkml/20220428143746.sya775ro5zi3kgm3@liuwe-devbox-debian-v2/T/
+Why would be this a problem? This is LDT mapped into page tables but as
+far as I know oom_reaper cannot really ever see that range because it is
+not really reachable from any VMA.
 
- drivers/gpu/drm/hyperv/hyperv_drm_drv.c | 76 ++-----------------------
- 1 file changed, 4 insertions(+), 72 deletions(-)
+> I'll need to check whether arch_exit_mmap() has to be called before
+> unmap_vmas(). If not, we could move it further down when we hold the
+> write lock.
+> Andrew, please remove this patchset from your tree for now until I fix this.
+> 
+> >
+> > >
+> > >       vma = mm->mmap;
+> > >       if (!vma) {
+> > >               /* Can happen if dup_mmap() received an OOM */
+> > > -             mmap_write_unlock(mm);
+> > > +             mmap_read_unlock(mm);
+> > >               return;
+> > >       }
+> > >
+> > > @@ -3138,6 +3121,16 @@ void exit_mmap(struct mm_struct *mm)
+> > >       /* update_hiwater_rss(mm) here? but nobody should be looking */
+> > >       /* Use -1 here to ensure all VMAs in the mm are unmapped */
+> > >       unmap_vmas(&tlb, vma, 0, -1);
+> > > +     mmap_read_unlock(mm);
+> > > +
+> > > +     /*
+> > > +      * Set MMF_OOM_SKIP to hide this task from the oom killer/reaper
+> > > +      * because the memory has been already freed. Do not bother checking
+> > > +      * mm_is_oom_victim because setting a bit unconditionally is cheaper.
+> > > +      */
+> > > +     set_bit(MMF_OOM_SKIP, &mm->flags);
+> > > +
+> > > +     mmap_write_lock(mm);
+> >
+> > Is there a race here?  We had a VMA but after the read lock was dropped,
+> > could the oom killer cause the VMA to be invalidated?
 
-diff --git a/drivers/gpu/drm/hyperv/hyperv_drm_drv.c b/drivers/gpu/drm/hyperv/hyperv_drm_drv.c
-index 4a8941fa0815..a32afd84f361 100644
---- a/drivers/gpu/drm/hyperv/hyperv_drm_drv.c
-+++ b/drivers/gpu/drm/hyperv/hyperv_drm_drv.c
-@@ -69,57 +69,8 @@ static struct pci_driver hyperv_pci_driver = {
- 	.remove =	hyperv_pci_remove,
- };
- 
--static int hyperv_setup_gen1(struct hyperv_drm_device *hv)
--{
--	struct drm_device *dev = &hv->dev;
--	struct pci_dev *pdev;
--	int ret;
--
--	pdev = pci_get_device(PCI_VENDOR_ID_MICROSOFT,
--			      PCI_DEVICE_ID_HYPERV_VIDEO, NULL);
--	if (!pdev) {
--		drm_err(dev, "Unable to find PCI Hyper-V video\n");
--		return -ENODEV;
--	}
--
--	ret = drm_aperture_remove_conflicting_pci_framebuffers(pdev, &hyperv_driver);
--	if (ret) {
--		drm_err(dev, "Not able to remove boot fb\n");
--		return ret;
--	}
--
--	if (pci_request_region(pdev, 0, DRIVER_NAME) != 0)
--		drm_warn(dev, "Cannot request framebuffer, boot fb still active?\n");
--
--	if ((pdev->resource[0].flags & IORESOURCE_MEM) == 0) {
--		drm_err(dev, "Resource at bar 0 is not IORESOURCE_MEM\n");
--		ret = -ENODEV;
--		goto error;
--	}
--
--	hv->fb_base = pci_resource_start(pdev, 0);
--	hv->fb_size = pci_resource_len(pdev, 0);
--	if (!hv->fb_base) {
--		drm_err(dev, "Resource not available\n");
--		ret = -ENODEV;
--		goto error;
--	}
--
--	hv->fb_size = min(hv->fb_size,
--			  (unsigned long)(hv->mmio_megabytes * 1024 * 1024));
--	hv->vram = devm_ioremap(&pdev->dev, hv->fb_base, hv->fb_size);
--	if (!hv->vram) {
--		drm_err(dev, "Failed to map vram\n");
--		ret = -ENOMEM;
--	}
--
--error:
--	pci_dev_put(pdev);
--	return ret;
--}
--
--static int hyperv_setup_gen2(struct hyperv_drm_device *hv,
--			     struct hv_device *hdev)
-+static int hyperv_setup_gen(struct hyperv_drm_device *hv,
-+			    struct hv_device *hdev)
- {
- 	struct drm_device *dev = &hv->dev;
- 	int ret;
-@@ -181,10 +132,7 @@ static int hyperv_vmbus_probe(struct hv_device *hdev,
- 		goto err_hv_set_drv_data;
- 	}
- 
--	if (efi_enabled(EFI_BOOT))
--		ret = hyperv_setup_gen2(hv, hdev);
--	else
--		ret = hyperv_setup_gen1(hv);
-+	ret = hyperv_setup_gen(hv, hdev);
- 
- 	if (ret)
- 		goto err_vmbus_close;
-@@ -225,29 +173,13 @@ static int hyperv_vmbus_remove(struct hv_device *hdev)
- {
- 	struct drm_device *dev = hv_get_drvdata(hdev);
- 	struct hyperv_drm_device *hv = to_hv(dev);
--	struct pci_dev *pdev;
- 
- 	drm_dev_unplug(dev);
- 	drm_atomic_helper_shutdown(dev);
- 	vmbus_close(hdev->channel);
- 	hv_set_drvdata(hdev, NULL);
- 
--	/*
--	 * Free allocated MMIO memory only on Gen2 VMs.
--	 * On Gen1 VMs, release the PCI device
--	 */
--	if (efi_enabled(EFI_BOOT)) {
--		vmbus_free_mmio(hv->mem->start, hv->fb_size);
--	} else {
--		pdev = pci_get_device(PCI_VENDOR_ID_MICROSOFT,
--				      PCI_DEVICE_ID_HYPERV_VIDEO, NULL);
--		if (!pdev) {
--			drm_err(dev, "Unable to find PCI Hyper-V video\n");
--			return -ENODEV;
--		}
--		pci_release_region(pdev, 0);
--		pci_dev_put(pdev);
--	}
-+	vmbus_free_mmio(hv->mem->start, hv->fb_size);
- 
- 	return 0;
- }
+Nope, the oom killer itself doesn't do much beyond sending SIGKILL and
+scheduling the victim for the oom_reaper. dup_mmap is holding exclusive
+mmap_lock throughout the whole process.
+
+> > I don't think so
+> > but the comment above about dup_mmap() receiving an OOM makes me
+> > question it.  The code before kept the write lock from when the VMA was
+> > found until the end of the mm edits - and it had the check for !vma
+> > within the block itself.  We are also hiding it from the oom killer
+> > outside the read lock so it is possible for oom to find it in that
+> > window, right?
+
+The oom killer's victim selection doesn't really depend on the
+mmap_lock. If there is a race and MMF_OOM_SKIP is not set yet then it
+will consider the task and very likely bail out anyway because the
+address space has already been unampped so oom_badness() would consider
+this task boring.
+
+oom_reaper on the other hand would just try to unmap in parallel but
+that is fine regardless of MMF_OOM_SKIP. Seeing the flag would allow to
+bail out early rather than just trying to unmap something that is no
+longer there. The only problem for the oom_reaper is to see page tables
+of the address space disappearing from udner its feet. That is excluded
+by the the exlusive lock and as Suren mentions mm->mmap == NULL check
+if the exit_mmap wins the race.
 -- 
-2.25.1
-
+Michal Hocko
+SUSE Labs

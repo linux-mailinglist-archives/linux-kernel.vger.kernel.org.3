@@ -2,178 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8E3752E138
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 02:34:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0F4752E13B
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 02:36:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344028AbiETAeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 20:34:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52998 "EHLO
+        id S1344035AbiETAge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 20:36:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232460AbiETAeU (ORCPT
+        with ESMTP id S232460AbiETAg3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 20:34:20 -0400
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A97E2F74B4
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 17:34:19 -0700 (PDT)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-d39f741ba0so8653901fac.13
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 17:34:19 -0700 (PDT)
+        Thu, 19 May 2022 20:36:29 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 356065DA12;
+        Thu, 19 May 2022 17:36:28 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id u3so9432399wrg.3;
+        Thu, 19 May 2022 17:36:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=e9ljUUDHH/JyJI4aQ9kIel1eQTZZ1jPr0AhJXun2ykU=;
-        b=gXlvnDGCdBwNwVpzUu6dPjZu7hjujZnhRYw5U+bmqIlSChZfw/OgFYiEYX1UOjmt8C
-         EMmWLvNQR/CWX+kboCzZbsmEQVjW13Wm37nBkgZh8w8r9I4I3mDLxrAmUh7cttqcGqvX
-         VJ54e9ZT9WGzRe6fqS26MvM4QLCTL9Eal9+FY=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=20g10QH4u/3O0tBO6ofFWhrt9ZuFgao8sbSN8hXJynU=;
+        b=Xs2tZvkUhGUidDE1n3SJS4u3GAqDBT0pD0YTr8+WjofwhZJ4LAUgEKbSeM9DjnkZyW
+         aw6Pxr9T2SQ/qrxMF1Vb/iamHZ2FC8ppfRw9z85una19facSffA3O0KjsNZQFxS9vkJU
+         Y4iNUbpxojolrC3BN+9xXZ2bDr1ul1hEKKydP42C/AR7NZsdpl3nauU+Z2tUqWYmLKg0
+         SLzR0Xfb7YvfAaTyirgmoCuz4i7arJnv5Gt/bUayLfCpPSd9I5hw5/SHls6cPE5GR1qd
+         Y9Rmy1tIzqb8EOlOmhM9LPIPfsBuJSUsqWM3PnwinzYV5jKLm8xy7PKY3LYoOMCFFc7G
+         0ROA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=e9ljUUDHH/JyJI4aQ9kIel1eQTZZ1jPr0AhJXun2ykU=;
-        b=UNFxACQAiUnU7WK3Bd9RCMbDPThF+LjRSc3lPUoX63YvvvczwHBEBSaetEiX2gLf7K
-         y8MgUeY7ZwPYH0I1okSW9WMBjW8BKfPCXLbfWPlgDsFr5ewnso4DxmsBt2TpTZJ9h4EF
-         /PFQgRbNXwkrO+S/qevpDlCkgVBekJm0aNR4Y2ya4bLtzuRImi0QkibAZrpXomsnOy04
-         d8HJc8oV/JbOw3SmuwRYCIZC9DVcwp4HRWvtu0qhPZyhu0Dtjxl6FGAhTbYk9wNrTCSx
-         mOTLV7K5fZidrQpqvIV4nG9+M8ojoPYwkoH5lVpwv0ZzCC3FEAOLEUYs3Ce7joDP0G80
-         g2ow==
-X-Gm-Message-State: AOAM532/ZJBR66tvk1kl26zeuvkB0IGASaA2YfEYAFdWDC1VsQN8GiE/
-        YEHTzFK9p2xJ/MJgxrS2G7sAFVJVQJxYGf+TXhmIKA==
-X-Google-Smtp-Source: ABdhPJz7GCry66MK6mS2X/Oob/iO+dMt3elWph3akDsxT5xS/EtFSj9XGQ/M4XZ3r6HgPrufR7ngXa2CnDPqZiOI8Bk=
-X-Received: by 2002:a05:6870:240d:b0:f1:b878:e97c with SMTP id
- n13-20020a056870240d00b000f1b878e97cmr4014027oap.193.1653006859019; Thu, 19
- May 2022 17:34:19 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 19 May 2022 17:34:18 -0700
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=20g10QH4u/3O0tBO6ofFWhrt9ZuFgao8sbSN8hXJynU=;
+        b=xQymGrSLhfJTTSy8g7cyPbWZL9300HdBCSR3Bukkr8GcF1vsNe7dv+w8RoIjPg9lci
+         JqPWUPtIRriPYVryQpHKx43M+asS9JvmMXWfXxzrxr2I/4Dh2wawXq9zdrYuj+SYKCWm
+         M825wM+c90onste/SLM+pIjGLIGRHsq5RAsLw9CTJDS7kzikAjpAxhSjU0bMc4xtC/XC
+         zNH5JHTmHZxdROlqoY69WX7YeSpsxgLWd/YWErMwIbHNet95pPDOb2Eqy4ulyZjNdl5m
+         gt38lgIaSxhX985OT3uq/KHlDxwl9ijW3qSB6e20wcydiaWr0CQrWnoI7H6M7we3lyx9
+         k50g==
+X-Gm-Message-State: AOAM533vxD05mHALrS9qhg0Sq9OE3fl2CubmyS0VA0ld8JONkE/r0Mxo
+        Dsc6DiuYqrTDdVbBm2zU5ptN2yZbgvc=
+X-Google-Smtp-Source: ABdhPJwKTnUkWXcKClggkLAd997j0lZE2h8MSJkc5Y+J0faRwVERo3wUnSrffxMBZ4Al4GCagUN1KQ==
+X-Received: by 2002:a05:6000:1acd:b0:20c:7201:9267 with SMTP id i13-20020a0560001acd00b0020c72019267mr6073089wry.41.1653006986589;
+        Thu, 19 May 2022 17:36:26 -0700 (PDT)
+Received: from localhost.localdomain ([41.232.195.220])
+        by smtp.gmail.com with ESMTPSA id bh9-20020a05600c3d0900b0039444973258sm951063wmb.0.2022.05.19.17.36.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 May 2022 17:36:26 -0700 (PDT)
+From:   Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     outreachy@lists.linux.dev, roopa@nvidia.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux-kernel@vger.kernel.org, eng.alaamohamedsoliman.am@gmail.com
+Subject: [PATCH net-next v2] net: vxlan: Fix kernel coding style
+Date:   Fri, 20 May 2022 02:36:14 +0200
+Message-Id: <20220520003614.6073-1-eng.alaamohamedsoliman.am@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <CAD=FV=W6Z1TG4vQcDDeNsGkjZVAR8=A1L1pDfo1rDFCh84H4Rg@mail.gmail.com>
-References: <20220418171757.2282651-1-dianders@chromium.org>
- <20220418101725.v3.1.Icf57bb12233a47727013c6ab69eebf803e22ebc1@changeid>
- <CAE-0n51iNXN4oOP-wAqrm9U6qC84fQ+qMUBu0BODXjsCDk+H=w@mail.gmail.com> <CAD=FV=W6Z1TG4vQcDDeNsGkjZVAR8=A1L1pDfo1rDFCh84H4Rg@mail.gmail.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Thu, 19 May 2022 17:34:18 -0700
-Message-ID: <CAE-0n50RXmaUsu5F9syJT-ZXzX8WacpJDFnhb1xQaou1Pxizng@mail.gmail.com>
-Subject: Re: [PATCH v3 1/4] drm/dp: Add wait_hpd_asserted() callback to struct drm_dp_aux
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        Philip Chen <philipchen@chromium.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Lyude Paul <lyude@redhat.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Doug Anderson (2022-05-12 16:24:13)
-> On Wed, May 11, 2022 at 6:58 PM Stephen Boyd <swboyd@chromium.org> wrote:
-> > Quoting Douglas Anderson (2022-04-18 10:17:54)
-> > > diff --git a/include/drm/dp/drm_dp_helper.h b/include/drm/dp/drm_dp_helper.h
-> > > index 53d1e722f4de..0940c415db8c 100644
-> > > --- a/include/drm/dp/drm_dp_helper.h
-> > > +++ b/include/drm/dp/drm_dp_helper.h
-> > > @@ -2035,6 +2035,32 @@ struct drm_dp_aux {
-> > >         ssize_t (*transfer)(struct drm_dp_aux *aux,
-> > >                             struct drm_dp_aux_msg *msg);
-> > >
-> > > +       /**
-> > > +        * @wait_hpd_asserted: wait for HPD to be asserted
-> > > +        *
-> > > +        * This is mainly useful for eDP panels drivers to wait for an eDP
-> > > +        * panel to finish powering on. This is an optional function.
-> >
-> > Is there any use for the opposite direction? For example, does anything
-> > care that HPD is deasserted?
->
-> Not that I'm aware of. Originally I was planning to have it so that a
-> timeout of "0" meant to just poll without sleeping at all, but it
-> ended up making the code a lot more complicated because everywhere
-> else we had the "readx" semantics where 0 meant wait forever. It
-> didn't seem worth it. I can go back to that behavior if need be.
->
+The continuation line does not align with the opening bracket
+and this patch fix it.
 
-Got it.
+Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+---
+changes in v2:
+	fix the alignment of the "DST, VNI, ifindex and port are mutually exclusive with NH_ID"
+  string to the open parenthesis of the NL_SET_ERR_MSG macro in vxlan_fdb_parse().
+---
+ drivers/net/vxlan/vxlan_core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
->
-> > > +        *
-> > > +        * This function will efficiently wait for up to `wait_us` microseconds
-> > > +        * for HPD to be asserted and might sleep.
-> > > +        *
-> > > +        * This function returns 0 if HPD was asserted or -ETIMEDOUT if time
-> > > +        * expired and HPD wasn't asserted. This function should not print
-> > > +        * timeout errors to the log.
-> > > +        *
-> > > +        * The semantics of this function are designed to match the
-> > > +        * readx_poll_timeout() function. That means a `wait_us` of 0 means
-> > > +        * to wait forever. If you want to do a quick poll you could pass 1
-> > > +        * for `wait_us`.
-> >
-> > It would also make sense to have a drm_dp_wait_hpd_asserted() API
-> >
-> >   int drm_dp_wait_hpd_asserted(struct drm_dp_aux *aux, unsigned long wait_us);
-> >
-> > and then this aux function could be implemented in various ways. The API
-> > could poll if the aux can only read immediate state of HPD, or it could
-> > sleep (is sleeping allowed? that isn't clear) and wake up the process
-> > once HPD goes high. Or if this op isn't implemented maybe there's a
-> > fixed timeout member that is non-zero which means "sleep this long".
-> > Either way, making each drm_dp_aux implement that logic seems error
-> > prone vs. having the drm_dp_aux implement some function for
-> >
-> >         get_immediate_hpd(struct drm_dp_aux *aux)
->
-> There's a reason why I changed the API to "wait" from "get". If you
-> can think of a good place to document this, I'm all ears.
->
-> The basic problem is ps8640 (my nemesis, apparently). On ps8640,
-> because of the black box firmware blob that's on it, we have a crazy
-> long delay in its runtime resume (300ms). So what happens with ps8640
-> is that if we make the API "get_immediate_hpd()" it wasn't so
-> immediate. Even with autosuspend, that first "get" could take 300 ms,
-> which really screwed with everyone else who was waiting with a 200 ms
-> timeout.
->
-> Now, in theory, one could argue that the fact that ps8640 had a 300 ms
-> sleep would mean that the very first "get" of the panel would already
-> show HPD high. I don't know why that wasn't the case, but ps8640 is an
-> annoying black box.
->
-> In general, though, the DP controller might need some amount of time
-> to power itself back up and configure itself. Even though the ps8640
-> case is extreme, it wouldn't be totally extreme to assume that an AUX
-> controller might take 20 ms or 50 ms to power up. That could still
-> throw timings off. Implementing the API as a "wait" style API gets
-> around this problem. Now the DP controller can take as long as it
-> needs to power itself up and it can then wait with the requested
-> timeout.
+diff --git a/drivers/net/vxlan/vxlan_core.c b/drivers/net/vxlan/vxlan_core.c
+index 293082c32a78..29db08f15e38 100644
+--- a/drivers/net/vxlan/vxlan_core.c
++++ b/drivers/net/vxlan/vxlan_core.c
+@@ -1138,7 +1138,7 @@ static int vxlan_fdb_parse(struct nlattr *tb[], struct vxlan_dev *vxlan,
+ 	if (tb[NDA_NH_ID] && (tb[NDA_DST] || tb[NDA_VNI] || tb[NDA_IFINDEX] ||
+ 	    tb[NDA_PORT])) {
+ 			NL_SET_ERR_MSG(extack,
+-						  "DST, VNI, ifindex and port are mutually exclusive with NH_ID");
++					"DST, VNI, ifindex and port are mutually exclusive with NH_ID");
+ 			return -EINVAL;
+ 		}
+ 
+@@ -1297,7 +1297,7 @@ int __vxlan_fdb_delete(struct vxlan_dev *vxlan,
+ static int vxlan_fdb_delete(struct ndmsg *ndm, struct nlattr *tb[],
+ 			    struct net_device *dev,
+ 			    const unsigned char *addr, u16 vid,
+-				struct netlink_ext_ack *extack)
++			    struct netlink_ext_ack *extack)
+ {
+ 	struct vxlan_dev *vxlan = netdev_priv(dev);
+ 	union vxlan_addr ip;
+-- 
+2.25.1
 
-To clarify, are you saying that the 'wait' passed in will be added to
-whatever time it takes for the driver to runtime resume to check HPD
-status? Or is the driver supposed to subtract any time to power up from the
-'wait' passed in and then poll or wait for an irq about HPD?
-
-Would it be incorrect to somehow have the pm_runtime_get_sync() call in
-the mythical wrapper API with a ktime_get() before and after and then
-subtract that from the 'wait' time and call "get_immediate_hpd()"?
-
-It would help me understand further if the 'wait' is described as a
-maximum time we're willing to wait or a minimum time we're willing to
-wait for hpd to be asserted. Usually a timeout is the maximum we're
-willing to wait so I think you're saying the wait is the maximum time
-after we know the drm_dp_aux is fully powered up and ready to check the
-state.

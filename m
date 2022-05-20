@@ -2,115 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7A5652F1AD
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 19:33:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F75152F1B9
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 19:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352276AbiETRdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 13:33:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57798 "EHLO
+        id S1350586AbiETRgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 13:36:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352289AbiETRdO (ORCPT
+        with ESMTP id S237137AbiETRgU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 13:33:14 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79500188E5A
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 10:33:10 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id v5-20020a17090a7c0500b001df84fa82f8so8403019pjf.5
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 10:33:10 -0700 (PDT)
+        Fri, 20 May 2022 13:36:20 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F4B80227
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 10:36:19 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id n18so7926164plg.5
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 10:36:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=OrRB57pxEIl15FSAbGFcbR04Zed82TbWnP8Ld+Fb0B0=;
-        b=YcuzP+v390hZe6XdOFXfD/RerN12dcdSbJLOi97YThDgyAgJtDrzjVdc8saKc4Zvls
-         PY06gVOZFuFEnCYTG2IwEpgDV72zRr2VLvOOU/rnMHBTI/0lqo2bb205Jjs9bsthqzj9
-         N3NPyEtF7PpLplFQZ54OoRz21BRsw+QtHl/osa8NS1VdCC54C0OC/mm+t1eD4F9ywA13
-         L4pgZx+32SsqrD+8IHBWy1wsr2rv42lM/AwdezQGCOwjQavFQwBpq7NQaeMjmHksE21f
-         IF0Bvw8bv0J67qRrnKVhdrZb8I7X0je2FO2+dQUoVdh/poiJwMjkN3bcMpEfxWMfCglQ
-         ddwg==
+        bh=pGTJhxGq4NRXnqMsGQiqbCMB+N3bs1Q8cueXx9EoXoc=;
+        b=Vdn1Q04weaeDmve1R0VnEbxYbLnsYVgVtMFoJBSb2LnRquGBT8YF9uJ6sT//LxT5Vc
+         zr1pqnrJEie4BUL2q5H4wyhHIldR429BTbCdXIrqeFTMlgIPqwsXKeUR3D6iVYelunXM
+         PSgBvAL3Da1xW1mEQ2Ip+aDGc26hqOYxUaYYE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=OrRB57pxEIl15FSAbGFcbR04Zed82TbWnP8Ld+Fb0B0=;
-        b=PgHuzTsXOUgF471vH0fJSqWDopSABSLGK8rHAb6p0CAlVVniO4zuXplejI/+KGC8S2
-         2qvMainNrYNvT3YCL2hAVBvXzN0AF8Td5CgckpinXoegAsWqGsj1GNh8KwPol2NGnaHR
-         8iO1HZlT3YMSKGVNbxTPhgH6e3jC2YaFumOuR+ZF5yJ4WRxB64egKEikLoLrlu9QTtUx
-         nAQHVRBEFFaFjjwQJNooMyWfa7VXpDHYSBbeNYFUvQ0yAH48oVsS378eBvAzWe7O9OWh
-         G2rIC/FD9r970PWddKDflPah+ZJ1h4Q0DYD+bKAiQRcI18BoaguApUogAE33pA2miVjG
-         JsxQ==
-X-Gm-Message-State: AOAM530Lgh6dKdxvrfAaH8cI7P8D84rTMmqGyIC4EK0VPawOQjUCHhZx
-        WKmIrUHzdSSWX+RWG1Ts11qiXA==
-X-Google-Smtp-Source: ABdhPJwQdl7zCAQyltZ8YceWiXiFncpYWC9yEUXZpjInWGC6kO731Tu2RH0yGESBbPyKG1N0SN7Vsg==
-X-Received: by 2002:a17:90b:3506:b0:1dc:72c6:384d with SMTP id ls6-20020a17090b350600b001dc72c6384dmr12550486pjb.137.1653067989818;
-        Fri, 20 May 2022 10:33:09 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id u19-20020a62d453000000b0050dc7628182sm2175348pfl.92.2022.05.20.10.33.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 10:33:09 -0700 (PDT)
-Date:   Fri, 20 May 2022 17:33:05 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@intel.com, luto@kernel.org, peterz@infradead.org,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, linux-kernel@vger.kernel.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        thomas.lendacky@amd.com, x86@kernel.org
-Subject: Re: [PATCHv2 1/3] x86/tdx: Fix early #VE handling
-Message-ID: <YofQ0RuJGMV9KBcW@google.com>
-References: <20220520031316.47722-1-kirill.shutemov@linux.intel.com>
- <20220520031316.47722-2-kirill.shutemov@linux.intel.com>
- <YofJYpBLeyNsuw5W@google.com>
+        bh=pGTJhxGq4NRXnqMsGQiqbCMB+N3bs1Q8cueXx9EoXoc=;
+        b=NzbjruB5Gx9FkQN0AO/FH0VQSsIR4/yWJmAoEJwrL+fQcn0KlIp/pnIKHb0rGD96Ea
+         gYJ4xmYW4qxoDmo18XN5r2wMhKg2OZ7yxtvkIOK59ZeptpR1tAWtqzq76yvg0jyI0B8x
+         vn0fXaD803HGVKps5NpqpLBg2KxYymLuGylY9GEECMDobuOyWPjt5JG6g6O93o2MxWvJ
+         guWZQpuFV3bqfAXti7lJ7jCac2pE9teeuU28eY+YxZVyFix7GcT76Il9gYXFvGo+gE96
+         OvKIP+R4zggpjoPf/yA2yPmofrxOV4qq5vYk0m22F4870D6dlwMFLlg3IkJhjP4UpuJs
+         tZwQ==
+X-Gm-Message-State: AOAM530JE54nTS6gGhQjQ33EFI9iFszjk3GxK3FzXtyvCOp3pXMjE22r
+        Mmr+Nh3yKqZ6tqZqkwFi4GZqhw==
+X-Google-Smtp-Source: ABdhPJxpuxzegEOsmYqFaMkZd1lrc6b7kou9uzD1zcGtYR43ETtk8hSvIjCQ5rY8JthgeEXXzOmATw==
+X-Received: by 2002:a17:903:41c1:b0:161:bec6:b308 with SMTP id u1-20020a17090341c100b00161bec6b308mr11030318ple.161.1653068178945;
+        Fri, 20 May 2022 10:36:18 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:5332:2096:60a3:3455])
+        by smtp.gmail.com with UTF8SMTPSA id f2-20020a170902f38200b0015e8d4eb24fsm25680ple.153.2022.05.20.10.36.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 May 2022 10:36:18 -0700 (PDT)
+Date:   Fri, 20 May 2022 10:36:17 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Judy Hsiao <judyhsiao@chromium.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Srini Kandagatla <srinivas.kandagatla@linaro.org>,
+        dianders@chromium.org, cychiang@google.com, judyhsiao@google.com,
+        tzungbi@chromium.org, swboyd@chromium.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [v2 2/3] arm64: dts: qcom: sc7280: Add
+ sc7280-herobrine-audio-rt5682.dtsi
+Message-ID: <YofRket193lxAg6F@google.com>
+References: <20220520161004.1141554-1-judyhsiao@chromium.org>
+ <20220520161004.1141554-3-judyhsiao@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YofJYpBLeyNsuw5W@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220520161004.1141554-3-judyhsiao@chromium.org>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022, Sean Christopherson wrote:
-> On Fri, May 20, 2022, Kirill A. Shutemov wrote:
-> > Move RIP in tdx_early_handle_ve() after handling the exception. Failure
-> > to do that leads to infinite loop of exceptions.
-> > 
-> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> > Fixes: 32e72854fa5f ("x86/tdx: Port I/O: Add early boot support")
-> > ---
-> >  arch/x86/coco/tdx/tdx.c | 6 +++++-
-> >  1 file changed, 5 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-> > index 03deb4d6920d..faae53f8d559 100644
-> > --- a/arch/x86/coco/tdx/tdx.c
-> > +++ b/arch/x86/coco/tdx/tdx.c
-> > @@ -447,13 +447,17 @@ static bool handle_io(struct pt_regs *regs, u32 exit_qual)
-> >  __init bool tdx_early_handle_ve(struct pt_regs *regs)
-> >  {
-> >  	struct ve_info ve;
-> > +	bool ret;
-> >  
-> >  	tdx_get_ve_info(&ve);
-> >  
-> >  	if (ve.exit_reason != EXIT_REASON_IO_INSTRUCTION)
-> >  		return false;
-> >  
-> > -	return handle_io(regs, ve.exit_qual);
-> > +	ret = handle_io(regs, ve.exit_qual);
-> > +	if (ret)
+On Fri, May 20, 2022 at 04:10:03PM +0000, Judy Hsiao wrote:
+> Audio dtsi for sc7280 boards that using rt5682 headset codec:
+> 1. Add dt nodes for sound card which use I2S playback and record
+>    through rt5682s and I2S playback through max98357a.
+> 2. Enable lpass cpu node and add pin control and dai-links.
 > 
-> Ugh, the boolean returns instead of 0/-errno are fugly.  At first glance I thought
-> this was wrong, i.e. advancing RIP on failure.
+> Signed-off-by: Judy Hsiao <judyhsiao@chromium.org>
+> ---
+>  .../qcom/sc7280-herobrine-audio-rt5682.dtsi   | 120 ++++++++++++++++++
+>  1 file changed, 120 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-rt5682.dtsi
 > 
-> Assuming moving away from booleans isn't happening anytime soon maybe s/ret/success
-> or s/ret/handled to make it more obvious that it's a happy path?
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-rt5682.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-rt5682.dtsi
+> new file mode 100644
+> index 000000000000..d83e99f1d417
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-rt5682.dtsi
+> @@ -0,0 +1,120 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + *
+> + * This file defines the common audio settings for the child boards using rt5682 codec.
+> + *
+> + * Copyright 2022 Google LLC.
+> + */
+> +
+> +/ {
+> +	/* BOARD-SPECIFIC TOP LEVEL NODES */
+> +	sound: sound {
 
-Doh, should have looked at patch 2...
+nit: the label might not be needed, unless we expect board files to override
+settings. But well, there is also nothing inherently wrong with having it :)
+
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>

@@ -2,280 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8D2752F669
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 01:52:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F12BD52F66D
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 01:59:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354127AbiETXvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 19:51:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53378 "EHLO
+        id S1354154AbiETX6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 19:58:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351624AbiETXvu (ORCPT
+        with ESMTP id S236380AbiETX6w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 19:51:50 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E4760D95
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 16:51:48 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id i17-20020a259d11000000b0064cd3084085so8414553ybp.9
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 16:51:48 -0700 (PDT)
+        Fri, 20 May 2022 19:58:52 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7763A1A0ADC
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 16:58:51 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id h205-20020a1c21d6000000b003972dda143eso1781881wmh.3
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 16:58:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=/stGQNozz5V8ZxaoJoUYmWkt2650UWUR5BTuTMQhVcc=;
-        b=NJ7NjIJHlpowz+JfL9ai/1suG6Hi1I8ypXAV6Cu8lQY2KEo256KEZuwu7LUDmKiB2Y
-         5Ux18dTA4YBTkHxmyYtMQ3JiaUR/578U6QdBJYn4AyBOjUYMPsCguArfQgSjDkHhQs4z
-         VEZ3lqxR4VJEBkxBvNgIupKXK1uBJ6X3VpGraksQ7TWlPV3P1pqnDZGvoCP/XsaTSCsL
-         iX2YtY55G/v/IkArAjqO/Q/KZTyYq6i+IHf1rgeQAjOY+udqayIIRmV2DruTw4RCgWjP
-         kC3wMvMQ1fRcOcdkCmQi1jO18Mcm1mnI963TkCF/jvX81RvUHRwAj5YPhEfzzO7Sa5dV
-         8rlQ==
+        d=amarulasolutions.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CZudmt8QjK7Ob0wwst9Iisd3ub5uSgdUrqhdvCAPlJY=;
+        b=n8YxOwsVsDs+d/Xov7EF5yekr3+BjzL7dG3FuFiONfF/sfoECLWTB3fLCdqaQTT5Bc
+         KCx4DZrjRGSNXTM14Rem+/1taT7VIFFAclXaS9I/+TrXfOlxiQJBpxtkVZF2h6HyfFkR
+         G0vtzP5zKGwENv+H7JPdHm4S6+BLi+JIfWofs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=/stGQNozz5V8ZxaoJoUYmWkt2650UWUR5BTuTMQhVcc=;
-        b=1KKH0QUS+alP1qeCAjfzADkPz7SgQzWrARrsoZpyz8lDM+zTHJ848VdueBaUYtOBxK
-         KaNV30Ln+/P14eIAcdjS2zOiQzWA91jVvuOrYDBt+rcz9g2vurA9Od9+ahUO5H0aLWm4
-         qqAfUqQbnSDpuH56WCgLEpQxIxIqpCsQROoBYPouGZlNpfWw5/aMs6lAGr6iACtrQUMv
-         5BuxbZtGizkUsKjTdzuWS84wO5LgciqVfUriEm38TTTrJ5OKN/tcGi5FjrylmOR2ZCnk
-         dda1aV9jRZHsyr9ItgbJiHMEdl3pSINrM5LLEBfK64gobuTs3IgPEVXiGdMPidd7xC6u
-         7QOQ==
-X-Gm-Message-State: AOAM533ZisAd9zx2o2YH87XNm/jiMzAwQqrRckyOzxEIsT6k9PgLlPuB
-        ssiv6Kt7/l6SaqnAMWcmPRdaexKu7QK/
-X-Google-Smtp-Source: ABdhPJyaJEr7h3tfFxG4TXTNGXbQm1jTGaXXwg70TJIHHZqZbcmU/Eovy7+w//t4heTmIWu5D61vyi5xDS9e
-X-Received: from joshdon.svl.corp.google.com ([2620:15c:2cd:202:d765:af15:7d42:5e08])
- (user=joshdon job=sendgmr) by 2002:a05:6902:136c:b0:649:81aa:5f7b with SMTP
- id bt12-20020a056902136c00b0064981aa5f7bmr11995294ybb.303.1653090707850; Fri,
- 20 May 2022 16:51:47 -0700 (PDT)
-Date:   Fri, 20 May 2022 16:51:38 -0700
-Message-Id: <20220520235138.3140590-1-joshdon@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
-Subject: [PATCH v2] sched/core: add forced idle accounting for cgroups
-From:   Josh Don <joshdon@google.com>
-To:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Tejun Heo <tj@kernel.org>
-Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Cruz Zhao <CruzZhao@linux.alibaba.com>,
-        Josh Don <joshdon@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CZudmt8QjK7Ob0wwst9Iisd3ub5uSgdUrqhdvCAPlJY=;
+        b=6rwPJSIyfUtY0QglJ9kwfeEIS1qCu86Nvv91XmeSibHdMyB94UM4AOH0cL/Vqc1ENJ
+         z8Y2WfHbqj7riKXdP0ylAp4N+3lcycT1WAAcrVUjRpA63FwH9gQUgLPUPRULgBA0+klJ
+         AWMHzcr2UW/fSD77jlsIizmJxeLeQKts2tC3TpYBixAv3MqDeZl5bMMZ64cYzqLTfwS3
+         yD9Gf/zPogLdSoPjnm1HmYdpgOTaQTGdcxprFgxS7Ik9/9+pz2b9Y3UJV9xFeA3/kiuB
+         OsWPYK+vNa3xUVq+7Nnio0PHojNzFwqrQb3XiwO/qSq46iPBMQiWAKKaCrikq8SPRikN
+         LrOQ==
+X-Gm-Message-State: AOAM530Hi3m6WePq4K+oZZdwZgnEB8wqBIQ8ubRlSn/VPiihXjUYD2w5
+        ToGv0lwysJbaOpV6bHK4cCJv0jqPEubADg==
+X-Google-Smtp-Source: ABdhPJyDdA9UiEi//2k2WCzJgQm8Dc/PW76V4KuUHKDVaRIJJzXRJoXMEnvbcpjfiuMh8OSv8ZtKIA==
+X-Received: by 2002:a05:600c:3c8b:b0:397:2db3:97a8 with SMTP id bg11-20020a05600c3c8b00b003972db397a8mr9203193wmb.132.1653091130092;
+        Fri, 20 May 2022 16:58:50 -0700 (PDT)
+Received: from tom-ThinkPad-T14s-Gen-2i.station (net-188-217-53-154.cust.vodafonedsl.it. [188.217.53.154])
+        by smtp.gmail.com with ESMTPSA id l41-20020a05600c1d2900b003973343c014sm3216306wms.33.2022.05.20.16.58.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 May 2022 16:58:49 -0700 (PDT)
+From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+Cc:     tommaso.merciai@amarulasolutions.com, michael@amarulasolutions.com,
+        alberto.bianchi@amarulasolutions.com,
+        linux-amarula@amarulasolutions.com, linuxfancy@googlegroups.com,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3] net: phy: DP83822: enable rgmii mode if phy_interface_is_rgmii
+Date:   Sat, 21 May 2022 01:58:46 +0200
+Message-Id: <20220520235846.1919954-1-tommaso.merciai@amarulasolutions.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-4feee7d1260 previously added per-task forced idle accounting. This patch
-extends this to also include cgroups.
+RGMII mode can be enable from dp83822 straps, and also writing bit 9
+of register 0x17 - RMII and Status Register (RCSR).
+When phy_interface_is_rgmii rgmii mode must be enabled, same for
+contrary, this prevents malconfigurations of hw straps
 
-rstat is used for cgroup accounting, except for the root, which uses
-kcpustat in order to bypass the need for doing an rstat flush when
-reading root stats.
+References:
+ - https://www.ti.com/lit/gpn/dp83822i p66
 
-Only cgroup v2 is supported. Similar to the task accounting, the cgroup
-accounting requires that schedstats is enabled.
-
-Signed-off-by: Josh Don <joshdon@google.com>
+Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
+Suggested-by: Alberto Bianchi <alberto.bianchi@amarulasolutions.com>
+Tested-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
 ---
-v2: Per Tejun's suggestion, move the forceidle stat to cgroup_base_stat
-directly.
+Changes since v2:
+ - Fix comment of register name RSCR -> RCSR
+ - Fix define DP83822_RGMII_MODE_EN location
 
- include/linux/cgroup-defs.h |  4 ++++
- include/linux/kernel_stat.h |  7 +++++++
- kernel/cgroup/rstat.c       | 40 +++++++++++++++++++++++++++++++------
- kernel/sched/core_sched.c   |  6 +++++-
- kernel/sched/cputime.c      | 11 ++++++++++
- 5 files changed, 61 insertions(+), 7 deletions(-)
+Changes since v1:
+ - Improve commit msg
+ - Add definition of bit 9 reg rcsr (rgmii mode en)
+ - Handle case: phy_interface_is_rgmii is false
 
-diff --git a/include/linux/cgroup-defs.h b/include/linux/cgroup-defs.h
-index 1bfcfb1af352..025fd0e84a31 100644
---- a/include/linux/cgroup-defs.h
-+++ b/include/linux/cgroup-defs.h
-@@ -287,6 +287,10 @@ struct css_set {
+ drivers/net/phy/dp83822.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/phy/dp83822.c b/drivers/net/phy/dp83822.c
+index ce17b2af3218..e6ad3a494d32 100644
+--- a/drivers/net/phy/dp83822.c
++++ b/drivers/net/phy/dp83822.c
+@@ -94,7 +94,8 @@
+ #define DP83822_WOL_INDICATION_SEL BIT(8)
+ #define DP83822_WOL_CLR_INDICATION BIT(11)
  
- struct cgroup_base_stat {
- 	struct task_cputime cputime;
+-/* RSCR bits */
++/* RCSR bits */
++#define DP83822_RGMII_MODE_EN	BIT(9)
+ #define DP83822_RX_CLK_SHIFT	BIT(12)
+ #define DP83822_TX_CLK_SHIFT	BIT(11)
+ 
+@@ -408,6 +409,12 @@ static int dp83822_config_init(struct phy_device *phydev)
+ 			if (err)
+ 				return err;
+ 		}
 +
-+#ifdef CONFIG_SCHED_CORE
-+	u64 forceidle_sum;
-+#endif
- };
- 
- /*
-diff --git a/include/linux/kernel_stat.h b/include/linux/kernel_stat.h
-index 69ae6b278464..94f435ce1df0 100644
---- a/include/linux/kernel_stat.h
-+++ b/include/linux/kernel_stat.h
-@@ -28,6 +28,9 @@ enum cpu_usage_stat {
- 	CPUTIME_STEAL,
- 	CPUTIME_GUEST,
- 	CPUTIME_GUEST_NICE,
-+#ifdef CONFIG_SCHED_CORE
-+	CPUTIME_FORCEIDLE,
-+#endif
- 	NR_STATS,
- };
- 
-@@ -115,4 +118,8 @@ extern void account_process_tick(struct task_struct *, int user);
- 
- extern void account_idle_ticks(unsigned long ticks);
- 
-+#ifdef CONFIG_SCHED_CORE
-+extern void account_forceidle_time(struct task_struct *tsk, u64 delta);
-+#endif
-+
- #endif /* _LINUX_KERNEL_STAT_H */
-diff --git a/kernel/cgroup/rstat.c b/kernel/cgroup/rstat.c
-index 24b5c2ab5598..d873de6f8716 100644
---- a/kernel/cgroup/rstat.c
-+++ b/kernel/cgroup/rstat.c
-@@ -310,6 +310,9 @@ static void cgroup_base_stat_add(struct cgroup_base_stat *dst_bstat,
- 	dst_bstat->cputime.utime += src_bstat->cputime.utime;
- 	dst_bstat->cputime.stime += src_bstat->cputime.stime;
- 	dst_bstat->cputime.sum_exec_runtime += src_bstat->cputime.sum_exec_runtime;
-+#ifdef CONFIG_SCHED_CORE
-+	dst_bstat->forceidle_sum += src_bstat->forceidle_sum;
-+#endif
- }
- 
- static void cgroup_base_stat_sub(struct cgroup_base_stat *dst_bstat,
-@@ -318,6 +321,9 @@ static void cgroup_base_stat_sub(struct cgroup_base_stat *dst_bstat,
- 	dst_bstat->cputime.utime -= src_bstat->cputime.utime;
- 	dst_bstat->cputime.stime -= src_bstat->cputime.stime;
- 	dst_bstat->cputime.sum_exec_runtime -= src_bstat->cputime.sum_exec_runtime;
-+#ifdef CONFIG_SCHED_CORE
-+	dst_bstat->forceidle_sum -= src_bstat->forceidle_sum;
-+#endif
- }
- 
- static void cgroup_base_stat_flush(struct cgroup *cgrp, int cpu)
-@@ -398,6 +404,11 @@ void __cgroup_account_cputime_field(struct cgroup *cgrp,
- 	case CPUTIME_SOFTIRQ:
- 		rstatc->bstat.cputime.stime += delta_exec;
- 		break;
-+#ifdef CONFIG_SCHED_CORE
-+	case CPUTIME_FORCEIDLE:
-+		rstatc->bstat.forceidle_sum += delta_exec;
-+		break;
-+#endif
- 	default:
- 		break;
- 	}
-@@ -411,8 +422,9 @@ void __cgroup_account_cputime_field(struct cgroup *cgrp,
-  * with how it is done by __cgroup_account_cputime_field for each bit of
-  * cpu time attributed to a cgroup.
-  */
--static void root_cgroup_cputime(struct task_cputime *cputime)
-+static void root_cgroup_cputime(struct cgroup_base_stat *bstat)
- {
-+	struct task_cputime *cputime = &bstat->cputime;
- 	int i;
- 
- 	cputime->stime = 0;
-@@ -438,6 +450,10 @@ static void root_cgroup_cputime(struct task_cputime *cputime)
- 		cputime->sum_exec_runtime += user;
- 		cputime->sum_exec_runtime += sys;
- 		cputime->sum_exec_runtime += cpustat[CPUTIME_STEAL];
-+
-+#ifdef CONFIG_SCHED_CORE
-+		bstat->forceidle_sum += cpustat[CPUTIME_FORCEIDLE];
-+#endif
- 	}
- }
- 
-@@ -445,27 +461,39 @@ void cgroup_base_stat_cputime_show(struct seq_file *seq)
- {
- 	struct cgroup *cgrp = seq_css(seq)->cgroup;
- 	u64 usage, utime, stime;
--	struct task_cputime cputime;
-+	struct cgroup_base_stat bstat;
-+	u64 __maybe_unused forceidle_time;
- 
- 	if (cgroup_parent(cgrp)) {
- 		cgroup_rstat_flush_hold(cgrp);
- 		usage = cgrp->bstat.cputime.sum_exec_runtime;
- 		cputime_adjust(&cgrp->bstat.cputime, &cgrp->prev_cputime,
- 			       &utime, &stime);
-+#ifdef CONFIG_SCHED_CORE
-+		forceidle_time = cgrp->bstat.forceidle_sum;
-+#endif
- 		cgroup_rstat_flush_release();
- 	} else {
--		root_cgroup_cputime(&cputime);
--		usage = cputime.sum_exec_runtime;
--		utime = cputime.utime;
--		stime = cputime.stime;
-+		root_cgroup_cputime(&bstat);
-+		usage = bstat.cputime.sum_exec_runtime;
-+		utime = bstat.cputime.utime;
-+		stime = bstat.cputime.stime;
-+#ifdef CONFIG_SCHED_CORE
-+		forceidle_time = bstat.forceidle_sum;
-+#endif
++		phy_set_bits_mmd(phydev, DP83822_DEVADDR,
++					MII_DP83822_RCSR, DP83822_RGMII_MODE_EN);
++	} else {
++		phy_clear_bits_mmd(phydev, DP83822_DEVADDR,
++					MII_DP83822_RCSR, DP83822_RGMII_MODE_EN);
  	}
  
- 	do_div(usage, NSEC_PER_USEC);
- 	do_div(utime, NSEC_PER_USEC);
- 	do_div(stime, NSEC_PER_USEC);
-+	do_div(forceidle_time, NSEC_PER_USEC);
- 
- 	seq_printf(seq, "usage_usec %llu\n"
- 		   "user_usec %llu\n"
- 		   "system_usec %llu\n",
- 		   usage, utime, stime);
-+
-+#ifdef CONFIG_SCHED_CORE
-+	seq_printf(seq, "forceidle_usec %llu\n", forceidle_time);
-+#endif
- }
-diff --git a/kernel/sched/core_sched.c b/kernel/sched/core_sched.c
-index 38a2cec21014..ddef2b8ddf68 100644
---- a/kernel/sched/core_sched.c
-+++ b/kernel/sched/core_sched.c
-@@ -277,7 +277,11 @@ void __sched_core_account_forceidle(struct rq *rq)
- 		if (p == rq_i->idle)
- 			continue;
- 
--		__schedstat_add(p->stats.core_forceidle_sum, delta);
-+		/*
-+		 * Note: this will account forceidle to the current cpu, even
-+		 * if it comes from our SMT sibling.
-+		 */
-+		account_forceidle_time(p, delta);
- 	}
- }
- 
-diff --git a/kernel/sched/cputime.c b/kernel/sched/cputime.c
-index 78a233d43757..598d1026d629 100644
---- a/kernel/sched/cputime.c
-+++ b/kernel/sched/cputime.c
-@@ -226,6 +226,17 @@ void account_idle_time(u64 cputime)
- 		cpustat[CPUTIME_IDLE] += cputime;
- }
- 
-+
-+#ifdef CONFIG_SCHED_CORE
-+/* Account for forceidle time due to core scheduling. */
-+void account_forceidle_time(struct task_struct *p, u64 delta)
-+{
-+	schedstat_add(p->stats.core_forceidle_sum, delta);
-+
-+	task_group_account_field(p, CPUTIME_FORCEIDLE, delta);
-+}
-+#endif
-+
- /*
-  * When a guest is interrupted for a longer amount of time, missed clock
-  * ticks are not redelivered later. Due to that, this function may on
+ 	if (dp83822->fx_enabled) {
 -- 
-2.36.1.124.g0e6072fb45-goog
+2.25.1
 

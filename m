@@ -2,81 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 403D152E11F
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 02:21:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84B1552E122
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 02:23:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343965AbiETAVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 20:21:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34634 "EHLO
+        id S1343971AbiETAXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 20:23:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343950AbiETAVi (ORCPT
+        with ESMTP id S238922AbiETAXp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 20:21:38 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 203C99CF4B
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 17:21:37 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id i19so12742790eja.11
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 17:21:37 -0700 (PDT)
+        Thu, 19 May 2022 20:23:45 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68AF312B032
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 17:23:42 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id i40so8863188eda.7
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 17:23:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=+wYJNaePiHcWNH/q3h1ZhNLEV4dJ71MIiiBiHgAmbYA=;
-        b=NVM/bktb8CtRk0VgJ75AEtD+l1Etp4dc82+iRcIAsF62UYPJmJUe2sENhNxQGCGQpE
-         vCsHBMNUy7vONzvYsBEHm8ej3XihpZ8QIBEoXSsqArdCBjVJF4IByYjx2R35+TnR4FqV
-         VDBFu5MpvMXsafQZ0SE+nZWoCjniwY9mA1MNg=
+        bh=NkNsmxiQk+nW3UDbjO7QxzvaqncjAzBvhuR1VH6Vk60=;
+        b=bA4kB8OhrG3AO6xz5No7HEoss1T72t7wOhdeRdSsdZLYCzD5aJYviGdcdpnznfPifZ
+         yuRj+lDxOoXXam02skD8mXDZraaqUDT3pVNFce59ArewYDhYNcYKJahlU2Ir6PagSJtJ
+         9VEQUM21705l7JBJccvc9ZdGE5VGkEK28WMdE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=+wYJNaePiHcWNH/q3h1ZhNLEV4dJ71MIiiBiHgAmbYA=;
-        b=O/hb0l+eauUOydPJ+X6PDe+r5ewmtvfODcwmYH8ahg0XqFDgQKp2W3z6/cqJhzOWVO
-         D0h4lnYQfOWFfhVnjMGdSRtz8P217uUxSBManSLNa6KK/AyTC2rg/CwVGVEWZCMtK6tU
-         qUHDiM2qIZ6SPy3OHJqr4ROy4eCJzRfKvDkO78Pd90fcuZf3+7EW5orCrnaBHeYXAC+n
-         /dr8fEuc0TMNRviNYz/2SRX2YW5/iNoDh5xcjjltc/5XUkTPlWYj116+OUjfC65hk42T
-         /KPkmVmlAr2yszrGf/7GUtWijBSm0vQOZg8eY3CufG6fEpw3/5qY9bEEscTBDtvehGT5
-         4btw==
-X-Gm-Message-State: AOAM533V3oKoCvAOiV9Otv0z3dGcQYyOX04JsQ+BG8iG9KhcmZb/IA62
-        dfnXPo3e/3TIK9r+4/UxdNbbXbAYcyt+zsjQ3j0=
-X-Google-Smtp-Source: ABdhPJzPrJ8zGcRWMPOP2PJNJAK5Fbrl6/BgusQP8fQkCJvp56hibTuiFQhGnY465Zq2NEzWdwN8VQ==
-X-Received: by 2002:a17:907:6d25:b0:6f4:d753:f250 with SMTP id sa37-20020a1709076d2500b006f4d753f250mr6442505ejc.580.1653006095466;
-        Thu, 19 May 2022 17:21:35 -0700 (PDT)
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com. [209.85.221.53])
-        by smtp.gmail.com with ESMTPSA id m5-20020a17090677c500b006f3ef214e28sm2638465ejn.142.2022.05.19.17.21.33
+        bh=NkNsmxiQk+nW3UDbjO7QxzvaqncjAzBvhuR1VH6Vk60=;
+        b=pqRg6tzuaS/hIy4uqmWB4t5ZicqcVOLhKTxSWzz0/Xm30vpxSCFplOc2viC1ogr6xd
+         bdKYo2HLlwrGKajMOEI7SMGMpglTZn7suQnrcS/LT1dGKldigkGUIXZ2o6fnOXRZIOUj
+         0LTuTgGX4NEC3y3nf0FvvltAdFrGTwpuXWBFpvCOF8NAcqMqpT0juwLS+5aatmpyj0G0
+         mroNWR1QjSKcqLTL4dG4bnfH9Ln5VU0PweictlhKCn1CKNUlAcg2w8MuCQ72kFxKw/Ai
+         fFcmLhkCdL3OviUz9+qTAi1ZgRbErNNVqcg44Ci79PRzumZrF4hTC72ZSC/bGfWMyW1Q
+         5Adg==
+X-Gm-Message-State: AOAM530YWp7kWhrFusstoXyRRyI+K6LIaorC5CCkYccezXLr8wfJgO4v
+        sLnJ+8BMXP9XWeUqFuf4SYwOAETQeMHPxaO6gBk=
+X-Google-Smtp-Source: ABdhPJwUQNQScKvDeDzQQltWTFMY4oQtgUC9hlKrHBnGUUdcyE6V5qyG95VtC+J4HRklt8uIkYoylA==
+X-Received: by 2002:a05:6402:1393:b0:42a:c36d:67a6 with SMTP id b19-20020a056402139300b0042ac36d67a6mr8335125edv.158.1653006220789;
+        Thu, 19 May 2022 17:23:40 -0700 (PDT)
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com. [209.85.128.42])
+        by smtp.gmail.com with ESMTPSA id qx16-20020a170907b59000b006f3ef214e60sm2553085ejc.198.2022.05.19.17.23.39
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 May 2022 17:21:33 -0700 (PDT)
-Received: by mail-wr1-f53.google.com with SMTP id j24so9406563wrb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 17:21:33 -0700 (PDT)
-X-Received: by 2002:a5d:5085:0:b0:20d:5f6:63fa with SMTP id
- a5-20020a5d5085000000b0020d05f663famr5861629wrt.679.1653006092752; Thu, 19
- May 2022 17:21:32 -0700 (PDT)
+        Thu, 19 May 2022 17:23:39 -0700 (PDT)
+Received: by mail-wm1-f42.google.com with SMTP id r9-20020a1c4409000000b00397345f2c6fso1242928wma.4
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 17:23:39 -0700 (PDT)
+X-Received: by 2002:a05:600c:3c99:b0:392:b49c:7b79 with SMTP id
+ bg25-20020a05600c3c9900b00392b49c7b79mr5830883wmb.199.1653006218866; Thu, 19
+ May 2022 17:23:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220511155749.v3.1.I2dd93486c6952bd52f2020904de0133970d11b29@changeid>
- <20220511155749.v3.2.I4ac7f55aa446699f8c200a23c10463256f6f439f@changeid>
-In-Reply-To: <20220511155749.v3.2.I4ac7f55aa446699f8c200a23c10463256f6f439f@changeid>
+References: <20220509161733.v2.1.Ia8651894026707e4fa61267da944ff739610d180@changeid>
+In-Reply-To: <20220509161733.v2.1.Ia8651894026707e4fa61267da944ff739610d180@changeid>
 From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 19 May 2022 17:21:20 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=X7cr-=UwV_XbAYovTqeUYXO3LVLTU2bLiwf8wU2kGsLA@mail.gmail.com>
-Message-ID: <CAD=FV=X7cr-=UwV_XbAYovTqeUYXO3LVLTU2bLiwf8wU2kGsLA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] drm/probe-helper: For DP, add 640x480 if all other
- modes are bad
+Date:   Thu, 19 May 2022 17:23:26 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=XWYFDMYvZJWDnV2Yc+5X=NThYnE78aOeMrhrEvBiDLkQ@mail.gmail.com>
+Message-ID: <CAD=FV=XWYFDMYvZJWDnV2Yc+5X=NThYnE78aOeMrhrEvBiDLkQ@mail.gmail.com>
+Subject: Re: [PATCH v2] drm: Document the power requirements for DP AUX transfers
 To:     dri-devel <dri-devel@lists.freedesktop.org>
-Cc:     freedreno <freedreno@lists.freedesktop.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
+Cc:     Robert Foss <robert.foss@linaro.org>,
+        Lyude Paul <lyude@redhat.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
         =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
         linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        freedreno <freedreno@lists.freedesktop.org>,
         Daniel Vetter <daniel@ffwll.ch>,
         David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
         LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -91,68 +90,81 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-On Wed, May 11, 2022 at 3:58 PM Douglas Anderson <dianders@chromium.org> wrote:
+On Mon, May 9, 2022 at 4:18 PM Douglas Anderson <dianders@chromium.org> wrote:
 >
-> As per Displayport spec section 5.2.1.2 ("Video Timing Format") says
-> that all detachable sinks shall support 640x480 @60Hz as a fail safe
-> mode.
+> When doing DP AUX transfers there are two actors that need to be
+> powered in order for the DP AUX transfer to work: the DP source and
+> the DP sink. Commit bacbab58f09d ("drm: Mention the power state
+> requirement on side-channel operations") added some documentation
+> saying that the DP source is required to power itself up (if needed)
+> to do AUX transfers. However, that commit doesn't talk anything about
+> the DP sink.
 >
-> A DP compliance test expected us to utilize the above fact when all
-> modes it presented to the DP source were not achievable. It presented
-> only modes that would be achievable with more lanes and/or higher
-> speeds than we had available and expected that when we couldn't do
-> that then we'd fall back to 640x480 even though it didn't advertise
-> this size.
+> For full fledged DP the sink isn't really a problem. It's expected
+> that if an external DP monitor isn't plugged in that attempting to do
+> AUX transfers won't work. It's also expected that if a DP monitor is
+> plugged in (and thus asserting HPD) then AUX transfers will work.
 >
-> In order to pass the compliance test (and also support any users who
-> might fall into a similar situation with their display), we need to
-> add 640x480 into the list of modes. However, we don't want to add
-> 640x480 all the time. Despite the fact that the DP spec says all sinks
-> _shall support_ 640x480, they're not guaranteed to support it
-> _well_. Continuing to read the spec you can see that the display is
-> not required to really treat 640x480 equal to all the other modes. It
-> doesn't need to scale or anything--just display the pixels somehow for
-> failsafe purposes. It should also be noted that it's not hard to find
-> a display hooked up via DisplayPort that _doesn't_ support 640x480 at
-> all. The HP ZR30w screen I'm sitting in front of has a native DP port
-> and doesn't work at 640x480. I also plugged in a tiny 800x480 HDMI
-> display via a DP to HDMI adapter and that screen definitely doesn't
-> support 640x480.
+> When we're looking at eDP, however, things are less obvious. Let's add
+> some documentation about expectations. Here's what we'll say:
 >
-> As a compromise solution, let's only add the 640x480 mode if:
-> * We're on DP.
-> * All other modes have been pruned.
+> 1. We don't expect the DP AUX transfer function to power on an eDP
+> panel. If an eDP panel is physically connected but powered off then it
+> makes sense for the transfer to fail.
 >
-> This acknowledges that 640x480 might not be the best mode to use but,
-> since sinks are _supposed_ to support it, we will at least fall back
-> to it if there's nothing else.
+> 2. We'll document that the official way to power on a panel is via the
+> bridge chain, specifically by making sure that the panel's prepare
+> function has been called (which is called by
+> panel_bridge_pre_enable()). It's already specified in the kernel doc
+> of drm_panel_prepare() that this is the way to power the panel on and
+> also that after this call "it is possible to communicate with any
+> integrated circuitry via a command bus."
 >
-> Note that we _don't_ add higher resolution modes like 1024x768 in this
-> case. We only add those modes for a failed EDID read where we have no
-> idea what's going on. In the case where we've pruned all modes then
-> instead we only want 640x480 which is the only defined "Fail Safe"
-> resolution.
+> 3. We'll also document that for code running in the panel driver
+> itself that it is legal for the panel driver to power itself up
+> however it wants (it doesn't need to officially call
+> drm_panel_pre_enable()) and then it can do AUX bus transfers. This is
+> currently the way that edp-panel works when it's running atop the DP
+> AUX bus.
 >
-> This patch originated in response to Kuogee Hsieh's patch [1].
+> NOTE: there was much discussion of all of this in response to v1 [1]
+> of this patch. A summary of that is:
+> * With the Intel i195 driver, apparently eDP panels do get powered
+>   up. We won't forbid this but it is expected that code that wants to
+>   run on a variety of platforms should ensure that the drm_panel's
+>   prepare() function has been called.
+> * There is at least a reasonable amount of agreement that the
+>   transfer() functions itself shouldn't be responsible for powering
+>   the panel. It's proposed that if we need the DP AUX dev nodes to be
+>   robust for eDP that the code handling the DP AUX dev nodes could
+>   handle powering the panel by ensuring that the panel's prepare()
+>   call was made. Potentially drm_dp_aux_dev_get_by_minor() could be a
+>   good place to do this. This is left as a future exercise. Until
+>   that's fixed the DP AUX dev nodes for eDP are probably best just
+>   used for debugging.
+> * If a panel could be in PSR and DP AUX via the dev node needs to be
+>   reliable then we need to be able to pull the panel out of PSR. On
+>   i915 this is also apparently handled as part of the transfer()
+>   function.
 >
-> [1] https://lore.kernel.org/r/1650671124-14030-1-git-send-email-quic_khsieh@quicinc.com
+> [1] https://lore.kernel.org/r/20220503162033.1.Ia8651894026707e4fa61267da944ff739610d180@changeid
 >
 > Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> Tested-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
 > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Reviewed-by: Lyude Paul <lyude@redhat.com>
 > ---
->
-> Changes in v3:
-> - Removed WARN_ON
+> Hopefully I've resolved everything here to everyone's
+> satisfaction. There's no crazy hurry here. I'll give this a week or so
+> and then land it on drm-misc if there is no additional discussion.
 >
 > Changes in v2:
-> - Two underscores for __drm_helper_update_and_validate().
-> - Return err and use WARN_ON instead of returning a bool.
+> - Updated wording as per discussion on v1.
+> - Updated commit message as per discussion on v1.
+> - Add pointer to v1 discussion for future reference.
 >
->  drivers/gpu/drm/drm_probe_helper.c | 27 ++++++++++++++++++++++-----
->  1 file changed, 22 insertions(+), 5 deletions(-)
+>  include/drm/display/drm_dp_helper.h | 16 +++++++++++++---
+>  1 file changed, 13 insertions(+), 3 deletions(-)
 
 Pushed to drm-misc-next:
 
-e7c254d75d16 drm/probe-helper: For DP, add 640x480 if all other modes are bad
+69ef4a192bba drm: Document the power requirements for DP AUX transfers

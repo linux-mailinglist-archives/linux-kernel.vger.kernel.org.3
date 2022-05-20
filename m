@@ -2,87 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24BBF52E767
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 10:30:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1841352E739
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 10:23:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347048AbiETI3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 04:29:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39552 "EHLO
+        id S1346953AbiETIXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 04:23:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344316AbiETI3l (ORCPT
+        with ESMTP id S1346932AbiETIXj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 04:29:41 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D07D61618;
-        Fri, 20 May 2022 01:29:40 -0700 (PDT)
-Received: from fraeml709-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4L4KYR55tBz687XH;
-        Fri, 20 May 2022 16:25:47 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml709-chm.china.huawei.com (10.206.15.37) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 20 May 2022 10:29:38 +0200
-Received: from localhost.localdomain (10.69.192.58) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 20 May 2022 09:29:34 +0100
-From:   John Garry <john.garry@huawei.com>
-To:     <damien.lemoal@opensource.wdc.com>, <joro@8bytes.org>,
-        <will@kernel.org>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <hch@lst.de>,
-        <m.szyprowski@samsung.com>, <robin.murphy@arm.com>
-CC:     <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-ide@vger.kernel.org>, <iommu@lists.linux-foundation.org>,
-        <linux-scsi@vger.kernel.org>, <liyihang6@hisilicon.com>,
-        <chenxiang66@hisilicon.com>, <thunder.leizhen@huawei.com>,
-        John Garry <john.garry@huawei.com>
-Subject: [PATCH 4/4] libata-scsi: Cap ata_device->max_sectors according to shost->max_sectors
-Date:   Fri, 20 May 2022 16:23:23 +0800
-Message-ID: <1653035003-70312-5-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1653035003-70312-1-git-send-email-john.garry@huawei.com>
-References: <1653035003-70312-1-git-send-email-john.garry@huawei.com>
+        Fri, 20 May 2022 04:23:39 -0400
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CB3140423;
+        Fri, 20 May 2022 01:23:36 -0700 (PDT)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id C419E6000A;
+        Fri, 20 May 2022 08:23:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1653035014;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=u7ftNRkOl2hUKqnVw602ufHyZi8yLfc1Zwyuxj3PqQU=;
+        b=c5I6dSsQESldKWX+KVZzuJkA3YahNJqcYefiVUApmUcel4osp4QtbFBDjObK519OFyoB0b
+        os093WMhtAX9vCqQWn9bpcqSHketvksEQDVpyhjh9JSEGfJ25AzoCD77dkKqtWgEMQH1M4
+        wBwDPOxYf74MqjtEZm16M9mbRv7CE2Fm9scfGZc1RCSgkX4DL/imWLpspuxsUlVb0smNZe
+        +H3HswE4E9m6q7mi7pmOhhnQEAf3vMEwXJoqvjGFWG3uuWTcERGPzrrYQuUl3FuQFlJrpO
+        hiCnIwdpd6UMi2XAwQOV1IeQXuahbdqG0oLzN4xjgpL5jk9rkYbmdLaKGWVSUQ==
+Date:   Fri, 20 May 2022 10:23:29 +0200
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Marek Vasut <marek.vasut+renesas@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>, linux-pci@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Clement Leger <clement.leger@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: Re: [PATCH v5 2/6] dt-bindings: PCI: renesas,pci-rcar-gen2: Add
+ device tree support for r9a06g032
+Message-ID: <20220520102329.6b0a58d0@bootlin.com>
+In-Reply-To: <29ba3db6-e5c7-06d3-29d9-918ee5b34555@linaro.org>
+References: <20220429134143.628428-1-herve.codina@bootlin.com>
+        <20220429134143.628428-4-herve.codina@bootlin.com>
+        <29ba3db6-e5c7-06d3-29d9-918ee5b34555@linaro.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ATA devices (struct ata_device) have a max_sectors field which is
-configured internally in libata. This is then used to (re)configure the
-associated sdev request queue max_sectors value from how it is earlier set
-in __scsi_init_queue(). In __scsi_init_queue() the max_sectors value is set
-according to shost limits, which includes host DMA mapping limits.
+Hi Krzysztof,
 
-Cap the ata_device max_sectors according to shost->max_sectors to respect
-this shost limit.
+On Sun, 1 May 2022 10:51:43 +0200
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-Signed-off-by: John Garry <john.garry@huawei.com>
----
- drivers/ata/libata-scsi.c | 1 +
- 1 file changed, 1 insertion(+)
+[...]
+> >    resets:
+> >      maxItems: 1
+> > @@ -106,13 +106,45 @@ required:
+> >    - interrupt-map
+> >    - interrupt-map-mask
+> >    - clocks
+> > -  - resets
+> >    - power-domains
+> >    - bus-range
+> >    - "#address-cells"
+> >    - "#size-cells"
+> >    - "#interrupt-cells"
+> > =20
+> > +if: =20
+>=20
+> allOf.
+>=20
+> > +  properties:
+> > +    compatible:
+> > +      contains:
+> > +        enum:
 
-diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
-index 06c9d90238d9..25fe89791641 100644
---- a/drivers/ata/libata-scsi.c
-+++ b/drivers/ata/libata-scsi.c
-@@ -1036,6 +1036,7 @@ int ata_scsi_dev_config(struct scsi_device *sdev, struct ata_device *dev)
- 		dev->flags |= ATA_DFLAG_NO_UNLOAD;
- 
- 	/* configure max sectors */
-+	dev->max_sectors = min(dev->max_sectors, sdev->host->max_sectors);
- 	blk_queue_max_hw_sectors(q, dev->max_sectors);
- 
- 	if (dev->class == ATA_DEV_ATAPI) {
--- 
-2.26.2
+I Have an issue with this allOf.
+
+The yaml has the following structure and so has 2 AllOf:
+  ...
+  allOf:
+  - $ref: /schemas/pci/pci-bus.yaml#
+ =20
+  properties:
+    compatible:
+  ...
+  allOf:
+  - if:
+      properties:
+        compatible:
+          contains:
+  ...
+
+
+make dt_binding_check failed with the following error:
+    $ make dt_binding_check DT_SCHEMA_FILES=3Drenesas,pci-rcar-gen2.yaml
+      LINT    Documentation/devicetree/bindings
+    ./Documentation/devicetree/bindings/pci/renesas,pci-rcar-gen2.yaml:115:=
+1: [error] duplication of key "allOf" in mapping (key-duplicates)
+      CHKDT   Documentation/devicetree/bindings/processed-schema.json
+    Traceback (most recent call last):
+      File "/home/hcodina/.local/bin/dt-doc-validate", line 25, in check_doc
+        testtree =3D dtschema.load(filename, line_number=3Dline_number)
+      File "/home/hcodina/.local/lib/python3.10/site-packages/dtschema/lib.=
+py", line 912, in load
+        return yaml.load(f.read())
+      File "/home/hcodina/.local/lib/python3.10/site-packages/ruamel/yaml/m=
+ain.py", line 434, in load
+        return constructor.get_single_data()
+      File "/home/hcodina/.local/lib/python3.10/site-packages/ruamel/yaml/c=
+onstructor.py", line 121, in get_single_data
+        return self.construct_document(node)
+      File "/home/hcodina/.local/lib/python3.10/site-packages/ruamel/yaml/c=
+onstructor.py", line 131, in construct_document
+        for _dummy in generator:
+      File "/home/hcodina/.local/lib/python3.10/site-packages/ruamel/yaml/c=
+onstructor.py", line 674, in construct_yaml_map
+        value =3D self.construct_mapping(node)
+      File "/home/hcodina/.local/lib/python3.10/site-packages/ruamel/yaml/c=
+onstructor.py", line 445, in construct_mapping
+        return BaseConstructor.construct_mapping(self, node, deep=3Ddeep)
+      File "/home/hcodina/.local/lib/python3.10/site-packages/ruamel/yaml/c=
+onstructor.py", line 263, in construct_mapping
+        if self.check_mapping_key(node, key_node, mapping, key, value):
+      File "/home/hcodina/.local/lib/python3.10/site-packages/ruamel/yaml/c=
+onstructor.py", line 294, in check_mapping_key
+        raise DuplicateKeyError(*args)
+    ruamel.yaml.constructor.DuplicateKeyError: while constructing a mapping
+      in "<unicode string>", line 4, column 1
+    found duplicate key "allOf" with value "[]" (original value: "[]")
+      in "<unicode string>", line 115, column 1
+   =20
+    To suppress this check see:
+        http://yaml.readthedocs.io/en/latest/api.html#duplicate-keys
+   =20
+   =20
+    During handling of the above exception, another exception occurred:
+   =20
+    Traceback (most recent call last):
+      File "/home/hcodina/.local/bin/dt-doc-validate", line 74, in <module>
+        ret =3D check_doc(f)
+      File "/home/hcodina/.local/bin/dt-doc-validate", line 30, in check_doc
+        print(filename + ":", exc.path[-1], exc.message, file=3Dsys.stderr)
+    AttributeError: 'DuplicateKeyError' object has no attribute 'path'
+      SCHEMA  Documentation/devicetree/bindings/processed-schema.json
+    /home/hcodina/project/xxxx/dev/linux/upstream_usb_host/Documentation/de=
+vicetree/bindings/pci/renesas,pci-rcar-gen2.yaml: ignoring, error parsing f=
+ile
+      DTEX    Documentation/devicetree/bindings/pci/renesas,pci-rcar-gen2.e=
+xample.dts
+    Documentation/devicetree/bindings/pci/renesas,pci-rcar-gen2.yaml: found=
+ duplicate key "allOf" with value "[]" (original value: "[]")
+    make[1]: *** [Documentation/devicetree/bindings/Makefile:26: Documentat=
+ion/devicetree/bindings/pci/renesas,pci-rcar-gen2.example.dts] Error 1
+    make[1]: *** Deleting file 'Documentation/devicetree/bindings/pci/renes=
+as,pci-rcar-gen2.example.dts'
+    make: *** [Makefile:1401: dt_binding_check] Error 2
+    [hcodina@localhost upstream_usb_host]$=20
+   =20
+    [hcodina@localhost upstream_usb_host]$ make ARCH=3Darm CROSS_COMPILE=3D=
+/home/hcodina/toolchain/gcc-linaro-7.5.0-2019.12-x86_64_arm-linux-gnueabihf=
+/bin/arm-linux-gnueabihf- dt_binding_check DT_SCHEMA_FILES=3Drenesas,pci-rc=
+ar-gen2.yaml
+      DTEX    Documentation/devicetree/bindings/pci/renesas,pci-rcar-gen2.e=
+xample.dts
+    Documentation/devicetree/bindings/pci/renesas,pci-rcar-gen2.yaml: found=
+ duplicate key "allOf" with value "[]" (original value: "[]")
+    make[1]: *** [Documentation/devicetree/bindings/Makefile:26: Documentat=
+ion/devicetree/bindings/pci/renesas,pci-rcar-gen2.example.dts] Error 1
+    make[1]: *** Deleting file 'Documentation/devicetree/bindings/pci/renes=
+as,pci-rcar-gen2.example.dts'
+    make: *** [Makefile:1401: dt_binding_check] Error 2
+
+
+Is having a 'allOf' for schemas inclusion and a 'allOf' for conditionnal
+parts allowed ?
+
+
+Regards,
+Herv=C3=A9
 

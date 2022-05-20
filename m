@@ -2,145 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 247F852E9FC
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 12:34:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 412BD52E9FE
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 12:35:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348170AbiETKeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 06:34:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37608 "EHLO
+        id S1348183AbiETKfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 06:35:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348177AbiETKeB (ORCPT
+        with ESMTP id S1348185AbiETKfd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 06:34:01 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B98B491546;
-        Fri, 20 May 2022 03:33:59 -0700 (PDT)
-Date:   Fri, 20 May 2022 10:33:57 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1653042838;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FE+BOQ6uzu8Gi5c2fn3WY83cdv+67m6yfyPb/3eWIfc=;
-        b=BfRkbNSNL/MGN8ldZzmNq0V9TIoS7Eevfk26KCfZL5L7SvkvAWZ+yQWY3DZqS3bvn1mfER
-        oAGkvHmppc21YMBeo11VJMPmzBpTJ16nlRZ5U1k0GHZc1lA9AcRHvWGf26PXKUGoTpmTfW
-        uAxtE89VuZVKElpoJij6FE+Ho34DrzYoIRRoBsGEJdurOGf4t0fhU+91Jq7OocecQDCSmt
-        Eu7rRs54KrQFO0beK/4fI8W59shsW7X2b+121a3hPB0xddvxvfG0V8RzbRczOxS27g/dev
-        xaCTF5E2UiexQmlQ8ywt5HA7AmtYfq3wXMf1P6cQbyqGPPmx6bzctzokt2tLKQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1653042838;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FE+BOQ6uzu8Gi5c2fn3WY83cdv+67m6yfyPb/3eWIfc=;
-        b=nvzRew2Wd0+BuwIHch+MrjxeMF0FyIvI+r+PFL2hbPNB2Vh+ACvAUm5rwNt/SIgp6Ha2Kr
-        OiuilLzxALFOxRBQ==
-From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/sev] x86/entry: Fixup objtool/ibt validation
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Borislav Petkov <bp@suse.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220520082604.GQ2578@worktop.programming.kicks-ass.net>
-References: <20220520082604.GQ2578@worktop.programming.kicks-ass.net>
+        Fri, 20 May 2022 06:35:33 -0400
+Received: from outbound-smtp22.blacknight.com (outbound-smtp22.blacknight.com [81.17.249.190])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61B74EBA8A
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 03:35:31 -0700 (PDT)
+Received: from mail.blacknight.com (pemlinmail01.blacknight.ie [81.17.254.10])
+        by outbound-smtp22.blacknight.com (Postfix) with ESMTPS id DF960BAB0A
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 11:35:29 +0100 (IST)
+Received: (qmail 29734 invoked from network); 20 May 2022 10:35:29 -0000
+Received: from unknown (HELO morpheus.112glenside.lan) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPA; 20 May 2022 10:35:29 -0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        Aubrey Li <aubrey.li@linux.intel.com>,
+        Ying Huang <ying.huang@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Mel Gorman <mgorman@techsingularity.net>
+Subject: [PATCH v2 0/4] Mitigate inconsistent NUMA imbalance behaviour
+Date:   Fri, 20 May 2022 11:35:15 +0100
+Message-Id: <20220520103519.1863-1-mgorman@techsingularity.net>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Message-ID: <165304283709.4207.13042308475336063166.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,HEXHASH_WORD,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/sev branch of tip:
+Changes since V1
+o Consolidate [allow|adjust]_numa_imbalance			(peterz)
+o #ifdefs around NUMA-specific pieces to build arc-allyesconfig	(lkp)
 
-Commit-ID:     ce6565282b3b16fd850c6a676f78c6bc76d0c235
-Gitweb:        https://git.kernel.org/tip/ce6565282b3b16fd850c6a676f78c6bc76d0c235
-Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Fri, 20 May 2022 10:26:04 +02:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Fri, 20 May 2022 12:04:56 +02:00
+A problem was reported privately related to inconsistent performance of
+NAS when parallelised with MPICH. The root of the problem is that the
+initial placement is unpredictable and there can be a larger imbalance
+than expected between NUMA nodes. As there is spare capacity and the faults
+are local, the imbalance persists for a long time and performance suffers.
 
-x86/entry: Fixup objtool/ibt validation
+This is not 100% an "allowed imbalance" problem as setting the allowed
+imbalance to 0 does not fix the issue but the allowed imbalance contributes
+the the performance problem. The unpredictable behaviour was most recently
+introduced by commit c6f886546cb8 ("sched/fair: Trigger the update of
+blocked load on newly idle cpu").
 
-Commit
+mpirun forks hydra_pmi_proxy helpers with MPICH that go to sleep before the
+execing the target workload. As the new tasks are sleeping, the potential
+imbalance is not observed as idle_cpus does not reflect the tasks that
+will be running in the near future. How bad the problem depends on the
+timing of when fork happens and whether the new tasks are still running.
+Consequently, a large initial imbalance may not be detected until the
+workload is fully running. Once running, NUMA Balancing picks the preferred
+node based on locality and runtime load balancing often ignores the tasks
+as can_migrate_task() fails for either locality or task_hot reasons and
+instead picks unrelated tasks.
 
-  47f33de4aafb ("x86/sev: Mark the code returning to user space as syscall gap")
+This is the min, max and range of run time for mg.D parallelised with ~25%
+of the CPUs parallelised by MPICH running on a 2-socket machine (80 CPUs,
+16 active for mg.D due to limitations of mg.D).
 
-added a bunch of text references without annotating them, resulting in a
-spree of objtool complaints:
+v5.3                                     Min  95.84 Max  96.55 Range   0.71 Mean  96.16
+v5.7                                     Min  95.44 Max  96.51 Range   1.07 Mean  96.14
+v5.8                                     Min  96.02 Max 197.08 Range 101.06 Mean 154.70
+v5.12                                    Min 104.45 Max 111.03 Range   6.58 Mean 105.94
+v5.13                                    Min 104.38 Max 170.37 Range  65.99 Mean 117.35
+v5.13-revert-c6f886546cb8                Min 104.40 Max 110.70 Range   6.30 Mean 105.68
+v5.18rc4-baseline                        Min 110.78 Max 169.84 Range  59.06 Mean 131.22
+v5.18rc4-revert-c6f886546cb8             Min 113.98 Max 117.29 Range   3.31 Mean 114.71
+v5.18rc4-this_series                     Min  95.56 Max 163.97 Range  68.41 Mean 105.39
+v5.18rc4-this_series-revert-c6f886546cb8 Min  95.56 Max 104.86 Range   9.30 Mean  97.00
 
-  vmlinux.o: warning: objtool: vc_switch_off_ist+0x77: relocation to !ENDBR: entry_SYSCALL_64+0x15c
-  vmlinux.o: warning: objtool: vc_switch_off_ist+0x8f: relocation to !ENDBR: entry_SYSCALL_compat+0xa5
-  vmlinux.o: warning: objtool: vc_switch_off_ist+0x97: relocation to !ENDBR: .entry.text+0x21ea
-  vmlinux.o: warning: objtool: vc_switch_off_ist+0xef: relocation to !ENDBR: .entry.text+0x162
-  vmlinux.o: warning: objtool: __sev_es_ist_enter+0x60: relocation to !ENDBR: entry_SYSCALL_64+0x15c
-  vmlinux.o: warning: objtool: __sev_es_ist_enter+0x6c: relocation to !ENDBR: .entry.text+0x162
-  vmlinux.o: warning: objtool: __sev_es_ist_enter+0x8a: relocation to !ENDBR: entry_SYSCALL_compat+0xa5
-  vmlinux.o: warning: objtool: __sev_es_ist_enter+0xc1: relocation to !ENDBR: .entry.text+0x21ea
+This shows that we've had unpredictable performance for a long time for
+this load. Instability was introduced somewhere between v5.7 and v5.8,
+fixed in v5.12 and broken again since v5.13.  The revert against 5.13
+and 5.18-rc4 shows that c6f886546cb8 is the primary source of instability
+although the best case is still worse than 5.7.
 
-Since these text references are used to compare against IP, and are not
-an indirect call target, they don't need ENDBR so annotate them away.
+This series addresses the allowed imbalance problems to get the peak
+performance back to 5.7 although only some of the time due to the
+instability problem. The series plus the revert is both stable and has
+slightly better peak performance and similar average performance. I'm
+not convinced commit c6f886546cb8 is wrong but haven't isolated exactly
+why it's unstable. I'm just noting it has an issue for now.
 
-Fixes: 47f33de4aafb ("x86/sev: Mark the code returning to user space as syscall gap")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20220520082604.GQ2578@worktop.programming.kicks-ass.net
----
- arch/x86/entry/entry_64.S        | 3 +++
- arch/x86/entry/entry_64_compat.S | 3 +++
- 2 files changed, 6 insertions(+)
+Patch 1 initialises numa_migrate_retry. While this resolves itself
+	eventually, it is unpredictable early in the lifetime of
+	a task.
 
-diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
-index 2fd8a5c..58a2d76 100644
---- a/arch/x86/entry/entry_64.S
-+++ b/arch/x86/entry/entry_64.S
-@@ -216,9 +216,12 @@ syscall_return_via_sysret:
- 	popq	%rdi
- 	popq	%rsp
- SYM_INNER_LABEL(entry_SYSRETQ_unsafe_stack, SYM_L_GLOBAL)
-+	ANNOTATE_NOENDBR
- 	swapgs
- 	sysretq
- SYM_INNER_LABEL(entry_SYSRETQ_end, SYM_L_GLOBAL)
-+	ANNOTATE_NOENDBR
-+	int3
- SYM_CODE_END(entry_SYSCALL_64)
- 
- /*
-diff --git a/arch/x86/entry/entry_64_compat.S b/arch/x86/entry/entry_64_compat.S
-index 3c0e149..8011021 100644
---- a/arch/x86/entry/entry_64_compat.S
-+++ b/arch/x86/entry/entry_64_compat.S
-@@ -298,6 +298,7 @@ sysret32_from_system_call:
-          */
- 	movq	RSP-ORIG_RAX(%rsp), %rsp
- SYM_INNER_LABEL(entry_SYSRETL_compat_unsafe_stack, SYM_L_GLOBAL)
-+	ANNOTATE_NOENDBR
- 
- 	/*
- 	 * The original userspace %rsp (RSP-ORIG_RAX(%rsp)) is stored
-@@ -316,6 +317,8 @@ SYM_INNER_LABEL(entry_SYSRETL_compat_unsafe_stack, SYM_L_GLOBAL)
- 	swapgs
- 	sysretl
- SYM_INNER_LABEL(entry_SYSRETL_compat_end, SYM_L_GLOBAL)
-+	ANNOTATE_NOENDBR
-+	int3
- SYM_CODE_END(entry_SYSCALL_compat)
- 
- /*
+Patch 2 will not swap NUMA tasks in the same NUMA group or without
+	a NUMA group if there is spare capacity. Swapping is just
+	punishing one task to help another.
+
+Patch 3 fixes an issue where a larger imbalance can be created at
+	fork time than would be allowed at run time. This behaviour
+	can help some workloads that are short lived and prefer
+	to remain local but it punishes long-lived tasks that are
+	memory intensive.
+
+Patch 4 adjusts the threshold where a NUMA imbalance is allowed to
+	better approximate the number of memory channels, at least
+	for x86-64.
+
+ kernel/sched/fair.c     | 91 +++++++++++++++++++++++++----------------
+ kernel/sched/topology.c | 23 +++++++----
+ 2 files changed, 70 insertions(+), 44 deletions(-)
+
+-- 
+2.34.1

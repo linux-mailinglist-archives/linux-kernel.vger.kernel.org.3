@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFFA852E1D5
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 03:21:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35AFD52E1DC
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 03:22:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344423AbiETBVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 21:21:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55354 "EHLO
+        id S1344450AbiETBV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 21:21:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344389AbiETBVl (ORCPT
+        with ESMTP id S1344407AbiETBVm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 21:21:41 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 410FE29817
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 18:21:40 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id t29-20020a056a00139d00b005107ebaefeaso3446932pfg.20
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 18:21:40 -0700 (PDT)
+        Thu, 19 May 2022 21:21:42 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2DEF27CC6
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 18:21:41 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id rj11-20020a17090b3e8b00b001df51eb1831so5985972pjb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 18:21:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=69cx6mPg1rWURoZo4NX3ijOmJtwQkSNn64F/hEHNYSU=;
-        b=BCreR+XUKTegtpZpREe5xPvg68UCcKsrUAIVbGh5bI2zogHrCn+YHLq0FMySF7Z8+U
-         3nTv8stgycmvTmhhg+YPkCLz4UYr3ZJz7474U4xhyJE3TKlT4rYlAp0vn5NBMmGoe2ov
-         dgweabl3iJGlpFuwJTqJRwak1koJWau8g/NP85L4CjmiJUzSKn4LzPc2hkHvubatyBQP
-         /96s5b/5xzfSh2L2JFvPZ2hVNpAhSiLyYoCG5VatpXZ/1CZSaKHDY0Xa+XvkgrFotW3c
-         B1tX82bRy1h3iblza4rY3Q+jRM97bMVY3aW48bY0dTk7oUfdIoNGjySPHVcDY3xSepq3
-         Yujw==
+        bh=18Er9O41CS051aXSe9usnmRbqjT27fNlHDiukFcMpPk=;
+        b=igx0wUTdQcYupX1yAJkzuiW3tixL4/rG9QHDOE1OuemDauucgS0b4WPm/qNDTqc6tj
+         dC8noNnsek02+MHALHDloPhHjY9PuAcO8cT0fqReQQSFMoKfhUaM0O2JYTV90eF5TW1T
+         1ZpTQAHA+bZ5+sSSYuH0fi+CeElAYVF0uv+c3gA5rToEvxuK4V4z2uk297hwMXxNn/CK
+         5nHug49g8iMgqh+7Bw17Kgzdbg90jtNx7QMIWVdBW/1UttBugbiKkD/nel+18aIOmhCW
+         DnVdrCrB08b/fwlSt9/iJh7/Z32kjo9kzvfKYcbNc635DkaxYvbgHuDNWDgJOr4EWfTq
+         +obQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=69cx6mPg1rWURoZo4NX3ijOmJtwQkSNn64F/hEHNYSU=;
-        b=sTAwLil3uHl2BEMTTKC7YpJo71kNTz2rpZ93IhOB8YQqsKL0iNFsbzZT7j1ThFyBKa
-         jcAuAo1qIJL8LOniWXDTBGjuwsStJFH/BCZMJ4FTBd7SngPZ7sB33qVkbnBi2gPJg3ag
-         iYWStfT7qLhxUn5n5Zrp3c4YKD94m/E+Kr6CTHw+7xlzRyhDzWE2qiKSijkHZGemq6oc
-         Yl56bL37Vh1hJUTBCrNTEASmzkt+oDp3vby4e8kKe/o3ppGMylVEK3mj8g3YBqC5XvVD
-         P/cgwpu7YO3y8IZE7IvQtOgivq5b/rXZXaRBpI/4VAUuyru4gyaxIX8hLngM3y8n5u58
-         zkpQ==
-X-Gm-Message-State: AOAM531A5ZqO8E16kBd1R80eNjquuc0FN5TJLWKVzaMZrWkf0xbLGPUw
-        WZ2V35vMKcOzUViwMqM8Fti6u0qpc07wl4Mv
-X-Google-Smtp-Source: ABdhPJwhlm4uc6Arbp6IzP0EiWll+Bev9gm1/YHaZOBFW6aHkjOxNlzyA5wFDryaE/HeLy/GmQugBTe+SOD4g6uB
+        bh=18Er9O41CS051aXSe9usnmRbqjT27fNlHDiukFcMpPk=;
+        b=0mJF/xV1v78oj6ZpuhbB8fBWb28PQ0vkTWKDQdWgrzOpK5aR3Chp+Mdqkb86H5QwsI
+         RLqZlS4O7LoWrqgdCUoUGNP3Gn28Z4lh2vUypOPirv3AmZXjnhWcNY/m4VTG1eE7tWph
+         XbIVH2FIqVkZIRciontfTtyNwge0IoEFTY9GM7dMm+EsDHgjjJu8h1YzhaHqPBgBZZ7p
+         pB7SFrPN1GXsRCSLd0EDDuuoT4cyrffOZezwilz9d1NeifEF+U4/NFo3thM2oWwnESne
+         3bimfB8Wu3T9Tosdz3n1ZUYjT6Ui9IIWU/jTU2OhbzIhsUNFskT8SeuUodN13b3Ras/Z
+         nKYA==
+X-Gm-Message-State: AOAM533QOnjFX2KNVg2S8G/+Gss78ayks43iFi42omdNsDTx8q189pqR
+        b+x6LPqx+ZjXrUf5krvL/DLgIzI28UKUJZT9
+X-Google-Smtp-Source: ABdhPJz9ntngBIfCSaZOOirWq+VnWkQ9QbljpHNzGtI7ZAT0+hNeqeX9Vx2fzjW6MS3w55enQ0OqOdn0dJ+ys6A1
 X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
- (user=yosryahmed job=sendgmr) by 2002:a05:6a00:724:b0:4fa:a35f:8e0f with SMTP
- id 4-20020a056a00072400b004faa35f8e0fmr7557670pfm.25.1653009699699; Thu, 19
- May 2022 18:21:39 -0700 (PDT)
-Date:   Fri, 20 May 2022 01:21:29 +0000
+ (user=yosryahmed job=sendgmr) by 2002:a62:e518:0:b0:4fa:9333:ddbd with SMTP
+ id n24-20020a62e518000000b004fa9333ddbdmr7319126pff.11.1653009701453; Thu, 19
+ May 2022 18:21:41 -0700 (PDT)
+Date:   Fri, 20 May 2022 01:21:30 +0000
 In-Reply-To: <20220520012133.1217211-1-yosryahmed@google.com>
-Message-Id: <20220520012133.1217211-2-yosryahmed@google.com>
+Message-Id: <20220520012133.1217211-3-yosryahmed@google.com>
 Mime-Version: 1.0
 References: <20220520012133.1217211-1-yosryahmed@google.com>
 X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
-Subject: [PATCH bpf-next v1 1/5] cgroup: bpf: add a hook for bpf progs to
- attach to rstat flushing
+Subject: [PATCH bpf-next v1 2/5] cgroup: bpf: add cgroup_rstat_updated() and
+ cgroup_rstat_flush() kfuncs
 From:   Yosry Ahmed <yosryahmed@google.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -85,40 +85,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add an empty bpf_rstat_flush() hook that is called during rstat
-flushing. bpf programs that make use of rstat and want to flush their
-stats can attach to bpf_rstat_flush().
+Add cgroup_rstat_updated() and cgroup_rstat_flush() kfuncs to bpf
+tracing programs. bpf programs that make use of rstat can use these
+functions to inform rstat when they update stats for a cgroup, and when
+they need to flush the stats.
 
 Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
 ---
- kernel/cgroup/rstat.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ kernel/cgroup/rstat.c | 35 ++++++++++++++++++++++++++++++++++-
+ 1 file changed, 34 insertions(+), 1 deletion(-)
 
 diff --git a/kernel/cgroup/rstat.c b/kernel/cgroup/rstat.c
-index 24b5c2ab5598..e7a88d2600bd 100644
+index e7a88d2600bd..a16a851bc0a1 100644
 --- a/kernel/cgroup/rstat.c
 +++ b/kernel/cgroup/rstat.c
-@@ -141,6 +141,12 @@ static struct cgroup *cgroup_rstat_cpu_pop_updated(struct cgroup *pos,
+@@ -3,6 +3,11 @@
+ 
+ #include <linux/sched/cputime.h>
+ 
++#include <linux/bpf.h>
++#include <linux/btf.h>
++#include <linux/btf_ids.h>
++
++
+ static DEFINE_SPINLOCK(cgroup_rstat_lock);
+ static DEFINE_PER_CPU(raw_spinlock_t, cgroup_rstat_cpu_lock);
+ 
+@@ -141,7 +146,12 @@ static struct cgroup *cgroup_rstat_cpu_pop_updated(struct cgroup *pos,
  	return pos;
  }
  
-+/* A hook for bpf stat collectors to attach to and flush their stats */
-+__weak noinline void bpf_rstat_flush(struct cgroup *cgrp,
-+				     struct cgroup *parent, int cpu)
-+{
-+}
+-/* A hook for bpf stat collectors to attach to and flush their stats */
++/*
++ * A hook for bpf stat collectors to attach to and flush their stats.
++ * Together with providing bpf kfuncs for cgroup_rstat_updated() and
++ * cgroup_rstat_flush(), this enables a complete workflow where bpf progs that
++ * collect cgroup stats can integrate with rstat for efficient flushing.
++ */
+ __weak noinline void bpf_rstat_flush(struct cgroup *cgrp,
+ 				     struct cgroup *parent, int cpu)
+ {
+@@ -476,3 +486,26 @@ void cgroup_base_stat_cputime_show(struct seq_file *seq)
+ 		   "system_usec %llu\n",
+ 		   usage, utime, stime);
+ }
 +
- /* see cgroup_rstat_flush() */
- static void cgroup_rstat_flush_locked(struct cgroup *cgrp, bool may_sleep)
- 	__releases(&cgroup_rstat_lock) __acquires(&cgroup_rstat_lock)
-@@ -168,6 +174,7 @@ static void cgroup_rstat_flush_locked(struct cgroup *cgrp, bool may_sleep)
- 			struct cgroup_subsys_state *css;
- 
- 			cgroup_base_stat_flush(pos, cpu);
-+			bpf_rstat_flush(pos, cgroup_parent(pos), cpu);
- 
- 			rcu_read_lock();
- 			list_for_each_entry_rcu(css, &pos->rstat_css_list,
++/* Add bpf kfuncs for cgroup_rstat_updated() and cgroup_rstat_flush() */
++BTF_SET_START(bpf_rstat_check_kfunc_ids)
++BTF_ID(func, cgroup_rstat_updated)
++BTF_ID(func, cgroup_rstat_flush)
++BTF_SET_END(bpf_rstat_check_kfunc_ids)
++
++BTF_SET_START(bpf_rstat_sleepable_kfunc_ids)
++BTF_ID(func, cgroup_rstat_flush)
++BTF_SET_END(bpf_rstat_sleepable_kfunc_ids)
++
++static const struct btf_kfunc_id_set bpf_rstat_kfunc_set = {
++	.owner		= THIS_MODULE,
++	.check_set	= &bpf_rstat_check_kfunc_ids,
++	.sleepable_set	= &bpf_rstat_sleepable_kfunc_ids,
++};
++
++static int __init bpf_rstat_kfunc_init(void)
++{
++	return register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING,
++					 &bpf_rstat_kfunc_set);
++}
++late_initcall(bpf_rstat_kfunc_init);
 -- 
 2.36.1.124.g0e6072fb45-goog
 

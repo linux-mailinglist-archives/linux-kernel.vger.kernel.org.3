@@ -2,118 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAB1852ECB5
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 14:53:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C90F052ECB7
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 14:54:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344516AbiETMxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 08:53:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42008 "EHLO
+        id S1349638AbiETMyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 08:54:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236511AbiETMx3 (ORCPT
+        with ESMTP id S236511AbiETMyH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 08:53:29 -0400
-Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D308CCD0
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 05:53:27 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed30:cdaa:735b:3efc:39fe])
-        by xavier.telenet-ops.be with bizsmtp
-        id Z0tP2700F38adXi010tPNB; Fri, 20 May 2022 14:53:25 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1ns28B-0010US-94; Fri, 20 May 2022 14:53:23 +0200
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1ns28A-0040pl-JZ; Fri, 20 May 2022 14:53:22 +0200
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-To:     Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Guenter Roeck <linux@roeck-us.net>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: [PATCH] drm/msm/adreno: Do not propagate void return values
-Date:   Fri, 20 May 2022 14:53:20 +0200
-Message-Id: <483795c4fb7d215a3f2089c55df29a0064eb021b.1653051029.git.geert@linux-m68k.org>
-X-Mailer: git-send-email 2.25.1
+        Fri, 20 May 2022 08:54:07 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6481C6A054;
+        Fri, 20 May 2022 05:54:04 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L4RVx72tRz4xD9;
+        Fri, 20 May 2022 22:54:01 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1653051242;
+        bh=xX70sbq84o7TSNzvXVmq0pVAVoppAgjs373K3Ng4Xtw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Akb2B4+uVCG0ySD1cWoOIlz+8DrVRJeaODOwNJI08oYO7ouM8FwBasUJ77rIj97fq
+         Y0xZmTDl8djQdiSPlYBDS++o4Knlow/SWs95UcW6zqunRoyR4IjzKwzIeCvTVQUtD5
+         TsbKnIzxbMQYZI2yEwznTEpJdFI9tlC6CssvFNfjllLvtMvRTb1+oYwG6o3hQLYLxF
+         6QJ6OaExOlg0+CjHPcowyihAXBgi8qCLf1G0bPwD4wvHUO6E/+erj8+HRMhF4yUeAg
+         iuXgZqLFOBVH63aftfntBU6Kdun0SyMlG+noTpHOOTZM9Q2vGl3h45qukBuk7RtXnV
+         gNZ1RCvcxOHlw==
+Date:   Fri, 20 May 2022 22:54:00 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     Eric Biggers <ebiggers@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the ext4 tree
+Message-ID: <20220520225400.089f9d4a@canb.auug.org.au>
+In-Reply-To: <20220520110313.48a824c4@canb.auug.org.au>
+References: <20220520110313.48a824c4@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/Edo9hu13=AH5BRA7qYadgR/";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With sparse ("make C=2"), lots of
+--Sig_/Edo9hu13=AH5BRA7qYadgR/
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-  error: return expression in void function
+Hi all,
 
-messages are seen.
+On Fri, 20 May 2022 11:03:13 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
 
-Fix this by removing the return statements to propagate void return
-values.
+>=20
+> After merging the ext4 tree, today's linux-next build (powerpc
+> ppc64_defconfig) produced this warning:
+>=20
+> fs/ext4/super.c: In function 'ext4_check_test_dummy_encryption':
+> fs/ext4/super.c:2677:36: warning: unused variable 'sbi' [-Wunused-variabl=
+e]
+>  2677 |         const struct ext4_sb_info *sbi =3D EXT4_SB(sb);
+>       |                                    ^~~
+>=20
+> Introduced by commit
+>=20
+>   0df27ddf69f3 ("ext4: only allow test_dummy_encryption when supported")
 
-Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+This becomes an error in an i386 defconfig build, so I have applied the
+following hack for today.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Fri, 20 May 2022 22:48:55 +1000
+Subject: [PATCH] hack fixup for "ext4: only allow test_dummy_encryption whe=
+n supported"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 ---
- drivers/gpu/drm/msm/adreno/a6xx_gmu.c | 2 +-
- drivers/gpu/drm/msm/adreno/a6xx_gmu.h | 4 ++--
- drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ fs/ext4/super.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-index 3e325e2a2b1b68eb..d137136d93f3b4ca 100644
---- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-@@ -504,7 +504,7 @@ static void a6xx_rpmh_stop(struct a6xx_gmu *gmu)
- 
- static inline void pdc_write(void __iomem *ptr, u32 offset, u32 value)
+diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+index 5168d894c41e..f9a3ad683b4a 100644
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@ -2674,7 +2674,6 @@ static int ext4_check_test_dummy_encryption(const str=
+uct fs_context *fc,
+ 					    struct super_block *sb)
  {
--	return msm_writel(value, ptr + (offset << 2));
-+	msm_writel(value, ptr + (offset << 2));
- }
- 
- static void __iomem *a6xx_gmu_get_mmio(struct platform_device *pdev,
-diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.h b/drivers/gpu/drm/msm/adreno/a6xx_gmu.h
-index 84bd516f01e895b2..e034935b3986f9f2 100644
---- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.h
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.h
-@@ -98,7 +98,7 @@ static inline u32 gmu_read(struct a6xx_gmu *gmu, u32 offset)
- 
- static inline void gmu_write(struct a6xx_gmu *gmu, u32 offset, u32 value)
- {
--	return msm_writel(value, gmu->mmio + (offset << 2));
-+	msm_writel(value, gmu->mmio + (offset << 2));
- }
- 
- static inline void
-@@ -138,7 +138,7 @@ static inline u32 gmu_read_rscc(struct a6xx_gmu *gmu, u32 offset)
- 
- static inline void gmu_write_rscc(struct a6xx_gmu *gmu, u32 offset, u32 value)
- {
--	return msm_writel(value, gmu->rscc + (offset << 2));
-+	msm_writel(value, gmu->rscc + (offset << 2));
- }
- 
- #define gmu_poll_timeout_rscc(gmu, addr, val, cond, interval, timeout) \
-diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-index ccc4fcf7a630f49a..d671b75f3289fdff 100644
---- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-@@ -1446,7 +1446,7 @@ static void a6xx_llc_rmw(struct a6xx_gpu *a6xx_gpu, u32 reg, u32 mask, u32 or)
- 
- static void a6xx_llc_write(struct a6xx_gpu *a6xx_gpu, u32 reg, u32 value)
- {
--	return msm_writel(value, a6xx_gpu->llc_mmio + (reg << 2));
-+	msm_writel(value, a6xx_gpu->llc_mmio + (reg << 2));
- }
- 
- static void a6xx_llc_deactivate(struct a6xx_gpu *a6xx_gpu)
--- 
-2.25.1
+ 	const struct ext4_fs_context *ctx =3D fc->fs_private;
+-	const struct ext4_sb_info *sbi =3D EXT4_SB(sb);
+=20
+ 	if (!IS_ENABLED(CONFIG_FS_ENCRYPTION) ||
+ 	    !(ctx->spec & EXT4_SPEC_DUMMY_ENCRYPTION))
+@@ -2692,7 +2691,7 @@ static int ext4_check_test_dummy_encryption(const str=
+uct fs_context *fc,
+ 	 * it to be specified during remount, but only if there is no change.
+ 	 */
+ 	if (fc->purpose =3D=3D FS_CONTEXT_FOR_RECONFIGURE &&
+-	    !DUMMY_ENCRYPTION_ENABLED(sbi)) {
++	    !DUMMY_ENCRYPTION_ENABLED(EXT4_SB(sb))) {
+ 		ext4_msg(NULL, KERN_WARNING,
+ 			 "Can't set test_dummy_encryption on remount");
+ 		return -EINVAL;
+--=20
+2.35.1
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Edo9hu13=AH5BRA7qYadgR/
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKHj2gACgkQAVBC80lX
+0Gz8ZQgAmJnoasBrbyUJWu4kvv6hp5S4O6dWa3JgP1z43NzkdNK7MaCuVT01is1G
++s5bIo/ZcGZtb7V3PYI3SK69YLFdOKjpCeC81NEdRZ3NuZD1HESrRlv6lrt2rgce
+WkQCr6wq2j2i196bvmrkHwJSpvWPvh0qw/F+1qTk3t0GhAAn9OVWdGwcdg+RCV1O
+PkiFtI4QLhAomots8CybnlLnhncqXI9uAGfIFq+pG2CeiXmnF4S51tXjHau1nAmO
+QGCU9y7sfZrUHL6DChfz3IrgHCq8BRfd8JRkmszd2yQp1VJ+OlVkKV3OexwQgt4+
+q9cA5LTrZIu0O940UAygcx1WK4og7A==
+=Exi2
+-----END PGP SIGNATURE-----
+
+--Sig_/Edo9hu13=AH5BRA7qYadgR/--

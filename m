@@ -2,79 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D69F52EACD
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 13:31:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DCD952EACE
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 13:31:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348540AbiETLam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 07:30:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43514 "EHLO
+        id S1348538AbiETLbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 07:31:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244015AbiETLaL (ORCPT
+        with ESMTP id S1348556AbiETLbF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 07:30:11 -0400
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F41EC3CC
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 04:30:10 -0700 (PDT)
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
-        by gnuweeb.org (Postfix) with ESMTPSA id 803F57E4A5
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 11:30:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1653046209;
-        bh=YfGkukxiI9NdB5uZmq9l5JnIO/B6pKFHg541ag61jVk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=UduQS/xeeDdo8uGSVr+7YIZRxCuC4Ll50KiINTOQKs6U3ZNRMgAiH6w/RY1pgJOub
-         5DcoGxRavDViH0CJYK6s4xfrFtGHMn2BmHQJbHb7kGIPpht9nm+tUKm7yS0t3eE8Zj
-         CwtQieK8snVU3ITCjQW5OyREuYAZtAqWCsxXU46HMsMBBPmoHHjg7H8oFuBkYDucNa
-         /ED5gXrJUWHQv610aIuf698eVymk6RJ4Ox+N9owRqd/ozYpqFTMOPZoBirw6fd/52a
-         cJY2o5cW1ZvtzvzysNanvevsMPO0aiFAxtgt4lpUPhKfjr/fS/046I7znY9daCjLMl
-         kUxnwAsBxO7UQ==
-Received: by mail-lf1-f42.google.com with SMTP id u23so13831340lfc.1
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 04:30:09 -0700 (PDT)
-X-Gm-Message-State: AOAM530yKSu1279AkATwBAr2SFntsPtGckV3knbmKUbCxaurEkKSBQtf
-        fFgxBPp6kRDCguygJjXuuahxsYrCBd9T6WcbTI0=
-X-Google-Smtp-Source: ABdhPJzT12I7iYIUbIEXo3WYPp4EJegEjIEuHSRkMgcluCxYOtwOwEjQz//oUBSb66eDFiGgSXW3dRiWRfiG8dOZvjc=
-X-Received: by 2002:a05:6512:3d8e:b0:478:545d:da06 with SMTP id
- k14-20020a0565123d8e00b00478545dda06mr1693995lfv.610.1653046207588; Fri, 20
- May 2022 04:30:07 -0700 (PDT)
+        Fri, 20 May 2022 07:31:05 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A81815AB0B
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 04:30:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1653046233; x=1684582233;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ek3Un87zV6kEiotbIl4DIu9SOlYA+IdCTrS8AmQff18=;
+  b=sR8ge11dDrrWfpJm+AM2uGpLePaBD879mq8mtGNJHYNgNFO37uO93nsh
+   Jk3Jxl/3+/jaDNwjdIIJNEzOdVLqvIAAj5SdxU+WlfjZNdExtxZJUN+gk
+   HiZ2XBvALjsUYwPJPUE9u+W4VrDHyDEbVPpMfg0xGA0mJ/T4XqGehWXh4
+   M=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 20 May 2022 04:30:32 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 04:30:32 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 20 May 2022 04:30:32 -0700
+Received: from qian (10.80.80.8) by nalasex01a.na.qualcomm.com (10.47.209.196)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 20 May
+ 2022 04:30:30 -0700
+Date:   Fri, 20 May 2022 07:30:28 -0400
+From:   Qian Cai <quic_qiancai@quicinc.com>
+To:     Zi Yan <ziy@nvidia.com>
+CC:     David Hildenbrand <david@redhat.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>,
+        <virtualization@lists.linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Eric Ren <renzhengeek@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Oscar Salvador" <osalvador@suse.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v11 0/6] Use pageblock_order for cma and
+ alloc_contig_range alignment.
+Message-ID: <Yod71OhUa3VWWPCG@qian>
+References: <B621B4DD-5D11-4F0E-AFF5-F8684AE37E57@nvidia.com>
+ <20220426210801.GA1038@qian>
+ <2B9844C8-6D35-41E2-ACB2-9854E7A9C29F@nvidia.com>
+ <20220427132720.GC71@qian>
+ <1D88AE1B-4DFC-400F-A054-662E3824C9AF@nvidia.com>
+ <A1956578-A851-4BF3-BD57-12571244DB5E@nvidia.com>
+ <20220428123308.GA71@qian>
+ <0E75B247-8150-48A3-83AE-56C586030006@nvidia.com>
+ <YoavU/+NfQIzQiDF@qian>
+ <F6598450-EFE0-4EA9-912B-A727DE1F8185@nvidia.com>
 MIME-Version: 1.0
-References: <20220519172116.283687-1-ammarfaizi2@gnuweeb.org> <20220519172116.283687-2-ammarfaizi2@gnuweeb.org>
-In-Reply-To: <20220519172116.283687-2-ammarfaizi2@gnuweeb.org>
-From:   Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
-Date:   Fri, 20 May 2022 18:29:56 +0700
-X-Gmail-Original-Message-ID: <CAOG64qO3B_FmaLS9=C+EuWcJhsw2Tr1Cci0BL1=eAkLWG=NDnQ@mail.gmail.com>
-Message-ID: <CAOG64qO3B_FmaLS9=C+EuWcJhsw2Tr1Cci0BL1=eAkLWG=NDnQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] tools/nolibc/stdlib: Support overflow checking for
- older compiler versions
-To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>, Willy Tarreau <w@1wt.eu>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "GNU/Weeb Mailing List" <gwml@vger.gnuweeb.org>,
-        Facebook Kernel Team <kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <F6598450-EFE0-4EA9-912B-A727DE1F8185@nvidia.com>
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 12:21 AM Ammar Faizi <ammarfaizi2@gnuweeb.org> wrote:
-> Previously, we used __builtin_mul_overflow() to check for overflow in
-> the multiplication operation in the calloc() function. However, older
-> compiler versions don't support this built-in. This patch changes the
-> overflow checking mechanism to make it work on any compiler version
-> by using a division method to check for overflow. No functional change
-> intended. While in there, remove the unused variable `void *orig`.
->
-> Link: https://lore.kernel.org/lkml/20220330024114.GA18892@1wt.eu
-> Suggested-by: Willy Tarreau <w@1wt.eu>
-> Cc: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
-> Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+On Thu, May 19, 2022 at 05:35:15PM -0400, Zi Yan wrote:
+> Do you have a complete reproducer? From your printout, it is clear that a 512-page compound
+> page caused the infinite loop, because the page was not migrated and the code kept
+> retrying. But __alloc_contig_migrate_range() is supposed to return non-zero to tell the
+> code the page cannot be migrated and the code will goto failed without retrying. It will be
+> great you can share what exactly has run after boot, so that I can reproduce locally to
+> identify what makes __alloc_contig_migrate_range() return 0 without migrating the page.
 
-Reviewed-by: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
+The reproducer is just to run the same script I shared with you previously
+multiple times instead. It is still quite reproducible here as it usually
+happens within a hour.
 
-tq
+$ for i in `seq 1 100`; do ./flip_mem.py; done
 
--- Viro
+> Can you also try the patch below to see if it fixes the infinite loop?
+> 
+> diff --git a/mm/page_isolation.c b/mm/page_isolation.c
+> index b3f074d1682e..abde1877bbcb 100644
+> --- a/mm/page_isolation.c
+> +++ b/mm/page_isolation.c
+> @@ -417,10 +417,9 @@ static int isolate_single_pageblock(unsigned long boundary_pfn, gfp_t gfp_flags,
+>                                 order = 0;
+>                                 outer_pfn = pfn;
+>                                 while (!PageBuddy(pfn_to_page(outer_pfn))) {
+> -                                       if (++order >= MAX_ORDER) {
+> -                                               outer_pfn = pfn;
+> -                                               break;
+> -                                       }
+> +                                       /* abort if the free page cannot be found */
+> +                                       if (++order >= MAX_ORDER)
+> +                                               goto failed;
+>                                         outer_pfn &= ~0UL << order;
+>                                 }
+>                                 pfn = outer_pfn;
+> 
+
+Can you explain a bit how this patch is the right thing to do here? I am a
+little bit worry about shooting into the dark. Otherwise, I'll be running
+the off-by-one part over the weekend to see if that helps.

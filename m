@@ -2,95 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BA3652E26A
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 04:21:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CD8A52E26D
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 04:21:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343982AbiETCVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 22:21:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40002 "EHLO
+        id S1344709AbiETCVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 22:21:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242111AbiETCVG (ORCPT
+        with ESMTP id S238831AbiETCVu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 22:21:06 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C20704553A
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 19:21:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653013263; x=1684549263;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=V6UQ8DzeLKfZNqwV6mywgfWsFOdr/AQaOcZRaiJ27E8=;
-  b=almZg6DDVdp/jUq9Jcc3EzfNXztqCRr0UuYZ217z+He7Tsp1x/vhkqXu
-   NhDdsy+J5SCoXI2EY57JLFiDRB6Z546l9M4MMABU5U0mW8qu9gnCFs2BF
-   AbciW+naNZDDJLjte7QDQi1DkNCq7QdCnCvev8w2q9WRUOR8WdFUkhoJX
-   12PHshCUQs6KS/1zGa8o2lH+XEGHuLM/4FvapqvBg5VHX+u3KysrXAXUl
-   ClbcSpsCkx3ssBRNs4efxEHxJkvJjzZgrZAkuB91oC2mRrfTS9E2Jbkqu
-   z2kpmViHqrEy5hQ8B1kwYMP1C4TomQ2Ua3k2pAQB0+3OOcfB9XNbBaRwJ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="272421794"
-X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="272421794"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 19:20:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="715297402"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 19 May 2022 19:20:52 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 97853109; Fri, 20 May 2022 05:20:52 +0300 (EEST)
-Date:   Fri, 20 May 2022 05:20:52 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     frederic@kernel.org, paulmck@kernel.org, rjw@rjwysocki.net,
-        x86@kernel.org, linux-kernel@vger.kernel.org, jpoimboe@kernel.org
-Subject: Re: [RFC][PATCH 9/9] arch/idle: Change arch_cpu_idle() IRQ behaviour
-Message-ID: <20220520022052.mkrc4v4evtp74bxe@black.fi.intel.com>
-References: <20220519212750.656413111@infradead.org>
- <20220519213422.119695559@infradead.org>
- <20220519220349.GM2578@worktop.programming.kicks-ass.net>
+        Thu, 19 May 2022 22:21:50 -0400
+Received: from sonic307-8.consmr.mail.gq1.yahoo.com (sonic307-8.consmr.mail.gq1.yahoo.com [98.137.64.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E83EBE8F
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 19:21:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=netscape.net; s=a2048; t=1653013309; bh=O9Iz0YCSaCQOHi8+J38vW/gZxqJdLA0UYeA/SDg5U+w=; h=Date:Subject:From:To:Cc:References:In-Reply-To:From:Subject:Reply-To; b=jOiM7JT5VanGyuKRieA98Wppi56m2wqlZrhriyy+zCzJTeQqBVbDAQFEIUOysTqxtnkEMyBcIEMseQj8FpRIrdItX/L9jDgZTaYTokRNvHfqfRIkr8M16m/2pewA79gfkM3kcH+LpI4WEqtIllo0Sp7ubx/BxgMIdhzBk2hLb7yUwcdn37WQwBycZj8nM+SRWsgMHaXXrL2bUx6K6F7VTPoJltqYLguYR7LD+0tqgTTenAvaRfbWWBFg7z+xdQ1D4suOG4Cm+j0GLNMb8PiEb+A0vwEp/F8TWNe03T6isKhyg/VsLFZk6dA4OKDZeMljwlWozdmT0AbW7JRLfJgWfg==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1653013309; bh=6MGScbnfauf9PPcM25Q2+iWYrJGmOgdqYWQb0WMLjIE=; h=X-Sonic-MF:Date:Subject:From:To:From:Subject; b=GUbmXdo7ITGpi/gQoJwtZsuJkduReS1ZzX+3bskP0o4sZfBSYyWjZ6Dz9m+cDy6239bj0pDIE2eHPJwLPk4JW/36vM/nXSpIQuV9M4C5jT9uUW29PFZWawswtOYdaOz493ziM070ZZBC97t/BqJdWV2QJTpYRiUWbU8A78bZzN88BrtrvQgfu0WhrtRAL/o/ObqQzMaAlbxo5bO+E6GhWi75YCz5xXZAG/KXNEJHbXuV5bgKe/29K3ab7whcnx16f0ChPIpj88IBTsgo0lymw8GXl4TudQFyC3Kk45zQDItyjbCEkw8hIvW+evdOkra1b959VumT5IjolhxsLWQYng==
+X-YMail-OSG: emYvzjUVM1l4fqlM8exikyXPZwlQsDInBWS4j_i2OUXqFaHZYmDSDjzSrfvrpjl
+ AwPzBYEYO943tyOm0YwVTonYKwFFFXDD.yKkWG5MmOSnOcZfI.7NJ.7881xRdint.9WXx_qYpBbF
+ _mTY.b46F3xY.Ey9zma_r3WqjSFrhtAOIHa7upoePwDBthFd3qIYYenlO1iG4xo2Q4UrJALbc.jL
+ 7ozE7_VZoGKo8tTaDLXmuFqF_C9g6MfwRR5UxBIf1GsMrjU0Zf_tUXHfSpUCew._TR6f8BkmQiaH
+ NO5p81elA1WZfj7B7rEfCBM11P_4GW5p2gEtbA4O6PF.NLcOczqTefIpJDW9iBVMkq2w7t84_RAc
+ ebtwvhbFk7lr.ZEoXwN0jR7ajgGDL7bjG6YbNisMnIw03n1lGlee8xxXXL4eO0IUj.WOE_8VvO54
+ NpC12TWwNV8P_FbZ2jcua1ygFk6bUax3w8s17YtNDeIXDZFYapFtgnHMHgchSukH7nUgQxV4fY3q
+ zJxuN5IB1YVmaxVvFGk4m8I3EhKTwznKYLzhmgiGjx8OdU3S8pfl7H__tvmImXf.4SnLoIzhCpPK
+ VhUg2gIAIonKK8AImgaiDU_aYMLJ1nejjjBFtBL0WtiRfh_vwHbH0cW6U3pdADF2bX0kurFvCwnI
+ Zw_jAZwY5CwQxstWSlN_yXkMqeCkikfyb6CX9kOUvdP3ZcbKBJrkBuWKieRAIryrNQ4RDpGs1PWY
+ P2LisBH5YMbmPonk1D0eyeWOOcjqdA6AFWblsTUA4VSIW9FdqIW7dxCW3uKd6EhsgjaNcEThOExz
+ 2tvW2Ohe5rJ.y1CcDg7XJ50EXUKPV2T3PwAIDSsU4PkQprntV10jBiXr2FLnk_EPBy1w4laW3kYh
+ 9F3gxChZgH19SpE9KA5tH6Q69hIn0rj5BzVmVQMwukq0v10cFNt6EenyxOiI97bw70xd9kOvJ5hO
+ e3XGmYri6upDAOVSQGGGBGiMxEf9TkP4t9GQYzae8ozGyAhMnJzI2X1GHsA_1pgjY3NbMON09Ywd
+ 8Flg4jguBYAnVUEXJhnxNT9m8mg9x7uarMlTwE9mv44J7iL.a5WwsEXorW.RLwsXoby35YKUkTNw
+ Ttyak04SM_7zJPoJTDlBefld0RUFDBCyHju4H08iY2KLqhQTEhLhJLmZIPqg2pQt_2td9sISQ1kF
+ OEJh59pDwZGFCaFegRaGjiILKv6TAN_rpVvtAWUd5.DqbCytdR8OqGjJFt90GAWbXPOypTe5ut7r
+ tqvf72keSq.X0vwBF8j5x8RYZ.faP2tFPiEJrp1c2n264kZPvAqrWhnKOIrLNX6qBUJsxrFRdzqt
+ t5gqbK42Hbao6VdWxM_7e7Vewv.UkOVou4h23Hjto4ul4P3BQwC9WJtVUyWirWtw0_HZ5fkXew8V
+ jCSnji4tIfDrakSykIuZQlB93U2hKnQ0S8806GD6bkYEsYWUWw4xSXuyf1e1DM8vtjDYbS9_N__R
+ bX3.X87tSyUPXAZKcKOg9aYurFvkpUcOCDcwq3Qmtd67mFSAQZrhkrXfujeds_1hlnEMi1vAAgpo
+ QuzkwZF76gzpeypkXGsPB9Ep4YvZMB4VQ2vEsnGK7GTbWT3iBPxZpV_FwuPxwne0OLW9mPYLB1TS
+ scyTix0mlZPxDKb_TGI9sSrXs2SAAQaNMX3F8vHdtY3L29ITOMIDRfY5xP981y_ePA9VzaGneWQF
+ DVS3mz5e6_Mf9uiosyyPsJVFpF1uduwsnHDs2Qyh8j_QhrXf9nrs_hkksclxsTFaUCnORq6hA6OO
+ AXXorcTe7aMAwovCD.o2T7vhe0s2Lg1990gggcrlHF3o1lX4YNNbH20KerVCcSoe6FJ_.sKpxJHY
+ c2QJEYlHUQlStato1ygy.ERiVXvw57q67pyZd80BRSNB42QEwpaqd9R9bVOlleprcPzjVNYDoy27
+ r3L114EPmz4vkeUuJXwD4qd98OHpmZVXyztywsvgDMoiEHKhegr2mrG45uIM19VnXjOaDHgBx.hm
+ wYGhlEGkfYHvOao7ClN15NrGwrFm9sXHFg.gnL_6j_83lqupNs_CEO1f6MThT_1OGEugH0A6lI9y
+ Ps4NteURzQ_ckISrzZrhzSafJUxcb0EKmZo.320_NC3NsYNPFQPnBxclrybUuEriY1MqdspZfHQ5
+ l3okdQcehIkxgUcQBLvByeZPWuQjI.uu_XRiPEwCwX9AIsG3e.A4WrBDVMvKxwyAkQOgIXJ6yvOv
+ N5YdxJHA-
+X-Sonic-MF: <brchuckz@aim.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic307.consmr.mail.gq1.yahoo.com with HTTP; Fri, 20 May 2022 02:21:49 +0000
+Received: by hermes--canary-production-ne1-5495f4d555-vwstm (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 418a811caf32e9bb9537443005bbc38e;
+          Fri, 20 May 2022 02:21:45 +0000 (UTC)
+Message-ID: <c9c4ca95-0423-a50f-f417-776ccc7904e7@netscape.net>
+Date:   Thu, 19 May 2022 22:21:42 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220519220349.GM2578@worktop.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 2/2] x86/pat: add functions to query specific cache mode
+ availability
+Content-Language: en-US
+From:   Chuck Zmudzinski <brchuckz@netscape.net>
+To:     Juergen Gross <jgross@suse.com>, xen-devel@lists.xenproject.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Cc:     jbeulich@suse.com, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        pkg-xen-devel@alioth-lists.debian.net
+References: <20220503132207.17234-1-jgross@suse.com>
+ <20220503132207.17234-3-jgross@suse.com>
+ <788dc391-6a20-5c03-9613-9f22fcc125f1@netscape.net>
+In-Reply-To: <788dc391-6a20-5c03-9613-9f22fcc125f1@netscape.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.20225 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.aol
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 12:03:49AM +0200, Peter Zijlstra wrote:
-> 
-> On Thu, May 19, 2022 at 11:27:59PM +0200, Peter Zijlstra wrote:
-> > --- a/arch/x86/coco/tdx/tdx.c
-> > +++ b/arch/x86/coco/tdx/tdx.c
-> > @@ -178,6 +178,9 @@ void __cpuidle tdx_safe_halt(void)
-> >  	 */
-> >  	if (__halt(irq_disabled, do_sti))
-> >  		WARN_ONCE(1, "HLT instruction emulation failed\n");
-> > +
-> > +	/* XXX I can't make sense of what @do_sti actually does */
-> > +	raw_local_irq_disable();
-> >  }
-> >  
-> 
-> Kirill, Dave says I should prod you :-)
+On 5/19/22 10:15 PM, Chuck Zmudzinski wrote:
+> On 5/3/22 9:22 AM, Juergen Gross wrote:
+>> Some drivers are using pat_enabled() in order to test availability of
+>> special caching modes (WC and UC-). This will lead to false negatives
+>> in case the system was booted e.g. with the "nopat" variant and the
+>> BIOS did setup the PAT MSR supporting the queried mode, or if the
+>> system is running as a Xen PV guest.
+> Hello,
+>
+> I am also getting a false positive
 
-It calls STI just before doing TDCALL that requests HLT.
-See comment above $TDX_HCALL_ISSUE_STI usage in __tdx_hypercall()[1].
+Sorry, I meant false negative here, not false
+positive.
 
-__halt(do_sti == true) matches native_safe_halt() semantics (or suppose
-to) and __halt(do_sti == false) corresponds to native_halt().
+Chuck
 
-For context, see Section 3.8 in GHCI[2]
+> in a Xen Dom0 from
+> pat_enabled() where bdd8b6c98239 patched the file
+>
+> drivers/gpu/drm/i915/gem/i915_gem_pages.c
+>
+> I think this patch also needs to touch that file to
+> fix the issue I am seeing.
+...
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/tree/arch/x86/coco/tdx/tdcall.S?h=x86/tdx#n151
-[2] https://www.intel.com/content/dam/develop/external/us/en/documents/intel-tdx-guest-hypervisor-communication-interface-1.0-344426-002.pdf
-
--- 
- Kirill A. Shutemov

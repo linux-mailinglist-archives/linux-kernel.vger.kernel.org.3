@@ -2,312 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B89752ED13
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 15:26:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C36B152ED12
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 15:26:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349775AbiETN0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 09:26:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39984 "EHLO
+        id S1347533AbiETN0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 09:26:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349822AbiETN02 (ORCPT
+        with ESMTP id S1349862AbiETN0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 09:26:28 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B24CD56772
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 06:26:26 -0700 (PDT)
+        Fri, 20 May 2022 09:26:11 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D75441F8E
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 06:26:09 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id w14so14262887lfl.13
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 06:26:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1653053186; x=1684589186;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=6pGEG/9/qOCI+rimPz1obtfPlQVkHT9DttDzI3GNIwo=;
-  b=wK3i6UCFg7QY9kjKC0h7y9Zm8yZ26ztH2NgzgUa9WuFZ5U00o55vPFVx
-   WzSF3MKKjWY3eL0Prvr+6zSA9zd/4dRtOKvtr+Ogbob1i7jyUuJG8J3eI
-   nl2Z4upYpqhhwfUSfDo3ft4kosIBog8uRrYIHRi9Ts5Qqbn2/9hqIAyhT
-   w=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 20 May 2022 06:26:26 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 06:26:25 -0700
-Received: from [10.216.0.65] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.47.97.222) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 20 May
- 2022 06:26:22 -0700
-Message-ID: <dc960064-1224-9efa-dafd-95f396c61402@quicinc.com>
-Date:   Fri, 20 May 2022 18:56:19 +0530
+        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=/1UN+TaMaEHcux1d6IJ2KDdfHYHO4F5ExU+odphW0WU=;
+        b=duNEHjCO0S0AOhMSt8aOd7DDMhxLHCQYK4g5GNHpXgS79y73DaQzAHn91LKMBCeOgD
+         1ZCPBLge3Cn96dQLOkEBsSLL8tRzqmO3sGp3nbRNnSbFVVEe05nol/Ts0rtg+UAT5qf9
+         KrNsl2YTbt0ua/0c/1wDITK3tAgfp6sVbaMT/a5Z5VnEQvz8Oiu5GqFx3STskU1zBxBj
+         WAOOE/4pBlOlTxjiZHB9p7CsDOnB+gRVfv5zGcBZsLKkBGcQE8O7ImKGFxpuI6e/D3tb
+         3gHeJLsT5Hvg9DpkdOoOJfn7w5twy49l2wvF9yWDtJfERc9MdiKHDpnN+gWxhwOaosHA
+         xfbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=/1UN+TaMaEHcux1d6IJ2KDdfHYHO4F5ExU+odphW0WU=;
+        b=xzHqCojVquwapH4EN7uVa65YultU0WhjHIJGF2r5AprVix0FBE7g9JuOmLLmMfWguY
+         NU0I50oMODMmwKwyq/2cQ+oIaljUZ1lmxaqdQGRB9yBaGNhSPmq8KoszxVFS6jvyPdEu
+         FpmdwH3sVY1qjArmmwD/fyVQDVW9sq1KNSg80pIFACussK7TbMY72RCGDvHSV3I0iXc2
+         kRTq+cceAkLzcoY3H1sWMH8NDezvf7uDRvXY3PMXB5ydViEX+LW/2MXvtD6J+TaRlPLm
+         S6p28FktoBF+uIgga89D/DWnWr4TwQcpXks8WYHIPeoBC3GPGRnB6M6rEXfQGUnOD7p2
+         1d6w==
+X-Gm-Message-State: AOAM533TcAELlVSo5Qa53kzAU+j7EBbICVivux7FDLHJtrCWZK9NskBn
+        D0JlHN0F7+npQTZjP+uVy68Sjg==
+X-Google-Smtp-Source: ABdhPJwzB3/PlRlrkNXbK7mwUivWQKZ0qAFrQcRwuovyF2EoriPwqD771ALNFGv+zdxasA/ruuX6Zg==
+X-Received: by 2002:a05:6512:10cf:b0:473:b735:4fae with SMTP id k15-20020a05651210cf00b00473b7354faemr6947736lfg.93.1653053167466;
+        Fri, 20 May 2022 06:26:07 -0700 (PDT)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id o3-20020ac24e83000000b0047794db1ffasm659901lfr.237.2022.05.20.06.26.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 May 2022 06:26:06 -0700 (PDT)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id 61396104AAB; Fri, 20 May 2022 16:28:00 +0300 (+03)
+Date:   Fri, 20 May 2022 16:28:00 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Jakub =?utf-8?Q?Mat=C4=9Bna?= <matenajakub@gmail.com>
+Cc:     linux-mm@kvack.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, vbabka@suse.cz, mhocko@kernel.org,
+        mgorman@techsingularity.net, willy@infradead.org,
+        liam.howlett@oracle.com, hughd@google.com, riel@surriel.com,
+        rostedt@goodmis.org, peterz@infradead.org, david@redhat.com
+Subject: Re: [RFC PATCH v3 1/6] [PATCH 1/6] mm: refactor of vma_merge()
+Message-ID: <20220520132800.hijytnlyjqeesjfj@box.shutemov.name>
+References: <20220516125405.1675-1-matenajakub@gmail.com>
+ <20220516125405.1675-2-matenajakub@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [RESEND PATCH v4] devcoredump : Serialize devcd_del work
-Content-Language: en-US
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <gregkh@linuxfoundation.org>, <tglx@linutronix.de>,
-        <sboyd@kernel.org>, <rafael@kernel.org>,
-        <johannes@sipsolutions.net>, <keescook@chromium.org>
-References: <1651558074-9620-1-git-send-email-quic_mojha@quicinc.com>
- <f251bc8f-7e72-cfd9-5eca-179c91880a1a@quicinc.com>
-In-Reply-To: <f251bc8f-7e72-cfd9-5eca-179c91880a1a@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.47.97.222)
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220516125405.1675-2-matenajakub@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Gentle reminder for review.
-
--Mukesh
-On 5/13/2022 7:33 PM, Mukesh Ojha wrote:
-> Gentle reminder!
+On Mon, May 16, 2022 at 02:54:00PM +0200, Jakub Matěna wrote:
+> Refactor vma_merge() to make it shorter, more understandable and
+> suitable for tracing of successful merges that are made possible by
+> following patches in the series. Main change is the elimination of code
+> duplicity in the case of merge next check. This is done by first doing
+> checks and caching the results before executing the merge itself. Exit
+> paths are also unified.
 > 
-> Thanks,
-> -Mukesh
-> On 5/3/2022 11:37 AM, Mukesh Ojha wrote:
->> In following scenario(diagram), when one thread X running dev_coredumpm()
->> adds devcd device to the framework which sends uevent notification to
->> userspace and another thread Y reads this uevent and call to
->> devcd_data_write() which eventually try to delete the queued timer that
->> is not initialized/queued yet.
->>
->> So, debug object reports some warning and in the meantime, timer is
->> initialized and queued from X path. and from Y path, it gets 
->> reinitialized
->> again and timer->entry.pprev=NULL and try_to_grab_pending() stucks.
->>
->> To fix this, introduce mutex and a boolean flag to serialize the 
->> behaviour.
->>
->>       cpu0(X)                            cpu1(Y)
->>
->>      dev_coredump() uevent sent to user space
->>      device_add()  ======================> user space process Y reads the
->>                                            uevents writes to devcd fd
->>                                            which results into writes to
->>
->>                                           devcd_data_write()
->>                                             mod_delayed_work()
->>                                               try_to_grab_pending()
->>                                                 del_timer()
->>                                                   debug_assert_init()
->>     INIT_DELAYED_WORK()
->>     schedule_delayed_work()
->>                                                     debug_object_fixup()
->>                                                       
->> timer_fixup_assert_init()
->>                                                         timer_setup()
->>                                                           do_init_timer()
->>                                                         /*
->>                                                          Above call 
->> reinitializes
->>                                                          the timer to
->>                                                          
->> timer->entry.pprev=NULL
->>                                                          and this will 
->> be checked
->>                                                          later in 
->> timer_pending() call.
->>                                                         */
->>                                                   timer_pending()
->>                                                    
->> !hlist_unhashed_lockless(&timer->entry)
->>                                                      !h->pprev
->>                                                  /*
->>                                                    del_timer() checks 
->> h->pprev and finds
->>                                                    it to be NULL due 
->> to which
->>                                                    
->> try_to_grab_pending() stucks.
->>                                                  */
->>
->> Link: 
->> https://lore.kernel.org/lkml/2e1f81e2-428c-f11f-ce92-eb11048cb271@quicinc.com/ 
->>
->> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
->> ---
->> v3->v4:
->>   - flg variable renamed to delete_work.
->>
->> v2->v3:
->>   Addressed comments from gregkh
->>   - Wrapped the commit text and corrected the alignment.
->>   - Described the reason to introduce new variables.
->>   - Restored the blank line.
->>   - rename the del_wk_queued to flg.
->>   Addressed comments from tglx
->>   - Added a comment which explains the race which looks obvious however
->>     would not occur between disabled_store and devcd_del work.
->>
->>
->> v1->v2:
->>   - Added del_wk_queued flag to serialize the race between 
->> devcd_data_write()
->>     and disabled_store() => devcd_free().
->>   drivers/base/devcoredump.c | 83 
->> ++++++++++++++++++++++++++++++++++++++++++++--
->>   1 file changed, 81 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/base/devcoredump.c b/drivers/base/devcoredump.c
->> index f4d794d..1c06781 100644
->> --- a/drivers/base/devcoredump.c
->> +++ b/drivers/base/devcoredump.c
->> @@ -25,6 +25,47 @@ struct devcd_entry {
->>       struct device devcd_dev;
->>       void *data;
->>       size_t datalen;
->> +    /*
->> +     * Here, mutex is required to serialize the calls to del_wk work 
->> between
->> +     * user/kernel space which happens when devcd is added with 
->> device_add()
->> +     * and that sends uevent to user space. User space reads the 
->> uevents,
->> +     * and calls to devcd_data_write() which try to modify the work 
->> which is
->> +     * not even initialized/queued from devcoredump.
->> +     *
->> +     *
->> +     *
->> +     *        cpu0(X)                                 cpu1(Y)
->> +     *
->> +     *        dev_coredump() uevent sent to user space
->> +     *        device_add()  ======================> user space 
->> process Y reads the
->> +     *                                              uevents writes to 
->> devcd fd
->> +     *                                              which results 
->> into writes to
->> +     *
->> +     *                                             devcd_data_write()
->> +     *                                               mod_delayed_work()
->> +     *                                                 
->> try_to_grab_pending()
->> +     *                                                   del_timer()
->> +     *                                                     
->> debug_assert_init()
->> +     *       INIT_DELAYED_WORK()
->> +     *       schedule_delayed_work()
->> +     *
->> +     *
->> +     * Also, mutex alone would not be enough to avoid scheduling of
->> +     * del_wk work after it get flush from a call to devcd_free()
->> +     * mentioned as below.
->> +     *
->> +     *    disabled_store()
->> +     *        devcd_free()
->> +     *          mutex_lock()             devcd_data_write()
->> +     *          flush_delayed_work()
->> +     *          mutex_unlock()
->> +     *                                   mutex_lock()
->> +     *                                   mod_delayed_work()
->> +     *                                   mutex_unlock()
->> +     * So, delete_work flag is required.
->> +     */
->> +    struct mutex mutex;
->> +    bool delete_work;
->>       struct module *owner;
->>       ssize_t (*read)(char *buffer, loff_t offset, size_t count,
->>               void *data, size_t datalen);
->> @@ -84,7 +125,12 @@ static ssize_t devcd_data_write(struct file *filp, 
->> struct kobject *kobj,
->>       struct device *dev = kobj_to_dev(kobj);
->>       struct devcd_entry *devcd = dev_to_devcd(dev);
->> -    mod_delayed_work(system_wq, &devcd->del_wk, 0);
->> +    mutex_lock(&devcd->mutex);
->> +    if (!devcd->delete_work) {
->> +        devcd->delete_work = true;
->> +        mod_delayed_work(system_wq, &devcd->del_wk, 0);
->> +    }
->> +    mutex_unlock(&devcd->mutex);
->>       return count;
->>   }
->> @@ -112,7 +158,12 @@ static int devcd_free(struct device *dev, void 
->> *data)
->>   {
->>       struct devcd_entry *devcd = dev_to_devcd(dev);
->> +    mutex_lock(&devcd->mutex);
->> +    if (!devcd->delete_work)
->> +        devcd->delete_work = true;
->> +
->>       flush_delayed_work(&devcd->del_wk);
->> +    mutex_unlock(&devcd->mutex);
->>       return 0;
->>   }
->> @@ -122,6 +173,30 @@ static ssize_t disabled_show(struct class *class, 
->> struct class_attribute *attr,
->>       return sysfs_emit(buf, "%d\n", devcd_disabled);
->>   }
->> +/*
->> + *
->> + *    disabled_store()                                    worker()
->> + *     class_for_each_device(&devcd_class,
->> + *        NULL, NULL, devcd_free)
->> + *         ...
->> + *         ...
->> + *       while ((dev = class_dev_iter_next(&iter))
->> + *                                                             
->> devcd_del()
->> + *                                                               
->> device_del()
->> + *                                                                 
->> put_device() <- last reference
->> + *             error = fn(dev, data)                           
->> devcd_dev_release()
->> + *             devcd_free(dev, data)                           
->> kfree(devcd)
->> + *             mutex_lock(&devcd->mutex);
->> + *
->> + *
->> + * In the above diagram, It looks like disabled_store() would be 
->> racing with parallely
->> + * running devcd_del() and result in memory abort while acquiring 
->> devcd->mutex which
->> + * is called after kfree of devcd memory  after dropping its last 
->> reference with
->> + * put_device(). However, this will not happens as fn(dev, data) runs
->> + * with its own reference to device via klist_node so it is not its 
->> last reference.
->> + * so, above situation would not occur.
->> + */
->> +
->>   static ssize_t disabled_store(struct class *class, struct 
->> class_attribute *attr,
->>                     const char *buf, size_t count)
->>   {
->> @@ -278,13 +353,16 @@ void dev_coredumpm(struct device *dev, struct 
->> module *owner,
->>       devcd->read = read;
->>       devcd->free = free;
->>       devcd->failing_dev = get_device(dev);
->> +    devcd->delete_work = false;
->> +    mutex_init(&devcd->mutex);
->>       device_initialize(&devcd->devcd_dev);
->>       dev_set_name(&devcd->devcd_dev, "devcd%d",
->>                atomic_inc_return(&devcd_count));
->>       devcd->devcd_dev.class = &devcd_class;
->> +    mutex_lock(&devcd->mutex);
->>       if (device_add(&devcd->devcd_dev))
->>           goto put_device;
->> @@ -301,10 +379,11 @@ void dev_coredumpm(struct device *dev, struct 
->> module *owner,
->>       INIT_DELAYED_WORK(&devcd->del_wk, devcd_del);
->>       schedule_delayed_work(&devcd->del_wk, DEVCD_TIMEOUT);
->> -
->> +    mutex_unlock(&devcd->mutex);
->>       return;
->>    put_device:
->>       put_device(&devcd->devcd_dev);
->> +    mutex_unlock(&devcd->mutex);
->>    put_module:
->>       module_put(owner);
->>    free:
+> Signed-off-by: Jakub Matěna <matenajakub@gmail.com>
+
+Okay, this looks good:
+
+Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+
+I would also consider renaming 'area' to 'vma'. 'area' feels wrong to me,
+but maybe it is only me.
+
+-- 
+ Kirill A. Shutemov

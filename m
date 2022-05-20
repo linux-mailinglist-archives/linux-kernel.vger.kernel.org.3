@@ -2,115 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7372852EB51
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 13:57:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2627352EB57
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 13:58:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348825AbiETL5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 07:57:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42884 "EHLO
+        id S1348943AbiETL6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 07:58:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348809AbiETL5R (ORCPT
+        with ESMTP id S1348904AbiETL6H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 07:57:17 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E01573EAA4
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 04:57:15 -0700 (PDT)
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 895D23F20F
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 11:57:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1653047834;
-        bh=IrJRmi5AylxlMjpRypcc8BFU8eV/I3jeS/028ygI84I=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=RhTkoxraEsoflh7mwk9eRzcbaBrfnyYGQ2/olUkcns0c6+O8IdmRtfZGJVdWsc7B8
-         5ocLWeP6bmEPxoJ21rz4TLGrwlL1oImePOn9q0dIKYzEGjUBOjE32CrAtWMKIPimal
-         J6pgeETpjPfp9fBRjCMT2y4uia2fLcoF/NHTd7vwkfPgGYZhm/GIHaN0pE78R4RZsI
-         5ot0NBWQDzsi4cNKthFszfUYzyHoD3Qj3WJJcCBpiIl8YmEZFpsEMykJ4iymH/0TPd
-         leqJJO0pIvOGYR+bSXXhHiRYYJzFKOveoq7OtaxwEjTzWEvDdghGrxxgBlLhx78FPb
-         rJ8fylPKdHewg==
-Received: by mail-ej1-f69.google.com with SMTP id s4-20020a170906500400b006feaccb3a0eso828580ejj.11
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 04:57:14 -0700 (PDT)
+        Fri, 20 May 2022 07:58:07 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9008343AE4;
+        Fri, 20 May 2022 04:57:43 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id rs12so3441697ejb.13;
+        Fri, 20 May 2022 04:57:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JPzY3rG4aAiGP4Adx8qp4zYUH//ThardXl1nVOzIKwg=;
+        b=jCPS7ml3TGMhhu8lNLCaV/PUeGvhBdasFiSPsWXogU170UjHCU3us9XoBdap4NaULV
+         dt5mfbhndQnfJfwiEdf6qUIVs8yNIdn5z+pFlw/qBuGUYEO3y02jTKQCfKBsnCFPiyM4
+         tb+Yw7mrSzDGgYRCyCv+VdpIvCO3bNaggokkLzGYif5m5ryLY9Abl4gnFDxdp+zMsImt
+         4qvl/37kIO2UhFY8GIoao4yWDnGFO1fM+Efl6Qn/AqGhZhnOF+DPoL4WNCSG7S4tvuTD
+         1Z8EjX+LY/AXDH5SqRZ07pRCJhO+OlsLNaBpuoJp0gujMecG/qvIgqWIHihJTeYAjOOe
+         H51Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=IrJRmi5AylxlMjpRypcc8BFU8eV/I3jeS/028ygI84I=;
-        b=7O4eFDBgRlA+klpBmGtQZeUKbzbos1IzbhJjs36cU9oYe8TdnW6C/1zuyTNuZelfIU
-         jeCloSxXvsxUWaxdTV62Yq1UE2rMnSlMXYjQLbCdFMvHIagIC7WqCl3z5uNLG7tDPTTG
-         vmcUBNQHZ/SgE/2R1tQXpM7fsFi7wrfyIPveTI/Ab73amJJcuZVvc7i8cmuTGHCBGLZz
-         /kOI/FTBzeelJlvTwnsce9Qxovezp5NH+tgGk1vzipAhMAg8BknWIHm+vT20Kz2TKMlJ
-         56s7l8r3gPtzkAw7Er7A+pwIvhkrjXiFIZNveA5jEz6ZqAnc49pEatOxNW3QlbCpI6sI
-         a3Og==
-X-Gm-Message-State: AOAM530QMLHh0W1wtxY1PnWyilfSZQcBjXhQI48ks4spPrypfLFLaL0v
-        Bkm2pSfgYfF/e0gj10a6dlCxp0jHV8JdeIhnXD8uBt9zxC350eP5V2I1NJyQCuFACxwfhliJBSb
-        qYUQj5P9UW5xy3p7U6edlqqkl0vxZK3CwlwYKtCJ7pg==
-X-Received: by 2002:a05:6402:34c2:b0:42a:f4da:5aa0 with SMTP id w2-20020a05640234c200b0042af4da5aa0mr10262569edc.260.1653047833820;
-        Fri, 20 May 2022 04:57:13 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw2s0EaRhVoMr9T7xvlSBA3I2jqCC/ZSF868KNzlmYWVfHrBmT0n59jDqNhraJB/bedEh2XMg==
-X-Received: by 2002:a05:6402:34c2:b0:42a:f4da:5aa0 with SMTP id w2-20020a05640234c200b0042af4da5aa0mr10262556edc.260.1653047833614;
-        Fri, 20 May 2022 04:57:13 -0700 (PDT)
-Received: from gollum.fritz.box ([194.191.244.86])
-        by smtp.gmail.com with ESMTPSA id ze16-20020a170906ef9000b006fe88802203sm2946451ejb.46.2022.05.20.04.57.12
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JPzY3rG4aAiGP4Adx8qp4zYUH//ThardXl1nVOzIKwg=;
+        b=iDLdn6/ArBVapUuqojt3y911o9uaY+ZDE/XlPkfA8Uo2yqrmJVao1xomMmEJhr9ovS
+         nsKZx2ExP7Z0oRO6Hqbv4qnVx5iwsUlfLYa93ImM8bApv+1/9HDcyqhUESqFEJIuBXo+
+         mBIBxT/fwPTIZNkAwvM1Qs+uEaJOnKKPXYgpZoVhl67kNosBxydMpKw6WJ91f3Gp0A5W
+         HpQTqK71EtlbAF51BcsQz99wAWMg8eR3jDJmtS/hJfjgUf+cWjYT24Qkp2W1UcD/N/5n
+         RGiSneY36BESAxAGj9Tad8SUzi2AKInzhRmbviKPtMis/11nID9UHQwddeXilJdwMMrb
+         I8EQ==
+X-Gm-Message-State: AOAM53192hgDv5RgpNAArSE1ZyAZ/NsNPvZ2uCag9aoyFaU5S+A3E5rb
+        8ZCL4qRGql+Zmld9c/RDnWMSrHEtajw=
+X-Google-Smtp-Source: ABdhPJw3J7+OdXRHM+j5hLfP9q6N7a+WUYPDb3oEqiwVpUjB58HVoQEg2A6NCMEHbgqBSPi1FTJipw==
+X-Received: by 2002:a17:906:c14c:b0:6f4:6e30:9ace with SMTP id dp12-20020a170906c14c00b006f46e309acemr8315896ejc.678.1653047862167;
+        Fri, 20 May 2022 04:57:42 -0700 (PDT)
+Received: from localhost.localdomain ([195.55.223.2])
+        by smtp.googlemail.com with ESMTPSA id h8-20020a170906530800b006fa8c685af1sm3100687ejo.163.2022.05.20.04.57.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 04:57:13 -0700 (PDT)
-From:   Juerg Haefliger <juerg.haefliger@canonical.com>
-X-Google-Original-From: Juerg Haefliger <juergh@canonical.com>
-To:     hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        linux-s390@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Juerg Haefliger <juergh@canonical.com>
-Subject: [PATCH 2/2] s390: Kconfig.debug: Fix indentation
-Date:   Fri, 20 May 2022 13:57:08 +0200
-Message-Id: <20220520115708.147841-3-juergh@canonical.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220520115708.147841-1-juergh@canonical.com>
-References: <20220520115708.147841-1-juergh@canonical.com>
+        Fri, 20 May 2022 04:57:41 -0700 (PDT)
+From:   Javier Abrego <javier.abrego.lorente@gmail.com>
+To:     trond.myklebust@hammerspace.com, anna@kernel.org
+Cc:     linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        javier.abrego.lorente@gmail.com
+Subject: [PATCH] FS: nfs: removed goto statement
+Date:   Fri, 20 May 2022 13:57:14 +0200
+Message-Id: <20220520115714.47321-1-javier.abrego.lorente@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The convention for indentation seems to be a single tab. Help text is
-further indented by an additional two whitespaces. Fix the lines that
-violate these rules.
+In this function goto can be replaced. Avoiding goto will improve the
+readability
 
-Signed-off-by: Juerg Haefliger <juergh@canonical.com>
+Signed-off-by: Javier Abrego<javier.abrego.lorente@gmail.com>
 ---
- arch/s390/Kconfig.debug | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ fs/nfs/nfs42xattr.c | 24 +++++++++++-------------
+ 1 file changed, 11 insertions(+), 13 deletions(-)
 
-diff --git a/arch/s390/Kconfig.debug b/arch/s390/Kconfig.debug
-index e94a2a7f6bf4..c4300ea4abf8 100644
---- a/arch/s390/Kconfig.debug
-+++ b/arch/s390/Kconfig.debug
-@@ -14,9 +14,9 @@ config DEBUG_ENTRY
- 	  If unsure, say N.
+diff --git a/fs/nfs/nfs42xattr.c b/fs/nfs/nfs42xattr.c
+index e7b34f7e0..78130462c 100644
+--- a/fs/nfs/nfs42xattr.c
++++ b/fs/nfs/nfs42xattr.c
+@@ -747,20 +747,18 @@ void nfs4_xattr_cache_set_list(struct inode *inode, const char *buf,
+ 		return;
  
- config CIO_INJECT
--       bool "CIO Inject interfaces"
--       depends on DEBUG_KERNEL && DEBUG_FS
--       help
--	This option provides a debugging facility to inject certain artificial events
--	and instruction responses to the CIO layer of Linux kernel. The newly created
--	debugfs user-interfaces will be at /sys/kernel/debug/s390/cio/*
-+	bool "CIO Inject interfaces"
-+	depends on DEBUG_KERNEL && DEBUG_FS
-+	help
-+	  This option provides a debugging facility to inject certain artificial events
-+	  and instruction responses to the CIO layer of Linux kernel. The newly created
-+	  debugfs user-interfaces will be at /sys/kernel/debug/s390/cio/*
+ 	entry = nfs4_xattr_alloc_entry(NULL, buf, NULL, buflen);
+-	if (entry == NULL)
+-		goto out;
+-
+-	/*
+-	 * This is just there to be able to get to bucket->cache,
+-	 * which is obviously the same for all buckets, so just
+-	 * use bucket 0.
+-	 */
+-	entry->bucket = &cache->buckets[0];
+-
+-	if (!nfs4_xattr_set_listcache(cache, entry))
+-		kref_put(&entry->ref, nfs4_xattr_free_entry_cb);
++	if (entry != NULL) {
++	       /*
++		* This is just there to be able to get to bucket->cache,
++		* which is obviously the same for all buckets, so just
++		* use bucket 0.
++		*/
++		entry->bucket = &cache->buckets[0];
++
++		if (!nfs4_xattr_set_listcache(cache, entry))
++			kref_put(&entry->ref, nfs4_xattr_free_entry_cb);
++	}
+ 
+-out:
+ 	kref_put(&cache->ref, nfs4_xattr_free_cache_cb);
+ }
+ 
 -- 
-2.32.0
+2.25.1
 

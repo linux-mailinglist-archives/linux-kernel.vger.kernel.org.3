@@ -2,167 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CD6052EE63
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 16:45:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF66252EE65
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 16:45:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350423AbiETOpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 10:45:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38786 "EHLO
+        id S1350421AbiETOpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 10:45:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244390AbiETOpT (ORCPT
+        with ESMTP id S244390AbiETOpi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 10:45:19 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EF1F170F22;
-        Fri, 20 May 2022 07:45:19 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id fw21-20020a17090b129500b001df9f62edd6so6557834pjb.0;
-        Fri, 20 May 2022 07:45:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=bV1fOV8EkPPKwTjdd+pCTFwZ+Tvzp6iCg5Gu+jWNb7o=;
-        b=jYSUm9nn4IZq15zBrPNJHS6DY7JGyShjxIH5jVqHz3lgZUe4TFRyDUIi6Ny2znOkyg
-         i/mFcUTWJ1kSTywrvoYWpYustfL3dCTrXzUbLEqBrvafbSxYS7F1quVM1ZXumO6oU0sC
-         WXlC4XUm438GrqA+ZKNsk9bPfwleiJZofZgP38x3cTvVYOXvICUE/JW0cEUXtHPVeHLA
-         nMV3LVccHDDYLtQm4CQhR0bx75KczIbJXobfeMI2U+G+1wolu6Z5ST819jqOhX80H3tZ
-         fS4T1I+V3DSH7sHywI+tZOaIxcOeTqs/hFUq1VSOedpJ2kigBc96Vp3+2mREwXQKOBxv
-         nFYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=bV1fOV8EkPPKwTjdd+pCTFwZ+Tvzp6iCg5Gu+jWNb7o=;
-        b=wkhEMgqUVcxFGn25E9zVuDju5fOrJHXqNf4SjSFwMw98hnjZla1NBak/ywGp/8+UfY
-         2AEW/LjBxFwp5rlOiuef5vbcIupi9V8uFt5TmLiCH0pSirV7baQcmdSrcuV5U36A+b+E
-         q/71pPcao8sjTnXIbM0U6Q1oX6nF/F6nBFPRXQy9EQ7G+AHgAzzbe8A3TQ1jarxbEp27
-         a9WliSPRQkCxj4WSrCMJ3uvxF1Y8SY4+6nScC4IMVOQT+wYpWSY+5TaHaSkCJBSyLfA6
-         MTERmnw7lMVg5nhOutnY6EzH3XN+7T9IzbIK9ttcJDC1tY0WnmSIBeXASXd2ONFSl+40
-         Gi9Q==
-X-Gm-Message-State: AOAM532tKw/WAsE1A380DHLzxIMzbGRLOD3IP0KXMssAIdMLIG4KEZMx
-        Qa2Px/LV5yxsffh2WkxwVlg=
-X-Google-Smtp-Source: ABdhPJyGaT7E+U0fr95zdMFKOzoFCFHlE57Co3IqQ8mOUYHRFFWs0oGNzpnjz814PubMJ4j+W7U6Wg==
-X-Received: by 2002:a17:902:9a42:b0:158:bf91:ecec with SMTP id x2-20020a1709029a4200b00158bf91ececmr10227542plv.115.1653057918534;
-        Fri, 20 May 2022 07:45:18 -0700 (PDT)
-Received: from localhost.localdomain ([203.205.141.25])
-        by smtp.gmail.com with ESMTPSA id a13-20020aa7864d000000b0051829b1595dsm1932698pfo.130.2022.05.20.07.45.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 07:45:18 -0700 (PDT)
-From:   Like Xu <like.xu.linux@gmail.com>
-X-Google-Original-From: Like Xu <likexu@tencent.com>
-To:     pbonzini@redhat.com
-Cc:     jmattson@google.com, joro@8bytes.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sandipan.das@amd.com,
-        seanjc@google.com, vkuznets@redhat.com, wanpengli@tencent.com
-Subject: [PATCH v2 2/3] KVM: x86/svm/pmu: Direct access pmu->gp_counter[] to implement amd_*_to_pmc()
-Date:   Fri, 20 May 2022 22:45:12 +0800
-Message-Id: <20220520144512.88454-1-likexu@tencent.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510115718.93335-2-likexu@tencent.com>
-References: <20220510115718.93335-2-likexu@tencent.com>
+        Fri, 20 May 2022 10:45:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B918170F28;
+        Fri, 20 May 2022 07:45:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DDF8618DC;
+        Fri, 20 May 2022 14:45:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE8C1C385A9;
+        Fri, 20 May 2022 14:45:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653057934;
+        bh=eyy20eLaoZHHhlcdY5b3GARHaDk/Ynm0A8xek9N7alE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hmtDN6rzpqT+fYQz7hSlNwVBz6PdgaCRI/+fJz0yhqebalgYoTqztGhfml4F5z/XW
+         gs67hODZJYg7mmnma+XHmFxHpsoU24dDBPX6Ryslvk4ir075rW0zF3LS7fKUzlg8Tt
+         8XbL1UbUZTCMK/JkbAWRdsAXAhq/iC5E9b01q4tAhBjTSNBcsKg0XfeK7HXhwBOsoi
+         QUI1RzLfxraasVYNWRBQxspfvrbtit1S8xkfcQ4XDe77dNw2qIPogeoEUOJfRoCYRP
+         Tu/TCg7LwF7BjrwIgHVkXJAJvYsmjICk3xMhO2CtF7Mqtbj75oFSVNcXC0n0Cbfttd
+         LYWcH0eTSLc/w==
+Date:   Fri, 20 May 2022 15:45:29 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     lgirdwood@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH 2/4] regulator: Add driver for MT6331 PMIC regulators
+Message-ID: <YoepiTUfdhkYByo7@sirena.org.uk>
+References: <20220520133305.265310-1-angelogioacchino.delregno@collabora.com>
+ <20220520133305.265310-3-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="p7DW/tPgeQFzSu9V"
+Content-Disposition: inline
+In-Reply-To: <20220520133305.265310-3-angelogioacchino.delregno@collabora.com>
+X-Cookie: Happy feast of the pig!
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Like Xu <likexu@tencent.com>
 
-AMD only has gp counters, whose corresponding vPMCs are initialised
-and stored in pmu->gp_counter[] in order of idx, so we can access this
-array directly based on any valid pmc->idx, without any help from other
-interfaces at all. The amd_rdpmc_ecx_to_pmc() can now reuse this part
-of the code quite naturally.
+--p7DW/tPgeQFzSu9V
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Opportunistically apply array_index_nospec() to reduce the attack
-surface for speculative execution and remove the dead code.
+On Fri, May 20, 2022 at 03:33:03PM +0200, AngeloGioacchino Del Regno wrote:
 
-Signed-off-by: Like Xu <likexu@tencent.com>
----
-v1 -> v2 Changelog:
-- Remove unused helper get_msr_base();
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2022 Collabora Ltd.
+> + * Author: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> + *
 
- arch/x86/kvm/svm/pmu.c | 45 +++++++-----------------------------------
- 1 file changed, 7 insertions(+), 38 deletions(-)
+Please make the entire comment a C++ one so things look more
+intentional.
 
-diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
-index a3b78342a221..6cd8d3c2000c 100644
---- a/arch/x86/kvm/svm/pmu.c
-+++ b/arch/x86/kvm/svm/pmu.c
-@@ -61,21 +61,14 @@ static struct kvm_event_hw_type_mapping amd_f17h_event_mapping[] = {
- static_assert(ARRAY_SIZE(amd_event_mapping) ==
- 	     ARRAY_SIZE(amd_f17h_event_mapping));
- 
--static unsigned int get_msr_base(struct kvm_pmu *pmu, enum pmu_type type)
-+static struct kvm_pmc *amd_pmc_idx_to_pmc(struct kvm_pmu *pmu, int pmc_idx)
- {
--	struct kvm_vcpu *vcpu = pmu_to_vcpu(pmu);
-+	unsigned int num_counters = pmu->nr_arch_gp_counters;
- 
--	if (guest_cpuid_has(vcpu, X86_FEATURE_PERFCTR_CORE)) {
--		if (type == PMU_TYPE_COUNTER)
--			return MSR_F15H_PERF_CTR;
--		else
--			return MSR_F15H_PERF_CTL;
--	} else {
--		if (type == PMU_TYPE_COUNTER)
--			return MSR_K7_PERFCTR0;
--		else
--			return MSR_K7_EVNTSEL0;
--	}
-+	if (pmc_idx >= num_counters)
-+		return NULL;
-+
-+	return &pmu->gp_counters[array_index_nospec(pmc_idx, num_counters)];
- }
- 
- static enum index msr_to_index(u32 msr)
-@@ -186,22 +179,6 @@ static bool amd_pmc_is_enabled(struct kvm_pmc *pmc)
- 	return true;
- }
- 
--static struct kvm_pmc *amd_pmc_idx_to_pmc(struct kvm_pmu *pmu, int pmc_idx)
--{
--	unsigned int base = get_msr_base(pmu, PMU_TYPE_COUNTER);
--	struct kvm_vcpu *vcpu = pmu_to_vcpu(pmu);
--
--	if (guest_cpuid_has(vcpu, X86_FEATURE_PERFCTR_CORE)) {
--		/*
--		 * The idx is contiguous. The MSRs are not. The counter MSRs
--		 * are interleaved with the event select MSRs.
--		 */
--		pmc_idx *= 2;
--	}
--
--	return get_gp_pmc_amd(pmu, base + pmc_idx, PMU_TYPE_COUNTER);
--}
--
- static bool amd_is_valid_rdpmc_ecx(struct kvm_vcpu *vcpu, unsigned int idx)
- {
- 	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
-@@ -215,15 +192,7 @@ static bool amd_is_valid_rdpmc_ecx(struct kvm_vcpu *vcpu, unsigned int idx)
- static struct kvm_pmc *amd_rdpmc_ecx_to_pmc(struct kvm_vcpu *vcpu,
- 	unsigned int idx, u64 *mask)
- {
--	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
--	struct kvm_pmc *counters;
--
--	idx &= ~(3u << 30);
--	if (idx >= pmu->nr_arch_gp_counters)
--		return NULL;
--	counters = pmu->gp_counters;
--
--	return &counters[idx];
-+	return amd_pmc_idx_to_pmc(vcpu_to_pmu(vcpu), idx & ~(3u << 30));
- }
- 
- static bool amd_is_valid_msr(struct kvm_vcpu *vcpu, u32 msr)
--- 
-2.36.1
+> +static const unsigned int ldo_volt_table10[] = {
+> +	1200000, 1300000, 1500000, 1800000,
+> +	1200000, 1300000, 1500000, 1800000,
+> +	1200000, 1300000, 1500000, 1800000,
+> +	1200000, 1300000, 1500000, 1800000,
+> +};
 
+So the top bits of the voltate selection field just get ignored?  Might
+be easier to just write the code to not include the top bits.
+
+> +static int mt6331_get_status(struct regulator_dev *rdev)
+> +{
+> +	struct mt6331_regulator_info *info = rdev_get_drvdata(rdev);
+> +	u32 reg, en_mask, regval;
+> +	int ret;
+> +
+> +	if (info->qi > 0) {
+> +		reg = info->desc.enable_reg;
+> +		en_mask = info->qi;
+
+If the regulator doesn't have status readback it shouldn't provide a
+get_status() operation.
+
+> +static int mt6331_ldo_set_mode(struct regulator_dev *rdev, unsigned int mode)
+> +{
+> +	int ret, val = 0;
+> +	struct mt6331_regulator_info *info = rdev_get_drvdata(rdev);
+> +
+> +	if (!info->modeset_mask) {
+> +		dev_err(&rdev->dev, "regulator %s doesn't support set_mode\n",
+> +			info->desc.name);
+> +		return -EINVAL;
+> +	}
+
+Just don't provide the operation for these regulators then.  That'll
+mean a separate ops struct but that's fine.
+
+--p7DW/tPgeQFzSu9V
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKHqYgACgkQJNaLcl1U
+h9CxpAf8Dcb0LgYJswtynhjrPmCXq5dYmagsB3EUxbEJcZXLX4uvOC2xRrQ8qv1F
+COwjJwhrHEDaeQGrX0LjxykTeI3RGn4fZGaIOgXtPrqAxETrp25ihtDuIU90LKAr
+cWrj82iP0HLYuKvPlkUh1uWlSMZ6vGh2WsJHhpNUIvZHd6swxslp3AXbS5L3hiTz
+K8Vq+Vw0TI800vnGy2PysQVb9bM5C7XUtnDOdyrYUl8PEDuJdnuLwiKNF+wZ1WpB
+R9ieqffSRUpsFsbJlWueKBcB/8UcHLJ+joI5/SYiL28Xz2fyM6ICUf6tHTARD++r
+JM7ueL0Tht/hfeIyuPT987jU5lqPJg==
+=7pHa
+-----END PGP SIGNATURE-----
+
+--p7DW/tPgeQFzSu9V--

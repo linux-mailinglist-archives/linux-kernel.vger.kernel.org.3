@@ -2,103 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E59852EA89
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 13:11:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AE0152EA90
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 13:14:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348419AbiETLL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 07:11:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43654 "EHLO
+        id S1348427AbiETLOm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 07:14:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348407AbiETLLZ (ORCPT
+        with ESMTP id S241462AbiETLOi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 07:11:25 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 932093EF22;
-        Fri, 20 May 2022 04:11:22 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24KAhckt022523;
-        Fri, 20 May 2022 11:11:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=kJVoVYK/ONGaiB5tlKh4bH8Chhvp/q4lg9PLkDF6dWw=;
- b=S+xYyxqBN8J8IaiZBXMfyHn5FHGyghBwCvz1hH93ggDefOOrOpnVBRP2of/bBZ8TL787
- y7wfQZHCM/yD6kzjhLTbn90tU/Ji7zVmoWsjO2vWWUz6543sPwfG1oXtax8GIe5sLUhE
- SugYV/x0Cjj+dcA9WQJiUuCaeN9YHkK9emVhNE3KffueLTx6UMm7nGkehtrgY8VBU7uE
- b2cM1/VEBuIy8q3oALEp4SPqY4HoirFUpJ5MeZetm1eJHeY9xz2g0g+yovk4A1tmXoSP
- FGjecKUt6Uif/BiQiRG7EJNotBDC3ramwfW+ZawKSfbhoC9HPtDMqPpjFuAIsoyBJ5DC GA== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g62qng659-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 May 2022 11:11:21 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24KB72XM027654;
-        Fri, 20 May 2022 11:11:19 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 3g23pjgpxx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 May 2022 11:11:19 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24KBAajl32375278
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 20 May 2022 11:10:36 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 66FF8A404D;
-        Fri, 20 May 2022 11:11:16 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 167E5A4040;
-        Fri, 20 May 2022 11:11:16 +0000 (GMT)
-Received: from osiris (unknown [9.145.81.162])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Fri, 20 May 2022 11:11:16 +0000 (GMT)
-Date:   Fri, 20 May 2022 13:11:14 +0200
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Steffen Eiden <seiden@linux.ibm.com>
-Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Nico Boehr <nrb@linux.ibm.com>, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/1] s390: Add attestation query information
-Message-ID: <Yod3Uiu2hRc9vas7@osiris>
-References: <20220518135908.1110319-1-seiden@linux.ibm.com>
+        Fri, 20 May 2022 07:14:38 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025709E9C7;
+        Fri, 20 May 2022 04:14:36 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L4PDp6dbNzQk8V;
+        Fri, 20 May 2022 19:11:38 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 20 May 2022 19:14:35 +0800
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 20 May 2022 19:14:34 +0800
+Message-ID: <641b4f4f-9786-d11c-e264-daaf0d564b7c@huawei.com>
+Date:   Fri, 20 May 2022 19:14:33 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220518135908.1110319-1-seiden@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: nGudQSKKXq0IiARFzdpVgNJN6rLdNBE9
-X-Proofpoint-GUID: nGudQSKKXq0IiARFzdpVgNJN6rLdNBE9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-20_03,2022-05-20_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- suspectscore=0 clxscore=1015 impostorscore=0 mlxscore=0 bulkscore=0
- adultscore=0 malwarescore=0 mlxlogscore=737 phishscore=0
- lowpriorityscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2202240000 definitions=main-2205200082
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v2 1/2] Documentation/barriers: Add memory barrier
+ dma_mb()
+Content-Language: en-US
+To:     Marco Elver <elver@google.com>
+CC:     <catalin.marinas@arm.com>, <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <mark.rutland@arm.com>,
+        Jonathan Corbet <corbet@lwn.net>, <linux-doc@vger.kernel.org>,
+        <paulmck@kernel.org>, Peter Zijlstra <peterz@infradead.org>
+References: <20220520031548.175582-1-wangkefeng.wang@huawei.com>
+ <20220520031548.175582-2-wangkefeng.wang@huawei.com>
+ <YodouVpl26890QfU@elver.google.com>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <YodouVpl26890QfU@elver.google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 01:59:07PM +0000, Steffen Eiden wrote:
-> By design the uv-device does not check whether an incoming attestation
-> measurement request only specifies valid plaintext flags or has the
-> right request version, as these values are verified by the Ultravisor
-> anyway. However, the userspace program that generates these requests
-> might want to know which flags/versions are supported in order to
-> create requests without trial and error. Therefore, we must expose the
-> supported plaintext flags and versions to userspace.
-> 
-> since v1:
-> 	* rebased on Janosch's "kvm: s390: Add PV dump support" series
-> 	* added rationale as this cover letter
 
-Thanks for adding the cover letter! However what I really meant (and
-failed to write) is that the rationale should be part of the patch
-description. Anyway; whoever picks this patch will hopefully integrate
-your cover letter description into the commit.
+On 2022/5/20 18:08, Marco Elver wrote:
+> On Fri, May 20, 2022 at 11:15AM +0800, Kefeng Wang wrote:
+>> The memory barrier dma_mb() is introduced by commit a76a37777f2c
+>> ("iommu/arm-smmu-v3: Ensure queue is read after updating prod pointer"),
+>> which is used to ensure that prior (both reads and writes) accesses to
+>> memory by a CPU are ordered w.r.t. a subsequent MMIO write.
+>>
+>> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+>> ---
+>>   Documentation/memory-barriers.txt | 5 ++++-
+>>   1 file changed, 4 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
+>> index b12df9137e1c..1eabcc0e4eca 100644
+>> --- a/Documentation/memory-barriers.txt
+>> +++ b/Documentation/memory-barriers.txt
+>> @@ -1894,10 +1894,13 @@ There are some more advanced barrier functions:
+>>   
+>>    (*) dma_wmb();
+>>    (*) dma_rmb();
+>> + (*) dma_mb();
+>>   
+>>        These are for use with consistent memory to guarantee the ordering
+>>        of writes or reads of shared memory accessible to both the CPU and a
+>> -     DMA capable device.
+>> +     DMA capable device, in the case of ensure the prior (both reads and
+>> +     writes) accesses to memory by a CPU are ordered w.r.t. a subsequent
+>> +     MMIO write, dma_mb().
+>>   
+> I think this is out of place; this explanation here is not yet
+> elaborating on either. Elaboration on dma_mb() should go where
+> dma_rmb() and dma_wmb() are explained.
+>
+> Something like this:
+>
+> ------ >8 ------
+>
+> diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
+> index b12df9137e1c..fb322b6cce70 100644
+> --- a/Documentation/memory-barriers.txt
+> +++ b/Documentation/memory-barriers.txt
+> @@ -1894,6 +1894,7 @@ There are some more advanced barrier functions:
+>   
+>    (*) dma_wmb();
+>    (*) dma_rmb();
+> + (*) dma_mb();
+>   
+>        These are for use with consistent memory to guarantee the ordering
+>        of writes or reads of shared memory accessible to both the CPU and a
+> @@ -1925,11 +1926,11 @@ There are some more advanced barrier functions:
+>        The dma_rmb() allows us guarantee the device has released ownership
+>        before we read the data from the descriptor, and the dma_wmb() allows
+>        us to guarantee the data is written to the descriptor before the device
+> -     can see it now has ownership.  Note that, when using writel(), a prior
+> -     wmb() is not needed to guarantee that the cache coherent memory writes
+> -     have completed before writing to the MMIO region.  The cheaper
+> -     writel_relaxed() does not provide this guarantee and must not be used
+> -     here.
+> +     can see it now has ownership.  The dma_mb() implies both a dma_rmb() and a
+> +     dma_wmb().  Note that, when using writel(), a prior wmb() is not needed to
+> +     guarantee that the cache coherent memory writes have completed before
+> +     writing to the MMIO region.  The cheaper writel_relaxed() does not provide
+> +     this guarantee and must not be used here.
+>   
+>        See the subsection "Kernel I/O barrier effects" for more information on
+>        relaxed I/O accessors and the Documentation/core-api/dma-api.rst file for
+>
+> ------ >8 ------
+Thanks， will use above explanation.
+> Also, now that you're making dma_mb() part of the official API, it might
+> need a generic definition in include/asm-generic/barrier.h, because
+> as-is it's only available in arm64 builds.
+
+Ok, it's good to add the dma_mb() and __dma_mb  definition with a 
+separate patch
+
+into include/asm-generic/barrier.h.
+
+>
+> Thoughts?
+>
+> Thanks,
+> -- Marco
+> .

@@ -2,67 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1FD252E1BF
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 03:16:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77D8852E1BC
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 03:16:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344249AbiETBMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 21:12:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40272 "EHLO
+        id S1344233AbiETBOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 21:14:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233927AbiETBMh (ORCPT
+        with ESMTP id S233927AbiETBOn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 21:12:37 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEADF1238A9
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 18:12:36 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2fb7cb07885so59540427b3.23
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 18:12:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=tRp9XwLCJd757nd6S6xrPEWJRWBLPfMUrN42v2RElFU=;
-        b=kLj1335gWXNqN3m0x4aikHu59YFs4w9jVsakDkYazDHkv7NdPPTHMDWcCBbO3/UU6H
-         C4koYXf/EG3VCj89YpQGoAsQcqkjWiUI4krLBCoyZ0vffn/xz7p+GjRLzkI0Djr3cUR7
-         icY3wNQnvbaXZORjv/+6eb+8c/8U5ZM0Sd2cE2skWOCrjurR8T/B9QDmAf8S1w48L3bR
-         87Z4HB468t+jYhTBRp28yYN2j311pzzKaC5m+TmiItPYKSuvb9j5Zd5tiOdshLhQ5Ts2
-         I54OjEYN9vXGiN83EaXLux5pHpSMsc31hiSPBrS5buR9BD8XZhC4mZXKH3ayBQ0DRmHS
-         IVJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=tRp9XwLCJd757nd6S6xrPEWJRWBLPfMUrN42v2RElFU=;
-        b=ip0M2rioek4ZS4/e30es4xxqUPHMxFtKvnIjBgcrIiTpqoXpM4kCRK23muhd+i4wwn
-         DAnIxWDk5mEB8JG6ko35V5xn8ls0/co+7t95yk1S0Xyms/5JYLFn3kNWfQ9fQM5guJXb
-         bpGbpDdobnYaIU1gYKcLLiAxbxfeSo6BtsR6+ar8GwUqiD2FWYGe7GsO58/m+CI3yhHB
-         Gxg7SXFaLZNccO9gB5P6WuEVb9UrEX+3POQUbRXd1zmk8BC9UmZGHZ292D7iV4aDtj8D
-         gHGEB+nM1RLgKMv71qO6WISKJF7BBtW4t0DnhE37Fa50ZnOyA9LM4ZjRO2NaJN5vm39p
-         yNaQ==
-X-Gm-Message-State: AOAM531lBC/WMTrSkrVDEha/zv7HumBGdt8/lTjKcP5kPjNqvNJkqHXk
-        sHPeSUe+SzU5aAU+tAJdUjqLzyYkcBMr4Q==
-X-Google-Smtp-Source: ABdhPJyuiwPd0mGkX3bVtfcgfftvAb+9azlm4isHk7kCY2QP2shRGSH8dq+GIVT0R0Fjh1DkLbeEJW8MtvjZ4A==
-X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:28b])
- (user=shakeelb job=sendgmr) by 2002:a25:1f85:0:b0:64b:a5fc:e881 with SMTP id
- f127-20020a251f85000000b0064ba5fce881mr7404391ybf.514.1653009156066; Thu, 19
- May 2022 18:12:36 -0700 (PDT)
-Date:   Fri, 20 May 2022 01:12:33 +0000
-In-Reply-To: <22ccf325-6aa5-9b55-4729-d03f34125650@openvz.org>
-Message-Id: <20220520011233.fxbqxcljfcrjk44n@google.com>
-Mime-Version: 1.0
-References: <Ynv7+VG+T2y9rpdk@carbon> <22ccf325-6aa5-9b55-4729-d03f34125650@openvz.org>
-Subject: Re: [PATCH 2/4] memcg: enable accounting for kernfs nodes and iattrs
-From:   Shakeel Butt <shakeelb@google.com>
-To:     Vasily Averin <vvs@openvz.org>
-Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
-        "Michal =?utf-8?Q?Koutn=C3=BD?=" <mkoutny@suse.com>,
-        kernel@openvz.org, linux-kernel@vger.kernel.org,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        Thu, 19 May 2022 21:14:43 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C702D9E87;
+        Thu, 19 May 2022 18:14:41 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L47zx13rQz4xD3;
+        Fri, 20 May 2022 11:14:37 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1653009277;
+        bh=KGHuo0pOnphFmXsNxGt1++Zt2qGBcDd2u6R3YD4xIdU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=p8jzjmGU7iRyAy6Xqk0dQbsbRkAeet0U+SMQZJ9BtNLF7Ac23c8lLhy4e9ZkbBhfq
+         hnkTXW7eLBjpjeyMQ+F19YGTB1TPmKfVjY9Ikyz65PbNN98yDMHoH+IwjugnmUKH8+
+         +xtgMfxAAQDWsp2+rAUs08bVhaCqeCW69ZYjE8kH6CHTO72L1cEXsIbtBiL2OxfqZj
+         H9IAFNCHQK8Yr8w9B5/icpCBFsZHwP2ji9Ij9qxHr3LWzPWwg6/z8l9qem+PgVPBvx
+         Gx76k33uBzx+rf1+/1zhsDbfHydjKepXbWMjTapCT9q7YZJ1beThRtsFPNAYe7QbbK
+         6uyhuP5Xj7xJw==
+Date:   Fri, 20 May 2022 11:14:35 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the fscache tree
+Message-ID: <20220520111435.34d660d7@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/NG=CYKoXHCq/tLUihblEgOB";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,27 +50,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 06:51:55PM +0300, Vasily Averin wrote:
-> kernfs nodes are quite small kernel objects, however there are few
-> scenarios where it consumes significant piece of all allocated memory:
-> 
-> 1) creating a new netdevice allocates ~50Kb of memory, where ~10Kb
->    was allocated for 80+ kernfs nodes.
-> 
-> 2) cgroupv2 mkdir allocates ~60Kb of memory, ~10Kb of them are kernfs
->    structures.
-> 
-> 3) Shakeel Butt reports that Google has workloads which create 100s
->    of subcontainers and they have observed high system overhead
->    without memcg accounting of kernfs.
-> 
-> It makes sense to enable accounting for kernfs objects, otherwise its
-> misuse inside memcg-limited can lead to global memory shortage,
-> OOM and random kills of host processes.
-> 
-> Signed-off-by: Vasily Averin <vvs@openvz.org>
+--Sig_/NG=CYKoXHCq/tLUihblEgOB
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Acked-by: Shakeel Butt <shakeelb@google.com>
+Hi all,
 
-You can keep the ack if you decide to include simple_xattr_alloc() in
-following version or different patch.
+After merging the fscache tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
+
+fs/cifs/fscache.c: In function 'cifs_fscache_get_inode_cookie':
+fs/cifs/fscache.c:106:14: error: 'struct cifsInodeInfo' has no member named=
+ 'netfs_ctx'
+  106 |         cifsi->netfs_ctx.cache =3D
+      |              ^~
+fs/cifs/fscache.c: In function 'cifs_fscache_release_inode_cookie':
+fs/cifs/fscache.c:134:22: error: 'struct cifsInodeInfo' has no member named=
+ 'netfs_ctx'
+  134 |                 cifsi->netfs_ctx.cache =3D NULL;
+      |                      ^~
+
+Caused by commit
+
+  a3457aa9c40f ("netfs: Fix gcc-12 warning by embedding vfs inode in netfs_=
+i_context")
+
+I have used the fscache tree from next-20220519 for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/NG=CYKoXHCq/tLUihblEgOB
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKG63sACgkQAVBC80lX
+0GyNWwf9EBAYijD5EV3RKTxBne8rImoRqVGGzH0yt9JHysCVDSi/HvDf/nua/y2/
+ZQtm42SOqfB3VcEkotxCou8XAaTkCy3FAz4uZj7iTjDFuXpEHJJanr0Z0c2tn/Oo
+HNouAqxHciRgYEpFK2o1Gm55LXsWhFVLh7VrmoaKjjBJhL+2LaHbRZg9vH/j+7uk
+tdEElzQUkoeZpWZ1eGE/wqcwHM587s5nte7PxVNWVKKDkv/AERoG+X1nc3w/Pevf
+stsJlOBpUUXVEjSKv0agYKA7hwQxS1ctNjBfvzNn5r5EbHAYkL+N2yf1qNdcVl0O
+7/4nCWbMjC138oeVcjuBzSyLYljmpw==
+=38K8
+-----END PGP SIGNATURE-----
+
+--Sig_/NG=CYKoXHCq/tLUihblEgOB--

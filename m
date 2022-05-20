@@ -2,182 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB88352E573
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 08:56:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF1E052E575
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 08:57:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346108AbiETGzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 02:55:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51114 "EHLO
+        id S1346109AbiETG5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 02:57:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231716AbiETGzl (ORCPT
+        with ESMTP id S235886AbiETG5F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 02:55:41 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0655C14E2E8;
-        Thu, 19 May 2022 23:55:40 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Fri, 20 May 2022 02:57:05 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45C5566AEA;
+        Thu, 19 May 2022 23:57:04 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id AB3C61FD76;
-        Fri, 20 May 2022 06:55:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1653029738; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=8opWnZNch32Zkmsa9alltAHULO52/yIuQNB9QASw+1M=;
-        b=o/cu7XrPJAid//aZbBVBTVWdH75iFn3NEqZc/9zKzMMh3RDM1WE9+PqMNATFHMMq3KZNZJ
-        nifwzGtrADISAQ1WBbof0sAYaEIELQs9oJxZAHfD7dCqJ9ht8Z2aGvzRKTXBnsXOWmdEZG
-        qa39MjyYsBMu3gqNY+EUDxT2/6chxZY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1653029738;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=8opWnZNch32Zkmsa9alltAHULO52/yIuQNB9QASw+1M=;
-        b=IPRWZBWPWYoVbL2rzbGbyVVQkgYVm67KRcLaAYo0Dix5pL7rU1cYnuNwSQ0gU4Fyet8k1g
-        ks7UikocFhgWzpAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9391A13A5F;
-        Fri, 20 May 2022 06:55:38 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ry+mImo7h2KEIgAAMHmgww
-        (envelope-from <mliska@suse.cz>); Fri, 20 May 2022 06:55:38 +0000
-Message-ID: <b95b3128-f010-dcba-1f6a-1a85dd2d20a5@suse.cz>
-Date:   Fri, 20 May 2022 08:55:38 +0200
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L4Hb23dQhz4xD9;
+        Fri, 20 May 2022 16:57:02 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1653029822;
+        bh=3qcC0zxa4JNcBZM2KoM0PUrp8oT7ymNUmD1Kh8x2BLE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=mF5G2mI9LN/6goV1xEUdlwdttZuZYp7qiCAR5xLBbEVqryX0rm3YGAmOk33Pt1E8M
+         VANVjdea+1WsIU6hDoc1Xsj/0eoYM2/e78Zh3YLLungYPf9PXy36XaSHKQKLn/t5f3
+         8sb7xnaSkTXhVpv+oEQmIq+RtM5aMWivrQE/ttYxv2IaGhBit4cQizElTpkwEtZDz4
+         jmRtDcw5Oe8o0xulE4UB5VOxacJOGj9NKoij8bjqmuTJCsHfyy2VBJ15GJB0Bg8Zwz
+         zHXzi9ac8mcYl+vB2jffIH/c0WQHm10OLmFCwrSpgv7d+jddQ98Uz8RhCj/zUA+cUk
+         n6D78eZmZAcBQ==
+Date:   Fri, 20 May 2022 16:57:01 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Linux Crypto List <linux-crypto@vger.kernel.org>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Meenakshi Aggarwal <meenakshi.aggarwal@nxp.com>,
+        Steffen Trumtrar <s.trumtrar@pengutronix.de>
+Subject: linux-next: manual merge of the tpmdd tree with the crypto tree
+Message-ID: <20220520165701.14224ddb@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-From:   =?UTF-8?Q?Martin_Li=c5=a1ka?= <mliska@suse.cz>
-Subject: [PATCH] arm64: Unify vertical spacing in HWCAPS
-To:     linux-doc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/s55XKUIBqpxB_cDnrpn6i.n";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Unify vertical spacing so that same font weight
-is used by Sphinx.
+--Sig_/s55XKUIBqpxB_cDnrpn6i.n
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Martin Liska <mliska@suse.cz>
----
- Documentation/arm64/elf_hwcaps.rst | 23 -----------------------
- 1 file changed, 23 deletions(-)
+Hi all,
 
-diff --git a/Documentation/arm64/elf_hwcaps.rst b/Documentation/arm64/elf_hwcaps.rst
-index a8f30963e550..1e79044f51a2 100644
---- a/Documentation/arm64/elf_hwcaps.rst
-+++ b/Documentation/arm64/elf_hwcaps.rst
-@@ -171,96 +171,73 @@ HWCAP_PACG
-     Documentation/arm64/pointer-authentication.rst.
- 
- HWCAP2_DCPODP
--
-     Functionality implied by ID_AA64ISAR1_EL1.DPB == 0b0010.
- 
- HWCAP2_SVE2
--
-     Functionality implied by ID_AA64ZFR0_EL1.SVEVer == 0b0001.
- 
- HWCAP2_SVEAES
--
-     Functionality implied by ID_AA64ZFR0_EL1.AES == 0b0001.
- 
- HWCAP2_SVEPMULL
--
-     Functionality implied by ID_AA64ZFR0_EL1.AES == 0b0010.
- 
- HWCAP2_SVEBITPERM
--
-     Functionality implied by ID_AA64ZFR0_EL1.BitPerm == 0b0001.
- 
- HWCAP2_SVESHA3
--
-     Functionality implied by ID_AA64ZFR0_EL1.SHA3 == 0b0001.
- 
- HWCAP2_SVESM4
--
-     Functionality implied by ID_AA64ZFR0_EL1.SM4 == 0b0001.
- 
- HWCAP2_FLAGM2
--
-     Functionality implied by ID_AA64ISAR0_EL1.TS == 0b0010.
- 
- HWCAP2_FRINT
--
-     Functionality implied by ID_AA64ISAR1_EL1.FRINTTS == 0b0001.
- 
- HWCAP2_SVEI8MM
--
-     Functionality implied by ID_AA64ZFR0_EL1.I8MM == 0b0001.
- 
- HWCAP2_SVEF32MM
--
-     Functionality implied by ID_AA64ZFR0_EL1.F32MM == 0b0001.
- 
- HWCAP2_SVEF64MM
--
-     Functionality implied by ID_AA64ZFR0_EL1.F64MM == 0b0001.
- 
- HWCAP2_SVEBF16
--
-     Functionality implied by ID_AA64ZFR0_EL1.BF16 == 0b0001.
- 
- HWCAP2_I8MM
--
-     Functionality implied by ID_AA64ISAR1_EL1.I8MM == 0b0001.
- 
- HWCAP2_BF16
--
-     Functionality implied by ID_AA64ISAR1_EL1.BF16 == 0b0001.
- 
- HWCAP2_DGH
--
-     Functionality implied by ID_AA64ISAR1_EL1.DGH == 0b0001.
- 
- HWCAP2_RNG
--
-     Functionality implied by ID_AA64ISAR0_EL1.RNDR == 0b0001.
- 
- HWCAP2_BTI
--
-     Functionality implied by ID_AA64PFR0_EL1.BT == 0b0001.
- 
- HWCAP2_MTE
--
-     Functionality implied by ID_AA64PFR1_EL1.MTE == 0b0010, as described
-     by Documentation/arm64/memory-tagging-extension.rst.
- 
- HWCAP2_ECV
--
-     Functionality implied by ID_AA64MMFR0_EL1.ECV == 0b0001.
- 
- HWCAP2_AFP
--
-     Functionality implied by ID_AA64MFR1_EL1.AFP == 0b0001.
- 
- HWCAP2_RPRES
--
-     Functionality implied by ID_AA64ISAR2_EL1.RPRES == 0b0001.
- 
- HWCAP2_MTE3
--
-     Functionality implied by ID_AA64PFR1_EL1.MTE == 0b0011, as described
-     by Documentation/arm64/memory-tagging-extension.rst.
- 
--- 
-2.36.1
+Today's linux-next merge of the tpmdd tree got a conflict in:
 
+  drivers/crypto/caam/Kconfig
+
+between commit:
+
+  0aa6ac7795ca ("crypto: caam/rng - Add support for PRNG")
+
+from the crypto tree and commit:
+
+  5e785783ddb0 ("crypto: caam - add in-kernel interface for blob generator")
+
+from the tpmdd tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/crypto/caam/Kconfig
+index 0aa52b612a01,ea9f8b1ae981..000000000000
+--- a/drivers/crypto/caam/Kconfig
++++ b/drivers/crypto/caam/Kconfig
+@@@ -151,14 -151,9 +151,17 @@@ config CRYPTO_DEV_FSL_CAAM_RNG_AP
+  	  Selecting this will register the SEC4 hardware rng to
+  	  the hw_random API for supplying the kernel entropy pool.
+ =20
+ +config CRYPTO_DEV_FSL_CAAM_PRNG_API
+ +	bool "Register Pseudo random number generation implementation with Crypt=
+o API"
+ +	default y
+ +	select CRYPTO_RNG
+ +	help
+ +	  Selecting this will register the SEC hardware prng to
+ +	  the Crypto API.
+ +
++ config CRYPTO_DEV_FSL_CAAM_BLOB_GEN
++ 	bool
++=20
+  endif # CRYPTO_DEV_FSL_CAAM_JR
+ =20
+  endif # CRYPTO_DEV_FSL_CAAM
+
+--Sig_/s55XKUIBqpxB_cDnrpn6i.n
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKHO70ACgkQAVBC80lX
+0GzSxgf6Ariy3P688k9jklxHAKIMrNYfg3624IP+CH6Hfiw4iZmdZpTmDVL/L8b8
+M4XcFAfmXDDhuh6CT7lqTGSFquYKGiMFea0TIElNGj1xHORTbGX8X2dyjvfVV/PZ
+lg74e6QBcYDjLhEFX4mNpM+3htDr629uUqC+dJe/uzY32gUFWwuYvFDlLX48VjpS
+3H9ENxxZ/ma+/Q6SNwTj4Xlh4teeahEqNB/lcT2qGYhk86Vp0oAK5OUnL9dOd+B4
+qoTZ7SmF8mVaXfsY/nyMceoMP6XUwAex8FoOiHghhNi+YE5cFz0s+VvQlWxY9BzA
+KBlyBZUrBs5rDOkoioCYauTZvvlKSg==
+=j1fH
+-----END PGP SIGNATURE-----
+
+--Sig_/s55XKUIBqpxB_cDnrpn6i.n--

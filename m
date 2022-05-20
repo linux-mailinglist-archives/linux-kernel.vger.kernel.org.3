@@ -2,125 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93D5652F434
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 22:06:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EC3E52F43D
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 22:08:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353400AbiETUGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 16:06:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43204 "EHLO
+        id S242269AbiETUIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 16:08:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353397AbiETUGQ (ORCPT
+        with ESMTP id S237646AbiETUIN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 16:06:16 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A69186FC
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 13:06:14 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id d22so8205176plr.9
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 13:06:14 -0700 (PDT)
+        Fri, 20 May 2022 16:08:13 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FA015F6EE
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 13:08:08 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id gh17so4488579ejc.6
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 13:08:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=oxi/xz+TkSciTWltjC+rtPwMZ91WNdjZnku8HYu4+Do=;
-        b=YLeZA/Kh3pdiyKkWKKN8fsqVCpHcK0kf8mkJoiOqg1Jo1ti+YqjrFSeBaCwmg8jaRG
-         rHFTxR2ltkA2sJ0JQ+0plz29WFRu3tI8SAk6hO7A3UE70QuOEuOLy35bHN0zuhqHfwpP
-         x1QpI3WbaCBFV0ddp254gRd0Fj47AN5AVwIyuxuSB/ZWFJ2KTDKahAQ2tjH1WZyVv2Ir
-         VU0eXJgp4bQfGuqAb3ZeLpZg6kCJ/F4Iso+4kTolcMYknPHyxEJrm6QrU/mpVcoxMqwR
-         OeF18Usf87IA5s3EP0cyxw5oi76OBRTCQ/YaN0tRelrW3M8egRPqD9Xxr/cg2impTibm
-         v37w==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hqeP5rdlyT9Ojb1o/Y+c7yG6gWz0o8Ya2ALrWN0i/h4=;
+        b=A6tATn1zlH3Ye7b1NXpayU3ySugX53PcyxEpLXWt24vF/to1SKuRlxfJtdLplXWXfq
+         A0noXbVj2uPtYxryi/uvbqcqTk9arKbWsQfNmCzY6HfD5gaBDDeHd01OvZk9xwBmCj94
+         IDsrT/ihzL2ZJm9QRmpcunQ9T/lHggMYZ7qko=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=oxi/xz+TkSciTWltjC+rtPwMZ91WNdjZnku8HYu4+Do=;
-        b=3B7SEtwPn3KoXxjpRmpfihknNjo3RKrViDec/YdJsJUnYYDEl5yJyDKH4K6HSFgZVb
-         Bnh3sYmmqHNRUdQtmeP8Bh9mBwx0SXBj8T6k1jTMFc+Muq8nnqBJ445jgjUnMf3pLmtQ
-         enS5O5TihsfUZwSD1qQO/vUUinLUJFan4JB6s59YG7SuJmCJFB9qTL9jHaH65hujE1y9
-         zBnGRxUa6lza/hKo9qY/wF29FxHSl39pr7rnkf75lHA1ACcGc5TZtkw5QItJvEaspuw8
-         gSSrOwZmkyZOv+RmlxGD69TyTsQU2PB6D3BucPGbVbXUMkwge1WmB9ogKfM2ENIsOsjB
-         MrlA==
-X-Gm-Message-State: AOAM532+i5Qdc2HXTPKogKDggsFXHg/BFpZgE6L75EyZhSMyMasrasYU
-        tXbSwhzByXSIF2oy/MQKZvmKLg==
-X-Google-Smtp-Source: ABdhPJwCAh2L7xVmugWXxwOMvGlfvdKsTSxrUSMsWmDJKPsXKxG8pNYNQZ0N5fdRgJfnez3HVXcYmA==
-X-Received: by 2002:a17:90b:250c:b0:1df:453f:561a with SMTP id ns12-20020a17090b250c00b001df453f561amr12763432pjb.35.1653077174024;
-        Fri, 20 May 2022 13:06:14 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id z1-20020a17090ab10100b001df93c8e737sm2244751pjq.39.2022.05.20.13.06.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 13:06:13 -0700 (PDT)
-Date:   Fri, 20 May 2022 20:06:09 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Jon Kohler <jon@nutanix.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Waiman Long <longman@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] KVM: VMX: do not disable interception for
- MSR_IA32_SPEC_CTRL on eIBRS
-Message-ID: <Yof0sSy/xKrCY5ke@google.com>
-References: <20220512174427.3608-1-jon@nutanix.com>
- <YoRPDp/3jfDUE529@google.com>
- <29CDF294-5394-47C7-8B50-5F1FC101891C@nutanix.com>
- <732266F9-9904-434A-857F-847203901A0C@nutanix.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hqeP5rdlyT9Ojb1o/Y+c7yG6gWz0o8Ya2ALrWN0i/h4=;
+        b=3lqS15wdYSWzUqKaQTkr3XbylbOSZLHJXc64DcNfLFxOHNxloty+AS5DERV6Fh5HoG
+         h5jnJ0GqyWkZp3iSFrZ2FrmhQhDJXn1e4xJz8VffGltDpjY944Y6MLLckDlECO3N29cX
+         yxhIJ1LZjMEIyc0wyLLfav0asAYEp9+iAjkuIWnvRPatY+13VRYld7oku4FFwCl2V9t9
+         i/d+DKW6fxMCZnApnnh4IdLqG4bolF+gyYwr2L7Ye0//LYJokCe9ona9ixFm5y0ge6Cz
+         psYu6pP9ba7lnG0cf0Pc7wg82mraJyaKqBBi0YeWYq2I9GS6TB8gxsW24bgO7uIZ6vXc
+         xLOQ==
+X-Gm-Message-State: AOAM532FLoFydvnvD2DmcMFrRWfIOXhgLtGv6OKJjE4SkgUgDrbtHxka
+        1puPiCeh104+U8+OzudhUIYgyZPtldfOeOAlpnM=
+X-Google-Smtp-Source: ABdhPJxSLLhajuSsJnMsgmwtv7UMA5WN5hAnuoC5GC5jcfG6f4hdHR4N2qMygMj7y7dCI7ZnPR+BHw==
+X-Received: by 2002:a17:907:7da2:b0:6f4:dcb8:7b7 with SMTP id oz34-20020a1709077da200b006f4dcb807b7mr10132657ejc.443.1653077286954;
+        Fri, 20 May 2022 13:08:06 -0700 (PDT)
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com. [209.85.128.51])
+        by smtp.gmail.com with ESMTPSA id b2-20020aa7df82000000b0042abfe32ac8sm4666694edy.30.2022.05.20.13.08.06
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 May 2022 13:08:06 -0700 (PDT)
+Received: by mail-wm1-f51.google.com with SMTP id p5-20020a1c2905000000b003970dd5404dso4919234wmp.0
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 13:08:06 -0700 (PDT)
+X-Received: by 2002:a05:600c:3c99:b0:392:b49c:7b79 with SMTP id
+ bg25-20020a05600c3c9900b00392b49c7b79mr9500680wmb.199.1653077285694; Fri, 20
+ May 2022 13:08:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <732266F9-9904-434A-857F-847203901A0C@nutanix.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220518155252.1.I176d4254c79cfaafa38cbe36f066f02f819df9b6@changeid>
+In-Reply-To: <20220518155252.1.I176d4254c79cfaafa38cbe36f066f02f819df9b6@changeid>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 20 May 2022 13:07:53 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=X+4JhN8EScFDZAiduo6zy7c0pbr6EOJpSo25ctOW-zRA@mail.gmail.com>
+Message-ID: <CAD=FV=X+4JhN8EScFDZAiduo6zy7c0pbr6EOJpSo25ctOW-zRA@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: qcom: sc7280: Enable wifi for Chrome OS boards
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Kevin Lund <kglund@google.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022, Jon Kohler wrote:
-> 
-> > On May 18, 2022, at 10:23 AM, Jon Kohler <jon@nutanix.com> wrote:
-> > 
-> >> On May 17, 2022, at 9:42 PM, Sean Christopherson <seanjc@google.com> wrote:
-> >>> +		if (boot_cpu_has(X86_FEATURE_IBRS_ENHANCED) && data == BIT(0)) {
-> >> 
-> >> Use SPEC_CTRL_IBRS instead of open coding "BIT(0)", then a chunk of the comment
-> >> goes away.
-> >> 
-> >>> +			vmx->spec_ctrl = data;
-> >>> +			break;
-> >>> +		}
-> >> 
-> >> There's no need for a separate if statement.  And the boot_cpu_has() check can
-> >> be dropped, kvm_spec_ctrl_test_value() has already verified the bit is writable
-> >> (unless you're worried about bit 0 being used for something else?)
-> 
-> I was (and am) worried about misbehaving guests on pre-eIBRS systems spamming IBRS
-> MSR, which we wouldn’t be able to see today. Intel’s guidance for eIBRS has long been
-> set it once and be done with it, so any eIBRS aware guest should behave nicely with that.
-> That limits the blast radius a bit here.
+Hi,
 
-Then check the guest capabilities, not the host flag.
+On Wed, May 18, 2022 at 3:53 PM Matthias Kaehlcke <mka@chromium.org> wrote:
+>
+> Enable the 'wifi' and 'remoteproc_wpss' nodes for all sc7280
+> based Chrome OS boards. Delete the corresponding entries from
+> sc7280-idp.dtsi since this file includes sc7280-chrome-common.dtsi.
+>
+> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> ---
+>
+>  arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi | 13 +++++++++++++
+>  arch/arm64/boot/dts/qcom/sc7280-idp.dtsi           | 11 -----------
+>  2 files changed, 13 insertions(+), 11 deletions(-)
 
-	if (data == SPEC_CTRL_IBRS &&
-	    (vcpu->arch.arch_capabilities & ARCH_CAP_IBRS_ALL))
+Looks right to me. You're also adding the firmware-name, but:
 
-> Sent out the v2 just now with a few minor tweaks, only notable one was keeping
-> the boot cpu check and small tweaks to comments here and there to suit.
+* That's in the bindings.
 
-In the future, give reviewers a bit of time to respond to a contented point before
-sending out the next revision, e.g. you could have avoided v3 :-)
+* The name you have there matches what's in the linux-firmware
+repository in commit 0d5e9f7e0aa1 ("ath11k: WCN6750 hw1.0: add to
+WLAN.MSL.1.0.1-00887-QCAMSLSWPLZ-1")
+
+Hmmm, I guess one question is whether this same firmware would also be
+used for other, non-Chrome sc7280 devices. If so then the
+firmware-name probably belongs straight in sc7280.dtsi? I suppose that
+could always happen in a future change if/when we have other sc7280
+devices and it's clear that they're sharing firmware. Thus:
+
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
+
+-Doug

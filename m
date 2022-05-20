@@ -2,241 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DF6E52E451
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 07:22:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E00452E452
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 07:26:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245078AbiETFVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 01:21:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60640 "EHLO
+        id S1345587AbiETFYT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 01:24:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345567AbiETFVK (ORCPT
+        with ESMTP id S1345567AbiETFYN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 01:21:10 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2041.outbound.protection.outlook.com [40.107.94.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 813993702C;
-        Thu, 19 May 2022 22:21:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nLqSfX+JDCUbZX1AkfRm/OTMuW6gboS3nRDpaizPPuo1BV0GfWh5YHjQKeW0HShiID2R2jaC0HzWSRd7pbCdiClqMuP6HkLZJ/0Qr4EIr4PuxNdslNJolSO0DTJ0Wi5pI3qCtPnzkCEiIMmzdrGd77PtA66okctEDk0FcGpgiIqkA+pRk09DYNCd649oUFU6f9aDp3dmIhkWxY1AevI3DpqP4U4BYhCG8XPqMhwBEOFu9lUJTDqDaDZi12JQjqagfRiDu2QYV7RoG6Sr+aCLiHKULJiZTArObo65ywAgxy1y6koFuFRD7yzA1sUB77/lhH16i6X1jDMSKRxw2ugCQQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xDnK0O1kqX+oFdKnlaoJ0/5aiyiMCLWhqAt9soEpUxw=;
- b=Zedy9RLNHlZNg3zjIHSmW4ukSOfzux2r6fQQJuLqJ1sVB2k3UHFLnNS8iA/NWQ3Ry/Ks5eyapqppFu98urNx1EkjYT7o42tYAg0bZWByaCXqiYuHXw+DNIGbqicLl2UAUGhdh7yCnI/fUY97nupgwX4uQDyNXvL5k7iKSR9rwHuEH5GpK15BfeJkiZz9R0yM8jxXXxamUtNQAF5qaPzeXY8VJX200ybmUMQdZ8CDCEzS7eKlQGpZViYu8jPcLe3cjRW96Ir53Bt+/z63agiinkkJVKHcaAwdY/ossXERyf/LkJQW4wS+FjMXa7kU0BvokOfshzgb6A1+hC0EZZxo8w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xDnK0O1kqX+oFdKnlaoJ0/5aiyiMCLWhqAt9soEpUxw=;
- b=ldmDqkYV5urB3TMSxZN3s10VAnwL51+1Xw04cuf/faYkgq7tGtKJKtUf56gDkUQjlBwlPUuND9uT/9aTSfXjVFfHaWn2bsW63ZdqEXBTHcc4u4fIJfNHZtDQF1ia8jcDQo7kt+X12rY4nv8m4JAGAidYHgggr4ZTW45vT3CuaUo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB6588.namprd12.prod.outlook.com (2603:10b6:510:210::10)
- by BN8PR12MB3090.namprd12.prod.outlook.com (2603:10b6:408:67::26) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.13; Fri, 20 May
- 2022 05:21:04 +0000
-Received: from PH7PR12MB6588.namprd12.prod.outlook.com
- ([fe80::f1f6:dd2c:7e78:9770]) by PH7PR12MB6588.namprd12.prod.outlook.com
- ([fe80::f1f6:dd2c:7e78:9770%6]) with mapi id 15.20.5250.013; Fri, 20 May 2022
- 05:21:04 +0000
-Message-ID: <25ebba62-0100-f7af-80fa-556fd6c2e879@amd.com>
-Date:   Fri, 20 May 2022 10:50:45 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH v3 2/5] perf header: Parse non-cpu pmu capabilities
-Content-Language: en-US
-To:     Ian Rogers <irogers@google.com>
-Cc:     acme@kernel.org, peterz@infradead.org, rrichter@amd.com,
-        mingo@redhat.com, mark.rutland@arm.com, jolsa@kernel.org,
-        namhyung@kernel.org, tglx@linutronix.de, bp@alien8.de,
-        james.clark@arm.com, leo.yan@linaro.org, kan.liang@linux.intel.com,
-        ak@linux.intel.com, eranian@google.com, like.xu.linux@gmail.com,
-        x86@kernel.org, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sandipan.das@amd.com,
-        ananth.narayan@amd.com, kim.phillips@amd.com,
-        santosh.shukla@amd.com, Ravi Bangoria <ravi.bangoria@amd.com>
-References: <20220519054355.477-1-ravi.bangoria@amd.com>
- <20220519054355.477-3-ravi.bangoria@amd.com>
- <CAP-5=fXiZj+EBqmg89faK0pZD-Af3V1fHWMOkds1oKoaz+ucFA@mail.gmail.com>
- <e578d274-946f-2c73-026d-9b172ce32f19@amd.com>
- <CAP-5=fXJQcVEUEz3taSXsm0Kd0Fs3Vc4+++vz1fVEHLjB3nMPw@mail.gmail.com>
-From:   Ravi Bangoria <ravi.bangoria@amd.com>
-In-Reply-To: <CAP-5=fXJQcVEUEz3taSXsm0Kd0Fs3Vc4+++vz1fVEHLjB3nMPw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN1PR0101CA0024.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c00:e::34) To PH7PR12MB6588.namprd12.prod.outlook.com
- (2603:10b6:510:210::10)
+        Fri, 20 May 2022 01:24:13 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D1014AF74
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 22:24:12 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id nr2-20020a17090b240200b001df2b1bfc40so10523807pjb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 22:24:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pernos.co; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ugR0diJyK9tyJS/g6851PslJmHEat2mXN1zC2extgo4=;
+        b=LGNkWIjJcigvMa3VriU6XF8R3RykYP3qK/iTGBwESiA802CoenEuBBG+Y/h+WaLtvX
+         dKWVHhaYx4cGD+RP6oobuCLYaQMsogtMd1fOrpL1irJtp4nq+EugoK8ac2cI88jAZw5O
+         BSiCI1FZBkRQevVJ5J1NhMccZfC0EheXeKUY8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ugR0diJyK9tyJS/g6851PslJmHEat2mXN1zC2extgo4=;
+        b=QncVJ858ZJ0nR7ghW8TBQJfcu0l0FJFboXxPE2tqdAfRIs7N4h4k3ZroDqhiSRB6gC
+         79QDJy7N0c970rIg+kEmHOVevIznfo1tN3Mtp5t+pLnhTVL7zMHdjeGy38mMCnpIllRL
+         igc3csFQSRoYyjaU1sm6yFmHVHtZqGAn+60iTnFEMrc92lcjwqmgYXfy+xxdthU0+06c
+         U2zTcgZXDyEIoniZ/lVkEki4ZaqVPpQiG6zDFESAI3dpzY+o9Z+EGc69ZVdfUhk3pkUK
+         hvzHRCAOzElblqJOfKtHVbb5Wrg99ROkTpaE267Gk2UcWibWalWr2yBA2Mv5FmDmT2Qf
+         ChHA==
+X-Gm-Message-State: AOAM531IzEKdokm2GgINn72BE3jCnaKNQtdi14tlGAYuHp6Ty9X9lPfC
+        sIeq8zCw1PBvHVY+patcsQqCIyYajAOJolwdMWuLOQ==
+X-Google-Smtp-Source: ABdhPJweQLRt0zQYOkMLmENDxsjQRrDWuz6sx2VP4M/s/7GGjhpww45oRGtvs6MOfvUJ9JibGnhOfUlcwT5Ret4dCKw=
+X-Received: by 2002:a17:90b:384d:b0:1df:f014:54e1 with SMTP id
+ nl13-20020a17090b384d00b001dff01454e1mr3543295pjb.107.1653024252060; Thu, 19
+ May 2022 22:24:12 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 07b538de-0d81-4ed9-394b-08da3a2088e1
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3090:EE_
-X-Microsoft-Antispam-PRVS: <BN8PR12MB3090FB97DF1B8F5616C1FBF4E0D39@BN8PR12MB3090.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /htRR4uhxdSxAz7AL9QgcdRo8bLgR+ZrO+wb4ZfMs7G4cVV73/5XYRY2kmWhf2fLBPTo+9lffjF19J/+BTTdKTYD09GFJHCu8eMb12jaMwzGPfB+KX/WWAT6GO/Hw9VWY8RubYdRahIxGFLTFLdgJ7x9nBc/wKjp/k2toMmEpz7rEH9bdH0GjyZ+/x5g96qkay9bR0QU+FToACdhwzbQ9xQnZSNWM7HLuafQRc6+uPcNC8qB7B7JF37rXrYNYrj0295XA7JLtZqqNc0hv/K/Xe34Vxzhzu6V40Y/Pj//ZoRpqrGeV0IqYEr2OXoLtLY/zCKBxFxBxCAPdsCZjPDZZGnwrs6JNfFpmpOlzw9KKn15Rs5xJUg8SsHee/W2Wl2kz110rF2RVFGXCdd/wxnLPiXxYzTltYyusQ2DjUMW3ocjfNN3qpmVL1v7xr0JPLxiRaStFeSgL0phB64CJK0fJAOWGa+4qrGyjfxXnMaDnIDYZJC8Du0nP/mAKlA/ih8P3X9mVjB6BOuVwwOxToJNm7wzvTfMPGKX65j8kwX69EP8/bGMi84hKW0RJ5Lf5+TpRhMsicPCzHZpo8D38rKOIO4ylvrGfet0FVuwwlNaV3k1rneZEXg0bS60aTsw9Lf3PTQ6e3Alh7dbtSltsn7gT+yin+dCMbjIufvTIOfAz0kSMGTiy97sfe7WxjGPXNsPBBetVHP4Iv9O83R1DrOTSrEULa0sqn1IYOfqJEmeMJg=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6588.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(508600001)(38100700002)(6486002)(186003)(31686004)(44832011)(7416002)(5660300002)(2906002)(83380400001)(36756003)(53546011)(86362001)(8676002)(2616005)(316002)(66476007)(31696002)(8936002)(66556008)(66946007)(6506007)(26005)(4326008)(6916009)(6666004)(6512007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RDZNODMyNmlubm92emw2cUsyT2dWWCtkcytpVVV6Y1lyMktpV25KMUpXSzVx?=
- =?utf-8?B?SitEWXY4RFQ3WFBDUWJnd3ZtT2VUa1pGMzJwWDREdXA1MGhtSHRaRGVJVTJG?=
- =?utf-8?B?bFBvL0NmZWZ4SkVOQUc2cVRmcGJhTm9rT1FBTWFzM0gweEFFZHNDLzhiekQ5?=
- =?utf-8?B?ZFMxU284UldYMXZ6WTFDYitGY0hYTTZvZlExbXE3VGgzcHJ4RkpSTktXZVIz?=
- =?utf-8?B?NEJQcWt3ZWQ0c1pjZGljcWZMUFVObUN1NXoySXc4MnErYW14cXZlZlUvQnJF?=
- =?utf-8?B?OFpibElMMFNCVzg1VDEyM0phL0FmeXVXS2Z4VjNMc3piaHdRQlJ5VUUwVHFr?=
- =?utf-8?B?NzVrQThrWjdxd1MycDVuRzEyQk1TWTVpSUt5R0tub2xPaWxWbzdYd1FWbFVW?=
- =?utf-8?B?N2dPSFB5cFF6TVpKQ05FWlo3SHY5RXVSbFpweEV0eCtPVGF1M1VnbUFwa2tC?=
- =?utf-8?B?UFFrWVVzblU5M29vRkJzYVBZZjRoTURvTVp2ZWY3aHVLcVJpYzJVV29QMlp0?=
- =?utf-8?B?ODFnVUFEZlJ0T3pNbnAwbmFyTWsxazRRd2xaSVo2cFNYMlJVSnZqekhqUWZi?=
- =?utf-8?B?ZzQ2cklra0RxQ2F3ZVFUa29wNG1qNmg3dFZXTWFoYWRxZ0RnOEJod3ZqSm1T?=
- =?utf-8?B?RDlNYWtxRmpLVlRsQXRvcG5ZRkJYZDNsQjByOHNKR2NtTkVaVHFGSS9LeEpY?=
- =?utf-8?B?YzA0TGZQR2dVWUw0MmV3ODZ6SFVRRG9VRFloV1FyeC9DZk1KSm0wc1ZVY0hq?=
- =?utf-8?B?OHUvRnByN2xhaU8wcG1aMnAyREU2OERVSmJReXV5ZXNyWTYvalJKQzJGeEpU?=
- =?utf-8?B?MnZFeFVSbVlIY2pHcHRIQlg4cnMzeUVZODI5Z0lBOXUyRWFvWm5veU50aDVV?=
- =?utf-8?B?TUVRWXljRzJDTXBld1FGemtNcW54MjNIaVhiV1lEZWtqL3lMNzZBTHBLMGdV?=
- =?utf-8?B?Zi9vaFNmVUlEUCt3QTVCMWFVYVRacnY0TXdIZ2xDdVVkNzRVamVCQXJMdjVs?=
- =?utf-8?B?WmFZaVBGWFRNdUU2UjMrSjVyNEE3VDNDN3gvc0FFMlBqS2tDYW1IQVZUNDZh?=
- =?utf-8?B?cFlnUEs1QlUrMHB6ak0yeXdrTEpFbkJYUC9tMFNBSHFmRjhCWmtsVGtGU3pE?=
- =?utf-8?B?MVVWU2tTYnBHclJGYXNucFhxTDd5U1BjeWhxbkJGdStrVlZmaUdjcFR0WUhD?=
- =?utf-8?B?Z3p5YTk3R3BUL3ZvWTVSL01taHgxa2FlUE9GaVZRUmJkNnp0b0dpTnQ1S1VL?=
- =?utf-8?B?QlBjZThtT2VhUUpIM1B1M2srbU53UElUVFJKVHlUMFVKaDJkbE5JUzZsVzlt?=
- =?utf-8?B?Y2oyTDY2MVMvWTJXczRJem9MdnZqU0hrOGVDZjQxSk9GQjN4L1hycDhiY25F?=
- =?utf-8?B?eWt0L2N3V3ErWXJxV09BTnRIWWZUVVFqY3ZrSzZUeXN0bGhnRzYzbWhPdkhr?=
- =?utf-8?B?bVk1NUJxSDRvWmR1aDFWOXQzekgxbDN4bW5YM2h5SlBPcXluYW9kelBTQzlY?=
- =?utf-8?B?amFrblNaaDNaVkxMTVRkbG0xYXRVUldCRXFuSS9LcVdYVWZSVnIxMjZCMnhn?=
- =?utf-8?B?VWlKV0hocFdMaEZTZ1VKeGpvZy8yTEViV3dkN3RORmNPRjBFdnlTckJFOGM4?=
- =?utf-8?B?OEFhekRYbUNmU29ZRDE3bmJZRzdsZWxjU3dLZTdpb3RyMU0rZVhRYWRWSzNZ?=
- =?utf-8?B?Wis0RnRaVDJmTDNiS1ZmUkJZU3VOS04wNUkwWGZPTGZVQ0FEZjRnSW9VZy95?=
- =?utf-8?B?Y29jOXVHYlZzelQ2b1hUVW5kNmNzdkxPQk9wbC80YkRVZUh5SER4MlZyOFJP?=
- =?utf-8?B?YWR2WEEzc1ZxLytRQ3lZejQrRThhRXdDMU1LanhlbmxFQzVJbjY3aU1yR216?=
- =?utf-8?B?dDNpNTBQT2FORm9OTFpZek5Ya05kZ3BhVXBLWktveVd1SmdZQTNxRDJXRVhp?=
- =?utf-8?B?VE05eDVPQUM3WStzNFQvdFlaOUkzOGFLNzhmYkwySVJ2bXF3d2dvZ2xDT3A1?=
- =?utf-8?B?dERuNVRjVTF6Wnk0MHI3ZnppWGlMdlBITEExUndYUWtvMXpPMjlWeDY3ZnNO?=
- =?utf-8?B?SXUyMkNwb0M4V05HU1NvVHU1WTJpd2JOcFRnNzRvVTRvbWhxb3RxbWd0VFVG?=
- =?utf-8?B?TWxETkpOeHRmSXNHVnk3UUcyNlpUaThNZzlRWFR5YzRLT0o0aStuZHE1ZkdH?=
- =?utf-8?B?VTZ3QUtpZThjVkEwVG81L3JkZTdRak9pQTBvcFcvbzIyYTdDVEJCa1JUQTVv?=
- =?utf-8?B?akcyYnZFYTNhc2RWK2ZqVWo0bC9wL3RqWm5RV3lmV0hFMUNzaVdhVkFVN2px?=
- =?utf-8?B?bWFYQ3V0bEROak1oOWswd1M5Tlo0R3JCU0l4TTloTGdCcUxCLzRVdz09?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 07b538de-0d81-4ed9-394b-08da3a2088e1
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6588.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 May 2022 05:21:04.0702
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Ql2SFX2fVFBIjdo68L4tQUGD9k+73Yhzf9OMU6YL4wK0y0HHKyyNoFmSvCa+Hjn8De3qMMPlkwUGtwx9sGWynw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3090
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220421150248.667412396@infradead.org> <20220421150654.817117821@infradead.org>
+ <87czhap9dy.fsf@email.froward.int.ebiederm.org> <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
+ <87k0b7v9yk.fsf_-_@email.froward.int.ebiederm.org> <87k0b0apne.fsf_-_@email.froward.int.ebiederm.org>
+ <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org> <871qwq5ucx.fsf_-_@email.froward.int.ebiederm.org>
+ <CALWUPBdFDLuT7JaNGSJ_UXbHf8y9uKdC-SkAqzd=FQC0MX4nNQ@mail.gmail.com>
+ <YoXhfGGPKnT/YFC1@linutronix.de> <8735h54cur.fsf@email.froward.int.ebiederm.org>
+In-Reply-To: <8735h54cur.fsf@email.froward.int.ebiederm.org>
+From:   Kyle Huey <khuey@pernos.co>
+Date:   Thu, 19 May 2022 22:24:00 -0700
+Message-ID: <CALWUPBdPO0ccBpFjQ-Lb5GsD=DcBw8ZyVwYVhLdpSeCcu2BSEg@mail.gmail.com>
+Subject: Re: [PATCH 00/16] ptrace: cleanups and calling do_cldstop with only siglock
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>, rjw@rjwysocki.net,
+        oleg@redhat.com, mingo@kernel.org, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Jann Horn <jannh@google.com>,
+        Kees Cook <keescook@chromium.org>, linux-ia64@vger.kernel.org,
+        "Robert O'Callahan" <roc@pernos.co>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Douglas Miller <dougmill@linux.vnet.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, May 19, 2022 at 11:05 AM Eric W. Biederman
+<ebiederm@xmission.com> wrote:
+>
+> Sebastian Andrzej Siewior <bigeasy@linutronix.de> writes:
+>
+> > On 2022-05-18 20:26:05 [-0700], Kyle Huey wrote:
+> >> Is there a git branch somewhere I can pull to test this? It doesn't apply
+> >> cleanly to Linus's tip.
+> >
+> > https://kernel.googlesource.com/pub/scm/linux/kernel/git/ebiederm/user-namespace.git ptrace_stop-cleanup-for-v5.19
+>
+> Yes that is the branch this all applies to.
+>
+> This is my second round of cleanups this cycle for this code.
+> I just keep finding little things that deserve to be changed,
+> when I am working on the more substantial issues.
+>
+> Eric
 
-On 20-May-22 10:01 AM, Ian Rogers wrote:
-> On Thu, May 19, 2022 at 8:49 PM Ravi Bangoria <ravi.bangoria@amd.com> wrote:
->>
->> Hi Ian,
->>
->> On 20-May-22 3:57 AM, Ian Rogers wrote:
->>> On Wed, May 18, 2022 at 10:45 PM Ravi Bangoria <ravi.bangoria@amd.com> wrote:
->>>>
->>>> Pmus advertise their capabilities via sysfs attribute files but
->>>> perf tool currently parses only core(cpu) pmu capabilities. Add
->>>> support for parsing non-cpu pmu capabilities.
->>>>
->>>> Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
->>>> ---
->>>>  .../Documentation/perf.data-file-format.txt   |  18 ++
->>>>  tools/perf/util/env.c                         |  48 +++++
->>>>  tools/perf/util/env.h                         |  11 +
->>>>  tools/perf/util/header.c                      | 198 ++++++++++++++++++
->>>>  tools/perf/util/header.h                      |   1 +
->>>>  tools/perf/util/pmu.c                         |  15 +-
->>>>  tools/perf/util/pmu.h                         |   2 +
->>>>  7 files changed, 289 insertions(+), 4 deletions(-)
->>>>
->>>> diff --git a/tools/perf/Documentation/perf.data-file-format.txt b/tools/perf/Documentation/perf.data-file-format.txt
->>>> index f56d0e0fbff6..7f8341db9134 100644
->>>> --- a/tools/perf/Documentation/perf.data-file-format.txt
->>>> +++ b/tools/perf/Documentation/perf.data-file-format.txt
->>>> @@ -435,6 +435,24 @@ struct {
->>>>         } [nr_pmu];
->>>>  };
->>>>
->>>> +       HEADER_PMU_CAPS = 32,
->>>> +
->>>> +       List of pmu capabilities (except cpu pmu which is already
->>>> +       covered by HEADER_CPU_PMU_CAPS)
->>>
->>> Sorry for the ignorance, is this currently broken for hybrid then?
->>> Will hybrid have a HEADER_CPU_PMU_CAPS? Presumably this varies between
->>> ARM's big.little and Alderlake.
->>
->> It's covered by HEADER_HYBRID_CPU_PMU_CAPS, but that too covers only
->> cpu pmu. I think I should update the above comment to:
->>
->>         List of pmu capabilities (except cpu pmu which is already
->>         covered by HEADER_CPU_PMU_CAPS / HEADER_HYBRID_CPU_PMU_CAPS)
->>
->>>> +
->>>> +struct {
->>>> +       u32 nr_pmus;
->>>> +       struct {
->>>> +               u32 core_type;  /* For hybrid topology */
->>>
->>> Could this be pmu_type as presumably we can have capabilities on any
->>> kind of PMU?
->>
->> Not sure I follow that question but let me just put my thoughts here.
->>
->> {core_type, pmu_name} is the unique key here. Considering a hypothetical
->> scenario: A system has two types of cores P-core and E-core. Certain pmu
->> inside P-core has some capabilities which are missing in the identical
->> pmu belonging to E-core. The header will look something like:
->>
->> struct {
->>         .nr_pmus = 2,
->>         [0] = struct {
->>                 .core_type = 0, /* P-core */
->>                 .pmu_name = xyz_pmu,
->>                 .nr_caps = 2,
->>                 [0] = { .name = cap1, .value = value1 },
->>                 [1] = { .name = cap2, .value = value2 },
->>         },
->>         [1] = struct {
->>                 .core_type = 1; /* E-core */
->>                 .pmu_name = xyz_pmu;
->>                 .nr_caps = 1;
->>                 [0] = { .name = cap1, .value = value1 };
->>         },
->> };
->>
->> Does that answer your question?
->>
->> Thanks for the review,
->> Ravi
-> 
-> I may be being a little ahead of the current code as I'm wondering
-> about heterogeneous systems with many non-CPU PMUs. It seems such a
-> scenario just wouldn't touch the core_type field here. Could the p or
-> e core-ness of a PMU be implied by the name?
+When running the rr test suite, I see hangs like this
 
-Using just pmu_name to identify the type of core it belongs to; yeah
-that might work assuming perf_pmu_register() doesn't allow registering
-multiple pmus with the same name. I'll remove 'core_type'.
+[  812.151505] watchdog: BUG: soft lockup - CPU#3 stuck for 548s!
+[condvar_stress-:12152]
+[  812.151529] Modules linked in: snd_hda_codec_realtek
+snd_hda_codec_generic ledtrig_audio rfcomm cmac algif_hash
+algif_skcipher af_alg bnep dm_crypt intel_rapl_msr mei_hdcp
+snd_hda_codec_
+hdmi intel_rapl_common snd_hda_intel x86_pkg_temp_thermal
+snd_intel_dspcfg snd_intel_sdw_acpi nls_iso8859_1 intel_powerclamp
+snd_hda_codec coretemp snd_hda_core snd_hwdep snd_pcm rtl8723be
+btcoexist snd_seq_midi snd_seq_midi_event rtl8723_common kvm_intel
+rtl_pci snd_rawmidi rtlwifi btusb btrtl btbcm snd_seq kvm mac80211
+btintel btmtk snd_seq_device rapl bluetooth snd_timer i
+ntel_cstate hp_wmi cfg80211 serio_raw snd platform_profile
+ecdh_generic mei_me sparse_keymap efi_pstore wmi_bmof ee1004 joydev
+input_leds ecc libarc4 soundcore mei acpi_pad mac_hid sch_fq_c
+odel ipmi_devintf ipmi_msghandler msr vhost_vsock
+vmw_vsock_virtio_transport_common vsock vhost_net vhost vhost_iotlb
+tap vhci_hcd usbip_core parport_pc ppdev lp parport ip_tables x_tables
+autofs4 btrfs blake2b_generic xor raid6_pq zstd_compress
+[  812.151570]  libcrc32c hid_generic usbhid hid i915 drm_buddy
+i2c_algo_bit ttm drm_dp_helper cec rc_core crct10dif_pclmul
+drm_kms_helper crc32_pclmul syscopyarea ghash_clmulni_intel sysfi
+llrect sysimgblt fb_sys_fops aesni_intel crypto_simd cryptd r8169
+psmouse drm i2c_i801 realtek ahci i2c_smbus xhci_pci libahci
+xhci_pci_renesas wmi video
+[  812.151584] CPU: 3 PID: 12152 Comm: condvar_stress- Tainted: G
+    I  L    5.18.0-rc1+ #2
+[  812.151586] Hardware name: HP 750-280st/2B4B, BIOS A0.11 02/24/2016
+[  812.151587] RIP: 0010:_raw_spin_unlock_irq+0x15/0x40
+[  812.151591] Code: df e8 3f 1f 4a ff 90 5b 5d c3 66 66 2e 0f 1f 84
+00 00 00 00 00 0f 1f 44 00 00 55 48 89 e5 c6 07 00 0f 1f 00 fb 0f 1f
+44 00 00 <bf> 01 00 00 00 e8 41 95 46 ff 65 8b 05 9
+a c1 9a 5f 85 c0 74 02 5d
+[  812.151593] RSP: 0018:ffffa863c246bd70 EFLAGS: 00000246
+[  812.151594] RAX: ffff8bc0913f6400 RBX: ffff8bc0913f6400 RCX: 0000000000000000
+[  812.151595] RDX: 0000000000000002 RSI: 00000000000a0013 RDI: ffff8bc089b63180
+[  812.151596] RBP: ffffa863c246bd70 R08: ffff8bc0811d6b40 R09: ffff8bc089b63180
+[  812.151597] R10: 0000000000000000 R11: 0000000000000004 R12: ffff8bc0913f6400
+[  812.151597] R13: ffff8bc089b63180 R14: ffff8bc0913f6400 R15: ffffa863c246be68
+[  812.151598] FS:  00007f612dda5700(0000) GS:ffff8bc7e24c0000(0000)
+knlGS:0000000000000000
+[  812.151599] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  812.151600] CR2: 000055e70715692e CR3: 000000010b4e8005 CR4: 00000000003706e4
+[  812.151601] Call Trace:
+[  812.151602]  <TASK>
+[  812.151604]  do_signal_stop+0x228/0x260
+[  812.151606]  get_signal+0x43a/0x8e0
+[  812.151608]  arch_do_signal_or_restart+0x37/0x7d0
+[  812.151610]  ? __this_cpu_preempt_check+0x13/0x20
+[  812.151612]  ? __perf_event_task_sched_in+0x81/0x230
+[  812.151616]  ? __this_cpu_preempt_check+0x13/0x20
+[  812.151617]  exit_to_user_mode_prepare+0x130/0x1a0
+[  812.151620]  syscall_exit_to_user_mode+0x26/0x40
+[  812.151621]  ret_from_fork+0x15/0x30
+[  812.151623] RIP: 0033:0x7f612dfcd125
+[  812.151625] Code: 48 85 ff 74 3d 48 85 f6 74 38 48 83 ee 10 48 89
+4e 08 48 89 3e 48 89 d7 4c 89 c2 4d 89 c8 4c 8b 54 24 08 b8 38 00 00
+00 0f 05 <48> 85 c0 7c 13 74 01 c3 31 ed 58 5f ff d
+0 48 89 c7 b8 3c 00 00 00
+[  812.151626] RSP: 002b:00007f612dda4fb0 EFLAGS: 00000246 ORIG_RAX:
+0000000000000038
+[  812.151628] RAX: 0000000000000000 RBX: 00007f612dda5700 RCX: ffffffffffffffff
+[  812.151628] RDX: 00007f612dda59d0 RSI: 00007f612dda4fb0 RDI: 00000000003d0f00
+[  812.151629] RBP: 00007ffd59ad20b0 R08: 00007f612dda5700 R09: 00007f612dda5700
+[  812.151630] R10: 00007f612dda59d0 R11: 0000000000000246 R12: 00007ffd59ad20ae
+[  812.151631] R13: 00007ffd59ad20af R14: 00007ffd59ad20b0 R15: 00007f612dda4fc0
+[  812.151632]  </TASK>
 
-> Is there something similar to core_type in sysfs
-
-I don't think so. I don't have any Intel ADL or ARM big.LITTLE system
-to try. But that's not required now.
-
-Thanks,
-Ravi
+- Kyle

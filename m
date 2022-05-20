@@ -2,89 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9D2E52F173
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 19:21:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A89F52F190
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 19:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352130AbiETRVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 13:21:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55372 "EHLO
+        id S1352162AbiETRXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 13:23:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352122AbiETRVg (ORCPT
+        with ESMTP id S1352160AbiETRXj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 13:21:36 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C183EB90
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 10:21:34 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id jx22so3364817ejb.12
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 10:21:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GBLh0J+t/T5q+hfavxvNCcW0ikmymnmk+L3i1gWEqLQ=;
-        b=QIZj/BbktjFwNItbM7A4GHMQdfprBs12g+gEp137eJ4gShNtIomOg5zNm2P1gwgbQl
-         JcpnYRSLPfvjVeHefqzcmEyVVGOOju/QhphTINFE94yCDUyCTHmAwoM9P5dfYZ74OpE0
-         jDHkLLqe60XGXbyWq6T5gTOzYc/8POk5KB2jJetIETnFh5xaK0tA0Pi2On1Lq8yIu5Gy
-         PtzF0eeLMjUgOViN+zq2FAefPcMi70cxeVqfm4dZCX5Jc2hkdWQLSK9ZXKYAq4sBIISF
-         2Sbgz8l18I7JbgptT6J01r8NH3TdpLVabFKFF2Yx7grm/f5F8tmaXcXV7ZivCcGYXkZI
-         x8Mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GBLh0J+t/T5q+hfavxvNCcW0ikmymnmk+L3i1gWEqLQ=;
-        b=qUVVk5PA2xucGh/Rcb77foJxoL/WjQL6lXNbpo6LuIsqLGIYCXDF32DTFt11/8b888
-         c08TBydIMhhZLSZXKq+qi88f2lWNhwrBee+k2L68ZVhJrA6QktJioiHAdDgonpkRd+l4
-         asbkE7ki9MhS1KJGUqNlfi6jvalesBk8jpYydNpK103m2pw2jisYa07xoIMvDXTnbhbR
-         DkLGivdJ/o9JB09w8UU+GrKKxC0MiUbIEG18PRWjpnde9+QezEuKtCyjX4Sa7Xw663eY
-         wjCko6zg1Y6MFDG+KxH2bLIG2Jti0Zd/bAlE6AYXYX++N0jHMDLtjbzgdHn/qMqI78Hy
-         MJLg==
-X-Gm-Message-State: AOAM533pTp1L4XdYIDPGxEkA20TqFSBrfUwl8MPIeJ94eGpL3dAHS6XN
-        MVwDU0OYf6uHlConV8g4raC/Wul0BRBBvrgXc6J0LA==
-X-Google-Smtp-Source: ABdhPJzPOGzMa4WOrxVRY1ADDnO0nuDdJB8phnBRSLJYIZ9p8JWPCDylwwWy2QTLjqsGI8G2/nuNSho9l4qrI5EakkI=
-X-Received: by 2002:a17:907:6e04:b0:6f4:d6f3:c72a with SMTP id
- sd4-20020a1709076e0400b006f4d6f3c72amr9421686ejc.636.1653067293120; Fri, 20
- May 2022 10:21:33 -0700 (PDT)
+        Fri, 20 May 2022 13:23:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A604018706D
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 10:23:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653067417;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=+mUQhLcxz6TZwVt0puoA8uLFKO7ahYDhUTcQY+6+1vw=;
+        b=IiiDZ1c+PYx9tlAd32lbmsUqEzepZR/dJjsV0ymioZFUAokXdy/CvWg61mThhfUp25fOl8
+        IcIOvMO4O6Lg+DJzpcEi3byNB8YkEzoLIk4FQB9NaMxpB6oqKV8Fy06o+RS9fIhzMtE6tK
+        x4HuGDBqdDPnRpjRGu/GUv4CQhO7RxA=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-400-66oEZV14PGix7OSjvRA3fQ-1; Fri, 20 May 2022 13:23:33 -0400
+X-MC-Unique: 66oEZV14PGix7OSjvRA3fQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B40E138041D6;
+        Fri, 20 May 2022 17:23:32 +0000 (UTC)
+Received: from eperezma.remote.csb (unknown [10.39.192.124])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 189E1492C14;
+        Fri, 20 May 2022 17:23:27 +0000 (UTC)
+From:   =?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>
+To:     virtualization@lists.linux-foundation.org,
+        Jason Wang <jasowang@redhat.com>, kvm@vger.kernel.org,
+        "Michael S. Tsirkin" <mst@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Stefano Garzarella <sgarzare@redhat.com>,
+        Longpeng <longpeng2@huawei.com>,
+        Zhu Lingshan <lingshan.zhu@intel.com>, martinh@xilinx.com,
+        hanand@xilinx.com, Si-Wei Liu <si-wei.liu@oracle.com>,
+        dinang@xilinx.com, Eli Cohen <elic@nvidia.com>, lvivier@redhat.com,
+        pabloc@xilinx.com, gautam.dawar@amd.com,
+        Xie Yongji <xieyongji@bytedance.com>, habetsm.xilinx@gmail.com,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        tanuj.kamde@amd.com, eperezma@redhat.com,
+        Wu Zongyong <wuzongyong@linux.alibaba.com>,
+        martinpo@xilinx.com, lulu@redhat.com, ecree.xilinx@gmail.com,
+        Parav Pandit <parav@nvidia.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Zhang Min <zhang.min9@zte.com.cn>
+Subject: [PATCH 0/4] Implement vdpasim stop operation
+Date:   Fri, 20 May 2022 19:23:21 +0200
+Message-Id: <20220520172325.980884-1-eperezma@redhat.com>
 MIME-Version: 1.0
-References: <20220520025624.3803776-1-zheyuma97@gmail.com>
-In-Reply-To: <20220520025624.3803776-1-zheyuma97@gmail.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 20 May 2022 19:21:22 +0200
-Message-ID: <CAMRc=MdysKQK4zGa=GH5-T=NTWOiMHBEEd9hKeHYANgKzrwpTQ@mail.gmail.com>
-Subject: Re: [PATCH v3] gpio: ml-ioh: Convert to use managed functions pcim*
- and devm_*
-To:     Zheyu Ma <zheyuma97@gmail.com>
-Cc:     Andy Shevchenko <andy@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 4:56 AM Zheyu Ma <zheyuma97@gmail.com> wrote:
->
->  When removing the module, we will get the following flaw:
->
-> [   14.204955] remove_proc_entry: removing non-empty directory 'irq/21', leaking at least 'gpio_ml_ioh'
-> [   14.205827] WARNING: CPU: 0 PID: 305 at fs/proc/generic.c:717 remove_proc_entry+0x389/0x3f0
-> ...
-> [   14.220613]  ioh_gpio_remove+0xc5/0xe0 [gpio_ml_ioh]
-> [   14.221075]  pci_device_remove+0x92/0x240
->
-> Fix this by using managed functions, this makes the error handling more
-> simpler.
->
-> Fixes: e971ac9a564a ("gpio: ml-ioh: use resource management for irqs")
-> Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
-> ---
+Implement stop operation for vdpa_sim devices, so vhost-vdpa will offer=0D
+that backend feature and userspace can effectively stop the device.=0D
+=0D
+This is a must before get virtqueue indexes (base) for live migration,=0D
+since the device could modify them after userland gets them. There are=0D
+individual ways to perform that action for some devices=0D
+(VHOST_NET_SET_BACKEND, VHOST_VSOCK_SET_RUNNING, ...) but there was no=0D
+way to perform it for any vhost device (and, in particular, vhost-vdpa).=0D
+=0D
+Comments are welcome.=0D
+=0D
+Eugenio P=C3=A9rez (4):=0D
+  vdpa: Add stop operation=0D
+  vhost-vdpa: introduce STOP backend feature bit=0D
+  vhost-vdpa: uAPI to stop the device=0D
+  vdpa_sim: Implement stop vdpa op=0D
+=0D
+ drivers/vdpa/vdpa_sim/vdpa_sim.c     | 21 +++++++++++++++++++=0D
+ drivers/vdpa/vdpa_sim/vdpa_sim.h     |  1 +=0D
+ drivers/vdpa/vdpa_sim/vdpa_sim_net.c |  3 +++=0D
+ drivers/vhost/vdpa.c                 | 31 ++++++++++++++++++++++++++++=0D
+ include/linux/vdpa.h                 |  6 ++++++=0D
+ include/uapi/linux/vhost.h           |  3 +++=0D
+ include/uapi/linux/vhost_types.h     |  2 ++=0D
+ 7 files changed, 67 insertions(+)=0D
+=0D
+-- =0D
+2.27.0=0D
+=0D
 
-Applied, thanks!
-
-Bart

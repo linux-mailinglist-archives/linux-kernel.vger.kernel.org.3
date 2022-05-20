@@ -2,171 +2,351 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1578052E201
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 03:33:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BACF52E20C
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 03:35:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344519AbiETBc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 21:32:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49700 "EHLO
+        id S244510AbiETBfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 21:35:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244784AbiETBcx (ORCPT
+        with ESMTP id S1344477AbiETBe4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 21:32:53 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2118.outbound.protection.outlook.com [40.107.117.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 326A99AE62;
-        Thu, 19 May 2022 18:32:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=L+BG9GAkmayG0BavPT1cviwaOj58ZcBcKcD9lW9TkA2j2TcXlFkLIIGvBHz48pTZ9knnhojl3/8U5alCjT3gfy6NWYi+6JcbZvwDA+O1i1QBYQmVQSO1Ggi5eU2cHRWaIYE37dV7cBFpKsBeh/UQB2DGvCU9B69HAyGiI6if3I1pGH93QjY4sRWA4izHMV8Quiv+TKXhI26a5ulzsY8kboIOA/gS7te0Wrz2S1A4k/0KSREmox96e2FWQsZRth2yjx4XCYdGbo1LJQdtidIAS3rGY+mm3eYDETYHT4TgQtElKDxfo2C7i4F3QO5CjpUInYtiAKXx5oGJQqWENoZjqA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0MyFlSWzlvdTUJ9cMwaeyW8c7lk6mo8wQYVZ7jQ5lWQ=;
- b=W91JISL+zjHixoAEOXw2H2l4ny0fFxyi1PoDcO3fxF/EyHd1ayb7rptmSpLlsczugDGgaeaEoXEmr3Pa9/AZxvHlsbltSBS+7L1w2PxkkHdJJWSqJTfdF9qjzpPBnUYu6aTwx7920LaWsTh5dbKwHXhE2N+401pyUD3Vmwy9CI4Y1tLmbMNprcWmMP+6QoHJOLB5O9iLesuHP+V7m2Z0Cpzf+ThyEM6zcz2hulvHtjQgkDVhr1fV8nZTLxsCIJyooRPiqoMqzTSPdYYVWEFyiO76l8kYOXebJXVtdSXQwyB2YVUhmxCJWGCvXAzGqzyLSIIazhjlxtw2VPNqFm1ZTA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0MyFlSWzlvdTUJ9cMwaeyW8c7lk6mo8wQYVZ7jQ5lWQ=;
- b=SIn9bShqshACZNTab/8EtD3FCvGZgzsjcGaqB1ysDOPcbeAohFA4piLxUvToQd2uVxPxMx86Vj3F2qRVfafdmNc3BesKY3WEiWGgGH3+X+tUhTm+vvpiYH5vqg2Jghw1IlnCvb5rJQq0rzIrflkjBxehKSx2Hyv9T0RQ4KK+74g=
-Received: from PSAPR06MB4021.apcprd06.prod.outlook.com (2603:1096:301:37::11)
- by PU1PR06MB2328.apcprd06.prod.outlook.com (2603:1096:803:3a::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.18; Fri, 20 May
- 2022 01:32:47 +0000
-Received: from PSAPR06MB4021.apcprd06.prod.outlook.com
- ([fe80::4dea:1528:e16a:bad4]) by PSAPR06MB4021.apcprd06.prod.outlook.com
- ([fe80::4dea:1528:e16a:bad4%7]) with mapi id 15.20.5273.017; Fri, 20 May 2022
- 01:32:47 +0000
-From:   =?gb2312?B?1dS+/L/8?= <bernard@vivo.com>
-To:     Kalle Valo <kvalo@kernel.org>
-CC:     Felix Fietkau <nbd@nbd.name>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Shayne Chen <shayne.chen@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "zhaojunkui2008@126.com" <zhaojunkui2008@126.com>
-Subject: Reply: [PATCH] mediatek/mt76: cleanup the code a bit
-Thread-Topic: Reply: [PATCH] mediatek/mt76: cleanup the code a bit
-Thread-Index: Adhr6RjdAX8K6c5RQCGrrf8vv/jUHg==
-Date:   Fri, 20 May 2022 01:32:46 +0000
-Message-ID: <PSAPR06MB4021205461AA996200FC5C92DFD39@PSAPR06MB4021.apcprd06.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d69745c4-4404-486d-0a45-08da3a00a51b
-x-ms-traffictypediagnostic: PU1PR06MB2328:EE_
-x-microsoft-antispam-prvs: <PU1PR06MB23288075B4D48E88135DDD41DFD39@PU1PR06MB2328.apcprd06.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Dulgwb/0WFYmtziDv6qE3KPeMbcdfmfkfP2OkejdLbN0eYpWIPIx3l3ZHVyxqicS7yH73O0jRHLts8zUMB2LR7543Q/O4zJPBiUaJiQ3ZJaatMq8JA4g2Tg3ljtnAd6jnFpKCUpVd2pK9YbRmAWp+CYBk9sSJZn0BFHZp85rkzhEtYsfY9GVX3Bjd/XEMXxwNbQLqx9KuUZMynXCSzZA60FEMZaJ+vRjtW8oGu28n/gvszkrz4S5xJaVLSjD/e0mqulJHyOZTjyU3Rcxfr0n7pG2hnoU4Npe0JdalmmGD2kTxZMP1yW7rTrZoHbuMF50P1mfS3jnRmDqDRuXvf63tFEc1z+4p/B0bBZyB3JbJCJwvo0dRLiADDj9IhKAnUTF+gsfG5CFsAjGAozk5k8g05WTWdZFvynzjIieAIHRZ8zwUXZPvul4moPXTonVv3leMGERTgqIMBV1F1geblgpyId8yGN5OHyaAVXMmG6tRmCxSrIcqPsVkmB8RqGa7pQWHJ1/SZ2HB30Lq3a+zeQS91UFOeaI9bBtjqefSIEbr0MWox7YuXFKktzZSJ0LaTs8Y94HyRoL1CQVkbMsNfXqEw1zPWImx2+NkyvGqRmRVI8fLVvOGPJfuMEc13JgSIyp579sftRcrC1Pb6YMV/0bfI48jFfblG3r6bc/3DATGPf3mRFm5dZG1Z60/Pxn57PeLWImAtLksXW3/YgNXa7iSXrdZeYDShqveeMPedS9tDs05f2ohojOF0BMwyQXjKjzu+eGSX6+9QrzxL1X5YO68g==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PSAPR06MB4021.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(316002)(66446008)(6916009)(52536014)(5660300002)(66476007)(64756008)(9686003)(26005)(186003)(6506007)(122000001)(38070700005)(38100700002)(2906002)(33656002)(8676002)(76116006)(508600001)(4326008)(966005)(8936002)(7416002)(85182001)(55016003)(7696005)(66946007)(66556008)(71200400001)(54906003)(86362001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?gb2312?B?VmRBUzdkcEloU2VnSitWMHdUTEpZV0pzRWtlbjlFdWR5clQ5aXRxOGpRS2FD?=
- =?gb2312?B?VjNwbUh3YTk1RzluZFFiWU5SRXRSc3pqdDBDL3lXbE8vRmlHZEVGL0dEaEtu?=
- =?gb2312?B?YlRJa1pZQWpydXUxdnQ2NWtVSnlRaXhUVHB1M0ZoV0FWQmk4amtTaDZhaFdD?=
- =?gb2312?B?ZFRsMWR3VjJxZEthbk1PLzJzbnp5UWVxQWlWQjQ4MlQ3ZytaWFVuYTZ1WEpo?=
- =?gb2312?B?dGZCeUt0L0JnNUZyY0RkQ0NTK0sxUzNTNGNrZzdLV1ZZVXZlaXByektMOEZO?=
- =?gb2312?B?clNBL2FiODg3eldLZ2FYN21NSm1IbXk0MC9rWmxtWTFVcUVjdmU0SGwwa2NV?=
- =?gb2312?B?V1hyL2owTkdPT3JWeFczSjFIdnRVdU5leXU5bmhPT25rczV6c0pBcGZ4ZmFH?=
- =?gb2312?B?a3NLK0tyeHBMSmdDbEVaUTdSWUVBQ003T2NleDl6YjlydElTRCtKTHY3UjdL?=
- =?gb2312?B?L1pBa0xyOE4zTzdheWRvWnR6OFlodk9PZ3lvbHAzZmViZTJGdVVpUDQrY1V3?=
- =?gb2312?B?OWsyczdtZDhna1ZGcXAzL2lXYWRsMUF3clpwY045RUlBUHd6dVhkMU5sSXRs?=
- =?gb2312?B?KzVGTmpGWTZVV1U3bnJTZVN0bDBhamFIaEIrSzNrLzVrRmZ1YzFGWGo0UjRu?=
- =?gb2312?B?aUoyWkNKR09GTjdiY0NlQkpGQ3NRSmozYUhKOTlsUU9iZXp4QlFpMDZ4ZStq?=
- =?gb2312?B?MmpESHZqMHExZ1RkeWk0VVNWa2lucWxnNTZZd0h6cEZldVdDNVJBQjhTRGZ3?=
- =?gb2312?B?b1BXck9ma0VIaUU0SmRlcG1uUUxMMmJCcVZEK0ZKZ3NBTDF1NnNYNTl0aVh5?=
- =?gb2312?B?U1EwQnlWVytZU29VU1E1VlBoWVNBdStYTjh6dUhjVGZpQVVaRHRPMzk1RGlS?=
- =?gb2312?B?WkdTY1dsdENZZ0xhbzFHUThxYnhuTk9DZTIxOURzMWwvM2ZsaEIwMWd2SjlS?=
- =?gb2312?B?RHpNV1ZuMlRYQ054ejZRdkV6czJIWW16bWFpLytGUEhlQnlkbFR5UFh4TUpC?=
- =?gb2312?B?VUNZMWJIRmFScUt2T1VKSnQvYWwweVAzaEhqNDlqQVZTRllkUmR2ME5mVytp?=
- =?gb2312?B?U3J6aTZLbTFVM0JkMDA4Qm1VcTVRRkhyZGQ4a1pWTnNXaDlwR0pTSzNOL2l4?=
- =?gb2312?B?S1NOK0tYTUkyQTBzT0JGZUdjS3d1MCtGQyttSVlZUTVLNkQrd1RaU3FibHJy?=
- =?gb2312?B?a2tkaHEvNEN0eEpHSGJlQndRRzB3RHRUQnJ5Qi9LaXJIN3pRRHVlQmtEN3Fi?=
- =?gb2312?B?dHc0aEw5azFtUmptLzRqSGptWTZiU2YrR2M1bGNQcDRoME9LMVN0eFYzQW9j?=
- =?gb2312?B?d1ExT2dKcVB1OGhCVm50YWlnQnl2Y3pOSlFGUmxtVy9TL1pKNXFIUEdISnJi?=
- =?gb2312?B?ME8yL2tNMG9ZV0NVUHpXWHZMSTJJMFpUS044U0R1NVpudXorSTJXUXZiZlRa?=
- =?gb2312?B?d2E0M1hsK0l6UGZtdnRGSUNDSlNhdkhjNmJ0clFselhnSU5xNmdJc0R0VzN2?=
- =?gb2312?B?SWh6RHRqcnlKYmF4c3NhdHkrVnpFeExocTF5Qkw2Y0ZscW4yaDJmU0dzdU5G?=
- =?gb2312?B?blRBTnJYSE5KdTNiSGhIT0ZvdEdIc1lVSHZoNWZWYVBIcElHVkN3OHA2ZTlw?=
- =?gb2312?B?SHRKTHVvblVzSW1BS250Z2g0blRhc2RrYk9SelJzamluMDdUOUxvNFFDUkkz?=
- =?gb2312?B?NHB2L093MVZRK2MrcWpnVFlpdVArUEVKUjVWNjFLRkFhK0V4RE9qMU5aZ25Z?=
- =?gb2312?B?UUdNWm93eDFnbTFoRTFaTTd4Mm9GL1o0cTlWMHJkNDlnNk1zU3JzRU5FNkxB?=
- =?gb2312?B?TnpyK3UrbXhYbFlhbnNVeDBMc1QwdCtqZmxiaHB1YnlQOHZSdnZ6ejNIOUNL?=
- =?gb2312?B?N2doUXdkajVWeTJjbmNnUzZFSXBIS2oyLzREY28yenNjaDg2SGpDWGtJMFlT?=
- =?gb2312?B?Si9UaW5IcG1vQlVpWlM5QUQ3NGNVS0YzM3FRRTA5WVBGVjBGNlBVMzBXTlk1?=
- =?gb2312?B?SVF2L1JlTS8yL1VRNUVFcUtBdmlGK3VFallkUkFqU2JEc2dkMjg3Q3laQTJ2?=
- =?gb2312?B?SmRpZnM4eE1kdVZzdU0wQlhjTHIxV3RyQWU5cXpmdFdFUTI2cHNSWVkzOE5n?=
- =?gb2312?B?ZndZL2RIUkxaUmtCMXdpdDYzMXVPaTh4SVRGanJWZGYvUGFDRktEVHdtVlNw?=
- =?gb2312?B?eHdWb2FmY3d1S05HS2VadFFMZ0IzQlR6T0d2Q1FiZFlaMjFkdndka3hMbWx3?=
- =?gb2312?B?ZzlsMVYxQ0hJR3RlT2J2MHJWeVhoTTllRnVPWmJGY3B4Sjlzc1dEZEFVWnB2?=
- =?gb2312?Q?5q8/I66lUzGxNNJp7f?=
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+        Thu, 19 May 2022 21:34:56 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7BA79BACD;
+        Thu, 19 May 2022 18:34:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653010494; x=1684546494;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NfdL/FzCFLB5InMgBmty5JY2QWGIPoi0Uc63oaN1Jzs=;
+  b=mXmSO7OHBJLAPAeDLkGpUSSYugpD3gIQoyuQAN2hSev7zjBiO4bj4vN0
+   1bmEFP+9FH95rUJBq+ocEotB1xWQNJ5+VLtBqvEzu2PkKSLTK3b/KHjRN
+   16O1tEhIs9my5P/ERR2+PZKJisX7fGNUyIYATSSVo1SpVOQ0JTFu5vh2+
+   7NE5g7oPRQC8uAs6kW93sfPi1cfZrNBnKoTMZKA70Cm3gYUs2CmEqCKfN
+   HdRTGdRIiUVDai3OnG+51Qfvv6VvxfDFR9Ael+AlvIcdv//iBlpPl9ZMc
+   dL6RjQYL7ezzQeueItnLf7gPSsjJs2UEIAgZHez8U9F1wzSC26I2/9BEq
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="358853024"
+X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
+   d="scan'208";a="358853024"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 18:34:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
+   d="scan'208";a="640085662"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 19 May 2022 18:34:51 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nrrXW-000485-Mx;
+        Fri, 20 May 2022 01:34:50 +0000
+Date:   Fri, 20 May 2022 09:34:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Uri Arev <me@wantyapps.xyz>
+Cc:     kbuild-all@lists.01.org, Uri Arev <me@wantyapps.xyz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Len Baker <len.baker@gmx.com>, Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Srivathsa Dara <srivathsa729.8@gmail.com>,
+        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: fbtft: fix checkpatch.pl struct should normally
+ be const
+Message-ID: <202205200955.wBcgkXij-lkp@intel.com>
+References: <20220519172503.10821-1-me@wantyapps.xyz>
 MIME-Version: 1.0
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PSAPR06MB4021.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d69745c4-4404-486d-0a45-08da3a00a51b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 May 2022 01:32:47.0145
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: bxbrSBJWnHenSrPI1LcT38aNwuzGcKXLZML+XRZbXjzbi/9l5IpUbE00V2u8E1UyoPuOWr2sw7FadrYJeKzuEg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PU1PR06MB2328
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220519172503.10821-1-me@wantyapps.xyz>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCi0tLS0t08q8/tStvP4tLS0tLQ0Kt6K8/sjLOiBLYWxsZSBWYWxvIDxrdmFsb0BrZXJuZWwu
-b3JnPiANCreiy83KsbzkOiAyMDIyxOo11MIxOMjVIDEzOjExDQrK1bz+yMs6INXUvvy//CA8YmVy
-bmFyZEB2aXZvLmNvbT4NCrOty806IEZlbGl4IEZpZXRrYXUgPG5iZEBuYmQubmFtZT47IExvcmVu
-em8gQmlhbmNvbmkgPGxvcmVuem9Aa2VybmVsLm9yZz47IFJ5ZGVyIExlZSA8cnlkZXIubGVlQG1l
-ZGlhdGVrLmNvbT47IFNoYXluZSBDaGVuIDxzaGF5bmUuY2hlbkBtZWRpYXRlay5jb20+OyBTZWFu
-IFdhbmcgPHNlYW4ud2FuZ0BtZWRpYXRlay5jb20+OyBEYXZpZCBTLiBNaWxsZXIgPGRhdmVtQGRh
-dmVtbG9mdC5uZXQ+OyBKYWt1YiBLaWNpbnNraSA8a3ViYUBrZXJuZWwub3JnPjsgUGFvbG8gQWJl
-bmkgPHBhYmVuaUByZWRoYXQuY29tPjsgTWF0dGhpYXMgQnJ1Z2dlciA8bWF0dGhpYXMuYmdnQGdt
-YWlsLmNvbT47IGxpbnV4LXdpcmVsZXNzQHZnZXIua2VybmVsLm9yZzsgbmV0ZGV2QHZnZXIua2Vy
-bmVsLm9yZzsgbGludXgtYXJtLWtlcm5lbEBsaXN0cy5pbmZyYWRlYWQub3JnOyBsaW51eC1tZWRp
-YXRla0BsaXN0cy5pbmZyYWRlYWQub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyB6
-aGFvanVua3VpMjAwOEAxMjYuY29tDQrW98ziOiBSZTogW1BBVENIXSBtZWRpYXRlay9tdDc2OiBj
-bGVhbnVwIHRoZSBjb2RlIGEgYml0DQoNCj4gQmVybmFyZCBaaGFvIDxiZXJuYXJkQHZpdm8uY29t
-PiB3cml0ZXM6DQoNCj4gPiBGdW5jdGlvbiBtdDc2X3JlZ2lzdGVyX2RlYnVnZnMganVzdCBjYWxs
-IG10NzZfcmVnaXN0ZXJfZGVidWdmc19mb3BzIA0KPiA+IHdpdGggTlVMTCBvcCBwYXJhbWV0ZXIu
-DQo+ID4gVGhpcyBjaGFuZ2UgaXMgdG8gY2xlYW51cCB0aGUgY29kZSBhIGJpdCwgZWxldGUgdGhl
-IG1lYW5pbmdsZXNzIA0KPiA+IG10NzZfcmVnaXN0ZXJfZGVidWdmcywgYW5kIGFsbCBjYWxsIG10
-NzZfcmVnaXN0ZXJfZGVidWdmc19mb3BzLg0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogQmVybmFy
-ZCBaaGFvIDxiZXJuYXJkQHZpdm8uY29tPg0KDQo+IFBsZWFzZSBtYWtlIHRoZSB0aXRsZSBtb3Jl
-IGluZm9ybWF0aXZlIGFuZCBkb24ndCB1c2UgbWVkaWF0ZWsgaW4gdGhlIHRpdGxlLCBmb3IgZXhh
-bXBsZSBzb21ldGhpbmcgbGlrZSB0aGlzOg0KDQo+IG10NzY6IHJlbW92ZSBzaW1wbGUgbXQ3Nl9y
-ZWdpc3Rlcl9kZWJ1Z2ZzKCkgZnVuY3Rpb24NCg0KPiBNb3JlIGluZm86DQoNCj4gaHR0cHM6Ly93
-aXJlbGVzcy53aWtpLmtlcm5lbC5vcmcvZW4vZGV2ZWxvcGVycy9kb2N1bWVudGF0aW9uL3N1Ym1p
-dHRpbmdwYXRjaGVzI2NvbW1pdF90aXRsZV9pc193cm9uZw0KSGkgS2FsbGUgVmFsbzoNCg0KR290
-IHRoaXMsIEkgd291bGQgcmVzdWJtaXQgYSBwYXRjaCBvZiBWMiB2ZXJzaW9uLCB0aGFuayB5b3Ug
-dmVyeSBtdWNoIQ0KDQpCUi8vQmVybmFyZA0KPiAtLQ0KPiBodHRwczovL3BhdGNod29yay5rZXJu
-ZWwub3JnL3Byb2plY3QvbGludXgtd2lyZWxlc3MvbGlzdC8NCg0KPiBodHRwczovL3dpcmVsZXNz
-Lndpa2kua2VybmVsLm9yZy9lbi9kZXZlbG9wZXJzL2RvY3VtZW50YXRpb24vc3VibWl0dGluZ3Bh
-dGNoZXMNCg==
+Hi Uri,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on staging/staging-testing]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Uri-Arev/staging-fbtft-fix-checkpatch-pl-struct-should-normally-be-const/20220520-012948
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git 4d0cc9e0e53e9946d7b8dc58279c62dfa7a2191b
+config: x86_64-randconfig-a013 (https://download.01.org/0day-ci/archive/20220520/202205200955.wBcgkXij-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/d26e139bfc29011b0a147df71f0b91485189c66e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Uri-Arev/staging-fbtft-fix-checkpatch-pl-struct-should-normally-be-const/20220520-012948
+        git checkout d26e139bfc29011b0a147df71f0b91485189c66e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/staging/fbtft/fbtft-core.c: In function 'fbtft_framebuffer_alloc':
+>> drivers/staging/fbtft/fbtft-core.c:617:15: error: type defaults to 'int' in declaration of 'fbops' [-Werror=implicit-int]
+     617 |         const fbops = devm_kzalloc(dev, sizeof(struct fb_ops), GFP_KERNEL);
+         |               ^~~~~
+>> drivers/staging/fbtft/fbtft-core.c:617:15: error: conflicting type qualifiers for 'fbops'
+   drivers/staging/fbtft/fbtft-core.c:542:30: note: previous definition of 'fbops' with type 'const struct fb_ops *'
+     542 |         const struct fb_ops *fbops = NULL;
+         |                              ^~~~~
+   drivers/staging/fbtft/fbtft-core.c:617:23: warning: initialization of 'int' from 'void *' makes integer from pointer without a cast [-Wint-conversion]
+     617 |         const fbops = devm_kzalloc(dev, sizeof(struct fb_ops), GFP_KERNEL);
+         |                       ^~~~~~~~~~~~
+   drivers/staging/fbtft/fbtft-core.c:617:9: warning: ISO C90 forbids mixed declarations and code [-Wdeclaration-after-statement]
+     617 |         const fbops = devm_kzalloc(dev, sizeof(struct fb_ops), GFP_KERNEL);
+         |         ^~~~~
+   drivers/staging/fbtft/fbtft-core.c:644:21: warning: assignment to 'const struct fb_ops *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+     644 |         info->fbops = fbops;
+         |                     ^
+>> drivers/staging/fbtft/fbtft-core.c:647:14: error: invalid type argument of '->' (have 'int')
+     647 |         fbops->owner        =      dev->driver->owner;
+         |              ^~
+   drivers/staging/fbtft/fbtft-core.c:648:14: error: invalid type argument of '->' (have 'int')
+     648 |         fbops->fb_read      =      fb_sys_read;
+         |              ^~
+   drivers/staging/fbtft/fbtft-core.c:649:14: error: invalid type argument of '->' (have 'int')
+     649 |         fbops->fb_write     =      fbtft_fb_write;
+         |              ^~
+   drivers/staging/fbtft/fbtft-core.c:650:14: error: invalid type argument of '->' (have 'int')
+     650 |         fbops->fb_fillrect  =      fbtft_fb_fillrect;
+         |              ^~
+   drivers/staging/fbtft/fbtft-core.c:651:14: error: invalid type argument of '->' (have 'int')
+     651 |         fbops->fb_copyarea  =      fbtft_fb_copyarea;
+         |              ^~
+   drivers/staging/fbtft/fbtft-core.c:652:14: error: invalid type argument of '->' (have 'int')
+     652 |         fbops->fb_imageblit =      fbtft_fb_imageblit;
+         |              ^~
+   drivers/staging/fbtft/fbtft-core.c:653:14: error: invalid type argument of '->' (have 'int')
+     653 |         fbops->fb_setcolreg =      fbtft_fb_setcolreg;
+         |              ^~
+   drivers/staging/fbtft/fbtft-core.c:654:14: error: invalid type argument of '->' (have 'int')
+     654 |         fbops->fb_blank     =      fbtft_fb_blank;
+         |              ^~
+   cc1: some warnings being treated as errors
+
+
+vim +617 drivers/staging/fbtft/fbtft-core.c
+
+   516	
+   517	/**
+   518	 * fbtft_framebuffer_alloc - creates a new frame buffer info structure
+   519	 *
+   520	 * @display: pointer to structure describing the display
+   521	 * @dev: pointer to the device for this fb, this can be NULL
+   522	 * @pdata: platform data for the display in use
+   523	 *
+   524	 * Creates a new frame buffer info structure.
+   525	 *
+   526	 * Also creates and populates the following structures:
+   527	 *   info->fbops
+   528	 *   info->fbdefio
+   529	 *   info->pseudo_palette
+   530	 *   par->fbtftops
+   531	 *   par->txbuf
+   532	 *
+   533	 * Returns the new structure, or NULL if an error occurred.
+   534	 *
+   535	 */
+   536	struct fb_info *fbtft_framebuffer_alloc(struct fbtft_display *display,
+   537						struct device *dev,
+   538						struct fbtft_platform_data *pdata)
+   539	{
+   540		struct fb_info *info;
+   541		struct fbtft_par *par;
+   542		const struct fb_ops *fbops = NULL;
+   543		struct fb_deferred_io *fbdefio = NULL;
+   544		u8 *vmem = NULL;
+   545		void *txbuf = NULL;
+   546		void *buf = NULL;
+   547		unsigned int width;
+   548		unsigned int height;
+   549		int txbuflen = display->txbuflen;
+   550		unsigned int bpp = display->bpp;
+   551		unsigned int fps = display->fps;
+   552		int vmem_size;
+   553		const s16 *init_sequence = display->init_sequence;
+   554		char *gamma = display->gamma;
+   555		u32 *gamma_curves = NULL;
+   556	
+   557		/* sanity check */
+   558		if (display->gamma_num * display->gamma_len >
+   559				FBTFT_GAMMA_MAX_VALUES_TOTAL) {
+   560			dev_err(dev, "FBTFT_GAMMA_MAX_VALUES_TOTAL=%d is exceeded\n",
+   561				FBTFT_GAMMA_MAX_VALUES_TOTAL);
+   562			return NULL;
+   563		}
+   564	
+   565		/* defaults */
+   566		if (!fps)
+   567			fps = 20;
+   568		if (!bpp)
+   569			bpp = 16;
+   570	
+   571		if (!pdata) {
+   572			dev_err(dev, "platform data is missing\n");
+   573			return NULL;
+   574		}
+   575	
+   576		/* override driver values? */
+   577		if (pdata->fps)
+   578			fps = pdata->fps;
+   579		if (pdata->txbuflen)
+   580			txbuflen = pdata->txbuflen;
+   581		if (pdata->display.init_sequence)
+   582			init_sequence = pdata->display.init_sequence;
+   583		if (pdata->gamma)
+   584			gamma = pdata->gamma;
+   585		if (pdata->display.debug)
+   586			display->debug = pdata->display.debug;
+   587		if (pdata->display.backlight)
+   588			display->backlight = pdata->display.backlight;
+   589		if (pdata->display.width)
+   590			display->width = pdata->display.width;
+   591		if (pdata->display.height)
+   592			display->height = pdata->display.height;
+   593		if (pdata->display.buswidth)
+   594			display->buswidth = pdata->display.buswidth;
+   595		if (pdata->display.regwidth)
+   596			display->regwidth = pdata->display.regwidth;
+   597	
+   598		display->debug |= debug;
+   599		fbtft_expand_debug_value(&display->debug);
+   600	
+   601		switch (pdata->rotate) {
+   602		case 90:
+   603		case 270:
+   604			width =  display->height;
+   605			height = display->width;
+   606			break;
+   607		default:
+   608			width =  display->width;
+   609			height = display->height;
+   610		}
+   611	
+   612		vmem_size = display->width * display->height * bpp / 8;
+   613		vmem = vzalloc(vmem_size);
+   614		if (!vmem)
+   615			goto alloc_fail;
+   616	
+ > 617		const fbops = devm_kzalloc(dev, sizeof(struct fb_ops), GFP_KERNEL);
+   618		if (!fbops)
+   619			goto alloc_fail;
+   620	
+   621		fbdefio = devm_kzalloc(dev, sizeof(struct fb_deferred_io), GFP_KERNEL);
+   622		if (!fbdefio)
+   623			goto alloc_fail;
+   624	
+   625		buf = devm_kzalloc(dev, 128, GFP_KERNEL);
+   626		if (!buf)
+   627			goto alloc_fail;
+   628	
+   629		if (display->gamma_num && display->gamma_len) {
+   630			gamma_curves = devm_kcalloc(dev,
+   631						    display->gamma_num *
+   632						    display->gamma_len,
+   633						    sizeof(gamma_curves[0]),
+   634						    GFP_KERNEL);
+   635			if (!gamma_curves)
+   636				goto alloc_fail;
+   637		}
+   638	
+   639		info = framebuffer_alloc(sizeof(struct fbtft_par), dev);
+   640		if (!info)
+   641			goto alloc_fail;
+   642	
+   643		info->screen_buffer = vmem;
+   644		info->fbops = fbops;
+   645		info->fbdefio = fbdefio;
+   646	
+ > 647		fbops->owner        =      dev->driver->owner;
+   648		fbops->fb_read      =      fb_sys_read;
+   649		fbops->fb_write     =      fbtft_fb_write;
+   650		fbops->fb_fillrect  =      fbtft_fb_fillrect;
+   651		fbops->fb_copyarea  =      fbtft_fb_copyarea;
+   652		fbops->fb_imageblit =      fbtft_fb_imageblit;
+   653		fbops->fb_setcolreg =      fbtft_fb_setcolreg;
+   654		fbops->fb_blank     =      fbtft_fb_blank;
+   655	
+   656		fbdefio->delay =           HZ / fps;
+   657		fbdefio->sort_pagelist =   true;
+   658		fbdefio->deferred_io =     fbtft_deferred_io;
+   659		fb_deferred_io_init(info);
+   660	
+   661		snprintf(info->fix.id, sizeof(info->fix.id), "%s", dev->driver->name);
+   662		info->fix.type =           FB_TYPE_PACKED_PIXELS;
+   663		info->fix.visual =         FB_VISUAL_TRUECOLOR;
+   664		info->fix.xpanstep =	   0;
+   665		info->fix.ypanstep =	   0;
+   666		info->fix.ywrapstep =	   0;
+   667		info->fix.line_length =    width * bpp / 8;
+   668		info->fix.accel =          FB_ACCEL_NONE;
+   669		info->fix.smem_len =       vmem_size;
+   670	
+   671		info->var.rotate =         pdata->rotate;
+   672		info->var.xres =           width;
+   673		info->var.yres =           height;
+   674		info->var.xres_virtual =   info->var.xres;
+   675		info->var.yres_virtual =   info->var.yres;
+   676		info->var.bits_per_pixel = bpp;
+   677		info->var.nonstd =         1;
+   678	
+   679		/* RGB565 */
+   680		info->var.red.offset =     11;
+   681		info->var.red.length =     5;
+   682		info->var.green.offset =   5;
+   683		info->var.green.length =   6;
+   684		info->var.blue.offset =    0;
+   685		info->var.blue.length =    5;
+   686		info->var.transp.offset =  0;
+   687		info->var.transp.length =  0;
+   688	
+   689		info->flags =              FBINFO_FLAG_DEFAULT | FBINFO_VIRTFB;
+   690	
+   691		par = info->par;
+   692		par->info = info;
+   693		par->pdata = pdata;
+   694		par->debug = display->debug;
+   695		par->buf = buf;
+   696		spin_lock_init(&par->dirty_lock);
+   697		par->bgr = pdata->bgr;
+   698		par->startbyte = pdata->startbyte;
+   699		par->init_sequence = init_sequence;
+   700		par->gamma.curves = gamma_curves;
+   701		par->gamma.num_curves = display->gamma_num;
+   702		par->gamma.num_values = display->gamma_len;
+   703		mutex_init(&par->gamma.lock);
+   704		info->pseudo_palette = par->pseudo_palette;
+   705	
+   706		if (par->gamma.curves && gamma) {
+   707			if (fbtft_gamma_parse_str(par, par->gamma.curves, gamma,
+   708						  strlen(gamma)))
+   709				goto release_framebuf;
+   710		}
+   711	
+   712		/* Transmit buffer */
+   713		if (txbuflen == -1)
+   714			txbuflen = vmem_size + 2; /* add in case startbyte is used */
+   715		if (txbuflen >= vmem_size + 2)
+   716			txbuflen = 0;
+   717	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

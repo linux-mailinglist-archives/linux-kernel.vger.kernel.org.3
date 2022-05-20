@@ -2,132 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B2DF52EDE4
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 16:12:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F26A952EDE1
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 16:12:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350143AbiETOMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 10:12:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41242 "EHLO
+        id S1346474AbiETOMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 10:12:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234377AbiETOMv (ORCPT
+        with ESMTP id S234377AbiETOM2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 10:12:51 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D87E71271A5
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 07:12:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653055969; x=1684591969;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iKY8F/VX/plDWOJFSr49vGSKgylKvy8RoB+nml/xJLw=;
-  b=lMvvijTILLaDQ3fBmZavjpmcP2bIrzOd+4hCeLYDZCeeZLTYWh4rSLYD
-   /UtXJCiRIs9xQBKGz5jJB2aR5W/iQP8y3ErxuyUORp3cmsmGY9v5kWPKJ
-   CcOWdyEqwpckI80EnZ2+Mx377B4rBfTaEjGzl9I6T2Ivk2hco3MM9EIfq
-   COPHgmIkBw6Snst1NUY9d8dCnbLb2QSFeY8nJTU2328QrTbBQ46P6bPSK
-   FYnLNmB0d9djVoxg4KIj7yb7ucCDUj5JVeySyDAGFT89J2OheqUToL1fu
-   DhumJSaEbvCWf/oZzhSMnus9ljLKfAalQ501v81yQqGrOvW1bTl8kLUzY
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10353"; a="272742389"
-X-IronPort-AV: E=Sophos;i="5.91,239,1647327600"; 
-   d="scan'208";a="272742389"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 07:12:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,239,1647327600"; 
-   d="scan'208";a="628173499"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 20 May 2022 07:12:47 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ns3N0-0004mA-Qu;
-        Fri, 20 May 2022 14:12:46 +0000
-Date:   Fri, 20 May 2022 22:12:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bo Liu <liubo03@inspur.com>, mst@redhat.com, jasowang@redhat.com
-Cc:     kbuild-all@lists.01.org, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, Bo Liu <liubo03@inspur.com>
-Subject: Re: [PATCH] virtio_ring: remove unused variable in virtqueue_add()
-Message-ID: <202205202236.ztzLWFZ4-lkp@intel.com>
-References: <20220520070740.7151-1-liubo03@inspur.com>
+        Fri, 20 May 2022 10:12:28 -0400
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E76381271A5;
+        Fri, 20 May 2022 07:12:26 -0700 (PDT)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 176FD100008;
+        Fri, 20 May 2022 14:12:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1653055945;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MaQV0rcRl9yju3BQiEVjVqUfjR6zffQamWBXh+IHtho=;
+        b=T1I9QydTzzgBi3C/MLXC5ctI80aDQxh39c7tD4yw7kBo1kQgcR8zFJOs4rO5TmLCDkoVrl
+        BeYlBXUXcDFOY/DSA6KnjZH/3v7aFq+O4ryT8AOU6kCFDk48+qKtIZh5vDNZCFbMydakf7
+        g8HFzQ9c9eQQ+xIdLcj6IHmOmObocR3OeHO+Nk59Y7H156wJjPefrwQsYypFHvB9uLohuG
+        49G0r5hUELpkt6P2LuJSGFxtUy3HtYn2Lg+KVEU2fiZkdIXfDlrDSQhJWJqjya1luTXEdv
+        RWvYOkBrduLtm1JmPtHMgBCKTqEHb5EwqWlXPr69NjpHB/OdYbQV6+1DJv/txg==
+Date:   Fri, 20 May 2022 16:12:22 +0200
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH 2/3] dt-bindings: usb: atmel: Add Microchip LAN966x
+ compatible string
+Message-ID: <20220520161222.71fc3a75@bootlin.com>
+In-Reply-To: <YoedFkAsTdoOn/3Y@mail.local>
+References: <20220513105850.310375-1-herve.codina@bootlin.com>
+        <20220513105850.310375-3-herve.codina@bootlin.com>
+        <8f0d4127-7e66-cf50-21c9-99680f737e30@linaro.org>
+        <20220520133426.3b4728ae@bootlin.com>
+        <b087c34f-0e2f-edd0-a738-3ffc2853a41b@linaro.org>
+        <20220520142109.57b84da2@bootlin.com>
+        <01b31a02-523e-10bf-3b46-5b830e456522@linaro.org>
+        <20220520150243.625723fa@bootlin.com>
+        <d26c7ebd-fc1a-391e-39e4-5ec41bf4fbfa@linaro.org>
+        <YoedFkAsTdoOn/3Y@mail.local>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220520070740.7151-1-liubo03@inspur.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bo,
+Hi Alexandre,
 
-Thank you for the patch! Yet something to improve:
+On Fri, 20 May 2022 15:52:22 +0200
+Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.18-rc7 next-20220519]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> Hello,
+>=20
+> On 20/05/2022 15:38:36+0200, Krzysztof Kozlowski wrote:
+> > On 20/05/2022 15:02, Herve Codina wrote: =20
+> > > On Fri, 20 May 2022 14:50:24 +0200
+> > > Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> > >  =20
+> > >> On 20/05/2022 14:21, Herve Codina wrote: =20
+> > >>>>> I think it makes sense to keep 'microchip,lan966x-udc' for the USB
+> > >>>>> device controller (same controller on LAN9662 and LAN9668) and so
+> > >>>>> keeping the same rules as for other common parts.     =20
+> > >>>>
+> > >>>> Having wildcard was rather a mistake and we already started correc=
+ting
+> > >>>> it, so keeping the "mistake" neither gives you consistency, nor
+> > >>>> correctness...
+> > >>>>   =20
+> > >>>
+> > >>> I think that the "family" compatible should be present.
+> > >>> This one allows to define the common parts in the common
+> > >>> .dtsi file (lan966x.dtsi in our case).
+> > >>>
+> > >>> What do you think about:
+> > >>> - microchip,lan9662-udc
+> > >>> - microchip,lan9668-udc
+> > >>> - microchip,lan966-udc  <-- Family
+> > >>>
+> > >>> lan966 is defined as the family compatible string since (1) in
+> > >>> bindings/arm/atmel-at91.yaml and in Documentation/arm/microchip.rst
+> > >>>    =20
+> > >>
+> > >> You can add some family compatible, if it makes sense. I don't get w=
+hy
+> > >> do you mention it - we did not discuss family names, but using
+> > >> wildcards... Just please do not add wildcards. =20
+> > >=20
+> > > Well, I mentioned it as I will only use the family compatible string
+> > > and not the SOC (lan9662 or lan9668) compatible string in lan966x.dts=
+i.
+> > > In this case, the family compatible string can be seen as a kind of
+> > > "wildcard". =20
+> >=20
+> > I understood as "the "family" compatible should be present" as you want
+> > to add it as a fallback. It would be okay (assuming devices indeed share
+> > family design). If you want to use it as the only one, then it is again
+> > not a recommended approach. Please use specific compatibles.
+> >=20
+> > I mean, why do we have this discussion? What is the benefit for you to
+> > implement something not-recommended by Devicetree spec and style?
+> >  =20
+>=20
+> Honestly, I would just go for microchip,lan9662-udc. There is no
+> difference between lan9662 and lan9668 apart from the number of switch
+> ports.
+>=20
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Bo-Liu/virtio_ring-remove-unused-variable-in-virtqueue_add/20220520-161845
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 3d7285a335edaf23b699e87c528cf0b0070e3293
-config: x86_64-rhel-8.3-func (https://download.01.org/0day-ci/archive/20220520/202205202236.ztzLWFZ4-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/8344061823a47f3245d81db45f5898d940ac488e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Bo-Liu/virtio_ring-remove-unused-variable-in-virtqueue_add/20220520-161845
-        git checkout 8344061823a47f3245d81db45f5898d940ac488e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
+Sounds good.
+I will do that.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks,
+Herv=C3=A9
 
-All errors (new ones prefixed by >>):
-
-   drivers/virtio/virtio_ring.c: In function 'virtqueue_add':
->> drivers/virtio/virtio_ring.c:1785:16: error: 'vq' undeclared (first use in this function); did you mean '_vq'?
-    1785 |         return vq->packed_ring ? virtqueue_add_packed(_vq, sgs, total_sg,
-         |                ^~
-         |                _vq
-   drivers/virtio/virtio_ring.c:1785:16: note: each undeclared identifier is reported only once for each function it appears in
-   drivers/virtio/virtio_ring.c:1789:1: error: control reaches end of non-void function [-Werror=return-type]
-    1789 | }
-         | ^
-   cc1: some warnings being treated as errors
-
-
-vim +1785 drivers/virtio/virtio_ring.c
-
-1ce9e6055fa0a9 Tiwei Bie 2018-11-21  1770  
-1ce9e6055fa0a9 Tiwei Bie 2018-11-21  1771  
-e6f633e5beab65 Tiwei Bie 2018-11-21  1772  /*
-e6f633e5beab65 Tiwei Bie 2018-11-21  1773   * Generic functions and exported symbols.
-e6f633e5beab65 Tiwei Bie 2018-11-21  1774   */
-e6f633e5beab65 Tiwei Bie 2018-11-21  1775  
-e6f633e5beab65 Tiwei Bie 2018-11-21  1776  static inline int virtqueue_add(struct virtqueue *_vq,
-e6f633e5beab65 Tiwei Bie 2018-11-21  1777  				struct scatterlist *sgs[],
-e6f633e5beab65 Tiwei Bie 2018-11-21  1778  				unsigned int total_sg,
-e6f633e5beab65 Tiwei Bie 2018-11-21  1779  				unsigned int out_sgs,
-e6f633e5beab65 Tiwei Bie 2018-11-21  1780  				unsigned int in_sgs,
-e6f633e5beab65 Tiwei Bie 2018-11-21  1781  				void *data,
-e6f633e5beab65 Tiwei Bie 2018-11-21  1782  				void *ctx,
-e6f633e5beab65 Tiwei Bie 2018-11-21  1783  				gfp_t gfp)
-e6f633e5beab65 Tiwei Bie 2018-11-21  1784  {
-1ce9e6055fa0a9 Tiwei Bie 2018-11-21 @1785  	return vq->packed_ring ? virtqueue_add_packed(_vq, sgs, total_sg,
-1ce9e6055fa0a9 Tiwei Bie 2018-11-21  1786  					out_sgs, in_sgs, data, ctx, gfp) :
-1ce9e6055fa0a9 Tiwei Bie 2018-11-21  1787  				 virtqueue_add_split(_vq, sgs, total_sg,
-e6f633e5beab65 Tiwei Bie 2018-11-21  1788  					out_sgs, in_sgs, data, ctx, gfp);
-e6f633e5beab65 Tiwei Bie 2018-11-21  1789  }
-e6f633e5beab65 Tiwei Bie 2018-11-21  1790  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+--=20
+Herv=C3=A9 Codina, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com

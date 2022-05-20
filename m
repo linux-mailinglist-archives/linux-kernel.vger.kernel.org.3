@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2BC852F2EC
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 20:34:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B79ED52F2F6
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 20:34:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352708AbiETSeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 14:34:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49558 "EHLO
+        id S1352735AbiETSex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 14:34:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343952AbiETSen (ORCPT
+        with ESMTP id S1349180AbiETSeo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 14:34:43 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26CD65FF06;
-        Fri, 20 May 2022 11:34:42 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id w4so12575953wrg.12;
-        Fri, 20 May 2022 11:34:42 -0700 (PDT)
+        Fri, 20 May 2022 14:34:44 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58BD86B7D9;
+        Fri, 20 May 2022 11:34:43 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id m20so1473798wrb.13;
+        Fri, 20 May 2022 11:34:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3Bvgb2lQC/lXU1/Ce5R2fdk8VVqr9ldd55Cmvb2FG04=;
-        b=Tnva1bxMWOKs2UqctZ678Ff8MWwyt7pQaseYZ2MDJ+3GyUDgF5viImh1detkoBd1B6
-         YKxC2awW4A830XVPDuHwTJzGCWo5E0WuetPzvkDotXPqQoIQQ2R01ix3CfOo5IJRIBqP
-         XSSHC7PvHXaXIlGLSs5ynFI6qWX6T6z4PULIstgeURmE66hXexdQ5grYvSjjTtrIRuOC
-         vr0vjR/KZ9jN8yNIsgbWc2iC9BuqA9A1DTbdNpTw1mlifrqOOYzwn5qLjnwf+vOVSzEB
-         KIA4LEsDxpaKCsAi1DrvxKEuxCWB9S2GpwicMCBI8uO+RxCEbwhA/o/Gic7TRjNO0lLn
-         ELIw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=71rNmvdBNzrDpvjl6ye6mbU4jyI75AeH59SJ+4jpFZc=;
+        b=FC1S0/4xLynlkKxblmICDerO/KOcxzps4ZEDHNsyV4XiIUvW3UoGUmFMgRI1U1+Uxz
+         AYvM7Ympxl+zPuyJeTvD0x75fVKk4uNCOzGxJ3zRPATWARu18IhcKEXlC9HD4wEXaBkH
+         omYWfka6r8203TMw8WhVy3BuGDOkxaA3EbV7gW8HhD/qJE7LJHEmgUH685ANOqjpg/ou
+         D6sSrDrbCvIfwM9Myj/K/MYnEApOPV39y4TOWI4fiDYthi3rz8u4/pPTU8XEBTbvffqE
+         bC48Tt6EpNMPocoqGkhyZqTo0cA2CD/M1o7jsJiLjX47J3IIwhItHgl+ZBIIJNBvHSJg
+         a4kA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3Bvgb2lQC/lXU1/Ce5R2fdk8VVqr9ldd55Cmvb2FG04=;
-        b=YDRJafk1kipNmVZul7qw7uvFARymDtoa2U53yjfB/WZAkwTlOBt5OVEngO99VRwyVN
-         kuUuSIT5BSg7+D5kq9M2XR49qOXJ3KII5/AwsNeCT8ttUNZ7YYC1xgMY3Egse2uswxxT
-         jluIvRqt+zsheema38J3bJ4Sj4TtdtTI+QJZym6B5ew/KpSxtovNDk+yACRnM1uAjZxP
-         1moSjgtFQdXpYZSCBNmqp4QJEBxSzODn4tcr5fc/tty+fusP9bR0j84VxcTn5sFCR+Sk
-         i75oT3c2W0pBqL79CQd73VNSz9G7ZXwHF2/JyHz0Uop9UOYpqFhFUk3ecEyLbMBeeZe5
-         rYvQ==
-X-Gm-Message-State: AOAM5303IbthLmJKhwyYCLuQmUBdFtYN19m919MC0GNqIv5IDybyGN/6
-        S3cGZ7sSqLbhDE6upkBZ190=
-X-Google-Smtp-Source: ABdhPJzBFOybRHQwepl7PhKKrktyPRT15xK3/W3FnElF3Q2IZ9Mk0too/QOoL1RiYQkCDtTGxdHPOw==
-X-Received: by 2002:a5d:68cf:0:b0:20c:ff58:37b with SMTP id p15-20020a5d68cf000000b0020cff58037bmr9412390wrw.448.1653071680604;
-        Fri, 20 May 2022 11:34:40 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=71rNmvdBNzrDpvjl6ye6mbU4jyI75AeH59SJ+4jpFZc=;
+        b=LqF8K5g0b4/SG50DzsbgWSWP+WF+4YqyS3by97BHpFfG0hYwrBUooul2Q8to5khS0U
+         XWbRptkNDPXmhiiCJX63SRzSJhbSXpgrW1YpPNUJvEulIIfTfullasRa2IiLNUDG6nAJ
+         D/cKLAmpcTAxlbV98eBpRmtWOgpcnwNN6N/Zp8cElfpX16UkJy3Jc4RkY7HY3KuevmvT
+         m9qHI5FC4TDQ95fbWASCUTmUytF23WMcEnyX1oUxlzzN/7W8ZHm6J78U2qbctvgeO/a3
+         vxXxjouAiyqfUgtp4bnScyhgiVCStar9QX/x1bX67ChhPyK+6ODURakMl2wuwWHzlyZQ
+         39Kg==
+X-Gm-Message-State: AOAM530tmvl03XERRizxOMZ1I7s9Vr2UEzhlIgokXsaeTnrmnanyzLAW
+        dWYgxx/Y8NR5woDCK8WtMLA=
+X-Google-Smtp-Source: ABdhPJxt3nDqtx1ogf7NJXt4PCZFVicNi7Z27RLRla8Rc9UbhVU3A2DahhT7K45Y0OxSoBa8gHffjw==
+X-Received: by 2002:a05:6000:15ca:b0:20c:4f4b:84ee with SMTP id y10-20020a05600015ca00b0020c4f4b84eemr9794115wry.207.1653071681801;
+        Fri, 20 May 2022 11:34:41 -0700 (PDT)
 Received: from xws.localdomain (pd9e5a9fe.dip0.t-ipconnect.de. [217.229.169.254])
-        by smtp.gmail.com with ESMTPSA id r9-20020adfa149000000b0020e62feca05sm3252081wrr.32.2022.05.20.11.34.39
+        by smtp.gmail.com with ESMTPSA id r9-20020adfa149000000b0020e62feca05sm3252081wrr.32.2022.05.20.11.34.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 11:34:40 -0700 (PDT)
+        Fri, 20 May 2022 11:34:41 -0700 (PDT)
 From:   Maximilian Luz <luzmaximilian@gmail.com>
 To:     Hans de Goede <hdegoede@redhat.com>
 Cc:     Maximilian Luz <luzmaximilian@gmail.com>,
@@ -55,14 +55,14 @@ Cc:     Maximilian Luz <luzmaximilian@gmail.com>,
         Sebastian Reichel <sre@kernel.org>,
         Jiri Kosina <jikos@kernel.org>,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
         platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 00/10] platform/surface: aggregator: Add support for client hot-removal
-Date:   Fri, 20 May 2022 20:34:12 +0200
-Message-Id: <20220520183422.7185-1-luzmaximilian@gmail.com>
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 01/10] platform/surface: aggregator: Allow devices to be marked as hot-removed
+Date:   Fri, 20 May 2022 20:34:13 +0200
+Message-Id: <20220520183422.7185-2-luzmaximilian@gmail.com>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220520183422.7185-1-luzmaximilian@gmail.com>
+References: <20220520183422.7185-1-luzmaximilian@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -75,73 +75,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series adds support for the type cover of the Surface Pro 8. On the
-Pro 8, the type cover is (unlike on previous generations) handled via
-the Surface System Aggregator Module (SSAM). As the type cover is
-detachable, care needs to be taken and the respective SSAM (HID) client
-devices need to be properly removed when detached and re-initialized
-when attached.
+Some SSAM devices, notably the keyboard cover (keyboard and touchpad) on
+the Surface Pro 8, can be hot-removed. When this occurs, communication
+with the device may fail and time out. This timeout can unnecessarily
+block and slow down device removal and even cause issues when the
+devices are detached and re-attached quickly. Thus, communication should
+generally be avoided once hot-removal is detected.
 
-Therefore, this series does three things:
+While we already remove a device as soon as we detect its (hot-)removal,
+the corresponding device driver may still attempt to communicate with
+the device during teardown. This is especially critical as communication
+failure may also extend to disabling of events, which is typically done
+at that stage.
 
- 1. Improve hot-removal support for SSAM client devices. When
-    hot-removing clients, subsequent communication may time out.
+Add a flag to allow marking devices as hot-removed. This can then be
+used during client driver teardown to check if any communication
+attempts should be avoided.
 
-    In the worst case, this can lead to problems when devices are
-    detached and re-attached quickly, before we can remove their
-    respective kernel representations. This can then lead to devices
-    being in an uninitialized state, preventing, for example, touchpad
-    gestures from working properly as the required HID feature report
-    has not been sent.
+Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
+---
+ include/linux/surface_aggregator/device.h | 48 +++++++++++++++++++++--
+ 1 file changed, 45 insertions(+), 3 deletions(-)
 
-    Therefore, handle hot-removal of devices more gracefully by avoiding
-    communication once it has been detected and ensure that devices are
-    actually removed.
+diff --git a/include/linux/surface_aggregator/device.h b/include/linux/surface_aggregator/device.h
+index cc257097eb05..491aa7e9f4bc 100644
+--- a/include/linux/surface_aggregator/device.h
++++ b/include/linux/surface_aggregator/device.h
+@@ -148,17 +148,30 @@ struct ssam_device_uid {
+ #define SSAM_SDEV(cat, tid, iid, fun) \
+ 	SSAM_DEVICE(SSAM_DOMAIN_SERIALHUB, SSAM_SSH_TC_##cat, tid, iid, fun)
  
- 2. Generify SSAM subsystem hubs and add a KIP hub. On the Surface Pro
-    8, the KIP subsystem (only that abbreviation is known) is
-    responsible for managing type-cover devices. This hub acts as the
-    controller for device removal similar to the BAS (detachable base)
-    subsystem hub on the Surface Book 3 (therefore we can share most of
-    the code between them).
-
- 3. Add the (HID) type-cover clients of the Surface Pro 8 to the
-    aggregator registry.
-
-Regards,
-Max
-
-
-Maximilian Luz (10):
-  platform/surface: aggregator: Allow devices to be marked as
-    hot-removed
-  platform/surface: aggregator: Allow notifiers to avoid communication
-    on unregistering
-  platform/surface: aggregator_registry: Use client device wrappers for
-    notifier registration
-  power/supply: surface_charger: Use client device wrappers for notifier
-    registration
-  power/supply: surface_battery: Use client device wrappers for notifier
-    registration
-  HID: surface-hid: Add support for hot-removal
-  platform/surface: aggregator: Add comment for KIP subsystem category
-  platform/surface: aggregator_registry: Generify subsystem hub
-    functionality
-  platform/surface: aggregator_registry: Add KIP device hub
-  platform/surface: aggregator_registry: Add support for keyboard cover
-    on Surface Pro 8
-
- .../driver-api/surface_aggregator/client.rst  |   6 +-
- drivers/hid/surface-hid/surface_hid_core.c    |  38 +-
- .../platform/surface/aggregator/controller.c  |  53 ++-
- .../surface/surface_aggregator_registry.c     | 401 +++++++++++++-----
- drivers/power/supply/surface_battery.c        |   4 +-
- drivers/power/supply/surface_charger.c        |   4 +-
- include/linux/surface_aggregator/controller.h |  24 +-
- include/linux/surface_aggregator/device.h     | 114 ++++-
- include/linux/surface_aggregator/serial_hub.h |   2 +-
- 9 files changed, 501 insertions(+), 145 deletions(-)
-
++/*
++ * enum ssam_device_flags - Flags for SSAM client devices.
++ * @SSAM_DEVICE_HOT_REMOVED_BIT:
++ *	The device has been hot-removed. Further communication with it may time
++ *	out and should be avoided.
++ */
++enum ssam_device_flags {
++	SSAM_DEVICE_HOT_REMOVED_BIT = 0,
++};
++
+ /**
+  * struct ssam_device - SSAM client device.
+- * @dev:  Driver model representation of the device.
+- * @ctrl: SSAM controller managing this device.
+- * @uid:  UID identifying the device.
++ * @dev:   Driver model representation of the device.
++ * @ctrl:  SSAM controller managing this device.
++ * @uid:   UID identifying the device.
++ * @flags: Device state flags, see &enum ssam_device_flags.
+  */
+ struct ssam_device {
+ 	struct device dev;
+ 	struct ssam_controller *ctrl;
+ 
+ 	struct ssam_device_uid uid;
++
++	unsigned long flags;
+ };
+ 
+ /**
+@@ -240,6 +253,35 @@ struct ssam_device *ssam_device_alloc(struct ssam_controller *ctrl,
+ int ssam_device_add(struct ssam_device *sdev);
+ void ssam_device_remove(struct ssam_device *sdev);
+ 
++/**
++ * ssam_device_mark_hot_removed() - Mark the given device as hot-removed.
++ * @sdev: The device to mark as hot-removed.
++ *
++ * Mark the device as having been hot-removed. This signals drivers using the
++ * device that communication with the device should be avoided and may lead to
++ * timeouts.
++ */
++static inline void ssam_device_mark_hot_removed(struct ssam_device *sdev)
++{
++	dev_dbg(&sdev->dev, "marking device as hot-removed\n");
++	set_bit(SSAM_DEVICE_HOT_REMOVED_BIT, &sdev->flags);
++}
++
++/**
++ * ssam_device_is_hot_removed() - Check if the given device has been
++ * hot-removed.
++ * @sdev: The device to check.
++ *
++ * Checks if the given device has been marked as hot-removed. See
++ * ssam_device_mark_hot_removed() for more details.
++ *
++ * Return: Returns ``true`` if the device has been marked as hot-removed.
++ */
++static inline bool ssam_device_is_hot_removed(struct ssam_device *sdev)
++{
++	return test_bit(SSAM_DEVICE_HOT_REMOVED_BIT, &sdev->flags);
++}
++
+ /**
+  * ssam_device_get() - Increment reference count of SSAM client device.
+  * @sdev: The device to increment the reference count of.
 -- 
 2.36.1
 

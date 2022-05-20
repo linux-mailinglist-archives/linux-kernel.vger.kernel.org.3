@@ -2,64 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AC7A52F0CE
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 18:35:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3662D52F0D1
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 18:38:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351728AbiETQe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 12:34:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59344 "EHLO
+        id S1351709AbiETQiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 12:38:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351764AbiETQeo (ORCPT
+        with ESMTP id S1351701AbiETQiS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 12:34:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6813F18542B
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 09:34:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653064466;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DK0SAajG/TJcxOWS+cQ31l+UPExFSP3wmD0TKCGxiF0=;
-        b=QAuGfYB9u4q9uUyxYWsHqg1eI9EN0lErqR5Jg8ApJccYY/bhoWIjLqlUllXvrp5nGiDPRl
-        car+O2vn9azsDsnjQIP5WR2pgU/Bdw/h4wyd8Kds6p3eLE/rXb1Z5deO8ASP4P/QCB7ZQe
-        GpBl61auY/Ygyr2yFfyfDqOgmuSAZVA=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-643-4b26uAIAOMiYWcS3v1XITg-1; Fri, 20 May 2022 12:34:23 -0400
-X-MC-Unique: 4b26uAIAOMiYWcS3v1XITg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 67B4C29AB3F8;
-        Fri, 20 May 2022 16:34:23 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.8])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 95C442026D6A;
-        Fri, 20 May 2022 16:34:22 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH net 6/6] rxrpc: Fix decision on when to generate an IDLE ACK
-From:   David Howells <dhowells@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     Marc Dionne <marc.dionne@auristor.com>,
-        linux-afs@lists.infradead.org, dhowells@redhat.com,
-        linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org
-Date:   Fri, 20 May 2022 17:34:21 +0100
-Message-ID: <165306446189.34086.4230022096487746478.stgit@warthog.procyon.org.uk>
-In-Reply-To: <165306442115.34086.1818959430525328753.stgit@warthog.procyon.org.uk>
-References: <165306442115.34086.1818959430525328753.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.4
+        Fri, 20 May 2022 12:38:18 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87E8815EA56
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 09:38:15 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id ev18so8500415pjb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 09:38:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=hoJZvnIpBTxSS+NvK5QFvGTIhA7+7bok5vtz0bhr51E=;
+        b=i70QAriHRCuKmzqDL3P9nf1UtjVDnyiDgyTqJejByjqv/L8Kv1qoTJQXvGLfk70yvX
+         Oq3Fn4ev9BUK1uwAZzvEgD4JwT4kzpzK/KOTDjiKOA4MGKhFTP998zIlGF6Q0mDo8FBc
+         C5VZyhc0chgc8CkuGh/ftwdYcYIhwnIArBem+dV6nAYKmnDexobMoUrcreDmtIgqwY5n
+         6kpZoGoU/Cn3ZIJtUS/GZn055YuHPA9mfo195ydq3JYInViEg2HV7BrceTXCH8FpP80r
+         xgp9J//goYt1UVD3v1rooCPMmARZ5Ugzm5kOXiik8xylkkOCDax0Fcgdl7NB/oDaxPuU
+         nHuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=hoJZvnIpBTxSS+NvK5QFvGTIhA7+7bok5vtz0bhr51E=;
+        b=dwv9K1x2Mt+3YjtlXlIH17H2SUGmUSzN8q8zQ8ZJeniJJJ9B7pufTpfF4QfQzUTVDo
+         gRxb1t14DM4QcOTY+cnhpTKh0YwU7r7t9+CbcLj0OKE1r1KLGMxGwUmXaT/ZW6atOzJz
+         AOG0tYThhHEynErcRSJNTh9fjV2OqNzrFh/FCQvxmpYyMZ5HcH8SD7C3rtK0EJ/Mh6SV
+         uV33/Hf1NjN8kqiAPgVDQintTv/zaTcLG88z3E1ey4x7gJTCUUyTYnviwrsUbkHGAL1R
+         mpeOdUChIrm6aBldeqCj+nBZPKH2FCslxHSNF/lLbVMdiZKd9Fonz0jR1Hv9YiaYYW4C
+         O5IQ==
+X-Gm-Message-State: AOAM5303O1k2JdGB+8X93NLV7AL3BFUt7Hhw0IiQTXuvPawo2Jn3SWiy
+        pOHvPzNnEBTVQ5y6rDtU+FPvk8+vaSUUxA==
+X-Google-Smtp-Source: ABdhPJxzeHy0Jx00QELFfKUnZJ0Mg5mXTsPynx9erbgaKfJ+ckKpAhM3gTGkP0NvpYb65lyR1YbV+Q==
+X-Received: by 2002:a17:902:8683:b0:161:e5a5:e388 with SMTP id g3-20020a170902868300b00161e5a5e388mr7046393plo.167.1653064694972;
+        Fri, 20 May 2022 09:38:14 -0700 (PDT)
+Received: from [192.168.254.17] ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id s2-20020a17090a1c0200b001dd16b86fc0sm2106194pjs.19.2022.05.20.09.38.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 May 2022 09:38:13 -0700 (PDT)
+Message-ID: <489592f6-b783-7bdb-2cc8-0c8e35ebc674@linaro.org>
+Date:   Fri, 20 May 2022 09:38:12 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] cgroup: don't queue css_release_work if one already
+ pending
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Hillf Danton <hdanton@sina.com>, Michal Koutny <mkoutny@suse.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzbot+e42ae441c3b10acf9e9d@syzkaller.appspotmail.com
+References: <20220412192459.227740-1-tadeusz.struk@linaro.org>
+ <20220414164409.GA5404@blackbody.suse.cz> <YmHwOAdGY2Lwl+M3@slm.duckdns.org>
+ <20220422100400.GA29552@blackbody.suse.cz>
+ <20220519112319.2455-1-hdanton@sina.com>
+ <25fb057a-077f-b601-dcb7-130071c733db@linaro.org>
+ <YodNu2C5iHKW3UeZ@slm.duckdns.org>
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+In-Reply-To: <YodNu2C5iHKW3UeZ@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,162 +81,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the decision on when to generate an IDLE ACK by keeping a count of the
-number of packets we've received, but not yet soft-ACK'd, and the number of
-packets we've processed, but not yet hard-ACK'd, rather than trying to keep
-track of which DATA sequence numbers correspond to those points.
+On 5/20/22 01:13, Tejun Heo wrote:
+> On Thu, May 19, 2022 at 04:26:51PM -0700, Tadeusz Struk wrote:
+>> On 5/19/22 04:23, Hillf Danton wrote:
+>>> On Wed, 18 May 2022 09:48:21 -0700 Tadeusz Struk  wrote:
+>>>> On 4/22/22 04:05, Michal Koutny wrote:
+>>>>> On Thu, Apr 21, 2022 at 02:00:56PM -1000, Tejun Heo<tj@kernel.org>  wrote:
+>>>>>> If this is the case, we need to hold an extra reference to be put by the
+>>>>>> css_killed_work_fn(), right?
+>>> That put could trigger INIT_WORK in css_release() and warning [1]
+>>> on init active (active state 0) object OTOH as the same
+>>> css->destroy_work is used in both kill and release paths.
+> 
+> Hmm... wouldn't the extra reference keep release from happening?
+> 
+>> Will this help if there would be two WQs, one for the css_release path
+>> and one for the rcu_work?
+>>
+>> diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+>> index adb820e98f24..a4873b33e488 100644
+>> --- a/kernel/cgroup/cgroup.c
+>> +++ b/kernel/cgroup/cgroup.c
+>> @@ -124,6 +124,7 @@ DEFINE_PERCPU_RWSEM(cgroup_threadgroup_rwsem);
+>>    * which may lead to deadlock.
+>>    */
+>>   static struct workqueue_struct *cgroup_destroy_wq;
+>> +static struct workqueue_struct *cgroup_destroy_rcu_wq;
+> 
+> I don't understand why this would help. Care to elaborate?
 
-We then generate an ACK when either counter exceeds 2.  The counters are
-both cleared when we transcribe the information into any sort of ACK packet
-for transmission.  IDLE and DELAY ACKs are skipped if both counters are 0
-(ie. no change).
+I think it will help to solve the list corruption issue:
 
-Fixes: 805b21b929e2 ("rxrpc: Send an ACK after every few DATA packets we receive")
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Marc Dionne <marc.dionne@auristor.com>
-cc: linux-afs@lists.infradead.org
----
+list_add corruption. prev->next should be next (ffff8881f705c060), but was ffff888113123870. (prev=ffff888113123870).
+------------[ cut here ]------------
+kernel BUG at lib/list_debug.c:28!
 
- include/trace/events/rxrpc.h |    2 +-
- net/rxrpc/ar-internal.h      |    4 ++--
- net/rxrpc/input.c            |   11 +++++++++--
- net/rxrpc/output.c           |   18 +++++++++++-------
- net/rxrpc/recvmsg.c          |    8 +++-----
- 5 files changed, 26 insertions(+), 17 deletions(-)
+as this is a result of enqueuing the same css->destroy_work onto the same WQ,
+one on the rcu path and one on the css_release path.
+I will prototype it today and test with syzbot.
 
-diff --git a/include/trace/events/rxrpc.h b/include/trace/events/rxrpc.h
-index 4a3ab0ed6e06..1c714336b863 100644
---- a/include/trace/events/rxrpc.h
-+++ b/include/trace/events/rxrpc.h
-@@ -1509,7 +1509,7 @@ TRACE_EVENT(rxrpc_call_reset,
- 		    __entry->call_serial = call->rx_serial;
- 		    __entry->conn_serial = call->conn->hi_serial;
- 		    __entry->tx_seq = call->tx_hard_ack;
--		    __entry->rx_seq = call->ackr_seen;
-+		    __entry->rx_seq = call->rx_hard_ack;
- 			   ),
- 
- 	    TP_printk("c=%08x %08x:%08x r=%08x/%08x tx=%08x rx=%08x",
-diff --git a/net/rxrpc/ar-internal.h b/net/rxrpc/ar-internal.h
-index 8465985a4cb6..dce056adb78c 100644
---- a/net/rxrpc/ar-internal.h
-+++ b/net/rxrpc/ar-internal.h
-@@ -680,8 +680,8 @@ struct rxrpc_call {
- 	u8			ackr_reason;	/* reason to ACK */
- 	rxrpc_serial_t		ackr_serial;	/* serial of packet being ACK'd */
- 	rxrpc_seq_t		ackr_highest_seq; /* Higest sequence number received */
--	rxrpc_seq_t		ackr_consumed;	/* Highest packet shown consumed */
--	rxrpc_seq_t		ackr_seen;	/* Highest packet shown seen */
-+	atomic_t		ackr_nr_unacked; /* Number of unacked packets */
-+	atomic_t		ackr_nr_consumed; /* Number of packets needing hard ACK */
- 
- 	/* RTT management */
- 	rxrpc_serial_t		rtt_serial[4];	/* Serial number of DATA or PING sent */
-diff --git a/net/rxrpc/input.c b/net/rxrpc/input.c
-index 2e61545ad8ca..1145cb14d86f 100644
---- a/net/rxrpc/input.c
-+++ b/net/rxrpc/input.c
-@@ -412,8 +412,8 @@ static void rxrpc_input_data(struct rxrpc_call *call, struct sk_buff *skb)
- {
- 	struct rxrpc_skb_priv *sp = rxrpc_skb(skb);
- 	enum rxrpc_call_state state;
--	unsigned int j, nr_subpackets;
--	rxrpc_serial_t serial = sp->hdr.serial, ack_serial = 0;
-+	unsigned int j, nr_subpackets, nr_unacked = 0;
-+	rxrpc_serial_t serial = sp->hdr.serial, ack_serial = serial;
- 	rxrpc_seq_t seq0 = sp->hdr.seq, hard_ack;
- 	bool immediate_ack = false, jumbo_bad = false;
- 	u8 ack = 0;
-@@ -569,6 +569,8 @@ static void rxrpc_input_data(struct rxrpc_call *call, struct sk_buff *skb)
- 			sp = NULL;
- 		}
- 
-+		nr_unacked++;
-+
- 		if (last) {
- 			set_bit(RXRPC_CALL_RX_LAST, &call->flags);
- 			if (!ack) {
-@@ -588,9 +590,14 @@ static void rxrpc_input_data(struct rxrpc_call *call, struct sk_buff *skb)
- 			}
- 			call->rx_expect_next = seq + 1;
- 		}
-+		if (!ack)
-+			ack_serial = serial;
- 	}
- 
- ack:
-+	if (atomic_add_return(nr_unacked, &call->ackr_nr_unacked) > 2 && !ack)
-+		ack = RXRPC_ACK_IDLE;
-+
- 	if (ack)
- 		rxrpc_propose_ACK(call, ack, ack_serial,
- 				  immediate_ack, true,
-diff --git a/net/rxrpc/output.c b/net/rxrpc/output.c
-index 46aae9b7006f..9683617db704 100644
---- a/net/rxrpc/output.c
-+++ b/net/rxrpc/output.c
-@@ -74,11 +74,18 @@ static size_t rxrpc_fill_out_ack(struct rxrpc_connection *conn,
- 				 u8 reason)
- {
- 	rxrpc_serial_t serial;
-+	unsigned int tmp;
- 	rxrpc_seq_t hard_ack, top, seq;
- 	int ix;
- 	u32 mtu, jmax;
- 	u8 *ackp = pkt->acks;
- 
-+	tmp = atomic_xchg(&call->ackr_nr_unacked, 0);
-+	tmp |= atomic_xchg(&call->ackr_nr_consumed, 0);
-+	if (!tmp && (reason == RXRPC_ACK_DELAY ||
-+		     reason == RXRPC_ACK_IDLE))
-+		return 0;
-+
- 	/* Barrier against rxrpc_input_data(). */
- 	serial = call->ackr_serial;
- 	hard_ack = READ_ONCE(call->rx_hard_ack);
-@@ -223,6 +230,10 @@ int rxrpc_send_ack_packet(struct rxrpc_call *call, bool ping,
- 	n = rxrpc_fill_out_ack(conn, call, pkt, &hard_ack, &top, reason);
- 
- 	spin_unlock_bh(&call->lock);
-+	if (n == 0) {
-+		kfree(pkt);
-+		return 0;
-+	}
- 
- 	iov[0].iov_base	= pkt;
- 	iov[0].iov_len	= sizeof(pkt->whdr) + sizeof(pkt->ack) + n;
-@@ -259,13 +270,6 @@ int rxrpc_send_ack_packet(struct rxrpc_call *call, bool ping,
- 					  ntohl(pkt->ack.serial),
- 					  false, true,
- 					  rxrpc_propose_ack_retry_tx);
--		} else {
--			spin_lock_bh(&call->lock);
--			if (after(hard_ack, call->ackr_consumed))
--				call->ackr_consumed = hard_ack;
--			if (after(top, call->ackr_seen))
--				call->ackr_seen = top;
--			spin_unlock_bh(&call->lock);
- 		}
- 
- 		rxrpc_set_keepalive(call);
-diff --git a/net/rxrpc/recvmsg.c b/net/rxrpc/recvmsg.c
-index eca6dda26c77..250f23bc1c07 100644
---- a/net/rxrpc/recvmsg.c
-+++ b/net/rxrpc/recvmsg.c
-@@ -260,11 +260,9 @@ static void rxrpc_rotate_rx_window(struct rxrpc_call *call)
- 		rxrpc_end_rx_phase(call, serial);
- 	} else {
- 		/* Check to see if there's an ACK that needs sending. */
--		if (after_eq(hard_ack, call->ackr_consumed + 2) ||
--		    after_eq(top, call->ackr_seen + 2) ||
--		    (hard_ack == top && after(hard_ack, call->ackr_consumed)))
--			rxrpc_propose_ACK(call, RXRPC_ACK_DELAY, serial,
--					  true, true,
-+		if (atomic_inc_return(&call->ackr_nr_consumed) > 2)
-+			rxrpc_propose_ACK(call, RXRPC_ACK_IDLE, serial,
-+					  true, false,
- 					  rxrpc_propose_ack_rotate_rx);
- 		if (call->ackr_reason && call->ackr_reason != RXRPC_ACK_DELAY)
- 			rxrpc_send_ack_packet(call, false, NULL);
-
-
+-- 
+Thanks,
+Tadeusz

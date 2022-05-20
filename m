@@ -2,49 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7125352ED96
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 15:55:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95D9B52ED97
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 15:55:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350025AbiETNzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 09:55:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60038 "EHLO
+        id S1350033AbiETNzn convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 20 May 2022 09:55:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241236AbiETNy6 (ORCPT
+        with ESMTP id S238503AbiETNzk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 09:54:58 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3FA7A5EDC2
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 06:54:56 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5280B1477;
-        Fri, 20 May 2022 06:54:56 -0700 (PDT)
-Received: from bogus (unknown [10.57.66.157])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F11AF3F73D;
-        Fri, 20 May 2022 06:54:53 -0700 (PDT)
-Date:   Fri, 20 May 2022 14:54:47 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     Ionela Voinescu <ionela.voinescu@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        linux-kernel@vger.kernel.org, Atish Patra <atishp@rivosinc.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Qing Wang <wangqing@vivo.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v2 3/8] arch_topology: Set cluster identifier in each
- core/thread from /cpu-map
-Message-ID: <20220520135447.bvdipvgjuy4dx64d@bogus>
-References: <20220518093325.2070336-1-sudeep.holla@arm.com>
- <20220518093325.2070336-4-sudeep.holla@arm.com>
- <YoZ2gjjS3rbRaJZm@arm.com>
- <26f39a9d-1a02-b77d-5c89-88a1fb0e4eac@arm.com>
+        Fri, 20 May 2022 09:55:40 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9E77F5EDC2
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 06:55:38 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-191-mSqs0xGWPE6wZaF1FGSg6A-1; Fri, 20 May 2022 14:55:35 +0100
+X-MC-Unique: mSqs0xGWPE6wZaF1FGSg6A-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36; Fri, 20 May 2022 14:55:35 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.036; Fri, 20 May 2022 14:55:35 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Adrian Hunter' <adrian.hunter@intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+CC:     Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 2/5] libperf: Add preadn()
+Thread-Topic: [PATCH 2/5] libperf: Add preadn()
+Thread-Index: AQHYbEz0Y2PvIJt5EUyDSqCKvEJ6Ya0nyBWw
+Date:   Fri, 20 May 2022 13:55:35 +0000
+Message-ID: <de58fd1514d5477aaf144234aa096ab1@AcuMS.aculab.com>
+References: <20220520132404.25853-1-adrian.hunter@intel.com>
+ <20220520132404.25853-3-adrian.hunter@intel.com>
+In-Reply-To: <20220520132404.25853-3-adrian.hunter@intel.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <26f39a9d-1a02-b77d-5c89-88a1fb0e4eac@arm.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,88 +61,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 02:33:19PM +0200, Dietmar Eggemann wrote:
-> On 19/05/2022 18:55, Ionela Voinescu wrote:
-> > Hi,
-> > 
-> > As said before, this creates trouble for CONFIG_SCHED_CLUSTER=y.
-> > The output below is obtained from Juno.
-> > 
-> > When cluster_id is populated, a new CLS level is created by the scheduler
-> > topology code. In this case the clusters in DT determine that the cluster
-> > siblings and llc siblings are the same so the MC scheduler domain will
-> > be removed and, for Juno, only CLS and DIE will be kept.
+From: Adrian Hunter
+> Sent: 20 May 2022 14:24
 > 
-> [...]
+> Add preadn() to provide pread() and readn() semantics.
 > 
-> > To be noted that we also get a new flag SD_PREFER_SIBLING for the CLS
-> > level that is not appropriate. We usually remove it for the child of a
-> > SD_ASYM_CPUCAPACITY domain, but we don't currently redo this after some
-> > levels are degenerated. This is a fixable issue.
-> > 
-> > But looking at the bigger picture, a good question is what is the best
-> > thing to do when cluster domains and llc domains span the same CPUs?
-> > 
-> > Possibly it would be best to restrict clusters (which are almost an
-> > arbitrary concept) to always span a subset of CPUs of the llc domain,
-> > if llc siblings can be obtained? If those clusters are not properly set
-> > up in DT to respect this condition, cluster_siblings would need to be
-> > cleared (or set to the current CPU) so the CLS domain is not created at
-> > all.
-> > 
-> > Additionally, should we use cluster information from DT (cluster_id) to
-> > create an MC level if we don't have llc information, even if
-> > CONFIG_SCHED_CLUSTER=n?
-> > 
-> > I currently don't have a very clear picture of how cluster domains and
-> > llc domains would "live" together in a variety of topologies. I'll try
-> > other DT topologies to see if there are others that can lead to trouble.
+> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+> ---
+>  tools/lib/perf/include/internal/lib.h |  2 ++
+>  tools/lib/perf/lib.c                  | 20 ++++++++++++++++++++
+>  2 files changed, 22 insertions(+)
 > 
-> This would be an issue. Depending on CONFIG_SCHED_CLUSTER we would get
-> two different systems from the viewpoint of the scheduler.
->
+> diff --git a/tools/lib/perf/include/internal/lib.h b/tools/lib/perf/include/internal/lib.h
+> index 5175d491b2d4..85471a4b900f 100644
+> --- a/tools/lib/perf/include/internal/lib.h
+> +++ b/tools/lib/perf/include/internal/lib.h
+> @@ -9,4 +9,6 @@ extern unsigned int page_size;
+>  ssize_t readn(int fd, void *buf, size_t n);
+>  ssize_t writen(int fd, const void *buf, size_t n);
+> 
+> +ssize_t preadn(int fd, void *buf, size_t n, off_t offs);
+> +
+>  #endif /* __LIBPERF_INTERNAL_CPUMAP_H */
+> diff --git a/tools/lib/perf/lib.c b/tools/lib/perf/lib.c
+> index 18658931fc71..ecc8035a3ae3 100644
+> --- a/tools/lib/perf/lib.c
+> +++ b/tools/lib/perf/lib.c
+> @@ -38,6 +38,26 @@ ssize_t readn(int fd, void *buf, size_t n)
+>  	return ion(true, fd, buf, n);
+>  }
+> 
+> +ssize_t preadn(int fd, void *buf, size_t n, off_t offs)
+> +{
+> +	ssize_t ret;
+> +	off_t cur;
+> +
+> +	cur = lseek(fd, 0, SEEK_CUR);
+> +	if (cur < 0)
+> +		return -1;
+> +
+> +	if (lseek(fd, offs, SEEK_SET) < 0)
+> +		return -1;
+> +
+> +	ret = readn(fd, buf, n);
+> +
+> +	if (lseek(fd, cur, SEEK_CUR) < 0)
+> +		return -1;
+> +
+> +	return ret;
+> +}
 
-Agreed, but that is the issue with the change that updates cpu_coregroup_mask
-based on CONFIG_SCHED_CLUSTER, the one that we added recent for Ampere
-systems. Sorry, but I admit I was OK for the work around then but all
-these discussions has made to disagree with that change now.
+Please don't ever write that code, not ever.
+It isn't an implementation of pread().
 
-> To me `cluster_id/_sibling` don't describe a certain level of CPU
-> grouping (e.g. one level above core or one level below package).
->
+Oh, and shoot whoever put in into (IIRC) uclibc.
 
-True, but based on how it is extracted from the firmware todat(ACPI and DT
-with this series, it is one level above the cores.
+pread() needs to use the syscall, you cannot implement
+it in userspace.
 
-> They were introduced to describe one level below LLC (e.g. Kunpeng920 L3
-> (24 CPUs LLC) -> L3 tag (4 CPUs) or x86 Jacobsville L3 -> L2), (Commit
->                  ^^^^^^                                   ^^
-> c5e22feffdd7 ("topology: Represent clusters of CPUs within a die")).
->
+It is better to have the function missing that that version.
 
-Again correct, but the description of sysfs is what we need to rely on from
-now. If that is not clear, we need to make it clear. But I don't real bother
-much on how it is related to LLC as it is known to vary with different
-systems.
+There is a similar problem with clock_nanosleep() and TIMER_ABSTIME
+in glibc - completely broken emulation.
 
-> The Ampere Altra issue already gave us a taste of the possible issues of
-> this definition, commit db1e59483dfd ("topology: make core_mask include
-> at least cluster_siblings").
->
+	David
 
-Yes this is one I am referring above. I tend to disagree with that now.
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
-> If we link `cluster_id/_sibling` against (1. level) cpu-map cluster
-> nodes plus using llc and `cluster_sibling >= llc_sibling` we will run
-> into these issues.
-
-As I said you can't change the topology because it causes issues the
-way we build sched_domains. You need to figure how to build sched domains
-for such systems. If current set of domains or how the masks for each of
-the domains are derived is not sufficient or incorrect, we need to fix that.
-We are not changing topology masks for that, whatever the reason might be,
-sorry as these are userspace visible.
-
---
-Regards,
-Sudeep

@@ -2,99 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30E3252EF27
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 17:26:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17F7A52EF2B
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 17:27:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244444AbiETP0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 11:26:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36048 "EHLO
+        id S1350847AbiETP1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 11:27:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350887AbiETP01 (ORCPT
+        with ESMTP id S1345085AbiETP1N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 11:26:27 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21EB11A05D
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 08:26:25 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id bh5so7640633plb.6
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 08:26:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=8ckWBW9Fjr8xfgmBSfl+f9OgYv33qOKWhE+4JMMaKRw=;
-        b=YYKHGP0IgfoQO6iOkN2ka8HPPVxXUyAoEDo+2ihZzUth1zktKy9n8ZiIrmV3i6Pr5f
-         USXGGFoKspuxJPO0aMNObOuYCrsTSa2NpXp+464JfldeLFdnfFOZTf1ggDrjvjC5ocqm
-         nzPALDWD90tkwTwHmPzPN0kppGLCHWFL2t3x2432bxvN+tpRZiW0aNxwVkYBkWlgjMrw
-         a19vj/qDTkocip60j68nf4ZcF9Ma6xVFg7cfBczNrpOniGA0PT7awGCJRgxZupem+ZU5
-         LVxWS/TR7q+8RwxKwdEJ9lEhi+JUn+JXW+cKdGde9mFMZT6Frg00Hc4ruPUVinzJeDWw
-         V9Qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8ckWBW9Fjr8xfgmBSfl+f9OgYv33qOKWhE+4JMMaKRw=;
-        b=OLZi1jZP5aaELg999BPchQnCnd5UclGWJcTYhW9MdgNOEmqd72aMCWtkB/bTgm4SUN
-         qt6PBKkWW/dc/KAuh/RWDO99H4KfuECGUx4mm/Ih+QOYYT7ThK/ot9MGTMTs0SlD1yNs
-         4cJog0RziwIFGHLSeHO8UW3ncTZ8qHKkN+apCLDemTIcMVmbuTKVEurKAfRjOcGYG80d
-         USU584T7cwmMhqeVG3PKdP/pLVU4yDxIYBOJgKvUH3u9xSLQcphTGBi6gFtmzubenTiG
-         MMHIa7/zIWsnyhmQs4ai0FRlFsbowjrgCdEbIrnZqr3C10FCWnPdedW405wZ82Ertd+O
-         a7Hw==
-X-Gm-Message-State: AOAM5327Qnm8CCGBUm8BF95kL1kTvXZ+ecRadQ4zNq/QFMijzW7OOKBz
-        MK/+EgW0NRp6Sdyre05h17gsbQ==
-X-Google-Smtp-Source: ABdhPJyvH8cQUP9G2+GlRDfRUJU8C+SmDJDAAkcuc+H+1+M9X3nr7cpEqMmdgUw+vfbbiQeLFseMkw==
-X-Received: by 2002:a17:902:854c:b0:158:35ce:9739 with SMTP id d12-20020a170902854c00b0015835ce9739mr10156221plo.150.1653060384458;
-        Fri, 20 May 2022 08:26:24 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id u8-20020a1709026e0800b00161435e7475sm5843105plk.157.2022.05.20.08.26.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 08:26:23 -0700 (PDT)
-Date:   Fri, 20 May 2022 15:26:20 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Zeng Guang <guang.zeng@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        Gao Chao <chao.gao@intel.com>
-Subject: Re: [PATCH] KVM: x86: Inhibit APICv/AVIC when changing apic id/base
- from the defaults
-Message-ID: <YoezHLoQ3J2mjv1n@google.com>
-References: <20220520144656.25579-1-guang.zeng@intel.com>
+        Fri, 20 May 2022 11:27:13 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A95EE3C706
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 08:27:11 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5549B1477;
+        Fri, 20 May 2022 08:27:11 -0700 (PDT)
+Received: from bogus (unknown [10.57.66.157])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1E43C3F73D;
+        Fri, 20 May 2022 08:27:09 -0700 (PDT)
+Date:   Fri, 20 May 2022 16:27:02 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Ionela Voinescu <ionela.voinescu@arm.com>
+Cc:     Atish Patra <atishp@atishpatra.org>, linux-kernel@vger.kernel.org,
+        Atish Patra <atishp@rivosinc.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Qing Wang <wangqing@vivo.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v2 3/8] arch_topology: Set cluster identifier in each
+ core/thread from /cpu-map
+Message-ID: <20220520152702.ge3uxmizwljsg6mr@bogus>
+References: <20220518093325.2070336-1-sudeep.holla@arm.com>
+ <20220518093325.2070336-4-sudeep.holla@arm.com>
+ <YoZ2gjjS3rbRaJZm@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220520144656.25579-1-guang.zeng@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YoZ2gjjS3rbRaJZm@arm.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022, Zeng Guang wrote:
-> From: Maxim Levitsky <mlevitsk@redhat.com>
+On Thu, May 19, 2022 at 05:55:30PM +0100, Ionela Voinescu wrote:
+> Hi,
 > 
-> Neither of these settings should be changed by the guest and it is a burden
-> to support it in the acceleration code, so just inhibit APICv/AVIC in case
-> such rare cases happen.
+> As said before, this creates trouble for CONFIG_SCHED_CLUSTER=y.
+> The output below is obtained from Juno.
 > 
-> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> Signed-off-by: Zeng Guang <guang.zeng@intel.com>
-> ---
+> When cluster_id is populated, a new CLS level is created by the scheduler
+> topology code. In this case the clusters in DT determine that the cluster
+> siblings and llc siblings are the same so the MC scheduler domain will
+> be removed and, for Juno, only CLS and DIE will be kept.
+>
 
-All of my comments on Maxim's posting still apply[*].  At this point, unless Paolo
-wants wield his hammer of authority and do a bunch of fixup, the fastest way forward
-will be to wait for Maxim to respond and post patches 1-3 of that series separately.
+Yes I have seen that. 
 
-[*] https://lore.kernel.org/all/YoZrG3n5fgMp4LQl@google.com
+1. Will that differ with ACPI on juno ?
+
+2. Is that a problem ? I mean we are fixing those masks that are user
+visible with this series and if using them as is in sched domain is
+incorrect or not sufficient, we need to fix that. We can't change these
+masks.
+
+> root@debian-arm64-buster:/sys/kernel/debug/sched/domains/cpu1# grep . */*
+> domain0/busy_factor:16
+> domain0/cache_nice_tries:1
+> domain0/flags:SD_BALANCE_NEWIDLE SD_BALANCE_EXEC SD_BALANCE_FORK SD_WAKE_AFFINE SD_SHARE_PKG_RESOURCES SD_PREFER_SIBLING
+> domain0/imbalance_pct:117
+> domain0/max_interval:4
+> domain0/max_newidle_lb_cost:14907
+> domain0/min_interval:2
+> domain0/name:CLS
+> domain1/busy_factor:16
+> domain1/cache_nice_tries:1
+> domain1/flags:SD_BALANCE_NEWIDLE SD_BALANCE_EXEC SD_BALANCE_FORK SD_WAKE_AFFINE SD_ASYM_CPUCAPACITY SD_ASYM_CPUCAPACITY_FULL SD_PREFER_SIBLING
+> domain1/imbalance_pct:117
+> domain1/max_interval:12
+> domain1/max_newidle_lb_cost:11858
+> domain1/min_interval:6
+> domain1/name:DIE
+> 
+> To be noted that we also get a new flag SD_PREFER_SIBLING for the CLS
+> level that is not appropriate. We usually remove it for the child of a
+> SD_ASYM_CPUCAPACITY domain, but we don't currently redo this after some
+> levels are degenerated. This is a fixable issue.
+>
+
+OK good.
+
+> But looking at the bigger picture, a good question is what is the best
+> thing to do when cluster domains and llc domains span the same CPUs?
+>
+
+Indeed, I will leave that to scheduler experts 😉. My main goal is to get
+the topology masks that are user visible right and keeping current behavior
+intact.
+
+> Possibly it would be best to restrict clusters (which are almost an
+> arbitrary concept) to always span a subset of CPUs of the llc domain,
+> if llc siblings can be obtained? If those clusters are not properly set
+> up in DT to respect this condition, cluster_siblings would need to be
+> cleared (or set to the current CPU) so the CLS domain is not created at
+> all.
+>
+
+Yes, we already have all these complex conditions in cpu_coregroup_mask.
+Why not do something similar in cpu_clustergroup_mask ?
+
+> Additionally, should we use cluster information from DT (cluster_id) to
+> create an MC level if we don't have llc information, even if
+> CONFIG_SCHED_CLUSTER=n?
+>
+
+I don't know. We have all the topology and llc info now, we need to decide
+how to present them to scheduler.
+
+> I currently don't have a very clear picture of how cluster domains and
+> llc domains would "live" together in a variety of topologies. I'll try
+> other DT topologies to see if there are others that can lead to trouble.
+>
+
+Me neither. I avoided these changes for years because of such complex
+questions but that is wrong reason to, as the user visible topology has
+now diverged from ACPI once(people who complained about user space breakage
+cared only about ACPI) and we need to bring them in parity soon IMO.
+
+-- 
+Regards,
+Sudeep

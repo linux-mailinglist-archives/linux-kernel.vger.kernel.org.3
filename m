@@ -2,71 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0527952E1BB
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 03:16:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1FD252E1BF
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 03:16:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242719AbiETBMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 21:12:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37722 "EHLO
+        id S1344249AbiETBMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 21:12:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233927AbiETBMI (ORCPT
+        with ESMTP id S233927AbiETBMh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 21:12:08 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53465D028F
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 18:12:07 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-2ff53d86abbso54097387b3.8
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 18:12:07 -0700 (PDT)
+        Thu, 19 May 2022 21:12:37 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEADF1238A9
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 18:12:36 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2fb7cb07885so59540427b3.23
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 18:12:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+        d=google.com; s=20210112;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=n5cS25sYVuFEczR5InEOqfq3ordUksWT2DjtGnQiv1I=;
-        b=IVOumXMysYuVP3hBEt03ghAv0Y2h3QRTsWbkcmn8YbfeSCIEkha4CCpWv5wIbd3Y4c
-         MTwHFRbp4yBOxF+Rzz4V4qiGc0Q6LBK9bxVl3c8FZ+vGrZoP+eOuP7Ak0B04ZE97oPwq
-         Xy22eogpvvY2/b0ZPBuxGbbPpzlzFclsGlL6eKxqxFui3JR3nlpVlssqbqoDp3AFmeCI
-         2pr38TsZMsX/4rFbwupGtfAO7N98hfnFHYAOEOY32b3CVv9ZOyIyq1rpwhCT99nkWhvj
-         jXeCGFVE85MqKZONex5oBLRz4fd4i7Din1llMdqn+jx9MUnrh4wdyLVzRoFFwxKUkyIt
-         welQ==
+        bh=tRp9XwLCJd757nd6S6xrPEWJRWBLPfMUrN42v2RElFU=;
+        b=kLj1335gWXNqN3m0x4aikHu59YFs4w9jVsakDkYazDHkv7NdPPTHMDWcCBbO3/UU6H
+         C4koYXf/EG3VCj89YpQGoAsQcqkjWiUI4krLBCoyZ0vffn/xz7p+GjRLzkI0Djr3cUR7
+         icY3wNQnvbaXZORjv/+6eb+8c/8U5ZM0Sd2cE2skWOCrjurR8T/B9QDmAf8S1w48L3bR
+         87Z4HB468t+jYhTBRp28yYN2j311pzzKaC5m+TmiItPYKSuvb9j5Zd5tiOdshLhQ5Ts2
+         I54OjEYN9vXGiN83EaXLux5pHpSMsc31hiSPBrS5buR9BD8XZhC4mZXKH3ayBQ0DRmHS
+         IVJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=n5cS25sYVuFEczR5InEOqfq3ordUksWT2DjtGnQiv1I=;
-        b=rkXIuZJmZIb3EOVrml2n0QmghQaxwZjYZkzEaBJb1iGAD77st7dL63PJd2eNlEWtHo
-         Jo/wvTgLtMVbEy8b8NfDMsZwMucRAXWvWCxWwdxaH7yNENx+WDj0yF/+Pg35Nf09Qijt
-         wwpvyDRHce61f9On1Vj/JzQHuGiflSD0bhQhXq/qv3Ce1Ypf/4K2Ie5okEhpJ216o4zj
-         4PQurMXT4Yw2rUdZm+UhkWn58KPpOYEH5CtRwbYFzomGG86cauzeeLERMLif8LMhJ9ZI
-         5wZex6HZ0mJQ+v/e3XHXp7czYWKQ3RB/kT2XZ/hmbaL7Q1h/QdntAAe6eNleFotOPhto
-         BCgw==
-X-Gm-Message-State: AOAM533z5sgAbfbCHBwdXvy8/6s5KJ7gdFoxGogxRu6PDl30lVFyk7Pp
-        W2ax0oFFXPIg66VJOF9LRxzBRPl4oEjRJ6Uf1ULo76hU4zo=
-X-Google-Smtp-Source: ABdhPJx7XmMQykZgAGlmnjUSI/OaX0hDVcJ4Bsq84jt3xVdt69P5p0pFvTQakYQIX5y11fCvpms2TSqBR9tF8XoyO0k=
-X-Received: by 2002:a0d:d40e:0:b0:2ff:28a0:8d09 with SMTP id
- w14-20020a0dd40e000000b002ff28a08d09mr7780815ywd.256.1653009126594; Thu, 19
- May 2022 18:12:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220506121431.563656641@infradead.org> <20220506121631.293889636@infradead.org>
- <20220519162411.GA4095576@roeck-us.net> <20220519170009.GL2578@worktop.programming.kicks-ass.net>
- <20220519171129.enw32izjhxsqc2xm@treble> <20220519173538.nywtw2h3y7sqfojn@treble>
-In-Reply-To: <20220519173538.nywtw2h3y7sqfojn@treble>
-From:   Lai Jiangshan <jiangshanlai@gmail.com>
-Date:   Fri, 20 May 2022 09:11:55 +0800
-Message-ID: <CAJhGHyC0sztc2_jTT+U1M2+OSNxfNgmaKJyZgySwYqKM06q7hg@mail.gmail.com>
-Subject: Re: [PATCH 3/6] x86/entry: Use PUSH_AND_CLEAR_REGS for compat
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Guenter Roeck <linux@roeck-us.net>, X86 ML <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Borislav Petkov <bp@suse.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=tRp9XwLCJd757nd6S6xrPEWJRWBLPfMUrN42v2RElFU=;
+        b=ip0M2rioek4ZS4/e30es4xxqUPHMxFtKvnIjBgcrIiTpqoXpM4kCRK23muhd+i4wwn
+         DAnIxWDk5mEB8JG6ko35V5xn8ls0/co+7t95yk1S0Xyms/5JYLFn3kNWfQ9fQM5guJXb
+         bpGbpDdobnYaIU1gYKcLLiAxbxfeSo6BtsR6+ar8GwUqiD2FWYGe7GsO58/m+CI3yhHB
+         Gxg7SXFaLZNccO9gB5P6WuEVb9UrEX+3POQUbRXd1zmk8BC9UmZGHZ292D7iV4aDtj8D
+         gHGEB+nM1RLgKMv71qO6WISKJF7BBtW4t0DnhE37Fa50ZnOyA9LM4ZjRO2NaJN5vm39p
+         yNaQ==
+X-Gm-Message-State: AOAM531lBC/WMTrSkrVDEha/zv7HumBGdt8/lTjKcP5kPjNqvNJkqHXk
+        sHPeSUe+SzU5aAU+tAJdUjqLzyYkcBMr4Q==
+X-Google-Smtp-Source: ABdhPJyuiwPd0mGkX3bVtfcgfftvAb+9azlm4isHk7kCY2QP2shRGSH8dq+GIVT0R0Fjh1DkLbeEJW8MtvjZ4A==
+X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:28b])
+ (user=shakeelb job=sendgmr) by 2002:a25:1f85:0:b0:64b:a5fc:e881 with SMTP id
+ f127-20020a251f85000000b0064ba5fce881mr7404391ybf.514.1653009156066; Thu, 19
+ May 2022 18:12:36 -0700 (PDT)
+Date:   Fri, 20 May 2022 01:12:33 +0000
+In-Reply-To: <22ccf325-6aa5-9b55-4729-d03f34125650@openvz.org>
+Message-Id: <20220520011233.fxbqxcljfcrjk44n@google.com>
+Mime-Version: 1.0
+References: <Ynv7+VG+T2y9rpdk@carbon> <22ccf325-6aa5-9b55-4729-d03f34125650@openvz.org>
+Subject: Re: [PATCH 2/4] memcg: enable accounting for kernfs nodes and iattrs
+From:   Shakeel Butt <shakeelb@google.com>
+To:     Vasily Averin <vvs@openvz.org>
+Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
+        "Michal =?utf-8?Q?Koutn=C3=BD?=" <mkoutny@suse.com>,
+        kernel@openvz.org, linux-kernel@vger.kernel.org,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,23 +70,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 1:35 AM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
->
-> diff --git a/arch/x86/entry/entry_64_compat.S b/arch/x86/entry/entry_64_compat.S
-> index ed2be3615b50..f76e674d22c4 100644
-> --- a/arch/x86/entry/entry_64_compat.S
-> +++ b/arch/x86/entry/entry_64_compat.S
-> @@ -200,7 +200,7 @@ SYM_INNER_LABEL(entry_SYSCALL_compat_safe_stack, SYM_L_GLOBAL)
->  SYM_INNER_LABEL(entry_SYSCALL_compat_after_hwframe, SYM_L_GLOBAL)
->         movl    %eax, %eax              /* discard orig_ax high bits */
->         pushq   %rax                    /* pt_regs->orig_ax */
-> -       PUSH_AND_CLEAR_REGS rax=$-ENOSYS
-> +       PUSH_AND_CLEAR_REGS rcx=%rbp rax=$-ENOSYS
+On Fri, May 13, 2022 at 06:51:55PM +0300, Vasily Averin wrote:
+> kernfs nodes are quite small kernel objects, however there are few
+> scenarios where it consumes significant piece of all allocated memory:
+> 
+> 1) creating a new netdevice allocates ~50Kb of memory, where ~10Kb
+>    was allocated for 80+ kernfs nodes.
+> 
+> 2) cgroupv2 mkdir allocates ~60Kb of memory, ~10Kb of them are kernfs
+>    structures.
+> 
+> 3) Shakeel Butt reports that Google has workloads which create 100s
+>    of subcontainers and they have observed high system overhead
+>    without memcg accounting of kernfs.
+> 
+> It makes sense to enable accounting for kernfs objects, otherwise its
+> misuse inside memcg-limited can lead to global memory shortage,
+> OOM and random kills of host processes.
+> 
+> Signed-off-by: Vasily Averin <vvs@openvz.org>
 
-Some comments need to be here to explain why %rcx is stashed in %rbp.
+Acked-by: Shakeel Butt <shakeelb@google.com>
 
-The code doing the stash in userspace may be in
-arch/x86/entry/vdso/vdso32/system_call.S (see SYSCALL_SEQUENCE)
-
-Thanks
-Lai
+You can keep the ack if you decide to include simple_xattr_alloc() in
+following version or different patch.

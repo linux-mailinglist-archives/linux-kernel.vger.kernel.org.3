@@ -2,161 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FB3452EDDC
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 16:10:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5844552EDD2
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 16:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350145AbiETOKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 10:10:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33818 "EHLO
+        id S1350116AbiETOKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 10:10:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233069AbiETOKU (ORCPT
+        with ESMTP id S233069AbiETOKJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 10:10:20 -0400
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 813C91668A6;
-        Fri, 20 May 2022 07:10:18 -0700 (PDT)
-Received: by mail-vs1-xe35.google.com with SMTP id c26so8477058vsl.6;
-        Fri, 20 May 2022 07:10:18 -0700 (PDT)
+        Fri, 20 May 2022 10:10:09 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F219A166441
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 07:10:07 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id oe17-20020a17090b395100b001df77d29587so11615559pjb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 07:10:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7xlJ0095zgB0c2Vb8evf5eblS7KNjFsBRz7hA5cc4xk=;
-        b=F2adFm0dsksybi2rC6k+PIt076DVcea/Bd3N45htU6EsZqv1MmC95+sCQDslUJqtp+
-         1UTtP8FAs/s2Hr4RRaiXr/CW6VuR07LJ5aNDn1kTlxpIISVvJbQvigLbPcpb+/VsKuw7
-         t8lw4FfVrlH7WwYXRSwvgX32weXdKkRLbCvGFHD7rBDXVr1Q5WSvC8Otj8IZ5Fvelxuk
-         bhYnmp3KEixDXCDc9b+YK+wXR8uC+7yGs4dJiokFQ+Om0+GlC1YFr6dq3qj/4wTsZ5J+
-         mlJ8w0+XTB7cP4DnskE2lLCFPEc4Gumwy9vN4cxHh25yhvzu/xDmcYcZ/fFixXNC4BkC
-         XW4A==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fw/8xtbO/77OBVSsbwuLK/fJrTcZqfjeO9mMBE3hl1k=;
+        b=gYcU/o1YFIQi1HnR+Y3q2DETW8SRnpOTtKvaPRlWdUw8SXyEhJJ5FsSzpyvqLX70Q2
+         aKLsQ1y7qD6APz9gC++fXm6VqF1jjZp/F8HtkvNJxkSSrVpznuOLbeN4qwSJ8Tg8tmo1
+         I+GpQnSf8tTXh1KeOuthM1uF9X5XURipi7EByr8hFzeDE2h5Zf97LtHHFcGW9EblFQjz
+         W8E9djzuFqAeGb/Nc0dqueeJjkyhkFB+QhhLpZ8OD6w3Jh1Q08ju723iERuneVr8ZOZY
+         mhfgLuGY93oxAEg9PGFkHdTJgGKIG1I3e3GPm6mKJI70s89pfsv1koiCOdObrtBSWVi+
+         Tt4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7xlJ0095zgB0c2Vb8evf5eblS7KNjFsBRz7hA5cc4xk=;
-        b=JhFd6mc7OKAa27vkqeAgVJCVtyvASf5iCQqgVG4WRUn8vMYuMs6ARYX2CPglMAoJHf
-         J+yXkorhp/6cB3JKEh8t3C9cOUzzvVEKhQ6/RwKtf/uTdjd7C5jBuRc/PqrtoJ/C6pdh
-         V85MKimDBiFjOpakatRfqP0fXPJsblcx9gjR0nLUxive9eEgnkkecUPHaaW+OH9Dytzi
-         fspASuqiA418aTq2aWCXMvA118RRye8nwI+iJvmWS73hxHsdxffxV7FNm8qhHcSlnQ+v
-         /02rpmDFPja2HsMxCy4OyK5dF1vOa3lEx4Q1rHoUxArerPhiwXq+9NBSVaTTU9crxzgY
-         QBNw==
-X-Gm-Message-State: AOAM530HyJlY7xSRmMVoKjs5rqMQrE3NP+4xFYKbQalXB0/csJK/ztd1
-        8HfItTSnNNLj95BEPLkXljoH5yh0qMQLOjRyRuJb5EUkNVOak1ot
-X-Google-Smtp-Source: ABdhPJwMOpVVngVB9TKYcsUkabtpLsRVzOSIqPkMg89E3lfuVoGU22wXBvVzfFrEzkIrrUjt/KLQjQYOViE2Oykxv6s=
-X-Received: by 2002:a67:e1c4:0:b0:335:cdc4:395f with SMTP id
- p4-20020a67e1c4000000b00335cdc4395fmr4220006vsl.71.1653055817568; Fri, 20 May
- 2022 07:10:17 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fw/8xtbO/77OBVSsbwuLK/fJrTcZqfjeO9mMBE3hl1k=;
+        b=6V24/LoPaTfnh0wXiaFjZ7jkdhYUMAYUb530JsCzvBMNQRvV1MYKmgEFS/bJ0+DlKW
+         S2WjymGJwh3RSOkbBQWoRdMRJiVyVn0LFqNib1N/SlI/XeYHN1PuvL2HFOu5rnHDzyuA
+         AQVwdNtJTYH0x6BRPikFZZwfLvnTrx0LhXKW7fHKti2zDBre/rF/1f9Ob0575SqpPZRF
+         WT+DV3+WETNhpjUbqM8Gi7fjQZ3q3mdW7lzYt8KuBYD3ITwd4oSwi47d2q11W9hC5pCx
+         Z2pLse7okgudQ5H+iieSCkmnO5L3tI4641YvGxIptf8PhdxlMTuDW7lTBIjavYAHjeLE
+         7UXQ==
+X-Gm-Message-State: AOAM533jFKy0cU87mQaOOEqUiFgn7sxfDpm4javBFfKWbG3u/UmQipPn
+        EUEkTslKu+LVZ7NVd4K8VgM=
+X-Google-Smtp-Source: ABdhPJzJvN7g9pmdcRYb5DB4rQeYTQqtb6Hw2+Lxb/5SjziGcIgoR9HpxUh4hxsH1WgmC4Y8Hh3tLA==
+X-Received: by 2002:a17:902:cf4c:b0:161:e3aa:2708 with SMTP id e12-20020a170902cf4c00b00161e3aa2708mr6644949plg.127.1653055807490;
+        Fri, 20 May 2022 07:10:07 -0700 (PDT)
+Received: from f34-buildvm.eng.vmware.com ([66.170.99.2])
+        by smtp.googlemail.com with ESMTPSA id m11-20020a170902d18b00b0015ee985999dsm5624673plb.97.2022.05.20.07.10.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 May 2022 07:10:07 -0700 (PDT)
+From:   Shreenidhi Shedi <yesshedi@gmail.com>
+X-Google-Original-From: Shreenidhi Shedi <sshedi@vmware.com>
+To:     srivatsa@csail.mit.edu, amakhalov@vmware.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com
+Cc:     virtualization@lists.linux-foundation.org, pv-drivers@vmware.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org, yesshedi@gmail.com,
+        Shreenidhi Shedi <sshedi@vmware.com>
+Subject: [PATCH v2] x86/vmware: use unsigned integer for shifting
+Date:   Fri, 20 May 2022 19:39:54 +0530
+Message-Id: <20220520140954.597725-1-sshedi@vmware.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20220518092619.1269111-1-chenhuacai@loongson.cn>
- <20220518092619.1269111-10-chenhuacai@loongson.cn> <CAMj1kXEBVWi2ZdR5Le5-G0DA43u-AMxmSO=pVt39qwN=PkzQfw@mail.gmail.com>
- <0bae0df1-48ae-d02f-bce4-d1f69acf269e@redhat.com>
-In-Reply-To: <0bae0df1-48ae-d02f-bce4-d1f69acf269e@redhat.com>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Fri, 20 May 2022 22:09:18 +0800
-Message-ID: <CAAhV-H5dqNiecER3fChkBjQUGGszj6gwcpOFM1b4Kaax5vz27g@mail.gmail.com>
-Subject: Re: [PATCH V11 09/22] LoongArch: Add boot and setup routines
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-efi <linux-efi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Javier,
+From: Shreenidhi Shedi <yesshedi@gmail.com>
 
-On Fri, May 20, 2022 at 5:41 PM Javier Martinez Canillas
-<javierm@redhat.com> wrote:
->
-> Hello Ard and Huacai,
->
-> On 5/20/22 11:17, Ard Biesheuvel wrote:
->
-> [snip]
->
-> >> +
-> >> +static int __init register_gop_device(void)
-> >> +{
-> >> +       void *pd;
-> >> +
-> >> +       if (screen_info.orig_video_isVGA != VIDEO_TYPE_EFI)
-> >> +               return 0;
-> >> +       pd = platform_device_register_data(NULL, "efi-framebuffer", 0,
-> >> +                       &screen_info, sizeof(screen_info));
-> >> +       return PTR_ERR_OR_ZERO(pd);
-> >> +}
-> >> +subsys_initcall(register_gop_device);
-> >
-> > Not sure this is now the correct way to do this - cc'ing Javier.
-> >
->
-> Is not the correct way to do it indeed, that can just be dropped.
->
-> We have unified now all the system framebuffer platform device
-> registration under drivers/firmware/sysfb.c (and the EFI quirks
-> if needed under drivers/firmware/efi/sysfb_efi.c).
->
-> So the only thing that a platform should do, is to enable the
-> the CONFIG_SYSFB config option. The screen_info should be set
-> correctly from the EFI GOP, but it seems that's already working
-> since you were already using it in register_gop_device().
->
-> But also, the "efi-framebuffer" platform device matches against
-> the legacy efifb fbdev driver. And now there's a simpledrm driver
-> that is also able to use the firmware-provided framebuffer.
->
-> You can enable that driver with CONFIG_DRM_SIMPLEDRM.
->
-> That driver though doesn't match against "efi-framebuffer" but with
-> a "simple-framebuffer", to make sysfb register that instead of the
-> "efi-framebuffer" device, you need to set CONFIG_SYSFB_SIMPLEFB too.
->
-> If for some reasons you need to provide a fbdev interface to the
-> user-space, you can enable CONFIG_DRM_FBDEV_EMULATION to have that.
->
-> In summary, just enable the following to use the firmware framebuffer:
->
-> CONFIG_DRM_SIMPLEDRM=y
-> CONFIG_DRM_FBDEV_EMULATION=y
-> CONFIG_SYSFB=y
-> CONFIG_SYSFB_SIMPLEFB=y
-Thank you very much, since 5.15 sysfb_init() do all things of
-register_gop_device(), so register_gop_device() here can be removed.
-But there is another small problem: if simpledrm or efifb driver is
-built-in, there is no display. The reason is both sysfb_init() and
-display driver are in the same initcall level (device_initcall()).
-From the comments I know that sysfb_init() should after PCI
-enumeration which is in subsys_initcall(), so, could we make
-sysfb_init() to be a subsys_initcall_sync()?
+From: Shreenidhi Shedi <sshedi@vmware.com>
 
-Huacai
->
-> --
-> Best regards,
->
-> Javier Martinez Canillas
-> Linux Engineering
-> Red Hat
->
+Shifting signed 32-bit value by 31 bits is implementation-defined
+behaviour. Using unsigned is better option for this.
+
+Fixes: 4cca6ea04d31 ("x86/apic: Allow x2apic without IR on VMware platform")
+
+Signed-off-by: Shreenidhi Shedi <sshedi@vmware.com>
+---
+ arch/x86/kernel/cpu/vmware.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/kernel/cpu/vmware.c b/arch/x86/kernel/cpu/vmware.c
+index c04b933f48d3..cd809c5b17f0 100644
+--- a/arch/x86/kernel/cpu/vmware.c
++++ b/arch/x86/kernel/cpu/vmware.c
+@@ -28,6 +28,7 @@
+ #include <linux/cpu.h>
+ #include <linux/reboot.h>
+ #include <linux/static_call.h>
++#include <linux/bits.h>
+ #include <asm/div64.h>
+ #include <asm/x86_init.h>
+ #include <asm/hypervisor.h>
+@@ -476,8 +477,8 @@ static bool __init vmware_legacy_x2apic_available(void)
+ {
+ 	uint32_t eax, ebx, ecx, edx;
+ 	VMWARE_CMD(GETVCPU_INFO, eax, ebx, ecx, edx);
+-	return (eax & (1 << VMWARE_CMD_VCPU_RESERVED)) == 0 &&
+-	       (eax & (1 << VMWARE_CMD_LEGACY_X2APIC)) != 0;
++	return !(eax & BIT(VMWARE_CMD_VCPU_RESERVED)) &&
++		(eax & BIT(VMWARE_CMD_LEGACY_X2APIC))
+ }
+ 
+ #ifdef CONFIG_AMD_MEM_ENCRYPT
+-- 
+2.36.1
+

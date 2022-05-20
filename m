@@ -2,124 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93D6D52EFB6
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 17:51:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B23B52EFB8
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 17:52:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351119AbiETPvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 11:51:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54058 "EHLO
+        id S1351110AbiETPwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 11:52:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351150AbiETPvL (ORCPT
+        with ESMTP id S1350066AbiETPw3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 11:51:11 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C651626AD3
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 08:51:09 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id h13so1819539pfq.5
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 08:51:09 -0700 (PDT)
+        Fri, 20 May 2022 11:52:29 -0400
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4AF115FE05
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 08:52:27 -0700 (PDT)
+Received: by mail-ot1-x329.google.com with SMTP id v22-20020a05683011d600b0060aeae0b599so2475848otq.0
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 08:52:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=xfBgeP+UgAMyYfuiGkyqd7pK8/GplNN5B8Npca/gXrU=;
-        b=VWDoik0uRyKjQxUY61C7iGAe6NewO9iV3x6sawu7TsoWZFNg0exUyQsQbZdkCShwGz
-         +msUoQm+GBl3pOGflb6qYhg+63NIIpggONq3HuDEFsJcg+JiMxpHNzPRehtayeWt+Ppf
-         RMZJ5RffTkSyQKogyK4R+a1uzOpn+zTsjArt50tDFzVVA7b2MenSopjmCxKRi9iGz0JY
-         8YsCIotgZcYNdZWkM3mLU2IGuxfyMuoyk43kPLMfgQ7QbHydwWwLtmROtvX1BANjQ2aX
-         pIWiVM13riwmh3RlHhgGJhYKGI3xaWyIAdnaX2mG9/440NSAOLmbOpJOdgbH3Nc3+APq
-         tg4Q==
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=EhB/lv0xrW5Gf8DJlfv+KquZ+GUpeG3dg1zB16zvTWY=;
+        b=QnVwIWj338v0R9Yd4Lfmvj9Ay7nt1uNCKkpcLOoISy5VgilCmjqCAWQglpNwtSQAa8
+         CCDWDWsBE9iOGzDN10EUuWazb0nKKu8fw7ogTqXFDt4BYz9KtrEJHSgFtHRis1Je82PA
+         7VWrx0oPQf2L04S5h8I65b+vif08qSVT9Wj8yNcpJqBYSZ/O/JesHxJ/47AKqsM9apCE
+         mhZld7fAqIx+ra7agM6xCCNOy2qzEgQV4qxSzopSekQ/93F9i9YbZGcL9JRJsbukmlb6
+         U4Q57XgMzguK9BhALYV7mVXe8NsSxNKyOxyTz5d7G5zMY/Nbg64LlTYBOXTFny1e3Skt
+         nVJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
          :content-transfer-encoding;
-        bh=xfBgeP+UgAMyYfuiGkyqd7pK8/GplNN5B8Npca/gXrU=;
-        b=Ia9e451fLp8/2B49gHOwl1DwjSZO39VjAdf1/kkn8K7oZMiaRBpGpISkrqctorwC1i
-         0MfxEjwJevZEWTuPbu2LpbdzUijrGQa8DPSQyzazbsDpxX9MRKdpj14saMQtLjBjIjWw
-         mTViSWFZL2Oxn5XyakPJbH23C9hODFYHyHtjw9Gb9acgOgDXeybaZLy9z3Ngyb3YATfe
-         dNLl6YMsNbCB1l0bo5KOPvhtp9gVM1NQRj9vrAr2HaO97dVX4CXMLuZ1QFiuMHjNO42A
-         OCrRdhsCHWFBpux4Ai1DqlNW5OwNZKJZgQk1q3Pd5Gmioz+89RdeyVoSRPpHD8E8Vqvy
-         x4kg==
-X-Gm-Message-State: AOAM532lzTQoK3/f5EhN9jMQav4C59bLRnQBk2H1CyqpzpK3e3v/Z2l8
-        HY/l2kLEhpX0PWXsAhGOmJW4YA==
-X-Google-Smtp-Source: ABdhPJx3PTR2xhaonRPQCr6GbY4WTfB4A1+3Dl+CYKrHRj16/9CxH8VvST9+T1AR1q+bGFE9OtVJ+A==
-X-Received: by 2002:a63:1b49:0:b0:3f2:cf90:5ad4 with SMTP id b9-20020a631b49000000b003f2cf905ad4mr9019159pgm.450.1653061869174;
-        Fri, 20 May 2022 08:51:09 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id e21-20020aa79815000000b005104c6d7941sm1988370pfl.31.2022.05.20.08.51.06
+        bh=EhB/lv0xrW5Gf8DJlfv+KquZ+GUpeG3dg1zB16zvTWY=;
+        b=JV8GhKds71ZFtVyLzl2H1uyE7R25TyNBMut8k1nG+cZceW2JwOkleh7v4z3uXES+fk
+         Lrey/dMw5XZzRkXtuOQfRxd+1JPl4gFRJeoz1bl0pVrvLP2MsAdcX3eQvIxD5Ls7ib5J
+         DYIvyao6smXjJjXFZcOhrYT66U9t1Bp4yP3MKYxOx0ngQX2F4kU452oAHJ8qPzhieJbX
+         3/AAYR+9gepGhZeyjwT7KDOFaFZg2rmtDwl4vmVkbZmNMsEMaDmwougUVvONBnlaO4Zf
+         p+/aZyk0PMaCRnsHmXIaACryNz8xVanxulbBay9oGtIM1BjpAFPTudYd1td4R3nJzuMO
+         H8QQ==
+X-Gm-Message-State: AOAM5305xr59t9J15eT9fYoFVzXrdwJ8+g3odWMrwzhbkyN/neQuh0My
+        6RDXLxXMXVBgU7IshseJtqG+Kb7igk+hHQ==
+X-Google-Smtp-Source: ABdhPJzPQhsZNAvqPlF3cf7RihR+hJJzn6iTUSxKphaDRW0SDUR1FHp1DQqSM9ckZ6xXySN15vPBgQ==
+X-Received: by 2002:a9d:6e5:0:b0:60a:efd6:96b8 with SMTP id 92-20020a9d06e5000000b0060aefd696b8mr1555198otx.11.1653061946398;
+        Fri, 20 May 2022 08:52:26 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id h1-20020a056870a3c100b000ee3fdcb51esm1069146oak.8.2022.05.20.08.52.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 May 2022 08:51:07 -0700 (PDT)
-Message-ID: <72344aad-b5ad-b317-d36d-385cb16d5204@kernel.dk>
-Date:   Fri, 20 May 2022 09:51:06 -0600
+        Fri, 20 May 2022 08:52:24 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <e253a579-1388-7c23-6425-13b692815a38@roeck-us.net>
+Date:   Fri, 20 May 2022 08:52:22 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
-Subject: Re: [PATCH v4 0/3] random: convert to using iters, for Al Viro
 Content-Language: en-US
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Theodore Ts'o <tytso@mit.edu>, Christoph Hellwig <hch@lst.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>
-References: <20220520094459.116240-1-Jason@zx2c4.com>
- <Yoey+FOYO69lS5qP@zx2c4.com> <bbdeeca7-9c99-e661-6596-f04ea783a30b@kernel.dk>
- <Yoe3vFmqx4Yua0a1@zx2c4.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <Yoe3vFmqx4Yua0a1@zx2c4.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>
+References: <c15bedc83d90a14fffcd5b1b6bfb32b8a80282c5.1653057096.git.geert@linux-m68k.org>
+ <286a1eef-e857-a31f-839b-00a4c835dfa9@roeck-us.net>
+ <CAMuHMdX3EYrGPPUEZ3_YPyr6zHnV-xEW3mYB_QyFYaqg_grF-w@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH] m68k: atari: Make Atari ROM port I/O write macros return
+ void
+In-Reply-To: <CAMuHMdX3EYrGPPUEZ3_YPyr6zHnV-xEW3mYB_QyFYaqg_grF-w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/20/22 9:46 AM, Jason A. Donenfeld wrote:
-> Hi Jens,
+On 5/20/22 08:07, Geert Uytterhoeven wrote:
+> Hi Günter,
 > 
-> On Fri, May 20, 2022 at 09:34:46AM -0600, Jens Axboe wrote:
->> On 5/20/22 9:25 AM, Jason A. Donenfeld wrote:
->>> Are we sure we really want to do this and need to do this?
+> On Fri, May 20, 2022 at 4:52 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>> On 5/20/22 07:32, Geert Uytterhoeven wrote:
+>>> The macros implementing Atari ROM port I/O writes do not cast away their
+>>> output, unlike similar implementations for other I/O buses.
+>>> When they are combined using conditional expressions in the definitions of
+>>> outb() and friends, this triggers sparse warnings like:
+>>>
+>>>       drivers/net/appletalk/cops.c:382:17: error: incompatible types in conditional expression (different base types):
+>>>       drivers/net/appletalk/cops.c:382:17:    unsigned char
+>>>       drivers/net/appletalk/cops.c:382:17:    void
+>>>
+>>> Fix this by adding casts to "void".
+>>>
+>>> Reported-by: kernel test robot <lkp@intel.com>
+>>> Reported-by: Guenter Roeck <linux@roeck-us.net>
+>>> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
 >>
->> I'm very sure, otherwise we're just accepting that we're breaking real
->> world applications.
+>> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 > 
-> Would we really? I always thought splice() and copy_file_range() and
-> sendfile() were all kind of "special" in that they mostly do not work
-> for many things, and so all userspaces need fallback code. And the state
-> of "mostly not working" has always just been the norm. So broken today,
-> working tomorrow, broken next week would be par for the course? I might
-> be *super* wrong here, so feel free to say so, but this has been my
-> general impression.
+> Thanks!
+> 
+>>> Removing the casts instead causes issues with functions propagating void
+>>> return values (return expression in void function), which BTW sparse
+>>> complains about, too.
+>>
+>> We live and learn. I didn't even know that this was valid syntax.
+> 
+> I knew about the syntax, but didn't realize immediately why it was
+> done that way.
+> 
+> Initially I thought it was some relic from the "always cast to void
+> to make it clear you do not care about the return value"-frenzy, which
+> are inside Linux visible mostly in the various "(void)acpi_<foo>(...);"
+> calls.  AFAIK these are checked by some external tools.
+> In Linux, we have __must_check to annotate the important cases.
+> 
 
-No, I think that is exactly the wrong impression. If you have an
-application that is written using eg splice from /dev/urandom, then it
-should indeed be safe to expect that it will indeed continue working. If
-we have one core tenet in the kernel it's that you should ALWAYS be able
-to upgrade your kernel and not have any breakage in terms of userspace
-ABI. Obviously that can happen sometimes, but I think this one is
-exactly the poster child of breakage that should NOT happen. We took
-away a feature that someone depended on.
+I looked at the output of my coccinelle script. To me it looks like
+(almost ?) all of the code with "return f(...)" in a function returning
+void is just sloppy programming.
 
-This situation of splice being flakily availably is new from when it was
-decided that it was OK to only have it be available if ->read_iter() and
-->splice_read() is set. And that is very unfortunate.
+In case someone is interested, I attached the script I used below.
 
-> Anyway, I do like the idea of supporting splice() and sendfile(). The
-> performance hit is just kind of sad.
+Guenter
 
-I like the idea too, but this is deeper than that. We simply cannot just
-break existing use cases like that.
+---
+virtual report
 
-Thankfully we do have an option here as I outlined in the previous email
-- keep the ->read() and just add ->read_iter() on the side so that
-splice still works. Is that ideal? No, it needs more code to support.
-But hopefully that can die at some point when the performance gap is
-such that we no longer need to worry about having ->read() for those
-cases.
+@d@
+function f;
+expression e;
+position p;
+@@
 
--- 
-Jens Axboe
+void f(...)
+{
+     <...
+     return e@p;
+     ...>
+}
 
+@script:python depends on report@
+p << d.p;
+f << d.f;
+e << d.e;
+@@
+
+print "Return in void function %s() at %s:%s: %s" % (f, p[0].file, p[0].line, e)

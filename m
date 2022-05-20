@@ -2,74 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEF2E52ED11
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 15:26:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E583152ED29
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 15:32:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344996AbiETNZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 09:25:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37276 "EHLO
+        id S1349790AbiETNco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 09:32:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233476AbiETNZi (ORCPT
+        with ESMTP id S236825AbiETNck (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 09:25:38 -0400
-Received: from smtp2.infineon.com (smtp2.infineon.com [IPv6:2a00:18f0:1e00:4::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01C76149D87;
-        Fri, 20 May 2022 06:25:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
-  t=1653053136; x=1684589136;
-  h=message-id:date:mime-version:reply-to:subject:to:cc:
-   references:from:in-reply-to:content-transfer-encoding;
-  bh=ueeMunmKCP4jhgg4Syz+6Dr4CSdM4dVyt+HIIQmajf0=;
-  b=S8qVyzZb/73BfxTMjRyBc7CpPnxZnTses1oQ+3OQL5RYzmwxCxDQSpmt
-   pA4CgnwUeN1y5R934KPSSgZ6d87lQum3VEG/EzjoSGw2qkFF9GJIQQDtb
-   bdH9wsS9a1r+aX62IqHplhdUqt2+2HD0LeRPoIBAxuEyRLqStxOWK6oWE
-   Q=;
-X-SBRS: None
-X-IronPort-AV: E=McAfee;i="6400,9594,10353"; a="179009252"
-X-IronPort-AV: E=Sophos;i="5.91,239,1647298800"; 
-   d="scan'208";a="179009252"
-Received: from unknown (HELO mucxv001.muc.infineon.com) ([172.23.11.16])
-  by smtp2.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 15:25:34 +0200
-Received: from MUCSE805.infineon.com (MUCSE805.infineon.com [172.23.29.31])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 20 May 2022 09:32:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 858E57A830
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 06:32:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653053558;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=W9lUTIUy4WtCyayKKPomN8o880KWoRZmSGFT9az1YwM=;
+        b=iacYB/+OGiLyPB5AQiUSudOtl6BUI1o2aDpIL+lRWLPGWo/z/Q51sJzj1Mj2ofT1NdES5t
+        ukDZ2rj3WoXrfERLxzWCSoMVA/QOrcIbiVqtBHTllWe12wO7/+utwgEv2YqKxmjJieA3F6
+        RYjxZtLNToR+IyYaZht49AZs0VC6/cI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-253-roDXAEShN9KS248HMVjVJA-1; Fri, 20 May 2022 09:32:35 -0400
+X-MC-Unique: roDXAEShN9KS248HMVjVJA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mucxv001.muc.infineon.com (Postfix) with ESMTPS;
-        Fri, 20 May 2022 15:25:34 +0200 (CEST)
-Received: from MUCSE818.infineon.com (172.23.29.44) by MUCSE805.infineon.com
- (172.23.29.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 20 May
- 2022 15:25:34 +0200
-Received: from [10.165.68.46] (10.165.68.46) by MUCSE818.infineon.com
- (172.23.29.44) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 20 May
- 2022 15:25:33 +0200
-Message-ID: <51a14f28-ce94-ade9-6512-a265f7b32dfb@infineon.com>
-Date:   Fri, 20 May 2022 15:28:42 +0200
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CCCE81C04B54;
+        Fri, 20 May 2022 13:32:34 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 546C341136E1;
+        Fri, 20 May 2022 13:32:33 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>
+Subject: Re: [PATCH 0/2]  KVM: x86/mmu: nEPT X-only unsync bug fix
+Date:   Fri, 20 May 2022 09:31:16 -0400
+Message-Id: <20220520133115.3319985-1-pbonzini@redhat.com>
+In-Reply-To: <20220513195000.99371-1-seanjc@google.com>
+References: 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Reply-To: <stefan.mahnke-hartmann@infineon.com>
-Subject: Re: [PATCH] tpm: increase timeout for kselftests
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Johannes Holland <johannes.holland@infineon.com>
-CC:     <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <peterhuewe@gmx.de>, <jgg@ziepe.ca>,
-        <stefan.mahnke-hartmann@infineon.com>
-References: <20220510111607.22984-1-johannes.holland@infineon.com>
- <YnvSwJxOg+IZxrxz@kernel.org>
-From:   Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>
-Organization: Infineon Technologies AG
-In-Reply-To: <YnvSwJxOg+IZxrxz@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.165.68.46]
-X-ClientProxiedBy: MUCSE820.infineon.com (172.23.29.46) To
- MUCSE818.infineon.com (172.23.29.44)
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,50 +64,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Queued, thanks.  Here is the new message for patch 1:
 
+    All of sync_page()'s existing checks filter out only !PRESENT gPTE,
+    because without execute-only, all upper levels are guaranteed to be at
+    least READABLE.  However, if EPT with execute-only support is in use by
+    L1, KVM can create an SPTE that is shadow-present but guest-inaccessible
+    (RWX=0) if the upper level combined permissions are R (or RW) and
+    the leaf EPTE is changed from R (or RW) to X.  Because the EPTE is
+    considered present when viewed in isolation, and no reserved bits are set,
+    FNAME(prefetch_invalid_gpte) will consider the GPTE valid, and cause a
+    not-present SPTE to be created.
 
-On 11.05.22 17:14, Jarkko Sakkinen wrote:
-> On Tue, May 10, 2022 at 01:16:08PM +0200, Johannes Holland wrote:
->> Due to CreatePrimary commands which need to create RSA keys of
->> increasing size, the timeout value need to be raised, as well.
->> Default is 300s.
->>
->> Signed-off-by: Johannes Holland <johannes.holland@infineon.com>
->> ---
->> A timeout of anything below 600s still lead to occasional timeouts for
->> me. Therefore, I propose 600s as a new value. 
->>
->>  tools/testing/selftests/tpm2/settings | 2 ++
->>  1 file changed, 2 insertions(+)
->>  create mode 100644 tools/testing/selftests/tpm2/settings
->>
->> diff --git a/tools/testing/selftests/tpm2/settings b/tools/testing/selftests/tpm2/settings
->> new file mode 100644
->> index 000000000000..919bc3803f03
->> --- /dev/null
->> +++ b/tools/testing/selftests/tpm2/settings
->> @@ -0,0 +1,2 @@
->> +timeout=600
->> +
->> -- 
->> 2.34.1
->>
-> Could cope but I did not get why it needs to be raised.
+    The SPTE is "correct": the guest translation is inaccessible because
+    the combined protections of all levels yield RWX=0, and KVM will just
+    redirect any vmexits to the guest.  If EPT A/D bits are disabled, KVM
+    can mistake the SPTE for an access-tracked SPTE, but again such confusion
+    isn't fatal, as the "saved" protections are also RWX=0.  However,
+    creating a useless SPTE in general means that KVM messed up something,
+    even if this particular goof didn't manifest as a functional bug.
+    So, drop SPTEs whose new protections will yield a RWX=0 SPTE, and
+    add a WARN in make_spte() to detect creation of SPTEs that will
+    result in RWX=0 protections.
 
-The TPM2 SpaceTest testsuite currently creates 8 primary RSA 2k keys + 1 for
-setup. Generating a RSA2k key can take up to ~1-2 minutes on some of our TPMs.
-=> 2x9 = 18 minutes. In the kernel we even define a duration timeout for rsa2k
-keygen of 5 min per key! (TPM2_DURATION_LONG_LONG = 300000) => up to 45 minutes
-would be "acceptable".
+Paolo
 
-However since the average key generation time is much faster, a value of ~10
-minutes should be fine enough.
-
-The reason why you did not experience this yet on your test system is either
-because PTT TPMs are faster in that respect and/or some TPMs implement pre-gen
-mechanisms for key generation, (or just plain luck)
-
-BR, Stefan
-
-> BR, Jarkko
 

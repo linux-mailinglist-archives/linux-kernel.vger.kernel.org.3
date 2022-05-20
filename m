@@ -2,157 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3874952F35E
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 20:43:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AE7B52F35F
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 20:43:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352268AbiETSnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 14:43:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42172 "EHLO
+        id S1352999AbiETSnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 14:43:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353168AbiETSn1 (ORCPT
+        with ESMTP id S238179AbiETSnk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 14:43:27 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6FCF5E769
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 11:43:25 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id a22so7713697qkl.5
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 11:43:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :content-transfer-encoding:user-agent:mime-version;
-        bh=TTPdN7iV1g2+qrFg1rp0eZkNNp0LmZaEHviGZ0GRfMA=;
-        b=bD4NJK4/USmoyRzS1BTjWO3mZPFXPtD3q2w+NVUuHLb619v4bGi+kVJHaHYdR2RqgJ
-         ytLc8+AKjnW21VKWjdxZo1NSstNd1a3qj2USgsOq1VuyEgHF7qz6T5VfGHLBls6boLH6
-         Qa1pk1s6Ren8DUMjehUA2quoqAubLg2IcLRokqSvALoBnr9tW98dXfIovmfc+KOcfwiU
-         zqKzcTfQ+plsxoYuj5wtEnS735AlmuPLmY4ezaBCtg09ZX+r3cQ2kKXjTHiIEAaX05B+
-         u0ab/ZMujqECPEs8OWRgb0ndbawVWPIJhRDAyJVUalHDzhHEmL1tQ7Fh5+vmoejpI/vF
-         0Wmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:content-transfer-encoding:user-agent:mime-version;
-        bh=TTPdN7iV1g2+qrFg1rp0eZkNNp0LmZaEHviGZ0GRfMA=;
-        b=COFfcO220p19zosStFV6OPOfWSj40ZXrglm/rOZcxEeVWQJXjZOYFU1bDOzu/kYyiw
-         7j9tktczeadTAvfMNHnX8MO+mcDyfBQl+DZboH9Adv4XyAweARoydm/RTA2PPXBiX4kI
-         BypZKxM+I3OZvkYJ6mLXv+ds+42YC+xnXwqBVIsWRPsfjTStHgJHqbLLvhR+T9gL+fSO
-         m+sfLlH+eZlDAdmH7BG/+vs48yf/lFt4ZhYAsxN1u8AMHybIb5+QHwdyD9K+3z1vFScW
-         AKxEWwXCWDBvuGzZnaYvNsXPp4HfWls35OLuXnRmLzUUDyWjcXQlrWjvLKLsv9x5ShO8
-         74nw==
-X-Gm-Message-State: AOAM5318C1izd6r/8Mf3b6Xu1VUNWtRj4nmKukmSXtLI5DeDxOlJmsmL
-        HTr3r58QKv9zGTO9QeGLo2OaiLes/aNMbJLH
-X-Google-Smtp-Source: ABdhPJw/HiPUL5BMlrX2E+aFG0czQf/p6GA0oJOEjs0f/SYmPAOZugdgTzG2J+epz6v3PmuIpk4e1Q==
-X-Received: by 2002:a05:620a:4308:b0:67b:487e:e02a with SMTP id u8-20020a05620a430800b0067b487ee02amr7191021qko.696.1653072205118;
-        Fri, 20 May 2022 11:43:25 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (173-246-12-168.qc.cable.ebox.net. [173.246.12.168])
-        by smtp.gmail.com with ESMTPSA id w15-20020ac84d0f000000b002f90517bc25sm128616qtv.41.2022.05.20.11.43.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 11:43:24 -0700 (PDT)
-Message-ID: <5056559927df64d8cac8831a13db0c266e5fff65.camel@ndufresne.ca>
-Subject: Re: [PATCH v3 4/5] media: Add HEXTILE compressed format
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Marvin Lin <milkfafa@gmail.com>, mchehab@kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     openbmc@lists.ozlabs.org, avifishman70@gmail.com,
-        tmaimon77@gmail.com, tali.perry1@gmail.com, kwliu@nuvoton.com,
-        kflin@nuvoton.com
-Date:   Fri, 20 May 2022 14:43:22 -0400
-In-Reply-To: <20220520024744.25655-5-milkfafa@gmail.com>
-References: <20220520024744.25655-1-milkfafa@gmail.com>
-         <20220520024744.25655-5-milkfafa@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.1 (3.44.1-1.fc36) 
+        Fri, 20 May 2022 14:43:40 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B8425468E
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 11:43:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653072219; x=1684608219;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=K2pmBkR7HaYgM5K8jO0luWcfEyX30jduvESLhKA1EPY=;
+  b=lscPWBI4NJWA3siXxUZPt4zuDP+oerDBtdk237NL6iucveAfLW9GPdcY
+   db8rlYuUmfcBZgtqMMLnBu1+yfCboT+HUADmJZby5dhs/O8mQOI32vM80
+   73pYbaDcAxmWE8xO2uWYuaXfI3OR3OCgMTYKtZE61rOTNzojSm+2XCuhD
+   GyXLZhK0x52UTCgKjKjrSiskbbZ5SzYYzTlZOS/iWUIdcAEncwfrhOfpt
+   ujDf/k8cbYgA8bRYBZGSLmKWZV/eBeY2jpyRtXVuxm7SkfSp2RD9npmlE
+   8eStWsiMO7md4GXvbrvCkf7EX/kbOFJT51pBjT9jumOOdE1UaHkJnpahs
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10353"; a="333324966"
+X-IronPort-AV: E=Sophos;i="5.91,240,1647327600"; 
+   d="scan'208";a="333324966"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 11:43:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,240,1647327600"; 
+   d="scan'208";a="607143113"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga001.jf.intel.com with ESMTP; 20 May 2022 11:43:35 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id ABBC2109; Fri, 20 May 2022 21:43:35 +0300 (EEST)
+Date:   Fri, 20 May 2022 21:43:35 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@intel.com, luto@kernel.org, peterz@infradead.org,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, linux-kernel@vger.kernel.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        thomas.lendacky@amd.com, x86@kernel.org
+Subject: Re: [PATCHv2 3/3] x86/tdx: Handle load_unaligned_zeropad()
+ page-cross to a shared page
+Message-ID: <20220520184335.oygw2q3rov2go45b@black.fi.intel.com>
+References: <20220520031316.47722-1-kirill.shutemov@linux.intel.com>
+ <20220520031316.47722-4-kirill.shutemov@linux.intel.com>
+ <YofUMlc3ORYZ8if7@google.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YofUMlc3ORYZ8if7@google.com>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le vendredi 20 mai 2022 =C3=A0 10:47 +0800, Marvin Lin a =C3=A9crit=C2=A0:
-> Add HEXTILE compressed format. This format is defined in Remote Framebuff=
-er
-> Protocol (RFC 6143) and is used by Encoding Compression Engine present on
-> Nuvoton NPCM SoCs.
+On Fri, May 20, 2022 at 05:47:30PM +0000, Sean Christopherson wrote:
+> On Fri, May 20, 2022, Kirill A. Shutemov wrote:
+> > load_unaligned_zeropad() can lead to unwanted loads across page boundaries.
+> > The unwanted loads are typically harmless. But, they might be made to
+> > totally unrelated or even unmapped memory. load_unaligned_zeropad()
+> > relies on exception fixup (#PF, #GP and now #VE) to recover from these
+> > unwanted loads.
+> > 
+> > In TDX guests, the second page can be shared page and VMM may configure
+> > it to trigger #VE.
+> > 
+> > Kernel assumes that #VE on a shared page is MMIO access and tries to
+> > decode instruction to handle it. In case of load_unaligned_zeropad() it
+> > may result in confusion as it is not MMIO access.
+> > 
+> > Check fixup table before trying to handle MMIO.
+> > 
+> > The issue was discovered by analysis. It was not triggered during the
+> > testing.
+> > 
+> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> > ---
+> >  arch/x86/coco/tdx/tdx.c | 20 ++++++++++++++++++++
+> >  1 file changed, 20 insertions(+)
+> > 
+> > diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
+> > index 010dc229096a..1a1c8a92cfa5 100644
+> > --- a/arch/x86/coco/tdx/tdx.c
+> > +++ b/arch/x86/coco/tdx/tdx.c
+> > @@ -11,6 +11,8 @@
+> >  #include <asm/insn.h>
+> >  #include <asm/insn-eval.h>
+> >  #include <asm/pgtable.h>
+> > +#include <asm/trapnr.h>
+> > +#include <asm/extable.h>
+> >  
+> >  /* TDX module Call Leaf IDs */
+> >  #define TDX_GET_INFO			1
+> > @@ -299,6 +301,24 @@ static int handle_mmio(struct pt_regs *regs, struct ve_info *ve)
+> >  	if (WARN_ON_ONCE(user_mode(regs)))
+> >  		return -EFAULT;
+> >  
+> > +	/*
+> > +	 * load_unaligned_zeropad() relies on exception fixups in case of the
+> > +	 * word being a page-crosser and the second page is not accessible.
+> > +	 *
+> > +	 * In TDX guests, the second page can be shared page and VMM may
+> > +	 * configure it to trigger #VE.
+> > +	 *
+> > +	 * Kernel assumes that #VE on a shared page is MMIO access and tries to
+> > +	 * decode instruction to handle it. In case of load_unaligned_zeropad()
+> > +	 * it may result in confusion as it is not MMIO access.
+> 
+> The guest kernel can't know that it's not "MMIO", e.g. nothing prevents the host
+> from manually serving accesses to some chunk of shared memory instead of backing
+> the shared chunk with host DRAM.
 
-Ah, ancient RFB compression. I also found that there is encoder/decoders pa=
-rt of
-FFMPEG and GStreamer VMNC (VMWare CODECs) and also a decoder in GStreamer R=
-FB
-plugin. It is though an obsolete format for all of these technology, thanks=
- for
-identifying clearly.
+It would require the guest to access shared memory only with instructions
+that we can deal with. I don't think we have such guarantee.
 
-Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+> > +	 *
+> > +	 * Check fixup table before trying to handle MMIO.
+> 
+> This ordering is wrong, fixup should be done if and only if the instruction truly
+> "faults".  E.g. if there's an MMIO access lurking in the kernel that is wrapped in
+> exception fixup, then this will break that usage and provide garbage data on a read
+> and drop any write.
 
->=20
-> Signed-off-by: Marvin Lin <milkfafa@gmail.com>
-> ---
->  Documentation/userspace-api/media/v4l/pixfmt-reserved.rst | 7 +++++++
->  drivers/media/v4l2-core/v4l2-ioctl.c                      | 1 +
->  include/uapi/linux/videodev2.h                            | 1 +
->  3 files changed, 9 insertions(+)
->=20
-> diff --git a/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst b/=
-Documentation/userspace-api/media/v4l/pixfmt-reserved.rst
-> index cabfa34b7db5..bad2b9a2f16e 100644
-> --- a/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst
-> +++ b/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst
-> @@ -239,6 +239,13 @@ please make a proposal on the linux-media mailing li=
-st.
->  	It remains an opaque intermediate format and the MDP hardware must be
->  	used to convert ``V4L2_PIX_FMT_MT21C`` to ``V4L2_PIX_FMT_NV12M``,
->  	``V4L2_PIX_FMT_YUV420M`` or ``V4L2_PIX_FMT_YVU420``.
-> +    * .. _V4L2-PIX-FMT-HEXTILE:
-> +
-> +      - ``V4L2_PIX_FMT_HEXTILE``
-> +      - 'HXTL'
-> +      - Compressed format used by Nuvoton NPCM video driver. This format=
- is
-> +        defined in Remote Framebuffer Protocol (RFC 6143, chapter 7.7.4 =
-Hextile
-> +        Encoding).
->  .. raw:: latex
-> =20
->      \normalsize
-> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-co=
-re/v4l2-ioctl.c
-> index 96e307fe3aab..9365519d65bb 100644
-> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
-> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-> @@ -1441,6 +1441,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *f=
-mt)
->  		case V4L2_PIX_FMT_SE401:	descr =3D "GSPCA SE401"; break;
->  		case V4L2_PIX_FMT_S5C_UYVY_JPG:	descr =3D "S5C73MX interleaved UYVY/JP=
-EG"; break;
->  		case V4L2_PIX_FMT_MT21C:	descr =3D "Mediatek Compressed Format"; break=
-;
-> +		case V4L2_PIX_FMT_HEXTILE:	descr =3D "Hextile Compressed Format"; brea=
-k;
->  		default:
->  			if (fmt->description[0])
->  				return;
-> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev=
-2.h
-> index 3768a0a80830..1c7af015b43b 100644
-> --- a/include/uapi/linux/videodev2.h
-> +++ b/include/uapi/linux/videodev2.h
-> @@ -746,6 +746,7 @@ struct v4l2_pix_format {
->  #define V4L2_PIX_FMT_INZI     v4l2_fourcc('I', 'N', 'Z', 'I') /* Intel P=
-lanar Greyscale 10-bit and Depth 16-bit */
->  #define V4L2_PIX_FMT_CNF4     v4l2_fourcc('C', 'N', 'F', '4') /* Intel 4=
--bit packed depth confidence information */
->  #define V4L2_PIX_FMT_HI240    v4l2_fourcc('H', 'I', '2', '4') /* BTTV 8-=
-bit dithered RGB */
-> +#define V4L2_PIX_FMT_HEXTILE  v4l2_fourcc('H', 'X', 'T', 'L') /* Hextile=
- compression */
-> =20
->  /* 10bit raw bayer packed, 32 bytes for every 25 pixels, last LSB 6 bits=
- unused */
->  #define V4L2_PIX_FMT_IPU3_SBGGR10	v4l2_fourcc('i', 'p', '3', 'b') /* IPU=
-3 packed 10-bit BGGR bayer */
+When I tried to trigger the bug, the #VE actually succeed, because
+load_unaligned_zeropad() uses instruction we can decode. But due
+misalignment, the part of that came from non-shared page got overwritten
+with data that came from VMM.
 
+I guess we can try to detect misaligned accesses and handle them
+correctly. But it gets complicated and easer to screw up.
+
+Do we ever use exception fixups for MMIO accesses to justify the
+complication?
+
+-- 
+ Kirill A. Shutemov

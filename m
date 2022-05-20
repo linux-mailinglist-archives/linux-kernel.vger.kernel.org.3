@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42E2652EC55
+	by mail.lfdr.de (Postfix) with ESMTP id 8F81852EC56
 	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 14:41:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349369AbiETMky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 08:40:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35010 "EHLO
+        id S1349452AbiETMlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 08:41:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349276AbiETMkv (ORCPT
+        with ESMTP id S242225AbiETMkv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 20 May 2022 08:40:51 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A392DD6;
-        Fri, 20 May 2022 05:40:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3B9EF2;
+        Fri, 20 May 2022 05:40:45 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: kholk11)
-        with ESMTPSA id 7F4261F462A8
+        with ESMTPSA id 39C0C1F462AB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
         s=mail; t=1653050443;
-        bh=xWMNR+zE+UnsdH+9w2byRvIquFAh3MbREE3UdlA2/kw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=eZa/Mw01gwpR5TW2F0uF/2dR9lSUFwkMtgGkX5+74375/19+cXM3TmNM1Y/4yfH8A
-         nUX/owvhX/WQE0lBu3nnf9ojmkg71Os26Xgx/pXC2Al30rxd1EGDTWWiyCAfs5+Ufs
-         5xAD92MHp6keq828bjx2tkC4mgx0XcuX8xX5bsFoSOMG6NhnZcDfBElzsLoiTKOJUr
-         EayO3WQfU/vRIhPhiO+rVA2zhwxPm7N/rJWZiDFSKdvVtLZAJOATke/0lCCUg6KVsu
-         i3nwyqKgXFg9U8uJvQJVjF28yUMbOTRSO/ne7jJJuvrMzHOI15PPngogFtgeGbD0Ql
-         d6XSX5MN4143w==
+        bh=1cI7pJdMnTRIrjJ1RulEP49MI5dUM/5mesdNO1GWVz4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=L0tAkU63Gsv6F35bpHi7VC2t0gJZXQNisR3r2SkQXYnbYmOLl8m1uBpD+9P8Rn8Cg
+         QCK0OPu9l6rX7bmbRnLWsDp+WAOjlUg+eaKbfMG9xS37+4uTNfn9nDXkosP5wiPhQj
+         SOMb+swpYgtORdI3xg6n32hrank1MYBliryTbwtr1UtmKdp4on/oCL2ApOoo6cFTtc
+         XexakscSvOEYUUsLtsucBJAFmkDhp0bGlCtKOn6MdpYuBq4q3AVxcnxhtEy1eEoQUh
+         38r3B3+12vgkLpEwEJUNK1avcv24xDWYmxvT7Rx2uq4enQJAU8sLWEmicST2fvbMtc
+         boLckHEBkraRw==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     lee.jones@linaro.org
@@ -37,10 +37,12 @@ Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         johnson.wang@mediatek.com, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 0/7] MediaTek Helio X10 MT6795 - MT6331/6332 PMIC Wrapper
-Date:   Fri, 20 May 2022 14:40:32 +0200
-Message-Id: <20220520124039.228314-1-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH 1/7] soc: mediatek: pwrap: Move PMIC read test sequence in function
+Date:   Fri, 20 May 2022 14:40:33 +0200
+Message-Id: <20220520124039.228314-2-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220520124039.228314-1-angelogioacchino.delregno@collabora.com>
+References: <20220520124039.228314-1-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -53,40 +55,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In an effort to give some love to the apparently forgotten MT6795 SoC,
-I am upstreaming more components that are necessary to support platforms
-powered by this one apart from a simple boot to serial console.
+The PMIC read test is performed in two places: pwrap_init_dual_io()
+and pwrap_init_sidly().
+In preparation for adding support for PMICs requiring a companion
+part, move this sequence to a new function pwrap_pmic_read_test().
 
-This series introduces support in the PMIC Wrapper for a different PMIC
-topology, which is commonly found on smartphone boards, using one main
-PMIC and one Companion PMIC;
-be aware that this kind of topology is not *specific to* the Helio X10
-SoC, but common across many kinds of MediaTek smartphone oriented SoCs
-and board designs.
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ drivers/soc/mediatek/mtk-pmic-wrap.c | 32 +++++++++++++++++-----------
+ 1 file changed, 20 insertions(+), 12 deletions(-)
 
-That said, support for the PMIC combo MT6331+MT6332 is provided in this
-series in a form that will be able to initialize the PMICs with crypto
-and DualIO but nothing else: these PMICs are very featureful, so I have
-decided to add this support in more than just one step, as there will
-be multiple patches for multiple different subsystems (..it's a mfd!..).
-
-Tested on a MT6795 Sony Xperia M5 (codename "Holly") smartphone.
-
-AngeloGioacchino Del Regno (7):
-  soc: mediatek: pwrap: Move PMIC read test sequence in function
-  soc: mediatek: pwrap: Add kerneldoc for struct pwrap_slv_type
-  soc: mediatek: mtk-pmic-wrap: Add support for companion PMICs
-  dt-bindings: mfd: Add compatible for MT6331 PMIC
-  soc: mediatek: mtk-pmic-wrap: Add support for MT6331 w/ MT6332
-    companion
-  dt-bindings: mediatek: pwrap: Add a compatible for MT6795 Helio X10
-  soc: mediatek: pwrap: Add support for MT6795 Helio X10
-
- .../devicetree/bindings/mfd/mt6397.txt        |   1 +
- .../bindings/soc/mediatek/pwrap.txt           |   1 +
- drivers/soc/mediatek/mtk-pmic-wrap.c          | 287 ++++++++++++++++--
- 3 files changed, 263 insertions(+), 26 deletions(-)
-
+diff --git a/drivers/soc/mediatek/mtk-pmic-wrap.c b/drivers/soc/mediatek/mtk-pmic-wrap.c
+index d8cb0f833645..d0c79ee4c56b 100644
+--- a/drivers/soc/mediatek/mtk-pmic-wrap.c
++++ b/drivers/soc/mediatek/mtk-pmic-wrap.c
+@@ -1390,6 +1390,18 @@ static int pwrap_regmap_write(void *context, u32 adr, u32 wdata)
+ 	return pwrap_write(context, adr, wdata);
+ }
+ 
++static bool pwrap_pmic_read_test(struct pmic_wrapper *wrp, const u32 *dew_regs,
++				 u16 read_test_val)
++{
++	bool is_success;
++	u32 rdata;
++
++	pwrap_read(wrp, dew_regs[PWRAP_DEW_READ_TEST], &rdata);
++	is_success = ((rdata & U16_MAX) == read_test_val);
++
++	return is_success;
++}
++
+ static int pwrap_reset_spislave(struct pmic_wrapper *wrp)
+ {
+ 	bool tmp;
+@@ -1433,18 +1445,18 @@ static int pwrap_reset_spislave(struct pmic_wrapper *wrp)
+  */
+ static int pwrap_init_sidly(struct pmic_wrapper *wrp)
+ {
+-	u32 rdata;
+ 	u32 i;
+ 	u32 pass = 0;
++	bool read_ok;
+ 	signed char dly[16] = {
+ 		-1, 0, 1, 0, 2, -1, 1, 1, 3, -1, -1, -1, 3, -1, 2, 1
+ 	};
+ 
+ 	for (i = 0; i < 4; i++) {
+ 		pwrap_writel(wrp, i, PWRAP_SIDLY);
+-		pwrap_read(wrp, wrp->slave->dew_regs[PWRAP_DEW_READ_TEST],
+-			   &rdata);
+-		if (rdata == PWRAP_DEW_READ_TEST_VAL) {
++		read_ok = pwrap_pmic_read_test(wrp, wrp->slave->dew_regs,
++					       PWRAP_DEW_READ_TEST_VAL);
++		if (read_ok) {
+ 			dev_dbg(wrp->dev, "[Read Test] pass, SIDLY=%x\n", i);
+ 			pass |= 1 << i;
+ 		}
+@@ -1464,8 +1476,7 @@ static int pwrap_init_sidly(struct pmic_wrapper *wrp)
+ static int pwrap_init_dual_io(struct pmic_wrapper *wrp)
+ {
+ 	int ret;
+-	bool tmp;
+-	u32 rdata;
++	bool read_ok, tmp;
+ 
+ 	/* Enable dual IO mode */
+ 	pwrap_write(wrp, wrp->slave->dew_regs[PWRAP_DEW_DIO_EN], 1);
+@@ -1481,12 +1492,9 @@ static int pwrap_init_dual_io(struct pmic_wrapper *wrp)
+ 	pwrap_writel(wrp, 1, PWRAP_DIO_EN);
+ 
+ 	/* Read Test */
+-	pwrap_read(wrp,
+-		   wrp->slave->dew_regs[PWRAP_DEW_READ_TEST], &rdata);
+-	if (rdata != PWRAP_DEW_READ_TEST_VAL) {
+-		dev_err(wrp->dev,
+-			"Read failed on DIO mode: 0x%04x!=0x%04x\n",
+-			PWRAP_DEW_READ_TEST_VAL, rdata);
++	read_ok = pwrap_pmic_read_test(wrp, wrp->slave->dew_regs, PWRAP_DEW_READ_TEST_VAL);
++	if (!read_ok) {
++		dev_err(wrp->dev, "Read failed on DIO mode.\n");
+ 		return -EFAULT;
+ 	}
+ 
 -- 
 2.35.1
 

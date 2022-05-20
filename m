@@ -2,120 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A904252F587
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 00:14:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCFA652F58D
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 00:16:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353841AbiETWOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 18:14:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60230 "EHLO
+        id S1353846AbiETWQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 18:16:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237957AbiETWOE (ORCPT
+        with ESMTP id S235214AbiETWQV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 18:14:04 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2A7B1994A0
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 15:14:03 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id ck4so13687764ejb.8
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 15:14:03 -0700 (PDT)
+        Fri, 20 May 2022 18:16:21 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 459E36D4F8
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 15:16:20 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id er5so12349921edb.12
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 15:16:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=h8tpGS9iPyKDrTF/Et0aFlq3MSSltBoAHnWZACQjZfY=;
-        b=RwcGky0voHc/fdP+XpSWj5VgRxzbty/vsT0v3kQ/FFGLnkT6+48yZN8FMS4Kj09vxQ
-         ZS+FYr3FSM0z8sZW9NB+Ru1hFavloOc2r9NLNRwmxZGDtI+Ghe/b8ew5uO046ARAg22T
-         Rea9zXk4YW2WSF24FPMLUDQuIDyZ+1cqPTXauI9lgOnnHZ315+fXHuG1JzKcK92hN31D
-         3xDEB16UO7IUwuowxv2mZr1e6/buZLk/ENm7Rh4ll5cAYzkTwImCAMzx/0lSaDS5+Ek3
-         gtSKXXtRx0EHL6FmHeE6pKtJwdlOb16+rDSJQ92hi9O9Vhn7LTOtE2xMKwMvl5/Ew9VA
-         muCA==
+        bh=Xvie0QExXbdO9a6ZetpQ6DoZ8RHzFGI7AHEhn57vJjo=;
+        b=b0LWh1jkiwtCTs7/NY5t9cERb0AJv432EorW/6rJ05w/AT0CTG5+oyybm3cf5ei2rH
+         mUBjXpXoPNZ9pdd2a/OTiuTn0l25LBjH8JcvbQza4Hp0GCHknr9rLKGBVN0yFZ21sbVv
+         KvyQap+JZT9Qt3hfwV4wMkZb/MBoSVAX2rvsY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=h8tpGS9iPyKDrTF/Et0aFlq3MSSltBoAHnWZACQjZfY=;
-        b=ydpdhex2I0AFnv5legtrS/dB6TOBb4RcRUgs9LusLU+RF2SQvdwmAIkW1EqhGvfWP/
-         4uHHGLbKHJdOIY09aiKIjuUGhEQoJaXfhrIqxMIGVRyvxmhqc6vNTemQw7v0Z/TjCIog
-         ad4eVgGhgXYLjPxYXRs5X8pHNPPWCcK1GFTua4ZD5ITDMngs3/pBqP1sM+q3sdWdhNyV
-         ywueOp2VbDQUKguEw+Tt+SX459+EHyRkiqHBanjvVHn/gc4pCWnmWg0P5LBwJEQOFd/E
-         47pBGvunNxCcRAlckiv+FMm4WGe0I2+0dtcXjNVKUspTGZkGm+sWPSHnhHA2nkt+L9Sb
-         rWXA==
-X-Gm-Message-State: AOAM532Z+RJzXK+xJaD9uZRxGLLIF2KP88j+v160pZVMJDVm1ziqjdqR
-        B9kXJSyG1NKoJopLGYGgdQ7lXl0h6/kMjFnXnPk2zw==
-X-Google-Smtp-Source: ABdhPJwrzYFXTBosi+kTvEClQu5KzH42K5CwiLg8OXhcoiR2js/3XnjiS7QMhxK7oi2Gjqyla1h/SD1k45HtUiruwjw=
-X-Received: by 2002:a17:907:3ea9:b0:6fe:b416:fe20 with SMTP id
- hs41-20020a1709073ea900b006feb416fe20mr3518012ejc.358.1653084842100; Fri, 20
- May 2022 15:14:02 -0700 (PDT)
+        bh=Xvie0QExXbdO9a6ZetpQ6DoZ8RHzFGI7AHEhn57vJjo=;
+        b=zQovzGCZOPvs0Sn4ORawnn3BaFyuIfUxUiidew0oS60afT6480Zutg1slr/IHgOPwT
+         EQs3hBFPd8AdBvH9ZQB8jUdW25agTVb2jRXklOgcdD4NVznpGgaLog9TYvHhZ44TlVoc
+         njDCVZliwOgvMYl0kj+xC7/4jvPbhLG2XYKYfMurvFjfGEdlF/m2DdPy3P/MqRr+Wzyi
+         IBtbll9Rzsu0bYRt75N1qR9izW+/q09TE1uhK3O6XgfIgLB+tAWIx5/IHCJiVXme2n0C
+         ihOX5d5KHhFBdkcEAfNsIxVaxLCrCcMxHxJ4YqolKeFT8z2y3cwZGUqjeLbQOIFEB3oV
+         SE6A==
+X-Gm-Message-State: AOAM531it190l9ZvqEQ/+vz7X5ns1BhuQ/vaAxnCLpBHG19QyZrmoa2G
+        LT1qquhujRpgZvx50ZJwpO8x4yBlAxGP04ay+g0=
+X-Google-Smtp-Source: ABdhPJz5KlzZGYYlJ24KAiurITLGf638ms78b9klmlETxKrUs6UkCmZMh4GHOZz2SbGzm9N+r/rqFQ==
+X-Received: by 2002:a05:6402:5113:b0:427:f443:f63e with SMTP id m19-20020a056402511300b00427f443f63emr12976107edd.317.1653084978611;
+        Fri, 20 May 2022 15:16:18 -0700 (PDT)
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com. [209.85.221.52])
+        by smtp.gmail.com with ESMTPSA id o16-20020aa7c510000000b0042617ba63b1sm4821914edq.59.2022.05.20.15.16.17
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 May 2022 15:16:17 -0700 (PDT)
+Received: by mail-wr1-f52.google.com with SMTP id s28so13050645wrb.7
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 15:16:17 -0700 (PDT)
+X-Received: by 2002:a05:6000:1548:b0:20f:c4e3:637a with SMTP id
+ 8-20020a056000154800b0020fc4e3637amr932134wry.513.1653084976906; Fri, 20 May
+ 2022 15:16:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220519164512.3180360-1-dlatypov@google.com> <CABVgOSnooocLsy2=a8rm7Y_m3DpffKtDam5_uYou+Y2tUkumRw@mail.gmail.com>
- <CAGS_qxrDYKKoWy3UAuVqebT+3jp-ux_uyfbwX3OnJqVbnzaiJg@mail.gmail.com>
-In-Reply-To: <CAGS_qxrDYKKoWy3UAuVqebT+3jp-ux_uyfbwX3OnJqVbnzaiJg@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Fri, 20 May 2022 15:13:50 -0700
-Message-ID: <CAGS_qxrvR+xxfmzz92rYYW=VzG1kyycn1EuaJxdNSMd_L5afFQ@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: refactor internal kconfig handling, allow overriding
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220427020339.360855-1-swboyd@chromium.org> <20220427020339.360855-4-swboyd@chromium.org>
+In-Reply-To: <20220427020339.360855-4-swboyd@chromium.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 20 May 2022 15:16:03 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=VSMyJrs9bTE2XEC=q7VtZi6YKFaKJQJyLTZhVaYa9-Jg@mail.gmail.com>
+Message-ID: <CAD=FV=VSMyJrs9bTE2XEC=q7VtZi6YKFaKJQJyLTZhVaYa9-Jg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] arm64: dts: qcom: Only include sc7180.dtsi in sc7180-trogdor.dtsi
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "Joseph S. Barrera III" <joebar@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 11:13 AM Daniel Latypov <dlatypov@google.com> wrote:
+Hi,
+
+On Tue, Apr 26, 2022 at 7:03 PM Stephen Boyd <swboyd@chromium.org> wrote:
 >
-> On Thu, May 19, 2022 at 11:13 PM David Gow <davidgow@google.com> wrote:
-> >
-> > I like this, but do think there are a few gaps this doesn't handle
-> > properly. (Though exactly how we'd deal with them, I'm not yet sure.)
-> >
-> > In particular, it's not possible to disable a pair of options where
-> > one depends on the other: disabling the parent option will result in
-> > the child one not being present in the generated config. This will
-> > conflict both with "=y" and "=n/not set": we'd need a way to _remove_
-> > a kconfig option for that to work.
+> The SoC is always present on sc7180-trogdor.dtsi and thus we should
+> include it in the "generic" dtsi file for trogdor. Previously we had
+> removed it from there because we had to do the spi6/spi0 swizzle, so
+> each trogdor variant board had to include sc7180.dtsi and then
+> sc7180-trogdor.dtsi so that the latter dtsi file could modify the right
+> spi bus for EC and H1 properties that are common to all trogdor boards.
 >
-> Do you have an example?
-> Because what you describe sounds like how we want it to work, but I'm
-> not sure if I'm misunderstanding the scenario you describe.
+> Now that we're done with that we can replace sc7180.dtsi includes with
+> sc7180-trogdor.dtsi and include sc7180.dtsi in sc7180-trogdor.dtsi as
+> was originally intended. We still need to include sc7180-trogdor.dtsi
+> before the bridge dtsi files though because those rely on the panel
+> label.
+>
+> Cc: "Joseph S. Barrera III" <joebar@chromium.org>
+> Cc: Douglas Anderson <dianders@chromium.org>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi            | 1 -
+>  arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar-r2.dts        | 2 +-
+>  arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar-r3.dts        | 2 +-
+>  arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar-r4.dts        | 2 +-
+>  .../boot/dts/qcom/sc7180-trogdor-lazor-limozeen-nots-r5.dts    | 2 +-
+>  .../boot/dts/qcom/sc7180-trogdor-lazor-limozeen-nots-r9.dts    | 2 +-
+>  arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-r4.dts  | 2 +-
+>  arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-r9.dts  | 2 +-
+>  arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts           | 2 +-
+>  arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts           | 2 +-
+>  arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3-kb.dts        | 2 +-
+>  arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3-lte.dts       | 2 +-
+>  arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3.dts           | 2 +-
+>  arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r9-kb.dts        | 2 +-
+>  arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r9-lte.dts       | 2 +-
+>  arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r9.dts           | 2 +-
+>  arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom.dtsi            | 1 -
+>  arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts                 | 1 -
+>  arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi                   | 3 ++-
+>  19 files changed, 17 insertions(+), 19 deletions(-)
 
-Talking offline with David, we've come up with a small example.
+While reviewing a different change, I found something fishy and
+tracked it down to ${SUBJECT} patch.
 
-If we add this kconfig somewhere
-+config X
-+       bool "X"
-+       default y
-+
-+config Y
-+       bool "Y"
-+       default y
-+       depends on X
-+
+Specifically, after ${SUBJECT} patch then I run `git grep
+include.*trogdor.dtsi`. When I do that, I see that
+`sc7180-trogdor.dtsi` is double-included in all lazor devices. :( It's
+included in the actual dts files and also in the lazor.dtsi file.
 
-Then running this will fail
-$ ./tools/testing/kunit/kunit.py config --kunitconfig xy_kunitconfig
---kconfig_add=CONFIG_X=n --kconfig_add=CONFIG_Y=n
+That's probably not right. I think we need to remove the one in the
+lazor.dtsi file?
 
-It will fail with this
-This is probably due to unsatisfied dependencies.
-Missing: # CONFIG_Y is not set
-
-The problem is that kunit.py is looking for an explicit line saying
-CONFIG_Y is not set.
-But CONFIG_Y's dependencies are not met, so Kconfig doesn't write it out.
-
-I assume we can treat the absence of it in the file as proof that it's not set.
-I.e. the bug lies in the is_subset() logic we have in kunit.py?
-
-I think there's also a general problem with kunit.py/kunitconfig not
-really handling disabling options properly.
+-Doug

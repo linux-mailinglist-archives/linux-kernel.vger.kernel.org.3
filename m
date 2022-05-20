@@ -2,77 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4757B52EB76
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 14:03:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6C8B52EB7C
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 14:03:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348962AbiETMDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 08:03:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56804 "EHLO
+        id S1348967AbiETMDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 08:03:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241234AbiETMCx (ORCPT
+        with ESMTP id S1348966AbiETMDU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 08:02:53 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 275C415E48E
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 05:02:44 -0700 (PDT)
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Fri, 20 May 2022 08:03:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 982ED1498C3;
+        Fri, 20 May 2022 05:03:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 156763F213
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 12:02:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1653048162;
-        bh=inh+fWbIr/Bd67tkllRc1lC2WFfhluEbQ0iFzzDcLrU=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=s9DCpMa7+W0aG582djOY0dvYB3T+is522cwUkgo+1mVOV9/tYcanLXw00plsdJ7Yr
-         8Jr7ThyQzoXOu9pQVY+IKwc8EbnnvOiWQ3pIydtH7duNr6eUd5X7Js7WPIi81h7yAf
-         GzyWGCQh5GuopAqNefq75xGuTn+X3zNqcRDKFR9rtMVKx662DLFZvtAau7n2UBYha6
-         YtKvg77pgtI3FOyP8qmcEbqoNzEFjNpzCSTsRpGrzZCjmlhYPwMHLRN3Oy2QJK2++a
-         g2xnIVBkg9E58cDi1/ZNZvQgNjIqloneUdQnfDDoS/E8dBnC/obwEvn0uYfF6kvl8i
-         kddcjoOs/1MIw==
-Received: by mail-ed1-f71.google.com with SMTP id g10-20020a056402180a00b0042ab515d6c5so5484692edy.13
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 05:02:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=inh+fWbIr/Bd67tkllRc1lC2WFfhluEbQ0iFzzDcLrU=;
-        b=rGLN5SOf22Su1v8sfopbOKknFJO4yA+FX5TkJix6e9BnrHRueDPdec0R9sgpXy8tJ5
-         gLgFkoDv3GCDnJwnYCMJcORx19cw/neamzQOdcsvfOvET5td2D6n6clR1WyYG8rcGchn
-         hKIYkENYa7U3tan7Pguh07qoRMXjUEwBrOpIizbpWTYqyFdMV9pq7Tb3SwaJCzKpYdp1
-         nc29kxGXN5vmr/xhQ4egZ+hc/mtkFiBOd5EMu+xbAlUmMAVBLUgUufFwQY82PO9SlCYv
-         TgFngFraVohJPzyb8QywDqJhsndm0/wXDYDt/TwbtDzUoFBihj3AjFTPlbwTwwrU/B38
-         KT0w==
-X-Gm-Message-State: AOAM532y5zncrSlDekm6oYzyl7/ZZoViap/tYMI9lgh5uylm4RA276du
-        +X6Yx859VrNmYakegoE0vhwqECPxIXEOECpSpblYttTq+RVqRlTFmx4X+iQOiJ7LEQ172WHkOEt
-        ijAVS6AWsj4BmhBpusA48cE8gtB53mvujvx0YgXLLKQ==
-X-Received: by 2002:a17:907:6287:b0:6e1:6ac:c769 with SMTP id nd7-20020a170907628700b006e106acc769mr8584226ejc.388.1653048160115;
-        Fri, 20 May 2022 05:02:40 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyLo7j6dIaDOh3PNDbQKIoRVWD3XVgyw32vGanJTzDPhngStWix2JFCu4iM6l3wsA+bjA2SFw==
-X-Received: by 2002:a17:907:6287:b0:6e1:6ac:c769 with SMTP id nd7-20020a170907628700b006e106acc769mr8584173ejc.388.1653048159593;
-        Fri, 20 May 2022 05:02:39 -0700 (PDT)
-Received: from gollum.fritz.box ([194.191.244.86])
-        by smtp.gmail.com with ESMTPSA id fg22-20020a1709069c5600b006feb002a620sm560042ejc.1.2022.05.20.05.02.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 05:02:39 -0700 (PDT)
-From:   Juerg Haefliger <juerg.haefliger@canonical.com>
-X-Google-Original-From: Juerg Haefliger <juergh@canonical.com>
-To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org,
-        Juerg Haefliger <juergh@canonical.com>
-Subject: [PATCH 3/3] riscv: Kconfig.socs: Add comments
-Date:   Fri, 20 May 2022 14:02:32 +0200
-Message-Id: <20220520120232.148310-4-juergh@canonical.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220520120232.148310-1-juergh@canonical.com>
-References: <20220520120232.148310-1-juergh@canonical.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C24161DFA;
+        Fri, 20 May 2022 12:03:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A87DC385A9;
+        Fri, 20 May 2022 12:03:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653048198;
+        bh=387K16xk7F07P+mVdomJn7VVO3JUePVAb1FehJf0grw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pWXK27ij1Y5VZ732mGSwahDUXfniztdn3J0KVqAlHnkGLAcyA9wBVpOy6fQb1nBG1
+         YkGbRDDCWYteE3/r1E4dDZ5wGckxtj89PGm0Fy5Hi05swie5t3XCH5mlNi0sV3kqI5
+         ASAPPCvENsVvF7TDYl7WlVnoGaH7JKYFsPauJWSwq8voFzDByrsDtN1E8HeHY94o37
+         S96JwGiBItKQ8erAfGAhXXXzcAWd/oEaSfPKJCz7CCUyIqdj/+AGXHISgmiha+AIHa
+         T3RKj8aShzUYXckY9TbuEtGAcGh3pDTGMzhz486ikm6GjzaZaqmMZT6FNi2drRnBJk
+         qtMmXytMDOvPg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1ns1Li-0005yv-8Z; Fri, 20 May 2022 14:03:18 +0200
+Date:   Fri, 20 May 2022 14:03:18 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] clk: qcom: gdsc: add collapse-bit helper
+Message-ID: <YoeDhpCzV2sR7+Y1@hovoldconsulting.com>
+References: <20220520100948.19622-1-johan+linaro@kernel.org>
+ <20220520100948.19622-2-johan+linaro@kernel.org>
+ <CAA8EJpr3_+iS_ntG0pgfG647Ou4Q60sk+-Roc9GJ-0qM5W710g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAA8EJpr3_+iS_ntG0pgfG647Ou4Q60sk+-Roc9GJ-0qM5W710g@mail.gmail.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,27 +63,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add trailing comments to endif and endmenu statements for better
-readability.
+On Fri, May 20, 2022 at 02:50:17PM +0300, Dmitry Baryshkov wrote:
+> On Fri, 20 May 2022 at 13:10, Johan Hovold <johan+linaro@kernel.org> wrote:
+> >
+> > Add a helper for updating the SW_COLLAPSE bit during initialisation and
+> > state updates.
+> >
+> 
+> 
+> > Note that the update during initialisation was relying on the
+> > SW_COLLAPSE bit not having been set earlier rather than passing in zero
+> > explicitly to clear the collapse vote.
+> 
+> I think this part deserves a separate commit with proper Fixes: tag.
 
-Signed-off-by: Juerg Haefliger <juergh@canonical.com>
----
- arch/riscv/Kconfig.socs | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+No, it's not a bug. The value passed in is explicitly set a bit higher
+up in the same function so that the SW_COLLAPSE bit is (currently) never
+set.
 
-diff --git a/arch/riscv/Kconfig.socs b/arch/riscv/Kconfig.socs
-index f6ef358d8a2c..c831609db249 100644
---- a/arch/riscv/Kconfig.socs
-+++ b/arch/riscv/Kconfig.socs
-@@ -79,6 +79,6 @@ config SOC_CANAAN_K210_DTB_SOURCE
- 	  for the DTS file that will be used to produce the DTB linked into the
- 	  kernel.
- 
--endif
-+endif # SOC_CANAAN
- 
--endmenu
-+endmenu # "SoC selection"
--- 
-2.32.0
+It mostly just looks weird and probably wasn't intentional.
 
+> > @@ -425,8 +437,7 @@ static int gdsc_init(struct gdsc *sc)
+> >                  * If a Votable GDSC is ON, make sure we have a Vote.
+> >                  */
+> >                 if (sc->flags & VOTABLE) {
+> > -                       ret = regmap_update_bits(sc->regmap, sc->gdscr,
+> > -                                                SW_COLLAPSE_MASK, val);
+> > +                       ret = gdsc_update_collapse_bit(sc, false);
+> >                         if (ret)
+> >                                 return ret;
+> >                 }
+
+Johan

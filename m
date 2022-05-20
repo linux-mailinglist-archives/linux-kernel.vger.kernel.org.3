@@ -2,75 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECFE152E6DB
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 10:01:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66EAC52E6DF
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 10:01:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346767AbiETIBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 04:01:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34696 "EHLO
+        id S1346761AbiETIBy convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 20 May 2022 04:01:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346763AbiETIB3 (ORCPT
+        with ESMTP id S1346790AbiETIBs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 04:01:29 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B487B192A3
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 01:01:27 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id 31so7099308pgp.8
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 01:01:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=4jOBgoCIuufL2fmUxuaX4Kx9ZFLT1aVrxdM4anPKWNs=;
-        b=m1Nlvcn2IuEUWzBWUWJFzDVxmJvy7P4aU4vT8suamJr2Vnfb3ImW+88kgdzI/VzNuv
-         fBhFH1AZXpqgmxPfrQsU9gPk6dXM3vtWVRUoVyoPl0nkkfW2FSHn4fpms9P9Yp9JdbLo
-         2PO1dO+lXDtkJTU3vYhXj2/upN35dBk+aNnHXIeIppiZnfJrnmMEe++0O0KGWTDhl1ui
-         5DL5SjYA7viNPGTn3b0U8XVXH2Bglr8ljucVX/XV8FrJtwbq5LGOJN/P0rG3mLp0IWPC
-         MVERG6jUUuUkoQUCgDuhVjU71udd94YjxzsFmj0TrDESot+2x1dNWtLOb/O1EtgzEVuN
-         bmpg==
+        Fri, 20 May 2022 04:01:48 -0400
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 972DC37A12;
+        Fri, 20 May 2022 01:01:47 -0700 (PDT)
+Received: by mail-qt1-f178.google.com with SMTP id b9so224922qtx.11;
+        Fri, 20 May 2022 01:01:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=4jOBgoCIuufL2fmUxuaX4Kx9ZFLT1aVrxdM4anPKWNs=;
-        b=wZaUmDo7bP+5PGUA3iU9YGDrUnI+ZI5AFcES/5lHVRpwQ035LWwSguOImPRVfuNl7O
-         BU/lm+cK9WWe+f7oXQ1MsXMTqQbJKO/zbCaTxdsV0LzsdF3jumbrDGO1Tohqku2nDO3/
-         cLlfIdzkOUx6tzOGYlZHeKmBh5LsWttOe/zLmdvJ5wOGqvElehm4EQgRyzW2Ie7nqihv
-         jdMqrPC9UDZCyofhErbhQxXxBW0Mi69CgTpwMXgV90aXnumiFz7rPVvWbMR7s7qf0n+h
-         cosCpLOFHVCHVXqM0CQlzoA4obyj2yAR6tO6CkKW2pOSLpesjrfVy1ZTqVJYkJXvnSSl
-         SJ+A==
-X-Gm-Message-State: AOAM5308vPG8s/zz886o53Vqq+gLkx4WLV+lYU2fyTbKyjdnVNCf88Mi
-        aSFpK2h4kiJmcgtshwxU2BTLjdyGKYk=
-X-Google-Smtp-Source: ABdhPJxM9CZc6sD2YS0pcbrCemhwqlpq9pXIhVvDfU1vLHXfVtjOMmWTMY42OhitxbxmMX2Mi2B4fg==
-X-Received: by 2002:a63:8349:0:b0:3f7:4cb2:686c with SMTP id h70-20020a638349000000b003f74cb2686cmr1672543pge.493.1653033687242;
-        Fri, 20 May 2022 01:01:27 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::4:1761])
-        by smtp.gmail.com with ESMTPSA id a24-20020a62d418000000b005184031963bsm1071789pfh.85.2022.05.20.01.01.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 01:01:26 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 19 May 2022 22:01:25 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3] workqueue: Wrap flush_workqueue() using a macro
-Message-ID: <YodK1czmhZtGmJ8E@slm.duckdns.org>
-References: <d34dac10-c12f-8bda-35c4-9cb158781db2@I-love.SAKURA.ne.jp>
- <a6288570ed3534b0316723061f5604e3871accef.camel@perches.com>
- <6e4ed62e-888b-6e7a-c13d-67656f39ca94@I-love.SAKURA.ne.jp>
- <738afe71-2983-05d5-f0fc-d94efbdf7634@I-love.SAKURA.ne.jp>
- <YnQKNea6KWFaWNis@slm.duckdns.org>
- <a0d6b5e4-b9c8-1a43-570f-4c73b0f6fc0c@I-love.SAKURA.ne.jp>
- <Yn0538VavQPv+/Ws@slm.duckdns.org>
- <7b2fecdb-59ae-2c54-5a5b-774ef7054d1b@I-love.SAKURA.ne.jp>
- <1c1b272b-239c-e1d1-84de-47d02feb911e@I-love.SAKURA.ne.jp>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=H1iVOpRla5rs6rYvY27pFyr760HB96cTo8Ladb3Lo6o=;
+        b=lBHH6y7xt5cg2Cl1+lNnZHtczZi0hkIEMCWn8a8E/7YotQCqL++AP8Y8px5K654cTK
+         QDYIaD9ISI6QOLNcRDFSBVdG1QDF1QeshhWLaV3kupIxKvzRMDBf/sZNM4ctO1w1T5Xc
+         5x9PYZfOhvDsaN67cMUsXfcFlne3Q6JOFXOxMvFb1/oXAbu4MBnzUQFbLUnrPlgvj3pr
+         rAWmYZBu5o/Tx9WBBcYY7uukrph7O9PIWzO1YAKbnwrFbC2cRzltFiLCc6wgrFSx/cs9
+         cMi7JaWvMUqgPaipMrcouwcwwFSz9XnVfVlpIrwoHz26C1FUlae8AFxJ3XvhrnkNUhrr
+         BoWQ==
+X-Gm-Message-State: AOAM533R3xdVpGNwZdVRc58DBxRIPrHhkA0NAQ1RmdbQqn7WG/VD7Ri2
+        CDPCjMqfTal7FujeemX7FEQdJJSaFMhqzw==
+X-Google-Smtp-Source: ABdhPJy9rlq6FYckE6dvWhZXO5Xifn+8i7hpHnmg+AMuwMrCVUiVYubqnyrVW+beXfgSifPp3eGymg==
+X-Received: by 2002:ac8:5c56:0:b0:2f3:bdd1:4f1e with SMTP id j22-20020ac85c56000000b002f3bdd14f1emr6801141qtj.545.1653033706208;
+        Fri, 20 May 2022 01:01:46 -0700 (PDT)
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
+        by smtp.gmail.com with ESMTPSA id f9-20020a05622a104900b002f39b99f69fsm3200042qte.57.2022.05.20.01.01.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 May 2022 01:01:45 -0700 (PDT)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-2ec42eae76bso79086497b3.10;
+        Fri, 20 May 2022 01:01:45 -0700 (PDT)
+X-Received: by 2002:a81:9b0c:0:b0:2f4:c522:7d3c with SMTP id
+ s12-20020a819b0c000000b002f4c5227d3cmr8843852ywg.316.1653033705399; Fri, 20
+ May 2022 01:01:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1c1b272b-239c-e1d1-84de-47d02feb911e@I-love.SAKURA.ne.jp>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+References: <20220519153107.696864-1-clement.leger@bootlin.com>
+ <20220519153107.696864-7-clement.leger@bootlin.com> <CAMuHMdXRCggkTSxfnSHvz3N2Oekuw7y5Sy2AKkqZpZzK_Eg_ng@mail.gmail.com>
+ <20220520095730.512bbb8d@fixe.home>
+In-Reply-To: <20220520095730.512bbb8d@fixe.home>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 20 May 2022 10:01:32 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWOMYE7b=auNeVAMDgArso+8vUzkxAwnFxFYtKPxOnjxw@mail.gmail.com>
+Message-ID: <CAMuHMdWOMYE7b=auNeVAMDgArso+8vUzkxAwnFxFYtKPxOnjxw@mail.gmail.com>
+Subject: Re: [PATCH net-next v5 06/13] dt-bindings: net: dsa: add bindings for
+ Renesas RZ/N1 Advanced 5 port switch
+To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?UTF-8?Q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,55 +92,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 02:00:37PM +0900, Tetsuo Handa wrote:
-> This patch is expected to be sent to linux.git immediately before the merge
-> window for 5.19 closes, for we need to wait until patches for removing
-> flush_workqueue(system_*_wq) calls reached linux.git during the merge window
-> for 5.19. Due to this ordering dependency, the kernel build bots complain like
-> https://lkml.kernel.org/r/202205021448.6SzhD1Cz-lkp@intel.com , but it seems
-> that simply ignoring these reports is the best choice.
-> 
-> If it is inconvenient for you to send pull request twice from your wq.git tree
-> (once for immediately after 5.18 is released, the other for immediately before
-> the merge window for 5.19 closes), I can send pull request for this patch from
-> my tree. In that case, please give me Acked-by: or Reviewed-by: response regarding
-> this patch.
+Hi Clément,
 
-What we can do is sending the patch to Andrew. The akpm patches float above
--next and get applied the last. I won't need any special treatment.
+On Fri, May 20, 2022 at 9:58 AM Clément Léger <clement.leger@bootlin.com> wrote:
+> Le Fri, 20 May 2022 09:13:23 +0200,
+> Geert Uytterhoeven <geert@linux-m68k.org> a écrit :
+> > On Thu, May 19, 2022 at 5:32 PM Clément Léger <clement.leger@bootlin.com> wrote:
+> > > Add bindings for Renesas RZ/N1 Advanced 5 port switch. This switch is
+> > > present on Renesas RZ/N1 SoC and was probably provided by MoreThanIP.
+> > > This company does not exists anymore and has been bought by Synopsys.
+> > > Since this IP can't be find anymore in the Synospsy portfolio, lets use
+> > > Renesas as the vendor compatible for this IP.
+> > >
+> > > Signed-off-by: Clément Léger <clement.leger@bootlin.com>
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/net/dsa/renesas,rzn1-a5psw.yaml
 
-> +/*
-> + * Detect attempt to flush system-wide workqueues at compile time when possible.
-> + * See https://lkml.kernel.org/r/49925af7-78a8-a3dd-bce6-cfc02e1a9236@I-love.SAKURA.ne.jp for
-> + * reasons and steps for converting system-wide workqueues into local workqueues.
-> + */
-> +#define flush_workqueue(wq)						\
-> +({									\
-> +	BUILD_BUG_ON_MSG(__builtin_constant_p(&(wq) == &system_wq) &&	\
-> +			 &(wq) == &system_wq,				\
-> +			 "Please avoid flushing system_wq.");		\
+> > Missing "power-domains" property.
+>
+> I do not use pm_runtime* in the switch driver. I should probably do that
+> right ?
 
-It kinda bothers me that this causes a build failure. It'd be better if we
-can trigger #warning instead. I'm not sure whether there'd be a clean way to
-do it tho. Maybe just textual matching would provide similar coverage? How
-did you test this?
+For now you don't have to.  But I think it is a good idea, and it helps if the
+IP block is ever reused in an SoC with real power areas.
 
->  #endif
-> diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-> index 0d2514b4ff0d..08255c332e4b 100644
-> --- a/kernel/workqueue.c
-> +++ b/kernel/workqueue.c
-> @@ -2794,6 +2794,7 @@ static bool flush_workqueue_prep_pwqs(struct workqueue_struct *wq,
->   * This function sleeps until all work items which were queued on entry
->   * have finished execution, but it is not livelocked by new incoming ones.
->   */
-> +#undef flush_workqueue
->  void flush_workqueue(struct workqueue_struct *wq)
+Gr{oetje,eeting}s,
 
-Maybe rename the function to __flush_workqueue() instead of undef'ing the
-macro?
+                        Geert
 
-Thanks.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
--- 
-tejun
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

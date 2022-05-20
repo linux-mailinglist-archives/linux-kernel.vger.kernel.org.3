@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 604A252F302
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 20:35:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA31752F306
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 20:36:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352837AbiETSfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 14:35:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49618 "EHLO
+        id S244328AbiETSfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 14:35:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352717AbiETSer (ORCPT
+        with ESMTP id S1352752AbiETSet (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 14:34:47 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 697AC195783;
-        Fri, 20 May 2022 11:34:46 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id m20so1473798wrb.13;
-        Fri, 20 May 2022 11:34:46 -0700 (PDT)
+        Fri, 20 May 2022 14:34:49 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E286166697;
+        Fri, 20 May 2022 11:34:48 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id u3so12626555wrg.3;
+        Fri, 20 May 2022 11:34:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=LSTVujSZxd7jybS/Xm7tv3qPDlYb2MEOHKZDRGbEpQ4=;
-        b=dJg9CQe3nx273fBEBZF9WXB3LktQmm+FfckxuUxi32ZHs5Hnk9iwWc49xyjTpTK85r
-         UbolqjCZgEvqbWO3Z9hFSBMhiQutha2QIf9FIt7VjTUHjsjRZt/KgX7Cmq8TgL1Vpl2L
-         my39hrNeKD2g/2GCAsx6qptExQRN5QNKiqvbQkDwhZMVXXeHr2+MXnZQsAe1w6anupgn
-         Gpzht8aV3N/xQi7xPJ068ufGTB1ivTUdw2elNrZw/uaSuRY0p7I9JzUCPSbk/U9okiWQ
-         EDGYP7EbCKTH3x6UO9XdH9Sz4/2Y9rL1Wa2ftb8zVFpKW79T85nRGoORlKuDrVrMIrmq
-         UMpw==
+        bh=qUjvuoWXG9UUtB5iaUNqYFk22P1RS1LUvWgzlAZCFx8=;
+        b=cxNMpTAFuWKDIhN2tjtgTzcHUBXt6OLUdjX8CkMUG4ILZdFepZBnJGh78f/U+ubgbK
+         QEXqE2+NWORsqQ/LDWmesBeli9Yri9oXsfVwkU9T/BCYB/VdAXwXs1uO9X5YO+W4ozxT
+         +cWJGLN+TCd0UrT4fKmiLNIu0+HrHlPgrjt2Jm124P7EWb1UMnWaUVsnEqObXTq3kEUz
+         poL6P8AgOZIf40734QR64IOAuL1uN5lcIsH1uLLRDBuvYIPgN5o/8vrgHjW1y0rn71Ja
+         rJKbeZC7cG626vR96Sdje2lKqBMm9M31UngT8JLc1Pasb7kRiIpsr/GB3tNh998kIU9v
+         2YQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=LSTVujSZxd7jybS/Xm7tv3qPDlYb2MEOHKZDRGbEpQ4=;
-        b=A+HvFrwk46GApWQkPf8Oa4mLITCYaSMzRDD/WJnEZz8ZTlnoKCfqaJluSrjXNoCfyF
-         +I4MfFHoN0CY2qxh0y/qcRgjy/rczlJruH5CPPwvHBuC+OIQDUYBpsLi65NQv/IDAO/S
-         YmdIYfGdMleyz8oad2dI9YShf9JyfUZawvLP9941I7NfypgeNs4cbcZAMMdlPdrfPcGq
-         995H7cVjr88jiKlW31pZkakO3p1dtDZ93sz+WF9pyo/MPi01HBj1wqQBQzdZL8Qsll9c
-         Hhq/u47uFH5ms6L1zH5wz/Gz32murncnoXd52jVHwc4/IVrSE1hsMX2eVEKjbpc+BKGD
-         unLQ==
-X-Gm-Message-State: AOAM5320J3/HAQS1sFaQhrsOVqnZ0XvhUx9jQoti5ciX5tiLd5gUu1Dx
-        2OEoR3UQsuMLMmRj7Gb/+MeAZEPLlHU=
-X-Google-Smtp-Source: ABdhPJxGAMbJ8hZRi7BTY3l1yRertQpGm8j1ElOR4tU22rk62QJymMuemNP8L8Yer/YbcP1WXy2Gqw==
-X-Received: by 2002:adf:f24c:0:b0:20c:fe15:504c with SMTP id b12-20020adff24c000000b0020cfe15504cmr9404828wrp.123.1653071686072;
-        Fri, 20 May 2022 11:34:46 -0700 (PDT)
+        bh=qUjvuoWXG9UUtB5iaUNqYFk22P1RS1LUvWgzlAZCFx8=;
+        b=rn9Z/jsAUCZvAcTdkOMtFWjBnAMbiDnaHiUN3ASQvsBAAXNYBpmftt228nPtj+E9cN
+         rfsuvuA2cJpFITxWg0Jlz2O+7R3X1Lmpl5s8DQka61a+diOIHqTUqNBF4E3vFDoW0RKg
+         70YZk4J8m7KKRx8Fn3YTDgXKdBo6U9vNJolXgsuje5UnWVadkijBsbPawQkgaJ8gEvOs
+         y3cxZdQjsmPRVS6XTZfe6FY6fXYvdGPBOF+HrD0ySs8SQ9BZPDPPw1mXRrpizki94x69
+         i7g5jcvetfPoleDNp+Uaas/Wefm9jR6Sh0x5V8aE/Y6R1t8T1ggJOUQhX8X7P/Pt6Muw
+         fR4g==
+X-Gm-Message-State: AOAM53261GUTIWzYQWLZwH5Wr7CD6e7PgChjXTdQzyUdzMGLUocyGUtb
+        /Lzpy8oLqOo9CH5OHfDlz9k=
+X-Google-Smtp-Source: ABdhPJwFMngfZzHs1Ct+MyDR7vbVpw18F8Ve40ULToUpYV59j4RanOTU6pms5G5mJh9wNR8o8jh2iQ==
+X-Received: by 2002:adf:ebce:0:b0:20d:7859:494d with SMTP id v14-20020adfebce000000b0020d7859494dmr9301298wrn.590.1653071687104;
+        Fri, 20 May 2022 11:34:47 -0700 (PDT)
 Received: from xws.localdomain (pd9e5a9fe.dip0.t-ipconnect.de. [217.229.169.254])
-        by smtp.gmail.com with ESMTPSA id r9-20020adfa149000000b0020e62feca05sm3252081wrr.32.2022.05.20.11.34.45
+        by smtp.gmail.com with ESMTPSA id r9-20020adfa149000000b0020e62feca05sm3252081wrr.32.2022.05.20.11.34.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 11:34:45 -0700 (PDT)
+        Fri, 20 May 2022 11:34:46 -0700 (PDT)
 From:   Maximilian Luz <luzmaximilian@gmail.com>
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Sebastian Reichel <sre@kernel.org>
+To:     Hans de Goede <hdegoede@redhat.com>, Jiri Kosina <jikos@kernel.org>
 Cc:     Maximilian Luz <luzmaximilian@gmail.com>,
         Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        platform-driver-x86@vger.kernel.org, linux-input@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 05/10] power/supply: surface_battery: Use client device wrappers for notifier registration
-Date:   Fri, 20 May 2022 20:34:17 +0200
-Message-Id: <20220520183422.7185-6-luzmaximilian@gmail.com>
+Subject: [PATCH 06/10] HID: surface-hid: Add support for hot-removal
+Date:   Fri, 20 May 2022 20:34:18 +0200
+Message-Id: <20220520183422.7185-7-luzmaximilian@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220520183422.7185-1-luzmaximilian@gmail.com>
 References: <20220520183422.7185-1-luzmaximilian@gmail.com>
@@ -73,35 +73,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use newly introduced client device wrapper functions for notifier
-registration and unregistration.
+Add support for hot-removal of SSAM HID client devices.
+
+Once a device has been hot-removed, further communication with it should
+be avoided as it may fail and time out. While the device will be removed
+as soon as we detect hot-removal, communication may still occur during
+teardown, especially when unregistering notifiers.
+
+While hot-removal is a surprise event that can happen at any time, try
+to avoid communication as much as possible once it has been detected to
+prevent timeouts that can slow down device removal and cause issues,
+e.g. when quickly re-attaching the device.
 
 Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
 ---
- drivers/power/supply/surface_battery.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/hid/surface-hid/surface_hid_core.c | 38 +++++++++++++++++++++-
+ 1 file changed, 37 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/power/supply/surface_battery.c b/drivers/power/supply/surface_battery.c
-index 5ec2e6bb2465..540707882bb0 100644
---- a/drivers/power/supply/surface_battery.c
-+++ b/drivers/power/supply/surface_battery.c
-@@ -802,7 +802,7 @@ static int spwr_battery_register(struct spwr_battery_device *bat)
- 	if (IS_ERR(bat->psy))
- 		return PTR_ERR(bat->psy);
- 
--	return ssam_notifier_register(bat->sdev->ctrl, &bat->notif);
-+	return ssam_device_notifier_register(bat->sdev, &bat->notif);
- }
+diff --git a/drivers/hid/surface-hid/surface_hid_core.c b/drivers/hid/surface-hid/surface_hid_core.c
+index e46330b2e561..87637f813de2 100644
+--- a/drivers/hid/surface-hid/surface_hid_core.c
++++ b/drivers/hid/surface-hid/surface_hid_core.c
+@@ -19,12 +19,30 @@
+ #include "surface_hid_core.h"
  
  
-@@ -837,7 +837,7 @@ static void surface_battery_remove(struct ssam_device *sdev)
++/* -- Utility functions. ---------------------------------------------------- */
++
++static bool surface_hid_is_hot_removed(struct surface_hid_device *shid)
++{
++	/*
++	 * Non-ssam client devices, i.e. platform client devices, cannot be
++	 * hot-removed.
++	 */
++	if (!is_ssam_device(shid->dev))
++		return false;
++
++	return ssam_device_is_hot_removed(to_ssam_device(shid->dev));
++}
++
++
+ /* -- Device descriptor access. --------------------------------------------- */
+ 
+ static int surface_hid_load_hid_descriptor(struct surface_hid_device *shid)
  {
- 	struct spwr_battery_device *bat = ssam_device_get_drvdata(sdev);
+ 	int status;
  
--	ssam_notifier_unregister(sdev->ctrl, &bat->notif);
-+	ssam_device_notifier_unregister(sdev, &bat->notif);
- 	cancel_delayed_work_sync(&bat->update_work);
++	if (surface_hid_is_hot_removed(shid))
++		return -ENODEV;
++
+ 	status = shid->ops.get_descriptor(shid, SURFACE_HID_DESC_HID,
+ 			(u8 *)&shid->hid_desc, sizeof(shid->hid_desc));
+ 	if (status)
+@@ -61,6 +79,9 @@ static int surface_hid_load_device_attributes(struct surface_hid_device *shid)
+ {
+ 	int status;
+ 
++	if (surface_hid_is_hot_removed(shid))
++		return -ENODEV;
++
+ 	status = shid->ops.get_descriptor(shid, SURFACE_HID_DESC_ATTRS,
+ 			(u8 *)&shid->attrs, sizeof(shid->attrs));
+ 	if (status)
+@@ -88,9 +109,18 @@ static int surface_hid_start(struct hid_device *hid)
+ static void surface_hid_stop(struct hid_device *hid)
+ {
+ 	struct surface_hid_device *shid = hid->driver_data;
++	bool hot_removed;
++
++	/*
++	 * Communication may fail for devices that have been hot-removed. This
++	 * also includes unregistration of HID events, so we need to check this
++	 * here. Only if the device has not been marked as hot-removed, we can
++	 * safely disable events.
++	 */
++	hot_removed = surface_hid_is_hot_removed(shid);
+ 
+ 	/* Note: This call will log errors for us, so ignore them here. */
+-	ssam_notifier_unregister(shid->ctrl, &shid->notif);
++	__ssam_notifier_unregister(shid->ctrl, &shid->notif, !hot_removed);
  }
+ 
+ static int surface_hid_open(struct hid_device *hid)
+@@ -109,6 +139,9 @@ static int surface_hid_parse(struct hid_device *hid)
+ 	u8 *buf;
+ 	int status;
+ 
++	if (surface_hid_is_hot_removed(shid))
++		return -ENODEV;
++
+ 	buf = kzalloc(len, GFP_KERNEL);
+ 	if (!buf)
+ 		return -ENOMEM;
+@@ -126,6 +159,9 @@ static int surface_hid_raw_request(struct hid_device *hid, unsigned char reportn
+ {
+ 	struct surface_hid_device *shid = hid->driver_data;
+ 
++	if (surface_hid_is_hot_removed(shid))
++		return -ENODEV;
++
+ 	if (rtype == HID_OUTPUT_REPORT && reqtype == HID_REQ_SET_REPORT)
+ 		return shid->ops.output_report(shid, reportnum, buf, len);
  
 -- 
 2.36.1

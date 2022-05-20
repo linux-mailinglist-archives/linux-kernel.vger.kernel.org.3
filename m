@@ -2,147 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31F9552EE7F
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 16:50:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3088A52EE80
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 16:52:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350499AbiETOu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 10:50:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51658 "EHLO
+        id S1350468AbiETOw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 10:52:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350468AbiETOuX (ORCPT
+        with ESMTP id S244321AbiETOwV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 10:50:23 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24BAF1737CA
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 07:50:22 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id g184so7935607pgc.1
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 07:50:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc
-         :references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=YlMUufwr0l9tO9rVDIxOV/soI8WTUMwn/+RPr0+aDoU=;
-        b=cz0wk8lcDszKFG3qX7rWCqzlqco9Sek/q86lTVGXVgDOoWtHf6JHnKv52/V1kI8GsY
-         tNhwHBCWrGXadYVN5kY78XCACyEuD+6h2Hi4/M3ErbKa5FZxFDBExxTLIs+GXtyLB+mE
-         rpPWbcyQ4DRaczSqCmY9GcIY644HfOExpwuZ1zTxkdZlJksBjavAN0Yx1JMdObEEoMfq
-         FwKDI9pJX77DEPyEmJ3qlksOG7v2PfcBVqSE0yDqwcXVEI65BIuXZT+qiJtNDO7ov/g6
-         JnGxVhPaVYO1ZDjM8zlutZROY7BlGoiyfmC57e8wywTsviMatf6ek/1z4itHFNcDOiHn
-         7rzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=YlMUufwr0l9tO9rVDIxOV/soI8WTUMwn/+RPr0+aDoU=;
-        b=1DqEPcLv0ojfBM6ZhlbLy63woUcxkuV8H5LJKacPBaM3uUgCg2iYWzWTS8wm5/7We6
-         ZjYXGeq0F3oCl5eZDkCoImBoK34Glmdx3ppHH9civjYkzLXNjzDw7qaV1PsSvBFCkoio
-         YKcPUCHRnZmYD9QdfdYoq5vANApeFQM88+VtvsAf/L9+fn2XRrhlKXi6jHnN4XGEZqM8
-         a9FrSsHGh0QfsR6W2NyxaiBI0kTNOeg5T/npFMzt6QrINr7vinEivkVCFGBYppKxJYS/
-         67WuanCK7ifESSFGgKcM/EDv8xndDoQJZb6qdKhXTNr3uVE6dQVrVmbjlqPz1DxVw8rN
-         ezvw==
-X-Gm-Message-State: AOAM532gWWngdj+MRWMTk6BRwPbl90x5oMlsvwBqLic0q15zrDUJq9qL
-        h8N0muPblD/ER9VK25pY9ovnYQ==
-X-Google-Smtp-Source: ABdhPJy1cIKEs7ndrkw7m80u2H+7m8NPgK6uDNE3lOEbmri0iW/ey3hMLMu3ycAdyZmLlukUP0c5QQ==
-X-Received: by 2002:a63:fc04:0:b0:3f6:4b2b:9d36 with SMTP id j4-20020a63fc04000000b003f64b2b9d36mr6451721pgi.206.1653058221601;
-        Fri, 20 May 2022 07:50:21 -0700 (PDT)
-Received: from [192.168.254.17] ([50.39.160.154])
-        by smtp.gmail.com with ESMTPSA id d10-20020a170902654a00b0015ea9aabd19sm5892769pln.241.2022.05.20.07.50.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 May 2022 07:50:21 -0700 (PDT)
-Message-ID: <983bb802-d883-18d4-7945-dbfa209c1cc8@linaro.org>
-Date:   Fri, 20 May 2022 07:50:20 -0700
+        Fri, 20 May 2022 10:52:21 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5220116D48B;
+        Fri, 20 May 2022 07:52:20 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0ADE51477;
+        Fri, 20 May 2022 07:52:20 -0700 (PDT)
+Received: from [10.57.7.229] (unknown [10.57.7.229])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6431D3F73D;
+        Fri, 20 May 2022 07:52:16 -0700 (PDT)
+Message-ID: <f2b243a7-5736-1f84-c284-29219fac585d@arm.com>
+Date:   Fri, 20 May 2022 15:52:14 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2 0/2] perf: arm64: Tools support for Dwarf unwinding
+ through SVE functions
 Content-Language: en-US
-To:     Jan Kara <jack@suse.cz>
-Cc:     linux-ext4@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org
-References: <49ac1697-5235-ca2e-2738-f0399c26d718@linaro.org>
- <20220519122353.eqpnxiaybvobfszb@quack3.lan>
- <e9ccb919-1616-f94f-c465-7024011ad8e5@linaro.org>
- <20220520095028.rq4ef2o5nwetzog3@quack3>
-From:   Tadeusz Struk <tadeusz.struk@linaro.org>
-Subject: Re: kernel BUG in ext4_writepages
-In-Reply-To: <20220520095028.rq4ef2o5nwetzog3@quack3>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        German Gomez <german.gomez@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        broonie@kernel.org, leo.yan@linaro.org, mathieu.poirier@linaro.org,
+        john.garry@huawei.com, Will Deacon <will@kernel.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+References: <20220517102005.3022017-1-james.clark@arm.com>
+ <YoO4Hiue7PmJ9KOS@kernel.org> <995099d3-a170-69dc-d12e-c9b2e4753f35@arm.com>
+ <YoeKZFXO6zqFaqme@kernel.org>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <YoeKZFXO6zqFaqme@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/20/22 02:50, Jan Kara wrote:
-> On Thu 19-05-22 16:14:17, Tadeusz Struk wrote:
->> On 5/19/22 05:23, Jan Kara wrote:
->>> Hi!
->>>
->>> On Tue 10-05-22 15:28:38, Tadeusz Struk wrote:
->>>> Syzbot found another BUG in ext4_writepages [1].
->>>> This time it complains about inode with inline data.
->>>> C reproducer can be found here [2]
->>>> I was able to trigger it on 5.18.0-rc6
+
+
+On 20/05/2022 13:32, Arnaldo Carvalho de Melo wrote:
+> Em Fri, May 20, 2022 at 12:46:24PM +0100, German Gomez escreveu:
+>>
+>> On 17/05/2022 15:58, Arnaldo Carvalho de Melo wrote:
+>>> Em Tue, May 17, 2022 at 11:20:01AM +0100, James Clark escreveu:
+>>>> Changes since v1:
 >>>>
->>>> [1] https://syzkaller.appspot.com/bug?id=a1e89d09bbbcbd5c4cb45db230ee28c822953984
->>>> [2] https://syzkaller.appspot.com/text?tag=ReproC&x=129da6caf00000
+>>>>   * Split patchset into kernel side and Perf tool changes
+>>> Thanks, now I'll wait for the kernel side to be merged.
 >>>
->>> Thanks for report. This should be fixed by:
->>>
->>> https://lore.kernel.org/all/20220516012752.17241-1-yebin10@huawei.com/
+>>> - Arnaldo
+>>>  
 >>
+>> Hi,
 >>
->> In case of the syzbot bug there is something messed up with PAGE DIRTY flags
->> and the way syzbot sets up the write. This is what triggers the crash:
+>> I think we also need to fix the below import (it's trying to import the
+>> perf_regs.h from the kernel, not the tools/ dir).
 > 
-> Can you tell me where exactly we hit the bug? I've now noticed that this is
-> on 5.10 kernel and on vanilla 5.10 there's no BUG_ON on line 2753.
-
-We are hiting this bug:
-https://elixir.bootlin.com/linux/latest/source/fs/ext4/inode.c#L2707
-Syzbot found it in v5.10, but I recreated it on 5.18-rc7, that's why
-the line number mismatch. But this is the same bug.
-On 5.10 it's in line 2739:
-https://elixir.bootlin.com/linux/v5.10.117/source/fs/ext4/inode.c#L2739
-
+> Sure, that is why it is important to do a:
 > 
->> $ ftrace -f ./repro
->> ...
->> [pid  2395] open("./bus", O_RDWR|O_CREAT|O_SYNC|O_NOATIME, 000 <unfinished ...>
->> [pid  2395] <... open resumed> )        = 6
->> ...
->> [pid  2395] write(6, "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0", 22 <unfinished ...>
->> ...
->> [pid  2395] <... write resumed> )       = 22
->>
->> One way I could fix it was to clear the PAGECACHE_TAG_DIRTY on the mapping in
->> ext4_try_to_write_inline_data() after the page has been updated:
->>
->> diff --git a/fs/ext4/inline.c b/fs/ext4/inline.c
->> index 9c076262770d..e4bbb53fa26f 100644
->> --- a/fs/ext4/inline.c
->> +++ b/fs/ext4/inline.c
->> @@ -715,6 +715,7 @@ int ext4_try_to_write_inline_data(struct address_space *mapping,
->>   			put_page(page);
->>   			goto out_up_read;
->>   		}
->> +		__xa_clear_mark(&mapping->i_pages, 0, PAGECACHE_TAG_DIRTY);
->>   	}
->>   	ret = 1;
->>
->> Please let me know it if makes sense any I will send a proper patch.
+> make -C tools/perf build-test
 > 
-> No, this looks really wrong... We need to better understand what's going
-> on.
 
-So I was afraid. I'm trying to diverge the ext4_writepages() to go to the
-out_writepages path before we hit this BOG_ON().
-Any hints will be much appreciated.
+Oops thanks, I will submit another version with a fix for this included.
 
--- 
-Thanks,
-Tadeusz
+James
+
+> before posting patches, as it will do, among other tests, a detached tarball test using:
+> 
+> ⬢[acme@toolbox perf-urgent]$ make help | grep perf
+>   perf-tar-src-pkg    - Build perf-5.18.0-rc7.tar source tarball
+>   perf-targz-src-pkg  - Build perf-5.18.0-rc7.tar.gz source tarball
+>   perf-tarbz2-src-pkg - Build perf-5.18.0-rc7.tar.bz2 source tarball
+>   perf-tarxz-src-pkg  - Build perf-5.18.0-rc7.tar.xz source tarball
+>   perf-tarzst-src-pkg - Build perf-5.18.0-rc7.tar.zst source tarball
+> ⬢[acme@toolbox perf-urgent]$
+> 
+> That will pick just what is in tools/perf/MANIFEST and that doesn´t
+> include the kernel headers, just what is in tools/ then building with
+> this patchkit would fail.
+> 
+> To recap:
+> 
+> ⬢[acme@toolbox perf-urgent]$ make perf-tarxz-src-pkg
+>   TAR
+>   PERF_VERSION = 5.18.rc7.gc645054ef517
+> ⬢[acme@toolbox perf-urgent]$ ls -la perf-5.18.0-rc7.tar.xz
+> -rw-r--r--. 1 acme acme 2364832 May 20 09:32 perf-5.18.0-rc7.tar.xz
+> ⬢[acme@toolbox perf-urgent]$ tar tvf perf-5.18.0-rc7.tar.xz | tail
+> -rw-rw-r-- root/root      7364 2022-05-20 09:32 perf-5.18.0-rc7/tools/perf/util/vdso.c
+> -rw-rw-r-- root/root       639 2022-05-20 09:32 perf-5.18.0-rc7/tools/perf/util/vdso.h
+> -rw-rw-r-- root/root      1793 2022-05-20 09:32 perf-5.18.0-rc7/tools/perf/util/zlib.c
+> -rw-rw-r-- root/root      2672 2022-05-20 09:32 perf-5.18.0-rc7/tools/perf/util/zstd.c
+> drwxrwxr-x root/root         0 2022-05-20 09:32 perf-5.18.0-rc7/tools/scripts/
+> -rw-rw-r-- root/root      1091 2022-05-20 09:32 perf-5.18.0-rc7/tools/scripts/Makefile.arch
+> -rw-rw-r-- root/root      5905 2022-05-20 09:32 perf-5.18.0-rc7/tools/scripts/Makefile.include
+> -rw-rw-r-- root/root      5288 2022-05-20 09:32 perf-5.18.0-rc7/tools/scripts/utilities.mak
+> -rw-r--r-- acme/acme        41 2022-05-20 09:32 perf-5.18.0-rc7/HEAD
+> -rw-r--r-- acme/acme        46 2022-05-20 09:32 perf-5.18.0-rc7/PERF-VERSION-FILE
+> ⬢[acme@toolbox perf-urgent]$
+> 
+> - Arnaldo
+>  
+>> diff --git a/tools/perf/util/libunwind/arm64.c b/tools/perf/util/libunwind/arm64.c
+>> index 15f60fd09424..014d82159656 100644
+>> --- a/tools/perf/util/libunwind/arm64.c
+>> +++ b/tools/perf/util/libunwind/arm64.c
+>> @@ -24,7 +24,7 @@
+>>  #include "unwind.h"
+>>  #include "libunwind-aarch64.h"
+>>  #define perf_event_arm_regs perf_event_arm64_regs
+>> -#include <../../../../arch/arm64/include/uapi/asm/perf_regs.h>
+>> +#include <../../../arch/arm64/include/uapi/asm/perf_regs.h>
+>>  #undef perf_event_arm_regs
+>>  #include "../../arch/arm64/util/unwind-libunwind.c"
+>>
+> 

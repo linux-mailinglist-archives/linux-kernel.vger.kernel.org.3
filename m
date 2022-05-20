@@ -2,115 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 169DD52EB23
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 13:51:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F072252EB25
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 13:51:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348718AbiETLvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 07:51:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58246 "EHLO
+        id S1348729AbiETLv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 07:51:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348709AbiETLvO (ORCPT
+        with ESMTP id S1348722AbiETLvX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 07:51:14 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45BB2120AC;
-        Fri, 20 May 2022 04:51:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1653047440;
-        bh=k4fKVQvURjqEQ8MtrJ2m1VCLQBvog7lyn9M2Wt/lV0Q=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=MKjD+jclEwCeFylv0hyyBS+WvHTmuPewzMPlTAPq4SzQ7HIxWMHCty6ASa4JQwjts
-         i4zZ0vYjycUJIHJPXmCz4RSB5WtmU7htC0/jVaXw49EzRSz0Oe593S1T5DNGJ3Bj8A
-         duJ+9EBhv28L9SHCZLW8pavMUMEJSrR/3AitmwCI=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [217.61.152.153] ([217.61.152.153]) by web-mail.gmx.net
- (3c-app-gmx-bap67.server.lan [172.19.172.67]) (via HTTP); Fri, 20 May 2022
- 13:50:39 +0200
+        Fri, 20 May 2022 07:51:23 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CAAD193EF
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 04:51:20 -0700 (PDT)
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id DBDD53F1EE
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 11:51:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1653047477;
+        bh=ulZqruHzuXibmsmfjZ5kTMOimfHFQdq4BeiWtFLLtng=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=cunq3yYICOjhgmxy2olxG1fcA0tIhbu3rQFiS9BfNPEKYaHFhgnqW7BemCM9v7rHs
+         WxL/cLM50XRpch9h6L9zl5npW5uwj02tYgJY2Cfj1FQbR4b1M+YPu1024hCWrAQEOe
+         lq/Yg0WTdFCSz+WAnZveIDlCz7fCWGEWUUHviv7uu+ZdOko19cdnJlEiQWmN93E6/L
+         Z6obT9I1sPVOPtycNnrDZbsDq67dB+Wr8mstJmleGUhM4yAVk0WsZ3aminTBasagya
+         WdYkMPc4Jpw6crB7N+BpNYL+I0dBeoXcpLt67rLFXHLVTMEcMQ1NIBE1fJV1USGsbC
+         kugaBZyo3JjDQ==
+Received: by mail-ed1-f71.google.com with SMTP id p13-20020aa7c4cd000000b0042ab847aba8so5535553edr.0
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 04:51:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ulZqruHzuXibmsmfjZ5kTMOimfHFQdq4BeiWtFLLtng=;
+        b=P0RQGcHhy3z9vW4lSUSKzRbhFyHfsU4UkR0a43EE27Mq5NckK3PACbgd0Z3E7pVT4V
+         GhDck9C5VQHhkThUysnoIyM2fWiBptwiBpCxNt0sSkLlK8+nkkf7rIjNov7RwO+TOGCD
+         F7GU/JF4Iqu1thi1h5OlCPnnxa6r4JZzLI+Pu2cDlvbKlx4Vr3InDgUgTnx4a/LyBfK5
+         otzB2Ax7NbdKqyoT5ruY0Uec8bsE/U7ygWcXuyELnhaMKKsSgae2k+xpyOQ1Cr/rNi4c
+         NF6t+T1XjN5XAnxXBgGpfH2VQUUOgK7Ipl1oX5mHeMM2Gjqj/HQNiTZwKkMrpMbiJRRP
+         hDSQ==
+X-Gm-Message-State: AOAM532u6IhXi7PxJRjCTidd7DYln9QCT97BXXeYKMGaVU0awF6Wv5JI
+        DE8mXplSAfopQ/cOzyZtvwAoC0PGMPQxjkQMnIn/JeGd8x6IQB+zP02n+khy+Gyx00vRCP3MFm3
+        b1eZqD7mQlvGvsJQ1jKArRJx5QfuAf78C68V2H4GHZQ==
+X-Received: by 2002:a17:907:7ea2:b0:6fe:7ef2:b71d with SMTP id qb34-20020a1709077ea200b006fe7ef2b71dmr8127410ejc.508.1653047477468;
+        Fri, 20 May 2022 04:51:17 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwcRQRee3TWn0TijUw5yehWrcDOC+S3/Ig1s/PEUC/T4w2AOT2xmnYsTj5rT1lS6xgC2pgVrQ==
+X-Received: by 2002:a17:907:7ea2:b0:6fe:7ef2:b71d with SMTP id qb34-20020a1709077ea200b006fe7ef2b71dmr8127397ejc.508.1653047477330;
+        Fri, 20 May 2022 04:51:17 -0700 (PDT)
+Received: from gollum.fritz.box ([194.191.244.86])
+        by smtp.gmail.com with ESMTPSA id e18-20020a50fb92000000b0042ab8c5e99fsm4112411edq.14.2022.05.20.04.51.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 May 2022 04:51:16 -0700 (PDT)
+From:   Juerg Haefliger <juerg.haefliger@canonical.com>
+X-Google-Original-From: Juerg Haefliger <juergh@canonical.com>
+To:     keguang.zhang@gmail.com, tsbogend@alpha.franken.de,
+        linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Juerg Haefliger <juergh@canonical.com>
+Subject: [PATCH] MIPS: loongson32: Kconfig: Remove extra space
+Date:   Fri, 20 May 2022 13:51:13 +0200
+Message-Id: <20220520115113.147170-1-juergh@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Message-ID: <trinity-940b8fcf-17e7-4445-8aeb-e17f36b41b4b-1653047439840@3c-app-gmx-bap67>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Frank Wunderlich <linux@fw-web.de>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Vinod Koul <vkoul@kernel.org>,
-        Johan Jonker <jbx6244@gmail.com>,
-        linux-rockchip@lists.infradead.org, linux-pci@vger.kernel.org,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>
-Subject: Aw: Re: Re: [RFC v3 1/5] dt-bindings: phy: rockchip: add PCIe v3
- phy
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 20 May 2022 13:50:39 +0200
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <20220518155551.GB3302100-robh@kernel.org>
-References: <20220514115946.8858-1-linux@fw-web.de>
- <20220514115946.8858-2-linux@fw-web.de>
- <1652570081.002742.3276245.nullmailer@robh.at.kernel.org>
- <trinity-02ad648c-f6f8-4383-b389-a0578d5a02d2-1652615387162@3c-app-gmx-bap15>
- <20220516173537.GA2942634-robh@kernel.org>
- <9496CAFB-6CB6-4BDA-A539-3A6E1B562299@public-files.de>
- <20220518155551.GB3302100-robh@kernel.org>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:SD3Edrf+NaJ//x8ye3V+dsdMGeWh8sRcrH6vyLezIFMvvRfi2kD/w+du5767L1pt7TB3A
- 9diq3JRpFJSmaDntiITaiJm2eZhpyfFCpjcf93y/5BMa+mMkKuIkHOmuN6fjAMElAvyjrbt9h18s
- Amtj5SSaEGyHSUtMkNjocxpSMH1INw1kDjl/7AAAPbCPR0mgoLp+E63LMkBfCG09Z4O0eh1HeXkl
- 47XVC40CdkXePpbMILRd5yP3FSHED6RQrQaoKM95aJmTccxHuQRmMjL4SS33OZ+NxgGLSUqzUKr4
- KE=
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ldW5S2z+XIU=:UXxS08Sj+aFSCv9KzQQTl2
- 1XnLZLY0FknaXahW1slqvCuFzb2THKkDUdph5QOpPyccApSaQNyeQNhYPecZryHHRWDOx8uga
- QIgdI3TCF3BNeFm047mDBshfAQ8psCtAMxAKCxojFBNNP9lLT9+nbg6LjUdWukSQCPPDbYpjD
- hot81cTZ7C3snYY/gUT9GE7zCEPV+M7OZMLBjktjReL4t32VaHwn/du6LM9G22CigWHx27jAq
- 6L16V9eeFWFRy8/rAxw3p+Wa8jCMFdcRuUPGSrEZgML3oRmkOK2KFrREdnOvg4I+knqORYl1k
- pxjxw+AKFkrZiSgX+2pGV3bwCi9iudf70ZU+lpIsPDPX3pYezIyfYHlzxLKmf2v1kiyfM1hiC
- a3EtG1Y0sIPo1sTnWDWBkmcby0riINfmxzTAqZytZ6RUIlHpmxebFsyxFxXskq+GGz63GDjmz
- ZLHoeoRMb5EwAJCf1W1/o7GCSSi8HGqkOEFoFvxY4RDU3Gj9jILxOJfxNiF3A1cuukwBfhum6
- C6wWfevuyyn7z3AgZdiIed+IgAVCYQRdPkz3JJ9zu/n6l+KFbhzebzwbcoLoOqW5twRWa4vw8
- BXsNil/j02qVXJm5RaYlhMsjbHBAvnU8X7LnCCuv9FS4C5NaXy4zKI+FA/gAWXMn4bLErlz69
- RtPNKV8cf+qA4/tQYbR2TZ+gI34nUo2dSlpvDbaIYN08WxG+AGf+qkZAqRS2wJGZPCL6zcgxy
- GI5EFSSu3thLB62bHwpa/wmuTpY5N8hblFje+N0jkUQL7fexaX5FgO8DamSspHAIWKCAESzvO
- jMNrQLd
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Remove extra space between 'prompt' keyword and string.
 
-fixed reg-error by using 32bit-address in example, in my test output is clean.
+Signed-off-by: Juerg Haefliger <juergh@canonical.com>
+---
+ arch/mips/loongson32/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-+++ b/Documentation/devicetree/bindings/phy/rockchip,pcie3-phy.yaml
-@@ -68,7 +68,7 @@ examples:
-     #include <dt-bindings/clock/rk3568-cru.h>
-     pcie30phy: phy@fe8c0000 {
-       compatible = "rockchip,rk3568-pcie3-phy";
--      reg = <0x0 0xfe8c0000 0x0 0x20000>;
-+      reg = <0xfe8c0000 0x20000>;
+diff --git a/arch/mips/loongson32/Kconfig b/arch/mips/loongson32/Kconfig
+index e27879b4813b..2ef9da0016df 100644
+--- a/arch/mips/loongson32/Kconfig
++++ b/arch/mips/loongson32/Kconfig
+@@ -46,7 +46,7 @@ menuconfig CEVT_CSRC_LS1X
+ 	  If unsure, say N.
+ 
+ choice
+-	prompt  "Select clockevent/clocksource"
++	prompt "Select clockevent/clocksource"
+ 	depends on CEVT_CSRC_LS1X
+ 	default TIMER_USE_PWM0
+ 
+-- 
+2.32.0
 
-
-i hope yours is clean too
-
-
-regarding data-lanes instead of own lane-map, Peter and me only find this in special
-bindings outside the phy-"namespace" like this.
-
-https://elixir.bootlin.com/linux/v5.18-rc7/source/Documentation/devicetree/bindings/media/video-interfaces.yaml#L157
-
-do you mean converting this binding and add it there and base out binding on it?
-
-https://elixir.bootlin.com/linux/v5.18-rc7/source/Documentation/devicetree/bindings/phy/phy-bindings.txt
-
-regards Frank

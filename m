@@ -2,119 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 588D952EB64
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 14:01:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED57052EB5D
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 14:00:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348909AbiETMAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 08:00:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50126 "EHLO
+        id S1348826AbiETMAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 08:00:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348879AbiETMAo (ORCPT
+        with ESMTP id S239395AbiETMAV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 08:00:44 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA84240A38;
-        Fri, 20 May 2022 05:00:40 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id a3so13815767ybg.5;
-        Fri, 20 May 2022 05:00:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SsuQwYfm5G6xrNGiS/dHpJ/FwoJ31MhACc8+V8rTgs4=;
-        b=QNjKLehntMGX87wICh6YufpfX4yIxbslpam/PjvE0Xqsw4x/7SguqhkrUfBzEP1n4V
-         ilJureFeTvKEVR9uUcEw39VUnCUlNIjkgBYYXqcnQ9k3ZNmwiEWk2DKRg8flJc7/X3BA
-         ftK3v+kWAg8AUIL5dT+olwc39P/fHaXiMLSKPD6yIYG1qE2IJugelGfjj9pfZ8Y8BxGS
-         bpsYdLHIm0VRROCIRwSjkl2d0CI4xsPYwdFTcyvFw0TRx1YKZjO1H0q3jyH55CIa4Q9c
-         gYbSYOf5HfR8q7KGz8AieiBQvWUkjZpGEfRwB9NX0APmg68uXrQY70xnb1tBe4PFggJu
-         E8Yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SsuQwYfm5G6xrNGiS/dHpJ/FwoJ31MhACc8+V8rTgs4=;
-        b=qPMlhcxmZyYupxUiseBRQgH7p3eiEdfFJlcd77udUHDMoClYnFwze5TbJXSWtGPb6Z
-         2nvwPLIOtWrfnn8reVhjQzri4/Q7bfgbwQnQSr/syNhOPxLvoFTbrQf7Z+3PWAdVIxTH
-         6B+DC+cmQYHUeZUhSJLJSUHTa59BLFdqgUbZg2Ouh3bllyLp6ZyMuRE9FL0RAPvoqJmJ
-         6jIAtXj1bNjIBgtwpooGDm867Ki0+fcDfbIR5f58DN3a4yEg2Vn2PWS3Wz3ZDAQntJKm
-         CV29eYigOCzjB3Ce6VxZRMp95ieCKN8oBH08IhxpDrpat2FfWaYmIUDZAB9GiwT8Nt+U
-         OGhQ==
-X-Gm-Message-State: AOAM531QpCnEQVK1eq3vKik5vRFLBLvbn9jGjvH8jwaacus6OF9mlOse
-        ijVKiwkgxyEwOj/oGnlpWdFsuPVxhXXqywBhKZ4=
-X-Google-Smtp-Source: ABdhPJwujyCk/43sRIvp26J8wkO6JVNTSR+PioHs1VjDwLcTBQGwCdzMjlSPwT7BjDW2IjsCeP9z3sYt2L4qkTFGzX8=
-X-Received: by 2002:a25:a222:0:b0:64a:edb4:cf02 with SMTP id
- b31-20020a25a222000000b0064aedb4cf02mr8875692ybi.615.1653048038443; Fri, 20
- May 2022 05:00:38 -0700 (PDT)
+        Fri, 20 May 2022 08:00:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 174D33A72C
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 05:00:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653048015;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=605A85MV8zA5Tmbn3R+kznNXMiIuQQdRxWs90LDiRko=;
+        b=P8J0JOo1fEo4xUCciSKpZjhOxcSk1OQG41HwokQlp9zNpItQ/BSoGLHKVNeKjd9If8LX4Z
+        R3XUMZHGHjzh6yRSdW9Si6ekOBMA1JrHKckyz8ZPC/4hqFSVORcGMu118R+SdCabVO1Zpr
+        9hrIjnf7eXA8+Xt/nwGXKaSQ3IxOEzI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-413-yhoQ07uhNDSq52_IpxLa3w-1; Fri, 20 May 2022 08:00:14 -0400
+X-MC-Unique: yhoQ07uhNDSq52_IpxLa3w-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 37B7B3C0218E;
+        Fri, 20 May 2022 12:00:14 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D9323403152;
+        Fri, 20 May 2022 12:00:13 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     likexu@tencent.com
+Subject: [PATCH] KVM: x86/pmu: remove useless prototype
+Date:   Fri, 20 May 2022 08:00:13 -0400
+Message-Id: <20220520120013.3312909-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-References: <20220520115714.47321-1-javier.abrego.lorente@gmail.com>
-In-Reply-To: <20220520115714.47321-1-javier.abrego.lorente@gmail.com>
-From:   Javier Abrego Lorente <javier.abrego.lorente@gmail.com>
-Date:   Fri, 20 May 2022 14:00:02 +0200
-Message-ID: <CAPsi6X+M11NttnV80dYhA=0t=ZGH1YR1ZGssEZvz+kN8RYTcbw@mail.gmail.com>
-Subject: Re: [PATCH] FS: nfs: removed goto statement
-To:     Javier Abrego <javier.abrego.lorente@gmail.com>
-Cc:     trond.myklebust@hammerspace.com, anna@kernel.org,
-        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-final version, I promise.
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+---
+ arch/x86/kvm/pmu.h | 1 -
+ 1 file changed, 1 deletion(-)
 
-On Fri, 20 May 2022 at 13:57, Javier Abrego
-<javier.abrego.lorente@gmail.com> wrote:
->
-> In this function goto can be replaced. Avoiding goto will improve the
-> readability
->
-> Signed-off-by: Javier Abrego<javier.abrego.lorente@gmail.com>
-> ---
->  fs/nfs/nfs42xattr.c | 24 +++++++++++-------------
->  1 file changed, 11 insertions(+), 13 deletions(-)
->
-> diff --git a/fs/nfs/nfs42xattr.c b/fs/nfs/nfs42xattr.c
-> index e7b34f7e0..78130462c 100644
-> --- a/fs/nfs/nfs42xattr.c
-> +++ b/fs/nfs/nfs42xattr.c
-> @@ -747,20 +747,18 @@ void nfs4_xattr_cache_set_list(struct inode *inode, const char *buf,
->                 return;
->
->         entry = nfs4_xattr_alloc_entry(NULL, buf, NULL, buflen);
-> -       if (entry == NULL)
-> -               goto out;
-> -
-> -       /*
-> -        * This is just there to be able to get to bucket->cache,
-> -        * which is obviously the same for all buckets, so just
-> -        * use bucket 0.
-> -        */
-> -       entry->bucket = &cache->buckets[0];
-> -
-> -       if (!nfs4_xattr_set_listcache(cache, entry))
-> -               kref_put(&entry->ref, nfs4_xattr_free_entry_cb);
-> +       if (entry != NULL) {
-> +              /*
-> +               * This is just there to be able to get to bucket->cache,
-> +               * which is obviously the same for all buckets, so just
-> +               * use bucket 0.
-> +               */
-> +               entry->bucket = &cache->buckets[0];
-> +
-> +               if (!nfs4_xattr_set_listcache(cache, entry))
-> +                       kref_put(&entry->ref, nfs4_xattr_free_entry_cb);
-> +       }
->
-> -out:
->         kref_put(&cache->ref, nfs4_xattr_free_cache_cb);
->  }
->
-> --
-> 2.25.1
->
+diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
+index 0bce361f72b8..4e9785d3dc70 100644
+--- a/arch/x86/kvm/pmu.h
++++ b/arch/x86/kvm/pmu.h
+@@ -196,7 +196,6 @@ void kvm_pmu_cleanup(struct kvm_vcpu *vcpu);
+ void kvm_pmu_destroy(struct kvm_vcpu *vcpu);
+ int kvm_vm_ioctl_set_pmu_event_filter(struct kvm *kvm, void __user *argp);
+ void kvm_pmu_trigger_event(struct kvm_vcpu *vcpu, u64 perf_hw_id);
+-void kvm_init_pmu_capability(void);
+ 
+ bool is_vmware_backdoor_pmc(u32 pmc_idx);
+ 
+-- 
+2.31.1
+

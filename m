@@ -2,100 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AE8B52E4DC
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 08:16:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFCF652E4E8
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 08:23:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345783AbiETGQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 02:16:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41854 "EHLO
+        id S1345789AbiETGUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 02:20:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345791AbiETGQI (ORCPT
+        with ESMTP id S233905AbiETGUD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 02:16:08 -0400
-Received: from azure-sdnproxy-2.icoremail.net (azure-sdnproxy.icoremail.net [52.175.55.52])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 1DC933C488
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 23:16:03 -0700 (PDT)
-Received: from ubuntu.localdomain (unknown [124.236.130.193])
-        by mail-app4 (Coremail) with SMTP id cS_KCgAnkCMOModigzl+AA--.18742S2;
-        Fri, 20 May 2022 14:15:51 +0800 (CST)
-From:   Duoming Zhou <duoming@zju.edu.cn>
-To:     linux-staging@lists.linux.dev, gregkh@linuxfoundation.org
-Cc:     davem@davemloft.net, kuba@kernel.org, alexander.deucher@amd.com,
-        broonie@kernel.org, linux-kernel@vger.kernel.org,
-        Duoming Zhou <duoming@zju.edu.cn>
-Subject: [PATCH] staging: rtl8192u: Fix sleep in atomic context bug in dm_fsync_timer_callback
-Date:   Fri, 20 May 2022 14:15:41 +0800
-Message-Id: <20220520061541.14785-1-duoming@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: cS_KCgAnkCMOModigzl+AA--.18742S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7trWftF15CF13ur18Xw47Jwb_yoW8Aw1UpF
-        WkC3WDCF48tFnF9w1kAw4vvryFk3Z7Ca4xGF9rZ345u3s5t3WUWFWYyFy0yr4UA3y5CFWF
-        vFyYkr13Zr4DCr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkS14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4U
-        JVW0owA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GF1l
-        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAK
-        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
-        4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
-        6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUndb1UUUUU
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgAQAVZdtZyoSgAEsX
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,
-        RCVD_IN_VALIDITY_RPBL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Fri, 20 May 2022 02:20:03 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF7F14C74D;
+        Thu, 19 May 2022 23:20:00 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24JJnLmo022160;
+        Fri, 20 May 2022 08:19:39 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=efeJifdma56rD3trwjzxCU9cZ0DK0SMJX02sClHrbfw=;
+ b=duJP13Um8k8SytXA95+J6+41SUITXlFftu0VVJusXjoXGlWE+hO9McLhFxdnCVLFtko1
+ ZmSdCQpkEndPusIF/r9q5pcVDvxYw/w4vA2uL/mDMWuAE/RyTisKju+kfTIxG/5rT75w
+ sf2k1ODFUeXbP3rmTs5q2suSUrnh5Zi4ZauLVONb3/P8W/k3AVM8sS7/R/C6/sEKEc6/
+ +x50g20BkAv+OK8L5ktVfvxs0SiDpsdA+krPtVMSDNX2Kn7RBdZ7LbEnPkGKMwRiUGjk
+ v7bBF8qzczUzLu9zTPVm9QNOMIqopusYnZrRV1If34WISsbNJAAEHRn2BF5iqXkCC+Kk nA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3g23aj62rn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 May 2022 08:19:39 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 619B410002A;
+        Fri, 20 May 2022 08:19:37 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 58640210F73;
+        Fri, 20 May 2022 08:19:37 +0200 (CEST)
+Received: from [10.201.20.162] (10.75.127.49) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Fri, 20 May
+ 2022 08:19:36 +0200
+Message-ID: <6f3de705-7db5-584c-1b3a-3ff7fb5c9096@foss.st.com>
+Date:   Fri, 20 May 2022 08:19:36 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2 7/9] serial: st-asc: Sanitize CSIZE and correct PARENB
+ for CS7
+Content-Language: en-US
+To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        <linux-serial@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Shubhrajyoti Datta <shubhrajyoti.datta@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@st.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220519081808.3776-1-ilpo.jarvinen@linux.intel.com>
+ <20220519081808.3776-8-ilpo.jarvinen@linux.intel.com>
+From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
+In-Reply-To: <20220519081808.3776-8-ilpo.jarvinen@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.75.127.49]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-20_02,2022-05-19_03,2022-02-23_01
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are sleep in atomic context bugs when dm_fsync_timer_callback is
-executing. The root cause is that the memory allocation functions with
-GFP_KERNEL parameter are called in dm_fsync_timer_callback which is a
-timer handler. The call paths that could trigger bugs are shown below:
+Hi Ilpo
 
-    (interrupt context)
-dm_fsync_timer_callback
-  write_nic_byte
-    kzalloc(sizeof(data), GFP_KERNEL); //may sleep
-  write_nic_dword
-    kzalloc(sizeof(data), GFP_KERNEL); //may sleep
+On 5/19/22 10:18, Ilpo Järvinen wrote:
+> Only CS7 and CS8 seem supported but CSIZE is not sanitized from CS5 or
+> CS6 to CS8. In addition, ASC_CTL_MODE_7BIT_PAR suggests that CS7 has
+> to have parity, thus add PARENB.
+> 
+> Incorrect CSIZE results in miscalculation of the frame bits in
+> tty_get_char_size() or in its predecessor where the roughly the same
+> code is directly within uart_update_timeout().
+> 
+> Cc: Srinivas Kandagatla <srinivas.kandagatla@st.com>
+> Fixes: c4b058560762 (serial:st-asc: Add ST ASC driver.)
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> ---
+>  drivers/tty/serial/st-asc.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/tty/serial/st-asc.c b/drivers/tty/serial/st-asc.c
+> index d7fd692286cf..1b0da603ab54 100644
+> --- a/drivers/tty/serial/st-asc.c
+> +++ b/drivers/tty/serial/st-asc.c
+> @@ -535,10 +535,14 @@ static void asc_set_termios(struct uart_port *port, struct ktermios *termios,
+>  	/* set character length */
+>  	if ((cflag & CSIZE) == CS7) {
+>  		ctrl_val |= ASC_CTL_MODE_7BIT_PAR;
+> +		cflag |= PARENB;
+>  	} else {
+>  		ctrl_val |= (cflag & PARENB) ?  ASC_CTL_MODE_8BIT_PAR :
+>  						ASC_CTL_MODE_8BIT;
+> +		cflag &= ~CSIZE;
+> +		cflag |= CS8;
+>  	}
+> +	termios->c_cflag = cflag;
+>  
+>  	/* set stop bit */
+>  	ctrl_val |= (cflag & CSTOPB) ? ASC_CTL_STOP_2BIT : ASC_CTL_STOP_1BIT;
 
-This patch changes allocation mode from GFP_KERNEL to GFP_ATOMIC
-in order to prevent atomic context sleeping. The GFP_ATOMIC flag
-makes memory allocation operation could be used in atomic context.
+Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
 
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
----
- drivers/staging/rtl8192u/r8192U_core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/staging/rtl8192u/r8192U_core.c b/drivers/staging/rtl8192u/r8192U_core.c
-index ce807c9d421..679c362baad 100644
---- a/drivers/staging/rtl8192u/r8192U_core.c
-+++ b/drivers/staging/rtl8192u/r8192U_core.c
-@@ -267,7 +267,7 @@ int write_nic_byte(struct net_device *dev, int indx, u8 data)
- 
- 	struct r8192_priv *priv = (struct r8192_priv *)ieee80211_priv(dev);
- 	struct usb_device *udev = priv->udev;
--	u8 *usbdata = kzalloc(sizeof(data), GFP_KERNEL);
-+	u8 *usbdata = kzalloc(sizeof(data), GFP_ATOMIC);
- 
- 	if (!usbdata)
- 		return -ENOMEM;
-@@ -319,7 +319,7 @@ int write_nic_dword(struct net_device *dev, int indx, u32 data)
- 
- 	struct r8192_priv *priv = (struct r8192_priv *)ieee80211_priv(dev);
- 	struct usb_device *udev = priv->udev;
--	u32 *usbdata = kzalloc(sizeof(data), GFP_KERNEL);
-+	u32 *usbdata = kzalloc(sizeof(data), GFP_ATOMIC);
- 
- 	if (!usbdata)
- 		return -ENOMEM;
--- 
-2.17.1
-
+Thanks
+Patrice

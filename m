@@ -2,129 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FABB52E86C
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 11:11:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17B2D52E879
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 11:13:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347478AbiETJL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 05:11:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55296 "EHLO
+        id S1347619AbiETJNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 05:13:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347605AbiETJLL (ORCPT
+        with ESMTP id S1347583AbiETJNm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 05:11:11 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ED3BDF0F;
-        Fri, 20 May 2022 02:11:09 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id i66so9258834oia.11;
-        Fri, 20 May 2022 02:11:09 -0700 (PDT)
+        Fri, 20 May 2022 05:13:42 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B095118030
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 02:13:41 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id e28so10026356wra.10
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 02:13:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=n78l5RlYFGeFo4MNBVlJMHVJSe7vOSqvMkjGVeopbig=;
-        b=SwRH/flpGWQ2Cjxfcl7aQ6iDtBJyYD3zwaVhLcN9vDRZYNUwQEmQEfDwDDHtGESIHt
-         DmGc7TmTv4/Fuk2X5DKsr1idacAf95OYtl7BwBzC5Fq2vENwIUpQqpNifA17YPrXO0Z8
-         ITVd+8udxyXmidvtnSreiZUp35RyW+8voqGVbJE5TaWx12HIV+q4LQJaZ3avu80aJ2Co
-         RCerbuxw3XODbvNoO7HNNtQblji3GNCOPxwPJvakefQJOHdmL7/5Q7Ghe8oUyN5vq1U8
-         +jflJ8KxTSZyoxRqfkjsJgXn88IQi1JmmtXtnyyklb4tJEt3YNtKDMd3TZGC4tegTxnO
-         oeSQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jKOS1vGID3J/FbD4HTDSZ/zk/t5PNErFudLDsYqbEjw=;
+        b=eDW10/xIZg8sKzudeh/BQlWYLaGFZPTtoK3i1FcF+DsZPu/Efolmt5EniRfWlxNt0U
+         1E5gvYAaXaVKbbbLyyZb2ZO39bU4ZOxFU3e2Ym62AKSjgXikXJhtQhGwqCVuFX44ejAd
+         J4UmnsgvvSAb7eGxKalw2dogjSyRPfi6njZRCzVXqWmzyEB6jXIs94KOiRVbBqj4aLEk
+         0MiGWxbyjTLm5IQQ6Y0UeFAN1GaH6hBiKI6NxT3uwI8kst31koBe3moFLywILByhvGqB
+         8oED5ZAcd0gKNKtzQw4OvyR4foQ+7pqiTGoq0HEA/+WCZ+AwzGkTtA08XRS7ALuhVWrP
+         LaiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=n78l5RlYFGeFo4MNBVlJMHVJSe7vOSqvMkjGVeopbig=;
-        b=0hjdHYWFwuh61CaLiZRd3f/uFYzuQOQ69zBNWc1NTgxHuBbLQgUGp9KlL7LhsuekaZ
-         jqT5BsH9VpALvPl/wqo5lV+HkC8sbqo+o/1L0902yWkuRHTQzQqj5lKcD6JRMQwuX/Ku
-         KVFVk6jqp4hO/ZodVyQYXtMEdJviQY9NWKLNeg5HdH+iNGtAbCpcS88KJ7qaQT0xCaFl
-         q+CZuXFFGiRrcgm8KmVL3el0/WHF7LHh1cHm4icnxDdaaJidxz2xSuuYRdzOx078A5/L
-         LPXKGlI9NcqTuRD0bOopth5NQlSf/YnYTk2SPzBwVXB+kzBtopph09U8Y7FIL+3b5yUR
-         HKiQ==
-X-Gm-Message-State: AOAM530b7Fcma4IWsE3SY3QXu0Vlk0VBWSwlbhunm/mIYmfgCJBu3P7Y
-        yxgmrl5qiS2Wznkwg6N1CjI=
-X-Google-Smtp-Source: ABdhPJy7QDmOM+GL7OEQ0lEPwD3lfsn1zoQ2XabM9gR0n5SIf16UEH3vIb+NvgbcTT5Smwg/6andnQ==
-X-Received: by 2002:a05:6808:13c3:b0:328:da83:aaeb with SMTP id d3-20020a05680813c300b00328da83aaebmr5213414oiw.184.1653037868747;
-        Fri, 20 May 2022 02:11:08 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v5-20020a056870954500b000e9364288bfsm685962oal.45.2022.05.20.02.11.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 May 2022 02:11:08 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <6e0f7f48-ecfd-16be-8672-aa4ba11b0c91@roeck-us.net>
-Date:   Fri, 20 May 2022 02:11:05 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jKOS1vGID3J/FbD4HTDSZ/zk/t5PNErFudLDsYqbEjw=;
+        b=f7s7ARaSEQZf7Zuw6jRUve9DBmDrXTTMNSndi4l+Q3mzRjYbyu16b0ea67ZIeloyhd
+         HIVMi7ZY4yfSM7ocglhpS9HQ6clvt70dM/3AtsL/F/dQRqGRaH5O2jbhvTZtc/USazv9
+         9YDZyWJrG4HwMyNASpmHESJI44jBciMgJLxMDvLkjCXJ4Cn+KIgkwERM3wtIigdLSTQx
+         XAKEW+QY77ej/gMJdImo9Edz3j1kz8pZZi33zHm3nBGbppZjwfA6FTOx3C6EVJousQSo
+         69q7yM0FjGWtwXhJbNtCc7XZMLGSmJYwILys8Ix8Ite3j86XPkAutedvwV0kQmyk/9uo
+         +0FQ==
+X-Gm-Message-State: AOAM530pVx4Aw7KWjyq5T/qsPD+ZsYBxIa7StHnZFHLrU/dJp6qHyw12
+        1g/pzo85MkeflocPaXqZMhhySOCDweRB5cuemTKJFQ==
+X-Google-Smtp-Source: ABdhPJzdNGEuWx52c5Mk4SfyNjiWYfScv37uAvT7HSY3sSxV4Mt41Wnou8aoh2If9uZxTmRc8VCgOe5De+zqkROkN/Y=
+X-Received: by 2002:a05:6000:154a:b0:20c:7e65:c79e with SMTP id
+ 10-20020a056000154a00b0020c7e65c79emr7567562wry.582.1653038019513; Fri, 20
+ May 2022 02:13:39 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v2] dt-bindings: watchdog: toshiba,visconti-wdt: Update
- the common clock properties
-Content-Language: en-US
-To:     Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     linux-watchdog@vger.kernel.org, yuji2.ishikawa@toshiba.co.jp,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Rob Herring <robh@kernel.org>
-References: <20220520090024.620928-1-nobuhiro1.iwamatsu@toshiba.co.jp>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220520090024.620928-1-nobuhiro1.iwamatsu@toshiba.co.jp>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220520012133.1217211-1-yosryahmed@google.com>
+ <20220520012133.1217211-3-yosryahmed@google.com> <YodCPWqZodr7Shnj@slm.duckdns.org>
+In-Reply-To: <YodCPWqZodr7Shnj@slm.duckdns.org>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Fri, 20 May 2022 02:13:03 -0700
+Message-ID: <CAJD7tkYDLc9irHLFROcYSg1shwCw+Stt5HTS08FW3ceQ5b8vqQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 2/5] cgroup: bpf: add cgroup_rstat_updated()
+ and cgroup_rstat_flush() kfuncs
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Michal Hocko <mhocko@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Cgroups <cgroups@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/20/22 02:00, Nobuhiro Iwamatsu wrote:
-> The clock for this driver switched to the common clock controller driver.
-> Therefore, update common clock properties for watchdog in the binding document.
-> And this matched this example with the actual dts.
-> 
-> Signed-off-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-> Acked-by: Rob Herring <robh@kernel.org>
-> ---
->   .../bindings/watchdog/toshiba,visconti-wdt.yaml     | 13 ++++---------
->   1 file changed, 4 insertions(+), 9 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/toshiba,visconti-wdt.yaml b/Documentation/devicetree/bindings/watchdog/toshiba,visconti-wdt.yaml
-> index 690e19ce4b87..52c0e0c022ea 100644
-> --- a/Documentation/devicetree/bindings/watchdog/toshiba,visconti-wdt.yaml
-> +++ b/Documentation/devicetree/bindings/watchdog/toshiba,visconti-wdt.yaml
-> @@ -35,20 +35,15 @@ additionalProperties: false
->   
->   examples:
->     - |
-> +    #include <dt-bindings/clock/toshiba,tmpv770x.h>
-> +
->       soc {
->           #address-cells = <2>;
->           #size-cells = <2>;
->   
-> -        wdt_clk: wdt-clk {
-> -            compatible = "fixed-clock";
-> -            clock-frequency = <150000000>;
-> -            #clock-cells = <0>;
-> -        };
-> -
-> -        watchdog@28330000 {
-> +        wdt: watchdog@28330000 {
->               compatible = "toshiba,visconti-wdt";
->               reg = <0 0x28330000 0 0x1000>;
-> -            clocks = <&wdt_clk>;
-> -            timeout-sec = <20>;
-> +            clocks = <&pismu TMPV770X_CLK_WDTCLK>;
->           };
->       };
+On Fri, May 20, 2022 at 12:24 AM Tejun Heo <tj@kernel.org> wrote:
+>
+> On Fri, May 20, 2022 at 01:21:30AM +0000, Yosry Ahmed wrote:
+> > Add cgroup_rstat_updated() and cgroup_rstat_flush() kfuncs to bpf
+> > tracing programs. bpf programs that make use of rstat can use these
+> > functions to inform rstat when they update stats for a cgroup, and when
+> > they need to flush the stats.
+> >
+> > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+>
+> Do patch 1 and 2 need to be separate? Also, can you explain and comment why
+> it's __weak?
 
-wdt: isn't needed in the example, and I question if it
-really improves the quality of the example to remove
-timeout-sec.
+I will squash them in the next version.
 
-Guenter
+As for the declaration, I took the __weak annotation from Alexei's
+reply to the previous version. I thought it had something to do with
+how fentry progs attach to functions with BTF and all.
+When I try the same code with a static noinline declaration instead,
+fentry attachment fails to find the BTF type ID of bpf_rstat_flush.
+When I try it with just noinline (without __weak), the fentry program
+attaches, but is never invoked. I tried looking at the attach code but
+I couldn't figure out why this happens.
+
+In retrospect, I should have given this more thought. It would be
+great if Alexei could shed some light on this.
+
+>
+> Thanks.
+
+
+>
+> --
+> tejun

@@ -2,138 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9A6652F08E
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 18:26:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D630652F095
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 18:27:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351590AbiETQ0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 12:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41510 "EHLO
+        id S1351599AbiETQ1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 12:27:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351588AbiETQZy (ORCPT
+        with ESMTP id S1351584AbiETQ1N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 12:25:54 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC1115FC3
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 09:25:51 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id gi33so8073151ejc.3
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 09:25:51 -0700 (PDT)
+        Fri, 20 May 2022 12:27:13 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2B8F1312B8;
+        Fri, 20 May 2022 09:27:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FUaa/CsIoXFhGcqQomBYha0KA+E1xpoSdaSoOErgusY=;
-        b=sCdCdZqIB2fM6C3/IMxJnyMHv4TxKGmIAEibbdWMh6FRbyWFI9mTEtryWRZ/NF+hj8
-         +Hx7jY6REjkdGsBVNwZIlsBAmuMkblQlokQialFoP0r3E+mVoJ7qGv/cmH27SzZH0S3E
-         6LoxOjAbQe+XtYP+GErjofpGVizVrpa3tPrxVs+yqbwCv/s6FVcSIgxyZOKq/Unt6sfK
-         WQdH0KeBkcXcGDUDuTf8vX6Et8/Yi9aMTfXHIESge8rquWo4PxOSekV4zJTp0tvovfMW
-         u6nTEG2KKtXD08jklErYVdrtfiimeio1bUddW1+xIx6fvJXFqqsrZgzOoeJe1LhQ/lrW
-         jHfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FUaa/CsIoXFhGcqQomBYha0KA+E1xpoSdaSoOErgusY=;
-        b=QPNI/yZxzUuDCU++3lceEuOw4lNcEOAyP3c2Jr2wYNZBjmmEk5GkaqLRxL27XRFLNV
-         aGNUDyRhA/3v3lyFINupuZeb8jr/zNi3ZJCOhvZnWVoETDVIOAPe3AqyZdV2VR/6byL7
-         c+yZJM6tqlrbHCBhM9GYLCauOj8GzMI1Lgk5P/O7Tpz3XW4fn0roT/pfVQ1gkTGtzseF
-         PwlmTYn0Kg3HFifm7Q2ATabcCCiZRGxAsY1Jf4qNMaESw5QFBnQtq6KYhBwPawDEWRX0
-         wI0+SdtVon+pFTY2I6LwPPvNz+R7dnRtqytgJaLK4TwhXCInxGqPTyBWDHnN+dZO7bJ3
-         O21Q==
-X-Gm-Message-State: AOAM531bUUzYZucbyfWDeF2st1D2Rcz7BJeP88QToT2bD3C6IKw13NXB
-        Ph6v3/sykjyqEJVvFzSGTbq7h+5RqmoN1xLynbbrXw==
-X-Google-Smtp-Source: ABdhPJzp/NHzceLMjs5KyttxLo22ikbB+moAIzlm/g7LpDw857XHy/sDkHqgW7kFrYOz58Ub2ZX5aqSsTj4pK+KZ3Kc=
-X-Received: by 2002:a17:907:9813:b0:6fa:78b0:9be2 with SMTP id
- ji19-20020a170907981300b006fa78b09be2mr9585859ejc.159.1653063949975; Fri, 20
- May 2022 09:25:49 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1653064032; x=1684600032;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=wfqmk7wibYupKrHcNoy/jRv/XjBNJjPc8xgFZ8HhRCw=;
+  b=GpXUwrZD6XEdYm6//8HU0jYhX7uzHshiAjUVYV03i9iEGb6PmSGxDe16
+   2PavJGfy6ywBWA1vfoRB3DNOhzZhmRQonBjDl47g/RmMg81bRfrGWRDV5
+   6LzO1WRGOkN6k26QDpcED5VaPDT4ycMOg6QxaDXJG1eTGGw6gpYaxC+8K
+   o=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 20 May 2022 09:27:12 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 09:27:11 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 20 May 2022 09:27:11 -0700
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 20 May 2022 09:27:10 -0700
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
+        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <bjorn.andersson@linaro.org>
+CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
+        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v8 0/3] eDP/DP Phy vdda realted function
+Date:   Fri, 20 May 2022 09:26:58 -0700
+Message-ID: <1653064021-25400-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <20220510235653.933868-1-tjmercier@google.com> <3365cd1d750e84fedc8e75d646a77ffd85619d35.camel@ndufresne.ca>
- <CABdmKX3ZV6-u-oLvW_wWavAMBfrsZ=C_rCgK_Uz4VjxcRvRFew@mail.gmail.com>
- <81026ef07c1ce20f8673b75b17bab79a2b39c548.camel@ndufresne.ca>
- <CABdmKX2LxZ6zZR=fhXfnuWCB2BR+gzDd1-t1DD2A2XP24wvuGQ@mail.gmail.com>
- <Yn6DpUsoSz1/15Kc@slm.duckdns.org> <CABdmKX1xvm87WMEDkMc9Aye46E4zv1-scenwgaRxHesrOCsaYg@mail.gmail.com>
- <YodHjYlMx1XGtM2+@slm.duckdns.org>
-In-Reply-To: <YodHjYlMx1XGtM2+@slm.duckdns.org>
-From:   "T.J. Mercier" <tjmercier@google.com>
-Date:   Fri, 20 May 2022 09:25:38 -0700
-Message-ID: <CABdmKX2Ok023rN1drQgXVZLKUO_DVYrzmEamCgMMu6BPO67yhQ@mail.gmail.com>
-Subject: Re: [PATCH v7 0/6] Proposal for a GPU cgroup controller
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@redhat.com>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Shuah Khan <shuah@kernel.org>, Daniel Vetter <daniel@ffwll.ch>,
-        John Stultz <jstultz@google.com>,
-        Carlos Llamas <cmllamas@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
-        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        kernel-team@android.com, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 12:47 AM Tejun Heo <tj@kernel.org> wrote:
->
-> Hello,
->
-> On Tue, May 17, 2022 at 04:30:29PM -0700, T.J. Mercier wrote:
-> > Thanks for your suggestion. This almost works. "dmabuf" as a key could
-> > work, but I'd actually like to account for each heap. Since heaps can
-> > be dynamically added, I can't accommodate every potential heap name by
-> > hardcoding registrations in the misc controller.
->
-> On its own, that's a pretty weak reason to be adding a separate gpu
-> controller especially given that it doesn't really seem to be one with
-> proper abstractions for gpu resources. We don't want to keep adding random
-> keys to misc controller but can definitely add limited flexibility. What
-> kind of keys do you need?
->
-Well the dmabuf-from-heaps component of this is the initial use case.
-I was envisioning we'd have additional keys as discussed here:
-https://lore.kernel.org/lkml/20220328035951.1817417-1-tjmercier@google.com/T/#m82e5fe9d8674bb60160701e52dae4356fea2ddfa
-So we'd end up with a well-defined core set of keys like "system", and
-then drivers would be free to use their own keys for their own unique
-purposes which could be complementary or orthogonal to the core set.
-Yesterday I was talking with someone who is interested in limiting gpu
-cores and bus IDs in addition to gpu memory. How to define core keys
-is the part where it looks like there's trouble.
+1) add regulator_set_load() to eDP phy
+2) add regulator_set_load() to DP phy
+3) remove vdda related function out of eDP/DP controller
 
-For my use case it would be sufficient to have current and maximum
-values for an arbitrary number of keys - one per heap. So the only
-part missing from the misc controller (for my use case) is the ability
-to register a new key at runtime as heaps are added. Instead of
-keeping track of resources with enum misc_res_type, requesting a
-resource handle/ID from the misc controller at runtime is what I think
-would be required instead.
+Kuogee Hsieh (3):
+  phy: qcom-edp: add regulator_set_load to edp phy
+  phy: qcom-qmp: add regulator_set_load to dp phy
+  drm/msm/dp: delete vdda regulator related functions from eDP/DP
+    controller
 
-> Thanks.
->
-> --
-> tejun
+ drivers/gpu/drm/msm/dp/dp_parser.c  | 14 ------
+ drivers/gpu/drm/msm/dp/dp_parser.h  |  6 ---
+ drivers/gpu/drm/msm/dp/dp_power.c   | 95 +------------------------------------
+ drivers/phy/qualcomm/phy-qcom-edp.c |  7 +++
+ drivers/phy/qualcomm/phy-qcom-qmp.c | 16 +++++++
+ 5 files changed, 25 insertions(+), 113 deletions(-)
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
+

@@ -2,66 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20F6D52EAE1
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 13:34:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 631E252EAE4
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 13:34:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242092AbiETLeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 07:34:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53240 "EHLO
+        id S1348570AbiETLeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 07:34:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244015AbiETLd5 (ORCPT
+        with ESMTP id S244015AbiETLee (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 07:33:57 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52796703C4
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 04:33:55 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id ck4so10795884ejb.8
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 04:33:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2Ff5tto3mG2moHDMZagyk1l4RGcRKVIn9NkwB+MYSFs=;
-        b=U7Hq/1yUUCJZVXfuVeGXfp42guR6XkALOJuCS98MJXa4mUPB101zO1rp84DeQDs8ig
-         4NQ6xwIcFxhYCCYOmVA1ovS/lkZMTttERIi9bT3wcTIviG1V2O0bAalzmtLr4kYKVWop
-         8xKaDqYiM8aYtgMeryqeg3Ec52+K3u3ktj9UiiJpoVmk70yDX/uGV4TowDHGRPVY/5d8
-         6vN7jTfonOu9cBvJBtC6EVqhE1fyUINoovNFNTtzfe/57ds3o/xIXACzDp6JPiBMk9QP
-         rbVf4mdGnNBKUTTGRAlZnrLo1Utg4TT7Yju0A1HRi3HhMiblXTUXCd4ssq9kWBuu88DM
-         9KGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2Ff5tto3mG2moHDMZagyk1l4RGcRKVIn9NkwB+MYSFs=;
-        b=3NcaulCk9TgH7A4YRlM+FzRpwxPT6vkUuxf7JCzi+/DeqL0PjyuFW+94e2tIN98LyP
-         O9z/xyjIlztqeppQ2xSi+mZgPtl6ku3WeIsipPlAAeajhGqemFJKqi8kX1KD7A1zcKU6
-         geutzG93+saOrGk6hkKtU93gt4DRWZ+DeJHcccP3xTx70lbc+GsLIQRq1PhOh8TPStou
-         GurYNkHZMTSzXnv3yVVYYCMtG9jvJHgHJ6+lGEvNExwWFYQPO0wiEpZaZofmHq2534Dy
-         yQgwyOW/h/9yavx4TFa54joKgjxFSfioO0+0Yd566GGN0JiyubvHXrt5lYGm5N9wYH4R
-         rZ7w==
-X-Gm-Message-State: AOAM530ljZpulb3aO06Rac2T9zklEGBTfcLyTZi3wQAbLAeLMgrWQrkH
-        dDtZ0rU7HVSkhO3b7IuNa0VktKA7ugtw3RAYlGsqJw==
-X-Google-Smtp-Source: ABdhPJxWOe0zDSPIJekNjBgD1lDZe2XG7cWximV0loSY7pxt3y6QF+zM9JUWooKidrZRLdvXWARpFnfhUN2ca5sFsSI=
-X-Received: by 2002:a17:907:6d8b:b0:6fe:874:25bf with SMTP id
- sb11-20020a1709076d8b00b006fe087425bfmr8658117ejc.734.1653046433749; Fri, 20
- May 2022 04:33:53 -0700 (PDT)
+        Fri, 20 May 2022 07:34:34 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E93470903;
+        Fri, 20 May 2022 04:34:30 -0700 (PDT)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 3974B1C0009;
+        Fri, 20 May 2022 11:34:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1653046468;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=t1RpCyOt9vJRwKKZzMrNpG1QDdfyBUk2YTX9dVi8KKY=;
+        b=Wcv2GBx4h6bBjBzJJdSS+4fp72OcI+2Tee3mT8kqifTa+CgH64T0l9F1N+HCSwYgXMt/XU
+        1mQlR4x6eCs8CGmkef2yNz1vxLNhgclH9+fi8MhIqSPG52me/Del76AttyXF4bP5dhf82U
+        ulvNLRDEKpq4REfbrBk2opMcYhS5/FQh6XmjT/D+bBpfNrYMupvHDoS5xXULqRGyHnsCn7
+        FVybCaG+3VjOJmI7w0VGs6BJaAiEYXwn0qhIGp856pbl9ri6eLgTFsivh6RcM5yTgv2qA7
+        WP1p0YkRiSYNi9BhReSFhQazp9AuMkfrzD8ZSsC701ZJ0He/bNeXZMORIDhcag==
+Date:   Fri, 20 May 2022 13:34:26 +0200
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH 2/3] dt-bindings: usb: atmel: Add Microchip LAN966x
+ compatible string
+Message-ID: <20220520133426.3b4728ae@bootlin.com>
+In-Reply-To: <8f0d4127-7e66-cf50-21c9-99680f737e30@linaro.org>
+References: <20220513105850.310375-1-herve.codina@bootlin.com>
+        <20220513105850.310375-3-herve.codina@bootlin.com>
+        <8f0d4127-7e66-cf50-21c9-99680f737e30@linaro.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <20220520025624.3803776-1-zheyuma97@gmail.com>
-In-Reply-To: <20220520025624.3803776-1-zheyuma97@gmail.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 20 May 2022 13:33:43 +0200
-Message-ID: <CAMRc=MfeEjJ0bGaDgkYOxYA1pi+8376zis=V1Hyvy5K3AKCAxA@mail.gmail.com>
-Subject: Re: [PATCH v3] gpio: ml-ioh: Convert to use managed functions pcim*
- and devm_*
-To:     Zheyu Ma <zheyuma97@gmail.com>
-Cc:     Andy Shevchenko <andy@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,173 +68,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 4:56 AM Zheyu Ma <zheyuma97@gmail.com> wrote:
->
->  When removing the module, we will get the following flaw:
->
-> [   14.204955] remove_proc_entry: removing non-empty directory 'irq/21', leaking at least 'gpio_ml_ioh'
-> [   14.205827] WARNING: CPU: 0 PID: 305 at fs/proc/generic.c:717 remove_proc_entry+0x389/0x3f0
-> ...
-> [   14.220613]  ioh_gpio_remove+0xc5/0xe0 [gpio_ml_ioh]
-> [   14.221075]  pci_device_remove+0x92/0x240
->
-> Fix this by using managed functions, this makes the error handling more
-> simpler.
->
-> Fixes: e971ac9a564a ("gpio: ml-ioh: use resource management for irqs")
-> Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
-> ---
->  drivers/gpio/gpio-ml-ioh.c | 76 ++++++++------------------------------
->  1 file changed, 16 insertions(+), 60 deletions(-)
->
-> diff --git a/drivers/gpio/gpio-ml-ioh.c b/drivers/gpio/gpio-ml-ioh.c
-> index b060c4773698..48e3768a830e 100644
-> --- a/drivers/gpio/gpio-ml-ioh.c
-> +++ b/drivers/gpio/gpio-ml-ioh.c
-> @@ -409,29 +409,27 @@ static int ioh_gpio_probe(struct pci_dev *pdev,
->         void *chip_save;
->         int irq_base;
->
-> -       ret = pci_enable_device(pdev);
-> +       ret = pcim_enable_device(pdev);
->         if (ret) {
-> -               dev_err(dev, "%s : pci_enable_device failed", __func__);
-> -               goto err_pci_enable;
-> +               dev_err(dev, "%s : pcim_enable_device failed", __func__);
-> +               return ret;
->         }
->
-> -       ret = pci_request_regions(pdev, KBUILD_MODNAME);
-> +       ret = pcim_iomap_regions(pdev, BIT(1), KBUILD_MODNAME);
->         if (ret) {
-> -               dev_err(dev, "pci_request_regions failed-%d", ret);
-> -               goto err_request_regions;
-> +               dev_err(dev, "pcim_iomap_regions failed-%d", ret);
-> +               return ret;
->         }
->
-> -       base = pci_iomap(pdev, 1, 0);
-> +       base = pcim_iomap_table(pdev)[1];
->         if (!base) {
-> -               dev_err(dev, "%s : pci_iomap failed", __func__);
-> -               ret = -ENOMEM;
-> -               goto err_iomap;
-> +               dev_err(dev, "%s : pcim_iomap_table failed", __func__);
-> +               return -ENOMEM;
->         }
->
-> -       chip_save = kcalloc(8, sizeof(*chip), GFP_KERNEL);
-> +       chip_save = devm_kcalloc(dev, 8, sizeof(*chip), GFP_KERNEL);
->         if (chip_save == NULL) {
-> -               ret = -ENOMEM;
-> -               goto err_kzalloc;
-> +               return -ENOMEM;
->         }
->
->         chip = chip_save;
-> @@ -442,10 +440,10 @@ static int ioh_gpio_probe(struct pci_dev *pdev,
->                 chip->ch = i;
->                 spin_lock_init(&chip->spinlock);
->                 ioh_gpio_setup(chip, num_ports[i]);
-> -               ret = gpiochip_add_data(&chip->gpio, chip);
-> +               ret = devm_gpiochip_add_data(dev, &chip->gpio, chip);
->                 if (ret) {
->                         dev_err(dev, "IOH gpio: Failed to register GPIO\n");
-> -                       goto err_gpiochip_add;
-> +                       return ret;
->                 }
->         }
->
-> @@ -456,15 +454,14 @@ static int ioh_gpio_probe(struct pci_dev *pdev,
->                 if (irq_base < 0) {
->                         dev_warn(dev,
->                                 "ml_ioh_gpio: Failed to get IRQ base num\n");
-> -                       ret = irq_base;
-> -                       goto err_gpiochip_add;
-> +                       return irq_base;
->                 }
->                 chip->irq_base = irq_base;
->
->                 ret = ioh_gpio_alloc_generic_chip(chip,
->                                                   irq_base, num_ports[j]);
->                 if (ret)
-> -                       goto err_gpiochip_add;
-> +                       return ret;
->         }
->
->         chip = chip_save;
-> @@ -472,52 +469,12 @@ static int ioh_gpio_probe(struct pci_dev *pdev,
->                                IRQF_SHARED, KBUILD_MODNAME, chip);
->         if (ret != 0) {
->                 dev_err(dev, "%s request_irq failed\n", __func__);
-> -               goto err_gpiochip_add;
-> +               return ret;
->         }
->
->         pci_set_drvdata(pdev, chip);
->
->         return 0;
-> -
-> -err_gpiochip_add:
-> -       chip = chip_save;
-> -       while (--i >= 0) {
-> -               gpiochip_remove(&chip->gpio);
-> -               chip++;
-> -       }
-> -       kfree(chip_save);
-> -
-> -err_kzalloc:
-> -       pci_iounmap(pdev, base);
-> -
-> -err_iomap:
-> -       pci_release_regions(pdev);
-> -
-> -err_request_regions:
-> -       pci_disable_device(pdev);
-> -
-> -err_pci_enable:
-> -
-> -       dev_err(dev, "%s Failed returns %d\n", __func__, ret);
-> -       return ret;
-> -}
-> -
-> -static void ioh_gpio_remove(struct pci_dev *pdev)
-> -{
-> -       int i;
-> -       struct ioh_gpio *chip = pci_get_drvdata(pdev);
-> -       void *chip_save;
-> -
-> -       chip_save = chip;
-> -
-> -       for (i = 0; i < 8; i++, chip++)
-> -               gpiochip_remove(&chip->gpio);
-> -
-> -       chip = chip_save;
-> -       pci_iounmap(pdev, chip->base);
-> -       pci_release_regions(pdev);
-> -       pci_disable_device(pdev);
-> -       kfree(chip);
->  }
->
->  static int __maybe_unused ioh_gpio_suspend(struct device *dev)
-> @@ -558,7 +515,6 @@ static struct pci_driver ioh_gpio_driver = {
->         .name = "ml_ioh_gpio",
->         .id_table = ioh_gpio_pcidev_id,
->         .probe = ioh_gpio_probe,
-> -       .remove = ioh_gpio_remove,
->         .driver = {
->                 .pm = &ioh_gpio_pm_ops,
->         },
-> --
-> 2.36.1
->
+On Fri, 13 May 2022 14:57:55 +0200
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-Looks so much better now, gotta love devres. :)
+> On 13/05/2022 12:58, Herve Codina wrote:
+> > The USB device controller available in the Microchip LAN966x SOC
+> > is the same IP as the one present in the SAMA5D3 SOC.
+> >=20
+> > Add the LAN966x compatible string and set the SAMA5D3 compatible
+> > string as a fallback for the LAN966x.
+> >=20
+> > Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> > ---
+> >  Documentation/devicetree/bindings/usb/atmel-usb.txt | 3 +++
+> >  1 file changed, 3 insertions(+)
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/usb/atmel-usb.txt b/Docu=
+mentation/devicetree/bindings/usb/atmel-usb.txt
+> > index f512f0290728..a6fab7d63f37 100644
+> > --- a/Documentation/devicetree/bindings/usb/atmel-usb.txt
+> > +++ b/Documentation/devicetree/bindings/usb/atmel-usb.txt
+> > @@ -87,6 +87,9 @@ Required properties:
+> >  	       "atmel,at91sam9g45-udc"
+> >  	       "atmel,sama5d3-udc"
+> >  	       "microchip,sam9x60-udc"
+> > +	       "microchip,lan996x-udc" =20
+>=20
+> No wildcards please, especially that it closely fits previous wildcard
+> (lan996x includes lan9960 which looks a lot like sam9x60...)
+>=20
 
-If Andy takes it through his tree:
+Well, first, I made a mistake. It should be lan966x instead of lan996x.
 
-Reviewed-by: Bartosz Golaszewski <brgl@bgdev.pl>
+This family is composed of the LAN9662 and the LAN9668 SOCs.
 
-Otherwise let me know, I can pick it up myself too.
+Related to the wilcard, lan966x is used in several bindings for common
+parts used by both SOCs:
+- microchip,lan966x-gck
+- microchip,lan966x-cpu-syscon
+- microchip,lan966x-switch
+- microchip,lan966x-miim
+- microchip,lan966x-serdes
+- microchip,lan966x-pinctrl
 
-Bart
+I think it makes sense to keep 'microchip,lan966x-udc' for the USB
+device controller (same controller on LAN9662 and LAN9668) and so
+keeping the same rules as for other common parts.
+
+Regards,
+Herv=C3=A9
+
+>=20
+> Best regards,
+> Krzysztof
+
+
+
+--=20
+Herv=C3=A9 Codina, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com

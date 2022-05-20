@@ -2,87 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BC0552E19C
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 03:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B383F52E1B1
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 03:16:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344312AbiETBJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 21:09:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57586 "EHLO
+        id S1344437AbiETBLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 21:11:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344269AbiETBJq (ORCPT
+        with ESMTP id S1344416AbiETBK5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 21:09:46 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07034135680;
-        Thu, 19 May 2022 18:09:37 -0700 (PDT)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24K0J7sq005792;
-        Fri, 20 May 2022 01:09:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=CdkcJdR0OlggZFncRV2N7kioLycd3Mu9PDETGZDhfvA=;
- b=QD1DlooC6hjJwYkjA8EqyqjG+DjyL32dcPQqGsuTCuD4LjTt9h2kPOY3b6CY6n9DjBi0
- JTDHESUBZgjT0DXwyFpLM2i/rHijcCJmzqEP4TwWeiOmVKQAk3lx4rdNQ0KG1kha8F5Q
- vAasI2AmBVQ7jf9Tpn95BYrVCjKQn7DGty9q/ITEqAmt6RiOMEoalTWZUzmgJ0tB/Dfm
- wqPvNiyoqcrAmw9vTXlR7KGLZ0aBkf+RJU7/xGhY4OFbNwyHzolznk/PJ9O+4MlRr1WT
- f64wVxJjuwKE0Wq0FEtmMpNNvB03pYzOnDoVZ1SRr/2QQ3VVjCmpjqGTL0fzahSj8pTT Hw== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3g22ucddrd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 20 May 2022 01:09:34 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 24K15n3W020161;
-        Fri, 20 May 2022 01:09:33 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3g37crytu5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 20 May 2022 01:09:33 +0000
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 24K19GKT030710;
-        Fri, 20 May 2022 01:09:33 GMT
-Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3g37crythd-13;
-        Fri, 20 May 2022 01:09:33 +0000
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Karan Tilak Kumar <kartilak@cisco.com>, sebaddel@cisco.com
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        arulponn@cisco.com, linux-scsi@vger.kernel.org, gcboffa@cisco.com,
-        jejb@linux.ibm.com, linux-kernel@vger.kernel.org,
-        djhawar@cisco.com, satishkh@cisco.com, gvaradar@cisco.com
-Subject: Re: [PATCH] scsi: fnic: Replace DMA mask of 64 bits with 47 bits
-Date:   Thu, 19 May 2022 21:09:12 -0400
-Message-Id: <165300891231.11465.3114023089870424603.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220513205605.81788-1-kartilak@cisco.com>
-References: <20220513205605.81788-1-kartilak@cisco.com>
-MIME-Version: 1.0
+        Thu, 19 May 2022 21:10:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE04F13B8DD;
+        Thu, 19 May 2022 18:10:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 56091B8297A;
+        Fri, 20 May 2022 01:10:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CDE3EC385B8;
+        Fri, 20 May 2022 01:10:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653009017;
+        bh=zKDszjw+FQvQwJMRAb9Fclk+cN7VO6xEcSjWwsNYDtE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=mK7k1ZsCOUHvcC7NHhWNX9Xc4C1s17Bp42Tx1SoX3pv+B5NcXYFYjoFjjXpyBZzQR
+         3wrOyMVnwtoJa4ij1z2Flqsx114w7shjO/zczDeFAvbKK3rOigfn2Sw6nHedNGc6G4
+         9/raNsZmZhd2hDI4lOj8GyUhgkeHjYg7ZGk6KOvr6i2p1M8YNv1PSFcJ+HDwiY8Qp6
+         /JWWjNrSX+2ttNIspaaNElruetnRtBWnJ9cdyngyE9jlTOtkxb+Tv/M8GsL0PSNu8x
+         Kr7sAuptLM2qgGSXOT44h+wZB67i0Gxu/8acgOqKcrVHdcHhHOJs8vg+E+G5O2OGmk
+         B0P7fAF7u3vAA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B2F6EF0389D;
+        Fri, 20 May 2022 01:10:17 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: vuTNoKkLtDstGVvI-f8rxKPwULE8J9OE
-X-Proofpoint-ORIG-GUID: vuTNoKkLtDstGVvI-f8rxKPwULE8J9OE
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH net v3] NFC: hci: fix sleep in atomic context bugs in
+ nfc_hci_hcp_message_tx
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165300901772.19017.10175085376155326113.git-patchwork-notify@kernel.org>
+Date:   Fri, 20 May 2022 01:10:17 +0000
+References: <20220518115733.62111-1-duoming@zju.edu.cn>
+In-Reply-To: <20220518115733.62111-1-duoming@zju.edu.cn>
+To:     Duoming Zhou <duoming@zju.edu.cn>
+Cc:     krzysztof.kozlowski@linaro.org, netdev@vger.kernel.org,
+        davem@davemloft.net, gregkh@linuxfoundation.org,
+        alexander.deucher@amd.com, broonie@kernel.org,
+        linux-kernel@vger.kernel.org, kuba@kernel.org, edumazet@google.com,
+        pabeni@redhat.com
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 13 May 2022 13:56:05 -0700, Karan Tilak Kumar wrote:
+Hello:
 
-> Cisco VIC supports only 47 bits.
-> If the host sends DMA addresses that are greater than 47
-> bits, it causes work queue (WQ) errors in the VIC.
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Wed, 18 May 2022 19:57:33 +0800 you wrote:
+> There are sleep in atomic context bugs when the request to secure
+> element of st21nfca is timeout. The root cause is that kzalloc and
+> alloc_skb with GFP_KERNEL parameter and mutex_lock are called in
+> st21nfca_se_wt_timeout which is a timer handler. The call tree shows
+> the execution paths that could lead to bugs:
 > 
+>    (Interrupt context)
+> st21nfca_se_wt_timeout
+>   nfc_hci_send_event
+>     nfc_hci_hcp_message_tx
+>       kzalloc(..., GFP_KERNEL) //may sleep
+>       alloc_skb(..., GFP_KERNEL) //may sleep
+>       mutex_lock() //may sleep
 > 
+> [...]
 
-Applied to 5.19/scsi-queue, thanks!
+Here is the summary with links:
+  - [net,v3] NFC: hci: fix sleep in atomic context bugs in nfc_hci_hcp_message_tx
+    https://git.kernel.org/netdev/net/c/b413b0cb0086
 
-[1/1] scsi: fnic: Replace DMA mask of 64 bits with 47 bits
-      https://git.kernel.org/mkp/scsi/c/b559b99a5c08
-
+You are awesome, thank you!
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

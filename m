@@ -2,70 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFD0152E380
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 06:10:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9036552E3E5
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 06:39:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240897AbiETEKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 00:10:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55110 "EHLO
+        id S1345335AbiETEhu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 00:37:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237884AbiETEKd (ORCPT
+        with ESMTP id S1345324AbiETEhp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 00:10:33 -0400
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BF0414AA4A
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 21:10:32 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R771e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=alimailimapcm10staff010182156082;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VDozTSs_1653019828;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VDozTSs_1653019828)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 20 May 2022 12:10:30 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     hch@infradead.org
-Cc:     linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH 2/2] freevxfs: fix kernel-doc warnings in vxfs_subr.c
-Date:   Fri, 20 May 2022 12:10:16 +0800
-Message-Id: <20220520041016.80354-2-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
-In-Reply-To: <20220520041016.80354-1-jiapeng.chong@linux.alibaba.com>
-References: <20220520041016.80354-1-jiapeng.chong@linux.alibaba.com>
+        Fri, 20 May 2022 00:37:45 -0400
+Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C8C190CE1;
+        Thu, 19 May 2022 21:37:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=metrotek.ru; s=mail;
+        h=from:subject:date:message-id:to:mime-version:content-type:in-reply-to:
+         references;
+        bh=MPfE5EJBVkzimd2oyGlmPUA4ytw/j02j1YCnHKRIQnY=;
+        b=AGpWfN8URGxgEM1veEHHYthyUNXn1RS/H82Ch92fxc8I8sjpfWNbEVsPMy0e4ZINAw7k78uPq18SO
+         ZB0Xy/pxN0aMQb3tq0kimRfqFwARnKpcnB4FqVDc4k7/4US3zbtoLkJ4yrEk3hL1fHc8yfQ1lFjvGF
+         7eL1ZBWKgk7+Fo1tSl3ipptVGKNGqwLcykN6cnKAAeoPbIOLvjrfjZe5Pm3XWvn6Yb5x5qE4BLYjY1
+         QrYe9v3cmbR7mzFU53B1TzCC9vjozuaCuHQOfdifDYV2SzpdjXTtEuELz//o9GxYcomIe9ugyiCbj2
+         TM8AbKFVo7lgh1AZlufrhmw/e3CTZsg==
+X-Kerio-Anti-Spam:  Build: [Engines: 2.16.3.1424, Stamp: 3], Multi: [Enabled, t: (0.000015,0.012860)], BW: [Enabled, t: (0.000019,0.000001)], RTDA: [Enabled, t: (0.067603), Hit: No, Details: v2.39.0; Id: 15.52katf.1g3fs2o1h.653ve; mclb], total: 0(700)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Level: 
+X-Footer: bWV0cm90ZWsucnU=
+Received: from x260 ([178.70.36.174])
+        (authenticated user i.bornyakov@metrotek.ru)
+        by mail.pr-group.ru with ESMTPSA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
+        Fri, 20 May 2022 07:37:10 +0300
+Date:   Fri, 20 May 2022 07:15:30 +0300
+From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
+To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+        trix@redhat.com, Conor.Dooley@microchip.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        system@metrotek.ru, i.bornyakov@metrotek.ru
+Subject: Re: [PATCH v12 0/3] Microchip Polarfire FPGA manager
+Message-ID: <20220520041530.aihtvyx6zsdtackn@x260>
+References: <20220513162755.16201-1-i.bornyakov@metrotek.ru>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220513162755.16201-1-i.bornyakov@metrotek.ru>
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the following W=1 kernel warnings:
+On Fri, May 13, 2022 at 07:27:52PM +0300, Ivan Bornyakov wrote:
+> Add support to the FPGA manager for programming Microchip Polarfire
+> FPGAs over slave SPI interface with .dat formatted bitsream image.
+> 
+> Changelog:
+>   v1 -> v2: fix printk formating
+>   v2 -> v3:
+>    * replace "microsemi" with "microchip"
+>    * replace prefix "microsemi_fpga_" with "mpf_"
+>    * more sensible .compatible and .name strings
+>    * remove unused defines STATUS_SPI_VIOLATION and STATUS_SPI_ERROR
+>   v3 -> v4: fix unused variable warning
+>     Put 'mpf_of_ids' definition under conditional compilation, so it
+>     would not hang unused if CONFIG_OF is not enabled.
+>   v4 -> v5:
+>    * prefix defines with MPF_
+>    * mdelay() -> usleep_range()
+>    * formatting fixes
+>    * add DT bindings doc
+>    * rework fpga_manager_ops.write() to fpga_manager_ops.write_sg()
+>      We can't parse image header in write_init() because image header
+>      size is not known beforehand. Thus parsing need to be done in
+>      fpga_manager_ops.write() callback, but fpga_manager_ops.write()
+>      also need to be reenterable. On the other hand,
+>      fpga_manager_ops.write_sg() is called once. Thus, rework usage of
+>      write() callback to write_sg().
+>   v5 -> v6: fix patch applying
+>      I forgot to clean up unrelated local changes which lead to error on
+>      patch 0001-fpga-microchip-spi-add-Microchip-MPF-FPGA-manager.patch
+>      applying on vanilla kernel.
+>   v6 -> v7: fix binding doc to pass dt_binding_check
+>   v7 -> v8: another fix for dt_binding_check warning
+>   v8 -> v9:
+>    * add another patch to support bitstream offset in FPGA image buffer
+>    * rework fpga_manager_ops.write_sg() back to fpga_manager_ops.write()
+>    * move image header parsing from write() to write_init()
+>   v9 -> v10:
+>    * add parse_header() callback to fpga_manager_ops
+>    * adjust fpga_mgr_write_init[_buf|_sg]() for parse_header() usage
+>    * implement parse_header() in microchip-spi driver
+>   v10 -> v11: include missing unaligned.h to microchip-spi
+>      fix error: implicit declaration of function 'get_unaligned_le[16|32]'
+>   v11 -> v12:
+>    * microchip-spi: double read hw status, ignore first read, because it
+>      can be unreliable.
+>    * microchip-spi: remove sleep between status readings in
+>      poll_status_not_busy() to save a few seconds. Status is polled on
+>      every 16 byte writes - that is quite often, therefore
+>      usleep_range() accumulate to a considerable number of seconds.
+> 
+> Ivan Bornyakov (3):
+>   fpga: fpga-mgr: support bitstream offset in image buffer
+>   fpga: microchip-spi: add Microchip MPF FPGA manager
+>   dt-bindings: fpga: add binding doc for microchip-spi fpga mgr
+> 
+>  .../fpga/microchip,mpf-spi-fpga-mgr.yaml      |  44 +++
+>  drivers/fpga/Kconfig                          |   9 +
+>  drivers/fpga/Makefile                         |   1 +
+>  drivers/fpga/fpga-mgr.c                       | 150 +++++--
+>  drivers/fpga/microchip-spi.c                  | 371 ++++++++++++++++++
+>  include/linux/fpga/fpga-mgr.h                 |  13 +-
+>  6 files changed, 552 insertions(+), 36 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
+>  create mode 100644 drivers/fpga/microchip-spi.c
+> 
+> -- 
+> 2.35.1
+> 
 
-fs/freevxfs/vxfs_subr.c:107: warning: expecting prototype for
-vxfs_get_block(). Prototype was for vxfs_getblk() instead.
-
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- fs/freevxfs/vxfs_subr.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/fs/freevxfs/vxfs_subr.c b/fs/freevxfs/vxfs_subr.c
-index 0e633d2bfc7d..11ab5c97b082 100644
---- a/fs/freevxfs/vxfs_subr.c
-+++ b/fs/freevxfs/vxfs_subr.c
-@@ -87,7 +87,7 @@ vxfs_bread(struct inode *ip, int block)
- }
- 
- /**
-- * vxfs_get_block - locate buffer for given inode,block tuple 
-+ * vxfs_getblk - locate buffer for given inode,block tuple
-  * @ip:		inode
-  * @iblock:	logical block
-  * @bp:		buffer skeleton
--- 
-2.20.1.7.g153144c
+Friendly ping.
 

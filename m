@@ -2,92 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E57B552F599
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 00:19:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B28352F59D
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 00:19:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353873AbiETWTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 18:19:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41290 "EHLO
+        id S1353884AbiETWTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 18:19:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245429AbiETWTN (ORCPT
+        with ESMTP id S1353875AbiETWT0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 18:19:13 -0400
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38529166D4E;
-        Fri, 20 May 2022 15:19:13 -0700 (PDT)
-Received: by mail-oi1-f171.google.com with SMTP id v65so11458789oig.10;
-        Fri, 20 May 2022 15:19:13 -0700 (PDT)
+        Fri, 20 May 2022 18:19:26 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED4EB1A076B;
+        Fri, 20 May 2022 15:19:24 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id 202so1824916pfu.0;
+        Fri, 20 May 2022 15:19:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=b7Vm31N1KmiKaz7SbohqBjKzTjmGJnpUAVkpKWUThMY=;
+        b=H3ZjIy79fwHtkOfYF1Ill/fMPUjrPR7E2pkOa/YhCb1jGsvLLxRr6uOQICQCl8yq2h
+         KzSERIApbRFXR9lmG4Uk3nHZvFVq8Uue1kE4LnmFLR/v/rN9npvSJts7f+iytk8LCo9a
+         fpRMMlwIruvdNJLVHaMg5qOJAgX4M5Fc/F1tt0tD6yZZrIAOeapE9xs6S16JiuWCsju2
+         Asxl3i8dLiXmCXxEAOBresM3uaNtP212C8mONg3FwmL4Z7oqEaT+taMPqifRHmMmn/nx
+         2IQLI+zcVqY30ca/PvxFcTrMC7DqzhHrftAfzpFMlIUEPLJgJV9MGm5xgioYQqWSeEHB
+         nm+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=H9dsJo+KUSNJhEleqZiYrTy2I+OsjWQH8r8DGAGeIs0=;
-        b=Wce68HBGZRZ8AUkpJqxCNWxesMT0oL7PEu/F5s/G/uty0qa8lbFp3Ft2t60QlXThwJ
-         9js2sH0jpkpAYOdight+5wXiMFRBkb4w6XZLYo7CgkvctFZptYJC73sTluK9LJjtaeV5
-         MDmAmEIEuHCseRh9QsxXyRP2dZUiDDC+f1d/3z83wnTYyJObXYzzxhe9b8AFJQ5QWPbG
-         LcfXs3r8Aikpk7liIkM8jqx4NmQ+mlbGorwdpj/2NWe1xVHVnT5uml+JFiplarBfyGnn
-         MM/C4mnhHVe1DIMcxAcUN4tg1+BG4QV8xW06j3cU7Dld079HAFjO8we2koaZu7c80Nnd
-         UAHQ==
-X-Gm-Message-State: AOAM533Fuhy8+gw4kl4p/1H+fASUIWY6SKkmYt1BZ7alv0D7ypkdOuSm
-        AxWwkCpRlDmq/6yyO7p4vj9bnKNIpg==
-X-Google-Smtp-Source: ABdhPJzft3aq22SEVhwqjbd7HcdI0g2Hkb3t39TPzeI/Bi/8SVUST456M6/1/CAjek8nu0smQ3/REA==
-X-Received: by 2002:a05:6808:14c1:b0:32a:f33d:86ca with SMTP id f1-20020a05680814c100b0032af33d86camr4898688oiw.89.1653085152543;
-        Fri, 20 May 2022 15:19:12 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id 126-20020a4a0384000000b0035eb4e5a6cdsm1569087ooi.35.2022.05.20.15.19.11
+        bh=b7Vm31N1KmiKaz7SbohqBjKzTjmGJnpUAVkpKWUThMY=;
+        b=CMWLtJPDj7rM4ifpTEJnVv7hK+1MX4Egzl1yiDoI66yNBAcCKJYr1dn3idm9L1rrh2
+         YPqr7D+iKQA8kDh2ysmWJAZbvqXkRVboaxGI/F6wxP5iCzWGHKSYLVlPJVkUg137/AhG
+         /hG4oCcr+v1ofdxWwogIiBiN6E0ZMH1UI9gsH5WPbB2J3ol+RJB6j3yu42yP2xQDWtY3
+         qljKbMz7OtsJHmbNYOQwTS8TWtxEywLRMCk48KN2Myrd3ylNm1GGHr71ZjXMTUnM7Mut
+         SY13+WmIEInbHD0Xhdl0s4RgGx2xk4jY2Cn6K7N9ZLQB997W60mWwhSWTh4LSbej77JD
+         K/Xw==
+X-Gm-Message-State: AOAM533PD2bbh9lT193sVem6ulWXOY6Q5nPrUAHnGf15JsN/bMOk3FV/
+        qR2PHZg3uOpeYf8kt5NHnQk=
+X-Google-Smtp-Source: ABdhPJyPatIaMfb0cUQB/du9LTA4vnmzNEjYiWrANLt3pPuau5sPW8xt9dH/j17WoeJK1uo/EDZDAg==
+X-Received: by 2002:a63:dc42:0:b0:3c5:e187:572 with SMTP id f2-20020a63dc42000000b003c5e1870572mr10364737pgj.82.1653085164314;
+        Fri, 20 May 2022 15:19:24 -0700 (PDT)
+Received: from MBP-98dd607d3435.dhcp.thefacebook.com ([2620:10d:c090:500::1:c6aa])
+        by smtp.gmail.com with ESMTPSA id 7-20020a17090a098700b001d25dfb9d39sm2356730pjo.14.2022.05.20.15.19.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 15:19:11 -0700 (PDT)
-Received: (nullmailer pid 352851 invoked by uid 1000);
-        Fri, 20 May 2022 22:19:10 -0000
-Date:   Fri, 20 May 2022 17:19:10 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        sboyd@kernel.org, chun-jie.chen@mediatek.com,
-        rex-bc.chen@mediatek.com, wenst@chromium.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        krzysztof.kozlowski@linaro.org
-Subject: Re: [PATCH v2 2/2] dt-bindings: arm: mtk-clocks: Set #clock-cells as
- required property
-Message-ID: <20220520221910.GA348732-robh@kernel.org>
-References: <20220518093631.25491-1-angelogioacchino.delregno@collabora.com>
- <20220518093631.25491-3-angelogioacchino.delregno@collabora.com>
+        Fri, 20 May 2022 15:19:23 -0700 (PDT)
+Date:   Fri, 20 May 2022 15:19:19 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Hao Luo <haoluo@google.com>, Tejun Heo <tj@kernel.org>,
+        Yonghong Song <yhs@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Michal Hocko <mhocko@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Cgroups <cgroups@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v1 3/5] bpf: Introduce cgroup iter
+Message-ID: <20220520221919.jnqgv52k4ajlgzcl@MBP-98dd607d3435.dhcp.thefacebook.com>
+References: <20220520012133.1217211-1-yosryahmed@google.com>
+ <20220520012133.1217211-4-yosryahmed@google.com>
+ <YodGI73xq8aIBrNM@slm.duckdns.org>
+ <CAJD7tkbvMcMWESMcWi6TtdCKLr6keBNGgZTnqcHZvBrPa1qWPw@mail.gmail.com>
+ <YodNLpxut+Zddnre@slm.duckdns.org>
+ <73fd9853-5dab-8b59-24a0-74c0a6cae88e@fb.com>
+ <YofFli6UCX4J5YnU@slm.duckdns.org>
+ <CA+khW7gjWVKrwCgDD-4ZdCf5CMcA4-YL0bLm6aWM74+qNQ4c0A@mail.gmail.com>
+ <CAJD7tkaJQjfSy+YARFRkqQ8m7OGJHO9v91mSk-cFeo9Z5UVJKg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220518093631.25491-3-angelogioacchino.delregno@collabora.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAJD7tkaJQjfSy+YARFRkqQ8m7OGJHO9v91mSk-cFeo9Z5UVJKg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 11:36:31AM +0200, AngeloGioacchino Del Regno wrote:
-> This is a clock-controller binding, so it needs #clock-cells, or
-> it would be of no use: add that to the list of required properties.
+On Fri, May 20, 2022 at 02:18:42PM -0700, Yosry Ahmed wrote:
+> >
+> > The userspace needs to specify the identity of the cgroup, when
+> > creating bpf_iter. This identity could be cgroup id or fd. This
+> > identity needs to be converted to cgroup object somewhere before
+> > passing into bpf program to use.
 > 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../devicetree/bindings/arm/mediatek/mediatek,mt8186-clock.yaml  | 1 +
->  .../bindings/arm/mediatek/mediatek,mt8186-sys-clock.yaml         | 1 +
->  .../devicetree/bindings/arm/mediatek/mediatek,mt8192-clock.yaml  | 1 +
->  .../bindings/arm/mediatek/mediatek,mt8192-sys-clock.yaml         | 1 +
->  .../devicetree/bindings/arm/mediatek/mediatek,mt8195-clock.yaml  | 1 +
->  .../bindings/arm/mediatek/mediatek,mt8195-sys-clock.yaml         | 1 +
->  6 files changed, 6 insertions(+)
+> 
+> Let's sum up the discussion here, I feel like we are losing track of
+> the main problem. IIUC the main concern is that cgroup_iter is not
+> effectively an iterator, it rather dumps information for one cgroup. I
+> like the suggestion to make it iterate cgroups by default, and an
+> optional cgroup_id parameter to make it only "iterate" this one
+> cgroup.
 
-Acked-by: Rob Herring <robh@kernel.org>
-
-Wasn't there some discussion about moving these to bindings/clocks/? 
-Maybe that was another one, it's all a blur...
-
-Rob
+We have bpf_map iterator that walks all bpf maps.
+When map iterator is parametrized with map_fd the iterator walks
+all elements of that map.
+cgroup iterator should have similar semantics.
+When non-parameterized it will walk all cgroups and their descendent
+depth first way. I believe that's what Yonghong is proposing.
+When parametrized it will start from that particular cgroup and
+walk all descendant of that cgroup only.
+The bpf prog can stop the iteration right away with ret 1.
+Maybe we can add two parameters. One -> cgroup_fd to use and another ->
+the order of iteration css_for_each_descendant_pre vs _post.
+wdyt?

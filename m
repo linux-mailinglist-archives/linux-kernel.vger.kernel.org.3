@@ -2,85 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DFA752F061
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 18:17:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 594E352F066
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 18:18:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351506AbiETQRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 12:17:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54330 "EHLO
+        id S1351517AbiETQSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 12:18:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351469AbiETQRl (ORCPT
+        with ESMTP id S232607AbiETQSo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 12:17:41 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F91B6D878
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 09:17:38 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-2ec42eae76bso92099027b3.10
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 09:17:38 -0700 (PDT)
+        Fri, 20 May 2022 12:18:44 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0236D86A;
+        Fri, 20 May 2022 09:18:44 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id v10so8115729pgl.11;
+        Fri, 20 May 2022 09:18:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=ONhZlVBI4HpQAKHE0J0FctRsQVKq+x2f4PkT65aBxxg=;
-        b=dmedB56pvgqE7vaxmJFTfngnHOclw61WJgI459OreAQ/EWhACPq1JJTl+tBexbZd3/
-         clCCW9wARLONeh60N3DHvB3Y1BQSNmngLUMTLBYkUFbVhQ6Zz3TAdZGwd7Tln+nw7vlY
-         EKu+sLeAsRK/llsvB/Yx1bKeOwOhQEFTd1IoLVIkMHpkjORtv2JjeJV7qfRNvyIkyGHN
-         JRCl3PyDvndsxDY2oDtf4qdb8KvcbW1aDVsv71H918s88KQnwhUnG1Jape1XL5qZ/FaG
-         q93yLWhQIvyuE5w/PihuBY6NuvMO0Dj6/jwlAWaDYA9KwYqGc88G1WBjRWJcaX1aRoMs
-         NGEw==
+        bh=sJkmL3cNNCMdY+tXxffweIx723JB3I+sakjvH9x5oPk=;
+        b=pKqLfq/DCIUJC4+qM7NiWzWHEvd6SrtREbZVUXsyCE/WXQz6k3GgmSapoKl75dVARm
+         DbiSfwlfIBtgrDKulb5CpFbtKpSkHN6f5nnd5qso6EHWyRCL/FqSYE1YV8/gLhAZBryA
+         oY2gKX7F82zdYn4EfMvajmTTI5ItAx/NUx9Udla5wndZ47Ky33OlQ22/uFJA9kvkUnlR
+         o0DVwt8vrrM2QUoPS2/u76YmC5xVNy3LV5hwY+r8Y/gyFVz0b87Q0y20zxyDZ6B6xVZL
+         0Mo4RGXMptD21gYHBroNYsA7W2lBPaZ0V7c9Yh6nEJ/jP++Fd8IjP97FF7cfBPtm7rtU
+         f3vA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ONhZlVBI4HpQAKHE0J0FctRsQVKq+x2f4PkT65aBxxg=;
-        b=hCYOMRftGm8/mFjcyo4wMTqSTUJ8iIzsH/QUHpP1sMKgc06Fy+MSbQjH62xSn6oiGp
-         hJ86GeuaWTZcxB68CgrbemFS0z7XL+ABQgR16IP8nVFXYq9KX6k27FxQCb5Z/dmGHzRA
-         MvwkjRkV+sOWRpjGhJoY5HitF/c03rEMK7uDYKt8G1nCjFLV8y+ZgADCUEdmO1pQVR6y
-         jubEE0V1ZG0rwUg7DJ3I780+HIriooxfo42It5Jo3qmCU1CDci7bhbAMIQs4PYbo2Zsz
-         mwHHzrOsFy5IHtjddpMvk3AoibGDQKe5eH2HqLzqnZsLObQLbteZEpbp+vfwc/m+S+Yl
-         7AfA==
-X-Gm-Message-State: AOAM532MVaA0lc7sh+k5ni4fK2Qd5MpOKDGvLZpNncuJwt0VK23XjkE6
-        1uYyDdQUkK2nPRKbVxyFWV6MpzmaG7jA03IEPZGcwQ==
-X-Google-Smtp-Source: ABdhPJxejo+Y7HD7oOOqHmw/rRbhZxiq5xDx278bG4dQMkXbrxvg4BAUzigZhBuAL0J1/93WzXPhH+PrBEck7JSuTNI=
-X-Received: by 2002:a81:557:0:b0:2ff:a20c:4bfc with SMTP id
- 84-20020a810557000000b002ffa20c4bfcmr969269ywf.293.1653063457607; Fri, 20 May
- 2022 09:17:37 -0700 (PDT)
+        bh=sJkmL3cNNCMdY+tXxffweIx723JB3I+sakjvH9x5oPk=;
+        b=cEdJTmQ1GtDApbN3fZuMOu3lugLXsTNN9mYu+flGgRO15E9mBqTO35YYDSkBxGEW+5
+         DEEmRHQgvV1jMKRZAWNj+znJziLJxLTPQvLtDYPm6oS6/aadU7yeRHyrJwMLw68ssrgk
+         ZhgXvibcbvZtx3S59yy4aUCml6WGnMJaW0UdQE91Qzu6sQdaIFtnKoVb8QYuDRtH4pDH
+         ITj4k1svPL9NcqlxBq0IOWHKZ2ONGwkabAhzgiaaJrXKMkMCfvKdt38YhKBSFCxCiJqa
+         e//ZCuIADW3TNbkzhVyAOseXORWczNX1AmzZbmCGqSW55Od4emRfdVFSjpo5LnJYgc6Q
+         erEg==
+X-Gm-Message-State: AOAM530yAn6j6WDSucM+cXh6qd7zZnTQ5sca0RDf2RWbeyeiZVMdqfvO
+        HruN2XWEMVNkFVRG5hqO9DmUyi9t+urGHFdyS5M=
+X-Google-Smtp-Source: ABdhPJx+qcYi6F2bg4WVAwh754TW7golfOR49ep220qUtfFvRzJQads+gxDHdltL7DRwree4z7Rg9gCYETyar8r/p2w=
+X-Received: by 2002:a65:694b:0:b0:3f5:f32a:3adc with SMTP id
+ w11-20020a65694b000000b003f5f32a3adcmr9069654pgq.541.1653063523816; Fri, 20
+ May 2022 09:18:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220516075619.1277152-1-surenb@google.com> <20220519202149.3ywynqhbxlzp6uyn@revolver>
- <CAJuCfpHeAXSLjrXxgRaTXOEPPipcFq5MhP=uU0wkqeBoPUAcsQ@mail.gmail.com>
- <YodBhjkyNtc+Une7@dhcp22.suse.cz> <CAJuCfpE2EB88uNUq=ohphKOecPoYZT9ypX8=fzxMgR6BviUibQ@mail.gmail.com>
-In-Reply-To: <CAJuCfpE2EB88uNUq=ohphKOecPoYZT9ypX8=fzxMgR6BviUibQ@mail.gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Fri, 20 May 2022 09:17:26 -0700
-Message-ID: <CAJuCfpHf38Z-svRsFaaZs2H7Q=KbSFBdi60wPYTFuSbXV+Mv1w@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] mm: drop oom code from exit_mmap
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Liam Howlett <liam.howlett@oracle.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "rientjes@google.com" <rientjes@google.com>,
-        "willy@infradead.org" <willy@infradead.org>,
-        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
-        "guro@fb.com" <guro@fb.com>,
-        "minchan@kernel.org" <minchan@kernel.org>,
-        "kirill@shutemov.name" <kirill@shutemov.name>,
-        "aarcange@redhat.com" <aarcange@redhat.com>,
-        "brauner@kernel.org" <brauner@kernel.org>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "shakeelb@google.com" <shakeelb@google.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jhubbard@nvidia.com" <jhubbard@nvidia.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "kernel-team@android.com" <kernel-team@android.com>
+References: <20220428205116.861003-1-yury.norov@gmail.com> <20220428205116.861003-4-yury.norov@gmail.com>
+ <20220519150929.GA3145933@roeck-us.net> <CAAH8bW8ju7XLkbYya1A1OtqGVGDUAk7dPyw01RsDzg+v7xihyQ@mail.gmail.com>
+ <872607af-5647-a255-83f2-3bf75b7f0df4@roeck-us.net>
+In-Reply-To: <872607af-5647-a255-83f2-3bf75b7f0df4@roeck-us.net>
+From:   Yury Norov <yury.norov@gmail.com>
+Date:   Fri, 20 May 2022 09:18:33 -0700
+Message-ID: <CAAH8bW9zdMCV_JJ7abC6jY=0W-oTK5g0refFgFHLYWCykVk5KA@mail.gmail.com>
+Subject: Re: [PATCH 3/5] lib/bitmap: add test for bitmap_{from,to}_arr64
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,110 +78,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 8:55 AM Suren Baghdasaryan <surenb@google.com> wrote:
+On Thu, May 19, 2022 at 11:04 AM Guenter Roeck <linux@roeck-us.net> wrote:
 >
-> On Fri, May 20, 2022 at 12:21 AM Michal Hocko <mhocko@suse.com> wrote:
+> On 5/19/22 09:01, Yury Norov wrote:
+> > On Thu, May 19, 2022 at 8:09 AM Guenter Roeck <linux@roeck-us.net> wrote:
+> >>
+> >> On Thu, Apr 28, 2022 at 01:51:14PM -0700, Yury Norov wrote:
+> >>> Test newly added bitmap_{from,to}_arr64() functions similarly to
+> >>> already existing bitmap_{from,to}_arr32() tests.
+> >>>
+> >>> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> >>
+> >> With this patch in linux-next (including next-20220519), I see lots of
+> >> bitmap test errors when booting 32-bit ppc images in qemu. Examples:
+> >>
+> >> test_bitmap: [lib/test_bitmap.c:600] bitmaps contents differ: expected "0", got "0,65"
+> >> ...
+> >> test_bitmap: [lib/test_bitmap.c:600] bitmaps contents differ: expected "0,65", got "0,65,128"
+> >> test_bitmap: [lib/test_bitmap.c:600] bitmaps contents differ: expected "0,65", got "0,65,128-129"
+> >> test_bitmap: [lib/test_bitmap.c:600] bitmaps contents differ: expected "0,65", got "0,65,128-130"
+> >> ...
+> >> test_bitmap: [lib/test_bitmap.c:600] bitmaps contents differ: expected "0,65,128-143", got "0,65,128-143,208-209"
+> >> test_bitmap: [lib/test_bitmap.c:600] bitmaps contents differ: expected "0,65,128-143", got "0,65,128-143,208-210"
+> >>
+> >> and so on. It only  gets worse from there, and ends with:
+> >>
+> >> test_bitmap: parselist: 14: input is '0-2047:128/256' OK, Time: 4274
+> >> test_bitmap: bitmap_print_to_pagebuf: input is '0-32767
+> >> ', Time: 127267
+> >> test_bitmap: failed 337 out of 3801 tests
+> >>
+> >> Other architectures and 64-bit ppc builds seem to be fine.
 > >
-> > On Thu 19-05-22 14:33:03, Suren Baghdasaryan wrote:
-> > > On Thu, May 19, 2022 at 1:22 PM Liam Howlett <liam.howlett@oracle.com> wrote:
-> > [...]
-> > > > arch_exit_mmap() was called under the write lock before, is it safe to
-> > > > call it under the read lock?
-> > >
-> > > Ah, good catch. I missed at least one call chain which I believe would
-> > > require arch_exit_mmap() to be called under write lock:
-> > >
-> > > arch_exit_mmap
-> > >     ldt_arch_exit_mmap
-> > >         free_ldt_pgtables
-> > >             free_pgd_range
+> > Hi Guenter,
 > >
-> > Why would be this a problem? This is LDT mapped into page tables but as
-> > far as I know oom_reaper cannot really ever see that range because it is
-> > not really reachable from any VMA.
+> > Thanks for letting me know. It's really weird because it has already
+> > been for 2 weeks
+> > in next with no issues. But I tested it on mips32, not powerpc. I'll
+> > check what happens
+> > there.
+> >
+> Oh, I have seen the problem for a while, it is just that -next is in
+> such a bad shape that it is difficult to bisect individual problems.
 >
-> Ah, thanks! I didn't realize these page tables are not reachable from
-> VMAs. The only other call that I'm not sure is ok without mmap write
-> lock is xen_hvm_exit_mmap:
+> > Can you please share your config and qemu image if possible?
+> >
 >
-> arch_exit_mmap
->     paravirt_arch_exit_mmap
->         xen_hvm_exit_mmap
+> First, you have to revert commit b033767848c411
+> ("powerpc/code-patching: Use jump_label for testing freed initmem")
+> to avoid a crash. After that, a recent version of qemu should work
+> with the following command line.
 >
-> I'll look closer today but if someone can confirm it's safe then my
-> current patch should be fine as is.
+> qemu-system-ppc -kernel arch/powerpc/boot/uImage -M mpc8544ds \
+>         -m 256 -no-reboot -initrd rootfs.cpio \
+>         --append "rdinit=/sbin/init coherent_pool=512k mem=256M console=ttyS0" \
+>         -monitor none -nographic
+>
+> Configuration is mpc85xx_defconfig with CONFIG_TEST_BITMAP enabled.
+> I used the root file system (initrd) from
+> https://github.com/groeck/linux-build-test/blob/master/rootfs/ppc/rootfs.cpio.gz
 
-My conclusion is that it's safe to call arch_exit_mmap without
-exclusive mmap lock since the only possible competition is from
-OOM-killer/process_mrelease which operate on mm->mmap and none of the
-arch_exit_mmap implementations use mm->mmap.
+Yes, that helped a lot. Thanks, I was able to reproduce it. I'll take
+a look shortly.
 
-Andrew, sorry for going back and forth. I think the patch is fine as
-is and can be integrated. Thanks!
-
-
-> Thanks,
-> Suren.
->
-> >
-> > > I'll need to check whether arch_exit_mmap() has to be called before
-> > > unmap_vmas(). If not, we could move it further down when we hold the
-> > > write lock.
-> > > Andrew, please remove this patchset from your tree for now until I fix this.
-> > >
-> > > >
-> > > > >
-> > > > >       vma = mm->mmap;
-> > > > >       if (!vma) {
-> > > > >               /* Can happen if dup_mmap() received an OOM */
-> > > > > -             mmap_write_unlock(mm);
-> > > > > +             mmap_read_unlock(mm);
-> > > > >               return;
-> > > > >       }
-> > > > >
-> > > > > @@ -3138,6 +3121,16 @@ void exit_mmap(struct mm_struct *mm)
-> > > > >       /* update_hiwater_rss(mm) here? but nobody should be looking */
-> > > > >       /* Use -1 here to ensure all VMAs in the mm are unmapped */
-> > > > >       unmap_vmas(&tlb, vma, 0, -1);
-> > > > > +     mmap_read_unlock(mm);
-> > > > > +
-> > > > > +     /*
-> > > > > +      * Set MMF_OOM_SKIP to hide this task from the oom killer/reaper
-> > > > > +      * because the memory has been already freed. Do not bother checking
-> > > > > +      * mm_is_oom_victim because setting a bit unconditionally is cheaper.
-> > > > > +      */
-> > > > > +     set_bit(MMF_OOM_SKIP, &mm->flags);
-> > > > > +
-> > > > > +     mmap_write_lock(mm);
-> > > >
-> > > > Is there a race here?  We had a VMA but after the read lock was dropped,
-> > > > could the oom killer cause the VMA to be invalidated?
-> >
-> > Nope, the oom killer itself doesn't do much beyond sending SIGKILL and
-> > scheduling the victim for the oom_reaper. dup_mmap is holding exclusive
-> > mmap_lock throughout the whole process.
-> >
-> > > > I don't think so
-> > > > but the comment above about dup_mmap() receiving an OOM makes me
-> > > > question it.  The code before kept the write lock from when the VMA was
-> > > > found until the end of the mm edits - and it had the check for !vma
-> > > > within the block itself.  We are also hiding it from the oom killer
-> > > > outside the read lock so it is possible for oom to find it in that
-> > > > window, right?
-> >
-> > The oom killer's victim selection doesn't really depend on the
-> > mmap_lock. If there is a race and MMF_OOM_SKIP is not set yet then it
-> > will consider the task and very likely bail out anyway because the
-> > address space has already been unampped so oom_badness() would consider
-> > this task boring.
-> >
-> > oom_reaper on the other hand would just try to unmap in parallel but
-> > that is fine regardless of MMF_OOM_SKIP. Seeing the flag would allow to
-> > bail out early rather than just trying to unmap something that is no
-> > longer there. The only problem for the oom_reaper is to see page tables
-> > of the address space disappearing from udner its feet. That is excluded
-> > by the the exlusive lock and as Suren mentions mm->mmap == NULL check
-> > if the exit_mmap wins the race.
-> > --
-> > Michal Hocko
-> > SUSE Labs
+Thanks,
+Yury

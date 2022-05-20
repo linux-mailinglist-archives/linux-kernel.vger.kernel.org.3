@@ -2,130 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A332952EE72
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 16:48:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DA7952EE76
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 16:49:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350455AbiETOsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 10:48:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49516 "EHLO
+        id S1350515AbiETOs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 10:48:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350459AbiETOsV (ORCPT
+        with ESMTP id S1350552AbiETOsm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 10:48:21 -0400
-Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9BB21737F1
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 07:48:00 -0700 (PDT)
-Received: by mail-ua1-x92d.google.com with SMTP id 90so3076134uam.8
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 07:48:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=TdE6K5mZnMzfi0LF9qaS0eQuKIQMNnhmY0eqSGQAtho=;
-        b=mUUGhPjn5fYL8N//HRUtYG1NSgB+aEK0JW6CWta7a81zxnc8/Qrf1FvIF8u+x3rvTL
-         iuaLSaiAd/xVdL8qYJexNCJJpEhs38roYttyPZG418V8yFOkzV3i69Ft/onbcISB7P8l
-         K75gO8RRcDmEyIxncusiC4YAa7blx1oPbF323/t7XC4HgcW9v+tYE4Kxw2Faa4wVKPUN
-         VfktW63jbnJrFdkIrXHIT6fcSlQ2EbT7aL8n1epYNy1RzCeJDps/qnmIsF4DDT70ipaN
-         I4YpVwsIkmDo+3Rj8aQi5hiBiym5zHTz8boJrA1e+iwmi7ITT6R6mQMfal+wcJVBeeWf
-         FeYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=TdE6K5mZnMzfi0LF9qaS0eQuKIQMNnhmY0eqSGQAtho=;
-        b=dddb0yJR6od7xzQxP2fc5SIgIvrKcb/+bWGRsAmR34gPZu1eEnlqm/EUGf7CNmmjfe
-         Wfl47lSlXmdBNDJSgnE58rjXqT/SHz+ayIUCVnoJnnLxC0x0hnp7cDfoPvNSjP15nccW
-         j5YGGx1hziaP0Z9Qs1/bM4litZGXkLj9Rs7D5H3+nEl4SrpeYkrHpQfNKA+xAkMOEoqr
-         4slJWAvGB1onFhi9LMX6/J+PW9/k6RbTVMqn3s1EHCdV4gKnSzX5ety+nzFFZDREGPHw
-         u5keGcx+N0KJQlRAR4V5WOJ/3cVCsk6Ic5Nlu5acQIqsGmsJnd+avYVeYvKIvgNJ0q6P
-         ibZQ==
-X-Gm-Message-State: AOAM530htrXxeogepV/55rPACUrQ5PDZU7CH0LIzGjLx9BtqsY1GiYsi
-        Vq9l9NNOEGL2HKgei2xuI94PEWDaMUjPr2RORk0=
-X-Google-Smtp-Source: ABdhPJywXx59CylkCISwiul4iQPc9BAVpifpqYl1j0iUV215cgLjUETS/cTOj+NSAoh7PLPB4Xk6375lsxP+vKjYdm8=
-X-Received: by 2002:ab0:614a:0:b0:368:bf32:5b37 with SMTP id
- w10-20020ab0614a000000b00368bf325b37mr4158060uan.30.1653058079775; Fri, 20
- May 2022 07:47:59 -0700 (PDT)
+        Fri, 20 May 2022 10:48:42 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0861737E8;
+        Fri, 20 May 2022 07:48:32 -0700 (PDT)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24KDhOK5010271;
+        Fri, 20 May 2022 14:48:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=2BQqrf/2UZw9BbZNKXr3rbh+d0YdvQlgVQfidEHv0RY=;
+ b=BQlvwXLkoWvXPj1LUUIv/I2HTPZYdVELF8oLQqAk3xXT3NdFKsPHCRQmsUl7+r0nyM3i
+ PhFUr9PQdbeITigMj7Na588NSgWfkW/wVzQEi2TLX4u796t1DmW1l+Xbl+dii2Q2dhm/
+ 35uund+5qxTMPsodh0ryPPcMkhm4+m0MYoQ+LWWC8BtKIyjL9r1ixfik353ESWLwFssl
+ 93WO+GRpx/QbIaDaXDpNSUPwMeb70RDxfEJZotEd9jxPqXm0dFwXfES+CYNr32ffJsSs
+ 0NtdX2ljwgNYHxAZHf5iav8jMJoNwpxZzep4QSMxkzEr6tPGlUl4RWAWliOxl2WaqoNk CA== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g69jhcy1q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 May 2022 14:48:32 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24KEgjDR022176;
+        Fri, 20 May 2022 14:48:30 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 3g2429gyh0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 May 2022 14:48:29 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24KEmQ8644696046
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 20 May 2022 14:48:26 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BF8F911C050;
+        Fri, 20 May 2022 14:48:26 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4C3AF11C04A;
+        Fri, 20 May 2022 14:48:26 +0000 (GMT)
+Received: from [9.145.62.102] (unknown [9.145.62.102])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 20 May 2022 14:48:26 +0000 (GMT)
+Message-ID: <f190b4cf-241e-db58-fa84-bfed4a401c04@linux.ibm.com>
+Date:   Fri, 20 May 2022 16:48:25 +0200
 MIME-Version: 1.0
-References: <20220516125405.1675-1-matenajakub@gmail.com> <20220516125405.1675-3-matenajakub@gmail.com>
- <20220520134124.6glbfzhrgzutfor6@box.shutemov.name>
-In-Reply-To: <20220520134124.6glbfzhrgzutfor6@box.shutemov.name>
-From:   =?UTF-8?Q?Jakub_Mat=C4=9Bna?= <matenajakub@gmail.com>
-Date:   Fri, 20 May 2022 16:48:08 +0200
-Message-ID: <CABsDyaJojLh0Hf2X4u44UpD_7P+eghjq9+Ogf=7f4HjAMq9KWg@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 2/6] [PATCH 2/6] mm: add merging after mremap resize
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     linux-mm@kvack.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Vlastimil Babka <vbabka@suse.cz>,
-        mhocko@kernel.org, mgorman@techsingularity.net,
-        willy@infradead.org, Liam Howlett <liam.howlett@oracle.com>,
-        Hugh Dickins <hughd@google.com>, riel@surriel.com,
-        rostedt@goodmis.org, peterz@infradead.org, david@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v2 1/1] s390: Add attestation query information
+Content-Language: en-US
+To:     Steffen Eiden <seiden@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Nico Boehr <nrb@linux.ibm.com>, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220518135908.1110319-1-seiden@linux.ibm.com>
+ <20220518135908.1110319-2-seiden@linux.ibm.com>
+From:   Janosch Frank <frankja@linux.ibm.com>
+In-Reply-To: <20220518135908.1110319-2-seiden@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: YTo8cgT42d4Ucy4cMhkBtWPZD-JOmh3z
+X-Proofpoint-GUID: YTo8cgT42d4Ucy4cMhkBtWPZD-JOmh3z
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-20_04,2022-05-20_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
+ clxscore=1015 malwarescore=0 spamscore=0 priorityscore=1501 phishscore=0
+ bulkscore=0 mlxlogscore=999 lowpriorityscore=0 impostorscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205200102
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 3:39 PM Kirill A. Shutemov <kirill@shutemov.name> w=
-rote:
->
-> On Mon, May 16, 2022 at 02:54:01PM +0200, Jakub Mat=C4=9Bna wrote:
-> > When mremap call results in expansion, it might be possible to merge th=
-e
-> > VMA with the next VMA which might become adjacent. This patch adds
-> > vma_merge call after the expansion is done to try and merge.
-> >
-> > Signed-off-by: Jakub Mat=C4=9Bna <matenajakub@gmail.com>
-> > ---
-> >  mm/mremap.c | 7 +++++--
-> >  1 file changed, 5 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/mm/mremap.c b/mm/mremap.c
-> > index 303d3290b938..75cda854ec58 100644
-> > --- a/mm/mremap.c
-> > +++ b/mm/mremap.c
-> > @@ -9,6 +9,7 @@
-> >   */
-> >
-> >  #include <linux/mm.h>
-> > +#include <linux/mm_inline.h>
-> >  #include <linux/hugetlb.h>
-> >  #include <linux/shm.h>
-> >  #include <linux/ksm.h>
-> > @@ -1022,8 +1023,10 @@ SYSCALL_DEFINE5(mremap, unsigned long, addr, uns=
-igned long, old_len,
-> >                               }
-> >                       }
-> >
-> > -                     if (vma_adjust(vma, vma->vm_start, addr + new_len=
-,
-> > -                                    vma->vm_pgoff, NULL)) {
-> > +                     if (!vma_merge(mm, vma, addr + old_len, addr + ne=
-w_len,
-> > +                                     vma->vm_flags, vma->anon_vma, vma=
-->vm_file,
-> > +                                     vma->vm_pgoff + (old_len >> PAGE_=
-SHIFT), vma_policy(vma),
-> > +                                     vma->vm_userfaultfd_ctx, anon_vma=
-_name(vma))) {
->
-> Hm. Don't you need to update 'vma' with result of vma_merge()?
->
-> 'vma' is used below the point and IIUC it can be use-after-free.
->
+On 5/18/22 15:59, Steffen Eiden wrote:
+> We have information about the supported attestation header version
+> and plaintext attestation flag bits.
+> Let's expose it via the sysfs files.
+> 
+> Signed-off-by: Steffen Eiden <seiden@linux.ibm.com>
 
-Actually, this merge call is always either case 1 or 2 as they are
-defined in the vma_merge(). So, either way the 'vma' can absorb its
-neighbors but never gets absorbed itself.
-But you are right and I will add the update, because otherwise it
-would depend on the vma_merge() implementation, which could possibly
-change in the future and cause a bug.
+When Heiko's nit for the commit message is fixed:
+Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
 
-> --
->  Kirill A. Shutemov
+
+> ---
+>   arch/s390/boot/uv.c        |  2 ++
+>   arch/s390/include/asm/uv.h |  7 ++++++-
+>   arch/s390/kernel/uv.c      | 20 ++++++++++++++++++++
+>   3 files changed, 28 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/s390/boot/uv.c b/arch/s390/boot/uv.c
+> index 67c737c1e580..a5fa667160b2 100644
+> --- a/arch/s390/boot/uv.c
+> +++ b/arch/s390/boot/uv.c
+> @@ -45,6 +45,8 @@ void uv_query_info(void)
+>   		uv_info.supp_se_hdr_pcf = uvcb.supp_se_hdr_pcf;
+>   		uv_info.conf_dump_storage_state_len = uvcb.conf_dump_storage_state_len;
+>   		uv_info.conf_dump_finalize_len = uvcb.conf_dump_finalize_len;
+> +		uv_info.supp_att_req_hdr_ver = uvcb.supp_att_req_hdr_ver;
+> +		uv_info.supp_att_pflags = uvcb.supp_att_pflags;
+>   	}
+>   
+>   #ifdef CONFIG_PROTECTED_VIRTUALIZATION_GUEST
+> diff --git a/arch/s390/include/asm/uv.h b/arch/s390/include/asm/uv.h
+> index 3e597bb634bd..18fe04c8547e 100644
+> --- a/arch/s390/include/asm/uv.h
+> +++ b/arch/s390/include/asm/uv.h
+> @@ -124,7 +124,10 @@ struct uv_cb_qui {
+>   	u64 reservedc0;				/* 0x00c0 */
+>   	u64 conf_dump_storage_state_len;	/* 0x00c8 */
+>   	u64 conf_dump_finalize_len;		/* 0x00d0 */
+> -	u8  reservedd8[256 - 216];		/* 0x00d8 */
+> +	u64 reservedd8;				/* 0x00d8 */
+> +	u64 supp_att_req_hdr_ver;		/* 0x00e0 */
+> +	u64 supp_att_pflags;			/* 0x00e8 */
+> +	u8 reservedf0[256 - 240];		/* 0x00f0 */
+>   } __packed __aligned(8);
+>   
+>   /* Initialize Ultravisor */
+> @@ -350,6 +353,8 @@ struct uv_info {
+>   	unsigned long supp_se_hdr_pcf;
+>   	unsigned long conf_dump_storage_state_len;
+>   	unsigned long conf_dump_finalize_len;
+> +	unsigned long supp_att_req_hdr_ver;
+> +	unsigned long supp_att_pflags;
+>   };
+>   
+>   extern struct uv_info uv_info;
+> diff --git a/arch/s390/kernel/uv.c b/arch/s390/kernel/uv.c
+> index 84fe33b6af4d..c13d5a7b71f0 100644
+> --- a/arch/s390/kernel/uv.c
+> +++ b/arch/s390/kernel/uv.c
+> @@ -479,6 +479,24 @@ static ssize_t uv_query_max_guest_addr(struct kobject *kobj,
+>   static struct kobj_attribute uv_query_max_guest_addr_attr =
+>   	__ATTR(max_address, 0444, uv_query_max_guest_addr, NULL);
+>   
+> +static ssize_t uv_query_supp_att_req_hdr_ver(struct kobject *kobj,
+> +					     struct kobj_attribute *attr, char *page)
+> +{
+> +	return scnprintf(page, PAGE_SIZE, "%lx\n", uv_info.supp_att_req_hdr_ver);
+> +}
+> +
+> +static struct kobj_attribute uv_query_supp_att_req_hdr_ver_attr =
+> +	__ATTR(supp_att_req_hdr_ver, 0444, uv_query_supp_att_req_hdr_ver, NULL);
+> +
+> +static ssize_t uv_query_supp_att_pflags(struct kobject *kobj,
+> +					struct kobj_attribute *attr, char *page)
+> +{
+> +	return scnprintf(page, PAGE_SIZE, "%lx\n", uv_info.supp_att_pflags);
+> +}
+> +
+> +static struct kobj_attribute uv_query_supp_att_pflags_attr =
+> +	__ATTR(supp_att_pflags, 0444, uv_query_supp_att_pflags, NULL);
+> +
+>   static struct attribute *uv_query_attrs[] = {
+>   	&uv_query_facilities_attr.attr,
+>   	&uv_query_feature_indications_attr.attr,
+> @@ -490,6 +508,8 @@ static struct attribute *uv_query_attrs[] = {
+>   	&uv_query_dump_storage_state_len_attr.attr,
+>   	&uv_query_dump_finalize_len_attr.attr,
+>   	&uv_query_dump_cpu_len_attr.attr,
+> +	&uv_query_supp_att_req_hdr_ver_attr.attr,
+> +	&uv_query_supp_att_pflags_attr.attr,
+>   	NULL,
+>   };
+>   
+

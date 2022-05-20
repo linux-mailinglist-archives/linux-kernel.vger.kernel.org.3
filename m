@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 982F152EBEC
+	by mail.lfdr.de (Postfix) with ESMTP id 43F6652EBEB
 	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 14:21:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349235AbiETMUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 08:20:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54942 "EHLO
+        id S1349192AbiETMUk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 08:20:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349201AbiETMUD (ORCPT
+        with ESMTP id S1349295AbiETMUG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 08:20:03 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF68163F7F;
-        Fri, 20 May 2022 05:19:55 -0700 (PDT)
+        Fri, 20 May 2022 08:20:06 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DF53166094;
+        Fri, 20 May 2022 05:19:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1653049195; x=1684585195;
+  t=1653049199; x=1684585199;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=01kA263hwXPhT5HxBQ+kdt4vpfNDUNRi6gZQFXOPTL0=;
-  b=ylnlnXVe3NJ8RQUuuwy35qxeDxU2Dlj2ZyevYXelBCPre7l8hI1o5RuQ
-   RldLxf023Eo1JWZqxVgNzfXkCcQDHzMhCK0s1fN47+1LAy4mj+IbtJhx3
-   VBvT9U6SQkVFLRsDcTrbfy045leStSN9xEM6eYAZ7GLHgxJcHU6oAQpNh
-   I=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 20 May 2022 05:19:54 -0700
+  bh=HeLhfci8syf2l4bw3M58ZqcMx7lpDd8BhHPU5FZxupE=;
+  b=YE0ogg8xYjzLxiY6yuBYm08+9DP+ZWs4rCy0q4mYZVszLJrahfOytyCI
+   Lnb1Cc4dK6TarWAP3i234b8irxcMK6phBVRAj29rJLUJJqDN2jovd4sV4
+   KV45G1XaDD+XMwv+2HQB+pp8rW8juvUnzt+5FcGuHMNFHZjR6kC0Bb+ki
+   g=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 20 May 2022 05:19:58 -0700
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 05:19:54 -0700
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 05:20:00 -0700
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 20 May 2022 05:19:54 -0700
+ 15.2.986.22; Fri, 20 May 2022 05:19:58 -0700
 Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 20 May 2022 05:19:50 -0700
+ 15.2.986.22; Fri, 20 May 2022 05:19:54 -0700
 From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
 To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
         <robh+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
@@ -47,9 +47,9 @@ To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
         <judyhsiao@chromium.org>
 CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
         "Venkata Prasad Potturu" <quic_potturu@quicinc.com>
-Subject: [PATCH v12 11/12] arm64: dts: qcom: sc7280: Add sound node for CRD 1.0/2.0 and IDP boards
-Date:   Fri, 20 May 2022 17:48:43 +0530
-Message-ID: <1653049124-24713-12-git-send-email-quic_srivasam@quicinc.com>
+Subject: [PATCH v12 12/12] arm64: dts: qcom: sc7280: Add sound node for CRD 3.0/3.1
+Date:   Fri, 20 May 2022 17:48:44 +0530
+Message-ID: <1653049124-24713-13-git-send-email-quic_srivasam@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1653049124-24713-1-git-send-email-quic_srivasam@quicinc.com>
 References: <1653049124-24713-1-git-send-email-quic_srivasam@quicinc.com>
@@ -58,8 +58,8 @@ Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
 X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,62 +68,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add dt nodes for sound card support on revision 3, 4
-(aka CRD 1.0 and 2.0) and IDP boards, which is using WCD9385 headset
-playback, capture, I2S speaker playback and DMICs via VA macro.
+Add dt nodes for sound card support on rev5+ (aka CRD 3.0/3.1) boards,
+which is using WCD9385 headset playback, capture, I2S speaker playback
+and DMICs via VA macro.
 
 Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
 Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
 Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
 Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
 ---
- arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts | 23 +++++++
- arch/arm64/boot/dts/qcom/sc7280-idp.dtsi   | 98 ++++++++++++++++++++++++++++++
- 2 files changed, 121 insertions(+)
+ arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts | 98 +++++++++++++++++++++++
+ 1 file changed, 98 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts b/arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts
-index 9c21207..dddb505 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts
-@@ -87,6 +87,29 @@ ap_ts_pen_1v8: &i2c13 {
- 	pins = "gpio51";
- };
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
+index e8a596c..81d0dfb 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
++++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
+@@ -13,6 +13,104 @@
+ 	model = "Qualcomm Technologies, Inc. sc7280 CRD platform (rev5+)";
+ 	compatible = "google,hoglin", "qcom,sc7280";
  
-+&sound {
-+	audio-routing =
-+		"IN1_HPHL", "HPHL_OUT",
-+		"IN2_HPHR", "HPHR_OUT",
-+		"AMIC1", "MIC BIAS1",
-+		"AMIC2", "MIC BIAS2",
-+		"VA DMIC0", "MIC BIAS1",
-+		"VA DMIC1", "MIC BIAS1",
-+		"VA DMIC2", "MIC BIAS3",
-+		"VA DMIC3", "MIC BIAS3",
-+		"TX SWR_ADC0", "ADC1_OUTPUT",
-+		"TX SWR_ADC1", "ADC2_OUTPUT",
-+		"TX SWR_ADC2", "ADC3_OUTPUT",
-+		"TX SWR_DMIC0", "DMIC1_OUTPUT",
-+		"TX SWR_DMIC1", "DMIC2_OUTPUT",
-+		"TX SWR_DMIC2", "DMIC3_OUTPUT",
-+		"TX SWR_DMIC3", "DMIC4_OUTPUT",
-+		"TX SWR_DMIC4", "DMIC5_OUTPUT",
-+		"TX SWR_DMIC5", "DMIC6_OUTPUT",
-+		"TX SWR_DMIC6", "DMIC7_OUTPUT",
-+		"TX SWR_DMIC7", "DMIC8_OUTPUT";
-+};
-+
- &wcd9385 {
- 	pinctrl-names = "default", "sleep";
- 	pinctrl-0 = <&wcd_reset_n>, <&us_euro_hs_sel>;
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-index 10f646d..ec2b6c9 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-@@ -85,6 +85,104 @@
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&nvme_pwren>;
- 	};
-+
 +	sound: sound {
 +		compatible = "google,sc7280-herobrine";
 +		model = "sc7280-wcd938x-max98360a-1mic";
@@ -133,10 +97,10 @@ index 10f646d..ec2b6c9 100644
 +			"IN2_HPHR", "HPHR_OUT",
 +			"AMIC1", "MIC BIAS1",
 +			"AMIC2", "MIC BIAS2",
-+			"VA DMIC0", "MIC BIAS3",
-+			"VA DMIC1", "MIC BIAS3",
-+			"VA DMIC2", "MIC BIAS1",
-+			"VA DMIC3", "MIC BIAS1",
++			"VA DMIC0", "MIC BIAS1",
++			"VA DMIC1", "MIC BIAS1",
++			"VA DMIC2", "MIC BIAS3",
++			"VA DMIC3", "MIC BIAS3",
 +			"TX SWR_ADC0", "ADC1_OUTPUT",
 +			"TX SWR_ADC1", "ADC2_OUTPUT",
 +			"TX SWR_ADC2", "ADC3_OUTPUT",
@@ -221,9 +185,10 @@ index 10f646d..ec2b6c9 100644
 +			};
 +		};
 +	};
- };
++
+ 	/* FIXED REGULATORS */
  
- &apps_rsc {
+ 	/*
 -- 
 2.7.4
 

@@ -2,52 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC5A652ED33
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 15:33:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA6BB52ED36
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 15:34:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349876AbiETNdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 09:33:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50796 "EHLO
+        id S1347889AbiETNeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 09:34:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349823AbiETNdQ (ORCPT
+        with ESMTP id S1348752AbiETNeC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 09:33:16 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFBD7163F45;
-        Fri, 20 May 2022 06:33:14 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 03B501F463C2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1653053593;
-        bh=cXo3YsE0OfrL8V3lpZRyZ78kDPt4+NdotzMnyfoCs5E=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RxMpqV+oXdfwcVD0PJs5lOPr9ZaiQ5A8AU+QbZz6gplaOxdXYDaaAflReiTJh7SrZ
-         QqMwW6Kt5RE+oQd5fUkK+kkacAm0lKwVnW8MLvXo2L0tjObqvCedl76fFhxTH7QbPe
-         qqsAyssCpiHwaDOkPFuV1BQLfXKc9c0vjnCBqXhs6RFrFLj7ziCbxjsRO2QTj33fMf
-         PEkxbWDs3d+bjWtdjbuXE3Wx2x8oi0C19fM8l2O21c8aQeSanEIhUxRVrbqJbGjwz6
-         HUiDaZS1dYhJDJ7LnSqxyNkKDjEyxEfrjX59LXcOd5UQoGzrnfresJ8pQEzRh1S5hd
-         0SIV6l/QaK8Jw==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     lgirdwood@gmail.com
-Cc:     broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH 4/4] regulator: Add driver for MT6332 PMIC regulators
-Date:   Fri, 20 May 2022 15:33:05 +0200
-Message-Id: <20220520133305.265310-5-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220520133305.265310-1-angelogioacchino.delregno@collabora.com>
-References: <20220520133305.265310-1-angelogioacchino.delregno@collabora.com>
+        Fri, 20 May 2022 09:34:02 -0400
+Received: from sonic301-21.consmr.mail.gq1.yahoo.com (sonic301-21.consmr.mail.gq1.yahoo.com [98.137.64.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA9D4169E3F
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 06:34:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=netscape.net; s=a2048; t=1653053641; bh=K5D2ddvcAFT7qU/7/cIEJD0V4lwIe18sO6+LKjoJkw4=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=PkYqpkkuQo45ByHHvchEhcebEAtp8AaC3/itk3+k6pOYzK1Vl/z8z2g9vmutXN7I+03ApExQ4Y6NLB+mJcTpxYKJvvgyubHih/MqBK1Y11BeD30vqVTc0y1MeyFfiy3rCLZWZIHEDBZC4ahH0inwNJWV4xCg2iwePPljxybrImoNt1fbIhLFEizqXiPa4oducIBTEgo/mA96tSRC+OvtAgX6rD6ayRTLgxi5VR/46+xLeyq6zj6iUiGngD9191uvtGbsX6W2THai8Km28tbUH07O+9GAxGU8OOdoTvL2OxR6ZVpzH1zVjegzIF7Rog41ycBWUqiR2YYy+asOTrHKlw==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1653053641; bh=k377TC4FGAEpIeRlbM1rv1iA2GuaofkGOp8RBu3yFHW=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=ugE6ujVanxC1STiP9viWDUWUTNr/7Wt7WN+8jsE/QCpermZtrtRAmb+JEtTaPCqWvzCLjKRzlFHmOmRlqly5nRy6Pco3dqpWzd+rCRd8nPoHcWX0uXI46JW+Rcxe4e5blbA0AB4+/e0weqdbzBQPr8Fj+4Jjrwt9l6wOn1ngb9jg77j3LsRIUF60sw2r0tJMr2WNI3fO9KAhu+ab9BOdtFRCES0M9WUvS9cMcQFIjtRgQJhFLbegsXhXPke0fJM2W56NR7EOVruOBmrw0REmQHnlmYmIqkHKMcbaTSBFZMhwyRP68X9o9jBO9UAYFlH3wkfHoWT3bBG2Bgi/TZVDoQ==
+X-YMail-OSG: Y48VktsVM1mw1z0tQFnDRFf5ZFKaFyl88afrKxRgVCgenPdgml44kt9snHULpVT
+ 0hp3_yGN5gR8i1DwVi8RSa8Tjln6rXBvzF_mi6gMpilobbMMYPhnFUsBCXflENor4wEUUZNSmxyw
+ ai48GGw8Y6.jdx043KG_tOo8G4Jmhkj05v3Ch.1Ut3YFFvauy_jNvaiswLqGx_5CkZib26t67mWd
+ v.fg36jpHJlDXy6dFR3IVxO7AZmdzT2ML1jvHYDGU3XniZ_gAxL9hB_5nCYJLjv96xYlLK2yZvWi
+ 7.uHJxWl3WWsJU5PaaHz9vzU0LH4nW9xRufzzv8nU8jKIK0FTuG7UePWKD.QveI1K516F.xFZ2Sv
+ KdFfpBV7t98KX1GzR4CXAi2Fmro4iNkk2gW6KkQYyZvddsSsBvES1Vk3IKz_JaBt46ORP71IICFf
+ _cZQKiIrezoGDURRIwoCo7fuhQBoUPnevV1uuIKBoR08ir2zaE3SrGWq4xQI5NozSPjI6xS8mUcL
+ 8LQREAONgkJvqpkY1ChD1yiEcApxNn3Kg67R_hH9Zag8DjckAboKfmcwhFuLthXYyRQOq.orj1og
+ U6XtQR6s3Z4iNUZNupP178rGJoDuSB.m4ZqG6.rQ33Z9SuuwVo2FJ9CkbGb8VrEqIMmNUMuU96Hm
+ mKYWS3fhCsK5TS6efG98kfRrHdJiyfFRhr2amzI1ru0Yk4OrF68XOnjEubxPzj7CNz7QSYP9ji2k
+ C.ziTjq9SyX9oJ75DCIiheFoncYe3YPD0B6KZaP9NqGUj6jqbxWkLprxJF6jJAN8mna77uif7jLU
+ AdviL5AaGK03B6rKCJu_4YzT1KCElh_OjJdMCtL1iV_HhUiD3pwTRGe5x0MY5mBpML35XU2WoUG.
+ tcJb7gTfdE0yvdGszIy9Mi670l890r258zDdaeeaXNEjkzrJ2tWBVn9kjMJFpFe_aV_FB_IbziQ9
+ HWabonezKTYBrLnm49Mn9rhQR4LKGlbA5puye05mehZWT0VacflQ.cMQgiiqdwhERh1Re8zSh26m
+ Gk0r57T6lXZ5fDhUXK.tp5RSZbTl4c43W.9qZwG9HUgeNLWNCsl_Bu9HWsk6wtfeciGjagOJHFcl
+ 5ibrmoOf.5n7dpBCLhOnNE5G9OZmS_r81Fup_YgNPry9aBT7cVlfQjvpzHHnuS._UbSYZ0noJWzW
+ BwTcwZByIjHOCmqaqQW8HIW1tA1N_xLmdC8aOkaibNjVLS1FUhD_adW.YKBMGvd2AljWFHM0weoX
+ A1cQNlmZLS7T26QoTblYoV8f6qf0kO5xt_6RevEWsbEUVehI2DrRCE7G1Wfohx.hqi4T8TA.puAQ
+ sv.TrzuZhbSJ7eWZ06OH74Fcdbe_i2p9Y6hoWTeaPkkp6Xoc.hF3XI48Vz9SZuuYaDklhkS_QEYl
+ 5xwQH895VwCP3RL5gqIU_Y4GfhctIUqn9RdQwVxOPkjw_jT2xz7Cle_jzNNKnCf5vL5RaJF1WndL
+ LXx3O1qoLa_wWrbzXSTdSHOh8sOda8aFNeNYBtBmKP4PKP7KuyyslQSSLp2D.MbE3nmkYma5bsWL
+ HMpO40hsuCZmIMaSdc8tqNyPKo1DpY3M_GkEcVGlqG2INwshP294ZHblx.Tcrhk895hodtT3KCG4
+ iTwjk5odyFIZt8XZMl.NV5MuGr1XuUJgjPDJTf_7B_yqJcGyVDGJKpBmc9fLvmqtJjSue1TsSJK4
+ uu5gR1eBHHke7g_zT2Zfves6VxMqDUYC9gKikpXfc8fhUzA0cr0eKd9Je61rCWZKILB3.UogNaPC
+ YJPWxETcskk6NC_Wp.RjKC6.4DsmNBjk0XzEAS4uKfqFDLI6XbtCkv04_1l67umJkst_y9XkoAX.
+ xNPe4YNN7394MMO8MyzmWn3iiosn30eO6PBD4v3MbmivZHLxrpIySMuvAWpWF5Yx.13EakdrURU9
+ vPPVKuDnSfeBAlIQiIlA34.bosrKDPG5EZGLwwJDOVXc5HhFVjCjJcIbe0LfNbHxYwH7H47VQIne
+ hoDB_nqDX4ZY5qJaX_smXDE_i0TB80HHXWa6bplXabf9K2qEBMna3975kd7RoWhKoHXdddkml9ia
+ zYyEnt4j9FimF826VhH8qwOA_1NKnOEDNM3gi6EoQjR5cC2qC5idpK8oxrS1WUzekA3zM52RKYb2
+ nbRsuf8iAUsVckiUApbxO1aWK1cLqCX3xTvd8CcZK3SrItQxhcDnnSok0e6ZC4KA5tIupcYA6fTg
+ gGjcC
+X-Sonic-MF: <brchuckz@aim.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic301.consmr.mail.gq1.yahoo.com with HTTP; Fri, 20 May 2022 13:34:01 +0000
+Received: by hermes--canary-production-bf1-5d4b57496-srbfg (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 457ab9e3e0994f36cbc2ca446594030f;
+          Fri, 20 May 2022 13:33:56 +0000 (UTC)
+Message-ID: <3ca084a9-768e-a6f5-ace4-cd347978dec7@netscape.net>
+Date:   Fri, 20 May 2022 09:33:55 -0400
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 2/2] x86/pat: add functions to query specific cache mode
+ availability
+Content-Language: en-US
+To:     Jan Beulich <jbeulich@suse.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, Juergen Gross <jgross@suse.com>
+References: <20220503132207.17234-1-jgross@suse.com>
+ <20220503132207.17234-3-jgross@suse.com>
+ <1d86d8ff-6878-5488-e8c4-cbe8a5e8f624@suse.com>
+ <0dcb05d0-108f-6252-e768-f75b393a7f5c@suse.com>
+ <77255e5b-12bf-5390-6910-dafbaff18e96@netscape.net>
+ <a2e95587-418b-879f-2468-8699a6df4a6a@suse.com>
+ <8b1ebea5-7820-69c4-2e2b-9866d55bc180@netscape.net>
+ <c5fa3c3f-e602-ed68-d670-d59b93c012a0@netscape.net>
+ <3bff3562-bb1e-04e6-6eca-8d9bc355f2eb@suse.com>
+From:   Chuck Zmudzinski <brchuckz@netscape.net>
+In-Reply-To: <3bff3562-bb1e-04e6-6eca-8d9bc355f2eb@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+X-Mailer: WebService/1.1.20225 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.aol
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,521 +101,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a driver for the regulators found in the MT6332 PMICs,
-including six buck and four LDO regulators.
+On 5/20/2022 5:41 AM, Jan Beulich wrote:
+> On 20.05.2022 10:30, Chuck Zmudzinski wrote:
+>> On 5/20/2022 2:59 AM, Chuck Zmudzinski wrote:
+>>> On 5/20/2022 2:05 AM, Jan Beulich wrote:
+>>>> On 20.05.2022 06:43, Chuck Zmudzinski wrote:
+>>>>> On 5/4/22 5:14 AM, Juergen Gross wrote:
+>>>>>> On 04.05.22 10:31, Jan Beulich wrote:
+>>>>>>> On 03.05.2022 15:22, Juergen Gross wrote:
+>>>>>>>
+>>>>>>> ... these uses there are several more. You say nothing on why
+>>>>>>> those want
+>>>>>>> leaving unaltered. When preparing my earlier patch I did inspect them
+>>>>>>> and came to the conclusion that these all would also better
+>>>>>>> observe the
+>>>>>>> adjusted behavior (or else I couldn't have left pat_enabled() as the
+>>>>>>> only predicate). In fact, as said in the description of my earlier
+>>>>>>> patch, in
+>>>>>>> my debugging I did find the use in i915_gem_object_pin_map() to be
+>>>>>>> the
+>>>>>>> problematic one, which you leave alone.
+>>>>>> Oh, I missed that one, sorry.
+>>>>> That is why your patch would not fix my Haswell unless
+>>>>> it also touches i915_gem_object_pin_map() in
+>>>>> drivers/gpu/drm/i915/gem/i915_gem_pages.c
+>>>>>
+>>>>>> I wanted to be rather defensive in my changes, but I agree at least
+>>>>>> the
+>>>>>> case in arch_phys_wc_add() might want to be changed, too.
+>>>>> I think your approach needs to be more aggressive so it will fix
+>>>>> all the known false negatives introduced by bdd8b6c98239
+>>>>> such as the one in i915_gem_object_pin_map().
+>>>>>
+>>>>> I looked at Jan's approach and I think it would fix the issue
+>>>>> with my Haswell as long as I don't use the nopat option. I
+>>>>> really don't have a strong opinion on that question, but I
+>>>>> think the nopat option as a Linux kernel option, as opposed
+>>>>> to a hypervisor option, should only affect the kernel, and
+>>>>> if the hypervisor provides the pat feature, then the kernel
+>>>>> should not override that,
+>>>> Hmm, why would the kernel not be allowed to override that? Such
+>>>> an override would affect only the single domain where the
+>>>> kernel runs; other domains could take their own decisions.
+>>>>
+>>>> Also, for the sake of completeness: "nopat" used when running on
+>>>> bare metal has the same bad effect on system boot, so there
+>>>> pretty clearly is an error cleanup issue in the i915 driver. But
+>>>> that's orthogonal, and I expect the maintainers may not even care
+>>>> (but tell us "don't do that then").
+>> Actually I just did a test with the last official Debian kernel
+>> build of Linux 5.16, that is, a kernel before bdd8b6c98239 was
+>> applied. In fact, the nopat option does *not* break the i915 driver
+>> in 5.16. That is, with the nopat option, the i915 driver loads
+>> normally on both the bare metal and on the Xen hypervisor.
+>> That means your presumption (and the presumption of
+>> the author of bdd8b6c98239) that the "nopat" option was
+>> being observed by the i915 driver is incorrect. Setting "nopat"
+>> had no effect on my system with Linux 5.16. So after doing these
+>> tests, I am against the aggressive approach of breaking the i915
+>> driver with the "nopat" option because prior to bdd8b6c98239,
+>> nopat did not break the i915 driver. Why break it now?
+> Because that's, in my understanding, is the purpose of "nopat"
+> (not breaking the driver of course - that's a driver bug -, but
+> having an effect on the driver).
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/regulator/Kconfig                  |   9 +
- drivers/regulator/Makefile                 |   1 +
- drivers/regulator/mt6332-regulator.c       | 431 +++++++++++++++++++++
- include/linux/regulator/mt6332-regulator.h |  27 ++
- 4 files changed, 468 insertions(+)
- create mode 100644 drivers/regulator/mt6332-regulator.c
- create mode 100644 include/linux/regulator/mt6332-regulator.h
+I wouldn't call it a driver bug, but an incorrect configuration of the
+kernel by the user.  I presume X86_FEATURE_PAT is required by the
+i915 driver and therefore the driver should refuse to disable
+it if the user requests to disable it and instead warn the user that
+the driver did not disable the feature, contrary to what the user
+requested with the nopat option.
 
-diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
-index dfb52b093c6f..511441acb592 100644
---- a/drivers/regulator/Kconfig
-+++ b/drivers/regulator/Kconfig
-@@ -786,6 +786,15 @@ config REGULATOR_MT6331
- 	  This driver supports the control of different power rails of device
- 	  through regulator interface
- 
-+config REGULATOR_MT6332
-+	tristate "MediaTek MT6332 PMIC"
-+	depends on MFD_MT6397
-+	help
-+	  Say y here to select this option to enable the power regulator of
-+	  MediaTek MT6332 PMIC.
-+	  This driver supports the control of different power rails of device
-+	  through regulator interface
-+
- config REGULATOR_MT6358
- 	tristate "MediaTek MT6358 PMIC"
- 	depends on MFD_MT6397
-diff --git a/drivers/regulator/Makefile b/drivers/regulator/Makefile
-index 3799e2673825..13dbac706ed8 100644
---- a/drivers/regulator/Makefile
-+++ b/drivers/regulator/Makefile
-@@ -95,6 +95,7 @@ obj-$(CONFIG_REGULATOR_MT6311) += mt6311-regulator.o
- obj-$(CONFIG_REGULATOR_MT6315) += mt6315-regulator.o
- obj-$(CONFIG_REGULATOR_MT6323)	+= mt6323-regulator.o
- obj-$(CONFIG_REGULATOR_MT6331)	+= mt6331-regulator.o
-+obj-$(CONFIG_REGULATOR_MT6332)	+= mt6332-regulator.o
- obj-$(CONFIG_REGULATOR_MT6358)	+= mt6358-regulator.o
- obj-$(CONFIG_REGULATOR_MT6359)	+= mt6359-regulator.o
- obj-$(CONFIG_REGULATOR_MT6360) += mt6360-regulator.o
-diff --git a/drivers/regulator/mt6332-regulator.c b/drivers/regulator/mt6332-regulator.c
-new file mode 100644
-index 000000000000..fdad39eeded3
---- /dev/null
-+++ b/drivers/regulator/mt6332-regulator.c
-@@ -0,0 +1,431 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2022 Collabora Ltd.
-+ * Author: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-+ *
-+ * Based on mt6323-regulator.c,
-+ *     Copyright (c) 2016 MediaTek Inc.
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+#include <linux/mfd/mt6397/core.h>
-+#include <linux/mfd/mt6332/registers.h>
-+#include <linux/regulator/driver.h>
-+#include <linux/regulator/machine.h>
-+#include <linux/regulator/mt6332-regulator.h>
-+#include <linux/regulator/of_regulator.h>
-+
-+#define MT6332_LDO_MODE_NORMAL	0
-+#define MT6332_LDO_MODE_LP	1
-+
-+/*
-+ * MT6332 regulators information
-+ *
-+ * @desc: standard fields of regulator description.
-+ * @qi: Mask for query enable signal status of regulators
-+ * @vselon_reg: Register sections for hardware control mode of bucks
-+ * @vselctrl_reg: Register for controlling the buck control mode.
-+ * @vselctrl_mask: Mask for query buck's voltage control mode.
-+ * @status_reg: Register for regulator enable status where qi unavailable
-+ * @status_mask: Mask for querying regulator enable status
-+ */
-+struct mt6332_regulator_info {
-+	struct regulator_desc desc;
-+	u32 qi;
-+	u32 vselon_reg;
-+	u32 vselctrl_reg;
-+	u32 vselctrl_mask;
-+	u32 modeset_reg;
-+	u32 modeset_mask;
-+	u32 status_reg;
-+	u32 status_mask;
-+};
-+
-+#define MT6332_BUCK(match, vreg, min, max, step, volt_ranges, enreg,	\
-+		vosel, vosel_mask, voselon, vosel_ctrl)			\
-+[MT6332_ID_##vreg] = {							\
-+	.desc = {							\
-+		.name = #vreg,						\
-+		.of_match = of_match_ptr(match),			\
-+		.ops = &mt6332_volt_range_ops,				\
-+		.type = REGULATOR_VOLTAGE,				\
-+		.id = MT6332_ID_##vreg,					\
-+		.owner = THIS_MODULE,					\
-+		.n_voltages = (max - min)/step + 1,			\
-+		.linear_ranges = volt_ranges,				\
-+		.n_linear_ranges = ARRAY_SIZE(volt_ranges),		\
-+		.vsel_reg = vosel,					\
-+		.vsel_mask = vosel_mask,				\
-+		.enable_reg = enreg,					\
-+		.enable_mask = BIT(0),					\
-+	},								\
-+	.qi = BIT(13),							\
-+	.vselon_reg = voselon,						\
-+	.vselctrl_reg = vosel_ctrl,					\
-+	.vselctrl_mask = BIT(1),					\
-+	.status_mask = 0,						\
-+}
-+
-+#define MT6332_LDO_LINEAR(match, vreg, min, max, step, volt_ranges,	\
-+			  enreg, vosel, vosel_mask, voselon, vosel_ctrl)\
-+[MT6332_ID_##vreg] = {							\
-+	.desc = {							\
-+		.name = #vreg,						\
-+		.of_match = of_match_ptr(match),			\
-+		.ops = &mt6332_volt_range_ops,				\
-+		.type = REGULATOR_VOLTAGE,				\
-+		.id = MT6332_ID_##vreg,					\
-+		.owner = THIS_MODULE,					\
-+		.n_voltages = (max - min)/step + 1,			\
-+		.linear_ranges = volt_ranges,				\
-+		.n_linear_ranges = ARRAY_SIZE(volt_ranges),		\
-+		.vsel_reg = vosel,					\
-+		.vsel_mask = vosel_mask,				\
-+		.enable_reg = enreg,					\
-+		.enable_mask = BIT(0),					\
-+	},								\
-+	.qi = BIT(15),							\
-+	.vselon_reg = voselon,						\
-+	.vselctrl_reg = vosel_ctrl,					\
-+	.vselctrl_mask = BIT(1),					\
-+	.status_mask = 0,						\
-+}
-+
-+#define MT6332_LDO_AO(match, vreg, ldo_volt_table, vosel, vosel_mask)	\
-+[MT6332_ID_##vreg] = {							\
-+	.desc = {							\
-+		.name = #vreg,						\
-+		.of_match = of_match_ptr(match),			\
-+		.ops = &mt6332_volt_table_ao_ops,			\
-+		.type = REGULATOR_VOLTAGE,				\
-+		.id = MT6332_ID_##vreg,					\
-+		.owner = THIS_MODULE,					\
-+		.n_voltages = ARRAY_SIZE(ldo_volt_table),		\
-+		.volt_table = ldo_volt_table,				\
-+		.vsel_reg = vosel,					\
-+		.vsel_mask = vosel_mask,				\
-+	},								\
-+}
-+
-+#define MT6332_LDO(match, vreg, ldo_volt_table, enreg, enbit, vosel,	\
-+		vosel_mask, _modeset_reg, _modeset_mask)		\
-+[MT6332_ID_##vreg] = {							\
-+	.desc = {							\
-+		.name = #vreg,						\
-+		.of_match = of_match_ptr(match),			\
-+		.ops = &mt6332_volt_table_ops,				\
-+		.type = REGULATOR_VOLTAGE,				\
-+		.id = MT6332_ID_##vreg,					\
-+		.owner = THIS_MODULE,					\
-+		.n_voltages = ARRAY_SIZE(ldo_volt_table),		\
-+		.volt_table = ldo_volt_table,				\
-+		.vsel_reg = vosel,					\
-+		.vsel_mask = vosel_mask,				\
-+		.enable_reg = enreg,					\
-+		.enable_mask = BIT(enbit),				\
-+	},								\
-+	.qi = BIT(15),							\
-+	.modeset_reg = _modeset_reg,					\
-+	.modeset_mask = _modeset_mask,					\
-+	.status_mask = 0,						\
-+}
-+
-+#define MT6332_REG_FIXED(match, vreg, enreg, enbit, qibit, volt,	\
-+			 stabit, _modeset_reg, _modeset_mask)		\
-+[MT6332_ID_##vreg] = {							\
-+	.desc = {							\
-+		.name = #vreg,						\
-+		.of_match = of_match_ptr(match),			\
-+		.ops = &mt6332_volt_fixed_ops,				\
-+		.type = REGULATOR_VOLTAGE,				\
-+		.id = MT6332_ID_##vreg,					\
-+		.owner = THIS_MODULE,					\
-+		.n_voltages = 1,					\
-+		.enable_reg = enreg,					\
-+		.enable_mask = BIT(enbit),				\
-+		.min_uV = volt,						\
-+	},								\
-+	.qi = BIT(qibit),						\
-+	.modeset_reg = _modeset_reg,					\
-+	.modeset_mask = _modeset_mask,					\
-+	.status_reg = MT6332_EN_STATUS0,				\
-+	.status_mask = BIT(stabit),					\
-+}
-+
-+static const struct linear_range boost_volt_range[] = {
-+	REGULATOR_LINEAR_RANGE(3500000, 0, 0x7f, 31250),
-+};
-+
-+static const struct linear_range buck_volt_range[] = {
-+	REGULATOR_LINEAR_RANGE(700000, 0, 0x7f, 6250),
-+};
-+
-+static const struct linear_range buck_pa_volt_range[] = {
-+	REGULATOR_LINEAR_RANGE(500000, 0, 0x3f, 50000),
-+};
-+
-+static const struct linear_range buck_rf_volt_range[] = {
-+	REGULATOR_LINEAR_RANGE(1050000, 0, 0x7f, 9375),
-+};
-+
-+static const unsigned int ldo_volt_table1[] = {
-+	2800000, 3000000, 0, 3200000
-+};
-+
-+static const unsigned int ldo_volt_table2[] = {
-+	1200000, 1300000, 1400000, 1500000, 1600000, 1700000, 1800000, 1800000,
-+};
-+
-+static int mt6332_get_status(struct regulator_dev *rdev)
-+{
-+	struct mt6332_regulator_info *info = rdev_get_drvdata(rdev);
-+	u32 reg, en_mask, regval;
-+	int ret;
-+
-+	if (info->qi > 0) {
-+		reg = info->desc.enable_reg;
-+		en_mask = info->qi;
-+	} else {
-+		reg = info->status_reg;
-+		en_mask = info->status_mask;
-+	}
-+
-+	ret = regmap_read(rdev->regmap, reg, &regval);
-+	if (ret != 0) {
-+		dev_err(&rdev->dev, "Failed to get enable reg: %d\n", ret);
-+		return ret;
-+	}
-+
-+	return (regval & en_mask) ? REGULATOR_STATUS_ON : REGULATOR_STATUS_OFF;
-+}
-+
-+static int mt6332_ldo_set_mode(struct regulator_dev *rdev, unsigned int mode)
-+{
-+	int ret, val = 0;
-+	struct mt6332_regulator_info *info = rdev_get_drvdata(rdev);
-+
-+	if (!info->modeset_mask) {
-+		dev_err(&rdev->dev, "regulator %s doesn't support set_mode\n",
-+			info->desc.name);
-+		return -EINVAL;
-+	}
-+
-+	switch (mode) {
-+	case REGULATOR_MODE_STANDBY:
-+		val = MT6332_LDO_MODE_LP;
-+		break;
-+	case REGULATOR_MODE_NORMAL:
-+		val = MT6332_LDO_MODE_NORMAL;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	val <<= ffs(info->modeset_mask) - 1;
-+
-+	ret = regmap_update_bits(rdev->regmap, info->modeset_reg,
-+				  info->modeset_mask, val);
-+
-+	return ret;
-+}
-+
-+static unsigned int mt6332_ldo_get_mode(struct regulator_dev *rdev)
-+{
-+	unsigned int val;
-+	unsigned int mode;
-+	int ret;
-+	struct mt6332_regulator_info *info = rdev_get_drvdata(rdev);
-+
-+	if (!info->modeset_mask) {
-+		dev_err(&rdev->dev, "regulator %s doesn't support get_mode\n",
-+			info->desc.name);
-+		return -EINVAL;
-+	}
-+
-+	ret = regmap_read(rdev->regmap, info->modeset_reg, &val);
-+	if (ret < 0)
-+		return ret;
-+
-+	val &= info->modeset_mask;
-+	val >>= ffs(info->modeset_mask) - 1;
-+
-+	if (val & 0x1)
-+		mode = REGULATOR_MODE_STANDBY;
-+	else
-+		mode = REGULATOR_MODE_NORMAL;
-+
-+	return mode;
-+}
-+
-+static const struct regulator_ops mt6332_volt_range_ops = {
-+	.list_voltage = regulator_list_voltage_linear_range,
-+	.map_voltage = regulator_map_voltage_linear_range,
-+	.set_voltage_sel = regulator_set_voltage_sel_regmap,
-+	.get_voltage_sel = regulator_get_voltage_sel_regmap,
-+	.set_voltage_time_sel = regulator_set_voltage_time_sel,
-+	.enable = regulator_enable_regmap,
-+	.disable = regulator_disable_regmap,
-+	.is_enabled = regulator_is_enabled_regmap,
-+	.get_status = mt6332_get_status,
-+};
-+
-+static const struct regulator_ops mt6332_volt_table_ops = {
-+	.list_voltage = regulator_list_voltage_table,
-+	.map_voltage = regulator_map_voltage_iterate,
-+	.set_voltage_sel = regulator_set_voltage_sel_regmap,
-+	.get_voltage_sel = regulator_get_voltage_sel_regmap,
-+	.set_voltage_time_sel = regulator_set_voltage_time_sel,
-+	.enable = regulator_enable_regmap,
-+	.disable = regulator_disable_regmap,
-+	.is_enabled = regulator_is_enabled_regmap,
-+	.get_status = mt6332_get_status,
-+	.set_mode = mt6332_ldo_set_mode,
-+	.get_mode = mt6332_ldo_get_mode,
-+};
-+
-+static const struct regulator_ops mt6332_volt_table_ao_ops = {
-+	.list_voltage = regulator_list_voltage_table,
-+	.map_voltage = regulator_map_voltage_iterate,
-+	.set_voltage_sel = regulator_set_voltage_sel_regmap,
-+	.get_voltage_sel = regulator_get_voltage_sel_regmap,
-+	.set_voltage_time_sel = regulator_set_voltage_time_sel,
-+	.set_mode = mt6332_ldo_set_mode,
-+	.get_mode = mt6332_ldo_get_mode,
-+};
-+
-+static const struct regulator_ops mt6332_volt_fixed_ops = {
-+	.list_voltage = regulator_list_voltage_linear,
-+	.enable = regulator_enable_regmap,
-+	.disable = regulator_disable_regmap,
-+	.is_enabled = regulator_is_enabled_regmap,
-+	.get_status = mt6332_get_status,
-+	.set_mode = mt6332_ldo_set_mode,
-+	.get_mode = mt6332_ldo_get_mode,
-+};
-+
-+/* The array is indexed by id(MT6332_ID_XXX) */
-+static struct mt6332_regulator_info mt6332_regulators[] = {
-+	MT6332_BUCK("buck-vdram", VDRAM, 700000, 1493750, 6250, buck_volt_range,
-+		    MT6332_EN_STATUS0, MT6332_VDRAM_CON11, GENMASK(6, 0),
-+		    MT6332_VDRAM_CON12, MT6332_VDRAM_CON7),
-+	MT6332_BUCK("buck-vdvfs2", VDVFS2, 700000, 1312500, 6250, buck_volt_range,
-+		    MT6332_VDVFS2_CON9, MT6332_VDVFS2_CON11, GENMASK(6, 0),
-+		    MT6332_VDVFS2_CON12, MT6332_VDVFS2_CON7),
-+	MT6332_BUCK("buck-vpa", VPA, 500000, 3400000, 50000, buck_pa_volt_range,
-+		    MT6332_VPA_CON9, MT6332_VPA_CON11, GENMASK(5, 0),
-+		    MT6332_VPA_CON12, MT6332_VPA_CON7),
-+	MT6332_BUCK("buck-vrf18a", VRF1, 1050000, 2240625, 9375, buck_rf_volt_range,
-+		    MT6332_VRF1_CON9, MT6332_VRF1_CON11, GENMASK(6, 0),
-+		    MT6332_VRF1_CON12, MT6332_VRF1_CON7),
-+	MT6332_BUCK("buck-vrf18b", VRF2, 1050000, 2240625, 9375, buck_rf_volt_range,
-+		    MT6332_VRF2_CON9, MT6332_VRF2_CON11, GENMASK(6, 0),
-+		    MT6332_VRF2_CON12, MT6332_VRF2_CON7),
-+	MT6332_BUCK("buck-vsbst", VSBST, 3500000, 7468750, 31250, boost_volt_range,
-+		    MT6332_VSBST_CON8, MT6332_VSBST_CON12, GENMASK(6, 0),
-+		    MT6332_VSBST_CON13, MT6332_VSBST_CON8),
-+	MT6332_LDO("ldo-vauxb32", VAUXB32, ldo_volt_table1, MT6332_LDO_CON1, 10,
-+		   MT6332_LDO_CON9, GENMASK(6, 5), MT6332_LDO_CON1, GENMASK(1, 0)),
-+	MT6332_REG_FIXED("ldo-vbif28", VBIF28, MT6332_LDO_CON2, 10, 0, 2800000, 1, 0, 0),
-+	MT6332_REG_FIXED("ldo-vusb33", VUSB33, MT6332_LDO_CON3, 10, 0, 3300000, 2, 0, 0),
-+	MT6332_LDO_LINEAR("ldo-vsram", VSRAM_DVFS2, 700000, 1493750, 6250, buck_volt_range,
-+			  MT6332_EN_STATUS0, MT6332_LDO_CON8, GENMASK(15, 9),
-+			  MT6332_VDVFS2_CON23, MT6332_VDVFS2_CON22),
-+	MT6332_LDO_AO("ldo-vdig18", VDIG18, ldo_volt_table2, MT6332_LDO_CON12, GENMASK(11, 9)),
-+};
-+
-+static int mt6332_set_buck_vosel_reg(struct platform_device *pdev)
-+{
-+	struct mt6397_chip *mt6332 = dev_get_drvdata(pdev->dev.parent);
-+	int i;
-+	u32 regval;
-+
-+	for (i = 0; i < MT6332_ID_VREG_MAX; i++) {
-+		if (mt6332_regulators[i].vselctrl_reg) {
-+			if (regmap_read(mt6332->regmap,
-+				mt6332_regulators[i].vselctrl_reg,
-+				&regval) < 0) {
-+				dev_err(&pdev->dev,
-+					"Failed to read buck ctrl\n");
-+				return -EIO;
-+			}
-+
-+			if (regval & mt6332_regulators[i].vselctrl_mask) {
-+				mt6332_regulators[i].desc.vsel_reg =
-+				mt6332_regulators[i].vselon_reg;
-+			}
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static int mt6332_regulator_probe(struct platform_device *pdev)
-+{
-+	struct mt6397_chip *mt6332 = dev_get_drvdata(pdev->dev.parent);
-+	struct regulator_config config = {};
-+	struct regulator_dev *rdev;
-+	int i;
-+	u32 reg_value;
-+
-+	/* Query buck controller to select activated voltage register part */
-+	if (mt6332_set_buck_vosel_reg(pdev))
-+		return -EIO;
-+
-+	/* Read PMIC chip revision to update constraints and voltage table */
-+	if (regmap_read(mt6332->regmap, MT6332_HWCID, &reg_value) < 0) {
-+		dev_err(&pdev->dev, "Failed to read Chip ID\n");
-+		return -EIO;
-+	}
-+	reg_value &= GENMASK(7, 0);
-+
-+	dev_info(&pdev->dev, "Chip ID = 0x%x\n", reg_value);
-+
-+	/*
-+	 * ChipID 0x10 is "MT6332 E1", has a different voltage table and
-+	 * it's currently not supported in this driver. Upon detection of
-+	 * this ID, refuse to register the regulators, as we will wrongly
-+	 * interpret the VSEL for this revision, potentially overvolting
-+	 * some device.
-+	 */
-+	if (reg_value == 0x10) {
-+		dev_err(&pdev->dev, "Chip version not supported. Bailing out.\n");
-+		return -EINVAL;
-+	}
-+
-+	for (i = 0; i < MT6332_ID_VREG_MAX; i++) {
-+		config.dev = &pdev->dev;
-+		config.driver_data = &mt6332_regulators[i];
-+		config.regmap = mt6332->regmap;
-+		rdev = devm_regulator_register(&pdev->dev,
-+				&mt6332_regulators[i].desc, &config);
-+		if (IS_ERR(rdev)) {
-+			dev_err(&pdev->dev, "failed to register %s\n",
-+				mt6332_regulators[i].desc.name);
-+			return PTR_ERR(rdev);
-+		}
-+	}
-+	return 0;
-+}
-+
-+static const struct platform_device_id mt6332_platform_ids[] = {
-+	{"mt6332-regulator", 0},
-+	{ /* sentinel */ },
-+};
-+MODULE_DEVICE_TABLE(platform, mt6332_platform_ids);
-+
-+static struct platform_driver mt6332_regulator_driver = {
-+	.driver = {
-+		.name = "mt6332-regulator",
-+	},
-+	.probe = mt6332_regulator_probe,
-+	.id_table = mt6332_platform_ids,
-+};
-+
-+module_platform_driver(mt6332_regulator_driver);
-+
-+MODULE_AUTHOR("AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>");
-+MODULE_DESCRIPTION("Regulator Driver for MediaTek MT6332 PMIC");
-+MODULE_LICENSE("GPL");
-diff --git a/include/linux/regulator/mt6332-regulator.h b/include/linux/regulator/mt6332-regulator.h
-new file mode 100644
-index 000000000000..af5e3ed31029
---- /dev/null
-+++ b/include/linux/regulator/mt6332-regulator.h
-@@ -0,0 +1,27 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (c) 2022 Collabora Ltd.
-+ * Author: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-+ */
-+
-+#ifndef __LINUX_REGULATOR_MT6332_H
-+#define __LINUX_REGULATOR_MT6332_H
-+
-+enum {
-+	/* BUCK */
-+	MT6332_ID_VDRAM = 0,
-+	MT6332_ID_VDVFS2,
-+	MT6332_ID_VPA,
-+	MT6332_ID_VRF1,
-+	MT6332_ID_VRF2,
-+	MT6332_ID_VSBST,
-+	/* LDO */
-+	MT6332_ID_VAUXB32,
-+	MT6332_ID_VBIF28,
-+	MT6332_ID_VDIG18,
-+	MT6332_ID_VSRAM_DVFS2,
-+	MT6332_ID_VUSB33,
-+	MT6332_ID_VREG_MAX
-+};
-+
-+#endif /* __LINUX_REGULATOR_MT6332_H */
--- 
-2.35.1
+In any case, my test did not verify that when nopat is set in Linux 5.16,
+the thread takes the same code path as when nopat is not set,
+so I am not totally sure that the reason nopat does not break the
+i915 driver in 5.16 is that static_cpu_has(X86_FEATURE_PAT)
+returns true even when nopat is set. I could test it with a custom
+log message in 5.16 if that is necessary.
 
+Are you saying it was wrong for static_cpu_has(X86_FEATURE_PAT)
+to return true in 5.16 when the user requests nopat? I think that is
+just permitting a bad configuration to break the driver that a
+well-written operating system should not allow. The i915 driver
+was, in my opinion, correctly ignoring the nopat option in 5.16
+because that option is not compatible with the hardware the
+i915 driver is trying to initialize and setup at boot time. At least
+that is my understanding now, but I will need to test it on 5.16
+to be sure I understand it correctly.
+
+Also, AFAICT, your patch would break the driver when the nopat
+option is set and only fix the regression introduced by bdd8b6c98239
+when nopat is not set on my box, so your patch would
+introduce a regression relative to Linux 5.16 and earlier for the
+case when nopat is set on my box. I think your point would
+be that it is not a regression if it is an incorrect user configuration.
+I respond by saying a well-written driver should refuse to honor
+the incorrect configuration requested by the user and instead
+warn the user that it did not honor the incorrect kernel option.
+
+I am only presuming what your patch would do on my box based
+on what I learned about this problem from my debugging. I can
+also test your patch on my box to verify that my understanding of
+it is correct.
+
+I also have not yet verified Juergen's patch will not fix it, but
+I am almost certain it will not unless it is expanded so it also
+touches i915_gem_object_pin_map() with the fix. I plan to test
+his patch, but expanded so it touches that function also.
+
+I also plan to test your patch with and without nopat and report the
+results in the thread where you posted your patch. Hopefully
+by tomorrow I will have the results.
+
+Chuck

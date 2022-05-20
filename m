@@ -2,97 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F85D52E0F1
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 02:00:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBC7052E0F0
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 02:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343854AbiETAAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 20:00:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49400 "EHLO
+        id S1343818AbiETAAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 20:00:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343850AbiETAAZ (ORCPT
+        with ESMTP id S233238AbiETAAO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 20:00:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FD478E1A5
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 17:00:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CFB2618D3
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 00:00:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BB80C34116
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 00:00:22 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="J7mtwgRZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1653004819;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sAf+9bb45OCjD9+tc2mnJ4RbdTvw8XAUzNhGDT5kgLo=;
-        b=J7mtwgRZPYPxlKHkSssJLpp+KUXu2+mcJQaaRPReQDed8cvMpoxNHFz6r9hFnWcBAo9ce7
-        EqP6T5u6DgK3hRkf6T2DpPiP4Zcmc7Kww7bASSu6CDHr5rSbxbGdnqMOH7TO9egcdYxgX6
-        SU4PcWieRNF12rF4bmEQDgGA2bw8f9g=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id ff98562a (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
-        for <linux-kernel@vger.kernel.org>;
-        Fri, 20 May 2022 00:00:19 +0000 (UTC)
-Received: by mail-yb1-f172.google.com with SMTP id x2so11330710ybi.8
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 17:00:19 -0700 (PDT)
-X-Gm-Message-State: AOAM533ZOW8par7o8PN7MjpG/vecqXiGsdbz5+3h6NMKnuIVZZEh17fe
-        q/GV7KlfGYLUwe1NmAYwg+1JaEQ63mmwWNnVwB8=
-X-Google-Smtp-Source: ABdhPJzy3BpkOgC2LunI9aQfxaONR+84wzAomthj6DSfBB0tceE3i5tTas+3b9R9WiJOZPgzpqiXXY8DMu7/V6ozsf4=
-X-Received: by 2002:a25:bf85:0:b0:64a:422c:24e7 with SMTP id
- l5-20020a25bf85000000b0064a422c24e7mr7098138ybk.637.1653004818108; Thu, 19
- May 2022 17:00:18 -0700 (PDT)
+        Thu, 19 May 2022 20:00:14 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C248B0BC
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 17:00:09 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id v10so6346521pgl.11
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 17:00:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=lLbMnvw+faTyxCMOwTjTghI4DP6Umnnr6YZkxv8pN48=;
+        b=DHiPMHxkjxizpYca3CNj1ugi0Z/cSJZD+ubYtVyLqnGgFiXVhHBUIXRzon5pEt5d5g
+         tmZ5uBdKlB00Ptz7Nwz4aKjxVy34E7+gG2mKxaaJDcnsckScBQTDmq+DaRtbtay3VgXZ
+         SRBK+8rhLYGRGppT66Rjr9ZYl+K2HAW0ix/JxZi9oSN/FXwzDrfuGr2Ov7CmTyy8tFvq
+         HaFJUclDI+t+GD6NONR+4tYDce/Tq+UXBr4iVpJubIXP7azF5WIqe7AnZQ7nWpKJIdcN
+         G+woSh9FR3hjNsTx8qZQrAJbior/pnEAqX38BlpBp1sM3IF1puBYNz7tC0RMuX6W5dZ8
+         7YbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=lLbMnvw+faTyxCMOwTjTghI4DP6Umnnr6YZkxv8pN48=;
+        b=YG9SDqTuzD58w0+Cjn5Jf77E9btshmobPKbV42uR8BwE0caT9PEC73z5ygfkTYLXEy
+         loYgIqiI2/250QvcLv7Hp+f5+NAPuzknuVdG0x+Osgb5C1A8E/IVckCIiBOn+4R2Rj60
+         YsOd5p+nnCqyyXbZ/BjnmVGXtw+pWu7tL7R4l8b3jiSw8GClKt9r3Ut7jtzemlAeqTdT
+         Ypus8aPP/8ruXkSvOhpYV2bmXoHvxXE43cFYeev5EexSmwE8VdYs1mLXaOBeSV77gmMP
+         SUzqH/vHjNmXMMDL7LzxCWzPRRUuBGSG/iLymmkQJwBGuXQE8yYCBVzMbHZOTjxDLimy
+         vO7w==
+X-Gm-Message-State: AOAM5331Suga/GrI/t3a3R+v4YKbJJei8kPpIPpo93X4k5PPJRV5D7xT
+        WXpVbYVnLrZo/V/dKHv0YIVLkA==
+X-Google-Smtp-Source: ABdhPJwdzzyjGnmiUST+x2ws3gviPmuNu7n3vODs578ovWO2/HrPZbaRamrr3u35imdKVWgEBlySkA==
+X-Received: by 2002:a05:6a00:1891:b0:50d:e6e7:acae with SMTP id x17-20020a056a00189100b0050de6e7acaemr7090542pfh.26.1653004809276;
+        Thu, 19 May 2022 17:00:09 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id cp20-20020a056a00349400b0050dc7628140sm270500pfb.26.2022.05.19.17.00.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 May 2022 17:00:08 -0700 (PDT)
+Message-ID: <cb3d45f0-8cd1-3973-d1a4-ccc7e413cff4@kernel.dk>
+Date:   Thu, 19 May 2022 18:00:07 -0600
 MIME-Version: 1.0
-References: <20220519193133.194138-1-axboe@kernel.dk> <YoajCafKmgUbbaY0@zx2c4.com>
- <a6c843ff-a3d7-ce6a-4e99-70968834a02a@kernel.dk> <YobPB27Ozl7uqUEu@zx2c4.com>
- <3553b935-0aca-3d3e-2495-12288f601b53@kernel.dk> <CAHmME9riX+YuqSVp64bhy=nX08_7d-m8es82BHy2qh-oWkqa8Q@mail.gmail.com>
- <aa7ae20c-a2d7-4959-b5fb-efe7b56294f1@kernel.dk> <CAHmME9oLPxzsnRezFPFVssmedOQUi2E9NWFbakEe92=Hdk1QuQ@mail.gmail.com>
- <03c7d6c9-0c86-d4b6-357d-d51be0143c80@kernel.dk>
-In-Reply-To: <03c7d6c9-0c86-d4b6-357d-d51be0143c80@kernel.dk>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Fri, 20 May 2022 02:00:07 +0200
-X-Gmail-Original-Message-ID: <CAHmME9qVQNkx-0J8rq_0ZVaSR+-eEgOUtcZhvq5dAY4-kJxSAA@mail.gmail.com>
-Message-ID: <CAHmME9qVQNkx-0J8rq_0ZVaSR+-eEgOUtcZhvq5dAY4-kJxSAA@mail.gmail.com>
-Subject: Re: [PATCHSET 0/2] Fix splice from random/urandom
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     "Theodore Ts'o" <tytso@mit.edu>, Christoph Hellwig <hch@lst.de>,
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCHSET v2 0/2] Fix splice from random/urandom
+Content-Language: en-US
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Theodore Ts'o <tytso@mit.edu>, Christoph Hellwig <hch@lst.de>,
         LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220519233137.20415-1-axboe@kernel.dk>
+ <CAHmME9p9jipQk96q_nY0YzFMUaAQ4jOAAN_cmVorddfKV8cn6g@mail.gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <CAHmME9p9jipQk96q_nY0YzFMUaAQ4jOAAN_cmVorddfKV8cn6g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jens,
+On 5/19/22 5:56 PM, Jason A. Donenfeld wrote:
+> Hi Jens,
+> 
+> This patchset seems to work. I'll queue it up with some cosmetic
+> changes. Thanks a lot.
 
-On Fri, May 20, 2022 at 1:57 AM Jens Axboe <axboe@kernel.dk> wrote:
->
-> On 5/19/22 5:27 PM, Jason A. Donenfeld wrote:
-> > Hi Jens,
-> >
-> > On Fri, May 20, 2022 at 1:25 AM Jens Axboe <axboe@kernel.dk> wrote:
-> >> I'll leave that to you :-)
-> >
-> > Alright, I'll have a look. Which one do I want here? This series adds
-> > splice_read/splice_write. The new thing would be sendpage? Or
-> > copy_file_range? Or something else?
->
-> For copying kernel memory? It's really the same thing, you just
-> initialize the iter as an ITER_KVEC instead. The nice thing about the
-> iov_iter iterator that it then hides that for you, call the same copy
-> in/out helpers for it.
+Great, thanks for the quick response!
 
-Err, maybe we're talking about different things? I was thinking about
-the plumbing to make splice/sendfile work on non-pipes.
+-- 
+Jens Axboe
 
-get_random_bytes() itself doesn't need to become iovec'd, as that has
-no IO callers.
-
-Jason

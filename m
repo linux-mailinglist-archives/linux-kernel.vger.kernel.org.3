@@ -2,66 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B824452F606
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 01:14:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59F9152F60A
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 01:16:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353993AbiETXOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 19:14:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40888 "EHLO
+        id S1348025AbiETXQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 19:16:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231549AbiETXN6 (ORCPT
+        with ESMTP id S238696AbiETXQf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 19:13:58 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E949A18628E
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 16:13:57 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id c14so8920438pfn.2
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 16:13:57 -0700 (PDT)
+        Fri, 20 May 2022 19:16:35 -0400
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E3AF57146
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 16:16:32 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id i66so11565495oia.11
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 16:16:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pRRzBzpTvPKL4ArnfdaUFW1cDfFNVquKut1ZEam2zu8=;
-        b=Qn7a9XbSwUWVcls8bMgVqhGcd6+Uwun0qQOM4rQuyzDlHm+4/j7XV0G8dnCzhmutcD
-         4ogENdLmRs9/m0jWAb5dgPeXelOheCwNpo2dqZTr/cpMqwyz/+7qy4JelCfRidWzdMeO
-         uiA5o4DcC87pPoYpzsQDuH4KvqtDikBFd6dlQ=
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=yxlZFui2Yaf/yMfrSBImiOBBtFzo9plT1mEwwLvskcQ=;
+        b=QQ3Ji43YCSMIg8zi7tO8mgLiPY7ZQlKggsWtAYpivQLNqk+AhHphjiJJkj5BEw3goj
+         FHAHKy8fWM7leVzFHXGZMrZAsYfuKb1BN8Imu8P6lDBZMim3CdRugYFXBeJvJ565G170
+         wl0TR4s69nBhT8PKphKsRvd+mvXC6hs6/WoYs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pRRzBzpTvPKL4ArnfdaUFW1cDfFNVquKut1ZEam2zu8=;
-        b=VSCBWd5Oaofpe/W5gv2l02ZJXKPM04rTqLwsgB8Lo1WVkcDPTfX/j31mStzMdFYreq
-         6clZAHNVSAZea8QIEz34xEzQrWGWoLHq03BCDrHKyJn2nLhCWSrTAKkgydU9ilaTJ5eM
-         x4TpzVVQSSSpSYzMocrq0vpx2SOKU9YMkODXRSvxDHXJWiWSzWIAFW6VOEpk1wO5GIu7
-         Qc0UuNgJFL2ma8uoQGryjjfrEaXT3tnJ/cHzhql/cZvvy6Xv9TJAjqaJFFCeN2SfnSqs
-         fg2dIB7ym+I+vekew7ThgLtzY4wYA7oo+HnxaTSYTFhw2r7dSzTXBFZQ2qmd/zT9GOgV
-         9RfA==
-X-Gm-Message-State: AOAM530gVD/95GrVmU/dpuWgJatzikEEbVTnMsWuFcMPNdOCD1jdJVJQ
-        JOKso8YmkJlhsBPPeXNkXZ0WxOGTi/nmkQ==
-X-Google-Smtp-Source: ABdhPJw94RKVYJtddL2x1+4L2GbIeueEMeZstosPkRJ/Wmtdl9kxiE1lO4z96eViqqe4F3Vs3PWpQA==
-X-Received: by 2002:a62:3881:0:b0:4b0:b1c:6fd9 with SMTP id f123-20020a623881000000b004b00b1c6fd9mr12445491pfa.27.1653088437410;
-        Fri, 20 May 2022 16:13:57 -0700 (PDT)
-Received: from smtp.gmail.com ([2620:15c:202:201:72c1:e5e8:3ad8:f199])
-        by smtp.gmail.com with ESMTPSA id o16-20020a17090ac09000b001d77f392280sm2420777pjs.30.2022.05.20.16.13.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 16:13:56 -0700 (PDT)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>,
-        "Joseph S. Barrera III" <joebar@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>
-Subject: [PATCH] arm64: dts: qcom: Remove duplicate sc7180-trogdor include on lazor
-Date:   Fri, 20 May 2022 16:13:55 -0700
-Message-Id: <20220520231355.1559104-1-swboyd@chromium.org>
-X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=yxlZFui2Yaf/yMfrSBImiOBBtFzo9plT1mEwwLvskcQ=;
+        b=m0f4HywHuOFrhhiY99HQLYClZ+kS9xz4ZEcyXTFGoxzqMQZ7Vhupmn4OENwxE/8kav
+         1qEF00LU8kOMST5+s+8eZJpJPOFUmFZhuq0NG6xt6/i2bMQesysSAOWyL4alJX7TsI9I
+         5Uectc4C2Tnq4gsD6/bl+cjiExMKINMLJ+3uxwVSG+iVVztdgcbXCPr6Nv9k22+6PLxi
+         5/odLA21TxetPDD//AaGvX+j9NzpeRCWTSmxZes97vTqyXl41MMExOoK1G2Zyzv5ECT6
+         TCoe+m2mDitCh3fzOyw85QtOl8FdgaVHGvTqgHn62ahLX3dFvUNe+7+lbPctvGMn+alm
+         MdEw==
+X-Gm-Message-State: AOAM531BUCGTN/Y3OicBziaMzTGZP7/hAeLnuw5vyuEUtpJrv864ozxd
+        JHjF7OGuYm/dbsmcxDd3OLC2lVdWwYFqhFdi3OEygKHkC2U=
+X-Google-Smtp-Source: ABdhPJze2O0r826Wkv9TYht2+IV2909AuAPrg2Bpl39RVQNOr0gbPg1aiFpRQF/hshBLa8Bf37FBjT5mXHnyiWqAZ6w=
+X-Received: by 2002:a05:6808:23c3:b0:326:bd8d:7993 with SMTP id
+ bq3-20020a05680823c300b00326bd8d7993mr6933836oib.63.1653088591458; Fri, 20
+ May 2022 16:16:31 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 20 May 2022 16:16:30 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAD=FV=VSMyJrs9bTE2XEC=q7VtZi6YKFaKJQJyLTZhVaYa9-Jg@mail.gmail.com>
+References: <20220427020339.360855-1-swboyd@chromium.org> <20220427020339.360855-4-swboyd@chromium.org>
+ <CAD=FV=VSMyJrs9bTE2XEC=q7VtZi6YKFaKJQJyLTZhVaYa9-Jg@mail.gmail.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Fri, 20 May 2022 16:16:30 -0700
+Message-ID: <CAE-0n52dG8ucjgsaDVXDw1hXsG3YNZRPKyYVTr+JVJHpFoAizA@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] arm64: dts: qcom: Only include sc7180.dtsi in sc7180-trogdor.dtsi
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "Joseph S. Barrera III" <joebar@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,44 +70,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The sc7180-trogdor-lazor-*.dtsi files all include sc7180-trogdor.dtsi
-and sc7180-trogdor-lazor.dtsi, so including it here in the
-sc7180-trogdor-lazor.dtsi file means we have a duplicate include after
-commit 19794489fa24 ("arm64: dts: qcom: Only include sc7180.dtsi in
-sc7180-trogdor.dtsi"). We include the sc7180-trogdor.dtsi file in a
-board like sc7180-trogdor-lazor-r1.dts so that we can include the
-display bridge snippet (e.g. sc7180-trogdor-ti-sn65dsi86.dtsi) instead
-of making ever increasing variants like
-sc7180-trogdor-lazor-ti-sn65dsi86.dtsi.
+Quoting Doug Anderson (2022-05-20 15:16:03)
+> On Tue, Apr 26, 2022 at 7:03 PM Stephen Boyd <swboyd@chromium.org> wrote:
+> >  arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom.dtsi            | 1 -
+> >  arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts                 | 1 -
+> >  arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi                   | 3 ++-
+> >  19 files changed, 17 insertions(+), 19 deletions(-)
+>
+> While reviewing a different change, I found something fishy and
+> tracked it down to ${SUBJECT} patch.
+>
+> Specifically, after ${SUBJECT} patch then I run `git grep
+> include.*trogdor.dtsi`. When I do that, I see that
+> `sc7180-trogdor.dtsi` is double-included in all lazor devices. :( It's
+> included in the actual dts files and also in the lazor.dtsi file.
+>
+> That's probably not right. I think we need to remove the one in the
+> lazor.dtsi file?
+>
 
-Fix this by dropping the include and making a note that the
-sc7180-trogdor-lazor.dtsi file must be included after
-sc7180-trogdor.dtsi
+Good catch! I sent a patch to fix it[1]. I recall I compiled
+before/after and didn't see any difference, so I suspect it's just a
+waste of time during the compilation phase but otherwise not causing a
+problem.
 
-Reported-by: Douglas Anderson <dianders@chromium.org>
-Cc: "Joseph S. Barrera III" <joebar@chromium.org>
-Cc: Matthias Kaehlcke <mka@chromium.org>
-Fixes: 19794489fa24 ("arm64: dts: qcom: Only include sc7180.dtsi in sc7180-trogdor.dtsi")
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
----
- arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor.dtsi
-index fe2369c29aad..88f6a7d4d020 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor.dtsi
-@@ -5,7 +5,7 @@
-  * Copyright 2020 Google LLC.
-  */
- 
--#include "sc7180-trogdor.dtsi"
-+/* This file must be included after sc7180-trogdor.dtsi */
- 
- &ap_sar_sensor {
- 	semtech,cs0-ground;
-
-base-commit: 19794489fa2474a55c00848e00ca3d15ea01d36c
--- 
-https://chromeos.dev
-
+[1] https://lore.kernel.org/r/20220520231355.1559104-1-swboyd@chromium.org

@@ -2,50 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AD7152EF86
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 17:45:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F9A252EFA1
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 17:47:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351030AbiETPpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 11:45:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42242 "EHLO
+        id S1350772AbiETPp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 11:45:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351027AbiETPpT (ORCPT
+        with ESMTP id S1351083AbiETPpm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 11:45:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A3F21796FA;
-        Fri, 20 May 2022 08:45:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 739BCB82A5D;
-        Fri, 20 May 2022 15:45:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38ECBC385A9;
-        Fri, 20 May 2022 15:45:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653061513;
-        bh=Vc86LN9Kl/kZdHiyBqJ9vnK7hHKZmKIn6mH8vCk639M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tjn1x/XwdFtK55Z368/s6bzfN+nq7NRkd3rJvNKtBtxLNYNbKE5tSt9x+Y4dOJJIZ
-         FGY8qJTLiBVfhYgQmHSPErYznIt3/8QR12w1GRrO5NCkxoygKksR+epBR8vy4QEiJ1
-         OcdAeC6jaoV90v8zjOBXfswvgpeM9yJXVRQrkg15HYFMikXffAymyH2CjD5mHeVqQh
-         g1bK9+9seL8tsriVPWJk6W4D9BtkaviorXZ9ADOxU7z5b7J3wf/mb2jXc3LAdbi8fh
-         S9rwkVk/NbS6ds0XK9+PUCrQxxl3L5iId4GqzlpGu4ddohJjdLYUNDwJILbmxAoHRl
-         I+9qZB248p1cw==
-Date:   Fri, 20 May 2022 08:45:12 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH v2] xfs: Remove dead code
-Message-ID: <Yoe3iG5E9KK4l/pO@magnolia>
-References: <20220520064416.5092-1-jiapeng.chong@linux.alibaba.com>
+        Fri, 20 May 2022 11:45:42 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A38C179C16
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 08:45:32 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id c12so11272444eds.10
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 08:45:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8QFFkfheRDcRMZUEeXPnmBkN/+sAvzTmwN5XHFZ6Mh4=;
+        b=k8MHYHNChdziwHOExhML5lxcgSGSD9/hlw8O2m1yktYbuXa8gUhYDCOX4RvyLfzunq
+         /aAKeZZuLTsajP3X+vG03Ss0A7Nxo1WtNc1cC/anRUyFi+vMz7cm1qIEAQsQvtYo7m8v
+         pePkt63pjEEwttcJmM8rZfdV9Fxd9ADpAU6jg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8QFFkfheRDcRMZUEeXPnmBkN/+sAvzTmwN5XHFZ6Mh4=;
+        b=78PBYBsOg5rngt6ptVT6r4gQ/duF3I+Po/l5mtrFPH9PZmLw1cgochOfYeDZcKib+b
+         ukfXcIfH2GglxNT60CqOjAe+oleLkqdQvthhhOGeUTFLEQaepmENLsQnR2aj1T5F9mTC
+         NSAQJjbH4MPe3381YIBuXFgtrcZkQSPaCU+R2ppzsvfjn3PnpVTgHe+ao6OO15rVeWrE
+         K5q7//zid6MCuLWTLGk3+9dzCrxVX+M9dsNCP8oKYGiQxdL2NmHu1DpJk4wjiCVk9cYi
+         B6Bqd4Tl2bxGcRDrngIWVa5g72+18+JVjecZvuooQXnJow/zKPbMvGJQebL8amWFteMr
+         XRjw==
+X-Gm-Message-State: AOAM5339mZ6PzHC2GIgy2TmdayQtOMyK7bKiOIGLRH6/Jo8iO9F1KtYy
+        YlJzX88FZkk9skNQvUx76pm12cvK/dkYmjd8jZM=
+X-Google-Smtp-Source: ABdhPJx/538vcrrFFISjp6D570MZHt7rPlR2+UM+XXKz8FlNL+BKq+HXyMczjfZdiHMOiHBa1Xkomg==
+X-Received: by 2002:a05:6402:2031:b0:42a:d157:66e9 with SMTP id ay17-20020a056402203100b0042ad15766e9mr11742593edb.395.1653061530812;
+        Fri, 20 May 2022 08:45:30 -0700 (PDT)
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com. [209.85.221.54])
+        by smtp.gmail.com with ESMTPSA id og31-20020a1709071ddf00b006f3ef214e15sm3221613ejc.123.2022.05.20.08.45.27
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 May 2022 08:45:29 -0700 (PDT)
+Received: by mail-wr1-f54.google.com with SMTP id r23so12054310wrr.2
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 08:45:27 -0700 (PDT)
+X-Received: by 2002:a05:6000:2c1:b0:20c:5e37:3ed1 with SMTP id
+ o1-20020a05600002c100b0020c5e373ed1mr8813527wry.342.1653061526420; Fri, 20
+ May 2022 08:45:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220520064416.5092-1-jiapeng.chong@linux.alibaba.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220418171757.2282651-1-dianders@chromium.org>
+ <20220418101725.v3.1.Icf57bb12233a47727013c6ab69eebf803e22ebc1@changeid>
+ <CAE-0n51iNXN4oOP-wAqrm9U6qC84fQ+qMUBu0BODXjsCDk+H=w@mail.gmail.com>
+ <CAD=FV=W6Z1TG4vQcDDeNsGkjZVAR8=A1L1pDfo1rDFCh84H4Rg@mail.gmail.com> <CAE-0n50RXmaUsu5F9syJT-ZXzX8WacpJDFnhb1xQaou1Pxizng@mail.gmail.com>
+In-Reply-To: <CAE-0n50RXmaUsu5F9syJT-ZXzX8WacpJDFnhb1xQaou1Pxizng@mail.gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 20 May 2022 08:45:13 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WG+_EzG4RvBwTswu4djGtJ00-2TRQaC3y4bGaf4SxLLg@mail.gmail.com>
+Message-ID: <CAD=FV=WG+_EzG4RvBwTswu4djGtJ00-2TRQaC3y4bGaf4SxLLg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] drm/dp: Add wait_hpd_asserted() callback to struct drm_dp_aux
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        Philip Chen <philipchen@chromium.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Lyude Paul <lyude@redhat.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,113 +88,181 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 02:44:16PM +0800, Jiapeng Chong wrote:
-> Remove tht entire xlog_recover_check_summary() function, this entire
-> function is dead code and has been for 12 years.
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Hi,
 
-LGTM,
-Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+On Thu, May 19, 2022 at 5:34 PM Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> Quoting Doug Anderson (2022-05-12 16:24:13)
+> > On Wed, May 11, 2022 at 6:58 PM Stephen Boyd <swboyd@chromium.org> wrote:
+> > > Quoting Douglas Anderson (2022-04-18 10:17:54)
+> > > > diff --git a/include/drm/dp/drm_dp_helper.h b/include/drm/dp/drm_dp_helper.h
+> > > > index 53d1e722f4de..0940c415db8c 100644
+> > > > --- a/include/drm/dp/drm_dp_helper.h
+> > > > +++ b/include/drm/dp/drm_dp_helper.h
+> > > > @@ -2035,6 +2035,32 @@ struct drm_dp_aux {
+> > > >         ssize_t (*transfer)(struct drm_dp_aux *aux,
+> > > >                             struct drm_dp_aux_msg *msg);
+> > > >
+> > > > +       /**
+> > > > +        * @wait_hpd_asserted: wait for HPD to be asserted
+> > > > +        *
+> > > > +        * This is mainly useful for eDP panels drivers to wait for an eDP
+> > > > +        * panel to finish powering on. This is an optional function.
+> > >
+> > > Is there any use for the opposite direction? For example, does anything
+> > > care that HPD is deasserted?
+> >
+> > Not that I'm aware of. Originally I was planning to have it so that a
+> > timeout of "0" meant to just poll without sleeping at all, but it
+> > ended up making the code a lot more complicated because everywhere
+> > else we had the "readx" semantics where 0 meant wait forever. It
+> > didn't seem worth it. I can go back to that behavior if need be.
+> >
+>
+> Got it.
+>
+> >
+> > > > +        *
+> > > > +        * This function will efficiently wait for up to `wait_us` microseconds
+> > > > +        * for HPD to be asserted and might sleep.
+> > > > +        *
+> > > > +        * This function returns 0 if HPD was asserted or -ETIMEDOUT if time
+> > > > +        * expired and HPD wasn't asserted. This function should not print
+> > > > +        * timeout errors to the log.
+> > > > +        *
+> > > > +        * The semantics of this function are designed to match the
+> > > > +        * readx_poll_timeout() function. That means a `wait_us` of 0 means
+> > > > +        * to wait forever. If you want to do a quick poll you could pass 1
+> > > > +        * for `wait_us`.
+> > >
+> > > It would also make sense to have a drm_dp_wait_hpd_asserted() API
+> > >
+> > >   int drm_dp_wait_hpd_asserted(struct drm_dp_aux *aux, unsigned long wait_us);
+> > >
+> > > and then this aux function could be implemented in various ways. The API
+> > > could poll if the aux can only read immediate state of HPD, or it could
+> > > sleep (is sleeping allowed? that isn't clear) and wake up the process
+> > > once HPD goes high. Or if this op isn't implemented maybe there's a
+> > > fixed timeout member that is non-zero which means "sleep this long".
+> > > Either way, making each drm_dp_aux implement that logic seems error
+> > > prone vs. having the drm_dp_aux implement some function for
+> > >
+> > >         get_immediate_hpd(struct drm_dp_aux *aux)
+> >
+> > There's a reason why I changed the API to "wait" from "get". If you
+> > can think of a good place to document this, I'm all ears.
+> >
+> > The basic problem is ps8640 (my nemesis, apparently). On ps8640,
+> > because of the black box firmware blob that's on it, we have a crazy
+> > long delay in its runtime resume (300ms). So what happens with ps8640
+> > is that if we make the API "get_immediate_hpd()" it wasn't so
+> > immediate. Even with autosuspend, that first "get" could take 300 ms,
+> > which really screwed with everyone else who was waiting with a 200 ms
+> > timeout.
+> >
+> > Now, in theory, one could argue that the fact that ps8640 had a 300 ms
+> > sleep would mean that the very first "get" of the panel would already
+> > show HPD high. I don't know why that wasn't the case, but ps8640 is an
+> > annoying black box.
+> >
+> > In general, though, the DP controller might need some amount of time
+> > to power itself back up and configure itself. Even though the ps8640
+> > case is extreme, it wouldn't be totally extreme to assume that an AUX
+> > controller might take 20 ms or 50 ms to power up. That could still
+> > throw timings off. Implementing the API as a "wait" style API gets
+> > around this problem. Now the DP controller can take as long as it
+> > needs to power itself up and it can then wait with the requested
+> > timeout.
+>
+> To clarify, are you saying that the 'wait' passed in will be added to
+> whatever time it takes for the driver to runtime resume to check HPD
+> status? Or is the driver supposed to subtract any time to power up from the
+> 'wait' passed in and then poll or wait for an irq about HPD?
 
---D
+So the "wait" time passed in is supposed to be the time from the panel
+datasheet that's the maximum it takes for HPD to go high after giving
+power to the panel.
+In theory, this wait time ought to be able to happen in parallel with
+the controller itself starting up. In that sense, going back to a
+polling mechanism again ought to work. ...but the polling mechanism
+_didn't_ work, so let's think more carefully about what might be going
+on.
 
-> ---
-> Changes in v2:
->   -Remove dead code.
-> 
->  fs/xfs/xfs_log_recover.c | 59 ----------------------------------------
->  1 file changed, 59 deletions(-)
-> 
-> diff --git a/fs/xfs/xfs_log_recover.c b/fs/xfs/xfs_log_recover.c
-> index 97b941c07957..b1980d7cbbee 100644
-> --- a/fs/xfs/xfs_log_recover.c
-> +++ b/fs/xfs/xfs_log_recover.c
-> @@ -39,13 +39,6 @@ STATIC int
->  xlog_clear_stale_blocks(
->  	struct xlog	*,
->  	xfs_lsn_t);
-> -#if defined(DEBUG)
-> -STATIC void
-> -xlog_recover_check_summary(
-> -	struct xlog *);
-> -#else
-> -#define	xlog_recover_check_summary(log)
-> -#endif
->  STATIC int
->  xlog_do_recovery_pass(
->          struct xlog *, xfs_daddr_t, xfs_daddr_t, int, xfs_daddr_t *);
-> @@ -3339,8 +3332,6 @@ xlog_do_recover(
->  	}
->  	mp->m_alloc_set_aside = xfs_alloc_set_aside(mp);
->  
-> -	xlog_recover_check_summary(log);
-> -
->  	/* Normal transactions can now occur */
->  	clear_bit(XLOG_ACTIVE_RECOVERY, &log->l_opstate);
->  	return 0;
-> @@ -3483,7 +3474,6 @@ xlog_recover_finish(
->  	}
->  
->  	xlog_recover_process_iunlinks(log);
-> -	xlog_recover_check_summary(log);
->  
->  	/*
->  	 * Recover any CoW staging blocks that are still referenced by the
-> @@ -3517,52 +3507,3 @@ xlog_recover_cancel(
->  		xlog_recover_cancel_intents(log);
->  }
->  
-> -#if defined(DEBUG)
-> -/*
-> - * Read all of the agf and agi counters and check that they
-> - * are consistent with the superblock counters.
-> - */
-> -STATIC void
-> -xlog_recover_check_summary(
-> -	struct xlog		*log)
-> -{
-> -	struct xfs_mount	*mp = log->l_mp;
-> -	struct xfs_perag	*pag;
-> -	struct xfs_buf		*agfbp;
-> -	struct xfs_buf		*agibp;
-> -	xfs_agnumber_t		agno;
-> -	uint64_t		freeblks;
-> -	uint64_t		itotal;
-> -	uint64_t		ifree;
-> -	int			error;
-> -
-> -	freeblks = 0LL;
-> -	itotal = 0LL;
-> -	ifree = 0LL;
-> -	for_each_perag(mp, agno, pag) {
-> -		error = xfs_read_agf(mp, NULL, pag->pag_agno, 0, &agfbp);
-> -		if (error) {
-> -			xfs_alert(mp, "%s agf read failed agno %d error %d",
-> -						__func__, pag->pag_agno, error);
-> -		} else {
-> -			struct xfs_agf	*agfp = agfbp->b_addr;
-> -
-> -			freeblks += be32_to_cpu(agfp->agf_freeblks) +
-> -				    be32_to_cpu(agfp->agf_flcount);
-> -			xfs_buf_relse(agfbp);
-> -		}
-> -
-> -		error = xfs_read_agi(mp, NULL, pag->pag_agno, &agibp);
-> -		if (error) {
-> -			xfs_alert(mp, "%s agi read failed agno %d error %d",
-> -						__func__, pag->pag_agno, error);
-> -		} else {
-> -			struct xfs_agi	*agi = agibp->b_addr;
-> -
-> -			itotal += be32_to_cpu(agi->agi_count);
-> -			ifree += be32_to_cpu(agi->agi_freecount);
-> -			xfs_buf_relse(agibp);
-> -		}
-> -	}
-> -}
-> -#endif /* DEBUG */
-> -- 
-> 2.20.1.7.g153144c
-> 
+So it's possible that somehow we're not waiting enough time in the
+parade's power on function. Maybe the chip isn't truly powered on and
+thus when we first poll it then we're always going to get back "HPD
+deasserted". ...or maybe it's powered on but the logic for HPD hasn't
+finished starting up yet, if that even makes sense. In that sense, we
+could probably go back to the polling mechanism again and just stick
+an even bigger hardcoded delay in the powerup.
+
+I guess it's also possible (and probably more likely) that the parade
+chip is "debouncing" HPD here. The chip might be powered up OK and HPD
+may be asserted, but it's possible that the value we're reading has an
+intentional, chip-specific delay in it. The ti-sn65dsi86's builtin HPD
+pin did this which is why we didn't use it. See commit c2bfc223882d
+("drm/bridge: ti-sn65dsi86: Remove the mystery delay"). If this is the
+case then an extra delay in "power on" won't _necessarily_ fix us.
+
+Let's imagine:
+
+1. The parade chip itself is already powered on, so runtime_resume for
+the parade chip is a no-op.
+
+2. The parade has a 150 ms debounce on HPD.
+
+3. The panel has a "max" HPD of 200 ms.
+
+4. The panel's HPD actually comes up in 150 ms after the panel is powered.
+
+In the above scenario, if we "poll" and timeout for 200 ms then we'll
+incorrectly believe that HPD is low at the end. We'll observe HPD
+going high at 300 ms, and I'll argue that in the above case we should
+wait until 350 ms before timing out (max HPD + debounce).
+
+
+> Would it be incorrect to somehow have the pm_runtime_get_sync() call in
+> the mythical wrapper API with a ktime_get() before and after and then
+> subtract that from the 'wait' time and call "get_immediate_hpd()"?
+>
+> It would help me understand further if the 'wait' is described as a
+> maximum time we're willing to wait or a minimum time we're willing to
+> wait for hpd to be asserted. Usually a timeout is the maximum we're
+> willing to wait so I think you're saying the wait is the maximum time
+> after we know the drm_dp_aux is fully powered up and ready to check the
+> state.
+
+So where does that leave us? I'd still argue that the "wait" API gives
+us the most flexibility. The DP controller driver has the most
+knowledge about exactly how much extra time it might need to tack on.
+The amount of duplicated code is really quite minimal, especially with
+all of the helper functions. Even if the "debounce" isn't the
+explanation for the parade bridge chip, we know for sure that other
+bridge chips might not have the ability to read the raw HPD state and
+can only read the debounced state.
+
+Aside from leaving the API as "wait", I guess the best thing I can
+think of would be to go back to polling and add another API that
+indicates the maximum debounce time for the HPD signal. That seems
+worse to me, though.
+
+If the above convinces you that the "wait" API is correct, I can spin
+the patches and add some extra comments. It's probably a good idea to
+add an extra 300 ms to the timeout in the parade driver too. Assuming
+my theory about the debounce is correct then my current patches are
+relying on the extra delay in the parade bridge powerup to cover the
+debounce. It should also be noted that having a longer timeout isn't
+really a terrible thing. In a functioning system we should never hit
+it.
+
+NOTE: after all the above discussion, it seems like the same arguments
+I made about the ti-sn65dsi86 might hold for the parade-ps8640: it
+would be better to just have the panel driver do the maximum delay and
+forget about trying to read HPD in the parade driver. Unfortunately,
+yet again I'm bumping up against the undocumented firmware blob for
+the parade chip. I have no idea how to tell the parade chip to ignore
+HPD. I'd also note that such a change would require "no-hpd" be added
+to existing device trees and thus would make old device trees
+incompatible.
+
+-Doug

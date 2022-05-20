@@ -2,100 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D068752EECD
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 17:11:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A584152EED0
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 17:12:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350667AbiETPLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 11:11:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35064 "EHLO
+        id S1350671AbiETPMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 11:12:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238626AbiETPLn (ORCPT
+        with ESMTP id S1347602AbiETPMU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 11:11:43 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1DEB27FD1
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 08:11:41 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id 31so7963896pgp.8
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 08:11:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=wxiN51YttqZ6z8fn+6Jl5O1G3wTtjehvYfZKGeCzivo=;
-        b=Y+pGUbnBoLUnlLA1uF2J2yJF+IOMvaOD2i4b6UV4fT0xQqtLbMIAoHur1VUew3lM97
-         akpMrzQF+E5fE+Rv5zvFa4gT2QovZe8xXeyQsSU76A/FBvZHOCH54/z0Xjfykd8eT8Ly
-         4UFHrZP/vFnjKTzlPZvGamifckr3W6vgMz7OmMfzdIwjQcOPJ5Yh26mKbo7ZfqaudznU
-         fKGGORUaU2+g9DICqxTdAXkWu/uZatg6zNr565w7g+o82mErYRZtrU+5E29MA/+sTiBB
-         d16zObHt2h0tuaY53fY3OCK10uhnRsnDHDE6vXIzHMeEUsTq/JjytmcXFrCFTzkpBvaB
-         frpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=wxiN51YttqZ6z8fn+6Jl5O1G3wTtjehvYfZKGeCzivo=;
-        b=FB8Jy8FCADwYQQzMWx3OKvilQhrzmsGc865aMOQmSdGakS30w3tSZmBf+297ly7Gwl
-         bXSGbUYgK9vlrviZV55Xy0eRCU7ltDuI9SgQjd+YF/BsAZxZC5QjcszOMqal7amr3apN
-         7jK2x09oS1RBf5GV9I9QtCE93H7edjnRsb81uvkR4Sj1laegkqQ/X1ECwIof+zMc66ny
-         melpLmwLaqN7TYOvT2GalPvagEpkiT1GAzrNif0mcNDglcqfIJKIByG2VE7a5pPJknCn
-         TL+gTsQnROLkvY+BgRpRepqj+xyow7r6Dv0xR4L+Un1zox7trN7GLjtlF6hsUdZ6qo4S
-         rgFA==
-X-Gm-Message-State: AOAM533sWSAW8XzW0GX7g1iWLAgDU5nHoswrRzzgB7tpI6b1rJJREtbY
-        WXwADy/n5OaIUtl1RDXVEuZTNXwx2pKvBw==
-X-Google-Smtp-Source: ABdhPJwRV1X63bl22cDKl3x/sUYr059BW2U+nCt9VcX4EsGouTekPNDfERRgA6Uw3hIIXVjzsM/HeA==
-X-Received: by 2002:a05:6a00:ad2:b0:4f1:2734:a3d9 with SMTP id c18-20020a056a000ad200b004f12734a3d9mr10475427pfl.61.1653059501102;
-        Fri, 20 May 2022 08:11:41 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id k22-20020a170902761600b001614cd997a8sm5803656pll.236.2022.05.20.08.11.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 May 2022 08:11:40 -0700 (PDT)
-Message-ID: <f35d7a15-0cbf-1663-15af-eae37a90d0ff@kernel.dk>
-Date:   Fri, 20 May 2022 09:11:39 -0600
+        Fri, 20 May 2022 11:12:20 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC50D8AE52;
+        Fri, 20 May 2022 08:12:18 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nfraprado)
+        with ESMTPSA id D6FFA1F46045
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1653059537;
+        bh=dM+dtww2MjUV3EO6VLGR/tvde0qsMUnXBPbKpDoQ3xs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Qb5Bkom9rqi1bHDGk7du6o4c58uBM1hqdlfe6uY6M8LUyEPi0b0iRFKmGxRuFys2K
+         3Y08v7welt57mQDEjS39tiRdSCgWKjg6fyJ5/zCAqmQOX5PPdadT3M1kKC0hJsV0QM
+         w+b/obwU3zIlURh1ygNWq8N5vFknX5CbNXEHXmRBXK3ukBEEjCIIw0gb5pblqxRamw
+         3pFxM4XT7j8NJcslhc7NVxqLw2NAlwQ2y7KS5L2+WUSssjEb7lSgNb7X55gY+H4bkE
+         GIVPivKRFAudr52IE85Wf/gyHaAdljblNbtuUmtWbrIGe/r8KmIlo5zDWv1nlJZRmR
+         10X6f+xMkcmUQ==
+Date:   Fri, 20 May 2022 11:12:12 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        p.zabel@pengutronix.de, angelogioacchino.delregno@collabora.com,
+        chun-jie.chen@mediatek.com, wenst@chromium.org,
+        runyang.chen@mediatek.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH v7 05/19] clk: mediatek: reset: Merge and revise reset
+ register function
+Message-ID: <20220520151212.rrrtekst7uhnojds@notapiano>
+References: <20220519125527.18544-1-rex-bc.chen@mediatek.com>
+ <20220519125527.18544-6-rex-bc.chen@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] char/mem: only use {read,write}_iter, not the old
- {read,write} functions
-Content-Language: en-US
-To:     Al Viro <viro@zeniv.linux.org.uk>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org
-References: <20220520135030.166831-1-Jason@zx2c4.com>
- <YoevH5YFLcBBfsB0@zeniv-ca.linux.org.uk>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <YoevH5YFLcBBfsB0@zeniv-ca.linux.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220519125527.18544-6-rex-bc.chen@mediatek.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/20/22 9:09 AM, Al Viro wrote:
-> On Fri, May 20, 2022 at 03:50:30PM +0200, Jason A. Donenfeld wrote:
->> Currently mem.c implements both the {read,write}_iter functions and the
->> {read,write} functions. But with {read,write} going away at some point
->> in the future,
+Hi Rex,
+
+On Thu, May 19, 2022 at 08:55:13PM +0800, Rex-BC Chen wrote:
+> There are two versions for clock reset register control for MediaTek
+> SoCs. The old hardware is one bit per reset control, and does not
+> have separate registers for bit set, clear and read-back operations.
+> This matches the scheme supported by the simple reset driver.
 > 
-> Not likely to happen, unfortunately.
+> However, because we need to use different data structure from
+> reset_simple_data, we can not use the operation of simple reset
+> driver.
+> For this reason, we keep the original functions and name this version
+> as "MTK_RST_SIMPLE".
 > 
->> and most kernel code made to prefer {read,write}_iter,
->> there's no point in keeping around the old code.
+> In this patch:
+> - Add a version enumeration to separate different reset hardware.
+> - Merge the reset register function of simple and set_clr into one
+>   function "mtk_register_reset_controller".
+> - Rename input variable "num_regs" to "rst_bank_nr" to avoid
+>   confusion. This variable is used to define the quantity of reset bank.
+> - Document mtk_reset_version and mtk_register_reset_controller.
 > 
-> Profile and you'll see ;-/
+> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
 
-Weren't you working on bits to get us to performance parity there?
-What's the status of that?
+<snip>
 
-It really is an unfortunate situation we're currently in with two
-methods for either read or write, with one being greatly preferred as we
-can pass in non-file associated state (like IOCB_NOWAIT, etc) but the
-older variant being a bit faster. It lives us in a bad place, imho.
+> index 764a8affe206..2a39eec9cff7 100644
+> --- a/drivers/clk/mediatek/reset.h
+> +++ b/drivers/clk/mediatek/reset.h
+> @@ -9,16 +9,32 @@
+>  #include <linux/reset-controller.h>
+>  #include <linux/types.h>
+>  
+> +/**
+> + * enum mtk_reset_version - Version of MediaTek clock reset controller.
+> + * @MTK_RST_SIMPLE: Use the same registers for bit set and clear.
+> + * @MTK_RST_SET_CLR: Use separate registers for bit set and clear.
+> + * @MTK_RST_MAX: Total quantity of version for MediaTek clock reset controller.
+> + */
+> +enum mtk_reset_version {
+> +	MTK_RST_SIMPLE = 0,
+> +	MTK_RST_SET_CLR,
+> +	MTK_RST_MAX,
+> +};
+> +
+>  struct mtk_reset {
+>  	struct regmap *regmap;
+>  	int regofs;
+>  	struct reset_controller_dev rcdev;
+>  };
+>  
+> +/**
+> + * mtk_register_reset_controller - Register MediaTek clock reset controller
+> + * @np: Pointer to device node.
+> + * @rst_bank_nr: Quantity of reset bank.
+> + * @reg_ofs: Base offset of the reset register.
+> + * @version: Version of MediaTek clock reset controller.
+> + */
+>  void mtk_register_reset_controller(struct device_node *np,
+> -				   unsigned int num_regs, int regofs);
+> -
+> -void mtk_register_reset_controller_set_clr(struct device_node *np,
+> -					   unsigned int num_regs, int regofs);
+> +				   u32 rst_bank_nr, u16 reg_ofs, u8 version);
 
--- 
-Jens Axboe
+Why not use 'enum mtk_reset_version' instead of a generic u8? Same thing when
+you move it to a struct in patch 6.
 
+Thanks,
+Nícolas

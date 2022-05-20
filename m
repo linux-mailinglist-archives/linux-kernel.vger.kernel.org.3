@@ -2,72 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EC3E52F43D
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 22:08:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C127052F443
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 22:10:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242269AbiETUIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 16:08:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51542 "EHLO
+        id S1350722AbiETUKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 16:10:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237646AbiETUIN (ORCPT
+        with ESMTP id S237497AbiETUKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 16:08:13 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FA015F6EE
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 13:08:08 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id gh17so4488579ejc.6
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 13:08:08 -0700 (PDT)
+        Fri, 20 May 2022 16:10:31 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4C7819CEED
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 13:10:30 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id v65so11157228oig.10
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 13:10:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hqeP5rdlyT9Ojb1o/Y+c7yG6gWz0o8Ya2ALrWN0i/h4=;
-        b=A6tATn1zlH3Ye7b1NXpayU3ySugX53PcyxEpLXWt24vF/to1SKuRlxfJtdLplXWXfq
-         A0noXbVj2uPtYxryi/uvbqcqTk9arKbWsQfNmCzY6HfD5gaBDDeHd01OvZk9xwBmCj94
-         IDsrT/ihzL2ZJm9QRmpcunQ9T/lHggMYZ7qko=
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=wiGaxzYkjsSexTF4OnqKljM8nknmSifQmJXxUrBf0MA=;
+        b=MVgIBoV64tzvV8y9jiIJOSMBnsDd4wm2LVgnLBX7s1HvFwvu0XSCEvVWzQqhbVoX6D
+         88DBGPkjq+0lWtRWBZwhEfZE7ggUnB7pT22Yf4GhVWCah2hLs6WlQeRPBFFBr4lZBNM7
+         Dy1qPpV7EiHYKOy5TulR/5ISe/5fF6OCvWo60=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hqeP5rdlyT9Ojb1o/Y+c7yG6gWz0o8Ya2ALrWN0i/h4=;
-        b=3lqS15wdYSWzUqKaQTkr3XbylbOSZLHJXc64DcNfLFxOHNxloty+AS5DERV6Fh5HoG
-         h5jnJ0GqyWkZp3iSFrZ2FrmhQhDJXn1e4xJz8VffGltDpjY944Y6MLLckDlECO3N29cX
-         yxhIJ1LZjMEIyc0wyLLfav0asAYEp9+iAjkuIWnvRPatY+13VRYld7oku4FFwCl2V9t9
-         i/d+DKW6fxMCZnApnnh4IdLqG4bolF+gyYwr2L7Ye0//LYJokCe9ona9ixFm5y0ge6Cz
-         psYu6pP9ba7lnG0cf0Pc7wg82mraJyaKqBBi0YeWYq2I9GS6TB8gxsW24bgO7uIZ6vXc
-         xLOQ==
-X-Gm-Message-State: AOAM532FLoFydvnvD2DmcMFrRWfIOXhgLtGv6OKJjE4SkgUgDrbtHxka
-        1puPiCeh104+U8+OzudhUIYgyZPtldfOeOAlpnM=
-X-Google-Smtp-Source: ABdhPJxSLLhajuSsJnMsgmwtv7UMA5WN5hAnuoC5GC5jcfG6f4hdHR4N2qMygMj7y7dCI7ZnPR+BHw==
-X-Received: by 2002:a17:907:7da2:b0:6f4:dcb8:7b7 with SMTP id oz34-20020a1709077da200b006f4dcb807b7mr10132657ejc.443.1653077286954;
-        Fri, 20 May 2022 13:08:06 -0700 (PDT)
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com. [209.85.128.51])
-        by smtp.gmail.com with ESMTPSA id b2-20020aa7df82000000b0042abfe32ac8sm4666694edy.30.2022.05.20.13.08.06
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 May 2022 13:08:06 -0700 (PDT)
-Received: by mail-wm1-f51.google.com with SMTP id p5-20020a1c2905000000b003970dd5404dso4919234wmp.0
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 13:08:06 -0700 (PDT)
-X-Received: by 2002:a05:600c:3c99:b0:392:b49c:7b79 with SMTP id
- bg25-20020a05600c3c9900b00392b49c7b79mr9500680wmb.199.1653077285694; Fri, 20
- May 2022 13:08:05 -0700 (PDT)
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=wiGaxzYkjsSexTF4OnqKljM8nknmSifQmJXxUrBf0MA=;
+        b=j+TBM1ZYXjQuEazldRRQl/LuV52Nu7yhQpURc/0KMOa2Z2x/+a4BbOHPbksgo6KkLk
+         bBoeVQDXf4OjFuTe+1NLtR/q9BKgAtd72kiHCcHmv7c9hGwpKCL9O3jkc3dMDWagyG1s
+         TJ/8wKSm62iLV1tKG99pAa+4NYsJCRzEb0+eZBtEjBVoy3NuFy4cUKaEPIclz3XxFsb1
+         8AKSpKX2Wcsp5SwEuT7yq5reALO5g5zGT6OegTy3pMFG4QKbMVB2EK9vzOl/btwDwmah
+         Q8v1p1AuaJFwYkoOXNNU/lFwtLhtCf0sbIqCfTYn203VbxpQSymaDDfitcu7fXwhrmqE
+         dJ+A==
+X-Gm-Message-State: AOAM531FWgIGu/q//0ZxY0HndZDuXKRuFiGdKgykDnDFR+TLrqCwpOax
+        u0gBP4UxzEGSVG+gzHvoeuGSdwL4UyVU6Xg3ttcrwA==
+X-Google-Smtp-Source: ABdhPJw2ESNASeabzgRPotV7qcOex0oQnU0E59jPuICmZ5pWN67wlKt5uZv6bTFKt/7R/sPtqR9z0wgtCUcJf2Pfkcs=
+X-Received: by 2002:a05:6808:14c2:b0:326:c129:d308 with SMTP id
+ f2-20020a05680814c200b00326c129d308mr6135411oiw.193.1653077430078; Fri, 20
+ May 2022 13:10:30 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 20 May 2022 13:10:29 -0700
 MIME-Version: 1.0
-References: <20220518155252.1.I176d4254c79cfaafa38cbe36f066f02f819df9b6@changeid>
-In-Reply-To: <20220518155252.1.I176d4254c79cfaafa38cbe36f066f02f819df9b6@changeid>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 20 May 2022 13:07:53 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=X+4JhN8EScFDZAiduo6zy7c0pbr6EOJpSo25ctOW-zRA@mail.gmail.com>
-Message-ID: <CAD=FV=X+4JhN8EScFDZAiduo6zy7c0pbr6EOJpSo25ctOW-zRA@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: qcom: sc7280: Enable wifi for Chrome OS boards
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Kevin Lund <kglund@google.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+In-Reply-To: <1289c2e4-5607-b515-88b1-f44585e62cd3@quicinc.com>
+References: <1652978825-5304-1-git-send-email-quic_sibis@quicinc.com>
+ <1652978825-5304-3-git-send-email-quic_sibis@quicinc.com> <CAE-0n50iYAUmj6GEdCuOJ1d_SgeeFWtoxqWf7qN=jZ_js4wBcQ@mail.gmail.com>
+ <1289c2e4-5607-b515-88b1-f44585e62cd3@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Fri, 20 May 2022 13:10:29 -0700
+Message-ID: <CAE-0n52tbS2zvOWb4+2cbL7uth0Z3AJ-O6e0WH_xtQsMyu4A7A@mail.gmail.com>
+Subject: Re: [PATCH v4 2/3] dt-bindings: remoteproc: qcom: Convert SC7280 MSS
+ bindings to YAML
+To:     Sibi Sankar <quic_sibis@quicinc.com>, bjorn.andersson@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org
+Cc:     ohad@wizery.com, agross@kernel.org, mathieu.poirier@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mka@chromium.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -79,35 +72,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Wed, May 18, 2022 at 3:53 PM Matthias Kaehlcke <mka@chromium.org> wrote:
+Quoting Sibi Sankar (2022-05-20 11:46:58)
+> On 5/20/22 4:05 AM, Stephen Boyd wrote:
+> > Quoting Sibi Sankar (2022-05-19 09:47:04)
+> >> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-mss-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-mss-pil.yaml
+> >> new file mode 100644
+> >> index 000000000000..a936d84eefa6
+> >> --- /dev/null
+> >> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-mss-pil.yaml
+> >> +        resets = <&aoss_reset AOSS_CC_MSS_RESTART>,
+> >> +                 <&pdc_reset PDC_MODEM_SYNC_RESET>;
+> >> +        reset-names = "mss_restart", "pdc_reset";
+> >> +
+> >> +        qcom,halt-regs = <&tcsr_mutex 0x23000 0x25000 0x28000 0x33000>;
+> >> +        qcom,ext-regs = <&tcsr 0x10000 0x10004 &tcsr_mutex 0x26004 0x26008>;
+> >
+> > Because it's two items I'd expect:
+> >
+> >       <&tcsr 0x10000 0x10004>, <&tcsr_mutex 0x26004 0x26008>;
 >
-> Enable the 'wifi' and 'remoteproc_wpss' nodes for all sc7280
-> based Chrome OS boards. Delete the corresponding entries from
-> sc7280-idp.dtsi since this file includes sc7280-chrome-common.dtsi.
->
-> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-> ---
->
->  arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi | 13 +++++++++++++
->  arch/arm64/boot/dts/qcom/sc7280-idp.dtsi           | 11 -----------
->  2 files changed, 13 insertions(+), 11 deletions(-)
+> I guess both the ways work since the driver uses
+> of_parse_phandle_with_fixed_args.
 
-Looks right to me. You're also adding the firmware-name, but:
-
-* That's in the bindings.
-
-* The name you have there matches what's in the linux-firmware
-repository in commit 0d5e9f7e0aa1 ("ath11k: WCN6750 hw1.0: add to
-WLAN.MSL.1.0.1-00887-QCAMSLSWPLZ-1")
-
-Hmmm, I guess one question is whether this same firmware would also be
-used for other, non-Chrome sc7280 devices. If so then the
-firmware-name probably belongs straight in sc7280.dtsi? I suppose that
-could always happen in a future change if/when we have other sc7280
-devices and it's clear that they're sharing firmware. Thus:
-
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-
--Doug
+See commit 39bd2b6a3783 ("dt-bindings: Improve phandle-array schemas")
+for why the way you have it is not preferred.

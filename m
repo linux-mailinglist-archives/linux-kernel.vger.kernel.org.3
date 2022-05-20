@@ -2,87 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9547B52E225
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 03:47:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8240552E230
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 03:50:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344585AbiETBrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 21:47:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44244 "EHLO
+        id S1344601AbiETBuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 21:50:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234339AbiETBrC (ORCPT
+        with ESMTP id S1344588AbiETBuC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 21:47:02 -0400
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AE08D682B;
-        Thu, 19 May 2022 18:47:01 -0700 (PDT)
-Received: by mail-ed1-x541.google.com with SMTP id g12so9025490edq.4;
-        Thu, 19 May 2022 18:47:01 -0700 (PDT)
+        Thu, 19 May 2022 21:50:02 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D788BDFF5B
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 18:50:00 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id ob14-20020a17090b390e00b001dff2a43f8cso646591pjb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 18:50:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+xlTXsyAk/e17efczng1vq07W7jlbD6xzsBBuyJVH0M=;
-        b=GkqvcdD+0YJpEcVANimuYVf/KRbU9litcoLK9LAQdwwAwhxmW6TZVLck2rOwTfhwP7
-         Ww9zps/HifFzI0/JK1YbC7MGq2V4ep2eY4yJUfm0OLmUVxi03iGtsscYSnyCIu7kAfZg
-         sTyYHn6SG11Sg4c/4fiv6KOWk3Xn8YKRKKMYIQCApUP4F6x9l/hjyTDivHo6AL0tKjDB
-         r1fnCpxTiZIb5U/HFYIyA33eOthrjWw2F/1VMJwTVca5CM0rZPQVyMbzWsfUnlXRhz5H
-         hg2JfmsLgURkQFATxhp63Ncx1b946PdyluW6Ztxg1K2wYydo30n9HmiuKW2n9gW8GnLA
-         3dYA==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=bSYkUjPvAsu074e/VjNGWfjNftItgD9OU7BKxmchNu0=;
+        b=IctWEQwULe+HOgPbU7d0NJ3bNOOh3R/ed9A6ET0Gs/piG+Bes/Utvzo/JOuyGD8RRU
+         RcDWQ8n8fK3gVNdg7zOFFUdQGbLx/Yeu4mzOrLYeaNU76aARYW0jjqtvRRXuDmBVfrna
+         g7qU8icOdLj7kU6hSvSdtAKN4mYIBgh28Dejc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+xlTXsyAk/e17efczng1vq07W7jlbD6xzsBBuyJVH0M=;
-        b=e8PcSay0cIDMKX09WUcahP7bKOwu0rS4On06qGUyAUEHTukfsxLkdEQ81VGJXrfrU9
-         e1bXc6Y8k5CSRB0aHVbchlr8uobG3/jq1DQUBVZnm5nbl+uJAoREi6rNDFJq3W6CL/rR
-         3i6bj4jGcqTdT2j3LvxLq8xTPMudIVP4bGUhk7MCXgW2WqD1VuhxpGAGZZm3rJsQaXcp
-         bZNo2cBLUTsSnK3n1PgRrO2ET3FRvjyPaIhsVo4yNvVGMD/8gkr/FDFy2pq5i+U0cSd8
-         xFuFMJezDaMwcHRljf4tKMr4aQ0XyhTnEElvsMAI11OjF4L6asa1j/D/qjcPJ/pjLm/Y
-         H/hw==
-X-Gm-Message-State: AOAM531bzRVt3ISIHCZDPE2PROe76NxfS1O6u3XRipRg5a1QPv3ocvZP
-        /bXiRYOPQKiiJ3J0vCGgqM9zsj+wMKMTEszyPV4=
-X-Google-Smtp-Source: ABdhPJwsOwN4tXqZjr4Z+fT7Lprmq2WVwCVuB9M2pLJ/hNGSKetnhJs2huDWD9s4qPSgcCcOtWZz4DgBVNzreP30q8o=
-X-Received: by 2002:a05:6402:c17:b0:42a:b3e0:cbd0 with SMTP id
- co23-20020a0564020c1700b0042ab3e0cbd0mr8362638edb.213.1653011220172; Thu, 19
- May 2022 18:47:00 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=bSYkUjPvAsu074e/VjNGWfjNftItgD9OU7BKxmchNu0=;
+        b=62vjablt/+2rQBGzmGDyEZPuCaAUP8DeNd0b2dQHzmC0Lp4i3qNmJc91IDHUdbH1B/
+         JxAvvC+G7uL51nvGvtxEw997bZgHR6pVXHNy6Jr0/gyLHVi5NA1gBP5a6TU51dRuk0wS
+         hc/wM1l1mLS7qXfCB46dI2sKVLRY3RNO1WoarqAXUDLzvfxI3KcPuYLDTqHWPmu/IjgV
+         urDQA5zUqMAWwN1FX8Ziq4myzOO86xB78FcQiVd0HYkCNyCP9/ueeGSeJScFMWVCfxpT
+         dMI6JJqhHUMcTNhmA1X0XQEx8Q2NjO9b1gbs16p02oSeMhcfc1I1axbuMwUz9NGE6OfI
+         AVAg==
+X-Gm-Message-State: AOAM532NWDGdXtBjbe1saR9Xgp403sj1JC82qD0/a1iU1oept/ruFH6H
+        WtEmKppK1Kxhg9iejySQ1QPpxQ==
+X-Google-Smtp-Source: ABdhPJxYCaKfJrQpyhnMwy4bw/c5zkQ+q174lh8wbUasjk9l4ZAUxrQCXZ8SzukBnlB3+yq5G+ayIg==
+X-Received: by 2002:a17:902:9887:b0:151:6e1c:7082 with SMTP id s7-20020a170902988700b001516e1c7082mr7427960plp.162.1653011400364;
+        Thu, 19 May 2022 18:50:00 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id a23-20020a056a001d1700b0050dc76281ddsm329776pfx.183.2022.05.19.18.49.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 May 2022 18:50:00 -0700 (PDT)
+Date:   Thu, 19 May 2022 18:49:59 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     ilkos@google.com, tjmercier@google.com, surenb@google.com,
+        kernel-team@android.com, Jonathan Corbet <corbet@lwn.net>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Anton Mitterer <mail@christoph.anton.mitterer.name>,
+        Mike Rapoport <rppt@kernel.org>,
+        Colin Cross <ccross@google.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
+Subject: Re: [RFC PATCH] procfs: Add file path and size to /proc/<pid>/fdinfo
+Message-ID: <202205191848.DEE05F6@keescook>
+References: <20220519214021.3572840-1-kaleshsingh@google.com>
 MIME-Version: 1.0
-References: <20220513030339.336580-1-imagedong@tencent.com>
- <20220513030339.336580-5-imagedong@tencent.com> <20220519084851.4bce4bdd@kernel.org>
-In-Reply-To: <20220519084851.4bce4bdd@kernel.org>
-From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Fri, 20 May 2022 09:46:49 +0800
-Message-ID: <CADxym3Y7MkGWmu+8y8Kpcf39QJ5207-VaEnCsYKRDqnpre1O0Q@mail.gmail.com>
-Subject: Re: [PATCH net-next v3 4/4] net: tcp: reset 'drop_reason' to
- NOT_SPCIFIED in tcp_v{4,6}_rcv()
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220519214021.3572840-1-kaleshsingh@google.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 11:48 PM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Fri, 13 May 2022 11:03:39 +0800 menglong8.dong@gmail.com wrote:
-> > From: Menglong Dong <imagedong@tencent.com>
-> >
-> > The 'drop_reason' that passed to kfree_skb_reason() in tcp_v4_rcv()
-> > and tcp_v6_rcv() can be SKB_NOT_DROPPED_YET(0), as it is used as the
-> > return value of tcp_inbound_md5_hash().
-> >
-> > And it can panic the kernel with NULL pointer in
-> > net_dm_packet_report_size() if the reason is 0, as drop_reasons[0]
-> > is NULL.
-> >
-> > Fixes: 1330b6ef3313 ("skb: make drop reason booleanable")
->
-> This patch is in net, should this fix have been targeting net / 5.18?
+On Thu, May 19, 2022 at 02:40:15PM -0700, Kalesh Singh wrote:
+> [...]
+> +	seq_file_path(m, file, "\n");
+> +	seq_putc(m, '\n');
+>  
+>  	/* show_fd_locks() never deferences files so a stale value is safe */
+>  	show_fd_locks(m, file, files);
 
-Yeah, I think it should have. What do I need to do? CC someone?
+This comment implies "file" might be stale? Does that mean anything for
+the above seq_file_path()?
+
+-- 
+Kees Cook

@@ -2,110 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A081752E372
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 06:02:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E33AB52E377
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 06:06:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237690AbiETEB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 00:01:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44306 "EHLO
+        id S230473AbiETEFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 00:05:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231720AbiETEBy (ORCPT
+        with ESMTP id S229537AbiETEFd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 00:01:54 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6222614A25B
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 21:01:52 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id j24so9797295wrb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 21:01:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lX20NL3YNPaKjNecI4oDdq3acoU2kOL0ZbPMHMv9mB0=;
-        b=QUhqUNwjiYBBL+Gfy7USDRKlfhCB5po25WZwgPlSiSkUXf8omWvdSvXZzxRV41w1tT
-         d5C/MVpxWJNzqMqMn4BsGlEqIb6rOVIxP+yf5DJ3CcD/CMFR7a+o3Nxfo0tiHS41+QJx
-         1G0voWhXE97nNh8TDu9IYnnRSfvefCogP4VsB5M0y74VMQ5qGopMDi1VQqUGm6PnvD78
-         YluERYOhs/tCKgwebfwVE2yQreNBgLUaB4ZY4z6xzZTQ7LXJk9AbCoT54oExEPxtuCAM
-         DF3gvipca18rnRT53tde7E+gUZik7VP0hR/Z6h4m5Gl7iRVkpIrQcRhWqQ2jBr0jnUJX
-         zgOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lX20NL3YNPaKjNecI4oDdq3acoU2kOL0ZbPMHMv9mB0=;
-        b=pqRcSLaG+as0vJXArPrpNnMwydtI6wmgpJ4zTLNmZo8WEVdGqixb+rNGIdP0S/8Wk0
-         m3xn1A/wHN6BPIKmnnL7QRZe3W4SE4ciiddpZUh+b50R+n5fgR3wtH0NSu8lhnDDcbhM
-         WSct/OaabO7/A6toEPP8P4jofGYS3Yv61wOxz68lDQrKVRRrgMWB+dLsGK8slRM5f3HF
-         z0cXcuItLkOsP0gGWEsdr4CyvQwBc65sb4O1ZJgNOfI8AZ4QsxMFeHNmxajFCc0ZypC4
-         Ogqs3Q5Z6zEbE2abaVlBzWgEIXf9+21RIgMd6nHlyf7nTw2iJEAgR2JtmxnBHdgOk1QC
-         TnuQ==
-X-Gm-Message-State: AOAM533GCeLZ+fPAWk3cKUbXZaxz7/meGIGaVEXBbnxrUDI8ozjcDTw/
-        rzo6+SY1SHAR43VGACjDs7safT0j1/lmu3bf9IU8qw==
-X-Google-Smtp-Source: ABdhPJzdvVJxxqGLhr1D82HU8Nge0YZ/NcyQRTLRKVqI4Jh/02FF2nx30JgW9qrXm/uIf/Cxvut3pYr3QoTiG9nq0a4=
-X-Received: by 2002:a5d:5846:0:b0:20c:7407:5fa1 with SMTP id
- i6-20020a5d5846000000b0020c74075fa1mr6448325wrf.116.1653019310813; Thu, 19
- May 2022 21:01:50 -0700 (PDT)
+        Fri, 20 May 2022 00:05:33 -0400
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2DE14A270;
+        Thu, 19 May 2022 21:05:32 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VDoVbWo_1653019520;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VDoVbWo_1653019520)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 20 May 2022 12:05:29 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     djwong@kernel.org
+Cc:     linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] xfs: Remove the redundant assignment
+Date:   Fri, 20 May 2022 12:05:18 +0800
+Message-Id: <20220520040518.73957-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-References: <20220519214021.3572840-1-kaleshsingh@google.com> <202205191848.DEE05F6@keescook>
-In-Reply-To: <202205191848.DEE05F6@keescook>
-From:   Kalesh Singh <kaleshsingh@google.com>
-Date:   Thu, 19 May 2022 21:01:39 -0700
-Message-ID: <CAC_TJve0iyPU0uKoKOi_qcwgxPkgNKgirBcMJ=oYBqhRC3a_+Q@mail.gmail.com>
-Subject: Re: [RFC PATCH] procfs: Add file path and size to /proc/<pid>/fdinfo
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Ioannis Ilkos <ilkos@google.com>,
-        "T.J. Mercier" <tjmercier@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        "Cc: Android Kernel" <kernel-team@android.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Anton Mitterer <mail@christoph.anton.mitterer.name>,
-        Mike Rapoport <rppt@kernel.org>,
-        Colin Cross <ccross@google.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        DRI mailing list <dri-devel@lists.freedesktop.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 6:50 PM Kees Cook <keescook@chromium.org> wrote:
->
-> On Thu, May 19, 2022 at 02:40:15PM -0700, Kalesh Singh wrote:
-> > [...]
-> > +     seq_file_path(m, file, "\n");
-> > +     seq_putc(m, '\n');
-> >
-> >       /* show_fd_locks() never deferences files so a stale value is safe */
-> >       show_fd_locks(m, file, files);
->
-> This comment implies "file" might be stale? Does that mean anything for
-> the above seq_file_path()?
+Variable 'ifree','freeblks' and 'itotal' set but not used.
 
-Hi Kees.
+Eliminate the follow clang warning:
 
-Thanks for taking a look. The comment above says the "files" pointer
-can be stale. It doesn't affect our use of "file" here. seq_show()
-takes the reference with get_file() so "file" wouldn't be destroyed
-from under us.
+fs/xfs/xfs_log_recover.c:3534:12: warning: variable 'freeblks' set but
+not used [-Wunused-but-set-variable].
 
-Thanks,
-Kalesh
->
-> --
-> Kees Cook
+fs/xfs/xfs_log_recover.c:3535:12: warning: variable 'itotal' set but not
+used [-Wunused-but-set-variable].
+
+fs/xfs/xfs_log_recover.c:3536:12: warning: variable 'ifree'
+set but not used [-Wunused-but-set-variable].
+
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ fs/xfs/xfs_log_recover.c | 12 ------------
+ 1 file changed, 12 deletions(-)
+
+diff --git a/fs/xfs/xfs_log_recover.c b/fs/xfs/xfs_log_recover.c
+index 97b941c07957..47736936ebba 100644
+--- a/fs/xfs/xfs_log_recover.c
++++ b/fs/xfs/xfs_log_recover.c
+@@ -3531,14 +3531,8 @@ xlog_recover_check_summary(
+ 	struct xfs_buf		*agfbp;
+ 	struct xfs_buf		*agibp;
+ 	xfs_agnumber_t		agno;
+-	uint64_t		freeblks;
+-	uint64_t		itotal;
+-	uint64_t		ifree;
+ 	int			error;
+ 
+-	freeblks = 0LL;
+-	itotal = 0LL;
+-	ifree = 0LL;
+ 	for_each_perag(mp, agno, pag) {
+ 		error = xfs_read_agf(mp, NULL, pag->pag_agno, 0, &agfbp);
+ 		if (error) {
+@@ -3546,9 +3540,6 @@ xlog_recover_check_summary(
+ 						__func__, pag->pag_agno, error);
+ 		} else {
+ 			struct xfs_agf	*agfp = agfbp->b_addr;
+-
+-			freeblks += be32_to_cpu(agfp->agf_freeblks) +
+-				    be32_to_cpu(agfp->agf_flcount);
+ 			xfs_buf_relse(agfbp);
+ 		}
+ 
+@@ -3558,9 +3549,6 @@ xlog_recover_check_summary(
+ 						__func__, pag->pag_agno, error);
+ 		} else {
+ 			struct xfs_agi	*agi = agibp->b_addr;
+-
+-			itotal += be32_to_cpu(agi->agi_count);
+-			ifree += be32_to_cpu(agi->agi_freecount);
+ 			xfs_buf_relse(agibp);
+ 		}
+ 	}
+-- 
+2.20.1.7.g153144c
+

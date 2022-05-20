@@ -2,159 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C3DE52E90D
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 11:42:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1773752E909
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 11:41:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347776AbiETJmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 05:42:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60360 "EHLO
+        id S1347777AbiETJlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 05:41:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347782AbiETJls (ORCPT
+        with ESMTP id S1347786AbiETJln (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 05:41:48 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E2BF1498CD;
-        Fri, 20 May 2022 02:41:47 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id gh17so1535714ejc.6;
-        Fri, 20 May 2022 02:41:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:subject:to:cc:message-id:in-reply-to:references
-         :mime-version;
-        bh=+Q0QiA7ru6i8BsA9kJw7SZPGcwHJrhsZ4QvZNcEI9Dg=;
-        b=qx0h4A1phm5nsIroUsJwfajaIeD7n912JaN0mRC5EAn8j78j6xSyKlsylTXxCMZuKu
-         eJvfLlqevQHJrDbbh7RkFrgnPLbVyOxA6T9kGy/6LI16CeXYpHply9dWKVG9qsadXonh
-         oan7RSXE4Ywm7kwFwLR7qTXKKepqKeKLatdAyrw8LsA0D3fkmQoEcENyBFUc0pgNnUzv
-         TUhQ/gF8jQ2uG8pFukE4tFlIdVmD2EMpRZTmNRVm5JXZTwwTbDOJSagsWkk/d9WtHaaD
-         AlY40bQ44f2z94SYbbgiGUKxRMvQI2lfY23GPi27X4wixARlyi6KppYRTutH5kuyy17j
-         w/Ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:subject:to:cc:message-id:in-reply-to
-         :references:mime-version;
-        bh=+Q0QiA7ru6i8BsA9kJw7SZPGcwHJrhsZ4QvZNcEI9Dg=;
-        b=xunQQkfiWyeLedzfRvS0yQbpHXW5IaFZOkJ+f2Vs36/3Gz5pfmf2QwLqp/KKYp0Om2
-         Km7GYLcvDuey7cslQ2qOpJcxa+pSilGRAXuOpaAmHH3lmWUicbxOcOaoI/1ZlF1qg+Ch
-         t9mIFUNg+TOKmG2HTPPnNkhRA2yofOG07AvB3DwcJ+MHek2rGbpVlegwxEI6xYy07jFJ
-         CRgt1SvB5zFr/Z1r2vSVHL0LOwMlRa9gXBsKZQrNWQSd8L6mg4GZhpT5rHQY5wIiy5o5
-         TWIH1E6lZSCFNGmLlqoZ4bXCGBkMkOEjCAQl/IJlZ+rhW6tGLb0wK23h4X8vZNrrjwH4
-         lFlA==
-X-Gm-Message-State: AOAM533ydAmMN/EdVR1Xborgf5k9PeEvhSPLe+QJoVccydURpMOS3CmR
-        4B+w7XiftOiTjOGkmL8EXZM=
-X-Google-Smtp-Source: ABdhPJx8KoctJFPDI79r21gvLJwl+tekVa1UwU2OiLxDKk1gsbX922JsgN+mWcLDYdoCB7xhEaRD/A==
-X-Received: by 2002:a17:906:1f52:b0:6f4:ebc2:da82 with SMTP id d18-20020a1709061f5200b006f4ebc2da82mr8207315ejk.176.1653039705676;
-        Fri, 20 May 2022 02:41:45 -0700 (PDT)
-Received: from [192.168.151.247] ([138.199.7.159])
-        by smtp.gmail.com with ESMTPSA id z22-20020a170906435600b006f4c4330c49sm2937723ejm.57.2022.05.20.02.41.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 02:41:45 -0700 (PDT)
-Date:   Fri, 20 May 2022 13:41:33 +0400
-From:   Yassine Oudjana <yassine.oudjana@gmail.com>
-Subject: Re: [PATCH 3/6] clk: mediatek: reset: Return reset data pointer on
- register
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Miles Chen <miles.chen@mediatek.com>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        =?iso-8859-1?q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        linux-mediatek@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-Message-Id: <9LD6CR.FM55IKDYS0IC2@gmail.com>
-In-Reply-To: <5b5f6656-8694-dc78-ef42-7ce301849aa4@collabora.com>
-References: <20220519134728.456643-1-y.oudjana@protonmail.com>
-        <20220519134728.456643-4-y.oudjana@protonmail.com>
-        <5b5f6656-8694-dc78-ef42-7ce301849aa4@collabora.com>
-X-Mailer: geary/40.0
+        Fri, 20 May 2022 05:41:43 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E7313F91C;
+        Fri, 20 May 2022 02:41:41 -0700 (PDT)
+X-UUID: 54fe12198bfc4baf9eefe19a8be5f5fd-20220520
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:09c94849-9717-4d73-aae2-b3dd68d15d28,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:5
+X-CID-META: VersionHash:2a19b09,CLOUDID:cf90f0e2-edbf-4bd4-8a34-dfc5f7bb086d,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 54fe12198bfc4baf9eefe19a8be5f5fd-20220520
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <johnson.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 363951275; Fri, 20 May 2022 17:41:37 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Fri, 20 May 2022 17:41:36 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 20 May 2022 17:41:35 +0800
+Message-ID: <47da3ed20b7f3c082a6bf38de2ba291b7dd67ecc.camel@mediatek.com>
+Subject: Re: [RESEND v4 2/2] PM / devfreq: mediatek: Introduce MediaTek CCI
+ devfreq driver
+From:   Johnson Wang <johnson.wang@mediatek.com>
+To:     Chen-Yu Tsai <wenst@chromium.org>
+CC:     <cw00.choi@samsung.com>, <krzk+dt@kernel.org>,
+        <robh+dt@kernel.org>, <kyungmin.park@samsung.com>,
+        <djakov@kernel.org>, <khilman@kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <jia-wei.chang@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Fri, 20 May 2022 17:41:35 +0800
+In-Reply-To: <CAGXv+5G-88zWSnic-AY2ANF9BYWCsZk29CeLxp+VuFKE_LH5Ug@mail.gmail.com>
+References: <20220513032832.17645-1-johnson.wang@mediatek.com>
+         <20220513032832.17645-3-johnson.wang@mediatek.com>
+         <CAGXv+5Em2eq8g8phC7MVcEP-sCsSsKa9FQjOra2UN3pib_psLA@mail.gmail.com>
+         <7eec74e32bb482ba6984c6789f598ee9965f49b3.camel@mediatek.com>
+         <CAGXv+5G-88zWSnic-AY2ANF9BYWCsZk29CeLxp+VuFKE_LH5Ug@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Fri, May 20 2022 at 10:42:40 +0200, AngeloGioacchino Del Regno 
-<angelogioacchino.delregno@collabora.com> wrote:
-> Il 19/05/22 15:47, Yassine Oudjana ha scritto:
->> From: Yassine Oudjana <y.oudjana@protonmail.com>
->> 
->> Return a struct mtk_clk_rst_data * when registering a reset
->> controller in preparation for adding an unregister helper
->> that will take it as an argument. Make the necessary changes
->> in drivers that do not currently discard the return value
->> of register functions.
->> 
->> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+On Thu, 2022-05-19 at 11:24 +0800, Chen-Yu Tsai wrote:
+> On Wed, May 18, 2022 at 8:19 PM Johnson Wang <
+> johnson.wang@mediatek.com> wrote:
+> > 
+> > Hi Chen-Yu,
+> > 
+> > On Fri, 2022-05-13 at 11:54 +0800, Chen-Yu Tsai wrote:
+> > > On Fri, May 13, 2022 at 11:31 AM Johnson Wang <
+> > > johnson.wang@mediatek.com> wrote:
+> > > > 
+> > > > We introduce a devfreq driver for the MediaTek Cache Coherent
+> > > > Interconnect
+> > > > (CCI) used by some MediaTek SoCs.
+> > > > 
+> > > > In this driver, we use the passive devfreq driver to get target
+> > > > frequencies
+> > > > and adjust voltages accordingly. In MT8183 and MT8186, the
+> > > > MediaTek
+> > > > CCI
+> > > > is supplied by the same regulators with the little core CPUs.
+> > > > 
+> > > > Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+> > > > Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
+> > > > Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+> > > > ---
+> > > > This patch depends on "devfreq-testing"[1].
+> > > > [1]
+> > > > 
+https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/log/?h=devfreq-testing__;!!CTRNKA9wMg0ARbw!zzOSoso9udvDV3h6kYlmizFtbn3ACA5aS2jCAjKyvtu4z0fobv1mD5uF9YbPSme8l_NnR05unTxkZfDdzohu8asWZQ$
+> > > > 
+> > > > ---
+> > > >  drivers/devfreq/Kconfig           |  10 +
+> > > >  drivers/devfreq/Makefile          |   1 +
+> > > >  drivers/devfreq/mtk-cci-devfreq.c | 474
+> > > > ++++++++++++++++++++++++++++++
+> > > >  3 files changed, 485 insertions(+)
+> > > >  create mode 100644 drivers/devfreq/mtk-cci-devfreq.c
+> > > > 
+> > > > diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
+> > > > index 87eb2b837e68..9754d8b31621 100644
+> > > > --- a/drivers/devfreq/Kconfig
+> > > > +++ b/drivers/devfreq/Kconfig
+> > > > @@ -120,6 +120,16 @@ config ARM_TEGRA_DEVFREQ
+> > > >           It reads ACTMON counters of memory controllers and
+> > > > adjusts the
+> > > >           operating frequencies and voltages with OPP support.
+> > > > 
+> > > > +config ARM_MEDIATEK_CCI_DEVFREQ
+> > > > +       tristate "MEDIATEK CCI DEVFREQ Driver"
+> > > > +       depends on ARM_MEDIATEK_CPUFREQ || COMPILE_TEST
+> > > > +       select DEVFREQ_GOV_PASSIVE
+> > > > +       help
+> > > > +         This adds a devfreq driver for MediaTek Cache
+> > > > Coherent
+> > > > Interconnect
+> > > > +         which is shared the same regulators with the cpu
+> > > > cluster.
+> > > > It can track
+> > > > +         buck voltages and update a proper CCI frequency. Use
+> > > > the
+> > > > notification
+> > > > +         to get the regulator status.
+> > > > +
+> > > >  config ARM_RK3399_DMC_DEVFREQ
+> > > >         tristate "ARM RK3399 DMC DEVFREQ Driver"
+> > > >         depends on (ARCH_ROCKCHIP && HAVE_ARM_SMCCC) || \
+> > > > diff --git a/drivers/devfreq/Makefile
+> > > > b/drivers/devfreq/Makefile
+> > > > index 0b6be92a25d9..bf40d04928d0 100644
+> > > > --- a/drivers/devfreq/Makefile
+> > > > +++ b/drivers/devfreq/Makefile
+> > > > @@ -11,6 +11,7 @@ obj-$(CONFIG_DEVFREQ_GOV_PASSIVE)     +=
+> > > > governor_passive.o
+> > > >  obj-$(CONFIG_ARM_EXYNOS_BUS_DEVFREQ)   += exynos-bus.o
+> > > >  obj-$(CONFIG_ARM_IMX_BUS_DEVFREQ)      += imx-bus.o
+> > > >  obj-$(CONFIG_ARM_IMX8M_DDRC_DEVFREQ)   += imx8m-ddrc.o
+> > > > +obj-$(CONFIG_ARM_MEDIATEK_CCI_DEVFREQ) += mtk-cci-devfreq.o
+> > > >  obj-$(CONFIG_ARM_RK3399_DMC_DEVFREQ)   += rk3399_dmc.o
+> > > >  obj-$(CONFIG_ARM_SUN8I_A33_MBUS_DEVFREQ)       += sun8i-a33-
+> > > > mbus.o
+> > > >  obj-$(CONFIG_ARM_TEGRA_DEVFREQ)                += tegra30-
+> > > > devfreq.o
+> > > > diff --git a/drivers/devfreq/mtk-cci-devfreq.c
+> > > > b/drivers/devfreq/mtk-cci-devfreq.c
+> > > > new file mode 100644
+> > > > index 000000000000..aa8c37eb4a06
+> > > > --- /dev/null
+> > > > +++ b/drivers/devfreq/mtk-cci-devfreq.c
+> > > > @@ -0,0 +1,474 @@
 > 
-> Hello Yassine,
+> [...]
 > 
-> Thanks for your efforts on helping to make the MediaTek clocks better 
-> - I agree
-> (and I'm not the only one..) that there's a lot of work to do on this 
-> side.
+> > > > +       if (IS_ERR(drv->sram_reg))
+> > > > +               drv->sram_reg = NULL;
+> > > > +       else {
+> > > > +               ret = regulator_enable(drv->sram_reg);
+> > > > +               if (ret) {
+> > > > +                       dev_err(dev, "failed to enable sram
+> > > > regulator\n");
+> > > > +                       goto out_free_resources;
+> > > > +               }
+> > > > +       }
+> > > > +
+> > > > +       /*
+> > > > +        * We assume min voltage is 0 and tracking target
+> > > > voltage
+> > > > using
+> > > > +        * min_volt_shift for each iteration.
+> > > > +        * The retry_max is 3 times of expeted iteration count.
+> > > 
+> > > expected?
+> > > 
+> > 
+> > Maybe "the maximum" will be more appropriate?
 > 
-> Though... I don't think that this is the right direction: you're 
-> right about
-> properly unregistering (in patch 4/6) the reset controllers on 
-> rmmod/failure
-> but I'm not sure that this kind of noise brings any benefit.
 > 
-> Explaining:
-> You definitely saw that there's a new register _with_dev, which uses 
-> devm ops
-> and that's going to automatically cleanup in case of removal/failure.
-> This is what we should do.
+> I was merely pointing out a typo in "expeted".
 > 
-> Hence, my proposal is to drop patch 3/6, 4/6, 5/6 and (slowly, 
-> steadily) migrate
-> all of the MediaTek clocks from CLK_OF_DECLARE() to platform drivers 
-> (which also
-> means that we can eventually change them to tristate!), so that we 
-> slowly remove
-> all users of all functions that are not "_with_dev", and that we 
-> finally remove
-> all of these then-unused functions as well.
-
-I've tried to make small (but hopefully not too small) steps with
-little improvements. Originally in MT6735 clock drivers v1, I only
-added reset controller unregister, and while rebasing on Rex-BC's
-reset cleanup series I found mtk_clk_simple_probe/remove while
-looking for references to mtk_register_reset_controller, so
-I thought of using it for my drivers resulting in this series
-adding support for the extra 4 clock types. I started finding
-other things that could be improved such as the other clock types
-not having register_*_with_dev(), but I had to avoid adding
-anything else since that would only make me find more things to
-improve and this series would've never been finished and sent.
-
-With that said, if these patches could become an obstacle for
-later more complete reworks, then by all means drop them.
-
+> Looking at it again, I'm not sure why retry attempts are tied to the
+> voltage.
 > 
-> Making sure that I don't get misunderstood:
->      I'm not implying that this huge migration work is on your 
-> shoulders!
 > 
+> ChenYu
 
-Of course. I would never be able to handle such a large task.
-Everyone currently helping with modernizing this common clock
-framework has my full respect. You are doing amazing work.
+Hi Chen-Yu,
 
-Thanks,
-Yassine
+Thanks for you reminder.
 
+Whenever the voltages are scaled up/down one step,
+meaning that there is another iteration in the while loop.
 
+Thus, our thought is to use times of the voltages step up/down to set
+iteration limit.
+
+BRs,
+Johnson Wang 
 

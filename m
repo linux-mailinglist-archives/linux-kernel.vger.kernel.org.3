@@ -2,144 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 089BB52F1AE
+	by mail.lfdr.de (Postfix) with ESMTP id C05D852F1B1
 	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 19:33:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352210AbiETRbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 13:31:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52196 "EHLO
+        id S1352251AbiETRcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 13:32:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237137AbiETRbu (ORCPT
+        with ESMTP id S1352216AbiETRcL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 13:31:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5934C60BA0
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 10:31:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 157C4B82A71
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 17:31:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11AC8C385A9;
-        Fri, 20 May 2022 17:31:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653067906;
-        bh=lEuAPpH49ZAL8xvh6aePU+pfbu+JAGfsbB+0Xp3O5LU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vH5U9BVcMfslOBDGllyc1uR5srxpm61snyd8KD79TxwamdnxAQY6dYFSJYd6CLTUM
-         msvqdro9xGZRcMh6YgQnjDjvixVbkSFfOGK2WkXBkSfYcl0StygIyFeB+6YCF0rNwp
-         xDsc8txBnndbkSOr4nTSH8f5jKmSF3TsdFeMkGFuvhv7QNOO6PE1qYFzPnndV06Rq2
-         0yc3Qh9DCs3rVFVPUSE9qXGz+qgTlftdEG9UQEz4NVqS+kQsCpNqEj3NTuvTuv/2Nr
-         i1oL5opLZ3un9oZNbRN8zo5KAacrarjAKPr2J5MTQ7DIeQgujpntkouuNmsKyZxyjV
-         IsSaggEuq8ivw==
-Date:   Fri, 20 May 2022 10:31:44 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Johannes Berg <johannes@sipsolutions.net>
-Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        Richard Weinberger <richard@nod.at>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        anton ivanov <anton.ivanov@cambridgegreys.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Eduard-Gabriel Munteanu <maxdamage@aladin.ro>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        regressions <regressions@lists.linux.dev>
-Subject: Re: [PATCH 1/1] um: fix error return code in winch_tramp()
-Message-ID: <YofQgDo38fAnPZEy@dev-arch.thelio-3990X>
-References: <20210508032239.2177-1-thunder.leizhen@huawei.com>
- <Yjt31seiNv18HYrf@dev-arch.thelio-3990X>
- <1b03d888-cea3-3e6f-087f-daeb5642a975@leemhuis.info>
- <1087614384.239493.1649583213699.JavaMail.zimbra@nod.at>
- <YlRp9KR1mp3/4Txo@thelio-3990X>
- <1287561645.244713.1649702724736.JavaMail.zimbra@nod.at>
- <e9597cbc-cabb-facf-deb6-662d40cf16a3@leemhuis.info>
- <Yoe5/HwL9DXhaw7Z@dev-arch.thelio-3990X>
- <32824a71109fe3387d582abbf56601fb08bdc9ef.camel@sipsolutions.net>
+        Fri, 20 May 2022 13:32:11 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A768427C7
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 10:32:09 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id i24so8303277pfa.7
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 10:32:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ZBKb0fjscPpUrzXEuZ8CHp+jRIIn9EphQZhgAcnYOMI=;
+        b=hPLF5ByV6OKZuxe0zweoZ6AmxwzQpA4YFOwx9e14kGQJ8frtXM7sTOs3yFC3P6sdeg
+         KUscqjAPu1SJ+eUV66whGKEF8HstKqxdQLSgGc4ePoYEZQLxMF0dQ9raKg0tG407moTy
+         pqdzq7XWNunDRkjvBKPxsjljdfQHzxRL/H9ZgdMEf5wh1u78qkuQMg6m5h80XofwNRKB
+         dZqNo3SchhJVu9KCFZGvBwEbaBqLo2wTv0LJ7HdT69wf7yyuRNLG8C8tXmWFqpDrhrHj
+         v9lr0CbcvrQ4DEF8qznBh+J+GgzAAGDhbgTsM+hoO4zDyN6a/ggd9MAI2J+KiaB4bnLu
+         FU4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZBKb0fjscPpUrzXEuZ8CHp+jRIIn9EphQZhgAcnYOMI=;
+        b=otUA4eyovBYSUQloWr250cc4Eq9seB40vTCnGnowS5t+CuTqmATgdYRp2T4ef0kJbt
+         0KMfyoJ9cmByr+Z1djzWSCfgBBzVRZ/kJ+kjl9KSMl3s0631hcAHUPnjsvUg4WjDzBQz
+         znPYfZhbWLkbwtcxi1qrEp3fCu9J4ugCciJ09aL5/2xfTZ7zHSq0d5bt9Lp7QdJo/zKU
+         UmwwcyeDGItZoODQR+b1Sn3/5c5HfP/gpHh4fn2YMLkvYhTcsIjUhvJZNcLM1yqOl2n8
+         fVujaTH7pzdfHNpumV/Coj6LvnC2+Haje0Oh9ry9Co8DIm37bf5+aUkgjcfpM9a+9PUD
+         7nNg==
+X-Gm-Message-State: AOAM533V5BNQl+BqZbzEsSm+Aypj3Mnvg8SJmFuqEff1Uy9+5qfd9kWh
+        6lEoSmW5RaMIyrOI+7iW8DAhzQ==
+X-Google-Smtp-Source: ABdhPJy/ZpW9fR0g5/rnyZmK5ygUqSdFNk+ECOXEaQsYVb5idh6wFSqoVoMNRGPaChhO5h//d6M/mg==
+X-Received: by 2002:a65:44c1:0:b0:3f6:26e8:77a9 with SMTP id g1-20020a6544c1000000b003f626e877a9mr9350381pgs.204.1653067928701;
+        Fri, 20 May 2022 10:32:08 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id l4-20020a170902f68400b0015e8d4eb1d2sm36893plg.28.2022.05.20.10.32.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 May 2022 10:32:08 -0700 (PDT)
+Date:   Fri, 20 May 2022 17:32:04 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] KVM: x86/emulator: Bounds check reg nr against reg array
+ size
+Message-ID: <YofQlBrlx18J7h9Y@google.com>
+References: <20220520165705.2140042-1-keescook@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <32824a71109fe3387d582abbf56601fb08bdc9ef.camel@sipsolutions.net>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220520165705.2140042-1-keescook@chromium.org>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 07:18:28PM +0200, Johannes Berg wrote:
-> On Fri, 2022-05-20 at 08:55 -0700, Nathan Chancellor wrote:
-> > On Fri, May 20, 2022 at 08:08:01AM +0200, Thorsten Leemhuis wrote:
-> > > On 11.04.22 20:45, Richard Weinberger wrote:
-> > > > ----- Ursprüngliche Mail -----
-> > > > > Von: "Nathan Chancellor" <nathan@kernel.org>
-> > > > > I attempted to print out the error code but it seems like there is no
-> > > > > output in the console after "reboot: System halted". If I add an
-> > > > > unconditional print right before the call to os_set_fd_block(), I see it
-> > > > > during start up but I do not see it during shutdown. Is there some way
-> > > > > to see that console output during shutdown?
-> > > > 
-> > > > I think in this case the easiest way is attaching gdb with a breakpoint.
-> > > 
-> > > I noticed this in my list of open regressions. It seems there wasn't any
-> > > progress to get this regression fixed (please let me know in case I
-> > > missed something), but I guess nobody considered it urgent which is
-> > > likely not that much of a problem in this case.
-> > 
-> > Yes, sorry, I tried to get gdb to reveal something but I couldn't get it
-> > to work then I had to move onto other work. We have worked around this
-> > for the time being but it would still be nice to figure out what is
-> > going on here; I am just not sure when I am going to have time to
-> > participate in that process.
-> > 
-> 
-> This fixes it for me, can you check it?
+On Fri, May 20, 2022, Kees Cook wrote:
+> GCC 12 sees that it might be possible for "nr" to be outside the _regs
+> array. Add explicit bounds checking.
 
-Yes, that works for me as well, thanks for looking into it!
+I think GCC 12 is wrong.
 
-Tested-by: Nathan Chancellor <nathan@kernel.org>
+There are four uses of reg_rmw() that don't use hardcoded registers:
 
-> diff --git a/arch/um/drivers/chan_user.c b/arch/um/drivers/chan_user.c
-> index 6040817c036f..25727ed648b7 100644
-> --- a/arch/um/drivers/chan_user.c
-> +++ b/arch/um/drivers/chan_user.c
-> @@ -220,7 +220,7 @@ static int winch_tramp(int fd, struct tty_port *port, int *fd_out,
->  		       unsigned long *stack_out)
->  {
->  	struct winch_data data;
-> -	int fds[2], n, err;
-> +	int fds[2], n, err, pid;
->  	char c;
->  
->  	err = os_pipe(fds, 1, 1);
-> @@ -238,8 +238,9 @@ static int winch_tramp(int fd, struct tty_port *port, int *fd_out,
->  	 * problem with /dev/net/tun, which if held open by this
->  	 * thread, prevents the TUN/TAP device from being reused.
->  	 */
-> -	err = run_helper_thread(winch_thread, &data, CLONE_FILES, stack_out);
-> -	if (err < 0) {
-> +	pid = run_helper_thread(winch_thread, &data, CLONE_FILES, stack_out);
-> +	if (pid < 0) {
-> +		err = pid;
->  		printk(UM_KERN_ERR "fork of winch_thread failed - errno = %d\n",
->  		       -err);
->  		goto out_close;
-> @@ -263,7 +264,7 @@ static int winch_tramp(int fd, struct tty_port *port, int *fd_out,
->  		goto out_close;
->  	}
->  
-> -	return err;
-> +	return pid;
->  
->   out_close:
->  	close(fds[1]);
-> 
-> 
-> Kind of obvious, really. :)
-> 
-> johannes
+   $ git grep reg_rmw | grep -v VCPU_REGS_
+   emulate.c:static ulong *reg_rmw(struct x86_emulate_ctxt *ctxt, unsigned nr)
+1  emulate.c:	ulong *preg = reg_rmw(ctxt, reg);
+2  emulate.c:		p = (unsigned char *)reg_rmw(ctxt, modrm_reg & 3) + 1;
+3  emulate.c:		p = reg_rmw(ctxt, modrm_reg);
+4  emulate.c:		assign_register(reg_rmw(ctxt, reg), val, ctxt->op_bytes);
+
+#1 has three users, but two of those use hardcoded registers.
+
+  $ git grep register_address_increment | grep -v VCPU_REGS_
+  emulate.c:register_address_increment(struct x86_emulate_ctxt *ctxt, int reg, int inc)
+  emulate.c:	register_address_increment(ctxt, reg, df * op->bytes);
+ 
+and that last one is string_addr_inc(), which is only called with RDI or RSI.
+
+#2 can't overflow as the register can only be 0-3 (yay AH/BH/CH/DH operands).
+
+#3 is the !highbyte path of decode_register(), and is a bit messy, but modrm_reg
+is always sanitized.
+
+   $ git grep -E "decode_register\("
+   emulate.c:static void *decode_register(struct x86_emulate_ctxt *ctxt, u8 modrm_reg,
+a  emulate.c:      op->addr.reg = decode_register(ctxt, reg, ctxt->d & ByteOp);
+b  emulate.c:              op->addr.reg = decode_register(ctxt, ctxt->modrm_rm,
+c  emulate.c:                      ctxt->memop.addr.reg = decode_register(ctxt,
+                                                                          ctxt->modrm_rm, true);
+
+For (b) and (c), modrm_reg == ctxt->modrm_rm, which is computed in one place and
+is bounded to 0-15:
+
+	base_reg = (ctxt->rex_prefix << 3) & 8; /* REX.B */
+	ctxt->modrm_rm = base_reg | (ctxt->modrm & 0x07);
+
+For (a), "reg" is either modrm_reg or a register that is encoded in the opcode,
+both of which are again bounded to 0-15:
+
+	unsigned reg = ctxt->modrm_reg;
+
+	if (!(ctxt->d & ModRM))
+		reg = (ctxt->b & 7) | ((ctxt->rex_prefix & 1) << 3);
+
+and
+
+	ctxt->modrm_reg = ((ctxt->rex_prefix << 1) & 8); /* REX.R */
+	ctxt->modrm_reg |= (ctxt->modrm & 0x38) >> 3;
+
+#4 is em_popa() and is just funky hardcoding of popping RAX-RDI, minus RSP.
+
+I did the same exercise for reg_reg() and write_reg(), and the handful of
+non-hardcoded use are all bounded in similar ways.
+
+> In function 'reg_read',
+>     inlined from 'reg_rmw' at ../arch/x86/kvm/emulate.c:266:2:
+
+Is there more of the "stack" available?  I don't mind the WARN too much, but if
+there is a bug lurking I would much rather fix the bug.
+
+> ../arch/x86/kvm/emulate.c:254:27: warning: array subscript 32 is above array bounds of 'long unsigned int[17]' [-Warray-bounds]
+>   254 |         return ctxt->_regs[nr];
+>       |                ~~~~~~~~~~~^~~~
+> In file included from ../arch/x86/kvm/emulate.c:23:
+> ../arch/x86/kvm/kvm_emulate.h: In function 'reg_rmw':
+> ../arch/x86/kvm/kvm_emulate.h:366:23: note: while referencing '_regs'
+>   366 |         unsigned long _regs[NR_VCPU_REGS];
+>       |                       ^~~~~

@@ -2,172 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 640F552EBAC
+	by mail.lfdr.de (Postfix) with ESMTP id B07CB52EBAD
 	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 14:12:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346765AbiETMMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 08:12:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45298 "EHLO
+        id S1349083AbiETMMb convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 20 May 2022 08:12:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237665AbiETMME (ORCPT
+        with ESMTP id S1349060AbiETMMZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 08:12:04 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A04B15EA62
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 05:11:59 -0700 (PDT)
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 887F73F1F3
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 12:11:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1653048717;
-        bh=BbZQ2v7/O1XNxv2l6ZiEn/Rj5+K5y5FEa7M1oafefgw=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=La3gNyCoGQlRcMD2Jl3/gCT9tGNrHI5p33DAXDh4JVw7sL0wL3dcb+CW/eC2weNur
-         5ZFDM0PuQkoUW4oflGEMVcRELyD41ODy16qiTOtMr/PCSctPPAllJbEtEGqlZzBiNX
-         xWvs2VvbiQQ2QBqFlbnqlj3PaZ3ko5BEBanFvuPBKzGU8XWxTob/REoSevG1krFLa2
-         rOZnhwYlEsVI4WbbtJbFI3wGYQ/3UTAZqY9BNoupiIfoGVtQxZJhb9BwaoDCJGGENb
-         yO3V2MeRabZLub+LCZ8d61YOto5OkK8uNeMUU/EVRarY6oMijUsQUs866rFeO9v06l
-         UuiUW0KCEUi/Q==
-Received: by mail-ej1-f70.google.com with SMTP id gh15-20020a170906e08f00b006fea2a22319so1466511ejb.20
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 05:11:57 -0700 (PDT)
+        Fri, 20 May 2022 08:12:25 -0400
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96066153526;
+        Fri, 20 May 2022 05:12:24 -0700 (PDT)
+Received: by mail-qv1-f41.google.com with SMTP id s5so6505508qvo.12;
+        Fri, 20 May 2022 05:12:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=BbZQ2v7/O1XNxv2l6ZiEn/Rj5+K5y5FEa7M1oafefgw=;
-        b=xZyXEqqEGI1ik/0RBHJRs2pfe4HnG2F7eFevLKOcKRGXsgv3qEYHNxxDkJ4JNRtt6l
-         61EqFsHCFYj626qvL07vVYwmWvkPLgxBi8eXuhUPTrW94zrB4AcUjIQIBAernq9+6t97
-         FMdK++cT3CF9yBIkuN1w0P45LIuY+U/6l4agjxg/DBzeBBre8sI2UqgwNAztl2gpf5BP
-         iLswt2UvzZhUbx1nMiQbWrapCMIeDknHb0MsLNaT1QETEji793m0i9Mkr3dD9bvwws83
-         FeVDwHCRuohfubXmcYeyptDfG8YxB7tZ9HtPi/wkZjZfiP7MopASK8xzub3aks1wwv0Q
-         Vd4Q==
-X-Gm-Message-State: AOAM533shpxMLGnbZbGkAe30YSJJYNtKqfmwic3Q3aOVQvOVrkCIQaZI
-        8ZbuNezkmQ5OKqnsOcwAxM6MukqAZommfX5ydV4T+zlpuYIx28KTABqXYJ1SRAe9y8yyFaNQjlX
-        f5A4xaEBQSCjm2NtGGRhi0ScJFYNNW/SCeUiEH8QZ8Q==
-X-Received: by 2002:a17:907:3e07:b0:6f0:270c:1121 with SMTP id hp7-20020a1709073e0700b006f0270c1121mr8481906ejc.137.1653048717229;
-        Fri, 20 May 2022 05:11:57 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJys+rXcRkBah3y4A8Ivr51zp1KXUkCKOzJC77NGpxzecgku3TDy2b6vWrZwTWYFUrWMpOX1dg==
-X-Received: by 2002:a17:907:3e07:b0:6f0:270c:1121 with SMTP id hp7-20020a1709073e0700b006f0270c1121mr8481891ejc.137.1653048717052;
-        Fri, 20 May 2022 05:11:57 -0700 (PDT)
-Received: from gollum.fritz.box ([194.191.244.86])
-        by smtp.gmail.com with ESMTPSA id ml13-20020a170906cc0d00b006fe90a8459dsm2432866ejb.166.2022.05.20.05.11.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 05:11:56 -0700 (PDT)
-From:   Juerg Haefliger <juerg.haefliger@canonical.com>
-X-Google-Original-From: Juerg Haefliger <juergh@canonical.com>
-To:     davem@davemloft.net, sparclinux@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Juerg Haefliger <juergh@canonical.com>
-Subject: [PATCH] sparc: Kconfig: Fix indentation and add comments
-Date:   Fri, 20 May 2022 14:11:53 +0200
-Message-Id: <20220520121153.148573-1-juergh@canonical.com>
-X-Mailer: git-send-email 2.32.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=txKFbhPEueIo/aj6c1+wzIrPvMm+5Ur9CFzaUN2DGCU=;
+        b=wGmR9+ZDYNEGn2IPBM2LXDNkJeBt0iOS9b3DlbTogKHuauzOoO9sBRexDhFZgX9P6e
+         3JTCIbZH22hOW5vJ/oaAG39iLUvj+RYGhp0qOdhaPg6vkPBvuf58CbY2OhmlD/wWQl9c
+         IgRL3Tlid5Dnwf8MdK4OTIGFBPcyz/hBiCPtu96NSOOE+b3UhNu/wqv/ZgyqQsAkJ1O1
+         VJY/LylhTPYfw49yi5OYcHASMWoFjr/vhV0VKfN5BGTVGWhtYF7O0v+2HennZlNiM0ML
+         NXDH3x2LY7vMv2XDy+E6ILLctK/asUoLGu17Hx6lhem7FCGqOKcEZ1kTuUkNqMWwwJT4
+         q2xw==
+X-Gm-Message-State: AOAM532CxsCPvD0L01CfaqE2552CgjDTnMXtX/HEfywmEEO/oPoE7SAM
+        0tMotVS6QJrpF19/LKNQSvDp9+R6GrRV8Q==
+X-Google-Smtp-Source: ABdhPJwAOlNx2QwqG6tMwk4V+tBjpJ/rAke1ZNihGpNxbdutNmhrUejVWY5cguWX0t5YuglTSVdB/Q==
+X-Received: by 2002:ad4:574f:0:b0:461:df46:af7b with SMTP id q15-20020ad4574f000000b00461df46af7bmr7548074qvx.53.1653048743205;
+        Fri, 20 May 2022 05:12:23 -0700 (PDT)
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
+        by smtp.gmail.com with ESMTPSA id d23-20020ac84e37000000b002f3ce9c0601sm3077053qtw.3.2022.05.20.05.12.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 May 2022 05:12:22 -0700 (PDT)
+Received: by mail-yb1-f169.google.com with SMTP id a3so13865583ybg.5;
+        Fri, 20 May 2022 05:12:22 -0700 (PDT)
+X-Received: by 2002:a05:6902:389:b0:633:31c1:d0f7 with SMTP id
+ f9-20020a056902038900b0063331c1d0f7mr8926767ybs.543.1653048742167; Fri, 20
+ May 2022 05:12:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220520094155.313784-1-herve.codina@bootlin.com>
+In-Reply-To: <20220520094155.313784-1-herve.codina@bootlin.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 20 May 2022 14:12:10 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWc2W1YY=EP49bQ07bO4-WqQh-MbAPr7s153VqSCxmk2w@mail.gmail.com>
+Message-ID: <CAMuHMdWc2W1YY=EP49bQ07bO4-WqQh-MbAPr7s153VqSCxmk2w@mail.gmail.com>
+Subject: Re: [PATCH v6 0/6] RZN1 USB Host support
+To:     Herve Codina <herve.codina@bootlin.com>
+Cc:     Marek Vasut <marek.vasut+renesas@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Clement Leger <clement.leger@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The convention for indentation seems to be a single tab. Help text is
-further indented by an additional two whitespaces. Fix the lines that
-violate these rules.
+Hi Hervé,
 
-While add it, add trailing comments to endif and endmenu statements for
-better readability.
+On Fri, May 20, 2022 at 11:42 AM Herve Codina <herve.codina@bootlin.com> wrote:
+> This series add support for the USB Host controllers available on
+> RZN1 (r9a06g032) SOC.
+>
+> These USB Host controllers are PCI OHCI/EHCI controllers located
+> behind a bridge.
 
-Signed-off-by: Juerg Haefliger <juergh@canonical.com>
----
- arch/sparc/Kconfig | 34 +++++++++++++++++-----------------
- 1 file changed, 17 insertions(+), 17 deletions(-)
+Thanks for your series!
 
-diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
-index 9200bc04701c..3c97725fe75c 100644
---- a/arch/sparc/Kconfig
-+++ b/arch/sparc/Kconfig
-@@ -227,7 +227,7 @@ config HOTPLUG_CPU
- 
- if SPARC64
- source "drivers/cpufreq/Kconfig"
--endif
-+endif # SPARC64
- 
- config US3_MC
- 	tristate "UltraSPARC-III Memory Controller driver"
-@@ -283,7 +283,7 @@ config FORCE_MAX_ZONEORDER
- 
- if SPARC64
- source "kernel/power/Kconfig"
--endif
-+endif # SPARC64
- 
- config SCHED_SMT
- 	bool "SMT (Hyperthreading) scheduler support"
-@@ -382,33 +382,33 @@ config UBOOT_LOAD_ADDR
- 	hex "uImage Load Address"
- 	default 0x40004000
- 	help
--	 U-Boot kernel load address, the address in physical address space
--	 where u-boot will place the Linux kernel before booting it.
--	 This address is normally the base address of main memory + 0x4000.
-+	  U-Boot kernel load address, the address in physical address space
-+	  where u-boot will place the Linux kernel before booting it.
-+	  This address is normally the base address of main memory + 0x4000.
- 
- config UBOOT_FLASH_ADDR
- 	hex "uImage.o Load Address"
- 	default 0x00080000
- 	help
--	 Optional setting only affecting the uImage.o ELF-image used to
--	 download the uImage file to the target using a ELF-loader other than
--	 U-Boot. It may for example be used to download an uImage to FLASH with
--	 the GRMON utility before even starting u-boot.
-+	  Optional setting only affecting the uImage.o ELF-image used to
-+	  download the uImage file to the target using a ELF-loader other than
-+	  U-Boot. It may for example be used to download an uImage to FLASH with
-+	  the GRMON utility before even starting u-boot.
- 
- config UBOOT_ENTRY_ADDR
- 	hex "uImage Entry Address"
- 	default 0xf0004000
- 	help
--	 Do not change this unless you know what you're doing. This is
--	 hardcoded by the SPARC32 and LEON port.
-+	  Do not change this unless you know what you're doing. This is
-+	  hardcoded by the SPARC32 and LEON port.
- 
--	 This is the virtual address u-boot jumps to when booting the Linux
--	 Kernel.
-+	  This is the virtual address u-boot jumps to when booting the Linux
-+	  Kernel.
- 
--endmenu
--endif
-+endmenu # "U-Boot options"
-+endif # SPARC_LEON
- 
--endmenu
-+endmenu # "Processor type and features"
- 
- menu "Bus options (PCI etc.)"
- config SBUS
-@@ -478,7 +478,7 @@ config SPARC64_PCI_MSI
- 	default y
- 	depends on SPARC64_PCI && PCI_MSI
- 
--endmenu
-+endmenu # "Bus options (PCI etc.)"
- 
- config COMPAT
- 	bool
--- 
-2.32.0
+> Herve Codina (6):
+>   dt-bindings: PCI: pci-rcar-gen2: Convert bindings to json-schema
+>   dt-bindings: PCI: renesas,pci-rcar-gen2: Add device tree support for
+>     r9a06g032
+>   PCI: rcar-gen2: Add RZ/N1 SOCs family compatible string
+>   ARM: dts: r9a06g032: Add internal PCI bridge node
+>   ARM: dts: r9a06g032: Add USB PHY DT support
+>   ARM: dts: r9a06g032: Link the PCI USB devices to the USB PHY
 
+As I had applied v5 of the last 3 patches to renesas-devel, and they
+are already present in soc/for-next, there is no need to resend them.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

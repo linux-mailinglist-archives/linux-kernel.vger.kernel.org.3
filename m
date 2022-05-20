@@ -2,146 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F39A52E9B5
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 12:14:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1373852E9BC
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 12:16:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347983AbiETKOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 06:14:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57698 "EHLO
+        id S1348066AbiETKQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 06:16:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236205AbiETKOo (ORCPT
+        with ESMTP id S1346577AbiETKQT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 06:14:44 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89EFE6CA89
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 03:14:43 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id ay35so2687302wmb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 03:14:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=YI47hgicQMxxxQU8hmpn8OChFvZfMABxIXxG9XMziXU=;
-        b=B6xXaCz/9Z8jPhpJ6mtVdO7hkOOPdVdMi4Br/t/hDUB+YC8X9ZDwbJcR3ju1QawwHc
-         EswtRNZ1IyK730pTuQhP3uAIu9sl/aCUWNw1WVi85nReMaIiw4D2JWW86ZUw0V5wYXOx
-         4Z0Y3Mt+ahHo87vwo5C0i9ZVJWisUBEfAa2QnaLah4lDH0c7EIGC7ZqysxMUe2qP6j3x
-         Uqsrvwd3l1d2x9uUZtKQDfyQeHKP/UxjXk1ZRU6ajJpnqm85U2GZVHLR0RXsa0KzS2ku
-         zH0OtdW1ZZHLanRQNX1zPCrWEeu5wIBsvVdYCinOA0tWAHV1et6tTYklCa9GNKvYdxCJ
-         ohjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=YI47hgicQMxxxQU8hmpn8OChFvZfMABxIXxG9XMziXU=;
-        b=S71s2DA3EE06VySVZnwyYIlqUyWCE4cza1kPDujx7lluok/dnbIMf6sGoIJ92j7urM
-         D9wdw905gnKFfkr0DrJZukPGeH/vTx3hnEmlsxxKU1+kRQjMRhXJkvbhyZ/ON2zhhIAq
-         pm6bVgM9e/dNpR5ZsoSyObrLkwFv8QYhHZQATY7uQS2CeOBvzKc6dydLG7i/64r4gSIG
-         J8eo0nC8El/rDREI8SdQZnvdXtib9Fw8YJbIeaccgDSgK0ArDcjH43JJAugWgpAt+xDE
-         7AUi71Iqg+ala8B8IywgR17b9ba653wrCtyjgkF39Fbr9ZF8jAUuqUBrGdc4DCAg9S+H
-         ZhxA==
-X-Gm-Message-State: AOAM531Rw50QA+n13dij6do/3LpMn4hjdeajj/9ELuuJS0JcktNsuWTh
-        PSB4lPZ41+kAOwehmhGeEQ561A==
-X-Google-Smtp-Source: ABdhPJw/Nl2hbEXYtjhjRz+i2/tfpFrVP4oUqSoMpKliGp2zwr3AlxitGZj40hxVFsRnsfmruCJAeQ==
-X-Received: by 2002:a05:600c:a53:b0:394:7a51:cb71 with SMTP id c19-20020a05600c0a5300b003947a51cb71mr8314724wmq.148.1653041681893;
-        Fri, 20 May 2022 03:14:41 -0700 (PDT)
-Received: from elver.google.com ([2a00:79e0:15:13:bae2:f132:a26:fae2])
-        by smtp.gmail.com with ESMTPSA id c11-20020adfa30b000000b0020d0b2de858sm2167642wrb.33.2022.05.20.03.14.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 03:14:41 -0700 (PDT)
-Date:   Fri, 20 May 2022 12:14:35 +0200
-From:   Marco Elver <elver@google.com>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     catalin.marinas@arm.com, will@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        mark.rutland@arm.com, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org, paulmck@kernel.org,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v2 2/2] arm64: kcsan: Support detecting more missing
- memory barriers
-Message-ID: <YodqC/HKVJLAjpQY@elver.google.com>
-References: <20220520031548.175582-1-wangkefeng.wang@huawei.com>
- <20220520031548.175582-3-wangkefeng.wang@huawei.com>
+        Fri, 20 May 2022 06:16:19 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3190522F2
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 03:16:16 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220520101612euoutp02184bc6af07a887caf76322898d58cc1d~wyLvJDPxr2361223612euoutp02Y
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 10:16:12 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220520101612euoutp02184bc6af07a887caf76322898d58cc1d~wyLvJDPxr2361223612euoutp02Y
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1653041772;
+        bh=FtiPxxeAqMIydXwHrRmAPLbmQRTffpcOCZWfzxgX4dc=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=lbsQvIKjmr7DQm90bC35XjusJN3VDdtxYqakSNKuWhxjpVZM3XI8N8B5gb36z8DIB
+         6w+vF34ajTMKNRA2/wDSKjxb1YUOSlpaTjlsviiSRmfCATSwUXtjhTUVZxqj1gsZOP
+         4+IeCbocrVHw7VRQL61WYU1TZtaKhRO0ogqy8tZ4=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20220520101611eucas1p13dd922345f7e91a0211cced9694b3ca9~wyLuh2GuU0792907929eucas1p1Q;
+        Fri, 20 May 2022 10:16:11 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id 07.A9.10009.B6A67826; Fri, 20
+        May 2022 11:16:11 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220520101610eucas1p1822ca6014e2a1d55ae74476f83c4de1d~wyLuEwPad0813608136eucas1p1M;
+        Fri, 20 May 2022 10:16:10 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220520101610eusmtrp1b047ec44358d3e2d4b2d8fd18217aacf~wyLuDudnP3260932609eusmtrp1e;
+        Fri, 20 May 2022 10:16:10 +0000 (GMT)
+X-AuditID: cbfec7f2-e95ff70000002719-0a-62876a6b4f0d
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 76.A7.09522.A6A67826; Fri, 20
+        May 2022 11:16:10 +0100 (BST)
+Received: from CAMSVWEXC01.scsc.local (unknown [106.1.227.71]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220520101610eusmtip1c7c8b787f20b055e8d604b8a9c64259c~wyLt1hgig2764527645eusmtip1t;
+        Fri, 20 May 2022 10:16:10 +0000 (GMT)
+Received: from localhost (106.210.248.142) by CAMSVWEXC01.scsc.local
+        (2002:6a01:e347::6a01:e347) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
+        Fri, 20 May 2022 11:16:09 +0100
+Date:   Fri, 20 May 2022 12:16:08 +0200
+From:   Javier =?utf-8?B?R29uesOhbGV6?= <javier.gonz@samsung.com>
+To:     Johannes Thumshirn <Johannes.Thumshirn@wdc.com>
+CC:     Hannes Reinecke <hare@suse.de>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Theodore Ts'o <tytso@mit.edu>, Christoph Hellwig <hch@lst.de>,
+        Pankaj Raghav <p.raghav@samsung.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "pankydev8@gmail.com" <pankydev8@gmail.com>,
+        "gost.dev@samsung.com" <gost.dev@samsung.com>,
+        "jiangbo.365@bytedance.com" <jiangbo.365@bytedance.com>,
+        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "dm-devel@redhat.com" <dm-devel@redhat.com>,
+        "dsterba@suse.com" <dsterba@suse.com>,
+        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
+        Jaegeuk Kim <jaegeuk@kernel.org>
+Subject: Re: [dm-devel] [PATCH v4 00/13] support non power of 2 zoned
+ devices
+Message-ID: <20220520101608.m6lngep5bvp22k6p@ArmHalley.local>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"; format="flowed"
 Content-Disposition: inline
-In-Reply-To: <20220520031548.175582-3-wangkefeng.wang@huawei.com>
-User-Agent: Mutt/2.1.4 (2021-12-11)
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <PH0PR04MB741634259FDCF264BF1CA7259BD39@PH0PR04MB7416.namprd04.prod.outlook.com>
+X-Originating-IP: [106.210.248.142]
+X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
+        CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrAKsWRmVeSWpSXmKPExsWy7djPc7rZWe1JBi+milmsvtvPZvH77Hlm
+        i73vZrNaXPjRyGSxZ9EkJouVq48yWTxZP4vZoufABxaLv133mCz23tK2uPR4BbvFnr0nWSwu
+        75rDZjF/2VN2ixsTnjJarLn5lMWitecnu4Ogx78Ta9g8ds66y+5x+Wypx6ZVnWwem5fUe+y+
+        2cDm0XTmKLPHztb7rB7v911l81i/5SqLx+bT1R6fN8l5tB/oZgrgjeKySUnNySxLLdK3S+DK
+        uHnwD1vBep6KJbM+MzcwNnN1MXJySAiYSHRN+cXYxcjFISSwglHi2cKVLBDOF0aJX/OXQjmf
+        GSXWTNjKAtPSeWMJM0RiOaPEwrfTWEESYFVPHptCJLYySkx985qti5GDg0VAVeLpI22QGjYB
+        e4lLy24xg4RFBIwlfq6zBilnFnjOJrH01w92kBphAX+JibvusIHYvAK2Esd2NjBD2IISJ2c+
+        ATuCWcBKovNDEyvIHGYBaYnl/zggwvISzVtng5VzCsRKtD5ZAFYiIaAssXy6L8T5tRJrj51h
+        B1krIfCJU6L1SCMTRMJFor/3CCOELSzx6vgWdghbRuL05B6o37MlLp7pZoawSyQWvz/GDDHf
+        WqLvTA5E2FFi16T/jBBhPokbbwUhLuOTmLRtOlQ1r0RHm9AERpVZSN6aheStWQhvzULy1gJG
+        llWM4qmlxbnpqcWGeanlesWJucWleel6yfm5mxiBifL0v+OfdjDOffVR7xAjEwfjIUYJDmYl
+        EV7G3JYkId6UxMqq1KL8+KLSnNTiQ4zSHCxK4rzJmRsShQTSE0tSs1NTC1KLYLJMHJxSDUyG
+        nEIXztz3vhu9S/FVmABz2MlOXaaDKbsD2bYtdfEyLQz+7Pr8jYyjzfrSV4J3EtXtd55n9NDU
+        vfO8svHUHd7DJTesQ3LTL05oPO3rNEdm2pwY5wrVfz+ezSwsqJoVtPvSQ+Eb8sI36367rpv8
+        OUszwsj6d2Dit5po1e1fdd88W3muat/9OW89w4RLJ+k8sHmdJ7Xp8ami/cYyvierZucv/yXk
+        JLr31ZfgH0dfrKg7+tX8RtyVDz1SeQceyhfdtOoyqTgSfL9HZ664sYjwlNYDcx7c8na996c/
+        6UX/qYOLIz6J3+UqZbm19NkXz9kve/bsvrz2q9Ox0Pp1BxLU/9zdEOP/fN5V/ndFC2cZGxvL
+        KrEUZyQaajEXFScCAP71JLADBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprDKsWRmVeSWpSXmKPExsVy+t/xu7pZWe1JBm9uGVisvtvPZvH77Hlm
+        i73vZrNaXPjRyGSxZ9EkJouVq48yWTxZP4vZoufABxaLv133mCz23tK2uPR4BbvFnr0nWSwu
+        75rDZjF/2VN2ixsTnjJarLn5lMWitecnu4Ogx78Ta9g8ds66y+5x+Wypx6ZVnWwem5fUe+y+
+        2cDm0XTmKLPHztb7rB7v911l81i/5SqLx+bT1R6fN8l5tB/oZgrgjdKzKcovLUlVyMgvLrFV
+        ija0MNIztLTQMzKx1DM0No+1MjJV0rezSUnNySxLLdK3S9DLuHnwD1vBep6KJbM+MzcwNnN1
+        MXJySAiYSHTeWMLcxcjFISSwlFHi5dU/bBAJGYlPVz6yQ9jCEn+udbFBFH1klPh7/yErhLOV
+        UeLJ/DdA7RwcLAKqEk8faYM0sAnYS1xadgssLCJgLPFznTVIObPAUzaJxR9PsIDUCAv4Slyd
+        8gbM5hWwlTi2swHqit0sEucXLIVKCEqcnPkEzGYWsJCYOf88I8hQZgFpieX/OCDC8hLNW2cz
+        g9icArESrU8WsIKUSAgoSyyf7gtxf63Eq/u7GScwisxCMnQWkqGzEIbOQjJ0ASPLKkaR1NLi
+        3PTcYkO94sTc4tK8dL3k/NxNjMBksu3Yz807GOe9+qh3iJGJg/EQowQHs5IIL2NuS5IQb0pi
+        ZVVqUX58UWlOavEhRlNgAE1klhJNzgems7ySeEMzA1NDEzNLA1NLM2MlcV7Pgo5EIYH0xJLU
+        7NTUgtQimD4mDk6pBibmupTz6mKn6297tPhpBH5z/B5ZeVtmweyHqhETZLJSC8yqVDfv77e8
+        qPJPRajC484M9dSph6Q60lb5T7zUfrWySDxlocBNE4UP4ntUFe98XbZVTeUxU2W1Bae2h4tL
+        4FmZS1e+sP5OMuotX35x8vb4h5sufNTOy3RZffpzxfK4pIcfqm4+eJvPt2HvRP4bNXETg48a
+        uF05tK5SwKyCs5/z/aV5M/T3cm9S6xWQYq/Yta3rYnLK1gMbDPZP97/p+VDL6qmbQZxl9twD
+        cTymGg6xEdLZ7mEKRYa5McqX1rC8vPXhGvMV2eWnG1M0jEtOqE/vOCYn3LJYwWi/RLoAc+jL
+        W8mabN/MGBcbbPPfp8RSnJFoqMVcVJwIAH96gSuvAwAA
+X-CMS-MailID: 20220520101610eucas1p1822ca6014e2a1d55ae74476f83c4de1d
+X-Msg-Generator: CA
+X-RootMTR: 20220520101610eucas1p1822ca6014e2a1d55ae74476f83c4de1d
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220520101610eucas1p1822ca6014e2a1d55ae74476f83c4de1d
+References: <20220517081048.GA13947@lst.de> <YoPAnj9ufkt5nh1G@mit.edu>
+        <7f9cb19b-621b-75ea-7273-2d2769237851@opensource.wdc.com>
+        <20220519031237.sw45lvzrydrm7fpb@garbanzo>
+        <69f06f90-d31b-620b-9009-188d1d641562@opensource.wdc.com>
+        <PH0PR04MB74166C87F694B150A5AE0F009BD09@PH0PR04MB7416.namprd04.prod.outlook.com>
+        <4a8f0e1b-0acb-1ed4-8d7a-c9ba93fcfd02@opensource.wdc.com>
+        <16f3f9ee-7db7-2173-840c-534f67bcaf04@suse.de>
+        <20220520062720.wxdcp5lkscesppch@mpHalley-2.localdomain>
+        <PH0PR04MB741634259FDCF264BF1CA7259BD39@PH0PR04MB7416.namprd04.prod.outlook.com>
+        <CGME20220520101610eucas1p1822ca6014e2a1d55ae74476f83c4de1d@eucas1p1.samsung.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 11:15AM +0800, Kefeng Wang wrote:
-> As "kcsan: Support detecting a subset of missing memory barriers"[1]
-> introduced KCSAN_STRICT/KCSAN_WEAK_MEMORY which make kcsan detects
-> more missing memory barrier, but arm64 don't have KCSAN instrumentation
-> for barriers, so the new selftest test_barrier() and test cases for
-> memory barrier instrumentation in kcsan_test module will fail, even
-> panic on selftest.
-> 
-> Let's prefix all barriers with __ on arm64, as asm-generic/barriers.h
-> defined the final instrumented version of these barriers, which will
-> fix the above issues.
-> 
-> Note, barrier instrumentation that can be disabled via __no_kcsan with
-> appropriate compiler-support (and not just with objtool help), see
-> commit bd3d5bd1a0ad ("kcsan: Support WEAK_MEMORY with Clang where no
-> objtool support exists"), it adds disable_sanitizer_instrumentation to
-> __no_kcsan attribute which will remove all sanitizer instrumentation fully
-> (with Clang 14.0). Meanwhile, GCC does the same thing with no_sanitize.
-> 
-> [1] https://lore.kernel.org/linux-mm/20211130114433.2580590-1-elver@google.com/
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-> ---
->  arch/arm64/include/asm/barrier.h | 12 ++++++------
->  include/asm-generic/barrier.h    |  4 ++++
->  2 files changed, 10 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/arm64/include/asm/barrier.h b/arch/arm64/include/asm/barrier.h
-> index 9f3e2c3d2ca0..2cfc4245d2e2 100644
-> --- a/arch/arm64/include/asm/barrier.h
-> +++ b/arch/arm64/include/asm/barrier.h
-> @@ -50,13 +50,13 @@
->  #define pmr_sync()	do {} while (0)
->  #endif
->  
-> -#define mb()		dsb(sy)
-> -#define rmb()		dsb(ld)
-> -#define wmb()		dsb(st)
-> +#define __mb()		dsb(sy)
-> +#define __rmb()		dsb(ld)
-> +#define __wmb()		dsb(st)
->  
-> -#define dma_mb()	dmb(osh)
-> -#define dma_rmb()	dmb(oshld)
-> -#define dma_wmb()	dmb(oshst)
-> +#define __dma_mb()	dmb(osh)
-> +#define __dma_rmb()	dmb(oshld)
-> +#define __dma_wmb()	dmb(oshst)
->  
->  #define io_stop_wc()	dgh()
->  
-> diff --git a/include/asm-generic/barrier.h b/include/asm-generic/barrier.h
-> index fd7e8fbaeef1..18863c50e9ce 100644
-> --- a/include/asm-generic/barrier.h
-> +++ b/include/asm-generic/barrier.h
-> @@ -38,6 +38,10 @@
->  #define wmb()	do { kcsan_wmb(); __wmb(); } while (0)
->  #endif
->  
-> +#ifdef __dma_mb
-> +#define dma_mb()	do { kcsan_mb(); __dma_mb(); } while (0)
-> +#endif
+On 20.05.2022 09:30, Johannes Thumshirn wrote:
+>On 20/05/2022 08:27, Javier González wrote:
+>> So you are suggesting adding support for !PO2 in the block layer and
+>> then a dm to present the device as a PO2 to the FS? This at least
+>> addresses the hole issue for raw zoned block devices, so it can be a
+>> first step.
+>>
+>> This said, it seems to me that the changes to the FS are not being a
+>> real issue. In fact, we are exposing some bugs while we generalize the
+>> zone size support.
+>>
+>> Could you point out what the challenges in btrfs are in the current
+>> patches, that it makes sense to add an extra dm layer?
+>
+>I personally don't like the padding we need to do for the super block.
+>
+>As I've pointed out to Pankaj already, I don't think it is 100% powerfail
+>safe as of now. It could probably be made, but that would also involve
+>changing non-zoned btrfs code which we try to avoid as much as we can.
+>
+>As Damien already said, we still have issues with the general zoned
+>support in btrfs, just have a look at the list of open issues [1] we
+>have.
+>
+Sounds good Johannes. I understand that the priority is to make btrfs
+stable now, before introducing more variables. Let's stick to this and
+then we can bring it back as the list of open issues becomes more
+manageable.
 
-The asm-generic changes might want to go into a separate patch, along
-with the generic definition of dma_mb() if there's no __dma_mb, as
-mentioned in the other email.
+>[1] https://protect2.fireeye.com/v1/url?k=f14a1d6f-90c10859-f14b9620-74fe485fffe0-3f1861e7739d8cc7&q=1&e=213fcc28-3f9d-41a1-b653-0dc0e203c718&u=https%3A%2F%2Fgithub.com%2Fnaota%2Flinux%2Fissues%2F
 
-Thanks,
--- Marco
+Thanks for sharing this too. It is a good way to where to help

@@ -2,102 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19FAD52E6E1
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 10:03:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9156952E6E6
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 10:04:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235920AbiETIDh convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 20 May 2022 04:03:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42702 "EHLO
+        id S238904AbiETIEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 04:04:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbiETIDf (ORCPT
+        with ESMTP id S229564AbiETIEH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 04:03:35 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E0206898F
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 01:03:32 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-231-j6MuEwWEOMq97IGnC72OWw-1; Fri, 20 May 2022 09:03:30 +0100
-X-MC-Unique: j6MuEwWEOMq97IGnC72OWw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.36; Fri, 20 May 2022 09:03:29 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.036; Fri, 20 May 2022 09:03:29 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Matthew Wilcox' <willy@infradead.org>
-CC:     'Kent Overstreet' <kent.overstreet@gmail.com>,
+        Fri, 20 May 2022 04:04:07 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9F8B149D8E;
+        Fri, 20 May 2022 01:04:05 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 24K83V7e8005202, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36504.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 24K83V7e8005202
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Fri, 20 May 2022 16:03:31 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXH36504.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Fri, 20 May 2022 16:03:30 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Fri, 20 May 2022 16:03:30 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::34e7:ab63:3da4:27c6]) by
+ RTEXMBS04.realtek.com.tw ([fe80::34e7:ab63:3da4:27c6%5]) with mapi id
+ 15.01.2308.021; Fri, 20 May 2022 16:03:30 +0800
+From:   Pkshih <pkshih@realtek.com>
+To:     "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
+CC:     "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "neojou@gmail.com" <neojou@gmail.com>,
+        "kvalo@kernel.org" <kvalo@kernel.org>,
+        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@vger.kernel.org" <linux-mm@vger.kernel.org>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>
-Subject: RE: [PATCH v2 03/28] vsprintf: %pf(%p)
-Thread-Topic: [PATCH v2 03/28] vsprintf: %pf(%p)
-Thread-Index: AQHYa6VkVQCoxy629k+LRSm5RxWDEq0mrmAQ///0sICAAMIK4A==
-Date:   Fri, 20 May 2022 08:03:29 +0000
-Message-ID: <786516a0b71a4c6689592b89b146edec@AcuMS.aculab.com>
-References: <20220519172421.162394-1-kent.overstreet@gmail.com>
- <20220519172421.162394-4-kent.overstreet@gmail.com>
- <141b17a257274fc38291cdb07e0e23b6@AcuMS.aculab.com>
- <Yoazbys+LiG0Uqcc@casper.infradead.org>
-In-Reply-To: <Yoazbys+LiG0Uqcc@casper.infradead.org>
-Accept-Language: en-GB, en-US
+        "martin.blumenstingl@googlemail.com" 
+        <martin.blumenstingl@googlemail.com>,
+        "linux@ulli-kroll.de" <linux@ulli-kroll.de>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: Re: [PATCH 10/10] rtw88: Add rtw8822cu chipset support
+Thread-Topic: [PATCH 10/10] rtw88: Add rtw8822cu chipset support
+Thread-Index: AQHYapDZWf6gD+YASkKjG/mcB1uml60m5OcA
+Date:   Fri, 20 May 2022 08:03:30 +0000
+Message-ID: <b19fcc328a8e436d27579bbf9e217a2be71b57b5.camel@realtek.com>
+References: <20220518082318.3898514-1-s.hauer@pengutronix.de>
+         <20220518082318.3898514-11-s.hauer@pengutronix.de>
+In-Reply-To: <20220518082318.3898514-11-s.hauer@pengutronix.de>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+user-agent: Evolution 3.36.1-2 
+x-originating-ip: [172.16.17.21]
+x-kse-serverinfo: RTEXMBS04.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzUvMjAg5LiK5Y2IIDA2OjM0OjAw?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <5A7F4BDA5022A641A7589E45466CD6E0@realtek.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-KSE-ServerInfo: RTEXH36504.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matthew Wilcox
-> Sent: 19 May 2022 22:15
-> 
-> On Thu, May 19, 2022 at 09:06:24PM +0000, David Laight wrote:
-> > I suspect this a very good way to blow the kernel stack.
-> > The highest stack use is already very likely to be inside
-> > the printf code in an error path somewhere.
-> 
-> ...
-> 
-> > Double copying using a temporary buffer isn't the end of the world.
-> 
-> How can you hold both of these positions simultaneously?
-
-Mostly you only need a short(ish) buffer to format a single item.
-But even a full line buffer is probably less stack than a
-nested printf call.
-It certainly makes it possible for static analysis to determine
-maximum stack depth.
-
-That made me realise that one of the problems doing static
-analysis of stack depth is indirect calls.
-The hashes that (IIRC) fine-ibt add to indirect calls
-and functions make it possible to tie these together.
-So you can determine the worst one of the called functions
-and use it for the stack depth at the call sites.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+T24gV2VkLCAyMDIyLTA1LTE4IGF0IDEwOjIzICswMjAwLCBTYXNjaGEgSGF1ZXIgd3JvdGU6DQo+
+IEFkZCBzdXBwb3J0IGZvciB0aGUgcnR3ODgyMmN1IGNoaXBzZXQgYmFzZWQgb24NCj4gaHR0cHM6
+Ly9naXRodWIuY29tL3VsbGkta3JvbGwvcnR3ODgtdXNiLmdpdA0KPiANCj4gU2lnbmVkLW9mZi1i
+eTogU2FzY2hhIEhhdWVyIDxzLmhhdWVyQHBlbmd1dHJvbml4LmRlPg0KPiAtLS0NCj4gIGRyaXZl
+cnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsvcnR3ODgvS2NvbmZpZyAgICB8IDExICsrKysrDQo+ICBk
+cml2ZXJzL25ldC93aXJlbGVzcy9yZWFsdGVrL3J0dzg4L01ha2VmaWxlICAgfCAgMyArKw0KPiAg
+ZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVhbHRlay9ydHc4OC9ydHc4ODIyYy5jIHwgMjQgKysrKysr
+KysrKysNCj4gIC4uLi9uZXQvd2lyZWxlc3MvcmVhbHRlay9ydHc4OC9ydHc4ODIyY3UuYyAgICB8
+IDQwICsrKysrKysrKysrKysrKysrKysNCj4gIC4uLi9uZXQvd2lyZWxlc3MvcmVhbHRlay9ydHc4
+OC9ydHc4ODIyY3UuaCAgICB8IDE1ICsrKysrKysNCj4gIDUgZmlsZXMgY2hhbmdlZCwgOTMgaW5z
+ZXJ0aW9ucygrKQ0KPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvbmV0L3dpcmVsZXNzL3Jl
+YWx0ZWsvcnR3ODgvcnR3ODgyMmN1LmMNCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL25l
+dC93aXJlbGVzcy9yZWFsdGVrL3J0dzg4L3J0dzg4MjJjdS5oDQo+IA0KPiANCg0KWy4uLl0NCg0K
+PiArTU9EVUxFX0FVVEhPUigiUmVhbHRlayBDb3Jwb3JhdGlvbiIpOw0KDQpPdXQgb2YgY3VyaW9z
+aXR5LCB0aGVyZSBhcmUgbWFueSBhdXRob3JzIGluIHlvdXIgcGF0Y2hzZXQuDQpEbyB5b3UgY29s
+bGVjdCB0aGVzZSBkcml2ZXIgZnJvbSB2YXJpb3VzIHBsYWNlcz8NCg0KcnR3ODcyM2R1LmM6TU9E
+VUxFX0FVVEhPUigiSGFucyBVbGxpIEtyb2xsIDxsaW51eEB1bGxpLWtyb2xsLmRlPiIpOw0KcnR3
+ODgyMWN1LmM6TU9EVUxFX0FVVEhPUigiSGFucyBVbGxpIEtyb2xsIDxsaW51eEB1bGxpLWtyb2xs
+LmRlPiIpOw0KcnR3ODgyMmJ1LmM6TU9EVUxFX0FVVEhPUigiUmVhbHRlayBDb3Jwb3JhdGlvbiIp
+Ow0KcnR3ODgyMmN1LmM6TU9EVUxFX0FVVEhPUigiUmVhbHRlayBDb3Jwb3JhdGlvbiIpOw0KdXNi
+LmM6TU9EVUxFX0FVVEhPUigiUmVhbHRlayBDb3Jwb3JhdGlvbiIpOw0KDQoNCj4gK01PRFVMRV9E
+RVNDUklQVElPTigiUmVhbHRlayA4MDIuMTFhYyB3aXJlbGVzcyA4ODIyY3UgZHJpdmVyIik7DQo+
+ICtNT0RVTEVfTElDRU5TRSgiRHVhbCBCU0QvR1BMIik7DQo+IGRpZmYgLS1naXQgYS9kcml2ZXJz
+L25ldC93aXJlbGVzcy9yZWFsdGVrL3J0dzg4L3J0dzg4MjJjdS5oDQo+IGIvZHJpdmVycy9uZXQv
+d2lyZWxlc3MvcmVhbHRlay9ydHc4OC9ydHc4ODIyY3UuaA0KPiBuZXcgZmlsZSBtb2RlIDEwMDY0
+NA0KPiBpbmRleCAwMDAwMDAwMDAwMDAwLi4xNmFmZTIyYTgyMTZjDQo+IC0tLSAvZGV2L251bGwN
+Cj4gKysrIGIvZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVhbHRlay9ydHc4OC9ydHc4ODIyY3UuaA0K
+PiBAQCAtMCwwICsxLDE1IEBADQo+ICsvKiBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjogR1BMLTIu
+MCBPUiBCU0QtMy1DbGF1c2UgKi8NCj4gKy8qIENvcHlyaWdodChjKSAyMDE4LTIwMTkgIFJlYWx0
+ZWsgQ29ycG9yYXRpb24NCj4gKyAqLw0KPiArDQo+ICsjaWZuZGVmIF9fUlRXXzg4MjJDVV9IXw0K
+PiArI2RlZmluZSBfX1JUV184ODIyQ1VfSF8NCj4gKw0KPiArLyogVVNCIFZlbmRvci9Qcm9kdWN0
+IElEcyAqLw0KPiArI2RlZmluZSBSVFdfVVNCX1ZFTkRPUl9JRF9SRUFMVEVLCQkweDBCREENCg0K
+TGlrZSBvdGhlcnMsIG1vdmUgdGhpcyB0byB1c2IuaA0KDQo+ICsjZGVmaW5lIFJUV19VU0JfUFJP
+RFVDVF9JRF9SRUFMVEVLXzg4MTJDCTB4QzgxMg0KPiArI2RlZmluZSBSVFdfVVNCX1BST0RVQ1Rf
+SURfUkVBTFRFS184ODIyQwkweEM4MkMNCj4gKw0KPiArZXh0ZXJuIHN0cnVjdCBydHdfY2hpcF9p
+bmZvIHJ0dzg4MjJjX2h3X3NwZWM7DQo+ICsNCj4gKyNlbmRpZg0KDQoNCi0tDQpQaW5nLUtlDQoN
+Cg0K

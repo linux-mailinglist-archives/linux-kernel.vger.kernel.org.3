@@ -2,124 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CDB352E973
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 11:54:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EE7252E982
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 11:58:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348011AbiETJym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 05:54:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54660 "EHLO
+        id S237918AbiETJ6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 05:58:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347989AbiETJye (ORCPT
+        with ESMTP id S234276AbiETJ6A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 05:54:34 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A1214CA1A;
-        Fri, 20 May 2022 02:54:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653040472; x=1684576472;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=e57KscECE+4podIf9mIVnQB3nlnxc3JwwKJkTZj1mHc=;
-  b=EcgcnywtfIWQu7/ht1OIxQgWwIbIe2hSNx+yuzexvNaUuRsqOm/Ox3Hm
-   YOCk7omaXQD5b3Yxqf9pXIVaoGZWS7393Cnk/Qs1C//vjtGozLt64/Jvj
-   K6A8+DL6Kg2EnWz/pjMSd6cmd6az/SyGiMPAJyloCwAHlNGD6X5FMdNIR
-   Uf4VfKa3fzI6aO17bQlJla8tNeM/XVm44mn9HB/7t5ZmGEFVMphXmHhMq
-   tYUsQOokhM2gtSVzbybHsyr0krHpz49vZaWSuOCCW+/bDhVvF3HxsoWNC
-   TnlzvXrmftPRB0Oyo7LOuql64yoo+GOewFGQ2Osl58nJoDs78PuRKt6IH
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="271376521"
-X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="271376521"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 02:54:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="557378558"
-Received: from yy-desk-7060.sh.intel.com (HELO localhost) ([10.239.159.76])
-  by orsmga002.jf.intel.com with ESMTP; 20 May 2022 02:54:29 -0700
-Date:   Fri, 20 May 2022 17:54:28 +0800
-From:   Yuan Yao <yuan.yao@linux.intel.com>
-To:     Yun Lu <luyun_611@163.com>
-Cc:     pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
-        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: x86/mmu: optimizing the code in
- mmu_try_to_unsync_pages
-Message-ID: <20220520095428.bahy37jxkznqtwx5@yy-desk-7060>
-References: <20220520060907.863136-1-luyun_611@163.com>
+        Fri, 20 May 2022 05:58:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60C855EDE2
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 02:57:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EFB4761C4A
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 09:57:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1CAFC385AA;
+        Fri, 20 May 2022 09:57:57 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="N6SXTpij"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1653040675;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Za8jSp0yqPB+l+OyGKfHicMuSJ/twvFBa+n/uLcHdb8=;
+        b=N6SXTpiji65z9HWsno1ZTPxqeuf1IQrbzM3sKT2DjEyXJZameFL/L56jdkTPB+z/D6grZz
+        PJK3j+cScfK8PueDrz08W3RCidb+eFymY1YuWIVETXTledS2YEB+M6nyPAc1sBaB8appFh
+        JXB27KsQiyyVYCfuM/AWOpSv2RciQ+Y=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id ccf116e5 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Fri, 20 May 2022 09:57:55 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>, Jens Axboe <axboe@suse.de>
+Subject: [PATCH] splice: allow direct splicing with chardevs
+Date:   Fri, 20 May 2022 11:57:47 +0200
+Message-Id: <20220520095747.123748-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220520060907.863136-1-luyun_611@163.com>
-User-Agent: NeoMutt/20171215
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 02:09:07PM +0800, Yun Lu wrote:
-> There is no need to check can_unsync and prefetch in the loop
-> every time, just move this check before the loop.
->
-> Signed-off-by: Yun Lu <luyun@kylinos.cn>
-> ---
->  arch/x86/kvm/mmu/mmu.c | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
->
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 311e4e1d7870..e51e7735adca 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -2534,6 +2534,12 @@ int mmu_try_to_unsync_pages(struct kvm *kvm, const struct kvm_memory_slot *slot,
->  	if (kvm_slot_page_track_is_active(kvm, slot, gfn, KVM_PAGE_TRACK_WRITE))
->  		return -EPERM;
->
-> +	if (!can_unsync)
-> +		return -EPERM;
-> +
-> +	if (prefetch)
-> +		return -EEXIST;
-> +
->  	/*
->  	 * The page is not write-tracked, mark existing shadow pages unsync
->  	 * unless KVM is synchronizing an unsync SP (can_unsync = false).  In
-> @@ -2541,15 +2547,9 @@ int mmu_try_to_unsync_pages(struct kvm *kvm, const struct kvm_memory_slot *slot,
->  	 * allowing shadow pages to become unsync (writable by the guest).
->  	 */
->  	for_each_gfn_indirect_valid_sp(kvm, sp, gfn) {
-> -		if (!can_unsync)
-> -			return -EPERM;
-> -
->  		if (sp->unsync)
->  			continue;
->
-> -		if (prefetch)
-> -			return -EEXIST;
-> -
+The original direct splicing mechanism from Jens required the input to
+be a regular file because it was avoiding the special socket case. It
+also recognized blkdevs as being close enough to a regular file. But it
+forgot about chardevs, which behave the same way and work fine here.
 
-Consider the case that for_each_gfn_indirect_valid_sp() loop is
-not triggered, means the gfn is not MMU page table page:
+This commit adds the missing S_ISCHR condition so that chardevs such as
+/dev/urandom can be directly spliced without strangely returning
+-EINVAL.
 
-The old behavior when : return 0;
-The new behavior with this change: returrn -EPERM / -EEXIST;
+Cc: Jens Axboe <axboe@suse.de>
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+Fixes: b92ce5589374 ("[PATCH] splice: add direct fd <-> fd splicing support")
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ fs/splice.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-It at least breaks FNAME(sync_page) -> make_spte(prefetch = true, can_unsync = false)
-which removes PT_WRITABLE_MASK from last level mapping unexpectedly.
+diff --git a/fs/splice.c b/fs/splice.c
+index 047b79db8eb5..7e673b1786fb 100644
+--- a/fs/splice.c
++++ b/fs/splice.c
+@@ -824,7 +824,7 @@ ssize_t splice_direct_to_actor(struct file *in, struct splice_desc *sd,
+ 	 * piped splicing for that!
+ 	 */
+ 	i_mode = file_inode(in)->i_mode;
+-	if (unlikely(!S_ISREG(i_mode) && !S_ISBLK(i_mode)))
++	if (unlikely(!S_ISREG(i_mode) && !S_ISBLK(i_mode) && !S_ISCHR(i_mode)))
+ 		return -EINVAL;
+ 
+ 	/*
+-- 
+2.35.1
 
-
->  		/*
->  		 * TDP MMU page faults require an additional spinlock as they
->  		 * run with mmu_lock held for read, not write, and the unsync
-> --
-> 2.25.1
->
->
-> No virus found
-> 		Checked by Hillstone Network AntiVirus
->

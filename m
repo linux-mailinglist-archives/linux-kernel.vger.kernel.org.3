@@ -2,83 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BED652E297
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 04:43:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB1C052E29B
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 04:46:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344786AbiETCnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 22:43:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51544 "EHLO
+        id S1344791AbiETCqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 22:46:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234497AbiETCnF (ORCPT
+        with ESMTP id S1344790AbiETCpy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 22:43:05 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18500146758
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 19:43:04 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id i27so13137844ejd.9
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 19:43:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OYbCF/Wdor6S6x41C8GCrQXaDG3ubugkdmo1FgeSEVU=;
-        b=RmdKa2U81HRM0iQrq3OBjkWcvUG6fMCnjls+30u/pdsiAT5Mom6VsyxM+qv/OjrSpk
-         GhXiARK+rQFYOdirEGgnvvypGcc/GKpmZtTq6renokfSaO+SbRreP40yclJ/eVG9R19s
-         FoEtkQfLDioVHxU4VfWtB6M+In74/rCHAM9jg=
+        Thu, 19 May 2022 22:45:54 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 881912FFF0
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 19:45:51 -0700 (PDT)
+Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com [209.85.161.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 1B54E402E2
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 02:45:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1653014750;
+        bh=GaatjPyXHl4SmKXxygcZKmkO/KC5Kz97rzqAvXN3cKo=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=HifUCEC0xIsGAV9qvjMaltwtEzsaCMADXfbjb4M87lkAYvocii34FNV+vufwvNHyf
+         pZB1wloQ8KNUjvmOpbeXB242jHblxfJmVy0VZ5P/NKer1qNe9eFa63YWCwbPtPYe54
+         uNFtFoUpFCMbfVs9+hgG3nais96Y4LuKWjcffmMr/Utqli9wjaIM3k7LqVn4xw8Acf
+         ta7QpMw3yOP07n0HQHAu2p0a/eOsvCfcdAsCK70Y4TJ5d1JjUUW3sDLRN5IrVU4/5m
+         m28FV3+W4aAFLPc1PPltT26bPRw39qlDy1kwKonPl1CQoZDwA+DOm7VFuMYEWtdHER
+         0rD7wiieM+lCQ==
+Received: by mail-oo1-f70.google.com with SMTP id e13-20020a056820060d00b0040e4f86c0a4so1936996oow.18
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 19:45:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=OYbCF/Wdor6S6x41C8GCrQXaDG3ubugkdmo1FgeSEVU=;
-        b=mb3ILe2MSQLtVmOeoZxlTu4kHLfGlRtyRwALNinzAs87xs62ovwzbPJOCfW0wuBS7o
-         YAg8ksv6wvXyfnQvJbd41tFtdmeC5mffWoFuzJY0GFGpUwKruYuaVIOu7gA5SRLtBIf+
-         D910fZ8/0WCCMVZJ4LNi7JdH4T1XELiOqMStu7Aynalbu8ApxgyHvT6JmydjS11jwkvj
-         sRffpg0rW5xLn3NlT9CUkwvd4Z1td6MLYs/fEwXIX6RF+z7yJbvSj/FVhcLrNGVT9DJV
-         O9eEXRqMwUZbLORwHc/bF++rhvA/EW50N0LR7flsCJJXU4rl2YSbNXvC/vCkYnL9E2ap
-         t2gA==
-X-Gm-Message-State: AOAM531YYwHvVegDlX9VU8n/1TPVCAN959rXoY5/8nCqS87ac5c7CO+b
-        U3/QSWC4kD1YGHaEvhzp50Iu4Y7/MnZ4YIDiDDlbtw==
-X-Google-Smtp-Source: ABdhPJzoEGCHel7BnFmKNlZP1FIsVE7LXNjlmiSoPgHoB42RyeIWF0smVKYX8wZZ1X5Sxu1lXHnAxgI4EdouniCE8aA=
-X-Received: by 2002:a17:906:cf9c:b0:6f5:108c:a5a with SMTP id
- um28-20020a170906cf9c00b006f5108c0a5amr6612732ejb.397.1653014582609; Thu, 19
- May 2022 19:43:02 -0700 (PDT)
+        bh=GaatjPyXHl4SmKXxygcZKmkO/KC5Kz97rzqAvXN3cKo=;
+        b=g8oUNrw6qCd7JCXeKJ4wMIdfIFUCFGc3PNBkeI/maaJvdoPYEPtEwSye5tftTb4WWt
+         N7FKk2VqIaLbrw2ooeH6NgG2v4IrI0Pwpd3KzSuBXuNctGOcFZDIAxhlZwkQY+GlW3p4
+         JntMpAOcn4LAy0il3sZ/x54SSyjeql9rQkuLWG4fuybCCCwV/eX++UZ2kL8Aenf0vIYl
+         8K3U/FKD11JBaLitjengAHEHGY6ZVWmBh8CgNMCuUSj6OLs6nkH1YhRRBjqF49JYvWrc
+         Kcn8dAE1CiSh0TGT6nEELzEP4SsjJRt3+cn4DJ1BLp7DpLVulwZ0fS+bfWb4ItBflqXF
+         TeKA==
+X-Gm-Message-State: AOAM533jmMwQV80Zdf6iQpdGU8Pp7YQLJhyzS5Ljim6yX/dULyahA3NA
+        J8qwjPiMLdhVDleXuWT7P3gWo2UTFr4yIHg8O3qFLtm24tsX8JRb8JWUvY9U3HqCN4qnV3assnt
+        /gH43IcX1j7oODkRsHk2KWyTnf6d4Gt6a0ZX48ghTyZCtr+r2GjCkuWEPRg==
+X-Received: by 2002:a05:6870:2111:b0:e6:8026:8651 with SMTP id f17-20020a056870211100b000e680268651mr4440517oae.42.1653014745863;
+        Thu, 19 May 2022 19:45:45 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwUd8npgDZFVCRK+/H03mTTbAYJXBPp30NE0Tzuyut6qHq5m/2a0jX6vwPXLG6EttAHcJwZSaW+auW+bAcL76c=
+X-Received: by 2002:a05:6870:2111:b0:e6:8026:8651 with SMTP id
+ f17-20020a056870211100b000e680268651mr4440502oae.42.1653014745511; Thu, 19
+ May 2022 19:45:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220516004311.18358-1-roger.lu@mediatek.com> <CAGXv+5GSdWPZe3fNpBJ_WW0zCL8Skg6fHx9ATxaKU1hyMEt2Ww@mail.gmail.com>
- <7h4k1ndaui.fsf@baylibre.com> <7hy1yzbtb7.fsf@baylibre.com>
- <CAGXv+5GT=3m=pVPwUOWR42BR=emCpBXvvoAiRV7YKt2kEKWdAQ@mail.gmail.com>
- <CGME20220519182512epcas1p3020bd4713580c9244f759971b8bd2c3a@epcas1p3.samsung.com>
- <7hmtfdbcsc.fsf@baylibre.com> <5a1767dc-ba2d-4de5-d8fe-2f308d3318a9@samsung.com>
-In-Reply-To: <5a1767dc-ba2d-4de5-d8fe-2f308d3318a9@samsung.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Fri, 20 May 2022 10:42:51 +0800
-Message-ID: <CAGXv+5EsgiXCpe-8H0cQ=qm_Nq+yfM_a4b1L=hOFP6mcwfZymw@mail.gmail.com>
-Subject: Re: [PATCH v25 0/7] soc: mediatek: SVS: introduce MTK SVS
-To:     Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     Kevin Hilman <khilman@kernel.org>,
-        Roger Lu <roger.lu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Enric Balletbo Serra <eballetbo@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Fan Chen <fan.chen@mediatek.com>,
-        Charles Yang <Charles.Yang@mediatek.com>,
-        Angus Lin <Angus.Lin@mediatek.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jia-wei Chang <jia-wei.chang@mediatek.com>,
-        =?UTF-8?B?UmV4LUJDIENoZW4gKOmZs+afj+i+sCk=?= 
-        <rex-bc.chen@mediatek.com>
+References: <20220511122806.2146847-1-kai.heng.feng@canonical.com>
+ <20220511122806.2146847-2-kai.heng.feng@canonical.com> <6246d753-00cb-b5dc-f5fc-d041a8e78718@molgen.mpg.de>
+ <CAAd53p52gkv-PLRvEM3GunTwU1J=c+n0J6uD03AQJ4EnL2y4Kg@mail.gmail.com>
+In-Reply-To: <CAAd53p52gkv-PLRvEM3GunTwU1J=c+n0J6uD03AQJ4EnL2y4Kg@mail.gmail.com>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Fri, 20 May 2022 10:45:33 +0800
+Message-ID: <CAAd53p4h1-SJROvUghPYbBnh2Z9nRtgfNEagE4X6XtBwNg8JOg@mail.gmail.com>
+Subject: Re: [Intel-wired-lan] [PATCH 2/2] igb: Make DMA faster when CPU is
+ active on the PCIe link
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        intel-wired-lan@lists.osuosl.org, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,131 +82,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 9:28 AM Chanwoo Choi <cw00.choi@samsung.com> wrote:
+On Thu, May 12, 2022 at 10:55 AM Kai-Heng Feng
+<kai.heng.feng@canonical.com> wrote:
 >
-> Hi Kevin, Chen-Yu,
+> Hi Paul,
 >
-> On 5/20/22 3:25 AM, Kevin Hilman wrote:
-> > Chen-Yu Tsai <wenst@chromium.org> writes:
+> On Wed, May 11, 2022 at 8:49 PM Paul Menzel <pmenzel@molgen.mpg.de> wrote:
 > >
-> >> n Wed, May 18, 2022 at 8:03 AM Kevin Hilman <khilman@kernel.org> wrote:
-> >>>
-> >>> Kevin Hilman <khilman@kernel.org> writes:
-> >>>
-> >>>> Chen-Yu Tsai <wenst@chromium.org> writes:
-> >>>>
-> >>>>> On Mon, May 16, 2022 at 8:43 AM Roger Lu <roger.lu@mediatek.com> wrote:
-> >>>>>>
-> >>>>>> The Smart Voltage Scaling(SVS) engine is a piece of hardware
-> >>>>>> which calculates suitable SVS bank voltages to OPP voltage table.
-> >>>>>> Then, DVFS driver could apply those SVS bank voltages to PMIC/Buck
-> >>>>>> when receiving OPP_EVENT_ADJUST_VOLTAGE.
-> >>>>>>
-> >>>>>> 1. SVS driver uses OPP adjust event in [1] to update OPP table voltage part.
-> >>>>>> 2. SVS driver gets thermal/GPU device by node [2][3] and CPU device by get_cpu_device().
-> >>>>>> After retrieving subsys device, SVS driver calls device_link_add() to make sure probe/suspend callback priority.
-> >>>>>>
-> >>>>>> [1] https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?h=opp/linux-next&id=25cb20a212a1f989385dfe23230817e69c62bee5
-> >>>>>> [2] https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?h=opp/linux-next&id=b325ce39785b1408040d90365a6ab1aa36e94f87
-> >>>>>> [3] https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?h=v5.16-next/dts64&id=a8168cebf1bca1b5269e8a7eb2626fb76814d6e2
-> >>>>>>
-> >>>>>> Change since v24:
-> >>>>>> - Rebase to Linux 5.18-rc6
-> >>>>>> - Show specific fail log in svs_platform_probe() to help catch which step fails quickly
-> >>>>>> - Remove struct svs_bank member "pd_dev" because all subsys device's power domain has been merged into one node like above [3]
-> >>>>>>
-> >>>>>> Test in below environment:
-> >>>>>> SW: Integration Tree [4] + Thermal patch [5] + SVS v25 (this patchset)
-> >>>>>> HW: mt8183-Krane
-> >>>>>>
-> >>>>>> [4] https://protect2.fireeye.com/v1/url?k=847bae75-e5f0bb43-847a253a-000babff9b5d-0b6f42041b9dea1d&q=1&e=37a26c43-8564-4808-9701-dc76d1ebbb27&u=https%3A%2F%2Fgithub.com%2Fwens%2Flinux%2Fcommits%2Fmt8183-cpufreq-cci-svs-test
-> >>>>>
-> >>>>> I've updated my branch to include all the latest versions of the relevant
-> >>>>> patch series:
-> >>>>>
-> >>>>> - anx7625 DPI bus type series v2 (so the display works)
-> >>>>> - MT8183 thermal series v9 (this seems to have been overlooked by the
-> >>>>> maintainer)
-> >>>>> - MTK SVS driver series v25
-> >>>>> - devfreq: cpu based scaling support to passive governor series v5
-> >>>>> - MTK CCI devfreq series v4
-> >>>>> - MT8183 cpufreq series v7
-> >>>>> - Additional WIP patches for panfrost MTK devfreq
-> >>>>
-> >>>> Thanks for preparing an integration branch Chen-Yu.
-> >>>>
-> >>>> I'm testing this on mt8183-pumpkin with one patch to add the CCI
-> >>>> regulator[1], and the defconfig you posted in a previous rev of this
-> >>>> series, but the CCI driver still causes a fault on boot[2] on my
-> >>>> platform.
-> >>>>
-> >>>> I mentioned in earlier reviews that I think there's potentially a race
-> >>>> between CCI and SVS loading since they are co-dependent.  My hunch is
-> >>>> that this is still not being handled properly.
-> >>>
-> >>> Ah, actually it's crashing when I try to boot the platform with
-> >>> `maxcpus=4` on the cmdline (which I have to do because mt8183-pumpkin is
-> >>> unstable upstream with the 2nd cluster enabled.)
->
-> This warning message is printed by 'WARN_ON(cpufreq_passive_unregister_notifier(devfreq))'
-> on devfreq passive governor.
->
-> If the cpufreq drivers are not probed before of probing cci devfreq driver
-> with passive governor, passive governor shows this warning message.
-> Because passive governor with CPUFREQ_PARENT_DEV depends on the cpufreq driver
-> in order to get 'struct cpufreq_policy'[2].
->
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/tree/drivers/devfreq/governor_passive.c?h=devfreq-testing#n339
-> [2] https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/tree/drivers/devfreq/governor_passive.c?h=devfreq-testing#n282
->
-> But, as I knew, this message might not stop the kernel. Just show the warning
-> message and then return -EPROBE_DEFER error. It means that maybe try to
-> probe the cci devfreq driver on late time of kernel booting
-> and then will be working. But, I need the full kernel booting log
-> and the booting sequence of between cpufreq and cci devfreq driver.
-
-Maybe just use a standard dev_warn() instead? WARN_ON causes all sorts
-of panicking in developers' minds. :p
-
-> In order to fix your issue, could you share the full booting log?
-> And if possible, please explain the more detailed something about this.
-
-The shortened version is that on an 8 core system, with maxcpus=4,
-only the first four cores are booted and have cpufreq associated.
-I've not actually used this mechanism, so I don't really know what
-happens if the other cores are brought up later with hotplug. Is
-cpufreq expected to attach to them?
-
-Maybe Kevin can add some more details.
-
-
-ChenYu
-
-
-> >>>
-> >>> The CCI driver should be a bit more robust about detecting
-> >>> available/online CPUs
-> >>
-> >> This all seems to be handled in the devfreq passive governor.
+> > Dear Kai-Hang,
 > >
-> > Well, that's the initial crash.  But the SVS driver will also go through
-> > its svs_mt8183_banks[] array (including both big & little clusters) and
-> > try to init SVS, so presumably that will have some problems also if only
-> > one cluster is enabled.
 > >
-> >> And presumably we'd like to have CCI devfreq running even if just one
-> >> core was booted.
+> > Thank you for the patch.
 > >
-> > Yes, I assume so also.
 > >
-> >> Added Chanwoo for more ideas.
+> > Am 11.05.22 um 14:28 schrieb Kai-Heng Feng:
+> > > We found Intel I210 can only achieve ~750Mbps Tx speed on some
+> > > platforms. The RR2DCDELAY shows around 0x2xxx DMA delay, which will be
 > >
-> > OK, thanks.
-> >
-> > Kevin
+> > Please give an example platform, where it works and where it does not.
 >
+> The platform is about but not yet hit the market yet, so I can't disclose it.
+> They are Intel Alder Lake based.
 >
-> --
-> Best Regards,
-> Chanwoo Choi
-> Samsung Electronics
+> >
+> > How did you test transfer speed?
+>
+> Iperf.
+>
+> >
+> > > significantly lower when 1) ASPM is disabled or 2) SoC package c-state
+> > > stays above PC3. When the RR2DCDELAY is around 0x1xxx the Tx speed can
+> > > reach to ~950Mbps.
+> > >
+> > > According to the I210 datasheet "8.26.1 PCIe Misc. Register - PCIEMISC",
+> > > "DMA Idle Indication" doesn't seem to tie to DMA coalesce anymore, so
+> > > set it to 1b for "DMA is considered idle when there is no Rx or Tx AND
+> > > when there are no TLPs indicating that CPU is active detected on the
+> > > PCIe link (such as the host executes CSR or Configuration register read
+> > > or write operation)" and performing Tx should also fall under "active
+> > > CPU on PCIe link" case.
+> > >
+> > > In addition to that, commit b6e0c419f040 ("igb: Move DMA Coalescing init
+> > > code to separate function.") seems to wrongly changed from enabling
+> > > E1000_PCIEMISC_LX_DECISION to disabling it, also fix that.
+> >
+> > Please split this into a separate commit with Fixes tag, and maybe the
+> > commit author in Cc.
+>
+> I don't see the need to split to separate commit as both require the
+> same change.
+>
+> I will add the "Fixes" tag once the igb maintainers reviewed the patch.
+
+A gentle ping...
+
+Please let me know if this is a proper fix so I can send v2.
+
+Kai-Heng
+
+>
+> Kai-Heng
+>
+> >
+> >
+> > Kind regards,
+> >
+> > Paul
+> >
+> >
+> > > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > > ---
+> > >   drivers/net/ethernet/intel/igb/igb_main.c | 12 +++++-------
+> > >   1 file changed, 5 insertions(+), 7 deletions(-)
+> > >
+> > > diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
+> > > index 34b33b21e0dcd..eca797dded429 100644
+> > > --- a/drivers/net/ethernet/intel/igb/igb_main.c
+> > > +++ b/drivers/net/ethernet/intel/igb/igb_main.c
+> > > @@ -9897,11 +9897,10 @@ static void igb_init_dmac(struct igb_adapter *adapter, u32 pba)
+> > >       struct e1000_hw *hw = &adapter->hw;
+> > >       u32 dmac_thr;
+> > >       u16 hwm;
+> > > +     u32 reg;
+> > >
+> > >       if (hw->mac.type > e1000_82580) {
+> > >               if (adapter->flags & IGB_FLAG_DMAC) {
+> > > -                     u32 reg;
+> > > -
+> > >                       /* force threshold to 0. */
+> > >                       wr32(E1000_DMCTXTH, 0);
+> > >
+> > > @@ -9934,7 +9933,6 @@ static void igb_init_dmac(struct igb_adapter *adapter, u32 pba)
+> > >                       /* Disable BMC-to-OS Watchdog Enable */
+> > >                       if (hw->mac.type != e1000_i354)
+> > >                               reg &= ~E1000_DMACR_DC_BMC2OSW_EN;
+> > > -
+> > >                       wr32(E1000_DMACR, reg);
+> > >
+> > >                       /* no lower threshold to disable
+> > > @@ -9951,12 +9949,12 @@ static void igb_init_dmac(struct igb_adapter *adapter, u32 pba)
+> > >                        */
+> > >                       wr32(E1000_DMCTXTH, (IGB_MIN_TXPBSIZE -
+> > >                            (IGB_TX_BUF_4096 + adapter->max_frame_size)) >> 6);
+> > > +             }
+> > >
+> > > -                     /* make low power state decision controlled
+> > > -                      * by DMA coal
+> > > -                      */
+> > > +             if (hw->mac.type >= e1000_i210 ||
+> > > +                 (adapter->flags & IGB_FLAG_DMAC)) {
+> > >                       reg = rd32(E1000_PCIEMISC);
+> > > -                     reg &= ~E1000_PCIEMISC_LX_DECISION;
+> > > +                     reg |= E1000_PCIEMISC_LX_DECISION;
+> > >                       wr32(E1000_PCIEMISC, reg);
+> > >               } /* endif adapter->dmac is not disabled */
+> > >       } else if (hw->mac.type == e1000_82580) {

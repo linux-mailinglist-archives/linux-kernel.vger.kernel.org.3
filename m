@@ -2,109 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7C1F52E6A6
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 09:55:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67EC752E6A5
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 09:55:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241980AbiETHzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 03:55:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51632 "EHLO
+        id S1346667AbiETHzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 03:55:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346702AbiETHze (ORCPT
+        with ESMTP id S241980AbiETHzQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 03:55:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05CB15D328
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 00:55:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0F217B82955
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 07:55:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5629C34100
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 07:55:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653033324;
-        bh=5PjNxWrAkE2aE9x3dsIS9yQLnElttOOmKVN4caatM7s=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=qbyzrSprqnbq46tDefPpYzM+NTVrUW5rIvgTJbph3SfpSXhg9Aj6ycFMp+2vpEWCr
-         tb3GemDub8Jx164H0J118szakPOJHgnNMYzvZbuCqh9OqGvKtufjt4TsxBOUHqC+z9
-         YZTXZ/5noMEGYCSgprz9YPg/mrBwZZWFpyn6JYL9PwEm28bIUwNJqSM8GH18tfwWb3
-         EpPtccTi3TGdjcJ8+iPJ6sNhlN7K6amHyX2h0iX+5c3rA965fhrlrBqCp7Djr/+JBA
-         GpuQvVouHZuJVIhklN7VTqvq3Hp9BhFgMeUfb3mvHKVAegfWsXpFm3H9mPqe6rqIGy
-         oJGEYDgHAGzvg==
-Received: by mail-vs1-f52.google.com with SMTP id i186so7601335vsc.9
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 00:55:24 -0700 (PDT)
-X-Gm-Message-State: AOAM532etIQdLaDCvZMO4+Mi1v2OYBMjIa7yWHVFMtVMm4TgFWEdrhSN
-        Cg24lQWldXZS5ERuOv6pWutaT+2GGK9xOtJJAyU=
-X-Google-Smtp-Source: ABdhPJzoQJmEcg1f5gdVVGcKBbnvI29hx3yOXCHhpEX2KNC80TO+z8VUoQ3xCchExuHGPIQmGQV0Zg0tadzLdBEIJW0=
-X-Received: by 2002:a05:6102:390b:b0:32d:5fc3:bd2c with SMTP id
- e11-20020a056102390b00b0032d5fc3bd2cmr3709471vsu.51.1653033323855; Fri, 20
- May 2022 00:55:23 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220518170254.3178923-1-heiko@sntech.de> <20220518170254.3178923-5-heiko@sntech.de>
-In-Reply-To: <20220518170254.3178923-5-heiko@sntech.de>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 20 May 2022 15:55:12 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQ0Ory_eXBfHAE7g+hdwPcC-h_41g_m=_v=e-HraOXPBQ@mail.gmail.com>
-Message-ID: <CAJF2gTQ0Ory_eXBfHAE7g+hdwPcC-h_41g_m=_v=e-HraOXPBQ@mail.gmail.com>
-Subject: Re: [PATCH 4/4] riscv: fix dependency for t-head errata
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Wei Fu <wefu@redhat.com>, Nick Kossifidis <mick@ics.forth.gr>,
-        Samuel Holland <samuel@sholland.org>,
-        Christoph Muellner <cmuellner@linux.com>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        Christoph Hellwig <hch@lst.de>,
-        kernel test robot <yujie.liu@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 20 May 2022 03:55:16 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D32B14A26A
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 00:55:15 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id ED2461F9A2;
+        Fri, 20 May 2022 07:55:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1653033313; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1e0cBZJ+4c9MhkTY/RLvyFL4APFdawq6AOt2sFnrDHQ=;
+        b=m0pD9hTCZsIiQULBDWo3pYq4wC6qo9ZbmEPr8o4k+XM5RRZo19BdHgi6/5t3LpEopb4Vrv
+        +swlm9nFKSgLNNHb8Sk5y1wVWPTzj8ACs+cwkQEIXh1U1xetXOoDk130BC+UoAN16zJjiF
+        2uTnUDQQF8wVSrh3AorKye7sE91bgjQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1653033313;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1e0cBZJ+4c9MhkTY/RLvyFL4APFdawq6AOt2sFnrDHQ=;
+        b=u6MaCjnY2DHQQdwG9CK4vkVsjJyXpqGl5gzaX1RMeE1MhIItLl6rFaPWYuhycLgbtDVRIZ
+        zf1wokZNR0yyvYCg==
+Received: from valkyrie.site.suse.de (unknown [10.163.18.242])
+        by relay2.suse.de (Postfix) with ESMTP id C66902C141;
+        Fri, 20 May 2022 07:55:13 +0000 (UTC)
+Date:   Fri, 20 May 2022 09:55:13 +0200
+Message-ID: <87o7zsr63i.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Vitaly Rodionov <vitalyr@opensource.cirrus.com>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Mark Brown <broonie@kernel.org>, <alsa-devel@alsa-project.org>,
+        <patches@opensource.cirrus.com>, <linux-kernel@vger.kernel.org>,
+        Stefan Binding <sbinding@opensource.cirrus.com>
+Subject: Re: [PATCH v3 01/17] ALSA: hda: hda_cs_dsp_ctl: Add Library to support CS_DSP ALSA controls
+In-Reply-To: <87pmk8r6bl.wl-tiwai@suse.de>
+References: <20220519174749.15459-1-vitalyr@opensource.cirrus.com>
+        <20220519174749.15459-2-vitalyr@opensource.cirrus.com>
+        <87pmk8r6bl.wl-tiwai@suse.de>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?ISO-2022-JP-2?B?R29qGyQoRCtXGyhC?=) APEL/10.8 Emacs/27
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Guo Ren <guoren@kernel.org>
+On Fri, 20 May 2022 09:50:22 +0200,
+Takashi Iwai wrote:
+> 
+> On Thu, 19 May 2022 19:47:33 +0200,
+> Vitaly Rodionov wrote:
+> On Thu, 19 May 2022 19:47:33 +0200,
+> Vitaly Rodionov wrote:
+> > 
+> > From: Stefan Binding <sbinding@opensource.cirrus.com>
+> > 
+> > The cs35l41 part contains a DSP which is able to run firmware.
+> > The cs_dsp library can be used to control the DSP.
+> > These controls can be exposed to userspace using ALSA controls.
+> > This library adds apis to be able to interface between
+> > cs_dsp and hda drivers and expose the relevant controls as
+> > ALSA controls.
+> > 
+> > The apis to add and remove the controls start new threads when
+> > adding/removing controls since it is possible that setting an ALSA
+> > control would end up calling this api, which would then deadlock.
+> 
+> Well, I still don't understand why the addition/deletion itself has to
+> be in a work.  As far as I see, it's simple calls of snd_ctl_add() and
+> snd_ctl_remove_id().
+> 
+> And, if the problem is that you're calling snd_ctl_add() from another
+> control callback, it's rather the problem of the caller's side, not
+> here.  IOW, the async implementation should be rather in the caller 
+> side.
 
-On Thu, May 19, 2022 at 1:03 AM Heiko Stuebner <heiko@sntech.de> wrote:
->
-> alternatives only work correctly on non-xip-kernels and while the
-> selected alternative-symbol has the correct dependency the symbol
-> selecting it also needs that dependency.
->
-> So add the missing dependency to the T-Head errata Kconfig symbol.
->
-> Reported-by: kernel test robot <yujie.liu@intel.com>
-> Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-> ---
->  arch/riscv/Kconfig.erratas | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/arch/riscv/Kconfig.erratas b/arch/riscv/Kconfig.erratas
-> index ebfcd5cc6eaf..457ac72c9b36 100644
-> --- a/arch/riscv/Kconfig.erratas
-> +++ b/arch/riscv/Kconfig.erratas
-> @@ -35,6 +35,7 @@ config ERRATA_SIFIVE_CIP_1200
->
->  config ERRATA_THEAD
->         bool "T-HEAD errata"
-> +       depends on !XIP_KERNEL
->         select RISCV_ALTERNATIVE
->         help
->           All T-HEAD errata Kconfig depend on this Kconfig. Disabling
-> --
-> 2.35.1
->
+Also, the description about the newly added controls is missing.
+It looks like a really special (non-standard) control that uses TLV
+for other purposes, and this must be mentioned somewhere.
+
+And, I wonder what happens with alsactl store/restore with those
+controls.  Are TLV contents properly parsed there?
 
 
--- 
-Best Regards
- Guo Ren
+thanks,
 
-ML: https://lore.kernel.org/linux-csky/
+Takashi

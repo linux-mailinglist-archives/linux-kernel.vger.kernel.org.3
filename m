@@ -2,118 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAC0452F4BE
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 23:06:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DF3B52F4C1
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 23:06:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353564AbiETVGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 17:06:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56288 "EHLO
+        id S1349256AbiETVGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 17:06:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353567AbiETVGF (ORCPT
+        with ESMTP id S1353566AbiETVGZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 17:06:05 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00B756EC7F
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 14:06:03 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id f21so4073736ejh.11
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 14:06:03 -0700 (PDT)
+        Fri, 20 May 2022 17:06:25 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE8A67DE21;
+        Fri, 20 May 2022 14:06:19 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id br17so4026034lfb.2;
+        Fri, 20 May 2022 14:06:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KMT8P8zbRfIHS8dDyJlM5Ic+rmYHYWgIa37DnbflAwE=;
-        b=OmDFcvlzW70+WKeNegTYuDop8HPEyPvaHb2R4UR+jYAORC80RbpoYFWn8oCQE2tMGF
-         vEtq78hodjiIWMwDJXJ0S5GZ7bWf4EY1GEx+VPBjrrs8uN+fxVsbI5lcMg33Mtr3OdaS
-         W196e1Lj6N0eOtybtKFZoydcm1332KktdJdxs=
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to;
+        bh=I0/LR1u9ynNadGu5tggcJqg3L+3503cJwrgFleP8Nlc=;
+        b=cTCFBLfwZ2h0RBCR4FhJsFHLuH31u3G82j10U05tAXqjmrva6a4XLJf8L7DFoTS/CZ
+         t+L8ag1j9Px3pCSDkTjHVSfXTB+z+p9WunksYw0I2euuPNt8S/210Ke+sRPVxnIsS96u
+         PrmOh/F/CohBjON9kkF8IMMr/pRArDFanlGFctyQO/MbTCQ/YIcmhKXYWSC/BE8vsrvh
+         Lf5MdM1wA4jU6gFF79dMMeghyC9elusXXhj4SrpZFilCcfT28qhHzEnT9X3XKQOC64ep
+         moALfhXWKlwLK0NiMlUceJN3p9TGuMv2PB4NzB/ESU4qi7hu4EwE96KEp6zbWmhAoxqI
+         NMSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KMT8P8zbRfIHS8dDyJlM5Ic+rmYHYWgIa37DnbflAwE=;
-        b=Tke67gCXJMSakoSP3QAT2RAylFEe888P+NQ5xZq8acVx+ilmYPnTqnJo+7uguJp4cs
-         v2P1p0oiKmwi6w8zLA7imaiD59yjEYgRpdIyr4ETk+begNsinkB7fscIXTohIMslytmJ
-         h0JErxpiqAe/77nu8Jfko8icwfJTb5jKNDTBIKxCKJkKdDG3rXaO9IIQDGwGSMY7i5BF
-         q0V826SUeE7UiehAYpCk2qK7zFMAHXsA7S4N/x/AGxFl/n7TP1B7H3VSo0Eav/ElJUtw
-         BKR2No6sbXG804z520aplua21LpUwpTkVNRDRBDzT6X6IICiqDzYaVYGK9gGC/VQgFAc
-         w9iQ==
-X-Gm-Message-State: AOAM533wnMPX1P1iZhI7ZakG1KANhJjNZHJK4IEhe5gHFaLYSBY21YuN
-        myWTymDuXO3OIFlnEbPwlrlH6iBH9Xezi8ad8AA=
-X-Google-Smtp-Source: ABdhPJw8oX7P0qJ76JEaZb7VKnqF1n/8TPvoGz6YyQ0kjdrPkpTSwrr/j3axc/NoXBisGseM2ArvHw==
-X-Received: by 2002:a17:907:7d8d:b0:6fe:b83f:802b with SMTP id oz13-20020a1709077d8d00b006feb83f802bmr1803330ejc.187.1653080762216;
-        Fri, 20 May 2022 14:06:02 -0700 (PDT)
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com. [209.85.128.51])
-        by smtp.gmail.com with ESMTPSA id h6-20020a1709070b0600b006fe8c2b66e4sm3152096ejl.135.2022.05.20.14.05.59
-        for <linux-kernel@vger.kernel.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to;
+        bh=I0/LR1u9ynNadGu5tggcJqg3L+3503cJwrgFleP8Nlc=;
+        b=kOCy/KfKoB2CQKlNBBw/TtCIQbB1I2F0MJhfTgbYZklC3bfF8lmYHO1TYq9+z6+cib
+         ke/EV6uEyy9Cc9YG/UEe1L4B46UmnYjdBeAjZ4O+0mAjpUdekul2WOv+9esPnLlmcH61
+         dxuuc91yOeDCeevEH4whgTSJukhoqdXddv7a/RxojD2Si7Ag4OO6NTtRFJuWMWn2Gxe3
+         h01STkvyMeoAV3YE95dVUrfrnWhn7oiNhBALkFGbW+1ftsbxaBr/BVINuPjd7jTEn+qD
+         6R4ksheFHDnOPGm6+Ir6r5Fr/lhOIkYfTef3ImLbJPEY+l4tIZCN+ypqPYHT+o/2iOK0
+         dQuQ==
+X-Gm-Message-State: AOAM530dTq360PSGQIjMwhQXUiMxe4QyAlYAn6wxl1ppEkfssmJ3Ty8M
+        LD3Ffpr3zx84D44RXD6p8NQ=
+X-Google-Smtp-Source: ABdhPJy5vRN5AeEfNxfYw4R5s1Plx4W8xjumOXOSk6AOIny2Drk8waP/R/peTyUi8i08yarPFUFj/Q==
+X-Received: by 2002:a05:6512:5cb:b0:472:f7e:a5f5 with SMTP id o11-20020a05651205cb00b004720f7ea5f5mr8027754lfo.358.1653080777901;
+        Fri, 20 May 2022 14:06:17 -0700 (PDT)
+Received: from [192.168.1.11] ([46.235.67.4])
+        by smtp.gmail.com with ESMTPSA id b17-20020ac247f1000000b004744bfd620fsm787093lfp.236.2022.05.20.14.06.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 May 2022 14:06:00 -0700 (PDT)
-Received: by mail-wm1-f51.google.com with SMTP id v191-20020a1cacc8000000b00397001398c0so7470156wme.5
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 14:05:59 -0700 (PDT)
-X-Received: by 2002:a05:600c:3482:b0:397:caa:9e68 with SMTP id
- a2-20020a05600c348200b003970caa9e68mr10274850wmq.118.1653080759084; Fri, 20
- May 2022 14:05:59 -0700 (PDT)
+        Fri, 20 May 2022 14:06:17 -0700 (PDT)
+Message-ID: <01a941bf-400a-b555-a67d-7b6bed44a53b@gmail.com>
+Date:   Sat, 21 May 2022 00:06:16 +0300
 MIME-Version: 1.0
-References: <20220520161004.1141554-1-judyhsiao@chromium.org>
- <20220520161004.1141554-2-judyhsiao@chromium.org> <CAE-0n53e0bq_MbfgZYdxatP8CpGVMKkBKOnSDOV+MvbBFB6wOA@mail.gmail.com>
- <CAD=FV=VX_dr+hrNEGyC7GxcYcbMeL-uMaVLEJ5EgKnb76HVoDA@mail.gmail.com> <CAE-0n53x6KJPz_Jc7terJB2AtLAHFo4kKZ98kAbUi8xckeCs_A@mail.gmail.com>
-In-Reply-To: <CAE-0n53x6KJPz_Jc7terJB2AtLAHFo4kKZ98kAbUi8xckeCs_A@mail.gmail.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 20 May 2022 14:05:44 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=Wr=tUb_Z2sgsJFE8oMykkmcKd+XUxmCohbgxOsvmVGoA@mail.gmail.com>
-Message-ID: <CAD=FV=Wr=tUb_Z2sgsJFE8oMykkmcKd+XUxmCohbgxOsvmVGoA@mail.gmail.com>
-Subject: Re: [v2 1/3] arm64: dts: qcom: sc7280: herobrine: Add pinconf
- settings for mi2s1
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Judy Hsiao <judyhsiao@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Srini Kandagatla <srinivas.kandagatla@linaro.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Jimmy Cheng-Yi Chiang <cychiang@google.com>,
-        Judy Hsiao <judyhsiao@google.com>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] net: ocelot: fix wront time_after usage
+Content-Language: en-US
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     vladimir.oltean@nxp.com, claudiu.manoil@nxp.com,
+        alexandre.belloni@bootlin.com, UNGLinuxDriver@microchip.com,
+        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        dan.carpenter@oracle.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220519204017.15586-1-paskripkin@gmail.com>
+ <YoeMW+/KGk8VpbED@lunn.ch>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <YoeMW+/KGk8VpbED@lunn.ch>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------caAMiWf062mI1cghvHNzgMk3"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------caAMiWf062mI1cghvHNzgMk3
+Content-Type: multipart/mixed; boundary="------------8B794hshaA4KPTW7ASRwuwK4";
+ protected-headers="v1"
+From: Pavel Skripkin <paskripkin@gmail.com>
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: vladimir.oltean@nxp.com, claudiu.manoil@nxp.com,
+ alexandre.belloni@bootlin.com, UNGLinuxDriver@microchip.com,
+ davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+ dan.carpenter@oracle.com, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Message-ID: <01a941bf-400a-b555-a67d-7b6bed44a53b@gmail.com>
+Subject: Re: [PATCH] net: ocelot: fix wront time_after usage
+References: <20220519204017.15586-1-paskripkin@gmail.com>
+ <YoeMW+/KGk8VpbED@lunn.ch>
+In-Reply-To: <YoeMW+/KGk8VpbED@lunn.ch>
 
-On Fri, May 20, 2022 at 2:01 PM Stephen Boyd <swboyd@chromium.org> wrote:
->
-> Quoting Doug Anderson (2022-05-20 13:39:21)
-> > On Fri, May 20, 2022 at 1:38 PM Stephen Boyd <swboyd@chromium.org> wrote:
-> > >
-> > > Quoting Judy Hsiao (2022-05-20 09:10:02)
-> > > > +};
-> > > > +
-> > > > +&mi2s1_sclk {
-> > > > +       drive-strength = <6>;
-> > > > +       bias-disable;
-> > >
-> > > Is there an external pull on this line? If so please add that details as
-> > > a comment like we do for other external pulls.
-> >
-> > Actually, I think they are output lines, which is why they have a
-> > drive-strength. I think for output lines we don't usually comment
-> > about why we're disabling the pulls, only for input lines?
->
-> Ok makes sense. Even for an open drain signal it would be an "input" so
-> that rule still applies?
+--------------8B794hshaA4KPTW7ASRwuwK4
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-I think open drain is mostly used for bidirectional signals, like i2c
-lines. In that case then you're right, you can have a drive-strength
-and a pull. ...I thought i2s was not bidirectoinal and not open-drain,
-but I certainly could be wrong.
+SGkgQW5kcmV3LA0KDQpPbiA1LzIwLzIyIDE1OjQwLCBBbmRyZXcgTHVubiB3cm90ZToNCj4g
+T24gVGh1LCBNYXkgMTksIDIwMjIgYXQgMTE6NDA6MTdQTSArMDMwMCwgUGF2ZWwgU2tyaXBr
+aW4gd3JvdGU6DQo+PiBBY2NpZGVudGFsbHkgbm90aWNlZCwgdGhhdCB0aGlzIGRyaXZlciBp
+cyB0aGUgb25seSB1c2VyIG9mDQo+PiB3aGlsZSAodGltZXJfYWZ0ZXIoamlmZmllcy4uLikp
+Lg0KPj4gDQo+PiBJdCBsb29rcyBsaWtlIHR5cG8sIGJlY2F1c2UgbGlrZWx5IHRoaXMgd2hp
+bGUgbG9vcCB3aWxsIGZpbmlzaCBhZnRlciAxc3QNCj4+IGl0ZXJhdGlvbiwgYmVjYXVzZSB0
+aW1lX2FmdGVyKCkgcmV0dXJucyB0cnVlIHdoZW4gMXN0IGFyZ3VtZW50IF9pcyBhZnRlcl8N
+Cj4+IDJuZCBvbmUuDQo+PiANCj4+IEZpeCBpdCBieSBuZWdhdGluZyB0aW1lX2FmdGVyIHJl
+dHVybiB2YWx1ZSBpbnNpZGUgd2hpbGUgbG9vcHMgc3RhdGVtZW50DQo+IA0KPiBBIGJldHRl
+ciBmaXggd291bGQgYmUgdG8gdXNlIG9uZSBvZiB0aGUgaGVscGVycyBpbiBsaW51eC9pb3Bv
+bGwuaC4NCj4gDQo+IFRoZXJlIGlzIGEgc2Vjb25kIGJ1ZyBpbiB0aGUgY3VycmVudCBjb2Rl
+Og0KPiANCj4gc3RhdGljIGludCBvY2Vsb3RfZmRtYV93YWl0X2NoYW5fc2FmZShzdHJ1Y3Qg
+b2NlbG90ICpvY2Vsb3QsIGludCBjaGFuKQ0KPiB7DQo+IAl1bnNpZ25lZCBsb25nIHRpbWVv
+dXQ7DQo+IAl1MzIgc2FmZTsNCj4gDQo+IAl0aW1lb3V0ID0gamlmZmllcyArIHVzZWNzX3Rv
+X2ppZmZpZXMoT0NFTE9UX0ZETUFfQ0hfU0FGRV9USU1FT1VUX1VTKTsNCj4gCWRvIHsNCj4g
+CQlzYWZlID0gb2NlbG90X2ZkbWFfcmVhZGwob2NlbG90LCBNU0NDX0ZETUFfQ0hfU0FGRSk7
+DQo+IAkJaWYgKHNhZmUgJiBCSVQoY2hhbikpDQo+IAkJCXJldHVybiAwOw0KPiAJfSB3aGls
+ZSAodGltZV9hZnRlcihqaWZmaWVzLCB0aW1lb3V0KSk7DQo+IA0KPiAJcmV0dXJuIC1FVElN
+RURPVVQ7DQo+IH0NCj4gDQo+IFRoZSBzY2hlZHVsZXIgY291bGQgcHV0IHRoZSB0aHJlYWQg
+dG8gc2xlZXAsIGFuZCBpdCBkb2VzIG5vdCBnZXQgd29rZW4NCj4gdXAgZm9yIE9DRUxPVF9G
+RE1BX0NIX1NBRkVfVElNRU9VVF9VUy4gRHVyaW5nIHRoYXQgdGltZSwgdGhlIGhhcmR3YXJl
+DQo+IGhhcyBkb25lIGl0cyB0aGluZywgYnV0IHlvdSBleGl0IHRoZSB3aGlsZSBsb29wIGFu
+ZCByZXR1cm4gLUVUSU1FRE9VVC4NCj4gDQo+IGxpbnV4L2lvcG9sbC5oIGhhbmRsZXMgdGhp
+cyBjb3JyZWN0bHkgYnkgdGVzdGluZyB0aGUgc3RhdGUgb25lIG1vcmUNCj4gdGltZSBhZnRl
+ciB0aGUgdGltZW91dCBoYXMgZXhwaXJlZC4NCj4gDQoNCkkgd2Fzbid0IGF3YXJlIGFib3V0
+IHRoZXNlIG1hY3Jvcy4gVGhhbmtzIGZvciBwb2ludGluZyBvdXQgdG8gdGhhdCBoZWFkZXIh
+DQoNCldpbGwgc2VuZCB2MiBzb29uLA0KDQoNCg0KV2l0aCByZWdhcmRzLA0KUGF2ZWwgU2ty
+aXBraW4NCg==
 
--Doug
+--------------8B794hshaA4KPTW7ASRwuwK4--
+
+--------------caAMiWf062mI1cghvHNzgMk3
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEER3XL3TplLQE8Qi40bk1w61LbBA0FAmKIAsgFAwAAAAAACgkQbk1w61LbBA2Q
+NhAAoR3iq/YyS89hLPJPJUHPQ7sImgIGnDs6CIBAXwIXSI2gM6CL437EpbnMeTskG6zjpRxtW4M4
+GKIHtNBdfhSK/yLcBr+ZCyhvB+GbyUzq1QVLy1IlCNtKseLHLTuzu+syC+A89hPgE+87cW0lLA3H
+frubZAYspDPkrXVI7sZXA0iDDZQAhn8ZBrCFSN7uHeOX5Y4LPugYXfPvPl5kxn55ubfUcTQZrTRo
+sio8wYeddiD+kocLfxlequCIlrd7d7PR2NZo0TQWQgjbPvB1Ir60GogTpxC8IQCIl5Hn082CDH1F
+3ktF3eWvbKHOQxmAnbhzifdGvxnyUAycmAdk8jAE/wSU71nG43BGQUEC35LppXbhiv+d7TnU9VNM
+D4TOeqkdp+RRrzEQBRBNODOk7KnpwWr0WfT7kbud+CU8AeaWYMsP6hH/dFnJ1F9OGtCwMHwtyfVC
+DlvhOgUdSIueL061/+tV0D6UQFy89e46KMh78jbj3WBAhlAPlKzB+2umZksoZtUEFj2XkgJu6xNn
+fagvUjtNKyc8tOMwZ9bXvQT4GXkUex1Be5UogEG04yHE1uzk4NGjjivkzgY2lCwMfE1/kuto2NJH
+Pw6C7Hgh27doihvwoYm9Ru1RGUTVJgxSBVmRq3fD5IjSDbb2C+SYOuiySMWd3LLZkyfLfDDkF1vI
+jck=
+=5814
+-----END PGP SIGNATURE-----
+
+--------------caAMiWf062mI1cghvHNzgMk3--

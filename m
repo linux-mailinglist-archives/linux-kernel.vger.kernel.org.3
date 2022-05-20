@@ -2,118 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2D1052EF7F
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 17:44:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4930A52EF80
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 17:44:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351000AbiETPoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 11:44:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41012 "EHLO
+        id S1350998AbiETPok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 11:44:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349157AbiETPoR (ORCPT
+        with ESMTP id S1351017AbiETPo3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 11:44:17 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38BEB9D067;
-        Fri, 20 May 2022 08:44:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653061457; x=1684597457;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Sm6rTxFjZJcJqtXNux3YigLFzIK7e0k9ReiYe3hBU1c=;
-  b=XQbtRWnEf7LrEzUXPP/g9dqCG9TbgGLNldJywYiN6hGSCLmo42hlK0M1
-   V+6Xre2KP/DKIxHvo4b8V0J+pQYNIQZDPWFeTLNVC0jXUzagF96UQYKo6
-   lTmBKJ/z7KEPZmmt+3k2xsrC9wgTsYZWyFDPFk0ZFyuuzk/0PZ59PSwTr
-   DVpiBkkkUYGs0mA7vQzGLJOhL6LDCtMTxAxyniFm+kq2tmlNX6nRlJII5
-   n8XC8hsjo1MnQZgsjYRyqwyzB02SN7rDCyhRqM12+heQeNR99fZ6sfo8H
-   nluHdIH+YEXe5ShYGM62UeSZl1wG6RJ/Qz4yuT/Ma31lJhp7bD+f3n4pO
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10353"; a="272766035"
-X-IronPort-AV: E=Sophos;i="5.91,239,1647327600"; 
-   d="scan'208";a="272766035"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 08:44:16 -0700
-X-IronPort-AV: E=Sophos;i="5.91,239,1647327600"; 
-   d="scan'208";a="546737649"
-Received: from kcaccard-mobl.amr.corp.intel.com (HELO kcaccard-mobl1.jf.intel.com) ([10.209.83.65])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 08:44:15 -0700
-Message-ID: <12ba3f76f06d1336d78e4bfe0f36ba83fbf2f2d1.camel@linux.intel.com>
-Subject: Re: [PATCH v2] x86/sgx: Set active memcg prior to shmem allocation
-From:   Kristen Carlson Accardi <kristen@linux.intel.com>
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     linux-sgx@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        stable <stable@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>, Michal Hocko <mhocko@suse.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Johannes Weiner <hannes@cmpxchg.org>
-Date:   Fri, 20 May 2022 08:44:14 -0700
-In-Reply-To: <CALvZod7+LyVDVvkdisSiQLySSnXjK5-VHbAwApE8TrHeUyAFxQ@mail.gmail.com>
-References: <20220519210445.5310-1-kristen@linux.intel.com>
-         <CALvZod7+LyVDVvkdisSiQLySSnXjK5-VHbAwApE8TrHeUyAFxQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
+        Fri, 20 May 2022 11:44:29 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494071796EC
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 08:44:27 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id bh5so7681453plb.6
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 08:44:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=9mUPsRUC7556BCOoMKheuSYgEvTIkY7O5zyQUwY11vk=;
+        b=FR3VFmMKFp1j7UuMtIgzK1hv8FGWhrsa7vPsjwpbPh1oA4HdcnynTJofpJL+E6jYgT
+         Us0/zcjNc2PnuO0EADQsM62moDvpOgBpNXIT0DC2UAkWYkQR1ZA+S4YJYChD+5bajI19
+         1yeUolfrb8UA/qXLzgjYnCT27LdGk4CR2zTRkhrA/4DgI/ADp6KK3MHQ6zwLuy9hF2Qz
+         2fUTKG2hYsOy8Sl+2k4sD4ZNfIIYPnvcByevLF1YlZiJTx/Gso7PSIIkF5SfUI64te/L
+         OKPlx9Kf/vppdxvA3m8JALgSl/aKqdkXRaoQkxeCjXcHOd/oJo6doc9D9F/Bel5ihFmA
+         bvng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9mUPsRUC7556BCOoMKheuSYgEvTIkY7O5zyQUwY11vk=;
+        b=QT+d/eKEv9PhK1hZ0LKbBeqzkbgEZt+P2f0ttKzxElyK2wgv+3Boz22VY/vbEKaU+7
+         nvUeGE8I0m71/DfNXkIULYFBPdo+KCKZKgxtN8WMFNpRKKaux+76zuiJpZZM6DoApdxT
+         aBNtPpjb7JcwfgLDFrWrd7NcCRdiOMnPWscDH9a7g+KsnSRJ3pSvmglvOcch4T0fMPXu
+         R2tT3ENfIefDZhnOV7R3LzIA8Gaw7dlczsyENWYTbmEB3BlaLgwYA9ts7+Dagmp9NfIx
+         Hkmp1qSx+03nOll1dVuh04EmhYSBNc7NyzLHKJJ7K8o7+64Ix7i/V5qXO5OlIB4LcQUq
+         EqwQ==
+X-Gm-Message-State: AOAM5338O40vvfKUnQrP8AECEJ9d//R4bGFPwP/TdvwtLJV7K0r7X8Ez
+        ejQfkvsYYR1vwxwpYP5nqUuihA==
+X-Google-Smtp-Source: ABdhPJy07HmIagMR/Y4Umfb72aBazBOqkx7r1N+ScbzNtv9e5BohxLRE+S+KqKQzNs0x691oCUjsHg==
+X-Received: by 2002:a17:902:bd83:b0:15f:a13:dfd8 with SMTP id q3-20020a170902bd8300b0015f0a13dfd8mr10233871pls.87.1653061467397;
+        Fri, 20 May 2022 08:44:27 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id m11-20020a63fd4b000000b003c14af50607sm5660761pgj.31.2022.05.20.08.44.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 May 2022 08:44:27 -0700 (PDT)
+Message-ID: <0a6ed6b9-0917-0d83-5c45-70ff58fad429@kernel.dk>
+Date:   Fri, 20 May 2022 09:44:25 -0600
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v4 0/3] random: convert to using iters, for Al Viro
+Content-Language: en-US
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Theodore Ts'o <tytso@mit.edu>, Christoph Hellwig <hch@lst.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>
+References: <20220520094459.116240-1-Jason@zx2c4.com>
+ <Yoey+FOYO69lS5qP@zx2c4.com> <bbdeeca7-9c99-e661-6596-f04ea783a30b@kernel.dk>
+ <Yoe2PPA/pzqhf+GZ@zx2c4.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <Yoe2PPA/pzqhf+GZ@zx2c4.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-05-19 at 14:22 -0700, Shakeel Butt wrote:
-> On Thu, May 19, 2022 at 2:05 PM Kristen Carlson Accardi
-> <kristen@linux.intel.com> wrote:
-> > When the system runs out of enclave memory, SGX can reclaim EPC
-> > pages
-> > by swapping to normal RAM. These backing pages are allocated via a
-> > per-enclave shared memory area. Since SGX allows unlimited over
-> > commit on EPC memory, the reclaimer thread can allocate a large
-> > number of backing RAM pages in response to EPC memory pressure.
-> > 
-> > When the shared memory backing RAM allocation occurs during
-> > the reclaimer thread context, the shared memory is charged to
-> > the root memory control group, and the shmem usage of the enclave
-> > is not properly accounted for, making cgroups ineffective at
-> > limiting the amount of RAM an enclave can consume.
-> > 
-> > For example, when using a cgroup to launch a set of test
-> > enclaves, the kernel does not properly account for 50% - 75% of
-> > shmem page allocations on average. In the worst case, when
-> > nearly all allocations occur during the reclaimer thread, the
-> > kernel accounts less than a percent of the amount of shmem used
-> > by the enclave's cgroup to the correct cgroup.
-> > 
-> > SGX stores a list of mm_structs that are associated with
-> > an enclave. Pick one of them during reclaim and charge that
-> > mm's memcg with the shmem allocation. The one that gets picked
-> > is arbitrary, but this list almost always only has one mm. The
-> > cases where there is more than one mm with different memcg's
-> > are not worth considering.
-> > 
-> > Create a new function - sgx_encl_alloc_backing(). This function
-> > is used whenever a new backing storage page needs to be
-> > allocated. Previously the same function was used for page
-> > allocation as well as retrieving a previously allocated page.
-> > Prior to backing page allocation, if there is a mm_struct
-> > associated
-> > with the enclave that is requesting the allocation, it is set
-> > as the active memory control group.
-> > 
-> > Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
+On 5/20/22 9:39 AM, Jason A. Donenfeld wrote:
+> Hi Jens,
 > 
-> For the memcg part:
+> On Fri, May 20, 2022 at 09:34:46AM -0600, Jens Axboe wrote:
+>> On 5/20/22 9:25 AM, Jason A. Donenfeld wrote:
+>>> Hi Jens,
+>>>
+>>> On Fri, May 20, 2022 at 11:44:56AM +0200, Jason A. Donenfeld wrote:
+>>>> Jens Axboe (3):
+>>>>   random: convert to using fops->read_iter()
+>>>>   random: convert to using fops->write_iter()
+>>>>   random: wire up fops->splice_{read,write}_iter()
+>>>
+>>> FYI, this series makes reads from /dev/urandom slower, from around 616
+>>> MiB/s to 598 MiB/s on my system. That seems rather unfortunate.
+>>
+>> How reproducible is that? That seems like a huge difference for the
+>> change. How big are the reads?
 > 
-> Reviewed-by: Shakeel Butt <shakeelb@google.com>
+> Fairly reproducible. Actually, if anything, it reproduces consistently
+> with worst results; I chose the most favorable ones for the new code.
+> This isn't any fancy `perf` profiling, but just running:
+> 
+> $ pv /dev/urandom > /dev/null
+> 
+> From looking at strace, the read size appears to be 131072.
 
-Thanks!
+Ran 32, 1k, 4k here and it does seem to be down aboout 3%. Which is
+definitely bigger than I expected, particularly for larger reads. If
+anything, the 32b read seems comparably better than eg 1k or 4k, which
+is also unexpected. Let me do a bit of profiling to see what is up.
 
+If you're worried about it, I'd just keep the read/write and add the
+iter variants on the side.
+
+-- 
+Jens Axboe
 

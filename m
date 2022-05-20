@@ -2,118 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B306552F072
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 18:20:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01BF052F078
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 18:22:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351533AbiETQUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 12:20:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57866 "EHLO
+        id S1351550AbiETQWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 12:22:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231239AbiETQUj (ORCPT
+        with ESMTP id S231239AbiETQWU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 12:20:39 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055027CDFA;
-        Fri, 20 May 2022 09:20:39 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id m1so7768578plx.3;
-        Fri, 20 May 2022 09:20:39 -0700 (PDT)
+        Fri, 20 May 2022 12:22:20 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECB36B8BFD;
+        Fri, 20 May 2022 09:22:19 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id a38so5272727pgl.9;
+        Fri, 20 May 2022 09:22:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=MtVzH3UoF12u8L33efNjqLpTUDtaXmlgKBbTF3gWD9k=;
-        b=Dsgg7TZ96W0GRuErppdSf6T4FUWmmZNPMnNO7I+8rmFZ9Wab7KpPZAoYQSzGSPzlhT
-         mb0X1UQ+25OgdIChFrz6rVnxb9d+U0p/aU6V3lmCC6hn6/QqDqNfx/FpekIj9bjlmOA9
-         PFlhK+DZQ8ibN3OaS6/ADJbQOEZiqGuikFY6jTpZYOIj4L9I/e6OWdc0LKeqEgAhkzMe
-         SMiDElqSqUx15bpFQWKQWFSqe+RLP/2OfKdcecnWuwQhOtE/eTNHqm8spfzC1msqPQrZ
-         98s9aR05kcj3vJPjsNqGYraDEGpKWwTldO41pcmFmGFbDG+wsboA+O9roKh5t/tN4SY5
-         K2cA==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=GRvxtBN/C9wxWz5+ZhYYKzs9qnKHSKKBLmyxPMHQAq8=;
+        b=EVJShjdj2n3x/Soo5TXuwql9BCI8yhOyZtEgC2M223tHJRBeyW3JfqJKD16yOS8w/y
+         KPNdLNFwTdFgpYAJEH3nv7V24ne5X9pD0Jf+vLGi/INcnW3qI9H+YJNeIMOeaJf2tfMh
+         hvcFSndNB5EHwzp+uUtL0gBXHvkmp4PzqEHygYmFwkBV7cdjZcuMIp4QYc0YR3cmxnQq
+         t8b4jpNaPunP88msk0YHEGupLlzwC4T0r+/e9/mzb310q3xh05Bb7/aMlUGraFcei+LT
+         OSfIxVsUvBuYoVjJ6kaks1JWeKxAbcS2WpIxRtPWoK29Ucg28nNhegty33QujELsEFPg
+         FjgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=MtVzH3UoF12u8L33efNjqLpTUDtaXmlgKBbTF3gWD9k=;
-        b=ecHy213Fv9HkUWSE0jF3Ouwng68yG0bBjwKfnFCjbK5F8/KgfkPF24g95gyfxve20F
-         J82Cr5gErAyJtkgCH1nX6koX7BK/v9fEjVLzAH7og46KjfW8Z/eaGcT3D1gko6nwt/+8
-         VunVuq+r56JodQHf6bV5KBCo2rbIoJyy4hiNqWdRiNR4mXmK6WY4E1u1kfZ+Nlhv5eXw
-         e+u8dNXNMH5/FwlLRLSECQ/xQrRnOOYTI9b137pRyWLHtqZrI5Anz3SV2CqOqzKyh9aZ
-         J8qh7nTNN/UV1lV6kHzHUZBK/P1ieHd0dfROnJaCtC2Rs9jkfbhhopkkKUyd/JJ8sT3v
-         McLg==
-X-Gm-Message-State: AOAM5334X2tZj78FlyGklhn9cbMZa8HmkEa6a30S0ej9LTYfiDK9tquq
-        l0DmiWRJp8kiu1C+1W9Ifh4=
-X-Google-Smtp-Source: ABdhPJxYicDnUkYqugMyMSYpobkXd2eA8l55tKWUoCwezF8GqNS+WhSBNQr8HswLB3GaL+Pd+D/MCg==
-X-Received: by 2002:a17:90b:4a0f:b0:1e0:edc:c1f with SMTP id kk15-20020a17090b4a0f00b001e00edc0c1fmr101197pjb.93.1653063638340;
-        Fri, 20 May 2022 09:20:38 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::4:1761])
-        by smtp.gmail.com with ESMTPSA id m3-20020a170902db0300b0015e8d4eb23dsm5971304plx.135.2022.05.20.09.20.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 09:20:37 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Fri, 20 May 2022 06:20:36 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-Cc:     "yukuai (C)" <yukuai3@huawei.com>, axboe@kernel.dk,
-        ming.lei@redhat.com, geert@linux-m68k.org, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com
-Subject: Re: [PATCH -next v3 2/2] blk-throttle: fix io hung due to
- configuration updates
-Message-ID: <Yoe/1BRYzSRI0JBd@slm.duckdns.org>
-References: <20220519085811.879097-1-yukuai3@huawei.com>
- <20220519085811.879097-3-yukuai3@huawei.com>
- <20220519095857.GE16096@blackbody.suse.cz>
- <a8953189-af42-0225-3031-daf61347524a@huawei.com>
- <20220519161026.GG16096@blackbody.suse.cz>
- <73464ca6-9412-cc55-d9c0-f2e8a10f0607@huawei.com>
- <fe3c03f7-9b52-7948-075d-cbdf431363e1@huawei.com>
- <20220520160305.GA17335@blackbody.suse.cz>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=GRvxtBN/C9wxWz5+ZhYYKzs9qnKHSKKBLmyxPMHQAq8=;
+        b=zhg2ccfvTOOl7jHm+qaeQjyg4gHyczpNSWPPSn+NauKT1g46wybEbOjXZ2vqD7IFDq
+         BKiXJr0x+mv56C04iRpLrzdZowNHB1ADeInmlVtnsAahDAESOsNwi/21tQ6QMOCkXqei
+         pgpl76XNyv/Q0sXCNjYJn90asK85BwnJ8lZrkx6TcVRY2V5IVnO3mfuNxEpEk2R35AVb
+         Dy23imulf8xLDToX79CmS84I7pme09cBpI7bBKTg3yrlZp1R5iEmxMktXWj33oBfYRdl
+         +TCCe1FCfbIboGU+59KhtPgv+R4uEuImGW9qPMXOuPY0GFo0iccycglKq40Lo5lwu1Ho
+         eUFw==
+X-Gm-Message-State: AOAM530ENyl/ORISw3KNtTG6D/YkkAo1ea9BbGTnm0CsLRnlqU/XpUCV
+        m30xtE354xX85NHP0HiVDxw=
+X-Google-Smtp-Source: ABdhPJzFmTifJ7tfHIGxJCl5NOUo5AyBDgPrIqvsK0LvcAjT6ddjF9aC08Xm+T+kiHe/rfw04fQnDA==
+X-Received: by 2002:a05:6a00:114b:b0:4f7:915:3ec3 with SMTP id b11-20020a056a00114b00b004f709153ec3mr11099752pfm.8.1653063739326;
+        Fri, 20 May 2022 09:22:19 -0700 (PDT)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id cp19-20020a170902e79300b0015e8d4eb285sm5787012plb.207.2022.05.20.09.22.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 May 2022 09:22:18 -0700 (PDT)
+Message-ID: <912a5d2b-bc2d-677a-dd64-d66046fc734d@gmail.com>
+Date:   Fri, 20 May 2022 09:22:16 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220520160305.GA17335@blackbody.suse.cz>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 1/1] perf vendors events arm64: Update Cortex A57/A72
+Content-Language: en-US
+To:     Nick Forrington <nick.forrington@arm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org
+Cc:     John Garry <john.garry@huawei.com>, Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        James Clark <james.clark@arm.com>,
+        Andrew Kilroy <andrew.kilroy@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+References: <20220517135805.313184-1-nick.forrington@arm.com>
+ <20220517135805.313184-2-nick.forrington@arm.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220517135805.313184-2-nick.forrington@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-On Fri, May 20, 2022 at 06:03:05PM +0200, Michal Koutný wrote:
-> > Then io hung can be triggered by always submmiting new configuration
-> > before the throttled bio is dispatched.
+
+On 5/17/2022 6:58 AM, Nick Forrington wrote:
+> Categorise and add missing PMU events for Cortex-A57/A72, based on:
+> https://github.com/ARM-software/data/blob/master/pmu/cortex-a57.json
+> https://github.com/ARM-software/data/blob/master/pmu/cortex-a72.json
 > 
-> How big is this a problem actually? Is it only shooting oneself in the leg
-> or can there be a user who's privileged enough to modify throttling
-> configuration yet not privileged enough to justify the hung's
-> consequences (like some global FS locks).
+> These contain the same events, and are based on the Arm Technical
+> Reference Manuals for Cortex-A57 and Cortex-A72.
+> 
+> Signed-off-by: Nick Forrington <nick.forrington@arm.com>
 
-So, the problem in itself is of the self-inflicted type and I'd prefer to
-ignore it. Unfortunately, the kernel doesn't have the kind of isolation
-where stalling out some aribtrary tasks is generally safe, especially not
-blk-throtl as it doesn't handle bio_issue_as_root() and thus can have a
-pretty severe priority inversions where IOs which can block system-wide
-operations (e.g. memory reclaim) get trapped in a random cgroup.
-
-Even ignoring that, the kernel in general assumes some forward progress from
-everybody and when a part stalls it's relatively easy to spread to the rest
-of the system, sometimes gradually, sometimes suddenly - e.g. if the stalled
-IO was being performed while holding the mmap_sem, which isn't rare, then
-anything which tries to read its proc cmdline will hang behind it.
-
-So, we wanna avoid a situation where a non-priviledged user can cause
-indefinite UNINTERRUPTIBLE sleeps to prevent local DoS attacks. I mean,
-preventing local attacks is almost never fool proof but we don't want to
-make it too easy at least.
-
-Thanks.
-
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-tejun
+Florian

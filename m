@@ -2,151 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57E7952E700
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 10:11:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 418D752E703
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 10:12:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346829AbiETILi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 04:11:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58246 "EHLO
+        id S243407AbiETIMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 04:12:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235949AbiETILa (ORCPT
+        with ESMTP id S241875AbiETIMP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 04:11:30 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4385252E49;
-        Fri, 20 May 2022 01:11:29 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id n8so6786361plh.1;
-        Fri, 20 May 2022 01:11:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=XsDbXLkM/SD1gIqolJSdHpOWgyWe8lXWJA+Qz0s6McE=;
-        b=eg8vz0xPF3x92KYNdkg2qpQTecRdTZDTj8Ub+NAl8OeO1ep1lDeLuB5jO2uc44xHth
-         xpwlne//yPNs9kG4mTLlIEPZJmrhO/MS0PuUrLv7y6aPdrWiymowlgpfaiOaFW3+hc5n
-         3Lgy4Sza/h7jiHNbKvwxlSkJ5ooWCHBYeqfqJwSO9n6kPjKtXTjF4jvUN9d+dom2vbw0
-         0mcz7iJK85ZnCQUCNimQ6pRDzmRb1zZHbgZ7+B3tpFRHgg+ttjx0FayzwJHeNUCmMcZt
-         LWwWfyDllBEwk0ddMgg7PJkSbV62gDDLHYEqIrLEHPSU2/F2u8QGvFEYxcwCv7WtQH6M
-         dPYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=XsDbXLkM/SD1gIqolJSdHpOWgyWe8lXWJA+Qz0s6McE=;
-        b=WrXdP7jl5Gram+BbnD0LdKKAWbfp7ausynKZni/Aj6bRWmxIP+pN/Y2KYdyj3ZTtrB
-         jYcCe3rIeuyXx9QiNbRgJOwGmG7g/E23zWJC6ufxHIwsjSuv5JXuQV26l8Bf9gNU92+t
-         XyQsgPUPNCE4ZDky0EHEqZIv6S/uFHJzpR7VbTmPMZT8oqoGo7CLK7FJhmEyV0LTIhTe
-         0DK6g2Vj1Nw9NSbHDkNlkvfr7ygbasKuWvXx96ePPgntSiaH/PqO6Lh2gra43mw9tZh6
-         uUzZN1TNEZL3ACxC/oUzU+Nzy8mkEpDNHeZyxTDWhk4l3RUL39NblPGiBmahVgp3224p
-         ql3g==
-X-Gm-Message-State: AOAM530/WcCpNUa/Fy3mtrkgcluQQjUi/Gvx6B8lHCkaGtEfJ/icXbUI
-        EJeXbJBTVrAou5b+6OXnPnE=
-X-Google-Smtp-Source: ABdhPJypatUyV/ufYREcR4VO4QOd+pO6wNuURAzg0PEZLZdQILYK8o5WgCQ/hpzFvG4VIwbJRIURtQ==
-X-Received: by 2002:a17:902:a502:b0:151:8289:b19 with SMTP id s2-20020a170902a50200b0015182890b19mr8683368plq.149.1653034288294;
-        Fri, 20 May 2022 01:11:28 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::4:1761])
-        by smtp.gmail.com with ESMTPSA id p6-20020a170902780600b0015e8d4eb299sm5038111pll.227.2022.05.20.01.11.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 01:11:27 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 19 May 2022 22:11:26 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Michal Hocko <mhocko@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v1 3/5] bpf: Introduce cgroup iter
-Message-ID: <YodNLpxut+Zddnre@slm.duckdns.org>
-References: <20220520012133.1217211-1-yosryahmed@google.com>
- <20220520012133.1217211-4-yosryahmed@google.com>
- <YodGI73xq8aIBrNM@slm.duckdns.org>
- <CAJD7tkbvMcMWESMcWi6TtdCKLr6keBNGgZTnqcHZvBrPa1qWPw@mail.gmail.com>
+        Fri, 20 May 2022 04:12:15 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5824ED790;
+        Fri, 20 May 2022 01:12:13 -0700 (PDT)
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24K4QUeh000310;
+        Fri, 20 May 2022 08:12:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type :
+ content-transfer-encoding; s=pp1;
+ bh=FhTqy8GufFhhuU9nuGr3TIMYf8rq3SU3NZu8orqFmEU=;
+ b=QBxqVfbmp6IRb1DS0m13NyL6UJef6GMfBgqD5RfxoDpYed361o4D3NdAvoTSMhsDLr/j
+ XGRQHtkQbZxlW1cUBBzh2GxriPrdnSEEfoARAMcFPTA317l9zi55/D/CA7Di3ddXhOWb
+ NOVm5PjIGtx+a7WZGrQ4He0XxADpWMkFnQJ7l2LxlvKXPAdMRn5CFRTfMS43M8h2cRHp
+ kYbw7hz1W0JOvLLXusfJlgUpFSMMqaaDIH5mw1PNsaa6kPMpFRcbPeRVcmiJAmKajzAU
+ y3wUicuny+wPkJ/ZE97SxQz54gzI/YfNCqO4TndCWQFgEWoFm1ccg2kx5AjeGef33/O/ Dw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g5ye4qwnk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 May 2022 08:12:10 +0000
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24K89nwW012174;
+        Fri, 20 May 2022 08:12:10 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g5ye4qwn0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 May 2022 08:12:09 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24K88wgs003119;
+        Fri, 20 May 2022 08:12:08 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma04fra.de.ibm.com with ESMTP id 3g2428xve3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 May 2022 08:12:08 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24K8C4qJ38994194
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 20 May 2022 08:12:04 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D643B11C052;
+        Fri, 20 May 2022 08:12:04 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8A72A11C04C;
+        Fri, 20 May 2022 08:12:04 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 20 May 2022 08:12:04 +0000 (GMT)
+From:   Thomas Richter <tmricht@linux.ibm.com>
+To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org
+Cc:     svens@linux.ibm.com, gor@linux.ibm.com, sumanthk@linux.ibm.com,
+        hca@linux.ibm.com, Namhyung Kim <namhyung@gmail.com>,
+        Thomas Richter <tmricht@linux.ibm.com>
+Subject: [PATCH v2] perf/s390: Compiler error on s390 for bench/numa.c
+Date:   Fri, 20 May 2022 10:11:58 +0200
+Message-Id: <20220520081158.2990006-1-tmricht@linux.ibm.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJD7tkbvMcMWESMcWi6TtdCKLr6keBNGgZTnqcHZvBrPa1qWPw@mail.gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: G-hqh_xU9Av7_Y095NhEWLP5iMfeXb1N
+X-Proofpoint-ORIG-GUID: sn581ht0DmnfQNOnJq-vQ7BicDUkSqlq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-20_02,2022-05-19_03,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ impostorscore=0 mlxlogscore=999 spamscore=0 phishscore=0 suspectscore=0
+ bulkscore=0 priorityscore=1501 lowpriorityscore=0 mlxscore=0 adultscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205200058
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+The compilation on s390 results in this error:
 
-On Fri, May 20, 2022 at 12:58:52AM -0700, Yosry Ahmed wrote:
-> On Fri, May 20, 2022 at 12:41 AM Tejun Heo <tj@kernel.org> wrote:
-> >
-> > On Fri, May 20, 2022 at 01:21:31AM +0000, Yosry Ahmed wrote:
-> > > From: Hao Luo <haoluo@google.com>
-> > >
-> > > Introduce a new type of iter prog: cgroup. Unlike other bpf_iter, this
-> > > iter doesn't iterate a set of kernel objects. Instead, it is supposed to
-> > > be parameterized by a cgroup id and prints only that cgroup. So one
-> > > needs to specify a target cgroup id when attaching this iter. The target
-> > > cgroup's state can be read out via a link of this iter.
-> > >
-> > > Signed-off-by: Hao Luo <haoluo@google.com>
-> > > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> >
-> > This could be me not understanding why it's structured this way but it keeps
-> > bothering me that this is adding a cgroup iterator which doesn't iterate
-> > cgroups. If all that's needed is extracting information from a specific
-> > cgroup, why does this need to be an iterator? e.g. why can't I use
-> > BPF_PROG_TEST_RUN which looks up the cgroup with the provided ID, flushes
-> > rstat, retrieves whatever information necessary and returns that as the
-> > result?
-> 
-> I will let Hao and Yonghong reply here as they have a lot more
-> context, and they had previous discussions about cgroup_iter. I just
-> want to say that exposing the stats in a file is extremely convenient
-> for userspace apps. It becomes very similar to reading stats from
-> cgroupfs. It also makes migrating cgroup stats that we have
-> implemented in the kernel to BPF a lot easier.
+ # make DEBUG=y bench/numa.o
+ ...
+ bench/numa.c: In function ‘__bench_numa’:
+ bench/numa.c:1749:81: error: ‘%d’ directive output may be truncated
+             writing between 1 and 11 bytes into a region of size between
+             10 and 20 [-Werror=format-truncation=]
+ 1749 |        snprintf(tname, sizeof(tname), "process%d:thread%d", p, t);
+                                                               ^~
+ ...
+ bench/numa.c:1749:64: note: directive argument in the range
+                [-2147483647, 2147483646]
+ ...
+ #
 
-So, if it were upto me, I'd rather direct energy towards making retrieving
-information through TEST_RUN_PROG easier rather than clinging to making
-kernel output text. I get that text interface is familiar but it kinda
-sucks in many ways.
+The maximum length of the %d replacement is 11 characters because
+of the negative sign.  Therefore extend the array by two more
+characters.
 
-> AFAIK there are also discussions about using overlayfs to have links
-> to the bpffs files in cgroupfs, which makes it even better. So I would
-> really prefer keeping the approach we have here of reading stats
-> through a file from userspace. As for how we go about this (and why a
-> cgroup iterator doesn't iterate cgroups) I will leave this for Hao and
-> Yonghong to explain the rationale behind it. Ideally we can keep the
-> same functionality under a more descriptive name/type.
+Output after:
+ # make  DEBUG=y bench/numa.o > /dev/null 2>&1; ll bench/numa.o
+ -rw-r--r-- 1 root root 418320 May 19 09:11 bench/numa.o
+ #
 
-My answer would be the same here. You guys seem dead set on making the
-kernel emulate cgroup1. I'm not gonna explicitly block that but would
-strongly suggest having a longer term view.
+Fixes: 3aff8ba0a4c9c ("perf bench numa: Avoid possible truncation when using snprintf()")
+Suggested-by: Namhyung Kim <namhyung@gmail.com>
+Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
+---
+ tools/perf/bench/numa.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-If you *must* do the iterator, can you at least make it a proper iterator
-which supports seeking? AFAICS there's nothing fundamentally preventing bpf
-iterators from supporting seeking. Or is it that you need something which is
-pinned to a cgroup so that you can emulate the directory structure?
-
-Thanks.
-
+diff --git a/tools/perf/bench/numa.c b/tools/perf/bench/numa.c
+index d5289fa58a4f..20eed1e53f80 100644
+--- a/tools/perf/bench/numa.c
++++ b/tools/perf/bench/numa.c
+@@ -1740,7 +1740,7 @@ static int __bench_numa(const char *name)
+ 		"GB/sec,", "total-speed",	"GB/sec total speed");
+ 
+ 	if (g->p.show_details >= 2) {
+-		char tname[14 + 2 * 10 + 1];
++		char tname[14 + 2 * 11 + 1];
+ 		struct thread_data *td;
+ 		for (p = 0; p < g->p.nr_proc; p++) {
+ 			for (t = 0; t < g->p.nr_threads; t++) {
 -- 
-tejun
+2.36.1
+

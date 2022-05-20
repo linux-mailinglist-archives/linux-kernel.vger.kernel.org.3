@@ -2,101 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63C1452E921
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 11:44:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEDD152E91F
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 11:44:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347872AbiETJm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 05:42:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34092 "EHLO
+        id S1347835AbiETJoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 05:44:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347814AbiETJmq (ORCPT
+        with ESMTP id S235188AbiETJny (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 05:42:46 -0400
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D8AA149AA2;
-        Fri, 20 May 2022 02:42:37 -0700 (PDT)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPA id CE5701C0006;
-        Fri, 20 May 2022 09:42:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1653039755;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3sbzBzsCcC7x9s3vXEvDzSjrA2nDIAK9IYFPPKABIDw=;
-        b=gO27dZkzBfMtegto1vIGkWgZin67UDCXsQ+Lu64r2gl7wQtsk/28Wddo7Ucd1TuSZy14KI
-        qlRkaQ7Nfij+MKOWV/DIEea+7XLbU5d2xhL9mAC7xBJHVNvNNutI1NE0PM7y1Og8s8UEEj
-        4wfh9YYh1BuzVIi+HBPHaownrza5ytvVXM6zoZ8Voti0HnUe/ir92wu/cUNOzsv0k/1UPk
-        EKz8zp6dAOU8XkDhbmizxx/VNZRiorcSGgjjsRBSa6XJl3fqngMiVBWUBR9niweeP+Jabn
-        ISJ6aOALrO31ER4ub1Sn2iPAyFq26fleAOP4b08Nn7ktCKnYJAQBO5N8HknCjw==
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
+        Fri, 20 May 2022 05:43:54 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30352149ABD
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 02:43:53 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d22so6914955plr.9
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 02:43:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ISg/8xMPMfr1lZg9uez8+LcDvNEZDPUAQ4cjw7mzFfk=;
+        b=GwV6FZzfJb4ectmQh1Tv2YE7JL/cAmzGrnb7G6ggB2qJ06d7/Cx4fOAm6tnhSfzCc5
+         fLGymIpxWMM5AWSPgfMGH3YVPyPRoJAYsFvW94d0nDzmbO/Mmdtals0dE5ABxSVAFvXP
+         f8CIF/z2jE/MOX+9Wf7LLVB3ztYV56Z8aDP6Q=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ISg/8xMPMfr1lZg9uez8+LcDvNEZDPUAQ4cjw7mzFfk=;
+        b=bglCO+MPwaK/PAaXXSR1yHjZyGSjG3bIU9xK3aZ0ZCutvKnx7z66ZnMpZiCDRrWzb7
+         MYSgYVIjPxn/kGU2Ij61cWQachlniBVaI0CnhzsQGIJ4t676a3eCIhooeBUnBN1qEpGq
+         mGOzYAhsO5teE25mOvJX6B9WlEqtI8aB6l+7vlgP/ur82Mwz+opdu0uQqz5eKoEaJuya
+         K/f51/g5XhEUQb9EKA9GTXYURFKJ8to2iYH1UJQsdhAmiEWF+imt0qjYsxaM3nVdZWNs
+         gry2iABENmsbUT4qxEsnb0C5AyMCp5i5oo2wbBgLc13m7TjbvXxynHgqOMTIcU3fJtKG
+         MDcQ==
+X-Gm-Message-State: AOAM533KqKxK0ALi9sYkQH4qdN3fbF+OcPP9WlVmQZxEvAORi73l4uTN
+        ZmlcdV4ff7ZywW1ZbOilLPgLcw==
+X-Google-Smtp-Source: ABdhPJy43LUtdN+xEWvgtRwLWdIsN389lpZaprg3R4KGqXqmkxm/vSRHdq0C/UG39gRhRdKmr/CD6w==
+X-Received: by 2002:a17:90b:3649:b0:1db:a201:5373 with SMTP id nh9-20020a17090b364900b001dba2015373mr10116081pjb.175.1653039832597;
+        Fri, 20 May 2022 02:43:52 -0700 (PDT)
+Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:ec49:9912:894:222d])
+        by smtp.gmail.com with ESMTPSA id 23-20020aa79217000000b0050dc76281bfsm1290597pfo.153.2022.05.20.02.43.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 May 2022 02:43:52 -0700 (PDT)
+From:   Chen-Yu Tsai <wenst@chromium.org>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Chen-Yu Tsai <wenst@chromium.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>
-Cc:     Rob Herring <robh@kernel.org>, linux-pci@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Clement Leger <clement.leger@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>
-Subject: [PATCH v6 6/6] ARM: dts: r9a06g032: Link the PCI USB devices to the USB PHY
-Date:   Fri, 20 May 2022 11:41:55 +0200
-Message-Id: <20220520094155.313784-7-herve.codina@bootlin.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220520094155.313784-1-herve.codina@bootlin.com>
-References: <20220520094155.313784-1-herve.codina@bootlin.com>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/4] clk: mediatek: mt8183: Fix GPU/MFG clock rate changing
+Date:   Fri, 20 May 2022 17:43:19 +0800
+Message-Id: <20220520094323.754971-1-wenst@chromium.org>
+X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Describe the PCI USB devices that are behind the PCI bridge, adding
-necessary links to the USB PHY device.
+Hi everyone,
 
-Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- arch/arm/boot/dts/r9a06g032.dtsi | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+This series fixes the clock rate changing for the GPU. This work came
+about as part of adding DVFS support for the Mali GPU on MT8183, to
+support efforts in testing the SVS patches [1] on MT8183.
 
-diff --git a/arch/arm/boot/dts/r9a06g032.dtsi b/arch/arm/boot/dts/r9a06g032.dtsi
-index 8cedc08ba3b9..db1e35381d9b 100644
---- a/arch/arm/boot/dts/r9a06g032.dtsi
-+++ b/arch/arm/boot/dts/r9a06g032.dtsi
-@@ -121,6 +121,18 @@ pci_usb: pci@40030000 {
- 			interrupt-map = <0x0000 0 0 1 &gic GIC_SPI 79 IRQ_TYPE_LEVEL_HIGH
- 					 0x0800 0 0 1 &gic GIC_SPI 79 IRQ_TYPE_LEVEL_HIGH
- 					 0x1000 0 0 2 &gic GIC_SPI 79 IRQ_TYPE_LEVEL_HIGH>;
-+
-+			usb@1,0 {
-+				reg = <0x800 0 0 0 0>;
-+				phys = <&usbphy>;
-+				phy-names = "usb";
-+			};
-+
-+			usb@2,0 {
-+				reg = <0x1000 0 0 0 0>;
-+				phys = <&usbphy>;
-+				phy-names = "usb";
-+			};
- 		};
- 
- 		uart0: serial@40060000 {
+This series fixes a couple things:
+
+1. Fix the clock reference for the GPU. The device tree incorrectly
+   references the top level PLL, when in fact it is fed from the clock
+   gate in the MFGCFG block. Fixed in patch 1.
+
+2. Clock rate requests on the MFG clock gate aren't propagated up the
+   tree. Fixed in patch 2 by adding CLK_SET_RATE_PARENT.
+
+3. MFG clock needs to be temporarily muxed away from MFG PLL during PLL
+   reconfiguration, to avoid glitches. This is done using a notifier.
+   The framework is added in patch 3, and added to the driver in patch 4.
+
+This is based on my "clk: mediatek: Move to struct clk_hw provider APIs"
+series version 3 [2], which was just merged.
+
+Please have a look.
+
+The GPU DVFS stuff will be sent separately, as that part is a bit more
+contentious, and the changes span more subsystems.
+
+
+Regards
+ChenYu
+
+[1] https://lore.kernel.org/linux-mediatek/20220516004311.18358-1-roger.lu@mediatek.com/
+[2] https://lore.kernel.org/linux-mediatek/20220519071610.423372-1-wenst@chromium.org/
+
+Chen-Yu Tsai (4):
+  arm64: dts: mt8183: Fix Mali GPU clock
+  clk: mediatek: mt8183: mfgcfg: Propagate rate changes to parent
+  clk: mediatek: mux: add clk notifier functions
+  clk: mediatek: mt8183: Add clk mux notifier for MFG mux
+
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi |  2 +-
+ drivers/clk/mediatek/clk-mt8183-mfgcfg.c |  6 ++--
+ drivers/clk/mediatek/clk-mt8183.c        | 21 ++++++++++++
+ drivers/clk/mediatek/clk-mux.c           | 42 ++++++++++++++++++++++++
+ drivers/clk/mediatek/clk-mux.h           | 15 +++++++++
+ 5 files changed, 82 insertions(+), 4 deletions(-)
+
 -- 
-2.35.1
+2.36.1.124.g0e6072fb45-goog
 

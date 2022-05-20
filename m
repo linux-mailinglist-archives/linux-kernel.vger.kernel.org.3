@@ -2,79 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F92952ECC7
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 15:00:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1278752ECC9
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 15:00:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349482AbiETNAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 09:00:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51836 "EHLO
+        id S1349678AbiETNAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 09:00:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236247AbiETNAB (ORCPT
+        with ESMTP id S236247AbiETNAJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 09:00:01 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0386D169E27;
-        Fri, 20 May 2022 06:00:01 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id f9so15567197ejc.0;
-        Fri, 20 May 2022 06:00:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=29WlRMrgqsqkyq2cXG/yY/s3COdSKBJEo/H2xfm8Y7k=;
-        b=RNKnYlXb1TsZpVz8ygubB2uyiiRyQvd+Vf3UZWaApaglAYyunwuJQRe+nOa/iDWQBQ
-         sQ/AsLAhYqVdmZmB/T9DCV7hiuNaw9hKySBKAzmDqPz22lK3H6BWrV5OgBU1oKyosIF/
-         5v6xJYzQX2jVIdS6CYxoAcAvIrOP2gvDsz0yC2RqsskSsOqY8x0abU60+oRUYQu2196k
-         t+9AhLQtIY9szFh2vIbT/3d6o8anOQb4YpSjH2XxW3j/QMqxPa0z/EmPg4LjM6B5cyf7
-         q70+BLQREtBsL3dmMNld4bE+UDqBScgtJxosA4ipmGMPjYW2fg2TRMT505L+0Ij2fsfu
-         8cKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=29WlRMrgqsqkyq2cXG/yY/s3COdSKBJEo/H2xfm8Y7k=;
-        b=IO3IQzulad3+y5G91Mkl6lRypSOA69vsR8ijAOmyoLBUelu2SgY7I7VmRkmmEevA/0
-         S87EJN6em6A7zIBXHZmNdqtMvukCjW/GWX8qOfH079rLQ7OYuv+MTCUHsug2lP7PKyij
-         Et+jcZ04JDiUD46qrioE9QvUcTe7msgGMG9G4RYeiGSbv0J6QnuQaeteJnGxR4ZR6KKN
-         prg7rVrNah4WPtT7cnLyPm6lYI35rzLHZo62BuATKzl0M7aE2l9FBe1wMygLyOpCNAqj
-         tAl5r7ujrarKxRUz/x5L5BGBIhNPEI/uR/lhiST/0/D0xFLvd/6mFPSvFzec/+FzEXi5
-         ItaQ==
-X-Gm-Message-State: AOAM53244hzbmbNdDlRa34Ob3G0oB4asuOm75+g/8U5RN1bsTYt/elmy
-        urhJ88HDaLUzyw7RwWXwjkE=
-X-Google-Smtp-Source: ABdhPJyL/n1KfLo7Nf1z5lBz2l68E4sxuMo89GrxheGeUfKF1v0thfjKcOHe8pm7UkfGE5fn5NiTqg==
-X-Received: by 2002:a17:907:e8b:b0:6fe:b76d:bd18 with SMTP id ho11-20020a1709070e8b00b006feb76dbd18mr519965ejc.294.1653051599504;
-        Fri, 20 May 2022 05:59:59 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id h24-20020a1709070b1800b006f3ef214e5csm1293345ejl.194.2022.05.20.05.59.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 May 2022 05:59:58 -0700 (PDT)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <3d30f1ac-558f-0ce6-3d46-e223f117899b@redhat.com>
-Date:   Fri, 20 May 2022 14:59:56 +0200
+        Fri, 20 May 2022 09:00:09 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B9B816A271
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 06:00:08 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 50D731477;
+        Fri, 20 May 2022 06:00:08 -0700 (PDT)
+Received: from bogus (unknown [10.57.66.157])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ECDCE3F73D;
+        Fri, 20 May 2022 06:00:05 -0700 (PDT)
+Date:   Fri, 20 May 2022 13:59:59 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Atish Patra <atishp@atishpatra.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Qing Wang <wangqing@vivo.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>
+Subject: Re: [PATCH v2 8/8] arch_topology: Add support to build llc_sibling
+ on DT platforms
+Message-ID: <20220520125959.wlxz53cfqldljxjy@bogus>
+References: <20220518093325.2070336-1-sudeep.holla@arm.com>
+ <20220518093325.2070336-9-sudeep.holla@arm.com>
+ <CAL_JsqKig8U4hQEtHW8ct1Pd0a29ZtoTp1HuWQv389yb+SuW_A@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH RESEND v3 11/11] KVM: x86/pmu: Drop amd_event_mapping[] in
- the KVM context
-Content-Language: en-US
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-References: <20220518132512.37864-1-likexu@tencent.com>
- <20220518132512.37864-12-likexu@tencent.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220518132512.37864-12-likexu@tencent.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAL_JsqKig8U4hQEtHW8ct1Pd0a29ZtoTp1HuWQv389yb+SuW_A@mail.gmail.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,17 +53,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/18/22 15:25, Like Xu wrote:
-> +	if (static_call(kvm_x86_pmu_hw_event_is_unavail)(pmc))
-> +		return false;
-> +
+On Thu, May 19, 2022 at 01:10:51PM -0500, Rob Herring wrote:
+> On Wed, May 18, 2022 at 4:34 AM Sudeep Holla <sudeep.holla@arm.com> wrote:
+> >
+> > ACPI PPTT provides cache identifiers and especially the last level cache
+> > identifier is used in obtaining last level cache siblings amongst CPUs.
+> >
+> > While we have the cpu map representing all the CPUs sharing last level
+> > cache in the cacheinfo driver, it is populated quite late in the boot
+> > while the information is needed to build scheduler domains quite early.
+>
+> Late is because it's a device_initcall() rather than late in the cpu
+> hotplug state machine, right?
 
-I think it's clearer to make this positive and also not abbreviate the 
-name; that is, hw_event_available.
+Right. The expectation is to run in on each online CPU in CPU hotplug state
+machine for some architectures. We may not need that on arm64 especially
+since we get all info from DT or ACPI, but e.g. x86 uses cpuid which needs
+to be executed on that CPU.
 
-Apart from patch 3, the series looks good.  I'll probably delay it to 
-5.20 so that you can confirm the SRCU issue, but it's queued.
+> The late aspect is for sysfs presumably,but I think we could decouple that.
 
-Thanks,
+OK, not sure when this sched_domain info is actually needed. It think it
+could be decoupled if we can wait until all the cpus are online.
 
-Paolo
+> Do all the firmware cache parsing early and then populate the sysfs parts
+> later.
+
+Yes that may work on DT/ACPI based systems, as I said x86 relies on cpuid.
+
+> It's not a unique problem as the DT unflattening and init code has to
+> do the same thing. I'd assume the hotplug and cpu sysfs devices have
+> to deal with the same thing.
+>
+
+OK, I will take a look at how to do that.
+
+--
+Regards,
+Sudeep

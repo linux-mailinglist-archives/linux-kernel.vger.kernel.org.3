@@ -2,193 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 221EC52F38B
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 20:59:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F31952F398
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 21:01:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345047AbiETS7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 14:59:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48512 "EHLO
+        id S1353165AbiETTBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 15:01:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237963AbiETS7s (ORCPT
+        with ESMTP id S1353149AbiETTAz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 14:59:48 -0400
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A0F195E92;
-        Fri, 20 May 2022 11:59:47 -0700 (PDT)
-Received: by mail-oi1-f175.google.com with SMTP id w130so11041009oig.0;
-        Fri, 20 May 2022 11:59:47 -0700 (PDT)
+        Fri, 20 May 2022 15:00:55 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB1E3C738
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 12:00:54 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id v10so8456505pgl.11
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 12:00:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=SLhpiwUzGg74rvz2i9jdfYcoP7QfcAfH5acSfb9UyLk=;
+        b=jO5DbYf++IXBnckF9Jhr/d2FabNt9kEG3A6iLrI02P7pvLOocUCGczpyGTaGnFFyoV
+         tt5taci3wmuG6vlqbc2f1NDubU4Z7JlSyb/0Lja1QsSEBPchDyprMBtaGg29oJDs7bEo
+         qFX9H8I4glYV5tUeGNQj0e4wMAXrC12F8yGe+1C8IVx483u4yG9EQSOqd2M/XunWUeh7
+         mhS/kCAgWve2V9kJha5VKgvhaK0mFO9a1jBre+YDm7c+WItxdrYBmrOft0M6QuI40JHF
+         p1lfti9VLSryzrD7O5kyFCu+faWj7KciOE14yfNal355Qv0k2R22nIMUFOI59HpIJUDS
+         aDEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GFbPgQEtbW912BPIItjV08RciM4FEzthIck0qttGkpk=;
-        b=fDsPDHpCxd2z66DUW2lygsqMnwmm+Oemfn/HWNOJM5u3y+fwXKI7FC2OVjuDN/mdJL
-         WGOIwyGxQin0Fs/iuoAB6cpUM117DT2VXt7Lwq/q9SUyjZG24V07OKFP8VCywKCIhwiq
-         jHyUf1gOLSfJY5c5NRUV4ZL38Q21609njDFdgYm5TuKxLht69Hjp+KBQzZC49uwd3bmY
-         nqyXw5/CTlR6pSEElBHjxqghCNN7TTrqEXgrOjIEc9D+o0aitpB2MZyI1ln4Dq15gEDi
-         H+shatSm9R06b+e2fahalh/oVOIl1RUcORpFkdSLYhTOiTAojzg5Quryn7vNnKj+2wUR
-         UtGg==
-X-Gm-Message-State: AOAM531qC9rJ2vQT+Bq1CEm7yopMmzl2B2nyvDFYSOhlmoZtfNNpx0pw
-        a0oLDhgx84YcL4WlUueXchgjurDkJmYiB+PrGFY=
-X-Google-Smtp-Source: ABdhPJxqogoOMkG4+gq8mrfj4XEMfuHTadYZbi0FuE9/BP6hynPyQ+19JDm9/rtXUghz8nAXO8bAy051UWUXYYGCxss=
-X-Received: by 2002:a05:6808:2218:b0:326:bd8c:d044 with SMTP id
- bd24-20020a056808221800b00326bd8cd044mr6204978oib.92.1653073187030; Fri, 20
- May 2022 11:59:47 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=SLhpiwUzGg74rvz2i9jdfYcoP7QfcAfH5acSfb9UyLk=;
+        b=ev2KhL+OqEQ4BXEb3FLN1vhbavb2xMaLZaBRROi4RhsnGY05OJEbMYYLUi5uGkP7VN
+         fBTx7uJUNcUqS3SXkBk9e3tedrp7/sMPArYNMPAAoRZx555UduPYaB8hZQOMEF1SEirq
+         VJcO4Q3KJfB3D8W9uon/481pBcnX1bDZuN7XeaH95KFMUtSL0hKOwR3TUKl6QrUbg+k8
+         72xAdmkUeZA1y7aIApLSPG4rWTI9Wf9VcLjIIaE1mU5oqXedVLnQb6vAOy6Odo51ZXri
+         Ewr2F9pQt0BBkr5niVehtyVrZNJjeskCyJj/B4fM0+MShaeCwwbWy64wrpBWJtZyXUvZ
+         JV0A==
+X-Gm-Message-State: AOAM533XLPRhctw7FhIB6ZpW0xeJQpFxHLXEmcQg1wgN3Fv3gBPeVK/b
+        9aa+2maduduWQn+3HoyIa3aprA==
+X-Google-Smtp-Source: ABdhPJyoldqb08E4bwvPijzVVn1NoOuF1/pWcZHWGeHqjM4mS1FkRMVCGDy315rzZryVv/FRMmq8ow==
+X-Received: by 2002:a63:4f4a:0:b0:3f5:d2b1:8dc4 with SMTP id p10-20020a634f4a000000b003f5d2b18dc4mr9722151pgl.106.1653073254001;
+        Fri, 20 May 2022 12:00:54 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id bo4-20020a056a000e8400b0050dc76281e2sm2076643pfb.188.2022.05.20.12.00.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 May 2022 12:00:52 -0700 (PDT)
+Date:   Fri, 20 May 2022 19:00:48 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@intel.com, luto@kernel.org, peterz@infradead.org,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, linux-kernel@vger.kernel.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        thomas.lendacky@amd.com, x86@kernel.org
+Subject: Re: [PATCHv2 3/3] x86/tdx: Handle load_unaligned_zeropad()
+ page-cross to a shared page
+Message-ID: <YoflYI6AACAqAt9l@google.com>
+References: <20220520031316.47722-1-kirill.shutemov@linux.intel.com>
+ <20220520031316.47722-4-kirill.shutemov@linux.intel.com>
+ <YofUMlc3ORYZ8if7@google.com>
+ <20220520184335.oygw2q3rov2go45b@black.fi.intel.com>
 MIME-Version: 1.0
-References: <20220422093833.340873-1-nakamura.shun@fujitsu.com> <20220422093833.340873-3-nakamura.shun@fujitsu.com>
-In-Reply-To: <20220422093833.340873-3-nakamura.shun@fujitsu.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Fri, 20 May 2022 11:59:35 -0700
-Message-ID: <CAM9d7cjoDXmQ=6B3zMfq_+0QNyTc-r5nBCJoKJBx98JrJjv-YA@mail.gmail.com>
-Subject: Re: [PATCH 2/7] libperf: Introduce perf_{evsel, evlist}__open_opt
- with extensible struct opts
-To:     Shunsuke Nakamura <nakamura.shun@fujitsu.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220520184335.oygw2q3rov2go45b@black.fi.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, May 20, 2022, Kirill A. Shutemov wrote:
+> On Fri, May 20, 2022 at 05:47:30PM +0000, Sean Christopherson wrote:
+> > On Fri, May 20, 2022, Kirill A. Shutemov wrote:
+> > > @@ -299,6 +301,24 @@ static int handle_mmio(struct pt_regs *regs, struct ve_info *ve)
+> > >  	if (WARN_ON_ONCE(user_mode(regs)))
+> > >  		return -EFAULT;
+> > >  
+> > > +	/*
+> > > +	 * load_unaligned_zeropad() relies on exception fixups in case of the
+> > > +	 * word being a page-crosser and the second page is not accessible.
+> > > +	 *
+> > > +	 * In TDX guests, the second page can be shared page and VMM may
+> > > +	 * configure it to trigger #VE.
+> > > +	 *
+> > > +	 * Kernel assumes that #VE on a shared page is MMIO access and tries to
+> > > +	 * decode instruction to handle it. In case of load_unaligned_zeropad()
+> > > +	 * it may result in confusion as it is not MMIO access.
+> > 
+> > The guest kernel can't know that it's not "MMIO", e.g. nothing prevents the host
+> > from manually serving accesses to some chunk of shared memory instead of backing
+> > the shared chunk with host DRAM.
+> 
+> It would require the guest to access shared memory only with instructions
+> that we can deal with. I don't think we have such guarantee.
 
-On Fri, Apr 22, 2022 at 2:44 AM Shunsuke Nakamura
-<nakamura.shun@fujitsu.com> wrote:
->
-> Introduce perf_{evsel, evlist}__open_opt with extensible structure opts.
-> The mechanism of the extensible structure opts imitates
-> tools/lib/bpf/libbpf.h. Currently, only open_flags is supported for the
-> opts structure.
->
-> Signed-off-by: Shunsuke Nakamura <nakamura.shun@fujitsu.com>
-> ---
-[SNIP]
-> diff --git a/tools/lib/perf/evsel.c b/tools/lib/perf/evsel.c
-> index 210ea7c06ce8..00c0cea43b52 100644
-> --- a/tools/lib/perf/evsel.c
-> +++ b/tools/lib/perf/evsel.c
-> @@ -16,8 +16,12 @@
->  #include <internal/lib.h>
->  #include <linux/string.h>
->  #include <sys/ioctl.h>
-> +#include <signal.h>
-> +#include <fcntl.h>
-> +#include <sys/types.h>
->  #include <sys/mman.h>
->  #include <asm/bug.h>
-> +#include "internal.h"
->
->  void perf_evsel__init(struct perf_evsel *evsel, struct perf_event_attr *attr,
->                       int idx)
-> @@ -26,6 +30,7 @@ void perf_evsel__init(struct perf_evsel *evsel, struct perf_event_attr *attr,
->         evsel->attr = *attr;
->         evsel->idx  = idx;
->         evsel->leader = evsel;
-> +       evsel->open_flags = 0;
+Ya, it's purely thoereticaly behavior.  But panicking if the kernel can't decode
+the instruction is really all the guest can do.
 
-In general, you don't need to reset it to zero as it's allocated with
-zalloc().
+> > > +	 * Check fixup table before trying to handle MMIO.
+> > 
+> > This ordering is wrong, fixup should be done if and only if the instruction truly
+> > "faults".  E.g. if there's an MMIO access lurking in the kernel that is wrapped in
+> > exception fixup, then this will break that usage and provide garbage data on a read
+> > and drop any write.
+> 
+> When I tried to trigger the bug, the #VE actually succeed, because
+> load_unaligned_zeropad() uses instruction we can decode. But due
+> misalignment, the part of that came from non-shared page got overwritten
+> with data that came from VMM.
 
->  }
->
-[SNIP]
-> diff --git a/tools/lib/perf/internal.h b/tools/lib/perf/internal.h
-> index 2c27e158de6b..4b91a087ed62 100644
-> --- a/tools/lib/perf/internal.h
-> +++ b/tools/lib/perf/internal.h
-> @@ -20,4 +20,48 @@ do {                            \
->  #define pr_debug2(fmt, ...)     __pr(LIBPERF_DEBUG2, fmt, ##__VA_ARGS__)
->  #define pr_debug3(fmt, ...)     __pr(LIBPERF_DEBUG3, fmt, ##__VA_ARGS__)
->
-> +static inline bool libperf_is_mem_zeroed(const char *p, ssize_t len)
-> +{
-> +       while (len > 0) {
-> +               if (*p)
-> +                       return false;
-> +               p++;
-> +               len--;
-> +       }
-> +       return true;
-> +}
-> +
-> +static inline bool libperf_validate_opts(const char *opts,
-> +                                        size_t opts_sz, size_t user_sz,
-> +                                        const char *type_name)
-> +{
-> +       if (user_sz < sizeof(size_t)) {
-> +               pr_warning("%s size (%zu) is too small\n", type_name, user_sz);
-> +               return false;
-> +       }
-> +       if (!libperf_is_mem_zeroed(opts + opts_sz, (ssize_t)user_sz - opts_sz)) {
+That's a bug in the emulation then.  I.e. it needs to deal with page splits.
 
-I don't think the cast is necessary since it'll be promoted again
-to size_t due to opts_sz.  Instead, we can check if user_sz is
-greater than opts_sz explicitly and call the function.
+> I guess we can try to detect misaligned accesses and handle them
+> correctly. But it gets complicated and easer to screw up.
 
-> +               pr_warning("%s has non-zero extra bytes\n", type_name);
-> +               return false;
-> +       }
-> +       return true;
-> +}
-> +
-> +#define offsetofend(TYPE, FIELD) \
-> +       (offsetof(TYPE, FIELD) + sizeof(((TYPE *)0)->FIELD))
-> +
-> +#define OPTS_VALID(opts, type)                                                 \
-> +       (!(opts) || libperf_validate_opts((const char *)opts,                   \
-> +                                         offsetofend(struct type,              \
-> +                                                     type##__last_field),      \
-> +                                               (opts)->sz, #type))
-> +#define OPTS_HAS(opts, field) \
-> +       ((opts) && opts->sz >= offsetofend(typeof(*(opts)), field))
-> +#define OPTS_GET(opts, field, fallback_value) \
-> +       (OPTS_HAS(opts, field) ? (opts)->field : fallback_value)
+At a minimum, it should reject EPT violation #VEs that split pages (on either side).
+That's needed irrespective of fixup, e.g. if there's a bug in there kernel that
+results in splitting an MMIO region, then panicking is better than data corruption.
 
-It'd be nice if you add a blank line between the macros.
+Then the post-failure fixup will work, i.e. the load_unaligned_zeropad() will work
+like you intend here, without risking spurious fixup.
+ 
+> Do we ever use exception fixups for MMIO accesses to justify the
+> complication?
 
-Thanks,
-Namhyung
-
-
-> +#define OPTS_SET(opts, field, value)           \
-> +       do {                                    \
-> +               if (OPTS_HAS(opts, field))      \
-> +                       (opts)->field = value;  \
-> +       } while (0)
-> +
->  #endif /* __LIBPERF_INTERNAL_H */
-> diff --git a/tools/lib/perf/libperf.map b/tools/lib/perf/libperf.map
-> index 190b56ae923a..eeeb3075e092 100644
-> --- a/tools/lib/perf/libperf.map
-> +++ b/tools/lib/perf/libperf.map
-> @@ -25,6 +25,7 @@ LIBPERF_0.0.1 {
->                 perf_evsel__enable;
->                 perf_evsel__disable;
->                 perf_evsel__open;
-> +               perf_evsel__open_opts;
->                 perf_evsel__close;
->                 perf_evsel__mmap;
->                 perf_evsel__munmap;
-> @@ -36,6 +37,7 @@ LIBPERF_0.0.1 {
->                 perf_evlist__new;
->                 perf_evlist__delete;
->                 perf_evlist__open;
-> +               perf_evlist__open_opts;
->                 perf_evlist__close;
->                 perf_evlist__enable;
->                 perf_evlist__disable;
-> --
-> 2.25.1
->
+It's essentially impossible to prove because identifying all the MMIO accesses in
+the kernel (and drivers!) is extremely difficult, e.g. see the I/O APIC code which
+uses a struct to overlay MMIO.

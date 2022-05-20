@@ -2,49 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02ADD52E6D7
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 10:00:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E94652E6D9
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 10:01:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346781AbiETIAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 04:00:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58992 "EHLO
+        id S1346750AbiETIAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 04:00:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346764AbiETH74 (ORCPT
+        with ESMTP id S1346789AbiETIA0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 03:59:56 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7945115E485;
-        Fri, 20 May 2022 00:59:53 -0700 (PDT)
+        Fri, 20 May 2022 04:00:26 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8A815D335
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 01:00:19 -0700 (PDT)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 32DA521B62;
-        Fri, 20 May 2022 07:59:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1653033592; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        by smtp-out2.suse.de (Postfix) with ESMTP id 5E2C41F894;
+        Fri, 20 May 2022 08:00:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1653033618; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=1ONbGgnv3zbgbzeidBMZy3YNCoQZ655Ohcr0KuG8fEY=;
-        b=gtRnHEOvVNgf7nRCjMJqY1mdpLA9NnNyiBy4LxGlue8p+v8zKlZBACX16szCvamP7INy7M
-        QdKcW6coXBBQbcH3ZNfEIakR938LEz+kDgWgD3QvYRhBnhxiJcbpf4X64eoggVDG9rwYY+
-        HJqCi+lCsxo1+PO54/yJHo9j0G8L1hQ=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id C5B442C141;
-        Fri, 20 May 2022 07:59:51 +0000 (UTC)
-Date:   Fri, 20 May 2022 09:59:51 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Kent Overstreet <kent.overstreet@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@vger.kernel.org,
-        pmladek@suse.com, rostedt@goodmis.org, senozhatsky@chromium.org,
-        andriy.shevchenko@linux.intel.com, willy@infradead.org
-Subject: Re: [PATCH v2 23/28] mm/memcontrol.c: Convert to printbuf
-Message-ID: <YodKd/orDGzLeubj@dhcp22.suse.cz>
-References: <20220519172421.162394-1-kent.overstreet@gmail.com>
- <20220519172421.162394-24-kent.overstreet@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220519172421.162394-24-kent.overstreet@gmail.com>
+        bh=kMKh/Uy0Fns4/DVHh6qKhq/hSbzRGo3igA2tqZ9EFDk=;
+        b=c8aF8z9411V6NZY1bfOQpBZUqrNA0TtQggHEsriTXMomPg3VrgKzxBi1qmba5LP+2GDu7N
+        9ZDIlIIwgm3g7vY4pqprmwTu20syL/4HiH1Qz5C8P4w6sXgA+ZmLSaNEkeA2lmTaTYsCeB
+        7A+9HcqURLGSvpzwSXaL2SL5mq6YDVk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1653033618;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kMKh/Uy0Fns4/DVHh6qKhq/hSbzRGo3igA2tqZ9EFDk=;
+        b=e5fyizbYQmJwGI/73KkgRbu2+OWQo0fz9mPNBt7gd1hB6k+eq4mVf2cEqAG+mrkV9W6dy+
+        50JyoEMNSeS85CCw==
+Received: from valkyrie.site.suse.de (unknown [10.163.18.242])
+        by relay2.suse.de (Postfix) with ESMTP id 2F3C02C141;
+        Fri, 20 May 2022 08:00:18 +0000 (UTC)
+Date:   Fri, 20 May 2022 10:00:18 +0200
+Message-ID: <87mtfcr5v1.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Vitaly Rodionov <vitalyr@opensource.cirrus.com>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        "Mark Brown" <broonie@kernel.org>, <alsa-devel@alsa-project.org>,
+        <patches@opensource.cirrus.com>, <linux-kernel@vger.kernel.org>,
+        Vitaly Rodionov <vitaly.rodionov@cirrus.com>
+Subject: Re: [PATCH v3 04/17] ALSA: hda: cs35l41: Add initial DSP support and firmware loading
+In-Reply-To: <20220519174749.15459-5-vitalyr@opensource.cirrus.com>
+References: <20220519174749.15459-1-vitalyr@opensource.cirrus.com>
+        <20220519174749.15459-5-vitalyr@opensource.cirrus.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?ISO-2022-JP-2?B?R29qGyQoRCtXGyhC?=) APEL/10.8 Emacs/27
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -55,14 +64,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 19-05-22 13:24:16, Kent Overstreet wrote:
-> This converts memory_stat_format() from seq_buf to printbuf. Printbuf is
-> simalar to seq_buf except that it heap allocates the string buffer:
-> here, we were already heap allocating the buffer with kmalloc() so the
-> conversion is trivial.
+On Thu, 19 May 2022 19:47:36 +0200,
+Vitaly Rodionov wrote:
+> 
+> From: Vitaly Rodionov <vitaly.rodionov@cirrus.com>
+> 
+> This patch adds support for the CS35L41 DSP.
+> The DSP allows for extra features, such as running
+> speaker protection algorithms and hibernations.
+> 
+> To utilize these features, the driver must load
+> firmware into the DSP, as well as various tuning
+> files which allow for cusomtization for specific
+> models.
 
-I have asked when you posted this last time around but I do not remember
-any response. Let me try again. Why do we want this?
--- 
-Michal Hocko
-SUSE Labs
+Wouldn't this sequence be required after S3/S4 resume?
+I thought cs35l41_hda_bind() is called only at the first binding.
+
+
+thanks,
+
+Takashi

@@ -2,64 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA1FC52E7ED
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 10:42:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A20652E80B
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 10:49:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347245AbiETImv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 04:42:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39356 "EHLO
+        id S1347366AbiETItd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 04:49:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347309AbiETImr (ORCPT
+        with ESMTP id S241770AbiETItU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 04:42:47 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC2D55485;
-        Fri, 20 May 2022 01:42:45 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 60EF21F43F56
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1653036164;
-        bh=VV7uxDN1Imb56z7LKukCJYplYNlWvJ/o/kgUG//vB80=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=CKGNnBlz4UxZuDv7oD+pHQm7jL3iCcv8u3ytZdgZt3UxC7Kn+CH4sbiXcbZSkW6zk
-         pp2ICEZD6VK0NzUkAbammKLfF42VOFCJusfNoIre8ZI3iQVTxKirFr/vrjwl67dqPg
-         GHIBJtyzT9A01nFU+FpgxyZ/4E8BrF/LtizIvVHejrd608DjOsCgioQ1l+XEKNOT+j
-         8UnYE5WsOQ6PN+uj2YiLL06m/9WTm7u+ow0CJzC+MTx23OJlMxvVOnwo/rIxhCkaHR
-         DD/JBHD04El4FpremJNnmTaH1ZYufM51vARbL03EBZhaV+MWvPwjPUgby88kldwWE7
-         ycqmpMXjAqvdA==
-Message-ID: <5b5f6656-8694-dc78-ef42-7ce301849aa4@collabora.com>
-Date:   Fri, 20 May 2022 10:42:40 +0200
+        Fri, 20 May 2022 04:49:20 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B4BEC1EF5;
+        Fri, 20 May 2022 01:49:18 -0700 (PDT)
+Received: from kwepemi500023.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4L4L2w3fBTz1J9jS;
+        Fri, 20 May 2022 16:47:52 +0800 (CST)
+Received: from huawei.com (10.175.112.208) by kwepemi500023.china.huawei.com
+ (7.221.188.76) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 20 May
+ 2022 16:49:15 +0800
+From:   Peng Wu <wupeng58@huawei.com>
+To:     <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
+        <christophe.jaillet@wanadoo.fr>
+CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <stable@vger.kernel.org>, <liwei391@huawei.com>,
+        <wupeng58@huawei.com>
+Subject: [PATCH v2] mtd: rawnand: cafe: fix drivers probe/remove methods
+Date:   Fri, 20 May 2022 08:44:25 +0000
+Message-ID: <20220520084425.116686-1-wupeng58@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 3/6] clk: mediatek: reset: Return reset data pointer on
- register
-Content-Language: en-US
-To:     Yassine Oudjana <yassine.oudjana@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Miles Chen <miles.chen@mediatek.com>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        linux-mediatek@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <20220519134728.456643-1-y.oudjana@protonmail.com>
- <20220519134728.456643-4-y.oudjana@protonmail.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220519134728.456643-4-y.oudjana@protonmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.208]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemi500023.china.huawei.com (7.221.188.76)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,42 +47,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 19/05/22 15:47, Yassine Oudjana ha scritto:
-> From: Yassine Oudjana <y.oudjana@protonmail.com>
-> 
-> Return a struct mtk_clk_rst_data * when registering a reset
-> controller in preparation for adding an unregister helper
-> that will take it as an argument. Make the necessary changes
-> in drivers that do not currently discard the return value
-> of register functions.
-> 
-> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+Driver should call pci_disable_device() if it returns from
+cafe_nand_probe() with error.
 
-Hello Yassine,
+Meanwhile, the driver calls pci_enable_device() in
+cafe_nand_probe(), but never calls pci_disable_device()
+during removal.
 
-Thanks for your efforts on helping to make the MediaTek clocks better - I agree
-(and I'm not the only one..) that there's a lot of work to do on this side.
+Signed-off-by: Peng Wu <wupeng58@huawei.com>
+---
+v2:
+- fix the subject prefix with "mtd: ranwnand: cafe:"
+---
+ drivers/mtd/nand/raw/cafe_nand.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-Though... I don't think that this is the right direction: you're right about
-properly unregistering (in patch 4/6) the reset controllers on rmmod/failure
-but I'm not sure that this kind of noise brings any benefit.
-
-Explaining:
-You definitely saw that there's a new register _with_dev, which uses devm ops
-and that's going to automatically cleanup in case of removal/failure.
-This is what we should do.
-
-Hence, my proposal is to drop patch 3/6, 4/6, 5/6 and (slowly, steadily) migrate
-all of the MediaTek clocks from CLK_OF_DECLARE() to platform drivers (which also
-means that we can eventually change them to tristate!), so that we slowly remove
-all users of all functions that are not "_with_dev", and that we finally remove
-all of these then-unused functions as well.
-
-Making sure that I don't get misunderstood:
-      I'm not implying that this huge migration work is on your shoulders!
-
-P.S.: Chen-Yu, Miles: do you also agree? :-)
-
-Cheers,
-Angelo
+diff --git a/drivers/mtd/nand/raw/cafe_nand.c b/drivers/mtd/nand/raw/cafe_nand.c
+index 9dbf031716a6..af119e376352 100644
+--- a/drivers/mtd/nand/raw/cafe_nand.c
++++ b/drivers/mtd/nand/raw/cafe_nand.c
+@@ -679,8 +679,10 @@ static int cafe_nand_probe(struct pci_dev *pdev,
+ 	pci_set_master(pdev);
+ 
+ 	cafe = kzalloc(sizeof(*cafe), GFP_KERNEL);
+-	if (!cafe)
+-		return  -ENOMEM;
++	if (!cafe) {
++		err = -ENOMEM;
++		goto out_disable_device;
++	}
+ 
+ 	mtd = nand_to_mtd(&cafe->nand);
+ 	mtd->dev.parent = &pdev->dev;
+@@ -801,6 +803,8 @@ static int cafe_nand_probe(struct pci_dev *pdev,
+ 	pci_iounmap(pdev, cafe->mmio);
+  out_free_mtd:
+ 	kfree(cafe);
++ out_disable_device:
++	pci_disable_device(pdev);
+  out:
+ 	return err;
+ }
+@@ -822,6 +826,7 @@ static void cafe_nand_remove(struct pci_dev *pdev)
+ 	pci_iounmap(pdev, cafe->mmio);
+ 	dma_free_coherent(&cafe->pdev->dev, 2112, cafe->dmabuf, cafe->dmaaddr);
+ 	kfree(cafe);
++	pci_disable_device(pdev);
+ }
+ 
+ static const struct pci_device_id cafe_nand_tbl[] = {
+-- 
+2.17.1
 

@@ -2,95 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC17452EBAB
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 14:12:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36F0352EBC2
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 14:17:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349054AbiETMMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 08:12:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46594 "EHLO
+        id S1349073AbiETMRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 08:17:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237237AbiETMMV (ORCPT
+        with ESMTP id S1348999AbiETMRB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 08:12:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E707214640B;
-        Fri, 20 May 2022 05:12:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8F1A8B82B3F;
-        Fri, 20 May 2022 12:12:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E6ADC385A9;
-        Fri, 20 May 2022 12:12:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653048738;
-        bh=JP/UIl4KDxvbN8nMb/Ta3j84yv1AshL7YzWZ8cVWRJg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=qTfnD6uxQAihQw+ANRC/4C0eftfr7QqZ8/EArV9KB59sYiLvJ06MBnrzQOYfpEeoV
-         yY9JV5GTJw7AWvszciiVeIqB67wM6feJakrE4uEN5SuORswCG/j5MGd6XD3+vAxHTb
-         AojdJ4oilNJKnuNCAPslnI7kVardar4y87EkXrnHAFVuLd8bQ682+YZ7GWlhMQ/qD7
-         y1y9oOLKypP1s26pX0LIGQLuShF/0z/dMWvvgf0azuXCx06A2PPNRKdokzsJxqi1MY
-         sPejm6GqaQo4EFwaBh6ABEVyREj+9vNKcMS8Xu7ZhwSeH6eLydjS/ZGy9bDctdzGI2
-         /ZXPfzR4THuOg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1ns1UQ-00065o-BQ; Fri, 20 May 2022 14:12:18 +0200
-Date:   Fri, 20 May 2022 14:12:18 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] USB-serial updates for 5.19-rc1
-Message-ID: <YoeFosQDeA5fQqCw@hovoldconsulting.com>
+        Fri, 20 May 2022 08:17:01 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 819EC5EDCA
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 05:16:56 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id j6so7598230pfe.13
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 05:16:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=BD7PI/jSYLDDXhR8nM6+izXH7+9ICId6CXZTsKRbqNE=;
+        b=ckq9CxBSEWsFbquFDtkNT1eWtvYCYvCxcaFNjatqqV4RF+vx0272kuGbS+NsUjv2Qz
+         HmS3156aoONf1ZkMGEFFNqE7bvFzPMjb2EhhrPMxpYlPkekDW8RjVNmkZC6vxHewcr4v
+         2LaCYZUIEQ8fzBtlLezaRtpw4MBoRr/uTifNjxuWdh2ouA+z2BpGk/e2GFLqICYnEv+o
+         SqLqMhy2RA3JwbBzF/3T+N7dhdl4D3bT1mKCiqrESB7U/fS0qX9oMqExEUS/9jcpTxtT
+         FwCCc7r/2yvpl41dV8nl+zqfyOqTW7zPL6O3spJrB0dHuMt/0fASo0GCRjrrMfmX705y
+         nVJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=BD7PI/jSYLDDXhR8nM6+izXH7+9ICId6CXZTsKRbqNE=;
+        b=h5lHBjdfQrwcHvYSLv1hhCHBS9OF44S4v3KAL0JfqseiQR4tEKBrphOYvWPItZxLsb
+         QKLw/9Ny7vkBkv4YnyywF3YhOIbxJSZOlHrqBcwNdR6VjDFnlFm5pQtMsZ1KnON2frEQ
+         HBO3jANCDyfDMj7lyz0V1XPcmAOxFFZn5cL9R9MONDs+JJXp6WbCM+VvbwzU2kwA8rLM
+         iHELJbZ2lSgPq7HmCO/ry4EaReMWuMVzKPTZxCTtzGHnWlZYrPXdySWbgSXn2yNaINUK
+         JPc5J5ZFq6eYPaoqXihCPVy6aDPsas+8/PLeapxDFpFP4lenuqKohGYpleKFPzDM+I6h
+         VsOA==
+X-Gm-Message-State: AOAM531nR0bhPYFr1PQE8aE22PSO7Hm2TiTg04ExHm+xGHaJo5eE4eIT
+        O34Z5g9TiPQou015TuW30fcN9g==
+X-Google-Smtp-Source: ABdhPJxmTpQ+umrmkBJ4xaC92Tx6GlFsh8O4+/89KUZSN141r2svsJGTg67LZdrG0P40kcHqHOxH7g==
+X-Received: by 2002:aa7:86cb:0:b0:518:3e92:f78b with SMTP id h11-20020aa786cb000000b005183e92f78bmr8607795pfo.61.1653049015893;
+        Fri, 20 May 2022 05:16:55 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id h188-20020a6283c5000000b005183fc7c6dasm1645851pfe.5.2022.05.20.05.16.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 May 2022 05:16:55 -0700 (PDT)
+Message-ID: <f3b9131c-6561-8b31-4581-fd8ca5184d4e@kernel.dk>
+Date:   Fri, 20 May 2022 06:16:54 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v4 0/3] random: convert to using iters, for Al Viro
+Content-Language: en-US
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Theodore Ts'o <tytso@mit.edu>, Christoph Hellwig <hch@lst.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>
+References: <20220520094459.116240-1-Jason@zx2c4.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20220520094459.116240-1-Jason@zx2c4.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 672c0c5173427e6b3e2a9bbb7be51ceeec78093a:
+On 5/20/22 3:44 AM, Jason A. Donenfeld wrote:
+> Hi Al,
+> 
+> I've incorporated your suggestions into Jens' patches and simplified a
+> lot of the control flow. Could you take a look at these and let me know
+> if it looks sane? In particular, I'm using the property you mentioned in
+> which copy_{to,from}_iter() can take a maximum and do less if the
+> remaining length is too small.
 
-  Linux 5.18-rc5 (2022-05-01 13:57:58 -0700)
+FWIW, ran my (small) tests and this series looks and tests fine to me.
 
-are available in the Git repository at:
+-- 
+Jens Axboe
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.19-rc1
-
-for you to fetch changes up to 33b7af2f459df453feb0d44628d820c47fefe7a8:
-
-  USB: serial: option: add Quectel BG95 modem (2022-05-19 08:03:32 +0200)
-
-----------------------------------------------------------------
-USB-serial updates for 5.19-rc1
-
-Here are the USB-serial updates for 5.19-rc1, including:
-
- - a workaround for pl2303 devices with unexpected bcdUSB
- - a new modem device id
-
-Included is also a printk clean up.
-
-All but the modem-id commit have been in linux-next with no reported
-issues.
-
-----------------------------------------------------------------
-Carl Yin(殷张成) (1):
-      USB: serial: option: add Quectel BG95 modem
-
-Daniels Umanovskis (1):
-      USB: serial: ftdi_sio: clean up printk format specifier
-
-Johan Hovold (1):
-      USB: serial: pl2303: fix type detection for odd device
-
- drivers/usb/serial/ftdi_sio.c | 2 +-
- drivers/usb/serial/option.c   | 2 ++
- drivers/usb/serial/pl2303.c   | 3 +++
- 3 files changed, 6 insertions(+), 1 deletion(-)

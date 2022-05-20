@@ -2,128 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A54B052F081
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 18:24:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9A6652F08E
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 18:26:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351583AbiETQYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 12:24:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40528 "EHLO
+        id S1351590AbiETQ0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 12:26:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351574AbiETQYk (ORCPT
+        with ESMTP id S1351588AbiETQZy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 12:24:40 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ACF017D3BA
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 09:24:39 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id z3so6654964pgn.4
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 09:24:39 -0700 (PDT)
+        Fri, 20 May 2022 12:25:54 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC1115FC3
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 09:25:51 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id gi33so8073151ejc.3
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 09:25:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Up48slLLXklbScKjS7/klG/4sx3wupJAFkj4Y/FraRs=;
-        b=KPHAmma9oKN1ewvN1W6iAV8SGt3iITADLc/ZUOTV723rXPR+SmD+N7JjGaI6Xsg1NK
-         PoAlymoTFt9amGl5099Dvl61Z+E0wRR0/UAwha4i1Jor1wp0xe/7T6/QCY/LSl9NZXun
-         o2vWbkFQ0Zp2pId8y3c/y/XuEZzekP/QQrmZ/VDwmOAqWW3h+Pydlr+Uc8pdu6ZAoEbV
-         dsK2FQM2v2XMQ7SezECWga9/pMvN0+zl9Uu4nIyw6kht7YalkNMnM5lSRSLJ3o4IXhAE
-         RCvMFmAnJCD9cPnSoj8X9xxmIMrCPUW1cps+0njiflhaYAWPQtbxODH8TBN0KR1+JguK
-         5Yeg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FUaa/CsIoXFhGcqQomBYha0KA+E1xpoSdaSoOErgusY=;
+        b=sCdCdZqIB2fM6C3/IMxJnyMHv4TxKGmIAEibbdWMh6FRbyWFI9mTEtryWRZ/NF+hj8
+         +Hx7jY6REjkdGsBVNwZIlsBAmuMkblQlokQialFoP0r3E+mVoJ7qGv/cmH27SzZH0S3E
+         6LoxOjAbQe+XtYP+GErjofpGVizVrpa3tPrxVs+yqbwCv/s6FVcSIgxyZOKq/Unt6sfK
+         WQdH0KeBkcXcGDUDuTf8vX6Et8/Yi9aMTfXHIESge8rquWo4PxOSekV4zJTp0tvovfMW
+         u6nTEG2KKtXD08jklErYVdrtfiimeio1bUddW1+xIx6fvJXFqqsrZgzOoeJe1LhQ/lrW
+         jHfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Up48slLLXklbScKjS7/klG/4sx3wupJAFkj4Y/FraRs=;
-        b=jzOtCcfxMOmuU1o1mJ2cpI4gQ2IDOfV0yoVwlbVmG31wIE/FUWw1TjXIlvHlRfPiL3
-         R9z+hR/eFHkzLK5symAUL5xsEQq4MJqqKzhb0AQ634xIAuazAp4awH0gPNLoUjYulnlC
-         f5DqQ7gMNlkx3328wVJA1xHg5/XASXZ28c9rlY8BINDvNNgPPQdWzJHqjY8h4UnFfo3a
-         1PE7HquOA9lH43feUJC1Roy2c7YgReVZbHclxS0FwDZ0bshnPrdSEmHi61LY64vKYgYJ
-         7VLtFkrVf/F/KRec8PX0MIupAnbUmsBS+gO7azbqjr8f5bU8CxnZNHsS02yHn4yQEBRu
-         i+Iw==
-X-Gm-Message-State: AOAM5337mF/ZhJOPRGe4YFAMwWbNiWi/wbbCz+VE9XOn21KsbRfz5RiT
-        g8m1YyhLzRUOSZwj68zbZbxeWA==
-X-Google-Smtp-Source: ABdhPJyTPXaqMY1JFIjzJUGFo8ngpNYspWSF8+MvJBYmEtntWWAKiEbzT+mM67rzFYg80BSxBR+JHg==
-X-Received: by 2002:a63:350c:0:b0:3c6:bf88:1509 with SMTP id c12-20020a63350c000000b003c6bf881509mr9111619pga.144.1653063879002;
-        Fri, 20 May 2022 09:24:39 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id x7-20020a170902b40700b0015e8d4eb254sm5762558plr.158.2022.05.20.09.24.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 May 2022 09:24:38 -0700 (PDT)
-Message-ID: <69bd18e6-d216-dfb3-201b-f6a285deb0e7@kernel.dk>
-Date:   Fri, 20 May 2022 10:24:36 -0600
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FUaa/CsIoXFhGcqQomBYha0KA+E1xpoSdaSoOErgusY=;
+        b=QPNI/yZxzUuDCU++3lceEuOw4lNcEOAyP3c2Jr2wYNZBjmmEk5GkaqLRxL27XRFLNV
+         aGNUDyRhA/3v3lyFINupuZeb8jr/zNi3ZJCOhvZnWVoETDVIOAPe3AqyZdV2VR/6byL7
+         c+yZJM6tqlrbHCBhM9GYLCauOj8GzMI1Lgk5P/O7Tpz3XW4fn0roT/pfVQ1gkTGtzseF
+         PwlmTYn0Kg3HFifm7Q2ATabcCCiZRGxAsY1Jf4qNMaESw5QFBnQtq6KYhBwPawDEWRX0
+         wI0+SdtVon+pFTY2I6LwPPvNz+R7dnRtqytgJaLK4TwhXCInxGqPTyBWDHnN+dZO7bJ3
+         O21Q==
+X-Gm-Message-State: AOAM531bUUzYZucbyfWDeF2st1D2Rcz7BJeP88QToT2bD3C6IKw13NXB
+        Ph6v3/sykjyqEJVvFzSGTbq7h+5RqmoN1xLynbbrXw==
+X-Google-Smtp-Source: ABdhPJzp/NHzceLMjs5KyttxLo22ikbB+moAIzlm/g7LpDw857XHy/sDkHqgW7kFrYOz58Ub2ZX5aqSsTj4pK+KZ3Kc=
+X-Received: by 2002:a17:907:9813:b0:6fa:78b0:9be2 with SMTP id
+ ji19-20020a170907981300b006fa78b09be2mr9585859ejc.159.1653063949975; Fri, 20
+ May 2022 09:25:49 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v4 0/3] random: convert to using iters, for Al Viro
-Content-Language: en-US
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Theodore Ts'o <tytso@mit.edu>, Christoph Hellwig <hch@lst.de>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20220520094459.116240-1-Jason@zx2c4.com>
- <Yoey+FOYO69lS5qP@zx2c4.com> <bbdeeca7-9c99-e661-6596-f04ea783a30b@kernel.dk>
- <Yoe4HP9iTA6l/For@zeniv-ca.linux.org.uk>
- <7e78d6a7-1cc3-2408-fe91-0329f5020e77@kernel.dk>
- <Yoe+lK8RIRbK6lDZ@zeniv-ca.linux.org.uk>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <Yoe+lK8RIRbK6lDZ@zeniv-ca.linux.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220510235653.933868-1-tjmercier@google.com> <3365cd1d750e84fedc8e75d646a77ffd85619d35.camel@ndufresne.ca>
+ <CABdmKX3ZV6-u-oLvW_wWavAMBfrsZ=C_rCgK_Uz4VjxcRvRFew@mail.gmail.com>
+ <81026ef07c1ce20f8673b75b17bab79a2b39c548.camel@ndufresne.ca>
+ <CABdmKX2LxZ6zZR=fhXfnuWCB2BR+gzDd1-t1DD2A2XP24wvuGQ@mail.gmail.com>
+ <Yn6DpUsoSz1/15Kc@slm.duckdns.org> <CABdmKX1xvm87WMEDkMc9Aye46E4zv1-scenwgaRxHesrOCsaYg@mail.gmail.com>
+ <YodHjYlMx1XGtM2+@slm.duckdns.org>
+In-Reply-To: <YodHjYlMx1XGtM2+@slm.duckdns.org>
+From:   "T.J. Mercier" <tjmercier@google.com>
+Date:   Fri, 20 May 2022 09:25:38 -0700
+Message-ID: <CABdmKX2Ok023rN1drQgXVZLKUO_DVYrzmEamCgMMu6BPO67yhQ@mail.gmail.com>
+Subject: Re: [PATCH v7 0/6] Proposal for a GPU cgroup controller
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Liam Mark <lmark@codeaurora.org>,
+        Laura Abbott <labbott@redhat.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Shuah Khan <shuah@kernel.org>, Daniel Vetter <daniel@ffwll.ch>,
+        John Stultz <jstultz@google.com>,
+        Carlos Llamas <cmllamas@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        kernel-team@android.com, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/20/22 10:15 AM, Al Viro wrote:
-> On Fri, May 20, 2022 at 09:53:30AM -0600, Jens Axboe wrote:
->> On 5/20/22 9:47 AM, Al Viro wrote:
->>> On Fri, May 20, 2022 at 09:34:46AM -0600, Jens Axboe wrote:
->>>
->>>> I'm very sure, otherwise we're just accepting that we're breaking real
->>>> world applications.
->>>
->>> "Breaking" as in "it used to work with earlier kernels, doesn't work with
->>> recent ones"?  Details, please...
->>
->> Yes, as in exactly that. This is what drove this addition of
->> ->read_iter() for urandom. See commit:
->>
->> ommit 36e2c7421f02a22f71c9283e55fdb672a9eb58e7
->> Author: Christoph Hellwig <hch@lst.de>
->> Date:   Thu Sep 3 16:22:34 2020 +0200
->>
->>     fs: don't allow splice read/write without explicit ops
->>
->> related to the set_fs() changes, and now go look for any commit that
->> has:
->>
->> Fixes: 36e2c7421f02 ("fs: don't allow splice read/write without explicit ops")
->>
->> in it and see that this isn't an isolated incident at all.
->>
->> tldr - splice from /dev/urandom used to work, and I recently got a
->> report internally on an application that broke on upgrade from 5.6 to
->> 5.12 exactly because it now just just -EINVAL's instead.
-> 
-> IIRC, Linus' position at the time had been along the lines of
-> "splice is not so good ABI anyway, so let's do it and fix up
-> the places that do get real-world complaints once such appear".
-> So /dev/urandom is one such place...
+On Fri, May 20, 2022 at 12:47 AM Tejun Heo <tj@kernel.org> wrote:
+>
+> Hello,
+>
+> On Tue, May 17, 2022 at 04:30:29PM -0700, T.J. Mercier wrote:
+> > Thanks for your suggestion. This almost works. "dmabuf" as a key could
+> > work, but I'd actually like to account for each heap. Since heaps can
+> > be dynamically added, I can't accommodate every potential heap name by
+> > hardcoding registrations in the misc controller.
+>
+> On its own, that's a pretty weak reason to be adding a separate gpu
+> controller especially given that it doesn't really seem to be one with
+> proper abstractions for gpu resources. We don't want to keep adding random
+> keys to misc controller but can definitely add limited flexibility. What
+> kind of keys do you need?
+>
+Well the dmabuf-from-heaps component of this is the initial use case.
+I was envisioning we'd have additional keys as discussed here:
+https://lore.kernel.org/lkml/20220328035951.1817417-1-tjmercier@google.com/T/#m82e5fe9d8674bb60160701e52dae4356fea2ddfa
+So we'd end up with a well-defined core set of keys like "system", and
+then drivers would be free to use their own keys for their own unique
+purposes which could be complementary or orthogonal to the core set.
+Yesterday I was talking with someone who is interested in limiting gpu
+cores and bus IDs in addition to gpu memory. How to define core keys
+is the part where it looks like there's trouble.
 
-That's what Christoph said too. Honestly that's a very odd way to
-attempt to justify breakage like this, even if it is tempting to
-facilitate the set_fs() removal. But then be honest about it and say
-it like it is, rather than some hand wavy explanation that frankly
-doesn't make any sense.
+For my use case it would be sufficient to have current and maximum
+values for an arbitrary number of keys - one per heap. So the only
+part missing from the misc controller (for my use case) is the ability
+to register a new key at runtime as heaps are added. Instead of
+keeping track of resources with enum misc_res_type, requesting a
+resource handle/ID from the misc controller at runtime is what I think
+would be required instead.
 
-The referenced change doesn't change the splice ABI at all, hence the
-justification seems very random to me. It kept what we already have,
-except we randomly break some use cases.
-
--- 
-Jens Axboe
-
+> Thanks.
+>
+> --
+> tejun

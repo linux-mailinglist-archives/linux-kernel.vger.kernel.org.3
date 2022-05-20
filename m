@@ -2,114 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9292352E696
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 09:52:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3CFA52E69E
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 09:54:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346653AbiETHwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 03:52:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48962 "EHLO
+        id S1346675AbiETHyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 03:54:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233004AbiETHwN (ORCPT
+        with ESMTP id S239607AbiETHx5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 03:52:13 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35033EBA98
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 00:52:13 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id 10so3307177plj.0
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 00:52:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=5vIeqJ2l7ohbADo6n14qY+TAL6tqjFMC+/vvZ+WHJvA=;
-        b=QbMBFcQM9qRP+Zt3g3VsB3vTZOpvKm6co4eXrI0mMajeM60kX9QU+FH98IFoV4NfxD
-         oRl0QjfFPBhMbU2V8gl/4x95UfmTyCaYSwq6U9PgyvQxVsCf4tzMbl9WOdYQJHo1qPcw
-         6lH+gvtR04sra0+Q4UwHEm6eSKsJKD0RHgLwSU1VIh8K98sH+Sm7Mg/PNk0OO11VygyX
-         I/a5DQemxJjUDN9jnRlMyQ8E7Aow7y1AnyqI8UyDT5KbsOWrir/uPpHFcx9LoIWiF5Db
-         SOd6VQmpcmW7+w065G+ZrR4LNhyHz0SY/j1URG/gcgJOLrnFH8do/XBfJ2zzmXfgnAW9
-         6vJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=5vIeqJ2l7ohbADo6n14qY+TAL6tqjFMC+/vvZ+WHJvA=;
-        b=2jUhXC4eKTOEI6Pf+4qJvmtvTlvM6vaF2L0kGOrS0JfK8MrjyJfNQsh2b8snF4Diya
-         770jN+5pcVySh8DHgN1Qs7wfScgarg4c2Fcsl9+Vsul+SEezL6A/MxxGSGywLE/f4t3N
-         yaVMznWuLsMRxOBXGGRTXb17nomES+hGLrQ9nG3cJGNZXkDvSoG5eu3NSJJ4ZeODunrP
-         /VhH5gxj4kAlXk/bhwB6BE+y3Xg4071nVSu+VRwCpeVmCwZMzvHYKv/gu8I6JWAm3hCk
-         779qmGJ2Jdub4lXrw3rEUS3yi8L3Qe0uw6M7c1Auv9WmeHwIE31FVRsTMaN8eVRjgQ57
-         LtUg==
-X-Gm-Message-State: AOAM530qW2gb5Mc8GUyDrIKAY9NkYin9M3iua+7esziyipPiy5tHvKBz
-        pbZY2h7Pkj486G3c4VgGwLA=
-X-Google-Smtp-Source: ABdhPJz2uw+P0c+QcAEevcQomiSCOXCL0p/z1jWLOWE65LWBQt5+YLv0FiSxkyiQpvuR3U6l2l8jRw==
-X-Received: by 2002:a17:90b:1e4f:b0:1dc:847d:38b5 with SMTP id pi15-20020a17090b1e4f00b001dc847d38b5mr10177098pjb.3.1653033132554;
-        Fri, 20 May 2022 00:52:12 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::4:1761])
-        by smtp.gmail.com with ESMTPSA id c17-20020a170902c1d100b0015e8d4eb243sm4943881plc.141.2022.05.20.00.52.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 00:52:12 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 19 May 2022 21:52:10 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Christian =?iso-8859-1?Q?K=F6nig?= 
-        <ckoenig.leichtzumerken@gmail.com>
-Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx@lists.freedesktop.org, Christian.Koenig@amd.com
-Subject: Re: [PATCH] Revert "workqueue: remove unused cancel_work()"
-Message-ID: <YodIquufXzK581gw@slm.duckdns.org>
-References: <20220519135642.83209-1-andrey.grodzovsky@amd.com>
- <CAJhGHyBQ60Lh3WZCa+2cE4T36t3vjNxYTBCxS7J0xhZr8Eb2wg@mail.gmail.com>
- <e1e2e63d-a1a9-12ad-97a7-a3771210edda@amd.com>
- <CAJhGHyC7VLM1PnXMu2zmdX=xtSNKo6VGO5p0AkUnaaMsuZytpA@mail.gmail.com>
- <045157bb-31a0-2d76-18b7-4272fab218ef@gmail.com>
+        Fri, 20 May 2022 03:53:57 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06A83106561;
+        Fri, 20 May 2022 00:53:54 -0700 (PDT)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 47E2640005;
+        Fri, 20 May 2022 07:53:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1653033233;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yoEhYOBRBgutAiogB53ii3LuQRNfEBwgcYFElSjLpok=;
+        b=ZmWzl7IxUoJcigm7KAJ6beUJS8SRedasi70dWc0Kbosm4M7OOt2E2Owdtc8KXe01b3TIGT
+        mmlDczU27RaBYK0zd0FcMFwnPve8hDoNtHlrEMTC3Qhco+sUz8ki9P2uzlXJJcdx5FIYJH
+        8/bnejuAUVW0mxqzXv/p4bAi5IWOIoAUeooFdlhfNqyeBRlqMUaTrA2/Ba9ZHfjzgQCay4
+        OsWld18d4Ma9PFTgXmTA9bbZ6JDz9GCE73ygcVZmpiI0uXnn/wOmQ+Fal9r7pjw/9mnG+j
+        EcNjJtVKYFiNNXEibMED3xGc6YP23pdRdY3H+ARJKgVnyYu9ATqhe4tND1zQcA==
+Date:   Fri, 20 May 2022 09:52:41 +0200
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?UTF-8?B?TWlxdcOobA==?= Raynal <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next v5 05/13] net: pcs: add Renesas MII converter
+ driver
+Message-ID: <20220520095241.6bbccdf0@fixe.home>
+In-Reply-To: <YoZvZj9sQL2GZAI3@shell.armlinux.org.uk>
+References: <20220519153107.696864-1-clement.leger@bootlin.com>
+        <20220519153107.696864-6-clement.leger@bootlin.com>
+        <YoZvZj9sQL2GZAI3@shell.armlinux.org.uk>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <045157bb-31a0-2d76-18b7-4272fab218ef@gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 08:22:39AM +0200, Christian König wrote:
-> Am 20.05.22 um 02:47 schrieb Lai Jiangshan:
-> > On Thu, May 19, 2022 at 11:04 PM Andrey Grodzovsky
-> > <andrey.grodzovsky@amd.com> wrote:
-> > > See this patch-set https://www.spinics.net/lists/amd-gfx/msg78514.html, specifically patch
-> > > 'drm/amdgpu: Switch to delayed work from work_struct.
-> > > 
-> > > I will just reiterate here -
-> > > 
-> > > We need to be able to do non blocking cancel pending reset works
-> > > from within GPU reset. Currently kernel API allows this only
-> > > for delayed_work and not for work_struct.
-> > > 
-> > I'm OK with the change.
-> > 
-> > With an updated changelog:
-> > 
-> > Reviewed-by: Lai Jiangshan<jiangshanlai@gmail.com>
-> 
-> Good morning guys,
-> 
-> for the patch itself Reviewed-by: Christian König <christian.koenig@amd.com>
-> 
-> And just for the record: We plan to push this upstream through the drm
-> branches, if anybody has any objections to that please speak up.
+Le Thu, 19 May 2022 17:25:10 +0100,
+"Russell King (Oracle)" <linux@armlinux.org.uk> a =C3=A9crit :
 
-Andrey, care to resend with updated description?
+> Hi,
+>=20
+> On Thu, May 19, 2022 at 05:30:59PM +0200, Cl=C3=A9ment L=C3=A9ger wrote:
+> > Add a PCS driver for the MII converter that is present on the Renesas
+> > RZ/N1 SoC. This MII converter is reponsible for converting MII to
+> > RMII/RGMII or act as a MII pass-trough. Exposing it as a PCS allows to
+> > reuse it in both the switch driver and the stmmac driver. Currently,
+> > this driver only allows the PCS to be used by the dual Cortex-A7
+> > subsystem since the register locking system is not used.
+> >=20
+> > Signed-off-by: Cl=C3=A9ment L=C3=A9ger <clement.leger@bootlin.com> =20
+>=20
+> Looks much better now, thanks. Only one thing I've spotted is:
+>=20
+> > +static int miic_validate(struct phylink_pcs *pcs, unsigned long *suppo=
+rted,
+> > +			 const struct phylink_link_state *state)
+> > +{
+> > +	if (state->interface =3D=3D PHY_INTERFACE_MODE_RGMII ||
+> > +	    state->interface =3D=3D PHY_INTERFACE_MODE_RGMII_ID ||
+> > +	    state->interface =3D=3D PHY_INTERFACE_MODE_RGMII_TXID ||
+> > +	    state->interface =3D=3D PHY_INTERFACE_MODE_RGMII_RXID || =20
+>=20
+> The above could use:
+>=20
+> 	if (phy_interface_mode_is_rgmii(state->interface) ||
 
-Thanks.
+Thanks, I did found the one to set the bit for phylink part but not
+this one.
 
--- 
-tejun
+>=20
+> Also, as a request to unbind this driver would be disasterous to users,
+> I think you should set ".suppress_bind_attrs =3D true" to prevent the
+> sysfs bind/unbind facility being available. This doesn't completely
+> solve the problem.
+
+Acked. What should I do to make it more robust ? Should I use a
+refcount per pdev and check that in the remove() callback to avoid
+removing the pdev if used ?
+
+Thanks,
+
+--=20
+Cl=C3=A9ment L=C3=A9ger,
+Embedded Linux and Kernel engineer at Bootlin
+https://bootlin.com

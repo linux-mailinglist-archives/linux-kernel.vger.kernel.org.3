@@ -2,100 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A740E52F596
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 00:18:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E57B552F599
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 00:19:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353871AbiETWSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 18:18:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40790 "EHLO
+        id S1353873AbiETWTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 18:19:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245429AbiETWSL (ORCPT
+        with ESMTP id S245429AbiETWTN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 18:18:11 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3571A166D4E
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 15:18:10 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id z7-20020a17090abd8700b001df78c7c209so12601382pjr.1
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 15:18:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ppqA1V71Dip/w0SDRJr0n7SLy4Hy4OPoqjHQOx+tb1w=;
-        b=RAU9fAtoYg44KWOfDd5AD8kQea342PUXf80S3LNyTJcnLvleWgVC8+ipOjZafWawXd
-         HnotSYVty/ibTqhp+GKUwJ7nOwi22ObOyMdYnykGlnyHcC11RnY5TPJ5c2C8cM1ter2z
-         mi2bSkOsYplAGvpUTkciI+BXFGYttZUEeZ1uRckqCWJ8gk9E6zzz8He0jph0vT50awPV
-         DoGJft5PebpUz7wCdS40EHnqm7hRXd8xuDJFzLgzVmZD/TlQ5iCZVGAQO9Kj/3hUjtd7
-         6Srv9u1r/8R0NcnZOgU4gIhJMnfzjTmek4P2Z2AVpiZg4j1rM4fFho07NQoQzcUIX7Fi
-         bskg==
+        Fri, 20 May 2022 18:19:13 -0400
+Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38529166D4E;
+        Fri, 20 May 2022 15:19:13 -0700 (PDT)
+Received: by mail-oi1-f171.google.com with SMTP id v65so11458789oig.10;
+        Fri, 20 May 2022 15:19:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ppqA1V71Dip/w0SDRJr0n7SLy4Hy4OPoqjHQOx+tb1w=;
-        b=sgL2nwSQA7ym7JNYEpiRQ9MTkfK4aLKJbTjNXkE914FEUaFMWBzWqjX/vfwj5i6dba
-         eRqpkDkkGSUoZPfUppyRLdTkkMvRZk+aLnlhvoDSJmPmSXh0O2y+Rh/OfEkuqC4je5xQ
-         Ia6hKul/ZJaBZIisRu0uUSGkw/1Phh22hC4BSj6z4tEp5Sogl59Z+4bCUbtOHspSj1Mg
-         K21WXwDEKG1gQ4QQFuS47n7vDGP+Fa1K39LzI3n7T6LajVfgH9GB3AozmeZ3dF2+3CY2
-         ZD1t+TNg7mY+ubGvCgMtZNxj0VIZKAjHQCDh5RZGwQTJVwQ3TKPPj5oJdQiR2OGPCUN5
-         kJcQ==
-X-Gm-Message-State: AOAM531thndfzaEXOfC9GY4VrJA/to7DS4vTf3fgTHUfpjGgFediyD1j
-        IQAUtAQCIxWMIiZsIJweE+3kbw==
-X-Google-Smtp-Source: ABdhPJwNh3Ko1yDLlYQF/0hdyJtZo7xphTsSajaIBO7hXN3XRFFS5rg0jQ6I/RsIU6d6JOX0mzuLPg==
-X-Received: by 2002:a17:90a:eac5:b0:1df:7da8:4b19 with SMTP id ev5-20020a17090aeac500b001df7da84b19mr13839697pjb.2.1653085089685;
-        Fri, 20 May 2022 15:18:09 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id v10-20020a17090a7c0a00b001d95c09f877sm2376612pjf.35.2022.05.20.15.18.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 May 2022 15:18:08 -0700 (PDT)
-Message-ID: <471e5654-49d7-9023-62b4-fc98483b1d89@kernel.dk>
-Date:   Fri, 20 May 2022 16:18:06 -0600
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=H9dsJo+KUSNJhEleqZiYrTy2I+OsjWQH8r8DGAGeIs0=;
+        b=Wce68HBGZRZ8AUkpJqxCNWxesMT0oL7PEu/F5s/G/uty0qa8lbFp3Ft2t60QlXThwJ
+         9js2sH0jpkpAYOdight+5wXiMFRBkb4w6XZLYo7CgkvctFZptYJC73sTluK9LJjtaeV5
+         MDmAmEIEuHCseRh9QsxXyRP2dZUiDDC+f1d/3z83wnTYyJObXYzzxhe9b8AFJQ5QWPbG
+         LcfXs3r8Aikpk7liIkM8jqx4NmQ+mlbGorwdpj/2NWe1xVHVnT5uml+JFiplarBfyGnn
+         MM/C4mnhHVe1DIMcxAcUN4tg1+BG4QV8xW06j3cU7Dld079HAFjO8we2koaZu7c80Nnd
+         UAHQ==
+X-Gm-Message-State: AOAM533Fuhy8+gw4kl4p/1H+fASUIWY6SKkmYt1BZ7alv0D7ypkdOuSm
+        AxWwkCpRlDmq/6yyO7p4vj9bnKNIpg==
+X-Google-Smtp-Source: ABdhPJzft3aq22SEVhwqjbd7HcdI0g2Hkb3t39TPzeI/Bi/8SVUST456M6/1/CAjek8nu0smQ3/REA==
+X-Received: by 2002:a05:6808:14c1:b0:32a:f33d:86ca with SMTP id f1-20020a05680814c100b0032af33d86camr4898688oiw.89.1653085152543;
+        Fri, 20 May 2022 15:19:12 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id 126-20020a4a0384000000b0035eb4e5a6cdsm1569087ooi.35.2022.05.20.15.19.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 May 2022 15:19:11 -0700 (PDT)
+Received: (nullmailer pid 352851 invoked by uid 1000);
+        Fri, 20 May 2022 22:19:10 -0000
+Date:   Fri, 20 May 2022 17:19:10 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        sboyd@kernel.org, chun-jie.chen@mediatek.com,
+        rex-bc.chen@mediatek.com, wenst@chromium.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        krzysztof.kozlowski@linaro.org
+Subject: Re: [PATCH v2 2/2] dt-bindings: arm: mtk-clocks: Set #clock-cells as
+ required property
+Message-ID: <20220520221910.GA348732-robh@kernel.org>
+References: <20220518093631.25491-1-angelogioacchino.delregno@collabora.com>
+ <20220518093631.25491-3-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] fs: prefer read_iter over read and write_iter over write
-Content-Language: en-US
-To:     David Laight <David.Laight@ACULAB.COM>,
-        "'Jason A. Donenfeld'" <Jason@zx2c4.com>
-Cc:     "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220520135103.166972-1-Jason@zx2c4.com>
- <39ed6917f2e64a07bad8dad63f8dceb4@AcuMS.aculab.com>
- <YogIg9FG7C/f98bf@zx2c4.com>
- <0da16e16caed4282ae97a86f1ba6f6db@AcuMS.aculab.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <0da16e16caed4282ae97a86f1ba6f6db@AcuMS.aculab.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220518093631.25491-3-angelogioacchino.delregno@collabora.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/20/22 4:08 PM, David Laight wrote:
->>    https://lore.kernel.org/lkml/Yoey+FOYO69lS5qP@zx2c4.com/
->>
->> The hope is that it eventually becomes faster... :-\
+On Wed, May 18, 2022 at 11:36:31AM +0200, AngeloGioacchino Del Regno wrote:
+> This is a clock-controller binding, so it needs #clock-cells, or
+> it would be of no use: add that to the list of required properties.
 > 
-> I suspect all the xxx_iter functions need optimising for
-> the common case of a single buffer in userspace.
-> 
-> That also includes the code to read the iov[] from usespace.
-> At the moment I think the 32bit compat code is actually
-> faster than the native amd64 version!
-> I've written some patches to speed that up.
-> But the bigger improvements all hit massive changes
-> to the ioring code.
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../devicetree/bindings/arm/mediatek/mediatek,mt8186-clock.yaml  | 1 +
+>  .../bindings/arm/mediatek/mediatek,mt8186-sys-clock.yaml         | 1 +
+>  .../devicetree/bindings/arm/mediatek/mediatek,mt8192-clock.yaml  | 1 +
+>  .../bindings/arm/mediatek/mediatek,mt8192-sys-clock.yaml         | 1 +
+>  .../devicetree/bindings/arm/mediatek/mediatek,mt8195-clock.yaml  | 1 +
+>  .../bindings/arm/mediatek/mediatek,mt8195-sys-clock.yaml         | 1 +
+>  6 files changed, 6 insertions(+)
 
-Do you have a link to those patches? I can certainly help with the
-io_uring side of things, and I have a genuine interest in improving the
-core and getting the iter side up to snuff.
+Acked-by: Rob Herring <robh@kernel.org>
 
--- 
-Jens Axboe
+Wasn't there some discussion about moving these to bindings/clocks/? 
+Maybe that was another one, it's all a blur...
 
+Rob

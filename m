@@ -2,95 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5C2352F108
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 18:48:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE10452F10F
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 18:48:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351921AbiETQrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 12:47:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55182 "EHLO
+        id S1348062AbiETQsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 12:48:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351860AbiETQrA (ORCPT
+        with ESMTP id S1351860AbiETQra (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 12:47:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 65F9C2FE4D
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 09:46:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653065216;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ojbIKgxOqxnHAzNXDbRdq8vthjOu4oruqFZ3uDQUp9g=;
-        b=fbEKSOGM561CqmZiU4n7CCxjSH29f1MaoxoK+6i90FPAAgvN3GnMOEFc7T+9XOrVLMpFWr
-        qraT7uKpvBhzjEO86xY0tAC+8YBg4hngT5wJGF+knt6L6itBAElWz04TQscSok20JyP+Fx
-        N/iC84DXTBsZs2Wq2rRA8G6dnCuiP9U=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-172-xn3Swnx1M9u2BvhAO2TVkw-1; Fri, 20 May 2022 12:46:54 -0400
-X-MC-Unique: xn3Swnx1M9u2BvhAO2TVkw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6976529AB3F8;
-        Fri, 20 May 2022 16:46:53 +0000 (UTC)
-Received: from [10.22.32.226] (unknown [10.22.32.226])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 677297AD5;
-        Fri, 20 May 2022 16:46:52 +0000 (UTC)
-Message-ID: <75d31caf-2d26-9fcc-13fb-e8be2f2ad8e5@redhat.com>
-Date:   Fri, 20 May 2022 12:46:52 -0400
+        Fri, 20 May 2022 12:47:30 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF93F2FE4D;
+        Fri, 20 May 2022 09:47:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653065249; x=1684601249;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=27ITcLx4VEf1PQo7y9MvVOyX5nDwqeDNk3fCk+qepa4=;
+  b=DieX39Jph8SWdUU6jkolhpXW8Ps6APWvuzke+iyAsjOBELyKsZRxckZ7
+   bCoUSBBoG5h+9vreiEF5xeGpNTHkRluqPWX78D6cqpgooerlQKlFR7g6N
+   iroVz6ncomUjj9z4bq+rE9qWyfDzlMcx865zP6j/w9kvTvQA5Zw3+WhOQ
+   6quUpqke1gts4hzdU+dvl8SQ5B9y8iiaroIgU9WhrSEbpm/PoIlzBGSxU
+   J12C1xGrKTyx0C/hYTv6NdVblvQkdZrJUJ6tl+zgUGPtsmFvZF/lfgA/W
+   nAZWzElp2GfLH1r9mDWohYC0ZSUKNFppKi/K9+5ln5kj0EXpCkvVd7yxj
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10353"; a="333286763"
+X-IronPort-AV: E=Sophos;i="5.91,239,1647327600"; 
+   d="scan'208";a="333286763"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 09:47:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,239,1647327600"; 
+   d="scan'208";a="743576808"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga005.jf.intel.com with ESMTP; 20 May 2022 09:47:27 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 13342109; Fri, 20 May 2022 19:47:27 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Dipen Patel <dipenp@nvidia.com>, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] gpiolib: cdev: Fix kernel doc for struct line
+Date:   Fri, 20 May 2022 19:47:26 +0300
+Message-Id: <20220520164726.60638-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v11 0/8] cgroup/cpuset: cpu partition code enhancements
-Content-Language: en-US
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-References: <20220510153413.400020-1-longman@redhat.com>
- <Yoe7FOkZpUwwTTQW@linutronix.de>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <Yoe7FOkZpUwwTTQW@linutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/20/22 12:00, Sebastian Andrzej Siewior wrote:
-> On 2022-05-10 11:34:05 [-0400], Waiman Long wrote:
->> v11:
->>   - Fix incorrect spacing in patch 7 and include documentation suggestions
->>     by Michal.
->>   - Move partition_is_populated() check to the last one in list of
->>     conditions to be checked.
-> If I follow this correctly, then this is the latest version of the
-> isolcpus= replacement with cgroup's cpusets, correct?
->
-> Sebastian
+Kernel doc validator is not happy:
+  gpiolib-cdev.c:487: warning: Function parameter or member 'hdesc' not described in 'line'
+  gpiolib-cdev.c:487: warning: Function parameter or member 'raw_level' not described in 'line'
+  gpiolib-cdev.c:487: warning: Function parameter or member 'total_discard_seq' not described in 'line'
+  gpiolib-cdev.c:487: warning: Function parameter or member 'last_seqno' not described in 'line'
 
-It is just the beginning, there is still a lot of work to do before 
-isolcpus= can be completely replaced.
+Describe above mentioned parameters.
 
-Cheers,
-Longman
+Fixes: 2068339a6c35 ("gpiolib: cdev: Add hardware timestamp clock type")
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/gpio/gpiolib-cdev.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/gpio/gpiolib-cdev.c b/drivers/gpio/gpiolib-cdev.c
+index f5aa5f93342a..d0dc68d04059 100644
+--- a/drivers/gpio/gpiolib-cdev.c
++++ b/drivers/gpio/gpiolib-cdev.c
+@@ -421,6 +421,10 @@ static int linehandle_create(struct gpio_device *gdev, void __user *ip)
+  * @work: the worker that implements software debouncing
+  * @sw_debounced: flag indicating if the software debouncer is active
+  * @level: the current debounced physical level of the line
++ * @hdesc: the Hardware Timestamp Engine (HTE) descriptor
++ * @raw_level: the line level at the time of event
++ * @total_discard_seq: the running counter of the discarded events
++ * @last_seqno: the last sequence number before debounce period expires
+  */
+ struct line {
+ 	struct gpio_desc *desc;
+-- 
+2.35.1
 

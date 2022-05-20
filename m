@@ -2,83 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 184DE52F5B4
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 00:33:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AE4452F5B8
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 00:35:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236404AbiETWdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 18:33:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36804 "EHLO
+        id S1353392AbiETWf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 18:35:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233176AbiETWdc (ORCPT
+        with ESMTP id S233176AbiETWf1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 18:33:32 -0400
-Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A12C16329E;
-        Fri, 20 May 2022 15:33:31 -0700 (PDT)
-Received: by mail-oi1-f178.google.com with SMTP id i66so11485291oia.11;
-        Fri, 20 May 2022 15:33:31 -0700 (PDT)
+        Fri, 20 May 2022 18:35:27 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF7AA178563
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 15:35:26 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id eg11so12392282edb.11
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 15:35:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Hc2DTzkdvmY5/H2+h1fYLqdWLOpbPYQU4WUrtguKfK8=;
+        b=YcQ0Hu0u3oUtOd9K6qAjIrCzfi7ako/V39ndwIxJG58KfcKA6mHEbr02iQKhS+icJ7
+         AWTF2PJV9YsGtctpG00VQ2dF159kSsPOUXUfYAgkjXoXbsftFK+R0lncDH8FpSfgueC+
+         7RzlTU+Diyl/K6STYoJjnz/brTfG73icT2DNlhlm+lmO827D6BhSScD//biiZGRO05QL
+         q3RnvLZwT6mcTsisMw8lRJ7Epy1rFcyBbvwAnyHXaGG2Yn/MikvesKpcqYFXNKUh/3QK
+         RcGUiDblIarbhgeIP7M/68tM41h18GHneABwFEDjCDltu8G3/5wCeHdcVOkSrsvu+uB6
+         +cOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PXDaYfdouwA97Dyh3xFZZ2BaIW2LzW4Se1PNa8S3D9Q=;
-        b=OAGwjAfKT45ZI/iYqIRtke9+AZnPnclq8yYtrACiJ1be4Y9maAU73+tGK6U7e4ZGJ3
-         EdZxgykMtg73akUMxhfbugE13LOf3SHGdBS7L2GnTAlK15aw8/+Oz5wNOvTf9ypBx3Ka
-         jz2SgIaSEbcKpZxIPt6OiIqneLlIi/3kJtvfCfoHsxEQ9DzTfUifqRcMjfaMisGpaHHf
-         YG5ULDdvST3ZpGQkw1vdnVkN1t/EtTCPH5RcUEQR4t+aLj1pSulhdXQGLKFeMbo5N9Hu
-         Y/0sqb31hDGLHct2VHI0cWqpNbh7ZoLcxxnjo+pp27y5Bq7FR7qHCzy+QdPukWAEkWGS
-         qUig==
-X-Gm-Message-State: AOAM5310iBug4amcwL9skVFmssApvmvHYMJSm7HSqTEAsclihDgDAzvh
-        D4PoQarxvXp34dFYZrsCyA==
-X-Google-Smtp-Source: ABdhPJxEqOGnOf4NSH7Hk1LJ68LHOPidjNw1JrZtODYMxN39z+e4TAoUh6dDrjhozXcA7G6zekSwbg==
-X-Received: by 2002:a05:6808:11c2:b0:2f9:b58f:5ac7 with SMTP id p2-20020a05680811c200b002f9b58f5ac7mr7100268oiv.132.1653086010592;
-        Fri, 20 May 2022 15:33:30 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id b7-20020a4aac87000000b0035eb4e5a6d6sm1636202oon.44.2022.05.20.15.33.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 15:33:29 -0700 (PDT)
-Received: (nullmailer pid 374265 invoked by uid 1000);
-        Fri, 20 May 2022 22:33:15 -0000
-Date:   Fri, 20 May 2022 17:33:15 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
-Cc:     mturquette@baylibre.com, chun-jie.chen@mediatek.com,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-clk@vger.kernel.org, matthias.bgg@gmail.com,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        runyang.chen@mediatek.com, sboyd@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, p.zabel@pengutronix.de,
-        wenst@chromium.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        angelogioacchino.delregno@collabora.com, robh+dt@kernel.org
-Subject: Re: [PATCH v7 18/19] dt-bindings: arm: mediatek: Add #reset-cells
- property for MT8186
-Message-ID: <20220520223315.GA374204-robh@kernel.org>
-References: <20220519125527.18544-1-rex-bc.chen@mediatek.com>
- <20220519125527.18544-19-rex-bc.chen@mediatek.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Hc2DTzkdvmY5/H2+h1fYLqdWLOpbPYQU4WUrtguKfK8=;
+        b=QZxm/odjlM/r5ge9k5vCctsEXzrtK7NKz2aIki5pkTS4yFxMOVYoGbxfnMZ2n3z3W/
+         FXD54IVgw6UeZjFMny6IJtSGzZC1UI1Q+KkGRL3qIj55nEXzpElYrBTK6yXjvRYfro2z
+         0RSbr7IQ7sEDaKvnYImUDDa0eX8aGJQVbj5rLF+O73lFUKPBrlGmunp8eIgfZhtALwYw
+         yKIJuTeSMUQ8/0+ah/Wtr3ejsb8mgcWNjPPS2L+d0lFKrreSidbAwF3wSQ5L7DRKYLiS
+         uToyH1L7OJ2H6UK6YhNvtloqXKqCwV9ohIV0Tr/J/IuHAJEX6ZLOO0Qiq1BJ8Lx1rSaI
+         F2CQ==
+X-Gm-Message-State: AOAM533ktd1n5eBIg4PWE5nxjZoeqSB+AIUt2Cz1m/EWll7dU9sJWNEe
+        JwuDzXNqFbkwSelSPSvON7LeVwv8KKc8GbWGLz9Qlw==
+X-Google-Smtp-Source: ABdhPJz7+9WUFMLkPO5qjQRZ4cQTpghpM2BlJvmMqQmZrSUEytXCmKRqFwOg9PAc+vapCevWMtNPVvcpFn9X9SbxdiM=
+X-Received: by 2002:a05:6402:3047:b0:42a:fbe9:4509 with SMTP id
+ bs7-20020a056402304700b0042afbe94509mr11941788edb.159.1653086125167; Fri, 20
+ May 2022 15:35:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220519125527.18544-19-rex-bc.chen@mediatek.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220519164512.3180360-1-dlatypov@google.com> <CABVgOSnooocLsy2=a8rm7Y_m3DpffKtDam5_uYou+Y2tUkumRw@mail.gmail.com>
+ <CAGS_qxrDYKKoWy3UAuVqebT+3jp-ux_uyfbwX3OnJqVbnzaiJg@mail.gmail.com> <CAGS_qxrvR+xxfmzz92rYYW=VzG1kyycn1EuaJxdNSMd_L5afFQ@mail.gmail.com>
+In-Reply-To: <CAGS_qxrvR+xxfmzz92rYYW=VzG1kyycn1EuaJxdNSMd_L5afFQ@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Fri, 20 May 2022 15:35:13 -0700
+Message-ID: <CAGS_qxpF338dvbB+6QW1n8_agddeS10+nkTQNmT+0UcvoE1gBw@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: refactor internal kconfig handling, allow overriding
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 19 May 2022 20:55:26 +0800, Rex-BC Chen wrote:
-> We will use the infra_ao reset which is defined in mt8186-sys-clock.
-> The value of reset-cells is 1.
-> 
-> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> ---
->  .../bindings/arm/mediatek/mediatek,mt8186-sys-clock.yaml       | 3 +++
->  1 file changed, 3 insertions(+)
-> 
+On Fri, May 20, 2022 at 3:13 PM Daniel Latypov <dlatypov@google.com> wrote:
+> Talking offline with David, we've come up with a small example.
+>
+> If we add this kconfig somewhere
+> +config X
+> +       bool "X"
+> +       default y
+> +
+> +config Y
+> +       bool "Y"
+> +       default y
+> +       depends on X
+> +
+>
+> Then running this will fail
+> $ ./tools/testing/kunit/kunit.py config --kunitconfig xy_kunitconfig
+> --kconfig_add=CONFIG_X=n --kconfig_add=CONFIG_Y=n
+>
+> It will fail with this
+> This is probably due to unsatisfied dependencies.
+> Missing: # CONFIG_Y is not set
+>
+> The problem is that kunit.py is looking for an explicit line saying
+> CONFIG_Y is not set.
+> But CONFIG_Y's dependencies are not met, so Kconfig doesn't write it out.
+>
+> I assume we can treat the absence of it in the file as proof that it's not set.
+> I.e. the bug lies in the is_subset() logic we have in kunit.py?
 
-Acked-by: Rob Herring <robh@kernel.org>
+Ah no, this is just me trying to be clever and avoid a call to this logic.
+I tried to use set_diff() and check if that's empty as an alternative.
+But the set_diff() logic is not aware of how to treat the absence of
+options properly.
+
+I'll send a v2 w/ a fix.

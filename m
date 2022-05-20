@@ -2,131 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F32F52ECCB
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 15:01:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9013252ECBF
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 14:57:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349673AbiETNAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 09:00:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52942 "EHLO
+        id S236808AbiETM5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 08:57:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236247AbiETNAu (ORCPT
+        with ESMTP id S236706AbiETM5f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 09:00:50 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0067B615A
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 06:00:48 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id n24so9812007oie.12
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 06:00:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=m1I83n4PUC08udPGh28I5vhbfHKAx+wBXDUq+Y3BXBo=;
-        b=EL5S8Pbfxlxir0aOubRo43JmPkaD40toeNu1YK18HJSHvtL1ZLCD0bRZPG+mKx7qkY
-         f89SN8Dr0KcGuboF5Ut4MPmv1of+ce1NFHNqCUxt76s4ULgg5ClihqdpMg+zfOyEW6NE
-         dOvtkezU4eMZ/xrep6lohbP8eIAaPtCnGxfcD9pmYSgQ9THg/KiOlsSw9UxNRgi6UzAY
-         9WH5Q9xN02YzkwaFSlN5lQ0E8QWAet29GrGboJS153P6KPIAhHys46wMoR9rUF4mZ/AD
-         03uXBFcA/1vtKXDqFkgfCvfiUnnrw8hIYpS+jLtGmbabzMX/ZbHX3N7lmS6piF0JiLab
-         jvSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=m1I83n4PUC08udPGh28I5vhbfHKAx+wBXDUq+Y3BXBo=;
-        b=ztaGBIzAzudMLsCp5f5shmtQU2sqgTt4mbGeh8ztXq7XDQrcUGyLt42OrO8071I6Vw
-         DgF6U51C78+Q1MdP5O5MrBGz9O1x0SBddxJoURJRBt3Xcy80BRSkAz5BZN9aJtNLm/3D
-         N3Cc3IkKRq7eTf8axQ3Bb9b/9ADhSwETgTfWJP+kPHkt0Dpr+EFBWRI2iDoOvTXt1CXw
-         Qp1hbFxl+YbEh/fFKz45rx+aejNdgCs5xgVvmpz4OBc3uogXEukYygIWSTwZyE5M/TzL
-         9/JztYg8Dhkjp8rWb+tmbAbDZWQuFIBaoW6iXd50/5OtOVH7GnRc15Fr29NPYcFrpFEu
-         M07A==
-X-Gm-Message-State: AOAM530bEi5ctbau7rmgrWFYls7FVW0giwXb7DbYKij6V59UpBDfbn1m
-        OEukyxwCIqmkHUL1ugYzkqHBPrVIEjIGfSoAnj1eBQ==
-X-Google-Smtp-Source: ABdhPJy98dHVNaBKTqGEhAkjVKO9b+S+j92rry67f6e2uKi3FVTumcvHpzK/BOl+ZrruOYSWOlP55BozDmZiufyNngA=
-X-Received: by 2002:a05:6808:c2:b0:325:eb71:7266 with SMTP id
- t2-20020a05680800c200b00325eb717266mr5766203oic.269.1653051646802; Fri, 20
- May 2022 06:00:46 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220518132512.37864-1-likexu@tencent.com> <20220518132512.37864-4-likexu@tencent.com>
- <31f3de9a-a752-e322-ebd0-731c42afd47a@redhat.com>
-In-Reply-To: <31f3de9a-a752-e322-ebd0-731c42afd47a@redhat.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Fri, 20 May 2022 06:00:35 -0700
-Message-ID: <CALMp9eSp5d3mq2GaT+AhDSXaZ=HN0SUSnW5VGY+o4NHLz=VkSA@mail.gmail.com>
-Subject: Re: [PATCH RESEND v3 03/11] KVM: x86/pmu: Protect kvm->arch.pmu_event_filter
- with SRCU
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Like Xu <like.xu.linux@gmail.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 20 May 2022 08:57:35 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F38169E27;
+        Fri, 20 May 2022 05:57:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653051454; x=1684587454;
+  h=from:to:cc:subject:date:message-id;
+  bh=2+Jz9WHsM/0uEHL0h9e/nusHfWTsJyJTnp0bXCMBStg=;
+  b=TLAIQ3gYSwxgV0DWjVvCyXG40tpfQ41i+0oaE1XpXNVcnY5W0KqRFaxC
+   lJvjDOzoH5CzmpL5QxeFL07fLyKhSACqFaVwwvpHhL6Rk/xEO7Begrv8L
+   f0dDpLbkQ89ujSyKQ0hIJrRmnRasadMcE1+WQQmjE0X9VMu5pxCqhMfD0
+   htj21I6a5XuuHhiXpTQE9bRGbH48NU39zTiLZSPXd3q9ljdyhT/EqVbrp
+   LFExS6v0VH+kj/QJFdLx2aqZjg0JEnymMlQxNqbrbow3it6/snLOSMEUE
+   bTwlyujKwyjUZTyo3LUZ7YN4elME1dUP14o4bnaewlW/V1gprU0RHslms
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="272305127"
+X-IronPort-AV: E=Sophos;i="5.91,239,1647327600"; 
+   d="scan'208";a="272305127"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 05:57:34 -0700
+X-IronPort-AV: E=Sophos;i="5.91,239,1647327600"; 
+   d="scan'208";a="546668736"
+Received: from monish-nuc11pahi5.iind.intel.com ([10.223.138.76])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 05:57:31 -0700
+From:   monish.kumar.r@intel.com
+To:     gregkh@linuxfoundation.org, oneukum@suse.com, olebowle@gmx.com,
+        davem@davemloft.net, wangjm221@gmail.com, chris.chiu@canonical.com,
+        vpalatin@chromium.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     monish.kumar.r@intel.com, abhijeet.rao@intel.com
+Subject: [PATCH] Add USB_QUIRK_NO_LPM USB_QUIRK_RESET_RESUME quirks for Dell usb gen 2 device to not fail during enumeration.
+Date:   Fri, 20 May 2022 18:30:44 +0530
+Message-Id: <20220520130044.17303-1-monish.kumar.r@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 5:51 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
->
-> On 5/18/22 15:25, Like Xu wrote:
-> > From: Like Xu <likexu@tencent.com>
-> >
-> > Similar to "kvm->arch.msr_filter", KVM should guarantee that vCPUs will
-> > see either the previous filter or the new filter when user space calls
-> > KVM_SET_PMU_EVENT_FILTER ioctl with the vCPU running so that guest
-> > pmu events with identical settings in both the old and new filter have
-> > deterministic behavior.
-> >
-> > Fixes: 66bb8a065f5a ("KVM: x86: PMU Event Filter")
-> > Signed-off-by: Like Xu <likexu@tencent.com>
-> > Reviewed-by: Wanpeng Li <wanpengli@tencent.com>
->
-> Please always include the call trace where SRCU is not taken.  The ones
-> I reconstructed always end up at a place inside srcu_read_lock/unlock:
->
-> reprogram_gp_counter/reprogram_fixed_counter
->    amd_pmu_set_msr
->     kvm_set_msr_common
->      svm_set_msr
->       __kvm_set_msr
->       kvm_set_msr_ignored_check
->        kvm_set_msr_with_filter
->         kvm_emulate_wrmsr**
->         emulator_set_msr_with_filter**
->        kvm_set_msr
->         emulator_set_msr**
->        do_set_msr
->         __msr_io
->          msr_io
->           ioctl(KVM_SET_MSRS)**
->    intel_pmu_set_msr
->     kvm_set_msr_common
->      vmx_set_msr (see svm_set_msr)
->    reprogram_counter
->     global_ctrl_changed
->      intel_pmu_set_msr (see above)
->     kvm_pmu_handle_event
->      vcpu_enter_guest**
->     kvm_pmu_incr_counter
->      kvm_pmu_trigger_event
->       nested_vmx_run**
->       kvm_skip_emulated_instruction**
->       x86_emulate_instruction**
->    reprogram_fixed_counters
->     intel_pmu_set_msr (see above)
->
-> Paolo
+From: Monish Kumar R <monish.kumar.r@intel.com>
 
-I agree with Paolo that existing usage is covered by
-srcu_read_lock/unlock, but (a) it's not easy to confirm this, and (b)
-this is very fragile.
+Found this bug on own testing
 
-Whichever way we decide to go, the userspace MSR filter and the PMU
-event filter should adopt the same approach.
+Signed-off-by: Monish Kumar R <monish.kumar.r@intel.com>
+---
+ drivers/usb/core/quirks.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
+index 97b44a68668a..f9e149fc4395 100644
+--- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -510,6 +510,10 @@ static const struct usb_device_id usb_quirk_list[] = {
+ 	/* DJI CineSSD */
+ 	{ USB_DEVICE(0x2ca3, 0x0031), .driver_info = USB_QUIRK_NO_LPM },
+ 
++	/*DELL USB GEN2 */
++	{ USB_DEVICE(0x413c, 0xb062), .driver_info = USB_QUIRK_NO_LPM |
++	  USB_QUIRK_RESET_RESUME },
++
+ 	/* VCOM device */
+ 	{ USB_DEVICE(0x4296, 0x7570), .driver_info = USB_QUIRK_CONFIG_INTF_STRINGS },
+ 
+-- 
+2.17.1
+

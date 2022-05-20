@@ -2,245 +2,273 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEB2152EAFC
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 13:39:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B18B452EB01
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 13:40:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348627AbiETLi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 07:38:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35654 "EHLO
+        id S1348643AbiETLkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 07:40:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348620AbiETLiy (ORCPT
+        with ESMTP id S1348668AbiETLjk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 07:38:54 -0400
-Received: from de-smtp-delivery-102.mimecast.com (de-smtp-delivery-102.mimecast.com [194.104.111.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B67C15AB01
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 04:38:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
-        t=1653046692;
+        Fri, 20 May 2022 07:39:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4275E15E63F
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 04:39:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653046762;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=nUgKGJ3O0a2AcI0M7Li2xW8xlIFt0nekuPR5p7Jv008=;
-        b=T5sHWe03SID1kqcVhQtS8xdX/98iuepOAqYdW/2FaiqoIYJZ8Qp+qd/l4ynJJXvMM/UgTB
-        O+mD26GL/ITfCw9IJUPKLpgcpZaNNxah1wIgEmHymZ+g+EwJt2v1cVyMsGwxQyLKKpyRe8
-        XPj8BDUOdF4zN69rohbUg2LhPEwkt/c=
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com
- (mail-vi1eur04lp2057.outbound.protection.outlook.com [104.47.14.57]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-20-xSRJOZfWPQaJ_cWg9diAQw-1; Fri, 20 May 2022 13:38:09 +0200
-X-MC-Unique: xSRJOZfWPQaJ_cWg9diAQw-1
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VM5Xoy+UaQPnNlVGzIO4679rwjwD7qjZRqZH3LOCdyrSFvWOlC9A0cDEwc2ehm8SYccyyLFDNF2x6irS6JiYwCsC5O64/wYNMJk8ai32VA2GAC8Z0kDUdt0Gln/7jSpXeJRIrkt+U1E9EJJD9KN2c5pdp2pU66QJ7xLTYQs3wgDSIz78Us3eHy2alDoi+K6XrF/e6OychbwK1qIzuiUUfWPscTOwggonoXlZ8H8+lN9Mpua+YJLIvdcBYcXZ5YIsxbf/WHn4h4T3Vo5xhX8Af2KwiUTCGfc7RHfsdIJnQcxt5KHGiQc6DREJo0/dppeqbo8Oh1VdIqnWz+ag+8ML6Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Xmzjpod21e6Cbz4kt7krDw3PSKbJIqoBQQasfgfdzH0=;
- b=FLnsmrU3b/QBBbmHZ3FUouMr5nacQm7ZhrTFLo1L+8VsfrBpnmLVoAksdVrpZ/PPkIvlZpnGnBzxQbwnQDrOKGod2PipBuqTKOJR3aEIi3M8hDNZjj3LHsHkbmAX9xIo82L8TwhFVzAvq1YURknLETBu/UbLkCgrT7V2ll5GEMq6Ht4LKB+up8VNcFAvCrGWx4XR25S7rEI8Dknsg9uMLYl/wFBQTEISqpcaTd/t+sAvSVRTCBHD8B5FogbOvsCgvIglk/Osxln+cbpdyDlbSJ8fUbLXpmMMCDRUab7DhYAenA+8H/n88AePc5gLOH/QlZzl0+9U4yMZeSUFtUjdVA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from DB9PR04MB8107.eurprd04.prod.outlook.com (2603:10a6:10:243::20)
- by VI1PR04MB6014.eurprd04.prod.outlook.com (2603:10a6:803:c9::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.17; Fri, 20 May
- 2022 11:38:06 +0000
-Received: from DB9PR04MB8107.eurprd04.prod.outlook.com
- ([fe80::40a2:1b77:8319:a7fa]) by DB9PR04MB8107.eurprd04.prod.outlook.com
- ([fe80::40a2:1b77:8319:a7fa%5]) with mapi id 15.20.5273.016; Fri, 20 May 2022
- 11:38:06 +0000
-From:   Shung-Hsi Yu <shung-hsi.yu@suse.com>
-To:     Shung-Hsi Yu <shung-hsi.yu@suse.com>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-CC:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>
-Subject: [PATCH bpf-next 4/4] selftests/bpf: add reason of rejection in ld_imm64
-Date:   Fri, 20 May 2022 19:37:28 +0800
-Message-ID: <20220520113728.12708-5-shung-hsi.yu@suse.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220520113728.12708-1-shung-hsi.yu@suse.com>
-References: <20220520113728.12708-1-shung-hsi.yu@suse.com>
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain
-X-ClientProxiedBy: AM5PR0502CA0010.eurprd05.prod.outlook.com
- (2603:10a6:203:91::20) To DB9PR04MB8107.eurprd04.prod.outlook.com
- (2603:10a6:10:243::20)
+        bh=IMnBRvEgaiZAUeMueIrkOycW7xuLXgytEdocVamBE54=;
+        b=V7Admbwut0HOjYireqWCcWIEWIYWh7RVSsAwzPSV/t4o0bwAngwg0tTzmxx/rd2nCTnuQg
+        vO5ItUaI1+qWFfxY/ERxig8a8rkyTCLyy0JeGZkHIKdsZ9PFIvlBFEjzmU1V12NZLMOoGP
+        Mt0pAGBgdWnmC3pfW3uMFzapM2+7S0E=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-190-Q2EdrlnBMdqqQ2xknTn-yg-1; Fri, 20 May 2022 07:39:19 -0400
+X-MC-Unique: Q2EdrlnBMdqqQ2xknTn-yg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DA6563C0218A;
+        Fri, 20 May 2022 11:39:18 +0000 (UTC)
+Received: from T590 (ovpn-8-21.pek2.redhat.com [10.72.8.21])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id C21BD1415100;
+        Fri, 20 May 2022 11:39:13 +0000 (UTC)
+Date:   Fri, 20 May 2022 19:39:08 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     "yukuai (C)" <yukuai3@huawei.com>
+Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        ming.lei@redhat.com
+Subject: Re: [PATCH -next v2] blk-mq: fix panic during blk_mq_run_work_fn()
+Message-ID: <Yod93DOdYosa+SvS@T590>
+References: <20220520032542.3331610-1-yukuai3@huawei.com>
+ <YocOsw6n3y11lNym@T590>
+ <2b7a82e0-1e33-e2ff-74d7-d80f152fdc75@huawei.com>
+ <afe9dec4-733d-88e9-850d-5c36e9201119@huawei.com>
+ <YodSlSm/sIC8G2iG@T590>
+ <dbe2deec-b007-470f-eb5a-35fae63ad134@huawei.com>
+ <YodlGOo7vrUa7DZK@T590>
+ <0e7967de-0c32-790d-fa08-b0bc9ef5923d@huawei.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f1f51714-7f93-4ca1-63d0-08da3a5534e1
-X-MS-TrafficTypeDiagnostic: VI1PR04MB6014:EE_
-X-Microsoft-Antispam-PRVS: <VI1PR04MB6014E63194B8ED142E1B5580BFD39@VI1PR04MB6014.eurprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 3HDc22kyX/23JRo+VeW6sX8hz01WC2XlEhzFUZ5+uTPAVUuR7b3l/hvrqTCAQLALlezN9/CDan9eh8qCvZh/CUMOqCwkxm3784vcvMl1aJgNAgdAfd6KmRBiOUXtqAePr+ZoG5ohLTuMlqOBgVW2yreGcLODa19paKMwC0Q20oawS8MwYd/COuGTIOSSDscMPnKzpApfqnPmg5RDBGZcfd0blCwvgi++vnzgXONiNnHsa9x7tbrC67Bhzm+YwCQLGHlvtqLZSvivsNiw5waXS96sLTKcoNvTlx1f5BTuL0JmU8vNoQpprD5h+CNgq1mACPQPCJC3E3ktBl4tnxM0pT4igjRfu11Fe/Fj/uCoeejrgq2aj1xEQ/M+0kOaPKv0uwweJSjGjl87uINc9jq7WeWchDannPXbJW5+N3BGlZ9n9tHAoZOtu0NbNUJAZJBywo9LSPQv2+q250OZKUjqW0Wj1E41qZ6GB3JxSYvxOAP3tIMjtiSkTtlNsInRpb/wzGX0r2RhzVaUu5fuRGsP7uEjDouu0zoY9RfcoYs5T5jIQoz+iQ5Svcrv8OKoz412Wl0jKFs6umHYJoF8/3HNTGF6Ozh0adXfIjuCos/1XMt5/yodOw87XlAYK1x9tJOG+4/YEPc9lilTXBoxkcYkbw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR04MB8107.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(508600001)(5660300002)(38100700002)(36756003)(66476007)(8936002)(66556008)(66946007)(7416002)(8676002)(86362001)(4326008)(186003)(6486002)(83380400001)(1076003)(2616005)(26005)(2906002)(316002)(54906003)(6512007)(6666004)(6506007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?13iNxCmyS4ttz4BJKKZxII+Y2qPXOjbPuJNuC90e5HK44O3sUPCnURwO+kkX?=
- =?us-ascii?Q?dCj8dU3qLFoDOiiL62zpIfHrWHIKWsJqB3fzS2mEiJy37DRTVeKCwCYzobob?=
- =?us-ascii?Q?pH4PnYNSITWXAq/hqqW3K/Mag8vw5RCZlHVlBdMgX/rPeY3W/qx/PWSnYspp?=
- =?us-ascii?Q?qeQJiei6N5g4wejGvTdBTb3rasZ9f8k5+5OsgqnDaxFBhCmYZO/ldagTPWFE?=
- =?us-ascii?Q?cqJzttld3EFFQJKXO/oLis/I/5zvoNM0tQK/G/n2E39gKXvJ9k0d0nJA4r32?=
- =?us-ascii?Q?+EPvc16NaR05c/J1M8OxlC+KIgc9JYs0qxeLumExww8nz/LAWehjcF8bgczf?=
- =?us-ascii?Q?/G7oAQ4VSNYhSZe2YK6nuIU3yf5BoJjEWQNAnr3omY0VR8ycYIf8d+e0oagw?=
- =?us-ascii?Q?ZN0bCGTg2ohAiAaO/ZTEOXYirTG8TPdYr6NptbohWNSohP9Q08ergwNZc/pN?=
- =?us-ascii?Q?hU9aTI3FjLSvsWhLt4JY8zAKtQhMKAc+7wB3AINritTb1cI9uEhU6wyCI37b?=
- =?us-ascii?Q?9u2SY9OD1Sc7Yu/Y8gl1Bo/5JZMkTnN1jkmoq1uqF1G991/62ok+Vj8qd8JE?=
- =?us-ascii?Q?uBywx0I7+kTUm+z5XPSpqLAbX1ffhDhhf2Hq58mqWhlrhGkumwkdWdhlI1GR?=
- =?us-ascii?Q?bRiATstxJVURk/wcH8cgUA0FMTute0KZ9Izu63gS6xF4Lw63IQfy8pJ6kKi5?=
- =?us-ascii?Q?ofTz7jtA6oyKmlaLIrZa9FRwamjR0Iz49el506FMjdUddOFqYZh2rku5+0Dm?=
- =?us-ascii?Q?TkWHXNvlzMTYaDmH4YXVZqpHLn+JzhZS4IyRJp4zIPf6wAzTTova78phWkqH?=
- =?us-ascii?Q?zXH6DD2mpeaS5dQqCzw8PKOVC+xq6m95TtBfIklEY4nvhyLBpEjUIxtCPfCb?=
- =?us-ascii?Q?HdKICcbpC3om7WY4NrjMJIGsHFAbmobGNOYpF0cxdgRH/CX9XqvHg2EyhNMz?=
- =?us-ascii?Q?+tIBJ5YWUvW/N/usbR8Zte4q3kmCmvtRKfoxeoYdWCdN3LDrg/4kyK1pvywn?=
- =?us-ascii?Q?sn40ey/uuUEDC9ukFq3++2Fg+uSDoZSH18m2swoovwHeFzWgP0bARF+cztVU?=
- =?us-ascii?Q?gAISSAnX28+zQQE9KvCj/PGpLCdC4Lp0WR9YTfh4Mrz7+ls0FVkQt1BxjNkW?=
- =?us-ascii?Q?9ngcDEQ3Hs9PSmsm64TbK9UIsgTIsSexEJ6u2okcX9yEP80KXESJP6jdyo00?=
- =?us-ascii?Q?HV2qYbNHwYxYkRTffWwTHyYDgHL4K5QJxIAZMCAqAvE1aw+GlhEVS6+9Kyq1?=
- =?us-ascii?Q?GAg54gNbZPsQXuKOg5yznrjhiLUQCgJon9jAycYb5K9++arJMSyvPC4tycpc?=
- =?us-ascii?Q?qMy90MueELrZ8s7rCZ3/6juWmDN9bn+d6NLraPb90QLlH8vkU6CWyRyQ5KXu?=
- =?us-ascii?Q?zXDiG8pTCSe9bomb8OxtPwv5HUFkm6S3ImxVE1en0NhjKQDXbRnZrGsEN9le?=
- =?us-ascii?Q?0Lz5HiJXwABnW5y9YNpay6UyuWQsK3NQizXWzFx2P2V7ShETa2tP6Tf5haiZ?=
- =?us-ascii?Q?v/v2AT56yoOVUEG3ZcxLUFpjv8RwtjuZX9GDZY6w7LTXlye7oyVXqWej+SOh?=
- =?us-ascii?Q?4W9K2ucQBUBJadAIhpO4zUYJ2nMm2c4G4uNAZpZnMZBkI2chfUQdfBSaCx/f?=
- =?us-ascii?Q?yI4aQQktzAXgb9JcjV9+Rfvrr+tsmZY8x3/k1Xekdb0yZVRoCSb8xnDhB//Y?=
- =?us-ascii?Q?NqAcHbEKu/Zbcsu7+mQBBz11Le84SfRU1WT4X5QgMe01Q+Cnh55sWHRMQ13Z?=
- =?us-ascii?Q?SaihelwNWA=3D=3D?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f1f51714-7f93-4ca1-63d0-08da3a5534e1
-X-MS-Exchange-CrossTenant-AuthSource: DB9PR04MB8107.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 May 2022 11:38:06.1101
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: K6aHrWjv2aPSAzCmP6OGJK2/r52hPVIny4FIJNq56hKMhFzPpJtN9uDtE51+wl93kC2Eah1eWcV7/plD5PWQpw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6014
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0e7967de-0c32-790d-fa08-b0bc9ef5923d@huawei.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It may not be immediately clear why that ld_imm64 test cases are
-rejected, especially for test1 and test2 where JMP to the 2nd
-instruction of BPF_LD_IMM64 is performed.
+On Fri, May 20, 2022 at 06:56:22PM +0800, yukuai (C) wrote:
+> 在 2022/05/20 17:53, Ming Lei 写道:
+> > On Fri, May 20, 2022 at 04:49:19PM +0800, yukuai (C) wrote:
+> > > 在 2022/05/20 16:34, Ming Lei 写道:
+> > > > On Fri, May 20, 2022 at 03:02:13PM +0800, yukuai (C) wrote:
+> > > > > 在 2022/05/20 14:23, yukuai (C) 写道:
+> > > > > > 在 2022/05/20 11:44, Ming Lei 写道:
+> > > > > > > On Fri, May 20, 2022 at 11:25:42AM +0800, Yu Kuai wrote:
+> > > > > > > > Our test report a following crash:
+> > > > > > > > 
+> > > > > > > > BUG: kernel NULL pointer dereference, address: 0000000000000018
+> > > > > > > > PGD 0 P4D 0
+> > > > > > > > Oops: 0000 [#1] SMP NOPTI
+> > > > > > > > CPU: 6 PID: 265 Comm: kworker/6:1H Kdump: loaded Tainted: G
+> > > > > > > > O      5.10.0-60.17.0.h43.eulerosv2r11.x86_64 #1
+> > > > > > > > Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+> > > > > > > > rel-1.12.1-0-ga5cab58-20220320_160524-szxrtosci10000 04/01/2014
+> > > > > > > > Workqueue: kblockd blk_mq_run_work_fn
+> > > > > > > > RIP: 0010:blk_mq_delay_run_hw_queues+0xb6/0xe0
+> > > > > > > > RSP: 0018:ffffacc6803d3d88 EFLAGS: 00010246
+> > > > > > > > RAX: 0000000000000006 RBX: ffff99e2c3d25008 RCX: 00000000ffffffff
+> > > > > > > > RDX: 0000000000000000 RSI: 0000000000000003 RDI: ffff99e2c911ae18
+> > > > > > > > RBP: ffffacc6803d3dd8 R08: 0000000000000000 R09: ffff99e2c0901f6c
+> > > > > > > > R10: 0000000000000018 R11: 0000000000000018 R12: ffff99e2c911ae18
+> > > > > > > > R13: 0000000000000000 R14: 0000000000000003 R15: ffff99e2c911ae18
+> > > > > > > > FS:  0000000000000000(0000) GS:ffff99e6bbf00000(0000)
+> > > > > > > > knlGS:0000000000000000
+> > > > > > > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > > > > > > CR2: 0000000000000018 CR3: 000000007460a006 CR4: 00000000003706e0
+> > > > > > > > Call Trace:
+> > > > > > > >     __blk_mq_do_dispatch_sched+0x2a7/0x2c0
+> > > > > > > >     ? newidle_balance+0x23e/0x2f0
+> > > > > > > >     __blk_mq_sched_dispatch_requests+0x13f/0x190
+> > > > > > > >     blk_mq_sched_dispatch_requests+0x30/0x60
+> > > > > > > >     __blk_mq_run_hw_queue+0x47/0xd0
+> > > > > > > >     process_one_work+0x1b0/0x350
+> > > > > > > >     worker_thread+0x49/0x300
+> > > > > > > >     ? rescuer_thread+0x3a0/0x3a0
+> > > > > > > >     kthread+0xfe/0x140
+> > > > > > > >     ? kthread_park+0x90/0x90
+> > > > > > > >     ret_from_fork+0x22/0x30
+> > > > > > > > 
+> > > > > > > > After digging from vmcore, I found that the queue is cleaned
+> > > > > > > > up(blk_cleanup_queue() is done) and tag set is
+> > > > > > > > freed(blk_mq_free_tag_set() is done).
+> > > > > > > > 
+> > > > > > > > There are two problems here:
+> > > > > > > > 
+> > > > > > > > 1) blk_mq_delay_run_hw_queues() will only be called from
+> > > > > > > > __blk_mq_do_dispatch_sched() if e->type->ops.has_work() return true.
+> > > > > > > > This seems impossible because blk_cleanup_queue() is done, and there
+> > > > > > > > should be no io. Commit ddc25c86b466 ("block, bfq: make bfq_has_work()
+> > > > > > > > more accurate") fix the problem in bfq. And currently ohter schedulers
+> > > > > > > > don't have such problem.
+> > > > > > > > 
+> > > > > > > > 2) 'hctx->run_work' still exists after blk_cleanup_queue().
+> > > > > > > > blk_mq_cancel_work_sync() is called from blk_cleanup_queue() to cancel
+> > > > > > > > all the 'run_work'. However, there is no guarantee that new 'run_work'
+> > > > > > > > won't be queued after that(and before blk_mq_exit_queue() is done).
+> > > > > > > 
+> > > > > > > It is blk_mq_run_hw_queue() caller's responsibility to grab
+> > > > > > > ->q_usage_counter for avoiding queue cleaned up, so please fix the user
+> > > > > > > side.
+> > > > > > > 
+> > > > > > Hi,
+> > > > > > 
+> > > > > > Thanks for your advice.
+> > > > > > 
+> > > > > > blk_mq_run_hw_queue() can be called async, in order to do that, what I
+> > > > > > can think of is that grab 'q_usage_counte' before queuing 'run->work'
+> > > > > > and release it after. Which is very similar to this patch...
+> > > > > 
+> > > > > Hi,
+> > > > > 
+> > > > > How do you think about following change:
+> > > > > 
+> > > > 
+> > > > I think the issue is in blk_mq_map_queue_type() which may touch tagset.
+> > > > 
+> > > > So please try the following patch:
+> > > > 
+> > > > 
+> > > > diff --git a/block/blk-mq.c b/block/blk-mq.c
+> > > > index ed1869a305c4..5789e971ac83 100644
+> > > > --- a/block/blk-mq.c
+> > > > +++ b/block/blk-mq.c
+> > > > @@ -2174,8 +2174,7 @@ static bool blk_mq_has_sqsched(struct request_queue *q)
+> > > >     */
+> > > >    static struct blk_mq_hw_ctx *blk_mq_get_sq_hctx(struct request_queue *q)
+> > > >    {
+> > > > -	struct blk_mq_hw_ctx *hctx;
+> > > > -
+> > > > +	struct blk_mq_ctx *ctx = blk_mq_get_ctx(q);
+> > > >    	/*
+> > > >    	 * If the IO scheduler does not respect hardware queues when
+> > > >    	 * dispatching, we just don't bother with multiple HW queues and
+> > > > @@ -2183,8 +2182,8 @@ static struct blk_mq_hw_ctx *blk_mq_get_sq_hctx(struct request_queue *q)
+> > > >    	 * just causes lock contention inside the scheduler and pointless cache
+> > > >    	 * bouncing.
+> > > >    	 */
+> > > > -	hctx = blk_mq_map_queue_type(q, HCTX_TYPE_DEFAULT,
+> > > > -				     raw_smp_processor_id());
+> > > > +	struct blk_mq_hw_ctx *hctx = blk_mq_map_queue(q, 0, ctx);
+> > > > +
+> > > >    	if (!blk_mq_hctx_stopped(hctx))
+> > > >    		return hctx;
+> > > >    	return NULL;
+> > > 
+> > > Hi, Ming
+> > > 
+> > > This patch do make sense, however, this doesn't fix the root cause, it
+> > 
+> > Isn't the root cause that tagset is referred after blk_cleanup_queue
+> > returns?
+> 
+> No, it's not the root cause. If we can make sure 'hctx->run_work' won't
 
-Add brief explaination of why each test case in verifier/ld_imm64.c
-should be rejected.
+Really, then how is the panic triggered?
 
-Signed-off-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
----
- .../testing/selftests/bpf/verifier/ld_imm64.c | 20 ++++++++++---------
- 1 file changed, 11 insertions(+), 9 deletions(-)
+> exist after blk_cleanup_queue(), such problem won't be triggered.
 
-diff --git a/tools/testing/selftests/bpf/verifier/ld_imm64.c b/tools/testin=
-g/selftests/bpf/verifier/ld_imm64.c
-index f9297900cea6..021312641aaf 100644
---- a/tools/testing/selftests/bpf/verifier/ld_imm64.c
-+++ b/tools/testing/selftests/bpf/verifier/ld_imm64.c
-@@ -1,5 +1,6 @@
-+/* Note: BPF_LD_IMM64 is composed of two instructions of class BPF_LD */
- {
--	"test1 ld_imm64",
-+	"test1 ld_imm64: reject JMP to 2nd instruction of BPF_LD_IMM64",
- 	.insns =3D {
- 	BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 0, 1),
- 	BPF_LD_IMM64(BPF_REG_0, 0),
-@@ -14,7 +15,7 @@
- 	.result =3D REJECT,
- },
- {
--	"test2 ld_imm64",
-+	"test2 ld_imm64: reject JMP to 2nd instruction of BPF_LD_IMM64",
- 	.insns =3D {
- 	BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 0, 1),
- 	BPF_LD_IMM64(BPF_REG_0, 0),
-@@ -28,7 +29,7 @@
- 	.result =3D REJECT,
- },
- {
--	"test3 ld_imm64",
-+	"test3 ld_imm64: reject incomplete BPF_LD_IMM64 instruction",
- 	.insns =3D {
- 	BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 0, 1),
- 	BPF_RAW_INSN(BPF_LD | BPF_IMM | BPF_DW, 0, 0, 0, 0),
-@@ -42,7 +43,7 @@
- 	.result =3D REJECT,
- },
- {
--	"test4 ld_imm64",
-+	"test4 ld_imm64: reject incomplete BPF_LD_IMM64 instruction",
- 	.insns =3D {
- 	BPF_RAW_INSN(BPF_LD | BPF_IMM | BPF_DW, 0, 0, 0, 0),
- 	BPF_EXIT_INSN(),
-@@ -70,7 +71,7 @@
- 	.retval =3D 1,
- },
- {
--	"test8 ld_imm64",
-+	"test8 ld_imm64: reject 1st off!=3D0",
- 	.insns =3D {
- 	BPF_RAW_INSN(BPF_LD | BPF_IMM | BPF_DW, 0, 0, 1, 1),
- 	BPF_RAW_INSN(0, 0, 0, 0, 1),
-@@ -80,7 +81,7 @@
- 	.result =3D REJECT,
- },
- {
--	"test9 ld_imm64",
-+	"test9 ld_imm64: reject 2nd off!=3D0",
- 	.insns =3D {
- 	BPF_RAW_INSN(BPF_LD | BPF_IMM | BPF_DW, 0, 0, 0, 1),
- 	BPF_RAW_INSN(0, 0, 0, 1, 1),
-@@ -90,7 +91,7 @@
- 	.result =3D REJECT,
- },
- {
--	"test10 ld_imm64",
-+	"test10 ld_imm64: reject 2nd dst_reg!=3D0",
- 	.insns =3D {
- 	BPF_RAW_INSN(BPF_LD | BPF_IMM | BPF_DW, 0, 0, 0, 1),
- 	BPF_RAW_INSN(0, BPF_REG_1, 0, 0, 1),
-@@ -100,7 +101,7 @@
- 	.result =3D REJECT,
- },
- {
--	"test11 ld_imm64",
-+	"test11 ld_imm64: reject 2nd src_reg!=3D0",
- 	.insns =3D {
- 	BPF_RAW_INSN(BPF_LD | BPF_IMM | BPF_DW, 0, 0, 0, 1),
- 	BPF_RAW_INSN(0, 0, BPF_REG_1, 0, 1),
-@@ -113,6 +114,7 @@
- 	"test12 ld_imm64",
- 	.insns =3D {
- 	BPF_MOV64_IMM(BPF_REG_1, 0),
-+	/* BPF_REG_1 is interpreted as BPF_PSEUDO_MAP_FD */
- 	BPF_RAW_INSN(BPF_LD | BPF_IMM | BPF_DW, 0, BPF_REG_1, 0, 1),
- 	BPF_RAW_INSN(0, 0, 0, 0, 0),
- 	BPF_EXIT_INSN(),
-@@ -121,7 +123,7 @@
- 	.result =3D REJECT,
- },
- {
--	"test13 ld_imm64",
-+	"test13 ld_imm64: 2nd src_reg!=3D0",
- 	.insns =3D {
- 	BPF_MOV64_IMM(BPF_REG_1, 0),
- 	BPF_RAW_INSN(BPF_LD | BPF_IMM | BPF_DW, 0, BPF_REG_1, 0, 1),
---=20
-2.36.1
+You can't drain run queue simply without call synchronize_rcu(), but
+that is really what we want to avoid.
+
+What if one inserted request is just done before run queue?
+
+Such as:
+
+blk_mq_submit_bio
+	blk_mq_sched_insert_request	//immediately done after inserted to queue
+							//blk_cleaup_queue returns if .q_usage_counter
+							//is in atomic mode
+		blk_mq_run_hw_queue	//still run queue
+
+> 
+> Actually, blk_cleaup_queue() already call blk_mq_cancel_work_sync() to
+> do that, however, new 'hctx->run_work' can be queued after that.
+
+We know run hw queue can be in-progress during blk_cleaup_queue(), that
+is fine since we do not want to quiesce queue which slows down
+teardown much.
+
+> > 
+> > > just bypass the problem like commit ddc25c86b466 ("block, bfq: make
+> > > bfq_has_work() more accurate"), which will prevent
+> > > blk_mq_delay_run_hw_queues() to be called in such case.
+> > 
+> > How can?
+> See the call trace:
+> 
+> __blk_mq_do_dispatch_sched+0x2a7/0x2c0
+> ? newidle_balance+0x23e/0x2f0
+> __blk_mq_sched_dispatch_requests+0x13f/0x190
+> blk_mq_sched_dispatch_requests+0x30/0x60
+> __blk_mq_run_hw_queue+0x47/0xd0
+> process_one_work+0x1b0/0x350 -> hctx->run_work
+> 
+> details how blk_mq_delay_run_hw_queues() is called:
+> __blk_mq_do_dispatch_sched
+>  if (e->type->ops.has_work && !e->type->ops.has_work(hctx))
+>   break -> has_work has to return true.
+> 
+>  rq = e->type->ops.dispatch_request(hctx);
+>  if (!rq)
+>   run_queue = true
+>   break; -> dispatch has to failed
+> 
+>  if (run_queue)
+>   blk_mq_delay_run_hw_queues(q, BLK_MQ_BUDGET_DELAY);
+> 
+> Thus if 'has_work' is accurate, blk_mq_delay_run_hw_queues() won't be
+> called if there is no io.
+
+After queue freezing is done, no any request is in queue, but the dispatch/run
+queue activity may not be done. It is one known fact.
+
+> > 
+> > > 
+> > > I do think we need to make sure 'run_work' doesn't exist after
+> > > blk_cleanup_queue().
+> > 
+> > Both hctx and request queue are fine to be referred after blk_cleanup_queue
+> > returns, what can't be referred is tagset.
+> 
+> I agree with that, however, I think we still need to reach an agreement
+> about root cause of this problem...
+
+In short:
+
+1) run queue can be in-progress during cleanup queue, or returns from
+cleanup queue; we drain it in both blk_cleanup_queue() and
+disk_release_mq(), see commit 2a19b28f7929 ("blk-mq: cancel blk-mq dispatch
+work in both blk_cleanup_queue and disk_release()")
+
+2) tagset can't be touched after blk_cleanup_queue returns because
+tagset lifetime is covered by driver, which is often released after
+blk_cleanup_queue() returns.
+
+
+Thanks,
+Ming
 

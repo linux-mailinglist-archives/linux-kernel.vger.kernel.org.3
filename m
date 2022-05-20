@@ -2,88 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F1FA52F1F7
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 19:59:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1D1052F1F9
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 20:00:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352380AbiETR7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 13:59:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42868 "EHLO
+        id S1352386AbiETSAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 14:00:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238573AbiETR7d (ORCPT
+        with ESMTP id S241477AbiETSAI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 13:59:33 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6D2185CA6
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 10:59:33 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id fw21-20020a17090b129500b001df9f62edd6so6845517pjb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 10:59:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=sbMDONAaztslfXaF78nBYtIMs/PV+y42syiXcKACw5Q=;
-        b=Jhtlk8lHsn6u+oOAB7a/p0PWW3TbxTLhc0sW/6epPVuUiPMe9xLclwv5eDff7hIXaS
-         ToKOYgr1XVTsrTSvAi7W/964Zo9RkvxQ5zeR/6658ije+WXP6Cr3FJ81KJR6gKLeeAgz
-         d1MG24ovbIRoDgx4qFpciRFKWu2vG5eBp4Y7w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=sbMDONAaztslfXaF78nBYtIMs/PV+y42syiXcKACw5Q=;
-        b=7keKuE6Hsj0CtQhmLx1oG3azK+HffwCJBUyk4MeRV9QHT8Op7JwcrKgL+Hvpxi5o7k
-         GHwrvkVvqTfsWtKz898L90ImMDnx8Dn9IMw7aOnYnuw+5zhCSZuOZ9a+nhZmmeWwz1Mj
-         N3biF7Nh29YOZBUA/Nm8bsQnZMQ/tdDEfkHnHCy+TCTuSOdK/BXqIsHmqi2P01s78d+P
-         XU7istk2f8Ej13gHaMZ+RpARrIj6y50OF2MK9oYZEa1LO8b3Ac+8YsXm0Yoz63aY36Xe
-         op05wWOYkTkb5qgKRwVb0oTzVzBNwKp0gGKAiwFKpTH95AJcH/T4WeE0Lgxwf3kSt8S1
-         SKXA==
-X-Gm-Message-State: AOAM5336Ggc2q6ppdtdyJ1lKGU26ircHxGjjpIWhKUxvVMzsgWydwuPl
-        W8lsud1yzGx7aYvpFahJDTcXJQ==
-X-Google-Smtp-Source: ABdhPJyrYcUsPiH2mjLiwGXoeb+Y+raXsTARhnMuiylx1OwmePb8juaW8TNHo0Rr/jBSXjxJppNMMg==
-X-Received: by 2002:a17:90a:a384:b0:1dc:a407:b5ac with SMTP id x4-20020a17090aa38400b001dca407b5acmr12083393pjp.11.1653069572786;
-        Fri, 20 May 2022 10:59:32 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:5332:2096:60a3:3455])
-        by smtp.gmail.com with UTF8SMTPSA id p21-20020a170903249500b00161b3d5e3e4sm21287plw.304.2022.05.20.10.59.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 May 2022 10:59:32 -0700 (PDT)
-Date:   Fri, 20 May 2022 10:59:31 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Judy Hsiao <judyhsiao@chromium.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Srini Kandagatla <srinivas.kandagatla@linaro.org>,
-        dianders@chromium.org, cychiang@google.com, judyhsiao@google.com,
-        tzungbi@chromium.org, swboyd@chromium.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [v2 3/3] arm64: dts: qcom: sc7280: include
- sc7280-herobrine-audio-rt5682.dtsi in villager and herobrine-r1
-Message-ID: <YofXA0QTpDYZj7wl@google.com>
-References: <20220520161004.1141554-1-judyhsiao@chromium.org>
- <20220520161004.1141554-4-judyhsiao@chromium.org>
+        Fri, 20 May 2022 14:00:08 -0400
+Received: from relay4.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A74185CBA
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 11:00:07 -0700 (PDT)
+Received: from omf07.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay02.hostedemail.com (Postfix) with ESMTP id 4061733D16;
+        Fri, 20 May 2022 18:00:05 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf07.hostedemail.com (Postfix) with ESMTPA id 022D720032;
+        Fri, 20 May 2022 18:00:01 +0000 (UTC)
+Message-ID: <b49d037c38715c3fd82c07309e32aad70c97890b.camel@perches.com>
+Subject: Re: [PATCH v2 4/5] clang-format: Fix empty curly braces
+From:   Joe Perches <joe@perches.com>
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Andy Whitcroft <apw@canonical.com>,
+        Brian Norris <briannorris@chromium.org>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>,
+        Kees Cook <keescook@chromium.org>,
+        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Paul Moore <paul@paul-moore.com>, Tom Rix <trix@redhat.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+Date:   Fri, 20 May 2022 11:00:00 -0700
+In-Reply-To: <CANiq72=e9LMujmsk-mh8YHcGoKuLAnBttNz7JbiXH_2-hpvUvw@mail.gmail.com>
+References: <20220506160106.522341-1-mic@digikod.net>
+         <20220506160106.522341-5-mic@digikod.net>
+         <CANiq72kbp3xTpj-L2BfLQ1Ecx-2Ki0W3e5YLERx8-T9bjb96=g@mail.gmail.com>
+         <5be32ddf7688db38408466315a80e03e9af7ac40.camel@perches.com>
+         <CANiq72=e9LMujmsk-mh8YHcGoKuLAnBttNz7JbiXH_2-hpvUvw@mail.gmail.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220520161004.1141554-4-judyhsiao@chromium.org>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        KHOP_HELO_FCRDNS,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
         autolearn_force=no version=3.4.6
+X-Rspamd-Server: rspamout07
+X-Rspamd-Queue-Id: 022D720032
+X-Stat-Signature: uyp44sgdrwfz49gbd36ydzok3tbmcndf
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX182117J8M64PyKDQx46EsFXLJslc2PgjkA=
+X-HE-Tag: 1653069601-77227
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 04:10:04PM +0000, Judy Hsiao wrote:
-> Include sc7280-herobrine-audio-rt5682.dtsi in villager and herobrine-r1 as
-> these boards use rt5682 codec.
+On Fri, 2022-05-20 at 19:50 +0200, Miguel Ojeda wrote:
+> Hi Joe,
 > 
-> Signed-off-by: Judy Hsiao <judyhsiao@chromium.org>
+> On Fri, May 20, 2022 at 7:24 PM Joe Perches <joe@perches.com> wrote:
+> > 
+> > static inline void foo1(...) {}
+> > static inline void foo2(...) {}
+> > ...
+> > static inline void fooN(...) {}
+> 
+> Those are the non-wrapped-from-signature case, which are handled
+> before this option takes place, i.e. this option is about:
+> 
+>     void f()
+>     {}
+> 
+> vs.
+> 
+>     void f()
+>     {
+>     }
+> 
+> For putting everything on the same line, we could adjust
+> `AllowShortFunctionsOnASingleLine` from `None` to `Empty`, though.
 
-Please make sure to collect tags when sending new revisions, you already
-had this for v1:
+As you wish.
 
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+I think it's more that there's no "one true style" issue than anything.
+
 

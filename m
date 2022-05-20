@@ -2,66 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E63752EE48
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 16:34:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C25A452EE49
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 16:36:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344850AbiETOee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 10:34:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51014 "EHLO
+        id S1349965AbiETOgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 10:36:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233904AbiETOe3 (ORCPT
+        with ESMTP id S233904AbiETOgV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 10:34:29 -0400
+        Fri, 20 May 2022 10:36:21 -0400
 Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E475DA36
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 07:34:28 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id n8so7535036plh.1
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 07:34:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27AAF56779
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 07:36:20 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id i1so7523488plg.7
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 07:36:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernel-dk.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=gNY/3AVbHNu09hERUfx0oPdssKWIVZqHzBoDv8banCY=;
-        b=qHOzlvJ+z/BVRREh7Ra71FFppaeMOeQzKsb18Qv3l11S2rTZei13xD57YHJvdVLWpF
-         7XkeaJ6A/ZtFwEhbO3JFSNyIsN/cG5GjDPuor7osKNQwv4wtXOk7XZerpQI09EwKDbJk
-         9snLMnuWL1wYNMwduurukpHTbsS15BhOnEeuXAbjo1i8w/n7gJV0Cez2JUkSjwRKIZAq
-         43aCPgDPJii9AnPvs0Ikw/8xwAV6RTK/RJour7vD34faKKVJrXGbdbHh/Io/hZ0axYrx
-         sIZVHQsxdj5m2gxmnNjZx1D6k1jPbFk+W6e2sczW6iK0fpyvYoHFHvtGNFy82uup0vjF
-         qb1g==
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=INFqOgoNC8M2kVfmoFeOv9h9ykovwpCyeybqDjrCvqM=;
+        b=w03MvGAGC+lICJ+stSchnIesIheHXMiHhf0qrEVv67QbymHRXNbIypjXQ+EqeUnBuy
+         6D4IttDBhpA9QAUnxhpVtgMsyMJGNe7NbVv6HSKeO+XC8WdgE7dBa+epExGgye/AIa8B
+         csMprCAqlxRNdOB0B/WQF6ty1+oRuVpsspYWwo0OmVUGfQbVBzg+W0WFjaSr8leQBWhV
+         Reb0jwJpnoBujnOIQgBFBvzScsg0CmrMOg0kw2ZyiSe1VGOAskAqE6ZlA0jdYnHyvk4v
+         tgJaokan8D56Ge9H+B6Sqc1hoqJ/yB4vvlj4F8V5pUL72lvJ8aa4D3uV/3IS+X0FFhLZ
+         WZ9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+         :content-language:to:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=gNY/3AVbHNu09hERUfx0oPdssKWIVZqHzBoDv8banCY=;
-        b=ZS7II04J6fcJYWLSRuw5eNSHcwsDaYwHNgIxd6Y1Mi1z8Zbw7zrW7E3Hw3Pxj8dyIw
-         4pI7RzmT/yoxiyMUp1yUYpva8fFFif7rvo1UmzaqjBakImJIxcsUNlVlj9eCtOKpcYOJ
-         kA0VPWC8Efy+m9xsKMSI1QheyImEhc90pNombYL7kbnUCM4E4aAt5y7qhrfsBwOdfUx7
-         ilNRNx939elk95PfgxjNf9wZ8EL+05yqofSlOh1Vcfr2442HHmH2X1G+lbl3mexgRf+J
-         OHwAGsUPxcOUf63pfxfiWoL6AFMEET9byMzDC003dzhbzIBjMVvxEpyCqTx3M3xg+01d
-         WKaw==
-X-Gm-Message-State: AOAM532EwTza4ZXNF9KqlvJIOUh2eq7CABXHK17l+8d2lY/psLr/IFTE
-        otdtMV028qbKHQvCTZJUmCDGYg==
-X-Google-Smtp-Source: ABdhPJzwluIjV6EurcBVvKlETIs9IsuXQhq0Wdlfkue8UtyQ+jr1/6tDPXhZ/7GJIBRXyUL7cK3gdA==
-X-Received: by 2002:a17:902:bd01:b0:161:ef0f:9da8 with SMTP id p1-20020a170902bd0100b00161ef0f9da8mr4738809pls.147.1653057267335;
-        Fri, 20 May 2022 07:34:27 -0700 (PDT)
+        bh=INFqOgoNC8M2kVfmoFeOv9h9ykovwpCyeybqDjrCvqM=;
+        b=2DfwboCzsTL0oxGqZ/TxQrgTjzno2nvZhHhzI/I80cNy9I0QA3OsedCDA2PJwasZWF
+         ZsmLSFCp7kGu5TAcakOt6Z2oEgh8qhjnX446mdtQndAigBj/AFxb56uSXF/YR8Rd4ThI
+         gskqk6dc3gqMxI13hVy4fzO6yo8tltZnK/OjIKNWhX7EaE4TREG0v7f/zhy9xT1XeZCQ
+         69esuUgyFrnjd7FhNtg4oezuTDEmdIGkqcBSszQ2hhg0ubpMdU5Si11sFtJCoPtn2mU0
+         1xizVdJCuE0hUz0y7pxtbq6r3qBDkp+QlaqZx3lcW/0ofVLOcGwrRkl1RavOshlgG6kJ
+         Og6A==
+X-Gm-Message-State: AOAM533U533NsH2qxJkJZYzo49cLWUOA2Swbhx1RbWjI3Ne9cRQEcrXZ
+        mHV2JxCD1CFmsWRGDl5By5Hd0M9WjkbDhg==
+X-Google-Smtp-Source: ABdhPJzUkmKyY1r8SzhHanCj/XsjiifTUk1pF5AJAsg0szitt8lG3Soz6+x8pP6Zf2UXY6if4UWT/g==
+X-Received: by 2002:a17:90b:4f47:b0:1df:ef58:d055 with SMTP id pj7-20020a17090b4f4700b001dfef58d055mr6128568pjb.82.1653057379617;
+        Fri, 20 May 2022 07:36:19 -0700 (PDT)
 Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id x137-20020a62868f000000b0050dc76281b0sm1882011pfd.138.2022.05.20.07.34.26
+        by smtp.gmail.com with ESMTPSA id o9-20020a170902d4c900b0015e8d4eb1dfsm5787324plg.41.2022.05.20.07.36.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 May 2022 07:34:26 -0700 (PDT)
-Message-ID: <938111ca-d3c7-9888-24f8-0017a989002b@kernel.dk>
-Date:   Fri, 20 May 2022 08:34:25 -0600
+        Fri, 20 May 2022 07:36:19 -0700 (PDT)
+Message-ID: <35a5ff9f-79d7-feb5-dfa7-a775b9352416@kernel.dk>
+Date:   Fri, 20 May 2022 08:36:17 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
-Subject: Re: [PATCH] splice: allow direct splicing with chardevs
+Subject: Re: [PATCH v4 1/3] random: convert to using fops->read_iter()
 Content-Language: en-US
 To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk
-Cc:     Jens Axboe <axboe@suse.de>
-References: <20220520095747.123748-1-Jason@zx2c4.com>
+        Theodore Ts'o <tytso@mit.edu>, Christoph Hellwig <hch@lst.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>
+References: <20220520094459.116240-1-Jason@zx2c4.com>
+ <20220520094459.116240-2-Jason@zx2c4.com> <YoeZi94CpGW9LE/y@zx2c4.com>
 From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220520095747.123748-1-Jason@zx2c4.com>
+In-Reply-To: <YoeZi94CpGW9LE/y@zx2c4.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,19 +75,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/20/22 3:57 AM, Jason A. Donenfeld wrote:
-> The original direct splicing mechanism from Jens required the input to
-> be a regular file because it was avoiding the special socket case. It
-> also recognized blkdevs as being close enough to a regular file. But it
-> forgot about chardevs, which behave the same way and work fine here.
+On 5/20/22 7:37 AM, Jason A. Donenfeld wrote:
+> On Fri, May 20, 2022 at 11:44:57AM +0200, Jason A. Donenfeld wrote:
+>>  const struct file_operations urandom_fops = {
+>> -	.read = urandom_read,
+>> +	.read_iter = urandom_read_iter,
 > 
-> This commit adds the missing S_ISCHR condition so that chardevs such as
-> /dev/urandom can be directly spliced without strangely returning
-> -EINVAL.
+> One thing I noticed is that drivers/char/mem.c has both the .read and
+> the .read_iter functions for /dev/zero and /dev/null and such. I wonder
+> if the .read ones can be removed?
 
-Should be fine to turn this on for char devices:
+I'm not sure if we have a clear "always use this if available" set of
+rules for this. Ideally we'd want it to be:
 
-Reviewed-by: Jens Axboe <axboe@kernel.dk>
+1) Use ->read_iter() if available
+2) If not, use ->read()
+
+Might require a bit of auditing to ensure that's the case, and if we
+can say that it is, then we could clean that up too.
 
 -- 
 Jens Axboe

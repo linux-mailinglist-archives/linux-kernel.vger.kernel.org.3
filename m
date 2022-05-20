@@ -2,267 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F9A252EFA1
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 17:47:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E5052EF8A
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 17:45:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350772AbiETPp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 11:45:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42478 "EHLO
+        id S1351044AbiETPp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 11:45:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351083AbiETPpm (ORCPT
+        with ESMTP id S1351034AbiETPpW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 11:45:42 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A38C179C16
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 08:45:32 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id c12so11272444eds.10
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 08:45:32 -0700 (PDT)
+        Fri, 20 May 2022 11:45:22 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C75CC179949
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 08:45:20 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id x12so8039565pgj.7
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 08:45:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8QFFkfheRDcRMZUEeXPnmBkN/+sAvzTmwN5XHFZ6Mh4=;
-        b=k8MHYHNChdziwHOExhML5lxcgSGSD9/hlw8O2m1yktYbuXa8gUhYDCOX4RvyLfzunq
-         /aAKeZZuLTsajP3X+vG03Ss0A7Nxo1WtNc1cC/anRUyFi+vMz7cm1qIEAQsQvtYo7m8v
-         pePkt63pjEEwttcJmM8rZfdV9Fxd9ADpAU6jg=
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=B+/7LZGrMlNtwgdHe90R2m8v3jGzIyKXW/TmqjH0p8o=;
+        b=6VxjFURLsZvEfrO6ok+Lx9lmFcRJBm12JUllBnZVZD76AqbcSMzLhebLruJAq+jN5G
+         8s4EFWw6zFTrCQ/X4Mlcfy4gDd5wf90NmwBV7+f45njOcQgTFrKjZ6UvbSNRqwx+X5PL
+         8PSJKIYIuqIyLumun1RXxMZHPB8FgC7kxRwCFMuBpvklIhUhWEculHnw/0WgfeaaidF4
+         pkhzJydJHEex70VhkFqveBSKucVLdoXH4NU6pn1L0M9LhNAPDdmr3Uhi7ceRuUNZApWK
+         cHFX58KerxBXZcDFTokh+4W7sOJaJK5sDHnmzd/oi8EipjF301ooHmHDy2s/RQNnYOft
+         hnNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8QFFkfheRDcRMZUEeXPnmBkN/+sAvzTmwN5XHFZ6Mh4=;
-        b=78PBYBsOg5rngt6ptVT6r4gQ/duF3I+Po/l5mtrFPH9PZmLw1cgochOfYeDZcKib+b
-         ukfXcIfH2GglxNT60CqOjAe+oleLkqdQvthhhOGeUTFLEQaepmENLsQnR2aj1T5F9mTC
-         NSAQJjbH4MPe3381YIBuXFgtrcZkQSPaCU+R2ppzsvfjn3PnpVTgHe+ao6OO15rVeWrE
-         K5q7//zid6MCuLWTLGk3+9dzCrxVX+M9dsNCP8oKYGiQxdL2NmHu1DpJk4wjiCVk9cYi
-         B6Bqd4Tl2bxGcRDrngIWVa5g72+18+JVjecZvuooQXnJow/zKPbMvGJQebL8amWFteMr
-         XRjw==
-X-Gm-Message-State: AOAM5339mZ6PzHC2GIgy2TmdayQtOMyK7bKiOIGLRH6/Jo8iO9F1KtYy
-        YlJzX88FZkk9skNQvUx76pm12cvK/dkYmjd8jZM=
-X-Google-Smtp-Source: ABdhPJx/538vcrrFFISjp6D570MZHt7rPlR2+UM+XXKz8FlNL+BKq+HXyMczjfZdiHMOiHBa1Xkomg==
-X-Received: by 2002:a05:6402:2031:b0:42a:d157:66e9 with SMTP id ay17-20020a056402203100b0042ad15766e9mr11742593edb.395.1653061530812;
-        Fri, 20 May 2022 08:45:30 -0700 (PDT)
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com. [209.85.221.54])
-        by smtp.gmail.com with ESMTPSA id og31-20020a1709071ddf00b006f3ef214e15sm3221613ejc.123.2022.05.20.08.45.27
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 May 2022 08:45:29 -0700 (PDT)
-Received: by mail-wr1-f54.google.com with SMTP id r23so12054310wrr.2
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 08:45:27 -0700 (PDT)
-X-Received: by 2002:a05:6000:2c1:b0:20c:5e37:3ed1 with SMTP id
- o1-20020a05600002c100b0020c5e373ed1mr8813527wry.342.1653061526420; Fri, 20
- May 2022 08:45:26 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220418171757.2282651-1-dianders@chromium.org>
- <20220418101725.v3.1.Icf57bb12233a47727013c6ab69eebf803e22ebc1@changeid>
- <CAE-0n51iNXN4oOP-wAqrm9U6qC84fQ+qMUBu0BODXjsCDk+H=w@mail.gmail.com>
- <CAD=FV=W6Z1TG4vQcDDeNsGkjZVAR8=A1L1pDfo1rDFCh84H4Rg@mail.gmail.com> <CAE-0n50RXmaUsu5F9syJT-ZXzX8WacpJDFnhb1xQaou1Pxizng@mail.gmail.com>
-In-Reply-To: <CAE-0n50RXmaUsu5F9syJT-ZXzX8WacpJDFnhb1xQaou1Pxizng@mail.gmail.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 20 May 2022 08:45:13 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=WG+_EzG4RvBwTswu4djGtJ00-2TRQaC3y4bGaf4SxLLg@mail.gmail.com>
-Message-ID: <CAD=FV=WG+_EzG4RvBwTswu4djGtJ00-2TRQaC3y4bGaf4SxLLg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/4] drm/dp: Add wait_hpd_asserted() callback to struct drm_dp_aux
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        Philip Chen <philipchen@chromium.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Lyude Paul <lyude@redhat.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=B+/7LZGrMlNtwgdHe90R2m8v3jGzIyKXW/TmqjH0p8o=;
+        b=q/naTHsu761kQJkgayLgh1E/01Sz9qUHIslElnpSArMI8mtBjgXz3Xy9YoUp3Q3G76
+         oYtvJfKilrqNX9l+cVShxtSwmlmecQgXhKto4OlGBYU4cDAPA5G2szM0Uaa7dp58NeJy
+         SUitPeHcUv2mJF4rbK5J3nxAeFJ9EOx8ib6arNechfYacHDx92hA7BJ/347VPdNTqf+i
+         t9W1jLuUpgaELUWUjFxiOnYtRrW9cN8KLA6iH1931YhCaKZuxp1IB0DXon0Q+tonNPlC
+         /XVNZvJ9xgjFscGVeDR/VyOWnPOlrRDsiAyqw4Ikaf7UuhVfaspxRSgay1fOzuazawBd
+         dE7A==
+X-Gm-Message-State: AOAM531i53/GYlLN2wXVWRlaFyHnb8ViklQ/FgfxKe+DfcG2rcY03m5F
+        ZSOqaFKOpF3y3gOlvApNccOPIg==
+X-Google-Smtp-Source: ABdhPJx60xj4QICH8XoCnnzUISnMEjHTEBuDbRp2Z4SG2Z01pp7QsrJBL/FLnxnzL/aMMI6a2O+bcQ==
+X-Received: by 2002:a05:6a00:2403:b0:4fd:e84a:4563 with SMTP id z3-20020a056a00240300b004fde84a4563mr10696130pfh.60.1653061520081;
+        Fri, 20 May 2022 08:45:20 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id je4-20020a170903264400b0015ebb3bf277sm5792454plb.238.2022.05.20.08.45.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 May 2022 08:45:19 -0700 (PDT)
+Date:   Fri, 20 May 2022 08:45:19 -0700 (PDT)
+X-Google-Original-Date: Thu, 19 May 2022 13:24:56 PDT (-0700)
+Subject:     Re: [PATCH v3 -next 1/6] kexec_file: Fix kexec_file.c build error for riscv platform
+In-Reply-To: <20220408100914.150110-2-lizhengyu3@huawei.com>
+CC:     liaochang1@huawei.com, alex@ghiti.fr, aou@eecs.berkeley.edu,
+        Bjorn Topel <bjorn.topel@gmail.com>, ebiederm@xmission.com,
+        guoren@linux.alibaba.com, jszhang@kernel.org,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, mick@ics.forth.gr,
+        Paul Walmsley <paul.walmsley@sifive.com>, penberg@kernel.org,
+        sunnanyong@huawei.com, wangkefeng.wang@huawei.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     lizhengyu3@huawei.com
+Message-ID: <mhng-33c63a92-49e5-48a0-8f54-797c797ee373@palmer-mbp2014>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Thu, May 19, 2022 at 5:34 PM Stephen Boyd <swboyd@chromium.org> wrote:
+On Fri, 08 Apr 2022 03:09:09 PDT (-0700), lizhengyu3@huawei.com wrote:
+> From: Liao Chang <liaochang1@huawei.com>
 >
-> Quoting Doug Anderson (2022-05-12 16:24:13)
-> > On Wed, May 11, 2022 at 6:58 PM Stephen Boyd <swboyd@chromium.org> wrote:
-> > > Quoting Douglas Anderson (2022-04-18 10:17:54)
-> > > > diff --git a/include/drm/dp/drm_dp_helper.h b/include/drm/dp/drm_dp_helper.h
-> > > > index 53d1e722f4de..0940c415db8c 100644
-> > > > --- a/include/drm/dp/drm_dp_helper.h
-> > > > +++ b/include/drm/dp/drm_dp_helper.h
-> > > > @@ -2035,6 +2035,32 @@ struct drm_dp_aux {
-> > > >         ssize_t (*transfer)(struct drm_dp_aux *aux,
-> > > >                             struct drm_dp_aux_msg *msg);
-> > > >
-> > > > +       /**
-> > > > +        * @wait_hpd_asserted: wait for HPD to be asserted
-> > > > +        *
-> > > > +        * This is mainly useful for eDP panels drivers to wait for an eDP
-> > > > +        * panel to finish powering on. This is an optional function.
-> > >
-> > > Is there any use for the opposite direction? For example, does anything
-> > > care that HPD is deasserted?
-> >
-> > Not that I'm aware of. Originally I was planning to have it so that a
-> > timeout of "0" meant to just poll without sleeping at all, but it
-> > ended up making the code a lot more complicated because everywhere
-> > else we had the "readx" semantics where 0 meant wait forever. It
-> > didn't seem worth it. I can go back to that behavior if need be.
-> >
+> When CONFIG_KEXEC_FILE is set for riscv platform, the compilation of
+> kernel/kexec_file.c generate build error:
 >
-> Got it.
+> kernel/kexec_file.c: In function 'crash_prepare_elf64_headers':
+> ./arch/riscv/include/asm/page.h:110:71: error: request for member 'virt_addr' in something not a structure or union
+>   110 |  ((x) >= PAGE_OFFSET && (!IS_ENABLED(CONFIG_64BIT) || (x) < kernel_map.virt_addr))
+>       |                                                                       ^
+> ./arch/riscv/include/asm/page.h:131:2: note: in expansion of macro 'is_linear_mapping'
+>   131 |  is_linear_mapping(_x) ?       \
+>       |  ^~~~~~~~~~~~~~~~~
+> ./arch/riscv/include/asm/page.h:140:31: note: in expansion of macro '__va_to_pa_nodebug'
+>   140 | #define __phys_addr_symbol(x) __va_to_pa_nodebug(x)
+>       |                               ^~~~~~~~~~~~~~~~~~
+> ./arch/riscv/include/asm/page.h:143:24: note: in expansion of macro '__phys_addr_symbol'
+>   143 | #define __pa_symbol(x) __phys_addr_symbol(RELOC_HIDE((unsigned long)(x), 0))
+>       |                        ^~~~~~~~~~~~~~~~~~
+> kernel/kexec_file.c:1327:36: note: in expansion of macro '__pa_symbol'
+>  1327 |   phdr->p_offset = phdr->p_paddr = __pa_symbol(_text);
 >
-> >
-> > > > +        *
-> > > > +        * This function will efficiently wait for up to `wait_us` microseconds
-> > > > +        * for HPD to be asserted and might sleep.
-> > > > +        *
-> > > > +        * This function returns 0 if HPD was asserted or -ETIMEDOUT if time
-> > > > +        * expired and HPD wasn't asserted. This function should not print
-> > > > +        * timeout errors to the log.
-> > > > +        *
-> > > > +        * The semantics of this function are designed to match the
-> > > > +        * readx_poll_timeout() function. That means a `wait_us` of 0 means
-> > > > +        * to wait forever. If you want to do a quick poll you could pass 1
-> > > > +        * for `wait_us`.
-> > >
-> > > It would also make sense to have a drm_dp_wait_hpd_asserted() API
-> > >
-> > >   int drm_dp_wait_hpd_asserted(struct drm_dp_aux *aux, unsigned long wait_us);
-> > >
-> > > and then this aux function could be implemented in various ways. The API
-> > > could poll if the aux can only read immediate state of HPD, or it could
-> > > sleep (is sleeping allowed? that isn't clear) and wake up the process
-> > > once HPD goes high. Or if this op isn't implemented maybe there's a
-> > > fixed timeout member that is non-zero which means "sleep this long".
-> > > Either way, making each drm_dp_aux implement that logic seems error
-> > > prone vs. having the drm_dp_aux implement some function for
-> > >
-> > >         get_immediate_hpd(struct drm_dp_aux *aux)
-> >
-> > There's a reason why I changed the API to "wait" from "get". If you
-> > can think of a good place to document this, I'm all ears.
-> >
-> > The basic problem is ps8640 (my nemesis, apparently). On ps8640,
-> > because of the black box firmware blob that's on it, we have a crazy
-> > long delay in its runtime resume (300ms). So what happens with ps8640
-> > is that if we make the API "get_immediate_hpd()" it wasn't so
-> > immediate. Even with autosuspend, that first "get" could take 300 ms,
-> > which really screwed with everyone else who was waiting with a 200 ms
-> > timeout.
-> >
-> > Now, in theory, one could argue that the fact that ps8640 had a 300 ms
-> > sleep would mean that the very first "get" of the panel would already
-> > show HPD high. I don't know why that wasn't the case, but ps8640 is an
-> > annoying black box.
-> >
-> > In general, though, the DP controller might need some amount of time
-> > to power itself back up and configure itself. Even though the ps8640
-> > case is extreme, it wouldn't be totally extreme to assume that an AUX
-> > controller might take 20 ms or 50 ms to power up. That could still
-> > throw timings off. Implementing the API as a "wait" style API gets
-> > around this problem. Now the DP controller can take as long as it
-> > needs to power itself up and it can then wait with the requested
-> > timeout.
+> This occurs is because the "kernel_map" referenced in macro
+> is_linear_mapping()  is suppose to be the one of struct kernel_mapping
+> defined in arch/riscv/mm/init.c, but the 2nd argument of
+> crash_prepare_elf64_header() has same symbol name, in expansion of macro
+> is_linear_mapping in function crash_prepare_elf64_header(), "kernel_map"
+> actually is the local variable.
 >
-> To clarify, are you saying that the 'wait' passed in will be added to
-> whatever time it takes for the driver to runtime resume to check HPD
-> status? Or is the driver supposed to subtract any time to power up from the
-> 'wait' passed in and then poll or wait for an irq about HPD?
-
-So the "wait" time passed in is supposed to be the time from the panel
-datasheet that's the maximum it takes for HPD to go high after giving
-power to the panel.
-In theory, this wait time ought to be able to happen in parallel with
-the controller itself starting up. In that sense, going back to a
-polling mechanism again ought to work. ...but the polling mechanism
-_didn't_ work, so let's think more carefully about what might be going
-on.
-
-So it's possible that somehow we're not waiting enough time in the
-parade's power on function. Maybe the chip isn't truly powered on and
-thus when we first poll it then we're always going to get back "HPD
-deasserted". ...or maybe it's powered on but the logic for HPD hasn't
-finished starting up yet, if that even makes sense. In that sense, we
-could probably go back to the polling mechanism again and just stick
-an even bigger hardcoded delay in the powerup.
-
-I guess it's also possible (and probably more likely) that the parade
-chip is "debouncing" HPD here. The chip might be powered up OK and HPD
-may be asserted, but it's possible that the value we're reading has an
-intentional, chip-specific delay in it. The ti-sn65dsi86's builtin HPD
-pin did this which is why we didn't use it. See commit c2bfc223882d
-("drm/bridge: ti-sn65dsi86: Remove the mystery delay"). If this is the
-case then an extra delay in "power on" won't _necessarily_ fix us.
-
-Let's imagine:
-
-1. The parade chip itself is already powered on, so runtime_resume for
-the parade chip is a no-op.
-
-2. The parade has a 150 ms debounce on HPD.
-
-3. The panel has a "max" HPD of 200 ms.
-
-4. The panel's HPD actually comes up in 150 ms after the panel is powered.
-
-In the above scenario, if we "poll" and timeout for 200 ms then we'll
-incorrectly believe that HPD is low at the end. We'll observe HPD
-going high at 300 ms, and I'll argue that in the above case we should
-wait until 350 ms before timing out (max HPD + debounce).
-
-
-> Would it be incorrect to somehow have the pm_runtime_get_sync() call in
-> the mythical wrapper API with a ktime_get() before and after and then
-> subtract that from the 'wait' time and call "get_immediate_hpd()"?
+> Signed-off-by: Liao Chang <liaochang1@huawei.com>
+> ---
+>  include/linux/kexec.h | 2 +-
+>  kernel/kexec_file.c   | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 >
-> It would help me understand further if the 'wait' is described as a
-> maximum time we're willing to wait or a minimum time we're willing to
-> wait for hpd to be asserted. Usually a timeout is the maximum we're
-> willing to wait so I think you're saying the wait is the maximum time
-> after we know the drm_dp_aux is fully powered up and ready to check the
-> state.
+> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
+> index 58d1b58a971e..ebb1bffbf068 100644
+> --- a/include/linux/kexec.h
+> +++ b/include/linux/kexec.h
+> @@ -227,7 +227,7 @@ struct crash_mem {
+>  extern int crash_exclude_mem_range(struct crash_mem *mem,
+>  				   unsigned long long mstart,
+>  				   unsigned long long mend);
+> -extern int crash_prepare_elf64_headers(struct crash_mem *mem, int kernel_map,
+> +extern int crash_prepare_elf64_headers(struct crash_mem *mem, int need_kernel_map,
+>  				       void **addr, unsigned long *sz);
+>  #endif /* CONFIG_KEXEC_FILE */
+>
+> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+> index 8347fc158d2b..331a4f0f10f5 100644
+> --- a/kernel/kexec_file.c
+> +++ b/kernel/kexec_file.c
+> @@ -1260,7 +1260,7 @@ int crash_exclude_mem_range(struct crash_mem *mem,
+>  	return 0;
+>  }
+>
+> -int crash_prepare_elf64_headers(struct crash_mem *mem, int kernel_map,
+> +int crash_prepare_elf64_headers(struct crash_mem *mem, int need_kernel_map,
+>  			  void **addr, unsigned long *sz)
+>  {
+>  	Elf64_Ehdr *ehdr;
+> @@ -1324,7 +1324,7 @@ int crash_prepare_elf64_headers(struct crash_mem *mem, int kernel_map,
+>  	phdr++;
+>
+>  	/* Prepare PT_LOAD type program header for kernel text region */
+> -	if (kernel_map) {
+> +	if (need_kernel_map) {
+>  		phdr->p_type = PT_LOAD;
+>  		phdr->p_flags = PF_R|PF_W|PF_X;
+>  		phdr->p_vaddr = (unsigned long) _text;
 
-So where does that leave us? I'd still argue that the "wait" API gives
-us the most flexibility. The DP controller driver has the most
-knowledge about exactly how much extra time it might need to tack on.
-The amount of duplicated code is really quite minimal, especially with
-all of the helper functions. Even if the "debounce" isn't the
-explanation for the parade bridge chip, we know for sure that other
-bridge chips might not have the ability to read the raw HPD state and
-can only read the debounced state.
+IMO this is fine: we could rename all the kernel_map stuff in 
+arch/riscv, but this is much more self-contained.  It's not been ack'd 
+by anyone else, but get_maintainers just suggests the kexec@ list so I'm 
+going to take it via the RISC-V tree along with the rest of these.
 
-Aside from leaving the API as "wait", I guess the best thing I can
-think of would be to go back to polling and add another API that
-indicates the maximum debounce time for the HPD signal. That seems
-worse to me, though.
-
-If the above convinces you that the "wait" API is correct, I can spin
-the patches and add some extra comments. It's probably a good idea to
-add an extra 300 ms to the timeout in the parade driver too. Assuming
-my theory about the debounce is correct then my current patches are
-relying on the extra delay in the parade bridge powerup to cover the
-debounce. It should also be noted that having a longer timeout isn't
-really a terrible thing. In a functioning system we should never hit
-it.
-
-NOTE: after all the above discussion, it seems like the same arguments
-I made about the ti-sn65dsi86 might hold for the parade-ps8640: it
-would be better to just have the panel driver do the maximum delay and
-forget about trying to read HPD in the parade driver. Unfortunately,
-yet again I'm bumping up against the undocumented firmware blob for
-the parade chip. I have no idea how to tell the parade chip to ignore
-HPD. I'd also note that such a change would require "no-hpd" be added
-to existing device trees and thus would make old device trees
-incompatible.
-
--Doug
+Thanks!

@@ -2,77 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C55A152F1A5
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 19:29:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66F4052F1A9
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 19:31:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351932AbiETR2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 13:28:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47162 "EHLO
+        id S1352176AbiETRau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 13:30:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237887AbiETR2b (ORCPT
+        with ESMTP id S1349172AbiETRar (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 13:28:31 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306BE17D399
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 10:28:30 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id u27so11576262wru.8
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 10:28:30 -0700 (PDT)
+        Fri, 20 May 2022 13:30:47 -0400
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F81C186299
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 10:30:43 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id c1so7379604qkf.13
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 10:30:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=PlBrfFXLkcBjzvaU5ZE61p8d0548/U8plsIcnYc6nwM=;
-        b=AmbYVUjm1Vvk52XX+gT8m9nyVd9UytuO7zSN8e691d+mbvoHmjsMc3RLNZylvOQYEd
-         zVzN2oVZE5VSxSZ0ETLdp1LjgvBp4qRgPDMzDPAVIU0gpQVTswTvQECG8uwX066LpKKI
-         YEIRmDtjNrpaO3W4dM2Ky78GbZkwkzyF2vpuDPED4OCG9qDL3saqa+x6tp8L6DuVhM59
-         QbK5RBe3Cq/eVInec37zHdr3yFJ3c9xUJRYg2uiKRtowHai8bi6VAsjGu3EFmt6GffUt
-         lnrtvgFNmq5JClrkBHf7tNeCTeBQMw6mCfTlR54dmHw6YlJUZ2DGyB3juoK/oBhcIZ4E
-         m0PA==
+        bh=CPavKVkR8bELd7v5gex0nX0RA6A8QGn+WltRM5Og+4g=;
+        b=MSLFYCHCp/SZxn9cm5CoWu+3FpwqYMeTrBILRT4T9npnAg/BaxF/9YpOt/8BpfCeIi
+         QNFKHiQ8wH5t6TjjD362O2oxnfrihMLlQiPFrrUH+NDukCfPWUuGOvL3+zuu3fi7AGdj
+         qgdT4/2uMNS7DYiZi6YKk9IXmhduvHlRP/0woJyAJMNWtD0YS0jrjWL0wPpxdQM3uspA
+         vJgbRI25KoLUFPhjSaZoBEnuSQDq+i0ze73pH1kri1TDLTflSDd6UyZwXBxmu5eVfBh6
+         UxiMZ9l7YRjsNMFPzIyBLQzKMTq6kkJMswyxyU98m9mX63TaYJcYhQG5GnSYZ1S/bTgH
+         STSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=PlBrfFXLkcBjzvaU5ZE61p8d0548/U8plsIcnYc6nwM=;
-        b=LE/sxkjNJNwils9/pUBzHLA4qcQqYZseNpOfOty5o/xzI1rkP/MMnecpoobM2HEoXf
-         D1O8Jk1H7CP/qQklhuGA33LprKjvxPZh3D1P7YVXbEPfSOZB5Uc5/rHYZsOD+QxDtQ0J
-         rFomXe/YIlUbNGPSLpHzNILrRwb+2qmZQ6yGuGqtf++KwlL+RLKuPx1qiFE9sgE59qkq
-         FBdSDUD2dXSRBddfLY6fHy6/U9QPjDD7irFMYuLlwL10tZ50bF4qU4ZOi/AtXf4ijU0X
-         z/1MIg3XYVPuzWkoKUL+h3De50L+SIatKtN1uZSH9ihj1EtBIj/KcGJPZ+3QyzS0tTtd
-         YwLA==
-X-Gm-Message-State: AOAM532bDcX/l2luYE++S9IKgA5bxqOh1kUcd4t80JKfG1wDJQWgy0Cs
-        2Af/fBTYRskTPWiw7WaNwWxEUo5yWXNjsRbWm7uB2Q==
-X-Google-Smtp-Source: ABdhPJz+I2ODFYGbdO1VhcQmaC6u7o1kmBPfNUDweJO4khAF66jihI5X7p3fHMS8kkj/hBJpwYFY/Rjm2u34bv5Uw+k=
-X-Received: by 2002:a5d:448d:0:b0:20d:744:7663 with SMTP id
- j13-20020a5d448d000000b0020d07447663mr9282426wrq.654.1653067708557; Fri, 20
- May 2022 10:28:28 -0700 (PDT)
+        bh=CPavKVkR8bELd7v5gex0nX0RA6A8QGn+WltRM5Og+4g=;
+        b=qAk5srmmtxtTfuhIofaAs7qE0Ew6oN625Slw1iXLlXPn/X4yyWpNbhIhW/fhgAxmqr
+         mQeCja40NLGxwqjRwMCjbmbTJmrvKD0D7Fx7f/JTvzbQeELwGzaVXQLrAL98EHN1AyXi
+         O4EGzN0V42ovLD3I568UgA4yIZGQJ4+FddzdCFHNE7ITzTPE8S0faMKAhIB7je3/7qOU
+         Xcf5AqOaJvMksTCbUC5BEwqA0skjh4tZ9JYr6zKGEUE3zHgWBz84ehm7/PWodfKUv1n7
+         44d+y4f8fr5OYCC1lYy2SbaV6zuMb+gR5u5dRTJmp0Mr//8SqrjZyyMujULJZml1vHj3
+         DUsw==
+X-Gm-Message-State: AOAM531+N+1sFKpuFsih+BzOxLQD8d9CkQJXPGlCv0VHLKdOaYdb3fZR
+        LEeVfj1tF98xXMbPPTYfJj5LHCsnqdJSTWR7FocMdg==
+X-Google-Smtp-Source: ABdhPJz5Mikyb2ZCSmg67TYUBBxgrBCM373X9eLBJ7/2D7arGeeYjmMXzqAYDcgIFIxH6qSqWi8VtqwbhGeWuNrgTig=
+X-Received: by 2002:a05:620a:2849:b0:687:651:54ee with SMTP id
+ h9-20020a05620a284900b00687065154eemr7084966qkp.446.1653067842202; Fri, 20
+ May 2022 10:30:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220510104758.64677-1-nick.forrington@arm.com>
- <f523b0fe-1262-c1e5-c587-15842ccf0fcf@arm.com> <28509191-3a45-de6d-f5bc-a8e7331c0a9e@huawei.com>
- <5773b630-8159-1eba-481a-1bf3c406c055@arm.com> <cf7d8003-9700-880f-0e46-ff40e6348bb1@huawei.com>
- <7a17256d-cad0-bd94-02e7-f8adaa959654@arm.com> <2d73146a-86fc-e0d1-11b9-432c7431d58a@huawei.com>
- <b4a16e3e-efbe-c06b-1bc3-c02e151a19a6@arm.com>
-In-Reply-To: <b4a16e3e-efbe-c06b-1bc3-c02e151a19a6@arm.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Fri, 20 May 2022 10:28:16 -0700
-Message-ID: <CAP-5=fXL7mVOvkFHgh7NtGnLfpBFKf_gPJ8wRYfJwRY9kpOoag@mail.gmail.com>
-Subject: Re: [PATCH 00/20] perf vendors events arm64: Multiple Arm CPUs
-To:     Nick Forrington <nick.forrington@arm.com>
-Cc:     John Garry <john.garry@huawei.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org, Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        Andrew Kilroy <andrew.kilroy@arm.com>
+References: <20220520012133.1217211-1-yosryahmed@google.com>
+ <20220520012133.1217211-4-yosryahmed@google.com> <YodGI73xq8aIBrNM@slm.duckdns.org>
+ <CAJD7tkbvMcMWESMcWi6TtdCKLr6keBNGgZTnqcHZvBrPa1qWPw@mail.gmail.com> <YodNLpxut+Zddnre@slm.duckdns.org>
+In-Reply-To: <YodNLpxut+Zddnre@slm.duckdns.org>
+From:   Hao Luo <haoluo@google.com>
+Date:   Fri, 20 May 2022 10:30:30 -0700
+Message-ID: <CA+khW7iN_=9yg6r9wSX5T3biWgUyAZ6quUUjsVp=hXBY9meJ9Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 3/5] bpf: Introduce cgroup iter
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Yosry Ahmed <yosryahmed@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Michal Hocko <mhocko@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Cgroups <cgroups@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -85,73 +87,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 6:53 AM Nick Forrington <nick.forrington@arm.com> wrote:
+Hi Tejun,
+
+On Fri, May 20, 2022 at 1:11 AM Tejun Heo <tj@kernel.org> wrote:
 >
+> Hello,
 >
-> On 19/05/2022 08:59, John Garry wrote:
-> > On 18/05/2022 15:14, Robin Murphy wrote:
-> >>> Sure, we should have these 32b cores supported for ARCH=arm if they
-> >>> are supported for ARCH=arm64. But then does it even make sense to
-> >>> have A7 support in arch/arm64?
-> >>
-> >> That's what I'm getting at. If it is tied to the build target as
-> >> you've said above, then there is no point in an AArch64 perf tool
-> >> including data for CPUs on which that tool cannot possibly run; it's
-> >> simply a waste of space.
-> >>
-> >> If there is interest in plumbing in support on AArch32 builds as
-> >> well, then I'd still be inclined to have a single arch/arm events
-> >> directory, and either do some build-time path munging or just symlink
-> >> an arch/arm64 sibling back to it. Yes, technically there are
-> >> AArch64-only CPUs whose data would then be redundant when building
-> >> for AArch32,
+> On Fri, May 20, 2022 at 12:58:52AM -0700, Yosry Ahmed wrote:
+> > On Fri, May 20, 2022 at 12:41 AM Tejun Heo <tj@kernel.org> wrote:
+> > >
+> > > On Fri, May 20, 2022 at 01:21:31AM +0000, Yosry Ahmed wrote:
+> > > > From: Hao Luo <haoluo@google.com>
+> > > >
+> > > > Introduce a new type of iter prog: cgroup. Unlike other bpf_iter, this
+> > > > iter doesn't iterate a set of kernel objects. Instead, it is supposed to
+> > > > be parameterized by a cgroup id and prints only that cgroup. So one
+> > > > needs to specify a target cgroup id when attaching this iter. The target
+> > > > cgroup's state can be read out via a link of this iter.
+> > > >
+> > > > Signed-off-by: Hao Luo <haoluo@google.com>
+> > > > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> > >
+> > > This could be me not understanding why it's structured this way but it keeps
+> > > bothering me that this is adding a cgroup iterator which doesn't iterate
+> > > cgroups. If all that's needed is extracting information from a specific
+> > > cgroup, why does this need to be an iterator? e.g. why can't I use
+> > > BPF_PROG_TEST_RUN which looks up the cgroup with the provided ID, flushes
+> > > rstat, retrieves whatever information necessary and returns that as the
+> > > result?
 > >
-> > If size is an issue then we have ways to cut this down, like doing the
-> > arch standard events fixup dynamically when running perf tool, or even
-> > not describing those events in the JSONs and rely on reading the CPU
-> > PMU events folder to learn which of those events are supported.
-> >
-> > > but those are
-> > > such a minority that it seems like an entirely reasonable compromise.
-> >
-> > @Nick, Can you drop the 32b core support for arm64? Or, if you really
-> > want them, look into ARCH=arm pmu-events support?
+> > I will let Hao and Yonghong reply here as they have a lot more
+> > context, and they had previous discussions about cgroup_iter. I just
+> > want to say that exposing the stats in a file is extremely convenient
+> > for userspace apps. It becomes very similar to reading stats from
+> > cgroupfs. It also makes migrating cgroup stats that we have
+> > implemented in the kernel to BPF a lot easier.
 >
-> No problem - I'll resubmit without the 32b-only CPUs.
->
-> Thanks,
-> Nick
+> So, if it were upto me, I'd rather direct energy towards making retrieving
+> information through TEST_RUN_PROG easier rather than clinging to making
+> kernel output text. I get that text interface is familiar but it kinda
+> sucks in many ways.
 >
 
-I'm hoping with jevents.py [1] then we can do a few things on the size front:
+Tejun, could you explain more about the downside of text interfaces
+and why TEST_RUN_PROG would address the problems in text output? From
+the discussion we had last time, I understand that your concern was
+the unstable interface if we introduce bpf files in cgroupfs, so we
+are moving toward replicating the directory structure in bpffs. But I
+am not sure about the issue of text format output
 
-1) relocations - the current pattern of generating '.foo = "foo_Bar"'
-means that when perf starts the .foo pointer needs to be updated for
-the relocation. If we concatenate the strings together then we can
-have 1 relocation, but we'll need an offset and length to get .foo's
-value and some kind of iteration abstraction. If we do this then we
-could also look to compress the string at compile time.
-2) sorting events - not really a compiler size improvement but should
-lower some runtime memory usage. We shouldn't need to linearly search
-event names, sorting at compile time means we can locate faster, less
-paging, etc.
-3) we've spoken in the past of the problems of cross-architecture
-testing of events, metrics, etc. For metrics, we may want to record
-events on one architecture and compute metrics on another. One idea is
-to have a fuller jevents mode where everything is built into one
-binary, which would make size improvements more valuable.
+> > AFAIK there are also discussions about using overlayfs to have links
+> > to the bpffs files in cgroupfs, which makes it even better. So I would
+> > really prefer keeping the approach we have here of reading stats
+> > through a file from userspace. As for how we go about this (and why a
+> > cgroup iterator doesn't iterate cgroups) I will leave this for Hao and
+> > Yonghong to explain the rationale behind it. Ideally we can keep the
+> > same functionality under a more descriptive name/type.
+>
+> My answer would be the same here. You guys seem dead set on making the
+> kernel emulate cgroup1. I'm not gonna explicitly block that but would
+> strongly suggest having a longer term view.
+>
 
-Another thing with jevents.py is trying to make the pmu-events.c
-presentation more consistent with sysfs', which may regress things on
-size.
+The reason why Yosry and I are still pushing toward this direction is
+that our user space applications rely heavily on extracting
+information from text output for cgroups. Please understand that
+migrating them from the traditional model to a new model is a bigger
+pain. But I agree that if we have a better, concrete solution (for
+example, maybe TEST_RUN_PROG) to convince them and help them migrate,
+I really would love to contribute and work on it.
 
-Anyway, I think it is good to have more events and I'm excited to see
-this merged in a way that's suitable for John. I'm happy to do more
-optionality stuff with jevents.py or the build if that can mean having
-more events on ARM32.
+> If you *must* do the iterator, can you at least make it a proper iterator
+> which supports seeking? AFAICS there's nothing fundamentally preventing bpf
+> iterators from supporting seeking. Or is it that you need something which is
+> pinned to a cgroup so that you can emulate the directory structure?
+>
 
-Thanks,
-Ian
+Yonghong may comment on adding seek for bpf_iter. I would love to
+contribute if we are in need of that. Right now, we don't have a use
+case that needs seek for bpf_iter, I think. My thought: for cgroups,
+we can seek using cgroup id. Maybe, not all kernel objects are
+indexable, so seeking doesn't apply there?
 
-[1] https://lore.kernel.org/linux-perf-users/20220511211526.1021908-1-irogers@google.com/
-- show your love with Acked-bys :-D
+Hao

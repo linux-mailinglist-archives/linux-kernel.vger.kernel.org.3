@@ -2,111 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8034852E9E6
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 12:31:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 558C352E9EA
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 12:32:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243299AbiETKbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 06:31:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56264 "EHLO
+        id S1348122AbiETKcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 06:32:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233724AbiETKa4 (ORCPT
+        with ESMTP id S240830AbiETKcE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 06:30:56 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C1D140BC;
-        Fri, 20 May 2022 03:30:54 -0700 (PDT)
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24K7nGjP022845;
-        Fri, 20 May 2022 10:30:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=SAwEXgmn+ug7Ywtt15h7zATBYWFQXhVY/ziQbb8IdbE=;
- b=aWFvuz5UYZbLHdI1qm3nNpf2gi025MZH+E5FQFSiseGJMXeKsQX4CLWdafs7ppXNpCeT
- 7bWRbQOK3BalA0fidpGCl+Bi5Y5vW88B8+PH3ZjgEU+Ivwfi3skAijjZAjQJrellzhSZ
- +y02UW2VF7VaSj4sM7gQHRDmIEa4cCRKAjx7cTsFV4lMoG9VuvvL4wv278c/7wSOXYc2
- ot9JUs19fFgaJik3Aop8hXyCUbBNFmWeRFdrmN0r/kDYqXBypZLx04GoxEHL+dmRo+oX
- W9GG3mfvv15FJal6P7KL+PPL1cQ/DU5wmuIYmLDQRXmvXXAsfbshxGUAlmMUu/Cmel22 Qg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g63a96wyq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 May 2022 10:30:41 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24KAQHKP010615;
-        Fri, 20 May 2022 10:30:40 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g63a96wy3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 May 2022 10:30:40 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24KASk1w031045;
-        Fri, 20 May 2022 10:30:38 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03ams.nl.ibm.com with ESMTP id 3g2429gmh9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 May 2022 10:30:38 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24KAGcts50201020
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 20 May 2022 10:16:38 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0A497A405F;
-        Fri, 20 May 2022 10:30:35 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 52DDAA4054;
-        Fri, 20 May 2022 10:30:34 +0000 (GMT)
-Received: from sig-9-145-82-10.uk.ibm.com (unknown [9.145.82.10])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 20 May 2022 10:30:34 +0000 (GMT)
-Message-ID: <41dd3f695c57a12fc5e68a3ed818940252cdb69f.camel@linux.ibm.com>
-Subject: Re: [PATCH] iommu/s390: tolerate repeat attach_dev calls
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Matthew Rosato <mjrosato@linux.ibm.com>, jgg@nvidia.com,
-        joro@8bytes.org
-Cc:     will@kernel.org, alex.williamson@redhat.com, cohuck@redhat.com,
-        borntraeger@linux.ibm.com, gerald.schaefer@linux.ibm.com,
-        farman@linux.ibm.com, iommu@lists.linux-foundation.org,
-        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
+        Fri, 20 May 2022 06:32:04 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72FC98BD39
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 03:32:02 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id v8so11639546lfd.8
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 03:32:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=jLoKShXnvK18g/hpxDcb3w46Wn4GpvoKRXUZYRWFidQ=;
+        b=YVHFkRD0MqPNxaUsIcx9HwSiCoSSee9T33zSd9hqf9PotLf1FcnGR0Pws1wO1JLgE4
+         e/6KIHa32HILZ5k73we7TDs6M4/NRbs2yA9gqSyxYYzGtVOKNjs+WeJBPV/vYcm1R9Gg
+         JD9oOUG3n0ADg9Ax4OdqLzX/nhE4s+rtOJOjQ/+5Q6dASz+i3MBSNb658knV0FUq00wC
+         1I2ahV40H9IJZ91kOQS8kmHsa5ClU10iVATVVwg73lqphQ1vOGCBiESQpMwntUhdu6iV
+         pkTlg7/QlybhBJSrM+wCNQOc9+Q+J7rKZ7CEH/WE0ZS3hi30FIC93l5syWL9aNoAkMRo
+         hC3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=jLoKShXnvK18g/hpxDcb3w46Wn4GpvoKRXUZYRWFidQ=;
+        b=D8DNYaaObvkjRXT/ucGqTeuGTzvJQlKBcENJBKoJpCmrCmLjjaw4O525J+WKXQLfWC
+         7toGuJKv/Aizp5KJ7+mbukMN+oUT3zqG5HAxSXZEVru+dZL3wG3JdJYVRQc8ZAZEATAC
+         Yzr0wca85d8ssbi0C7IhixnAvvtcSGTXYj9IAhqMMH+bGLV9VSU7bglen0JMP4WCZkK2
+         oVXWcLmuzzcyLTCn00b6aFnyDL4+HZKoSaPsnBuYFxsLA4H+C9D29jhb/Iwn9VqJozrd
+         oQSi51VLz2/as+Pnz90k42PwheFsI/YhFzo9EjqxPQ3IGFhw3bO+y/cLB2X8gsHFNr5V
+         QOCw==
+X-Gm-Message-State: AOAM5303yAF3SSmIv7BqGXPVWxyAmKnSnMytReTni1LRjnOy5ZjKdcTU
+        VDJphTyDzyBagk/3x59D5Ac5wQ==
+X-Google-Smtp-Source: ABdhPJwBIkQUvVaiMkEgWaWOZv0PfIymapoTpMeWHBZ0HTws3HEolBrTMYZvdVTLI6OZbthBhCE1kA==
+X-Received: by 2002:a05:6512:3d89:b0:473:9e0e:8c4c with SMTP id k9-20020a0565123d8900b004739e0e8c4cmr6566185lfv.160.1653042720823;
+        Fri, 20 May 2022 03:32:00 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id h4-20020ac250c4000000b00477be45fb23sm563728lfm.56.2022.05.20.03.31.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 May 2022 03:32:00 -0700 (PDT)
+Message-ID: <7b451dfb-8353-4a4e-1834-a01feaa267d2@linaro.org>
+Date:   Fri, 20 May 2022 12:31:58 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2 2/5] dt-bindings: interconnect: Add Qualcomm SM6350 NoC
+ support
+Content-Language: en-US
+To:     Luca Weiss <luca.weiss@fairphone.com>,
+        linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Odelu Kukatla <okukatla@codeaurora.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Date:   Fri, 20 May 2022 12:30:33 +0200
-In-Reply-To: <20220519182929.581898-1-mjrosato@linux.ibm.com>
-References: <20220519182929.581898-1-mjrosato@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+References: <20220520070318.48521-1-luca.weiss@fairphone.com>
+ <20220520070318.48521-3-luca.weiss@fairphone.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220520070318.48521-3-luca.weiss@fairphone.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: UPQNWYGYN2jfEEnpr0kh6tsiw-ImLUir
-X-Proofpoint-ORIG-GUID: lZwqxU0pyHDPdiisXyarqcrrM_OytcKb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-20_03,2022-05-20_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- lowpriorityscore=0 clxscore=1015 phishscore=0 mlxscore=0 bulkscore=0
- spamscore=0 mlxlogscore=768 priorityscore=1501 malwarescore=0 adultscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205200073
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-05-19 at 14:29 -0400, Matthew Rosato wrote:
-> Since commit 0286300e6045 ("iommu: iommu_group_claim_dma_owner() must
-> always assign a domain") s390-iommu will get called to allocate multiple
-> unmanaged iommu domains for a vfio-pci device -- however the current
-> s390-iommu logic tolerates only one.  Recognize that multiple domains can
-> be allocated and handle switching between DMA or different iommu domain
-> tables during attach_dev.
+On 20/05/2022 09:03, Luca Weiss wrote:
+> Add bindings for Qualcomm SM6350 Network-On-Chip interconnect devices.
 > 
-> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+> As SM6350 has two pairs of NoCs sharing the same reg, allow this in the
+> binding documentation, as was done for qcm2290.
+> 
+> Because the main qcom,rpmh.yaml file is getting too complicated for our
+> use cases, create a new qcom,rpmh-common.yaml and a separate
+> qcom,sm6350-rpmh.yaml that defines our new bindings.
+> 
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
 > ---
+> Changes since v1:
+> * Split sm6350 into separate yaml with new rpmh-common.yaml
+> 
+>  .../interconnect/qcom,rpmh-common.yaml        |  41 +++++
+>  .../interconnect/qcom,sm6350-rpmh.yaml        |  82 ++++++++++
+>  .../dt-bindings/interconnect/qcom,sm6350.h    | 148 ++++++++++++++++++
+>  3 files changed, 271 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,rpmh-common.yaml
+>  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sm6350-rpmh.yaml
+>  create mode 100644 include/dt-bindings/interconnect/qcom,sm6350.h
+> 
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpmh-common.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpmh-common.yaml
+> new file mode 100644
+> index 000000000000..6121eea3e87d
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,rpmh-common.yaml
+> @@ -0,0 +1,41 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/interconnect/qcom,rpmh-common.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm RPMh Network-On-Chip Interconnect
+> +
+> +maintainers:
+> +  - Georgi Djakov <georgi.djakov@linaro.org>
+> +  - Odelu Kukatla <okukatla@codeaurora.org>
 
-I know it's applied already and no need to add my R-b but:
+Is this valid email address?
 
-Reviewed-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> +
+> +description: |
+> +   RPMh interconnect providers support system bandwidth requirements through
+> +   RPMh hardware accelerators known as Bus Clock Manager (BCM). The provider is
+> +   able to communicate with the BCM through the Resource State Coordinator (RSC)
+> +   associated with each execution environment. Provider nodes must point to at
+> +   least one RPMh device child node pertaining to their RSC and each provider
+> +   can map to multiple RPMh resources.
+> +
+> +properties:
+> +  '#interconnect-cells':
+> +    enum: [ 1, 2 ]
 
+Why this is an enum?
+
+> +
+> +  qcom,bcm-voters:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    items:
+
+Please implement my previous comments.
+
+> +      maxItems: 1
+> +    description: |
+
+No need for |
+
+> +      List of phandles to qcom,bcm-voter nodes that are required by
+> +      this interconnect to send RPMh commands.
+> +
+> +  qcom,bcm-voter-names:
+
+What names do you expect here?
+
+> +    description: |
+
+Ditto.
+
+> +      Names for each of the qcom,bcm-voters specified.
+> +
+> +required:
+> +  - '#interconnect-cells'
+> +  - qcom,bcm-voters
+> +
+> +additionalProperties: true
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,sm6350-rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,sm6350-rpmh.yaml
+> new file mode 100644
+> index 000000000000..89fe17c31b8f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,sm6350-rpmh.yaml
+> @@ -0,0 +1,82 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/interconnect/qcom,sm6350-rpmh.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm SM6350 RPMh Network-On-Chip Interconnect
+> +
+> +maintainers:
+> +  - Luca Weiss <luca.weiss@fairphone.com>
+> +
+> +description: |
+> +  Qualcomm RPMh-based interconnect provider on SM6350.
+> +
+> +allOf:
+> +  - $ref: qcom,rpmh-common.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - qcom,sm6350-aggre1-noc
+> +      - qcom,sm6350-aggre2-noc
+> +      - qcom,sm6350-config-noc
+> +      - qcom,sm6350-dc-noc
+> +      - qcom,sm6350-gem-noc
+> +      - qcom,sm6350-mmss-noc
+> +      - qcom,sm6350-npu-noc
+> +      - qcom,sm6350-system-noc
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  '#interconnect-cells': true
+
+Since you defined it as enum in rpmh-common, you really expect here
+different values?
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +unevaluatedProperties: false
+> +
+> +patternProperties:
+
+This goes after "properties".
+
+> +  '^interconnect-[a-z0-9\-]+$':
+> +    type: object
+> +    description:
+> +      The interconnect providers do not have a separate QoS register space,
+> +      but share parent's space.
+> +    $ref: qcom,rpmh-common.yaml#
+> +
+> +    properties:
+> +      compatible:
+> +        enum:
+> +          - qcom,sm6350-clk-virt
+> +          - qcom,sm6350-compute-noc
+> +
+> +      '#interconnect-cells': true
+
+Same problem.
+
+> +
+> +    required:
+> +      - compatible
+> +
+> +    unevaluatedProperties: false
+> +
+
+
+Best regards,
+Krzysztof

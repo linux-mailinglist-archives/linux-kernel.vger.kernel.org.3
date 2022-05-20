@@ -2,142 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3D6052F59E
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 00:20:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFB3C52F5A1
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 00:20:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353886AbiETWT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 18:19:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41848 "EHLO
+        id S1353894AbiETWUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 18:20:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353875AbiETWTs (ORCPT
+        with ESMTP id S1350459AbiETWUO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 18:19:48 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E6BB1A0481
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 15:19:36 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id j6so8795303pfe.13
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 15:19:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=FJNM+SC0IIR+V8IbK3b8r/wd9vAA7Bdywff6gYSjtWo=;
-        b=IAMIx2qmVQETKVtS+eBPNuWm9U9fFHmsYSExLr6IDKzceYJaksMhXffQk2IE+D7NiL
-         wmXbzFxZLiUuy9QVTOWQm9RG3+vPowUfkO9qbhQkYe1LFO7/i674voMBdNYzc21ydd9y
-         VbiCumoURfE5ioRSP3xY/gRPs5tCVwCgx8zwwAXczAzxev5vsydhEms8X+dpn2BRvqM/
-         nB23BMg4wyRlDNWhslbqYT0UF4PPu8Fj2YiPgxdXX+ywqOhhjIYg5msgduqq+0MkKevb
-         5+t+n+gaaYno1lbeY08X7cOYSAlFJqtvx+aLNBc/LWV208pz0X9JKLYdd+9VtQi02Evx
-         RwAQ==
+        Fri, 20 May 2022 18:20:14 -0400
+Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3144D1A074A;
+        Fri, 20 May 2022 15:20:14 -0700 (PDT)
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-f1d2ea701dso11814110fac.10;
+        Fri, 20 May 2022 15:20:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=FJNM+SC0IIR+V8IbK3b8r/wd9vAA7Bdywff6gYSjtWo=;
-        b=M7jfy5RocrFh9KBnezriy4PsCyaCh8Odd++P79Tf2mLgyggRGSBl+IL3EOjiWKykBt
-         sQitKFORmKBPHBk3DLD6lQYwJsPMzdpUI3ydrdwb/e89LwDA01PyxlSjK4l8zQE9cvDx
-         NXTXEJjbEp9UcceIQB/KlBklzqVYVxPQUxsOoKheugUwbD1EZptOtGhxIpgwmWYiylT9
-         zUDxsUTuMkQDIb4M0qhcqKITx8TSMIFPHBMcHPEhsVionBtxIsd/e5ooJqirFTFAuSkv
-         btTA81JC2Qr5cKUzhOTs4no6RKoqRkIoJA97mM63i16Nn4ZzSLqDYS3F3mE4it6368cL
-         0NLg==
-X-Gm-Message-State: AOAM530zFmnqhhltqMa409A/0bb5D499D2imIbs1HdWHl9Ge3mPvhV6W
-        8bSNgIukB5V8t4rIleudgCTbiv+XTEQ=
-X-Google-Smtp-Source: ABdhPJzTA7NI8raUHUFL9b5veywXOFMcEpgKQYOTLQnyOSWCcy0yzWIrM0H3Vl3f6/l4yp2/RT5+MA==
-X-Received: by 2002:a63:5c22:0:b0:3db:141c:6db2 with SMTP id q34-20020a635c22000000b003db141c6db2mr10186919pgb.198.1653085175156;
-        Fri, 20 May 2022 15:19:35 -0700 (PDT)
-Received: from google.com ([2620:15c:211:201:828d:ad52:eebc:6659])
-        by smtp.gmail.com with ESMTPSA id q7-20020a170902edc700b0016168e90f37sm224221plk.152.2022.05.20.15.19.34
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=M8rmRCmN4GlSEfCUYx10TspLN6s4IxFkT9OjnFWex24=;
+        b=5boocA2mCB1cSq1Fpmx9VxwwIe0xnvR80yV98UyDcw8D6bVl+pP5yAmk6txNKEBTBW
+         SYRE2gUnRmgpiAC5l/EnKY3wHrbx+5VM0vzLCFta21rde2i1XcPbHRqxUfbGVZDT+qQy
+         AEk3dEhqTp2Psvrloq0J7i9G3CTcPIhmL2yAMa7Sp3drCa9zN6+aG6TCjTa7yfmaIyxY
+         JU+9V73mbM9DryGDpdbcMENxAZR8tEMQq4Wg9yCDzlVquRKxz9b7+KRjqgVqW8mEwhrF
+         DkN/StQ8gozPRhcXekhAcf1zDDIdxsPlgXK5VTkz5gGDMyKCSRPtKRzQ4sii5zIoRrKQ
+         9BGQ==
+X-Gm-Message-State: AOAM531AQC23YhyhA1WU+0Y4W0svQVDNM/PMrXof9r/yXlPuMoRk1UMt
+        gHXuCDdVmPwjTrODbMZkcQ==
+X-Google-Smtp-Source: ABdhPJwJjQIXPU0/UMu0hOETcS+SXwtTymvjCnqffWHXLumHewxkv7m+SwigscCX2nOUGYR5V10jnQ==
+X-Received: by 2002:a05:6870:d109:b0:f1:ab23:9e with SMTP id e9-20020a056870d10900b000f1ab23009emr7621547oac.187.1653085213482;
+        Fri, 20 May 2022 15:20:13 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id 184-20020aca05c1000000b0032698578409sm1572229oif.38.2022.05.20.15.20.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 15:19:34 -0700 (PDT)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Fri, 20 May 2022 15:19:32 -0700
-From:   Minchan Kim <minchan@kernel.org>
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     John Hubbard <jhubbard@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        syzbot <syzbot+acf65ca584991f3cc447@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
-        syzkaller-bugs@googlegroups.com, trix@redhat.com,
-        Matthew Wilcox <willy@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [syzbot] WARNING in follow_hugetlb_page
-Message-ID: <YogT9AwVclxAnyvs@google.com>
-References: <00000000000077377c05dee75f63@google.com>
- <20220513102617.c464c4f566052838e911a3ec@linux-foundation.org>
- <75f09063-d184-7d44-17a1-ed04be5eb953@oracle.com>
- <a7fd0c3f-921e-19b3-2f67-a231dede28f9@oracle.com>
- <20220513161910.d1b73583cdb2e33562aa86e5@linux-foundation.org>
- <Yn7vnpXwX50J3K+7@google.com>
- <4809b134-a37a-50b8-4c25-44548bc1048f@nvidia.com>
- <Yn73Hz7LkSUv7ycw@google.com>
- <d97d8a00-e9e0-278f-0c3f-71162afa48b1@nvidia.com>
- <6d281052-485c-5e17-4f1c-ef5689831450@oracle.com>
+        Fri, 20 May 2022 15:20:12 -0700 (PDT)
+Received: (nullmailer pid 354579 invoked by uid 1000);
+        Fri, 20 May 2022 22:20:11 -0000
+Date:   Fri, 20 May 2022 17:20:11 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     konrad.dybcio@somainline.org, devicetree@vger.kernel.org,
+        phone-devel@vger.kernel.org, robh+dt@kernel.org,
+        linux-arm-kernel@lists.infradead.org, will@kernel.org,
+        joro@8bytes.org, linux-mediatek@lists.infradead.org,
+        marijn.suijten@somainline.org, martin.botka@somainline.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, yong.wu@mediatek.com,
+        krzysztof.kozlowski+dt@linaro.org, paul.bouchara@somainline.org,
+        matthias.bgg@gmail.com, iommu@lists.linux-foundation.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: mediatek: Add bindings for MT6795 M4U
+Message-ID: <20220520222011.GA354543-robh@kernel.org>
+References: <20220518101849.46804-1-angelogioacchino.delregno@collabora.com>
+ <20220518101849.46804-2-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6d281052-485c-5e17-4f1c-ef5689831450@oracle.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220518101849.46804-2-angelogioacchino.delregno@collabora.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 08:37:01PM -0700, Mike Kravetz wrote:
-
-< snip >
-
-> > I need to look at this a little more closely, it is making me wonder
-> > whether the is_pinnable_page() check is a problem in this path. The
-> > comment in try_grab_folio() indicates that the early return is a hack
-> > (it assumes that the caller is in the gup fast path), and maybe the hack
-> > is just wrong here--I think we're actually on the slow gup path. Not
-> > good.
-> > 
-> > Mike, any thoughts here?
-> > 
+On Wed, 18 May 2022 12:18:48 +0200, AngeloGioacchino Del Regno wrote:
+> Add bindings for the MediaTek Helio X10 (MT6795) IOMMU/M4U.
 > 
-> Do you know why try_grab_compound_page(now try_grab_folio) checks for
-> pinnable when try_grab_page does not?
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  .../bindings/iommu/mediatek,iommu.yaml        |  4 +
+>  include/dt-bindings/memory/mt6795-larb-port.h | 96 +++++++++++++++++++
+>  2 files changed, 100 insertions(+)
+>  create mode 100644 include/dt-bindings/memory/mt6795-larb-port.h
 > 
-> Then I guess the next question is 'Should we allow pinning of hugetlb pages
-> in these areas?'.  My first thought would be no.  But, recall it was 'allowed'
-> until that commit which changed try_grab_page to try_grab_compound_page.
 
-The reason we don't allow longterm pinning in CMA area is to improve
-big contigus memory allocation sccuess ratio when someone claim the memory
-space. Thus, any pages mapped at userspace given the CMA area shouldn't be
-pinned with longterm. Otherwise, the cma_alloc will fail due to migration
-failure.
-
-In hugetlb case(I might miss something..), the CMA memory was already
-claimed by hugeTLB and the big contiguous memory was mapped at userspace
-so there is no reason to prevent longterm pinning since HugeTLB will
-never claim those CMA memory until user release the memory and HugeTLB
-free the range using cma_release.
-
-> In the 'common' case of compaction, we do not attempt to migrate/move hugetlb
-> pages (last time I looked), so long term pinning should not be an issue.
-> However, for things like memory offline or alloc_contig_range() we want to
-
-The memory offline would be an issue so we shouldn't allow pinning of any
-pages in *movable zone*.
-
-Isn't alloc_contig_range just best effort? Then, it wouldn't be a big
-problem to allow pinning on those area. The matter is what target range
-on alloc_contig_range is backed by CMA or movable zone and usecases.
-
-IOW, movable zone should be never allowed. But CMA case, if pages
-are used by normal process memory instead of hugeTLB, we shouldn't
-allow longterm pinning since someone can claim those memory suddenly.
-However, we are fine to allow longterm pinning if the CMA memory
-already claimed and mapped at userspace(hugeTLB case IIUC).
-
-Please correct me if I miss something.
-
-Thanks.
+Acked-by: Rob Herring <robh@kernel.org>

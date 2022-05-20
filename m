@@ -2,80 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC16252F217
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 20:09:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A552152F220
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 20:11:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352432AbiETSJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 14:09:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57300 "EHLO
+        id S1351944AbiETSLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 14:11:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231983AbiETSJ1 (ORCPT
+        with ESMTP id S237996AbiETSLo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 14:09:27 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D4318C074
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 11:09:26 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id fu47so7537673qtb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 11:09:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :content-transfer-encoding:user-agent:mime-version;
-        bh=NR3kZ49dmkT1KeVAfKZ4S7OqnOEH8qjrvmWh2/OGKUI=;
-        b=vhA7rOy41zBfrp7nAjtyoVUjn1qW+jwuo0H36oHDZu1PGGIoqBjwWZTQqj5pohxFcU
-         pKr2w1tqeku841iCY46Qlx8V9+ekdS/0R9ZvgB/F2vhL17kHlkkVdlyTyyG1Ri7hvJb+
-         dfVc5L7Ein0cyBCQ3m5HkrZSlAs9VkRfjUvR2R2U+9YIKbAabIueTdVvFPUVqQQQamqn
-         ZHTHhcuPHwDduWtQn62rp51FYZ1UHCCNO0LL2T1l72o1rD8Hiza0l+q9DT33K7KGGM7q
-         M4YycQCOJzFsn6dR1BHS6ZWEzph/zY5+1rtwzOILcVgAPfpBEhWqnzkaulsuqf8Gbg07
-         7Hnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:content-transfer-encoding:user-agent:mime-version;
-        bh=NR3kZ49dmkT1KeVAfKZ4S7OqnOEH8qjrvmWh2/OGKUI=;
-        b=engvhXS7Yo2twFPhPq8XY9j/qiXWlLReQKM9RExm8Rhq2j9/ozwd8rBkK9PCBm139M
-         E8bpqrap+x/TNwVi8eXKK4EZYZs6nL1P8SksCS20HRr+q587vcJWzvm/IesnDArfi1VA
-         AsUA2fUVxRKaeLHpVaaNF/hXWVyDdrZG2S81+E6xGdQuXeBOC43k0NhsGC7dwor+zJcz
-         vwC/0uQMpFI9sDriqKDclAoDxbIM98AGif9vLR2NYc/FMmoGWZv9NL8Cd35TRl2UrWi5
-         BkgtbnPieAhF02tRi7U3BqSrzVQstLR6/I3O5SmdFDT8PhJiDTjT/vgVaVIIvEcTAwwR
-         Gx8g==
-X-Gm-Message-State: AOAM532p0SnB3o8N025EnV46guRoAoWyv6q7y1mzMxvyeSoPR3thMzm/
-        PCTP+IzSrS9pjHtPJs1hI/Iw9A==
-X-Google-Smtp-Source: ABdhPJzQMahI/6mv9fxIYp/N8Ntlckg1blDgzhWZsiFQ79buITzh8AG5WIt0Cth3NvMWJ658ylfNiQ==
-X-Received: by 2002:ac8:5b4d:0:b0:2f6:3ee7:6231 with SMTP id n13-20020ac85b4d000000b002f63ee76231mr8916799qtw.4.1653070166133;
-        Fri, 20 May 2022 11:09:26 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (173-246-12-168.qc.cable.ebox.net. [173.246.12.168])
-        by smtp.gmail.com with ESMTPSA id f21-20020a05622a1a1500b002f917d2d3cbsm74318qtb.76.2022.05.20.11.09.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 11:09:25 -0700 (PDT)
-Message-ID: <6187a0514757dd50734175ceebcc0061d8eb6c5b.camel@ndufresne.ca>
-Subject: Re: [EXT] Re: [PATCH] media: amphion: return error if format is
- unsupported by vpu
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Ming Qian <ming.qian@nxp.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "hverkuil-cisco@xs4all.nl" <hverkuil-cisco@xs4all.nl>
-Cc:     "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Date:   Fri, 20 May 2022 14:09:22 -0400
-In-Reply-To: <DB8PR04MB634682E34667F804608E3018E7D39@DB8PR04MB6346.eurprd04.prod.outlook.com>
-References: <20220519072844.31792-1-ming.qian@nxp.com>
-         <e03669333c20c07d40d0b1ce05eb771f5dbd4139.camel@ndufresne.ca>
-         <DB8PR04MB634682E34667F804608E3018E7D39@DB8PR04MB6346.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
+        Fri, 20 May 2022 14:11:44 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3FCE5D653;
+        Fri, 20 May 2022 11:11:42 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24KFVNQx016707;
+        Fri, 20 May 2022 18:11:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
+ to : cc : references : in-reply-to : message-id : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=24Dvykp2KUkjJ6d/E8Qq50Ojk1N4J0gGWIZsa/gjTL0=;
+ b=VMngJluL69wMtwtlGk9gS7JO/bSTSL9qWSn8K8qjSPLan8xC0Sm9QoNmBRlFgyD3w6L2
+ n32qZYGGav2KQZ1SvCv8ERgAKljGXVv361JlkqdbXUf0xUCQaFS4Ko57NPKEHGOXlA12
+ nWohyJRw+vicYNDs/HVwf1iS3TGqlBEkCKOU2EUeEq0WIAwIWpi4wSIDIa+yq+THIIfs
+ P43LWjq42vYi1JDxyCK626BMPYfWFV3G+ouWb8K1OAHk5MlJkVJgGdRpbfMH8RXImDnI
+ 4zeF0pPf0CRCFrx9D7/NXWWnhIQV92JUoPrSBIsEurSVbJkJbuvHVEV2h7WtFIax1jOR vA== 
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g6b7eenye-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 May 2022 18:11:20 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24KHv39v001053;
+        Fri, 20 May 2022 18:11:18 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma01fra.de.ibm.com with ESMTP id 3g242902yr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 May 2022 18:11:18 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24KIBG5p43647418
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 20 May 2022 18:11:16 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0EF7A42041;
+        Fri, 20 May 2022 18:11:16 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 990E84203F;
+        Fri, 20 May 2022 18:11:15 +0000 (GMT)
+Received: from localhost (unknown [9.43.91.35])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 20 May 2022 18:11:15 +0000 (GMT)
+Date:   Fri, 20 May 2022 23:41:13 +0530
+From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Subject: Re: linux-next: changed messages in qemu boot
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>
+References: <20220520233602.2738d87c@canb.auug.org.au>
+In-Reply-To: <20220520233602.2738d87c@canb.auug.org.au>
+User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
+Message-Id: <1653069342.3xtfot6wli.naveen@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Wi4CIOHTYoPB9DtNtrBg2pnd-QI3Mc4e
+X-Proofpoint-ORIG-GUID: Wi4CIOHTYoPB9DtNtrBg2pnd-QI3Mc4e
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.1 (3.44.1-1.fc36) 
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-20_05,2022-05-20_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ suspectscore=0 lowpriorityscore=0 malwarescore=0 mlxlogscore=999
+ priorityscore=1501 impostorscore=0 bulkscore=0 adultscore=0 clxscore=1011
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205200116
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,112 +88,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le vendredi 20 mai 2022 =C3=A0 01:25 +0000, Ming Qian a =C3=A9crit=C2=A0:
-> > From: Nicolas Dufresne [mailto:nicolas@ndufresne.ca]
-> > Sent: Friday, May 20, 2022 2:13 AM
-> > To: Ming Qian <ming.qian@nxp.com>; mchehab@kernel.org;
-> > hverkuil-cisco@xs4all.nl
-> > Cc: shawnguo@kernel.org; robh+dt@kernel.org; s.hauer@pengutronix.de;
-> > kernel@pengutronix.de; festevam@gmail.com; dl-linux-imx
-> > <linux-imx@nxp.com>; linux-media@vger.kernel.org;
-> > linux-kernel@vger.kernel.org; linux-arm-kernel@lists.infradead.org
-> > Subject: [EXT] Re: [PATCH] media: amphion: return error if format is
-> > unsupported by vpu
-> >=20
-> > Caution: EXT Email
-> >=20
-> > Hi Ming Qian,
-> >=20
-> > Le jeudi 19 mai 2022 =C3=A0 15:28 +0800, Ming Qian a =C3=A9crit :
-> > > return error if format is unsupported by vpu, otherwise the vpu will
-> > > be stalled at decoding
-> >=20
-> > I have a reasonable doubt about this patch. I don't think such a case s=
-hould
-> > be
-> > reachable by users. Normally, calls to S_FMT should ensure the driver f=
-ormat
-> > state is valid on both ends but modifying the relevant structures. As a=
-n
-> > example, for decoders, setting the CODEC (OUTPUT queue) format, may
-> > change the raw format (CAPTURE queue) implicitly to prevent this situat=
-ion.
-> > Are we certain this change isn't papering around some missing format
-> > propagation ?
-> >=20
-> > regards,
-> > Nicolas
-> >=20
+Stephen Rothwell wrote:
+> Hi all,
 >=20
-> Hi Nicolas,
-> =C2=A0=C2=A0=C2=A0=C2=A0You're right, it's not reachable currently.
-> =C2=A0=C2=A0=C2=A0=C2=A0And there are some formats supported by VPU, but =
-I didn't add support in
-> driver, as they are not defined in kernel yet.
-> So if someone wants to enable them in future, and if he only adds a forma=
-t
-> into vdec_formats[] without modifying the vpu_malone part , then he can
-> enum_fmt and set_fmt successfully, but meet vpu hang without any error
-> message.
-> 	I think driver should report an error in case of the new format is
-> not implemented fully.
+> Today's linux-next bboot of the powerpc pseries_le_defconfig build
+> produced these different kernel messages (diff from yesterday's tree):
+>=20
+> - ftrace: allocating 33658 entries in 13 pages
+> - ftrace: allocated 13 pages with 3 groups
+> + ftrace-powerpc: Address of ftrace_regs_caller out of range of kernel_to=
+c.
 
-Fair point, but it should be bug_on or at least an error trace.
+Thanks for the report. I think that is due to:
+https://patchwork.ozlabs.org/project/linuxppc-dev/patch/bb6626e884acffe87b5=
+8736291df57db3deaa9b9.1652074503.git.christophe.leroy@csgroup.eu/
 
-regards,
-Nicolas
+The below diff fixes it for me:
 
->=20
-> Ming
->=20
-> > >=20
-> > > Signed-off-by: Ming Qian <ming.qian@nxp.com>
-> > > ---
-> > > =C2=A0drivers/media/platform/amphion/vpu_malone.c | 2 ++
-> > > =C2=A0drivers/media/platform/amphion/vpu_v4l2.c   | 4 ++--
-> > > =C2=A02 files changed, 4 insertions(+), 2 deletions(-)
-> > >=20
-> > > diff --git a/drivers/media/platform/amphion/vpu_malone.c
-> > > b/drivers/media/platform/amphion/vpu_malone.c
-> > > index f29c223eefce..0930b6ba8c42 100644
-> > > --- a/drivers/media/platform/amphion/vpu_malone.c
-> > > +++ b/drivers/media/platform/amphion/vpu_malone.c
-> > > @@ -610,6 +610,8 @@ static int vpu_malone_set_params(struct
-> > vpu_shared_addr *shared,
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0enum vpu_malone_format malone_for=
-mat;
-> > >=20
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0malone_format =3D
-> > vpu_malone_format_remap(params->codec_format);
-> > > +     if (malone_format =3D=3D MALONE_FMT_NULL)
-> > > +             return -EINVAL;
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0iface->udata_buffer[instance].bas=
-e =3D params->udata.base;
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0iface->udata_buffer[instance].slo=
-t_size =3D params->udata.size;
-> > >=20
-> > > diff --git a/drivers/media/platform/amphion/vpu_v4l2.c
-> > > b/drivers/media/platform/amphion/vpu_v4l2.c
-> > > index 446f07d09d0b..89b88e063e45 100644
-> > > --- a/drivers/media/platform/amphion/vpu_v4l2.c
-> > > +++ b/drivers/media/platform/amphion/vpu_v4l2.c
-> > > @@ -500,10 +500,10 @@ static int vpu_vb2_start_streaming(struct
-> > vb2_queue *q, unsigned int count)
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0fmt->sizeimage[1], fmt->bytesperline[1],
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0fmt->sizeimage[2], fmt->bytesperline[2],
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0q->num_buffers);
-> > > -     call_void_vop(inst, start, q->type);
-> > > +     ret =3D call_vop(inst, start, q->type);
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0vb2_clear_last_buffer_dequeued(q)=
-;
-> > >=20
-> > > -     return 0;
-> > > +     return ret;
-> > > =C2=A0}
-> > >=20
-> > > =C2=A0static void vpu_vb2_stop_streaming(struct vb2_queue *q)
->=20
+diff --git a/arch/powerpc/kernel/trace/ftrace.c b/arch/powerpc/kernel/trace=
+/ftrace.c
+index 46c002a8388804..7418da705d43ac 100644
+--- a/arch/powerpc/kernel/trace/ftrace.c
++++ b/arch/powerpc/kernel/trace/ftrace.c
+@@ -746,7 +746,7 @@ int __init ftrace_dyn_arch_init(void)
+=20
+        reladdr =3D addr - kernel_toc_addr();
+=20
+-       if (reladdr >=3D SZ_2G || reladdr < -SZ_2G) {
++       if (reladdr >=3D SZ_2G || reladdr < -_UL(SZ_2G)) {
+                pr_err("Address of %ps out of range of kernel_toc.\n",
+                                (void *)addr);
+                return -1;
+
+
+- Naveen
 

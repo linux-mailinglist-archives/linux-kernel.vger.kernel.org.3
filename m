@@ -2,118 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF9AA52EDEB
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 16:16:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A85052EDEF
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 16:17:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350181AbiETOQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 10:16:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43358 "EHLO
+        id S1350188AbiETOQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 10:16:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234377AbiETOPz (ORCPT
+        with ESMTP id S234377AbiETOQx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 10:15:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C63201;
-        Fri, 20 May 2022 07:15:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 25FB1B82B4F;
-        Fri, 20 May 2022 14:15:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF2B2C385A9;
-        Fri, 20 May 2022 14:15:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653056150;
-        bh=2/f9dMyLp9yCKVz+6/1S/e0nzkuFIkzjpaxNCSNnScs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TsjSxRlrGKZ5eF2ZKArkoXb3l3WquR2IGQRmzREnKrlQuLzSdKgTvS6T8JwSvAiRV
-         AyMgqJhLDMahYlE2MNPhLkHBhYxFOkuO4KM/But6ZcYqK+c3bJepFBb7WHpGqwE1Zi
-         3mlFANrQyk41dEEr04WDEIPLuJTPPaAEU87+Va9J3BrGmVeVXk63tSMB8Qt2E7YLJJ
-         DWBDD07eZ9yRARagA8GOU1ifmRVgdVisMU+8TOUU5DTIJcdlIlJreGaPm7KWgTIXNv
-         996knJiyZHC47jpfNiHydgUGVvnfZD27vQW39266j96TyNdoM4OIPT8f27QirO8CwO
-         FcSj+WNO7qYlA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 4804E400B1; Fri, 20 May 2022 11:15:48 -0300 (-03)
-Date:   Fri, 20 May 2022 11:15:48 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     kan.liang@linux.intel.com
-Cc:     mingo@redhat.com, irogers@google.com, jolsa@kernel.org,
-        namhyung@kernel.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, peterz@infradead.org,
-        zhengjun.xing@linux.intel.com, adrian.hunter@intel.com,
-        ak@linux.intel.com, eranian@google.com
-Subject: Re: [PATCH V3 0/4] Several perf metrics topdown related fixes
-Message-ID: <YoeilN7HLeXckAb2@kernel.org>
-References: <20220518143900.1493980-1-kan.liang@linux.intel.com>
+        Fri, 20 May 2022 10:16:53 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7869A326DA
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 07:16:50 -0700 (PDT)
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id D95C3240003;
+        Fri, 20 May 2022 14:16:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1653056209;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=VI9qmRzvanlIX/NlStApcAYQNNBeShzItzVx/nRwYgU=;
+        b=Ftsgxk8aGcC3VQ93ZvGKo/WEZrjJAvz59q4MW3CSkOgyaHlXHIcR0PDJfirHSVQ9TKQ7dB
+        i+ZTf1EltVurww2Ul8g8Vo8hXCp8vXldwWWX0ydvaXOWQVVNmdDOAzaEubwABIXrbqqR9Q
+        XpK3yoD5vGXlIG0ywLrJ3yW7/qusT4550Dk01ShXeTfn7tR2H8RrCh6UtLeUNOdl+0BhUn
+        gokuuWdI4ZndVS9zR8DYs92I1+wIEb9O+cohtLbQNeEGa22irJHw/3HYAbmqoi8s0up3hs
+        zqV2XKOSDGkNJ0j5zfOdNjn7XIszz/57gWt4Qf51pyQrpOFryni08tiksWdYEg==
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: [PATCH v12 0/1] [READY FOR MERGE] drm: LogiCVC display controller support
+Date:   Fri, 20 May 2022 16:15:54 +0200
+Message-Id: <20220520141555.1429041-1-paul.kocialkowski@bootlin.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220518143900.1493980-1-kan.liang@linux.intel.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, May 18, 2022 at 07:38:56AM -0700, kan.liang@linux.intel.com escreveu:
-> From: Kan Liang <kan.liang@linux.intel.com>
-> 
-> The Patch 1 is a follow-up patch for Ian's ("Fix topdown event weak
-> grouping")[1].
-> 
-> The patch 2 is to fix the perf metrics topdown events in a mixed group.
-> It reuses the function introduced in [1].
-> Patch 1 & 2 should be on top of [1].
-> 
-> The patch 3 & 4 are to fix other perf metrics topdown related issues.
-> They can be merged separately.
-> 
-> [1]: https://lore.kernel.org/all/20220517052724.283874-2-irogers@google.com/
+Please consider merging this driver for the next merge window.
 
-Thanks, applied.
+This series introduces support for the LogiCVC display controller.
+The controller is a bit unusual since it is usually loaded as
+programmable logic on Xilinx FPGAs or Zynq-7000 SoCs.
+More details are presented on the main commit for the driver.
 
-- Arnaldo
+More information about the controller is available on the dedicated
+web page: https://www.logicbricks.com/Products/logiCVC-ML.aspx
 
- 
-> Changes since V2:
-> - Add more comments for the evsel__sys_has_perf_metrics() and
->   topdown_sys_has_perf_metrics()
-> - Remove the uncessary evsel->core.leader->nr_members = 0; in patch 2.
->   The value has been updated in the new evsel__remove_from_group().
-> - Add Reviewed-by from Ian for patch 4
-> 
-> Changes since V1:
-> - Add comments for the evsel__sys_has_perf_metrics() and
->   topdown_sys_has_perf_metrics()
-> - Factor out evsel__remove_from_group()
-> - Add Reviewed-by from Ian for patch 3
-> 
-> Kan Liang (4):
->   perf evsel: Fixes topdown events in a weak group for the hybrid
->     platform
->   perf stat: Always keep perf metrics topdown events in a group
->   perf parse-events: Support different format of the topdown event name
->   perf parse-events: Move slots event for the hybrid platform too
-> 
->  tools/perf/arch/x86/util/evlist.c  |  7 ++++---
->  tools/perf/arch/x86/util/evsel.c   | 23 +++++++++++++++++++++--
->  tools/perf/arch/x86/util/topdown.c | 25 +++++++++++++++++++++++++
->  tools/perf/arch/x86/util/topdown.h |  7 +++++++
->  tools/perf/builtin-stat.c          |  7 ++-----
->  tools/perf/util/evlist.c           |  6 +-----
->  tools/perf/util/evsel.c            | 13 +++++++++++--
->  tools/perf/util/evsel.h            |  2 +-
->  8 files changed, 72 insertions(+), 18 deletions(-)
->  create mode 100644 tools/perf/arch/x86/util/topdown.h
-> 
-> -- 
-> 2.35.1
+Note that this driver has rather simple connector management, which was
+not converted to drm_panel_bridge to keep the ability to enable the panel
+at first vblank but also to support DVI.
+
+Changes since v11:
+- Removed not-for-merge patch;
+- Rebased on top of latest drm-misc-next.
+
+Changes since v10:
+- Removed common compatibles for major logicvc versions;
+- Switched caps detection to use the version registers instead of
+  the compatible;
+- Added support for major version 5 of the unit;
+- Used FIELD_GET from bitfield.h and removed local equivalents;
+- Updated copyright year;
+
+Changes since v9:
+- Added common compatibles for major logicvc versions;
+- Add support for logicvc-5;
+- Rebased on latest drm-misc next.
+
+Changes since v8:
+- Rebased on top of the latest drm-misc-next;
+- Dropped useless phandle-based syscon regmap support;
+- Switched to a single-port graph description;
+- Updated the device-tree schema to the port schema and added a
+  description for the port.
+
+Change since v7:
+- Replaced DRM_INFO/DRM_ERROR/DRM_DEBUG_DRIVER with fashions using drm_device;
+- Fixed yaml binding alignment issue;
+- Renamed logicvc-display name to the generic "display" name;
+- Added patternProperties match for display in the parent mfd binding;
+- Used drm_atomic_get_new_crtc_state when needed;
+- Checked mode in mode_valid instead of atomic_check;
+- Switched to drmm_mode_config_init;
+- Removed useless logicvc_connector_destroy wrapper;
+- Removed useless drm_dev_put calls;
+- Removed atomic_commit_tail that enables the panel and streamlined the logic;
+- Reworked Makefile cosmetics;
+- Fixed checkpatch issues.
+
+Changes since v6:
+- Updated to the latest DRM internal API changes; 
+- Used an enum to index dt properties instead of the name string.
+
+Changes since v5:
+- Subclass DRM device and use devm_drm_dev_alloc for allocation;
+- Removed call to drm_mode_config_cleanup (done automatically with devm);
+- Some related code cleanups;
+- Bring back not-for-merge patch adding colorkey support.
+
+Changes since v4:
+- Updated to internal DRM API changes (rebased on drm-misc-next);
+- Added Kconfig dependency on OF;
+- Added MAINTAINERS entry;
+- Used drm_err and dev_err instead of DRM_ERROR where possible;
+- Various cosmetic changes.
+
+Changes since v3:
+- Rebased on latest drm-misc;
+- Improved event lock wrapping;
+- Added collect tag;
+- Added color-key support patch (not for merge, for reference only).
+
+Changes since v2:
+- Fixed and slightly improved dt schema.
+
+Changes since v1:
+- Switched dt bindings documentation to dt schema;
+- Described more possible dt parameters;
+- Added support for the lvds-3bit interface;
+- Added support for grabbing syscon regmap from parent node;
+- Removed layers count property and count layers child nodes instead.
+
+Paul Kocialkowski (1):
+  drm: Add support for the LogiCVC display controller
+
+ MAINTAINERS                                 |   6 +
+ drivers/gpu/drm/Kconfig                     |   2 +
+ drivers/gpu/drm/Makefile                    |   1 +
+ drivers/gpu/drm/logicvc/Kconfig             |   9 +
+ drivers/gpu/drm/logicvc/Makefile            |   9 +
+ drivers/gpu/drm/logicvc/logicvc_crtc.c      | 280 +++++++++
+ drivers/gpu/drm/logicvc/logicvc_crtc.h      |  21 +
+ drivers/gpu/drm/logicvc/logicvc_drm.c       | 497 ++++++++++++++++
+ drivers/gpu/drm/logicvc/logicvc_drm.h       |  67 +++
+ drivers/gpu/drm/logicvc/logicvc_interface.c | 214 +++++++
+ drivers/gpu/drm/logicvc/logicvc_interface.h |  28 +
+ drivers/gpu/drm/logicvc/logicvc_layer.c     | 628 ++++++++++++++++++++
+ drivers/gpu/drm/logicvc/logicvc_layer.h     |  64 ++
+ drivers/gpu/drm/logicvc/logicvc_mode.c      |  80 +++
+ drivers/gpu/drm/logicvc/logicvc_mode.h      |  15 +
+ drivers/gpu/drm/logicvc/logicvc_of.c        | 185 ++++++
+ drivers/gpu/drm/logicvc/logicvc_of.h        |  46 ++
+ drivers/gpu/drm/logicvc/logicvc_regs.h      |  80 +++
+ 18 files changed, 2232 insertions(+)
+ create mode 100644 drivers/gpu/drm/logicvc/Kconfig
+ create mode 100644 drivers/gpu/drm/logicvc/Makefile
+ create mode 100644 drivers/gpu/drm/logicvc/logicvc_crtc.c
+ create mode 100644 drivers/gpu/drm/logicvc/logicvc_crtc.h
+ create mode 100644 drivers/gpu/drm/logicvc/logicvc_drm.c
+ create mode 100644 drivers/gpu/drm/logicvc/logicvc_drm.h
+ create mode 100644 drivers/gpu/drm/logicvc/logicvc_interface.c
+ create mode 100644 drivers/gpu/drm/logicvc/logicvc_interface.h
+ create mode 100644 drivers/gpu/drm/logicvc/logicvc_layer.c
+ create mode 100644 drivers/gpu/drm/logicvc/logicvc_layer.h
+ create mode 100644 drivers/gpu/drm/logicvc/logicvc_mode.c
+ create mode 100644 drivers/gpu/drm/logicvc/logicvc_mode.h
+ create mode 100644 drivers/gpu/drm/logicvc/logicvc_of.c
+ create mode 100644 drivers/gpu/drm/logicvc/logicvc_of.h
+ create mode 100644 drivers/gpu/drm/logicvc/logicvc_regs.h
 
 -- 
+2.36.0
 
-- Arnaldo

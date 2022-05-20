@@ -2,117 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 117E852E5D1
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 09:05:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 469AA52E5C5
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 09:05:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240649AbiETHDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 03:03:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39230 "EHLO
+        id S1346073AbiETHDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 03:03:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346238AbiETHCW (ORCPT
+        with ESMTP id S1346245AbiETHCT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 03:02:22 -0400
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA0D6212B;
-        Fri, 20 May 2022 00:02:19 -0700 (PDT)
-Received: by mail-qt1-f171.google.com with SMTP id b9so161482qtx.11;
-        Fri, 20 May 2022 00:02:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uBnYOzozPS0/gk3rG8TZQmfueqfKwe86yaRHQBbpuNM=;
-        b=QOZFK5XdTPxyIxX28igOPjvbfFM1sXh1WPHrz6DWkcVKasAjCyvBF3S0RB8v4vRZyl
-         QliavJ/C3iWgtmt35n7PBunpQelu2dwVilZ8fC52XuJ/RM1iXcnYJ3cCyyjR8gmJdyKK
-         FKjCXQp+KtFqjzr189S4Q3kygoGQBPfmktmNy3kgjYJ6+dQrNX3J8rQ+CLPmUkCPHmHR
-         oo9WyBlb4A4g9UaC0bC/hlCqZ/aT6dUBGcYz3SHFTDb3y3oLbAlTnHT9Z11kaOxvp3NZ
-         2Z1CGkaJpgGAE8cDr6+X32QD/diW0t+Wqk3hlaMaIVYKcO4cZcI6YK+YtZaRi7XR0j5L
-         mVpw==
-X-Gm-Message-State: AOAM533hb2RQevCc/2FPAdo3F85m6qKCOjt2EBDB1vvozUBLciU/NLZK
-        GgeFLIajG6N78RzJ/g5utPKuUXRBAPUqMw==
-X-Google-Smtp-Source: ABdhPJxA1TF8DBGIXzFAp1HuqIe/vcBpkQAYbJoUgKOn6vwcaxx1V08YHqDKF1K+iEARoh7JpGWERQ==
-X-Received: by 2002:a05:622a:138d:b0:2f3:b935:9d55 with SMTP id o13-20020a05622a138d00b002f3b9359d55mr6580978qtk.112.1653030138519;
-        Fri, 20 May 2022 00:02:18 -0700 (PDT)
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
-        by smtp.gmail.com with ESMTPSA id ey18-20020a05622a4c1200b002f3f24b6d12sm2400565qtb.29.2022.05.20.00.02.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 May 2022 00:02:18 -0700 (PDT)
-Received: by mail-yb1-f173.google.com with SMTP id i187so10505637ybg.6;
-        Fri, 20 May 2022 00:02:17 -0700 (PDT)
-X-Received: by 2002:a25:e04d:0:b0:64d:6f23:b906 with SMTP id
- x74-20020a25e04d000000b0064d6f23b906mr8107235ybg.380.1653030137498; Fri, 20
- May 2022 00:02:17 -0700 (PDT)
+        Fri, 20 May 2022 03:02:19 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF2355DE69;
+        Fri, 20 May 2022 00:02:16 -0700 (PDT)
+Received: from kwepemi100019.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L4HgQ5Q39zfbXk;
+        Fri, 20 May 2022 15:00:50 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi100019.china.huawei.com (7.221.188.189) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 20 May 2022 15:02:14 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 20 May 2022 15:02:14 +0800
+Subject: Re: [PATCH -next v2] blk-mq: fix panic during blk_mq_run_work_fn()
+From:   "yukuai (C)" <yukuai3@huawei.com>
+To:     Ming Lei <ming.lei@redhat.com>
+CC:     <axboe@kernel.dk>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
+References: <20220520032542.3331610-1-yukuai3@huawei.com>
+ <YocOsw6n3y11lNym@T590> <2b7a82e0-1e33-e2ff-74d7-d80f152fdc75@huawei.com>
+Message-ID: <afe9dec4-733d-88e9-850d-5c36e9201119@huawei.com>
+Date:   Fri, 20 May 2022 15:02:13 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <20220513201243.2381133-1-vladimir.oltean@nxp.com>
- <CAGETcx9vjrh_ORhGq0g5oH5kUE8MbcyEW4Mv9i=S8m9PLzBkhA@mail.gmail.com>
- <20220519151529.qkhlsjfkh6mebpqw@skbuf> <CAGETcx_eiuKnyTgzxGBzgakV7reQOEdfpsvVjAsUXVmCSvSttQ@mail.gmail.com>
-In-Reply-To: <CAGETcx_eiuKnyTgzxGBzgakV7reQOEdfpsvVjAsUXVmCSvSttQ@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 20 May 2022 09:02:05 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUso+j5K8VYxTofg7Pw4jdH2xMMGBXGwBxpzRiQWX+ZNA@mail.gmail.com>
-Message-ID: <CAMuHMdUso+j5K8VYxTofg7Pw4jdH2xMMGBXGwBxpzRiQWX+ZNA@mail.gmail.com>
-Subject: Re: [RFC PATCH devicetree] of: property: mark "interrupts" as
- optional for fw_devlink
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        John Stultz <john.stultz@linaro.org>,
-        =?UTF-8?B?QWx2aW4g4pS8w6FpcHJhZ2E=?= <alsi@bang-olufsen.dk>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Android Kernel Team <kernel-team@android.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <2b7a82e0-1e33-e2ff-74d7-d80f152fdc75@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Saravana,
+在 2022/05/20 14:23, yukuai (C) 写道:
+> 在 2022/05/20 11:44, Ming Lei 写道:
+>> On Fri, May 20, 2022 at 11:25:42AM +0800, Yu Kuai wrote:
+>>> Our test report a following crash:
+>>>
+>>> BUG: kernel NULL pointer dereference, address: 0000000000000018
+>>> PGD 0 P4D 0
+>>> Oops: 0000 [#1] SMP NOPTI
+>>> CPU: 6 PID: 265 Comm: kworker/6:1H Kdump: loaded Tainted: G           
+>>> O      5.10.0-60.17.0.h43.eulerosv2r11.x86_64 #1
+>>> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 
+>>> rel-1.12.1-0-ga5cab58-20220320_160524-szxrtosci10000 04/01/2014
+>>> Workqueue: kblockd blk_mq_run_work_fn
+>>> RIP: 0010:blk_mq_delay_run_hw_queues+0xb6/0xe0
+>>> RSP: 0018:ffffacc6803d3d88 EFLAGS: 00010246
+>>> RAX: 0000000000000006 RBX: ffff99e2c3d25008 RCX: 00000000ffffffff
+>>> RDX: 0000000000000000 RSI: 0000000000000003 RDI: ffff99e2c911ae18
+>>> RBP: ffffacc6803d3dd8 R08: 0000000000000000 R09: ffff99e2c0901f6c
+>>> R10: 0000000000000018 R11: 0000000000000018 R12: ffff99e2c911ae18
+>>> R13: 0000000000000000 R14: 0000000000000003 R15: ffff99e2c911ae18
+>>> FS:  0000000000000000(0000) GS:ffff99e6bbf00000(0000) 
+>>> knlGS:0000000000000000
+>>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>> CR2: 0000000000000018 CR3: 000000007460a006 CR4: 00000000003706e0
+>>> Call Trace:
+>>>   __blk_mq_do_dispatch_sched+0x2a7/0x2c0
+>>>   ? newidle_balance+0x23e/0x2f0
+>>>   __blk_mq_sched_dispatch_requests+0x13f/0x190
+>>>   blk_mq_sched_dispatch_requests+0x30/0x60
+>>>   __blk_mq_run_hw_queue+0x47/0xd0
+>>>   process_one_work+0x1b0/0x350
+>>>   worker_thread+0x49/0x300
+>>>   ? rescuer_thread+0x3a0/0x3a0
+>>>   kthread+0xfe/0x140
+>>>   ? kthread_park+0x90/0x90
+>>>   ret_from_fork+0x22/0x30
+>>>
+>>> After digging from vmcore, I found that the queue is cleaned
+>>> up(blk_cleanup_queue() is done) and tag set is
+>>> freed(blk_mq_free_tag_set() is done).
+>>>
+>>> There are two problems here:
+>>>
+>>> 1) blk_mq_delay_run_hw_queues() will only be called from
+>>> __blk_mq_do_dispatch_sched() if e->type->ops.has_work() return true.
+>>> This seems impossible because blk_cleanup_queue() is done, and there
+>>> should be no io. Commit ddc25c86b466 ("block, bfq: make bfq_has_work()
+>>> more accurate") fix the problem in bfq. And currently ohter schedulers
+>>> don't have such problem.
+>>>
+>>> 2) 'hctx->run_work' still exists after blk_cleanup_queue().
+>>> blk_mq_cancel_work_sync() is called from blk_cleanup_queue() to cancel
+>>> all the 'run_work'. However, there is no guarantee that new 'run_work'
+>>> won't be queued after that(and before blk_mq_exit_queue() is done).
+>>
+>> It is blk_mq_run_hw_queue() caller's responsibility to grab
+>> ->q_usage_counter for avoiding queue cleaned up, so please fix the user
+>> side.
+>>
+> Hi,
+> 
+> Thanks for your advice.
+> 
+> blk_mq_run_hw_queue() can be called async, in order to do that, what I
+> can think of is that grab 'q_usage_counte' before queuing 'run->work'
+> and release it after. Which is very similar to this patch...
 
-On Thu, May 19, 2022 at 10:00 PM Saravana Kannan <saravanak@google.com> wrote:
-> There's still work to be done that might make this easier/cleaner in the future:
-> 1. Adding a DT property that explicitly marks device A as not
-> dependent on B (Rob was already open to this -- with additional
-> context I don't want to type up here).
-> 2. Adding kernel command line options that might allow people to say
-> stuff like "Device A doesn't depend on Device B independent of what DT
-> might say".
+Hi,
 
-There are clearly cases where the hardware defines if the property
-is optional or required, and a DT property would work.  However, in
-general relaxing such dependencies involves a complex mix of hardware
-capabilities, driver support, and system policies.
-Examples:
-  - A hardware block may support both DMA and PIO, or can require DMA,
-  - DMA-capable devices can typically work without an IOMMU,
-    unless all RAM lies outside the address space addressable by
-    the DMA controller,
-  - A driver may fall back to PIO if DMA is not available (yet),
-    but doing so may not meet the required performance target,
-  - Not using the IOMMU may violate anti-tampering policies.
+How do you think about following change:
 
-Gr{oetje,eeting}s,
+diff --git a/block/blk-mq.c b/block/blk-mq.c
+index cedc355218db..7d5370b5b5e1 100644
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -1627,8 +1627,16 @@ static void __blk_mq_delay_run_hw_queue(struct 
+blk_mq_hw_ctx *hctx, bool async,
+                 put_cpu();
+         }
 
-                        Geert
++       /*
++        * No need to queue work if there is no io, and this can avoid race
++        * with blk_cleanup_queue().
++        */
++       if (!percpu_ref_tryget(&hctx->queue->q_usage_counter))
++               return;
++
+         kblockd_mod_delayed_work_on(blk_mq_hctx_next_cpu(hctx), 
+&hctx->run_work,
+                                     msecs_to_jiffies(msecs));
++       percpu_ref_put(&hctx->queue->q_usage_counter);
+  }
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

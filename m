@@ -2,58 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C218552E115
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 02:20:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2DE752E11C
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 02:21:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343937AbiETAUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 20:20:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59022 "EHLO
+        id S1343957AbiETAVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 20:21:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233287AbiETAUP (ORCPT
+        with ESMTP id S1343956AbiETAUz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 20:20:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD4A980A5;
-        Thu, 19 May 2022 17:20:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F8CD61A9C;
-        Fri, 20 May 2022 00:20:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8B4FEC34114;
-        Fri, 20 May 2022 00:20:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653006012;
-        bh=xN23XhVWg7Svo/4Flus8IM4qw8lkr4ZoO2wuqfbf4Vo=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=UJRK+YmEw/qvsuJHr1vSUE+3eeREXiS19Ok+bI40fXlPkr0cX7WWaBFomqemkWo6M
-         OXfMN6d6wTZ4KtJJutzUhDLarFmPZgJ8jje/SNy3azbDK/+EO5CsHAytX+PehEnQO4
-         q5CcTHkegSVh4pyWcumiDcy3PeJCOi5OcIvJSK0QD3KZnaS9zkBBeCkzjDd5EmBtzf
-         FlvE0JaL7cCj4/wcOikB41dY58RG9DohuDMGY2aLPeFvGqsY2Wq/PX3ue4SBRHr7GM
-         HwA6A7XiSl5z+YEwgkkLvcbtTbfkMi1MAbJMx9HEssrRcjS/dthRMBBnWkIra7L2vO
-         T1NehjeifRWWw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6C3E5E8DBDA;
-        Fri, 20 May 2022 00:20:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 19 May 2022 20:20:55 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C274224BE0;
+        Thu, 19 May 2022 17:20:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653006054; x=1684542054;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AX9u0AjfkhQIv902pkLIaB2pcFVPrNmehZjTGBz16NU=;
+  b=mtdNsYRF+q2AdF6JvRpi9EUz8Qwia2g7y2xkHHWUnQGdev+VW+5yPics
+   qubndh+n8FMLi9x+3hNsrUwl4LvDkA5nbVC/VsZYS2FCzIddNqF0jDAtS
+   ebN+wsypSB6luy265BQy1d1Q5F6jati6qsXeYqY/XfEvMzdzpb0hPWChY
+   ghH+vYtWAXId7tBjSdcb+oiNbdtQ8NusS+PAgAlLVPc6AjwRGRfPnc8jf
+   HxMDcRhkdvfCVliekjAwSTxhse0S0ARg5QpvVsh69wpOh3zDbNgDz2tQe
+   6l+yN1RyuExN57sa5jNkXgWJ24AnEY1oF4WcKwqZoDo/ndCEayA3n5Fwc
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="272394418"
+X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
+   d="scan'208";a="272394418"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 17:20:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
+   d="scan'208";a="546392359"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 19 May 2022 17:20:48 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nrqNs-000459-6h;
+        Fri, 20 May 2022 00:20:48 +0000
+Date:   Fri, 20 May 2022 08:20:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Meng Li <li.meng@amd.com>, Shuah Khan <skhan@linuxfoundation.org>,
+        Huang Rui <ray.huang@amd.com>, linux-pm@vger.kernel.org
+Cc:     kbuild-all@lists.01.org,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Jinzhou Su <Jinzhou.Su@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
+        Meng Li <li.meng@amd.com>
+Subject: Re: [PATCH V6 2/4] cpufreq: amd-pstate: Add test module for
+ amd-pstate driver
+Message-ID: <202205200812.g9S1SWP3-lkp@intel.com>
+References: <20220519134737.359290-3-li.meng@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v3] net: macb: Fix PTP one step sync support
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165300601244.28143.16404681790790978508.git-patchwork-notify@kernel.org>
-Date:   Fri, 20 May 2022 00:20:12 +0000
-References: <20220518170756.7752-1-harini.katakam@xilinx.com>
-In-Reply-To: <20220518170756.7752-1-harini.katakam@xilinx.com>
-To:     Harini Katakam <harini.katakam@xilinx.com>
-Cc:     nicolas.ferre@microchip.com, davem@davemloft.net,
-        richardcochran@gmail.com, claudiu.beznea@microchip.com,
-        kuba@kernel.org, edumazet@google.com, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        michal.simek@xilinx.com, harinikatakamlinux@gmail.com,
-        radhey.shyam.pandey@xilinx.com
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220519134737.359290-3-li.meng@amd.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,30 +76,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi Meng,
 
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+Thank you for the patch! Perhaps something to improve:
 
-On Wed, 18 May 2022 22:37:56 +0530 you wrote:
-> PTP one step sync packets cannot have CSUM padding and insertion in
-> SW since time stamp is inserted on the fly by HW.
-> In addition, ptp4l version 3.0 and above report an error when skb
-> timestamps are reported for packets that not processed for TX TS
-> after transmission.
-> Add a helper to identify PTP one step sync and fix the above two
-> errors. Add a common mask for PTP header flag field "twoStepflag".
-> Also reset ptp OSS bit when one step is not selected.
-> 
-> [...]
+[auto build test WARNING on shuah-kselftest/next]
+[also build test WARNING on rafael-pm/linux-next linux/master linus/master v5.18-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Here is the summary with links:
-  - [net,v3] net: macb: Fix PTP one step sync support
-    https://git.kernel.org/netdev/net/c/5cebb40bc955
+url:    https://github.com/intel-lab-lkp/linux/commits/Meng-Li/Add-unit-test-module-for-AMD-P-State-driver/20220519-215444
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git next
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220520/202205200812.g9S1SWP3-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/5a00a68d142a32f76cf2e770d75463802273e7ed
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Meng-Li/Add-unit-test-module-for-AMD-P-State-driver/20220519-215444
+        git checkout 5a00a68d142a32f76cf2e770d75463802273e7ed
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/cpufreq/
 
-You are awesome, thank you!
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from include/linux/kernel.h:29,
+                    from arch/x86/include/asm/percpu.h:27,
+                    from arch/x86/include/asm/current.h:6,
+                    from arch/x86/include/asm/processor.h:17,
+                    from arch/x86/include/asm/timex.h:5,
+                    from include/linux/timex.h:65,
+                    from include/linux/time32.h:13,
+                    from include/linux/time.h:60,
+                    from include/linux/stat.h:19,
+                    from include/linux/module.h:13,
+                    from include/../tools/testing/selftests/kselftest_module.h:5,
+                    from drivers/cpufreq/amd-pstate-ut.c:23:
+   drivers/cpufreq/amd-pstate-ut.c: In function 'get_shared_mem':
+>> include/linux/kern_levels.h:5:25: warning: format '%ld' expects argument of type 'long int', but argument 3 has type 'ssize_t' {aka 'int'} [-Wformat=]
+       5 | #define KERN_SOH        "\001"          /* ASCII Start Of Header */
+         |                         ^~~~~~
+   include/linux/printk.h:418:25: note: in definition of macro 'printk_index_wrap'
+     418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                         ^~~~
+   include/linux/printk.h:489:9: note: in expansion of macro 'printk'
+     489 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+         |         ^~~~~~
+   include/linux/kern_levels.h:11:25: note: in expansion of macro 'KERN_SOH'
+      11 | #define KERN_ERR        KERN_SOH "3"    /* error conditions */
+         |                         ^~~~~~~~
+   include/linux/printk.h:489:16: note: in expansion of macro 'KERN_ERR'
+     489 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+         |                ^~~~~~~~
+   drivers/cpufreq/amd-pstate-ut.c:83:33: note: in expansion of macro 'pr_err'
+      83 |                                 pr_err("%s ret=%ld unable to read from param file!\n",
+         |                                 ^~~~~~
+
+
+vim +5 include/linux/kern_levels.h
+
+314ba3520e513a Joe Perches 2012-07-30  4  
+04d2c8c83d0e3a Joe Perches 2012-07-30 @5  #define KERN_SOH	"\001"		/* ASCII Start Of Header */
+04d2c8c83d0e3a Joe Perches 2012-07-30  6  #define KERN_SOH_ASCII	'\001'
+04d2c8c83d0e3a Joe Perches 2012-07-30  7  
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

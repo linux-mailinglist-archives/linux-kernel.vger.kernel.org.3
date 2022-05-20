@@ -2,94 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5654B52E31D
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 05:30:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69B9952E324
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 05:33:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345160AbiETD3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 23:29:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45958 "EHLO
+        id S1345144AbiETDbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 23:31:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230117AbiETD24 (ORCPT
+        with ESMTP id S1344901AbiETDbn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 23:28:56 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D56CE126989
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 20:28:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653017335; x=1684553335;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/2Rd7aRGXDFx0VPd9x4FavskHTE+idupHl56Dc9ywwA=;
-  b=cO7fECGjz/kx5zqBNDAT74qwE/1yx4QU5lSawr0PKUVKrpEuJVJzGxdR
-   va9SzmzGUEaDhk4fM23Y2SFnwIItlaErcDFPioBumqhHrwluhkVYSkRPP
-   Q0lqi4/apQmme3JlFS6kFcNUj+fziIYCuF6OD0DGxpPTJ6rYJt/GJbzrM
-   WcG+4ZOhtNsqxrgewHMRjFaIfOnJWt3YEk/EaR+4sth1ghHXovm/yrKjn
-   0bzUFssUEYELsrRSq44WdmEFKrlCl3CDtQNkc4sabbPbm1/uN2hwx8GDE
-   Gy3Arsii5BSQWMadVuAt9HY1bJYcUdXL72EqTm8Jnp2SSZiNKFV61d9W7
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="335521923"
-X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="335521923"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 20:28:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="570581574"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 19 May 2022 20:28:53 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nrtJt-0004El-4i;
-        Fri, 20 May 2022 03:28:53 +0000
-Date:   Fri, 20 May 2022 11:28:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guo Ren <guoren@linux.alibaba.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [ammarfaizi2-block:palmer/linux/riscv-compat 20/20]
- riscv64-linux-ld: arch/riscv/kernel/compat_syscall_table.o:undefined
- reference to `compat_sys_fadvise64_64'
-Message-ID: <202205201131.BsQlHAIj-lkp@intel.com>
+        Thu, 19 May 2022 23:31:43 -0400
+Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B6257B28
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 20:31:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=wHef6Z3MEY5uLblxjBwpzUeUe+sPUOyaDIdO+GUS+wY=; b=TmGiw23nicyT2P87FuBkBrGDth
+        AcURHnVmtwfvyAHpc8zwxmSSPWAwwmunJdnYkmrkcgE3rjyyhn7xfglNY3nGkwRhpp6+ulloeo/yH
+        /okWjmfkP/VfFfWGwpzv9FzxQ+/GFjQgFZJQ8MAFQPq0/Vvu2NO78VdfFMo0t29yRSJgVZyvJETO6
+        xVF117u4pFuWduLiV6dtjt5BQyfGcNgnuL63gdA6ZJNZgsk/G2TIiiUZrhsxSVzYQ/cw3l96P9ZiX
+        HGVFvTEGPGS1FVf4GPHQ/MiZjdQIrT6SIy6srfGij07BIJEl40dm4R2JGLgHIk6luBgKeFZTDl9Nl
+        O+tdatTA==;
+Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nrtMa-00GUId-SQ; Fri, 20 May 2022 03:31:40 +0000
+Date:   Fri, 20 May 2022 03:31:40 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] random: convert to using fops->write_iter()
+Message-ID: <YocLnFa8mRpOkCZ5@zeniv-ca.linux.org.uk>
+References: <f871a510-d262-bc98-757e-204976e1b82c@kernel.dk>
+ <YocEddeThi8VUcKb@zeniv-ca.linux.org.uk>
+ <e70dfd3b-c2a6-d830-e3a0-6a25f0da9256@kernel.dk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <e70dfd3b-c2a6-d830-e3a0-6a25f0da9256@kernel.dk>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block palmer/linux/riscv-compat
-head:   9be8459298eadb39b9fe9974b890239e9c123107
-commit: 9be8459298eadb39b9fe9974b890239e9c123107 [20/20] riscv: compat: Add COMPAT Kbuild skeletal support
-config: riscv-randconfig-r004-20220519 (https://download.01.org/0day-ci/archive/20220520/202205201131.BsQlHAIj-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/9be8459298eadb39b9fe9974b890239e9c123107
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block palmer/linux/riscv-compat
-        git checkout 9be8459298eadb39b9fe9974b890239e9c123107
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+On Thu, May 19, 2022 at 09:25:30PM -0600, Jens Axboe wrote:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> > Feed it a buffer with only 1 byte mapped, watch it'll pass to mix_pool_bytes().
+> > And see how much of 'block' has been used uninitialized...
+> 
+> I don't follow? Buffer with 1 byte, iter setup with 1 byte. We copy 1 byte,
+> and we pass 1 byte to mix_pool_bytes(). What am I missing?
 
-All errors (new ones prefixed by >>):
-
->> riscv64-linux-ld: arch/riscv/kernel/compat_syscall_table.o:(.rodata+0x6f8): undefined reference to `compat_sys_fadvise64_64'
-   pahole: .tmp_vmlinux.btf: No such file or directory
-   .btf.vmlinux.bin.o: file not recognized: file format not recognized
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+"only 1 byte mapped" != "len is 1"...  Anonymous mmap() of 2*PAGE_SIZE, munmap()
+the second half, ask that sucker to write PAGE_SIZE from buffer + PAGE_SIZE - 1...

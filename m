@@ -2,125 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A169252EE4A
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 16:36:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65EA552EE4E
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 16:37:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350335AbiETOgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 10:36:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53682 "EHLO
+        id S1350362AbiETOha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 10:37:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348785AbiETOgY (ORCPT
+        with ESMTP id S1350377AbiETOh1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 10:36:24 -0400
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D76BA57B30
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 07:36:23 -0700 (PDT)
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-e5e433d66dso10511152fac.5
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 07:36:23 -0700 (PDT)
+        Fri, 20 May 2022 10:37:27 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 527BD170F1F
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 07:37:26 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id j6so7905536pfe.13
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 07:37:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=Ft39s9YnF4jUcvzq1w5kbMMaYHzsE+zHP2eH0w8U0EY=;
+        b=PVRBBNJUqNpXpWS52H3xdQX/P/MsjRNLghetF/hCiTEM1OrfqCQ4sAJYhw3z7UTA3c
+         16lmT+qKKEvTZ6VaUC7metHid/flN6WI2MAb7AU6Fho9hczvIGMcj5iakR0ucHw4ERbm
+         B/6w+59k5md5YG7Za1rgmfh95+7R1jpCagZ6ERhbFO+7kZnppj4E732JK/73xnYbXRrX
+         NlfBAsX2E66S5YJcDOlG4l2z4Xn8Bye2VHjP18nLGqmkKjTbkATYh5bM1WTsTTiHHWxT
+         pAfHkDnLJTlG7YUkv82iNsDMhG1CFCgDEptTBO1TnA3tjFkTxNAPR5O5eoiiDxrYz7G0
+         7z2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=iyg09MXx3MxUDrIc80FSkTauSbtXFvQYu5GaFcUD4A8=;
-        b=6A/ZADbDOwV84hhjbq0VUFECjbAJ6n9rXYOhPXYnmVuYdV0+TYBj4xyxGEI8vBXHq5
-         G4KtzH+Ak1xhfjiBCMNmdQ+GAizmpGk3hg4KY4HH3gt/9vef1utHbc6h7BmN5prMLBiE
-         WTagxyn0/05V2ETZl1KlacfQ1gtwe2fZfhYfzQDFrXOyxsg8v1Ukm1Pf8UndwhVAaO+O
-         raaCxetI24HzGygLTt/fL15xFyyCmqFE5CbiwNInMizTTwr+xmM2HQZX1Q+5MwfxaKf0
-         9I1aWW0/FurcLam2XoJ3XYq6Xt04FlTwiPza5Zk1ggNPQ5tkXI5zvOmIIXoRtm8PwrZW
-         /qeg==
-X-Gm-Message-State: AOAM532q4EK3/PwrfE952cb9WowRwoTXxKTwf6kX/ePYRBqlKEK+GJS+
-        UyF89Lz10xwZEjkQVqw92g==
-X-Google-Smtp-Source: ABdhPJyMUFH7t+iQryu0gI+MIfzU/pVaixAR4w3tzpu5naOonR9QLmz8Q4jg4oru81EwcHVye5wwIA==
-X-Received: by 2002:a05:6870:d60d:b0:f1:ddfc:2f26 with SMTP id a13-20020a056870d60d00b000f1ddfc2f26mr6255111oaq.296.1653057382154;
-        Fri, 20 May 2022 07:36:22 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id p13-20020a0568301d4d00b0060603221236sm975958oth.6.2022.05.20.07.36.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 07:36:21 -0700 (PDT)
-Received: (nullmailer pid 3813862 invoked by uid 1000);
-        Fri, 20 May 2022 14:36:20 -0000
-Date:   Fri, 20 May 2022 09:36:20 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Atish Patra <atishp@atishpatra.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Qing Wang <wangqing@vivo.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH v2 8/8] arch_topology: Add support to build llc_sibling
- on DT platforms
-Message-ID: <20220520143620.GA3788938-robh@kernel.org>
-References: <20220518093325.2070336-1-sudeep.holla@arm.com>
- <20220518093325.2070336-9-sudeep.holla@arm.com>
- <CAL_JsqKig8U4hQEtHW8ct1Pd0a29ZtoTp1HuWQv389yb+SuW_A@mail.gmail.com>
- <20220520125959.wlxz53cfqldljxjy@bogus>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Ft39s9YnF4jUcvzq1w5kbMMaYHzsE+zHP2eH0w8U0EY=;
+        b=thsp5zJt4sUX988gwWYDxbZynnJVLDd1CDAFxqeMzgjAwkewu9uKmXwKQxUHWrXKBS
+         7GSPGOEabNgFaNttZU73DDFutX7iCvK8iWQI6EK0fyZfCaFyM8sT0MhXSwgUDKf5HllY
+         dsQ03gdfbtV7RwWgc90Vq8Bp8n4ABAM9zzZLqpHqIDtqFDPEi7mG3qyOZnE2ulSg0c/v
+         MK+H1NmYG3EA374sMCi3IKTfq64LU5vSD2Riq6G9M8APH16FnLT7aD+/KHgMgAgOlYDW
+         l6SrCVzgIYZ7Kh3Ad9GbL/oojA73oWw72DfgQ7ONsgoKNizFPmqF5SP8uIKg2ZltTFuR
+         J4YQ==
+X-Gm-Message-State: AOAM5322XkvluMPmj2G7laqv0TFRWYHDxubZ6vqdTWZ3O11vFHTVSDTt
+        RR/ZHuYHvH7yaoGgivYhQUa4Cg==
+X-Google-Smtp-Source: ABdhPJygloC7AYK6iNI8gFmXE42/H9Z2I8/vO+Kho3jD0oUSnd0bkZGt2GgWiKM+vJndd8l/vE8sFA==
+X-Received: by 2002:a63:d90c:0:b0:3c6:4ab4:fbfe with SMTP id r12-20020a63d90c000000b003c64ab4fbfemr8819887pgg.499.1653057445575;
+        Fri, 20 May 2022 07:37:25 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id r19-20020a63fc53000000b003f60a8d7dadsm5195525pgk.15.2022.05.20.07.37.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 May 2022 07:37:25 -0700 (PDT)
+Message-ID: <aa51432c-7d23-5758-6dd1-a7f364a0cd89@kernel.dk>
+Date:   Fri, 20 May 2022 08:37:23 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220520125959.wlxz53cfqldljxjy@bogus>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] fs: prefer read_iter over read and write_iter over write
+Content-Language: en-US
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>, viro@zeniv.linux.org.uk,
+        linux-kernel@vger.kernel.org
+References: <20220520135103.166972-1-Jason@zx2c4.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20220520135103.166972-1-Jason@zx2c4.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 01:59:59PM +0100, Sudeep Holla wrote:
-> On Thu, May 19, 2022 at 01:10:51PM -0500, Rob Herring wrote:
-> > On Wed, May 18, 2022 at 4:34 AM Sudeep Holla <sudeep.holla@arm.com> wrote:
-> > >
-> > > ACPI PPTT provides cache identifiers and especially the last level cache
-> > > identifier is used in obtaining last level cache siblings amongst CPUs.
-> > >
-> > > While we have the cpu map representing all the CPUs sharing last level
-> > > cache in the cacheinfo driver, it is populated quite late in the boot
-> > > while the information is needed to build scheduler domains quite early.
-> >
-> > Late is because it's a device_initcall() rather than late in the cpu
-> > hotplug state machine, right?
-> 
-> Right. The expectation is to run in on each online CPU in CPU hotplug state
-> machine for some architectures. We may not need that on arm64 especially
-> since we get all info from DT or ACPI, but e.g. x86 uses cpuid which needs
-> to be executed on that CPU.
+On 5/20/22 7:51 AM, Jason A. Donenfeld wrote:
+> Most kernel code prefers read_iter over read and write_iter over write,
+> yet the read function pointer is tested first. Reverse these so that the
+> iter function is always used first.
 
-That's a separate issue. I'm not suggesting changing that part (that 
-would just be an optimization).
+Acked-by: Jens Axboe <axboe@kernel.dk>
 
-> > The late aspect is for sysfs presumably,but I think we could decouple that.
-> 
-> OK, not sure when this sched_domain info is actually needed. It think it
-> could be decoupled if we can wait until all the cpus are online.
+-- 
+Jens Axboe
 
-No need to wait for all cpus to be online. I think you keep doing 
-it as part of cpu hotplug. The device_initcall() is used because you 
-cannot have struct device or sysfs calls before the driver core is 
-initialized. If we run the cacheinfo code earlier (I think the arch code 
-will have to call it) just like the topology code and skip the sysfs 
-parts, then you can use it.
-
-> > Do all the firmware cache parsing early and then populate the sysfs parts
-> > later.
-> 
-> Yes that may work on DT/ACPI based systems, as I said x86 relies on cpuid.
-
-I'd assume using cpuid works at any time?
-
-> > It's not a unique problem as the DT unflattening and init code has to
-> > do the same thing. I'd assume the hotplug and cpu sysfs devices have
-> > to deal with the same thing.
-> >
-> 
-> OK, I will take a look at how to do that.
-> 
-> --
-> Regards,
-> Sudeep

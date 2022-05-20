@@ -2,135 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 186BA52E4B0
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 08:09:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10FD552E4B3
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 08:09:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345727AbiETGGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 02:06:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54370 "EHLO
+        id S1345729AbiETGHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 02:07:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345704AbiETGGo (ORCPT
+        with ESMTP id S233353AbiETGHr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 02:06:44 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2669A2E9E0;
-        Thu, 19 May 2022 23:06:40 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 24K666Mq8004182, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36504.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 24K666Mq8004182
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 20 May 2022 14:06:06 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXH36504.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Fri, 20 May 2022 14:06:06 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 20 May 2022 14:06:05 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::34e7:ab63:3da4:27c6]) by
- RTEXMBS04.realtek.com.tw ([fe80::34e7:ab63:3da4:27c6%5]) with mapi id
- 15.01.2308.021; Fri, 20 May 2022 14:06:05 +0800
-From:   Pkshih <pkshih@realtek.com>
-To:     "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
-CC:     "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "neojou@gmail.com" <neojou@gmail.com>,
-        "kvalo@kernel.org" <kvalo@kernel.org>,
-        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "martin.blumenstingl@googlemail.com" 
-        <martin.blumenstingl@googlemail.com>,
-        "linux@ulli-kroll.de" <linux@ulli-kroll.de>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: Re: [PATCH 05/10] rtw88: Do not access registers while atomic
-Thread-Topic: [PATCH 05/10] rtw88: Do not access registers while atomic
-Thread-Index: AQHYapDak3Q7f2qnxkShGFFqb9ia8a0mxBmA
-Date:   Fri, 20 May 2022 06:06:05 +0000
-Message-ID: <e33aaa2ab60e04d3449273e117ca73acb3895ed3.camel@realtek.com>
-References: <20220518082318.3898514-1-s.hauer@pengutronix.de>
-         <20220518082318.3898514-6-s.hauer@pengutronix.de>
-In-Reply-To: <20220518082318.3898514-6-s.hauer@pengutronix.de>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.36.1-2 
-x-originating-ip: [172.16.17.21]
-x-kse-serverinfo: RTEXMBS04.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzUvMjAg5LiK5Y2IIDAyOjU5OjAw?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <A2511D85AF58FC4BAF2AD10B96859F90@realtek.com>
-Content-Transfer-Encoding: base64
+        Fri, 20 May 2022 02:07:47 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6C931214;
+        Thu, 19 May 2022 23:07:45 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id B37C91F9A9;
+        Fri, 20 May 2022 06:07:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1653026863; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dbKU2OF86UPuVPELt9TcC5rsAyYqeClUEknxePZcRvA=;
+        b=ZpBMRUdr/yxOmFNCLp5Cedao9AryRJlxOAW9rhXNtqV21q5N80Ewf13/J5fkHHcIkTRmNQ
+        nztYY+PrtIvZA+yvGWum/gBpHLMPFYtFThJhnmjkibX03qulL/RLEsp8GUIleR8lJrVTIe
+        oQTrXowvogaNim1vWEmxiqB0OCASkpg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1653026863;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dbKU2OF86UPuVPELt9TcC5rsAyYqeClUEknxePZcRvA=;
+        b=egdV9BOdadegD0puQdNh36WsxV7caaZDO9UqLzNLxBMlJuan3AaikX0x9GqZu4H7sEHyuS
+        xZU3HZ7ChexSXiAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4C49D13A5F;
+        Fri, 20 May 2022 06:07:43 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id QUrNEC8wh2KlEAAAMHmgww
+        (envelope-from <hare@suse.de>); Fri, 20 May 2022 06:07:43 +0000
+Message-ID: <16f3f9ee-7db7-2173-840c-534f67bcaf04@suse.de>
+Date:   Fri, 20 May 2022 08:07:42 +0200
 MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36504.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [dm-devel] [PATCH v4 00/13] support non power of 2 zoned devices
+Content-Language: en-US
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Johannes Thumshirn <Johannes.Thumshirn@wdc.com>,
+        Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Theodore Ts'o <tytso@mit.edu>, Christoph Hellwig <hch@lst.de>,
+        Pankaj Raghav <p.raghav@samsung.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "pankydev8@gmail.com" <pankydev8@gmail.com>,
+        "gost.dev@samsung.com" <gost.dev@samsung.com>,
+        "jiangbo.365@bytedance.com" <jiangbo.365@bytedance.com>,
+        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "dm-devel@redhat.com" <dm-devel@redhat.com>,
+        "dsterba@suse.com" <dsterba@suse.com>,
+        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>
+References: <CGME20220516165418eucas1p2be592d9cd4b35f6b71d39ccbe87f3fef@eucas1p2.samsung.com>
+ <20220516165416.171196-1-p.raghav@samsung.com>
+ <20220517081048.GA13947@lst.de> <YoPAnj9ufkt5nh1G@mit.edu>
+ <7f9cb19b-621b-75ea-7273-2d2769237851@opensource.wdc.com>
+ <20220519031237.sw45lvzrydrm7fpb@garbanzo>
+ <69f06f90-d31b-620b-9009-188d1d641562@opensource.wdc.com>
+ <PH0PR04MB74166C87F694B150A5AE0F009BD09@PH0PR04MB7416.namprd04.prod.outlook.com>
+ <4a8f0e1b-0acb-1ed4-8d7a-c9ba93fcfd02@opensource.wdc.com>
+From:   Hannes Reinecke <hare@suse.de>
+In-Reply-To: <4a8f0e1b-0acb-1ed4-8d7a-c9ba93fcfd02@opensource.wdc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gV2VkLCAyMDIyLTA1LTE4IGF0IDEwOjIzICswMjAwLCBTYXNjaGEgSGF1ZXIgd3JvdGU6DQo+
-IFRoZSBkcml2ZXIgdXNlcyBpZWVlODAyMTFfaXRlcmF0ZV9hY3RpdmVfaW50ZXJmYWNlc19hdG9t
-aWMoKQ0KPiBhbmQgaWVlZTgwMjExX2l0ZXJhdGVfc3RhdGlvbnNfYXRvbWljKCkgaW4gc2V2ZXJh
-bCBwbGFjZXMgYW5kIGRvZXMNCj4gcmVnaXN0ZXIgYWNjZXNzZXMgaW4gdGhlIGl0ZXJhdG9ycy4g
-VGhpcyBkb2Vzbid0IGNvcGUgd2l0aCB1cGNvbWluZw0KICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgIF5eXl5eXl4gZG9lcz8NCj4gVVNCIHN1cHBvcnQgYXMgcmVnaXN0
-ZXJzIGNhbiBvbmx5IGJlIGFjY2Vzc2VkIG5vbi1hdG9taWNhbGx5Lg0KPiANCj4gU3BsaXQgdGhl
-c2UgaW50byBhIHR3byBzdGFnZSBwcm9jZXNzOiBGaXJzdCB1c2UgdGhlIGF0b21pYyBpdGVyYXRv
-cg0KPiBmdW5jdGlvbnMgdG8gY29sbGVjdCBhbGwgYWN0aXZlIGludGVyZmFjZXMgb3Igc3RhdGlv
-bnMgb24gYSBsaXN0LCB0aGVuDQo+IGl0ZXJhdGUgb3ZlciB0aGUgbGlzdCBub24tYXRvbWljYWxs
-eSBhbmQgY2FsbCB0aGUgaXRlcmF0b3Igb24gZWFjaA0KPiBlbnRyeS4NCg0KSSB0aGluayB0aGUg
-c3ViamVjdCBjb3VsZCBiZSAiaXRlcmF0ZSBvdmVyIHZpZi9zdGEgbGlzdCBub24tYXRvbWljYWxs
-eSINCg0KPiANCj4gU2lnbmVkLW9mZi1ieTogU2FzY2hhIEhhdWVyIDxzLmhhdWVyQHBlbmd1dHJv
-bml4LmRlPg0KPiBTdWdnZXN0ZWQtYnk6IFBrc2hpaCA8cGtzaGloQHJlYWx0ZWsuY29tPg0KPiAt
-LS0NCj4gIGRyaXZlcnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsvcnR3ODgvcGh5LmMgIHwgIDYgKy0N
-Cj4gIGRyaXZlcnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsvcnR3ODgvcHMuYyAgIHwgIDIgKy0NCj4g
-IGRyaXZlcnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsvcnR3ODgvdXRpbC5jIHwgOTIgKysrKysrKysr
-KysrKysrKysrKysrKysNCj4gIGRyaXZlcnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsvcnR3ODgvdXRp
-bC5oIHwgMTIgKystDQo+ICA0IGZpbGVzIGNoYW5nZWQsIDEwNSBpbnNlcnRpb25zKCspLCA3IGRl
-bGV0aW9ucygtKQ0KPiANCj4gDQoNClsuLi5dDQoNCj4gIA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVy
-cy9uZXQvd2lyZWxlc3MvcmVhbHRlay9ydHc4OC91dGlsLmMgYi9kcml2ZXJzL25ldC93aXJlbGVz
-cy9yZWFsdGVrL3J0dzg4L3V0aWwuYw0KPiBpbmRleCAyYzUxNWFmMjE0ZTc2Li5kYjU1ZGJkNWM1
-MzNlIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL25ldC93aXJlbGVzcy9yZWFsdGVrL3J0dzg4L3V0
-aWwuYw0KPiArKysgYi9kcml2ZXJzL25ldC93aXJlbGVzcy9yZWFsdGVrL3J0dzg4L3V0aWwuYw0K
-PiBAQCAtMTA1LDMgKzEwNSw5NSBAQCB2b2lkIHJ0d19kZXNjX3RvX21jc3JhdGUodTE2IHJhdGUs
-IHU4ICptY3MsIHU4ICpuc3MpDQo+ICAJCSptY3MgPSByYXRlIC0gREVTQ19SQVRFTUNTMDsNCj4g
-IAl9DQo+ICB9DQo+IA0KDQpbLi4uXQ0KDQo+ICsNCj4gK3ZvaWQgcnR3X2l0ZXJhdGVfc3Rhcyhz
-dHJ1Y3QgcnR3X2RldiAqcnR3ZGV2LA0KPiArCQkgICAgICB2b2lkICgqaXRlcmF0b3IpKHZvaWQg
-KmRhdGEsDQo+ICsJCQkJICAgICAgIHN0cnVjdCBpZWVlODAyMTFfc3RhICpzdGEpLA0KPiArCQkJ
-CSAgICAgICB2b2lkICpkYXRhKQ0KPiArew0KPiArCXN0cnVjdCBydHdfaXRlcl9zdGFzX2RhdGEg
-aXRlcl9kYXRhOw0KPiArCXN0cnVjdCBydHdfc3Rhc19lbnRyeSAqc3RhX2VudHJ5LCAqdG1wOw0K
-DQpsb2NrZGVwX2Fzc2VydF9oZWxkKCZydHdkZXYtPm11dGV4KTsNCg0KPiArDQo+ICsJaXRlcl9k
-YXRhLnJ0d2RldiA9IHJ0d2RldjsNCj4gKwlJTklUX0xJU1RfSEVBRCgmaXRlcl9kYXRhLmxpc3Qp
-Ow0KPiArDQo+ICsJaWVlZTgwMjExX2l0ZXJhdGVfc3RhdGlvbnNfYXRvbWljKHJ0d2Rldi0+aHcs
-IHJ0d19jb2xsZWN0X3N0YV9pdGVyLA0KPiArCQkJCQkgICZpdGVyX2RhdGEpOw0KPiArDQo+ICsJ
-bGlzdF9mb3JfZWFjaF9lbnRyeV9zYWZlKHN0YV9lbnRyeSwgdG1wLCAmaXRlcl9kYXRhLmxpc3Qs
-DQo+ICsJCQkJIGxpc3QpIHsNCj4gKwkJbGlzdF9kZWxfaW5pdCgmc3RhX2VudHJ5LT5saXN0KTsN
-Cj4gKwkJaXRlcmF0b3IoZGF0YSwgc3RhX2VudHJ5LT5zdGEpOw0KPiArCQlrZnJlZShzdGFfZW50
-cnkpOw0KPiArCX0NCj4gK30NCj4gKw0KDQpbLi4uXQ0KDQo+ICt2b2lkIHJ0d19pdGVyYXRlX3Zp
-ZnMoc3RydWN0IHJ0d19kZXYgKnJ0d2RldiwNCj4gKwkJICAgICAgdm9pZCAoKml0ZXJhdG9yKSh2
-b2lkICpkYXRhLCB1OCAqbWFjLA0KPiArCQkJCSAgICAgICBzdHJ1Y3QgaWVlZTgwMjExX3ZpZiAq
-dmlmKSwNCj4gKwkJICAgICAgdm9pZCAqZGF0YSkNCj4gK3sNCj4gKwlzdHJ1Y3QgcnR3X2l0ZXJf
-dmlmc19kYXRhIGl0ZXJfZGF0YTsNCj4gKwlzdHJ1Y3QgcnR3X3ZpZnNfZW50cnkgKnZpZl9lbnRy
-eSwgKnRtcDsNCg0KbG9ja2RlcF9hc3NlcnRfaGVsZCgmcnR3ZGV2LT5tdXRleCk7DQoNCj4gKw0K
-PiArCWl0ZXJfZGF0YS5ydHdkZXYgPSBydHdkZXY7DQo+ICsJSU5JVF9MSVNUX0hFQUQoJml0ZXJf
-ZGF0YS5saXN0KTsNCj4gKw0KPiArCWllZWU4MDIxMV9pdGVyYXRlX2FjdGl2ZV9pbnRlcmZhY2Vz
-X2F0b21pYyhydHdkZXYtPmh3LA0KPiArCQkJSUVFRTgwMjExX0lGQUNFX0lURVJfTk9STUFMLCBy
-dHdfY29sbGVjdF92aWZfaXRlciwgJml0ZXJfZGF0YSk7DQo+ICsNCj4gKwlsaXN0X2Zvcl9lYWNo
-X2VudHJ5X3NhZmUodmlmX2VudHJ5LCB0bXAsICZpdGVyX2RhdGEubGlzdCwNCj4gKwkJCQkgbGlz
-dCkgew0KPiArCQlsaXN0X2RlbF9pbml0KCZ2aWZfZW50cnktPmxpc3QpOw0KPiArCQlpdGVyYXRv
-cihkYXRhLCB2aWZfZW50cnktPm1hYywgdmlmX2VudHJ5LT52aWYpOw0KPiArCQlrZnJlZSh2aWZf
-ZW50cnkpOw0KPiArCX0NCj4gK30NCj4gDQoNClsuLi5dDQoNCi0tDQpQaW5nLUtlDQoNCg0K
+On 5/19/22 20:47, Damien Le Moal wrote:
+> On 5/19/22 16:34, Johannes Thumshirn wrote:
+>> On 19/05/2022 05:19, Damien Le Moal wrote:
+>>> On 5/19/22 12:12, Luis Chamberlain wrote:
+>>>> On Thu, May 19, 2022 at 12:08:26PM +0900, Damien Le Moal wrote:
+>>>>> On 5/18/22 00:34, Theodore Ts'o wrote:
+>>>>>> On Tue, May 17, 2022 at 10:10:48AM +0200, Christoph Hellwig wrote:
+>>>>>>> I'm a little surprised about all this activity.
+>>>>>>>
+>>>>>>> I though the conclusion at LSF/MM was that for Linux itself there
+>>>>>>> is very little benefit in supporting this scheme.  It will massively
+>>>>>>> fragment the supported based of devices and applications, while only
+>>>>>>> having the benefit of supporting some Samsung legacy devices.
+>>>>>>
+>>>>>> FWIW,
+>>>>>>
+>>>>>> That wasn't my impression from that LSF/MM session, but once the
+>>>>>> videos become available, folks can decide for themselves.
+>>>>>
+>>>>> There was no real discussion about zone size constraint on the zone
+>>>>> storage BoF. Many discussions happened in the hallway track though.
+>>>>
+>>>> Right so no direct clear blockers mentioned at all during the BoF.
+>>>
+>>> Nor any clear OK.
+>>
+>> So what about creating a device-mapper target, that's taking npo2 drives and
+>> makes them po2 drives for the FS layers? It will be very similar code to
+>> dm-linear.
+> 
+> +1
+> 
+> This will simplify the support for FSes, at least for the initial drop (if
+> accepted).
+> 
+> And more importantly, this will also allow addressing any potential
+> problem with user space breaking because of the non power of 2 zone size.
+> 
+Seconded (or maybe thirded).
+
+The changes to support npo2 in the block layer are pretty simple, and 
+really I don't have an issue with those.
+Then adding a device-mapper target transforming npo2 drives in po2 block 
+devices should be pretty trivial.
+
+And once that is in you can start arguing with the the FS folks on 
+whether to implement it natively.
+
+Cheers,
+
+Hannes
+-- 
+Dr. Hannes Reinecke                Kernel Storage Architect
+hare@suse.de                              +49 911 74053 688
+SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), Geschäftsführer: Ivo Totev, Andrew
+Myers, Andrew McDonald, Martje Boudien Moerman

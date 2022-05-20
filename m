@@ -2,297 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 802D152E50F
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 08:32:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D59B152E516
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 08:34:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345864AbiETGb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 02:31:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38718 "EHLO
+        id S1345873AbiETGdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 02:33:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235315AbiETGbz (ORCPT
+        with ESMTP id S235315AbiETGdV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 02:31:55 -0400
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80685286EA;
-        Thu, 19 May 2022 23:31:52 -0700 (PDT)
-Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 5483A100008;
-        Fri, 20 May 2022 06:31:48 +0000 (UTC)
-Date:   Fri, 20 May 2022 08:31:46 +0200
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Quentin Schulz <quentin.schulz@theobroma-systems.com>
-Cc:     Quentin Schulz <foss+kernel@0leil.net>, shawnx.tu@intel.com,
-        mchehab@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 4/4] media: i2c: ov5675: add .get_selection support
-Message-ID: <20220520063146.czduh63siiwmryen@uno.localdomain>
-References: <20220509143226.531117-1-foss+kernel@0leil.net>
- <20220509143226.531117-4-foss+kernel@0leil.net>
- <20220512090553.x7mzsj3ff3u5gqxq@uno.localdomain>
- <b77d43d5-4a50-3da2-67b4-65224a82a202@theobroma-systems.com>
- <20220517111814.gcu7zcog4atqzwdc@uno.localdomain>
- <9e1fc111-0a64-5a01-8ec2-77a9b60d1535@theobroma-systems.com>
+        Fri, 20 May 2022 02:33:21 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E0C14CA03
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 23:33:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653028400; x=1684564400;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=kTIPLuMMhYIb9gAUdTsnisHkLhqTeVG36MB99AR/ruo=;
+  b=P3lFH245Lv0mP/OwwdRbYQIWO0+qO+uj8Txa5W4/YReVIpgT06fwpazp
+   6M3u3BCRx6TTZY0kgsmnru3tAc6yRSAncuHy+/NrOKL+9VbyKECwHcvdV
+   EN32sqq+THN/fSj0piAuTbNj1CfYTI/fTas2RP1Xm9NMvk1ygHWK5cF4R
+   We0Hi4jDDZt/r9na04mfNnP85gvMHAXA18CIegxE3JWxlu74IBJLxNRdN
+   hgmcf7mCHnZnzZkj91KhL06yVPFeVgMRoWiL8mqaJ8uKYybo/JIQIqA3A
+   zwJLGbeFO+29cMqrCSBaziVFOUjZLg86yrgbC/Np/mt9uk8FNC35H5dUu
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="253024365"
+X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
+   d="scan'208";a="253024365"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 23:33:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
+   d="scan'208";a="818398254"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 19 May 2022 23:33:19 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nrwCM-0004Mq-J9;
+        Fri, 20 May 2022 06:33:18 +0000
+Date:   Fri, 20 May 2022 14:32:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [avpatel:riscv_iommu_dtbind_v1 30/37] include/linux/stddef.h:8:14:
+ warning: initialization of 'unsigned int' from 'void *' makes integer from
+ pointer without a cast
+Message-ID: <202205201424.VySxQhcM-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9e1fc111-0a64-5a01-8ec2-77a9b60d1535@theobroma-systems.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,PDS_OTHER_BAD_TLD,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Quentin,
+tree:   https://github.com/avpatel/linux.git riscv_iommu_dtbind_v1
+head:   faeb35c454e84e3b0cc70389d5ae25a84416dad6
+commit: 2e1468f8a505d8b65cf6e3e77348690d9b167923 [30/37] RISC-V: KVM: Add G-stage ioremap() and iounmap() functions
+config: arm64-defconfig (https://download.01.org/0day-ci/archive/20220520/202205201424.VySxQhcM-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/avpatel/linux/commit/2e1468f8a505d8b65cf6e3e77348690d9b167923
+        git remote add avpatel https://github.com/avpatel/linux.git
+        git fetch --no-tags avpatel riscv_iommu_dtbind_v1
+        git checkout 2e1468f8a505d8b65cf6e3e77348690d9b167923
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-On Tue, May 17, 2022 at 02:47:06PM +0200, Quentin Schulz wrote:
-> Hi Jacopo,
->
-> On 5/17/22 13:18, Jacopo Mondi wrote:
-> > Hi Quentin
-> >
-> > On Tue, May 17, 2022 at 11:25:17AM +0200, Quentin Schulz wrote:
-> > > Hi Jacopo,
-> > >
-> > > On 5/12/22 11:05, Jacopo Mondi wrote:
-> > > > Hi Quentin,
-> > > >
-> > > > On Mon, May 09, 2022 at 04:32:26PM +0200, Quentin Schulz wrote:
-> > > > > From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-> > > > >
-> > > > > The sensor has 2592*1944 active pixels, surrounded by 16 active dummy
-> > > > > pixels and there are an additional 24 black rows "at the bottom".
-> > > > >
-> > > > > As recommended in the SELECTION API documentation, let's put the first
-> > > > > useful active pixel at the top/left corner (0,0).
-> > > > >
-> > > > > This window is the default and maximal crop allowed by the sensor.
-> > > > >
-> > > > > Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-> > > > > ---
-> > > > >
-> > > > > added in v3
-> > > > >
-> > > > >    drivers/media/i2c/ov5675.c | 25 +++++++++++++++++++++++++
-> > > > >    1 file changed, 25 insertions(+)
-> > > > >
-> > > > > diff --git a/drivers/media/i2c/ov5675.c b/drivers/media/i2c/ov5675.c
-> > > > > index 5544e1ae444e..8e3a5bc6c027 100644
-> > > > > --- a/drivers/media/i2c/ov5675.c
-> > > > > +++ b/drivers/media/i2c/ov5675.c
-> > > > > @@ -78,6 +78,9 @@
-> > > > >    #define OV5675_REG_FORMAT1		0x3820
-> > > > >    #define OV5675_REG_FORMAT2		0x373d
-> > > > >
-> > > > > +#define OV5675_PIXEL_ARRAY_WIDTH	2592U
-> > > > > +#define OV5675_PIXEL_ARRAY_HEIGHT	1944U
-> > > > > +
-> > > > >    #define to_ov5675(_sd)			container_of(_sd, struct ov5675, sd)
-> > > > >
-> > > > >    static const char * const ov5675_supply_names[] = {
-> > > > > @@ -1115,6 +1118,27 @@ static int ov5675_get_format(struct v4l2_subdev *sd,
-> > > > >    	return 0;
-> > > > >    }
-> > > > >
-> > > > > +static int ov5675_get_selection(struct v4l2_subdev *sd,
-> > > > > +				struct v4l2_subdev_state *state,
-> > > > > +				struct v4l2_subdev_selection *sel)
-> > > > > +{
-> > > > > +	if (sel->which != V4L2_SUBDEV_FORMAT_ACTIVE)
-> > > > > +		return -EINVAL;
-> > > > > +
-> > > > > +	switch (sel->target) {
-> > > > > +	case V4L2_SEL_TGT_CROP:
-> > > > > +	case V4L2_SEL_TGT_CROP_DEFAULT:
-> > > > > +	case V4L2_SEL_TGT_CROP_BOUNDS:
-> > > > > +		/* In HW, top/left corner is actually at (16,16) */
-> > > > > +		sel->r.top = 0;
-> > > > > +		sel->r.left = 0;
-> > > > > +		sel->r.width = OV5675_PIXEL_ARRAY_WIDTH;
-> > > > > +		sel->r.height = OV5675_PIXEL_ARRAY_HEIGHT;
-> > > > > +		return 0;
-> > > > > +	}
-> > > >
-> > > > CROP_NATIVE = the full pixel array size = 2592x1944
-> > > >
-> > > > CROP_BOUNDS = the rectangle that contains all possible crop
-> > > >                 rectangles, aka the readable portion of your pixel array.
-> > > >                 If in your case the sensor can read out dummy and non
-> > > >                 active lines this is == NATIVE
-> > > >
-> > > > CROP_DEFAULT = the active/valid pixel area. If there are any
-> > > >                  dummy/invalid lines the DEFAULT rectangle should not
-> > > >                  include them
-> > > >
-> > > > CROP = the portion of the active pixel area cropped to produce the
-> > > >          final image. You should look into the modes definition and
-> > > >          inspect what values are programmed in register 0x380x (I don't
-> > > >          have a datasheet hence I don't know what corresponds to what)
-> > > >
-> > > > Does this make any sense to you ?
-> > > >
-> > >
-> > > It's difficult to make sense of the datasheet to be honest.
-> > >
-> >
-> > Seems like it is made on purpose, isn't it :)
-> >
-> >
-> > > There's a 3296x2480px "full-size" rectangle, then the sensor array output
-> >
-> > Are there that many blank/invalid lines/cols ?
-> >
->
-> Seems very unlikely, but it's in the schema..
->
-> Can't rule out that they just reused the same schema they had for a bigger
-> sensor and just didn't update the sizes for the full-size rectangle..
->
-> > > area called CROP and configurable through registers 0x380x, then another
-> > > output area called WIN (for window) also configurable through registers
-> > > 0x380x. The WIN area seems to be just a mask applied on top of CROP area
-> > > ("timing is not affected").
-> > >
-> > > On top of that, the schema shows 24 black lines - I assume - incorrectly,
-> > > one after the start of the full-size rectangle, one after the end of the
-> > > full-size rectangle.
-> > >
-> > > Then the sensor array area region in another section explicitly specifies
-> > > the sensor to be 2624x2000px, active dummy pixels (2 16-pixel rows and
-> > > columns) and black lines (1 24-pixel line) included. Which makes the actual
-> > > useful area 2592x1944px.
-> > >
-> > > In the datasheet, the default size for the CROP area is
-> > > 2624x1952px, offset (0,12) and for WIN it is 2592x1944px, offset (16,4)
-> > > (assumed relative to CROP given the second coordinate).
-> > >
-> > > In the kernel driver though, the 2592x1944px mode configures the CROP area
-> > > to be 2624x1968px offset (0,4) and the WIN area to be 2592x1944px, offset
-> > > (16,13).
-> > >
-> > > The datasheet only ever mentions 2592x1944px as being the max resolution of
-> > > the sensor though the sensor output area documentation and registers do not
-> > > mention such a limitation.
-> > >
-> > > Since we're not modifying the crop area at the moment, CROP_DEFAULT and CROP
-> > > would be the same, which would both be 2592x1944px.
-> > >
-> > > For the two others, I'm not sure. Any clue or hint with the info I just
-> > > gave?
-> >
-> > Is my intrpretation of the above correct ?
-> >
-> >                       [2624]
-> >          +------------------------------+
-> >          |     |     16 dummy     |     |
-> >          |------------------------------|
-> >          |     |                  |     |
-> >          |     |     [2592]       |     |
-> >          |     |                  |     |
-> >          |16   |      valid       | 16  |[2000]
-> >          |dummy|                  |dummy|
-> >          |     |            [1944]|     |
-> >          |     |                  |     |
-> >          |------------------------------|
-> >          |     |     24 blacks    |     |
-> >          |------------------------------|
-> >          |     |     16 dummy     |     |
-> >          -------------------------------|
-> >
->
-> the 24 black lines and 16 dummy pixels rows at the bottom are swapped, but
-> otherwise yes.
->
-> BTW, did you use a specific tool to make this schema?
->
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Yes, a keyboard
+All warnings (new ones prefixed by >>):
 
-:p
+   In file included from include/uapi/linux/posix_types.h:5,
+                    from include/uapi/linux/types.h:14,
+                    from include/linux/types.h:6,
+                    from include/linux/kasan-checks.h:5,
+                    from include/asm-generic/rwonce.h:26,
+                    from arch/arm64/include/asm/rwonce.h:71,
+                    from include/linux/compiler.h:248,
+                    from include/asm-generic/bug.h:5,
+                    from arch/arm64/include/asm/bug.h:26,
+                    from include/linux/bug.h:5,
+                    from include/linux/mmdebug.h:5,
+                    from include/linux/mm.h:6,
+                    from include/linux/mman.h:5,
+                    from arch/arm64/kvm/mmu.c:7:
+   arch/arm64/kvm/mmu.c: In function 'kvm_phys_addr_ioremap':
+>> include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' from 'void *' makes integer from pointer without a cast [-Wint-conversion]
+       8 | #define NULL ((void *)0)
+         |              ^
+   arch/arm64/kvm/mmu.c:767:62: note: in expansion of macro 'NULL'
+     767 |         struct kvm_mmu_memory_cache cache = { 0, __GFP_ZERO, NULL, };
+         |                                                              ^~~~
+   include/linux/stddef.h:8:14: note: (near initialization for 'cache.gfp_atomic')
+       8 | #define NULL ((void *)0)
+         |              ^
+   arch/arm64/kvm/mmu.c:767:62: note: in expansion of macro 'NULL'
+     767 |         struct kvm_mmu_memory_cache cache = { 0, __GFP_ZERO, NULL, };
+         |                                                              ^~~~
 
-> >
-> > Math looks right at least:
-> >
-> >          2000 - 16 - 24 - 16 = 1944
-> >          2624 - 16 - 16 = 2592
-> >
-> > As V4L2 selection targets are defined in respect to they larger
-> > sourrounding target, if the documentation about the full size array
-> > (3296,2480) doesn't tell you what offset the readable part is, I think
-> > it's fair to define
-> >          - NATIVE == BOUNDS = (0, 0, 2624, 2000)
-> >          - DEFAULT == CROP = (16, 16, 2592, 1944)
-> >
-> > Or maybe better not define NATIVE at all.
-> >
-> > The skipped rows/cols almost seems to match what the datasheet suggests by
-> > combining the cropping and windowing rectangles top/left offsets (with
-> > 2 cols more skipped compared to my understanding)
-> >
-> >          crop = (0, 12, 2624, 1952)
-> >          win = (16, 6, 2592, 1944)
-> >
-> >          CROP = (16, 18, 2592, 1944)
-> >
-> > The driver does that a little differently with:
-> >
-> >          crop = (0, 4, 2624, 1968)
-> >          win = (16, 13, 2592, 1944)
-> >
-> >          CROP = (16, 17, 2624, 1944)
-> >
-> > Which seems a little off as the driver values for the VTS and HTS
-> > register counts from 0 hence it seems to be skipping 17 rows and 18
-> > cols (maybe the driver adjusts when writing the values to registers ?)
-> >
->
-> Datasheet states that whatever the window, it'll reuse the timings of the
-> crop ("Windowing is achieved by masking off the pixels outside of the
-> window; thus, the original timing is not affected."). So I assume what
-> matters it that the timings are right for the crop.
->
 
-I assume that the "timings" the datasheet refers means the pixel array
-sampling rate, which depends on the "crop" rectangle that define
-the portion of the pixel array fed to the on-board ISP for processing
-(mostly subsampling, as this seems to be a raw sensor ?)
+vim +8 include/linux/stddef.h
 
-The output frame rate will depend instead on the bus link frequency
-and the total image size including blankings (usually configured
-through the registers named VTS/HTS on OV sensors?)
+^1da177e4c3f41 Linus Torvalds   2005-04-16  6  
+^1da177e4c3f41 Linus Torvalds   2005-04-16  7  #undef NULL
+^1da177e4c3f41 Linus Torvalds   2005-04-16 @8  #define NULL ((void *)0)
+6e218287432472 Richard Knutsson 2006-09-30  9  
 
-> > If you feel like it you can try to adjust the driver rectangles, but
-> > in my experience subtle regressions might be introduced by moving
-> > those values, hence I would not be too concerned and just report
-> > whatever the driver does. I assume you're doing this in the context of
-> > pleasing libcamera requirements, and as much as I don't like saying
-> > this, if we're 1 or 2 columns off when reporting the CROP rectangle,
-> > it's not a huge issue.
-> >
->
-> Yes, this patch is for satisfying libcamera requirements.
->
+:::::: The code at line 8 was first introduced by commit
+:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
 
-The most important requirement is to expose VBLANK and PIXEL_RATE as
-they're used calculate the sensor's frame rate. Selection targets are
-mostly useful to populate the camera properties (ie the full pixel
-array size) and to implement digitial zoom, somewhat and "advanced"
-feature, hence they're optional to support.
+:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
+:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
 
-Thanks
-  j
-
-> I also just saw that we actually support two modes for the sensor. So I'll
-> need to get the width and height of the currently selected supported_modes.
-> Fortunately, the window+crop offsets seem identical so there's no need to
-> add some logic for those.
->
-> I'll resend patch 3 and 4 separately so they can be merged and I'll continue
-> fighting with runtime PM on our camera sensor, looking into HW if
-> something's off there.
->
-> Cheers,
-> Quentin
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

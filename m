@@ -2,219 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A8C352EA62
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 12:56:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 857B752EA6A
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 13:00:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348345AbiETK4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 06:56:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49170 "EHLO
+        id S1348307AbiETLAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 07:00:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348324AbiETK4a (ORCPT
+        with ESMTP id S235945AbiETLAv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 06:56:30 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE8A53B40;
-        Fri, 20 May 2022 03:56:25 -0700 (PDT)
-Received: from kwepemi100010.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4L4Nsb5h2Pz1JCKh;
-        Fri, 20 May 2022 18:54:59 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi100010.china.huawei.com (7.221.188.54) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 20 May 2022 18:56:23 +0800
-Received: from [10.174.176.73] (10.174.176.73) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 20 May 2022 18:56:23 +0800
-Subject: Re: [PATCH -next v2] blk-mq: fix panic during blk_mq_run_work_fn()
-To:     Ming Lei <ming.lei@redhat.com>
-CC:     <axboe@kernel.dk>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
-References: <20220520032542.3331610-1-yukuai3@huawei.com>
- <YocOsw6n3y11lNym@T590> <2b7a82e0-1e33-e2ff-74d7-d80f152fdc75@huawei.com>
- <afe9dec4-733d-88e9-850d-5c36e9201119@huawei.com> <YodSlSm/sIC8G2iG@T590>
- <dbe2deec-b007-470f-eb5a-35fae63ad134@huawei.com> <YodlGOo7vrUa7DZK@T590>
-From:   "yukuai (C)" <yukuai3@huawei.com>
-Message-ID: <0e7967de-0c32-790d-fa08-b0bc9ef5923d@huawei.com>
-Date:   Fri, 20 May 2022 18:56:22 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Fri, 20 May 2022 07:00:51 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34DDB7CA;
+        Fri, 20 May 2022 04:00:49 -0700 (PDT)
+Date:   Fri, 20 May 2022 11:00:46 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1653044448;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OfHvb3fruLU2Rg+3l/c/ckZU21HNHw7WDZW9HPhwKk0=;
+        b=Dg3al9neC57Puv7RlGzOlDLp6OBN9jS/QlsLJSmyYVhYnCDYAwJWAaEzVLvM1tkTFUFXOt
+        ZzzzW0YI9YrG2l+SUtvw+WfiaZhdWZQ1DWzG0fOqUQw673EqTNv0cVVzHLt1vwFWxlFsCr
+        fl1FqYwGxM7KxSxmSm9BPmIZ+K7QLoLeW+uBd5kQb1J+6BOeExD37eSV3GBNlxD0CqeYNf
+        kLTUIA3VHbJ37Me4nUKMJDqLxFh0/n2bXh6apnQsMtmU18+lVinu45y3mnKqEvVzU6IZfI
+        yXrow1YpEFbJwkSVmDOo4BptUfjqelpQJRoLCN21BqGyfPlSl3vHEHhbVxpokQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1653044448;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OfHvb3fruLU2Rg+3l/c/ckZU21HNHw7WDZW9HPhwKk0=;
+        b=YAxvw4U6dlfDaGOaoYObAEL0yq8lLnf72uhg5gz7rkN5qlTzbsqSvXL1CA6e68UCIrzXXp
+        m06UmvTiQzB5SzCA==
+From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/tdx] x86/tdx: Fix RETs in TDX asm
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Borislav Petkov <bp@suse.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220520083839.GR2578@worktop.programming.kicks-ass.net>
+References: <20220520083839.GR2578@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-In-Reply-To: <YodlGOo7vrUa7DZK@T590>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.73]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <165304444691.4207.14334435844427241995.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/05/20 17:53, Ming Lei 写道:
-> On Fri, May 20, 2022 at 04:49:19PM +0800, yukuai (C) wrote:
->> 在 2022/05/20 16:34, Ming Lei 写道:
->>> On Fri, May 20, 2022 at 03:02:13PM +0800, yukuai (C) wrote:
->>>> 在 2022/05/20 14:23, yukuai (C) 写道:
->>>>> 在 2022/05/20 11:44, Ming Lei 写道:
->>>>>> On Fri, May 20, 2022 at 11:25:42AM +0800, Yu Kuai wrote:
->>>>>>> Our test report a following crash:
->>>>>>>
->>>>>>> BUG: kernel NULL pointer dereference, address: 0000000000000018
->>>>>>> PGD 0 P4D 0
->>>>>>> Oops: 0000 [#1] SMP NOPTI
->>>>>>> CPU: 6 PID: 265 Comm: kworker/6:1H Kdump: loaded Tainted: G
->>>>>>> O      5.10.0-60.17.0.h43.eulerosv2r11.x86_64 #1
->>>>>>> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
->>>>>>> rel-1.12.1-0-ga5cab58-20220320_160524-szxrtosci10000 04/01/2014
->>>>>>> Workqueue: kblockd blk_mq_run_work_fn
->>>>>>> RIP: 0010:blk_mq_delay_run_hw_queues+0xb6/0xe0
->>>>>>> RSP: 0018:ffffacc6803d3d88 EFLAGS: 00010246
->>>>>>> RAX: 0000000000000006 RBX: ffff99e2c3d25008 RCX: 00000000ffffffff
->>>>>>> RDX: 0000000000000000 RSI: 0000000000000003 RDI: ffff99e2c911ae18
->>>>>>> RBP: ffffacc6803d3dd8 R08: 0000000000000000 R09: ffff99e2c0901f6c
->>>>>>> R10: 0000000000000018 R11: 0000000000000018 R12: ffff99e2c911ae18
->>>>>>> R13: 0000000000000000 R14: 0000000000000003 R15: ffff99e2c911ae18
->>>>>>> FS:  0000000000000000(0000) GS:ffff99e6bbf00000(0000)
->>>>>>> knlGS:0000000000000000
->>>>>>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>>>>>> CR2: 0000000000000018 CR3: 000000007460a006 CR4: 00000000003706e0
->>>>>>> Call Trace:
->>>>>>>     __blk_mq_do_dispatch_sched+0x2a7/0x2c0
->>>>>>>     ? newidle_balance+0x23e/0x2f0
->>>>>>>     __blk_mq_sched_dispatch_requests+0x13f/0x190
->>>>>>>     blk_mq_sched_dispatch_requests+0x30/0x60
->>>>>>>     __blk_mq_run_hw_queue+0x47/0xd0
->>>>>>>     process_one_work+0x1b0/0x350
->>>>>>>     worker_thread+0x49/0x300
->>>>>>>     ? rescuer_thread+0x3a0/0x3a0
->>>>>>>     kthread+0xfe/0x140
->>>>>>>     ? kthread_park+0x90/0x90
->>>>>>>     ret_from_fork+0x22/0x30
->>>>>>>
->>>>>>> After digging from vmcore, I found that the queue is cleaned
->>>>>>> up(blk_cleanup_queue() is done) and tag set is
->>>>>>> freed(blk_mq_free_tag_set() is done).
->>>>>>>
->>>>>>> There are two problems here:
->>>>>>>
->>>>>>> 1) blk_mq_delay_run_hw_queues() will only be called from
->>>>>>> __blk_mq_do_dispatch_sched() if e->type->ops.has_work() return true.
->>>>>>> This seems impossible because blk_cleanup_queue() is done, and there
->>>>>>> should be no io. Commit ddc25c86b466 ("block, bfq: make bfq_has_work()
->>>>>>> more accurate") fix the problem in bfq. And currently ohter schedulers
->>>>>>> don't have such problem.
->>>>>>>
->>>>>>> 2) 'hctx->run_work' still exists after blk_cleanup_queue().
->>>>>>> blk_mq_cancel_work_sync() is called from blk_cleanup_queue() to cancel
->>>>>>> all the 'run_work'. However, there is no guarantee that new 'run_work'
->>>>>>> won't be queued after that(and before blk_mq_exit_queue() is done).
->>>>>>
->>>>>> It is blk_mq_run_hw_queue() caller's responsibility to grab
->>>>>> ->q_usage_counter for avoiding queue cleaned up, so please fix the user
->>>>>> side.
->>>>>>
->>>>> Hi,
->>>>>
->>>>> Thanks for your advice.
->>>>>
->>>>> blk_mq_run_hw_queue() can be called async, in order to do that, what I
->>>>> can think of is that grab 'q_usage_counte' before queuing 'run->work'
->>>>> and release it after. Which is very similar to this patch...
->>>>
->>>> Hi,
->>>>
->>>> How do you think about following change:
->>>>
->>>
->>> I think the issue is in blk_mq_map_queue_type() which may touch tagset.
->>>
->>> So please try the following patch:
->>>
->>>
->>> diff --git a/block/blk-mq.c b/block/blk-mq.c
->>> index ed1869a305c4..5789e971ac83 100644
->>> --- a/block/blk-mq.c
->>> +++ b/block/blk-mq.c
->>> @@ -2174,8 +2174,7 @@ static bool blk_mq_has_sqsched(struct request_queue *q)
->>>     */
->>>    static struct blk_mq_hw_ctx *blk_mq_get_sq_hctx(struct request_queue *q)
->>>    {
->>> -	struct blk_mq_hw_ctx *hctx;
->>> -
->>> +	struct blk_mq_ctx *ctx = blk_mq_get_ctx(q);
->>>    	/*
->>>    	 * If the IO scheduler does not respect hardware queues when
->>>    	 * dispatching, we just don't bother with multiple HW queues and
->>> @@ -2183,8 +2182,8 @@ static struct blk_mq_hw_ctx *blk_mq_get_sq_hctx(struct request_queue *q)
->>>    	 * just causes lock contention inside the scheduler and pointless cache
->>>    	 * bouncing.
->>>    	 */
->>> -	hctx = blk_mq_map_queue_type(q, HCTX_TYPE_DEFAULT,
->>> -				     raw_smp_processor_id());
->>> +	struct blk_mq_hw_ctx *hctx = blk_mq_map_queue(q, 0, ctx);
->>> +
->>>    	if (!blk_mq_hctx_stopped(hctx))
->>>    		return hctx;
->>>    	return NULL;
->>
->> Hi, Ming
->>
->> This patch do make sense, however, this doesn't fix the root cause, it
-> 
-> Isn't the root cause that tagset is referred after blk_cleanup_queue
-> returns?
+The following commit has been merged into the x86/tdx branch of tip:
 
-No, it's not the root cause. If we can make sure 'hctx->run_work' won't
-exist after blk_cleanup_queue(), such problem won't be triggered.
+Commit-ID:     c796f02162e428b595ff70196dca161ee46b163b
+Gitweb:        https://git.kernel.org/tip/c796f02162e428b595ff70196dca161ee46b163b
+Author:        Peter Zijlstra <peterz@infradead.org>
+AuthorDate:    Fri, 20 May 2022 10:38:39 +02:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Fri, 20 May 2022 12:53:22 +02:00
 
-Actually, blk_cleaup_queue() already call blk_mq_cancel_work_sync() to
-do that, however, new 'hctx->run_work' can be queued after that.
-> 
->> just bypass the problem like commit ddc25c86b466 ("block, bfq: make
->> bfq_has_work() more accurate"), which will prevent
->> blk_mq_delay_run_hw_queues() to be called in such case.
-> 
-> How can?
-See the call trace:
+x86/tdx: Fix RETs in TDX asm
 
-__blk_mq_do_dispatch_sched+0x2a7/0x2c0
-? newidle_balance+0x23e/0x2f0
-__blk_mq_sched_dispatch_requests+0x13f/0x190
-blk_mq_sched_dispatch_requests+0x30/0x60
-__blk_mq_run_hw_queue+0x47/0xd0
-process_one_work+0x1b0/0x350 -> hctx->run_work
+Because build-testing is over-rated, fix a few trivial objtool complaints:
 
-details how blk_mq_delay_run_hw_queues() is called:
-__blk_mq_do_dispatch_sched
-  if (e->type->ops.has_work && !e->type->ops.has_work(hctx))
-   break -> has_work has to return true.
+  vmlinux.o: warning: objtool: __tdx_module_call+0x3e: missing int3 after ret
+  vmlinux.o: warning: objtool: __tdx_hypercall+0x6e: missing int3 after ret
 
-  rq = e->type->ops.dispatch_request(hctx);
-  if (!rq)
-   run_queue = true
-   break; -> dispatch has to failed
+Fixes: eb94f1b6a70a ("x86/tdx: Add __tdx_module_call() and __tdx_hypercall() helper functions")
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/20220520083839.GR2578@worktop.programming.kicks-ass.net
+---
+ arch/x86/coco/tdx/tdcall.S | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-  if (run_queue)
-   blk_mq_delay_run_hw_queues(q, BLK_MQ_BUDGET_DELAY);
-
-Thus if 'has_work' is accurate, blk_mq_delay_run_hw_queues() won't be
-called if there is no io.
-> 
->>
->> I do think we need to make sure 'run_work' doesn't exist after
->> blk_cleanup_queue().
-> 
-> Both hctx and request queue are fine to be referred after blk_cleanup_queue
-> returns, what can't be referred is tagset.
-
-I agree with that, however, I think we still need to reach an agreement
-about root cause of this problem...
-
-Thanks,
-Kuai
+diff --git a/arch/x86/coco/tdx/tdcall.S b/arch/x86/coco/tdx/tdcall.S
+index eeb4511..f9eb113 100644
+--- a/arch/x86/coco/tdx/tdcall.S
++++ b/arch/x86/coco/tdx/tdcall.S
+@@ -73,7 +73,7 @@ SYM_FUNC_START(__tdx_module_call)
+ 	FRAME_BEGIN
+ 	TDX_MODULE_CALL host=0
+ 	FRAME_END
+-	ret
++	RET
+ SYM_FUNC_END(__tdx_module_call)
+ 
+ /*
+@@ -196,7 +196,7 @@ SYM_FUNC_START(__tdx_hypercall)
+ 
+ 	FRAME_END
+ 
+-	retq
++	RET
+ .Lpanic:
+ 	call __tdx_hypercall_failed
+ 	/* __tdx_hypercall_failed never returns */

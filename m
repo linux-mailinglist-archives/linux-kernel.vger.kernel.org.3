@@ -2,175 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D3CD52F362
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 20:46:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC94552F366
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 20:47:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352069AbiETSqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 14:46:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49984 "EHLO
+        id S1352817AbiETSrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 14:47:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352929AbiETSqL (ORCPT
+        with ESMTP id S236364AbiETSrI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 14:46:11 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97FAD7C167
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 11:46:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653072369; x=1684608369;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=lEl6XDV2Lb5+CEHDctzerJoj2UobczRglX6ZOKeaOyU=;
-  b=SJ4uq5QVSqRycDtULQ9fqSAJhScGImErcYV27td41RK3kXazUGx+X5DX
-   gzqLHoNEkg3x3B3lGB31m7S61yLpBHjT/PeWOVgpDd5bGXyia7I6HeFIz
-   9s7lczsToK2T0UFMgmQdxEUbm/7rkP6l49xN+KebPPwdSptyR3//dHlEv
-   Za7VEpTBTPezHH6O5by4SNIx4ymcGhGRyWUHplF0Ne5ds8FwzUOJ4hL5b
-   4QZkk5TETmszKEoIr4KtTiQxKhxSGoWO/pioUA1sgr8/+YTXxHAE22dt1
-   X9OAp6fWqE5S4WwU0d1wFEbhHdz9mbfr6o4b26P/1A+Ab0bm+NmvOF+sG
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10353"; a="359105425"
-X-IronPort-AV: E=Sophos;i="5.91,240,1647327600"; 
-   d="scan'208";a="359105425"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 11:46:09 -0700
-X-IronPort-AV: E=Sophos;i="5.91,240,1647327600"; 
-   d="scan'208";a="701877348"
-Received: from schen9-mobl.amr.corp.intel.com ([10.209.57.48])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 11:46:08 -0700
-Message-ID: <aa8746fbb27849ee34ddb0ff028d0a1ee064c506.camel@linux.intel.com>
-Subject: Re: [PATCH v2 0/7] Add latency_nice priority
-From:   Tim Chen <tim.c.chen@linux.intel.com>
-To:     Chris Hyser <chris.hyser@oracle.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
-        qais.yousef@arm.com, valentin.schneider@arm.com,
-        patrick.bellasi@matbug.net, David.Laight@aculab.com,
-        pjt@google.com, pavel@ucw.cz, tj@kernel.org, qperret@google.com,
-        joshdon@google.com, len.brown@intel.com
-Date:   Fri, 20 May 2022 11:46:08 -0700
-In-Reply-To: <9c0f9158-2d0c-dba9-1505-79ba4e642684@oracle.com>
-References: <20220512163534.2572-1-vincent.guittot@linaro.org>
-         <f1f50c52673aa1873b4a4d3b6b15250d4bf390f9.camel@linux.intel.com>
-         <CAKfTPtBEHyP202duKwJi+GVNTMza+L_PuK3hmUxcjKnODOuRjw@mail.gmail.com>
-         <9c0f9158-2d0c-dba9-1505-79ba4e642684@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+        Fri, 20 May 2022 14:47:08 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9066F941AE;
+        Fri, 20 May 2022 11:47:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1653072426; x=1684608426;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=AmggUx1E4WjOTJi2d8/NCr6el8KzJxZxVGbSr2RIJ6M=;
+  b=B+pFQJ/HxtDZkr5WWiwd4SGp0lqUVlDbv0ppUCpoY2InBBFrp6DPzjgx
+   ZIx0jTZLTiG0wl6OI15Z5yytfZyp/IeFOZe9lo1zdre6AKSDP3Y4Xsrwc
+   DqSjhXSs7gV/LTi8m2Z0Yz7AQgwZsvBkCVzI5ruZt/w4SvTpGlm479pRN
+   4=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 20 May 2022 11:47:06 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 11:47:05 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 20 May 2022 11:47:05 -0700
+Received: from [10.79.43.230] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 20 May
+ 2022 11:47:01 -0700
+Subject: Re: [PATCH v4 2/3] dt-bindings: remoteproc: qcom: Convert SC7280 MSS
+ bindings to YAML
+To:     Stephen Boyd <swboyd@chromium.org>, <bjorn.andersson@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>
+CC:     <ohad@wizery.com>, <agross@kernel.org>,
+        <mathieu.poirier@linaro.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <mka@chromium.org>
+References: <1652978825-5304-1-git-send-email-quic_sibis@quicinc.com>
+ <1652978825-5304-3-git-send-email-quic_sibis@quicinc.com>
+ <CAE-0n50iYAUmj6GEdCuOJ1d_SgeeFWtoxqWf7qN=jZ_js4wBcQ@mail.gmail.com>
+From:   Sibi Sankar <quic_sibis@quicinc.com>
+Message-ID: <1289c2e4-5607-b515-88b1-f44585e62cd3@quicinc.com>
+Date:   Sat, 21 May 2022 00:16:58 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <CAE-0n50iYAUmj6GEdCuOJ1d_SgeeFWtoxqWf7qN=jZ_js4wBcQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-05-19 at 14:14 -0400, Chris Hyser wrote:
-> On 5/19/22 10:16 AM, Vincent Guittot wrote:
-> > On Fri, 13 May 2022 at 23:44, Tim Chen <tim.c.chen@linux.intel.com> wrote:
-> > > On Thu, 2022-05-12 at 18:35 +0200, Vincent Guittot wrote:
-> > > > This patchset restarts the work about adding a latency nice priority to
-> > > > describe the latency tolerance of cfs tasks.
-> > > > 
-> > > > The patches [1-4] have been done by Parth:
-> > > > https://lore.kernel.org/lkml/20200228090755.22829-1-parth@linux.ibm.com/
-> > > > 
-> > > > I have just rebased and moved the set of latency priority outside the
-> > > > priority update. I have removed the reviewed tag because the patches
-> > > > are 2 years old.
-> > > > 
-> > > 
-> > > Vincent,
-> > > 
-> > > Thanks for introducing the feature again, which is much needed.  I am trying
-> > > to look at the problem again from usage point of view. And wonder if
-> > > there are ways to make the latency_nice knob easier to use.
-> > > 
-> > > The latency nice value here is relative.  A latency sensitive task
-> > > may not tell if setting the latency_nice to -5, or to -10 is good enough.
-> > > It depends on what other tasks are setting their latency_nice value to.
-> > > What a task does know is what it it doing and its characteristics.
-> > > For instance for client tasks, we may have categories such as
-> > > 
-> > > Task Category                                   latency_nice_range
-> > > -------------                                   ------------------
-> > > urgent                                          -19 to -16
-> > > media playback                                  -15 to -11
-> > > interactive (e.g.pressing key)                  -10 to -6
-> > > normal                                          -5  to  9
-> > > background                                       10  to 15
-> > > opportunistic soaker task (sched_idle class)     16 to  20
-> > > 
-> > > And we could allow a task to set attribute of which task category applies
-> > > to it and the OS can set a default latency nice value in its task category.
-> > > So a task can just declare itself what kind of task it is, and not worry about
-> > > actually setting a latency nice value which it may not know
-> > > what is appopriate.
-> > > If needed, a task could still adjust its latency nice value within the range to
-> > > differentiate itself in a task category. And we will prevent
-> > > a task from seeting inappropriate latency nice value out of the right range.
-> > 
-> > The description above make sense but I'm not sure this should be put
-> > as part of the interface but more in the documentation to describe how
-> > system can make use of nice_latency
-> > > Knowing a task characteristics will also be helpful with other
-> > > scheduling decisions, like placing a task on a more high performing
-> > > core in hetero systems.
-> > 
-> > Ok so you would like a more general interface than an latency
-> > interface but a way to set some attributes to a task so we can make
-> > smarter decision
-> 
-> The original definition of latency nice was as a task attribute describing the latency sensitivity of the task. The fact 
-> that it was mapped to 'nice' values created too much granularity and made it look more like a tuning knob than a 
-> statement about the characteristics of the task as intended.
-> 
-> > > I think the missing piece here is a way for a task to declare
-> > > what kind of task it is.  I think that will make things easier.
-> 
-> A classification of tasks into categories would be useful, but perhaps one level up in a user space tool or a user's 
-> head (ie docs). For any of the categories you describe, there may be a number of per-task attributes beyond latency 
-> sensitivity needed to capture the task characteristics you mention and ideally would be set in specific ways. Say 'nice' 
-> values, oom kill, etc. And others may make sense in the future, like say NUMA sensitivity, etc.
-> 
-> Basically, a category can map to a bunch of desired default values for various scheduler visible task attributes.
+Hey Stephen,
 
-Yes.  I think having a default value for each category will make the setting of the attributes
-consistent and life of a task simpler.
+On 5/20/22 4:05 AM, Stephen Boyd wrote:
+> Quoting Sibi Sankar (2022-05-19 09:47:04)
+>> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-mss-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-mss-pil.yaml
+>> new file mode 100644
+>> index 000000000000..a936d84eefa6
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-mss-pil.yaml
+>> @@ -0,0 +1,250 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/remoteproc/qcom,sc7280-mss-pil.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Qualcomm SC7280 MSS Peripheral Image Loader
+>> +
+>> +maintainers:
+>> +  - Sibi Sankar <quic_sibis@quicinc.com>
+>> +
+>> +description:
+>> +  This document describes the hardware for a component that loads and boots firmware
+>> +  on the Qualcomm Technology Inc. SC7280 Modem Hexagon Core.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - qcom,sc7280-mss-pil
+>> +
+> [..]
+>> +
+>> +  resets:
+>> +    items:
+>> +      - description: AOSS restart
+>> +      - description: PDC reset
+>> +
+>> +  reset-names:
+>> +    items:
+>> +      - const: mss_restart
+>> +      - const: pdc_reset
+>> +
+>> +  memory-region:
+>> +    maxItems: 2
+>> +    description: Phandle reference to the reserved-memory for the MBA region followed
+>> +                 by the modem region.
+>> +
+>> +  firmware-name:
+>> +    $ref: /schemas/types.yaml#/definitions/string-array
+>> +    maxItems: 2
+> 
+> Instead of maxItems can this be
+> 
+>         items:
+>           - description: Name of MBA firmware
+> 	 - description: Name of modem firmware
+> 
+> so that we know the order? Same for 'memory-region' above.
 
-Without guidance, one media playback task can set its latency_nice to be -5, 
-and another interactive task doing computation and displaying results to user
-set its latency_nice to be -6. We would have the interactive task running ahead of the media playback,
-which is undesired.  Just letting each task set its own latency_nice value will not achieve the
-desired effect.  We need guidance on what attribute value a certain task category 
-should use (as in documentation that Vincent mentioned).
-
-Or let OS set the attribute to some sensible value if it knows the task category.
+ack
 
 > 
-> Now you could also take the idea in the other direction where you set a "category value" for a task and have the kernel 
-> pick the other attribute defaults like 'nice' that would typically apply to tasks in the category, but I think letting 
-> user space figure stuff out and then set low level kernel task attributes primitives is cleaner.
+>> +    description:
+>> +      The name of the MBA and modem firmware to be loaded for this remote processor.
+>> +
+>> +  qcom,halt-regs:
+>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> 
+> Should this have maxItems: 1? Or that's implicit from description?
 
-It is cleaner for the OS to give the knob to the user and say, "set it".
-But users need guidance on what knob value they should use,
-or even better, they don't need to worry about setting the knob.
-I think it is easy for the user to set task category correctly, but
-harder to set the low level knobs.
-
-I can see that it is easy to set the latency_nice knob incorrectly.
-The absolute value of the knob doesn't matter. Only the relative values
-between tasks do. So we need all the tasks to agree on what latency-nice
-to use for a task category.  
-
-Tim
-
+It's implicit!
 
 > 
-> -chrish
+>> +    description:
+>> +      Phandle reference to a syscon representing TCSR followed by the
+>> +      four offsets within syscon for q6, modem, nc and vq6 halt registers.
+>> +
+>> +  qcom,ext-regs:
+>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> 
+> Should this have min/maxItems: 2?
 
+ack
+
+> 
+>> +    description:
+>> +      Two phandle references to syscons representing TCSR_REG and TCSR register
+>> +      space followed by the two offsets within the syscon to force_clk_en/rscc_disable
+>> +      and axim1_clk_off/crypto_clk_off registers respectively.
+>> +
+>> +  qcom,qaccept-regs:
+>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+>> +    description:
+>> +      Phandle reference to a syscon representing TCSR followed by the
+>> +      three offsets within syscon for mdm, cx and axi qaccept registers.
+>> +
+>> +  qcom,qmp:
+>> +    $ref: /schemas/types.yaml#/definitions/phandle
+>> +    description: Reference to the AOSS side-channel message RAM.
+>> +
+>> +  qcom,smem-states:
+>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+>> +    description: States used by the AP to signal the Hexagon core
+>> +    items:
+>> +      - description: Stop the modem
+> 
+> This one did items for a phandle array so I think we should follow the
+> same above.
+
+ack
+
+> 
+>> +
+>> +  qcom,smem-state-names:
+>> +    description: The names of the state bits used for SMP2P output
+>> +    const: stop
+>> +
+>> +  glink-edge:
+>> +    $ref: qcom,glink-edge.yaml#
+>> +    description:
+>> +      Qualcomm G-Link subnode which represents communication edge, channels
+>> +      and devices related to the DSP.
+> [..]
+>> +        power-domain-names = "cx", "mss";
+>> +
+>> +        memory-region = <&mba_mem>, <&mpss_mem>;
+>> +
+>> +        qcom,qmp = <&aoss_qmp>;
+>> +
+>> +        qcom,smem-states = <&modem_smp2p_out 0>;
+>> +        qcom,smem-state-names = "stop";
+>> +
+>> +        resets = <&aoss_reset AOSS_CC_MSS_RESTART>,
+>> +                 <&pdc_reset PDC_MODEM_SYNC_RESET>;
+>> +        reset-names = "mss_restart", "pdc_reset";
+>> +
+>> +        qcom,halt-regs = <&tcsr_mutex 0x23000 0x25000 0x28000 0x33000>;
+>> +        qcom,ext-regs = <&tcsr 0x10000 0x10004 &tcsr_mutex 0x26004 0x26008>;
+> 
+> Because it's two items I'd expect:
+> 	
+> 	<&tcsr 0x10000 0x10004>, <&tcsr_mutex 0x26004 0x26008>;
+
+I guess both the ways work since the driver uses
+of_parse_phandle_with_fixed_args.
+
+> 
+>> +        qcom,qaccept-regs = <&tcsr_mutex 0x23030 0x23040 0x23020>;
+>> +
+>> +        glink-edge {
+>> +            interrupts-extended = <&ipcc IPCC_CLIENT_MPSS
+>> +                                   IPCC_MPROC_SIGNAL_GLINK_QMP
+>> +                                   IRQ_TYPE_EDGE_RISING>;

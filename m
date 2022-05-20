@@ -2,127 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C8AA52EE09
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 16:22:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B4E052EE0D
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 16:23:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350228AbiETOWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 10:22:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58672 "EHLO
+        id S1350244AbiETOXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 10:23:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345975AbiETOWw (ORCPT
+        with ESMTP id S1345583AbiETOXP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 10:22:52 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CF8916329D;
-        Fri, 20 May 2022 07:22:51 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id o22so9837327ljp.8;
-        Fri, 20 May 2022 07:22:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=m/O8UBKE0c2cSYufgjXBbNvLdDE1ALuRtN6rsL7jV4U=;
-        b=Y1n9Tpe6rOxQyxePWnDR1MaQDvfpGxBGwVuDCY1yXBOYEgPEjnN1XN6rYIHpAeVbL4
-         u09U6NhvUpj+CX5cPGqgcEv9QTndEm7qNfvKNBc/Fk2GjqaIqQwmzF8Juns3jFsnfYDI
-         OC3OYS5xLjXLkORT6TJCO5Q1KLlccUr2QwrSt5Alee+t49+mDWgrCtM1DO4LZIKyxl4H
-         5ZKt9Gug9r11C8IO4WvXs5rSaaAsfdDbhwEW0furWWyejeTQs09uR7HZbifCIhDR7xZ2
-         WTF22eaVs2CuwS8jd/3segFqU7vV1MXXMewC7OtmlZagRZDQalKLgEknB8xwBdr9tGQT
-         o85Q==
+        Fri, 20 May 2022 10:23:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C809D1632A7
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 07:23:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653056593;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YJC1yK9IYkMDQ2u1869gK2NvV1iKqVWIKXw6SqG9e5g=;
+        b=OTkkKm+NBUK11aCK055ifoCIhgAWDIgrwGPNO6GAC6twaxB/CMtprmQPLXTKtRQZ7qeZz/
+        u1RJtNzsNd7pBD0zZhV2/685hosT/RCGnrQC7zgYL8NmFjkQRv/l3nhvOFJFirJWgOnayX
+        81C1HsVQbH5Yp2df5WLEw3BKVOsdTJA=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-171-CgOfc_DRN_OkJGw95-NS2w-1; Fri, 20 May 2022 10:23:10 -0400
+X-MC-Unique: CgOfc_DRN_OkJGw95-NS2w-1
+Received: by mail-wm1-f70.google.com with SMTP id m31-20020a05600c3b1f00b003973a563605so369752wms.9
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 07:23:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=m/O8UBKE0c2cSYufgjXBbNvLdDE1ALuRtN6rsL7jV4U=;
-        b=OzVqVqka4KxN+i9gSvIMDmn4bupEh7KjbLC0Ln27Wiqj1RyluEiQlduDI+2wGZYS8a
-         JzpnyJbmXOvzxQTbWhcC3i5fHt4oAJQmDeb2KRnT8UMzxp1GTrSfH8+XsxdRRTdmfpdS
-         Q8/yX0mhKPL67tJn2tIKRCpGWi1g7G39d2pT2D1iVhRe+0od1eFIV+wtLjR3uz8Cl3IU
-         WildLWbSUOvDawODuGOZrDNTptYi5idusUoRy3QuVLMEwWAgZW8YbqQo0DR1Jl//FhVF
-         FiCSzgupKu/m+51aaH1mYt67pZpsjaJfQ7KEpVG9y98VkUs2aiawansta6v5YA0xVX1I
-         N1KA==
-X-Gm-Message-State: AOAM533jEb5coC1a8ep60TyKIG73hh0idbQMh5pBJRWK+71fIsPcx4kN
-        8JdcKITveZLXSLyyCOGh8W4=
-X-Google-Smtp-Source: ABdhPJyuKO7AzKSZ1dg5Btd/SfXZvnHzAuI8HlG677gz26ktEZ3LD4xIAFSufc94XaudHIKZGHVxCg==
-X-Received: by 2002:a2e:9d87:0:b0:253:e12a:916a with SMTP id c7-20020a2e9d87000000b00253e12a916amr2197ljj.502.1653056569307;
-        Fri, 20 May 2022 07:22:49 -0700 (PDT)
-Received: from orome ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id c5-20020a056512324500b00477b6ffffa6sm679897lfr.65.2022.05.20.07.22.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 07:22:48 -0700 (PDT)
-Date:   Fri, 20 May 2022 16:22:45 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, linux-pwm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel@collabora.com,
-        nfraprado@collabora.com
-Subject: Re: [PATCH 0/2] MediaTek Helio X10 MT6795 - PWM driver
-Message-ID: <YoekNfGTvCfjDMDp@orome>
-References: <20220503105405.54832-1-angelogioacchino.delregno@collabora.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=YJC1yK9IYkMDQ2u1869gK2NvV1iKqVWIKXw6SqG9e5g=;
+        b=UFmFnMvs5KKgR/HdqKiKzlurnCQ/3VpC4U5f5lzsVDk7HH2ggbzKdiaSH+UtZHrqky
+         Rg9C+tjp3pAH/S1qIb1NWOr8z4Pmusur0+Er1utNUhKNOJ295AfOgzabTCiBkNLjZlQO
+         POax4hH7yzfgIOGfcl3CpsvOnwCumn0JGa/V1j+rRihkPogdwXbWOr/ZVytTWMQQv4xu
+         DoK9GQHVbTo2svHF+bPk05JlapOKvO2BJh49i+QcUHLYu5BDlCUgrB9G6UHRSXaXTMKL
+         MUdJG+SleoWIN5dnGtqHfRI4a+U6lgLaKw8S989khFh8lCLIOoFxPLKy1xuPxuV5gGkE
+         AQng==
+X-Gm-Message-State: AOAM530cqb12Z8LOVB19YJ/VxUe09aaD9hWoE94wG0Rm1YM185HqvdK2
+        Q86CAn5mdB02vn/a5UvrSyEUxgq+KGXiY1GXmXZL2NEW5mMUoAaokxKfUPuOTnxC+023QUO3G+H
+        DnilUYYbsR6G7bOQqlnymFaVa
+X-Received: by 2002:adf:f584:0:b0:20d:431:27f8 with SMTP id f4-20020adff584000000b0020d043127f8mr8649994wro.577.1653056589485;
+        Fri, 20 May 2022 07:23:09 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwjZMXOW3Se1xcwWM1GByTHWAdauwNMswM1vYef9PHHlEOhrXQN4r8cthb7UZYLjMT4wI6OcA==
+X-Received: by 2002:adf:f584:0:b0:20d:431:27f8 with SMTP id f4-20020adff584000000b0020d043127f8mr8649980wro.577.1653056589274;
+        Fri, 20 May 2022 07:23:09 -0700 (PDT)
+Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id t16-20020adfa2d0000000b0020d0a070c80sm2683251wra.35.2022.05.20.07.23.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 May 2022 07:23:08 -0700 (PDT)
+Message-ID: <cdbb002a-9f0a-caa9-445e-4ba20328171a@redhat.com>
+Date:   Fri, 20 May 2022 16:23:07 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="UWrvBWnZYpzwCo1F"
-Content-Disposition: inline
-In-Reply-To: <20220503105405.54832-1-angelogioacchino.delregno@collabora.com>
-User-Agent: Mutt/2.2.4 (c3baa83e) (2022-04-30)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH V11 09/22] LoongArch: Add boot and setup routines
+Content-Language: en-US
+To:     Huacai Chen <chenhuacai@gmail.com>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-efi <linux-efi@vger.kernel.org>
+References: <20220518092619.1269111-1-chenhuacai@loongson.cn>
+ <20220518092619.1269111-10-chenhuacai@loongson.cn>
+ <CAMj1kXEBVWi2ZdR5Le5-G0DA43u-AMxmSO=pVt39qwN=PkzQfw@mail.gmail.com>
+ <0bae0df1-48ae-d02f-bce4-d1f69acf269e@redhat.com>
+ <CAAhV-H5dqNiecER3fChkBjQUGGszj6gwcpOFM1b4Kaax5vz27g@mail.gmail.com>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <CAAhV-H5dqNiecER3fChkBjQUGGszj6gwcpOFM1b4Kaax5vz27g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Huacai,
 
---UWrvBWnZYpzwCo1F
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 5/20/22 16:09, Huacai Chen wrote:
 
-On Tue, May 03, 2022 at 12:54:03PM +0200, AngeloGioacchino Del Regno wrote:
-> In an effort to give some love to the apparently forgotten MT6795 SoC,
-> I am upstreaming more components that are necessary to support platforms
-> powered by this one apart from a simple boot to serial console.
->=20
-> This series introduces support for the PWMs found in Helio X10.
->=20
-> Tested on a Sony Xperia M5 (codename "Holly") smartphone.
->=20
-> AngeloGioacchino Del Regno (2):
->   pwm: pwm-mediatek: Add support for MediaTek Helio X10 MT6795
->   dt-bindings: pwm: pwm-mediatek: Add documentation for MT6795 SoC
->=20
->  Documentation/devicetree/bindings/pwm/pwm-mediatek.txt | 1 +
->  drivers/pwm/pwm-mediatek.c                             | 7 +++++++
->  2 files changed, 8 insertions(+)
+[snip]
 
-Applied, thanks.
+>>
+>> In summary, just enable the following to use the firmware framebuffer:
+>>
+>> CONFIG_DRM_SIMPLEDRM=y
+>> CONFIG_DRM_FBDEV_EMULATION=y
+>> CONFIG_SYSFB=y
+>> CONFIG_SYSFB_SIMPLEFB=y
+> Thank you very much, since 5.15 sysfb_init() do all things of
+> register_gop_device(), so register_gop_device() here can be removed.
 
-Thierry
+Correct.
 
---UWrvBWnZYpzwCo1F
-Content-Type: application/pgp-signature; name="signature.asc"
+> But there is another small problem: if simpledrm or efifb driver is
+> built-in, there is no display. The reason is both sysfb_init() and
+> display driver are in the same initcall level (device_initcall()).
+> From the comments I know that sysfb_init() should after PCI
+> enumeration which is in subsys_initcall(), so, could we make
+> sysfb_init() to be a subsys_initcall_sync()?
+>
 
------BEGIN PGP SIGNATURE-----
+I don't understand why we would need that... it shouldn't matter the order
+in which the driver's init and sysfb_init() are done. If the driver's init
+is executed first, then the driver will be registered and later when the
+sysfb_init() registers the device, it will match the driver and probe.
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmKHpDUACgkQ3SOs138+
-s6FFHQ/9HkWx87OkIttu0M8J/TwAIYF6wGE76TI54RMoEBlGQLLIbfjkJx4wI7bq
-kQh7j6LLB9exFF5WaP+HmskXzadBSEBJH1/H7e9/cLMGiJABtx/KfDjQrKslw4kg
-qXupNoRExePzrFUMte/Yo9VOZCb750W7j7ummOoxOJLPBQXZ0TiY/ryiedBvDNHI
-qw5tePjX6Tv+hP8SuLeJCH9KGaYK4oUJVNd8P1F+zMlvdlFpVoZ48PBNcTPyUxFA
-VC/cwXb7I2qce1FoVjQT9K+hON7qzr/VLo5sSOI/QITo5pvIFVTgU++gY2GvgIuF
-ukgWprZSIjFYWxCe053sKNFnzaJZ5V1CFKylpsw5864AsSo8PSwcLjjytsc/cF5I
-o4Ke9j0IR22lhc89h/eJOpVPuZEUFes6pQtMUUFUcuCEksfODlJs5l2X1KKnivo4
-+b21+ryugvr12Yogf0VGiU0JUS2KgfqbF5hduIuQesXoLoTXVgy885DqmPuI8Tmz
-zyoZNj2a1qysVYdsybkFDuNmFy9rqzZmqQjuSIF/jrh4YnEaOaSHCI4ApQFB1vQN
-LOIFk8pw+vlH7WV51n+0RIRWpB77Q3LWsu0kIZq0tZZnYXe9td6sOXEtoSAHyxLE
-ir6jzWbR/cJEJ8ImS/7YaeQpzUa+OQQ+U4HchIpQQ8E+to20dnM=
-=7cPS
------END PGP SIGNATURE-----
+Conversely, if the sysfb_init() is executed first then the platform device
+will be registered and latter when the driver's init register the driver
+this will match the already registered device.
 
---UWrvBWnZYpzwCo1F--
+In other words, it will be handled by the Linux device model and we should
+not attempt to hand pick the initcall level for each. That's quite fragile.
+
+Or am I missing something here ?
+
+-- 
+Best regards,
+
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
+

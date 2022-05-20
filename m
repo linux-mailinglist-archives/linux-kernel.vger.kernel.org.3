@@ -2,136 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA53552EC96
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 14:50:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D81CE52EC9A
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 14:50:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349533AbiETMuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 08:50:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58096 "EHLO
+        id S1349553AbiETMui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 08:50:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347387AbiETMtu (ORCPT
+        with ESMTP id S1349453AbiETMub (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 08:49:50 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD29B1668B0
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 05:49:49 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id ob14-20020a17090b390e00b001dff2a43f8cso1528416pjb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 05:49:49 -0700 (PDT)
+        Fri, 20 May 2022 08:50:31 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A13F166D5A
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 05:50:28 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id c19so1049294lfv.5
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 05:50:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=L5PMblmmvoFAeFdsYsUFWHO7SIHwulVtXRKpa8zsMb4=;
-        b=28tz65xXLtKpfh4aJ2vYSm3Ig9VveaDYnjyOkMc28CTA0q6pR5fjJK3ZQ5Umul/Sxr
-         K2GrMhwmgXQEAFhhGRTqdbRyhUhC54ozVB9zM9Gb/xk1QtpT5PtxSepRDXre6UO/2cbb
-         DWVYuyM2mDqeRlbxLHEFhgbLeL4yNxuJRCjoBbE/Eoqs04AlSqBTP/m9Z+U7KMf4wGXt
-         fHQOr3tGUjin6oDbJzUlPtHdB7e+mI0decQedxHq9+OKcI4jwTy+zJf9odwt2FuFxFjd
-         vk4w4/4mf3jOLlvF9qsZNSRhUkTnQn07nItty4zX4/8B/X5r4wVwibciDl+i7Posjlsj
-         Awow==
+        bh=rw557JuqqBfkrIeMqm9Q73SdR1LCTiOOmhhgFZlhrWo=;
+        b=Nps8png1xqwqaXRARrrO0C+DfZYSf2bntdBhj+6Ri1e5U4zbqewJS2ReLdLXfNseaJ
+         +GR6dNvZ9KmcKDqw/yAl8FIa9T7xhwJrHW8hzzaPVmLQCh/qJMZcx7lzHVsCQPn1W+jN
+         DY3inZbdl0olc/vIN+nPO2SEXkZ/nAdDnYFkDBVBqn67nzFjwvq7zc4ClLDNHVW/ycJT
+         51cR7UgzrqLkUzOO+ME7jdVLz2vTdnOdejHIyBsCsg5Ww6kYnNN7TRp+1SkD80OcTU15
+         0qCO24dIDN7iM9RzktkTAHwFacxgYU67R9uEPwvleLP2sejndHkw8Ios1VlFVDa7CZwe
+         JN/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=L5PMblmmvoFAeFdsYsUFWHO7SIHwulVtXRKpa8zsMb4=;
-        b=6UUh6o9pdD1J+4K0ei2FI7b1q79snoj/Fxw+WRSVb9D8sOlfWNs5dL6TjdhuTmB6oj
-         ilpyjrvXCdpZuwaIMWuRaitGxmkDSJjzSupptlsXjQUYeETLew/aIoTeYMJ+3OrTpK3x
-         I2iLOtxcKuxjl6zphjYSKGVRhCIkijqNzEN5UcYP4g2ziLcoT53cIaesZsHAaOCmJJh9
-         zH+OJhyDbqiUI/MXnhBtsMoND6vh/ETCnD5gLA+iuVqcKV+GADzB7RZLa14ARH7WNqOU
-         JyrRK9yAi5EFk39MQ+q9s+CozKwRsQ4MX95RJxkk0Emry2z96u67u5yt+JVWvzDPplUp
-         MNQA==
-X-Gm-Message-State: AOAM532xdH4r9XisLlijiDAl6NRw9hIGsx6lKJUYbnMgAUQbg0NyPnWP
-        qbyg5WyYO2kkHREuPPYn/A7WWBh1UsJipw==
-X-Google-Smtp-Source: ABdhPJyQykJwg3rfKF87IWw+moG2G6VP1tO5mjGoc2XXzdpA5vDIApiSwil4Q+D5P6+gP/ie5hotjQ==
-X-Received: by 2002:a17:903:186:b0:161:f394:3e75 with SMTP id z6-20020a170903018600b00161f3943e75mr2974469plg.113.1653050989176;
-        Fri, 20 May 2022 05:49:49 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id z7-20020a655a47000000b003c67e472338sm5437060pgs.42.2022.05.20.05.49.46
+        bh=rw557JuqqBfkrIeMqm9Q73SdR1LCTiOOmhhgFZlhrWo=;
+        b=yHQ7DZxDIOCvY63WTs6zCqWqMbz5mXt1MjHohm7x3s4YqSWKxZULIlg8OFJ1MOwEy+
+         Ry+mLuABWRQNwrXimWbZwcVbDGp9CGRE8E/Y3o0Ia4NhlGiIIHHo8Yrpl+MTDkOidAgb
+         As8k/NwC7qSlWqwB5YcD+Mvq21JEGnmHPCv+kzX+mrJ71kt5LX7yyoP/G3eVWTzrJ/F/
+         4zjMtWBpx5B+2DScXaYyepHblOiSutIAR7SAyaQyS4nw4tlztgErFcmfTEwYNYr1Fb9f
+         4BYbm9g0oik9q/5KNbyJF1UeduwJ2msKNQFdlXB8i1hQFMdlJrCozxBr6c/sQCnhnZ0g
+         jtFA==
+X-Gm-Message-State: AOAM531v9VyTZTMRljbQRZj/KUwScan2S0Hryn7fmC8r96VRMD+ULLxY
+        mHiHCoosfZiAy29I4lnrAxEP0A==
+X-Google-Smtp-Source: ABdhPJxEkqrTB396TYyemRowxMKtKjQKYNzjkppAXp92YM0ZAbZjILr9av0gjhay7sjVxpd9D2tQjA==
+X-Received: by 2002:a19:5e55:0:b0:477:bae8:e5fc with SMTP id z21-20020a195e55000000b00477bae8e5fcmr6671440lfi.14.1653051026539;
+        Fri, 20 May 2022 05:50:26 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id v5-20020a2e9605000000b0024f3d1daeaasm309855ljh.50.2022.05.20.05.50.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 May 2022 05:49:47 -0700 (PDT)
-Message-ID: <110504dc-4720-1430-2e18-a7b6e3a12015@kernel.dk>
-Date:   Fri, 20 May 2022 06:49:45 -0600
+        Fri, 20 May 2022 05:50:25 -0700 (PDT)
+Message-ID: <01b31a02-523e-10bf-3b46-5b830e456522@linaro.org>
+Date:   Fri, 20 May 2022 14:50:24 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
-Subject: Re: [PATCHSET 0/2] Fix splice from random/urandom
+Subject: Re: [PATCH 2/3] dt-bindings: usb: atmel: Add Microchip LAN966x
+ compatible string
 Content-Language: en-US
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Theodore Ts'o <tytso@mit.edu>, Christoph Hellwig <hch@lst.de>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <CAHmME9riX+YuqSVp64bhy=nX08_7d-m8es82BHy2qh-oWkqa8Q@mail.gmail.com>
- <aa7ae20c-a2d7-4959-b5fb-efe7b56294f1@kernel.dk>
- <CAHmME9oLPxzsnRezFPFVssmedOQUi2E9NWFbakEe92=Hdk1QuQ@mail.gmail.com>
- <03c7d6c9-0c86-d4b6-357d-d51be0143c80@kernel.dk>
- <CAHmME9qVQNkx-0J8rq_0ZVaSR+-eEgOUtcZhvq5dAY4-kJxSAA@mail.gmail.com>
- <13899409-e81b-8689-3380-249de46c0b6f@kernel.dk> <YobldmDn6pU9mr4f@zx2c4.com>
- <84d073aa-9937-1a58-dd7a-b1828874c21a@kernel.dk> <YoboEokc00YACuha@zx2c4.com>
- <435cc499-7564-13e2-c4ef-a71119379cf0@kernel.dk> <YoeM6hP0JVqL9edj@zx2c4.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <YoeM6hP0JVqL9edj@zx2c4.com>
+To:     Herve Codina <herve.codina@bootlin.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20220513105850.310375-1-herve.codina@bootlin.com>
+ <20220513105850.310375-3-herve.codina@bootlin.com>
+ <8f0d4127-7e66-cf50-21c9-99680f737e30@linaro.org>
+ <20220520133426.3b4728ae@bootlin.com>
+ <b087c34f-0e2f-edd0-a738-3ffc2853a41b@linaro.org>
+ <20220520142109.57b84da2@bootlin.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220520142109.57b84da2@bootlin.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/20/22 6:43 AM, Jason A. Donenfeld wrote:
-> Hi Jens,
+On 20/05/2022 14:21, Herve Codina wrote:
+>>> I think it makes sense to keep 'microchip,lan966x-udc' for the USB
+>>> device controller (same controller on LAN9662 and LAN9668) and so
+>>> keeping the same rules as for other common parts.  
+>>
+>> Having wildcard was rather a mistake and we already started correcting
+>> it, so keeping the "mistake" neither gives you consistency, nor
+>> correctness...
+>>
 > 
-> On Thu, May 19, 2022 at 07:10:56PM -0600, Jens Axboe wrote:
->> On 5/19/22 7:00 PM, Jason A. Donenfeld wrote:
->>> Hi Jens,
->>>
->>> On Thu, May 19, 2022 at 06:56:12PM -0600, Jens Axboe wrote:
->>>> On 5/19/22 6:48 PM, Jason A. Donenfeld wrote:
->>>>> sendfile() returns -EINVAL even with your patches. Only splicing to pipes
->>>>> seems to work.
->>>>
->>>> Huh, that really should work. Are you trying to sendfile() to random? If
->>>> so, you need that last write_iter patch too, and add the splice_write as
->>>> I mentioned.
->>>  
->>> No, I've only tried the read side so far. I made a little program:
->>>
->>> #include <sys/sendfile.h>
->>> #include <stdio.h>
->>>
->>> int main(int argc, char *argv[])
->>> {
->>>         ssize_t s = sendfile(1, 0, NULL, 0xffff);
->>>         fprintf(stderr, "ret: %zd\n", s);
->>>         return 0;
->>> }
->>>
->>> Then I ran `./a.out < /dev/urandom > /dev/null`. Fails. OTOH, if I
->>> replace /dev/urandom with an ordinary file, it succeeds.
->>
->> Here's why, it's limited to regular files or block devices:
->>
->> if (unlikely(!S_ISREG(i_mode) && !S_ISBLK(i_mode)))
->> 	return -EINVAL;
->>
->> in splice_direct_to_actor().
+> I think that the "family" compatible should be present.
+> This one allows to define the common parts in the common
+> .dtsi file (lan966x.dtsi in our case).
 > 
-> Indeed. Looks like that was your code from long long ago!
+> What do you think about:
+> - microchip,lan9662-udc
+> - microchip,lan9668-udc
+> - microchip,lan966-udc  <-- Family
+> 
+> lan966 is defined as the family compatible string since (1) in
+> bindings/arm/atmel-at91.yaml and in Documentation/arm/microchip.rst
+> 
 
-Yep I would not be surprised if that is the case!
+You can add some family compatible, if it makes sense. I don't get why
+do you mention it - we did not discuss family names, but using
+wildcards... Just please do not add wildcards.
 
-> I posted
-> https://lore.kernel.org/lkml/20220520095747.123748-1-Jason@zx2c4.com/ to
-> fix it if you'd like to review.
-
-Not in my inbox, but you also used an email that hasn't been valid in 16
-years :-)
-
-But looks fine to me, we can open this up to character devices, don't
-see an issue with that.
-
--- 
-Jens Axboe
-
+Best regards,
+Krzysztof

@@ -2,139 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACA6252E673
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 09:44:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31DC152E684
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 09:47:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346621AbiETHoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 03:44:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60452 "EHLO
+        id S1346620AbiETHrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 03:47:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345214AbiETHoF (ORCPT
+        with ESMTP id S1346549AbiETHr3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 03:44:05 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0768B14B66E;
-        Fri, 20 May 2022 00:43:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1653032636; bh=x0xYa0LBezZirht7lUcewcXV5yh8eIpA525zzxAMvGA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=VISIawV2pPCwtOe0dYAob+msSevvQeSQRtd3ijyHSnEmzffFzbERxutuhycAgl4FA
-         Jdmcar87TZuBGeE1rq9Fx0wWWiR5WQN3Qy0D7kh7O50Nv+LQcXoiqgtA52wNXYmbgf
-         EALoiGqj7FZrOG4DlPa8l1PGT9FvixJKjAyOYYjA=
-Received: from [192.168.9.172] (unknown [101.88.28.48])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id CACC760074;
-        Fri, 20 May 2022 15:43:55 +0800 (CST)
-Message-ID: <28ff0ebb-5344-1bdb-5ae0-2bc4bd5ec812@xen0n.name>
-Date:   Fri, 20 May 2022 15:43:54 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.0a1
-Subject: Re: [PATCH V11 02/22] Documentation/zh_CN: Add basic LoongArch
- documentations
-To:     Guo Ren <guoren@kernel.org>, Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
+        Fri, 20 May 2022 03:47:29 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9645371D89;
+        Fri, 20 May 2022 00:47:27 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id nk9-20020a17090b194900b001df2fcdc165so10842579pjb.0;
+        Fri, 20 May 2022 00:47:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=56ihVfI55g+5kWoCWi0j9KBKpP7u+QiASGOdishgsYU=;
+        b=fI4qwgrFQO4hVvdc3SUyQ8Cdgd+sywkDfLxoX5FB2E66Rov05yQTZSVOzP7gpoXEQF
+         0elvCO46fIFZh0PGVYSb0zBP9E8rthiYU1kAunjlGADxZHVDIzKAD9lkoRKg2HXJ1W5y
+         hXlwhv/t9DEN5z9vOFJjkOJHZlgbiKv1kt3tICg8ZW4m3WO5jv6iWCSmP7K1aB7qLYm4
+         VMIP2whsDbn6dmzkcOergoPPDPGfcjXLPaXh/y5sNGVVKXZAO8zLhLtKDQfFcopimuD1
+         iFzKXGu0GYsL7i2AAdYko6ymJb3ROx8/6svDCApNBiO36LmQDMIJe2JZDgJ2TmbOdK9q
+         Eg8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=56ihVfI55g+5kWoCWi0j9KBKpP7u+QiASGOdishgsYU=;
+        b=HM34ncEY4fHxu4Xx07p6KWs1bSKp1D4Cq/L9VCHzndNSN63VYDO33Of07xgwiOuFDw
+         qdTRgF6q3QNhJ9hMFBPD+AfVZcUHxoQepZTb2ZBJbFXKHdGwOftBNlT8TxVkD2cal/04
+         YndHel80ekeJfzMIfv0fnDEjqqYWJAZ5Ho90nhIf5HTkho40yNUn0KtOMtEoP0IUPEd4
+         m1KS0ryCWldQDYPTQSg4ZF3qklZTsfphRuMQyojd8vY7IdQ3az6CXS7f/XX2ILDFvQd9
+         cHBkF1gmdM/NKHj1Q4tINQOOh0LsvDPs+9usQNfnrwcG6SNk4opFz06RKE8Pr2Sqrv9I
+         GD1Q==
+X-Gm-Message-State: AOAM5331K2ZflfCEdV5/3yMlh+VwT393BPqvmcpgFwXx1lpECKu6WPBC
+        INfzm8Azfl1wtnjIjX7VQSI=
+X-Google-Smtp-Source: ABdhPJzWP/OizPFgR9KmuaPsRGfMHikuqC99X6s0BZZQYR12Xiw5I0XneB0xM48YDFHIVgUBpKEfiw==
+X-Received: by 2002:a17:90a:760d:b0:1df:6423:d0b9 with SMTP id s13-20020a17090a760d00b001df6423d0b9mr10201911pjk.33.1653032846949;
+        Fri, 20 May 2022 00:47:26 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::4:1761])
+        by smtp.gmail.com with ESMTPSA id v12-20020a17090331cc00b0015e8d4eb1ebsm4949822ple.53.2022.05.20.00.47.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 May 2022 00:47:26 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 19 May 2022 21:47:25 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     "T.J. Mercier" <tjmercier@google.com>
+Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
         Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Alex Shi <alexs@kernel.org>
-References: <20220518092619.1269111-1-chenhuacai@loongson.cn>
- <20220518092619.1269111-3-chenhuacai@loongson.cn>
- <CAJF2gTSO0DA2tv+MhdygRZ2JDDS8mPTGpSFAugutVNH-+Usv4w@mail.gmail.com>
-Content-Language: en-US
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <CAJF2gTSO0DA2tv+MhdygRZ2JDDS8mPTGpSFAugutVNH-+Usv4w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75 autolearn=ham
-        autolearn_force=no version=3.4.6
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Liam Mark <lmark@codeaurora.org>,
+        Laura Abbott <labbott@redhat.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Shuah Khan <shuah@kernel.org>, Daniel Vetter <daniel@ffwll.ch>,
+        John Stultz <jstultz@google.com>,
+        Carlos Llamas <cmllamas@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        kernel-team@android.com, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v7 0/6] Proposal for a GPU cgroup controller
+Message-ID: <YodHjYlMx1XGtM2+@slm.duckdns.org>
+References: <20220510235653.933868-1-tjmercier@google.com>
+ <3365cd1d750e84fedc8e75d646a77ffd85619d35.camel@ndufresne.ca>
+ <CABdmKX3ZV6-u-oLvW_wWavAMBfrsZ=C_rCgK_Uz4VjxcRvRFew@mail.gmail.com>
+ <81026ef07c1ce20f8673b75b17bab79a2b39c548.camel@ndufresne.ca>
+ <CABdmKX2LxZ6zZR=fhXfnuWCB2BR+gzDd1-t1DD2A2XP24wvuGQ@mail.gmail.com>
+ <Yn6DpUsoSz1/15Kc@slm.duckdns.org>
+ <CABdmKX1xvm87WMEDkMc9Aye46E4zv1-scenwgaRxHesrOCsaYg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABdmKX1xvm87WMEDkMc9Aye46E4zv1-scenwgaRxHesrOCsaYg@mail.gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello,
 
-On 5/20/22 15:37, Guo Ren wrote:
-> On Wed, May 18, 2022 at 5:27 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
->> [snip]
->>
->> +
->> +指令列表
->> +--------
->> +
->> +为了简便起见，我们在此只罗列一下指令名称（助记符），需要详细信息请阅读
->> +:ref:`参考文献 <loongarch-references-zh_CN>` 中的文档。
->> +
->> +1. 算术运算指令::
->> +
->> +    ADD.W SUB.W ADDI.W ADD.D SUB.D ADDI.D
->> +    SLT SLTU SLTI SLTUI
->> +    AND OR NOR XOR ANDN ORN ANDI ORI XORI
->> +    MUL.W MULH.W MULH.WU DIV.W DIV.WU MOD.W MOD.WU
->> +    MUL.D MULH.D MULH.DU DIV.D DIV.DU MOD.D MOD.DU
->> +    PCADDI PCADDU12I PCADDU18I
->> +    LU12I.W LU32I.D LU52I.D ADDU16I.D
->> +
->> +2. 移位运算指令::
->> +
->> +    SLL.W SRL.W SRA.W ROTR.W SLLI.W SRLI.W SRAI.W ROTRI.W
->> +    SLL.D SRL.D SRA.D ROTR.D SLLI.D SRLI.D SRAI.D ROTRI.D
->> +
->> +3. 位域操作指令::
->> +
->> +    EXT.W.B EXT.W.H CLO.W CLO.D SLZ.W CLZ.D CTO.W CTO.D CTZ.W CTZ.D
->> +    BYTEPICK.W BYTEPICK.D BSTRINS.W BSTRINS.D BSTRPICK.W BSTRPICK.D
->> +    REVB.2H REVB.4H REVB.2W REVB.D REVH.2W REVH.D BITREV.4B BITREV.8B BITREV.W BITREV.D
->> +    MASKEQZ MASKNEZ
->> +
->> +4. 分支转移指令::
->> +
->> +    BEQ BNE BLT BGE BLTU BGEU BEQZ BNEZ B BL JIRL
->> +
->> +5. 访存读写指令::
->> +
->> +    LD.B LD.BU LD.H LD.HU LD.W LD.WU LD.D ST.B ST.H ST.W ST.D
->> +    LDX.B LDX.BU LDX.H LDX.HU LDX.W LDX.WU LDX.D STX.B STX.H STX.W STX.D
->> +    LDPTR.W LDPTR.D STPTR.W STPTR.D
->> +    PRELD PRELDX
->> +
->> +6. 原子操作指令::
->> +
->> +    LL.W SC.W LL.D SC.D
->> +    AMSWAP.W AMSWAP.D AMADD.W AMADD.D AMAND.W AMAND.D AMOR.W AMOR.D AMXOR.W AMXOR.D
->> +    AMMAX.W AMMAX.D AMMIN.W AMMIN.D
->> +
->> +7. 栅障指令::
->> +
->> +    IBAR DBAR
-> Is IBAR is pipeline flush? I think DBAR is for LSU fence. loongarch is
-> weak consistency, right?
->
-> I think we just leave DBAR here, and put IBAR into 8. Flush pipeline
-> is not for memory consistency.
-I believe he's just listing the instructions in the exact same 
-organization as the ISA manual. LoongArch memory model is indeed weak, 
-and IBAR most certainly just flushes the instruction fetch pipeline wrt. 
-the memory stores happening in the same core (this is what the manual 
-says, section 2.2.8.1).
->
-> Overall, I give:
-> Reviewed-by: Guo Ren <guoren@kernel.org>
+On Tue, May 17, 2022 at 04:30:29PM -0700, T.J. Mercier wrote:
+> Thanks for your suggestion. This almost works. "dmabuf" as a key could
+> work, but I'd actually like to account for each heap. Since heaps can
+> be dynamically added, I can't accommodate every potential heap name by
+> hardcoding registrations in the misc controller.
+
+On its own, that's a pretty weak reason to be adding a separate gpu
+controller especially given that it doesn't really seem to be one with
+proper abstractions for gpu resources. We don't want to keep adding random
+keys to misc controller but can definitely add limited flexibility. What
+kind of keys do you need?
+
+Thanks.
+
+-- 
+tejun

@@ -2,166 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4C0B52E2C6
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 04:59:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A995752E2C8
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 05:01:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344929AbiETC6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 22:58:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48602 "EHLO
+        id S1344943AbiETDBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 23:01:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230028AbiETC6w (ORCPT
+        with ESMTP id S1344936AbiETDA6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 22:58:52 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D31606FE;
-        Thu, 19 May 2022 19:58:50 -0700 (PDT)
-X-UUID: b225131989d949c0a19a00dd87d0e9de-20220520
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:e49bcbe8-ceba-4862-bd5d-435c9df4e4b9,OB:0,LO
-        B:10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:45
-X-CID-INFO: VERSION:1.1.5,REQID:e49bcbe8-ceba-4862-bd5d-435c9df4e4b9,OB:0,LOB:
-        10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:45
-X-CID-META: VersionHash:2a19b09,CLOUDID:59f0f079-5ef6-470b-96c9-bdb8ced32786,C
-        OID:37c94442f15b,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,QS:0,BEC:nil
-X-UUID: b225131989d949c0a19a00dd87d0e9de-20220520
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 365575824; Fri, 20 May 2022 10:58:44 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Fri, 20 May 2022 10:58:43 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 20 May 2022 10:58:42 +0800
-Message-ID: <3f39777a225fac66f01858262defcc11c6135bb2.camel@mediatek.com>
-Subject: Re: [PATCH v7 13/19] dt-bindings: reset: mediatek: Add infra_ao
- reset index for MT8192/MT8195
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>,
-        Chun-Jie Chen =?UTF-8?Q?=28=E9=99=B3=E6=B5=9A=E6=A1=80=29?= 
-        <Chun-Jie.Chen@mediatek.com>,
-        "wenst@chromium.org" <wenst@chromium.org>,
-        Runyang Chen =?UTF-8?Q?=28=E9=99=88=E6=B6=A6=E6=B4=8B=29?= 
-        <Runyang.Chen@mediatek.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Fri, 20 May 2022 10:58:43 +0800
-In-Reply-To: <20220519125527.18544-14-rex-bc.chen@mediatek.com>
-References: <20220519125527.18544-1-rex-bc.chen@mediatek.com>
-         <20220519125527.18544-14-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 19 May 2022 23:00:58 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 624802494A;
+        Thu, 19 May 2022 20:00:56 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id d15so12131328lfk.5;
+        Thu, 19 May 2022 20:00:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=octF3L3s7sydh3Lri04JtKL9Flbqols+7/iLfIisCyY=;
+        b=NqoaH6Mc7/OOqRQltCRS8pd72n8MJo0az00PWGZZ58uNqNKx/wBZUpjlAeB5YxeeAc
+         D9lNwfF+oFuXhae+TVixbLa2ffYX+FroITjQEghvqJ9Qw76YSrYOTsvnbXJ4B2PITVF5
+         a2kys8aKQRyepMbQfr6uo3C7yLcOoTjKz/bIuzcu9StoDphqCkZIhuXYo3MVzkmLXBOl
+         lRJrWKFVpa5rpCjfWfjQiE7LsH8kvB3mebWeSUM0qOv/L+zdwYJfgJWBq2KOtgu3eMRZ
+         er8ev63pvSGoUtivHkvr9pxWgGM3vEeKGqWNlJb8ajVRzvLfrke9MZtnKkKI7uEiYuut
+         kHmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=octF3L3s7sydh3Lri04JtKL9Flbqols+7/iLfIisCyY=;
+        b=tq+xj/k4PUYF+AXb7ItUJJWHBb4oEaEbNJgeL/ZlER7G2zVr4Nc5HyyGiQ9z24jz6z
+         gTNSAac5DP7/K7tIHBW3yxtspL8i4poO+8rRYO2T5XS1q70gasTOAwshMPUzr7qfq1YJ
+         vjpPfM8xK6bQeNRXA1QcU9o4j4EQQQFY54bwxVAKTxn12xvuvllEgcwH7yPn/4ecQIjm
+         xzKqpOHdWFo6AgLXKw3hRPjWzBUSwVbJFBehEUAcc9B4kqanGwQmifjcWkVNN8QqpaQg
+         aC9uw/5rNWNDjShyYdCpGjK0ex39ZSR/m/GPiZWvXHfsHxp0KDwhNe9HVUQ6wCl30l4+
+         ++dw==
+X-Gm-Message-State: AOAM530bbk15Iq59xtCk/QGALNethoBE50Hqbsa0g8vDV69BrNF3ka7Q
+        E3DG3ZkYxcW+G0ps6WRkE5BX1MbH54wRjaQsh/EOHQEzBjs=
+X-Google-Smtp-Source: ABdhPJz1T0X7NVqyHAUCqGcRKKadO+LL19xo4SPj4nddVDRFm4DbZqXHJVsTK3ViY1ETeB9iU9aOcD4JiU3qeilhkRw=
+X-Received: by 2002:a05:6512:3f96:b0:477:c0fe:9b05 with SMTP id
+ x22-20020a0565123f9600b00477c0fe9b05mr5249778lfa.109.1653015654603; Thu, 19
+ May 2022 20:00:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220516165740.6256af51.alex.williamson@redhat.com>
+ <20220518115432.76183-1-windy.bi.enflame@gmail.com> <20220519110622.6fd065d2.alex.williamson@redhat.com>
+In-Reply-To: <20220519110622.6fd065d2.alex.williamson@redhat.com>
+From:   windy Bi <windy.bi.enflame@gmail.com>
+Date:   Fri, 20 May 2022 11:00:42 +0800
+Message-ID: <CAGdb+H00q3xhCfw-x+DG624sMuuKqaRwRpPWDJCYs2iLsBCyVw@mail.gmail.com>
+Subject: Re: [PATCH v2] PCI: Fix no-op wait after secondary bus reset
+To:     Alex Williamson <alex.williamson@redhat.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lukas Wunner <lukas@wunner.de>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-05-19 at 20:55 +0800, Rex-BC Chen wrote:
-> To support reset of infra_ao, add the index of infra_ao reset of
-> thermal/svs/pcei for MT8192 and thermal/svs for MT8195.
-> 
-> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reviewed-by: AngeloGioacchino Del Regno <
-> angelogioacchino.delregno@collabora.com>
-> ---
->  include/dt-bindings/reset/mt8192-resets.h | 8 ++++++++
->  include/dt-bindings/reset/mt8195-resets.h | 6 ++++++
->  2 files changed, 14 insertions(+)
-> 
-> diff --git a/include/dt-bindings/reset/mt8192-resets.h b/include/dt-
-> bindings/reset/mt8192-resets.h
-> index 764ca9910fa9..12e2087c90a3 100644
-> --- a/include/dt-bindings/reset/mt8192-resets.h
-> +++ b/include/dt-bindings/reset/mt8192-resets.h
-> @@ -7,6 +7,7 @@
->  #ifndef _DT_BINDINGS_RESET_CONTROLLER_MT8192
->  #define _DT_BINDINGS_RESET_CONTROLLER_MT8192
->  
-> +/* TOPRGU resets */
->  #define MT8192_TOPRGU_MM_SW_RST					
-> 1
->  #define MT8192_TOPRGU_MFG_SW_RST				2
->  #define MT8192_TOPRGU_VENC_SW_RST				3
-> @@ -30,4 +31,11 @@
->  /* MMSYS resets */
->  #define MT8192_MMSYS_SW0_RST_B_DISP_DSI0			15
->  
-> +/* INFRA resets */
-> +#define MT8192_INFRA_RST0_THERM_CTRL_SWRST		0
-> +#define MT8192_INFRA_RST2_PEXTP_PHY_SWRST		1
-> +#define MT8192_INFRA_RST3_THERM_CTRL_PTP_SWRST	2
-> +#define MT8192_INFRA_RST4_PCIE_TOP_SWRST		3
-> +#define MT8192_INFRA_RST4_THERM_CTRL_MCU_SWRST	4
-> +
->  #endif  /* _DT_BINDINGS_RESET_CONTROLLER_MT8192 */
-> diff --git a/include/dt-bindings/reset/mt8195-resets.h b/include/dt-
-> bindings/reset/mt8195-resets.h
-> index a26bccc8b957..0b1937f14b36 100644
-> --- a/include/dt-bindings/reset/mt8195-resets.h
-> +++ b/include/dt-bindings/reset/mt8195-resets.h
-> @@ -7,6 +7,7 @@
->  #ifndef _DT_BINDINGS_RESET_CONTROLLER_MT8195
->  #define _DT_BINDINGS_RESET_CONTROLLER_MT8195
->  
-> +/* TOPRGU resets */
->  #define MT8195_TOPRGU_CONN_MCU_SW_RST          0
->  #define MT8195_TOPRGU_INFRA_GRST_SW_RST        1
->  #define MT8195_TOPRGU_APU_SW_RST               2
-> @@ -26,4 +27,9 @@
->  
->  #define MT8195_TOPRGU_SW_RST_NUM               16
->  
-> +/* INFRA resets */
-> +#define MT8195_INFRA_RST0_THERM_CTRL_SWRST     0
-> +#define MT8195_INFRA_RST3_THERM_CTRL_PTP_SWRST 1
-> +#define MT8195_INFRA_RST4_THERM_CTRL_MCU_SWRST 2
-> +
->  #endif  /* _DT_BINDINGS_RESET_CONTROLLER_MT8195 */
-> -- 
-> 2.18.0
-> 
+On Fri, May 20, 2022 at 1:06 AM Alex Williamson
+<alex.williamson@redhat.com> wrote:
+>
+> On Wed, 18 May 2022 19:54:32 +0800
+> Sheng Bi <windy.bi.enflame@gmail.com> wrote:
+>
+> > pci_bridge_secondary_bus_reset() triggers SBR followed by 1 second sleep,
+> > and then uses pci_dev_wait() for waiting device ready. The dev parameter
+> > passes to the wait function is currently the bridge itself, but not the
+> > device been reset.
+> >
+> > If we call pci_bridge_secondary_bus_reset() to trigger SBR to a device,
+> > there is 1 second sleep but not waiting device ready, since the bridge
+> > is always ready while resetting downstream devices. pci_dev_wait() here
+> > is a no-op actually. This would be risky in the case which the device
+> > becomes ready after more than 1 second, especially while hotplug enabled.
+> > The late coming hotplug event after 1 second will trigger hotplug module
+> > to remove/re-insert the device.
+> >
+> > Instead of waiting ready of bridge itself, changing to wait all the
+> > downstream devices become ready with timeout PCIE_RESET_READY_POLL_MS
+> > after SBR, considering all downstream devices are affected during SBR.
+> > Once one of the devices doesn't reappear within the timeout, return
+> > -ENOTTY to indicate SBR doesn't complete successfully.
+> >
+> > Fixes: 6b2f1351af56 ("PCI: Wait for device to become ready after secondary bus reset")
+> > Signed-off-by: Sheng Bi <windy.bi.enflame@gmail.com>
+> > ---
+> >  drivers/pci/pci.c | 30 +++++++++++++++++++++++++++++-
+> >  1 file changed, 29 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> > index eb7c0a08ff57..32b7a5c1fa3a 100644
+> > --- a/drivers/pci/pci.c
+> > +++ b/drivers/pci/pci.c
+> > @@ -5049,6 +5049,34 @@ void pci_bridge_wait_for_secondary_bus(struct pci_dev *dev)
+> >       }
+> >  }
+> >
+> > +static int pci_bridge_secondary_bus_wait(struct pci_dev *bridge, int timeout)
+> > +{
+> > +     struct pci_dev *dev;
+> > +     int delay = 0;
+> > +
+> > +     if (!bridge->subordinate || list_empty(&bridge->subordinate->devices))
+> > +             return 0;
+> > +
+> > +     list_for_each_entry(dev, &bridge->subordinate->devices, bus_list) {
+> > +             while (!pci_device_is_present(dev)) {
+> > +                     if (delay > timeout) {
+> > +                             pci_warn(dev, "not ready %dms after secondary bus reset; giving up\n",
+> > +                                     delay);
+> > +                             return -ENOTTY;
+> > +                     }
+> > +
+> > +                     msleep(20);
+> > +                     delay += 20;
+>
+> Your previous version used the same exponential back-off as used in
+> pci_dev_wait(), why the change here to poll at 20ms intervals?  Thanks,
+>
+> Alex
 
-Hello Stephen,
+Many thanks for your time. The change is to get a more accurate
+timeout, to align with
+previous statement "we shouldn't incur any extra delay once timeout has passed".
+Previous binary exponential back-off incurred probable unexpected
+extra delay, like
+60,000 ms timeout but actual 65,535 ms, and the difference probably
+goes worse by
+timeout setting changes. Thanks,
 
-this patch will have conflict with Matthias's commit branch for
-include/dt-bindings/reset/mt8192-resets.h.
+windy
 
-It's on linux-next.
-
-I have fix it in this version, but I think there will be a merge
-conflict if you pick my series in this run.
-
-
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/include/dt-bindings/reset/mt8192-resets.h?h=next-20220519&id=19c66219e4d5b813ebbd28621cfe9c450659ded7
-
-BRs,
-Rex
-
+>
+> > +             }
+> > +
+> > +             if (delay > 1000)
+> > +                     pci_info(dev, "ready %dms after secondary bus reset\n",
+> > +                             delay);
+> > +     }
+> > +
+> > +     return 0;
+> > +}
+> > +
+> >  void pci_reset_secondary_bus(struct pci_dev *dev)
+> >  {
+> >       u16 ctrl;
+> > @@ -5092,7 +5120,7 @@ int pci_bridge_secondary_bus_reset(struct pci_dev *dev)
+> >  {
+> >       pcibios_reset_secondary_bus(dev);
+> >
+> > -     return pci_dev_wait(dev, "bus reset", PCIE_RESET_READY_POLL_MS);
+> > +     return pci_bridge_secondary_bus_wait(dev, PCIE_RESET_READY_POLL_MS);
+> >  }
+> >  EXPORT_SYMBOL_GPL(pci_bridge_secondary_bus_reset);
+> >
+> >
+> > base-commit: 617c8a1e527fadaaec3ba5bafceae7a922ebef7e
+>

@@ -2,88 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A587C52EC64
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 14:42:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D6F352EC65
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 14:42:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347801AbiETMly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 08:41:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36140 "EHLO
+        id S243190AbiETMmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 08:42:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349541AbiETMlU (ORCPT
+        with ESMTP id S1349390AbiETMle (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 08:41:20 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363AE12D09;
-        Fri, 20 May 2022 05:41:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=y5yue5StjMLDz9Stw8tyOk8WJH/+6r8jlx/4Qmd/Q5c=; b=40SWpeZS1e9hHYXISSNDgAETMz
-        fg0iOwPHdtVGaZDTPcOxP774uLKK3RHuX5jcE4qrYsikW4cnM776o07+TQqgZwxtsW+m6DT0zRKt3
-        1rFIDgLmHCxmY7Ydx0WhKf5o7ze+Udsh5JY7kAzAE1F8e79/jwIS+BL3YzMg56Q/cf3o=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1ns1wB-003co2-Au; Fri, 20 May 2022 14:40:59 +0200
-Date:   Fri, 20 May 2022 14:40:59 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Pavel Skripkin <paskripkin@gmail.com>
-Cc:     vladimir.oltean@nxp.com, claudiu.manoil@nxp.com,
-        alexandre.belloni@bootlin.com, UNGLinuxDriver@microchip.com,
-        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        dan.carpenter@oracle.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: ocelot: fix wront time_after usage
-Message-ID: <YoeMW+/KGk8VpbED@lunn.ch>
-References: <20220519204017.15586-1-paskripkin@gmail.com>
+        Fri, 20 May 2022 08:41:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DCCB11901A
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 05:41:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653050491;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=N22RTNjNiOoeCyukDfey1BC2Fv6UeTKWJCGnb5nPt1Y=;
+        b=RnFgmktNfs1V+PGGMHKQIdoNZ92v7Z7ah1l5JqtuuwXyj5w3Xhres4hOFMf3/znPS7yOQq
+        gDLpC5z66tsipTmAnD76lFfP872sh0Z0ecFFB+WQMwW4ALtNDwVOUtgAyCS4NjsbGb5pDM
+        jNngtsDRZ//4nkBcFO7ghiboOqHd/4E=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-201-KphpiQiNPXSVG0ro4fr9xw-1; Fri, 20 May 2022 08:41:27 -0400
+X-MC-Unique: KphpiQiNPXSVG0ro4fr9xw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1DECE3C138BE;
+        Fri, 20 May 2022 12:41:27 +0000 (UTC)
+Received: from [172.16.176.1] (ovpn-64-66.rdu2.redhat.com [10.10.64.66])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id C62AB1121319;
+        Fri, 20 May 2022 12:41:26 +0000 (UTC)
+From:   "Benjamin Coddington" <bcodding@redhat.com>
+To:     "Javier Abrego Lorente" <javier.abrego.lorente@gmail.com>
+Cc:     trond.myklebust@hammerspace.com, anna@kernel.org,
+        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] nfs: removed goto statement
+Date:   Fri, 20 May 2022 08:41:26 -0400
+Message-ID: <B70C3673-8CBF-414D-9D8A-BAD4F30FA9D9@redhat.com>
+In-Reply-To: <CAPsi6X+M11NttnV80dYhA=0t=ZGH1YR1ZGssEZvz+kN8RYTcbw@mail.gmail.com>
+References: <20220520115714.47321-1-javier.abrego.lorente@gmail.com>
+ <CAPsi6X+M11NttnV80dYhA=0t=ZGH1YR1ZGssEZvz+kN8RYTcbw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220519204017.15586-1-paskripkin@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 11:40:17PM +0300, Pavel Skripkin wrote:
-> Accidentally noticed, that this driver is the only user of
-> while (timer_after(jiffies...)).
-> 
-> It looks like typo, because likely this while loop will finish after 1st
-> iteration, because time_after() returns true when 1st argument _is after_
-> 2nd one.
-> 
-> Fix it by negating time_after return value inside while loops statement
+On 20 May 2022, at 8:00, Javier Abrego Lorente wrote:
 
-A better fix would be to use one of the helpers in linux/iopoll.h.
+> final version, I promise.
 
-There is a second bug in the current code:
+Javier, please read "7) Centralized exiting of functions" in
+Documentation/process/coding-style.rst.  The maintainers are unlikely to
+take this patch because it doesn't (my opinion) improve the readability, and
+removing a goto isn't a valid reason on its own.  The use of goto is an
+acceptable practice in the linux kernel for some patterns.
 
-static int ocelot_fdma_wait_chan_safe(struct ocelot *ocelot, int chan)
-{
-	unsigned long timeout;
-	u32 safe;
+Ben
 
-	timeout = jiffies + usecs_to_jiffies(OCELOT_FDMA_CH_SAFE_TIMEOUT_US);
-	do {
-		safe = ocelot_fdma_readl(ocelot, MSCC_FDMA_CH_SAFE);
-		if (safe & BIT(chan))
-			return 0;
-	} while (time_after(jiffies, timeout));
-
-	return -ETIMEDOUT;
-}
-
-The scheduler could put the thread to sleep, and it does not get woken
-up for OCELOT_FDMA_CH_SAFE_TIMEOUT_US. During that time, the hardware
-has done its thing, but you exit the while loop and return -ETIMEDOUT.
-
-linux/iopoll.h handles this correctly by testing the state one more
-time after the timeout has expired.
-
-  Andrew

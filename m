@@ -2,150 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FFE552E76C
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 10:30:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0940652E78B
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 10:32:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347010AbiETIaE convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 20 May 2022 04:30:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39552 "EHLO
+        id S229519AbiETIba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 04:31:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347014AbiETI3o (ORCPT
+        with ESMTP id S1347164AbiETIaq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 04:29:44 -0400
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3A2F5E166;
-        Fri, 20 May 2022 01:29:43 -0700 (PDT)
-Received: by mail-qt1-f181.google.com with SMTP id 11so4201836qtp.9;
-        Fri, 20 May 2022 01:29:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=vQOf+Td+ygkeVxH/Q4rPVYerZmfW/Jb9XT+06okoXpI=;
-        b=3zG89MuHpotbf+Ws6VqTyT4EWHR8D275ghcUJfZobqyP6jxYOYe/lWBA2EwoVMmAD8
-         vfZoQq4IyYdRJuNXSfVYYbocrousz+jwPzkk/RN0ivwbLqAfOfudIe4L8W2KBSYS26oF
-         bjfmZO8sW/MlD3jk4y77WW+kjXwu6r3vpOOVYZf5ilT/XIvj2sE70kExTIBVsJLZ3QQb
-         F/aQokyus9yU2aDW0zglu4PStivKK3hGUSoiZXE+QLIkkY/U7Dn3Giby6mjYEd69up+n
-         BZadpuqeMoZj5dg03NT0Zeq7UrJOaD7BV+3E3ZKaa8n7B1/AT4GY8iDMQRfgyUIPBFAz
-         hc+Q==
-X-Gm-Message-State: AOAM533yeRvGdTI7F5B2tDzrtAk9tNT99Omryo78IkX3Mpv3W9chOwfr
-        dNccvF/VlkcvEUCnV2zuSq29wsyTSYLMFg==
-X-Google-Smtp-Source: ABdhPJwlZmN9N3HbUeX50IpW7oo4V5w3MCII46HPIX4xlZ3znPCqOSlUCEYOymQ7RxNuUCJu63popQ==
-X-Received: by 2002:ac8:58c9:0:b0:2f3:d8f0:185f with SMTP id u9-20020ac858c9000000b002f3d8f0185fmr6798687qta.381.1653035382854;
-        Fri, 20 May 2022 01:29:42 -0700 (PDT)
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
-        by smtp.gmail.com with ESMTPSA id bs26-20020ac86f1a000000b002f39b99f6bdsm2699378qtb.87.2022.05.20.01.29.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 May 2022 01:29:42 -0700 (PDT)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-2ff39b44b06so79589747b3.13;
-        Fri, 20 May 2022 01:29:42 -0700 (PDT)
-X-Received: by 2002:a81:9b0c:0:b0:2f4:c522:7d3c with SMTP id
- s12-20020a819b0c000000b002f4c5227d3cmr8935563ywg.316.1653035382015; Fri, 20
- May 2022 01:29:42 -0700 (PDT)
+        Fri, 20 May 2022 04:30:46 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B5D15A744;
+        Fri, 20 May 2022 01:30:25 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24K3ZQ3p004615;
+        Fri, 20 May 2022 10:29:59 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=hneNV+UTX/MQsnnJ1NOLYhI1GUf8ZaFIZymZJDulI7Y=;
+ b=bVSQ9bpLAesU4gdQU0NY7YC9ypuO98FoqvhNOA2l0Rhf5a3s228zScK5H/gq2trCQuc3
+ oqSJPMYWZoRd4EEYCDCMV8rgHfCBZ4lhThMhnF61btFjxfFjBVczQEa726hgc0pmOy1M
+ Y84p0AynckK6gqePolG0QuO9NW/TXm7WHmPhgnTFTwWj79PVZIbjbrjEvkz51tlj9CGX
+ oDfoDXfZ8/edYsF0cRzfFBHV0C6ps7//j6tyXfCS92a6Ry/gqX8FrFUT93t81GKlhVPM
+ LHXXO0JMDnsdgfhhRw/u2vSa5O5Od7/clCS1TbPkhBNkuv3zY8NulMdUilILWY3MvYyv kg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3g23s22tjt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 May 2022 10:29:59 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id DF853100038;
+        Fri, 20 May 2022 10:29:56 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id D8EE1214D2D;
+        Fri, 20 May 2022 10:29:56 +0200 (CEST)
+Received: from localhost (10.75.127.45) by SHFDAG1NODE2.st.com (10.75.129.70)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Fri, 20 May
+ 2022 10:29:54 +0200
+From:   Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        Deepak Kumar Singh <quic_deesin@quicinc.com>,
+        Chris Lew <quic_clew@quicinc.com>,
+        <arnaud.pouliquen@foss.st.com>
+Subject: [RFC PATCH 00/10] Introduction of rpmsg flow control service
+Date:   Fri, 20 May 2022 10:29:30 +0200
+Message-ID: <20220520082940.2984914-1-arnaud.pouliquen@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220429134143.628428-1-herve.codina@bootlin.com>
- <20220429134143.628428-4-herve.codina@bootlin.com> <29ba3db6-e5c7-06d3-29d9-918ee5b34555@linaro.org>
- <20220520102329.6b0a58d0@bootlin.com>
-In-Reply-To: <20220520102329.6b0a58d0@bootlin.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 20 May 2022 10:29:28 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdX6zXbFXo-tojpvrbobkWBe0MsjONEgZJismwFvhZ7SKA@mail.gmail.com>
-Message-ID: <CAMuHMdX6zXbFXo-tojpvrbobkWBe0MsjONEgZJismwFvhZ7SKA@mail.gmail.com>
-Subject: Re: [PATCH v5 2/6] dt-bindings: PCI: renesas,pci-rcar-gen2: Add
- device tree support for r9a06g032
-To:     Herve Codina <herve.codina@bootlin.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Clement Leger <clement.leger@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.45]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-20_03,2022-05-19_03,2022-02-23_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hervé,
+This series proposes an implementation for the rpmsg virtio transport
+backend, of the signaling API proposed by Deepak Kumar Singh:
+"rpmsg and glink signaling API support" [1]
 
-On Fri, May 20, 2022 at 10:23 AM Herve Codina <herve.codina@bootlin.com> wrote:
+The aim of the series is to offer the possibility for an endpoint to inform
+a remote endpoint about its state, based on a software flow control[2].
 
-> On Sun, 1 May 2022 10:51:43 +0200
-> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
->
-> [...]
-> > >    resets:
-> > >      maxItems: 1
-> > > @@ -106,13 +106,45 @@ required:
-> > >    - interrupt-map
-> > >    - interrupt-map-mask
-> > >    - clocks
-> > > -  - resets
-> > >    - power-domains
-> > >    - bus-range
-> > >    - "#address-cells"
-> > >    - "#size-cells"
-> > >    - "#interrupt-cells"
-> > >
-> > > +if:
-> >
-> > allOf.
-> >
-> > > +  properties:
-> > > +    compatible:
-> > > +      contains:
-> > > +        enum:
->
-> I Have an issue with this allOf.
->
-> The yaml has the following structure and so has 2 AllOf:
->   ...
->   allOf:
->   - $ref: /schemas/pci/pci-bus.yaml#
->
->   properties:
->     compatible:
->   ...
->   allOf:
->   - if:
->       properties:
->         compatible:
->           contains:
->   ...
-> Is having a 'allOf' for schemas inclusion and a 'allOf' for conditionnal
-> parts allowed ?
+For this a new rpmsg service( with a fixed address 64) is proposed.
+It is responsible for:
+- transmitting local endpoint flow control information to the remote side,
+- informing a local endpoint about a remote endpoint flow control.
 
-Just combine them into a single "allOf".
-See e.g. Documentation/devicetree/bindings/i2c/renesas,rcar-i2c.yaml.
+For the rpmsg virtio transport layer the service is negotiated thanks to the 
+virtio feature flag: VIRTIO_RPMSG_F_FC
 
-{oetje,eeting}s,
+Notice that this pull request introduces new feature in the rpmsg protocol,
+So it has to be aligned with OpenAMP implementation.
+Pending OpenAMP pull request is available here:
+https://github.com/OpenAMP/open-amp/pull/394
 
-                        Geert
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+[1]https://lkml.org/lkml/2022/1/18/867
+[2]https://en.wikipedia.org/wiki/Software_flow_control
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Arnaud Pouliquen (8):
+  rpmsg: core: Add rpmsg device remote flow control announcement ops
+  rpmsg: virtio: Implement the announce_remote_fc ops
+  rpmsg: Introduce flow control channel driver
+  rpmsg: virtio: Add support of the VIRTIO_RPMSG_F_FC feature
+  rpmsg: virtio: Implement the set_flow_control ops
+  rpmsg: Add the destination address in rpmsg_set_flow_control
+  rpmsg: tty : Add the support of the flow control
+  rpmsg: virtio: Set default dst address on flow control
+
+Deepak Kumar Singh (2):
+  rpmsg: core: Add signal API support
+  rpmsg: char: Add TIOCMGET/TIOCMSET ioctl support
+
+ drivers/rpmsg/Kconfig            |  11 +++
+ drivers/rpmsg/Makefile           |   1 +
+ drivers/rpmsg/rpmsg_char.c       |  56 +++++++++++++--
+ drivers/rpmsg/rpmsg_core.c       |  47 +++++++++++++
+ drivers/rpmsg/rpmsg_fc.c         | 113 +++++++++++++++++++++++++++++++
+ drivers/rpmsg/rpmsg_internal.h   |   9 +++
+ drivers/rpmsg/virtio_rpmsg_bus.c | 111 +++++++++++++++++++++++++++++-
+ drivers/tty/rpmsg_tty.c          |  50 ++++++++++++++
+ include/linux/rpmsg.h            |  15 ++++
+ include/linux/rpmsg/fc.h         |  51 ++++++++++++++
+ 10 files changed, 456 insertions(+), 8 deletions(-)
+ create mode 100644 drivers/rpmsg/rpmsg_fc.c
+ create mode 100644 include/linux/rpmsg/fc.h
+
+-- 
+2.25.1
+

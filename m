@@ -2,61 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16C3B52EFC3
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 17:55:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 894F152EFC4
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 17:55:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351129AbiETPzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 11:55:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33292 "EHLO
+        id S1351176AbiETPzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 11:55:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244131AbiETPzO (ORCPT
+        with ESMTP id S244131AbiETPzd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 11:55:14 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7E815EA41
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 08:55:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E3ABFCE2991
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 15:55:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B34E9C34100;
-        Fri, 20 May 2022 15:55:08 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="NbhhjPbe"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1653062107;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pUosTam6sJ3QFBqPm2/0VkGE5we6zMbpQ9U8h/KBbBA=;
-        b=NbhhjPbeQRm3SkmaBPqs4icVbL8d/4Oyn/EYFkDr+nDFbkxeKrWegBzml8pOpvVHS/w7fv
-        ip8Qfd8P0OJ7NKq7jU2m8F1gnbQauwluw41MpowDGCyrsG9L2GaJvPoOVNJLkj1SZXndDZ
-        vOVECAGJr22wyFyOYmNqPl3h97nGSqI=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 47eeb361 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Fri, 20 May 2022 15:55:06 +0000 (UTC)
-Date:   Fri, 20 May 2022 17:55:05 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Theodore Ts'o <tytso@mit.edu>, Christoph Hellwig <hch@lst.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH v4 0/3] random: convert to using iters, for Al Viro
-Message-ID: <Yoe52RaMayvgodVW@zx2c4.com>
-References: <20220520094459.116240-1-Jason@zx2c4.com>
- <Yoey+FOYO69lS5qP@zx2c4.com>
- <bbdeeca7-9c99-e661-6596-f04ea783a30b@kernel.dk>
- <Yoe2PPA/pzqhf+GZ@zx2c4.com>
- <0a6ed6b9-0917-0d83-5c45-70ff58fad429@kernel.dk>
+        Fri, 20 May 2022 11:55:33 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3844B179955
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 08:55:32 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id i11so14892198ybq.9
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 08:55:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qqIlZXHciqSCzGv9K20w6MWTF8E6ifVRlg9P+8G2gKQ=;
+        b=oo+1ocxByaJe982/04okSYCPxdX1W9blLgrX8Fa21vxgElGzE6B/yMLLTUByoo+WPH
+         mBz3f2Ei8URAy3xNduTdzO3blo8zIiPHHdcd5gUVscNDg8M+gjUK8wyHJ+nC1xMC7vD3
+         pHj+bux8qQeKOobC8z6FBxyc7L1yqqMSwvSKQ2uONAGqa6qMzMh1X8ru9lq06mItoKR7
+         hCR3d4ZqrzHIfEzYws3kzrcYj0HlTKNkVJXXwcvW4zvbKqxF6DrgANf8ykl3p80CDf6a
+         IhcXnywNslbNPvPRJftRgZDNh/+P7FHemqI9Q4aXoYdjrAMc/0cFzN3mwZuLSxF6bp/O
+         KxFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qqIlZXHciqSCzGv9K20w6MWTF8E6ifVRlg9P+8G2gKQ=;
+        b=YkJLiPCh1854bH8U3GRQ2PntrRo1TFTtCTCbiW9xDabINmqL8eqjx+XhTOd/Dew3VB
+         Dpk5z+d08HuW7hAP4mohek25Truk5x3eBLWWtuginWTx8/hjMVMtx+FcLHqXe4RAKfPs
+         NxhDW2s1YVz/wjnHt4gD/34q9m5pTj7cO+2edaby0AuT3BErp+O8t7CMcJcIXKeKWXrm
+         mzW1PBBHSNP86ztKYBM5Pxh40IIUYYD90sUcqz7pmYrnacxg+ejlESCQyzgDIdL4YyvV
+         vPxQ9dldJ047zUbhXpb4ApZ0owqsRNrBDrAA4T1dgeAcKy/+k0hrg3Ry0MWOZJSmiNFw
+         wvvA==
+X-Gm-Message-State: AOAM533gSem/jCFvkT4wuHmwRCLRUMmxTRWKgJhfwUa67gGcYGUAYO8C
+        JXK1KwYDtaUEtfX44BCPyqv41gZ/3cejDZChWGLHiQ==
+X-Google-Smtp-Source: ABdhPJzZKZf5fVNn8AONoaSu4ult8oDmS/7X1ySGgimMas0oBwgScpufr6Vecwc4UrWAnzsit/xWKSLeGfwXerC//yE=
+X-Received: by 2002:a25:1c0b:0:b0:64d:6b11:6a32 with SMTP id
+ c11-20020a251c0b000000b0064d6b116a32mr10536038ybc.441.1653062131138; Fri, 20
+ May 2022 08:55:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <0a6ed6b9-0917-0d83-5c45-70ff58fad429@kernel.dk>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220516075619.1277152-1-surenb@google.com> <20220519202149.3ywynqhbxlzp6uyn@revolver>
+ <CAJuCfpHeAXSLjrXxgRaTXOEPPipcFq5MhP=uU0wkqeBoPUAcsQ@mail.gmail.com> <YodBhjkyNtc+Une7@dhcp22.suse.cz>
+In-Reply-To: <YodBhjkyNtc+Une7@dhcp22.suse.cz>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Fri, 20 May 2022 08:55:20 -0700
+Message-ID: <CAJuCfpE2EB88uNUq=ohphKOecPoYZT9ypX8=fzxMgR6BviUibQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] mm: drop oom code from exit_mmap
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Liam Howlett <liam.howlett@oracle.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "rientjes@google.com" <rientjes@google.com>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
+        "guro@fb.com" <guro@fb.com>,
+        "minchan@kernel.org" <minchan@kernel.org>,
+        "kirill@shutemov.name" <kirill@shutemov.name>,
+        "aarcange@redhat.com" <aarcange@redhat.com>,
+        "brauner@kernel.org" <brauner@kernel.org>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "shakeelb@google.com" <shakeelb@google.com>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "jhubbard@nvidia.com" <jhubbard@nvidia.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "kernel-team@android.com" <kernel-team@android.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,37 +87,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jens,
+On Fri, May 20, 2022 at 12:21 AM Michal Hocko <mhocko@suse.com> wrote:
+>
+> On Thu 19-05-22 14:33:03, Suren Baghdasaryan wrote:
+> > On Thu, May 19, 2022 at 1:22 PM Liam Howlett <liam.howlett@oracle.com> wrote:
+> [...]
+> > > arch_exit_mmap() was called under the write lock before, is it safe to
+> > > call it under the read lock?
+> >
+> > Ah, good catch. I missed at least one call chain which I believe would
+> > require arch_exit_mmap() to be called under write lock:
+> >
+> > arch_exit_mmap
+> >     ldt_arch_exit_mmap
+> >         free_ldt_pgtables
+> >             free_pgd_range
+>
+> Why would be this a problem? This is LDT mapped into page tables but as
+> far as I know oom_reaper cannot really ever see that range because it is
+> not really reachable from any VMA.
 
-On Fri, May 20, 2022 at 09:44:25AM -0600, Jens Axboe wrote:
-> Ran 32, 1k, 4k here and it does seem to be down aboout 3%. Which is
-> definitely bigger than I expected, particularly for larger reads. If
-> anything, the 32b read seems comparably better than eg 1k or 4k, which
-> is also unexpected. Let me do a bit of profiling to see what is up.
+Ah, thanks! I didn't realize these page tables are not reachable from
+VMAs. The only other call that I'm not sure is ok without mmap write
+lock is xen_hvm_exit_mmap:
 
-Something to keep in mind wrt 32b is that for complicated crypto
-reasons, the function has this logic:
+arch_exit_mmap
+    paravirt_arch_exit_mmap
+        xen_hvm_exit_mmap
 
-- If len <= 32, generate one 64 byte block and give <= 32 bytes of it to
-  the caller.
+I'll look closer today but if someone can confirm it's safe then my
+current patch should be fine as is.
+Thanks,
+Suren.
 
-- If len > 32, generate one 64 byte block, but give 0 of it to the
-  caller. Then generate ⌈len/64⌉ blocks for the caller.
-
-Put together, this means:
-
-- 1..32, 1 block
-- 33..64, 2 blocks
-- 65..128, 3 blocks
-- 129..196, 4 blocks
-
-So you get this sort of shelf where the amortization benefits don't
-really kick in until after 3 blocks.
-
-> If you're worried about it, I'd just keep the read/write and add the
-> iter variants on the side.
- 
-Not a chance of that. These functions are already finicky as-is; I would
-really hate to have to duplicate all of these paths.
-
-Jason
+>
+> > I'll need to check whether arch_exit_mmap() has to be called before
+> > unmap_vmas(). If not, we could move it further down when we hold the
+> > write lock.
+> > Andrew, please remove this patchset from your tree for now until I fix this.
+> >
+> > >
+> > > >
+> > > >       vma = mm->mmap;
+> > > >       if (!vma) {
+> > > >               /* Can happen if dup_mmap() received an OOM */
+> > > > -             mmap_write_unlock(mm);
+> > > > +             mmap_read_unlock(mm);
+> > > >               return;
+> > > >       }
+> > > >
+> > > > @@ -3138,6 +3121,16 @@ void exit_mmap(struct mm_struct *mm)
+> > > >       /* update_hiwater_rss(mm) here? but nobody should be looking */
+> > > >       /* Use -1 here to ensure all VMAs in the mm are unmapped */
+> > > >       unmap_vmas(&tlb, vma, 0, -1);
+> > > > +     mmap_read_unlock(mm);
+> > > > +
+> > > > +     /*
+> > > > +      * Set MMF_OOM_SKIP to hide this task from the oom killer/reaper
+> > > > +      * because the memory has been already freed. Do not bother checking
+> > > > +      * mm_is_oom_victim because setting a bit unconditionally is cheaper.
+> > > > +      */
+> > > > +     set_bit(MMF_OOM_SKIP, &mm->flags);
+> > > > +
+> > > > +     mmap_write_lock(mm);
+> > >
+> > > Is there a race here?  We had a VMA but after the read lock was dropped,
+> > > could the oom killer cause the VMA to be invalidated?
+>
+> Nope, the oom killer itself doesn't do much beyond sending SIGKILL and
+> scheduling the victim for the oom_reaper. dup_mmap is holding exclusive
+> mmap_lock throughout the whole process.
+>
+> > > I don't think so
+> > > but the comment above about dup_mmap() receiving an OOM makes me
+> > > question it.  The code before kept the write lock from when the VMA was
+> > > found until the end of the mm edits - and it had the check for !vma
+> > > within the block itself.  We are also hiding it from the oom killer
+> > > outside the read lock so it is possible for oom to find it in that
+> > > window, right?
+>
+> The oom killer's victim selection doesn't really depend on the
+> mmap_lock. If there is a race and MMF_OOM_SKIP is not set yet then it
+> will consider the task and very likely bail out anyway because the
+> address space has already been unampped so oom_badness() would consider
+> this task boring.
+>
+> oom_reaper on the other hand would just try to unmap in parallel but
+> that is fine regardless of MMF_OOM_SKIP. Seeing the flag would allow to
+> bail out early rather than just trying to unmap something that is no
+> longer there. The only problem for the oom_reaper is to see page tables
+> of the address space disappearing from udner its feet. That is excluded
+> by the the exlusive lock and as Suren mentions mm->mmap == NULL check
+> if the exit_mmap wins the race.
+> --
+> Michal Hocko
+> SUSE Labs

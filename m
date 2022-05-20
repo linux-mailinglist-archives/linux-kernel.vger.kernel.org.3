@@ -2,87 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E776652E9D2
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 12:22:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 649D052E9DF
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 12:26:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348115AbiETKW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 06:22:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42498 "EHLO
+        id S236296AbiETK0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 06:26:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346498AbiETKW0 (ORCPT
+        with ESMTP id S233724AbiETK0d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 06:22:26 -0400
-Received: from theia.8bytes.org (8bytes.org [IPv6:2a01:238:4383:600:38bc:a715:4b6d:a889])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7E7F5931B
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 03:22:25 -0700 (PDT)
-Received: from cap.home.8bytes.org (p5b006cf2.dip0.t-ipconnect.de [91.0.108.242])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by theia.8bytes.org (Postfix) with ESMTPSA id CC385209;
-        Fri, 20 May 2022 12:22:23 +0200 (CEST)
-From:   Joerg Roedel <joro@8bytes.org>
-To:     Joerg Roedel <joro@8bytes.org>
-Cc:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Will Deacon <will@kernel.org>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        Joerg Roedel <jroedel@suse.de>,
-        "D. Ziegfeld" <dzigg@posteo.de>,
-        =?UTF-8?q?J=C3=B6rg-Volker=20Peetz?= <jvpeetz@web.de>
-Subject: [PATCH] iommu/amd: Increase timeout waiting for GA log enablement
-Date:   Fri, 20 May 2022 12:22:14 +0200
-Message-Id: <20220520102214.12563-1-joro@8bytes.org>
-X-Mailer: git-send-email 2.36.1
+        Fri, 20 May 2022 06:26:33 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F10D759B89;
+        Fri, 20 May 2022 03:26:30 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 321991F46241
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1653042389;
+        bh=HDf0MWYOCR8r+DZXQalTBiAOnmPm5YoK5f5O0omhcKw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=mdAaBJ/ldoxoFkOrLMDVKqWZzcLoxCeB7GE3uaRVXxTozO8Y5+Hp6X5lUigIWNr7J
+         Ktc7zWDmESvVXtv2Iad6ze8Kgxdg2WAsPRxKwZN+IPNJjbKZInkZDd2mV5ih49Z67M
+         XGN+NHSZr59Q4aDq3Zytr23c5wpGqtrewmWFxkoqJ2UkmvdNHFw7qnVk9yUd+BKAHc
+         /oT1lON2DU9i2X04vG27EVMGu2kvfSCyrhA2Eo/Ij66jU4RO4TRI1h3sFvHlRB1j6A
+         33qLkIzS/BpuXD0hf1mRa5PSa1hrhF4FCjI51q6AQKa9lzIUyAHlQSyQ8xjT2cT/uG
+         sv+GathARu3Mw==
+Message-ID: <c7b98ee4-cd4f-d7b7-726d-1acd4fafd50a@collabora.com>
+Date:   Fri, 20 May 2022 12:26:25 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v2 4/4] clk: mediatek: Add drivers for MediaTek MT6735
+ main clock drivers
+Content-Language: en-US
+To:     Miles Chen <miles.chen@mediatek.com>, yassine.oudjana@gmail.com
+Cc:     bgolaszewski@baylibre.com, chun-jie.chen@mediatek.com,
+        devicetree@vger.kernel.org, ikjn@chromium.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        matthias.bgg@gmail.com, mturquette@baylibre.com,
+        p.zabel@pengutronix.de, robh+dt@kernel.org, sam.shih@mediatek.com,
+        sboyd@kernel.org, tinghan.shen@mediatek.com, weiyi.lu@mediatek.com,
+        wenst@chromium.org, y.oudjana@protonmail.com,
+        ~postmarketos/upstreaming@lists.sr.ht
+References: <NJC6CR.M4CF312LSXXV1@gmail.com>
+ <20220520093501.28758-1-miles.chen@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220520093501.28758-1-miles.chen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Joerg Roedel <jroedel@suse.de>
+Il 20/05/22 11:35, Miles Chen ha scritto:
+> 
+>>>
+>>> Thanks for submitting this patch.
+>>>
+>>> I compare this with drivers/clk/mediatek/clk-mt7986-apmixed.c,
+>>> and other clk files are using macros to make the mtk_pll_data array
+>>> more readable.
+>>
+>> I'd actually argue that macros make it less readable. While reading
+>> other drivers I had a lot of trouble figuring out which argument
+>> is which field of the struct, and had to constantly go back to the
+>> macro definitions and count arguments to find it. Having it this
+>> way, each value is labeled clearly with the field it's in. I think
+>> the tradeoff between line count and readability here is worth it.
+> 
+> It is easier for multiple developers to work together if we have a common style.
+> 
+> How do you think?
+> 
 
-On some systems it can take a long time for the hardware to enable the
-GA log of the AMD IOMMU. The current wait time is only 0.1ms, but
-testing showed that it can take up to 14ms for the GA log to enter
-running state after it has been enabled.
+In my opinion, Yassine is definitely right about this one: unrolling these macros
+will make the code more readable, even though this has the side effect of making
+it bigger in the source code form (obviously, when compiled, it's going to be the
+exact same size).
 
-Sometimes the long delay happens when booting the system, sometimes
-only on resume. Adjust the timeout accordingly to not print a warning
-when hardware takes a longer than usual.
+I wouldn't mind getting this clock driver in without the usage of macros, as much
+as I wouldn't mind converting all of the existing drivers to open-code everything
+instead of using macros that you have to find in various headers... this practice
+was done in multiple drivers (clock or elsewhere), so I don't think that it would
+actually be a bad idea to do it here on MediaTek too, even though I'm not aware of
+any *rule* that may want us to do that: if you check across drivers/clk/*, there's
+a big split in how drivers are made, where some are using macros (davinci, renesas,
+samsung, sprd, etc), and some are not (bcm, sunxi-ng, qcom, tegra, versatile, etc),
+so it's really "do it as you wish"...
 
-There has already been an attempt to fix this with commit
+... *but:*
 
-	9b45a7738eec ("iommu/amd: Fix loop timeout issue in iommu_ga_log_enable()")
+Apart from that, I also don't think that it is a good idea to convert the other
+MTK clock drivers right now, as this would make the upstreaming of MediaTek clock
+drivers harder for some of the community in this moment... especially when we look
+at how many MTK SoCs are out there in the wild, and how many we have upstream:
+something like 10% of them, or less.
 
-But that commit was based on some wrong math and did not fix the issue
-in all cases.
+I see the huge benefit of having a bigger community around MediaTek platforms as
+that's beneficial to get a way better support and solidity for all SoCs as they
+are sharing the same drivers and same framework, and expanding the support to more
+of them will only make it better with highly valuable community contributions.
 
-Cc: "D. Ziegfeld" <dzigg@posteo.de>
-Cc: Jörg-Volker Peetz <jvpeetz@web.de>
-Fixes: 8bda0cfbdc1a ("iommu/amd: Detect and initialize guest vAPIC log")
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
----
- drivers/iommu/amd/init.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/iommu/amd/init.c b/drivers/iommu/amd/init.c
-index b4a798c7b347..d8060503ba51 100644
---- a/drivers/iommu/amd/init.c
-+++ b/drivers/iommu/amd/init.c
-@@ -84,7 +84,7 @@
- #define ACPI_DEVFLAG_LINT1              0x80
- #define ACPI_DEVFLAG_ATSDIS             0x10000000
- 
--#define LOOP_TIMEOUT	100000
-+#define LOOP_TIMEOUT	2000000
- /*
-  * ACPI table definitions
-  *
--- 
-2.36.1
+That said, Yassine, you should've understood that you have my full support on
+unrolling these macros - but it's not time to do that yet: you definitely know
+that MediaTek clock drivers are going through a big cleanup phase which is, at
+this point, unavoidable... if we are able to get the aid of scripts (cocci and
+others), that will make our life easier in this cleanup, and will also make us
+able to perform the entire cleanup with less effort and in less overall time.
 
+With that, I'm sad but I have to support Miles' decision on this one, and I also
+have to ask you to use macros in this driver.
+
+
+I am sure - and it is my wish - to see MediaTek clock drivers open-coding stuff
+instead of using macros, but that's something for the future - which will happen
+after the more important cleanups.
+
+After all, it will be just about running "gcc -E xxxx.c" and copy-pasting the
+unrolled macros to the clock drivers, which will be pretty fast and straightforward.
+
+Sorry for the wall of text, by the way.
+
+Cheers,
+Angelo

@@ -2,103 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D1CE52E259
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 04:01:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B40A652E25D
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 04:09:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344681AbiETCAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 22:00:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35604 "EHLO
+        id S238498AbiETCJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 22:09:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233642AbiETCAd (ORCPT
+        with ESMTP id S231640AbiETCJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 22:00:33 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B5CCEC3E1
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 19:00:28 -0700 (PDT)
-X-UUID: 678f8650941a41e6a635e18ff1ae7ee0-20220520
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:9c1dffcf-4ed1-411f-be01-ab84a57e06b1,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:5
-X-CID-META: VersionHash:2a19b09,CLOUDID:284adee2-edbf-4bd4-8a34-dfc5f7bb086d,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:0,BEC:nil
-X-UUID: 678f8650941a41e6a635e18ff1ae7ee0-20220520
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-        (envelope-from <xinlei.lee@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 2041282179; Fri, 20 May 2022 10:00:21 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Fri, 20 May 2022 10:00:20 +0800
-Received: from mszsdaap41.gcn.mediatek.inc (10.16.6.141) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.3 via Frontend Transport; Fri, 20 May 2022 10:00:19 +0800
-From:   <xinlei.lee@mediatek.com>
-To:     <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
-        <airlied@linux.ie>, <daniel@ffwll.ch>, <matthias.bgg@gmail.com>
-CC:     <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <rex-bc.chen@mediatek.com>, <jitao.shi@mediatek.com>,
-        Xinlei Lee <xinlei.lee@mediatek.com>
-Subject: [PATCH v7,4/4] drm/mediatek: Add pull-down MIPI operation in mtk_dsi_poweroff function
-Date:   Fri, 20 May 2022 10:00:07 +0800
-Message-ID: <1653012007-11854-5-git-send-email-xinlei.lee@mediatek.com>
-X-Mailer: git-send-email 2.6.4
-In-Reply-To: <1653012007-11854-1-git-send-email-xinlei.lee@mediatek.com>
-References: <1653012007-11854-1-git-send-email-xinlei.lee@mediatek.com>
+        Thu, 19 May 2022 22:09:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E3FD69CC6;
+        Thu, 19 May 2022 19:09:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1727061BBD;
+        Fri, 20 May 2022 02:09:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57067C385AA;
+        Fri, 20 May 2022 02:09:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653012556;
+        bh=gl4KrzZh297pzyRBGrg99DuXFVso9aKDezZKbkvLka8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=YZqZgOM2RS1anErK0S9CnH5Hy111XLdQfjNiLiXSmXHTxCZhBVa0rSQpE/QmbHmI4
+         VKTtX5cnaC1DiUP/9oLVs2WTxw4rM/O9y+05jgNPcH0gK9ru6CNlhGvknW1LsUS8Y3
+         M/+j78CGPRttCfuwcEBqo8xrpKRXefD6saeMuin2clcuEgKekeyqZPWgdFgKQSwnjJ
+         Syd6bepO59Ikezl4tD8JsaWRKenKNyrjRH2xttUWWzPoKMNDVVMypMocKiJFKP/JRV
+         bCNFnnPPDR1hE0KfS1g3+Wwrbd4dYSZnWatsKnMIbgS8UeHBC+29vgFpYYdhMC52gA
+         FGqNtQs05mIiA==
+Date:   Thu, 19 May 2022 19:09:15 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Menglong Dong <menglong8.dong@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>
+Subject: Re: [PATCH net-next v3 4/4] net: tcp: reset 'drop_reason' to
+ NOT_SPCIFIED in tcp_v{4,6}_rcv()
+Message-ID: <20220519190915.086d4c89@kernel.org>
+In-Reply-To: <CADxym3Y7MkGWmu+8y8Kpcf39QJ5207-VaEnCsYKRDqnpre1O0Q@mail.gmail.com>
+References: <20220513030339.336580-1-imagedong@tencent.com>
+        <20220513030339.336580-5-imagedong@tencent.com>
+        <20220519084851.4bce4bdd@kernel.org>
+        <CADxym3Y7MkGWmu+8y8Kpcf39QJ5207-VaEnCsYKRDqnpre1O0Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xinlei Lee <xinlei.lee@mediatek.com>
+On Fri, 20 May 2022 09:46:49 +0800 Menglong Dong wrote:
+> > This patch is in net, should this fix have been targeting net / 5.18?  
+> 
+> Yeah, I think it should have. What do I need to do? CC someone?
 
-In the dsi_enable function, mtk_dsi_rxtx_control is to
-pull up the MIPI signal operation. Before dsi_disable,
-MIPI should also be pulled down by writing a register
-instead of disabling dsi.
+Too late now, I was just double checking. It can make its way to the
+current release via stable in a week or two.
 
-If disable dsi without pulling the mipi signal low, the value of
-the register will still maintain the setting of the mipi signal being
-pulled high.
-After resume, even if the mipi signal is not pulled high, it will still
-be in the high state.
-
-Fixes: 2e54c14e310f ("drm/mediatek: Add DSI sub driver")
-
-Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
-Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
-Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-Reviewed-by: CK Hu <ck.hu@mediatek.com>
----
- drivers/gpu/drm/mediatek/mtk_dsi.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
-index 25e84d9426bf..79c906868bc2 100644
---- a/drivers/gpu/drm/mediatek/mtk_dsi.c
-+++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
-@@ -688,6 +688,8 @@ static void mtk_dsi_poweroff(struct mtk_dsi *dsi)
- 	mtk_dsi_reset_engine(dsi);
- 	mtk_dsi_lane0_ulp_mode_enter(dsi);
- 	mtk_dsi_clk_ulp_mode_enter(dsi);
-+	/* set the lane number as 0 to pull down mipi */
-+	writel(0, dsi->regs + DSI_TXRX_CTRL);
- 
- 	mtk_dsi_disable(dsi);
- 
--- 
-2.18.0
-
+BTW I'm about to send a fixup to patch 4, stay tuned.

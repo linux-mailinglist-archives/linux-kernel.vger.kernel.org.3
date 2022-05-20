@@ -2,86 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A58E752E690
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 09:51:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE68752E697
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 09:52:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346655AbiETHvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 03:51:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45570 "EHLO
+        id S1346662AbiETHwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 03:52:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346641AbiETHvT (ORCPT
+        with ESMTP id S1346644AbiETHwQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 03:51:19 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B8B4335;
-        Fri, 20 May 2022 00:50:59 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id f10so7354968pjs.3;
-        Fri, 20 May 2022 00:50:59 -0700 (PDT)
+        Fri, 20 May 2022 03:52:16 -0400
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFDCC8D699;
+        Fri, 20 May 2022 00:52:13 -0700 (PDT)
+Received: by mail-qv1-xf2a.google.com with SMTP id k8so6198266qvm.9;
+        Fri, 20 May 2022 00:52:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=YlH159IcSNXAnSMmJrm8SPIzKKgsdQNyWHqQ6RmP5X8=;
-        b=UFMQ6EQgUHKYqvJqw5I6s0P7kMn6UxEfOGOyCHgjfGaTURsUdYbkyHzzQNaiSkc0B8
-         kzo2XZXZ9YsddgW/3uR4CTQ49h2BWa17hKYq3sFHmshzOxgYsIOtGAQKCZEWty554kys
-         Cp+JrBH/gYGExZiKTJzX7MyD9EcAeSczl6tQ1SohJuptWykoZcNPfK4YlyGmY24LsTWG
-         Iwcbb2ILRU33S13LSaKFCK2mJntHkAXligibXRmYhjSIB/en61VfXoz0vLqiyYDMo71p
-         fbR+7X7qgWrbdwGihSZdWt1PZ3Ii/ayrpduRnCLwcysQ7ZDEVmAs7O6VJE1Z7KM5DkOl
-         LQKQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VdY72I8mhybRFUOICLOWp/6ONouuzQkRYkpcV7tXB4w=;
+        b=mGtVG3cF/RRc+1WhMh3mRAJ2N1LM1iGv/ZXcsBkmGC1k8ojddIl/5C4HQYiwX6jAlH
+         nIXG29SF2V7iL1SWaBWxpE8tSZjZusqUdtINbRGhvVcyCH4mqNbZpXKHbXL9uYdagP/G
+         LJaK1rrD2r509upJCzPSuxzVmkIlLFgIuXRYeLg4lgZjn9UU2bKSukMn5F5tMjUHU4yQ
+         v2MfBeW3BKiFQGlFQ6KQ/KjgD/3+lo6iRZsXpBvXXKjH601G3gnMpMujalfx3K+Iqj9S
+         C9JuDOP1vshda5kwnn0hX4D9CBNiRNGh8LAOGMHmE/dsFsa1OtV9yObeSAgdDWi5UvNW
+         e2uA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=YlH159IcSNXAnSMmJrm8SPIzKKgsdQNyWHqQ6RmP5X8=;
-        b=Jpv1kcr19gN7pIke43XedcGVEVKupKbiRslITe8JJDDJH198zcZjAbvD68syIc1d/5
-         2hHgiRqJoAeXdtr3LBRYA078+qBpPOF2t03jrOFiG6s+YNspha0dFDyR2O+0rZFv5qgd
-         aJk/aoLDT2eNUENjyg1VP8mDJ02sY9Gpj6zBn5GfM4mGr3FbdinjDdzfUZFIWcBCE9ha
-         ZQ5AzmMttLKnzkrGmlCCmOzh9DLz5Rs1zsh6Qaqj5feTRdX0X86R5A97V12ICIyGw5a2
-         2NYdDgxGQ49vnQNMVsyWUGvDVmMAL3c87vA+NBqCaq2C4mbiuNjCq0XFacRRqdj1KH27
-         BFQw==
-X-Gm-Message-State: AOAM533u+aUTvaZamkyhZ52V6NM18JfJ/m03J6ycxg1F6X766q81GDXw
-        jnUxQag9gClrEdc8ZU73q2IdsRIre54=
-X-Google-Smtp-Source: ABdhPJwE8KcWrrWcyZwZjrXCxLx99rVuSOz/yzpbM6ERGWN7qY/MeDDOy/Z+8blksEJUtYx3KwpWlg==
-X-Received: by 2002:a17:902:8608:b0:158:c532:d8b2 with SMTP id f8-20020a170902860800b00158c532d8b2mr8650398plo.46.1653033059309;
-        Fri, 20 May 2022 00:50:59 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::4:1761])
-        by smtp.gmail.com with ESMTPSA id k3-20020aa79983000000b005181133ff2dsm1077631pfh.176.2022.05.20.00.50.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 00:50:58 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 19 May 2022 21:50:57 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Shida Zhang <starzhangzsd@gmail.com>
-Cc:     lizefan.x@bytedance.com, hannes@cmpxchg.org, zhangshida@kylinos.cn,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org
-Subject: Re: [PATCH v2] cgroup: remove the superfluous judgment
-Message-ID: <YodIYdu0T+HYKlY7@slm.duckdns.org>
-References: <20220518013647.1749568-1-zhangshida@kylinos.cn>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VdY72I8mhybRFUOICLOWp/6ONouuzQkRYkpcV7tXB4w=;
+        b=rdnpynLZzwiTzEySeDP9Q7EAHtCeZabJLBUEMmDrdV2WmZMwTDNzDM6oqTPVPmlozQ
+         In8l+Tc7IUsbKg9KXpjsCIs7XeIzNtxlqowyzickdp4nlgC4v7SP7hOmUmV4N4AGHeC2
+         bVMu7EMXlRzKNJoWXkqMyagR6f0NtTaE86meNu+Uli3GYESdrlh93bdsl71pIYghOLxC
+         0WFdeYnkWkhwhXeE+zOgx2X32hE+twhLrjA1+fMqlBM2LpuKyrl03dwHkvGCgBGi4aXJ
+         kBkpcXZhE4irl2tLHWkQezBzjjs6az7Bs8Eug2x0nxXzclZEVEJr5LqhlNsWgft7/FCx
+         000Q==
+X-Gm-Message-State: AOAM530Nkh5TxrqV/aVlAuL9tPZNdVyilayssmOmO6czk6gGDRJVBJoB
+        XP658qWk6WXc7X0/UNt8cMBTMwlzekW/pJfV+7k=
+X-Google-Smtp-Source: ABdhPJw8mc4Z1ZNfr3ozcCBCCHD10JZaV1gQehEHnBL/ac8vMhBFmG1SdEbCwkMNxndpXoDSo/5q9pIeCWviRb1yERU=
+X-Received: by 2002:a05:6214:5296:b0:461:d3bb:ba01 with SMTP id
+ kj22-20020a056214529600b00461d3bbba01mr6872345qvb.12.1653033133008; Fri, 20
+ May 2022 00:52:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220518013647.1749568-1-zhangshida@kylinos.cn>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20f17f64-88cb-4e80-07c1-85cb96c83619@windriver.com>
+ <CAOQ4uxiQTwEh3ry8_8UMFuPPBjwA+pb8RLLuG=93c9hYtDqg8g@mail.gmail.com>
+ <YocRWLtlbokO0jsi@zeniv-ca.linux.org.uk> <CAOQ4uxizvWk-=JW=s-WXw0OGR3Wjm2YYkpwQqXHc27U=iRtQDg@mail.gmail.com>
+In-Reply-To: <CAOQ4uxizvWk-=JW=s-WXw0OGR3Wjm2YYkpwQqXHc27U=iRtQDg@mail.gmail.com>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Fri, 20 May 2022 10:52:01 +0300
+Message-ID: <CAOQ4uxj+YSbywkKC8c6qRW55Ujcwxcjkf9sFg=e8m0xp8JLq9g@mail.gmail.com>
+Subject: Re: warning for EOPNOTSUPP vfs_copy_file_range
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     He Zhe <zhe.he@windriver.com>, Dave Chinner <dchinner@redhat.com>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Luis Henriques <lhenriques@suse.com>,
+        Olga Kornievskaia <kolga@netapp.com>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 09:36:47AM +0800, Shida Zhang wrote:
-> Remove the superfluous judgment since the function is
-> never called for a root cgroup, as suggested by Tejun.
-> 
-> Suggested-by: Tejun Heo <tj@kernel.org>
-> Signed-off-by: Shida Zhang <zhangshida@kylinos.cn>
+On Fri, May 20, 2022 at 7:39 AM Amir Goldstein <amir73il@gmail.com> wrote:
+>
+> On Fri, May 20, 2022 at 6:56 AM Al Viro <viro@zeniv.linux.org.uk> wrote:
+> >
+> > On Thu, May 19, 2022 at 04:53:15PM +0300, Amir Goldstein wrote:
+> >
+> > > Luis gave up on it, because no maintainer stepped up to take
+> > > the patch, but I think that is the right way to go.
+> > >
+> > > Maybe this bug report can raise awareness to that old patch.
+> > >
+> > > Al, could you have a look?
+> >
+> > IIRC, you had objections to that variant back then...
+>
+> Right. But not about the "main" patch.
+> The patch had an "also" part:
+>
+> The short-circuit code for the case where the copy length is zero has also
+> been dropped from the VFS code.  This is because a zero size copy between
+> two files shall provide a clear indication on whether or not the
+> filesystem supports non-zero copies.
+>
+> -     if (len == 0)
+> -         return 0;
+> -
+>
+> Which would have been a regression for nfs client, because
+> nfs protocol treats length 0 from ->copy_file_range() as "copy everything":
+>
+> https://lore.kernel.org/linux-fsdevel/CAOQ4uxgwcNwWEqYKBg3fMHD3aXOsYUmPeexBe9EVP9Nb53b-Hw@mail.gmail.com/
+>
+> This api impedance should be fixed in the nfs client, but I'm
+> not sure if that was already done.
+>
+> I will test and re-post Luis' patch without removing the short-circuit
+> unless Luis gets to it first.
+>
 
-Applied to cgroup/for-5.19.
+Urgh! That old patch passes the fstests -g copy_range group
+on nfs, but fails almost all of them on xfs/btrfs.
 
-Thanks.
+The reason is that when we allow to perform copy_range
+with remap_file_range() it fails for sizes smaller than block size
+and returning short read of 0 from copy_range is not an option.
 
--- 
-tejun
+So what I am going to do is to keep the basic restriction in this patch of:
+"copy_range allowed for fs that implement either ->copy_file_range()
+or ->remap_file_range() (for same sb copy)"
+
+But will change the logic of:
+"try clone and then copy then fail"
+to:
+- try ->copy_file_range()
+- try ->remap_file_range()
+- fall back to kernel copy
+
+Patch coming shortly.
+
+Thanks,
+Amir.

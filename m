@@ -2,96 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF08E52EB75
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 14:03:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 844B052EB72
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 14:03:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344623AbiETMCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 08:02:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52816 "EHLO
+        id S1348933AbiETMCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 08:02:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348908AbiETMBl (ORCPT
+        with ESMTP id S1348947AbiETMCf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 08:01:41 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9135149920;
-        Fri, 20 May 2022 05:01:35 -0700 (PDT)
-Received: from kwepemi100022.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L4QH04bTnzQkBG;
-        Fri, 20 May 2022 19:58:36 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi100022.china.huawei.com (7.221.188.126) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 20 May 2022 20:01:32 +0800
-Received: from [10.174.176.73] (10.174.176.73) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 20 May 2022 20:01:32 +0800
-Subject: Re: [PATCH -next v2] blk-mq: fix panic during blk_mq_run_work_fn()
-To:     Ming Lei <ming.lei@redhat.com>
-CC:     <axboe@kernel.dk>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
-References: <20220520032542.3331610-1-yukuai3@huawei.com>
- <YocOsw6n3y11lNym@T590> <2b7a82e0-1e33-e2ff-74d7-d80f152fdc75@huawei.com>
- <afe9dec4-733d-88e9-850d-5c36e9201119@huawei.com> <YodSlSm/sIC8G2iG@T590>
- <dbe2deec-b007-470f-eb5a-35fae63ad134@huawei.com> <YodlGOo7vrUa7DZK@T590>
- <0e7967de-0c32-790d-fa08-b0bc9ef5923d@huawei.com> <Yod93DOdYosa+SvS@T590>
-From:   "yukuai (C)" <yukuai3@huawei.com>
-Message-ID: <8e6a806b-f42e-319b-e6c8-de1f07befce2@huawei.com>
-Date:   Fri, 20 May 2022 20:01:31 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Fri, 20 May 2022 08:02:35 -0400
+Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A11149156;
+        Fri, 20 May 2022 05:02:26 -0700 (PDT)
+Received: by mail-qv1-f52.google.com with SMTP id eq14so6519377qvb.4;
+        Fri, 20 May 2022 05:02:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=65WlQ7s8g42M5C+5yY3Awf+CpXZTfjugQxcprooIu8U=;
+        b=H4H5LtAxlH368rGbeiAUynQDnrh/BXQmBONueTt/4LyjcN0gRD5Imh2Eb1wviOUidU
+         ZaUNCljmMzVu97ucZAG88dMS1MttqTcGDsQg/Rb9zRXxOIaCK4FpqBsOOe5VSv2HoqYc
+         Vx0WW/UDHb0QINToSOROo7wHOHxDBuqASpjNZFd7K2gObbkr8/fnsjW4eRin9K9KDgOV
+         gyxvmRiOwG423nqWVrpdKsGvq11JuIGYl8MwC2xCyIhHWZ/mH+Cs9XJGGAP8zlPclR5P
+         oJWG5EpI//w3ll3p3pi3fskRX3aLUEkm4BytvupZnexgrlQaJ9qf6FJb9hqoLY4RiTQs
+         FOWw==
+X-Gm-Message-State: AOAM533pCWAUb2WxgWalUoN0CfNCLXzZ91kz5YqhhFQEsX/XgtJlT/bk
+        LZmaI5VWbgGA95xXxOnYDWb7VQbtBurznw==
+X-Google-Smtp-Source: ABdhPJzxbJUSuKDtFmliNY60ckeR9FwT0HpsWozJ6nrAa6f+qH4bHHCc+oxtXwpVW4zfaDztnxiYAg==
+X-Received: by 2002:a05:6214:500c:b0:435:6b7d:5bc3 with SMTP id jo12-20020a056214500c00b004356b7d5bc3mr7641794qvb.92.1653048144744;
+        Fri, 20 May 2022 05:02:24 -0700 (PDT)
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
+        by smtp.gmail.com with ESMTPSA id he17-20020a05622a601100b002f39b99f6c3sm2850201qtb.93.2022.05.20.05.02.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 May 2022 05:02:24 -0700 (PDT)
+Received: by mail-yb1-f178.google.com with SMTP id t26so13825047ybt.3;
+        Fri, 20 May 2022 05:02:23 -0700 (PDT)
+X-Received: by 2002:a25:4289:0:b0:64d:746f:5311 with SMTP id
+ p131-20020a254289000000b0064d746f5311mr8586423yba.89.1653048143666; Fri, 20
+ May 2022 05:02:23 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <Yod93DOdYosa+SvS@T590>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.73]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220520091602.179078-1-javierm@redhat.com>
+In-Reply-To: <20220520091602.179078-1-javierm@redhat.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 20 May 2022 14:02:11 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVmFGjGbHz1yo7tOzqtUbMTDkUxaMo2fVSp1HMU=_1emA@mail.gmail.com>
+Message-ID: <CAMuHMdVmFGjGbHz1yo7tOzqtUbMTDkUxaMo2fVSp1HMU=_1emA@mail.gmail.com>
+Subject: Re: [PATCH] drm/st7735r: Fix module autoloading for Okaya RH128128T
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        David Lechner <david@lechnology.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Mark Brown <broonie@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/05/20 19:39, Ming Lei 写道:
+Hi Javier,
 
-> 
-> In short:
-> 
-> 1) run queue can be in-progress during cleanup queue, or returns from
-> cleanup queue; we drain it in both blk_cleanup_queue() and
-> disk_release_mq(), see commit 2a19b28f7929 ("blk-mq: cancel blk-mq dispatch
-> work in both blk_cleanup_queue and disk_release()")
-I understand that, however, there is no garantee new 'hctx->run_work'
-won't be queued after 'drain it', for this crash, I think this is how
-it triggered:
+CC spi
 
-assum that there is no io, while some bfq_queue is still busy:
+On Fri, May 20, 2022 at 11:16 AM Javier Martinez Canillas
+<javierm@redhat.com> wrote:
+> The SPI core always reports a "MODALIAS=spi:<foo>", even if the device was
+> registered via OF. This means that the st7735r.ko module won't autoload if
+> a DT has a node with a compatible "okaya,rh128128t" string.
+>
+> In that case, kmod expects a "MODALIAS=of:N*T*Cokaya,rh128128t" uevent but
+> instead will get a "MODALIAS=spi:rh128128t", which is not present in the
+> list of aliases:
+>
+>   $ modinfo drivers/gpu/drm/tiny/st7735r.ko | grep alias
+>   alias:          of:N*T*Cokaya,rh128128tC*
+>   alias:          of:N*T*Cokaya,rh128128t
+>   alias:          of:N*T*Cjianda,jd-t18003-t01C*
+>   alias:          of:N*T*Cjianda,jd-t18003-t01
+>   alias:          spi:jd-t18003-t01
+>
+> To workaround this issue, add in the SPI table an entry for that device.
+>
+> Fixes: d1d511d516f7 ("drm: tiny: st7735r: Add support for Okaya RH128128T")
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
 
-blk_cleanup_queue
-  blk_freeze_queue
-  blk_mq_cancel_work_sync
-  cancel_delayed_work_sync(hctx1)
-				blk_mq_run_work_fn -> hctx2
-				 __blk_mq_run_hw_queue
-				  blk_mq_sched_dispatch_requests
-				   __blk_mq_do_dispatch_sched
-				    blk_mq_delay_run_hw_queues
-				     blk_mq_delay_run_hw_queue
-				      -> add hctx1->run_work again
-  cancel_delayed_work_sync(hctx2)
-> 
-> 2) tagset can't be touched after blk_cleanup_queue returns because
-> tagset lifetime is covered by driver, which is often released after
-> blk_cleanup_queue() returns.
-> 
-> 
-> Thanks,
-> Ming
-> 
-> .
-> 
+Thanks for your patch!
+We really need to fix this at the subsystem level.
+
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+
+> --- a/drivers/gpu/drm/tiny/st7735r.c
+> +++ b/drivers/gpu/drm/tiny/st7735r.c
+> @@ -174,6 +174,7 @@ MODULE_DEVICE_TABLE(of, st7735r_of_match);
+>
+>  static const struct spi_device_id st7735r_id[] = {
+>         { "jd-t18003-t01", (uintptr_t)&jd_t18003_t01_cfg },
+> +       { "rh128128t", (uintptr_t)&rh128128t_cfg },
+>         { },
+>  };
+>  MODULE_DEVICE_TABLE(spi, st7735r_id);
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

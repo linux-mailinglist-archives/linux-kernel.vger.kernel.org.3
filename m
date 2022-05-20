@@ -2,52 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEE2E52EB37
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 13:52:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD53B52EB39
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 13:53:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348783AbiETLww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 07:52:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35972 "EHLO
+        id S1348801AbiETLxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 07:53:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348762AbiETLwp (ORCPT
+        with ESMTP id S1348806AbiETLxD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 07:52:45 -0400
+        Fri, 20 May 2022 07:53:03 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F31F615E48E;
-        Fri, 20 May 2022 04:52:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B1C15E63E
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 04:52:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4FFC461DEB;
-        Fri, 20 May 2022 11:52:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BDA2C385A9;
-        Fri, 20 May 2022 11:52:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CF67761DFD
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 11:52:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20F6BC385A9;
+        Fri, 20 May 2022 11:52:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653047563;
-        bh=KjobZP6O6Jgwt6QhmllP83ZeT6Jg+VwnOafaxcAZ+8c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bptv6Mg3TVFF3Sk1DQV4g4ILT2blHfHJLQtoU4tvyhqF7sBMSi7SFHPt3GYix9zDj
-         fmabFBKLLAt+mzYpio3Dnr/a7b1Bzz/E1lwcSx8VAf8RLyOdKVCKRepQRXrq4mW3NI
-         xqhUOLKtCR6bJJICVsEgK6en7zdhRbI3TuWM4uIQLCEtyDzROd1z4XU0U6Eg3HnHGC
-         6Vu5Fs1CZPey2sZjUfEvTvZXyBNZShJ6tvoIR9/5uN7AJh/Mv7cAPeyxtXUC8GLCOr
-         f3oZpQCpTLgA7aCs25q+jmOHsq0cBJOc1BrqKgBXL2hPTHR0+nkHa+zQP+BSejsGZ5
-         JQb/K98Kky8rA==
-Date:   Fri, 20 May 2022 13:52:37 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-xfs@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-fscrypt@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Keith Busch <kbusch@kernel.org>
-Subject: Re: [RFC PATCH v2 1/7] statx: add I/O alignment information
-Message-ID: <20220520115237.w2oa5bdzyzhkgwin@wittgenstein>
-References: <20220518235011.153058-1-ebiggers@kernel.org>
- <20220518235011.153058-2-ebiggers@kernel.org>
+        s=k20201202; t=1653047576;
+        bh=oZptL5fsiNONqFwTONEq/Jg0O0BcJkaM8ZR8aQVYHw4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=NtuVB4/dpuMPVCP7hjFnA+Ne8bqpDeYDpI+3rdn3jCTMNF0NPixWIwh3VcLLTFHRN
+         LddOGNcKKjnQUDJ8vZ2kcJVOdCoqZ/QV3aGEqlFhx6B2FuNjkPZl6eZ0gWvo9/4fgp
+         wyioSp+1oxxorwkwYLZuY/pZ+yuMAK9HqaVUKM2KpF2NiqIHauVwR4pxLLY5nu8hIk
+         TIbZ7QcX0CU/ba0+mem3JCvQeolLkNjsFbjOMkhiCOR5wTqOhzVSsZukeYQLtqSKpb
+         yr8GHpmD9cAfHkjhO4yR3Dtfh+JH/PEwdLI7MXx7Q+TaWGUYas269qynKBYP9D43cp
+         mJ4vb2Vga84RA==
+Date:   Fri, 20 May 2022 12:52:51 +0100
+From:   Will Deacon <will@kernel.org>
+To:     torvalds@linux-foundation.org
+Cc:     catalin.marinas@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: [GIT PULL] arm64 fixes for -rc8/final
+Message-ID: <20220520115250.GA6700@willie-the-truck>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220518235011.153058-2-ebiggers@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,63 +53,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 04:50:05PM -0700, Eric Biggers wrote:
-> From: Eric Biggers <ebiggers@google.com>
-> 
-> Traditionally, the conditions for when DIO (direct I/O) is supported
-> were fairly simple: filesystems either supported DIO aligned to the
-> block device's logical block size, or didn't support DIO at all.
-> 
-> However, due to filesystem features that have been added over time (e.g,
-> data journalling, inline data, encryption, verity, compression,
-> checkpoint disabling, log-structured mode), the conditions for when DIO
-> is allowed on a file have gotten increasingly complex.  Whether a
-> particular file supports DIO, and with what alignment, can depend on
-> various file attributes and filesystem mount options, as well as which
-> block device(s) the file's data is located on.
-> 
-> XFS has an ioctl XFS_IOC_DIOINFO which exposes this information to
-> applications.  However, as discussed
-> (https://lore.kernel.org/linux-fsdevel/20220120071215.123274-1-ebiggers@kernel.org/T/#u),
-> this ioctl is rarely used and not known to be used outside of
-> XFS-specific code.  It also was never intended to indicate when a file
-> doesn't support DIO at all, and it only exposes the minimum I/O
-> alignment, not the optimal I/O alignment which has been requested too.
-> 
-> Therefore, let's expose this information via statx().  Add the
-> STATX_IOALIGN flag and three fields associated with it:
-> 
-> * stx_mem_align_dio: the alignment (in bytes) required for user memory
->   buffers for DIO, or 0 if DIO is not supported on the file.
-> 
-> * stx_offset_align_dio: the alignment (in bytes) required for file
->   offsets and I/O segment lengths for DIO, or 0 if DIO is not supported
->   on the file.  This will only be nonzero if stx_mem_align_dio is
->   nonzero, and vice versa.
-> 
-> * stx_offset_align_optimal: the alignment (in bytes) suggested for file
->   offsets and I/O segment lengths to get optimal performance.  This
->   applies to both DIO and buffered I/O.  It differs from stx_blocksize
->   in that stx_offset_align_optimal will contain the real optimum I/O
->   size, which may be a large value.  In contrast, for compatibility
->   reasons stx_blocksize is the minimum size needed to avoid page cache
->   read/write/modify cycles, which may be much smaller than the optimum
->   I/O size.  For more details about the motivation for this field, see
->   https://lore.kernel.org/r/20220210040304.GM59729@dread.disaster.area
-> 
-> Note that as with other statx() extensions, if STATX_IOALIGN isn't set
-> in the returned statx struct, then these new fields won't be filled in.
-> This will happen if the filesystem doesn't support STATX_IOALIGN, or if
-> the file isn't a regular file.  (It might be supported on block device
-> files in the future.)  It might also happen if the caller didn't include
-> STATX_IOALIGN in the request mask, since statx() isn't required to
-> return information that wasn't requested.
-> 
-> This commit adds the VFS-level plumbing for STATX_IOALIGN.  Individual
-> filesystems will still need to add code to support it.
-> 
-> Signed-off-by: Eric Biggers <ebiggers@google.com>
-> ---
+Hi Linus,
 
-Looks good to me,
-Reviewed-by: Christian Brauner (Microsoft) <brauner@kernel.org>
+Please pull these three arm64 fixes for -rc8/final. The MTE and stolen
+time fixes have been doing the rounds for a little while, but review
+and testing feedback was ongoing until earlier this week. The kexec fix
+showed up on Monday and addresses a failure observed under Qemu.
+
+Summary in the tag. Cheers,
+
+Will
+
+--->8
+
+The following changes since commit 51f559d66527e238f9a5f82027bff499784d4eac:
+
+  arm64: Enable repeat tlbi workaround on KRYO4XX gold CPUs (2022-05-12 13:15:38 +0100)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git tags/arm64-fixes
+
+for you to fetch changes up to 1d0cb4c8864addc362bae98e8ffa5500c87e1227:
+
+  arm64: mte: Ensure the cleared tags are visible before setting the PTE (2022-05-17 14:29:51 +0100)
+
+----------------------------------------------------------------
+arm64 fixes for -rc8/final
+
+- Add missing write barrier to publish MTE tags before a pte update
+
+- Fix kexec relocation clobbering its own data structures
+
+- Fix stolen time crash if a timer IRQ fires during CPU hotplug
+
+----------------------------------------------------------------
+Catalin Marinas (1):
+      arm64: mte: Ensure the cleared tags are visible before setting the PTE
+
+Mark Rutland (1):
+      arm64: kexec: load from kimage prior to clobbering
+
+Prakruthi Deepak Heragu (1):
+      arm64: paravirt: Use RCU read locks to guard stolen_time
+
+ arch/arm64/kernel/mte.c             |  3 +++
+ arch/arm64/kernel/paravirt.c        | 29 +++++++++++++++++++++--------
+ arch/arm64/kernel/relocate_kernel.S | 22 +++++++++++++++-------
+ 3 files changed, 39 insertions(+), 15 deletions(-)

@@ -2,190 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6278452E52F
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 08:44:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33E4252E53A
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 08:46:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345953AbiETGoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 02:44:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59556 "EHLO
+        id S1345976AbiETGqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 02:46:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345947AbiETGoc (ORCPT
+        with ESMTP id S1345969AbiETGqI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 02:44:32 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A0C14CA37
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 23:44:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653029071; x=1684565071;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=BFOIGS+UO6yNQ6oDUnVrSS743SJ5o0AGPw625gUfsq0=;
-  b=NhmqhG7eABAOF8eG3/jhcmTXvoG//z6BvKmfWusFJ2jhr4wpxzXa9yEW
-   Y/IVYV4NfeOT7Jii2/JfoalSHt+6gWDHiHeQvAwF0W8wwJeYuSaT9MvZr
-   RneYAaRMv/w8V/Sz0mQV/u4YDD4CPJ2pfFcUyrmL0gHOg2Y6cc4fS7PoM
-   q+3nj4nr8cFzCx9uKrCCn6Fa4nWK2Vz24Jhvt1EpM5I5Ie4GBuPl4ksBl
-   wIwfa3vwT6ZzUr1snddHw0kX9Ql+E8TEijNSf236J9EKEKHmHNvy4Z6ij
-   YM8j560cKDaejKgJ3q1bQyDWVSXfmGaONB1EDOo7SI9vxQaryPQNlUpQ3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="272483819"
-X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="272483819"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 23:44:31 -0700
-X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="546529712"
-Received: from xinyutan-mobl.ccr.corp.intel.com ([10.254.215.154])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 23:44:28 -0700
-Message-ID: <4977e67c975723c98a441e08cc9f001b69f5668e.camel@intel.com>
-Subject: Re: [LKP] Re: [sched/numa]  bb2dee337b:  unixbench.score -11.2%
- regression
-From:   Ying Huang <ying.huang@intel.com>
-To:     Mel Gorman <mgorman@techsingularity.net>,
-        kernel test robot <oliver.sang@intel.com>
-Cc:     0day robot <lkp@intel.com>, LKML <linux-kernel@vger.kernel.org>,
-        lkp@lists.01.org, fengwei.yin@intel.com,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Aubrey Li <aubrey.li@linux.intel.com>, yu.c.chen@intel.com
-Date:   Fri, 20 May 2022 14:44:26 +0800
-In-Reply-To: <5941ce856343c314f829852d3a831cdd19f06573.camel@intel.com>
-References: <20220511143038.4620-4-mgorman@techsingularity.net>
-         <20220518092414.GA15472@xsang-OptiPlex-9020>
-         <20220518152258.GR3441@techsingularity.net>
-         <5941ce856343c314f829852d3a831cdd19f06573.camel@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
-MIME-Version: 1.0
+        Fri, 20 May 2022 02:46:08 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05353632A;
+        Thu, 19 May 2022 23:46:03 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24K5TdqO016949;
+        Fri, 20 May 2022 06:45:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : content-type : content-transfer-encoding :
+ mime-version; s=corp-2021-07-09;
+ bh=1iQV7BXiNeAjgHtftthAUHLQslOSZwxCeLkcw0+B4Nw=;
+ b=LI/PLbg8r+rx5gD/SEMMvfJubd0RTbGywlBmliM4HxfObKy5HYKAZtWafcRZ3NwFLWb0
+ 1oMqCStVehfL4X7v9x84NKqY8cqYBKYXCIO9+yHNhWyyO1wEOZ4yUbPMscU4TAp5V40U
+ NQ5FscUc9MNs5E40wKEhb9ISzCZKF6uq7kUYAj4mqOZnwv/sK1VEEwJ2VnWhdsGsYUKn
+ 56aUoZ3reO1V0asDoiudff0EHDRbAIx7cIFpD9WB8YjiJd4UtB0XYtTcfval0Ebo+Py2
+ IemVtShOIy9cZrU88k4/oGej2qtcIjCTVxT64BD2nB6QnXwVsxdLsq+1Ix9VBjYmtxs6 qA== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3g24ytx79n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 20 May 2022 06:45:53 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 24K6jode011087;
+        Fri, 20 May 2022 06:45:51 GMT
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2046.outbound.protection.outlook.com [104.47.66.46])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3g22v5ruxd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 20 May 2022 06:45:51 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mbjbnXbTyFzfKiAyOtYCQ/hKr6AcvSU7stwK5fKRvEVmes3MRwfcAWryV2gORQv85O19G6dZMopmHZzJDb3C/eulJl42Rjmy1gyh68HwD9pn2SEF950p6kL3QR/eC+3WlFOYEjvwf66URuK2+DOnh+zonE10GlRXtu9Xj3X7yqkGFEAj1JdO9w8j3RGiziOklbZ9pa4M0Vb6CkasbWYV0OAsu1hEtW2OCBpL7aWOmf+IvROSGDgBd2vUAQfBaAZlC10MvctoW1dcNsRAAS6cWts8Hr2embAKNPnGIkXw2UP3roJB5c9Fipf9UFewc/gV2NjOYYSpGsSqNJtYGnBuLw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1iQV7BXiNeAjgHtftthAUHLQslOSZwxCeLkcw0+B4Nw=;
+ b=WsmQpmLRnTWXQJhJyFMfoO5tvx9ZskKuuIDkFydggWDR4LcWl71lFtWViCLidkbfcgBPlGmln3AFXZL6+z7gtqR0+zzs7SEVk7umebU3Fza89gjQfn9bFdN+Q060UVcGbA8A4GKkAsG0IU+WKV8oD2E9BH5wmKPWJ87kyPrIdKURYVS6IM1atVI39KTuUYJRUw5KD01b0T6cQ1aqwIIdeC7ICUjc6ZAuvkNhvMi/Z5Rx2Np24F1xs2DM6MK+YdSdxRi4EcVupJ5G6vJP4l318fImaOj/zM18c8o/u4PcK5hOFZSbcufqnRuxLFt1FKdztk0zSX1QfXgLTKtg+3jQNA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1iQV7BXiNeAjgHtftthAUHLQslOSZwxCeLkcw0+B4Nw=;
+ b=o42CkV1T0rgt4cOzxI+5MTECnQu/q66RskyPb8A7qnK+ziJaD8E/DcNJ5okvDGmJicgkPGOnDmzah8tz1MqmH1xSVFAvX+y/niya9en+LRYg6FbzTrgYNK4yvyaV1Pvyw4W9X3Gu8vZGADvVOsCKG8AFhFsET/srCfJu3IvgNrc=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by PH0PR10MB5435.namprd10.prod.outlook.com
+ (2603:10b6:510:ec::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.15; Fri, 20 May
+ 2022 06:45:36 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::86f:81ba:9951:5a7e]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::86f:81ba:9951:5a7e%2]) with mapi id 15.20.5273.014; Fri, 20 May 2022
+ 06:45:36 +0000
+Date:   Fri, 20 May 2022 09:45:16 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        stable@vger.kernel.org,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH v3] nvmem: brcm_nvram: check for allocation failure
+Message-ID: <20220520064516.GX4009@kadam>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: MR2P264CA0176.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501::15)
+ To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1ab31446-d7bb-4b1e-aafb-08da3a2c581c
+X-MS-TrafficTypeDiagnostic: PH0PR10MB5435:EE_
+X-Microsoft-Antispam-PRVS: <PH0PR10MB54352B817D8DB75D89BF299C8ED39@PH0PR10MB5435.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: RyiIOaS6fpKBGLI1zqpuvDiJVpHf82XXOJJnhG1/Hiq5Wpn9xxnhJOUHhIB7JeQjixMX8ysN+6ESBYrry8Kk0B99gkKMVtUv2SnZQ3YtVSWmmKMhzB6nlCWV8rvmydYR9l4708OqQRGEjyVgry7LviRn6Dnx4xGxHAdO83TN6EhQqDsJZLAhNy4TJuYW3svSVWp7sUTZltSi3F/4zCB97Gg3fDjAgM90XXOEJ6saLRMtDq64Jk0a9nJUk+FKJjeZySvb9eKxgTU8UCGIYUDdAQzfatP1wOqwLMI8h7LWohge9DsXtpp+I7eS2q5viPKp3h/52LadStR4ym5/XMDkxjJi1hv7bGgbpEB5XS30PVZkA97mRfGXoHqqIUvh81X2Vmz9BR/a0frp3gKShEsqSM2ePWW0XBvubFFQmlNh0oPPe/hPQ47tHOwmM3Y8Q2yJ/ChmS9yVAwUZ2Fy065A9VDehZ4Gm5/qoGLawY7n6kZxpoxd+JmgJbM9376ohLebhgiEzeG0iGkVIaWOECitwbpfQFoT20Pas+dPFgYjipKkWaDYAZ4NdJmVv9VqwkM4Nxg43wBKcm9GE0B55/a/v5oRbyZiZ3G5RRpb2DbvmwJlajRNs9nv9fGKZDa5q2JA03fCjuo5fbIPC8LLvwLToZyLSrckTpwL/7s/eEaOY+fITgQZH067be09i+oHtLuhYOaO3WzJZCxat/IWQLDvGYw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(26005)(6506007)(52116002)(6512007)(6486002)(5660300002)(33656002)(6666004)(9686003)(2906002)(33716001)(38100700002)(38350700002)(83380400001)(186003)(66946007)(1076003)(66574015)(4326008)(8676002)(66556008)(508600001)(66476007)(86362001)(54906003)(44832011)(6916009)(8936002)(316002)(4744005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aXVtTk9DOVVaclIxQU1BTHJnZTRDaXBlTWltL2Y1c1FLWFpMRVF2dy8ybWhX?=
+ =?utf-8?B?RXJhR0l3YUtxM2pwRlVYTUJEMXNHS3o5dThENVpCOUhzTklDM1FWeGZQLzVV?=
+ =?utf-8?B?aENVQ1JXRE5QTnY2L0laKzE3RVpPMFQxVHNQcC9ib05DdElHeEF4cExpZlYw?=
+ =?utf-8?B?c3hwRWl1NXMxOGpUajlpY21HeVpjYTM5akZpdk5CWXBHVVJ0Z3BUcm5FRlMy?=
+ =?utf-8?B?WjlmNUhRdm81cVFmbmRQS3cxNnFRekh4aU5SSXdza3Bxc1JmVVBTdnYrZ3hZ?=
+ =?utf-8?B?Z3VjM2hDTWsxVGUzWmM0L1hoSmRkR3J4Uy92QmpFM0kwSjN5bXdmZ2R6VTcv?=
+ =?utf-8?B?VzkrZ3hoeTQ1TWdBa0RFTVp3WXdPbXllYXFUMzQ5dU5Ham9BTzloemZyWWs3?=
+ =?utf-8?B?aFkwWkV6d2tlalhQeDErV1VkWWhtdE42bDRJejNIbGkwdkY0THozd2ZFSFFi?=
+ =?utf-8?B?WUxacTFZNG0vWGQxc2RHUnRQMGJOOWtudDFxR3BQNGFicUNIc2RlZ0Jzd1M0?=
+ =?utf-8?B?cVFOOGtzeVlUNENWbTh1NmlUTEZjRTczalRzb0dqVnFYUzRHbXJjM29qdkhy?=
+ =?utf-8?B?MjBaUFpTaUxXZDU4dE5tYkRRN25lOVVEQ0Zwb2pSZnNBYjh3KzU2dUIvSkJs?=
+ =?utf-8?B?bmV2NStMU3UzR0tVaGo1NDdWeW1qdFI5Q1RPQWJhU2pDaEg0ZlExVjNTaDMw?=
+ =?utf-8?B?ckhYREtES3BJOVQ2bGdCWnVBM0dsSm0vNG1FOWdqeCtFZVhab0JNdHRSUkpN?=
+ =?utf-8?B?ZDN4TDRicGMwUUgxRkRCekpmT0FDQjRZWHBwc1lsOW9GSTZoOW5ZUUhIMDBo?=
+ =?utf-8?B?dDFFTWlNYWxlRjFNUDgzbVdTT1MwQmkrNlNQRmV6SHdPZElkZzJCcEhHU3Rx?=
+ =?utf-8?B?dVcxZFRDK2lBaEhzci9IdGpkRjhoNkN5SFZ5TEoxRGJpYmV5dG9WeDluSE9Y?=
+ =?utf-8?B?dDdscmhRVzFVdi9PTzZic0VSNHBURDR2YlQ3N2pHZlN1bnRXT2J1b1FWRXlJ?=
+ =?utf-8?B?ZWp6ZjNWUE5tbDZMOEhTZEJJaWM3NU93a3lmcU1RZFh6WTlxS3p3Mi82ZXJJ?=
+ =?utf-8?B?SDcraEk5bkhFTjZZcDhsWWJKTzZaWlhwZW50OW5hT2NMSmtGd2NUVXJXS0hD?=
+ =?utf-8?B?L2tES3JzbmN6djU3aXpoNytoNW1RenhsWlJXUk1aWk5YZ2UwZGJiaEhBWTds?=
+ =?utf-8?B?dzkvNEZqTHVORU9zeFlMWnRGS3Y5T1cxeWRIV2J2aDJHRUYxRDZFT1k5VjFJ?=
+ =?utf-8?B?ZGcwRFNvYi9BSHhsTVJ6M1lycnJJc3JTWjQzNkZMbnQ2Vm44VEt5MU1UK0oz?=
+ =?utf-8?B?ZHcyRFNvMFpxWlVRMmNTRDQ2MjZtVGVQcHB2YTlGMDB1NE5QTWZ2YlBSMUtT?=
+ =?utf-8?B?QUJrSVdsUk1obk1xalo4SEVyWFEvSzV5SDZvZ29xQ25vYU1FSy9IN0NkYkl2?=
+ =?utf-8?B?aHM5b05RWDYvdXhDWHpEVjh2MWlsdkNQQ2NpaGdqMFFacDhXL1YzWVdEZFlS?=
+ =?utf-8?B?cjBSUmlzd1d2ZEJJY1R4dllsczNlTlBYQnhZZys1Sjd4a1RKOXlkdWoyZCth?=
+ =?utf-8?B?WExNUjVOejE2ckZzN2dPTVk3M0xQZWJMNXBJeU1EeHkxV1JwRkc1V2Uvd0Ru?=
+ =?utf-8?B?dGQwUWhRa2pNQ1BYV2lHbUxzNlAzMVpjYkU2VXNVdnJTSzdjQ0dRNndNSi9Z?=
+ =?utf-8?B?TXBYdldidEhTUVBDY0pORVNaM2tYVWMzM1hrWmYvMWZTMmdHMzhES2IyS0RU?=
+ =?utf-8?B?a3BYbGdTZnkyQVZaRXJoQTF3NlhKd2dpbmlYblQ5UlRadFNaM3lvbHN2RGZj?=
+ =?utf-8?B?UE9wQTFreWN0L0MxMnQyU3ZTdllENElmQnRFTjZWNGYzRVo0RVNFTHE3YVhP?=
+ =?utf-8?B?RU5iSmlFTXdvbHEzTnBEdnNleVNlbEZjNytKdGF1alFYb0lWdGRJVHlFQnV0?=
+ =?utf-8?B?dmNBMkU0MTE2MjNNR3dDWU90QzRzbEUvM2FlakpPcW9UK0J3YnBqQm9qaHR0?=
+ =?utf-8?B?WGxqNmp1b29Qb2RyTkNLRi9LMWE0alFQRDkvU0tTRFMwMG9ETThWcjQ0WUUz?=
+ =?utf-8?B?elBPSldwL3hlT0I2NFB1aWdUSnU2cVBNcG5Oak1hS0wzS3VLaXZtcmtMRnRC?=
+ =?utf-8?B?Zzg5KzRPNmN3OEZFekFQZkJ5bUJGWHgzNStDZUtkR0ltZTU0bDE0bUdJZ2dM?=
+ =?utf-8?B?TUVuMS9jZVRNZnBYc2VGVUlYMldaN0Zwd0xpODNqcEcrTzVhblZvUlBYT011?=
+ =?utf-8?B?aU5iclZIVk9YQWo0bDNCaHNSZXBoTGFmTXJ0eWVPRTNkMDRpOVQ5N2tRcUx5?=
+ =?utf-8?B?SDI1NnFGcitRMFNTendLRWYyL3lFbUxqazVoMmhmeVd0VmdzRGZVV2hRU2NL?=
+ =?utf-8?Q?2nSfy4qDcxK9gbeU=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1ab31446-d7bb-4b1e-aafb-08da3a2c581c
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 May 2022 06:45:36.2279
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: W6q+MQwtc4IOdyspKG21HbHkM2nDDpL0/7XRTyKbIO1XbQzoVOLClfwTM1WeUSmRpNrZk4eay08XkyBtkgXBnWbkuMs8ScxIFR1AUwU7d1E=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB5435
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.874
+ definitions=2022-05-20_02:2022-05-19,2022-05-20 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 suspectscore=0
+ phishscore=0 bulkscore=0 adultscore=0 mlxlogscore=999 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2205200049
+X-Proofpoint-GUID: GkelnxO-GOf9GFGSnAP6iX4j4cme0CSO
+X-Proofpoint-ORIG-GUID: GkelnxO-GOf9GFGSnAP6iX4j4cme0CSO
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-05-19 at 15:54 +0800, ying.huang@intel.com wrote:
-> Hi, Mel,
-> 
-> On Wed, 2022-05-18 at 16:22 +0100, Mel Gorman wrote:
-> > On Wed, May 18, 2022 at 05:24:14PM +0800, kernel test robot wrote:
-> > > 
-> > > 
-> > > Greeting,
-> > > 
-> > > FYI, we noticed a -11.2% regression of unixbench.score due to commit:
-> > > 
-> > > 
-> > > commit: bb2dee337bd7d314eb7c7627e1afd754f86566bc ("[PATCH 3/4] sched/numa: Apply imbalance limitations consistently")
-> > > url: https://github.com/intel-lab-lkp/linux/commits/Mel-Gorman/Mitigate-inconsistent-NUMA-imbalance-behaviour/20220511-223233
-> > > base: https://git.kernel.org/cgit/linux/kernel/git/tip/tip.git d70522fc541224b8351ac26f4765f2c6268f8d72
-> > > patch link: https://lore.kernel.org/lkml/20220511143038.4620-4-mgorman@techsingularity.net
-> > > 
-> > > in testcase: unixbench
-> > > on test machine: 128 threads 2 sockets Intel(R) Xeon(R) Gold 6338 CPU @ 2.00GHz with 256G memory
-> > > with following parameters:
-> > > 
-> > > 	runtime: 300s
-> > > 	nr_task: 1
-> > > 	test: shell8
-> > > 	cpufreq_governor: performance
-> > > 	ucode: 0xd000331
-> > > 
-> > > test-description: UnixBench is the original BYTE UNIX benchmark suite aims to test performance of Unix-like system.
-> > > test-url: https://github.com/kdlucas/byte-unixbench
-> > 
-> > I think what is happening for unixbench is that it prefers to run all
-> > instances on a local node if possible. shell8 is creating 8 scripts,
-> > each of which spawn more processes. The total number of tasks may exceed
-> > the allowed imbalance at fork time of 16 tasks. Some spill over to a
-> > remote node and as they are using files, some accesses are remote and it
-> > suffers. It's not memory bandwidth bound but is sensitive to locality.
-> > The stats somewhat support this idea
-> > 
-> > >      83590 ± 13%     -73.7%      21988 ± 32%  numa-meminfo.node0.AnonHugePages
-> > >     225657 ± 18%     -58.0%      94847 ± 18%  numa-meminfo.node0.AnonPages
-> > >     231652 ± 17%     -55.3%     103657 ± 16%  numa-meminfo.node0.AnonPages.max
-> > >     234525 ± 17%     -55.5%     104341 ± 18%  numa-meminfo.node0.Inactive
-> > >     234397 ± 17%     -55.5%     104267 ± 18%  numa-meminfo.node0.Inactive(anon)
-> > >      11724 ±  7%     +17.5%      13781 ±  5%  numa-meminfo.node0.KernelStack
-> > >       4472 ± 34%    +117.1%       9708 ± 31%  numa-meminfo.node0.PageTables
-> > >      15239 ± 75%    +401.2%      76387 ± 10%  numa-meminfo.node1.AnonHugePages
-> > >      67256 ± 63%    +206.3%     205994 ±  6%  numa-meminfo.node1.AnonPages
-> > >      73568 ± 58%    +193.1%     215644 ±  6%  numa-meminfo.node1.AnonPages.max
-> > >      75737 ± 53%    +183.9%     215053 ±  6%  numa-meminfo.node1.Inactive
-> > >      75709 ± 53%    +183.9%     214971 ±  6%  numa-meminfo.node1.Inactive(anon)
-> > >       3559 ± 42%    +187.1%      10216 ±  8%  numa-meminfo.node1.PageTables
-> > 
-> > There is less memory used on one node and more on the other so it's
-> > getting split.
-> 
-> This makes sense.  I will also check CPU utilization per node to verify
-> this directly.
+Check for if the kcalloc() fails.
 
-I run this workload 3 times for the commit and its parent with mpstat
-node statistics.
+Cc: stable@vger.kernel.org
+Fixes: 6e977eaa8280 ("nvmem: brcm_nvram: parse NVRAM content into NVMEM cells")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Acked-by: Rafał Miłecki <rafal@milecki.pl>
+Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+---
+v3: Update fixes tag
+v2: I don't think anything changed in v2?  Added tags?
 
-For the parent commit,
+ drivers/nvmem/brcm_nvram.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-  "mpstat.node.0.usr%": [
-    0.1396875,
-    3.0806153846153848,
-    0.05303030303030303
-  ],
-  "mpstat.node.0.sys%": [
-    0.10515625,
-    5.597692307692308,
-    0.1340909090909091
-  ],
-
-  "mpstat.node.1.usr%": [
-    3.1015625,
-    0.1306153846153846,
-    3.0275757575757574
-  ],
-  "mpstat.node.1.sys%": [
-    5.66703125,
-    0.11676923076923076,
-    5.498181818181818
-  ],
-
-The difference between two nodes are quite large.
-
-For the commit,
-
-  "mpstat.node.0.usr%": [
-    1.42109375,
-    1.4725,
-    1.5140625
-  ],
-  "mpstat.node.0.sys%": [
-    3.00125,
-    3.16390625,
-    3.1284375
-  ],
-
-  "mpstat.node.1.usr%": [
-    1.4909375,
-    1.41609375,
-    1.3740625
-  ],
-  "mpstat.node.1.sys%": [
-    3.1671875,
-    3.00109375,
-    3.044375
-  ],
-
-The difference between 2 nodes reduces greatly.  So this proves your
-theory directly.
-
-Best Regards,
-Huang, Ying
-
-
-[snip]
-
+diff --git a/drivers/nvmem/brcm_nvram.c b/drivers/nvmem/brcm_nvram.c
+index 450b927691c3..48bb8c62cbbf 100644
+--- a/drivers/nvmem/brcm_nvram.c
++++ b/drivers/nvmem/brcm_nvram.c
+@@ -97,6 +97,8 @@ static int brcm_nvram_parse(struct brcm_nvram *priv)
+ 	len = le32_to_cpu(header.len);
+ 
+ 	data = kcalloc(1, len, GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
+ 	memcpy_fromio(data, priv->base, len);
+ 	data[len - 1] = '\0';
+ 
+-- 
+2.21.0

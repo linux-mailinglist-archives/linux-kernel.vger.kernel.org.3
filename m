@@ -2,141 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9A1252F181
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 19:22:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B78352F16C
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 19:19:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352148AbiETRWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 13:22:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33356 "EHLO
+        id S1352123AbiETRTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 13:19:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345306AbiETRWx (ORCPT
+        with ESMTP id S1352108AbiETRTm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 13:22:53 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A70B16D4A9;
-        Fri, 20 May 2022 10:22:52 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 050A01F899;
-        Fri, 20 May 2022 17:22:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1653067371;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=U1vEEBx5l6lck/ZVYtVMS6/WSLGFTxzXzQhGy8n6n1Y=;
-        b=1K0EXYYgwzsP5pttWIVJPO7peR7LU+5/FGwrIehUJrgtYp1b2Z1gmnbsrlrvfd9lUvK2VA
-        zu24tnaYU76hI6QXg7nbkOeg0BgdflDuWpJoTzQjH360AGI4TCOxit8DE29sKLWYXVeAlH
-        Jl7ARw2GtOYQYSYYjCB3PhyECWDOHus=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1653067371;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=U1vEEBx5l6lck/ZVYtVMS6/WSLGFTxzXzQhGy8n6n1Y=;
-        b=fdfW8UYvFzHZKAsM32Bd+yUPieD8tKqZpNTkU0+Ww4cQ9TxtNrH3v7+6LIxP4Bdiz6Gq/f
-        1Yvz9mmtz7ulOzDg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 83B7A13AF4;
-        Fri, 20 May 2022 17:22:50 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 53QXH2rOh2KIPwAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Fri, 20 May 2022 17:22:50 +0000
-Date:   Fri, 20 May 2022 19:18:30 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     Pankaj Raghav <p.raghav@samsung.com>
-Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Javier =?iso-8859-1?Q?Gonz=E1lez?= <javier.gonz@samsung.com>,
-        Hannes Reinecke <hare@suse.de>,
-        Johannes Thumshirn <Johannes.Thumshirn@wdc.com>,
-        Mike Snitzer <snitzer@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "pankydev8@gmail.com" <pankydev8@gmail.com>,
-        "gost.dev@samsung.com" <gost.dev@samsung.com>,
-        "jiangbo.365@bytedance.com" <jiangbo.365@bytedance.com>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "dm-devel@redhat.com" <dm-devel@redhat.com>,
-        "dsterba@suse.com" <dsterba@suse.com>,
-        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Keith Busch <kbusch@kernel.org>,
-        Adam Manzanares <a.manzanares@samsung.com>
-Subject: Re: [dm-devel] [PATCH v4 00/13] support non power of 2 zoned devices
-Message-ID: <20220520171830.GR18596@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz, Pankaj Raghav <p.raghav@samsung.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Javier =?iso-8859-1?Q?Gonz=E1lez?= <javier.gonz@samsung.com>,
-        Hannes Reinecke <hare@suse.de>,
-        Johannes Thumshirn <Johannes.Thumshirn@wdc.com>,
-        Mike Snitzer <snitzer@redhat.com>, Christoph Hellwig <hch@lst.de>,
-        Luis Chamberlain <mcgrof@kernel.org>, Theodore Ts'o <tytso@mit.edu>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "pankydev8@gmail.com" <pankydev8@gmail.com>,
-        "gost.dev@samsung.com" <gost.dev@samsung.com>,
-        "jiangbo.365@bytedance.com" <jiangbo.365@bytedance.com>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "dm-devel@redhat.com" <dm-devel@redhat.com>,
-        "dsterba@suse.com" <dsterba@suse.com>,
-        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
-        Jaegeuk Kim <jaegeuk@kernel.org>, Keith Busch <kbusch@kernel.org>,
-        Adam Manzanares <a.manzanares@samsung.com>
-References: <YoPAnj9ufkt5nh1G@mit.edu>
- <7f9cb19b-621b-75ea-7273-2d2769237851@opensource.wdc.com>
- <20220519031237.sw45lvzrydrm7fpb@garbanzo>
- <69f06f90-d31b-620b-9009-188d1d641562@opensource.wdc.com>
- <PH0PR04MB74166C87F694B150A5AE0F009BD09@PH0PR04MB7416.namprd04.prod.outlook.com>
- <4a8f0e1b-0acb-1ed4-8d7a-c9ba93fcfd02@opensource.wdc.com>
- <16f3f9ee-7db7-2173-840c-534f67bcaf04@suse.de>
- <20220520062720.wxdcp5lkscesppch@mpHalley-2.localdomain>
- <be429864-09cb-e3fb-2afe-46a3453c4d73@opensource.wdc.com>
- <aee22e8a-b89b-378c-3d5b-238c1215b01d@samsung.com>
+        Fri, 20 May 2022 13:19:42 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C76EBA98
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 10:19:40 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id u3so12383738wrg.3
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 10:19:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AotfV1tzndaO8ANao4j/ji8ZRWlSeHdzWiW8XQoX2j8=;
+        b=uEM9R+wyIujwZo+Xod1pCpBS3mDc5bdCIzHeWWTe+kAJo51EEgb3Epu6GyBGpNmNyS
+         2a1nK9/TN3lwJQQUEVuOPd6wqcjOgLvzdNVlTnPw3TYqOXgi1tq6dAbqR+2+/GwLN6qW
+         A8lm8xRGsHf0Pw9EotRg7HC+DRr1bmbIgoHcFtJrhfxJnnfJBcke5WFSMsKitrJv3eRv
+         Jc4KVDnd05msVsEnq7WoLRtpzmEVhK2u4uOw/tIZN/8V2zp/xiyNdeX+xVhrS+AoWAzj
+         50pOs8vNyWVx19ZQ/NIO+MYkwOmVb14MuN4M+R8TxpOrZb8OD60MO+GPFzE+GUDNuR1e
+         +FiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AotfV1tzndaO8ANao4j/ji8ZRWlSeHdzWiW8XQoX2j8=;
+        b=b0oUkdNJJWzB6oTkNH+MSaDDcqpKA5FmpvJEyiTq1CMy3QF7K9rMqZtp59AmbiKaGm
+         oba4peZQRUxV7xoj420BbV3qt5bzWzGGzwxryOZooN4lTaFnXq6hwsh6bpPWHHRLDxk8
+         1zAbIOOmMP4tnih8lFcvgoQLhjKsnVh2wi9zWd4bwnV41a5J8HUjcED8DvyozAXb3It9
+         +g63tlYL39tcWiXdbAnNz7pvT+wxLFOCqZf6AtzHA4joNydeTXcw//3vOgcLY5LO11j+
+         VISE4HahGuOCuSBM+pOTgYC+2UoFOj+bKUcWeFjtpo5mSI3L9kLsE5ntvrKI2U+UaDmJ
+         7VvA==
+X-Gm-Message-State: AOAM5324Q62kdPCmXA7YLJNuwRTmQ+TFH6RrcPMveg5TDE8hdz7UyhvE
+        elB2PHUV6SYUnmh8oxPMaHlZxg==
+X-Google-Smtp-Source: ABdhPJyYsswAx77EPhgnR3dEm+3zJQONdtGcwMikEMVNq+b69dxB7GRncKeudxz+ih1WeNNa9sLm6A==
+X-Received: by 2002:adf:eac9:0:b0:20d:cdd:a719 with SMTP id o9-20020adfeac9000000b0020d0cdda719mr9341473wrn.0.1653067179375;
+        Fri, 20 May 2022 10:19:39 -0700 (PDT)
+Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:3f03:2f2e:2755:5200])
+        by smtp.gmail.com with ESMTPSA id o4-20020a05600c338400b003949dbc3790sm2474752wmp.18.2022.05.20.10.19.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 May 2022 10:19:38 -0700 (PDT)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [GIT PULL] gpio: fixes for v5.18
+Date:   Fri, 20 May 2022 19:19:30 +0200
+Message-Id: <20220520171930.1029663-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aee22e8a-b89b-378c-3d5b-238c1215b01d@samsung.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 11:30:09AM +0200, Pankaj Raghav wrote:
-> On 5/20/22 08:41, Damien Le Moal wrote:
-> >> Note that for F2FS there is no blocker. Jaegeuk picked the initial
-> >> patches, and he agreed to add native support.
-> > 
-> > And until that is done, f2fs will not work with these new !po2 devices...
-> > Having the new dm will avoid that support fragmentation which I personally
-> > really dislike. With the new dm, we can keep support for *all* zoned block
-> > devices, albeit needing a different setup depending on the device. That is
-> > not nice at all but at least there is a way to make things work continuously.
-> 
-> I see that many people in the community feel it is better to target the
-> dm layer for the initial support of npo2 devices. I can give it a shot
-> and maintain a native out-of-tree support for FSs for npo2 devices and
-> merge it upstream as we see fit later.
+Linus,
 
-Some of the changes from your patchset are cleanups or abstracting the
-alignment and zone calculations, so this can be merged to minimize the
-out of tree code.
+Please pull the last batch of GPIO driver fixes for this release cycle.
+
+Best Regards,
+Bartosz Golaszewski
+
+The following changes since commit 42226c989789d8da4af1de0c31070c96726d990c:
+
+  Linux 5.18-rc7 (2022-05-15 18:08:58 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/gpio-fixes-for-v5.18
+
+for you to fetch changes up to 3ecb10175b1f776f076553c24e2689e42953fef5:
+
+  gpio: mvebu/pwm: Refuse requests with inverted polarity (2022-05-20 16:46:56 +0200)
+
+----------------------------------------------------------------
+gpio: fixes for v5.18
+
+- fix bitops logic in gpio-vf610
+- return an error if the user tries to use inverted polarity in gpio-mvebu
+
+----------------------------------------------------------------
+Haibo Chen (1):
+      gpio: gpio-vf610: do not touch other bits when set the target bit
+
+Uwe Kleine-König (1):
+      gpio: mvebu/pwm: Refuse requests with inverted polarity
+
+ drivers/gpio/gpio-mvebu.c | 3 +++
+ drivers/gpio/gpio-vf610.c | 8 ++++++--
+ 2 files changed, 9 insertions(+), 2 deletions(-)

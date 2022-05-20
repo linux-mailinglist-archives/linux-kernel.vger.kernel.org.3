@@ -2,68 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E89F52EB10
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 13:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A970C52EB11
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 13:43:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348661AbiETLnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 07:43:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46910 "EHLO
+        id S1348668AbiETLnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 07:43:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348649AbiETLnC (ORCPT
+        with ESMTP id S1348659AbiETLnF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 07:43:02 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3317E15A74B;
-        Fri, 20 May 2022 04:43:01 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id oe17-20020a17090b395100b001df77d29587so11289327pjb.2;
-        Fri, 20 May 2022 04:43:01 -0700 (PDT)
+        Fri, 20 May 2022 07:43:05 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F23BF15A75F
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 04:43:03 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id a19so7519583pgw.6
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 04:43:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=h/xyoqkIvhfgBM1R/pjz/c5Tr/c0eTmfasuHvGueSGA=;
-        b=E3lOmoRFlOjxGHQDXs7cJf+HWAAZZ657dnehtNx5da0GaOhXpguTlSuwp+7YxD2U6G
-         tUeg8HfmUkxOwpEW4bcR99LqEpfE1sQL8B+h4grfBbLZM0qGLWhNsnlaliulhkefbtEc
-         YsTN/Ehr7vjeEEEzNtdU5GibsXVpBj4OY6KasC13TR5un4WbH6dhVtGIrs71BaJeuNnL
-         twiQtPdR8AOg6A4iBXaINGXmW1HHQ3OZNuM+nlvwy04oeSXPxoImHdJRwf2OyNJirjYH
-         tCrQDQhOtAT1BZ9aGmJ+QKp66YApNeN4RWWL+Kn33leyLvkZb8JydN99flQlD+j50+Hx
-         O1Hw==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=YOapDlN8jb/oTIK7p2pjJfrsska7tlBqsu0+8NfTwEY=;
+        b=bQTvIXXjUdwosurQPkJH/SVzTHlXmYVkmSU8KGI239VF2VrKMKGdXwQPe/FX5FjDcV
+         OjWqYUJh4T/DBhv3epcNl/8e6OohOtqNMwdz0tKYSureU2boaoAYS24WP8tibBhV0Y/H
+         U/GKHNZ1wvSOl4NFvVySuQRABROUYTP+210DUQnDlaagGeloNqCNmW0nwHUg25Hwa8oO
+         x898GnG9E6iAwK05PAjra8RII82DYqePuGXqxWkO845G7SkFYsxG0ES4OJqVc2RCT2c0
+         GmL8qjfxYGBoTKM5ZdBgmmIR9fWB23mQMD7Nb0RiB17voph8qnC7nWWKPuVe221HxBD3
+         YvlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=h/xyoqkIvhfgBM1R/pjz/c5Tr/c0eTmfasuHvGueSGA=;
-        b=k0OIMqALFJnBz4osFwYVYTMlkBinVs4EomsJYzPuGDd8nUNIcTTcYa0YgDbLei2TjI
-         IsyYzD2U8Byreb8lt1k+OtORvT/LNWi1OTb0y5iucnJ6VQ/AcGoy3s4M+3uZZxnR1Rcw
-         /w0s3qCGC5EjBCkDC5OaXo74xkBU7BMTUNLxWHhm2LOhjScQcTmS8pmOKJlPg3SERhZh
-         Nx/e8MOs5aaWnw6lI9cSskRqIol0rnVsq4rUN4ckeHkv1TWFGJvmzf9T5pFZd9faUJX0
-         Giy9M3zD3voxaOzdY3ivrFdfDp7P2b+MqR6m2ML3SNzCaEdz4ZubW9cTikbVh7oT1cK7
-         IVjg==
-X-Gm-Message-State: AOAM533KqDscXEfAXwRxU4YXodLYOxMpfaNkTwO9Rd1yMDKWgbegz0Oy
-        i8Tjq+XZ+RAyPlq3OdIBZuk=
-X-Google-Smtp-Source: ABdhPJzm5Sgk+3QTFye3qt75CV2NmIm3tHPvNd0i8hsyfjED3q8+LigmehXbM79CdKWBtmpTzYsYjA==
-X-Received: by 2002:a17:90b:1a8b:b0:1dc:e565:3238 with SMTP id ng11-20020a17090b1a8b00b001dce5653238mr10586140pjb.64.1653046980673;
-        Fri, 20 May 2022 04:43:00 -0700 (PDT)
-Received: from arch-pc.genesyslogic.com.tw (60-251-58-169.hinet-ip.hinet.net. [60.251.58.169])
-        by smtp.gmail.com with ESMTPSA id d4-20020a170903230400b00161955fe0d5sm6042050plh.274.2022.05.20.04.42.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 04:43:00 -0700 (PDT)
-From:   Ben Chuang <benchuanggli@gmail.com>
-To:     adrian.hunter@intel.com, ulf.hansson@linaro.org
-Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        greg.tu@genesyslogic.com.tw, ben.chuang@genesyslogic.com.tw,
-        SeanHY.Chen@genesyslogic.com.tw, jason.lai@genesyslogic.com.tw,
-        victor.shih@genesyslogic.com.tw,
-        kane.chen@intel.corp-partner.google.com,
-        Ben Chuang <benchuanggli@gmail.com>
-Subject: [RESEND, PATCH] mmc: sdhci-pci-gli: Fix GL9763E runtime PM when the system resumes from suspend
-Date:   Fri, 20 May 2022 19:42:42 +0800
-Message-Id: <20220520114242.150235-1-benchuanggli@gmail.com>
-X-Mailer: git-send-email 2.36.0
+        bh=YOapDlN8jb/oTIK7p2pjJfrsska7tlBqsu0+8NfTwEY=;
+        b=aiPx0que0kokiVh73X2vLS0Pvcbs/iZoBFxqMezkiAOEuAn5WqCzhq7Xqknen0+6rI
+         1stOzoevp35AVOuboJYsJxIrFzFk44HOFYP/xLTo1sYDr2Dy23u9JsGq+5IIf24xNdgq
+         omWarmpEqnihwjxTvi2dISQDH+kW2JuHryCRrrFq5lrFklCYSNnF4XTCucboClIyVq85
+         TZtu+/8l4zoJ557YTnO8ayMBTROqv/yVz9QBETxI1+tBnond2qFCRJ0zAQLmXRPgCj1j
+         OZCOKsAclFh/khVyR6KdS03mQScB7Gar76WE/vWInxuu7XgIFhuWkicZmIGEN2EFYyfw
+         mWDw==
+X-Gm-Message-State: AOAM533R4ZuRFrBWRuAiTFw5YTczKDCHF4N5zom/okhUyBwRJoypB4LO
+        YveEpChiRNjvUs0j4n7RrQqzeD30v7MZxYzw0jvV/g==
+X-Google-Smtp-Source: ABdhPJxcLpa0lnyGIu1w0+2MVsg7exXsrDcE1PoSHWbjPDZanK7+BZn3kMFWMNyk80Lm/Gp/GWnHZA==
+X-Received: by 2002:a62:3881:0:b0:4b0:b1c:6fd9 with SMTP id f123-20020a623881000000b004b00b1c6fd9mr9824353pfa.27.1653046983390;
+        Fri, 20 May 2022 04:43:03 -0700 (PDT)
+Received: from [192.168.0.103] ([106.51.243.174])
+        by smtp.gmail.com with ESMTPSA id z18-20020aa785d2000000b005183c6a21c8sm1542950pfn.165.2022.05.20.04.42.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 May 2022 04:43:02 -0700 (PDT)
+Message-ID: <53809b87-9b39-0aa9-dbc9-d5b40b3b46a6@gmail.com>
+Date:   Fri, 20 May 2022 17:12:57 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.0
+Subject: Re: [PATCH] x86/vmware: use unsigned integer for shifting
+Content-Language: en-US
+To:     "Srivatsa S. Bhat" <srivatsa@csail.mit.edu>,
+        Borislav Petkov <bp@alien8.de>
+Cc:     amakhalov@vmware.com, tglx@linutronix.de, mingo@redhat.com,
+        dave.hansen@linux.intel.com, hpa@zytor.com,
+        virtualization@lists.linux-foundation.org, pv-drivers@vmware.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        Shreenidhi Shedi <sshedi@vmware.com>
+References: <20220520072857.592746-1-sshedi@vmware.com>
+ <Yode3m6iia9ZBHsl@zn.tnic>
+ <c3219731-5f7e-80ea-b193-f8c93d7c1bdc@csail.mit.edu>
+From:   Shreenidhi Shedi <yesshedi@gmail.com>
+In-Reply-To: <c3219731-5f7e-80ea-b193-f8c93d7c1bdc@csail.mit.edu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,39 +80,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the system resumes from suspend (S3 or S4), the power mode is
-MMC_POWER_OFF. In this status, gl9763e_runtime_resume() should not enable
-PLL. Add a condition to this function to enable PLL only when the power
-mode is MMC_POWER_ON.
+On 20/05/22 4:59 pm, Srivatsa S. Bhat wrote:
+> Hi Shreenidhi,
+> 
+> Thank you for the patch!
+> 
+> On 5/20/22 2:26 AM, Borislav Petkov wrote:
+>> On Fri, May 20, 2022 at 12:58:57PM +0530, Shreenidhi Shedi wrote:
+>>> Shifting signed 32-bit value by 31 bits is implementation-defined
+>>> behaviour. Using unsigned is better option for this.
+>>>
+> 
+> Can you also add a "Fixes:" tag with the commit that introduced the
+> issue? I believe it is 4cca6ea04d31 ("x86/apic: Allow x2apic without
+> IR on VMware platform").
+> 
+>>> Signed-off-by: Shreenidhi Shedi <sshedi@vmware.com>
+>>> ---
+>>>  arch/x86/kernel/cpu/vmware.c | 2 +-
+>>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/arch/x86/kernel/cpu/vmware.c b/arch/x86/kernel/cpu/vmware.c
+>>> index c04b933f48d3..b28f789d3c56 100644
+>>> --- a/arch/x86/kernel/cpu/vmware.c
+>>> +++ b/arch/x86/kernel/cpu/vmware.c
+>>> @@ -476,7 +476,7 @@ static bool __init vmware_legacy_x2apic_available(void)
+>>>  {
+>>>  	uint32_t eax, ebx, ecx, edx;
+>>>  	VMWARE_CMD(GETVCPU_INFO, eax, ebx, ecx, edx);
+>>> -	return (eax & (1 << VMWARE_CMD_VCPU_RESERVED)) == 0 &&
+>>> +	return (eax & (1U << VMWARE_CMD_VCPU_RESERVED)) == 0 &&
+>>>  	       (eax & (1 << VMWARE_CMD_LEGACY_X2APIC)) != 0;
+>>
+>> Or you can use the BIT() macro and simplify this expression even more:
+>>
+>>        return !(eax & BIT(VMWARE_CMD_VCPU_RESERVED)) &&
+>>                (eax & BIT(VMWARE_CMD_LEGACY_X2APIC));
+>>
+>>
+> 
+> That's better indeed.
+> 
+> Regards,
+> Srivatsa
 
-Fixes: d607667bb8fa (mmc: sdhci-pci-gli: Add runtime PM for GL9763E)
-Signed-off-by: Ben Chuang <benchuanggli@gmail.com>
----
-Hi,
 
-Sorry, resend this patch because typo two email addresses.
-Sorry for Adrian and Kane.
+Thanks for the quick reviews Boris and Srivatsa. I will make the changes and push the another patch soon.
 
-Best regards,
-Ben
----
- drivers/mmc/host/sdhci-pci-gli.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/mmc/host/sdhci-pci-gli.c b/drivers/mmc/host/sdhci-pci-gli.c
-index d09728c37d03..d81e5dc90e15 100644
---- a/drivers/mmc/host/sdhci-pci-gli.c
-+++ b/drivers/mmc/host/sdhci-pci-gli.c
-@@ -972,6 +972,9 @@ static int gl9763e_runtime_resume(struct sdhci_pci_chip *chip)
- 	struct sdhci_host *host = slot->host;
- 	u16 clock;
- 
-+	if (host->mmc->ios.power_mode != MMC_POWER_ON)
-+		return 0;
-+
- 	clock = sdhci_readw(host, SDHCI_CLOCK_CONTROL);
- 
- 	clock |= SDHCI_CLOCK_PLL_EN;
--- 
-2.36.0
-
+--
+Shedi

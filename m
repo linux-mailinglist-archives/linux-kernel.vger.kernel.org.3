@@ -2,136 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9A4552EA87
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 13:11:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E59852EA89
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 13:11:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348369AbiETLLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 07:11:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42978 "EHLO
+        id S1348419AbiETLL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 07:11:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242937AbiETLLM (ORCPT
+        with ESMTP id S1348407AbiETLLZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 07:11:12 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 891A01C115
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 04:11:10 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id j6so7465048pfe.13
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 04:11:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Uaa00xEzMAT264ixc/l0jbLyNQxuxXIt7JbL8gFbxGc=;
-        b=NynBBm/2O7cP307yZ8aUc3cRrv+lrugZQcvavT85BAtZwbJtf8O/uKFCgcZQR5S8/n
-         6E2veCYZjSwp7KX5Qg8ouCTG0OW3xS06pd8H7OEdUWxQgbDFXExFGJbVW9YjkSECmfwb
-         2rvyRBj3nSAg+Qr7urXHzTahI8eoWwa+aKUH493eG1ObtBpX6smhb3kb2IGH2gG6ZOkk
-         CSIdL78UDssFUUOTZaPd/2NrfXVdhFecgf6u10seQalAtJ28WbvtOUzpVYzgBnbA7HHf
-         g7pPoHQkw+sL/weLf718gZfnYw13uTypUKmSSPSvISM0AtONvUWCB8DpJ/8opVOKTSOH
-         KQAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=Uaa00xEzMAT264ixc/l0jbLyNQxuxXIt7JbL8gFbxGc=;
-        b=xNNer+IGdqvRt700nfcuHJ+yOrm30m2FIYSs6155KmbYVCoch5lkyNBRUNZCvghjUV
-         UNjdFvKnIGELHHQ+OuQT15hdVhCbITHb0Ty8KEv20aO36uR/7dymv6eEop4qEOX02Y0q
-         HGZhWtku6wpKMiBpIKYgTp3xB+BTePHVxhu5RG7ryCt4I72aF8R7U0GvRh728lBGNMhz
-         f+NR1OaWvs0cqCfo8XLUOI9q3rdmXy+vCzVlcvVb+yo7V526j8/wTvCe3uvRjUIggN/O
-         utBd9dmWGfbPsQWtz9c+YZRgAM+8b7JBrCXkegyIoO+ELBtkRwYYROI9lJFVYas8YbzR
-         WTtA==
-X-Gm-Message-State: AOAM53383udT+QTTNj9IcHG+EdySkc1GDTwBUZrSEk7uORabk/xc/FKD
-        hF2d/AhHW8vLOpSHuz63J5dNGj7SYhg=
-X-Google-Smtp-Source: ABdhPJz+GT67ZQr2kr+MHQCAea0xiwvhAQs5MFjIww7Bjm3YNddJHnbBU5A3ZuzMCGCGOnCODI9Y0A==
-X-Received: by 2002:a05:6a00:b56:b0:510:8107:5cf8 with SMTP id p22-20020a056a000b5600b0051081075cf8mr9396199pfo.2.1653045069441;
-        Fri, 20 May 2022 04:11:09 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::4:1761])
-        by smtp.gmail.com with ESMTPSA id u12-20020a170902714c00b0015f0dcd1579sm5285513plm.9.2022.05.20.04.11.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 04:11:08 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Fri, 20 May 2022 01:11:07 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3] workqueue: Wrap flush_workqueue() using a macro
-Message-ID: <Yod3S8jmle+LYlES@slm.duckdns.org>
-References: <a6288570ed3534b0316723061f5604e3871accef.camel@perches.com>
- <6e4ed62e-888b-6e7a-c13d-67656f39ca94@I-love.SAKURA.ne.jp>
- <738afe71-2983-05d5-f0fc-d94efbdf7634@I-love.SAKURA.ne.jp>
- <YnQKNea6KWFaWNis@slm.duckdns.org>
- <a0d6b5e4-b9c8-1a43-570f-4c73b0f6fc0c@I-love.SAKURA.ne.jp>
- <Yn0538VavQPv+/Ws@slm.duckdns.org>
- <7b2fecdb-59ae-2c54-5a5b-774ef7054d1b@I-love.SAKURA.ne.jp>
- <1c1b272b-239c-e1d1-84de-47d02feb911e@I-love.SAKURA.ne.jp>
- <YodK1czmhZtGmJ8E@slm.duckdns.org>
- <5f417d30-34a7-8da1-0ad5-33bd750582c7@I-love.SAKURA.ne.jp>
+        Fri, 20 May 2022 07:11:25 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 932093EF22;
+        Fri, 20 May 2022 04:11:22 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24KAhckt022523;
+        Fri, 20 May 2022 11:11:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=kJVoVYK/ONGaiB5tlKh4bH8Chhvp/q4lg9PLkDF6dWw=;
+ b=S+xYyxqBN8J8IaiZBXMfyHn5FHGyghBwCvz1hH93ggDefOOrOpnVBRP2of/bBZ8TL787
+ y7wfQZHCM/yD6kzjhLTbn90tU/Ji7zVmoWsjO2vWWUz6543sPwfG1oXtax8GIe5sLUhE
+ SugYV/x0Cjj+dcA9WQJiUuCaeN9YHkK9emVhNE3KffueLTx6UMm7nGkehtrgY8VBU7uE
+ b2cM1/VEBuIy8q3oALEp4SPqY4HoirFUpJ5MeZetm1eJHeY9xz2g0g+yovk4A1tmXoSP
+ FGjecKUt6Uif/BiQiRG7EJNotBDC3ramwfW+ZawKSfbhoC9HPtDMqPpjFuAIsoyBJ5DC GA== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g62qng659-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 May 2022 11:11:21 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24KB72XM027654;
+        Fri, 20 May 2022 11:11:19 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 3g23pjgpxx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 May 2022 11:11:19 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24KBAajl32375278
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 20 May 2022 11:10:36 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 66FF8A404D;
+        Fri, 20 May 2022 11:11:16 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 167E5A4040;
+        Fri, 20 May 2022 11:11:16 +0000 (GMT)
+Received: from osiris (unknown [9.145.81.162])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Fri, 20 May 2022 11:11:16 +0000 (GMT)
+Date:   Fri, 20 May 2022 13:11:14 +0200
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Steffen Eiden <seiden@linux.ibm.com>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Nico Boehr <nrb@linux.ibm.com>, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/1] s390: Add attestation query information
+Message-ID: <Yod3Uiu2hRc9vas7@osiris>
+References: <20220518135908.1110319-1-seiden@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5f417d30-34a7-8da1-0ad5-33bd750582c7@I-love.SAKURA.ne.jp>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220518135908.1110319-1-seiden@linux.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: nGudQSKKXq0IiARFzdpVgNJN6rLdNBE9
+X-Proofpoint-GUID: nGudQSKKXq0IiARFzdpVgNJN6rLdNBE9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-20_03,2022-05-20_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 clxscore=1015 impostorscore=0 mlxscore=0 bulkscore=0
+ adultscore=0 malwarescore=0 mlxlogscore=737 phishscore=0
+ lowpriorityscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2202240000 definitions=main-2205200082
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On Fri, May 20, 2022 at 06:51:12PM +0900, Tetsuo Handa wrote:
-> On 2022/05/20 17:01, Tejun Heo wrote:
-> >> +/*
-> >> + * Detect attempt to flush system-wide workqueues at compile time when possible.
-> >> + * See https://lkml.kernel.org/r/49925af7-78a8-a3dd-bce6-cfc02e1a9236@I-love.SAKURA.ne.jp for
-> >> + * reasons and steps for converting system-wide workqueues into local workqueues.
-> >> + */
-> >> +#define flush_workqueue(wq)						\
-> >> +({									\
-> >> +	BUILD_BUG_ON_MSG(__builtin_constant_p(&(wq) == &system_wq) &&	\
-> >> +			 &(wq) == &system_wq,				\
-> >> +			 "Please avoid flushing system_wq.");		\
-> > 
-> > It kinda bothers me that this causes a build failure. It'd be better if we
-> > can trigger #warning instead. I'm not sure whether there'd be a clean way to
-> > do it tho. Maybe just textual matching would provide similar coverage? How
-> > did you test this?
+On Wed, May 18, 2022 at 01:59:07PM +0000, Steffen Eiden wrote:
+> By design the uv-device does not check whether an incoming attestation
+> measurement request only specifies valid plaintext flags or has the
+> right request version, as these values are verified by the Ultravisor
+> anyway. However, the userspace program that generates these requests
+> might want to know which flags/versions are supported in order to
+> create requests without trial and error. Therefore, we must expose the
+> supported plaintext flags and versions to userspace.
 > 
-> This does not cause a build failure, for this wrapping happens only if
-> flush_workqueue() appears between "#define flush_workqueue(wq)" and
-> "#undef flush_workqueue". Only flush_scheduled_work() in include/linux/workqueue.h
-> calls flush_workqueue(system_wq), and flush_scheduled_work() is defined
-> before the "#define flush_workqueue(wq)" is defined.
+> since v1:
+> 	* rebased on Janosch's "kvm: s390: Add PV dump support" series
+> 	* added rationale as this cover letter
 
-What I mean is that if there's a file which didn't get tested or another
-pull request which raced and that thing flushes one of the system_wq's,
-it'll trigger a build error instead of a warning, which is a bit of an
-overkill.
-
-> And use of #warning directive breaks building with -Werror option.
-
-If the user wants to fail build on warnings, sure. That's different from
-kernel failing to build in a way which may require non-trivial changes to
-fix.
-
-> > Maybe rename the function to __flush_workqueue() instead of undef'ing the
-> > macro?
-> 
-> I prefer not adding __ prefix, for flush_workqueue() is meant as a public function.
-> For easier life of kernel message parsers, I don't feel reason to dare to rename.
-
-You mean the WARN_ON messages? Given how they never trigger, I doubt there's
-much to break. Maybe some kprobe users? But they can survive.
-
-> But if you still prefer renaming, I will change flush_workqueue() as an inline function
-> in include/linux/workqueue.h which calls __flush_workqueue() in kernel/workqueue.c.
-
-Please just do something straight forward.
-
-Thanks.
-
--- 
-tejun
+Thanks for adding the cover letter! However what I really meant (and
+failed to write) is that the rationale should be part of the patch
+description. Anyway; whoever picks this patch will hopefully integrate
+your cover letter description into the commit.

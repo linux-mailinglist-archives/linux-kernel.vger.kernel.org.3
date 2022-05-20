@@ -2,73 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB37952F485
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 22:39:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8912452F480
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 22:38:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353514AbiETUjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 16:39:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37932 "EHLO
+        id S1353500AbiETUiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 16:38:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241610AbiETUi7 (ORCPT
+        with ESMTP id S235788AbiETUiC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 16:38:59 -0400
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6935F19FF45;
-        Fri, 20 May 2022 13:38:58 -0700 (PDT)
-Received: from pps.filterd (m0134422.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24KFjYX9028627;
-        Fri, 20 May 2022 20:38:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pps0720;
- bh=5EP4WWdQHl2GA9A4nkZcKwln/XTzNpHsE6OOEXMtWg4=;
- b=cdxLViPCAOfi0bOw7sm7GiypYJ9YO1GmWP9ujXzYTeLUOzaqqfHu7cdHR/ubef1LF+Ph
- 9uxaAGamAQtwMt795mlZYeDqnuvYvu3AAbhUijPmHv1ZxVyWID2bneg2V1goaOxSBXiP
- z2awl1oqtv0wLR5cBJXMSaSVDKBZ0QtMbJb921GiRObxQiQ7DDfOrhw7/iwjwxDYEL42
- y96D2OG0U6ti/83+08Ff/RYhcd9qs2+5S3qr5zOYh90gniR+M4cgHrWYo6xkCkKLqbfv
- kWM/Usebx8Nr/nVDKCq0Xf5cmRFfhUuBqOEG5tj5Zcz7pmgZAvV/4Ank6m+DRQc6lJUU NA== 
-Received: from g2t2354.austin.hpe.com (g2t2354.austin.hpe.com [15.233.44.27])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3g6athkpuy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 May 2022 20:38:12 +0000
-Received: from g2t2360.austin.hpecorp.net (g2t2360.austin.hpecorp.net [16.196.225.135])
-        by g2t2354.austin.hpe.com (Postfix) with ESMTP id 6EFFA81;
-        Fri, 20 May 2022 20:38:11 +0000 (UTC)
-Received: from dog.eag.rdlabs.hpecorp.net (dog.eag.rdlabs.hpecorp.net [128.162.243.181])
-        by g2t2360.austin.hpecorp.net (Postfix) with ESMTP id C04CF37;
-        Fri, 20 May 2022 20:38:09 +0000 (UTC)
-From:   Mike Travis <mike.travis@hpe.com>
-To:     Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steve Wahl <steve.wahl@hpe.com>, x86@kernel.org
-Cc:     Mike Travis <mike.travis@hpe.com>,
-        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
-        Andy Shevchenko <andy@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Russ Anderson <russ.anderson@hpe.com>,
-        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org
-Subject: [PATCH] x86/platform/uv: Dont use smp_processor_id while preemptable
-Date:   Fri, 20 May 2022 15:37:55 -0500
-Message-Id: <20220520203755.266337-1-mike.travis@hpe.com>
-X-Mailer: git-send-email 2.26.2
+        Fri, 20 May 2022 16:38:02 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615AA19FF45
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 13:38:01 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id v9so6603046oie.5
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 13:38:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=XdQ54rbpqYvGNbI94ee1Aky8XoFj7o6SUF46CZVfiN4=;
+        b=hGVbRnhuCUsA7bBxm1jXglNj0M4A5uWOLbZL5AIXbyqoc+LL8xMyGTWkc0jBWM9G5I
+         cb8IsWVIGCSkYX3UH6k43iEJWn3FK5SNewHW81MOG6KdqiinW8vnxXh3CWbOShRTsj/y
+         qU20Tb2v5yBUH3Nnhnb4zmtAJ0C6mN+BTuMb0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=XdQ54rbpqYvGNbI94ee1Aky8XoFj7o6SUF46CZVfiN4=;
+        b=LJWEmmfI5epQxWbhBfxBoyhhOIFyqFZ24B9XTonfnL1TY8+QKYdCEhrCaWn+ToGm1s
+         oTxHMDqjsbYKoYxWdx4ZIoTW6jS+9RKCsjYGW6/DSv+2YXcqpyc5eXyoNEKhYnSwWXz2
+         1mKwd92wJF+b+hNS9iQHNntCT6pyqtrnZVqMOkFNNckn7qz6YgTt6P4M3o2pdV1VwfdF
+         27kQ3vJHAEbLcpZCPiTZ2IWQbFmTz9VZfyGEuBLsH2MaaYIW+c3er1kyi+JKq8JcfWXT
+         rZibyPYh33Eodv5w5Oawzs68jyHUzhr9zeaMaBnY7ejkV2PCVoETg3wBhGexWJpBCkMI
+         KiHg==
+X-Gm-Message-State: AOAM5309/jMUkqF6K0tN5Rf0oq2OH1wYTUNGBfOasfVOmzGqP8gu8BfU
+        DnLhiDHp/DO4765KYRdTX+8bgzTMeTdewiqQFYweeA==
+X-Google-Smtp-Source: ABdhPJx2ZXh9WbynSbhPjcPZhEQqIdnt2/D/vPTAW+3Hd/TEuhNZ0OKfdeoUPFA1x7Ghd1ESi9sF62pOTWaQMba6H08=
+X-Received: by 2002:a05:6808:23c3:b0:326:bd8d:7993 with SMTP id
+ bq3-20020a05680823c300b00326bd8d7993mr6651718oib.63.1653079080739; Fri, 20
+ May 2022 13:38:00 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 20 May 2022 13:38:00 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: m21svjX_-GCqeTwK_FVQ7dSkUI5r4ybe
-X-Proofpoint-ORIG-GUID: m21svjX_-GCqeTwK_FVQ7dSkUI5r4ybe
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-20_06,2022-05-20_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 suspectscore=0 adultscore=0 mlxlogscore=915 spamscore=0
- phishscore=0 lowpriorityscore=0 mlxscore=0 clxscore=1011 bulkscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205200126
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220520161004.1141554-2-judyhsiao@chromium.org>
+References: <20220520161004.1141554-1-judyhsiao@chromium.org> <20220520161004.1141554-2-judyhsiao@chromium.org>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Fri, 20 May 2022 13:38:00 -0700
+Message-ID: <CAE-0n53e0bq_MbfgZYdxatP8CpGVMKkBKOnSDOV+MvbBFB6wOA@mail.gmail.com>
+Subject: Re: [v2 1/3] arm64: dts: qcom: sc7280: herobrine: Add pinconf
+ settings for mi2s1
+To:     Andy Gross <agross@kernel.org>, Judy Hsiao <judyhsiao@chromium.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Srini Kandagatla <srinivas.kandagatla@linaro.org>,
+        dianders@chromium.org, mka@chromium.org, cychiang@google.com,
+        judyhsiao@google.com, tzungbi@chromium.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,41 +73,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To avoid a "BUG: using smp_processor_id() in preemptible" debug
-warning message, disable preemption around use of the processor id.
+Quoting Judy Hsiao (2022-05-20 09:10:02)
+> 1. Add drive strength property for mi2s1 on sc7280 based platforms.
+> 2. Disbale the pull-up mi2s1_data0, mi2s1_sclk.
 
-Signed-off-by: Mike Travis <mike.travis@hpe.com>
-Reviewed-by: Steve Wahl <steve.wahl@hpe.com>
-Reviewed-by: Dimitri Sivanich <dimitri.sivanich@hpe.com>
----
- arch/x86/platform/uv/uv_time.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+s/Disbale/Disable/
 
-diff --git a/arch/x86/platform/uv/uv_time.c b/arch/x86/platform/uv/uv_time.c
-index 54663f3e00cb..094190814a28 100644
---- a/arch/x86/platform/uv/uv_time.c
-+++ b/arch/x86/platform/uv/uv_time.c
-@@ -275,14 +275,17 @@ static int uv_rtc_unset_timer(int cpu, int force)
-  */
- static u64 uv_read_rtc(struct clocksource *cs)
- {
--	unsigned long offset;
-+	unsigned long offset, time;
-+	unsigned int cpu = get_cpu();
- 
- 	if (uv_get_min_hub_revision_id() == 1)
- 		offset = 0;
- 	else
--		offset = (uv_blade_processor_id() * L1_CACHE_BYTES) % PAGE_SIZE;
-+		offset = (uv_cpu_blade_processor_id(cpu) * L1_CACHE_BYTES) % PAGE_SIZE;
- 
--	return (u64)uv_read_local_mmr(UVH_RTC | offset);
-+	time = (u64)uv_read_local_mmr(UVH_RTC | offset);
-+	put_cpu();
-+	return time;
- }
- 
- /*
--- 
-2.26.2
+The commit text is a list of things done but no reason why they're done.
+I'd appreciate more freeform text with a blurb why a drive strength is
+chosen and why pulls are disabled.
 
+> Signed-off-by: Judy Hsiao <judyhsiao@chromium.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
+> index 9cb1bc8ed6b5..6d8744e130b0 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
+> @@ -612,6 +612,20 @@ &dp_hot_plug_det {
+>         bias-disable;
+>  };
+>
+> +&mi2s1_data0 {
+> +       drive-strength = <6>;
+> +       bias-disable;
+
+Is there an external pull on this line?
+
+> +};
+> +
+> +&mi2s1_sclk {
+> +       drive-strength = <6>;
+> +       bias-disable;
+
+Is there an external pull on this line? If so please add that details as
+a comment like we do for other external pulls.
+
+> +};

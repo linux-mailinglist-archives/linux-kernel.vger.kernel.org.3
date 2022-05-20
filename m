@@ -2,222 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99FB152E815
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 10:52:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B32152E812
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 10:52:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347416AbiETIwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 04:52:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53754 "EHLO
+        id S1347400AbiETIwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 04:52:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344968AbiETIwG (ORCPT
+        with ESMTP id S1344968AbiETIwB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 04:52:06 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 665B75DE49
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 01:52:04 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1nryMX-0006Xw-Bd; Fri, 20 May 2022 10:51:57 +0200
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1nryMW-0005Nx-Ak; Fri, 20 May 2022 10:51:56 +0200
-Date:   Fri, 20 May 2022 10:51:56 +0200
-From:   "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
-To:     Pkshih <pkshih@realtek.com>
-Cc:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "neojou@gmail.com" <neojou@gmail.com>,
-        "kvalo@kernel.org" <kvalo@kernel.org>,
-        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "martin.blumenstingl@googlemail.com" 
-        <martin.blumenstingl@googlemail.com>,
-        "linux@ulli-kroll.de" <linux@ulli-kroll.de>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "neo_jou@realtek.com" <neo_jou@realtek.com>
-Subject: Re: [PATCH 06/10] rtw88: Add common USB chip support
-Message-ID: <20220520085156.GE25578@pengutronix.de>
-References: <20220518082318.3898514-1-s.hauer@pengutronix.de>
- <20220518082318.3898514-7-s.hauer@pengutronix.de>
- <e9ca08c6facb8916fb9e5cbad05447321d3d0f43.camel@realtek.com>
+        Fri, 20 May 2022 04:52:01 -0400
+Received: from theia.8bytes.org (8bytes.org [IPv6:2a01:238:4383:600:38bc:a715:4b6d:a889])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C335DD00
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 01:52:00 -0700 (PDT)
+Received: by theia.8bytes.org (Postfix, from userid 1000)
+        id BC47C1E9; Fri, 20 May 2022 10:51:58 +0200 (CEST)
+Date:   Fri, 20 May 2022 10:51:57 +0200
+From:   Joerg Roedel <joro@8bytes.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        John Garry <john.garry@huawei.com>, will@kernel.org,
+        m.szyprowski@samsung.com, chenxiang66@hisilicon.com,
+        thunder.leizhen@huawei.com, iommu@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, liyihang6@hisilicon.com
+Subject: Re: [RFC PATCH] dma-iommu: Add iommu_dma_max_mapping_size()
+Message-ID: <YodWrRFircbmh1bN@8bytes.org>
+References: <1652706361-92557-1-git-send-email-john.garry@huawei.com>
+ <f5b78c9c-312e-70ab-ecbb-f14623a4b6e3@arm.com>
+ <9160031b-50be-6993-5a8e-f238391962c5@huawei.com>
+ <8f193bdd-3a0a-f9ed-0726-e6081f374320@arm.com>
+ <20220518131353.GB26019@lst.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e9ca08c6facb8916fb9e5cbad05447321d3d0f43.camel@realtek.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 10:21:45 up 50 days, 20:51, 53 users,  load average: 0.08, 0.07,
- 0.09
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220518131353.GB26019@lst.de>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 07:39:03AM +0000, Pkshih wrote:
-> On Wed, 2022-05-18 at 10:23 +0200, Sascha Hauer wrote:
-> > Add the common bits and pieces to add USB support to the RTW88 driver.
-> > This is based on https://github.com/ulli-kroll/rtw88-usb.git which
-> > itself is first written by Neo Jou.
-> > 
-> > Signed-off-by: neo_jou <neo_jou@realtek.com>
-> > Signed-off-by: Hans Ulli Kroll <linux@ulli-kroll.de>
-> > Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-> > ---
-> >  drivers/net/wireless/realtek/rtw88/Kconfig  |    3 +
-> >  drivers/net/wireless/realtek/rtw88/Makefile |    2 +
-> >  drivers/net/wireless/realtek/rtw88/mac.c    |    3 +
-> >  drivers/net/wireless/realtek/rtw88/main.c   |    5 +
-> >  drivers/net/wireless/realtek/rtw88/main.h   |    4 +
-> >  drivers/net/wireless/realtek/rtw88/reg.h    |    1 +
-> >  drivers/net/wireless/realtek/rtw88/tx.h     |   31 +
-> >  drivers/net/wireless/realtek/rtw88/usb.c    | 1051 +++++++++++++++++++
-> >  drivers/net/wireless/realtek/rtw88/usb.h    |  109 ++
-> >  9 files changed, 1209 insertions(+)
-> >  create mode 100644 drivers/net/wireless/realtek/rtw88/usb.c
-> >  create mode 100644 drivers/net/wireless/realtek/rtw88/usb.h
-> > 
+On Wed, May 18, 2022 at 03:13:53PM +0200, Christoph Hellwig wrote:
+> On Tue, May 17, 2022 at 01:02:00PM +0100, Robin Murphy wrote:
+> >> So how to inform the SCSI driver of this caching limit then so that it may 
+> >> limit the SGL length?
+> >
+> > Driver-specific mechanism; block-layer-specific mechanism; redefine this 
+> > whole API to something like dma_opt_mapping_size(), as a limit above which 
+> > mappings might become less efficient or start to fail (callback to my 
+> > thoughts on [1] as well, I suppose); many options. Just not imposing a 
+> > ridiculously low *maximum* on everyone wherein mapping calls "should not be 
+> > larger than the returned value" when that's clearly bollocks.
 > 
-> [...]
-> 
-> > diff --git a/drivers/net/wireless/realtek/rtw88/reg.h b/drivers/net/wireless/realtek/rtw88/reg.h
-> > index 84ba9ec489c37..a928899030863 100644
-> > --- a/drivers/net/wireless/realtek/rtw88/reg.h
-> > +++ b/drivers/net/wireless/realtek/rtw88/reg.h
-> > @@ -184,6 +184,7 @@
-> >  #define BIT_TXDMA_VIQ_MAP(x)                                                   \
-> 				^^^^^^^ replace 8 spaces by one tab
+> Well, for swiotlb it is a hard limit.  So if we want to go down that
+> route we need two APIs, one for the optimal size and one for the
+> hard limit.
 
-This line is not added by me. There are spaces used before the
-linebreaks throughout this file.
+I agree with Robin, and if it really helps some drivers I am all for
+doing a dma_opt_mapping_size() instead. Limiting DMA mapping sizes to
+make drivers perform better gets a clear NAK from my side.
 
-> > +	do {
-> > +		spin_lock_irqsave(&rtwusb->rx_data_list_lock, flags);
-> > +
-> > +		rxcb = list_first_entry_or_null(&rtwusb->rx_data_free,
-> > +						struct rx_usb_ctrl_block, list);
-> > +
-> > +		spin_unlock_irqrestore(&rtwusb->rx_data_list_lock, flags);
-> > +		if (!rxcb)
-> > +			return;
-> > +
-> > +		rxcb->rx_skb = alloc_skb(RTW_USB_MAX_RECVBUF_SZ, GFP_KERNEL);
-> > +		if (!rxcb->rx_skb) {
-> > +			rtw_err(rtwdev, "could not allocate rx skbuff\n");
-> > +			return;
-> > +		}
-> > +
-> > +		usb_fill_bulk_urb(rxcb->rx_urb, rtwusb->udev,
-> > +				  usb_rcvbulkpipe(rtwusb->udev, rtwusb->pipe_in),
-> > +				  rxcb->rx_skb->data, RTW_USB_MAX_RECVBUF_SZ,
-> > +				  rtw_usb_read_port_complete, rxcb);
-> > +
-> > +		spin_lock_irqsave(&rtwusb->rx_data_list_lock, flags);
-> > +		list_move(&rxcb->list, &rtwusb->rx_data_used);
-> > +		spin_unlock_irqrestore(&rtwusb->rx_data_list_lock, flags);
-> > +
-> > +		error = usb_submit_urb(rxcb->rx_urb, GFP_KERNEL);
-> > +		if (error) {
-> > +			kfree_skb(rxcb->rx_skb);
-> > +			if (error != -ENODEV)
-> > +				rtw_err(rtwdev, "Err sending rx data urb %d\n",
-> > +					   error);
-> > +			rtw_usb_rx_data_put(rtwusb, rxcb);
-> > +
-> > +			return;
-> > +		}
-> > +	} while (true);
-> 
-> Can we have a limit of 'for(;<limit;)' insetad of 'while (true)'?
+Regards,
 
-Not sure if it's worth it, but yes, it shouldn't hurt either.
-
-> 
-> > +}
-> > +
-> > +static void rtw_usb_cancel_rx_bufs(struct rtw_usb *rtwusb)
-> > +{
-> > +	struct rx_usb_ctrl_block *rxcb;
-> > +	unsigned long flags;
-> > +
-> > +	spin_lock_irqsave(&rtwusb->rx_data_list_lock, flags);
-> > +
-> > +	while (true) {
-> > +		rxcb = list_first_entry_or_null(&rtwusb->rx_data_used,
-> > +						struct rx_usb_ctrl_block, list);
-> > +
-> > +		spin_unlock_irqrestore(&rtwusb->rx_data_list_lock, flags);
-> > +
-> > +		if (!rxcb)
-> > +			break;
-> > +
-> > +		usb_kill_urb(rxcb->rx_urb);
-> > +
-> > +		spin_lock_irqsave(&rtwusb->rx_data_list_lock, flags);
-> > +		list_move(&rxcb->list, &rtwusb->rx_data_free);
-> > +	}
-> > +}
-> 
-> The spin_lock pairs are not intuitive.
-> Can we change this chunk to
-> 
-> while (true) {
->      spin_lock();
->      rxcb = list_first_entry_or_null();
->      spin_unlock()
-> 
->      if (!rxcb)
->         return;
-> 
->      usb_free_urb();
-> 
->      spin_lock();
->      list_del();
->      spin_unlock();
-> }
-> 
-> The drawback is lock/unlock twice in single loop.
-
-Yes, that's why I did it the way I did ;)
-
-How about:
-
-	while (true) {
-		unsigned long flags;
-
-		spin_lock_irqsave(&rtwusb->rx_data_list_lock, flags);
-
-		rxcb = list_first_entry_or_null(&rtwusb->rx_data_free,
-						struct rx_usb_ctrl_block, list);
-		if (rxcb)
-			list_del(&rxcb->list);
-
-		spin_unlock_irqrestore(&rtwusb->rx_data_list_lock, flags);
-
-		if (!rxcb)
-			break;
-
-		usb_free_urb(rxcb->rx_urb);
-	}
-
-Sascha
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+	Joerg

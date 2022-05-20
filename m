@@ -2,58 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95D9B52ED97
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 15:55:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 906AF52EDA4
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 15:57:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350033AbiETNzn convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 20 May 2022 09:55:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60514 "EHLO
+        id S1350053AbiETN5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 09:57:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238503AbiETNzk (ORCPT
+        with ESMTP id S236985AbiETN5E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 09:55:40 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9E77F5EDC2
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 06:55:38 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-191-mSqs0xGWPE6wZaF1FGSg6A-1; Fri, 20 May 2022 14:55:35 +0100
-X-MC-Unique: mSqs0xGWPE6wZaF1FGSg6A-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.36; Fri, 20 May 2022 14:55:35 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.036; Fri, 20 May 2022 14:55:35 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Adrian Hunter' <adrian.hunter@intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-CC:     Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 2/5] libperf: Add preadn()
-Thread-Topic: [PATCH 2/5] libperf: Add preadn()
-Thread-Index: AQHYbEz0Y2PvIJt5EUyDSqCKvEJ6Ya0nyBWw
-Date:   Fri, 20 May 2022 13:55:35 +0000
-Message-ID: <de58fd1514d5477aaf144234aa096ab1@AcuMS.aculab.com>
-References: <20220520132404.25853-1-adrian.hunter@intel.com>
- <20220520132404.25853-3-adrian.hunter@intel.com>
-In-Reply-To: <20220520132404.25853-3-adrian.hunter@intel.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 20 May 2022 09:57:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5643C5E16A
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 06:57:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653055022;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2Xg9YIIDr5qXxyMPcswvH5k6lOW6r7RcBc7OT6l2sRU=;
+        b=ZIDF+271NKp51ltLRPXmKAsdmtlcl0idqZ8259FsEd0kDLjxAm2NkPrNRydzLiTR48i7iz
+        AI8tvqQOyU89+9BNeJOor2dfjFb/vqYDJAHWd4YD93sE6iNlFFqWKpD5ehsUHT/9NcHbvt
+        8B5g0fA9EQy3IJVCYQoRrBFjsSeAq00=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-588-WE6RxvVbNny_ovl1L2prrg-1; Fri, 20 May 2022 09:56:46 -0400
+X-MC-Unique: WE6RxvVbNny_ovl1L2prrg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C0B78101AA42;
+        Fri, 20 May 2022 13:56:45 +0000 (UTC)
+Received: from T590 (ovpn-8-21.pek2.redhat.com [10.72.8.21])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7F0097C2A;
+        Fri, 20 May 2022 13:56:40 +0000 (UTC)
+Date:   Fri, 20 May 2022 21:56:35 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     "yukuai (C)" <yukuai3@huawei.com>
+Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        ming.lei@redhat.com
+Subject: Re: [PATCH -next v2] blk-mq: fix panic during blk_mq_run_work_fn()
+Message-ID: <YoeeEw4SFvWtXNRk@T590>
+References: <20220520032542.3331610-1-yukuai3@huawei.com>
+ <YocOsw6n3y11lNym@T590>
+ <2b7a82e0-1e33-e2ff-74d7-d80f152fdc75@huawei.com>
+ <afe9dec4-733d-88e9-850d-5c36e9201119@huawei.com>
+ <YodSlSm/sIC8G2iG@T590>
+ <dbe2deec-b007-470f-eb5a-35fae63ad134@huawei.com>
+ <YodlGOo7vrUa7DZK@T590>
+ <0e7967de-0c32-790d-fa08-b0bc9ef5923d@huawei.com>
+ <Yod93DOdYosa+SvS@T590>
+ <8e6a806b-f42e-319b-e6c8-de1f07befce2@huawei.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8e6a806b-f42e-319b-e6c8-de1f07befce2@huawei.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,72 +72,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Adrian Hunter
-> Sent: 20 May 2022 14:24
+On Fri, May 20, 2022 at 08:01:31PM +0800, yukuai (C) wrote:
+> 在 2022/05/20 19:39, Ming Lei 写道:
 > 
-> Add preadn() to provide pread() and readn() semantics.
+> > 
+> > In short:
+> > 
+> > 1) run queue can be in-progress during cleanup queue, or returns from
+> > cleanup queue; we drain it in both blk_cleanup_queue() and
+> > disk_release_mq(), see commit 2a19b28f7929 ("blk-mq: cancel blk-mq dispatch
+> > work in both blk_cleanup_queue and disk_release()")
+> I understand that, however, there is no garantee new 'hctx->run_work'
+> won't be queued after 'drain it', for this crash, I think this is how
+
+No, run queue activity will be shutdown after both disk_release_mq()
+and blk_cleanup_queue() are done.
+
+disk_release_mq() is called after all FS IOs are done, so there isn't
+any run queue from FS IO code path, either sync or async.
+
+In blk_cleanup_queue(), we only focus on passthrough request, and
+passthrough request is always explicitly allocated & freed by
+its caller, so once queue is frozen, all sync dispatch activity
+for passthrough request has been done, then it is enough to just cancel
+dispatch work for avoiding any dispatch activity.
+
+That is why both request queue and hctx can be released safely
+after the two are done.
+
+> it triggered:
 > 
-> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
-> ---
->  tools/lib/perf/include/internal/lib.h |  2 ++
->  tools/lib/perf/lib.c                  | 20 ++++++++++++++++++++
->  2 files changed, 22 insertions(+)
+> assum that there is no io, while some bfq_queue is still busy:
 > 
-> diff --git a/tools/lib/perf/include/internal/lib.h b/tools/lib/perf/include/internal/lib.h
-> index 5175d491b2d4..85471a4b900f 100644
-> --- a/tools/lib/perf/include/internal/lib.h
-> +++ b/tools/lib/perf/include/internal/lib.h
-> @@ -9,4 +9,6 @@ extern unsigned int page_size;
->  ssize_t readn(int fd, void *buf, size_t n);
->  ssize_t writen(int fd, const void *buf, size_t n);
-> 
-> +ssize_t preadn(int fd, void *buf, size_t n, off_t offs);
-> +
->  #endif /* __LIBPERF_INTERNAL_CPUMAP_H */
-> diff --git a/tools/lib/perf/lib.c b/tools/lib/perf/lib.c
-> index 18658931fc71..ecc8035a3ae3 100644
-> --- a/tools/lib/perf/lib.c
-> +++ b/tools/lib/perf/lib.c
-> @@ -38,6 +38,26 @@ ssize_t readn(int fd, void *buf, size_t n)
->  	return ion(true, fd, buf, n);
->  }
-> 
-> +ssize_t preadn(int fd, void *buf, size_t n, off_t offs)
-> +{
-> +	ssize_t ret;
-> +	off_t cur;
-> +
-> +	cur = lseek(fd, 0, SEEK_CUR);
-> +	if (cur < 0)
-> +		return -1;
-> +
-> +	if (lseek(fd, offs, SEEK_SET) < 0)
-> +		return -1;
-> +
-> +	ret = readn(fd, buf, n);
-> +
-> +	if (lseek(fd, cur, SEEK_CUR) < 0)
-> +		return -1;
-> +
-> +	return ret;
-> +}
+> blk_cleanup_queue
+>  blk_freeze_queue
+>  blk_mq_cancel_work_sync
+>  cancel_delayed_work_sync(hctx1)
+> 				blk_mq_run_work_fn -> hctx2
+> 				 __blk_mq_run_hw_queue
+> 				  blk_mq_sched_dispatch_requests
+> 				   __blk_mq_do_dispatch_sched
+> 				    blk_mq_delay_run_hw_queues
+> 				     blk_mq_delay_run_hw_queue
+> 				      -> add hctx1->run_work again
+>  cancel_delayed_work_sync(hctx2)
 
-Please don't ever write that code, not ever.
-It isn't an implementation of pread().
+Yes, even blk_mq_delay_run_hw_queues() can be called after all
+hctx->run_work are canceled since __blk_mq_run_hw_queue() could be
+running in sync io code path, not via ->run_work.
 
-Oh, and shoot whoever put in into (IIRC) uclibc.
+And my patch will fix the issue, won't it?
 
-pread() needs to use the syscall, you cannot implement
-it in userspace.
 
-It is better to have the function missing that that version.
-
-There is a similar problem with clock_nanosleep() and TIMER_ABSTIME
-in glibc - completely broken emulation.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+Thanks,
+Ming
 

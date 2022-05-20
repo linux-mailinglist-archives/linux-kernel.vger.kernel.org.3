@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F9D252F2AF
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 20:31:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E20F252F2B5
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 20:31:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352704AbiETSbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 14:31:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37920 "EHLO
+        id S1348238AbiETSbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 14:31:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352672AbiETSa4 (ORCPT
+        with ESMTP id S1352678AbiETSa6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 14:30:56 -0400
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A038E5F7B;
-        Fri, 20 May 2022 11:30:53 -0700 (PDT)
-Received: by mail-ot1-x335.google.com with SMTP id p12-20020a9d4e0c000000b00606b40860a3so6043590otf.11;
-        Fri, 20 May 2022 11:30:53 -0700 (PDT)
+        Fri, 20 May 2022 14:30:58 -0400
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C662F6339;
+        Fri, 20 May 2022 11:30:55 -0700 (PDT)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-d39f741ba0so11186025fac.13;
+        Fri, 20 May 2022 11:30:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=za+JFS8UrUe1EXtSy/HN8YRbGNE25Vj78rAPO0Rkf/g=;
-        b=o6Tx0LzPHIhCpfrRIsc95kozM8a+KwgIDkmt8N/jDxvtQZqIPGgXK164juK2RVXwOX
-         GWDJHgXi5NGg9NBQJW4Vru8DxkxlfjWiG9WGUekie0LgziLRuvTIraofgJp/QlQk+s7V
-         h9dX77Ndbojz45f3QR2S2ixdbc2LTL5klQ31FbQUslkFOl02mqZQD3zxQL+tQWPlObFn
-         o3WlsJVSE0FCUWnJ2aSMjlh6UJPgZ9UaW3fF2i16LEz2UpqpjPc+aYq/o2hT1jDa43er
-         Qk6DY93E1MLDMXPBjXpIaT1IEEnwp53xeXkDon5AfzFpxgegcPzcR+nTiSMDBsQipGpL
-         vk3g==
+        bh=eGxcFia+56uzVoruJ6OmLxji9P6kTMXtUnj8BikXIyE=;
+        b=khSf+r1Fkqxo8gglY2M/PhmMoJy5KBDJIogypEi7/BHI82vQ6fH58w1bO1V0n26U5j
+         /eySZly75d1mGk1EAA+nInGv5Yvz1NGSqpcdiBOiHyRFXHuznj5Fjk92Tr5t+WlCukcb
+         nXJRFooDU9fLk009z13xqPfRyz88F9hdws3CWctomBk8TGeotImRYAkHFh0Tqa5aeELa
+         7Sj+HiAiMTU5IW6YoTs9VH1WGAQelTyJpmMAjXlhBjMh3R23ENFL0R2feJy/X0nJDCgC
+         YOiqLt1iKuJzSp8Fr1CtH5qPt2fzNzGNoaF5RibDxVwno3dyVns6W4CXiMAB4to98TMn
+         VMMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=za+JFS8UrUe1EXtSy/HN8YRbGNE25Vj78rAPO0Rkf/g=;
-        b=tRb/vJysg58nsL3KZu/haW/hoksGbblbzSwu08JK7fhUd20T11zVuPwFRKNdtQoAFx
-         CmRZ+Gi6CG7W/n+DXNx2gEm6bZzKkl2na/ppe7GJ6qmEE3bjFPrHMPbbdSPLYT08DeYU
-         LqYvyAT5Nb4C10FI06rFNRnpsYftH+SzRT9fZxVpG6BMplcEoQ+92MT3C+HdCcP6cf2g
-         vVSN2NDFUeG2jRaSQwyoxSzNPnnZWTYqR+tJhKbfZmrCFBWH93yCblVsSv3kTUV58i1b
-         pGF8aXu/xS3TPtKczfRRGXxNG3M9kIMiOH9c/D+ivcN+d5cx0CpCLFItZBOaSuAG5L71
-         J/vA==
-X-Gm-Message-State: AOAM5315v3az6cTmk9wkiKpu1gQGUfQ3K7AkTDOw34qpSV3W9n4U5fLC
-        Uacs8BF+Dl+Bgt0ETFg0kxNMWYuN73Ep5Q==
-X-Google-Smtp-Source: ABdhPJyerJGQBYBXYu2NsSfmJk2S2dCsqe0iHzS308XxRXfoTAcER2mEziZSk7jviJ+AgOc+c/A+bw==
-X-Received: by 2002:a9d:7dc2:0:b0:606:1ad9:9956 with SMTP id k2-20020a9d7dc2000000b006061ad99956mr4502990otn.214.1653071452656;
-        Fri, 20 May 2022 11:30:52 -0700 (PDT)
+        bh=eGxcFia+56uzVoruJ6OmLxji9P6kTMXtUnj8BikXIyE=;
+        b=k6B/cLX6e0urXPg4mxzUZURJ1dZLLJb/stX/mEXt/5+/iu0QysxDr9bw9Ge8E4Pwxz
+         YyHrTDn9occhKC4vDrHPZU5lsZoDdkUmLiXeMCyDDJvAqs/tULAdZcqeoQLKhrM+Spqm
+         v1P1WHcRXw5cD3YrKGuRNeNUTnxgAkEek1JJN5bk2hcOo2uX0Ky/awjDeKrIFoec+0jp
+         Y8NI2sdvomfwiLnIp5rrjUowm2URAafh1maICVVLnSx8d5W6pN/KCiQkstAZFXXDaIEi
+         19TTKFniDOjBciz5MwLx4kXmJSyxU4p03RGddPk6X3ui6TM59gWlpvdVgoVWaFDtCVGL
+         GvSQ==
+X-Gm-Message-State: AOAM532Lv+rIAAJAC0kvbVJTReKKdVHXZYEZpFktNjZKI0J51TbJolz4
+        v65BEyatPZfYNq74Qhw78XEDKJ79kqAUEw==
+X-Google-Smtp-Source: ABdhPJzzqJHVY90lRrp4y3xlMCM5Vhrv3EAWizoRLW8Mbmv8pqWXk08CnCxms8Y1G8h23RbxgHDIzw==
+X-Received: by 2002:a05:6870:2103:b0:e9:6d65:4abb with SMTP id f3-20020a056870210300b000e96d654abbmr7173626oae.261.1653071454048;
+        Fri, 20 May 2022 11:30:54 -0700 (PDT)
 Received: from wintermute.localdomain (cpe-76-183-134-35.tx.res.rr.com. [76.183.134.35])
-        by smtp.gmail.com with ESMTPSA id w12-20020a4ab6cc000000b0035eb4e5a6d0sm1339467ooo.38.2022.05.20.11.30.51
+        by smtp.gmail.com with ESMTPSA id w12-20020a4ab6cc000000b0035eb4e5a6d0sm1339467ooo.38.2022.05.20.11.30.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 11:30:52 -0700 (PDT)
+        Fri, 20 May 2022 11:30:53 -0700 (PDT)
 From:   Chris Morgan <macroalpha82@gmail.com>
 To:     linux-pm@vger.kernel.org
 Cc:     linux-rockchip@lists.infradead.org,
@@ -57,11 +57,10 @@ Cc:     linux-rockchip@lists.infradead.org,
         heiko@sntech.de, sre@kernel.org, jon.lin@rock-chips.com,
         zyw@rock-chips.com, zhangqing@rock-chips.com,
         Chris Morgan <macromorgan@hotmail.com>,
-        Maya Matuszczyk <maccraft123mc@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [RESEND 1/4 v7] dt-bindings: Add Rockchip rk817 battery charger support
-Date:   Fri, 20 May 2022 13:30:34 -0500
-Message-Id: <20220520183037.2566-2-macroalpha82@gmail.com>
+        Maya Matuszczyk <maccraft123mc@gmail.com>
+Subject: [RESEND 2/4 v7] mfd: Add Rockchip rk817 battery charger support
+Date:   Fri, 20 May 2022 13:30:35 -0500
+Message-Id: <20220520183037.2566-3-macroalpha82@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220520183037.2566-1-macroalpha82@gmail.com>
 References: <20220520183037.2566-1-macroalpha82@gmail.com>
@@ -79,93 +78,177 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Chris Morgan <macromorgan@hotmail.com>
 
-Create dt-binding documentation to document rk817 battery and charger
-usage. New device-tree properties have been added.
+Add rk817 charger support cell to rk808 mfd driver.
 
-- rockchip,resistor-sense-micro-ohms: The value in microohms of the
-                                      sample resistor.
-- rockchip,sleep-enter-current-microamp: The value in microamps of the
-                                         sleep enter current.
-- rockchip,sleep-filter-current: The value in microamps of the sleep
-                                 filter current.
-
+Acked-for-mfd-by: Lee Jones <lee.jones@linaro.org>
 Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
 Signed-off-by: Maya Matuszczyk <maccraft123mc@gmail.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
+ drivers/mfd/rk808.c       | 16 ++++++-
+ include/linux/mfd/rk808.h | 91 +++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 106 insertions(+), 1 deletion(-)
 
-Note that this patch requires the following commit (still pending):
-https://lore.kernel.org/linux-rockchip/20220519161731.1168-1-macroalpha82@gmail.com/
-
- .../bindings/mfd/rockchip,rk817.yaml          | 48 +++++++++++++++++++
- 1 file changed, 48 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/mfd/rockchip,rk817.yaml b/Documentation/devicetree/bindings/mfd/rockchip,rk817.yaml
-index bfc1720adc43..d0dccb1aaf4c 100644
---- a/Documentation/devicetree/bindings/mfd/rockchip,rk817.yaml
-+++ b/Documentation/devicetree/bindings/mfd/rockchip,rk817.yaml
-@@ -117,6 +117,47 @@ properties:
-         description:
-           Describes if the microphone uses differential mode.
+diff --git a/drivers/mfd/rk808.c b/drivers/mfd/rk808.c
+index 4142b638e5fa..283a65b64d2c 100644
+--- a/drivers/mfd/rk808.c
++++ b/drivers/mfd/rk808.c
+@@ -67,6 +67,10 @@ static bool rk817_is_volatile_reg(struct device *dev, unsigned int reg)
+ 	case RK817_SECONDS_REG ... RK817_WEEKS_REG:
+ 	case RK817_RTC_STATUS_REG:
+ 	case RK817_CODEC_DTOP_LPT_SRST:
++	case RK817_GAS_GAUGE_ADC_CONFIG0 ... RK817_GAS_GAUGE_CUR_ADC_K0:
++	case RK817_PMIC_CHRG_STS:
++	case RK817_PMIC_CHRG_OUT:
++	case RK817_PMIC_CHRG_IN:
+ 	case RK817_INT_STS_REG0:
+ 	case RK817_INT_STS_REG1:
+ 	case RK817_INT_STS_REG2:
+@@ -74,7 +78,7 @@ static bool rk817_is_volatile_reg(struct device *dev, unsigned int reg)
+ 		return true;
+ 	}
  
-+  charger:
-+    description: |
-+      The child node for the charger to hold additional properties. If a
-+      battery is not in use, this node can be omitted.
-+    type: object
-+    properties:
-+      monitored-battery:
-+        description: |
-+          A phandle to a monitored battery node that contains a valid
-+          value for:
-+          charge-full-design-microamp-hours,
-+          charge-term-current-microamp,
-+          constant-charge-current-max-microamp,
-+          constant-charge-voltage-max-microvolt,
-+          voltage-max-design-microvolt,
-+          voltage-min-design-microvolt,
-+          and a valid ocv-capacity table.
-+
-+      rockchip,resistor-sense-micro-ohms:
-+        description: |
-+          Value in microohms of the battery sense resistor. This value is
-+          used by the driver to set the correct divisor value to translate
-+          ADC readings into the proper units of measure.
-+        enum: [10000, 20000]
-+
-+      rockchip,sleep-enter-current-microamp:
-+        description: |
-+          Value in microamps of the sleep enter current for the charger.
-+          Value is used by the driver to calibrate the relax threshold.
-+
-+      rockchip,sleep-filter-current-microamp:
-+        description:
-+          Value in microamps of the sleep filter current for the charger.
-+          Value is used by the driver to derive the sleep sample current.
-+
-+    required:
-+      - monitored-battery
-+      - rockchip,resistor-sense-micro-ohms
-+      - rockchip,sleep-enter-current-microamp
-+      - rockchip,sleep-filter-current-microamp
-+
- allOf:
-   - if:
-       properties:
-@@ -323,6 +364,13 @@ examples:
-                 };
-             };
+-	return true;
++	return false;
+ }
  
-+            rk817_charger: charger {
-+                monitored-battery = <&battery>;
-+                rockchip,resistor-sense-micro-ohms = <10000>;
-+                rockchip,sleep-enter-current-microamp = <300000>;
-+                rockchip,sleep-filter-current-microamp = <100000>;
-+            };
+ static const struct regmap_config rk818_regmap_config = {
+@@ -127,6 +131,11 @@ static const struct resource rk817_pwrkey_resources[] = {
+ 	DEFINE_RES_IRQ(RK817_IRQ_PWRON_FALL),
+ };
+ 
++static const struct resource rk817_charger_resources[] = {
++	DEFINE_RES_IRQ(RK817_IRQ_PLUG_IN),
++	DEFINE_RES_IRQ(RK817_IRQ_PLUG_OUT),
++};
 +
-             rk817_codec: codec {
-                 rockchip,mic-in-differential;
-             };
+ static const struct mfd_cell rk805s[] = {
+ 	{ .name = "rk808-clkout", },
+ 	{ .name = "rk808-regulator", },
+@@ -166,6 +175,11 @@ static const struct mfd_cell rk817s[] = {
+ 		.resources = &rk817_rtc_resources[0],
+ 	},
+ 	{ .name = "rk817-codec",},
++	{
++		.name = "rk817-charger",
++		.num_resources = ARRAY_SIZE(rk817_charger_resources),
++		.resources = &rk817_charger_resources[0],
++	},
+ };
+ 
+ static const struct mfd_cell rk818s[] = {
+diff --git a/include/linux/mfd/rk808.h b/include/linux/mfd/rk808.h
+index 58602032e642..9af1f3105f80 100644
+--- a/include/linux/mfd/rk808.h
++++ b/include/linux/mfd/rk808.h
+@@ -519,6 +519,77 @@ enum rk809_reg_id {
+ #define MIC_DIFF_DIS			(0x0 << 7)
+ #define MIC_DIFF_EN			(0x1 << 7)
+ 
++/* RK817 Battery Registers */
++#define RK817_GAS_GAUGE_ADC_CONFIG0	0x50
++#define RK817_GG_EN			(0x1 << 7)
++#define RK817_SYS_VOL_ADC_EN		(0x1 << 6)
++#define RK817_TS_ADC_EN			(0x1 << 5)
++#define RK817_USB_VOL_ADC_EN		(0x1 << 4)
++#define RK817_BAT_VOL_ADC_EN		(0x1 << 3)
++#define RK817_BAT_CUR_ADC_EN		(0x1 << 2)
++
++#define RK817_GAS_GAUGE_ADC_CONFIG1	0x55
++
++#define RK817_VOL_CUR_CALIB_UPD		BIT(7)
++
++#define RK817_GAS_GAUGE_GG_CON		0x56
++#define RK817_GAS_GAUGE_GG_STS		0x57
++
++#define RK817_BAT_CON			(0x1 << 4)
++#define RK817_RELAX_VOL_UPD		(0x3 << 2)
++#define RK817_RELAX_STS			(0x1 << 1)
++
++#define RK817_GAS_GAUGE_RELAX_THRE_H	0x58
++#define RK817_GAS_GAUGE_RELAX_THRE_L	0x59
++#define RK817_GAS_GAUGE_OCV_THRE_VOL	0x62
++#define RK817_GAS_GAUGE_OCV_VOL_H	0x63
++#define RK817_GAS_GAUGE_OCV_VOL_L	0x64
++#define RK817_GAS_GAUGE_PWRON_VOL_H	0x6b
++#define RK817_GAS_GAUGE_PWRON_VOL_L	0x6c
++#define RK817_GAS_GAUGE_PWRON_CUR_H	0x6d
++#define RK817_GAS_GAUGE_PWRON_CUR_L	0x6e
++#define RK817_GAS_GAUGE_OFF_CNT		0x6f
++#define RK817_GAS_GAUGE_Q_INIT_H3	0x70
++#define RK817_GAS_GAUGE_Q_INIT_H2	0x71
++#define RK817_GAS_GAUGE_Q_INIT_L1	0x72
++#define RK817_GAS_GAUGE_Q_INIT_L0	0x73
++#define RK817_GAS_GAUGE_Q_PRES_H3	0x74
++#define RK817_GAS_GAUGE_Q_PRES_H2	0x75
++#define RK817_GAS_GAUGE_Q_PRES_L1	0x76
++#define RK817_GAS_GAUGE_Q_PRES_L0	0x77
++#define RK817_GAS_GAUGE_BAT_VOL_H	0x78
++#define RK817_GAS_GAUGE_BAT_VOL_L	0x79
++#define RK817_GAS_GAUGE_BAT_CUR_H	0x7a
++#define RK817_GAS_GAUGE_BAT_CUR_L	0x7b
++#define RK817_GAS_GAUGE_USB_VOL_H	0x7e
++#define RK817_GAS_GAUGE_USB_VOL_L	0x7f
++#define RK817_GAS_GAUGE_SYS_VOL_H	0x80
++#define RK817_GAS_GAUGE_SYS_VOL_L	0x81
++#define RK817_GAS_GAUGE_Q_MAX_H3	0x82
++#define RK817_GAS_GAUGE_Q_MAX_H2	0x83
++#define RK817_GAS_GAUGE_Q_MAX_L1	0x84
++#define RK817_GAS_GAUGE_Q_MAX_L0	0x85
++#define RK817_GAS_GAUGE_SLEEP_CON_SAMP_CUR_H	0x8f
++#define RK817_GAS_GAUGE_SLEEP_CON_SAMP_CUR_L	0x90
++#define RK817_GAS_GAUGE_CAL_OFFSET_H	0x91
++#define RK817_GAS_GAUGE_CAL_OFFSET_L	0x92
++#define RK817_GAS_GAUGE_VCALIB0_H	0x93
++#define RK817_GAS_GAUGE_VCALIB0_L	0x94
++#define RK817_GAS_GAUGE_VCALIB1_H	0x95
++#define RK817_GAS_GAUGE_VCALIB1_L	0x96
++#define RK817_GAS_GAUGE_IOFFSET_H	0x97
++#define RK817_GAS_GAUGE_IOFFSET_L	0x98
++#define RK817_GAS_GAUGE_BAT_R1		0x9a
++#define RK817_GAS_GAUGE_BAT_R2		0x9b
++#define RK817_GAS_GAUGE_BAT_R3		0x9c
++#define RK817_GAS_GAUGE_DATA0		0x9d
++#define RK817_GAS_GAUGE_DATA1		0x9e
++#define RK817_GAS_GAUGE_DATA2		0x9f
++#define RK817_GAS_GAUGE_DATA3		0xa0
++#define RK817_GAS_GAUGE_DATA4		0xa1
++#define RK817_GAS_GAUGE_DATA5		0xa2
++#define RK817_GAS_GAUGE_CUR_ADC_K0	0xb0
++
+ #define RK817_POWER_EN_REG(i)		(0xb1 + (i))
+ #define RK817_POWER_SLP_EN_REG(i)	(0xb5 + (i))
+ 
+@@ -544,10 +615,30 @@ enum rk809_reg_id {
+ #define RK817_LDO_ON_VSEL_REG(idx)	(0xcc + (idx) * 2)
+ #define RK817_BOOST_OTG_CFG		(0xde)
+ 
++#define RK817_PMIC_CHRG_OUT		0xe4
++#define RK817_CHRG_VOL_SEL		(0x07 << 4)
++#define RK817_CHRG_CUR_SEL		(0x07 << 0)
++
++#define RK817_PMIC_CHRG_IN		0xe5
++#define RK817_USB_VLIM_EN		(0x01 << 7)
++#define RK817_USB_VLIM_SEL		(0x07 << 4)
++#define RK817_USB_ILIM_EN		(0x01 << 3)
++#define RK817_USB_ILIM_SEL		(0x07 << 0)
++#define RK817_PMIC_CHRG_TERM		0xe6
++#define RK817_CHRG_TERM_ANA_DIG		(0x01 << 2)
++#define RK817_CHRG_TERM_ANA_SEL		(0x03 << 0)
++#define RK817_CHRG_EN			(0x01 << 6)
++
++#define RK817_PMIC_CHRG_STS		0xeb
++#define RK817_BAT_EXS			BIT(7)
++#define RK817_CHG_STS			(0x07 << 4)
++
+ #define RK817_ID_MSB			0xed
+ #define RK817_ID_LSB			0xee
+ 
+ #define RK817_SYS_STS			0xf0
++#define RK817_PLUG_IN_STS		(0x1 << 6)
++
+ #define RK817_SYS_CFG(i)		(0xf1 + (i))
+ 
+ #define RK817_ON_SOURCE_REG		0xf5
 -- 
 2.25.1
 

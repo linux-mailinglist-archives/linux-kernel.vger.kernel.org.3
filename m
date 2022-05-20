@@ -2,42 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AE4E52E5C1
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 09:03:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C844852E558
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 08:51:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346197AbiETHDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 03:03:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36642 "EHLO
+        id S1346061AbiETGvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 02:51:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346258AbiETHCN (ORCPT
+        with ESMTP id S239485AbiETGvf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 03:02:13 -0400
-Received: from mx1.cqplus1.com (unknown [113.204.237.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0E32E62A23
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 00:01:47 -0700 (PDT)
-X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
-        LIVER,40,3)
-Received: from 172.28.114.216
-        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(13837:0:AUTH_RELAY)
-        (envelope-from <qinjian@cqplus1.com>); Fri, 20 May 2022 14:51:17 +0800 (CST)
-From:   Qin Jian <qinjian@cqplus1.com>
-To:     sboyd@kernel.org
-Cc:     krzysztof.kozlowski@linaro.org, robh+dt@kernel.org,
-        mturquette@baylibre.com, tglx@linutronix.de, maz@kernel.org,
-        p.zabel@pengutronix.de, linux@armlinux.org.uk, arnd@arndb.de,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        Qin Jian <qinjian@cqplus1.com>
-Subject: [PATCH v16 10/10] ARM: dts: Add Sunplus SP7021-Demo-V3 board device tree
-Date:   Fri, 20 May 2022 14:50:44 +0800
-Message-Id: <8975c7d3b95b1f2de5b9eda9872f9dc18f1b123e.1653027644.git.qinjian@cqplus1.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <cover.1653027644.git.qinjian@cqplus1.com>
-References: <cover.1653027644.git.qinjian@cqplus1.com>
+        Fri, 20 May 2022 02:51:35 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD3313F9C
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 23:51:34 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id u30so12707168lfm.9
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 23:51:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=2sD0n6yJXGuDhEewc3lorHaqBnUR099vPCJ5WEpCDzU=;
+        b=mOoGc9M7MZgxeaun4PGlBRo4C1JXBlLpYBpB0L6MScXAzAz4CQjEupqeEEiqIWVtoS
+         yzsod5WBURL9tjzxFjdaKzclp79TQIts7pzJufezPjonrPmOg2kLST6Yz5yk0poAdEkv
+         1FokQMf2YtyUEt6qDRhGfKp0jAmlbIhEPE0Y9yp1BlWPZddAsy6avCDFyvojQByppw3U
+         YZdF+69jR6WSNT6qja7BKlhcm6UOQBYfk6GgCQMdG/v+I34ZPzvjSe2msGn5TGD8lKrK
+         CkEzOdKtdYsHqPbRhaDRxiJDH5hUlWVIVsUbCi9Mslb5JOHLhOU32ArxKxPNHc/7iUZR
+         xWpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=2sD0n6yJXGuDhEewc3lorHaqBnUR099vPCJ5WEpCDzU=;
+        b=7knAv4VqKZcOpCgiyCIHsveerHwiiSiJdLhjcm+fK2pVhFORkwv0vv8Rh4uJlkLBD+
+         7yMKV9EZiGYMSS8mGt/U/p7q2RhjK3KZ8ZFJR8wq52br6MKwO70bde2LwYNqDlqKjD1U
+         YUd+RSuyN8kUKTQjeUxgKEyWer4WL1RsVjyB9PsPS4RXc2PLfMNte2gSWiMZccCwCMfy
+         QyByNbkRJz7bYJPmZNk8FDZ6b/auRQ0AzdTfl/uu7htDxMjJgRwoPPUxjjDABHjKx2HD
+         kUvi5e8Deg4blljNZhH1JKnOQP0Tqs5VgIK0+MF1blJ/fjwROZEy5bD7tvXh1rgB+hPP
+         KApA==
+X-Gm-Message-State: AOAM531qEPGnAI5V/cq0PPVWSDLhvEAbKeOiMdnyGHZy40rFhTfWZFFj
+        XgeK0iQQul/TAY6nm9TamJWc2g==
+X-Google-Smtp-Source: ABdhPJzaGbv04buuDHGp4NLG8WTmLEncJfxtJuLSgfyJWSMt4wxUrF1jnVPHvL9DO/40kuanoOGM6w==
+X-Received: by 2002:a05:6512:398c:b0:473:ab45:1f7c with SMTP id j12-20020a056512398c00b00473ab451f7cmr5937130lfu.341.1653029492370;
+        Thu, 19 May 2022 23:51:32 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id g23-20020a2e9e57000000b0024f3d1daebbsm192250ljk.67.2022.05.19.23.51.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 May 2022 23:51:31 -0700 (PDT)
+Message-ID: <a0eed04a-1380-d96a-a406-217f053354b9@linaro.org>
+Date:   Fri, 20 May 2022 08:51:30 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 1/6] ASoC: tegra: Add binding doc for OPE module
+Content-Language: en-US
+To:     Sameer Pujar <spujar@nvidia.com>, broonie@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        thierry.reding@gmail.com, catalin.marinas@arm.com, will@kernel.org,
+        perex@perex.cz, tiwai@suse.com
+Cc:     jonathanh@nvidia.com, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <1652895372-29885-1-git-send-email-spujar@nvidia.com>
+ <1652895372-29885-2-git-send-email-spujar@nvidia.com>
+ <049173a1-0fa6-510b-9169-ebe869b8a3b3@linaro.org>
+ <90680cfb-c611-63cd-ab5f-5afb86c91cec@nvidia.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <90680cfb-c611-63cd-ab5f-5afb86c91cec@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,493 +81,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the basic support for Sunplus SP7021-Demo-V3 board.
+On 20/05/2022 06:19, Sameer Pujar wrote:
+> Thanks Krzysztof for review.
+> 
+> 
+> On 19-05-2022 17:10, Krzysztof Kozlowski wrote:
+>> On 18/05/2022 19:36, Sameer Pujar wrote:
+>>> +description: |
+>>> +  The Multi Band Dynamic Range Compressor (MBDRC) is part of Output
+>>> +  Processing Engine (OPE) which interfaces with Audio Hub (AHUB) via
+>>> +  Audio Client Interface (ACIF). MBDRC can be used as a traditional
+>>> +  single full band or a dual band or a multi band dynamic processor.
+>>> +
+>>> +maintainers:
+>>> +  - Jon Hunter <jonathanh@nvidia.com>
+>>> +  - Mohan Kumar <mkumard@nvidia.com>
+>>> +  - Sameer Pujar <spujar@nvidia.com>
+>>> +
+>>> +properties:
+>>> +  $nodename:
+>>> +    pattern: "^mbdrc@[0-9a-f]*$"
+>> Why? We enforce only generic names in shared schemas and this is neither
+>> shared schema nor is it generic name.
+> 
+> Idea was to keep these node names consistent across DT files and parent 
+> node can allow a given list of child nodes with strict checks. Does name 
+> like "dynamic-range-compressor@xxx"
 
-Signed-off-by: Qin Jian <qinjian@cqplus1.com>
----
-Fix the comments from Krzysztof.
----
- MAINTAINERS                                  |   1 +
- arch/arm/boot/dts/Makefile                   |   2 +
- arch/arm/boot/dts/sunplus-sp7021-achip.dtsi  |  84 +++++
- arch/arm/boot/dts/sunplus-sp7021-demo-v3.dts |  26 ++
- arch/arm/boot/dts/sunplus-sp7021.dtsi        | 318 +++++++++++++++++++
- 5 files changed, 431 insertions(+)
- create mode 100644 arch/arm/boot/dts/sunplus-sp7021-achip.dtsi
- create mode 100644 arch/arm/boot/dts/sunplus-sp7021-demo-v3.dts
- create mode 100644 arch/arm/boot/dts/sunplus-sp7021.dtsi
+The checks are not coming from device node name, but from matching
+schema to compatible. Why do you need consistent names across DTS files?
+They should be anyway generic but what happens if they differ?
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 17f43065f..d8ba5aace 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2814,6 +2814,7 @@ F:	Documentation/devicetree/bindings/arm/sunplus,sp7021.yaml
- F:	Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
- F:	Documentation/devicetree/bindings/interrupt-controller/sunplus,sp7021-intc.yaml
- F:	Documentation/devicetree/bindings/reset/sunplus,reset.yaml
-+F:	arch/arm/boot/dts/sunplus-sp7021*.dts*
- F:	arch/arm/configs/sp7021_*defconfig
- F:	arch/arm/mach-sunplus/
- F:	drivers/clk/clk-sp7021.c
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 7c16f8a2b..2862dac61 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -79,6 +79,8 @@ dtb-$(CONFIG_SOC_SAM_V7) += \
- 	at91-vinco.dtb
- dtb-$(CONFIG_SOC_SAMA7G5) += \
- 	at91-sama7g5ek.dtb
-+dtb-$(CONFIG_SOC_SP7021) += \
-+	sunplus-sp7021-demo-v3.dtb
- dtb-$(CONFIG_ARCH_AXXIA) += \
- 	axm5516-amarillo.dtb
- dtb-$(CONFIG_ARCH_BCM2835) += \
-diff --git a/arch/arm/boot/dts/sunplus-sp7021-achip.dtsi b/arch/arm/boot/dts/sunplus-sp7021-achip.dtsi
-new file mode 100644
-index 000000000..67274a49e
---- /dev/null
-+++ b/arch/arm/boot/dts/sunplus-sp7021-achip.dtsi
-@@ -0,0 +1,84 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Device Tree Source for Sunplus SP7021
-+ *
-+ * Copyright (C) 2021 Sunplus Technology Co.
-+ */
-+
-+#include "sunplus-sp7021.dtsi"
-+#include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+/ {
-+	compatible = "sunplus,sp7021-achip", "sunplus,sp7021";
-+	model = "Sunplus SP7021 (CA7)";
-+	#address-cells = <1>;
-+	#size-cells = <1>;
-+	interrupt-parent = <&gic>;
-+
-+	cpus {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		cpu0: cpu@0 {
-+			compatible = "arm,cortex-a7";
-+			device_type = "cpu";
-+			reg = <0>;
-+			clock-frequency = <931000000>;
-+		};
-+		cpu1: cpu@1 {
-+			compatible = "arm,cortex-a7";
-+			device_type = "cpu";
-+			reg = <1>;
-+			clock-frequency = <931000000>;
-+		};
-+		cpu2: cpu@2 {
-+			compatible = "arm,cortex-a7";
-+			device_type = "cpu";
-+			reg = <2>;
-+			clock-frequency = <931000000>;
-+		};
-+		cpu3: cpu@3 {
-+			compatible = "arm,cortex-a7";
-+			device_type = "cpu";
-+			reg = <3>;
-+			clock-frequency = <931000000>;
-+		};
-+	};
-+
-+	gic: interrupt-controller@9f101000 {
-+		compatible = "arm,cortex-a7-gic";
-+		interrupt-controller;
-+		#interrupt-cells = <3>;
-+		reg = <0x9f101000 0x1000>,
-+		      <0x9f102000 0x2000>,
-+		      <0x9f104000 0x2000>,
-+		      <0x9f106000 0x2000>;
-+	};
-+
-+	timer {
-+		compatible = "arm,armv7-timer";
-+		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
-+			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
-+			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
-+			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
-+		clock-frequency = <XTAL>;
-+		arm,cpu-registers-not-fw-configured;
-+	};
-+
-+	arm-pmu {
-+		compatible = "arm,cortex-a7-pmu";
-+		interrupts = <GIC_SPI 219 IRQ_TYPE_LEVEL_HIGH>,
-+			     <GIC_SPI 220 IRQ_TYPE_LEVEL_HIGH>,
-+			     <GIC_SPI 221 IRQ_TYPE_LEVEL_HIGH>,
-+			     <GIC_SPI 222 IRQ_TYPE_LEVEL_HIGH>;
-+		interrupt-affinity = <&cpu0>, <&cpu1>, <&cpu2>, <&cpu3>;
-+	};
-+
-+	soc {
-+		intc: interrupt-controller@9c000780 {
-+			interrupt-parent = <&gic>;
-+			interrupts = <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>, /* EXT_INT0 */
-+				<GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>; /* EXT_INT1 */
-+		};
-+	};
-+};
-diff --git a/arch/arm/boot/dts/sunplus-sp7021-demo-v3.dts b/arch/arm/boot/dts/sunplus-sp7021-demo-v3.dts
-new file mode 100644
-index 000000000..bfac954bb
---- /dev/null
-+++ b/arch/arm/boot/dts/sunplus-sp7021-demo-v3.dts
-@@ -0,0 +1,26 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Device Tree Source for Sunplus SP7021 Demo V3 SBC board
-+ *
-+ * Copyright (C) Sunplus Technology Co.
-+ */
-+
-+/dts-v1/;
-+
-+#include "sunplus-sp7021-achip.dtsi"
-+
-+/ {
-+	compatible = "sunplus,sp7021-demo-v3", "sunplus,sp7021";
-+	model = "Sunplus SP7021/CA7/Demo_V3";
-+	#address-cells = <1>;
-+	#size-cells = <1>;
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	memory@0 {
-+		device_type = "memory";
-+		reg = <0x00000000 0x20000000>;
-+	};
-+};
-diff --git a/arch/arm/boot/dts/sunplus-sp7021.dtsi b/arch/arm/boot/dts/sunplus-sp7021.dtsi
-new file mode 100644
-index 000000000..3c1f4d106
---- /dev/null
-+++ b/arch/arm/boot/dts/sunplus-sp7021.dtsi
-@@ -0,0 +1,318 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Device Tree Source for Sunplus SP7021
-+ *
-+ * Copyright (C) 2021 Sunplus Technology Co.
-+ */
-+
-+#include <dt-bindings/clock/sunplus,sp7021-clkc.h>
-+#include <dt-bindings/interrupt-controller/irq.h>
-+#include <dt-bindings/reset/sunplus,sp7021-reset.h>
-+#include <dt-bindings/pinctrl/sppctl-sp7021.h>
-+#include <dt-bindings/gpio/gpio.h>
-+
-+#define XTAL	27000000
-+
-+/ {
-+	compatible = "sunplus,sp7021";
-+	model = "Sunplus SP7021";
-+
-+	aliases {
-+		serial0 = &uart0;
-+		serial1 = &uart1;
-+		serial2 = &uart2;
-+		serial3 = &uart3;
-+		serial4 = &uart4;
-+	};
-+
-+	clocks {
-+		extclk: osc0 {
-+			compatible = "fixed-clock";
-+			#clock-cells = <0>;
-+			clock-frequency = <XTAL>;
-+			clock-output-names = "extclk";
-+		};
-+	};
-+
-+	soc {
-+		compatible = "simple-bus";
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges;
-+		interrupt-parent = <&intc>;
-+
-+		intc: interrupt-controller@9c000780 {
-+			compatible = "sunplus,sp7021-intc";
-+			reg = <0x9c000780 0x80>, <0x9c000a80 0x80>;
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+		};
-+
-+		clkc: clock-controller@9c000004 {
-+			compatible = "sunplus,sp7021-clkc";
-+			reg = <0x9c000004 0x28>,
-+			      <0x9c000200 0x44>,
-+			      <0x9c000268 0x04>;
-+			clocks = <&extclk>;
-+			#clock-cells = <1>;
-+		};
-+
-+		rstc: reset@9c000054 {
-+			compatible = "sunplus,sp7021-reset";
-+			reg = <0x9c000054 0x28>;
-+			#reset-cells = <1>;
-+		};
-+
-+		rtc: serial@9c003a00 {
-+			compatible = "sunplus,sp7021-rtc";
-+			reg = <0x9c003a00 0x80>;
-+			reg-names = "rtc";
-+			clocks = <&clkc CLK_RTC>;
-+			resets = <&rstc RST_RTC>;
-+			interrupts = <163 IRQ_TYPE_EDGE_RISING>;
-+		};
-+
-+		otp: otp@9c00af00 {
-+			compatible = "sunplus,sp7021-ocotp";
-+			reg = <0x9c00af00 0x34>, <0x9c00af80 0x58>;
-+			reg-names = "hb_gpio", "otprx";
-+			clocks = <&clkc CLK_OTPRX>;
-+			resets = <&rstc RST_OTPRX>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+
-+			therm_calib: thermal-calibration@14 {
-+				reg = <0x14 0x3>;
-+			};
-+			disc_vol: disconnect-voltage@18 {
-+				reg = <0x18 0x2>;
-+			};
-+			mac_addr0: mac-address0@34 {
-+				reg = <0x34 0x6>;
-+			};
-+			mac_addr1: mac-address1@3a {
-+				reg = <0x3a 0x6>;
-+			};
-+		};
-+
-+		uart0: serial@9c000900 {
-+			compatible = "sunplus,sp7021-uart";
-+			reg = <0x9c000900 0x80>;
-+			interrupts = <53 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clkc CLK_UA0>;
-+			resets = <&rstc RST_UA0>;
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&uart0_pins>;
-+		};
-+
-+		uart1: serial@9c000980 {
-+			compatible = "sunplus,sp7021-uart";
-+			reg = <0x9c000980 0x80>;
-+			interrupts = <54 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clkc CLK_UA1>;
-+			resets = <&rstc RST_UA1>;
-+			status = "disabled";
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&uart1_pins>;
-+		};
-+
-+		uart2: serial@9c000800 {
-+			compatible = "sunplus,sp7021-uart";
-+			reg = <0x9c000800 0x80>;
-+			interrupts = <55 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clkc CLK_UA2>;
-+			resets = <&rstc RST_UA2>;
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&uart2_pins>;
-+			status = "disabled";
-+		};
-+
-+		uart3: serial@9c000880 {
-+			compatible = "sunplus,sp7021-uart";
-+			reg = <0x9c000880 0x80>;
-+			interrupts = <56 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clkc CLK_UA3>;
-+			resets = <&rstc RST_UA3>;
-+			status = "disabled";
-+		};
-+
-+		uart4: serial@9c008780 {
-+			compatible = "sunplus,sp7021-uart";
-+			reg = <0x9c008780 0x80>;
-+			interrupts = <134 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clkc CLK_UA4>;
-+			resets = <&rstc RST_UA4>;
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&uart4_pins>;
-+			status = "disabled";
-+		};
-+
-+		spi_controller0: spi@9c002d80 {
-+			compatible = "sunplus,sp7021-spi";
-+			reg = <0x9c002d80 0x80>, <0x9c002e00 0x80>;
-+			reg-names = "master", "slave";
-+			interrupts = <144 IRQ_TYPE_LEVEL_HIGH>,
-+				     <146 IRQ_TYPE_LEVEL_HIGH>,
-+				     <145 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "dma_w", "master_risc", "slave_risc";
-+			clocks = <&clkc CLK_SPI_COMBO_0>;
-+			resets = <&rstc RST_SPI_COMBO_0>;
-+
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&spi0_pins>;
-+			cs-gpios = <&pctl 26 GPIO_ACTIVE_LOW>,
-+				   <&pctl 28 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		spi_controller1: spi@9c00f480 {
-+			compatible = "sunplus,sp7021-spi";
-+			reg = <0x9c00f480 0x80>, <0x9c00f500 0x80>;
-+			reg-names = "master", "slave";
-+			interrupts = <67 IRQ_TYPE_LEVEL_HIGH>,
-+				     <69 IRQ_TYPE_LEVEL_HIGH>,
-+				     <68 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "dma_w", "master_risc", "slave_risc";
-+			clocks = <&clkc CLK_SPI_COMBO_1>;
-+			resets = <&rstc RST_SPI_COMBO_1>;
-+			spi-max-frequency = <25000000>;
-+			status = "disabled";
-+		};
-+
-+		spi_controller2: spi@9c00f600 {
-+			compatible = "sunplus,sp7021-spi";
-+			reg = <0x9c00f600 0x80>, <0x9c00f680 0x80>;
-+			reg-names = "master", "slave";
-+			interrupts = <70 IRQ_TYPE_LEVEL_HIGH>,
-+				     <72 IRQ_TYPE_LEVEL_HIGH>,
-+				     <71 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "dma_w", "master_risc", "slave_risc";
-+			clocks = <&clkc CLK_SPI_COMBO_2>;
-+			resets = <&rstc RST_SPI_COMBO_2>;
-+			spi-max-frequency = <25000000>;
-+			status = "disabled";
-+		};
-+
-+		spi_controller3: spi@9c00f780 {
-+			compatible = "sunplus,sp7021-spi";
-+			reg = <0x9c00f780 0x80>, <0x9c00f800 0x80>;
-+			reg-names = "master", "slave";
-+			interrupts = <73 IRQ_TYPE_LEVEL_HIGH>,
-+				     <75 IRQ_TYPE_LEVEL_HIGH>,
-+				     <74 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "dma_w", "master_risc", "slave_risc";
-+			clocks = <&clkc CLK_SPI_COMBO_3>;
-+			resets = <&rstc RST_SPI_COMBO_3>;
-+			spi-max-frequency = <25000000>;
-+			status = "disabled";
-+		};
-+
-+		pctl: pinctl@9c000100 {
-+			compatible = "sunplus,sp7021-pctl";
-+			reg = <0x9C000100 0x100>,
-+			      <0x9C000300 0x100>,
-+			      <0x9C0032e4 0x1C>,
-+			      <0x9C000080 0x20>;
-+			reg-names = "moon2", "gpioxt", "first", "moon1";
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			clocks = <&clkc CLK_GPIO>;
-+			resets = <&rstc RST_GPIO>;
-+
-+			leds_pins: pinmux_gpio_leds-pins {
-+				sunplus,pins = < SPPCTL_IOPAD(0,SPPCTL_PCTL_G_GPIO,0,SPPCTL_PCTL_L_OUT) >;
-+			};
-+
-+			emmc_pins: emmc-pins {
-+				function = "CARD0_EMMC";
-+				groups = "CARD0_EMMC";
-+			};
-+
-+			sdcard-pins {
-+				function = "SD_CARD";
-+				groups = "SD_CARD";
-+				sunplus,pins = < SPPCTL_IOPAD(91, SPPCTL_PCTL_G_GPIO, 0, 0) >;
-+			};
-+
-+			emac_pins: pinmux_emac_demo_board_v3-pins {
-+				sunplus,pins = <
-+					SPPCTL_IOPAD(49,SPPCTL_PCTL_G_PMUX,MUXF_L2SW_CLK_OUT,0)
-+					SPPCTL_IOPAD(44,SPPCTL_PCTL_G_PMUX,MUXF_L2SW_MAC_SMI_MDC,0)
-+					SPPCTL_IOPAD(43,SPPCTL_PCTL_G_PMUX,MUXF_L2SW_MAC_SMI_MDIO,0)
-+					SPPCTL_IOPAD(52,SPPCTL_PCTL_G_PMUX,MUXF_L2SW_P0_MAC_RMII_TXEN,0)
-+					SPPCTL_IOPAD(50,SPPCTL_PCTL_G_PMUX,MUXF_L2SW_P0_MAC_RMII_TXD0,0)
-+					SPPCTL_IOPAD(51,SPPCTL_PCTL_G_PMUX,MUXF_L2SW_P0_MAC_RMII_TXD1,0)
-+					SPPCTL_IOPAD(46,SPPCTL_PCTL_G_PMUX,MUXF_L2SW_P0_MAC_RMII_CRSDV,0)
-+					SPPCTL_IOPAD(47,SPPCTL_PCTL_G_PMUX,MUXF_L2SW_P0_MAC_RMII_RXD0,0)
-+					SPPCTL_IOPAD(48,SPPCTL_PCTL_G_PMUX,MUXF_L2SW_P0_MAC_RMII_RXD1,0)
-+					SPPCTL_IOPAD(45,SPPCTL_PCTL_G_PMUX,MUXF_L2SW_P0_MAC_RMII_RXER,0)
-+					SPPCTL_IOPAD(59,SPPCTL_PCTL_G_PMUX,MUXF_L2SW_P1_MAC_RMII_TXEN,0)
-+					SPPCTL_IOPAD(57,SPPCTL_PCTL_G_PMUX,MUXF_L2SW_P1_MAC_RMII_TXD0,0)
-+					SPPCTL_IOPAD(58,SPPCTL_PCTL_G_PMUX,MUXF_L2SW_P1_MAC_RMII_TXD1,0)
-+					SPPCTL_IOPAD(54,SPPCTL_PCTL_G_PMUX,MUXF_L2SW_P1_MAC_RMII_CRSDV,0)
-+					SPPCTL_IOPAD(55,SPPCTL_PCTL_G_PMUX,MUXF_L2SW_P1_MAC_RMII_RXD0,0)
-+					SPPCTL_IOPAD(56,SPPCTL_PCTL_G_PMUX,MUXF_L2SW_P1_MAC_RMII_RXD1,0)
-+					SPPCTL_IOPAD(53,SPPCTL_PCTL_G_PMUX,MUXF_L2SW_P1_MAC_RMII_RXER,0)
-+				>;
-+				sunplus,zerofunc = <
-+					MUXF_L2SW_LED_FLASH0
-+					MUXF_L2SW_LED_FLASH1
-+					MUXF_L2SW_LED_ON0
-+					MUXF_L2SW_LED_ON1
-+					MUXF_DAISY_MODE
-+				>;
-+			};
-+
-+			uart0_pins: pinmux_uart0-pins {
-+				function = "UA0";
-+				groups = "UA0";
-+			};
-+
-+			uart1_pins: pinmux_uart1-pins {
-+				sunplus,pins = <
-+					SPPCTL_IOPAD(14,SPPCTL_PCTL_G_PMUX,MUXF_UA4_TX,0)
-+					SPPCTL_IOPAD(16,SPPCTL_PCTL_G_PMUX,MUXF_UA4_RX,0)
-+				>;
-+			};
-+
-+			uart2_pins: pinmux_uart2-pins {
-+				sunplus,pins = <
-+					SPPCTL_IOPAD(16,SPPCTL_PCTL_G_PMUX,MUXF_UA2_TX,0)
-+					SPPCTL_IOPAD(17,SPPCTL_PCTL_G_PMUX,MUXF_UA2_RX,0)
-+					SPPCTL_IOPAD(18,SPPCTL_PCTL_G_PMUX,MUXF_UA2_RTS,0)
-+					SPPCTL_IOPAD(19,SPPCTL_PCTL_G_PMUX,MUXF_UA2_CTS,0)
-+				>;
-+			};
-+
-+			uart4_pins: pinmux_uart4-pins {
-+				sunplus,pins = <
-+					SPPCTL_IOPAD(22,SPPCTL_PCTL_G_PMUX,MUXF_UA4_TX,0)
-+					SPPCTL_IOPAD(20,SPPCTL_PCTL_G_PMUX,MUXF_UA4_RX,0)
-+					SPPCTL_IOPAD(23,SPPCTL_PCTL_G_PMUX,MUXF_UA4_RTS,0)
-+					SPPCTL_IOPAD(21,SPPCTL_PCTL_G_PMUX,MUXF_UA4_CTS,0)
-+				>;
-+			};
-+
-+			spi0_pins: pinmux_spi0-pins {
-+				sunplus,pins = <
-+					SPPCTL_IOPAD(26,SPPCTL_PCTL_G_GPIO,0,0)
-+					SPPCTL_IOPAD(28,SPPCTL_PCTL_G_GPIO,0,0)
-+					SPPCTL_IOPAD(23,SPPCTL_PCTL_G_PMUX,MUXF_SPI0S_DO,0)
-+					SPPCTL_IOPAD(25,SPPCTL_PCTL_G_PMUX,MUXF_SPI0S_DI,0)
-+					SPPCTL_IOPAD(27,SPPCTL_PCTL_G_PMUX,MUXF_SPI0S_CLK,0)
-+				>;
-+			};
-+		};
-+	};
-+
-+	led {
-+		compatible = "gpio-leds";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&leds_pins>;
-+		system-led {
-+			label = "system-led";
-+			gpios = <&pctl 0 GPIO_ACTIVE_HIGH>;
-+			default-state = "off";
-+			linux,default-trigger = "heartbeat";
-+		};
-+	};
-+};
--- 
-2.33.1
+Additionally, the parent schema enforces nodes of children, so if this
+is included in other schema, then the change is pointless.
 
+I propose to drop it, unless it is a shared schema for many different
+vendors.
+
+>>
+>>> +
+>>> +  compatible:
+>>> +    oneOf:
+>>> +      - const: nvidia,tegra210-mbdrc
+>>> +      - items:
+>>> +          - enum:
+>>> +              - nvidia,tegra234-mbdrc
+>>> +              - nvidia,tegra194-mbdrc
+>>> +              - nvidia,tegra186-mbdrc
+>>> +          - const: nvidia,tegra210-mbdrc
+>>> +
+>>> +  reg:
+>>> +    maxItems: 1
+>>> +
+>>> +required:
+>>> +  - compatible
+>>> +  - reg
+>>> +
+>>> +additionalProperties: false
+>>> +
+>>> +examples:
+>>> +  - |
+>>> +
+>> No need for space
+> 
+> will remove
+> 
+> 
+>>> +
+>>> +  compatible:
+>>> +    oneOf:
+>>> +      - const: nvidia,tegra210-ope
+>>> +      - items:
+>>> +          - enum:
+>>> +              - nvidia,tegra234-ope
+>>> +              - nvidia,tegra194-ope
+>>> +              - nvidia,tegra186-ope
+>>> +          - const: nvidia,tegra210-ope
+>>> +
+>>> +  reg:
+>>> +    maxItems: 1
+>>> +
+>>> +  "#address-cells":
+>>> +    const: 1
+>>> +
+>>> +  "#size-cells":
+>>> +    const: 1
+>>> +
+>>> +  ranges: true
+>>> +
+>>> +  sound-name-prefix:
+>>> +    pattern: "^OPE[1-9]$"
+>>> +
+>>> +  ports:
+>>> +    $ref: /schemas/graph.yaml#/properties/ports
+>>> +    properties:
+>>> +      port@0:
+>>> +        $ref: audio-graph-port.yaml#
+>>> +        unevaluatedProperties: false
+>>> +        description: |
+>> No need for |
+> 
+> will remove.
+> 
+> 
+>>
+>>> +    ope@702d8000 {
+>> I would suggest generic node name, if it is possible.
+> 
+> May be "processing-engine@xxx" ?
+
+Sure.
+
+
+Best regards,
+Krzysztof

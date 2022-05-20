@@ -2,74 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB4E652EDD5
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 16:10:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B2DF52EDE4
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 16:12:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350133AbiETOKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 10:10:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33678 "EHLO
+        id S1350143AbiETOMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 10:12:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350120AbiETOKN (ORCPT
+        with ESMTP id S234377AbiETOMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 10:10:13 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38D2B166441
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 07:10:11 -0700 (PDT)
-Received: from zn.tnic (p200300ea974657be329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9746:57be:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id AFFDC1EC0432;
-        Fri, 20 May 2022 16:10:05 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1653055805;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=Jw8Jjz7F/KFwbNnn4srCQ68W2G6++y7u/dhV8E5+6KU=;
-        b=YKuNyQq5+Wxqlgq1j8eVsbNGFuG5GC1HPYPlVA+ej5bySjFRaLngXPzI4psfQR3nBHlDBK
-        GV7UiNzmKppbzkLPb/pZSShOdrqGaB5sS9eO9qvw8S9cTWXe9HlYBuw8M6tPM6+crkuVbG
-        nrM+PcXEst6/DRTQD3iDchGEzopo0qc=
-Date:   Fri, 20 May 2022 16:10:01 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Shreenidhi Shedi <yesshedi@gmail.com>
-Cc:     srivatsa@csail.mit.edu, amakhalov@vmware.com, tglx@linutronix.de,
-        mingo@redhat.com, dave.hansen@linux.intel.com, hpa@zytor.com,
-        virtualization@lists.linux-foundation.org, pv-drivers@vmware.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        Shreenidhi Shedi <sshedi@vmware.com>
-Subject: Re: [PATCH v1] x86/vmware: use unsigned integer for shifting
-Message-ID: <YoehOWHN7h8cFBK5@zn.tnic>
-References: <20220520114712.595583-1-sshedi@vmware.com>
- <YoeA4pf5OWxfjE0J@zn.tnic>
- <f05264ce-e90f-0b1a-4796-ec1f3b75c09c@gmail.com>
+        Fri, 20 May 2022 10:12:51 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D87E71271A5
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 07:12:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653055969; x=1684591969;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=iKY8F/VX/plDWOJFSr49vGSKgylKvy8RoB+nml/xJLw=;
+  b=lMvvijTILLaDQ3fBmZavjpmcP2bIrzOd+4hCeLYDZCeeZLTYWh4rSLYD
+   /UtXJCiRIs9xQBKGz5jJB2aR5W/iQP8y3ErxuyUORp3cmsmGY9v5kWPKJ
+   CcOWdyEqwpckI80EnZ2+Mx377B4rBfTaEjGzl9I6T2Ivk2hco3MM9EIfq
+   COPHgmIkBw6Snst1NUY9d8dCnbLb2QSFeY8nJTU2328QrTbBQ46P6bPSK
+   FYnLNmB0d9djVoxg4KIj7yb7ucCDUj5JVeySyDAGFT89J2OheqUToL1fu
+   DhumJSaEbvCWf/oZzhSMnus9ljLKfAalQ501v81yQqGrOvW1bTl8kLUzY
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10353"; a="272742389"
+X-IronPort-AV: E=Sophos;i="5.91,239,1647327600"; 
+   d="scan'208";a="272742389"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 07:12:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,239,1647327600"; 
+   d="scan'208";a="628173499"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 20 May 2022 07:12:47 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ns3N0-0004mA-Qu;
+        Fri, 20 May 2022 14:12:46 +0000
+Date:   Fri, 20 May 2022 22:12:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bo Liu <liubo03@inspur.com>, mst@redhat.com, jasowang@redhat.com
+Cc:     kbuild-all@lists.01.org, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, Bo Liu <liubo03@inspur.com>
+Subject: Re: [PATCH] virtio_ring: remove unused variable in virtqueue_add()
+Message-ID: <202205202236.ztzLWFZ4-lkp@intel.com>
+References: <20220520070740.7151-1-liubo03@inspur.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f05264ce-e90f-0b1a-4796-ec1f3b75c09c@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220520070740.7151-1-liubo03@inspur.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 07:33:30PM +0530, Shreenidhi Shedi wrote:
-> I deliberately did it because I was lacking clarity on using my org
-> mail & personal mail id.
+Hi Bo,
 
-You could have a look at Documentation/process/submitting-patches.rst
-and everything under Documentation/process/ in case you don't know what
-to do.
+Thank you for the patch! Yet something to improve:
 
-Using checkpatch.pl on your patch before submitting it, is also
-something you should do.
+[auto build test ERROR on linus/master]
+[also build test ERROR on v5.18-rc7 next-20220519]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-HTH.
+url:    https://github.com/intel-lab-lkp/linux/commits/Bo-Liu/virtio_ring-remove-unused-variable-in-virtqueue_add/20220520-161845
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 3d7285a335edaf23b699e87c528cf0b0070e3293
+config: x86_64-rhel-8.3-func (https://download.01.org/0day-ci/archive/20220520/202205202236.ztzLWFZ4-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/8344061823a47f3245d81db45f5898d940ac488e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Bo-Liu/virtio_ring-remove-unused-variable-in-virtqueue_add/20220520-161845
+        git checkout 8344061823a47f3245d81db45f5898d940ac488e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/virtio/virtio_ring.c: In function 'virtqueue_add':
+>> drivers/virtio/virtio_ring.c:1785:16: error: 'vq' undeclared (first use in this function); did you mean '_vq'?
+    1785 |         return vq->packed_ring ? virtqueue_add_packed(_vq, sgs, total_sg,
+         |                ^~
+         |                _vq
+   drivers/virtio/virtio_ring.c:1785:16: note: each undeclared identifier is reported only once for each function it appears in
+   drivers/virtio/virtio_ring.c:1789:1: error: control reaches end of non-void function [-Werror=return-type]
+    1789 | }
+         | ^
+   cc1: some warnings being treated as errors
+
+
+vim +1785 drivers/virtio/virtio_ring.c
+
+1ce9e6055fa0a9 Tiwei Bie 2018-11-21  1770  
+1ce9e6055fa0a9 Tiwei Bie 2018-11-21  1771  
+e6f633e5beab65 Tiwei Bie 2018-11-21  1772  /*
+e6f633e5beab65 Tiwei Bie 2018-11-21  1773   * Generic functions and exported symbols.
+e6f633e5beab65 Tiwei Bie 2018-11-21  1774   */
+e6f633e5beab65 Tiwei Bie 2018-11-21  1775  
+e6f633e5beab65 Tiwei Bie 2018-11-21  1776  static inline int virtqueue_add(struct virtqueue *_vq,
+e6f633e5beab65 Tiwei Bie 2018-11-21  1777  				struct scatterlist *sgs[],
+e6f633e5beab65 Tiwei Bie 2018-11-21  1778  				unsigned int total_sg,
+e6f633e5beab65 Tiwei Bie 2018-11-21  1779  				unsigned int out_sgs,
+e6f633e5beab65 Tiwei Bie 2018-11-21  1780  				unsigned int in_sgs,
+e6f633e5beab65 Tiwei Bie 2018-11-21  1781  				void *data,
+e6f633e5beab65 Tiwei Bie 2018-11-21  1782  				void *ctx,
+e6f633e5beab65 Tiwei Bie 2018-11-21  1783  				gfp_t gfp)
+e6f633e5beab65 Tiwei Bie 2018-11-21  1784  {
+1ce9e6055fa0a9 Tiwei Bie 2018-11-21 @1785  	return vq->packed_ring ? virtqueue_add_packed(_vq, sgs, total_sg,
+1ce9e6055fa0a9 Tiwei Bie 2018-11-21  1786  					out_sgs, in_sgs, data, ctx, gfp) :
+1ce9e6055fa0a9 Tiwei Bie 2018-11-21  1787  				 virtqueue_add_split(_vq, sgs, total_sg,
+e6f633e5beab65 Tiwei Bie 2018-11-21  1788  					out_sgs, in_sgs, data, ctx, gfp);
+e6f633e5beab65 Tiwei Bie 2018-11-21  1789  }
+e6f633e5beab65 Tiwei Bie 2018-11-21  1790  
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+0-DAY CI Kernel Test Service
+https://01.org/lkp

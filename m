@@ -2,286 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3881752E4B6
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 08:09:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 186BA52E4B0
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 08:09:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345693AbiETGFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 02:05:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51598 "EHLO
+        id S1345727AbiETGGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 02:06:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbiETGFf (ORCPT
+        with ESMTP id S1345704AbiETGGo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 02:05:35 -0400
-Received: from de-smtp-delivery-102.mimecast.com (de-smtp-delivery-102.mimecast.com [194.104.109.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF3DE14AC96
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 23:05:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
-        t=1653026730;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=eftByQOw/98Iyqlou20TtEqZPQMdkwpudL9Nhw9SVt0=;
-        b=LXtrlGCOW8Yquko6F1rY+nRs3rXaWm4K7sthYHFphGaGwxYb+pwZFLrwt45D/lqtk2WkNC
-        BUUsEeJQZIZw0yJXw7XKBqNPFlo66SXcP9UttrAzMPK6hDAmyppN/b6T41hfA/wNyFx8gx
-        7paKOVAtafqOIU/k28NJkPVEp3p9b54=
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com
- (mail-he1eur04lp2050.outbound.protection.outlook.com [104.47.13.50]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-41-koBqpQerPPO8nhPALlYEgg-2; Fri, 20 May 2022 08:05:28 +0200
-X-MC-Unique: koBqpQerPPO8nhPALlYEgg-2
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=N3KQjM4qp5R7ecaDbrCUMnEGf/qo7T8n2dPXyLhaZ2JcWt0deiPB1OYaR23Hw0D2TTdP4N2S1qxeZNPKuObgTA82J2UIGuXtnsA0yFT584ppU4Z/Z7qOvk6xUKLXxzoknCF3Cxq8gsmToXXC3G+2bwoczRJGRqk0Vw54lVpA0NUw5aIc5IuSh4R3yv2XgPAr5WCi1LVvu6pdLWaovYXXmKuT0Pi3RkekrTjeAh47XDHRvrf63yroKFInrLus7Q0fdXBX33h1emOl8Ufu1226zHktCq1LC9fScLr8VCU+Dj05DkFyO3YBNtKKZthdT6AvrsD6K8ua2UCDvb7wDZtMBw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=P21rAljciaAKLSv3QWyYdNHHhSpmhmRlZkvtfIBJeeM=;
- b=SqNu0ZKu0wo4kJQjyDpMXwYMaWOX9a8D8FQdIvPMvAsulj+WUnD041W3kmZjc9h68u08V3XENCYt8NwQlOvK+lEPLrmztBQ2oR0QewJOh6McLvbASDWwOCo4wTGmR6cSkBIptGySzQpJ9dLVpVHCAryX7INYjIganE8aeLUtsaBMalzoPTrsG4slQ2pcBPf6/VJnQLohuR/mNapIFtI9IezJ09HVS58MG2X+HOX2FHqe2CV3go6LRL0G3OI/nWXxa03MWqzkKZNG1ISD4H4WbkSK8xPBLDZmXqnrmW1zoELVuzAn09jm9Jqp2P5ZFE9l2YmN7KGgFfeL1C5ARnubvA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VE1PR04MB6560.eurprd04.prod.outlook.com (2603:10a6:803:122::25)
- by DU2PR04MB9066.eurprd04.prod.outlook.com (2603:10a6:10:2f1::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.23; Fri, 20 May
- 2022 06:05:24 +0000
-Received: from VE1PR04MB6560.eurprd04.prod.outlook.com
- ([fe80::91b8:8f7f:61ac:cc9b]) by VE1PR04MB6560.eurprd04.prod.outlook.com
- ([fe80::91b8:8f7f:61ac:cc9b%7]) with mapi id 15.20.5273.017; Fri, 20 May 2022
- 06:05:24 +0000
-Message-ID: <a2e95587-418b-879f-2468-8699a6df4a6a@suse.com>
-Date:   Fri, 20 May 2022 08:05:20 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 2/2] x86/pat: add functions to query specific cache mode
- availability
-Content-Language: en-US
-To:     Chuck Zmudzinski <brchuckz@netscape.net>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        xen-devel@lists.xenproject.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, Juergen Gross <jgross@suse.com>
-References: <20220503132207.17234-1-jgross@suse.com>
- <20220503132207.17234-3-jgross@suse.com>
- <1d86d8ff-6878-5488-e8c4-cbe8a5e8f624@suse.com>
- <0dcb05d0-108f-6252-e768-f75b393a7f5c@suse.com>
- <77255e5b-12bf-5390-6910-dafbaff18e96@netscape.net>
-From:   Jan Beulich <jbeulich@suse.com>
-In-Reply-To: <77255e5b-12bf-5390-6910-dafbaff18e96@netscape.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: AS9P251CA0011.EURP251.PROD.OUTLOOK.COM
- (2603:10a6:20b:50f::13) To VE1PR04MB6560.eurprd04.prod.outlook.com
- (2603:10a6:803:122::25)
+        Fri, 20 May 2022 02:06:44 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2669A2E9E0;
+        Thu, 19 May 2022 23:06:40 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 24K666Mq8004182, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36504.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 24K666Mq8004182
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Fri, 20 May 2022 14:06:06 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXH36504.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Fri, 20 May 2022 14:06:06 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Fri, 20 May 2022 14:06:05 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::34e7:ab63:3da4:27c6]) by
+ RTEXMBS04.realtek.com.tw ([fe80::34e7:ab63:3da4:27c6%5]) with mapi id
+ 15.01.2308.021; Fri, 20 May 2022 14:06:05 +0800
+From:   Pkshih <pkshih@realtek.com>
+To:     "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
+CC:     "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "neojou@gmail.com" <neojou@gmail.com>,
+        "kvalo@kernel.org" <kvalo@kernel.org>,
+        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "martin.blumenstingl@googlemail.com" 
+        <martin.blumenstingl@googlemail.com>,
+        "linux@ulli-kroll.de" <linux@ulli-kroll.de>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: Re: [PATCH 05/10] rtw88: Do not access registers while atomic
+Thread-Topic: [PATCH 05/10] rtw88: Do not access registers while atomic
+Thread-Index: AQHYapDak3Q7f2qnxkShGFFqb9ia8a0mxBmA
+Date:   Fri, 20 May 2022 06:06:05 +0000
+Message-ID: <e33aaa2ab60e04d3449273e117ca73acb3895ed3.camel@realtek.com>
+References: <20220518082318.3898514-1-s.hauer@pengutronix.de>
+         <20220518082318.3898514-6-s.hauer@pengutronix.de>
+In-Reply-To: <20220518082318.3898514-6-s.hauer@pengutronix.de>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.36.1-2 
+x-originating-ip: [172.16.17.21]
+x-kse-serverinfo: RTEXMBS04.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzUvMjAg5LiK5Y2IIDAyOjU5OjAw?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <A2511D85AF58FC4BAF2AD10B96859F90@realtek.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 89e43463-1c92-474b-376c-08da3a26baca
-X-MS-TrafficTypeDiagnostic: DU2PR04MB9066:EE_
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
-X-Microsoft-Antispam-PRVS: <DU2PR04MB906685AD472BBBBBBFC1B1ADB3D39@DU2PR04MB9066.eurprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ETEc8JRAdWVHpZKwiVrOc7nwAXI8itNVTqRz5VMcrU7SBV+qlyPzbaN12Xl07lNg7mvlW/GBydxdQyoVumdWLupXB22XNEEX7kecGC0sveRs/qrTFBoYr5Ip9gh0T5+xdg0aXg6ycJ4vaQYUHa8JCIk4UbPBfr6IVKLd0ADlMEHNboUdbHIBr1wfB+mwfhrDDs7x3Wqg8st8K6Tx2CKbp6B7JuwGyDUa/2Jjys0pAOhCfvaodOiTzNF0kQ4ScRgSFIHkA8UOSEZ8/H1Lx5vsVX0SiwZtNlqdyY/346Frq56ejR5VkWIJ6b6zk7s2CDkeJ1DO184XA/kLIJaUwJgm9pimDHvbuh8MF8lcV1re+mmbzRfm8Uz9HeV/zeQsV7lDyGQFladm364MWS/71I17pQdTjYz5A2VbIVSv5fse1KXQgrUor2YrZQx76uDub4KTQPCM2SMmpCjrlIf1/OB8vEwvVV7m624KdjLo/nTNWselz48jU+oynQt8nhjrMyfvd/cm99MXkdwQ/zwdGUbmdi7kd0afFXiTo8gQdxm6jMdEMiISYa8K13TtOg2r8h/3akKhbd4ihdE+4/eTDKqNK3Fpk2FZl9q6HJRf2kRDBXftVvoAt3KrpabJ5BjWEhY3xMuSswF1EJSN1WEjZYj8iICGc2CXZsjyeDdHorucH569Ih2cLyYV7jU5sEw0ZDuHItfU0DjQLYrCt6Br7GIHizmHy/f4k15NM3PelAA4OwA=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6560.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(186003)(83380400001)(316002)(2616005)(36756003)(6916009)(31686004)(38100700002)(66556008)(66946007)(8676002)(4326008)(6486002)(508600001)(107886003)(6512007)(6666004)(2906002)(53546011)(5660300002)(86362001)(8936002)(54906003)(31696002)(6506007)(26005)(66476007)(7416002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?g48/Tuk3XWFbnSqtRBTSYTbU318qy8GrOJwMMqgwMzGd3UHT/w5KtVf/bhQl?=
- =?us-ascii?Q?Roc2uIZZ0Inq+u5l9utd73cq1poi+7NU073o2JoxZuy6Wzny7r8XECMSUQC/?=
- =?us-ascii?Q?1xCBh6WBpZTP5noCw/GT2Bf2tJgn2CmohdU+lRKUKFoaHGuexHTUP/sZ8p3g?=
- =?us-ascii?Q?KqMhabJNfQ7t1AC9deo+7FY4oKby4iIccsU/MyWxgV8nGiTNAumvAFRyKV03?=
- =?us-ascii?Q?RcNPUvBhpAXWSXY22CP1T9GQC31VhDjfGdTshJwoNV2JxGSDV2jta3cFio8T?=
- =?us-ascii?Q?xW9MzERJPu4URRCUhPlVjt9Y8nqzDKh7qsdYrVRziZ3Z43aXPH9QMT21Zy3q?=
- =?us-ascii?Q?NNFAoWiYodIhD53oYZq7KT2p+5G/qXWgD93Fu66WuG0a3LkI48SXSdejrL6G?=
- =?us-ascii?Q?Ec+DcWEc46QJzuJ540YA0YFLOYG1fJPLF/g53pkhvtR2Kb1k738AtL6dEr9u?=
- =?us-ascii?Q?Eboed82wcxmyZppS9B9+757PqVrnGPDGUbgVQJ7FDi3U6fwbQJy6Ga4HFxlZ?=
- =?us-ascii?Q?W8BXnZDn0+rDP3WYzAsWwdxyiBQL2FSb6SCtPhyxB69HqDlX+ovHL9ku6o7F?=
- =?us-ascii?Q?u0ry6oXyLOwjFiZS0/Mwd3JZKo4mw3u3a/09sT1X6Zf3uLol8NoHiX76npSX?=
- =?us-ascii?Q?Jwc7qboNnYAq75pm0mXpV8NSDj7vGIr6yLXAJ5s30p4uS686tuoAWRMeYSfg?=
- =?us-ascii?Q?64+1ARwLr4Jg+azL+HnMxsl55mZuG9ehc9WAVeORabjGfXTLSRDoDyFG0v/0?=
- =?us-ascii?Q?+IXqIV5VU4ARu7mePLbgb1Oo3sv35KIehFY3Ynjmf1uqVDwqkiZ6bUtwPXnf?=
- =?us-ascii?Q?QWPmX7JKCjKeZUiJBQPysqTA5QGvFJuKvGPcg9CZb8dlrhhmILvyie/6yRRM?=
- =?us-ascii?Q?J0z0ejpLV/0J9sv7geO5adwFcOimZjF+T+SbfnXYw9b5ik1ar04xy5v5tdr0?=
- =?us-ascii?Q?juUNv1oOZ8p06auQdR8AEUGEFRmXmFbUOgczPvdJQyWIzkPhY58evLMnYSbf?=
- =?us-ascii?Q?Mhp5nXT3pxsU6kBH3nZzC71ajbaILW/JsjEwUOWIaSQ4XN1RQitUI+WmgF6j?=
- =?us-ascii?Q?nPOOH8rtk97akb2ZyTUbeiSfYtzOq52qQ27lkFKHe8TpImJ8IrQZwPuqu4Yk?=
- =?us-ascii?Q?m5DW5gQnr17VCXHh7QtkJU+b2Z7zzDbuUFEisL9PBb5GJtqjSaZ+MD0Edp9X?=
- =?us-ascii?Q?l46MsjzV603+C77Hg77qUZe430pXlTeVwQAnWiM0+JX5gBpK4Wn3DFqxNkcU?=
- =?us-ascii?Q?eBCpLxLMBAHshkT502SsmyFXs9yD9T8mCP/yXmrVNKQRieQuGC+e8GlFRxZt?=
- =?us-ascii?Q?PiEldgLAUukpXmPfT2pZGkDlV7jPxWttDPibZjxDYRS93LPmDX56IxgUhDDn?=
- =?us-ascii?Q?EPaNAelsbiL1rvpMBv3mqSys8+y91L5xJj8p5wnUo41VY3s3mizEU8qodtq7?=
- =?us-ascii?Q?IOoyURw3ifMXEHBeycXMr1qY5rzxjVahy2xjs47DIczyi8FKjK6Kc8iFeJuL?=
- =?us-ascii?Q?RMnQaqSYJCpwIyJXSrEcD2HkWq9A7Ah3GErNfrBplZ1YE6GCpEcpXHXSPhUS?=
- =?us-ascii?Q?zr20I6lVYGCLD4KULrF933NpizjBUQ19QHuiKQswA/U+2kQGt/GbZvOIdM9O?=
- =?us-ascii?Q?WdspQlp3M/F3K8JJBFV+jtOaclbWnaRfd30Rgv9Ts+sQphziPfh33WQQChpZ?=
- =?us-ascii?Q?bXlzfBkVZtUPFMmTMZ13CzOsuWJnlAveSbCysrsZkJh4AsHHJ3nMtSP45Wqj?=
- =?us-ascii?Q?dRDrbl8Dzw=3D=3D?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 89e43463-1c92-474b-376c-08da3a26baca
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6560.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 May 2022 06:05:24.5360
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: H2WUDTGiEHuZmmVuglqYS/UwXc6+bkKPBmjlCfHQOA4kSEEBTV5kD/OW7CEkFidsY/5r7LXByR3cn7+zAo/GAA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB9066
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-KSE-ServerInfo: RTEXH36504.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20.05.2022 06:43, Chuck Zmudzinski wrote:
-> On 5/4/22 5:14 AM, Juergen Gross wrote:
->> On 04.05.22 10:31, Jan Beulich wrote:
->>> On 03.05.2022 15:22, Juergen Gross wrote:
->>>> Some drivers are using pat_enabled() in order to test availability of
->>>> special caching modes (WC and UC-). This will lead to false negatives
->>>> in case the system was booted e.g. with the "nopat" variant and the
->>>> BIOS did setup the PAT MSR supporting the queried mode, or if the
->>>> system is running as a Xen PV guest.
->>> ...
->>>> Add test functions for those caching modes instead and use them at the
->>>> appropriate places.
->>>>
->>>> Fixes: bdd8b6c98239 ("drm/i915: replace X86_FEATURE_PAT with=20
->>>> pat_enabled()")
->>>> Fixes: ae749c7ab475 ("PCI: Add arch_can_pci_mmap_wc() macro")
->>>> Signed-off-by: Juergen Gross <jgross@suse.com>
->>> ...
->>>
->>>> --- a/arch/x86/include/asm/pci.h
->>>> +++ b/arch/x86/include/asm/pci.h
->>>> @@ -94,7 +94,7 @@ int pcibios_set_irq_routing(struct pci_dev *dev,=20
->>>> int pin, int irq);
->>>> =C2=A0 =C2=A0 =C2=A0 #define HAVE_PCI_MMAP
->>>> -#define arch_can_pci_mmap_wc()=C2=A0=C2=A0=C2=A0 pat_enabled()
->>>> +#define arch_can_pci_mmap_wc()=C2=A0=C2=A0=C2=A0 x86_has_pat_wc()
->>>
->>> Besides this and ...
->>>
->>>> --- a/drivers/gpu/drm/i915/gem/i915_gem_mman.c
->>>> +++ b/drivers/gpu/drm/i915/gem/i915_gem_mman.c
->>>> @@ -76,7 +76,7 @@ i915_gem_mmap_ioctl(struct drm_device *dev, void=20
->>>> *data,
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (args->flags & ~(I915_MMAP_WC))
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return -EINVAL;
->>>> =C2=A0 -=C2=A0=C2=A0=C2=A0 if (args->flags & I915_MMAP_WC && !pat_enab=
-led())
->>>> +=C2=A0=C2=A0=C2=A0 if (args->flags & I915_MMAP_WC && !x86_has_pat_wc(=
-))
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return -ENODEV;
->>>> =C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 obj =3D i915_gem_object_lookup(f=
-ile, args->handle);
->>>> @@ -757,7 +757,7 @@ i915_gem_dumb_mmap_offset(struct drm_file *file,
->>>> =C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (HAS_LMEM(to_i915(dev)))
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 mmap_type =3D I=
-915_MMAP_TYPE_FIXED;
->>>> -=C2=A0=C2=A0=C2=A0 else if (pat_enabled())
->>>> +=C2=A0=C2=A0=C2=A0 else if (x86_has_pat_wc())
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 mmap_type =3D I=
-915_MMAP_TYPE_WC;
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 else if (!i915_ggtt_has_aperture(to_gt(=
-i915)->ggtt))
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return -ENODEV;
->>>> @@ -813,7 +813,7 @@ i915_gem_mmap_offset_ioctl(struct drm_device=20
->>>> *dev, void *data,
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
->>>> =C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case I915_MMAP_OFFSET_WC:
->>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!pat_enabled())
->>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!x86_has_pat_wc())
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 return -ENODEV;
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 type =3D I915_M=
-MAP_TYPE_WC;
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
->>>> @@ -823,7 +823,7 @@ i915_gem_mmap_offset_ioctl(struct drm_device=20
->>>> *dev, void *data,
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
->>>> =C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case I915_MMAP_OFFSET_UC:
->>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!pat_enabled())
->>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!x86_has_pat_uc_minus(=
-))
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 return -ENODEV;
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 type =3D I915_M=
-MAP_TYPE_UC;
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
->>>
->>> ... these uses there are several more. You say nothing on why those wan=
-t
->>> leaving unaltered. When preparing my earlier patch I did inspect them
->>> and came to the conclusion that these all would also better observe the
->>> adjusted behavior (or else I couldn't have left pat_enabled() as the=20
->>> only
->>> predicate). In fact, as said in the description of my earlier patch, in
->>> my debugging I did find the use in i915_gem_object_pin_map() to be the
->>> problematic one, which you leave alone.
->>
->> Oh, I missed that one, sorry.
->=20
-> That is why your patch would not fix my Haswell unless
-> it also touches i915_gem_object_pin_map() in
-> drivers/gpu/drm/i915/gem/i915_gem_pages.c
->=20
->>
->> I wanted to be rather defensive in my changes, but I agree at least the
->> case in arch_phys_wc_add() might want to be changed, too.
->=20
-> I think your approach needs to be more aggressive so it will fix
-> all the known false negatives introduced by bdd8b6c98239
-> such as the one in i915_gem_object_pin_map().
->=20
-> I looked at Jan's approach and I think it would fix the issue
-> with my Haswell as long as I don't use the nopat option. I
-> really don't have a strong opinion on that question, but I
-> think the nopat option as a Linux kernel option, as opposed
-> to a hypervisor option, should only affect the kernel, and
-> if the hypervisor provides the pat feature, then the kernel
-> should not override that,
-
-Hmm, why would the kernel not be allowed to override that? Such
-an override would affect only the single domain where the
-kernel runs; other domains could take their own decisions.
-
-Also, for the sake of completeness: "nopat" used when running on
-bare metal has the same bad effect on system boot, so there
-pretty clearly is an error cleanup issue in the i915 driver. But
-that's orthogonal, and I expect the maintainers may not even care
-(but tell us "don't do that then").
-
-Jan
-
-> but because of the confusion, maybe
-> a warning could be printed with the nopat option when a
-> hypervisor provides the feature so the user can at least have a
-> knob to tweak if if does not behave the way the user intends.
-> But I must admit, I don't know if the Xen hypervisor has an
-> option also to disable pat. If not, then maybe Jan's more
-> aggressive approach with nopat might be needed if for
-> some reason pat really needs to be disabled in the Linux
-> when Linux is running on Xen or another hypervisor, but I don't
-> know of any cases when that would be needed.
->=20
-> Chuck
->=20
-
+T24gV2VkLCAyMDIyLTA1LTE4IGF0IDEwOjIzICswMjAwLCBTYXNjaGEgSGF1ZXIgd3JvdGU6DQo+
+IFRoZSBkcml2ZXIgdXNlcyBpZWVlODAyMTFfaXRlcmF0ZV9hY3RpdmVfaW50ZXJmYWNlc19hdG9t
+aWMoKQ0KPiBhbmQgaWVlZTgwMjExX2l0ZXJhdGVfc3RhdGlvbnNfYXRvbWljKCkgaW4gc2V2ZXJh
+bCBwbGFjZXMgYW5kIGRvZXMNCj4gcmVnaXN0ZXIgYWNjZXNzZXMgaW4gdGhlIGl0ZXJhdG9ycy4g
+VGhpcyBkb2Vzbid0IGNvcGUgd2l0aCB1cGNvbWluZw0KICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgIF5eXl5eXl4gZG9lcz8NCj4gVVNCIHN1cHBvcnQgYXMgcmVnaXN0
+ZXJzIGNhbiBvbmx5IGJlIGFjY2Vzc2VkIG5vbi1hdG9taWNhbGx5Lg0KPiANCj4gU3BsaXQgdGhl
+c2UgaW50byBhIHR3byBzdGFnZSBwcm9jZXNzOiBGaXJzdCB1c2UgdGhlIGF0b21pYyBpdGVyYXRv
+cg0KPiBmdW5jdGlvbnMgdG8gY29sbGVjdCBhbGwgYWN0aXZlIGludGVyZmFjZXMgb3Igc3RhdGlv
+bnMgb24gYSBsaXN0LCB0aGVuDQo+IGl0ZXJhdGUgb3ZlciB0aGUgbGlzdCBub24tYXRvbWljYWxs
+eSBhbmQgY2FsbCB0aGUgaXRlcmF0b3Igb24gZWFjaA0KPiBlbnRyeS4NCg0KSSB0aGluayB0aGUg
+c3ViamVjdCBjb3VsZCBiZSAiaXRlcmF0ZSBvdmVyIHZpZi9zdGEgbGlzdCBub24tYXRvbWljYWxs
+eSINCg0KPiANCj4gU2lnbmVkLW9mZi1ieTogU2FzY2hhIEhhdWVyIDxzLmhhdWVyQHBlbmd1dHJv
+bml4LmRlPg0KPiBTdWdnZXN0ZWQtYnk6IFBrc2hpaCA8cGtzaGloQHJlYWx0ZWsuY29tPg0KPiAt
+LS0NCj4gIGRyaXZlcnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsvcnR3ODgvcGh5LmMgIHwgIDYgKy0N
+Cj4gIGRyaXZlcnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsvcnR3ODgvcHMuYyAgIHwgIDIgKy0NCj4g
+IGRyaXZlcnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsvcnR3ODgvdXRpbC5jIHwgOTIgKysrKysrKysr
+KysrKysrKysrKysrKysNCj4gIGRyaXZlcnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsvcnR3ODgvdXRp
+bC5oIHwgMTIgKystDQo+ICA0IGZpbGVzIGNoYW5nZWQsIDEwNSBpbnNlcnRpb25zKCspLCA3IGRl
+bGV0aW9ucygtKQ0KPiANCj4gDQoNClsuLi5dDQoNCj4gIA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVy
+cy9uZXQvd2lyZWxlc3MvcmVhbHRlay9ydHc4OC91dGlsLmMgYi9kcml2ZXJzL25ldC93aXJlbGVz
+cy9yZWFsdGVrL3J0dzg4L3V0aWwuYw0KPiBpbmRleCAyYzUxNWFmMjE0ZTc2Li5kYjU1ZGJkNWM1
+MzNlIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL25ldC93aXJlbGVzcy9yZWFsdGVrL3J0dzg4L3V0
+aWwuYw0KPiArKysgYi9kcml2ZXJzL25ldC93aXJlbGVzcy9yZWFsdGVrL3J0dzg4L3V0aWwuYw0K
+PiBAQCAtMTA1LDMgKzEwNSw5NSBAQCB2b2lkIHJ0d19kZXNjX3RvX21jc3JhdGUodTE2IHJhdGUs
+IHU4ICptY3MsIHU4ICpuc3MpDQo+ICAJCSptY3MgPSByYXRlIC0gREVTQ19SQVRFTUNTMDsNCj4g
+IAl9DQo+ICB9DQo+IA0KDQpbLi4uXQ0KDQo+ICsNCj4gK3ZvaWQgcnR3X2l0ZXJhdGVfc3Rhcyhz
+dHJ1Y3QgcnR3X2RldiAqcnR3ZGV2LA0KPiArCQkgICAgICB2b2lkICgqaXRlcmF0b3IpKHZvaWQg
+KmRhdGEsDQo+ICsJCQkJICAgICAgIHN0cnVjdCBpZWVlODAyMTFfc3RhICpzdGEpLA0KPiArCQkJ
+CSAgICAgICB2b2lkICpkYXRhKQ0KPiArew0KPiArCXN0cnVjdCBydHdfaXRlcl9zdGFzX2RhdGEg
+aXRlcl9kYXRhOw0KPiArCXN0cnVjdCBydHdfc3Rhc19lbnRyeSAqc3RhX2VudHJ5LCAqdG1wOw0K
+DQpsb2NrZGVwX2Fzc2VydF9oZWxkKCZydHdkZXYtPm11dGV4KTsNCg0KPiArDQo+ICsJaXRlcl9k
+YXRhLnJ0d2RldiA9IHJ0d2RldjsNCj4gKwlJTklUX0xJU1RfSEVBRCgmaXRlcl9kYXRhLmxpc3Qp
+Ow0KPiArDQo+ICsJaWVlZTgwMjExX2l0ZXJhdGVfc3RhdGlvbnNfYXRvbWljKHJ0d2Rldi0+aHcs
+IHJ0d19jb2xsZWN0X3N0YV9pdGVyLA0KPiArCQkJCQkgICZpdGVyX2RhdGEpOw0KPiArDQo+ICsJ
+bGlzdF9mb3JfZWFjaF9lbnRyeV9zYWZlKHN0YV9lbnRyeSwgdG1wLCAmaXRlcl9kYXRhLmxpc3Qs
+DQo+ICsJCQkJIGxpc3QpIHsNCj4gKwkJbGlzdF9kZWxfaW5pdCgmc3RhX2VudHJ5LT5saXN0KTsN
+Cj4gKwkJaXRlcmF0b3IoZGF0YSwgc3RhX2VudHJ5LT5zdGEpOw0KPiArCQlrZnJlZShzdGFfZW50
+cnkpOw0KPiArCX0NCj4gK30NCj4gKw0KDQpbLi4uXQ0KDQo+ICt2b2lkIHJ0d19pdGVyYXRlX3Zp
+ZnMoc3RydWN0IHJ0d19kZXYgKnJ0d2RldiwNCj4gKwkJICAgICAgdm9pZCAoKml0ZXJhdG9yKSh2
+b2lkICpkYXRhLCB1OCAqbWFjLA0KPiArCQkJCSAgICAgICBzdHJ1Y3QgaWVlZTgwMjExX3ZpZiAq
+dmlmKSwNCj4gKwkJICAgICAgdm9pZCAqZGF0YSkNCj4gK3sNCj4gKwlzdHJ1Y3QgcnR3X2l0ZXJf
+dmlmc19kYXRhIGl0ZXJfZGF0YTsNCj4gKwlzdHJ1Y3QgcnR3X3ZpZnNfZW50cnkgKnZpZl9lbnRy
+eSwgKnRtcDsNCg0KbG9ja2RlcF9hc3NlcnRfaGVsZCgmcnR3ZGV2LT5tdXRleCk7DQoNCj4gKw0K
+PiArCWl0ZXJfZGF0YS5ydHdkZXYgPSBydHdkZXY7DQo+ICsJSU5JVF9MSVNUX0hFQUQoJml0ZXJf
+ZGF0YS5saXN0KTsNCj4gKw0KPiArCWllZWU4MDIxMV9pdGVyYXRlX2FjdGl2ZV9pbnRlcmZhY2Vz
+X2F0b21pYyhydHdkZXYtPmh3LA0KPiArCQkJSUVFRTgwMjExX0lGQUNFX0lURVJfTk9STUFMLCBy
+dHdfY29sbGVjdF92aWZfaXRlciwgJml0ZXJfZGF0YSk7DQo+ICsNCj4gKwlsaXN0X2Zvcl9lYWNo
+X2VudHJ5X3NhZmUodmlmX2VudHJ5LCB0bXAsICZpdGVyX2RhdGEubGlzdCwNCj4gKwkJCQkgbGlz
+dCkgew0KPiArCQlsaXN0X2RlbF9pbml0KCZ2aWZfZW50cnktPmxpc3QpOw0KPiArCQlpdGVyYXRv
+cihkYXRhLCB2aWZfZW50cnktPm1hYywgdmlmX2VudHJ5LT52aWYpOw0KPiArCQlrZnJlZSh2aWZf
+ZW50cnkpOw0KPiArCX0NCj4gK30NCj4gDQoNClsuLi5dDQoNCi0tDQpQaW5nLUtlDQoNCg0K

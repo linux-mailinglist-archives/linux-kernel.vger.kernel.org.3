@@ -2,39 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0325B52E6B0
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 09:58:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA0F852E6D2
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 10:00:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346724AbiETH56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 03:57:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57204 "EHLO
+        id S1346770AbiETH7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 03:59:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346726AbiETH5z (ORCPT
+        with ESMTP id S1346738AbiETH71 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 03:57:55 -0400
-X-Greylist: delayed 1170 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 20 May 2022 00:57:47 PDT
-Received: from theia.8bytes.org (8bytes.org [81.169.241.247])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 437BF15D30C;
-        Fri, 20 May 2022 00:57:46 -0700 (PDT)
-Received: by theia.8bytes.org (Postfix, from userid 1000)
-        id 66298820; Fri, 20 May 2022 09:57:45 +0200 (CEST)
-Date:   Fri, 20 May 2022 09:57:44 +0200
-From:   Joerg Roedel <joro@8bytes.org>
-To:     Matthew Rosato <mjrosato@linux.ibm.com>
-Cc:     jgg@nvidia.com, will@kernel.org, alex.williamson@redhat.com,
-        cohuck@redhat.com, borntraeger@linux.ibm.com,
-        schnelle@linux.ibm.com, gerald.schaefer@linux.ibm.com,
-        farman@linux.ibm.com, iommu@lists.linux-foundation.org,
-        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iommu/s390: tolerate repeat attach_dev calls
-Message-ID: <YodJ+OwxsP5PPO3V@8bytes.org>
-References: <20220519182929.581898-1-mjrosato@linux.ibm.com>
+        Fri, 20 May 2022 03:59:27 -0400
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD8615D325;
+        Fri, 20 May 2022 00:59:24 -0700 (PDT)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id F1E85100017;
+        Fri, 20 May 2022 07:59:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1653033563;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jUrOb7gzDfqcjgGGnV3qddsGrV2m84KgsE5E1hxmOQo=;
+        b=GGtq16fx0ICa1YTJHlP+y+ItSHWaMLcKTJ4U3FvZ2cV/IiKmp1XgxBlQuZyCeQh5he0fZj
+        cgwSCI8AYLvrICnV8Jd1LCsycV7nycaX2t1cD0j2q6IBy4i7QhZmcIwWy/PKLzmR0K+gOE
+        6u5SnJAPG9RcK3P6pnYWJlkhmlEX8NJfUQPgvGvH04Xt32g5krPn13Yzzfl+McDVYXaRhE
+        5n6wPT8KxAHmO4pBJLnjhrXGo29jxxtgodgWrcZ51rEaCCzG55iqTTtbm1grCyeOLnZs1j
+        WpNAIQrvcH/Iqli0EnQ9zTbfNCOEGAlclT1iKTsUxdYHMaGxWZQfneluY/YOcA==
+Date:   Fri, 20 May 2022 09:58:10 +0200
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?UTF-8?B?TWlxdcOobA==?= Raynal <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
+        Jean-Pierre Geslin <jean-pierre.geslin@non.se.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>
+Subject: Re: [PATCH net-next v5 07/13] net: dsa: rzn1-a5psw: add Renesas
+ RZ/N1 advanced 5 port switch driver
+Message-ID: <20220520095810.0b0c29ef@fixe.home>
+In-Reply-To: <20220519180851.chpqhou7ykt45oty@skbuf>
+References: <20220519153107.696864-1-clement.leger@bootlin.com>
+        <20220519153107.696864-8-clement.leger@bootlin.com>
+        <20220519180851.chpqhou7ykt45oty@skbuf>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220519182929.581898-1-mjrosato@linux.ibm.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -43,18 +78,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 02:29:29PM -0400, Matthew Rosato wrote:
-> Since commit 0286300e6045 ("iommu: iommu_group_claim_dma_owner() must
-> always assign a domain") s390-iommu will get called to allocate multiple
-> unmanaged iommu domains for a vfio-pci device -- however the current
-> s390-iommu logic tolerates only one.  Recognize that multiple domains can
-> be allocated and handle switching between DMA or different iommu domain
-> tables during attach_dev.
-> 
-> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
-> ---
->  drivers/iommu/s390-iommu.c | 15 ++++++++++++---
->  1 file changed, 12 insertions(+), 3 deletions(-)
+Le Thu, 19 May 2022 21:08:51 +0300,
+Vladimir Oltean <olteanv@gmail.com> a =C3=A9crit :
 
-Applied to the vfio-notifier-fix topic branch, thanks.
+> I think when you exit the for_each_available_child_of_node() loop you
+> need to manually call of_node_put(port).
 
+Yes you are right on that point. I'll fix that.
+
+--=20
+Cl=C3=A9ment L=C3=A9ger,
+Embedded Linux and Kernel engineer at Bootlin
+https://bootlin.com

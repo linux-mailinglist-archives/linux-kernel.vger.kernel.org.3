@@ -2,63 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C69AE52E7B1
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 10:35:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0E1A52E7B4
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 10:35:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344241AbiETIfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 04:35:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43134 "EHLO
+        id S1347152AbiETIfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 04:35:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347175AbiETIex (ORCPT
+        with ESMTP id S1344658AbiETIf1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 04:34:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 603065D5E0
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 01:34:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653035685;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Aden0zBjHpHh6vfYkJ5RkS0c4wpPoEEgX60xnl8bYGo=;
-        b=fYwW4j5IMxVp6NMUBwZkSJRALlSkcG+Jx/2Ys71bgix2pSVLJfBvk0auRlyibTxSmmTP63
-        H4lHbl8U7Jssia4SZcyWY9D3V3SGLoVNlbYXzkBsMtMvSb096o34ws3crppYwgZij5hxhg
-        XIOXseTHKiUU/QvnLoKvyMfV/UXl704=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-122-Acn1Ez1uOnSgRHFaeB9fkw-1; Fri, 20 May 2022 04:34:40 -0400
-X-MC-Unique: Acn1Ez1uOnSgRHFaeB9fkw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8A318811E75;
-        Fri, 20 May 2022 08:34:39 +0000 (UTC)
-Received: from T590 (ovpn-8-21.pek2.redhat.com [10.72.8.21])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3F51D40E8B05;
-        Fri, 20 May 2022 08:34:34 +0000 (UTC)
-Date:   Fri, 20 May 2022 16:34:29 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     "yukuai (C)" <yukuai3@huawei.com>
-Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        ming.lei@redhat.com
-Subject: Re: [PATCH -next v2] blk-mq: fix panic during blk_mq_run_work_fn()
-Message-ID: <YodSlSm/sIC8G2iG@T590>
-References: <20220520032542.3331610-1-yukuai3@huawei.com>
- <YocOsw6n3y11lNym@T590>
- <2b7a82e0-1e33-e2ff-74d7-d80f152fdc75@huawei.com>
- <afe9dec4-733d-88e9-850d-5c36e9201119@huawei.com>
+        Fri, 20 May 2022 04:35:27 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 699BB40A22;
+        Fri, 20 May 2022 01:35:23 -0700 (PDT)
+X-UUID: 07e51fdc60124ace873be9560f264f7d-20220520
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:3b110d5e-afd3-4d48-990f-b1997d9f61ee,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:2a19b09,CLOUDID:1cc9ede2-edbf-4bd4-8a34-dfc5f7bb086d,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 07e51fdc60124ace873be9560f264f7d-20220520
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <miles.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 948682526; Fri, 20 May 2022 16:35:16 +0800
+Received: from MTKMBS07N2.mediatek.inc (172.21.101.141) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Fri, 20 May 2022 16:35:15 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 20 May 2022 16:35:15 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 20 May 2022 16:35:14 +0800
+From:   Miles Chen <miles.chen@mediatek.com>
+To:     <yassine.oudjana@gmail.com>
+CC:     <angelogioacchino.delregno@collabora.com>,
+        <bgolaszewski@baylibre.com>, <chun-jie.chen@mediatek.com>,
+        <devicetree@vger.kernel.org>, <ikjn@chromium.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
+        <miles.chen@mediatek.com>, <mturquette@baylibre.com>,
+        <p.zabel@pengutronix.de>, <robh+dt@kernel.org>,
+        <sam.shih@mediatek.com>, <sboyd@kernel.org>,
+        <tinghan.shen@mediatek.com>, <weiyi.lu@mediatek.com>,
+        <wenst@chromium.org>, <y.oudjana@protonmail.com>,
+        <~postmarketos/upstreaming@lists.sr.ht>
+Subject: Re: [PATCH v2 4/4] clk: mediatek: Add drivers for MediaTek MT6735 main clock drivers
+Date:   Fri, 20 May 2022 16:35:14 +0800
+Message-ID: <20220520083514.27891-1-miles.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220519142211.458336-5-y.oudjana@protonmail.com>
+References: <20220519142211.458336-5-y.oudjana@protonmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <afe9dec4-733d-88e9-850d-5c36e9201119@huawei.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,111 +71,199 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 03:02:13PM +0800, yukuai (C) wrote:
-> 在 2022/05/20 14:23, yukuai (C) 写道:
-> > 在 2022/05/20 11:44, Ming Lei 写道:
-> > > On Fri, May 20, 2022 at 11:25:42AM +0800, Yu Kuai wrote:
-> > > > Our test report a following crash:
-> > > > 
-> > > > BUG: kernel NULL pointer dereference, address: 0000000000000018
-> > > > PGD 0 P4D 0
-> > > > Oops: 0000 [#1] SMP NOPTI
-> > > > CPU: 6 PID: 265 Comm: kworker/6:1H Kdump: loaded Tainted: G
-> > > > O      5.10.0-60.17.0.h43.eulerosv2r11.x86_64 #1
-> > > > Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-> > > > rel-1.12.1-0-ga5cab58-20220320_160524-szxrtosci10000 04/01/2014
-> > > > Workqueue: kblockd blk_mq_run_work_fn
-> > > > RIP: 0010:blk_mq_delay_run_hw_queues+0xb6/0xe0
-> > > > RSP: 0018:ffffacc6803d3d88 EFLAGS: 00010246
-> > > > RAX: 0000000000000006 RBX: ffff99e2c3d25008 RCX: 00000000ffffffff
-> > > > RDX: 0000000000000000 RSI: 0000000000000003 RDI: ffff99e2c911ae18
-> > > > RBP: ffffacc6803d3dd8 R08: 0000000000000000 R09: ffff99e2c0901f6c
-> > > > R10: 0000000000000018 R11: 0000000000000018 R12: ffff99e2c911ae18
-> > > > R13: 0000000000000000 R14: 0000000000000003 R15: ffff99e2c911ae18
-> > > > FS:  0000000000000000(0000) GS:ffff99e6bbf00000(0000)
-> > > > knlGS:0000000000000000
-> > > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > > CR2: 0000000000000018 CR3: 000000007460a006 CR4: 00000000003706e0
-> > > > Call Trace:
-> > > >   __blk_mq_do_dispatch_sched+0x2a7/0x2c0
-> > > >   ? newidle_balance+0x23e/0x2f0
-> > > >   __blk_mq_sched_dispatch_requests+0x13f/0x190
-> > > >   blk_mq_sched_dispatch_requests+0x30/0x60
-> > > >   __blk_mq_run_hw_queue+0x47/0xd0
-> > > >   process_one_work+0x1b0/0x350
-> > > >   worker_thread+0x49/0x300
-> > > >   ? rescuer_thread+0x3a0/0x3a0
-> > > >   kthread+0xfe/0x140
-> > > >   ? kthread_park+0x90/0x90
-> > > >   ret_from_fork+0x22/0x30
-> > > > 
-> > > > After digging from vmcore, I found that the queue is cleaned
-> > > > up(blk_cleanup_queue() is done) and tag set is
-> > > > freed(blk_mq_free_tag_set() is done).
-> > > > 
-> > > > There are two problems here:
-> > > > 
-> > > > 1) blk_mq_delay_run_hw_queues() will only be called from
-> > > > __blk_mq_do_dispatch_sched() if e->type->ops.has_work() return true.
-> > > > This seems impossible because blk_cleanup_queue() is done, and there
-> > > > should be no io. Commit ddc25c86b466 ("block, bfq: make bfq_has_work()
-> > > > more accurate") fix the problem in bfq. And currently ohter schedulers
-> > > > don't have such problem.
-> > > > 
-> > > > 2) 'hctx->run_work' still exists after blk_cleanup_queue().
-> > > > blk_mq_cancel_work_sync() is called from blk_cleanup_queue() to cancel
-> > > > all the 'run_work'. However, there is no guarantee that new 'run_work'
-> > > > won't be queued after that(and before blk_mq_exit_queue() is done).
-> > > 
-> > > It is blk_mq_run_hw_queue() caller's responsibility to grab
-> > > ->q_usage_counter for avoiding queue cleaned up, so please fix the user
-> > > side.
-> > > 
-> > Hi,
-> > 
-> > Thanks for your advice.
-> > 
-> > blk_mq_run_hw_queue() can be called async, in order to do that, what I
-> > can think of is that grab 'q_usage_counte' before queuing 'run->work'
-> > and release it after. Which is very similar to this patch...
+hi Yassine,
+
+> Add drivers for MT6735 apmixedsys, topckgen, infracfg and pericfg
+> clock and reset controllers. These provide the base clocks on the
+> platform, and should be enough to bring up all essential blocks
+> including PWRAP, MSDC and peripherals (UART, I2C, SPI).
 > 
-> Hi,
+> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+> ---
+> Dependencies:
+> - clk: mediatek: Move to struct clk_hw provider APIs (series)
+>   https://patchwork.kernel.org/project/linux-mediatek/cover/20220510104804.544597-1-wenst@chromium.org/ 
+> - Cleanup MediaTek clk reset drivers and support MT8192/MT8195 (series)
+>   https://patchwork.kernel.org/project/linux-mediatek/cover/20220503093856.22250-1-rex-bc.chen@mediatek.com/
+> - Export required symbols to compile clk drivers as module (single patch)
+>   https://patchwork.kernel.org/project/linux-mediatek/patch/20220518111652.223727-7-angelogioacchino.delregno@collabora.com/
+> - clk: mediatek: Improvements to simple probe/remove and reset controller unregistration
+>   https://patchwork.kernel.org/project/linux-clk/cover/20220519134728.456643-1-y.oudjana@protonmail.com/
 > 
-> How do you think about following change:
-> 
+>  MAINTAINERS                                  |    4 +
+>  drivers/clk/mediatek/Kconfig                 |    9 +
+>  drivers/clk/mediatek/Makefile                |    1 +
+>  drivers/clk/mediatek/clk-mt6735-apmixedsys.c |  235 ++++
 
-I think the issue is in blk_mq_map_queue_type() which may touch tagset.
+...snip...
 
-So please try the following patch:
+> +#define APLL2_CON0		0x284
+> +#define APLL2_CON1		0x288
+> +#define APLL2_CON2		0x28c
+> +#define APLL2_PWR_CON0		0x294
+> +
+> +#define CON0_RST_BAR		BIT(24)
+> +
+> +static const struct mtk_pll_data apmixedsys_plls[] = {
+> +	{
+> +		.id = ARMPLL,
+> +		.name = "armpll",
+> +		.parent_name = "clk26m",
+> +
+> +		.reg = ARMPLL_CON0,
+> +		.pwr_reg = ARMPLL_PWR_CON0,
+> +		.en_mask = 0x00000001,
+> +
+> +		.pd_reg = ARMPLL_CON1,
+> +		.pd_shift = 24,
+> +
+> +		.pcw_reg = ARMPLL_CON1,
+> +		.pcw_chg_reg = ARMPLL_CON1,
+> +		.pcwbits = 21,
+> +
+> +		.flags = PLL_AO
+
+Thanks for submitting this patch.
+
+I compare this with drivers/clk/mediatek/clk-mt7986-apmixed.c,
+and other clk files are using macros to make the mtk_pll_data array
+more readable.
+
+Would you mind following the same style for all c files, please?
+
+e.g.,
+	static const struct mtk_pll_data plls[] = {
+		PLL(CLK_APMIXED_ARMPLL, "armpll", 0x0200, 0x020C, 0x00000001, 0, 32,
+				0x0200, 4, 0, 0x0204, 0),
+		PLL(CLK_APMIXED_NET2PLL, "net2pll", 0x0210, 0x021C, 0x00000001, 0, 32,
+				0x0210, 4, 0, 0x0214, 0),                                           
+		...
+	};
+
+> +	},
+> +	{
+> +		.id = MAINPLL,
+> +		.name = "mainpll",
+> +		.parent_name = "clk26m",
+> +
+> +		.reg = MAINPLL_CON0,
+> +		.pwr_reg = MAINPLL_PWR_CON0,
+> +		.en_mask = 0xf0000101,
+> +
+> +		.pd_reg = MAINPLL_CON1,
+> +		.pd_shift = 24,
+> +
+> +		.pcw_reg = MAINPLL_CON1,
+> +		.pcw_chg_reg = MAINPLL_CON1,
+> +		.pcwbits = 21,
+> +
+> +		.flags = HAVE_RST_BAR,
+> +		.rst_bar_mask = CON0_RST_BAR
+> +	},
+> +	{
+> +		.id = UNIVPLL,
+> +		.name = "univpll",
+> +		.parent_name = "clk26m",
+> +
+> +		.reg = UNIVPLL_CON0,
+> +		.pwr_reg = UNIVPLL_PWR_CON0,
+> +		.en_mask = 0xfc000001,
+> +
+> +		.pd_reg = UNIVPLL_CON1,
+> +		.pd_shift = 24,
+> +
+> +		.pcw_reg = UNIVPLL_CON1,
+> +		.pcw_chg_reg = UNIVPLL_CON1,
+> +		.pcwbits = 21,
+> +
+> +		.flags = HAVE_RST_BAR,
+> +		.rst_bar_mask = CON0_RST_BAR
+> +	},
+> +	{
+> +		.id = MMPLL,
+> +		.name = "mmpll",
+> +		.parent_name = "clk26m",
+> +
+> +		.reg = MMPLL_CON0,
+> +		.pwr_reg = MMPLL_PWR_CON0,
+> +		.en_mask = 0x00000001,
+> +
+> +		.pd_reg = MMPLL_CON1,
+> +		.pd_shift = 24,
+> +
+> +		.pcw_reg = MMPLL_CON1,
+> +		.pcw_chg_reg = MMPLL_CON1,
+> +		.pcwbits = 21
+> +	},
+> +	{
+> +		.id = MSDCPLL,
+> +		.name = "msdcpll",
+> +		.parent_name = "clk26m",
+> +
+> +		.reg = MSDCPLL_CON0,
+> +		.pwr_reg = MSDCPLL_PWR_CON0,
+> +		.en_mask = 0x00000001,
+> +
+> +		.pd_reg = MSDCPLL_CON1,
+> +		.pd_shift = 24,
+> +
+> +		.pcw_reg = MSDCPLL_CON1,
+> +		.pcw_chg_reg = MSDCPLL_CON1,
+> +		.pcwbits = 21,
+> +	},
+> +	{
+> +		.id = VENCPLL,
+> +		.name = "vencpll",
+> +		.parent_name = "clk26m",
+> +
+> +		.reg = VENCPLL_CON0,
+> +		.pwr_reg = VENCPLL_PWR_CON0,
+> +		.en_mask = 0x00000001,
+> +
+> +		.pd_reg = VENCPLL_CON1,
+> +		.pd_shift = 24,
+> +
+> +		.pcw_reg = VENCPLL_CON1,
+> +		.pcw_chg_reg = VENCPLL_CON1,
+> +		.pcwbits = 21,
+> +
+> +		.flags = HAVE_RST_BAR,
+> +		.rst_bar_mask = CON0_RST_BAR
+> +	},
+> +	{
+> +		.id = TVDPLL,
+> +		.name = "tvdpll",
+> +		.parent_name = "clk26m",
+> +
+> +		.reg = TVDPLL_CON0,
+> +		.pwr_reg = TVDPLL_PWR_CON0,
+> +		.en_mask = 0x00000001,
+> +
+> +		.pd_reg = TVDPLL_CON1,
+> +		.pd_shift = 24,
+> +
+> +		.pcw_reg = TVDPLL_CON1,
+> +		.pcw_chg_reg = TVDPLL_CON1,
+> +		.pcwbits = 21
+> +	},
+> +	{
+> +		.id = APLL1,
+> +		.name = "apll1",
+> +		.parent_name = "clk26m",
+> +
+> +		.reg = APLL1_CON0,
+> +		.pwr_reg = APLL1_PWR_CON0,
+> +module_platform_driver(clk_mt6735_apmixedsys);
+> +
+> +MODULE_AUTHOR("Yassine Oudjana <y.oudjana@protonmail.com>");
+> +MODULE_DESCRIPTION("Mediatek MT6735 apmixedsys clock driver");
+
+Would you mind changing all Mediatek to MediaTek?
+i.e.,
+
+s/Mediatek/MediaTek/
 
 
-diff --git a/block/blk-mq.c b/block/blk-mq.c
-index ed1869a305c4..5789e971ac83 100644
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -2174,8 +2174,7 @@ static bool blk_mq_has_sqsched(struct request_queue *q)
-  */
- static struct blk_mq_hw_ctx *blk_mq_get_sq_hctx(struct request_queue *q)
- {
--	struct blk_mq_hw_ctx *hctx;
--
-+	struct blk_mq_ctx *ctx = blk_mq_get_ctx(q);
- 	/*
- 	 * If the IO scheduler does not respect hardware queues when
- 	 * dispatching, we just don't bother with multiple HW queues and
-@@ -2183,8 +2182,8 @@ static struct blk_mq_hw_ctx *blk_mq_get_sq_hctx(struct request_queue *q)
- 	 * just causes lock contention inside the scheduler and pointless cache
- 	 * bouncing.
- 	 */
--	hctx = blk_mq_map_queue_type(q, HCTX_TYPE_DEFAULT,
--				     raw_smp_processor_id());
-+	struct blk_mq_hw_ctx *hctx = blk_mq_map_queue(q, 0, ctx);
-+
- 	if (!blk_mq_hctx_stopped(hctx))
- 		return hctx;
- 	return NULL;
-
-
-Thanks,
-Ming
-
+thanks,
+Miles
+> +MODULE_LICENSE("GPL");

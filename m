@@ -2,124 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4935E52F4BB
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 23:05:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAC0452F4BE
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 23:06:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352770AbiETVFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 17:05:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55110 "EHLO
+        id S1353564AbiETVGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 17:06:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233133AbiETVE7 (ORCPT
+        with ESMTP id S1353567AbiETVGF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 17:04:59 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC8897A444
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 14:04:57 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id v9so1665190lja.12
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 14:04:57 -0700 (PDT)
+        Fri, 20 May 2022 17:06:05 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00B756EC7F
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 14:06:03 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id f21so4073736ejh.11
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 14:06:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=HaUZAl6YfbHEQXiaIPa4mpZAp8nomzN9ZpQ9paddnxg=;
-        b=P19vffmlkG1iJCTLs0sNasiEJUWVb3TPMdRDwEmxSbxScZ2NxMpIWzrSVF4JHrBPRe
-         s3uiuRHwGScr2zQfomAlm9XfmvNZpibBT26naIE1Rb45EHMNr6oHnwNUuF0UthIpwSI5
-         EKjtnFKrkm4CpDAjx+5OpK+zFIualtjiWo+cd+fprvcDWNnPEsvWBqsFYr/v7vfwMnYK
-         ldO1b4TnQUeWbMKpAjsM+0jNft5X2r4HTHd59xA12FlwSTfBDEJPqkpOUfDr/fRipPgX
-         HOK7tm0w4e3B9sTT1Mz67tQCxm0GCbZpoIPPNGcIKmZSxcWKRbjjKht7/be0pXDhTJLS
-         rmEQ==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KMT8P8zbRfIHS8dDyJlM5Ic+rmYHYWgIa37DnbflAwE=;
+        b=OmDFcvlzW70+WKeNegTYuDop8HPEyPvaHb2R4UR+jYAORC80RbpoYFWn8oCQE2tMGF
+         vEtq78hodjiIWMwDJXJ0S5GZ7bWf4EY1GEx+VPBjrrs8uN+fxVsbI5lcMg33Mtr3OdaS
+         W196e1Lj6N0eOtybtKFZoydcm1332KktdJdxs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=HaUZAl6YfbHEQXiaIPa4mpZAp8nomzN9ZpQ9paddnxg=;
-        b=u8L6j7bQspjrIB0zfD7g4XkwjjhywHzdCSTJoRYhXQUli6iwuR6ozay5BzfqOEAXBk
-         /OuaVilXY1J892NcjE7WMgzxitThgmyUC9AifchEwmmbo3WenWEE6OAi1zQejGhCKuHf
-         CRLYOXx5YGVffxEw1pkAOHCmBoRLcAonsjseOeCmnlhdVG+cQVWxawIxfdFx6n2+DBD3
-         jWHcCvkjSo7k1e5bQrpmyQWTIupFjmiVMVIW56PfM6cShzXSAA1WM+oZC6DFStBsgC6e
-         WDE/bXmyLIFKc15EAbPNZBtVa3xlTlgNrOfLT3l0CLSlIJ19ezfNkjgswfbLf7U4QPR6
-         7RJg==
-X-Gm-Message-State: AOAM531OyVSkrA5wAF0Q58YBnojEJkisiytvEnl1/FZGelvysWe2Dpop
-        jwHKqW4WU2TdZnTisF+XBNwnR8Nd4uc=
-X-Google-Smtp-Source: ABdhPJxmM9jEolg3xExHgCFocx8NEIVlwbyAXz0ed+AqfNbI+CV310rzPcZkV8LG0jxUerhnAQ+R4A==
-X-Received: by 2002:a2e:a810:0:b0:253:cb18:9058 with SMTP id l16-20020a2ea810000000b00253cb189058mr6528817ljq.12.1653080696019;
-        Fri, 20 May 2022 14:04:56 -0700 (PDT)
-Received: from [192.168.1.11] ([46.235.67.4])
-        by smtp.gmail.com with ESMTPSA id i19-20020a056512007300b0047255d210d5sm791887lfo.4.2022.05.20.14.04.55
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KMT8P8zbRfIHS8dDyJlM5Ic+rmYHYWgIa37DnbflAwE=;
+        b=Tke67gCXJMSakoSP3QAT2RAylFEe888P+NQ5xZq8acVx+ilmYPnTqnJo+7uguJp4cs
+         v2P1p0oiKmwi6w8zLA7imaiD59yjEYgRpdIyr4ETk+begNsinkB7fscIXTohIMslytmJ
+         h0JErxpiqAe/77nu8Jfko8icwfJTb5jKNDTBIKxCKJkKdDG3rXaO9IIQDGwGSMY7i5BF
+         q0V826SUeE7UiehAYpCk2qK7zFMAHXsA7S4N/x/AGxFl/n7TP1B7H3VSo0Eav/ElJUtw
+         BKR2No6sbXG804z520aplua21LpUwpTkVNRDRBDzT6X6IICiqDzYaVYGK9gGC/VQgFAc
+         w9iQ==
+X-Gm-Message-State: AOAM533wnMPX1P1iZhI7ZakG1KANhJjNZHJK4IEhe5gHFaLYSBY21YuN
+        myWTymDuXO3OIFlnEbPwlrlH6iBH9Xezi8ad8AA=
+X-Google-Smtp-Source: ABdhPJw8oX7P0qJ76JEaZb7VKnqF1n/8TPvoGz6YyQ0kjdrPkpTSwrr/j3axc/NoXBisGseM2ArvHw==
+X-Received: by 2002:a17:907:7d8d:b0:6fe:b83f:802b with SMTP id oz13-20020a1709077d8d00b006feb83f802bmr1803330ejc.187.1653080762216;
+        Fri, 20 May 2022 14:06:02 -0700 (PDT)
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com. [209.85.128.51])
+        by smtp.gmail.com with ESMTPSA id h6-20020a1709070b0600b006fe8c2b66e4sm3152096ejl.135.2022.05.20.14.05.59
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 May 2022 14:04:55 -0700 (PDT)
-Message-ID: <44d12b0f-3ce0-42d2-a475-31d70dd4d699@gmail.com>
-Date:   Sat, 21 May 2022 00:04:54 +0300
+        Fri, 20 May 2022 14:06:00 -0700 (PDT)
+Received: by mail-wm1-f51.google.com with SMTP id v191-20020a1cacc8000000b00397001398c0so7470156wme.5
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 14:05:59 -0700 (PDT)
+X-Received: by 2002:a05:600c:3482:b0:397:caa:9e68 with SMTP id
+ a2-20020a05600c348200b003970caa9e68mr10274850wmq.118.1653080759084; Fri, 20
+ May 2022 14:05:59 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] staging: r8188eu: remove include/rtw_debug.h
-Content-Language: en-US
-To:     Phillip Potter <phil@philpotter.co.uk>, gregkh@linuxfoundation.org
-Cc:     straube.linux@gmail.com, martin@kaiser.cx,
-        saurav.girepunje@gmail.com, abdun.nihaal@gmail.com,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-References: <20220519221047.6940-1-phil@philpotter.co.uk>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <20220519221047.6940-1-phil@philpotter.co.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220520161004.1141554-1-judyhsiao@chromium.org>
+ <20220520161004.1141554-2-judyhsiao@chromium.org> <CAE-0n53e0bq_MbfgZYdxatP8CpGVMKkBKOnSDOV+MvbBFB6wOA@mail.gmail.com>
+ <CAD=FV=VX_dr+hrNEGyC7GxcYcbMeL-uMaVLEJ5EgKnb76HVoDA@mail.gmail.com> <CAE-0n53x6KJPz_Jc7terJB2AtLAHFo4kKZ98kAbUi8xckeCs_A@mail.gmail.com>
+In-Reply-To: <CAE-0n53x6KJPz_Jc7terJB2AtLAHFo4kKZ98kAbUi8xckeCs_A@mail.gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 20 May 2022 14:05:44 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=Wr=tUb_Z2sgsJFE8oMykkmcKd+XUxmCohbgxOsvmVGoA@mail.gmail.com>
+Message-ID: <CAD=FV=Wr=tUb_Z2sgsJFE8oMykkmcKd+XUxmCohbgxOsvmVGoA@mail.gmail.com>
+Subject: Re: [v2 1/3] arm64: dts: qcom: sc7280: herobrine: Add pinconf
+ settings for mi2s1
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Judy Hsiao <judyhsiao@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Srini Kandagatla <srinivas.kandagatla@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Jimmy Cheng-Yi Chiang <cychiang@google.com>,
+        Judy Hsiao <judyhsiao@google.com>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Phillip,
+Hi,
 
-On 5/20/22 01:10, Phillip Potter wrote:
-> Remove include/rtw_debug.h, as all it now has are:
-> 
-> (1) A load of unused preprocessor definitions that expand to BIT(x)
->      variants.
-> (2) A preprocessor definition that expands to the name of the driver
->      and is only used in one place inside a pr_info_once call in
->      core/rtw_fw.c.
-> 
-> It is now surplus to requirements after fixing up the few places that
-> include the file.
-> 
-> Signed-off-by: Phillip Potter <phil@philpotter.co.uk>
-> ---
->   drivers/staging/r8188eu/core/rtw_fw.c        |  4 +-
->   drivers/staging/r8188eu/include/drv_types.h  |  1 -
->   drivers/staging/r8188eu/include/rtw_debug.h  | 45 --------------------
->   drivers/staging/r8188eu/os_dep/ioctl_linux.c |  1 -
->   4 files changed, 2 insertions(+), 49 deletions(-)
->   delete mode 100644 drivers/staging/r8188eu/include/rtw_debug.h
-> 
-> diff --git a/drivers/staging/r8188eu/core/rtw_fw.c b/drivers/staging/r8188eu/core/rtw_fw.c
-> index bf077876ed3d..0451e5177644 100644
-> --- a/drivers/staging/r8188eu/core/rtw_fw.c
-> +++ b/drivers/staging/r8188eu/core/rtw_fw.c
-> @@ -259,8 +259,8 @@ int rtl8188e_firmware_download(struct adapter *padapter)
->   	fwhdr = (struct rt_firmware_hdr *)dvobj->firmware.data;
->   
->   	if (IS_FW_HEADER_EXIST(fwhdr)) {
-> -		pr_info_once("%sFirmware Version %d, SubVersion %d, Signature 0x%x\n",
-> -			     DRIVER_PREFIX, le16_to_cpu(fwhdr->version), fwhdr->subversion,
-> +		pr_info_once("R8188EU: Firmware Version %d, SubVersion %d, Signature 0x%x\n",
-> +			     le16_to_cpu(fwhdr->version), fwhdr->subversion,
->   			     le16_to_cpu(fwhdr->signature));
->   
+On Fri, May 20, 2022 at 2:01 PM Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> Quoting Doug Anderson (2022-05-20 13:39:21)
+> > On Fri, May 20, 2022 at 1:38 PM Stephen Boyd <swboyd@chromium.org> wrote:
+> > >
+> > > Quoting Judy Hsiao (2022-05-20 09:10:02)
+> > > > +};
+> > > > +
+> > > > +&mi2s1_sclk {
+> > > > +       drive-strength = <6>;
+> > > > +       bias-disable;
+> > >
+> > > Is there an external pull on this line? If so please add that details as
+> > > a comment like we do for other external pulls.
+> >
+> > Actually, I think they are output lines, which is why they have a
+> > drive-strength. I think for output lines we don't usually comment
+> > about why we're disabling the pulls, only for input lines?
+>
+> Ok makes sense. Even for an open drain signal it would be an "input" so
+> that rule still applies?
 
-What about converting this macro to dev_info_once()? IMO, looks cleaner:
+I think open drain is mostly used for bidirectional signals, like i2c
+lines. In that case then you're right, you can have a drive-strength
+and a pull. ...I thought i2s was not bidirectoinal and not open-drain,
+but I certainly could be wrong.
 
-[   27.985218] r8188eu 2-1:1.0: Firmware Version 11, SubVersion 1, 
-Signature 0x88e1
-
-
-
-
-With regards,
-Pavel Skripkin
+-Doug

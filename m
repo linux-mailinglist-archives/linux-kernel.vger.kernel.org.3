@@ -2,121 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2AFE52E237
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 03:57:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D53B152E258
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 04:01:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245741AbiETB54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 21:57:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32870 "EHLO
+        id S1344666AbiETCAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 22:00:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230474AbiETB5x (ORCPT
+        with ESMTP id S1344647AbiETCAd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 21:57:53 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B299EC304;
-        Thu, 19 May 2022 18:57:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653011872; x=1684547872;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Pi588XLvq+mQ0AgwxIsoSjkMIdYQhApnFrYgEjsZBLY=;
-  b=fQmj3AbMYoZh2sL971VPOJYoJr7hokQ+jzWMVO0RGrl0CvME+JxA74wW
-   PPlXuO5x2VMhvdAIG43z9q1N7E0k3QoiPokoU7fGYkYl0t2HrwX2rxcFq
-   NIRw2ZqlyFY/xlvBGge07HNW8ymvozP9IFNgtEwqsddX8t6Iii/309u11
-   sYCO53jGLiU0Uz0H+CXJJx6rSjhiiDzj3TFGLtVkZBNLuDtB+F/xPNIM/
-   FnH1attyUmwpItip1gHzXCGb2SxLRqVfDRiOW3dhtMrJSWkrMXW4b43ha
-   rVvn+JRJYzwcle/SES4XpDFcicZqBynKuaafYDhdR2xolO4g99LKenvPO
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="272578061"
-X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="272578061"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 18:57:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="627908126"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 19 May 2022 18:57:49 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nrrtk-00049x-MV;
-        Fri, 20 May 2022 01:57:48 +0000
-Date:   Fri, 20 May 2022 09:57:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Song Liu <song@kernel.org>, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, linux-mm@kvack.org
-Cc:     kbuild-all@lists.01.org, ast@kernel.org, daniel@iogearbox.net,
-        mcgrof@kernel.org, torvalds@linux-foundation.org,
-        rick.p.edgecombe@intel.com, kernel-team@fb.com,
-        Song Liu <song@kernel.org>
-Subject: Re: [PATCH v2 bpf-next 8/8] bpf: simplify select_bpf_prog_pack_size
-Message-ID: <202205200913.DnvvOaAw-lkp@intel.com>
-References: <20220519202037.2401584-9-song@kernel.org>
+        Thu, 19 May 2022 22:00:33 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 087FAEC334
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 19:00:26 -0700 (PDT)
+X-UUID: 73926dfc9e754399b636968c2a995a38-20220520
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:b0a79d0d-62c9-4fa0-a64c-f1e191d76526,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:2a19b09,CLOUDID:3a46dee2-edbf-4bd4-8a34-dfc5f7bb086d,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 73926dfc9e754399b636968c2a995a38-20220520
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <xinlei.lee@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 332516485; Fri, 20 May 2022 10:00:10 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Fri, 20 May 2022 10:00:09 +0800
+Received: from mszsdaap41.gcn.mediatek.inc (10.16.6.141) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.3 via Frontend Transport; Fri, 20 May 2022 10:00:08 +0800
+From:   <xinlei.lee@mediatek.com>
+To:     <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
+        <airlied@linux.ie>, <daniel@ffwll.ch>, <matthias.bgg@gmail.com>
+CC:     <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <rex-bc.chen@mediatek.com>, <jitao.shi@mediatek.com>,
+        Xinlei Lee <xinlei.lee@mediatek.com>
+Subject: [PATCH v7,0/4] Cooperate with DSI RX devices to modify dsi funcs and delay mipi high to cooperate with panel sequence
+Date:   Fri, 20 May 2022 10:00:03 +0800
+Message-ID: <1653012007-11854-1-git-send-email-xinlei.lee@mediatek.com>
+X-Mailer: git-send-email 2.6.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220519202037.2401584-9-song@kernel.org>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Song,
+From: Xinlei Lee <xinlei.lee@mediatek.com>
 
-I love your patch! Perhaps something to improve:
+In upstream-v5.8, dsi_enable will operate panel_enable, but this
+modification has been moved in v5.9. In order to ensure the timing of
+dsi_power_on/off and the timing of pulling up/down the MIPI signal,
+the modification of v5.9 is synchronized in this series of patches.
 
-[auto build test WARNING on bpf-next/master]
+Change since v6:
+1. Change comment back linux version to kernel 5.10.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Song-Liu/bpf_prog_pack-followup/20220520-043417
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-config: i386-randconfig-a003 (https://download.01.org/0day-ci/archive/20220520/202205200913.DnvvOaAw-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/2d5d4beb45be09f3130b694f49ab1b1fd1aa4470
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Song-Liu/bpf_prog_pack-followup/20220520-043417
-        git checkout 2d5d4beb45be09f3130b694f49ab1b1fd1aa4470
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash kernel/bpf/
+Change since v5:
+1. Merged [v5,1/5] drm/mediatek: Adjust the timing of mipi signal from
+LP00 to LP11 to [v5,4/5] drm/mediatek: keep dsi as LP00 before dcs cmds
+transfer, because in (v5,1/5) to adjust the dsi func sequence in order
+to move to lane_ready func together in (v5, 4/5).
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Changes since v4:
+1. Dsi func modified to atomic operation.
+2. Added fix tag.
+3. Removed lane_ready print statement.
 
-All warnings (new ones prefixed by >>):
+Changes since v3:
+1. Rebase kernel-5.18-rc1.
+2. Added dsi_enable protection.
+3. Encapsulates the dsi_lane_ready function.
 
-   kernel/bpf/core.c: In function 'select_bpf_prog_pack_size':
->> kernel/bpf/core.c:857:15: warning: unused variable 'ptr' [-Wunused-variable]
-     857 |         void *ptr;
-         |               ^~~
+Changes since v2:
+1. Rebase linux-next.
 
+Changes since v1:
+1. Dsi sequence marked with patch adjustment.
+2. Fixes: mtk_dsi: Use the drm_panel_bridge.
 
-vim +/ptr +857 kernel/bpf/core.c
+Jitao Shi (2):
+  drm/mediatek: Separate poweron/poweroff from enable/disable and define
+    new funcs
+  drm/mediatek: keep dsi as LP00 before dcs cmds transfer
 
-e581094167beb6 Song Liu 2022-03-21  853  
-ef078600eec20f Song Liu 2022-03-11  854  static size_t select_bpf_prog_pack_size(void)
-ef078600eec20f Song Liu 2022-03-11  855  {
-ef078600eec20f Song Liu 2022-03-11  856  	size_t size;
-ef078600eec20f Song Liu 2022-03-11 @857  	void *ptr;
-ef078600eec20f Song Liu 2022-03-11  858  
-2d5d4beb45be09 Song Liu 2022-05-19  859  	if (huge_vmalloc_supported()) {
-e581094167beb6 Song Liu 2022-03-21  860  		size = BPF_HPAGE_SIZE * num_online_nodes();
-2d5d4beb45be09 Song Liu 2022-05-19  861  		bpf_prog_pack_mask = BPF_HPAGE_MASK;
-2d5d4beb45be09 Song Liu 2022-05-19  862  	} else {
-ef078600eec20f Song Liu 2022-03-11  863  		size = PAGE_SIZE;
-96805674e5624b Song Liu 2022-03-21  864  		bpf_prog_pack_mask = PAGE_MASK;
-96805674e5624b Song Liu 2022-03-21  865  	}
-ef078600eec20f Song Liu 2022-03-11  866  
-ef078600eec20f Song Liu 2022-03-11  867  	return size;
-ef078600eec20f Song Liu 2022-03-11  868  }
-ef078600eec20f Song Liu 2022-03-11  869  
+Xinlei Lee (2):
+  drm/mediatek: Modify dsi funcs to atomic operations
+  drm/mediatek: Add pull-down MIPI operation in mtk_dsi_poweroff
+    function
+
+ drivers/gpu/drm/mediatek/mtk_dsi.c | 93 ++++++++++++++++++++----------
+ 1 file changed, 63 insertions(+), 30 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.18.0
+

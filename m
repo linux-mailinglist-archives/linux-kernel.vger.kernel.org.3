@@ -2,64 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F0A652F125
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 18:55:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9613E52F127
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 18:57:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351919AbiETQzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 12:55:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40378 "EHLO
+        id S1351931AbiETQ47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 12:56:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351824AbiETQzm (ORCPT
+        with ESMTP id S237781AbiETQ4x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 12:55:42 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EEFF994FE
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 09:55:42 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id w17-20020a17090a529100b001db302efed6so8334667pjh.4
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 09:55:42 -0700 (PDT)
+        Fri, 20 May 2022 12:56:53 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE9C65C87C
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 09:56:51 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id y41so8211972pfw.12
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 09:56:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HImf2kaCG91lzQHnr8MRW3BphKAYkvqBRRs5ES2/Au0=;
-        b=chMw8BbdMENO44Ex7To5iiOLh8gVzvLkcdwXIkjZhtLgjDmcw6bvH3pKV81xXyD1RT
-         jaO2BDd6Ba12cdcRMcQWeQ3eTZhPw5pkToFSdosBNAEAA3xd7hoJfdOKEysEHf/EH7Gx
-         PCTLhPtYCs/oxN3hQZ5CVWyNtXZRzsmr/2/UA=
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=L9Uqg73Lka5chFS5zb9bS7SoEX4aGwiCW9rsgcbKHU8=;
+        b=WCgjyI/pbMDZt70/ehioRounN5pA+7LkAnLwVBt5i2W43nM7tKoH6B5ttsBfWBgo6D
+         ki/kXFgEIVboqXvyQa7Ju8Fe4j2gUlJDvQJ/z1Izt5yPYUeHzutkgKgMvjwLrulEG1hK
+         hYg+HgyBXqyq/Z/nhlE7+ssXsm4fP2u2Ob1gqHeRYkLyEKVEmij0ed4Mua47CxL8W+6u
+         eN0vFWoaM6bhlCvvxyG1dcvexERXpbuStK1Hp6VfxRKuHrI5RDL7hksQ7bMWM7ynVKmQ
+         VvZS5J/C7XumERU5SOsgWCrqosIk8n2xBtOuih/QHUYxR3qQWVyCWhRQaxjLOplJQbrE
+         dVNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=HImf2kaCG91lzQHnr8MRW3BphKAYkvqBRRs5ES2/Au0=;
-        b=0HRNvYhg0VqJAEA4aSCP6t6mZd6Oo+PKbPGoWUiTbiKV0AK8BBdMEhRuASfDRPby27
-         C7gxANgSnlISTMGQWlp394QAJqK51aUJfLKQ3V2FkgJmbx9y2yKYJKibqGzD7x2SmXb2
-         QXw/IDmp2hIIQiPBr7kBvBmXcKAwt5ISPrOi7CuEEldL7c41HUItRif/KnzLTIorD1Rs
-         hfKbsTD8kYMVWZv7nvicXWtjVmd542qERaT7hyV1LC3s/aX2vi+RC4FX0IMFs2/Zg1p7
-         W8bsnknVzJTWUa4HhC0/gEkkVI/k7s7H/XjU1YLOcWJFmwJgKQ7lSZNtNmCTMZsB7NFz
-         9cBg==
-X-Gm-Message-State: AOAM531s5YwXJJU6fMvDmNyYvvJ+i5ED5qSpLN3Mm87j2psUiAU3kMvP
-        evvhnl1w8PrVQhSCgkaCTXBfzw==
-X-Google-Smtp-Source: ABdhPJyPX/wiqqe3vp3/13uQvnlQZbUyGzIpvrkBOpe/APiP2oAzWvzYFRxJefLrl44crd3enNc2Lw==
-X-Received: by 2002:a17:90b:4b83:b0:1df:6862:fa9d with SMTP id lr3-20020a17090b4b8300b001df6862fa9dmr12702530pjb.32.1653065741654;
-        Fri, 20 May 2022 09:55:41 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id bw1-20020a17090af60100b001dc37aef4ffsm2080789pjb.48.2022.05.20.09.55.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 09:55:41 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Jaroslav Kysela <perex@perex.cz>
-Cc:     Kees Cook <keescook@chromium.org>, Takashi Iwai <tiwai@suse.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH] ALSA: lola: Bounds check loop iterator against streams array size
-Date:   Fri, 20 May 2022 09:55:37 -0700
-Message-Id: <20220520165537.2139826-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.32.0
+        bh=L9Uqg73Lka5chFS5zb9bS7SoEX4aGwiCW9rsgcbKHU8=;
+        b=GZXmaC6dllbVUSy3v6clX1YSoyqgqZIq8Lppg96KkSQtBef81pD9LMI3VtPtg7UnDW
+         2sQ3VmAuzwxIz0RzNVg/gv4MA8sJ3SnlFpoihCq9pQZrpmsMgUBsYnF/J4xFOU1EvOyF
+         eQgTDxWM/2ki8KXqdzRmebYzdeYbuXq/asP+pVNHZ3NwwOmvwx87ZaxVPGxzCCnKPH0F
+         Mc0PrqDMtgVwq5qLic9FTqL7p9zAKtenDHJn29eYAkdLJ2k8+NZ2XQWkFYKYJSThHqb3
+         vk0XdrBik4jalLk6wF1qrasq6Psd8IwMI9sxQtb+QI53GD2sxPOXRMBn7wu68Ncg1Vl4
+         fThw==
+X-Gm-Message-State: AOAM5322kXiexJigx8NmV6MQ0+RootrjCQKp3G0u0Jq/yk714RrBlkzJ
+        AqcqYs3Ta5j8r+Ybe8F55xVIrQ==
+X-Google-Smtp-Source: ABdhPJxxwklaCHPwxufCg4de+9ueaGPfNoNDXbigS4fAynaoaFEgIm1jY/OTJrmDMijuou7j+TuQWg==
+X-Received: by 2002:a05:6a00:1709:b0:505:fa47:b611 with SMTP id h9-20020a056a00170900b00505fa47b611mr10982307pfc.65.1653065811417;
+        Fri, 20 May 2022 09:56:51 -0700 (PDT)
+Received: from [192.168.254.17] ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id iw3-20020a170903044300b00161a2d98a8esm5903314plb.226.2022.05.20.09.56.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 May 2022 09:56:51 -0700 (PDT)
+Message-ID: <1fadd74c-25d0-b9ab-8a06-27a9faa6579b@linaro.org>
+Date:   Fri, 20 May 2022 09:56:50 -0700
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1649; h=from:subject; bh=gr574qUgcbq3MCtPgynzNKObQz8m2bTmWuCGKzHJ8oE=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBih8gIIXIPk/P0F6PPAXfjj2YPCN4RrUGeVlJhNe5p dtIzbUCJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYofICAAKCRCJcvTf3G3AJmiTD/ wLZy4PXZmSaQfadLpeAOF1dQZVsrfP59bq6c3hU+T8kHRdZW3c7TalWO8SX+bZ//+7SVTcdJ3UJR4U 5yQufY2Hu5aZ3SzEZieTedw2HeRQjSksM6BY86lsk7nCMQHsz1bv8ju2mh5JfscBmPxV8bCob83Wwc C3b38caQpgXXyLfO+4JnhaEdR/g+uSOpjCrr5pg2ibM3Yi+Ks51nX9fCaSnoDSJNVMv0ohoKHAYufC 6Vy4KR5vmxqVQ04jKa6PvDUR6UWAMvY0HKqln8l4KCKO8Hk06Ehrr7JRssAxU08EXO1rdscVF2pNrX bko77kiex8R3J9GV2TvBRQDTc/ddYj+4wHdETAY/8Hd9S2lTQL6Iq+fgpLIPbas35gzm3xnpbBsdaO 9j7QdWUXkSV85wipNjvYUpG2gQbi5cxtPr1CL4ejvZPUZs9L5TDQynWjmB2W6o29Ez8y08iCxy7Idv RcJhkyvvKw3vmG6ICncm8U2+yYyDIUywrft0CWriC3QZU9k90wdCdG310wVJEdfslQbXf8UgG3Hdbg quCgwW81cCh+SUGBw3NLNcOGx7VGJiQxvUMy9zKjVf4yuYbTSFpBNyhlLJM64JPCqxjTPw3iEIJ+Fx 37ZyhnaW3/JAHRauPrgsKEEXoGT+jBZuCVfVRqe4eAn8MomlRYNQkFyb//NA==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] cgroup: don't queue css_release_work if one already
+ pending
+Content-Language: en-US
+To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+Cc:     Tejun Heo <tj@kernel.org>, Hillf Danton <hdanton@sina.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzbot+e42ae441c3b10acf9e9d@syzkaller.appspotmail.com
+References: <20220412192459.227740-1-tadeusz.struk@linaro.org>
+ <20220414164409.GA5404@blackbody.suse.cz> <YmHwOAdGY2Lwl+M3@slm.duckdns.org>
+ <20220422100400.GA29552@blackbody.suse.cz>
+ <20220519112319.2455-1-hdanton@sina.com>
+ <25fb057a-077f-b601-dcb7-130071c733db@linaro.org>
+ <YodNu2C5iHKW3UeZ@slm.duckdns.org>
+ <489592f6-b783-7bdb-2cc8-0c8e35ebc674@linaro.org>
+ <20220520164255.GB17335@blackbody.suse.cz>
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+In-Reply-To: <20220520164255.GB17335@blackbody.suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,41 +83,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-GCC 12 sees that it's technically possible for num_streams to be larger
-than ARRAY_SIZE(pcm->streams). Bounds-check the iterator.
+On 5/20/22 09:42, Michal Koutný wrote:
+> On Fri, May 20, 2022 at 09:38:12AM -0700, Tadeusz Struk<tadeusz.struk@linaro.org>  wrote:
+>> as this is a result of enqueuing the same css->destroy_work onto the same WQ,
+>> one on the rcu path and one on the css_release path.
+>> I will prototype it today and test with syzbot.
+> In my understanding, you'd need two independent work_structs in a css,
+> not two separate workqueues to put the single entry on.
 
-../sound/pci/lola/lola_pcm.c: In function 'lola_pcm_update':
-../sound/pci/lola/lola_pcm.c:567:64: warning: array subscript [0, 31] is outside array bounds of 'struct lola_stream[16]' [-Warray-bounds]
-  567 |                         struct lola_stream *str = &pcm->streams[i];
-      |                                                    ~~~~~~~~~~~~^~~
-In file included from ../sound/pci/lola/lola_pcm.c:15:
-../sound/pci/lola/lola.h:307:28: note: while referencing 'streams'
-  307 |         struct lola_stream streams[MAX_STREAM_COUNT];
-      |                            ^~~~~~~
+I think either way would work, but two workqueues would be less churn.
+I can try both.
 
-Cc: Jaroslav Kysela <perex@perex.cz>
-Cc: Takashi Iwai <tiwai@suse.com>
-Cc: alsa-devel@alsa-project.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- sound/pci/lola/lola_pcm.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/sound/pci/lola/lola_pcm.c b/sound/pci/lola/lola_pcm.c
-index 738ec987000a..32193fae978d 100644
---- a/sound/pci/lola/lola_pcm.c
-+++ b/sound/pci/lola/lola_pcm.c
-@@ -561,8 +561,9 @@ static snd_pcm_uframes_t lola_pcm_pointer(struct snd_pcm_substream *substream)
- void lola_pcm_update(struct lola *chip, struct lola_pcm *pcm, unsigned int bits)
- {
- 	int i;
-+	u8 num_streams = min_t(u8, pcm->num_streams, ARRAY_SIZE(pcm->streams));
- 
--	for (i = 0; bits && i < pcm->num_streams; i++) {
-+	for (i = 0; bits && i < num_streams; i++) {
- 		if (bits & (1 << i)) {
- 			struct lola_stream *str = &pcm->streams[i];
- 			if (str->substream && str->running)
 -- 
-2.32.0
-
+Thanks,
+Tadeusz

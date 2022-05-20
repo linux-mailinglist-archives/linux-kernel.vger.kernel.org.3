@@ -2,80 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2B6552EE7C
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 16:49:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31F9552EE7F
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 16:50:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349064AbiETOt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 10:49:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51032 "EHLO
+        id S1350499AbiETOu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 10:50:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350494AbiETOtq (ORCPT
+        with ESMTP id S1350468AbiETOuX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 10:49:46 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 026511737EF;
-        Fri, 20 May 2022 07:49:44 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id en5so11126992edb.1;
-        Fri, 20 May 2022 07:49:43 -0700 (PDT)
+        Fri, 20 May 2022 10:50:23 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24BAF1737CA
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 07:50:22 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id g184so7935607pgc.1
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 07:50:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=3lQxYbWXEP6uwC0KR1H8SjH5k3UicDj1ai6gDVQrEtI=;
-        b=Qc4Z7iVvog+zQB82KcR6ielXaXYpNOWCAt8CUU9cXNlzEq6A6C1M/tX5nMx8Xs7vYS
-         vuqrTYf6yR0sifhuKxsEx3PfOFXL/395V/IpZ+yXtKeq6K2pT/b/5WgWOcDhxDNsRlkY
-         U57E/0G0LKzY7uCglzvDzoOPnmEGM53fEovsSE5QJkEXJe6vOVwP9Gq9QlqI+fMdIew2
-         sPUdX9pfo5Npiu3VpD9fNecYoXRuPRfQQ7Sno3kRjnYyJdGW9QP7lqDzuwivHEjWrw1p
-         t1cs+zW9s41+n3+U6MU7FV/uc3+1Z9c9/M/OJ55fAQFGkvj+UQMvpIu6MCephR0L06sO
-         WS8w==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc
+         :references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=YlMUufwr0l9tO9rVDIxOV/soI8WTUMwn/+RPr0+aDoU=;
+        b=cz0wk8lcDszKFG3qX7rWCqzlqco9Sek/q86lTVGXVgDOoWtHf6JHnKv52/V1kI8GsY
+         tNhwHBCWrGXadYVN5kY78XCACyEuD+6h2Hi4/M3ErbKa5FZxFDBExxTLIs+GXtyLB+mE
+         rpPWbcyQ4DRaczSqCmY9GcIY644HfOExpwuZ1zTxkdZlJksBjavAN0Yx1JMdObEEoMfq
+         FwKDI9pJX77DEPyEmJ3qlksOG7v2PfcBVqSE0yDqwcXVEI65BIuXZT+qiJtNDO7ov/g6
+         JnGxVhPaVYO1ZDjM8zlutZROY7BlGoiyfmC57e8wywTsviMatf6ek/1z4itHFNcDOiHn
+         7rzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
          :content-transfer-encoding;
-        bh=3lQxYbWXEP6uwC0KR1H8SjH5k3UicDj1ai6gDVQrEtI=;
-        b=hwdUnlauP/QU8Snk3z4xBxBc4XEMsL0MjDTT8Wfsp76TSvIA/URhXlWptipvA50ONT
-         OZ6fYZ7gf2aaKoqyj0Mw/hREPIXCnSZA0W5seN/XuL9HsWH+MkDblpqMRBuTU6X+nIFW
-         zZcfs4vL5QTWP3acroXbTpjW8zSPnO+2Du8v/yk/jJF2Ki2fUFbhG5WrEWbAUkJjtgNW
-         fp8ZcmKUZWc8iN8VJzQqL0t1atFlFEWHRyyTuLZxo0U0H6VcLZtmqG43F4xpzTuLP819
-         qN4dz5fdnn8cY+XxQLf956RIZZgow+UrGFyMD6FFzhWE9Gij3y71v/u2w4G9OhaMQP32
-         uwgA==
-X-Gm-Message-State: AOAM532+lBBwd3OTXQTEFhLm1c9UMjBoQ1znsPd/rhlE71hMkgYyA1Qj
-        XyY8t8aqeGj2mJzXL3dMVvk1Wk8QBuOeuQ==
-X-Google-Smtp-Source: ABdhPJzouOMsHp5AumLigjIAucsoC6vK+9Cp9dTYqJqCpkMV1w2fMIUyqFUcWwS8nHDlBaYG1plAwQ==
-X-Received: by 2002:a05:6402:4396:b0:427:f2dc:b11 with SMTP id o22-20020a056402439600b00427f2dc0b11mr11479587edc.298.1653058182595;
-        Fri, 20 May 2022 07:49:42 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id ra48-20020a17090769b000b006fe9a2874cdsm1808233ejc.103.2022.05.20.07.49.39
+        bh=YlMUufwr0l9tO9rVDIxOV/soI8WTUMwn/+RPr0+aDoU=;
+        b=1DqEPcLv0ojfBM6ZhlbLy63woUcxkuV8H5LJKacPBaM3uUgCg2iYWzWTS8wm5/7We6
+         ZjYXGeq0F3oCl5eZDkCoImBoK34Glmdx3ppHH9civjYkzLXNjzDw7qaV1PsSvBFCkoio
+         YKcPUCHRnZmYD9QdfdYoq5vANApeFQM88+VtvsAf/L9+fn2XRrhlKXi6jHnN4XGEZqM8
+         a9FrSsHGh0QfsR6W2NyxaiBI0kTNOeg5T/npFMzt6QrINr7vinEivkVCFGBYppKxJYS/
+         67WuanCK7ifESSFGgKcM/EDv8xndDoQJZb6qdKhXTNr3uVE6dQVrVmbjlqPz1DxVw8rN
+         ezvw==
+X-Gm-Message-State: AOAM532gWWngdj+MRWMTk6BRwPbl90x5oMlsvwBqLic0q15zrDUJq9qL
+        h8N0muPblD/ER9VK25pY9ovnYQ==
+X-Google-Smtp-Source: ABdhPJy1cIKEs7ndrkw7m80u2H+7m8NPgK6uDNE3lOEbmri0iW/ey3hMLMu3ycAdyZmLlukUP0c5QQ==
+X-Received: by 2002:a63:fc04:0:b0:3f6:4b2b:9d36 with SMTP id j4-20020a63fc04000000b003f64b2b9d36mr6451721pgi.206.1653058221601;
+        Fri, 20 May 2022 07:50:21 -0700 (PDT)
+Received: from [192.168.254.17] ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id d10-20020a170902654a00b0015ea9aabd19sm5892769pln.241.2022.05.20.07.50.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 May 2022 07:49:42 -0700 (PDT)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <035a5300-27e1-e212-1ed7-0449e9d20615@redhat.com>
-Date:   Fri, 20 May 2022 16:49:38 +0200
+        Fri, 20 May 2022 07:50:21 -0700 (PDT)
+Message-ID: <983bb802-d883-18d4-7945-dbfa209c1cc8@linaro.org>
+Date:   Fri, 20 May 2022 07:50:20 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2 6/8] KVM: Fix multiple races in gfn=>pfn cache refresh
+ Thunderbird/91.9.0
 Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Woodhouse <dwmw@amazon.co.uk>,
-        Mingwei Zhang <mizhang@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>
-References: <20220427014004.1992589-1-seanjc@google.com>
- <20220427014004.1992589-7-seanjc@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220427014004.1992589-7-seanjc@google.com>
+To:     Jan Kara <jack@suse.cz>
+Cc:     linux-ext4@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org
+References: <49ac1697-5235-ca2e-2738-f0399c26d718@linaro.org>
+ <20220519122353.eqpnxiaybvobfszb@quack3.lan>
+ <e9ccb919-1616-f94f-c465-7024011ad8e5@linaro.org>
+ <20220520095028.rq4ef2o5nwetzog3@quack3>
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+Subject: Re: kernel BUG in ext4_writepages
+In-Reply-To: <20220520095028.rq4ef2o5nwetzog3@quack3>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,33 +77,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/27/22 03:40, Sean Christopherson wrote:
-> +		 * Wait for mn_active_invalidate_count, not mmu_notifier_count,
-> +		 * to go away, as the invalidation in the mmu_notifier event
-> +		 * occurs_before_  mmu_notifier_count is elevated.
-> +		 *
-> +		 * Note, mn_active_invalidate_count can change at any time as
-> +		 * it's not protected by gpc->lock.  But, it is guaranteed to
-> +		 * be elevated before the mmu_notifier acquires gpc->lock, and
-> +		 * isn't dropped until after mmu_notifier_seq is updated.  So,
-> +		 * this task may get a false positive of sorts, i.e. see an
-> +		 * elevated count and wait even though it's technically safe to
-> +		 * proceed (becase the mmu_notifier will invalidate the cache
-> +		 *_after_  it's refreshed here), but the cache will never be
-> +		 * refreshed with stale data, i.e. won't get false negatives.
+On 5/20/22 02:50, Jan Kara wrote:
+> On Thu 19-05-22 16:14:17, Tadeusz Struk wrote:
+>> On 5/19/22 05:23, Jan Kara wrote:
+>>> Hi!
+>>>
+>>> On Tue 10-05-22 15:28:38, Tadeusz Struk wrote:
+>>>> Syzbot found another BUG in ext4_writepages [1].
+>>>> This time it complains about inode with inline data.
+>>>> C reproducer can be found here [2]
+>>>> I was able to trigger it on 5.18.0-rc6
+>>>>
+>>>> [1] https://syzkaller.appspot.com/bug?id=a1e89d09bbbcbd5c4cb45db230ee28c822953984
+>>>> [2] https://syzkaller.appspot.com/text?tag=ReproC&x=129da6caf00000
+>>>
+>>> Thanks for report. This should be fixed by:
+>>>
+>>> https://lore.kernel.org/all/20220516012752.17241-1-yebin10@huawei.com/
+>>
+>>
+>> In case of the syzbot bug there is something messed up with PAGE DIRTY flags
+>> and the way syzbot sets up the write. This is what triggers the crash:
+> 
+> Can you tell me where exactly we hit the bug? I've now noticed that this is
+> on 5.10 kernel and on vanilla 5.10 there's no BUG_ON on line 2753.
 
-I am all for lavish comments, but I think this is even too detailed.  What about:
+We are hiting this bug:
+https://elixir.bootlin.com/linux/latest/source/fs/ext4/inode.c#L2707
+Syzbot found it in v5.10, but I recreated it on 5.18-rc7, that's why
+the line number mismatch. But this is the same bug.
+On 5.10 it's in line 2739:
+https://elixir.bootlin.com/linux/v5.10.117/source/fs/ext4/inode.c#L2739
 
-                 /*
-                  * mn_active_invalidate_count acts for all intents and purposes
-                  * like mmu_notifier_count here; but we cannot use the latter
-                  * because the invalidation in the mmu_notifier event occurs
-                  * _before_ mmu_notifier_count is elevated.
-                  *
-                  * Note, it does not matter that mn_active_invalidate_count
-                  * is not protected by gpc->lock.  It is guaranteed to
-                  * be elevated before the mmu_notifier acquires gpc->lock, and
-                  * isn't dropped until after mmu_notifier_seq is updated.
-                  */
+> 
+>> $ ftrace -f ./repro
+>> ...
+>> [pid  2395] open("./bus", O_RDWR|O_CREAT|O_SYNC|O_NOATIME, 000 <unfinished ...>
+>> [pid  2395] <... open resumed> )        = 6
+>> ...
+>> [pid  2395] write(6, "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0", 22 <unfinished ...>
+>> ...
+>> [pid  2395] <... write resumed> )       = 22
+>>
+>> One way I could fix it was to clear the PAGECACHE_TAG_DIRTY on the mapping in
+>> ext4_try_to_write_inline_data() after the page has been updated:
+>>
+>> diff --git a/fs/ext4/inline.c b/fs/ext4/inline.c
+>> index 9c076262770d..e4bbb53fa26f 100644
+>> --- a/fs/ext4/inline.c
+>> +++ b/fs/ext4/inline.c
+>> @@ -715,6 +715,7 @@ int ext4_try_to_write_inline_data(struct address_space *mapping,
+>>   			put_page(page);
+>>   			goto out_up_read;
+>>   		}
+>> +		__xa_clear_mark(&mapping->i_pages, 0, PAGECACHE_TAG_DIRTY);
+>>   	}
+>>   	ret = 1;
+>>
+>> Please let me know it if makes sense any I will send a proper patch.
+> 
+> No, this looks really wrong... We need to better understand what's going
+> on.
 
-Paolo
+So I was afraid. I'm trying to diverge the ext4_writepages() to go to the
+out_writepages path before we hit this BOG_ON().
+Any hints will be much appreciated.
+
+-- 
+Thanks,
+Tadeusz

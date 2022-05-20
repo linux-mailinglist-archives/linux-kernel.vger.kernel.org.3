@@ -2,137 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 649D052E9DF
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 12:26:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8034852E9E6
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 12:31:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236296AbiETK0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 06:26:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48194 "EHLO
+        id S243299AbiETKbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 06:31:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233724AbiETK0d (ORCPT
+        with ESMTP id S233724AbiETKa4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 06:26:33 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F10D759B89;
-        Fri, 20 May 2022 03:26:30 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 321991F46241
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1653042389;
-        bh=HDf0MWYOCR8r+DZXQalTBiAOnmPm5YoK5f5O0omhcKw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=mdAaBJ/ldoxoFkOrLMDVKqWZzcLoxCeB7GE3uaRVXxTozO8Y5+Hp6X5lUigIWNr7J
-         Ktc7zWDmESvVXtv2Iad6ze8Kgxdg2WAsPRxKwZN+IPNJjbKZInkZDd2mV5ih49Z67M
-         XGN+NHSZr59Q4aDq3Zytr23c5wpGqtrewmWFxkoqJ2UkmvdNHFw7qnVk9yUd+BKAHc
-         /oT1lON2DU9i2X04vG27EVMGu2kvfSCyrhA2Eo/Ij66jU4RO4TRI1h3sFvHlRB1j6A
-         33qLkIzS/BpuXD0hf1mRa5PSa1hrhF4FCjI51q6AQKa9lzIUyAHlQSyQ8xjT2cT/uG
-         sv+GathARu3Mw==
-Message-ID: <c7b98ee4-cd4f-d7b7-726d-1acd4fafd50a@collabora.com>
-Date:   Fri, 20 May 2022 12:26:25 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v2 4/4] clk: mediatek: Add drivers for MediaTek MT6735
- main clock drivers
-Content-Language: en-US
-To:     Miles Chen <miles.chen@mediatek.com>, yassine.oudjana@gmail.com
-Cc:     bgolaszewski@baylibre.com, chun-jie.chen@mediatek.com,
-        devicetree@vger.kernel.org, ikjn@chromium.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        matthias.bgg@gmail.com, mturquette@baylibre.com,
-        p.zabel@pengutronix.de, robh+dt@kernel.org, sam.shih@mediatek.com,
-        sboyd@kernel.org, tinghan.shen@mediatek.com, weiyi.lu@mediatek.com,
-        wenst@chromium.org, y.oudjana@protonmail.com,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <NJC6CR.M4CF312LSXXV1@gmail.com>
- <20220520093501.28758-1-miles.chen@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220520093501.28758-1-miles.chen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Fri, 20 May 2022 06:30:56 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C1D140BC;
+        Fri, 20 May 2022 03:30:54 -0700 (PDT)
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24K7nGjP022845;
+        Fri, 20 May 2022 10:30:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=SAwEXgmn+ug7Ywtt15h7zATBYWFQXhVY/ziQbb8IdbE=;
+ b=aWFvuz5UYZbLHdI1qm3nNpf2gi025MZH+E5FQFSiseGJMXeKsQX4CLWdafs7ppXNpCeT
+ 7bWRbQOK3BalA0fidpGCl+Bi5Y5vW88B8+PH3ZjgEU+Ivwfi3skAijjZAjQJrellzhSZ
+ +y02UW2VF7VaSj4sM7gQHRDmIEa4cCRKAjx7cTsFV4lMoG9VuvvL4wv278c/7wSOXYc2
+ ot9JUs19fFgaJik3Aop8hXyCUbBNFmWeRFdrmN0r/kDYqXBypZLx04GoxEHL+dmRo+oX
+ W9GG3mfvv15FJal6P7KL+PPL1cQ/DU5wmuIYmLDQRXmvXXAsfbshxGUAlmMUu/Cmel22 Qg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g63a96wyq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 May 2022 10:30:41 +0000
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24KAQHKP010615;
+        Fri, 20 May 2022 10:30:40 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g63a96wy3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 May 2022 10:30:40 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24KASk1w031045;
+        Fri, 20 May 2022 10:30:38 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma03ams.nl.ibm.com with ESMTP id 3g2429gmh9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 May 2022 10:30:38 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24KAGcts50201020
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 20 May 2022 10:16:38 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0A497A405F;
+        Fri, 20 May 2022 10:30:35 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 52DDAA4054;
+        Fri, 20 May 2022 10:30:34 +0000 (GMT)
+Received: from sig-9-145-82-10.uk.ibm.com (unknown [9.145.82.10])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 20 May 2022 10:30:34 +0000 (GMT)
+Message-ID: <41dd3f695c57a12fc5e68a3ed818940252cdb69f.camel@linux.ibm.com>
+Subject: Re: [PATCH] iommu/s390: tolerate repeat attach_dev calls
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Matthew Rosato <mjrosato@linux.ibm.com>, jgg@nvidia.com,
+        joro@8bytes.org
+Cc:     will@kernel.org, alex.williamson@redhat.com, cohuck@redhat.com,
+        borntraeger@linux.ibm.com, gerald.schaefer@linux.ibm.com,
+        farman@linux.ibm.com, iommu@lists.linux-foundation.org,
+        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 20 May 2022 12:30:33 +0200
+In-Reply-To: <20220519182929.581898-1-mjrosato@linux.ibm.com>
+References: <20220519182929.581898-1-mjrosato@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: UPQNWYGYN2jfEEnpr0kh6tsiw-ImLUir
+X-Proofpoint-ORIG-GUID: lZwqxU0pyHDPdiisXyarqcrrM_OytcKb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-20_03,2022-05-20_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 clxscore=1015 phishscore=0 mlxscore=0 bulkscore=0
+ spamscore=0 mlxlogscore=768 priorityscore=1501 malwarescore=0 adultscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205200073
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 20/05/22 11:35, Miles Chen ha scritto:
+On Thu, 2022-05-19 at 14:29 -0400, Matthew Rosato wrote:
+> Since commit 0286300e6045 ("iommu: iommu_group_claim_dma_owner() must
+> always assign a domain") s390-iommu will get called to allocate multiple
+> unmanaged iommu domains for a vfio-pci device -- however the current
+> s390-iommu logic tolerates only one.  Recognize that multiple domains can
+> be allocated and handle switching between DMA or different iommu domain
+> tables during attach_dev.
 > 
->>>
->>> Thanks for submitting this patch.
->>>
->>> I compare this with drivers/clk/mediatek/clk-mt7986-apmixed.c,
->>> and other clk files are using macros to make the mtk_pll_data array
->>> more readable.
->>
->> I'd actually argue that macros make it less readable. While reading
->> other drivers I had a lot of trouble figuring out which argument
->> is which field of the struct, and had to constantly go back to the
->> macro definitions and count arguments to find it. Having it this
->> way, each value is labeled clearly with the field it's in. I think
->> the tradeoff between line count and readability here is worth it.
-> 
-> It is easier for multiple developers to work together if we have a common style.
-> 
-> How do you think?
-> 
+> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+> ---
 
-In my opinion, Yassine is definitely right about this one: unrolling these macros
-will make the code more readable, even though this has the side effect of making
-it bigger in the source code form (obviously, when compiled, it's going to be the
-exact same size).
+I know it's applied already and no need to add my R-b but:
 
-I wouldn't mind getting this clock driver in without the usage of macros, as much
-as I wouldn't mind converting all of the existing drivers to open-code everything
-instead of using macros that you have to find in various headers... this practice
-was done in multiple drivers (clock or elsewhere), so I don't think that it would
-actually be a bad idea to do it here on MediaTek too, even though I'm not aware of
-any *rule* that may want us to do that: if you check across drivers/clk/*, there's
-a big split in how drivers are made, where some are using macros (davinci, renesas,
-samsung, sprd, etc), and some are not (bcm, sunxi-ng, qcom, tegra, versatile, etc),
-so it's really "do it as you wish"...
+Reviewed-by: Niklas Schnelle <schnelle@linux.ibm.com>
 
-... *but:*
-
-Apart from that, I also don't think that it is a good idea to convert the other
-MTK clock drivers right now, as this would make the upstreaming of MediaTek clock
-drivers harder for some of the community in this moment... especially when we look
-at how many MTK SoCs are out there in the wild, and how many we have upstream:
-something like 10% of them, or less.
-
-I see the huge benefit of having a bigger community around MediaTek platforms as
-that's beneficial to get a way better support and solidity for all SoCs as they
-are sharing the same drivers and same framework, and expanding the support to more
-of them will only make it better with highly valuable community contributions.
-
-
-That said, Yassine, you should've understood that you have my full support on
-unrolling these macros - but it's not time to do that yet: you definitely know
-that MediaTek clock drivers are going through a big cleanup phase which is, at
-this point, unavoidable... if we are able to get the aid of scripts (cocci and
-others), that will make our life easier in this cleanup, and will also make us
-able to perform the entire cleanup with less effort and in less overall time.
-
-With that, I'm sad but I have to support Miles' decision on this one, and I also
-have to ask you to use macros in this driver.
-
-
-I am sure - and it is my wish - to see MediaTek clock drivers open-coding stuff
-instead of using macros, but that's something for the future - which will happen
-after the more important cleanups.
-
-After all, it will be just about running "gcc -E xxxx.c" and copy-pasting the
-unrolled macros to the clock drivers, which will be pretty fast and straightforward.
-
-Sorry for the wall of text, by the way.
-
-Cheers,
-Angelo

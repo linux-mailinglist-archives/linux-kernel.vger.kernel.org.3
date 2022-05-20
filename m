@@ -2,79 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9613E52F127
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 18:57:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A89E752F129
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 18:57:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351931AbiETQ47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 12:56:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44420 "EHLO
+        id S1351951AbiETQ5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 12:57:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237781AbiETQ4x (ORCPT
+        with ESMTP id S237781AbiETQ5Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 12:56:53 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE9C65C87C
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 09:56:51 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id y41so8211972pfw.12
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 09:56:51 -0700 (PDT)
+        Fri, 20 May 2022 12:57:16 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C62179093
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 09:57:15 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id pq9-20020a17090b3d8900b001df622bf81dso8346434pjb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 09:57:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=L9Uqg73Lka5chFS5zb9bS7SoEX4aGwiCW9rsgcbKHU8=;
-        b=WCgjyI/pbMDZt70/ehioRounN5pA+7LkAnLwVBt5i2W43nM7tKoH6B5ttsBfWBgo6D
-         ki/kXFgEIVboqXvyQa7Ju8Fe4j2gUlJDvQJ/z1Izt5yPYUeHzutkgKgMvjwLrulEG1hK
-         hYg+HgyBXqyq/Z/nhlE7+ssXsm4fP2u2Ob1gqHeRYkLyEKVEmij0ed4Mua47CxL8W+6u
-         eN0vFWoaM6bhlCvvxyG1dcvexERXpbuStK1Hp6VfxRKuHrI5RDL7hksQ7bMWM7ynVKmQ
-         VvZS5J/C7XumERU5SOsgWCrqosIk8n2xBtOuih/QHUYxR3qQWVyCWhRQaxjLOplJQbrE
-         dVNA==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6SpNaB2y1Al28S6NM7uzx+ecVRdfZl8NU3/XOGW88bQ=;
+        b=FlSBAkr4ofMj/1FfrjZdKJHGWxG5It1GsGUnToRA0ztAQWucRqPq4eJCdV9rBICATG
+         p22NWsd07otLxl9qy0pg3FlOUwx8PnAG1t198y4QkGLfPzgimEVAMvWu2HQG70OGWgdS
+         rWLo2Ju0uuDXL89mk3bvO92g5uE8YJGwBQ3Q4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=L9Uqg73Lka5chFS5zb9bS7SoEX4aGwiCW9rsgcbKHU8=;
-        b=GZXmaC6dllbVUSy3v6clX1YSoyqgqZIq8Lppg96KkSQtBef81pD9LMI3VtPtg7UnDW
-         2sQ3VmAuzwxIz0RzNVg/gv4MA8sJ3SnlFpoihCq9pQZrpmsMgUBsYnF/J4xFOU1EvOyF
-         eQgTDxWM/2ki8KXqdzRmebYzdeYbuXq/asP+pVNHZ3NwwOmvwx87ZaxVPGxzCCnKPH0F
-         Mc0PrqDMtgVwq5qLic9FTqL7p9zAKtenDHJn29eYAkdLJ2k8+NZ2XQWkFYKYJSThHqb3
-         vk0XdrBik4jalLk6wF1qrasq6Psd8IwMI9sxQtb+QI53GD2sxPOXRMBn7wu68Ncg1Vl4
-         fThw==
-X-Gm-Message-State: AOAM5322kXiexJigx8NmV6MQ0+RootrjCQKp3G0u0Jq/yk714RrBlkzJ
-        AqcqYs3Ta5j8r+Ybe8F55xVIrQ==
-X-Google-Smtp-Source: ABdhPJxxwklaCHPwxufCg4de+9ueaGPfNoNDXbigS4fAynaoaFEgIm1jY/OTJrmDMijuou7j+TuQWg==
-X-Received: by 2002:a05:6a00:1709:b0:505:fa47:b611 with SMTP id h9-20020a056a00170900b00505fa47b611mr10982307pfc.65.1653065811417;
-        Fri, 20 May 2022 09:56:51 -0700 (PDT)
-Received: from [192.168.254.17] ([50.39.160.154])
-        by smtp.gmail.com with ESMTPSA id iw3-20020a170903044300b00161a2d98a8esm5903314plb.226.2022.05.20.09.56.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 May 2022 09:56:51 -0700 (PDT)
-Message-ID: <1fadd74c-25d0-b9ab-8a06-27a9faa6579b@linaro.org>
-Date:   Fri, 20 May 2022 09:56:50 -0700
+        bh=6SpNaB2y1Al28S6NM7uzx+ecVRdfZl8NU3/XOGW88bQ=;
+        b=TC4UGfWaJ2YpsE1xJHWdAc2m7FJOEvMghSGyHjWe7pctK67PquUvRKApNEOTjRss2c
+         4kaEFa2CGPy5JSgOhLRgK4TAJ4UNxYiIr8GpM9QJp/Gurbw1hsFeumbg5geO5B/w+U1G
+         ofw1kkyJZSzAgWXkceIOGCSd+kN6krKqGuCmYiuX0sFT0TTZGz1vTIJVcHpjYcn04ENq
+         GGKM7X9FdRQFLqxfaka6Ipkocc9xfUoXITrtRGUmEqoLjn4bxixuzCB/hM6xivLv5TgQ
+         Tq6G9Qz/WAsIbRY1w+Fj/na/UYH8SsUHAQxWDxVtUd+8kBORHWa9VYPIzK7ITPBjsewA
+         sOrA==
+X-Gm-Message-State: AOAM533AeH33Rg2ZEXlXymjQm5gZzdM2fLfy/lNMUjYMCaesz2KmvFIS
+        0v+fSADGjLrPz1PKOFgxfqzl9A==
+X-Google-Smtp-Source: ABdhPJxkVZRhHdGR5NDul9Khe/5JxygEEdSRxZBEPGrG33xqgtDPzhBAR+c7Iv2CIauYTn5mEid49Q==
+X-Received: by 2002:a17:90b:1a8c:b0:1dc:1c62:2c0c with SMTP id ng12-20020a17090b1a8c00b001dc1c622c0cmr12594751pjb.140.1653065834734;
+        Fri, 20 May 2022 09:57:14 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id e21-20020aa79815000000b005104c6d7941sm2060007pfl.31.2022.05.20.09.57.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 May 2022 09:57:14 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH] KVM: x86/emulator: Bounds check reg nr against reg array size
+Date:   Fri, 20 May 2022 09:57:04 -0700
+Message-Id: <20220520165705.2140042-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] cgroup: don't queue css_release_work if one already
- pending
-Content-Language: en-US
-To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-Cc:     Tejun Heo <tj@kernel.org>, Hillf Danton <hdanton@sina.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzbot+e42ae441c3b10acf9e9d@syzkaller.appspotmail.com
-References: <20220412192459.227740-1-tadeusz.struk@linaro.org>
- <20220414164409.GA5404@blackbody.suse.cz> <YmHwOAdGY2Lwl+M3@slm.duckdns.org>
- <20220422100400.GA29552@blackbody.suse.cz>
- <20220519112319.2455-1-hdanton@sina.com>
- <25fb057a-077f-b601-dcb7-130071c733db@linaro.org>
- <YodNu2C5iHKW3UeZ@slm.duckdns.org>
- <489592f6-b783-7bdb-2cc8-0c8e35ebc674@linaro.org>
- <20220520164255.GB17335@blackbody.suse.cz>
-From:   Tadeusz Struk <tadeusz.struk@linaro.org>
-In-Reply-To: <20220520164255.GB17335@blackbody.suse.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1901; h=from:subject; bh=JJuMLpa4bRxd+XIVXJHSB00fFvogB4eo+vqKcUS+E5c=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBih8hg9y6m79FVwywHWrIpyRZj+n8gfvE1kdQ4vttq CxUDwHGJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYofIYAAKCRCJcvTf3G3AJtHhEA CJetvbOuFyM9hM1wpAXtchIPly9FkjVoOpZjYYW1QuSIQo44/BvNeHZFgtxmVE3BGchr2akYhClwI1 nTy/7bc8Z/i6DFUm6mF0VpTt0Sj32XouSRJb8goy+KJNCO9mn0AaJFfOLkDysFXw98ov7nAl3TrICA 7wXEzs7MPwStZ+Eg3Fod2/LmHSNCyPjgVwguQAPJY2y820fqEWhr58sH6d/hQeSqRZ9/V3N+NM9+Z8 wVEOxxBwVUkzqYUYEq4BavHyE2qUfMpCEUgu9ijb/b+x9/ekkWVFb6/nIQ+KDMKc9bFrAFjJbUrqFp 4XsOUjfjJQXz04M1TibNo0mCM22Ph10iUFlXxYIMpa6kcHkVAnGDU6H2tiGst+/H7j9LjL6+sLFoHE f6uBS262o12sISPjZJP4MzsnmMbJAmoqtpEU/Ws/bIf3VDoB0HLdd7MVOLGk5FH20k+RnLy/GDR2bm zNkBmURh2qIWVrUtbWyNZaM3mpVWY0LQGcUfBYKzRMgPFwl92+nyVeptwm6yaVjTndDHqE7aPBxpVz oW+pJ2XsLw+/GHfLO46BNH9VH3hMBmsDZBcNjriHMERtI97JI6UO/RowyS22w48uZwAu7+nYUlWum7 v0TUYX74ldqPWaE9gjBI2b+XcHC9ERv93e/aHHQ7TvsfTV22SA5aqoQy1mlw==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,17 +73,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/20/22 09:42, Michal Koutný wrote:
-> On Fri, May 20, 2022 at 09:38:12AM -0700, Tadeusz Struk<tadeusz.struk@linaro.org>  wrote:
->> as this is a result of enqueuing the same css->destroy_work onto the same WQ,
->> one on the rcu path and one on the css_release path.
->> I will prototype it today and test with syzbot.
-> In my understanding, you'd need two independent work_structs in a css,
-> not two separate workqueues to put the single entry on.
+GCC 12 sees that it might be possible for "nr" to be outside the _regs
+array. Add explicit bounds checking.
 
-I think either way would work, but two workqueues would be less churn.
-I can try both.
+In function 'reg_read',
+    inlined from 'reg_rmw' at ../arch/x86/kvm/emulate.c:266:2:
+../arch/x86/kvm/emulate.c:254:27: warning: array subscript 32 is above array bounds of 'long unsigned int[17]' [-Warray-bounds]
+  254 |         return ctxt->_regs[nr];
+      |                ~~~~~~~~~~~^~~~
+In file included from ../arch/x86/kvm/emulate.c:23:
+../arch/x86/kvm/kvm_emulate.h: In function 'reg_rmw':
+../arch/x86/kvm/kvm_emulate.h:366:23: note: while referencing '_regs'
+  366 |         unsigned long _regs[NR_VCPU_REGS];
+      |                       ^~~~~
 
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Sean Christopherson <seanjc@google.com>
+Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc: Wanpeng Li <wanpengli@tencent.com>
+Cc: Jim Mattson <jmattson@google.com>
+Cc: x86@kernel.org
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: kvm@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ arch/x86/kvm/emulate.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+index 89b11e7dca8a..fbcbc012a3ae 100644
+--- a/arch/x86/kvm/emulate.c
++++ b/arch/x86/kvm/emulate.c
+@@ -247,6 +247,8 @@ enum x86_transfer_type {
+ 
+ static ulong reg_read(struct x86_emulate_ctxt *ctxt, unsigned nr)
+ {
++	if (WARN_ON(nr >= ARRAY_SIZE(ctxt->_regs)))
++		return 0;
+ 	if (!(ctxt->regs_valid & (1 << nr))) {
+ 		ctxt->regs_valid |= 1 << nr;
+ 		ctxt->_regs[nr] = ctxt->ops->read_gpr(ctxt, nr);
+@@ -256,6 +258,8 @@ static ulong reg_read(struct x86_emulate_ctxt *ctxt, unsigned nr)
+ 
+ static ulong *reg_write(struct x86_emulate_ctxt *ctxt, unsigned nr)
+ {
++	if (WARN_ON(nr >= ARRAY_SIZE(ctxt->_regs)))
++		return 0;
+ 	ctxt->regs_valid |= 1 << nr;
+ 	ctxt->regs_dirty |= 1 << nr;
+ 	return &ctxt->_regs[nr];
 -- 
-Thanks,
-Tadeusz
+2.32.0
+

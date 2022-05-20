@@ -2,142 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F01DD52E71D
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 10:17:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFE7A52E721
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 10:18:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346903AbiETIRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 04:17:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45212 "EHLO
+        id S1346909AbiETIRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 04:17:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242281AbiETIQ7 (ORCPT
+        with ESMTP id S237421AbiETIRu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 04:16:59 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7675C762AD
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 01:16:58 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1nrxoV-0001il-A1; Fri, 20 May 2022 10:16:47 +0200
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1nrxoS-0004CF-BI; Fri, 20 May 2022 10:16:44 +0200
-Date:   Fri, 20 May 2022 10:16:44 +0200
-From:   "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
-To:     Pkshih <pkshih@realtek.com>
-Cc:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "linux@ulli-kroll.de" <linux@ulli-kroll.de>,
-        "martin.blumenstingl@googlemail.com" 
-        <martin.blumenstingl@googlemail.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "kvalo@kernel.org" <kvalo@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
-        "neojou@gmail.com" <neojou@gmail.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "johannes@sipsolutions.net" <johannes@sipsolutions.net>
-Subject: Re: [PATCH 07/10] rtw88: Add rtw8723du chipset support
-Message-ID: <20220520081644.GD25578@pengutronix.de>
-References: <20220518082318.3898514-1-s.hauer@pengutronix.de>
- <20220518082318.3898514-8-s.hauer@pengutronix.de>
- <819189eb24ecece40e9d0c2a51f54d4084bb9493.camel@realtek.com>
+        Fri, 20 May 2022 04:17:50 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 912D38A301
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 01:17:48 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L4KLZ5qj0zfbLy;
+        Fri, 20 May 2022 16:16:22 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 20 May 2022 16:17:46 +0800
+Subject: Re: [PATCH v4 4/5] mm/shmem: fix infinite loop when swap in shmem
+ error at swapoff time
+To:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
+        <naoya.horiguchi@nec.com>
+CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "hughd@google.com" <hughd@google.com>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "neilb@suse.de" <neilb@suse.de>,
+        "apopple@nvidia.com" <apopple@nvidia.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "surenb@google.com" <surenb@google.com>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "rcampbell@nvidia.com" <rcampbell@nvidia.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220519125030.21486-1-linmiaohe@huawei.com>
+ <20220519125030.21486-5-linmiaohe@huawei.com>
+ <20220520063433.GA584983@hori.linux.bs1.fc.nec.co.jp>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <970aee34-c377-2b8c-c6bb-45e2a96e84b9@huawei.com>
+Date:   Fri, 20 May 2022 16:17:45 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <819189eb24ecece40e9d0c2a51f54d4084bb9493.camel@realtek.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 10:16:18 up 50 days, 20:45, 53 users,  load average: 0.03, 0.08,
- 0.12
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220520063433.GA584983@hori.linux.bs1.fc.nec.co.jp>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 07:47:44AM +0000, Pkshih wrote:
-> On Wed, 2022-05-18 at 10:23 +0200, Sascha Hauer wrote:
-> > Add support for the rtw8723du chipset based on
-> > https://github.com/ulli-kroll/rtw88-usb.git
-> > 
-> > Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-> > ---
-> >  drivers/net/wireless/realtek/rtw88/Kconfig    | 11 +++++
-> >  drivers/net/wireless/realtek/rtw88/Makefile   |  3 ++
-> >  drivers/net/wireless/realtek/rtw88/rtw8723d.c | 19 +++++++++
-> >  drivers/net/wireless/realtek/rtw88/rtw8723d.h |  1 +
-> >  .../net/wireless/realtek/rtw88/rtw8723du.c    | 40 +++++++++++++++++++
-> >  .../net/wireless/realtek/rtw88/rtw8723du.h    | 13 ++++++
-> >  6 files changed, 87 insertions(+)
-> >  create mode 100644 drivers/net/wireless/realtek/rtw88/rtw8723du.c
-> >  create mode 100644 drivers/net/wireless/realtek/rtw88/rtw8723du.h
-> > 
-> > 
+On 2022/5/20 14:34, HORIGUCHI NAOYA(堀口 直也) wrote:
+> On Thu, May 19, 2022 at 08:50:29PM +0800, Miaohe Lin wrote:
+>> When swap in shmem error at swapoff time, there would be a infinite loop
+>> in the while loop in shmem_unuse_inode(). It's because swapin error is
+>> deliberately ignored now and thus info->swapped will never reach 0. So
+>> we can't escape the loop in shmem_unuse().
+>>
+>> In order to fix the issue, swapin_error entry is stored in the mapping
+>> when swapin error occurs. So the swapcache page can be freed and the
+>> user won't end up with a permanently mounted swap because a sector is
+>> bad. If the page is accessed later, the user process will be killed
+>> so that corrupted data is never consumed. On the other hand, if the
+>> page is never accessed, the user won't even notice it.
+>>
+>> Reported-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 > 
-> [...]
+> Hi Miaohe,
 > 
-> > diff --git a/drivers/net/wireless/realtek/rtw88/rtw8723du.c
-> > b/drivers/net/wireless/realtek/rtw88/rtw8723du.c
-> > new file mode 100644
-> > index 0000000000000..910f64c168131
-> > --- /dev/null
-> > +++ b/drivers/net/wireless/realtek/rtw88/rtw8723du.c
-> > @@ -0,0 +1,40 @@
-> > +// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
-> > +/* Copyright(c) 2018-2019  Realtek Corporation
-> > + */
-> > +
-> > +#include <linux/module.h>
-> > +#include <linux/usb.h>
-> > +#include "main.h"
-> > +#include "rtw8723du.h"
-> > +#include "usb.h"
-> > +
-> > +static const struct usb_device_id rtw_8723du_id_table[] = {
-> > +	/*
-> > +	 * ULLI :
-> > +	 * ID found in rtw8822bu sources
-> > +	 */
-> 
-> checkpatch.pl will tell us this comment block should be
-> 
-> /* ULLI :
->  * ID found in rtw8822bu sources
->  */
-> 
-> But, I think we can just "/* ULLI: ID found in rtw8822bu sources */" 
-> if we really want to keep this comment.
+> Thank you for the update.  I might miss something, but I still see the same
+> problem (I checked it on mm-everything-2022-05-19-00-03 + this patchset).
 
-I'll drop this comment.
+I was testing this patch on my 5.10 kernel. I reproduced the problem in my env and
+fixed it. It seems there might be some critical difference though I checked that by
+reviewing the code... Sorry. :(
 
-> > +
-> > +#ifndef __RTW_8723DU_H_
-> > +#define __RTW_8723DU_H_
-> > +
-> > +/* USB Vendor/Product IDs */
-> > +#define RTW_USB_VENDOR_ID_REALTEK		0x0BDA
 > 
-> rtw8821cu.h and rtw8822bu.h define this too.
-> Can we move it to usb.h?
+> This patch has the effect to change the return value of shmem_swapin_folio(),
+> -EIO (without this patch) to -EEXIST (with this patch).
 
-Yes.
+In fact, I didn't change the return value from -EIO to -EEXIST:
 
-Sascha
+@@ -1762,6 +1799,8 @@ static int shmem_swapin_folio(struct inode *inode, pgoff_t index,
+ failed:
+ 	if (!shmem_confirm_swap(mapping, index, swap))
+ 		error = -EEXIST;
++	if (error == -EIO)
++		shmem_set_folio_swapin_error(inode, index, folio, swap)
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+> But shmem_unuse_swap_entries() checks neither, so no change from caller's view point.
+> Maybe breaking in errors (rather than ENOMEM) in for loop in shmem_unuse_swap_entries()
+> solves the issue?  I briefly checked with the below change, then swapoff can return
+> with failure.
+> 
+> @@ -1222,7 +1222,7 @@ static int shmem_unuse_swap_entries(struct inode *inode,
+>                         folio_put(folio);
+>                         ret++;
+>                 }
+> -               if (error == -ENOMEM)
+> +               if (error < 0)
+>                         break;
+>                 error = 0;
+>         }
+
+Yes, this is the simplest and straightforward way to fix the issue. But it has the side effect
+that user will end up with a permanently mounted swap just because a sector is bad. That might
+be somewhat unacceptable?
+
+> 
+>> ---
+>>  mm/shmem.c | 39 +++++++++++++++++++++++++++++++++++++++
+>>  1 file changed, 39 insertions(+)
+>>
+>> diff --git a/mm/shmem.c b/mm/shmem.c
+>> index d3c7970e0179..d55dd972023a 100644
+>> --- a/mm/shmem.c
+>> +++ b/mm/shmem.c
+>> @@ -1175,6 +1175,10 @@ static int shmem_find_swap_entries(struct address_space *mapping,
+>>  			continue;
+>>  
+>>  		entry = radix_to_swp_entry(folio);
+>> +		/*
+>> +		 * swapin error entries can be found in the mapping. But they're
+>> +		 * deliberately ignored here as we've done everything we can do.
+>> +		 */
+>>  		if (swp_type(entry) != type)
+>>  			continue;
+>>  
+>> @@ -1672,6 +1676,36 @@ static int shmem_replace_page(struct page **pagep, gfp_t gfp,
+>>  	return error;
+>>  }
+>>  
+>> +static void shmem_set_folio_swapin_error(struct inode *inode, pgoff_t index,
+>> +					 struct folio *folio, swp_entry_t swap)
+>> +{
+>> +	struct address_space *mapping = inode->i_mapping;
+>> +	struct shmem_inode_info *info = SHMEM_I(inode);
+>> +	swp_entry_t swapin_error;
+>> +	void *old;
+>> +
+>> +	swapin_error = make_swapin_error_entry(&folio->page);
+>> +	old = xa_cmpxchg_irq(&mapping->i_pages, index,
+>> +			     swp_to_radix_entry(swap),
+>> +			     swp_to_radix_entry(swapin_error), 0);
+>> +	if (old != swp_to_radix_entry(swap))
+>> +		return;
+>> +
+>> +	folio_wait_writeback(folio);
+>> +	delete_from_swap_cache(&folio->page);
+>> +	spin_lock_irq(&info->lock);
+>> +	/*
+>> +	 * Don't treat swapin error folio as alloced. Otherwise inode->i_blocks won't
+>> +	 * be 0 when inode is released and thus trigger WARN_ON(inode->i_blocks) in
+>> +	 * shmem_evict_inode.
+>> +	 */
+>> +	info->alloced--;
+>> +	info->swapped--;
+>> +	shmem_recalc_inode(inode);
+>> +	spin_unlock_irq(&info->lock);
+>> +	swap_free(swap);
+>> +}
+>> +
+>>  /*
+>>   * Swap in the page pointed to by *pagep.
+>>   * Caller has to make sure that *pagep contains a valid swapped page.
+> 
+> (off-topic a little) BTW, the comment on shmem_swapin_folio() still mentions
+> *pagep, but maybe it can be updated to *foliop.
+
+Will do it.
+
+> 
+> Thanks,
+> Naoya Horiguchi
+
+Many thanks for comment and test ! :)
+
+> 
+>> @@ -1695,6 +1729,9 @@ static int shmem_swapin_folio(struct inode *inode, pgoff_t index,
+>>  	swap = radix_to_swp_entry(*foliop);
+>>  	*foliop = NULL;
+>>  
+>> +	if (is_swapin_error_entry(swap))
+>> +		return -EIO;
+>> +
+>>  	/* Look it up and read it in.. */
+>>  	page = lookup_swap_cache(swap, NULL, 0);
+>>  	if (!page) {
+>> @@ -1762,6 +1799,8 @@ static int shmem_swapin_folio(struct inode *inode, pgoff_t index,
+>>  failed:
+>>  	if (!shmem_confirm_swap(mapping, index, swap))
+>>  		error = -EEXIST;
+>> +	if (error == -EIO)
+>> +		shmem_set_folio_swapin_error(inode, index, folio, swap);
+

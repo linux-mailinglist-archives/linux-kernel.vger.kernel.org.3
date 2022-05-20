@@ -2,143 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A356552F0ED
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 18:44:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E57852F0F2
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 18:45:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351780AbiETQoc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 12:44:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49126 "EHLO
+        id S1351790AbiETQpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 12:45:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiETQo1 (ORCPT
+        with ESMTP id S229452AbiETQpN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 12:44:27 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2B717DDD9
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 09:44:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653065066; x=1684601066;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=5ciO0kBoZZmdwy8SM6NT74DC/ofmCkiIKcxaKmJyLWk=;
-  b=cdtBIu070VNSig9gjmasyocWM5LmPQHHZS3WLN3pwqFH+jrL2unuTQyA
-   K/yv+98D5nw0MbvD3xffVuf5YcEeGaQIkhmoKSXjxCR5KFQDL1YNEFl08
-   K58r3g4zWGmrVbg+eQJOoOzzISBI2iRu/jQ9uQbdZyRT05dbTcV1ZT9Yv
-   /aSR5+ksv39UrCFDhgIgnFqoB8Z01LXfiP4f/0M9lMLgKoNEuSRUENU0n
-   Q6AqMlQA1o6fU38gSxvAu/C2xQ4mqDVxRagCMlILAc6fm/gytSxVnksxT
-   PkCd+tNb71BFbXslrPbNq/HISvTsEeIi0DwH6sR8F5AV5B0han+VsU2eL
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10353"; a="254716852"
-X-IronPort-AV: E=Sophos;i="5.91,239,1647327600"; 
-   d="scan'208";a="254716852"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 09:44:26 -0700
-X-IronPort-AV: E=Sophos;i="5.91,239,1647327600"; 
-   d="scan'208";a="570893664"
-Received: from luislore-desk2.amr.corp.intel.com (HELO [10.212.196.93]) ([10.212.196.93])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 09:44:25 -0700
-Message-ID: <7dffbd70-d7db-6d58-abbb-19006cd9e4a2@intel.com>
-Date:   Fri, 20 May 2022 09:44:25 -0700
+        Fri, 20 May 2022 12:45:13 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D5D178567;
+        Fri, 20 May 2022 09:45:12 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d22so7803215plr.9;
+        Fri, 20 May 2022 09:45:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=u22Vdb8ad4QsGUpvqDD4jw8opLANlipXffF4J28OkDw=;
+        b=alC71XCAjWLZ2L+MKQYDKx3KTDbWUY+ds3nxi6wLqgO7s9wjvHmeS0X4mp5EnSoUUl
+         5azRlTmtfw/UqAiUwhI5sZANOPrUEC/QVcgidBJjdj4vzvuMoqNBW3nF9tMw2moyZlgN
+         8wyQDt0+i8Ada0za5PsJuWKfV+qMDHHHk2GretQeRaKoVLkVf0wFl6lveJrSxek6tugV
+         CGXMeMWuv7bzSJ5ekUqL6IxWkCb1TWH3HxYnZOseiU6svnyorwth8UX8rb5PIV8m9KMA
+         KOP4TMl/Nnd2YqrNvrxDocxEl3yX1fsJgCEhZhQWU9/MAB/jhNnUTNVoxy08eGE2Tu0V
+         r/5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=u22Vdb8ad4QsGUpvqDD4jw8opLANlipXffF4J28OkDw=;
+        b=IOtTvcJiQ8WXVNaJploMVtDsmP/0ioJ8LIo6qbOKA8PBVzkaqhbGsSnzlqr3PPAmx1
+         HTZdskCfxZ6kobIxp/pLmmnUAQLTocSwwSVTPRT+mUnskJLEQSZW/5/F2AILMVbVo+Bn
+         abQ4kEBLSnYUf8IeeQEorU6IyQ427T1twq7712qCViQXHEb280Epndgd77zPb/QPavRa
+         PG8Z2+8cD0nG59V3KA6mRVXUsEUtIW162uujDcNf8rx4rwDKRqtgl2+o5RqJwjPGvOng
+         DMNEAft2AsCC4I3D+eRE7UuxFGp4FmBPLJvRMZIgmiQ9j9naXZPe3PfQQ7b2fxlAYO7R
+         mdBQ==
+X-Gm-Message-State: AOAM533unz4xbJLttFEap9bNm7IAS1QM4dwHhSsG7XxbrVHYAv7LqyLv
+        ZeL2It1tQCf5NmXZwXJCsLg=
+X-Google-Smtp-Source: ABdhPJyP4R45XL7Ygkc11JWnS15dH4cQ+zV/iI/2vxrlGm1gisg0ogaD4Bj036lBydbUC7eRTm8umQ==
+X-Received: by 2002:a17:90a:cc02:b0:1df:257a:5396 with SMTP id b2-20020a17090acc0200b001df257a5396mr12031837pju.190.1653065111792;
+        Fri, 20 May 2022 09:45:11 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::4:1761])
+        by smtp.gmail.com with ESMTPSA id j7-20020a170902690700b001616b71e5e6sm5917456plk.175.2022.05.20.09.45.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 May 2022 09:45:11 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Fri, 20 May 2022 06:45:10 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Yosry Ahmed <yosryahmed@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Michal Hocko <mhocko@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Cgroups <cgroups@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v1 3/5] bpf: Introduce cgroup iter
+Message-ID: <YofFli6UCX4J5YnU@slm.duckdns.org>
+References: <20220520012133.1217211-1-yosryahmed@google.com>
+ <20220520012133.1217211-4-yosryahmed@google.com>
+ <YodGI73xq8aIBrNM@slm.duckdns.org>
+ <CAJD7tkbvMcMWESMcWi6TtdCKLr6keBNGgZTnqcHZvBrPa1qWPw@mail.gmail.com>
+ <YodNLpxut+Zddnre@slm.duckdns.org>
+ <73fd9853-5dab-8b59-24a0-74c0a6cae88e@fb.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 2/2] x86: fix platform info detection in frequency
- invariance
-Content-Language: en-US
-To:     Giovanni Gherdovich <ggherdovich@suse.cz>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-References: <20220520161022.5972-1-ggherdovich@suse.cz>
- <20220520161022.5972-2-ggherdovich@suse.cz>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20220520161022.5972-2-ggherdovich@suse.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <73fd9853-5dab-8b59-24a0-74c0a6cae88e@fb.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/20/22 09:10, Giovanni Gherdovich wrote:
->  	if (slv_set_max_freq_ratio(&base_freq, &turbo_freq))
->  		goto out;
->  
-> -	if (x86_match_cpu(has_glm_turbo_ratio_limits) &&
-> -	    skx_set_max_freq_ratio(&base_freq, &turbo_freq, 1))
-> +	if (x86_match_cpu(has_glm_turbo_ratio_limits)) {
-> +		skx_set_max_freq_ratio(&base_freq, &turbo_freq, 1);
->  		goto out;
-> +	}
->  
-> -	if (x86_match_cpu(has_knl_turbo_ratio_limits) &&
-> -	    knl_set_max_freq_ratio(&base_freq, &turbo_freq, 1))
-> +	if (x86_match_cpu(has_knl_turbo_ratio_limits)) {
-> +		knl_set_max_freq_ratio(&base_freq, &turbo_freq, 1);
->  		goto out;
-> +	}
->  
-> -	if (x86_match_cpu(has_skx_turbo_ratio_limits) &&
-> -	    skx_set_max_freq_ratio(&base_freq, &turbo_freq, 4))
-> +	if (x86_match_cpu(has_skx_turbo_ratio_limits)) {
-> +		skx_set_max_freq_ratio(&base_freq, &turbo_freq, 4);
->  		goto out;
-> +	}
->  
->  	if (core_set_max_freq_ratio(&base_freq, &turbo_freq))
->  		goto out;
+Hello, Yonghong.
 
-But didn't the last patch in the series carefully change the return
-value for knl_set_max_freq_ratio()?  Now, the only call site is ignoring
-the return value?  That seems odd.
+On Fri, May 20, 2022 at 09:29:43AM -0700, Yonghong Song wrote:
+> Maybe you can have a bpf program signature like below:
+> 
+> int BPF_PROG(dump_vmscan, struct bpf_iter_meta *meta, struct cgroup *cgrp,
+> struct cgroup *parent_cgrp)
+> 
+> parent_cgrp is NULL when cgrp is the root cgroup.
+> 
+> I would like the bpf program should send the following information to
+> user space:
+>    <parent cgroup dir name> <current cgroup dir name>
 
-Also, this is a mess.  These constructs:
+I don't think parent cgroup dir name would be sufficient to reconstruct the
+path given that multiple cgroups in different subtrees can have the same
+name. For live cgroups, userspace can find the path from id (or ino) without
+traversing anything by constructing the fhandle, open it open_by_handle_at()
+and then reading /proc/self/fd/$FD symlink -
+https://lkml.org/lkml/2020/12/2/1126. This isn't available for dead cgroups
+but I'm not sure how much that'd matter given that they aren't visible from
+userspace anyway.
 
-static const struct x86_cpu_id has_knl_turbo_ratio_limits[] = {
-        X86_MATCH(XEON_PHI_KNL),
-        X86_MATCH(XEON_PHI_KNM),
-        {}
-};
+>    <various stats interested by the user>
+> 
+> This way, user space can easily construct the cgroup hierarchy stat like
+>                            cpu   mem   cpu pressure   mem pressure ...
+>    cgroup1                 ...
+>       child1               ...
+>         grandchild1        ...
+>       child2               ...
+>    cgroup 2                ...
+>       child 3              ...
+>         ...                ...
+> 
+> the bpf iterator can have additional parameter like
+> cgroup_id = ... to only call bpf program once with that
+> cgroup_id if specified.
+> 
+> The kernel part of cgroup_iter can call cgroup_rstat_flush()
+> before calling cgroup_iter bpf program.
+> 
+> WDYT?
 
-static const struct x86_cpu_id has_skx_turbo_ratio_limits[] = {
-        X86_MATCH(SKYLAKE_X),
-        {}
-};
+Would it work to just pass in @cgrp and provide a group of helpers so that
+the program can do whatever it wanna do including looking up the full path
+and passing that to userspace?
 
-static const struct x86_cpu_id has_glm_turbo_ratio_limits[] = {
-        X86_MATCH(ATOM_GOLDMONT),
-        X86_MATCH(ATOM_GOLDMONT_D),
-        X86_MATCH(ATOM_GOLDMONT_PLUS),
-        {}
-};
+Thanks.
 
-are rather goofy.  A single array like rapl_ids[] that points to the
-handler function would do us a lot more good here, say:
-
-static const struct x86_cpu_id has_knl_turbo_ratio_limits[] = {
-        X86_MATCH(XEON_PHI_KNL, 	&knl_set_max_freq_ratio),
-        X86_MATCH(XEON_PHI_KNM, 	&knl_set_max_freq_ratio),
-        X86_MATCH(SKYLAKE_X,		&skx_set_max_freq_ratio),
-        X86_MATCH(ATOM_GOLDMONT, 	&skx_set_max_freq_ratio),
-        X86_MATCH(ATOM_GOLDMONT_D,	&skx_set_max_freq_ratio),
-        X86_MATCH(ATOM_GOLDMONT_PLUS,	&skx_set_max_freq_ratio),
-	X86_MATCH(ANY,			&core_set_max_freq_ratio),
-        {}
-};
-
-That would get rid of all the goofy gotos and actually puts all the
-logic in one place.  BTW, I'm not 100% sure about the 'ANY' line.  I
-think that's how those work, but please double-check me on it.
-
-While it's generally best to keep bug fixes to a minimum, I think this
-one is worth a bit of a cleanup because it will remove a bunch of spaghetti.
+-- 
+tejun

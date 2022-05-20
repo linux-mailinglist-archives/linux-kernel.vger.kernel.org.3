@@ -2,138 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A822E52F648
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 01:34:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F0BA52F64C
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 01:41:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354152AbiETXeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 19:34:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53258 "EHLO
+        id S237843AbiETXlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 19:41:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231439AbiETXeJ (ORCPT
+        with ESMTP id S230462AbiETXlI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 19:34:09 -0400
-Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32C81A7D2B
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 16:34:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1653089648; x=1684625648;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=cxD0WkTRuBGs7QMn33plUCWC3KT9kbapNpgQIUmBMA8=;
-  b=WU5QGbVXgqoJSzhNmD0ZQxyYaacyb/Ed78b452a9wN95QxdWblf1U4RN
-   C6yLFNm52sfJAzzO+yeoEuZL39zb+iLQE8GgXSP1nIH09XTVpEM0ILyfo
-   WCByek4HZobNKbDysRkyAU0D/sCncSg70flQ2tGU2kYkdZw7p0nizW1lT
-   4TnZRnpAOXgjbfu2i57q77IKeTDRXsWx59Gj75CO5aqppWURkJbJL4IDS
-   DvwJEarG0WhhoGHRVbo6p/soc1qATBAbHgcoT51CQ7wu1vgX0/GToGOEW
-   3wU4gk0X5fUQV5n39vVnDyNXi2O+83znuSUDcJvKyYBaQ1NsM8MH//oaU
-   w==;
-X-IronPort-AV: E=Sophos;i="5.91,240,1647273600"; 
-   d="scan'208";a="200966409"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 21 May 2022 07:34:07 +0800
-IronPort-SDR: Yc2OuQSEFpK0b/9UukqWftPoMtnutwETM2S5cpmH/9XHGc/K903w1x0JgM4P6AjUK4fXzyIsKD
- ZTWWo3J4tjB+KFLYfc61cj77JJ/4UGnH/B++ZGsa3s4Zdhi6tf3EtKdGdCxJut2/wktcEoxz54
- xhy1DQnPXfiCcL8h+Tsa9H6Dgq5W9ZOWgujIhZPyAYQ6TTxaPt7GYW0xJ03vxvnNoi0155ZF9r
- fAoVlg1AXHWzS+vho2ERgnJW9LtWAp/nF7ysuC0vQsYcVkaD+i63BxFGMybofLbUlEqJ6S1mL8
- u0ArP4pviGNgxxLrE9yYGHEJ
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 May 2022 15:56:51 -0700
-IronPort-SDR: kXTB591zHXOaGYjbc/XthMr+rNfXtv2v9xMZk2uWc6OIH7TC5dIXiH77S/oMvQtE3ZSjKKn3iC
- nlDF5tDf36Zl6pKMvtdV0bfNerQs2aYpbQ5zyprBbOq4IZDoBUcEy8JE2oHCc+Tx6KiUHGf9Ft
- a+nZMFcLDIggbGuA/CLpP/S9tTERgR34oEZ8YSO+R8pIn+Wq5MMKk/mm1tjxY7yfbmWETmIF0+
- jQnW4/B9oxFG/3vkCqKgR60G58eK/5C/yg5i0A7W7bHnnqIVUUZ8L/1Hi9KWtF/jGmz+Qekylr
- FUk=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 May 2022 16:34:07 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4L4jjW0x04z1SVp7
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 16:34:07 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1653089646; x=1655681647; bh=cxD0WkTRuBGs7QMn33plUCWC3KT9kbapNpg
-        QIUmBMA8=; b=IAZfh2N/A1jItIRu6RNK4GCq/n7NLG1+opKeFCVPmNoD3nU4SpR
-        bC6akAQHrRKjwDRGh4NXwXV/FMrBCZ6GcNYZcuC2ARib1r2sjAHkGU9Ep1cDFwop
-        mDfqvuMSQssge51ujkq7vQ5pCjovouoGBfDz3E5IaM9G2Qqp9uzAo46qFsID7yHl
-        Vw6amvteVP/EJl7jEGH7Boh6b3YkUpvvr5IwG9eq9uJub53GSlGzOb852GLfBhb/
-        JW5MGlFzL5zQEqnjhAL3oRx/o0N9qjqNC1su+SaebsoCtTk5dX1J8MyoLkNh1FZr
-        qCDdMdkk9R1i9CbzUDAwGjlwztQvrlS+5aw==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id J_-CnV0JDusr for <linux-kernel@vger.kernel.org>;
-        Fri, 20 May 2022 16:34:06 -0700 (PDT)
-Received: from [10.225.163.51] (unknown [10.225.163.51])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4L4jjS0PF4z1Rvlc;
-        Fri, 20 May 2022 16:34:03 -0700 (PDT)
-Message-ID: <1a683059-d718-9536-e8fe-d7d47e25e935@opensource.wdc.com>
-Date:   Sat, 21 May 2022 08:34:03 +0900
+        Fri, 20 May 2022 19:41:08 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CAA1E3E2
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 16:41:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1653090066; x=1684626066;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RXc+ONkFyVVtEjPAyk2CpuG/lsV8gZbDITKeLwGX1u8=;
+  b=ywjlBwUgjd66YvzkxGiFX/9htrw9Bsw1mWNwiSHklpjzG3AAH+CDy8PV
+   ww1Y+mBtj+mlYZTRMPSjkRX3xYzixJRHNiKZ5XybI0KUNVgumawW+mKgs
+   v5cX8BtxEiMaRWhsXaoC88YVaUTaaZorTTuOe7LkUFSzPymT361NAP/zv
+   U=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 20 May 2022 16:41:05 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 16:41:05 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 20 May 2022 16:41:04 -0700
+Received: from qian (10.80.80.8) by nalasex01a.na.qualcomm.com (10.47.209.196)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 20 May
+ 2022 16:41:02 -0700
+Date:   Fri, 20 May 2022 19:41:00 -0400
+From:   Qian Cai <quic_qiancai@quicinc.com>
+To:     Zi Yan <ziy@nvidia.com>
+CC:     David Hildenbrand <david@redhat.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>,
+        <virtualization@lists.linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Eric Ren <renzhengeek@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Oscar Salvador" <osalvador@suse.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v11 0/6] Use pageblock_order for cma and
+ alloc_contig_range alignment.
+Message-ID: <YognDJT8C/o1Mt+y@qian>
+References: <A1956578-A851-4BF3-BD57-12571244DB5E@nvidia.com>
+ <20220428123308.GA71@qian>
+ <0E75B247-8150-48A3-83AE-56C586030006@nvidia.com>
+ <YoavU/+NfQIzQiDF@qian>
+ <F6598450-EFE0-4EA9-912B-A727DE1F8185@nvidia.com>
+ <Yod71OhUa3VWWPCG@qian>
+ <48D48FDC-B8DD-41C9-B56A-EBD7314883AB@nvidia.com>
+ <A03D6267-5945-4A6A-9C55-5F3DDDB35CC2@nvidia.com>
+ <Yofu5wUgov+2eVCE@qian>
+ <C1636974-A315-4E0A-81C2-845878429920@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 4/4] libata-scsi: Cap ata_device->max_sectors according to
- shost->max_sectors
-Content-Language: en-US
-To:     John Garry <john.garry@huawei.com>, joro@8bytes.org,
-        will@kernel.org, jejb@linux.ibm.com, martin.petersen@oracle.com,
-        hch@lst.de, m.szyprowski@samsung.com, robin.murphy@arm.com
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-ide@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-scsi@vger.kernel.org, liyihang6@hisilicon.com,
-        chenxiang66@hisilicon.com, thunder.leizhen@huawei.com
-References: <1653035003-70312-1-git-send-email-john.garry@huawei.com>
- <1653035003-70312-5-git-send-email-john.garry@huawei.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <1653035003-70312-5-git-send-email-john.garry@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <C1636974-A315-4E0A-81C2-845878429920@nvidia.com>
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/20/22 17:23, John Garry wrote:
-> ATA devices (struct ata_device) have a max_sectors field which is
-> configured internally in libata. This is then used to (re)configure the
-> associated sdev request queue max_sectors value from how it is earlier set
-> in __scsi_init_queue(). In __scsi_init_queue() the max_sectors value is set
-> according to shost limits, which includes host DMA mapping limits.
-> 
-> Cap the ata_device max_sectors according to shost->max_sectors to respect
-> this shost limit.
-> 
-> Signed-off-by: John Garry <john.garry@huawei.com>
-> ---
->  drivers/ata/libata-scsi.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
-> index 06c9d90238d9..25fe89791641 100644
-> --- a/drivers/ata/libata-scsi.c
-> +++ b/drivers/ata/libata-scsi.c
-> @@ -1036,6 +1036,7 @@ int ata_scsi_dev_config(struct scsi_device *sdev, struct ata_device *dev)
->  		dev->flags |= ATA_DFLAG_NO_UNLOAD;
->  
->  	/* configure max sectors */
-> +	dev->max_sectors = min(dev->max_sectors, sdev->host->max_sectors);
->  	blk_queue_max_hw_sectors(q, dev->max_sectors);
->  
->  	if (dev->class == ATA_DEV_ATAPI) {
+On Fri, May 20, 2022 at 05:56:52PM -0400, Zi Yan wrote:
+> Do you have the page information like refcount, map count, mapping, index, and
+> page flags? That would be more helpful. Thanks.
 
-Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+page:fffffc200c7f8000 refcount:393 mapcount:1 mapping:0000000000000000 index:0xffffbb800 pfn:0x8039fe00
+head:fffffc200c7f8000 order:9 compound_mapcount:0 compound_pincount:0
+memcg:ffff40026005a000
+anon flags: 0xbfffc000009001c(uptodate|dirty|lru|head|swapbacked|node=0|zone=2|lastcpupid=0xffff)
+raw: 0bfffc000009001c fffffc2007b74048 fffffc2009c087c8 ffff08038dab9189
+raw: 0000000ffffbb800 0000000000000000 0000018900000000 ffff40026005a000
 
--- 
-Damien Le Moal
-Western Digital Research
+> I cannot reproduce it locally after hundreds of iterations of flip_mem.py on my
+> x86_64 VM and bare metal.
+> 
+> What ARM machine are you using? I wonder if I am able to get one locally.
+
+Ampere Altra.

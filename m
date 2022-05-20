@@ -2,131 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF66252EE65
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 16:45:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EDCE52EE67
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 16:47:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350421AbiETOpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 10:45:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39228 "EHLO
+        id S1350396AbiETOrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 10:47:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244390AbiETOpi (ORCPT
+        with ESMTP id S234821AbiETOrK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 10:45:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B918170F28;
-        Fri, 20 May 2022 07:45:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DDF8618DC;
-        Fri, 20 May 2022 14:45:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE8C1C385A9;
-        Fri, 20 May 2022 14:45:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653057934;
-        bh=eyy20eLaoZHHhlcdY5b3GARHaDk/Ynm0A8xek9N7alE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hmtDN6rzpqT+fYQz7hSlNwVBz6PdgaCRI/+fJz0yhqebalgYoTqztGhfml4F5z/XW
-         gs67hODZJYg7mmnma+XHmFxHpsoU24dDBPX6Ryslvk4ir075rW0zF3LS7fKUzlg8Tt
-         8XbL1UbUZTCMK/JkbAWRdsAXAhq/iC5E9b01q4tAhBjTSNBcsKg0XfeK7HXhwBOsoi
-         QUI1RzLfxraasVYNWRBQxspfvrbtit1S8xkfcQ4XDe77dNw2qIPogeoEUOJfRoCYRP
-         Tu/TCg7LwF7BjrwIgHVkXJAJvYsmjICk3xMhO2CtF7Mqtbj75oFSVNcXC0n0Cbfttd
-         LYWcH0eTSLc/w==
-Date:   Fri, 20 May 2022 15:45:29 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     lgirdwood@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH 2/4] regulator: Add driver for MT6331 PMIC regulators
-Message-ID: <YoepiTUfdhkYByo7@sirena.org.uk>
-References: <20220520133305.265310-1-angelogioacchino.delregno@collabora.com>
- <20220520133305.265310-3-angelogioacchino.delregno@collabora.com>
+        Fri, 20 May 2022 10:47:10 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 093396D848;
+        Fri, 20 May 2022 07:47:09 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id s3so11064173edr.9;
+        Fri, 20 May 2022 07:47:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SWTQFgB8L0HOjZtQc1uTglM1zJk6QTSSIlavXmQwbTw=;
+        b=kqbsM/w2QOwGxf2UjEnlVOncYqn2rwW8vphGroA5HeE2AtSamnO3PFv5sXcDBpwLr1
+         rrc4DEABL98OCWqPpH0vVGcgyJxmzR/HtoUmRpAOOgMJGnCAWo5EO69SXfO5ZrPU9Bj/
+         eP1vGtB9z20A6qW/OeA04MVbY8EF+E/1jW5Er72EmdxngcDfXQXR2pcdezafWxvrDRWt
+         D0SfozJgFeLbto3IiK2QzSe3rueCMiD9qh/EYguwxQe1sqTuik0T/NninI2M3oQAsxLK
+         gNYbmcR2Xv0ZHG9bgB4t3fU58kU+E5pm2+nB/HW6YjAdTRhUBtP8LQuK8FGnkkUuC2Sz
+         vbIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SWTQFgB8L0HOjZtQc1uTglM1zJk6QTSSIlavXmQwbTw=;
+        b=UQGkEyXSzxRUKXzrnCI/No6Uu8rb+CTs09cjSxSKAoEoF1UqBI62q69gTZOdCpX0rH
+         DYs6TZswWOhbScKbDqBSDyJAxeg7kx1+JWxYGL9QrplIzxF4hys6XPZWYr5C5Kny16CT
+         sm+qh3qZ0zzVZo4CGZmNkcKB7gDxO4QGJcGD0HPfP59tcN9MjHsj7bl67JyjN84GKNbR
+         dn5PMFRLfL/WC2xSCTioUl0PhNTZFP4FwnCN1fArfyDqIMhGpQnN0ZtABCNEyi2eQw3H
+         Q1AYXs7o/tHb/59Gb2PIVmEnKMdm7q+lCr2mOrc4wpCpDOYqOBt5pGPAo2772Sz1G3eN
+         MdxQ==
+X-Gm-Message-State: AOAM533a/gjExsUBt2V9T/zagToEdKTet1HpZuBMtJqu05Z1G/OpxSOy
+        ZYQ+gCOgkoC3ds6s0rwNEU/twPfIQLc=
+X-Google-Smtp-Source: ABdhPJwoFRUDuX17QRDGhaE8MUYmI9XsJtewhQ+/m1a98o+oddwFTlmOHJFPz4XvmG2vEgnGz46+jw==
+X-Received: by 2002:a05:6402:3447:b0:42a:a449:ebb with SMTP id l7-20020a056402344700b0042aa4490ebbmr11130353edc.75.1653058027304;
+        Fri, 20 May 2022 07:47:07 -0700 (PDT)
+Received: from localhost.localdomain (93-103-18-160.static.t-2.net. [93.103.18.160])
+        by smtp.gmail.com with ESMTPSA id zp26-20020a17090684fa00b006f3ef214e2fsm3345013ejb.149.2022.05.20.07.47.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 May 2022 07:47:07 -0700 (PDT)
+From:   Uros Bizjak <ubizjak@gmail.com>
+To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Uros Bizjak <ubizjak@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>
+Subject: [PATCH] KVM: x86/mmu: Use try_cmpxchg64 in fast_pf_fix_direct_spte
+Date:   Fri, 20 May 2022 16:46:35 +0200
+Message-Id: <20220520144635.63134-1-ubizjak@gmail.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="p7DW/tPgeQFzSu9V"
-Content-Disposition: inline
-In-Reply-To: <20220520133305.265310-3-angelogioacchino.delregno@collabora.com>
-X-Cookie: Happy feast of the pig!
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Use try_cmpxchg64 instead of cmpxchg64 (*ptr, old, new) != old in
+fast_pf_fix_direct_spte. cmpxchg returns success in ZF flag, so this
+change saves a compare after cmpxchg (and related move instruction
+in front of cmpxchg).
 
---p7DW/tPgeQFzSu9V
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Sean Christopherson <seanjc@google.com>
+Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc: Wanpeng Li <wanpengli@tencent.com>
+Cc: Jim Mattson <jmattson@google.com>
+Cc: Joerg Roedel <joro@8bytes.org>
+---
 
-On Fri, May 20, 2022 at 03:33:03PM +0200, AngeloGioacchino Del Regno wrote:
+The patch is against tip tree.
+---
+ arch/x86/kvm/mmu/mmu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2022 Collabora Ltd.
-> + * Author: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> + *
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 311e4e1d7870..347bfd8bc5a3 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -3073,7 +3073,7 @@ fast_pf_fix_direct_spte(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
+ 	 *
+ 	 * Compare with set_spte where instead shadow_dirty_mask is set.
+ 	 */
+-	if (cmpxchg64(sptep, old_spte, new_spte) != old_spte)
++	if (!try_cmpxchg64(sptep, &old_spte, new_spte))
+ 		return false;
+ 
+ 	if (is_writable_pte(new_spte) && !is_writable_pte(old_spte))
+-- 
+2.35.3
 
-Please make the entire comment a C++ one so things look more
-intentional.
-
-> +static const unsigned int ldo_volt_table10[] = {
-> +	1200000, 1300000, 1500000, 1800000,
-> +	1200000, 1300000, 1500000, 1800000,
-> +	1200000, 1300000, 1500000, 1800000,
-> +	1200000, 1300000, 1500000, 1800000,
-> +};
-
-So the top bits of the voltate selection field just get ignored?  Might
-be easier to just write the code to not include the top bits.
-
-> +static int mt6331_get_status(struct regulator_dev *rdev)
-> +{
-> +	struct mt6331_regulator_info *info = rdev_get_drvdata(rdev);
-> +	u32 reg, en_mask, regval;
-> +	int ret;
-> +
-> +	if (info->qi > 0) {
-> +		reg = info->desc.enable_reg;
-> +		en_mask = info->qi;
-
-If the regulator doesn't have status readback it shouldn't provide a
-get_status() operation.
-
-> +static int mt6331_ldo_set_mode(struct regulator_dev *rdev, unsigned int mode)
-> +{
-> +	int ret, val = 0;
-> +	struct mt6331_regulator_info *info = rdev_get_drvdata(rdev);
-> +
-> +	if (!info->modeset_mask) {
-> +		dev_err(&rdev->dev, "regulator %s doesn't support set_mode\n",
-> +			info->desc.name);
-> +		return -EINVAL;
-> +	}
-
-Just don't provide the operation for these regulators then.  That'll
-mean a separate ops struct but that's fine.
-
---p7DW/tPgeQFzSu9V
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKHqYgACgkQJNaLcl1U
-h9CxpAf8Dcb0LgYJswtynhjrPmCXq5dYmagsB3EUxbEJcZXLX4uvOC2xRrQ8qv1F
-COwjJwhrHEDaeQGrX0LjxykTeI3RGn4fZGaIOgXtPrqAxETrp25ihtDuIU90LKAr
-cWrj82iP0HLYuKvPlkUh1uWlSMZ6vGh2WsJHhpNUIvZHd6swxslp3AXbS5L3hiTz
-K8Vq+Vw0TI800vnGy2PysQVb9bM5C7XUtnDOdyrYUl8PEDuJdnuLwiKNF+wZ1WpB
-R9ieqffSRUpsFsbJlWueKBcB/8UcHLJ+joI5/SYiL28Xz2fyM6ICUf6tHTARD++r
-JM7ueL0Tht/hfeIyuPT987jU5lqPJg==
-=7pHa
------END PGP SIGNATURE-----
-
---p7DW/tPgeQFzSu9V--

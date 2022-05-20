@@ -2,124 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AACCE52E986
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 11:58:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 250DE52E954
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 11:51:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348019AbiETJ6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 05:58:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34044 "EHLO
+        id S1347899AbiETJvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 05:51:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347728AbiETJ60 (ORCPT
+        with ESMTP id S1348026AbiETJvY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 05:58:26 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47840EC3FD;
-        Fri, 20 May 2022 02:58:25 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id F001B1F88B;
-        Fri, 20 May 2022 09:58:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1653040703; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=64ihC9Z8An8BVNW7TtS5ZeiD3v6obwU4Wb5TbN/d6lE=;
-        b=rtE5ey666MicJjXHbgWRKj4LKRbVjjbtZKGOlcEy0wYWsmtAxl0gOH3JIchkIUpk5/QrEx
-        S2eehmOuYALLl7ipS8ZcojV8wS61nbxkTA8SHF+8lGFopefr0S+lketbS5TnIW9F35kJeK
-        /jqQZ+v9kFHpDzNfHKmUMEFsPLGculw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1653040703;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=64ihC9Z8An8BVNW7TtS5ZeiD3v6obwU4Wb5TbN/d6lE=;
-        b=4WIMZ8b0BHB7yygq7FdP0yMfnRLqf4/mr1Eup2XUb9bb3irniVoZkLmTCJWqKJ2Ji9V8sO
-        A4BhfRvi3GHbVMCg==
-Received: from quack3.suse.cz (unknown [10.100.224.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id C94CD2C141;
-        Fri, 20 May 2022 09:58:23 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 26F32A0634; Fri, 20 May 2022 11:50:28 +0200 (CEST)
-Date:   Fri, 20 May 2022 11:50:28 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Tadeusz Struk <tadeusz.struk@linaro.org>
-Cc:     Jan Kara <jack@suse.cz>, linux-ext4@vger.kernel.org,
-        lkml <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: kernel BUG in ext4_writepages
-Message-ID: <20220520095028.rq4ef2o5nwetzog3@quack3>
-References: <49ac1697-5235-ca2e-2738-f0399c26d718@linaro.org>
- <20220519122353.eqpnxiaybvobfszb@quack3.lan>
- <e9ccb919-1616-f94f-c465-7024011ad8e5@linaro.org>
+        Fri, 20 May 2022 05:51:24 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7614D57179
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 02:51:20 -0700 (PDT)
+Received: from fsav412.sakura.ne.jp (fsav412.sakura.ne.jp [133.242.250.111])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 24K9pFeC028974;
+        Fri, 20 May 2022 18:51:15 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav412.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav412.sakura.ne.jp);
+ Fri, 20 May 2022 18:51:15 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav412.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 24K9pFPN028969
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Fri, 20 May 2022 18:51:15 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <5f417d30-34a7-8da1-0ad5-33bd750582c7@I-love.SAKURA.ne.jp>
+Date:   Fri, 20 May 2022 18:51:12 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e9ccb919-1616-f94f-c465-7024011ad8e5@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v3] workqueue: Wrap flush_workqueue() using a macro
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+References: <d34dac10-c12f-8bda-35c4-9cb158781db2@I-love.SAKURA.ne.jp>
+ <a6288570ed3534b0316723061f5604e3871accef.camel@perches.com>
+ <6e4ed62e-888b-6e7a-c13d-67656f39ca94@I-love.SAKURA.ne.jp>
+ <738afe71-2983-05d5-f0fc-d94efbdf7634@I-love.SAKURA.ne.jp>
+ <YnQKNea6KWFaWNis@slm.duckdns.org>
+ <a0d6b5e4-b9c8-1a43-570f-4c73b0f6fc0c@I-love.SAKURA.ne.jp>
+ <Yn0538VavQPv+/Ws@slm.duckdns.org>
+ <7b2fecdb-59ae-2c54-5a5b-774ef7054d1b@I-love.SAKURA.ne.jp>
+ <1c1b272b-239c-e1d1-84de-47d02feb911e@I-love.SAKURA.ne.jp>
+ <YodK1czmhZtGmJ8E@slm.duckdns.org>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <YodK1czmhZtGmJ8E@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 19-05-22 16:14:17, Tadeusz Struk wrote:
-> On 5/19/22 05:23, Jan Kara wrote:
-> > Hi!
-> > 
-> > On Tue 10-05-22 15:28:38, Tadeusz Struk wrote:
-> > > Syzbot found another BUG in ext4_writepages [1].
-> > > This time it complains about inode with inline data.
-> > > C reproducer can be found here [2]
-> > > I was able to trigger it on 5.18.0-rc6
-> > > 
-> > > [1] https://syzkaller.appspot.com/bug?id=a1e89d09bbbcbd5c4cb45db230ee28c822953984
-> > > [2] https://syzkaller.appspot.com/text?tag=ReproC&x=129da6caf00000
-> > 
-> > Thanks for report. This should be fixed by:
-> > 
-> > https://lore.kernel.org/all/20220516012752.17241-1-yebin10@huawei.com/
+On 2022/05/20 17:01, Tejun Heo wrote:
+>> +/*
+>> + * Detect attempt to flush system-wide workqueues at compile time when possible.
+>> + * See https://lkml.kernel.org/r/49925af7-78a8-a3dd-bce6-cfc02e1a9236@I-love.SAKURA.ne.jp for
+>> + * reasons and steps for converting system-wide workqueues into local workqueues.
+>> + */
+>> +#define flush_workqueue(wq)						\
+>> +({									\
+>> +	BUILD_BUG_ON_MSG(__builtin_constant_p(&(wq) == &system_wq) &&	\
+>> +			 &(wq) == &system_wq,				\
+>> +			 "Please avoid flushing system_wq.");		\
 > 
-> 
-> In case of the syzbot bug there is something messed up with PAGE DIRTY flags
-> and the way syzbot sets up the write. This is what triggers the crash:
+> It kinda bothers me that this causes a build failure. It'd be better if we
+> can trigger #warning instead. I'm not sure whether there'd be a clean way to
+> do it tho. Maybe just textual matching would provide similar coverage? How
+> did you test this?
 
-Can you tell me where exactly we hit the bug? I've now noticed that this is
-on 5.10 kernel and on vanilla 5.10 there's no BUG_ON on line 2753.
+This does not cause a build failure, for this wrapping happens only if
+flush_workqueue() appears between "#define flush_workqueue(wq)" and
+"#undef flush_workqueue". Only flush_scheduled_work() in include/linux/workqueue.h
+calls flush_workqueue(system_wq), and flush_scheduled_work() is defined
+before the "#define flush_workqueue(wq)" is defined.
 
-> $ ftrace -f ./repro
-> ...
-> [pid  2395] open("./bus", O_RDWR|O_CREAT|O_SYNC|O_NOATIME, 000 <unfinished ...>
-> [pid  2395] <... open resumed> )        = 6
-> ...
-> [pid  2395] write(6, "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0", 22 <unfinished ...>
-> ...
-> [pid  2395] <... write resumed> )       = 22
-> 
-> One way I could fix it was to clear the PAGECACHE_TAG_DIRTY on the mapping in
-> ext4_try_to_write_inline_data() after the page has been updated:
-> 
-> diff --git a/fs/ext4/inline.c b/fs/ext4/inline.c
-> index 9c076262770d..e4bbb53fa26f 100644
-> --- a/fs/ext4/inline.c
-> +++ b/fs/ext4/inline.c
-> @@ -715,6 +715,7 @@ int ext4_try_to_write_inline_data(struct address_space *mapping,
->  			put_page(page);
->  			goto out_up_read;
->  		}
-> +		__xa_clear_mark(&mapping->i_pages, 0, PAGECACHE_TAG_DIRTY);
->  	}
->  	ret = 1;
-> 
-> Please let me know it if makes sense any I will send a proper patch.
+And use of #warning directive breaks building with -Werror option.
 
-No, this looks really wrong... We need to better understand what's going
-on.
+> 
+>>  #endif
+>> diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+>> index 0d2514b4ff0d..08255c332e4b 100644
+>> --- a/kernel/workqueue.c
+>> +++ b/kernel/workqueue.c
+>> @@ -2794,6 +2794,7 @@ static bool flush_workqueue_prep_pwqs(struct workqueue_struct *wq,
+>>   * This function sleeps until all work items which were queued on entry
+>>   * have finished execution, but it is not livelocked by new incoming ones.
+>>   */
+>> +#undef flush_workqueue
+>>  void flush_workqueue(struct workqueue_struct *wq)
+> 
+> Maybe rename the function to __flush_workqueue() instead of undef'ing the
+> macro?
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+I prefer not adding __ prefix, for flush_workqueue() is meant as a public function.
+For easier life of kernel message parsers, I don't feel reason to dare to rename.
+
+But if you still prefer renaming, I will change flush_workqueue() as an inline function
+in include/linux/workqueue.h which calls __flush_workqueue() in kernel/workqueue.c.
+

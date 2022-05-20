@@ -2,122 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFCF652E4E8
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 08:23:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4697952E4E9
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 08:23:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345789AbiETGUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 02:20:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47830 "EHLO
+        id S1345794AbiETGWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 02:22:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233905AbiETGUD (ORCPT
+        with ESMTP id S232003AbiETGWq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 02:20:03 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF7F14C74D;
-        Thu, 19 May 2022 23:20:00 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24JJnLmo022160;
-        Fri, 20 May 2022 08:19:39 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=efeJifdma56rD3trwjzxCU9cZ0DK0SMJX02sClHrbfw=;
- b=duJP13Um8k8SytXA95+J6+41SUITXlFftu0VVJusXjoXGlWE+hO9McLhFxdnCVLFtko1
- ZmSdCQpkEndPusIF/r9q5pcVDvxYw/w4vA2uL/mDMWuAE/RyTisKju+kfTIxG/5rT75w
- sf2k1ODFUeXbP3rmTs5q2suSUrnh5Zi4ZauLVONb3/P8W/k3AVM8sS7/R/C6/sEKEc6/
- +x50g20BkAv+OK8L5ktVfvxs0SiDpsdA+krPtVMSDNX2Kn7RBdZ7LbEnPkGKMwRiUGjk
- v7bBF8qzczUzLu9zTPVm9QNOMIqopusYnZrRV1If34WISsbNJAAEHRn2BF5iqXkCC+Kk nA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3g23aj62rn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 May 2022 08:19:39 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 619B410002A;
-        Fri, 20 May 2022 08:19:37 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 58640210F73;
-        Fri, 20 May 2022 08:19:37 +0200 (CEST)
-Received: from [10.201.20.162] (10.75.127.49) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Fri, 20 May
- 2022 08:19:36 +0200
-Message-ID: <6f3de705-7db5-584c-1b3a-3ff7fb5c9096@foss.st.com>
-Date:   Fri, 20 May 2022 08:19:36 +0200
+        Fri, 20 May 2022 02:22:46 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E2EBC6CF
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 23:22:43 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id c12so9488586eds.10
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 23:22:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=2qNVFmiF/TTMdfF9KQaUQuxRKJ4iuZ6iN+QlrxgUKnA=;
+        b=SFqt9UOrMboZYYQDF1PI76h4elHYHxG9uQtEJeGv3ZvDqDMBr9VzkLWaLhdRXWG2SH
+         1+OV1sAY8Wvdbb4ZXAE7Eh3aPpJXBYh7e276E8QCCCTG5NowqLGohiwSS7H/Rztz5Otg
+         pklPeKeyiicDHIjwDmwePAzTtGdZxNGc8bqZCIwQ9qebOzQbOYT3XXStluuiQzNYZ0+M
+         /gy0KzA1+HEkAzFNAH5aiH6H2FBLjYakLk/CzQaew8o9P6mP2jA31s0L/AG+MW4SBP14
+         Yg6At+iZtGX/4zp151xto235Yk3ipky07JrMfaNrC0pagnGaq/1J/nqO8kbOZYlQEphS
+         gjxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=2qNVFmiF/TTMdfF9KQaUQuxRKJ4iuZ6iN+QlrxgUKnA=;
+        b=LZuJfKywj4Za8bOPswuEwe0Tp+TjHe9SLTWwECcVLC4ON40og/NzTrMtXevSvaD4BT
+         6ALAhXpyGAS1fEh8btxTcZ+eTeMDw4RpAtgJiRHEV073cGv6T3o99uRIPySBcIo9L85h
+         JDGh+uIYeW+9rdOoppsRdSWU8TQ12LFXHhnEjr/HTPdx03chnPewGRzs7DD5/amHLsx8
+         xjpu1EuxQrCg1i2jJRMshDCV0oMhdE9k+ql5yj+k53B4My6+n6tF9Grvo/7APmEa+NtM
+         BoSH4MbKmE6os08xpS+xEAigIdo5IRv35gZ7kRvZrtAl1xwpeXyhuIJu22VySR4yVPsB
+         7syg==
+X-Gm-Message-State: AOAM531yzioriclKNRNIiA6nVcmkF9gkQcTLa7/tdlngqpcLK6ggzf4D
+        SL3QLSK9ZKlNSxSl+LCg6i0=
+X-Google-Smtp-Source: ABdhPJw53K8igu5RpJ7t4nDpoJn09N8/AdK9nO7GxYmBWHaKQiibcUV7d6mxgSlKXJ6K0kEE0Sds7g==
+X-Received: by 2002:aa7:d6c3:0:b0:42a:cc78:1764 with SMTP id x3-20020aa7d6c3000000b0042acc781764mr9089918edr.134.1653027761559;
+        Thu, 19 May 2022 23:22:41 -0700 (PDT)
+Received: from ?IPV6:2a02:908:1256:79a0:66f:9303:6022:1507? ([2a02:908:1256:79a0:66f:9303:6022:1507])
+        by smtp.gmail.com with ESMTPSA id qs24-20020a170906459800b006f3ef214dabsm2886921ejc.17.2022.05.19.23.22.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 May 2022 23:22:41 -0700 (PDT)
+Message-ID: <045157bb-31a0-2d76-18b7-4272fab218ef@gmail.com>
+Date:   Fri, 20 May 2022 08:22:39 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
-Subject: Re: [PATCH v2 7/9] serial: st-asc: Sanitize CSIZE and correct PARENB
- for CS7
+Subject: Re: [PATCH] Revert "workqueue: remove unused cancel_work()"
 Content-Language: en-US
-To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        <linux-serial@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@st.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220519081808.3776-1-ilpo.jarvinen@linux.intel.com>
- <20220519081808.3776-8-ilpo.jarvinen@linux.intel.com>
-From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
-In-Reply-To: <20220519081808.3776-8-ilpo.jarvinen@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+To:     Lai Jiangshan <jiangshanlai@gmail.com>,
+        Andrey Grodzovsky <andrey.grodzovsky@amd.com>
+Cc:     Tejun Heo <tj@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        amd-gfx@lists.freedesktop.org, Christian.Koenig@amd.com
+References: <20220519135642.83209-1-andrey.grodzovsky@amd.com>
+ <CAJhGHyBQ60Lh3WZCa+2cE4T36t3vjNxYTBCxS7J0xhZr8Eb2wg@mail.gmail.com>
+ <e1e2e63d-a1a9-12ad-97a7-a3771210edda@amd.com>
+ <CAJhGHyC7VLM1PnXMu2zmdX=xtSNKo6VGO5p0AkUnaaMsuZytpA@mail.gmail.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
+In-Reply-To: <CAJhGHyC7VLM1PnXMu2zmdX=xtSNKo6VGO5p0AkUnaaMsuZytpA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.75.127.49]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-20_02,2022-05-19_03,2022-02-23_01
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ilpo
+Am 20.05.22 um 02:47 schrieb Lai Jiangshan:
+> On Thu, May 19, 2022 at 11:04 PM Andrey Grodzovsky
+> <andrey.grodzovsky@amd.com> wrote:
+>> See this patch-set https://www.spinics.net/lists/amd-gfx/msg78514.html, specifically patch
+>> 'drm/amdgpu: Switch to delayed work from work_struct.
+>>
+>> I will just reiterate here -
+>>
+>> We need to be able to do non blocking cancel pending reset works
+>> from within GPU reset. Currently kernel API allows this only
+>> for delayed_work and not for work_struct.
+>>
+> I'm OK with the change.
+>
+> With an updated changelog:
+>
+> Reviewed-by: Lai Jiangshan<jiangshanlai@gmail.com>
 
-On 5/19/22 10:18, Ilpo Järvinen wrote:
-> Only CS7 and CS8 seem supported but CSIZE is not sanitized from CS5 or
-> CS6 to CS8. In addition, ASC_CTL_MODE_7BIT_PAR suggests that CS7 has
-> to have parity, thus add PARENB.
-> 
-> Incorrect CSIZE results in miscalculation of the frame bits in
-> tty_get_char_size() or in its predecessor where the roughly the same
-> code is directly within uart_update_timeout().
-> 
-> Cc: Srinivas Kandagatla <srinivas.kandagatla@st.com>
-> Fixes: c4b058560762 (serial:st-asc: Add ST ASC driver.)
-> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> ---
->  drivers/tty/serial/st-asc.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/tty/serial/st-asc.c b/drivers/tty/serial/st-asc.c
-> index d7fd692286cf..1b0da603ab54 100644
-> --- a/drivers/tty/serial/st-asc.c
-> +++ b/drivers/tty/serial/st-asc.c
-> @@ -535,10 +535,14 @@ static void asc_set_termios(struct uart_port *port, struct ktermios *termios,
->  	/* set character length */
->  	if ((cflag & CSIZE) == CS7) {
->  		ctrl_val |= ASC_CTL_MODE_7BIT_PAR;
-> +		cflag |= PARENB;
->  	} else {
->  		ctrl_val |= (cflag & PARENB) ?  ASC_CTL_MODE_8BIT_PAR :
->  						ASC_CTL_MODE_8BIT;
-> +		cflag &= ~CSIZE;
-> +		cflag |= CS8;
->  	}
-> +	termios->c_cflag = cflag;
->  
->  	/* set stop bit */
->  	ctrl_val |= (cflag & CSTOPB) ? ASC_CTL_STOP_2BIT : ASC_CTL_STOP_1BIT;
+Good morning guys,
 
-Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
+for the patch itself Reviewed-by: Christian König <christian.koenig@amd.com>
 
-Thanks
-Patrice
+And just for the record: We plan to push this upstream through the drm 
+branches, if anybody has any objections to that please speak up.
+
+Thanks,
+Christian.
+
+>
+>
+> Thanks
+> Lai
+

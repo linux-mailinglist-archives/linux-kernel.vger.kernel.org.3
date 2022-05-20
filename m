@@ -2,155 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F112F52F133
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 18:59:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 225A352F137
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 19:00:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351988AbiETQ72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 12:59:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48420 "EHLO
+        id S1351995AbiETRAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 13:00:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352002AbiETQ70 (ORCPT
+        with ESMTP id S242208AbiETRAJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 12:59:26 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7274F185CA7
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 09:59:24 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id v5-20020a17090a7c0500b001df84fa82f8so8338849pjf.5
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 09:59:24 -0700 (PDT)
+        Fri, 20 May 2022 13:00:09 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF1217CCB0
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 10:00:09 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id v14so7355017qtc.3
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 10:00:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xYQDC1M1CZuV48ZKXFN2Cts3NE6JaCCl55IecsECCIQ=;
-        b=M2zhhYWqVviqmDNnxEiQDv/RJlQXUZm/wKUzFX2XXcauWrMuLZcv/0U470u5TYKyoe
-         tt/lDtFS4I/NNDdX/kbT1xYfUIDVLRX4kCTtrC7wvzXhmoSbmsfIsW/dzAg8Jq+9PyzZ
-         CmeH0rP9fPtVaTpXNZj6bBnLN6DWF9xBvWWbA=
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=fFacJbvwa5BeiY3szVOg+2bHWvSVuVrSCav3PMs3Wy4=;
+        b=FTtqHS4Ab3DM4iXG5smV6wqAV7NigY5YOsrNfdM9EDqDL5th5wGo+wZVRy8FzYswDT
+         SDGetT+iY1qj8QP7mFHxOIrcrxoTg1NqhzsPapXSFVu5aIeW1EAtipIjCmrRcUz29+Bf
+         hWHp4zj09YNJkFNnFMW8OiKSexYuzZGbIkol9548EZJ9Rf41Y30NSDUob2I7XkCeZl4O
+         pfSVSMFREIQS6MrbI490t5eTt2FG/rgno1k87u3e7A+WECLqsnH9niksYJaD+/E5R528
+         P/0JMNG2HVIKLA4xI7BcX1v1jJ5kDukehFUYmZ7xykFZntaS5Z58ilBHB5ZecS0fTxju
+         EZ3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xYQDC1M1CZuV48ZKXFN2Cts3NE6JaCCl55IecsECCIQ=;
-        b=2ZnzBorSYL8kWDsuEf7RXxniZKWjidT9NRwZ9Om1kNup7aWSoH1AdtOJnO9DL8nCLJ
-         Qt5zMMq6KbjqcTGjJY+zi68Z2Bes6Vv7hkTU8gCbrda252oOjj6NyOJ1LBSpkrgqBRxh
-         FoDRYXU2y0XNZX8lewMQ0/4jOG0S+/hgqJwTHGnqC0/N57ehG22Vc4tVMvqImPAljSvG
-         IRZwldSSLEoihY/XOwJyy/YahbEKmgE6Ajq3afJX/5fO50yoowgySJPJUgE19mwjLfyD
-         skjffk6hF0hLin5K230g/8jG3UlcPkruIJEflLvHcaB1Spf4BTjIGlm6doCVDjAc+hvA
-         dWKw==
-X-Gm-Message-State: AOAM530+EsZWlQChjBoUHlkf7K+3EnyIBr9kIN/g8nPSKqb2BNWNZ9DS
-        8AJgM6KON2u7x7HwS+u+N58HnQ==
-X-Google-Smtp-Source: ABdhPJxjRfg0cpH+6s9pfLq6EVrFAcB33wko4OyN8aWvmZyc7qC4HjGFRusHIjWqBLjPgzFWHhq/pQ==
-X-Received: by 2002:a17:902:6a85:b0:161:96bc:ef5d with SMTP id n5-20020a1709026a8500b0016196bcef5dmr10886093plk.46.1653065964024;
-        Fri, 20 May 2022 09:59:24 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id c27-20020aa7953b000000b0050dc762814fsm2118848pfp.41.2022.05.20.09.59.23
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=fFacJbvwa5BeiY3szVOg+2bHWvSVuVrSCav3PMs3Wy4=;
+        b=AsT21lnR78uprTHDRU+ffdCQsGav3EdKbytEUU66TkJwhGrpv/N/4WkqYzIxDwrKHU
+         v4XOS6Hr/nyfGpj2f+JQ299NK+MSJkyLeSsK/04N3/BXYYakBQ8HiF43EcUTSWtRiWyR
+         j+YZeGbB+48uHAxzxbNrMX6tsOetMRS1uRyWAEIk+wBJqAIBSRXqVl9iJjugXTY2peJZ
+         VtPwhfhpS0imjrKG1uuNKNfQrOSswqXMTWes2ATsJTcb3tTzp4157RCgZUF2y0QxXq1c
+         rI/ZBXDd9Hsk/nwOPVPkA/F0QoV1EMh+OgNabkmdGg/xBGkd/CLdNLNiDXXw4gll/fI7
+         3sdQ==
+X-Gm-Message-State: AOAM531t5QKa7qHDK1SnYEFt1mL1mKVw6MtTnugPT62TRsdLvCI+CNIk
+        SHmmco9ZcvlMYkYNOZHKCg==
+X-Google-Smtp-Source: ABdhPJwJLVP/OySs/WRd/Wh6kqhmG3bqXMDgdLqLgevH4DAll8yOHHXdgwbOB6cDskW54cnK9Iwx3Q==
+X-Received: by 2002:ac8:7f01:0:b0:2f9:1c7d:c68 with SMTP id f1-20020ac87f01000000b002f91c7d0c68mr3619868qtk.504.1653066008225;
+        Fri, 20 May 2022 10:00:08 -0700 (PDT)
+Received: from moria.home.lan (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
+        by smtp.gmail.com with ESMTPSA id k12-20020ac8478c000000b002f3d7c13a24sm13041qtq.4.2022.05.20.10.00.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 09:59:23 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Jan Harkes <jaharkes@cs.cmu.edu>
-Cc:     Kees Cook <keescook@chromium.org>, coda@cs.cmu.edu,
-        codalist@coda.cs.cmu.edu, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH] fs/coda: Do not use partially allocated struct
-Date:   Fri, 20 May 2022 09:59:22 -0700
-Message-Id: <20220520165922.2140450-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.32.0
+        Fri, 20 May 2022 10:00:07 -0700 (PDT)
+Date:   Fri, 20 May 2022 13:00:05 -0400
+From:   Kent Overstreet <kent.overstreet@gmail.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Dave Chinner <dchinner@redhat.com>,
+        linux-kernel@vger.kernel.org, Hillf Danton <hdanton@sina.com>
+Subject: Re: [PATCH v3 2/6] mm: shrinkers: introduce debugfs interface for
+ memory shrinkers
+Message-ID: <20220520170005.a3dlxk6a2qbrjdoq@moria.home.lan>
+References: <20220509183820.573666-1-roman.gushchin@linux.dev>
+ <20220509183820.573666-3-roman.gushchin@linux.dev>
+ <d938e52e-3704-d095-cafe-a6218701896a@wanadoo.fr>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3530; h=from:subject; bh=EWsLugKK7JxpFFTFhQ1Z0fK45IDltRDRvfWym7LQs3Q=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBih8jpTzLdzGg2nhFSnqG3MKgGXprAQ22QYIvmLkld ioSekFuJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYofI6QAKCRCJcvTf3G3AJijWEA CDYjMcRBUsPF1YvvwLlPdbR7tj2Cxwbaz3jZwo8+bmpf/QPPIQ0LZ/zs8oiCqxn+gRqAoYyADk9AjI Ewg5kwPFd1gb+hlb5VlEmW26dR9ZJ7t1WOMLRmkf80g7LtwEasxIhhVrsxNgxB2RaM2KwHE7fzVhF0 0AVOj5tdhU8bdb4LsGUSEKHHM6W1E6oHRRUiQ5l3/J7JoqGBHonv/ZDf3aNCunYAzUD+Aylc/FI1vT grQ5UFERil8mOHjF7+pCXaTf6ghvCmZdbvabAFbJJo+glzzddZ+GTxT1CZJk+/+gtttZvNFrffEdn/ KqC2Byn+inuM6iUzSPDsOTRBriPLwEXmui9ALV5i81A/o1x2q6uHsCuWka5Sbm001GfbVqbPM15oV+ ejjzI13Qpy3ut8hbZrjWqj87aDgY2/Pev46nG1b06kWuKrphuN6OPQqXpb3hGmiLxmLeGhtZWDFJEG d1TG8suzvAIUWUpT8+/j8zWBiqCmPvS3apGg6QmKH3P3Kkelx3XDsNuEjlkFXhX03UOz0ugce5g3t4 uJ6ZqU57a2b4wuPaETGkK+CsxQAMX/IsKcMZUAXRxC1wPqBB2ZyOWr0YIX3Iqc+fyVeniLracfiG7o 9fYFFVCMR32Vg5XRpil38WXEsAxcVITGhJ1+g0q8ifv/3Zu9G2EOTjlSl4kw==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <d938e52e-3704-d095-cafe-a6218701896a@wanadoo.fr>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-GCC 12 does not like seeing a partially allocated structure being used,
-especially when a pointer is being passed out of function scope. Since
-only the struct coda_in_hdr member of union inputArgs is being allocated
-and used, just replace union inputArgs with struct coda_in_hdr.
+On Fri, May 20, 2022 at 06:58:12PM +0200, Christophe JAILLET wrote:
+> Le 09/05/2022 à 20:38, Roman Gushchin a écrit :
+> > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> > index 3fd7a2e9eaf1..5fa65a649798 100644
+> > --- a/lib/Kconfig.debug
+> > +++ b/lib/Kconfig.debug
+> > @@ -733,6 +733,15 @@ config SLUB_STATS
+> >   	  out which slabs are relevant to a particular load.
+> >   	  Try running: slabinfo -DA
+> > +config SHRINKER_DEBUG
+> > +	default y
+> 
+> The previous version of the serie had default 'n'.
+> Is it intentional to have it now activated by default? It looked more like a
+> tuning functionality when fine grained mangement of shrinker is needed.
 
-../fs/coda/upcall.c: In function 'coda_upcall':
-../fs/coda/upcall.c:801:22: warning: array subscript 'union inputArgs[0]' is partly outside array bounds of 'unsigned char[20]' [-Warray-bounds]
-  801 |         sig_inputArgs->ih.opcode = CODA_SIGNAL;
-      |                      ^~
-In file included from ../include/linux/fs.h:45,
-                 from ../include/linux/huge_mm.h:8,
-                 from ../include/linux/mm.h:700,
-                 from ../fs/coda/upcall.c:22:
-In function 'kvmalloc',
-    inlined from 'kvzalloc' at ../include/linux/slab.h:758:9,
-    inlined from 'coda_upcall' at ../fs/coda/upcall.c:794:18:
-../include/linux/slab.h:750:16: note: object of size 20 allocated by 'kvmalloc_node'
-  750 |         return kvmalloc_node(size, flags, NUMA_NO_NODE);
-      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-../fs/coda/upcall.c: In function 'coda_upcall':
-../fs/coda/upcall.c:802:22: warning: array subscript 'union inputArgs[0]' is partly outside array bounds of 'unsigned char[20]' [-Warray-bounds]
-  802 |         sig_inputArgs->ih.unique = req->uc_unique;
-      |                      ^~
-In function 'kvmalloc',
-    inlined from 'kvzalloc' at ../include/linux/slab.h:758:9,
-    inlined from 'coda_upcall' at ../fs/coda/upcall.c:794:18:
-../include/linux/slab.h:750:16: note: object of size 20 allocated by 'kvmalloc_node'
-  750 |         return kvmalloc_node(size, flags, NUMA_NO_NODE);
-      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Cc: Jan Harkes <jaharkes@cs.cmu.edu>
-Cc: coda@cs.cmu.edu
-Cc: codalist@coda.cs.cmu.edu
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- fs/coda/upcall.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
-
-diff --git a/fs/coda/upcall.c b/fs/coda/upcall.c
-index 59f6cfd06f96..21e4f5f446b2 100644
---- a/fs/coda/upcall.c
-+++ b/fs/coda/upcall.c
-@@ -711,7 +711,7 @@ static int coda_upcall(struct venus_comm *vcp,
- 		       union inputArgs *buffer)
- {
- 	union outputArgs *out;
--	union inputArgs *sig_inputArgs;
-+	struct coda_in_hdr *ih;
- 	struct upc_req *req = NULL, *sig_req;
- 	int error;
- 
-@@ -791,22 +791,22 @@ static int coda_upcall(struct venus_comm *vcp,
- 	sig_req = kmalloc(sizeof(struct upc_req), GFP_KERNEL);
- 	if (!sig_req) goto exit;
- 
--	sig_inputArgs = kvzalloc(sizeof(struct coda_in_hdr), GFP_KERNEL);
--	if (!sig_inputArgs) {
-+	ih = kvzalloc(sizeof(*ih), GFP_KERNEL);
-+	if (!ih) {
- 		kfree(sig_req);
- 		goto exit;
- 	}
- 
- 	error = -EINTR;
--	sig_inputArgs->ih.opcode = CODA_SIGNAL;
--	sig_inputArgs->ih.unique = req->uc_unique;
-+	ih->opcode = CODA_SIGNAL;
-+	ih->unique = req->uc_unique;
- 
- 	sig_req->uc_flags = CODA_REQ_ASYNC;
--	sig_req->uc_opcode = sig_inputArgs->ih.opcode;
--	sig_req->uc_unique = sig_inputArgs->ih.unique;
--	sig_req->uc_data = (void *)sig_inputArgs;
--	sig_req->uc_inSize = sizeof(struct coda_in_hdr);
--	sig_req->uc_outSize = sizeof(struct coda_in_hdr);
-+	sig_req->uc_opcode = ih->opcode;
-+	sig_req->uc_unique = ih->unique;
-+	sig_req->uc_data = (void *)ih;
-+	sig_req->uc_inSize = sizeof(*ih);
-+	sig_req->uc_outSize = sizeof(*ih);
- 
- 	/* insert at head of queue! */
- 	list_add(&(sig_req->uc_chain), &vcp->vc_pending);
--- 
-2.32.0
-
+I think having this on by default if you've already enabled debugfs is smart -
+it doesn't add runtime overhead, just a bit of code, and things that make the
+system more observable are great to have on by default.

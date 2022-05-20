@@ -2,58 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 250DE52E954
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 11:51:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C530052E965
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 11:53:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347899AbiETJvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 05:51:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49298 "EHLO
+        id S1347975AbiETJxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 05:53:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348026AbiETJvY (ORCPT
+        with ESMTP id S229765AbiETJxq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 05:51:24 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7614D57179
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 02:51:20 -0700 (PDT)
-Received: from fsav412.sakura.ne.jp (fsav412.sakura.ne.jp [133.242.250.111])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 24K9pFeC028974;
-        Fri, 20 May 2022 18:51:15 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav412.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav412.sakura.ne.jp);
- Fri, 20 May 2022 18:51:15 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav412.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 24K9pFPN028969
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Fri, 20 May 2022 18:51:15 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <5f417d30-34a7-8da1-0ad5-33bd750582c7@I-love.SAKURA.ne.jp>
-Date:   Fri, 20 May 2022 18:51:12 +0900
+        Fri, 20 May 2022 05:53:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B614F14AA64
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 02:53:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653040424;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Dn41worp1wDo6PF9XTuid7e1vcUmdBzXAlYAQOBdYHw=;
+        b=c+YUzST+CH1zHSeMHmcuGTsAvbj1RF0y1h0tbAHPiITZ9TFYgAgHwU4OL7KKGy/d5J22w5
+        4aOPwfLE5295EOVgDzBOhaZENM+GmG0IzwSkuUgO/7zOJicXC4o/szP+76qDjqkpAUXPqK
+        1SP7eO3wn/8NpGJlJH/jFvOAAGPeBz4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-582-qZJNmVo8MNCtiMbwrNHQYA-1; Fri, 20 May 2022 05:53:39 -0400
+X-MC-Unique: qZJNmVo8MNCtiMbwrNHQYA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 180FD8015BA;
+        Fri, 20 May 2022 09:53:39 +0000 (UTC)
+Received: from T590 (ovpn-8-21.pek2.redhat.com [10.72.8.21])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 0562A492C3B;
+        Fri, 20 May 2022 09:53:34 +0000 (UTC)
+Date:   Fri, 20 May 2022 17:53:28 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     "yukuai (C)" <yukuai3@huawei.com>
+Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
+Subject: Re: [PATCH -next v2] blk-mq: fix panic during blk_mq_run_work_fn()
+Message-ID: <YodlGOo7vrUa7DZK@T590>
+References: <20220520032542.3331610-1-yukuai3@huawei.com>
+ <YocOsw6n3y11lNym@T590>
+ <2b7a82e0-1e33-e2ff-74d7-d80f152fdc75@huawei.com>
+ <afe9dec4-733d-88e9-850d-5c36e9201119@huawei.com>
+ <YodSlSm/sIC8G2iG@T590>
+ <dbe2deec-b007-470f-eb5a-35fae63ad134@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v3] workqueue: Wrap flush_workqueue() using a macro
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-References: <d34dac10-c12f-8bda-35c4-9cb158781db2@I-love.SAKURA.ne.jp>
- <a6288570ed3534b0316723061f5604e3871accef.camel@perches.com>
- <6e4ed62e-888b-6e7a-c13d-67656f39ca94@I-love.SAKURA.ne.jp>
- <738afe71-2983-05d5-f0fc-d94efbdf7634@I-love.SAKURA.ne.jp>
- <YnQKNea6KWFaWNis@slm.duckdns.org>
- <a0d6b5e4-b9c8-1a43-570f-4c73b0f6fc0c@I-love.SAKURA.ne.jp>
- <Yn0538VavQPv+/Ws@slm.duckdns.org>
- <7b2fecdb-59ae-2c54-5a5b-774ef7054d1b@I-love.SAKURA.ne.jp>
- <1c1b272b-239c-e1d1-84de-47d02feb911e@I-love.SAKURA.ne.jp>
- <YodK1czmhZtGmJ8E@slm.duckdns.org>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <YodK1czmhZtGmJ8E@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <dbe2deec-b007-470f-eb5a-35fae63ad134@huawei.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,50 +67,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/05/20 17:01, Tejun Heo wrote:
->> +/*
->> + * Detect attempt to flush system-wide workqueues at compile time when possible.
->> + * See https://lkml.kernel.org/r/49925af7-78a8-a3dd-bce6-cfc02e1a9236@I-love.SAKURA.ne.jp for
->> + * reasons and steps for converting system-wide workqueues into local workqueues.
->> + */
->> +#define flush_workqueue(wq)						\
->> +({									\
->> +	BUILD_BUG_ON_MSG(__builtin_constant_p(&(wq) == &system_wq) &&	\
->> +			 &(wq) == &system_wq,				\
->> +			 "Please avoid flushing system_wq.");		\
+On Fri, May 20, 2022 at 04:49:19PM +0800, yukuai (C) wrote:
+> 在 2022/05/20 16:34, Ming Lei 写道:
+> > On Fri, May 20, 2022 at 03:02:13PM +0800, yukuai (C) wrote:
+> > > 在 2022/05/20 14:23, yukuai (C) 写道:
+> > > > 在 2022/05/20 11:44, Ming Lei 写道:
+> > > > > On Fri, May 20, 2022 at 11:25:42AM +0800, Yu Kuai wrote:
+> > > > > > Our test report a following crash:
+> > > > > > 
+> > > > > > BUG: kernel NULL pointer dereference, address: 0000000000000018
+> > > > > > PGD 0 P4D 0
+> > > > > > Oops: 0000 [#1] SMP NOPTI
+> > > > > > CPU: 6 PID: 265 Comm: kworker/6:1H Kdump: loaded Tainted: G
+> > > > > > O      5.10.0-60.17.0.h43.eulerosv2r11.x86_64 #1
+> > > > > > Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+> > > > > > rel-1.12.1-0-ga5cab58-20220320_160524-szxrtosci10000 04/01/2014
+> > > > > > Workqueue: kblockd blk_mq_run_work_fn
+> > > > > > RIP: 0010:blk_mq_delay_run_hw_queues+0xb6/0xe0
+> > > > > > RSP: 0018:ffffacc6803d3d88 EFLAGS: 00010246
+> > > > > > RAX: 0000000000000006 RBX: ffff99e2c3d25008 RCX: 00000000ffffffff
+> > > > > > RDX: 0000000000000000 RSI: 0000000000000003 RDI: ffff99e2c911ae18
+> > > > > > RBP: ffffacc6803d3dd8 R08: 0000000000000000 R09: ffff99e2c0901f6c
+> > > > > > R10: 0000000000000018 R11: 0000000000000018 R12: ffff99e2c911ae18
+> > > > > > R13: 0000000000000000 R14: 0000000000000003 R15: ffff99e2c911ae18
+> > > > > > FS:  0000000000000000(0000) GS:ffff99e6bbf00000(0000)
+> > > > > > knlGS:0000000000000000
+> > > > > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > > > > CR2: 0000000000000018 CR3: 000000007460a006 CR4: 00000000003706e0
+> > > > > > Call Trace:
+> > > > > >    __blk_mq_do_dispatch_sched+0x2a7/0x2c0
+> > > > > >    ? newidle_balance+0x23e/0x2f0
+> > > > > >    __blk_mq_sched_dispatch_requests+0x13f/0x190
+> > > > > >    blk_mq_sched_dispatch_requests+0x30/0x60
+> > > > > >    __blk_mq_run_hw_queue+0x47/0xd0
+> > > > > >    process_one_work+0x1b0/0x350
+> > > > > >    worker_thread+0x49/0x300
+> > > > > >    ? rescuer_thread+0x3a0/0x3a0
+> > > > > >    kthread+0xfe/0x140
+> > > > > >    ? kthread_park+0x90/0x90
+> > > > > >    ret_from_fork+0x22/0x30
+> > > > > > 
+> > > > > > After digging from vmcore, I found that the queue is cleaned
+> > > > > > up(blk_cleanup_queue() is done) and tag set is
+> > > > > > freed(blk_mq_free_tag_set() is done).
+> > > > > > 
+> > > > > > There are two problems here:
+> > > > > > 
+> > > > > > 1) blk_mq_delay_run_hw_queues() will only be called from
+> > > > > > __blk_mq_do_dispatch_sched() if e->type->ops.has_work() return true.
+> > > > > > This seems impossible because blk_cleanup_queue() is done, and there
+> > > > > > should be no io. Commit ddc25c86b466 ("block, bfq: make bfq_has_work()
+> > > > > > more accurate") fix the problem in bfq. And currently ohter schedulers
+> > > > > > don't have such problem.
+> > > > > > 
+> > > > > > 2) 'hctx->run_work' still exists after blk_cleanup_queue().
+> > > > > > blk_mq_cancel_work_sync() is called from blk_cleanup_queue() to cancel
+> > > > > > all the 'run_work'. However, there is no guarantee that new 'run_work'
+> > > > > > won't be queued after that(and before blk_mq_exit_queue() is done).
+> > > > > 
+> > > > > It is blk_mq_run_hw_queue() caller's responsibility to grab
+> > > > > ->q_usage_counter for avoiding queue cleaned up, so please fix the user
+> > > > > side.
+> > > > > 
+> > > > Hi,
+> > > > 
+> > > > Thanks for your advice.
+> > > > 
+> > > > blk_mq_run_hw_queue() can be called async, in order to do that, what I
+> > > > can think of is that grab 'q_usage_counte' before queuing 'run->work'
+> > > > and release it after. Which is very similar to this patch...
+> > > 
+> > > Hi,
+> > > 
+> > > How do you think about following change:
+> > > 
+> > 
+> > I think the issue is in blk_mq_map_queue_type() which may touch tagset.
+> > 
+> > So please try the following patch:
+> > 
+> > 
+> > diff --git a/block/blk-mq.c b/block/blk-mq.c
+> > index ed1869a305c4..5789e971ac83 100644
+> > --- a/block/blk-mq.c
+> > +++ b/block/blk-mq.c
+> > @@ -2174,8 +2174,7 @@ static bool blk_mq_has_sqsched(struct request_queue *q)
+> >    */
+> >   static struct blk_mq_hw_ctx *blk_mq_get_sq_hctx(struct request_queue *q)
+> >   {
+> > -	struct blk_mq_hw_ctx *hctx;
+> > -
+> > +	struct blk_mq_ctx *ctx = blk_mq_get_ctx(q);
+> >   	/*
+> >   	 * If the IO scheduler does not respect hardware queues when
+> >   	 * dispatching, we just don't bother with multiple HW queues and
+> > @@ -2183,8 +2182,8 @@ static struct blk_mq_hw_ctx *blk_mq_get_sq_hctx(struct request_queue *q)
+> >   	 * just causes lock contention inside the scheduler and pointless cache
+> >   	 * bouncing.
+> >   	 */
+> > -	hctx = blk_mq_map_queue_type(q, HCTX_TYPE_DEFAULT,
+> > -				     raw_smp_processor_id());
+> > +	struct blk_mq_hw_ctx *hctx = blk_mq_map_queue(q, 0, ctx);
+> > +
+> >   	if (!blk_mq_hctx_stopped(hctx))
+> >   		return hctx;
+> >   	return NULL;
 > 
-> It kinda bothers me that this causes a build failure. It'd be better if we
-> can trigger #warning instead. I'm not sure whether there'd be a clean way to
-> do it tho. Maybe just textual matching would provide similar coverage? How
-> did you test this?
+> Hi, Ming
+> 
+> This patch do make sense, however, this doesn't fix the root cause, it
 
-This does not cause a build failure, for this wrapping happens only if
-flush_workqueue() appears between "#define flush_workqueue(wq)" and
-"#undef flush_workqueue". Only flush_scheduled_work() in include/linux/workqueue.h
-calls flush_workqueue(system_wq), and flush_scheduled_work() is defined
-before the "#define flush_workqueue(wq)" is defined.
+Isn't the root cause that tagset is referred after blk_cleanup_queue
+returns?
 
-And use of #warning directive breaks building with -Werror option.
+> just bypass the problem like commit ddc25c86b466 ("block, bfq: make
+> bfq_has_work() more accurate"), which will prevent
+> blk_mq_delay_run_hw_queues() to be called in such case.
+
+How can?
 
 > 
->>  #endif
->> diff --git a/kernel/workqueue.c b/kernel/workqueue.c
->> index 0d2514b4ff0d..08255c332e4b 100644
->> --- a/kernel/workqueue.c
->> +++ b/kernel/workqueue.c
->> @@ -2794,6 +2794,7 @@ static bool flush_workqueue_prep_pwqs(struct workqueue_struct *wq,
->>   * This function sleeps until all work items which were queued on entry
->>   * have finished execution, but it is not livelocked by new incoming ones.
->>   */
->> +#undef flush_workqueue
->>  void flush_workqueue(struct workqueue_struct *wq)
-> 
-> Maybe rename the function to __flush_workqueue() instead of undef'ing the
-> macro?
+> I do think we need to make sure 'run_work' doesn't exist after
+> blk_cleanup_queue().
 
-I prefer not adding __ prefix, for flush_workqueue() is meant as a public function.
-For easier life of kernel message parsers, I don't feel reason to dare to rename.
+Both hctx and request queue are fine to be referred after blk_cleanup_queue
+returns, what can't be referred is tagset.
 
-But if you still prefer renaming, I will change flush_workqueue() as an inline function
-in include/linux/workqueue.h which calls __flush_workqueue() in kernel/workqueue.c.
+
+Thanks,
+Ming
 

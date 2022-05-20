@@ -2,140 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CD9C52E8B4
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 11:23:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF45F52E8BA
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 11:25:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347694AbiETJXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 05:23:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57530 "EHLO
+        id S1347700AbiETJZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 05:25:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347627AbiETJXm (ORCPT
+        with ESMTP id S1344866AbiETJZe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 05:23:42 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4669191573;
-        Fri, 20 May 2022 02:23:40 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 24K9NB920026777, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 24K9NB920026777
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 20 May 2022 17:23:11 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Fri, 20 May 2022 17:23:11 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 20 May 2022 17:23:11 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::34e7:ab63:3da4:27c6]) by
- RTEXMBS04.realtek.com.tw ([fe80::34e7:ab63:3da4:27c6%5]) with mapi id
- 15.01.2308.021; Fri, 20 May 2022 17:23:11 +0800
-From:   Pkshih <pkshih@realtek.com>
-To:     "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
-CC:     "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "neojou@gmail.com" <neojou@gmail.com>,
-        "kvalo@kernel.org" <kvalo@kernel.org>,
-        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "martin.blumenstingl@googlemail.com" 
-        <martin.blumenstingl@googlemail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux@ulli-kroll.de" <linux@ulli-kroll.de>,
-        "neo_jou@realtek.com" <neo_jou@realtek.com>
-Subject: Re: [PATCH 06/10] rtw88: Add common USB chip support
-Thread-Topic: [PATCH 06/10] rtw88: Add common USB chip support
-Thread-Index: AQHYapDiqxMx5uVh8U2fFMFwvLZZx60m3hOAgAAUZgCAAAixAA==
-Date:   Fri, 20 May 2022 09:23:11 +0000
-Message-ID: <a0c7fb57d0e9c1a36f328f4e523643ba6009630f.camel@realtek.com>
-References: <20220518082318.3898514-1-s.hauer@pengutronix.de>
-         <20220518082318.3898514-7-s.hauer@pengutronix.de>
-         <e9ca08c6facb8916fb9e5cbad05447321d3d0f43.camel@realtek.com>
-         <20220520085156.GE25578@pengutronix.de>
-In-Reply-To: <20220520085156.GE25578@pengutronix.de>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.36.1-2 
-x-originating-ip: [172.16.17.21]
-x-kse-serverinfo: RTEXMBS04.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzUvMjAg5LiK5Y2IIDA3OjI3OjAw?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <876FF89BFAA1BE468B922ECF02786C6C@realtek.com>
-Content-Transfer-Encoding: base64
+        Fri, 20 May 2022 05:25:34 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE58225284
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 02:25:33 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id a11so7309571pff.1
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 02:25:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=aPTFbZr4LhKGppGQDkO7tNLWiZLizgW3cwR+POXjY4E=;
+        b=i/OUnOpe+L6EXkV0g2GBLh/LlkmTO2ABKbDeNNYBAIiqPBi7Po+V9JEX6+911ykRjL
+         t2M2j+RYB4XkLljq6P/kRFKJivx2S6CKWRBFLoXzRplrC+xBWkkeGBV6APfYjVsvThcF
+         rl8Fk/KxCGL7b0xFltVLp93SeGngyXLI31mpnRoXCiF8eiTVtcKBD67n8/P1KubzjsGF
+         jGJlbvut5C1a21qOhynvMcTC55oQ8VqS8dhTaKuBakv/vW/GwhYobJJ/+kY8GgISfyer
+         i4jZemgrU2cd8yv8hzVxS2NHjcsJTqpANPyZy5YXcbXUxRr/CvcOTGvvGWeRKYJgZNfX
+         VOHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=aPTFbZr4LhKGppGQDkO7tNLWiZLizgW3cwR+POXjY4E=;
+        b=7RjnGCmCo3Uhoe5vuz9xPk6jZ7mIHywlvSeSkoN9WRyPuHUWwVJTd8xdsDAjOdJSWX
+         zHsuvUQfO9AHd/8R+pVChA0kLPP05Zk13VbLI/vjaScappJLN89j8SWhj3i3idkUPIxg
+         zHfpSTtD7nUy2sMU4m+uLHI2+kOTrezhqoUFpAHvMM1QFLaIQ9ZQILYpmAaj8Upy/ojS
+         mQX3PYLlcIwrG8aG/6nTXN1e+UoFioHWa7RmLHG3Z//iO5ZenlTi9jDNE9wYPnKd03Jh
+         rW/AirZTRzdxDuQzf/uY4rkP+7nksTJ5oXb9JehXTVbz6lMKCmNCGaOETYe69bQmywga
+         vHow==
+X-Gm-Message-State: AOAM531g0uVUrxzYUTYgcIDUIz5VHf8zZnOsNxjmsh1JptDAspaZckzH
+        hQ9diZW+/5amYNOvKovsozg1kKbhwK4Zbccc+Cs=
+X-Google-Smtp-Source: ABdhPJzJ6l/pbV2vxgCsyyxnwB5/t9MO8LaSN+KONN6ZVqHZxtZAc5RvBOStUiQ/kY2EEDNsINNgUm+br2kawyaQus4=
+X-Received: by 2002:a05:6a00:e8e:b0:4fa:a52f:59cf with SMTP id
+ bo14-20020a056a000e8e00b004faa52f59cfmr9075732pfb.84.1653038733395; Fri, 20
+ May 2022 02:25:33 -0700 (PDT)
 MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Reply-To: dr.tracymedicinemed1@gmail.com
+Sender: traorekafando07@gmail.com
+Received: by 2002:a05:7300:7685:b0:60:d395:5d14 with HTTP; Fri, 20 May 2022
+ 02:25:32 -0700 (PDT)
+From:   Dr Tracy William <ra6277708@gmail.com>
+Date:   Fri, 20 May 2022 17:25:32 +0800
+X-Google-Sender-Auth: U20KsUiIlkHSeO5Q_W5tV1PMHSA
+Message-ID: <CACGK7qsTaCVASty7JP9vk-t75BQ5=VGvK7NsStSFO8Ld+ZBjng@mail.gmail.com>
+Subject: From Dr Tracy from United States
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:442 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4999]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [traorekafando07[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [traorekafando07[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [dr.tracymedicinemed1[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.4 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gRnJpLCAyMDIyLTA1LTIwIGF0IDEwOjUxICswMjAwLCBzLmhhdWVyQHBlbmd1dHJvbml4LmRl
-IHdyb3RlOg0KPiBPbiBGcmksIE1heSAyMCwgMjAyMiBhdCAwNzozOTowM0FNICswMDAwLCBQa3No
-aWggd3JvdGU6DQo+ID4gT24gV2VkLCAyMDIyLTA1LTE4IGF0IDEwOjIzICswMjAwLCBTYXNjaGEg
-SGF1ZXIgd3JvdGU6DQo+ID4gPiBBZGQgdGhlIGNvbW1vbiBiaXRzIGFuZCBwaWVjZXMgdG8gYWRk
-IFVTQiBzdXBwb3J0IHRvIHRoZSBSVFc4OCBkcml2ZXIuDQo+ID4gPiBUaGlzIGlzIGJhc2VkIG9u
-IGh0dHBzOi8vZ2l0aHViLmNvbS91bGxpLWtyb2xsL3J0dzg4LXVzYi5naXQgd2hpY2gNCj4gPiA+
-IGl0c2VsZiBpcyBmaXJzdCB3cml0dGVuIGJ5IE5lbyBKb3UuDQo+ID4gPiANCj4gPiA+IFNpZ25l
-ZC1vZmYtYnk6IG5lb19qb3UgPG5lb19qb3VAcmVhbHRlay5jb20+DQo+ID4gPiBTaWduZWQtb2Zm
-LWJ5OiBIYW5zIFVsbGkgS3JvbGwgPGxpbnV4QHVsbGkta3JvbGwuZGU+DQo+ID4gPiBTaWduZWQt
-b2ZmLWJ5OiBTYXNjaGEgSGF1ZXIgPHMuaGF1ZXJAcGVuZ3V0cm9uaXguZGU+DQo+ID4gPiAtLS0N
-Cj4gPiA+ICBkcml2ZXJzL25ldC93aXJlbGVzcy9yZWFsdGVrL3J0dzg4L0tjb25maWcgIHwgICAg
-MyArDQo+ID4gPiAgZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVhbHRlay9ydHc4OC9NYWtlZmlsZSB8
-ICAgIDIgKw0KPiA+ID4gIGRyaXZlcnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsvcnR3ODgvbWFjLmMg
-ICAgfCAgICAzICsNCj4gPiA+ICBkcml2ZXJzL25ldC93aXJlbGVzcy9yZWFsdGVrL3J0dzg4L21h
-aW4uYyAgIHwgICAgNSArDQo+ID4gPiAgZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVhbHRlay9ydHc4
-OC9tYWluLmggICB8ICAgIDQgKw0KPiA+ID4gIGRyaXZlcnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsv
-cnR3ODgvcmVnLmggICAgfCAgICAxICsNCj4gPiA+ICBkcml2ZXJzL25ldC93aXJlbGVzcy9yZWFs
-dGVrL3J0dzg4L3R4LmggICAgIHwgICAzMSArDQo+ID4gPiAgZHJpdmVycy9uZXQvd2lyZWxlc3Mv
-cmVhbHRlay9ydHc4OC91c2IuYyAgICB8IDEwNTEgKysrKysrKysrKysrKysrKysrKw0KPiA+ID4g
-IGRyaXZlcnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsvcnR3ODgvdXNiLmggICAgfCAgMTA5ICsrDQo+
-ID4gPiAgOSBmaWxlcyBjaGFuZ2VkLCAxMjA5IGluc2VydGlvbnMoKykNCj4gPiA+ICBjcmVhdGUg
-bW9kZSAxMDA2NDQgZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVhbHRlay9ydHc4OC91c2IuYw0KPiA+
-ID4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL25ldC93aXJlbGVzcy9yZWFsdGVrL3J0dzg4
-L3VzYi5oDQo+ID4gPiANCj4gPiANCj4gPiA+ICt9DQo+ID4gPiArDQo+ID4gPiArc3RhdGljIHZv
-aWQgcnR3X3VzYl9jYW5jZWxfcnhfYnVmcyhzdHJ1Y3QgcnR3X3VzYiAqcnR3dXNiKQ0KPiA+ID4g
-K3sNCj4gPiA+ICsJc3RydWN0IHJ4X3VzYl9jdHJsX2Jsb2NrICpyeGNiOw0KPiA+ID4gKwl1bnNp
-Z25lZCBsb25nIGZsYWdzOw0KPiA+ID4gKw0KPiA+ID4gKwlzcGluX2xvY2tfaXJxc2F2ZSgmcnR3
-dXNiLT5yeF9kYXRhX2xpc3RfbG9jaywgZmxhZ3MpOw0KPiA+ID4gKw0KPiA+ID4gKwl3aGlsZSAo
-dHJ1ZSkgew0KPiA+ID4gKwkJcnhjYiA9IGxpc3RfZmlyc3RfZW50cnlfb3JfbnVsbCgmcnR3dXNi
-LT5yeF9kYXRhX3VzZWQsDQo+ID4gPiArCQkJCQkJc3RydWN0IHJ4X3VzYl9jdHJsX2Jsb2NrLCBs
-aXN0KTsNCj4gPiA+ICsNCj4gPiA+ICsJCXNwaW5fdW5sb2NrX2lycXJlc3RvcmUoJnJ0d3VzYi0+
-cnhfZGF0YV9saXN0X2xvY2ssIGZsYWdzKTsNCj4gPiA+ICsNCj4gPiA+ICsJCWlmICghcnhjYikN
-Cj4gPiA+ICsJCQlicmVhazsNCj4gPiA+ICsNCj4gPiA+ICsJCXVzYl9raWxsX3VyYihyeGNiLT5y
-eF91cmIpOw0KPiA+ID4gKw0KPiA+ID4gKwkJc3Bpbl9sb2NrX2lycXNhdmUoJnJ0d3VzYi0+cnhf
-ZGF0YV9saXN0X2xvY2ssIGZsYWdzKTsNCj4gPiA+ICsJCWxpc3RfbW92ZSgmcnhjYi0+bGlzdCwg
-JnJ0d3VzYi0+cnhfZGF0YV9mcmVlKTsNCj4gPiA+ICsJfQ0KPiA+ID4gK30NCj4gPiANCj4gPiBU
-aGUgc3Bpbl9sb2NrIHBhaXJzIGFyZSBub3QgaW50dWl0aXZlLg0KPiA+IENhbiB3ZSBjaGFuZ2Ug
-dGhpcyBjaHVuayB0bw0KPiA+IA0KPiA+IHdoaWxlICh0cnVlKSB7DQo+ID4gICAgICBzcGluX2xv
-Y2soKTsNCj4gPiAgICAgIHJ4Y2IgPSBsaXN0X2ZpcnN0X2VudHJ5X29yX251bGwoKTsNCj4gPiAg
-ICAgIHNwaW5fdW5sb2NrKCkNCj4gPiANCj4gPiAgICAgIGlmICghcnhjYikNCj4gPiAgICAgICAg
-IHJldHVybjsNCj4gPiANCj4gPiAgICAgIHVzYl9mcmVlX3VyYigpOw0KPiA+IA0KPiA+ICAgICAg
-c3Bpbl9sb2NrKCk7DQo+ID4gICAgICBsaXN0X2RlbCgpOw0KPiA+ICAgICAgc3Bpbl91bmxvY2so
-KTsNCj4gPiB9DQo+ID4gDQo+ID4gVGhlIGRyYXdiYWNrIGlzIGxvY2svdW5sb2NrIHR3aWNlIGlu
-IHNpbmdsZSBsb29wLg0KPiANCj4gWWVzLCB0aGF0J3Mgd2h5IEkgZGlkIGl0IHRoZSB3YXkgSSBk
-aWQgOykNCj4gDQo+IEhvdyBhYm91dDoNCj4gDQo+IAl3aGlsZSAodHJ1ZSkgew0KPiAJCXVuc2ln
-bmVkIGxvbmcgZmxhZ3M7DQo+IA0KPiAJCXNwaW5fbG9ja19pcnFzYXZlKCZydHd1c2ItPnJ4X2Rh
-dGFfbGlzdF9sb2NrLCBmbGFncyk7DQo+IA0KPiAJCXJ4Y2IgPSBsaXN0X2ZpcnN0X2VudHJ5X29y
-X251bGwoJnJ0d3VzYi0+cnhfZGF0YV9mcmVlLA0KPiAJCQkJCQlzdHJ1Y3QgcnhfdXNiX2N0cmxf
-YmxvY2ssIGxpc3QpOw0KPiAJCWlmIChyeGNiKQ0KPiAJCQlsaXN0X2RlbCgmcnhjYi0+bGlzdCk7
-DQo+IA0KPiAJCXNwaW5fdW5sb2NrX2lycXJlc3RvcmUoJnJ0d3VzYi0+cnhfZGF0YV9saXN0X2xv
-Y2ssIGZsYWdzKTsNCj4gDQo+IAkJaWYgKCFyeGNiKQ0KPiAJCQlicmVhazsNCj4gDQo+IAkJdXNi
-X2ZyZWVfdXJiKHJ4Y2ItPnJ4X3VyYik7DQo+IAl9DQo+IA0KDQpXaXRoIHRoZSBuZXcgb25lLCBJ
-IGNhbiBlYXNpbHkgY2hlY2sgc3Bpbl9sb2NrL191bmxvY2sgaXMgcGFpcmVkLCBzbw0KSSB2b3Rl
-IGl0Lg0KDQotLQ0KUGluZy1LZQ0KDQoNCg==
+Hello Dear,
+
+how are you today,I hope you are doing great.
+
+It is my great pleasure to contact you,I want to make a new and
+special friend,I hope you don't mind. My name is Tracy William from
+the United States, Am an English and French nationalities. I will give
+you pictures and more details about my self as soon as i hear from
+you Kisses.
+
+Pls resply to my personal email(dr.tracymedicinemed1@gmail.com)
+
+Thanks.
+Tracy,

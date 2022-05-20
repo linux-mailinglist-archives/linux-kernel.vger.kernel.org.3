@@ -2,220 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D4F052F548
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 23:44:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 897A252F54C
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 23:46:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353763AbiETVo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 17:44:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34344 "EHLO
+        id S1353747AbiETVpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 17:45:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353714AbiETVoW (ORCPT
+        with ESMTP id S1352695AbiETVpj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 17:44:22 -0400
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE70F17B856;
-        Fri, 20 May 2022 14:44:21 -0700 (PDT)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-f16a3e0529so11772070fac.2;
-        Fri, 20 May 2022 14:44:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=xuAFxBe+Oh7r20VJCSRON1DgAE3jyT4SHtR5VWLH/zo=;
-        b=kzXmS6nC20v++UZ6fcRGldCByqP2sHf/AW9Msb8lKkIzCt/u2gSx79pnLnwkjYrLzY
-         E53jWKVqAB2EUmtUZPWJTHVNf/r+hZ7Hk5b+KwrlEYySsOnUphB0/6iaDL7BVLHyaypN
-         EcYlEKskmD5nWd2X7s0jzlztpkgg2j7Qxul3a45mBa0mE7lOodvUxMfX2wJY8l+71zG8
-         s/5gACxjYTp0TPhRcsUGP0qitJnWzhUsuR3aPUYk1bVO+oamfZrmRMm2kDf0FIyPCBsU
-         3l68wOXmE8SnnLtEgg4dJ/uIxLgD2rzcpLBqAXo3bq7KX+T0bcfi+6F8ZTXxqmYoPNq6
-         FW7A==
-X-Gm-Message-State: AOAM533vKwX8S3+7iPAW+SGxgefwhNN/3RisXzqq/GWHclvPICXoC4lb
-        bZLg8Dfu3D9L6cz2hF9kWxzy5+EBYg==
-X-Google-Smtp-Source: ABdhPJzORFGD0rbS+Q0lOcvCQedu3y3g3eorPA5fBEYyT++cB929na6HaNNNhnoQ5HQ//MeIXp9vjw==
-X-Received: by 2002:a05:6870:3292:b0:f1:2333:83c6 with SMTP id q18-20020a056870329200b000f1233383c6mr6723924oac.129.1653083060803;
-        Fri, 20 May 2022 14:44:20 -0700 (PDT)
-Received: from xps15.. (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.googlemail.com with ESMTPSA id e12-20020a056820060c00b0035eb4e5a6d8sm1615018oow.46.2022.05.20.14.44.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 14:44:20 -0700 (PDT)
-From:   Rob Herring <robh@kernel.org>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 2/2] dt-bindings: arm: Convert CoreSight CPU debug to DT schema
-Date:   Fri, 20 May 2022 16:44:16 -0500
-Message-Id: <20220520214416.302127-3-robh@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220520214416.302127-1-robh@kernel.org>
-References: <20220520214416.302127-1-robh@kernel.org>
+        Fri, 20 May 2022 17:45:39 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FB7D185CBA;
+        Fri, 20 May 2022 14:45:37 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 24KLjCF7022100
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 May 2022 17:45:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1653083116; bh=Kena1s74NfZpE/ieHVoWi+W9Tj+cPireegTJMkTYQ9Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=K/MlzjrH88/7BkC/Pt1fYXFhfFSaNv5AOfMMqBDmZulnsCbvSIu6afJzH18Dg3TFL
+         TPmv6srejeH0g5cbsCqb8RZmScwyeYzw0JVoKL6khT0y2cT1eYk3xiVM3XdQQlQjnh
+         /AhfdW4LJv7dC2bstYXB1OxiMNdD3Woc2wauGpfYhR4uOkYzdlbsX2NDapwRePK/jw
+         WtV9a80O7fuBLDD4zOw9mZ8CfqZ8YyrKhsvyYvvcnFUV2yfyWjqfZsFM9wnTWwG9cF
+         C/4f0wISNRYBkXD6WFzUHT+F9k0VNT9z8E/uxG985iDW3oMz9rgAcmnBief4IDKylz
+         nKv1dY/zFuzFg==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 84DFA15C3EC0; Fri, 20 May 2022 17:45:12 -0400 (EDT)
+Date:   Fri, 20 May 2022 17:45:12 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     Hillf Danton <hdanton@sina.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        syzbot <syzbot+9c3fb12e9128b6e1d7eb@syzkaller.appspotmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com,
+        syzkaller <syzkaller@googlegroups.com>
+Subject: Re: [syzbot] INFO: task hung in jbd2_journal_commit_transaction (3)
+Message-ID: <YogL6MCdYVrqGcRf@mit.edu>
+References: <00000000000032992d05d370f75f@google.com>
+ <20211219023540.1638-1-hdanton@sina.com>
+ <Yb6zKVoxuD3lQMA/@casper.infradead.org>
+ <20211221090804.1810-1-hdanton@sina.com>
+ <20211222022527.1880-1-hdanton@sina.com>
+ <YcKrHc11B/2tcfRS@mit.edu>
+ <CACT4Y+YHxkL5aAgd4wXPe-J+RG6_VBcPs=e8QpRM8=3KJe+GCg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACT4Y+YHxkL5aAgd4wXPe-J+RG6_VBcPs=e8QpRM8=3KJe+GCg@mail.gmail.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the CoreSight CPU debug binding to DT schema format.
+On Fri, May 20, 2022 at 01:57:07PM +0200, Dmitry Vyukov wrote:
+> 
+> Hi Ted,
+> 
+> Reviving this old thread re syzkaller using SCHED_FIFO.
+> 
+> It's a bit hard to restrict what the fuzzer can do if we give it
+> sched_setattr() and friends syscalls. We could remove them from the
+> fuzzer entirely, but it's probably suboptimal as well.
+> 
+> I see that setting up SCHED_FIFO is guarded by CAP_SYS_NICE:
+> https://elixir.bootlin.com/linux/v5.18-rc7/source/kernel/sched/core.c#L7264
+> 
+> And I see we drop CAP_SYS_NICE from the fuzzer process since 2019
+> (after a similar discussion):
+> https://github.com/google/syzkaller/commit/f3ad68446455a
+>
+> The latest C reproducer contains: ....
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- .../bindings/arm/arm,coresight-cpu-debug.yaml | 81 +++++++++++++++++++
- .../bindings/arm/coresight-cpu-debug.txt      | 49 -----------
- 2 files changed, 81 insertions(+), 49 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-cpu-debug.yaml
- delete mode 100644 Documentation/devicetree/bindings/arm/coresight-cpu-debug.txt
+For this particular report, there *was* no C reproducer.  There was
+only a syz reproducer:
 
-diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-cpu-debug.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-cpu-debug.yaml
-new file mode 100644
-index 000000000000..0a6bc03ebe00
---- /dev/null
-+++ b/Documentation/devicetree/bindings/arm/arm,coresight-cpu-debug.yaml
-@@ -0,0 +1,81 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/arm/arm,coresight-cpu-debug.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: CoreSight CPU Debug Component
-+
-+maintainers:
-+  - Mathieu Poirier <mathieu.poirier@linaro.org>
-+  - Mike Leach <mike.leach@linaro.org>
-+  - Leo Yan <leo.yan@linaro.org>
-+  - Suzuki K Poulose <suzuki.poulose@arm.com>
-+
-+description: |
-+  CoreSight CPU debug component are compliant with the ARMv8 architecture
-+  reference manual (ARM DDI 0487A.k) Chapter 'Part H: External debug'. The
-+  external debug module is mainly used for two modes: self-hosted debug and
-+  external debug, and it can be accessed from mmio region from Coresight and
-+  eventually the debug module connects with CPU for debugging. And the debug
-+  module provides sample-based profiling extension, which can be used to sample
-+  CPU program counter, secure state and exception level, etc; usually every CPU
-+  has one dedicated debug module to be connected.
-+
-+select:
-+  properties:
-+    compatible:
-+      contains:
-+        const: arm,coresight-cpu-debug
-+  required:
-+    - compatible
-+
-+allOf:
-+  - $ref: /schemas/arm/primecell.yaml#
-+
-+properties:
-+  compatible:
-+    items:
-+      - const: arm,coresight-cpu-debug
-+      - const: arm,primecell
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    maxItems: 1
-+
-+  cpu:
-+    description:
-+      A phandle to the cpu this debug component is bound to.
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+
-+  power-domains:
-+    maxItems: 1
-+    description:
-+      A phandle to the debug power domain if the debug logic has its own
-+      dedicated power domain. CPU idle states may also need to be separately
-+      constrained to keep CPU cores powered.
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - cpu
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    debug@f6590000 {
-+        compatible = "arm,coresight-cpu-debug", "arm,primecell";
-+        reg = <0xf6590000 0x1000>;
-+        clocks = <&sys_ctrl 1>;
-+        clock-names = "apb_pclk";
-+        cpu = <&cpu0>;
-+    };
-+...
-diff --git a/Documentation/devicetree/bindings/arm/coresight-cpu-debug.txt b/Documentation/devicetree/bindings/arm/coresight-cpu-debug.txt
-deleted file mode 100644
-index f1de3247c1b7..000000000000
---- a/Documentation/devicetree/bindings/arm/coresight-cpu-debug.txt
-+++ /dev/null
-@@ -1,49 +0,0 @@
--* CoreSight CPU Debug Component:
--
--CoreSight CPU debug component are compliant with the ARMv8 architecture
--reference manual (ARM DDI 0487A.k) Chapter 'Part H: External debug'. The
--external debug module is mainly used for two modes: self-hosted debug and
--external debug, and it can be accessed from mmio region from Coresight
--and eventually the debug module connects with CPU for debugging. And the
--debug module provides sample-based profiling extension, which can be used
--to sample CPU program counter, secure state and exception level, etc;
--usually every CPU has one dedicated debug module to be connected.
--
--Required properties:
--
--- compatible : should be "arm,coresight-cpu-debug"; supplemented with
--               "arm,primecell" since this driver is using the AMBA bus
--	       interface.
--
--- reg : physical base address and length of the register set.
--
--- clocks : the clock associated to this component.
--
--- clock-names : the name of the clock referenced by the code. Since we are
--                using the AMBA framework, the name of the clock providing
--		the interconnect should be "apb_pclk" and the clock is
--		mandatory. The interface between the debug logic and the
--		processor core is clocked by the internal CPU clock, so it
--		is enabled with CPU clock by default.
--
--- cpu : the CPU phandle the debug module is affined to. Do not assume it
--        to default to CPU0 if omitted.
--
--Optional properties:
--
--- power-domains: a phandle to the debug power domain. We use "power-domains"
--                 binding to turn on the debug logic if it has own dedicated
--		 power domain and if necessary to use "cpuidle.off=1" or
--		 "nohlt" in the kernel command line or sysfs node to
--		 constrain idle states to ensure registers in the CPU power
--		 domain are accessible.
--
--Example:
--
--	debug@f6590000 {
--		compatible = "arm,coresight-cpu-debug","arm,primecell";
--		reg = <0 0xf6590000 0 0x1000>;
--		clocks = <&sys_ctrl HI6220_DAPB_CLK>;
--		clock-names = "apb_pclk";
--		cpu = <&cpu0>;
--	};
--- 
-2.34.1
+> syzbot found the following issue on:
+> 
+> HEAD commit:    5472f14a3742 Merge tag 'for_linus' of git://git.kernel.org..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=11132113b00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=e3bdfd29b408d1b6
+> dashboard link: https://syzkaller.appspot.com/bug?extid=9c3fb12e9128b6e1d7eb
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14559113b00000
 
+So let me ask a counter question.  I thought syzbot tries to create a
+minimal reproducer?  So if the sched_setattr is a no-op, and is
+returning EPERM, why wasn't the sched_setattr line removed from the
+syz repro?
+
+As a side note, since in many cases running a reproducer can be
+painful, would it be possible for the syzkiller dashboard to provide
+the output of running "strace -f" while the reproducer is running?
+
+That would also especially help since even when there is a C
+reproducer, trying to understand what it is doing from reading the
+syzbot-generated C source code is often non-trivial, and strace does a
+much better job decoding what the !@#?@ the reproducer.  Another
+advantage of using strace is that it will also show us the return code
+from the system call, which would very quickly confirm whether the
+sched_setattr() was actually returning EPERM or not --- and it will
+decode the system call arguments in a way that I often wished would be
+included as comments in the syzbot-generated reproducer.
+
+Providing the strace output could significantly reduce the amount of
+upstream developer toil, and might therefore improve upstream
+developer engagement with syzkaller.
+
+Cheers,
+
+						- Ted

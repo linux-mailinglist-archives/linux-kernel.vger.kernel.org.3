@@ -2,140 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABB5852E569
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 08:54:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F10F52E56F
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 08:56:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346075AbiETGyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 02:54:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50256 "EHLO
+        id S1346080AbiETGzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 02:55:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238366AbiETGyr (ORCPT
+        with ESMTP id S242373AbiETGy5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 02:54:47 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E463514E2F8
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 23:54:46 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1nrwWy-00071N-Bi; Fri, 20 May 2022 08:54:36 +0200
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1nrwWx-0006qD-69; Fri, 20 May 2022 08:54:35 +0200
-Date:   Fri, 20 May 2022 08:54:35 +0200
-From:   "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
-To:     Pkshih <pkshih@realtek.com>
-Cc:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "neojou@gmail.com" <neojou@gmail.com>,
-        "kvalo@kernel.org" <kvalo@kernel.org>,
-        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "martin.blumenstingl@googlemail.com" 
-        <martin.blumenstingl@googlemail.com>,
-        "linux@ulli-kroll.de" <linux@ulli-kroll.de>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: Re: [PATCH 02/10] rtw88: Drop rf_lock
-Message-ID: <20220520065435.GB25578@pengutronix.de>
-References: <20220518082318.3898514-1-s.hauer@pengutronix.de>
- <20220518082318.3898514-3-s.hauer@pengutronix.de>
- <af80039404cb3eb9dd036ab5734ddea95d31cf49.camel@realtek.com>
+        Fri, 20 May 2022 02:54:57 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A14614E2F9
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 23:54:56 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-2ff39b44b06so77657607b3.13
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 23:54:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=S8eKdPVJU8XZRt7HQU1VfWz2aFNqGg6i7oky+n97/rU=;
+        b=UuzDDIUmGiToBt/3nWSbb1ELw+fqQ0gdv2dEaNLYZE1Rn2fv6kD43b73QQaIvVyhXS
+         JgTkAxDOClkIrfevR03cBVUyWdfXjZNU0fxT7TFgg8Df0Um6xGmS5y67Xs/bkgN38RVs
+         nGtqfrSpsiBD8Ht5WU5heNZFGD5aWauP3YEu5/4Gw5URfu3UtjtgRgGEjPx5WjCUhVot
+         sv2Qh/5yc+RSQtIP4RGi6F/2AOq5ZX8yZxWU1wKXpTDSmAcRLfuG6GfDKHwStvINZAsr
+         L4VqO+5LY67tu/1l6bn6DxGny6zRdG5arm2n/vElIewNc68xIkLYtPPOqEDY1nWGDKZW
+         9OyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=S8eKdPVJU8XZRt7HQU1VfWz2aFNqGg6i7oky+n97/rU=;
+        b=tkVMkICmzmeqxstDOjKGoIG1Ehdnr3rKTFAXzc6bYIsMzLpBcmGSjwsvYq4ekNIV++
+         p1ha8YCBe1Fk8Tdi8WTTcybVO0GSFYReOVNbw2C48y0wR4r3df6EFw/u9Yr0h66P5jaL
+         v2LqmEz+YokvSSMhGc+xnD+YjxBLuvsqQ6m9Eq4738Bgph06X+CbDuKza/hN7UdJ2ok0
+         3dkkQ0OjsdfCYmf0JeZ+M0sikGxU3nElQV7RFC+J8C6rsiAekKTKUNRCeEEEh8YZqZRM
+         4PiItlyZD88ZSVp1AtL38o9Jh+NmsJR3iKQ3Djov1YIdD2qyCHOvAmPPCDgWFxC/BD8L
+         1C3A==
+X-Gm-Message-State: AOAM531+oms/K5nuX9mnxSH1QsIrIpgzJMeuTC2U8Z65didp753RGi1t
+        YqJvKzDGaV2NikSZT/97E3qaE0XbBKADC05oHjg=
+X-Google-Smtp-Source: ABdhPJxxsGu2y4JZd2GxLLJM/FAn7kccOKOc3yL/ODdczf+IOsVimlJu69GRFtfBLQT7dMbj2i+D85MuTCwcrNjEV58=
+X-Received: by 2002:a81:5593:0:b0:2ff:2663:ea7f with SMTP id
+ j141-20020a815593000000b002ff2663ea7fmr8739981ywb.224.1653029695663; Thu, 19
+ May 2022 23:54:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <af80039404cb3eb9dd036ab5734ddea95d31cf49.camel@realtek.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 08:45:02 up 50 days, 19:14, 44 users,  load average: 0.02, 0.06,
- 0.07
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220303131942.12030-1-henrybear327@gmail.com>
+In-Reply-To: <20220303131942.12030-1-henrybear327@gmail.com>
+From:   Henry Tseng <henrybear327@gmail.com>
+Date:   Fri, 20 May 2022 08:54:44 +0200
+Message-ID: <CAA5xa-==1d2UATF1Q1YnijD4_j-sBY=E5P52qrigX4rKFjbMxw@mail.gmail.com>
+Subject: Re: [PATCH v3] sched: Simplify __sched_init runtime checks
+To:     mingo@redhat.com, Peter Zijlstra <peterz@infradead.org>,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org,
+        Benjamin Segall <bsegall@google.com>, mgorman@suse.de,
+        bristot@redhat.com, christian@brauner.io,
+        linux-kernel@vger.kernel.org, Jim Huang <jserv@ccns.ncku.edu.tw>,
+        Huichun Feng <foxhoundsk.tw@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 03:49:06AM +0000, Pkshih wrote:
-> On Wed, 2022-05-18 at 10:23 +0200, Sascha Hauer wrote:
-> > The rtwdev->rf_lock spinlock protects the rf register accesses in
-> > rtw_read_rf() and rtw_write_rf(). Most callers of these functions hold
-> > rtwdev->mutex already with the exception of the callsites in the debugfs
-> > code. The debugfs code doesn't justify an extra lock, so acquire the mutex
-> > there as well before calling rf register accessors and drop the now
-> > unnecessary spinlock.
-> > 
-> > Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-> > ---
-> >  drivers/net/wireless/realtek/rtw88/debug.c | 11 +++++++++++
-> >  drivers/net/wireless/realtek/rtw88/hci.h   |  9 +++------
-> >  drivers/net/wireless/realtek/rtw88/main.c  |  1 -
-> >  drivers/net/wireless/realtek/rtw88/main.h  |  3 ---
-> >  4 files changed, 14 insertions(+), 10 deletions(-)
-> > 
-> > diff --git a/drivers/net/wireless/realtek/rtw88/debug.c
-> > b/drivers/net/wireless/realtek/rtw88/debug.c
-> > index 1a52ff585fbc7..ba5ba852efb8c 100644
-> > --- a/drivers/net/wireless/realtek/rtw88/debug.c
-> > +++ b/drivers/net/wireless/realtek/rtw88/debug.c
-> > 
-> 
-> [...]
-> 
-> > @@ -523,6 +527,8 @@ static int rtw_debug_get_rf_dump(struct seq_file *m, void *v)
-> >  	u32 addr, offset, data;
-> >  	u8 path;
-> >  
-> > +	mutex_lock(&rtwdev->mutex);
-> > +
-> >  	for (path = 0; path < rtwdev->hal.rf_path_num; path++) {
-> >  		seq_printf(m, "RF path:%d\n", path);
-> >  		for (addr = 0; addr < 0x100; addr += 4) {
-> > @@ -537,6 +543,8 @@ static int rtw_debug_get_rf_dump(struct seq_file *m, void *v)
-> >  		seq_puts(m, "\n");
-> >  	}
-> >  
-> > +	mutex_unlock(&rtwdev->mutex);
-> > +
-> >  	return 0;
-> >  }
-> > 
-> 
-> This will take time to dump all RF registers for debugging
-> purpose. For PCI interface, I think this would be okay.
-> Could you try to dump registers via debufs while you are
-> using a USB WiFi device, such as play Youtube or download files...
+A friendly ping on this patch!
 
-I just did a ping and iperf test while doing a:
+On Thu, Mar 3, 2022 at 2:19 PM Chun-Hung Tseng <henrybear327@gmail.com> wrote:
+>
+> Improve runtime checks in __sched_init(void) by replacing if conditional
+> checks with preprocessor directives.
+>
+> Signed-off-by: Chun-Hung Tseng <henrybear327@gmail.com>
+> ---
+>  kernel/sched/core.c | 29 +++++++++++++++--------------
+>  1 file changed, 15 insertions(+), 14 deletions(-)
+>
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index 9745613d531c..003e8677f6ba 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -9317,28 +9317,29 @@ void __init sched_init(void)
+>  #ifdef CONFIG_RT_GROUP_SCHED
+>         ptr += 2 * nr_cpu_ids * sizeof(void **);
+>  #endif
+> -       if (ptr) {
+> -               ptr = (unsigned long)kzalloc(ptr, GFP_NOWAIT);
+> +
+> +#if defined(CONFIG_FAIR_GROUP_SCHED) || defined(CONFIG_RT_GROUP_SCHED)
+> +       ptr = (unsigned long)kzalloc(ptr, GFP_NOWAIT);
+>
+>  #ifdef CONFIG_FAIR_GROUP_SCHED
+> -               root_task_group.se = (struct sched_entity **)ptr;
+> -               ptr += nr_cpu_ids * sizeof(void **);
+> +       root_task_group.se = (struct sched_entity **)ptr;
+> +       ptr += nr_cpu_ids * sizeof(void **);
+>
+> -               root_task_group.cfs_rq = (struct cfs_rq **)ptr;
+> -               ptr += nr_cpu_ids * sizeof(void **);
+> +       root_task_group.cfs_rq = (struct cfs_rq **)ptr;
+> +       ptr += nr_cpu_ids * sizeof(void **);
+>
+> -               root_task_group.shares = ROOT_TASK_GROUP_LOAD;
+> -               init_cfs_bandwidth(&root_task_group.cfs_bandwidth);
+> +       root_task_group.shares = ROOT_TASK_GROUP_LOAD;
+> +       init_cfs_bandwidth(&root_task_group.cfs_bandwidth);
+>  #endif /* CONFIG_FAIR_GROUP_SCHED */
+>  #ifdef CONFIG_RT_GROUP_SCHED
+> -               root_task_group.rt_se = (struct sched_rt_entity **)ptr;
+> -               ptr += nr_cpu_ids * sizeof(void **);
+> -
+> -               root_task_group.rt_rq = (struct rt_rq **)ptr;
+> -               ptr += nr_cpu_ids * sizeof(void **);
+> +       root_task_group.rt_se = (struct sched_rt_entity **)ptr;
+> +       ptr += nr_cpu_ids * sizeof(void **);
+>
+> +       root_task_group.rt_rq = (struct rt_rq **)ptr;
+> +       ptr += nr_cpu_ids * sizeof(void **);
+>  #endif /* CONFIG_RT_GROUP_SCHED */
+> -       }
+> +#endif /* CONFIG_FAIR_GROUP_SCHED || CONFIG_RT_GROUP_SCHED */
+> +
+>  #ifdef CONFIG_CPUMASK_OFFSTACK
+>         for_each_possible_cpu(i) {
+>                 per_cpu(load_balance_mask, i) = (cpumask_var_t)kzalloc_node(
+> --
+> 2.35.1
+>
 
-while true; do cat /sys/kernel/debug/ieee80211/phy0/rtw88/rf_dump ; done
-
-The register dumping has no influence on neither the throughput or the
-latency.
-
-Adding some debugging to the mutex_lock also tells why: rtwdev->mutex
-isn't acquired for normal rx/tx. It is only acquired every two seconds
-or so.
-
-So I would say adding the mutex_lock around the register dump is not a
-problem. If latency is a concern we could still move the mutex_lock()
-into the loop.
-
-Sascha
 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Best wishes,
+Henry

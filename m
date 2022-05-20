@@ -2,191 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 472B952EB6B
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 14:02:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF08E52EB75
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 14:03:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348893AbiETMCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 08:02:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53546 "EHLO
+        id S1344623AbiETMCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 08:02:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348941AbiETMB5 (ORCPT
+        with ESMTP id S1348908AbiETMBl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 08:01:57 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2EEF56202;
-        Fri, 20 May 2022 05:01:56 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id w17-20020a17090a529100b001db302efed6so7712981pjh.4;
-        Fri, 20 May 2022 05:01:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=HUR71Busz7rHoO3kdum5ovbPXwWOHM0ZF312TuUbImQ=;
-        b=gVyVvvBuan5PEI1TjD1XRfgPqU/5F2N75ycvOiIj4TNN2P7evdLgDgd96wcdLzT9fX
-         LJuUMz6Bvm8PceIlm/FVNC1aLDL0bci/4S+m4OcxNw4+6wn4m9c9CJjQiinKJym8PRBh
-         5vwZAWWM6qbw56jceZQd+woeD5T6sCXDfij2M6YU9iHvL0VmWZUR87hNh4Z8xB5/yvLT
-         V0t0Y4lWwXnGnPr65L2KGpXyd5w3qLYLiIgVFLmwePpYteO1nxJ8Y5xjaUooQkzxPQjm
-         3d4oYoBGixGVTnTABorwFFx8OneqiLrgw+9o24ckScevIJiolzTxCMBt5tzD8wvWWlpV
-         Vaow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=HUR71Busz7rHoO3kdum5ovbPXwWOHM0ZF312TuUbImQ=;
-        b=jz0J7Z0JJF8Lx6GU18V5jYHrT6vLhTbGZtbJKUhITsR0b1LDmNFfSwijUoLrEZa6R3
-         tuTDyyAe4g80RzfwMGdrIjCaFgcjbviXKmzBGBG/ya+Z5UUNrersfpIMpY6y0Ro0DytI
-         4Nt0TEx26k7AJIXQtg48Zbob9RCWZeyBRq7rwciBQAYwr8IOlgtyH/CVavuBqO7LuR7e
-         MfBR9bfxfJQgHjfov872S9bpiey66DIWO1UyTH+oLbWUBmglqziTFZXh27tny6pBgZZ/
-         /USYH8kbENdBnDGlM45+9wS+dJye124T41uQzFba4xafHaTQ0izAfcgfrI9liOLtv4yZ
-         0t7g==
-X-Gm-Message-State: AOAM5307tjYPy/sYbMTfpoYNIuFkVFE7zLGhPQE+DekEnAvDTBs/aa6w
-        SP5mh1UrymZzbdZP2eb90uQ=
-X-Google-Smtp-Source: ABdhPJxjrwzxzkeGGI2NEtVC0Txs8wwcKKyycde8qmg0K4hIXxUZGT1Zm0b/5rqdiT03fBEazffe5Q==
-X-Received: by 2002:a17:90a:930b:b0:1bf:ac1f:6585 with SMTP id p11-20020a17090a930b00b001bfac1f6585mr10500025pjo.88.1653048115442;
-        Fri, 20 May 2022 05:01:55 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-24.three.co.id. [180.214.232.24])
-        by smtp.gmail.com with ESMTPSA id m10-20020a170902768a00b0015e8d4eb1d8sm5486794pll.34.2022.05.20.05.01.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 May 2022 05:01:54 -0700 (PDT)
-Message-ID: <4752814a-091c-9dd5-762c-6fd1a476c4bb@gmail.com>
-Date:   Fri, 20 May 2022 19:01:50 +0700
+        Fri, 20 May 2022 08:01:41 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9135149920;
+        Fri, 20 May 2022 05:01:35 -0700 (PDT)
+Received: from kwepemi100022.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L4QH04bTnzQkBG;
+        Fri, 20 May 2022 19:58:36 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi100022.china.huawei.com (7.221.188.126) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 20 May 2022 20:01:32 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 20 May 2022 20:01:32 +0800
+Subject: Re: [PATCH -next v2] blk-mq: fix panic during blk_mq_run_work_fn()
+To:     Ming Lei <ming.lei@redhat.com>
+CC:     <axboe@kernel.dk>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
+References: <20220520032542.3331610-1-yukuai3@huawei.com>
+ <YocOsw6n3y11lNym@T590> <2b7a82e0-1e33-e2ff-74d7-d80f152fdc75@huawei.com>
+ <afe9dec4-733d-88e9-850d-5c36e9201119@huawei.com> <YodSlSm/sIC8G2iG@T590>
+ <dbe2deec-b007-470f-eb5a-35fae63ad134@huawei.com> <YodlGOo7vrUa7DZK@T590>
+ <0e7967de-0c32-790d-fa08-b0bc9ef5923d@huawei.com> <Yod93DOdYosa+SvS@T590>
+From:   "yukuai (C)" <yukuai3@huawei.com>
+Message-ID: <8e6a806b-f42e-319b-e6c8-de1f07befce2@huawei.com>
+Date:   Fri, 20 May 2022 20:01:31 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] arm64: Unify vertical spacing in HWCAPS
-Content-Language: en-US
-To:     =?UTF-8?Q?Martin_Li=c5=a1ka?= <mliska@suse.cz>,
-        linux-doc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net
-References: <b95b3128-f010-dcba-1f6a-1a85dd2d20a5@suse.cz>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <b95b3128-f010-dcba-1f6a-1a85dd2d20a5@suse.cz>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <Yod93DOdYosa+SvS@T590>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/20/22 13:55, Martin Liška wrote:
-> Unify vertical spacing so that same font weight
-> is used by Sphinx.
-> 
-> Signed-off-by: Martin Liska <mliska@suse.cz>
-> ---
->  Documentation/arm64/elf_hwcaps.rst | 23 -----------------------
->  1 file changed, 23 deletions(-)
-> 
-> diff --git a/Documentation/arm64/elf_hwcaps.rst b/Documentation/arm64/elf_hwcaps.rst
-> index a8f30963e550..1e79044f51a2 100644
-> --- a/Documentation/arm64/elf_hwcaps.rst
-> +++ b/Documentation/arm64/elf_hwcaps.rst
-> @@ -171,96 +171,73 @@ HWCAP_PACG
->      Documentation/arm64/pointer-authentication.rst.
->  
->  HWCAP2_DCPODP
-> -
->      Functionality implied by ID_AA64ISAR1_EL1.DPB == 0b0010.
->  
->  HWCAP2_SVE2
-> -
->      Functionality implied by ID_AA64ZFR0_EL1.SVEVer == 0b0001.
->  
->  HWCAP2_SVEAES
-> -
->      Functionality implied by ID_AA64ZFR0_EL1.AES == 0b0001.
->  
->  HWCAP2_SVEPMULL
-> -
->      Functionality implied by ID_AA64ZFR0_EL1.AES == 0b0010.
->  
->  HWCAP2_SVEBITPERM
-> -
->      Functionality implied by ID_AA64ZFR0_EL1.BitPerm == 0b0001.
->  
->  HWCAP2_SVESHA3
-> -
->      Functionality implied by ID_AA64ZFR0_EL1.SHA3 == 0b0001.
->  
->  HWCAP2_SVESM4
-> -
->      Functionality implied by ID_AA64ZFR0_EL1.SM4 == 0b0001.
->  
->  HWCAP2_FLAGM2
-> -
->      Functionality implied by ID_AA64ISAR0_EL1.TS == 0b0010.
->  
->  HWCAP2_FRINT
-> -
->      Functionality implied by ID_AA64ISAR1_EL1.FRINTTS == 0b0001.
->  
->  HWCAP2_SVEI8MM
-> -
->      Functionality implied by ID_AA64ZFR0_EL1.I8MM == 0b0001.
->  
->  HWCAP2_SVEF32MM
-> -
->      Functionality implied by ID_AA64ZFR0_EL1.F32MM == 0b0001.
->  
->  HWCAP2_SVEF64MM
-> -
->      Functionality implied by ID_AA64ZFR0_EL1.F64MM == 0b0001.
->  
->  HWCAP2_SVEBF16
-> -
->      Functionality implied by ID_AA64ZFR0_EL1.BF16 == 0b0001.
->  
->  HWCAP2_I8MM
-> -
->      Functionality implied by ID_AA64ISAR1_EL1.I8MM == 0b0001.
->  
->  HWCAP2_BF16
-> -
->      Functionality implied by ID_AA64ISAR1_EL1.BF16 == 0b0001.
->  
->  HWCAP2_DGH
-> -
->      Functionality implied by ID_AA64ISAR1_EL1.DGH == 0b0001.
->  
->  HWCAP2_RNG
-> -
->      Functionality implied by ID_AA64ISAR0_EL1.RNDR == 0b0001.
->  
->  HWCAP2_BTI
-> -
->      Functionality implied by ID_AA64PFR0_EL1.BT == 0b0001.
->  
->  HWCAP2_MTE
-> -
->      Functionality implied by ID_AA64PFR1_EL1.MTE == 0b0010, as described
->      by Documentation/arm64/memory-tagging-extension.rst.
->  
->  HWCAP2_ECV
-> -
->      Functionality implied by ID_AA64MMFR0_EL1.ECV == 0b0001.
->  
->  HWCAP2_AFP
-> -
->      Functionality implied by ID_AA64MFR1_EL1.AFP == 0b0001.
->  
->  HWCAP2_RPRES
-> -
->      Functionality implied by ID_AA64ISAR2_EL1.RPRES == 0b0001.
->  
->  HWCAP2_MTE3
-> -
->      Functionality implied by ID_AA64PFR1_EL1.MTE == 0b0011, as described
->      by Documentation/arm64/memory-tagging-extension.rst.
->  
+在 2022/05/20 19:39, Ming Lei 写道:
 
-Did you mean the font weight is heading? Something like promoting headings
-by removing intermediate blank lines?
+> 
+> In short:
+> 
+> 1) run queue can be in-progress during cleanup queue, or returns from
+> cleanup queue; we drain it in both blk_cleanup_queue() and
+> disk_release_mq(), see commit 2a19b28f7929 ("blk-mq: cancel blk-mq dispatch
+> work in both blk_cleanup_queue and disk_release()")
+I understand that, however, there is no garantee new 'hctx->run_work'
+won't be queued after 'drain it', for this crash, I think this is how
+it triggered:
 
--- 
-An old man doll... just what I always wanted! - Clara
+assum that there is no io, while some bfq_queue is still busy:
+
+blk_cleanup_queue
+  blk_freeze_queue
+  blk_mq_cancel_work_sync
+  cancel_delayed_work_sync(hctx1)
+				blk_mq_run_work_fn -> hctx2
+				 __blk_mq_run_hw_queue
+				  blk_mq_sched_dispatch_requests
+				   __blk_mq_do_dispatch_sched
+				    blk_mq_delay_run_hw_queues
+				     blk_mq_delay_run_hw_queue
+				      -> add hctx1->run_work again
+  cancel_delayed_work_sync(hctx2)
+> 
+> 2) tagset can't be touched after blk_cleanup_queue returns because
+> tagset lifetime is covered by driver, which is often released after
+> blk_cleanup_queue() returns.
+> 
+> 
+> Thanks,
+> Ming
+> 
+> .
+> 

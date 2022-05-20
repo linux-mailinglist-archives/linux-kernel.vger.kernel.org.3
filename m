@@ -2,66 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12B6B52EA4E
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 12:51:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5035F52EA56
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 12:53:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348389AbiETKu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 06:50:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39118 "EHLO
+        id S1343713AbiETKxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 06:53:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348345AbiETKui (ORCPT
+        with ESMTP id S237515AbiETKxi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 06:50:38 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E6CE793A1;
-        Fri, 20 May 2022 03:50:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1653043837; x=1684579837;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=DHrHW0BTO8G2BHU2v8y0jzk3Zo4we65ITDQbzNpM/c8=;
-  b=F99+8GKpbIj7wenYeLSyH42Kp5xwPTvwpicOZE6bPLAkekMZdpnzmPzw
-   KFEKrsMN7P4L3UV4Q7Kq4mumJEljOAcmzk3gHxb+kfYkz2BwtSInu54EQ
-   YwlWBBKagIHBepkct/usrIoBaU4oVKUrF30OoOlstZcwMlwt1MP+8oFN7
-   Y=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 20 May 2022 03:50:37 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 03:50:37 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 20 May 2022 03:50:37 -0700
-Received: from c-skakit-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 20 May 2022 03:50:32 -0700
-From:   Satya Priya <quic_c_skakit@quicinc.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
-        <quic_collinsd@quicinc.com>, <quic_subbaram@quicinc.com>,
-        <quic_jprakash@quicinc.com>,
-        Satya Priya <quic_c_skakit@quicinc.com>
-Subject: [PATCH V13 9/9] arm64: dts: qcom: sc7280: Add pm8008 support for sc7280-idp
-Date:   Fri, 20 May 2022 16:19:37 +0530
-Message-ID: <1653043777-24003-10-git-send-email-quic_c_skakit@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1653043777-24003-1-git-send-email-quic_c_skakit@quicinc.com>
-References: <1653043777-24003-1-git-send-email-quic_c_skakit@quicinc.com>
+        Fri, 20 May 2022 06:53:38 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4349A7220E;
+        Fri, 20 May 2022 03:53:36 -0700 (PDT)
+Date:   Fri, 20 May 2022 10:53:33 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1653044014;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OtSIFPB0YVt45I6/uLYDyp1TV30jOPmQoHnLwn/78wk=;
+        b=r3/bKPz8y0DVRXN6jijN+SEFOsWsVvMFlT2Vlh8t7VL9c7AtHmtmeAd9XfIUzrWZOaLTpp
+        plhLvsYLmGrwJKfEMr23tzOqy/3KkaPWym/0Ntps8hQ/Hb5VjemDHRxLH4aUniXFWmp+1m
+        I1ztvsSEPgvWnzunVTvtDv8/U4i7++XsnkWpme5vJpAtkwd9sdAr+yHNH2Dtx6ZOPCRZmz
+        YDsR0oc9ZSksy+ifbfn4YGTN84lbi7Sj5VbpBkgtbYtSsEeCcD4BH3Sp6tbUWmMkJOxVRN
+        nGy39fgrUtuGgdm0F02BqIIFXrcyleLaxkOIh5V0zr/PRbQ4Qh63LKDz3m+nwQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1653044014;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OtSIFPB0YVt45I6/uLYDyp1TV30jOPmQoHnLwn/78wk=;
+        b=DerLFG95QxMrCdOIFueUetI+LQ7w/LPtSdeUiFKkhSiRp3+F7jbjhtVUgYsnRLrGmn4AFh
+        Mpq3qajp/6dw9EAw==
+From:   "tip-bot2 for Mikulas Patocka" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: objtool/core] objtool: Fix objtool regression on x32 systems
+Cc:     Mikulas Patocka <mpatocka@redhat.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Borislav Petkov <bp@suse.de>, <stable@vger.kernel.org>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: =?utf-8?q?=3Calpine=2ELRH=2E2=2E02=2E2205161041260=2E1155?=
+ =?utf-8?q?6=40file01=2Eintranet=2Eprod=2Eint=2Erdu2=2Eredhat=2Ecom=3E?=
+References: =?utf-8?q?=3Calpine=2ELRH=2E2=2E02=2E2205161041260=2E11556?=
+ =?utf-8?q?=40file01=2Eintranet=2Eprod=2Eint=2Erdu2=2Eredhat=2Ecom=3E?=
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+Message-ID: <165304401319.4207.18392602354110557584.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,107 +68,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add pm8008 infra and regulators support for sc7280 idp.
+The following commit has been merged into the objtool/core branch of tip:
 
-Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Commit-ID:     22682a07acc308ef78681572e19502ce8893c4d4
+Gitweb:        https://git.kernel.org/tip/22682a07acc308ef78681572e19502ce8893c4d4
+Author:        Mikulas Patocka <mpatocka@redhat.com>
+AuthorDate:    Mon, 16 May 2022 11:06:36 -04:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Fri, 20 May 2022 12:45:30 +02:00
+
+objtool: Fix objtool regression on x32 systems
+
+Commit c087c6e7b551 ("objtool: Fix type of reloc::addend") failed to
+appreciate cross building from ILP32 hosts, where 'int' == 'long' and
+the issue persists.
+
+As such, use s64/int64_t/Elf64_Sxword for this field and suffer the
+pain that is ISO C99 printf formats for it.
+
+Fixes: c087c6e7b551 ("objtool: Fix type of reloc::addend")
+Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
+[peterz: reword changelog, s/long long/s64/]
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: <stable@vger.kernel.org>
+Link: https://lkml.kernel.org/r/alpine.LRH.2.02.2205161041260.11556@file01.intranet.prod.int.rdu2.redhat.com
 ---
-Changes in V13:
- - None.
+ tools/objtool/check.c               |  9 +++++----
+ tools/objtool/elf.c                 |  2 +-
+ tools/objtool/include/objtool/elf.h |  4 ++--
+ 3 files changed, 8 insertions(+), 7 deletions(-)
 
-Changes in V12:
- - None.
-
-Changes in V11:
- - Add ldos and parent supplies directly under pm8008@8 node.
-
- arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 66 ++++++++++++++++++++++++++++++++
- 1 file changed, 66 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-index 5eb6689..166812e 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-@@ -271,6 +271,63 @@
- 	};
- };
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index 2063f9f..190b2f6 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -5,6 +5,7 @@
  
-+pm8008_bus: &i2c1 {
-+	status = "okay";
-+};
-+
-+#include "pm8008.dtsi"
-+
-+&pm8008 {
-+	interrupt-parent = <&tlmm>;
-+	interrupts = <24 IRQ_TYPE_EDGE_RISING>;
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pm8008_active>;
-+
-+	reset-gpios = <&pm8350c_gpios 4 GPIO_ACTIVE_LOW>;
-+
-+	vdd_l1_l2-supply = <&vreg_s8b_1p2>;
-+	vdd_l3_l4-supply = <&vreg_s1b_1p8>;
-+	vdd_l5-supply = <&vreg_bob>;
-+	vdd_l6-supply = <&vreg_bob>;
-+	vdd_l7-supply = <&vreg_bob>;
-+};
-+
-+&pm8008_l1 {
-+	regulator-min-microvolt = <950000>;
-+	regulator-max-microvolt = <1300000>;
-+};
-+
-+&pm8008_l2 {
-+	regulator-min-microvolt = <950000>;
-+	regulator-max-microvolt = <1250000>;
-+};
-+
-+&pm8008_l3 {
-+	regulator-min-microvolt = <1650000>;
-+	regulator-max-microvolt = <3000000>;
-+};
-+
-+&pm8008_l4 {
-+	regulator-min-microvolt = <1504000>;
-+	regulator-max-microvolt = <1600000>;
-+};
-+
-+&pm8008_l5 {
-+	regulator-min-microvolt = <2600000>;
-+	regulator-max-microvolt = <3000000>;
-+};
-+
-+&pm8008_l6 {
-+	regulator-min-microvolt = <2600000>;
-+	regulator-max-microvolt = <3000000>;
-+};
-+
-+&pm8008_l7 {
-+	regulator-min-microvolt = <3000000>;
-+	regulator-max-microvolt = <3544000>;
-+};
-+
- &qfprom {
- 	vcc-supply = <&vreg_l1c_1p8>;
- };
-@@ -383,6 +440,15 @@
- 	drive-strength = <2>;
- };
+ #include <string.h>
+ #include <stdlib.h>
++#include <inttypes.h>
+ #include <sys/mman.h>
  
-+&pm8350c_gpios {
-+	pm8008_active: pm8008-active {
-+		pins = "gpio4";
-+		function = "normal";
-+		bias-disable;
-+		power-source = <0>;
-+	};
-+};
-+
- &qspi_cs0 {
- 	bias-disable;
+ #include <arch/elf.h>
+@@ -561,12 +562,12 @@ static int add_dead_ends(struct objtool_file *file)
+ 		else if (reloc->addend == reloc->sym->sec->sh.sh_size) {
+ 			insn = find_last_insn(file, reloc->sym->sec);
+ 			if (!insn) {
+-				WARN("can't find unreachable insn at %s+0x%lx",
++				WARN("can't find unreachable insn at %s+0x%" PRIx64,
+ 				     reloc->sym->sec->name, reloc->addend);
+ 				return -1;
+ 			}
+ 		} else {
+-			WARN("can't find unreachable insn at %s+0x%lx",
++			WARN("can't find unreachable insn at %s+0x%" PRIx64,
+ 			     reloc->sym->sec->name, reloc->addend);
+ 			return -1;
+ 		}
+@@ -596,12 +597,12 @@ reachable:
+ 		else if (reloc->addend == reloc->sym->sec->sh.sh_size) {
+ 			insn = find_last_insn(file, reloc->sym->sec);
+ 			if (!insn) {
+-				WARN("can't find reachable insn at %s+0x%lx",
++				WARN("can't find reachable insn at %s+0x%" PRIx64,
+ 				     reloc->sym->sec->name, reloc->addend);
+ 				return -1;
+ 			}
+ 		} else {
+-			WARN("can't find reachable insn at %s+0x%lx",
++			WARN("can't find reachable insn at %s+0x%" PRIx64,
+ 			     reloc->sym->sec->name, reloc->addend);
+ 			return -1;
+ 		}
+diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
+index 7fb6720..c25e957 100644
+--- a/tools/objtool/elf.c
++++ b/tools/objtool/elf.c
+@@ -550,7 +550,7 @@ static struct section *elf_create_reloc_section(struct elf *elf,
+ 						int reltype);
+ 
+ int elf_add_reloc(struct elf *elf, struct section *sec, unsigned long offset,
+-		  unsigned int type, struct symbol *sym, long addend)
++		  unsigned int type, struct symbol *sym, s64 addend)
+ {
+ 	struct reloc *reloc;
+ 
+diff --git a/tools/objtool/include/objtool/elf.h b/tools/objtool/include/objtool/elf.h
+index de0cb2f..adebfbc 100644
+--- a/tools/objtool/include/objtool/elf.h
++++ b/tools/objtool/include/objtool/elf.h
+@@ -73,7 +73,7 @@ struct reloc {
+ 	struct symbol *sym;
+ 	unsigned long offset;
+ 	unsigned int type;
+-	long addend;
++	s64 addend;
+ 	int idx;
+ 	bool jump_table_start;
  };
--- 
-2.7.4
-
+@@ -145,7 +145,7 @@ struct elf *elf_open_read(const char *name, int flags);
+ struct section *elf_create_section(struct elf *elf, const char *name, unsigned int sh_flags, size_t entsize, int nr);
+ 
+ int elf_add_reloc(struct elf *elf, struct section *sec, unsigned long offset,
+-		  unsigned int type, struct symbol *sym, long addend);
++		  unsigned int type, struct symbol *sym, s64 addend);
+ int elf_add_reloc_to_insn(struct elf *elf, struct section *sec,
+ 			  unsigned long offset, unsigned int type,
+ 			  struct section *insn_sec, unsigned long insn_off);

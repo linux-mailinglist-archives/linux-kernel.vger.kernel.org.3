@@ -2,85 +2,487 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFE1E52E4C0
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 08:11:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 859BC52E4E1
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 08:16:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345773AbiETGKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 02:10:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34154 "EHLO
+        id S1345731AbiETGNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 02:13:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345760AbiETGKV (ORCPT
+        with ESMTP id S241053AbiETGND (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 02:10:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 972EE14C755;
-        Thu, 19 May 2022 23:10:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 248EE61D92;
-        Fri, 20 May 2022 06:10:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 86537C34100;
-        Fri, 20 May 2022 06:10:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653027016;
-        bh=+g8bHb2ilbuh8waM+HYF0p83yeXeOKZUATDuTJKYzKk=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=Idy55GefI4ac6/SHeU30qdRAsd9T8UPBNPrBsTOHDBUiSdRCRd48J9pLXOmsPwYU9
-         gzzPq7LIikMc1Jft8nXQ2S2QHGnxGJHAn81lu2ipnXHJaizUzdTeOHyE/MNRIIkhtP
-         Tx38e9hpqo1+gv1ZVJKiMbAv1W56FXVn2hJB5t1rkSXBQb2a0/2cHP4E8dg7eXZ+Dh
-         SWweC3XtthwO7morsohtTjZtz1ctjKi9WclOov/fNBEB7pWkwQQrlzwL2tCO7zCE/P
-         jSFx7hNxY/K2D+LctLAHbVTCx8cao/gt5wbraXWBApAtXgb+/WKdEUynas8dUYw/mO
-         lcyWTQUzJvyGA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 73025F0383D;
-        Fri, 20 May 2022 06:10:16 +0000 (UTC)
-Subject: Re: [GIT PULL] Crypto Fixes for 5.18
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Yocp8BaZacpvwJEL@gondor.apana.org.au>
-References: <20210108035450.GA6191@gondor.apana.org.au>
- <20210708030913.GA32097@gondor.apana.org.au>
- <20210817013601.GA14148@gondor.apana.org.au>
- <20210929023843.GA28594@gondor.apana.org.au>
- <20211029041408.GA3192@gondor.apana.org.au>
- <20211112104815.GA14105@gondor.apana.org.au>
- <YcKz4wHYTe3qlW7L@gondor.apana.org.au>
- <YgMn+1qQPQId50hO@gondor.apana.org.au>
- <YjE5yThYIzih2kM6@gondor.apana.org.au>
- <YkUdKiJflWqxBmx5@gondor.apana.org.au> <Yocp8BaZacpvwJEL@gondor.apana.org.au>
-X-PR-Tracked-List-Id: <linux-crypto.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Yocp8BaZacpvwJEL@gondor.apana.org.au>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/herbert/crypto-2.6.git tags/v5.18-p2
-X-PR-Tracked-Commit-Id: 16287397ec5c08aa58db6acf7dbc55470d78087d
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 3d7285a335edaf23b699e87c528cf0b0070e3293
-Message-Id: <165302701646.26960.7262335626261692818.pr-tracker-bot@kernel.org>
-Date:   Fri, 20 May 2022 06:10:16 +0000
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        "David S. Miller" <davem@davemloft.net>,
+        Fri, 20 May 2022 02:13:03 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B1414C74C
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 23:13:00 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id r30so10021801wra.13
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 23:13:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YKANWCdueBTzI7Twedv3GqPDQQ7DfAbHN6fR89ncX9w=;
+        b=Yz5Hh/khOKuk5jMOhzbPtGEuar/R0JTElstSJQdWFXUXkTUJ0AXJNyx0jbY9yUItqU
+         Lc8Az7qbhzg2TwrbUhM+C3KiIutq1mINOWt8FKH6Xta1unTAd3cIsnY2lIfsxeWnEOzN
+         Up8IZou+VEb+G7exICVx1wFPO5wM81l0jxN2in9G2P028fl83AIagiIqfDU/ZMH5bJ/4
+         DiAa3jL0ywF3lV+WWSK2S7gXWyiDYkvTM3V7oHKPkhi6YL9Ptte842rMyX9hKJMy0SY7
+         ed66vYmiLg0+egGdWpC388u53hAsxcnRYSPkHeCXQbv15jbAqg8lstKDq191dAnaVx6/
+         R2yQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YKANWCdueBTzI7Twedv3GqPDQQ7DfAbHN6fR89ncX9w=;
+        b=wQvVW3CbihYAX9NeaABoCAUk8B92FQ36psregmRioNHUslUEbg8WTNwI4iTFtUpmw8
+         4fLFUsDhchRNEwY5XYxN2HbHkUOLRgNcpYKGBpr7XQ31/q560Ui+bXm5Ju0QUflzqlB+
+         OfUEz7R5BYLVUd6wnkMP09J2rvac4JUxouB/3dL8HNooR3eaCvqxZlyFK7sFDPUJb8+n
+         VHBEaAv5H3ZE+B8H2RU9BcICnnhDbzwrrek5YipnbTs7g5oxGuiJ3Bv+EoD+8z8FH6BL
+         DaDhJ+JDPMiBxzyiwii/z9CuHk7jKxAibDg/PfQatTtvQbXG5UZRZQuS+pr1KAzeTnfk
+         HZug==
+X-Gm-Message-State: AOAM5300Vto91Ts+cLOlTd/94mrmbYbQcObhewzT6jdEnkLikmUmePdS
+        UxDMXU/Pu9HuM14xhPn733FwRZxwXJvbu/w+0ImDVw==
+X-Google-Smtp-Source: ABdhPJwBnBFoLrQxUGsEHH09sdgE9kbISOKCa/G+4XY2BqTlfUUsek3Akx2eeRK6c8jiTe7DieEquwvXfFgWHLzaLkI=
+X-Received: by 2002:a5d:6041:0:b0:20d:8e4:7bb8 with SMTP id
+ j1-20020a5d6041000000b0020d08e47bb8mr6742438wrt.652.1653027178404; Thu, 19
+ May 2022 23:12:58 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220519164512.3180360-1-dlatypov@google.com>
+In-Reply-To: <20220519164512.3180360-1-dlatypov@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Fri, 20 May 2022 14:12:47 +0800
+Message-ID: <CABVgOSnooocLsy2=a8rm7Y_m3DpffKtDam5_uYou+Y2tUkumRw@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: refactor internal kconfig handling, allow overriding
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000cd467805df6b6192"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 20 May 2022 13:41:04 +0800:
+--000000000000cd467805df6b6192
+Content-Type: text/plain; charset="UTF-8"
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/herbert/crypto-2.6.git tags/v5.18-p2
+On Fri, May 20, 2022 at 12:45 AM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> Currently, you cannot ovewrwrite what's in your kunitconfig via
+> --kconfig_add.
+> Nor can you override something in a qemu_config via either means.
+>
+> This patch makes it so we have this level of priority
+> * --kconfig_add
+> * kunitconfig file (the default or the one from --kunitconfig)
+> * qemu_config
+>
+> The rationale for this order is that the more "dynamic" sources of
+> kconfig options should take priority.
+>
+> --kconfig_add is obviously the most dynamic.
+> And for kunitconfig, users probably tweak the file manually or specify
+> --kunitconfig more often than they delve into qemu_config python files.
+>
+> And internally, we convert the kconfigs from a python list into a set or
+> dict fairly often. We should just use a dict internally.
+> We exposed the set transform in the past since we didn't define __eq__,
+> so also take the chance to shore up the kunit_kconfig.Kconfig interface.
+>
+> Example
+> =======
+>
+> Let's consider the unrealistic example where someone would want to
+> disable CONFIG_KUNIT.
+> I.e. they run
+> $ ./tools/testing/kunit/kunit.py config --kconfig_add=CONFIG_KUNIT=n
+>
+> Before
+> ------
+> We'd write the following
+> > # CONFIG_KUNIT is not set
+> > CONFIG_KUNIT_ALL_TESTS=y
+> > CONFIG_KUNIT_TEST=y
+> > CONFIG_KUNIT=y
+> > CONFIG_KUNIT_EXAMPLE_TEST=y
+>
+> And we'd error out with
+> > ERROR:root:Not all Kconfig options selected in kunitconfig were in the generated .config.
+> > This is probably due to unsatisfied dependencies.
+> > Missing: # CONFIG_KUNIT is not set
+>
+> After
+> -----
+> We'd write the following
+> > # CONFIG_KUNIT is not set
+> > CONFIG_KUNIT_TEST=y
+> > CONFIG_KUNIT_ALL_TESTS=y
+> > CONFIG_KUNIT_EXAMPLE_TEST=y
+>
+> And we'd error out with
+> > ERROR:root:Not all Kconfig options selected in kunitconfig were in the generated .config.
+> > This is probably due to unsatisfied dependencies.
+> > Missing: CONFIG_KUNIT_EXAMPLE_TEST=y, CONFIG_KUNIT_TEST=y, CONFIG_KUNIT_ALL_TESTS=y
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> ---
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/3d7285a335edaf23b699e87c528cf0b0070e3293
+I like this, but do think there are a few gaps this doesn't handle
+properly. (Though exactly how we'd deal with them, I'm not yet sure.)
 
-Thank you!
+In particular, it's not possible to disable a pair of options where
+one depends on the other: disabling the parent option will result in
+the child one not being present in the generated config. This will
+conflict both with "=y" and "=n/not set": we'd need a way to _remove_
+a kconfig option for that to work.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+The ideal thing would be for us to work out what the default value is,
+and remove the option automatically if it matches, but that seems like
+it'd be quite difficult. Otherwise, I guess a
+--kconfig_{remove,delete,etc} option would work.
+
+Otherwise, this seems okay at first glance, but I haven't had the time
+to fully review it in detail yet...
+
+Cheers,
+-- David
+
+>  tools/testing/kunit/kunit_config.py    | 49 +++++++++++++++-----------
+>  tools/testing/kunit/kunit_kernel.py    | 21 ++++++-----
+>  tools/testing/kunit/kunit_tool_test.py | 45 ++++++++++-------------
+>  3 files changed, 59 insertions(+), 56 deletions(-)
+>
+> diff --git a/tools/testing/kunit/kunit_config.py b/tools/testing/kunit/kunit_config.py
+> index 75a8dc1683d4..89443400b17e 100644
+> --- a/tools/testing/kunit/kunit_config.py
+> +++ b/tools/testing/kunit/kunit_config.py
+> @@ -8,7 +8,7 @@
+>
+>  from dataclasses import dataclass
+>  import re
+> -from typing import List, Set
+> +from typing import Dict, Iterable, Set
+>
+>  CONFIG_IS_NOT_SET_PATTERN = r'^# CONFIG_(\w+) is not set$'
+>  CONFIG_PATTERN = r'^CONFIG_(\w+)=(\S+|".*")$'
+> @@ -32,35 +32,46 @@ class Kconfig:
+>         """Represents defconfig or .config specified using the Kconfig language."""
+>
+>         def __init__(self) -> None:
+> -               self._entries = []  # type: List[KconfigEntry]
+> +               self._entries = {}  # type: Dict[str, str]
+>
+> -       def entries(self) -> Set[KconfigEntry]:
+> -               return set(self._entries)
+> +       def __eq__(self, other) -> bool:
+> +               if not isinstance(other, self.__class__):
+> +                       return False
+> +               return self._entries == other._entries
+>
+> -       def add_entry(self, entry: KconfigEntry) -> None:
+> -               self._entries.append(entry)
+> +       def __repr__(self) -> str:
+> +               return ','.join(str(e) for e in self._as_entries())
+> +
+> +
+> +       def _as_entries(self) -> Iterable[KconfigEntry]:
+> +               for name, value in self._entries.items():
+> +                       yield KconfigEntry(name, value)
+> +
+> +       def add_entry(self, name: str, value: str) -> None:
+> +               self._entries[name] = value
+>
+>         def is_subset_of(self, other: 'Kconfig') -> bool:
+> -               other_dict = {e.name: e.value for e in other.entries()}
+> -               for a in self.entries():
+> -                       b = other_dict.get(a.name)
+> +               for name, value in self._entries.items():
+> +                       b = other._entries.get(name)
+>                         if b is None:
+> -                               if a.value == 'n':
+> +                               if value == 'n':
+>                                         continue
+>                                 return False
+> -                       if a.value != b:
+> +                       if value != b:
+>                                 return False
+>                 return True
+>
+> +       def set_diff(self, other: 'Kconfig') -> Set[KconfigEntry]:
+> +               return set(self._as_entries()) - set(other._as_entries())
+> +
+>         def merge_in_entries(self, other: 'Kconfig') -> None:
+> -               if other.is_subset_of(self):
+> -                       return
+> -               self._entries = list(self.entries().union(other.entries()))
+> +               for name, value in other._entries.items():
+> +                       self._entries[name] = value
+>
+>         def write_to_file(self, path: str) -> None:
+>                 with open(path, 'a+') as f:
+> -                       for entry in self.entries():
+> -                               f.write(str(entry) + '\n')
+> +                       for e in self._as_entries():
+> +                               f.write(str(e) + '\n')
+>
+>  def parse_file(path: str) -> Kconfig:
+>         with open(path, 'r') as f:
+> @@ -78,14 +89,12 @@ def parse_from_string(blob: str) -> Kconfig:
+>
+>                 match = config_matcher.match(line)
+>                 if match:
+> -                       entry = KconfigEntry(match.group(1), match.group(2))
+> -                       kconfig.add_entry(entry)
+> +                       kconfig.add_entry(match.group(1), match.group(2))
+>                         continue
+>
+>                 empty_match = is_not_set_matcher.match(line)
+>                 if empty_match:
+> -                       entry = KconfigEntry(empty_match.group(1), 'n')
+> -                       kconfig.add_entry(entry)
+> +                       kconfig.add_entry(empty_match.group(1), 'n')
+>                         continue
+>
+>                 if line[0] == '#':
+> diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+> index 3539efaf99ba..ebd2d91af710 100644
+> --- a/tools/testing/kunit/kunit_kernel.py
+> +++ b/tools/testing/kunit/kunit_kernel.py
+> @@ -53,8 +53,8 @@ class LinuxSourceTreeOperations:
+>                 except subprocess.CalledProcessError as e:
+>                         raise ConfigError(e.output.decode())
+>
+> -       def make_arch_qemuconfig(self, base_kunitconfig: kunit_config.Kconfig) -> None:
+> -               pass
+> +       def make_arch_qemuconfig(self, base_kunitconfig: kunit_config.Kconfig) -> kunit_config.Kconfig:
+> +               return base_kunitconfig
+>
+>         def make_allyesconfig(self, build_dir: str, make_options) -> None:
+>                 raise ConfigError('Only the "um" arch is supported for alltests')
+> @@ -109,9 +109,10 @@ class LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
+>                 self._kernel_command_line = qemu_arch_params.kernel_command_line + ' kunit_shutdown=reboot'
+>                 self._extra_qemu_params = qemu_arch_params.extra_qemu_params
+>
+> -       def make_arch_qemuconfig(self, base_kunitconfig: kunit_config.Kconfig) -> None:
+> +       def make_arch_qemuconfig(self, base_kunitconfig: kunit_config.Kconfig) -> kunit_config.Kconfig:
+>                 kconfig = kunit_config.parse_from_string(self._kconfig)
+> -               base_kunitconfig.merge_in_entries(kconfig)
+> +               kconfig.merge_in_entries(base_kunitconfig)
+> +               return kconfig
+>
+>         def start(self, params: List[str], build_dir: str) -> subprocess.Popen:
+>                 kernel_path = os.path.join(build_dir, self._kernel_path)
+> @@ -265,9 +266,10 @@ class LinuxSourceTree:
+>         def validate_config(self, build_dir: str) -> bool:
+>                 kconfig_path = get_kconfig_path(build_dir)
+>                 validated_kconfig = kunit_config.parse_file(kconfig_path)
+> -               if self._kconfig.is_subset_of(validated_kconfig):
+> +               invalid = self._kconfig.set_diff(validated_kconfig)
+> +               if not invalid:
+>                         return True
+> -               invalid = self._kconfig.entries() - validated_kconfig.entries()
+> +
+>                 message = 'Not all Kconfig options selected in kunitconfig were in the generated .config.\n' \
+>                           'This is probably due to unsatisfied dependencies.\n' \
+>                           'Missing: ' + ', '.join([str(e) for e in invalid])
+> @@ -282,7 +284,7 @@ class LinuxSourceTree:
+>                 if build_dir and not os.path.exists(build_dir):
+>                         os.mkdir(build_dir)
+>                 try:
+> -                       self._ops.make_arch_qemuconfig(self._kconfig)
+> +                       self._kconfig = self._ops.make_arch_qemuconfig(self._kconfig)
+>                         self._kconfig.write_to_file(kconfig_path)
+>                         self._ops.make_olddefconfig(build_dir, make_options)
+>                 except ConfigError as e:
+> @@ -303,7 +305,7 @@ class LinuxSourceTree:
+>                         return True
+>
+>                 old_kconfig = kunit_config.parse_file(old_path)
+> -               return old_kconfig.entries() != self._kconfig.entries()
+> +               return old_kconfig != self._kconfig
+>
+>         def build_reconfig(self, build_dir: str, make_options) -> bool:
+>                 """Creates a new .config if it is not a subset of the .kunitconfig."""
+> @@ -313,7 +315,8 @@ class LinuxSourceTree:
+>                         return self.build_config(build_dir, make_options)
+>
+>                 existing_kconfig = kunit_config.parse_file(kconfig_path)
+> -               self._ops.make_arch_qemuconfig(self._kconfig)
+> +               self._kconfig = self._ops.make_arch_qemuconfig(self._kconfig)
+> +
+>                 if self._kconfig.is_subset_of(existing_kconfig) and not self._kunitconfig_changed(build_dir):
+>                         return True
+>                 print('Regenerating .config ...')
+> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+> index 25a2eb3bf114..3a8f638ff092 100755
+> --- a/tools/testing/kunit/kunit_tool_test.py
+> +++ b/tools/testing/kunit/kunit_tool_test.py
+> @@ -45,7 +45,7 @@ class KconfigTest(unittest.TestCase):
+>                 self.assertTrue(kconfig0.is_subset_of(kconfig0))
+>
+>                 kconfig1 = kunit_config.Kconfig()
+> -               kconfig1.add_entry(kunit_config.KconfigEntry('TEST', 'y'))
+> +               kconfig1.add_entry('TEST', 'y')
+>                 self.assertTrue(kconfig1.is_subset_of(kconfig1))
+>                 self.assertTrue(kconfig0.is_subset_of(kconfig1))
+>                 self.assertFalse(kconfig1.is_subset_of(kconfig0))
+> @@ -56,40 +56,28 @@ class KconfigTest(unittest.TestCase):
+>                 kconfig = kunit_config.parse_file(kconfig_path)
+>
+>                 expected_kconfig = kunit_config.Kconfig()
+> -               expected_kconfig.add_entry(
+> -                       kunit_config.KconfigEntry('UML', 'y'))
+> -               expected_kconfig.add_entry(
+> -                       kunit_config.KconfigEntry('MMU', 'y'))
+> -               expected_kconfig.add_entry(
+> -                       kunit_config.KconfigEntry('TEST', 'y'))
+> -               expected_kconfig.add_entry(
+> -                       kunit_config.KconfigEntry('EXAMPLE_TEST', 'y'))
+> -               expected_kconfig.add_entry(
+> -                       kunit_config.KconfigEntry('MK8', 'n'))
+> -
+> -               self.assertEqual(kconfig.entries(), expected_kconfig.entries())
+> +               expected_kconfig.add_entry('UML', 'y')
+> +               expected_kconfig.add_entry('MMU', 'y')
+> +               expected_kconfig.add_entry('TEST', 'y')
+> +               expected_kconfig.add_entry('EXAMPLE_TEST', 'y')
+> +               expected_kconfig.add_entry('MK8', 'n')
+> +
+> +               self.assertEqual(kconfig, expected_kconfig)
+>
+>         def test_write_to_file(self):
+>                 kconfig_path = os.path.join(test_tmpdir, '.config')
+>
+>                 expected_kconfig = kunit_config.Kconfig()
+> -               expected_kconfig.add_entry(
+> -                       kunit_config.KconfigEntry('UML', 'y'))
+> -               expected_kconfig.add_entry(
+> -                       kunit_config.KconfigEntry('MMU', 'y'))
+> -               expected_kconfig.add_entry(
+> -                       kunit_config.KconfigEntry('TEST', 'y'))
+> -               expected_kconfig.add_entry(
+> -                       kunit_config.KconfigEntry('EXAMPLE_TEST', 'y'))
+> -               expected_kconfig.add_entry(
+> -                       kunit_config.KconfigEntry('MK8', 'n'))
+> +               expected_kconfig.add_entry('UML', 'y')
+> +               expected_kconfig.add_entry('MMU', 'y')
+> +               expected_kconfig.add_entry('TEST', 'y')
+> +               expected_kconfig.add_entry('EXAMPLE_TEST', 'y')
+> +               expected_kconfig.add_entry('MK8', 'n')
+>
+>                 expected_kconfig.write_to_file(kconfig_path)
+>
+>                 actual_kconfig = kunit_config.parse_file(kconfig_path)
+> -
+> -               self.assertEqual(actual_kconfig.entries(),
+> -                                expected_kconfig.entries())
+> +               self.assertEqual(actual_kconfig, expected_kconfig)
+>
+>  class KUnitParserTest(unittest.TestCase):
+>
+> @@ -381,8 +369,11 @@ class LinuxSourceTreeTest(unittest.TestCase):
+>                         kunit_kernel.LinuxSourceTree('', kunitconfig_path=dir)
+>
+>         def test_kconfig_add(self):
+> +               want_kconfig = kunit_config.Kconfig()
+> +               want_kconfig.add_entry('NOT_REAL', 'y')
+> +
+>                 tree = kunit_kernel.LinuxSourceTree('', kconfig_add=['CONFIG_NOT_REAL=y'])
+> -               self.assertIn(kunit_config.KconfigEntry('NOT_REAL', 'y'), tree._kconfig.entries())
+> +               self.assertFalse(want_kconfig.set_diff(tree._kconfig))
+>
+>         def test_invalid_arch(self):
+>                 with self.assertRaisesRegex(kunit_kernel.ConfigError, 'not a valid arch, options are.*x86_64'):
+>
+> base-commit: 1b11063d32d7e11366e48be64215ff517ce32217
+> --
+> 2.36.1.124.g0e6072fb45-goog
+>
+
+--000000000000cd467805df6b6192
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+G7p3AiuB2sgfq6cOpbO5MEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQBsL34EJkCtu9Nu
+2+R6l1Qzno5Gl+N2Cm6/YLujukDGYa1JW27txXiilR9dGP7yl60HYyG2Exd5i6fiLDlaNEw0SqzE
+dw9ZSIak3Qvm2UybR8zcnB0deCUiwahqh7ZncEPlhnPpB08ETEUtwBEqCEnndNEkIN67yz4kniCZ
+jZstNF/BUnI3864fATiXSbnNqBwlJS3YkoaCTpbI9qNTrf5VIvnbryT69xJ6f25yfmxrXNJJe5OG
+ncB34Cwnb7xQyk+uRLZ465yUBkbjk9pC/yamL0O7SOGYUclrQl2c5zzGuVBD84YcQGDOK6gSPj6w
+QuBfOooZPOyZZZ8AMih7J980MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCC/
+alf0qaXwa20cjHl888c+ckgVjj3r/4QIXHtOCpkX+jAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjA1MjAwNjEyNThaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAhea78VUkmCPriMjXG7gY
+wZKAEUMaDbDmjU433BIMS9HyTz3UbGme/MJyvutC5SvX2W8NWcwDvIaH3ayvfG/vTwffUKZsyE6n
+kidcLA3Vp/DLV5H4HAlQrIcl3DVO+5aJg0M9I3cbWiAzxj4IVWFi3FjE+cBdmYG1wE0F/IvAS0HK
+NpD8XGjIWwTt4lwhIGRlgr2qI/qp08UcDlPcuMqd/7whP0NkRorRGbYsmHw1Kd6390rGxulNaHvB
+I9QxeZTcTYz1+hO2W3TTaZ3tXXiImjgG7Eb2BEb2tq7oPykghja6I/7Pc9oCR9r0+bRSxL6Zv1Yl
+2YQSKrXTNp8lPIKKqw==
+--000000000000cd467805df6b6192--

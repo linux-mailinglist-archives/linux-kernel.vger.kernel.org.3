@@ -2,96 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59F9152F60A
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 01:16:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99F9952F613
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 01:17:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348025AbiETXQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 19:16:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43864 "EHLO
+        id S1354026AbiETXRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 19:17:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238696AbiETXQf (ORCPT
+        with ESMTP id S238696AbiETXRe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 19:16:35 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E3AF57146
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 16:16:32 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id i66so11565495oia.11
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 16:16:32 -0700 (PDT)
+        Fri, 20 May 2022 19:17:34 -0400
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A8B193225;
+        Fri, 20 May 2022 16:17:32 -0700 (PDT)
+Received: by mail-vs1-xe35.google.com with SMTP id a127so9766057vsa.3;
+        Fri, 20 May 2022 16:17:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=yxlZFui2Yaf/yMfrSBImiOBBtFzo9plT1mEwwLvskcQ=;
-        b=QQ3Ji43YCSMIg8zi7tO8mgLiPY7ZQlKggsWtAYpivQLNqk+AhHphjiJJkj5BEw3goj
-         FHAHKy8fWM7leVzFHXGZMrZAsYfuKb1BN8Imu8P6lDBZMim3CdRugYFXBeJvJ565G170
-         wl0TR4s69nBhT8PKphKsRvd+mvXC6hs6/WoYs=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Hekv4PeSVxy3W9xeYUymMwFTkMHNpWijYPhHjrvNMUI=;
+        b=WH75hysf+lIJsWaAMWYtK3N11JjMncKS4XPr0SkeHmLi5c086CqZUMqXFwpJAn/mX5
+         HnZbkMRD8J55TA77KetrwP8nWmAL99eVqP1CpVEbA907mPIL4+OrEaRlxpfHPBG7rzgi
+         e9msRuEfTLpcesCmAwATMBrAWQDXVLoQa/pZmCf2nD1yQ5r/aeRoKQnjGNawQb10R2F+
+         Qq2qMZDeMpIAlO6E0+KRqrGzadzxogn2+v6YUZpll2qi8EThLK3EJohXtYaHMtq0bzzW
+         HcsFghXXhJnOV+KCVLmZr0zfqOE3d9qR1DSXLb9BKPgpz9kx0tQidIWZ3WOT86xGREwm
+         sZ1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=yxlZFui2Yaf/yMfrSBImiOBBtFzo9plT1mEwwLvskcQ=;
-        b=m0f4HywHuOFrhhiY99HQLYClZ+kS9xz4ZEcyXTFGoxzqMQZ7Vhupmn4OENwxE/8kav
-         1qEF00LU8kOMST5+s+8eZJpJPOFUmFZhuq0NG6xt6/i2bMQesysSAOWyL4alJX7TsI9I
-         5Uectc4C2Tnq4gsD6/bl+cjiExMKINMLJ+3uxwVSG+iVVztdgcbXCPr6Nv9k22+6PLxi
-         5/odLA21TxetPDD//AaGvX+j9NzpeRCWTSmxZes97vTqyXl41MMExOoK1G2Zyzv5ECT6
-         TCoe+m2mDitCh3fzOyw85QtOl8FdgaVHGvTqgHn62ahLX3dFvUNe+7+lbPctvGMn+alm
-         MdEw==
-X-Gm-Message-State: AOAM531BUCGTN/Y3OicBziaMzTGZP7/hAeLnuw5vyuEUtpJrv864ozxd
-        JHjF7OGuYm/dbsmcxDd3OLC2lVdWwYFqhFdi3OEygKHkC2U=
-X-Google-Smtp-Source: ABdhPJze2O0r826Wkv9TYht2+IV2909AuAPrg2Bpl39RVQNOr0gbPg1aiFpRQF/hshBLa8Bf37FBjT5mXHnyiWqAZ6w=
-X-Received: by 2002:a05:6808:23c3:b0:326:bd8d:7993 with SMTP id
- bq3-20020a05680823c300b00326bd8d7993mr6933836oib.63.1653088591458; Fri, 20
- May 2022 16:16:31 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 20 May 2022 16:16:30 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Hekv4PeSVxy3W9xeYUymMwFTkMHNpWijYPhHjrvNMUI=;
+        b=n4wnZkfifaQu4vZ7ieC/8Q5a9b92789MXr0pGts2mW854FoXMuFWzI8Mch2xkv8ioO
+         9NlFiquLOMX23fZnrduO1ceYu1EfHsj9XFq+PFxMeK3lj201GoIadwqAh5a8gJgKF+jS
+         AH+/0oc246PeQq++131/SWttbXFak+qxWbHW4iAt189f1FKUIxoHvdg06o86yOGqNld/
+         GrrFtcc/ADxNo4P3gfvWpBC9lJ5LEgEiAN+O69paOyE3RWBRFvWqynNGFHESG2+Dk8bI
+         F29rQzuyOBHeIDbzrt6zWRt4r/v2zYxr4SXC6IaDhplFlituwIzscrhfwZyGOL21/as2
+         C6KQ==
+X-Gm-Message-State: AOAM533xkbF+MLj/FEVFqRRz3E9p7JaxbDuObyrokoCCnW950eanvZyV
+        TvtBLt6K7RtT4/Yl2GXirek6/e16DbRCO0X7tmIsnPAe
+X-Google-Smtp-Source: ABdhPJzGsa4x6gQ2dO5RSAPdcysgQixxoZi6ANEP0FObSFf4AXal9/ndfLtDJDlCiQclR78VD96mgwXcI/ndzt6IqCs=
+X-Received: by 2002:a05:6102:370a:b0:333:c0e7:77e8 with SMTP id
+ s10-20020a056102370a00b00333c0e777e8mr5547201vst.54.1653088651840; Fri, 20
+ May 2022 16:17:31 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAD=FV=VSMyJrs9bTE2XEC=q7VtZi6YKFaKJQJyLTZhVaYa9-Jg@mail.gmail.com>
-References: <20220427020339.360855-1-swboyd@chromium.org> <20220427020339.360855-4-swboyd@chromium.org>
- <CAD=FV=VSMyJrs9bTE2XEC=q7VtZi6YKFaKJQJyLTZhVaYa9-Jg@mail.gmail.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Fri, 20 May 2022 16:16:30 -0700
-Message-ID: <CAE-0n52dG8ucjgsaDVXDw1hXsG3YNZRPKyYVTr+JVJHpFoAizA@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] arm64: dts: qcom: Only include sc7180.dtsi in sc7180-trogdor.dtsi
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "Joseph S. Barrera III" <joebar@chromium.org>
+References: <cover.1652772731.git.esyr@redhat.com> <6ef675aeeea442fa8fc168cd1cb4e4e474f65a3f.1652772731.git.esyr@redhat.com>
+ <YoNnAgDsIWef82is@krava> <20220517123050.GA25149@asgard.redhat.com>
+ <YoP/eEMqAn3sVFXf@krava> <7c5e64f2-f2cf-61b7-9231-fc267bf0f2d8@fb.com>
+ <YoTXiAk1EpZ0rLKE@krava> <20220518123022.GA5425@asgard.redhat.com>
+ <CAEf4BzbRYT4ykpxzXKGQ03REoVRKm_q8=oVEVCXfE+4zVDb=8A@mail.gmail.com> <20220519173359.GA7786@asgard.redhat.com>
+In-Reply-To: <20220519173359.GA7786@asgard.redhat.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 20 May 2022 16:16:57 -0700
+Message-ID: <CAEf4BzYCU-jz9aks3q4Y+nvjkTyoqnW4CAL6KujioLOoAiJ3YA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 4/4] bpf_trace: pass array of u64 values in kprobe_multi.addrs
+To:     Eugene Syromiatnikov <esyr@redhat.com>
+Cc:     Jiri Olsa <olsajiri@gmail.com>, Yonghong Song <yhs@fb.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Doug Anderson (2022-05-20 15:16:03)
-> On Tue, Apr 26, 2022 at 7:03 PM Stephen Boyd <swboyd@chromium.org> wrote:
-> >  arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom.dtsi            | 1 -
-> >  arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts                 | 1 -
-> >  arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi                   | 3 ++-
-> >  19 files changed, 17 insertions(+), 19 deletions(-)
+On Thu, May 19, 2022 at 10:34 AM Eugene Syromiatnikov <esyr@redhat.com> wrote:
 >
-> While reviewing a different change, I found something fishy and
-> tracked it down to ${SUBJECT} patch.
+> On Wed, May 18, 2022 at 04:48:59PM -0700, Andrii Nakryiko wrote:
+> > Not sure how you can do that without having extra test_progs variant
+> > that's running in compat mode?
 >
-> Specifically, after ${SUBJECT} patch then I run `git grep
-> include.*trogdor.dtsi`. When I do that, I see that
-> `sc7180-trogdor.dtsi` is double-included in all lazor devices. :( It's
-> included in the actual dts files and also in the lazor.dtsi file.
->
-> That's probably not right. I think we need to remove the one in the
-> lazor.dtsi file?
+> I think, all bpf selftests are to be run in compat mode as well,
+> now is a good time to enable this as any.
 >
 
-Good catch! I sent a patch to fix it[1]. I recall I compiled
-before/after and didn't see any difference, so I suspect it's just a
-waste of time during the compilation phase but otherwise not causing a
-problem.
-
-[1] https://lore.kernel.org/r/20220520231355.1559104-1-swboyd@chromium.org
+It's going to add a noticeable delay to CI runs, which is bad. Until
+we have everything set up to run test_progs flavors in parallel,
+adding compat flavor is not an option.

@@ -2,117 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61AFB52E7C1
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 10:39:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99B4552E7C9
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 10:39:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347203AbiETIi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 04:38:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58432 "EHLO
+        id S1347262AbiETIjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 04:39:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244669AbiETIi4 (ORCPT
+        with ESMTP id S1347214AbiETIi7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 04:38:56 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8BDC9E9E6;
-        Fri, 20 May 2022 01:38:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=pxggZUUsNsOcqH9iLg2oJLg6WmEmCBTVD52cAZNze7E=; b=f18j+M0/1MTZ6wPOZo6o/pbIpZ
-        QzyvPytWu44BPAqWPQbCGV6YNYjcGXnjo2o0+OIuladBTSprxtvid50mc+NjW1icENd1wy/pv6ezs
-        ESlixUCnaL2mDjsFRyxU/D5/YHzld+kkcfdHxUBEt2U3r/rvz1lJsmgf4tXG/OqGTEZcjML+93PH8
-        83fR4Oh5zqPMs4rFyj+v5pYotCPtrM2Ip/PLQnTjqdrc3ARPyVAfqJrRe3PU0NjXYQC7AFuendUeX
-        yJuPtxE098+fnmKIiaxZQMMQdpVLeZVUD/9YCCiBsONRBmushSEqyWVF6VXh5zhW0il3QD2puRwtX
-        WFXcnqaQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nry9f-002HFc-Hw; Fri, 20 May 2022 08:38:40 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 145B4980E7F; Fri, 20 May 2022 10:38:39 +0200 (CEST)
-Date:   Fri, 20 May 2022 10:38:39 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-tip-commits@vger.kernel.org,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
+        Fri, 20 May 2022 04:38:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F43F9D4F3;
+        Fri, 20 May 2022 01:38:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CFE5761B0B;
+        Fri, 20 May 2022 08:38:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27026C385AA;
+        Fri, 20 May 2022 08:38:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653035938;
+        bh=jVvvW+OlkZCh2gb3rdyuw5E31L8Sl2Fot/uy8XyBemw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=fTpEcYsk+CaV2qze7mX4Ytg6Pej6K9S0Ft34ASKgEa6PpTQk44zcpuBZ3Pk4ij8OB
+         eZulL/6ILVqSu5PvOXP0ubazBOCDw2E2c0+dgiHe1ZQ5X2m0lDtM3quK370eo8tz44
+         8D7DvVNVhRQTUQu6rymfC3kJcYBuN1mUmWFppX+xNiPf7rBOfNMLybxFqqeYkKDHrQ
+         v1z5URUmzQYa8ZizHT1K1hruPhcBrchV2UTeq/vnUFmUJXJuXjg48AvKGhkwz7VvnY
+         SC0lIbNwQdl95GJKMQpPeWc0JyPc+TFi0Jj/iL9hZwyg5htuu+S7MrfPbnnzKRsfbD
+         F+JnUeBgArh5Q==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nry9v-00CdSv-M0; Fri, 20 May 2022 09:38:55 +0100
+Date:   Fri, 20 May 2022 09:38:55 +0100
+Message-ID: <87k0agmwdc.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Dragan Mladjenovic <Dragan.Mladjenovic@syrmia.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@suse.de>, x86@kernel.org
-Subject: [PATCH] x86/tdx: Fix tdx asm
-Message-ID: <20220520083839.GR2578@worktop.programming.kicks-ass.net>
-References: <20220405232939.73860-4-kirill.shutemov@linux.intel.com>
- <164946766187.4207.15170758896351389068.tip-bot2@tip-bot2>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <164946766187.4207.15170758896351389068.tip-bot2@tip-bot2>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chao-ying Fu <cfu@wavecomp.com>
+Subject: Re: [PATCH 03/12] irqchip: mips-gic: Introduce gic_with_each_online_cpu()
+In-Reply-To: <20220519185125.11686-4-Dragan.Mladjenovic@syrmia.com>
+References: <20220519185125.11686-1-Dragan.Mladjenovic@syrmia.com>
+        <20220519185125.11686-4-Dragan.Mladjenovic@syrmia.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: Dragan.Mladjenovic@syrmia.com, tsbogend@alpha.franken.de, paulburton@kernel.org, fancer.lancer@gmail.com, tglx@linutronix.de, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, cfu@wavecomp.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 09, 2022 at 01:27:41AM -0000, tip-bot2 for Kuppuswamy Sathyanarayanan wrote:
-> +SYM_FUNC_START(__tdx_module_call)
-> +	FRAME_BEGIN
-> +	TDX_MODULE_CALL host=0
-> +	FRAME_END
-> +	ret
-> +SYM_FUNC_END(__tdx_module_call)
+On Thu, 19 May 2022 19:51:16 +0100,
+Dragan Mladjenovic <Dragan.Mladjenovic@syrmia.com> wrote:
+> 
+> From: Paul Burton <paulburton@kernel.org>
+> 
+> A few pieces of code in the MIPS GIC driver operate on the GIC local
+> register block for each online CPU, accessing each via the GIC's
+> other/redirect register block. This patch abstracts the process of
+> iterating over online CPUs & configuring the other/redirect region to
+> access their registers through a new gic_with_each_online_cpu() macro.
+> 
+> This simplifies users of the new macro slightly, and more importantly
+> prepares us for handling multi-cluster systems where the register
+> configuration will be done via the CM's GCR_CL_REDIRECT register. By
+> abstracting all other/redirect block configuration through this macro,
+> and the __gic_with_next_online_cpu() function which backs it, users will
+> trivially gain support for multi-cluster when it is implemented in
+> __gic_with_next_online_cpu().
+> 
+> Signed-off-by: Paul Burton <paulburton@kernel.org>
+> Signed-off-by: Chao-ying Fu <cfu@wavecomp.com>
+> 
+> diff --git a/drivers/irqchip/irq-mips-gic.c b/drivers/irqchip/irq-mips-gic.c
+> index ff89b36267dd..4872bebe24cf 100644
+> --- a/drivers/irqchip/irq-mips-gic.c
+> +++ b/drivers/irqchip/irq-mips-gic.c
 
-> +SYM_FUNC_START(__tdx_hypercall)
+No SoB from the sender, odd patch format (no ---), and I didn't get a
+complete series, which makes it impossible to review things in context
+(I don't even know what the series is about).
 
-> +
-> +	retq
-> +.Lpanic:
-> +	call __tdx_hypercall_failed
-> +	/* __tdx_hypercall_failed never returns */
-> +	jmp .Lpanic
-> +SYM_FUNC_END(__tdx_hypercall)
+Please fix things and resend.
 
-:-(
+	M.
 
----
-Subject: x86/tdx: Fix tdx asm
-
-Because build-testing is over-rated, a few trivial objtool complaints:
-
-  vmlinux.o: warning: objtool: __tdx_module_call+0x3e: missing int3 after ret
-  vmlinux.o: warning: objtool: __tdx_hypercall+0x6e: missing int3 after ret
-
-Fixes: eb94f1b6a70a ("x86/tdx: Add __tdx_module_call() and __tdx_hypercall() helper functions")
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- arch/x86/coco/tdx/tdcall.S | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/coco/tdx/tdcall.S b/arch/x86/coco/tdx/tdcall.S
-index eeb4511dc414..f9eb1134f22d 100644
---- a/arch/x86/coco/tdx/tdcall.S
-+++ b/arch/x86/coco/tdx/tdcall.S
-@@ -73,7 +73,7 @@ SYM_FUNC_START(__tdx_module_call)
- 	FRAME_BEGIN
- 	TDX_MODULE_CALL host=0
- 	FRAME_END
--	ret
-+	RET
- SYM_FUNC_END(__tdx_module_call)
-
- /*
-@@ -196,7 +196,7 @@ SYM_FUNC_START(__tdx_hypercall)
-
- 	FRAME_END
-
--	retq
-+	RET
- .Lpanic:
- 	call __tdx_hypercall_failed
- 	/* __tdx_hypercall_failed never returns */
-
+-- 
+Without deviation from the norm, progress is not possible.

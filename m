@@ -2,133 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BB2652EE61
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 16:45:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CD6052EE63
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 16:45:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344047AbiETOpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 10:45:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38766 "EHLO
+        id S1350423AbiETOpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 10:45:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237092AbiETOpQ (ORCPT
+        with ESMTP id S244390AbiETOpT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 10:45:16 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2052.outbound.protection.outlook.com [40.107.92.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E84F170F22;
-        Fri, 20 May 2022 07:45:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gnuhCraQ/yTA4pX8VtvoNph7DjzDHECkkd5EOwvvN/zCCnGmWIRI4UcQjIU76YGfDxBeEDhfI5xOnlq02yAidWfLrbwwn+8JYwK1DzIFDoABxypVXYwp3M6RD5Hq0CACJi3eJl1SlGN8bw2sgHrhnLJkUcrDoIcmmFdwUFk1Y1265WubcK0z5Zv4LcBbgVNMemOyIUboM1pcPvNSxjArYEY1oy0Nq7jkja4Adx6hfWeNR0kRDwU8x0R10Y+Qb9xEoGZjaQaZ7K7yZ43/rKY9HiwuJOKjqzMuudwCSzohbfFpvei9uZP5J8JMKRV5QeMzj5DMGP4Yxp6BYWei+r5E1Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9o8czfjRm88/ROisOKix6uiVn4Jg6Sr0YAoQYW5o+9k=;
- b=PDQgBoOJZDWVICdUvjQLW0ul5Nw28/FIQ2m9Sa7g7oeCH1WCYi37QDQpmj7YJw/6Xk6QrGimjRBa+en/+Br7wIJ0HjgGv4ZAbh0idUIWYxd63q7B/ZCR2m14Rdy8dsndRPy7EnNCHytg5ok4FClsE/3XKBWqTMAGZdkJ8y7/4/yLQGdPNDu/HHjIFMtKkLuQqR/E67FQnX/oFy2O3qK8/2nhJYPQ0KSFIBpsQRCx4bDU1k4hGNNvwbpOHkk6mYKinwrdHoSVOaVopNiq7AjcL45JQ1AcNfKlvv1qTVjPkDxtgzVei7XzI12gVO3WDgPKpmiRwMoLalwsa7vePOBURg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9o8czfjRm88/ROisOKix6uiVn4Jg6Sr0YAoQYW5o+9k=;
- b=kQtj7QuDlO+8SkS3DJFXfQVYpiMxb0Y+6It/WQDlpRQ3md1PQWBGN8RH/JLZNNdkhIyYESlJvJ+ptyKRxwNeF6f20QHKoIFO3H6tS6MB2LmP435ibY5Rnm1qEyeDoGIyvLUxeQ7tUiFz6MMh1XBqjlJQoBrxUrjkCYJKszb3rqlccKOwOyYcKsem7FTpWnUlnAPIFuDSSm59k3Z8UvX0KFFGyKC5/a6D+yXj/dO8wt0bRDaOqdPZgEM4lOv6Lksy2XzVtnKt3U78StdSuqgUNle94XNEeGNgFnLwCXsFxiE746Fu3EZZonZRg64XJUFZupklHjOeCExEjg2gYaH8iQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by PH7PR12MB5805.namprd12.prod.outlook.com (2603:10b6:510:1d1::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.17; Fri, 20 May
- 2022 14:45:13 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ec2d:9167:1b47:2db2]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ec2d:9167:1b47:2db2%7]) with mapi id 15.20.5273.017; Fri, 20 May 2022
- 14:45:13 +0000
-Date:   Fri, 20 May 2022 11:45:11 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Li Zhijian <lizhijian@fujitsu.com>
-Cc:     Zhu Yanjun <zyjzyj2000@gmail.com>, linux-rdma@vger.kernel.org,
-        Bob Pearson <rpearsonhpe@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] RDMA/rxe: Use kzalloc() to alloc map_set
-Message-ID: <20220520144511.GA2302907@nvidia.com>
-References: <20220518043725.771549-1-lizhijian@fujitsu.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220518043725.771549-1-lizhijian@fujitsu.com>
-X-ClientProxiedBy: MN2PR08CA0006.namprd08.prod.outlook.com
- (2603:10b6:208:239::11) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Fri, 20 May 2022 10:45:19 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EF1F170F22;
+        Fri, 20 May 2022 07:45:19 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id fw21-20020a17090b129500b001df9f62edd6so6557834pjb.0;
+        Fri, 20 May 2022 07:45:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=bV1fOV8EkPPKwTjdd+pCTFwZ+Tvzp6iCg5Gu+jWNb7o=;
+        b=jYSUm9nn4IZq15zBrPNJHS6DY7JGyShjxIH5jVqHz3lgZUe4TFRyDUIi6Ny2znOkyg
+         i/mFcUTWJ1kSTywrvoYWpYustfL3dCTrXzUbLEqBrvafbSxYS7F1quVM1ZXumO6oU0sC
+         WXlC4XUm438GrqA+ZKNsk9bPfwleiJZofZgP38x3cTvVYOXvICUE/JW0cEUXtHPVeHLA
+         nMV3LVccHDDYLtQm4CQhR0bx75KczIbJXobfeMI2U+G+1wolu6Z5ST819jqOhX80H3tZ
+         fS4T1I+V3DSH7sHywI+tZOaIxcOeTqs/hFUq1VSOedpJ2kigBc96Vp3+2mREwXQKOBxv
+         nFYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=bV1fOV8EkPPKwTjdd+pCTFwZ+Tvzp6iCg5Gu+jWNb7o=;
+        b=wkhEMgqUVcxFGn25E9zVuDju5fOrJHXqNf4SjSFwMw98hnjZla1NBak/ywGp/8+UfY
+         2AEW/LjBxFwp5rlOiuef5vbcIupi9V8uFt5TmLiCH0pSirV7baQcmdSrcuV5U36A+b+E
+         q/71pPcao8sjTnXIbM0U6Q1oX6nF/F6nBFPRXQy9EQ7G+AHgAzzbe8A3TQ1jarxbEp27
+         a9WliSPRQkCxj4WSrCMJ3uvxF1Y8SY4+6nScC4IMVOQT+wYpWSY+5TaHaSkCJBSyLfA6
+         MTERmnw7lMVg5nhOutnY6EzH3XN+7T9IzbIK9ttcJDC1tY0WnmSIBeXASXd2ONFSl+40
+         Gi9Q==
+X-Gm-Message-State: AOAM532tKw/WAsE1A380DHLzxIMzbGRLOD3IP0KXMssAIdMLIG4KEZMx
+        Qa2Px/LV5yxsffh2WkxwVlg=
+X-Google-Smtp-Source: ABdhPJyGaT7E+U0fr95zdMFKOzoFCFHlE57Co3IqQ8mOUYHRFFWs0oGNzpnjz814PubMJ4j+W7U6Wg==
+X-Received: by 2002:a17:902:9a42:b0:158:bf91:ecec with SMTP id x2-20020a1709029a4200b00158bf91ececmr10227542plv.115.1653057918534;
+        Fri, 20 May 2022 07:45:18 -0700 (PDT)
+Received: from localhost.localdomain ([203.205.141.25])
+        by smtp.gmail.com with ESMTPSA id a13-20020aa7864d000000b0051829b1595dsm1932698pfo.130.2022.05.20.07.45.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 May 2022 07:45:18 -0700 (PDT)
+From:   Like Xu <like.xu.linux@gmail.com>
+X-Google-Original-From: Like Xu <likexu@tencent.com>
+To:     pbonzini@redhat.com
+Cc:     jmattson@google.com, joro@8bytes.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sandipan.das@amd.com,
+        seanjc@google.com, vkuznets@redhat.com, wanpengli@tencent.com
+Subject: [PATCH v2 2/3] KVM: x86/svm/pmu: Direct access pmu->gp_counter[] to implement amd_*_to_pmc()
+Date:   Fri, 20 May 2022 22:45:12 +0800
+Message-Id: <20220520144512.88454-1-likexu@tencent.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220510115718.93335-2-likexu@tencent.com>
+References: <20220510115718.93335-2-likexu@tencent.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b53422ea-b3c4-4173-23f4-08da3a6f5908
-X-MS-TrafficTypeDiagnostic: PH7PR12MB5805:EE_
-X-Microsoft-Antispam-PRVS: <PH7PR12MB580530C9D6B00A1306F76A37C2D39@PH7PR12MB5805.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: y3lh7EI6kxkvnV07D+cSJbiPUKs3e4mPqpORi1cnAIv2ijgWsnEhMKQfuWbAZsFDwPs12nm7HPsl/EFG6IeJ7bA6NW1ps5NoTsuH1XVbH8LiLEXAOW0IWntjwwwgWRVHi7X6ir0X0PJ0zYLWd4slw33t2SjyDhFv6YP82Bsl0o1/qLJdNhzoxZqaFuHgjPDaIVsXMf3bpbjUAm2n+GTdbGpp2Jtb6JftzShxjkita28unMCod7G1w/w0tgO7FEJKhb79j938yWIHHcGsrox/YjNvdQcPQnyyz+7SxB2gODLQ63NdnyLq9VwUxnzUaWZkBE6NkU0j8nCa6wBRJUvwXQz0wJoN75+hmDPOfuWxr22i3UyiF728RzxuFKFo2edXZQm8NiYpiUymQfZ2vlM4v2AzAD3XY2Xd5AsKHyZ5WaSEgAepneMrLBwG2ARAa1JIF+YZtzHyja1L//VsLhbCI8g5SnUc4mOMaNhFFGEBlrFL0rkWuBzmcLTWf77T3/B+fP/wWNSM0KatJaea4M+8TQlJ3pqShVKGvySWyty74JR+3evsPW4vKxtCSJoH7q2UOzDSPQpZNQ9LvWWnH1fjkROdQ9XYgPnoQZV2vITHgjl4M/+UWT+SmJ6xnvYa9zaJgq2TJGsTWgV3VAytfiO07g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6486002)(2906002)(54906003)(6916009)(316002)(33656002)(86362001)(38100700002)(6512007)(6506007)(26005)(508600001)(2616005)(1076003)(186003)(36756003)(4326008)(66476007)(66946007)(66556008)(4744005)(8936002)(5660300002)(8676002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZCeOck/v0iv6WBRd0COScLJtt6EpU4PCS+g6Ra3IEED447S8ZGUpu/AM139r?=
- =?us-ascii?Q?mOifMl3HerEyGJqgNcPzIr5LLXY4VnWXjdQA3XE8oVjpSimpIh9wW/2XQziz?=
- =?us-ascii?Q?X5zXACSXI+TQ3Vvrch4PdTv8qV94KrLMDfToKu7e8meC+e+SdHlKuYDMtEnt?=
- =?us-ascii?Q?yuUbKrCgfi6L3I0gO9t49vUlcu+NyZgdGAc99s9LdJjjTT/nGz0//mFKr52P?=
- =?us-ascii?Q?tqEYr4rnk+NekslmuUa9/GAxTK+X48CvdPHNkXkGSTsXtCXPhTLDonlAY7Bw?=
- =?us-ascii?Q?c7sx5/j/AdXJndFh0OgtqyUC286bI+kyqnl0rbjS8Y1ZvKp0hu4XElAAtzuY?=
- =?us-ascii?Q?M6CuJwzj0OQmleQKF1dc4b0c+lh2sA6EpJoJGSOHSXu/gQheIO0nvt/soPSL?=
- =?us-ascii?Q?INOVB2mQYEgKhOAaKURpJR53P5Lb1ER1dtG6KaB5vRkT8iZ8f0rss8DBhBlq?=
- =?us-ascii?Q?wE8rK1m1p97gmmO6noHJizhGunQ275q0So7qzyq5ua81pANH/qiJT8s/MfBY?=
- =?us-ascii?Q?ktlailkBLTA5wIfU/QfVONBXUL4RP8xbVBB+Fy3dFj7MDumk8fdJC7Y1TSP9?=
- =?us-ascii?Q?sku3/b1xEaRWv5P7RRlA7fkLNeG3NTv24hXqQPn6OFsolK+UGbSpjUFBK2XK?=
- =?us-ascii?Q?qvc2CQqpdRJQawovLsatnTh0qrB63zCErPlPGt+EgUpt6N6asYabIiD4wHhP?=
- =?us-ascii?Q?dCCm/4NuZa0e9m7il9XTC0U8jFjoZk55OlxVLkh65mKcYEFvUPyWoj8B59L0?=
- =?us-ascii?Q?vFv98N7peNONn+AuvNfOg5qfNRSFgMPTWE5GkCPo4CGs02AYX5FXudUZwVDC?=
- =?us-ascii?Q?mnXdmyzRZOasCBYMiQmRF2T/NhPYjCxaBcusZAZDuNH1jH6eTcY2p64x99sN?=
- =?us-ascii?Q?VW5z1NlpQ+I+rFv0viTKrH/m84B0O9/Ao4pc29HrJvsvqhHZRcqd00BgO5JX?=
- =?us-ascii?Q?8jgz7Pq0W5Lp5lzzeAazBnEMzMOjAnMLJXrgvStM2PRT4u/Gmt+SPgXMPCj+?=
- =?us-ascii?Q?zroGU4ITQL7B1b6T25/vuMzusw/gAr7J+T08YJz26Lw8kRgL+r/7OayHK3a4?=
- =?us-ascii?Q?UPU1bbs3k49QKvI+ATOTywc41/TLgD+kmVyRD1CUKmiasYiyqqIwLH9U3KOl?=
- =?us-ascii?Q?Ozk03BtjNss0FVuaUNjkZhul3AeoyqNqfUDUDtAKPnVmYzawbQGKHi6x+kQP?=
- =?us-ascii?Q?dO2nvq4s7iGbkQErP/mQb1XeP4NR0jwKruRjtMFzbE7ie27INEw9JPW7VGcE?=
- =?us-ascii?Q?2lTqM+JPMY3tdIG9P4QQsU/Cw+MeDTHwHA9ajXoKEtljHp/He0KAAS2lj/c0?=
- =?us-ascii?Q?eZ8J7KWjdc/l6G80MjURDe70Y5rB1cqsTYxtbt668Jtml/dlxA3KYGV1/Ylm?=
- =?us-ascii?Q?ouqMbJ6tSx1xoaf5wTFnSFq4uV2mJZ1kb3fsfxBI1NCXtxrt1rNLNze1gjuf?=
- =?us-ascii?Q?Ng4QuHoWTAN2dqWts61hxQLnhFLDQF2ZFLNkDwx9fHDUKG2hkfWnekt+A8DC?=
- =?us-ascii?Q?ATKSQ2utjW+F8mIeWqkLrnaTvD00beGTJrXvI4RfUl+TNny2kD/ew4a31/sB?=
- =?us-ascii?Q?4VIAuHkkQWVal/AHRREZswLutEacFWbmdvXKQ2CKu3Y9yornn0YU0N9RpIut?=
- =?us-ascii?Q?LvFuKZWvNKqhaU4E1IQmQu198A97o4+IczwiKgClyFYpWZzsgZvBuf1APy2d?=
- =?us-ascii?Q?cBJaqVl83MZzhweRCkKwUuRYWN7g9JHHasS8KiaXPqmEzV7f6y5ETh4oJJoa?=
- =?us-ascii?Q?TmrKOjn5Uw=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b53422ea-b3c4-4173-23f4-08da3a6f5908
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 May 2022 14:45:13.8176
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HNqR325knmxI+AkxQv0PtLBauXE3cqw9eEDu+oboqWMxYWgHSLbK8R5dQdkaw9fC
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5805
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 12:37:25PM +0800, Li Zhijian wrote:
-> Below call chains will alloc map_set without fully initializing map_set.
-> rxe_mr_init_fast()
->  -> rxe_mr_alloc()
->     -> rxe_mr_alloc_map_set()
-> 
-> Uninitialized values inside struct rxe_map_set are possible to cause
-> kernel panic.
+From: Like Xu <likexu@tencent.com>
 
-If the value is uninitialized then why is 0 an OK value?
+AMD only has gp counters, whose corresponding vPMCs are initialised
+and stored in pmu->gp_counter[] in order of idx, so we can access this
+array directly based on any valid pmc->idx, without any help from other
+interfaces at all. The amd_rdpmc_ecx_to_pmc() can now reuse this part
+of the code quite naturally.
 
-Would be happier to know the exact value that is not initialized
+Opportunistically apply array_index_nospec() to reduce the attack
+surface for speculative execution and remove the dead code.
 
-Jason
+Signed-off-by: Like Xu <likexu@tencent.com>
+---
+v1 -> v2 Changelog:
+- Remove unused helper get_msr_base();
+
+ arch/x86/kvm/svm/pmu.c | 45 +++++++-----------------------------------
+ 1 file changed, 7 insertions(+), 38 deletions(-)
+
+diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
+index a3b78342a221..6cd8d3c2000c 100644
+--- a/arch/x86/kvm/svm/pmu.c
++++ b/arch/x86/kvm/svm/pmu.c
+@@ -61,21 +61,14 @@ static struct kvm_event_hw_type_mapping amd_f17h_event_mapping[] = {
+ static_assert(ARRAY_SIZE(amd_event_mapping) ==
+ 	     ARRAY_SIZE(amd_f17h_event_mapping));
+ 
+-static unsigned int get_msr_base(struct kvm_pmu *pmu, enum pmu_type type)
++static struct kvm_pmc *amd_pmc_idx_to_pmc(struct kvm_pmu *pmu, int pmc_idx)
+ {
+-	struct kvm_vcpu *vcpu = pmu_to_vcpu(pmu);
++	unsigned int num_counters = pmu->nr_arch_gp_counters;
+ 
+-	if (guest_cpuid_has(vcpu, X86_FEATURE_PERFCTR_CORE)) {
+-		if (type == PMU_TYPE_COUNTER)
+-			return MSR_F15H_PERF_CTR;
+-		else
+-			return MSR_F15H_PERF_CTL;
+-	} else {
+-		if (type == PMU_TYPE_COUNTER)
+-			return MSR_K7_PERFCTR0;
+-		else
+-			return MSR_K7_EVNTSEL0;
+-	}
++	if (pmc_idx >= num_counters)
++		return NULL;
++
++	return &pmu->gp_counters[array_index_nospec(pmc_idx, num_counters)];
+ }
+ 
+ static enum index msr_to_index(u32 msr)
+@@ -186,22 +179,6 @@ static bool amd_pmc_is_enabled(struct kvm_pmc *pmc)
+ 	return true;
+ }
+ 
+-static struct kvm_pmc *amd_pmc_idx_to_pmc(struct kvm_pmu *pmu, int pmc_idx)
+-{
+-	unsigned int base = get_msr_base(pmu, PMU_TYPE_COUNTER);
+-	struct kvm_vcpu *vcpu = pmu_to_vcpu(pmu);
+-
+-	if (guest_cpuid_has(vcpu, X86_FEATURE_PERFCTR_CORE)) {
+-		/*
+-		 * The idx is contiguous. The MSRs are not. The counter MSRs
+-		 * are interleaved with the event select MSRs.
+-		 */
+-		pmc_idx *= 2;
+-	}
+-
+-	return get_gp_pmc_amd(pmu, base + pmc_idx, PMU_TYPE_COUNTER);
+-}
+-
+ static bool amd_is_valid_rdpmc_ecx(struct kvm_vcpu *vcpu, unsigned int idx)
+ {
+ 	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
+@@ -215,15 +192,7 @@ static bool amd_is_valid_rdpmc_ecx(struct kvm_vcpu *vcpu, unsigned int idx)
+ static struct kvm_pmc *amd_rdpmc_ecx_to_pmc(struct kvm_vcpu *vcpu,
+ 	unsigned int idx, u64 *mask)
+ {
+-	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
+-	struct kvm_pmc *counters;
+-
+-	idx &= ~(3u << 30);
+-	if (idx >= pmu->nr_arch_gp_counters)
+-		return NULL;
+-	counters = pmu->gp_counters;
+-
+-	return &counters[idx];
++	return amd_pmc_idx_to_pmc(vcpu_to_pmu(vcpu), idx & ~(3u << 30));
+ }
+ 
+ static bool amd_is_valid_msr(struct kvm_vcpu *vcpu, u32 msr)
+-- 
+2.36.1
+

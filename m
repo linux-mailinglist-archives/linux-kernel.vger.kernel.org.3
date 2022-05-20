@@ -2,471 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37DC352E167
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 02:52:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DF1A52E171
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 02:56:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344150AbiETAwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 20:52:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57610 "EHLO
+        id S243354AbiETA4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 20:56:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232937AbiETAwm (ORCPT
+        with ESMTP id S232272AbiETA4Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 20:52:42 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C282741999;
-        Thu, 19 May 2022 17:52:40 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id t6so9445286wra.4;
-        Thu, 19 May 2022 17:52:40 -0700 (PDT)
+        Thu, 19 May 2022 20:56:16 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3CD25C673
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 17:56:13 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id v10so6431298pgl.11
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 17:56:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=8wmu68V4CsX/EUhtdLMZtJOtGaV8vxzQ5sczCJqnhcM=;
-        b=NT5kma0B7Op4v2qovqLRUNpC6SqHdqRVsspUeL4JOFv0uoOWMVa5xL2KWipXwhCATy
-         8BWz8tjm3Ta4bflZp1Ev59HwdwK7evHDpFx6gKeUneLZ9OPr7ci0m8mKBxjJpw2QePlo
-         XlrCGrJ7vj828yV3jF9K50FWfEd1Z6tVdR4ClhBHE1SvwEzAliKtP8HV88kgVmNhGt4w
-         BKBQBokvWv1RH96525koPJtWHNc2DCywF1W2CzDT07Bp7jv0bWyinSbCOTEvTNQFMrq6
-         PRN9WfEV57n9Op3wqTeG6xbpP4xdMR7NDFRPysdFIb/8tvJfXDWu0F9zWCfUTHvbxuIC
-         WA0Q==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Qy8eyoRBs5yiXN/0GtfHHCv3AARvpVaJFYQDrp6RKOY=;
+        b=XGlUl+vgzpkRfgpMDhJgwQZC6kR5/4tdm4wA2PIaxiG0hGaN3czYewWNsHuDgL3C62
+         oBr1Wbyp1AvsGW3iqafovjH27t9GVZ4m2uZCNL23WcN3hLqkPZ4cbURlnD6sI1kulhz5
+         QeGMg19wur7zvpqZq4cFPbcepIWQd46FJLKKZDrO+Cx3j7jZKZXAJm5gtQ6T3NIwqNj4
+         5qih06f7naHne7RiCSS9LplZau5WDsRVqXSEV2e0CXDscAjnyEmMP98ckbEyVzK1Caju
+         QQIw/IE9NE0ycqkhFmmh2EIhQIxz98lfHwdf5/8aVOAyLu62HxBotAFDRnlMZPbwHTwy
+         QtEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8wmu68V4CsX/EUhtdLMZtJOtGaV8vxzQ5sczCJqnhcM=;
-        b=LFR7gVKKXgQ/QYchyVglMRtPIm7vn7uidvopUDoVEgj7nKHcRou3fRpV3wDouAdZXx
-         IXWf/7gtedVJPsdmgkig/wnE73Xkr+5QEw9RPyXoI2jc4pvWF051GU6985g1mcWXWX2i
-         VMe11lOM4/7+Sga3U4w+hvITuDgkv37xgxRpZphtQbzLHntgqPX5Me5++U6hXq/Z5fa+
-         vpEgqKxOL4Hyyqzzu23tnZhADwoSRGYqhd30G3pyYclYGMS6DTI8wPLYz/vcuK2fTahR
-         L+TgZb4vDyWRj0db0OKTsjkWHC3LXheFvB28aUpph31r9RYHWEIB1ypGXdia3SFKdV2D
-         bWYQ==
-X-Gm-Message-State: AOAM530U0BxftzxMKlem+H2s+4FptYvBZE4ymZg2+xDgnqjk6Xkn+55N
-        P7fQvwd3DNaUdudyFh5jS4A=
-X-Google-Smtp-Source: ABdhPJwc8Bb01KOPGzN1thsODDHXEi1v+DZ6lfdVI+U7aMQ4AnhZTFY7m7MqzcIcJIx0+cRpfWhBnQ==
-X-Received: by 2002:a05:6000:1acc:b0:20c:67ff:e8b7 with SMTP id i12-20020a0560001acc00b0020c67ffe8b7mr6170381wry.646.1653007959005;
-        Thu, 19 May 2022 17:52:39 -0700 (PDT)
-Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.gmail.com with ESMTPSA id e30-20020adfa45e000000b0020c5253d8e6sm916921wra.50.2022.05.19.17.52.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 17:52:38 -0700 (PDT)
-Message-ID: <6286e656.1c69fb81.27e64.4cfc@mx.google.com>
-X-Google-Original-Message-ID: <YobmVODvpR9Uk0Hu@Ansuel-xps.>
-Date:   Fri, 20 May 2022 02:52:36 +0200
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] devfreq: qcom: Add L2 Krait Cache devfreq scaling
- driver
-References: <CGME20200929162941epcas1p4a6f524f2406785934918c2a9f556ae4b@epcas1p4.samsung.com>
- <20200929162926.139-1-ansuelsmth@gmail.com>
- <53bcf684-54e7-13e2-2b41-26b6791f7469@samsung.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Qy8eyoRBs5yiXN/0GtfHHCv3AARvpVaJFYQDrp6RKOY=;
+        b=da35ZKUHoud2ybhhZyP8U9Mq0G/uRRb43OqSF0aR6G1bKhKbMp+50e1A/YFG5uYUzT
+         7uICnNJtgml/rSkniKzuNRssoHDnZDrF0EIrk1yS4KIC1Ugp/kdmc57t2cwcCWP4vqHQ
+         HShuTcuGEFVStgfmD+uEo+8ny/vmN6nT2ErJeqOwa+nj1bAuCA+dRn9n8UynvLGoXJFl
+         DyjYBzZ46moKkXgjKluozOZvmAQUyTufzSejZIUpNkeApOu3eNOgZUL5PkYWPyL9RhIF
+         a2xqmCE4P5uQ0102ZezDRyDUDF/vI61sTrZYdQh/OERloWvhWbwUaG4iy4i0/Zv1vT5L
+         yOag==
+X-Gm-Message-State: AOAM531ou+qlIOWs8ii0ZoG9zmbnAA3ar8u6c/Y6eko0G1Nfa7OLWPcz
+        3FJ8tu549JXbTEQNr6xULNfuNg==
+X-Google-Smtp-Source: ABdhPJxGsQmGgAr8PyOeWJcAzFBJt+e/lqccNiHlbdTt0s5rCTuNMGwg3zdeH+aPwBVHI8CWjHYOSw==
+X-Received: by 2002:a63:5a01:0:b0:3d8:22cb:9224 with SMTP id o1-20020a635a01000000b003d822cb9224mr6175648pgb.548.1653008173301;
+        Thu, 19 May 2022 17:56:13 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id b2-20020aa78702000000b0050dc76281fcsm275308pfo.214.2022.05.19.17.56.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 May 2022 17:56:12 -0700 (PDT)
+Message-ID: <84d073aa-9937-1a58-dd7a-b1828874c21a@kernel.dk>
+Date:   Thu, 19 May 2022 18:56:12 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <53bcf684-54e7-13e2-2b41-26b6791f7469@samsung.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCHSET 0/2] Fix splice from random/urandom
+Content-Language: en-US
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Theodore Ts'o <tytso@mit.edu>, Christoph Hellwig <hch@lst.de>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <YoajCafKmgUbbaY0@zx2c4.com>
+ <a6c843ff-a3d7-ce6a-4e99-70968834a02a@kernel.dk> <YobPB27Ozl7uqUEu@zx2c4.com>
+ <3553b935-0aca-3d3e-2495-12288f601b53@kernel.dk>
+ <CAHmME9riX+YuqSVp64bhy=nX08_7d-m8es82BHy2qh-oWkqa8Q@mail.gmail.com>
+ <aa7ae20c-a2d7-4959-b5fb-efe7b56294f1@kernel.dk>
+ <CAHmME9oLPxzsnRezFPFVssmedOQUi2E9NWFbakEe92=Hdk1QuQ@mail.gmail.com>
+ <03c7d6c9-0c86-d4b6-357d-d51be0143c80@kernel.dk>
+ <CAHmME9qVQNkx-0J8rq_0ZVaSR+-eEgOUtcZhvq5dAY4-kJxSAA@mail.gmail.com>
+ <13899409-e81b-8689-3380-249de46c0b6f@kernel.dk> <YobldmDn6pU9mr4f@zx2c4.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <YobldmDn6pU9mr4f@zx2c4.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 10:11:16AM +0900, Chanwoo Choi wrote:
-> Hi Ansuel,
+On 5/19/22 6:48 PM, Jason A. Donenfeld wrote:
+> Hi Jens,
 > 
+> On Thu, May 19, 2022 at 06:02:55PM -0600, Jens Axboe wrote:
+>> On 5/19/22 6:00 PM, Jason A. Donenfeld wrote:
+>>> Hi Jens,
+>>>
+>>> On Fri, May 20, 2022 at 1:57 AM Jens Axboe <axboe@kernel.dk> wrote:
+>>>>
+>>>> On 5/19/22 5:27 PM, Jason A. Donenfeld wrote:
+>>>>> Hi Jens,
+>>>>>
+>>>>> On Fri, May 20, 2022 at 1:25 AM Jens Axboe <axboe@kernel.dk> wrote:
+>>>>>> I'll leave that to you :-)
+>>>>>
+>>>>> Alright, I'll have a look. Which one do I want here? This series adds
+>>>>> splice_read/splice_write. The new thing would be sendpage? Or
+>>>>> copy_file_range? Or something else?
+>>>>
+>>>> For copying kernel memory? It's really the same thing, you just
+>>>> initialize the iter as an ITER_KVEC instead. The nice thing about the
+>>>> iov_iter iterator that it then hides that for you, call the same copy
+>>>> in/out helpers for it.
+>>>
+>>> Err, maybe we're talking about different things? I was thinking about
+>>> the plumbing to make splice/sendfile work on non-pipes.
+>>
+>> Ah I see. sendfile() just uses splice() internally, so that'll work
+>> (again) with my changes. splice(), by definition, either moves to and
+>> from a pipe. Hence one of the fds must be a pipe. Does that answer the
+>> question?
 > 
-> The 5.19-rc1 will support the cpu based scaling support[2]
-> as your needed. So that if you use passive governor with CPUFREQ_PARENT_DEV,
-> you can scale the cache frequency according to cpu frequency change.
-> 
-> [1] https://patchwork.kernel.org/project/linux-pm/patch/3acd6c32-6e78-dfc2-3e45-84f69a7d5f36@samsung.com/
-> [2] PM / devfreq: Add cpu based scaling support to passive governor
-> 
-> 
-> Best Regards,
-> Chanwoo Choi
->
+> sendfile() returns -EINVAL even with your patches. Only splicing to pipes
+> seems to work.
 
-Oh wow thanks a lot for this. Wonder if this is finally the right time
-for a correct handling of cache scaling for krait. Will rework this and
-send a new version with the new implementation!
-Again thanks.
-
-> On 9/30/20 1:29 AM, Ansuel Smith wrote:
-> > Qcom L2 Krait CPUs use the generic cpufreq-dt driver and doesn't actually
-> > scale the Cache frequency when the CPU frequency is changed. This
-> > devfreq driver register with the cpu notifier and scale the Cache
-> > based on the max Freq across all core as the CPU cache is shared across
-> > all of them. If provided this also scale the voltage of the regulator
-> > attached to the CPU cache. The scaling logic is based on the CPU freq
-> > and the 3 scaling interval are set by the device dts.
-> > 
-> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> > ---
-> > v2:
-> > * Change cpu-freq to qcom,cpu-freq
-> > * Skip freq change if prev is the same target freq
-> > 
-> >  drivers/devfreq/Kconfig               |  10 +
-> >  drivers/devfreq/Makefile              |   1 +
-> >  drivers/devfreq/krait-cache-devfreq.c | 301 ++++++++++++++++++++++++++
-> >  3 files changed, 312 insertions(+)
-> >  create mode 100644 drivers/devfreq/krait-cache-devfreq.c
-> > 
-> > diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
-> > index 37dc40d1fcfb..99051aaf9c5e 100644
-> > --- a/drivers/devfreq/Kconfig
-> > +++ b/drivers/devfreq/Kconfig
-> > @@ -143,6 +143,16 @@ config ARM_RK3399_DMC_DEVFREQ
-> >  	  It sets the frequency for the memory controller and reads the usage counts
-> >  	  from hardware.
-> >  
-> > +config ARM_KRAIT_CACHE_DEVFREQ
-> > +	tristate "Scaling support for Krait CPU Cache Devfreq"
-> > +	depends on ARCH_QCOM || COMPILE_TEST
-> > +	help
-> > +	  This adds the DEVFREQ driver for the Krait CPU L2 Cache shared by all cores.
-> > +
-> > +	  The driver register with the cpufreq notifier and find the right frequency
-> > +	  based on the max frequency across all core and the range set in the device
-> > +	  dts. If provided this scale also the regulator attached to the l2 cache.
-> > +
-> >  source "drivers/devfreq/event/Kconfig"
-> >  
-> >  endif # PM_DEVFREQ
-> > diff --git a/drivers/devfreq/Makefile b/drivers/devfreq/Makefile
-> > index 3ca1ad0ecb97..bb87925a6a2d 100644
-> > --- a/drivers/devfreq/Makefile
-> > +++ b/drivers/devfreq/Makefile
-> > @@ -14,6 +14,7 @@ obj-$(CONFIG_ARM_IMX8M_DDRC_DEVFREQ)	+= imx8m-ddrc.o
-> >  obj-$(CONFIG_ARM_RK3399_DMC_DEVFREQ)	+= rk3399_dmc.o
-> >  obj-$(CONFIG_ARM_TEGRA_DEVFREQ)		+= tegra30-devfreq.o
-> >  obj-$(CONFIG_ARM_TEGRA20_DEVFREQ)	+= tegra20-devfreq.o
-> > +obj-$(CONFIG_ARM_KRAIT_CACHE_DEVFREQ)	+= krait-cache-devfreq.o
-> >  
-> >  # DEVFREQ Event Drivers
-> >  obj-$(CONFIG_PM_DEVFREQ_EVENT)		+= event/
-> > diff --git a/drivers/devfreq/krait-cache-devfreq.c b/drivers/devfreq/krait-cache-devfreq.c
-> > new file mode 100644
-> > index 000000000000..101a13b6927a
-> > --- /dev/null
-> > +++ b/drivers/devfreq/krait-cache-devfreq.c
-> > @@ -0,0 +1,301 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +
-> > +#include <linux/kernel.h>
-> > +#include <linux/init.h>
-> > +#include <linux/module.h>
-> > +#include <linux/cpufreq.h>
-> > +#include <linux/devfreq.h>
-> > +#include <linux/of.h>
-> > +#include <linux/platform_device.h>
-> > +#include <linux/clk.h>
-> > +#include <linux/slab.h>
-> > +#include <linux/regulator/consumer.h>
-> > +#include <linux/pm_opp.h>
-> > +
-> > +#include "governor.h"
-> > +
-> > +struct krait_data {
-> > +	struct device *dev;
-> > +	struct devfreq *devfreq;
-> > +
-> > +	struct clk *l2_clk;
-> > +
-> > +	unsigned long *freq_table; /* L2 bus clock rate */
-> > +	unsigned int *l2_cpufreq; /* L2 target CPU frequency */
-> > +
-> > +	struct notifier_block nb;
-> > +};
-> > +
-> > +static int krait_cache_set_opp(struct dev_pm_set_opp_data *data)
-> > +{
-> > +	unsigned long old_freq = data->old_opp.rate, freq = data->new_opp.rate;
-> > +	struct dev_pm_opp_supply *supply = &data->new_opp.supplies[0];
-> > +	struct regulator *reg = data->regulators[0];
-> > +	struct clk *clk = data->clk;
-> > +	struct krait_data *kdata;
-> > +	unsigned long idle_freq;
-> > +	int ret;
-> > +
-> > +	kdata = (struct krait_data *)dev_get_drvdata(data->dev);
-> > +
-> > +	idle_freq = kdata->freq_table[0];
-> > +
-> > +	if (reg) {
-> > +		ret = regulator_set_voltage_triplet(reg, supply->u_volt_min,
-> > +						    supply->u_volt,
-> > +						    supply->u_volt_max);
-> > +		if (ret)
-> > +			goto exit;
-> > +	}
-> > +
-> > +	/*
-> > +	 * Set to idle bin if switching from normal to high bin
-> > +	 * or vice versa. It has been notice that a bug is triggered
-> > +	 * in cache scaling when more than one bin is scaled, to fix
-> > +	 * this we first need to transition to the base rate and then
-> > +	 * to target rate
-> > +	 */
-> > +	if (likely(freq != idle_freq && old_freq != idle_freq)) {
-> > +		ret = clk_set_rate(clk, idle_freq);
-> > +		if (ret)
-> > +			goto exit;
-> > +	}
-> > +
-> > +	ret = clk_set_rate(clk, freq);
-> > +	if (ret)
-> > +		goto exit;
-> > +
-> > +exit:
-> > +	return ret;
-> > +};
-> > +
-> > +static int krait_cache_target(struct device *dev, unsigned long *freq,
-> > +			      u32 flags)
-> > +{
-> > +	return dev_pm_opp_set_rate(dev, *freq);
-> > +};
-> > +
-> > +static int krait_cache_get_dev_status(struct device *dev,
-> > +				      struct devfreq_dev_status *stat)
-> > +{
-> > +	struct krait_data *data = dev_get_drvdata(dev);
-> > +
-> > +	stat->busy_time = 0;
-> > +	stat->total_time = 0;
-> > +	stat->current_frequency = clk_get_rate(data->l2_clk);
-> > +
-> > +	return 0;
-> > +};
-> > +
-> > +static int krait_cache_get_cur_freq(struct device *dev, unsigned long *freq)
-> > +{
-> > +	struct krait_data *data = dev_get_drvdata(dev);
-> > +
-> > +	*freq = clk_get_rate(data->l2_clk);
-> > +
-> > +	return 0;
-> > +};
-> > +
-> > +static struct devfreq_dev_profile tegra_devfreq_profile = {
-> > +	.target = krait_cache_target,
-> > +	.get_dev_status = krait_cache_get_dev_status,
-> > +	.get_cur_freq = krait_cache_get_cur_freq
-> > +};
-> > +
-> > +static int krait_cache_notifier(struct notifier_block *nb, unsigned long action,
-> > +				void *v)
-> > +{
-> > +	struct cpufreq_freqs *freqs;
-> > +	unsigned int cpu, cur_cpu;
-> > +	struct krait_data *data;
-> > +	struct devfreq *devfreq;
-> > +	unsigned long freq;
-> > +	int ret = 0;
-> > +
-> > +	if (action != CPUFREQ_POSTCHANGE)
-> > +		return NOTIFY_OK;
-> > +
-> > +	data = container_of(nb, struct krait_data, nb);
-> > +	devfreq = data->devfreq;
-> > +
-> > +	mutex_lock_nested(&devfreq->lock, SINGLE_DEPTH_NESTING);
-> > +
-> > +	freqs = (struct cpufreq_freqs *)v;
-> > +	freq = freqs->new;
-> > +	cur_cpu = freqs->policy->cpu;
-> > +
-> > +	/* find the max freq across all core */
-> > +	for_each_present_cpu(cpu)
-> > +		if (cpu != cur_cpu)
-> > +			freq = max(freq, (unsigned long)cpufreq_quick_get(cpu));
-> > +
-> > +	devfreq->governor->get_target_freq(devfreq, &freq);
-> > +
-> > +	if (devfreq->previous_freq == freq)
-> > +		goto out;
-> > +
-> > +	ret = devfreq->profile->target(data->dev, &freq, 0);
-> > +	if (ret < 0)
-> > +		goto out;
-> > +
-> > +	if (devfreq->profile->freq_table &&
-> > +	    (devfreq_update_status(devfreq, freq)))
-> > +		dev_err(data->dev,
-> > +			"Couldn't update frequency transition information.\n");
-> > +
-> > +	devfreq->previous_freq = freq;
-> > +
-> > +out:
-> > +	mutex_unlock(&devfreq->lock);
-> > +	return notifier_from_errno(ret);
-> > +};
-> > +
-> > +static int krait_cache_governor_get_target(struct devfreq *devfreq,
-> > +					   unsigned long *freq)
-> > +{
-> > +	unsigned int *l2_cpufreq;
-> > +	unsigned long *freq_table;
-> > +	unsigned long target_freq = *freq;
-> > +	struct krait_data *data = dev_get_drvdata(devfreq->dev.parent);
-> > +
-> > +	l2_cpufreq = data->l2_cpufreq;
-> > +	freq_table = data->freq_table;
-> > +
-> > +	/*
-> > +	 * Find the highest l2 freq interval based on the max cpufreq
-> > +	 * across all core
-> > +	 */
-> > +	while (*(l2_cpufreq = l2_cpufreq + 1) && target_freq >= *l2_cpufreq)
-> > +		freq_table = freq_table + 1;
-> > +
-> > +	*freq = *freq_table;
-> > +
-> > +	return 0;
-> > +};
-> > +
-> > +static int krait_cache_governor_event_handler(struct devfreq *devfreq,
-> > +					      unsigned int event, void *data)
-> > +{
-> > +	struct krait_data *kdata = dev_get_drvdata(devfreq->dev.parent);
-> > +	int ret = 0;
-> > +
-> > +	switch (event) {
-> > +	case DEVFREQ_GOV_START:
-> > +		kdata->nb.notifier_call = krait_cache_notifier;
-> > +		ret = cpufreq_register_notifier(&kdata->nb,
-> > +						CPUFREQ_TRANSITION_NOTIFIER);
-> > +		break;
-> > +
-> > +	case DEVFREQ_GOV_STOP:
-> > +		cpufreq_unregister_notifier(&kdata->nb,
-> > +					    CPUFREQ_TRANSITION_NOTIFIER);
-> > +		break;
-> > +	}
-> > +
-> > +	return ret;
-> > +};
-> > +
-> > +static struct devfreq_governor krait_devfreq_governor = {
-> > +	.name = "krait_governor",
-> > +	.get_target_freq = krait_cache_governor_get_target,
-> > +	.event_handler = krait_cache_governor_event_handler,
-> > +	.immutable = true,
-> > +};
-> > +
-> > +static int krait_cache_probe(struct platform_device *pdev)
-> > +{
-> > +	int ret, count;
-> > +	struct opp_table *table;
-> > +	struct krait_data *data;
-> > +	struct device *dev = &pdev->dev;
-> > +	struct device_node *node = dev->of_node;
-> > +
-> > +	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-> > +	if (!data)
-> > +		return -ENOMEM;
-> > +
-> > +	data->dev = dev;
-> > +
-> > +	data->l2_clk = devm_clk_get(dev, "l2");
-> > +	if (IS_ERR(data->l2_clk))
-> > +		return PTR_ERR(data->l2_clk);
-> > +
-> > +	table = dev_pm_opp_set_regulators(dev, (const char *[]){ "l2" }, 1);
-> > +	if (IS_ERR(table)) {
-> > +		ret = PTR_ERR(table);
-> > +		dev_err(dev, "failed to set regulators %d\n", ret);
-> > +		return ret;
-> > +	}
-> > +
-> > +	ret = PTR_ERR_OR_ZERO(
-> > +		dev_pm_opp_register_set_opp_helper(dev, krait_cache_set_opp));
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	ret = dev_pm_opp_of_add_table(dev);
-> > +	if (ret) {
-> > +		dev_err(dev, "failed to parse L2 freq thresholds\n");
-> > +		return ret;
-> > +	}
-> > +
-> > +	count = dev_pm_opp_get_opp_count(dev);
-> > +
-> > +	data->l2_cpufreq =
-> > +		devm_kzalloc(dev, sizeof(unsigned int) * count, GFP_KERNEL);
-> > +	if (!data->l2_cpufreq)
-> > +		return -ENOMEM;
-> > +
-> > +	ret = of_property_read_u32_array(node, "qcom,l2-cpufreq", data->l2_cpufreq,
-> > +					 count);
-> > +	if (ret) {
-> > +		dev_err(dev, "failed to parse L2 cpufreq thresholds\n");
-> > +		return ret;
-> > +	}
-> > +
-> > +	ret = devfreq_add_governor(&krait_devfreq_governor);
-> > +	if (ret) {
-> > +		dev_err(&pdev->dev, "Failed to add governor: %d\n", ret);
-> > +		return ret;
-> > +	}
-> > +
-> > +	platform_set_drvdata(pdev, data);
-> > +
-> > +	data->devfreq = devfreq_add_device(&pdev->dev, &tegra_devfreq_profile,
-> > +					   "krait_governor", NULL);
-> > +
-> > +	/* Cache freq_table to quickly get it when needed */
-> > +	data->freq_table = data->devfreq->profile->freq_table;
-> > +
-> > +	if (IS_ERR(data->devfreq))
-> > +		return PTR_ERR(data->devfreq);
-> > +
-> > +	return 0;
-> > +};
-> > +
-> > +static int krait_cache_remove(struct platform_device *pdev)
-> > +{
-> > +	struct krait_data *data = platform_get_drvdata(pdev);
-> > +
-> > +	dev_pm_opp_remove_table(data->dev);
-> > +
-> > +	return 0;
-> > +};
-> > +
-> > +static const struct of_device_id krait_cache_match_table[] = {
-> > +	{ .compatible = "qcom,krait-cache" },
-> > +	{}
-> > +};
-> > +
-> > +static struct platform_driver krait_cache_driver = {
-> > +	.probe		= krait_cache_probe,
-> > +	.remove		= krait_cache_remove,
-> > +	.driver		= {
-> > +		.name   = "krait-cache-scaling",
-> > +		.of_match_table = krait_cache_match_table,
-> > +	},
-> > +};
-> > +module_platform_driver(krait_cache_driver);
-> > +
-> > +MODULE_DESCRIPTION("Krait CPU Cache Scaling driver");
-> > +MODULE_AUTHOR("Ansuel Smith <ansuelsmth@gmail.com>");
-> > +MODULE_LICENSE("GPL v2");
-> > 
-> 
-> 
-> -- 
-> Best Regards,
-> Chanwoo Choi
-> Samsung Electronics
+Huh, that really should work. Are you trying to sendfile() to random? If
+so, you need that last write_iter patch too, and add the splice_write as
+I mentioned.
 
 -- 
-	Ansuel
+Jens Axboe
+

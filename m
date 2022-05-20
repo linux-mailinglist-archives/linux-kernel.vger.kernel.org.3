@@ -2,178 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DA6A52E718
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 10:16:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99AD552E716
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 10:16:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344715AbiETIQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 04:16:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40488 "EHLO
+        id S1346893AbiETIQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 04:16:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345055AbiETIQB (ORCPT
+        with ESMTP id S1346875AbiETIQH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 04:16:01 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 614B72E0B9
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 01:15:58 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id bq30so13069966lfb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 01:15:58 -0700 (PDT)
+        Fri, 20 May 2022 04:16:07 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 826933DA48
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 01:16:04 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id u27so9594904wru.8
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 01:16:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=3WMyBzBsRRCp6gbma/PbvD8+LxmLfC0Z+aWsUUO5v2Q=;
-        b=r8VE/uCTjI1e7vSggfcD/lYcs0j1kTxOduTx3B/oYII5BDkRCTFH8oLlvB4Tof2u4D
-         srS0Okq1V37kNOj+J0SbInhv+n24I+vkVDFIQ06wiyfkkAzCCe9TxOnztwm7TOy6OsRi
-         r5uotICug85Fom3LRI5GHqRjAM8dyJmTIGZF9JAucv5bIUju3LizX2JH3cDTsYdCbpV+
-         /dvm7USDxXWWjZiaqH9X3v9iH33NRi/011BF43EKMgU10d+u7pRuZbxa93+hEVU19CmH
-         96GhWRfNlrjwi2H3D3shQ/vvJUvLQKZraiyEi3N6ReCkaB6uTsZR35TzIS1CiM6YfP1Q
-         uSxg==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=sgVdkj+m0vdYfC42vgmnXcgErywSFim9EldJP/IRKb8=;
+        b=UbCjQtGRYjLqlisKKVYQpJgMYj/br9KZw6pGqNIRnL84QxknHPwih4CK9F5I2S/7Ki
+         IiOelDJRDtgCgP298udFAK1aWzVaCZ7RT4ZahHcBGmee5L74RImyWtVZcWbHwwmS31Vb
+         KRCORvITE+zT6KppLMaGOMhi7pFikUYxpIb3NGlyYZ0qLcnYIJ2GAP6R1lpgYwgMX/LB
+         7IHc+a+uWC+czjVbCL9a0shS9FDqRkGALziE0pfwdtD6S7qevDZOKUIRXJ9/Z+5O3bhU
+         bak0XChjaPwOdMDWTkYPt7rKc16wH1TAgCSMNsAijtXjymRrf4RfcKq5SOzqu8iL3ZW/
+         z1bw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=3WMyBzBsRRCp6gbma/PbvD8+LxmLfC0Z+aWsUUO5v2Q=;
-        b=EwV2BoBCcUYU2ZYuOZ5ELwgMY7a4fWv8dvuMN78w5eveMz0bdrzP0MB//8fw6XqJy1
-         iB0yMHnMVACjJAFwJeacOd1OB3wD+unqnhM3/vWWZnuiZ0nJcFWdWIONfcuk98vhWyKn
-         QmDxm0WHRwmjQGMK6egm3YFE9jmeiU/4e5Sgg0W5joRlNtWCZr2tREyo3dayhuGG1rf/
-         SqgGOPuIQcFUq6A+H4UMd0e2BTDmCTdzsnEp6sxLw6CEtYpqWX1J6P7Iz/hNKZsGmjwY
-         /XjWTBPG2ZTrPT3apmlOdr63mg2jH0FBeYkVlfrgXw0FTt8byaVYTRWs5i7rXmW5+87T
-         q+ew==
-X-Gm-Message-State: AOAM5306jx4aYQWg2zulyYO9ZQEyy/Vq+uv6XXjJWpDji4rFEtTC1l7d
-        /54hTwyfvYiJ/oOVV+oobvt1aQ==
-X-Google-Smtp-Source: ABdhPJwykLzONsSZWY9axC9eeMj14sgcODVg3yQ+6KyFmWtA4KaDq9yJKAlnTHB1z/K2FxU5uXKaeQ==
-X-Received: by 2002:a05:6512:3d1a:b0:477:ae14:9778 with SMTP id d26-20020a0565123d1a00b00477ae149778mr6380088lfv.72.1653034556706;
-        Fri, 20 May 2022 01:15:56 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id x17-20020a05651c105100b0024f3d1dae9esm222920ljm.38.2022.05.20.01.15.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 May 2022 01:15:56 -0700 (PDT)
-Message-ID: <45e78390-5f91-7ac7-45d8-5796bc608234@linaro.org>
-Date:   Fri, 20 May 2022 10:15:54 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=sgVdkj+m0vdYfC42vgmnXcgErywSFim9EldJP/IRKb8=;
+        b=nD+PaeQ5B9dBPnATJyKWAAhVQ/94DNb1Dk9BYCaNJBTJadmcuxhWtMfKJeaE9WI2+1
+         9aBA/mkq5zTFPRGQKGF3N8zDpAyUC6CJapz5VDBQNrVBnD2+1Qz6Qx4m+S1B6zJs6Og/
+         oiRFTU7wJUBecs1Uvc9bOUxd82B+xeHdBJYdm6YATiH5b1d1wYT/5Fax5SXAP8PVdc6s
+         0mp9voNW2Xh8fN+pmLOManQeKRWCVHYb2PEBt1m4HIv6BMCTWbX6ThjZfZR9/qXOCrxT
+         t9m7CJpRD3nwIeXOrAXIVgNatGkI9vsvjowkcjT7FTs46ZDaTFdUFJY3g90gXdO8uvT1
+         +VTA==
+X-Gm-Message-State: AOAM532260C1X77jNizJc1MzjqHAgIGV9OYCpMkcN0PB5e8YMzeB3qfu
+        6e/6ErqPzUmR3EMPUMU10c3xNeyOZVXE2A==
+X-Google-Smtp-Source: ABdhPJyJit3hnS/YjTniZmJ2kknMK6SoFyfAJ/HlzlsgZ7pfH0IL0m/0hSt8/6YePAJ85te1SjUyuQ==
+X-Received: by 2002:a5d:598b:0:b0:20e:6288:8c6a with SMTP id n11-20020a5d598b000000b0020e62888c6amr7114554wri.531.1653034563061;
+        Fri, 20 May 2022 01:16:03 -0700 (PDT)
+Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
+        by smtp.googlemail.com with ESMTPSA id l6-20020a05600c088600b00397335cf750sm1283305wmp.47.2022.05.20.01.16.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 May 2022 01:16:02 -0700 (PDT)
+Date:   Fri, 20 May 2022 10:15:55 +0200
+From:   LABBE Corentin <clabbe@baylibre.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Mark Brown <broonie@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        calvin.johnson@oss.nxp.com, davem@davemloft.net,
+        edumazet@google.com, hkallweit1@gmail.com,
+        jernej.skrabec@gmail.com, krzysztof.kozlowski+dt@linaro.org,
+        kuba@kernel.org, lgirdwood@gmail.com, linux@armlinux.org.uk,
+        pabeni@redhat.com, robh+dt@kernel.org, samuel@sholland.org,
+        wens@csie.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev, netdev@vger.kernel.org
+Subject: Re: [PATCH v2 4/5] dt-bindings: net: Add documentation for optional
+ regulators
+Message-ID: <YodOO6PfsjelCa1x@Red>
+References: <20220518200939.689308-1-clabbe@baylibre.com>
+ <20220518200939.689308-5-clabbe@baylibre.com>
+ <95f3f0a4-17e6-ec5f-6f2f-23a5a4993a44@linaro.org>
+ <YoYqmAB3P7fNOSVG@sirena.org.uk>
+ <c74b0524-60c6-c3af-e35f-13521ba2b02e@linaro.org>
+ <YoYw2lKbgCiDXP0A@lunn.ch>
+ <YoZm9eabWy/FNKu1@sirena.org.uk>
+ <0518eef1-75a6-fbfe-96d8-bb1fc4e5178a@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] dt-bindings: mailbox: mtk-gce: Convert txt to json-schema
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, robh+dt@kernel.org
-Cc:     jassisinghbrar@gmail.com, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, houlong.wei@mediatek.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20220519101806.18097-1-angelogioacchino.delregno@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220519101806.18097-1-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0518eef1-75a6-fbfe-96d8-bb1fc4e5178a@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/05/2022 12:18, AngeloGioacchino Del Regno wrote:
-> Convert the mtk-gce documentation from freeform text format to a
-> json-schema.
+Le Fri, May 20, 2022 at 09:57:26AM +0200, Krzysztof Kozlowski a écrit :
+> On 19/05/2022 17:49, Mark Brown wrote:
+> > On Thu, May 19, 2022 at 01:58:18PM +0200, Andrew Lunn wrote:
+> >> On Thu, May 19, 2022 at 01:33:21PM +0200, Krzysztof Kozlowski wrote:
+> >>> On 19/05/2022 13:31, Mark Brown wrote:
+> >>>> On Thu, May 19, 2022 at 11:55:28AM +0200, Krzysztof Kozlowski wrote:
+> >>>>> On 18/05/2022 22:09, Corentin Labbe wrote:
+> > 
+> >>>>>> +  regulators:
+> >>>>>> +    description:
+> >>>>>> +       List of phandle to regulators needed for the PHY
+> > 
+> >>>>> I don't understand that... is your PHY defining the regulators or using
+> >>>>> supplies? If it needs a regulator (as a supply), you need to document
+> >>>>> supplies, using existing bindings.
+> > 
+> >>>> They're trying to have a generic driver which works with any random PHY
+> >>>> so the binding has no idea what supplies it might need.
+> > 
+> >>> OK, that makes sense, but then question is why not using existing
+> >>> naming, so "supplies" and "supply-names"?
+> > 
+> >> I'm not saying it is not possible, but in general, the names are not
+> >> interesting. All that is needed is that they are all on, or
+> >> potentially all off to save power on shutdown. We don't care how many
+> >> there are, or what order they are enabled.
+> > 
+> > I think Krzysztof is referring to the name of the property rather than
+> > the contents of the -names property there.
 > 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  .../bindings/mailbox/mediatek,gce-mbox.yaml   | 114 ++++++++++++++++++
->  .../devicetree/bindings/mailbox/mtk-gce.txt   |  82 -------------
->  2 files changed, 114 insertions(+), 82 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/mailbox/mediatek,gce-mbox.yaml
->  delete mode 100644 Documentation/devicetree/bindings/mailbox/mtk-gce.txt
+> Yes, exactly. Existing pattern for single regulator supply is
+> "xxx-supply", so why this uses a bit different pattern instead of
+> something more consistent ("supplies" and "supply-names")?
 > 
-> diff --git a/Documentation/devicetree/bindings/mailbox/mediatek,gce-mbox.yaml b/Documentation/devicetree/bindings/mailbox/mediatek,gce-mbox.yaml
-> new file mode 100644
-> index 000000000000..750391b4038c
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mailbox/mediatek,gce-mbox.yaml
-> @@ -0,0 +1,114 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mailbox/mediatek,gce-mbox.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MediaTek Global Command Engine (GCE) mailbox
-> +
-> +maintainers:
-> +  - Houlong Wei <houlong.wei@mediatek.com>
-> +
-> +description: |
-> +  The Global Command Engine (GCE) is used to help read/write registers
-> +  with critical time limitation, such as updating display configuration
-> +  during the vblank.
-> +  The GCE can be used to implement the Command Queue (CMDQ) driver.
 
-Mention the headers in description.
-
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - mediatek,mt6779-gce
-> +      - mediatek,mt8173-gce
-> +      - mediatek,mt8183-gce
-> +      - mediatek,mt8186-gce
-> +      - mediatek,mt8192-gce
-> +      - mediatek,mt8195-gce
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-names:
-> +    items:
-> +      - const: gce
-> +
-> +  '#mbox-cells':
-> +    description: |
-> +      The first cell describes the mailbox channel, which is the GCE Thread ID;
-> +      The second cell describes the priority of the GCE thread.
-> +    const: 2
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +  - '#mbox-cells'
-> +
-> +additionalProperties: false
-> +
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          enum:
-> +            - mediatek,mt8195-gce
-> +    then:
-> +      properties:
-> +        clocks:
-> +          maxItems: 2
-
-Are you sure this works on mt8195-gce?
-
-> +
-> +        clock-names:
-> +          items:
-> +            - const: gce0
-> +            - const: gce1
-> +
-
-Best regards,
-Krzysztof
+I agree that supplies and supply-names are better.
+But in another answer Rob is against it, so if I understand well, we are stuck to use individual xxx-supply.
+I will try to create a new regulator_get_bulk_all() which scan all properties matching xxx-supply

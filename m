@@ -2,31 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E33AB52E377
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 06:06:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87A0E52E378
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 06:08:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230473AbiETEFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 00:05:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48080 "EHLO
+        id S231680AbiETEHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 00:07:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbiETEFd (ORCPT
+        with ESMTP id S229537AbiETEHA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 00:05:33 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2DE14A270;
-        Thu, 19 May 2022 21:05:32 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VDoVbWo_1653019520;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VDoVbWo_1653019520)
+        Fri, 20 May 2022 00:07:00 -0400
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 067E962A0A;
+        Thu, 19 May 2022 21:06:56 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=alimailimapcm10staff010182156082;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VDowqRk_1653019609;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VDowqRk_1653019609)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 20 May 2022 12:05:29 +0800
+          Fri, 20 May 2022 12:06:54 +0800
 From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     djwong@kernel.org
-Cc:     linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+To:     davem@davemloft.net
+Cc:     yoshfuji@linux-ipv6.org, dsahern@kernel.org, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
         Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
         Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] xfs: Remove the redundant assignment
-Date:   Fri, 20 May 2022 12:05:18 +0800
-Message-Id: <20220520040518.73957-1-jiapeng.chong@linux.alibaba.com>
+Subject: [PATCH] usb: gadget: u_audio: clean up some inconsistent indenting
+Date:   Fri, 20 May 2022 12:06:48 +0800
+Message-Id: <20220520040648.75468-1-jiapeng.chong@linux.alibaba.com>
 X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -40,64 +42,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Variable 'ifree','freeblks' and 'itotal' set but not used.
+Eliminate the follow smatch warning:
 
-Eliminate the follow clang warning:
-
-fs/xfs/xfs_log_recover.c:3534:12: warning: variable 'freeblks' set but
-not used [-Wunused-but-set-variable].
-
-fs/xfs/xfs_log_recover.c:3535:12: warning: variable 'itotal' set but not
-used [-Wunused-but-set-variable].
-
-fs/xfs/xfs_log_recover.c:3536:12: warning: variable 'ifree'
-set but not used [-Wunused-but-set-variable].
+drivers/usb/gadget/function/u_audio.c:1005 g_audio_setup() warn:
+inconsistent indenting.
 
 Reported-by: Abaci Robot <abaci@linux.alibaba.com>
 Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 ---
- fs/xfs/xfs_log_recover.c | 12 ------------
- 1 file changed, 12 deletions(-)
+ drivers/usb/gadget/function/u_audio.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/fs/xfs/xfs_log_recover.c b/fs/xfs/xfs_log_recover.c
-index 97b941c07957..47736936ebba 100644
---- a/fs/xfs/xfs_log_recover.c
-+++ b/fs/xfs/xfs_log_recover.c
-@@ -3531,14 +3531,8 @@ xlog_recover_check_summary(
- 	struct xfs_buf		*agfbp;
- 	struct xfs_buf		*agibp;
- 	xfs_agnumber_t		agno;
--	uint64_t		freeblks;
--	uint64_t		itotal;
--	uint64_t		ifree;
- 	int			error;
+diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
+index 4561d7a183ff..a84f051cfbf5 100644
+--- a/drivers/usb/gadget/function/u_audio.c
++++ b/drivers/usb/gadget/function/u_audio.c
+@@ -1001,9 +1001,8 @@ int g_audio_setup(struct g_audio *g_audio, const char *pcm_name,
  
--	freeblks = 0LL;
--	itotal = 0LL;
--	ifree = 0LL;
- 	for_each_perag(mp, agno, pag) {
- 		error = xfs_read_agf(mp, NULL, pag->pag_agno, 0, &agfbp);
- 		if (error) {
-@@ -3546,9 +3540,6 @@ xlog_recover_check_summary(
- 						__func__, pag->pag_agno, error);
- 		} else {
- 			struct xfs_agf	*agfp = agfbp->b_addr;
+ 	if (c_chmask) {
+ 		struct uac_rtd_params *prm = &uac->c_prm;
 -
--			freeblks += be32_to_cpu(agfp->agf_freeblks) +
--				    be32_to_cpu(agfp->agf_flcount);
- 			xfs_buf_relse(agfbp);
- 		}
+-    spin_lock_init(&prm->lock);
+-    uac->c_prm.uac = uac;
++		spin_lock_init(&prm->lock);
++		uac->c_prm.uac = uac;
+ 		prm->max_psize = g_audio->out_ep_maxpsize;
  
-@@ -3558,9 +3549,6 @@ xlog_recover_check_summary(
- 						__func__, pag->pag_agno, error);
- 		} else {
- 			struct xfs_agi	*agi = agibp->b_addr;
--
--			itotal += be32_to_cpu(agi->agi_count);
--			ifree += be32_to_cpu(agi->agi_freecount);
- 			xfs_buf_relse(agibp);
- 		}
- 	}
+ 		prm->reqs = kcalloc(params->req_number,
 -- 
 2.20.1.7.g153144c
 

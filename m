@@ -2,81 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B816B52E89A
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 11:19:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CD9C52E8B4
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 11:23:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347674AbiETJTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 05:19:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46968 "EHLO
+        id S1347694AbiETJXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 05:23:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347653AbiETJTI (ORCPT
+        with ESMTP id S1347627AbiETJXm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 05:19:08 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204098CCEF;
-        Fri, 20 May 2022 02:19:06 -0700 (PDT)
-Date:   Fri, 20 May 2022 11:19:02 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1653038344;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KWPubtkvQ2aCZReywxCS4p4fahrxBl0TxS5i1kN1rQo=;
-        b=gszbfQ6zI4nXwPJMDIOmIvbGJFBZwp7oLxEadOjquG+OVYnR3Ge7ZAFW7beHrFP5E39bA3
-        mMt0ZIiuaKlWdu1X/phpLUyYl5eCIYcfLJFdXTBJ2CQzA0NS/gSdgixkSRcqtcOdX8qPlQ
-        egaskZ3eqGPOyjvpABCn0ocGnlQqBGgRtpvNyiIheym7rYJ4DFJdF+YuvTXB6SakmKAEhg
-        TQHAHVkmxTCcl707FX5wL1CL+kRpvyX4zAs22iPpUZwdTxf62SS+EKZV4kf3/l9B5TYiYv
-        OLuXSWgvAHtHTTAev5t+P7kzoIK9GTj4sC0/goB2g+ZKi+n5tm20si1RksABKg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1653038344;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KWPubtkvQ2aCZReywxCS4p4fahrxBl0TxS5i1kN1rQo=;
-        b=c2VdbW/XNEh+SkoJfHvsYMpGLND9/MSvmYh3p6cn2VPhVlrTN7OQ9dQVPzZE+VQ9Ws5wJG
-        sNmUjAxyeWk5FYDQ==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, oleg@redhat.com,
-        mingo@kernel.org, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Jann Horn <jannh@google.com>,
-        Kees Cook <keescook@chromium.org>, linux-ia64@vger.kernel.org,
-        Robert O'Callahan <roc@pernos.co>, Kyle Huey <khuey@pernos.co>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Douglas Miller <dougmill@linux.vnet.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>
-Subject: Re: [PATCH 00/16] ptrace: cleanups and calling do_cldstop with only
- siglock
-Message-ID: <YoddBrfDCzaXmh2E@linutronix.de>
-References: <20220421150248.667412396@infradead.org>
- <20220421150654.817117821@infradead.org>
- <87czhap9dy.fsf@email.froward.int.ebiederm.org>
- <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
- <87k0b7v9yk.fsf_-_@email.froward.int.ebiederm.org>
- <87k0b0apne.fsf_-_@email.froward.int.ebiederm.org>
- <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
- <871qwq5ucx.fsf_-_@email.froward.int.ebiederm.org>
+        Fri, 20 May 2022 05:23:42 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4669191573;
+        Fri, 20 May 2022 02:23:40 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 24K9NB920026777, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 24K9NB920026777
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Fri, 20 May 2022 17:23:11 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Fri, 20 May 2022 17:23:11 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Fri, 20 May 2022 17:23:11 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::34e7:ab63:3da4:27c6]) by
+ RTEXMBS04.realtek.com.tw ([fe80::34e7:ab63:3da4:27c6%5]) with mapi id
+ 15.01.2308.021; Fri, 20 May 2022 17:23:11 +0800
+From:   Pkshih <pkshih@realtek.com>
+To:     "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
+CC:     "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "neojou@gmail.com" <neojou@gmail.com>,
+        "kvalo@kernel.org" <kvalo@kernel.org>,
+        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "martin.blumenstingl@googlemail.com" 
+        <martin.blumenstingl@googlemail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux@ulli-kroll.de" <linux@ulli-kroll.de>,
+        "neo_jou@realtek.com" <neo_jou@realtek.com>
+Subject: Re: [PATCH 06/10] rtw88: Add common USB chip support
+Thread-Topic: [PATCH 06/10] rtw88: Add common USB chip support
+Thread-Index: AQHYapDiqxMx5uVh8U2fFMFwvLZZx60m3hOAgAAUZgCAAAixAA==
+Date:   Fri, 20 May 2022 09:23:11 +0000
+Message-ID: <a0c7fb57d0e9c1a36f328f4e523643ba6009630f.camel@realtek.com>
+References: <20220518082318.3898514-1-s.hauer@pengutronix.de>
+         <20220518082318.3898514-7-s.hauer@pengutronix.de>
+         <e9ca08c6facb8916fb9e5cbad05447321d3d0f43.camel@realtek.com>
+         <20220520085156.GE25578@pengutronix.de>
+In-Reply-To: <20220520085156.GE25578@pengutronix.de>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.36.1-2 
+x-originating-ip: [172.16.17.21]
+x-kse-serverinfo: RTEXMBS04.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzUvMjAg5LiK5Y2IIDA3OjI3OjAw?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <876FF89BFAA1BE468B922ECF02786C6C@realtek.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <871qwq5ucx.fsf_-_@email.froward.int.ebiederm.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -85,13 +85,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-05-18 17:49:50 [-0500], Eric W. Biederman wrote:
-> After this set of changes only cgroup_enter_frozen should remain a
-> stumbling block for PREEMPT_RT in the ptrace_stop path.
-
-Yes, I can confirm that. I have no systemd-less system at hand which
-means I can't boot a kernel without CGROUP support. But after removing
-cgroup_{enter|leave}_frozen() in ptrace_stop() I don't see the problems
-I saw earlier.
-
-Sebastian
+T24gRnJpLCAyMDIyLTA1LTIwIGF0IDEwOjUxICswMjAwLCBzLmhhdWVyQHBlbmd1dHJvbml4LmRl
+IHdyb3RlOg0KPiBPbiBGcmksIE1heSAyMCwgMjAyMiBhdCAwNzozOTowM0FNICswMDAwLCBQa3No
+aWggd3JvdGU6DQo+ID4gT24gV2VkLCAyMDIyLTA1LTE4IGF0IDEwOjIzICswMjAwLCBTYXNjaGEg
+SGF1ZXIgd3JvdGU6DQo+ID4gPiBBZGQgdGhlIGNvbW1vbiBiaXRzIGFuZCBwaWVjZXMgdG8gYWRk
+IFVTQiBzdXBwb3J0IHRvIHRoZSBSVFc4OCBkcml2ZXIuDQo+ID4gPiBUaGlzIGlzIGJhc2VkIG9u
+IGh0dHBzOi8vZ2l0aHViLmNvbS91bGxpLWtyb2xsL3J0dzg4LXVzYi5naXQgd2hpY2gNCj4gPiA+
+IGl0c2VsZiBpcyBmaXJzdCB3cml0dGVuIGJ5IE5lbyBKb3UuDQo+ID4gPiANCj4gPiA+IFNpZ25l
+ZC1vZmYtYnk6IG5lb19qb3UgPG5lb19qb3VAcmVhbHRlay5jb20+DQo+ID4gPiBTaWduZWQtb2Zm
+LWJ5OiBIYW5zIFVsbGkgS3JvbGwgPGxpbnV4QHVsbGkta3JvbGwuZGU+DQo+ID4gPiBTaWduZWQt
+b2ZmLWJ5OiBTYXNjaGEgSGF1ZXIgPHMuaGF1ZXJAcGVuZ3V0cm9uaXguZGU+DQo+ID4gPiAtLS0N
+Cj4gPiA+ICBkcml2ZXJzL25ldC93aXJlbGVzcy9yZWFsdGVrL3J0dzg4L0tjb25maWcgIHwgICAg
+MyArDQo+ID4gPiAgZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVhbHRlay9ydHc4OC9NYWtlZmlsZSB8
+ICAgIDIgKw0KPiA+ID4gIGRyaXZlcnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsvcnR3ODgvbWFjLmMg
+ICAgfCAgICAzICsNCj4gPiA+ICBkcml2ZXJzL25ldC93aXJlbGVzcy9yZWFsdGVrL3J0dzg4L21h
+aW4uYyAgIHwgICAgNSArDQo+ID4gPiAgZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVhbHRlay9ydHc4
+OC9tYWluLmggICB8ICAgIDQgKw0KPiA+ID4gIGRyaXZlcnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsv
+cnR3ODgvcmVnLmggICAgfCAgICAxICsNCj4gPiA+ICBkcml2ZXJzL25ldC93aXJlbGVzcy9yZWFs
+dGVrL3J0dzg4L3R4LmggICAgIHwgICAzMSArDQo+ID4gPiAgZHJpdmVycy9uZXQvd2lyZWxlc3Mv
+cmVhbHRlay9ydHc4OC91c2IuYyAgICB8IDEwNTEgKysrKysrKysrKysrKysrKysrKw0KPiA+ID4g
+IGRyaXZlcnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsvcnR3ODgvdXNiLmggICAgfCAgMTA5ICsrDQo+
+ID4gPiAgOSBmaWxlcyBjaGFuZ2VkLCAxMjA5IGluc2VydGlvbnMoKykNCj4gPiA+ICBjcmVhdGUg
+bW9kZSAxMDA2NDQgZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVhbHRlay9ydHc4OC91c2IuYw0KPiA+
+ID4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL25ldC93aXJlbGVzcy9yZWFsdGVrL3J0dzg4
+L3VzYi5oDQo+ID4gPiANCj4gPiANCj4gPiA+ICt9DQo+ID4gPiArDQo+ID4gPiArc3RhdGljIHZv
+aWQgcnR3X3VzYl9jYW5jZWxfcnhfYnVmcyhzdHJ1Y3QgcnR3X3VzYiAqcnR3dXNiKQ0KPiA+ID4g
+K3sNCj4gPiA+ICsJc3RydWN0IHJ4X3VzYl9jdHJsX2Jsb2NrICpyeGNiOw0KPiA+ID4gKwl1bnNp
+Z25lZCBsb25nIGZsYWdzOw0KPiA+ID4gKw0KPiA+ID4gKwlzcGluX2xvY2tfaXJxc2F2ZSgmcnR3
+dXNiLT5yeF9kYXRhX2xpc3RfbG9jaywgZmxhZ3MpOw0KPiA+ID4gKw0KPiA+ID4gKwl3aGlsZSAo
+dHJ1ZSkgew0KPiA+ID4gKwkJcnhjYiA9IGxpc3RfZmlyc3RfZW50cnlfb3JfbnVsbCgmcnR3dXNi
+LT5yeF9kYXRhX3VzZWQsDQo+ID4gPiArCQkJCQkJc3RydWN0IHJ4X3VzYl9jdHJsX2Jsb2NrLCBs
+aXN0KTsNCj4gPiA+ICsNCj4gPiA+ICsJCXNwaW5fdW5sb2NrX2lycXJlc3RvcmUoJnJ0d3VzYi0+
+cnhfZGF0YV9saXN0X2xvY2ssIGZsYWdzKTsNCj4gPiA+ICsNCj4gPiA+ICsJCWlmICghcnhjYikN
+Cj4gPiA+ICsJCQlicmVhazsNCj4gPiA+ICsNCj4gPiA+ICsJCXVzYl9raWxsX3VyYihyeGNiLT5y
+eF91cmIpOw0KPiA+ID4gKw0KPiA+ID4gKwkJc3Bpbl9sb2NrX2lycXNhdmUoJnJ0d3VzYi0+cnhf
+ZGF0YV9saXN0X2xvY2ssIGZsYWdzKTsNCj4gPiA+ICsJCWxpc3RfbW92ZSgmcnhjYi0+bGlzdCwg
+JnJ0d3VzYi0+cnhfZGF0YV9mcmVlKTsNCj4gPiA+ICsJfQ0KPiA+ID4gK30NCj4gPiANCj4gPiBU
+aGUgc3Bpbl9sb2NrIHBhaXJzIGFyZSBub3QgaW50dWl0aXZlLg0KPiA+IENhbiB3ZSBjaGFuZ2Ug
+dGhpcyBjaHVuayB0bw0KPiA+IA0KPiA+IHdoaWxlICh0cnVlKSB7DQo+ID4gICAgICBzcGluX2xv
+Y2soKTsNCj4gPiAgICAgIHJ4Y2IgPSBsaXN0X2ZpcnN0X2VudHJ5X29yX251bGwoKTsNCj4gPiAg
+ICAgIHNwaW5fdW5sb2NrKCkNCj4gPiANCj4gPiAgICAgIGlmICghcnhjYikNCj4gPiAgICAgICAg
+IHJldHVybjsNCj4gPiANCj4gPiAgICAgIHVzYl9mcmVlX3VyYigpOw0KPiA+IA0KPiA+ICAgICAg
+c3Bpbl9sb2NrKCk7DQo+ID4gICAgICBsaXN0X2RlbCgpOw0KPiA+ICAgICAgc3Bpbl91bmxvY2so
+KTsNCj4gPiB9DQo+ID4gDQo+ID4gVGhlIGRyYXdiYWNrIGlzIGxvY2svdW5sb2NrIHR3aWNlIGlu
+IHNpbmdsZSBsb29wLg0KPiANCj4gWWVzLCB0aGF0J3Mgd2h5IEkgZGlkIGl0IHRoZSB3YXkgSSBk
+aWQgOykNCj4gDQo+IEhvdyBhYm91dDoNCj4gDQo+IAl3aGlsZSAodHJ1ZSkgew0KPiAJCXVuc2ln
+bmVkIGxvbmcgZmxhZ3M7DQo+IA0KPiAJCXNwaW5fbG9ja19pcnFzYXZlKCZydHd1c2ItPnJ4X2Rh
+dGFfbGlzdF9sb2NrLCBmbGFncyk7DQo+IA0KPiAJCXJ4Y2IgPSBsaXN0X2ZpcnN0X2VudHJ5X29y
+X251bGwoJnJ0d3VzYi0+cnhfZGF0YV9mcmVlLA0KPiAJCQkJCQlzdHJ1Y3QgcnhfdXNiX2N0cmxf
+YmxvY2ssIGxpc3QpOw0KPiAJCWlmIChyeGNiKQ0KPiAJCQlsaXN0X2RlbCgmcnhjYi0+bGlzdCk7
+DQo+IA0KPiAJCXNwaW5fdW5sb2NrX2lycXJlc3RvcmUoJnJ0d3VzYi0+cnhfZGF0YV9saXN0X2xv
+Y2ssIGZsYWdzKTsNCj4gDQo+IAkJaWYgKCFyeGNiKQ0KPiAJCQlicmVhazsNCj4gDQo+IAkJdXNi
+X2ZyZWVfdXJiKHJ4Y2ItPnJ4X3VyYik7DQo+IAl9DQo+IA0KDQpXaXRoIHRoZSBuZXcgb25lLCBJ
+IGNhbiBlYXNpbHkgY2hlY2sgc3Bpbl9sb2NrL191bmxvY2sgaXMgcGFpcmVkLCBzbw0KSSB2b3Rl
+IGl0Lg0KDQotLQ0KUGluZy1LZQ0KDQoNCg==

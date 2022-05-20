@@ -2,129 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B714352EF49
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 17:32:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB8DD52EF4B
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 17:33:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350878AbiETPcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 11:32:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50548 "EHLO
+        id S1350890AbiETPdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 11:33:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238787AbiETPch (ORCPT
+        with ESMTP id S238787AbiETPdT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 11:32:37 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9454B163285
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 08:32:36 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id gg20so8367536pjb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 08:32:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=0ntU8sTmh5Ep5NJhOAETphIL9u6IXcDTJKCNORkCS/I=;
-        b=IKc2NKSf1AUEAsbPlWcIgEDiTqTFpPbUl+OkjQdAxhQM3dSMjE3zWizyiQid4mkJN1
-         zgus02O69yK+ROby49I8jIDf9v++Wn3KJWCcEd4BeOBYXORAWs5yMs2ORAIgxiCUYQRY
-         SH777deBLEd7dKDpCCz6E6aQ9q9+V9kG5jG22JmHpNNsD5m3kfzFQGRhdnAfxjNSk63t
-         P1jWp9gTOWCzpG+SwE0SHN26XImKPyVLFiff5hNNaNc5t2+GTRI6H1+XVOIxFtCNJdT9
-         dml5v2KPvLuxxcd1bpgFwJqrABSlxVHv7ptcb9WVjYpXvKDSkmXvg7w9BjeaNFyz5WX3
-         z6RA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=0ntU8sTmh5Ep5NJhOAETphIL9u6IXcDTJKCNORkCS/I=;
-        b=UJlTs8Nd78zmQBsH++EtfEP80t4PizWJvzKmRrYflhQRAXqYww5ALvv06Z+6iietlG
-         d+I6YIcz4gehkeqX1fbaeET3y1mzpTlpV62Qfj/oyiY7Ub4JY0IDWu2jRcZ2qI2mLHar
-         u4TZrzDK3hD7CRTAN0yQY6Is/KzC2QU0WK3mlMG1x+U5jzN2UjHLbVbTUDgwzoQSZ8d4
-         e3NGZRd/KhbXmlotFlGOjtBdpAhZkXjuHnjH+sFG5491aGFi6QVIjbt86EqeIwRFx4bX
-         li7LQi2mCA1V9fyfr/s8y3vdi775hHL1ANdz0mtTHrzHFAYqzaLAwV+q0Itz1y/QKO3o
-         MUSQ==
-X-Gm-Message-State: AOAM532w0+So4CPzLXXtBtv3qwVqDIhazERTnymz4bK6ObAtNTk3ISFj
-        m5j0yS5qw/njWNltkieQKpi+6A==
-X-Google-Smtp-Source: ABdhPJwITIqqh6qsh8GVu9M878qMLPuGX+511kDWzKH7A1OzGtisIeWBFyjPeGSfqYFcswfyRjOhtw==
-X-Received: by 2002:a17:903:153:b0:161:eaba:5b2a with SMTP id r19-20020a170903015300b00161eaba5b2amr5617477plc.30.1653060756026;
-        Fri, 20 May 2022 08:32:36 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id u13-20020a17090a450d00b001df955c28f6sm1776081pjg.37.2022.05.20.08.32.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 May 2022 08:32:35 -0700 (PDT)
-Message-ID: <f3878dfd-67f7-9a01-8dcf-7202bf5f3918@kernel.dk>
-Date:   Fri, 20 May 2022 09:32:34 -0600
+        Fri, 20 May 2022 11:33:19 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C47D178556
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 08:33:18 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0C0E51477;
+        Fri, 20 May 2022 08:33:18 -0700 (PDT)
+Received: from bogus (unknown [10.57.66.157])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AADFA3F73D;
+        Fri, 20 May 2022 08:33:15 -0700 (PDT)
+Date:   Fri, 20 May 2022 16:33:09 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Ionela Voinescu <ionela.voinescu@arm.com>
+Cc:     Atish Patra <atishp@atishpatra.org>, linux-kernel@vger.kernel.org,
+        Atish Patra <atishp@rivosinc.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Qing Wang <wangqing@vivo.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v2 0/8] arch_topology: Updates to add socket support and
+ fix cluster ids
+Message-ID: <20220520153309.rjtticnfxidz4x7p@bogus>
+References: <20220518093325.2070336-1-sudeep.holla@arm.com>
+ <YoZxKJ6TiAsxTXNl@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] char/mem: only use {read,write}_iter, not the old
- {read,write} functions
-Content-Language: en-US
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Al Viro <viro@zeniv.linux.org.uk>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org
-References: <20220520135030.166831-1-Jason@zx2c4.com>
- <YoevH5YFLcBBfsB0@zeniv-ca.linux.org.uk>
- <f35d7a15-0cbf-1663-15af-eae37a90d0ff@kernel.dk>
-In-Reply-To: <f35d7a15-0cbf-1663-15af-eae37a90d0ff@kernel.dk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YoZxKJ6TiAsxTXNl@arm.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/20/22 9:11 AM, Jens Axboe wrote:
-> On 5/20/22 9:09 AM, Al Viro wrote:
->> On Fri, May 20, 2022 at 03:50:30PM +0200, Jason A. Donenfeld wrote:
->>> Currently mem.c implements both the {read,write}_iter functions and the
->>> {read,write} functions. But with {read,write} going away at some point
->>> in the future,
->>
->> Not likely to happen, unfortunately.
->>
->>> and most kernel code made to prefer {read,write}_iter,
->>> there's no point in keeping around the old code.
->>
->> Profile and you'll see ;-/
+On Thu, May 19, 2022 at 05:32:49PM +0100, Ionela Voinescu wrote:
+> Hi Sudeep,
 > 
-> Weren't you working on bits to get us to performance parity there?
-> What's the status of that?
+> On Wednesday 18 May 2022 at 10:33:17 (+0100), Sudeep Holla wrote:
+> > Hi All,
+> > 
+> > This series intends to fix some discrepancies we have in the CPU topology
+> > parsing from the device tree /cpu-map node. Also this diverges from the
+> > behaviour on a ACPI enabled platform. The expectation is that both DT
+> > and ACPI enabled systems must present consistent view of the CPU topology.
+> > 
+> > Currently we assign generated cluster count as the physical package identifier
+> > for each CPU which is wrong. The device tree bindings for CPU topology supports
+> > sockets to infer the socket or physical package identifier for a given CPU.
+> > Also we don't check if all the cores/threads belong to the same cluster before
+> > updating their sibling masks which is fine as we don't set the cluster id yet.
+> > 
+> > These changes also assigns the cluster identifier as parsed from the device tree
+> > cluster nodes within /cpu-map without support for nesting of the clusters.
+> > Finally, it also add support for socket nodes in /cpu-map. With this the
+> > parsing of exact same information from ACPI PPTT and /cpu-map DT node
+> > aligns well.
+> > 
+> > The only exception is that the last level cache id information can be
+> > inferred from the same ACPI PPTT while we need to parse CPU cache nodes
+> > in the device tree.
+> > 
+> > P.S: I have not cc-ed Greg and Rafael so that all the users of arch_topology
+> > agree with the changes first before we include them.
+> > 
+> > v1[1]->v2:
+> > 	- Updated ID validity check include all non-negative value
+> > 	- Added support to get the device node for the CPU's last level cache
+> > 	- Added support to build llc_sibling on DT platforms
+> > 
+> > [1] https://lore.kernel.org/lkml/20220513095559.1034633-1-sudeep.holla@arm.com
+> > 
+> > Sudeep Holla (8):
+> >   arch_topology: Don't set cluster identifier as physical package identifier
+> >   arch_topology: Set thread sibling cpumask only within the cluster
+> >   arch_topology: Set cluster identifier in each core/thread from /cpu-map
+> >   arch_topology: Add support for parsing sockets in /cpu-map
+> >   arch_topology: Check for non-negative value rather than -1 for IDs validity
+> >   arch_topology: Avoid parsing through all the CPUs once a outlier CPU is found
+> >   of: base: add support to get the device node for the CPU's last level cache
+> >   arch_topology: Add support to build llc_sibling on DT platforms
+> > 
+> 
+> Just a recommendation for patch-set structure: it would be best to have
+> the following sequence to maintain the same scheduler topology and
+> behaviour when partially applying the set (currently testing this on Juno,
+> but should be the case for other platforms as well):
+> 
+> 2/8 arch_topology: Set thread sibling cpumask only within the cluster
+> 5/8 arch_topology: Check for non-negative value rather than -1 for IDs validity
+> 6/8 arch_topology: Avoid parsing through all the CPUs once a outlier CPU is found
+> 
+> --> these are only preparation/cleanup patches and don't affect current
+> functionality
+>
 
-Totally unscientific test on the current kernel, running:
+Agreed. It was in my TODO list but I just to post this v2 for some reason.
+I knew the patches were more in the order of my thoughts on what all needs
+to be done and the order I added them. I knew it would result in issue
+with kernel bisection.
 
-dd if=/dev/zero of=/dev/null bs=4k status=progress
 
-With the current tree, I get 8.8GB/sec, and if I drop fops->read() for
-/dev/zero, then I get 8.6GB/sec. That's 1%, which isn't nothing, but
-it's also not a huge loss for moving us in the right direction.
+> 7/8 of: base: add support to get the device node for the CPU's last level cache
+> 8/8 arch_topology: Add support to build llc_sibling on DT platforms
+>
+> --> these will populate llc siblings but this list will be equal to
+> core siblings (based on package_id) so nothing changes in the scheduler
+> topology. Even if CONFIG_SCHED_CLUSTER=y, we still have cluster_id=-1 so
+> nothing will change in that case either, for the patches so far.
+>
 
-Looking at a perf diff, it's mostly:
+Correct, I had worked out this much detail.
 
-               +0.34%  [kernel.kallsyms]  [k] new_sync_read
-               +0.33%  [kernel.kallsyms]  [k] init_sync_kiocb
-               +0.07%  [kernel.kallsyms]  [k] iov_iter_init
-               +0.80%  [kernel.kallsyms]  [k] iov_iter_zero
+> 1/8 arch_topology: Don't set cluster identifier as physical package identifier
+> 
+> --> 1/8 is the trouble maker if it's the first patch as it will result
+> in having all CPUs in core_siblings so the topology will be flattened to
+> just an MC level for a typical b.L system like Juno. But if you add it after
+> all of the above patches, the llc_siblings will contribute to create the same
+> MC and DIE levels we expect.
+> 
+> 3/8 arch_topology: Set cluster identifier in each core/thread from /cpu-map
+> 4/8 arch_topology: Add support for parsing sockets in /cpu-map
+> 
+> --> Here 3/8 will start creating complications when having clusters in
+> DT and we have CONFIG_SCHED_CLUSTER=y. But I'll detail this in a reply
+> to that patch. For CONFIG_SCHED_CLUSTER=n the topology and scheduler
+> behaviour should be the same as before this set.
+>
 
-with these being gone after switch to ->read_iter():
+Thanks for the ordering of the last 3. I wanted to work out, but you need
+to have done more work than me on that and thanks for saving my time. Much
+appreciated.
 
-     0.63%             [kernel.kallsyms]  [k] read_zero
-     0.13%             [kernel.kallsyms]  [k] __clear_user
+> Hope it helps,
 
-Didn't look closer, but I'm assuming this is _mostly_ tied to needing to
-init 48 bytes of kiocb for each one. There might be ways to embed a
-sync_kiocb inside the kiocb for the bits we need there, at least that
-could get us down to 32 bytes.
-
-> It really is an unfortunate situation we're currently in with two
-> methods for either read or write, with one being greatly preferred as we
-> can pass in non-file associated state (like IOCB_NOWAIT, etc) but the
-> older variant being a bit faster. It lives us in a bad place, imho.
-
-And splice etc, for example...
+Yes definitely, thanks again.
 
 -- 
-Jens Axboe
-
+Regards,
+Sudeep

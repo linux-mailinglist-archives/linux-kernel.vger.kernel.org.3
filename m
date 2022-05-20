@@ -2,184 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7144952E309
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 05:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5D5852E314
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 05:25:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345138AbiETDS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 23:18:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53748 "EHLO
+        id S1345038AbiETDZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 23:25:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345156AbiETDSz (ORCPT
+        with ESMTP id S1343795AbiETDZg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 23:18:55 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34AD062BE3
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 20:18:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653016735; x=1684552735;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=F/tKyieMfZNagPF9Zg8dnRW4a/AFFrFYjlL09LAKMEQ=;
-  b=iQ2z+CxdKOVqwGqykL0MeTcciB32mMCVQFlgRH9HCN6GHw0HlOMq+xEI
-   BQpLQJhyB+KMAa5i611SbqUV2uYwZP/LyEGtNDi8SX6hJYFcxNug0xEj7
-   WAKqeyHRE7vf1OJcOq8bxpmjdw2pDn7XCSOKBZP0EbKpfvQEW1ZIYLZFm
-   HuJ9EXJ8Pu4IwAdQgln/c7Iw1V6bjeJGWSkwzChEgamvsN7YdDRLmPDk+
-   0mTdKimihH/gvT2LYi+ae94fcCt+kyo1rIVcfUBeQFluiuDtqF7sp0iVs
-   JEN+aL22Gv3WtZOVx+txVjjwnB/Mb1GVoeZ4G1Jwj0D+TJNfCMcE37Cnj
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="252984364"
-X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="252984364"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 20:18:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="524433905"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 19 May 2022 20:18:53 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nrtAC-0004EE-SX;
-        Fri, 20 May 2022 03:18:52 +0000
-Date:   Fri, 20 May 2022 11:18:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- 78a96d33fc3ba010f88c12cb37344febc93b0012
-Message-ID: <62870894.+zQMjbRBecjhKTdx%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Thu, 19 May 2022 23:25:36 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B53A611AFC0
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 20:25:34 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id bh5so6339847plb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 20:25:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=oIvOnBi1zfzgJcgYX6B3AAYIMu7O4TOTP0MAscTgQD4=;
+        b=ZAasFmyKC1bCtYFDeeM598RQyVmV1chlTdFSHPZjgX1QKOySQ9CePCDE/VKPQk8gTF
+         Efza7Z/0cFBEEqdPhkCvfIRqWFnYIKt65Jr732qAogW+KR20BZ3EFSptZQkl156JCGkD
+         lC1VCoxc3ojGRwhT5oSyckTLf+zB+NkJ1/WGJzs9THRub/3c4qHg5OkkUgvmUEjC3Pcu
+         T27vTPMtykTR4nCM2/LvjISM0YiZXg10h93pzH+Zvn9U6kYGJuETi75QlwKwbAsJx6sw
+         a3uc4/pFa0Rrn14LQ0De5MMa+jP9r1MIV3mHbKsOsVRk8WoFxcZedp4TgFIumZNLF2RU
+         eUvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=oIvOnBi1zfzgJcgYX6B3AAYIMu7O4TOTP0MAscTgQD4=;
+        b=uzV/aAN7LL/5bPv7ZXVdsvZJsCkSyXEnbE0dSoXGN2hOBeBLesvRFO9piO/tF/2cZ0
+         SM7dFH9V1tPSSJqw5iNXhIUzC7lN+L2en6X+yXShmFQQqC67x0AEqXJZ9H/CANzx8Fd4
+         5Gp5q82kR5NR2g2Xwlx2QiE3QCVVi72l88E9zeNXgUsl1inzvEmGIKgSzOkRJjdXMJXp
+         PtTD/nc0AtjUtHjyHzaqE6aLHZXmogPzFLfMn6/sFQtteq2ZgMf3Dw2bbDbGDBWVz1m7
+         FrOY8y6inad29Y7DKDz+4OeuWSOI+0pk/IQJEst2GOIqD7pQqLkuGJMeU5IYa3+1/m7g
+         3APg==
+X-Gm-Message-State: AOAM530ad6h4krwjIVZCXcHq7N3d5PCqsvLRKETH06NNXf3u05I6/9M7
+        jdHlQ5x8+cEMtOTRAJVN4kDc1vSSCfhWVw==
+X-Google-Smtp-Source: ABdhPJxGIaHJIehw0yYD2H3oiND/gRVQaYMV1bSf2rca78U6rOB7y3HypvNrkKyEMQNts49hBhWs9A==
+X-Received: by 2002:a17:902:74c5:b0:161:5061:9d93 with SMTP id f5-20020a17090274c500b0016150619d93mr7595309plt.171.1653017134123;
+        Thu, 19 May 2022 20:25:34 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id w22-20020a1709026f1600b0016189ed82c4sm4470814plk.79.2022.05.19.20.25.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 May 2022 20:25:33 -0700 (PDT)
+Message-ID: <e70dfd3b-c2a6-d830-e3a0-6a25f0da9256@kernel.dk>
+Date:   Thu, 19 May 2022 21:25:30 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] random: convert to using fops->write_iter()
+Content-Language: en-US
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <f871a510-d262-bc98-757e-204976e1b82c@kernel.dk>
+ <YocEddeThi8VUcKb@zeniv-ca.linux.org.uk>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <YocEddeThi8VUcKb@zeniv-ca.linux.org.uk>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: 78a96d33fc3ba010f88c12cb37344febc93b0012  Merge x86/sev into tip/master
+On 5/19/22 9:01 PM, Al Viro wrote:
+> On Thu, May 19, 2022 at 05:43:15PM -0600, Jens Axboe wrote:
+> 
+>> -static int write_pool(const char __user *ubuf, size_t len)
+>> +static size_t write_pool(struct iov_iter *iter)
+>>  {
+>>  	size_t block_len;
+>>  	int ret = 0;
+>>  
+>> -	while (len) {
+>> -		block_len = min(len, sizeof(block));
+>> -		if (copy_from_user(block, ubuf, block_len)) {
+>> -			ret = -EFAULT;
+>> +	while (iov_iter_count(iter)) {
+>> +		block_len = min(iov_iter_count(iter), sizeof(block));
+>> +		if (!copy_from_iter(block, block_len, iter)) {
+>> +			if (!ret)
+>> +				ret = -EFAULT;
+>>  			goto out;
+>>  		}
+> 
+> Feed it a buffer with only 1 byte mapped, watch it'll pass to mix_pool_bytes().
+> And see how much of 'block' has been used uninitialized...
 
-elapsed time: 738m
+I don't follow? Buffer with 1 byte, iter setup with 1 byte. We copy 1 byte,
+and we pass 1 byte to mix_pool_bytes(). What am I missing?
 
-configs tested: 99
-configs skipped: 98
+> And why bother with that min thing, anyway?
+> 
+> 	ssize_t ret = 0;
+> 
+> 	while (iov_iter_count(iter)) {
+> 	  	u8 block[BLAKE2S_BLOCK_SIZE];
+> 		size_t copied = copy_from_iter(block, sizeof(block), iter);
+> 		if (!copied) {
+> 			if (!ret)
+> 				ret = -EFAULT;
+> 			break;
+> 		}
+> 		mix_pool_bytes(block, copied);
+> 		ret += copied;
+> 	}
+> 	return ret;
+> 
+> and be done with that...
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Agree, that does look better, the min() part could've been killed with
+the conversion indeed.
 
-gcc tested configs:
-arm64                               defconfig
-arm64                            allyesconfig
-arm                              allmodconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                          randconfig-c001
-powerpc                      pcm030_defconfig
-sh                   sh7770_generic_defconfig
-h8300                    h8300h-sim_defconfig
-sh                        sh7763rdp_defconfig
-powerpc                     sequoia_defconfig
-sh                         microdev_defconfig
-riscv                            allyesconfig
-arm                      jornada720_defconfig
-powerpc64                           defconfig
-powerpc                        warp_defconfig
-mips                       capcella_defconfig
-powerpc                 linkstation_defconfig
-sh                   secureedge5410_defconfig
-arm                        realview_defconfig
-sh                   rts7751r2dplus_defconfig
-sh                          urquell_defconfig
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220519
-m68k                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-csky                                defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                                defconfig
-s390                             allmodconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-sparc                               defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-riscv                            allmodconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                                  kexec
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                    rhel-8.3-kselftests
-x86_64                         rhel-8.3-kunit
+>> @@ -1382,11 +1378,16 @@ static long random_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
+>>  			return -EINVAL;
+>>  		if (get_user(size, p++))
+>>  			return -EFAULT;
+>> -		retval = write_pool((const char __user *)p, size);
+>> +
+>> +		iov.iov_base = p;
+>> +		iov.iov_len = size;
+>> +		iov_iter_init(&iter, WRITE, &iov, 1, size);
+> 
+> That'd be
+> 		import_single_range(WRITE, p, size, &iov, &iter);
 
-clang tested configs:
-powerpc              randconfig-c003-20220519
-x86_64                        randconfig-c007
-riscv                randconfig-c006-20220519
-mips                 randconfig-c004-20220519
-i386                          randconfig-c001
-arm                  randconfig-c002-20220519
-riscv                          rv32_defconfig
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a013
-i386                          randconfig-a015
-i386                          randconfig-a011
-hexagon              randconfig-r045-20220519
-riscv                randconfig-r042-20220519
-hexagon              randconfig-r041-20220519
-s390                 randconfig-r044-20220519
+Yep that'd be a simpler equivalent.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Jens Axboe
+

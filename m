@@ -2,145 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2E5652EE9F
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 17:02:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B49452EEA3
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 17:04:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350561AbiETPCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 11:02:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41140 "EHLO
+        id S1350582AbiETPEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 11:04:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231347AbiETPCI (ORCPT
+        with ESMTP id S1350566AbiETPEi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 11:02:08 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 184DA4F455
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 08:02:07 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id t11-20020a17090a6a0b00b001df6f318a8bso11711224pjj.4
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 08:02:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=qZz8FZUKECzNbnFY9lR47szCmiT+m34JVlG5HP+QTn0=;
-        b=DPzty7wOyFBPH7nBmaSCp1zF+Qu7AFgBU08fZ/J6ZV3I9UZOl9K3s2S6vt+V/oqBjY
-         sHUOsi3rrOntar7AKCoxb+FfbEpm/Q+wIRL2ycC7L8K3BRwBxtMd+Md8Qu6Pubhky3VY
-         LbUhHE5/gUHLm+RzAxoWBf//KHBuH5+MXjl225wZ3HiYBUXzuFJBZPZZJz4pRuAvPPUf
-         2nQoEss9uwYAA/4yNtIWVB4XDC1j/hQ/ovuk3sHMLwTIcH2EGnymMWY0RbNcXhpy44Wa
-         JUM61y34EIspVfWpJCVMC5oZrL9m7SJOGr97rM7irmcuG+X8pUb0R2sSpM6I/mur9cfS
-         CneQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=qZz8FZUKECzNbnFY9lR47szCmiT+m34JVlG5HP+QTn0=;
-        b=AAMt/a2BFYNw4dVy90MYFlPnFzammTQT3vGUUag7nnirCB6cnqaNnyc5ElNRZoSgGU
-         HgsDR5w6+kzMvO8PzyZNqfow/NkTJUS2PkSCc08FmAJ+tOYs8e72HNiix3CKL+2qyuGb
-         urXkzF0ayx+gdBGgzUW9APikyvQQ28rZfGg+5crZXQKuYr8pMZDLDAhzABedL/E+ljDP
-         HqaP9KrkPCFbJub7SKNiJe9gc5bK94FsnLVt/55EyvYUjqrdS2DOf9wB9DkZnq+t0Agy
-         iIb7xfS6g0+dgWZMkWe1RZwboKcenm8y7WNiEbSS9RKxCUO7Jh5ws3Jl4siivSVCtCK1
-         X6yg==
-X-Gm-Message-State: AOAM531jpBFsVS029sXEbAkGgOx3WLixj4HlWrfE6juNNyQ/EGgBr8YD
-        oUL1ETpLMVvkOf4cgzEBJtLdcw==
-X-Google-Smtp-Source: ABdhPJwGx7/ziDKYfEwbA7cv/TFh1iHd2mnAZbRvFEIzyRocHqSZvq6rVVrPIugR9QUgSsO/fi3hvw==
-X-Received: by 2002:a17:90a:4d49:b0:1df:78ca:ae49 with SMTP id l9-20020a17090a4d4900b001df78caae49mr11190224pjh.121.1653058926286;
-        Fri, 20 May 2022 08:02:06 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id p17-20020a170902c71100b0015e8d4eb28fsm5665018plp.217.2022.05.20.08.02.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 08:02:05 -0700 (PDT)
-Date:   Fri, 20 May 2022 15:02:02 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Woodhouse <dwmw@amazon.co.uk>,
-        Mingwei Zhang <mizhang@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>
-Subject: Re: [PATCH v2 6/8] KVM: Fix multiple races in gfn=>pfn cache refresh
-Message-ID: <YoetaoA7m4P5NQhy@google.com>
-References: <20220427014004.1992589-1-seanjc@google.com>
- <20220427014004.1992589-7-seanjc@google.com>
- <035a5300-27e1-e212-1ed7-0449e9d20615@redhat.com>
- <4c617e69-f80a-1ee1-635e-c198cf93187e@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4c617e69-f80a-1ee1-635e-c198cf93187e@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 20 May 2022 11:04:38 -0400
+Received: from azure-sdnproxy-1.icoremail.net (azure-sdnproxy.icoremail.net [52.237.72.81])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id C501516D4B3
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 08:04:33 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [124.236.130.193])
+        by mail-app3 (Coremail) with SMTP id cC_KCgAXftjsrYdiVwGUAA--.62375S2;
+        Fri, 20 May 2022 23:04:20 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-kernel@vger.kernel.org
+Cc:     miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        linux-mtd@lists.infradead.org, Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH] mtd: Fix deadlock caused by cancel_work_sync in sm_release
+Date:   Fri, 20 May 2022 23:04:12 +0800
+Message-Id: <20220520150412.52143-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cC_KCgAXftjsrYdiVwGUAA--.62375S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7ZFW5XrWkWFy8Zr1DZw1DZFb_yoW8Jw1Dpr
+        WrCry8JFW8Ar4DJ34DKa13ZF4ru34kKFW7Kr1UK3W5ZrZ5XFnIg345KFyFgFWfGFy8A39I
+        vFs2grW5ZF1rZw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkq14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6ryr
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+        W8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
+        cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUUE_M7UUUUU==
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgkQAVZdtZzBSQAZsp
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022, Paolo Bonzini wrote:
-> On 5/20/22 16:49, Paolo Bonzini wrote:
-> > On 4/27/22 03:40, Sean Christopherson wrote:
-> > > +         * Wait for mn_active_invalidate_count, not mmu_notifier_count,
-> > > +         * to go away, as the invalidation in the mmu_notifier event
-> > > +         * occurs_before_  mmu_notifier_count is elevated.
-> > > +         *
-> > > +         * Note, mn_active_invalidate_count can change at any time as
-> > > +         * it's not protected by gpc->lock.  But, it is guaranteed to
-> > > +         * be elevated before the mmu_notifier acquires gpc->lock, and
-> > > +         * isn't dropped until after mmu_notifier_seq is updated.  So,
-> > > +         * this task may get a false positive of sorts, i.e. see an
-> > > +         * elevated count and wait even though it's technically safe to
-> > > +         * proceed (becase the mmu_notifier will invalidate the cache
-> > > +         *_after_  it's refreshed here), but the cache will never be
-> > > +         * refreshed with stale data, i.e. won't get false negatives.
-> > 
-> > I am all for lavish comments, but I think this is even too detailed.
-> > What about:
-> 
-> And in fact this should be moved to a separate function.
-> 
-> diff --git a/virt/kvm/pfncache.c b/virt/kvm/pfncache.c
-> index 50ce7b78b42f..321964ff42e1 100644
-> --- a/virt/kvm/pfncache.c
-> +++ b/virt/kvm/pfncache.c
-> @@ -112,6 +112,36 @@ static void gpc_release_pfn_and_khva(struct kvm *kvm, kvm_pfn_t pfn, void *khva)
->  	}
->  }
-> +
-> +static inline bool mmu_notifier_retry_cache(struct kvm *kvm, unsigned long mmu_seq)
-> +{
-> +	/*
-> +	 * mn_active_invalidate_count acts for all intents and purposes
-> +	 * like mmu_notifier_count here; but we cannot use the latter
-> +	 * because the invalidation in the mmu_notifier event occurs
-> +	 * _before_ mmu_notifier_count is elevated.
-> +	 *
-> +	 * Note, it does not matter that mn_active_invalidate_count
-> +	 * is not protected by gpc->lock.  It is guaranteed to
-> +	 * be elevated before the mmu_notifier acquires gpc->lock, and
-> +	 * isn't dropped until after mmu_notifier_seq is updated.
-> +	 */
-> +	if (kvm->mn_active_invalidate_count)
-> +		return true;
-> +
-> +	/*
-> +	 * Ensure mn_active_invalidate_count is read before
-> +	 * mmu_notifier_seq.  This pairs with the smp_wmb() in
-> +	 * mmu_notifier_invalidate_range_end() to guarantee either the
-> +	 * old (non-zero) value of mn_active_invalidate_count or the
-> +	 * new (incremented) value of mmu_notifier_seq is observed.
-> +	 */
-> +	smp_rmb();
-> +	if (kvm->mmu_notifier_seq != mmu_seq)
-> +		return true;
-> +	return false;
+There is a deadlock between sm_release and sm_cache_flush_work
+which is a work item. The cancel_work_sync in sm_release will
+not return until sm_cache_flush_work is finished. If we hold
+mutex_lock and use cancel_work_sync to wait the work item to
+finish, the work item also requires mutex_lock. As a result,
+the sm_release will be blocked forever. The race condition is
+shown below:
 
-This can be
+    (Thread 1)             |   (Thread 2)
+sm_release                 |
+  mutex_lock(&ftl->mutex)  | sm_cache_flush_work
+                           |   mutex_lock(&ftl->mutex)
+  cancel_work_sync         |   ...
 
-	return kvm->mmu_notifier_seq != mmu_seq;
+This patch moves del_timer_sync and cancel_work_sync out of
+mutex_lock in order to mitigate deadlock.
 
-Looks good otherwise.  It'll probably yield a smaller diff too.
+Fixes: 7d17c02a01a1 ("mtd: Add new SmartMedia/xD FTL")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+---
+ drivers/mtd/sm_ftl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/mtd/sm_ftl.c b/drivers/mtd/sm_ftl.c
+index 0cff2cda1b5..7f955fade83 100644
+--- a/drivers/mtd/sm_ftl.c
++++ b/drivers/mtd/sm_ftl.c
+@@ -1111,9 +1111,9 @@ static void sm_release(struct mtd_blktrans_dev *dev)
+ {
+ 	struct sm_ftl *ftl = dev->priv;
+ 
+-	mutex_lock(&ftl->mutex);
+ 	del_timer_sync(&ftl->timer);
+ 	cancel_work_sync(&ftl->flush_work);
++	mutex_lock(&ftl->mutex);
+ 	sm_cache_flush(ftl);
+ 	mutex_unlock(&ftl->mutex);
+ }
+-- 
+2.17.1
+

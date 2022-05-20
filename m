@@ -2,126 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A89E752F129
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 18:57:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1729252F12D
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 18:58:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351951AbiETQ5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 12:57:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46184 "EHLO
+        id S1351970AbiETQ6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 12:58:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237781AbiETQ5Q (ORCPT
+        with ESMTP id S1351966AbiETQ6q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 12:57:16 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C62179093
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 09:57:15 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id pq9-20020a17090b3d8900b001df622bf81dso8346434pjb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 09:57:15 -0700 (PDT)
+        Fri, 20 May 2022 12:58:46 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4995E17DDDA;
+        Fri, 20 May 2022 09:58:43 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id l13so8688208lfp.11;
+        Fri, 20 May 2022 09:58:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6SpNaB2y1Al28S6NM7uzx+ecVRdfZl8NU3/XOGW88bQ=;
-        b=FlSBAkr4ofMj/1FfrjZdKJHGWxG5It1GsGUnToRA0ztAQWucRqPq4eJCdV9rBICATG
-         p22NWsd07otLxl9qy0pg3FlOUwx8PnAG1t198y4QkGLfPzgimEVAMvWu2HQG70OGWgdS
-         rWLo2Ju0uuDXL89mk3bvO92g5uE8YJGwBQ3Q4=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=w09xDaFhvCgd5/jtHMQ9zzqMXFg1Hmqji5SOkLVSX04=;
+        b=ECOahUtY8/3WYgfZkQ8StYb8HVRRLhv4hCEnNfr7XbEzU6weV+kjDmrqGyjHiBK6SC
+         Xkeeh4O081HIQtBhR3/96isJuNtcb54l+0FJ9SZoLYdyNe+5dRDBWpRhHO654doBe5t0
+         6w+TMedl8/iTrJYGdIaSqLEv3UqIGRkiJRI0i486D/gMGrBSFTUqZoZx2+bIJa4/8iqt
+         uEaXgo2xbtpHgJg7ldB9gKcyXHVZNWT8uaW/yHXmbSv02YUCxx66BjBT3+WtQ+4xnBGg
+         /vaB9W6g4zc9CEOfTDCPPY0BCW1rkXvphkqFdUs0X2OEQmDza+or1KjnYgkVs1Kf6N/M
+         liTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6SpNaB2y1Al28S6NM7uzx+ecVRdfZl8NU3/XOGW88bQ=;
-        b=TC4UGfWaJ2YpsE1xJHWdAc2m7FJOEvMghSGyHjWe7pctK67PquUvRKApNEOTjRss2c
-         4kaEFa2CGPy5JSgOhLRgK4TAJ4UNxYiIr8GpM9QJp/Gurbw1hsFeumbg5geO5B/w+U1G
-         ofw1kkyJZSzAgWXkceIOGCSd+kN6krKqGuCmYiuX0sFT0TTZGz1vTIJVcHpjYcn04ENq
-         GGKM7X9FdRQFLqxfaka6Ipkocc9xfUoXITrtRGUmEqoLjn4bxixuzCB/hM6xivLv5TgQ
-         Tq6G9Qz/WAsIbRY1w+Fj/na/UYH8SsUHAQxWDxVtUd+8kBORHWa9VYPIzK7ITPBjsewA
-         sOrA==
-X-Gm-Message-State: AOAM533AeH33Rg2ZEXlXymjQm5gZzdM2fLfy/lNMUjYMCaesz2KmvFIS
-        0v+fSADGjLrPz1PKOFgxfqzl9A==
-X-Google-Smtp-Source: ABdhPJxkVZRhHdGR5NDul9Khe/5JxygEEdSRxZBEPGrG33xqgtDPzhBAR+c7Iv2CIauYTn5mEid49Q==
-X-Received: by 2002:a17:90b:1a8c:b0:1dc:1c62:2c0c with SMTP id ng12-20020a17090b1a8c00b001dc1c622c0cmr12594751pjb.140.1653065834734;
-        Fri, 20 May 2022 09:57:14 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id e21-20020aa79815000000b005104c6d7941sm2060007pfl.31.2022.05.20.09.57.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 09:57:14 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
-        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH] KVM: x86/emulator: Bounds check reg nr against reg array size
-Date:   Fri, 20 May 2022 09:57:04 -0700
-Message-Id: <20220520165705.2140042-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.32.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=w09xDaFhvCgd5/jtHMQ9zzqMXFg1Hmqji5SOkLVSX04=;
+        b=ijo2sKcAmd10Fak2J1KLZFKvu6oBcZSlED37Ez81QNB0KGOPDgO34P+S/y1rCLnifm
+         Pdw6pr0ig2CvbKgcnMktaxk0j3gCfUZQK0BnFF+qp4Tylv3yogGDt8DnU2uP2qlsjfbt
+         gZ8SDPtmqAQVFd3ReTYRx0Pz/MEVVm1uwN57Dqa/0StursyPyPuEyaO1CeM3gCkfrpgG
+         jCPvWnqohKp5eMP7rxJsAPtDepvacJi1eMDo3d6oL/HNpSF3jOLCnTtJQ0Eh9895h+Bh
+         NpYSilD+J290jBhpZ47xXN5gjUBm5Bne1P+QJMb1K4P8wlUPO9YcEpYTkpyq1llLxSRS
+         gyuA==
+X-Gm-Message-State: AOAM530cE2XmXoXVaPXHGBhYEh+KWeY6yOlsHtpv5gwWy8LYl7Ea073h
+        wMsDDfk74B7XOYjKN9a0jLDMGAVXhwoSdRNSt0Q=
+X-Google-Smtp-Source: ABdhPJwa9oKuEddMWiH4lSEQYyGZxTDOu6R1NSAWB2r/9keVKQWP4q6vWZWLYvQ45DixG/0ulDuHC60cbYfj/Btl6XQ=
+X-Received: by 2002:a05:6512:318f:b0:473:dffc:18c8 with SMTP id
+ i15-20020a056512318f00b00473dffc18c8mr7738530lfe.129.1653065921291; Fri, 20
+ May 2022 09:58:41 -0700 (PDT)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1901; h=from:subject; bh=JJuMLpa4bRxd+XIVXJHSB00fFvogB4eo+vqKcUS+E5c=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBih8hg9y6m79FVwywHWrIpyRZj+n8gfvE1kdQ4vttq CxUDwHGJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYofIYAAKCRCJcvTf3G3AJtHhEA CJetvbOuFyM9hM1wpAXtchIPly9FkjVoOpZjYYW1QuSIQo44/BvNeHZFgtxmVE3BGchr2akYhClwI1 nTy/7bc8Z/i6DFUm6mF0VpTt0Sj32XouSRJb8goy+KJNCO9mn0AaJFfOLkDysFXw98ov7nAl3TrICA 7wXEzs7MPwStZ+Eg3Fod2/LmHSNCyPjgVwguQAPJY2y820fqEWhr58sH6d/hQeSqRZ9/V3N+NM9+Z8 wVEOxxBwVUkzqYUYEq4BavHyE2qUfMpCEUgu9ijb/b+x9/ekkWVFb6/nIQ+KDMKc9bFrAFjJbUrqFp 4XsOUjfjJQXz04M1TibNo0mCM22Ph10iUFlXxYIMpa6kcHkVAnGDU6H2tiGst+/H7j9LjL6+sLFoHE f6uBS262o12sISPjZJP4MzsnmMbJAmoqtpEU/Ws/bIf3VDoB0HLdd7MVOLGk5FH20k+RnLy/GDR2bm zNkBmURh2qIWVrUtbWyNZaM3mpVWY0LQGcUfBYKzRMgPFwl92+nyVeptwm6yaVjTndDHqE7aPBxpVz oW+pJ2XsLw+/GHfLO46BNH9VH3hMBmsDZBcNjriHMERtI97JI6UO/RowyS22w48uZwAu7+nYUlWum7 v0TUYX74ldqPWaE9gjBI2b+XcHC9ERv93e/aHHQ7TvsfTV22SA5aqoQy1mlw==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220519101656.44513-1-duoming@zju.edu.cn> <87fsl53jic.fsf@kernel.org>
+ <257f8e7.216cd.180dc1af4d3.Coremail.duoming@zju.edu.cn> <877d6h37c9.fsf@kernel.org>
+In-Reply-To: <877d6h37c9.fsf@kernel.org>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 20 May 2022 18:58:04 +0200
+Message-ID: <CAHp75Vd8om_5sC8LDcnRH1oi6pGTmL6AVBrpieZe3HepOXnoGw@mail.gmail.com>
+Subject: Re: [PATCH net] net: wireless: marvell: mwifiex: fix sleep in atomic
+ context bugs
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     duoming@zju.edu.cn,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Amitkumar Karwar <amitkarwar@gmail.com>,
+        Ganapathi Bhat <ganapathi017@gmail.com>,
+        Sharvari Harisangam <sharvari.harisangam@nxp.com>,
+        Xinming Hu <huxinming820@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "open list:TI WILINK WIRELES..." <linux-wireless@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-GCC 12 sees that it might be possible for "nr" to be outside the _regs
-array. Add explicit bounds checking.
+On Thu, May 19, 2022 at 5:44 PM Kalle Valo <kvalo@kernel.org> wrote:
+> duoming@zju.edu.cn writes:
+> > On Thu, 19 May 2022 13:27:07 +0300 Kalle Valo wrote:
 
-In function 'reg_read',
-    inlined from 'reg_rmw' at ../arch/x86/kvm/emulate.c:266:2:
-../arch/x86/kvm/emulate.c:254:27: warning: array subscript 32 is above array bounds of 'long unsigned int[17]' [-Warray-bounds]
-  254 |         return ctxt->_regs[nr];
-      |                ~~~~~~~~~~~^~~~
-In file included from ../arch/x86/kvm/emulate.c:23:
-../arch/x86/kvm/kvm_emulate.h: In function 'reg_rmw':
-../arch/x86/kvm/kvm_emulate.h:366:23: note: while referencing '_regs'
-  366 |         unsigned long _regs[NR_VCPU_REGS];
-      |                       ^~~~~
+...
 
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Sean Christopherson <seanjc@google.com>
-Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc: Wanpeng Li <wanpengli@tencent.com>
-Cc: Jim Mattson <jmattson@google.com>
-Cc: x86@kernel.org
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: kvm@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- arch/x86/kvm/emulate.c | 4 ++++
- 1 file changed, 4 insertions(+)
+> >> > Fixes: f5ecd02a8b20 ("mwifiex: device dump support for usb interface")
+> >> > Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+> >>
+> >> Have you tested this on real hardware? Or is this just a theoretical
+> >> fix?
+> >
+> > This is a theoretical fix. I don't have the real hardware.
+>
+> For such patches clearly document that in the commit log, for example
+> something like "Compile tested only."
 
-diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-index 89b11e7dca8a..fbcbc012a3ae 100644
---- a/arch/x86/kvm/emulate.c
-+++ b/arch/x86/kvm/emulate.c
-@@ -247,6 +247,8 @@ enum x86_transfer_type {
- 
- static ulong reg_read(struct x86_emulate_ctxt *ctxt, unsigned nr)
- {
-+	if (WARN_ON(nr >= ARRAY_SIZE(ctxt->_regs)))
-+		return 0;
- 	if (!(ctxt->regs_valid & (1 << nr))) {
- 		ctxt->regs_valid |= 1 << nr;
- 		ctxt->_regs[nr] = ctxt->ops->read_gpr(ctxt, nr);
-@@ -256,6 +258,8 @@ static ulong reg_read(struct x86_emulate_ctxt *ctxt, unsigned nr)
- 
- static ulong *reg_write(struct x86_emulate_ctxt *ctxt, unsigned nr)
- {
-+	if (WARN_ON(nr >= ARRAY_SIZE(ctxt->_regs)))
-+		return 0;
- 	ctxt->regs_valid |= 1 << nr;
- 	ctxt->regs_dirty |= 1 << nr;
- 	return &ctxt->_regs[nr];
+It seems I even missed this part... :-(
+
 -- 
-2.32.0
-
+With Best Regards,
+Andy Shevchenko

@@ -2,55 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94BE152E417
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 06:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09DA052E41C
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 06:53:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345437AbiETEwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 00:52:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47104 "EHLO
+        id S1345449AbiETExN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 00:53:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345438AbiETEwj (ORCPT
+        with ESMTP id S1345450AbiETExC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 00:52:39 -0400
+        Fri, 20 May 2022 00:53:02 -0400
 Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE8E66C8F
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 21:52:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9111014ACA2
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 21:53:01 -0700 (PDT)
 Received: by mail-ej1-x631.google.com with SMTP id ck4so9204831ejb.8
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 21:52:38 -0700 (PDT)
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 21:53:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=iXQ11dkGIoE0lV36QZDgqg8uCYyptybDNTq4ktZBTbs=;
-        b=Gn7sIKywSM62dUwnlqYPfjztZlNBpnEvxn/LPGPAND/LIIcY7GDg8EgQIw+Zh3y/U1
-         h9lNgaIg/X2sWmLtWsZCJ6kKKaAQiFpLbw531WuTGezENUeCvmgZzu1lNfBWdlyCnfL+
-         Uo716ZjvlyclNOH5OVjrtuSR2M+RHKhbiqW+4=
+        bh=HelS1YSgoBW0SE2UIxwjEVxXmUoAGRP6Ud70VaUb1RA=;
+        b=H6iH3aexSzoRS3xXyRLeJheX9vWo0LSI92UAWGJj3vVnikNVcBAUVV//3jW+OoHWMo
+         c6QuxxhcpXAZBwmBxi7/BCYKY2HuDVbJgHBMKEtcou/69yjh3SsfubfIpwV8ZiWSmLnM
+         9YQff4597xej1VzxR5vTD6CKVagarFZCMisUQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=iXQ11dkGIoE0lV36QZDgqg8uCYyptybDNTq4ktZBTbs=;
-        b=a4YihJCWQXTVDiHLCyO/uPKDVT5z+5muCU5RPOyESj4Wcezb1OL1+TEe22niEkWFJK
-         yn0z9GESu5l/OmqV72f6IIM3Tielf7CWwYasxjsqWuqOBReY3vHWHRs7/kD1Aogv83hk
-         44gO3JD4scBirP+gmNuwALmshpONuxWAcgSIVJoL4fRJTu09JMBRY68uR4ZBOTFzU/fl
-         s+5cb/jZzG9OgCiPyjc4naqiuwHmZS8WdQR5nb/GAGd9hv1B3U0sh72QLg6Wnz8m1bVz
-         kkmNc12sYAk0cejl71KjDgdYoBjgDYjWWeGlxd6+G1oodgvZvjmY5e8F5m9306E+OfFV
-         jvsg==
-X-Gm-Message-State: AOAM530dwvwKDJWut8ABrbIoPfbsqcUKP5A1u2F+To6ZoWhpgjmtV31j
-        LeRSzwNnzyz5hOKVkOV/9WwJmGUImy+yjPilmapUqg==
-X-Google-Smtp-Source: ABdhPJw9Y9lBj9Z5FwDbfz0z2g17IMdLUZaYayEtlHgFK/MU4JnEW8hdabOOpLZh98m29bEIpS/fA3W+v5e7mgJb+sk=
-X-Received: by 2002:a17:907:3f8e:b0:6f4:4723:4185 with SMTP id
- hr14-20020a1709073f8e00b006f447234185mr7108632ejc.359.1653022356766; Thu, 19
- May 2022 21:52:36 -0700 (PDT)
+        bh=HelS1YSgoBW0SE2UIxwjEVxXmUoAGRP6Ud70VaUb1RA=;
+        b=jSVw6NAxYCqIUe2brSTd20TsYuyiqlU0+EYX4JqL/9gdgQgAVqVmPkDI9a+Wck3n7p
+         DAiwi4/VCAzEiV3G8pbzSknArxR3lLgVanUlru7SIf6QrKiVILvxenMlAe7S4vpm1VSo
+         GCC+U9RBWYK3x1c+0fXucssn8LjIKFbsWw/vDVM49ItMwezGrckDfis9r5ggyhnEhQOV
+         fiPBNOPMZ0LuNOLAkdLQTS8AxR1Wzc2ff+3zrnRtmBXwfBXeM6BaUGptuWscXPo/vGdz
+         F71yCGIX+ynb+11ZzRy+FqpkveaQUrNoqCgDUmrifIWIW5BANFr5fMaK5QGb8AiNJRZT
+         Ljhw==
+X-Gm-Message-State: AOAM531uMywxve9hLukNRS47ICXSgDqXVdo0TPnbPMargopbKN9j3Jnm
+        vhhfVNgDTOEeDDB4jm1UpVIbV+UfzT4hCulnrYUemg==
+X-Google-Smtp-Source: ABdhPJx//tzm42OLUTVgIaPY6+uQ1fk21PSPAoxge18XjLdO9zIresHOvI3h20PeWG9DGgGmlfuWizAbefFCfNTPqQQ=
+X-Received: by 2002:a17:907:c12:b0:6fe:22bb:7a0 with SMTP id
+ ga18-20020a1709070c1200b006fe22bb07a0mr7327804ejc.450.1653022381201; Thu, 19
+ May 2022 21:53:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220519134728.456643-1-y.oudjana@protonmail.com>
- <20220519134728.456643-3-y.oudjana@protonmail.com> <CAGXv+5GnjY1DOWHx-B4PZqNi5tnWOgYQ_TCk6YzhtEnPQnVVnA@mail.gmail.com>
-In-Reply-To: <CAGXv+5GnjY1DOWHx-B4PZqNi5tnWOgYQ_TCk6YzhtEnPQnVVnA@mail.gmail.com>
+References: <20220519134728.456643-1-y.oudjana@protonmail.com> <20220519134728.456643-2-y.oudjana@protonmail.com>
+In-Reply-To: <20220519134728.456643-2-y.oudjana@protonmail.com>
 From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Fri, 20 May 2022 12:52:25 +0800
-Message-ID: <CAGXv+5FO+wZyyORV36+OmRn62M9zxfmB5WaTCkSgWJ6k9=572Q@mail.gmail.com>
-Subject: Re: [PATCH 2/6] clk: mediatek: Use mtk_clk_register_gates_with_dev in
- simple probe
+Date:   Fri, 20 May 2022 12:52:50 +0800
+Message-ID: <CAGXv+5GNoi_e2Ms3rcTTZ59k+_TZOB9qBM0p_BtE8EtDKYfpOQ@mail.gmail.com>
+Subject: Re: [PATCH 1/6] clk: mediatek: gate: Export mtk_clk_register_gates_with_dev
 To:     Yassine Oudjana <yassine.oudjana@gmail.com>
 Cc:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
@@ -77,23 +75,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 12:49 PM Chen-Yu Tsai <wenst@chromium.org> wrote:
+On Thu, May 19, 2022 at 9:49 PM Yassine Oudjana
+<yassine.oudjana@gmail.com> wrote:
 >
-> On Thu, May 19, 2022 at 9:49 PM Yassine Oudjana
-> <yassine.oudjana@gmail.com> wrote:
-> >
-> > From: Yassine Oudjana <y.oudjana@protonmail.com>
-> >
-> > Register gates with dev in mtk_clk_simple_probe.
-> >
-> > Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+> From: Yassine Oudjana <y.oudjana@protonmail.com>
 >
-> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+> This allows it to be used in drivers built as modules.
+>
+> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
 
-Side note: one day I would like to rename all the common functions so
-that the follow the style of the CCF. One example would be
-
-  - mtk_XXX_register() takes |struct device *|
-  - of_mtk_XXX_register() takes |struct device_node *|
-
-I don't know if I'll ever get to it.
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>

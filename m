@@ -2,81 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7649C52EA0A
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 12:37:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE6B652EA0C
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 12:39:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348212AbiETKhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 06:37:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44014 "EHLO
+        id S1348219AbiETKjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 06:39:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343908AbiETKg7 (ORCPT
+        with ESMTP id S239447AbiETKjl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 06:36:59 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17EE43D1E6;
-        Fri, 20 May 2022 03:36:57 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id p4so12196830lfg.4;
-        Fri, 20 May 2022 03:36:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=kJ3gaWI7ls+cENHBhyRJBXNyvaYoDTFV2ZamYkNuQtk=;
-        b=BOC1E2lE5UsAVwhOHz0x3YJp39K2ujW746Ya3goMOmV9XCG64s40HclxPIvjLXpyHt
-         XwTxdMze0EjyKQjeJCeXNY4dQQ82ZpR2vuB9UzYmwt3tLaogQ4SxLk4Lr4OuOwF7hi+f
-         SdA52IeSeMYcH1QonwQCmxxNlbG3iUxM9Q11FlVjVLRXkIMm2tjfK/j1WSipkIYpo3H+
-         S7v+Op5+STHIY8mivYEjaZM7BmYLE6W57bcBj/zGGaqjKyzidkRSJ0cC6SrbJ1ZIqL66
-         iu5T/82R8EuYZVBbNcCBhe+cJQo+v5+8GozV7U+0E8dMr4/81NkGZwXvRWTtebQL3NfV
-         N6Jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kJ3gaWI7ls+cENHBhyRJBXNyvaYoDTFV2ZamYkNuQtk=;
-        b=ycYwt4Ej1B83NLh1YlsozQsA9IQ1pd5X9816sgLpAjO/moCVrmgJmUSNB3VSb2reHD
-         EIFGKAjfmuvgbhk4ocbC22gXChxpQYlfudZ726IRKG1AzhwhjnuXDr7VpaPOIVoAjqU1
-         GIVdM+WER23qY/+HDtF1UhI6S2+VXKgPKMVq9bQmgw0mHChIB4VIfCC+fFRR/HD3mThf
-         l5ChSuKlYhssOxs7fpTCTD+9cB7eF6tbBU3j03udXxmh7joE3EyxBdbL6vlHJ2+9MxEV
-         0TAXZOzdHJcIrz3xbPD4+YcRr9ZXQxhPr1Y9P67J02BBXorjHuNXYylCdc8I3xwFd4cX
-         dtFA==
-X-Gm-Message-State: AOAM5305RNoUGlbn08HhZRKXdqowUzzKJySp/fneCSK0ehSfsjAiwIMh
-        BVwx4QH/HqjnKXZ0H22k4kQ=
-X-Google-Smtp-Source: ABdhPJwecc1nic2z9tHROgs5vxB6dyKh3HqMjdx6kvQ2QR53xiVhDVy/U6Wa1UGa7W/Tk6FPnREvwQ==
-X-Received: by 2002:a19:2d0c:0:b0:477:b461:2648 with SMTP id k12-20020a192d0c000000b00477b4612648mr6400254lfj.35.1653043015462;
-        Fri, 20 May 2022 03:36:55 -0700 (PDT)
-Received: from mobilestation ([95.79.189.214])
-        by smtp.gmail.com with ESMTPSA id g4-20020a2ea4a4000000b0024f3d1dae97sm271176ljm.31.2022.05.20.03.36.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 03:36:54 -0700 (PDT)
-Date:   Fri, 20 May 2022 13:36:52 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rahul Tanwar <rtanwar@maxlinear.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 14/17] PCI: dwc: Check iATU in/outbound ranges setup
- methods status
-Message-ID: <20220520103652.37f6fygtwfmre4ot@mobilestation>
-References: <20220503214638.1895-1-Sergey.Semin@baikalelectronics.ru>
- <20220503214638.1895-15-Sergey.Semin@baikalelectronics.ru>
- <20220516213506.GA3296584-robh@kernel.org>
+        Fri, 20 May 2022 06:39:41 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E51914D25
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 03:39:32 -0700 (PDT)
+X-UUID: 0fc3d0681b8843af85197e923aaa4c03-20220520
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:eeff4b10-2339-4f06-9d8a-4050195bf023,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:20
+X-CID-META: VersionHash:2a19b09,CLOUDID:795c027a-5ef6-470b-96c9-bdb8ced32786,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:3,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 0fc3d0681b8843af85197e923aaa4c03-20220520
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <yee.lee@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 898076341; Fri, 20 May 2022 18:39:29 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Fri, 20 May 2022 18:39:28 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Fri, 20 May 2022 18:39:28 +0800
+Message-ID: <95510f5fd4913f800d36052e573c56029b22b104.camel@mediatek.com>
+Subject: Re: [PATCH] scs: Release kasan vmalloc poison in scs_free process
+From:   Yee Lee <yee.lee@mediatek.com>
+To:     <linux-kernel@vger.kernel.org>
+Date:   Fri, 20 May 2022 18:39:27 +0800
+In-Reply-To: <20210923095316.13867-1-yee.lee@mediatek.com>
+References: <20210923095316.13867-1-yee.lee@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220516213506.GA3296584-robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,UNPARSEABLE_RELAY
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,55 +56,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 04:35:06PM -0500, Rob Herring wrote:
-> On Wed, May 04, 2022 at 12:46:35AM +0300, Serge Semin wrote:
-> > Let's make the DWC PCIe RC/EP safer and more verbose for the invalid or
-> > failed inbound and outbound iATU windows setups. Needless to say that
-> > silently ignoring iATU regions setup errors may cause unpredictable
-> > errors. For instance if for some reason a cfg or IO window fails to be
-> > activated, then any CFG/IO requested won't reach target PCIe devices and
-> > the corresponding accessors will return platform-specific random values.
-> > 
-> > First of all we need to convert dw_pcie_ep_outbound_atu() method to check
-> > whether the specified outbound iATU range is successfully setup. That
-> > method is called by the pci_epc_ops.map_addr callback. Thus we'll make the
-> > EP-specific CPU->PCIe memory mappings saver.
-> > 
-> > Secondly since the iATU outbound range programming method now returns the
-> > operation status, it will be handy to take that status into account in the
-> > pci_ops.{map_bus,read,write} methods. Thus any failed mapping will be
-> > immediately noticeable by the PCIe CFG operations requesters.
-> > 
-> > Finally we need to convert the dw_pcie_setup_rc() method to returning the
-> > operation status, since the iATU outbound ranges setup procedure may now
-> > fail. It will be especially handy in case if the DW PCIe RC DT-node has
-> > invalid/unsupported (dma-)ranges property. Note since the suggested
-> > modification causes having too wide code indentation, it is reasonable
-> > from maintainability and readability points of view to move the outbound
-> > ranges setup procedure in the separate function.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > ---
-> >  .../pci/controller/dwc/pcie-designware-ep.c   |   9 +-
-> >  .../pci/controller/dwc/pcie-designware-host.c | 149 ++++++++++++------
-> >  drivers/pci/controller/dwc/pcie-designware.h  |   5 +-
-> >  drivers/pci/controller/dwc/pcie-intel-gw.c    |   6 +-
+Test
+On Thu, 2021-09-23 at 17:53 +0800, yee.lee@mediatek.com wrote:
+> From: Yee Lee <yee.lee@mediatek.com>
 > 
-
-> I worry that this could regress some platforms that happened to work 
-> before. But only one way to find out...
-
-You are right. It may especially in the framework of the outbound iATU
-windows setup procedure due to the new alignment constraints added in
-the previous patch. But in that case the returned failure is well
-justified by the consequences of the improper windows setup. Anyway
-let's hope the regression won't happen.
-
+> Since scs allocation has been moved to vmalloc region, the
+> shadow stack is protected by kasan_posion_vmalloc.
+> However, the vfree_atomic operation needs to access
+> its context for scs_free process and causes kasan error
+> as the dump info below.
 > 
-> Reviewed-by: Rob Herring <robh@kernel.org>
-
-Thanks.
-
--Sergey
-
+> This patch Adds kasan_unpoison_vmalloc() before vfree_atomic,
+> which aligns to the prior flow as using kmem_cache.
+> The vmalloc region will go back posioned in the following
+> vumap() operations.
 > 
+>  ==================================================================
+>  BUG: KASAN: vmalloc-out-of-bounds in llist_add_batch+0x60/0xd4
+>  Write of size 8 at addr ffff8000100b9000 by task kthreadd/2
+> 
+>  CPU: 0 PID: 2 Comm: kthreadd Not tainted 5.15.0-rc2-11681-(skip)
+>  Hardware name: linux,dummy-virt (DT)
+>  Call trace:
+>   dump_backtrace+0x0/0x43c
+>   show_stack+0x1c/0x2c
+>   dump_stack_lvl+0x68/0x84
+>   print_address_description+0x80/0x394
+>   kasan_report+0x180/0x1dc
+>   __asan_report_store8_noabort+0x48/0x58
+>   llist_add_batch+0x60/0xd4
+>   vfree_atomic+0x60/0xe0
+>   scs_free+0x1dc/0x1fc
+>   scs_release+0xa4/0xd4
+>   free_task+0x30/0xe4
+>   __put_task_struct+0x1ec/0x2e0
+>   delayed_put_task_struct+0x5c/0xa0
+>   rcu_do_batch+0x62c/0x8a0
+>   rcu_core+0x60c/0xc14
+>   rcu_core_si+0x14/0x24
+>   __do_softirq+0x19c/0x68c
+>   irq_exit+0x118/0x2dc
+>   handle_domain_irq+0xcc/0x134
+>   gic_handle_irq+0x7c/0x1bc
+>   call_on_irq_stack+0x40/0x70
+>   do_interrupt_handler+0x78/0x9c
+>   el1_interrupt+0x34/0x60
+>   el1h_64_irq_handler+0x1c/0x2c
+>   el1h_64_irq+0x78/0x7c
+>   _raw_spin_unlock_irqrestore+0x40/0xcc
+>   sched_fork+0x4f0/0xb00
+>   copy_process+0xacc/0x3648
+>   kernel_clone+0x168/0x534
+>   kernel_thread+0x13c/0x1b0
+>   kthreadd+0x2bc/0x400
+>   ret_from_fork+0x10/0x20
+> 
+>  Memory state around the buggy address:
+>   ffff8000100b8f00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+>   ffff8000100b8f80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+>  >ffff8000100b9000: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+>                     ^
+>   ffff8000100b9080: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+>   ffff8000100b9100: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+>  ==================================================================
+> 
+> CC: Matthias Brugger <matthias.bgg@gmail.com>
+> CC: Will Deacon <will@kernel.org>
+> CC: Sami Tolvanen <samitolvanen@google.com>
+> Signed-off-by: Yee Lee <yee.lee@mediatek.com>
+> ---
+>  kernel/scs.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/kernel/scs.c b/kernel/scs.c
+> index e2a71fc82fa0..25c0d8e416e6 100644
+> --- a/kernel/scs.c
+> +++ b/kernel/scs.c
+> @@ -68,6 +68,7 @@ void scs_free(void *s)
+>  
+>  	__scs_account(s, -1);
+>  
+> +	kasan_unpoison_vmalloc(s, SCS_SIZE);
+>  	/*
+>  	 * We cannot sleep as this can be called in interrupt context,
+>  	 * so use this_cpu_cmpxchg to update the cache, and
+> vfree_atomic
+

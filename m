@@ -2,74 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 193E252EB35
+	by mail.lfdr.de (Postfix) with ESMTP id AEE2E52EB37
 	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 13:52:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348755AbiETLwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 07:52:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35812 "EHLO
+        id S1348783AbiETLww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 07:52:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348762AbiETLwh (ORCPT
+        with ESMTP id S1348762AbiETLwp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 07:52:37 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8365B15E48F
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 04:52:34 -0700 (PDT)
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Fri, 20 May 2022 07:52:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F31F615E48E;
+        Fri, 20 May 2022 04:52:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 318013F1BA
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 11:52:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1653047553;
-        bh=F3uWhU19tqPSpilnTv06Sntkt3xu6QI1J2QyXbNwKXI=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=dUz4r1cF3cM71ujz2lj/GKq0UlmDbaUTQZF8swsdfTA2wKp/AGLrISyZkQlumCFGm
-         J4Cpg6P89/blJey1h0WxuKh4ALETLiFbaDmND9LS2/ipBsiDlXMJ6HfzSLUNNWQNzN
-         gVfPL6soXyYx3HFQ9XbST6i3fKFcAG6N7KlOpoRcMDTnMKGZ83AB5ipa4IF1GQeyF3
-         7ntCoye35WpHR6/fp7t89G0t77g+kpuxFLabOwWG/QfYOd2OfTIay08UpWMgQxhk3X
-         Z6KnORqyaouduIKn6wKNKTfpHkJCzz5xMLT2BBRUKsG/MiW11Ijr3UBt32milnrm65
-         c5G+sk2ibTkOw==
-Received: by mail-ej1-f70.google.com with SMTP id l18-20020a1709066b9200b006fe40aaf3bbso3931986ejr.1
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 04:52:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=F3uWhU19tqPSpilnTv06Sntkt3xu6QI1J2QyXbNwKXI=;
-        b=C/KuOKZo3Ey7f2BYlYcFqPtcF8YFVgeLGBDmN1TRj7y2UlVr7YLinzqvWNYOzGLbYy
-         oPPEh7b7v1rYqTuVwfZrIAJELFbL489xLbS1mVU7Yj8kL/YcvCvYXpktjNdZ713FDNVI
-         +lumRBH1VzFkf4hopPBW1QOBkb09yHZ2wDMWew7EQlJ/mUntTlzV9JdqJe/ChGBo/Dr8
-         82Hxf4yxAS51WXsF6ULt8iJ3VVBMeKVPnROrsuPRc1x9d29qHuXq/ntg6dIowCD1/gp5
-         N4MdBqDBaBUDi4iIU0osklO6bC9NmAwb+vBlYq9BPKYGzaD+ADhQcA1AwQMMdNRJDtvm
-         oMOQ==
-X-Gm-Message-State: AOAM5332wif/RvCewhXO1bT4RRT/PKi/gTR6JiJ5sh2POiytqChmyz5V
-        H1YTQc0/uvVXoOXgtp2EWdprcc6W15tv/v5fpi4axbJOykSysw07NHzr13+sP/bpHIgRHI0l+v4
-        yB2r07LbeK2nDnBR611KVN/g2SD6hcxaOoU/qfOL9Rg==
-X-Received: by 2002:aa7:cf83:0:b0:42a:c73e:6d86 with SMTP id z3-20020aa7cf83000000b0042ac73e6d86mr10481226edx.251.1653047552916;
-        Fri, 20 May 2022 04:52:32 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz6JwgyP43Z2fUOMqs72r04gqZu8vQTIl8anLwpcnAq693ZcuMztCwn/3EFf3TvpdllczP3eQ==
-X-Received: by 2002:aa7:cf83:0:b0:42a:c73e:6d86 with SMTP id z3-20020aa7cf83000000b0042ac73e6d86mr10481208edx.251.1653047552783;
-        Fri, 20 May 2022 04:52:32 -0700 (PDT)
-Received: from gollum.fritz.box ([194.191.244.86])
-        by smtp.gmail.com with ESMTPSA id d24-20020a056402145800b0042aa5a74598sm4186088edx.52.2022.05.20.04.52.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 04:52:32 -0700 (PDT)
-From:   Juerg Haefliger <juerg.haefliger@canonical.com>
-X-Google-Original-From: Juerg Haefliger <juergh@canonical.com>
-To:     mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        linuxppc-dev@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org,
-        Juerg Haefliger <juergh@canonical.com>
-Subject: [PATCH] powerpc/powernv: Kconfig: Replace single quotes
-Date:   Fri, 20 May 2022 13:52:29 +0200
-Message-Id: <20220520115229.147368-1-juergh@canonical.com>
-X-Mailer: git-send-email 2.32.0
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4FFC461DEB;
+        Fri, 20 May 2022 11:52:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BDA2C385A9;
+        Fri, 20 May 2022 11:52:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653047563;
+        bh=KjobZP6O6Jgwt6QhmllP83ZeT6Jg+VwnOafaxcAZ+8c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bptv6Mg3TVFF3Sk1DQV4g4ILT2blHfHJLQtoU4tvyhqF7sBMSi7SFHPt3GYix9zDj
+         fmabFBKLLAt+mzYpio3Dnr/a7b1Bzz/E1lwcSx8VAf8RLyOdKVCKRepQRXrq4mW3NI
+         xqhUOLKtCR6bJJICVsEgK6en7zdhRbI3TuWM4uIQLCEtyDzROd1z4XU0U6Eg3HnHGC
+         6Vu5Fs1CZPey2sZjUfEvTvZXyBNZShJ6tvoIR9/5uN7AJh/Mv7cAPeyxtXUC8GLCOr
+         f3oZpQCpTLgA7aCs25q+jmOHsq0cBJOc1BrqKgBXL2hPTHR0+nkHa+zQP+BSejsGZ5
+         JQb/K98Kky8rA==
+Date:   Fri, 20 May 2022 13:52:37 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, linux-xfs@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-fscrypt@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Keith Busch <kbusch@kernel.org>
+Subject: Re: [RFC PATCH v2 1/7] statx: add I/O alignment information
+Message-ID: <20220520115237.w2oa5bdzyzhkgwin@wittgenstein>
+References: <20220518235011.153058-1-ebiggers@kernel.org>
+ <20220518235011.153058-2-ebiggers@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220518235011.153058-2-ebiggers@kernel.org>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,27 +58,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace single quotes with double quotes which seems to be the convention
-for strings.
+On Wed, May 18, 2022 at 04:50:05PM -0700, Eric Biggers wrote:
+> From: Eric Biggers <ebiggers@google.com>
+> 
+> Traditionally, the conditions for when DIO (direct I/O) is supported
+> were fairly simple: filesystems either supported DIO aligned to the
+> block device's logical block size, or didn't support DIO at all.
+> 
+> However, due to filesystem features that have been added over time (e.g,
+> data journalling, inline data, encryption, verity, compression,
+> checkpoint disabling, log-structured mode), the conditions for when DIO
+> is allowed on a file have gotten increasingly complex.  Whether a
+> particular file supports DIO, and with what alignment, can depend on
+> various file attributes and filesystem mount options, as well as which
+> block device(s) the file's data is located on.
+> 
+> XFS has an ioctl XFS_IOC_DIOINFO which exposes this information to
+> applications.  However, as discussed
+> (https://lore.kernel.org/linux-fsdevel/20220120071215.123274-1-ebiggers@kernel.org/T/#u),
+> this ioctl is rarely used and not known to be used outside of
+> XFS-specific code.  It also was never intended to indicate when a file
+> doesn't support DIO at all, and it only exposes the minimum I/O
+> alignment, not the optimal I/O alignment which has been requested too.
+> 
+> Therefore, let's expose this information via statx().  Add the
+> STATX_IOALIGN flag and three fields associated with it:
+> 
+> * stx_mem_align_dio: the alignment (in bytes) required for user memory
+>   buffers for DIO, or 0 if DIO is not supported on the file.
+> 
+> * stx_offset_align_dio: the alignment (in bytes) required for file
+>   offsets and I/O segment lengths for DIO, or 0 if DIO is not supported
+>   on the file.  This will only be nonzero if stx_mem_align_dio is
+>   nonzero, and vice versa.
+> 
+> * stx_offset_align_optimal: the alignment (in bytes) suggested for file
+>   offsets and I/O segment lengths to get optimal performance.  This
+>   applies to both DIO and buffered I/O.  It differs from stx_blocksize
+>   in that stx_offset_align_optimal will contain the real optimum I/O
+>   size, which may be a large value.  In contrast, for compatibility
+>   reasons stx_blocksize is the minimum size needed to avoid page cache
+>   read/write/modify cycles, which may be much smaller than the optimum
+>   I/O size.  For more details about the motivation for this field, see
+>   https://lore.kernel.org/r/20220210040304.GM59729@dread.disaster.area
+> 
+> Note that as with other statx() extensions, if STATX_IOALIGN isn't set
+> in the returned statx struct, then these new fields won't be filled in.
+> This will happen if the filesystem doesn't support STATX_IOALIGN, or if
+> the file isn't a regular file.  (It might be supported on block device
+> files in the future.)  It might also happen if the caller didn't include
+> STATX_IOALIGN in the request mask, since statx() isn't required to
+> return information that wasn't requested.
+> 
+> This commit adds the VFS-level plumbing for STATX_IOALIGN.  Individual
+> filesystems will still need to add code to support it.
+> 
+> Signed-off-by: Eric Biggers <ebiggers@google.com>
+> ---
 
-Signed-off-by: Juerg Haefliger <juergh@canonical.com>
----
- arch/powerpc/platforms/powernv/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/powerpc/platforms/powernv/Kconfig b/arch/powerpc/platforms/powernv/Kconfig
-index 161dfe024085..ecc4a5806b42 100644
---- a/arch/powerpc/platforms/powernv/Kconfig
-+++ b/arch/powerpc/platforms/powernv/Kconfig
-@@ -20,7 +20,7 @@ config PPC_POWERNV
- 	default y
- 
- config OPAL_PRD
--	tristate 'OPAL PRD driver'
-+	tristate "OPAL PRD driver"
- 	depends on PPC_POWERNV
- 	help
- 	  This enables the opal-prd driver, a facility to run processor
--- 
-2.32.0
-
+Looks good to me,
+Reviewed-by: Christian Brauner (Microsoft) <brauner@kernel.org>

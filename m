@@ -2,94 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B383F52E1B1
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 03:16:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E1C752E1B3
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 03:16:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344437AbiETBLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 21:11:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57658 "EHLO
+        id S243903AbiETBLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 21:11:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344416AbiETBK5 (ORCPT
+        with ESMTP id S231950AbiETBLK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 21:10:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE04F13B8DD;
-        Thu, 19 May 2022 18:10:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 56091B8297A;
-        Fri, 20 May 2022 01:10:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CDE3EC385B8;
-        Fri, 20 May 2022 01:10:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653009017;
-        bh=zKDszjw+FQvQwJMRAb9Fclk+cN7VO6xEcSjWwsNYDtE=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=mK7k1ZsCOUHvcC7NHhWNX9Xc4C1s17Bp42Tx1SoX3pv+B5NcXYFYjoFjjXpyBZzQR
-         3wrOyMVnwtoJa4ij1z2Flqsx114w7shjO/zczDeFAvbKK3rOigfn2Sw6nHedNGc6G4
-         9/raNsZmZhd2hDI4lOj8GyUhgkeHjYg7ZGk6KOvr6i2p1M8YNv1PSFcJ+HDwiY8Qp6
-         /JWWjNrSX+2ttNIspaaNElruetnRtBWnJ9cdyngyE9jlTOtkxb+Tv/M8GsL0PSNu8x
-         Kr7sAuptLM2qgGSXOT44h+wZB67i0Gxu/8acgOqKcrVHdcHhHOJs8vg+E+G5O2OGmk
-         B0P7fAF7u3vAA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B2F6EF0389D;
-        Fri, 20 May 2022 01:10:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 19 May 2022 21:11:10 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAF0C248E8
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 18:10:58 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id c22so6491933pgu.2
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 18:10:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=W1tiYidB9VbdEzAyF+NhHjubEysTDlNRhrUd/eA+Ohk=;
+        b=Eoe4LeOynIcxC6493WrqpLFDgXJ015hlZEm33YCOqHuyQslWcUo+zsFQelUeiPghU4
+         uvIBsTHDjpX2WGGfPRycvvNxh2dyEvnvN8npb+wgrQBYOGb3wGzWwiGX8imSf+yRSuB0
+         nY5NiWwXMvVZ5Fj3FvgJXvcnwIYaqdRczdVKrxtVBeXFN8+xN1fYUa/9eAWL3T1E1gF8
+         kE+0K1jzjdB0YylcCKbK7kfpPFkD21eNwHOQ41VFLXmpGZ8H4/vgWo0MGXjPZCrK0Jxf
+         KHboaupHaCtNLchLY/SSNlI4Acw/LPhtJnOZcAVCxjpiMT89UanLSbicBx/RLpKc7QJp
+         6wWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=W1tiYidB9VbdEzAyF+NhHjubEysTDlNRhrUd/eA+Ohk=;
+        b=SrnXd5zz2O5tXWMjbcg37JaGXOFR+NAtKuLPwNjbP0xrUPCFQlM1ZZ29ZV3HQBMOTg
+         IC+YZsEgTvyortYmmKNKdQkVpS7ENJmP6epyRe77NTY2upJbvZJkWrWpYQu/s4r4QOFp
+         jr9djPuSO6cydVNWF25ynfymWJYY+Kxv/tNuZPBtH/IJEYOHz+JnqPHdQ5QziLR4fAn2
+         8TD4QuBVwyubcnZycr2gjcYyXSkQeLIc4dPh07FQGQNUHytbBIADKSTbr5qHkdbEXBDp
+         PPYlpUSPHrydyhltX7XPSggQCYi8PwzZx71+RGqd5o79E5sgce+nC6MJ+ZExlQPuP7Rd
+         EQqQ==
+X-Gm-Message-State: AOAM532xSdLA84Oy+sGI+XIZnbuixPZ/ia91iRMz9Mfj2cIbokd6vE0a
+        YLA3SsTg5B4CCrKXYH73z9ISQ1tG82qqew==
+X-Google-Smtp-Source: ABdhPJwcj3YBUD1wXbxinW6AUwLS8DdyQQLMFOvsbI3s732XF8KMRsEdteZkeIVAIJsQapG2J0IfDg==
+X-Received: by 2002:a05:6a00:238f:b0:4f6:b09a:4c63 with SMTP id f15-20020a056a00238f00b004f6b09a4c63mr7614917pfc.35.1653009058222;
+        Thu, 19 May 2022 18:10:58 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id w12-20020a17090a380c00b001df1f7c5941sm455440pjb.16.2022.05.19.18.10.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 May 2022 18:10:57 -0700 (PDT)
+Message-ID: <435cc499-7564-13e2-c4ef-a71119379cf0@kernel.dk>
+Date:   Thu, 19 May 2022 19:10:56 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v3] NFC: hci: fix sleep in atomic context bugs in
- nfc_hci_hcp_message_tx
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165300901772.19017.10175085376155326113.git-patchwork-notify@kernel.org>
-Date:   Fri, 20 May 2022 01:10:17 +0000
-References: <20220518115733.62111-1-duoming@zju.edu.cn>
-In-Reply-To: <20220518115733.62111-1-duoming@zju.edu.cn>
-To:     Duoming Zhou <duoming@zju.edu.cn>
-Cc:     krzysztof.kozlowski@linaro.org, netdev@vger.kernel.org,
-        davem@davemloft.net, gregkh@linuxfoundation.org,
-        alexander.deucher@amd.com, broonie@kernel.org,
-        linux-kernel@vger.kernel.org, kuba@kernel.org, edumazet@google.com,
-        pabeni@redhat.com
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCHSET 0/2] Fix splice from random/urandom
+Content-Language: en-US
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Theodore Ts'o <tytso@mit.edu>, Christoph Hellwig <hch@lst.de>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <YobPB27Ozl7uqUEu@zx2c4.com>
+ <3553b935-0aca-3d3e-2495-12288f601b53@kernel.dk>
+ <CAHmME9riX+YuqSVp64bhy=nX08_7d-m8es82BHy2qh-oWkqa8Q@mail.gmail.com>
+ <aa7ae20c-a2d7-4959-b5fb-efe7b56294f1@kernel.dk>
+ <CAHmME9oLPxzsnRezFPFVssmedOQUi2E9NWFbakEe92=Hdk1QuQ@mail.gmail.com>
+ <03c7d6c9-0c86-d4b6-357d-d51be0143c80@kernel.dk>
+ <CAHmME9qVQNkx-0J8rq_0ZVaSR+-eEgOUtcZhvq5dAY4-kJxSAA@mail.gmail.com>
+ <13899409-e81b-8689-3380-249de46c0b6f@kernel.dk> <YobldmDn6pU9mr4f@zx2c4.com>
+ <84d073aa-9937-1a58-dd7a-b1828874c21a@kernel.dk> <YoboEokc00YACuha@zx2c4.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <YoboEokc00YACuha@zx2c4.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Wed, 18 May 2022 19:57:33 +0800 you wrote:
-> There are sleep in atomic context bugs when the request to secure
-> element of st21nfca is timeout. The root cause is that kzalloc and
-> alloc_skb with GFP_KERNEL parameter and mutex_lock are called in
-> st21nfca_se_wt_timeout which is a timer handler. The call tree shows
-> the execution paths that could lead to bugs:
+On 5/19/22 7:00 PM, Jason A. Donenfeld wrote:
+> Hi Jens,
 > 
->    (Interrupt context)
-> st21nfca_se_wt_timeout
->   nfc_hci_send_event
->     nfc_hci_hcp_message_tx
->       kzalloc(..., GFP_KERNEL) //may sleep
->       alloc_skb(..., GFP_KERNEL) //may sleep
->       mutex_lock() //may sleep
+> On Thu, May 19, 2022 at 06:56:12PM -0600, Jens Axboe wrote:
+>> On 5/19/22 6:48 PM, Jason A. Donenfeld wrote:
+>>> sendfile() returns -EINVAL even with your patches. Only splicing to pipes
+>>> seems to work.
+>>
+>> Huh, that really should work. Are you trying to sendfile() to random? If
+>> so, you need that last write_iter patch too, and add the splice_write as
+>> I mentioned.
+>  
+> No, I've only tried the read side so far. I made a little program:
 > 
-> [...]
+> #include <sys/sendfile.h>
+> #include <stdio.h>
+> 
+> int main(int argc, char *argv[])
+> {
+>         ssize_t s = sendfile(1, 0, NULL, 0xffff);
+>         fprintf(stderr, "ret: %zd\n", s);
+>         return 0;
+> }
+> 
+> Then I ran `./a.out < /dev/urandom > /dev/null`. Fails. OTOH, if I
+> replace /dev/urandom with an ordinary file, it succeeds.
 
-Here is the summary with links:
-  - [net,v3] NFC: hci: fix sleep in atomic context bugs in nfc_hci_hcp_message_tx
-    https://git.kernel.org/netdev/net/c/b413b0cb0086
+Here's why, it's limited to regular files or block devices:
 
-You are awesome, thank you!
+if (unlikely(!S_ISREG(i_mode) && !S_ISBLK(i_mode)))
+	return -EINVAL;
+
+in splice_direct_to_actor().
+
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Jens Axboe
 

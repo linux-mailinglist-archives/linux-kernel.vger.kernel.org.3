@@ -2,97 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06B0552F5DB
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 00:47:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B35652F5E3
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 00:53:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353963AbiETWr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 18:47:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59920 "EHLO
+        id S1344897AbiETWxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 18:53:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231520AbiETWrZ (ORCPT
+        with ESMTP id S230504AbiETWx3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 18:47:25 -0400
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E825AFAED;
-        Fri, 20 May 2022 15:47:25 -0700 (PDT)
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-f233f06563so266113fac.7;
-        Fri, 20 May 2022 15:47:25 -0700 (PDT)
+        Fri, 20 May 2022 18:53:29 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A84C179C1A
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 15:53:28 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id a38so6005367pgl.9
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 15:53:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=o22h3oPMlsnIXryLoOAHFqdN5N7JnmoMxor1pOpYCAw=;
+        b=Nr4q8UMKXI8g+fSga4XE9e6j5zTO7pxyCGKLHwzhXugoMHEsve5aEokrP+7MAknMc5
+         VBx/CEppMHbPiipvADeMycCYbIlpKSkWjB7Y+JHVcPFqyEb0HXy07eLPTonHh0IZVsw2
+         fJnMuP0ERavpR5om8GMQEqUqFTqf6igNRojVI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=u4R4HL1CccLMyjJa3KDF9+5IZQqrErKeOe9qyzr40zI=;
-        b=Dj6lV1R5Gri9eMa8TyivJNir//yhSHjDqYr3k0ZYc5mt7fVnELnlj95uzxLPXGhwNI
-         abqSPjPsWDdnKHmzEMHcK7q5LQoHhwkJCQiclzJLeD3ahjwChNbG/OcU0Ign5F16Sdo1
-         3Iavu01oFstRmTfrLqLZl/dvFoPVtNY68cYVUqHT27jJcXc+7KlhtzQ6HDG6snf3CWhl
-         0GxSeE2xIvN5hgR2Pd8mNUq6NQkRECjRf3uBGGVCHLYa0rKyJdE9Z27nnnsvqizVWuD3
-         y7ABYR4riv6YETDvyhGc4nmCJsg1hPBhkiZOUzQlD1CNmWiir3VAA3EwQ5T/bpopeYNf
-         H5Tw==
-X-Gm-Message-State: AOAM532irK+SaOZpdNLgME/jkUwugzHwi84VvMLXRzeYCN39pSDUDxkt
-        0IgZMWfmdwQmwJ8UR/LDDw==
-X-Google-Smtp-Source: ABdhPJwdW+Tdz65h6ry0Oq7eN1HrHtplP8oRV3Q6PNvZ3m9WMfgL/C+eJKxxwfuac94FX1DXNrpTbQ==
-X-Received: by 2002:a05:6871:554:b0:f1:7f92:7e67 with SMTP id t20-20020a056871055400b000f17f927e67mr7044878oal.124.1653086844501;
-        Fri, 20 May 2022 15:47:24 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id t187-20020aca5fc4000000b00325cda1ffb4sm1575818oib.51.2022.05.20.15.47.23
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=o22h3oPMlsnIXryLoOAHFqdN5N7JnmoMxor1pOpYCAw=;
+        b=EK+J8381+wcT7rdC5LEJE0krLT+qIPDIhOY3nG2sFdEW0Pu+pgLiHwpNCRfWajYr3B
+         VwHThIrZgzvXWJYYa4jTqiEK7El4Ehxm7CiqyNOfkYo1UPUXo2N8QwJ6ceWaHL/gTqUU
+         6E3bgvMGM7JKes07YB+DFCah7bfR4xJqwJl0iEDdCGHim+vg2TCmMJeGNDkBf9Bb3OHX
+         9ak8AEXXA4g2hL35iUSDxxZ9H1t3nJxuEk5ZcCiSE7nfqItfVGfUsMnHTkTsjWQXRwth
+         TWjaVb6VGa0xJCD5k7w7oZY474WFp+i5a7bfpzrH821aGIplZgoUWwVDOMUeRfOCQFb0
+         2vEA==
+X-Gm-Message-State: AOAM532eQDf3tmkcpPUpXy50KqNa0CM6eRXfy5pDEgsOIRNlsrrsH7L5
+        5UJrT3sdPuLvaZfbOSgB4tEKQw==
+X-Google-Smtp-Source: ABdhPJx7JOARztXZqHURTgRX5Op7Y7PuxbJuHlf06rQcT7xomGOQb80ozWjhRMthGXBemfvTsSgk9A==
+X-Received: by 2002:a05:6a00:1826:b0:518:4c8b:c5db with SMTP id y38-20020a056a00182600b005184c8bc5dbmr7803168pfa.22.1653087207535;
+        Fri, 20 May 2022 15:53:27 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:b090:3896:c312:c4df])
+        by smtp.gmail.com with ESMTPSA id g24-20020a1709029f9800b0015e8d4eb1fbsm258368plq.69.2022.05.20.15.53.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 15:47:23 -0700 (PDT)
-Received: (nullmailer pid 395300 invoked by uid 1000);
-        Fri, 20 May 2022 22:47:22 -0000
-Date:   Fri, 20 May 2022 17:47:22 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Chris Morgan <macroalpha82@gmail.com>
-Cc:     linux-pm@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lee.jones@linaro.org,
-        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de, sre@kernel.org,
-        jon.lin@rock-chips.com, zyw@rock-chips.com,
-        zhangqing@rock-chips.com, Chris Morgan <macromorgan@hotmail.com>,
-        Maya Matuszczyk <maccraft123mc@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [RESEND 1/4 v7] dt-bindings: Add Rockchip rk817 battery charger
- support
-Message-ID: <20220520224722.GA389075-robh@kernel.org>
-References: <20220520183037.2566-1-macroalpha82@gmail.com>
- <20220520183037.2566-2-macroalpha82@gmail.com>
+        Fri, 20 May 2022 15:53:27 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+Cc:     Stephen Boyd <swboyd@chromium.org>, matvore@chromium.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] soc: qcom: socinfo: Add an ID for sc7180P
+Date:   Fri, 20 May 2022 15:53:10 -0700
+Message-Id: <20220520155305.v2.1.I26eca1856f99e6160d30de6d50ecab60e6226354@changeid>
+X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220520183037.2566-2-macroalpha82@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 01:30:34PM -0500, Chris Morgan wrote:
-> From: Chris Morgan <macromorgan@hotmail.com>
-> 
-> Create dt-binding documentation to document rk817 battery and charger
-> usage. New device-tree properties have been added.
-> 
-> - rockchip,resistor-sense-micro-ohms: The value in microohms of the
->                                       sample resistor.
-> - rockchip,sleep-enter-current-microamp: The value in microamps of the
->                                          sleep enter current.
-> - rockchip,sleep-filter-current: The value in microamps of the sleep
->                                  filter current.
-> 
-> Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
-> Signed-off-by: Maya Matuszczyk <maccraft123mc@gmail.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-> 
-> Note that this patch requires the following commit (still pending):
-> https://lore.kernel.org/linux-rockchip/20220519161731.1168-1-macroalpha82@gmail.com/
+Some sc7180 Chromebooks actually have sc7180P (known by many names,
+apparently, including possibly sc7180 Pro and sc7185). This is a
+sc7180 part that has slightly higher clock speeds.
 
-And so the checks still won't run... :(
+The official ID numbrer allocated to these devices by Qualcomm is 495
+so we'll add an entry to the table for them. Note that currently
+shipping BIOS for these devices will actually end up reporting an ID
+of 407 due to a bug but eventually a new BIOS will be released which
+corrects it to 495.
 
-Looks like it should be fine to me though.
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
 
-Acked-by: Rob Herring <robh@kernel.org>
+Changes in v2:
+- Switch from 407 to 495.
+
+ drivers/soc/qcom/socinfo.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/soc/qcom/socinfo.c b/drivers/soc/qcom/socinfo.c
+index cee579a267a6..c2c879ccc6c0 100644
+--- a/drivers/soc/qcom/socinfo.c
++++ b/drivers/soc/qcom/socinfo.c
+@@ -332,6 +332,7 @@ static const struct soc_id soc_id[] = {
+ 	{ 480, "SM8450" },
+ 	{ 482, "SM8450" },
+ 	{ 487, "SC7280" },
++	{ 495, "SC7180P" },
+ };
+ 
+ static const char *socinfo_machine(struct device *dev, unsigned int id)
+-- 
+2.36.1.124.g0e6072fb45-goog
+

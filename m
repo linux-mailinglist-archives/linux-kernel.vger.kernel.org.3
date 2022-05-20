@@ -2,215 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA6BB52ED36
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 15:34:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB22B52ED3B
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 15:36:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347889AbiETNeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 09:34:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51798 "EHLO
+        id S1347959AbiETNgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 09:36:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348752AbiETNeC (ORCPT
+        with ESMTP id S241938AbiETNgM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 09:34:02 -0400
-Received: from sonic301-21.consmr.mail.gq1.yahoo.com (sonic301-21.consmr.mail.gq1.yahoo.com [98.137.64.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA9D4169E3F
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 06:34:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=netscape.net; s=a2048; t=1653053641; bh=K5D2ddvcAFT7qU/7/cIEJD0V4lwIe18sO6+LKjoJkw4=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=PkYqpkkuQo45ByHHvchEhcebEAtp8AaC3/itk3+k6pOYzK1Vl/z8z2g9vmutXN7I+03ApExQ4Y6NLB+mJcTpxYKJvvgyubHih/MqBK1Y11BeD30vqVTc0y1MeyFfiy3rCLZWZIHEDBZC4ahH0inwNJWV4xCg2iwePPljxybrImoNt1fbIhLFEizqXiPa4oducIBTEgo/mA96tSRC+OvtAgX6rD6ayRTLgxi5VR/46+xLeyq6zj6iUiGngD9191uvtGbsX6W2THai8Km28tbUH07O+9GAxGU8OOdoTvL2OxR6ZVpzH1zVjegzIF7Rog41ycBWUqiR2YYy+asOTrHKlw==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1653053641; bh=k377TC4FGAEpIeRlbM1rv1iA2GuaofkGOp8RBu3yFHW=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=ugE6ujVanxC1STiP9viWDUWUTNr/7Wt7WN+8jsE/QCpermZtrtRAmb+JEtTaPCqWvzCLjKRzlFHmOmRlqly5nRy6Pco3dqpWzd+rCRd8nPoHcWX0uXI46JW+Rcxe4e5blbA0AB4+/e0weqdbzBQPr8Fj+4Jjrwt9l6wOn1ngb9jg77j3LsRIUF60sw2r0tJMr2WNI3fO9KAhu+ab9BOdtFRCES0M9WUvS9cMcQFIjtRgQJhFLbegsXhXPke0fJM2W56NR7EOVruOBmrw0REmQHnlmYmIqkHKMcbaTSBFZMhwyRP68X9o9jBO9UAYFlH3wkfHoWT3bBG2Bgi/TZVDoQ==
-X-YMail-OSG: Y48VktsVM1mw1z0tQFnDRFf5ZFKaFyl88afrKxRgVCgenPdgml44kt9snHULpVT
- 0hp3_yGN5gR8i1DwVi8RSa8Tjln6rXBvzF_mi6gMpilobbMMYPhnFUsBCXflENor4wEUUZNSmxyw
- ai48GGw8Y6.jdx043KG_tOo8G4Jmhkj05v3Ch.1Ut3YFFvauy_jNvaiswLqGx_5CkZib26t67mWd
- v.fg36jpHJlDXy6dFR3IVxO7AZmdzT2ML1jvHYDGU3XniZ_gAxL9hB_5nCYJLjv96xYlLK2yZvWi
- 7.uHJxWl3WWsJU5PaaHz9vzU0LH4nW9xRufzzv8nU8jKIK0FTuG7UePWKD.QveI1K516F.xFZ2Sv
- KdFfpBV7t98KX1GzR4CXAi2Fmro4iNkk2gW6KkQYyZvddsSsBvES1Vk3IKz_JaBt46ORP71IICFf
- _cZQKiIrezoGDURRIwoCo7fuhQBoUPnevV1uuIKBoR08ir2zaE3SrGWq4xQI5NozSPjI6xS8mUcL
- 8LQREAONgkJvqpkY1ChD1yiEcApxNn3Kg67R_hH9Zag8DjckAboKfmcwhFuLthXYyRQOq.orj1og
- U6XtQR6s3Z4iNUZNupP178rGJoDuSB.m4ZqG6.rQ33Z9SuuwVo2FJ9CkbGb8VrEqIMmNUMuU96Hm
- mKYWS3fhCsK5TS6efG98kfRrHdJiyfFRhr2amzI1ru0Yk4OrF68XOnjEubxPzj7CNz7QSYP9ji2k
- C.ziTjq9SyX9oJ75DCIiheFoncYe3YPD0B6KZaP9NqGUj6jqbxWkLprxJF6jJAN8mna77uif7jLU
- AdviL5AaGK03B6rKCJu_4YzT1KCElh_OjJdMCtL1iV_HhUiD3pwTRGe5x0MY5mBpML35XU2WoUG.
- tcJb7gTfdE0yvdGszIy9Mi670l890r258zDdaeeaXNEjkzrJ2tWBVn9kjMJFpFe_aV_FB_IbziQ9
- HWabonezKTYBrLnm49Mn9rhQR4LKGlbA5puye05mehZWT0VacflQ.cMQgiiqdwhERh1Re8zSh26m
- Gk0r57T6lXZ5fDhUXK.tp5RSZbTl4c43W.9qZwG9HUgeNLWNCsl_Bu9HWsk6wtfeciGjagOJHFcl
- 5ibrmoOf.5n7dpBCLhOnNE5G9OZmS_r81Fup_YgNPry9aBT7cVlfQjvpzHHnuS._UbSYZ0noJWzW
- BwTcwZByIjHOCmqaqQW8HIW1tA1N_xLmdC8aOkaibNjVLS1FUhD_adW.YKBMGvd2AljWFHM0weoX
- A1cQNlmZLS7T26QoTblYoV8f6qf0kO5xt_6RevEWsbEUVehI2DrRCE7G1Wfohx.hqi4T8TA.puAQ
- sv.TrzuZhbSJ7eWZ06OH74Fcdbe_i2p9Y6hoWTeaPkkp6Xoc.hF3XI48Vz9SZuuYaDklhkS_QEYl
- 5xwQH895VwCP3RL5gqIU_Y4GfhctIUqn9RdQwVxOPkjw_jT2xz7Cle_jzNNKnCf5vL5RaJF1WndL
- LXx3O1qoLa_wWrbzXSTdSHOh8sOda8aFNeNYBtBmKP4PKP7KuyyslQSSLp2D.MbE3nmkYma5bsWL
- HMpO40hsuCZmIMaSdc8tqNyPKo1DpY3M_GkEcVGlqG2INwshP294ZHblx.Tcrhk895hodtT3KCG4
- iTwjk5odyFIZt8XZMl.NV5MuGr1XuUJgjPDJTf_7B_yqJcGyVDGJKpBmc9fLvmqtJjSue1TsSJK4
- uu5gR1eBHHke7g_zT2Zfves6VxMqDUYC9gKikpXfc8fhUzA0cr0eKd9Je61rCWZKILB3.UogNaPC
- YJPWxETcskk6NC_Wp.RjKC6.4DsmNBjk0XzEAS4uKfqFDLI6XbtCkv04_1l67umJkst_y9XkoAX.
- xNPe4YNN7394MMO8MyzmWn3iiosn30eO6PBD4v3MbmivZHLxrpIySMuvAWpWF5Yx.13EakdrURU9
- vPPVKuDnSfeBAlIQiIlA34.bosrKDPG5EZGLwwJDOVXc5HhFVjCjJcIbe0LfNbHxYwH7H47VQIne
- hoDB_nqDX4ZY5qJaX_smXDE_i0TB80HHXWa6bplXabf9K2qEBMna3975kd7RoWhKoHXdddkml9ia
- zYyEnt4j9FimF826VhH8qwOA_1NKnOEDNM3gi6EoQjR5cC2qC5idpK8oxrS1WUzekA3zM52RKYb2
- nbRsuf8iAUsVckiUApbxO1aWK1cLqCX3xTvd8CcZK3SrItQxhcDnnSok0e6ZC4KA5tIupcYA6fTg
- gGjcC
-X-Sonic-MF: <brchuckz@aim.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic301.consmr.mail.gq1.yahoo.com with HTTP; Fri, 20 May 2022 13:34:01 +0000
-Received: by hermes--canary-production-bf1-5d4b57496-srbfg (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 457ab9e3e0994f36cbc2ca446594030f;
-          Fri, 20 May 2022 13:33:56 +0000 (UTC)
-Message-ID: <3ca084a9-768e-a6f5-ace4-cd347978dec7@netscape.net>
-Date:   Fri, 20 May 2022 09:33:55 -0400
+        Fri, 20 May 2022 09:36:12 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0BD3E0EA;
+        Fri, 20 May 2022 06:36:08 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L4SRR0KlNz4xYC;
+        Fri, 20 May 2022 23:36:03 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1653053764;
+        bh=rv1y2V0j2hffLl77o/ijD0s40MZpKA7qrdB4T1/IDzs=;
+        h=Date:From:To:Cc:Subject:From;
+        b=DA+qh8edn8yS1GBay0R5VWOjpa6Lipy99y9HOILQTztbIVLgr7WW/GPFvdzeDtyxJ
+         L0bhR1sPSiVJHawzCWl2QiFCdJedAWwsOlzOpO8sk6gV+NbNJYjz3E+UZ0SkKDchmT
+         90bzdvhRmCKgc3SvNFI5sr53uhQZ8+06289JryPrhafHU5hS5B+q35kY2KLkVx07up
+         AFg4v9c8K94FaVO86vjapluavZHPH7WyfjzZhzBMb22zjOa1mHCYyj5anaIyExfPYB
+         0GHK9jWP1iS0AFGbYoS6u/tC1Q+q8Si1dUzqeeP1KlG70wSS+6UzvM8qhBPuVnMpvJ
+         0oWZIHoGbbppA==
+Date:   Fri, 20 May 2022 23:36:02 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     PowerPC <linuxppc-dev@lists.ozlabs.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: changed messages in qemu boot
+Message-ID: <20220520233602.2738d87c@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 2/2] x86/pat: add functions to query specific cache mode
- availability
-Content-Language: en-US
-To:     Jan Beulich <jbeulich@suse.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        xen-devel@lists.xenproject.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, Juergen Gross <jgross@suse.com>
-References: <20220503132207.17234-1-jgross@suse.com>
- <20220503132207.17234-3-jgross@suse.com>
- <1d86d8ff-6878-5488-e8c4-cbe8a5e8f624@suse.com>
- <0dcb05d0-108f-6252-e768-f75b393a7f5c@suse.com>
- <77255e5b-12bf-5390-6910-dafbaff18e96@netscape.net>
- <a2e95587-418b-879f-2468-8699a6df4a6a@suse.com>
- <8b1ebea5-7820-69c4-2e2b-9866d55bc180@netscape.net>
- <c5fa3c3f-e602-ed68-d670-d59b93c012a0@netscape.net>
- <3bff3562-bb1e-04e6-6eca-8d9bc355f2eb@suse.com>
-From:   Chuck Zmudzinski <brchuckz@netscape.net>
-In-Reply-To: <3bff3562-bb1e-04e6-6eca-8d9bc355f2eb@suse.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Mailer: WebService/1.1.20225 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.aol
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/fUjO3JqV/cTb15Tx6/q9Ay3";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/20/2022 5:41 AM, Jan Beulich wrote:
-> On 20.05.2022 10:30, Chuck Zmudzinski wrote:
->> On 5/20/2022 2:59 AM, Chuck Zmudzinski wrote:
->>> On 5/20/2022 2:05 AM, Jan Beulich wrote:
->>>> On 20.05.2022 06:43, Chuck Zmudzinski wrote:
->>>>> On 5/4/22 5:14 AM, Juergen Gross wrote:
->>>>>> On 04.05.22 10:31, Jan Beulich wrote:
->>>>>>> On 03.05.2022 15:22, Juergen Gross wrote:
->>>>>>>
->>>>>>> ... these uses there are several more. You say nothing on why
->>>>>>> those want
->>>>>>> leaving unaltered. When preparing my earlier patch I did inspect them
->>>>>>> and came to the conclusion that these all would also better
->>>>>>> observe the
->>>>>>> adjusted behavior (or else I couldn't have left pat_enabled() as the
->>>>>>> only predicate). In fact, as said in the description of my earlier
->>>>>>> patch, in
->>>>>>> my debugging I did find the use in i915_gem_object_pin_map() to be
->>>>>>> the
->>>>>>> problematic one, which you leave alone.
->>>>>> Oh, I missed that one, sorry.
->>>>> That is why your patch would not fix my Haswell unless
->>>>> it also touches i915_gem_object_pin_map() in
->>>>> drivers/gpu/drm/i915/gem/i915_gem_pages.c
->>>>>
->>>>>> I wanted to be rather defensive in my changes, but I agree at least
->>>>>> the
->>>>>> case in arch_phys_wc_add() might want to be changed, too.
->>>>> I think your approach needs to be more aggressive so it will fix
->>>>> all the known false negatives introduced by bdd8b6c98239
->>>>> such as the one in i915_gem_object_pin_map().
->>>>>
->>>>> I looked at Jan's approach and I think it would fix the issue
->>>>> with my Haswell as long as I don't use the nopat option. I
->>>>> really don't have a strong opinion on that question, but I
->>>>> think the nopat option as a Linux kernel option, as opposed
->>>>> to a hypervisor option, should only affect the kernel, and
->>>>> if the hypervisor provides the pat feature, then the kernel
->>>>> should not override that,
->>>> Hmm, why would the kernel not be allowed to override that? Such
->>>> an override would affect only the single domain where the
->>>> kernel runs; other domains could take their own decisions.
->>>>
->>>> Also, for the sake of completeness: "nopat" used when running on
->>>> bare metal has the same bad effect on system boot, so there
->>>> pretty clearly is an error cleanup issue in the i915 driver. But
->>>> that's orthogonal, and I expect the maintainers may not even care
->>>> (but tell us "don't do that then").
->> Actually I just did a test with the last official Debian kernel
->> build of Linux 5.16, that is, a kernel before bdd8b6c98239 was
->> applied. In fact, the nopat option does *not* break the i915 driver
->> in 5.16. That is, with the nopat option, the i915 driver loads
->> normally on both the bare metal and on the Xen hypervisor.
->> That means your presumption (and the presumption of
->> the author of bdd8b6c98239) that the "nopat" option was
->> being observed by the i915 driver is incorrect. Setting "nopat"
->> had no effect on my system with Linux 5.16. So after doing these
->> tests, I am against the aggressive approach of breaking the i915
->> driver with the "nopat" option because prior to bdd8b6c98239,
->> nopat did not break the i915 driver. Why break it now?
-> Because that's, in my understanding, is the purpose of "nopat"
-> (not breaking the driver of course - that's a driver bug -, but
-> having an effect on the driver).
+--Sig_/fUjO3JqV/cTb15Tx6/q9Ay3
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I wouldn't call it a driver bug, but an incorrect configuration of the
-kernel by the user.  I presume X86_FEATURE_PAT is required by the
-i915 driver and therefore the driver should refuse to disable
-it if the user requests to disable it and instead warn the user that
-the driver did not disable the feature, contrary to what the user
-requested with the nopat option.
+Hi all,
 
-In any case, my test did not verify that when nopat is set in Linux 5.16,
-the thread takes the same code path as when nopat is not set,
-so I am not totally sure that the reason nopat does not break the
-i915 driver in 5.16 is that static_cpu_has(X86_FEATURE_PAT)
-returns true even when nopat is set. I could test it with a custom
-log message in 5.16 if that is necessary.
+Today's linux-next bboot of the powerpc pseries_le_defconfig build
+produced these different kernel messages (diff from yesterday's tree):
 
-Are you saying it was wrong for static_cpu_has(X86_FEATURE_PAT)
-to return true in 5.16 when the user requests nopat? I think that is
-just permitting a bad configuration to break the driver that a
-well-written operating system should not allow. The i915 driver
-was, in my opinion, correctly ignoring the nopat option in 5.16
-because that option is not compatible with the hardware the
-i915 driver is trying to initialize and setup at boot time. At least
-that is my understanding now, but I will need to test it on 5.16
-to be sure I understand it correctly.
+- ftrace: allocating 33658 entries in 13 pages
+- ftrace: allocated 13 pages with 3 groups
++ ftrace-powerpc: Address of ftrace_regs_caller out of range of kernel_toc.
 
-Also, AFAICT, your patch would break the driver when the nopat
-option is set and only fix the regression introduced by bdd8b6c98239
-when nopat is not set on my box, so your patch would
-introduce a regression relative to Linux 5.16 and earlier for the
-case when nopat is set on my box. I think your point would
-be that it is not a regression if it is an incorrect user configuration.
-I respond by saying a well-written driver should refuse to honor
-the incorrect configuration requested by the user and instead
-warn the user that it did not honor the incorrect kernel option.
+I am not sure what caused this.
 
-I am only presuming what your patch would do on my box based
-on what I learned about this problem from my debugging. I can
-also test your patch on my box to verify that my understanding of
-it is correct.
+--=20
+Cheers,
+Stephen Rothwell
 
-I also have not yet verified Juergen's patch will not fix it, but
-I am almost certain it will not unless it is expanded so it also
-touches i915_gem_object_pin_map() with the fix. I plan to test
-his patch, but expanded so it touches that function also.
+--Sig_/fUjO3JqV/cTb15Tx6/q9Ay3
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-I also plan to test your patch with and without nopat and report the
-results in the thread where you posted your patch. Hopefully
-by tomorrow I will have the results.
+-----BEGIN PGP SIGNATURE-----
 
-Chuck
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKHmUIACgkQAVBC80lX
+0GzcrAf/Ru8QL632jWscLmwjX6IVBqTFPdIpCEWCqrxblq0BBzBAexYJg1DPu/B+
+XVp0lF5GiAjqrzrW8sNryi0y1pHJVZ+drhW0l/2Z/vs/WEycAds+58XMHOIiMXMc
+L2WgYQYXcbljMrV3XWIorzyLUlDGQuSG+zAIJnJs0CwbAzq4MBiGdqKYC+lBJQCu
+njvmwsJMz13J46nLWYb98iWpXjxDylsOXLx506vBOubp/4+H54tYGertlBGJo/Y8
+kvVjRsoUpPnaxuSN5cAmqXK9KUFmKr7nwzHRLv1mWqoRuLQNsckXFBmowxD2+UIN
+kr5pBQfQDh7rjQu54F4RRo8ToCvxIA==
+=9ugd
+-----END PGP SIGNATURE-----
+
+--Sig_/fUjO3JqV/cTb15Tx6/q9Ay3--

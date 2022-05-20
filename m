@@ -2,111 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF45F52E8BA
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 11:25:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21EEE52E8C0
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 11:27:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347700AbiETJZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 05:25:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58450 "EHLO
+        id S1344866AbiETJ1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 05:27:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344866AbiETJZe (ORCPT
+        with ESMTP id S236050AbiETJ1H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 05:25:34 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE58225284
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 02:25:33 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id a11so7309571pff.1
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 02:25:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=aPTFbZr4LhKGppGQDkO7tNLWiZLizgW3cwR+POXjY4E=;
-        b=i/OUnOpe+L6EXkV0g2GBLh/LlkmTO2ABKbDeNNYBAIiqPBi7Po+V9JEX6+911ykRjL
-         t2M2j+RYB4XkLljq6P/kRFKJivx2S6CKWRBFLoXzRplrC+xBWkkeGBV6APfYjVsvThcF
-         rl8Fk/KxCGL7b0xFltVLp93SeGngyXLI31mpnRoXCiF8eiTVtcKBD67n8/P1KubzjsGF
-         jGJlbvut5C1a21qOhynvMcTC55oQ8VqS8dhTaKuBakv/vW/GwhYobJJ/+kY8GgISfyer
-         i4jZemgrU2cd8yv8hzVxS2NHjcsJTqpANPyZy5YXcbXUxRr/CvcOTGvvGWeRKYJgZNfX
-         VOHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=aPTFbZr4LhKGppGQDkO7tNLWiZLizgW3cwR+POXjY4E=;
-        b=7RjnGCmCo3Uhoe5vuz9xPk6jZ7mIHywlvSeSkoN9WRyPuHUWwVJTd8xdsDAjOdJSWX
-         zHsuvUQfO9AHd/8R+pVChA0kLPP05Zk13VbLI/vjaScappJLN89j8SWhj3i3idkUPIxg
-         zHfpSTtD7nUy2sMU4m+uLHI2+kOTrezhqoUFpAHvMM1QFLaIQ9ZQILYpmAaj8Upy/ojS
-         mQX3PYLlcIwrG8aG/6nTXN1e+UoFioHWa7RmLHG3Z//iO5ZenlTi9jDNE9wYPnKd03Jh
-         rW/AirZTRzdxDuQzf/uY4rkP+7nksTJ5oXb9JehXTVbz6lMKCmNCGaOETYe69bQmywga
-         vHow==
-X-Gm-Message-State: AOAM531g0uVUrxzYUTYgcIDUIz5VHf8zZnOsNxjmsh1JptDAspaZckzH
-        hQ9diZW+/5amYNOvKovsozg1kKbhwK4Zbccc+Cs=
-X-Google-Smtp-Source: ABdhPJzJ6l/pbV2vxgCsyyxnwB5/t9MO8LaSN+KONN6ZVqHZxtZAc5RvBOStUiQ/kY2EEDNsINNgUm+br2kawyaQus4=
-X-Received: by 2002:a05:6a00:e8e:b0:4fa:a52f:59cf with SMTP id
- bo14-20020a056a000e8e00b004faa52f59cfmr9075732pfb.84.1653038733395; Fri, 20
- May 2022 02:25:33 -0700 (PDT)
+        Fri, 20 May 2022 05:27:07 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A2D87204
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 02:27:05 -0700 (PDT)
+Received: from zn.tnic (p200300ea974657be329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9746:57be:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 173CA1EC0258;
+        Fri, 20 May 2022 11:27:00 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1653038820;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=4q4B8B6JOY6jxn99S0iabm4qIhRYOLZ2S6fDGT0xc58=;
+        b=CHhsgH5o3QZU5x8WA5Vm69Uiz4Zzi2Q/w8I1mdaqxQVCy98cyXm3LnSwTa/On2NVcV4IdN
+        ubSxLchELki5hjuBvMDCy4cvxgnfiu3v6q/wWuna7AvD5xA86T+/oH2VnOFB1D/+NMmPJm
+        dCMDNlt2aCjyasbV9hyEBu52YO2AoCA=
+Date:   Fri, 20 May 2022 11:26:54 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Shreenidhi Shedi <yesshedi@gmail.com>
+Cc:     srivatsa@csail.mit.edu, amakhalov@vmware.com, tglx@linutronix.de,
+        mingo@redhat.com, dave.hansen@linux.intel.com, hpa@zytor.com,
+        virtualization@lists.linux-foundation.org, pv-drivers@vmware.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        Shreenidhi Shedi <sshedi@vmware.com>
+Subject: Re: [PATCH] x86/vmware: use unsigned integer for shifting
+Message-ID: <Yode3m6iia9ZBHsl@zn.tnic>
+References: <20220520072857.592746-1-sshedi@vmware.com>
 MIME-Version: 1.0
-Reply-To: dr.tracymedicinemed1@gmail.com
-Sender: traorekafando07@gmail.com
-Received: by 2002:a05:7300:7685:b0:60:d395:5d14 with HTTP; Fri, 20 May 2022
- 02:25:32 -0700 (PDT)
-From:   Dr Tracy William <ra6277708@gmail.com>
-Date:   Fri, 20 May 2022 17:25:32 +0800
-X-Google-Sender-Auth: U20KsUiIlkHSeO5Q_W5tV1PMHSA
-Message-ID: <CACGK7qsTaCVASty7JP9vk-t75BQ5=VGvK7NsStSFO8Ld+ZBjng@mail.gmail.com>
-Subject: From Dr Tracy from United States
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:442 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4999]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [traorekafando07[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [traorekafando07[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [dr.tracymedicinemed1[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.4 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220520072857.592746-1-sshedi@vmware.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Dear,
+On Fri, May 20, 2022 at 12:58:57PM +0530, Shreenidhi Shedi wrote:
+> Shifting signed 32-bit value by 31 bits is implementation-defined
+> behaviour. Using unsigned is better option for this.
+> 
+> Signed-off-by: Shreenidhi Shedi <sshedi@vmware.com>
+> ---
+>  arch/x86/kernel/cpu/vmware.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kernel/cpu/vmware.c b/arch/x86/kernel/cpu/vmware.c
+> index c04b933f48d3..b28f789d3c56 100644
+> --- a/arch/x86/kernel/cpu/vmware.c
+> +++ b/arch/x86/kernel/cpu/vmware.c
+> @@ -476,7 +476,7 @@ static bool __init vmware_legacy_x2apic_available(void)
+>  {
+>  	uint32_t eax, ebx, ecx, edx;
+>  	VMWARE_CMD(GETVCPU_INFO, eax, ebx, ecx, edx);
+> -	return (eax & (1 << VMWARE_CMD_VCPU_RESERVED)) == 0 &&
+> +	return (eax & (1U << VMWARE_CMD_VCPU_RESERVED)) == 0 &&
+>  	       (eax & (1 << VMWARE_CMD_LEGACY_X2APIC)) != 0;
 
-how are you today,I hope you are doing great.
+Or you can use the BIT() macro and simplify this expression even more:
 
-It is my great pleasure to contact you,I want to make a new and
-special friend,I hope you don't mind. My name is Tracy William from
-the United States, Am an English and French nationalities. I will give
-you pictures and more details about my self as soon as i hear from
-you Kisses.
+       return !(eax & BIT(VMWARE_CMD_VCPU_RESERVED)) &&
+               (eax & BIT(VMWARE_CMD_LEGACY_X2APIC));
 
-Pls resply to my personal email(dr.tracymedicinemed1@gmail.com)
 
-Thanks.
-Tracy,
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

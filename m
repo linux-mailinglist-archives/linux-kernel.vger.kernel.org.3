@@ -2,334 +2,497 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB01C52F06A
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 18:19:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75BD052F06F
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 18:20:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351523AbiETQTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 12:19:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56940 "EHLO
+        id S1351531AbiETQUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 12:20:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231239AbiETQTa (ORCPT
+        with ESMTP id S231239AbiETQUC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 12:19:30 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D4084A05
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 09:19:29 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id f2so12192347wrc.0
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 09:19:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/EVIv/9CZTu8F4lKjgKh6a8dtu5zA1i+E/pDvfo4hlg=;
-        b=CW69hrN5vebSYxMBDMRgCe2w0sM1Iv/pkmxJupl1Uy5H7fz+dBy+VyTDnV6cDj0XsQ
-         ZTU5yZdTGKEoXHi1rvM7JRozCWvMYkJbOzVwjLF02CSXWD6y0hDSst8lblSMFtGbptgF
-         hi3doqI3y6HsFiSEpUJRCaVvG+kShY9rhBKxttRwvxnk1WgImSjuBxsnLjPDYjsbbz7P
-         WpZuqe83DB9/yH18NDhhQLuXwXqrrmFjN9aZZUlc1vUC4umyi61FZ8Oz5JC8kEbcImdD
-         IHDD4rCaOJYNoaowNgITdnbRlhcsl78MMEnU+WzFSHYA3Bj+xUiOjQUIQ7GTwaBM0+Vh
-         r1YA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/EVIv/9CZTu8F4lKjgKh6a8dtu5zA1i+E/pDvfo4hlg=;
-        b=LTo8j3xgHeEdM42PV9DLkEHzTvDCekfYECvz/jxJUOOU1PEdxJ6ESsMrl1Zn2NUos6
-         Qz8aR//nZiAabc5pWS114LmTpNrq+hWlD7ndlgTvgJulYVr+m6yaeucjXqr6/Dw94oMO
-         r+cMi2PcBSMh9JJUjmGDaQiH5uhVs3JP0PSLfGjyTbyoRUiklzsI7COBi5vyl7at5L2t
-         iUpbknSYSohr3BjIZsfZvn+Mq1T9gKrZDTt3kxqH/XyRcsT+ySLCHNKDVrgJsRO/v2Yk
-         95gKlmfq/VMf9pjwjPvpHLVrolvy8kDs8m0BQ0xvHx3t8hPrZ2NHs1pyDeq+UUH0Q7ij
-         D6Gg==
-X-Gm-Message-State: AOAM5303AIGCv7fkkT2cMQom5D/jDlvwk2lOciTZ0a5eDcPfV/1JzenM
-        U0HqgaQUkzoeHggw9RMG3zSZ4Ny8IYL0SbZSiloiAA==
-X-Google-Smtp-Source: ABdhPJzCDuRwDRI99yqqvfQrZmhDnGagNTIez9NJb8UBT5MVHcHFvsRMRynjNYzj/aWuz2Aui5NUW0e3p/S+Nq3sGb8=
-X-Received: by 2002:a5d:6146:0:b0:20d:d42:e954 with SMTP id
- y6-20020a5d6146000000b0020d0d42e954mr8984842wrt.372.1653063567330; Fri, 20
- May 2022 09:19:27 -0700 (PDT)
+        Fri, 20 May 2022 12:20:02 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA2E84A05;
+        Fri, 20 May 2022 09:19:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653063599; x=1684599599;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xyoX3wJFV08KmJUKWtkfILCFbxxU1mCoQdXyEQyxFyM=;
+  b=VvfLxkh5P69VrogfFXb8tkYBrKbI3Yn5b5qF8QwBgjW0TyCggqXdFwxd
+   3nQYJYaYExG9dOvvooBaXsGRB4qL/BIsgCZ+2S+YqAWLlqTPovc+6BIF0
+   AAmQKBuoFGKgJKMGUSf+RDRprMyMuqt8670yQVK/zi34ZJznZQnqkKb4W
+   ErRCJgLBpxvk9C/8WmC2pRT0F3u8/rVm/MwB6WRsAVim1VKU40YaiV5Xj
+   BbezH1IdLaGD9n7YiFd+wQJvqb9dlxQ6oyvy+1L56mLBJ3Nv44gEW+Qr4
+   vQ7IsQclJkcOWg7uShuU4D2NTKk63inAgJT1fALNG7ZKzotolDiOalduV
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10353"; a="270237768"
+X-IronPort-AV: E=Sophos;i="5.91,239,1647327600"; 
+   d="scan'208";a="270237768"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 09:19:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,239,1647327600"; 
+   d="scan'208";a="628238945"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 20 May 2022 09:19:52 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ns5Lz-0004uI-MF;
+        Fri, 20 May 2022 16:19:51 +0000
+Date:   Sat, 21 May 2022 00:19:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, rjw@rjwysocki.net,
+        Oleg Nesterov <oleg@redhat.com>, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org,
+        Robert OCallahan <roc@pernos.co>, Kyle Huey <khuey@pernos.co>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>
+Subject: Re: [PATCH 16/16] signal: Always call do_notify_parent_cldstop with
+ siglock held
+Message-ID: <202205210010.E4Hyn2kD-lkp@intel.com>
+References: <20220518225355.784371-16-ebiederm@xmission.com>
 MIME-Version: 1.0
-References: <20220520012133.1217211-1-yosryahmed@google.com>
- <20220520012133.1217211-6-yosryahmed@google.com> <926b21ee-58e8-18b1-3d60-148d02f1c17a@fb.com>
-In-Reply-To: <926b21ee-58e8-18b1-3d60-148d02f1c17a@fb.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Fri, 20 May 2022 09:18:51 -0700
-Message-ID: <CAJD7tka1HLqyyomPN=a+RW9Z0S9TrNLhbc+tYDwEgDa1rwYggw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 5/5] bpf: add a selftest for cgroup
- hierarchical stats collection
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Michal Hocko <mhocko@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220518225355.784371-16-ebiederm@xmission.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 9:09 AM Yonghong Song <yhs@fb.com> wrote:
->
->
->
-> On 5/19/22 6:21 PM, Yosry Ahmed wrote:
-> > Add a selftest that tests the whole workflow for collecting,
-> > aggregating, and display cgroup hierarchical stats.
-> >
-> > TL;DR:
-> > - Whenever reclaim happens, vmscan_start and vmscan_end update
-> >    per-cgroup percpu readings, and tell rstat which (cgroup, cpu) pairs
-> >    have updates.
-> > - When userspace tries to read the stats, vmscan_dump calls rstat to flush
-> >    the stats.
-> > - rstat calls vmscan_flush once for every (cgroup, cpu) pair that has
-> >    updates, vmscan_flush aggregates cpu readings and propagates updates
-> >    to parents.
-> >
-> > Detailed explanation:
-> > - The test loads tracing bpf programs, vmscan_start and vmscan_end, to
-> >    measure the latency of cgroup reclaim. Per-cgroup ratings are stored in
-> >    percpu maps for efficiency. When a cgroup reading is updated on a cpu,
-> >    cgroup_rstat_updated(cgroup, cpu) is called to add the cgroup to the
-> >    rstat updated tree on that cpu.
-> >
-> > - A cgroup_iter program, vmscan_dump, is loaded and pinned to a file, for
-> >    each cgroup. Reading this file invokes the program, which calls
-> >    cgroup_rstat_flush(cgroup) to ask rstat to propagate the updates for all
-> >    cpus and cgroups that have updates in this cgroup's subtree. Afterwards,
-> >    the stats are exposed to the user.
-> >
-> > - An ftrace program, vmscan_flush, is also loaded and attached to
-> >    bpf_rstat_flush. When rstat flushing is ongoing, vmscan_flush is invoked
-> >    once for each (cgroup, cpu) pair that has updates. cgroups are popped
-> >    from the rstat tree in a bottom-up fashion, so calls will always be
-> >    made for cgroups that have updates before their parents. The program
-> >    aggregates percpu readings to a total per-cgroup reading, and also
-> >    propagates them to the parent cgroup. After rstat flushing is over, all
-> >    cgroups will have correct updated hierarchical readings (including all
-> >    cpus and all their descendants).
-> >
-> > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> > ---
-> >   .../test_cgroup_hierarchical_stats.c          | 339 ++++++++++++++++++
-> >   tools/testing/selftests/bpf/progs/bpf_iter.h  |   7 +
-> >   .../selftests/bpf/progs/cgroup_vmscan.c       | 221 ++++++++++++
-> >   3 files changed, 567 insertions(+)
-> >   create mode 100644 tools/testing/selftests/bpf/prog_tests/test_cgroup_hierarchical_stats.c
-> >   create mode 100644 tools/testing/selftests/bpf/progs/cgroup_vmscan.c
-> >
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/test_cgroup_hierarchical_stats.c b/tools/testing/selftests/bpf/prog_tests/test_cgroup_hierarchical_stats.c
-> > new file mode 100644
-> > index 000000000000..e560c1f6291f
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/prog_tests/test_cgroup_hierarchical_stats.c
-> > @@ -0,0 +1,339 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/*
-> > + * Functions to manage eBPF programs attached to cgroup subsystems
-> > + *
-> > + * Copyright 2022 Google LLC.
-> > + */
-> > +#include <errno.h>
-> > +#include <sys/types.h>
-> > +#include <sys/mount.h>
-> > +#include <sys/stat.h>
-> > +#include <unistd.h>
-> > +
-> > +#include <bpf/libbpf.h>
-> > +#include <bpf/bpf.h>
-> > +#include <test_progs.h>
-> > +
-> > +#include "cgroup_helpers.h"
-> > +#include "cgroup_vmscan.skel.h"
-> > +
-> > +#define PAGE_SIZE 4096
-> > +#define MB(x) (x << 20)
-> > +
-> > +#define BPFFS_ROOT "/sys/fs/bpf/"
-> > +#define BPFFS_VMSCAN BPFFS_ROOT"vmscan/"
-> > +
-> > +#define CG_ROOT_NAME "root"
-> > +#define CG_ROOT_ID 1
-> > +
-> > +#define CGROUP_PATH(p, n) {.name = #n, .path = #p"/"#n}
-> > +
-> > +static struct {
-> > +     const char *name, *path;
-> > +     unsigned long long id;
-> > +     int fd;
-> > +} cgroups[] = {
-> > +     CGROUP_PATH(/, test),
-> > +     CGROUP_PATH(/test, child1),
-> > +     CGROUP_PATH(/test, child2),
-> > +     CGROUP_PATH(/test/child1, child1_1),
-> > +     CGROUP_PATH(/test/child1, child1_2),
-> > +     CGROUP_PATH(/test/child2, child2_1),
-> > +     CGROUP_PATH(/test/child2, child2_2),
-> > +};
-> > +
-> > +#define N_CGROUPS ARRAY_SIZE(cgroups)
-> > +#define N_NON_LEAF_CGROUPS 3
-> > +
-> > +bool mounted_bpffs;
-> > +static int duration;
-> > +
-> > +static int read_from_file(const char *path, char *buf, size_t size)
-> > +{
-> > +     int fd, len;
-> > +
-> > +     fd = open(path, O_RDONLY);
-> > +     if (fd < 0) {
-> > +             log_err("Open %s", path);
-> > +             return -errno;
-> > +     }
-> > +     len = read(fd, buf, size);
-> > +     if (len < 0)
-> > +             log_err("Read %s", path);
-> > +     else
-> > +             buf[len] = 0;
-> > +     close(fd);
-> > +     return len < 0 ? -errno : 0;
-> > +}
-> > +
-> > +static int setup_bpffs(void)
-> > +{
-> > +     int err;
-> > +
-> > +     /* Mount bpffs */
-> > +     err = mount("bpf", BPFFS_ROOT, "bpf", 0, NULL);
-> > +     mounted_bpffs = !err;
-> > +     if (CHECK(err && errno != EBUSY, "mount bpffs",
->
-> Please use ASSERT_* macros instead of CHECK.
-> There are similar instances below as well.
+Hi "Eric,
 
-CHECK is more flexible in providing a parameterized failure message,
-but I guess we ideally shouldn't see those a lot anyway. Will change
-them to ASSERTs in the next version.
+Thank you for the patch! Perhaps something to improve:
 
->
-> > +           "failed to mount bpffs at %s (%s)\n", BPFFS_ROOT,
-> > +           strerror(errno)))
-> > +             return err;
-> > +
-> > +     /* Create a directory to contain stat files in bpffs */
-> > +     err = mkdir(BPFFS_VMSCAN, 0755);
-> > +     CHECK(err, "mkdir bpffs", "failed to mkdir %s (%s)\n",
-> > +           BPFFS_VMSCAN, strerror(errno));
-> > +     return err;
-> > +}
-> > +
-> > +static void cleanup_bpffs(void)
-> > +{
-> > +     /* Remove created directory in bpffs */
-> > +     CHECK(rmdir(BPFFS_VMSCAN), "rmdir", "failed to rmdir %s (%s)\n",
-> > +           BPFFS_VMSCAN, strerror(errno));
-> > +
-> > +     /* Unmount bpffs, if it wasn't already mounted when we started */
-> > +     if (mounted_bpffs)
-> > +             return;
-> > +     CHECK(umount(BPFFS_ROOT), "umount", "failed to unmount bpffs (%s)\n",
-> > +           strerror(errno));
-> > +}
-> > +
-> > +static int setup_cgroups(void)
-> > +{
-> > +     int i, err;
-> > +
-> > +     err = setup_cgroup_environment();
-> > +     if (CHECK(err, "setup_cgroup_environment", "failed: %d\n", err))
-> > +             return err;
-> > +
-> > +     for (i = 0; i < N_CGROUPS; i++) {
-> > +             int fd;
->
-> You can put this to the top declaration 'int i, err'.
+[auto build test WARNING on next-20220518]
+[cannot apply to linux/master powerpc/next wireless-next/main wireless/main linus/master v5.18-rc7 v5.18-rc6 v5.18-rc5 v5.18-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Will do in the next version. I thought declaring variables in the
-innermost block that uses them is preferable.
+url:    https://github.com/intel-lab-lkp/linux/commits/Eric-W-Biederman/signal-alpha-Remove-unused-definition-of-TASK_REAL_PARENT/20220519-065947
+base:    736ee37e2e8eed7fe48d0a37ee5a709514d478b3
+config: parisc-randconfig-s032-20220519 (https://download.01.org/0day-ci/archive/20220521/202205210010.E4Hyn2kD-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 11.3.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/4b66a617bf6d095d33fe43e9dbcfdf2e0de9fb29
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Eric-W-Biederman/signal-alpha-Remove-unused-definition-of-TASK_REAL_PARENT/20220519-065947
+        git checkout 4b66a617bf6d095d33fe43e9dbcfdf2e0de9fb29
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=parisc SHELL=/bin/bash
 
->
-> > +
-> > +             fd = create_and_get_cgroup(cgroups[i].path);
-> > +             if (!ASSERT_GE(fd, 0, "create_and_get_cgroup"))
-> > +                     return fd;
-> > +
-> > +             cgroups[i].fd = fd;
-> > +             cgroups[i].id = get_cgroup_id(cgroups[i].path);
-> > +             if (i < N_NON_LEAF_CGROUPS) {
-> > +                     err = enable_controllers(cgroups[i].path, "memory");
-> > +                     if (!ASSERT_OK(err, "enable_controllers"))
-> > +                             return err;
-> > +             }
-> > +     }
-> > +     return 0;
-> > +}
-> > +
-> > +static void cleanup_cgroups(void)
-> > +{
-> > +     for (int i = 0; i < N_CGROUPS; i++)
-> > +             close(cgroups[i].fd);
-> > +     cleanup_cgroup_environment();
-> > +}
-> > +
-> > +
-> > +static int setup_hierarchy(void)
-> > +{
-> > +     return setup_bpffs() || setup_cgroups();
-> > +}
-> > +
-> > +static void destroy_hierarchy(void)
-> > +{
-> > +     cleanup_cgroups();
-> > +     cleanup_bpffs();
-> > +}
-> > +
-> [...]
-> > +
-> > +SEC("iter.s/cgroup")
-> > +int BPF_PROG(dump_vmscan, struct bpf_iter_meta *meta, struct cgroup *cgrp)
-> > +{
-> > +     struct seq_file *seq = meta->seq;
-> > +     struct vmscan *total_stat;
-> > +     __u64 cg_id = cgroup_id(cgrp);
-> > +
-> > +     /* Flush the stats to make sure we get the most updated numbers */
-> > +     cgroup_rstat_flush(cgrp);
-> > +
-> > +     total_stat = bpf_map_lookup_elem(&cgroup_vmscan_elapsed, &cg_id);
-> > +     if (!total_stat) {
-> > +             bpf_printk("error finding stats for cgroup %llu\n", cg_id);
-> > +             BPF_SEQ_PRINTF(seq, "cg_id: -1, total_vmscan_delay: -1\n");
-> > +             return 0;
-> > +     }
-> > +     BPF_SEQ_PRINTF(seq, "cg_id: %llu, total_vmscan_delay: %llu\n",
-> > +                    cg_id, total_stat->state);
-> > +     return 0;
-> > +}
-> > +
->
-> Empty line here.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Will remove this in the next version.
-Thanks for taking a look at this!
 
->
+sparse warnings: (new ones prefixed by >>)
+   kernel/signal.c: note: in included file (through arch/parisc/include/uapi/asm/signal.h, arch/parisc/include/asm/signal.h, include/uapi/linux/signal.h, ...):
+   include/uapi/asm-generic/signal-defs.h:83:29: sparse: sparse: multiple address spaces given
+   kernel/signal.c:195:31: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/signal.c:195:31: sparse:     expected struct spinlock [usertype] *lock
+   kernel/signal.c:195:31: sparse:     got struct spinlock [noderef] __rcu *
+   kernel/signal.c:198:33: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/signal.c:198:33: sparse:     expected struct spinlock [usertype] *lock
+   kernel/signal.c:198:33: sparse:     got struct spinlock [noderef] __rcu *
+   kernel/signal.c:480:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/signal.c:480:9: sparse:     expected struct spinlock [usertype] *lock
+   kernel/signal.c:480:9: sparse:     got struct spinlock [noderef] __rcu *
+   kernel/signal.c:484:34: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/signal.c:484:34: sparse:     expected struct spinlock [usertype] *lock
+   kernel/signal.c:484:34: sparse:     got struct spinlock [noderef] __rcu *
+   kernel/signal.c:542:53: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct k_sigaction *ka @@     got struct k_sigaction [noderef] __rcu * @@
+   kernel/signal.c:542:53: sparse:     expected struct k_sigaction *ka
+   kernel/signal.c:542:53: sparse:     got struct k_sigaction [noderef] __rcu *
+   include/uapi/asm-generic/signal-defs.h:83:29: sparse: sparse: multiple address spaces given
+   kernel/signal.c:1261:9: sparse: sparse: no member 'ip' in struct pt_regs
+   kernel/signal.c:1267:29: sparse: sparse: no member 'ip' in struct pt_regs
+   kernel/signal.c:1267:29: sparse: sparse: cast from unknown type
+   kernel/signal.c:1267:29: sparse: sparse: cannot dereference this type
+   kernel/signal.c:1267:29: sparse: sparse: no member 'ip' in struct pt_regs
+   kernel/signal.c:1267:29: sparse: sparse: cast from unknown type
+   kernel/signal.c:1267:29: sparse: sparse: no member 'ip' in struct pt_regs
+   kernel/signal.c:1267:29: sparse: sparse: cast from unknown type
+   kernel/signal.c:1267:29: sparse: sparse: cannot dereference this type
+   kernel/signal.c:1267:29: sparse: sparse: no member 'ip' in struct pt_regs
+   kernel/signal.c:1267:29: sparse: sparse: cast from unknown type
+   kernel/signal.c:1267:29: sparse: sparse: no member 'ip' in struct pt_regs
+   kernel/signal.c:1267:29: sparse: sparse: cast from unknown type
+   kernel/signal.c:1267:29: sparse: sparse: cannot dereference this type
+   kernel/signal.c:1267:29: sparse: sparse: no member 'ip' in struct pt_regs
+   kernel/signal.c:1267:29: sparse: sparse: cast from unknown type
+   kernel/signal.c:1267:29: sparse: sparse: no member 'ip' in struct pt_regs
+   kernel/signal.c:1267:29: sparse: sparse: cast from unknown type
+   kernel/signal.c:1267:29: sparse: sparse: cannot dereference this type
+   kernel/signal.c:1267:29: sparse: sparse: no member 'ip' in struct pt_regs
+   kernel/signal.c:1267:29: sparse: sparse: cast from unknown type
+   kernel/signal.c:1267:29: sparse: sparse: cannot dereference this type
+   kernel/signal.c:1267:29: sparse: sparse: no member 'ip' in struct pt_regs
+   kernel/signal.c:1267:29: sparse: sparse: cast from unknown type
+   kernel/signal.c:1267:29: sparse: sparse: incompatible types for 'case' statement
+   kernel/signal.c:1267:29: sparse: sparse: incompatible types for 'case' statement
+   kernel/signal.c:1267:29: sparse: sparse: incompatible types for 'case' statement
+   kernel/signal.c:1267:29: sparse: sparse: incompatible types for 'case' statement
+   kernel/signal.c:1328:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/signal.c:1328:9: sparse:     expected struct spinlock [usertype] *lock
+   kernel/signal.c:1328:9: sparse:     got struct spinlock [noderef] __rcu *
+   kernel/signal.c:1329:16: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct k_sigaction *action @@     got struct k_sigaction [noderef] __rcu * @@
+   kernel/signal.c:1329:16: sparse:     expected struct k_sigaction *action
+   kernel/signal.c:1329:16: sparse:     got struct k_sigaction [noderef] __rcu *
+   kernel/signal.c:1349:34: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/signal.c:1349:34: sparse:     expected struct spinlock [usertype] *lock
+   kernel/signal.c:1349:34: sparse:     got struct spinlock [noderef] __rcu *
+   kernel/signal.c:1938:36: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/signal.c:1938:36: sparse:     expected struct spinlock [usertype] *lock
+   kernel/signal.c:1938:36: sparse:     got struct spinlock [noderef] __rcu *
+>> kernel/signal.c:2048:46: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct sighand_struct *m_sighand @@     got struct sighand_struct [noderef] __rcu *sighand @@
+   kernel/signal.c:2048:46: sparse:     expected struct sighand_struct *m_sighand
+   kernel/signal.c:2048:46: sparse:     got struct sighand_struct [noderef] __rcu *sighand
+   kernel/signal.c:2057:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct task_struct *parent @@     got struct task_struct [noderef] __rcu *real_parent @@
+   kernel/signal.c:2057:24: sparse:     expected struct task_struct *parent
+   kernel/signal.c:2057:24: sparse:     got struct task_struct [noderef] __rcu *real_parent
+   kernel/signal.c:2087:21: sparse: sparse: incompatible types in comparison expression (different address spaces):
+>> kernel/signal.c:2087:21: sparse:    struct task_struct [noderef] __rcu *
+>> kernel/signal.c:2087:21: sparse:    struct task_struct *
+>> kernel/signal.c:2117:40: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct task_struct *parent @@     got struct task_struct [noderef] __rcu *real_parent @@
+   kernel/signal.c:2117:40: sparse:     expected struct task_struct *parent
+   kernel/signal.c:2117:40: sparse:     got struct task_struct [noderef] __rcu *real_parent
+   kernel/signal.c:2119:46: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct sighand_struct *m_sighand @@     got struct sighand_struct [noderef] __rcu *sighand @@
+   kernel/signal.c:2119:46: sparse:     expected struct sighand_struct *m_sighand
+   kernel/signal.c:2119:46: sparse:     got struct sighand_struct [noderef] __rcu *sighand
+>> kernel/signal.c:2120:50: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct sighand_struct *p_sighand @@     got struct sighand_struct [noderef] __rcu *sighand @@
+   kernel/signal.c:2120:50: sparse:     expected struct sighand_struct *p_sighand
+   kernel/signal.c:2120:50: sparse:     got struct sighand_struct [noderef] __rcu *sighand
+>> kernel/signal.c:2125:58: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct sighand_struct *t_sighand @@     got struct sighand_struct [noderef] __rcu *sighand @@
+   kernel/signal.c:2125:58: sparse:     expected struct sighand_struct *t_sighand
+   kernel/signal.c:2125:58: sparse:     got struct sighand_struct [noderef] __rcu *sighand
+   kernel/signal.c:2171:44: sparse: sparse: cast removes address space '__rcu' of expression
+   kernel/signal.c:2190:65: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct task_struct *tsk @@     got struct task_struct [noderef] __rcu *parent @@
+   kernel/signal.c:2190:65: sparse:     expected struct task_struct *tsk
+   kernel/signal.c:2190:65: sparse:     got struct task_struct [noderef] __rcu *parent
+   kernel/signal.c:2191:40: sparse: sparse: cast removes address space '__rcu' of expression
+   kernel/signal.c:2209:14: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct sighand_struct *psig @@     got struct sighand_struct [noderef] __rcu *[noderef] __rcu sighand @@
+   kernel/signal.c:2209:14: sparse:     expected struct sighand_struct *psig
+   kernel/signal.c:2209:14: sparse:     got struct sighand_struct [noderef] __rcu *[noderef] __rcu sighand
+   kernel/signal.c:2238:53: sparse: sparse: incorrect type in argument 3 (different address spaces) @@     expected struct task_struct *t @@     got struct task_struct [noderef] __rcu *parent @@
+   kernel/signal.c:2238:53: sparse:     expected struct task_struct *t
+   kernel/signal.c:2238:53: sparse:     got struct task_struct [noderef] __rcu *parent
+   kernel/signal.c:2239:34: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected struct task_struct *parent @@     got struct task_struct [noderef] __rcu *parent @@
+   kernel/signal.c:2239:34: sparse:     expected struct task_struct *parent
+   kernel/signal.c:2239:34: sparse:     got struct task_struct [noderef] __rcu *parent
+   kernel/signal.c:2269:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct task_struct *parent @@     got struct task_struct [noderef] __rcu *parent @@
+   kernel/signal.c:2269:24: sparse:     expected struct task_struct *parent
+   kernel/signal.c:2269:24: sparse:     got struct task_struct [noderef] __rcu *parent
+   kernel/signal.c:2272:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct task_struct *parent @@     got struct task_struct [noderef] __rcu *real_parent @@
+   kernel/signal.c:2272:24: sparse:     expected struct task_struct *parent
+   kernel/signal.c:2272:24: sparse:     got struct task_struct [noderef] __rcu *real_parent
+   kernel/signal.c:2307:17: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct sighand_struct *sighand @@     got struct sighand_struct [noderef] __rcu *sighand @@
+   kernel/signal.c:2307:17: sparse:     expected struct sighand_struct *sighand
+   kernel/signal.c:2307:17: sparse:     got struct sighand_struct [noderef] __rcu *sighand
+   kernel/signal.c:2341:41: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/signal.c:2341:41: sparse:     expected struct spinlock [usertype] *lock
+   kernel/signal.c:2341:41: sparse:     got struct spinlock [noderef] __rcu *
+   kernel/signal.c:2343:39: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/signal.c:2343:39: sparse:     expected struct spinlock [usertype] *lock
+   kernel/signal.c:2343:39: sparse:     got struct spinlock [noderef] __rcu *
+   kernel/signal.c:2428:33: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/signal.c:2428:33: sparse:     expected struct spinlock [usertype] *lock
+   kernel/signal.c:2428:33: sparse:     got struct spinlock [noderef] __rcu *
+   kernel/signal.c:2440:31: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/signal.c:2440:31: sparse:     expected struct spinlock [usertype] *lock
+   kernel/signal.c:2440:31: sparse:     got struct spinlock [noderef] __rcu *
+   kernel/signal.c:2479:31: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/signal.c:2479:31: sparse:     expected struct spinlock [usertype] *lock
+   kernel/signal.c:2479:31: sparse:     got struct spinlock [noderef] __rcu *
+   kernel/signal.c:2481:33: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/signal.c:2481:33: sparse:     expected struct spinlock [usertype] *lock
+   kernel/signal.c:2481:33: sparse:     got struct spinlock [noderef] __rcu *
+   kernel/signal.c:2584:41: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/signal.c:2584:41: sparse:     expected struct spinlock [usertype] *lock
+   kernel/signal.c:2584:41: sparse:     got struct spinlock [noderef] __rcu *
+   kernel/signal.c:2599:33: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/signal.c:2599:33: sparse:     expected struct spinlock [usertype] *lock
+   kernel/signal.c:2599:33: sparse:     got struct spinlock [noderef] __rcu *
+   kernel/signal.c:2656:41: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/signal.c:2656:41: sparse:     expected struct spinlock [usertype] *lock
+   kernel/signal.c:2656:41: sparse:     got struct spinlock [noderef] __rcu *
+   kernel/signal.c:2668:33: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/signal.c:2668:33: sparse:     expected struct spinlock [usertype] *lock
+   kernel/signal.c:2668:33: sparse:     got struct spinlock [noderef] __rcu *
+   kernel/signal.c:2726:49: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct sighand_struct *sighand @@     got struct sighand_struct [noderef] __rcu *sighand @@
+   kernel/signal.c:2726:49: sparse:     expected struct sighand_struct *sighand
+   kernel/signal.c:2726:49: sparse:     got struct sighand_struct [noderef] __rcu *sighand
+   kernel/signal.c:3052:27: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/signal.c:3052:27: sparse:     expected struct spinlock [usertype] *lock
+   kernel/signal.c:3052:27: sparse:     got struct spinlock [noderef] __rcu *
+   kernel/signal.c:3081:29: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/signal.c:3081:29: sparse:     expected struct spinlock [usertype] *lock
+   kernel/signal.c:3081:29: sparse:     got struct spinlock [noderef] __rcu *
+   kernel/signal.c:3138:27: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/signal.c:3138:27: sparse:     expected struct spinlock [usertype] *lock
+   kernel/signal.c:3138:27: sparse:     got struct spinlock [noderef] __rcu *
+   kernel/signal.c:3140:29: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/signal.c:3140:29: sparse:     expected struct spinlock [usertype] *lock
+   kernel/signal.c:3140:29: sparse:     got struct spinlock [noderef] __rcu *
+   kernel/signal.c:3291:31: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/signal.c:3291:31: sparse:     expected struct spinlock [usertype] *lock
+   kernel/signal.c:3291:31: sparse:     got struct spinlock [noderef] __rcu *
+   kernel/signal.c:3294:33: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/signal.c:3294:33: sparse:     expected struct spinlock [usertype] *lock
+   kernel/signal.c:3294:33: sparse:     got struct spinlock [noderef] __rcu *
+   kernel/signal.c:3683:27: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/signal.c:3683:27: sparse:     expected struct spinlock [usertype] *lock
+   kernel/signal.c:3683:27: sparse:     got struct spinlock [noderef] __rcu *
+   kernel/signal.c:3695:37: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/signal.c:3695:37: sparse:     expected struct spinlock [usertype] *lock
+   kernel/signal.c:3695:37: sparse:     got struct spinlock [noderef] __rcu *
+   kernel/signal.c:3700:35: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/signal.c:3700:35: sparse:     expected struct spinlock [usertype] *lock
+   kernel/signal.c:3700:35: sparse:     got struct spinlock [noderef] __rcu *
+   kernel/signal.c:3705:29: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/signal.c:3705:29: sparse:     expected struct spinlock [usertype] *lock
+   kernel/signal.c:3705:29: sparse:     got struct spinlock [noderef] __rcu *
+   kernel/signal.c:4159:31: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/signal.c:4159:31: sparse:     expected struct spinlock [usertype] *lock
+   kernel/signal.c:4159:31: sparse:     got struct spinlock [noderef] __rcu *
+   kernel/signal.c:4171:33: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/signal.c:4171:33: sparse:     expected struct spinlock [usertype] *lock
+   kernel/signal.c:4171:33: sparse:     got struct spinlock [noderef] __rcu *
+   kernel/signal.c:4189:11: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct k_sigaction *k @@     got struct k_sigaction [noderef] __rcu * @@
+   kernel/signal.c:4189:11: sparse:     expected struct k_sigaction *k
+   kernel/signal.c:4189:11: sparse:     got struct k_sigaction [noderef] __rcu *
+   kernel/signal.c:4191:25: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/signal.c:4191:25: sparse:     expected struct spinlock [usertype] *lock
+   kernel/signal.c:4191:25: sparse:     got struct spinlock [noderef] __rcu *
+
+vim +2048 kernel/signal.c
+
+  1934	
+  1935	void sigqueue_free(struct sigqueue *q)
+  1936	{
+  1937		unsigned long flags;
+> 1938		spinlock_t *lock = &current->sighand->siglock;
+  1939	
+  1940		BUG_ON(!(q->flags & SIGQUEUE_PREALLOC));
+  1941		/*
+  1942		 * We must hold ->siglock while testing q->list
+  1943		 * to serialize with collect_signal() or with
+  1944		 * __exit_signal()->flush_sigqueue().
+  1945		 */
+  1946		spin_lock_irqsave(lock, flags);
+  1947		q->flags &= ~SIGQUEUE_PREALLOC;
+  1948		/*
+  1949		 * If it is queued it will be freed when dequeued,
+  1950		 * like the "regular" sigqueue.
+  1951		 */
+  1952		if (!list_empty(&q->list))
+  1953			q = NULL;
+  1954		spin_unlock_irqrestore(lock, flags);
+  1955	
+  1956		if (q)
+  1957			__sigqueue_free(q);
+  1958	}
+  1959	
+  1960	int send_sigqueue(struct sigqueue *q, struct pid *pid, enum pid_type type)
+  1961	{
+  1962		int sig = q->info.si_signo;
+  1963		struct sigpending *pending;
+  1964		struct task_struct *t;
+  1965		unsigned long flags;
+  1966		int ret, result;
+  1967	
+  1968		BUG_ON(!(q->flags & SIGQUEUE_PREALLOC));
+  1969	
+  1970		ret = -1;
+  1971		rcu_read_lock();
+  1972		t = pid_task(pid, type);
+  1973		if (!t || !likely(lock_task_sighand(t, &flags)))
+  1974			goto ret;
+  1975	
+  1976		ret = 1; /* the signal is ignored */
+  1977		result = TRACE_SIGNAL_IGNORED;
+  1978		if (!prepare_signal(sig, t, false))
+  1979			goto out;
+  1980	
+  1981		ret = 0;
+  1982		if (unlikely(!list_empty(&q->list))) {
+  1983			/*
+  1984			 * If an SI_TIMER entry is already queue just increment
+  1985			 * the overrun count.
+  1986			 */
+  1987			BUG_ON(q->info.si_code != SI_TIMER);
+  1988			q->info.si_overrun++;
+  1989			result = TRACE_SIGNAL_ALREADY_PENDING;
+  1990			goto out;
+  1991		}
+  1992		q->info.si_overrun = 0;
+  1993	
+  1994		signalfd_notify(t, sig);
+  1995		pending = (type != PIDTYPE_PID) ? &t->signal->shared_pending : &t->pending;
+  1996		list_add_tail(&q->list, &pending->list);
+  1997		sigaddset(&pending->signal, sig);
+  1998		complete_signal(sig, t, type);
+  1999		result = TRACE_SIGNAL_DELIVERED;
+  2000	out:
+  2001		trace_signal_generate(sig, &q->info, t, type != PIDTYPE_PID, result);
+  2002		unlock_task_sighand(t, &flags);
+  2003	ret:
+  2004		rcu_read_unlock();
+  2005		return ret;
+  2006	}
+  2007	
+  2008	/**
+  2009	 * lock_parents_siglocks - Take current, real_parent, and parent's siglock
+  2010	 * @lock_tracer: The tracers siglock is needed.
+  2011	 *
+  2012	 * There is no natural ordering to these locks so they must be sorted
+  2013	 * before being taken.
+  2014	 *
+  2015	 * There are two complicating factors here:
+  2016	 * - The locks live in sighand and sighand can be arbitrarily shared
+  2017	 * - parent and real_parent can change when current's siglock is unlocked.
+  2018	 *
+  2019	 * To deal with this first the all of the sighand pointers are
+  2020	 * gathered under current's siglock, and the sighand pointers are
+  2021	 * sorted.  As siglock lives inside of sighand this also sorts the
+  2022	 * siglock's by address.
+  2023	 *
+  2024	 * Then the siglocks are taken in order dropping current's siglock if
+  2025	 * necessary.
+  2026	 *
+  2027	 * Finally if parent and real_parent have not changed return.
+  2028	 * If they either parent has changed drop their locks and try again.
+  2029	 *
+  2030	 * Changing sighand is an infrequent and somewhat expensive operation
+  2031	 * (unshare or exec) and so even in the worst case this loop
+  2032	 * should not loop too many times before all of the proper locks are
+  2033	 * taken in order.
+  2034	 *
+  2035	 * CONTEXT:
+  2036	 * Must be called with @current->sighand->siglock held
+  2037	 *
+  2038	 * RETURNS:
+  2039	 * current's, real_parent's, and parent's siglock held.
+  2040	 */
+  2041	static void lock_parents_siglocks(bool lock_tracer)
+  2042		__releases(&current->sighand->siglock)
+  2043		__acquires(&current->sighand->siglock)
+  2044		__acquires(&current->real_parent->sighand->siglock)
+  2045		__acquires(&current->parent->sighand->siglock)
+  2046	{
+  2047		struct task_struct *me = current;
+> 2048		struct sighand_struct *m_sighand = me->sighand;
+  2049	
+  2050		lockdep_assert_held(&m_sighand->siglock);
+  2051	
+  2052		rcu_read_lock();
+  2053		for (;;) {
+  2054			struct task_struct *parent, *tracer;
+  2055			struct sighand_struct *p_sighand, *t_sighand, *s1, *s2, *s3;
+  2056	
+  2057			parent = me->real_parent;
+  2058			tracer = ptrace_parent(me);
+  2059			if (!tracer || !lock_tracer)
+  2060				tracer = parent;
+  2061	
+  2062			p_sighand = rcu_dereference(parent->sighand);
+  2063			t_sighand = rcu_dereference(tracer->sighand);
+  2064	
+  2065			/* Sort the sighands so that s1 >= s2 >= s3 */
+  2066			s1 = m_sighand;
+  2067			s2 = p_sighand;
+  2068			s3 = t_sighand;
+  2069			if (s1 > s2)
+  2070				swap(s1, s2);
+  2071			if (s1 > s3)
+  2072				swap(s1, s3);
+  2073			if (s2 > s3)
+  2074				swap(s2, s3);
+  2075	
+  2076			/* Take the locks in order */
+  2077			if (s1 != m_sighand) {
+  2078				spin_unlock(&m_sighand->siglock);
+  2079				spin_lock(&s1->siglock);
+  2080			}
+  2081			if (s1 != s2)
+  2082				spin_lock_nested(&s2->siglock, 1);
+  2083			if (s2 != s3)
+  2084				spin_lock_nested(&s3->siglock, 2);
+  2085	
+  2086			/* Verify the proper locks are held */
+> 2087			if (likely((s1 == m_sighand) ||
+  2088				   ((me->real_parent == parent) &&
+  2089				    (me->parent == tracer) &&
+  2090				    (parent->sighand == p_sighand) &&
+  2091				    (tracer->sighand == t_sighand)))) {
+  2092				break;
+  2093			}
+  2094	
+  2095			/* Drop all but current's siglock */
+  2096			if (p_sighand != m_sighand)
+  2097				spin_unlock(&p_sighand->siglock);
+  2098			if (t_sighand != p_sighand)
+  2099				spin_unlock(&t_sighand->siglock);
+  2100	
+  2101			/*
+  2102			 * Since [pt]_sighand will likely change if we go
+  2103			 * around, and m_sighand is the only one held, make sure
+  2104			 * it is subclass-0, since the above 's1 != m_sighand'
+  2105			 * clause very much relies on that.
+  2106			 */
+  2107			lock_set_subclass(&m_sighand->siglock.dep_map, 0, _RET_IP_);
+  2108		}
+  2109		rcu_read_unlock();
+  2110	}
+  2111	
+  2112	static void unlock_parents_siglocks(bool unlock_tracer)
+  2113		__releases(&current->real_parent->sighand->siglock)
+  2114		__releases(&current->parent->sighand->siglock)
+  2115	{
+  2116		struct task_struct *me = current;
+> 2117		struct task_struct *parent = me->real_parent;
+  2118		struct task_struct *tracer = ptrace_parent(me);
+  2119		struct sighand_struct *m_sighand = me->sighand;
+> 2120		struct sighand_struct *p_sighand = parent->sighand;
+  2121	
+  2122		if (p_sighand != m_sighand)
+  2123			spin_unlock(&p_sighand->siglock);
+  2124		if (tracer && unlock_tracer) {
+> 2125			struct sighand_struct *t_sighand = tracer->sighand;
+  2126			if (t_sighand != p_sighand)
+  2127				spin_unlock(&t_sighand->siglock);
+  2128		}
+  2129	}
+  2130	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,50 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDF6B52E31F
+	by mail.lfdr.de (Postfix) with ESMTP id 5654B52E31D
 	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 05:30:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345156AbiETD1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 23:27:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42286 "EHLO
+        id S1345160AbiETD3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 23:29:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230117AbiETD1o (ORCPT
+        with ESMTP id S230117AbiETD24 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 23:27:44 -0400
-Received: from mail105.syd.optusnet.com.au (mail105.syd.optusnet.com.au [211.29.132.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 314C78DDF6;
-        Thu, 19 May 2022 20:27:42 -0700 (PDT)
-Received: from dread.disaster.area (pa49-181-2-147.pa.nsw.optusnet.com.au [49.181.2.147])
-        by mail105.syd.optusnet.com.au (Postfix) with ESMTPS id 4126E10E68AE;
-        Fri, 20 May 2022 13:27:41 +1000 (AEST)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1nrtIh-00E6GN-MT; Fri, 20 May 2022 13:27:39 +1000
-Date:   Fri, 20 May 2022 13:27:39 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     Eric Biggers <ebiggers@kernel.org>, linux-fsdevel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-xfs@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Keith Busch <kbusch@kernel.org>
-Subject: Re: [RFC PATCH v2 1/7] statx: add I/O alignment information
-Message-ID: <20220520032739.GB1098723@dread.disaster.area>
-References: <20220518235011.153058-1-ebiggers@kernel.org>
- <20220518235011.153058-2-ebiggers@kernel.org>
- <YobNXbYnhBiqniTH@magnolia>
+        Thu, 19 May 2022 23:28:56 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D56CE126989
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 20:28:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653017335; x=1684553335;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/2Rd7aRGXDFx0VPd9x4FavskHTE+idupHl56Dc9ywwA=;
+  b=cO7fECGjz/kx5zqBNDAT74qwE/1yx4QU5lSawr0PKUVKrpEuJVJzGxdR
+   va9SzmzGUEaDhk4fM23Y2SFnwIItlaErcDFPioBumqhHrwluhkVYSkRPP
+   Q0lqi4/apQmme3JlFS6kFcNUj+fziIYCuF6OD0DGxpPTJ6rYJt/GJbzrM
+   WcG+4ZOhtNsqxrgewHMRjFaIfOnJWt3YEk/EaR+4sth1ghHXovm/yrKjn
+   0bzUFssUEYELsrRSq44WdmEFKrlCl3CDtQNkc4sabbPbm1/uN2hwx8GDE
+   Gy3Arsii5BSQWMadVuAt9HY1bJYcUdXL72EqTm8Jnp2SSZiNKFV61d9W7
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="335521923"
+X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
+   d="scan'208";a="335521923"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 20:28:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
+   d="scan'208";a="570581574"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 19 May 2022 20:28:53 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nrtJt-0004El-4i;
+        Fri, 20 May 2022 03:28:53 +0000
+Date:   Fri, 20 May 2022 11:28:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guo Ren <guoren@linux.alibaba.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: [ammarfaizi2-block:palmer/linux/riscv-compat 20/20]
+ riscv64-linux-ld: arch/riscv/kernel/compat_syscall_table.o:undefined
+ reference to `compat_sys_fadvise64_64'
+Message-ID: <202205201131.BsQlHAIj-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YobNXbYnhBiqniTH@magnolia>
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.4 cv=VuxAv86n c=1 sm=1 tr=0 ts=62870aad
-        a=ivVLWpVy4j68lT4lJFbQgw==:117 a=ivVLWpVy4j68lT4lJFbQgw==:17
-        a=kj9zAlcOel0A:10 a=oZkIemNP1mAA:10 a=1XWaLZrsAAAA:8 a=VwQbUJbxAAAA:8
-        a=7-415B0cAAAA:8 a=-h69JAkiF4VdWyV60hkA:9 a=CjuIK1q_8ugA:10
-        a=AjGcO6oz07-iQ99wixmX:22 a=biEYGPWJfzWAr4FL6Ov7:22
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,71 +65,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 04:06:05PM -0700, Darrick J. Wong wrote:
-> On Wed, May 18, 2022 at 04:50:05PM -0700, Eric Biggers wrote:
-> > From: Eric Biggers <ebiggers@google.com>
-> > 
-> > Traditionally, the conditions for when DIO (direct I/O) is supported
-> > were fairly simple: filesystems either supported DIO aligned to the
-> > block device's logical block size, or didn't support DIO at all.
-> > 
-> > However, due to filesystem features that have been added over time (e.g,
-> > data journalling, inline data, encryption, verity, compression,
-> > checkpoint disabling, log-structured mode), the conditions for when DIO
-> > is allowed on a file have gotten increasingly complex.  Whether a
-> > particular file supports DIO, and with what alignment, can depend on
-> > various file attributes and filesystem mount options, as well as which
-> > block device(s) the file's data is located on.
-> > 
-> > XFS has an ioctl XFS_IOC_DIOINFO which exposes this information to
-> > applications.  However, as discussed
-> > (https://lore.kernel.org/linux-fsdevel/20220120071215.123274-1-ebiggers@kernel.org/T/#u),
-> > this ioctl is rarely used and not known to be used outside of
-> > XFS-specific code.  It also was never intended to indicate when a file
-> > doesn't support DIO at all, and it only exposes the minimum I/O
-> > alignment, not the optimal I/O alignment which has been requested too.
-> > 
-> > Therefore, let's expose this information via statx().  Add the
-> > STATX_IOALIGN flag and three fields associated with it:
-> > 
-> > * stx_mem_align_dio: the alignment (in bytes) required for user memory
-> >   buffers for DIO, or 0 if DIO is not supported on the file.
-> > 
-> > * stx_offset_align_dio: the alignment (in bytes) required for file
-> >   offsets and I/O segment lengths for DIO, or 0 if DIO is not supported
-> >   on the file.  This will only be nonzero if stx_mem_align_dio is
-> >   nonzero, and vice versa.
-> > 
-> > * stx_offset_align_optimal: the alignment (in bytes) suggested for file
-> >   offsets and I/O segment lengths to get optimal performance.  This
-> >   applies to both DIO and buffered I/O.  It differs from stx_blocksize
-> >   in that stx_offset_align_optimal will contain the real optimum I/O
-> >   size, which may be a large value.  In contrast, for compatibility
-> >   reasons stx_blocksize is the minimum size needed to avoid page cache
-> >   read/write/modify cycles, which may be much smaller than the optimum
-> >   I/O size.  For more details about the motivation for this field, see
-> >   https://lore.kernel.org/r/20220210040304.GM59729@dread.disaster.area
-> 
-> Hmm.  So I guess this is supposed to be the filesystem's best guess at
-> the IO size that will minimize RMW cycles in the entire stack?  i.e. if
-> the user does not want RMW of pagecache pages, of file allocation units
-> (if COW is enabled), of RAID stripes, or in the storage itself, then it
-> should ensure that all IOs are aligned to this value?
-> 
-> I guess that means for XFS it's effectively max(pagesize, i_blocksize,
-> bdev io_opt, sb_width, and (pretend XFS can reflink the realtime volume)
-> the rt extent size)?  I didn't see a manpage update for statx(2) but
-> that's mostly what I'm interested in. :)
+tree:   https://github.com/ammarfaizi2/linux-block palmer/linux/riscv-compat
+head:   9be8459298eadb39b9fe9974b890239e9c123107
+commit: 9be8459298eadb39b9fe9974b890239e9c123107 [20/20] riscv: compat: Add COMPAT Kbuild skeletal support
+config: riscv-randconfig-r004-20220519 (https://download.01.org/0day-ci/archive/20220520/202205201131.BsQlHAIj-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/9be8459298eadb39b9fe9974b890239e9c123107
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block palmer/linux/riscv-compat
+        git checkout 9be8459298eadb39b9fe9974b890239e9c123107
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-Yup, xfs_stat_blksize() should give a good idea of what we should
-do. It will end up being pretty much that, except without the need
-to a mount option to turn on the sunit/swidth return, and always
-taking into consideration extent size hints rather than just doing
-that for RT inodes...
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Cheers,
+All errors (new ones prefixed by >>):
 
-Dave.
+>> riscv64-linux-ld: arch/riscv/kernel/compat_syscall_table.o:(.rodata+0x6f8): undefined reference to `compat_sys_fadvise64_64'
+   pahole: .tmp_vmlinux.btf: No such file or directory
+   .btf.vmlinux.bin.o: file not recognized: file format not recognized
+
 -- 
-Dave Chinner
-david@fromorbit.com
+0-DAY CI Kernel Test Service
+https://01.org/lkp

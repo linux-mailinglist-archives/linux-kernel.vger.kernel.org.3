@@ -2,106 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 128BA52E20B
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 03:35:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFDAD52E210
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 03:36:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344526AbiETBe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 21:34:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50888 "EHLO
+        id S1344551AbiETBgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 21:36:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232853AbiETBez (ORCPT
+        with ESMTP id S245148AbiETBgQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 21:34:55 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F9AB9B190;
-        Thu, 19 May 2022 18:34:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653010494; x=1684546494;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1PD0LUvvtmIb9K8Grpc51OrTQynCSoemBKxewL9TVZA=;
-  b=edYL3pYTqZAuOX7FA7LjxKZh+aKG98S9RXOlCsoLl8SBoDsioiHBOU9t
-   RzDeCNht9Qu2Edrl0TF15In9LaEQYjziVZsEInjgcN3ZadUUJNWebZjUE
-   20kgD/rjNlp3fzjt6e3FsALs2mDWzabfjjdZGtZOREqAFI+zoaLLHXS43
-   Svg/RLYxPT0sR3IZxFEV0mQHrJ1t2vqupyBwTC9clOz43tSoPUMwUDs9j
-   5l5lB8ErRBTCgdKMZnnMYi2Ba0w4reRHbdyXqPFAoWIrTVPe8LK7WNIi4
-   eQQCp0V0Gs7CwjZsgzLRC9HUHfZm8glBzVAr1eAnS31zbR40M25Enkjqy
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="297754779"
-X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="297754779"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 18:34:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="743240182"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 19 May 2022 18:34:51 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nrrXW-000488-OU;
-        Fri, 20 May 2022 01:34:50 +0000
-Date:   Fri, 20 May 2022 09:34:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alec Su <ae40515@yahoo.com.tw>, agross@kernel.org,
-        bjorn.andersson@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, sboyd@codeaurora.org
-Cc:     kbuild-all@lists.01.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        y.oudjana@protonmail.com, Alec Su <ae40515@yahoo.com.tw>
-Subject: Re: [PATCH 1/2] arm64: dts: qcom: msm8996-xiaomi-natrium: Add
- support for Xiaomi Mi 5s Plus
-Message-ID: <202205200926.TE2gqa0N-lkp@intel.com>
-References: <20220519074112.25600-2-ae40515@yahoo.com.tw>
+        Thu, 19 May 2022 21:36:16 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3036F3A72B;
+        Thu, 19 May 2022 18:36:15 -0700 (PDT)
+Received: from kwepemi100021.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L48Rs2CSczjWw5;
+        Fri, 20 May 2022 09:35:21 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi100021.china.huawei.com (7.221.188.223) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 20 May 2022 09:36:13 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 20 May 2022 09:36:12 +0800
+Subject: Re: [PATCH -next v3 2/2] blk-throttle: fix io hung due to
+ configuration updates
+From:   "yukuai (C)" <yukuai3@huawei.com>
+To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+CC:     <tj@kernel.org>, <axboe@kernel.dk>, <ming.lei@redhat.com>,
+        <geert@linux-m68k.org>, <cgroups@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yi.zhang@huawei.com>
+References: <20220519085811.879097-1-yukuai3@huawei.com>
+ <20220519085811.879097-3-yukuai3@huawei.com>
+ <20220519095857.GE16096@blackbody.suse.cz>
+ <a8953189-af42-0225-3031-daf61347524a@huawei.com>
+ <20220519161026.GG16096@blackbody.suse.cz>
+ <73464ca6-9412-cc55-d9c0-f2e8a10f0607@huawei.com>
+Message-ID: <fe3c03f7-9b52-7948-075d-cbdf431363e1@huawei.com>
+Date:   Fri, 20 May 2022 09:36:11 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220519074112.25600-2-ae40515@yahoo.com.tw>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <73464ca6-9412-cc55-d9c0-f2e8a10f0607@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alec,
+在 2022/05/20 9:22, yukuai (C) 写道:
+> 在 2022/05/20 0:10, Michal Koutný 写道:
+>> On Thu, May 19, 2022 at 08:14:28PM +0800, "yukuai (C)" 
+>> <yukuai3@huawei.com> wrote:
+>>> tg_with_in_bps_limit:
+>>>   jiffy_elapsed_rnd = jiffies - tg->slice_start[rw];
+>>>   tmp = bps_limit * jiffy_elapsed_rnd;
+>>>   do_div(tmp, HZ);
+>>>   bytes_allowed = tmp; -> how many bytes are allowed in this slice,
+>>>                  incluing dispatched.
+>>>   if (tg->bytes_disp[rw] + bio_size <= bytes_allowed)
+>>>    *wait = 0 -> no need to wait if this bio is within limit
+>>>
+>>>   extra_bytes = tg->bytes_disp[rw] + bio_size - bytes_allowed;
+>>>   -> extra_bytes is based on 'bytes_disp'
+>>>
+>>> For example:
+>>>
+>>> 1) bps_limit is 2k, we issue two io, (1k and 9k)
+>>> 2) the first io(1k) will be dispatched, bytes_disp = 1k, slice_start = 0
+>>>     the second io(9k) is waiting for (9 - (2 - 1)) / 2 = 4 s
+>>
+>> The 2nd io arrived at 1s, the wait time is 4s, i.e. it can be dispatched
+>> at 5s (i.e. 10k/*2kB/s = 5s).
+> No, the example is that the second io arrived together with first io.
+>>
+>>> 3) after 3 s, we update bps_limit to 1k, then new waiting is caculated:
+>>>
+>>> without this patch:  bytes_disp = 0, slict_start =3:
+>>> bytes_allowed = 1k                                <--- why 1k and not 0?
+> Because slice_start == jiffies, bytes_allowed is equal to bps_limit
+>>> extra_bytes = 9k - 1k = 8k
+>>> wait = 8s
+>>
+>> This looks like it was calculated at time 4s (1s after new config was
+>> set).
+> No... it was caculated at time 3s:
+> 
+> jiffy_elapsed_rnd = roundup(jiffy_elapsed_rnd, tg->td->throtl_slice);
+> 
+> jiffies should be greater than 3s here, thus jiffy_elapsed_rnd is
+> 3s + throtl_slice (I'm using throtl_slice = 1s here, it should not
+> affect result)
+Hi,
 
-Thank you for the patch! Yet something to improve:
+Just to simplify explanation (assum that throtl_slice is greater than
+0.5s):
+Without this patch:
+wait time is caculated based on issuing 9k from now(3s) without any
+bytes aready dispatched.
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on v5.18-rc7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Alec-Su/arm64-dts-qcom-msm8996-xiaomi-natrium-Add-support-for-Xiaomi-Mi-5s-Plus/20220519-164217
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-config: arm64-randconfig-r022-20220518 (https://download.01.org/0day-ci/archive/20220520/202205200926.TE2gqa0N-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/b35e1afb49b50a1d68a67f66a3eb6c4259f329fb
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Alec-Su/arm64-dts-qcom-msm8996-xiaomi-natrium-Add-support-for-Xiaomi-Mi-5s-Plus/20220519-164217
-        git checkout b35e1afb49b50a1d68a67f66a3eb6c4259f329fb
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> Error: arch/arm64/boot/dts/qcom/msm8996-xiaomi-natrium.dts:79.1-9 Label or path mss_pil not found
->> Error: arch/arm64/boot/dts/qcom/msm8996-xiaomi-natrium.dts:106.1-10 Label or path slpi_pil not found
-   FATAL ERROR: Syntax error parsing input tree
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+With this patch:
+wait time is caculated based on issuing 9k from 0s with 0.5 bytes
+aready dispatched.
+>>
+>>>
+>>> whth this patch: bytes_disp = 0.5k, slice_start =  0,
+>>> bytes_allowed = 1k * 3 + 1k = 4k
+>>> extra_bytes =  0.5k + 9k - 4k = 5.5k
+>>> wait = 5.5s
+>>
+>> This looks like calculated at 4s, so the IO would be waiting till
+>> 4s+5.5s = 9.5s.
+> wait time is based on extra_bytes, this is really 5.5s, add 4s is
+> wrong here.
+> 
+> bytes_allowed = ((jiffies - slice_start) / Hz + 1) * bps_limit
+> extra_bytes = bio_size + bytes_disp - bytes_allowed
+> wait = extra_bytes / bps_limit
+>>
+>> As I don't know why using time 4s, I'll shift this calculation to the
+>> time 3s (when the config changes):
+>>
+>> bytes_disp = 0.5k, slice_start =  0,
+>> bytes_allowed = 1k * 3  = 3k
+>> extra_bytes =  0.5k + 9k - 3k = 7.5k
+> 6.5k
+>> wait = 7.5s
+>>
+>> In absolute time, the IO would wait till 3s+7.5s = 10.5s
+> Like I said above, wait time should not add (jiffies - slice_start)
+>>
+>> OK, either your 9.5s or my 10.5s looks weird (although earlier than
+>> original 4s+8s=12s).
+>> However, the IO should ideally only wait till
+>>
+>>      3s + (9k -   (6k    -    1k)     ) / 1k/s =
+>>           bio - (allowed - dispatched)  / new_limit
+>>
+>>     =3s + 4k / 1k/s = 7s
+>>
+>>     ('allowed' is based on old limit)
+>>
+>> Or in another example, what if you change the config from 2k/s to ∞k/s
+>> (unlimited, let's neglect the arithmetic overflow that you handle
+>> explicitly, imagine a big number but not so big to be greater than
+>> division result).
+>>
+>> In such a case, the wait time should be zero, i.e. IO should be
+>> dispatched right at the time of config change.
+> 
+> I thought about it, however, IMO, this is not a good idea. If user
+> updated config quite frequently, io throttle will be invalid.
+> 
+> Thanks,
+> Kuai
+>> (With your patch that still calculates >0 wait time (and the original
+>> behavior gives >0 wait too.)
+>>
+>>> I hope I can expliain it clearly...
+>>
+>> Yes, thanks for pointing me to relevant parts.
+>> I hope I grasped them correctly.
+>>
+>> IOW, your patch and formula make the wait time shorter but still IO can
+>> be delayed indefinitely if you pass a sequence of new configs. (AFAIU)
+>>
+>> Regards,
+>> Michal
+>> .
+>>

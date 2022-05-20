@@ -2,63 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ACAD52E65B
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 09:38:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 283AB52E651
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 09:34:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346542AbiETHiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 03:38:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51118 "EHLO
+        id S1346507AbiETHd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 03:33:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346535AbiETHiF (ORCPT
+        with ESMTP id S235940AbiETHdw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 03:38:05 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB4314A243;
-        Fri, 20 May 2022 00:38:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653032284; x=1684568284;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rtepu/ruq0EW+A7tbd3HbQbyCoghYdIk0/jAPt0oXFI=;
-  b=fef6XOtv5E5nTazsKqMw9Il7Mbxn8eBYQOxuRStl3fXWUOhDKHZxH2rD
-   8GfTiS6F43YQL8YahrxHhgkk6UNmbyAZBp3cQYjjbJbcwB7FNfnWj4lcs
-   VyMB9UA24MSJxOd3RQff1nX6cvKDblm/2shUC5kNDDagnzA2UgzWADtVg
-   AY3b3NfNBz5h1a02M0pEq6GEnIY5mGDruzK3DWWRrW7/vsPI/5IZ4dAeV
-   AMC+WFxUQb0ingjMQ/Oe7EXqbcQMBsCK5AN9bmUmKgor1B+LBI3XPu14n
-   hMAfVdZhQ0C8zvn1lEqosyf9ohGzFkN4/hoShFCA37ayk/y8CtUL2BL3e
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="254579751"
-X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="254579751"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 00:34:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="743369440"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 20 May 2022 00:34:22 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nrx9R-0004Rz-TW;
-        Fri, 20 May 2022 07:34:21 +0000
-Date:   Fri, 20 May 2022 15:33:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Zqiang <qiang1.zhang@intel.com>, paulmck@kernel.org,
-        frederic@kernel.org
-Cc:     kbuild-all@lists.01.org, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rcu-tasks: Stop RCU Tasks scanning tasks which record on
- dyntick-idle entry
-Message-ID: <202205201526.INo2g6TS-lkp@intel.com>
-References: <20220520045645.1692124-1-qiang1.zhang@intel.com>
+        Fri, 20 May 2022 03:33:52 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE4914AC97;
+        Fri, 20 May 2022 00:33:50 -0700 (PDT)
+Date:   Fri, 20 May 2022 09:33:46 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1653032028;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WO3Qag7yVyo0GFmwDFCkyWbSVTR+kGU+HMvb/D9bjOo=;
+        b=h4dL5j62evAr9rItV/vck1C6kA0EcttM1m0b1Da0ljJr4V7XdOnxfSv+mWxSutuS2anLKN
+        neSSgNQkpP53eeKBE5CT48hYBJKpeL2q5GmrRpUfJSrhbbAgR96xaZFLm2m9HyNl2hpRjT
+        p4R0TUJObBZ8LuvElhNTARZVzJSH+sfB8hS+wPzXOg5CKr62geGJqavEKMI2R0SUtV5/8r
+        jm0hy5BI7tr3GfOMHLvYq1VeO3ehLaTFzPsyd262aPCmYuf6k1919aqHhR+iCvZFAB5r9g
+        WDP5zU50AT8WP6hpkDrViT7FZkOgF4nok3fWjosNMDT8fokR0m0ESQUltn3zng==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1653032028;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WO3Qag7yVyo0GFmwDFCkyWbSVTR+kGU+HMvb/D9bjOo=;
+        b=4tb6POwNJbbl9CtNBPZJfUGQvl1P67iM9z/Z0O1ewVgldWrTMWuavKsCaXBCXYv5PsOEiU
+        eksDJVhVX6WxZDDw==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, oleg@redhat.com,
+        mingo@kernel.org, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Jann Horn <jannh@google.com>,
+        Kees Cook <keescook@chromium.org>, linux-ia64@vger.kernel.org,
+        Robert O'Callahan <roc@pernos.co>, Kyle Huey <khuey@pernos.co>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Douglas Miller <dougmill@linux.vnet.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>
+Subject: Re: [PATCH 00/16] ptrace: cleanups and calling do_cldstop with only
+ siglock
+Message-ID: <YodEWlfo4kFd8+mt@linutronix.de>
+References: <20220421150248.667412396@infradead.org>
+ <20220421150654.817117821@infradead.org>
+ <87czhap9dy.fsf@email.froward.int.ebiederm.org>
+ <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
+ <87k0b7v9yk.fsf_-_@email.froward.int.ebiederm.org>
+ <87k0b0apne.fsf_-_@email.froward.int.ebiederm.org>
+ <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
+ <871qwq5ucx.fsf_-_@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220520045645.1692124-1-qiang1.zhang@intel.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <871qwq5ucx.fsf_-_@email.froward.int.ebiederm.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,57 +88,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zqiang,
+On 2022-05-18 17:49:50 [-0500], Eric W. Biederman wrote:
+>=20
+> For ptrace_stop to work on PREEMT_RT no spinlocks can be taken once
+> ptrace_freeze_traced has completed successfully.  Which fundamentally
+> means the lock dance of dropping siglock and grabbing tasklist_lock does
+> not work on PREEMPT_RT.  So I have worked through what is necessary so
+> that tasklist_lock does not need to be grabbed in ptrace_stop after
+> siglock is dropped.
+=E2=80=A6
+It took me a while to realise that this is a follow-up I somehow assumed
+that you added a few patches on top. Might have been the yesterday's
+heat. b4 also refused to download this series because the v4 in this
+thread looked newer=E2=80=A6 Anyway. Both series applied:
 
-Thank you for the patch! Yet something to improve:
+| =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+| WARNING: suspicious RCU usage
+| 5.18.0-rc7+ #16 Not tainted
+| -----------------------------
+| include/linux/ptrace.h:120 suspicious rcu_dereference_check() usage!
+|
+| other info that might help us debug this:
+|
+| rcu_scheduler_active =3D 2, debug_locks =3D 1
+| 2 locks held by ssdd/1734:
+|  #0: ffff88800eaa6918 (&sighand->siglock){....}-{2:2}, at: lock_parents_s=
+iglocks+0xf0/0x3b0
+|  #1: ffff88800eaa71d8 (&sighand->siglock/2){....}-{2:2}, at: lock_parents=
+_siglocks+0x115/0x3b0
+|
+| stack backtrace:
+| CPU: 2 PID: 1734 Comm: ssdd Not tainted 5.18.0-rc7+ #16
+| Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-debian-1.=
+16.0-4 04/01/2014
+| Call Trace:
+|  <TASK>
+|  dump_stack_lvl+0x45/0x5a
+|  unlock_parents_siglocks+0xb6/0xc0
+|  ptrace_stop+0xb9/0x390
+|  get_signal+0x51c/0x8d0
+|  arch_do_signal_or_restart+0x31/0x750
+|  exit_to_user_mode_prepare+0x157/0x220
+|  irqentry_exit_to_user_mode+0x5/0x50
+|  asm_sysvec_apic_timer_interrupt+0x12/0x20
 
-[auto build test ERROR on paulmck-rcu/dev]
-[also build test ERROR on v5.18-rc7 next-20220519]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+That is ptrace_parent() in unlock_parents_siglocks().
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Zqiang/rcu-tasks-Stop-RCU-Tasks-scanning-tasks-which-record-on-dyntick-idle-entry/20220520-125904
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev
-config: m68k-defconfig (https://download.01.org/0day-ci/archive/20220520/202205201526.INo2g6TS-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/47ee19cf17eefb7dd696eabb583e5dcba4cd89e1
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Zqiang/rcu-tasks-Stop-RCU-Tasks-scanning-tasks-which-record-on-dyntick-idle-entry/20220520-125904
-        git checkout 47ee19cf17eefb7dd696eabb583e5dcba4cd89e1
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from kernel/rcu/update.c:606:
-   kernel/rcu/tasks.h: In function 'task_is_on_dyntick_idle':
->> kernel/rcu/tasks.h:212:34: error: 'struct task_struct' has no member named 'rcu_tasks_idle_cpu'
-     212 |                                 t->rcu_tasks_idle_cpu >= 0;
-         |                                  ^~
-   At top level:
-   kernel/rcu/tasks.h:209:13: warning: 'task_is_on_dyntick_idle' defined but not used [-Wunused-function]
-     209 | static bool task_is_on_dyntick_idle(struct task_struct *t)
-         |             ^~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +212 kernel/rcu/tasks.h
-
-   208	
-   209	static bool task_is_on_dyntick_idle(struct task_struct *t)
-   210	{
-   211		return IS_ENABLED(CONFIG_NO_HZ_FULL) && !is_idle_task(t) &&
- > 212					t->rcu_tasks_idle_cpu >= 0;
-   213	}
-   214	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Sebastian

@@ -2,101 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AECD52ED84
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 15:51:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17CE552ED88
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 15:52:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349993AbiETNvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 09:51:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50944 "EHLO
+        id S1349997AbiETNwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 09:52:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350060AbiETNvM (ORCPT
+        with ESMTP id S236798AbiETNwe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 09:51:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B2DD2183
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 06:51:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D65E61A41
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 13:51:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67758C385A9;
-        Fri, 20 May 2022 13:51:08 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="DXDes+eQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1653054666;
+        Fri, 20 May 2022 09:52:34 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A38615E745;
+        Fri, 20 May 2022 06:52:31 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id BC9EF240014;
+        Fri, 20 May 2022 13:52:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1653054744;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=nSTYvkNc0Kli2MjzgAhQgfzOMmCUcDFC3yLiCpm97cQ=;
-        b=DXDes+eQMvAqO+6Iu7b9VTksQ6WQMZSLfT6RME2A/5O7CDdwvT0MGgztiB28cKYp0icUkM
-        +5Zcc1aD/cG5bnPBqGa+ku7HVOQR9IOgd2ThtRnvSHVoNAmL6DZlGOv4F9lXSmws11r9Qf
-        GWtLcFGOBO2bXkaWrDMSo1/LaL5Xh7M=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 4bc6b890 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Fri, 20 May 2022 13:51:06 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH] fs: prefer read_iter over read and write_iter over write
-Date:   Fri, 20 May 2022 15:51:03 +0200
-Message-Id: <20220520135103.166972-1-Jason@zx2c4.com>
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+bOjW1b8w++QSKTTjEeZgfbqJDg2u0gptb5iXkZEb88=;
+        b=BVxr94oPQhfAiYxwDjhe2bG3Z6/SMBrYYEZafMACzM4CcLha3a5UMnIu3Pmtq9A49uz52A
+        R8m4JdTcaTi8kigUhs8WqAGLuyKj0D9T/aEzSqOWxLmNdkBsGAbehvMglVYuMDxkIC4ffc
+        SF6gSivmwl3gYM1VmYln49skYbOEK2h0x3KEKgFSqDAmIrYwbEfK88ZZeh9T+Fl7SptLza
+        lbyt4Vs1hWGvXbW0Wgsx786klXuPMiMBFMOS3Yd+nZ6Ev3WnrPlk5U5qIlvpRvfshsWCDB
+        sc0pGkUiGTTyH5spF0BPxFwFH60xBZyatTS+u9lB+Xr8Qqb1RTueDGc9ltgUSw==
+Date:   Fri, 20 May 2022 15:52:22 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Herve Codina <herve.codina@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH 2/3] dt-bindings: usb: atmel: Add Microchip LAN966x
+ compatible string
+Message-ID: <YoedFkAsTdoOn/3Y@mail.local>
+References: <20220513105850.310375-1-herve.codina@bootlin.com>
+ <20220513105850.310375-3-herve.codina@bootlin.com>
+ <8f0d4127-7e66-cf50-21c9-99680f737e30@linaro.org>
+ <20220520133426.3b4728ae@bootlin.com>
+ <b087c34f-0e2f-edd0-a738-3ffc2853a41b@linaro.org>
+ <20220520142109.57b84da2@bootlin.com>
+ <01b31a02-523e-10bf-3b46-5b830e456522@linaro.org>
+ <20220520150243.625723fa@bootlin.com>
+ <d26c7ebd-fc1a-391e-39e4-5ec41bf4fbfa@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d26c7ebd-fc1a-391e-39e4-5ec41bf4fbfa@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Most kernel code prefers read_iter over read and write_iter over write,
-yet the read function pointer is tested first. Reverse these so that the
-iter function is always used first.
+Hello,
 
-Cc: Al Viro <viro@zeniv.linux.org.uk>
-Cc: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- fs/read_write.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+On 20/05/2022 15:38:36+0200, Krzysztof Kozlowski wrote:
+> On 20/05/2022 15:02, Herve Codina wrote:
+> > On Fri, 20 May 2022 14:50:24 +0200
+> > Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> > 
+> >> On 20/05/2022 14:21, Herve Codina wrote:
+> >>>>> I think it makes sense to keep 'microchip,lan966x-udc' for the USB
+> >>>>> device controller (same controller on LAN9662 and LAN9668) and so
+> >>>>> keeping the same rules as for other common parts.    
+> >>>>
+> >>>> Having wildcard was rather a mistake and we already started correcting
+> >>>> it, so keeping the "mistake" neither gives you consistency, nor
+> >>>> correctness...
+> >>>>  
+> >>>
+> >>> I think that the "family" compatible should be present.
+> >>> This one allows to define the common parts in the common
+> >>> .dtsi file (lan966x.dtsi in our case).
+> >>>
+> >>> What do you think about:
+> >>> - microchip,lan9662-udc
+> >>> - microchip,lan9668-udc
+> >>> - microchip,lan966-udc  <-- Family
+> >>>
+> >>> lan966 is defined as the family compatible string since (1) in
+> >>> bindings/arm/atmel-at91.yaml and in Documentation/arm/microchip.rst
+> >>>   
+> >>
+> >> You can add some family compatible, if it makes sense. I don't get why
+> >> do you mention it - we did not discuss family names, but using
+> >> wildcards... Just please do not add wildcards.
+> > 
+> > Well, I mentioned it as I will only use the family compatible string
+> > and not the SOC (lan9662 or lan9668) compatible string in lan966x.dtsi.
+> > In this case, the family compatible string can be seen as a kind of
+> > "wildcard".
+> 
+> I understood as "the "family" compatible should be present" as you want
+> to add it as a fallback. It would be okay (assuming devices indeed share
+> family design). If you want to use it as the only one, then it is again
+> not a recommended approach. Please use specific compatibles.
+> 
+> I mean, why do we have this discussion? What is the benefit for you to
+> implement something not-recommended by Devicetree spec and style?
+> 
 
-diff --git a/fs/read_write.c b/fs/read_write.c
-index e643aec2b0ef..78a81aa5fa76 100644
---- a/fs/read_write.c
-+++ b/fs/read_write.c
-@@ -476,10 +476,10 @@ ssize_t vfs_read(struct file *file, char __user *buf, size_t count, loff_t *pos)
- 	if (count > MAX_RW_COUNT)
- 		count =  MAX_RW_COUNT;
- 
--	if (file->f_op->read)
--		ret = file->f_op->read(file, buf, count, pos);
--	else if (file->f_op->read_iter)
-+	if (file->f_op->read_iter)
- 		ret = new_sync_read(file, buf, count, pos);
-+	else if (file->f_op->read)
-+		ret = file->f_op->read(file, buf, count, pos);
- 	else
- 		ret = -EINVAL;
- 	if (ret > 0) {
-@@ -585,10 +585,10 @@ ssize_t vfs_write(struct file *file, const char __user *buf, size_t count, loff_
- 	if (count > MAX_RW_COUNT)
- 		count =  MAX_RW_COUNT;
- 	file_start_write(file);
--	if (file->f_op->write)
--		ret = file->f_op->write(file, buf, count, pos);
--	else if (file->f_op->write_iter)
-+	if (file->f_op->write_iter)
- 		ret = new_sync_write(file, buf, count, pos);
-+	else if (file->f_op->write)
-+		ret = file->f_op->write(file, buf, count, pos);
- 	else
- 		ret = -EINVAL;
- 	if (ret > 0) {
+Honestly, I would just go for microchip,lan9662-udc. There is no
+difference between lan9662 and lan9668 apart from the number of switch
+ports.
+
+
 -- 
-2.35.1
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com

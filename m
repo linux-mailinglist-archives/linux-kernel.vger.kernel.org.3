@@ -2,339 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE62F52EB83
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 14:04:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4205E52EB89
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 14:05:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348973AbiETMEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 08:04:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58472 "EHLO
+        id S1348997AbiETMFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 08:05:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348966AbiETMEd (ORCPT
+        with ESMTP id S243571AbiETMFe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 08:04:33 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD92114E2C7
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 05:04:31 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id n10so15213319ejk.5
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 05:04:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair;
-        h=mime-version:content-transfer-encoding:date:message-id:subject:from
-         :to:cc:references:in-reply-to;
-        bh=bnp8Ujwr8MQyroDL1ax6TC+7SRvJNg55sxpIGZD26uk=;
-        b=quqvSHxC6rGCpfvIoQTQlfgyzOfCAOVSoJ0/SHj0YgmVnY3uE4NeOILG9RUerUh9x1
-         up9AjQNAGGP5YuiCGLuloWLqv4JcA7lPCfTPKXP5mMIHS4ABzOx8NRQDoOgXJ9N3C4KS
-         ExoJBIhCY2/ucanpGN3W7T+/vOxR/hYa9ZMa4PKqmD5s0Q9cROgfePxkCfOlMwpyIRbf
-         Rx2YzJRITibYjjHh1EF81SRQ05GN1R4/6h+g8DFqKwAOQXIUbbrqvLHRd1tG6CGuBkmT
-         BAi6z4wC2J3yIGto12mcGu4uQsK9SuXwiObX5TIaQ98GBBCFk1mfnoyKcUbaVxku51Kl
-         4SSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:content-transfer-encoding:date
-         :message-id:subject:from:to:cc:references:in-reply-to;
-        bh=bnp8Ujwr8MQyroDL1ax6TC+7SRvJNg55sxpIGZD26uk=;
-        b=t1dlcZdynojGgUUKsyDP7HaZGIb9URmi0HhlxXGkA6CHbBxOO4dDEhdxeDPTqgdXDR
-         RjfORP2/W4LI7CaYkZR/m9DkMj5ELDeLMeicCs3SxIT0bUHCMEM/7jyz/D62Qi1xpP6O
-         MELm8YPvLbYCIr+olipm2dR3PJeEP/dTQYZEfs5uTHrucsxCZYfNOJmCytz6chGtX5Sz
-         T0kbBDU5c+GpeuGZokv1kCl1dtEdUhofsXQ4Clqhl09DrtLaS5SL0abcIwSEj2ZpAdYY
-         IizGJAogCD8BDZjP9kjPqDGDZG61cM8oKfFcbihBNed8gQf7rd+i6jeBhfo2FdWAKUEl
-         bM6g==
-X-Gm-Message-State: AOAM533MbfD+qDmg6fIdXaRhXOsYuGmA8y0Q/3eqWfuPEvr3EUBCmZpL
-        ZHJq8m5Mwk1h8NtElWEr5IEDug==
-X-Google-Smtp-Source: ABdhPJxz6xN6SrDKQFNsARBd2ZX6IwHX3udFQjhKbdEnaeG29Octc2v/NTMAWOIO2IC97iIEFmAA7g==
-X-Received: by 2002:a17:907:1c20:b0:6f4:639e:9400 with SMTP id nc32-20020a1709071c2000b006f4639e9400mr8479969ejc.485.1653048269844;
-        Fri, 20 May 2022 05:04:29 -0700 (PDT)
-Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id d13-20020a05640208cd00b0042617ba639esm4214058edz.40.2022.05.20.05.04.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 May 2022 05:04:29 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 20 May 2022 14:04:28 +0200
-Message-Id: <CK4KPEWM9165.2LR9ZUG2GGK6Q@otso>
-Subject: Re: [PATCH v2 2/5] dt-bindings: interconnect: Add Qualcomm SM6350
- NoC support
-From:   "Luca Weiss" <luca.weiss@fairphone.com>
-To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>
-Cc:     <~postmarketos/upstreaming@lists.sr.ht>,
-        <phone-devel@vger.kernel.org>, "Andy Gross" <agross@kernel.org>,
-        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
-        "Georgi Djakov" <djakov@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "Odelu Kukatla" <okukatla@codeaurora.org>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-X-Mailer: aerc 0.9.0
-References: <20220520070318.48521-1-luca.weiss@fairphone.com>
- <20220520070318.48521-3-luca.weiss@fairphone.com>
- <7b451dfb-8353-4a4e-1834-a01feaa267d2@linaro.org>
-In-Reply-To: <7b451dfb-8353-4a4e-1834-a01feaa267d2@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 20 May 2022 08:05:34 -0400
+Received: from sonic310-19.consmr.mail.sg3.yahoo.com (sonic310-19.consmr.mail.sg3.yahoo.com [106.10.244.139])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D272414FCAB
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 05:05:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com.tw; s=s2048; t=1653048329; bh=m5qRjrtAwTm45gVOBmuBl6oIrvjG2+lMVTnZgN9reTs=; h=From:To:Cc:Subject:Date:References:From:Subject:Reply-To; b=A0gteQS1PF0/daIGYsgG/I6crpjZEyjjrvV+KF+jZuHDui6JKsqF1JSBXvHwaxww7YbybGPjugZ1B4CeaBXQ3Zo01qfTplBwBUjWTnbbG9vL1y2eP701Z1OCAgouFwhs22U9Jj2mCb6NE1VrbGRgCarQDW7ic9nArQAflmdLOVMuLypkQLLLZHIYHVoum5edrV6Go30SyeW7ZLviU751j6tUyMTyd6OHaE21eowCHwt83uHdtCVMUoTXXI0/vL1bNWzZrC3Gnej0JEmtfyzVzrvqfXgDFQdPG/Z7ijh148kgrQNEj1hgygLR3bmRioh7I3NHhfVETw2+0CC84vwBuA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1653048329; bh=06F7/vuVcJCwHQ8t+q1qQlgeAL2a0CDJc/jIwwKCbXg=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=HBYJ5YJaT/uPIx/ecePDpkljo+DxLn0uh9t8moksnSXyUbKfYV7KcEfB533wROlXVm66zbuFTt0NbBESRV+6m6jF+VivK8N5SOvTJe5SmodH2nG22FMTdDdOYGfEUlWcjugRJJhWMmAlfHaU5X8ZCexKcMkVP1kW6XS9oZU1z5ctV+e8lVUdlGZWCyPXhLWuuzbHMOFyn9XFxw3+cL4fP7SxQYSYa40Kac2EExFYIqsFntcxI5q8zFRiy1E/bBSBsssufHqd2jv5DNSJUxpRAbXdznnHiL0Rz6BGV7xywBh2gfM0+RupbpYCQH3ATZmI3oZkEtHWhb4755Rkf8DexA==
+X-YMail-OSG: Kg1CpzUVM1mA9kP8_PyUkMj0BiSVgKciuua.QitQfA5QZ1sfb9s15.DzepEIG6P
+ SOhNeekzoezlbdyAQ.rlStP9vnhmUNy6yPmVqqm4fCpCklZ_QZEZ0mtL9iAyrut6dz4omFmxOkCX
+ SNIBPtc1Rkxam5.oBxX11Nh4mYEEAjbkk_BZfTDsvWReI3goDvqpkYAA3_5hITTIsIFw4NUh7wQf
+ FDWFWXfIL8IBhSPe23IxidA1MHVPhCI8KFND6fDao0sE1oSmeKlgMtj4tF.shh7RWhb6N6g.wk03
+ 2mBit_eLJJJT7GF5lZ7wfjI6mJr1v4LfUBKEw.j.CmHgCCMi.Xro3Dcy5ufIJZftsrYwOBIZ_7Az
+ L9uARsXVEGZVfyh5Lz5flhtpCMdMEjq5ofaaRc2sLet_AMVGp.xyX5GgZsWUGoG3hkXDF31Nra0P
+ zbRQ9jdvBgxZTw27dfsMEsczAKwJEzqArXBCMKatqoA5LDB48Hi1ezTzERMdzKrKueuNFgrudSL0
+ oUnYbvoIXLabvK5WmJT5wwuGfN3Er9_eBwi8vRLJeiFI2FdvcB080fJD7Ak9xZ2clHv9UF3M4rfI
+ lsUAhqG.LBmV1a.qD4MCQVR6kY3osKwZ5UAo9T9tc0XOYSz5I6scfwAREtYenZ4KZKWiMHdL2gRK
+ AuC5UW9mHFbrZy9Isc7xUiaGUcyhVuaejpv4WoDVEtyuTe2hFIUM1EZMuOXAoS11QTAKTx8lWI74
+ GQm2HGh0YV9pTDrMMDNZHFFa.sbBhoEh_Kzw1mjvZtIgI7Re0BKZopvXg4eBAdvIattLkp09hLNI
+ 1D3_gLCMpehmDxnUIDJ.PXE3UnmPAnPiWFj_8dUbOAmoWV.upFLgd4o3Azx89j85u6lCgC9lga1x
+ UYGG35I0bl3.JsFLLpwDjG15uwG7KMrld1BDgL3ErsM5toKLomO4HBgzPmDzR6x7iwsEoHV7ndbE
+ CgyMPZPnadGVwRShMC1SJud6oGZJ2kFSVeqI7S9GWWi0iwWCbZ6aGznok4pE1dS8b2QU07JZBQ0B
+ 3ZL02WPLiJrzADFjKPsfNdXR8n1vrqyLrrjVTiAYr52_WkWOalNzb_N4iZNPfF6zL2ITAgMHiwOE
+ .xv.SrUC09xm0eMT0qWHp5jKhKcxhc1c4DjpaVwYphCf.pMRDdX0gg7K8g1tTp88STd04cYLjm8I
+ trh_MduZzT1iLuTvUaJMuzW0JpfZ3TDcROTFlbI9hvqFplCTiBL0Nu6RpbzK1bnIjvhlUTO4o4oM
+ 6xDSoxLC33qhwW0ZDEDcfy.AZbaC0qMuYNZFsWsEfG0ZC2mQ5.RQPb1gG15IqGgJYH.29TjtB8TO
+ BnaWJJv5hw1dvhYNr4P_B.2fPLAOZ2aqSG2yA4.Bi7eNhvu1R.MjBxMy3y6YJA35riK6ZJBfJ0ti
+ _XElCqjmy0gNvvLsgVyNJfq6jcxmGiU.Gy5cvwXo0vKpOnVpyh_3WhkXBWRO0qa.G0ew1D_jP2Bu
+ n9ZaI2RchEAE4doX7tI7DcqbWgkp95zuK.7AGtTowQeMzgZTtIEbMkaU3B9qa0Yrfv4HFUuXWEue
+ A1gvZQSdFMWAqUX8.pBQAOCJycZNymq23vU7P7sD7.4TmN8srDhBuNbqORkWw2jG47q9BSHA0QLm
+ j9mr2aID7u8yRoe8zV8rw.wrjnSEXKX2jPm1o.108ec1nlMy0P4fRjJRFUZT_FOUQF1YizzZvlN7
+ bYcA1QZMhjIPmEKBruIZ6qldoQME5axU3qP6Pd6DXaSTe3no7sxmdsnxMVI2SoDYYGEqhuWWdFcI
+ Ucuur2VeI22l_uvDyIc96yf8Yts7ZjeoJ9j8U1xtvTBxwqi46aPZsMJTBtPcqe6QqLr7BJC06UL5
+ opvvsCSNAvsUVrThcNgqAc_ngmC3qQLrQquWwOMgg85S.N1n5hy4Gi93O59jsRbEcujIKSEwaTZ1
+ Bd04OqP9ZEvem2I.cYdGYlNhTyn_m5ZZQ9DDpSGwOrwOoyYDZmgdbkrgodSWZFjRuefqUU9q9ROL
+ 9dnT4N5OaR8TuufYX3zSH2tQJVX4ZuDqDiupzKin.tBZyVjS3S7vb8iTCZFLIS4UNHCZwCfbgTdg
+ 97ZxluR1X7_0nWMG.MijAB9xjpqv9hmr4jsDpMEz_FiL23G2KDYEkHQ9uOWdC9Y2Ir9uBkryM22p
+ D5ZaXO8E.LUcWieBowrIGXA3oXi0VoNpsA635w6rjo5lgRypUbG2U8SYuo8GeopPiQgObNdyHHWS
+ SVeTJeS7v.mW5zRDJjuYY_exHw3Lk2QS19gd24jcjD0muz9apL6QVHkSwFD5dHXiUeqcU7czqgHk
+ i98go95Nfl9hkjALpAO85WgQ-
+X-Sonic-MF: <ae40515@yahoo.com.tw>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.sg3.yahoo.com with HTTP; Fri, 20 May 2022 12:05:29 +0000
+Received: by hermes--canary-production-gq1-5cd7967f4d-rdzjx (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 0e81e43a2f3cdb966d184af1e1a1edda;
+          Fri, 20 May 2022 12:05:22 +0000 (UTC)
+From:   Alec Su <ae40515@yahoo.com.tw>
+To:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, sboyd@codeaurora.org
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, y.oudjana@protonmail.com,
+        Alec Su <ae40515@yahoo.com.tw>
+Subject: [PATCH v3 0/2] Add support for Xiaomi Mi 5s Plus
+Date:   Fri, 20 May 2022 12:04:47 +0000
+Message-Id: <20220520120449.12996-1-ae40515@yahoo.com.tw>
+X-Mailer: git-send-email 2.35.3
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+References: <20220520120449.12996-1-ae40515.ref@yahoo.com.tw>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+This series adds the device tree for Xiaomi Mi 5s Plus (xiaomi-natrium)
+smartphone which is based on Snapdragon 821 SoC.
 
-Thanks for the review!
+Changes since v2:
+- Rename the node "synaptics" to "touchscreen".
 
-On Fri May 20, 2022 at 12:31 PM CEST, Krzysztof Kozlowski wrote:
-> On 20/05/2022 09:03, Luca Weiss wrote:
-> > Add bindings for Qualcomm SM6350 Network-On-Chip interconnect devices.
-> >=20
-> > As SM6350 has two pairs of NoCs sharing the same reg, allow this in the
-> > binding documentation, as was done for qcm2290.
-> >=20
-> > Because the main qcom,rpmh.yaml file is getting too complicated for our
-> > use cases, create a new qcom,rpmh-common.yaml and a separate
-> > qcom,sm6350-rpmh.yaml that defines our new bindings.
-> >=20
-> > Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> > ---
-> > Changes since v1:
-> > * Split sm6350 into separate yaml with new rpmh-common.yaml
-> >=20
-> >  .../interconnect/qcom,rpmh-common.yaml        |  41 +++++
-> >  .../interconnect/qcom,sm6350-rpmh.yaml        |  82 ++++++++++
-> >  .../dt-bindings/interconnect/qcom,sm6350.h    | 148 ++++++++++++++++++
-> >  3 files changed, 271 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom=
-,rpmh-common.yaml
-> >  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom=
-,sm6350-rpmh.yaml
-> >  create mode 100644 include/dt-bindings/interconnect/qcom,sm6350.h
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpmh-c=
-ommon.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpmh-commo=
-n.yaml
-> > new file mode 100644
-> > index 000000000000..6121eea3e87d
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/interconnect/qcom,rpmh-common.y=
-aml
-> > @@ -0,0 +1,41 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/interconnect/qcom,rpmh-common.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Qualcomm RPMh Network-On-Chip Interconnect
-> > +
-> > +maintainers:
-> > +  - Georgi Djakov <georgi.djakov@linaro.org>
-> > +  - Odelu Kukatla <okukatla@codeaurora.org>
->
-> Is this valid email address?
+Changes since v1:
+- Adjust the sequence of the patches in this series.
+- Remove the unnecessary line and properties in the device tree.
+- Rename the nodes contain underscores.
 
-Will put Georgi and Bjorn as maintainers, as per your other email.
+Alec Su (2):
+  dt-bindings: arm: qcom: Document xiaomi,natrium board
+  arm64: dts: qcom: msm8996-xiaomi-natrium: Add support for Xiaomi Mi 5s
+    Plus
 
->
-> > +
-> > +description: |
-> > +   RPMh interconnect providers support system bandwidth requirements t=
-hrough
-> > +   RPMh hardware accelerators known as Bus Clock Manager (BCM). The pr=
-ovider is
-> > +   able to communicate with the BCM through the Resource State Coordin=
-ator (RSC)
-> > +   associated with each execution environment. Provider nodes must poi=
-nt to at
-> > +   least one RPMh device child node pertaining to their RSC and each p=
-rovider
-> > +   can map to multiple RPMh resources.
-> > +
-> > +properties:
-> > +  '#interconnect-cells':
-> > +    enum: [ 1, 2 ]
->
-> Why this is an enum?
+ .../devicetree/bindings/arm/qcom.yaml         |   1 +
+ arch/arm64/boot/dts/qcom/Makefile             |   1 +
+ .../boot/dts/qcom/msm8996-xiaomi-natrium.dts  | 416 ++++++++++++++++++
+ 3 files changed, 418 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8996-xiaomi-natrium.dts
 
-As a start, just adding that the definitions are copied from
-qcom,rpmh.yaml so it's not my invention :) Of course that doesn't mean
-that it should be improved where possible!
-
-Either value is supported by the driver (and used upstream). But perhaps
-it can use a description to define what the 'parameters' mean.
-
-The second (optional) parameters "is to support different bandwidth
-configurations that are toggled by RPMh, depending on the power state of
-the CPU."[0]
-
-A commit message for sc7180 calls it the "tag information" and "The
-consumers can specify the path tag as an additional argument to the
-endpoints."[1]
-
-Not sure how to properly describe the first property, I guess the
-interconnect endpoint? Maybe Georgi can help here.
-
-
-[0] https://lore.kernel.org/linux-arm-msm/b079a211-d387-7958-bbe2-c41cac00d=
-269@kernel.org/
-[1] https://git.kernel.org/torvalds/c/e23b122
-
->
-> > +
-> > +  qcom,bcm-voters:
-> > +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> > +    items:
->
-> Please implement my previous comments.
-
-Sorry, I looked over the comment in v1.
-
-As far as I can tell in current code only 1 item is used.
-
-If the second parameter of_bcm_voter_get would be used as non-NULL then
-qcom,bcm-voter-names gets looked up and the N-th value in qcom,bcm-voters
-used. But currently qcom,bcm-voter-names is not actively used so only
-one gets used.
-
-Do you have a recommendation what to put here? A synthetic limit like
-32 just to have a number there?
-
->
-> > +      maxItems: 1
-> > +    description: |
->
-> No need for |
-
-ack
-
->
-> > +      List of phandles to qcom,bcm-voter nodes that are required by
-> > +      this interconnect to send RPMh commands.
-> > +
-> > +  qcom,bcm-voter-names:
->
-> What names do you expect here?
-
-Currently unused in mainline but newer downstream kernels[2] use "hlos"
-as first parameter, and e.g. "disp" as second one that goes to a
-qcom,bcm-voter that's a child of disp_rsc. Not sure exactly what that
-does.
-
-[2] https://github.com/atomsand/android_kernel_qcom_devicetree/blob/a6d5081=
-0116e8314d64eb63b8862c207b974e0c7/qcom/waipio.dtsi#L1701-L1793
-
->
-> > +    description: |
->
-> Ditto.
-
-ack
-
->
-> > +      Names for each of the qcom,bcm-voters specified.
-> > +
-> > +required:
-> > +  - '#interconnect-cells'
-> > +  - qcom,bcm-voters
-> > +
-> > +additionalProperties: true
-> > diff --git a/Documentation/devicetree/bindings/interconnect/qcom,sm6350=
--rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,sm6350-rpm=
-h.yaml
-> > new file mode 100644
-> > index 000000000000..89fe17c31b8f
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/interconnect/qcom,sm6350-rpmh.y=
-aml
-> > @@ -0,0 +1,82 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/interconnect/qcom,sm6350-rpmh.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Qualcomm SM6350 RPMh Network-On-Chip Interconnect
-> > +
-> > +maintainers:
-> > +  - Luca Weiss <luca.weiss@fairphone.com>
-> > +
-> > +description: |
-> > +  Qualcomm RPMh-based interconnect provider on SM6350.
-> > +
-> > +allOf:
-> > +  - $ref: qcom,rpmh-common.yaml#
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - qcom,sm6350-aggre1-noc
-> > +      - qcom,sm6350-aggre2-noc
-> > +      - qcom,sm6350-config-noc
-> > +      - qcom,sm6350-dc-noc
-> > +      - qcom,sm6350-gem-noc
-> > +      - qcom,sm6350-mmss-noc
-> > +      - qcom,sm6350-npu-noc
-> > +      - qcom,sm6350-system-noc
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  '#interconnect-cells': true
->
-> Since you defined it as enum in rpmh-common, you really expect here
-> different values?
-
-Doesn't ": true" here just mean we want the value from the allOf: -
-$ref?
-But we could in theory make interconnect-cells only accept <2> for
-sm6350.
-
->
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +
-> > +unevaluatedProperties: false
-> > +
-> > +patternProperties:
->
-> This goes after "properties".
-
-So above required & unevaluatedProperties? Will update.
-
-Regards
-Luca
-
->
-> > +  '^interconnect-[a-z0-9\-]+$':
-> > +    type: object
-> > +    description:
-> > +      The interconnect providers do not have a separate QoS register s=
-pace,
-> > +      but share parent's space.
-> > +    $ref: qcom,rpmh-common.yaml#
-> > +
-> > +    properties:
-> > +      compatible:
-> > +        enum:
-> > +          - qcom,sm6350-clk-virt
-> > +          - qcom,sm6350-compute-noc
-> > +
-> > +      '#interconnect-cells': true
->
-> Same problem.
->
-> > +
-> > +    required:
-> > +      - compatible
-> > +
-> > +    unevaluatedProperties: false
-> > +
->
->
-> Best regards,
-> Krzysztof
+-- 
+2.35.3
 

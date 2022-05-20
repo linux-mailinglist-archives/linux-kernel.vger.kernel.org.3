@@ -2,77 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C844852E558
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 08:51:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E36C52E55D
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 08:52:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346061AbiETGvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 02:51:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42024 "EHLO
+        id S1346058AbiETGw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 02:52:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239485AbiETGvf (ORCPT
+        with ESMTP id S239485AbiETGwV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 02:51:35 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD3313F9C
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 23:51:34 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id u30so12707168lfm.9
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 23:51:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=2sD0n6yJXGuDhEewc3lorHaqBnUR099vPCJ5WEpCDzU=;
-        b=mOoGc9M7MZgxeaun4PGlBRo4C1JXBlLpYBpB0L6MScXAzAz4CQjEupqeEEiqIWVtoS
-         yzsod5WBURL9tjzxFjdaKzclp79TQIts7pzJufezPjonrPmOg2kLST6Yz5yk0poAdEkv
-         1FokQMf2YtyUEt6qDRhGfKp0jAmlbIhEPE0Y9yp1BlWPZddAsy6avCDFyvojQByppw3U
-         YZdF+69jR6WSNT6qja7BKlhcm6UOQBYfk6GgCQMdG/v+I34ZPzvjSe2msGn5TGD8lKrK
-         CkEzOdKtdYsHqPbRhaDRxiJDH5hUlWVIVsUbCi9Mslb5JOHLhOU32ArxKxPNHc/7iUZR
-         xWpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=2sD0n6yJXGuDhEewc3lorHaqBnUR099vPCJ5WEpCDzU=;
-        b=7knAv4VqKZcOpCgiyCIHsveerHwiiSiJdLhjcm+fK2pVhFORkwv0vv8Rh4uJlkLBD+
-         7yMKV9EZiGYMSS8mGt/U/p7q2RhjK3KZ8ZFJR8wq52br6MKwO70bde2LwYNqDlqKjD1U
-         YUd+RSuyN8kUKTQjeUxgKEyWer4WL1RsVjyB9PsPS4RXc2PLfMNte2gSWiMZccCwCMfy
-         QyByNbkRJz7bYJPmZNk8FDZ6b/auRQ0AzdTfl/uu7htDxMjJgRwoPPUxjjDABHjKx2HD
-         kUvi5e8Deg4blljNZhH1JKnOQP0Tqs5VgIK0+MF1blJ/fjwROZEy5bD7tvXh1rgB+hPP
-         KApA==
-X-Gm-Message-State: AOAM531qEPGnAI5V/cq0PPVWSDLhvEAbKeOiMdnyGHZy40rFhTfWZFFj
-        XgeK0iQQul/TAY6nm9TamJWc2g==
-X-Google-Smtp-Source: ABdhPJzaGbv04buuDHGp4NLG8WTmLEncJfxtJuLSgfyJWSMt4wxUrF1jnVPHvL9DO/40kuanoOGM6w==
-X-Received: by 2002:a05:6512:398c:b0:473:ab45:1f7c with SMTP id j12-20020a056512398c00b00473ab451f7cmr5937130lfu.341.1653029492370;
-        Thu, 19 May 2022 23:51:32 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id g23-20020a2e9e57000000b0024f3d1daebbsm192250ljk.67.2022.05.19.23.51.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 May 2022 23:51:31 -0700 (PDT)
-Message-ID: <a0eed04a-1380-d96a-a406-217f053354b9@linaro.org>
-Date:   Fri, 20 May 2022 08:51:30 +0200
+        Fri, 20 May 2022 02:52:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75792562F9;
+        Thu, 19 May 2022 23:52:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1987961DAD;
+        Fri, 20 May 2022 06:52:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77A1BC3411B;
+        Fri, 20 May 2022 06:52:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653029539;
+        bh=sgNd0vtqp83N2s1CaS4qcYCZ1Em1yEUBxHGWRZy2GF4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=QJBTW/RwnaTwqYXJN8e7engo5uBawXCQTvmCdGvUS74l9X8TDS1QOyLsWI5uKXyLl
+         z4mcTAEHIllWYWzAWLvEqFQSVWA32pMZOO5rV0hQ76pRqnCkjg+uHjPRlQhFvoL3pk
+         S/APCr1bAALi9XnsrfiRcp5eTRBKjNuEkQjPgzSmc4cr82m2Yn2166lyMu8gdFNv+V
+         9OQycaz9hf0jXTvYhYsi7Fap6X1mFAoahOANs7pZPkc4DkbDp15FLM1CMmm+YQalNU
+         pIhNUBmoXl8vZ5ih7RzVCxqVn9MrEkNHQcn0ctt+y/zyJkvn1B8ldM3OjofP7BiqGf
+         PPytbnwyBdBzA==
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-f1d2ea701dso9333010fac.10;
+        Thu, 19 May 2022 23:52:19 -0700 (PDT)
+X-Gm-Message-State: AOAM533X3U4X/Fhw25PbbXfwFzto6i+qGsW8RxrTfTPiqX6yA2792NVz
+        ga7asyjjoMNMeHEZ1KKb5h/eNHRt80EwpBmRW1Y=
+X-Google-Smtp-Source: ABdhPJyUGKjChdSOGekyhnWuYeiWn9PaC4+0BZipYBFb+HJq3aKZ3nWX3el0jnXK/bPQXUK7A1ce3Km9EF5ppdRDfgo=
+X-Received: by 2002:a05:6870:f112:b0:f1:f1e9:e8f1 with SMTP id
+ k18-20020a056870f11200b000f1f1e9e8f1mr3897703oac.126.1653029538554; Thu, 19
+ May 2022 23:52:18 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 1/6] ASoC: tegra: Add binding doc for OPE module
-Content-Language: en-US
-To:     Sameer Pujar <spujar@nvidia.com>, broonie@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        thierry.reding@gmail.com, catalin.marinas@arm.com, will@kernel.org,
-        perex@perex.cz, tiwai@suse.com
-Cc:     jonathanh@nvidia.com, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <1652895372-29885-1-git-send-email-spujar@nvidia.com>
- <1652895372-29885-2-git-send-email-spujar@nvidia.com>
- <049173a1-0fa6-510b-9169-ebe869b8a3b3@linaro.org>
- <90680cfb-c611-63cd-ab5f-5afb86c91cec@nvidia.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <90680cfb-c611-63cd-ab5f-5afb86c91cec@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <CAMj1kXGSStDgj9ABmUaTLnBmpQFksh3wx4tx=mJohum4GQe3Gg@mail.gmail.com>
+ <20220419070150.254377-1-mawupeng1@huawei.com> <CAMj1kXHr2RdYSPor1st1ZnL=O42c8N6e=bNG+eFhatfefWLUrw@mail.gmail.com>
+ <c65d22b4-f654-21aa-bd5f-d4f8b0939a25@huawei.com> <7058b8d8-c0cb-108e-0db9-2fdf5fb154cf@huawei.com>
+In-Reply-To: <7058b8d8-c0cb-108e-0db9-2fdf5fb154cf@huawei.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 20 May 2022 08:52:07 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXHnL12j6FPGtEeSQB2-kHzoVF+LJMUF9YBq43Yi1UntDg@mail.gmail.com>
+Message-ID: <CAMj1kXHnL12j6FPGtEeSQB2-kHzoVF+LJMUF9YBq43Yi1UntDg@mail.gmail.com>
+Subject: Re: [PATCH 0/2] Add support to relocate kernel image to mirrored region
+To:     mawupeng <mawupeng1@huawei.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Joerg Roedel <jroedel@suse.de>, songmuchun@bytedance.com,
+        macro@orcam.me.uk, Frederic Weisbecker <frederic@kernel.org>,
+        W_Armin@gmx.de, John Garry <john.garry@huawei.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        chenhuacai@kernel.org, David Hildenbrand <david@redhat.com>,
+        gpiccoli@igalia.com, Mark Rutland <mark.rutland@arm.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        linux-ia64@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        Linux Memory Management List <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,117 +90,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/05/2022 06:19, Sameer Pujar wrote:
-> Thanks Krzysztof for review.
-> 
-> 
-> On 19-05-2022 17:10, Krzysztof Kozlowski wrote:
->> On 18/05/2022 19:36, Sameer Pujar wrote:
->>> +description: |
->>> +  The Multi Band Dynamic Range Compressor (MBDRC) is part of Output
->>> +  Processing Engine (OPE) which interfaces with Audio Hub (AHUB) via
->>> +  Audio Client Interface (ACIF). MBDRC can be used as a traditional
->>> +  single full band or a dual band or a multi band dynamic processor.
->>> +
->>> +maintainers:
->>> +  - Jon Hunter <jonathanh@nvidia.com>
->>> +  - Mohan Kumar <mkumard@nvidia.com>
->>> +  - Sameer Pujar <spujar@nvidia.com>
->>> +
->>> +properties:
->>> +  $nodename:
->>> +    pattern: "^mbdrc@[0-9a-f]*$"
->> Why? We enforce only generic names in shared schemas and this is neither
->> shared schema nor is it generic name.
-> 
-> Idea was to keep these node names consistent across DT files and parent 
-> node can allow a given list of child nodes with strict checks. Does name 
-> like "dynamic-range-compressor@xxx"
+On Thu, 19 May 2022 at 13:09, mawupeng <mawupeng1@huawei.com> wrote:
+>
+>
+>
+> =E5=9C=A8 2022/5/7 17:28, mawupeng =E5=86=99=E9=81=93:
+> >
+> >
+> > =E5=9C=A8 2022/5/3 17:58, Ard Biesheuvel =E5=86=99=E9=81=93:
+> >> On Tue, 19 Apr 2022 at 08:43, Wupeng Ma <mawupeng1@huawei.com> wrote:
+> >>>
+> >>> From: Ma Wupeng <mawupeng1@huawei.com>
+> >>>
+> >>> Now system image will perfer to be located to mirrored regions both K=
+ASLR
+> >>> on and off.
+> >>>
+> >>
+> >> Hello Ma Wupeng,
+> >>
+> >> I wonder if we could simplify this as follows:
+> >> - ignore the non-KASLR case for now, and rely on the bootloader  > loa=
+d the image into mirrored memory if it exists;
+> >
+> > In grub, memory for static image is allocated via the following path:
+> >
+> > grub_cmd_linux
+> >    kernel =3D grub_malloc(filelen)
+> >    kernel_alloc_addr =3D grub_efi_allocate_any_pages (kernel_alloc_page=
+s)
+> >    grub_memcpy (kernel_addr, kernel, grub_min(filelen, kernel_size))
+> >     grub_loader_set (grub_linux_boot, grub_linux_unload, 0)
+> >
+> > Can we get memory from mirrored region by the following steps:
+> > 1. get memory map by calling grub_efi_get_memory_map()
+> > 2. iter all memory map to find a suitable mirrored memory area
+> > 3. locate kernel image to this area
+> >
+> > So, if kaslr is not enabled
+> >   - grub will load kernel into mirrored region
+> > else
+> >   - arm64-stub.c will relocate kernel image to mirrored region
+> >
+> > Is this feasible?
+>
+> Is this a feasible proposal to relocate the static kernel image itself
+> into more reliable memory?
+>
 
-The checks are not coming from device node name, but from matching
-schema to compatible. Why do you need consistent names across DTS files?
-They should be anyway generic but what happens if they differ?
+I'm not sure, it all depends on the firmware.
 
-Additionally, the parent schema enforces nodes of children, so if this
-is included in other schema, then the change is pointless.
+When GRUB calls LoadImage(), the firmware will reallocate the image
+and unpack it there. So it is really the firmware's job to ensure that
+the image is loaded into a suitable location.
 
-I propose to drop it, unless it is a shared schema for many different
-vendors.
+I have some code here that implements a EFI based decompressor, and
+which loads the kernel image into mirrored memory if it exists,
+without the need to move it again. It could trivially be modified to
+deal with non-randomized loads as well.
 
->>
->>> +
->>> +  compatible:
->>> +    oneOf:
->>> +      - const: nvidia,tegra210-mbdrc
->>> +      - items:
->>> +          - enum:
->>> +              - nvidia,tegra234-mbdrc
->>> +              - nvidia,tegra194-mbdrc
->>> +              - nvidia,tegra186-mbdrc
->>> +          - const: nvidia,tegra210-mbdrc
->>> +
->>> +  reg:
->>> +    maxItems: 1
->>> +
->>> +required:
->>> +  - compatible
->>> +  - reg
->>> +
->>> +additionalProperties: false
->>> +
->>> +examples:
->>> +  - |
->>> +
->> No need for space
-> 
-> will remove
-> 
-> 
->>> +
->>> +  compatible:
->>> +    oneOf:
->>> +      - const: nvidia,tegra210-ope
->>> +      - items:
->>> +          - enum:
->>> +              - nvidia,tegra234-ope
->>> +              - nvidia,tegra194-ope
->>> +              - nvidia,tegra186-ope
->>> +          - const: nvidia,tegra210-ope
->>> +
->>> +  reg:
->>> +    maxItems: 1
->>> +
->>> +  "#address-cells":
->>> +    const: 1
->>> +
->>> +  "#size-cells":
->>> +    const: 1
->>> +
->>> +  ranges: true
->>> +
->>> +  sound-name-prefix:
->>> +    pattern: "^OPE[1-9]$"
->>> +
->>> +  ports:
->>> +    $ref: /schemas/graph.yaml#/properties/ports
->>> +    properties:
->>> +      port@0:
->>> +        $ref: audio-graph-port.yaml#
->>> +        unevaluatedProperties: false
->>> +        description: |
->> No need for |
-> 
-> will remove.
-> 
-> 
->>
->>> +    ope@702d8000 {
->> I would suggest generic node name, if it is possible.
-> 
-> May be "processing-engine@xxx" ?
-
-Sure.
-
-
-Best regards,
-Krzysztof
+But the bottom line is that UEFI should expose the ability to target
+mirrored memory, hacking around it like this is not a sustainable
+approach.

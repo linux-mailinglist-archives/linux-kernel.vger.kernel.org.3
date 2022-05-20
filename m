@@ -2,99 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5566952EFCE
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 17:57:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D68A852EF4E
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 17:34:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237486AbiETP5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 11:57:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38060 "EHLO
+        id S1350893AbiETPex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 11:34:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351212AbiETP4x (ORCPT
+        with ESMTP id S243036AbiETPeu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 11:56:53 -0400
-X-Greylist: delayed 1389 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 20 May 2022 08:56:51 PDT
-Received: from vern.gendns.com (vern.gendns.com [98.142.107.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D70856B7CF
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 08:56:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=lechnology.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=3hmYwiverMb1N0J61Fi+8bzNM2DByfoLQaNKfPSLJ9k=; b=Ql9Sep6+YZYzeNT4c/2jhSUvgk
-        pu0cmPSjxKPfjL6DXri1z6i9804pTe+syIlCTXqR/QGA7ydZOV0hX1S/ExFEsalEIuAHjRZkjXyoR
-        l4brXxjojKL01gM75PAybV2oeWIcfcdpnsu1zbEAdiYJ9npo/V+Zq47sn7Wp4XvbIL9TuWmpxc3qz
-        38U6YAwnEWq5NKnTqAObF0dVKw2stIQQ/7vuC5Ix6qlVEDl5YukGLOzfrhmww72MeUmb/HoGlH72Y
-        iZFsZ1IiFTZkmyaJlAYX0eZsylJvWO6hfUevE1LEK+B2UD0l+vXYoiV8YCe9CbU03g64AM8q4ml5C
-        eU28VhJw==;
-Received: from 108-198-5-147.lightspeed.okcbok.sbcglobal.net ([108.198.5.147]:45970 helo=[192.168.0.134])
-        by vern.gendns.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <david@lechnology.com>)
-        id 1ns4d4-0003zy-OF;
-        Fri, 20 May 2022 11:33:40 -0400
-Message-ID: <cb4aadab-0724-35d6-0a97-dc4425f31bb9@lechnology.com>
-Date:   Fri, 20 May 2022 10:33:37 -0500
+        Fri, 20 May 2022 11:34:50 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A93179084
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 08:34:49 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id r71so8066736pgr.0
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 08:34:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=e3zRTRtgvILEICGPiLa/WYEa5fM29ZCSz7EUFRvdtTU=;
+        b=oGkNhLX3ZdPbv/FoolRZwwzMYLvSflVnMKZndrubwwVxefDL/TJsFcwA7PHv3NPmop
+         1AjRtWBBvEnjh5/Hz5IT6vr880lfZw2A02pAcAcrssPEWPQm+BfkFrNZgqPu+pOgqZNI
+         5//sCsv6kGtH1fLbFATDm0TD4qVmx936MlA8s+V9XKNR72F5kWuYpZAskohh3Ll9URu0
+         5wAIPJ6ZsufyrR/wE7C3HSYq74VRIRgH8Mlrv3yercHpUNtj7yt5kexMM5Pd12uPcLv8
+         oxQiynEUoCRcvOF84+EE8T46bpi5LD2PvABqt1I3iezIB50wrHQW2uHMYWqrFEzgtXSh
+         Z6xA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=e3zRTRtgvILEICGPiLa/WYEa5fM29ZCSz7EUFRvdtTU=;
+        b=whtJ3/NfnYPa1JBV6UsQ6suBip3Co9+YvaH1Mys2tLN2ljD+4peLrLq4rw5MVqb1UX
+         I4Gc7gZ5JsdXH9TfXYuE+j0R1LyhUCY78LAqBa8gmeZmAxqAjh1HBOQpKuqaQVHjx//5
+         H8OSZ1Ikg3GAiK4Oh0NlpCOYFLQ7x09PqhJ8/N7MkfP9e8r0bcgCKwQSGUs6/qSMOpy1
+         mq1Cmr1rpe7FZ4cmtOwMuJ5+74ZWDvgILSDvIyzcKFXiV++odeNorsHNqThTCm3bFThl
+         i1YKkbIbdLgggt8xyYBKqZixys9Cl86a0HQY84Xf5IfRL+klhS/hXrY/69KrNGQsuQMN
+         NYZw==
+X-Gm-Message-State: AOAM532aZzS4vJkgpYeQslR+Y62pIrZ+besFHKa3WE6d0FTsm5ED27+Y
+        e+QIkUxyTZo3WYkDz6w2F4uceQ==
+X-Google-Smtp-Source: ABdhPJye3iSjVZVnCNjKkjVoudazo5xjF4r6gxTAf/5wgpCjyoSqMp8Kyzng+oax8HnxSmv5B37mqA==
+X-Received: by 2002:a63:115b:0:b0:3c1:eb46:6f5 with SMTP id 27-20020a63115b000000b003c1eb4606f5mr9021128pgr.277.1653060888405;
+        Fri, 20 May 2022 08:34:48 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id l13-20020a17090af8cd00b001cd4989ff42sm2029545pjd.9.2022.05.20.08.34.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 May 2022 08:34:47 -0700 (PDT)
+Message-ID: <bbdeeca7-9c99-e661-6596-f04ea783a30b@kernel.dk>
+Date:   Fri, 20 May 2022 09:34:46 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] drm/st7735r: Fix module autoloading for Okaya RH128128T
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v4 0/3] random: convert to using iters, for Al Viro
 Content-Language: en-US
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        dri-devel@lists.freedesktop.org
-References: <20220520091602.179078-1-javierm@redhat.com>
-From:   David Lechner <david@lechnology.com>
-In-Reply-To: <20220520091602.179078-1-javierm@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Theodore Ts'o <tytso@mit.edu>, Christoph Hellwig <hch@lst.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>
+References: <20220520094459.116240-1-Jason@zx2c4.com>
+ <Yoey+FOYO69lS5qP@zx2c4.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <Yoey+FOYO69lS5qP@zx2c4.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - vern.gendns.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lechnology.com
-X-Get-Message-Sender-Via: vern.gendns.com: authenticated_id: davidmain+lechnology.com/only user confirmed/virtual account not confirmed
-X-Authenticated-Sender: vern.gendns.com: davidmain@lechnology.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/20/22 4:16 AM, Javier Martinez Canillas wrote:
-> The SPI core always reports a "MODALIAS=spi:<foo>", even if the device was
-> registered via OF. This means that the st7735r.ko module won't autoload if
-> a DT has a node with a compatible "okaya,rh128128t" string.
+On 5/20/22 9:25 AM, Jason A. Donenfeld wrote:
+> Hi Jens,
 > 
-> In that case, kmod expects a "MODALIAS=of:N*T*Cokaya,rh128128t" uevent but
-> instead will get a "MODALIAS=spi:rh128128t", which is not present in the
-> list of aliases:
+> On Fri, May 20, 2022 at 11:44:56AM +0200, Jason A. Donenfeld wrote:
+>> Jens Axboe (3):
+>>   random: convert to using fops->read_iter()
+>>   random: convert to using fops->write_iter()
+>>   random: wire up fops->splice_{read,write}_iter()
 > 
->    $ modinfo drivers/gpu/drm/tiny/st7735r.ko | grep alias
->    alias:          of:N*T*Cokaya,rh128128tC*
->    alias:          of:N*T*Cokaya,rh128128t
->    alias:          of:N*T*Cjianda,jd-t18003-t01C*
->    alias:          of:N*T*Cjianda,jd-t18003-t01
->    alias:          spi:jd-t18003-t01
-> 
-> To workaround this issue, add in the SPI table an entry for that device.
-> 
-> Fixes: d1d511d516f7 ("drm: tiny: st7735r: Add support for Okaya RH128128T")
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> ---
+> FYI, this series makes reads from /dev/urandom slower, from around 616
+> MiB/s to 598 MiB/s on my system. That seems rather unfortunate.
 
-Acked-by: David Lechner <david@lechnology.com>
+How reproducible is that? That seems like a huge difference for the
+change. How big are the reads?
+
+> Are we sure we really want to do this and need to do this?
+
+I'm very sure, otherwise we're just accepting that we're breaking real
+world applications. Alternatively, you can keep the ->read() and add the
+->read_iter() as well, but I'm a bit skeptical at your initial results
+there.
+
+-- 
+Jens Axboe
 

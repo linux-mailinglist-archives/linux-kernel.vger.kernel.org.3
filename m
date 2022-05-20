@@ -2,64 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5A4F52E2B7
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 04:54:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D658852E2C1
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 04:56:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344864AbiETCx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 22:53:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40778 "EHLO
+        id S1344899AbiETC4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 22:56:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbiETCx5 (ORCPT
+        with ESMTP id S229847AbiETC4a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 22:53:57 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EFCCB41E2;
-        Thu, 19 May 2022 19:53:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653015236; x=1684551236;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=T+kF11TKdf/Yw7gXtARSc8OVLWJ0w+qZ62oJVBw1bK8=;
-  b=e5uc8AdSAtQ18MESRR214S75RviNsMBIocyL5Nex/IN45v+Eyb7DNL5J
-   Gy6+Nco6v9ivPqNqtKjCnYkBShTBp7bFxu5T/bcdefAG79NeBdW0KPCvj
-   TfFa2T1G1XXBHvpGy2EaHWhSOUOSoDc8fCngO55OwbJGbdfyfXFF0XkwS
-   Zz1BSe8gd9mnqZ5pU2MauAoobywyCEFoFMukfkYBr6TdtGW8+SytlBUID
-   k8X85w3qb7vBOvXVlqx0IPWUhoaOYexi4JGjuF1eWYVn+1faIJXSmYF8J
-   jqb0D9xpykMyeZHVZt2QXw+zb6FdiPtcq1PLNIEHYvwaHW+vJmvreM2ZU
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="297771234"
-X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="297771234"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 19:53:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="524426313"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 19 May 2022 19:53:52 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nrsm0-0004DH-2n;
-        Fri, 20 May 2022 02:53:52 +0000
-Date:   Fri, 20 May 2022 10:53:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Song Liu <song@kernel.org>, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, linux-mm@kvack.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, ast@kernel.org,
-        daniel@iogearbox.net, mcgrof@kernel.org,
-        torvalds@linux-foundation.org, rick.p.edgecombe@intel.com,
-        kernel-team@fb.com, Song Liu <song@kernel.org>
-Subject: Re: [PATCH v2 bpf-next 8/8] bpf: simplify select_bpf_prog_pack_size
-Message-ID: <202205201001.kKBulowq-lkp@intel.com>
-References: <20220519202037.2401584-9-song@kernel.org>
+        Thu, 19 May 2022 22:56:30 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF7FC5F8D4
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 19:56:27 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id ev18so6867410pjb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 19:56:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=arFWL10Ch1n8yhdI9Mk3g6bNs91IYU+HlkP+JS3nOtc=;
+        b=wizXH2T4i0hpvyt1QyLKg8TJlFJ0pfc6am4wF+te/O3S9glO8olN0SHXNgf4XMOoeA
+         vV2Wnl58mBKeekoB6US+vMjbV3r6LPQEj/7d2af5doeUV7LO3RAnChsoB+paO63F+lE3
+         gIPtQB8Ee/hMqlf28gB6G0/OTsSEN7FhLi5vHK0GQNb2sbI+CJfs5nHoUTlVCtnj/TYK
+         Sk6i6HD1cC+PTtTSSAi94V29xLQ7WhlBol3au+V0pxZ3UHwyuy4gCQv6l6w5VW3jZVFl
+         E8eSg2aW86VGC044TmzYkarO+G2YkcYUswMF/Gshk+GKcHuvJgULhv9XTs+YgMxXR6w6
+         3fBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=arFWL10Ch1n8yhdI9Mk3g6bNs91IYU+HlkP+JS3nOtc=;
+        b=2LEPa815dyjj8KiXnEcMQP3MB6y3RYcvzPAoi/2QjMifQJHmpKAgnFqvV4paQofHN6
+         vpWJFMLqwQk4zrZiTs+1U/oEXo4nF9inyXO5URmWILfuk2lrteUKVrHs0/gGjDNox2P2
+         99AeE+SBVDlJxjTmMR5dnU1u4nGVqgjwaZhiaEkt/BBzZy6/n+TrMHcdHPqeFPR+6scl
+         Yss4kphmFYQvnmm9JHmTf6iKC9ONUCcDcaKLdzWD2387g7yJitZ8BA666tf02NitqFdw
+         WKoPDdnvygLuFhc/6e1WEhzHjApavw96SZTUAnafID7WwUbfnSmZtok4gq47cdW4AF+k
+         atig==
+X-Gm-Message-State: AOAM531w8u+YxY792CHoQNFs6V8k+f6IKVShY3EiREIo5/Vd2++G/rxy
+        5uzlLJ0qffoW6K+uQ9Vwe5RJsg==
+X-Google-Smtp-Source: ABdhPJzmfzbWN5y+2+2LQpGTfqGvPCPq3Ax+cTXuRcr74nqsBxj1mht756PZTm11HL7tsYT9gkMvYw==
+X-Received: by 2002:a17:90b:4d0c:b0:1df:c9a6:84d8 with SMTP id mw12-20020a17090b4d0c00b001dfc9a684d8mr8900143pjb.231.1653015386971;
+        Thu, 19 May 2022 19:56:26 -0700 (PDT)
+Received: from FVFYT0MHHV2J.bytedance.net ([139.177.225.234])
+        by smtp.gmail.com with ESMTPSA id o10-20020a62f90a000000b0050dc76281a5sm225675pfh.127.2022.05.19.19.56.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 May 2022 19:56:26 -0700 (PDT)
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     corbet@lwn.net, akpm@linux-foundation.org, paulmck@kernel.org,
+        mike.kravetz@oracle.com, osalvador@suse.de, david@redhat.com
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, duanxiongchun@bytedance.com, smuchun@gmail.com,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: [PATCH v2 0/2] make hugetlb_optimize_vmemmap compatible with memmap_on_memory
+Date:   Fri, 20 May 2022 10:55:36 +0800
+Message-Id: <20220520025538.21144-1-songmuchun@bytedance.com>
+X-Mailer: git-send-email 2.32.1 (Apple Git-133)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220519202037.2401584-9-song@kernel.org>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,72 +69,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Song,
+This series makes hugetlb_optimize_vmemmap compatible with memmap_on_memory
+and is based on next-20220518.  The reason refers to the patch 2's commit log.
 
-I love your patch! Perhaps something to improve:
+v2:
+ - Fix compile error when !CONFIG_ZONE_DEVICE reported by kernel test robot.
 
-[auto build test WARNING on bpf-next/master]
+Muchun Song (2):
+  mm: memory_hotplug: enumerate all supported section flags
+  mm: memory_hotplug: introduce SECTION_CANNOT_OPTIMIZE_VMEMMAP
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Song-Liu/bpf_prog_pack-followup/20220520-043417
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220520/202205201001.kKBulowq-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e00cbbec06c08dc616a0d52a20f678b8fbd4e304)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/2d5d4beb45be09f3130b694f49ab1b1fd1aa4470
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Song-Liu/bpf_prog_pack-followup/20220520-043417
-        git checkout 2d5d4beb45be09f3130b694f49ab1b1fd1aa4470
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/bpf/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> kernel/bpf/core.c:857:8: warning: unused variable 'ptr' [-Wunused-variable]
-           void *ptr;
-                 ^
-   kernel/bpf/core.c:1656:12: warning: no previous prototype for function 'bpf_probe_read_kernel' [-Wmissing-prototypes]
-   u64 __weak bpf_probe_read_kernel(void *dst, u32 size, const void *unsafe_ptr)
-              ^
-   kernel/bpf/core.c:1656:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   u64 __weak bpf_probe_read_kernel(void *dst, u32 size, const void *unsafe_ptr)
-   ^
-   static 
-   kernel/bpf/core.c:2099:6: warning: no previous prototype for function 'bpf_patch_call_args' [-Wmissing-prototypes]
-   void bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth)
-        ^
-   kernel/bpf/core.c:2099:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth)
-   ^
-   static 
-   3 warnings generated.
-
-
-vim +/ptr +857 kernel/bpf/core.c
-
-e581094167beb6 Song Liu 2022-03-21  853  
-ef078600eec20f Song Liu 2022-03-11  854  static size_t select_bpf_prog_pack_size(void)
-ef078600eec20f Song Liu 2022-03-11  855  {
-ef078600eec20f Song Liu 2022-03-11  856  	size_t size;
-ef078600eec20f Song Liu 2022-03-11 @857  	void *ptr;
-ef078600eec20f Song Liu 2022-03-11  858  
-2d5d4beb45be09 Song Liu 2022-05-19  859  	if (huge_vmalloc_supported()) {
-e581094167beb6 Song Liu 2022-03-21  860  		size = BPF_HPAGE_SIZE * num_online_nodes();
-2d5d4beb45be09 Song Liu 2022-05-19  861  		bpf_prog_pack_mask = BPF_HPAGE_MASK;
-2d5d4beb45be09 Song Liu 2022-05-19  862  	} else {
-ef078600eec20f Song Liu 2022-03-11  863  		size = PAGE_SIZE;
-96805674e5624b Song Liu 2022-03-21  864  		bpf_prog_pack_mask = PAGE_MASK;
-96805674e5624b Song Liu 2022-03-21  865  	}
-ef078600eec20f Song Liu 2022-03-11  866  
-ef078600eec20f Song Liu 2022-03-11  867  	return size;
-ef078600eec20f Song Liu 2022-03-11  868  }
-ef078600eec20f Song Liu 2022-03-11  869  
+ Documentation/admin-guide/kernel-parameters.txt | 22 ++++----
+ Documentation/admin-guide/sysctl/vm.rst         |  5 +-
+ include/linux/kconfig.h                         |  1 +
+ include/linux/memory_hotplug.h                  |  9 ----
+ include/linux/mmzone.h                          | 71 ++++++++++++++++++++++---
+ mm/hugetlb_vmemmap.c                            | 28 +++++++---
+ mm/memory_hotplug.c                             | 28 +++++-----
+ mm/sparse.c                                     |  8 +++
+ 8 files changed, 119 insertions(+), 53 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.11.0
+

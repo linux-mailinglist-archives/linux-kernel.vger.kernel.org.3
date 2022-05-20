@@ -2,90 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F43452F619
+	by mail.lfdr.de (Postfix) with ESMTP id 1363852F618
 	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 01:20:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbiETXUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 19:20:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53092 "EHLO
+        id S1354042AbiETXU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 19:20:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232691AbiETXUP (ORCPT
+        with ESMTP id S1349382AbiETXUW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 19:20:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADF65193237;
-        Fri, 20 May 2022 16:20:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 65A9CB82E83;
-        Fri, 20 May 2022 23:20:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1EF36C34113;
-        Fri, 20 May 2022 23:20:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653088812;
-        bh=pxfXzwf2fgybsIKDaD5Oz1d3k5S72HQUOYo91VWrp0U=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=WbY3AD4Fd7hbAM6ytlQ6Y9f7eVl0Vw2swErVigsjQtv8ej3F8OCq98ml2Sva1bEyk
-         +On+wdohLysfQfPn5JSmqSCnA/fIlWb7EunQ0j18hKNVjU+l8UpjX2wp4R29IB9Oq1
-         /Kdp0xqLigC7cajRN5ccXrr48fB3Z2l/6ipsNB7bGtd1CP+x9jj+gk6KC4sDtcMK77
-         xGDqIIjz8qEViFhMErhj3leX6UnO+B0OzUg4KWY45heQaWyFfBGQi49mTj8wSqgTWx
-         u/KTVqbcMNZEOSHGnkKwUQ+bW4QdqbzQ+ZvjGweeIGQlv4qRQ+UMLWBKw5W72d8djb
-         sWk0qiXB9CLww==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 037E5F0383D;
-        Fri, 20 May 2022 23:20:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 20 May 2022 19:20:22 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 254971A35BE
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 16:20:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653088821; x=1684624821;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=c9BIW73hx5JonUVl23AHcBlgkTJnCAYOnWIJ1KF82FI=;
+  b=QQSrfPhWeFlRdhesAzW1IcqsZADMmuuMv+CPWJbV16ZFHJDQRWWxfTkV
+   eG1nyz6g1xnbDJx/GpHNxQgDu/CtKw1YbDsdzDzbO1tTlqbIQj2F0mWab
+   E30Ldd6YAzSSjA/dUmfCxGybKPREIo+jThVMgnnDWpIzSF5NQ6fhdmjzI
+   z/o+aGHUOgfu8Spd7/ip4ggAaQb49HMW/HUC0mtfM0SyqyDC6scVIQdde
+   I3aWs6YADX2kKcfA5khKFvZ6HLUI84QT6rEUmbrnZ4BqzHpIf+JsOxvcx
+   r9OBznLNR+5Jg9NnX1h74u6v/HY8ULR6xIG4h53uPs44jF5OTBvUtsrFd
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10353"; a="270350823"
+X-IronPort-AV: E=Sophos;i="5.91,240,1647327600"; 
+   d="scan'208";a="270350823"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 16:20:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,240,1647327600"; 
+   d="scan'208";a="524870580"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 20 May 2022 16:20:19 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nsBus-0005bW-8U;
+        Fri, 20 May 2022 23:20:18 +0000
+Date:   Sat, 21 May 2022 07:20:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/tdx] BUILD SUCCESS
+ c796f02162e428b595ff70196dca161ee46b163b
+Message-ID: <62882231.8NgygejD19hvyPbu%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: Add missing trampoline program
- type to trampoline_count test
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165308881201.22265.16897739421546601910.git-patchwork-notify@kernel.org>
-Date:   Fri, 20 May 2022 23:20:12 +0000
-References: <20220519150610.601313-1-ytcoode@gmail.com>
-In-Reply-To: <20220519150610.601313-1-ytcoode@gmail.com>
-To:     Yuntao Wang <ytcoode@gmail.com>
-Cc:     andrii.nakryiko@gmail.com, andrii@kernel.org, ast@kernel.org,
-        bpf@vger.kernel.org, daniel@iogearbox.net,
-        john.fastabend@gmail.com, jolsa@kernel.org, kafai@fb.com,
-        kpsingh@kernel.org, kuifeng@fb.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        shuah@kernel.org, songliubraving@fb.com, sunyucong@gmail.com,
-        toke@redhat.com, yhs@fb.com
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/tdx
+branch HEAD: c796f02162e428b595ff70196dca161ee46b163b  x86/tdx: Fix RETs in TDX asm
 
-This patch was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
+elapsed time: 731m
 
-On Thu, 19 May 2022 23:06:10 +0800 you wrote:
-> Currently the trampoline_count test doesn't include any fmod_ret bpf
-> programs, fix it to make the test cover all possible trampoline program
-> types.
-> 
-> Since fmod_ret bpf programs can't be attached to __set_task_comm function,
-> as it's neither whitelisted for error injection nor a security hook, change
-> it to bpf_modify_return_test.
-> 
-> [...]
+configs tested: 142
+configs skipped: 65
 
-Here is the summary with links:
-  - [bpf-next,v2] selftests/bpf: Add missing trampoline program type to trampoline_count test
-    https://git.kernel.org/bpf/bpf-next/c/b23316aabffa
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-You are awesome, thank you!
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+sh                               j2_defconfig
+mips                           ci20_defconfig
+xtensa                          iss_defconfig
+s390                             allyesconfig
+ia64                        generic_defconfig
+powerpc                      chrp32_defconfig
+s390                          debug_defconfig
+mips                  maltasmvp_eva_defconfig
+h8300                            allyesconfig
+powerpc                     asp8347_defconfig
+arm                          badge4_defconfig
+um                                  defconfig
+powerpc                        cell_defconfig
+sh                                  defconfig
+powerpc                    klondike_defconfig
+powerpc64                           defconfig
+powerpc                        warp_defconfig
+mips                       capcella_defconfig
+powerpc                 linkstation_defconfig
+xtensa                  audio_kc705_defconfig
+arm                           h3600_defconfig
+parisc                generic-64bit_defconfig
+sh                           se7619_defconfig
+arm                           h5000_defconfig
+arm                        multi_v7_defconfig
+ia64                         bigsur_defconfig
+sh                          landisk_defconfig
+alpha                            allyesconfig
+powerpc                      ep88xc_defconfig
+h8300                       h8s-sim_defconfig
+powerpc                     mpc83xx_defconfig
+powerpc                 mpc834x_mds_defconfig
+x86_64                           alldefconfig
+powerpc                 canyonlands_defconfig
+m68k                          hp300_defconfig
+mips                         mpc30x_defconfig
+m68k                            q40_defconfig
+powerpc                 mpc837x_mds_defconfig
+arm                           viper_defconfig
+arm                             pxa_defconfig
+m68k                        mvme147_defconfig
+m68k                       bvme6000_defconfig
+m68k                       m5208evb_defconfig
+powerpc                      mgcoge_defconfig
+mips                     loongson1b_defconfig
+arc                         haps_hs_defconfig
+sh                               allmodconfig
+sh                          sdk7786_defconfig
+m68k                          sun3x_defconfig
+sh                        sh7757lcr_defconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220519
+ia64                                defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+xtensa                           allyesconfig
+arc                                 defconfig
+s390                                defconfig
+s390                             allmodconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+sparc                               defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+i386                          randconfig-a005
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+arc                  randconfig-r043-20220519
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                                  kexec
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+x86_64                         rhel-8.3-kunit
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+
+clang tested configs:
+s390                 randconfig-c005-20220519
+powerpc              randconfig-c003-20220519
+x86_64                        randconfig-c007
+riscv                randconfig-c006-20220519
+mips                 randconfig-c004-20220519
+i386                          randconfig-c001
+arm                  randconfig-c002-20220519
+mips                     loongson2k_defconfig
+arm                         s5pv210_defconfig
+powerpc                   bluestone_defconfig
+powerpc                      katmai_defconfig
+powerpc                        icon_defconfig
+powerpc                      ppc44x_defconfig
+arm                         palmz72_defconfig
+mips                            e55_defconfig
+arm                        mvebu_v5_defconfig
+arm                              alldefconfig
+powerpc                  mpc885_ads_defconfig
+powerpc                    gamecube_defconfig
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+s390                 randconfig-r044-20220519
+hexagon              randconfig-r045-20220519
+riscv                randconfig-r042-20220519
+hexagon              randconfig-r041-20220519
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

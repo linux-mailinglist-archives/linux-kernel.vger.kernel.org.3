@@ -2,71 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3F5F52E267
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 04:18:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BA3652E26A
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 04:21:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344695AbiETCSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 22:18:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37842 "EHLO
+        id S1343982AbiETCVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 22:21:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230375AbiETCSG (ORCPT
+        with ESMTP id S242111AbiETCVG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 22:18:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAFA112E31D;
-        Thu, 19 May 2022 19:18:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 83CC861ACC;
-        Fri, 20 May 2022 02:18:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C431DC385AA;
-        Fri, 20 May 2022 02:18:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653013084;
-        bh=rCZNmJ2ylnRRed8mdSoVU3DvNe0665kVCH8jrn81CmY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=CKlYUb/GYEENdFD53r3OcLMvj9GCqu1roXIcgfzLz9Y/tcr99lHXqyF+ilpcOccr9
-         YSA4jC9a4cHGrJdTikCbsp/XTmUO4LdMeLfhFTDyfsGkj/e0E/f18akV9bh1SCyVAD
-         KcAYxgAGuPhhY1ZEQrzWNo9a9ImEjhhssPyX+l5OfWYN0kawiaciNEn4aWTuf0SftQ
-         6zOsu3H34asfbbpvKhJayeh98tpSAUNt+BR1zWfX9rjgGDw7t8Tyd4tE2lafbhjAQn
-         yEB7JHv1fBSgJ+rkb+IzrHDv3n+K0eNyWdOmxtUIOenR0jANZ7wIwNn2xfOK328moL
-         gfNoFc2CkPqgg==
-Date:   Thu, 19 May 2022 19:18:03 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Menglong Dong <menglong8.dong@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>
-Subject: Re: [PATCH net-next v3 4/4] net: tcp: reset 'drop_reason' to
- NOT_SPCIFIED in tcp_v{4,6}_rcv()
-Message-ID: <20220519191803.627d5708@kernel.org>
-In-Reply-To: <20220519190915.086d4c89@kernel.org>
-References: <20220513030339.336580-1-imagedong@tencent.com>
-        <20220513030339.336580-5-imagedong@tencent.com>
-        <20220519084851.4bce4bdd@kernel.org>
-        <CADxym3Y7MkGWmu+8y8Kpcf39QJ5207-VaEnCsYKRDqnpre1O0Q@mail.gmail.com>
-        <20220519190915.086d4c89@kernel.org>
+        Thu, 19 May 2022 22:21:06 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C20704553A
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 19:21:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653013263; x=1684549263;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=V6UQ8DzeLKfZNqwV6mywgfWsFOdr/AQaOcZRaiJ27E8=;
+  b=almZg6DDVdp/jUq9Jcc3EzfNXztqCRr0UuYZ217z+He7Tsp1x/vhkqXu
+   NhDdsy+J5SCoXI2EY57JLFiDRB6Z546l9M4MMABU5U0mW8qu9gnCFs2BF
+   AbciW+naNZDDJLjte7QDQi1DkNCq7QdCnCvev8w2q9WRUOR8WdFUkhoJX
+   12PHshCUQs6KS/1zGa8o2lH+XEGHuLM/4FvapqvBg5VHX+u3KysrXAXUl
+   ClbcSpsCkx3ssBRNs4efxEHxJkvJjzZgrZAkuB91oC2mRrfTS9E2Jbkqu
+   z2kpmViHqrEy5hQ8B1kwYMP1C4TomQ2Ua3k2pAQB0+3OOcfB9XNbBaRwJ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="272421794"
+X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
+   d="scan'208";a="272421794"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 19:20:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
+   d="scan'208";a="715297402"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 19 May 2022 19:20:52 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 97853109; Fri, 20 May 2022 05:20:52 +0300 (EEST)
+Date:   Fri, 20 May 2022 05:20:52 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     frederic@kernel.org, paulmck@kernel.org, rjw@rjwysocki.net,
+        x86@kernel.org, linux-kernel@vger.kernel.org, jpoimboe@kernel.org
+Subject: Re: [RFC][PATCH 9/9] arch/idle: Change arch_cpu_idle() IRQ behaviour
+Message-ID: <20220520022052.mkrc4v4evtp74bxe@black.fi.intel.com>
+References: <20220519212750.656413111@infradead.org>
+ <20220519213422.119695559@infradead.org>
+ <20220519220349.GM2578@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220519220349.GM2578@worktop.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 19 May 2022 19:09:15 -0700 Jakub Kicinski wrote:
-> On Fri, 20 May 2022 09:46:49 +0800 Menglong Dong wrote:
-> > > This patch is in net, should this fix have been targeting net / 5.18?    
-> > 
-> > Yeah, I think it should have. What do I need to do? CC someone?  
+On Fri, May 20, 2022 at 12:03:49AM +0200, Peter Zijlstra wrote:
 > 
-> Too late now, I was just double checking. It can make its way to the
-> current release via stable in a week or two.
+> On Thu, May 19, 2022 at 11:27:59PM +0200, Peter Zijlstra wrote:
+> > --- a/arch/x86/coco/tdx/tdx.c
+> > +++ b/arch/x86/coco/tdx/tdx.c
+> > @@ -178,6 +178,9 @@ void __cpuidle tdx_safe_halt(void)
+> >  	 */
+> >  	if (__halt(irq_disabled, do_sti))
+> >  		WARN_ONCE(1, "HLT instruction emulation failed\n");
+> > +
+> > +	/* XXX I can't make sense of what @do_sti actually does */
+> > +	raw_local_irq_disable();
+> >  }
+> >  
+> 
+> Kirill, Dave says I should prod you :-)
 
-Ah, FWIW my initial question was missing "-next" - I meant to say that
-the patch is in net-next rather than net. I think you got what I meant..
+It calls STI just before doing TDCALL that requests HLT.
+See comment above $TDX_HCALL_ISSUE_STI usage in __tdx_hypercall()[1].
+
+__halt(do_sti == true) matches native_safe_halt() semantics (or suppose
+to) and __halt(do_sti == false) corresponds to native_halt().
+
+For context, see Section 3.8 in GHCI[2]
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/tree/arch/x86/coco/tdx/tdcall.S?h=x86/tdx#n151
+[2] https://www.intel.com/content/dam/develop/external/us/en/documents/intel-tdx-guest-hypervisor-communication-interface-1.0-344426-002.pdf
+
+-- 
+ Kirill A. Shutemov

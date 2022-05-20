@@ -2,70 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2646352E0F8
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 02:08:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34BE652E0FE
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 02:09:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343860AbiETAIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 20:08:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39158 "EHLO
+        id S1343891AbiETAJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 20:09:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiETAIV (ORCPT
+        with ESMTP id S230026AbiETAJQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 20:08:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6DB1A3A6
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 17:08:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 11C4161A22
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 00:08:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16BADC385AA;
-        Fri, 20 May 2022 00:08:18 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="C9agVZPW"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1653005297;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Oz4jyYgcdPnHqeYXhsxnndTsxU1YZpmX/v9xz8spcmE=;
-        b=C9agVZPWmSYDBJk/Aiw7BnWiKGhMuCHa/ZZahQF4StRzcxU+6c8V7UF4HvRqMuvr8XhWtg
-        Upb4nMG+IKYu+uwG9/unl2prZSVZjseTnxW525+5wb84wrx1xJCiFEGwQ/GK8dBHA+sdSU
-        NLCqXUft4DkpQ8PXn5d7y8ZCXKvgiHk=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 072d2e63 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Fri, 20 May 2022 00:08:17 +0000 (UTC)
-Date:   Fri, 20 May 2022 02:08:15 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] random: convert to using fops->write_iter()
-Message-ID: <Yobb79PvIqRRNguV@zx2c4.com>
-References: <f871a510-d262-bc98-757e-204976e1b82c@kernel.dk>
+        Thu, 19 May 2022 20:09:16 -0400
+X-Greylist: delayed 49890 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 19 May 2022 17:09:13 PDT
+Received: from azure-sdnproxy-3.icoremail.net (azure-sdnproxy.icoremail.net [20.232.28.96])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id CA60395499;
+        Thu, 19 May 2022 17:09:13 -0700 (PDT)
+Received: by ajax-webmail-mail-app3 (Coremail) ; Fri, 20 May 2022 08:08:59
+ +0800 (GMT+08:00)
+X-Originating-IP: [124.236.130.193]
+Date:   Fri, 20 May 2022 08:08:59 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   duoming@zju.edu.cn
+To:     "Jeff Johnson" <quic_jjohnson@quicinc.com>
+Cc:     "Kalle Valo" <kvalo@kernel.org>, linux-kernel@vger.kernel.org,
+        amitkarwar@gmail.com, ganapathi017@gmail.com,
+        sharvari.harisangam@nxp.com, huxinming820@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH net v2] net: wireless: marvell: mwifiex: fix sleep in
+ atomic context bugs
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
+In-Reply-To: <18852332-ee42-ef7e-67a3-bbd91a6694ba@quicinc.com>
+References: <20220519135345.109936-1-duoming@zju.edu.cn>
+ <87zgjd1sd4.fsf@kernel.org>
+ <699e56d5.22006.180dce26e02.Coremail.duoming@zju.edu.cn>
+ <18852332-ee42-ef7e-67a3-bbd91a6694ba@quicinc.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <f871a510-d262-bc98-757e-204976e1b82c@kernel.dk>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <4e778cb1.22654.180decbcb8e.Coremail.duoming@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: cC_KCgAHbtgb3IZikq2LAA--.13527W
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAg0QAVZdtZyOgwABsw
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jens,
-
-On Thu, May 19, 2022 at 05:43:15PM -0600, Jens Axboe wrote:
-> -static int write_pool(const char __user *ubuf, size_t len)
-> +static size_t write_pool(struct iov_iter *iter)
->  {
->  	size_t block_len;
->  	int ret = 0;
-
-Changing the return value to size_t isn't quite right, as this can
-return -EFAULT. So at the very minimum, it should return a ssize_t.
-
-Jason
+SGVsbG8sCgpPbiBUaHUsIDE5IE1heSAyMDIyIDA4OjQ4OjQ0IC0wNzAwIEplZmYgSm9obnNvbiB3
+cm90ZToKCj4gPj4+IFRoZXJlIGFyZSBzbGVlcCBpbiBhdG9taWMgY29udGV4dCBidWdzIHdoZW4g
+dXBsb2FkaW5nIGRldmljZSBkdW1wCj4gPj4+IGRhdGEgb24gdXNiIGludGVyZmFjZS4gVGhlIHJv
+b3QgY2F1c2UgaXMgdGhhdCB0aGUgb3BlcmF0aW9ucyB0aGF0Cj4gPj4+IG1heSBzbGVlcCBhcmUg
+Y2FsbGVkIGluIGZ3X2R1bXBfdGltZXJfZm4gd2hpY2ggaXMgYSB0aW1lciBoYW5kbGVyLgo+ID4+
+PiBUaGUgY2FsbCB0cmVlIHNob3dzIHRoZSBleGVjdXRpb24gcGF0aHMgdGhhdCBjb3VsZCBsZWFk
+IHRvIGJ1Z3M6Cj4gPj4+Cj4gPj4+ICAgICAoSW50ZXJydXB0IGNvbnRleHQpCj4gPj4+IGZ3X2R1
+bXBfdGltZXJfZm4KPiA+Pj4gICAgbXdpZmlleF91cGxvYWRfZGV2aWNlX2R1bXAKPiA+Pj4gICAg
+ICBkZXZfY29yZWR1bXB2KC4uLiwgR0ZQX0tFUk5FTCkKPiAKPiBqdXN0IGxvb2tpbmcgYXQgdGhp
+cyBkZXNjcmlwdGlvbiwgd2h5IGlzbid0IHRoZSBzaW1wbGUgZml4IGp1c3QgdG8gCj4gY2hhbmdl
+IHRoaXMgY2FsbCB0byB1c2UgR0ZQX0FUT01JQz8KCkJlY2F1c2UgY2hhbmdlIHRoZSBwYXJhbWV0
+ZXIgb2YgZGV2X2NvcmVkdW1wdigpIHRvIEdGUF9BVE9NSUMgY291bGQgb25seSBzb2x2ZQpwYXJ0
+aWFsIHByb2JsZW0uIFRoZSBmb2xsb3dpbmcgR0ZQX0tFUk5FTCBwYXJhbWV0ZXJzIGFyZSBpbiAv
+bGliL2tvYmplY3QuYyAKd2hpY2ggaXMgbm90IGluZmx1ZW5jZWQgYnkgZGV2X2NvcmVkdW1wdigp
+LgoKIGtvYmplY3Rfc2V0X25hbWVfdmFyZ3MKICAga3Zhc3ByaW50Zl9jb25zdChHRlBfS0VSTkVM
+LCAuLi4pOyAvL21heSBzbGVlcAogICBrc3RyZHVwKHMsIEdGUF9LRVJORUwpOyAvL21heSBzbGVl
+cAoKQmVzdCByZWdhcmRzLApEdW9taW5nIFpob3U=

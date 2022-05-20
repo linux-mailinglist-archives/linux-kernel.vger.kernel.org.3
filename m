@@ -2,63 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14BDA52E367
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 05:56:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7340B52E36A
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 05:58:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345275AbiETD4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 23:56:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35004 "EHLO
+        id S232621AbiETD6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 23:58:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345254AbiETD4O (ORCPT
+        with ESMTP id S229816AbiETD6A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 23:56:14 -0400
-Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5EC5381A2;
-        Thu, 19 May 2022 20:56:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=WvGjtR6qZ4Bar1EwTL1Ag7SU1XkDDUufcV0zIp+ja0M=; b=ed8YFKadAPDMbtpuAAxpC2O2e5
-        JqUHl2Rce2Hg8+6+C9iItbDTT5gfUEeXSnTBQjaZGyLYUN85GqJFAG1SzPc080Ux98gCfFPmMk8Zb
-        6Xt5h6ppqNnPXpf6Kp/Emjesp09WNDBQ03uQIth8XmkOv+g2XouBoJY1SQG7+QcgS+Y/g346gOrWh
-        gcYP+Mnai404SaYeSS82RAboYN0xETfShy8z6s4ne0vRcsVkQ9SYXbwwZxgnQnErMck4yG80KpYB0
-        pPmEF292U9CKNapNnhcGGD8snworgmsEqXWUFaKi9TAH7ty/V/LHZX6S5jio753rVT9e53JcXDjqz
-        9F5xmFHg==;
-Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nrtkG-00GUZu-Es; Fri, 20 May 2022 03:56:08 +0000
-Date:   Fri, 20 May 2022 03:56:08 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     He Zhe <zhe.he@windriver.com>, Dave Chinner <dchinner@redhat.com>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Luis Henriques <lhenriques@suse.com>
-Subject: Re: warning for EOPNOTSUPP vfs_copy_file_range
-Message-ID: <YocRWLtlbokO0jsi@zeniv-ca.linux.org.uk>
-References: <20f17f64-88cb-4e80-07c1-85cb96c83619@windriver.com>
- <CAOQ4uxiQTwEh3ry8_8UMFuPPBjwA+pb8RLLuG=93c9hYtDqg8g@mail.gmail.com>
+        Thu, 19 May 2022 23:58:00 -0400
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFE62B41FB;
+        Thu, 19 May 2022 20:57:59 -0700 (PDT)
+Received: by mail-wm1-f44.google.com with SMTP id bg25so3885533wmb.4;
+        Thu, 19 May 2022 20:57:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=pNHvSj7Qlaisn5x9H/7CDWdcNlvF8ouTuEdsvQFM/ZA=;
+        b=8ImggjWuyOVusKMfYPBklOm88M8uLHN9SLGFLfPTA93qT1VQjQPWma7pxmWZ5jfnPi
+         p2jHeGoKIJj7oRD3F+KwIbJBfI4K7TEbxzlF7NNIXkYV99sZLXZlB1dG6XvUhYtYsR6q
+         QAdLKFOlAPLwnrYXNcH7t1JSMERxQIyCocVwsXBns4JCIe5rd654O4XOcejq7AwtvGwI
+         CMjj3v2ECaUTHK3SMK4Qce/E4j0Gv+ibRmEDdaluHJnoGau/daH/GsXAgCwxxpf80TeO
+         okZS/d6sdCVP+F3oQx7GP5Sb8dAgOaCY4k/6PMyFGxyEbDZMneRGmsdiRwpQ1if3gzTg
+         x2mw==
+X-Gm-Message-State: AOAM5304Be7pA1lfP1VJudrsBLL9SwMJm3GjNowQZQZKgECNzzSbll6z
+        uujJicNRLw8HAzEv/2+lBDS1ZvOfW3w=
+X-Google-Smtp-Source: ABdhPJwEnqc3qcnxLHbZP1A2PzFVsK+V1WqW5Vkp1tqMoVO29pwCKaxpouzu2iQPE6xw046SLF/fTw==
+X-Received: by 2002:a05:600c:3b0a:b0:394:6373:6c45 with SMTP id m10-20020a05600c3b0a00b0039463736c45mr6731690wms.69.1653019078230;
+        Thu, 19 May 2022 20:57:58 -0700 (PDT)
+Received: from localhost.localdomain ([94.205.35.240])
+        by smtp.googlemail.com with ESMTPSA id z17-20020a05600c03d100b0039732f1b4a3sm1146878wmd.14.2022.05.19.20.57.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 May 2022 20:57:57 -0700 (PDT)
+From:   "Denis Efremov (Oracle)" <efremov@linux.com>
+To:     gregkh@linuxfoundation.org
+Cc:     "Denis Efremov (Oracle)" <efremov@linux.com>,
+        Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        dan.carpenter@oracle.com, straube.linux@gmail.com,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, stable <stable@vger.kernel.org>
+Subject: [PATCH v5.10] staging: rtl8723bs: prevent ->Ssid overflow in rtw_wx_set_scan()
+Date:   Fri, 20 May 2022 07:57:30 +0400
+Message-Id: <20220520035730.5533-1-efremov@linux.com>
+X-Mailer: git-send-email 2.35.3
+In-Reply-To: <YoZk3YLEDYKGG5xe@kroah.com>
+References: <YoZk3YLEDYKGG5xe@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOQ4uxiQTwEh3ry8_8UMFuPPBjwA+pb8RLLuG=93c9hYtDqg8g@mail.gmail.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 04:53:15PM +0300, Amir Goldstein wrote:
+This code has a check to prevent read overflow but it needs another
+check to prevent writing beyond the end of the ->Ssid[] array.
 
-> Luis gave up on it, because no maintainer stepped up to take
-> the patch, but I think that is the right way to go.
-> 
-> Maybe this bug report can raise awareness to that old patch.
-> 
-> Al, could you have a look?
+Fixes: 554c0a3abf21 ("staging: Add rtl8723bs sdio wifi driver")
+Cc: stable <stable@vger.kernel.org>
+Signed-off-by: Denis Efremov (Oracle) <efremov@linux.com>
+---
+ drivers/staging/rtl8723bs/os_dep/ioctl_linux.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-IIRC, you had objections to that variant back then...
+diff --git a/drivers/staging/rtl8723bs/os_dep/ioctl_linux.c b/drivers/staging/rtl8723bs/os_dep/ioctl_linux.c
+index 902ac8169948..083ff72976cf 100644
+--- a/drivers/staging/rtl8723bs/os_dep/ioctl_linux.c
++++ b/drivers/staging/rtl8723bs/os_dep/ioctl_linux.c
+@@ -1351,9 +1351,11 @@ static int rtw_wx_set_scan(struct net_device *dev, struct iw_request_info *a,
+ 
+ 					sec_len = *(pos++); len -= 1;
+ 
+-					if (sec_len > 0 && sec_len <= len) {
++					if (sec_len > 0 &&
++					    sec_len <= len &&
++					    sec_len <= 32) {
+ 						ssid[ssid_index].SsidLength = sec_len;
+-						memcpy(ssid[ssid_index].Ssid, pos, ssid[ssid_index].SsidLength);
++						memcpy(ssid[ssid_index].Ssid, pos, sec_len);
+ 						/* DBG_871X("%s COMBO_SCAN with specific ssid:%s, %d\n", __func__ */
+ 						/* 	, ssid[ssid_index].Ssid, ssid[ssid_index].SsidLength); */
+ 						ssid_index++;
+-- 
+2.35.3
+

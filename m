@@ -2,60 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 933AA52E64B
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 09:29:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ACAD52E65B
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 09:38:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346484AbiETH3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 03:29:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36982 "EHLO
+        id S1346542AbiETHiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 03:38:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233629AbiETH3s (ORCPT
+        with ESMTP id S1346535AbiETHiF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 03:29:48 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DE3F14B67B;
-        Fri, 20 May 2022 00:29:47 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id BBC6921C7D;
-        Fri, 20 May 2022 07:29:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1653031785; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2FXv1dgsYTKaim0NgoOrpNGccWSrMRNDM5AkhS49DWs=;
-        b=ICaJn67v2gF2PbSdCTsQnIvjMmEX8BOujrOgBrm1IrKejCLRT2BWNVjYuxOqMjlOka2Nqz
-        7wtGCPO6Sxp1pEmkwsIMETuaaY6rFSzNG87SEhJVlW39uk3W3fStPgzu7TcgzJ3GUInpR/
-        zvEq7wTmasM4aS/PdC3GaIQxnkBiT+4=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 3079C2C141;
-        Fri, 20 May 2022 07:29:45 +0000 (UTC)
-Date:   Fri, 20 May 2022 09:29:44 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Vaibhav Jain <vaibhav@linux.ibm.com>
-Cc:     cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Yosry Ahmed <yosryahmed@google.com>
-Subject: Re: [PATCH] memcg: provide reclaim stats via 'memory.reclaim'
-Message-ID: <YodDaFVeU33bu7yQ@dhcp22.suse.cz>
-References: <20220518223815.809858-1-vaibhav@linux.ibm.com>
- <YoYj4sLJfGke5IGT@dhcp22.suse.cz>
- <87zgjcg4xs.fsf@vajain21.in.ibm.com>
+        Fri, 20 May 2022 03:38:05 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB4314A243;
+        Fri, 20 May 2022 00:38:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653032284; x=1684568284;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rtepu/ruq0EW+A7tbd3HbQbyCoghYdIk0/jAPt0oXFI=;
+  b=fef6XOtv5E5nTazsKqMw9Il7Mbxn8eBYQOxuRStl3fXWUOhDKHZxH2rD
+   8GfTiS6F43YQL8YahrxHhgkk6UNmbyAZBp3cQYjjbJbcwB7FNfnWj4lcs
+   VyMB9UA24MSJxOd3RQff1nX6cvKDblm/2shUC5kNDDagnzA2UgzWADtVg
+   AY3b3NfNBz5h1a02M0pEq6GEnIY5mGDruzK3DWWRrW7/vsPI/5IZ4dAeV
+   AMC+WFxUQb0ingjMQ/Oe7EXqbcQMBsCK5AN9bmUmKgor1B+LBI3XPu14n
+   hMAfVdZhQ0C8zvn1lEqosyf9ohGzFkN4/hoShFCA37ayk/y8CtUL2BL3e
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="254579751"
+X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
+   d="scan'208";a="254579751"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 00:34:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
+   d="scan'208";a="743369440"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 20 May 2022 00:34:22 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nrx9R-0004Rz-TW;
+        Fri, 20 May 2022 07:34:21 +0000
+Date:   Fri, 20 May 2022 15:33:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Zqiang <qiang1.zhang@intel.com>, paulmck@kernel.org,
+        frederic@kernel.org
+Cc:     kbuild-all@lists.01.org, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rcu-tasks: Stop RCU Tasks scanning tasks which record on
+ dyntick-idle entry
+Message-ID: <202205201526.INo2g6TS-lkp@intel.com>
+References: <20220520045645.1692124-1-qiang1.zhang@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87zgjcg4xs.fsf@vajain21.in.ibm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <20220520045645.1692124-1-qiang1.zhang@intel.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,73 +66,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 20-05-22 10:45:43, Vaibhav Jain wrote:
-> 
-> Thanks for looking into this patch Michal,
-> 
-> Michal Hocko <mhocko@suse.com> writes:
-> 
-> > On Thu 19-05-22 04:08:15, Vaibhav Jain wrote:
-> >> [1] Provides a way for user-space to trigger proactive reclaim by introducing
-> >> a write-only memcg file 'memory.reclaim'. However reclaim stats like number
-> >> of pages scanned and reclaimed is still not directly available to the
-> >> user-space.
-> >> 
-> >> This patch proposes to extend [1] to make the memcg file 'memory.reclaim'
-> >> readable which returns the number of pages scanned / reclaimed during the
-> >> reclaim process from 'struct vmpressure' associated with each memcg. This should
-> >> let user-space asses how successful proactive reclaim triggered from memcg
-> >> 'memory.reclaim' was ?
-> >> 
-> >> With the patch following command flow is expected:
-> >> 
-> >>  # echo "1M" > memory.reclaim
-> >> 
-> >>  # cat memory.reclaim
-> >>    scanned 76
-> >>    reclaimed 32
-> >
-> > Why cannot you use memory.stat? Sure it would require to iterate over
-> > the reclaimed hierarchy but the information about scanned and reclaimed
-> > pages as well as other potentially useful stats is there.
-> 
-> Agree that "memory.stat" is more suitable for scanned/reclaimed stats as
-> it already is exposing bunch of other stats.
-> 
-> The discussion on this patch however seems to have split into two parts:
-> 
-> 1. Is it a good idea to expose nr_scanned/nr_reclaimed to users-space
-> and if yes how ?
-> 
-> IMHO, I think it will be better to expose this info via 'memory.stat' as it
-> can be useful insight into the reclaim efficiency  and vmpressure.
+Hi Zqiang,
 
-We already do that with some more metrics
-pgrefill 9801926
-pgscan 27329762
-pgsteal 22715987
-pgactivate 250691267
-pgdeactivate 9521843
-pglazyfree 0
-pglazyfreed 0
- 
-> 2. Will it be useful to provide feedback to userspace when it writes to
-> 'memory.reclaim' on how much memory has been reclaimed ?
-> 
-> IMHO, this will be a useful feeback to userspace to better adjust future
-> proactive reclaim requests via 'memory.reclaim'
+Thank you for the patch! Yet something to improve:
 
-How precise this information should be? A very simplistic approach would
-be
-cp memory.stat stats.before
-echo $WHATEVER > memory.reclaim
-cp memory.stat stats.after
+[auto build test ERROR on paulmck-rcu/dev]
+[also build test ERROR on v5.18-rc7 next-20220519]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-This will obviously contain also activity outside of the explicitly
-triggered reclaim (racing background/direct reclaim) but isn't that what
-actually matters? Are there any cases where the only metric you care
-about is the triggered reclaim in isolation?
+url:    https://github.com/intel-lab-lkp/linux/commits/Zqiang/rcu-tasks-Stop-RCU-Tasks-scanning-tasks-which-record-on-dyntick-idle-entry/20220520-125904
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev
+config: m68k-defconfig (https://download.01.org/0day-ci/archive/20220520/202205201526.INo2g6TS-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/47ee19cf17eefb7dd696eabb583e5dcba4cd89e1
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Zqiang/rcu-tasks-Stop-RCU-Tasks-scanning-tasks-which-record-on-dyntick-idle-entry/20220520-125904
+        git checkout 47ee19cf17eefb7dd696eabb583e5dcba4cd89e1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from kernel/rcu/update.c:606:
+   kernel/rcu/tasks.h: In function 'task_is_on_dyntick_idle':
+>> kernel/rcu/tasks.h:212:34: error: 'struct task_struct' has no member named 'rcu_tasks_idle_cpu'
+     212 |                                 t->rcu_tasks_idle_cpu >= 0;
+         |                                  ^~
+   At top level:
+   kernel/rcu/tasks.h:209:13: warning: 'task_is_on_dyntick_idle' defined but not used [-Wunused-function]
+     209 | static bool task_is_on_dyntick_idle(struct task_struct *t)
+         |             ^~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +212 kernel/rcu/tasks.h
+
+   208	
+   209	static bool task_is_on_dyntick_idle(struct task_struct *t)
+   210	{
+   211		return IS_ENABLED(CONFIG_NO_HZ_FULL) && !is_idle_task(t) &&
+ > 212					t->rcu_tasks_idle_cpu >= 0;
+   213	}
+   214	
 
 -- 
-Michal Hocko
-SUSE Labs
+0-DAY CI Kernel Test Service
+https://01.org/lkp

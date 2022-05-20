@@ -2,33 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87A0E52E378
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 06:08:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 822D152E37F
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 06:10:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231680AbiETEHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 00:07:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51976 "EHLO
+        id S238119AbiETEKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 00:10:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbiETEHA (ORCPT
+        with ESMTP id S229537AbiETEK3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 00:07:00 -0400
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 067E962A0A;
-        Thu, 19 May 2022 21:06:56 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=alimailimapcm10staff010182156082;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VDowqRk_1653019609;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VDowqRk_1653019609)
+        Fri, 20 May 2022 00:10:29 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28E0514AA4A
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 21:10:28 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VDoVd5w_1653019820;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VDoVd5w_1653019820)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 20 May 2022 12:06:54 +0800
+          Fri, 20 May 2022 12:10:25 +0800
 From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     davem@davemloft.net
-Cc:     yoshfuji@linux-ipv6.org, dsahern@kernel.org, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
+To:     hch@infradead.org
+Cc:     linux-kernel@vger.kernel.org,
         Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
         Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] usb: gadget: u_audio: clean up some inconsistent indenting
-Date:   Fri, 20 May 2022 12:06:48 +0800
-Message-Id: <20220520040648.75468-1-jiapeng.chong@linux.alibaba.com>
+Subject: [PATCH 1/2] freevxfs: fix kernel-doc warning in vxfs_super.c
+Date:   Fri, 20 May 2022 12:10:15 +0800
+Message-Id: <20220520041016.80354-1-jiapeng.chong@linux.alibaba.com>
 X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -42,33 +40,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Eliminate the follow smatch warning:
+Fix the following W=1 kernel warnings:
 
-drivers/usb/gadget/function/u_audio.c:1005 g_audio_setup() warn:
-inconsistent indenting.
+fs/freevxfs/vxfs_super.c:184: warning: expecting prototype for
+vxfs_read_super(). Prototype was for vxfs_fill_super() instead.
 
 Reported-by: Abaci Robot <abaci@linux.alibaba.com>
 Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 ---
- drivers/usb/gadget/function/u_audio.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ fs/freevxfs/vxfs_super.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
-index 4561d7a183ff..a84f051cfbf5 100644
---- a/drivers/usb/gadget/function/u_audio.c
-+++ b/drivers/usb/gadget/function/u_audio.c
-@@ -1001,9 +1001,8 @@ int g_audio_setup(struct g_audio *g_audio, const char *pcm_name,
+diff --git a/fs/freevxfs/vxfs_super.c b/fs/freevxfs/vxfs_super.c
+index c3b82f716f9a..310d73e254df 100644
+--- a/fs/freevxfs/vxfs_super.c
++++ b/fs/freevxfs/vxfs_super.c
+@@ -165,7 +165,7 @@ static int vxfs_try_sb_magic(struct super_block *sbp, int silent,
+ }
  
- 	if (c_chmask) {
- 		struct uac_rtd_params *prm = &uac->c_prm;
--
--    spin_lock_init(&prm->lock);
--    uac->c_prm.uac = uac;
-+		spin_lock_init(&prm->lock);
-+		uac->c_prm.uac = uac;
- 		prm->max_psize = g_audio->out_ep_maxpsize;
- 
- 		prm->reqs = kcalloc(params->req_number,
+ /**
+- * vxfs_read_super - read superblock into memory and initialize filesystem
++ * vxfs_fill_super - read superblock into memory and initialize filesystem
+  * @sbp:		VFS superblock (to fill)
+  * @dp:			fs private mount data
+  * @silent:		do not complain loudly when sth is wrong
 -- 
 2.20.1.7.g153144c
 

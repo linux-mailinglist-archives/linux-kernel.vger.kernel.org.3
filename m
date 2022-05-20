@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5515052E3C8
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 06:32:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88B3E52E3D0
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 06:34:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244926AbiETEcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 00:32:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58704 "EHLO
+        id S1345201AbiETEdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 00:33:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241454AbiETEcO (ORCPT
+        with ESMTP id S231720AbiETEdK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 00:32:14 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B7D8579A9
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 21:32:06 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id u27so9004614wru.8
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 21:32:06 -0700 (PDT)
+        Fri, 20 May 2022 00:33:10 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F8357B1F
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 21:33:08 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id r23so9857961wrr.2
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 21:33:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=f+yLwX4v2kJDuTdhPmFkHWTh5EbBsLz6n6h1cv0PsHE=;
-        b=l4UUOYRepzob/HFyAF2Rl6gwo8FbLs4V2ylF9L4Aele+X1dKOZDCu93dLjeMtJOO28
-         QXum7nQMlIz1Mza0YhEnjd38y5eFmyu1Tdi1MnRFBdptOjrMkjdifzIijNlNg+uP3pp4
-         cyi1M2xWQGOujm7/0dB18yhCS34gPdxosiotphU+Z8lT4jtoSSWy8ccuKPEq8lxTog3B
-         fQcZGa1Z+8hHeXXPrMkYjdh7HeZhmGzDG3rV7RqO7+im6R9JoJ4IJA4lzqVk9XvBrH0J
-         xL2sFwmmt1uOjla9JJzKMWXiHh5FTdmAdLZjh3jhAGgVmPk+jsTLKHsOyshYaJvewkre
-         xMyg==
+        bh=BsigNR0JuNP0YckuzKTpyGQC2LiAaAhgt7nwjSQGL9k=;
+        b=E8A1+g3llC9kBUKWpwAhB8u88qU0ljnfEM4sdhpzYmj2MgLkAjxtJvteY6s0viYl9q
+         88ciBlHOOT0VrhRRakDRXCWuGGqyCYQxcCJ7cfRm93VGtfV+jP13SGi88DFU/quSO5g1
+         XDVjgfr8Y4yC/0CrJ8f2py5ZwtJjh6QkyQphbuvgBdxEvkjQ4TzCB3uwIJDd7oOm69Y6
+         280it63mC/SBEz3GafoHn7C8tyx5U9Y99232FJ10iErE8MXhslAUOxbhd7qWOp1bTKFv
+         WKWeBKvPASjnh6rR1eg4Qqwq91S1JUZkLS+wbD2S1kVUVz/HML3PxdzmC4v8HLovgDRr
+         du8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=f+yLwX4v2kJDuTdhPmFkHWTh5EbBsLz6n6h1cv0PsHE=;
-        b=s/NCDDwEQWOihXUVS5UmTLC4B5p3/DrSrH1zTlGKovgJGCnrMX0E3b2w1r3eQZ4qWi
-         ZNdKR7X6S8tzijO2klmfXG9DdYKcvDfsg88w6huXYdM6aI3iHmhGj6zhTex3Oqw7KsiW
-         oStXb2OmbRfIudrGLni+qOuTqcK5bn3P5k3sADZ8vhbnbYABidEKu1+KJBB+OEn9PKY9
-         n3YB+7W1Znxdjs/bMPKXJh9R5h3JgeimzVsTQvYJFpLp9qyXi1EUTXz6mhSa+iih/PJr
-         ElVB1f6OstYIg3pqmKw6QMKA9mi/Wd105cktqN40LrGD9+GKKoHvbZgh0Olx5CgKJNcA
-         WrNg==
-X-Gm-Message-State: AOAM532ZuCyjEvcw4cGtwXGnyN5lBQPedq/MFFgz/E1gjnpC+ZWBTyKE
-        xB1e4Omg5+hMMFHEM2p2TnU3kHuxV7ATkAsQjHkpOw==
-X-Google-Smtp-Source: ABdhPJwQN/0YILiNXWjmTMiG3mOUXqk0m3Fwxd7G7ym80oOOIkivHTG/LVUHBmB2V75Nev6A+wsACLruMGgRETw9Qlo=
-X-Received: by 2002:a5d:448d:0:b0:20d:744:7663 with SMTP id
- j13-20020a5d448d000000b0020d07447663mr6647011wrq.654.1653021124626; Thu, 19
- May 2022 21:32:04 -0700 (PDT)
+        bh=BsigNR0JuNP0YckuzKTpyGQC2LiAaAhgt7nwjSQGL9k=;
+        b=L7JX1BkiN1tsOG2g155ynnMGcnYgS5oxAiYyYMYUl++MES6Fl9tSzRdRThky1FayK2
+         65N1P89YDnye8qdUiXRMOGmU3bQ3K1lGPu2hcJaJ0hnkcpbrNsCqefuUkv46P5Z+vk/5
+         HVZnPYXAsindXchWeRAjBZIjPtZbc3Xgf9D+EoBbPPVaxr1bc+IEv1W1zEWyFHZ/wk4T
+         12NCT++c1Eu5WolXzzWKb4g315W+VSYv7wNh5h0e/9Thtg0uBtfEiTNBZeMZek2PyO+/
+         ubFUvcR7S9uTsKDkArO3zEK2o65U+K96StdqdTiCTzf/fqDMXqRIC+VvP5x209vJRkYm
+         vB6w==
+X-Gm-Message-State: AOAM533mRJcEOy4lNrDJcjGTzGMwx7/HufFoqWioJjF+B1Mmm1RovQK1
+        ZgWUpSXiLkGv7jaQQDE877Ej1IIM2QgSzbwJ2VkwJw==
+X-Google-Smtp-Source: ABdhPJyJXfWp+3Nh59Q/OMnZlUA34UVQ/S/iPX6RmguFYtqgoOLSKfPUkcRFmR5+JULHS3GX7r9AkQx2DF0JqPM03aI=
+X-Received: by 2002:adf:e70e:0:b0:20e:7523:f01d with SMTP id
+ c14-20020adfe70e000000b0020e7523f01dmr2332987wrm.300.1653021186777; Thu, 19
+ May 2022 21:33:06 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220519054355.477-1-ravi.bangoria@amd.com> <20220519054355.477-3-ravi.bangoria@amd.com>
- <CAP-5=fXiZj+EBqmg89faK0pZD-Af3V1fHWMOkds1oKoaz+ucFA@mail.gmail.com> <e578d274-946f-2c73-026d-9b172ce32f19@amd.com>
-In-Reply-To: <e578d274-946f-2c73-026d-9b172ce32f19@amd.com>
+References: <20220519054355.477-1-ravi.bangoria@amd.com> <20220519054355.477-5-ravi.bangoria@amd.com>
+ <CAP-5=fU5ArsMcTiYNgZ1U+i6mmtdc+OGx9_ny0x46+O7d4+dpQ@mail.gmail.com> <8b0fc830-a0f6-c2ca-a493-011a46dc190d@amd.com>
+In-Reply-To: <8b0fc830-a0f6-c2ca-a493-011a46dc190d@amd.com>
 From:   Ian Rogers <irogers@google.com>
-Date:   Thu, 19 May 2022 21:31:52 -0700
-Message-ID: <CAP-5=fXJQcVEUEz3taSXsm0Kd0Fs3Vc4+++vz1fVEHLjB3nMPw@mail.gmail.com>
-Subject: Re: [PATCH v3 2/5] perf header: Parse non-cpu pmu capabilities
+Date:   Thu, 19 May 2022 21:32:54 -0700
+Message-ID: <CAP-5=fWiG4oZbZqFTuWbdYDPnD3mgOTK3vMvS=y-Y6qT4_5nEg@mail.gmail.com>
+Subject: Re: [PATCH v3 4/5] perf tool ibs: Sync amd ibs header file
 To:     Ravi Bangoria <ravi.bangoria@amd.com>
 Cc:     acme@kernel.org, peterz@infradead.org, rrichter@amd.com,
         mingo@redhat.com, mark.rutland@arm.com, jolsa@kernel.org,
@@ -68,101 +68,116 @@ X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 8:49 PM Ravi Bangoria <ravi.bangoria@amd.com> wrote:
+On Thu, May 19, 2022 at 8:56 PM Ravi Bangoria <ravi.bangoria@amd.com> wrote:
 >
 > Hi Ian,
 >
-> On 20-May-22 3:57 AM, Ian Rogers wrote:
+> On 20-May-22 5:18 AM, Ian Rogers wrote:
 > > On Wed, May 18, 2022 at 10:45 PM Ravi Bangoria <ravi.bangoria@amd.com> wrote:
 > >>
-> >> Pmus advertise their capabilities via sysfs attribute files but
-> >> perf tool currently parses only core(cpu) pmu capabilities. Add
-> >> support for parsing non-cpu pmu capabilities.
+> >> IBS support has been enhanced with two new features in upcoming uarch:
+> >> 1. DataSrc extension and 2. L3 miss filtering. Additional set of bits
+> >> has been introduced in IBS registers to exploit these features.
+> >> New bits are already defining in arch/x86/ header. Sync it with tools
+> >> header file.
 > >>
 > >> Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
 > >> ---
-> >>  .../Documentation/perf.data-file-format.txt   |  18 ++
-> >>  tools/perf/util/env.c                         |  48 +++++
-> >>  tools/perf/util/env.h                         |  11 +
-> >>  tools/perf/util/header.c                      | 198 ++++++++++++++++++
-> >>  tools/perf/util/header.h                      |   1 +
-> >>  tools/perf/util/pmu.c                         |  15 +-
-> >>  tools/perf/util/pmu.h                         |   2 +
-> >>  7 files changed, 289 insertions(+), 4 deletions(-)
+> >>  tools/arch/x86/include/asm/amd-ibs.h | 16 ++++++++++------
+> >>  tools/perf/util/amd-sample-raw.c     |  4 ++--
+> >>  2 files changed, 12 insertions(+), 8 deletions(-)
 > >>
-> >> diff --git a/tools/perf/Documentation/perf.data-file-format.txt b/tools/perf/Documentation/perf.data-file-format.txt
-> >> index f56d0e0fbff6..7f8341db9134 100644
-> >> --- a/tools/perf/Documentation/perf.data-file-format.txt
-> >> +++ b/tools/perf/Documentation/perf.data-file-format.txt
-> >> @@ -435,6 +435,24 @@ struct {
-> >>         } [nr_pmu];
+> >> diff --git a/tools/arch/x86/include/asm/amd-ibs.h b/tools/arch/x86/include/asm/amd-ibs.h
+> >> index 765e9e752d03..9a3312e12e2e 100644
+> >> --- a/tools/arch/x86/include/asm/amd-ibs.h
+> >> +++ b/tools/arch/x86/include/asm/amd-ibs.h
+> >> @@ -29,7 +29,10 @@ union ibs_fetch_ctl {
+> >>                         rand_en:1,      /* 57: random tagging enable */
+> >>                         fetch_l2_miss:1,/* 58: L2 miss for sampled fetch
+> >>                                          *      (needs IbsFetchComp) */
+> >> -                       reserved:5;     /* 59-63: reserved */
+> >> +                       l3_miss_only:1, /* 59: Collect L3 miss samples only */
+> >> +                       fetch_oc_miss:1,/* 60: Op cache miss for the sampled fetch */
+> >> +                       fetch_l3_miss:1,/* 61: L3 cache miss for the sampled fetch */
+> >> +                       reserved:2;     /* 62-63: reserved */
+> >>         };
 > >>  };
 > >>
-> >> +       HEADER_PMU_CAPS = 32,
-> >> +
-> >> +       List of pmu capabilities (except cpu pmu which is already
-> >> +       covered by HEADER_CPU_PMU_CAPS)
+> >> @@ -38,14 +41,14 @@ union ibs_op_ctl {
+> >>         __u64 val;
+> >>         struct {
+> >>                 __u64   opmaxcnt:16,    /* 0-15: periodic op max. count */
+> >> -                       reserved0:1,    /* 16: reserved */
+> >> +                       l3_miss_only:1, /* 16: Collect L3 miss samples only */
+> >>                         op_en:1,        /* 17: op sampling enable */
+> >>                         op_val:1,       /* 18: op sample valid */
+> >>                         cnt_ctl:1,      /* 19: periodic op counter control */
+> >>                         opmaxcnt_ext:7, /* 20-26: upper 7 bits of periodic op maximum count */
+> >> -                       reserved1:5,    /* 27-31: reserved */
+> >> +                       reserved0:5,    /* 27-31: reserved */
+> >>                         opcurcnt:27,    /* 32-58: periodic op counter current count */
+> >> -                       reserved2:5;    /* 59-63: reserved */
+> >> +                       reserved1:5;    /* 59-63: reserved */
+> >>         };
+> >>  };
+> >>
+> >> @@ -71,11 +74,12 @@ union ibs_op_data {
+> >>  union ibs_op_data2 {
+> >>         __u64 val;
+> >>         struct {
+> >> -               __u64   data_src:3,     /* 0-2: data source */
+> >> +               __u64   data_src_lo:3,  /* 0-2: data source low */
+> >>                         reserved0:1,    /* 3: reserved */
+> >>                         rmt_node:1,     /* 4: destination node */
+> >>                         cache_hit_st:1, /* 5: cache hit state */
+> >> -                       reserved1:57;   /* 5-63: reserved */
+> >> +                       data_src_hi:2,  /* 6-7: data source high */
+> >> +                       reserved1:56;   /* 8-63: reserved */
+> >>         };
+> >>  };
+> >>
+> >> diff --git a/tools/perf/util/amd-sample-raw.c b/tools/perf/util/amd-sample-raw.c
+> >> index d19d765195c5..3b623ea6ee7e 100644
+> >> --- a/tools/perf/util/amd-sample-raw.c
+> >> +++ b/tools/perf/util/amd-sample-raw.c
 > >
-> > Sorry for the ignorance, is this currently broken for hybrid then?
-> > Will hybrid have a HEADER_CPU_PMU_CAPS? Presumably this varies between
-> > ARM's big.little and Alderlake.
+> > nit: given the commit message this should probably be a separate patch.
 >
-> It's covered by HEADER_HYBRID_CPU_PMU_CAPS, but that too covers only
-> cpu pmu. I think I should update the above comment to:
+> Renaming of an existing field in only header file creates a build issue.
+> So I had to include it in this patch. Would documenting it in the patch
+> description help?
 >
->         List of pmu capabilities (except cpu pmu which is already
->         covered by HEADER_CPU_PMU_CAPS / HEADER_HYBRID_CPU_PMU_CAPS)
->
-> >> +
-> >> +struct {
-> >> +       u32 nr_pmus;
-> >> +       struct {
-> >> +               u32 core_type;  /* For hybrid topology */
-> >
-> > Could this be pmu_type as presumably we can have capabilities on any
-> > kind of PMU?
->
-> Not sure I follow that question but let me just put my thoughts here.
->
-> {core_type, pmu_name} is the unique key here. Considering a hypothetical
-> scenario: A system has two types of cores P-core and E-core. Certain pmu
-> inside P-core has some capabilities which are missing in the identical
-> pmu belonging to E-core. The header will look something like:
->
-> struct {
->         .nr_pmus = 2,
->         [0] = struct {
->                 .core_type = 0, /* P-core */
->                 .pmu_name = xyz_pmu,
->                 .nr_caps = 2,
->                 [0] = { .name = cap1, .value = value1 },
->                 [1] = { .name = cap2, .value = value2 },
->         },
->         [1] = struct {
->                 .core_type = 1; /* E-core */
->                 .pmu_name = xyz_pmu;
->                 .nr_caps = 1;
->                 [0] = { .name = cap1, .value = value1 };
->         },
-> };
->
-> Does that answer your question?
+>   Also rename existing ibs_op_data field "data_src" to "data_src_lo".
 >
 > Thanks for the review,
 > Ravi
 
-I may be being a little ahead of the current code as I'm wondering
-about heterogeneous systems with many non-CPU PMUs. It seems such a
-scenario just wouldn't touch the core_type field here. Could the p or
-e core-ness of a PMU be implied by the name? Is there something
-similar to core_type in sysfs or would we use the name in that case?
-
-Thanks,
+Perfect fix. Thanks!
 Ian
+
+> >
+> > Thanks,
+> > Ian
+> >
+> >> @@ -98,9 +98,9 @@ static void pr_ibs_op_data2(union ibs_op_data2 reg)
+> >>         };
+> >>
+> >>         printf("ibs_op_data2:\t%016llx %sRmtNode %d%s\n", reg.val,
+> >> -              reg.data_src == 2 ? (reg.cache_hit_st ? "CacheHitSt 1=O-State "
+> >> +              reg.data_src_lo == 2 ? (reg.cache_hit_st ? "CacheHitSt 1=O-State "
+> >>                                                      : "CacheHitSt 0=M-state ") : "",
+> >> -              reg.rmt_node, data_src_str[reg.data_src]);
+> >> +              reg.rmt_node, data_src_str[reg.data_src_lo]);
+> >>  }
+> >>
+> >>  static void pr_ibs_op_data3(union ibs_op_data3 reg)
+> >> --
+> >> 2.27.0
+> >>

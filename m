@@ -2,69 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B32152E812
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 10:52:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D65CF52E81B
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 10:55:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347400AbiETIwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 04:52:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53436 "EHLO
+        id S1347427AbiETIzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 04:55:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344968AbiETIwB (ORCPT
+        with ESMTP id S1347096AbiETIzA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 04:52:01 -0400
-Received: from theia.8bytes.org (8bytes.org [IPv6:2a01:238:4383:600:38bc:a715:4b6d:a889])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C335DD00
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 01:52:00 -0700 (PDT)
-Received: by theia.8bytes.org (Postfix, from userid 1000)
-        id BC47C1E9; Fri, 20 May 2022 10:51:58 +0200 (CEST)
-Date:   Fri, 20 May 2022 10:51:57 +0200
-From:   Joerg Roedel <joro@8bytes.org>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        John Garry <john.garry@huawei.com>, will@kernel.org,
-        m.szyprowski@samsung.com, chenxiang66@hisilicon.com,
-        thunder.leizhen@huawei.com, iommu@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, liyihang6@hisilicon.com
-Subject: Re: [RFC PATCH] dma-iommu: Add iommu_dma_max_mapping_size()
-Message-ID: <YodWrRFircbmh1bN@8bytes.org>
-References: <1652706361-92557-1-git-send-email-john.garry@huawei.com>
- <f5b78c9c-312e-70ab-ecbb-f14623a4b6e3@arm.com>
- <9160031b-50be-6993-5a8e-f238391962c5@huawei.com>
- <8f193bdd-3a0a-f9ed-0726-e6081f374320@arm.com>
- <20220518131353.GB26019@lst.de>
+        Fri, 20 May 2022 04:55:00 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 048C1994FC
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 01:54:58 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9D1291477;
+        Fri, 20 May 2022 01:54:58 -0700 (PDT)
+Received: from [10.57.82.55] (unknown [10.57.82.55])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 495CD3F66F;
+        Fri, 20 May 2022 01:54:57 -0700 (PDT)
+Message-ID: <794e13dd-8eae-481d-711d-b5462fdbfb18@arm.com>
+Date:   Fri, 20 May 2022 09:54:51 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220518131353.GB26019@lst.de>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v2] iommu/amd: Set translation valid bit only when IO page
+ tables are in used
+Content-Language: en-GB
+To:     Joerg Roedel <joro@8bytes.org>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+Cc:     iommu@lists.linux-foundation.org, jon.grimm@amd.com,
+        linux-kernel@vger.kernel.org, vasant.hegde@amd.com
+References: <20220509074815.11881-1-suravee.suthikulpanit@amd.com>
+ <Yn5YIfzmerwAM30M@8bytes.org> <1dfaf07e-040e-848b-db7c-86a107fd5cb3@amd.com>
+ <YodMvV/8eii4KCLg@8bytes.org>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <YodMvV/8eii4KCLg@8bytes.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 03:13:53PM +0200, Christoph Hellwig wrote:
-> On Tue, May 17, 2022 at 01:02:00PM +0100, Robin Murphy wrote:
-> >> So how to inform the SCSI driver of this caching limit then so that it may 
-> >> limit the SGL length?
-> >
-> > Driver-specific mechanism; block-layer-specific mechanism; redefine this 
-> > whole API to something like dma_opt_mapping_size(), as a limit above which 
-> > mappings might become less efficient or start to fail (callback to my 
-> > thoughts on [1] as well, I suppose); many options. Just not imposing a 
-> > ridiculously low *maximum* on everyone wherein mapping calls "should not be 
-> > larger than the returned value" when that's clearly bollocks.
+On 2022-05-20 09:09, Joerg Roedel wrote:
+> Hi Suravee,
 > 
-> Well, for swiotlb it is a hard limit.  So if we want to go down that
-> route we need two APIs, one for the optimal size and one for the
-> hard limit.
+> On Mon, May 16, 2022 at 07:27:51PM +0700, Suravee Suthikulpanit wrote:
+>> Due to the new restriction (please see the IOMMU spec Rev 3.06-PUB - Apr 2021
+>> https://www.amd.com/system/files/TechDocs/48882_IOMMU.pdf) where the use of
+>> DTE[Mode]=0 is not supported on systems that are SNP-enabled (i.e. EFR[SNPSup]=1),
+>> the IOMMU HW looks at the DTE[TV] bit to determine if it needs to handle the v1 page table.
+>> When the HW encounters DTE entry with TV=1, V=1, Mode=0, it would generate
+>> ILLEGAL_DEV_TABLE_ENTRY event.
+> 
+> Ah, that is the part I was missing, thanks.
+> 
+>> - I am still trying to see what is the best way to force Linux to not allow
+>> Mode=0 (i.e. iommu=pt mode). Any thoughts?
+> 
+> I think this needs a general approach. First start in the AMD IOMMU
+> driver:
+> 
+> 	1) Do not set DTE.TV=1 bit iff SNP-Support is enabled
+> 	2) Fail to allocate passthrough domains when SNP support is
+> 	   enabled.
+> 
+> Then test how the IOMMU core layer handles that. In fact the IOMMU layer
+> needs to adjust its decisions so that:
+> 
+> 	1) It uses translated-mode by default
+> 	2) passthrough domains are disallowed and can not be chosen, not
+> 	   on the kernel command line and not at runtime.
+> 
+> Ideally this needs some kind of arch-callback to set the appropriate
+> defaults.
 
-I agree with Robin, and if it really helps some drivers I am all for
-doing a dma_opt_mapping_size() instead. Limiting DMA mapping sizes to
-make drivers perform better gets a clear NAK from my side.
+The .def_domain type op already allows drivers to do exactly this sort 
+of override. You could also conditionally reject 
+IOMMU_DOMAIN_PASSTHROUGH in .domain_alloc for good measure, provided 
+that (for now at least*) SNP is a global thing rather than per-instance.
 
-Regards,
+Cheers,
+Robin.
 
-	Joerg
+*Instance-aware .domain_alloc probably about 2 releases away at the 
+current pace of landing the tree-wide prep ;)
+
+>> - Also, it seems that the current iommu v2 page table use case, where GVA->GPA=SPA
+>> will no longer be supported on system w/ SNPSup=1. Any thoughts?
+> 
+> Support for that is not upstream yet, it should be easy to disallow this
+> configuration and just use the v1 page-tables when SNP is active. This
+> can be handled entirely inside the AMD IOMMU driver.
+> 
+> Regards,
+> 
+> 	Joerg
+> _______________________________________________
+> iommu mailing list
+> iommu@lists.linux-foundation.org
+> https://lists.linuxfoundation.org/mailman/listinfo/iommu

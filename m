@@ -2,64 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6052F52E821
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 10:56:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 684B052E8AB
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 11:21:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347442AbiETI4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 04:56:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59498 "EHLO
+        id S1347604AbiETJVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 05:21:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347396AbiETI4h (ORCPT
+        with ESMTP id S236358AbiETJVV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 04:56:37 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E58B5A157
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 01:56:36 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1nryQr-00075f-K0; Fri, 20 May 2022 10:56:25 +0200
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1nryQq-0005Y9-NT; Fri, 20 May 2022 10:56:24 +0200
-Date:   Fri, 20 May 2022 10:56:24 +0200
-From:   "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
-To:     Pkshih <pkshih@realtek.com>
-Cc:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "linux@ulli-kroll.de" <linux@ulli-kroll.de>,
-        "martin.blumenstingl@googlemail.com" 
-        <martin.blumenstingl@googlemail.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "kvalo@kernel.org" <kvalo@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
-        "neojou@gmail.com" <neojou@gmail.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "johannes@sipsolutions.net" <johannes@sipsolutions.net>
-Subject: Re: [PATCH 10/10] rtw88: Add rtw8822cu chipset support
-Message-ID: <20220520085624.GF25578@pengutronix.de>
-References: <20220518082318.3898514-1-s.hauer@pengutronix.de>
- <20220518082318.3898514-11-s.hauer@pengutronix.de>
- <b19fcc328a8e436d27579bbf9e217a2be71b57b5.camel@realtek.com>
+        Fri, 20 May 2022 05:21:21 -0400
+X-Greylist: delayed 1434 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 20 May 2022 02:21:19 PDT
+Received: from mo-csw-fb.securemx.jp (mo-csw-fb1516.securemx.jp [210.130.202.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E542DAB6;
+        Fri, 20 May 2022 02:21:19 -0700 (PDT)
+Received: by mo-csw-fb.securemx.jp (mx-mo-csw-fb1516) id 24K8vQSw029845; Fri, 20 May 2022 17:57:26 +0900
+Received: by mo-csw.securemx.jp (mx-mo-csw1516) id 24K8uskm030850; Fri, 20 May 2022 17:56:54 +0900
+X-Iguazu-Qid: 34trvzMrv8epPT65NT
+X-Iguazu-QSIG: v=2; s=0; t=1653037014; q=34trvzMrv8epPT65NT; m=wCqfnp8vQEQyhU528pIyqI4BbH8Xu5y1VmAO4hRtlXU=
+Received: from imx12-a.toshiba.co.jp (imx12-a.toshiba.co.jp [61.202.160.135])
+        by relay.securemx.jp (mx-mr1510) id 24K8uqbh040873
+        (version=TLSv1.2 cipher=AES128-GCM-SHA256 bits=128 verify=NOT);
+        Fri, 20 May 2022 17:56:53 +0900
+From:   Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh@kernel.org>
+Cc:     linux-pci@vger.kernel.org, yuji2.ishikawa@toshiba.co.jp,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+Subject: [PATCH] dt-bindings: pci: toshiba,visconti-pcie: Update the common clock properties
+Date:   Fri, 20 May 2022 17:56:48 +0900
+X-TSB-HOP2: ON
+Message-Id: <20220520085648.620703-1-nobuhiro1.iwamatsu@toshiba.co.jp>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b19fcc328a8e436d27579bbf9e217a2be71b57b5.camel@realtek.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 10:53:21 up 50 days, 21:23, 57 users,  load average: 0.04, 0.05,
- 0.07
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,49 +49,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 08:03:30AM +0000, Pkshih wrote:
-> On Wed, 2022-05-18 at 10:23 +0200, Sascha Hauer wrote:
-> > Add support for the rtw8822cu chipset based on
-> > https://github.com/ulli-kroll/rtw88-usb.git
-> > 
-> > Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-> > ---
-> >  drivers/net/wireless/realtek/rtw88/Kconfig    | 11 +++++
-> >  drivers/net/wireless/realtek/rtw88/Makefile   |  3 ++
-> >  drivers/net/wireless/realtek/rtw88/rtw8822c.c | 24 +++++++++++
-> >  .../net/wireless/realtek/rtw88/rtw8822cu.c    | 40 +++++++++++++++++++
-> >  .../net/wireless/realtek/rtw88/rtw8822cu.h    | 15 +++++++
-> >  5 files changed, 93 insertions(+)
-> >  create mode 100644 drivers/net/wireless/realtek/rtw88/rtw8822cu.c
-> >  create mode 100644 drivers/net/wireless/realtek/rtw88/rtw8822cu.h
-> > 
-> > 
-> 
-> [...]
-> 
-> > +MODULE_AUTHOR("Realtek Corporation");
-> 
-> Out of curiosity, there are many authors in your patchset.
-> Do you collect these driver from various places?
+The clock for this driver switched to the common clock controller driver.
+Therefore, update common clock properties for PCIe controller in the binding
+document.
 
-No, the driver is completely based on
-https://github.com/ulli-kroll/rtw88-usb.git
+Signed-off-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+Acked-by: Rob Herring <robh@kernel.org>
+---
+ .../devicetree/bindings/pci/toshiba,visconti-pcie.yaml         | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-> 
-> rtw8723du.c:MODULE_AUTHOR("Hans Ulli Kroll <linux@ulli-kroll.de>");
-> rtw8821cu.c:MODULE_AUTHOR("Hans Ulli Kroll <linux@ulli-kroll.de>");
-> rtw8822bu.c:MODULE_AUTHOR("Realtek Corporation");
-> rtw8822cu.c:MODULE_AUTHOR("Realtek Corporation");
-> usb.c:MODULE_AUTHOR("Realtek Corporation");
-
-The driver is originally from Neo Jou (at least that's what the git log
-tells me). The rtw8723du and rtw8821cu support was added later by Ulli
-Kroll.
-
-Sascha
-
+diff --git a/Documentation/devicetree/bindings/pci/toshiba,visconti-pcie.yaml b/Documentation/devicetree/bindings/pci/toshiba,visconti-pcie.yaml
+index 30b6396d83c8..b9d0484606cc 100644
+--- a/Documentation/devicetree/bindings/pci/toshiba,visconti-pcie.yaml
++++ b/Documentation/devicetree/bindings/pci/toshiba,visconti-pcie.yaml
+@@ -69,6 +69,7 @@ unevaluatedProperties: false
+ 
+ examples:
+   - |
++    #include <dt-bindings/clock/toshiba,tmpv770x.h>
+     #include <dt-bindings/interrupt-controller/irq.h>
+     #include <dt-bindings/interrupt-controller/arm-gic.h>
+ 
+@@ -102,7 +103,7 @@ examples:
+                  0 0 0 2 &gic GIC_SPI 215 IRQ_TYPE_LEVEL_HIGH
+                  0 0 0 3 &gic GIC_SPI 215 IRQ_TYPE_LEVEL_HIGH
+                  0 0 0 4 &gic GIC_SPI 215 IRQ_TYPE_LEVEL_HIGH>;
+-            clocks = <&extclk100mhz>, <&clk600mhz>, <&clk25mhz>;
++            clocks = <&extclk100mhz>, <&pismu TMPV770X_CLK_PCIE_MSTR>, <&pismu TMPV770X_CLK_PCIE_AUX>;
+             clock-names = "ref", "core", "aux";
+             max-link-speed = <2>;
+         };
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.36.0
+
+

@@ -2,223 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5296652E1ED
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 03:24:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FE3A52E1EF
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 03:24:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344474AbiETBYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 21:24:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33464 "EHLO
+        id S1344463AbiETBYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 21:24:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344195AbiETBYO (ORCPT
+        with ESMTP id S240603AbiETBYn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 21:24:14 -0400
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45BBD2AC7B;
-        Thu, 19 May 2022 18:24:13 -0700 (PDT)
-Date:   Thu, 19 May 2022 18:24:04 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1653009850;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8dIWBHJuUxrh6Wv36T47A+FcXJPl91XrE218hQx8ro0=;
-        b=Vl7farxJ2q0Ic6HJwHmFW9rd1Zuol6JbtjZA9EGtxRUlqjION7Y1jxbPS4XUPWAWo8mRM6
-        4NXVVVoXrjcR6/n1Mw0F/TvQnMpjoi4gfsY84Gn4R+GI4sop1Fyx4aGQwKFmGVMZIQIkJe
-        +1kasV0MMBMhQXq+l8Y46LT5CKaikPg=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Kristen Carlson Accardi <kristen@linux.intel.com>
-Cc:     linux-sgx@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, mhocko@suse.com, hannes@cmpxchg.org,
-        shakeelb@google.com
-Subject: Re: [PATCH v2] x86/sgx: Set active memcg prior to shmem allocation
-Message-ID: <YobttN5nRMwYbN4I@carbon>
-References: <20220519210445.5310-1-kristen@linux.intel.com>
+        Thu, 19 May 2022 21:24:43 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33DDF2C133
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 18:24:42 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id a9so4471309pgv.12
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 18:24:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=EFGW6KkwvyY4pQb6+GcqplYjxXlO6yZ13EE/09wmTnc=;
+        b=TI6lTngyykFfvljrDLE4Pa5ypaSRcLJnl9IAzY25aN01OhcPFu4uW2bOL3O1xhYzxI
+         LupT/aqYQ9bCN+AaYRdZkne92MvzQZA3N3B9bTA9TyETdKNrTe4WyIerRd0F5SfbjFQ7
+         ZyQ07KG+FSOdlMKklCNdiuV4NMNuWPQNi2YMcnuO2lhnWirISKNZWUv33S2IbC5yrzf/
+         nHurKgWtdIcYFm0bKuJMPzRekdGBeI1/QGJY3FgKeBfZVyoSLQIi354kSLtNLlTJuhxG
+         CAjYscNZrNCP37ZNGR5eSYPJtIhBhy5wKRXpnnF9hn19ETyHJClBRSt+2SLJ9pgZeqQF
+         sahw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=EFGW6KkwvyY4pQb6+GcqplYjxXlO6yZ13EE/09wmTnc=;
+        b=z4BcYEobcoMAli7k9bdDfBi60VAhaFQCH4NvBAyGzKYjwjuu2/7aE9OYYfybhoU9H7
+         Mkb3CFEAhNEni/MZPsx80dQ1k1U2hozEZAvUjznjN7fetgZ9gfnif6XZTcQ74YYqAY6L
+         Erv5GcEU52g1KD+N0Rfs6/rnJXsOGay5cMtOA9CCdAKm8+33r6FgSWj9L+Np7Rrt3vyv
+         EPD56pt9UY47qoAiTXlHRc7AUGBy2+Vkb0ucfhk06P0hTklhEUgt3IpIl+3JAETL9I7F
+         N7hfY57Xd7VudNxKHvT6hxoJnIcHYNRsbSZSA8S6Sd2F5IZ9BON+C789/dssnwNRa++b
+         CRPw==
+X-Gm-Message-State: AOAM5338LGHZSPiI/RZEuHeIOMm9udeppDXoX/Dn7Z25th7QflRAOA8w
+        azfO/dHg4d0uXXbk8ThDy0weq8s0SfVmFQ==
+X-Google-Smtp-Source: ABdhPJxQQ4zdCljbCK2lum+5DPvq5tArBDIZ1+hRcJo2nqBaO0J/3a+zpKX9d2WoKT0Lw7zNyl7H1A==
+X-Received: by 2002:a05:6a00:ad2:b0:4f1:2734:a3d9 with SMTP id c18-20020a056a000ad200b004f12734a3d9mr7398933pfl.61.1653009881457;
+        Thu, 19 May 2022 18:24:41 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id p17-20020a170902c71100b0015e8d4eb28fsm4300576plp.217.2022.05.19.18.24.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 May 2022 18:24:40 -0700 (PDT)
+Date:   Fri, 20 May 2022 01:24:37 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Lei Wang <lei4.wang@intel.com>
+Cc:     pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        jmattson@google.com, joro@8bytes.org, chenyi.qiang@intel.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 8/8] KVM: VMX: Enable PKS for nested VM
+Message-ID: <Yobt1XwOfb5M6Dfa@google.com>
+References: <20220424101557.134102-1-lei4.wang@intel.com>
+ <20220424101557.134102-9-lei4.wang@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220519210445.5310-1-kristen@linux.intel.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220424101557.134102-9-lei4.wang@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 02:04:45PM -0700, Kristen Carlson Accardi wrote:
-> When the system runs out of enclave memory, SGX can reclaim EPC pages
-> by swapping to normal RAM. These backing pages are allocated via a
-> per-enclave shared memory area. Since SGX allows unlimited over
-> commit on EPC memory, the reclaimer thread can allocate a large
-> number of backing RAM pages in response to EPC memory pressure.
-> 
-> When the shared memory backing RAM allocation occurs during
-> the reclaimer thread context, the shared memory is charged to
-> the root memory control group, and the shmem usage of the enclave
-> is not properly accounted for, making cgroups ineffective at
-> limiting the amount of RAM an enclave can consume.
-> 
-> For example, when using a cgroup to launch a set of test
-> enclaves, the kernel does not properly account for 50% - 75% of
-> shmem page allocations on average. In the worst case, when
-> nearly all allocations occur during the reclaimer thread, the
-> kernel accounts less than a percent of the amount of shmem used
-> by the enclave's cgroup to the correct cgroup.
-> 
-> SGX stores a list of mm_structs that are associated with
-> an enclave. Pick one of them during reclaim and charge that
-> mm's memcg with the shmem allocation. The one that gets picked
-> is arbitrary, but this list almost always only has one mm. The
-> cases where there is more than one mm with different memcg's
-> are not worth considering.
-> 
-> Create a new function - sgx_encl_alloc_backing(). This function
-> is used whenever a new backing storage page needs to be
-> allocated. Previously the same function was used for page
-> allocation as well as retrieving a previously allocated page.
-> Prior to backing page allocation, if there is a mm_struct associated
-> with the enclave that is requesting the allocation, it is set
-> as the active memory control group.
-> 
-> Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
-> ---
-> V1 -> V2:
->  Changed sgx_encl_set_active_memcg() to simply return the correct
->  memcg for the enclave and renamed to sgx_encl_get_mem_cgroup().
-> 
->  Created helper function current_is_ksgxd() to improve readability.
-> 
->  Use mmget_not_zero()/mmput_async() when searching mm_list.
-> 
->  Move call to set_active_memcg() to sgx_encl_alloc_backing() and
->  use mem_cgroup_put() to avoid leaking a memcg reference.
-> 
->  Address review feedback regarding comments and commit log.
-> 
->  arch/x86/kernel/cpu/sgx/encl.c | 109 ++++++++++++++++++++++++++++++++-
->  arch/x86/kernel/cpu/sgx/encl.h |  11 +++-
->  arch/x86/kernel/cpu/sgx/main.c |   4 +-
->  3 files changed, 118 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
-> index 001808e3901c..6d10202612d6 100644
-> --- a/arch/x86/kernel/cpu/sgx/encl.c
-> +++ b/arch/x86/kernel/cpu/sgx/encl.c
-> @@ -32,7 +32,7 @@ static int __sgx_encl_eldu(struct sgx_encl_page *encl_page,
->  	else
->  		page_index = PFN_DOWN(encl->size);
+Nit, use "KVM: nVMX:" for the shortlog scope.
+
+On Sun, Apr 24, 2022, Lei Wang wrote:
+> @@ -2433,6 +2437,10 @@ static void prepare_vmcs02_rare(struct vcpu_vmx *vmx, struct vmcs12 *vmcs12)
+>  		if (kvm_mpx_supported() && vmx->nested.nested_run_pending &&
+>  		    (vmcs12->vm_entry_controls & VM_ENTRY_LOAD_BNDCFGS))
+>  			vmcs_write64(GUEST_BNDCFGS, vmcs12->guest_bndcfgs);
+> +
+> +		if (vmx->nested.nested_run_pending &&
+> +		    (vmcs12->vm_entry_controls & VM_ENTRY_LOAD_IA32_PKRS))
+> +			vmcs_write64(GUEST_IA32_PKRS, vmcs12->guest_ia32_pkrs);
+
+As mentioned in the BNDCFGS thread, this does the wrong thing for SMM.  But, after
+a lot of thought, handling this in nested_vmx_enter_non_root_mode() would be little
+more than a band-aid, and a messy one at that, because KVM's SMM emulation is
+horrifically broken with respect to nVMX.
+
+Entry does to SMM does not modify _any_ state that is not saved in SMRAM.  That
+we're having to deal with this crap is a symptom of KVM doing the complete wrong
+thing by piggybacking nested_vmx_vmexit() and nested_vmx_enter_non_root_mode().
+
+The SDM's description of CET spells this out very, very clearly:
+
+  On processors that support CET shadow stacks, when the processor enters SMM,
+  the processor saves the SSP register to the SMRAM state save area (see Table 31-3)
+  and clears CR4.CET to 0. Thus, the initial execution environment of the SMI handler
+  has CET disabled and all of the CET state of the interrupted program is still in the
+  machine. An SMM that uses CET is required to save the interrupted program’s CET
+  state and restore the CET state prior to exiting SMM.
+
+It mostly works because no guest SMM handler does anything with most of the MSRs,
+but it's all wildy wrong.  A concrete example of a lurking bug is if vmcs12 uses
+the VM-Exit MSR load list, in which case the forced nested_vmx_vmexit() will load
+state that is never undone.
+
+So, my very strong vote is to ignore SMM and let someone who actually cares about
+SMM fix that mess properly by adding custom flows for exiting/re-entering L2 on
+SMI/RSM.
+
+>  	}
 >  
-> -	ret = sgx_encl_get_backing(encl, page_index, &b);
-> +	ret = sgx_encl_lookup_backing(encl, page_index, &b);
->  	if (ret)
->  		return ret;
+>  	if (nested_cpu_has_xsaves(vmcs12))
+> @@ -2521,6 +2529,11 @@ static int prepare_vmcs02(struct kvm_vcpu *vcpu, struct vmcs12 *vmcs12,
+>  	if (kvm_mpx_supported() && (!vmx->nested.nested_run_pending ||
+>  	    !(vmcs12->vm_entry_controls & VM_ENTRY_LOAD_BNDCFGS)))
+>  		vmcs_write64(GUEST_BNDCFGS, vmx->nested.vmcs01_guest_bndcfgs);
+> +	if (kvm_cpu_cap_has(X86_FEATURE_PKS) &&
+
+ERROR: trailing whitespace
+#85: FILE: arch/x86/kvm/vmx/nested.c:3407:
++^Iif (kvm_cpu_cap_has(X86_FEATURE_PKS) && $
+
+> +	    (!vmx->nested.nested_run_pending ||
+> +	     !(vmcs12->vm_entry_controls & VM_ENTRY_LOAD_IA32_PKRS)))
+> +		vmcs_write64(GUEST_IA32_PKRS, vmx->nested.vmcs01_guest_pkrs);
+> +
+>  	vmx_set_rflags(vcpu, vmcs12->guest_rflags);
 >  
-> @@ -574,7 +574,7 @@ static struct page *sgx_encl_get_backing_page(struct sgx_encl *encl,
->   *   0 on success,
->   *   -errno otherwise.
->   */
-> -int sgx_encl_get_backing(struct sgx_encl *encl, unsigned long page_index,
-> +static int sgx_encl_get_backing(struct sgx_encl *encl, unsigned long page_index,
->  			 struct sgx_backing *backing)
->  {
->  	pgoff_t pcmd_index = PFN_DOWN(encl->size) + 1 + (page_index >> 5);
-> @@ -601,6 +601,111 @@ int sgx_encl_get_backing(struct sgx_encl *encl, unsigned long page_index,
+>  	/* EXCEPTION_BITMAP and CR0_GUEST_HOST_MASK should basically be the
+> @@ -2897,6 +2910,10 @@ static int nested_vmx_check_host_state(struct kvm_vcpu *vcpu,
+>  					   vmcs12->host_ia32_perf_global_ctrl)))
+>  		return -EINVAL;
+>  
+> +	if ((vmcs12->vm_exit_controls & VM_EXIT_LOAD_IA32_PKRS) &&
+> +	    CC(!kvm_pkrs_valid(vmcs12->host_ia32_pkrs)))
+> +		return -EINVAL;
+> +
+>  #ifdef CONFIG_X86_64
+>  	ia32e = !!(vmcs12->vm_exit_controls & VM_EXIT_HOST_ADDR_SPACE_SIZE);
+>  #else
+> @@ -3049,6 +3066,10 @@ static int nested_vmx_check_guest_state(struct kvm_vcpu *vcpu,
+>  	if (nested_check_guest_non_reg_state(vmcs12))
+>  		return -EINVAL;
+>  
+> +	if ((vmcs12->vm_entry_controls & VM_ENTRY_LOAD_IA32_PKRS) &&
+> +	    CC(!kvm_pkrs_valid(vmcs12->guest_ia32_pkrs)))
+> +		return -EINVAL;
+> +
 >  	return 0;
 >  }
 >  
-> +/*
-> + * When called from ksgxd, returns the mem_cgroup of a struct mm stored
-> + * in the enclave's mm_list. When not called from ksgxd, just returns
-> + * the mem_cgroup of the current task.
-> + */
-> +static struct mem_cgroup *sgx_encl_get_mem_cgroup(struct sgx_encl *encl)
-> +{
-> +	struct mem_cgroup *memcg = NULL;
-> +	struct sgx_encl_mm *encl_mm;
-> +	int idx;
+> @@ -3384,6 +3405,10 @@ enum nvmx_vmentry_status nested_vmx_enter_non_root_mode(struct kvm_vcpu *vcpu,
+>  	    (!from_vmentry ||
+>  	     !(vmcs12->vm_entry_controls & VM_ENTRY_LOAD_BNDCFGS)))
+>  		vmx->nested.vmcs01_guest_bndcfgs = vmcs_read64(GUEST_BNDCFGS);
+> +	if (kvm_cpu_cap_has(X86_FEATURE_PKS) && 
+> +	    (!from_vmentry ||
+
+This should be "!vmx->nested.nested_run_pending" instead of "!from_vmentry" to
+avoid the unnecessary VMREAD when restoring L2 with a pending VM-Enter. 
+	
+> +	     !(vmcs12->vm_entry_controls & VM_ENTRY_LOAD_IA32_PKRS)))
+> +		vmx->nested.vmcs01_guest_pkrs = vmcs_read64(GUEST_IA32_PKRS);
+>  
+>  	/*
+>  	 * Overwrite vmcs01.GUEST_CR3 with L1's CR3 if EPT is disabled *and*
+
+...
+
+> diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
+> index 91723a226bf3..82f79ac46d7b 100644
+> --- a/arch/x86/kvm/vmx/vmx.h
+> +++ b/arch/x86/kvm/vmx/vmx.h
+> @@ -222,6 +222,8 @@ struct nested_vmx {
+>  	u64 vmcs01_debugctl;
+>  	u64 vmcs01_guest_bndcfgs;
+>  
+
+Please pack these together, i.e. don't have a blank line between the various
+vmcs01_* fields.
+
+> +	u64 vmcs01_guest_pkrs;
 > +
-> +	/*
-> +	 * If called from normal task context, return the mem_cgroup
-> +	 * of the current task's mm. The remainder of the handling is for
-> +	 * ksgxd.
-> +	 */
-> +	if (!current_is_ksgxd())
-> +		return get_mem_cgroup_from_mm(current->mm);
-> +
-> +	/*
-> +	 * Search the enclave's mm_list to find an mm associated with
-> +	 * this enclave to charge the allocation to.
-> +	 */
-> +	idx = srcu_read_lock(&encl->srcu);
-> +
-> +	list_for_each_entry_rcu(encl_mm, &encl->mm_list, list) {
-> +		if (!mmget_not_zero(encl_mm->mm))
-> +			continue;
-> +
-> +		memcg = get_mem_cgroup_from_mm(encl_mm->mm);
-> +
-> +		mmput_async(encl_mm->mm);
-> +
-> +		break;
-> +	}
-> +
-> +	srcu_read_unlock(&encl->srcu, idx);
-> +
-> +	/*
-> +	 * In the rare case that there isn't an mm associated with
-> +	 * the enclave, set memcg to the current active mem_cgroup.
-> +	 * This will be the root mem_cgroup if there is no active
-> +	 * mem_cgroup.
-> +	 */
-> +	if (!memcg)
-> +		return get_mem_cgroup_from_mm(NULL);
-> +
-> +	return memcg;
-> +}
-
-
-You can simplify the function a bit. But it's up to you, not a strong
-opinion.
-
-static struct mem_cgroup *sgx_encl_get_mem_cgroup(struct sgx_encl *encl)
-{
-	struct mem_cgroup *memcg = NULL;
-	struct sgx_encl_mm *encl_mm;
-	int idx;
-
-	if (current_is_ksgxd()) {
-		/*
-		 * Search the enclave's mm_list to find an mm associated with
-		 * this enclave to charge the allocation to.
-		 */
-		idx = srcu_read_lock(&encl->srcu);
-		list_for_each_entry_rcu(encl_mm, &encl->mm_list, list) {
-			if (!mmget_not_zero(encl_mm->mm))
-				continue;
-
-			memcg = get_mem_cgroup_from_mm(encl_mm->mm);
-			mmput_async(encl_mm->mm);
-			break;
-		}
-		srcu_read_unlock(&encl->srcu, idx);
-	}
-
-	return memcg ? memcg : get_mem_cgroup_from_mm(current->mm);
-}
-
---
-
-The rest of the patch looks good to me. Please, feel free to add:
-
-Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
-
-Thanks!
+>  	/* to migrate it to L1 if L2 writes to L1's CR8 directly */
+>  	int l1_tpr_threshold;
+>  
+> -- 
+> 2.25.1
+> 

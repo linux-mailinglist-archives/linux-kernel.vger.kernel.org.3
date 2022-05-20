@@ -2,114 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33C0D52EC71
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 14:43:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B43E52EC3B
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 14:36:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349643AbiETMmw convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 20 May 2022 08:42:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41096 "EHLO
+        id S243222AbiETMgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 08:36:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349498AbiETMmh (ORCPT
+        with ESMTP id S231533AbiETMge (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 08:42:37 -0400
-X-Greylist: delayed 390 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 20 May 2022 05:42:21 PDT
-Received: from unicorn.mansr.com (unicorn.mansr.com [81.2.72.234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 402B61901A;
-        Fri, 20 May 2022 05:42:20 -0700 (PDT)
-Received: from raven.mansr.com (raven.mansr.com [IPv6:2001:8b0:ca0d:1::3])
-        by unicorn.mansr.com (Postfix) with ESMTPS id 6406615361;
-        Fri, 20 May 2022 13:35:48 +0100 (BST)
-Received: by raven.mansr.com (Postfix, from userid 51770)
-        id 4D31721A3D6; Fri, 20 May 2022 13:35:48 +0100 (BST)
-From:   =?iso-8859-1?Q?M=E5ns_Rullg=E5rd?= <mans@mansr.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Pantelis Antoniou <pantelis.antoniou@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vitaly Bordug <vbordug@ru.mvista.com>,
-        Dan Malek <dan@embeddededge.com>,
-        Joakim Tjernlund <joakim.tjernlund@lumentis.se>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] net: fs_enet: sync rx dma buffer before reading
-References: <20220519192443.28681-1-mans@mansr.com>
-        <03f24864-9d4d-b4f9-354a-f3b271c0ae66@csgroup.eu>
-Date:   Fri, 20 May 2022 13:35:48 +0100
-In-Reply-To: <03f24864-9d4d-b4f9-354a-f3b271c0ae66@csgroup.eu> (Christophe
-        Leroy's message of "Fri, 20 May 2022 05:39:38 +0000")
-Message-ID: <yw1xmtfc9yaj.fsf@mansr.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+        Fri, 20 May 2022 08:36:34 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F4B5E15B
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 05:36:32 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id 27so4566497ljw.0
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 05:36:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xGncHVX9PqWBfDwc0H7X3Y0RBAzmQK7gEv/KlhgQIFU=;
+        b=n7u9zgy8R2EEPG7xkvIIeSOnMhW/c3vq0cTBXYCQngSibUDoynkYDolKt3ma3ZZW8x
+         DBoMso0maqFQsDwkhY6oUmCjbxcaeYfDa/FkgjoGvHNaMlV9b0dLqgj/bd8b3Oh4GBmW
+         8uRYQW8qu1mmYask+PovLh10t6IDcw6pM2+44vmWYTqLP7yHSdEqhwlh0sIeXTMFLsXP
+         PwTigRoxwgLjOaMftG+cYjUugbir4hc3lsRzDyvntFo3UaLAS35tX9kGrnbd1uxZ0KOK
+         sqopp3GmIbbvrWE9EGCvRu4WQwg2Ffgj8CkwiNoq0sGDoq9WdJeZ6VcXJP/FyxLevuRT
+         a6sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xGncHVX9PqWBfDwc0H7X3Y0RBAzmQK7gEv/KlhgQIFU=;
+        b=nqEkrqRTme7IwtrlxcYy7AYnxCUOdQ9MKY+rZQs3rmx5n7FltVKOHvf2Cg7q3Ew75E
+         daknwlLW9QZOI06iOwBjdWz2rlJ5QD9Vw6kVOH6WDHFDfYk1mt9EaVrswUa1SPw7k30y
+         pv9/L0ANkaeyWPcY35xb7T8JytA90CqyjqjW05HLG9MDx3O87CRF/fDC2Vs1OvSP8njq
+         TYNWkII5Q3HPTJtmKJKuR0Z537Ebfhy/skZjGTUly/rJyD0gUcKbMC6r1fmp88aSp8uj
+         GbXXy6UQnefUZzer24yRGrtu2T6HDHppQev+shd5DsjE8wdWJJMmz5nAHLDfVJZCRkcD
+         W+Qg==
+X-Gm-Message-State: AOAM531oBtoJTl6fQGOCzhKo74vSFHwUgPspN4l43kejMZz5ZTS0OyJn
+        FHhTxNXVmWaUirzlTknjnVZtyA==
+X-Google-Smtp-Source: ABdhPJwLBdNwh3xBWo2b/5yTtd2qZWhE9XiACStDUXrelLY1sD912zvcZvSoA4ihzMOV3Yq/he1Gog==
+X-Received: by 2002:a2e:9410:0:b0:253:c996:59fd with SMTP id i16-20020a2e9410000000b00253c99659fdmr5444397ljh.41.1653050190685;
+        Fri, 20 May 2022 05:36:30 -0700 (PDT)
+Received: from localhost.localdomain (ua-84-216-129-17.bbcust.telenor.se. [84.216.129.17])
+        by smtp.gmail.com with ESMTPSA id x3-20020a19f603000000b0047255d211ccsm642295lfe.251.2022.05.20.05.36.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 May 2022 05:36:29 -0700 (PDT)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     Linus <torvalds@linux-foundation.org>, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [GIT PULL] MMC fixes for v5.18-rc8
+Date:   Fri, 20 May 2022 14:36:25 +0200
+Message-Id: <20220520123625.46331-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christophe Leroy <christophe.leroy@csgroup.eu> writes:
+Hi Linus,
 
-> Le 19/05/2022 à 21:24, Mans Rullgard a écrit :
->> The dma_sync_single_for_cpu() call must precede reading the received
->> data. Fix this.
->
-> See original commit 070e1f01827c. It explicitely says that the cache 
-> must be invalidate _AFTER_ the copy.
->
-> The cache is initialy invalidated by dma_map_single(), so before the 
-> copy the cache is already clean.
->
-> After the copy, data is in the cache. In order to allow re-use of the 
-> skb, it must be put back in the same condition as before, in extenso the 
-> cache must be invalidated in order to be in the same situation as after 
-> dma_map_single().
->
-> So I think your change is wrong.
+Here's a PR with an MMC fix intended for v5.18-rc8. Details about the highlights
+are as usual found in the signed tag.
 
-OK, looking at it more closely, the change is at least unnecessary since
-there will be a cache invalidation between each use of the buffer either
-way.  Please disregard the patch.  Sorry for the noise.
+Please pull this in!
 
->> 
->> Fixes: 070e1f01827c ("net: fs_enet: don't unmap DMA when packet len is below copybreak")
->> Signed-off-by: Mans Rullgard <mans@mansr.com>
->> ---
->>   drivers/net/ethernet/freescale/fs_enet/fs_enet-main.c | 8 ++++----
->>   1 file changed, 4 insertions(+), 4 deletions(-)
->> 
->> diff --git a/drivers/net/ethernet/freescale/fs_enet/fs_enet-main.c b/drivers/net/ethernet/freescale/fs_enet/fs_enet-main.c
->> index b3dae17e067e..432ce10cbfd0 100644
->> --- a/drivers/net/ethernet/freescale/fs_enet/fs_enet-main.c
->> +++ b/drivers/net/ethernet/freescale/fs_enet/fs_enet-main.c
->> @@ -240,14 +240,14 @@ static int fs_enet_napi(struct napi_struct *napi, int budget)
->>                                  /* +2 to make IP header L1 cache aligned */
->>                                  skbn = netdev_alloc_skb(dev, pkt_len + 2);
->>                                  if (skbn != NULL) {
->> +                                       dma_sync_single_for_cpu(fep->dev,
->> +                                               CBDR_BUFADDR(bdp),
->> +                                               L1_CACHE_ALIGN(pkt_len),
->> +                                               DMA_FROM_DEVICE);
->>                                          skb_reserve(skbn, 2);   /* align IP header */
->>                                          skb_copy_from_linear_data(skb,
->>                                                        skbn->data, pkt_len);
->>                                          swap(skb, skbn);
->> -                                       dma_sync_single_for_cpu(fep->dev,
->> -                                               CBDR_BUFADDR(bdp),
->> -                                               L1_CACHE_ALIGN(pkt_len),
->> -                                               DMA_FROM_DEVICE);
->>                                  }
->>                          } else {
->>                                  skbn = netdev_alloc_skb(dev, ENET_RX_FRSIZE);
->> --
->> 2.35.1
->> 
+Kind regards
+Ulf Hansson
 
--- 
-Måns Rullgård
+
+The following changes since commit 3e5a8e8494a8122fe4eb3f167662f406cab753b9:
+
+  mmc: sdhci-msm: Reset GCC_SDCC_BCR register for SDHC (2022-05-04 12:31:55 +0200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git tags/mmc-v5.18-rc4-2
+
+for you to fetch changes up to e949dee3625e1b0ef2e40d9aa09c2995281b12f6:
+
+  mmc: core: Fix busy polling for MMC_SEND_OP_COND again (2022-05-19 15:46:46 +0200)
+
+----------------------------------------------------------------
+MMC core:
+ - Fix busy polling for MMC_SEND_OP_COND again
+
+----------------------------------------------------------------
+Ulf Hansson (1):
+      mmc: core: Fix busy polling for MMC_SEND_OP_COND again
+
+ drivers/mmc/core/mmc_ops.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)

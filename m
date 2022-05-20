@@ -2,128 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF1E052E575
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 08:57:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3672A52E578
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 08:59:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346109AbiETG5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 02:57:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55442 "EHLO
+        id S235910AbiETG7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 02:59:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235886AbiETG5F (ORCPT
+        with ESMTP id S231716AbiETG7d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 02:57:05 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45C5566AEA;
-        Thu, 19 May 2022 23:57:04 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L4Hb23dQhz4xD9;
-        Fri, 20 May 2022 16:57:02 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1653029822;
-        bh=3qcC0zxa4JNcBZM2KoM0PUrp8oT7ymNUmD1Kh8x2BLE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=mF5G2mI9LN/6goV1xEUdlwdttZuZYp7qiCAR5xLBbEVqryX0rm3YGAmOk33Pt1E8M
-         VANVjdea+1WsIU6hDoc1Xsj/0eoYM2/e78Zh3YLLungYPf9PXy36XaSHKQKLn/t5f3
-         8sb7xnaSkTXhVpv+oEQmIq+RtM5aMWivrQE/ttYxv2IaGhBit4cQizElTpkwEtZDz4
-         jmRtDcw5Oe8o0xulE4UB5VOxacJOGj9NKoij8bjqmuTJCsHfyy2VBJ15GJB0Bg8Zwz
-         zHXzi9ac8mcYl+vB2jffIH/c0WQHm10OLmFCwrSpgv7d+jddQ98Uz8RhCj/zUA+cUk
-         n6D78eZmZAcBQ==
-Date:   Fri, 20 May 2022 16:57:01 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Linux Crypto List <linux-crypto@vger.kernel.org>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Meenakshi Aggarwal <meenakshi.aggarwal@nxp.com>,
-        Steffen Trumtrar <s.trumtrar@pengutronix.de>
-Subject: linux-next: manual merge of the tpmdd tree with the crypto tree
-Message-ID: <20220520165701.14224ddb@canb.auug.org.au>
+        Fri, 20 May 2022 02:59:33 -0400
+Received: from sonic317-22.consmr.mail.gq1.yahoo.com (sonic317-22.consmr.mail.gq1.yahoo.com [98.137.66.148])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E10677CB1E
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 23:59:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=netscape.net; s=a2048; t=1653029971; bh=nAiiF/gaLx9YvHz1WBDFG9vBQFV8yYAG36DVxtUDGKg=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=tLvZ3yzsCHOuV4WrX1KecYXs0pEIszI6bSoNzA1XE25GAU6V3pjIWuolHmY8padgkyekUiCsDaaE5QLypBFyYaxojzCWKxb1HJWRAAAWl8pTnJQzt91y4vddc0IkD9w+njtNwZxCGvjEM1955itIu76Fb4NkqaHPuzHRbySgIf/DSF01Zyn2MHsIE/fPPBHDRK9XxDjiz9wBqyqgy62WqZ59RZmQnDjG7X2UZ50N382AbyBV6BPqT50BZuatq78Oo6yxhouXC1BATI/ki9vBlszgc4BlDGSJCCyTVLHFwU0I8EDZQ0s/iS6i5KKQkoCO0ekSFRqhnES/hqkrMwOe2g==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1653029971; bh=qaC13H91UDc+VejYtnG4e4YoYUKSODRWjrwz7203O68=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=FBLtiV+7nG53sWH4vtivDlRsiQ7U9+H2O82e70byZhBu5q513G53nK2/vCRSAif2sFdKprG9M+VRbaSbxlPyjl8LeNIz4DVevl8m2I2aZVeTyV2zvt5JQ77fThijKOQjnX1jAM4vlFIsupDo53wkuhtSUATJWbIySkBTNAO90VV6Syv0Uk6qvAz1skwaI68hOtJ5RPindoD85fX5QgLH6b3Y91hDwRqCdlFX6bPvo23x9kojLsRd5jbpQHrEwWSk27ukIFwhqZm3KJ3OGRpbvezesfwLya8R/u1asItlsDqQnmRKsC6ODgy4H4wjahYYmEHyxNjnldMHwWkhM2+JDA==
+X-YMail-OSG: 7xtcaasVM1lx5OMihPL.hTlRrM1A8gAiFAluZtMNuTWzcGcv870G4vhNQPZRIZS
+ ilxDgYTnY6Km_vUamZlf4scV5t21_TYQ3L18f1vS8IF2oTF0jrqEYdQWjiwAD_po1Durvana8z9k
+ S5Nmu0gvJnezglWTF1P5xNECJtfXsYc75paLHUVCjR0eSwSKmztMsmNOGlP4eTVqXq.1NeSkl2g6
+ QvsEqSV3DWHURxjOEGXk68nRQY7hkY4U_3rrBNbxF9HlnxTDidZ2eU2uaytTPAaBYX8PLyMD6KfI
+ 8Qh4i6fIEQj27ZDyuBs7D2ejdSKXAawjuo0c1F_4jIJPUIIlLcYEmzlDXWaL6ryL_Nn3VPbreDzz
+ acD1Z73p_3ufdSev_GUX8DiMfR0Etah7zgfP_jGUa6ctalbF3NcnUck3NqSjO4iH.pT4IVDoO4g.
+ SsDFxvhI9kx1Qyw6q_YBnuCSE7Sa7PYi_Yg3g6Qoe5HDOXcze8BWT91QRrax9983YrQDuhSKcY1O
+ FdXs0nHPgFowx47xZOC5eoVOqmgT0DUEtE3FbioTjwoJuuX4IRGwookpeDxxLzS5xQ23QLdHNZen
+ DSCh3o5wUhfR1bgjTg7XORYgXc4GlXiKAU2svD41dsQIT3WB73cC88lcP_0Hm1P8cfEV1bXDqTV3
+ ITLSOplghvQymnxjEv7gLH0nca9XmBaeoLje_SBduuVgJX5rpoTIDZJs7d757Ic.vVqkIuSFTXrZ
+ 95Op_O8e1Oz7YS7rOcy8FJFk59NED_KjHBGe3mu61MCrFpN.4L7W.6eYBqL3se5ksp6w5LBerJqd
+ 98sTqB5wG70a5sA.SkXOG.S7wx3faRCL8J0XNFTNQluhnilgXbwIdL99WmBXkVgRFEJnafwoRYCa
+ Z8k8yUTnb7ckMJmZejnNq.b_hYLG41aZSXjzaveOZH3OXxuoL46_tQ3EQteu4jJ2yY5_eHWNYqat
+ Ri_jkXOsmNcD9_pr3VJITniq2Jn0ZNTY8ZJyraIM_M3PhVkaE8dI711kZ70YCzZRKnsyzq8exphZ
+ B_cnxDyPJIT88zju7u81eNctVt2ora4rVYrzPIptRU2HUhOW8_Jpkd4rN6vi5vs95cDPQkGnDaRQ
+ ZI_bObcrELFaOZ.ky3MZCLJp6K0gd5EdjeRdhKqtOS5f_hMeX5yiXP0lyRF0g4sswTTDKCUs7lAx
+ pwd9mINEq07kqdrZrVC3DKO.aFwFB.KjlW2lsgjl30OXphrTnlTNPkDt2Wb4BTKAzIAW1Zjl_0WD
+ Lc9vaypKYJ.vBO4ssOTh7KKvkv3JP1Mfu4jr6Tp70GE05I3QfJLghqxMzOtj5KlGj0FhcTLH3kcc
+ 0IiuJDtyjAgcQDU6zykDmf1SX.Rm_t1WgWrZ.bQ4vGk3ln56eftNhkBkewlMVT1iUaXlqUcwH8F4
+ wV.KlsDBRfUyrcfzEK.eatnVe_TNlQ1yxBd2rqjsl_vZfDPrYG8HywXgOSAlNHm_2VPX6NkoM5xT
+ 6G1N5lhaTXs1mXbT_F.3sWbISjecItVM5zKDNADFOjEW9MKOA_J1Ckgw37pIdFWPpVhtOcoG1qYT
+ oU2EALUQZ66qle9q5H50ck6o2jWgsQi5EAl6W2PzLXmdVGhFNcVHWk7lrkHcT6RgtE4gknfAi.12
+ h3C6m8F8CgMfO3GQ.5yxgl0wAxslMHGGqQU9FrpNecAJ4a88Aw9Zrk2rEUlB5iRePZiiA0t3DoE.
+ 2.egF7I7_T9cyNZyFPTsAdZGsAEn0ifH91EgCZvRvLy.Xa8M.pfNLN30TVHGYVRvzxijxcdXqDs1
+ g_20vFXNo.n824fOAMKq0yXKWg9ribjIxu.T69RwZAmsFFqtpMknS1OGHnsJrnb3T6vqsPYMMMMd
+ zP_8BlykH.soKnXEJY4YgY8NIWMLPXX1Oc7JaR7b5AkfNAHtJQZtGYFBo16RnUAFioTGM9vcij1D
+ RRNZbLbpvVkLOLeIffNQeqeQTJo3W2e9pZ2Ti6zWPvU0AY9fFGcYWPxmB8h4SKJmLat4MVnUGLcs
+ nmFw4uL21s9Hsiyb987egxLFul1L_70Jt7rQ.u3GuQX9BJ4GHNlmWJs0RI6iMrCRFWoyYmZNxO_P
+ aCcQdZDnCbMIIIFMaeYgF77GZlIzio6lCsPkWxOdUI7epcuPKOA0a97onBFS.bRWfb37uNZ0H8Au
+ ckQZogbtCcbzM4DuVH2c_hb_2GQhNuLSq72OSZ.m__vZtFIQwCLL6hH1jYdSlZbes5DIhL58aF2x
+ Z5C82
+X-Sonic-MF: <brchuckz@aim.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic317.consmr.mail.gq1.yahoo.com with HTTP; Fri, 20 May 2022 06:59:31 +0000
+Received: by hermes--canary-production-ne1-5495f4d555-xgn59 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 077428ea294e9eca2cd83f945fe6833b;
+          Fri, 20 May 2022 06:59:14 +0000 (UTC)
+Message-ID: <8b1ebea5-7820-69c4-2e2b-9866d55bc180@netscape.net>
+Date:   Fri, 20 May 2022 02:59:11 -0400
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/s55XKUIBqpxB_cDnrpn6i.n";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 2/2] x86/pat: add functions to query specific cache mode
+ availability
+Content-Language: en-US
+To:     Jan Beulich <jbeulich@suse.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, Juergen Gross <jgross@suse.com>
+References: <20220503132207.17234-1-jgross@suse.com>
+ <20220503132207.17234-3-jgross@suse.com>
+ <1d86d8ff-6878-5488-e8c4-cbe8a5e8f624@suse.com>
+ <0dcb05d0-108f-6252-e768-f75b393a7f5c@suse.com>
+ <77255e5b-12bf-5390-6910-dafbaff18e96@netscape.net>
+ <a2e95587-418b-879f-2468-8699a6df4a6a@suse.com>
+From:   Chuck Zmudzinski <brchuckz@netscape.net>
+In-Reply-To: <a2e95587-418b-879f-2468-8699a6df4a6a@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Mailer: WebService/1.1.20225 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.aol
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/s55XKUIBqpxB_cDnrpn6i.n
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 5/20/2022 2:05 AM, Jan Beulich wrote:
+> On 20.05.2022 06:43, Chuck Zmudzinski wrote:
+>> On 5/4/22 5:14 AM, Juergen Gross wrote:
+>>> On 04.05.22 10:31, Jan Beulich wrote:
+>>>> On 03.05.2022 15:22, Juergen Gross wrote:
+>>>>> Some drivers are using pat_enabled() in order to test availability of
+>>>>> special caching modes (WC and UC-). This will lead to false negatives
+>>>>> in case the system was booted e.g. with the "nopat" variant and the
+>>>>> BIOS did setup the PAT MSR supporting the queried mode, or if the
+>>>>> system is running as a Xen PV guest.
+>>>> ...
+>>>>> Add test functions for those caching modes instead and use them at the
+>>>>> appropriate places.
+>>>>>
+>>>>> Fixes: bdd8b6c98239 ("drm/i915: replace X86_FEATURE_PAT with
+>>>>> pat_enabled()")
+>>>>> Fixes: ae749c7ab475 ("PCI: Add arch_can_pci_mmap_wc() macro")
+>>>>> Signed-off-by: Juergen Gross <jgross@suse.com>
+>>>> ...
+>>>>
+>>>>> --- a/arch/x86/include/asm/pci.h
+>>>>> +++ b/arch/x86/include/asm/pci.h
+>>>>> @@ -94,7 +94,7 @@ int pcibios_set_irq_routing(struct pci_dev *dev,
+>>>>> int pin, int irq);
+>>>>>        #define HAVE_PCI_MMAP
+>>>>> -#define arch_can_pci_mmap_wc()    pat_enabled()
+>>>>> +#define arch_can_pci_mmap_wc()    x86_has_pat_wc()
+>>>> Besides this and ...
+>>>>
+>>>>> --- a/drivers/gpu/drm/i915/gem/i915_gem_mman.c
+>>>>> +++ b/drivers/gpu/drm/i915/gem/i915_gem_mman.c
+>>>>> @@ -76,7 +76,7 @@ i915_gem_mmap_ioctl(struct drm_device *dev, void
+>>>>> *data,
+>>>>>        if (args->flags & ~(I915_MMAP_WC))
+>>>>>            return -EINVAL;
+>>>>>    -    if (args->flags & I915_MMAP_WC && !pat_enabled())
+>>>>> +    if (args->flags & I915_MMAP_WC && !x86_has_pat_wc())
+>>>>>            return -ENODEV;
+>>>>>          obj = i915_gem_object_lookup(file, args->handle);
+>>>>> @@ -757,7 +757,7 @@ i915_gem_dumb_mmap_offset(struct drm_file *file,
+>>>>>          if (HAS_LMEM(to_i915(dev)))
+>>>>>            mmap_type = I915_MMAP_TYPE_FIXED;
+>>>>> -    else if (pat_enabled())
+>>>>> +    else if (x86_has_pat_wc())
+>>>>>            mmap_type = I915_MMAP_TYPE_WC;
+>>>>>        else if (!i915_ggtt_has_aperture(to_gt(i915)->ggtt))
+>>>>>            return -ENODEV;
+>>>>> @@ -813,7 +813,7 @@ i915_gem_mmap_offset_ioctl(struct drm_device
+>>>>> *dev, void *data,
+>>>>>            break;
+>>>>>          case I915_MMAP_OFFSET_WC:
+>>>>> -        if (!pat_enabled())
+>>>>> +        if (!x86_has_pat_wc())
+>>>>>                return -ENODEV;
+>>>>>            type = I915_MMAP_TYPE_WC;
+>>>>>            break;
+>>>>> @@ -823,7 +823,7 @@ i915_gem_mmap_offset_ioctl(struct drm_device
+>>>>> *dev, void *data,
+>>>>>            break;
+>>>>>          case I915_MMAP_OFFSET_UC:
+>>>>> -        if (!pat_enabled())
+>>>>> +        if (!x86_has_pat_uc_minus())
+>>>>>                return -ENODEV;
+>>>>>            type = I915_MMAP_TYPE_UC;
+>>>>>            break;
+>>>> ... these uses there are several more. You say nothing on why those want
+>>>> leaving unaltered. When preparing my earlier patch I did inspect them
+>>>> and came to the conclusion that these all would also better observe the
+>>>> adjusted behavior (or else I couldn't have left pat_enabled() as the
+>>>> only
+>>>> predicate). In fact, as said in the description of my earlier patch, in
+>>>> my debugging I did find the use in i915_gem_object_pin_map() to be the
+>>>> problematic one, which you leave alone.
+>>> Oh, I missed that one, sorry.
+>> That is why your patch would not fix my Haswell unless
+>> it also touches i915_gem_object_pin_map() in
+>> drivers/gpu/drm/i915/gem/i915_gem_pages.c
+>>
+>>> I wanted to be rather defensive in my changes, but I agree at least the
+>>> case in arch_phys_wc_add() might want to be changed, too.
+>> I think your approach needs to be more aggressive so it will fix
+>> all the known false negatives introduced by bdd8b6c98239
+>> such as the one in i915_gem_object_pin_map().
+>>
+>> I looked at Jan's approach and I think it would fix the issue
+>> with my Haswell as long as I don't use the nopat option. I
+>> really don't have a strong opinion on that question, but I
+>> think the nopat option as a Linux kernel option, as opposed
+>> to a hypervisor option, should only affect the kernel, and
+>> if the hypervisor provides the pat feature, then the kernel
+>> should not override that,
+> Hmm, why would the kernel not be allowed to override that? Such
+> an override would affect only the single domain where the
+> kernel runs; other domains could take their own decisions.
+>
+> Also, for the sake of completeness: "nopat" used when running on
+> bare metal has the same bad effect on system boot, so there
+> pretty clearly is an error cleanup issue in the i915 driver. But
+> that's orthogonal, and I expect the maintainers may not even care
+> (but tell us "don't do that then").
+>
+> Jan
+>
+>> but because of the confusion,
 
-Hi all,
+As I just wrote earlier, the confusion is whether or not "nopat"
+means the kernel drivers will not use pat even if the firmware
+and hypervisor provides it. I think you are correct to
+point out that is the way the i915 driver behaved with the nopat
+option before bdd8b6c98239 was applied, with the same
+bad effects on bare metal as with the hypervisor. I think perhaps
+dealing with the nopat option to fix bdd8b6c98239 is a solution in
+search of a problem, at least as regards the i915 driver.
 
-Today's linux-next merge of the tpmdd tree got a conflict in:
+The only problem we have, as I see it, is with a false negative
+when the nopat option is *not* enabled. But the forced disabling
+of pat in Jan's patch when the nopat option is enabled is probably
+needed if the goal of the patch is to preserve the same
+behavior of the i915 driver that it had before bdd8b6c98239
+was applied.
 
-  drivers/crypto/caam/Kconfig
+In any case, especially if we do include Jan's aggressive approach
+of disabling pat with the nopat option and preserving the same bad
+behavior we had with nopat before bdd8b6c98239 was applied, the
+i915 driver should log a warning when pat is disabled. Right now,
+the driver returns -ENODEV with the problem in
+i915_gem_object_pin_map(), but it does not log an error. The only
+log message I get now is the add_taint_for_CI in intel_gt_init
+which was not very helpful information for debugging
+this problem. It was only the starting point of a longer debugging
+process because of a lack of error log messages in the i915 driver.
 
-between commit:
-
-  0aa6ac7795ca ("crypto: caam/rng - Add support for PRNG")
-
-from the crypto tree and commit:
-
-  5e785783ddb0 ("crypto: caam - add in-kernel interface for blob generator")
-
-from the tpmdd tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/crypto/caam/Kconfig
-index 0aa52b612a01,ea9f8b1ae981..000000000000
---- a/drivers/crypto/caam/Kconfig
-+++ b/drivers/crypto/caam/Kconfig
-@@@ -151,14 -151,9 +151,17 @@@ config CRYPTO_DEV_FSL_CAAM_RNG_AP
-  	  Selecting this will register the SEC4 hardware rng to
-  	  the hw_random API for supplying the kernel entropy pool.
- =20
- +config CRYPTO_DEV_FSL_CAAM_PRNG_API
- +	bool "Register Pseudo random number generation implementation with Crypt=
-o API"
- +	default y
- +	select CRYPTO_RNG
- +	help
- +	  Selecting this will register the SEC hardware prng to
- +	  the Crypto API.
- +
-+ config CRYPTO_DEV_FSL_CAAM_BLOB_GEN
-+ 	bool
-+=20
-  endif # CRYPTO_DEV_FSL_CAAM_JR
- =20
-  endif # CRYPTO_DEV_FSL_CAAM
-
---Sig_/s55XKUIBqpxB_cDnrpn6i.n
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKHO70ACgkQAVBC80lX
-0GzSxgf6Ariy3P688k9jklxHAKIMrNYfg3624IP+CH6Hfiw4iZmdZpTmDVL/L8b8
-M4XcFAfmXDDhuh6CT7lqTGSFquYKGiMFea0TIElNGj1xHORTbGX8X2dyjvfVV/PZ
-lg74e6QBcYDjLhEFX4mNpM+3htDr629uUqC+dJe/uzY32gUFWwuYvFDlLX48VjpS
-3H9ENxxZ/ma+/Q6SNwTj4Xlh4teeahEqNB/lcT2qGYhk86Vp0oAK5OUnL9dOd+B4
-qoTZ7SmF8mVaXfsY/nyMceoMP6XUwAex8FoOiHghhNi+YE5cFz0s+VvQlWxY9BzA
-KBlyBZUrBs5rDOkoioCYauTZvvlKSg==
-=j1fH
------END PGP SIGNATURE-----
-
---Sig_/s55XKUIBqpxB_cDnrpn6i.n--
+Chuck

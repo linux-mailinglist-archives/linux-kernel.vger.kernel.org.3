@@ -2,94 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E06B452F3A6
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 21:07:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1924052F3A8
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 21:08:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353162AbiETTH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 15:07:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33118 "EHLO
+        id S1353168AbiETTIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 15:08:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353081AbiETTHX (ORCPT
+        with ESMTP id S236050AbiETTIU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 15:07:23 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB0A9195EA4
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 12:07:21 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-f17f1acffeso11339429fac.4
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 12:07:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=nihMNKg/Cee52sDZgIzDCYQdEGAz2qYL7OpwXO++SRk=;
-        b=Xzzdw+qOUg6OXEC6WX8aZ1fXI2d76UtEKEll96yvfxKwyLcQKj/n4uMJDsdxKR8Kh3
-         CLc9+NimGVuwpkzvs6o/El+Bo8J37wsXEpvP/XZxH5R59MsSoB+OL8ratu/uc9jTkxrQ
-         MwJ5uD2OsRF/hjJ4TmXsFrBtfEkLd4GcmRSJE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=nihMNKg/Cee52sDZgIzDCYQdEGAz2qYL7OpwXO++SRk=;
-        b=HVoh5eCSq0UqkIweBUNDBWu89ud0gX4CkNSpONkCBprbhHOlhFa8fz0baVSnjveKQ3
-         LCI5D/952bCZbTf3n13O56QZx4TqI66lFYywmY1ZP/Z6G2rDqyMdUDgqipbJddcwY/xi
-         j+RmH5fYkT8vha/uWPZyarY1tgqItvBLqA9o2S1lORrdocR/J6TqQJwGRnAEriAHPpJ5
-         tAMCbxr0da2eSKzKhfNHTQKJO90Iwyw1J6XbwAyB8U8i9Grf4pW4s1fr7D0+EAqATLqr
-         sS4I0zDAjsQM7X/gVVFX2cOF6ewwqqRzz50FuwMlX1nRK0hda/fO/Ngb2iJ0uk6NC+Rz
-         oxYA==
-X-Gm-Message-State: AOAM532HodwkjHyCcUq15kT1LkSC//SHxnn4gxz6ApgoWAi/7XCXH/HO
-        k2Hhpim+pG/Y3O3PSGG2RX6t+aUVlQCre3bkbSbguQ==
-X-Google-Smtp-Source: ABdhPJxIC9bDA4i/ZggEJB0rWG96ePG3EUgyO1b8ubjEfLF0xE6tjuSnzDqSm6ZyeHYmPQkHU+YybI/U0OJccJHUwV8=
-X-Received: by 2002:a05:6870:240d:b0:f1:b878:e97c with SMTP id
- n13-20020a056870240d00b000f1b878e97cmr6170490oap.193.1653073641117; Fri, 20
- May 2022 12:07:21 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 20 May 2022 12:07:20 -0700
+        Fri, 20 May 2022 15:08:20 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B1519669A;
+        Fri, 20 May 2022 12:08:18 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id DFE7B5C016A;
+        Fri, 20 May 2022 15:08:17 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Fri, 20 May 2022 15:08:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1653073697; x=1653160097; bh=fI8NrSEa2V
+        /LQ+RtZc+UGGY9Ev/Xm4uci6IiTsPxdm0=; b=mVuXap/RdqY0CvhUGgMfElVx0T
+        U9LM1li5Mg5dC5OM8Mt+9VWghQqzlOMLZ7cT1e3KVprX+OpRKD7a0V3Q1ZlkTisR
+        TW7Vy0SkARKo4v4l7gpGFdHRbNqRJnhDBvgQw57hE71vKUwPm8XpQ8Yz7QRtAS3K
+        tzkNsq1BYNa8WdnAlOWZG93eiOkbddYSBMjZAc0NgdOKx+uh1Zy2bElCWhj01lM9
+        Bu7Fj5W8oXAjn/+vlnXiC1ZhSpQ/NqzJef168MN6tFODcMNIFeJKXy/K3x0W0GEy
+        IHG8VELdzHdMndDFA0zsEspnrNGuWnYpOEO2/JDYTmhEd9gQ16wJmQUcchmA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1653073697; x=1653160097; bh=fI8NrSEa2V/LQ+RtZc+UGGY9Ev/X
+        m4uci6IiTsPxdm0=; b=K75/26GGy9haXDqF17xfsWj9ns3399+u3gZd5HQLxrA8
+        XHRYOEp8JOYP9zbnv0KVIzRDWcoZtEPTF98fmATkp8sSB5kItXzhv+ak5WU9zN8t
+        O7uQKGGujTWmcqv2g5KE9/m2u00CY1sFHqgn4Y1KwG3IK/XKZOoD65stdszoCvFD
+        BZBD7PIgeG8o3RHbT21oJi8HdNji/LtkIQA4fAFDtcovcSVJ7Bl0ZjfimaPFVCK5
+        4PI/Qw9o9sy/w3e1kNPITFzsLknIk1PTRgtIPlpkC9A9b5dbuYbQjNaSWin9fU3m
+        S0pVw2OOCKH7qVb2G1/pwVP/p5usIVw772Nge/aB2w==
+X-ME-Sender: <xms:IeeHYro-TUUodLyLv9VS8vYxb2mNdgy3Jnp4aBvtlEy1UfWaSbVMdg>
+    <xme:IeeHYlrtrE-XtgNqQGzXYFGXwCVN3FjAMSX9CNg0BYmi6QlR2rVcr8uKutB6bn9Ab
+    vtt98hhVmvGkA>
+X-ME-Received: <xmr:IeeHYoNDOBy2QrfUEXu5qzd4GUdBOEJ6jdZ9RT8tmxcghAjWGCk7Fs2mMsV-rmOmhLSsJFiPulhbGW7s2pivwHEsA-kJz1E2>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrieefgddufeduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
+    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:IeeHYu7cQ6ykwawDcKZE-fmkCajyFv7AF5D1olUQMDVeHU0AcMSMgA>
+    <xmx:IeeHYq6pDp1ryo-i1GpFkO2TqqVZBkVtrpvYNr4c2hgvVfe9bi-XNA>
+    <xmx:IeeHYmgv_9wW4u5sulX4GID-60xztjPDR2BatiogiPbb-qHep7UHag>
+    <xmx:IeeHYssS24m3zGQTaOOUWEZiB2B7qEk5xFIr4dS7SY43-KoLx96aVA>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 20 May 2022 15:08:16 -0400 (EDT)
+Date:   Fri, 20 May 2022 21:08:13 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Samuel Thibault <samuel.thibault@ens-lyon.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the char-misc tree
+Message-ID: <YofnHcOa5AkhXnbX@kroah.com>
+References: <20220520194637.03824f7f@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <031ebead-4b0d-8493-d8f8-96f2ff9d938a@quicinc.com>
-References: <1652978825-5304-1-git-send-email-quic_sibis@quicinc.com>
- <1652978825-5304-2-git-send-email-quic_sibis@quicinc.com> <YoaqDcB6wkd4zOWR@ripper>
- <031ebead-4b0d-8493-d8f8-96f2ff9d938a@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Fri, 20 May 2022 12:07:20 -0700
-Message-ID: <CAE-0n53hDDoetQW0Bz7noq4peuNCyrGsXaJdjFj=4sMkGeZFgw@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] arm64: dts: qcom: sc7280: Add proxy interconnect
- requirements for modem
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Sibi Sankar <quic_sibis@quicinc.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        ohad@wizery.com, agross@kernel.org, mathieu.poirier@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mka@chromium.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220520194637.03824f7f@canb.auug.org.au>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Sibi Sankar (2022-05-20 11:08:52)
-> Hey Bjorn,
-> Thanks for taking time to review the series.
->
-> On 5/20/22 2:05 AM, Bjorn Andersson wrote:
-> > On Thu 19 May 09:47 PDT 2022, Sibi Sankar wrote:
-> >
-> >> Add interconnects that are required to be proxy voted upon during modem
-> >> bootup on SC7280 SoCs.
-> >
-> > This looks reasonable, but how come the vote is only for DDR frequency?
-> > What about the buses between modem and ddr?
->
-> The proxy votes that are put in aren't for perf related reasons, the
-> modem was getting llcc timeouts while trying to read contents from
-> memory. The hw team recommended the proxy votes as the fix.
+On Fri, May 20, 2022 at 07:46:37PM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the soundwire tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+> 
+> make[4]: *** Deleting file 'drivers/accessibility/speakup/mapdata.h'
+> can't open ./include/linux/input.h
+> make[4]: *** [/home/sfr/next/next/drivers/accessibility/speakup/Makefile:46: drivers/accessibility/speakup/mapdata.h] Error 1
+> make[3]: *** [/home/sfr/next/next/scripts/Makefile.build:542: drivers/accessibility/speakup] Error 2
+> 
+> Caused by commit
+> 
+>   6646b95aab5f ("speakup: Generate speakupmap.h automatically")
+> 
+> I have used the char-misc tree from next-20220519 for today.
 
-Presumably the bootloader sets up some initial modem and ddr bus
-bandwidth requests? Or the modem bootloader stage (MSA?) handles that
-part?
+Ugh, odd, this worked for me.  I'll go revert this.  Samuel, can you
+rework this again?
+
+thanks,
+
+greg k-h

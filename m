@@ -2,207 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1773752E909
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 11:41:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 081DA52E916
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 11:42:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347777AbiETJlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 05:41:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58696 "EHLO
+        id S1347823AbiETJmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 05:42:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347786AbiETJln (ORCPT
+        with ESMTP id S1347807AbiETJmT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 05:41:43 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E7313F91C;
-        Fri, 20 May 2022 02:41:41 -0700 (PDT)
-X-UUID: 54fe12198bfc4baf9eefe19a8be5f5fd-20220520
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:09c94849-9717-4d73-aae2-b3dd68d15d28,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:5
-X-CID-META: VersionHash:2a19b09,CLOUDID:cf90f0e2-edbf-4bd4-8a34-dfc5f7bb086d,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:0,BEC:nil
-X-UUID: 54fe12198bfc4baf9eefe19a8be5f5fd-20220520
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <johnson.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 363951275; Fri, 20 May 2022 17:41:37 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 20 May 2022 17:41:36 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 20 May 2022 17:41:35 +0800
-Message-ID: <47da3ed20b7f3c082a6bf38de2ba291b7dd67ecc.camel@mediatek.com>
-Subject: Re: [RESEND v4 2/2] PM / devfreq: mediatek: Introduce MediaTek CCI
- devfreq driver
-From:   Johnson Wang <johnson.wang@mediatek.com>
-To:     Chen-Yu Tsai <wenst@chromium.org>
-CC:     <cw00.choi@samsung.com>, <krzk+dt@kernel.org>,
-        <robh+dt@kernel.org>, <kyungmin.park@samsung.com>,
-        <djakov@kernel.org>, <khilman@kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <jia-wei.chang@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Fri, 20 May 2022 17:41:35 +0800
-In-Reply-To: <CAGXv+5G-88zWSnic-AY2ANF9BYWCsZk29CeLxp+VuFKE_LH5Ug@mail.gmail.com>
-References: <20220513032832.17645-1-johnson.wang@mediatek.com>
-         <20220513032832.17645-3-johnson.wang@mediatek.com>
-         <CAGXv+5Em2eq8g8phC7MVcEP-sCsSsKa9FQjOra2UN3pib_psLA@mail.gmail.com>
-         <7eec74e32bb482ba6984c6789f598ee9965f49b3.camel@mediatek.com>
-         <CAGXv+5G-88zWSnic-AY2ANF9BYWCsZk29CeLxp+VuFKE_LH5Ug@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Fri, 20 May 2022 05:42:19 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F5A7149AAF;
+        Fri, 20 May 2022 02:42:15 -0700 (PDT)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPA id E74F51C0011;
+        Fri, 20 May 2022 09:42:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1653039734;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=9lFUeoVRYN54qYNWAM9UozSrrbHgfx0SB7tDXiiZJ5A=;
+        b=Lx58oJLucHixvC8m5oLSHtXGC1hx0QawumGYKZZJb3mE6D99slrBU0s7z0MX0SpgacG6xg
+        FRRgWSfzmBS/QD4ODxFmEYpbvcjbwuJW5ywPg+pfDeY+/H7vo+PvOvRo/96Shfc7ZPHQHb
+        DLtH3uWstnEbXT7zDWEhQpUbpDLhlAjP9QqSN1/5BqzFnw1/+bPfmwq1e//JvOFLmKBpP+
+        t/koUi8MBIs+OqreFqBmjiZVMhCg8xtoqKihu/pzSZ61QTScWDMTf7ev7Gze250uw6fSSB
+        Z5giGkcdpCv0rk2Gp6hUpl8WXr8PbffVVm8ODFS52u4sYWS+2gFz/VooXhnUvA==
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Marek Vasut <marek.vasut+renesas@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>
+Cc:     Rob Herring <robh@kernel.org>, linux-pci@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Clement Leger <clement.leger@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>
+Subject: [PATCH v6 0/6] RZN1 USB Host support
+Date:   Fri, 20 May 2022 11:41:49 +0200
+Message-Id: <20220520094155.313784-1-herve.codina@bootlin.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-05-19 at 11:24 +0800, Chen-Yu Tsai wrote:
-> On Wed, May 18, 2022 at 8:19 PM Johnson Wang <
-> johnson.wang@mediatek.com> wrote:
-> > 
-> > Hi Chen-Yu,
-> > 
-> > On Fri, 2022-05-13 at 11:54 +0800, Chen-Yu Tsai wrote:
-> > > On Fri, May 13, 2022 at 11:31 AM Johnson Wang <
-> > > johnson.wang@mediatek.com> wrote:
-> > > > 
-> > > > We introduce a devfreq driver for the MediaTek Cache Coherent
-> > > > Interconnect
-> > > > (CCI) used by some MediaTek SoCs.
-> > > > 
-> > > > In this driver, we use the passive devfreq driver to get target
-> > > > frequencies
-> > > > and adjust voltages accordingly. In MT8183 and MT8186, the
-> > > > MediaTek
-> > > > CCI
-> > > > is supplied by the same regulators with the little core CPUs.
-> > > > 
-> > > > Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> > > > Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
-> > > > Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
-> > > > ---
-> > > > This patch depends on "devfreq-testing"[1].
-> > > > [1]
-> > > > 
-https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/log/?h=devfreq-testing__;!!CTRNKA9wMg0ARbw!zzOSoso9udvDV3h6kYlmizFtbn3ACA5aS2jCAjKyvtu4z0fobv1mD5uF9YbPSme8l_NnR05unTxkZfDdzohu8asWZQ$
-> > > > 
-> > > > ---
-> > > >  drivers/devfreq/Kconfig           |  10 +
-> > > >  drivers/devfreq/Makefile          |   1 +
-> > > >  drivers/devfreq/mtk-cci-devfreq.c | 474
-> > > > ++++++++++++++++++++++++++++++
-> > > >  3 files changed, 485 insertions(+)
-> > > >  create mode 100644 drivers/devfreq/mtk-cci-devfreq.c
-> > > > 
-> > > > diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
-> > > > index 87eb2b837e68..9754d8b31621 100644
-> > > > --- a/drivers/devfreq/Kconfig
-> > > > +++ b/drivers/devfreq/Kconfig
-> > > > @@ -120,6 +120,16 @@ config ARM_TEGRA_DEVFREQ
-> > > >           It reads ACTMON counters of memory controllers and
-> > > > adjusts the
-> > > >           operating frequencies and voltages with OPP support.
-> > > > 
-> > > > +config ARM_MEDIATEK_CCI_DEVFREQ
-> > > > +       tristate "MEDIATEK CCI DEVFREQ Driver"
-> > > > +       depends on ARM_MEDIATEK_CPUFREQ || COMPILE_TEST
-> > > > +       select DEVFREQ_GOV_PASSIVE
-> > > > +       help
-> > > > +         This adds a devfreq driver for MediaTek Cache
-> > > > Coherent
-> > > > Interconnect
-> > > > +         which is shared the same regulators with the cpu
-> > > > cluster.
-> > > > It can track
-> > > > +         buck voltages and update a proper CCI frequency. Use
-> > > > the
-> > > > notification
-> > > > +         to get the regulator status.
-> > > > +
-> > > >  config ARM_RK3399_DMC_DEVFREQ
-> > > >         tristate "ARM RK3399 DMC DEVFREQ Driver"
-> > > >         depends on (ARCH_ROCKCHIP && HAVE_ARM_SMCCC) || \
-> > > > diff --git a/drivers/devfreq/Makefile
-> > > > b/drivers/devfreq/Makefile
-> > > > index 0b6be92a25d9..bf40d04928d0 100644
-> > > > --- a/drivers/devfreq/Makefile
-> > > > +++ b/drivers/devfreq/Makefile
-> > > > @@ -11,6 +11,7 @@ obj-$(CONFIG_DEVFREQ_GOV_PASSIVE)     +=
-> > > > governor_passive.o
-> > > >  obj-$(CONFIG_ARM_EXYNOS_BUS_DEVFREQ)   += exynos-bus.o
-> > > >  obj-$(CONFIG_ARM_IMX_BUS_DEVFREQ)      += imx-bus.o
-> > > >  obj-$(CONFIG_ARM_IMX8M_DDRC_DEVFREQ)   += imx8m-ddrc.o
-> > > > +obj-$(CONFIG_ARM_MEDIATEK_CCI_DEVFREQ) += mtk-cci-devfreq.o
-> > > >  obj-$(CONFIG_ARM_RK3399_DMC_DEVFREQ)   += rk3399_dmc.o
-> > > >  obj-$(CONFIG_ARM_SUN8I_A33_MBUS_DEVFREQ)       += sun8i-a33-
-> > > > mbus.o
-> > > >  obj-$(CONFIG_ARM_TEGRA_DEVFREQ)                += tegra30-
-> > > > devfreq.o
-> > > > diff --git a/drivers/devfreq/mtk-cci-devfreq.c
-> > > > b/drivers/devfreq/mtk-cci-devfreq.c
-> > > > new file mode 100644
-> > > > index 000000000000..aa8c37eb4a06
-> > > > --- /dev/null
-> > > > +++ b/drivers/devfreq/mtk-cci-devfreq.c
-> > > > @@ -0,0 +1,474 @@
-> 
-> [...]
-> 
-> > > > +       if (IS_ERR(drv->sram_reg))
-> > > > +               drv->sram_reg = NULL;
-> > > > +       else {
-> > > > +               ret = regulator_enable(drv->sram_reg);
-> > > > +               if (ret) {
-> > > > +                       dev_err(dev, "failed to enable sram
-> > > > regulator\n");
-> > > > +                       goto out_free_resources;
-> > > > +               }
-> > > > +       }
-> > > > +
-> > > > +       /*
-> > > > +        * We assume min voltage is 0 and tracking target
-> > > > voltage
-> > > > using
-> > > > +        * min_volt_shift for each iteration.
-> > > > +        * The retry_max is 3 times of expeted iteration count.
-> > > 
-> > > expected?
-> > > 
-> > 
-> > Maybe "the maximum" will be more appropriate?
-> 
-> 
-> I was merely pointing out a typo in "expeted".
-> 
-> Looking at it again, I'm not sure why retry attempts are tied to the
-> voltage.
-> 
-> 
-> ChenYu
+Hi,
 
-Hi Chen-Yu,
+This series add support for the USB Host controllers available on
+RZN1 (r9a06g032) SOC.
 
-Thanks for you reminder.
+These USB Host controllers are PCI OHCI/EHCI controllers located
+behind a bridge.
 
-Whenever the voltages are scaled up/down one step,
-meaning that there is another iteration in the while loop.
+Regards,
+Herve
 
-Thus, our thought is to use times of the voltages step up/down to set
-iteration limit.
+Changes v2:
+- Convert bindings to json-schema
+- Update clocks description
+- Remove unneeded '.compatible = "renesas,pci-r9a06g032"'
 
-BRs,
-Johnson Wang 
+Changes v3:
+- Remove the unneeded patch that calls clk_bulk_prepare_enable()
+- Rework the device tree binding (conversion from .txt and RZ/N1 support)
+- Use the RZ/N1 SOCs family only in the driver match compatible string.
+- Enable PM and PM_GENERIC_DOMAIN for RZ/N1 and add the missing
+  '#power-domain-cells' in sysctrl node.
+
+Changes v4:
+- Remove patches related to PM enable and #pwower-domain-cells as they
+  will be handle out of this series.
+- Add Bob's reviewed-by on patch 1
+- Add Geert's reviewed by on patch 1 and 6
+- Rename clocks and make the 'resets' property optional on RZ/N1 family
+- Reword some commit logs and titles
+- Fix dst node location (sort by node names or unit addresses)
+- Fix the USB PHY node name
+
+Changes v5:
+- Rename clocks ("usb_" prefix removed)
+- Add Geert's reviewed-by on patch 2, 3, 4 and 5
+
+Changes v6:
+- Include schema optionnal part (ie 'if:') in a 'allOf:' block
+- Modify commit log on commit 2/6
+
+Herve Codina (6):
+  dt-bindings: PCI: pci-rcar-gen2: Convert bindings to json-schema
+  dt-bindings: PCI: renesas,pci-rcar-gen2: Add device tree support for
+    r9a06g032
+  PCI: rcar-gen2: Add RZ/N1 SOCs family compatible string
+  ARM: dts: r9a06g032: Add internal PCI bridge node
+  ARM: dts: r9a06g032: Add USB PHY DT support
+  ARM: dts: r9a06g032: Link the PCI USB devices to the USB PHY
+
+ .../devicetree/bindings/pci/pci-rcar-gen2.txt |  84 --------
+ .../bindings/pci/renesas,pci-rcar-gen2.yaml   | 186 ++++++++++++++++++
+ arch/arm/boot/dts/r9a06g032.dtsi              |  47 +++++
+ drivers/pci/controller/pci-rcar-gen2.c        |   1 +
+ 4 files changed, 234 insertions(+), 84 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/pci/pci-rcar-gen2.txt
+ create mode 100644 Documentation/devicetree/bindings/pci/renesas,pci-rcar-gen2.yaml
+
+-- 
+2.35.1
 

@@ -2,146 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AE0152EA90
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 13:14:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D46A552EA97
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 13:16:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348427AbiETLOm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 07:14:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48586 "EHLO
+        id S1348433AbiETLQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 07:16:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241462AbiETLOi (ORCPT
+        with ESMTP id S1348460AbiETLQE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 07:14:38 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025709E9C7;
-        Fri, 20 May 2022 04:14:36 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L4PDp6dbNzQk8V;
-        Fri, 20 May 2022 19:11:38 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 20 May 2022 19:14:35 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 20 May 2022 19:14:34 +0800
-Message-ID: <641b4f4f-9786-d11c-e264-daaf0d564b7c@huawei.com>
-Date:   Fri, 20 May 2022 19:14:33 +0800
+        Fri, 20 May 2022 07:16:04 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28908201AE;
+        Fri, 20 May 2022 04:16:02 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id h13so1226896pfq.5;
+        Fri, 20 May 2022 04:16:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=cSj1iULxPa/Q17vQx9CvBh+XXwbDyu32iNxH8BDHGWo=;
+        b=KAl6JiUblhGNLjQZ5H0XrsEH9sR+zAIGiIrYCvRSOx3z++Jx75Eil0AfqhCM8BbmPR
+         qPbECuxldaypu17UE9fgu89sGfMl+EohW1msxEf6R+k1ZrxamBnRam6cYcJcx7mXGEqg
+         g/6VIVWY73HuktEyJ9EyJCB4Lddi2viqjElMH2ai6Q9L+7nv7ma1iOTRAbMr0jGRP0sT
+         T2ga5r8esXHAIG+CzKW2Pt1e8LuhbOIyKuceUi9Yu5OgSv+9+TSt7xFSfM1lI8rZhdxQ
+         aVEFgCYfivV/FDw3ekn39hJpjJ8YmEZ/SpoeZdUduz+g+kLNR+zul2CDNo3FNVhbchS9
+         tEIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=cSj1iULxPa/Q17vQx9CvBh+XXwbDyu32iNxH8BDHGWo=;
+        b=0w88yCrOL04HwqV5gLOWjIFgDP0uBZPSjC4HwA7j7jzwRJIzIgVsdCu4FqViL5FvQ7
+         MNx4wNSizTpF209qV+DHVEoP95X2w3Oue2vdTgjoHn1uoNT0zBE5ey+NnxVvjTvQxGIi
+         FDpQ+BsXBxUCs3PottXCEglZsGEwypRbBNAOSDSlcyM3qk6Z3/QYMuZg9a90/aHCLiEb
+         DVooyjnx2J+WFfjceGq2+HaMmEKglBxerSlh4zYRyXzfQwxTQWYP2LwXX7Bo3SyTrauX
+         6fXCAmAgYqz/g5jGzkmoszWQNZoVvcdXyJa9i55zjq9j7V6iH6GxHd1UfKAYh4nJh+lj
+         mwiA==
+X-Gm-Message-State: AOAM533hze85FmLKL61QQUsktWisM+oV9UFKK+YoiqhPPoLb2qMRJLJM
+        t1ggoNEy1QLTAwV2bwTj8dy3j/VAgKk=
+X-Google-Smtp-Source: ABdhPJyqsW819iNKjHVYIQggrJBIiy7DKH8+i2ACo/uPCYVrkPdFb8BHaiKm7RUnHS5MzQbqtCRdew==
+X-Received: by 2002:a63:1a1d:0:b0:3f5:eb02:b6b4 with SMTP id a29-20020a631a1d000000b003f5eb02b6b4mr8196749pga.343.1653045362244;
+        Fri, 20 May 2022 04:16:02 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::4:1761])
+        by smtp.gmail.com with ESMTPSA id y6-20020a62ce06000000b005082a7fd144sm1559042pfg.3.2022.05.20.04.16.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 May 2022 04:16:01 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Fri, 20 May 2022 01:16:00 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     Yosry Ahmed <yosryahmed@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Michal Hocko <mhocko@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Cgroups <cgroups@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v1 2/5] cgroup: bpf: add cgroup_rstat_updated()
+ and cgroup_rstat_flush() kfuncs
+Message-ID: <Yod4cN+HayIDhR/c@slm.duckdns.org>
+References: <20220520012133.1217211-1-yosryahmed@google.com>
+ <20220520012133.1217211-3-yosryahmed@google.com>
+ <YodCPWqZodr7Shnj@slm.duckdns.org>
+ <CAJD7tkYDLc9irHLFROcYSg1shwCw+Stt5HTS08FW3ceQ5b8vqQ@mail.gmail.com>
+ <20220520093607.sadvim2igfde6x22@apollo.legion>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v2 1/2] Documentation/barriers: Add memory barrier
- dma_mb()
-Content-Language: en-US
-To:     Marco Elver <elver@google.com>
-CC:     <catalin.marinas@arm.com>, <will@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <mark.rutland@arm.com>,
-        Jonathan Corbet <corbet@lwn.net>, <linux-doc@vger.kernel.org>,
-        <paulmck@kernel.org>, Peter Zijlstra <peterz@infradead.org>
-References: <20220520031548.175582-1-wangkefeng.wang@huawei.com>
- <20220520031548.175582-2-wangkefeng.wang@huawei.com>
- <YodouVpl26890QfU@elver.google.com>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <YodouVpl26890QfU@elver.google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220520093607.sadvim2igfde6x22@apollo.legion>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, May 20, 2022 at 03:06:07PM +0530, Kumar Kartikeya Dwivedi wrote:
+> With static noinline, the compiler will optimize away the function. With global
+> noinline, it can still optimize away the call site, but will keep the function
+> definition, so attach works. Therefore __weak is needed to ensure call is still
+> emitted. With GCC __attribute__((noipa)) might have been more appropritate, but
+> LLVM doesn't support it, so __weak is the next best thing supported by both with
+> the same side effect.
 
-On 2022/5/20 18:08, Marco Elver wrote:
-> On Fri, May 20, 2022 at 11:15AM +0800, Kefeng Wang wrote:
->> The memory barrier dma_mb() is introduced by commit a76a37777f2c
->> ("iommu/arm-smmu-v3: Ensure queue is read after updating prod pointer"),
->> which is used to ensure that prior (both reads and writes) accesses to
->> memory by a CPU are ordered w.r.t. a subsequent MMIO write.
->>
->> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
->> ---
->>   Documentation/memory-barriers.txt | 5 ++++-
->>   1 file changed, 4 insertions(+), 1 deletion(-)
->>
->> diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
->> index b12df9137e1c..1eabcc0e4eca 100644
->> --- a/Documentation/memory-barriers.txt
->> +++ b/Documentation/memory-barriers.txt
->> @@ -1894,10 +1894,13 @@ There are some more advanced barrier functions:
->>   
->>    (*) dma_wmb();
->>    (*) dma_rmb();
->> + (*) dma_mb();
->>   
->>        These are for use with consistent memory to guarantee the ordering
->>        of writes or reads of shared memory accessible to both the CPU and a
->> -     DMA capable device.
->> +     DMA capable device, in the case of ensure the prior (both reads and
->> +     writes) accesses to memory by a CPU are ordered w.r.t. a subsequent
->> +     MMIO write, dma_mb().
->>   
-> I think this is out of place; this explanation here is not yet
-> elaborating on either. Elaboration on dma_mb() should go where
-> dma_rmb() and dma_wmb() are explained.
->
-> Something like this:
->
-> ------ >8 ------
->
-> diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
-> index b12df9137e1c..fb322b6cce70 100644
-> --- a/Documentation/memory-barriers.txt
-> +++ b/Documentation/memory-barriers.txt
-> @@ -1894,6 +1894,7 @@ There are some more advanced barrier functions:
->   
->    (*) dma_wmb();
->    (*) dma_rmb();
-> + (*) dma_mb();
->   
->        These are for use with consistent memory to guarantee the ordering
->        of writes or reads of shared memory accessible to both the CPU and a
-> @@ -1925,11 +1926,11 @@ There are some more advanced barrier functions:
->        The dma_rmb() allows us guarantee the device has released ownership
->        before we read the data from the descriptor, and the dma_wmb() allows
->        us to guarantee the data is written to the descriptor before the device
-> -     can see it now has ownership.  Note that, when using writel(), a prior
-> -     wmb() is not needed to guarantee that the cache coherent memory writes
-> -     have completed before writing to the MMIO region.  The cheaper
-> -     writel_relaxed() does not provide this guarantee and must not be used
-> -     here.
-> +     can see it now has ownership.  The dma_mb() implies both a dma_rmb() and a
-> +     dma_wmb().  Note that, when using writel(), a prior wmb() is not needed to
-> +     guarantee that the cache coherent memory writes have completed before
-> +     writing to the MMIO region.  The cheaper writel_relaxed() does not provide
-> +     this guarantee and must not be used here.
->   
->        See the subsection "Kernel I/O barrier effects" for more information on
->        relaxed I/O accessors and the Documentation/core-api/dma-api.rst file for
->
-> ------ >8 ------
-Thanks， will use above explanation.
-> Also, now that you're making dma_mb() part of the official API, it might
-> need a generic definition in include/asm-generic/barrier.h, because
-> as-is it's only available in arm64 builds.
+Ah, okay, so it's to prevent compiler from optimizing away call to a noop
+function by telling it that we don't know what the function might eventually
+be. Thanks for the explanation. Yosry, can you please add a comment
+explaining what's going on?
 
-Ok, it's good to add the dma_mb() and __dma_mb  definition with a 
-separate patch
+Thanks.
 
-into include/asm-generic/barrier.h.
-
->
-> Thoughts?
->
-> Thanks,
-> -- Marco
-> .
+-- 
+tejun

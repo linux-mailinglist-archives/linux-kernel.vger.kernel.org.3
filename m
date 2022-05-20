@@ -2,487 +2,381 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 859BC52E4E1
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 08:16:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D810A52E4DE
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 08:16:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345731AbiETGNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 02:13:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39420 "EHLO
+        id S1345782AbiETGPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 02:15:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241053AbiETGND (ORCPT
+        with ESMTP id S1345766AbiETGPO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 02:13:03 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B1414C74C
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 23:13:00 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id r30so10021801wra.13
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 23:13:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YKANWCdueBTzI7Twedv3GqPDQQ7DfAbHN6fR89ncX9w=;
-        b=Yz5Hh/khOKuk5jMOhzbPtGEuar/R0JTElstSJQdWFXUXkTUJ0AXJNyx0jbY9yUItqU
-         Lc8Az7qbhzg2TwrbUhM+C3KiIutq1mINOWt8FKH6Xta1unTAd3cIsnY2lIfsxeWnEOzN
-         Up8IZou+VEb+G7exICVx1wFPO5wM81l0jxN2in9G2P028fl83AIagiIqfDU/ZMH5bJ/4
-         DiAa3jL0ywF3lV+WWSK2S7gXWyiDYkvTM3V7oHKPkhi6YL9Ptte842rMyX9hKJMy0SY7
-         ed66vYmiLg0+egGdWpC388u53hAsxcnRYSPkHeCXQbv15jbAqg8lstKDq191dAnaVx6/
-         R2yQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YKANWCdueBTzI7Twedv3GqPDQQ7DfAbHN6fR89ncX9w=;
-        b=wQvVW3CbihYAX9NeaABoCAUk8B92FQ36psregmRioNHUslUEbg8WTNwI4iTFtUpmw8
-         4fLFUsDhchRNEwY5XYxN2HbHkUOLRgNcpYKGBpr7XQ31/q560Ui+bXm5Ju0QUflzqlB+
-         OfUEz7R5BYLVUd6wnkMP09J2rvac4JUxouB/3dL8HNooR3eaCvqxZlyFK7sFDPUJb8+n
-         VHBEaAv5H3ZE+B8H2RU9BcICnnhDbzwrrek5YipnbTs7g5oxGuiJ3Bv+EoD+8z8FH6BL
-         DaDhJ+JDPMiBxzyiwii/z9CuHk7jKxAibDg/PfQatTtvQbXG5UZRZQuS+pr1KAzeTnfk
-         HZug==
-X-Gm-Message-State: AOAM5300Vto91Ts+cLOlTd/94mrmbYbQcObhewzT6jdEnkLikmUmePdS
-        UxDMXU/Pu9HuM14xhPn733FwRZxwXJvbu/w+0ImDVw==
-X-Google-Smtp-Source: ABdhPJwBnBFoLrQxUGsEHH09sdgE9kbISOKCa/G+4XY2BqTlfUUsek3Akx2eeRK6c8jiTe7DieEquwvXfFgWHLzaLkI=
-X-Received: by 2002:a5d:6041:0:b0:20d:8e4:7bb8 with SMTP id
- j1-20020a5d6041000000b0020d08e47bb8mr6742438wrt.652.1653027178404; Thu, 19
- May 2022 23:12:58 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220519164512.3180360-1-dlatypov@google.com>
-In-Reply-To: <20220519164512.3180360-1-dlatypov@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Fri, 20 May 2022 14:12:47 +0800
-Message-ID: <CABVgOSnooocLsy2=a8rm7Y_m3DpffKtDam5_uYou+Y2tUkumRw@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: refactor internal kconfig handling, allow overriding
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Fri, 20 May 2022 02:15:14 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD2BF14C74D;
+        Thu, 19 May 2022 23:15:12 -0700 (PDT)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24K5HpKu031635;
+        Fri, 20 May 2022 06:15:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type :
+ mime-version : subject : from : in-reply-to : date : cc :
+ content-transfer-encoding : message-id : references : to; s=pp1;
+ bh=Hoe/XsaJ00glkaVH2ZqTSi8OiMgAqlNehX7+8B6G9pI=;
+ b=ATzd5hgkuK+xT6Dmu32XG4z6CQgoQMq4UWbXHkV+WRtIHlzTm83iPBVtXjcUTU2xG4NQ
+ cQxOxEygEWwFXSt0lk7R5ziJV4MFXjotEFoG2+KjUqWbycs2zrbm5ldmD2n4KxpyU41C
+ 5/cy64KrnBOqeSN6mc95dNuIJEJoUpU1hkO8dm0RuhhyIGxBpf0xadq/NWE0GXdVC1m5
+ sikN6HW+sWFgyxlDiQuQGzdKWuedI5ly00o73UiGw6bFgQdPTmHT8a4WT4PedxA+4ROU
+ eVP4/nNf5vAlkRAR454GgmraajDBg674Q8wSSuYJxaNTLSE4q7VRgwd06T7XorwH1tOA VQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g64qerxxu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 May 2022 06:15:06 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24K60ll4020846;
+        Fri, 20 May 2022 06:15:06 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g64qerxwx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 May 2022 06:15:06 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24K6Ch3H009357;
+        Fri, 20 May 2022 06:15:03 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma03ams.nl.ibm.com with ESMTP id 3g2429g9m2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 May 2022 06:15:03 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24K6F0GO49545512
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 20 May 2022 06:15:00 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6AFC552051;
+        Fri, 20 May 2022 06:15:00 +0000 (GMT)
+Received: from smtpclient.apple (unknown [9.163.31.125])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id 3C3D75204F;
+        Fri, 20 May 2022 06:14:55 +0000 (GMT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.120.0.1.13\))
+Subject: Re: [PATCH V2 1/2] powerpc/perf: Add support for caps under sysfs in
+ powerpc
+From:   Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+In-Reply-To: <CAP-5=fURkncicNEs87=QisBJhPkujRUZ51Z1S4A63fz+SXV6rg@mail.gmail.com>
+Date:   Fri, 20 May 2022 11:44:52 +0530
+Cc:     maddy@linux.vnet.ibm.com,
+        Nageswara Sastry <rnsastry@linux.ibm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000cd467805df6b6192"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
+        Kajol Jain <kjain@linux.ibm.com>, disgoel@linux.vnet.ibm.com,
+        linuxppc-dev@lists.ozlabs.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <03549C78-8965-4599-BE66-D5920B6C1376@linux.vnet.ibm.com>
+References: <20220518085502.6914-1-atrajeev@linux.vnet.ibm.com>
+ <CAP-5=fWN3Sgyp_hTyYvDrLrnr-7dj6ozERn0tDm5MrU2SEJ2Fg@mail.gmail.com>
+ <4D9BD7B3-1FA0-4EFE-A7D9-75BBB84ED308@linux.vnet.ibm.com>
+ <CAP-5=fURkncicNEs87=QisBJhPkujRUZ51Z1S4A63fz+SXV6rg@mail.gmail.com>
+To:     Ian Rogers <irogers@google.com>
+X-Mailer: Apple Mail (2.3654.120.0.1.13)
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 8rmXbz9Uvdu_zUEEn-xdYIoEnVeTI4sY
+X-Proofpoint-ORIG-GUID: _ihGu-k5RsJzCje7oSGNuihal26ESqW8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-20_02,2022-05-19_03,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
+ impostorscore=0 malwarescore=0 bulkscore=0 mlxscore=0 clxscore=1015
+ suspectscore=0 lowpriorityscore=0 priorityscore=1501 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205200044
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000cd467805df6b6192
-Content-Type: text/plain; charset="UTF-8"
 
-On Fri, May 20, 2022 at 12:45 AM Daniel Latypov <dlatypov@google.com> wrote:
->
-> Currently, you cannot ovewrwrite what's in your kunitconfig via
-> --kconfig_add.
-> Nor can you override something in a qemu_config via either means.
->
-> This patch makes it so we have this level of priority
-> * --kconfig_add
-> * kunitconfig file (the default or the one from --kunitconfig)
-> * qemu_config
->
-> The rationale for this order is that the more "dynamic" sources of
-> kconfig options should take priority.
->
-> --kconfig_add is obviously the most dynamic.
-> And for kunitconfig, users probably tweak the file manually or specify
-> --kunitconfig more often than they delve into qemu_config python files.
->
-> And internally, we convert the kconfigs from a python list into a set or
-> dict fairly often. We should just use a dict internally.
-> We exposed the set transform in the past since we didn't define __eq__,
-> so also take the chance to shore up the kunit_kconfig.Kconfig interface.
->
-> Example
-> =======
->
-> Let's consider the unrealistic example where someone would want to
-> disable CONFIG_KUNIT.
-> I.e. they run
-> $ ./tools/testing/kunit/kunit.py config --kconfig_add=CONFIG_KUNIT=n
->
-> Before
-> ------
-> We'd write the following
-> > # CONFIG_KUNIT is not set
-> > CONFIG_KUNIT_ALL_TESTS=y
-> > CONFIG_KUNIT_TEST=y
-> > CONFIG_KUNIT=y
-> > CONFIG_KUNIT_EXAMPLE_TEST=y
->
-> And we'd error out with
-> > ERROR:root:Not all Kconfig options selected in kunitconfig were in the generated .config.
-> > This is probably due to unsatisfied dependencies.
-> > Missing: # CONFIG_KUNIT is not set
->
-> After
-> -----
-> We'd write the following
-> > # CONFIG_KUNIT is not set
-> > CONFIG_KUNIT_TEST=y
-> > CONFIG_KUNIT_ALL_TESTS=y
-> > CONFIG_KUNIT_EXAMPLE_TEST=y
->
-> And we'd error out with
-> > ERROR:root:Not all Kconfig options selected in kunitconfig were in the generated .config.
-> > This is probably due to unsatisfied dependencies.
-> > Missing: CONFIG_KUNIT_EXAMPLE_TEST=y, CONFIG_KUNIT_TEST=y, CONFIG_KUNIT_ALL_TESTS=y
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> ---
 
-I like this, but do think there are a few gaps this doesn't handle
-properly. (Though exactly how we'd deal with them, I'm not yet sure.)
+> On 20-May-2022, at 3:06 AM, Ian Rogers <irogers@google.com> wrote:
+>=20
+> On Thu, May 19, 2022 at 4:29 AM Athira Rajeev
+> <atrajeev@linux.vnet.ibm.com> wrote:
+>>=20
+>>> On 19-May-2022, at 10:12 AM, Ian Rogers <irogers@google.com> wrote:
+>>>=20
+>>> On Wed, May 18, 2022 at 1:55 AM Athira Rajeev
+>>> <atrajeev@linux.vnet.ibm.com> wrote:
+>>>>=20
+>>>> Add caps support under "/sys/bus/event_source/devices/<pmu>/"
+>>>> for powerpc. This directory can be used to expose some of the
+>>>> specific features that powerpc PMU supports to the user.
+>>>> Example: pmu_name. The name of PMU registered will depend on
+>>>> platform, say power9 or power10 or it could be Generic Compat
+>>>> PMU.
+>>>>=20
+>>>> Currently the only way to know which is the registered
+>>>> PMU is from the dmesg logs. But clearing the dmesg will make it
+>>>> difficult to know exact PMU backend used. And even extracting
+>>>> from dmesg will be complicated, as we need  to parse the dmesg
+>>>> logs and add filters for pmu name. Whereas by exposing it via
+>>>> caps will make it easy as we just need to directly read it from
+>>>> the sysfs.
+>>>=20
+>>> For ARM and x86 in the perf tool this is normally done through a =
+cpuid
+>>> like function, is there a reason to differ on Power?
+>>>=20
+>>> Thanks,
+>>> Ian
+>>=20
+>> Hi Ian,
+>>=20
+>> Thanks for review. The information from cpuid or cpuinfo will provide
+>> us the information of the platform/model/machine etc. In case of =
+powerpc,
+>> we have one case where, though platform points to specific generation =
+of the
+>> processor, say power9 or power10, the registered PMU could point to
+>> different one. To be specific, this is named as Generic Compat PMU =
+which
+>> is a fallback PMU. This gets registered when the distro doesn't have =
+support
+>> for platform specific PMU. In that case distro will have a Generic
+>> Compat PMU registered which supports basic features for performance =
+monitoring.
+>> This information can't be fetched from the cpuid data since that will =
+point
+>> to current platform.
+>>=20
+>> So the pmu_name exposed via "caps" will be useful to detect the PMU
+>> registered and also we target to use this information in some of our
+>> selftests.
+>=20
+> Thanks, I've no problem with the change. Do we need to do a similar
+> discovery in the perf tool on old kernels? Perhaps then this
+> information could be exposed in the perf list command for self tests.
 
-In particular, it's not possible to disable a pair of options where
-one depends on the other: disabling the parent option will result in
-the child one not being present in the generated config. This will
-conflict both with "=y" and "=n/not set": we'd need a way to _remove_
-a kconfig option for that to work.
 
-The ideal thing would be for us to work out what the default value is,
-and remove the option automatically if it matches, but that seems like
-it'd be quite difficult. Otherwise, I guess a
---kconfig_{remove,delete,etc} option would work.
+Hi Ian,
 
-Otherwise, this seems okay at first glance, but I haven't had the time
-to fully review it in detail yet...
+Thanks for review. Thats good one to have. I see in perf tools, we are =
+parsing caps data : "env->cpu_pmu_caps" already.
+I will check on how this is used and option of having in perf list.
+After checking, I will send a follow up patch for the same.
 
-Cheers,
--- David
+Thanks
+Athira
+>=20
+> Thanks,
+> Ian
+>=20
+>> Thanks
+>> Athira
+>>>=20
+>>>> Add a caps directory to /sys/bus/event_source/devices/cpu/
+>>>> for power8, power9, power10 and generic compat PMU in respective
+>>>> PMU driver code. Update the pmu_name file under caps folder
+>>>> in core-book3s using "attr_update".
+>>>>=20
+>>>> The information exposed currently:
+>>>> - pmu_name : Underlying PMU name from the driver
+>>>>=20
+>>>> Example result with power9 pmu:
+>>>>=20
+>>>> # ls /sys/bus/event_source/devices/cpu/caps
+>>>> pmu_name
+>>>>=20
+>>>> # cat /sys/bus/event_source/devices/cpu/caps/pmu_name
+>>>> POWER9
+>>>>=20
+>>>> Signed-off-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+>>>> ---
+>>>> Changelog:
+>>>> v1 -> v2:
+>>>> Move the show function as generic in core-book3s
+>>>> and update show function using sysfs_emit and ppmu->name
+>>>> Added Documention for this ABI in patch 2.
+>>>> Notes: The caps directory is implemented in PMU for other
+>>>> architectures already. Reference commit for x86:
+>>>> commit b00233b53065 ("perf/x86: Export some PMU attributes in caps/ =
+directory")
+>>>>=20
+>>>> arch/powerpc/perf/core-book3s.c        | 31 =
+++++++++++++++++++++++++++
+>>>> arch/powerpc/perf/generic-compat-pmu.c | 10 +++++++++
+>>>> arch/powerpc/perf/power10-pmu.c        | 10 +++++++++
+>>>> arch/powerpc/perf/power8-pmu.c         | 10 +++++++++
+>>>> arch/powerpc/perf/power9-pmu.c         | 10 +++++++++
+>>>> 5 files changed, 71 insertions(+)
+>>>>=20
+>>>> diff --git a/arch/powerpc/perf/core-book3s.c =
+b/arch/powerpc/perf/core-book3s.c
+>>>> index b5b42cf0a703..a208f502a80b 100644
+>>>> --- a/arch/powerpc/perf/core-book3s.c
+>>>> +++ b/arch/powerpc/perf/core-book3s.c
+>>>> @@ -2488,6 +2488,33 @@ static int power_pmu_prepare_cpu(unsigned =
+int cpu)
+>>>>      return 0;
+>>>> }
+>>>>=20
+>>>> +static ssize_t pmu_name_show(struct device *cdev,
+>>>> +               struct device_attribute *attr,
+>>>> +               char *buf)
+>>>> +{
+>>>> +       if (ppmu)
+>>>> +               return sysfs_emit(buf, "%s\n", ppmu->name);
+>>>> +
+>>>> +       return 0;
+>>>> +}
+>>>> +
+>>>> +static DEVICE_ATTR_RO(pmu_name);
+>>>> +
+>>>> +static struct attribute *pmu_caps_attrs[] =3D {
+>>>> +       &dev_attr_pmu_name.attr,
+>>>> +       NULL
+>>>> +};
+>>>> +
+>>>> +static const struct attribute_group pmu_caps_group =3D {
+>>>> +       .name  =3D "caps",
+>>>> +       .attrs =3D pmu_caps_attrs,
+>>>> +};
+>>>> +
+>>>> +static const struct attribute_group *pmu_caps_groups[] =3D {
+>>>> +       &pmu_caps_group,
+>>>> +       NULL,
+>>>> +};
+>>>> +
+>>>> int __init register_power_pmu(struct power_pmu *pmu)
+>>>> {
+>>>>      if (ppmu)
+>>>> @@ -2498,6 +2525,10 @@ int __init register_power_pmu(struct =
+power_pmu *pmu)
+>>>>              pmu->name);
+>>>>=20
+>>>>      power_pmu.attr_groups =3D ppmu->attr_groups;
+>>>> +
+>>>> +       if (ppmu->flags & PPMU_ARCH_207S)
+>>>> +               power_pmu.attr_update =3D pmu_caps_groups;
+>>>> +
+>>>>      power_pmu.capabilities |=3D (ppmu->capabilities & =
+PERF_PMU_CAP_EXTENDED_REGS);
+>>>>=20
+>>>> #ifdef MSR_HV
+>>>> diff --git a/arch/powerpc/perf/generic-compat-pmu.c =
+b/arch/powerpc/perf/generic-compat-pmu.c
+>>>> index f3db88aee4dd..817c69863038 100644
+>>>> --- a/arch/powerpc/perf/generic-compat-pmu.c
+>>>> +++ b/arch/powerpc/perf/generic-compat-pmu.c
+>>>> @@ -151,9 +151,19 @@ static const struct attribute_group =
+generic_compat_pmu_format_group =3D {
+>>>>      .attrs =3D generic_compat_pmu_format_attr,
+>>>> };
+>>>>=20
+>>>> +static struct attribute *generic_compat_pmu_caps_attrs[] =3D {
+>>>> +       NULL
+>>>> +};
+>>>> +
+>>>> +static struct attribute_group generic_compat_pmu_caps_group =3D {
+>>>> +       .name  =3D "caps",
+>>>> +       .attrs =3D generic_compat_pmu_caps_attrs,
+>>>> +};
+>>>> +
+>>>> static const struct attribute_group =
+*generic_compat_pmu_attr_groups[] =3D {
+>>>>      &generic_compat_pmu_format_group,
+>>>>      &generic_compat_pmu_events_group,
+>>>> +       &generic_compat_pmu_caps_group,
+>>>>      NULL,
+>>>> };
+>>>>=20
+>>>> diff --git a/arch/powerpc/perf/power10-pmu.c =
+b/arch/powerpc/perf/power10-pmu.c
+>>>> index c6d51e7093cf..d1adcd9f52e2 100644
+>>>> --- a/arch/powerpc/perf/power10-pmu.c
+>>>> +++ b/arch/powerpc/perf/power10-pmu.c
+>>>> @@ -258,6 +258,15 @@ static const struct attribute_group =
+power10_pmu_format_group =3D {
+>>>>      .attrs =3D power10_pmu_format_attr,
+>>>> };
+>>>>=20
+>>>> +static struct attribute *power10_pmu_caps_attrs[] =3D {
+>>>> +       NULL
+>>>> +};
+>>>> +
+>>>> +static struct attribute_group power10_pmu_caps_group =3D {
+>>>> +       .name  =3D "caps",
+>>>> +       .attrs =3D power10_pmu_caps_attrs,
+>>>> +};
+>>>> +
+>>>> static const struct attribute_group *power10_pmu_attr_groups_dd1[] =
+=3D {
+>>>>      &power10_pmu_format_group,
+>>>>      &power10_pmu_events_group_dd1,
+>>>> @@ -267,6 +276,7 @@ static const struct attribute_group =
+*power10_pmu_attr_groups_dd1[] =3D {
+>>>> static const struct attribute_group *power10_pmu_attr_groups[] =3D =
+{
+>>>>      &power10_pmu_format_group,
+>>>>      &power10_pmu_events_group,
+>>>> +       &power10_pmu_caps_group,
+>>>>      NULL,
+>>>> };
+>>>>=20
+>>>> diff --git a/arch/powerpc/perf/power8-pmu.c =
+b/arch/powerpc/perf/power8-pmu.c
+>>>> index e37b1e714d2b..2518f5375d4a 100644
+>>>> --- a/arch/powerpc/perf/power8-pmu.c
+>>>> +++ b/arch/powerpc/perf/power8-pmu.c
+>>>> @@ -187,9 +187,19 @@ static const struct attribute_group =
+power8_pmu_events_group =3D {
+>>>>      .attrs =3D power8_events_attr,
+>>>> };
+>>>>=20
+>>>> +static struct attribute *power8_pmu_caps_attrs[] =3D {
+>>>> +       NULL
+>>>> +};
+>>>> +
+>>>> +static struct attribute_group power8_pmu_caps_group =3D {
+>>>> +       .name  =3D "caps",
+>>>> +       .attrs =3D power8_pmu_caps_attrs,
+>>>> +};
+>>>> +
+>>>> static const struct attribute_group *power8_pmu_attr_groups[] =3D {
+>>>>      &isa207_pmu_format_group,
+>>>>      &power8_pmu_events_group,
+>>>> +       &power8_pmu_caps_group,
+>>>>      NULL,
+>>>> };
+>>>>=20
+>>>> diff --git a/arch/powerpc/perf/power9-pmu.c =
+b/arch/powerpc/perf/power9-pmu.c
+>>>> index c393e837648e..5c654ce1a417 100644
+>>>> --- a/arch/powerpc/perf/power9-pmu.c
+>>>> +++ b/arch/powerpc/perf/power9-pmu.c
+>>>> @@ -258,9 +258,19 @@ static const struct attribute_group =
+power9_pmu_format_group =3D {
+>>>>      .attrs =3D power9_pmu_format_attr,
+>>>> };
+>>>>=20
+>>>> +static struct attribute *power9_pmu_caps_attrs[] =3D {
+>>>> +       NULL
+>>>> +};
+>>>> +
+>>>> +static struct attribute_group power9_pmu_caps_group =3D {
+>>>> +       .name  =3D "caps",
+>>>> +       .attrs =3D power9_pmu_caps_attrs,
+>>>> +};
+>>>> +
+>>>> static const struct attribute_group *power9_pmu_attr_groups[] =3D {
+>>>>      &power9_pmu_format_group,
+>>>>      &power9_pmu_events_group,
+>>>> +       &power9_pmu_caps_group,
+>>>>      NULL,
+>>>> };
+>>>>=20
+>>>> --
+>>>> 2.31.1
 
->  tools/testing/kunit/kunit_config.py    | 49 +++++++++++++++-----------
->  tools/testing/kunit/kunit_kernel.py    | 21 ++++++-----
->  tools/testing/kunit/kunit_tool_test.py | 45 ++++++++++-------------
->  3 files changed, 59 insertions(+), 56 deletions(-)
->
-> diff --git a/tools/testing/kunit/kunit_config.py b/tools/testing/kunit/kunit_config.py
-> index 75a8dc1683d4..89443400b17e 100644
-> --- a/tools/testing/kunit/kunit_config.py
-> +++ b/tools/testing/kunit/kunit_config.py
-> @@ -8,7 +8,7 @@
->
->  from dataclasses import dataclass
->  import re
-> -from typing import List, Set
-> +from typing import Dict, Iterable, Set
->
->  CONFIG_IS_NOT_SET_PATTERN = r'^# CONFIG_(\w+) is not set$'
->  CONFIG_PATTERN = r'^CONFIG_(\w+)=(\S+|".*")$'
-> @@ -32,35 +32,46 @@ class Kconfig:
->         """Represents defconfig or .config specified using the Kconfig language."""
->
->         def __init__(self) -> None:
-> -               self._entries = []  # type: List[KconfigEntry]
-> +               self._entries = {}  # type: Dict[str, str]
->
-> -       def entries(self) -> Set[KconfigEntry]:
-> -               return set(self._entries)
-> +       def __eq__(self, other) -> bool:
-> +               if not isinstance(other, self.__class__):
-> +                       return False
-> +               return self._entries == other._entries
->
-> -       def add_entry(self, entry: KconfigEntry) -> None:
-> -               self._entries.append(entry)
-> +       def __repr__(self) -> str:
-> +               return ','.join(str(e) for e in self._as_entries())
-> +
-> +
-> +       def _as_entries(self) -> Iterable[KconfigEntry]:
-> +               for name, value in self._entries.items():
-> +                       yield KconfigEntry(name, value)
-> +
-> +       def add_entry(self, name: str, value: str) -> None:
-> +               self._entries[name] = value
->
->         def is_subset_of(self, other: 'Kconfig') -> bool:
-> -               other_dict = {e.name: e.value for e in other.entries()}
-> -               for a in self.entries():
-> -                       b = other_dict.get(a.name)
-> +               for name, value in self._entries.items():
-> +                       b = other._entries.get(name)
->                         if b is None:
-> -                               if a.value == 'n':
-> +                               if value == 'n':
->                                         continue
->                                 return False
-> -                       if a.value != b:
-> +                       if value != b:
->                                 return False
->                 return True
->
-> +       def set_diff(self, other: 'Kconfig') -> Set[KconfigEntry]:
-> +               return set(self._as_entries()) - set(other._as_entries())
-> +
->         def merge_in_entries(self, other: 'Kconfig') -> None:
-> -               if other.is_subset_of(self):
-> -                       return
-> -               self._entries = list(self.entries().union(other.entries()))
-> +               for name, value in other._entries.items():
-> +                       self._entries[name] = value
->
->         def write_to_file(self, path: str) -> None:
->                 with open(path, 'a+') as f:
-> -                       for entry in self.entries():
-> -                               f.write(str(entry) + '\n')
-> +                       for e in self._as_entries():
-> +                               f.write(str(e) + '\n')
->
->  def parse_file(path: str) -> Kconfig:
->         with open(path, 'r') as f:
-> @@ -78,14 +89,12 @@ def parse_from_string(blob: str) -> Kconfig:
->
->                 match = config_matcher.match(line)
->                 if match:
-> -                       entry = KconfigEntry(match.group(1), match.group(2))
-> -                       kconfig.add_entry(entry)
-> +                       kconfig.add_entry(match.group(1), match.group(2))
->                         continue
->
->                 empty_match = is_not_set_matcher.match(line)
->                 if empty_match:
-> -                       entry = KconfigEntry(empty_match.group(1), 'n')
-> -                       kconfig.add_entry(entry)
-> +                       kconfig.add_entry(empty_match.group(1), 'n')
->                         continue
->
->                 if line[0] == '#':
-> diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-> index 3539efaf99ba..ebd2d91af710 100644
-> --- a/tools/testing/kunit/kunit_kernel.py
-> +++ b/tools/testing/kunit/kunit_kernel.py
-> @@ -53,8 +53,8 @@ class LinuxSourceTreeOperations:
->                 except subprocess.CalledProcessError as e:
->                         raise ConfigError(e.output.decode())
->
-> -       def make_arch_qemuconfig(self, base_kunitconfig: kunit_config.Kconfig) -> None:
-> -               pass
-> +       def make_arch_qemuconfig(self, base_kunitconfig: kunit_config.Kconfig) -> kunit_config.Kconfig:
-> +               return base_kunitconfig
->
->         def make_allyesconfig(self, build_dir: str, make_options) -> None:
->                 raise ConfigError('Only the "um" arch is supported for alltests')
-> @@ -109,9 +109,10 @@ class LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
->                 self._kernel_command_line = qemu_arch_params.kernel_command_line + ' kunit_shutdown=reboot'
->                 self._extra_qemu_params = qemu_arch_params.extra_qemu_params
->
-> -       def make_arch_qemuconfig(self, base_kunitconfig: kunit_config.Kconfig) -> None:
-> +       def make_arch_qemuconfig(self, base_kunitconfig: kunit_config.Kconfig) -> kunit_config.Kconfig:
->                 kconfig = kunit_config.parse_from_string(self._kconfig)
-> -               base_kunitconfig.merge_in_entries(kconfig)
-> +               kconfig.merge_in_entries(base_kunitconfig)
-> +               return kconfig
->
->         def start(self, params: List[str], build_dir: str) -> subprocess.Popen:
->                 kernel_path = os.path.join(build_dir, self._kernel_path)
-> @@ -265,9 +266,10 @@ class LinuxSourceTree:
->         def validate_config(self, build_dir: str) -> bool:
->                 kconfig_path = get_kconfig_path(build_dir)
->                 validated_kconfig = kunit_config.parse_file(kconfig_path)
-> -               if self._kconfig.is_subset_of(validated_kconfig):
-> +               invalid = self._kconfig.set_diff(validated_kconfig)
-> +               if not invalid:
->                         return True
-> -               invalid = self._kconfig.entries() - validated_kconfig.entries()
-> +
->                 message = 'Not all Kconfig options selected in kunitconfig were in the generated .config.\n' \
->                           'This is probably due to unsatisfied dependencies.\n' \
->                           'Missing: ' + ', '.join([str(e) for e in invalid])
-> @@ -282,7 +284,7 @@ class LinuxSourceTree:
->                 if build_dir and not os.path.exists(build_dir):
->                         os.mkdir(build_dir)
->                 try:
-> -                       self._ops.make_arch_qemuconfig(self._kconfig)
-> +                       self._kconfig = self._ops.make_arch_qemuconfig(self._kconfig)
->                         self._kconfig.write_to_file(kconfig_path)
->                         self._ops.make_olddefconfig(build_dir, make_options)
->                 except ConfigError as e:
-> @@ -303,7 +305,7 @@ class LinuxSourceTree:
->                         return True
->
->                 old_kconfig = kunit_config.parse_file(old_path)
-> -               return old_kconfig.entries() != self._kconfig.entries()
-> +               return old_kconfig != self._kconfig
->
->         def build_reconfig(self, build_dir: str, make_options) -> bool:
->                 """Creates a new .config if it is not a subset of the .kunitconfig."""
-> @@ -313,7 +315,8 @@ class LinuxSourceTree:
->                         return self.build_config(build_dir, make_options)
->
->                 existing_kconfig = kunit_config.parse_file(kconfig_path)
-> -               self._ops.make_arch_qemuconfig(self._kconfig)
-> +               self._kconfig = self._ops.make_arch_qemuconfig(self._kconfig)
-> +
->                 if self._kconfig.is_subset_of(existing_kconfig) and not self._kunitconfig_changed(build_dir):
->                         return True
->                 print('Regenerating .config ...')
-> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-> index 25a2eb3bf114..3a8f638ff092 100755
-> --- a/tools/testing/kunit/kunit_tool_test.py
-> +++ b/tools/testing/kunit/kunit_tool_test.py
-> @@ -45,7 +45,7 @@ class KconfigTest(unittest.TestCase):
->                 self.assertTrue(kconfig0.is_subset_of(kconfig0))
->
->                 kconfig1 = kunit_config.Kconfig()
-> -               kconfig1.add_entry(kunit_config.KconfigEntry('TEST', 'y'))
-> +               kconfig1.add_entry('TEST', 'y')
->                 self.assertTrue(kconfig1.is_subset_of(kconfig1))
->                 self.assertTrue(kconfig0.is_subset_of(kconfig1))
->                 self.assertFalse(kconfig1.is_subset_of(kconfig0))
-> @@ -56,40 +56,28 @@ class KconfigTest(unittest.TestCase):
->                 kconfig = kunit_config.parse_file(kconfig_path)
->
->                 expected_kconfig = kunit_config.Kconfig()
-> -               expected_kconfig.add_entry(
-> -                       kunit_config.KconfigEntry('UML', 'y'))
-> -               expected_kconfig.add_entry(
-> -                       kunit_config.KconfigEntry('MMU', 'y'))
-> -               expected_kconfig.add_entry(
-> -                       kunit_config.KconfigEntry('TEST', 'y'))
-> -               expected_kconfig.add_entry(
-> -                       kunit_config.KconfigEntry('EXAMPLE_TEST', 'y'))
-> -               expected_kconfig.add_entry(
-> -                       kunit_config.KconfigEntry('MK8', 'n'))
-> -
-> -               self.assertEqual(kconfig.entries(), expected_kconfig.entries())
-> +               expected_kconfig.add_entry('UML', 'y')
-> +               expected_kconfig.add_entry('MMU', 'y')
-> +               expected_kconfig.add_entry('TEST', 'y')
-> +               expected_kconfig.add_entry('EXAMPLE_TEST', 'y')
-> +               expected_kconfig.add_entry('MK8', 'n')
-> +
-> +               self.assertEqual(kconfig, expected_kconfig)
->
->         def test_write_to_file(self):
->                 kconfig_path = os.path.join(test_tmpdir, '.config')
->
->                 expected_kconfig = kunit_config.Kconfig()
-> -               expected_kconfig.add_entry(
-> -                       kunit_config.KconfigEntry('UML', 'y'))
-> -               expected_kconfig.add_entry(
-> -                       kunit_config.KconfigEntry('MMU', 'y'))
-> -               expected_kconfig.add_entry(
-> -                       kunit_config.KconfigEntry('TEST', 'y'))
-> -               expected_kconfig.add_entry(
-> -                       kunit_config.KconfigEntry('EXAMPLE_TEST', 'y'))
-> -               expected_kconfig.add_entry(
-> -                       kunit_config.KconfigEntry('MK8', 'n'))
-> +               expected_kconfig.add_entry('UML', 'y')
-> +               expected_kconfig.add_entry('MMU', 'y')
-> +               expected_kconfig.add_entry('TEST', 'y')
-> +               expected_kconfig.add_entry('EXAMPLE_TEST', 'y')
-> +               expected_kconfig.add_entry('MK8', 'n')
->
->                 expected_kconfig.write_to_file(kconfig_path)
->
->                 actual_kconfig = kunit_config.parse_file(kconfig_path)
-> -
-> -               self.assertEqual(actual_kconfig.entries(),
-> -                                expected_kconfig.entries())
-> +               self.assertEqual(actual_kconfig, expected_kconfig)
->
->  class KUnitParserTest(unittest.TestCase):
->
-> @@ -381,8 +369,11 @@ class LinuxSourceTreeTest(unittest.TestCase):
->                         kunit_kernel.LinuxSourceTree('', kunitconfig_path=dir)
->
->         def test_kconfig_add(self):
-> +               want_kconfig = kunit_config.Kconfig()
-> +               want_kconfig.add_entry('NOT_REAL', 'y')
-> +
->                 tree = kunit_kernel.LinuxSourceTree('', kconfig_add=['CONFIG_NOT_REAL=y'])
-> -               self.assertIn(kunit_config.KconfigEntry('NOT_REAL', 'y'), tree._kconfig.entries())
-> +               self.assertFalse(want_kconfig.set_diff(tree._kconfig))
->
->         def test_invalid_arch(self):
->                 with self.assertRaisesRegex(kunit_kernel.ConfigError, 'not a valid arch, options are.*x86_64'):
->
-> base-commit: 1b11063d32d7e11366e48be64215ff517ce32217
-> --
-> 2.36.1.124.g0e6072fb45-goog
->
-
---000000000000cd467805df6b6192
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-G7p3AiuB2sgfq6cOpbO5MEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQBsL34EJkCtu9Nu
-2+R6l1Qzno5Gl+N2Cm6/YLujukDGYa1JW27txXiilR9dGP7yl60HYyG2Exd5i6fiLDlaNEw0SqzE
-dw9ZSIak3Qvm2UybR8zcnB0deCUiwahqh7ZncEPlhnPpB08ETEUtwBEqCEnndNEkIN67yz4kniCZ
-jZstNF/BUnI3864fATiXSbnNqBwlJS3YkoaCTpbI9qNTrf5VIvnbryT69xJ6f25yfmxrXNJJe5OG
-ncB34Cwnb7xQyk+uRLZ465yUBkbjk9pC/yamL0O7SOGYUclrQl2c5zzGuVBD84YcQGDOK6gSPj6w
-QuBfOooZPOyZZZ8AMih7J980MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCC/
-alf0qaXwa20cjHl888c+ckgVjj3r/4QIXHtOCpkX+jAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjA1MjAwNjEyNThaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAhea78VUkmCPriMjXG7gY
-wZKAEUMaDbDmjU433BIMS9HyTz3UbGme/MJyvutC5SvX2W8NWcwDvIaH3ayvfG/vTwffUKZsyE6n
-kidcLA3Vp/DLV5H4HAlQrIcl3DVO+5aJg0M9I3cbWiAzxj4IVWFi3FjE+cBdmYG1wE0F/IvAS0HK
-NpD8XGjIWwTt4lwhIGRlgr2qI/qp08UcDlPcuMqd/7whP0NkRorRGbYsmHw1Kd6390rGxulNaHvB
-I9QxeZTcTYz1+hO2W3TTaZ3tXXiImjgG7Eb2BEb2tq7oPykghja6I/7Pc9oCR9r0+bRSxL6Zv1Yl
-2YQSKrXTNp8lPIKKqw==
---000000000000cd467805df6b6192--

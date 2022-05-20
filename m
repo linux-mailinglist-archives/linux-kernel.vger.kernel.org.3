@@ -2,112 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B10C752E704
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 10:14:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DA6A52E718
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 10:16:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245383AbiETINx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 04:13:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37426 "EHLO
+        id S1344715AbiETIQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 04:16:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbiETINu (ORCPT
+        with ESMTP id S1345055AbiETIQB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 04:13:50 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432BD56F98
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 01:13:50 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id y199so7149947pfb.9
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 01:13:50 -0700 (PDT)
+        Fri, 20 May 2022 04:16:01 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 614B72E0B9
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 01:15:58 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id bq30so13069966lfb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 01:15:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=EIB7I1izCiKqOcFIxWO4e4Y55iF6iq8HKn+j8l4m85k=;
-        b=l5FqNy4IOsPn30GAhv5YZgTa/ATc/RMrO8LLQb2+ZeGbCy/l7dFWQJzCRHrWF+pNdZ
-         5Kzg4CwqmGA/2z7Z87N+l095g4gd07Tdc22QNAQ03064+BgpzlI6DRkobXASad9OVMKX
-         5nIHWqC3OYjkTEdbECoGeQPB0GVj5Flxq92K/mNoS3ZiTvk/ST6xby0yq8UNf0HwQSdP
-         gL3vuF7LkXQs9reCJbardFAdJRiuP84INJGU/CzblAtYRXTU/iWPD8/oZwgCPsFisWeH
-         fWEl03rbbW19aCf3Un8h4QX5N+jcwyvkGoUYBbECQ/Z6KjR2fwwZIGsDtxMxQx6ThRTO
-         V32g==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=3WMyBzBsRRCp6gbma/PbvD8+LxmLfC0Z+aWsUUO5v2Q=;
+        b=r8VE/uCTjI1e7vSggfcD/lYcs0j1kTxOduTx3B/oYII5BDkRCTFH8oLlvB4Tof2u4D
+         srS0Okq1V37kNOj+J0SbInhv+n24I+vkVDFIQ06wiyfkkAzCCe9TxOnztwm7TOy6OsRi
+         r5uotICug85Fom3LRI5GHqRjAM8dyJmTIGZF9JAucv5bIUju3LizX2JH3cDTsYdCbpV+
+         /dvm7USDxXWWjZiaqH9X3v9iH33NRi/011BF43EKMgU10d+u7pRuZbxa93+hEVU19CmH
+         96GhWRfNlrjwi2H3D3shQ/vvJUvLQKZraiyEi3N6ReCkaB6uTsZR35TzIS1CiM6YfP1Q
+         uSxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=EIB7I1izCiKqOcFIxWO4e4Y55iF6iq8HKn+j8l4m85k=;
-        b=Sd+pZMA7GdqLMz4BEsstz/LzcCrQyO+sgewtveWA5shBXGKzdjOnpTy1kORQ63ntAe
-         GfYtQ/rBFcKCkAUJmQuILyg6/uBHeLSc4K7V8EvJ206+KWKkHiceK2+thJGrOtdowRs5
-         yjRdPHsuzjnML3gPVjCFyOimEDhoRIWfwD00I59dVmlbyBqiEU795do4utKlEoi8ucda
-         sMaPn7v0ABVdgv6w1PJq+ycDFPZa2mOVU5t546w6bwu6CxxGdrHekwgPvYE6TxEFkCvz
-         F8hFQ++PCUCZDHXXj0JGfh5Aa2oAAdFClH2XEfclZLZah0D0n17FeMqrGFOSweHtnOQV
-         XMKg==
-X-Gm-Message-State: AOAM533I0+VfO8NWMtI13AQty8vTQAaP4+Gh2d4Ca4blmxjNIjhQ+pOb
-        aF2aZfKEFd5b/iYzJnGQv3E=
-X-Google-Smtp-Source: ABdhPJyU6MeKG/U3vVDarJSOP+UaAJpwGqEaW7e7mjKiG0rQcQRP/t86aQEPrI2FMr2k0aUeeO1QgA==
-X-Received: by 2002:a63:5c22:0:b0:3db:141c:6db2 with SMTP id q34-20020a635c22000000b003db141c6db2mr7398703pgb.198.1653034429671;
-        Fri, 20 May 2022 01:13:49 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::4:1761])
-        by smtp.gmail.com with ESMTPSA id c10-20020a170903234a00b0015e8d4eb2c0sm4995113plh.266.2022.05.20.01.13.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 01:13:49 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 19 May 2022 22:13:47 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Tadeusz Struk <tadeusz.struk@linaro.org>
-Cc:     Hillf Danton <hdanton@sina.com>, Michal Koutny <mkoutny@suse.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzbot+e42ae441c3b10acf9e9d@syzkaller.appspotmail.com
-Subject: Re: [PATCH] cgroup: don't queue css_release_work if one already
- pending
-Message-ID: <YodNu2C5iHKW3UeZ@slm.duckdns.org>
-References: <20220412192459.227740-1-tadeusz.struk@linaro.org>
- <20220414164409.GA5404@blackbody.suse.cz>
- <YmHwOAdGY2Lwl+M3@slm.duckdns.org>
- <20220422100400.GA29552@blackbody.suse.cz>
- <20220519112319.2455-1-hdanton@sina.com>
- <25fb057a-077f-b601-dcb7-130071c733db@linaro.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=3WMyBzBsRRCp6gbma/PbvD8+LxmLfC0Z+aWsUUO5v2Q=;
+        b=EwV2BoBCcUYU2ZYuOZ5ELwgMY7a4fWv8dvuMN78w5eveMz0bdrzP0MB//8fw6XqJy1
+         iB0yMHnMVACjJAFwJeacOd1OB3wD+unqnhM3/vWWZnuiZ0nJcFWdWIONfcuk98vhWyKn
+         QmDxm0WHRwmjQGMK6egm3YFE9jmeiU/4e5Sgg0W5joRlNtWCZr2tREyo3dayhuGG1rf/
+         SqgGOPuIQcFUq6A+H4UMd0e2BTDmCTdzsnEp6sxLw6CEtYpqWX1J6P7Iz/hNKZsGmjwY
+         /XjWTBPG2ZTrPT3apmlOdr63mg2jH0FBeYkVlfrgXw0FTt8byaVYTRWs5i7rXmW5+87T
+         q+ew==
+X-Gm-Message-State: AOAM5306jx4aYQWg2zulyYO9ZQEyy/Vq+uv6XXjJWpDji4rFEtTC1l7d
+        /54hTwyfvYiJ/oOVV+oobvt1aQ==
+X-Google-Smtp-Source: ABdhPJwykLzONsSZWY9axC9eeMj14sgcODVg3yQ+6KyFmWtA4KaDq9yJKAlnTHB1z/K2FxU5uXKaeQ==
+X-Received: by 2002:a05:6512:3d1a:b0:477:ae14:9778 with SMTP id d26-20020a0565123d1a00b00477ae149778mr6380088lfv.72.1653034556706;
+        Fri, 20 May 2022 01:15:56 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id x17-20020a05651c105100b0024f3d1dae9esm222920ljm.38.2022.05.20.01.15.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 May 2022 01:15:56 -0700 (PDT)
+Message-ID: <45e78390-5f91-7ac7-45d8-5796bc608234@linaro.org>
+Date:   Fri, 20 May 2022 10:15:54 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <25fb057a-077f-b601-dcb7-130071c733db@linaro.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] dt-bindings: mailbox: mtk-gce: Convert txt to json-schema
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, robh+dt@kernel.org
+Cc:     jassisinghbrar@gmail.com, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, houlong.wei@mediatek.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20220519101806.18097-1-angelogioacchino.delregno@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220519101806.18097-1-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 04:26:51PM -0700, Tadeusz Struk wrote:
-> On 5/19/22 04:23, Hillf Danton wrote:
-> > On Wed, 18 May 2022 09:48:21 -0700 Tadeusz Struk  wrote:
-> > > On 4/22/22 04:05, Michal Koutny wrote:
-> > > > On Thu, Apr 21, 2022 at 02:00:56PM -1000, Tejun Heo<tj@kernel.org>  wrote:
-> > > > > If this is the case, we need to hold an extra reference to be put by the
-> > > > > css_killed_work_fn(), right?
-> > That put could trigger INIT_WORK in css_release() and warning [1]
-> > on init active (active state 0) object OTOH as the same
-> > css->destroy_work is used in both kill and release pathes.
-
-Hmm... wouldn't the extra reference keep release from happening?
-
-> Will this help if there would be two WQs, one for the css_release path
-> and one for the rcu_work?
+On 19/05/2022 12:18, AngeloGioacchino Del Regno wrote:
+> Convert the mtk-gce documentation from freeform text format to a
+> json-schema.
 > 
-> diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-> index adb820e98f24..a4873b33e488 100644
-> --- a/kernel/cgroup/cgroup.c
-> +++ b/kernel/cgroup/cgroup.c
-> @@ -124,6 +124,7 @@ DEFINE_PERCPU_RWSEM(cgroup_threadgroup_rwsem);
->   * which may lead to deadlock.
->   */
->  static struct workqueue_struct *cgroup_destroy_wq;
-> +static struct workqueue_struct *cgroup_destroy_rcu_wq;
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  .../bindings/mailbox/mediatek,gce-mbox.yaml   | 114 ++++++++++++++++++
+>  .../devicetree/bindings/mailbox/mtk-gce.txt   |  82 -------------
+>  2 files changed, 114 insertions(+), 82 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/mailbox/mediatek,gce-mbox.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/mailbox/mtk-gce.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/mailbox/mediatek,gce-mbox.yaml b/Documentation/devicetree/bindings/mailbox/mediatek,gce-mbox.yaml
+> new file mode 100644
+> index 000000000000..750391b4038c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mailbox/mediatek,gce-mbox.yaml
+> @@ -0,0 +1,114 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mailbox/mediatek,gce-mbox.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek Global Command Engine (GCE) mailbox
+> +
+> +maintainers:
+> +  - Houlong Wei <houlong.wei@mediatek.com>
+> +
+> +description: |
+> +  The Global Command Engine (GCE) is used to help read/write registers
+> +  with critical time limitation, such as updating display configuration
+> +  during the vblank.
+> +  The GCE can be used to implement the Command Queue (CMDQ) driver.
 
-I don't understand why this would help. Care to elaborate?
+Mention the headers in description.
 
-Thanks.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - mediatek,mt6779-gce
+> +      - mediatek,mt8173-gce
+> +      - mediatek,mt8183-gce
+> +      - mediatek,mt8186-gce
+> +      - mediatek,mt8192-gce
+> +      - mediatek,mt8195-gce
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    items:
+> +      - const: gce
+> +
+> +  '#mbox-cells':
+> +    description: |
+> +      The first cell describes the mailbox channel, which is the GCE Thread ID;
+> +      The second cell describes the priority of the GCE thread.
+> +    const: 2
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - clock-names
+> +  - '#mbox-cells'
+> +
+> +additionalProperties: false
+> +
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          enum:
+> +            - mediatek,mt8195-gce
+> +    then:
+> +      properties:
+> +        clocks:
+> +          maxItems: 2
 
--- 
-tejun
+Are you sure this works on mt8195-gce?
+
+> +
+> +        clock-names:
+> +          items:
+> +            - const: gce0
+> +            - const: gce1
+> +
+
+Best regards,
+Krzysztof

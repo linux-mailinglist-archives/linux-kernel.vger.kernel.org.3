@@ -2,134 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2F8852F419
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 21:58:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DFD852F424
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 22:00:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353382AbiETT6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 15:58:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33220 "EHLO
+        id S1351442AbiETT7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 15:59:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353373AbiETT6M (ORCPT
+        with ESMTP id S236170AbiETT7v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 15:58:12 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18E4619CB6C;
-        Fri, 20 May 2022 12:58:11 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id c19so2995931lfv.5;
-        Fri, 20 May 2022 12:58:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=WOJusE8NHNqjKMNStmuZRo9RH3cwXzoVFMfF94/t6Ck=;
-        b=bQ+WBLuzBq3aGizqD1+Kwm5uAKpENycXAljdLzTGsAaeq+eESfeAhCSUpZDT5IDNb+
-         P9zTFv7zoTRkmT/uwyhlZyXGFyiERjKOPBEBQWG4V9rlz1NhEyOqJTV5P3IKQAqYnxva
-         zVb6UFNRlCa1blmb2JCzrbWtoKSq9JCYY/sYf8dT32VU3RaA+dRV/Nq6TJYgh6kmh5LD
-         kSmEw+or1PbtqHPMBqBSOAbmKlV0V+u4GmL78rngDoFH2mA1oDxVQT4Iih9170vjUhFw
-         ebTXGxF75uA7HdFslnlPt6emZADNR7A8pIHxil/1PZB17Xr8krOhd2E1J1pblpk+5/Ar
-         NAcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=WOJusE8NHNqjKMNStmuZRo9RH3cwXzoVFMfF94/t6Ck=;
-        b=mgGVOZjulemk2VqRjHC5Yom16+rHbpFqOLBsa+ueRQSQVVEdrPw5h4i8iFjaCGoiLT
-         B1GPQp6Nkd6RiziP4cLoOGebRbAIT/P2MryYVe2ZQM4Y2CErOdOPT6xrXIFbFLMu4D+4
-         U6YaZfIEEm85ap9ICIhGfUH78MqcsYIKpYYbP8lLX8PtovChonP5KGhaxr7F1lyM0X3s
-         YUtQO6uScGygIU8tkIiLtFfWEyDhACAfPFwNNk+XoGxb5ojqenWCktlojkn3sM39vtzE
-         EmkeTzMJqciRNHx4abfc7h1XysYhexmcHKx06dOI56jAY5lO6qxlDuW/j7y7WTFcfZt1
-         itKw==
-X-Gm-Message-State: AOAM532UqEkOHP3sDhMgUz+X9BrbleTr/UI+qdqAgOzU2CNpjVq83A62
-        7StHZ8BHv3JvouE3I3uQczU=
-X-Google-Smtp-Source: ABdhPJzUt2asX4E8YYHlbCTQJA7I8CTGGnYx5OzSOW/hCyHXdcIZDrwis8BM2kQq338jS7Wsy2a/7A==
-X-Received: by 2002:a05:6512:5cb:b0:472:f7e:a5f5 with SMTP id o11-20020a05651205cb00b004720f7ea5f5mr7867956lfo.358.1653076689178;
-        Fri, 20 May 2022 12:58:09 -0700 (PDT)
-Received: from pc ([104.28.198.246])
-        by smtp.gmail.com with ESMTPSA id u5-20020a2e8545000000b0024f3d1dae7csm422051ljj.4.2022.05.20.12.58.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 12:58:08 -0700 (PDT)
-Date:   Fri, 20 May 2022 22:58:03 +0300
-From:   Boris Lysov <arz65xx@gmail.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Chen-Yu Tsai <wenst@chromium.org>,
-        Miles Chen <miles.chen@mediatek.com>,
-        bgolaszewski@baylibre.com, chun-jie.chen@mediatek.com,
-        ck.hu@mediatek.com, devicetree@vger.kernel.org,
-        fparent@baylibre.com, ikjn@chromium.org, jason-jh.lin@mediatek.com,
-        kernel@collabora.com, konrad.dybcio@somainline.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        marijn.suijten@somainline.org, martin.botka@somainline.org,
-        matthias.bgg@gmail.com, mturquette@baylibre.com,
-        p.zabel@pengutronix.de, paul.bouchara@somainline.org,
-        phone-devel@vger.kernel.org, rex-bc.chen@mediatek.com,
-        robh+dt@kernel.org, sam.shih@mediatek.com, sboyd@kernel.org,
-        tinghan.shen@mediatek.com, weiyi.lu@mediatek.com,
-        y.oudjana@protonmail.com, ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH v2 7/7] clk: mediatek: Add MediaTek Helio X10 MT6795
- clock drivers
-Message-ID: <20220520225803.193bcda9@pc>
-In-Reply-To: <a253f338-c162-17b8-f412-95cd63195151@collabora.com>
-References: <20220518111652.223727-8-angelogioacchino.delregno@collabora.com>
-        <20220519045340.11198-1-miles.chen@mediatek.com>
-        <11bf21cd-85c4-f64c-2af7-7695e71aee07@collabora.com>
-        <CAGXv+5H4gF5GXzfk8mjkG4Kry8uCs1CQbKoViBuc9LC+XdHH=A@mail.gmail.com>
-        <a253f338-c162-17b8-f412-95cd63195151@collabora.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Fri, 20 May 2022 15:59:51 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F96319C39F;
+        Fri, 20 May 2022 12:59:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=BKP5a5pHHBYXwyuiYqA00KUXwchZ92uDPjXicGU1+N4=; b=f3i3OO4NtAt4RShav01WKmUiP+
+        599WE/SJ21kBjnzJesrvpTcA+dh6R3VaK0B5Qid5F817Vt30vklE58KbJef4mZ2dtOa8xUNUYZF8Z
+        NrZNbvX/S+Hr+7EkhtRTVmLRYa5ssrGbzgrvWMl/2I+/8LLWLsQ6Tukep0XyzL0QX0v9ZaevzZr9i
+        H0fxG+hX221jPI8Jj/owdXD5vy72TVl0IyF2r+St0wXN52t5fBL7jajkFEkkLa9drGkA4sMsL6xG1
+        ROdDN77gZUweIL3el5tIWIk5t3pRaeQjP8N7Zv+ce5IkvIbtebaz/bFnHaBN8fH9XzF3JlVv9v6yX
+        EyHktMqg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ns8lu-00E5EI-Jc; Fri, 20 May 2022 19:58:50 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id D2737981243; Fri, 20 May 2022 21:58:48 +0200 (CEST)
+Date:   Fri, 20 May 2022 21:58:48 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-kernel@vger.kernel.org, rjw@rjwysocki.net, oleg@redhat.com,
+        mingo@kernel.org, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Jann Horn <jannh@google.com>,
+        Kees Cook <keescook@chromium.org>, linux-ia64@vger.kernel.org,
+        Robert O'Callahan <roc@pernos.co>, Kyle Huey <khuey@pernos.co>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Douglas Miller <dougmill@linux.vnet.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>
+Subject: Re: [PATCH 00/16] ptrace: cleanups and calling do_cldstop with only
+ siglock
+Message-ID: <20220520195848.GY2578@worktop.programming.kicks-ass.net>
+References: <20220421150248.667412396@infradead.org>
+ <20220421150654.817117821@infradead.org>
+ <87czhap9dy.fsf@email.froward.int.ebiederm.org>
+ <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
+ <87k0b7v9yk.fsf_-_@email.froward.int.ebiederm.org>
+ <87k0b0apne.fsf_-_@email.froward.int.ebiederm.org>
+ <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
+ <871qwq5ucx.fsf_-_@email.froward.int.ebiederm.org>
+ <YodEWlfo4kFd8+mt@linutronix.de>
+ <87wnegyp87.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87wnegyp87.fsf@email.froward.int.ebiederm.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, I'd like to chime in with some feedback.
-
-> >> Hence, the usecases for this kind of splitting are:
-> >> 1. Somewhat rare (corner) cases: someone may not want to compile in any of
-> >> the mm/venc/vdec/mfg clock drivers because they don't need the
-> >> functionality at all (probably, including the other related drivers), or;
-> >> 2. It would be possible to compile as built-in only the "main" drivers
-> >> (apmixed, infra, peri, topck) to achieve a boot (ex.: you need eMMC to
-> >> boot, at least) and then compile the mm/venc/vdec/mfg as modules to be
-> >> loaded after mounting a rootfs (where you probably also have mediatek-drm,
-> >> vcodec, etc as modules).
-> > 
-> > I assume you mean split them into two groups:
-> > 
-> >    - essential for booting to a state capable of loading modules from
-> > storage So apmixedsys + topckgen + infra_ao + peri_ao + imp_iic_wrap
-> > (maybe?)
-> >    - everything else
-> { snip }
-> > IMO having two Kconfig symbols for one chip is still much better than
-> > having ten though.
-This sounds good.
-
-I think it would've been even better if selecting a Kconfig option like
-MACH_MT6795 would automatically select the base clock driver for booting to a
-state capable of loading modules from storage. But a quick check showed me that
-arm64 doesn't use such an approach unlike arm.
-
-> For MT8195... and 92, 83, 73... and others from the same era, being them for
-> chromebooks, iot, smartphones and whatever else... yeah you're totally right.
+On Fri, May 20, 2022 at 02:32:24PM -0500, Eric W. Biederman wrote:
+> Sebastian Andrzej Siewior <bigeasy@linutronix.de> writes:
 > 
-> The issue starts raising when looking at older SoCs featuring an older
-> bootloader that does have a kernel size limitation; for example, to make the
-> loader happy on MT6795, I had to strip the defconfig a lot and keep the
-> Android-style boot.img smaller than 10MB (that's Image.gz-dtb + ramdisk).
-This issue gets even more relevant if/when we consider older ARM32 SoCs such as
-mt65xx series. As far as I know, most of them (with a notable exception of
-mt6580) have bootloaders that restrict max boot.img size to 6144 kB.
+> > On 2022-05-18 17:49:50 [-0500], Eric W. Biederman wrote:
+> >> 
+> >> For ptrace_stop to work on PREEMT_RT no spinlocks can be taken once
+> >> ptrace_freeze_traced has completed successfully.  Which fundamentally
+> >> means the lock dance of dropping siglock and grabbing tasklist_lock does
+> >> not work on PREEMPT_RT.  So I have worked through what is necessary so
+> >> that tasklist_lock does not need to be grabbed in ptrace_stop after
+> >> siglock is dropped.
+> > …
+> > It took me a while to realise that this is a follow-up I somehow assumed
+> > that you added a few patches on top. Might have been the yesterday's
+> > heat. b4 also refused to download this series because the v4 in this
+> > thread looked newer… Anyway. Both series applied:
+> >
+> > | =============================
+> > | WARNING: suspicious RCU usage
+> > | 5.18.0-rc7+ #16 Not tainted
+> > | -----------------------------
+> > | include/linux/ptrace.h:120 suspicious rcu_dereference_check() usage!
+> > |
+> > | other info that might help us debug this:
+> > |
+> > | rcu_scheduler_active = 2, debug_locks = 1
+> > | 2 locks held by ssdd/1734:
+> > |  #0: ffff88800eaa6918 (&sighand->siglock){....}-{2:2}, at: lock_parents_siglocks+0xf0/0x3b0
+> > |  #1: ffff88800eaa71d8 (&sighand->siglock/2){....}-{2:2}, at: lock_parents_siglocks+0x115/0x3b0
+> > |
+> > | stack backtrace:
+> > | CPU: 2 PID: 1734 Comm: ssdd Not tainted 5.18.0-rc7+ #16
+> > | Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-debian-1.16.0-4 04/01/2014
+> > | Call Trace:
+> > |  <TASK>
+> > |  dump_stack_lvl+0x45/0x5a
+> > |  unlock_parents_siglocks+0xb6/0xc0
+> > |  ptrace_stop+0xb9/0x390
+> > |  get_signal+0x51c/0x8d0
+> > |  arch_do_signal_or_restart+0x31/0x750
+> > |  exit_to_user_mode_prepare+0x157/0x220
+> > |  irqentry_exit_to_user_mode+0x5/0x50
+> > |  asm_sysvec_apic_timer_interrupt+0x12/0x20
+> >
+> > That is ptrace_parent() in unlock_parents_siglocks().
+> 
+> How odd.  I thought I had the appropriate lockdep config options enabled
+> in my test build to catch things like this.  I guess not.
+> 
+> Now I am trying to think how to tell it that holding the appropriate
+> iglock makes this ok.
 
-However, I think too much granularity in Kconfig might cause unnecessary
-confusion. The "essential clock infra" + "everything else" split sounds better
-to me.
+The typical annotation is something like:
+
+	rcu_dereference_protected(foo, lockdep_is_held(&bar))
+
+Except in this case I think the problem is that bar depends on foo in
+non-trivial ways. That is, foo is 'task->parent' and bar is
+'task->parent->sighand->siglock' or something.
+
+The other option is to use rcu_dereference_raw() in this one instance
+and have a comment that explains the situation.

@@ -2,285 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A426D52EEBC
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 17:08:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04C3552EEBD
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 17:08:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350633AbiETPIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 11:08:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55102 "EHLO
+        id S1350659AbiETPIe convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 20 May 2022 11:08:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350529AbiETPHh (ORCPT
+        with ESMTP id S1350708AbiETPIY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 11:07:37 -0400
-Received: from smtp2.infineon.com (smtp2.infineon.com [IPv6:2a00:18f0:1e00:4::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37C411666BF;
-        Fri, 20 May 2022 08:07:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
-  t=1653059255; x=1684595255;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=TVGD+RI7ONjcaP+2ro4ykcSv7oyzWhgaxYsaQqzuMlk=;
-  b=FANOTozyfjjfoBG6pXyMaN0imEwc5pmxvJj9qyWhEmSW9FS8ZMKHKhi9
-   OlCsBhBIwo7XXQZPmM9HCfx9gWrY+66+TMEBxzgW3b9iBgLP80Q+d38o4
-   590TmfgBGrJfku/tsvf287ocNwA/37KNduej41BYu4SZNVpCfPWwDYFAa
-   0=;
-X-SBRS: None
-X-IronPort-AV: E=McAfee;i="6400,9594,10353"; a="179026253"
-X-IronPort-AV: E=Sophos;i="5.91,239,1647298800"; 
-   d="scan'208";a="179026253"
-Received: from unknown (HELO mucxv003.muc.infineon.com) ([172.23.11.20])
-  by smtp2.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 17:07:33 +0200
-Received: from MUCSE822.infineon.com (MUCSE822.infineon.com [172.23.29.53])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mucxv003.muc.infineon.com (Postfix) with ESMTPS;
-        Fri, 20 May 2022 17:07:33 +0200 (CEST)
-Received: from MUCSE807.infineon.com (172.23.29.33) by MUCSE822.infineon.com
- (172.23.29.53) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 20 May
- 2022 17:07:33 +0200
-Received: from ISCNPF0RJXQS.infineon.com (172.23.8.247) by
- MUCSE807.infineon.com (172.23.29.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 20 May 2022 17:07:31 +0200
-From:   Hakan Jansson <hakan.jansson@infineon.com>
-CC:     Hakan Jansson <hakan.jansson@infineon.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        "Luiz Augusto von Dentz" <luiz.dentz@gmail.com>,
-        <linux-bluetooth@vger.kernel.org>
-Subject: [PATCH v2 2/2] Bluetooth: hci_bcm: Add support for FW loading in autobaud mode
-Date:   Fri, 20 May 2022 17:07:14 +0200
-Message-ID: <996c7e5f1eaffbb1a1af40c004f897029f586d58.1653057480.git.hakan.jansson@infineon.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1653057480.git.hakan.jansson@infineon.com>
-References: <cover.1653057480.git.hakan.jansson@infineon.com>
+        Fri, 20 May 2022 11:08:24 -0400
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4A61796EC
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 08:08:10 -0700 (PDT)
+Received: by mail-qv1-f47.google.com with SMTP id v5so6837137qvs.10
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 08:08:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=pEvlCe4V/em2drNfzpLbMhZO2cZ4QaTzSiWNKrAJWLg=;
+        b=fDlsXLxHdjDEr3FdcNIarMitIOHtvIay9vzF9SWR5X9ssFh7o6sPmkRHtXZoa4xww7
+         xB+6RTwOogVLrZIkB8uE3vyrYOgVGY1Ew0lYx3yBuQ0oTuuMuPOLyvPkxHHx38JGUuJA
+         xb086y0rBJ5DDxKV7x7N07O7hyIpCvs5VviyrH0xWfmQP4ZPoeC+2lzSs/Js2JBhDj5p
+         b7ExWgLH+yxnw4mRuEWjS9lveIbfd4/YBhvYrQjGmhm028lP8wZC0dcgEwUiO4iRqwcs
+         wWn2Vwq5cS17fK9SdzcMxLp/UdvHHjxxkrUSm8pLqIivVIh+gwWShap91NnL88rM0qSv
+         i+Cg==
+X-Gm-Message-State: AOAM533wBehR7d5FA13qHTLxFoE7Apq93RF3lf/TkaVEKJ1i04PTlmnU
+        ylTdxJ4fese2JrpEzSjfZEdMOWL0Lthhbw==
+X-Google-Smtp-Source: ABdhPJwrO906sM0PqbDLCf0ueoWTP+6X5XV3BiGhLP+CWCghyy/JzqP45VWseq84RBxxt7n4AvlwYA==
+X-Received: by 2002:ad4:5bab:0:b0:461:dcad:838e with SMTP id 11-20020ad45bab000000b00461dcad838emr7975830qvq.34.1653059289196;
+        Fri, 20 May 2022 08:08:09 -0700 (PDT)
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
+        by smtp.gmail.com with ESMTPSA id j4-20020a37b904000000b0069fc13ce225sm3052354qkf.86.2022.05.20.08.08.08
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 May 2022 08:08:08 -0700 (PDT)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-2ff155c239bso90615077b3.2
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 08:08:08 -0700 (PDT)
+X-Received: by 2002:a81:9b0c:0:b0:2f4:c522:7d3c with SMTP id
+ s12-20020a819b0c000000b002f4c5227d3cmr10719893ywg.316.1653059288103; Fri, 20
+ May 2022 08:08:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [172.23.8.247]
-X-ClientProxiedBy: MUCSE815.infineon.com (172.23.29.41) To
- MUCSE807.infineon.com (172.23.29.33)
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <c15bedc83d90a14fffcd5b1b6bfb32b8a80282c5.1653057096.git.geert@linux-m68k.org>
+ <286a1eef-e857-a31f-839b-00a4c835dfa9@roeck-us.net>
+In-Reply-To: <286a1eef-e857-a31f-839b-00a4c835dfa9@roeck-us.net>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 20 May 2022 17:07:56 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdX3EYrGPPUEZ3_YPyr6zHnV-xEW3mYB_QyFYaqg_grF-w@mail.gmail.com>
+Message-ID: <CAMuHMdX3EYrGPPUEZ3_YPyr6zHnV-xEW3mYB_QyFYaqg_grF-w@mail.gmail.com>
+Subject: Re: [PATCH] m68k: atari: Make Atari ROM port I/O write macros return void
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some devices (e.g. CYW5557x) require autobaud mode to enable FW loading.
-Autobaud mode can also be required on some boards where the controller
-device is using a non-standard baud rate when first powered on.
+Hi Günter,
 
-Only a limited subset of HCI commands are supported in autobaud mode.
+On Fri, May 20, 2022 at 4:52 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> On 5/20/22 07:32, Geert Uytterhoeven wrote:
+> > The macros implementing Atari ROM port I/O writes do not cast away their
+> > output, unlike similar implementations for other I/O buses.
+> > When they are combined using conditional expressions in the definitions of
+> > outb() and friends, this triggers sparse warnings like:
+> >
+> >      drivers/net/appletalk/cops.c:382:17: error: incompatible types in conditional expression (different base types):
+> >      drivers/net/appletalk/cops.c:382:17:    unsigned char
+> >      drivers/net/appletalk/cops.c:382:17:    void
+> >
+> > Fix this by adding casts to "void".
+> >
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Reported-by: Guenter Roeck <linux@roeck-us.net>
+> > Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+>
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-This patch looks for a DT property, "brcm,uses-autobaud-mode", to enable
-autobaud mode selection. If the property is present, the device is started
-in autobaud mode by keeping RTS asserted while powering on the device. The
-patch also prevents the use of unsupported commands for devices started in
-autobaud mode.
+Thanks!
 
-Signed-off-by: Hakan Jansson <hakan.jansson@infineon.com>
----
-V1 -> V2: No changes, submitted as part of updated patch series
+> > Removing the casts instead causes issues with functions propagating void
+> > return values (return expression in void function), which BTW sparse
+> > complains about, too.
+>
+> We live and learn. I didn't even know that this was valid syntax.
 
- drivers/bluetooth/btbcm.c   | 31 +++++++++++++++++++++++--------
- drivers/bluetooth/btbcm.h   |  8 ++++----
- drivers/bluetooth/hci_bcm.c | 15 ++++++++++++---
- 3 files changed, 39 insertions(+), 15 deletions(-)
+I knew about the syntax, but didn't realize immediately why it was
+done that way.
 
-diff --git a/drivers/bluetooth/btbcm.c b/drivers/bluetooth/btbcm.c
-index 92a2b7e81757..0c0958030c0a 100644
---- a/drivers/bluetooth/btbcm.c
-+++ b/drivers/bluetooth/btbcm.c
-@@ -403,6 +403,13 @@ static int btbcm_read_info(struct hci_dev *hdev)
- 	bt_dev_info(hdev, "BCM: chip id %u", skb->data[1]);
- 	kfree_skb(skb);
- 
-+	return 0;
-+}
-+
-+static int btbcm_print_controller_features(struct hci_dev *hdev)
-+{
-+	struct sk_buff *skb;
-+
- 	/* Read Controller Features */
- 	skb = btbcm_read_controller_features(hdev);
- 	if (IS_ERR(skb))
-@@ -513,7 +520,7 @@ static const char *btbcm_get_board_name(struct device *dev)
- #endif
- }
- 
--int btbcm_initialize(struct hci_dev *hdev, bool *fw_load_done)
-+int btbcm_initialize(struct hci_dev *hdev, bool *fw_load_done, bool use_autobaud_mode)
- {
- 	u16 subver, rev, pid, vid;
- 	struct sk_buff *skb;
-@@ -550,9 +557,16 @@ int btbcm_initialize(struct hci_dev *hdev, bool *fw_load_done)
- 		if (err)
- 			return err;
- 	}
--	err = btbcm_print_local_name(hdev);
--	if (err)
--		return err;
-+
-+	if (!use_autobaud_mode) {
-+		err = btbcm_print_controller_features(hdev);
-+		if (err)
-+			return err;
-+
-+		err = btbcm_print_local_name(hdev);
-+		if (err)
-+			return err;
-+	}
- 
- 	bcm_subver_table = (hdev->bus == HCI_USB) ? bcm_usb_subver_table :
- 						    bcm_uart_subver_table;
-@@ -635,13 +649,13 @@ int btbcm_initialize(struct hci_dev *hdev, bool *fw_load_done)
- }
- EXPORT_SYMBOL_GPL(btbcm_initialize);
- 
--int btbcm_finalize(struct hci_dev *hdev, bool *fw_load_done)
-+int btbcm_finalize(struct hci_dev *hdev, bool *fw_load_done, bool use_autobaud_mode)
- {
- 	int err;
- 
- 	/* Re-initialize if necessary */
- 	if (*fw_load_done) {
--		err = btbcm_initialize(hdev, fw_load_done);
-+		err = btbcm_initialize(hdev, fw_load_done, use_autobaud_mode);
- 		if (err)
- 			return err;
- 	}
-@@ -657,15 +671,16 @@ EXPORT_SYMBOL_GPL(btbcm_finalize);
- int btbcm_setup_patchram(struct hci_dev *hdev)
- {
- 	bool fw_load_done = false;
-+	bool use_autobaud_mode = false;
- 	int err;
- 
- 	/* Initialize */
--	err = btbcm_initialize(hdev, &fw_load_done);
-+	err = btbcm_initialize(hdev, &fw_load_done, use_autobaud_mode);
- 	if (err)
- 		return err;
- 
- 	/* Re-initialize after loading Patch */
--	return btbcm_finalize(hdev, &fw_load_done);
-+	return btbcm_finalize(hdev, &fw_load_done, use_autobaud_mode);
- }
- EXPORT_SYMBOL_GPL(btbcm_setup_patchram);
- 
-diff --git a/drivers/bluetooth/btbcm.h b/drivers/bluetooth/btbcm.h
-index 8bf01565fdfc..b4cb24231a20 100644
---- a/drivers/bluetooth/btbcm.h
-+++ b/drivers/bluetooth/btbcm.h
-@@ -62,8 +62,8 @@ int btbcm_write_pcm_int_params(struct hci_dev *hdev,
- int btbcm_setup_patchram(struct hci_dev *hdev);
- int btbcm_setup_apple(struct hci_dev *hdev);
- 
--int btbcm_initialize(struct hci_dev *hdev, bool *fw_load_done);
--int btbcm_finalize(struct hci_dev *hdev, bool *fw_load_done);
-+int btbcm_initialize(struct hci_dev *hdev, bool *fw_load_done, bool use_autobaud_mode);
-+int btbcm_finalize(struct hci_dev *hdev, bool *fw_load_done, bool use_autobaud_mode);
- 
- #else
- 
-@@ -104,12 +104,12 @@ static inline int btbcm_setup_apple(struct hci_dev *hdev)
- 	return 0;
- }
- 
--static inline int btbcm_initialize(struct hci_dev *hdev, bool *fw_load_done)
-+static inline int btbcm_initialize(struct hci_dev *hdev, bool *fw_load_done, bool use_autobaud_mode)
- {
- 	return 0;
- }
- 
--static inline int btbcm_finalize(struct hci_dev *hdev, bool *fw_load_done)
-+static inline int btbcm_finalize(struct hci_dev *hdev, bool *fw_load_done, bool use_autobaud_mode)
- {
- 	return 0;
- }
-diff --git a/drivers/bluetooth/hci_bcm.c b/drivers/bluetooth/hci_bcm.c
-index 785f445dd60d..0230cfcc8e3e 100644
---- a/drivers/bluetooth/hci_bcm.c
-+++ b/drivers/bluetooth/hci_bcm.c
-@@ -99,6 +99,7 @@ struct bcm_device_data {
-  * @no_early_set_baudrate: don't set_baudrate before setup()
-  * @drive_rts_on_open: drive RTS signal on ->open() when platform requires it
-  * @pcm_int_params: keep the initial PCM configuration
-+ * @use_autobaud_mode: start Bluetooth device in autobaud mode
-  */
- struct bcm_device {
- 	/* Must be the first member, hci_serdev.c expects this. */
-@@ -136,6 +137,7 @@ struct bcm_device {
- #endif
- 	bool			no_early_set_baudrate;
- 	bool			drive_rts_on_open;
-+	bool			use_autobaud_mode;
- 	u8			pcm_int_params[5];
- };
- 
-@@ -472,7 +474,9 @@ static int bcm_open(struct hci_uart *hu)
- 
- out:
- 	if (bcm->dev) {
--		if (bcm->dev->drive_rts_on_open)
-+		if (bcm->dev->use_autobaud_mode)
-+			hci_uart_set_flow_control(hu, false);	/* Assert BT_UART_CTS_N */
-+		else if (bcm->dev->drive_rts_on_open)
- 			hci_uart_set_flow_control(hu, true);
- 
- 		hu->init_speed = bcm->dev->init_speed;
-@@ -564,6 +568,7 @@ static int bcm_setup(struct hci_uart *hu)
- {
- 	struct bcm_data *bcm = hu->priv;
- 	bool fw_load_done = false;
-+	bool use_autobaud_mode = (bcm->dev ? bcm->dev->use_autobaud_mode : 0);
- 	unsigned int speed;
- 	int err;
- 
-@@ -572,7 +577,7 @@ static int bcm_setup(struct hci_uart *hu)
- 	hu->hdev->set_diag = bcm_set_diag;
- 	hu->hdev->set_bdaddr = btbcm_set_bdaddr;
- 
--	err = btbcm_initialize(hu->hdev, &fw_load_done);
-+	err = btbcm_initialize(hu->hdev, &fw_load_done, use_autobaud_mode);
- 	if (err)
- 		return err;
- 
-@@ -616,7 +621,7 @@ static int bcm_setup(struct hci_uart *hu)
- 		btbcm_write_pcm_int_params(hu->hdev, &params);
- 	}
- 
--	err = btbcm_finalize(hu->hdev, &fw_load_done);
-+	err = btbcm_finalize(hu->hdev, &fw_load_done, use_autobaud_mode);
- 	if (err)
- 		return err;
- 
-@@ -1197,6 +1202,10 @@ static int bcm_acpi_probe(struct bcm_device *dev)
- 
- static int bcm_of_probe(struct bcm_device *bdev)
- {
-+	bdev->use_autobaud_mode = device_property_read_bool(bdev->dev, "brcm,uses-autobaud-mode");
-+	if (bdev->use_autobaud_mode)
-+		bdev->no_early_set_baudrate = true;
-+
- 	device_property_read_u32(bdev->dev, "max-speed", &bdev->oper_speed);
- 	device_property_read_u8_array(bdev->dev, "brcm,bt-pcm-int-params",
- 				      bdev->pcm_int_params, 5);
--- 
-2.25.1
+Initially I thought it was some relic from the "always cast to void
+to make it clear you do not care about the return value"-frenzy, which
+are inside Linux visible mostly in the various "(void)acpi_<foo>(...);"
+calls.  AFAIK these are checked by some external tools.
+In Linux, we have __must_check to annotate the important cases.
 
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

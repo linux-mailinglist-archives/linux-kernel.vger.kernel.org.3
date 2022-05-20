@@ -2,112 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 857B752EA6A
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 13:00:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF07352EA74
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 13:03:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348307AbiETLAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 07:00:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55104 "EHLO
+        id S1348330AbiETLDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 07:03:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235945AbiETLAv (ORCPT
+        with ESMTP id S1348312AbiETLDJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 07:00:51 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34DDB7CA;
-        Fri, 20 May 2022 04:00:49 -0700 (PDT)
-Date:   Fri, 20 May 2022 11:00:46 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1653044448;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OfHvb3fruLU2Rg+3l/c/ckZU21HNHw7WDZW9HPhwKk0=;
-        b=Dg3al9neC57Puv7RlGzOlDLp6OBN9jS/QlsLJSmyYVhYnCDYAwJWAaEzVLvM1tkTFUFXOt
-        ZzzzW0YI9YrG2l+SUtvw+WfiaZhdWZQ1DWzG0fOqUQw673EqTNv0cVVzHLt1vwFWxlFsCr
-        fl1FqYwGxM7KxSxmSm9BPmIZ+K7QLoLeW+uBd5kQb1J+6BOeExD37eSV3GBNlxD0CqeYNf
-        kLTUIA3VHbJ37Me4nUKMJDqLxFh0/n2bXh6apnQsMtmU18+lVinu45y3mnKqEvVzU6IZfI
-        yXrow1YpEFbJwkSVmDOo4BptUfjqelpQJRoLCN21BqGyfPlSl3vHEHhbVxpokQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1653044448;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OfHvb3fruLU2Rg+3l/c/ckZU21HNHw7WDZW9HPhwKk0=;
-        b=YAxvw4U6dlfDaGOaoYObAEL0yq8lLnf72uhg5gz7rkN5qlTzbsqSvXL1CA6e68UCIrzXXp
-        m06UmvTiQzB5SzCA==
-From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/tdx] x86/tdx: Fix RETs in TDX asm
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Borislav Petkov <bp@suse.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220520083839.GR2578@worktop.programming.kicks-ass.net>
-References: <20220520083839.GR2578@worktop.programming.kicks-ass.net>
+        Fri, 20 May 2022 07:03:09 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B4A91498DC
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 04:03:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653044588; x=1684580588;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=64uK/wIWiSqexpwgngQnIl6DO+Ru93LCQrKFKwJZoRk=;
+  b=KfAhV/ZrgZDAepWxRu41zxNeMcsjIA80VnbBjm96VSh+17JBVnKcv38q
+   7Vy2AKhfGIjc1SPPWiYac1Ay47tt+UosNnc7zJTeDYhjieKHSj6cHN/az
+   4pU7QG7JU2QKuk6hdb29fsAumNHp6aMApg9lQkEqNWUZ0YDIxboTvMyM4
+   Tw08WZkY9ctx+9h98Dqj14kQe5WGNLQ9H37BMSaVYb4paSCxLogoPgHPT
+   0ueWSjMiR1ZfmfalU8HFiZoSKXEynQsCboTg1uSGMqYSxVC4ZdKwh1QBs
+   8ywTS6cfrImYHCLbO6gttN5wzPDsmNbbCy86rNuLLERNnYSi9TzKib55K
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="260157077"
+X-IronPort-AV: E=Sophos;i="5.91,239,1647327600"; 
+   d="scan'208";a="260157077"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 04:03:07 -0700
+X-IronPort-AV: E=Sophos;i="5.91,239,1647327600"; 
+   d="scan'208";a="599166968"
+Received: from wangyu5-mobl.ccr.corp.intel.com (HELO [10.249.172.121]) ([10.249.172.121])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 04:03:04 -0700
+Message-ID: <9e786a91-6239-1fa5-cad9-f319794b6055@linux.intel.com>
+Date:   Fri, 20 May 2022 19:03:02 +0800
 MIME-Version: 1.0
-Message-ID: <165304444691.4207.14334435844427241995.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Cc:     baolu.lu@linux.intel.com, Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/5] iommu: Add blocking_domain_ops field in iommu_ops
+Content-Language: en-US
+To:     Joerg Roedel <joro@8bytes.org>
+References: <20220516015759.2952771-1-baolu.lu@linux.intel.com>
+ <20220516015759.2952771-3-baolu.lu@linux.intel.com>
+ <YodVJ7ervpIdWfg+@8bytes.org>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <YodVJ7ervpIdWfg+@8bytes.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/tdx branch of tip:
+On 2022/5/20 16:45, Joerg Roedel wrote:
+> On Mon, May 16, 2022 at 09:57:56AM +0800, Lu Baolu wrote:
+>>   	const struct iommu_domain_ops *default_domain_ops;
+>> +	const struct iommu_domain_ops *blocking_domain_ops;
+> 
+> I don't understand why extra domain-ops are needed for this. I think it
+> would be more straight-forward to implement allocation of
+> IOMMU_DOMAIN_BLOCKED domains in each driver and let the details be
+> handled in the set_dev() call-back. The IOMMU driver can make sure DMA
+> is blocked for a device when it encounters a IOMMU_DOMAIN_BLOCKED
+> domain.
+> 
+> For IOMMUs that have no explicit way to block DMA could just use an
+> unmanaged domain with an empty page-table.
 
-Commit-ID:     c796f02162e428b595ff70196dca161ee46b163b
-Gitweb:        https://git.kernel.org/tip/c796f02162e428b595ff70196dca161ee46b163b
-Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Fri, 20 May 2022 10:38:39 +02:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Fri, 20 May 2022 12:53:22 +02:00
+Yes, this is what will go.
 
-x86/tdx: Fix RETs in TDX asm
+Best regards,
+baolu
 
-Because build-testing is over-rated, fix a few trivial objtool complaints:
-
-  vmlinux.o: warning: objtool: __tdx_module_call+0x3e: missing int3 after ret
-  vmlinux.o: warning: objtool: __tdx_hypercall+0x6e: missing int3 after ret
-
-Fixes: eb94f1b6a70a ("x86/tdx: Add __tdx_module_call() and __tdx_hypercall() helper functions")
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20220520083839.GR2578@worktop.programming.kicks-ass.net
----
- arch/x86/coco/tdx/tdcall.S | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/coco/tdx/tdcall.S b/arch/x86/coco/tdx/tdcall.S
-index eeb4511..f9eb113 100644
---- a/arch/x86/coco/tdx/tdcall.S
-+++ b/arch/x86/coco/tdx/tdcall.S
-@@ -73,7 +73,7 @@ SYM_FUNC_START(__tdx_module_call)
- 	FRAME_BEGIN
- 	TDX_MODULE_CALL host=0
- 	FRAME_END
--	ret
-+	RET
- SYM_FUNC_END(__tdx_module_call)
- 
- /*
-@@ -196,7 +196,7 @@ SYM_FUNC_START(__tdx_hypercall)
- 
- 	FRAME_END
- 
--	retq
-+	RET
- .Lpanic:
- 	call __tdx_hypercall_failed
- 	/* __tdx_hypercall_failed never returns */

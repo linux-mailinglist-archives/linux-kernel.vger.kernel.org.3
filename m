@@ -2,97 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1528D52EB3F
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 13:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2DDF52EB3B
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 13:54:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348799AbiETLyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 07:54:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37436 "EHLO
+        id S1345434AbiETLx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 07:53:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348791AbiETLyM (ORCPT
+        with ESMTP id S1346944AbiETLxx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 07:54:12 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39CED15D31E
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 04:54:10 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id br17so1589191lfb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 04:54:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=rSuzs4n4Sskm3JHT6PT66YWFV3PUZnimPTSzRD2tWSg=;
-        b=wpU0Xbi3qNPhIsGbn3dTnIJjM0guksk6R0+2fenSiGhdpViMAQwecBOTD6TSGuyT+E
-         uUB+KkSPJLE2hZE1m+XHi+XvIEOYhdcwkMwKILksmRBLUSEF0AChl22J2FR+pR8Y6aoM
-         I6/nj+/ttx8o2pLGwFJmgVnxj/97Rp3IPxhNEoUV5nPKZTBvpzDr3ZGvseVYJROTwCte
-         u4DUBrDePqhdXtUs4xQWmHYCUHf4tfeMllUs7Pr7MU2nW8LpOHLwL5+MIHHyNC+B3n4G
-         6f5gY/5q/MMUUfU/9/CRzhAghdlEx6ErskRuy18t0iwPlUpIVTM9kMf4eZgqm4ztSp7A
-         DdMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=rSuzs4n4Sskm3JHT6PT66YWFV3PUZnimPTSzRD2tWSg=;
-        b=sEY9YLgsyOH6Yzz9WppjyPxyZk92Ddb8e38XbeRp1VtVBCCJuICCE8aCrELBXkA9M1
-         +UdKiSeuhEtfGsbDkIU/5I5GJKVyVXVDYaaRGmY1yqIC9MPgRjhlpdP1OQME7JLD631a
-         Nw/489Sv19Vv2IYg9KxRKEXZLyATcuytGArqmp47+J6ohFSPPndDM0mtNP+Nx+eB2YQ1
-         +qkWm/yPheqd4kcp9Sfn05cG+B/vASgusZXGcPgYfYBWN56KLnXm7jssHtrKE9sNjyqe
-         3mOzekCdMy0knEeK40BE78XH7wvVBf4llaH5HHLMSNNZuIpm2gvxc6cEGp2myqy+MVkf
-         M0nQ==
-X-Gm-Message-State: AOAM533SNEXPLipmMB7iL7FMBEamu37y3VroFgfEVpALmzmZw2qKg48Q
-        tafqtHQnbRkxhR1rAYVaXXyt2g==
-X-Google-Smtp-Source: ABdhPJwHbS3B+g10NGZBGRxnNDfdHe7p/uRXjL55A1oYzFJvqnTHUNryLFfceBT55K+P1aalTA9hvg==
-X-Received: by 2002:ac2:43a1:0:b0:478:5867:5047 with SMTP id t1-20020ac243a1000000b0047858675047mr1004918lfl.37.1653047648614;
-        Fri, 20 May 2022 04:54:08 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id o12-20020ac2494c000000b0047255d211a5sm632074lfi.212.2022.05.20.04.54.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 May 2022 04:54:08 -0700 (PDT)
-Message-ID: <dc883b3b-9eba-e883-cedb-e848b13cf746@linaro.org>
-Date:   Fri, 20 May 2022 13:54:06 +0200
+        Fri, 20 May 2022 07:53:53 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B62B55A156;
+        Fri, 20 May 2022 04:53:51 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 74B0121B21;
+        Fri, 20 May 2022 11:53:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1653047630; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=odZCkoyt1raniMI756SQp0+X5fym2vW4nS/PB0RUy+o=;
+        b=H3TTGCzguH+hUwZQMY03Hmo66+CToYMwEvjEp8WPenkvKXYhjYlXAb0W4+4EVkUQTuzbLU
+        2bouSzGIrifL0BhloT1sru2QWyjpCXkHlwsgtt4MPIXmZCz7S1mGSmrQt/I7DEok82maz6
+        YGEgUga6qO8wV5MWUjNm+L64DzgqVOk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1653047630;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=odZCkoyt1raniMI756SQp0+X5fym2vW4nS/PB0RUy+o=;
+        b=idKjf09Uliga1F+wR/EV9gSsWXnfW3xdRgE4hKC/Hj3ucqSso4MxIVze6W/9vIO0fcWKBp
+        CcRJ3T7eRIjP2yBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 016AF13AF4;
+        Fri, 20 May 2022 11:53:49 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 1OBzOE2Bh2JBNgAAMHmgww
+        (envelope-from <lhenriques@suse.de>); Fri, 20 May 2022 11:53:49 +0000
+Received: from localhost (brahms.olymp [local])
+        by brahms.olymp (OpenSMTPD) with ESMTPA id cf0f8a7d;
+        Fri, 20 May 2022 11:54:27 +0000 (UTC)
+From:   =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>
+To:     Jeff Layton <jlayton@kernel.org>, Xiubo Li <xiubli@redhat.com>,
+        Ilya Dryomov <idryomov@gmail.com>
+Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>
+Subject: [RFC PATCH] ceph: try to prevent exceeding the MDS maximum xattr size
+Date:   Fri, 20 May 2022 12:54:26 +0100
+Message-Id: <20220520115426.438-1-lhenriques@suse.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 2/2] dt-bindings: arm: qcom: Document xiaomi,natrium board
-Content-Language: en-US
-To:     Alec Su <ae40515@yahoo.com.tw>, Rob Herring <robh@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, y.oudjana@protonmail.com,
-        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
-        sboyd@codeaurora.org
-References: <20220519074112.25600-1-ae40515@yahoo.com.tw>
- <20220519074112.25600-3-ae40515@yahoo.com.tw>
- <1652965539.974526.1359566.nullmailer@robh.at.kernel.org>
- <7e5ecca1-aef7-ce90-7797-7f8be3b55715@yahoo.com.tw>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <7e5ecca1-aef7-ce90-7797-7f8be3b55715@yahoo.com.tw>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/05/2022 03:23, Alec Su wrote:
-> On 2022/5/19 21:05, Rob Herring wrote:
->> On Thu, 19 May 2022 07:41:12 +0000, Alec Su wrote:
->>> Document Xiaomi Mi 5s Plus (xiaomi-natrium) smartphone which is based on
->>> Snapdragon 821 SoC.
+The MDS tries to enforce a limit on the total key/values in extended
+attributes.  However, this limit is enforced only if doing a synchronous
+operation (MDS_OP_SETXATTR) -- if we're buffering the xattrs, the MDS
+doesn't have a chance to enforce these limits.
 
-> 
-> I checked the full log. These warnings seem not the new warning caused
-> by the patch series. Look like these device trees are trying to match
-> with each of the compatible strings in qcom.yaml.
+This patch forces the usage of the synchronous operation if xattrs size hits
+the maximum size that is set on the MDS by default (64k).
 
+While there, fix a dout() that would trigger a printk warning:
 
-Yes, I'll fix them.
+[   98.718078] ------------[ cut here ]------------
+[   98.719012] precision 65536 too large
+[   98.719039] WARNING: CPU: 1 PID: 3755 at lib/vsprintf.c:2703 vsnprintf+0x5e3/0x600
+...
 
-Best regards,
-Krzysztof
+URL: https://tracker.ceph.com/issues/55725
+Signed-off-by: Luís Henriques <lhenriques@suse.de>
+---
+ fs/ceph/xattr.c | 17 +++++++++++++----
+ 1 file changed, 13 insertions(+), 4 deletions(-)
+
+diff --git a/fs/ceph/xattr.c b/fs/ceph/xattr.c
+index afec84088471..09751a5f028c 100644
+--- a/fs/ceph/xattr.c
++++ b/fs/ceph/xattr.c
+@@ -15,6 +15,12 @@
+ #define XATTR_CEPH_PREFIX "ceph."
+ #define XATTR_CEPH_PREFIX_LEN (sizeof (XATTR_CEPH_PREFIX) - 1)
+ 
++/*
++ * Maximum size of xattrs the MDS can handle per inode by default.  This
++ * includes the attribute name and 4+4 bytes for the key/value sizes.
++ */
++#define MDS_MAX_XATTR_PAIRS_SIZE (1<<16) /* 64K */
++
+ static int __remove_xattr(struct ceph_inode_info *ci,
+ 			  struct ceph_inode_xattr *xattr);
+ 
+@@ -1078,7 +1084,7 @@ static int ceph_sync_setxattr(struct inode *inode, const char *name,
+ 			flags |= CEPH_XATTR_REMOVE;
+ 	}
+ 
+-	dout("setxattr value=%.*s\n", (int)size, value);
++	dout("setxattr value size: ld\n", size);
+ 
+ 	/* do request */
+ 	req = ceph_mdsc_create_request(mdsc, op, USE_AUTH_MDS);
+@@ -1176,8 +1182,13 @@ int __ceph_setxattr(struct inode *inode, const char *name,
+ 	spin_lock(&ci->i_ceph_lock);
+ retry:
+ 	issued = __ceph_caps_issued(ci, NULL);
+-	if (ci->i_xattrs.version == 0 || !(issued & CEPH_CAP_XATTR_EXCL))
++	required_blob_size = __get_required_blob_size(ci, name_len, val_len);
++	if ((ci->i_xattrs.version == 0) || !(issued & CEPH_CAP_XATTR_EXCL) ||
++	    (required_blob_size >= MDS_MAX_XATTR_PAIRS_SIZE)) {
++		dout("%s do sync setxattr: version: %llu blob size: %d\n",
++		     __func__, ci->i_xattrs.version, required_blob_size);
+ 		goto do_sync;
++	}
+ 
+ 	if (!lock_snap_rwsem && !ci->i_head_snapc) {
+ 		lock_snap_rwsem = true;
+@@ -1193,8 +1204,6 @@ int __ceph_setxattr(struct inode *inode, const char *name,
+ 	     ceph_cap_string(issued));
+ 	__build_xattrs(inode);
+ 
+-	required_blob_size = __get_required_blob_size(ci, name_len, val_len);
+-
+ 	if (!ci->i_xattrs.prealloc_blob ||
+ 	    required_blob_size > ci->i_xattrs.prealloc_blob->alloc_len) {
+ 		struct ceph_buffer *blob;

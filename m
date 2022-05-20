@@ -2,74 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E79752ECC5
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 14:58:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F92952ECC7
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 15:00:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237259AbiETM6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 08:58:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51262 "EHLO
+        id S1349482AbiETNAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 09:00:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236706AbiETM6u (ORCPT
+        with ESMTP id S236247AbiETNAB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 08:58:50 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B4716A26A
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 05:58:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=D0rE5ocQaNvc6gwUw0uCA5HZ3TY/Uz1wLd+/r/5igCI=; b=T1fD6vnPvo1v8eK3XVf+kwOwIz
-        fyqe8th/EBUGWxrvd9S4j2qFFfpJCYQbBs08b4RzbLonNEtXVhGG12SU2wP7mAZ5Gvenp/Clks2dt
-        4Uh8/WXm6GcQo2gpWYVnYHwAsTG5RyN7/1w/h4kE8GgsfbMrXois4NAmDFSU0bxnG0hnDHJZw6cBO
-        Kru9QFej4iDxqpA5KLaFqfp8qd+SekLezdWIqwX3Vthc2mmbWxgXXTVQvfIymELESJIH2Jmwq5hwD
-        eChtTwAPMHpqJovzeVrzmdGvLfZWz8nJS71GT8v34u+FsXP1WU0rvG4YSJz7XdqRmjqPxPi8dPwo9
-        JBiUMC0Q==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ns2Cz-002Kur-Rn; Fri, 20 May 2022 12:58:22 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 1D7E3981243; Fri, 20 May 2022 14:58:19 +0200 (CEST)
-Date:   Fri, 20 May 2022 14:58:19 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     Isaku Yamahata <isaku.yamahata@intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        frederic@kernel.org, paulmck@kernel.org, rjw@rjwysocki.net,
-        x86@kernel.org, linux-kernel@vger.kernel.org, jpoimboe@kernel.org
-Subject: Re: [RFC][PATCH 9/9] arch/idle: Change arch_cpu_idle() IRQ behaviour
-Message-ID: <20220520125819.GS2578@worktop.programming.kicks-ass.net>
-References: <20220519212750.656413111@infradead.org>
- <20220519213422.119695559@infradead.org>
- <20220519220349.GM2578@worktop.programming.kicks-ass.net>
- <20220520022052.mkrc4v4evtp74bxe@black.fi.intel.com>
- <20220520070614.GP2578@worktop.programming.kicks-ass.net>
- <20220520101322.flxf52mg6vkkbc7r@box.shutemov.name>
+        Fri, 20 May 2022 09:00:01 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0386D169E27;
+        Fri, 20 May 2022 06:00:01 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id f9so15567197ejc.0;
+        Fri, 20 May 2022 06:00:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=29WlRMrgqsqkyq2cXG/yY/s3COdSKBJEo/H2xfm8Y7k=;
+        b=RNKnYlXb1TsZpVz8ygubB2uyiiRyQvd+Vf3UZWaApaglAYyunwuJQRe+nOa/iDWQBQ
+         sQ/AsLAhYqVdmZmB/T9DCV7hiuNaw9hKySBKAzmDqPz22lK3H6BWrV5OgBU1oKyosIF/
+         5v6xJYzQX2jVIdS6CYxoAcAvIrOP2gvDsz0yC2RqsskSsOqY8x0abU60+oRUYQu2196k
+         t+9AhLQtIY9szFh2vIbT/3d6o8anOQb4YpSjH2XxW3j/QMqxPa0z/EmPg4LjM6B5cyf7
+         q70+BLQREtBsL3dmMNld4bE+UDqBScgtJxosA4ipmGMPjYW2fg2TRMT505L+0Ij2fsfu
+         8cKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=29WlRMrgqsqkyq2cXG/yY/s3COdSKBJEo/H2xfm8Y7k=;
+        b=IO3IQzulad3+y5G91Mkl6lRypSOA69vsR8ijAOmyoLBUelu2SgY7I7VmRkmmEevA/0
+         S87EJN6em6A7zIBXHZmNdqtMvukCjW/GWX8qOfH079rLQ7OYuv+MTCUHsug2lP7PKyij
+         Et+jcZ04JDiUD46qrioE9QvUcTe7msgGMG9G4RYeiGSbv0J6QnuQaeteJnGxR4ZR6KKN
+         prg7rVrNah4WPtT7cnLyPm6lYI35rzLHZo62BuATKzl0M7aE2l9FBe1wMygLyOpCNAqj
+         tAl5r7ujrarKxRUz/x5L5BGBIhNPEI/uR/lhiST/0/D0xFLvd/6mFPSvFzec/+FzEXi5
+         ItaQ==
+X-Gm-Message-State: AOAM53244hzbmbNdDlRa34Ob3G0oB4asuOm75+g/8U5RN1bsTYt/elmy
+        urhJ88HDaLUzyw7RwWXwjkE=
+X-Google-Smtp-Source: ABdhPJyL/n1KfLo7Nf1z5lBz2l68E4sxuMo89GrxheGeUfKF1v0thfjKcOHe8pm7UkfGE5fn5NiTqg==
+X-Received: by 2002:a17:907:e8b:b0:6fe:b76d:bd18 with SMTP id ho11-20020a1709070e8b00b006feb76dbd18mr519965ejc.294.1653051599504;
+        Fri, 20 May 2022 05:59:59 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id h24-20020a1709070b1800b006f3ef214e5csm1293345ejl.194.2022.05.20.05.59.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 May 2022 05:59:58 -0700 (PDT)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <3d30f1ac-558f-0ce6-3d46-e223f117899b@redhat.com>
+Date:   Fri, 20 May 2022 14:59:56 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220520101322.flxf52mg6vkkbc7r@box.shutemov.name>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH RESEND v3 11/11] KVM: x86/pmu: Drop amd_event_mapping[] in
+ the KVM context
+Content-Language: en-US
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+References: <20220518132512.37864-1-likexu@tencent.com>
+ <20220518132512.37864-12-likexu@tencent.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220518132512.37864-12-likexu@tencent.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 01:13:22PM +0300, Kirill A. Shutemov wrote:
+On 5/18/22 15:25, Like Xu wrote:
+> +	if (static_call(kvm_x86_pmu_hw_event_is_unavail)(pmc))
+> +		return false;
+> +
 
-> So you want to call call the HLT hypercall with .irq_disabled=false and
-> .do_sti=false, but actual RFLAGS.IF in the guest is 0 and avoid CLI on
-> wake up expecting it to be cleared already, right?
+I think it's clearer to make this positive and also not abbreviate the 
+name; that is, hw_event_available.
 
-Yep, just like MWAIT can, avoids pointless IF flipping.
+Apart from patch 3, the series looks good.  I'll probably delay it to 
+5.20 so that you can confirm the SRCU issue, but it's queued.
 
-> My reading of the spec is "don't do that". But actual behaviour is up to
-> VMM and TDX module implementation. VMM doens't have access to the guest
-> register file, so it *may* work, I donno.
+Thanks,
 
-Yeah, it totally *can* work, but I've no idea if they done the right
-thing.
+Paolo

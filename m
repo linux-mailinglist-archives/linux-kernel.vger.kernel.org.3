@@ -2,212 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAFDC52E2CB
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 05:02:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 497D352E2CC
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 05:02:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344957AbiETDBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 23:01:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52650 "EHLO
+        id S1344967AbiETDCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 23:02:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234783AbiETDBo (ORCPT
+        with ESMTP id S1344961AbiETDCM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 23:01:44 -0400
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD5356422
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 20:01:43 -0700 (PDT)
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 24JKmXfB032212
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 20:01:42 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : cc : subject :
- date : message-id : references : in-reply-to : content-type : content-id :
- content-transfer-encoding : mime-version; s=facebook;
- bh=m+sASbbRun4XTRrMN3LSqMa9x7G0j4KlytPdvtE1xqA=;
- b=kCjFvF0MUvxZaYbHJLl6zRPgPfAw8ZNApCHyg8kRYM3mERL0kA5ZQmrKgLm8IlIrTgKQ
- 0mwLvDZWxkpWITe3k+0IkyYW2t+zhi2GIEo+tHkN7jEkSoJc1mkQRvr+vuynp5y7viA+
- CSHU7k2+N5yWqhrSkbfbbd6GW+ZMNoWXxMM= 
-Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2109.outbound.protection.outlook.com [104.47.70.109])
-        by m0089730.ppops.net (PPS) with ESMTPS id 3g5h5d6tu6-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 20:01:42 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ky3LVrJvwY3YcWHhs8gcIDA4/fvBvJqXiR4DeHb3Gv5RXrplMfuW3feOPHGa+OCXicSjY1q9Le0JT0BiKvhSY6lqZwZBTxnNf+iwQQpBLSXJdp4eo7ZvbEXe1yKseirLhx/Ry8oxYrHJv4zrz3mdjqCERhihb12xXoccK2CRCEVxPGgpJBuWRWfsDTuDpbEbJralKuV271VQGpaxFHbi8QX9qzpE2f2v3CRnFm3SQzgy3if/AYU0oIB2Mb2B8B1eNxVoLU8r4qoEMuLscE/MXzJWGx5O7SRE3w0D0tOOf3U4X4OWBCW1HrcaJYYCNLiHS3/A9/Xbcp4zpg+haZooqw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=m+sASbbRun4XTRrMN3LSqMa9x7G0j4KlytPdvtE1xqA=;
- b=LU5I590DUn2uBtV1Sz4Vi2p89L4sSHOQVsncmK40uAZ+MhgR7X1Q3YZh4lhwdMTz+n2/H5b6s+NvK1TwhVixmpP0G3RW6l8aJbO5LiSYZBSinFAwTjQlVRtdVDftdk85NhrbPNKNf2NlxpkyNb8bit3tZ0arfilcRcioMIWDiOl9FrTZvcovXgAWjVfyROLcwKnH+D05kB7BTNGiOaAZlv+8MCLo/w0fA3LnBCQtUzsmfD6EdTMlgv3M7ab5jURYWEurmiOZwmct+0wHaora6FSKiD3kPOL694zSuKuQyjQu/2KF9BAzNtOCWB95k8r1lZsPa314gww37KkOloOkqQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from BYAPR15MB3032.namprd15.prod.outlook.com (2603:10b6:a03:ff::11)
- by CY4PR15MB1335.namprd15.prod.outlook.com (2603:10b6:903:10f::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.14; Fri, 20 May
- 2022 03:01:39 +0000
-Received: from BYAPR15MB3032.namprd15.prod.outlook.com
- ([fe80::45c5:2306:17b3:89eb]) by BYAPR15MB3032.namprd15.prod.outlook.com
- ([fe80::45c5:2306:17b3:89eb%5]) with mapi id 15.20.5273.014; Fri, 20 May 2022
- 03:01:39 +0000
-From:   Peter Delevoryas <pdel@fb.com>
-CC:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        OpenBMC List <openbmc@lists.ozlabs.org>,
-        BMC-SW <BMC-SW@aspeedtech.com>,
-        "ryan_chen@aspeedtech.com" <ryan_chen@aspeedtech.com>,
-        Peter Delevoryas <pdel@fb.com>
-Subject: Re: [PATCH v3 0/3] Add ASPEED AST2600 I2C new controller driver
-Thread-Topic: [PATCH v3 0/3] Add ASPEED AST2600 I2C new controller driver
-Thread-Index: AQHYaPFadatO4kmu/EiPkIJLA5AvH60moyWAgAByrICAAAQkAA==
-Date:   Fri, 20 May 2022 03:01:39 +0000
-Message-ID: <A553E632-F534-4823-BC50-89408294DB5F@fb.com>
-References: <20220516064900.30517-1-ryan_chen@aspeedtech.com>
- <DDAAA045-3BDE-4712-A6CC-B1A52713634A@fb.com>
- <SEZPR06MB52697491CF6D06ECB85F0FB7F2D39@SEZPR06MB5269.apcprd06.prod.outlook.com>
-In-Reply-To: <SEZPR06MB52697491CF6D06ECB85F0FB7F2D39@SEZPR06MB5269.apcprd06.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 62f38510-d8f4-4626-180f-08da3a0d0f7b
-x-ms-traffictypediagnostic: CY4PR15MB1335:EE_
-x-microsoft-antispam-prvs: <CY4PR15MB1335A573FBB96DE045BC318DACD39@CY4PR15MB1335.namprd15.prod.outlook.com>
-x-fb-source: Internal
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: x/CVhybQQQ95mBDguZ9td0EbCzFCmhd7IooJ9IhXM34S7HQhyuqUjhUIYDT7JAxmJ/QWL+9fvRXXrvIYO1H1Gy4B4nB75Fzb2qtQOQUoxiOWT+TwBibDi7r2rBt9XBmZiLn9Q/ogtdmWWZbar/b4kvPkdqdxh/QMZMpEFURXlTFOJP1I8xaJzH7dSWeuuwx1B/KjODG3BRsQpxGWnCBNZav/6MMFdLaRadOMA0X9KzfOjuvQfdYXXTTAP2Ouj69i2TjjHBEqql+PBWVG9UP/aXFbZlzQdZUmyM7DmLKqsnClTkfovJKKrLHrZITseXOXmgDFdVajd3apS1n7fvJhzBwzeQ0cBKFzhNH8VrVbokGicZX90p9zoYnBa+esmRGDfr16Y0o/hq/QPWzrCpVscEDNntrX0uNLs2fLWnxcJJ1pY59q1ay8XT628FBtbyT5IuaoAF4oAz8yNFd5JMMKExok9lS2KDLOsSk/6HpGLLomS1ER3Ad4Xfmi66sGpNfl1I5ky2yKoJX5gfcxzGgwRyLCktcunr1tHcrJ7M8i+R8ngh/G0vlLn1QQmIcYH4xoy9exiyv6HmeQo3ogEUjeK+Ya6RHReJGALV4vKtqH+hi2zKGIu9PvraIY/TXDrL0ZLHcaXlmt5oQjWkOXd2T242Q36QQzax5/N45A0tB+yQEnwZHeWjBvK5ZStlHQSjDXAN0twF6UsWrCfvCsjrEcOnJPVz1Wf/uwFP0FfGMHSOH28iiqZZG8PZ6MJ+fuzGN2s/5YtZnw/MT+w5CF99FKD0k7t/CNuDQXkgKl+Evu1EIH+kIOsUYCObVLuBbvBqHg
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB3032.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(86362001)(5660300002)(2616005)(508600001)(8936002)(2906002)(53546011)(6506007)(6486002)(966005)(33656002)(6512007)(38100700002)(38070700005)(122000001)(64756008)(66446008)(83380400001)(66556008)(54906003)(71200400001)(76116006)(8676002)(36756003)(4326008)(66476007)(109986005)(186003)(316002)(66946007)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MFA4c0JuVkxCSUNKSDNrU0J1NHVkcUE2cHA1Qm9lZDE1c002WUFnck1SM2Jl?=
- =?utf-8?B?djJJaU40NmhnMVo5b1ZTdTB2U1dFVkdoVmdYYXZVWms5cmViZzYraVQ5WG5h?=
- =?utf-8?B?cjF4dzlaUmw2aHAxYU1NODZRUVdhZGp0NDNobE9uMkNKSHNIamJFZnBTUC92?=
- =?utf-8?B?WDRJQ0ZvUFFSenRleUo3M1Q4azNkZXhhZFY2V2xpcWNFMk9YWnc4SFBUbW5G?=
- =?utf-8?B?YmoxRmh1NmpnWlEvN0s4Y05XM1pZU0VUTWM0bnVicjR0WFlVNEczdWZCMG12?=
- =?utf-8?B?SVRmdHZiS1M2RFJieEpkUjR5c3RUT1VHaTh3eXNUeWs1Mmp3TVpQNFg5aVRJ?=
- =?utf-8?B?MHhYcVJJUFMrU3BJM0g2RGJULzM4UElGRXZmRFJWNnFxTW1paFdZRmdPUUZ5?=
- =?utf-8?B?N1pmTUtYNE9maGZLeFhYV3dDRzBrNVYwSkNZR3RnNGt5TVlFUTBsYWdiZ1cw?=
- =?utf-8?B?Q3hyZ09VMnM0TGFsZXl2Z1dkRmh5L0laZWlGQ3F6S2RiY2w0QlVOT2JWdUFo?=
- =?utf-8?B?MEppdDJRRWxrY2NHdUJnMnRoakFDNzdzYVdCcmdnVWpnZUUxaExha1d4Vnpi?=
- =?utf-8?B?UElDU2pYenpuVEtlZW55RkRvU2M2Tm9XdER5UWxJaWV1VUduL3RUTDBRakFN?=
- =?utf-8?B?dSsvMVlKQkZpeC9lQmdSOEtGN3M0Z25tTWFhN2lCNHVTMXRCZDgzd2ZhVXBz?=
- =?utf-8?B?clpYRjhKMVMrbFhMRE1sRDdPUitRajdwMWRlY3lTaWRocWlkbXAyblRQSzFu?=
- =?utf-8?B?RkpPY2t0NExPUGxuYXEzeng3V2pwcjBPTC9PL1N5TlVHdlhGdUxSSEVIeVY4?=
- =?utf-8?B?UnNDVllxb2grZ2NwcDBvVC9EWnNrS1FBWWdpU2dnN1RxbGdOeHVDM2dlajJW?=
- =?utf-8?B?VUM1UmM5bEduZlVjRVR4ajNZLzk1V3hoVjY4aXl0SEQ3bmV3KzZHNlhUOS9n?=
- =?utf-8?B?QjVuQ1ViVmZOcVlORVJJcjR6QjhxSExIYldqeUwvR0xYeGR4bjEwaW9aUEd5?=
- =?utf-8?B?amFkZk5lcHFWNkhmWkljd255ekZqVTVrbEVMMnJpdWdUQktxMHZzODZQRzQ0?=
- =?utf-8?B?ekdHQVI0VFN0MHcxZWlWTmNaanNnY0dtbU9ibHp4MDBDL2MvN2M0em9mL1E2?=
- =?utf-8?B?cFBHY0t4UTgvcjMwZGNONU5xM1YrdTRVbTU5VndrL3hVNW9sRGFpL2ZhTkNE?=
- =?utf-8?B?dWkwUUlid21oREFaWkpyZmM3Sk5IbTA1Q1RzbjJMajIvZHV6WEU3dGJ0M0o3?=
- =?utf-8?B?akVndlZtSTEwL0JySURqcnBubTMrcU14RjE4OWkvbGpUdmxDdUZheWw5VUh5?=
- =?utf-8?B?S0oyT0VZTXhlZ0xaMHpDYk4xRkxQbi9XeTdzSTVTbmNPNjZBVmQ1VU5SRk1o?=
- =?utf-8?B?L0FrUkppV2c4QXl4TUc2dnl0YlFFQUtEUFVxbDhmczFGbFQ2eUhRQ1QwcTdk?=
- =?utf-8?B?Q2xwMnFiSUgzQk9KUm1QLzJrRlNQRldZajUrVG52SjV2S3hvbzBPejhSNExR?=
- =?utf-8?B?c01BOHNrRzgyZzV5cnlSdlhqaVp5L01IVk5lbUR1WlR6dis1SDM5anpubGZ4?=
- =?utf-8?B?WVZEN2o5dkY0eG9lRUtyL1VZTm96Zmpab2llUUZkNHRramxqczUyc0NvRGQz?=
- =?utf-8?B?OW5rR2ZGdk0ydUxKZkl0TVNkWDJlS1A2aHgzdThqeFJVUkw0WDhWY3R1NVRs?=
- =?utf-8?B?ZHJwYUlqLzJmUTRZNmhEVWlQK0gvUUx4S29MVUt2eEdJU0Zpb1VneVZPMkVS?=
- =?utf-8?B?T0o5OEdQWFBNdG8vNDRzOXkyQy9NUDdiSnFJVXFEN1pDeitucVhvZHFLQ3lV?=
- =?utf-8?B?aGF1eEdRMEg3RytMQ1FSRTR0bVJVREcwYjhKQjE3eFYvSVNRM0IxVlhsOEw1?=
- =?utf-8?B?NXlBVGsvZDE4NnFlN1M5ZE8yL0VCU2dIZFlHZ0NqSzRZSUpFVVpSalM2VFk3?=
- =?utf-8?B?bjFmVmRqa01BQU05UUp2RHpkZ3U5Qk50ajdiMXNRUG9CcjdQS0p6dzVyVFhs?=
- =?utf-8?B?QzFUYXh3VU8zeVFxQWlIY0gwcFVRMk1iRnNITXVieUN1OEF1OVdYc3M3ZVRx?=
- =?utf-8?B?Ujk1b0hTblFiT2wrZDFmNk12TC9kdFNnbWNFM0J5aUx3TnVLSndmZEZLcDJI?=
- =?utf-8?B?TzhVc0VreG9LWXBTMVRLYXBRNVN4TzUvWDBHKzZoVlQ4S2xxMUhKZjdrakxC?=
- =?utf-8?B?Y0t1ZXlOL2lUcEVsdi8yMFJpSGNiWkRpemdJb1dRL3NUWnlLejIrY0YwWklm?=
- =?utf-8?B?L3NJTU9na2FLREl2YkRvTlFid3d4M1k3Q2phU3UxdVZhRVZKMm43WUhHSnZE?=
- =?utf-8?B?eXRqcG9uSkJmVnhKWFNBWWc3akV6Y3o2RnplZXJBdWZtVUk0eCtlZHUyUHRE?=
- =?utf-8?Q?MVZu+60W7nvMjmTk=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <6C146CB7BD2B90488DF8B64CD13F76A7@namprd15.prod.outlook.com>
-X-OriginatorOrg: fb.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB3032.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 62f38510-d8f4-4626-180f-08da3a0d0f7b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 May 2022 03:01:39.4745
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: tOmSX6DWAWiH4e5+GK+AA7gjRBTNeTqfuVcxt2MASDdMkNm2v3E/j98exSC80m7e
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR15MB1335
-X-Proofpoint-GUID: ckmx0XNuStxQc_Zd6-u8iaGAvVOEctla
-X-Proofpoint-ORIG-GUID: ckmx0XNuStxQc_Zd6-u8iaGAvVOEctla
-Content-Transfer-Encoding: base64
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 19 May 2022 23:02:12 -0400
+Received: from p3plwbeout14-04.prod.phx3.secureserver.net (p3plsmtp14-04-2.prod.phx3.secureserver.net [173.201.192.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF78D5DD16
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 20:02:09 -0700 (PDT)
+Received: from mailex.mailcore.me ([94.136.40.141])
+        by :WBEOUT: with ESMTP
+        id rsu0nME9r4zeHrsu1n8VEI; Thu, 19 May 2022 20:02:09 -0700
+X-CMAE-Analysis: v=2.4 cv=Uqumi88B c=1 sm=1 tr=0 ts=628704b1
+ a=bheWAUFm1xGnSTQFbH9Kqg==:117 a=84ok6UeoqCVsigPHarzEiQ==:17
+ a=ggZhUymU-5wA:10 a=IkcTkHD0fZMA:10 a=oZkIemNP1mAA:10 a=cm27Pg_UAAAA:8
+ a=JfrnYn6hAAAA:8 a=FXvPX3liAAAA:8 a=pGLkceISAAAA:8 a=VwQbUJbxAAAA:8
+ a=8s4zpLD2_1IN5pkUfRcA:9 a=QEXdDO2ut3YA:10 a=xmb-EsYY8bH0VWELuYED:22
+ a=1CNFftbPRP8L7MoqJWF3:22 a=UObqyxdv-6Yh2QiB9mM_:22 a=AjGcO6oz07-iQ99wixmX:22
+X-SECURESERVER-ACCT: phillip@squashfs.org.uk  
+X-SID:  rsu0nME9r4zeH
+Received: from 82-69-79-175.dsl.in-addr.zen.co.uk ([82.69.79.175] helo=[192.168.178.33])
+        by smtp06.mailcore.me with esmtpa (Exim 4.94.2)
+        (envelope-from <phillip@squashfs.org.uk>)
+        id 1nrstx-0007M4-UV; Fri, 20 May 2022 04:02:08 +0100
+Message-ID: <eef04b7d-6778-ef7e-07a8-a2c916d21fdb@squashfs.org.uk>
+Date:   Fri, 20 May 2022 04:02:01 +0100
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-19_06,2022-05-19_03,2022-02-23_01
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v2 3/3] squashfs: implement readahead
+To:     Hsin-Yi Wang <hsinyi@chromium.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Xiongwei Song <Xiongwei.Song@windriver.com>
+Cc:     Zheng Liang <zhengliang6@huawei.com>,
+        Zhang Yi <yi.zhang@huawei.com>, Hou Tao <houtao1@huawei.com>,
+        Miao Xie <miaoxie@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux-mm @ kvack . org" <linux-mm@kvack.org>,
+        "squashfs-devel @ lists . sourceforge . net" 
+        <squashfs-devel@lists.sourceforge.net>,
+        linux-kernel@vger.kernel.org
+References: <20220517082650.2005840-1-hsinyi@chromium.org>
+ <20220517082650.2005840-4-hsinyi@chromium.org>
+ <CAJMQK-hovwXsuVUDD6-eueD05srWVdx1OWZ9vBdp-bT6De25ig@mail.gmail.com>
+From:   Phillip Lougher <phillip@squashfs.org.uk>
+In-Reply-To: <CAJMQK-hovwXsuVUDD6-eueD05srWVdx1OWZ9vBdp-bT6De25ig@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Mailcore-Auth: 439999529
+X-Mailcore-Domain: 1394945
+X-123-reg-Authenticated:  phillip@squashfs.org.uk  
+X-Originating-IP: 82.69.79.175
+X-CMAE-Envelope: MS4xfJots4nwIllVc/wvi7isK7orq3Gtc4WYfE21ekOLgrztmQOElpavp7C4ffBQNgu5ihtqZlZVyWmRu4B3hh9JV2eUAlbPrL54sJtuytK8q3Eu1BzF27bo
+ Vsyz4lwQ/SkpvXeDtcMHbZ7dXAENKRpQ4uSN/N6tLjnQNbMP5SCB8medF54mO19m64HDLkWJw8YSOjyOV2ELNTM5T+TqoAzq+Uw=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gT24gTWF5IDE5LCAyMDIyLCBhdCA3OjQ2IFBNLCBSeWFuIENoZW4gPHJ5YW5fY2hlbkBh
-c3BlZWR0ZWNoLmNvbT4gd3JvdGU6DQo+IA0KPiBIZWxsbywNCj4gDQo+PiAtLS0tLU9yaWdpbmFs
-IE1lc3NhZ2UtLS0tLQ0KPj4gRnJvbTogUGV0ZXIgRGVsZXZvcnlhcyA8cGRlbEBmYi5jb20+DQo+
-PiBTZW50OiBGcmlkYXksIE1heSAyMCwgMjAyMiAzOjU2IEFNDQo+PiBDYzogSm9lbCBTdGFubGV5
-IDxqb2VsQGptcy5pZC5hdT47IEFuZHJldyBKZWZmZXJ5IDxhbmRyZXdAYWouaWQuYXU+OyBQaGls
-aXBwDQo+PiBaYWJlbCA8cC56YWJlbEBwZW5ndXRyb25peC5kZT47IGxpbnV4LWFybS1rZXJuZWxA
-bGlzdHMuaW5mcmFkZWFkLm9yZzsNCj4+IGxpbnV4LWFzcGVlZEBsaXN0cy5vemxhYnMub3JnOyBs
-aW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyBPcGVuQk1DIExpc3QNCj4+IDxvcGVuYm1jQGxp
-c3RzLm96bGFicy5vcmc+OyBCTUMtU1cgPEJNQy1TV0Bhc3BlZWR0ZWNoLmNvbT47IFBldGVyDQo+
-PiBEZWxldm9yeWFzIDxwZGVsQGZiLmNvbT47IFJ5YW4gQ2hlbiA8cnlhbl9jaGVuQGFzcGVlZHRl
-Y2guY29tPg0KPj4gU3ViamVjdDogUmU6IFtQQVRDSCB2MyAwLzNdIEFkZCBBU1BFRUQgQVNUMjYw
-MCBJMkMgbmV3IGNvbnRyb2xsZXIgZHJpdmVyDQo+PiANCj4+IA0KPj4gDQo+Pj4gT24gTWF5IDE1
-LCAyMDIyLCBhdCAxMTo0OCBQTSwgcnlhbl9jaGVuIDxyeWFuX2NoZW5AYXNwZWVkdGVjaC5jb20+
-DQo+PiB3cm90ZToNCj4+PiANCj4+PiBUaGlzIHNlcmllcyBhZGQgQVNUMjYwMCBpMmMgbmV3IHJl
-Z2lzdGVyIHNldCBkcml2ZXIuIFRoZSBpMmMgbmV3DQo+Pj4gcmVnaXN0ZXIgc2V0IGhhdmUgbmV3
-IGNsb2NrIGRpdmlkZXIgb3B0aW9uIGZvciBtb3JlIGZsZXhpYWJsZSBnZW5lcmF0aW9uLg0KPj4+
-IEFuZCBhbHNvIGhhdmUgc2VwYXJhdGUgaTJjIG1hc3RlciBhbmQgc2xhdmUgcmVnaXN0ZXIgc2V0
-IGZvciBjb250cm9sLg0KPj4gDQo+PiBIZXkgUnlhbiwgdGhhbmtzIGZvciB0aGlzIHdvcmshIFRo
-aXMgaXMgYSBsaXR0bGUgYml0IG9mZi10b3BpYywgYnV0IGFyZSB5b3Ugb3INCj4+IGFueW9uZSBl
-bHNlIGF0IEFzcGVlZCB3b3JraW5nIG9uIGFuIGVxdWl2YWxlbnQgUUVNVSBwYXRjaCBzZXJpZXM/
-IFdpdGhvdXQNCj4+IGl0LCBJIGRvbuKAmXQgdGhpbmsgUUVNVSB3aWxsIHdvcmsgd2l0aCB0aGlz
-IHNlcmllcyByaWdodD8gSSB0aGluayBRRU1VIG9ubHkNCj4+IHN1cHBvcnRzIHRoZSBvbGQgcmVn
-aXN0ZXIgc2V0IHJpZ2h0IG5vdy4NCj4+IA0KPiBObywgdGhlcmUgYXJlIHR3byBzdWJtaXQgaW4g
-UUVNVSBhYm91dCBpMmMgbmV3IHJlZ2lzdGVyIG1vZGUuDQo+IE9uZSBpcyBBU1BFRUQgc3VibWl0
-IDogaHR0cHM6Ly9wYXRjaHdvcmsua2VybmVsLm9yZy9wcm9qZWN0L3FlbXUtZGV2ZWwvbGlzdC8/
-c2VyaWVzPTYyNjAyOCZhcmNoaXZlPWJvdGgNCj4gQW5vdGhlciBpcyBHT09HTEUgOiBodHRwczov
-L3BhdGNod29yay5rZXJuZWwub3JnL3Byb2plY3QvcWVtdS1kZXZlbC9saXN0Lz9zZXJpZXM9NjI3
-NzA2JmFyY2hpdmU9Ym90aA0KDQpPaCBncmVhdCwgdGhhbmtzLiBJIGp1c3QgdHJpZWQgdGhlIEFz
-cGVlZCBRRU1VIHNlcmllcyBhbmQgaXQgd29ya2VkIGZvciBtZSB3aXRoIFplcGh5ciwgdmVyeSBo
-ZWxwZnVsIQ0KDQo+IA0KPj4gDQo+Pj4gDQo+Pj4gdjM6DQo+Pj4gLWZpeCBpMmMgZ2xvYmFsIGNs
-b2NrIGRpdmlkZSBkZWZhdWx0IHZhbHVlIC1yZW1vdmUgaTJjIHNsYXZlIG5vIHVzZWQNCj4+PiBk
-ZXZfZGJnIGluZm8uDQo+Pj4gDQo+Pj4gdjI6DQo+Pj4gLWFkZCBpMmMgZ2xvYmFsIHltYWwgZmls
-ZSBjb21taXQNCj4+PiAtcmVuYW1lIGZpbGUgbmFtZSBmcm9tIG5ldyB0byBhc3QyNjAwLg0KPj4+
-IGFzcGVlZC1pMmMtbmV3LWdsb2JhbC5jIC0+IGkyYy1hc3QyNjAwLWdsb2JhbC5jDQo+Pj4gYXNw
-ZWVkLWkyYy1uZXctZ2xvYmFsLmggLT4gaTJjLWFzdDI2MDAtZ2xvYmFsLmggaTJjLW5ldy1hc3Bl
-ZWQuYyAtPg0KPj4+IGkyYy1hc3QyNjAwLmMgLXJlbmFtZSBhbGwgZHJpdmVyIGZ1bmN0aW9uIG5h
-bWUgdG8gYXN0MjYwMA0KPj4+IA0KPj4+IHJ5YW5fY2hlbiAoMyk6DQo+Pj4gZHQtYmluZGluZ3M6
-IGkyYy1hc3QyNjAwOiBBZGQgYmluZGluZ3MgZm9yIEFTVDI2MDAgaTJDIGdsb2JhbCByZWdpc3Rl
-cg0KPj4+IGNvbnRyb2xsZXINCj4+PiBkdC1iaW5kaW5nczogaTJjLWFzdDI2MDA6IEFkZCBiaW5k
-aW5ncyBmb3IgQVNUMjYwMCBpMkMgZHJpdmVyDQo+Pj4gaTJjOmFzcGVlZDpzdXBwb3J0IGFzdDI2
-MDAgaTJjIG5ldyByZWdpc3RlciBtb2RlIGRyaXZlcg0KPj4+IA0KPj4+IC4uLi9pMmMvYXNwZWVk
-LGkyYy1hc3QyNjAwLWdsb2JhbC55bWFsIHwgNDQgKw0KPj4+IC4uLi9iaW5kaW5ncy9pMmMvYXNw
-ZWVkLGkyYy1hc3QyNjAwLnltYWwgfCA3OCArDQo+Pj4gZHJpdmVycy9pMmMvYnVzc2VzL0tjb25m
-aWcgfCAxMSArDQo+Pj4gZHJpdmVycy9pMmMvYnVzc2VzL01ha2VmaWxlIHwgMSArDQo+Pj4gZHJp
-dmVycy9pMmMvYnVzc2VzL2kyYy1hc3QyNjAwLWdsb2JhbC5jIHwgOTQgKw0KPj4+IGRyaXZlcnMv
-aTJjL2J1c3Nlcy9pMmMtYXN0MjYwMC1nbG9iYWwuaCB8IDE5ICsNCj4+PiBkcml2ZXJzL2kyYy9i
-dXNzZXMvaTJjLWFzdDI2MDAuYyB8IDE3MDMNCj4+ICsrKysrKysrKysrKysrKysrDQo+Pj4gNyBm
-aWxlcyBjaGFuZ2VkLCAxOTUwIGluc2VydGlvbnMoKykNCj4+PiBjcmVhdGUgbW9kZSAxMDA2NDQN
-Cj4+PiBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvaTJjL2FzcGVlZCxpMmMtYXN0
-MjYwMC1nbG9iYWwueW1hbA0KPj4+IGNyZWF0ZSBtb2RlIDEwMDY0NA0KPj4+IERvY3VtZW50YXRp
-b24vZGV2aWNldHJlZS9iaW5kaW5ncy9pMmMvYXNwZWVkLGkyYy1hc3QyNjAwLnltYWwNCj4+PiBj
-cmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1hc3QyNjAwLWdsb2JhbC5j
-DQo+Pj4gY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtYXN0MjYwMC1n
-bG9iYWwuaA0KPj4+IGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL2kyYy9idXNzZXMvaTJjLWFz
-dDI2MDAuYw0KPj4+IA0KPj4+IC0tDQo+Pj4gMi4xNy4xDQoNCg==
+On 19/05/2022 09:09, Hsin-Yi Wang wrote:
+> On Tue, May 17, 2022 at 4:28 PM Hsin-Yi Wang <hsinyi@chromium.org> wrote:
+>>
+>> Implement readahead callback for squashfs. It will read datablocks
+>> which cover pages in readahead request. For a few cases it will
+>> not mark page as uptodate, including:
+>> - file end is 0.
+>> - zero filled blocks.
+>> - current batch of pages isn't in the same datablock or not enough in a
+>>    datablock.
+>> Otherwise pages will be marked as uptodate. The unhandled pages will be
+>> updated by readpage later.
+>>
+>> Suggested-by: Matthew Wilcox <willy@infradead.org>
+>> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+>> Reported-by: Matthew Wilcox <willy@infradead.org>
+>> Reported-by: Phillip Lougher <phillip@squashfs.org.uk>
+>> Reported-by: Xiongwei Song <sxwjean@gmail.com>
+>> ---
+>> v1->v2: remove unused check on readahead_expand().
+>> v1: https://lore.kernel.org/lkml/20220516105100.1412740-3-hsinyi@chromium.org/
+>> ---
+> 
+> Hi Phillip and Matthew,
+> 
+> Regarding the performance issue of this patch, I saw a possible
+> performance gain if we only read the first block instead of reading
+> until nr_pages == 0.
+> 
+> To be more clear, apply the following diff (Please ignore the skipping
+> of nr_pages check first. This is a demonstration of "only read and
+> update the first block per readahead call"):
+> 
+> diff --git a/fs/squashfs/file.c b/fs/squashfs/file.c
+> index aad6823f0615..c52f7c4a7cfe 100644
+> --- a/fs/squashfs/file.c
+> +++ b/fs/squashfs/file.c
+> @@ -524,10 +524,8 @@ static void squashfs_readahead(struct
+> readahead_control *ractl)
+>          if (!actor)
+>                  goto out;
+> 
+> -       for (;;) {
+> +       {
+>                  nr_pages = __readahead_batch(ractl, pages, max_pages);
+> -               if (!nr_pages)
+> -                       break;
+> 
+>                  if (readahead_pos(ractl) >= i_size_read(inode) ||
+>                      nr_pages < max_pages)
+> 
+> 
+> All the performance numbers:
+> 1. original: 39s
+> 2. revert "mm: put readahead pages in cache earlier": 2.8s
+> 3. v2 of this patch: 2.7s
+> 4. v2 of this patch and apply the diff: 1.8s
+> 
+> In my testing data, normally it reads and updates 1~2 blocks per
+> readahead call. The change might not make sense since the performance
+> improvement may only happen in certain cases.
+> What do you think? Or is the performance of the current patch
+> considered reasonable?
+
+It entirely depends on where the speed improvement comes from.
+
+ From experience, the speed improvement is probably worthwhile,
+and probably isn't gained at the expense of worse performance
+on other work-loads.
+
+But this is a guestimate, based on the fact timings 2 and 3
+(2.8s v 2.7s) are almost identical.  Which implies the v2
+patch isn't now doing any more work than the previous
+baseline before the "mm: put readahead pages in cache earlier"
+patch (*).
+
+As such the speed improvement must be coming from increased
+parallelism.  Such as moving from serially reading the
+readahead blocks to parallel reading.
+
+But, without looking at any trace output, that is just a
+guestimate.
+
+Phillip
+
+(*) multiply decompressing the same blocks, which
+     is the cause of the performance regression.
+> 
+> Thanks.
+> 
+> testing env:
+> - arm64 on kernel 5.10
+> - data: ~ 300K pack file contains some android files
+> 
+>>   fs/squashfs/file.c | 77 +++++++++++++++++++++++++++++++++++++++++++++-
+>>   1 file changed, 76 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/fs/squashfs/file.c b/fs/squashfs/file.c
+>> index a8e495d8eb86..e10a55c5b1eb 100644
+>> --- a/fs/squashfs/file.c
+>> +++ b/fs/squashfs/file.c
+>> @@ -39,6 +39,7 @@
+>>   #include "squashfs_fs_sb.h"
+>>   #include "squashfs_fs_i.h"
+>>   #include "squashfs.h"
+>> +#include "page_actor.h"
+>>
+>>   /*
+>>    * Locate cache slot in range [offset, index] for specified inode.  If
+>> @@ -495,7 +496,81 @@ static int squashfs_read_folio(struct file *file, struct folio *folio)
+>>          return 0;
+>>   }
+>>
+>> +static void squashfs_readahead(struct readahead_control *ractl)
+>> +{
+>> +       struct inode *inode = ractl->mapping->host;
+>> +       struct squashfs_sb_info *msblk = inode->i_sb->s_fs_info;
+>> +       size_t mask = (1UL << msblk->block_log) - 1;
+>> +       size_t shift = msblk->block_log - PAGE_SHIFT;
+>> +       loff_t start = readahead_pos(ractl) &~ mask;
+>> +       size_t len = readahead_length(ractl) + readahead_pos(ractl) - start;
+>> +       struct squashfs_page_actor *actor;
+>> +       unsigned int nr_pages = 0;
+>> +       struct page **pages;
+>> +       u64 block = 0;
+>> +       int bsize, res, i, index;
+>> +       int file_end = i_size_read(inode) >> msblk->block_log;
+>> +       unsigned int max_pages = 1UL << shift;
+>> +
+>> +       readahead_expand(ractl, start, (len | mask) + 1);
+>> +
+>> +       if (file_end == 0)
+>> +               return;
+>> +
+>> +       pages = kmalloc_array(max_pages, sizeof(void *), GFP_KERNEL);
+>> +       if (!pages)
+>> +               return;
+>> +
+>> +       actor = squashfs_page_actor_init_special(pages, max_pages, 0);
+>> +       if (!actor)
+>> +               goto out;
+>> +
+>> +       for (;;) {
+>> +               nr_pages = __readahead_batch(ractl, pages, max_pages);
+>> +               if (!nr_pages)
+>> +                       break;
+>> +
+>> +               if (readahead_pos(ractl) >= i_size_read(inode) ||
+>> +                   nr_pages < max_pages)
+>> +                       goto skip_pages;
+>> +
+>> +               index = pages[0]->index >> shift;
+>> +               if ((pages[nr_pages - 1]->index >> shift) != index)
+>> +                       goto skip_pages;
+>> +
+>> +               bsize = read_blocklist(inode, index, &block);
+>> +               if (bsize == 0)
+>> +                       goto skip_pages;
+>> +
+>> +               res = squashfs_read_data(inode->i_sb, block, bsize, NULL,
+>> +                                        actor);
+>> +
+>> +               if (res >= 0)
+>> +                       for (i = 0; i < nr_pages; i++)
+>> +                               SetPageUptodate(pages[i]);
+>> +
+>> +               for (i = 0; i < nr_pages; i++) {
+>> +                       unlock_page(pages[i]);
+>> +                       put_page(pages[i]);
+>> +               }
+>> +       }
+>> +
+>> +       kfree(actor);
+>> +       kfree(pages);
+>> +       return;
+>> +
+>> +skip_pages:
+>> +       for (i = 0; i < nr_pages; i++) {
+>> +               unlock_page(pages[i]);
+>> +               put_page(pages[i]);
+>> +       }
+>> +
+>> +       kfree(actor);
+>> +out:
+>> +       kfree(pages);
+>> +}
+>>
+>>   const struct address_space_operations squashfs_aops = {
+>> -       .read_folio = squashfs_read_folio
+>> +       .read_folio = squashfs_read_folio,
+>> +       .readahead = squashfs_readahead
+>>   };
+>> --
+>> 2.36.0.550.gb090851708-goog
+>>
+

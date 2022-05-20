@@ -2,118 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9039652E0F6
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 02:03:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E745C52E0FA
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 02:09:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343844AbiETADB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 20:03:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58794 "EHLO
+        id S1343867AbiETAIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 20:08:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiETAC6 (ORCPT
+        with ESMTP id S229567AbiETAIt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 20:02:58 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B00D12AB34
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 17:02:57 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id bh5so6071346plb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 17:02:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=JRJGmCqk5tjloCFIjqv0r+VHMtvyHIc44tkIRahAkNw=;
-        b=Utq4ThbmRd6RQqkA5cmIwmwu6VlAnDFD6J0xe8Af4MFqXAsjgH1XG51pA9oG7egUjF
-         bTM9KAU1Sq+dbLAcL9gYqR/4KxIAqER1nXm69Fm7iugPuBRc5Ials37rYct2RHDs8Ld0
-         suSFQE1xDBakouVfkI+sBjnwdMH/3ptTGHe0LxiHqG1cLcnx5NtLnmcUTauTTX0Od5LT
-         oGqZbfACFos1SEbXDK4cxjE1utzK4Pc+1hQmpyty4rFIsXSmWu4G2Qru7bkGzjJv/aTH
-         Wc3Jpdcc9dlx0pU+XFQ9rNiABHvMKRPHohUQk2RHMgwzBYDr/5sDv8iQwiEsYrtb2QyN
-         lwRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=JRJGmCqk5tjloCFIjqv0r+VHMtvyHIc44tkIRahAkNw=;
-        b=ROP1EAQ0K6XGMP0I6TdJ8YlqrWDtq1xxqmvSa4rR+5/Cq4kzhbCRPi23DPMy8opJhG
-         z3R3VrpplAXWrvyxYv5vd/7Zc2rfUiqWkVdzRHbh0gwCZhOM42VhPUGdtPwV0Xffs/F8
-         0yyQDyqvNT3LYXlqOjvIme6z7k1la7MixPCnvoLddVPcsg2JfYyjwiEdAilYylUxw/N0
-         6zhW+JB18hye90gB/zgVHMnJ2Kf3Pdpcj6BhdhaSR712ItgIB4RkPN4H/BYg3kyg++lk
-         LAUkKt6TMKJi+jQ7pCvOWrTgGkQmROON/prgNp8ZAtwRHVJWKSEAUSwgPZkcRHcZTB0h
-         e5VQ==
-X-Gm-Message-State: AOAM5329JfcXmTCaDLzJ3BoZge3jLB3PAlV+bh1+Yo69AfXd+1FojDz9
-        15iHcUweCixs2vyxNi74vti0jQ==
-X-Google-Smtp-Source: ABdhPJx9H3IVdAZZk26IPh4h1xYBABIV5nw2uiEKo/9tmw4Q+oCYeUoHRIWG+IzLjN7fViFaF6bo8A==
-X-Received: by 2002:a17:90a:2e83:b0:1da:3273:53ab with SMTP id r3-20020a17090a2e8300b001da327353abmr8411071pjd.14.1653004976932;
-        Thu, 19 May 2022 17:02:56 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id p6-20020a170902e74600b0015e8d4eb21dsm4459347plf.103.2022.05.19.17.02.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 May 2022 17:02:56 -0700 (PDT)
-Message-ID: <13899409-e81b-8689-3380-249de46c0b6f@kernel.dk>
-Date:   Thu, 19 May 2022 18:02:55 -0600
+        Thu, 19 May 2022 20:08:49 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B92895499
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 17:08:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653005329; x=1684541329;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=3oJVd2uNaGfr914y+xcrWjasG+1vP5j565ik4JIiVL4=;
+  b=MVEDS8ZGWPsyRInJZPK7mKWKP8KKOpuYr2q4gNnBUu+7JxCcnwp0JbNX
+   q0i/2iEWabhiqE8jP8I8gsRIsUnLyHBMxEs3ujtASu6KVJeKrbKGKsmjc
+   c4QwVbRn6XwqGXHT4g3vwmMsc4zoX3qkq3R6qSUShNZdx8/7ujGE/hfot
+   3CMoptAoreLbrMyiVEAQoiazwyjG2BfrsuDYYohzN6nk2Esr8F0QNmGvp
+   mrwIfTNM6UUHDpcMEt/tH9ynIEHaIuSIrFLggTkLKdUBRzFq9dJdg1UoK
+   eGee5vwNuT4h+0MayUabAuj5pL1H1KvQ6wYM84DY6hBEPMdhXWGeMcgwV
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="272554777"
+X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
+   d="scan'208";a="272554777"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 17:08:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
+   d="scan'208";a="674331932"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 19 May 2022 17:08:47 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nrqCE-00044P-Mr;
+        Fri, 20 May 2022 00:08:46 +0000
+Date:   Fri, 20 May 2022 08:08:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>
+Subject: [ammarfaizi2-block:dhowells/linux-fs/fscache-next 3/3]
+ fs/cifs/fscache.c:106:9: error: no member named 'netfs_ctx' in 'struct
+ cifsInodeInfo'
+Message-ID: <202205200739.HeIDHcBH-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCHSET 0/2] Fix splice from random/urandom
-Content-Language: en-US
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Theodore Ts'o <tytso@mit.edu>, Christoph Hellwig <hch@lst.de>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20220519193133.194138-1-axboe@kernel.dk>
- <YoajCafKmgUbbaY0@zx2c4.com> <a6c843ff-a3d7-ce6a-4e99-70968834a02a@kernel.dk>
- <YobPB27Ozl7uqUEu@zx2c4.com> <3553b935-0aca-3d3e-2495-12288f601b53@kernel.dk>
- <CAHmME9riX+YuqSVp64bhy=nX08_7d-m8es82BHy2qh-oWkqa8Q@mail.gmail.com>
- <aa7ae20c-a2d7-4959-b5fb-efe7b56294f1@kernel.dk>
- <CAHmME9oLPxzsnRezFPFVssmedOQUi2E9NWFbakEe92=Hdk1QuQ@mail.gmail.com>
- <03c7d6c9-0c86-d4b6-357d-d51be0143c80@kernel.dk>
- <CAHmME9qVQNkx-0J8rq_0ZVaSR+-eEgOUtcZhvq5dAY4-kJxSAA@mail.gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <CAHmME9qVQNkx-0J8rq_0ZVaSR+-eEgOUtcZhvq5dAY4-kJxSAA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/19/22 6:00 PM, Jason A. Donenfeld wrote:
-> Hi Jens,
-> 
-> On Fri, May 20, 2022 at 1:57 AM Jens Axboe <axboe@kernel.dk> wrote:
->>
->> On 5/19/22 5:27 PM, Jason A. Donenfeld wrote:
->>> Hi Jens,
->>>
->>> On Fri, May 20, 2022 at 1:25 AM Jens Axboe <axboe@kernel.dk> wrote:
->>>> I'll leave that to you :-)
->>>
->>> Alright, I'll have a look. Which one do I want here? This series adds
->>> splice_read/splice_write. The new thing would be sendpage? Or
->>> copy_file_range? Or something else?
->>
->> For copying kernel memory? It's really the same thing, you just
->> initialize the iter as an ITER_KVEC instead. The nice thing about the
->> iov_iter iterator that it then hides that for you, call the same copy
->> in/out helpers for it.
-> 
-> Err, maybe we're talking about different things? I was thinking about
-> the plumbing to make splice/sendfile work on non-pipes.
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/fscache-next
+head:   a3457aa9c40f99183345cbedd7e0a7404bcc6370
+commit: a3457aa9c40f99183345cbedd7e0a7404bcc6370 [3/3] netfs: Fix gcc-12 warning by embedding vfs inode in netfs_i_context
+config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20220520/202205200739.HeIDHcBH-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e00cbbec06c08dc616a0d52a20f678b8fbd4e304)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/a3457aa9c40f99183345cbedd7e0a7404bcc6370
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/fscache-next
+        git checkout a3457aa9c40f99183345cbedd7e0a7404bcc6370
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/cifs/
 
-Ah I see. sendfile() just uses splice() internally, so that'll work
-(again) with my changes. splice(), by definition, either moves to and
-from a pipe. Hence one of the fds must be a pipe. Does that answer the
-question?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> get_random_bytes() itself doesn't need to become iovec'd, as that has
-> no IO callers.
+All errors (new ones prefixed by >>):
 
-I was a little puzzled, but didn't look deeper and see if it would make
-sense to do so.
+>> fs/cifs/fscache.c:106:9: error: no member named 'netfs_ctx' in 'struct cifsInodeInfo'
+           cifsi->netfs_ctx.cache =
+           ~~~~~  ^
+   fs/cifs/fscache.c:134:10: error: no member named 'netfs_ctx' in 'struct cifsInodeInfo'
+                   cifsi->netfs_ctx.cache = NULL;
+                   ~~~~~  ^
+   2 errors generated.
+
+
+vim +106 fs/cifs/fscache.c
+
+402cb8dda949d9 David Howells    2018-04-04   96  
+70431bfd825d9c David Howells    2020-11-17   97  void cifs_fscache_get_inode_cookie(struct inode *inode)
+9451a9a52f91a4 Suresh Jayaraman 2010-07-05   98  {
+70431bfd825d9c David Howells    2020-11-17   99  	struct cifs_fscache_inode_coherency_data cd;
+9451a9a52f91a4 Suresh Jayaraman 2010-07-05  100  	struct cifsInodeInfo *cifsi = CIFS_I(inode);
+9451a9a52f91a4 Suresh Jayaraman 2010-07-05  101  	struct cifs_sb_info *cifs_sb = CIFS_SB(inode->i_sb);
+96daf2b09178d8 Steve French     2011-05-27  102  	struct cifs_tcon *tcon = cifs_sb_master_tcon(cifs_sb);
+9451a9a52f91a4 Suresh Jayaraman 2010-07-05  103  
+a3457aa9c40f99 David Howells    2022-05-19  104  	cifs_fscache_fill_coherency(&cifsi->nic.inode, &cd);
+9451a9a52f91a4 Suresh Jayaraman 2010-07-05  105  
+bc899ee1c898e5 David Howells    2021-06-29 @106  	cifsi->netfs_ctx.cache =
+70431bfd825d9c David Howells    2020-11-17  107  		fscache_acquire_cookie(tcon->fscache, 0,
+70431bfd825d9c David Howells    2020-11-17  108  				       &cifsi->uniqueid, sizeof(cifsi->uniqueid),
+70431bfd825d9c David Howells    2020-11-17  109  				       &cd, sizeof(cd),
+a3457aa9c40f99 David Howells    2022-05-19  110  				       i_size_read(&cifsi->nic.inode));
+9451a9a52f91a4 Suresh Jayaraman 2010-07-05  111  }
+9451a9a52f91a4 Suresh Jayaraman 2010-07-05  112  
+
+:::::: The code at line 106 was first introduced by commit
+:::::: bc899ee1c898e520574ff4d99356eb2e724a9265 netfs: Add a netfs inode context
+
+:::::: TO: David Howells <dhowells@redhat.com>
+:::::: CC: David Howells <dhowells@redhat.com>
 
 -- 
-Jens Axboe
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

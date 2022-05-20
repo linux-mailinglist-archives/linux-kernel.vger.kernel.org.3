@@ -2,123 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DE4752F546
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 23:44:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A546152F543
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 23:44:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353725AbiETVoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 17:44:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34242 "EHLO
+        id S1349313AbiETVoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 17:44:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236457AbiETVoM (ORCPT
+        with ESMTP id S244646AbiETVoM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 20 May 2022 17:44:12 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 664E39D4EB
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D26149156
         for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 14:44:11 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id l7-20020a17090aaa8700b001dd1a5b9965so8867850pjq.2
+Received: by mail-wr1-x435.google.com with SMTP id u3so13123143wrg.3
         for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 14:44:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:references:cc:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding;
-        bh=po9hx/FFDA/6UFacoo9gPW8IQQNzUvQfbnbKwHyRNfM=;
-        b=DDxHO5JVhIiDbdzCxdfA0tUrkzF7fKrRar/uMUsL1M7HdWh3OTpsIJ4fFwMJf/TKIy
-         xGM5ZBcR/LSQnSGAXdweZtBtdAX9koFKgnM7X/4VUv+HqAfTch4uyhHnLrT4H2VfXxzd
-         wNxTMH+58XJHuVAxzjV479+UZqDapJNvOYDW/bQNUgfi7gFSbIuj16W7xoZMJnxXCWQE
-         XFDKVomXwOhErgEjEBbc199V+IgNXDMV0J5ZHfhtXOezugiMyMHfUdzVoMRek7wzECLO
-         CfOGSEQ9QNtvlMlUw8E36E34uoM7LVV8SHNIJWZiuDkJYCPuVULjLI5SwbIzVSMYzbzy
-         k+BA==
+        d=philpotter-co-uk.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=IzGzA+yh9SksfN5PIuMihNbMewTTi3EccGQw+Clkiu4=;
+        b=foYATmd1RKdylPsEWAhM44IiLkq8ozZdIlx/rz59ujVWTJtQItDKcjc/WjxETayczl
+         UoUCwyalfBSvNn7GdGiVRf5wq7H4Kq9WnR4a0miOHxPNmnXCxNkq9JHn85OLN6WcD9h4
+         dsGRwS5zRFXzf6aWNFPTndqWggMaFh1Luj+2dxDIRFaeNTCEJ9/EqQoJfRoaWJP0Le7K
+         xiSMhdrQbSf9n3Z/2xOCcY5vSHJ/bR1UD1oc1ZTLIzUWMc9zTatpiMEhtUTeqvDH8Auj
+         u4zIQIGxmK2Wo8rTMP53epas2sHpfaG9czzc57b6dYWLgGkmDmlXcW4r8OeR7U5V8n6d
+         OW6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
-        bh=po9hx/FFDA/6UFacoo9gPW8IQQNzUvQfbnbKwHyRNfM=;
-        b=wBYssEbGBKW504D72HE/egcfgZvM8+BPKS0+T78nd3RnakQVo55Zy47hXiTapI+KzQ
-         /MU5nH4EwpY/P4r+nIyQDCoO01tOZ168LeNZMFtvTqhco8ehLPytOmTuT8ILXk9qUPHE
-         iKo/geddV46Am9qjodJim1Ym68YOEriunUA9hl1VOso+YrIqdLXCSXHD8jgsPzlD619s
-         giNbX5913wn836o0aWsoCSIx0RorFuCzE5whgFmTIkTdmWcYZmIWGBX0kjc3a4TWtLDV
-         ENF/zJ04f5/NGuhkds+0RnK/wMU3fADLxifc0Nt1bqvVi/jj1ETdHCdAtY5TZOX42+E0
-         7exA==
-X-Gm-Message-State: AOAM532d1hUTxbK76FAlcYWUwM5gmCka/Ent1Yi/JVw6+6u8Sm0Dgx15
-        W1y71aUqcwu4zEaMRtgy+fY=
-X-Google-Smtp-Source: ABdhPJxqHG82SC/AOGlMVrEhzymuTl6S1INJ0XTrki35g6wNiT1n/spu0CIavILkAPi0IV+SxJwAtw==
-X-Received: by 2002:a17:902:7087:b0:161:88a4:db37 with SMTP id z7-20020a170902708700b0016188a4db37mr11492775plk.131.1653083050851;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=IzGzA+yh9SksfN5PIuMihNbMewTTi3EccGQw+Clkiu4=;
+        b=tElE6TNj2+LL5DX4sXHAzoEJV0rHZsb9JgNDrBZR1YIPLbeuLflLtku46eHmDS70Rh
+         ZX6ZTrCGBTGk6KdwrU/CVWU/qEc7wr/DOfHmfL7I+nZBY5rehJ7UfqZ5JgLBDK2VRbhY
+         eMfQYmz/5yeel4NQOSC/355R2+nrLLfK9u3O6l/hkuJhNwxfg9e/fJX1lyN5SB5OQoW6
+         3r5YGrMGP0GliPLUfCng1o0U6zT+XSp0QpjkoV8duBTgEDaBSC9fY6qVbZDcSILqqPiB
+         xuxFQjsQeKPwCygBK0FgYsr9mkXBwX8xIG6Rn/YTkWkAEYNDdHocCVYQbqRUIOZU/FwY
+         ZITQ==
+X-Gm-Message-State: AOAM532hhxTh2dJKT1Q7sIrdSR/+L2xwCXScc7/I6Vfvo7eeKjYT8UWJ
+        fZpJlY60MXHam0jnV8LNeXvLdQ==
+X-Google-Smtp-Source: ABdhPJysnghgnS8LjetKJyGo16CPlEka360A32ksJ6PUoC0FMqoibBrTG1Q97T9veiwnXw7XstzNpA==
+X-Received: by 2002:a05:6000:1f94:b0:20e:744a:214 with SMTP id bw20-20020a0560001f9400b0020e744a0214mr6032740wrb.65.1653083050066;
         Fri, 20 May 2022 14:44:10 -0700 (PDT)
-Received: from [10.1.1.24] (222-155-0-244-adsl.sparkbb.co.nz. [222.155.0.244])
-        by smtp.gmail.com with ESMTPSA id mn2-20020a17090b188200b001df983f9a3dsm2357714pjb.29.2022.05.20.14.44.05
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 20 May 2022 14:44:10 -0700 (PDT)
-Subject: Re: [PATCH] m68k: atari: Make Atari ROM port I/O write macros return
- void
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-m68k@lists.linux-m68k.org
-References: <c15bedc83d90a14fffcd5b1b6bfb32b8a80282c5.1653057096.git.geert@linux-m68k.org>
- <286a1eef-e857-a31f-839b-00a4c835dfa9@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-From:   Michael Schmitz <schmitzmic@gmail.com>
-Message-ID: <c2e45d59-4e0a-bf8a-e4db-ce3336fc9b05@gmail.com>
-Date:   Sat, 21 May 2022 09:44:02 +1200
-User-Agent: Mozilla/5.0 (X11; Linux ppc; rv:45.0) Gecko/20100101
- Icedove/45.4.0
+Received: from equinox (2.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.a.1.e.e.d.f.d.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:dfde:e1a0::2])
+        by smtp.gmail.com with ESMTPSA id ay28-20020a05600c1e1c00b003973c4bb19bsm1844030wmb.16.2022.05.20.14.44.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 May 2022 14:44:09 -0700 (PDT)
+Date:   Fri, 20 May 2022 22:44:07 +0100
+From:   Phillip Potter <phil@philpotter.co.uk>
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     straube.linux@gmail.com, martin@kaiser.cx,
+        saurav.girepunje@gmail.com, abdun.nihaal@gmail.com,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
+Subject: Re: [PATCH] staging: r8188eu: remove include/rtw_debug.h
+Message-ID: <YogLpztabN6PkIT/@equinox>
+References: <20220519221047.6940-1-phil@philpotter.co.uk>
+ <44d12b0f-3ce0-42d2-a475-31d70dd4d699@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <286a1eef-e857-a31f-839b-00a4c835dfa9@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <44d12b0f-3ce0-42d2-a475-31d70dd4d699@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Guenter,
+On Sat, May 21, 2022 at 12:04:54AM +0300, Pavel Skripkin wrote:
+> Hi Phillip,
+> 
+> On 5/20/22 01:10, Phillip Potter wrote:
+> > Remove include/rtw_debug.h, as all it now has are:
+> > 
+> > (1) A load of unused preprocessor definitions that expand to BIT(x)
+> >      variants.
+> > (2) A preprocessor definition that expands to the name of the driver
+> >      and is only used in one place inside a pr_info_once call in
+> >      core/rtw_fw.c.
+> > 
+> > It is now surplus to requirements after fixing up the few places that
+> > include the file.
+> > 
+> > Signed-off-by: Phillip Potter <phil@philpotter.co.uk>
+> > ---
+> >   drivers/staging/r8188eu/core/rtw_fw.c        |  4 +-
+> >   drivers/staging/r8188eu/include/drv_types.h  |  1 -
+> >   drivers/staging/r8188eu/include/rtw_debug.h  | 45 --------------------
+> >   drivers/staging/r8188eu/os_dep/ioctl_linux.c |  1 -
+> >   4 files changed, 2 insertions(+), 49 deletions(-)
+> >   delete mode 100644 drivers/staging/r8188eu/include/rtw_debug.h
+> > 
+> > diff --git a/drivers/staging/r8188eu/core/rtw_fw.c b/drivers/staging/r8188eu/core/rtw_fw.c
+> > index bf077876ed3d..0451e5177644 100644
+> > --- a/drivers/staging/r8188eu/core/rtw_fw.c
+> > +++ b/drivers/staging/r8188eu/core/rtw_fw.c
+> > @@ -259,8 +259,8 @@ int rtl8188e_firmware_download(struct adapter *padapter)
+> >   	fwhdr = (struct rt_firmware_hdr *)dvobj->firmware.data;
+> >   	if (IS_FW_HEADER_EXIST(fwhdr)) {
+> > -		pr_info_once("%sFirmware Version %d, SubVersion %d, Signature 0x%x\n",
+> > -			     DRIVER_PREFIX, le16_to_cpu(fwhdr->version), fwhdr->subversion,
+> > +		pr_info_once("R8188EU: Firmware Version %d, SubVersion %d, Signature 0x%x\n",
+> > +			     le16_to_cpu(fwhdr->version), fwhdr->subversion,
+> >   			     le16_to_cpu(fwhdr->signature));
+> 
+> What about converting this macro to dev_info_once()? IMO, looks cleaner:
+> 
+> [   27.985218] r8188eu 2-1:1.0: Firmware Version 11, SubVersion 1, Signature
+> 0x88e1
+> 
+> 
+> 
+> 
+> With regards,
+> Pavel Skripkin
 
-I wish I knew of a way to fix this mess for good... suggestions would be 
-welcome.
+Hi Pavel,
 
-Looks like you spotted the last remaining macros without a void cast 
-here, thanks.
+Yes, good idea, I like it. This patch has been merged now, but I will
+submit another to do this. Many thanks for the suggestion.
 
-FWIW:
-Reviewed-by: Michael Schmitz <schmitzmic@gmail.com>
-
-
-Am 21.05.2022 um 02:52 schrieb Guenter Roeck:
-> On 5/20/22 07:32, Geert Uytterhoeven wrote:
->> The macros implementing Atari ROM port I/O writes do not cast away their
->> output, unlike similar implementations for other I/O buses.
->> When they are combined using conditional expressions in the
->> definitions of
->> outb() and friends, this triggers sparse warnings like:
->>
->>      drivers/net/appletalk/cops.c:382:17: error: incompatible types in
->> conditional expression (different base types):
->>      drivers/net/appletalk/cops.c:382:17:    unsigned char
->>      drivers/net/appletalk/cops.c:382:17:    void
->>
->> Fix this by adding casts to "void".
->>
->> Reported-by: kernel test robot <lkp@intel.com>
->> Reported-by: Guenter Roeck <linux@roeck-us.net>
->> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
->
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
->
->> ---
->> Survived m68k/allmodconfig.
->> To be queued in the m68k tree for v5.19.
->>
->> Removing the casts instead causes issues with functions propagating void
->> return values (return expression in void function), which BTW sparse
->> complains about, too.
->
-> We live and learn. I didn't even know that this was valid syntax.
-> I thought it might be easier to just fix that code, but coccinelle
-> reports that there are hundreds of places in the kernel where this
-> is done. Outch.
->
-> Guenter
+Regards,
+Phil

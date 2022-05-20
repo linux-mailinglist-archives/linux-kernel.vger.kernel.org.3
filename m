@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80B6352EA9A
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 13:18:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E730F52EA9C
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 13:19:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231203AbiETLSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 07:18:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58180 "EHLO
+        id S1348461AbiETLS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 07:18:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233914AbiETLSj (ORCPT
+        with ESMTP id S1346848AbiETLSq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 07:18:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4ADB14AA74
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 04:18:38 -0700 (PDT)
+        Fri, 20 May 2022 07:18:46 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA9D914AA74
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 04:18:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E39661DAB
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 11:18:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D978C385A9;
-        Fri, 20 May 2022 11:18:35 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0F43DCE2A09
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 11:18:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34D0CC34113;
+        Fri, 20 May 2022 11:18:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653045517;
-        bh=K/HrRMv6djwUaET7IYhl0udvj25T3d8ReiyZWFxaTSs=;
+        s=k20201202; t=1653045520;
+        bh=DbozWUA8l+/nc8nWGrNyayfGeTWLYFZBoyJhygSVS90=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=WGRk3hmfSkiDeLWCnz04H8B+sSLqBguOtwl2KpvZ8sObiAf4zRt6NchEBkzwIxltu
-         0ClkpwW/38zpvxVUGzZZO+Q2ZfsRXedvVEJ+74UvyDYlrD1swomyIt7DAfoh0n9pgX
-         bU2oqJoRBmBJ4TxVjtNewW6hM0fCiaot0xp4diFf0s4KIZeFiHS0C9Vbubj6wyVeyl
-         W2rTDoXDNAwIrUewLeMwdRx5vTuF+vNIf3XhSlrrl9mvO+tIz0uum5FkAfbppvRFlW
-         XQJjJ3YOA5bVtWC3Uadk8JrvebbeUblJ5wtgOoR+almQA7Nkl4l5vWiKD9WZg4hxJM
-         /PRkoLwcYpDcA==
+        b=BCumOtXXJjMUuU8HP8qlOiM/Zn10Qly7EvKIPAhMPl8Nftlg8/T0Noa3BRCsTr0bn
+         9zMVhTZONKIfQe7kWxEIasA5phVDb6eK0OQISR80TjzvLeyBX602fk6M/PcvdJd5xm
+         7J2ZQytKph1qQW5qNTJ0qPwohdcZnA9FHs7hTMSxUonfM9WLgAgVXhn9c6fZttrLGr
+         8YN86Y6WRG8Mf6ZYYYN0EmElK0uA5kf77B1wGojKA20AT6T6X5Wa2zVlqVTzQsfBAR
+         XKk7nHVJr/dtXLMJTPpuvbtg48fLohXCP698knh5q1TXYhyiKsXLt8B2PJGALfR9wZ
+         RSv4bSNlvJ1qw==
 From:   Mark Brown <broonie@kernel.org>
-To:     perex@perex.cz, tiwai@suse.com, quic_srivasam@quicinc.com,
-        quic_potturu@quicinc.com, lgirdwood@gmail.com,
-        yuehaibing@huawei.com
-Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
-In-Reply-To: <20220516120909.36356-1-yuehaibing@huawei.com>
-References: <20220516120909.36356-1-yuehaibing@huawei.com>
-Subject: Re: [PATCH -next] ASoC: codecs: lpass: Fix passing zero to 'PTR_ERR'
-Message-Id: <165304551581.45439.10887051635570767512.b4-ty@kernel.org>
-Date:   Fri, 20 May 2022 12:18:35 +0100
+To:     Vsujithkumar.Reddy@amd.com, alsa-devel@alsa-project.org
+Cc:     AjitKumar.Pandey@amd.com, Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Basavaraj.Hiregoudar@amd.com,
+        ajitkumar.pandey@amd.com, Vijendar.Mukunda@amd.com,
+        open list <linux-kernel@vger.kernel.org>,
+        Sunil-kumar.Dommati@amd.com, Liam Girdwood <lgirdwood@gmail.com>
+In-Reply-To: <20220516160619.17832-1-Vsujithkumar.Reddy@amd.com>
+References: <20220516160619.17832-1-Vsujithkumar.Reddy@amd.com>
+Subject: Re: [PATCH v2 1/2] Revert "ASoC: amd: acp: Set gpio_spkr_en to None for max speaker amplifer in machine driver"
+Message-Id: <165304551793.45439.12289149064085038567.b4-ty@kernel.org>
+Date:   Fri, 20 May 2022 12:18:37 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -55,13 +57,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 16 May 2022 20:09:09 +0800, YueHaibing wrote:
-> sound/soc/codecs/lpass-macro-common.c:28 lpass_macro_pds_init() warn: passing zero to 'PTR_ERR'
-> sound/soc/codecs/lpass-macro-common.c:38 lpass_macro_pds_init() warn: passing zero to 'PTR_ERR'
-> sound/soc/codecs/lpass-macro-common.c:54 lpass_macro_pds_init() warn: passing zero to 'ERR_PTR'
+On Mon, 16 May 2022 21:36:09 +0530, V sujith kumar Reddy wrote:
+> ASoC: amd : acp : Set Speaker enable/disable pin through rt1019 codec driver.
 > 
-> dev_pm_domain_attach_by_name() may return NULL, set 'ret' as
-> -ENODATA to fix this warning.
+> RT1019 codec has two ways of controlling the en_spkr.
+> one way is controlling through gpio pin method the another way is through codec register update through driver.
+> 
+> Now Speaker enable/disable is controlled  through codec register updated by codec driver.
+> This patch reverts gpio logic.
 > 
 > [...]
 
@@ -71,8 +74,10 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: codecs: lpass: Fix passing zero to 'PTR_ERR'
-      commit: 81e7b165c45e94188ae8f1134b57f27d1f35452f
+[1/2] Revert "ASoC: amd: acp: Set gpio_spkr_en to None for max speaker amplifer in machine driver"
+      commit: 6107fb660749507d5e02988151e45884b5423cdc
+[2/2] Revert "ASoC: amd: acp: Power on/off the speaker enable gpio pin based on DAPM callback."
+      commit: 17572892e3beefe68d0875ecfd015eef521c244d
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

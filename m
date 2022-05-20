@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B79ED52F2F6
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 20:34:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B1CC52F2FB
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 20:35:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352735AbiETSex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 14:34:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49564 "EHLO
+        id S1352802AbiETSe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 14:34:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349180AbiETSeo (ORCPT
+        with ESMTP id S1352681AbiETSeq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 14:34:44 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58BD86B7D9;
-        Fri, 20 May 2022 11:34:43 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id m20so1473798wrb.13;
-        Fri, 20 May 2022 11:34:43 -0700 (PDT)
+        Fri, 20 May 2022 14:34:46 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94A285FF06;
+        Fri, 20 May 2022 11:34:44 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id u27so11789227wru.8;
+        Fri, 20 May 2022 11:34:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=71rNmvdBNzrDpvjl6ye6mbU4jyI75AeH59SJ+4jpFZc=;
-        b=FC1S0/4xLynlkKxblmICDerO/KOcxzps4ZEDHNsyV4XiIUvW3UoGUmFMgRI1U1+Uxz
-         AYvM7Ympxl+zPuyJeTvD0x75fVKk4uNCOzGxJ3zRPATWARu18IhcKEXlC9HD4wEXaBkH
-         omYWfka6r8203TMw8WhVy3BuGDOkxaA3EbV7gW8HhD/qJE7LJHEmgUH685ANOqjpg/ou
-         D6sSrDrbCvIfwM9Myj/K/MYnEApOPV39y4TOWI4fiDYthi3rz8u4/pPTU8XEBTbvffqE
-         bC48Tt6EpNMPocoqGkhyZqTo0cA2CD/M1o7jsJiLjX47J3IIwhItHgl+ZBIIJNBvHSJg
-         a4kA==
+        bh=GvSQBhpvLDyleu1LIfP8VMG0wWB85CIJW6YgQSKRQow=;
+        b=j8WOrlNFUeG3r+YDMsurwgDUfVhCy+6sY15G27qSeJ6zBhCyBEw1Grn4zjFwVjMsRB
+         y0//yAd/WOUGXbXI7ZdGaGG1uiWABD6y20n9GAPi2NtOsChdihJIJDSWYlv1aLClg8YB
+         f+dLj82vxePduYXHoGnzOKNRXc/5Jyt+hyW3LHjL8Lhg00bk6HA700sF7alrsvh3kNS6
+         nYhy61QXst7HVg/gmqLMayBcQd/ZqAFXI8qyxzxmMKrXVeXJPO90AcznBgNexiAYOThY
+         R/Qnr5eitHhAaalCdl93SnicBVYPqZQCdoSsiefqQuUbwx+l4IZ+F90Dcbd6sbnCCkzd
+         xUoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=71rNmvdBNzrDpvjl6ye6mbU4jyI75AeH59SJ+4jpFZc=;
-        b=LqF8K5g0b4/SG50DzsbgWSWP+WF+4YqyS3by97BHpFfG0hYwrBUooul2Q8to5khS0U
-         XWbRptkNDPXmhiiCJX63SRzSJhbSXpgrW1YpPNUJvEulIIfTfullasRa2IiLNUDG6nAJ
-         D/cKLAmpcTAxlbV98eBpRmtWOgpcnwNN6N/Zp8cElfpX16UkJy3Jc4RkY7HY3KuevmvT
-         m9qHI5FC4TDQ95fbWASCUTmUytF23WMcEnyX1oUxlzzN/7W8ZHm6J78U2qbctvgeO/a3
-         vxXxjouAiyqfUgtp4bnScyhgiVCStar9QX/x1bX67ChhPyK+6ODURakMl2wuwWHzlyZQ
-         39Kg==
-X-Gm-Message-State: AOAM530tmvl03XERRizxOMZ1I7s9Vr2UEzhlIgokXsaeTnrmnanyzLAW
-        dWYgxx/Y8NR5woDCK8WtMLA=
-X-Google-Smtp-Source: ABdhPJxt3nDqtx1ogf7NJXt4PCZFVicNi7Z27RLRla8Rc9UbhVU3A2DahhT7K45Y0OxSoBa8gHffjw==
-X-Received: by 2002:a05:6000:15ca:b0:20c:4f4b:84ee with SMTP id y10-20020a05600015ca00b0020c4f4b84eemr9794115wry.207.1653071681801;
-        Fri, 20 May 2022 11:34:41 -0700 (PDT)
+        bh=GvSQBhpvLDyleu1LIfP8VMG0wWB85CIJW6YgQSKRQow=;
+        b=mJebUDAVwONvw6/oTjoHrlIQbl2BnPxXUUdfu4bA6SIcreAfjWcsCngeWhCdo4edu+
+         +pI39aEdoMdm4E0xMiQK7LCOHwAAc2zP9yQHrWHzBFl7XO70v7kqVZqhr+4MuJD5f791
+         bkoC8K6KzSNiW0nrG1hhtzvui3fURtjrCfrbqk6kq1quTGFtVTGkwV4h/gsLvOOQaH+l
+         znOa3raiDVmuV92bpLWboRYXN4b5yXJpqfC/03OeJutFcuWnSzANALXTzUCD3M+PiAqW
+         xUXcf3MZhgBq01knJCDk8puvePzzhazKXtkZ4+r4/I7B/y8V60EbLBfra2HX1msTUPdO
+         6cyg==
+X-Gm-Message-State: AOAM532qTjXZUjVikIHLRsPkzJWry0CRg8kNP3/fMQz3+uFallWikPdL
+        2ixPMvwLP+01rJb/G0UMK8Y=
+X-Google-Smtp-Source: ABdhPJymYAYSUfXRKsn0YR3ilQcBY4C5ohTnSx6mbeXGe3fsjIGMyVJPc0guX9pECLmCHnRxQz8c3g==
+X-Received: by 2002:a5d:64c8:0:b0:20c:6970:fb22 with SMTP id f8-20020a5d64c8000000b0020c6970fb22mr9279097wri.424.1653071682985;
+        Fri, 20 May 2022 11:34:42 -0700 (PDT)
 Received: from xws.localdomain (pd9e5a9fe.dip0.t-ipconnect.de. [217.229.169.254])
-        by smtp.gmail.com with ESMTPSA id r9-20020adfa149000000b0020e62feca05sm3252081wrr.32.2022.05.20.11.34.40
+        by smtp.gmail.com with ESMTPSA id r9-20020adfa149000000b0020e62feca05sm3252081wrr.32.2022.05.20.11.34.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 11:34:41 -0700 (PDT)
+        Fri, 20 May 2022 11:34:42 -0700 (PDT)
 From:   Maximilian Luz <luzmaximilian@gmail.com>
 To:     Hans de Goede <hdegoede@redhat.com>
 Cc:     Maximilian Luz <luzmaximilian@gmail.com>,
@@ -55,11 +55,13 @@ Cc:     Maximilian Luz <luzmaximilian@gmail.com>,
         Sebastian Reichel <sre@kernel.org>,
         Jiri Kosina <jikos@kernel.org>,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
         platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 01/10] platform/surface: aggregator: Allow devices to be marked as hot-removed
-Date:   Fri, 20 May 2022 20:34:13 +0200
-Message-Id: <20220520183422.7185-2-luzmaximilian@gmail.com>
+        linux-input@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 02/10] platform/surface: aggregator: Allow notifiers to avoid communication on unregistering
+Date:   Fri, 20 May 2022 20:34:14 +0200
+Message-Id: <20220520183422.7185-3-luzmaximilian@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220520183422.7185-1-luzmaximilian@gmail.com>
 References: <20220520183422.7185-1-luzmaximilian@gmail.com>
@@ -75,102 +77,289 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some SSAM devices, notably the keyboard cover (keyboard and touchpad) on
-the Surface Pro 8, can be hot-removed. When this occurs, communication
-with the device may fail and time out. This timeout can unnecessarily
-block and slow down device removal and even cause issues when the
-devices are detached and re-attached quickly. Thus, communication should
-generally be avoided once hot-removal is detected.
+When SSAM client devices have been (physically) hot-removed,
+communication attempts with those devices may fail and time out. This
+can even extend to event notifiers, due to which timeouts may occur
+during device removal, slowing down that process.
 
-While we already remove a device as soon as we detect its (hot-)removal,
-the corresponding device driver may still attempt to communicate with
-the device during teardown. This is especially critical as communication
-failure may also extend to disabling of events, which is typically done
-at that stage.
+Add a parameter to the notifier unregister function that allows skipping
+communication with the EC to prevent this. Furthermore, add wrappers for
+registering and unregistering notifiers belonging to SSAM client devices
+that automatically check if the device has been marked as hot-removed
+and communication should be avoided.
 
-Add a flag to allow marking devices as hot-removed. This can then be
-used during client driver teardown to check if any communication
-attempts should be avoided.
+Note that non-SSAM client devices can generally not be hot-removed, so
+also add a convenience wrapper for those, defaulting to allow
+communication.
 
 Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
 ---
- include/linux/surface_aggregator/device.h | 48 +++++++++++++++++++++--
- 1 file changed, 45 insertions(+), 3 deletions(-)
+ .../driver-api/surface_aggregator/client.rst  |  6 +-
+ .../platform/surface/aggregator/controller.c  | 53 ++++++++++-----
+ include/linux/surface_aggregator/controller.h | 24 ++++++-
+ include/linux/surface_aggregator/device.h     | 66 +++++++++++++++++++
+ 4 files changed, 128 insertions(+), 21 deletions(-)
 
+diff --git a/Documentation/driver-api/surface_aggregator/client.rst b/Documentation/driver-api/surface_aggregator/client.rst
+index e519d374c378..27f95abdbe99 100644
+--- a/Documentation/driver-api/surface_aggregator/client.rst
++++ b/Documentation/driver-api/surface_aggregator/client.rst
+@@ -17,6 +17,8 @@
+ .. |SSAM_DEVICE| replace:: :c:func:`SSAM_DEVICE`
+ .. |ssam_notifier_register| replace:: :c:func:`ssam_notifier_register`
+ .. |ssam_notifier_unregister| replace:: :c:func:`ssam_notifier_unregister`
++.. |ssam_device_notifier_register| replace:: :c:func:`ssam_device_notifier_register`
++.. |ssam_device_notifier_unregister| replace:: :c:func:`ssam_device_notifier_unregister`
+ .. |ssam_request_sync| replace:: :c:func:`ssam_request_sync`
+ .. |ssam_event_mask| replace:: :c:type:`enum ssam_event_mask <ssam_event_mask>`
+ 
+@@ -312,7 +314,9 @@ Handling Events
+ To receive events from the SAM EC, an event notifier must be registered for
+ the desired event via |ssam_notifier_register|. The notifier must be
+ unregistered via |ssam_notifier_unregister| once it is not required any
+-more.
++more. For |ssam_device| type clients, the |ssam_device_notifier_register| and
++|ssam_device_notifier_unregister| wrappers should be preferred as they properly
++handle hot-removal of client devices.
+ 
+ Event notifiers are registered by providing (at minimum) a callback to call
+ in case an event has been received, the registry specifying how the event
+diff --git a/drivers/platform/surface/aggregator/controller.c b/drivers/platform/surface/aggregator/controller.c
+index b8c377b3f932..6de834b52b63 100644
+--- a/drivers/platform/surface/aggregator/controller.c
++++ b/drivers/platform/surface/aggregator/controller.c
+@@ -2199,16 +2199,26 @@ static int ssam_nf_refcount_enable(struct ssam_controller *ctrl,
+ }
+ 
+ /**
+- * ssam_nf_refcount_disable_free() - Disable event for reference count entry if it is
+- * no longer in use and free the corresponding entry.
++ * ssam_nf_refcount_disable_free() - Disable event for reference count entry if
++ * it is no longer in use and free the corresponding entry.
+  * @ctrl:  The controller to disable the event on.
+  * @entry: The reference count entry for the event to be disabled.
+  * @flags: The flags used for enabling the event on the EC.
++ * @ec:    Flag specifying if the event should actually be disabled on the EC.
+  *
+- * If the reference count equals zero, i.e. the event is no longer requested by
+- * any client, the event will be disabled and the corresponding reference count
+- * entry freed. The reference count entry must not be used any more after a
+- * call to this function.
++ * If ``ec`` equals ``true`` and the reference count equals zero (i.e. the
++ * event is no longer requested by any client), the specified event will be
++ * disabled on the EC via the corresponding request.
++ *
++ * If ``ec`` equals ``false``, no request will be sent to the EC and the event
++ * can be considered in a detached state (i.e. no longer used but still
++ * enabled). Disabling an event via this method may be required for
++ * hot-removable devices, where event disable requests may time out after the
++ * device has been physically removed.
++ *
++ * In both cases, if the reference count equals zero, the corresponding
++ * reference count entry will be freed. The reference count entry must not be
++ * used any more after a call to this function.
+  *
+  * Also checks if the flags used for disabling the event match the flags used
+  * for enabling the event and warns if they do not (regardless of reference
+@@ -2223,7 +2233,7 @@ static int ssam_nf_refcount_enable(struct ssam_controller *ctrl,
+  * returns the status of the event-enable EC command.
+  */
+ static int ssam_nf_refcount_disable_free(struct ssam_controller *ctrl,
+-					 struct ssam_nf_refcount_entry *entry, u8 flags)
++					 struct ssam_nf_refcount_entry *entry, u8 flags, bool ec)
+ {
+ 	const struct ssam_event_registry reg = entry->key.reg;
+ 	const struct ssam_event_id id = entry->key.id;
+@@ -2232,8 +2242,9 @@ static int ssam_nf_refcount_disable_free(struct ssam_controller *ctrl,
+ 
+ 	lockdep_assert_held(&nf->lock);
+ 
+-	ssam_dbg(ctrl, "disabling event (reg: %#04x, tc: %#04x, iid: %#04x, rc: %d)\n",
+-		 reg.target_category, id.target_category, id.instance, entry->refcount);
++	ssam_dbg(ctrl, "%s event (reg: %#04x, tc: %#04x, iid: %#04x, rc: %d)\n",
++		 ec ? "disabling" : "detaching", reg.target_category, id.target_category,
++		 id.instance, entry->refcount);
+ 
+ 	if (entry->flags != flags) {
+ 		ssam_warn(ctrl,
+@@ -2242,7 +2253,7 @@ static int ssam_nf_refcount_disable_free(struct ssam_controller *ctrl,
+ 			  id.instance);
+ 	}
+ 
+-	if (entry->refcount == 0) {
++	if (ec && entry->refcount == 0) {
+ 		status = ssam_ssh_event_disable(ctrl, reg, id, flags);
+ 		kfree(entry);
+ 	}
+@@ -2322,20 +2333,26 @@ int ssam_notifier_register(struct ssam_controller *ctrl, struct ssam_event_notif
+ EXPORT_SYMBOL_GPL(ssam_notifier_register);
+ 
+ /**
+- * ssam_notifier_unregister() - Unregister an event notifier.
+- * @ctrl: The controller the notifier has been registered on.
+- * @n:    The event notifier to unregister.
++ * __ssam_notifier_unregister() - Unregister an event notifier.
++ * @ctrl:    The controller the notifier has been registered on.
++ * @n:       The event notifier to unregister.
++ * @disable: Whether to disable the corresponding event on the EC.
+  *
+  * Unregister an event notifier. Decrement the usage counter of the associated
+  * SAM event if the notifier is not marked as an observer. If the usage counter
+- * reaches zero, the event will be disabled.
++ * reaches zero and ``disable`` equals ``true``, the event will be disabled.
++ *
++ * Useful for hot-removable devices, where communication may fail once the
++ * device has been physically removed. In that case, specifying ``disable`` as
++ * ``false`` avoids communication with the EC.
+  *
+  * Return: Returns zero on success, %-ENOENT if the given notifier block has
+  * not been registered on the controller. If the given notifier block was the
+  * last one associated with its specific event, returns the status of the
+  * event-disable EC-command.
+  */
+-int ssam_notifier_unregister(struct ssam_controller *ctrl, struct ssam_event_notifier *n)
++int __ssam_notifier_unregister(struct ssam_controller *ctrl, struct ssam_event_notifier *n,
++			       bool disable)
+ {
+ 	u16 rqid = ssh_tc_to_rqid(n->event.id.target_category);
+ 	struct ssam_nf_refcount_entry *entry;
+@@ -2373,7 +2390,7 @@ int ssam_notifier_unregister(struct ssam_controller *ctrl, struct ssam_event_not
+ 			goto remove;
+ 		}
+ 
+-		status = ssam_nf_refcount_disable_free(ctrl, entry, n->event.flags);
++		status = ssam_nf_refcount_disable_free(ctrl, entry, n->event.flags, disable);
+ 	}
+ 
+ remove:
+@@ -2383,7 +2400,7 @@ int ssam_notifier_unregister(struct ssam_controller *ctrl, struct ssam_event_not
+ 
+ 	return status;
+ }
+-EXPORT_SYMBOL_GPL(ssam_notifier_unregister);
++EXPORT_SYMBOL_GPL(__ssam_notifier_unregister);
+ 
+ /**
+  * ssam_controller_event_enable() - Enable the specified event.
+@@ -2477,7 +2494,7 @@ int ssam_controller_event_disable(struct ssam_controller *ctrl,
+ 		return -ENOENT;
+ 	}
+ 
+-	status = ssam_nf_refcount_disable_free(ctrl, entry, flags);
++	status = ssam_nf_refcount_disable_free(ctrl, entry, flags, true);
+ 
+ 	mutex_unlock(&nf->lock);
+ 	return status;
+diff --git a/include/linux/surface_aggregator/controller.h b/include/linux/surface_aggregator/controller.h
+index 74bfdffaf7b0..50a2b4926c06 100644
+--- a/include/linux/surface_aggregator/controller.h
++++ b/include/linux/surface_aggregator/controller.h
+@@ -835,8 +835,28 @@ struct ssam_event_notifier {
+ int ssam_notifier_register(struct ssam_controller *ctrl,
+ 			   struct ssam_event_notifier *n);
+ 
+-int ssam_notifier_unregister(struct ssam_controller *ctrl,
+-			     struct ssam_event_notifier *n);
++int __ssam_notifier_unregister(struct ssam_controller *ctrl,
++			       struct ssam_event_notifier *n, bool disable);
++
++/**
++ * ssam_notifier_unregister() - Unregister an event notifier.
++ * @ctrl:    The controller the notifier has been registered on.
++ * @n:       The event notifier to unregister.
++ *
++ * Unregister an event notifier. Decrement the usage counter of the associated
++ * SAM event if the notifier is not marked as an observer. If the usage counter
++ * reaches zero, the event will be disabled.
++ *
++ * Return: Returns zero on success, %-ENOENT if the given notifier block has
++ * not been registered on the controller. If the given notifier block was the
++ * last one associated with its specific event, returns the status of the
++ * event-disable EC-command.
++ */
++static inline int ssam_notifier_unregister(struct ssam_controller *ctrl,
++					   struct ssam_event_notifier *n)
++{
++	return __ssam_notifier_unregister(ctrl, n, true);
++}
+ 
+ int ssam_controller_event_enable(struct ssam_controller *ctrl,
+ 				 struct ssam_event_registry reg,
 diff --git a/include/linux/surface_aggregator/device.h b/include/linux/surface_aggregator/device.h
-index cc257097eb05..491aa7e9f4bc 100644
+index 491aa7e9f4bc..ad245c6b00d0 100644
 --- a/include/linux/surface_aggregator/device.h
 +++ b/include/linux/surface_aggregator/device.h
-@@ -148,17 +148,30 @@ struct ssam_device_uid {
- #define SSAM_SDEV(cat, tid, iid, fun) \
- 	SSAM_DEVICE(SSAM_DOMAIN_SERIALHUB, SSAM_SSH_TC_##cat, tid, iid, fun)
+@@ -472,4 +472,70 @@ static inline void ssam_remove_clients(struct device *dev) {}
+ 				    sdev->uid.instance, ret);		\
+ 	}
  
-+/*
-+ * enum ssam_device_flags - Flags for SSAM client devices.
-+ * @SSAM_DEVICE_HOT_REMOVED_BIT:
-+ *	The device has been hot-removed. Further communication with it may time
-+ *	out and should be avoided.
-+ */
-+enum ssam_device_flags {
-+	SSAM_DEVICE_HOT_REMOVED_BIT = 0,
-+};
 +
- /**
-  * struct ssam_device - SSAM client device.
-- * @dev:  Driver model representation of the device.
-- * @ctrl: SSAM controller managing this device.
-- * @uid:  UID identifying the device.
-+ * @dev:   Driver model representation of the device.
-+ * @ctrl:  SSAM controller managing this device.
-+ * @uid:   UID identifying the device.
-+ * @flags: Device state flags, see &enum ssam_device_flags.
-  */
- struct ssam_device {
- 	struct device dev;
- 	struct ssam_controller *ctrl;
- 
- 	struct ssam_device_uid uid;
++/* -- Helpers for client-device notifiers. ---------------------------------- */
 +
-+	unsigned long flags;
- };
- 
- /**
-@@ -240,6 +253,35 @@ struct ssam_device *ssam_device_alloc(struct ssam_controller *ctrl,
- int ssam_device_add(struct ssam_device *sdev);
- void ssam_device_remove(struct ssam_device *sdev);
- 
 +/**
-+ * ssam_device_mark_hot_removed() - Mark the given device as hot-removed.
-+ * @sdev: The device to mark as hot-removed.
++ * ssam_device_notifier_register() - Register an event notifier for the
++ * specified client device.
++ * @sdev: The device the notifier should be registered on.
++ * @n:    The event notifier to register.
 + *
-+ * Mark the device as having been hot-removed. This signals drivers using the
-+ * device that communication with the device should be avoided and may lead to
-+ * timeouts.
++ * Register an event notifier. Increment the usage counter of the associated
++ * SAM event if the notifier is not marked as an observer. If the event is not
++ * marked as an observer and is currently not enabled, it will be enabled
++ * during this call. If the notifier is marked as an observer, no attempt will
++ * be made at enabling any event and no reference count will be modified.
++ *
++ * Notifiers marked as observers do not need to be associated with one specific
++ * event, i.e. as long as no event matching is performed, only the event target
++ * category needs to be set.
++ *
++ * Return: Returns zero on success, %-ENOSPC if there have already been
++ * %INT_MAX notifiers for the event ID/type associated with the notifier block
++ * registered, %-ENOMEM if the corresponding event entry could not be
++ * allocated, %-ENODEV if the device is marked as hot-removed. If this is the
++ * first time that a notifier block is registered for the specific associated
++ * event, returns the status of the event-enable EC-command.
 + */
-+static inline void ssam_device_mark_hot_removed(struct ssam_device *sdev)
++static inline int ssam_device_notifier_register(struct ssam_device *sdev,
++						struct ssam_event_notifier *n)
 +{
-+	dev_dbg(&sdev->dev, "marking device as hot-removed\n");
-+	set_bit(SSAM_DEVICE_HOT_REMOVED_BIT, &sdev->flags);
++	/*
++	 * Note that this check does not provide any guarantees whatsoever as
++	 * hot-removal could happen at any point and we can't protect against
++	 * it. Nevertheless, if we can detect hot-removal, bail early to avoid
++	 * communication timeouts.
++	 */
++	if (ssam_device_is_hot_removed(sdev))
++		return -ENODEV;
++
++	return ssam_notifier_register(sdev->ctrl, n);
 +}
 +
 +/**
-+ * ssam_device_is_hot_removed() - Check if the given device has been
-+ * hot-removed.
-+ * @sdev: The device to check.
++ * ssam_device_notifier_unregister() - Unregister an event notifier for the
++ * specified client device.
++ * @sdev: The device the notifier has been registered on.
++ * @n:    The event notifier to unregister.
 + *
-+ * Checks if the given device has been marked as hot-removed. See
-+ * ssam_device_mark_hot_removed() for more details.
++ * Unregister an event notifier. Decrement the usage counter of the associated
++ * SAM event if the notifier is not marked as an observer. If the usage counter
++ * reaches zero, the event will be disabled.
 + *
-+ * Return: Returns ``true`` if the device has been marked as hot-removed.
++ * In case the device has been marked as hot-removed, the event will not be
++ * disabled on the EC, as in those cases any attempt at doing so may time out.
++ *
++ * Return: Returns zero on success, %-ENOENT if the given notifier block has
++ * not been registered on the controller. If the given notifier block was the
++ * last one associated with its specific event, returns the status of the
++ * event-disable EC-command.
 + */
-+static inline bool ssam_device_is_hot_removed(struct ssam_device *sdev)
++static inline int ssam_device_notifier_unregister(struct ssam_device *sdev,
++						  struct ssam_event_notifier *n)
 +{
-+	return test_bit(SSAM_DEVICE_HOT_REMOVED_BIT, &sdev->flags);
++	return __ssam_notifier_unregister(sdev->ctrl, n,
++					  !ssam_device_is_hot_removed(sdev));
 +}
 +
- /**
-  * ssam_device_get() - Increment reference count of SSAM client device.
-  * @sdev: The device to increment the reference count of.
+ #endif /* _LINUX_SURFACE_AGGREGATOR_DEVICE_H */
 -- 
 2.36.1
 

@@ -2,124 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A552152F220
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 20:11:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4F0C52F247
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 20:13:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351944AbiETSLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 14:11:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33444 "EHLO
+        id S1352483AbiETSNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 14:13:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237996AbiETSLo (ORCPT
+        with ESMTP id S1352493AbiETSNj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 14:11:44 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3FCE5D653;
-        Fri, 20 May 2022 11:11:42 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24KFVNQx016707;
-        Fri, 20 May 2022 18:11:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : message-id : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=24Dvykp2KUkjJ6d/E8Qq50Ojk1N4J0gGWIZsa/gjTL0=;
- b=VMngJluL69wMtwtlGk9gS7JO/bSTSL9qWSn8K8qjSPLan8xC0Sm9QoNmBRlFgyD3w6L2
- n32qZYGGav2KQZ1SvCv8ERgAKljGXVv361JlkqdbXUf0xUCQaFS4Ko57NPKEHGOXlA12
- nWohyJRw+vicYNDs/HVwf1iS3TGqlBEkCKOU2EUeEq0WIAwIWpi4wSIDIa+yq+THIIfs
- P43LWjq42vYi1JDxyCK626BMPYfWFV3G+ouWb8K1OAHk5MlJkVJgGdRpbfMH8RXImDnI
- 4zeF0pPf0CRCFrx9D7/NXWWnhIQV92JUoPrSBIsEurSVbJkJbuvHVEV2h7WtFIax1jOR vA== 
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g6b7eenye-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 May 2022 18:11:20 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24KHv39v001053;
-        Fri, 20 May 2022 18:11:18 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma01fra.de.ibm.com with ESMTP id 3g242902yr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 May 2022 18:11:18 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24KIBG5p43647418
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 20 May 2022 18:11:16 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0EF7A42041;
-        Fri, 20 May 2022 18:11:16 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 990E84203F;
-        Fri, 20 May 2022 18:11:15 +0000 (GMT)
-Received: from localhost (unknown [9.43.91.35])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 20 May 2022 18:11:15 +0000 (GMT)
-Date:   Fri, 20 May 2022 23:41:13 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: linux-next: changed messages in qemu boot
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>
-References: <20220520233602.2738d87c@canb.auug.org.au>
-In-Reply-To: <20220520233602.2738d87c@canb.auug.org.au>
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1653069342.3xtfot6wli.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Wi4CIOHTYoPB9DtNtrBg2pnd-QI3Mc4e
-X-Proofpoint-ORIG-GUID: Wi4CIOHTYoPB9DtNtrBg2pnd-QI3Mc4e
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 20 May 2022 14:13:39 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91F7B18FF12
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 11:13:32 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id g12so11788411edq.4
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 11:13:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=diEsMUAPJX4u0FJo9NkDwZ5Xz9iATJQSF3lAp/gYU1A=;
+        b=I87RLcljCH0RuSbiTrRQexejctdo+oMuIRy59YA+r+nR+yZwS2t6yeUqhQNO3I0sho
+         0kvV9fopy2diCllarPTabCkUVUGiHFwYWAYnpqsf7Pa7SmkSmgcM/rzj7catq+4TMWVq
+         EOkLlq6rMWfkrLiGFfbgaoxEz78RbWy5Oc2a54iNQCB2Z21hIlbfiTzpkuWY21YUjOEi
+         dmYO4mZ0+WM6qw5mmauUQf69pAkPy5b5D915wxqgN/EmALrVJq6ly76nBGi5VWw8gjcI
+         4O3Ns1t1LgkRbhOcQmhON3hCYwT5gZGIJh2HAja7zlFXEjHIUtl5AWU9yAa2BjipS9x3
+         BCDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=diEsMUAPJX4u0FJo9NkDwZ5Xz9iATJQSF3lAp/gYU1A=;
+        b=NBp8YRJn3kAIp9yaAST1pozT0WAk0p5LCFHO7x6eela9qgo5D89cJF0wr+8h6LxB7z
+         wmsTzV3QS8OtAtywMVRRcPYJGwVn7L/Km+BiacbXZE3QOISjqx1mwlaW0ZMvmXhoxyIc
+         Eo6/kw38gNOmuYym97OFkPE2MnkE2nbgn2J2gvZIoCko8sACH0Pd6mvvnbaDgMcp4Ce8
+         tQLIcl/uZXQG9xIi8zmHB2o+ozomThGAvmn+EEtHwddYSg3SBDBsIppuxG3Z6ZeQlNe5
+         X4ubEiFSCsTWCP6OdQ2SF2mzBP0CU8ZXU8aDgeng34jz/QvcbY4SnSjGjWTApK/47GYa
+         mkyw==
+X-Gm-Message-State: AOAM532p0TNp0Mlq7b17nnHWHaN8MRMGJy98nRMfyMJDIdZKLnvyMAaV
+        jNv3wP0icoQ761K8NP6zUwGHJKyqi1pdqeTun8mq3A==
+X-Google-Smtp-Source: ABdhPJyJ9aD1+buOd6X23qPr2SUjHKZOvsxBvuzgTQCHrWKd4i4H+xLKXa2OUWjgWol3otPNS4gl1fDpDbZoTdNYgOc=
+X-Received: by 2002:a05:6402:84a:b0:426:262d:967e with SMTP id
+ b10-20020a056402084a00b00426262d967emr12527519edz.286.1653070410982; Fri, 20
+ May 2022 11:13:30 -0700 (PDT)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-20_05,2022-05-20_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
- suspectscore=0 lowpriorityscore=0 malwarescore=0 mlxlogscore=999
- priorityscore=1501 impostorscore=0 bulkscore=0 adultscore=0 clxscore=1011
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205200116
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220519164512.3180360-1-dlatypov@google.com> <CABVgOSnooocLsy2=a8rm7Y_m3DpffKtDam5_uYou+Y2tUkumRw@mail.gmail.com>
+In-Reply-To: <CABVgOSnooocLsy2=a8rm7Y_m3DpffKtDam5_uYou+Y2tUkumRw@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Fri, 20 May 2022 11:13:19 -0700
+Message-ID: <CAGS_qxrDYKKoWy3UAuVqebT+3jp-ux_uyfbwX3OnJqVbnzaiJg@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: refactor internal kconfig handling, allow overriding
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Stephen Rothwell wrote:
-> Hi all,
->=20
-> Today's linux-next bboot of the powerpc pseries_le_defconfig build
-> produced these different kernel messages (diff from yesterday's tree):
->=20
-> - ftrace: allocating 33658 entries in 13 pages
-> - ftrace: allocated 13 pages with 3 groups
-> + ftrace-powerpc: Address of ftrace_regs_caller out of range of kernel_to=
-c.
+On Thu, May 19, 2022 at 11:13 PM David Gow <davidgow@google.com> wrote:
+>
+> I like this, but do think there are a few gaps this doesn't handle
+> properly. (Though exactly how we'd deal with them, I'm not yet sure.)
+>
+> In particular, it's not possible to disable a pair of options where
+> one depends on the other: disabling the parent option will result in
+> the child one not being present in the generated config. This will
+> conflict both with "=y" and "=n/not set": we'd need a way to _remove_
+> a kconfig option for that to work.
 
-Thanks for the report. I think that is due to:
-https://patchwork.ozlabs.org/project/linuxppc-dev/patch/bb6626e884acffe87b5=
-8736291df57db3deaa9b9.1652074503.git.christophe.leroy@csgroup.eu/
+Do you have an example?
+Because what you describe sounds like how we want it to work, but I'm
+not sure if I'm misunderstanding the scenario you describe.
 
-The below diff fixes it for me:
+I was considering the case mentioned in the commit description.
+I.e. we do --kunitconfig_add=CONFIG_KUNIT=n to the default kunitconfig.
+That gives us complaints about these
+ CONFIG_KUNIT_EXAMPLE_TEST=y, CONFIG_KUNIT_TEST=y,
+ CONFIG_KUNIT_ALL_TESTS=y
+options no longer being in the generated .config.
+And I think that's exactly how it _should_ work, as this flag is a
+low-level tool for tweaking individual options.
 
-diff --git a/arch/powerpc/kernel/trace/ftrace.c b/arch/powerpc/kernel/trace=
-/ftrace.c
-index 46c002a8388804..7418da705d43ac 100644
---- a/arch/powerpc/kernel/trace/ftrace.c
-+++ b/arch/powerpc/kernel/trace/ftrace.c
-@@ -746,7 +746,7 @@ int __init ftrace_dyn_arch_init(void)
-=20
-        reladdr =3D addr - kernel_toc_addr();
-=20
--       if (reladdr >=3D SZ_2G || reladdr < -SZ_2G) {
-+       if (reladdr >=3D SZ_2G || reladdr < -_UL(SZ_2G)) {
-                pr_err("Address of %ps out of range of kernel_toc.\n",
-                                (void *)addr);
-                return -1;
+IMO, anything complicated should be done by editing the
+kunitconfig/qemu_config files, in which case it's a lot less
+cumbersome to disable multiple options by just deleting them.
 
-
-- Naveen
-
+Daniel

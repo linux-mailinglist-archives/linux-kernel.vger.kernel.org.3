@@ -2,67 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 679D452F5AE
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 00:31:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D889352F5B1
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 00:33:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353859AbiETWbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 18:31:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35818 "EHLO
+        id S1353915AbiETWdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 18:33:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233176AbiETWbu (ORCPT
+        with ESMTP id S233176AbiETWc6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 18:31:50 -0400
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37533163284;
-        Fri, 20 May 2022 15:31:49 -0700 (PDT)
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-edf3b6b0f2so11824101fac.9;
-        Fri, 20 May 2022 15:31:49 -0700 (PDT)
+        Fri, 20 May 2022 18:32:58 -0400
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F7FA163284;
+        Fri, 20 May 2022 15:32:58 -0700 (PDT)
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-e5e433d66dso11852687fac.5;
+        Fri, 20 May 2022 15:32:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=ggCgD+ecJUNc304fvLo33dXBGBOItGeeTMTlvKmJ6V8=;
-        b=Zm37sDEGL/Cx1wLBBfa2Dbm8fymYIvgHRRMsBi+TysIfyWgnGyexTqHeHRcL6MhLag
-         kKjwvl55hI6V5kMpY1BonbETS/qxp0MYDOw/yAT8dYPIJLC7HbEGouu590xXhySyaO6Q
-         DSeRDhpWksWi57vdVwa12eGixTfJPEosoFQK3QbF0cQEqVIPru7Gz7KpRDIsbUBH9nwe
-         cpH+84Iq034QQg6ncZU3R9qkYVbCoX5jUsawFQd7NALMywLHGGrZ7Ksq0xXmJ7AICINR
-         ziVUexcS8icaSU06z2z7ZerqBrgI98ZqdCYHrSs7C+/mEYDf9TFZgF6q+QGyYc971/A/
-         QHmg==
-X-Gm-Message-State: AOAM53132qSdv3ZldXDbP1i3nQO6GpDnk8Krbo0l+I5NdG75nUfqCnlB
-        /4Fph2BFIAONt0QSNrrNPg==
-X-Google-Smtp-Source: ABdhPJxOBzEWcjzqY1jgrge+hg8TP2rhGj/XCO23lR/mV1xoV5nDbiL0wG8OasuLd+XsdY+e9N694g==
-X-Received: by 2002:a05:6870:f713:b0:d2:8adb:aaeb with SMTP id ej19-20020a056870f71300b000d28adbaaebmr7118602oab.111.1653085908584;
-        Fri, 20 May 2022 15:31:48 -0700 (PDT)
+        bh=S+A8nYno3K9fjfGCVzllAZ4bC8ICFLl/EZ6hiaypTZ0=;
+        b=pElcQPU5terX3e3xy89/mFm23KCrs6dsTbJmFtdFbw3/KwFFt7Jqt9RMna+4bAmTSw
+         Jpt0iiJCkoj4S5nWdltaFhI5TSfc/8j3BHPeoq0bobHUatXZHj2x01eV+P1ef5hOTkA1
+         l9V4QXx2CZA9XEZ9h65XOpQybLEc4DUQKcfdoT8XjNhvCuqFZq3pOQVeHDtOjC9rKvy0
+         GtOIkWP4WYDYYcpX7H5XU0jCohfVEH7/TLKC67Wfgn3KMTGuZ0cqmjwNm4wXoNJwSAmI
+         WaOvo2Bj2OBH8/0jgLwQiB7dUV2cF+1kFKhP/fKYBnM2BI7BCQkr5Me/RzVF1bB1YXMn
+         Olew==
+X-Gm-Message-State: AOAM531M9PQlZa188EiD+FOnO/rgJQKHVpKWeSYLxID38TCMw0iAHr+f
+        5ndzSkGpz4xbnjVI5i601w==
+X-Google-Smtp-Source: ABdhPJxAYBhJ/Opqa1MfmSNj+qtDt0LMPMLf7JCAo8KdxjvZj/7iZqkk839Elkm3pETPKoROUJKHXg==
+X-Received: by 2002:a05:6870:4619:b0:f1:e78d:fd54 with SMTP id z25-20020a056870461900b000f1e78dfd54mr7360868oao.195.1653085977332;
+        Fri, 20 May 2022 15:32:57 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id j5-20020a9d7685000000b0060afaae0e34sm690705otl.0.2022.05.20.15.31.47
+        by smtp.gmail.com with ESMTPSA id x26-20020a056830245a00b0060afe803e5bsm356937otr.35.2022.05.20.15.32.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 15:31:47 -0700 (PDT)
-Received: (nullmailer pid 371624 invoked by uid 1000);
-        Fri, 20 May 2022 22:31:46 -0000
-Date:   Fri, 20 May 2022 17:31:46 -0500
+        Fri, 20 May 2022 15:32:56 -0700 (PDT)
+Received: (nullmailer pid 373515 invoked by uid 1000);
+        Fri, 20 May 2022 22:32:55 -0000
+Date:   Fri, 20 May 2022 17:32:55 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Tim Chang <jia-wei.chang@mediatek.com>
-Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Kevin Hilman <khilman@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>, hsinyi@google.com,
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
+Cc:     krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        sboyd@kernel.org, mturquette@baylibre.com,
+        linux-clk@vger.kernel.org, runyang.chen@mediatek.com,
         Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-mediatek@lists.infradead.org,
-        Roger Lu <roger.lu@mediatek.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/4] dt-bindings: soc: mediatek: add mt8195 svs
- dt-bindings
-Message-ID: <20220520223146.GA371569-robh@kernel.org>
-References: <20220519060924.13493-1-jia-wei.chang@mediatek.com>
- <20220519060924.13493-4-jia-wei.chang@mediatek.com>
+        robh+dt@kernel.org, p.zabel@pengutronix.de,
+        angelogioacchino.delregno@collabora.com, wenst@chromium.org,
+        devicetree@vger.kernel.org, chun-jie.chen@mediatek.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v7 17/19] dt-bindings: reset: mediatek: Add infra_ao
+ reset index for MT8186
+Message-ID: <20220520223255.GA373481-robh@kernel.org>
+References: <20220519125527.18544-1-rex-bc.chen@mediatek.com>
+ <20220519125527.18544-18-rex-bc.chen@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220519060924.13493-4-jia-wei.chang@mediatek.com>
+In-Reply-To: <20220519125527.18544-18-rex-bc.chen@mediatek.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
@@ -74,15 +71,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 19 May 2022 14:09:23 +0800, Tim Chang wrote:
-> From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+On Thu, 19 May 2022 20:55:25 +0800, Rex-BC Chen wrote:
+> To support reset of infra_ao, add the index of infra_ao reset of
+> thermal/svs for MT8186.
 > 
-> Add mt8195 svs compatible in dt-bindings.
-> 
-> Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
 > ---
->  Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml | 1 +
->  1 file changed, 1 insertion(+)
+>  include/dt-bindings/reset/mt8186-resets.h | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
 
 Acked-by: Rob Herring <robh@kernel.org>

@@ -2,149 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0192152E613
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 09:20:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ED0052E617
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 09:21:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346268AbiETHUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 03:20:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48960 "EHLO
+        id S1346313AbiETHUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 03:20:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231572AbiETHUH (ORCPT
+        with ESMTP id S1346276AbiETHUs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 03:20:07 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C19A13C4FC
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 00:20:06 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id l7-20020a17090aaa8700b001dd1a5b9965so7195730pjq.2
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 00:20:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hsjxg2lV0kHqZ2OGp1MCfh1/3ZpmNndhrm6POUvbWnI=;
-        b=AKX0ckYf8ZI5edSV7TwmJosTcQGnse4e+Vfl3LK2R7eqMpRtDtl8Na08m5VXAih5aK
-         dseNsN0Djff0CXnEculuh4Eot/g2q6qhnfP31n5M4x3ArLW8/LXF3jeBV35v8NvNigks
-         F5mHYmZwECadQRhawkRNff09rvzeXeyaEQmusx2Jz/ptC9J7Q8Vb/sOzWHyhyBN58jZe
-         N7gK9xtyZwOxUMjjpbng0EQssqvWXGfQ0N7MKFAYyRxDieRtLGxk86LMtFc7izsXbRTw
-         npZn7rovM35L5l0Cncar9XdfVs1KDKBWUKdxkrkie181C43sm500hGDexJt8Y65SJNQk
-         t5GQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hsjxg2lV0kHqZ2OGp1MCfh1/3ZpmNndhrm6POUvbWnI=;
-        b=AjIf4xHfGCs1Crngg01i+5cka5TKRxUsEa4t8ndqlBImPGnqZNZDu2qe8geZ1q62jb
-         ERxeHx+GpMoIzf3bnJpRdDZPDKG/UdHtZy2gCwx7XFPnLFQ3biRBA2azrStq/2TYCqSF
-         W7gWu1C55fDoo4vxxckA+EmqYrsa9sDFHxckfqVguaglIUFdcOyyJkzuTARRz32tLH/P
-         z4Kgi2nHV+yyJ2ZuO68ZlrpJhX1SROvYyDQZ4si1VLy8Y6+SKYPO8qO2mlN/I8wyEIrD
-         J+g5dqDwVUtl3d2eYCLJdNkYAalZvZDwOO0LmotvDXz9E8sEZH9t5IbRe40VXKq3ajRl
-         WdQg==
-X-Gm-Message-State: AOAM531whs4ffqUFnM2AdOk2JrbW97/MGxS1tEKK9A6So4yczTFXiTQL
-        4U9RwiWTert2LLZlvaqplAO3HLMdUKwin0/Y72ar/w==
-X-Google-Smtp-Source: ABdhPJy0P1kA+Qi9bbiBnljc+PhkQb8M4k3s68fhoc6cGxqUck1kCUXPWO9AJTe2PlCORCf0F51fQhfrkGhq7qT/CU4=
-X-Received: by 2002:a17:902:d043:b0:161:e9f7:2afe with SMTP id
- l3-20020a170902d04300b00161e9f72afemr4025914pll.29.1653031205457; Fri, 20 May
- 2022 00:20:05 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220413143434.527-1-aajith@arista.com> <350f6a02-2975-ac1b-1c9d-ab738722a9fe@kernel.org>
-In-Reply-To: <350f6a02-2975-ac1b-1c9d-ab738722a9fe@kernel.org>
-From:   Arun Ajith S <aajith@arista.com>
-Date:   Fri, 20 May 2022 12:49:53 +0530
-Message-ID: <CAOvjArTAce_68CkoUff_=Hi+mr731dsWcQdEbaev4xaMDFZNug@mail.gmail.com>
-Subject: Re: [PATCH net-next v3] net/ipv6: Introduce accept_unsolicited_na
- knob to implement router-side changes for RFC9131
-To:     David Ahern <dsahern@kernel.org>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        yoshfuji@linux-ipv6.org, kuba@kernel.org, pabeni@redhat.com,
-        corbet@lwn.net, prestwoj@gmail.com, gilligan@arista.com,
-        noureddine@arista.com, gk@arista.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 20 May 2022 03:20:48 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 89F07140C5;
+        Fri, 20 May 2022 00:20:45 -0700 (PDT)
+Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 0B96320F9C0D;
+        Fri, 20 May 2022 00:20:45 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0B96320F9C0D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1653031245;
+        bh=l3C4NInvgKvz4oi7EOLCuKiDCvtT7GIwKr04BZ3Yohk=;
+        h=From:To:Subject:Date:From;
+        b=WOzpWrc1VnMzae6Ns5L09zG0PwZGswch3brRhEKx3VaK3VEAJJYxiLLdzrFpkLY03
+         oigcapwqqaPR67ezwnSJ3jtrV1pZntK7/1PT+LaFHbFcAD8fM47nMhhxlq+d77BxC/
+         Oo9b+nTyDzatXyR959qwn0noqBErS3AREqQRoT6Y=
+From:   Saurabh Sengar <ssengar@linux.microsoft.com>
+To:     ssengar@microsoft.com, drawat.floss@gmail.com, airlied@linux.ie,
+        daniel@ffwll.ch, linux-hyperv@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        decui@microsoft.com, haiyangz@microsoft.com
+Subject: [PATCH] drm/hyperv : Removing the restruction of VRAM allocation with PCI bar size
+Date:   Fri, 20 May 2022 00:20:40 -0700
+Message-Id: <1653031240-13623-1-git-send-email-ssengar@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 3:37 AM David Ahern <dsahern@kernel.org> wrote:
->
-> On 4/13/22 8:34 AM, Arun Ajith S wrote:
-> > diff --git a/tools/testing/selftests/net/ndisc_unsolicited_na_test.py b/tools/testing/selftests/net/ndisc_unsolicited_na_test.py
-> > new file mode 100755
-> > index 000000000000..f508657ee126
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/net/ndisc_unsolicited_na_test.py
-> > @@ -0,0 +1,255 @@
-> > +#!/bin/bash
->
-> that file name suffix should be .sh since it is a bash script; not .py
->
-> other than that looks good to me.
->
-> Reviewed-by: David Ahern <dsahern@kernel.org>
+There were two different approaches getting used in this driver to
+allocate vram:
+	1. VRAM allocation from PCI region for Gen1
+	2. VRAM alloaction from MMIO region for Gen2
+First approach limilts the vram to PCI BAR size, which is 64 MB in most
+legacy systems. This limits the maximum resolution to be restricted to
+64 MB size, and with recent conclusion on fbdev issue its concluded to have
+similar allocation strategy for both Gen1 and Gen2. This patch unifies
+the Gen1 and Gen2 vram allocation strategy.
 
-Hi David,
+Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+---
+FBdev patch Ref :
+https://lore.kernel.org/lkml/20220428143746.sya775ro5zi3kgm3@liuwe-devbox-debian-v2/T/
 
-It has been pointed out to me that I might have read RFC9131 in a
-narrower sense than what was intended.
-The behavior of adding a new entry in the neighbour cache on receiving
-a NA if none exists presently
-shouldn't be limited to unsolicited NAs like in my original patch,
-rather it should extend to all NAs.
+ drivers/gpu/drm/hyperv/hyperv_drm_drv.c | 76 ++-----------------------
+ 1 file changed, 4 insertions(+), 72 deletions(-)
 
-I am quoting from the RFC below
+diff --git a/drivers/gpu/drm/hyperv/hyperv_drm_drv.c b/drivers/gpu/drm/hyperv/hyperv_drm_drv.c
+index 4a8941fa0815..a32afd84f361 100644
+--- a/drivers/gpu/drm/hyperv/hyperv_drm_drv.c
++++ b/drivers/gpu/drm/hyperv/hyperv_drm_drv.c
+@@ -69,57 +69,8 @@ static struct pci_driver hyperv_pci_driver = {
+ 	.remove =	hyperv_pci_remove,
+ };
+ 
+-static int hyperv_setup_gen1(struct hyperv_drm_device *hv)
+-{
+-	struct drm_device *dev = &hv->dev;
+-	struct pci_dev *pdev;
+-	int ret;
+-
+-	pdev = pci_get_device(PCI_VENDOR_ID_MICROSOFT,
+-			      PCI_DEVICE_ID_HYPERV_VIDEO, NULL);
+-	if (!pdev) {
+-		drm_err(dev, "Unable to find PCI Hyper-V video\n");
+-		return -ENODEV;
+-	}
+-
+-	ret = drm_aperture_remove_conflicting_pci_framebuffers(pdev, &hyperv_driver);
+-	if (ret) {
+-		drm_err(dev, "Not able to remove boot fb\n");
+-		return ret;
+-	}
+-
+-	if (pci_request_region(pdev, 0, DRIVER_NAME) != 0)
+-		drm_warn(dev, "Cannot request framebuffer, boot fb still active?\n");
+-
+-	if ((pdev->resource[0].flags & IORESOURCE_MEM) == 0) {
+-		drm_err(dev, "Resource at bar 0 is not IORESOURCE_MEM\n");
+-		ret = -ENODEV;
+-		goto error;
+-	}
+-
+-	hv->fb_base = pci_resource_start(pdev, 0);
+-	hv->fb_size = pci_resource_len(pdev, 0);
+-	if (!hv->fb_base) {
+-		drm_err(dev, "Resource not available\n");
+-		ret = -ENODEV;
+-		goto error;
+-	}
+-
+-	hv->fb_size = min(hv->fb_size,
+-			  (unsigned long)(hv->mmio_megabytes * 1024 * 1024));
+-	hv->vram = devm_ioremap(&pdev->dev, hv->fb_base, hv->fb_size);
+-	if (!hv->vram) {
+-		drm_err(dev, "Failed to map vram\n");
+-		ret = -ENOMEM;
+-	}
+-
+-error:
+-	pci_dev_put(pdev);
+-	return ret;
+-}
+-
+-static int hyperv_setup_gen2(struct hyperv_drm_device *hv,
+-			     struct hv_device *hdev)
++static int hyperv_setup_gen(struct hyperv_drm_device *hv,
++			    struct hv_device *hdev)
+ {
+ 	struct drm_device *dev = &hv->dev;
+ 	int ret;
+@@ -181,10 +132,7 @@ static int hyperv_vmbus_probe(struct hv_device *hdev,
+ 		goto err_hv_set_drv_data;
+ 	}
+ 
+-	if (efi_enabled(EFI_BOOT))
+-		ret = hyperv_setup_gen2(hv, hdev);
+-	else
+-		ret = hyperv_setup_gen1(hv);
++	ret = hyperv_setup_gen(hv, hdev);
+ 
+ 	if (ret)
+ 		goto err_vmbus_close;
+@@ -225,29 +173,13 @@ static int hyperv_vmbus_remove(struct hv_device *hdev)
+ {
+ 	struct drm_device *dev = hv_get_drvdata(hdev);
+ 	struct hyperv_drm_device *hv = to_hv(dev);
+-	struct pci_dev *pdev;
+ 
+ 	drm_dev_unplug(dev);
+ 	drm_atomic_helper_shutdown(dev);
+ 	vmbus_close(hdev->channel);
+ 	hv_set_drvdata(hdev, NULL);
+ 
+-	/*
+-	 * Free allocated MMIO memory only on Gen2 VMs.
+-	 * On Gen1 VMs, release the PCI device
+-	 */
+-	if (efi_enabled(EFI_BOOT)) {
+-		vmbus_free_mmio(hv->mem->start, hv->fb_size);
+-	} else {
+-		pdev = pci_get_device(PCI_VENDOR_ID_MICROSOFT,
+-				      PCI_DEVICE_ID_HYPERV_VIDEO, NULL);
+-		if (!pdev) {
+-			drm_err(dev, "Unable to find PCI Hyper-V video\n");
+-			return -ENODEV;
+-		}
+-		pci_release_region(pdev, 0);
+-		pci_dev_put(pdev);
+-	}
++	vmbus_free_mmio(hv->mem->start, hv->fb_size);
+ 
+ 	return 0;
+ }
+-- 
+2.25.1
 
-   |  When a valid Neighbor Advertisement is received (either solicited
-   |  or unsolicited), the Neighbor Cache is searched for the target's
-   |  entry.  If no entry exists:
-   |
-   |  *  Hosts SHOULD silently discard the advertisement.  There is no
-   |     need to create an entry if none exists, since the recipient has
-   |     apparently not initiated any communication with the target.
-   |
-   |  *  Routers SHOULD create a new entry for the target address with
-   |     the link-layer address set to the Target Link-Layer Address
-   |     Option (if supplied).  The entry's reachability state MUST be
-   |     set to STALE.  If the received Neighbor Advertisement does not
-   |     contain the Target Link-Layer Address Option, the advertisement
-   |     SHOULD be silently discarded.
-
-I want to fix this, but this would mean the sysctl name
-accept_unsolicited_na is no longer appropriate
-I see that the net-next window for 5.19 is still open and changing the
-sysctl name
-wouldn't mean changing an existing interface.
-I was thinking of renaming the sysctl to accept_untracked_na to
-highlight that we are accepting NAs even if there is
-no corresponding entry tracked in the neighbor cache.
-
-Also, there's an error in my comment, where I say "pass up the stack"
-as we don't pass NAs up the stack.
-The comment can be updated as:
-        /* RFC 9131 updates original Neighbour Discovery RFC 4861.
-         * NAs with Target LL Address option without a corresponding
-         * entry in the neighbour cache can now create a STALE neighbour
-         * cache entry on routers.
-         *
-         *   entry accept  fwding  solicited        behaviour
-         * ------- ------  ------  ---------    ----------------------
-         * present      X       X         0     Set state to STALE
-         * present      X       X         1     Set state to REACHABLE
-         *  absent      0       X         X     Do nothing
-         *  absent      1       0         X     Do nothing
-         *  absent      1       1         X     Add a new STALE entry
-         */
-
-In summary
-1. accept=0 keeps original(5.18) behavior for all cases.
-2. accept=1 changes original behavior for entry=asbent, fwding=1 case
-provided the NA had specified target link-layer address.
-
-Please let me know what you think.
-
-Thanks,
-Arun

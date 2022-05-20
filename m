@@ -2,100 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8E7952EDF1
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 16:17:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81A0552EDF4
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 16:17:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350207AbiETORX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 10:17:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47302 "EHLO
+        id S1350204AbiETORr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 10:17:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350221AbiETORS (ORCPT
+        with ESMTP id S240895AbiETORm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 10:17:18 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70EF955238;
-        Fri, 20 May 2022 07:17:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653056232; x=1684592232;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0dhkczegwRH13BvW0cvFYHyS34naarmgkKC/BWnrwr8=;
-  b=NAO5ULFVTbqNCnEIVPyWhRpN+f8Tl+bmp2QgAf02jS78eT1gdqyATt1/
-   jhLl7XlHVPsGa3jsVtGk9ohBxouh+JlRarPnjvUDVZh7yrSPStSCIuwAO
-   WrIFAHE9tuR1BSfTmSE+fB8NEumPCPtljcojB7UDqPoYRPa20VQ5SRIEI
-   8MY4tFR4ieD/e+xCmmLnFZJbqqaZP45kJpwh35ScCryZcm/RhvVct1XUi
-   anKunlil9y6liEBegH8lu0GKIQDRIkL+67lN9B8QL4JBQrmBsOr8YHt1m
-   xvm2n5OuvY5w2mkv+BIlCRuB2su8A5zJyeXzw/xBj6e+5fSGlVVbQfV4t
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10353"; a="271435377"
-X-IronPort-AV: E=Sophos;i="5.91,239,1647327600"; 
-   d="scan'208";a="271435377"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 07:17:11 -0700
-X-IronPort-AV: E=Sophos;i="5.91,239,1647327600"; 
-   d="scan'208";a="607032045"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 07:17:09 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ns3RC-000GqM-7s;
-        Fri, 20 May 2022 17:17:06 +0300
-Date:   Fri, 20 May 2022 17:17:05 +0300
-From:   "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>
-To:     Kent Overstreet <kent.overstreet@gmail.com>
-Cc:     David Laight <David.Laight@aculab.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@vger.kernel.org" <linux-mm@vger.kernel.org>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
-        "willy@infradead.org" <willy@infradead.org>
-Subject: Re: [PATCH v2 03/28] vsprintf: %pf(%p)
-Message-ID: <Yoei4RdwQ0u5HyPB@smile.fi.intel.com>
-References: <20220519172421.162394-1-kent.overstreet@gmail.com>
- <20220519172421.162394-4-kent.overstreet@gmail.com>
- <141b17a257274fc38291cdb07e0e23b6@AcuMS.aculab.com>
- <20220520044924.dr2rnnbhvilxznek@moria.home.lan>
+        Fri, 20 May 2022 10:17:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5578041F8F;
+        Fri, 20 May 2022 07:17:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0BD1DB82B3D;
+        Fri, 20 May 2022 14:17:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91D5BC385A9;
+        Fri, 20 May 2022 14:17:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653056258;
+        bh=F14/F9P0/AL5bgXbf41f1cTe10uS+wJN6iGkeUqAY8s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=B6O8GTconuBxSD/Yc148TzSu3wNinzh6t3pv7gnRB2WUXCaq99EvetYrnh/BqD7wA
+         4cTkTW8I7yZBzeek49avXhXMx5N3o2t1w1c/X8jBtPZhkh5nmOUrvyoS9jNwZVArAs
+         VW/DwTtQnrb8z3La6aAzlpQ6rcpRn9d++oivtNAABYID3Uh4GR2GWRO6nhuA/Y4mSh
+         GIDWV11TVsvpg59rq9Twdfe1We+PX2ue3pPbp2Klxc5YxBjWv7tHQfkH1m6z5J4ZvY
+         sxc3bKvGiHtbogkgk4i45goA3tu1HT2xgzE51BYq76L0V8rVKYdXKXa3rdr4CloO1E
+         Ox5Jwl6Ye2WxQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 25E6C400B1; Fri, 20 May 2022 11:17:36 -0300 (-03)
+Date:   Fri, 20 May 2022 11:17:36 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Marco Elver <elver@google.com>,
+        Sohaib Mohamed <sohaib.amhmd@gmail.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH] perf test: Avoid shell test description infinite loop
+Message-ID: <YoejAP5Yfnh7ViIZ@kernel.org>
+References: <20220517204144.645913-1-irogers@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220520044924.dr2rnnbhvilxznek@moria.home.lan>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220517204144.645913-1-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 12:49:24AM -0400, Kent Overstreet wrote:
-> On Thu, May 19, 2022 at 09:06:24PM +0000, David Laight wrote:
-
-...
-
-> > > The goal is to replace most of our %p format extensions with this
-> > > interface, and to move pretty-printers out of the core vsprintf.c code -
-> > 
-> > One advantage of the current scheme is that is reasonably safe
-> > and easy to use.
-> > Perhaps too many extra formats have been added recently.
-> > This all seems like a recipe for disaster with functions being
-> > called with the wrong number of parameters
-> > (I can't think how you can compile-time check it).
+Em Tue, May 17, 2022 at 01:41:44PM -0700, Ian Rogers escreveu:
+> for_each_shell_test is already strict in expecting tests to be files and
+> executable. It is sometimes possible when it iterates over all files
+> that it finds one that is executable and lacks a newline character. When
+> this happens the loop never terminates as it doesn't check for EOF. Add
+> the EOF check to make this loop at least bounded by the file size.
 > 
-> We can't check it at compile time yet, it's true - printf format checking will
-> need to be extended. But we're already talking about doing that.
+> If the description is returned as NULL then also skip the test.
 
-I have heard about GCC plugin, which also may check the %p extension usages.
+Thanks, applied.
 
+- Arnaldo
+
+ 
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/tests/builtin-test.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
+> index 3c34cb766724..aa40eae1c9cf 100644
+> --- a/tools/perf/tests/builtin-test.c
+> +++ b/tools/perf/tests/builtin-test.c
+> @@ -279,6 +279,7 @@ static const char *shell_test__description(char *description, size_t size,
+>  {
+>  	FILE *fp;
+>  	char filename[PATH_MAX];
+> +	int ch;
+>  
+>  	path__join(filename, sizeof(filename), path, name);
+>  	fp = fopen(filename, "r");
+> @@ -286,7 +287,9 @@ static const char *shell_test__description(char *description, size_t size,
+>  		return NULL;
+>  
+>  	/* Skip shebang */
+> -	while (fgetc(fp) != '\n');
+> +	do {
+> +		ch = fgetc(fp);
+> +	} while (ch != EOF && ch != '\n');
+>  
+>  	description = fgets(description, size, fp);
+>  	fclose(fp);
+> @@ -419,7 +422,8 @@ static int run_shell_tests(int argc, const char *argv[], int i, int width,
+>  			.priv = &st,
+>  		};
+>  
+> -		if (!perf_test__matches(test_suite.desc, curr, argc, argv))
+> +		if (test_suite.desc == NULL ||
+> +		    !perf_test__matches(test_suite.desc, curr, argc, argv))
+>  			continue;
+>  
+>  		st.file = ent->d_name;
+> -- 
+> 2.36.0.550.gb090851708-goog
 
 -- 
-With Best Regards,
-Andy Shevchenko
 
-
+- Arnaldo

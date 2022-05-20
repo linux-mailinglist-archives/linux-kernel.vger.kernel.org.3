@@ -2,204 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1841352E739
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 10:23:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4668C52E73C
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 10:24:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346953AbiETIXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 04:23:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56338 "EHLO
+        id S1346963AbiETIYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 04:24:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346932AbiETIXj (ORCPT
+        with ESMTP id S1346955AbiETIYp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 04:23:39 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CB3140423;
-        Fri, 20 May 2022 01:23:36 -0700 (PDT)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id C419E6000A;
-        Fri, 20 May 2022 08:23:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1653035014;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=u7ftNRkOl2hUKqnVw602ufHyZi8yLfc1Zwyuxj3PqQU=;
-        b=c5I6dSsQESldKWX+KVZzuJkA3YahNJqcYefiVUApmUcel4osp4QtbFBDjObK519OFyoB0b
-        os093WMhtAX9vCqQWn9bpcqSHketvksEQDVpyhjh9JSEGfJ25AzoCD77dkKqtWgEMQH1M4
-        wBwDPOxYf74MqjtEZm16M9mbRv7CE2Fm9scfGZc1RCSgkX4DL/imWLpspuxsUlVb0smNZe
-        +H3HswE4E9m6q7mi7pmOhhnQEAf3vMEwXJoqvjGFWG3uuWTcERGPzrrYQuUl3FuQFlJrpO
-        hiCnIwdpd6UMi2XAwQOV1IeQXuahbdqG0oLzN4xjgpL5jk9rkYbmdLaKGWVSUQ==
-Date:   Fri, 20 May 2022 10:23:29 +0200
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>, linux-pci@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Clement Leger <clement.leger@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: Re: [PATCH v5 2/6] dt-bindings: PCI: renesas,pci-rcar-gen2: Add
- device tree support for r9a06g032
-Message-ID: <20220520102329.6b0a58d0@bootlin.com>
-In-Reply-To: <29ba3db6-e5c7-06d3-29d9-918ee5b34555@linaro.org>
-References: <20220429134143.628428-1-herve.codina@bootlin.com>
-        <20220429134143.628428-4-herve.codina@bootlin.com>
-        <29ba3db6-e5c7-06d3-29d9-918ee5b34555@linaro.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-redhat-linux-gnu)
+        Fri, 20 May 2022 04:24:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 007ED14043C;
+        Fri, 20 May 2022 01:24:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A4F73B82A59;
+        Fri, 20 May 2022 08:24:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5E35C385A9;
+        Fri, 20 May 2022 08:24:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1653035081;
+        bh=XfKwpBP1R2jgDqmH5QbJiPNIqrfBf2dHD4BBgGABNIo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=D70ljEwuyeXy7X+oZ3tTPMl4azzukqqcW8zv9Rnok1uijxxVpZL9PBTub33s6isP6
+         KubHy6vSUMHWfkUVhjke263LhMkXDqfXA32f/QAuzVO4Tmq39jvVGCuyS/JQUtydDm
+         SHWARBdCUJ/6bwqIXv6XB4QxNUt/OhF1rJ6CiLbE=
+Date:   Fri, 20 May 2022 10:24:38 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Kushagra Verma <kushagra765@outlook.com>
+Cc:     balbi@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB / dwc3: remove the use of -ENOSYS from core.c
+Message-ID: <YodQRpxKA55g5Mt+@kroah.com>
+References: <HK0PR01MB280106E1D78EF51A5B8ED8BFF8CE9@HK0PR01MB2801.apcprd01.prod.exchangelabs.com>
+ <YoZpcqDCwoXIvI5q@kroah.com>
+ <HK0PR01MB2801E9A6A53F346BC3436845F8D39@HK0PR01MB2801.apcprd01.prod.exchangelabs.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <HK0PR01MB2801E9A6A53F346BC3436845F8D39@HK0PR01MB2801.apcprd01.prod.exchangelabs.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+On Fri, May 20, 2022 at 12:16:29PM +0530, Kushagra Verma wrote:
+> On Thu, 2022-05-19 at 17:59 +0200, Greg KH wrote:
+> > On Tue, May 17, 2022 at 08:22:00PM +0530, Kushagra Verma wrote:
+> > > This patch removes the use of -ENOSYS as it is used when users try
+> > > to call a
+> > > syscall that doesn't exist. So, we don't need to check if 'ret == -
+> > > ENOSYS'.
+> > 
+> > ENOSYS is also used internally in the kernel for other things.
+> > 
+> > > 
+> > > Signed-off-by: Kushagra Verma <kushagra765@outlook.com>
+> > > ---
+> > >  drivers/usb/dwc3/core.c | 4 ++--
+> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > > index c78205c5e19f..3c1a877d5183 100644
+> > > --- a/drivers/usb/dwc3/core.c
+> > > +++ b/drivers/usb/dwc3/core.c
+> > > @@ -1283,7 +1283,7 @@ static int dwc3_core_get_phy(struct dwc3
+> > > *dwc)
+> > >         dwc->usb2_generic_phy = devm_phy_get(dev, "usb2-phy");
+> > >         if (IS_ERR(dwc->usb2_generic_phy)) {
+> > >                 ret = PTR_ERR(dwc->usb2_generic_phy);
+> > > -               if (ret == -ENOSYS || ret == -ENODEV)
+> > > +               if (ret == -ENODEV)
+> > 
+> > Did you validate that no callers can ever set this to ENOSYS?
+> Yes, I think no callers should ever set ret to ENOSYS unless it comes under the other things ENOSYS is used for.
 
-On Sun, 1 May 2022 10:51:43 +0200
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+Please audit the code to verify this and document it in the changelog
+text when you resend this.
 
-[...]
-> >    resets:
-> >      maxItems: 1
-> > @@ -106,13 +106,45 @@ required:
-> >    - interrupt-map
-> >    - interrupt-map-mask
-> >    - clocks
-> > -  - resets
-> >    - power-domains
-> >    - bus-range
-> >    - "#address-cells"
-> >    - "#size-cells"
-> >    - "#interrupt-cells"
-> > =20
-> > +if: =20
->=20
-> allOf.
->=20
-> > +  properties:
-> > +    compatible:
-> > +      contains:
-> > +        enum:
+> > Why was this added in the first place?  What commit added it?
+> This was added by commit 57303488cd37d ("usb: dwc3: adapt dwc3 core to use Generic PHY Framework").
 
-I Have an issue with this allOf.
+Great, please also include that information.
 
-The yaml has the following structure and so has 2 AllOf:
-  ...
-  allOf:
-  - $ref: /schemas/pci/pci-bus.yaml#
- =20
-  properties:
-    compatible:
-  ...
-  allOf:
-  - if:
-      properties:
-        compatible:
-          contains:
-  ...
+thanks,
 
-
-make dt_binding_check failed with the following error:
-    $ make dt_binding_check DT_SCHEMA_FILES=3Drenesas,pci-rcar-gen2.yaml
-      LINT    Documentation/devicetree/bindings
-    ./Documentation/devicetree/bindings/pci/renesas,pci-rcar-gen2.yaml:115:=
-1: [error] duplication of key "allOf" in mapping (key-duplicates)
-      CHKDT   Documentation/devicetree/bindings/processed-schema.json
-    Traceback (most recent call last):
-      File "/home/hcodina/.local/bin/dt-doc-validate", line 25, in check_doc
-        testtree =3D dtschema.load(filename, line_number=3Dline_number)
-      File "/home/hcodina/.local/lib/python3.10/site-packages/dtschema/lib.=
-py", line 912, in load
-        return yaml.load(f.read())
-      File "/home/hcodina/.local/lib/python3.10/site-packages/ruamel/yaml/m=
-ain.py", line 434, in load
-        return constructor.get_single_data()
-      File "/home/hcodina/.local/lib/python3.10/site-packages/ruamel/yaml/c=
-onstructor.py", line 121, in get_single_data
-        return self.construct_document(node)
-      File "/home/hcodina/.local/lib/python3.10/site-packages/ruamel/yaml/c=
-onstructor.py", line 131, in construct_document
-        for _dummy in generator:
-      File "/home/hcodina/.local/lib/python3.10/site-packages/ruamel/yaml/c=
-onstructor.py", line 674, in construct_yaml_map
-        value =3D self.construct_mapping(node)
-      File "/home/hcodina/.local/lib/python3.10/site-packages/ruamel/yaml/c=
-onstructor.py", line 445, in construct_mapping
-        return BaseConstructor.construct_mapping(self, node, deep=3Ddeep)
-      File "/home/hcodina/.local/lib/python3.10/site-packages/ruamel/yaml/c=
-onstructor.py", line 263, in construct_mapping
-        if self.check_mapping_key(node, key_node, mapping, key, value):
-      File "/home/hcodina/.local/lib/python3.10/site-packages/ruamel/yaml/c=
-onstructor.py", line 294, in check_mapping_key
-        raise DuplicateKeyError(*args)
-    ruamel.yaml.constructor.DuplicateKeyError: while constructing a mapping
-      in "<unicode string>", line 4, column 1
-    found duplicate key "allOf" with value "[]" (original value: "[]")
-      in "<unicode string>", line 115, column 1
-   =20
-    To suppress this check see:
-        http://yaml.readthedocs.io/en/latest/api.html#duplicate-keys
-   =20
-   =20
-    During handling of the above exception, another exception occurred:
-   =20
-    Traceback (most recent call last):
-      File "/home/hcodina/.local/bin/dt-doc-validate", line 74, in <module>
-        ret =3D check_doc(f)
-      File "/home/hcodina/.local/bin/dt-doc-validate", line 30, in check_doc
-        print(filename + ":", exc.path[-1], exc.message, file=3Dsys.stderr)
-    AttributeError: 'DuplicateKeyError' object has no attribute 'path'
-      SCHEMA  Documentation/devicetree/bindings/processed-schema.json
-    /home/hcodina/project/xxxx/dev/linux/upstream_usb_host/Documentation/de=
-vicetree/bindings/pci/renesas,pci-rcar-gen2.yaml: ignoring, error parsing f=
-ile
-      DTEX    Documentation/devicetree/bindings/pci/renesas,pci-rcar-gen2.e=
-xample.dts
-    Documentation/devicetree/bindings/pci/renesas,pci-rcar-gen2.yaml: found=
- duplicate key "allOf" with value "[]" (original value: "[]")
-    make[1]: *** [Documentation/devicetree/bindings/Makefile:26: Documentat=
-ion/devicetree/bindings/pci/renesas,pci-rcar-gen2.example.dts] Error 1
-    make[1]: *** Deleting file 'Documentation/devicetree/bindings/pci/renes=
-as,pci-rcar-gen2.example.dts'
-    make: *** [Makefile:1401: dt_binding_check] Error 2
-    [hcodina@localhost upstream_usb_host]$=20
-   =20
-    [hcodina@localhost upstream_usb_host]$ make ARCH=3Darm CROSS_COMPILE=3D=
-/home/hcodina/toolchain/gcc-linaro-7.5.0-2019.12-x86_64_arm-linux-gnueabihf=
-/bin/arm-linux-gnueabihf- dt_binding_check DT_SCHEMA_FILES=3Drenesas,pci-rc=
-ar-gen2.yaml
-      DTEX    Documentation/devicetree/bindings/pci/renesas,pci-rcar-gen2.e=
-xample.dts
-    Documentation/devicetree/bindings/pci/renesas,pci-rcar-gen2.yaml: found=
- duplicate key "allOf" with value "[]" (original value: "[]")
-    make[1]: *** [Documentation/devicetree/bindings/Makefile:26: Documentat=
-ion/devicetree/bindings/pci/renesas,pci-rcar-gen2.example.dts] Error 1
-    make[1]: *** Deleting file 'Documentation/devicetree/bindings/pci/renes=
-as,pci-rcar-gen2.example.dts'
-    make: *** [Makefile:1401: dt_binding_check] Error 2
-
-
-Is having a 'allOf' for schemas inclusion and a 'allOf' for conditionnal
-parts allowed ?
-
-
-Regards,
-Herv=C3=A9
-
+greg k-h

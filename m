@@ -2,50 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17F7A52EF2B
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 17:27:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E514052EF2D
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 17:28:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350847AbiETP1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 11:27:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38992 "EHLO
+        id S237338AbiETP2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 11:28:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345085AbiETP1N (ORCPT
+        with ESMTP id S237308AbiETP2P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 11:27:13 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A95EE3C706
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 08:27:11 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5549B1477;
-        Fri, 20 May 2022 08:27:11 -0700 (PDT)
-Received: from bogus (unknown [10.57.66.157])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1E43C3F73D;
-        Fri, 20 May 2022 08:27:09 -0700 (PDT)
-Date:   Fri, 20 May 2022 16:27:02 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     Atish Patra <atishp@atishpatra.org>, linux-kernel@vger.kernel.org,
-        Atish Patra <atishp@rivosinc.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Qing Wang <wangqing@vivo.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v2 3/8] arch_topology: Set cluster identifier in each
- core/thread from /cpu-map
-Message-ID: <20220520152702.ge3uxmizwljsg6mr@bogus>
-References: <20220518093325.2070336-1-sudeep.holla@arm.com>
- <20220518093325.2070336-4-sudeep.holla@arm.com>
- <YoZ2gjjS3rbRaJZm@arm.com>
+        Fri, 20 May 2022 11:28:15 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4641611F3
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 08:28:13 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id n124-20020a1c2782000000b003972dfca96cso2746731wmn.4
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 08:28:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=5E8x4FVCG4g/RN7rMnV9PFAV1qWnSvWM5QdqIp4Vq7k=;
+        b=yB3flR0GH7yb9Y8wc7BfiuVtckbP/9wqbQCRMWsL8b3J6VoBI7GMOeWRlIp6xBiyLr
+         AHCFYizo+NTn9wwC2dqspUHYEU/bpHY7suR7Qtzf9G+MchHu3N4KDBNWM9Cog+VJvfbm
+         b3wSQpzabSemL9H7CUNuzGZV/iVoAfzFCXTe406MTfQw5fRjDC4Tzi8rx9JntAUEs1La
+         Se5jZTnx+dj6dvOBwBwzGygr40w2sRJStTuT/0nluR6xIUQhYUHFfOOKDBrFjbcLsgQ8
+         kCApURu3FkaRquEfLF/848NTlsQSkOzyM2CcPmhVxJAoMEvHjUY1UGimjgSdZq3x0AM3
+         myWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=5E8x4FVCG4g/RN7rMnV9PFAV1qWnSvWM5QdqIp4Vq7k=;
+        b=06F4IDmPk37K6uzFpi4frHkFraP7O6aCu8e4PtAjt7VZmof9vA8s3Le7+ATVBY7bY+
+         hO2cKJHKaJF9MY9N2GctFI1LSocY+dWtJCp4cup6jD7Lr1d2HmqEpXNPVa/TtR6kiJ+n
+         nqsl9NI1w1m8PizXh7CjRkP0RXFfGSJrmg+1d2enGK/39f4FtlAQgFlEsWUGIQfxfmIc
+         8Y6Hg+k6RZBanOQJKbnwH21ORvhk5B2FXhGY0HV2Zq16svdBohS1/eBovXh1XDSSr8O9
+         KZfhP82F0C17ie7N0kdoP7NC21+jtYWTfSMaTUk8Ly+vlmdBni4HrnFDv1exvI2Buht8
+         BOsQ==
+X-Gm-Message-State: AOAM531d5pmdRJZkJoVb9dBM8L1BnLAckY8j4aV9Mri1F+Px6UGvDUHF
+        3blIU/Z0s+MRb1iJtUZUanC/sw==
+X-Google-Smtp-Source: ABdhPJy+Obtd+PPQDqBECWvKM3CYT5IeaUl1xlBHl9ryqy9MFWl/X3Q6zlQcBCBFMyt6vTMS0QrlUQ==
+X-Received: by 2002:a7b:c414:0:b0:394:21dd:e24f with SMTP id k20-20020a7bc414000000b0039421dde24fmr8777432wmi.133.1653060492002;
+        Fri, 20 May 2022 08:28:12 -0700 (PDT)
+Received: from ?IPV6:2a01:e34:ed2f:f020:b8:a290:ff05:e4c4? ([2a01:e34:ed2f:f020:b8:a290:ff05:e4c4])
+        by smtp.googlemail.com with ESMTPSA id u17-20020a05600c211100b003942a244f4fsm2169682wml.40.2022.05.20.08.28.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 May 2022 08:28:10 -0700 (PDT)
+Message-ID: <156a53a2-c33b-7ec5-3584-41ef25cb9cdd@linaro.org>
+Date:   Fri, 20 May 2022 17:28:07 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 2/3] clocksource/drivers/timer-ti-dm: Make timer
+ selectable for ARCH_K3
+Content-Language: en-US
+To:     Tony Lindgren <tony@atomide.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, Keerthy <j-keerthy@ti.com>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+References: <20220408101715.43697-1-tony@atomide.com>
+ <20220408101715.43697-3-tony@atomide.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220408101715.43697-3-tony@atomide.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <YoZ2gjjS3rbRaJZm@arm.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,90 +79,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 05:55:30PM +0100, Ionela Voinescu wrote:
-> Hi,
+On 08/04/2022 12:17, Tony Lindgren wrote:
+> Let's make timer-ti-dm selectable for ARCH_K3, and add a separate option
+> for OMAP_DM_SYSTIMER as there should be no need for it on ARCH_K3.
 > 
-> As said before, this creates trouble for CONFIG_SCHED_CLUSTER=y.
-> The output below is obtained from Juno.
+> For older TI SoCs, we are already selecting OMAP_DM_TIMER in
+> arch/arm/mach-omap*/Kconfig. For mach-omap2, we need to now also select
+> OMAP_DM_SYSTIMER.
 > 
-> When cluster_id is populated, a new CLS level is created by the scheduler
-> topology code. In this case the clusters in DT determine that the cluster
-> siblings and llc siblings are the same so the MC scheduler domain will
-> be removed and, for Juno, only CLS and DIE will be kept.
->
-
-Yes I have seen that. 
-
-1. Will that differ with ACPI on juno ?
-
-2. Is that a problem ? I mean we are fixing those masks that are user
-visible with this series and if using them as is in sched domain is
-incorrect or not sufficient, we need to fix that. We can't change these
-masks.
-
-> root@debian-arm64-buster:/sys/kernel/debug/sched/domains/cpu1# grep . */*
-> domain0/busy_factor:16
-> domain0/cache_nice_tries:1
-> domain0/flags:SD_BALANCE_NEWIDLE SD_BALANCE_EXEC SD_BALANCE_FORK SD_WAKE_AFFINE SD_SHARE_PKG_RESOURCES SD_PREFER_SIBLING
-> domain0/imbalance_pct:117
-> domain0/max_interval:4
-> domain0/max_newidle_lb_cost:14907
-> domain0/min_interval:2
-> domain0/name:CLS
-> domain1/busy_factor:16
-> domain1/cache_nice_tries:1
-> domain1/flags:SD_BALANCE_NEWIDLE SD_BALANCE_EXEC SD_BALANCE_FORK SD_WAKE_AFFINE SD_ASYM_CPUCAPACITY SD_ASYM_CPUCAPACITY_FULL SD_PREFER_SIBLING
-> domain1/imbalance_pct:117
-> domain1/max_interval:12
-> domain1/max_newidle_lb_cost:11858
-> domain1/min_interval:6
-> domain1/name:DIE
+> Cc: Keerthy <j-keerthy@ti.com>
+> Cc: Nishanth Menon <nm@ti.com>
+> Cc: Vignesh Raghavendra <vigneshr@ti.com>
+> Signed-off-by: Tony Lindgren <tony@atomide.com>
+> ---
+>   arch/arm/mach-omap2/Kconfig  | 2 ++
+>   drivers/clocksource/Kconfig  | 8 +++++++-
+>   drivers/clocksource/Makefile | 2 +-
+>   3 files changed, 10 insertions(+), 2 deletions(-)
 > 
-> To be noted that we also get a new flag SD_PREFER_SIBLING for the CLS
-> level that is not appropriate. We usually remove it for the child of a
-> SD_ASYM_CPUCAPACITY domain, but we don't currently redo this after some
-> levels are degenerated. This is a fixable issue.
->
+> diff --git a/arch/arm/mach-omap2/Kconfig b/arch/arm/mach-omap2/Kconfig
+> --- a/arch/arm/mach-omap2/Kconfig
+> +++ b/arch/arm/mach-omap2/Kconfig
+> @@ -105,6 +105,7 @@ config ARCH_OMAP2PLUS
+>   	select MACH_OMAP_GENERIC
+>   	select MEMORY
+>   	select MFD_SYSCON
+> +	select OMAP_DM_SYSTIMER
+>   	select OMAP_DM_TIMER
+>   	select OMAP_GPMC
+>   	select PINCTRL
+> @@ -160,6 +161,7 @@ config SOC_OMAP2420
+>   	bool "OMAP2420 support"
+>   	depends on ARCH_OMAP2
+>   	default y
+> +	select OMAP_DM_SYSTIMER
+>   	select OMAP_DM_TIMER
+>   	select SOC_HAS_OMAP2_SDRC
+>   
+> diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
+> --- a/drivers/clocksource/Kconfig
+> +++ b/drivers/clocksource/Kconfig
+> @@ -22,7 +22,7 @@ config CLKEVT_I8253
+>   config I8253_LOCK
+>   	bool
+>   
+> -config OMAP_DM_TIMER
+> +config OMAP_DM_SYSTIMER
+>   	bool
+>   	select TIMER_OF
+>   
+> @@ -56,6 +56,12 @@ config DIGICOLOR_TIMER
+>   	help
+>   	  Enables the support for the digicolor timer driver.
+>   
+> +config OMAP_DM_TIMER
+> +	tristate "OMAP dual-mode timer driver" if ARCH_K3 || COMPILE_TEST
 
-OK good.
+Actually, I missed this. Could you convert to a 'bool' there is no 
+module in the timer drivers ATM.
 
-> But looking at the bigger picture, a good question is what is the best
-> thing to do when cluster domains and llc domains span the same CPUs?
->
 
-Indeed, I will leave that to scheduler experts 😉. My main goal is to get
-the topology masks that are user visible right and keeping current behavior
-intact.
 
-> Possibly it would be best to restrict clusters (which are almost an
-> arbitrary concept) to always span a subset of CPUs of the llc domain,
-> if llc siblings can be obtained? If those clusters are not properly set
-> up in DT to respect this condition, cluster_siblings would need to be
-> cleared (or set to the current CPU) so the CLS domain is not created at
-> all.
->
+> +	select TIMER_OF
+> +	help
+> +	  Enables the support for the TI dual-mode timer driver.
+> +
+>   config DW_APB_TIMER
+>   	bool "DW APB timer driver" if COMPILE_TEST
+>   	help
+> diff --git a/drivers/clocksource/Makefile b/drivers/clocksource/Makefile
+> --- a/drivers/clocksource/Makefile
+> +++ b/drivers/clocksource/Makefile
+> @@ -18,7 +18,7 @@ obj-$(CONFIG_CLKSRC_MMIO)	+= mmio.o
+>   obj-$(CONFIG_DAVINCI_TIMER)	+= timer-davinci.o
+>   obj-$(CONFIG_DIGICOLOR_TIMER)	+= timer-digicolor.o
+>   obj-$(CONFIG_OMAP_DM_TIMER)	+= timer-ti-dm.o
+> -obj-$(CONFIG_OMAP_DM_TIMER)	+= timer-ti-dm-systimer.o
+> +obj-$(CONFIG_OMAP_DM_SYSTIMER)	+= timer-ti-dm-systimer.o
+>   obj-$(CONFIG_DW_APB_TIMER)	+= dw_apb_timer.o
+>   obj-$(CONFIG_DW_APB_TIMER_OF)	+= dw_apb_timer_of.o
+>   obj-$(CONFIG_FTTMR010_TIMER)	+= timer-fttmr010.o
 
-Yes, we already have all these complex conditions in cpu_coregroup_mask.
-Why not do something similar in cpu_clustergroup_mask ?
-
-> Additionally, should we use cluster information from DT (cluster_id) to
-> create an MC level if we don't have llc information, even if
-> CONFIG_SCHED_CLUSTER=n?
->
-
-I don't know. We have all the topology and llc info now, we need to decide
-how to present them to scheduler.
-
-> I currently don't have a very clear picture of how cluster domains and
-> llc domains would "live" together in a variety of topologies. I'll try
-> other DT topologies to see if there are others that can lead to trouble.
->
-
-Me neither. I avoided these changes for years because of such complex
-questions but that is wrong reason to, as the user visible topology has
-now diverged from ACPI once(people who complained about user space breakage
-cared only about ACPI) and we need to bring them in parity soon IMO.
 
 -- 
-Regards,
-Sudeep
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

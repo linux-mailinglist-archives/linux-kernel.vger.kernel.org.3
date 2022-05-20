@@ -2,66 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F8D452ECFF
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 15:20:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2327A52ED01
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 15:21:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349770AbiETNUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 09:20:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55832 "EHLO
+        id S1349506AbiETNVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 09:21:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349745AbiETNUO (ORCPT
+        with ESMTP id S1349641AbiETNUl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 09:20:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 30CA3EAD05
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 06:20:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653052813;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
-        b=iQ3I3KvBv26DAGNy+Uo/j3Gphd1i86J7xyjcgEeee/rR7+Hdo0D47R6YIdF+niwvddWBAN
-        dQRUiToEsm9GMXG+5SWDrox37InhW7ncPYecAxHk5Nvp3BnlskTneSeR4C3KRk0PhTt8Ih
-        iIQXUxQdrDrdklhpc/2r1SC8BRMsRXw=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-452-k0LIMuDmNE-DilKRJp7t6w-1; Fri, 20 May 2022 09:20:07 -0400
-X-MC-Unique: k0LIMuDmNE-DilKRJp7t6w-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 45F843C02187;
-        Fri, 20 May 2022 13:20:06 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A96FB403156;
-        Fri, 20 May 2022 13:20:05 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wanpeng Li <wanpengli@tencent.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] KVM: x86: hyper-v: fix type of valid_bank_mask
-Date:   Fri, 20 May 2022 09:19:59 -0400
-Message-Id: <20220520131959.3319622-1-pbonzini@redhat.com>
-In-Reply-To: <20220519171504.1238724-1-yury.norov@gmail.com>
-References: 
+        Fri, 20 May 2022 09:20:41 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0A16516A260
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 06:20:35 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AA1C21477;
+        Fri, 20 May 2022 06:20:34 -0700 (PDT)
+Received: from bogus (unknown [10.57.66.157])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6B74F3F73D;
+        Fri, 20 May 2022 06:20:32 -0700 (PDT)
+Date:   Fri, 20 May 2022 14:20:25 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     Atish Patra <atishp@atishpatra.org>, linux-kernel@vger.kernel.org,
+        Atish Patra <atishp@rivosinc.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Qing Wang <wangqing@vivo.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v2 2/8] arch_topology: Set thread sibling cpumask only
+ within the cluster
+Message-ID: <20220520132025.sbbmnusnmls3ruow@bogus>
+References: <20220518093325.2070336-1-sudeep.holla@arm.com>
+ <20220518093325.2070336-3-sudeep.holla@arm.com>
+ <db6dc5e0-780a-5542-5e49-711cd454a9d8@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <db6dc5e0-780a-5542-5e49-711cd454a9d8@arm.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,8 +50,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Queued, thanks.
+On Fri, May 20, 2022 at 02:32:19PM +0200, Dietmar Eggemann wrote:
+> On 18/05/2022 11:33, Sudeep Holla wrote:
+> > Currently the cluster identifier is not set on the DT based platforms.
+> > The reset or default value is -1 for all the CPUs. Once we assign the
+> > cluster identifier values correctly that imay result in getting the thread
+> > siblings wrongs as the core identifiers can be same for 2 different CPUs
+> > belonging to 2 different cluster.
+> > 
+> > So, in order to get the thread sibling cpumasks correct, we need to
+> > update them only if the cores they belong are in the same cluster within
+> > the socket. Let us skip updation of the thread sibling cpumaks if the
+> > cluster identifier doesn't match.
+> 
+> So this issue should be there on ACPI systems as well then. Kunpeng920
+> and Ampere Altra don't have SMT, so very likely nobody has noticed this
+> so far.
 
-Paolo
+No, I think it is handled correctly. May be the wordings of my commit log
+needs changing. Previously the core ids were generated and unique across the
+platform. But with this change I am assigned the id as read from the DT
+node using core@<id>. That results in the problem and needs to be taken care.
+This doesn't change the end result(the actual mask) but the way we arrive at
+that. In short this is not fixing any issue that was broken before.
 
-
+-- 
+Regards,
+Sudeep

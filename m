@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5567B52ED30
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 15:33:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38E4F52ED34
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 15:33:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349838AbiETNdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 09:33:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50734 "EHLO
+        id S1349863AbiETNd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 09:33:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349769AbiETNdN (ORCPT
+        with ESMTP id S1349815AbiETNdP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 09:33:13 -0400
+        Fri, 20 May 2022 09:33:15 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D8C5163295;
-        Fri, 20 May 2022 06:33:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 456757A830;
+        Fri, 20 May 2022 06:33:13 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: kholk11)
-        with ESMTPSA id D0FE51F463B9
+        with ESMTPSA id 8C8C01F463BE
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1653053591;
-        bh=QDz+2vPFi19R9vlOd4Rq6jmq6Zwn41yhv87cVTbFMbo=;
+        s=mail; t=1653053592;
+        bh=41U1R8+//LdRc6rfYKj115tWwy0Pjx1OF9542UgTqB8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BnHs3otv0nq1ho89dy9ykICb7uxX+lMrcld1X05YQmayU0IgOBs7Hs7lX7XMY7mfl
-         4uxtAPpQdETiPOesuwCb8cNjt+8/sBLVFoKtwTuVq/8f93F/+Z5rJW8u+LDR//6rhs
-         9rQnYmsk8IpzUPgqRWp6O85LsKV65LV8hrCF3K99G5ucVNtytfg5dZXQoQGMdWFFWT
-         XUNqp7LluGVJqSgmb5vSoWmhjLeIaTiAD7cUUTQMTe8AA6cuRDTWgrLirWl+9vgKGS
-         nIcNkBiHa2v1hSbyQr+94cVZ4qG+SA3/feEG51Lc8TSrA10/Mefx+ZBWPPFQ0cQhX6
-         7N35Nz3bwiGlQ==
+        b=OnCli6oRO1o5ccXK4tlEUF43pXvCLdCTLdur2evoDGrOonMyE0j8h4L66HVpFHsar
+         yesCKipJwzz/hyzN85iRRA3+TjQ7in92uWvEqKIfjaBhLDFcPLmlF/TfxJtWdfvQNg
+         lz4zzNGYtTKeIxdWjmlUjiR2s5BHoDscgpB3YyD9LoKkEUzZVPBe5rYY4sZkte55cB
+         d+SdK5/G85ky10eXLS4poqps+EttXbbylWlY0cR8yWgMwGmT9/c3dlkFf1Jkd86cvy
+         /HtigZASoYZV1lTnnjFl+IbLV7ODuv0UHlBSr9RD3gY+VwXod4aYN3C8ToxBcG/5qx
+         TLwHQd+8QNwrQ==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     lgirdwood@gmail.com
@@ -37,9 +37,9 @@ Cc:     broonie@kernel.org, robh+dt@kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org
-Subject: [PATCH 1/4] dt-bindings: regulator: Add bindings for MT6331 regulator
-Date:   Fri, 20 May 2022 15:33:02 +0200
-Message-Id: <20220520133305.265310-2-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH 2/4] regulator: Add driver for MT6331 PMIC regulators
+Date:   Fri, 20 May 2022 15:33:03 +0200
+Message-Id: <20220520133305.265310-3-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220520133305.265310-1-angelogioacchino.delregno@collabora.com>
 References: <20220520133305.265310-1-angelogioacchino.delregno@collabora.com>
@@ -55,292 +55,616 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the bindings for the regulators found in the MT6331 PMIC.
+Add a driver for the regulators found in the MT6331 PMIC.
+This PMIC features six buck and 21 Low DropOut (LDO) regulators.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- .../bindings/regulator/mt6331-regulator.yaml  | 272 ++++++++++++++++++
- 1 file changed, 272 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/regulator/mt6331-regulator.yaml
+ drivers/regulator/Kconfig                  |   9 +
+ drivers/regulator/Makefile                 |   1 +
+ drivers/regulator/mt6331-regulator.c       | 507 +++++++++++++++++++++
+ include/linux/regulator/mt6331-regulator.h |  46 ++
+ 4 files changed, 563 insertions(+)
+ create mode 100644 drivers/regulator/mt6331-regulator.c
+ create mode 100644 include/linux/regulator/mt6331-regulator.h
 
-diff --git a/Documentation/devicetree/bindings/regulator/mt6331-regulator.yaml b/Documentation/devicetree/bindings/regulator/mt6331-regulator.yaml
+diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
+index cbe0f96ca342..dfb52b093c6f 100644
+--- a/drivers/regulator/Kconfig
++++ b/drivers/regulator/Kconfig
+@@ -777,6 +777,15 @@ config REGULATOR_MT6323
+ 	  This driver supports the control of different power rails of device
+ 	  through regulator interface.
+ 
++config REGULATOR_MT6331
++	tristate "MediaTek MT6331 PMIC"
++	depends on MFD_MT6397
++	help
++	  Say y here to select this option to enable the power regulator of
++	  MediaTek MT6331 PMIC.
++	  This driver supports the control of different power rails of device
++	  through regulator interface
++
+ config REGULATOR_MT6358
+ 	tristate "MediaTek MT6358 PMIC"
+ 	depends on MFD_MT6397
+diff --git a/drivers/regulator/Makefile b/drivers/regulator/Makefile
+index 8d3ee8b6d41d..3799e2673825 100644
+--- a/drivers/regulator/Makefile
++++ b/drivers/regulator/Makefile
+@@ -94,6 +94,7 @@ obj-$(CONFIG_REGULATOR_MPQ7920) += mpq7920.o
+ obj-$(CONFIG_REGULATOR_MT6311) += mt6311-regulator.o
+ obj-$(CONFIG_REGULATOR_MT6315) += mt6315-regulator.o
+ obj-$(CONFIG_REGULATOR_MT6323)	+= mt6323-regulator.o
++obj-$(CONFIG_REGULATOR_MT6331)	+= mt6331-regulator.o
+ obj-$(CONFIG_REGULATOR_MT6358)	+= mt6358-regulator.o
+ obj-$(CONFIG_REGULATOR_MT6359)	+= mt6359-regulator.o
+ obj-$(CONFIG_REGULATOR_MT6360) += mt6360-regulator.o
+diff --git a/drivers/regulator/mt6331-regulator.c b/drivers/regulator/mt6331-regulator.c
 new file mode 100644
-index 000000000000..333c74cdbcbe
+index 000000000000..e147b883bf96
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/regulator/mt6331-regulator.yaml
-@@ -0,0 +1,272 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/regulator/mt6331-regulator.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/drivers/regulator/mt6331-regulator.c
+@@ -0,0 +1,507 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2022 Collabora Ltd.
++ * Author: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
++ *
++ * Based on mt6323-regulator.c,
++ *     Copyright (c) 2016 MediaTek Inc.
++ */
 +
-+title: MT6331 Regulator from MediaTek Integrated
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/platform_device.h>
++#include <linux/regmap.h>
++#include <linux/mfd/mt6397/core.h>
++#include <linux/mfd/mt6331/registers.h>
++#include <linux/regulator/driver.h>
++#include <linux/regulator/machine.h>
++#include <linux/regulator/mt6331-regulator.h>
++#include <linux/regulator/of_regulator.h>
 +
-+maintainers:
-+  - AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
++#define MT6331_LDO_MODE_NORMAL	0
++#define MT6331_LDO_MODE_LP	1
 +
-+description: |
-+  List of regulators provided by this controller. It is named
-+  according to its regulator type, buck_<name> and ldo_<name>.
-+  MT6331 regulators node should be sub node of the MT6397 MFD node.
++/*
++ * MT6331 regulators information
++ *
++ * @desc: standard fields of regulator description.
++ * @qi: Mask for query enable signal status of regulators
++ * @vselon_reg: Register sections for hardware control mode of bucks
++ * @vselctrl_reg: Register for controlling the buck control mode.
++ * @vselctrl_mask: Mask for query buck's voltage control mode.
++ * @status_reg: Register for regulator enable status where qi unavailable
++ * @status_mask: Mask for querying regulator enable status
++ */
++struct mt6331_regulator_info {
++	struct regulator_desc desc;
++	u32 qi;
++	u32 vselon_reg;
++	u32 vselctrl_reg;
++	u32 vselctrl_mask;
++	u32 modeset_reg;
++	u32 modeset_mask;
++	u32 status_reg;
++	u32 status_mask;
++};
 +
-+patternProperties:
-+  "^buck_v(core2|io18|dvfs11|dvfs12|dvfs13|dvfs14)$":
-+    type: object
-+    $ref: "regulator.yaml#"
++#define MT6331_BUCK(match, vreg, min, max, step, volt_ranges, enreg,	\
++		vosel, vosel_mask, voselon, vosel_ctrl)			\
++[MT6331_ID_##vreg] = {							\
++	.desc = {							\
++		.name = #vreg,						\
++		.of_match = of_match_ptr(match),			\
++		.ops = &mt6331_volt_range_ops,				\
++		.type = REGULATOR_VOLTAGE,				\
++		.id = MT6331_ID_##vreg,					\
++		.owner = THIS_MODULE,					\
++		.n_voltages = (max - min)/step + 1,			\
++		.linear_ranges = volt_ranges,				\
++		.n_linear_ranges = ARRAY_SIZE(volt_ranges),		\
++		.vsel_reg = vosel,					\
++		.vsel_mask = vosel_mask,				\
++		.enable_reg = enreg,					\
++		.enable_mask = BIT(0),					\
++	},								\
++	.qi = BIT(13),							\
++	.vselon_reg = voselon,						\
++	.vselctrl_reg = vosel_ctrl,					\
++	.vselctrl_mask = BIT(1),					\
++	.status_mask = 0,						\
++}
 +
-+    properties:
-+      regulator-name:
-+        pattern: "^v(core2|io18|dvfs11|dvfs12|dvfs13|dvfs14)$"
++#define MT6331_LDO_AO(match, vreg, ldo_volt_table, vosel, vosel_mask)	\
++[MT6331_ID_##vreg] = {							\
++	.desc = {							\
++		.name = #vreg,						\
++		.of_match = of_match_ptr(match),			\
++		.ops = &mt6331_volt_table_ao_ops,			\
++		.type = REGULATOR_VOLTAGE,				\
++		.id = MT6331_ID_##vreg,					\
++		.owner = THIS_MODULE,					\
++		.n_voltages = ARRAY_SIZE(ldo_volt_table),		\
++		.volt_table = ldo_volt_table,				\
++		.vsel_reg = vosel,					\
++		.vsel_mask = vosel_mask,				\
++	},								\
++}
 +
-+    unevaluatedProperties: false
++#define MT6331_LDO_S(match, vreg, ldo_volt_table, enreg, enbit, vosel,	\
++		vosel_mask, _modeset_reg, _modeset_mask, _status_reg,	\
++		_status_mask)						\
++[MT6331_ID_##vreg] = {							\
++	.desc = {							\
++		.name = #vreg,						\
++		.of_match = of_match_ptr(match),			\
++		.ops = &mt6331_volt_table_ops,				\
++		.type = REGULATOR_VOLTAGE,				\
++		.id = MT6331_ID_##vreg,					\
++		.owner = THIS_MODULE,					\
++		.n_voltages = ARRAY_SIZE(ldo_volt_table),		\
++		.volt_table = ldo_volt_table,				\
++		.vsel_reg = vosel,					\
++		.vsel_mask = vosel_mask,				\
++		.enable_reg = enreg,					\
++		.enable_mask = BIT(enbit),				\
++	},								\
++	.qi = 0,							\
++	.modeset_reg = _modeset_reg,					\
++	.modeset_mask = _modeset_mask,					\
++	.status_reg = _status_reg,					\
++	.status_mask = _status_mask,					\
++}
 +
-+  "^ldo_v(avdd32aud|auxa32)$":
-+    type: object
-+    $ref: "regulator.yaml#"
++#define MT6331_LDO(match, vreg, ldo_volt_table, enreg, enbit, vosel,	\
++		vosel_mask, _modeset_reg, _modeset_mask)		\
++[MT6331_ID_##vreg] = {							\
++	.desc = {							\
++		.name = #vreg,						\
++		.of_match = of_match_ptr(match),			\
++		.ops = &mt6331_volt_table_ops,				\
++		.type = REGULATOR_VOLTAGE,				\
++		.id = MT6331_ID_##vreg,					\
++		.owner = THIS_MODULE,					\
++		.n_voltages = ARRAY_SIZE(ldo_volt_table),		\
++		.volt_table = ldo_volt_table,				\
++		.vsel_reg = vosel,					\
++		.vsel_mask = vosel_mask,				\
++		.enable_reg = enreg,					\
++		.enable_mask = BIT(enbit),				\
++	},								\
++	.qi = BIT(15),							\
++	.modeset_reg = _modeset_reg,					\
++	.modeset_mask = _modeset_mask,					\
++	.status_mask = 0,						\
++}
 +
-+    properties:
-+      regulator-name:
-+        pattern: "^v(avdd32aud|auxa32)$"
++#define MT6331_REG_FIXED(match, vreg, enreg, enbit, qibit, volt,	\
++		_modeset_reg, _modeset_mask)				\
++[MT6331_ID_##vreg] = {							\
++	.desc = {							\
++		.name = #vreg,						\
++		.of_match = of_match_ptr(match),			\
++		.ops = &mt6331_volt_fixed_ops,				\
++		.type = REGULATOR_VOLTAGE,				\
++		.id = MT6331_ID_##vreg,					\
++		.owner = THIS_MODULE,					\
++		.n_voltages = 1,					\
++		.enable_reg = enreg,					\
++		.enable_mask = BIT(enbit),				\
++		.min_uV = volt,						\
++	},								\
++	.qi = BIT(qibit),						\
++	.modeset_reg = _modeset_reg,					\
++	.modeset_mask = _modeset_mask,					\
++	.status_mask = 0,						\
++}
 +
-+    unevaluatedProperties: false
++static const struct linear_range buck_volt_range[] = {
++	REGULATOR_LINEAR_RANGE(700000, 0, 0x7f, 6250),
++};
 +
-+  "^ldo_v(dig18|emc33|ibr|mc|mch|mipi|rtc|sram|usb10)$":
-+    type: object
-+    $ref: "regulator.yaml#"
++static const unsigned int ldo_volt_table1[] = {
++	2800000, 3000000, 0, 3200000
++};
 +
-+    properties:
-+      regulator-name:
-+        pattern: "^v(dig18|emc33|ibr|mc|mch|mipi|rtc|sram|usb10)$"
++static const unsigned int ldo_volt_table2[] = {
++	1500000, 1800000, 2500000, 2800000, 1500000, 1800000, 2500000, 2800000,
++};
 +
-+    unevaluatedProperties: false
++static const unsigned int ldo_volt_table3[] = {
++	1200000, 1300000, 1500000, 1800000, 2000000, 2800000, 3000000, 3300000,
++};
 +
-+  "^ldo_vcam(a|af|d|io)$":
-+    type: object
-+    $ref: "regulator.yaml#"
++static const unsigned int ldo_volt_table3a[] = {
++	1200000, 1300000, 1500000, 1800000, 2000000, 2800000, 3000000, 3300000,
++	1200000, 1300000, 1500000, 1800000, 2000000, 2800000, 3000000, 3300000,
++};
 +
-+    properties:
-+      regulator-name:
-+        pattern: "^vcam(a|af|d|io)$"
++static const unsigned int ldo_volt_table4[] = {
++	0, 0, 1700000, 1800000, 1860000, 2760000, 3000000, 3100000,
++};
 +
-+    unevaluatedProperties: false
++static const unsigned int ldo_volt_table5[] = {
++	1800000, 3300000, 1800000, 3300000, 1800000, 3300000, 1800000, 3300000,
++};
 +
-+  "^ldo_vtcxo[12]$":
-+    type: object
-+    $ref: "regulator.yaml#"
++static const unsigned int ldo_volt_table6[] = {
++	3000000, 3300000,
++};
 +
-+    properties:
-+      regulator-name:
-+        pattern: "^vtcxo[12]$"
++static const unsigned int ldo_volt_table7[] = {
++	1200000, 1600000, 1700000, 1800000, 1900000, 2000000, 2100000, 2200000,
++};
 +
-+    required:
-+      - regulator-name
++static const unsigned int ldo_volt_table8[] = {
++	900000, 1000000, 1100000, 1220000, 1300000, 1500000, 1500000, 1500000,
++};
 +
-+    unevaluatedProperties: false
++static const unsigned int ldo_volt_table9[] = {
++	1000000, 1050000, 1100000, 1150000, 1200000, 1250000, 1300000, 1300000,
++	1000000, 1050000, 1100000, 1150000, 1200000, 1250000, 1300000, 1300000,
++};
 +
-+  "^ldo_vgp[1234]$":
-+    type: object
-+    $ref: "regulator.yaml#"
++static const unsigned int ldo_volt_table10[] = {
++	1200000, 1300000, 1500000, 1800000,
++	1200000, 1300000, 1500000, 1800000,
++	1200000, 1300000, 1500000, 1800000,
++	1200000, 1300000, 1500000, 1800000,
++};
 +
-+    properties:
-+      regulator-name:
-+        pattern: "^vgp[12]$"
++static const unsigned int ldo_volt_table11[] = {
++	1200000, 1300000, 1400000, 1500000, 1600000, 1700000, 1800000, 1800000,
++};
 +
-+    required:
-+      - regulator-name
++static int mt6331_get_status(struct regulator_dev *rdev)
++{
++	struct mt6331_regulator_info *info = rdev_get_drvdata(rdev);
++	u32 reg, en_mask, regval;
++	int ret;
 +
-+    unevaluatedProperties: false
++	if (info->qi > 0) {
++		reg = info->desc.enable_reg;
++		en_mask = info->qi;
++	} else {
++		reg = info->status_reg;
++		en_mask = info->status_mask;
++	}
 +
-+additionalProperties: false
++	ret = regmap_read(rdev->regmap, reg, &regval);
++	if (ret != 0) {
++		dev_err(&rdev->dev, "Failed to get enable reg: %d\n", ret);
++		return ret;
++	}
 +
-+examples:
-+  - |
-+    pmic {
-+      regulators {
-+        mt6331_vdvfs11_reg: buck-vdvfs11 {
-+          regulator-name = "vdvfs11";
-+          regulator-min-microvolt = <700000>;
-+          regulator-max-microvolt = <1493750>;
-+          regulator-ramp-delay = <12500>;
-+          regulator-enable-ramp-delay = <1>;
-+          regulator-allowed-modes = <0 1>;
-+        };
-+        mt6331_vdvfs12_reg: buck-vdvfs12 {
-+          regulator-name = "vdvfs12";
-+          regulator-min-microvolt = <700000>;
-+          regulator-max-microvolt = <1493750>;
-+          regulator-ramp-delay = <12500>;
-+          regulator-enable-ramp-delay = <1>;
-+          regulator-allowed-modes = <0 1>;
-+        };
-+        mt6331_vdvfs13_reg: buck-vdvfs13 {
-+          regulator-name = "vdvfs13";
-+          regulator-min-microvolt = <700000>;
-+          regulator-max-microvolt = <1493750>;
-+          regulator-ramp-delay = <12500>;
-+          regulator-enable-ramp-delay = <1>;
-+          regulator-allowed-modes = <0 1>;
-+        };
-+        mt6331_vdvfs14_reg: buck-vdvfs14 {
-+          regulator-name = "vdvfs14";
-+          regulator-min-microvolt = <700000>;
-+          regulator-max-microvolt = <1493750>;
-+          regulator-ramp-delay = <12500>;
-+          regulator-enable-ramp-delay = <1>;
-+          regulator-allowed-modes = <0 1>;
-+        };
-+        mt6331_vcore2_reg: buck-vcore2 {
-+          regulator-name = "vcore2";
-+          regulator-min-microvolt = <700000>;
-+          regulator-max-microvolt = <1493750>;
-+          regulator-ramp-delay = <12500>;
-+          regulator-enable-ramp-delay = <1>;
-+          regulator-allowed-modes = <0 1>;
-+        };
-+        mt6331_vio18_reg: buck-vio18 {
-+          regulator-name = "vio18";
-+          regulator-min-microvolt = <1800000>;
-+          regulator-max-microvolt = <1800000>;
-+          regulator-ramp-delay = <12500>;
-+          regulator-enable-ramp-delay = <0>;
-+          regulator-allowed-modes = <0 1>;
-+        };
-+        mt6331_vtcxo1_reg: ldo-vtcxo1 {
-+          regulator-name = "vtcxo1";
-+          regulator-min-microvolt = <2800000>;
-+          regulator-max-microvolt = <2800000>;
-+          regulator-always-on;
-+          regulator-boot-on;
-+        };
-+        mt6331_vtcxo2_reg: ldo-vtcxo2 {
-+          regulator-name = "vtcxo2";
-+          regulator-min-microvolt = <2800000>;
-+          regulator-max-microvolt = <2800000>;
-+          regulator-always-on;
-+          regulator-boot-on;
-+        };
-+        mt6331_avdd32_aud_reg: ldo-avdd32aud {
-+          regulator-name = "avdd32_aud";
-+          regulator-min-microvolt = <2800000>;
-+          regulator-max-microvolt = <3200000>;
-+        };
-+        mt6331_vauxa32_reg: ldo-vauxa32 {
-+          regulator-name = "vauxa32";
-+          regulator-min-microvolt = <2800000>;
-+          regulator-max-microvolt = <3200000>;
-+        };
-+        mt6331_vcama_reg: ldo-vcama {
-+          regulator-name = "vcama";
-+          regulator-min-microvolt = <1500000>;
-+          regulator-max-microvolt = <2800000>;
-+          regulator-always-on;
-+        };
-+        mt6331_vio28_reg: ldo-vio28 {
-+          regulator-name = "vio28";
-+          regulator-min-microvolt = <2800000>;
-+          regulator-max-microvolt = <2800000>;
-+          regulator-always-on;
-+          regulator-boot-on;
-+        };
-+        mt6331_vcamaf_reg: ldo-vcamaf {
-+          regulator-name = "vcam_af";
-+          regulator-min-microvolt = <1200000>;
-+          regulator-max-microvolt = <3300000>;
-+        };
-+        mt6331_vmc_reg: ldo-vmc {
-+          regulator-name = "vmc";
-+          regulator-min-microvolt = <1800000>;
-+          regulator-max-microvolt = <3300000>;
-+        };
-+        mt6331_vmch_reg: ldo-vmch {
-+          regulator-name = "vmch";
-+          regulator-min-microvolt = <3000000>;
-+          regulator-max-microvolt = <3300000>;
-+        };
-+        mt6331_vemc33_reg: ldo-vemc33 {
-+          regulator-name = "vemc33";
-+          regulator-min-microvolt = <3300000>;
-+          regulator-max-microvolt = <3300000>;
-+        };
-+        mt6331_vgp1_reg: ldo-vgp1 {
-+          regulator-name = "vgp1";
-+          regulator-min-microvolt = <1200000>;
-+          regulator-max-microvolt = <3300000>;
-+        };
-+        mt6331_vsim1_reg: ldo-vsim1 {
-+          regulator-name = "vsim1";
-+          regulator-min-microvolt = <1700000>;
-+          regulator-max-microvolt = <3100000>;
-+        };
-+        mt6331_vsim2_reg: ldo-vsim2 {
-+          regulator-name = "vsim2";
-+          regulator-min-microvolt = <1700000>;
-+          regulator-max-microvolt = <3100000>;
-+        };
-+        mt6331_vmipi_reg: ldo-vmipi {
-+          regulator-name = "vmipi";
-+          regulator-min-microvolt = <1200000>;
-+          regulator-max-microvolt = <3300000>;
-+        };
-+        mt6331_vibr_reg: ldo-vibr {
-+          regulator-name = "vibr";
-+          regulator-min-microvolt = <1200000>;
-+          regulator-max-microvolt = <3300000>;
-+        };
-+        mt6331_vgp4_reg: ldo-vgp4 {
-+          regulator-name = "vgp4";
-+          regulator-min-microvolt = <1600000>;
-+          regulator-max-microvolt = <2200000>;
-+        };
-+        mt6331_vcamd_reg: ldo-vcamd {
-+          regulator-name = "vcamd";
-+          regulator-min-microvolt = <900000>;
-+          regulator-max-microvolt = <1500000>;
-+        };
-+        mt6331_vusb10_reg: ldo-vusb10 {
-+          regulator-name = "vusb";
-+          regulator-min-microvolt = <1000000>;
-+          regulator-max-microvolt = <1300000>;
-+          regulator-boot-on;
-+        };
-+        mt6331_vcamio_reg: ldo-vcamio {
-+          regulator-name = "vcam_io";
-+          regulator-min-microvolt = <1200000>;
-+          regulator-max-microvolt = <1800000>;
-+        };
-+        mt6331_vsram_reg: ldo-vsram {
-+          regulator-name = "vsram";
-+          regulator-min-microvolt = <1012500>;
-+          regulator-max-microvolt = <1012500>;
-+          regulator-always-on;
-+          regulator-boot-on;
-+        };
-+        mt6331_vgp2_reg: ldo-vgp2 {
-+          regulator-name = "vgp2";
-+          regulator-min-microvolt = <1100000>;
-+          regulator-max-microvolt = <1500000>;
-+          regulator-boot-on;
-+        };
-+        mt6331_vgp3_reg: ldo-vgp3 {
-+          regulator-name = "vgp3";
-+          regulator-min-microvolt = <1200000>;
-+          regulator-max-microvolt = <1800000>;
-+        };
-+        mt6331_vrtc_reg: ldo-vrtc {
-+          regulator-name = "vrtc";
-+          regulator-min-microvolt = <2800000>;
-+          regulator-max-microvolt = <2800000>;
-+          regulator-always-on;
-+        };
-+        mt6331_vdig18_reg: ldo-vdig18 {
-+          regulator-name = "dvdd18_dig";
-+          regulator-min-microvolt = <1800000>;
-+          regulator-max-microvolt = <1800000>;
-+        };
-+      };
-+    };
-+...
++	return (regval & en_mask) ? REGULATOR_STATUS_ON : REGULATOR_STATUS_OFF;
++}
++
++static int mt6331_ldo_set_mode(struct regulator_dev *rdev, unsigned int mode)
++{
++	int ret, val = 0;
++	struct mt6331_regulator_info *info = rdev_get_drvdata(rdev);
++
++	if (!info->modeset_mask) {
++		dev_err(&rdev->dev, "regulator %s doesn't support set_mode\n",
++			info->desc.name);
++		return -EINVAL;
++	}
++
++	switch (mode) {
++	case REGULATOR_MODE_STANDBY:
++		val = MT6331_LDO_MODE_LP;
++		break;
++	case REGULATOR_MODE_NORMAL:
++		val = MT6331_LDO_MODE_NORMAL;
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	val <<= ffs(info->modeset_mask) - 1;
++
++	ret = regmap_update_bits(rdev->regmap, info->modeset_reg,
++				  info->modeset_mask, val);
++
++	return ret;
++}
++
++static unsigned int mt6331_ldo_get_mode(struct regulator_dev *rdev)
++{
++	unsigned int val;
++	unsigned int mode;
++	int ret;
++	struct mt6331_regulator_info *info = rdev_get_drvdata(rdev);
++
++	if (!info->modeset_mask) {
++		dev_err(&rdev->dev, "regulator %s doesn't support get_mode\n",
++			info->desc.name);
++		return -EINVAL;
++	}
++
++	ret = regmap_read(rdev->regmap, info->modeset_reg, &val);
++	if (ret < 0)
++		return ret;
++
++	val &= info->modeset_mask;
++	val >>= ffs(info->modeset_mask) - 1;
++
++	if (val & 0x1)
++		mode = REGULATOR_MODE_STANDBY;
++	else
++		mode = REGULATOR_MODE_NORMAL;
++
++	return mode;
++}
++
++static const struct regulator_ops mt6331_volt_range_ops = {
++	.list_voltage = regulator_list_voltage_linear_range,
++	.map_voltage = regulator_map_voltage_linear_range,
++	.set_voltage_sel = regulator_set_voltage_sel_regmap,
++	.get_voltage_sel = regulator_get_voltage_sel_regmap,
++	.set_voltage_time_sel = regulator_set_voltage_time_sel,
++	.enable = regulator_enable_regmap,
++	.disable = regulator_disable_regmap,
++	.is_enabled = regulator_is_enabled_regmap,
++	.get_status = mt6331_get_status,
++};
++
++static const struct regulator_ops mt6331_volt_table_ops = {
++	.list_voltage = regulator_list_voltage_table,
++	.map_voltage = regulator_map_voltage_iterate,
++	.set_voltage_sel = regulator_set_voltage_sel_regmap,
++	.get_voltage_sel = regulator_get_voltage_sel_regmap,
++	.set_voltage_time_sel = regulator_set_voltage_time_sel,
++	.enable = regulator_enable_regmap,
++	.disable = regulator_disable_regmap,
++	.is_enabled = regulator_is_enabled_regmap,
++	.get_status = mt6331_get_status,
++	.set_mode = mt6331_ldo_set_mode,
++	.get_mode = mt6331_ldo_get_mode,
++};
++
++static const struct regulator_ops mt6331_volt_table_ao_ops = {
++	.list_voltage = regulator_list_voltage_table,
++	.map_voltage = regulator_map_voltage_iterate,
++	.set_voltage_sel = regulator_set_voltage_sel_regmap,
++	.get_voltage_sel = regulator_get_voltage_sel_regmap,
++	.set_voltage_time_sel = regulator_set_voltage_time_sel,
++	.set_mode = mt6331_ldo_set_mode,
++	.get_mode = mt6331_ldo_get_mode,
++};
++
++static const struct regulator_ops mt6331_volt_fixed_ops = {
++	.list_voltage = regulator_list_voltage_linear,
++	.enable = regulator_enable_regmap,
++	.disable = regulator_disable_regmap,
++	.is_enabled = regulator_is_enabled_regmap,
++	.get_status = mt6331_get_status,
++	.set_mode = mt6331_ldo_set_mode,
++	.get_mode = mt6331_ldo_get_mode,
++};
++
++/* The array is indexed by id(MT6331_ID_XXX) */
++static struct mt6331_regulator_info mt6331_regulators[] = {
++	MT6331_BUCK("buck-vdvfs11", VDVFS11, 700000, 1493750, 6250,
++		buck_volt_range, MT6331_VDVFS11_CON9, MT6331_VDVFS11_CON11, GENMASK(6, 0),
++		MT6331_VDVFS11_CON12, MT6331_VDVFS11_CON7),
++	MT6331_BUCK("buck-vdvfs12", VDVFS12, 700000, 1493750, 6250,
++		buck_volt_range, MT6331_VDVFS12_CON9, MT6331_VDVFS12_CON11, GENMASK(6, 0),
++		MT6331_VDVFS12_CON12, MT6331_VDVFS12_CON7),
++	MT6331_BUCK("buck-vdvfs13", VDVFS13, 700000, 1493750, 6250,
++		buck_volt_range, MT6331_VDVFS13_CON9, MT6331_VDVFS13_CON11, GENMASK(6, 0),
++		MT6331_VDVFS13_CON12, MT6331_VDVFS13_CON7),
++	MT6331_BUCK("buck-vdvfs14", VDVFS14, 700000, 1493750, 6250,
++		buck_volt_range, MT6331_VDVFS14_CON9, MT6331_VDVFS14_CON11, GENMASK(6, 0),
++		MT6331_VDVFS14_CON12, MT6331_VDVFS14_CON7),
++	MT6331_BUCK("buck-vcore2", VCORE2, 700000, 1493750, 6250,
++		buck_volt_range, MT6331_VCORE2_CON9, MT6331_VCORE2_CON11, GENMASK(6, 0),
++		MT6331_VCORE2_CON12, MT6331_VCORE2_CON7),
++	MT6331_REG_FIXED("buck-vio18", VIO18, MT6331_VIO18_CON7, 0, 13, 1800000, 0, 0),
++	MT6331_REG_FIXED("ldo-vtcxo1", VTCXO1, MT6331_ANALDO_CON1, 10, 15, 2800000,
++		MT6331_ANALDO_CON1, GENMASK(1, 0)),
++	MT6331_REG_FIXED("ldo-vtcxo2", VTCXO2, MT6331_ANALDO_CON2, 10, 15, 2800000,
++		MT6331_ANALDO_CON2, GENMASK(1, 0)),
++	MT6331_LDO("ldo-avdd32aud", AVDD32_AUD, ldo_volt_table1, MT6331_ANALDO_CON3, 10,
++		MT6331_ANALDO_CON10, GENMASK(6, 5), MT6331_ANALDO_CON3, GENMASK(1, 0)),
++	MT6331_LDO("ldo-vauxa32", VAUXA32, ldo_volt_table1, MT6331_ANALDO_CON4, 10,
++		MT6331_ANALDO_CON6, GENMASK(6, 5), MT6331_ANALDO_CON4, GENMASK(1, 0)),
++	MT6331_LDO("ldo-vcama", VCAMA, ldo_volt_table2, MT6331_ANALDO_CON5, 15,
++		MT6331_ANALDO_CON9, GENMASK(6, 4), 0, 0),
++	MT6331_REG_FIXED("ldo-vio28", VIO28, MT6331_DIGLDO_CON1, 10, 15, 2800000,
++		MT6331_DIGLDO_CON1, GENMASK(1, 0)),
++	MT6331_LDO_S("ldo-vcamaf", VCAM_AF, ldo_volt_table3, MT6331_DIGLDO_CON2, 10,
++		MT6331_DIGLDO_CON14, GENMASK(6, 4), MT6331_DIGLDO_CON2, GENMASK(1, 0),
++		MT6331_EN_STATUS1, BIT(0)),
++	MT6331_LDO("ldo-vmc", VMC, ldo_volt_table5, MT6331_DIGLDO_CON3, 10,
++		MT6331_DIGLDO_CON15, GENMASK(6, 4), MT6331_DIGLDO_CON3, GENMASK(1, 0)),
++	MT6331_LDO("ldo-vmch", VMCH, ldo_volt_table6, MT6331_DIGLDO_CON4, 10,
++		MT6331_DIGLDO_CON16, BIT(6), MT6331_DIGLDO_CON4, GENMASK(1, 0)),
++	MT6331_LDO("ldo-vemc33", VEMC33, ldo_volt_table6, MT6331_DIGLDO_CON5, 10,
++		MT6331_DIGLDO_CON17, BIT(6), MT6331_DIGLDO_CON5, GENMASK(1, 0)),
++	MT6331_LDO_S("ldo-vgp1", VGP1, ldo_volt_table3, MT6331_DIGLDO_CON6, 10,
++		MT6331_DIGLDO_CON19, GENMASK(6, 4), MT6331_DIGLDO_CON6, GENMASK(1, 0),
++		MT6331_EN_STATUS1, BIT(4)),
++	MT6331_LDO("ldo-vsim1", VSIM1, ldo_volt_table4, MT6331_DIGLDO_CON8, 10,
++		MT6331_DIGLDO_CON21, GENMASK(6, 4), MT6331_DIGLDO_CON8, GENMASK(1, 0)),
++	MT6331_LDO("ldo-vsim2", VSIM2, ldo_volt_table4, MT6331_DIGLDO_CON9, 10,
++		MT6331_DIGLDO_CON22, GENMASK(6, 4), MT6331_DIGLDO_CON9, GENMASK(1, 0)),
++	MT6331_LDO("ldo-vmipi", VMIPI, ldo_volt_table3a, MT6331_SYSLDO_CON5, 10,
++		MT6331_SYSLDO_CON13, GENMASK(6, 3), MT6331_SYSLDO_CON5, GENMASK(1, 0)),
++	MT6331_LDO("ldo-vibr", VIBR, ldo_volt_table3, MT6331_DIGLDO_CON12, 10,
++		MT6331_DIGLDO_CON20, GENMASK(6, 4), MT6331_DIGLDO_CON12, GENMASK(1, 0)),
++	MT6331_LDO_S("ldo-vgp4", VGP4, ldo_volt_table7, MT6331_DIGLDO_CON7, 10,
++		MT6331_DIGLDO_CON18, GENMASK(6, 4), MT6331_DIGLDO_CON7, GENMASK(1, 0),
++		MT6331_EN_STATUS1, BIT(5)),
++	MT6331_LDO_S("ldo-vcamd", VCAMD, ldo_volt_table8, MT6331_SYSLDO_CON1, 15,
++		MT6331_SYSLDO_CON9, GENMASK(6, 4), MT6331_SYSLDO_CON1, GENMASK(1, 0),
++		MT6331_EN_STATUS1, BIT(11)),
++	MT6331_LDO("ldo-vusb10", VUSB10, ldo_volt_table9, MT6331_SYSLDO_CON2, 10,
++		MT6331_SYSLDO_CON10, GENMASK(6, 3), MT6331_SYSLDO_CON2, GENMASK(1, 0)),
++	MT6331_LDO_S("ldo-vcamio", VCAM_IO,  ldo_volt_table10, MT6331_SYSLDO_CON3, 10,
++		MT6331_SYSLDO_CON11, GENMASK(6, 3), MT6331_SYSLDO_CON3, GENMASK(1, 0),
++		MT6331_EN_STATUS1, BIT(13)),
++	MT6331_REG_FIXED("ldo-vsram", VSRAM_DVFS1, MT6331_SYSLDO_CON4, 10, 15, 1012500,
++		MT6331_SYSLDO_CON4, GENMASK(1, 0)),
++	MT6331_LDO_S("ldo-vgp2", VGP2, ldo_volt_table10, MT6331_SYSLDO_CON6, 10,
++		MT6331_SYSLDO_CON14, GENMASK(6, 3), MT6331_SYSLDO_CON6, GENMASK(1, 0),
++		MT6331_EN_STATUS1, BIT(15)),
++	MT6331_LDO_S("ldo-vgp3", VGP3, ldo_volt_table10, MT6331_SYSLDO_CON7, 10,
++		MT6331_SYSLDO_CON15, GENMASK(6, 3), MT6331_SYSLDO_CON7, GENMASK(1, 0),
++		MT6331_EN_STATUS2, BIT(0)),
++	MT6331_REG_FIXED("ldo-vrtc", VRTC, MT6331_DIGLDO_CON11, 8, 15, 2800000, 0, 0),
++	MT6331_LDO_AO("ldo-vdig18", VDIG18, ldo_volt_table11,
++		MT6331_DIGLDO_CON28, GENMASK(14, 12)),
++};
++
++static int mt6331_set_buck_vosel_reg(struct platform_device *pdev)
++{
++	struct mt6397_chip *mt6331 = dev_get_drvdata(pdev->dev.parent);
++	int i;
++	u32 regval;
++
++	for (i = 0; i < MT6331_ID_VREG_MAX; i++) {
++		if (mt6331_regulators[i].vselctrl_reg) {
++			if (regmap_read(mt6331->regmap,
++				mt6331_regulators[i].vselctrl_reg,
++				&regval) < 0) {
++				dev_err(&pdev->dev,
++					"Failed to read buck ctrl\n");
++				return -EIO;
++			}
++
++			if (regval & mt6331_regulators[i].vselctrl_mask) {
++				mt6331_regulators[i].desc.vsel_reg =
++				mt6331_regulators[i].vselon_reg;
++			}
++		}
++	}
++
++	return 0;
++}
++
++static int mt6331_regulator_probe(struct platform_device *pdev)
++{
++	struct mt6397_chip *mt6331 = dev_get_drvdata(pdev->dev.parent);
++	struct regulator_config config = {};
++	struct regulator_dev *rdev;
++	int i;
++	u32 reg_value;
++
++	/* Query buck controller to select activated voltage register part */
++	if (mt6331_set_buck_vosel_reg(pdev))
++		return -EIO;
++
++	/* Read PMIC chip revision to update constraints and voltage table */
++	if (regmap_read(mt6331->regmap, MT6331_HWCID, &reg_value) < 0) {
++		dev_err(&pdev->dev, "Failed to read Chip ID\n");
++		return -EIO;
++	}
++	reg_value &= GENMASK(7, 0);
++
++	dev_info(&pdev->dev, "Chip ID = 0x%x\n", reg_value);
++
++	/*
++	 * ChipID 0x10 is "MT6331 E1", has a different voltage table and
++	 * it's currently not supported in this driver. Upon detection of
++	 * this ID, refuse to register the regulators, as we will wrongly
++	 * interpret the VSEL for this revision, potentially overvolting
++	 * some device.
++	 */
++	if (reg_value == 0x10) {
++		dev_err(&pdev->dev, "Chip version not supported. Bailing out.\n");
++		return -EINVAL;
++	}
++
++	for (i = 0; i < MT6331_ID_VREG_MAX; i++) {
++		config.dev = &pdev->dev;
++		config.driver_data = &mt6331_regulators[i];
++		config.regmap = mt6331->regmap;
++		rdev = devm_regulator_register(&pdev->dev,
++				&mt6331_regulators[i].desc, &config);
++		if (IS_ERR(rdev)) {
++			dev_err(&pdev->dev, "failed to register %s\n",
++				mt6331_regulators[i].desc.name);
++			return PTR_ERR(rdev);
++		}
++	}
++	return 0;
++}
++
++static const struct platform_device_id mt6331_platform_ids[] = {
++	{"mt6331-regulator", 0},
++	{ /* sentinel */ },
++};
++MODULE_DEVICE_TABLE(platform, mt6331_platform_ids);
++
++static struct platform_driver mt6331_regulator_driver = {
++	.driver = {
++		.name = "mt6331-regulator",
++	},
++	.probe = mt6331_regulator_probe,
++	.id_table = mt6331_platform_ids,
++};
++
++module_platform_driver(mt6331_regulator_driver);
++
++MODULE_AUTHOR("AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>");
++MODULE_DESCRIPTION("Regulator Driver for MediaTek MT6331 PMIC");
++MODULE_LICENSE("GPL");
+diff --git a/include/linux/regulator/mt6331-regulator.h b/include/linux/regulator/mt6331-regulator.h
+new file mode 100644
+index 000000000000..2801a9879c14
+--- /dev/null
++++ b/include/linux/regulator/mt6331-regulator.h
+@@ -0,0 +1,46 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (c) 2022 Collabora Ltd.
++ * Author: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
++ */
++
++#ifndef __LINUX_REGULATOR_MT6331_H
++#define __LINUX_REGULATOR_MT6331_H
++
++enum {
++	/* BUCK */
++	MT6331_ID_VDVFS11 = 0,
++	MT6331_ID_VDVFS12,
++	MT6331_ID_VDVFS13,
++	MT6331_ID_VDVFS14,
++	MT6331_ID_VCORE2,
++	MT6331_ID_VIO18,
++	/* LDO */
++	MT6331_ID_VTCXO1,
++	MT6331_ID_VTCXO2,
++	MT6331_ID_AVDD32_AUD,
++	MT6331_ID_VAUXA32,
++	MT6331_ID_VCAMA,
++	MT6331_ID_VIO28,
++	MT6331_ID_VCAM_AF,
++	MT6331_ID_VMC,
++	MT6331_ID_VMCH,
++	MT6331_ID_VEMC33,
++	MT6331_ID_VGP1,
++	MT6331_ID_VSIM1,
++	MT6331_ID_VSIM2,
++	MT6331_ID_VMIPI,
++	MT6331_ID_VIBR,
++	MT6331_ID_VGP4,
++	MT6331_ID_VCAMD,
++	MT6331_ID_VUSB10,
++	MT6331_ID_VCAM_IO,
++	MT6331_ID_VSRAM_DVFS1,
++	MT6331_ID_VGP2,
++	MT6331_ID_VGP3,
++	MT6331_ID_VRTC,
++	MT6331_ID_VDIG18,
++	MT6331_ID_VREG_MAX
++};
++
++#endif /* __LINUX_REGULATOR_MT6331_H */
 -- 
 2.35.1
 

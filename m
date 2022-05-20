@@ -2,251 +2,309 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BF7852EEE0
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 17:15:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4ED952EEE3
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 17:18:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350705AbiETPP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 11:15:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42134 "EHLO
+        id S1350660AbiETPSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 11:18:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350684AbiETPPU (ORCPT
+        with ESMTP id S1343812AbiETPSE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 11:15:20 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9528617706D;
-        Fri, 20 May 2022 08:15:19 -0700 (PDT)
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24KC1rum017408;
-        Fri, 20 May 2022 08:14:56 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=facebook;
- bh=dKI6dQu6wjTQjbRSozjt86cO6m+HuXIEEDaxEzrfdXE=;
- b=cEVdlanj8BCrlSJjXp/hdlknzURoKuEYi5hR/wOvfV//37i57MyLWD6iwdIXRh2xiOS7
- d5fLd2EYENREr21SDkQMsIP6cX/+el7uklp4nqPe1f1L3P0yrUNTJkKZeKEy96Z1oD8c
- lgEbo1blFr+2IMn3PKUqv+kYwGFsrrlYHnM= 
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2175.outbound.protection.outlook.com [104.47.59.175])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3g5pj50c3a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 May 2022 08:14:55 -0700
+        Fri, 20 May 2022 11:18:04 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2074.outbound.protection.outlook.com [40.107.93.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D81F17788A
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 08:18:02 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ABVPeFcTrVaHIHhat0uhsHaLo3ebCRApJoQiEA6HbXCookLkiMt5di7mm5Z1hwF/+Su34mC7uqiSeTJHBVabT5t45jIwIadTjH43qPhPFwS9Y4G75STNrzWAzBLed0oUQvw0X05esP6A1twASE0q5MXjaL+FkqJlW/5JuIXtfHI+iD9L8F1gH6Jo+mMBNobUIy5bTkJ+O+PuJUOv2SeIqoaBGcCc12hfF69+23nfmLbs6/4hICYPv7XzYeHg+gzFYeS53YqclUdBSNb9+Ckil0TJgN+cyV1kNZ1TzFd9jzPCuNRg9defOa2Yo+Lmqiy3teQTx/Dcm6XQ/+IgBeKa2Q==
+ b=LIokpzZnfUd5zqmFi2prH3WUq/sguwOgLLshQ9TXlBqqiR2YJLqnNdnsiR4BL9GPKCGpgnXm9i2gE5HaNwUTW1R3Ld+tOH8gMxLmhpbTDxUrEGjGZ1+G2flsOXGggzLyY5JXiDMlXeNZOVgfDNfTVFN3DHR0jfoWP90Apo0qx7cHQ3Y9QTTzAsRUAdK68nv96dyeg1XNo9b/KbOpeHz6AFdUFMKZT6Y5RW1satExWfwntScrjoFBW5z2rOALrIcivDz5WuMSUmR5nL+TSFqkPlULNl8j8FcVoK4+NPjFyBtQzy1Id1HGYbSYSM/aUsKIkg2rvBPd12pZLxrdqrVtEg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dKI6dQu6wjTQjbRSozjt86cO6m+HuXIEEDaxEzrfdXE=;
- b=C90u9PlCVCyqTunEsbGgFs8BO+iA0SbiEMwSeFUpqHWPriZfOiOryeF7A/6MPwzrd1q9she0dNnvSTtDuVTKX+aLGU0CpQdyniYFtDt+wqsPCxJ14mvAqBRDkekfMG1jlWFomgvRqtQDuL1WyCyoX4ze5Cqu+4XYKo1chN/wQWJHzV1ZbVwtKKHH0a3u59b3NxZtJ16cp8sLvPWkTnudQTs5KUNFBUAsnxXGufV0mcxcCn67gmdWJ52PtKxY9UxbsWC7RYtpO9AAldUxPxeQ4ThJ8UrNSuJg84cvXt3XWoqbzcwaGd4ycTEYrqPSl4l8hDGiT20rF8pIL0YIzgOQjQ==
+ bh=q1Zc0PvwRtzri2Bg1ISGA8UrhRrZI3cGZYGW2UcP94U=;
+ b=Ot69/7cz8Mfpda2CCE0LuBI2+tUKey0cIa7syWROgH4AaoVj/LD5owwVWvV8u35qbIX/sBxJ06IIMJ4KU+B9++l3kCykZJiWJ4g9QAQotXOg5y90hgTtdh4WwWgrDrPIow9VUdmroQdP6IDW5pdQ/oeUU7DTUdHPFmPdBnFdvfxxriQLZ+T3MQXuOoKWCcSA3KN3sCXCqyaqtqQb5+Fz2CZF3JnwhO1lrvLbGBiK8GuvqB1K1PEvWwXgkTvuYVxdf5FHpGHhDLLzWmkBZ9EXzv7K3js4HgcPhhtjaZgQyGP1kGdk284cE1Px+nK58Kp4ROmfacPF4ILWYLTtQvFJaQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by SA1PR15MB4532.namprd15.prod.outlook.com (2603:10b6:806:19b::17) with
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=q1Zc0PvwRtzri2Bg1ISGA8UrhRrZI3cGZYGW2UcP94U=;
+ b=vwMkOosnIO0RWi0Ly/NAVUMJK3ZkX4x+wgpvqobVIEA4RH2xhtiOLQcRU0DIbq18XU4RwobZ5Xe1zYwHc4m3ByzsqS5qs68s1QCCl9CQV4nRqA3yF2dpJ9fBAtofua4tIMWST1Hd6Qo1ifB/6aLSSqZ4iBOz0CCu7lnweYBACvc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MW2PR12MB2379.namprd12.prod.outlook.com (2603:10b6:907:9::24)
+ by DS0PR12MB6558.namprd12.prod.outlook.com (2603:10b6:8:d2::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.17; Fri, 20 May
- 2022 15:14:53 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::5811:4996:bbfd:3c53]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::5811:4996:bbfd:3c53%7]) with mapi id 15.20.5273.017; Fri, 20 May 2022
- 15:14:53 +0000
-Message-ID: <fa3b35a6-5c3c-42a1-23f0-a8143b4eaa57@fb.com>
-Date:   Fri, 20 May 2022 08:14:50 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: [PATCH bpf-next v1 2/5] cgroup: bpf: add cgroup_rstat_updated()
- and cgroup_rstat_flush() kfuncs
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.18; Fri, 20 May
+ 2022 15:18:00 +0000
+Received: from MW2PR12MB2379.namprd12.prod.outlook.com
+ ([fe80::d22:1b6d:6231:e435]) by MW2PR12MB2379.namprd12.prod.outlook.com
+ ([fe80::d22:1b6d:6231:e435%7]) with mapi id 15.20.5273.017; Fri, 20 May 2022
+ 15:18:00 +0000
+Message-ID: <4b781c91-2947-a029-3558-f4a49130e5e0@amd.com>
+Date:   Fri, 20 May 2022 20:47:47 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH 0/4] Mitigate inconsistent NUMA imbalance behaviour
 Content-Language: en-US
-To:     Yosry Ahmed <yosryahmed@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Michal Hocko <mhocko@kernel.org>
-Cc:     Stanislav Fomichev <sdf@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, cgroups@vger.kernel.org
-References: <20220520012133.1217211-1-yosryahmed@google.com>
- <20220520012133.1217211-3-yosryahmed@google.com>
-From:   Yonghong Song <yhs@fb.com>
-In-Reply-To: <20220520012133.1217211-3-yosryahmed@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Aubrey Li <aubrey.li@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20220511143038.4620-1-mgorman@techsingularity.net>
+ <f6b2eba0-2c28-b41b-3900-8834abbd6575@amd.com>
+ <20220520101812.GW3441@techsingularity.net>
+From:   K Prateek Nayak <kprateek.nayak@amd.com>
+In-Reply-To: <20220520101812.GW3441@techsingularity.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BY3PR10CA0021.namprd10.prod.outlook.com
- (2603:10b6:a03:255::26) To SN6PR1501MB2064.namprd15.prod.outlook.com
- (2603:10b6:805:d::27)
+X-ClientProxiedBy: PN2PR01CA0023.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:25::28) To MW2PR12MB2379.namprd12.prod.outlook.com
+ (2603:10b6:907:9::24)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6c46fa3f-7c8d-40dd-5aad-08da3a737e07
-X-MS-TrafficTypeDiagnostic: SA1PR15MB4532:EE_
-X-Microsoft-Antispam-PRVS: <SA1PR15MB45329B108E3E7E02A4AA3A44D3D39@SA1PR15MB4532.namprd15.prod.outlook.com>
-X-FB-Source: Internal
+X-MS-Office365-Filtering-Correlation-Id: 87890734-22cc-4fd4-35ad-08da3a73ecd4
+X-MS-TrafficTypeDiagnostic: DS0PR12MB6558:EE_
+X-Microsoft-Antispam-PRVS: <DS0PR12MB6558ECA9736A929B79D5B8C998D39@DS0PR12MB6558.namprd12.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: k3pZk4MMLpjNkedYlpywNxtSmq0a54hHnHRTn43YTzeY3t2u0Od5UJCTSyi8soOdSF+HZvNCQaHQ7Oa77wynk/mHxd0f8DcvJzEYgfjEdajVrbRznnoniAaZZTb6TIiyYaBvumC/aKt/PhBAC4faPTRc/ROKbXhXCfvoH+lwzhU4+zHfaHQoSOIEUVe4bq9S17YiPttaY/qf1TiqAr2at0zfGGW5ePxgV4UOzWBuXsNr4Uyeaw3QN6nv9fJUaAtjBpp/so+qQO9xHt1gVuWfsOvu5b2senUSmJogrT6110MW+qS0Po+75zzeEm9YNHsUcMuZwnoutbfQaKXpmC124nKqxgzTUSmjIvg0xaAAZy6EvBMRuiJXI3ExCpgThRMiMItOGHbH9HGDxL2IJrvWy+eU4/oYs0NmerAltzfbbTy15tDvot1hyXwc6oitrOig76r/vXCc+ar5hWWE+MvWHKg7MY33d3trK6Vfq3HFFEGcNQY0G69H1Aymge5eg+UuSluO99dB/sWDX/+YGC+C4YdDCzakglIQ4An5KFgBS0hcUBf+w2nHWi0bCVsUsSGdgRPJwKXN6KlyjposLEC+eu4sy16aTmOU+UQU6q4gbUhEcMgeXfMcB/vGElJznpTf9U2NRVnuXM9S5FKZSPuh6v7m/5kYPdvxI0MEu+6GbbufcQl8qJZJj8Twq8Tpvp/0K0f21r67RI8THqVClp7+S2Vp4WKTAcuI7gb76w+JkkRYZYPlCE0kjg3izA+pqn1z
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(110136005)(86362001)(921005)(38100700002)(54906003)(4326008)(316002)(31696002)(66556008)(66946007)(66476007)(8676002)(2616005)(36756003)(8936002)(6506007)(2906002)(5660300002)(7416002)(508600001)(186003)(6512007)(31686004)(83380400001)(53546011)(6486002)(52116002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: WG0FD7faqXFrvB7GIT9mZBSm18dZhPvZ4TSJdFcoQGROTzNVzlURpZd5vc7DrF530i2QalQydwaXc596IW4lkuzpwQDP8eO1HH9Js/T4oZdnLyzgs3uJDeKZq46qpV5YcyICMC20ZHdGELEd4fA4lGDGunLspCfpL9WYGNkfzArRTFiNt/N8kaA0jGKhySvypc1KAUqCOFDM0+aLMGm0LpW0ELDSCsB0QtIO2+iht2twIRS+JfVocqPuk+WVSQgANsyfPLWArVmjH2yUhesQerlipzMjCVNeWOCl48dcinA5fuKI1odqtXEX7+uj3tn1bWP115cILsifc+nd0Nup+RPqcthoEQ9aD2UIVzhbvtdKYVPBr8InAzULlGjYkXDupv0bwiqh/4kE/4FZpvtY4COs+pDWJH4vTO1ufYIFpoy4q1ZgWPfH1RbDf4yCBMjUodxrfyRG6xEpixTK4RQE3LQfs/2+bgF5uy2Bi+Nn/K+ZzxfpZ9FG7exO7EqF0hllL5dpBVeJJKTvBdQFBUVaoNDCR78cLcMjd/febKQVVGgtzfLVWWLwf3C9/AWS93VFFtLGQQ4c96BVE2Q4hnH62odjNMloPaFr6Wl/Bwber5hzzujTeagyNgaPP6T4JBLMvUWpnE1dVktOo9dkjvE9fkCSnJX7WNZgcXBRzGKIV0escZa8I3Z0Z5ZHxPdnp8DFS0drYlPjiz4rDpbHtlCEnuAHFgdXJToDt7+eWIiLX2I=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR12MB2379.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(86362001)(186003)(53546011)(6506007)(6916009)(36756003)(31696002)(6512007)(8936002)(54906003)(26005)(31686004)(6486002)(8676002)(5660300002)(83380400001)(2616005)(4326008)(66556008)(38100700002)(6666004)(2906002)(66476007)(66946007)(508600001)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QytOWFMyZkZRWWVtZW5GNzdlcm1lTk9taWtkNDJBd2I2VUtkUDUzb3poanM4?=
- =?utf-8?B?ek1YcmI2UktEcllkK2VJSHNLbDRucFUwaEVFRkpwRHp1czlzaWtuODVPcmt3?=
- =?utf-8?B?MERDL2c5ZVZvSmtHUHB1NFZNOXAzY3Y3SFdDWXFINlFhL0QwOFhLL1Q3WFRU?=
- =?utf-8?B?U0lpMS83L2dEa1Y3Y3dycWlIcVlmUXRnd1pxZ2NMbmpiaFZUb2ZPRnl4WTFN?=
- =?utf-8?B?a2h4eTB2c09ESGJaNDJEcGVOS040NHNKWlM5VTVCa1J2SXJrMWFkYW1FMU9l?=
- =?utf-8?B?Vi83QWpCN09BYXpOVkg1T1Yvdm1xdG1sNUpObXJ6bkYyT29wdTk0WnJHYnZt?=
- =?utf-8?B?eU1yaHZrZWNYZ3B3a3QrS1FmMnBaT1V6U21UbDlVTDZMRlpkNnMwV2ZmRlRu?=
- =?utf-8?B?RVZDZzF0N2RxaUhZL2dsWUI3RXdTQU5hcmZJZ3NaUUR5ZEp3VS8yMExKQno3?=
- =?utf-8?B?Vy96TUsxamIrMjJjbkFqdVFEUU9LdGtza2wzNzJZRms1aXJGNEd0MUJDMUpw?=
- =?utf-8?B?dllYWHZFZmtqU2t0U2lweWQzOFR6RzE3cUFKMi9TMDFwSnlvNWhyQURGNEY1?=
- =?utf-8?B?emVzQ3VKNU1uRHNJaEZ3UE1XbEdqMFJtOTc3dUgxVTBjQkxnRHV1Y0NWMjQ1?=
- =?utf-8?B?Y3dRaTJoN2VmaDFndlNuTnFoQXIwWGZsRVFrdG0rZUNHL2I5T0p5aTFIdEVD?=
- =?utf-8?B?U0t4ZkNFUnF0NFZtMmttVE1DL0pZZHpiOEdibzJRNldHUWIxUGJXMFFyNk1K?=
- =?utf-8?B?ZUJLaWpwUmlkMWdMVlVnbHJDdlRvWEFUQzdNNzNhMm55bk5wdVQyN1A5NWFP?=
- =?utf-8?B?RjF3ZS9hY25lcDJhMWJBZ05RajNybE1BWnBucllucFFUR1BqOTNyenNZTHh1?=
- =?utf-8?B?Ulc4elVJVjloYTltaUhWOEN4a2EzalJpL0tOY1dVLzlPZU5tYmsyT0RwSUJJ?=
- =?utf-8?B?eVBIQitaV2VndEkxVWdiUVo2QUhOWTB0VEFqR2g1MnFjc3kvY2VZZ0xaVXRm?=
- =?utf-8?B?VExYbGpEaG1MMVVPWXhFbG43cXlaUVFQcXJWRUpwVit3M3VXY2h0bks4MGVw?=
- =?utf-8?B?TTU1cDZDMy8yQ1h6NHNBU0VwcXJuNXRYZEIxRVB0WFZKTjNqYnRNcWNnTHgy?=
- =?utf-8?B?Um4zaER0V25xSkpXbVhMZlhuU1Y3R2ZrTGg0VjdvbDdMQ09sS1pZR1ZHMUhy?=
- =?utf-8?B?Ri9QRGx0cW1JdjNkSkFrbGtqcmx6RjdaT0pRa2c2emZHWkZadWZ2VG5XS1Zv?=
- =?utf-8?B?eXQ3YUxFbER0UWpSK3JZMTdEbXRuQ2VvU0hvMGMwa0hXVHA3LzMwNnFhc3Zw?=
- =?utf-8?B?dTFjbFB0TnE5OG4wWGdtUnVJeXZBYk1ZWFVobzk5SjZWYWpQTmFSU2F6NnY1?=
- =?utf-8?B?OURmSkdmL2VCckt1ckxhR1h3eWlRU1h3eFBNM1NiVFZzMUZNWFdNN3Z0QlM5?=
- =?utf-8?B?REcycWZ2L0x3YjVaQjFoLzNCR3BCbEM5M1ppcy84dW5HSHAwSTEvS3ZrQVM4?=
- =?utf-8?B?VnN1eWJ1bGZhN2hBbURWYU5MUEMwYmlMN2R5eGI3S2QzRTd1RnhhYjNoakc1?=
- =?utf-8?B?VWpidGZZcHgzNWIvMkdyT0kwcVFXSjBWQThEVWNYa0g5dTFlcUlPcnZKNGhN?=
- =?utf-8?B?dVRPN3lVNE1mcjFCRmFocllSajVFTU54TE1JQzhVZFFhWWVlUHdHL0oyU1ky?=
- =?utf-8?B?ZFFSenMyajhPVUM0TTQ5MkNhSjlEeHdDT3Nnc0NGVC9keUVGQk1aejc1VU9v?=
- =?utf-8?B?SldFdGpMY2JSNS9CRjlpQjFYL3o0cDVLZHJSOExoOGJwTnlKUWxya1V0L1Bl?=
- =?utf-8?B?ZDlNSjJha0NreU5MUnZWdjlQQkVTZDl0cVEzTWNIVUhBbmdrSHp1SEltdnNp?=
- =?utf-8?B?MCttK3hudWtLSUJkcjNPU29ZQno1RklLZ1dKb0VTc01Semx6N3lMYVJUUCs3?=
- =?utf-8?B?ei9hTFFvSGw0UkxWSld0S2FlKzJMSUxLUzRDM1NsQ1lzbzJRalRQZW1zWG1j?=
- =?utf-8?B?ZjdpdEN1bFk4KzJSalNGelFyVmdkNHBsUU9GOXFlUnVtc29GUVFKWnF6MTEy?=
- =?utf-8?B?bkNSV3N5eWZ1ZCtWSUU3aStqRDVId0dOajlUTjFDU3VNL3E4Z3BMbFcwTVND?=
- =?utf-8?B?OXNoTGxVM0JFenZoL2FFZy9vakZRNU9vV3BQeE55RzZGcUQ5ZDNINWQ2cHg2?=
- =?utf-8?B?TnJhQU1jY0M2MkxERzNGbXpucTdrTG4zUlVZaWhNRmRRc3BRcThaUm1PYVNl?=
- =?utf-8?B?TmplMWwwL1htaS81VnpuWGhhZCtEQ2IwNTRKaVVzWG95K3Byd3U3OWVZa0Uv?=
- =?utf-8?B?c1V5a3BGczluWjJjbjZTR0t1V1NITkhmZmM1d3BYZEE3elA3d2xQQ083WUh1?=
- =?utf-8?Q?SZv2C8J0s5swNCVg=3D?=
-X-OriginatorOrg: fb.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6c46fa3f-7c8d-40dd-5aad-08da3a737e07
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aE00YlhYVW5XUy9BUkcxZjZWUjBFZXVOWmdKd2paeU9MUHRqcFIzUHl3Rnlw?=
+ =?utf-8?B?Lzg2MWEveHcrMEVPT3VBYU1kS2IvZWhCc2o3UDIxMXkyZlVyOGlZeVdFaUYy?=
+ =?utf-8?B?QmlXRml6V2ZYd1RvSjd0cTN6M1R1NlFoTHFXWXd4alFBMUVzRlNOVlJ3eEsx?=
+ =?utf-8?B?TU9ZbEpudlRHTHdrSGJpMk0xc01pNFlXZ2Z4YlJPV3AwaVJsQjBMS216YzFL?=
+ =?utf-8?B?ekttY2lsaWEwVG9QdnVzN00wN1g1YnFvSjRhaGhweWFVS005RDhwNnVYWmk4?=
+ =?utf-8?B?N3JxelpUZmZMS1pTYnN6RUZtSThyQWUvampPdUFadW1NdDZqWDVzdVdjZ3lO?=
+ =?utf-8?B?MXVxT2g1N296UTF4TTQ3M0xEYjI5TzZVMlUycDlHQ3FRMVJad1hlVE9JSldH?=
+ =?utf-8?B?N2I5ZVEwR2hMOFphSFdTcWxjN1ZyMDZoaE9JTUlQbjhTb3VGSUEvRE51V0kx?=
+ =?utf-8?B?emdIb1FrS0NwNEpNOWxnS2pNM1RJelhNUmNDdzBNTlZVSWxiTWpjZHlsWTJV?=
+ =?utf-8?B?NVV5YTJldkQvQWtNeEl0V3ZIUGxVN0JPTGJXU2thMW1VQW9mTHdkdW5VV29u?=
+ =?utf-8?B?dHAyZ2ZLNnVLRGZEb2dpcGp6Y1JReXhWZUNPVjRtcHBITWJKV2pqUE10OERn?=
+ =?utf-8?B?TGg0YkcvWUtXTU1wcThsaTlvSXgyOE1HeDVyajRmTk93eG1pUHh5TEVCR05I?=
+ =?utf-8?B?YlNvVk5VdHQxZXZaRzVKVm5lWHpmUkEyVXhKcmdyeGNQV2pzZjE3b3VYaVRv?=
+ =?utf-8?B?K2hUU3RCQzNtUzNyQTBkdTlRYmEvazcvU3BkNTdwdFNYVG54VGgzelFKMnRu?=
+ =?utf-8?B?M1ZKVmZvakNGdU1tWm5hUm50dkl0Q09ITzE3aDRTS214cVltRFkxczd4aVoz?=
+ =?utf-8?B?WUJYWklDOWs4MGpNUUE5WXdUdGdic3RNaUg5MHRCZEp6bkxJbjZwZHdWVWF2?=
+ =?utf-8?B?VVU1MWx4ejc4WWhIWWljcUVUdDlmK1hHeTZ0SUtEOG1QOG1kL1g2US8vaUFQ?=
+ =?utf-8?B?YzNuVE0wUytpd1c2VVpqY1RHZC9VTkxOaVN0MnhGUFRMS1REaUFQMjVIQlNK?=
+ =?utf-8?B?TFp5WHEwMXZGNmQ5a1ViWVZMODVPT1BOZ1AwaFpOZU9aTFVOc1h1cTBIUURK?=
+ =?utf-8?B?ZXRnaGxQdzFmOWJyVFhOMjNvMkxuRGpyY2JMbHR6ZUdoMTIzTVh3SjFHSkFV?=
+ =?utf-8?B?bENmMDh5YTljdEd5Ty9RcUd5SU5Jdm5wODdTUmlIVGlQVkhETkJWT2JwSVA5?=
+ =?utf-8?B?YlBocjZmWFNjVVY4b240WEJTOS9xWEVaYlJvTjBybEgzeDNvMjBKZUplUW9C?=
+ =?utf-8?B?YXZoZlVOSC9xeTF4YjRMWUZuOXZzdUN2OEhaaFRVNEh1T25DMzl0MzE0c3Nw?=
+ =?utf-8?B?RDRDVjZSdGQ4Nkhyc2xsM05mVWJ2dytHdjFyd0c5LzBtMnQyaGxBNUxPK0Q0?=
+ =?utf-8?B?ZFI0ZDNPV1hGQ2VFN2NOZUVWd1FPYTVheWZjUnRzUXN5MHoyUkdIdzMrUURs?=
+ =?utf-8?B?UXZSWWI0WDZFK3BXQ0RkRUFUejF0T1h3a1BKQUZUdkJRbTV3S2dnTXhJQUF5?=
+ =?utf-8?B?RDdLNFEzcGZBMGYvSlJtT0RIUVRCWmlHejVlTUhpbDZyVzVJUG8wQ1pFQVY1?=
+ =?utf-8?B?bkpSTVk5THY5ZDhVTG1TdElTWkg4YW1KcDd6OVQ2TDY2QUFMODVMV1dYd0M2?=
+ =?utf-8?B?ZDdpR3JUMmYvQ0pGSHZadG90clVnby9EWFZTM09rcCtRa3ltVDZ0b3dqZTZV?=
+ =?utf-8?B?RlBlUHlRbC9SRmRXNi9nNDNsUXcvQnpRTTV4T1RURzg4SHNyYnFBVmpMQVJC?=
+ =?utf-8?B?TDQwWjBaamFOVVlCOTVXRXp2bUE2RGpoK1ZQemtKZEZ4bjQ0RWFmTmFaS2NL?=
+ =?utf-8?B?UUhTb1kwcENCVVdNQ3ppMG5kdG5YMDdPSnQwVVBJUHlRRm1xY1lQUjkyVE9w?=
+ =?utf-8?B?YnNvNTVzNDNBTllERng1WWVHOGxiS2psUno2N1FldHlDa3J0M0VFVkp3clRh?=
+ =?utf-8?B?eFo5Nm9La3dWeGl5cGJlS3BnV0JBVUlRd0h0cDh3WnZsMmUzOGtsa1RKZ3dO?=
+ =?utf-8?B?S3VSQ3BFZllQWlQ4TFlyeEJkTzBKV1AwUHpyZEhMU01nWVRXVlh6djMvbEpz?=
+ =?utf-8?B?emRmQldpWEdNY3pxRjZ4K0Mxbjl1WE1Pa1RGazBDNEwyd1RRcXpPM1dMcnY3?=
+ =?utf-8?B?blZzY25sNjdtcUtzYUVLWnlQaXZFWTk4MC9FVnEyMHk0TGQ2OGtGTnhYaURB?=
+ =?utf-8?B?eTNPeWxvUWFoWkpNMFFXL2ZBREF2RkVrUXBORmpka09UYXZ1NFBlRlRxQ01M?=
+ =?utf-8?B?d3hHcVIxQjIyVm0wL2M0TnNSVkRIaWVjYmJKczlRTkFINVZtU3dydz09?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 87890734-22cc-4fd4-35ad-08da3a73ecd4
+X-MS-Exchange-CrossTenant-AuthSource: MW2PR12MB2379.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 May 2022 15:14:53.8282
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 May 2022 15:18:00.1263
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SD/P0KWwhuJUNqGg1HGNCLNvxRHdlAZpMi/JL66nAMGssnR1QO6cCtQfQ4SdwTeH
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR15MB4532
-X-Proofpoint-GUID: vcEZZZbk92WtRuoIe4SNG6wb0CrKhhRn
-X-Proofpoint-ORIG-GUID: vcEZZZbk92WtRuoIe4SNG6wb0CrKhhRn
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-20_04,2022-05-20_02,2022-02-23_01
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0pcupYGdkVkg7Kc/u+Ua0RLiNp6zPPOxDGk62UXWtOAAU4tepV0WyAMc9SfzzNRXhZtzqwsKPdpkLfZFHdjw7w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6558
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Mel,
+
+Thank you for looking at the results.
+
+On 5/20/2022 3:48 PM, Mel Gorman wrote:
+> On Fri, May 20, 2022 at 10:28:02AM +0530, K Prateek Nayak wrote:
+>> Hello Mel,
+>>
+>> We tested the patch series on a our systems.
+>>
+>> tl;dr
+>>
+>> Results of testing:
+>> - Benefits short running Stream tasks in NPS2 and NPS4 mode.
+>> - Benefits seen for tbench in NPS1 mode for 8-128 worker count.
+>> - Regression in Hackbench with 16 groups in NPS1 mode. A rerun for
+>>   same data point suggested run to run variation on patched kernel.
+>> - Regression in case of tbench with 32 and 64 workers in NPS2 mode.
+>>   Patched kernel however seems to report more stable value for 64
+>>   worker count compared to tip.
+>> - Slight regression in schbench in NPS2 and NPS4 mode for large
+>>   worker count but we did spot some run to run variation with
+>>   both tip and patched kernel.
+>>
+>> Below are all the detailed numbers for the benchmarks.
+>>
+> Thanks!
+>
+> I looked through the results but I do not see anything that is very
+> alarming. Some notes.
+>
+> o Hackbench with 16 groups on NPS1, that would likely be 640 tasks
+>   communicating unless other paramters are used. I expect it to be
+>   variable and it's a heavily overloaded scenario. Initial placement is
+>   not necessarily critical as migrations are likely to be very high.
+>   On NPS1, there is going to be random luck given that the latency
+>   to individual CPUs and the physical topology is hidden.
+I agree. On rerun, the numbers are quite close so I don't think it
+is a concern currently.
+> o NPS2 with 128 workers. That's at the threshold where load is
+>   potentially evenly split between the two sockets but not perfectly
+>   split due to migrate-on-wakeup being a little unpredictable. Might
+>   be worth checking the variability there.
+
+For schbench, following are the stats recorded for 128 workers:
+
+Configuration: NPS2
+
+- tip
+
+Min           : 357.00
+Max           : 407.00
+Median        : 369.00
+AMean         : 376.30
+AMean Stddev  : 19.15
+AMean CoefVar : 5.09 pct
+
+- NUMA Bal
+
+Min           : 384.00
+Max           : 410.00
+Median        : 400.50
+AMean         : 400.40
+AMean Stddev  : 8.36
+AMean CoefVar : 2.09 pct
 
 
-On 5/19/22 6:21 PM, Yosry Ahmed wrote:
-> Add cgroup_rstat_updated() and cgroup_rstat_flush() kfuncs to bpf
-> tracing programs. bpf programs that make use of rstat can use these
-> functions to inform rstat when they update stats for a cgroup, and when
-> they need to flush the stats.
-> 
-> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> ---
->   kernel/cgroup/rstat.c | 35 ++++++++++++++++++++++++++++++++++-
->   1 file changed, 34 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/cgroup/rstat.c b/kernel/cgroup/rstat.c
-> index e7a88d2600bd..a16a851bc0a1 100644
-> --- a/kernel/cgroup/rstat.c
-> +++ b/kernel/cgroup/rstat.c
-> @@ -3,6 +3,11 @@
->   
->   #include <linux/sched/cputime.h>
->   
-> +#include <linux/bpf.h>
-> +#include <linux/btf.h>
-> +#include <linux/btf_ids.h>
-> +
-> +
->   static DEFINE_SPINLOCK(cgroup_rstat_lock);
->   static DEFINE_PER_CPU(raw_spinlock_t, cgroup_rstat_cpu_lock);
->   
-> @@ -141,7 +146,12 @@ static struct cgroup *cgroup_rstat_cpu_pop_updated(struct cgroup *pos,
->   	return pos;
->   }
->   
-> -/* A hook for bpf stat collectors to attach to and flush their stats */
-> +/*
-> + * A hook for bpf stat collectors to attach to and flush their stats.
-> + * Together with providing bpf kfuncs for cgroup_rstat_updated() and
-> + * cgroup_rstat_flush(), this enables a complete workflow where bpf progs that
-> + * collect cgroup stats can integrate with rstat for efficient flushing.
-> + */
->   __weak noinline void bpf_rstat_flush(struct cgroup *cgrp,
->   				     struct cgroup *parent, int cpu)
->   {
-> @@ -476,3 +486,26 @@ void cgroup_base_stat_cputime_show(struct seq_file *seq)
->   		   "system_usec %llu\n",
->   		   usage, utime, stime);
->   }
-> +
-> +/* Add bpf kfuncs for cgroup_rstat_updated() and cgroup_rstat_flush() */
-> +BTF_SET_START(bpf_rstat_check_kfunc_ids)
-> +BTF_ID(func, cgroup_rstat_updated)
-> +BTF_ID(func, cgroup_rstat_flush)
-> +BTF_SET_END(bpf_rstat_check_kfunc_ids)
-> +
-> +BTF_SET_START(bpf_rstat_sleepable_kfunc_ids)
-> +BTF_ID(func, cgroup_rstat_flush)
-> +BTF_SET_END(bpf_rstat_sleepable_kfunc_ids)
-> +
-> +static const struct btf_kfunc_id_set bpf_rstat_kfunc_set = {
-> +	.owner		= THIS_MODULE,
-> +	.check_set	= &bpf_rstat_check_kfunc_ids,
-> +	.sleepable_set	= &bpf_rstat_sleepable_kfunc_ids,
+Configuration: NPS4
 
-There is a compilation error here:
+- tip
 
-kernel/cgroup/rstat.c:503:3: error: ‘const struct btf_kfunc_id_set’ has 
-no member named ‘sleepable_set’; did you mean ‘release_set’?
-     503 |  .sleepable_set = &bpf_rstat_sleepable_kfunc_ids,
-         |   ^~~~~~~~~~~~~
-         |   release_set
-   kernel/cgroup/rstat.c:503:19: warning: excess elements in struct 
-initializer
-     503 |  .sleepable_set = &bpf_rstat_sleepable_kfunc_ids,
-         |                   ^
-   kernel/cgroup/rstat.c:503:19: note: (near initialization for 
-‘bpf_rstat_kfunc_set’)
-   make[3]: *** [scripts/Makefile.build:288: kernel/cgroup/rstat.o] Error 1
+Min           : 361.00
+Max           : 399.00
+Median        : 377.00
+AMean         : 377.00
+AMean Stddev  : 10.31
+AMean CoefVar : 2.73 pct
 
-Please fix.
+- NUMA Bal
 
-> +};
-> +
-> +static int __init bpf_rstat_kfunc_init(void)
-> +{
-> +	return register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING,
-> +					 &bpf_rstat_kfunc_set);
-> +}
-> +late_initcall(bpf_rstat_kfunc_init);
+Min           : 379.00
+Max           : 394.00
+Median        : 390.50
+AMean         : 388.10
+AMean Stddev  : 5.55
+AMean CoefVar : 1.43 pct
+
+In the above cases, the patched kernel seems to
+be giving more stable results compared to the tip.
+schbench is run 10 times for each worker count to
+gather these statistics.
+
+> o Same observations for tbench. I looked at my own results for NPS1
+>   on Zen3 and what I see is that there is a small blip there but
+>   the mpstat heat map indicates that the nodes are being more evenly
+>   used than without the patch which is expected.
+I agree. The task distribution should have improved with the patch.
+Following are the stats recorded for the tbench run for 32 and 64
+workers.
+
+Configuration: NPS2
+
+o 32 workers
+
+- tip
+
+Min           : 10250.10
+Max           : 10721.90
+Median        : 10651.00
+AMean         : 10541.00
+AMean Stddev  : 254.41
+AMean CoefVar : 2.41 pct
+
+- NUMA Bal
+
+Min           : 8932.03
+Max           : 10065.10
+Median        : 9894.89
+AMean         : 9630.67
+AMean Stddev  : 611.00
+AMean CoefVar : 6.34 pct
+
+o 64 workers
+
+- tip
+
+Min           : 16197.20
+Max           : 17175.90
+Median        : 16291.20
+AMean         : 16554.77
+AMean Stddev  : 539.97
+AMean CoefVar : 3.26 pct
+
+- NUMA Bal
+
+Min           : 14386.80
+Max           : 16625.50
+Median        : 16441.10
+AMean         : 15817.80
+AMean Stddev  : 1242.71
+AMean CoefVar : 7.86 pct
+
+We are observing tip to be more stable in this case.
+tbench is run 3 times with for given worker count
+to gather these statistics.
+
+> o STREAM is interesting in that there are large differences between
+>   10 runs and 100 hundred runs. In indicates that without pinning that
+>   STREAM can be a bit variable. The problem might be similar to NAS
+>   as reported in the leader mail with the variability due to commit
+>   c6f886546cb8 for unknown reasons.
+There are some cases of Stream where two Stream threads will be co-located
+on the same LLC which results in performance drop. I suspect the
+patch helps in such situation by getting a better balance much earlier.
+>>>  kernel/sched/fair.c     | 59 ++++++++++++++++++++++++++---------------
+>>>  kernel/sched/topology.c | 23 ++++++++++------
+>>>  2 files changed, 53 insertions(+), 29 deletions(-)
+>>>
+>> Please let me know if you would like me to get some additional
+>> data on the test system.
+> Other than checking variability, the min, max and range, I don't need
+> additional data. I suspect in some cases like what I observed with NAS
+> that there is wide variability for reasons independent of this series.
+I've inlined the data above.
+> I'm of the opinion though that your results are not a barrier for
+> merging. Do you agree?
+The results overall look good and shouldn't be a barrier for merging.
+
+Tested-by: K Prateek Nayak <kprateek.nayak@amd.com>
+
+--
+Thanks and Regards,
+Prateek
+

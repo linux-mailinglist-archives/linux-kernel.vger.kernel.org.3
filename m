@@ -2,149 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0845E52F590
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 00:16:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A740E52F596
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 00:18:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353861AbiETWQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 18:16:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35696 "EHLO
+        id S1353871AbiETWSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 18:18:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345089AbiETWQk (ORCPT
+        with ESMTP id S245429AbiETWSL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 18:16:40 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2041.outbound.protection.outlook.com [40.107.244.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A916E8CD;
-        Fri, 20 May 2022 15:16:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Y4QKgCA1iI9oWTz2SVBYBraDVfB6uuXhgrb0EgA9AXBA2Pn5VKz6UIc/9+3ww3IqD5/WlBmrFOQLJR5je/akozWI/pkAZ6QVLPbVKhxe2GOxesLlm6p+gIOsSf3p4NlF/lIzO+h9TMRTylJiiPALbwRu2//47A0tzTsuInRsieyV0aoOD2gDCayNERiOliBzb2m7YW0L9qLshwBjeN0FFfFYmX9KV1bioTV/qct2nfuYSNck778gG/W5O+4oo79X30YHAx2LuvXIgZH//Y5xuReZioD4N9hsvQkacbY6GT5yT9HKhw+WdkCh2qK2mTaIix8mazuETJe8Kia2yaalCw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/4H55jr8ld4bsOPUqGSMtesrL4oIDlLT/4Hx9CIhMqQ=;
- b=CNVvMe9qwP6w58khQAmmuSPaNjlLBIUrrcqx8YoFiAlicMDXSp1ZlaYiTt3K82gVZg1rLFaZ/D2pc8Il6RRpwcjwieVJ1SeyBDP4ugpVEfW6v/JW2bhWYq7VtXKvpEPtAkRXByKNx11OFwSSOavsFIj7+d9J5Nd+5OXdY7HtDXRCsYWs0fM5z+1SHvcuWP/pWX9B8sAZrrGmzE4hanTXiD+lGGp8kMlWf7/dnN+xrzTjLJFuDmvcaoo49pxhNJjY07Er4IjHqKAkOFVWtm0WtYFhU4X5BZperlhkzQMm3vVsgu4x0vGDx2n69OczVddAJxBO2NFJGiib3T7yXsZYsQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/4H55jr8ld4bsOPUqGSMtesrL4oIDlLT/4Hx9CIhMqQ=;
- b=WT6Kl3o+hpB2dLkr2fgtRKxStLOK+Wx9vLt8pX6K22YhPzQvdMd6wjIlbEcpTAZMRi+cWTXtkoBOXTMZI5btv37eeJ++CDZed/jhUP/yqKusoz1UuIDkx2+9R6QdlrW+Jgq90dBP6UhwK1xs5THXjW+vPse5xJOtaNtDuhJC8WKaBe6CRI8xbaVj8awRYf7xDjLIhk9lrjueqVsFekNPiazvqnsBi/sD4sp9Hqzymmc/iosUlODzghRTWfv099SQCwZEQbJ0ojtbyxyPXEqQ3kDrxvFNynB3fv6k34lvgcRPZwV+bOkbK8B4dNqMGMPfS6eE9rnZgSPERUH0IAXU9g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4209.namprd12.prod.outlook.com (2603:10b6:a03:20d::22)
- by DS7PR12MB6071.namprd12.prod.outlook.com (2603:10b6:8:9d::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.17; Fri, 20 May
- 2022 22:16:38 +0000
-Received: from BY5PR12MB4209.namprd12.prod.outlook.com
- ([fe80::bcda:499a:1cc1:abca]) by BY5PR12MB4209.namprd12.prod.outlook.com
- ([fe80::bcda:499a:1cc1:abca%4]) with mapi id 15.20.5273.015; Fri, 20 May 2022
- 22:16:38 +0000
-Date:   Fri, 20 May 2022 15:16:37 -0700
-From:   Saeed Mahameed <saeedm@nvidia.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Doug Ledford <dledford@redhat.com>,
-        Jason Gunthorpe <jgg@mellanox.com>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Leon Romanovsky <leon@kernel.org>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Shay Drory <shayd@nvidia.com>
-Subject: Re: linux-next: manual merge of the rdma tree with the net tree
-Message-ID: <20220520221637.24jwi3uy5iai3pxo@sx1>
-References: <20220519113529.226bc3e2@canb.auug.org.au>
- <20220519040345.6yrjromcdistu7vh@sx1>
- <20220519104852.0b6afa26@kernel.org>
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20220519104852.0b6afa26@kernel.org>
-X-ClientProxiedBy: BYAPR05CA0054.namprd05.prod.outlook.com
- (2603:10b6:a03:74::31) To BY5PR12MB4209.namprd12.prod.outlook.com
- (2603:10b6:a03:20d::22)
+        Fri, 20 May 2022 18:18:11 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3571A166D4E
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 15:18:10 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id z7-20020a17090abd8700b001df78c7c209so12601382pjr.1
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 15:18:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ppqA1V71Dip/w0SDRJr0n7SLy4Hy4OPoqjHQOx+tb1w=;
+        b=RAU9fAtoYg44KWOfDd5AD8kQea342PUXf80S3LNyTJcnLvleWgVC8+ipOjZafWawXd
+         HnotSYVty/ibTqhp+GKUwJ7nOwi22ObOyMdYnykGlnyHcC11RnY5TPJ5c2C8cM1ter2z
+         mi2bSkOsYplAGvpUTkciI+BXFGYttZUEeZ1uRckqCWJ8gk9E6zzz8He0jph0vT50awPV
+         DoGJft5PebpUz7wCdS40EHnqm7hRXd8xuDJFzLgzVmZD/TlQ5iCZVGAQO9Kj/3hUjtd7
+         6Srv9u1r/8R0NcnZOgU4gIhJMnfzjTmek4P2Z2AVpiZg4j1rM4fFho07NQoQzcUIX7Fi
+         bskg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ppqA1V71Dip/w0SDRJr0n7SLy4Hy4OPoqjHQOx+tb1w=;
+        b=sgL2nwSQA7ym7JNYEpiRQ9MTkfK4aLKJbTjNXkE914FEUaFMWBzWqjX/vfwj5i6dba
+         eRqpkDkkGSUoZPfUppyRLdTkkMvRZk+aLnlhvoDSJmPmSXh0O2y+Rh/OfEkuqC4je5xQ
+         Ia6hKul/ZJaBZIisRu0uUSGkw/1Phh22hC4BSj6z4tEp5Sogl59Z+4bCUbtOHspSj1Mg
+         K21WXwDEKG1gQ4QQFuS47n7vDGP+Fa1K39LzI3n7T6LajVfgH9GB3AozmeZ3dF2+3CY2
+         ZD1t+TNg7mY+ubGvCgMtZNxj0VIZKAjHQCDh5RZGwQTJVwQ3TKPPj5oJdQiR2OGPCUN5
+         kJcQ==
+X-Gm-Message-State: AOAM531thndfzaEXOfC9GY4VrJA/to7DS4vTf3fgTHUfpjGgFediyD1j
+        IQAUtAQCIxWMIiZsIJweE+3kbw==
+X-Google-Smtp-Source: ABdhPJwNh3Ko1yDLlYQF/0hdyJtZo7xphTsSajaIBO7hXN3XRFFS5rg0jQ6I/RsIU6d6JOX0mzuLPg==
+X-Received: by 2002:a17:90a:eac5:b0:1df:7da8:4b19 with SMTP id ev5-20020a17090aeac500b001df7da84b19mr13839697pjb.2.1653085089685;
+        Fri, 20 May 2022 15:18:09 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id v10-20020a17090a7c0a00b001d95c09f877sm2376612pjf.35.2022.05.20.15.18.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 May 2022 15:18:08 -0700 (PDT)
+Message-ID: <471e5654-49d7-9023-62b4-fc98483b1d89@kernel.dk>
+Date:   Fri, 20 May 2022 16:18:06 -0600
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e679d8e6-d826-4fc1-eb8b-08da3aae68a3
-X-MS-TrafficTypeDiagnostic: DS7PR12MB6071:EE_
-X-Microsoft-Antispam-PRVS: <DS7PR12MB60715254B21868638972F6A3B3D39@DS7PR12MB6071.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HnTCh21Kt5rk7U9YoYPKI18LrOrJzmgkQFpXy6423SfV6DQ8ppS2tTG6ktZjU3m8Kt8VVgrGDCKCBnBjP3c2w3Ta+CO0KpZqtBRyzVxICfQlgNkipoQ6NVG+opEQ+vJeaUxA1zm+ZigQEtOyV/QYVVIUAN5G4Av8GkkGQTVIVH7UEqb7EQDsaOT+B1udangQ8wHI0MPcRMOdqwJVuEGmsjGLCDzm+g+wgPMqU8FZ3FWXDD6IW0aBa4Q8qCOh3IcLzTSyyw/iS5BQdF/v02TIkrki9qZEECDPFuAGlJVS+dHNmthMMHbieLic4vzjmUmzlveP7JX4FlCzYbHAMDfdC5WE+g9CeDhktOdSsJpHT2vX9FKIlaKk9PgM96lRHU+mUT3Jlt6t8W9NBRXqOWwEycmuWjaOHjPzTJlpIAuSP6sOLYnrEJXHdLzLdbQuswIcXHqgnAKoqOxtKZQprNRyloIwNRz/y6Wd/P1crWPOYJ85fW1nC7qJUrJ95jPaoWbEVbF+meIWqv5mdwOyoAqtXkfRYSr2wxOINFKK8IoKB+PwGB/3Z1ErlaqVCXc+fLXBhac6D81XZRhi8Z2Rh9jl5tdjKsDfZOdYHeZg2+7oeuBTggMWivLPPjbYv5d1xBMziDPymBlBj19yKh3tCeezOg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4209.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(7916004)(366004)(6486002)(1076003)(66556008)(33716001)(4326008)(8676002)(4744005)(66476007)(66946007)(508600001)(5660300002)(8936002)(107886003)(2906002)(186003)(316002)(38100700002)(6512007)(9686003)(6506007)(54906003)(6916009)(86362001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3N5lZHvkXkgY+ApfdoTj+rlFU1RgeIz5X2JflhFlqsFRj3zcDlgdHLexAaKV?=
- =?us-ascii?Q?EVgWpELzzR8oLFEvPjoljRdzk0YeVw+hvKBU2ehYJs9p8oa+fWVbKXtO93Gx?=
- =?us-ascii?Q?gy2us0K9DWCH1uAHDED04BxGOPqAYsdCe06ewb8qulGAJXYNv2BDInx+hQYN?=
- =?us-ascii?Q?LkoUzxSMkOkjCkO/IsBTS+tLQSCN3N4Nt8k2nSrLGdOe/Ug0Def72asGiZPy?=
- =?us-ascii?Q?VuUtPRDx+QkKm+f/ao6hp90Kofgr4knlhceaw2OO0dPqSHgeaQhn4v/e/HK/?=
- =?us-ascii?Q?0Vlg8jahBO9vk+/wQh+S5Kl49EVDBtwQ8lLODKRuQhZRcFpaOdrPd+6IvwO5?=
- =?us-ascii?Q?a9e3FKUWF5Pr8QDYWzJDEzO9qQEhIu7hUpbfXnTCmWkKiK4EPxabQLve1/C+?=
- =?us-ascii?Q?Xv/qymX6+I6mHC2lI/OSB4IdW72UdE9WV6IpRRD4FAm7taVdk+8vtPdkVWPA?=
- =?us-ascii?Q?gnzUNbHQnGpIuLwukKY1gnnMPRfRC3KH1c7KDKBI4a0v66voveDnnCelEOkL?=
- =?us-ascii?Q?OR6G/8VZe30ic3TPFDbCaR+oIbShI4Dquooe+HiZyW9J24qU93aUo0hBa794?=
- =?us-ascii?Q?vP4p97ifQ2ZWll7pqrWS3qj2LOKJXiphDHbalTRIUiZEjlW7268GGDF4REfB?=
- =?us-ascii?Q?L0QqbAW/hhNPx8vJWSEigElYMsW6Ih5x5rbqvMLPreYwXPELGuHRZocK6GZj?=
- =?us-ascii?Q?rCxqdbh4XXw4j+ngneZfs94qFwtvbtWGYjLsjvPdSG9sSHu7Pq+7FCDEexTk?=
- =?us-ascii?Q?idmv264zWvjeQabky1U3mI24nwItW7uGVfWfzy5D8xOmkQQF67v5HmpyRlOM?=
- =?us-ascii?Q?7WuvEBmj1gJfVWcgW0kPADcGke+nDYazXZ5nht8vbiZ6eNuJp4vzvm8MZFvU?=
- =?us-ascii?Q?n8AM5yJL71rCtFKXNTs1xTRIsi9EnHOCyic2YUOY+C/kmxIZcL1p1vBQdFQO?=
- =?us-ascii?Q?uL/Shto99Enkxd5r5VaDVIGrVXLYaxt/wSWoiZ8jDKVkKgXFTzpRSazBHiem?=
- =?us-ascii?Q?UFVZaBW4Z5gnutIJwPlI9qewUD2kVbjx/lKIfOaO1zGGJdx8Gu2WHOkZkrAB?=
- =?us-ascii?Q?okVjHVuPPlXKzBh77QVCDhNE9TbRpFpyhq8j/NeUNEtlv1avVT0dXHbWqTT4?=
- =?us-ascii?Q?SZthVnAxjW+ko2YRL7OksEmKa/+Wk9983Sh5Y0+V5s6wWMv6GIjlkjU7nNOl?=
- =?us-ascii?Q?K2MjQN6Mtd3VhprzBy5LfAiIqh1lw7MtwnwNkXgUOdG/PaZBsoKROA8QoRSg?=
- =?us-ascii?Q?J4HsISNOIW78P09v72V1DlZaauiUNx0WAyTt0flo6YpjW/g4dI50rQzmCnJF?=
- =?us-ascii?Q?Smmw+6skFJ1B11CfQt34XU1J0uuprYAyuq8UzuHZeAfwYxRPO5Q23rAWpMEw?=
- =?us-ascii?Q?3HCpmGdnyt37ePn/drKnKg+9h//fVVYq1Jxg/jJ27OoncicB9o3rI+gC0FtY?=
- =?us-ascii?Q?CjB8cdHlVE74F74vLL/Hbz0gkHLERETyeY5W1fpBzTPqxq5cVWh9MkBgEgi/?=
- =?us-ascii?Q?B7Z9W2twe9wLvV2v7XenZCNldpEdwXxCfTR6gO6Uynw9xykzAk1bb92MTkS1?=
- =?us-ascii?Q?iC/4R25oaGbMdecFJrAiNZlF29AjtFiI6CwSSyM5FGzHYCPyPYhlp/hsfm/y?=
- =?us-ascii?Q?18JiE6N2whRMU6mIinMERVji8wUYDOyaVoZGhlfrucd13UKyZYUzG1bcRmXQ?=
- =?us-ascii?Q?xyM7VNMLu+x9ynZR6l9ZBPx42rzPd73cNOMgOpcdrJ8RHKRipXeuV7c23JHZ?=
- =?us-ascii?Q?04TlIreNncWNhaamEh5L26SIF111ULKzzGqTBlL81ZiU/zpBSlCJ?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e679d8e6-d826-4fc1-eb8b-08da3aae68a3
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4209.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 May 2022 22:16:38.2671
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2SWKgqX2C+QvgC1hQYnxxmqb97I6Hme0QWz4gg0FLEoWGedOwRBvlVONe0sygVv/lr4gXi+Xdq+YNMV8jhREjQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6071
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] fs: prefer read_iter over read and write_iter over write
+Content-Language: en-US
+To:     David Laight <David.Laight@ACULAB.COM>,
+        "'Jason A. Donenfeld'" <Jason@zx2c4.com>
+Cc:     "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220520135103.166972-1-Jason@zx2c4.com>
+ <39ed6917f2e64a07bad8dad63f8dceb4@AcuMS.aculab.com>
+ <YogIg9FG7C/f98bf@zx2c4.com>
+ <0da16e16caed4282ae97a86f1ba6f6db@AcuMS.aculab.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <0da16e16caed4282ae97a86f1ba6f6db@AcuMS.aculab.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19 May 10:48, Jakub Kicinski wrote:
->On Wed, 18 May 2022 21:03:45 -0700 Saeed Mahameed wrote:
->> >@@@ -1274,9 -1252,7 +1261,7 @@@ static void mlx5_unload(struct mlx5_cor
->> >  	mlx5_ec_cleanup(dev);
->> >  	mlx5_sf_hw_table_destroy(dev);
->> >  	mlx5_vhca_event_stop(dev);
->> > -	mlx5_cleanup_fs(dev);
->> > +	mlx5_fs_core_cleanup(dev);
->> >- 	mlx5_accel_ipsec_cleanup(dev);
->> >- 	mlx5_accel_tls_cleanup(dev);
->> >  	mlx5_fpga_device_stop(dev);
->> >  	mlx5_rsc_dump_cleanup(dev);
->> >  	mlx5_hv_vhca_cleanup(dev->hv_vhca);
+On 5/20/22 4:08 PM, David Laight wrote:
+>>    https://lore.kernel.org/lkml/Yoey+FOYO69lS5qP@zx2c4.com/
 >>
->> I already mentioned this to the netdev maintainers, same conflict should
->> appear in net-next, this is the correct resolution, Thanks Stephen.
->
->FTR could you not have held off the mlx5_$verb_fs() -> mlx5_fs_$verb
->rename until net-next? This conflict looks avoidable :/
+>> The hope is that it eventually becomes faster... :-\
+> 
+> I suspect all the xxx_iter functions need optimising for
+> the common case of a single buffer in userspace.
+> 
+> That also includes the code to read the iov[] from usespace.
+> At the moment I think the 32bit compat code is actually
+> faster than the native amd64 version!
+> I've written some patches to speed that up.
+> But the bigger improvements all hit massive changes
+> to the ioring code.
 
-Yes, sorry again, will be more careful in the future. 
+Do you have a link to those patches? I can certainly help with the
+io_uring side of things, and I have a genuine interest in improving the
+core and getting the iter side up to snuff.
+
+-- 
+Jens Axboe
+

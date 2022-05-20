@@ -2,119 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D181F52E80F
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 10:50:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99FB152E815
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 10:52:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347360AbiETIu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 04:50:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48508 "EHLO
+        id S1347416AbiETIwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 04:52:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347168AbiETIuY (ORCPT
+        with ESMTP id S1344968AbiETIwG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 04:50:24 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A761C6E77;
-        Fri, 20 May 2022 01:50:23 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id w4so10505462wrg.12;
-        Fri, 20 May 2022 01:50:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kKSrGrQ3KFhSHnYm0sBJhqBxqjSZZxv4rXZISo5LB2U=;
-        b=HP/5VoY5DZ2nGZbwOPj5r9hJmyzEGFqfhl8h3H+XUc9mCrEGZkNh/M/MclZ37IlCHr
-         QcY0prxvR3n/brwjgq9DSvqEN+bObsL5D6I4VpDTCNVRPWhvhHON13ckdSsEpeuzi5ox
-         gCJgBxE9J9fH5hzeb49GDlSA6H6k8AtRhag7qxlvraPfcUCWJdsN+v/50GSE9a5jGIfn
-         nP+R1dMx+PtsYZBqwk0/RzdUQ2ID3zem4B0K3Muamsx58HCFfFMzjtzJoIAn6aZSqnFg
-         Vq199yxLkUYiBHXXzYTKWepW8QgMc5s3sbhyxKeQVKLzqrzTcT3nqzZquggaEFh3HrpU
-         ybCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kKSrGrQ3KFhSHnYm0sBJhqBxqjSZZxv4rXZISo5LB2U=;
-        b=P4AxXe8b6vR7UUkaoh3PN3gCFxSCOL5CXQFlEyTubjadUeeCaKOnl8ImgVRYBaurQb
-         pTRom75D+EHZrhc0xUU4Be/l4twn5dJQab76z3unyJwMCPLlRU+5MlJCCIbmPm3uiA0e
-         ZWo/Ql3QAlSP5WmDcUeYeibwcM+MmUxV0p8eWVgC20b81Pth3wbNwuwdSkp4CjtbOxll
-         Aaac6FFIHMecjW/4F0TbU3cT7GUXBespu+uePD1g4PvcK/eFRrgZBO/stWxvLAn6Tkgc
-         TvDftYcw2kZFkzDQqf2P6RklPobrZ/eS13DSmco0gIymSbQKWq003V0C/vyh2gO8pRCD
-         U4Pg==
-X-Gm-Message-State: AOAM531aHSPv53blCVfoZ6E3TmxXAkQN02A4ElU4lGyiWG1yTBJk3+P4
-        pg/1keqAID8FNpG5kdI0Qhc=
-X-Google-Smtp-Source: ABdhPJwGLeTHNPcglw6xcRgPlledKiZeb4vBth7DW6CwJ05UvdHdvw91ywCHLVVsaoCgM46M7LdjsA==
-X-Received: by 2002:a05:6000:1a88:b0:20e:6ee9:c78e with SMTP id f8-20020a0560001a8800b0020e6ee9c78emr5406783wry.622.1653036621886;
-        Fri, 20 May 2022 01:50:21 -0700 (PDT)
-Received: from localhost.localdomain ([195.55.223.2])
-        by smtp.googlemail.com with ESMTPSA id x6-20020a7bc206000000b003942a244f53sm1378944wmi.44.2022.05.20.01.50.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 01:50:21 -0700 (PDT)
-From:   Javier Abrego <javier.abrego.lorente@gmail.com>
-To:     trond.myklebust@hammerspace.com, anna@kernel.org
-Cc:     linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        javier.abrego.lorente@gmail.com
-Subject: [PATCH] FS: nfs: removed goto statement
-Date:   Fri, 20 May 2022 10:50:19 +0200
-Message-Id: <20220520085019.44138-1-javier.abrego.lorente@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 20 May 2022 04:52:06 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 665B75DE49
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 01:52:04 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1nryMX-0006Xw-Bd; Fri, 20 May 2022 10:51:57 +0200
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1nryMW-0005Nx-Ak; Fri, 20 May 2022 10:51:56 +0200
+Date:   Fri, 20 May 2022 10:51:56 +0200
+From:   "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
+To:     Pkshih <pkshih@realtek.com>
+Cc:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "neojou@gmail.com" <neojou@gmail.com>,
+        "kvalo@kernel.org" <kvalo@kernel.org>,
+        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "martin.blumenstingl@googlemail.com" 
+        <martin.blumenstingl@googlemail.com>,
+        "linux@ulli-kroll.de" <linux@ulli-kroll.de>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "neo_jou@realtek.com" <neo_jou@realtek.com>
+Subject: Re: [PATCH 06/10] rtw88: Add common USB chip support
+Message-ID: <20220520085156.GE25578@pengutronix.de>
+References: <20220518082318.3898514-1-s.hauer@pengutronix.de>
+ <20220518082318.3898514-7-s.hauer@pengutronix.de>
+ <e9ca08c6facb8916fb9e5cbad05447321d3d0f43.camel@realtek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e9ca08c6facb8916fb9e5cbad05447321d3d0f43.camel@realtek.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 10:21:45 up 50 days, 20:51, 53 users,  load average: 0.08, 0.07,
+ 0.09
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In this function goto can be replaced. Avoiding goto will improve the
-readability
+On Fri, May 20, 2022 at 07:39:03AM +0000, Pkshih wrote:
+> On Wed, 2022-05-18 at 10:23 +0200, Sascha Hauer wrote:
+> > Add the common bits and pieces to add USB support to the RTW88 driver.
+> > This is based on https://github.com/ulli-kroll/rtw88-usb.git which
+> > itself is first written by Neo Jou.
+> > 
+> > Signed-off-by: neo_jou <neo_jou@realtek.com>
+> > Signed-off-by: Hans Ulli Kroll <linux@ulli-kroll.de>
+> > Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+> > ---
+> >  drivers/net/wireless/realtek/rtw88/Kconfig  |    3 +
+> >  drivers/net/wireless/realtek/rtw88/Makefile |    2 +
+> >  drivers/net/wireless/realtek/rtw88/mac.c    |    3 +
+> >  drivers/net/wireless/realtek/rtw88/main.c   |    5 +
+> >  drivers/net/wireless/realtek/rtw88/main.h   |    4 +
+> >  drivers/net/wireless/realtek/rtw88/reg.h    |    1 +
+> >  drivers/net/wireless/realtek/rtw88/tx.h     |   31 +
+> >  drivers/net/wireless/realtek/rtw88/usb.c    | 1051 +++++++++++++++++++
+> >  drivers/net/wireless/realtek/rtw88/usb.h    |  109 ++
+> >  9 files changed, 1209 insertions(+)
+> >  create mode 100644 drivers/net/wireless/realtek/rtw88/usb.c
+> >  create mode 100644 drivers/net/wireless/realtek/rtw88/usb.h
+> > 
+> 
+> [...]
+> 
+> > diff --git a/drivers/net/wireless/realtek/rtw88/reg.h b/drivers/net/wireless/realtek/rtw88/reg.h
+> > index 84ba9ec489c37..a928899030863 100644
+> > --- a/drivers/net/wireless/realtek/rtw88/reg.h
+> > +++ b/drivers/net/wireless/realtek/rtw88/reg.h
+> > @@ -184,6 +184,7 @@
+> >  #define BIT_TXDMA_VIQ_MAP(x)                                                   \
+> 				^^^^^^^ replace 8 spaces by one tab
 
-Signed-off-by: Javier Abrego<javier.abrego.lorente@gmail.com>
----
- fs/nfs/nfs42xattr.c | 28 +++++++++++++---------------
- 1 file changed, 13 insertions(+), 15 deletions(-)
+This line is not added by me. There are spaces used before the
+linebreaks throughout this file.
 
-diff --git a/fs/nfs/nfs42xattr.c b/fs/nfs/nfs42xattr.c
-index e7b34f7e0..9bf3a88fd 100644
---- a/fs/nfs/nfs42xattr.c
-+++ b/fs/nfs/nfs42xattr.c
-@@ -747,21 +747,19 @@ void nfs4_xattr_cache_set_list(struct inode *inode, const char *buf,
- 		return;
- 
- 	entry = nfs4_xattr_alloc_entry(NULL, buf, NULL, buflen);
--	if (entry == NULL)
--		goto out;
--
--	/*
--	 * This is just there to be able to get to bucket->cache,
--	 * which is obviously the same for all buckets, so just
--	 * use bucket 0.
--	 */
--	entry->bucket = &cache->buckets[0];
--
--	if (!nfs4_xattr_set_listcache(cache, entry))
--		kref_put(&entry->ref, nfs4_xattr_free_entry_cb);
--
--out:
--	kref_put(&cache->ref, nfs4_xattr_free_cache_cb);
-+	if (entry == NULL) {
-+		kref_put(&cache->ref, nfs4_xattr_free_cache_cb);
-+	} else {
-+	       /*
-+		* This is just there to be able to get to bucket->cache,
-+		* which is obviously the same for all buckets, so just
-+		* use bucket 0.
-+		*/
-+		entry->bucket = &cache->buckets[0];
-+
-+		if (!nfs4_xattr_set_listcache(cache, entry))
-+			kref_put(&entry->ref, nfs4_xattr_free_entry_cb);
-+	}
- }
- 
- /*
+> > +	do {
+> > +		spin_lock_irqsave(&rtwusb->rx_data_list_lock, flags);
+> > +
+> > +		rxcb = list_first_entry_or_null(&rtwusb->rx_data_free,
+> > +						struct rx_usb_ctrl_block, list);
+> > +
+> > +		spin_unlock_irqrestore(&rtwusb->rx_data_list_lock, flags);
+> > +		if (!rxcb)
+> > +			return;
+> > +
+> > +		rxcb->rx_skb = alloc_skb(RTW_USB_MAX_RECVBUF_SZ, GFP_KERNEL);
+> > +		if (!rxcb->rx_skb) {
+> > +			rtw_err(rtwdev, "could not allocate rx skbuff\n");
+> > +			return;
+> > +		}
+> > +
+> > +		usb_fill_bulk_urb(rxcb->rx_urb, rtwusb->udev,
+> > +				  usb_rcvbulkpipe(rtwusb->udev, rtwusb->pipe_in),
+> > +				  rxcb->rx_skb->data, RTW_USB_MAX_RECVBUF_SZ,
+> > +				  rtw_usb_read_port_complete, rxcb);
+> > +
+> > +		spin_lock_irqsave(&rtwusb->rx_data_list_lock, flags);
+> > +		list_move(&rxcb->list, &rtwusb->rx_data_used);
+> > +		spin_unlock_irqrestore(&rtwusb->rx_data_list_lock, flags);
+> > +
+> > +		error = usb_submit_urb(rxcb->rx_urb, GFP_KERNEL);
+> > +		if (error) {
+> > +			kfree_skb(rxcb->rx_skb);
+> > +			if (error != -ENODEV)
+> > +				rtw_err(rtwdev, "Err sending rx data urb %d\n",
+> > +					   error);
+> > +			rtw_usb_rx_data_put(rtwusb, rxcb);
+> > +
+> > +			return;
+> > +		}
+> > +	} while (true);
+> 
+> Can we have a limit of 'for(;<limit;)' insetad of 'while (true)'?
+
+Not sure if it's worth it, but yes, it shouldn't hurt either.
+
+> 
+> > +}
+> > +
+> > +static void rtw_usb_cancel_rx_bufs(struct rtw_usb *rtwusb)
+> > +{
+> > +	struct rx_usb_ctrl_block *rxcb;
+> > +	unsigned long flags;
+> > +
+> > +	spin_lock_irqsave(&rtwusb->rx_data_list_lock, flags);
+> > +
+> > +	while (true) {
+> > +		rxcb = list_first_entry_or_null(&rtwusb->rx_data_used,
+> > +						struct rx_usb_ctrl_block, list);
+> > +
+> > +		spin_unlock_irqrestore(&rtwusb->rx_data_list_lock, flags);
+> > +
+> > +		if (!rxcb)
+> > +			break;
+> > +
+> > +		usb_kill_urb(rxcb->rx_urb);
+> > +
+> > +		spin_lock_irqsave(&rtwusb->rx_data_list_lock, flags);
+> > +		list_move(&rxcb->list, &rtwusb->rx_data_free);
+> > +	}
+> > +}
+> 
+> The spin_lock pairs are not intuitive.
+> Can we change this chunk to
+> 
+> while (true) {
+>      spin_lock();
+>      rxcb = list_first_entry_or_null();
+>      spin_unlock()
+> 
+>      if (!rxcb)
+>         return;
+> 
+>      usb_free_urb();
+> 
+>      spin_lock();
+>      list_del();
+>      spin_unlock();
+> }
+> 
+> The drawback is lock/unlock twice in single loop.
+
+Yes, that's why I did it the way I did ;)
+
+How about:
+
+	while (true) {
+		unsigned long flags;
+
+		spin_lock_irqsave(&rtwusb->rx_data_list_lock, flags);
+
+		rxcb = list_first_entry_or_null(&rtwusb->rx_data_free,
+						struct rx_usb_ctrl_block, list);
+		if (rxcb)
+			list_del(&rxcb->list);
+
+		spin_unlock_irqrestore(&rtwusb->rx_data_list_lock, flags);
+
+		if (!rxcb)
+			break;
+
+		usb_free_urb(rxcb->rx_urb);
+	}
+
+Sascha
+
 -- 
-2.25.1
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

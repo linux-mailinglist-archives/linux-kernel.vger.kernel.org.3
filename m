@@ -2,93 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D36CC52F003
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 18:05:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08C6152F005
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 18:06:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351322AbiETQFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 12:05:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52866 "EHLO
+        id S1351293AbiETQGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 12:06:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238027AbiETQFB (ORCPT
+        with ESMTP id S1351337AbiETQGK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 12:05:01 -0400
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31DF4179961;
-        Fri, 20 May 2022 09:05:00 -0700 (PDT)
-Received: by mail-wr1-f52.google.com with SMTP id t6so12100877wra.4;
-        Fri, 20 May 2022 09:05:00 -0700 (PDT)
+        Fri, 20 May 2022 12:06:10 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558B34A901
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 09:06:09 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id q18so7720985pln.12
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 09:06:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=5/R5bCf9OwP510/pDmYW2FFlspx1kD44TYqDeemy0+4=;
+        b=kj8F3oF04Q9cLGw74VEVRn5irZvHe5KFHraSHeY77+cYi4kjVw8MvBAdi2Oan4E3/Z
+         Ru/89bmGcEsg0mWcm1h2qt3d+EAH7vChfHLMkTFOv9lyrq+pnxTLu6BEAwciq+9vE+dj
+         1PmX3SLwn2L1+6q/S/4VUVw5OFzL1zQqyy8iDmWOxQ/U2N2KyUFlCcofesFVn1ZIwKIM
+         rF20hYFKGDyhOmcICka4Q8dTCawON4VO4xbl/+LrZc7EFgjs3j1Z0hj8pGZuTykjiYFx
+         dFaDuFv3m22dHuTzJ+KLT3XIpnY6LqaPyqLr6mSvmp3n3n/6Y8V+PuHGscR+UakzmfaO
+         YNYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=znA8cfMsy9necYNeW0un5CDeTQYcG+NaGrcgbE7Qc9U=;
-        b=If+puf/v/sWHGEFMN7gLHRJi/sF17ZR+6vhHST7lPeZpCI7yOsgHM5hQf4E9UXfAnr
-         ZnxXeIv5CFZEh7ZmbjOy2FPNyKyhnYJXN+zW5Sce8HPuyABGBxDaRz0CGVo2nrjVV4Qu
-         weuy57OzA9nNWYbW/0SjSFb1FtVjElTy6PwW9OTq+rDZGcM4cYsC9gdNugDcuOhPZRwC
-         BpBRgyhIY7Eo83N8WNcOUsDOhjYx1aXCEsbNh2nCRQXPJPM8wXAAPpgOW2gr5MfGyilc
-         9zA200SZ9IASuV4s2I2GF2viAIxokgmitUmhxO3uiy4kwfbHjygG0V8hW1qF01LvArkF
-         KV2Q==
-X-Gm-Message-State: AOAM5338IRq/EyxBvhQ044Rcf3iLrIxqIzV/UukCo/z2zOw78QobpvAw
-        RkK+Biik4jZ8mcPIY7F+/t8=
-X-Google-Smtp-Source: ABdhPJzVBU9OT5V2aJFBxPSjcscT22BehkQdcY4NBwEls+uES4fYLVTSlw50QD9SuzILMGH2C/O7fA==
-X-Received: by 2002:adf:dd81:0:b0:20e:5853:1762 with SMTP id x1-20020adfdd81000000b0020e58531762mr8993811wrl.447.1653062698678;
-        Fri, 20 May 2022 09:04:58 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id r17-20020adfa151000000b0020d00174eabsm2781202wrr.94.2022.05.20.09.04.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 09:04:58 -0700 (PDT)
-Date:   Fri, 20 May 2022 16:04:56 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Saurabh Sengar <ssengar@linux.microsoft.com>
-Cc:     ssengar@microsoft.com, drawat.floss@gmail.com, airlied@linux.ie,
-        daniel@ffwll.ch, linux-hyperv@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        decui@microsoft.com, haiyangz@microsoft.com,
-        Wei Liu <wei.liu@kernel.org>
-Subject: Re: [PATCH] drm/hyperv : Removing the restruction of VRAM allocation
- with PCI bar size
-Message-ID: <20220520160456.3ibns7xyx7jv236d@liuwe-devbox-debian-v2>
-References: <1653031240-13623-1-git-send-email-ssengar@linux.microsoft.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=5/R5bCf9OwP510/pDmYW2FFlspx1kD44TYqDeemy0+4=;
+        b=ovPbr87dMIGyB++Y++5pj8Tigo65MUMtJVBdrCvMTAynDKsWLmPOkP32swI1yN5w1Z
+         /lwmNx21wcl87c+1RVlwTKvuWKPwM1LAywcmkPil1AexHC3yBaH0jeWS1wp7nqWjgDg1
+         mOgnwPzEwsYUFqXWaqsqkayI3O2nabt3lgYeuUCpsMOR8gE4GstnE//g9vtNuHwQSMFk
+         siBqlt5T93/AbGK/8D7iBM1ZE/tTsxhBqZ4czPJozag6R7IIGFMcEQXawHg7lFSmDwr3
+         c+WpwSrkQn6qyy0Gxm9gRMF53B/tpnMxRD8I8JOUv0j7AXGbjZ8ZunQaSZMDUMua447O
+         zV+g==
+X-Gm-Message-State: AOAM530uazAYSwFdyE3jGZBO/ytI0BaVazCI2eN9gDbzI9jKVSqdNqcK
+        Vj2oeGR9t1wmxrXmuJtl8AtqhA==
+X-Google-Smtp-Source: ABdhPJwH39QfgiguHNPaK0KPDtD1T/94hq0odQeT5/vu9w0UEfRsxg0jeL2FeIHSHBm104XH+2JlPQ==
+X-Received: by 2002:a17:902:ef45:b0:156:1858:71fc with SMTP id e5-20020a170902ef4500b00156185871fcmr10073381plx.23.1653062768465;
+        Fri, 20 May 2022 09:06:08 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id f11-20020a62380b000000b005184640c939sm1986005pfa.207.2022.05.20.09.06.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 May 2022 09:06:07 -0700 (PDT)
+Message-ID: <bcef12c5-35b5-f6a8-24c8-d190f87c3cff@kernel.dk>
+Date:   Fri, 20 May 2022 10:06:06 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1653031240-13623-1-git-send-email-ssengar@linux.microsoft.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v4 0/3] random: convert to using iters, for Al Viro
+Content-Language: en-US
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Theodore Ts'o <tytso@mit.edu>, Christoph Hellwig <hch@lst.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>
+References: <20220520094459.116240-1-Jason@zx2c4.com>
+ <Yoey+FOYO69lS5qP@zx2c4.com> <bbdeeca7-9c99-e661-6596-f04ea783a30b@kernel.dk>
+ <Yoe2PPA/pzqhf+GZ@zx2c4.com> <0a6ed6b9-0917-0d83-5c45-70ff58fad429@kernel.dk>
+ <Yoe52RaMayvgodVW@zx2c4.com> <79024675-9a4a-cb2b-a0ed-91067ef05783@kernel.dk>
+ <Yoe7ykNXjUerhywY@zx2c4.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <Yoe7ykNXjUerhywY@zx2c4.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 12:20:40AM -0700, Saurabh Sengar wrote:
-> There were two different approaches getting used in this driver to
-> allocate vram:
-> 	1. VRAM allocation from PCI region for Gen1
-> 	2. VRAM alloaction from MMIO region for Gen2
-> First approach limilts the vram to PCI BAR size, which is 64 MB in most
-> legacy systems. This limits the maximum resolution to be restricted to
-> 64 MB size, and with recent conclusion on fbdev issue its concluded to have
-> similar allocation strategy for both Gen1 and Gen2. This patch unifies
-> the Gen1 and Gen2 vram allocation strategy.
+On 5/20/22 10:03 AM, Jason A. Donenfeld wrote:
+>> Then I'd say there are only two options:
+>>
+>> - Add a helper that provides splice for something that only has
+>>   read/write set.
 > 
-> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
-> ---
-> FBdev patch Ref :
-> https://lore.kernel.org/lkml/20220428143746.sya775ro5zi3kgm3@liuwe-devbox-debian-v2/T/
+> That'd be fine with me, but wouldn't it involve bringing back set_fs(),
+> because of the copy_to_user() in there?
+
+I haven't even looked into whether it's currently feasible or not, just
+mentioning it as a potential option. But the better one is definetely
+the next one...
+
+>> - Just accept that we're 3% slower reading from /dev/urandom for now,
+>>   and maybe 1-2% for small reads. Can't really imagine this being a huge
+>>   issue, how many high throughput /dev/urandom read situations exist in
+>>   the real world?
 > 
-[...]
-> -static int hyperv_setup_gen2(struct hyperv_drm_device *hv,
-> -			     struct hv_device *hdev)
-> +static int hyperv_setup_gen(struct hyperv_drm_device *hv,
-> +			    struct hv_device *hdev)
+> An option three might be that eventually the VFS overhead is worked out
+> and read_iter() reaches parity. One can hope, I guess.
 
-There is no need to have "_gen" suffix anymore.
+And that will certainly happen, especially as we have other paths that
+don't really have the choice, they have to use the iterator versions.
+And if we can get a bit closer, then that also opens the door more
+generic conversions so we can kill ->read/->write for almost all cases
+(except those weirdo ones that Al pointed out).
 
-I don't know much about the rest so cannot really make any meaningful
-comment here.
+-- 
+Jens Axboe
 
-Thanks,
-Wei.

@@ -2,75 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7582852EE88
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 16:54:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD15B52EE8B
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 16:56:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350521AbiETOyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 10:54:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57796 "EHLO
+        id S1349159AbiETO4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 10:56:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348564AbiETOyk (ORCPT
+        with ESMTP id S1350525AbiETO4B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 10:54:40 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ADFC1737EF
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 07:54:39 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id g16so9964244lja.3
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 07:54:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=4BJIT7CG+Ul2K/EB6KaL6cJMzPTA3sPqOQKdczNQrz0=;
-        b=XiL/0TCBEhD5jOpMvf+4h3Uz3adrFQvHz3m15JiIOFF50t8K0dCctWQJl5TyuG8HSK
-         /FQIIGd4+oZKqiRff4nW3Twkj4PAvbPHoDI2DICGKZWZMllrazXCk5yfr8//Esgu7Ksa
-         AQErmMxiLKzR4Ei3gYnxDo1EMiWL6jVe45bRsdShKs3j/dyr77n7/dRxQ/o30byqYsDa
-         cCdQDzHt+XL/p+WOjSsKg+5Qkfoq5l3xh86Rr8jCcnkOVBlAPg3woP7CBrlYG/Lt7aPG
-         G66gvKCftnM2GZPyMVkg2V995CxPHLuCzQ1DN0zwTmNwJ0LJtIhG79uXq9RBn4rLj2wi
-         85xA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=4BJIT7CG+Ul2K/EB6KaL6cJMzPTA3sPqOQKdczNQrz0=;
-        b=Do/KO/lBxfJ26id0I12wuhsUgvae0dindKQYAL+5e2wibA0m81gqMdVpOi1XIVClRx
-         psmPmBtA8Y8KpHMmIntgO62bWzNm8voaDKdg6huoPHbik2nxzCSpC8OtPMz4HW+JBkql
-         Relg2ja38XAi5z8y4X0mPAwHovDL5+vea7NSiFjJ3mKHJIbjMqZYtdNAblB+hG+Yl77J
-         gzFqO5kYkBLXDNgmPQVhhppHHEO3oCBfiWMtVPbtBM0B61BqEo9YC4LvhxysTPsiFZZz
-         iddnITz1hkWhoLf0ldm2MbRw3r82TLTiDMcGcbkeLoe+NGmx62Y3nqvpS91Bnr9cN+zd
-         1V0g==
-X-Gm-Message-State: AOAM532MoKXKZfPTT+bD2yIG118/C/CI0DTSggRKanAJw5l/k80mEQMs
-        CTmA8s7jmC7i8YIwtuFbazfBPA==
-X-Google-Smtp-Source: ABdhPJwsgGw3Tfn2I01xsNTM/Xrzfl3SCvqSwPoFgoVuLlutxeYLQV0lqlxPCwxh7WUHbRKLbAru/Q==
-X-Received: by 2002:a05:651c:179a:b0:247:d37b:6ec5 with SMTP id bn26-20020a05651c179a00b00247d37b6ec5mr5616804ljb.112.1653058477877;
-        Fri, 20 May 2022 07:54:37 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id f3-20020a19ae03000000b004779f2ce1e7sm689290lfc.53.2022.05.20.07.54.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 May 2022 07:54:37 -0700 (PDT)
-Message-ID: <1b39bff2-7eb1-b613-654d-59d11dcfe03a@linaro.org>
-Date:   Fri, 20 May 2022 16:54:36 +0200
+        Fri, 20 May 2022 10:56:01 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F0115814;
+        Fri, 20 May 2022 07:55:58 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nfraprado)
+        with ESMTPSA id AACB51F46542
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1653058557;
+        bh=jxX878QWawgfvMOXk/YfULJcGJes7LLWJjg8hH9kCTI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Qp+eGoXC12xS0US+up3AlAeSEDKDGEXAPjch3KWyCwzTClULych8zz0ibHqnTODRR
+         G4rG2kxigej4l/KJ0XIgq5nph59Dym7LEXSDLoqZ7WdA9BJL2jAdofZS+0UiB7P7GK
+         UQ8hg2zb7DWeq0g/pElSQw1ktp2ekGitloZsfJ0Xzznf7LsGa9zimN5TcwVFR/C7ib
+         TI9pOyWzqApc7fhRwNSI815uGNqXDLnXsWajfm93QhDnkksdfKGXkAQtKmGdQ5cvWg
+         w8tB+P+d2GF10vgVOHyflekvmgd9D60EqKj1xMxVE7lQjZMcr0rZwYZSJbmUicXt0W
+         T5nUb3G2ru02w==
+Date:   Fri, 20 May 2022 10:55:51 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        p.zabel@pengutronix.de, angelogioacchino.delregno@collabora.com,
+        chun-jie.chen@mediatek.com, wenst@chromium.org,
+        runyang.chen@mediatek.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH v7 04/19] clk: mediatek: reset: Extract common drivers to
+ update function
+Message-ID: <20220520145551.b2sqheaizkegna3n@notapiano>
+References: <20220519125527.18544-1-rex-bc.chen@mediatek.com>
+ <20220519125527.18544-5-rex-bc.chen@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] dt-bindings: soc: qcom,rpmh-rsc: simplify qcom,tcs-config
-Content-Language: en-US
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Rob Herring <robh@kernel.org>
-References: <20220426110757.80603-1-krzysztof.kozlowski@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220426110757.80603-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220519125527.18544-5-rex-bc.chen@mediatek.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,17 +61,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/04/2022 13:07, Krzysztof Kozlowski wrote:
-> The schema for "qcom,tcs-config" property can be a little bit simpler,
-> without the need of defining each item.  Also move the description of
-> each part of "qcom,tcs-config" tupple to the tupple items description.
+On Thu, May 19, 2022 at 08:55:12PM +0800, Rex-BC Chen wrote:
+> To make drivers more clear and readable, we extract common code
+> within assert and deassert to mtk_reset_update_set_clr() and
+> mtk_reset_update().
 > 
-> Suggested-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  drivers/clk/mediatek/reset.c | 38 +++++++++++++++++++++---------------
+>  1 file changed, 22 insertions(+), 16 deletions(-)
+> 
+> diff --git a/drivers/clk/mediatek/reset.c b/drivers/clk/mediatek/reset.c
+> index 5cbbcc22a4fc..22fa9f09752c 100644
+> --- a/drivers/clk/mediatek/reset.c
+> +++ b/drivers/clk/mediatek/reset.c
+> @@ -12,24 +12,27 @@
+>  
+>  #include "reset.h"
+>  
+> -static int mtk_reset_assert(struct reset_controller_dev *rcdev,
+> -			    unsigned long id)
+> +static int mtk_reset_update(struct reset_controller_dev *rcdev,
+> +			    unsigned long id, bool deassert)
 
-Hi,
+I'd have called the bool 'assert', and then passed true on assert and false on
+deassert, as I think that's slightly more intuitive, but that's just personal
+preference. It's fine like this as well.
 
-This was sent a month ago... any chances for pick up?
+Thanks,
+Nícolas
 
-Best regards,
-Krzysztof
+>  {
+>  	struct mtk_reset *data = container_of(rcdev, struct mtk_reset, rcdev);
+> +	unsigned int val = deassert ? 0 : ~0;
+>  
+>  	return regmap_update_bits(data->regmap,
+>  				  data->regofs + ((id / 32) << 2),
+> -				  BIT(id % 32), ~0);
+> +				  BIT(id % 32), val);
+> +}
+> +
+> +static int mtk_reset_assert(struct reset_controller_dev *rcdev,
+> +			    unsigned long id)
+> +{
+> +	return mtk_reset_update(rcdev, id, false);
+>  }
+>  
+>  static int mtk_reset_deassert(struct reset_controller_dev *rcdev,
+>  			      unsigned long id)
+>  {
+> -	struct mtk_reset *data = container_of(rcdev, struct mtk_reset, rcdev);
+> -
+> -	return regmap_update_bits(data->regmap,
+> -				  data->regofs + ((id / 32) << 2),
+> -				  BIT(id % 32), 0);
+> +	return mtk_reset_update(rcdev, id, true);
+>  }
+>  
+>  static int mtk_reset(struct reset_controller_dev *rcdev, unsigned long id)
+> @@ -43,24 +46,27 @@ static int mtk_reset(struct reset_controller_dev *rcdev, unsigned long id)
+>  	return mtk_reset_deassert(rcdev, id);
+>  }
+>  
+> -static int mtk_reset_assert_set_clr(struct reset_controller_dev *rcdev,
+> -				    unsigned long id)
+> +static int mtk_reset_update_set_clr(struct reset_controller_dev *rcdev,
+> +				    unsigned long id, bool deassert)
+>  {
+>  	struct mtk_reset *data = container_of(rcdev, struct mtk_reset, rcdev);
+> +	unsigned int deassert_ofs = deassert ? 0x4 : 0;
+>  
+>  	return regmap_write(data->regmap,
+> -			    data->regofs + ((id / 32) << 4),
+> +			    data->regofs + ((id / 32) << 4) + deassert_ofs,
+>  			    BIT(id % 32));
+>  }
+>  
+> +static int mtk_reset_assert_set_clr(struct reset_controller_dev *rcdev,
+> +				    unsigned long id)
+> +{
+> +	return mtk_reset_update_set_clr(rcdev, id, false);
+> +}
+> +
+>  static int mtk_reset_deassert_set_clr(struct reset_controller_dev *rcdev,
+>  				      unsigned long id)
+>  {
+> -	struct mtk_reset *data = container_of(rcdev, struct mtk_reset, rcdev);
+> -
+> -	return regmap_write(data->regmap,
+> -			    data->regofs + ((id / 32) << 4) + 0x4,
+> -			    BIT(id % 32));
+> +	return mtk_reset_update_set_clr(rcdev, id, true);
+>  }
+>  
+>  static int mtk_reset_set_clr(struct reset_controller_dev *rcdev,
+> -- 
+> 2.18.0
+> 
+> 

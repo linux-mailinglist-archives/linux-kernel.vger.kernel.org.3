@@ -2,129 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 631E252EAE4
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 13:34:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F34D52EAE9
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 13:35:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348570AbiETLeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 07:34:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53546 "EHLO
+        id S1347244AbiETLfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 07:35:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244015AbiETLee (ORCPT
+        with ESMTP id S244015AbiETLfG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 07:34:34 -0400
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E93470903;
-        Fri, 20 May 2022 04:34:30 -0700 (PDT)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 3974B1C0009;
-        Fri, 20 May 2022 11:34:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1653046468;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=t1RpCyOt9vJRwKKZzMrNpG1QDdfyBUk2YTX9dVi8KKY=;
-        b=Wcv2GBx4h6bBjBzJJdSS+4fp72OcI+2Tee3mT8kqifTa+CgH64T0l9F1N+HCSwYgXMt/XU
-        1mQlR4x6eCs8CGmkef2yNz1vxLNhgclH9+fi8MhIqSPG52me/Del76AttyXF4bP5dhf82U
-        ulvNLRDEKpq4REfbrBk2opMcYhS5/FQh6XmjT/D+bBpfNrYMupvHDoS5xXULqRGyHnsCn7
-        FVybCaG+3VjOJmI7w0VGs6BJaAiEYXwn0qhIGp856pbl9ri6eLgTFsivh6RcM5yTgv2qA7
-        WP1p0YkRiSYNi9BhReSFhQazp9AuMkfrzD8ZSsC701ZJ0He/bNeXZMORIDhcag==
-Date:   Fri, 20 May 2022 13:34:26 +0200
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH 2/3] dt-bindings: usb: atmel: Add Microchip LAN966x
- compatible string
-Message-ID: <20220520133426.3b4728ae@bootlin.com>
-In-Reply-To: <8f0d4127-7e66-cf50-21c9-99680f737e30@linaro.org>
-References: <20220513105850.310375-1-herve.codina@bootlin.com>
-        <20220513105850.310375-3-herve.codina@bootlin.com>
-        <8f0d4127-7e66-cf50-21c9-99680f737e30@linaro.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-redhat-linux-gnu)
+        Fri, 20 May 2022 07:35:06 -0400
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA7456C2B;
+        Fri, 20 May 2022 04:35:05 -0700 (PDT)
+Received: by mail-ej1-f47.google.com with SMTP id kq17so15092864ejb.4;
+        Fri, 20 May 2022 04:35:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PKSnfNmh5PAwV0dZWUv7bsiyKNUHk1UCJgkK3J4/ff4=;
+        b=gr/AFrCqCG9skC9OoN5O6DNBTNHMDIYrKb6oGqP1oukdOX1/tarACrvFhiwz+yVNbi
+         CfSFXvg/kP61+j/v9iBSmH3aLvwBzghDyo4nE5RODochGaFILokcxnGwan6E/OjLpvQq
+         7yWmndTcT1zgGjZifDOvfbAtyO6hvepZnXve+xy+tvludjRvHhA6915bJK0MP1sCavOV
+         mBZeP4Qg46CZ3hTbClEteaQX4p9K9FT6fG3yw88ab6CjpIGIA1R1Gk/JcAWGIVuzGF0S
+         8EF6KekUuOdQ8QTzVGkfDkOJxDzS7UsyehMLe1ydlD/mwtnz98Ldj97FynicwUpz1xqx
+         5fOw==
+X-Gm-Message-State: AOAM532vs4BQCXPW8UeWj0iVJw9uM3y/43AMYvxmMnhjUN/07PcN9FbQ
+        SfJzLK9JxSs5kFosj2FxhDdshqMQo2Tw5XX2Tpber+wA7gc=
+X-Google-Smtp-Source: ABdhPJybybsn1df97si3V7APCBEPEWfLEv95ysLynaQaitiMPM6pchF3IyTkYstUN0KjssnWoGeKy/zRZLSIYICRQPw=
+X-Received: by 2002:a17:906:9753:b0:6fe:aafb:31a6 with SMTP id
+ o19-20020a170906975300b006feaafb31a6mr2422367ejy.502.1653046503736; Fri, 20
+ May 2022 04:35:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220513093433.425163-1-dietmar.eggemann@arm.com> <165299742675.4207.9389624037232636288.tip-bot2@tip-bot2>
+In-Reply-To: <165299742675.4207.9389624037232636288.tip-bot2@tip-bot2>
+From:   Barry Song <baohua@kernel.org>
+Date:   Fri, 20 May 2022 23:34:52 +1200
+Message-ID: <CAGsJ_4wdYrxPrXGnmEGBfzHfY0f8ON4gRwNz2z_EABzva7bmrw@mail.gmail.com>
+Subject: Re: [tip: sched/core] topology: Remove unused cpu_cluster_mask()
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-tip-commits@vger.kernel.org,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        x86 <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 13 May 2022 14:57:55 +0200
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+On Fri, May 20, 2022 at 9:57 AM tip-bot2 for Dietmar Eggemann
+<tip-bot2@linutronix.de> wrote:
+>
+> The following commit has been merged into the sched/core branch of tip:
+>
+> Commit-ID:     991d8d8142cad94f9c5c05db25e67fa83d6f772a
+> Gitweb:        https://git.kernel.org/tip/991d8d8142cad94f9c5c05db25e67fa83d6f772a
+> Author:        Dietmar Eggemann <dietmar.eggemann@arm.com>
+> AuthorDate:    Fri, 13 May 2022 11:34:33 +02:00
+> Committer:     Peter Zijlstra <peterz@infradead.org>
+> CommitterDate: Thu, 19 May 2022 23:46:13 +02:00
+>
+> topology: Remove unused cpu_cluster_mask()
+>
+> default_topology[] uses cpu_clustergroup_mask() for the CLS level
+> (guarded by CONFIG_SCHED_CLUSTER) which is currently provided by x86
+> (arch/x86/kernel/smpboot.c) and arm64 (drivers/base/arch_topology.c).
+>
+> Fixes: 778c558f49a2c ("sched: Add cluster scheduler level in core and
+> related Kconfig for ARM64")
+>
+> Signed-off-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Acked-by: Barry Song <baohua@kernel.org>
+> Link: https://lore.kernel.org/r/20220513093433.425163-1-dietmar.eggemann@arm.com
+> ---
 
-> On 13/05/2022 12:58, Herve Codina wrote:
-> > The USB device controller available in the Microchip LAN966x SOC
-> > is the same IP as the one present in the SAMA5D3 SOC.
-> >=20
-> > Add the LAN966x compatible string and set the SAMA5D3 compatible
-> > string as a fallback for the LAN966x.
-> >=20
-> > Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> > ---
-> >  Documentation/devicetree/bindings/usb/atmel-usb.txt | 3 +++
-> >  1 file changed, 3 insertions(+)
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/usb/atmel-usb.txt b/Docu=
-mentation/devicetree/bindings/usb/atmel-usb.txt
-> > index f512f0290728..a6fab7d63f37 100644
-> > --- a/Documentation/devicetree/bindings/usb/atmel-usb.txt
-> > +++ b/Documentation/devicetree/bindings/usb/atmel-usb.txt
-> > @@ -87,6 +87,9 @@ Required properties:
-> >  	       "atmel,at91sam9g45-udc"
-> >  	       "atmel,sama5d3-udc"
-> >  	       "microchip,sam9x60-udc"
-> > +	       "microchip,lan996x-udc" =20
->=20
-> No wildcards please, especially that it closely fits previous wildcard
-> (lan996x includes lan9960 which looks a lot like sam9x60...)
->=20
-
-Well, first, I made a mistake. It should be lan966x instead of lan996x.
-
-This family is composed of the LAN9662 and the LAN9668 SOCs.
-
-Related to the wilcard, lan966x is used in several bindings for common
-parts used by both SOCs:
-- microchip,lan966x-gck
-- microchip,lan966x-cpu-syscon
-- microchip,lan966x-switch
-- microchip,lan966x-miim
-- microchip,lan966x-serdes
-- microchip,lan966x-pinctrl
-
-I think it makes sense to keep 'microchip,lan966x-udc' for the USB
-device controller (same controller on LAN9662 and LAN9668) and so
-keeping the same rules as for other common parts.
-
-Regards,
-Herv=C3=A9
-
->=20
-> Best regards,
-> Krzysztof
+Hi Peter,
+I also received emails which say Greg has put it into drive-core-testing and
+driver-core-next.
+https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git/commit/?h=driver-core-next&id=15f214f9bdb7c1f5
 
 
+>  include/linux/topology.h | 7 -------
+>  1 file changed, 7 deletions(-)
+>
+> diff --git a/include/linux/topology.h b/include/linux/topology.h
+> index f19bc36..4564faa 100644
+> --- a/include/linux/topology.h
+> +++ b/include/linux/topology.h
+> @@ -240,13 +240,6 @@ static inline const struct cpumask *cpu_smt_mask(int cpu)
+>  }
+>  #endif
+>
+> -#if defined(CONFIG_SCHED_CLUSTER) && !defined(cpu_cluster_mask)
+> -static inline const struct cpumask *cpu_cluster_mask(int cpu)
+> -{
+> -       return topology_cluster_cpumask(cpu);
+> -}
+> -#endif
+> -
+>  static inline const struct cpumask *cpu_cpu_mask(int cpu)
+>  {
+>         return cpumask_of_node(cpu_to_node(cpu));
 
---=20
-Herv=C3=A9 Codina, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Thanks
+Barry

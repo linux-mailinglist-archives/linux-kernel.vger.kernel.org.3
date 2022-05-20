@@ -2,91 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD27852EDBE
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 16:05:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F57B52EDC0
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 16:05:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350090AbiETOFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 10:05:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52790 "EHLO
+        id S1350105AbiETOFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 10:05:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236471AbiETOFN (ORCPT
+        with ESMTP id S236471AbiETOFf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 10:05:13 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4B333FBE6
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 07:05:11 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id a23so9766685ljd.9
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 07:05:11 -0700 (PDT)
+        Fri, 20 May 2022 10:05:35 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7133D7A466;
+        Fri, 20 May 2022 07:05:34 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id fd25so10952273edb.3;
+        Fri, 20 May 2022 07:05:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ZSoP2XlUk6Qy7Ea7GRzy0ZIIx3kZ4kuDve6bLr9v0FU=;
-        b=yZ7J79WDUdV51e938vwl8Msup096rZpqY3nfbFVUSKIUsFNyR9/8ag2cYlrkTwwd4j
-         dzZp5Q8ZAPU2TGmWct9hvwvGO5p7DJBUN4h0uyZVFdCET035Vo4nNx4MsSk1qAT47pQA
-         drqkvYRuaUZW4zjj/+26jewpvDM/Q+/ePQamoMnK9aMKZMZwer8TTNLcYsOh43jg1Ea4
-         silS4SJaRvPEmOyuqRjs8GNNPnybOonmk1N0ISaO1zK2aNYVxLwvoHTVJSP/9xk+zZDu
-         SfxyAy7fRJd+Z5jhFzbXthmH25wM/9sAc0Q7xFwyMGnZGOY8nDRSPW6Kb8+8zShydSje
-         9LTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=ZSoP2XlUk6Qy7Ea7GRzy0ZIIx3kZ4kuDve6bLr9v0FU=;
-        b=nIlA8CDS7nOKSoJIYUyckrGxGBFs8WGhW2WGkvUJ1HAtE0YD6SQmAVHgk/1PUD/VzH
-         bjROWNusEfZusoP3pjZAmBhERC4TQYAQBiu5VKPln3zFcE0NmP1kLynhXVhAQk/kwrOp
-         oPX5v9q7DFN2+nUg7aprS9JW71xLwiNdcAR/w4gFrgL1mr+hOQ/QTDdDkZJBv8E0hUQh
-         nS6I9JVfRBRjxlYNlgo0Q42reH66ptzO3C/RdUMJOElpI6obHVOmtTfQS8kCC/ZxUpeP
-         Qusx3w3YsK4nTe8RHHP5rSl6SAKGfzSSkChV9YmABEp2YmySG9xmg/1uDbHb4hW3ZdvM
-         Xjbw==
-X-Gm-Message-State: AOAM530Dg3vKxUK7IyTxJCRA0/rNJHdWPDNhhcH9EyUhAZGlQ3/TG4kt
-        h1TpYqb2GpmKnEUvl+GlI6Uu0A==
-X-Google-Smtp-Source: ABdhPJz18nK01Tozrb9341q0LvZVpstDY2wZjBWCLDMz2lSdMvfGQvcov2arOdxJJBKxZIyeoFm34g==
-X-Received: by 2002:a2e:a54b:0:b0:250:5abe:4e97 with SMTP id e11-20020a2ea54b000000b002505abe4e97mr5392296ljn.458.1653055509621;
-        Fri, 20 May 2022 07:05:09 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id b4-20020a056512024400b00477a6c86f17sm676907lfo.8.2022.05.20.07.05.08
+        bh=xqRSEjWYdwzjgqqrBK7n3d3BWHqbAI1WmVJdVsPHdzY=;
+        b=hpGgi2DP4fY8eeSk24xHGBwf9dXFz1DoUMuVMAluPutpfuFAXNt++YnDEiwAuSlvi1
+         wKAcl24hRdyYDaPD0gJsd7N+PM9JgAEXoquw+nBjomwECoZLbY+sPa5aN5Q5E3JUmZ8U
+         XwiPTQbC0f+uv0w4mUg9sqh43c1Dr48+FAWZItaEYlOXziO5ZA7xGsS3hP5mEz2vQo9e
+         O1fTAGQPoMYa8USQgvDMzJchxgsZ/+MjE0KvDfTaAXDUaWUv/Eg/7PyW4poncMbuquaM
+         xegD+lRkF2CX2DZ+vcznpTHM/blCQA4pak9bzDzhw3pHi8YZc9jQCsdFKpP1LkdX7tJP
+         D7hA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=xqRSEjWYdwzjgqqrBK7n3d3BWHqbAI1WmVJdVsPHdzY=;
+        b=CxSagnwAdAE+lcy45qkevdJFXgCGmKu73UiPyo9xFKOCgNLJ4q8YGNiktUZXiX+hD6
+         CoK1Kg86Rk+Z1OOL1za78MZjKOjLbdTcL7/EYjNaEBkWzzzmf4DciBp55wfNZeKdo9nx
+         88TSkmRU98fpUukuhdSESGwVoFCitm4iGQtoY0JbmQhrocMqrbj8hwyAyZbxNepqFkTZ
+         IJfmRzpdGv0qW0CoxaR764/Z5kSokll9BMyzccf1BQ0XgoJhW8WwRlFPFegU8QUBa292
+         SO/PMj7qflGpoAZchXZIE5CJ8O2zMo3OW1mDcUtkIjeZBSpQ9AanOHs3+1reR+r97POY
+         UMfQ==
+X-Gm-Message-State: AOAM533TXN71iUzLnupTdJeqoa3rSkr9ZMDPIpecPgjFRwM7vMzdNzwg
+        /9LycdWwYzCTq7ooiKCpsdE=
+X-Google-Smtp-Source: ABdhPJwtHhtrpMri3jGlX7fK78xgzfY2QhnH38KjZRTtrP0mHRhd7OyS6HTAeg76jINoaFzpQdIWJQ==
+X-Received: by 2002:a05:6402:1612:b0:42a:be18:8c8 with SMTP id f18-20020a056402161200b0042abe1808c8mr11160802edv.223.1653055532922;
+        Fri, 20 May 2022 07:05:32 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id 26-20020a170906225a00b006f3ef214db9sm3214636ejr.31.2022.05.20.07.05.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 May 2022 07:05:09 -0700 (PDT)
-Message-ID: <862862a6-afde-234a-ccb1-d3781d867775@linaro.org>
-Date:   Fri, 20 May 2022 16:05:07 +0200
+        Fri, 20 May 2022 07:05:32 -0700 (PDT)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <fb4a9151-e56c-d16c-f09c-ac098e41a791@redhat.com>
+Date:   Fri, 20 May 2022 16:05:29 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 2/3] dt-bindings: usb: atmel: Add Microchip LAN966x
- compatible string
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] KVM: x86: SVM: fix nested PAUSE filtering
 Content-Language: en-US
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Herve Codina <herve.codina@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20220513105850.310375-1-herve.codina@bootlin.com>
- <20220513105850.310375-3-herve.codina@bootlin.com>
- <8f0d4127-7e66-cf50-21c9-99680f737e30@linaro.org>
- <20220520133426.3b4728ae@bootlin.com>
- <b087c34f-0e2f-edd0-a738-3ffc2853a41b@linaro.org>
- <20220520142109.57b84da2@bootlin.com>
- <01b31a02-523e-10bf-3b46-5b830e456522@linaro.org>
- <20220520150243.625723fa@bootlin.com>
- <d26c7ebd-fc1a-391e-39e4-5ec41bf4fbfa@linaro.org>
- <YoedFkAsTdoOn/3Y@mail.local>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <YoedFkAsTdoOn/3Y@mail.local>
-Content-Type: text/plain; charset=UTF-8
+To:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Borislav Petkov <bp@alien8.de>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+References: <20220518072709.730031-1-mlevitsk@redhat.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220518072709.730031-1-mlevitsk@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -95,62 +86,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/05/2022 15:52, Alexandre Belloni wrote:
-> Hello,
-> 
-> On 20/05/2022 15:38:36+0200, Krzysztof Kozlowski wrote:
->> On 20/05/2022 15:02, Herve Codina wrote:
->>> On Fri, 20 May 2022 14:50:24 +0200
->>> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
->>>
->>>> On 20/05/2022 14:21, Herve Codina wrote:
->>>>>>> I think it makes sense to keep 'microchip,lan966x-udc' for the USB
->>>>>>> device controller (same controller on LAN9662 and LAN9668) and so
->>>>>>> keeping the same rules as for other common parts.    
->>>>>>
->>>>>> Having wildcard was rather a mistake and we already started correcting
->>>>>> it, so keeping the "mistake" neither gives you consistency, nor
->>>>>> correctness...
->>>>>>  
->>>>>
->>>>> I think that the "family" compatible should be present.
->>>>> This one allows to define the common parts in the common
->>>>> .dtsi file (lan966x.dtsi in our case).
->>>>>
->>>>> What do you think about:
->>>>> - microchip,lan9662-udc
->>>>> - microchip,lan9668-udc
->>>>> - microchip,lan966-udc  <-- Family
->>>>>
->>>>> lan966 is defined as the family compatible string since (1) in
->>>>> bindings/arm/atmel-at91.yaml and in Documentation/arm/microchip.rst
->>>>>   
->>>>
->>>> You can add some family compatible, if it makes sense. I don't get why
->>>> do you mention it - we did not discuss family names, but using
->>>> wildcards... Just please do not add wildcards.
->>>
->>> Well, I mentioned it as I will only use the family compatible string
->>> and not the SOC (lan9662 or lan9668) compatible string in lan966x.dtsi.
->>> In this case, the family compatible string can be seen as a kind of
->>> "wildcard".
->>
->> I understood as "the "family" compatible should be present" as you want
->> to add it as a fallback. It would be okay (assuming devices indeed share
->> family design). If you want to use it as the only one, then it is again
->> not a recommended approach. Please use specific compatibles.
->>
->> I mean, why do we have this discussion? What is the benefit for you to
->> implement something not-recommended by Devicetree spec and style?
->>
-> 
-> Honestly, I would just go for microchip,lan9662-udc. There is no
-> difference between lan9662 and lan9668 apart from the number of switch
-> ports.
+On 5/18/22 09:27, Maxim Levitsky wrote:
+> To fix this, change the fallback strategy - ignore the guest threshold
+> values, but use/update the host threshold values, instead of using zeros.
 
-Thank you, and maybe that was misunderstanding - I do not propose to add
-additional lan9668 compatible, if it is not actually needed.
+Hmm, now I remember why it was using the guest values.  It's because, if
+the L1 hypervisor specifies COUNT=0 or does not have filtering enabled,
+we need to obey and inject a vmexit on every PAUSE.  So something like this:
+
+diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
+index f209c1ca540c..e6153fd3ae47 100644
+--- a/arch/x86/kvm/svm/nested.c
++++ b/arch/x86/kvm/svm/nested.c
+@@ -616,6 +616,8 @@ static void nested_vmcb02_prepare_control(struct vcpu_svm *svm)
+  	struct kvm_vcpu *vcpu = &svm->vcpu;
+  	struct vmcb *vmcb01 = svm->vmcb01.ptr;
+  	struct vmcb *vmcb02 = svm->nested.vmcb02.ptr;
++	u32 pause_count12;
++	u32 pause_thresh12;
+  
+  	/*
+  	 * Filled at exit: exit_code, exit_code_hi, exit_info_1, exit_info_2,
+@@ -671,20 +673,25 @@ static void nested_vmcb02_prepare_control(struct vcpu_svm *svm)
+  	if (!nested_vmcb_needs_vls_intercept(svm))
+  		vmcb02->control.virt_ext |= VIRTUAL_VMLOAD_VMSAVE_ENABLE_MASK;
+  
++	pause_count12 = svm->pause_filter_enabled ? svm->nested.ctl.pause_filter_count : 0;
++	pause_thresh12 = svm->pause_threshold_enabled ? svm->nested.ctl.pause_filter_thresh : 0;
+  	if (kvm_pause_in_guest(svm->vcpu.kvm)) {
+-		/* use guest values since host doesn't use them */
+-		vmcb02->control.pause_filter_count =
+-				svm->pause_filter_enabled ?
+-				svm->nested.ctl.pause_filter_count : 0;
+-
+-		vmcb02->control.pause_filter_thresh =
+-				svm->pause_threshold_enabled ?
+-				svm->nested.ctl.pause_filter_thresh : 0;
++		/* use guest values since host doesn't intercept PAUSE */
++		vmcb02->control.pause_filter_count = pause_count12;
++		vmcb02->control.pause_filter_thresh = pause_thresh12;
+  
+  	} else {
+-		/* use host values otherwise */
++		/* start from host values otherwise */
+  		vmcb02->control.pause_filter_count = vmcb01->control.pause_filter_count;
+  		vmcb02->control.pause_filter_thresh = vmcb01->control.pause_filter_thresh;
++
++		/* ... but ensure filtering is disabled if so requested.  */
++		if (vmcb12_is_intercept(&svm->nested.ctl, INTERCEPT_PAUSE)) {
++			if (!pause_count12)
++				vmcb02->control.pause_filter_count = 0;
++			if (!pause_thresh12)
++				vmcb02->control.pause_filter_thresh = 0;
++		}
+  	}
+  
+  	nested_svm_transition_tlb_flush(vcpu);
 
 
-Best regards,
-Krzysztof
+What do you think?

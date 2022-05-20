@@ -2,186 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DA7952EE76
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 16:49:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8395552EE78
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 16:49:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350515AbiETOs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 10:48:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49748 "EHLO
+        id S1350473AbiETOt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 10:49:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350552AbiETOsm (ORCPT
+        with ESMTP id S1350441AbiETOtZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 10:48:42 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0861737E8;
-        Fri, 20 May 2022 07:48:32 -0700 (PDT)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24KDhOK5010271;
-        Fri, 20 May 2022 14:48:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=2BQqrf/2UZw9BbZNKXr3rbh+d0YdvQlgVQfidEHv0RY=;
- b=BQlvwXLkoWvXPj1LUUIv/I2HTPZYdVELF8oLQqAk3xXT3NdFKsPHCRQmsUl7+r0nyM3i
- PhFUr9PQdbeITigMj7Na588NSgWfkW/wVzQEi2TLX4u796t1DmW1l+Xbl+dii2Q2dhm/
- 35uund+5qxTMPsodh0ryPPcMkhm4+m0MYoQ+LWWC8BtKIyjL9r1ixfik353ESWLwFssl
- 93WO+GRpx/QbIaDaXDpNSUPwMeb70RDxfEJZotEd9jxPqXm0dFwXfES+CYNr32ffJsSs
- 0NtdX2ljwgNYHxAZHf5iav8jMJoNwpxZzep4QSMxkzEr6tPGlUl4RWAWliOxl2WaqoNk CA== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g69jhcy1q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 May 2022 14:48:32 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24KEgjDR022176;
-        Fri, 20 May 2022 14:48:30 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3g2429gyh0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 May 2022 14:48:29 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24KEmQ8644696046
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 20 May 2022 14:48:26 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BF8F911C050;
-        Fri, 20 May 2022 14:48:26 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4C3AF11C04A;
-        Fri, 20 May 2022 14:48:26 +0000 (GMT)
-Received: from [9.145.62.102] (unknown [9.145.62.102])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 20 May 2022 14:48:26 +0000 (GMT)
-Message-ID: <f190b4cf-241e-db58-fa84-bfed4a401c04@linux.ibm.com>
-Date:   Fri, 20 May 2022 16:48:25 +0200
+        Fri, 20 May 2022 10:49:25 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 741031737E8
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 07:49:24 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id z7-20020a17090abd8700b001df78c7c209so11706325pjr.1
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 07:49:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=f1NRmKh5Rhsxk9PmTkCXw/A8MNF/NhHvXEmLtT1IpHE=;
+        b=QZq4zlFkytnpkoKLHXfPVTDwcf9UtqLUzauaG+cSAnYVATmyPX81nLvs7hhmFyWBhe
+         CbWOigB+fYckwMOkgfGsCJ0urV15tiqwqIWj3aFa+InB8MHitijRYDLZqlyktUnOHdzK
+         1E/BkiyELKk1vHvrUiViJjXSEKszJYX395HLQWuDEFyfTdtW8F8lUTlYL3NXfdkIM609
+         87aKY/zH8Ngh+Qhb2+aojh/ynF4pK/Flk9qjGL93ex6Hec84NYU6elLaxICYnxjkr8Kp
+         hFXOe3z4bKd/JlXrfT/tb54mcnS+iQd+zJ/dt7EZNoN1Gcp2G5wD2CmWphQ7IJj+qdGI
+         PXcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=f1NRmKh5Rhsxk9PmTkCXw/A8MNF/NhHvXEmLtT1IpHE=;
+        b=V2PfQer33AMY+tKa5+c2UZXBJzzIY9PLF2Oh63FejPq41+Fa7YnPtrgobmXgu3JIIK
+         zempQmOPY3pVvYKAqXPPwuPV1pYxYfllFNkH7eCRV7+HGA2aAK7EcydBHt0EWUKAsBqG
+         pnCVGziXy6KC17rnZ91st9fixuA3qjXYQGt9xb9uRhUMls9kOir3rNcuEvr1ErA5V41o
+         WTBbyYxfRRlN5WY+NDgULNeps3hNTXEaxhfyOal5G6bNgxz6q+tsrj9pib8WNonhsAuc
+         /ESxHQ4RVn2jvCYIfwEg8ce5X4L9460rOtvvDUzdFoufm7z9DMQZeedIvMFSseNh3+XO
+         SuKw==
+X-Gm-Message-State: AOAM530fW1GzA5xCacRvblqhHCVv/2VKAMtVBFn9Ata0oD4Vzu93+kfG
+        eo17q+kNKyN9eVkGDzKVN3jUlg==
+X-Google-Smtp-Source: ABdhPJyEbl4XhIo7xvkFoiHhRz1H+L7M1KeQghT2ol/Uc3pk9wA/MY8rSpYGOfK4Zij5dnpx8N4gnA==
+X-Received: by 2002:a17:902:d502:b0:161:bc5f:7b2d with SMTP id b2-20020a170902d50200b00161bc5f7b2dmr9675245plg.140.1653058163758;
+        Fri, 20 May 2022 07:49:23 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id t4-20020a170902e84400b0015e8d4eb248sm5871611plg.146.2022.05.20.07.49.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 May 2022 07:49:23 -0700 (PDT)
+Date:   Fri, 20 May 2022 14:49:19 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Yajun Deng <yajun.deng@linux.dev>, vkuznets@redhat.com,
+        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: x86: Move kzalloc out of atomic context on
+ PREEMPT_RT
+Message-ID: <YoeqbxPwOnOZx5oI@google.com>
+References: <20220519090218.2230653-1-yajun.deng@linux.dev>
+ <YoZeI6UeQbP3t1dF@google.com>
+ <f7585471-43be-4b40-f398-dfd7dc937131@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2 1/1] s390: Add attestation query information
-Content-Language: en-US
-To:     Steffen Eiden <seiden@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Nico Boehr <nrb@linux.ibm.com>, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220518135908.1110319-1-seiden@linux.ibm.com>
- <20220518135908.1110319-2-seiden@linux.ibm.com>
-From:   Janosch Frank <frankja@linux.ibm.com>
-In-Reply-To: <20220518135908.1110319-2-seiden@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: YTo8cgT42d4Ucy4cMhkBtWPZD-JOmh3z
-X-Proofpoint-GUID: YTo8cgT42d4Ucy4cMhkBtWPZD-JOmh3z
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-20_04,2022-05-20_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
- clxscore=1015 malwarescore=0 spamscore=0 priorityscore=1501 phishscore=0
- bulkscore=0 mlxlogscore=999 lowpriorityscore=0 impostorscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205200102
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f7585471-43be-4b40-f398-dfd7dc937131@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/18/22 15:59, Steffen Eiden wrote:
-> We have information about the supported attestation header version
-> and plaintext attestation flag bits.
-> Let's expose it via the sysfs files.
+On Fri, May 20, 2022, Paolo Bonzini wrote:
+> On 5/19/22 17:11, Sean Christopherson wrote:
+> > AFAICT, kfree() is safe to call under a raw spinlock, so this?  Compile tested
+> > only...
 > 
-> Signed-off-by: Steffen Eiden <seiden@linux.ibm.com>
-
-When Heiko's nit for the commit message is fixed:
-Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
-
-
-> ---
->   arch/s390/boot/uv.c        |  2 ++
->   arch/s390/include/asm/uv.h |  7 ++++++-
->   arch/s390/kernel/uv.c      | 20 ++++++++++++++++++++
->   3 files changed, 28 insertions(+), 1 deletion(-)
+> Freeing outside the lock is not complicated enough to check if it is:
 > 
-> diff --git a/arch/s390/boot/uv.c b/arch/s390/boot/uv.c
-> index 67c737c1e580..a5fa667160b2 100644
-> --- a/arch/s390/boot/uv.c
-> +++ b/arch/s390/boot/uv.c
-> @@ -45,6 +45,8 @@ void uv_query_info(void)
->   		uv_info.supp_se_hdr_pcf = uvcb.supp_se_hdr_pcf;
->   		uv_info.conf_dump_storage_state_len = uvcb.conf_dump_storage_state_len;
->   		uv_info.conf_dump_finalize_len = uvcb.conf_dump_finalize_len;
-> +		uv_info.supp_att_req_hdr_ver = uvcb.supp_att_req_hdr_ver;
-> +		uv_info.supp_att_pflags = uvcb.supp_att_pflags;
->   	}
->   
->   #ifdef CONFIG_PROTECTED_VIRTUALIZATION_GUEST
-> diff --git a/arch/s390/include/asm/uv.h b/arch/s390/include/asm/uv.h
-> index 3e597bb634bd..18fe04c8547e 100644
-> --- a/arch/s390/include/asm/uv.h
-> +++ b/arch/s390/include/asm/uv.h
-> @@ -124,7 +124,10 @@ struct uv_cb_qui {
->   	u64 reservedc0;				/* 0x00c0 */
->   	u64 conf_dump_storage_state_len;	/* 0x00c8 */
->   	u64 conf_dump_finalize_len;		/* 0x00d0 */
-> -	u8  reservedd8[256 - 216];		/* 0x00d8 */
-> +	u64 reservedd8;				/* 0x00d8 */
-> +	u64 supp_att_req_hdr_ver;		/* 0x00e0 */
-> +	u64 supp_att_pflags;			/* 0x00e8 */
-> +	u8 reservedf0[256 - 240];		/* 0x00f0 */
->   } __packed __aligned(8);
->   
->   /* Initialize Ultravisor */
-> @@ -350,6 +353,8 @@ struct uv_info {
->   	unsigned long supp_se_hdr_pcf;
->   	unsigned long conf_dump_storage_state_len;
->   	unsigned long conf_dump_finalize_len;
-> +	unsigned long supp_att_req_hdr_ver;
-> +	unsigned long supp_att_pflags;
->   };
->   
->   extern struct uv_info uv_info;
-> diff --git a/arch/s390/kernel/uv.c b/arch/s390/kernel/uv.c
-> index 84fe33b6af4d..c13d5a7b71f0 100644
-> --- a/arch/s390/kernel/uv.c
-> +++ b/arch/s390/kernel/uv.c
-> @@ -479,6 +479,24 @@ static ssize_t uv_query_max_guest_addr(struct kobject *kobj,
->   static struct kobj_attribute uv_query_max_guest_addr_attr =
->   	__ATTR(max_address, 0444, uv_query_max_guest_addr, NULL);
->   
-> +static ssize_t uv_query_supp_att_req_hdr_ver(struct kobject *kobj,
-> +					     struct kobj_attribute *attr, char *page)
-> +{
-> +	return scnprintf(page, PAGE_SIZE, "%lx\n", uv_info.supp_att_req_hdr_ver);
-> +}
+> diff --git a/arch/x86/kernel/kvm.c b/arch/x86/kernel/kvm.c
+> index 6aa1241a80b7..f849f7c9fbf2 100644
+> --- a/arch/x86/kernel/kvm.c
+> +++ b/arch/x86/kernel/kvm.c
+> @@ -229,12 +229,15 @@ void kvm_async_pf_task_wake(u32 token)
+>  		dummy->cpu = smp_processor_id();
+>  		init_swait_queue_head(&dummy->wq);
+>  		hlist_add_head(&dummy->link, &b->list);
+> +		dummy = NULL;
+>  	} else {
+> -		kfree(dummy);
+>  		apf_task_wake_one(n);
+>  	}
+>  	raw_spin_unlock(&b->lock);
+> -	return;
 > +
-> +static struct kobj_attribute uv_query_supp_att_req_hdr_ver_attr =
-> +	__ATTR(supp_att_req_hdr_ver, 0444, uv_query_supp_att_req_hdr_ver, NULL);
-> +
-> +static ssize_t uv_query_supp_att_pflags(struct kobject *kobj,
-> +					struct kobj_attribute *attr, char *page)
-> +{
-> +	return scnprintf(page, PAGE_SIZE, "%lx\n", uv_info.supp_att_pflags);
-> +}
-> +
-> +static struct kobj_attribute uv_query_supp_att_pflags_attr =
-> +	__ATTR(supp_att_pflags, 0444, uv_query_supp_att_pflags, NULL);
-> +
->   static struct attribute *uv_query_attrs[] = {
->   	&uv_query_facilities_attr.attr,
->   	&uv_query_feature_indications_attr.attr,
-> @@ -490,6 +508,8 @@ static struct attribute *uv_query_attrs[] = {
->   	&uv_query_dump_storage_state_len_attr.attr,
->   	&uv_query_dump_finalize_len_attr.attr,
->   	&uv_query_dump_cpu_len_attr.attr,
-> +	&uv_query_supp_att_req_hdr_ver_attr.attr,
-> +	&uv_query_supp_att_pflags_attr.attr,
->   	NULL,
->   };
->   
+> +	/* A dummy token might be allocated and ultimately not used.  */
+> +	if (dummy)
+> +		kfree(dummy);
+>  }
+>  EXPORT_SYMBOL_GPL(kvm_async_pf_task_wake);
+> 
+> 
+> I queued your patch with the above fixup.
 
+Ha, I wrote it exactly that way, then grepped around found a few instances of kfree()
+being called in side a raw spinlock, so changed it back :-)
+
+100% agree it's not worth having to generate another patch if it turns out those
+callers are wrong.

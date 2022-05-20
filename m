@@ -2,101 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4F0C52F247
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 20:13:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDF9552F24D
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 20:14:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352483AbiETSNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 14:13:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36994 "EHLO
+        id S1352492AbiETSO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 14:14:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352493AbiETSNj (ORCPT
+        with ESMTP id S1344415AbiETSOx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 14:13:39 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91F7B18FF12
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 11:13:32 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id g12so11788411edq.4
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 11:13:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=diEsMUAPJX4u0FJo9NkDwZ5Xz9iATJQSF3lAp/gYU1A=;
-        b=I87RLcljCH0RuSbiTrRQexejctdo+oMuIRy59YA+r+nR+yZwS2t6yeUqhQNO3I0sho
-         0kvV9fopy2diCllarPTabCkUVUGiHFwYWAYnpqsf7Pa7SmkSmgcM/rzj7catq+4TMWVq
-         EOkLlq6rMWfkrLiGFfbgaoxEz78RbWy5Oc2a54iNQCB2Z21hIlbfiTzpkuWY21YUjOEi
-         dmYO4mZ0+WM6qw5mmauUQf69pAkPy5b5D915wxqgN/EmALrVJq6ly76nBGi5VWw8gjcI
-         4O3Ns1t1LgkRbhOcQmhON3hCYwT5gZGIJh2HAja7zlFXEjHIUtl5AWU9yAa2BjipS9x3
-         BCDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=diEsMUAPJX4u0FJo9NkDwZ5Xz9iATJQSF3lAp/gYU1A=;
-        b=NBp8YRJn3kAIp9yaAST1pozT0WAk0p5LCFHO7x6eela9qgo5D89cJF0wr+8h6LxB7z
-         wmsTzV3QS8OtAtywMVRRcPYJGwVn7L/Km+BiacbXZE3QOISjqx1mwlaW0ZMvmXhoxyIc
-         Eo6/kw38gNOmuYym97OFkPE2MnkE2nbgn2J2gvZIoCko8sACH0Pd6mvvnbaDgMcp4Ce8
-         tQLIcl/uZXQG9xIi8zmHB2o+ozomThGAvmn+EEtHwddYSg3SBDBsIppuxG3Z6ZeQlNe5
-         X4ubEiFSCsTWCP6OdQ2SF2mzBP0CU8ZXU8aDgeng34jz/QvcbY4SnSjGjWTApK/47GYa
-         mkyw==
-X-Gm-Message-State: AOAM532p0TNp0Mlq7b17nnHWHaN8MRMGJy98nRMfyMJDIdZKLnvyMAaV
-        jNv3wP0icoQ761K8NP6zUwGHJKyqi1pdqeTun8mq3A==
-X-Google-Smtp-Source: ABdhPJyJ9aD1+buOd6X23qPr2SUjHKZOvsxBvuzgTQCHrWKd4i4H+xLKXa2OUWjgWol3otPNS4gl1fDpDbZoTdNYgOc=
-X-Received: by 2002:a05:6402:84a:b0:426:262d:967e with SMTP id
- b10-20020a056402084a00b00426262d967emr12527519edz.286.1653070410982; Fri, 20
- May 2022 11:13:30 -0700 (PDT)
+        Fri, 20 May 2022 14:14:53 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C4071900D3;
+        Fri, 20 May 2022 11:14:52 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dmitry.osipenko)
+        with ESMTPSA id 055C51F4675C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1653070491;
+        bh=x/OOyFHTqKvvNw+5fLLflE2enF2X0UELX4BA2pQVGII=;
+        h=From:To:Cc:Subject:Date:From;
+        b=be1dlzwgyznSiKw4DhsBnAbpQs4W46+0yvn2g9+eaTZt3f6Kxo5t+ZIV4qsuBJJzX
+         Q90pkkkJtwtTW8vh2TG/KZBD1Rk+86FYaG16JoIBmq14OQ4TYPbTRTpfWG2wc6Afls
+         QxGLdsQVoJzYyQH4b1aJP/0YUX8nq8yIvQrLsw/Dkh2gqq9gLZS7CQoZGayOw0FKop
+         jqIFjt6zYHgXgpOPmCOAFgLGcUS46/Of7V75uXhhYSemVVgnMX25uj6lpngJarb/3s
+         ppX70pUiPsyMzXXaBYVCOCv0E5gxlDxnI8MuANXb4vhsAgjL+wTiwfx+8zqppYb7xR
+         Q0PQqIyoCwUZA==
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1] dmaengine: pl330: Fix lockdep warning about non-static key
+Date:   Fri, 20 May 2022 21:14:32 +0300
+Message-Id: <20220520181432.149904-1-dmitry.osipenko@collabora.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-References: <20220519164512.3180360-1-dlatypov@google.com> <CABVgOSnooocLsy2=a8rm7Y_m3DpffKtDam5_uYou+Y2tUkumRw@mail.gmail.com>
-In-Reply-To: <CABVgOSnooocLsy2=a8rm7Y_m3DpffKtDam5_uYou+Y2tUkumRw@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Fri, 20 May 2022 11:13:19 -0700
-Message-ID: <CAGS_qxrDYKKoWy3UAuVqebT+3jp-ux_uyfbwX3OnJqVbnzaiJg@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: refactor internal kconfig handling, allow overriding
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 11:13 PM David Gow <davidgow@google.com> wrote:
->
-> I like this, but do think there are a few gaps this doesn't handle
-> properly. (Though exactly how we'd deal with them, I'm not yet sure.)
->
-> In particular, it's not possible to disable a pair of options where
-> one depends on the other: disabling the parent option will result in
-> the child one not being present in the generated config. This will
-> conflict both with "=y" and "=n/not set": we'd need a way to _remove_
-> a kconfig option for that to work.
+The DEFINE_SPINLOCK() macro shouldn't be used for dynamically allocated
+spinlocks. The lockdep warns about this and disables locking validator.
+Fix the warning by making lock static.
 
-Do you have an example?
-Because what you describe sounds like how we want it to work, but I'm
-not sure if I'm misunderstanding the scenario you describe.
+ INFO: trying to register non-static key.
+ The code is fine but needs lockdep annotation, or maybe
+ you didn't initialize this object before use?
+ turning off the locking correctness validator.
+ Hardware name: Radxa ROCK Pi 4C (DT)
+ Call trace:
+  dump_backtrace.part.0+0xcc/0xe0
+  show_stack+0x18/0x6c
+  dump_stack_lvl+0x8c/0xb8
+  dump_stack+0x18/0x34
+  register_lock_class+0x4a8/0x4cc
+  __lock_acquire+0x78/0x20cc
+  lock_acquire.part.0+0xe0/0x230
+  lock_acquire+0x68/0x84
+  _raw_spin_lock_irqsave+0x84/0xc4
+  add_desc+0x44/0xc0
+  pl330_get_desc+0x15c/0x1d0
+  pl330_prep_dma_cyclic+0x100/0x270
+  snd_dmaengine_pcm_trigger+0xec/0x1c0
+  dmaengine_pcm_trigger+0x18/0x24
+  ...
 
-I was considering the case mentioned in the commit description.
-I.e. we do --kunitconfig_add=CONFIG_KUNIT=n to the default kunitconfig.
-That gives us complaints about these
- CONFIG_KUNIT_EXAMPLE_TEST=y, CONFIG_KUNIT_TEST=y,
- CONFIG_KUNIT_ALL_TESTS=y
-options no longer being in the generated .config.
-And I think that's exactly how it _should_ work, as this flag is a
-low-level tool for tweaking individual options.
+Fixes: e588710311ee ("dmaengine: pl330: fix descriptor allocation fail")
+Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+---
+ drivers/dma/pl330.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-IMO, anything complicated should be done by editing the
-kunitconfig/qemu_config files, in which case it's a lot less
-cumbersome to disable multiple options by just deleting them.
+diff --git a/drivers/dma/pl330.c b/drivers/dma/pl330.c
+index 858400e42ec0..09915a5cba3e 100644
+--- a/drivers/dma/pl330.c
++++ b/drivers/dma/pl330.c
+@@ -2589,7 +2589,7 @@ static struct dma_pl330_desc *pl330_get_desc(struct dma_pl330_chan *pch)
+ 
+ 	/* If the DMAC pool is empty, alloc new */
+ 	if (!desc) {
+-		DEFINE_SPINLOCK(lock);
++		static DEFINE_SPINLOCK(lock);
+ 		LIST_HEAD(pool);
+ 
+ 		if (!add_desc(&pool, &lock, GFP_ATOMIC, 1))
+-- 
+2.35.3
 
-Daniel

@@ -2,45 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31F6E52EA9B
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 13:18:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E93C752EA9E
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 13:19:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348456AbiETLSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 07:18:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58270 "EHLO
+        id S1348494AbiETLTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 07:19:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348443AbiETLSr (ORCPT
+        with ESMTP id S1348455AbiETLSv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 07:18:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78DC1153536
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 04:18:46 -0700 (PDT)
+        Fri, 20 May 2022 07:18:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAC20154B3D
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 04:18:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 12DB961DB3
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 11:18:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99908C385A9;
-        Fri, 20 May 2022 11:18:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 41ADA61DB4
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 11:18:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B16EC385AA;
+        Fri, 20 May 2022 11:18:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653045525;
-        bh=QI/Wp5OFrg8DZFaDAnxSX717/fIkU2TW5bPmuaN/enI=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=jYol+oKj0wYTzAeeKSLIkHdNvkNLvTGs/dmcsrT3DNkBcuFpI1S6i28rjXPkhn+nn
-         WFsUZRTU/lFzOZIHV7Pbc/Ik2cRvauW0ihACXOX56JR7DlV6VMYHX9fiYDpAuxun3q
-         Zv1onFxKi83gn+NdTP/+Djltn3O78M6jh/27rSB8vYrCT+sezTh7HPb6ciamW09rTW
-         /IAPUdNgGObNbI1aY//Cr758RF5GpDDONKYAWzWONM80ngpydHk5KvsNJQ4iW6Nur0
-         d8M0RFzDX+Sh86lF0RpSeqyaLRXHwEIfBP3JEMGiKRweoV34z302Z021poDR8pa4Ny
-         kIV3EXrKpnkbg==
+        s=k20201202; t=1653045529;
+        bh=UhFND29rKzFNk/PM3lmGrodeQwn/fNPjQBAAKBp20gY=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=qYqeBTUNoNrIVAwTHKSCHB3plxVJLKocoriVJmA4aOa7hh3BcI12PHAdCbTd4+ih7
+         orY0T+lvoqnSV587qMOMU8jApzkpzW0m5sQ15uJxkoEfCSNxrgUEad0krHecwGmnj0
+         3tG6DvV+kxmPB6Ic9xgJT0dxoDNkTgf4cz0TRWgz6D6Swn+XmuTLJbAER0y/Am5cDn
+         v4JtnIe17vTWVc0pr+B0sHFCSET0ozsA9ZrBWfesyTASYP8bQ+DaDRZVrjiYP8WSho
+         XoSgPkp09sgS2m1HXPcdPHFusSNmURAWfoHzgphCFbiKJoXilhxDiAE5DmiU7WhCxl
+         JBLRGl/oEvUcg==
 From:   Mark Brown <broonie@kernel.org>
-To:     linux-kernel@vger.kernel.org, yangyingliang@huawei.com,
-        alsa-devel@alsa-project.org
-Cc:     lgirdwood@gmail.com
-In-Reply-To: <20220514091053.686416-1-yangyingliang@huawei.com>
-References: <20220514091053.686416-1-yangyingliang@huawei.com>
-Subject: Re: [PATCH -next] ASoC: wm2000: fix missing clk_disable_unprepare() on error in wm2000_anc_transition()
-Message-Id: <165304552434.45439.17487958177424111002.b4-ty@kernel.org>
-Date:   Fri, 20 May 2022 12:18:44 +0100
+To:     yc.hung@mediatek.com, matthias.bgg@gmail.com,
+        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
+        linux-mediatek@lists.infradead.org,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
+        ranjani.sridharan@linux.intel.com, daniel.baluta@nxp.com,
+        linux-arm-kernel@lists.infradead.org,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        peter.ujfalusi@linux.intel.com, Allen-KH.Cheng@mediatek.com,
+        kai.vehmanen@linux.intel.com, geert@linux-m68k.org,
+        yangyingliang@huawei.com, wanjiabing@vivo.com,
+        sound-open-firmware@alsa-project.org
+In-Reply-To: <20220518125902.13407-1-wanjiabing@vivo.com>
+References: <20220518125902.13407-1-wanjiabing@vivo.com>
+Subject: Re: [PATCH] ASoC: SOF: mediatek: remove duplicate include in mt8195.c
+Message-Id: <165304552575.45439.1697552885187311521.b4-ty@kernel.org>
+Date:   Fri, 20 May 2022 12:18:45 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -54,9 +63,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 14 May 2022 17:10:53 +0800, Yang Yingliang wrote:
-> Fix the missing clk_disable_unprepare() before return
-> from wm2000_anc_transition() in the error handling case.
+On Wed, 18 May 2022 20:58:57 +0800, Wan Jiabing wrote:
+> Fix following checkincludes.pl warning:
+> sound/soc/sof/mediatek/mt8195/mt8195.c: linux/of_platform.h is included more than once.
 > 
 > 
 
@@ -66,8 +75,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: wm2000: fix missing clk_disable_unprepare() on error in wm2000_anc_transition()
-      commit: be2af740e2a9c7134f2d8ab4f104006e110b13de
+[1/1] ASoC: SOF: mediatek: remove duplicate include in mt8195.c
+      commit: 0f653c95c4f4b6b623ce8bd995002daf8032bfc3
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

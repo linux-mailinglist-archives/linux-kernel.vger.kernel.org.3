@@ -2,54 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37B3752F279
+	by mail.lfdr.de (Postfix) with ESMTP id 85F8F52F27A
 	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 20:18:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352632AbiETSRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 14:17:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40110 "EHLO
+        id S236136AbiETSR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 14:17:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352573AbiETSP5 (ORCPT
+        with ESMTP id S1352603AbiETSQr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 14:15:57 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ACAF7165A1;
-        Fri, 20 May 2022 11:15:55 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6F8F11570;
-        Fri, 20 May 2022 11:15:55 -0700 (PDT)
-Received: from hype-n1-sdp.warwick.arm.com (hype-n1-sdp.warwick.arm.com [10.32.32.32])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id EA5D73F718;
-        Fri, 20 May 2022 11:15:52 -0700 (PDT)
-From:   Nick Forrington <nick.forrington@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org
-Cc:     Nick Forrington <nick.forrington@arm.com>,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andrew Kilroy <andrew.kilroy@arm.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 13/13] perf vendors events arm64: Arm Neoverse E1
-Date:   Fri, 20 May 2022 19:14:55 +0100
-Message-Id: <20220520181455.340344-14-nick.forrington@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220520181455.340344-1-nick.forrington@arm.com>
-References: <20220520181455.340344-1-nick.forrington@arm.com>
+        Fri, 20 May 2022 14:16:47 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03B662ED58;
+        Fri, 20 May 2022 11:16:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1653070572;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=gbY8Ly+SgWvx4lZZsE36qDSwqHJmarMcDOr8/OKncyw=;
+    b=Nem9+xzzzTMcUAZqOnUvzds9NC1kY+OKyLcgaKMYV2Kp2B9lsG7mFxUyoBga4tCU6u
+    U5ocqOVRrG09Ge8kIEgo6ssfalnXDPz75/vw0dGxlnC/GxkWDPkdHYwfbyOy8HM8ZPQU
+    sCyWzIfknd7mJ2VsgjRAbEcDdD5wQvH6HfHLfxFkjWgbuK5eUY4OBOdcEBlX4gAwMiXB
+    3lxRCSyWWRqRa6yIwutq+zImC0g1Hdlg8uelQui73Z3EwjpaAPDFn81Mk5qVQbAE6Ms7
+    3dtwNe7TVEgaUSc1ESXJ+b80Vu6M8VLSSr53JvBbg3qdQIF3gsqS5wLAT7TsTsN7JKxM
+    ZQZQ==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u267FZF9PwpcNKLUrK85lg=="
+X-RZG-CLASS-ID: mo00
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 47.45.0 AUTH)
+    with ESMTPSA id 9056edy4KIGBHeP
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Fri, 20 May 2022 20:16:11 +0200 (CEST)
+Date:   Fri, 20 May 2022 20:16:05 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        Vinod Koul <vkoul@kernel.org>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH 1/9] dt-bindings: arm: qcom: fix Alcatel OneTouch Idol 3
+ compatibles
+Message-ID: <Yofa5et7kd6UpS0C@gerhold.net>
+References: <20220520123252.365762-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220520123252.365762-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,368 +65,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add PMU events for Arm Neoverse E1
-Update mapfile.csv
+On Fri, May 20, 2022 at 02:32:44PM +0200, Krzysztof Kozlowski wrote:
+> The MSM8916 Alcatel OneTouch Idol 3 does not use MTP fallbacks in
+> compatibles:
+> 
+>   msm8916-alcatel-idol347.dtb: /: compatible: 'oneOf' conditional failed, one must be fixed:
+>     ['alcatel,idol347', 'qcom,msm8916'] is too short
+> 
+> Reported-by: Rob Herring <robh@kernel.org>
+> Fixes: e9dd2f7204ed ("dt-bindings: arm: qcom: Document alcatel,idol347 board")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Event data based on:
-https://github.com/ARM-software/data/tree/master/pmu/neoverse-e1.json
+Reviewed-by: Stephan Gerhold <stephan@gerhold.net>
 
-which is based on PMU event descriptions from the Arm Neoverse E1 Technical
-Reference Manual.
-
-Mapping data (for mapfile.csv) based on:
-https://github.com/ARM-software/data/blob/master/cpus.json
-
-which is based on Main ID Register (MIDR) information found in the Arm
-Technical Reference Manuals for individual CPUs.
-
-Reviewed-by: John Garry <john.garry@huawei.com>
-Signed-off-by: Nick Forrington <nick.forrington@arm.com>
----
- .../arch/arm64/arm/neoverse-e1/branch.json    |  17 +++
- .../arch/arm64/arm/neoverse-e1/bus.json       |  17 +++
- .../arch/arm64/arm/neoverse-e1/cache.json     | 107 ++++++++++++++++++
- .../arch/arm64/arm/neoverse-e1/exception.json |  14 +++
- .../arm64/arm/neoverse-e1/instruction.json    |  65 +++++++++++
- .../arch/arm64/arm/neoverse-e1/memory.json    |  23 ++++
- .../arch/arm64/arm/neoverse-e1/pipeline.json  |   8 ++
- .../arch/arm64/arm/neoverse-e1/spe.json       |  14 +++
- tools/perf/pmu-events/arch/arm64/mapfile.csv  |   1 +
- 9 files changed, 266 insertions(+)
- create mode 100644 tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/branch.json
- create mode 100644 tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/bus.json
- create mode 100644 tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/cache.json
- create mode 100644 tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/exception.json
- create mode 100644 tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/instruction.json
- create mode 100644 tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/memory.json
- create mode 100644 tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/pipeline.json
- create mode 100644 tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/spe.json
-
-diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/branch.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/branch.json
-new file mode 100644
-index 000000000000..2f2d137f5f55
---- /dev/null
-+++ b/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/branch.json
-@@ -0,0 +1,17 @@
-+[
-+    {
-+        "ArchStdEvent": "BR_MIS_PRED"
-+    },
-+    {
-+        "ArchStdEvent": "BR_PRED"
-+    },
-+    {
-+        "ArchStdEvent": "BR_IMMED_SPEC"
-+    },
-+    {
-+        "ArchStdEvent": "BR_RETURN_SPEC"
-+    },
-+    {
-+        "ArchStdEvent": "BR_INDIRECT_SPEC"
-+    }
-+]
-diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/bus.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/bus.json
-new file mode 100644
-index 000000000000..75d850b781ac
---- /dev/null
-+++ b/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/bus.json
-@@ -0,0 +1,17 @@
-+[
-+    {
-+        "ArchStdEvent": "CPU_CYCLES"
-+    },
-+    {
-+        "ArchStdEvent": "BUS_ACCESS"
-+    },
-+    {
-+        "ArchStdEvent": "BUS_CYCLES"
-+    },
-+    {
-+        "ArchStdEvent": "BUS_ACCESS_RD"
-+    },
-+    {
-+        "ArchStdEvent": "BUS_ACCESS_WR"
-+    }
-+]
-diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/cache.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/cache.json
-new file mode 100644
-index 000000000000..3ad15e3a93a9
---- /dev/null
-+++ b/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/cache.json
-@@ -0,0 +1,107 @@
-+[
-+    {
-+        "ArchStdEvent": "L1I_CACHE_REFILL"
-+    },
-+    {
-+        "ArchStdEvent": "L1I_TLB_REFILL"
-+    },
-+    {
-+        "ArchStdEvent": "L1D_CACHE_REFILL"
-+    },
-+    {
-+        "ArchStdEvent": "L1D_CACHE"
-+    },
-+    {
-+        "ArchStdEvent": "L1D_TLB_REFILL"
-+    },
-+    {
-+        "ArchStdEvent": "L1I_CACHE"
-+    },
-+    {
-+        "ArchStdEvent": "L1D_CACHE_WB"
-+    },
-+    {
-+        "ArchStdEvent": "L2D_CACHE"
-+    },
-+    {
-+        "ArchStdEvent": "L2D_CACHE_REFILL"
-+    },
-+    {
-+        "ArchStdEvent": "L2D_CACHE_WB"
-+    },
-+    {
-+        "ArchStdEvent": "L1D_CACHE_ALLOCATE"
-+    },
-+    {
-+        "ArchStdEvent": "L2D_CACHE_ALLOCATE"
-+    },
-+    {
-+        "ArchStdEvent": "L1D_TLB"
-+    },
-+    {
-+        "ArchStdEvent": "L1I_TLB"
-+    },
-+    {
-+        "ArchStdEvent": "L3D_CACHE_ALLOCATE"
-+    },
-+    {
-+        "ArchStdEvent": "L3D_CACHE_REFILL"
-+    },
-+    {
-+        "ArchStdEvent": "L3D_CACHE"
-+    },
-+    {
-+        "ArchStdEvent": "L2D_TLB_REFILL"
-+    },
-+    {
-+        "ArchStdEvent": "L2D_TLB"
-+    },
-+    {
-+        "ArchStdEvent": "DTLB_WALK"
-+    },
-+    {
-+        "ArchStdEvent": "ITLB_WALK"
-+    },
-+    {
-+        "ArchStdEvent": "LL_CACHE_RD"
-+    },
-+    {
-+        "ArchStdEvent": "LL_CACHE_MISS_RD"
-+    },
-+    {
-+        "ArchStdEvent": "L1D_CACHE_RD"
-+    },
-+    {
-+        "ArchStdEvent": "L1D_CACHE_WR"
-+    },
-+    {
-+        "ArchStdEvent": "L1D_CACHE_REFILL_RD"
-+    },
-+    {
-+        "ArchStdEvent": "L1D_CACHE_REFILL_WR"
-+    },
-+    {
-+        "ArchStdEvent": "L1D_CACHE_REFILL_INNER"
-+    },
-+    {
-+        "ArchStdEvent": "L1D_CACHE_REFILL_OUTER"
-+    },
-+    {
-+        "ArchStdEvent": "L2D_CACHE_RD"
-+    },
-+    {
-+        "ArchStdEvent": "L2D_CACHE_WR"
-+    },
-+    {
-+        "ArchStdEvent": "L2D_CACHE_REFILL_RD"
-+    },
-+    {
-+        "ArchStdEvent": "L2D_CACHE_REFILL_WR"
-+    },
-+    {
-+        "ArchStdEvent": "L3D_CACHE_RD"
-+    },
-+    {
-+        "ArchStdEvent": "L3D_CACHE_REFILL_RD"
-+    }
-+]
-diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/exception.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/exception.json
-new file mode 100644
-index 000000000000..27c3fe9c831a
---- /dev/null
-+++ b/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/exception.json
-@@ -0,0 +1,14 @@
-+[
-+    {
-+        "ArchStdEvent": "EXC_TAKEN"
-+    },
-+    {
-+        "ArchStdEvent": "MEMORY_ERROR"
-+    },
-+    {
-+        "ArchStdEvent": "EXC_IRQ"
-+    },
-+    {
-+        "ArchStdEvent": "EXC_FIQ"
-+    }
-+]
-diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/instruction.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/instruction.json
-new file mode 100644
-index 000000000000..6c3b8f772e7f
---- /dev/null
-+++ b/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/instruction.json
-@@ -0,0 +1,65 @@
-+[
-+    {
-+        "ArchStdEvent": "SW_INCR"
-+    },
-+    {
-+        "ArchStdEvent": "LD_RETIRED"
-+    },
-+    {
-+        "ArchStdEvent": "ST_RETIRED"
-+    },
-+    {
-+        "ArchStdEvent": "INST_RETIRED"
-+    },
-+    {
-+        "ArchStdEvent": "EXC_RETURN"
-+    },
-+    {
-+        "ArchStdEvent": "CID_WRITE_RETIRED"
-+    },
-+    {
-+        "ArchStdEvent": "PC_WRITE_RETIRED"
-+    },
-+    {
-+        "ArchStdEvent": "BR_IMMED_RETIRED"
-+    },
-+    {
-+        "ArchStdEvent": "BR_RETURN_RETIRED"
-+    },
-+    {
-+        "ArchStdEvent": "INST_SPEC"
-+    },
-+    {
-+        "ArchStdEvent": "TTBR_WRITE_RETIRED"
-+    },
-+    {
-+        "ArchStdEvent": "BR_RETIRED"
-+    },
-+    {
-+        "ArchStdEvent": "BR_MIS_PRED_RETIRED"
-+    },
-+    {
-+        "ArchStdEvent": "LD_SPEC"
-+    },
-+    {
-+        "ArchStdEvent": "ST_SPEC"
-+    },
-+    {
-+        "ArchStdEvent": "LDST_SPEC"
-+    },
-+    {
-+        "ArchStdEvent": "DP_SPEC"
-+    },
-+    {
-+        "ArchStdEvent": "ASE_SPEC"
-+    },
-+    {
-+        "ArchStdEvent": "VFP_SPEC"
-+    },
-+    {
-+        "ArchStdEvent": "CRYPTO_SPEC"
-+    },
-+    {
-+        "ArchStdEvent": "ISB_SPEC"
-+    }
-+]
-diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/memory.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/memory.json
-new file mode 100644
-index 000000000000..78ed6dfcedc1
---- /dev/null
-+++ b/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/memory.json
-@@ -0,0 +1,23 @@
-+[
-+    {
-+        "ArchStdEvent": "MEM_ACCESS"
-+    },
-+    {
-+        "ArchStdEvent": "REMOTE_ACCESS_RD"
-+    },
-+    {
-+        "ArchStdEvent": "MEM_ACCESS_RD"
-+    },
-+    {
-+        "ArchStdEvent": "MEM_ACCESS_WR"
-+    },
-+    {
-+        "ArchStdEvent": "UNALIGNED_LD_SPEC"
-+    },
-+    {
-+        "ArchStdEvent": "UNALIGNED_ST_SPEC"
-+    },
-+    {
-+        "ArchStdEvent": "UNALIGNED_LDST_SPEC"
-+    }
-+]
-diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/pipeline.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/pipeline.json
-new file mode 100644
-index 000000000000..eeac798d403a
---- /dev/null
-+++ b/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/pipeline.json
-@@ -0,0 +1,8 @@
-+[
-+    {
-+        "ArchStdEvent": "STALL_FRONTEND"
-+    },
-+    {
-+        "ArchStdEvent": "STALL_BACKEND"
-+    }
-+]
-diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/spe.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/spe.json
-new file mode 100644
-index 000000000000..20f2165c85fe
---- /dev/null
-+++ b/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/spe.json
-@@ -0,0 +1,14 @@
-+[
-+    {
-+        "ArchStdEvent": "SAMPLE_POP"
-+    },
-+    {
-+        "ArchStdEvent": "SAMPLE_FEED"
-+    },
-+    {
-+        "ArchStdEvent": "SAMPLE_FILTRATE"
-+    },
-+    {
-+        "ArchStdEvent": "SAMPLE_COLLISION"
-+    }
-+]
-diff --git a/tools/perf/pmu-events/arch/arm64/mapfile.csv b/tools/perf/pmu-events/arch/arm64/mapfile.csv
-index 14ff5ab9dbde..ed29e4433c67 100644
---- a/tools/perf/pmu-events/arch/arm64/mapfile.csv
-+++ b/tools/perf/pmu-events/arch/arm64/mapfile.csv
-@@ -32,6 +32,7 @@
- 0x00000000410fd470,v1,arm/cortex-a710,core
- 0x00000000410fd480,v1,arm/cortex-x2,core
- 0x00000000410fd490,v1,arm/neoverse-n2,core
-+0x00000000410fd4a0,v1,arm/neoverse-e1,core
- 0x00000000420f5160,v1,cavium/thunderx2,core
- 0x00000000430f0af0,v1,cavium/thunderx2,core
- 0x00000000460f0010,v1,fujitsu/a64fx,core
--- 
-2.25.1
-
+> ---
+>  Documentation/devicetree/bindings/arm/qcom.yaml | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+> index 5c06d1bfc046..b7dd61df7ec0 100644
+> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
+> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+> @@ -153,14 +153,13 @@ properties:
+>            - const: qcom,msm8974
+>  
+>        - items:
+> -          - enum:
+> -              - alcatel,idol347
+>            - const: qcom,msm8916-mtp/1
+>            - const: qcom,msm8916-mtp
+>            - const: qcom,msm8916
+>  
+>        - items:
+>            - enum:
+> +              - alcatel,idol347
+>                - longcheer,l8150
+>                - samsung,a3u-eur
+>                - samsung,a5u-eur
+> -- 
+> 2.32.0
+> 

@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F81852EC56
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 14:41:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CAA952EC57
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 14:41:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349452AbiETMlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 08:41:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35008 "EHLO
+        id S1349486AbiETMlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 08:41:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242225AbiETMkv (ORCPT
+        with ESMTP id S1349336AbiETMkv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 20 May 2022 08:40:51 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3B9EF2;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85382F0;
         Fri, 20 May 2022 05:40:45 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: kholk11)
-        with ESMTPSA id 39C0C1F462AB
+        with ESMTPSA id E96BB1F462B0
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1653050443;
-        bh=1cI7pJdMnTRIrjJ1RulEP49MI5dUM/5mesdNO1GWVz4=;
+        s=mail; t=1653050444;
+        bh=x06V/XCPzZpmYAgHXtWkmjUfcFKK5jjJPN9DpP31Kf4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=L0tAkU63Gsv6F35bpHi7VC2t0gJZXQNisR3r2SkQXYnbYmOLl8m1uBpD+9P8Rn8Cg
-         QCK0OPu9l6rX7bmbRnLWsDp+WAOjlUg+eaKbfMG9xS37+4uTNfn9nDXkosP5wiPhQj
-         SOMb+swpYgtORdI3xg6n32hrank1MYBliryTbwtr1UtmKdp4on/oCL2ApOoo6cFTtc
-         XexakscSvOEYUUsLtsucBJAFmkDhp0bGlCtKOn6MdpYuBq4q3AVxcnxhtEy1eEoQUh
-         38r3B3+12vgkLpEwEJUNK1avcv24xDWYmxvT7Rx2uq4enQJAU8sLWEmicST2fvbMtc
-         boLckHEBkraRw==
+        b=fCgpRhpqMw/ZILDXfIXuNwSGMGuhlTYvHEygdNCG1eH2qI0jLyRRDUa7Aye9np1nV
+         KwZKc2Ot/lDUwGKswK5NfQ65IwflRg2Bpm63k3hUQYZhm3EbZdi/UtGJLeB9h/fgtX
+         Dddji/ANIrrp6oMbS6b3tI5dubjyWLHOVkZXpcdYDcrj6UrhCPyGbRe4LvEvCK981v
+         l6rSpENJmrUGVTZBbhoFqm3HJ3FCC8mk1yvvV6kT25IXgFxnDerQM2RrA/q6LOlSJ+
+         fQywzCUNb9VTAWVX5vDoLa9BvI3y7SFyLk4cwRIr86R8R3PeY2JF0UYJn4Q8DtZlYU
+         tAenNqqD0cTzg==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     lee.jones@linaro.org
@@ -37,9 +37,9 @@ Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         johnson.wang@mediatek.com, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/7] soc: mediatek: pwrap: Move PMIC read test sequence in function
-Date:   Fri, 20 May 2022 14:40:33 +0200
-Message-Id: <20220520124039.228314-2-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH 2/7] soc: mediatek: pwrap: Add kerneldoc for struct pwrap_slv_type
+Date:   Fri, 20 May 2022 14:40:34 +0200
+Message-Id: <20220520124039.228314-3-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220520124039.228314-1-angelogioacchino.delregno@collabora.com>
 References: <20220520124039.228314-1-angelogioacchino.delregno@collabora.com>
@@ -55,87 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The PMIC read test is performed in two places: pwrap_init_dual_io()
-and pwrap_init_sidly().
-In preparation for adding support for PMICs requiring a companion
-part, move this sequence to a new function pwrap_pmic_read_test().
+In preparation for adding new members with name abbreviations describe
+the struct pwrap_slv_type with kerneldoc to enhance human readability.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- drivers/soc/mediatek/mtk-pmic-wrap.c | 32 +++++++++++++++++-----------
- 1 file changed, 20 insertions(+), 12 deletions(-)
+ drivers/soc/mediatek/mtk-pmic-wrap.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/soc/mediatek/mtk-pmic-wrap.c b/drivers/soc/mediatek/mtk-pmic-wrap.c
-index d8cb0f833645..d0c79ee4c56b 100644
+index d0c79ee4c56b..76b1f7bc8217 100644
 --- a/drivers/soc/mediatek/mtk-pmic-wrap.c
 +++ b/drivers/soc/mediatek/mtk-pmic-wrap.c
-@@ -1390,6 +1390,18 @@ static int pwrap_regmap_write(void *context, u32 adr, u32 wdata)
- 	return pwrap_write(context, adr, wdata);
- }
+@@ -1155,11 +1155,17 @@ struct pwrap_slv_regops {
+ 	int (*pwrap_write)(struct pmic_wrapper *wrp, u32 adr, u32 wdata);
+ };
  
-+static bool pwrap_pmic_read_test(struct pmic_wrapper *wrp, const u32 *dew_regs,
-+				 u16 read_test_val)
-+{
-+	bool is_success;
-+	u32 rdata;
-+
-+	pwrap_read(wrp, dew_regs[PWRAP_DEW_READ_TEST], &rdata);
-+	is_success = ((rdata & U16_MAX) == read_test_val);
-+
-+	return is_success;
-+}
-+
- static int pwrap_reset_spislave(struct pmic_wrapper *wrp)
- {
- 	bool tmp;
-@@ -1433,18 +1445,18 @@ static int pwrap_reset_spislave(struct pmic_wrapper *wrp)
-  */
- static int pwrap_init_sidly(struct pmic_wrapper *wrp)
- {
--	u32 rdata;
- 	u32 i;
- 	u32 pass = 0;
-+	bool read_ok;
- 	signed char dly[16] = {
- 		-1, 0, 1, 0, 2, -1, 1, 1, 3, -1, -1, -1, 3, -1, 2, 1
- 	};
- 
- 	for (i = 0; i < 4; i++) {
- 		pwrap_writel(wrp, i, PWRAP_SIDLY);
--		pwrap_read(wrp, wrp->slave->dew_regs[PWRAP_DEW_READ_TEST],
--			   &rdata);
--		if (rdata == PWRAP_DEW_READ_TEST_VAL) {
-+		read_ok = pwrap_pmic_read_test(wrp, wrp->slave->dew_regs,
-+					       PWRAP_DEW_READ_TEST_VAL);
-+		if (read_ok) {
- 			dev_dbg(wrp->dev, "[Read Test] pass, SIDLY=%x\n", i);
- 			pass |= 1 << i;
- 		}
-@@ -1464,8 +1476,7 @@ static int pwrap_init_sidly(struct pmic_wrapper *wrp)
- static int pwrap_init_dual_io(struct pmic_wrapper *wrp)
- {
- 	int ret;
--	bool tmp;
--	u32 rdata;
-+	bool read_ok, tmp;
- 
- 	/* Enable dual IO mode */
- 	pwrap_write(wrp, wrp->slave->dew_regs[PWRAP_DEW_DIO_EN], 1);
-@@ -1481,12 +1492,9 @@ static int pwrap_init_dual_io(struct pmic_wrapper *wrp)
- 	pwrap_writel(wrp, 1, PWRAP_DIO_EN);
- 
- 	/* Read Test */
--	pwrap_read(wrp,
--		   wrp->slave->dew_regs[PWRAP_DEW_READ_TEST], &rdata);
--	if (rdata != PWRAP_DEW_READ_TEST_VAL) {
--		dev_err(wrp->dev,
--			"Read failed on DIO mode: 0x%04x!=0x%04x\n",
--			PWRAP_DEW_READ_TEST_VAL, rdata);
-+	read_ok = pwrap_pmic_read_test(wrp, wrp->slave->dew_regs, PWRAP_DEW_READ_TEST_VAL);
-+	if (!read_ok) {
-+		dev_err(wrp->dev, "Read failed on DIO mode.\n");
- 		return -EFAULT;
- 	}
++/**
++ * struct pwrap_slv_type - PMIC device wrapper definitions
++ * @dew_regs:      Device Wrapper (DeW) register offsets
++ * @type:          PMIC Type (model)
++ * @regops:        Register R/W ops
++ * @caps:          Capability flags for the target device
++ */
+ struct pwrap_slv_type {
+ 	const u32 *dew_regs;
+ 	enum pmic_type type;
+ 	const struct pwrap_slv_regops *regops;
+-	/* Flags indicating the capability for the target slave */
+ 	u32 caps;
+ };
  
 -- 
 2.35.1

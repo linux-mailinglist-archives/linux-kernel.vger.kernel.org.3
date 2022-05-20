@@ -2,49 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDAFD52F0EC
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 18:43:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A356552F0ED
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 18:44:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351774AbiETQnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 12:43:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48590 "EHLO
+        id S1351780AbiETQoc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 12:44:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiETQng (ORCPT
+        with ESMTP id S229452AbiETQo1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 12:43:36 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 57B7117855A;
-        Fri, 20 May 2022 09:43:35 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 077B91477;
-        Fri, 20 May 2022 09:43:35 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.7.188])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CF25E3F73D;
-        Fri, 20 May 2022 09:43:30 -0700 (PDT)
-Date:   Fri, 20 May 2022 17:43:26 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Vivek Kumar <quic_vivekuma@quicinc.com>
-Cc:     corbet@lwn.net, catalin.marinas@arm.com, will@kernel.org,
-        tglx@linutronix.de, maz@kernel.org, axboe@kernel.dk,
-        rafael@kernel.org, akpm@linux-foundation.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-mm@kvack.org, len.brown@intel.com,
-        pavel@ucw.cz, paulmck@kernel.org, bp@suse.de,
-        keescook@chromium.org, songmuchun@bytedance.com,
-        rdunlap@infradead.org, damien.lemoal@opensource.wdc.com,
-        pasha.tatashin@soleen.com, tabba@google.com, ardb@kernel.org,
-        tsoni@quicinc.com, quic_psodagud@quicinc.com,
-        quic_svaddagi@quicinc.com
-Subject: Re: [RFC 0/6] Bootloader based hibernation
-Message-ID: <YofFLih8LML9U5rc@FVFF77S0Q05N>
-References: <1652860121-24092-1-git-send-email-quic_vivekuma@quicinc.com>
+        Fri, 20 May 2022 12:44:27 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2B717DDD9
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 09:44:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653065066; x=1684601066;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=5ciO0kBoZZmdwy8SM6NT74DC/ofmCkiIKcxaKmJyLWk=;
+  b=cdtBIu070VNSig9gjmasyocWM5LmPQHHZS3WLN3pwqFH+jrL2unuTQyA
+   K/yv+98D5nw0MbvD3xffVuf5YcEeGaQIkhmoKSXjxCR5KFQDL1YNEFl08
+   K58r3g4zWGmrVbg+eQJOoOzzISBI2iRu/jQ9uQbdZyRT05dbTcV1ZT9Yv
+   /aSR5+ksv39UrCFDhgIgnFqoB8Z01LXfiP4f/0M9lMLgKoNEuSRUENU0n
+   Q6AqMlQA1o6fU38gSxvAu/C2xQ4mqDVxRagCMlILAc6fm/gytSxVnksxT
+   PkCd+tNb71BFbXslrPbNq/HISvTsEeIi0DwH6sR8F5AV5B0han+VsU2eL
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10353"; a="254716852"
+X-IronPort-AV: E=Sophos;i="5.91,239,1647327600"; 
+   d="scan'208";a="254716852"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 09:44:26 -0700
+X-IronPort-AV: E=Sophos;i="5.91,239,1647327600"; 
+   d="scan'208";a="570893664"
+Received: from luislore-desk2.amr.corp.intel.com (HELO [10.212.196.93]) ([10.212.196.93])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 09:44:25 -0700
+Message-ID: <7dffbd70-d7db-6d58-abbb-19006cd9e4a2@intel.com>
+Date:   Fri, 20 May 2022 09:44:25 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1652860121-24092-1-git-send-email-quic_vivekuma@quicinc.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 2/2] x86: fix platform info detection in frequency
+ invariance
+Content-Language: en-US
+To:     Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+References: <20220520161022.5972-1-ggherdovich@suse.cz>
+ <20220520161022.5972-2-ggherdovich@suse.cz>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20220520161022.5972-2-ggherdovich@suse.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,96 +70,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 5/20/22 09:10, Giovanni Gherdovich wrote:
+>  	if (slv_set_max_freq_ratio(&base_freq, &turbo_freq))
+>  		goto out;
+>  
+> -	if (x86_match_cpu(has_glm_turbo_ratio_limits) &&
+> -	    skx_set_max_freq_ratio(&base_freq, &turbo_freq, 1))
+> +	if (x86_match_cpu(has_glm_turbo_ratio_limits)) {
+> +		skx_set_max_freq_ratio(&base_freq, &turbo_freq, 1);
+>  		goto out;
+> +	}
+>  
+> -	if (x86_match_cpu(has_knl_turbo_ratio_limits) &&
+> -	    knl_set_max_freq_ratio(&base_freq, &turbo_freq, 1))
+> +	if (x86_match_cpu(has_knl_turbo_ratio_limits)) {
+> +		knl_set_max_freq_ratio(&base_freq, &turbo_freq, 1);
+>  		goto out;
+> +	}
+>  
+> -	if (x86_match_cpu(has_skx_turbo_ratio_limits) &&
+> -	    skx_set_max_freq_ratio(&base_freq, &turbo_freq, 4))
+> +	if (x86_match_cpu(has_skx_turbo_ratio_limits)) {
+> +		skx_set_max_freq_ratio(&base_freq, &turbo_freq, 4);
+>  		goto out;
+> +	}
+>  
+>  	if (core_set_max_freq_ratio(&base_freq, &turbo_freq))
+>  		goto out;
 
-On Wed, May 18, 2022 at 01:18:35PM +0530, Vivek Kumar wrote:
-> Kernel Hibernation
-> 
-> Linux Kernel has been already supporting hibernation, a process which
-> involves freezing of all userspace tasks, followed by quiescing of all
-> kernel device drivers and then a DDR snapshot is taken which is saved
-> to disc-swap partition, after the save, the system can either shutdown
-> or continue further. Generally during the next power cycle when kernel
-> boots and after probing almost all of the drivers, in the late_init()
-> part, it checks if a hibernation image is present in the specified swap
-> slot, if a valid hibernation image is found, it superimposes the currently
-> executing Kernel with an older kernel from the snapshot, moving further,
-> it calls the restore of the drivers and unfreezes the userspace tasks.
-> CONFIG_HIBERNATION and a designated swap partition needs to be present
-> for to enable Hibernation.
-> 
-> Bootloader Based Hibernation:
-> 
-> Automotive usecases require better boot KPIs, Hence we are proposing a
-> bootloader based hibernation restore.
+But didn't the last patch in the series carefully change the return
+value for knl_set_max_freq_ratio()?  Now, the only call site is ignoring
+the return value?  That seems odd.
 
-At a high-level, I'm not a fan of adding new ways to enter the kernel, and for
-the same reasons that the existing hibernate handover is deliberately *not* a
-stable ABI, I don't think we should add an ABI for this. This is not going to
-remain maintainable or compatible over time as the kernel evolves.
+Also, this is a mess.  These constructs:
 
-> Purpose of bootloader based hibernation is to improve the overall boot time
-> till the first display frame is seen on the screen or a camera application
-> can be launched from userspace after the power on reset key is pressed.
+static const struct x86_cpu_id has_knl_turbo_ratio_limits[] = {
+        X86_MATCH(XEON_PHI_KNL),
+        X86_MATCH(XEON_PHI_KNM),
+        {}
+};
 
-Can you break down the time taken for that today?
+static const struct x86_cpu_id has_skx_turbo_ratio_limits[] = {
+        X86_MATCH(SKYLAKE_X),
+        {}
+};
 
-What does a cold boot look like?
+static const struct x86_cpu_id has_glm_turbo_ratio_limits[] = {
+        X86_MATCH(ATOM_GOLDMONT),
+        X86_MATCH(ATOM_GOLDMONT_D),
+        X86_MATCH(ATOM_GOLDMONT_PLUS),
+        {}
+};
 
-What *exactly* are you trying to skip by using hibernation?
+are rather goofy.  A single array like rapl_ids[] that points to the
+handler function would do us a lot more good here, say:
 
-Thanks,
-Mark.
+static const struct x86_cpu_id has_knl_turbo_ratio_limits[] = {
+        X86_MATCH(XEON_PHI_KNL, 	&knl_set_max_freq_ratio),
+        X86_MATCH(XEON_PHI_KNM, 	&knl_set_max_freq_ratio),
+        X86_MATCH(SKYLAKE_X,		&skx_set_max_freq_ratio),
+        X86_MATCH(ATOM_GOLDMONT, 	&skx_set_max_freq_ratio),
+        X86_MATCH(ATOM_GOLDMONT_D,	&skx_set_max_freq_ratio),
+        X86_MATCH(ATOM_GOLDMONT_PLUS,	&skx_set_max_freq_ratio),
+	X86_MATCH(ANY,			&core_set_max_freq_ratio),
+        {}
+};
 
-> This RFC patchset
-> implements a slightly tweaked version of hibernation in which the
-> restoration of an older snapshot into DDR is being carried out from the
-> bootloader (ABL) itself, by doing this we are saving some time
-> (1 second measured on msm-4.14 Kernel) by not running a
-> temporary kernel and figuring out the hibernation image at late_init().
-> In order to achieve the same bootloader checks for the hibernation
-> image at a very early stage from swap partition, it parses the image and
-> loads it in the DDR instead of loading boot image form boot partition.
-> Since we are not running the temporary kernel,which would have done some
-> basic ARM related setup like, MMU enablement, EL2 setup, CPU setup etc,
-> entry point into hibernation snapshot image directly from bootloader is
-> different, on similar lines, all device drivers are now re-programming
-> the IO-mapped registers as part of the restore callback (which is
-> triggered from the hibernation framework) to bring back the HW/SW sync.
-> 
-> Other factors like, read-speed of the secondary storage device and
-> organization of the hibernation image in the swap partition effects the
-> total image restore time and the overall boot time. In our current
-> implementation we have serialized the allocation of swap-partition's slots
-> in kernel, so when hibernation image is being saved to disc, each page is
-> not scattered across various swap-slot offsets, rather it in a serial
-> manner. For example, if a DDR page at Page frame number 0x8005 is
-> located at a swap-slot offset 50, the next valid DDR page at PFN 0x8005
-> will be preset at the swap-slot offset 51. With this optimization in
-> place, bootloader can utilize the max capacity of issuing a disc-read
-> for reading a bigger chunk (~50 MBs at once) from the swap slot,
-> and also parsing of the image becomes simpler as it is available
-> contiguously.
-> 
-> 
-> 
-> Vivek Kumar (6):
->   arm64: hibernate: Introduce new entry point to kernel
->   PM: Hibernate: Add option to disable disk offset randomization
->   block: gendisk: Add a new genhd capability flag
->   mm: swap: Add randomization check for swapon/off calls
->   Hibernate: Add check for pte_valid in saveable page
->   irqchip/gic-v3: Re-init GIC hardware upon hibernation restore
-> 
->  Documentation/admin-guide/kernel-parameters.txt |  11 ++
->  arch/arm64/kernel/hibernate.c                   |   9 ++
->  drivers/irqchip/irq-gic-v3.c                    | 138 ++++++++++++++++-
->  include/linux/blkdev.h                          |   1 +
->  kernel/power/snapshot.c                         |  43 ++++++++
->  kernel/power/swap.c                             |  12 +++
->  mm/swapfile.c                                   |   6 +-
->  7 files changed, 216 insertions(+), 4 deletions(-)
-> 
-> -- 
-> 2.7.4
-> 
+That would get rid of all the goofy gotos and actually puts all the
+logic in one place.  BTW, I'm not 100% sure about the 'ANY' line.  I
+think that's how those work, but please double-check me on it.
+
+While it's generally best to keep bug fixes to a minimum, I think this
+one is worth a bit of a cleanup because it will remove a bunch of spaghetti.

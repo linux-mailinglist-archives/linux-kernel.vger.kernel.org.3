@@ -2,140 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2FF352E147
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 02:40:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39B4F52E182
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 03:06:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343797AbiETAjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 20:39:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32882 "EHLO
+        id S1344199AbiETBGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 21:06:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234162AbiETAjB (ORCPT
+        with ESMTP id S1344210AbiETBGB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 20:39:01 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E92A131281
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 17:38:59 -0700 (PDT)
-Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220520003853epoutp013c8130544a1817e4159d6605a261f39e~wqTrhjDlV3267032670epoutp01M
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 00:38:53 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220520003853epoutp013c8130544a1817e4159d6605a261f39e~wqTrhjDlV3267032670epoutp01M
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1653007133;
-        bh=5NMI7MorGMmG97q1ul08ajIeM0aOU20dl08vI5qrh8c=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=vHthYb1ieIuPByo+SXQNyBi52iYEYEOW1QWRlENqUTrN9E+CicDhFMx3FjPS39c2A
-         63MQuFFrncZXjW3fueY/LeDGIiQySzoVu9ZZRtPRnI4u3m9WHnq/yp2e69knyxpm7+
-         t9iAA1P8CNAWkMmeZkMxm9vJCEBhuUnD+cexoXt8=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20220520003853epcas1p20b3ffcd617e3439610fd588b7a935e91~wqTrSZzyU2348723487epcas1p20;
-        Fri, 20 May 2022 00:38:53 +0000 (GMT)
-Received: from epsmges1p2.samsung.com (unknown [182.195.38.235]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4L47Bg6r2xz4x9Pr; Fri, 20 May
-        2022 00:38:51 +0000 (GMT)
-Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
-        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        B3.F6.09785.B13E6826; Fri, 20 May 2022 09:38:51 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220520003851epcas1p1542dc1328f88ee1ac13e8bb8d49ef364~wqTplGxWv0695006950epcas1p1D;
-        Fri, 20 May 2022 00:38:51 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220520003851epsmtrp10e1fcb2aa8ae1425c6aa5e24e849aa5f~wqTpkOGq-1074010740epsmtrp1U;
-        Fri, 20 May 2022 00:38:51 +0000 (GMT)
-X-AuditID: b6c32a36-c87ff70000002639-ac-6286e31ba827
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        88.35.08924.B13E6826; Fri, 20 May 2022 09:38:51 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220520003851epsmtip17c812aed18a84625a19d49a63cff0db5~wqTpXlHVb2793627936epsmtip1f;
-        Fri, 20 May 2022 00:38:51 +0000 (GMT)
-Subject: Re: [GIT PULL] extcon next for 5.19
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Chanwoo Choi <cwchoi00@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Chanwoo Choi <chanwoo@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <316a4c19-b164-a8a5-3643-ec8f5930db68@samsung.com>
-Date:   Fri, 20 May 2022 10:05:10 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
-        Thunderbird/59.0
+        Thu, 19 May 2022 21:06:01 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B61522BCC
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 18:06:00 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id i8so6139866plr.13
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 18:06:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=oQsGBHyg4anWhL9luyNRj4RxEeeygNWGDSk1a1ys5Tk=;
+        b=MNGMyo/iFIrtWF+ECjFPBilsERxattchuXUT025XovM9k07HVR3RMo4VWOOU+cEPCD
+         ZJU13q/OhRwAfhb0DkD0zanT9Ee8X6EOg4a+AG9tuNPXRSnt/mMzUn92eKl0FarYUaru
+         FsjiCOLqzKAyrzNSOmxVVRSh3lYS5EUWvCrZrkK6/tNcJyOeLtsjZ6kGAM4Jprjc4lkZ
+         JW2/KxbQqyo964jn+6p6lRfujN03/at+gow//h7gTd2+rl5kcn0zLk1vwFhQwDuOOhM/
+         /RnVWMyIWjE7Lx4ABkL4SGtg0HomDaQQ9ynsUPSjGNwinJw1F0+qpJ3mli6qpAJp2VTm
+         bmmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=oQsGBHyg4anWhL9luyNRj4RxEeeygNWGDSk1a1ys5Tk=;
+        b=iuZneZ58JzPLXl2qNQruld9+WYTsY1H6o9A90V6OWmgNyFmgGYSfGMkyT9Gu5Lomjn
+         QfCm7nwfYOQjZoFWkvFAjqQtMIGJBqZUzAU9zMqctWnUQJzdWlhWiFdKTqUbIyDcAaRm
+         AqPTFCQcm/B0pVaBYffREqw/+o1w8q6TX0EAOpdW0PhMslfeeqEdzNfoOiYM+kmZ9wkg
+         t62eboz0F3lDwfmOmaxbffqwwU88lZ1Ph3XClbMOZpyJyjlJIeqPwHyUaN13QIuKv4WN
+         gjPwmcLeYL4vfGWVayp7RuvvjPUBZElLHdAF1YiRq4kAOnGV3lw/GGmL5panAYu9nHBM
+         zyDQ==
+X-Gm-Message-State: AOAM53173nvta3bgOsme7/Gwlw7Vh4QACEgp3cayS9ffM+UtIDPD+KiE
+        +jY2a7IyKHDkZoivGCv2l5UOgg==
+X-Google-Smtp-Source: ABdhPJz3u5e4/xj2hM37upFEiwGVZ7O6bXtKDVpC84G3mV+nWP9TNVSQvt7BYFSUW4xR+17smPosuQ==
+X-Received: by 2002:a17:90b:4d11:b0:1dc:ec4f:a19c with SMTP id mw17-20020a17090b4d1100b001dcec4fa19cmr8587931pjb.117.1653008759671;
+        Thu, 19 May 2022 18:05:59 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id 194-20020a6306cb000000b003db7de758besm4190792pgg.5.2022.05.19.18.05.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 May 2022 18:05:59 -0700 (PDT)
+Message-ID: <8f890747-c37f-2fd4-2428-4a9ffc865cac@kernel.dk>
+Date:   Thu, 19 May 2022 19:05:57 -0600
 MIME-Version: 1.0
-In-Reply-To: <YoZagTAVe1WQb6n+@kroah.com>
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCHSET 0/2] Fix splice from random/urandom
 Content-Language: en-US
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Theodore Ts'o <tytso@mit.edu>, Christoph Hellwig <hch@lst.de>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <YobPB27Ozl7uqUEu@zx2c4.com>
+ <3553b935-0aca-3d3e-2495-12288f601b53@kernel.dk>
+ <CAHmME9riX+YuqSVp64bhy=nX08_7d-m8es82BHy2qh-oWkqa8Q@mail.gmail.com>
+ <aa7ae20c-a2d7-4959-b5fb-efe7b56294f1@kernel.dk>
+ <CAHmME9oLPxzsnRezFPFVssmedOQUi2E9NWFbakEe92=Hdk1QuQ@mail.gmail.com>
+ <03c7d6c9-0c86-d4b6-357d-d51be0143c80@kernel.dk>
+ <CAHmME9qVQNkx-0J8rq_0ZVaSR+-eEgOUtcZhvq5dAY4-kJxSAA@mail.gmail.com>
+ <13899409-e81b-8689-3380-249de46c0b6f@kernel.dk> <YobldmDn6pU9mr4f@zx2c4.com>
+ <84d073aa-9937-1a58-dd7a-b1828874c21a@kernel.dk> <YoboEokc00YACuha@zx2c4.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <YoboEokc00YACuha@zx2c4.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupnk+LIzCtJLcpLzFFi42LZdljTQFf6cVuSwZMec4uJN66wWDw7qm3R
-        vHg9m8XlXXPYLG43rmBzYPXYOesuu8emVZ1sHvvnrmH36NuyitHj8ya5ANaobJuM1MSU1CKF
-        1Lzk/JTMvHRbJe/geOd4UzMDQ11DSwtzJYW8xNxUWyUXnwBdt8wcoN1KCmWJOaVAoYDE4mIl
-        fTubovzSklSFjPziElul1IKUnALTAr3ixNzi0rx0vbzUEitDAwMjU6DChOyMiy332Qt+M1U8
-        vnuHsYFxOVMXIyeHhICJROv7hyxdjFwcQgI7GCUevf3MBOF8YpQ4dG8nVOYzo0Tf6VOsMC0L
-        3+9hhkjsYpQ486EJquo9o8SlhkcsIFXCAjoSPR332EFsEYEIidvHzoHNZRboYpRoXrILbBSb
-        gJbE/hc32EBsfgFFias/HjOC2LwCdhKvlswAG8QioCox88xWsEGiAmESJ7e1QNUISpyc+QSs
-        hlNAU+LTlG1gNcwC4hK3nsxngrDlJba/nQN2qoRAL4fE6jN3gBZzADkuErcO50O8Iyzx6vgW
-        dghbSuJlfxs7RH0zo0TDi9uMEE4Po8TRZ30sEFXGEvuXTmYCGcQMtHn9Ln2IsKLEzt9zGSEW
-        80m8+9oDtYtXoqNNCKJEWeLyg7vQkJeUWNzeyTaBUWkWkndmIXlhFpIXZiEsW8DIsopRLLWg
-        ODc9tdiwwAge38n5uZsYwSlTy2wH46S3H/QOMTJxMB5ilOBgVhLhZcxtSRLiTUmsrEotyo8v
-        Ks1JLT7EaAoM4InMUqLJ+cCknVcSb2hiaWBiZmRsYmFoZqgkzrtq2ulEIYH0xJLU7NTUgtQi
-        mD4mDk6pBqbKxwe7JcUMjVwuvwg4v+jmxw7fHzt3XRXfU9j2cQnbPTWdi623X+U/ZK8reLjo
-        WJoPm/NCnyUM2Z6hdlOXOrL7zb0seNX7xT8e0x/9X97/OsJePJ3D41ruTfdVbw5tvBn1pIZp
-        q4vSbMusd3v8d6QtLstrqxWxjNEVdNCffNb5Ux2bf8RLRt+Lbx0TexecOWWa2v5MPHRb+xuL
-        OHNzz1lR+/9l1u7hv6x+xfK8UtuUyd/Dub2/Vv5uSwuKiauceXdxS5Xix61JOhe2n33aM2dH
-        bWq992nujV4Sc4NYDmw/fi098nLq9e0rVrY3/z6m0zb/nbzLuZL7OwpufZgur5SwYdmVSf1N
-        UzzlfsmsP/NFiaU4I9FQi7moOBEAkwvIMSIEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrJLMWRmVeSWpSXmKPExsWy7bCSnK7047Ykg5tHJS0m3rjCYvHsqLZF
-        8+L1bBaXd81hs7jduILNgdVj56y77B6bVnWyeeyfu4bdo2/LKkaPz5vkAlijuGxSUnMyy1KL
-        9O0SuDIuttxnL/jNVPH47h3GBsblTF2MnBwSAiYSC9/vYe5i5OIQEtjBKLH4z3x2iISkxLSL
-        R4ESHEC2sMThw8UQNW8ZJf6vOM4IUiMsoCPR03EPrF5EIELi1ro5TCBFzAJdjBL3bjxnheh4
-        xCix/mEzWBWbgJbE/hc32EBsfgFFias/HoNN4hWwk3i1ZAYLiM0ioCox88xWsHpRgTCJnUse
-        M0HUCEqcnPkErIZTQFPi05RtYDXMAuoSf+ZdYoawxSVuPZnPBGHLS2x/O4d5AqPwLCTts5C0
-        zELSMgtJywJGllWMkqkFxbnpucWGBUZ5qeV6xYm5xaV56XrJ+bmbGMGxo6W1g3HPqg96hxiZ
-        OBgPMUpwMCuJ8DLmtiQJ8aYkVlalFuXHF5XmpBYfYpTmYFES573QdTJeSCA9sSQ1OzW1ILUI
-        JsvEwSnVwOQffPjGK+npOw9+7HpT7pQlNjfnYiVHvnAZm1ZvXLHqzOCKiZY/1weaT13ycv4z
-        wXidlu4ph1R2GT844Kc6be0cFkbm2zvLXnNz7Yh6HKUceblhqcqrYvefLq1blE7cOBbtZvDN
-        +tPrCQv4V+75kKMoL7p+yaXwrY/md/2ZJHHDsTC/QvTAbmbuybd7meTvPF2UKcjwW+n6turD
-        HwxYP+p1v/3Suf/lgSBv7weW7OER3j06sxaYrIvIrN/8LTSD55gZt7y6rLDVjETTP019atY6
-        90LtvGb7dqRvOKGdkPX/g5nin0s5m7cePt3VUxpfcyLg5IK7aV9Cu6aeuVYn9PAOW590U8Dc
-        0PMPfq09LqbEUpyRaKjFXFScCAAUg/e6DAMAAA==
-X-CMS-MailID: 20220520003851epcas1p1542dc1328f88ee1ac13e8bb8d49ef364
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220519150019epcas1p28ef56fb480ecbc553544543a2ea29c5b
-References: <eaab9f4d-06d4-3ddc-3756-69f762bd86e1@gmail.com>
-        <3aa73483-19d6-fc25-a3c6-03343582b542@gmail.com>
-        <CGME20220519150019epcas1p28ef56fb480ecbc553544543a2ea29c5b@epcas1p2.samsung.com>
-        <YoZagTAVe1WQb6n+@kroah.com>
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/19/22 11:56 PM, Greg Kroah-Hartman wrote:
-> On Wed, May 18, 2022 at 03:03:48AM +0900, Chanwoo Choi wrote:
->> Dear Greg,
+On 5/19/22 7:00 PM, Jason A. Donenfeld wrote:
+> Hi Jens,
+> 
+> On Thu, May 19, 2022 at 06:56:12PM -0600, Jens Axboe wrote:
+>> On 5/19/22 6:48 PM, Jason A. Donenfeld wrote:
+>>> sendfile() returns -EINVAL even with your patches. Only splicing to pipes
+>>> seems to work.
 >>
->> Gently ping. Could you please pull this request?
+>> Huh, that really should work. Are you trying to sendfile() to random? If
+>> so, you need that last write_iter patch too, and add the splice_write as
+>> I mentioned.
+>  
+> No, I've only tried the read side so far. I made a little program:
 > 
-> Sorry, was behind in patches, catching up now...
+> #include <sys/sendfile.h>
+> #include <stdio.h>
 > 
+> int main(int argc, char *argv[])
+> {
+>         ssize_t s = sendfile(1, 0, NULL, 0xffff);
+>         fprintf(stderr, "ret: %zd\n", s);
+>         return 0;
+> }
+> 
+> Then I ran `./a.out < /dev/urandom > /dev/null`. Fails. OTOH, if I
+> replace /dev/urandom with an ordinary file, it succeeds.
 
-You're welcome. I'll send the pull request more early on next.
-Thank you
+Yeah I reproduced the same, doing it the other way works fine. Curious
+enough to see what it is, looking into it.
 
 -- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
+Jens Axboe
+

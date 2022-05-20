@@ -2,180 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32BDF52E51C
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 08:36:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 944CA52E51F
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 08:38:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345903AbiETGfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 02:35:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43212 "EHLO
+        id S1345907AbiETGiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 02:38:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244487AbiETGfd (ORCPT
+        with ESMTP id S230283AbiETGiW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 02:35:33 -0400
-Received: from esa19.fujitsucc.c3s2.iphmx.com (esa19.fujitsucc.c3s2.iphmx.com [216.71.158.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D7B314CA10
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 23:35:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
-  t=1653028533; x=1684564533;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=+9niHwPIRae1VLQDsCWCPN/1XhEDLQzvhvMBqjqH7fY=;
-  b=GP2Utlte6z3vapquzJ52TRLp+8aZnqAyaplrvhuA4HUd4VLACqw6fTql
-   evExLmmnLI30982aoCphZIV0g8jP9/g9oToI381QVWHVvtBoTaO5fJuT2
-   p6p3dGl0Rbs2IO6/n/9wC/oE4aTbmlICFN1G/ea5kdVr1fF/CiAIIWGGQ
-   FYtjzj0qVGBMivbA0Qql3bhTe8Za4FCvdwTf+DlaxzhWKQcO4jC8YGk2t
-   kf7YjMdZl3DBmCHNZ4BKPueLizOwWivPVkXFye4YSbiP3aO22ysyFdCyI
-   K6n/IMdDFZOYJdfEcs9jp7c9BKYRTjkfW9f4bQ5s/R1Pdk2fmSqMtLpG3
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="55932607"
-X-IronPort-AV: E=Sophos;i="5.91,238,1647270000"; 
-   d="scan'208";a="55932607"
-Received: from mail-os0jpn01lp2108.outbound.protection.outlook.com (HELO JPN01-OS0-obe.outbound.protection.outlook.com) ([104.47.23.108])
-  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 15:35:25 +0900
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GFyUUQbtbnuxrey47IJImv0nSORN+n9KL6XXXaAuMSHyQTSj7ivBJogiS3H9Vo9jEZ+A15b4i4AeTW5KOyF4Acr1UQe6KuJlGsD27COw2xj7zZFC5fNQ7XOF0iN0qHOKwnosZlV6Ixa2G/WA0qVRlnWKKNcoFC2Kx8f6LjBY2/dEviEUlJHg7VJoVltQnxgITYeMNMbVpqQuY4nCifCJ1crBIlVDLbXPUVjFoeDZFpz8BS9JhrlsUtmi7e4nA78WG+Q6WVNepMLYcqiP00ANReFPGJZyFnYyxZklUpVFoXSZr5/B3DIBsdWmyCZnbZmkdftsBEiRlWxYzlJBcojZjg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+9niHwPIRae1VLQDsCWCPN/1XhEDLQzvhvMBqjqH7fY=;
- b=FXylqlYvh1Uoh3r4Z/Nj71ijFDxLsuimAKvc3sifyS+T8qsoKwfSjmhvL/ubsYNldqqw0zJucFdSYIBlsav4YVTsKQu60jocFCINAW1VW89eofi0M9KZT9m/fl54K/416ViUP/IBrDOcxiqYy8OdF0MdgDkrE023wlEV3CH0czlrBnnDb18Yh+hrH6T2CIXjzgPPu8BT9FyGh3IwHJorgl2J/YkjYOCp2qpbTfq4MwustQU3CpKEkMLo1rElPZrtIwjCJBE/Kjkbabfg6+tmZVGXSAD/cIbnQP1g0yjS881Frn4OAYZK7orzpk5PAsTklWc3VAMGkd1WwN4c794sPg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fujitsu.com; dmarc=pass action=none header.from=fujitsu.com;
- dkim=pass header.d=fujitsu.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=fujitsu.onmicrosoft.com; s=selector2-fujitsu-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+9niHwPIRae1VLQDsCWCPN/1XhEDLQzvhvMBqjqH7fY=;
- b=ZSqVz/1t6ntMMmAsRPuSMBbSe9X2fx0dbQM7247rHzrCip2mmjxQmZoUmkKoFODPRP6Uq+xKiLb04h26FqCsXalbn9w6wigAaQeT2BtmuyJ82ea6Ngj6xtqBox62nfu5yCtH7Vu5clfhjkmGsih3/Ddjl5OBLuB/g/H28TIwU7k=
-Received: from OSBPR01MB2037.jpnprd01.prod.outlook.com (2603:1096:603:25::17)
- by OSAPR01MB1572.jpnprd01.prod.outlook.com (2603:1096:603:32::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.14; Fri, 20 May
- 2022 06:35:21 +0000
-Received: from OSBPR01MB2037.jpnprd01.prod.outlook.com
- ([fe80::a041:7644:4eca:ec8]) by OSBPR01MB2037.jpnprd01.prod.outlook.com
- ([fe80::a041:7644:4eca:ec8%7]) with mapi id 15.20.5273.015; Fri, 20 May 2022
- 06:35:21 +0000
-From:   "tarumizu.kohei@fujitsu.com" <tarumizu.kohei@fujitsu.com>
-To:     'Greg KH' <gregkh@linuxfoundation.org>
-CC:     "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>,
-        "eugenis@google.com" <eugenis@google.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "pcc@google.com" <pcc@google.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "marcos@orca.pet" <marcos@orca.pet>,
-        "conor.dooley@microchip.com" <conor.dooley@microchip.com>,
-        "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>,
-        "marcan@marcan.st" <marcan@marcan.st>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: RE: [PATCH v4 7/8] x86: Add Kconfig/Makefile to build hardware
- prefetch control driver
-Thread-Topic: [PATCH v4 7/8] x86: Add Kconfig/Makefile to build hardware
- prefetch control driver
-Thread-Index: AQHYaoDsEbDM2XkZO0CnazvYZZezea0kMD8AgAMg6qA=
-Date:   Fri, 20 May 2022 06:35:21 +0000
-Message-ID: <OSBPR01MB20373DA0C4D33C63933273DE80D39@OSBPR01MB2037.jpnprd01.prod.outlook.com>
-References: <20220518063032.2377351-1-tarumizu.kohei@fujitsu.com>
- <20220518063032.2377351-8-tarumizu.kohei@fujitsu.com>
- <YoSVpAlKA2wF41o3@kroah.com>
-In-Reply-To: <YoSVpAlKA2wF41o3@kroah.com>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=fujitsu.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 86669a69-7fea-49a6-25cb-08da3a2ae9cb
-x-ms-traffictypediagnostic: OSAPR01MB1572:EE_
-x-microsoft-antispam-prvs: <OSAPR01MB15729563414DAF9970F894FA80D39@OSAPR01MB1572.jpnprd01.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: J4vtvEZLs1c1jAkLdkkjyI5WuZkHmMSfjLfCsdpHcxLIUApHb4gV+uFkoqT+xnbrmSkK3cHvv8hrz2ozVx3UI/mUXl/+FXYuMcaqHiUBA4o2HLJw7uODbQFaaQN8KgynA40NgcbnSnf+IoUbm0qIqic/ZR74ay5ud4E1pUvuVmZP2LcOCJcB3h5/PfxLNcfJ4+t1vxeFzcDnZfq1El1BXMTnOVZ76Rk2t87mXw7DrsAuuOuKZ49x2WcsE0NoqmEEesH3N2Gox3XbIRm7Et+Q42hR3bdekcruSj8I05HszP3XrAdM9xit8e1pTN3OMOauIyn+kR5KsRqopdpKwsL+tCvdnnd4SHRIK6rmnbfWKgZ501zH6a1vXE7y9/MMh8uJB3a3EGxlm5AbEltwLqNNR/J4IPmM9lzxh1rBXccCAnN5ImbKukJtERDe2jzSOdrDPH3VvGmD+05WnbPzt19lXV8j8B2sumUwyFLw08aJvrTVpJ8gnPyqcOpLAu+G00DyxV2581G3CeC3Chd9Q99H34biKTeRqEXcWOSX6nuD0Geaea0TJ0w8lniBqYuEFD5uvpPCM1OFp9eWhKcadcGzvJy2DOMHpk7et5mrAkEmXkZ63SIoeEJ5RPbzp1Dh8tn3yBTSuDNb5mCTgmXSc+L2YJ2gfWpvSOlbpdMlV4iOpwrBKKvCEL6a3hbml35vPNR4YF5uLbtCKThNMlerIAooZg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OSBPR01MB2037.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66476007)(66556008)(7696005)(8936002)(9686003)(66446008)(85182001)(64756008)(4326008)(76116006)(122000001)(5660300002)(66946007)(186003)(8676002)(558084003)(508600001)(6506007)(26005)(52536014)(38100700002)(38070700005)(71200400001)(6916009)(316002)(54906003)(55016003)(82960400001)(7416002)(33656002)(86362001)(2906002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-2022-jp?B?YmIzLzEydU00K3A1UFkyL2dLS3lPRjlYcjBVN1pGSWxjZ0wxcnJwTW5w?=
- =?iso-2022-jp?B?a01hMzVkMzBzazF4dGNEWkRua2hmaTJ2V1dlSm9XeGF0eTdYK0JMc3Bu?=
- =?iso-2022-jp?B?dGxoajlnNGVRY01sY013dWp5cjR5UzM4YUZoRW5VT2NzWG1aQnFjUVFh?=
- =?iso-2022-jp?B?Lzc4czZtZlRycTBCa1lXRkVyaW85U0ZJS0hndmwvQjUrR0pCc1J1Zm9q?=
- =?iso-2022-jp?B?SU5lWFYxb2ZPMWZMYTByVzhqY0k0UTM4S0wvMWQ4aVRNdGlkUVB2dUc4?=
- =?iso-2022-jp?B?TTNkNkY2SXZ5RDVHdjZKd0Q5MTVpRWZJVU5KQ1VRdGtqM1hNNTRVL0Zo?=
- =?iso-2022-jp?B?eDAxQXJaSERCRksrblgyUlo0Y0lMN1BFMnoxYVh5NlVUam1tSUN0UHZ3?=
- =?iso-2022-jp?B?YVZMbWJpdldQdmZUYTdkZEIydFpGa3NpMzBIZnpkaG1kTWV0dThxVjF6?=
- =?iso-2022-jp?B?eEV6Q051THRiUlY4M08vbDdRVVozRXpEd1hxc015SUViYnlyZWFtbEdT?=
- =?iso-2022-jp?B?VU5Lb0w4b1pkSDdYNXRlR0pHWGxaZ0JwQzNOZm12SWVBY3JCU2ZoM3h2?=
- =?iso-2022-jp?B?UFBaWHZDZHlpSWcvK1h2a3ZqbEIxNjRCWjlMRmZQNjN2UEtLTUlDeElv?=
- =?iso-2022-jp?B?b1RJMlVuc1h2dFRCc0VyejQ5UFUyeC9jYnVmQ2dPVkdOZ2RhaWZQRGJJ?=
- =?iso-2022-jp?B?cjR0UUV6U080VkprYVlVem1jTkpVblZ5WEZ4RWVXdWlHUW1WVGxOY056?=
- =?iso-2022-jp?B?cEZCZW5uOVV1c2tVYVkzampJd0drL2g0VWk4bFdONDlJV2laRk03ZVBO?=
- =?iso-2022-jp?B?Q0o1Y2M1cnhCRzVYY25RelJERlowUXdmb215M2IwSS92dlFZTXlmbnV3?=
- =?iso-2022-jp?B?SmNlTk11bGxRZlNIT1ZIc2k3akM4L25TMXFtNmI4R0dIeEVjMDRtL21m?=
- =?iso-2022-jp?B?K2JaSDNOcE9zMmw2Um9LN25qZWI3b05nd2pEdERPaWoxQnlvU09VK29N?=
- =?iso-2022-jp?B?TmNHTmF0V3hma3gyajMvKzYwTi96QmFmRlB5OFZpYjBCb0h2R0kxc3dy?=
- =?iso-2022-jp?B?OFI5emVYWEJyT2ZLUmFzYnQyS2wvKzZqS2JHYkVyMkZiU0o0aWoyWXFG?=
- =?iso-2022-jp?B?Z1YzT1pqdU5MSUI3cTVkbXFBTmNzLzZjTTllMzRMQWFQRFVGa0RxOFJ0?=
- =?iso-2022-jp?B?aFYxQXFaV1R0MWtoL0VLUzYxMUpaTkJuL1VtckJtVCtNMmEvdlBCbHZz?=
- =?iso-2022-jp?B?ODhMNDVUL0ZLbUFYTUM2STlGcEJmSVh0RDFwMkNSdTc3NGxyVkhQeFd3?=
- =?iso-2022-jp?B?Z05kVk8xTVhJTDBNTXptaGZFY3pTRnNBbG5BWmpCc2dIYWZ0Zk9DM3c2?=
- =?iso-2022-jp?B?ZlVVV3l3YUJGNkZvN1RVOE43ak55bkRYbWN0RlU3SmdkS2dUaHVDWUZE?=
- =?iso-2022-jp?B?VXRqd05lRGQwOUtTQTF1YWlxbDNKZUJoMzY3V3d2VHRMZWZYNGZIa2FY?=
- =?iso-2022-jp?B?VFQxWldlYWcxSDQxbDVoTzQvREJYY2tyTGk4ZUx0SkVPeXphamNEUFpt?=
- =?iso-2022-jp?B?Z1RFR1NnamlVQVBTM09wM200WTc0QkwvWXNMWFNpM29qZmo4eGo4UXEz?=
- =?iso-2022-jp?B?a3htMGdCZVllUU1COXBjcFZOZ3BKb1NmM1B3MGp5RmZ1bXNlM2hWNEM4?=
- =?iso-2022-jp?B?enovWHRVelFHZnlhMzdBc0wvQnZVaDFlQ2hxSld5M25yMTY5em1mcXdZ?=
- =?iso-2022-jp?B?REt6U3lWN01vZ2Y3cVFvbkFSUWVkOUl2M1Z1d041S3A4RXhPbG03SkY1?=
- =?iso-2022-jp?B?ZXVaQzArVlBDV3BUaGl5U3NZRDVqMlZKVHFDOE1RYmwyTmtvZXpmenow?=
- =?iso-2022-jp?B?cEJZYnJsR3N1UjlXbjgxdS9IMDZpTlJyOG9YV1k0MGtzL0MweEYrR1pP?=
- =?iso-2022-jp?B?ME1zU0xLbFI1TTNMQWJLRG9ucUpML3hIRTVuT2IwMXBycHFBNlJRejg2?=
- =?iso-2022-jp?B?OTJ3WWFnZDE3T2JXSjNaaEdTM0tPR0FHMFdNUjZhRUIzU0I4T2lhMDha?=
- =?iso-2022-jp?B?Z2hkYmw2Z0pSZUs5MEd6anI1Rmorc1dxSk94c2xhNVdIeTFnM0F0ZnQw?=
- =?iso-2022-jp?B?OTNCVGNmbXFaTXh0SStTQldXVkZ3ZVQwUi95Z1BvdWFHYk5MNDVQSTgr?=
- =?iso-2022-jp?B?NWF5RDB6Q2g2b3BKNm9IRlhkVXBJbEpIZ3ZHeG9WTndhTTg5WHVDQkZ0?=
- =?iso-2022-jp?B?RE43MnFZMGtYYlhGNVlXTkNGdGd3U3V3SVFYNzRZL1gxWENYbE45N01u?=
- =?iso-2022-jp?B?RUV4VTFtNkRHWGQ1V29zdDVKZ3djem5MVlVOd0hsOGhabGFDVk9WK2pB?=
- =?iso-2022-jp?B?YUtYeFJYeTlMdUhQblNSUDh5MHFSVkszQm15S21zbjF4MXFOOGMvRWlk?=
- =?iso-2022-jp?B?aFFINXdEWCttSTNWNWtQY0p4cFM3QUlPb0w4aEpyVnNHQzRhZHpWOWlw?=
- =?iso-2022-jp?B?cHBNZ1kwakcrZkxUQXI4L1pqaU5BUjNkNWZCOEYyRTlLdWpKQk9PNytX?=
- =?iso-2022-jp?B?OWdUMFd0Zz0=?=
-Content-Type: text/plain; charset="iso-2022-jp"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 20 May 2022 02:38:22 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0405D146403
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 23:38:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653028701; x=1684564701;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=LjXpZ9HfEbrJFZUmIy/qyR+9XU1wWQIVrt5b3XOXC5c=;
+  b=d4HRkkZBNsOoO0XzpY+DrcbjgGs1jUraXzoDvDrYwj/tK3wX8HooIwfz
+   55mtbq/8f2xRaH3gFMH4G3fTyH+OUhltQDY/z6vIAs7FlpgIjj9JbS1uM
+   7Yvzto4am42L/dcMzAdEwRkhZfxlNX+RQlI+lpNec0GaQHayK+7gGaAEs
+   qxVWq9cLF1+CmMmaOfEF6UJqxgmuSNc9IPDfVxrlkZF1UyQ0gLgzrvoui
+   ZS7flImyqpUSY0oPgsQO8L3PTaI/ynQpzMn2hy5eQT2PKOKBElqtZEua8
+   0VZsnXQLPBg5kZ1wntMaziLrnfmckpvjye954hWuxtKe9Tm9Uy55xBETw
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="253025889"
+X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
+   d="scan'208";a="253025889"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 23:38:21 -0700
+X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
+   d="scan'208";a="599047317"
+Received: from wangyu5-mobl.ccr.corp.intel.com (HELO [10.249.172.121]) ([10.249.172.121])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 23:38:14 -0700
+Message-ID: <3636ac5e-4f52-26a9-db73-5858a27f61b8@linux.intel.com>
+Date:   Fri, 20 May 2022 14:38:12 +0800
 MIME-Version: 1.0
-X-OriginatorOrg: fujitsu.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OSBPR01MB2037.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 86669a69-7fea-49a6-25cb-08da3a2ae9cb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 May 2022 06:35:21.1163
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 9BSYB6bbP2JiEc/rsdwRODcS3pqlD20YOQEhnjA34DnT8PpTe2AWgzj73Iww1GaiLrvTY8oHH1Tyk/vdLX3suUtEE56lK/ly5HGVwYE/ENs=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSAPR01MB1572
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 06/10] iommu/sva: Refactoring
+ iommu_sva_bind/unbind_device()
+Content-Language: en-US
+To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
+References: <20220519072047.2996983-1-baolu.lu@linux.intel.com>
+ <20220519072047.2996983-7-baolu.lu@linux.intel.com> <YoZyvVxJLiYOjBHw@myrica>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <YoZyvVxJLiYOjBHw@myrica>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> You need a lot more text here about what this is, what it does, why you w=
-ould want
-> it, and the module name it will create.
+On 2022/5/20 00:39, Jean-Philippe Brucker wrote:
+>> +struct iommu_sva *iommu_sva_bind_device(struct device *dev, struct mm_struct *mm)
+>> +{
+>> +	struct iommu_sva_domain *sva_domain;
+>> +	struct iommu_domain *domain;
+>> +	ioasid_t max_pasid = 0;
+>> +	int ret = -EINVAL;
+>> +
+>> +	/* Allocate mm->pasid if necessary. */
+>> +	if (!dev->iommu->iommu_dev->pasids)
+>> +		return ERR_PTR(-EOPNOTSUPP);
+>> +
+>> +	if (dev_is_pci(dev)) {
+>> +		max_pasid = pci_max_pasids(to_pci_dev(dev));
+>> +		if (max_pasid < 0)
+>> +			return ERR_PTR(max_pasid);
+>> +	} else {
+>> +		ret = device_property_read_u32(dev, "pasid-num-bits",
+>> +					       &max_pasid);
+>> +		if (ret)
+>> +			return ERR_PTR(ret);
+>> +		max_pasid = (1UL << max_pasid);
+>> +	}
+> The IOMMU driver needs this PASID width information earlier, when creating
+> the PASID table (in .probe_device(), .attach_dev()). Since we're moving it
+> to the IOMMU core to avoid code duplication, it should be done earlier and
+> stored in dev->iommu
 
-I add more text in the next version.
+Yes, really. How about below changes?
+
+ From f1382579e8a15ca49acdf758d38fd36451ea174d Mon Sep 17 00:00:00 2001
+From: Lu Baolu <baolu.lu@linux.intel.com>
+Date: Mon, 28 Feb 2022 15:01:35 +0800
+Subject: [PATCH 1/1] iommu: Add pasids field in struct dev_iommu
+
+Use this field to save the number of PASIDs that a device is able to
+consume. It is a generic attribute of a device and lifting it into the
+per-device dev_iommu struct could help to avoid the boilerplate code
+in various IOMMU drivers.
+
+Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+---
+  drivers/iommu/iommu.c | 15 +++++++++++++++
+  include/linux/iommu.h |  2 ++
+  2 files changed, 17 insertions(+)
+
+diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+index e49c5a5b8cc1..6b731171d42f 100644
+--- a/drivers/iommu/iommu.c
++++ b/drivers/iommu/iommu.c
+@@ -20,6 +20,7 @@
+  #include <linux/idr.h>
+  #include <linux/err.h>
+  #include <linux/pci.h>
++#include <linux/pci-ats.h>
+  #include <linux/bitops.h>
+  #include <linux/property.h>
+  #include <linux/fsl/mc.h>
+@@ -194,6 +195,8 @@ EXPORT_SYMBOL_GPL(iommu_device_unregister);
+  static struct dev_iommu *dev_iommu_get(struct device *dev)
+  {
+  	struct dev_iommu *param = dev->iommu;
++	u32 max_pasids = 0;
++	int ret;
+
+  	if (param)
+  		return param;
+@@ -202,6 +205,18 @@ static struct dev_iommu *dev_iommu_get(struct 
+device *dev)
+  	if (!param)
+  		return NULL;
+
++	if (dev_is_pci(dev)) {
++		ret = pci_max_pasids(to_pci_dev(dev));
++		if (ret > 0)
++			max_pasids = ret;
++	} else {
++		ret = device_property_read_u32(dev, "pasid-num-bits",
++					       &max_pasids);
++		if (!ret)
++			max_pasids = (1UL << max_pasids);
++	}
++	param->pasids = max_pasids;
++
+  	mutex_init(&param->lock);
+  	dev->iommu = param;
+  	return param;
+diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+index 45f274b2640d..d4296136ba75 100644
+--- a/include/linux/iommu.h
++++ b/include/linux/iommu.h
+@@ -371,6 +371,7 @@ struct iommu_fault_param {
+   * @fwspec:	 IOMMU fwspec data
+   * @iommu_dev:	 IOMMU device this device is linked to
+   * @priv:	 IOMMU Driver private data
++ * @pasids:	 number of supported PASIDs
+   *
+   * TODO: migrate other per device data pointers under iommu_dev_data, e.g.
+   *	struct iommu_group	*iommu_group;
+@@ -382,6 +383,7 @@ struct dev_iommu {
+  	struct iommu_fwspec		*fwspec;
+  	struct iommu_device		*iommu_dev;
+  	void				*priv;
++	u32				pasids;
+  };
+
+  int iommu_device_register(struct iommu_device *iommu,
+-- 
+2.25.1
+
+Best regards,
+baolu

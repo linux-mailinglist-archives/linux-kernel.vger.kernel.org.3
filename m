@@ -2,254 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 558C352E9EA
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 12:32:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71C0F52E9F5
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 12:33:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348122AbiETKcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 06:32:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60804 "EHLO
+        id S1348151AbiETKdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 06:33:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240830AbiETKcE (ORCPT
+        with ESMTP id S1346638AbiETKdr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 06:32:04 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72FC98BD39
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 03:32:02 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id v8so11639546lfd.8
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 03:32:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=jLoKShXnvK18g/hpxDcb3w46Wn4GpvoKRXUZYRWFidQ=;
-        b=YVHFkRD0MqPNxaUsIcx9HwSiCoSSee9T33zSd9hqf9PotLf1FcnGR0Pws1wO1JLgE4
-         e/6KIHa32HILZ5k73we7TDs6M4/NRbs2yA9gqSyxYYzGtVOKNjs+WeJBPV/vYcm1R9Gg
-         JD9oOUG3n0ADg9Ax4OdqLzX/nhE4s+rtOJOjQ/+5Q6dASz+i3MBSNb658knV0FUq00wC
-         1I2ahV40H9IJZ91kOQS8kmHsa5ClU10iVATVVwg73lqphQ1vOGCBiESQpMwntUhdu6iV
-         pkTlg7/QlybhBJSrM+wCNQOc9+Q+J7rKZ7CEH/WE0ZS3hi30FIC93l5syWL9aNoAkMRo
-         hC3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=jLoKShXnvK18g/hpxDcb3w46Wn4GpvoKRXUZYRWFidQ=;
-        b=D8DNYaaObvkjRXT/ucGqTeuGTzvJQlKBcENJBKoJpCmrCmLjjaw4O525J+WKXQLfWC
-         7toGuJKv/Aizp5KJ7+mbukMN+oUT3zqG5HAxSXZEVru+dZL3wG3JdJYVRQc8ZAZEATAC
-         Yzr0wca85d8ssbi0C7IhixnAvvtcSGTXYj9IAhqMMH+bGLV9VSU7bglen0JMP4WCZkK2
-         oVXWcLmuzzcyLTCn00b6aFnyDL4+HZKoSaPsnBuYFxsLA4H+C9D29jhb/Iwn9VqJozrd
-         oQSi51VLz2/as+Pnz90k42PwheFsI/YhFzo9EjqxPQ3IGFhw3bO+y/cLB2X8gsHFNr5V
-         QOCw==
-X-Gm-Message-State: AOAM5303yAF3SSmIv7BqGXPVWxyAmKnSnMytReTni1LRjnOy5ZjKdcTU
-        VDJphTyDzyBagk/3x59D5Ac5wQ==
-X-Google-Smtp-Source: ABdhPJwBIkQUvVaiMkEgWaWOZv0PfIymapoTpMeWHBZ0HTws3HEolBrTMYZvdVTLI6OZbthBhCE1kA==
-X-Received: by 2002:a05:6512:3d89:b0:473:9e0e:8c4c with SMTP id k9-20020a0565123d8900b004739e0e8c4cmr6566185lfv.160.1653042720823;
-        Fri, 20 May 2022 03:32:00 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id h4-20020ac250c4000000b00477be45fb23sm563728lfm.56.2022.05.20.03.31.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 May 2022 03:32:00 -0700 (PDT)
-Message-ID: <7b451dfb-8353-4a4e-1834-a01feaa267d2@linaro.org>
-Date:   Fri, 20 May 2022 12:31:58 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v2 2/5] dt-bindings: interconnect: Add Qualcomm SM6350 NoC
- support
-Content-Language: en-US
-To:     Luca Weiss <luca.weiss@fairphone.com>,
-        linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Odelu Kukatla <okukatla@codeaurora.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        Fri, 20 May 2022 06:33:47 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C2B48CB20;
+        Fri, 20 May 2022 03:33:46 -0700 (PDT)
+Date:   Fri, 20 May 2022 10:33:43 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1653042825;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3EiRAfrIIlf5nSh1BVIrTg9D0v4FjgcwC3dU0MUagIE=;
+        b=TgsC4A8r0Trv4KIp1jE6z0WvGz1lLd3mBesEK3ZL2Qe/rwSO424ZH1OP9Q0tTTj9FDZIZu
+        BXZXHE9uRC21G+pVv3e87GFqzZTX694Jxd/Yj713ZGMvvwxI9t1s6uR5BNfZTuahK+ZjhN
+        hczHj6wdk3eySdOfej2Fa6iWvdxdrenRpafMsAfZvVXQf1rAv56ibozaLT1WxqfxgfHGn3
+        DA4tMgqZ1eY18UDfGjJQgxq/J+5ozjv1kd3P+IQ5aRLVtbuBkJH6k2bOBibhpn8P4bA3ei
+        DTFNXGFsmsfG2Y/h7Z9vHlKnjEDbkKkSjTXmWT9BRnKGuEqMPx8DSwqfjIQwIA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1653042825;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3EiRAfrIIlf5nSh1BVIrTg9D0v4FjgcwC3dU0MUagIE=;
+        b=8SFiJBHiKF9WY8ObskHxAlTNVBfHSsUFqvSJ4i5A4NmiFqCr0jCnWoxSRm11NPch+RxsfV
+        sHVimvolCS4V7FDw==
+From:   "tip-bot2 for Borislav Petkov" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/cleanups] x86: Remove empty files
+Cc:     Borislav Petkov <bp@suse.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-References: <20220520070318.48521-1-luca.weiss@fairphone.com>
- <20220520070318.48521-3-luca.weiss@fairphone.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220520070318.48521-3-luca.weiss@fairphone.com>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20220520101723.12006-1-bp@alien8.de>
+References: <20220520101723.12006-1-bp@alien8.de>
+MIME-Version: 1.0
+Message-ID: <165304282381.4207.12933200150021377765.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/05/2022 09:03, Luca Weiss wrote:
-> Add bindings for Qualcomm SM6350 Network-On-Chip interconnect devices.
-> 
-> As SM6350 has two pairs of NoCs sharing the same reg, allow this in the
-> binding documentation, as was done for qcm2290.
-> 
-> Because the main qcom,rpmh.yaml file is getting too complicated for our
-> use cases, create a new qcom,rpmh-common.yaml and a separate
-> qcom,sm6350-rpmh.yaml that defines our new bindings.
-> 
-> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> ---
-> Changes since v1:
-> * Split sm6350 into separate yaml with new rpmh-common.yaml
-> 
->  .../interconnect/qcom,rpmh-common.yaml        |  41 +++++
->  .../interconnect/qcom,sm6350-rpmh.yaml        |  82 ++++++++++
->  .../dt-bindings/interconnect/qcom,sm6350.h    | 148 ++++++++++++++++++
->  3 files changed, 271 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,rpmh-common.yaml
->  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sm6350-rpmh.yaml
->  create mode 100644 include/dt-bindings/interconnect/qcom,sm6350.h
-> 
-> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpmh-common.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpmh-common.yaml
-> new file mode 100644
-> index 000000000000..6121eea3e87d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/interconnect/qcom,rpmh-common.yaml
-> @@ -0,0 +1,41 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/interconnect/qcom,rpmh-common.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm RPMh Network-On-Chip Interconnect
-> +
-> +maintainers:
-> +  - Georgi Djakov <georgi.djakov@linaro.org>
-> +  - Odelu Kukatla <okukatla@codeaurora.org>
+The following commit has been merged into the x86/cleanups branch of tip:
 
-Is this valid email address?
+Commit-ID:     d936411dc9caeb3edb992e39c33d4d1d81ca8c08
+Gitweb:        https://git.kernel.org/tip/d936411dc9caeb3edb992e39c33d4d1d81ca8c08
+Author:        Borislav Petkov <bp@suse.de>
+AuthorDate:    Fri, 20 May 2022 12:12:30 +02:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Fri, 20 May 2022 12:29:26 +02:00
 
-> +
-> +description: |
-> +   RPMh interconnect providers support system bandwidth requirements through
-> +   RPMh hardware accelerators known as Bus Clock Manager (BCM). The provider is
-> +   able to communicate with the BCM through the Resource State Coordinator (RSC)
-> +   associated with each execution environment. Provider nodes must point to at
-> +   least one RPMh device child node pertaining to their RSC and each provider
-> +   can map to multiple RPMh resources.
-> +
-> +properties:
-> +  '#interconnect-cells':
-> +    enum: [ 1, 2 ]
+x86: Remove empty files
 
-Why this is an enum?
+Remove empty files which were supposed to get removed with the
+respective commits removing the functionality in them:
 
-> +
-> +  qcom,bcm-voters:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    items:
+$ find arch/x86/ -empty
+arch/x86/lib/mmx_32.c
+arch/x86/include/asm/fpu/internal.h
+arch/x86/include/asm/mmx.h
 
-Please implement my previous comments.
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/20220520101723.12006-1-bp@alien8.de
+---
+ arch/x86/include/asm/fpu/internal.h | 0
+ arch/x86/include/asm/mmx.h          | 0
+ arch/x86/lib/mmx_32.c               | 0
+ 3 files changed, 0 insertions(+), 0 deletions(-)
+ delete mode 100644 arch/x86/include/asm/fpu/internal.h
+ delete mode 100644 arch/x86/include/asm/mmx.h
+ delete mode 100644 arch/x86/lib/mmx_32.c
 
-> +      maxItems: 1
-> +    description: |
-
-No need for |
-
-> +      List of phandles to qcom,bcm-voter nodes that are required by
-> +      this interconnect to send RPMh commands.
-> +
-> +  qcom,bcm-voter-names:
-
-What names do you expect here?
-
-> +    description: |
-
-Ditto.
-
-> +      Names for each of the qcom,bcm-voters specified.
-> +
-> +required:
-> +  - '#interconnect-cells'
-> +  - qcom,bcm-voters
-> +
-> +additionalProperties: true
-> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,sm6350-rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,sm6350-rpmh.yaml
-> new file mode 100644
-> index 000000000000..89fe17c31b8f
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/interconnect/qcom,sm6350-rpmh.yaml
-> @@ -0,0 +1,82 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/interconnect/qcom,sm6350-rpmh.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm SM6350 RPMh Network-On-Chip Interconnect
-> +
-> +maintainers:
-> +  - Luca Weiss <luca.weiss@fairphone.com>
-> +
-> +description: |
-> +  Qualcomm RPMh-based interconnect provider on SM6350.
-> +
-> +allOf:
-> +  - $ref: qcom,rpmh-common.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - qcom,sm6350-aggre1-noc
-> +      - qcom,sm6350-aggre2-noc
-> +      - qcom,sm6350-config-noc
-> +      - qcom,sm6350-dc-noc
-> +      - qcom,sm6350-gem-noc
-> +      - qcom,sm6350-mmss-noc
-> +      - qcom,sm6350-npu-noc
-> +      - qcom,sm6350-system-noc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  '#interconnect-cells': true
-
-Since you defined it as enum in rpmh-common, you really expect here
-different values?
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +unevaluatedProperties: false
-> +
-> +patternProperties:
-
-This goes after "properties".
-
-> +  '^interconnect-[a-z0-9\-]+$':
-> +    type: object
-> +    description:
-> +      The interconnect providers do not have a separate QoS register space,
-> +      but share parent's space.
-> +    $ref: qcom,rpmh-common.yaml#
-> +
-> +    properties:
-> +      compatible:
-> +        enum:
-> +          - qcom,sm6350-clk-virt
-> +          - qcom,sm6350-compute-noc
-> +
-> +      '#interconnect-cells': true
-
-Same problem.
-
-> +
-> +    required:
-> +      - compatible
-> +
-> +    unevaluatedProperties: false
-> +
-
-
-Best regards,
-Krzysztof
+diff --git a/arch/x86/include/asm/fpu/internal.h b/arch/x86/include/asm/fpu/internal.h
+deleted file mode 100644
+index e69de29..0000000
+--- a/arch/x86/include/asm/fpu/internal.h
++++ /dev/null
+diff --git a/arch/x86/include/asm/mmx.h b/arch/x86/include/asm/mmx.h
+deleted file mode 100644
+index e69de29..0000000
+--- a/arch/x86/include/asm/mmx.h
++++ /dev/null
+diff --git a/arch/x86/lib/mmx_32.c b/arch/x86/lib/mmx_32.c
+deleted file mode 100644
+index e69de29..0000000
+--- a/arch/x86/lib/mmx_32.c
++++ /dev/null

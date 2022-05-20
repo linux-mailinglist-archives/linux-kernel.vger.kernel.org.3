@@ -2,128 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45A8952E320
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 05:30:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDF6B52E31F
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 05:30:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243266AbiETD0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 23:26:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38058 "EHLO
+        id S1345156AbiETD1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 23:27:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234470AbiETD0W (ORCPT
+        with ESMTP id S230117AbiETD1o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 23:26:22 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA0D73B037
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 20:26:19 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id oe17-20020a17090b395100b001df77d29587so10380271pjb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 20:26:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=H3VyJyYzyGl+bwWlPfM/C+xqUqwKodZh3oC5dIQJb8g=;
-        b=AwN/O3Asl0gcWZcdhE9NIJP5pfBujS6ucL4RWcmhC+IwX5t26SWqzrMSCOmu4x87CJ
-         EXAy/BekTbWA2UK4+5+NmfBrIrk0Hf3tkCc3MqWZW7GizzrbwVP42TbhlulYxrL5vrMA
-         h5roqw3oYy1jkZ3cQdbEmR2Yxjd6hYoDbpAQF58lcqgwDkyIYBQpsK0EzwpB6pS+WbFY
-         RjyMXbwFpJcbqy3CKdd1DN3yPEAD2FSrwDfL5s1oZSnBQfM/HSH3Lo2BhmoXa0I4eqVi
-         2vBQXn+OgKrzMwnnqORx5/kU4rwTXMWML+1zV7oat8jgP/RqFqb0+tTzXkLpELUkEjfg
-         3VJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=H3VyJyYzyGl+bwWlPfM/C+xqUqwKodZh3oC5dIQJb8g=;
-        b=cDG2oTOyo36XC6q74AhW9tquTRWbGA33JNHPpJBYYOvQ6hh6DsJYV4OkpZ9m0wo5p7
-         jU3riSJ+F2KjIg4zTw2X14JGYeh3QJsBJfeTv0/I25GBaoiWkXGVNS4cMscSZ9R5WHHC
-         7wYQpS8LzxNPKbXamcP6VA3hyBhETNn4VaE9FRlOGGGM8QXCYSk796Je6+q3P1sPgoxs
-         k6nP4NOKmgdGGsdWL6phVO2tRTOAQp9lGxoDuAknqCVdp+Us75SxlSYu6YGPo5BzB0D3
-         jW/4TwshLzwZE0BasrfrIcDGQsGZjMKblZ2bYjqHQXMhk1k30+BHApeX0dIOmvcmre5l
-         HtUw==
-X-Gm-Message-State: AOAM531/X1PddsbuC/aJ1w5m9gEBuqfPDJLdLrLpWcp4cYYWJPsyGRIn
-        gUeyK+aMejtGngX7MHUf05rC2Lq+0yKzOg==
-X-Google-Smtp-Source: ABdhPJz5YLVpIXQZFKz5IvfX3ynX480UagoJcgM9QT+YK1tWoyRtQv7rNZ1srZURHMqBzImbbctoEA==
-X-Received: by 2002:a17:902:d2d2:b0:161:be0f:ccd7 with SMTP id n18-20020a170902d2d200b00161be0fccd7mr7697007plc.98.1653017178987;
-        Thu, 19 May 2022 20:26:18 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id m9-20020a62a209000000b005185407eda5sm477650pff.44.2022.05.19.20.26.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 May 2022 20:26:18 -0700 (PDT)
-Message-ID: <25ec7b58-08bd-3732-2a2e-52b95cbffda0@kernel.dk>
-Date:   Thu, 19 May 2022 21:26:15 -0600
+        Thu, 19 May 2022 23:27:44 -0400
+Received: from mail105.syd.optusnet.com.au (mail105.syd.optusnet.com.au [211.29.132.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 314C78DDF6;
+        Thu, 19 May 2022 20:27:42 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-2-147.pa.nsw.optusnet.com.au [49.181.2.147])
+        by mail105.syd.optusnet.com.au (Postfix) with ESMTPS id 4126E10E68AE;
+        Fri, 20 May 2022 13:27:41 +1000 (AEST)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1nrtIh-00E6GN-MT; Fri, 20 May 2022 13:27:39 +1000
+Date:   Fri, 20 May 2022 13:27:39 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     Eric Biggers <ebiggers@kernel.org>, linux-fsdevel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-xfs@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Keith Busch <kbusch@kernel.org>
+Subject: Re: [RFC PATCH v2 1/7] statx: add I/O alignment information
+Message-ID: <20220520032739.GB1098723@dread.disaster.area>
+References: <20220518235011.153058-1-ebiggers@kernel.org>
+ <20220518235011.153058-2-ebiggers@kernel.org>
+ <YobNXbYnhBiqniTH@magnolia>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 1/2] random: convert to using fops->read_iter()
-Content-Language: en-US
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     tytso@mit.edu, Jason@zx2c4.com, hch@lst.de,
-        linux-kernel@vger.kernel.org
-References: <20220519233137.20415-1-axboe@kernel.dk>
- <20220519233137.20415-2-axboe@kernel.dk>
- <YocGyl8mmG84tQD4@zeniv-ca.linux.org.uk>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <YocGyl8mmG84tQD4@zeniv-ca.linux.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YobNXbYnhBiqniTH@magnolia>
+X-Optus-CM-Score: 0
+X-Optus-CM-Analysis: v=2.4 cv=VuxAv86n c=1 sm=1 tr=0 ts=62870aad
+        a=ivVLWpVy4j68lT4lJFbQgw==:117 a=ivVLWpVy4j68lT4lJFbQgw==:17
+        a=kj9zAlcOel0A:10 a=oZkIemNP1mAA:10 a=1XWaLZrsAAAA:8 a=VwQbUJbxAAAA:8
+        a=7-415B0cAAAA:8 a=-h69JAkiF4VdWyV60hkA:9 a=CjuIK1q_8ugA:10
+        a=AjGcO6oz07-iQ99wixmX:22 a=biEYGPWJfzWAr4FL6Ov7:22
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/19/22 9:11 PM, Al Viro wrote:
-> On Thu, May 19, 2022 at 05:31:36PM -0600, Jens Axboe wrote:
+On Thu, May 19, 2022 at 04:06:05PM -0700, Darrick J. Wong wrote:
+> On Wed, May 18, 2022 at 04:50:05PM -0700, Eric Biggers wrote:
+> > From: Eric Biggers <ebiggers@google.com>
+> > 
+> > Traditionally, the conditions for when DIO (direct I/O) is supported
+> > were fairly simple: filesystems either supported DIO aligned to the
+> > block device's logical block size, or didn't support DIO at all.
+> > 
+> > However, due to filesystem features that have been added over time (e.g,
+> > data journalling, inline data, encryption, verity, compression,
+> > checkpoint disabling, log-structured mode), the conditions for when DIO
+> > is allowed on a file have gotten increasingly complex.  Whether a
+> > particular file supports DIO, and with what alignment, can depend on
+> > various file attributes and filesystem mount options, as well as which
+> > block device(s) the file's data is located on.
+> > 
+> > XFS has an ioctl XFS_IOC_DIOINFO which exposes this information to
+> > applications.  However, as discussed
+> > (https://lore.kernel.org/linux-fsdevel/20220120071215.123274-1-ebiggers@kernel.org/T/#u),
+> > this ioctl is rarely used and not known to be used outside of
+> > XFS-specific code.  It also was never intended to indicate when a file
+> > doesn't support DIO at all, and it only exposes the minimum I/O
+> > alignment, not the optimal I/O alignment which has been requested too.
+> > 
+> > Therefore, let's expose this information via statx().  Add the
+> > STATX_IOALIGN flag and three fields associated with it:
+> > 
+> > * stx_mem_align_dio: the alignment (in bytes) required for user memory
+> >   buffers for DIO, or 0 if DIO is not supported on the file.
+> > 
+> > * stx_offset_align_dio: the alignment (in bytes) required for file
+> >   offsets and I/O segment lengths for DIO, or 0 if DIO is not supported
+> >   on the file.  This will only be nonzero if stx_mem_align_dio is
+> >   nonzero, and vice versa.
+> > 
+> > * stx_offset_align_optimal: the alignment (in bytes) suggested for file
+> >   offsets and I/O segment lengths to get optimal performance.  This
+> >   applies to both DIO and buffered I/O.  It differs from stx_blocksize
+> >   in that stx_offset_align_optimal will contain the real optimum I/O
+> >   size, which may be a large value.  In contrast, for compatibility
+> >   reasons stx_blocksize is the minimum size needed to avoid page cache
+> >   read/write/modify cycles, which may be much smaller than the optimum
+> >   I/O size.  For more details about the motivation for this field, see
+> >   https://lore.kernel.org/r/20220210040304.GM59729@dread.disaster.area
 > 
->> @@ -418,25 +419,23 @@ static ssize_t get_random_bytes_user(void __user *ubuf, size_t len)
->>  	 * the user directly.
->>  	 */
->>  	if (len <= CHACHA_KEY_SIZE) {
->> -		ret = len - copy_to_user(ubuf, &chacha_state[4], len);
->> +		ret = copy_to_iter(&chacha_state[4], len, to);
->>  		goto out_zero_chacha;
->>  	}
->>  
->>  	for (;;) {
->> +		size_t copied;
->> +
->>  		chacha20_block(chacha_state, output);
->>  		if (unlikely(chacha_state[12] == 0))
->>  			++chacha_state[13];
->>  
->>  		block_len = min_t(size_t, len, CHACHA_BLOCK_SIZE);
->> -		left = copy_to_user(ubuf, output, block_len);
->> -		if (left) {
->> -			ret += block_len - left;
->> +		copied = copy_to_iter(output, block_len, to);
->> +		ret += copied;
->> +		if (copied != block_len)
->>  			break;
->> -		}
+> Hmm.  So I guess this is supposed to be the filesystem's best guess at
+> the IO size that will minimize RMW cycles in the entire stack?  i.e. if
+> the user does not want RMW of pagecache pages, of file allocation units
+> (if COW is enabled), of RAID stripes, or in the storage itself, then it
+> should ensure that all IOs are aligned to this value?
 > 
-> 		copied = copy_to_iter(output, CHACHA_BLOCK_SIZE, to);
-> 		ret += copied;
-> 		if (copied != CHACHA_BLOCK_SIZE) {
-> 			if (!ret)
-> 				ret = -EFAULT;
-> 			break;
-> 		}
-> 	}
-> 
->>  SYSCALL_DEFINE3(getrandom, char __user *, ubuf, size_t, len, unsigned int, flags)
->>  {
->> +	struct iovec iov = { .iov_base = ubuf };
->> +	struct iov_iter iter;
-> 
-> 	import_single_range(READ, ubuf, len, &iov, &iter)
-> 
-> (note, BTW, that this'll cap len)
+> I guess that means for XFS it's effectively max(pagesize, i_blocksize,
+> bdev io_opt, sb_width, and (pretend XFS can reflink the realtime volume)
+> the rt extent size)?  I didn't see a manpage update for statx(2) but
+> that's mostly what I'm interested in. :)
 
-Yep both of these are good changes.
+Yup, xfs_stat_blksize() should give a good idea of what we should
+do. It will end up being pretty much that, except without the need
+to a mount option to turn on the sunit/swidth return, and always
+taking into consideration extent size hints rather than just doing
+that for RT inodes...
 
+Cheers,
+
+Dave.
 -- 
-Jens Axboe
-
+Dave Chinner
+david@fromorbit.com

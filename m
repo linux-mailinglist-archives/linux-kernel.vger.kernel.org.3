@@ -2,71 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FEA052EE51
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 16:38:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 080B752EE57
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 16:39:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350395AbiETOip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 10:38:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58914 "EHLO
+        id S1350399AbiETOjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 10:39:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345502AbiETOij (ORCPT
+        with ESMTP id S1350401AbiETOjo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 10:38:39 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FB60170663
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 07:38:38 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id y199so7924953pfb.9
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 07:38:38 -0700 (PDT)
+        Fri, 20 May 2022 10:39:44 -0400
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7405170F10
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 07:39:42 -0700 (PDT)
+Received: by mail-qv1-xf33.google.com with SMTP id s5so6777283qvo.12
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 07:39:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=IbkmnGlcN/XcFPtYcz0cIGeL3AyDjITw0dhmfbvoZuI=;
-        b=HtOl4YtWSIGRx/5+p9qcBzI6jHbYgZ99afRZitk1whsRZqHM0aT90+dKbIJ8ynS6FP
-         426GXioQ/JGq/VqMtuacLloUDulszRUBirKkfWJq4za3vQ9ij+/UHc8RE0wq04PRQqdw
-         LYVYIGW+mFxuk16aCuQigob9YgYzBRUnIwKKQX02X7miaMea25rXyWl2Kgp8JuRZsf82
-         CXzBZD0i1UzayJyteJuBt+jYfmD1BKEHB7jK+2Qo1qEgfbMSvuABvwapyxEIn/DaRd+G
-         YA2X1QK9PXVNxG6s/cRdMUt/Qdy3m2t1KyXsYC5qSkARAlvBo0DDQSn0a9NTtgSoiMZr
-         L+ug==
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=TTmi/1xkgT1AjVxJzskAr+COf/0zmPlsvxgfjW6STHE=;
+        b=Gxvhl+k8BBXk02rLhNHh59M59iKaZySmrURL5ViwDbexkz4AQDcT1PrTxGRwwIA9b6
+         /1f2ADWNgafFMzN43IhcFiyinqNnehHn/mS0YJbtMR6z731PyisnndoOkG4QNw19YD3d
+         5k+xSboSMaMN7QvahZpDuaMGQOESeBd5F4Bx3mh8jgB1uyY3ssyoK0Xq2S2xeP72/K83
+         PKpXip7h0Y+PpB3dm95FI4ngwmEccKM7+EXoqGyFtJ1eCsv33X6U8TW4FvS5JNrN09KR
+         w9b5Y7kbJX4XTJASFVGfGrpW2a4CWNMPykU0xVE8Gyft/WvrlN09/Biji8rIPx+RUWjW
+         tCtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=IbkmnGlcN/XcFPtYcz0cIGeL3AyDjITw0dhmfbvoZuI=;
-        b=R1zVVgO6Ouo7TBS+pEQwQGrSOu4lK6VP/N7NN3cip233ndL+BI6QVzyYnvSE8yjgj0
-         6ej3/++8G6EQpJw4JTcAFojafTOSMdQAvD5JQfNfo8FHYiUrs+ufboPypdZ6we3oruvx
-         lccOYlS20vMw9OXLAObASoLVeo6BALAHsF7RTEPw3ttJ33tIQRJAM+movMvorPR8JOxW
-         nBmWpt4vW4Vr9m1YB+AeX+FK+fZLZDhyn8HJ+KxFPNuRE3taYvisR5Ni/mJiu3QMZWT4
-         5J4fWZJPrwHvBWD3sa4/jSAblI1WN3dIHPPMTKFB/5drVGyl9siQw8Zn1HJweylv4O54
-         IHow==
-X-Gm-Message-State: AOAM5320fMiPMmQnmzociwanKyqYnMnXg6Q+TfHnioHRhOIKjeJQli/L
-        Smnye0bxF6G5DppLqOydODw6OQ==
-X-Google-Smtp-Source: ABdhPJwoiuRwAD7cP+uyJZK80O6cvq3J5MFmxqh85krr8Z0tJmdsBUXyr9+sLjs3fN10fil3Nr3jCQ==
-X-Received: by 2002:a05:6a00:2444:b0:4fd:db81:cbdd with SMTP id d4-20020a056a00244400b004fddb81cbddmr10594109pfj.32.1653057517977;
-        Fri, 20 May 2022 07:38:37 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id jz10-20020a17090b14ca00b001df54afccb3sm1992213pjb.6.2022.05.20.07.38.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 May 2022 07:38:37 -0700 (PDT)
-Message-ID: <b1e7991f-b01e-b29c-954a-0d55e971840e@kernel.dk>
-Date:   Fri, 20 May 2022 08:38:35 -0600
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=TTmi/1xkgT1AjVxJzskAr+COf/0zmPlsvxgfjW6STHE=;
+        b=NQpQK1WsVkdnpCVIvy01ntejvDdOBmpbSoTytkq1F8M8dDNa8GME/twp5GUtZfk5Ct
+         JlCftwXRRfB33WI58rhW95mQqqHpotMqc0IhdT8og9ZBM+cF4eY5+hP0TBY78BEMjVZr
+         WelKZnElO5jkV2A1MesMLgx9HpttYU6AEbkjQWJ16DgjKuOaxLgrDclTtr8yqiwGJLmt
+         utrwval2hNz2/PRlZedD6sC01iqbTJRSBDu/dEWKpPFMCKf54RlPBsTcoPuPAWQnXryu
+         eCpQ0MuTkMDi0vHetaHZpn7tLFqDKIw9gDAcy5esistwmqhjo4OpSvjUvzHoba+EnxAL
+         pQmQ==
+X-Gm-Message-State: AOAM532U2G+Px6Gs7PKhDMUuYwqPHa2TUhB7uHmQTIKiguuWNdq5H84j
+        cpddsmZbJGpGHBKmXxPF9pPALVA7vi3nUw==
+X-Google-Smtp-Source: ABdhPJzkvB4GuJsVQAvtAye6NIsbWLxTJ8yuyfKdI6Dpev7Y/X++dkHVcr1QgV/boWcwi159jErlrw==
+X-Received: by 2002:ad4:4208:0:b0:461:d262:7842 with SMTP id k8-20020ad44208000000b00461d2627842mr8117176qvp.113.1653057582042;
+        Fri, 20 May 2022 07:39:42 -0700 (PDT)
+Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
+        by smtp.gmail.com with ESMTPSA id 196-20020a3706cd000000b0069fd12a957bsm3076730qkg.17.2022.05.20.07.39.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 May 2022 07:39:41 -0700 (PDT)
+Date:   Fri, 20 May 2022 10:39:40 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Shakeel Butt <shakeelb@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Marc Zyngier <maz@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Oliver Upton <oupton@google.com>,
+        Cgroups <cgroups@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, Linux-MM <linux-mm@kvack.org>
+Subject: Re: [PATCH v4 1/4] mm: add NR_SECONDARY_PAGETABLE to count secondary
+ page table uses.
+Message-ID: <YoeoLJNQTam5fJSu@cmpxchg.org>
+References: <20220429201131.3397875-1-yosryahmed@google.com>
+ <20220429201131.3397875-2-yosryahmed@google.com>
+ <87ilqoi77b.wl-maz@kernel.org>
+ <CAJD7tkY7JF25XXUFq2mGroetMkfo-2zGOaQC94pjZE3D42+oaw@mail.gmail.com>
+ <Yn2TGJ4vZ/fst+CY@cmpxchg.org>
+ <Yn2YYl98Vhh/UL0w@google.com>
+ <Yn5+OtZSSUZZgTQj@cmpxchg.org>
+ <Yn6DeEGLyR4Q0cDp@google.com>
+ <CALvZod6nERq4j=L0V+pc-rd5+QKi4yb_23tWV-1MF53xL5KE6Q@mail.gmail.com>
+ <CAJD7tka-5+XRkthNV4qCg8woPCpjcwynQoRBame-3GP1L8y+WQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] char/mem: only use {read,write}_iter, not the old
- {read,write} functions
-Content-Language: en-US
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org
-Cc:     Al Viro <viro@zeniv.linux.org.uk>
-References: <20220520135030.166831-1-Jason@zx2c4.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220520135030.166831-1-Jason@zx2c4.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJD7tka-5+XRkthNV4qCg8woPCpjcwynQoRBame-3GP1L8y+WQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,25 +97,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/20/22 7:50 AM, Jason A. Donenfeld wrote:
-> Currently mem.c implements both the {read,write}_iter functions and the
-> {read,write} functions. But with {read,write} going away at some point
-> in the future, and most kernel code made to prefer {read,write}_iter,
-> there's no point in keeping around the old code. Actually, this comment
-> in __kernel_read() indicates that having both might be plain wrong:
+On Thu, May 19, 2022 at 06:56:54PM -0700, Yosry Ahmed wrote:
+> On Fri, May 13, 2022 at 10:14 AM Shakeel Butt <shakeelb@google.com> wrote:
+> >
+> > On Fri, May 13, 2022 at 9:12 AM Sean Christopherson <seanjc@google.com> wrote:
+> > >
+> > [...]
+> > >
+> > > It was mostly an honest question, I too am trying to understand what userspace
+> > > wants to do with this information.  I was/am also trying to understand the benefits
+> > > of doing the tracking through page_state and not a dedicated KVM stat.  E.g. KVM
+> > > already has specific stats for the number of leaf pages mapped into a VM, why not
+> > > do the same for non-leaf pages?
+> >
+> > Let me answer why a more general stat is useful and the potential
+> > userspace reaction:
+> >
+> > For a memory type which is significant enough, it is useful to expose
+> > it in the general interfaces, so that the general data/stat collection
+> > infra can collect them instead of having workload dependent stat
+> > collectors. In addition, not necessarily that stat has to have a
+> > userspace reaction in an online fashion. We do collect stats for
+> > offline analysis which greatly influence the priority order of
+> > optimization workitems.
+> >
+> > Next the question is do we really need a separate stat item
+> > (secondary_pagetable instead of just plain pagetable) exposed in the
+> > stable API? To me secondary_pagetable is general (not kvm specific)
+> > enough and can be significant, so having a separate dedicated stat
+> > should be ok. Though I am ok with lump it with pagetable stat for now
+> > but we do want it to be accounted somewhere.
 > 
->         /*
->          * Also fail if ->read_iter and ->read are both wired up as that
->          * implies very convoluted semantics.
->          */
->         if (unlikely(!file->f_op->read_iter || file->f_op->read))
->                 return warn_unsupported(file, "read");
+> Any thoughts on this? Johannes?
 
-Nice, just another bit of wasted space due to not having clearly
-defined iter vs non-iter.
+I agree that this memory should show up in vmstat/memory.stat in some
+form or another.
 
-Reviewed-by: Jens Axboe <axboe@kernel.dk>
+The arguments on whether this should be part of NR_PAGETABLE or a
+separate entry seem a bit vague to me. I was hoping somebody more
+familiar with KVM could provide a better picture of memory consumption
+in that area.
 
--- 
-Jens Axboe
+Sean had mentioned that these allocations already get tracked through
+GFP_KERNEL_ACCOUNT. That's good, but if they are significant enough to
+track, they should be represented in memory.stat in some form. Sean
+also pointed out though that those allocations tend to scale rather
+differently than the page tables, so it probably makes sense to keep
+those two things separate at least.
 
+Any thoughts on putting shadow page tables and iommu page tables into
+the existing NR_PAGETABLE item? If not, what are the cons?
+
+And creating (maybe later) a separate NR_VIRT for the other
+GPF_KERNEL_ACCOUNT allocations in kvm?

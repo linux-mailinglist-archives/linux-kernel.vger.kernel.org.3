@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C127052F443
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 22:10:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFC4052F447
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 22:11:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350722AbiETUKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 16:10:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52388 "EHLO
+        id S1353385AbiETULt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 16:11:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237497AbiETUKb (ORCPT
+        with ESMTP id S238561AbiETULq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 16:10:31 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4C7819CEED
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 13:10:30 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id v65so11157228oig.10
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 13:10:30 -0700 (PDT)
+        Fri, 20 May 2022 16:11:46 -0400
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 362F418540A
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 13:11:46 -0700 (PDT)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-f1d2ea701dso11496162fac.10
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 13:11:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:in-reply-to:references:from:user-agent:date:message-id
          :subject:to:cc;
-        bh=wiGaxzYkjsSexTF4OnqKljM8nknmSifQmJXxUrBf0MA=;
-        b=MVgIBoV64tzvV8y9jiIJOSMBnsDd4wm2LVgnLBX7s1HvFwvu0XSCEvVWzQqhbVoX6D
-         88DBGPkjq+0lWtRWBZwhEfZE7ggUnB7pT22Yf4GhVWCah2hLs6WlQeRPBFFBr4lZBNM7
-         Dy1qPpV7EiHYKOy5TulR/5ISe/5fF6OCvWo60=
+        bh=uCSJrMcblYtE68pI/o4aCmCDuyMBMTIK3XeFUPvOxus=;
+        b=Aod2ILs1RijYKXW4aXOU2BMwT5hq9+n39aXCSNpVCSiKiV2mBseP2mnnLb2FxS2Mwt
+         Q+miDEFv/E1MsuY0ay93RhZoZUTIMenvnIsznz8ZpLD8gyRukPy7eMXtndRB88hXyCzx
+         I+KHm+DSXBvQFXaHFU7xEQJL28LCFHnGlgQ5c=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:in-reply-to:references:from
          :user-agent:date:message-id:subject:to:cc;
-        bh=wiGaxzYkjsSexTF4OnqKljM8nknmSifQmJXxUrBf0MA=;
-        b=j+TBM1ZYXjQuEazldRRQl/LuV52Nu7yhQpURc/0KMOa2Z2x/+a4BbOHPbksgo6KkLk
-         bBoeVQDXf4OjFuTe+1NLtR/q9BKgAtd72kiHCcHmv7c9hGwpKCL9O3jkc3dMDWagyG1s
-         TJ/8wKSm62iLV1tKG99pAa+4NYsJCRzEb0+eZBtEjBVoy3NuFy4cUKaEPIclz3XxFsb1
-         8AKSpKX2Wcsp5SwEuT7yq5reALO5g5zGT6OegTy3pMFG4QKbMVB2EK9vzOl/btwDwmah
-         Q8v1p1AuaJFwYkoOXNNU/lFwtLhtCf0sbIqCfTYn203VbxpQSymaDDfitcu7fXwhrmqE
-         dJ+A==
-X-Gm-Message-State: AOAM531FWgIGu/q//0ZxY0HndZDuXKRuFiGdKgykDnDFR+TLrqCwpOax
-        u0gBP4UxzEGSVG+gzHvoeuGSdwL4UyVU6Xg3ttcrwA==
-X-Google-Smtp-Source: ABdhPJw2ESNASeabzgRPotV7qcOex0oQnU0E59jPuICmZ5pWN67wlKt5uZv6bTFKt/7R/sPtqR9z0wgtCUcJf2Pfkcs=
-X-Received: by 2002:a05:6808:14c2:b0:326:c129:d308 with SMTP id
- f2-20020a05680814c200b00326c129d308mr6135411oiw.193.1653077430078; Fri, 20
- May 2022 13:10:30 -0700 (PDT)
+        bh=uCSJrMcblYtE68pI/o4aCmCDuyMBMTIK3XeFUPvOxus=;
+        b=7nzAKJraHEIHHDIslSv9fhJe9hWbcbcGi/5XJjMgvzvLurE3Q7wretR5x5CrgVKcRY
+         J6qi/h+teeJ4Gb5H7Gdkq+akToDHr5//83sfFPOod4YQSERusXmHDBGO1FUAIuyNK0mU
+         Ed8fVuE/Bg7Ttbqkw0brnc8Ufku6vS+SExwOiP+FwM+AELoOSLPxcG/nGhwJXRK3A7G9
+         uLPmiKb5Cc/NCZf7A3FUSYZgWqVFRVIY2XRng3zPgGkqIeAt8objETj9JUi1bOe5ocAV
+         IdLK1YqDwlue4y9cjicrdK+yKfthN6dcQrkDn9VQcsXrc49pckIfcGdZVWI8XSCDZyAN
+         UADQ==
+X-Gm-Message-State: AOAM533f5BLIybu67KZ+jF2iX6ADiXHYpXJzCH2N6pqC7Mqj5e63lRWN
+        vubpy2gRBsSpBI8JGFvp1ZyUiJrmOkb7k+RG6TP+Cw==
+X-Google-Smtp-Source: ABdhPJyZzp8Z8QM9GBZRwRI5IW+g6D1RrMyMk90vlJpNz5rkGtSO8wMKBpy5TYZYX78MlQGpAiU3hd3sIjiNZZb4lms=
+X-Received: by 2002:a05:6870:558e:b0:e1:db7c:26aa with SMTP id
+ n14-20020a056870558e00b000e1db7c26aamr6766673oao.63.1653077504534; Fri, 20
+ May 2022 13:11:44 -0700 (PDT)
 Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 20 May 2022 13:10:29 -0700
+ HTTPREST; Fri, 20 May 2022 13:11:43 -0700
 MIME-Version: 1.0
-In-Reply-To: <1289c2e4-5607-b515-88b1-f44585e62cd3@quicinc.com>
-References: <1652978825-5304-1-git-send-email-quic_sibis@quicinc.com>
- <1652978825-5304-3-git-send-email-quic_sibis@quicinc.com> <CAE-0n50iYAUmj6GEdCuOJ1d_SgeeFWtoxqWf7qN=jZ_js4wBcQ@mail.gmail.com>
- <1289c2e4-5607-b515-88b1-f44585e62cd3@quicinc.com>
+In-Reply-To: <1652804494-19650-1-git-send-email-quic_khsieh@quicinc.com>
+References: <1652804494-19650-1-git-send-email-quic_khsieh@quicinc.com>
 From:   Stephen Boyd <swboyd@chromium.org>
 User-Agent: alot/0.10
-Date:   Fri, 20 May 2022 13:10:29 -0700
-Message-ID: <CAE-0n52tbS2zvOWb4+2cbL7uth0Z3AJ-O6e0WH_xtQsMyu4A7A@mail.gmail.com>
-Subject: Re: [PATCH v4 2/3] dt-bindings: remoteproc: qcom: Convert SC7280 MSS
- bindings to YAML
-To:     Sibi Sankar <quic_sibis@quicinc.com>, bjorn.andersson@linaro.org,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org
-Cc:     ohad@wizery.com, agross@kernel.org, mathieu.poirier@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mka@chromium.org
+Date:   Fri, 20 May 2022 13:11:43 -0700
+Message-ID: <CAE-0n51_Bp50XbjvA7-4ZAf2ReXbRCWxt3wLe3tcqAeUKjE2kw@mail.gmail.com>
+Subject: Re: [PATCH v7] drm/msm/dp: Always clear mask bits to disable
+ interrupts at dp_ctrl_reset_irq_ctrl()
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
+        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
+        dianders@chromium.org, dmitry.baryshkov@linaro.org,
+        robdclark@gmail.com, sean@poorly.run, vkoul@kernel.org
+Cc:     quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -72,27 +72,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Sibi Sankar (2022-05-20 11:46:58)
-> On 5/20/22 4:05 AM, Stephen Boyd wrote:
-> > Quoting Sibi Sankar (2022-05-19 09:47:04)
-> >> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-mss-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-mss-pil.yaml
-> >> new file mode 100644
-> >> index 000000000000..a936d84eefa6
-> >> --- /dev/null
-> >> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-mss-pil.yaml
-> >> +        resets = <&aoss_reset AOSS_CC_MSS_RESTART>,
-> >> +                 <&pdc_reset PDC_MODEM_SYNC_RESET>;
-> >> +        reset-names = "mss_restart", "pdc_reset";
-> >> +
-> >> +        qcom,halt-regs = <&tcsr_mutex 0x23000 0x25000 0x28000 0x33000>;
-> >> +        qcom,ext-regs = <&tcsr 0x10000 0x10004 &tcsr_mutex 0x26004 0x26008>;
-> >
-> > Because it's two items I'd expect:
-> >
-> >       <&tcsr 0x10000 0x10004>, <&tcsr_mutex 0x26004 0x26008>;
+Quoting Kuogee Hsieh (2022-05-17 09:21:34)
+> dp_catalog_ctrl_reset() will software reset DP controller. But it will
+> not reset programmable registers to default value. DP driver still have
+> to clear mask bits to interrupt status registers to disable interrupts
+> after software reset of controller.
 >
-> I guess both the ways work since the driver uses
-> of_parse_phandle_with_fixed_args.
+> At current implementation, dp_ctrl_reset_irq_ctrl() will software reset dp
+> controller but did not call dp_catalog_ctrl_enable_irq(false) to clear hpd
+> related interrupt mask bits to disable hpd related interrupts due to it
+> mistakenly think hpd related interrupt mask bits will be cleared by software
+> reset of dp controller automatically. This mistake may cause system to crash
+> during suspending procedure due to unexpected irq fired and trigger event
+> thread to access dp controller registers with controller clocks are disabled.
+>
+> This patch fixes system crash during suspending problem by removing "enable"
+> flag condition checking at dp_ctrl_reset_irq_ctrl() so that hpd related
+> interrupt mask bits are cleared to prevent unexpected from happening.
+>
+> Changes in v2:
+> -- add more details commit text
+>
+> Changes in v3:
+> -- add synchrons_irq()
+> -- add atomic_t suspended
+>
+> Changes in v4:
+> -- correct Fixes's commit ID
+> -- remove synchrons_irq()
+>
+> Changes in v5:
+> -- revise commit text
+>
+> Changes in v6:
+> -- add event_lock to protect "suspended"
+>
+> Changes in v7:
+> -- delete "suspended" flag
+>
+> Fixes: 989ebe7bc446 ("drm/msm/dp: do not initialize phy until plugin interrupt received")
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> ---
 
-See commit 39bd2b6a3783 ("dt-bindings: Improve phandle-array schemas")
-for why the way you have it is not preferred.
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>

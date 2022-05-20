@@ -2,95 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4351952E949
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 11:47:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 339A452E94C
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 11:47:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347917AbiETJqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 05:46:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42258 "EHLO
+        id S1347928AbiETJrn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 05:47:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244958AbiETJqr (ORCPT
+        with ESMTP id S238325AbiETJrk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 05:46:47 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03660328;
-        Fri, 20 May 2022 02:46:45 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Fri, 20 May 2022 05:47:40 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6BC201B7;
+        Fri, 20 May 2022 02:47:39 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 02A571F99B;
+        Fri, 20 May 2022 09:47:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1653040058; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0EDYX6/jlsKjCqfkxKgPdol0lZ2Drp928yPwi4paSLQ=;
+        b=GsRkmokRG8jMr2vvJlveZSJsxyDD0gdysvsOlHzRO6nawaGMCacKesz3nKhzFGIrXCT7O4
+        QkJnIO5CeoLCZr01MrYO4ZxjGX/iAKWb9nnKmyZTxnA3DKcfPWofoLQAult89v3jpyKQSe
+        qP8vVQpSn5xrwiweHnkSnl9hnN8jHSE=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L4MLl1wQBz4xDK;
-        Fri, 20 May 2022 19:46:39 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1653040000;
-        bh=UdX0I3S31U4Zq+mgg99EGlxgpDh9JmkS37nsxtBDFIQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=IGKTJKRMAdfBREvqln3jTPMS3OccS9zWfTh3TIJ0nlnaB/P8I/p6HW/DCW+XBJbuk
-         VUouuId7y7lckOJGfMlIR/IUDCoKKtKVt80JBe00YYywBcT42k2hrIfMQmSsoBPw0+
-         6A7WeoULlOeu7zTx8icQhmm5njSaCN3jNw7dAPNIo9RXbPe++K+udAo+AOropQ1QSg
-         Hig4s1hcJLMtdlYmg1IsZ9PEPPEZaCxvymqbTRLZZjNRd3UgV3gX02+8mutqXb4CwJ
-         zkT3OQevDVD5mxJeD83DWJnzymCgZnIiwN4Hx5mdcUbstkmuiI8NN2Zy6gn35jc9Wu
-         ankyXPmPU5uLw==
-Date:   Fri, 20 May 2022 19:46:37 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>
-Cc:     Samuel Thibault <samuel.thibault@ens-lyon.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the char-misc tree
-Message-ID: <20220520194637.03824f7f@canb.auug.org.au>
+        by relay2.suse.de (Postfix) with ESMTPS id 746C02C141;
+        Fri, 20 May 2022 09:47:37 +0000 (UTC)
+Date:   Fri, 20 May 2022 11:47:37 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Lecopzer Chen <lecopzer.chen@mediatek.com>
+Cc:     linux-kernel@vger.kernel.org, acme@kernel.org,
+        akpm@linux-foundation.org, alexander.shishkin@linux.intel.com,
+        catalin.marinas@arm.com, davem@davemloft.net, jolsa@redhat.com,
+        jthierry@redhat.com, keescook@chromium.org, kernelfans@gmail.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, mark.rutland@arm.com,
+        masahiroy@kernel.org, matthias.bgg@gmail.com, maz@kernel.org,
+        mcgrof@kernel.org, mingo@redhat.com, namhyung@kernel.org,
+        nixiaoming@huawei.com, peterz@infradead.org,
+        sparclinux@vger.kernel.org, sumit.garg@linaro.org,
+        wangqing@vivo.com, will@kernel.org, yj.chiang@mediatek.com
+Subject: Re: [PATCH v4 6/6] arm64: Enable perf events based hard lockup
+ detector
+Message-ID: <YodjucHQ3Nab5J/f@alley>
+References: <20220427161340.8518-1-lecopzer.chen@mediatek.com>
+ <20220427161340.8518-7-lecopzer.chen@mediatek.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/i4CIhAztvp3LxxFc+knzPA+";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220427161340.8518-7-lecopzer.chen@mediatek.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/i4CIhAztvp3LxxFc+knzPA+
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu 2022-04-28 00:13:40, Lecopzer Chen wrote:
+> With the recent feature added to enable perf events to use pseudo NMIs
+> as interrupts on platforms which support GICv3 or later, its now been
+> possible to enable hard lockup detector (or NMI watchdog) on arm64
+> platforms. So enable corresponding support.
+> 
+> One thing to note here is that normally lockup detector is initialized
+> just after the early initcalls but PMU on arm64 comes up much later as
+> device_initcall(). To cope with that, overriding watchdog_nmi_probe() to
+> let the watchdog framework know PMU not ready, and inform the framework
+> to re-initialize lockup detection once PMU has been initialized.
+> 
+> [1]: http://lore.kernel.org/linux-arm-kernel/1610712101-14929-1-git-send-email-sumit.garg@linaro.org
+> 
+> --- a/arch/arm64/kernel/perf_event.c
+> +++ b/arch/arm64/kernel/perf_event.c
+> @@ -1390,10 +1391,15 @@ static struct platform_driver armv8_pmu_driver = {
+>  
+>  static int __init armv8_pmu_driver_init(void)
+>  {
+> +	int ret;
+> +
+>  	if (acpi_disabled)
+> -		return platform_driver_register(&armv8_pmu_driver);
+> +		ret = platform_driver_register(&armv8_pmu_driver);
+>  	else
+> -		return arm_pmu_acpi_probe(armv8_pmuv3_pmu_init);
+> +		ret = arm_pmu_acpi_probe(armv8_pmuv3_pmu_init);
+> +
+> +	retry_lockup_detector_init();
 
-Hi all,
+Does it makes sense to call retry_lockup_detector_init() when
+the above returned an error? Should it be?
 
-After merging the soundwire tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+	if (!ret)
+		retry_lockup_detector_init();
 
-make[4]: *** Deleting file 'drivers/accessibility/speakup/mapdata.h'
-can't open ./include/linux/input.h
-make[4]: *** [/home/sfr/next/next/drivers/accessibility/speakup/Makefile:46=
-: drivers/accessibility/speakup/mapdata.h] Error 1
-make[3]: *** [/home/sfr/next/next/scripts/Makefile.build:542: drivers/acces=
-sibility/speakup] Error 2
+> +	return ret;
+>  }
+>  device_initcall(armv8_pmu_driver_init)
 
-Caused by commit
 
-  6646b95aab5f ("speakup: Generate speakupmap.h automatically")
+I am not qualified to ack the arm-specific code. But otherwise
+the change looks reasonable.
 
-I have used the char-misc tree from next-20220519 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/i4CIhAztvp3LxxFc+knzPA+
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKHY30ACgkQAVBC80lX
-0GyKSQf/V4H1+pqw22P4eNQPHNkgTmIFlNx8k6uYJ0eCDeAXtv+ni/A+N2Oh9t3n
-iEonVw0NJ3JRTmFm0Y1zSL82xkeAdaRpXp/ZkAMf52mwhc9EpQsvF1Q/6wXSNySf
-xmLMDQraBooQT2ET3+U+vM8KPja4ql1qVufCDDjt7pTUa6Hh1Pcsm+uVaKp9Zx22
-b6RIz40cGPcwg7zygJdlDVJS6KGboyoUZyYB23WxNU6XSsS6o0Qq0TIttDG6cBsF
-jV5vOMGC2GONcDnjj+BHWOsfpnN9Vnm8nk8gAtMttytAObdiJTg4qtm8DCVamRnJ
-sEDo132deuWMGKTjZGuPrtlFHNO74Q==
-=kmCz
------END PGP SIGNATURE-----
-
---Sig_/i4CIhAztvp3LxxFc+knzPA+--
+Best Regards,
+Petr

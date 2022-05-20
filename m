@@ -2,214 +2,299 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F39552E875
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 11:13:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D264352E87A
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 11:13:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347556AbiETJN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 05:13:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34920 "EHLO
+        id S1347633AbiETJNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 05:13:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234035AbiETJN1 (ORCPT
+        with ESMTP id S1347583AbiETJNr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 05:13:27 -0400
+        Fri, 20 May 2022 05:13:47 -0400
 Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD98118030;
-        Fri, 20 May 2022 02:13:22 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id kq17so14466104ejb.4;
-        Fri, 20 May 2022 02:13:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1010118030
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 02:13:45 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id kq17so14466104ejb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 02:13:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:subject:to:cc:message-id:in-reply-to:references
-         :mime-version;
-        bh=iyT30uEszkCa+aZ/40TmGWuqHZ6hjBWjF8lNdivRYyU=;
-        b=j1eEm5wAAhrGavm6iYgNIUuBrWMqSrHfuYo8a+CV5AlZZjzPg617WjsleXaZfH7SMy
-         xhZkeDF0n/HN8yMLKgPJPAzxik46vpDPMDjpf7erwURC5cNlFyqxVxdGQDvaAK/mot/+
-         ba+HlzZYXXqzn5LycNlZwiMSCLgLH4P8+nFGHJcfaiJ1cG25dOcjlWus/4+k9bliau2D
-         q3ByGbPCKfzBo9s15M4O+R2AxgWwUodWRti94ETgo1bMyrEAyOy6c/lG3rkjNISPPQz0
-         MgqnDhoEHDscENkcreEw9cIvIH4SB10d+zCs3CsK3zW9YtjFKdfXSGYhoeMIpFIRQzNq
-         W9Rw==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hRRyXBAMdaUQcvr7P130WMrTlU9twmxBI/F4JADwZX4=;
+        b=GTNJaeW179p1zmS6cE+Rq8JDZaXGEzd1s6G8CvRfw7WyaBFPvXVlhFA5ZzZNu9/Kty
+         29hATcLJx5y0J0GEvNM6SPTOzueFpYPpP6w5ncZvR/j+Pjzusy6xlDY7DDPZhqrSwkyu
+         K0ha34MMbNpb3QENfHzsWuu5yrCDbL3Qx2wR8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:subject:to:cc:message-id:in-reply-to
-         :references:mime-version;
-        bh=iyT30uEszkCa+aZ/40TmGWuqHZ6hjBWjF8lNdivRYyU=;
-        b=3fW9WC1Ss5TzRqngzVnBtUvh1qKTfyvmhvWp0hIGNDtrW3nm9ImzAG6dVIZP984hJH
-         Ia4yLOt/vn9b1IMdOcKja4HQ0Wf753J0icgzDcFbgQMCGqaj7nUbNHgJAaaw/NTT3nCq
-         awBgvi4MjHBy8TK+FIWlvhXfpWbeCQHz0Tkm9VdjgMIwIVCF9LbbCzN2Qa2p46EqTeCV
-         pjqECeaa3tx10NNtc8Kv4RCVODzdSIwtZdPtQGu/JV8mm9yak4WH21FZOvIHFaDW8stY
-         TTa8QFkVv5uUDpdiJbBMXIFaZVq1webaUv1fEJOs9TIfV4LUM5r+uA7fPIPcjD9RbpZh
-         8nug==
-X-Gm-Message-State: AOAM533/HvfMg/a2KwFtSeHsmV84TGMf/A7mK9E4faFd/Bb48EUT++WQ
-        ci6Up3FOk81/h4DrRgBYBGA=
-X-Google-Smtp-Source: ABdhPJzCxtK3/GDoGEo87WoOjtFl4CjJllOA3nui2brjs9JDd5jLcwgf560M6dUvKBhp4qeVfEjvzw==
-X-Received: by 2002:a17:906:49d4:b0:6d6:e5ec:9a23 with SMTP id w20-20020a17090649d400b006d6e5ec9a23mr8030721ejv.79.1653038001094;
-        Fri, 20 May 2022 02:13:21 -0700 (PDT)
-Received: from [192.168.151.247] ([138.199.7.159])
-        by smtp.gmail.com with ESMTPSA id eb22-20020a170907281600b006f4c557b7d2sm697876ejc.203.2022.05.20.02.13.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 02:13:20 -0700 (PDT)
-Date:   Fri, 20 May 2022 13:13:05 +0400
-From:   Yassine Oudjana <yassine.oudjana@gmail.com>
-Subject: Re: [PATCH v2 2/4] dt-bindings: reset: Add MT6735 reset bindings
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hRRyXBAMdaUQcvr7P130WMrTlU9twmxBI/F4JADwZX4=;
+        b=btXLq4/ajYEkTQV31xh4IYWi8/Tf197P0mt+PXS+bDxADCJ9sx9FVAlKtvXEdAtvrM
+         vdbkSEAwp90UCMCLKBq2WHo0DqVK/zkxFdQmXOXznqZRDGUJOcuvVVdlDWzYLY22WU7L
+         HhzzcQORIB2k04rD5eQIipGXBYBOVYF//tDnpghMh9oenQ1y0Pcj6/ckHhIKx2AIXAQj
+         B0RSvWOAJ8v1klA3MNhWoQfllA2Glb4gCEEY21SO7CIqKVXkjedssoLuZb1NvO6vPc1v
+         VGOJiirXDf1PmSA4MKEqIRl0dFuVP4TL5peB8kiEJ9UeLnK1/OsTOSAtHf5a3LrX6O3/
+         0Yvg==
+X-Gm-Message-State: AOAM53348+uMDHUDKf5G/zNoSZY9vmosNH9o2cgmjZE9S+NVOcYzR7Df
+        OWnFZk2YVloN85JCQYYc/0eMJI6G1VyyVSf4b+y6LQ==
+X-Google-Smtp-Source: ABdhPJyF3XzL3rcQv+7nwk+LUAnyEDcuvUKsXjTn90VIqxdjucSROEdkQRcR74cEFJ8tWDimKVn3EFHzznO4N5Ec2Bg=
+X-Received: by 2002:a17:906:a10e:b0:6f3:e70b:b572 with SMTP id
+ t14-20020a170906a10e00b006f3e70bb572mr7587780ejy.546.1653038025359; Fri, 20
+ May 2022 02:13:45 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220519134728.456643-1-y.oudjana@protonmail.com> <20220519134728.456643-7-y.oudjana@protonmail.com>
+In-Reply-To: <20220519134728.456643-7-y.oudjana@protonmail.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Fri, 20 May 2022 17:13:34 +0800
+Message-ID: <CAGXv+5Gws-YHkKzUUuQeVdVVtqyCrv1HfS+wdNvwsTGVJaPR+g@mail.gmail.com>
+Subject: Re: [PATCH 6/6] clk: mediatek: Add support for other clock types in
+ simple probe/remove
+To:     Yassine Oudjana <yassine.oudjana@gmail.com>
 Cc:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Yassine Oudjana <y.oudjana@protonmail.com>,
-        Tinghan Shen <tinghan.shen@mediatek.com>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        Weiyi Lu <weiyi.lu@mediatek.com>,
-        Ikjoon Jang <ikjn@chromium.org>,
         Miles Chen <miles.chen@mediatek.com>,
-        Sam Shih <sam.shih@mediatek.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Rob Herring <robh@kernel.org>
-Message-Id: <T9C6CR.ZDXJ22Q377EZ1@gmail.com>
-In-Reply-To: <d54ea1d3-903f-0b2a-3db4-99f1adfadce0@collabora.com>
-References: <20220519142211.458336-1-y.oudjana@protonmail.com>
-        <20220519142211.458336-3-y.oudjana@protonmail.com>
-        <d54ea1d3-903f-0b2a-3db4-99f1adfadce0@collabora.com>
-X-Mailer: geary/40.0
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        linux-mediatek@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, May 19, 2022 at 9:50 PM Yassine Oudjana
+<yassine.oudjana@gmail.com> wrote:
+>
+> From: Yassine Oudjana <y.oudjana@protonmail.com>
+>
+> Simple probe/remove functions currently support gates only. Add
+> PLLs, fixed clocks, fixed factors and muxes to support most
+> clock controllers. struct mtk_clk_desc now takes descriptions
+> for all of these clocks, and only the ones set will be registered.
+> Most clock controllers will only use a subset of the types
+> supported.
 
-On Fri, May 20 2022 at 10:55:24 +0200, AngeloGioacchino Del Regno 
-<angelogioacchino.delregno@collabora.com> wrote:
-> Il 19/05/22 16:22, Yassine Oudjana ha scritto:
->> From: Yassine Oudjana <y.oudjana@protonmail.com>
->> 
->> Add reset definitions for Mediatek MT6735 resets provided by
->> infracfg and pericfg.
->> 
->> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
->> Acked-by: Rob Herring <robh@kernel.org>
->> ---
->>   MAINTAINERS                                   |  2 ++
->>   .../reset/mediatek,mt6735-infracfg.h          | 31 
->> +++++++++++++++++++
->>   .../reset/mediatek,mt6735-pericfg.h           | 31 
->> +++++++++++++++++++
->>   3 files changed, 64 insertions(+)
->>   create mode 100644 
->> include/dt-bindings/reset/mediatek,mt6735-infracfg.h
->>   create mode 100644 
->> include/dt-bindings/reset/mediatek,mt6735-pericfg.h
->> 
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index a59069263cfb..1c0af554a7b6 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -12503,6 +12503,8 @@ 
->> F:	include/dt-bindings/clock/mediatek,mt6735-apmixedsys.h
->>   F:	include/dt-bindings/clock/mediatek,mt6735-infracfg.h
->>   F:	include/dt-bindings/clock/mediatek,mt6735-pericfg.h
->>   F:	include/dt-bindings/clock/mediatek,mt6735-topckgen.h
->> +F:	include/dt-bindings/reset/mediatek,mt6735-infracfg.h
->> +F:	include/dt-bindings/reset/mediatek,mt6735-pericfg.h
->>     MEDIATEK MT76 WIRELESS LAN DRIVER
->>   M:	Felix Fietkau <nbd@nbd.name>
-> 
-> ..snip..
-> 
->> diff --git a/include/dt-bindings/reset/mediatek,mt6735-pericfg.h 
->> b/include/dt-bindings/reset/mediatek,mt6735-pericfg.h
->> new file mode 100644
->> index 000000000000..6cdfaa7ddadf
->> --- /dev/null
->> +++ b/include/dt-bindings/reset/mediatek,mt6735-pericfg.h
->> @@ -0,0 +1,31 @@
->> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
->> +
->> +#ifndef _DT_BINDINGS_RST_MT6735_PERICFG_H
->> +#define _DT_BINDINGS_RST_MT6735_PERICFG_H
->> +
->> +#define UART0_SW_RST			0
->> +#define UART1_SW_RST			1
->> +#define UART2_SW_RST			2
->> +#define UART3_SW_RST			3
->> +#define UART4_SW_RST			4
-> 
-> where's number 5?
-> 
->> +#define BTIF_SW_RST			6
->> +#define DISP_PWM_SW_RST			7
->> +#define PWM_SW_RST			8
-> 
-> ...and where's 9?
-> 
->> +#define AUXADC_SW_RST			10
->> +#define DMA_SW_RST			11
->> +#define IRDA_SW_RST			12
->> +#define IRTX_SW_RST			13
-> 
-> and 14, 15?
-> 
->> +#define THERM_SW_RST			16
->> +#define MSDC2_SW_RST			17
->> +#define MSDC3_SW_RST			17
-> 
-> MSDC 2 and 3 are both 17?! :-)
-> 
->> +#define MSDC0_SW_RST			19
->> +#define MSDC1_SW_RST			20
-> 
-> 21?
-> 
->> +#define I2C0_SW_RST			22
->> +#define I2C1_SW_RST			23
->> +#define I2C2_SW_RST			24
->> +#define I2C3_SW_RST			25
->> +#define USB_SW_RST			28
->> +
-> 
-> and 29-32?
-> 
->> +#define SPI0_SW_RST			33
->> +
->> +#endif
-> 
-> I have a hunch that you've misunderstood the changes in the resets...
-> 
-> What Rex-BC has done in his reset cleanup is exactly to stop directly
-> mapping these to the actual bits that we're using... so the 
-> definitions
-> in there will simply be sequential, and the actual mapping is done in
-> your clk-mt6735-pericfg.c driver.
+I assume this mostly benefits the apmixedsys (PLL) and topckgen
+(mix of dividers and muxes and gates) drivers.
 
-I did notice that, but reading the documentation in reset.h:
+I plan on introducing |struct clk_hw *| based clk_parent_data for internal
+clock parents. This will require parent clocks be registered before child
+clocks. Depending on the hardware, registration of different clock types
+would need to be interweaved, and we would end up losing any benefits this
+patch brings.
 
- * @rst_idx_map:Pointer to an array containing ids if input argument is 
-index.
- *		This array is not necessary if our input argument does not mean 
-index.
+I would hold off on this patch until we have a clearer picture of what
+needs to be done. At least two or three clock drivers that can use this
+should be introduced or converted
 
-I thought that it wasn't necessary to use it. Thinking
-about it now however, I guess that was to maintain compatibility
-with old device trees. I'll change it next time.
-Maybe a note should be put there to avoid confusion
-in the future.
+> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+> ---
+> Dependencies:
+> - clk: mediatek: Move to struct clk_hw provider APIs (series)
+>   https://patchwork.kernel.org/project/linux-mediatek/cover/20220510104804.544597-1-wenst@chromium.org/
+> - Cleanup MediaTek clk reset drivers and support MT8192/MT8195 (series)
+>   https://patchwork.kernel.org/project/linux-mediatek/cover/20220503093856.22250-1-rex-bc.chen@mediatek.com/
+> - Export required symbols to compile clk drivers as module (single patch)
+>   https://patchwork.kernel.org/project/linux-mediatek/patch/20220518111652.223727-7-angelogioacchino.delregno@collabora.com/
+>
+>  drivers/clk/mediatek/clk-mtk.c | 88 +++++++++++++++++++++++++++++-----
+>  drivers/clk/mediatek/clk-mtk.h | 17 ++++++-
+>  2 files changed, 92 insertions(+), 13 deletions(-)
+>
+> diff --git a/drivers/clk/mediatek/clk-mtk.c b/drivers/clk/mediatek/clk-mtk.c
+> index 3382802663f4..df1209d5b6fb 100644
+> --- a/drivers/clk/mediatek/clk-mtk.c
+> +++ b/drivers/clk/mediatek/clk-mtk.c
+> @@ -15,8 +15,10 @@
+>  #include <linux/platform_device.h>
+>  #include <linux/slab.h>
+>
+> -#include "clk-mtk.h"
+>  #include "clk-gate.h"
+> +#include "clk-mtk.h"
+> +#include "clk-mux.h"
+> +#include "clk-pll.h"
+>
+>  struct clk_hw_onecell_data *mtk_alloc_clk_data(unsigned int clk_num)
+>  {
+> @@ -434,20 +436,55 @@ int mtk_clk_simple_probe(struct platform_device *pdev)
+>         if (!clk_ctrl)
+>                 return -ENOMEM;
+>
+> -       clk_ctrl->clk_data = mtk_alloc_clk_data(mcd->num_clks);
+> +       clk_ctrl->clk_data = mtk_alloc_clk_data(mcd->num_plls
+> +                                             + mcd->num_fixed_clks
+> +                                             + mcd->num_factors
+> +                                             + mcd->num_muxes
+> +                                             + mcd->num_gates);
 
-Thanks,
-Yassine
+There are also dividers and composite clocks.
 
+ChenYu
 
-
+>         if (!clk_ctrl->clk_data) {
+>                 r = -ENOMEM;
+>                 goto free_clk_ctrl;
+>         }
+>
+> -       r = mtk_clk_register_gates_with_dev(node, mcd->clks, mcd->num_clks,
+> -                                           clk_ctrl->clk_data, &pdev->dev);
+> -       if (r)
+> -               goto free_clk_data;
+> +       if (mcd->plls) {
+> +               r = mtk_clk_register_plls(node, mcd->plls, mcd->num_plls,
+> +                                         clk_ctrl->clk_data);
+> +               if (r)
+> +                       goto free_clk_data;
+> +       }
+> +
+> +       if (mcd->fixed_clks) {
+> +               r = mtk_clk_register_fixed_clks(mcd->fixed_clks, mcd->num_fixed_clks,
+> +                                               clk_ctrl->clk_data);
+> +               if (r)
+> +                       goto unregister_plls;
+> +       }
+> +
+> +       if (mcd->factors) {
+> +               r = mtk_clk_register_factors(mcd->factors, mcd->num_factors,
+> +                                            clk_ctrl->clk_data);
+> +               if (r)
+> +                       goto unregister_fixed_clks;
+> +       }
+> +
+> +       if (mcd->muxes) {
+> +               spin_lock_init(&clk_ctrl->mux_lock);
+> +               r = mtk_clk_register_muxes(mcd->muxes, mcd->num_muxes, node,
+> +                                          &clk_ctrl->mux_lock, clk_ctrl->clk_data);
+> +               if (r)
+> +                       goto unregister_factors;
+> +       }
+> +
+> +       if (mcd->gates) {
+> +               r = mtk_clk_register_gates_with_dev(node, mcd->gates, mcd->num_gates,
+> +                                                   clk_ctrl->clk_data, &pdev->dev);
+> +               if (r)
+> +                       goto unregister_muxes;
+> +       }
+>
+>         r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_ctrl->clk_data);
+>         if (r)
+> -               goto unregister_clks;
+> +               goto unregister_gates;
+>
+>         platform_set_drvdata(pdev, clk_ctrl);
+>
+> @@ -457,14 +494,30 @@ int mtk_clk_simple_probe(struct platform_device *pdev)
+>                                                                mcd->rst_desc);
+>                 if (IS_ERR(clk_ctrl->rst_data)) {
+>                         r = PTR_ERR(clk_ctrl->rst_data);
+> -                       goto unregister_clks;
+> +                       goto unregister_clk_provider;
+>                 }
+>         }
+>
+>         return r;
+>
+> -unregister_clks:
+> -       mtk_clk_unregister_gates(mcd->clks, mcd->num_clks, clk_ctrl->clk_data);
+> +unregister_clk_provider:
+> +       of_clk_del_provider(node);
+> +unregister_gates:
+> +       if (mcd->gates)
+> +               mtk_clk_unregister_gates(mcd->gates, mcd->num_gates, clk_ctrl->clk_data);
+> +unregister_muxes:
+> +       if (mcd->muxes)
+> +               mtk_clk_unregister_muxes(mcd->muxes, mcd->num_muxes, clk_ctrl->clk_data);
+> +unregister_factors:
+> +       if (mcd->factors)
+> +               mtk_clk_unregister_factors(mcd->factors, mcd->num_factors, clk_ctrl->clk_data);
+> +unregister_fixed_clks:
+> +       if (mcd->fixed_clks)
+> +               mtk_clk_unregister_fixed_clks(mcd->fixed_clks, mcd->num_fixed_clks,
+> +                                             clk_ctrl->clk_data);
+> +unregister_plls:
+> +       if (mcd->plls)
+> +               mtk_clk_unregister_plls(mcd->plls, mcd->num_plls, clk_ctrl->clk_data);
+>  free_clk_data:
+>         mtk_free_clk_data(clk_ctrl->clk_data);
+>  free_clk_ctrl:
+> @@ -480,9 +533,22 @@ int mtk_clk_simple_remove(struct platform_device *pdev)
+>         struct device_node *node = pdev->dev.of_node;
+>
+>         of_clk_del_provider(node);
+> +
+>         if (clk_ctrl->rst_data)
+>                 mtk_unregister_reset_controller(clk_ctrl->rst_data);
+> -       mtk_clk_unregister_gates(mcd->clks, mcd->num_clks, clk_ctrl->clk_data);
+> +
+> +       if (mcd->gates)
+> +               mtk_clk_unregister_gates(mcd->gates, mcd->num_gates, clk_ctrl->clk_data);
+> +       if (mcd->muxes)
+> +               mtk_clk_unregister_muxes(mcd->muxes, mcd->num_muxes, clk_ctrl->clk_data);
+> +       if (mcd->factors)
+> +               mtk_clk_unregister_factors(mcd->factors, mcd->num_factors, clk_ctrl->clk_data);
+> +       if (mcd->fixed_clks)
+> +               mtk_clk_unregister_fixed_clks(mcd->fixed_clks, mcd->num_fixed_clks,
+> +                                             clk_ctrl->clk_data);
+> +       if (mcd->plls)
+> +               mtk_clk_unregister_plls(mcd->plls, mcd->num_plls, clk_ctrl->clk_data);
+> +
+>         mtk_free_clk_data(clk_ctrl->clk_data);
+>         kfree(clk_ctrl);
+>
+> diff --git a/drivers/clk/mediatek/clk-mtk.h b/drivers/clk/mediatek/clk-mtk.h
+> index fa092bca97c8..23bce98bca20 100644
+> --- a/drivers/clk/mediatek/clk-mtk.h
+> +++ b/drivers/clk/mediatek/clk-mtk.h
+> @@ -13,6 +13,9 @@
+>  #include <linux/spinlock.h>
+>  #include <linux/types.h>
+>
+> +#include "clk-gate.h"
+> +#include "clk-mux.h"
+> +#include "clk-pll.h"
+>  #include "reset.h"
+>
+>  #define MAX_MUX_GATE_BIT       31
+> @@ -191,12 +194,22 @@ struct clk_hw *mtk_clk_register_ref2usb_tx(const char *name,
+>
+>  struct mtk_simple_clk_controller {
+>         struct clk_hw_onecell_data *clk_data;
+> +       spinlock_t mux_lock;
+>         struct mtk_clk_rst_data *rst_data;
+>  };
+>
+>  struct mtk_clk_desc {
+> -       const struct mtk_gate *clks;
+> -       size_t num_clks;
+> +       const struct mtk_pll_data *plls;
+> +       size_t num_plls;
+> +       const struct mtk_fixed_clk *fixed_clks;
+> +       size_t num_fixed_clks;
+> +       const struct mtk_fixed_factor *factors;
+> +       size_t num_factors;
+> +       const struct mtk_mux *muxes;
+> +       size_t num_muxes;
+> +       const struct mtk_gate *gates;
+> +       size_t num_gates;
+> +
+>         const struct mtk_clk_rst_desc *rst_desc;
+>  };
+>
+> --
+> 2.36.1
+>

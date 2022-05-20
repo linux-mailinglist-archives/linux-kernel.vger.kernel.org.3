@@ -2,100 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B08652EB2C
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 13:52:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 193E252EB35
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 13:52:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348743AbiETLw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 07:52:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34054 "EHLO
+        id S1348755AbiETLwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 07:52:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348700AbiETLwO (ORCPT
+        with ESMTP id S1348762AbiETLwh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 07:52:14 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21656286FE
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 04:52:12 -0700 (PDT)
-Received: from zn.tnic (p200300ea974657be329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9746:57be:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 20 May 2022 07:52:37 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8365B15E48F
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 04:52:34 -0700 (PDT)
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 574D71EC0432;
-        Fri, 20 May 2022 13:52:07 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1653047527;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=UBx25AJVNBXwj5NkoGiu7FzpWAyO7lQh9NzqQwd3+KY=;
-        b=hlg4xpGj5ir+DAwkdOit9i47xkD0eD832zyfp5Bqcbc65pO+fSAD4TR+ozvBBFilfXWqNg
-        prhaUpQsxQMZUJa0smCpYQ1blvcii5b+KZtbuBu4AhzCPSBJn8kpcFkW3GmW6J9n2rBQ4a
-        GW3RDinr3LPum9Ozz1lYbI7tEuAzbsg=
-Date:   Fri, 20 May 2022 13:52:02 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Shreenidhi Shedi <yesshedi@gmail.com>
-Cc:     srivatsa@csail.mit.edu, amakhalov@vmware.com, tglx@linutronix.de,
-        mingo@redhat.com, dave.hansen@linux.intel.com, hpa@zytor.com,
-        virtualization@lists.linux-foundation.org, pv-drivers@vmware.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        Shreenidhi Shedi <sshedi@vmware.com>
-Subject: Re: [PATCH v1] x86/vmware: use unsigned integer for shifting
-Message-ID: <YoeA4pf5OWxfjE0J@zn.tnic>
-References: <20220520114712.595583-1-sshedi@vmware.com>
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 318013F1BA
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 11:52:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1653047553;
+        bh=F3uWhU19tqPSpilnTv06Sntkt3xu6QI1J2QyXbNwKXI=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=dUz4r1cF3cM71ujz2lj/GKq0UlmDbaUTQZF8swsdfTA2wKp/AGLrISyZkQlumCFGm
+         J4Cpg6P89/blJey1h0WxuKh4ALETLiFbaDmND9LS2/ipBsiDlXMJ6HfzSLUNNWQNzN
+         gVfPL6soXyYx3HFQ9XbST6i3fKFcAG6N7KlOpoRcMDTnMKGZ83AB5ipa4IF1GQeyF3
+         7ntCoye35WpHR6/fp7t89G0t77g+kpuxFLabOwWG/QfYOd2OfTIay08UpWMgQxhk3X
+         Z6KnORqyaouduIKn6wKNKTfpHkJCzz5xMLT2BBRUKsG/MiW11Ijr3UBt32milnrm65
+         c5G+sk2ibTkOw==
+Received: by mail-ej1-f70.google.com with SMTP id l18-20020a1709066b9200b006fe40aaf3bbso3931986ejr.1
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 04:52:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=F3uWhU19tqPSpilnTv06Sntkt3xu6QI1J2QyXbNwKXI=;
+        b=C/KuOKZo3Ey7f2BYlYcFqPtcF8YFVgeLGBDmN1TRj7y2UlVr7YLinzqvWNYOzGLbYy
+         oPPEh7b7v1rYqTuVwfZrIAJELFbL489xLbS1mVU7Yj8kL/YcvCvYXpktjNdZ713FDNVI
+         +lumRBH1VzFkf4hopPBW1QOBkb09yHZ2wDMWew7EQlJ/mUntTlzV9JdqJe/ChGBo/Dr8
+         82Hxf4yxAS51WXsF6ULt8iJ3VVBMeKVPnROrsuPRc1x9d29qHuXq/ntg6dIowCD1/gp5
+         N4MdBqDBaBUDi4iIU0osklO6bC9NmAwb+vBlYq9BPKYGzaD+ADhQcA1AwQMMdNRJDtvm
+         oMOQ==
+X-Gm-Message-State: AOAM5332wif/RvCewhXO1bT4RRT/PKi/gTR6JiJ5sh2POiytqChmyz5V
+        H1YTQc0/uvVXoOXgtp2EWdprcc6W15tv/v5fpi4axbJOykSysw07NHzr13+sP/bpHIgRHI0l+v4
+        yB2r07LbeK2nDnBR611KVN/g2SD6hcxaOoU/qfOL9Rg==
+X-Received: by 2002:aa7:cf83:0:b0:42a:c73e:6d86 with SMTP id z3-20020aa7cf83000000b0042ac73e6d86mr10481226edx.251.1653047552916;
+        Fri, 20 May 2022 04:52:32 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz6JwgyP43Z2fUOMqs72r04gqZu8vQTIl8anLwpcnAq693ZcuMztCwn/3EFf3TvpdllczP3eQ==
+X-Received: by 2002:aa7:cf83:0:b0:42a:c73e:6d86 with SMTP id z3-20020aa7cf83000000b0042ac73e6d86mr10481208edx.251.1653047552783;
+        Fri, 20 May 2022 04:52:32 -0700 (PDT)
+Received: from gollum.fritz.box ([194.191.244.86])
+        by smtp.gmail.com with ESMTPSA id d24-20020a056402145800b0042aa5a74598sm4186088edx.52.2022.05.20.04.52.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 May 2022 04:52:32 -0700 (PDT)
+From:   Juerg Haefliger <juerg.haefliger@canonical.com>
+X-Google-Original-From: Juerg Haefliger <juergh@canonical.com>
+To:     mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        linuxppc-dev@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org,
+        Juerg Haefliger <juergh@canonical.com>
+Subject: [PATCH] powerpc/powernv: Kconfig: Replace single quotes
+Date:   Fri, 20 May 2022 13:52:29 +0200
+Message-Id: <20220520115229.147368-1-juergh@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220520114712.595583-1-sshedi@vmware.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 05:17:12PM +0530, Shreenidhi Shedi wrote:
-> Shifting signed 32-bit value by 31 bits is implementation-defined
-> behaviour. Using unsigned is better option for this.
-> 
-> Fixes: 4cca6ea04d31 ("x86/apic: Allow x2apic without IR on VMware platform")
-> 
-> Signed-off-by: Shreenidhi Shedi <sshedi@vmware.com>
-> Signed-off-by: Shreenidhi Shedi <yesshedi@gmail.com>
+Replace single quotes with double quotes which seems to be the convention
+for strings.
 
-This is not how this is done - you need to set your author email
-properly in git so that it adds your From: ... @vmware.com> instead of
-having two SOBs.
+Signed-off-by: Juerg Haefliger <juergh@canonical.com>
+---
+ arch/powerpc/platforms/powernv/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> ---
->  arch/x86/kernel/cpu/vmware.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/cpu/vmware.c b/arch/x86/kernel/cpu/vmware.c
-> index c04b933f48d3..7f44ea073436 100644
-> --- a/arch/x86/kernel/cpu/vmware.c
-> +++ b/arch/x86/kernel/cpu/vmware.c
-> @@ -28,6 +28,7 @@
->  #include <linux/cpu.h>
->  #include <linux/reboot.h>
->  #include <linux/static_call.h>
-> +#include <linux/bits.h>
->  #include <asm/div64.h>
->  #include <asm/x86_init.h>
->  #include <asm/hypervisor.h>
-> @@ -476,8 +477,8 @@ static bool __init vmware_legacy_x2apic_available(void)
->  {
->  	uint32_t eax, ebx, ecx, edx;
->  	VMWARE_CMD(GETVCPU_INFO, eax, ebx, ecx, edx);
-> -	return (eax & (1 << VMWARE_CMD_VCPU_RESERVED)) == 0 &&
-> -	       (eax & (1 << VMWARE_CMD_LEGACY_X2APIC)) != 0;
-> +	return (eax & BIT(VMWARE_CMD_VCPU_RESERVED)) == 0 &&
-> +	       (eax & BIT(VMWARE_CMD_LEGACY_X2APIC)) != 0;
-						    ^^^^^^^^
-
-You did hurry too much with sending a new version.
-
+diff --git a/arch/powerpc/platforms/powernv/Kconfig b/arch/powerpc/platforms/powernv/Kconfig
+index 161dfe024085..ecc4a5806b42 100644
+--- a/arch/powerpc/platforms/powernv/Kconfig
++++ b/arch/powerpc/platforms/powernv/Kconfig
+@@ -20,7 +20,7 @@ config PPC_POWERNV
+ 	default y
+ 
+ config OPAL_PRD
+-	tristate 'OPAL PRD driver'
++	tristate "OPAL PRD driver"
+ 	depends on PPC_POWERNV
+ 	help
+ 	  This enables the opal-prd driver, a facility to run processor
 -- 
-Regards/Gruss,
-    Boris.
+2.32.0
 
-https://people.kernel.org/tglx/notes-about-netiquette

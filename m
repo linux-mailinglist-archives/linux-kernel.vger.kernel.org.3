@@ -2,85 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 515F252F5D8
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 00:47:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06B0552F5DB
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 00:47:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353957AbiETWq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 18:46:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58468 "EHLO
+        id S1353963AbiETWr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 18:47:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231520AbiETWq5 (ORCPT
+        with ESMTP id S231520AbiETWrZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 18:46:57 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE2A8AFAE0;
-        Fri, 20 May 2022 15:46:55 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id gi33so9566628ejc.3;
-        Fri, 20 May 2022 15:46:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7VSmTsrf2yRmDPUJj7O4mhbeh8I71iXxthfFzi3aXkY=;
-        b=IDKxeJ8SiDdIfH863/nqT0j9/oK9RffxHSoBU/YfUbDXzroET4eYNRV1zNCUxEaWnG
-         Pkot+DctHiLZHSYTz17WCwyNwWLNSzhphRyOXbp7mEMH/Oc3vAfXrQ7e9HjTaV7CeG68
-         SHLv0AIKUUdwf0seJRCjZgNvM1AHSlgRsgPwxlwX3l88C+2TFL4lU1u5IpyhxM57s0hb
-         03acGg740tRQaowRW+Qs5heTK3Es+GTTDJwJ5faZBiF9W2eDzTMOQUCymSVSElXBl31R
-         jUbpANF3T8Nh0O1Hn1TbalyTbIiNMo0UengQkfo8Nc1gsWFK5p3LNP53QTP5oOKsFJ/k
-         XMNQ==
+        Fri, 20 May 2022 18:47:25 -0400
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E825AFAED;
+        Fri, 20 May 2022 15:47:25 -0700 (PDT)
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-f233f06563so266113fac.7;
+        Fri, 20 May 2022 15:47:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7VSmTsrf2yRmDPUJj7O4mhbeh8I71iXxthfFzi3aXkY=;
-        b=LU3yUXwmc/+eNNtxI9XRQfwdD41o6Vd9RE4k8pX2gNN57d4Sezz+l/naTpP1qVlMzE
-         ZQE+63rW+mDR3AY/6S+tqsn3dvyT5LfaySIrfoUPXQU2kK3SNDpSE5wX+ZtcZL9ZyzFM
-         yD0VOxwkE8WfMRIEwjubzuBPS0bgvuddaxqVGC0fjtV6QFsYu8vBGMDMpqjOC2eJlaw5
-         UStAG1GxX3YYdep+Dui6C+i4IlLCUZtrLOpQ/yea9XGDLpv71ujDx37UvEjiE2LN3AgJ
-         Gr4cjEl4Qs6T7Iy07mTkI88pbtL4kesch8MxnCTn9M2HCsUZlLeO57RD2rRwRp404OjU
-         mWFw==
-X-Gm-Message-State: AOAM532g+01YLCZr/zZd31jrTDghvLKDg2QjsaLW3b4LnYgvmTpIyZYG
-        z4UGWMXOSviUUAhehnvmNUVymkDKUclXkJZaGCI=
-X-Google-Smtp-Source: ABdhPJzv2U16Vzaku4966umMnfoPWOcUFGVy3bm7ySb9ND5HlqxVQMQuqiT4pmFn9OVXCr91+j9mXw9nQIm8v9wjJe8=
-X-Received: by 2002:a17:906:9753:b0:6fe:aafb:31a6 with SMTP id
- o19-20020a170906975300b006feaafb31a6mr4663290ejy.502.1653086814409; Fri, 20
- May 2022 15:46:54 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=u4R4HL1CccLMyjJa3KDF9+5IZQqrErKeOe9qyzr40zI=;
+        b=Dj6lV1R5Gri9eMa8TyivJNir//yhSHjDqYr3k0ZYc5mt7fVnELnlj95uzxLPXGhwNI
+         abqSPjPsWDdnKHmzEMHcK7q5LQoHhwkJCQiclzJLeD3ahjwChNbG/OcU0Ign5F16Sdo1
+         3Iavu01oFstRmTfrLqLZl/dvFoPVtNY68cYVUqHT27jJcXc+7KlhtzQ6HDG6snf3CWhl
+         0GxSeE2xIvN5hgR2Pd8mNUq6NQkRECjRf3uBGGVCHLYa0rKyJdE9Z27nnnsvqizVWuD3
+         y7ABYR4riv6YETDvyhGc4nmCJsg1hPBhkiZOUzQlD1CNmWiir3VAA3EwQ5T/bpopeYNf
+         H5Tw==
+X-Gm-Message-State: AOAM532irK+SaOZpdNLgME/jkUwugzHwi84VvMLXRzeYCN39pSDUDxkt
+        0IgZMWfmdwQmwJ8UR/LDDw==
+X-Google-Smtp-Source: ABdhPJwdW+Tdz65h6ry0Oq7eN1HrHtplP8oRV3Q6PNvZ3m9WMfgL/C+eJKxxwfuac94FX1DXNrpTbQ==
+X-Received: by 2002:a05:6871:554:b0:f1:7f92:7e67 with SMTP id t20-20020a056871055400b000f17f927e67mr7044878oal.124.1653086844501;
+        Fri, 20 May 2022 15:47:24 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id t187-20020aca5fc4000000b00325cda1ffb4sm1575818oib.51.2022.05.20.15.47.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 May 2022 15:47:23 -0700 (PDT)
+Received: (nullmailer pid 395300 invoked by uid 1000);
+        Fri, 20 May 2022 22:47:22 -0000
+Date:   Fri, 20 May 2022 17:47:22 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Chris Morgan <macroalpha82@gmail.com>
+Cc:     linux-pm@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lee.jones@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de, sre@kernel.org,
+        jon.lin@rock-chips.com, zyw@rock-chips.com,
+        zhangqing@rock-chips.com, Chris Morgan <macromorgan@hotmail.com>,
+        Maya Matuszczyk <maccraft123mc@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [RESEND 1/4 v7] dt-bindings: Add Rockchip rk817 battery charger
+ support
+Message-ID: <20220520224722.GA389075-robh@kernel.org>
+References: <20220520183037.2566-1-macroalpha82@gmail.com>
+ <20220520183037.2566-2-macroalpha82@gmail.com>
 MIME-Version: 1.0
-References: <20220520113728.12708-1-shung-hsi.yu@suse.com> <20220520113728.12708-4-shung-hsi.yu@suse.com>
-In-Reply-To: <20220520113728.12708-4-shung-hsi.yu@suse.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 20 May 2022 15:46:40 -0700
-Message-ID: <CAADnVQK8JcV8n4J-FgryKxgLBnNHLMWftjSiEZ3zPuCnFgkKrw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 3/4] bpf: verifier: remove redundant opcode checks
-To:     Shung-Hsi Yu <shung-hsi.yu@suse.com>
-Cc:     Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220520183037.2566-2-macroalpha82@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 4:38 AM Shung-Hsi Yu <shung-hsi.yu@suse.com> wrote:
->
-> The introduction of opcode validation with bpf_opcode_in_insntable() in
-> commit 5e581dad4fec ("bpf: make unknown opcode handling more robust")
-> has made opcode checks done in do_check_common() and its callees
-> redundant, so either remove them entirely, or turn them into comments in
-> places where the redundancy may not be clear.
+On Fri, May 20, 2022 at 01:30:34PM -0500, Chris Morgan wrote:
+> From: Chris Morgan <macromorgan@hotmail.com>
+> 
+> Create dt-binding documentation to document rk817 battery and charger
+> usage. New device-tree properties have been added.
+> 
+> - rockchip,resistor-sense-micro-ohms: The value in microohms of the
+>                                       sample resistor.
+> - rockchip,sleep-enter-current-microamp: The value in microamps of the
+>                                          sleep enter current.
+> - rockchip,sleep-filter-current: The value in microamps of the sleep
+>                                  filter current.
+> 
+> Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
+> Signed-off-by: Maya Matuszczyk <maccraft123mc@gmail.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+> 
+> Note that this patch requires the following commit (still pending):
+> https://lore.kernel.org/linux-rockchip/20220519161731.1168-1-macroalpha82@gmail.com/
 
-I prefer to keep the existing checks.
-They help readability on what is actually expected at this point.
-These checks cost close to nothing in run-time.
+And so the checks still won't run... :(
+
+Looks like it should be fine to me though.
+
+Acked-by: Rob Herring <robh@kernel.org>

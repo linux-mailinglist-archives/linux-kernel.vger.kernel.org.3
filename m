@@ -2,232 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3672A52E578
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 08:59:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A45452E57D
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 09:00:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235910AbiETG7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 02:59:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33182 "EHLO
+        id S231716AbiETG7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 02:59:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231716AbiETG7d (ORCPT
+        with ESMTP id S1346122AbiETG7r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 02:59:33 -0400
-Received: from sonic317-22.consmr.mail.gq1.yahoo.com (sonic317-22.consmr.mail.gq1.yahoo.com [98.137.66.148])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E10677CB1E
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 23:59:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=netscape.net; s=a2048; t=1653029971; bh=nAiiF/gaLx9YvHz1WBDFG9vBQFV8yYAG36DVxtUDGKg=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=tLvZ3yzsCHOuV4WrX1KecYXs0pEIszI6bSoNzA1XE25GAU6V3pjIWuolHmY8padgkyekUiCsDaaE5QLypBFyYaxojzCWKxb1HJWRAAAWl8pTnJQzt91y4vddc0IkD9w+njtNwZxCGvjEM1955itIu76Fb4NkqaHPuzHRbySgIf/DSF01Zyn2MHsIE/fPPBHDRK9XxDjiz9wBqyqgy62WqZ59RZmQnDjG7X2UZ50N382AbyBV6BPqT50BZuatq78Oo6yxhouXC1BATI/ki9vBlszgc4BlDGSJCCyTVLHFwU0I8EDZQ0s/iS6i5KKQkoCO0ekSFRqhnES/hqkrMwOe2g==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1653029971; bh=qaC13H91UDc+VejYtnG4e4YoYUKSODRWjrwz7203O68=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=FBLtiV+7nG53sWH4vtivDlRsiQ7U9+H2O82e70byZhBu5q513G53nK2/vCRSAif2sFdKprG9M+VRbaSbxlPyjl8LeNIz4DVevl8m2I2aZVeTyV2zvt5JQ77fThijKOQjnX1jAM4vlFIsupDo53wkuhtSUATJWbIySkBTNAO90VV6Syv0Uk6qvAz1skwaI68hOtJ5RPindoD85fX5QgLH6b3Y91hDwRqCdlFX6bPvo23x9kojLsRd5jbpQHrEwWSk27ukIFwhqZm3KJ3OGRpbvezesfwLya8R/u1asItlsDqQnmRKsC6ODgy4H4wjahYYmEHyxNjnldMHwWkhM2+JDA==
-X-YMail-OSG: 7xtcaasVM1lx5OMihPL.hTlRrM1A8gAiFAluZtMNuTWzcGcv870G4vhNQPZRIZS
- ilxDgYTnY6Km_vUamZlf4scV5t21_TYQ3L18f1vS8IF2oTF0jrqEYdQWjiwAD_po1Durvana8z9k
- S5Nmu0gvJnezglWTF1P5xNECJtfXsYc75paLHUVCjR0eSwSKmztMsmNOGlP4eTVqXq.1NeSkl2g6
- QvsEqSV3DWHURxjOEGXk68nRQY7hkY4U_3rrBNbxF9HlnxTDidZ2eU2uaytTPAaBYX8PLyMD6KfI
- 8Qh4i6fIEQj27ZDyuBs7D2ejdSKXAawjuo0c1F_4jIJPUIIlLcYEmzlDXWaL6ryL_Nn3VPbreDzz
- acD1Z73p_3ufdSev_GUX8DiMfR0Etah7zgfP_jGUa6ctalbF3NcnUck3NqSjO4iH.pT4IVDoO4g.
- SsDFxvhI9kx1Qyw6q_YBnuCSE7Sa7PYi_Yg3g6Qoe5HDOXcze8BWT91QRrax9983YrQDuhSKcY1O
- FdXs0nHPgFowx47xZOC5eoVOqmgT0DUEtE3FbioTjwoJuuX4IRGwookpeDxxLzS5xQ23QLdHNZen
- DSCh3o5wUhfR1bgjTg7XORYgXc4GlXiKAU2svD41dsQIT3WB73cC88lcP_0Hm1P8cfEV1bXDqTV3
- ITLSOplghvQymnxjEv7gLH0nca9XmBaeoLje_SBduuVgJX5rpoTIDZJs7d757Ic.vVqkIuSFTXrZ
- 95Op_O8e1Oz7YS7rOcy8FJFk59NED_KjHBGe3mu61MCrFpN.4L7W.6eYBqL3se5ksp6w5LBerJqd
- 98sTqB5wG70a5sA.SkXOG.S7wx3faRCL8J0XNFTNQluhnilgXbwIdL99WmBXkVgRFEJnafwoRYCa
- Z8k8yUTnb7ckMJmZejnNq.b_hYLG41aZSXjzaveOZH3OXxuoL46_tQ3EQteu4jJ2yY5_eHWNYqat
- Ri_jkXOsmNcD9_pr3VJITniq2Jn0ZNTY8ZJyraIM_M3PhVkaE8dI711kZ70YCzZRKnsyzq8exphZ
- B_cnxDyPJIT88zju7u81eNctVt2ora4rVYrzPIptRU2HUhOW8_Jpkd4rN6vi5vs95cDPQkGnDaRQ
- ZI_bObcrELFaOZ.ky3MZCLJp6K0gd5EdjeRdhKqtOS5f_hMeX5yiXP0lyRF0g4sswTTDKCUs7lAx
- pwd9mINEq07kqdrZrVC3DKO.aFwFB.KjlW2lsgjl30OXphrTnlTNPkDt2Wb4BTKAzIAW1Zjl_0WD
- Lc9vaypKYJ.vBO4ssOTh7KKvkv3JP1Mfu4jr6Tp70GE05I3QfJLghqxMzOtj5KlGj0FhcTLH3kcc
- 0IiuJDtyjAgcQDU6zykDmf1SX.Rm_t1WgWrZ.bQ4vGk3ln56eftNhkBkewlMVT1iUaXlqUcwH8F4
- wV.KlsDBRfUyrcfzEK.eatnVe_TNlQ1yxBd2rqjsl_vZfDPrYG8HywXgOSAlNHm_2VPX6NkoM5xT
- 6G1N5lhaTXs1mXbT_F.3sWbISjecItVM5zKDNADFOjEW9MKOA_J1Ckgw37pIdFWPpVhtOcoG1qYT
- oU2EALUQZ66qle9q5H50ck6o2jWgsQi5EAl6W2PzLXmdVGhFNcVHWk7lrkHcT6RgtE4gknfAi.12
- h3C6m8F8CgMfO3GQ.5yxgl0wAxslMHGGqQU9FrpNecAJ4a88Aw9Zrk2rEUlB5iRePZiiA0t3DoE.
- 2.egF7I7_T9cyNZyFPTsAdZGsAEn0ifH91EgCZvRvLy.Xa8M.pfNLN30TVHGYVRvzxijxcdXqDs1
- g_20vFXNo.n824fOAMKq0yXKWg9ribjIxu.T69RwZAmsFFqtpMknS1OGHnsJrnb3T6vqsPYMMMMd
- zP_8BlykH.soKnXEJY4YgY8NIWMLPXX1Oc7JaR7b5AkfNAHtJQZtGYFBo16RnUAFioTGM9vcij1D
- RRNZbLbpvVkLOLeIffNQeqeQTJo3W2e9pZ2Ti6zWPvU0AY9fFGcYWPxmB8h4SKJmLat4MVnUGLcs
- nmFw4uL21s9Hsiyb987egxLFul1L_70Jt7rQ.u3GuQX9BJ4GHNlmWJs0RI6iMrCRFWoyYmZNxO_P
- aCcQdZDnCbMIIIFMaeYgF77GZlIzio6lCsPkWxOdUI7epcuPKOA0a97onBFS.bRWfb37uNZ0H8Au
- ckQZogbtCcbzM4DuVH2c_hb_2GQhNuLSq72OSZ.m__vZtFIQwCLL6hH1jYdSlZbes5DIhL58aF2x
- Z5C82
-X-Sonic-MF: <brchuckz@aim.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic317.consmr.mail.gq1.yahoo.com with HTTP; Fri, 20 May 2022 06:59:31 +0000
-Received: by hermes--canary-production-ne1-5495f4d555-xgn59 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 077428ea294e9eca2cd83f945fe6833b;
-          Fri, 20 May 2022 06:59:14 +0000 (UTC)
-Message-ID: <8b1ebea5-7820-69c4-2e2b-9866d55bc180@netscape.net>
-Date:   Fri, 20 May 2022 02:59:11 -0400
+        Fri, 20 May 2022 02:59:47 -0400
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40FCF14FCA7
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 23:59:44 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20220520065942euoutp015c1b8ad709ff42848ed9786ceecb48da~wvgLp1tkr0278402784euoutp01W
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 06:59:42 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20220520065942euoutp015c1b8ad709ff42848ed9786ceecb48da~wvgLp1tkr0278402784euoutp01W
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1653029983;
+        bh=mJkxTYPikvkdqTMnJ+Lh+vfvviEKxyPCWIK29LAgqws=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=fwZzgxhR8r0aDLdv917/Pc2QFVtY1YINgZWiGwTQOzlISvRHGfrFqFdQBJ+AhRx8x
+         yao5q7WVWBFdm0noVfvJFkQ46ta/DM69753qC+shGo9aJ/Iwsy4JdIZepUH3ZiUF4O
+         HsjWXQRZnYlVb0Gsf5+wr1IBVe/J59F8oAqQNay0=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20220520065942eucas1p2c8721732b62af59ccfc2110b4655da17~wvgLVSAmh0722907229eucas1p2_;
+        Fri, 20 May 2022 06:59:42 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id 9C.29.10260.E5C37826; Fri, 20
+        May 2022 07:59:42 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220520065941eucas1p105cf273ede995dc4bf92f3245fad09b1~wvgKPDE413192831928eucas1p1m;
+        Fri, 20 May 2022 06:59:41 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220520065941eusmtrp119cec5b2f3eb4133ff4c909e1066456d~wvgKM9niN0344103441eusmtrp19;
+        Fri, 20 May 2022 06:59:41 +0000 (GMT)
+X-AuditID: cbfec7f5-bddff70000002814-c5-62873c5e7aec
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id F4.76.09522.D5C37826; Fri, 20
+        May 2022 07:59:41 +0100 (BST)
+Received: from CAMSVWEXC01.scsc.local (unknown [106.1.227.71]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220520065941eusmtip2778dbf13ef9c02edb6e5f1e63237ea6b~wvgKAjsFg2107821078eusmtip2U;
+        Fri, 20 May 2022 06:59:41 +0000 (GMT)
+Received: from localhost (106.210.248.142) by CAMSVWEXC01.scsc.local
+        (2002:6a01:e347::6a01:e347) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
+        Fri, 20 May 2022 07:59:40 +0100
+Date:   Fri, 20 May 2022 08:59:39 +0200
+From:   Javier =?utf-8?B?R29uesOhbGV6?= <javier.gonz@samsung.com>
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
+CC:     Hannes Reinecke <hare@suse.de>,
+        Johannes Thumshirn <Johannes.Thumshirn@wdc.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        "Theodore Ts'o" <tytso@mit.edu>, Christoph Hellwig <hch@lst.de>,
+        Pankaj Raghav <p.raghav@samsung.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "pankydev8@gmail.com" <pankydev8@gmail.com>,
+        "gost.dev@samsung.com" <gost.dev@samsung.com>,
+        "jiangbo.365@bytedance.com" <jiangbo.365@bytedance.com>,
+        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "dm-devel@redhat.com" <dm-devel@redhat.com>,
+        "dsterba@suse.com" <dsterba@suse.com>,
+        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
+        Jaegeuk Kim <jaegeuk@kernel.org>
+Subject: Re: [dm-devel] [PATCH v4 00/13] support non power of 2 zoned
+ devices
+Message-ID: <20220520065939.yjqlgsxs3qchpgzo@mpHalley-2.localdomain>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 2/2] x86/pat: add functions to query specific cache mode
- availability
-Content-Language: en-US
-To:     Jan Beulich <jbeulich@suse.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        xen-devel@lists.xenproject.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, Juergen Gross <jgross@suse.com>
-References: <20220503132207.17234-1-jgross@suse.com>
- <20220503132207.17234-3-jgross@suse.com>
- <1d86d8ff-6878-5488-e8c4-cbe8a5e8f624@suse.com>
- <0dcb05d0-108f-6252-e768-f75b393a7f5c@suse.com>
- <77255e5b-12bf-5390-6910-dafbaff18e96@netscape.net>
- <a2e95587-418b-879f-2468-8699a6df4a6a@suse.com>
-From:   Chuck Zmudzinski <brchuckz@netscape.net>
-In-Reply-To: <a2e95587-418b-879f-2468-8699a6df4a6a@suse.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"; format="flowed"
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Mailer: WebService/1.1.20225 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.aol
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <be429864-09cb-e3fb-2afe-46a3453c4d73@opensource.wdc.com>
+X-Originating-IP: [106.210.248.142]
+X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
+        CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347)
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Se0xTZxjG851bDzUlh+rgHTq3ISabOtCo29F6YRku5x8G2T+iTkehZ0Bo
+        i+ttg41ZblMoA2QLbIXgMhDQegsKEQdbZWuxAURoOinjoqHFDURBIRSnOMvRjf9+3/s8z/t9
+        T/LRuPQBGUqnqnW8Ri1XhlFiotk+3/PWoR1HEzeWT6xiLUMlFPtPdw/Ott2rJNkbvmyMbf2p
+        DGNPWWwY6zlvxtki6xTBPikcxti2gfVs32iDiG1tcxCs80oVxZ6o84rY/lIvYs+4vQSbXzQv
+        igriFq6dobgW85CIc3brucbTBRR3sfYI97PbSHE5XTaca8kfIbn7v7go7vwlF8Fd7PyCe9i4
+        mjtqNWFxkv3iHQpemWrgNZG7EsQpg1cH8MO21z+vscySRvQ4tBAF0MBsgUn7DaoQiWkp04Cg
+        ZnwQ+QUpM4PAeT1TEB4iGL5dK3qR+N5TjQShHoHn3hT6z5VjySWEQxOC6tFszB8hmLVQ98cE
+        7meK2Q19dQOLvILZCpNF+YsBnLlDQZ0zh/QLy5lYOH5lkPKzhImG7ptPCYGDwPGDZ5FxZjsU
+        TPn99DNeCfULtDB+FXKbKhf3BzDvw+UJJ+a3ALMG6itihAZZcNbeJfJfC8yjAHhc5aIEIRoq
+        TAtI4OUw3nHpeeVV0PltESFwGvR2mXCBdVBz344L+2VQ3KUUxu/CufwSShgHQv9kkPCyQChr
+        rnjulsCxr6WlKNy8pJZ5SS3z/7XMS2r9iIjTKITXa1XJvHazmv8sQitXafXq5IikdFUjevYt
+        Oxc6Zi+jhvHpiHaE0agdAY2HrZAgVV6iVKKQZ2TymvSPNXolr21HK2kiLESSlHpBLmWS5To+
+        jecP85oXKkYHhBqxN8669P2kwRMMzQdXv3lnzJm4VbxNYc3FNMF5LbH4oLPW/sF09ElRa4Li
+        6ga0mx+xpm0Xgel3dkbZc7c7yvfhLJC3quYOzZHmGXH8Xxv3pMorsyLSs7V7P32vXJEhXdb7
+        6JtiW9aEdVfksrsjjqdxke2h3t/c3k8mZXtePuAL7+tdqxoP37Dvz+vH/naLh+ZqGmbJkp3m
+        jLz1+6qJ8gLfS9iQWpN4arh5NObLlCgU/wANlJGS7+Y7Qhodrl8NbxvcTZm1N2+PXYu0+G5t
+        VmWkHNkrM2TGHgx0GF4jdPxJY85H72ySTSd4q7cUnwveZpR9FZM0EzetKx2Lt+18xfQkjNCm
+        yDetwzVa+b9FxuryBQQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprLKsWRmVeSWpSXmKPExsVy+t/xe7qxNu1JBj9nC1msvtvPZvH77Hlm
+        i73vZrNaXPjRyGSxZ9EkJouVq48yWTxZP4vZoufABxaLv133mCz23tK2uPR4BbvFnr0nWSwu
+        75rDZjF/2VN2ixsTnjJarLn5lMWitecnu4Ogx78Ta9g8ds66y+5x+Wypx6ZVnWwem5fUe+y+
+        2cDm0XTmKLPHztb7rB7v911l81i/5SqLx+bT1R6fN8l5tB/oZgrgjdKzKcovLUlVyMgvLrFV
+        ija0MNIztLTQMzKx1DM0No+1MjJV0rezSUnNySxLLdK3S9DLuHPwFnPBUcWKxau/sjYw/pHq
+        YuTkkBAwkZjxZB5jFyMXh5DAUkaJf38Ws0IkZCQ+XfnIDmELS/y51sUGUfSRUeLozslsIAkh
+        ga2MEmsulYPYLAKqEsuuvWYGsdkE7CUuLbsFZosImEq87WllAWlmFnjKJnH+3U9GkISwgK/E
+        1SlvWEBsXgEXibPX/7NAbFjCInHp41JGiISgxMmZT8CKmAUsJGbOPw8U5wCypSWW/+OACMtL
+        NG+dDbaMU8BNYsfry0wgJRICyhLLp/tCPFAr8er+bsYJjCKzkAydhWToLIShs5AMXcDIsopR
+        JLW0ODc9t9hQrzgxt7g0L10vOT93EyMwnWw79nPzDsZ5rz7qHWJk4mA8xCjBwawkwsuY25Ik
+        xJuSWFmVWpQfX1Sak1p8iNEUGEQTmaVEk/OBCS2vJN7QzMDU0MTM0sDU0sxYSZzXs6AjUUgg
+        PbEkNTs1tSC1CKaPiYNTqoEpQNSsz/fuIQbdhzqvWlK3CRjn5c/2c+x4Ycs385PYpcz7fcdW
+        Fttc2X3ZJEIz0rlr9ivNI4a9ug217xYvX25flT7RM0//m3tC56tJbVoGR7y3Pn7w5GzL1ca2
+        /LgjzaHO99gbPPaHR+Ts5mxbZ6LBfkrCafY84Y9HZ00ROcL26VWOScYXph3nY3d7L79bePum
+        Pmv7niiejxPbH6npPtF5Om36va74CRlJJ/Vlgn3aXa0S/sy9WHc10ftm45HNSTYP2mV/VHod
+        Y7RJXG7avZjhyrZrJyItE6TObnPxyPwh2v5+gdB1uwnZ6xteGielz3NkmWaYsGbVy7L8qt6e
+        lgf3z6za/ZvrwqnsA+LdzNJKLMUZiYZazEXFiQDpv0hasAMAAA==
+X-CMS-MailID: 20220520065941eucas1p105cf273ede995dc4bf92f3245fad09b1
+X-Msg-Generator: CA
+X-RootMTR: 20220520065941eucas1p105cf273ede995dc4bf92f3245fad09b1
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220520065941eucas1p105cf273ede995dc4bf92f3245fad09b1
+References: <20220517081048.GA13947@lst.de> <YoPAnj9ufkt5nh1G@mit.edu>
+        <7f9cb19b-621b-75ea-7273-2d2769237851@opensource.wdc.com>
+        <20220519031237.sw45lvzrydrm7fpb@garbanzo>
+        <69f06f90-d31b-620b-9009-188d1d641562@opensource.wdc.com>
+        <PH0PR04MB74166C87F694B150A5AE0F009BD09@PH0PR04MB7416.namprd04.prod.outlook.com>
+        <4a8f0e1b-0acb-1ed4-8d7a-c9ba93fcfd02@opensource.wdc.com>
+        <16f3f9ee-7db7-2173-840c-534f67bcaf04@suse.de>
+        <20220520062720.wxdcp5lkscesppch@mpHalley-2.localdomain>
+        <be429864-09cb-e3fb-2afe-46a3453c4d73@opensource.wdc.com>
+        <CGME20220520065941eucas1p105cf273ede995dc4bf92f3245fad09b1@eucas1p1.samsung.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/20/2022 2:05 AM, Jan Beulich wrote:
-> On 20.05.2022 06:43, Chuck Zmudzinski wrote:
->> On 5/4/22 5:14 AM, Juergen Gross wrote:
->>> On 04.05.22 10:31, Jan Beulich wrote:
->>>> On 03.05.2022 15:22, Juergen Gross wrote:
->>>>> Some drivers are using pat_enabled() in order to test availability of
->>>>> special caching modes (WC and UC-). This will lead to false negatives
->>>>> in case the system was booted e.g. with the "nopat" variant and the
->>>>> BIOS did setup the PAT MSR supporting the queried mode, or if the
->>>>> system is running as a Xen PV guest.
->>>> ...
->>>>> Add test functions for those caching modes instead and use them at the
->>>>> appropriate places.
+On 20.05.2022 15:41, Damien Le Moal wrote:
+>On 5/20/22 15:27, Javier González wrote:
+>> On 20.05.2022 08:07, Hannes Reinecke wrote:
+>>> On 5/19/22 20:47, Damien Le Moal wrote:
+>>>> On 5/19/22 16:34, Johannes Thumshirn wrote:
+>>>>> On 19/05/2022 05:19, Damien Le Moal wrote:
+>>>>>> On 5/19/22 12:12, Luis Chamberlain wrote:
+>>>>>>> On Thu, May 19, 2022 at 12:08:26PM +0900, Damien Le Moal wrote:
+>>>>>>>> On 5/18/22 00:34, Theodore Ts'o wrote:
+>>>>>>>>> On Tue, May 17, 2022 at 10:10:48AM +0200, Christoph Hellwig wrote:
+>>>>>>>>>> I'm a little surprised about all this activity.
+>>>>>>>>>>
+>>>>>>>>>> I though the conclusion at LSF/MM was that for Linux itself there
+>>>>>>>>>> is very little benefit in supporting this scheme.  It will massively
+>>>>>>>>>> fragment the supported based of devices and applications, while only
+>>>>>>>>>> having the benefit of supporting some Samsung legacy devices.
+>>>>>>>>>
+>>>>>>>>> FWIW,
+>>>>>>>>>
+>>>>>>>>> That wasn't my impression from that LSF/MM session, but once the
+>>>>>>>>> videos become available, folks can decide for themselves.
+>>>>>>>>
+>>>>>>>> There was no real discussion about zone size constraint on the zone
+>>>>>>>> storage BoF. Many discussions happened in the hallway track though.
+>>>>>>>
+>>>>>>> Right so no direct clear blockers mentioned at all during the BoF.
+>>>>>>
+>>>>>> Nor any clear OK.
 >>>>>
->>>>> Fixes: bdd8b6c98239 ("drm/i915: replace X86_FEATURE_PAT with
->>>>> pat_enabled()")
->>>>> Fixes: ae749c7ab475 ("PCI: Add arch_can_pci_mmap_wc() macro")
->>>>> Signed-off-by: Juergen Gross <jgross@suse.com>
->>>> ...
+>>>>> So what about creating a device-mapper target, that's taking npo2 drives and
+>>>>> makes them po2 drives for the FS layers? It will be very similar code to
+>>>>> dm-linear.
 >>>>
->>>>> --- a/arch/x86/include/asm/pci.h
->>>>> +++ b/arch/x86/include/asm/pci.h
->>>>> @@ -94,7 +94,7 @@ int pcibios_set_irq_routing(struct pci_dev *dev,
->>>>> int pin, int irq);
->>>>>        #define HAVE_PCI_MMAP
->>>>> -#define arch_can_pci_mmap_wc()    pat_enabled()
->>>>> +#define arch_can_pci_mmap_wc()    x86_has_pat_wc()
->>>> Besides this and ...
+>>>> +1
 >>>>
->>>>> --- a/drivers/gpu/drm/i915/gem/i915_gem_mman.c
->>>>> +++ b/drivers/gpu/drm/i915/gem/i915_gem_mman.c
->>>>> @@ -76,7 +76,7 @@ i915_gem_mmap_ioctl(struct drm_device *dev, void
->>>>> *data,
->>>>>        if (args->flags & ~(I915_MMAP_WC))
->>>>>            return -EINVAL;
->>>>>    -    if (args->flags & I915_MMAP_WC && !pat_enabled())
->>>>> +    if (args->flags & I915_MMAP_WC && !x86_has_pat_wc())
->>>>>            return -ENODEV;
->>>>>          obj = i915_gem_object_lookup(file, args->handle);
->>>>> @@ -757,7 +757,7 @@ i915_gem_dumb_mmap_offset(struct drm_file *file,
->>>>>          if (HAS_LMEM(to_i915(dev)))
->>>>>            mmap_type = I915_MMAP_TYPE_FIXED;
->>>>> -    else if (pat_enabled())
->>>>> +    else if (x86_has_pat_wc())
->>>>>            mmap_type = I915_MMAP_TYPE_WC;
->>>>>        else if (!i915_ggtt_has_aperture(to_gt(i915)->ggtt))
->>>>>            return -ENODEV;
->>>>> @@ -813,7 +813,7 @@ i915_gem_mmap_offset_ioctl(struct drm_device
->>>>> *dev, void *data,
->>>>>            break;
->>>>>          case I915_MMAP_OFFSET_WC:
->>>>> -        if (!pat_enabled())
->>>>> +        if (!x86_has_pat_wc())
->>>>>                return -ENODEV;
->>>>>            type = I915_MMAP_TYPE_WC;
->>>>>            break;
->>>>> @@ -823,7 +823,7 @@ i915_gem_mmap_offset_ioctl(struct drm_device
->>>>> *dev, void *data,
->>>>>            break;
->>>>>          case I915_MMAP_OFFSET_UC:
->>>>> -        if (!pat_enabled())
->>>>> +        if (!x86_has_pat_uc_minus())
->>>>>                return -ENODEV;
->>>>>            type = I915_MMAP_TYPE_UC;
->>>>>            break;
->>>> ... these uses there are several more. You say nothing on why those want
->>>> leaving unaltered. When preparing my earlier patch I did inspect them
->>>> and came to the conclusion that these all would also better observe the
->>>> adjusted behavior (or else I couldn't have left pat_enabled() as the
->>>> only
->>>> predicate). In fact, as said in the description of my earlier patch, in
->>>> my debugging I did find the use in i915_gem_object_pin_map() to be the
->>>> problematic one, which you leave alone.
->>> Oh, I missed that one, sorry.
->> That is why your patch would not fix my Haswell unless
->> it also touches i915_gem_object_pin_map() in
->> drivers/gpu/drm/i915/gem/i915_gem_pages.c
+>>>> This will simplify the support for FSes, at least for the initial drop (if
+>>>> accepted).
+>>>>
+>>>> And more importantly, this will also allow addressing any potential
+>>>> problem with user space breaking because of the non power of 2 zone size.
+>>>>
+>>> Seconded (or maybe thirded).
+>>>
+>>> The changes to support npo2 in the block layer are pretty simple, and
+>>> really I don't have an issue with those.
+>>> Then adding a device-mapper target transforming npo2 drives in po2
+>>> block devices should be pretty trivial.
+>>>
+>>> And once that is in you can start arguing with the the FS folks on
+>>> whether to implement it natively.
+>>>
 >>
->>> I wanted to be rather defensive in my changes, but I agree at least the
->>> case in arch_phys_wc_add() might want to be changed, too.
->> I think your approach needs to be more aggressive so it will fix
->> all the known false negatives introduced by bdd8b6c98239
->> such as the one in i915_gem_object_pin_map().
+>> So you are suggesting adding support for !PO2 in the block layer and
+>> then a dm to present the device as a PO2 to the FS? This at least
+>> addresses the hole issue for raw zoned block devices, so it can be a
+>> first step.
+>
+>Yes, and it also allows supporting these new !po2 devices without
+>regressions (read lack of) in the support at FS level.
+>
 >>
->> I looked at Jan's approach and I think it would fix the issue
->> with my Haswell as long as I don't use the nopat option. I
->> really don't have a strong opinion on that question, but I
->> think the nopat option as a Linux kernel option, as opposed
->> to a hypervisor option, should only affect the kernel, and
->> if the hypervisor provides the pat feature, then the kernel
->> should not override that,
-> Hmm, why would the kernel not be allowed to override that? Such
-> an override would affect only the single domain where the
-> kernel runs; other domains could take their own decisions.
+>> This said, it seems to me that the changes to the FS are not being a
+>> real issue. In fact, we are exposing some bugs while we generalize the
+>> zone size support.
 >
-> Also, for the sake of completeness: "nopat" used when running on
-> bare metal has the same bad effect on system boot, so there
-> pretty clearly is an error cleanup issue in the i915 driver. But
-> that's orthogonal, and I expect the maintainers may not even care
-> (but tell us "don't do that then").
+>Not arguing with that. But since we are still stabilizing btrfs ZNS
+>support, adding more code right now is a little painful.
 >
-> Jan
+>>
+>> Could you point out what the challenges in btrfs are in the current
+>> patches, that it makes sense to add an extra dm layer?
 >
->> but because of the confusion,
+>See above. No real challenge, just needs to be done if a clear agreement
+>can be reached on zone size alignment constraints. As mentioned above, the
+>btrfs changes timing is not ideal right now though.
+>
+>Also please do not forget applications that may expect a power of 2 zone
+>size. A dm-zsp2 would be a nice solution for these. So regardless of the
+>FS work, that new DM target will be *very* nice to have.
+>
+>>
+>> Note that for F2FS there is no blocker. Jaegeuk picked the initial
+>> patches, and he agreed to add native support.
+>
+>And until that is done, f2fs will not work with these new !po2 devices...
+>Having the new dm will avoid that support fragmentation which I personally
+>really dislike. With the new dm, we can keep support for *all* zoned block
+>devices, albeit needing a different setup depending on the device. That is
+>not nice at all but at least there is a way to make things work continuously.
 
-As I just wrote earlier, the confusion is whether or not "nopat"
-means the kernel drivers will not use pat even if the firmware
-and hypervisor provides it. I think you are correct to
-point out that is the way the i915 driver behaved with the nopat
-option before bdd8b6c98239 was applied, with the same
-bad effects on bare metal as with the hypervisor. I think perhaps
-dealing with the nopat option to fix bdd8b6c98239 is a solution in
-search of a problem, at least as regards the i915 driver.
+All the above sounds very reasonable. Thanks Damien.
 
-The only problem we have, as I see it, is with a false negative
-when the nopat option is *not* enabled. But the forced disabling
-of pat in Jan's patch when the nopat option is enabled is probably
-needed if the goal of the patch is to preserve the same
-behavior of the i915 driver that it had before bdd8b6c98239
-was applied.
+If we all can agree, we can address this in the next version and come
+maintain the native FS support off-tree until you see that general btrfs
+support for zoned devicse is stable. We will be happy to help with this
+too.
 
-In any case, especially if we do include Jan's aggressive approach
-of disabling pat with the nopat option and preserving the same bad
-behavior we had with nopat before bdd8b6c98239 was applied, the
-i915 driver should log a warning when pat is disabled. Right now,
-the driver returns -ENODEV with the problem in
-i915_gem_object_pin_map(), but it does not log an error. The only
-log message I get now is the add_taint_for_CI in intel_gt_init
-which was not very helpful information for debugging
-this problem. It was only the starting point of a longer debugging
-process because of a lack of error log messages in the i915 driver.
-
-Chuck

@@ -2,137 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 283AB52E651
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 09:34:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32CC752E656
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 09:36:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346507AbiETHd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 03:33:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44074 "EHLO
+        id S1346517AbiETHgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 03:36:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235940AbiETHdw (ORCPT
+        with ESMTP id S238923AbiETHgM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 03:33:52 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE4914AC97;
-        Fri, 20 May 2022 00:33:50 -0700 (PDT)
-Date:   Fri, 20 May 2022 09:33:46 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1653032028;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WO3Qag7yVyo0GFmwDFCkyWbSVTR+kGU+HMvb/D9bjOo=;
-        b=h4dL5j62evAr9rItV/vck1C6kA0EcttM1m0b1Da0ljJr4V7XdOnxfSv+mWxSutuS2anLKN
-        neSSgNQkpP53eeKBE5CT48hYBJKpeL2q5GmrRpUfJSrhbbAgR96xaZFLm2m9HyNl2hpRjT
-        p4R0TUJObBZ8LuvElhNTARZVzJSH+sfB8hS+wPzXOg5CKr62geGJqavEKMI2R0SUtV5/8r
-        jm0hy5BI7tr3GfOMHLvYq1VeO3ehLaTFzPsyd262aPCmYuf6k1919aqHhR+iCvZFAB5r9g
-        WDP5zU50AT8WP6hpkDrViT7FZkOgF4nok3fWjosNMDT8fokR0m0ESQUltn3zng==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1653032028;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WO3Qag7yVyo0GFmwDFCkyWbSVTR+kGU+HMvb/D9bjOo=;
-        b=4tb6POwNJbbl9CtNBPZJfUGQvl1P67iM9z/Z0O1ewVgldWrTMWuavKsCaXBCXYv5PsOEiU
-        eksDJVhVX6WxZDDw==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, oleg@redhat.com,
-        mingo@kernel.org, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Jann Horn <jannh@google.com>,
-        Kees Cook <keescook@chromium.org>, linux-ia64@vger.kernel.org,
-        Robert O'Callahan <roc@pernos.co>, Kyle Huey <khuey@pernos.co>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Douglas Miller <dougmill@linux.vnet.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>
-Subject: Re: [PATCH 00/16] ptrace: cleanups and calling do_cldstop with only
- siglock
-Message-ID: <YodEWlfo4kFd8+mt@linutronix.de>
-References: <20220421150248.667412396@infradead.org>
- <20220421150654.817117821@infradead.org>
- <87czhap9dy.fsf@email.froward.int.ebiederm.org>
- <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
- <87k0b7v9yk.fsf_-_@email.froward.int.ebiederm.org>
- <87k0b0apne.fsf_-_@email.froward.int.ebiederm.org>
- <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
- <871qwq5ucx.fsf_-_@email.froward.int.ebiederm.org>
+        Fri, 20 May 2022 03:36:12 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0601338A3;
+        Fri, 20 May 2022 00:36:09 -0700 (PDT)
+Received: from kwepemi100015.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L4JNl5R78zQkB3;
+        Fri, 20 May 2022 15:33:11 +0800 (CST)
+Received: from kwepemm600012.china.huawei.com (7.193.23.74) by
+ kwepemi100015.china.huawei.com (7.221.188.125) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 20 May 2022 15:36:07 +0800
+Received: from ubuntu1804.huawei.com (10.67.175.29) by
+ kwepemm600012.china.huawei.com (7.193.23.74) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 20 May 2022 15:36:01 +0800
+From:   Guan Jing <guanjing6@huawei.com>
+To:     <davem@davemloft.net>
+CC:     <saeedm@nvidia.com>, <leon@kernel.org>, <edumazet@google.com>,
+        <kuba@kernel.org>, <pabeni@redhat.com>, <netdev@vger.kernel.org>,
+        <linux-rdma@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Guan Jing <guanjing6@huawei.com>
+Subject: [PATCH -next] net/mlx5: Fix build error of multiple definition
+Date:   Fri, 20 May 2022 15:34:23 +0800
+Message-ID: <20220520073423.35556-1-guanjing6@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <871qwq5ucx.fsf_-_@email.froward.int.ebiederm.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.175.29]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600012.china.huawei.com (7.193.23.74)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-05-18 17:49:50 [-0500], Eric W. Biederman wrote:
->=20
-> For ptrace_stop to work on PREEMT_RT no spinlocks can be taken once
-> ptrace_freeze_traced has completed successfully.  Which fundamentally
-> means the lock dance of dropping siglock and grabbing tasklist_lock does
-> not work on PREEMPT_RT.  So I have worked through what is necessary so
-> that tasklist_lock does not need to be grabbed in ptrace_stop after
-> siglock is dropped.
-=E2=80=A6
-It took me a while to realise that this is a follow-up I somehow assumed
-that you added a few patches on top. Might have been the yesterday's
-heat. b4 also refused to download this series because the v4 in this
-thread looked newer=E2=80=A6 Anyway. Both series applied:
+There are some errors like:
 
-| =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-| WARNING: suspicious RCU usage
-| 5.18.0-rc7+ #16 Not tainted
-| -----------------------------
-| include/linux/ptrace.h:120 suspicious rcu_dereference_check() usage!
-|
-| other info that might help us debug this:
-|
-| rcu_scheduler_active =3D 2, debug_locks =3D 1
-| 2 locks held by ssdd/1734:
-|  #0: ffff88800eaa6918 (&sighand->siglock){....}-{2:2}, at: lock_parents_s=
-iglocks+0xf0/0x3b0
-|  #1: ffff88800eaa71d8 (&sighand->siglock/2){....}-{2:2}, at: lock_parents=
-_siglocks+0x115/0x3b0
-|
-| stack backtrace:
-| CPU: 2 PID: 1734 Comm: ssdd Not tainted 5.18.0-rc7+ #16
-| Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-debian-1.=
-16.0-4 04/01/2014
-| Call Trace:
-|  <TASK>
-|  dump_stack_lvl+0x45/0x5a
-|  unlock_parents_siglocks+0xb6/0xc0
-|  ptrace_stop+0xb9/0x390
-|  get_signal+0x51c/0x8d0
-|  arch_do_signal_or_restart+0x31/0x750
-|  exit_to_user_mode_prepare+0x157/0x220
-|  irqentry_exit_to_user_mode+0x5/0x50
-|  asm_sysvec_apic_timer_interrupt+0x12/0x20
+drivers/net/ethernet/mellanox/mlx5/core/lag/lag.o:
+In function `mlx5_lag_mpesw_init':
+lag.c:(.text+0xb70): multiple definition of `mlx5_lag_mpesw_init'
+drivers/net/ethernet/mellanox/mlx5/core/lag/debugfs.o:debugfs.c:(.text+0x440):
+first defined here
+drivers/net/ethernet/mellanox/mlx5/core/lag/lag.o: In function `mlx5_lag_mpesw_cleanup':
+lag.c:(.text+0xb80): multiple definition of `mlx5_lag_mpesw_cleanup'
+drivers/net/ethernet/mellanox/mlx5/core/lag/debugfs.o:debugfs.c:(.text+0x450):
+first defined here
 
-That is ptrace_parent() in unlock_parents_siglocks().
+So, add 'static inline' on the defineation of these functions.
 
-Sebastian
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Fixes: 94db33177819 ("net/mlx5: Support multiport eswitch mode")
+Signed-off-by: Guan Jing <guanjing6@huawei.com>
+---
+ drivers/net/ethernet/mellanox/mlx5/core/lag/mpesw.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/lag/mpesw.h b/drivers/net/ethernet/mellanox/mlx5/core/lag/mpesw.h
+index d39a02280e29..be4abcb8fcd5 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/lag/mpesw.h
++++ b/drivers/net/ethernet/mellanox/mlx5/core/lag/mpesw.h
+@@ -19,8 +19,8 @@ bool mlx5_lag_mpesw_is_activated(struct mlx5_core_dev *dev);
+ void mlx5_lag_mpesw_init(struct mlx5_lag *ldev);
+ void mlx5_lag_mpesw_cleanup(struct mlx5_lag *ldev);
+ #else
+-void mlx5_lag_mpesw_init(struct mlx5_lag *ldev) {}
+-void mlx5_lag_mpesw_cleanup(struct mlx5_lag *ldev) {}
++static inline void mlx5_lag_mpesw_init(struct mlx5_lag *ldev) {}
++static inline void mlx5_lag_mpesw_cleanup(struct mlx5_lag *ldev) {}
+ #endif
+ 
+ #endif /* __MLX5_LAG_MPESW_H__ */
+-- 
+2.17.1
+

@@ -2,90 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 293F752E6EB
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 10:05:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 792D852E6EC
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 10:05:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346702AbiETIEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 04:04:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43870 "EHLO
+        id S1346806AbiETIFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 04:05:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239114AbiETIEo (ORCPT
+        with ESMTP id S1346841AbiETIFE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 04:04:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 06EDB14D7A4
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 01:04:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653033882;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vxIfyueKTwi8me9odGJZHdVY8aeJtK9bNyPeP1e4+B0=;
-        b=R83s1U+UpR7bBIxnV6fg+evdB9SOA5tFhaowQN5dkkVACD6gZ2/QGYtqtMjyhJ261vBcqG
-        /Hvq+nqM1TL7cDeJRHhV8SnB1qcy/nq5bNzr5Qjhc1gZbR/qf2fJB+19WWd5LPXRvLJhiq
-        e3qXj0XIyGZb2IZIml2nC+M1PZGelco=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-609-BxkzoncIP8eB1SJBhhR0ug-1; Fri, 20 May 2022 04:04:40 -0400
-X-MC-Unique: BxkzoncIP8eB1SJBhhR0ug-1
-Received: by mail-qv1-f71.google.com with SMTP id ck16-20020a05621404d000b00461bcafbbe9so6118265qvb.23
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 01:04:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=vxIfyueKTwi8me9odGJZHdVY8aeJtK9bNyPeP1e4+B0=;
-        b=bA4dhLtnn9HqzbQJ/2X9CbvfdJQqWW1WX0Tg/j5GtxUWiardtJH/0WFTX2jcsiEYhA
-         byIXL3nl3pMisq8l9DP0zYksZL9rdk9RtAKi8VDhzlHoAflho3cc2k56Q5vrlPVegCEv
-         oFE9XXJaVzOcYZVkw02rHvswsHN8k5TQfDO/+tsG+obsD3q+66EvijiQQV9WNRfNRc4P
-         vn09AAHWGfrhTFjztRk2IPYvEvaSqtPlxNvGoQSpk6B90xPgWiYPDYGqjCGcEMCwU1hH
-         YUeQdUtRx7BoFXBwHGdxjhAC/XCAZbnFEhDCSm+q38Q5j1F+nRu7cBNmku1qsL0dHRMZ
-         51UA==
-X-Gm-Message-State: AOAM5322lwzobjPefkDwohAXSJsQgVK1+Aei7usBYOwoMUeq5YA4bUwe
-        gVqVmd10Kv6h7gFxq/I3JS8YFlAvTELunQjA8ioRi4M7oWhXRCkhm2K/HB1G1s5yUwALy7tMocW
-        oDZcr5OujF9CN4SSimiRP/TED4okvjg/Zf92g8xPu
-X-Received: by 2002:a05:622a:110c:b0:2f3:d347:6f8d with SMTP id e12-20020a05622a110c00b002f3d3476f8dmr6667359qty.403.1653033879835;
-        Fri, 20 May 2022 01:04:39 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwrb+athTnq5oBuQh5GySrh9ZKPVoFX6p6p05bd/oosxd7+KoHF5tjlJJsnXBkIab10yK1Mr+zLUaEumNvqgQM=
-X-Received: by 2002:a05:622a:110c:b0:2f3:d347:6f8d with SMTP id
- e12-20020a05622a110c00b002f3d3476f8dmr6667325qty.403.1653033879554; Fri, 20
- May 2022 01:04:39 -0700 (PDT)
+        Fri, 20 May 2022 04:05:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A45F015E604
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 01:05:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1A37FB82A5B
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 08:04:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E373C385A9;
+        Fri, 20 May 2022 08:04:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653033897;
+        bh=2+UsR8SY09lQomSf/1VOLFJ4QEsxG2ZXRneVf/dRIRQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PLGFqZccKSIjEgIWJN2VKqwQzgxTVsmT1Os/COyLLsf72r3km7q6scL8RKqTvMzGH
+         fGGyAXIDxmixCis7kbCQUDTIFR+kkCMEKpDbG44/e4AT9f73rI8rmDq7IZV/NiGMYo
+         fj2GQzGF5i1bTCoYocEVOl3Wu1H4tz94tet7vKNJd8ogrKJWWzKFu3b62ZZaZqMebv
+         3mWP3KnJvOYxTn02uLcE6bF8pPkk9iTHX4Kbr1IRhEfO6zSuL2V4+3PEzB9wns8iV9
+         D7I2+rPaUBv+4OIfsw3KtPCyb/q5GcgyQQzGLobuGO4KxLZJm2PW+mqJug7Ax53DtE
+         KLNrk+p+H7yFw==
+Received: by pali.im (Postfix)
+        id 3491053E; Fri, 20 May 2022 10:04:54 +0200 (CEST)
+Date:   Fri, 20 May 2022 10:04:54 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Ash Logan <ash@heyquark.com>
+Cc:     paulus@samba.org, mpe@ellerman.id.au, christophe.leroy@csgroup.eu,
+        robh+dt@kernel.org, benh@kernel.crashing.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        j.ne@posteo.net
+Subject: Re: [PATCH 11/12] powerpc: wiiu: don't enforce flat memory
+Message-ID: <20220520080454.c3cqodsdbfbkmg56@pali>
+References: <20220302044406.63401-1-ash@heyquark.com>
+ <20220302044406.63401-12-ash@heyquark.com>
+ <20220513224353.n56qg5fhstbaqhfz@pali>
+ <d84e4d24-f350-80fc-6c31-b7e7f8d429f4@heyquark.com>
 MIME-Version: 1.0
-References: <20220330180436.24644-1-gdawar@xilinx.com>
-In-Reply-To: <20220330180436.24644-1-gdawar@xilinx.com>
-From:   Eugenio Perez Martin <eperezma@redhat.com>
-Date:   Fri, 20 May 2022 10:04:03 +0200
-Message-ID: <CAJaqyWdVef5fOLRRnx+F9LNpqYZuLPq-sC750G58KmGFyon2_w@mail.gmail.com>
-Subject: Re: [PATCH v2 00/19] Control VQ support in vDPA
-To:     Gautam Dawar <gautam.dawar@xilinx.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        kvm list <kvm@vger.kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Martin Petrus Hubertus Habets <martinh@xilinx.com>,
-        Harpreet Singh Anand <hanand@xilinx.com>,
-        martinpo@xilinx.com, pabloc@xilinx.com, dinang@xilinx.com,
-        tanuj.kamde@amd.com, habetsm.xilinx@gmail.com,
-        ecree.xilinx@gmail.com, Gautam Dawar <gdawar@xilinx.com>,
-        Wu Zongyong <wuzongyong@linux.alibaba.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Eli Cohen <elic@nvidia.com>,
-        Zhu Lingshan <lingshan.zhu@intel.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Xie Yongji <xieyongji@bytedance.com>,
-        Si-Wei Liu <si-wei.liu@oracle.com>,
-        Parav Pandit <parav@nvidia.com>,
-        Longpeng <longpeng2@huawei.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Zhang Min <zhang.min9@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d84e4d24-f350-80fc-6c31-b7e7f8d429f4@heyquark.com>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,168 +63,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 8:05 PM Gautam Dawar <gautam.dawar@xilinx.com> wrot=
-e:
->
-> Hi All:
->
-> This series tries to add the support for control virtqueue in vDPA.
->
-> Control virtqueue is used by networking device for accepting various
-> commands from the driver. It's a must to support multiqueue and other
-> configurations.
->
-> When used by vhost-vDPA bus driver for VM, the control virtqueue
-> should be shadowed via userspace VMM (Qemu) instead of being assigned
-> directly to Guest. This is because Qemu needs to know the device state
-> in order to start and stop device correctly (e.g for Live Migration).
->
-> This requies to isolate the memory mapping for control virtqueue
-> presented by vhost-vDPA to prevent guest from accessing it directly.
->
-> To achieve this, vDPA introduce two new abstractions:
->
-> - address space: identified through address space id (ASID) and a set
->                  of memory mapping in maintained
-> - virtqueue group: the minimal set of virtqueues that must share an
->                  address space
->
-> Device needs to advertise the following attributes to vDPA:
->
-> - the number of address spaces supported in the device
-> - the number of virtqueue groups supported in the device
-> - the mappings from a specific virtqueue to its virtqueue groups
->
-> The mappings from virtqueue to virtqueue groups is fixed and defined
-> by vDPA device driver. E.g:
->
-> - For the device that has hardware ASID support, it can simply
->   advertise a per virtqueue group.
-> - For the device that does not have hardware ASID support, it can
->   simply advertise a single virtqueue group that contains all
->   virtqueues. Or if it wants a software emulated control virtqueue, it
->   can advertise two virtqueue groups, one is for cvq, another is for
->   the rest virtqueues.
->
-> vDPA also allow to change the association between virtqueue group and
-> address space. So in the case of control virtqueue, userspace
-> VMM(Qemu) may use a dedicated address space for the control virtqueue
-> group to isolate the memory mapping.
->
-> The vhost/vhost-vDPA is also extend for the userspace to:
->
-> - query the number of virtqueue groups and address spaces supported by
->   the device
-> - query the virtqueue group for a specific virtqueue
-> - assocaite a virtqueue group with an address space
-> - send ASID based IOTLB commands
->
-> This will help userspace VMM(Qemu) to detect whether the control vq
-> could be supported and isolate memory mappings of control virtqueue
-> from the others.
->
-> To demonstrate the usage, vDPA simulator is extended to support
-> setting MAC address via a emulated control virtqueue.
->
-> Please review.
->
-> Changes since RFC v2:
->
-> - Fixed memory leak for asid 0 in vhost_vdpa_remove_as()
-> - Removed unnecessary NULL check for iotlb in vhost_vdpa_unmap() and
->   changed its return type to void.
-> - Removed insignificant used_as member field from struct vhost_vdpa.
-> - Corrected the iommu parameter in call to vringh_set_iotlb() from
->   vdpasim_set_group_asid()
-> - Fixed build errors with vdpa_sim_net
-> - Updated alibaba, vdpa_user and virtio_pci vdpa parent drivers to
->   call updated vDPA APIs and ensured successful build
-> - Tested control (MAC address configuration) and data-path using
->   single virtqueue pair on Xilinx (now AMD) SN1022 SmartNIC device
->   and vdpa_sim_net software device using QEMU release at [1]
-> - Removed two extra blank lines after set_group_asid() in
->   include/linux/vdpa.h
->
-> Changes since v1:
->
-> - Rebased the v1 patch series on vhost branch of MST vhost git repo
->   git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git/log/?h=3Dvhost
-> - Updates to accommodate vdpa_sim changes from monolithic module in
->   kernel used v1 patch series to current modularized class (net, block)
->   based approach.
-> - Added new attributes (ngroups and nas) to "vdpasim_dev_attr" and
->   propagated them from vdpa_sim_net to vdpa_sim
-> - Widened the data-type for "asid" member of vhost_msg_v2 to __u32
->   to accommodate PASID
-> - Fixed the buildbot warnings
-> - Resolved all checkpatch.pl errors and warnings
-> - Tested both control and datapath with Xilinx Smartnic SN1000 series
->   device using QEMU implementing the Shadow virtqueue and support for
->   VQ groups and ASID available at [1]
->
-> Changes since RFC:
->
-> - tweak vhost uAPI documentation
-> - switch to use device specific IOTLB really in patch 4
-> - tweak the commit log
-> - fix that ASID in vhost is claimed to be 32 actually but 16bit
->   actually
-> - fix use after free when using ASID with IOTLB batching requests
-> - switch to use Stefano's patch for having separated iov
-> - remove unused "used_as" variable
-> - fix the iotlb/asid checking in vhost_vdpa_unmap()
->
-> [1] Development QEMU release with support for SVQ, VQ groups and ASID:
->   github.com/eugpermar/qemu/releases/tag/vdpa_sw_live_migration.d%2F
->   asid_groups-v1.d%2F00
->
-> Thanks
->
-> Gautam Dawar (19):
->   vhost: move the backend feature bits to vhost_types.h
->   virtio-vdpa: don't set callback if virtio doesn't need it
->   vhost-vdpa: passing iotlb to IOMMU mapping helpers
->   vhost-vdpa: switch to use vhost-vdpa specific IOTLB
->   vdpa: introduce virtqueue groups
->   vdpa: multiple address spaces support
->   vdpa: introduce config operations for associating ASID to a virtqueue
->     group
->   vhost_iotlb: split out IOTLB initialization
->   vhost: support ASID in IOTLB API
->   vhost-vdpa: introduce asid based IOTLB
->   vhost-vdpa: introduce uAPI to get the number of virtqueue groups
->   vhost-vdpa: introduce uAPI to get the number of address spaces
->   vhost-vdpa: uAPI to get virtqueue group id
->   vhost-vdpa: introduce uAPI to set group ASID
->   vhost-vdpa: support ASID based IOTLB API
->   vdpa_sim: advertise VIRTIO_NET_F_MTU
->   vdpa_sim: factor out buffer completion logic
->   vdpa_sim: filter destination mac address
->   vdpasim: control virtqueue support
->
->  drivers/vdpa/alibaba/eni_vdpa.c      |   2 +-
->  drivers/vdpa/ifcvf/ifcvf_main.c      |   8 +-
->  drivers/vdpa/mlx5/net/mlx5_vnet.c    |  11 +-
->  drivers/vdpa/vdpa.c                  |   5 +
->  drivers/vdpa/vdpa_sim/vdpa_sim.c     | 100 ++++++++--
->  drivers/vdpa/vdpa_sim/vdpa_sim.h     |   3 +
->  drivers/vdpa/vdpa_sim/vdpa_sim_net.c | 169 +++++++++++++----
->  drivers/vdpa/vdpa_user/vduse_dev.c   |   3 +-
->  drivers/vdpa/virtio_pci/vp_vdpa.c    |   2 +-
->  drivers/vhost/iotlb.c                |  23 ++-
->  drivers/vhost/vdpa.c                 | 267 +++++++++++++++++++++------
->  drivers/vhost/vhost.c                |  23 ++-
->  drivers/vhost/vhost.h                |   4 +-
->  drivers/virtio/virtio_vdpa.c         |   2 +-
->  include/linux/vdpa.h                 |  44 ++++-
->  include/linux/vhost_iotlb.h          |   2 +
->  include/uapi/linux/vhost.h           |  26 ++-
->  include/uapi/linux/vhost_types.h     |  11 +-
->  18 files changed, 563 insertions(+), 142 deletions(-)
->
+On Friday 20 May 2022 13:41:04 Ash Logan wrote:
+> On 14/5/22 08:43, Pali Rohár wrote:
+> > On Wednesday 02 March 2022 15:44:05 Ash Logan wrote:
+> >> pgtable_32.c:mapin_ram loops over each valid memory range, which means
+> >> non-contiguous memory just works.
+> > 
+> > Hello! Does it mean that non-contiguous memory works for any 32-bit
+> > powerpc platform, and not only for wiiu? If yes, should not be
+> > non-contiguous memory support enabled for all 32-bit ppc boards then?
+> 
+> Hi! Sorry for my delayed response. As best I can tell, it does indeed
+> Just Work, but I have only been able to test on wiiu which is missing a
+> lot of features other boards have (like PCI) - so it's possible there's
+> still an assumption elsewhere in the kernel that I haven't hit.
+> 
+> As best I can tell, the Wii and Wii U are the only 32-bit powerpc boards
+> out there where it's even possible to have non-contiguous memory.
 
-Hoping it's not too late for this, but I tested this series with my
-latest qemu CVQ SVQ RFC (v8). So, in that regard,
+What is the reason that those two boards are the **only**? Is there some
+specific requirement from bootloader or hardware to "enable"
+non-contiguous memory support?
 
-Reviewed-by: Eugenio P=C3=A9rez <eperezma@redhat.com>
+I'm interested in enabling non-contiguous memory support for P2020-based
+board as it has gaps in its 32-bit memory layout and which could be used
+for RAM mapping when 4GB DDR3 module is plugged in (default is 2GB).
 
+> >> Signed-off-by: Ash Logan <ash@heyquark.com>
+> >> ---
+> >>  arch/powerpc/mm/init_32.c | 4 ++--
+> >>  1 file changed, 2 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git a/arch/powerpc/mm/init_32.c b/arch/powerpc/mm/init_32.c
+> >> index 3d690be48e84..59a84629d9a0 100644
+> >> --- a/arch/powerpc/mm/init_32.c
+> >> +++ b/arch/powerpc/mm/init_32.c
+> >> @@ -125,10 +125,10 @@ void __init MMU_init(void)
+> >>  	 * lowmem_end_addr is initialized below.
+> >>  	 */
+> >>  	if (memblock.memory.cnt > 1) {
+> >> -#ifndef CONFIG_WII
+> >> +#if !defined(CONFIG_WII) && !defined(CONFIG_WIIU)
+> >>  		memblock_enforce_memory_limit(memblock.memory.regions[0].size);
+> >>  		pr_warn("Only using first contiguous memory region\n");
+> >> -#else
+> >> +#elif defined(CONFIG_WII)
+> >>  		wii_memory_fixups();
+> >>  #endif
+> >>  	}
+> >> -- 
+> >> 2.35.1
+> >>

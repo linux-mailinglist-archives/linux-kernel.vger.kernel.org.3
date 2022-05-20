@@ -2,85 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D1DF52E6D3
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 10:00:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02ADD52E6D7
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 10:00:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346758AbiETH7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 03:59:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59084 "EHLO
+        id S1346781AbiETIAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 04:00:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346751AbiETH7Z (ORCPT
+        with ESMTP id S1346764AbiETH74 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 03:59:25 -0400
-Received: from relay3.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E527315D303
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 00:59:22 -0700 (PDT)
-Received: from omf06.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay11.hostedemail.com (Postfix) with ESMTP id A07E7814D3;
-        Fri, 20 May 2022 07:59:21 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf06.hostedemail.com (Postfix) with ESMTPA id 5987220012;
-        Fri, 20 May 2022 07:59:15 +0000 (UTC)
-Message-ID: <ab048a2a99b7ff26da98ad01b575b036df7ddec9.camel@perches.com>
-Subject: Re: [PATCH v3] nvmem: brcm_nvram: check for allocation failure
-From:   Joe Perches <joe@perches.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>,
-        gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Date:   Fri, 20 May 2022 00:59:12 -0700
-In-Reply-To: <20220520064516.GX4009@kadam>
-References: <20220520064516.GX4009@kadam>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Fri, 20 May 2022 03:59:56 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7945115E485;
+        Fri, 20 May 2022 00:59:53 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 32DA521B62;
+        Fri, 20 May 2022 07:59:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1653033592; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1ONbGgnv3zbgbzeidBMZy3YNCoQZ655Ohcr0KuG8fEY=;
+        b=gtRnHEOvVNgf7nRCjMJqY1mdpLA9NnNyiBy4LxGlue8p+v8zKlZBACX16szCvamP7INy7M
+        QdKcW6coXBBQbcH3ZNfEIakR938LEz+kDgWgD3QvYRhBnhxiJcbpf4X64eoggVDG9rwYY+
+        HJqCi+lCsxo1+PO54/yJHo9j0G8L1hQ=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id C5B442C141;
+        Fri, 20 May 2022 07:59:51 +0000 (UTC)
+Date:   Fri, 20 May 2022 09:59:51 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Kent Overstreet <kent.overstreet@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@vger.kernel.org,
+        pmladek@suse.com, rostedt@goodmis.org, senozhatsky@chromium.org,
+        andriy.shevchenko@linux.intel.com, willy@infradead.org
+Subject: Re: [PATCH v2 23/28] mm/memcontrol.c: Convert to printbuf
+Message-ID: <YodKd/orDGzLeubj@dhcp22.suse.cz>
+References: <20220519172421.162394-1-kent.overstreet@gmail.com>
+ <20220519172421.162394-24-kent.overstreet@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 5987220012
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        KHOP_HELO_FCRDNS,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Stat-Signature: uszn4rq8yguwbgz4noujdmrr6hoayhn8
-X-Rspamd-Server: rspamout05
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX19k4XSOnPuhcFCvKet5IpLxGxgUIDlzBFA=
-X-HE-Tag: 1653033555-188531
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220519172421.162394-24-kent.overstreet@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-05-20 at 09:45 +0300, Dan Carpenter wrote:
-> Check for if the kcalloc() fails.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 6e977eaa8280 ("nvmem: brcm_nvram: parse NVRAM content into NVMEM cells")
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Acked-by: Rafał Miłecki <rafal@milecki.pl>
-> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> ---
-> v3: Update fixes tag
-> v2: I don't think anything changed in v2?  Added tags?
-[]
-> diff --git a/drivers/nvmem/brcm_nvram.c b/drivers/nvmem/brcm_nvram.c
-[]
-> @@ -97,6 +97,8 @@ static int brcm_nvram_parse(struct brcm_nvram *priv)
->  	len = le32_to_cpu(header.len);
->  
->  	data = kcalloc(1, len, GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
+On Thu 19-05-22 13:24:16, Kent Overstreet wrote:
+> This converts memory_stat_format() from seq_buf to printbuf. Printbuf is
+> simalar to seq_buf except that it heap allocates the string buffer:
+> here, we were already heap allocating the buffer with kmalloc() so the
+> conversion is trivial.
 
-trivia:
-
-Not sure the kcalloc(1. ..) is useful.
-
-It might be simpler using kzalloc, though given the memcpy_fromio
-below a kcalloc/kzalloc seems dubious and kmalloc could be used.
-
->  	memcpy_fromio(data, priv->base, len);
->  	data[len - 1] = '\0';
->  
-
-
+I have asked when you posted this last time around but I do not remember
+any response. Let me try again. Why do we want this?
+-- 
+Michal Hocko
+SUSE Labs

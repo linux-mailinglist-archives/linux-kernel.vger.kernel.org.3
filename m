@@ -2,119 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2525C52FF7D
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 22:47:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C9A452FF81
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 22:47:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346013AbiEUUqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 16:46:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50374 "EHLO
+        id S1346172AbiEUUri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 16:47:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245130AbiEUUqn (ORCPT
+        with ESMTP id S1345277AbiEUUrf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 16:46:43 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04AC63CA77
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 13:46:42 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id z11so931677pjc.3
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 13:46:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jwrHtlvoewbRftN79d2AI6EqYNBZAOLiqwA2wLK3D6Q=;
-        b=yo8vdBEEiaXPv5TVCm0uGTi08S+UDkH4S3uyX9hcU/H+SJpdwMgG9PHXxNMH935f8p
-         i6WWIGk0SNGhSfs9+xDFfvLPpCyMsN7BJOMKx+NydgVIrFWYPAl/cJq8TvoHYVSyenAV
-         3Sr5r9+2K9vLEva0N0rYD3b6SRPvMnmnYdvR6giHbX0V9JkXCEks1Tk992WQb3kHQuhq
-         SHWeBGgkpxSuwi+4l6G2aU8i7VPrsS+kAkZerHVF2EIB3wqnUPvxvoA2Hhp4wW+C+Jhq
-         WnJdklRqz1jR3uWC3DnY9EVCjhSdTtn3iMvzaTwu3cHwa7Ynpk2dzzILWv1JaPqHLeWv
-         /MOA==
+        Sat, 21 May 2022 16:47:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 43E3F41302
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 13:47:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653166053;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Q7KKV9nEc1O8xO71RHJAseDwiXENbXZxnjAzbqBmERg=;
+        b=HRVf4zVvWcIOoiM32MjsSxlronjRM6snQIzPw0mrLLYWZbcfFfAnBwJ6c8fodmA4CLCEXE
+        YTw5yOZyoFW6MRuvHwDAsl9rhdv8AH+zIAzvtVWh7dQuFPmcsNHzKJzzAq/eYXJt95KjhR
+        O4tdq8MmUjybZ9Mb1Koyeqs2GGu+xdY=
+Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
+ [209.85.210.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-484-8lhy7idoM5OcWvWmUphnyA-1; Sat, 21 May 2022 16:47:29 -0400
+X-MC-Unique: 8lhy7idoM5OcWvWmUphnyA-1
+Received: by mail-ot1-f70.google.com with SMTP id y97-20020a9d22ea000000b0060b0cc66316so180075ota.0
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 13:47:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=jwrHtlvoewbRftN79d2AI6EqYNBZAOLiqwA2wLK3D6Q=;
-        b=6ePFGvBguSgGWwCfkcdCfGZFUKcsAapHyVT2AcJ/QXb7Hp2A/SYyE221UI4DpEoQPz
-         4LLObgAiFi0tHLcup0a8cNXBMhsgEySs7h30ASW6Frbj0lLQ+zJdlwNlTZRkvg3UMsaX
-         GtOXvQNRSnuVi1tAY/IbiGtL9ADYZGqL/0SCT0OhExPCNxBgajRIrif+zdO/Kj4GmMVG
-         6mmfQ9n7QAE1HOcTbLrqAXdjaIn6mtBCgyxhhQM+xYm6wQrieQR8KS9YI4F9PIQli+/o
-         8ZYTkVq8b9nLp8z/K/2kh9331k5u3hfU77NqNbZixCBkZZ77iuW+a/udyflTaBqWRltF
-         S+jw==
-X-Gm-Message-State: AOAM5339miQ5ZqaaefNZwKdKJu1hKv0Gdoo8ERUDYRFTTrxttqldA4EU
-        Ij3T3bsQgq9Lx58cAfXePl1nXQ==
-X-Google-Smtp-Source: ABdhPJyRUhZLqKij6roy84fqUWFg5odT9HuZcCTJ9XBMKxnsSy3XKYFHF6vGp9GIlcchCijVMYJctg==
-X-Received: by 2002:a17:90b:4ac9:b0:1df:af66:1f3 with SMTP id mh9-20020a17090b4ac900b001dfaf6601f3mr18398951pjb.106.1653166001503;
-        Sat, 21 May 2022 13:46:41 -0700 (PDT)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id t13-20020a63b24d000000b003fa321e9463sm9039pgo.58.2022.05.21.13.46.40
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Q7KKV9nEc1O8xO71RHJAseDwiXENbXZxnjAzbqBmERg=;
+        b=YR+sjohXbqUDUaYsSPIAam1DM1m2saVS4NTUozP5sAC/xCaOcf5FzMfC/Y8F2ej9RI
+         7lPcq2SmRR82JBpydhON/vzkXjCcT7J0VwzgSDA2BJ/+XrkZpoLKZQ8EYmCZP9sgVFAh
+         UA+BqoTeXfgxeXuLLEJbGbNnHaaE0RqmC6HoEsizY0xdg+QyPKkP8IoHRB3yIgaDWJ37
+         wtEj0XdLzzJA7SoZZPzkXMqyKq6NeOdVAQGMggLYzo9LNSz0ipmtnZ3qSzSTiVhFHzVB
+         SMKpITOuRGaGoFU/5fpo15ob0DR+4Ki11sjFi8JV3ccdE5VGlkrYOUVrHNliNddSo/pm
+         NZ4Q==
+X-Gm-Message-State: AOAM530Ix+0tK+AEQu1yrC9yTOjtpkzOmDyl2SRjkroXe0yVChT3GuDK
+        BKQXPFBIACKHTy2/hD6pnvDeBHi90fesQy8/JOiH2EzuEOl/7SUcUFN1DiyayUqz69U0thKLo6O
+        Q/4b8q4/6byujLhMQD8erb86b
+X-Received: by 2002:a05:6870:5694:b0:f2:2ad8:a0ae with SMTP id p20-20020a056870569400b000f22ad8a0aemr2596743oao.71.1653166049067;
+        Sat, 21 May 2022 13:47:29 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxXZGmjsHsgboy8HLVJI93WiKGJ0RPTYTp8bJj+9c19UnhE7jTtNQ/lroFEhDPgmTztujXLFg==
+X-Received: by 2002:a05:6870:5694:b0:f2:2ad8:a0ae with SMTP id p20-20020a056870569400b000f22ad8a0aemr2596738oao.71.1653166048917;
+        Sat, 21 May 2022 13:47:28 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id d44-20020a056870d2ac00b000f218150563sm1751520oae.10.2022.05.21.13.47.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 May 2022 13:46:41 -0700 (PDT)
-Date:   Sat, 21 May 2022 13:46:41 -0700 (PDT)
-X-Google-Original-Date: Sat, 21 May 2022 11:33:11 PDT (-0700)
-Subject:     Re: [PATCH v2] RISC-V: Add CONFIG_{NON,}PORTABLE
-In-Reply-To: <YlgX5Jy1pjPPI+/u@x1-carbon>
-CC:     Arnd Bergmann <arnd@arndb.de>, linux-riscv@lists.infradead.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, linux-kernel@vger.kernel.org
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     Niklas.Cassel@wdc.com
-Message-ID: <mhng-0cc9ae4c-55ee-425b-9e83-41d3f3d4ad5f@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Sat, 21 May 2022 13:47:28 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     toke@toke.dk, kvalo@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] ath9k: remove setting of 'is_ext' parameter
+Date:   Sat, 21 May 2022 16:47:25 -0400
+Message-Id: <20220521204725.2539952-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 14 Apr 2022 05:47:33 PDT (-0700), Niklas.Cassel@wdc.com wrote:
-> On Wed, Apr 13, 2022 at 06:40:10PM -0700, Palmer Dabbelt wrote:
->> From: Palmer Dabbelt <palmer@rivosinc.com>
->> 
->> The RISC-V port has collected a handful of options that are
->> fundamentally non-portable.  To prevent users from shooting themselves
->> in the foot, hide them all behind a config entry that explicitly calls
->> out that non-portable binaries may be produced.
->> 
->> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
->> 
->> ---
->> 
->> Changes since v1:
->> 
->> * Fix a bunch of spelling mistakes.
->> * Move NONPORTABLE under the "Platform type" sub-heading.
->> * Fix the rv32i dependency.
->> ---
->>  arch/riscv/Kconfig | 28 ++++++++++++++++++++++++++--
->>  1 file changed, 26 insertions(+), 2 deletions(-)
->> 
->> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
->> index 5adcbd9b5e88..3d8eb44eb889 100644
->> --- a/arch/riscv/Kconfig
->> +++ b/arch/riscv/Kconfig
->> @@ -213,6 +213,21 @@ source "arch/riscv/Kconfig.erratas"
->>  
->>  menu "Platform type"
->>  
->> +config NONPORTABLE
->> +	bool "Allow configurations that result in non-portable kernels"
->> +	help
->> +	  RISC-V kernel binaries are compatible between all known systems
->> +	  whenever possible, but there are some use cases that can only be
->> +	  satisfied by configurations that result in kernel binaries that are
->> +	  not portable between systems.
->> +
->> +	  Selecting N does not guarantee kernels will be portable to all knows
->
-> nit: s/knows/known ?
+cppcheck reports
+[drivers/net/wireless/ath/ath9k/dfs.c:93]: (style) Assignment of function parameter has no effect outside the function.
 
-Thanks.  Turns out I've got a bit of an issue here and this results in the
-defconfigs breaking, so I've got ahead and sent a v3 that includes the
-necessary bits to make those work along with this fixed up.
+Both the is_ctl and the is_ext parameters are set in the if-else statement.
+But only is_ctl is used later, so setting is_ext is not needed and can be removed.
 
-> Kind regards,
-> Niklas
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/net/wireless/ath/ath9k/dfs.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/drivers/net/wireless/ath/ath9k/dfs.c b/drivers/net/wireless/ath/ath9k/dfs.c
+index acb9602aa464..47cdfb584eb0 100644
+--- a/drivers/net/wireless/ath/ath9k/dfs.c
++++ b/drivers/net/wireless/ath/ath9k/dfs.c
+@@ -89,8 +89,6 @@ static int ath9k_get_max_index_ht40(struct ath9k_dfs_fft_40 *fft,
+ 			int mag_upper = fft_max_magnitude(fft->upper_bins);
+ 			if (mag_upper > mag_lower)
+ 				is_ctl = false;
+-			else
+-				is_ext = false;
+ 		}
+ 	}
+ 	if (is_ctl)
+-- 
+2.27.0
+

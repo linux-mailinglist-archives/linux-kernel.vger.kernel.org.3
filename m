@@ -2,74 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE9A352F929
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 08:03:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EF6452F92D
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 08:07:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354654AbiEUGDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 02:03:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41028 "EHLO
+        id S1354651AbiEUGHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 02:07:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354651AbiEUGD1 (ORCPT
+        with ESMTP id S232311AbiEUGG7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 02:03:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E12B1A35BE;
-        Fri, 20 May 2022 23:03:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BF0D660B67;
-        Sat, 21 May 2022 06:03:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2554FC385A5;
-        Sat, 21 May 2022 06:03:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653113006;
-        bh=Jr0mndLpciSgpNuD1q2Hbj4m3KgZFsGNqnqW3Q3qQYE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=O6XjGXnHd58vQsEcjojwg4j+c2SIcvvsDpspEhzX1+cGuUq7LA7vjMv0H+UAK09ad
-         NOPrjn1cSA8/69MuGWxqWIEI+LPt/PlF4oDJ0l5MeUPkfda8c5oZ2Ii6/c+1SDu1xD
-         7q/4Fw3YmwdXlfXxzfdzStTEuSQaUmiwLmIKMz8QoWkYszhy7uaHRrBL/Qd7z9Jsu4
-         N1O5qG4gXAhsldC2fHaQfO9QTnc1iKj5wU3+utrIYezyxvtR8kWiF1UO4KRNtuGu2N
-         sGFcz4MDIOg1Dy67Y3DtPtMmCx6VG08+MmdemjgzWwOWmGp/KZPHZBiX39Xc5bPoQv
-         nBi9+GfaYZzPg==
-Date:   Sat, 21 May 2022 08:03:22 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Tyrone Ting <warp5tw@gmail.com>
-Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        venture@google.com, yuenn@google.com, benjaminfair@google.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        andriy.shevchenko@linux.intel.com, jarkko.nikula@linux.intel.com,
-        semen.protsenko@linaro.org, rafal@milecki.pl, sven@svenpeter.dev,
-        jsd@semihalf.com, jie.deng@intel.com, lukas.bulwahn@gmail.com,
-        arnd@arndb.de, olof@lixom.net, tali.perry@nuvoton.com,
-        Avi.Fishman@nuvoton.com, tomer.maimon@nuvoton.com,
-        KWLIU@nuvoton.com, JJLIU0@nuvoton.com, kfting@nuvoton.com,
-        openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 01/10] dt-bindings: i2c: npcm: support NPCM845
-Message-ID: <YoiAqhZBILoxFLih@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <warp5tw@gmail.com>, avifishman70@gmail.com,
-        tmaimon77@gmail.com, tali.perry1@gmail.com, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        andriy.shevchenko@linux.intel.com, jarkko.nikula@linux.intel.com,
-        semen.protsenko@linaro.org, rafal@milecki.pl, sven@svenpeter.dev,
-        jsd@semihalf.com, jie.deng@intel.com, lukas.bulwahn@gmail.com,
-        arnd@arndb.de, olof@lixom.net, tali.perry@nuvoton.com,
-        Avi.Fishman@nuvoton.com, tomer.maimon@nuvoton.com,
-        KWLIU@nuvoton.com, JJLIU0@nuvoton.com, kfting@nuvoton.com,
-        openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220517101142.28421-1-warp5tw@gmail.com>
- <20220517101142.28421-2-warp5tw@gmail.com>
+        Sat, 21 May 2022 02:06:59 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA57166090;
+        Fri, 20 May 2022 23:06:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1653113217; x=1684649217;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=7bhaqxDiFBknyai7yTBsu6ONxjwkZMnyE6Y5/QRSQGI=;
+  b=LtXr2OXmKrm4BfuqBNW1dEfRN3sbWzlXxWa7tJ+v6+EZLC/jtaKsmfsX
+   27Vjt78TLabxZKRK6j1vz2o4eldXnVh6JKlVWZ/D9LjVCPkkAEGx0y0p/
+   2mkNmieRdU+scSOse3n2daSPWZ52DmU6dBE4X0dTnKogIuj7eY/v+EHqG
+   w=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 20 May 2022 23:06:56 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 23:06:56 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 20 May 2022 23:06:56 -0700
+Received: from [10.79.43.230] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 20 May
+ 2022 23:06:54 -0700
+Subject: Re: [PATCH V2] remoteproc: qcom: pas: Add elf64 support to coredump
+To:     Yogesh Lal <quic_ylal@quicinc.com>, <bjorn.andersson@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1647355307-7612-1-git-send-email-quic_ylal@quicinc.com>
+From:   Sibi Sankar <quic_sibis@quicinc.com>
+Message-ID: <dc6d78d3-4c03-7422-d6c4-b0c7c5a5ae12@quicinc.com>
+Date:   Sat, 21 May 2022 11:36:50 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ik2fnGryMtvN0IPc"
-Content-Disposition: inline
-In-Reply-To: <20220517101142.28421-2-warp5tw@gmail.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <1647355307-7612-1-git-send-email-quic_ylal@quicinc.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,41 +67,133 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---ik2fnGryMtvN0IPc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 17, 2022 at 06:11:33PM +0800, Tyrone Ting wrote:
-> From: Tyrone Ting <kfting@nuvoton.com>
->=20
-> Add compatible and nuvoton,sys-mgr description for NPCM i2c module.
->=20
-> Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reviewed-by: Rob Herring <robh@kernel.org>
+On 3/15/22 8:11 PM, Yogesh Lal wrote:
+> This change adds elf64 coredump to the ADSP,CDSP and MPSS subsystems as
+> they will be 64 bit from sm8450 onward.
+> 
+> Signed-off-by: Yogesh Lal <quic_ylal@quicinc.com>
 
-Needs to wait until comments to patches 8+9 are addressed.
+Reviewed-by: Sibi Sankar <quic_sibis@quicinc.com>
 
-
---ik2fnGryMtvN0IPc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKIgKoACgkQFA3kzBSg
-KbYInw/+NJI+MgHsS8pu8S1ZhhCqigiS67hipxsM/AETBx+8O1wZmGjdc11F4mOX
-LrmCqzcGZzKiqIpJqe5vXMqegEKrXfM7dXWgmzntqtduuWXiaKAv1eRRGgms2eBo
-rNgJsdFQZIAY0mzvReEZuRgFuuwTNzmuIjzkMNzIDFpf9JXOfz2mBEM6Wjca35ZI
-5OBl72A1QyBE3PhCUSkBLhgqphQvWfKSLxxURSDCSUPHRiZXvzAjOKSaogIh7P+k
-/3qWSwHIXO6Ubxxz/enoez/0MODNCnaXJjCD9i99FW8DXRTeRkA9B3yFRtkdC98M
-5EDQFa8nOPOPhCzR6UKOWhOzIVlUqfGMwjhwRTXMxp+HS8Y5+6rSvlBdfcUcCSI5
-heEyH/V5S6gvVRa2bylaChEEbEfWFOh1mPapuQhUPSYZHcvmOtYPJKaFb6Az082n
-z7ULIW4aJz+3ECVs6m5XuTSUmilZ/cjJ6vk+QHE9ysnsAUXtH/kG7VSGvFbx2DNz
-lfLaf3csJqFlW+HnGlywHO3pYU6dEi1egJcw9OWVMfFbLgk2Dd/M0NtNM3yB6Rye
-M95znOVouWemcJor3A5XWy+RE+ymvpkdct6PNHmnhwSJWX2XhU+PGLuYYfM/oP/f
-Yg61uj74FUrNOUEFZ7ThugTmbj5UF93AF/VvDVRD9jxNBINvQZk=
-=DipO
------END PGP SIGNATURE-----
-
---ik2fnGryMtvN0IPc--
+> ---
+>   Updating commit message and minor code change.
+>   drivers/remoteproc/qcom_q6v5_pas.c | 68 +++++++++++++++++++++++++++++++++++---
+>   1 file changed, 64 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
+> index 1ae47cc..445ee3f 100644
+> --- a/drivers/remoteproc/qcom_q6v5_pas.c
+> +++ b/drivers/remoteproc/qcom_q6v5_pas.c
+> @@ -34,6 +34,7 @@ struct adsp_data {
+>   	const char *firmware_name;
+>   	int pas_id;
+>   	unsigned int minidump_id;
+> +	bool uses_elf64;
+>   	bool has_aggre2_clk;
+>   	bool auto_boot;
+>   
+> @@ -450,7 +451,11 @@ static int adsp_probe(struct platform_device *pdev)
+>   	}
+>   
+>   	rproc->auto_boot = desc->auto_boot;
+> -	rproc_coredump_set_elf_info(rproc, ELFCLASS32, EM_NONE);
+> +
+> +	if (desc->uses_elf64)
+> +		rproc_coredump_set_elf_info(rproc, ELFCLASS64, EM_NONE);
+> +	else
+> +		rproc_coredump_set_elf_info(rproc, ELFCLASS32, EM_NONE);
+>   
+>   	adsp = (struct qcom_adsp *)rproc->priv;
+>   	adsp->dev = &pdev->dev;
+> @@ -617,6 +622,24 @@ static const struct adsp_data sm8350_adsp_resource = {
+>   	.ssctl_id = 0x14,
+>   };
+>   
+> +static const struct adsp_data sm8450_adsp_resource = {
+> +	.crash_reason_smem = 423,
+> +	.firmware_name = "adsp.mdt",
+> +	.pas_id = 1,
+> +	.uses_elf64 = true,
+> +	.has_aggre2_clk = false,
+> +	.auto_boot = true,
+> +	.proxy_pd_names = (char*[]){
+> +		"lcx",
+> +		"lmx",
+> +		NULL
+> +	},
+> +	.load_state = "adsp",
+> +	.ssr_name = "lpass",
+> +	.sysmon_name = "adsp",
+> +	.ssctl_id = 0x14,
+> +};
+> +
+>   static const struct adsp_data msm8996_adsp_resource = {
+>   		.crash_reason_smem = 423,
+>   		.firmware_name = "adsp.mdt",
+> @@ -721,6 +744,24 @@ static const struct adsp_data sm8350_cdsp_resource = {
+>   	.ssctl_id = 0x17,
+>   };
+>   
+> +static const struct adsp_data sm8450_cdsp_resource = {
+> +	.crash_reason_smem = 601,
+> +	.firmware_name = "cdsp.mdt",
+> +	.pas_id = 18,
+> +	.uses_elf64 = true,
+> +	.has_aggre2_clk = false,
+> +	.auto_boot = true,
+> +	.proxy_pd_names = (char*[]){
+> +		"cx",
+> +		"mxc",
+> +		NULL
+> +	},
+> +	.load_state = "cdsp",
+> +	.ssr_name = "cdsp",
+> +	.sysmon_name = "cdsp",
+> +	.ssctl_id = 0x17,
+> +};
+> +
+>   static const struct adsp_data mpss_resource_init = {
+>   	.crash_reason_smem = 421,
+>   	.firmware_name = "modem.mdt",
+> @@ -755,6 +796,25 @@ static const struct adsp_data sc8180x_mpss_resource = {
+>   	.ssctl_id = 0x12,
+>   };
+>   
+> +static const struct adsp_data sm8450_mpss_resource = {
+> +	.crash_reason_smem = 421,
+> +	.firmware_name = "modem.mdt",
+> +	.pas_id = 4,
+> +	.minidump_id = 3,
+> +	.uses_elf64 = true,
+> +	.has_aggre2_clk = false,
+> +	.auto_boot = false,
+> +	.proxy_pd_names = (char*[]){
+> +		"cx",
+> +		"mss",
+> +		NULL
+> +	},
+> +	.load_state = "modem",
+> +	.ssr_name = "mpss",
+> +	.sysmon_name = "modem",
+> +	.ssctl_id = 0x12,
+> +};
+> +
+>   static const struct adsp_data slpi_resource_init = {
+>   		.crash_reason_smem = 424,
+>   		.firmware_name = "slpi.mdt",
+> @@ -879,10 +939,10 @@ static const struct of_device_id adsp_of_match[] = {
+>   	{ .compatible = "qcom,sm8350-cdsp-pas", .data = &sm8350_cdsp_resource},
+>   	{ .compatible = "qcom,sm8350-slpi-pas", .data = &sm8350_slpi_resource},
+>   	{ .compatible = "qcom,sm8350-mpss-pas", .data = &mpss_resource_init},
+> -	{ .compatible = "qcom,sm8450-adsp-pas", .data = &sm8350_adsp_resource},
+> -	{ .compatible = "qcom,sm8450-cdsp-pas", .data = &sm8350_cdsp_resource},
+> +	{ .compatible = "qcom,sm8450-adsp-pas", .data = &sm8450_adsp_resource},
+> +	{ .compatible = "qcom,sm8450-cdsp-pas", .data = &sm8450_cdsp_resource},
+>   	{ .compatible = "qcom,sm8450-slpi-pas", .data = &sm8350_slpi_resource},
+> -	{ .compatible = "qcom,sm8450-mpss-pas", .data = &mpss_resource_init},
+> +	{ .compatible = "qcom,sm8450-mpss-pas", .data = &sm8450_mpss_resource},
+>   	{ },
+>   };
+>   MODULE_DEVICE_TABLE(of, adsp_of_match);
+> 

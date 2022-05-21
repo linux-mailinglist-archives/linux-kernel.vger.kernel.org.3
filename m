@@ -2,136 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 777A252F809
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 05:29:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B06252F810
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 05:32:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239580AbiEUD2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 23:28:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52776 "EHLO
+        id S1350199AbiEUDbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 23:31:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230497AbiEUD2v (ORCPT
+        with ESMTP id S230497AbiEUDbw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 23:28:51 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96ABF17856B;
-        Fri, 20 May 2022 20:28:48 -0700 (PDT)
+        Fri, 20 May 2022 23:31:52 -0400
+X-Greylist: delayed 125755 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 20 May 2022 20:31:47 PDT
+Received: from azure-sdnproxy-2.icoremail.net (azure-sdnproxy.icoremail.net [52.175.55.52])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 8804956759;
+        Fri, 20 May 2022 20:31:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1653103728; x=1684639728;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0LDXVKVdyKs0GAHKkPbR5zauQdlYZvFTlw+hJZ4BOLc=;
-  b=PVahPzGcmj2rvYjndNmPbHYpETu2GMMHzIcM1fryh1vZ1vT3SInKsOfQ
-   F5OcxuED1VKd6Y4uPHGCBKyTy6r7f8a9coszg1zD38Uao8yn/6jmp/ZtC
-   wKrX3V7e+KOIEGSpUoDzLF/Z87mDofpZmi4TFHUgYza693nUM39nlXP+0
-   M=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 20 May 2022 20:28:48 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 20:28:48 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 20 May 2022 20:28:47 -0700
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 20 May 2022 20:28:43 -0700
-Date:   Sat, 21 May 2022 08:58:39 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Harsh Agarwal <quic_harshq@quicinc.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>
-Subject: Re: [RFC 1/2] dt-bindings: usb: dwc3: Add support for multiport
- related properties
-Message-ID: <20220521032839.GA15121@hu-pkondeti-hyd.qualcomm.com>
-References: <1652963695-10109-1-git-send-email-quic_harshq@quicinc.com>
- <1652963695-10109-2-git-send-email-quic_harshq@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <1652963695-10109-2-git-send-email-quic_harshq@quicinc.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        d=pku.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
+        Message-Id:In-Reply-To:References; bh=2+Vwb1brMiNx4lK7ZGRYMXQnW/
+        BV3o/Pw9gsvxTqgWw=; b=XFFi+A4zijJ9TWoxHBTKU9FwiZlN6swOxdnr60j7/v
+        zDXHm/YYvr1NNr9+blZmHLZu88wVRQFaolPNgGhh/X7S4+Cs9y2ocajsqyo5k4uK
+        zlYwtMJVIsiCWAEv2fgKG03m51t83Hnzaa7cPXQEhCXS4bycHVp4HqOM85t3olxZ
+        g=
+Received: from localhost (unknown [10.129.21.144])
+        by front02 (Coremail) with SMTP id 54FpogCHheX9XIhiUlHABg--.30761S2;
+        Sat, 21 May 2022 11:31:09 +0800 (CST)
+From:   Yongzhi Liu <lyz_cs@pku.edu.cn>
+To:     agross@kernel.org, bjorn.andersson@linaro.org, jic23@kernel.org,
+        lars@metafoo.de, svarbanov@mm-sol.com, iivanov@mm-sol.com,
+        jonathan.cameron@huawei.com
+Cc:     linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, fuyq@stu.pku.edu.cn,
+        Yongzhi Liu <lyz_cs@pku.edu.cn>
+Subject: [PATCH] hv_netvsc: Fix potential dereference of NULL pointer
+Date:   Fri, 20 May 2022 20:31:02 -0700
+Message-Id: <1653103862-36104-1-git-send-email-lyz_cs@pku.edu.cn>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <20220520181323.00002892@huawei.com>
+References: <20220520181323.00002892@huawei.com>
+X-CM-TRANSID: 54FpogCHheX9XIhiUlHABg--.30761S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZw4UGr4UCw1rtw47CF1Utrb_yoWfXrg_Cr
+        48uF1rZr17AFy8KrsrCF4rZFy0yw1vqr1fZrW2y3y3tFy7ZrWDX395Zr97JF4fWa1Uur9x
+        Cwn2qFW5AryIgjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb3AFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AK
+        wVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20x
+        vE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E
+        87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
+        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_
+        Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
+        xGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc2xSY4AK
+        6svPMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_Kr1UJr1l4I8I3I0E4IkC6x
+        0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2
+        zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF
+        4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWU
+        CwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
+        nIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
+X-CM-SenderInfo: irzqijirqukmo6sn3hxhgxhubq/1tbiAwEMBlPy7vKeCwAFsl
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_VALIDITY_RPBL,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Harsh,
+The return value of netvsc_devinfo_get()
+needs to be checked to avoid use of NULL
+pointer in case of an allocation failure.
 
-On Thu, May 19, 2022 at 06:04:54PM +0530, Harsh Agarwal wrote:
-> Added support for multiport, mport, num-ssphy and num-hsphy
-> properties. These properties are used to support devices having
-> a multiport controller.
-> 
-> Signed-off-by: Harsh Agarwal <quic_harshq@quicinc.com>
-> ---
->  .../devicetree/bindings/usb/snps,dwc3.yaml         | 55 ++++++++++++++++++++++
->  1 file changed, 55 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> index f4471f8..39c61483 100644
-> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> @@ -341,6 +341,35 @@ properties:
->        This port is used with the 'usb-role-switch' property  to connect the
->        dwc3 to type C connector.
->  
-> +  multiport:
-> +    description:
-> +      If a single USB controller supports multiple ports, then it's referred to as
-> +      a multiport controller. Each port of the multiport controller can support
-> +      either High Speed or Super Speed or both and have their own PHY phandles. Each
-> +      port is represented by "mport" node and all the "mport" nodes are grouped
-> +      together inside the "multiport" node where individual "mport" node defines the
-> +      PHYs supported by that port.
-> +    required:
-> +      - mport
-> +
-> +  num-hsphy:
-> +    description: Total number of HS-PHYs defined by the multiport controller.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +
-> +  num-ssphy:
-> +    description: Total number of SS-PHYs defined by the multiport controller.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +
-Do we need this properties at all? Atleast your next patch in this series is
-not parsing those properties. The idea I believe is to maintain the same
-usb-phy / phys semantics as of today. i.e we expect first PHY to be USB2 PHY
-and 2nd PHY to be USB3 PHY. Obviously, we need to make sure that all ports
-defined under multiport node are passing PHYs without any holes. For example,
-if the controller has 3 ports and passing phys for 1st and 3rd port is not
-acceptible. In any case we need to know the number of HS and SS PHYs so that 
-the GUSB2PHYCFG/GUSB3PIPECTL are configured correctly, irrespective of how we
-handle phy(s) in this node.
+Fixes: 0efeea5fb ("hv_netvsc: Add the support of hibernation")
 
-Can you please clarify on the need for num-hsphy and num-ssphy and what
-happens for USB2 only ports?
+Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
+---
+ drivers/net/hyperv/netvsc_drv.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-> +  mport:
-> +    description: Each mport node represents one port of the multiport controller.
-> +    patternProperties: "^mport@[0-9a-f]+$"
-> +    oneOf:
-> +       - required:
-> +         - usb-phy
-> +       - required:
-> +          - phys
-> +          - phy-names
-> +
+diff --git a/drivers/net/hyperv/netvsc_drv.c b/drivers/net/hyperv/netvsc_drv.c
+index fde1c49..b1dece6 100644
+--- a/drivers/net/hyperv/netvsc_drv.c
++++ b/drivers/net/hyperv/netvsc_drv.c
+@@ -2671,7 +2671,10 @@ static int netvsc_suspend(struct hv_device *dev)
+ 
+ 	/* Save the current config info */
+ 	ndev_ctx->saved_netvsc_dev_info = netvsc_devinfo_get(nvdev);
+-
++	if (!ndev_ctx->saved_netvsc_dev_info) {
++		ret = -ENOMEM;
++		goto out;
++	}
+ 	ret = netvsc_detach(net, nvdev);
+ out:
+ 	rtnl_unlock();
+-- 
+2.7.4
 
-Thanks,
-Pavan

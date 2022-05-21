@@ -2,312 +2,295 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAE3B52F786
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 04:19:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D4F652F78B
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 04:23:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239195AbiEUCTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 22:19:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55292 "EHLO
+        id S239304AbiEUCXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 22:23:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232004AbiEUCTe (ORCPT
+        with ESMTP id S232004AbiEUCXH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 22:19:34 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F8D195EAB
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 19:19:31 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id gh17so5514707ejc.6
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 19:19:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=sQlK8EPAE1nmulIIgv5jRhcGPrhGOTgo4V3rKxqmaH4=;
-        b=rnCv4bfcViQifT0EnuLazBJP+RPyjJedUNb+XaGcQSXhNUZkgOYt7ievywxjV1c2EE
-         MJycHcYkWvToUmN9fth48vtDpbQ8998jU959vlLAp8q+kxszB9zEEIou0KXawjZ0tTVy
-         gIKIwNNtpdmIBb2uKjvJhKJoClgHdIw4qEo3rWw4wDzrYVOCXfuwX/+junNVwel4K6KY
-         DZMasQmbk8jAgtbeKOxbDF7OHmI6gInClz5ODkttVNJ9T4h+dbgBVX+8jOUQt572JzP/
-         q1QAJRiIxjo0ghtkLxdrCVDrXpSQXDQivzghlBw2O5NyNSWzB32vrSjS7mHu9XuiTqWp
-         PU3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=sQlK8EPAE1nmulIIgv5jRhcGPrhGOTgo4V3rKxqmaH4=;
-        b=xFScdTmMf+0hrEwr3PtUIEP2zQb74FzZ865aGW54vp/fO+G8KE7WdpuutWeGvfsPdf
-         NjUZw0ucESjc2LBY2Bqb1e8C/hDMZ72Ymz5VI6QrF8tYJcY0avDtY7l/oxzigDj4+gNa
-         tygQ1/WKQy0kbCEj5hPfb1veG/iUvmXQd7hAiya7aNS7wG9+/cVkf/0Ls0Ebok0HIffy
-         FOkVbeg0v0JeJWET8qPo154qxSmAE42D0HgjlKyEpQTPxuk9vOqgzUc3lBNsuTrW85ZT
-         mqoN8tLAcw0//zcEpi12KHNcCLRNFRu/DerDzomFAk/+EZaqf6r7CCKtiLXOGzbQ+ZKo
-         XGJQ==
-X-Gm-Message-State: AOAM532zYpGOpUSdWrzDea4ndUKSBcv0bHft0yGMG28x5v6TeA3qjyoE
-        293FdAndPf21gElq1y9K+UCNdkOOG5Fny45zr/EzBQ==
-X-Google-Smtp-Source: ABdhPJzma20Jw8z2jDhsEaXVdc6gwk7GyQZeyDajs1P9GPAR8KSzzRz5P+0if2lufkSUvXOh/v8I91ajvbIFbhkcjPg=
-X-Received: by 2002:a17:906:6a0f:b0:6f5:15cf:2e5 with SMTP id
- qw15-20020a1709066a0f00b006f515cf02e5mr10844216ejc.584.1653099569797; Fri, 20
- May 2022 19:19:29 -0700 (PDT)
+        Fri, 20 May 2022 22:23:07 -0400
+Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B780FD35B;
+        Fri, 20 May 2022 19:23:04 -0700 (PDT)
+Received: by mail.hallyn.com (Postfix, from userid 1001)
+        id 24B9766E; Fri, 20 May 2022 21:23:02 -0500 (CDT)
+Date:   Fri, 20 May 2022 21:23:02 -0500
+From:   "Serge E. Hallyn" <serge@hallyn.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, christian.brauner@ubuntu.com,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
+        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        jpenumak@redhat.com, Christian Brauner <brauner@kernel.org>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>
+Subject: Re: [PATCH v12 02/26] securityfs: Extend securityfs with namespacing
+ support
+Message-ID: <20220521022302.GA8575@mail.hallyn.com>
+References: <20220420140633.753772-1-stefanb@linux.ibm.com>
+ <20220420140633.753772-3-stefanb@linux.ibm.com>
 MIME-Version: 1.0
-References: <20220510235653.933868-1-tjmercier@google.com> <20220519093034.541481-1-eballetbo@kernel.org>
-In-Reply-To: <20220519093034.541481-1-eballetbo@kernel.org>
-From:   "T.J. Mercier" <tjmercier@google.com>
-Date:   Fri, 20 May 2022 19:19:18 -0700
-Message-ID: <CABdmKX17aS3nh0UHf+FoM3VPdvMn5NvrZTkGSisznDgjZyeQxw@mail.gmail.com>
-Subject: Re: [PATCH v7 1/6] gpu: rfc: Proposal for a GPU cgroup controller
-To:     eballetbo@kernel.org
-Cc:     Zefan Li <lizefan.x@bytedance.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tejun Heo <tj@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Todd Kjos <tkjos@android.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Liam Mark <lmark@codeaurora.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Laura Abbott <labbott@redhat.com>, cgroups@vger.kernel.org,
-        kernel-team@android.com, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        Carlos Llamas <cmllamas@google.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Kenny.Ho@amd.com,
-        linux-kselftest@vger.kernel.org,
-        Kalesh Singh <kaleshsingh@google.com>,
-        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        John Stultz <jstultz@google.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220420140633.753772-3-stefanb@linux.ibm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 2:31 AM <eballetbo@kernel.org> wrote:
->
-> From: Enric Balletbo i Serra <eballetbo@kernel.org>
->
-> On Tue, 10 May 2022 23:56:45 +0000, T.J. Mercier wrote:
-> > From: Hridya Valsaraju <hridya@google.com>
-> >
->
-> Hi T.J. Mercier,
->
-> Many thanks for this effort. It caught my attention because we might have=
- a use
-> case where this feature can be useful for us. Hence I'd like to jump and =
-be part
-> of the discussion, I'd really appreciate if you can cc'me for next versio=
-ns.
->
-Hi Enric,
+On Wed, Apr 20, 2022 at 10:06:09AM -0400, Stefan Berger wrote:
+> Enable multiple instances of securityfs by keying each instance with a
+> pointer to the user namespace it belongs to.
+> 
+> Since we do not need the pinning of the filesystem for the virtualization
+> case, limit the usage of simple_pin_fs() and simpe_release_fs() to the
+> case when the init_user_ns is active. This simplifies the cleanup for the
+> virtualization case where usage of securityfs_remove() to free dentries
+> is therefore not needed anymore.
+> 
+> For the initial securityfs, i.e. the one mounted in the host userns mount,
+> nothing changes. The rules for securityfs_remove() are as before and it is
+> still paired with securityfs_create(). Specifically, a file created via
+> securityfs_create_dentry() in the initial securityfs mount still needs to
+> be removed by a call to securityfs_remove(). Creating a new dentry in the
+> initial securityfs mount still pins the filesystem like it always did.
+> Consequently, the initial securityfs mount is not destroyed on
+> umount/shutdown as long as at least one user of it still has dentries that
+> it hasn't removed with a call to securityfs_remove().
+> 
+> Prevent mounting of an instance of securityfs in another user namespace
+> than it belongs to. Also, prevent accesses to files and directories by
+> a user namespace that is neither the user namespace it belongs to
+> nor an ancestor of the user namespace that the instance of securityfs
+> belongs to. Do not prevent access if securityfs was bind-mounted and
+> therefore the init_user_ns is the owning user namespace.
+> 
+> Suggested-by: Christian Brauner <brauner@kernel.org>
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+> 
+> ---
+> v11:
+>  - Formatted comment's first line to be '/*'
+> ---
+>  security/inode.c | 73 ++++++++++++++++++++++++++++++++++++++++--------
+>  1 file changed, 62 insertions(+), 11 deletions(-)
+> 
+> diff --git a/security/inode.c b/security/inode.c
+> index 13e6780c4444..84c9396792a9 100644
+> --- a/security/inode.c
+> +++ b/security/inode.c
+> @@ -21,9 +21,38 @@
+>  #include <linux/security.h>
+>  #include <linux/lsm_hooks.h>
+>  #include <linux/magic.h>
+> +#include <linux/user_namespace.h>
+>  
+> -static struct vfsmount *mount;
+> -static int mount_count;
+> +static struct vfsmount *init_securityfs_mount;
+> +static int init_securityfs_mount_count;
+> +
+> +static int securityfs_permission(struct user_namespace *mnt_userns,
+> +				 struct inode *inode, int mask)
+> +{
+> +	int err;
+> +
+> +	err = generic_permission(&init_user_ns, inode, mask);
+> +	if (!err) {
+> +		/*
+> +		 * Unless bind-mounted, deny access if current_user_ns() is not
+> +		 * ancestor.
 
-Sure thing, thanks for engaging.
+This comment has confused me the last few times I looked at this.  I see
+now you're using "bind-mounted" as a shortcut for saying "bind mounted from
+the init_user_ns into a child_user_ns container".  I do think that needs
+to be made clearer in this comment.
 
-> While reading the full patchset I was a bit confused about the status of =
-this
-> proposal. In fact, the rfc in the subject combined with the number of ite=
-rations
-> (already seven) confused me. So I'm wondering if this is a RFC or a 'real=
-'
-> proposal already that you want to land.
->
-I'm sorry about this. I'm quite new to kernel development (this is my
-first set of patches) and the point at which I should have
-transitioned from RFC to PATCH was not clear to me. The status now
-could be described as adding initial support for accounting that would
-be built upon to expand what is tracked (more than just buffers from
-heaps) and to add support for limiting. I see you have also commented
-about this below.
+Should the init_user_ns really be special here?  What if I'm running a
+first level container with uptodate userspace that mounts its own
+securityfs, but in that i want to run a nested older userspace that
+bind mounts the parent securityfs?  Is there a good reason to deny that?
 
-> If this is still a RFC I'd remove the 'rfc: Proposal' and use the more ca=
-nonical
-> way that is put RFC in the []. I.e [PATCH RFC v7] cgroup: Add a GPU cgrou=
-p
-> controller.
->
-> If it is not, I'd just remove the RFC and make the subject in the cgroup
-> subsystem instead of the gpu. I.E [PATCH v7] cgroup: Add a GPU cgroup
->
-> I don't want to nitpick but IMO that helps new people to join to the hist=
-ory of
-> the patchset.
->
-> > This patch adds a proposal for a new GPU cgroup controller for
-> > accounting/limiting GPU and GPU-related memory allocations.
->
-> As far as I can see the only thing that is adding here is the accounting,=
- so I'd
-> remove any reference to limiting and just explain what the patch really
-> introduces, not the future, otherwise is confusing an you expect more tha=
-n the
-> patch really does.
->
-> It is important maintain the commit message sync with what the patch real=
-ly
-> does.
->
-Acknowledged, thank you.
+It would seem to me the better check would be
 
-> > The proposed controller is based on the DRM cgroup controller[1] and
-> > follows the design of the RDMA cgroup controller.
-> >
-> > The new cgroup controller would:
-> > * Allow setting per-device limits on the total size of buffers
-> >   allocated by device within a cgroup.
-> > * Expose a per-device/allocator breakdown of the buffers charged to a
-> >   cgroup.
-> >
-> > The prototype in the following patches is only for memory accounting
-> > using the GPU cgroup controller and does not implement limit setting.
-> >
-> > [1]: https://lore.kernel.org/amd-gfx/20210126214626.16260-1-brian.welty=
-@intel.com/
-> >
->
-> I think this is material for the cover more than the commit message. When=
- I read
-> this I was expecting all this in this patch.
->
-> > Signed-off-by: Hridya Valsaraju <hridya@google.com>
-> > Signed-off-by: T.J. Mercier <tjmercier@google.com>
-> > ---
-> > v7 changes
-> > Remove comment about duplicate name rejection which is not relevant to
-> > cgroups users per Michal Koutn=C3=BD.
-> >
-> > v6 changes
-> > Move documentation into cgroup-v2.rst per Tejun Heo.
-> >
-> > v5 changes
-> > Drop the global GPU cgroup "total" (sum of all device totals) portion
-> > of the design since there is no currently known use for this per
-> > Tejun Heo.
-> >
-> > Update for renamed functions/variables.
-> >
-> > v3 changes
-> > Remove Upstreaming Plan from gpu-cgroup.rst per John Stultz.
-> >
-> > Use more common dual author commit message format per John Stultz.
-> > ---
-> >  Documentation/admin-guide/cgroup-v2.rst | 23 +++++++++++++++++++++++
-> >  1 file changed, 23 insertions(+)
-> >
-> > diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/ad=
-min-guide/cgroup-v2.rst
-> > index 69d7a6983f78..2e1d26e327c7 100644
-> > --- a/Documentation/admin-guide/cgroup-v2.rst
-> > +++ b/Documentation/admin-guide/cgroup-v2.rst
-> > @@ -2352,6 +2352,29 @@ first, and stays charged to that cgroup until th=
-at resource is freed. Migrating
-> >  a process to a different cgroup does not move the charge to the destin=
-ation
-> >  cgroup where the process has moved.
-> >
-> > +
-> > +GPU
-> > +---
-> > +
-> > +The GPU controller accounts for device and system memory allocated by =
-the GPU
-> > +and related subsystems for graphics use. Resource limits are not curre=
-ntly
-> > +supported.
-> > +
-> > +GPU Interface Files
-> > +~~~~~~~~~~~~~~~~~~~~
-> > +
-> > +  gpu.memory.current
-> > +     A read-only file containing memory allocations in flat-keyed form=
-at. The key
-> > +     is a string representing the device name. The value is the size o=
-f the memory
-> > +     charged to the device in bytes. The device names are globally uni=
-que.::
-> > +
-> > +       $ cat /sys/kernel/fs/cgroup1/gpu.memory.current
->
-> I think this is outdated, you are using cgroup v2, right?
->
-Oh "cgroup1" was meant to refer to the name of a cgroup, not to cgroup
-v1. A different name would be better here.
+	if (!is_original_mounter_of(current_user_ns, inode->i_sb->s_user_ns) &&
+	     !in_userns(current_user_ns(), inode->i_sb->s_user_ns))
+		err = -EACCESS;
 
-> > +       dev1 4194304
-> > +       dev2 104857600
-> > +
->
-> When I applied the full series I was expecting see the memory allocated b=
-y the
-> gpu devices or users of the gpu in this file but, after some experiments,=
- what I
-> saw is the memory allocated via any process that uses the dma-buf heap AP=
-I (not
-> necessary gpu users). For example, if you create a small program that all=
-ocates
-> some memory via the dma-buf heap API and then you cat the gpu.memory.curr=
-ent
-> file, you see that the memory accounted is not related to the gpu.
->
-> This is really confusing, looks to me that the patches evolved to account=
- memory
-> that is not really related to the GPU but allocated vi the dma-buf heap A=
-PI. IMO
-> the name of the file should be according to what really does to avoid
-> confusions.
->
-> So, is this patchset meant to be GPU specific? If the answer is yes that'=
-s good
-> but that's not what I experienced. I'm missing something?
->
-There are two reasons this exists as a GPU controller. The first is
-that most graphics buffers in Android come from these heaps, and this
-is primarily what we are interested in accounting. However the idea is
-to account other graphics memory types more commonly used on desktop
-under different resource names with this controller. The second reason
-predates my involvement, but my understanding is that Hridya tried to
-upstream heap tracking via tracepoints but was asked to try to use GPU
-cgroups instead, which led to her initial version of this series. So
-this is a starting point. Any commentary on why this controller would
-our would not work for any use cases you have in mind (provided the
-appropriate charging/uncharging code is plugged in) would be
-appreciated!
+the is_original_mounter_of() would require the user_ns to cache first
+its parent securityfs userns, and, when a task in the user_ns mounts
+securityfs, then cache its own userns.  (without a reference).
+If current_user_ns() has mounted a securityfs for a user_ns other than
+inode->i_sb->s_user_ns (or init_user_ns), then reject the mount.
+Otherwise check current_user_ns()->parent, etc, until init_user_ns.
+If you reach init_user_ns, or an ns which mounted inode->i_sb->s_user_ns,
+then allow, else deny.
 
-By the way, discussion around earlier proposals on this topic
-suggested the "G" should be for "general" instead of "graphics", I
-think in recognition of the breadth of resources that would eventually
-be tracked by it.
-https://lore.kernel.org/amd-gfx/YBp4ap+1l2KWbqEJ@phenom.ffwll.local/
+It's the kind of special casing we've worked hard to avoid in other
+namespaces.
 
+> +		 */
+> +		if (inode->i_sb->s_user_ns != &init_user_ns &&
+> +		    !in_userns(current_user_ns(), inode->i_sb->s_user_ns))
+> +			err = -EACCES;
+> +	}
+> +
+> +	return err;
+> +}
+> +
+> +static const struct inode_operations securityfs_dir_inode_operations = {
+> +	.permission	= securityfs_permission,
+> +	.lookup		= simple_lookup,
+> +};
+> +
+> +static const struct inode_operations securityfs_file_inode_operations = {
+> +	.permission	= securityfs_permission,
+> +};
+>  
+>  static void securityfs_free_inode(struct inode *inode)
+>  {
+> @@ -40,20 +69,25 @@ static const struct super_operations securityfs_super_operations = {
+>  static int securityfs_fill_super(struct super_block *sb, struct fs_context *fc)
+>  {
+>  	static const struct tree_descr files[] = {{""}};
+> +	struct user_namespace *ns = fc->user_ns;
+>  	int error;
+>  
+> +	if (WARN_ON(ns != current_user_ns()))
+> +		return -EINVAL;
+> +
+>  	error = simple_fill_super(sb, SECURITYFS_MAGIC, files);
+>  	if (error)
+>  		return error;
+>  
+>  	sb->s_op = &securityfs_super_operations;
+> +	sb->s_root->d_inode->i_op = &securityfs_dir_inode_operations;
+>  
+>  	return 0;
+>  }
+>  
+>  static int securityfs_get_tree(struct fs_context *fc)
+>  {
+> -	return get_tree_single(fc, securityfs_fill_super);
+> +	return get_tree_keyed(fc, securityfs_fill_super, fc->user_ns);
+>  }
+>  
+>  static const struct fs_context_operations securityfs_context_ops = {
+> @@ -71,6 +105,7 @@ static struct file_system_type fs_type = {
+>  	.name =		"securityfs",
+>  	.init_fs_context = securityfs_init_fs_context,
+>  	.kill_sb =	kill_litter_super,
+> +	.fs_flags =	FS_USERNS_MOUNT,
+>  };
+>  
+>  /**
+> @@ -109,6 +144,7 @@ static struct dentry *securityfs_create_dentry(const char *name, umode_t mode,
+>  					const struct file_operations *fops,
+>  					const struct inode_operations *iops)
+>  {
+> +	struct user_namespace *ns = current_user_ns();
+>  	struct dentry *dentry;
+>  	struct inode *dir, *inode;
+>  	int error;
+> @@ -118,12 +154,19 @@ static struct dentry *securityfs_create_dentry(const char *name, umode_t mode,
+>  
+>  	pr_debug("securityfs: creating file '%s'\n",name);
+>  
+> -	error = simple_pin_fs(&fs_type, &mount, &mount_count);
+> -	if (error)
+> -		return ERR_PTR(error);
+> +	if (ns == &init_user_ns) {
+> +		error = simple_pin_fs(&fs_type, &init_securityfs_mount,
+> +				      &init_securityfs_mount_count);
 
+So ...  it's less work for the kernel to skip the simple_pin_fs()
+here, but it's more code, and more confusing code, to skip it.
 
-> If the answer is that evolved to track dma-buf heap allocations I think a=
-ll the
-> patches need some rework to adapt the wording as right now, the gpu wordi=
-ng
-> seems confusing to me.
->
-> > +     The device name string is set by a device driver when it register=
-s with the
-> > +     GPU cgroup controller to participate in resource accounting.
-> > +
-> >  Others
-> >  ------
-> >
-> >
-> Thanks,
->  Enric
->
+So I just want to ask, to make sure:  is it worth it?  Or should
+it just be done for all namespaces here (and below and for release),
+for shorter, simpler, easier to read and grok code?
+
+> +		if (error)
+> +			return ERR_PTR(error);
+> +	}
+>  
+> -	if (!parent)
+> -		parent = mount->mnt_root;
+> +	if (!parent) {
+> +		if (ns == &init_user_ns)
+> +			parent = init_securityfs_mount->mnt_root;
+> +		else
+> +			return ERR_PTR(-EINVAL);
+> +	}
+>  
+>  	dir = d_inode(parent);
+>  
+> @@ -148,7 +191,7 @@ static struct dentry *securityfs_create_dentry(const char *name, umode_t mode,
+>  	inode->i_atime = inode->i_mtime = inode->i_ctime = current_time(inode);
+>  	inode->i_private = data;
+>  	if (S_ISDIR(mode)) {
+> -		inode->i_op = &simple_dir_inode_operations;
+> +		inode->i_op = &securityfs_dir_inode_operations;
+>  		inode->i_fop = &simple_dir_operations;
+>  		inc_nlink(inode);
+>  		inc_nlink(dir);
+> @@ -156,6 +199,7 @@ static struct dentry *securityfs_create_dentry(const char *name, umode_t mode,
+>  		inode->i_op = iops ? iops : &simple_symlink_inode_operations;
+>  		inode->i_link = data;
+>  	} else {
+> +		inode->i_op = &securityfs_file_inode_operations;
+>  		inode->i_fop = fops;
+>  	}
+>  	d_instantiate(dentry, inode);
+> @@ -167,7 +211,9 @@ static struct dentry *securityfs_create_dentry(const char *name, umode_t mode,
+>  	dentry = ERR_PTR(error);
+>  out:
+>  	inode_unlock(dir);
+> -	simple_release_fs(&mount, &mount_count);
+> +	if (ns == &init_user_ns)
+> +		simple_release_fs(&init_securityfs_mount,
+> +				  &init_securityfs_mount_count);
+>  	return dentry;
+>  }
+>  
+> @@ -293,11 +339,14 @@ EXPORT_SYMBOL_GPL(securityfs_create_symlink);
+>   */
+>  void securityfs_remove(struct dentry *dentry)
+>  {
+> +	struct user_namespace *ns;
+>  	struct inode *dir;
+>  
+>  	if (!dentry || IS_ERR(dentry))
+>  		return;
+>  
+> +	ns = dentry->d_sb->s_user_ns;
+> +
+>  	dir = d_inode(dentry->d_parent);
+>  	inode_lock(dir);
+>  	if (simple_positive(dentry)) {
+> @@ -310,7 +359,9 @@ void securityfs_remove(struct dentry *dentry)
+>  		dput(dentry);
+>  	}
+>  	inode_unlock(dir);
+> -	simple_release_fs(&mount, &mount_count);
+> +	if (ns == &init_user_ns)
+> +		simple_release_fs(&init_securityfs_mount,
+> +				  &init_securityfs_mount_count);
+>  }
+>  EXPORT_SYMBOL_GPL(securityfs_remove);
+>  
+> -- 
+> 2.34.1

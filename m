@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04BE452FBE9
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:29:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E62C52FBEC
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:29:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356901AbiEULXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 07:23:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50188 "EHLO
+        id S1356751AbiEULXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 07:23:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353244AbiEULNv (ORCPT
+        with ESMTP id S231415AbiEULNn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 07:13:51 -0400
+        Sat, 21 May 2022 07:13:43 -0400
 Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA2EF74B2;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E63BED7BC;
         Sat, 21 May 2022 04:12:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=inria.fr; s=dc;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=lfkmiRjm0rrMRH5/qVszM4Nbsakjf+VgxH/LVjz5wvc=;
-  b=N7ZFZHpoZF5kMF0I8jm8ws+3zweEwjnhZYpBt2bhpPPocUnCD1JpjWeT
-   ASHxqX7uwDLUNLUvBn4Go3/TuLmQ2HpB2BD3mGe4m3zrLrKi+Xxs0By9K
-   6OFHNBJUjtMBmtS2v0kZJpm12cLg4Gb14gd6/zhvqfY5WRls9EUq6RfS5
-   c=;
+  bh=D055PQLkjddNqPyjiz+oZSg3+qohn0RJAVU0RfJ3zO8=;
+  b=D1DYV78fCgx2bJAjVsccQuSTWgCm1Tp8hYqxlyeysjBjvuNrzOWBrRQN
+   vfB/DGNaSQR3mf9pRqHzwrxdD4JSEJs6a8nukC7d/5Xjdw452Zh5dHgXa
+   h2+Y9sax3ICIC38MbzjcBsD9edg9KKz1Rnop57kU1Fn+/BZnGCHvZ5JuP
+   U=;
 Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
 X-IronPort-AV: E=Sophos;i="5.91,242,1647298800"; 
-   d="scan'208";a="14727986"
+   d="scan'208";a="14727987"
 Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
   by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 13:12:06 +0200
 From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Ariel Elior <aelior@marvell.com>
-Cc:     kernel-janitors@vger.kernel.org,
-        Manish Chopra <manishc@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+To:     Liam Girdwood <lgirdwood@gmail.com>
+Cc:     kernel-janitors@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] qed: fix typos in comments
-Date:   Sat, 21 May 2022 13:11:28 +0200
-Message-Id: <20220521111145.81697-78-Julia.Lawall@inria.fr>
+Subject: [PATCH] ASoC: amd: acp: fix typo in comment
+Date:   Sat, 21 May 2022 13:11:29 +0200
+Message-Id: <20220521111145.81697-79-Julia.Lawall@inria.fr>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -54,40 +51,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Spelling mistakes (triple letters) in comments.
+Spelling mistake (triple letters) in comment.
 Detected with the help of Coccinelle.
 
 Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
 ---
- drivers/net/ethernet/qlogic/qed/qed_dbg_hsi.h |    2 +-
- drivers/net/ethernet/qlogic/qed/qed_vf.h      |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ sound/soc/amd/acp/acp-pdm.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/qlogic/qed/qed_dbg_hsi.h b/drivers/net/ethernet/qlogic/qed/qed_dbg_hsi.h
-index 9d5a0c9e1ca0..f6cd1b3efdfd 100644
---- a/drivers/net/ethernet/qlogic/qed/qed_dbg_hsi.h
-+++ b/drivers/net/ethernet/qlogic/qed/qed_dbg_hsi.h
-@@ -1282,7 +1282,7 @@ void qed_dbg_mcp_trace_set_meta_data(struct qed_hwfn *p_hwfn,
-  * @results_buf_size: (OUT) required buffer size (in bytes) for the parsed
-  *                    results.
-  *
-- * Return: Rrror if the parsing fails, ok otherwise.
-+ * Return: Error if the parsing fails, ok otherwise.
-  */
- enum dbg_status qed_get_mcp_trace_results_buf_size(struct qed_hwfn *p_hwfn,
- 						   u32 *dump_buf,
-diff --git a/drivers/net/ethernet/qlogic/qed/qed_vf.h b/drivers/net/ethernet/qlogic/qed/qed_vf.h
-index 306b5f4bc632..2bd51a41ce8d 100644
---- a/drivers/net/ethernet/qlogic/qed/qed_vf.h
-+++ b/drivers/net/ethernet/qlogic/qed/qed_vf.h
-@@ -225,7 +225,7 @@ struct pfvf_start_queue_resp_tlv {
- };
+diff --git a/sound/soc/amd/acp/acp-pdm.c b/sound/soc/amd/acp/acp-pdm.c
+index 424c6e0bb9d6..7a0b26a30051 100644
+--- a/sound/soc/amd/acp/acp-pdm.c
++++ b/sound/soc/amd/acp/acp-pdm.c
+@@ -174,7 +174,7 @@ static void acp_dmic_dai_shutdown(struct snd_pcm_substream *substream,
+ 	struct acp_dev_data *adata = dev_get_drvdata(dev);
+ 	u32 ext_int_ctrl;
  
- /* Extended queue information - additional index for reference inside qzone.
-- * If commmunicated between VF/PF, each TLV relating to queues should be
-+ * If communicated between VF/PF, each TLV relating to queues should be
-  * extended by one such [or have a future base TLV that already contains info].
-  */
- struct vfpf_qid_tlv {
+-	/* Disable DMIC interrrupts */
++	/* Disable DMIC interrupts */
+ 	ext_int_ctrl = readl(adata->acp_base + ACP_EXTERNAL_INTR_CNTL);
+ 	ext_int_ctrl |= ~PDM_DMA_INTR_MASK;
+ 	writel(ext_int_ctrl, adata->acp_base + ACP_EXTERNAL_INTR_CNTL);
 

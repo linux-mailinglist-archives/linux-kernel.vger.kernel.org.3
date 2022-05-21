@@ -2,88 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C76252F6CC
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 02:31:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A96F152F6D2
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 02:32:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352598AbiEUAaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 20:30:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54434 "EHLO
+        id S1354227AbiEUAbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 20:31:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235582AbiEUAaO (ORCPT
+        with ESMTP id S231552AbiEUAbv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 20:30:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B25B31A90E1;
-        Fri, 20 May 2022 17:30:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D93861E79;
-        Sat, 21 May 2022 00:30:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A29B6C34119;
-        Sat, 21 May 2022 00:30:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653093012;
-        bh=romPb1m7BCaZKliDlGaR9szxJOdOcNEB+jJBTqlaxZM=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Iaj2Smbi2urjtd4iTA6wKfARRCKtlZujdu7lKCLPtJVKhGBpvYDCQaeNUhXo7HuPS
-         eGR/ZncPbvcLm7DAwJkyLmpydxG/S1h89mFotZ8Gmmq8ZoJ4Db3pVZ7eoR7XW3Nxhw
-         J5gvXmHABvRsC/WtWm9QVH+RGoUPY1P5hl/HB3bflf94Hf2Xr0lH8uFAsmezDfK8Ya
-         LEPp5vR/nUPutiXz0KCS4xtRo4hgBGQevbdjkiJpLiNUv1XNz/jEQn17QPChrgkN82
-         DRbQp2qkJI2DR0yCb4bMZhBqxLb6rkV8H2yZJKlazYA0XMZejJW4lurrs6olrssVZv
-         lzqtEKlce0yCg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8CDD4F03935;
-        Sat, 21 May 2022 00:30:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 20 May 2022 20:31:51 -0400
+Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DCE91966A0
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 17:31:50 -0700 (PDT)
+Date:   Fri, 20 May 2022 17:31:43 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1653093108;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/PvswcI13Yf4q0l94RXQB7xvET7jRmzJANLdVyC6U+A=;
+        b=BZxSssMM56O+65UCUfQpz9fJkEhid3CADJGmnG88vw0ZXU6GVY5FCSTCnUZRxyQSJ9nhcC
+        1kJLsZoU+x8BW/bPXcJo/CH4BMxdIIwFlZSOvK3zy/VshPgDCFgrVFx56VW9IGkMdBxAFS
+        bEXLmD1vJthOX2YMbMW5txVXPs06K1s=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Kent Overstreet <kent.overstreet@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Dave Chinner <dchinner@redhat.com>,
+        linux-kernel@vger.kernel.org, Hillf Danton <hdanton@sina.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH v3 3/6] mm: shrinkers: provide shrinkers with names
+Message-ID: <Yogy79yg44BX7sI1@carbon>
+References: <20220509183820.573666-1-roman.gushchin@linux.dev>
+ <20220509183820.573666-4-roman.gushchin@linux.dev>
+ <20220520164115.oectf3x5hkwesioi@moria.home.lan>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH -next v2] net: wwan: t7xx: use GFP_ATOMIC under spin lock in
- t7xx_cldma_gpd_set_next_ptr()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165309301257.22995.9619477553610888846.git-patchwork-notify@kernel.org>
-Date:   Sat, 21 May 2022 00:30:12 +0000
-References: <20220519032108.2996400-1-yangyingliang@huawei.com>
-In-Reply-To: <20220519032108.2996400-1-yangyingliang@huawei.com>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-        haijun.liu@mediatek.com, chandrashekar.devegowda@intel.com,
-        ricardo.martinez@linux.intel.com, loic.poulain@linaro.org,
-        davem@davemloft.net, kuba@kernel.org
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220520164115.oectf3x5hkwesioi@moria.home.lan>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Thu, 19 May 2022 11:21:08 +0800 you wrote:
-> Sometimes t7xx_cldma_gpd_set_next_ptr() is called under spin lock,
-> so add 'gfp_mask' parameter in t7xx_cldma_gpd_set_next_ptr() to pass
-> the flag.
+On Fri, May 20, 2022 at 12:41:15PM -0400, Kent Overstreet wrote:
+> On Mon, May 09, 2022 at 11:38:17AM -0700, Roman Gushchin wrote:
+> > diff --git a/drivers/md/bcache/btree.c b/drivers/md/bcache/btree.c
+> > index ad9f16689419..c1f734ab86b3 100644
+> > --- a/drivers/md/bcache/btree.c
+> > +++ b/drivers/md/bcache/btree.c
+> > @@ -812,7 +812,7 @@ int bch_btree_cache_alloc(struct cache_set *c)
+> >  	c->shrink.seeks = 4;
+> >  	c->shrink.batch = c->btree_pages * 2;
+> >  
+> > -	if (register_shrinker(&c->shrink))
+> > +	if (register_shrinker(&c->shrink, "btree"))
+> >  		pr_warn("bcache: %s: could not register shrinker\n",
+> >  				__func__);
 > 
-> Fixes: 39d439047f1d ("net: wwan: t7xx: Add control DMA interface")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> These drivers need better names for their shrinkers - there will often be
+> multiple instances in use on a system and we need to distinguish.
 > 
-> [...]
+> Also, "btree" isn't a good name for the bcache shrinker - "bcache-%pU",
+> c->set_uuid would be a good name for bcache's shrinker, it'll match up with the
+> cache set directory in /sys/fs/bcache/.
 
-Here is the summary with links:
-  - [-next,v2] net: wwan: t7xx: use GFP_ATOMIC under spin lock in t7xx_cldma_gpd_set_next_ptr()
-    https://git.kernel.org/netdev/net-next/c/9ee152ee3ee3
+Sure, will improve in the next version. Thanks!
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> 
+> For others (device mapper, md, etc.) there should be a minor device number you
+> can reference.
 
+Good point, will think of it.
 
+Thank you for taking a look!

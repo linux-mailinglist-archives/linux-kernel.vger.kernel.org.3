@@ -2,238 +2,413 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A0E052FA6E
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 11:49:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EE7F52FA69
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 11:49:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240831AbiEUJos (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 05:44:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50154 "EHLO
+        id S240792AbiEUJsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 05:48:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234199AbiEUJol (ORCPT
+        with ESMTP id S234199AbiEUJsi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 05:44:41 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83BF15BD2E;
-        Sat, 21 May 2022 02:44:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653126279; x=1684662279;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CyElkUixF8lvdj70ORq0rLvjq2VxXO4qRJDmlrfQAXc=;
-  b=L0mdijWrsSAkA/A8mZ4nbZocIlR1H3iSn5OzzN530vHz/RD8yfgNJEtp
-   DD0e8VyqgNt2aBOOC6rbihcsIMVKkP60YFtONcl79+gGZh23b5jBILmCs
-   8j+ZVKhDcggHFn/L5Ek07VFyUjd1ekgZn9ZOURI/FQgTa2DwjT6I8PShi
-   JLPnGIVXT7cHvGyl1I6gx0jNsgK5TlHf+eTmvH4sW+pQFO9BSNpDKBEZL
-   HqlmRbjz6ZB0QByX8Kc4hdvfYzZefGOjoGQdw0nrE/mAFyyN6hx5ytgTC
-   BfIQIN0USfjZ1rpb5mbe18ax4BGHs+t7cBqExfbXLIbPiU+Mh0HJJWlxR
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10353"; a="298145942"
-X-IronPort-AV: E=Sophos;i="5.91,242,1647327600"; 
-   d="scan'208";a="298145942"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 02:44:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,242,1647327600"; 
-   d="scan'208";a="818943906"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 21 May 2022 02:44:35 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nsLf0-0006AE-Tt;
-        Sat, 21 May 2022 09:44:34 +0000
-Date:   Sat, 21 May 2022 17:44:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Qin Jian <qinjian@cqplus1.com>, sboyd@kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        krzysztof.kozlowski@linaro.org, robh+dt@kernel.org,
-        mturquette@baylibre.com, tglx@linutronix.de, maz@kernel.org,
-        p.zabel@pengutronix.de, linux@armlinux.org.uk, arnd@arndb.de,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        Qin Jian <qinjian@cqplus1.com>
-Subject: Re: [PATCH v16 05/10] clk: Add Sunplus SP7021 clock driver
-Message-ID: <202205211701.QKHjaFD8-lkp@intel.com>
-References: <573fdd7360c1e57eccc79b151a1edf7f58c0708b.1653027644.git.qinjian@cqplus1.com>
+        Sat, 21 May 2022 05:48:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD588198A;
+        Sat, 21 May 2022 02:48:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 419C3B81B1C;
+        Sat, 21 May 2022 09:48:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCAECC385A5;
+        Sat, 21 May 2022 09:48:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653126514;
+        bh=srchwg0AIXyDnKVXefcoYDLalQsQhd+DPUVJTRX4wEU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kHYmbDAmXUqXDuLIplZTm219yE+xlDgmPXfjNN6o+nC+dQ5ecBRldxLyMhaUcXmpa
+         +ZIz1I5jhPS+Ce1cVsZ3f5Th7R8vV0/3qUdqoHvEpRGASbb9W02xte9hn1KtX8iMJz
+         YbdK0LD0BQQlb3lACKQduxAnMHl1WoM7BZ2F6aUt4r59+OMLUfoXF7Tx1cMpU1JCNo
+         nDfmK2pDB6pPsUY3cB1jisZIcWzKkVQE7UpmhC/W3ZoEB3SuxuomHPGmWaYct2E/cp
+         73ESzm5XFdkCLrKiBLgs/7l9CA0f3Qn86CYWHsVN+SFJFRcMqLv81RFmeFpM57Gh7b
+         73v7XifcPTrAQ==
+Date:   Sat, 21 May 2022 11:48:29 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     linux-i2c@vger.kernel.org, ben.dooks@codethink.co.uk,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        daire.mcnamara@microchip.com
+Subject: Re: [PATCH v3] i2c: add support for microchip fpga i2c controllers
+Message-ID: <Yoi1bV95l7+thgS5@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-i2c@vger.kernel.org, ben.dooks@codethink.co.uk,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        daire.mcnamara@microchip.com
+References: <20220516073331.3508505-1-conor.dooley@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="4/1BQIBLBjjxvj+u"
 Content-Disposition: inline
-In-Reply-To: <573fdd7360c1e57eccc79b151a1edf7f58c0708b.1653027644.git.qinjian@cqplus1.com>
+In-Reply-To: <20220516073331.3508505-1-conor.dooley@microchip.com>
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Qin,
 
-I love your patch! Perhaps something to improve:
+--4/1BQIBLBjjxvj+u
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-[auto build test WARNING on pza/reset/next]
-[also build test WARNING on robh/for-next tip/irq/core linus/master v5.18-rc7 next-20220520]
-[cannot apply to clk/clk-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Hi Conor,
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Qin-Jian/Add-Sunplus-SP7021-SoC-Support/20220520-150501
-base:   https://git.pengutronix.de/git/pza/linux reset/next
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220521/202205211701.QKHjaFD8-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e00cbbec06c08dc616a0d52a20f678b8fbd4e304)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/a1d62767c4450c6ec48f1c63cb58ca8a2dcd6977
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Qin-Jian/Add-Sunplus-SP7021-SoC-Support/20220520-150501
-        git checkout a1d62767c4450c6ec48f1c63cb58ca8a2dcd6977
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/mm/ drivers/clk/
+driver looks mostly good, but some comments:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> +/*
+> + * mchp_corei2c_dev - I2C device context
+> + * @base: pointer to register struct
+> + * @msg: pointer to current message
+> + * @msg_len: number of bytes transferred in msg
+> + * @msg_err: error code for completed message
+> + * @msg_complete: xfer completion object
+> + * @dev: device reference
+> + * @adapter: core i2c abstraction
+> + * @i2c_clk: clock reference for i2c input clock
+> + * @bus_clk_rate: current i2c bus clock rate
+> + * @buf: ptr to msg buffer for easier use.
+> + * @isr_status: cached copy of local ISR status.
+> + * @lock: spinlock for IRQ synchronization.
+> + */
 
-All warnings (new ones prefixed by >>):
+This seems outdated, e.g. msg is not in the struct but addr is missing.
+Also, proper kdoc header is missing?
 
->> drivers/clk/clk-sp7021.c:317:8: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((_m), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (_m)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
-           r0 |= HWM_FIELD_PREP(MASK_SEL_FRA, clk->p[SEL_FRA]);
-                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/clk/clk-sp7021.c:44:15: note: expanded from macro 'HWM_FIELD_PREP'
-           (_m << 16) | FIELD_PREP(_m, value);     \
-                        ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
-                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
-                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:352:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:340:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:332:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
-   drivers/clk/clk-sp7021.c:318:8: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((_m), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (_m)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
-           r0 |= HWM_FIELD_PREP(MASK_SDM_MOD, clk->p[SDM_MOD]);
-                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/clk/clk-sp7021.c:44:15: note: expanded from macro 'HWM_FIELD_PREP'
-           (_m << 16) | FIELD_PREP(_m, value);     \
-                        ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
-                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
-                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:352:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:340:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:332:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
-   drivers/clk/clk-sp7021.c:319:8: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((_m), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (_m)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
-           r0 |= HWM_FIELD_PREP(MASK_PH_SEL, clk->p[PH_SEL]);
-                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/clk/clk-sp7021.c:44:15: note: expanded from macro 'HWM_FIELD_PREP'
-           (_m << 16) | FIELD_PREP(_m, value);     \
-                        ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
-                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
-                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:352:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:340:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:332:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
-   drivers/clk/clk-sp7021.c:320:8: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((_m), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (_m)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
-           r0 |= HWM_FIELD_PREP(MASK_NFRA, clk->p[NFRA]);
-                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/clk/clk-sp7021.c:44:15: note: expanded from macro 'HWM_FIELD_PREP'
-           (_m << 16) | FIELD_PREP(_m, value);     \
-                        ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
-                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
-                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:352:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:340:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:332:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
-   drivers/clk/clk-sp7021.c:322:8: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((_m), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (_m)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
-           r1  = HWM_FIELD_PREP(MASK_DIVR, clk->p[DIVR]);
-                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/clk/clk-sp7021.c:44:15: note: expanded from macro 'HWM_FIELD_PREP'
-           (_m << 16) | FIELD_PREP(_m, value);     \
-                        ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
-                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
-                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+> +struct mchp_corei2c_dev {
+> +	void __iomem *base;
+> +	size_t msg_len;
+
+Maybe u16 to match the original type from struct i2c_msg?
+
+> +	int msg_err;
+> +	struct completion msg_complete;
+> +	struct device *dev;
+> +	struct i2c_adapter adapter;
+> +	struct clk *i2c_clk;
+> +	spinlock_t lock; /* IRQ synchronization */
+> +	u32 bus_clk_rate;
+> +	u32 msg_read;
+
+This is initialized but never used?
+
+> +	u32 isr_status;
+> +	u8 *buf;
+> +	u8 addr;
+> +};
+> +
+
+...
+
+> +static int mchp_corei2c_init(struct mchp_corei2c_dev *idev)
+> +{
+> +	u32 clk_rate = clk_get_rate(idev->i2c_clk);
+> +	u32 divisor = clk_rate / idev->bus_clk_rate;
+
+I don't see a protection against division by zero?
+
+> +	int ret;
+> +
+> +	ret = mchp_corei2c_set_divisor(divisor, idev);
+> +	if (ret)
+> +		return ret;
+> +
+> +	mchp_corei2c_reset(idev);
+> +
+> +	return 0;
+> +}
+> +
+> +static void mchp_corei2c_transfer(struct mchp_corei2c_dev *idev, u32 data)
+> +{
+> +	if (idev->msg_len > 0)
+> +		writeb(data, idev->base + CORE_I2C_DATA);
+> +}
+
+Minor: this is very finegrained and only called once. I'd put it into
+the calling function.
+
+...
+
+> +static irqreturn_t mchp_corei2c_handle_isr(struct mchp_corei2c_dev *idev)
+> +{
+> +	u32 status = idev->isr_status;
+> +	u8 ctrl;
+> +
+> +	if (!idev->buf)
+> +		return IRQ_NONE;
+> +
+> +	switch (status) {
+> +	case STATUS_M_START_SENT:
+> +	case STATUS_M_REPEATED_START_SENT:
+> +		ctrl = readb(idev->base + CORE_I2C_CTRL);
+> +		ctrl &= ~CTRL_STA;
+> +		writeb(idev->addr, idev->base + CORE_I2C_DATA);
+> +		writeb(ctrl, idev->base + CORE_I2C_CTRL);
+> +		if (idev->msg_len <= 0)
+
+msg_len is unsigned, can't be < 0?
+
+> +			goto finished;
+> +		break;
+> +	case STATUS_M_ARB_LOST:
+> +		idev->msg_err = -EAGAIN;
+> +		goto finished;
+> +	case STATUS_M_SLAW_ACK:
+> +	case STATUS_M_TX_DATA_ACK:
+> +		if (idev->msg_len > 0)
+> +			mchp_corei2c_fill_tx(idev);
+> +		else
+> +			goto last_byte;
+
+IMO this is a bit too much of goto here. Can't we have a flag for
+last_byte and handle it at the end of the handler?
+
+> +		break;
+> +	case STATUS_M_TX_DATA_NACK:
+> +	case STATUS_M_SLAR_NACK:
+> +	case STATUS_M_SLAW_NACK:
+> +		idev->msg_err = -ENXIO;
+> +		goto last_byte;
+> +	case STATUS_M_SLAR_ACK:
+> +		ctrl = readb(idev->base + CORE_I2C_CTRL);
+> +		if (idev->msg_len == 1u) {
+> +			ctrl &= ~CTRL_AA;
+> +			writeb(ctrl, idev->base + CORE_I2C_CTRL);
+> +		} else {
+> +			ctrl |= CTRL_AA;
+> +			writeb(ctrl, idev->base + CORE_I2C_CTRL);
+> +		}
+> +		if (idev->msg_len < 1u)
+> +			goto last_byte;
+> +		break;
+> +	case STATUS_M_RX_DATA_ACKED:
+> +		mchp_corei2c_empty_rx(idev);
+> +		break;
+> +	case STATUS_M_RX_DATA_NACKED:
+> +		mchp_corei2c_empty_rx(idev);
+> +		if (idev->msg_len == 0)
+> +			goto last_byte;
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return IRQ_HANDLED;
+> +
+> +last_byte:
+> +	/* On the last byte to be transmitted, send STOP */
+> +	mchp_corei2c_stop(idev);
+> +finished:
+> +	complete(&idev->msg_complete);
+> +	return IRQ_HANDLED;
+> +}
+
+...
+
+> +
+> +static int mchp_corei2c_xfer_msg(struct mchp_corei2c_dev *idev,
+> +				 struct i2c_msg *msg)
+> +{
+> +	u8 ctrl;
+> +	unsigned long time_left;
+> +
+> +	if (msg->len == 0)
+> +		return -EINVAL;
+
+If your hardware cannot do zero length messages, you need to set up an
+i2c_adapter_quirk struct with I2C_AQ_NO_ZERO_LEN.
+
+> +
+> +	idev->addr = i2c_8bit_addr_from_msg(msg);
+> +	idev->msg_len = msg->len;
+> +	idev->buf = msg->buf;
+> +	idev->msg_err = 0;
+> +	idev->msg_read = (msg->flags & I2C_M_RD);
+> +
+> +	reinit_completion(&idev->msg_complete);
+> +
+> +	mchp_corei2c_core_enable(idev);
+> +
+> +	ctrl = readb(idev->base + CORE_I2C_CTRL);
+> +	ctrl |= CTRL_STA;
+> +	writeb(ctrl, idev->base + CORE_I2C_CTRL);
+> +
+> +	time_left = wait_for_completion_timeout(&idev->msg_complete,
+> +						MICROCHIP_I2C_TIMEOUT);
+
+You should use adapter.timeout here, so it can be changed from
+userspace.
+
+> +	if (!time_left)
+> +		return -ETIMEDOUT;
+> +
+> +	return idev->msg_err;
+> +}
+> +
+> +static int mchp_corei2c_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
+> +			     int num)
+> +{
+> +	struct mchp_corei2c_dev *idev = i2c_get_adapdata(adap);
+> +	int i, ret;
+> +
+> +	for (i = 0; i < num; i++) {
+> +		ret = mchp_corei2c_xfer_msg(idev, msgs++);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	return num;
+> +}
+> +
+> +static u32 mchp_corei2c_func(struct i2c_adapter *adap)
+> +{
+> +	return I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL;
+> +}
+
+If you can't handle zero length messages, you need to mask
+I2C_FUNC_SMBUS_QUICK out.
+
+> +
+> +static const struct i2c_algorithm mchp_corei2c_algo = {
+> +	.master_xfer = mchp_corei2c_xfer,
+> +	.functionality = mchp_corei2c_func,
+> +};
+> +
+> +static int mchp_corei2c_probe(struct platform_device *pdev)
+> +{
+> +	struct mchp_corei2c_dev *idev = NULL;
+
+Unneeded initialization.
+
+> +	struct resource *res;
+> +	int irq, ret;
+> +	u32 val;
+> +
+> +	idev = devm_kzalloc(&pdev->dev, sizeof(*idev), GFP_KERNEL);
+> +	if (!idev)
+> +		return -ENOMEM;
+> +
+> +	idev->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+> +	if (IS_ERR(idev->base))
+> +		return PTR_ERR(idev->base);
+> +
+> +	irq = platform_get_irq(pdev, 0);
+> +	if (irq < 0)
+> +		return dev_err_probe(&pdev->dev, irq,
+> +				     "missing interrupt resource\n");
+> +
+> +	idev->i2c_clk = devm_clk_get(&pdev->dev, NULL);
+> +	if (IS_ERR(idev->i2c_clk))
+> +		return dev_err_probe(&pdev->dev, PTR_ERR(idev->i2c_clk),
+> +				     "missing clock\n");
+> +
+> +	idev->dev = &pdev->dev;
+> +	init_completion(&idev->msg_complete);
+> +	spin_lock_init(&idev->lock);
+> +
+> +	val = device_property_read_u32(idev->dev, "clock-frequency",
+> +				       &idev->bus_clk_rate);
+
+This functions returns an int. So, 'ret' please which is also more
+readable.
+
+> +	if (val) {
+
+I think the missing check against 'division by zero' should go here.
+
+> +		dev_info(&pdev->dev, "default to 100kHz\n");
+> +		idev->bus_clk_rate = 100000;
+> +	}
+> +
+> +	if (idev->bus_clk_rate > 400000)
+> +		return dev_err_probe(&pdev->dev, -EINVAL,
+> +				     "clock-frequency too high: %d\n",
+> +				     idev->bus_clk_rate);
+> +
+> +	ret = devm_request_irq(&pdev->dev, irq, mchp_corei2c_isr, IRQF_SHARED,
+> +			       pdev->name, idev);
+
+Really SHARED?
+
+> +	if (ret)
+> +		return dev_err_probe(&pdev->dev, ret,
+> +				     "failed to claim irq %d\n", irq);
+> +
+> +	ret = clk_prepare_enable(idev->i2c_clk);
+> +	if (ret)
+> +		return dev_err_probe(&pdev->dev, ret,
+> +				     "failed to enable clock\n");
+> +
+> +	ret = mchp_corei2c_init(idev);
+> +	if (ret) {
+> +		clk_disable_unprepare(idev->i2c_clk);
+> +		return dev_err_probe(&pdev->dev, ret, "failed to program clock divider\n");
+> +	}
+> +
+> +	i2c_set_adapdata(&idev->adapter, idev);
+> +	snprintf(idev->adapter.name, sizeof(idev->adapter.name),
+> +		 "Microchip I2C hw bus");
+
+Most people add something like the base address here to distinguish
+multiple instances.
+
+> +	idev->adapter.owner = THIS_MODULE;
+> +	idev->adapter.algo = &mchp_corei2c_algo;
+> +	idev->adapter.dev.parent = &pdev->dev;
+> +	idev->adapter.dev.of_node = pdev->dev.of_node;
+> +
+> +	platform_set_drvdata(pdev, idev);
+> +
+> +	ret = i2c_add_adapter(&idev->adapter);
+> +	if (ret) {
+> +		clk_disable_unprepare(idev->i2c_clk);
+> +		return ret;
+> +	}
+> +
+> +	dev_info(&pdev->dev, "Microchip I2C Probe Complete\n");
+> +
+> +	return 0;
+> +}
+
+Rest looks good, Thank you for the submission.
+
+All the best,
+
+   Wolfram
 
 
-vim +317 drivers/clk/clk-sp7021.c
+--4/1BQIBLBjjxvj+u
+Content-Type: application/pgp-signature; name="signature.asc"
 
-   310	
-   311	static int plltv_set_rate(struct sp_pll *clk)
-   312	{
-   313		unsigned long flags;
-   314		u32 r0, r1, r2;
-   315	
-   316		r0  = BIT(clk->bp_bit + 16);
- > 317		r0 |= HWM_FIELD_PREP(MASK_SEL_FRA, clk->p[SEL_FRA]);
-   318		r0 |= HWM_FIELD_PREP(MASK_SDM_MOD, clk->p[SDM_MOD]);
-   319		r0 |= HWM_FIELD_PREP(MASK_PH_SEL, clk->p[PH_SEL]);
-   320		r0 |= HWM_FIELD_PREP(MASK_NFRA, clk->p[NFRA]);
-   321	
-   322		r1  = HWM_FIELD_PREP(MASK_DIVR, clk->p[DIVR]);
-   323	
-   324		r2  = HWM_FIELD_PREP(MASK_DIVN, clk->p[DIVN] - 1);
-   325		r2 |= HWM_FIELD_PREP(MASK_DIVM, clk->p[DIVM] - 1);
-   326	
-   327		spin_lock_irqsave(&clk->lock, flags);
-   328		writel(r0, clk->reg);
-   329		writel(r1, clk->reg + 4);
-   330		writel(r2, clk->reg + 8);
-   331		spin_unlock_irqrestore(&clk->lock, flags);
-   332	
-   333		return 0;
-   334	}
-   335	
+-----BEGIN PGP SIGNATURE-----
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKItWoACgkQFA3kzBSg
+KbZO8xAAtYMhV/kN9jcoPj0n0ikzTYPqhObXRqnQmf0BXVn1sIpBI19MgNkfE9Xz
+vrRLFWI6eD72TZ8ZA2OuHP8HuBt63QqRIc7jBestGrRfR+TApZUaC+PvLS38pj/O
+iahcaXwcw7QIpvshr5O6k3sJXqBdQGjcMQS5Jxr2gmEj5UrE56YEOwGCrMtwjuws
+SBzExhStfgV/2GDqdY/erGgCPrmQ3KRI0noDXKqzTaWpHfBOWZBkQFHJvuVDuBFc
+4UM+rSo/kN4wJWd5um5UGDBG768T+0quVpnhYtlafKTI5iGkGlmtxQQKPCvd3D/V
+Rx9rib3a+Lwh0tLRsNerldRn/Cy/n5vHR+MNngoFraLL6aGwTEkFmi85GuWBIdlf
+TccFOzLKBfgzh6rViOJ/enhrUWGwHYh9rM03PbVwmhogSasVNI+WbJTMff3N6zkJ
+VyI0nm9Q3hHeXtGx05kfFhvZ+YuBcklOa8c3ZTqdHiyEIc5upnNJGtds0OD0uTU4
++GKCob7a2EieMXSesKEIvEKcAPfFmJ6lJ8ygM2FraeQplQxKNN1wO42JXZiaRkvI
+BmUGdI7gtfzycw1PaUaiJX1ZXOb0WfN//jlzEnuxO2j0dPlo6DP8h8PNwe6os71I
+B81J0kEI2rX+O/g3tVCrv8Ls0+xywjswsvL8FaTzmWsUJMjSYcg=
+=tYE4
+-----END PGP SIGNATURE-----
+
+--4/1BQIBLBjjxvj+u--

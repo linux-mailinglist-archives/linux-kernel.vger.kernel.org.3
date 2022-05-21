@@ -2,179 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADA5852FE1A
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 18:21:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74D2F52FE1C
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 18:30:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245533AbiEUQVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 12:21:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58616 "EHLO
+        id S245543AbiEUQ25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 12:28:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230071AbiEUQVO (ORCPT
+        with ESMTP id S230071AbiEUQ2y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 12:21:14 -0400
-Received: from EUR02-VE1-obe.outbound.protection.outlook.com (mail-eopbgr20074.outbound.protection.outlook.com [40.107.2.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C62110F;
-        Sat, 21 May 2022 09:21:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jROYLp2vgCEcRJ1cCobUah/SsKf/qC0qVxspK2/Ghi4QUXSBxhK+x6hq9Ghy+UoOfxNeQPFJxzUPmzMso4gee+9Fav1s5fZpDbuTr2Pz00IhsSquBDd+743JUPEUdcgSCh9wzCDHpsfxgzo2aV2rD5OeXBNHGeiiMZ8fCDahuaNuN8F/s6YYvU4CVK0nh/ROWhl0X5cC9U1Co/ZIlIVGsTy7NHImY4AQ3rZkZfgjcrY3NGvUEC3pnBk84U4VgC8j7nRboABcvYB1OAdSQQ8nScB61o6vtWoNA4KZ8a8ZjbqiNtuxEsAnWXnkHDMCodzrX8QkWCaym7vSmBRi5PtOXw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/o7Gy8fJzd+tNNWSHmqBpF9S9zatJXRgAX6j4a7DJKE=;
- b=EO/S+KgPrCasDjCqhbrlARlncWB/B46tXFDX7VMKi/oU1hs4X+MQaDMhYVGYIbzpFScUSmL/ivf2qWTSPmFpcWXD+1sp1eUkRNHQPKuQe/BfU94wO1KRITgzlLV+bEzE4v48eSTeNMVOwiUGiB+qJP8sagMmT/P9nqm+N49eWjJd6czFJVectT9NSuhSLNRFSsw2N73b7pWwwztzj8V3leKWAxk4MTQAUbvQyDgkwi81V8OVvz4aAXc64PtbFQBm6OUodbVk/ztqB9rYAVuAZmHjLa2T0ei0s5RxK2wlD4/zxamn6m3RVQk0k0CW7A/chWmDGemRNMuh6kyLN/CEgQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/o7Gy8fJzd+tNNWSHmqBpF9S9zatJXRgAX6j4a7DJKE=;
- b=idvDqytNGYcgR24pf7djMQ84MKfJ5fI2VxfXX4TeM+s+4QIeO1sXzMnArry83WV2uwoXTFFilrwqfnrDX0rY6yOWZ3EY8SA6JOueKhwFVjfUSy6RGTdKIuR87k41NLjhy6qMQy8XXNYMpv+gshGe4yneJZiwheN/CzJc9BpR29o=
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by AM0PR0402MB3379.eurprd04.prod.outlook.com (2603:10a6:208:1a::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.19; Sat, 21 May
- 2022 16:21:10 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::fd1f:cc16:dafe:4bf5]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::fd1f:cc16:dafe:4bf5%5]) with mapi id 15.20.5250.014; Sat, 21 May 2022
- 16:21:09 +0000
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-CC:     Pavel Skripkin <paskripkin@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "clement.leger@bootlin.com" <clement.leger@bootlin.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] net: ocelot: fix wrong time_after usage
-Thread-Topic: [PATCH v2] net: ocelot: fix wrong time_after usage
-Thread-Index: AQHYbJD0POeq/e10YUezilbAbovQL60pW7sAgAAosAA=
-Date:   Sat, 21 May 2022 16:21:09 +0000
-Message-ID: <20220521162108.bact3sn4z2yuysdt@skbuf>
-References: <YoeMW+/KGk8VpbED@lunn.ch>
- <20220520213115.7832-1-paskripkin@gmail.com> <YojvUsJ090H/wfEk@lunn.ch>
-In-Reply-To: <YojvUsJ090H/wfEk@lunn.ch>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 1a48084c-f60e-4ea9-86d7-08da3b45ea6b
-x-ms-traffictypediagnostic: AM0PR0402MB3379:EE_
-x-microsoft-antispam-prvs: <AM0PR0402MB33790DC0A584032CC486B64AE0D29@AM0PR0402MB3379.eurprd04.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: CeFSBZ6O+jMVxiJZg1kppz1HSFfSCFAcSXBWVWOSZdHnH2grIwoWT04g2DrSMXEhHxS8Lk1pSylVGeNEEGJTXg1GsBjdwzXOWbw8IhYS5fmMPDBZ2rehPecdNrv8zVy6FZ07f5TBK33kQhlNs77cnQCO/c21QwgTnKCwQ/wzEnizFHuZvfCEp3KKFjsxz8+SQKb5L2/DCXdWML3Ac72L3r6FhZpQwciikeKe2tH4BSocX5PbnZLK44a7lZzZ4uStZn5pgBWUtGt6P0BO5txA1E1V6J+GHPGfBkXE2uamghZufiwvt9s4SqgcPIzcukO14j1kEb/ZtmW5O/zMYPmv4FTOfPT0gbneWbWbyrvlHsj6XLiIFazp05Q9gW9hxZ2Fay9mvSxf2TvsCycl1BZH8D/jQmHK3M+mUMrcJqg+xS6Z/ove2f7jBXxJnOt8EiY3BMFOsvXkL4zgnsZYxdpUzx/FbOX0MXpQge09V5IRcQ9clBDj4ubrPoIgJ9S9e8lfX2jjEbkChzvMEWvOI/AWbDi0vdHbdxRCtxy8teo7+2Wlqdd3V66pY+ottsVp7Mxz1miiS+05T/H4lODptd2fkgQ+WZTJtzExF2vIYctbN3QHx+8kolvOgN0TMdrSd14Xlr1Fz1kEnt3DrflO8wmayhvOwinyvuEu8u0DMtnh5U0K5vg/oWNLCj3TjD863URfS2erT5OxSpMvpZZ2VO0nMg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(4636009)(366004)(6916009)(6506007)(86362001)(66946007)(5660300002)(44832011)(38070700005)(316002)(2906002)(66446008)(66476007)(66556008)(64756008)(8676002)(4326008)(91956017)(76116006)(6486002)(54906003)(186003)(71200400001)(83380400001)(8936002)(38100700002)(122000001)(33716001)(1076003)(26005)(508600001)(6512007)(9686003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?u+tfl66U34HeL7vvO8RTg1Y9s8RQB3DW3ZceSUs7j04+WHWRU3l9Le7lXh9I?=
- =?us-ascii?Q?g6llKRh/BAjqtMX68YdV1GrCRO+oV+3ujMGp0s9OY4xpZ/TZeNca++aejU1e?=
- =?us-ascii?Q?T4Rs2rA1qe79XE7GE1DHzExcUV6BBPm/2XM2mtE7BKNYyLU362R4YdWwc9+i?=
- =?us-ascii?Q?/k7OwZVFp7lGWmVw6D/vtKLiy7tQqoqS/8O3L7MxDF5jH/J2qPYBfZzZodgC?=
- =?us-ascii?Q?5ND+eKNHOer/TotefsbZ0VNcPq577JSbwJaVp1WnWtE/0VHc6Q2qRyyb5A6R?=
- =?us-ascii?Q?XdvbNm5b//7KY/2yICy6wx0v7OCrtcVR1Xub8UYcJhhlS9eYQMtTIDKk3eEO?=
- =?us-ascii?Q?aPfvfk1JON1m+INplLkcQhcteoIw2qa4zOotlB365PJ6EEW5jpi/HqusAi7+?=
- =?us-ascii?Q?dLCdVd71WDZofWBx9CNm3QgGeSMw9xAlbVtfqNuwN+/Fks6Gs41uYkyd59oy?=
- =?us-ascii?Q?ggH64Qs7KCry0uKMcAKFDbt0FZQ4ya7KoSw1yhymCy8MBmI6FtcV2dHs0MZ7?=
- =?us-ascii?Q?Qow7Gzyte2fsAEmeHRGzMrkNWIaDHfzizl/8/ox3GYpH3s4E7bcrr7YBBJ8A?=
- =?us-ascii?Q?F6Is/1fqdtv7zEtcUWvzNnXFl7XRV7hHK+dqEMsJGxSmIw21Te5IeyxO1kdd?=
- =?us-ascii?Q?DFbEADYu4ZzQ4+pjYhTCzuBkEoWKZF8S9melIlbDf5stQUJB+Ob0h+yMcpQU?=
- =?us-ascii?Q?TbHGy29FwuWHEmKCUlOJA9q+efS7akSu7bCe4dQySjWU7gh7tm8ZgPzStHxO?=
- =?us-ascii?Q?T1hu7hXLBQUk+UtWBy1bmkKBavcy6QQzLzJwvT0Rlm5kTehEzeW9w+3jPcWF?=
- =?us-ascii?Q?Fdyhh9B3xUoXjzKr52+jevAOTA+nVFgsCHvdHW/OyKaCGTdDzeF7nuI0iXYh?=
- =?us-ascii?Q?ahnCQ26787RjunlsJlrjJppyymWsF104KjedLWdT6c5NRPZ59zoHKHLe3YjA?=
- =?us-ascii?Q?6ZlGW0Fp0AiR1WUP/whfthGapjIxV40XxE5p/Xfz8ZPZfVXX0GSjg4/G0umS?=
- =?us-ascii?Q?Q62+8p5Ua+zfmsePMd8EaLLM0MxqnR/lZSV4R/wHpZIfHeUbjcjcHgKC0Nqs?=
- =?us-ascii?Q?exjYKXazJb8svhu3IX0kOdYm+HYv/v5g8B8T/4UCTMOx9HGeJCrGEGe6JUmn?=
- =?us-ascii?Q?4vpJBMVXn6OFXhaJMmmMCuc0wxMRGhs5znHUcNDkl4gB63GDreaflekDrz5i?=
- =?us-ascii?Q?fbN1tSPm108GZ92v7BgF4ZLDsvXytOZwlpQOVXYWjS/wUA5guf+zhgzK4R7w?=
- =?us-ascii?Q?qJBhh7nfA8slPqtzsaxR+vfo05DDLCSYaLgnVSbNslLXc31GHqoBThVkbYIo?=
- =?us-ascii?Q?QGL6rhpsjw6yahv8ynP3yNG4X1G0Qics9R3Ej/K3hnFTVAKtNTJQCXAZ31cd?=
- =?us-ascii?Q?otAuX4WADNrhrCjKyHNJHhwU0nj/dGKIgWm+8RgNCtyThTUIKCNSP74WmV5f?=
- =?us-ascii?Q?9jSQBrO5EQN9WKSggXnsrwsmV/Gvm+fBXHRTapRMy1xTJGgrUXW02IfPakd/?=
- =?us-ascii?Q?2by1hmd4zzlhRof6J4mGLk4JXZevX89qvu4hUjezInX+8xWHH79KhdgEudYw?=
- =?us-ascii?Q?i0mEw/PFui4BEiCmfw4j5qNdMwk88ddvxOIXx9iJs5ETGCywwwZhF5DgHRgz?=
- =?us-ascii?Q?lfk43y7UX4RRIl0Rh9iWvvhkygDXgF5h8oOHH8B7+akLW+BHPPV6CbgR+To+?=
- =?us-ascii?Q?6w2lwRlyJO+SsXBKuabf2vbaSzcaUgs05zNok/gVpq/pwG0T4LWDa8F7W2+s?=
- =?us-ascii?Q?bsWy/h4hhui0ow3yGLMB56M4Pl0uigE=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <44352338C3D41741A8CDA2E58D079E14@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Sat, 21 May 2022 12:28:54 -0400
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B71015DA4C
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 09:28:53 -0700 (PDT)
+Received: by mail-oi1-x230.google.com with SMTP id q10so13223539oia.9
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 09:28:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oK1yB+pWX7DUbSOpiHUXdRbl5cSW3whx4lZdoBBpZGI=;
+        b=UrqSD+LVWpiMGbElInA4v1zLlY3zz44S8My+BazS33dvc4USn2c/ACJivVLw21vW59
+         8tcYf2szyzOj5GjVLttevS5n+e2k7DtbJ5OHAGJ8NqfuwDOqtJhB9RSQnh9LeV5FuIid
+         DBCRdv47mdQhwfLitq4LgbXd3yizYz5n1gG0s=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oK1yB+pWX7DUbSOpiHUXdRbl5cSW3whx4lZdoBBpZGI=;
+        b=PyOd2vl+oXoBVfIxiso2iVoyFUQqIP4Q/LJm8uYd43S93EeuJeDppjNywvQ2QrDajK
+         Zau8eQgwNHBOJ41C2QMgGGE0c01aJGXQbinfFdu0CZYbV3fDD3uYnymBd1Qqv14oY7/9
+         zQdU4fVTPBDBeBLWF9D4TO2PbzfZyya7+HX2dyfU0xzHWuUb0QWD7Xbv6jAHtVgcEoAY
+         EIMGy/lR10mb8O+nuItkRAmZau8wCmPuphuSi9mJa0CVoZSOPb6OuSqJo61Jr7QHjMqH
+         TsdPq6iZ8gtDUDEcY6O7b/3xYOoAIl/nJbzIrquLHbe3HOGaMrdke65l5T+/bV460KRQ
+         QCnw==
+X-Gm-Message-State: AOAM531ErVaHZYtRIYef9OIoVFLWoHjrr6Qv/FDyi6sYwPduL1uS+nh0
+        CS8ddKmhHnU6DBzfrGb9nrcqhd8vzb2k+/ql4sowlw==
+X-Google-Smtp-Source: ABdhPJwjzViPzNj+UQE/C64zn+ilBV2EKusiLYfvuHVAdSNoX/9mTgUSq3Zi0TP0zUvswqDoY3TGHCLcMRNQuEz5lBY=
+X-Received: by 2002:a05:6808:2181:b0:326:901e:f5e7 with SMTP id
+ be1-20020a056808218100b00326901ef5e7mr8641168oib.7.1653150533098; Sat, 21 May
+ 2022 09:28:53 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1a48084c-f60e-4ea9-86d7-08da3b45ea6b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 May 2022 16:21:09.7731
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: UwkzkrRdPYBcAgIfSSLEyuCCoXMOCmpdThQCqVOyFN7mVZPp49x8VGwzv5netRFLfveOYTIhXhuMSmyqRe7CGA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR0402MB3379
+References: <20220422084720.959271-1-xji@analogixsemi.com> <20220422084720.959271-4-xji@analogixsemi.com>
+ <CAG3jFytWGSUM9mevHewdmEe-hq3JgB74s7_f0fsEQqkXr9VUHg@mail.gmail.com>
+ <CAG3jFyvEYbwkdGtiNR-6vFEXTLjcyT_viqp9qeVxFTu0PrJEVA@mail.gmail.com>
+ <CAGXv+5E1cCNWD98fMDjC38y2UztZd=PNQ+=G=wrBYfoXkswvHA@mail.gmail.com>
+ <20220425091419.GA967110@anxtwsw-Precision-3640-Tower> <CAG3jFyvTim7P_y2G1Br5j3Pwz4KzvRjWgci_qQ3m_YW=3Bog8A@mail.gmail.com>
+ <CAKMK7uFHyYTnGtP+vCzo2Uan90DW-QZpPFPn5S9bQ5aPiY=qzA@mail.gmail.com>
+In-Reply-To: <CAKMK7uFHyYTnGtP+vCzo2Uan90DW-QZpPFPn5S9bQ5aPiY=qzA@mail.gmail.com>
+From:   Daniel Vetter <daniel@ffwll.ch>
+Date:   Sat, 21 May 2022 18:28:42 +0200
+Message-ID: <CAKMK7uHFGsPMZf2SUF4HDXo3XuOLjP3-DLfyp=gB2qpKR964Eg@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] drm/bridge: anx7625: Use DPI bus type
+To:     Robert Foss <robert.foss@linaro.org>
+Cc:     Xin Ji <xji@analogixsemi.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        David Airlie <airlied@linux.ie>, qwen@analogixsemi.com,
+        Jonas Karlman <jonas@kwiboo.se>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Chen-Yu Tsai <wenst@chromium.org>, bliang@analogixsemi.com,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 21, 2022 at 03:55:30PM +0200, Andrew Lunn wrote:
-> On Sat, May 21, 2022 at 12:31:15AM +0300, Pavel Skripkin wrote:
-> > Accidentally noticed, that this driver is the only user of
-> > while (time_after(jiffies...)).
-> >=20
-> > It looks like typo, because likely this while loop will finish after 1s=
-t
-> > iteration, because time_after() returns true when 1st argument _is afte=
-r_
-> > 2nd one.
-> >=20
-> > There is one possible problem with this poll loop: the scheduler could =
-put
-> > the thread to sleep, and it does not get woken up for
-> > OCELOT_FDMA_CH_SAFE_TIMEOUT_US. During that time, the hardware has done
-> > its thing, but you exit the while loop and return -ETIMEDOUT.
-> >=20
-> > Fix it by using sane poll API that avoids all problems described above
-> >=20
-> > Fixes: 753a026cfec1 ("net: ocelot: add FDMA support")
-> > Suggested-by: Andrew Lunn <andrew@lunn.ch>
-> > Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
-> > ---
-> >=20
-> > I can't say if 0 is a good choise for 5th readx_poll_timeout() argument=
-,
-> > so this patch is build-tested only.
->=20
-> > Testing and suggestions are welcomed!
->=20
-> If you had the hardware, i would suggest you profile how often it does
-> complete on the first iteration. And when it does not complete on the
-> first iteration, how many more iterations it needs.
->=20
-> Tobias made an interesting observation with the mv88e6xxx switch. He
-> found that two tight polls was enough 99% of the time. Putting a sleep
-> in there doubles the time it took to setup the switch. So he ended up
-> with a hybrid of open coded polling twice, followed by iopoll with a
-> timer value set.
->=20
-> That was with a heavily used poll function. How often is this function
-> used? No point in overly optimising this if it is not used much.
+On Sat, 21 May 2022 at 18:07, Daniel Vetter <daniel@ffwll.ch> wrote:
+>
+> On Tue, 17 May 2022 at 18:09, Robert Foss <robert.foss@linaro.org> wrote:
+> >
+> > On Mon, 25 Apr 2022 at 11:14, Xin Ji <xji@analogixsemi.com> wrote:
+> > >
+> > > On Mon, Apr 25, 2022 at 04:24:50PM +0800, Chen-Yu Tsai wrote:
+> > > > On Fri, Apr 22, 2022 at 10:13 PM Robert Foss <robert.foss@linaro.org> wrote:
+> > > > >
+> > > > > On Fri, 22 Apr 2022 at 16:01, Robert Foss <robert.foss@linaro.org> wrote:
+> > > > > >
+> > > > > > On Fri, 22 Apr 2022 at 10:49, Xin Ji <xji@analogixsemi.com> wrote:
+> > > > > > >
+> > > > > > > As V4L2_FWNODE_BUS_TYPE_PARALLEL not properly descript for DPI
+> > > > > > > interface, this patch use new defined V4L2_FWNODE_BUS_TYPE_DPI for it.
+> > > > > > >
+> > > > > > > Fixes: fd0310b6fe7d ("drm/bridge: anx7625: add MIPI DPI input feature")
+> > > > > > > Signed-off-by: Xin Ji <xji@analogixsemi.com>
+> > > > > > > ---
+> > > > > > >  drivers/gpu/drm/bridge/analogix/anx7625.c | 8 ++++----
+> > > > > > >  1 file changed, 4 insertions(+), 4 deletions(-)
+> > > > > > >
+> > > > > > > diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > > > > > > index 376da01243a3..71df977e8f53 100644
+> > > > > > > --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > > > > > > +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > > > > > > @@ -1623,14 +1623,14 @@ static int anx7625_parse_dt(struct device *dev,
+> > > > > > >
+> > > > > > >         anx7625_get_swing_setting(dev, pdata);
+> > > > > > >
+> > > > > > > -       pdata->is_dpi = 1; /* default dpi mode */
+> > > > > > > +       pdata->is_dpi = 0; /* default dsi mode */
+> > > > > > >         pdata->mipi_host_node = of_graph_get_remote_node(np, 0, 0);
+> > > > > > >         if (!pdata->mipi_host_node) {
+> > > > > > >                 DRM_DEV_ERROR(dev, "fail to get internal panel.\n");
+> > > > > > >                 return -ENODEV;
+> > > > > > >         }
+> > > > > > >
+> > > > > > > -       bus_type = V4L2_FWNODE_BUS_TYPE_PARALLEL;
+> > > > > > > +       bus_type = 0;
+> > > > > > >         mipi_lanes = MAX_LANES_SUPPORT;
+> > > > > > >         ep0 = of_graph_get_endpoint_by_regs(np, 0, 0);
+> > > > > > >         if (ep0) {
+> > > > > > > @@ -1640,8 +1640,8 @@ static int anx7625_parse_dt(struct device *dev,
+> > > > > > >                 mipi_lanes = of_property_count_u32_elems(ep0, "data-lanes");
+> > > > > > >         }
+> > > > > > >
+> > > > > > > -       if (bus_type == V4L2_FWNODE_BUS_TYPE_PARALLEL) /* bus type is Parallel(DSI) */
+> > > > > > > -               pdata->is_dpi = 0;
+> > > > > > > +       if (bus_type == V4L2_FWNODE_BUS_TYPE_DPI) /* bus type is DPI */
+> > > > > > > +               pdata->is_dpi = 1;
+> > > > > > >
+> > > > > > >         pdata->mipi_lanes = mipi_lanes;
+> > > > > > >         if (pdata->mipi_lanes > MAX_LANES_SUPPORT || pdata->mipi_lanes <= 0)
+> > > > > >
+> > > > > > Reviewed-by: Robert Foss <robert.foss@linaro.org>
+> > > > >
+> > > > > Acked-by: Robert Foss <robert.foss@linaro.org>
+> > > >
+> > > > Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+> > > >
+> > > > Confirmed this fixes the display on Juniper (Acer Chromebook Spin 311) on
+> > > > mainline (next-20220422).
+> > > >
+> > > > Xin, in the future, please send the whole series to all recipients of
+> > > > all patches listed by get_maintainers.pl, not just the recipients of
+> > > > each patch. In the case of this series, they should have been sent
+> > > > to all of the mailing lists (media, devicetree, dri-devel) so that
+> > > > everyone has the same, full view of the patches.
+> > > Hi ChenYu, OK, I'll send to all media, devicetree, dri-devel next time.
+> > > Thanks,
+> > > Xin
+> > > >
+> > > > ChenYu
+> >
+> > Applied 3/4 + 4/4 to drm-misc-next.
+>
+> This patch doesn't even compile. Can you pls fix this up asap? Also
+> pls compile-test before pushing ...
 
-If you're looking at me, I don't have the hardware to test, sorry.
-Frame DMA is one of the components NXP removed when building their DSA
-variants of these switches. But the function is called once or twice per
-NAPI poll cycle, so it's worth optimizing as much as possible.
+Marek says the prerequisite landed through linux-media, and that's why
+it compilers on linux-next but not in drm-misc-next.
 
-Clement, could you please do some testing? The patch that Andrew is
-talking about is 35da1dfd9484 ("net: dsa: mv88e6xxx: Improve performance
-of busy bit polling").=
+Don't do that.
+
+Instead:
+- merge all patches through one branch, with the foreign patches acked
+for that merge patch
+- wait until you can backmerge all the dependencies
+- do a topic branch
+
+This probably needs to be reverted here and instead merged through
+linux-media. Or you wait until -rc1 and then apply it to
+drm-misc-next.
+-Daniel
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

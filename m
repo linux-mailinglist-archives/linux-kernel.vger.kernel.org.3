@@ -2,55 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D94A052F7E0
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 05:09:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0002452F7E7
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 05:13:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354425AbiEUDI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 23:08:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52756 "EHLO
+        id S1350352AbiEUDNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 23:13:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231627AbiEUDIy (ORCPT
+        with ESMTP id S232435AbiEUDNo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 23:08:54 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D185815E61A;
-        Fri, 20 May 2022 20:08:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=GxNkNtUv6N3Tj2YSbc6Q95yX7yWRN2SSYpLlOny+k3w=; b=LvCw6ToyXw4MKse/VNChJdugHE
-        2BNemmkXG/9p9KPM3Je0Q4KPOtpd5VEby5fDaWrr8Jf3adgdRGEbQlzoGPPJH7RDKfYDPC5PCKonr
-        Zef6/lHQKmgSBZduaaq/ROYLdNJNDznXMWTy/CaXUNzmVlPvOBkuR23LFBItdOFxE2ZhBrprjddCI
-        WSflXL3NQb0O5CdQWeuEQt6G9O2113/wvJ7/K7L0MJeRU+C1GjqRGKnk/2/S5RDWNCKeVebt1dfWJ
-        5VkmfGFwmiOmyBIDQA8hfb+f6p0F+vdgElDJG7k0uBE3Hs0BNOV1cArHs8sadeiy+cqNw/eLvuc6Q
-        CBJQMCQw==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nsFU1-00EKVz-7v; Sat, 21 May 2022 03:08:49 +0000
-Message-ID: <3ae306e0-c6c7-ed12-cacd-62b1c26dba3c@infradead.org>
-Date:   Fri, 20 May 2022 20:08:43 -0700
+        Fri, 20 May 2022 23:13:44 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E65415EA63
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 20:13:43 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-e656032735so12378176fac.0
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 20:13:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to;
+        bh=z9YTOjtD+Dp8ysX3Zqk41W0+lPLgTo0iBxjrvvqtCBU=;
+        b=cLDsvBQl3CZnZjmn3PmDvOxQs7A+4qpMSGeH+GcvPeqE6Rvcs0ccD3rvO0oo6H8M4v
+         yEhmbpIEQToKgIxmIMitMFetTqQiY55KOQGQWEmS9133pgxN41HPQqgKkrwNCHndBuAT
+         h66dGug5YTy2lURMzBPiPK2i5uxrMz3oPziA8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to;
+        bh=z9YTOjtD+Dp8ysX3Zqk41W0+lPLgTo0iBxjrvvqtCBU=;
+        b=hnWU2sIOOQ9yixSjGR+R7s3VYrGy0VUpyGiVx5vX0ZUrIDJWfpR39uakoTRsVFb7KE
+         RkgoW9G4bNOImiYlLEw4v+L4A1D8vE5/2/DVW4piPdImYYpvQrziyC57BYEzYfWaUO/M
+         EPrmGOA34/HSHGNdhaF37bhf9COyUGDD75FdOOQ7agxxMRX/P5sGZAGFk/Mty7q/Vpgs
+         AcOhUvF3j1koFva6IvPbFpBUbcRaOTrRFupY5ngvSblnb5kZYbmdZLNqmJGWJi3OdV7G
+         /UtyRRpnIkx9osWxw3rnj/dIuBO9gwAyqRciCwGG5uoSb/Uow+nsSfOkwDFTXOe9hkFK
+         mv9A==
+X-Gm-Message-State: AOAM533X7EMUSnFE7L6jZhwdIEpy9oAA/1NJxv/n2FV3BpDrFUd5IdEq
+        YhGlaMqvwTthrtRkF2nmr8m/PKSCi3kLcvTIjgM3pw==
+X-Google-Smtp-Source: ABdhPJyIw+llNRTQ/iWjLecfnj7stFoJrXY3wx+LQdTK0mDBx0mttcqVey3oWixUE9g2fqdMqfohHlynJ4sBtrZiqhk=
+X-Received: by 2002:a05:6870:240d:b0:f1:b878:e97c with SMTP id
+ n13-20020a056870240d00b000f1b878e97cmr6985165oap.193.1653102821168; Fri, 20
+ May 2022 20:13:41 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 20 May 2022 20:13:40 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: kbuild problem: ERROR: modpost: missing MODULE_LICENSE() in
- drivers/iio/afe/iio-rescale.o
-Content-Language: en-US
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-iio@vger.kernel.org, Peter Rosin <peda@axentia.se>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>
-References: <18500f18-9cd5-a81c-4a55-14e999ed4496@infradead.org>
-In-Reply-To: <18500f18-9cd5-a81c-4a55-14e999ed4496@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <1652877755-25120-1-git-send-email-quic_srivasam@quicinc.com>
+References: <1652877755-25120-1-git-send-email-quic_srivasam@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Fri, 20 May 2022 20:13:40 -0700
+Message-ID: <CAE-0n53g9rWks+euk5KHBzmJNEB3xLbJzMgCxN52DO5x+9-Wgg@mail.gmail.com>
+Subject: Re: [PATCH v2] ASoC: qcom: soundwire: Add support for controlling
+ audio CGCR from HLOS
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        agross@kernel.org, alsa-devel@alsa-project.org,
+        bgoswami@quicinc.com, bjorn.andersson@linaro.org,
+        broonie@kernel.org, devicetree@vger.kernel.org,
+        judyhsiao@chromium.org, lgirdwood@gmail.com,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        perex@perex.cz, quic_plai@quicinc.com, quic_rohkumar@quicinc.com,
+        robh+dt@kernel.org, srinivas.kandagatla@linaro.org, tiwai@suse.com,
+        vkoul@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,43 +73,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Quoting Srinivasa Rao Mandadapu (2022-05-18 05:42:35)
+> diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
+> index da1ad7e..445e481 100644
+> --- a/drivers/soundwire/qcom.c
+> +++ b/drivers/soundwire/qcom.c
+> @@ -1333,6 +1337,10 @@ static int qcom_swrm_probe(struct platform_device *pdev)
+>         ctrl->bus.compute_params = &qcom_swrm_compute_params;
+>         ctrl->bus.clk_stop_timeout = 300;
+>
+> +       ctrl->audio_cgcr = devm_reset_control_get_exclusive(dev, "swr_audio_cgcr");
+> +       if (IS_ERR(ctrl->audio_cgcr))
+> +               dev_err(dev, "Failed to get audio_cgcr reset required for soundwire-v1.6.0\n");
 
+Why is there no return on error here? Is the reset optional?
 
-On 5/20/22 19:40, Randy Dunlap wrote:
-> Hi,
-> 
-> In March I reported that a randconfig build complained:
-> 
-> ERROR: modpost: missing MODULE_LICENSE() in drivers/iio/afe/iio-rescale.o
-> 
-> (https://lore.kernel.org/all/16509fb6-e40c-e31b-2c80-264c44b0beb9@infradead.org/)
-> 
-> I am still seeing this problem so I tried to dig into it a bit.
-> However, I don't see why get_next_modinfo() and friends don't find the
-> MODULE_LICENSE() since it is in the iio-rescale.o file.
-> 
-> (BTW, I see this build error on many different $ARCH [around 15 tested]
-> and with 2 different versions of GCC.)
-> 
-> Q1: Is modpost checking both vmlinux and iio-rescale.o for modinfo license
-> strings?
-> 
-> It looks like it is, because it appears (?) that modpost is looking at
-> drivers/iio/test/iio-test-rescale.o (<<<<< a kunit test, which is builtin
-> in my .config) and at drivers/iio/afe/iio-rescale.o (which is built as a
-> loadable module).
-> 
-> Is this confusing modpost?
-> I renamed drivers/iio/afe/iio-rescale.c to afe-rescale.c and changed its
-> Makefile entry accordingly and the MODULE_LICENSE error goes away.
-
-Oh well. This rename causes drivers/iio/test/iio-test-rescale.c to have
-build errors, so that's not a solution, just some info...
-
-
-> Is this a modpost error or is kunit messing things up?
-> 
-> thanks for looking.
-
--- 
-~Randy
+> +
+>         ret = qcom_swrm_get_port_config(ctrl);
+>         if (ret)
+>                 goto err_clk;

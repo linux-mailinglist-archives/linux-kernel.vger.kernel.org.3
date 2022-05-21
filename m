@@ -2,74 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58C7952F8C7
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 06:58:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE49752F8CB
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 07:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237509AbiEUE6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 00:58:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
+        id S1354459AbiEUFAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 01:00:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbiEUE6D (ORCPT
+        with ESMTP id S229740AbiEUFAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 00:58:03 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6894A16D13D
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 21:57:55 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id w17-20020a17090a529100b001db302efed6so9327357pjh.4
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 21:57:55 -0700 (PDT)
+        Sat, 21 May 2022 01:00:19 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9ABF170F2C;
+        Fri, 20 May 2022 22:00:17 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id bo5so9290589pfb.4;
+        Fri, 20 May 2022 22:00:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=THgJXLsn0Ot2fDV0cFcGYcE4RJPtFgenCQ+HURhdl4I=;
-        b=FZgy8N6BAuXSCGbfu81TBLlDLTF+i6kV679S+qdqUFHkHjZlnqOlsw3F5i0pc6/QLF
-         u8gLDsiw/sS7p8DxPJ2gqf5duzMa4rNUWNrHa5lQEDQmivPIAg+UgCoWvrvRYm+31H5t
-         2siQRu0qw3C+np34TzZi/7IbMKidVFSi2ArnpljolplZN3rcDL3vKXmNFwMveFfJ22K+
-         BkyCrDfGGQd/g7v5i94nRri/RMrbjPu3+YRC86w9zrpBq+LO0Byjz6rhDyJHzu0B1Umh
-         H5kLVl1k8Ym3C+aJ9bV1zsHIM3NsjWDjO57A2c0D0hpJueAbYMhTNC5SucH5/jWQnt8Y
-         Auow==
+        bh=TT52cKU8Oo9pvmq53QQ/gpy/l4ehF6WUmfOqY1Ifb5w=;
+        b=Ri4Q2yDK9UddopX/efZVecxLBB/qzjAX8bOizIYqnYBz/IVPnAqRxKzwm1vJ0T8X0+
+         nuqli3W/XU2w+3+GIA1ghzD5MCISZJd+atg1PhfSHFZW8V7M+vLgShlWqqVmmArVHAAj
+         zffrOtgFX9Rqj5/HifljRxmrvGxNRZ4O1kzoXZZs4f9WN5Ykt4MQYUKi7LteHzVVgHyW
+         bpJ7xFRb4wFhtzMY02KmxQhyr0XbS9Y1JJhNAkx9exmbRdG/+E4chTBnMvnwAbkQWjFw
+         0NmE6kHrDNabzqwLUR32uOHW5Rv+xwsWUiIYDkEz1PtdnS4d6hk0vr0HXy7biSD13qSm
+         FTBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=THgJXLsn0Ot2fDV0cFcGYcE4RJPtFgenCQ+HURhdl4I=;
-        b=fvgzhIM8CpJ7dRNU5T/H8fVwmPfJh9G6Uf/5FZgH7n5mbIXSLMuyS2QSssHLdTaszU
-         Qo4TtPT3WlkjChCt+sp2CuujZPQN3rbEeW2QT2XmoZW8DFEQeb5neB4m/QdN6W4MrDjY
-         sxS6Yj3xJeop/46WzpcJgIr7nnGQvW0GgH+mxtkmeBWCJwkhfaiJbJDkiJzh6bMs6SDX
-         fJmmiDOnahN2Rwwej924UahxSd9HzFp89guDJB3a4XJNw2P5E9hWmY4vKfpt1pVONzJU
-         DsOusJ55rHvziHGmJbFyOK0TNgg4eEAzp4QdFWUXzgO+ogLBchEaVypCbJv2OcSzXnMW
-         qRCw==
-X-Gm-Message-State: AOAM532GVhtnktLVcVqtOIZ3tq2hks7BofEnEnbXR+E8h+31XHcMK55Z
-        HeitYwHkf9+/xxm5HvWpn+M=
-X-Google-Smtp-Source: ABdhPJxOadA772Cc5R6WFp+H45uHE9aeJ0zS9S8FF4APLyO64LwVqCzK7+SDgnOZDArp1s1uMX3f/A==
-X-Received: by 2002:a17:90b:4a4d:b0:1df:53dc:c094 with SMTP id lb13-20020a17090b4a4d00b001df53dcc094mr15193310pjb.69.1653109074763;
-        Fri, 20 May 2022 21:57:54 -0700 (PDT)
+        bh=TT52cKU8Oo9pvmq53QQ/gpy/l4ehF6WUmfOqY1Ifb5w=;
+        b=WhsCt/Ya/yYrrTRc+2eXgjqY6pui/1isCdBudiEPx7IYA619HY/JmmSun9ngDuHuNq
+         Ph3SPGcjEXaAVkCRIT6goD8P31hEpFWuyCFMsvKeRkCMGhRBz/x2LkEB6HcW0cbq+DXS
+         R/iUoBGIPCF39U3ert/zg541/7f0Uk9QI/suZOXsF0ei7CV00fSeE4PyehH/ZFQrrQmW
+         FIa7CVk+t55Cylo9td8h8oBPbesnDJZdAms7BSTCGrThknmiTP5aeQDVhV8O30ILP5ht
+         WK1UhawlDgsHak6r2vrU0reRCQ/monfOIjol/8SihOiueOPz3k0vSl9Co9evYcvxs358
+         sJmw==
+X-Gm-Message-State: AOAM531RtiChTVSCULvRyAukCg4LUeVWuxVzrI8bfZcuxHFHu4VgROFY
+        vtihJzdY5QnYIQ9xX1X3seirOFVzpU0=
+X-Google-Smtp-Source: ABdhPJy1pzrVnSH8RYDdkvaQ97w0zLTB4FwLCQZ3KInQR5+wRhOBGCaAkd5Yze73kQyif3z+3cxqFA==
+X-Received: by 2002:a05:6a00:1acd:b0:50e:1872:c680 with SMTP id f13-20020a056a001acd00b0050e1872c680mr13571991pfv.16.1653109217238;
+        Fri, 20 May 2022 22:00:17 -0700 (PDT)
 Received: from localhost ([2620:10d:c090:400::4:1761])
-        by smtp.gmail.com with ESMTPSA id c2-20020a62f842000000b0051800111b2fsm2699075pfm.216.2022.05.20.21.57.53
+        by smtp.gmail.com with ESMTPSA id bo4-20020a056a000e8400b0050dc76281e2sm2565515pfb.188.2022.05.20.22.00.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 21:57:54 -0700 (PDT)
+        Fri, 20 May 2022 22:00:16 -0700 (PDT)
 Sender: Tejun Heo <htejun@gmail.com>
-Date:   Fri, 20 May 2022 18:57:52 -1000
+Date:   Fri, 20 May 2022 19:00:15 -1000
 From:   Tejun Heo <tj@kernel.org>
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v3] workqueue: Wrap flush_workqueue() using a macro
-Message-ID: <YohxUC45xk523g9I@slm.duckdns.org>
-References: <a0d6b5e4-b9c8-1a43-570f-4c73b0f6fc0c@I-love.SAKURA.ne.jp>
- <Yn0538VavQPv+/Ws@slm.duckdns.org>
- <7b2fecdb-59ae-2c54-5a5b-774ef7054d1b@I-love.SAKURA.ne.jp>
- <1c1b272b-239c-e1d1-84de-47d02feb911e@I-love.SAKURA.ne.jp>
- <YodK1czmhZtGmJ8E@slm.duckdns.org>
- <5f417d30-34a7-8da1-0ad5-33bd750582c7@I-love.SAKURA.ne.jp>
- <Yod3S8jmle+LYlES@slm.duckdns.org>
- <1a1634ac-db0e-a44c-b286-a3aba55ad695@I-love.SAKURA.ne.jp>
- <YofLmMTAjNVM+9nQ@slm.duckdns.org>
- <d05f4745-ba08-61eb-4780-ddfe50d0f1b9@I-love.SAKURA.ne.jp>
+To:     "yukuai (C)" <yukuai3@huawei.com>
+Cc:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        axboe@kernel.dk, ming.lei@redhat.com, geert@linux-m68k.org,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
+Subject: Re: [PATCH -next v3 2/2] blk-throttle: fix io hung due to
+ configuration updates
+Message-ID: <Yohx305S2bkSemQx@slm.duckdns.org>
+References: <20220519085811.879097-1-yukuai3@huawei.com>
+ <20220519085811.879097-3-yukuai3@huawei.com>
+ <20220519095857.GE16096@blackbody.suse.cz>
+ <a8953189-af42-0225-3031-daf61347524a@huawei.com>
+ <20220519161026.GG16096@blackbody.suse.cz>
+ <73464ca6-9412-cc55-d9c0-f2e8a10f0607@huawei.com>
+ <fe3c03f7-9b52-7948-075d-cbdf431363e1@huawei.com>
+ <20220520160305.GA17335@blackbody.suse.cz>
+ <Yoe/1BRYzSRI0JBd@slm.duckdns.org>
+ <97be6af0-ea94-f4ee-5ab2-02b6fc02cbff@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d05f4745-ba08-61eb-4780-ddfe50d0f1b9@I-love.SAKURA.ne.jp>
+In-Reply-To: <97be6af0-ea94-f4ee-5ab2-02b6fc02cbff@huawei.com>
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
@@ -81,52 +84,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 21, 2022 at 10:14:36AM +0900, Tetsuo Handa wrote:
-> On 2022/05/21 2:10, Tejun Heo wrote:
-> > On Fri, May 20, 2022 at 08:43:41PM +0900, Tetsuo Handa wrote:
-> >> All flush_workqueue(system_*_wq) users are gone in linux-next.git, and this patch
-> >> is for preventing new flush_workqueue(system_*_wq) users from coming in.
-> > 
-> > Are we fully sure? Also, there can be other changes in flight which aren't
-> > covered. It's just not nice in general to intentionally trigger build
-> > failures without an easy way to remediate it.
+On Sat, May 21, 2022 at 11:51:11AM +0800, yukuai (C) wrote:
+> It's right the problem is self-inflicted. However, I do think with
+> Michal's suggestion, how throttled bios are handled while new config is
+> submitted really make sense from the functional poinit of view.
 > 
-> Yes, we are fully sure. Subset of this patch is already in linux-next.git without problems.
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=next-20220520&id=5015b3b61696f8f44e7113e5bc14f4a20cbf57ff
-> There aren't other changes in flight which aren't covered.
-> 
-> I believe that it is safe to replace the commit above with this patch when Linus released
-> 5.18 final (or maybe 5.18-rc8) is released next Sunday. I also believe that it is safe to
-> send this patch right before Linus releases 5.19-rc1.
-> 
-> I guess that there are several out-of-tree kernel modules which will start
-> failing with this patch. But they can use
-> 
-> 	#undef flush_workqueue
-> 
-> as a temporary workaround (if they can't remediate easily) until we add WARN_ON()
-> as a run-time check. We will need to wait for several months until we can add
-> WARN_ON() as a run-time check, for that happens after all flush_scheduled_work()
-> users are gone.
+> Do you think the solution is OK?
 
-How is that better tho? If we can just trigger build warning, that's way
-better than asking people to hunt down some random define and shoot it down.
-How would they do that?
-
-> >> Therefore, triggering a build error (by sending this patch to linux.git right
-> >> before 5.19-rc1 in order to make sure that developers will not use
-> >> flush_workqueue(system_*_wq) again) is what this patch is for.
-> > 
-> > What I'm trying to say is that, if we can trigger build warnings, that'd be
-> > a better way to go about it.
-> 
-> Some unlucky users (if any) can workaround this build failure using #undef.
-> Nothing to bother with how to emit warning messages instead of error messages.
-
-We're talking in circles. If we can trigger warning, I don't see a reason
-why we'd want to trigger build failures. It's a really bad user experience
-for anybody who doesn't know what is going on exactly. So, nack on the
-current patch.
+I haven't followed the details but anything which isn't overly complex and
+doesn't produce extra budget or eat into existing one on config change is
+fine by me.
 
 Thanks.
 

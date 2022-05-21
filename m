@@ -2,136 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AABBC52F911
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 07:53:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A696C52F915
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 07:55:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345331AbiEUFxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 01:53:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53266 "EHLO
+        id S1351791AbiEUFze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 01:55:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354636AbiEUFxn (ORCPT
+        with ESMTP id S233317AbiEUFza (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 01:53:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19319195E94;
-        Fri, 20 May 2022 22:53:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B1D36062B;
-        Sat, 21 May 2022 05:53:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0FA0C385A5;
-        Sat, 21 May 2022 05:53:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653112421;
-        bh=dpbIpqoujbScv7RvmvWip90jnfnepY2P/FAJKsXF4cQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bgncoWYvFLcFeTXPFtlMs/6ibTWl4YfV7+6xasUSIRzZpR4Dvqnu1672UtZ5XMdyR
-         SDAL8/RVqmbuNbkiayONTWP7rRTw3MQO4hZSdFGtTFVA1NORQrhb4JPY5AvzC7AmsA
-         TIJb16WJBBzuw0DpvcDbCIfPFpnN7DIHNNdzEnwI8VkBVzqFEp8H3/r3x5/E9MBFSi
-         k/8GN6wlVE/J1YwVSjFJzS+wzsDEou/pkfuKOAHgPZRKCYHjBrpigUhr/Eq4Oj+ZUe
-         PDQR7f94W8ERCOLTWxmdugsx2pZ2EU3pni4O5w8LiWL1nKpjs5gwdMla9u+Rp05Xed
-         UhOuSS7EPsl7Q==
-Date:   Sat, 21 May 2022 07:53:37 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Tyrone Ting <warp5tw@gmail.com>
-Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        venture@google.com, yuenn@google.com, benjaminfair@google.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        andriy.shevchenko@linux.intel.com, jarkko.nikula@linux.intel.com,
-        semen.protsenko@linaro.org, rafal@milecki.pl, sven@svenpeter.dev,
-        jsd@semihalf.com, jie.deng@intel.com, lukas.bulwahn@gmail.com,
-        arnd@arndb.de, olof@lixom.net, tali.perry@nuvoton.com,
-        Avi.Fishman@nuvoton.com, tomer.maimon@nuvoton.com,
-        KWLIU@nuvoton.com, JJLIU0@nuvoton.com, kfting@nuvoton.com,
-        openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 07/10] i2c: npcm: Handle spurious interrupts
-Message-ID: <Yoh+YZestxT7oG8B@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <warp5tw@gmail.com>, avifishman70@gmail.com,
-        tmaimon77@gmail.com, tali.perry1@gmail.com, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        andriy.shevchenko@linux.intel.com, jarkko.nikula@linux.intel.com,
-        semen.protsenko@linaro.org, rafal@milecki.pl, sven@svenpeter.dev,
-        jsd@semihalf.com, jie.deng@intel.com, lukas.bulwahn@gmail.com,
-        arnd@arndb.de, olof@lixom.net, tali.perry@nuvoton.com,
-        Avi.Fishman@nuvoton.com, tomer.maimon@nuvoton.com,
-        KWLIU@nuvoton.com, JJLIU0@nuvoton.com, kfting@nuvoton.com,
-        openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220517101142.28421-1-warp5tw@gmail.com>
- <20220517101142.28421-8-warp5tw@gmail.com>
+        Sat, 21 May 2022 01:55:30 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF551195EB4;
+        Fri, 20 May 2022 22:55:28 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id x143so9334416pfc.11;
+        Fri, 20 May 2022 22:55:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=A9K5jYakLsitCG3aeCoI3LC43G255mEcSCnND1aMnvE=;
+        b=HL6eA1yFsYmhhwBOMTcGVvfgJMcAN6Li3zYgH4JRb/UQMdkU5MdKLURgI/4AYpC4xq
+         KEOf/+Y72k6XqXWKfSecDt9ynqI/MD6AEPSCF8ugdKERDsz57OWrqgTMcQ3OApbNy4et
+         lW5U/ygWmaMkwVEF+0wPNJAEtyL3FTMmu5Kw0Mo2JuvufyejJ3FWfSbC7zNFZ6BPz+wf
+         giWLoCh/z7r+NBlq5T5v4yplIX9/Km6Hfgxk95uD034RYQQGcewHJn/KtUqlx3HjF7Q/
+         UVSGOzeodmxkYuoBFmY9AY+1BZulTyaCBx84iwPRQsM0UzO3U2RJyx4WUVCS6svLn6eJ
+         ZDpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=A9K5jYakLsitCG3aeCoI3LC43G255mEcSCnND1aMnvE=;
+        b=E2cQ434OnskwMAn6qOHT9D64lAUArJsM7rtZl0moTaxWWFVUiKXKRaD4zRsfJgoDQG
+         WZ71td5gvNl8RQLL7STdWYrvCSq5q45Zy2YUYkUNt4XX9wIal5EcLNN0njevhcE5gB+r
+         pPv03ijyvMUQv/emYIesHXj1C/a5HkHFmuhqtvu+JuEl/4OMOVL8VPexl/C96BukOIYy
+         PEtTda/pmiHYVcV7kMqJVEdC9aIeH27slS94/P8SaF3DDdW3VZAIqfIbXgmEB+n7gB45
+         1DdSwIv2r0GzjWJLxHiIPNq9CFAP9Zu4aPdbXFZr7olxJlxW846BJKSJMAImzIyNXU9l
+         UU7A==
+X-Gm-Message-State: AOAM531V4IoZw3C8cAamWANa27ECf3ZSFmgbLrhJlAvbq9dofUc7ZiW7
+        SOf8Y2oMjrtGQKiXAt5O7w==
+X-Google-Smtp-Source: ABdhPJzrcNGHH5doaI82Wr3eE19tL3mtNl4XKxa7gv6HxfWFzKm+dAVVmkJl5H8+3IDkoPbEiUISuw==
+X-Received: by 2002:a63:e513:0:b0:3ab:a3fb:f100 with SMTP id r19-20020a63e513000000b003aba3fbf100mr11276173pgh.70.1653112528379;
+        Fri, 20 May 2022 22:55:28 -0700 (PDT)
+Received: from localhost.localdomain ([144.202.91.207])
+        by smtp.gmail.com with ESMTPSA id v11-20020a170902d68b00b0015e8d4eb284sm685971ply.206.2022.05.20.22.55.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 May 2022 22:55:27 -0700 (PDT)
+From:   Zheyu Ma <zheyuma97@gmail.com>
+To:     maintainers@bluecherrydvr.com, anton@corp.bluecherry.net,
+        andrey.utkin@corp.bluecherry.net, mchehab@kernel.org
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zheyu Ma <zheyuma97@gmail.com>
+Subject: [PATCH] media: tw5864: Convert to use managed functions pcim* and devm*
+Date:   Sat, 21 May 2022 13:55:17 +0800
+Message-Id: <20220521055517.3099142-1-zheyuma97@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="XIXrVdc2uJ0FLF/V"
-Content-Disposition: inline
-In-Reply-To: <20220517101142.28421-8-warp5tw@gmail.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When removing the module, we will get the follow flaw:
 
---XIXrVdc2uJ0FLF/V
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+[   69.323999] remove_proc_entry: removing non-empty directory 'irq/21', leaking at least 'tw5864'
+[   69.324449] WARNING: CPU: 0 PID: 395 at fs/proc/generic.c:717 remove_proc_entry+0x389/0x3f0
+[   69.326909] RIP: 0010:remove_proc_entry+0x389/0x3f0
+[   69.331089] Call Trace:
+[   69.331215]  <TASK>
+[   69.331327]  unregister_irq_proc+0x14c/0x170
+[   69.332579]  tw5864_finidev+0x12a/0x190 [tw5864]
+[   69.332811]  pci_device_remove+0x92/0x240
 
-On Tue, May 17, 2022 at 06:11:39PM +0800, Tyrone Ting wrote:
-> From: Tali Perry <tali.perry1@gmail.com>
->=20
-> On some platforms in rare cases (1 to 100,000 transactions),
-> the i2c gets a spurious interrupt which means that we enter an interrupt
-> but in the interrupt handler we don't find any status bit that points to
-> the reason we got this interrupt.
->=20
-> This may be a case of a rare HW issue or signal integrity issue that is
-> still under investigation.
->=20
-> In order to overcome this we are doing the following:
-> 1. Disable incoming interrupts in master mode only when slave mode is not
->    enabled.
-> 2. Clear end of busy (EOB) after every interrupt.
-> 3. Clear other status bits (just in case since we found them cleared)
-> 4. Return correct status during the interrupt that will finish the
->    transaction.
->=20
-> On next xmit transaction if the bus is still busy the master will issue a
-> recovery process before issuing the new transaction.
->=20
-> Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller drive=
-r")
-> Signed-off-by: Tali Perry <tali.perry1@gmail.com>
-> Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
+Fix this by using managed functions, this makes the error handling more
+simpler.
 
-Applied to for-next, thanks!
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+---
+ drivers/media/pci/tw5864/tw5864-core.c | 30 ++++++--------------------
+ 1 file changed, 7 insertions(+), 23 deletions(-)
 
+diff --git a/drivers/media/pci/tw5864/tw5864-core.c b/drivers/media/pci/tw5864/tw5864-core.c
+index 5cae73e6fb9c..560ff1ddcc83 100644
+--- a/drivers/media/pci/tw5864/tw5864-core.c
++++ b/drivers/media/pci/tw5864/tw5864-core.c
+@@ -254,9 +254,9 @@ static int tw5864_initdev(struct pci_dev *pci_dev,
+ 
+ 	/* pci init */
+ 	dev->pci = pci_dev;
+-	err = pci_enable_device(pci_dev);
++	err = pcim_enable_device(pci_dev);
+ 	if (err) {
+-		dev_err(&dev->pci->dev, "pci_enable_device() failed\n");
++		dev_err(&dev->pci->dev, "pcim_enable_device() failed\n");
+ 		goto unreg_v4l2;
+ 	}
+ 
+@@ -265,21 +265,16 @@ static int tw5864_initdev(struct pci_dev *pci_dev,
+ 	err = dma_set_mask(&pci_dev->dev, DMA_BIT_MASK(32));
+ 	if (err) {
+ 		dev_err(&dev->pci->dev, "32 bit PCI DMA is not supported\n");
+-		goto disable_pci;
++		goto unreg_v4l2;
+ 	}
+ 
+ 	/* get mmio */
+-	err = pci_request_regions(pci_dev, dev->name);
++	err = pcim_iomap_regions(pci_dev, BIT(0), dev->name);
+ 	if (err) {
+ 		dev_err(&dev->pci->dev, "Cannot request regions for MMIO\n");
+-		goto disable_pci;
+-	}
+-	dev->mmio = pci_ioremap_bar(pci_dev, 0);
+-	if (!dev->mmio) {
+-		err = -EIO;
+-		dev_err(&dev->pci->dev, "can't ioremap() MMIO memory\n");
+-		goto release_mmio;
++		goto unreg_v4l2;
+ 	}
++	dev->mmio = pcim_iomap_table(pci_dev)[0];
+ 
+ 	spin_lock_init(&dev->slock);
+ 
+@@ -291,7 +286,7 @@ static int tw5864_initdev(struct pci_dev *pci_dev,
+ 
+ 	err = tw5864_video_init(dev, video_nr);
+ 	if (err)
+-		goto unmap_mmio;
++		goto unreg_v4l2;
+ 
+ 	/* get irq */
+ 	err = devm_request_irq(&pci_dev->dev, pci_dev->irq, tw5864_isr,
+@@ -308,12 +303,6 @@ static int tw5864_initdev(struct pci_dev *pci_dev,
+ 
+ fini_video:
+ 	tw5864_video_fini(dev);
+-unmap_mmio:
+-	iounmap(dev->mmio);
+-release_mmio:
+-	pci_release_regions(pci_dev);
+-disable_pci:
+-	pci_disable_device(pci_dev);
+ unreg_v4l2:
+ 	v4l2_device_unregister(&dev->v4l2_dev);
+ 	return err;
+@@ -331,11 +320,6 @@ static void tw5864_finidev(struct pci_dev *pci_dev)
+ 	/* unregister */
+ 	tw5864_video_fini(dev);
+ 
+-	/* release resources */
+-	iounmap(dev->mmio);
+-	pci_release_regions(pci_dev);
+-	pci_disable_device(pci_dev);
+-
+ 	v4l2_device_unregister(&dev->v4l2_dev);
+ }
+ 
+-- 
+2.36.1
 
---XIXrVdc2uJ0FLF/V
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKIfmAACgkQFA3kzBSg
-KbZAaRAAmwZ/2/JCqfwS5lmeCmxd5j8Pht4lV2IIbFRdTYuTh5eYLNUhYTRO6705
-UC/qiIIdVog7nVhwYB0vR1vgISyQRItiCm3lfxhaYNd6FBSksfpF29Dh8RIKMUjg
-tu7TsWwI1nAxLcagFv8e6l/E2vKJHqwJfO1H8U1hj9KrLUR+wcunFfLWBichH/my
-hQmR9y29/Tjx2ENCTMjJkKMoYnN5g4H5tsylqD1aG002sje5WUWyo0zXBdiYe85R
-nRpP/yYmv+/MWYSZb0vcxM8Qbpo6I6p8HFwYDrcupKT6eoWUUwAfBDB0y89gleJZ
-z8SpspncmsIwlNvVW0CWz3EYw8XQOxJcVoUHmCNRH36LvxocGaYpLhDdRY9l4RCJ
-oqfiq2hg+dX7TIBMk01d2NR/rPuT7z+NhfmV/foMf3/z421dNmYdsXJhZ6nPYAN3
-LnVg8u8mVJF20iGSzFsuXd42dbvAOHwB16980UbPAHiybE9W4FTWsl1VaP9JS8Vx
-1OW4K59h6HYN64MrptiIciW27C00fqZXWiGZk1z0gjOuV+eToXVOc5u5OoP6YuMx
-xRZHeWcSAf110OaOwSOueq4+V8SZteeBHg3HKioE7VZ7ty0t7tkttHW5Gw+CcMyn
-5F0kpziefNUkQKIJSZ/9LaZz3qcs09DtiRkbICBgZ/vlx91iyVU=
-=XB3r
------END PGP SIGNATURE-----
-
---XIXrVdc2uJ0FLF/V--

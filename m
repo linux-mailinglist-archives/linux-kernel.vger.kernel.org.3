@@ -2,57 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15AA152FA99
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 12:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A55552FAA7
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 12:24:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242095AbiEUKPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 06:15:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43614 "EHLO
+        id S242180AbiEUKYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 06:24:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235635AbiEUKPO (ORCPT
+        with ESMTP id S231536AbiEUKY0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 06:15:14 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7033492D11;
-        Sat, 21 May 2022 03:15:12 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: usama.anjum)
-        with ESMTPSA id 77A5C1F465E9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1653128111;
-        bh=U5YYJMFVDj3+ZXv5ZAFidJafbwiSoIY5HnfXpGh6rAQ=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=oMoyK3w1YJ2PVNfPvw+RD6t1fHMeeqpJmiDcE8SpeQ/4muCzkrsfGVkHgvqJ9C6Hn
-         N88TlBup/hKQ3eFIWH9s0JoZvlDU8HHTOh6SWzS5BSSymMx96ikENa15ZWXHKAAaID
-         PHVtndYhUdryLb8NM7id4YsBl1GrJ9G0SyFwd7ckZBB4o0yWbX26QprnBdiNu1Dgng
-         BHgEzene+7JSCWDzDkdfHhTRnlb/4V/KG1eoK5AYJEiB1qLWyE1STxBG96D2/5DVch
-         eDRa7e7UEBzQV8bq6hqPJLRjjl8/Uhh9w3mEZW1GJPiltOKPxE8Kjb/jC52lITXsAh
-         d83BYBjPrh67A==
-Message-ID: <0d63c264-520c-687d-7ac6-26cb3f119f0b@collabora.com>
-Date:   Sat, 21 May 2022 15:15:03 +0500
+        Sat, 21 May 2022 06:24:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00C0E53B58;
+        Sat, 21 May 2022 03:24:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A1EA6B81B22;
+        Sat, 21 May 2022 10:24:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 937A4C385A9;
+        Sat, 21 May 2022 10:24:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653128660;
+        bh=aQ66ppQ61E71sBFPrUxFfvV2qUpYZYEcuTJAKUG3/QU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AY+09pKT65P2pPSdS3VAfGddTMbpF/wFn9/KqlXrneEKNqbFZRY44lI5pUmqmleY5
+         UYgKcKRWWgorhTduIw0Ol3Tey50HhqiJUm9HL71TkFgMORRbjwgjDd2d1JJobHGl5w
+         9nXOzj4KWnDEKldhqtBBgF6X+fFaZ2PruRuwkRoH1gg6AgNv//w1f2Iay8ftg8TLdc
+         gsijrQdMiZnoM34Y+I80MSYd3FiXQE/8ht7+heIARr1wOJXMt27EUmQh17ayCCRF7B
+         zUWZAeZS7JXjSSpIQw4/z18rP0tEpFcDEVBbseWiC5Am0eV645QLdRSFoWRPP/LLrr
+         5h9/fj/k+w0gA==
+Date:   Sat, 21 May 2022 12:24:16 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Alifer Moraes <alifer.m@variscite.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        eran.m@variscite.com, festevam@gmail.com, kernel@pengutronix.de,
+        linux-imx@nxp.com, linux-i2c@vger.kernel.org,
+        linux@rempel-privat.de, pierluigi.p@variscite.com,
+        s.hauer@pengutronix.de, shawnguo@kernel.org,
+        gaopan <b54642@freescale.com>,
+        Fugang Duan <B38611@freescale.com>,
+        Vipul Kumar <vipul_kumar@mentor.com>
+Subject: Re: (EXT) [PATCH] i2c: imx: add irqf_no_suspend
+Message-ID: <Yoi90G5cphagcxpp@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Alifer Moraes <alifer.m@variscite.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        eran.m@variscite.com, festevam@gmail.com, kernel@pengutronix.de,
+        linux-imx@nxp.com, linux-i2c@vger.kernel.org,
+        linux@rempel-privat.de, pierluigi.p@variscite.com,
+        s.hauer@pengutronix.de, shawnguo@kernel.org,
+        gaopan <b54642@freescale.com>, Fugang Duan <B38611@freescale.com>,
+        Vipul Kumar <vipul_kumar@mentor.com>
+References: <20220307143630.28697-1-alifer.m@variscite.com>
+ <3676803.kQq0lBPeGt@steina-w>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Cc:     usama.anjum@collabora.com, daniel@ffwll.ch, tj@kernel.org,
-        hridya@google.com, christian.koenig@amd.com, jstultz@google.com,
-        tkjos@android.com, cmllamas@google.com, surenb@google.com,
-        kaleshsingh@google.com, Kenny.Ho@amd.com, mkoutny@suse.com,
-        skhan@linuxfoundation.org, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v7 6/6] selftests: Add binder cgroup gpu memory transfer
- tests
-Content-Language: en-US
-To:     "T.J. Mercier" <tjmercier@google.com>,
-        Shuah Khan <shuah@kernel.org>
-References: <20220510235653.933868-1-tjmercier@google.com>
- <20220510235653.933868-7-tjmercier@google.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20220510235653.933868-7-tjmercier@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bW5lVs4zqF9WjfiD"
+Content-Disposition: inline
+In-Reply-To: <3676803.kQq0lBPeGt@steina-w>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,38 +73,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/11/22 4:56 AM, T.J. Mercier wrote:
->  .../selftests/drivers/android/binder/Makefile |   8 +
->  .../drivers/android/binder/binder_util.c      | 250 +++++++++
->  .../drivers/android/binder/binder_util.h      |  32 ++
->  .../selftests/drivers/android/binder/config   |   4 +
->  .../binder/test_dmabuf_cgroup_transfer.c      | 526 ++++++++++++++++++
->  5 files changed, 820 insertions(+)
->  create mode 100644 tools/testing/selftests/drivers/android/binder/Makefile
->  create mode 100644 tools/testing/selftests/drivers/android/binder/binder_util.c
->  create mode 100644 tools/testing/selftests/drivers/android/binder/binder_util.h
->  create mode 100644 tools/testing/selftests/drivers/android/binder/config
->  create mode 100644 tools/testing/selftests/drivers/android/binder/test_dmabuf_cgroup_transfer.c
-> 
-> diff --git a/tools/testing/selftests/drivers/android/binder/Makefile b/tools/testing/selftests/drivers/android/binder/Makefile
-> new file mode 100644
-> index 000000000000..726439d10675
-> --- /dev/null
-> +++ b/tools/testing/selftests/drivers/android/binder/Makefile
-> @@ -0,0 +1,8 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +CFLAGS += -Wall
-Please add $(KHDR_INCLUDES) here to include the uapi header files from
-the source tree.
 
-> +
-> +TEST_GEN_PROGS = test_dmabuf_cgroup_transfer
-Please create a .gitignore file and add test_dmabuf_cgroup_transfer to it.
+--bW5lVs4zqF9WjfiD
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> +
-> +include ../../../lib.mk
-> +
-> +$(OUTPUT)/test_dmabuf_cgroup_transfer: ../../../cgroup/cgroup_util.c binder_util.c
+Hi everyone,
 
--- 
-Muhammad Usama Anjum
+> > The i2c irq is masked when pcie starts a i2c transfer process
+> > during noirq suspend stage. As a result, i2c transfer fails.
+> > To solve the problem, IRQF_NO_SUSPEND is added to i2c bus.
+> >=20
+> > Signed-off-by: Gao Pan <b54642@freescale.com>
+> > Signed-off-by: Fugang Duan <B38611@freescale.com>
+> > Signed-off-by: Vipul Kumar <vipul_kumar@mentor.com>
+
+The SoB from Alifer Moraes is missing, too.
+
+> > goto rpm_disable;
+> >=20
+> >  	/* Request IRQ */
+> > -	ret =3D request_threaded_irq(irq, i2c_imx_isr, NULL, IRQF_SHARED,
+> > +	ret =3D request_threaded_irq(irq, i2c_imx_isr, NULL,
+> > +				   IRQF_SHARED | IRQF_NO_SUSPEND,
+> >  				   pdev->name, i2c_imx);
+> >  	if (ret) {
+> >  		dev_err(&pdev->dev, "can't claim irq %d\n", irq);
+>=20
+>=20
+> I stumbled across Documentation/power/suspend-and-interrupts.rst which st=
+ates:
+> > For this reason, using IRQF_NO_SUSPEND and IRQF_SHARED at the
+> > same time should be avoided.
+> Given this IMHO at least a comment should be inserted why this is fine. I=
+ dont=20
+> have a full picture about the situation, but to me it seems there is a=20
+> reference missing, or why/how does some PCIe start some I2C transfer when=
+ the
+> controller is suspended already? Do I miss something?
+
+Thank you for this comment, Alexander. I second you, this needs
+explanation.
+
+Happy hacking,
+
+   Wolfram
+
+
+--bW5lVs4zqF9WjfiD
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKIvcwACgkQFA3kzBSg
+KbYBVw//eUEuyxhP5NHyCEWeN7/A9Rbd45Wch8anz2ZxTHwrQ/d5jocPR0ZZjb7H
+pGhesAIMaw+LH88Bhw49U8TpbjKNRUwB8J9uaREwtI8X7rlmx8iHLqMadis83HPM
+RZblDYVbe+69+EAKHfKu3WrzMWhGc+tO+hinRPaxCY26h1isuQPaELPBfTyuqiJ5
+NHYfDhVV/qZtMYZI8xfEf8UAN/wGYaVL4Zhputw/XL5ZjCAuczavsInFdwzkzRyX
+JlRb+VXvJAqI5CAz6AYGuaWlMO7hZB81fpGm4+5B6UVPQA6jWl9e9s/L7sVZ1Zjs
+cJYjL3BD3/j0XQArEoMhySZAfs2KNeoXHWnc0zVas1lHHh4HwbEWLFRrK/sv5Wkz
+KkR1mMiLjlFsmxHwFIh+eWN0KDM8pTWCYEaiiCuYaQfeQH6RTE9Ju1l/+tb03mu7
+dPOK6S9Vl+nJ6qYGAS/HDj9nq6GQIX1i3T/bkYvLYE1/lK81AJt/7TuQdV7ulmwF
+jQHd5hpFjh8Bx25oyaK3kqQeCV6PUVtqdxoNCPffqH9BJwRWPdy275ucpZR9+7p9
+ysOhQQ+HDc3kXAVgpWE1AJgj95w/O7WVSpf7D5zwfpjiRyHaNp8qTB1IbcSC6Ty4
+frxbSqyQa4wbGBJfcsiuAe8linmZkmoZfCa3+Sh0vggMmpBM9Pg=
+=CxIu
+-----END PGP SIGNATURE-----
+
+--bW5lVs4zqF9WjfiD--

@@ -2,227 +2,367 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43A8452F9F1
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 10:04:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F55B52F9F6
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 10:09:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354847AbiEUIEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 04:04:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39080 "EHLO
+        id S236113AbiEUIJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 04:09:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244417AbiEUIDu (ORCPT
+        with ESMTP id S231968AbiEUII5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 04:03:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6B8FC1611FE
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 01:03:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653120216;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DK0SAajG/TJcxOWS+cQ31l+UPExFSP3wmD0TKCGxiF0=;
-        b=BsouvqIPkHkCZj29EUPouXgz0aXWOcrKxW9cQzaEMcYY6ytPtTuN3lv2Ykuo1tlPys2KGD
-        xq50noDlQsHinYVEOK3VvjJJZBSmf9zzQ1ehdp9V4RgMroETlRn0E5amUFfsqKnm2KvsdA
-        EQ0PjIRCBxG4rFO+M8jGF1Cy5SXK8HU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-404-jZVjQp2TPJKmwaU8J5fBRQ-1; Sat, 21 May 2022 04:03:33 -0400
-X-MC-Unique: jZVjQp2TPJKmwaU8J5fBRQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 02BB81C06904;
-        Sat, 21 May 2022 08:03:33 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.8])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 30D39112131B;
-        Sat, 21 May 2022 08:03:32 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH net 5/5] rxrpc: Fix decision on when to generate an IDLE ACK
-From:   David Howells <dhowells@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     Marc Dionne <marc.dionne@auristor.com>,
-        linux-afs@lists.infradead.org, dhowells@redhat.com,
-        linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org
-Date:   Sat, 21 May 2022 09:03:31 +0100
-Message-ID: <165312021145.246773.9017083815980096337.stgit@warthog.procyon.org.uk>
-In-Reply-To: <165312017819.246773.14440495192028707532.stgit@warthog.procyon.org.uk>
-References: <165312017819.246773.14440495192028707532.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.4
+        Sat, 21 May 2022 04:08:57 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2CDA1611C1;
+        Sat, 21 May 2022 01:08:56 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id a38so6671622pgl.9;
+        Sat, 21 May 2022 01:08:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=c7ATnEiBWxzHBgmdH+iHVOAqIrrFmswpu1N0IujH5qE=;
+        b=L3s20sPVxmFAGVEfovbCZpePdPnhRolUkvviaRi5nvHWkviVMX4JKwLeFCaJ714wqn
+         12DZRJVnvXTjVsywI8Cq5r/TYEh4+f/wPpWjIYFxjwcrGTOyaS0YHwjoIfWVhofLDN3h
+         eDCUyZcsqZg5OQd9DAtsPoBSkiOltFUNO7b0z5tfEwnRIT1l8rR+cf2Iw36OC1g70sBZ
+         5YWM1V+zcpTKJsVJN7fwvFkmvLYPAtRzpQxL0Z50oJZidOxjz5Z28F8+ys5o+QSzVaOB
+         aC7z6PcbuMk3ti/L9Afj1tegj/R4Hfa7doISxn+KRyXIX8G+OOAhzuVuuECll3L86x/8
+         WXEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=c7ATnEiBWxzHBgmdH+iHVOAqIrrFmswpu1N0IujH5qE=;
+        b=sFt4ozS0Ix6A0dM/ihiI/1YTno56ikuet887EmQxw+vYZjaFr84Si5iiFsmBL49wI+
+         dlhdXcI5I+xYSi3aTDKolCqucQnfkGwX9g2ApQklbyXOoMhLCETHMcPTfhc9o8m2DNc3
+         5ppH34TwnGCAlvigy7Y/g9wviphA9mDQpYmyeS09vOp/ZqgV54HLrIoVIp5EDVY8okEv
+         6jxD3vvM1bhzfM2FFaryVIubPyFwL5Y/RTI2LP9MPOBNCVOt7EghpHP85dPSOln9aQIT
+         1V7vpqPYka4t4dZu+dFH9Xw/PUgd2hiLArdhTwmW/JzJoncsyTceKKcCdkuHURe7TsOs
+         dfrg==
+X-Gm-Message-State: AOAM533IePZ3XGEP9O3zFgdHG3AEyD+zth3wiWyBWW/nDLx1PDxFYyyv
+        OKM4j2TRcVCCkLQ8MzhCb1A=
+X-Google-Smtp-Source: ABdhPJyXqBazkLVfBEQYtRi13M1WwhHu1omCI7n4jN6NC/g25BcVpG+LEaDshheGjeO2TtVp0AKqug==
+X-Received: by 2002:a65:6c06:0:b0:3f5:f29d:e030 with SMTP id y6-20020a656c06000000b003f5f29de030mr11703403pgu.22.1653120536150;
+        Sat, 21 May 2022 01:08:56 -0700 (PDT)
+Received: from localhost (subs02-180-214-232-90.three.co.id. [180.214.232.90])
+        by smtp.gmail.com with ESMTPSA id z71-20020a63334a000000b003db68cb9d6esm1006167pgz.9.2022.05.21.01.08.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 21 May 2022 01:08:55 -0700 (PDT)
+Date:   Sat, 21 May 2022 15:08:52 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Martin =?utf-8?B?TGnFoWth?= <mliska@suse.cz>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        corbet@lwn.net, Akira Yokosawa <akiyks@gmail.com>
+Subject: Re: [PATCH] arm64: Unify vertical spacing in HWCAPS
+Message-ID: <YoieFI7hdJPJW5qy@debian.me>
+References: <4752814a-091c-9dd5-762c-6fd1a476c4bb@gmail.com>
+ <e3921517-f903-3ad5-afa4-d7959051e5dd@suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e3921517-f903-3ad5-afa4-d7959051e5dd@suse.cz>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the decision on when to generate an IDLE ACK by keeping a count of the
-number of packets we've received, but not yet soft-ACK'd, and the number of
-packets we've processed, but not yet hard-ACK'd, rather than trying to keep
-track of which DATA sequence numbers correspond to those points.
+On Fri, May 20, 2022 at 04:01:33PM +0200, Martin Liška wrote:
+> Promote headings by removing intermediate blank lines.
+> 
+> Signed-off-by: Martin Liska <mliska@suse.cz>
+> ---
+>  Documentation/arm64/elf_hwcaps.rst | 23 -----------------------
+>  1 file changed, 23 deletions(-)
+> 
+> diff --git a/Documentation/arm64/elf_hwcaps.rst b/Documentation/arm64/elf_hwcaps.rst
+> index a8f30963e550..1e79044f51a2 100644
+> --- a/Documentation/arm64/elf_hwcaps.rst
+> +++ b/Documentation/arm64/elf_hwcaps.rst
+> @@ -171,96 +171,73 @@ HWCAP_PACG
+>      Documentation/arm64/pointer-authentication.rst.
+>  
+>  HWCAP2_DCPODP
+> -
+>      Functionality implied by ID_AA64ISAR1_EL1.DPB == 0b0010.
+>  
+>  HWCAP2_SVE2
+> -
+>      Functionality implied by ID_AA64ZFR0_EL1.SVEVer == 0b0001.
+>  
+>  HWCAP2_SVEAES
+> -
+>      Functionality implied by ID_AA64ZFR0_EL1.AES == 0b0001.
+>  
+>  HWCAP2_SVEPMULL
+> -
+>      Functionality implied by ID_AA64ZFR0_EL1.AES == 0b0010.
+>  
+>  HWCAP2_SVEBITPERM
+> -
+>      Functionality implied by ID_AA64ZFR0_EL1.BitPerm == 0b0001.
+>  
+>  HWCAP2_SVESHA3
+> -
+>      Functionality implied by ID_AA64ZFR0_EL1.SHA3 == 0b0001.
+>  
+>  HWCAP2_SVESM4
+> -
+>      Functionality implied by ID_AA64ZFR0_EL1.SM4 == 0b0001.
+>  
+>  HWCAP2_FLAGM2
+> -
+>      Functionality implied by ID_AA64ISAR0_EL1.TS == 0b0010.
+>  
+>  HWCAP2_FRINT
+> -
+>      Functionality implied by ID_AA64ISAR1_EL1.FRINTTS == 0b0001.
+>  
+>  HWCAP2_SVEI8MM
+> -
+>      Functionality implied by ID_AA64ZFR0_EL1.I8MM == 0b0001.
+>  
+>  HWCAP2_SVEF32MM
+> -
+>      Functionality implied by ID_AA64ZFR0_EL1.F32MM == 0b0001.
+>  
+>  HWCAP2_SVEF64MM
+> -
+>      Functionality implied by ID_AA64ZFR0_EL1.F64MM == 0b0001.
+>  
+>  HWCAP2_SVEBF16
+> -
+>      Functionality implied by ID_AA64ZFR0_EL1.BF16 == 0b0001.
+>  
+>  HWCAP2_I8MM
+> -
+>      Functionality implied by ID_AA64ISAR1_EL1.I8MM == 0b0001.
+>  
+>  HWCAP2_BF16
+> -
+>      Functionality implied by ID_AA64ISAR1_EL1.BF16 == 0b0001.
+>  
+>  HWCAP2_DGH
+> -
+>      Functionality implied by ID_AA64ISAR1_EL1.DGH == 0b0001.
+>  
+>  HWCAP2_RNG
+> -
+>      Functionality implied by ID_AA64ISAR0_EL1.RNDR == 0b0001.
+>  
+>  HWCAP2_BTI
+> -
+>      Functionality implied by ID_AA64PFR0_EL1.BT == 0b0001.
+>  
+>  HWCAP2_MTE
+> -
+>      Functionality implied by ID_AA64PFR1_EL1.MTE == 0b0010, as described
+>      by Documentation/arm64/memory-tagging-extension.rst.
+>  
+>  HWCAP2_ECV
+> -
+>      Functionality implied by ID_AA64MMFR0_EL1.ECV == 0b0001.
+>  
+>  HWCAP2_AFP
+> -
+>      Functionality implied by ID_AA64MFR1_EL1.AFP == 0b0001.
+>  
+>  HWCAP2_RPRES
+> -
+>      Functionality implied by ID_AA64ISAR2_EL1.RPRES == 0b0001.
+>  
+>  HWCAP2_MTE3
+> -
+>      Functionality implied by ID_AA64PFR1_EL1.MTE == 0b0011, as described
+>      by Documentation/arm64/memory-tagging-extension.rst.
+>  
+> -- 
+> 2.36.1
+> 
 
-We then generate an ACK when either counter exceeds 2.  The counters are
-both cleared when we transcribe the information into any sort of ACK packet
-for transmission.  IDLE and DELAY ACKs are skipped if both counters are 0
-(ie. no change).
+Hi,
 
-Fixes: 805b21b929e2 ("rxrpc: Send an ACK after every few DATA packets we receive")
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Marc Dionne <marc.dionne@auristor.com>
-cc: linux-afs@lists.infradead.org
----
+Sorry for misunderstanding of this topic on my reply at [1].
 
- include/trace/events/rxrpc.h |    2 +-
- net/rxrpc/ar-internal.h      |    4 ++--
- net/rxrpc/input.c            |   11 +++++++++--
- net/rxrpc/output.c           |   18 +++++++++++-------
- net/rxrpc/recvmsg.c          |    8 +++-----
- 5 files changed, 26 insertions(+), 17 deletions(-)
+After applying this patch and doing htmldocs build, I see the HTML
+diff below.
 
-diff --git a/include/trace/events/rxrpc.h b/include/trace/events/rxrpc.h
-index 4a3ab0ed6e06..1c714336b863 100644
---- a/include/trace/events/rxrpc.h
-+++ b/include/trace/events/rxrpc.h
-@@ -1509,7 +1509,7 @@ TRACE_EVENT(rxrpc_call_reset,
- 		    __entry->call_serial = call->rx_serial;
- 		    __entry->conn_serial = call->conn->hi_serial;
- 		    __entry->tx_seq = call->tx_hard_ack;
--		    __entry->rx_seq = call->ackr_seen;
-+		    __entry->rx_seq = call->rx_hard_ack;
- 			   ),
- 
- 	    TP_printk("c=%08x %08x:%08x r=%08x/%08x tx=%08x rx=%08x",
-diff --git a/net/rxrpc/ar-internal.h b/net/rxrpc/ar-internal.h
-index 8465985a4cb6..dce056adb78c 100644
---- a/net/rxrpc/ar-internal.h
-+++ b/net/rxrpc/ar-internal.h
-@@ -680,8 +680,8 @@ struct rxrpc_call {
- 	u8			ackr_reason;	/* reason to ACK */
- 	rxrpc_serial_t		ackr_serial;	/* serial of packet being ACK'd */
- 	rxrpc_seq_t		ackr_highest_seq; /* Higest sequence number received */
--	rxrpc_seq_t		ackr_consumed;	/* Highest packet shown consumed */
--	rxrpc_seq_t		ackr_seen;	/* Highest packet shown seen */
-+	atomic_t		ackr_nr_unacked; /* Number of unacked packets */
-+	atomic_t		ackr_nr_consumed; /* Number of packets needing hard ACK */
- 
- 	/* RTT management */
- 	rxrpc_serial_t		rtt_serial[4];	/* Serial number of DATA or PING sent */
-diff --git a/net/rxrpc/input.c b/net/rxrpc/input.c
-index 2e61545ad8ca..1145cb14d86f 100644
---- a/net/rxrpc/input.c
-+++ b/net/rxrpc/input.c
-@@ -412,8 +412,8 @@ static void rxrpc_input_data(struct rxrpc_call *call, struct sk_buff *skb)
- {
- 	struct rxrpc_skb_priv *sp = rxrpc_skb(skb);
- 	enum rxrpc_call_state state;
--	unsigned int j, nr_subpackets;
--	rxrpc_serial_t serial = sp->hdr.serial, ack_serial = 0;
-+	unsigned int j, nr_subpackets, nr_unacked = 0;
-+	rxrpc_serial_t serial = sp->hdr.serial, ack_serial = serial;
- 	rxrpc_seq_t seq0 = sp->hdr.seq, hard_ack;
- 	bool immediate_ack = false, jumbo_bad = false;
- 	u8 ack = 0;
-@@ -569,6 +569,8 @@ static void rxrpc_input_data(struct rxrpc_call *call, struct sk_buff *skb)
- 			sp = NULL;
- 		}
- 
-+		nr_unacked++;
-+
- 		if (last) {
- 			set_bit(RXRPC_CALL_RX_LAST, &call->flags);
- 			if (!ack) {
-@@ -588,9 +590,14 @@ static void rxrpc_input_data(struct rxrpc_call *call, struct sk_buff *skb)
- 			}
- 			call->rx_expect_next = seq + 1;
- 		}
-+		if (!ack)
-+			ack_serial = serial;
- 	}
- 
- ack:
-+	if (atomic_add_return(nr_unacked, &call->ackr_nr_unacked) > 2 && !ack)
-+		ack = RXRPC_ACK_IDLE;
-+
- 	if (ack)
- 		rxrpc_propose_ACK(call, ack, ack_serial,
- 				  immediate_ack, true,
-diff --git a/net/rxrpc/output.c b/net/rxrpc/output.c
-index 46aae9b7006f..9683617db704 100644
---- a/net/rxrpc/output.c
-+++ b/net/rxrpc/output.c
-@@ -74,11 +74,18 @@ static size_t rxrpc_fill_out_ack(struct rxrpc_connection *conn,
- 				 u8 reason)
- {
- 	rxrpc_serial_t serial;
-+	unsigned int tmp;
- 	rxrpc_seq_t hard_ack, top, seq;
- 	int ix;
- 	u32 mtu, jmax;
- 	u8 *ackp = pkt->acks;
- 
-+	tmp = atomic_xchg(&call->ackr_nr_unacked, 0);
-+	tmp |= atomic_xchg(&call->ackr_nr_consumed, 0);
-+	if (!tmp && (reason == RXRPC_ACK_DELAY ||
-+		     reason == RXRPC_ACK_IDLE))
-+		return 0;
-+
- 	/* Barrier against rxrpc_input_data(). */
- 	serial = call->ackr_serial;
- 	hard_ack = READ_ONCE(call->rx_hard_ack);
-@@ -223,6 +230,10 @@ int rxrpc_send_ack_packet(struct rxrpc_call *call, bool ping,
- 	n = rxrpc_fill_out_ack(conn, call, pkt, &hard_ack, &top, reason);
- 
- 	spin_unlock_bh(&call->lock);
-+	if (n == 0) {
-+		kfree(pkt);
-+		return 0;
-+	}
- 
- 	iov[0].iov_base	= pkt;
- 	iov[0].iov_len	= sizeof(pkt->whdr) + sizeof(pkt->ack) + n;
-@@ -259,13 +270,6 @@ int rxrpc_send_ack_packet(struct rxrpc_call *call, bool ping,
- 					  ntohl(pkt->ack.serial),
- 					  false, true,
- 					  rxrpc_propose_ack_retry_tx);
--		} else {
--			spin_lock_bh(&call->lock);
--			if (after(hard_ack, call->ackr_consumed))
--				call->ackr_consumed = hard_ack;
--			if (after(top, call->ackr_seen))
--				call->ackr_seen = top;
--			spin_unlock_bh(&call->lock);
- 		}
- 
- 		rxrpc_set_keepalive(call);
-diff --git a/net/rxrpc/recvmsg.c b/net/rxrpc/recvmsg.c
-index eca6dda26c77..250f23bc1c07 100644
---- a/net/rxrpc/recvmsg.c
-+++ b/net/rxrpc/recvmsg.c
-@@ -260,11 +260,9 @@ static void rxrpc_rotate_rx_window(struct rxrpc_call *call)
- 		rxrpc_end_rx_phase(call, serial);
- 	} else {
- 		/* Check to see if there's an ACK that needs sending. */
--		if (after_eq(hard_ack, call->ackr_consumed + 2) ||
--		    after_eq(top, call->ackr_seen + 2) ||
--		    (hard_ack == top && after(hard_ack, call->ackr_consumed)))
--			rxrpc_propose_ACK(call, RXRPC_ACK_DELAY, serial,
--					  true, true,
-+		if (atomic_inc_return(&call->ackr_nr_consumed) > 2)
-+			rxrpc_propose_ACK(call, RXRPC_ACK_IDLE, serial,
-+					  true, false,
- 					  rxrpc_propose_ack_rotate_rx);
- 		if (call->ackr_reason && call->ackr_reason != RXRPC_ACK_DELAY)
- 			rxrpc_send_ack_packet(call, false, NULL);
+diff --git a/tmp/elf_hwcaps.html b/tmp/elf_hwcaps.patched.html
+index 8b0b0f83ca4f9e..d13f49faebf297 100644
+--- a/tmp/elf_hwcaps.html
++++ b/tmp/elf_hwcaps.patched.html
+@@ -320,101 +320,55 @@ ID_AA64ISAR1_EL1.API == 0b0001, as described by
+ ID_AA64ISAR1_EL1.GPI == 0b0001, as described by
+  <a class="reference internal" href="pointer-authentication.html"><span class="doc">Pointer authentication in AArch64 Linux</span></a>.</p>
+   </dd>
+   -</dl>
+   -<p>HWCAP2_DCPODP</p>
+   -<blockquote>
+   -<div><p>Functionality implied by ID_AA64ISAR1_EL1.DPB == 0b0010.</p>
+   -</div></blockquote>
+   -<p>HWCAP2_SVE2</p>
+   -<blockquote>
+   -<div><p>Functionality implied by ID_AA64ZFR0_EL1.SVEVer == 0b0001.</p>
+   -</div></blockquote>
+   -<p>HWCAP2_SVEAES</p>
+   -<blockquote>
+   -<div><p>Functionality implied by ID_AA64ZFR0_EL1.AES == 0b0001.</p>
+   -</div></blockquote>
+   -<p>HWCAP2_SVEPMULL</p>
+   -<blockquote>
+   -<div><p>Functionality implied by ID_AA64ZFR0_EL1.AES == 0b0010.</p>
+   -</div></blockquote>
+   -<p>HWCAP2_SVEBITPERM</p>
+   -<blockquote>
+   -<div><p>Functionality implied by ID_AA64ZFR0_EL1.BitPerm == 0b0001.</p>
+   -</div></blockquote>
+   -<p>HWCAP2_SVESHA3</p>
+   -<blockquote>
+   -<div><p>Functionality implied by ID_AA64ZFR0_EL1.SHA3 == 0b0001.</p>
+   -</div></blockquote>
+   -<p>HWCAP2_SVESM4</p>
+   -<blockquote>
+   -<div><p>Functionality implied by ID_AA64ZFR0_EL1.SM4 == 0b0001.</p>
+   -</div></blockquote>
+   -<p>HWCAP2_FLAGM2</p>
+   -<blockquote>
+   -<div><p>Functionality implied by ID_AA64ISAR0_EL1.TS == 0b0010.</p>
+   -</div></blockquote>
+   -<p>HWCAP2_FRINT</p>
+   -<blockquote>
+   -<div><p>Functionality implied by ID_AA64ISAR1_EL1.FRINTTS == 0b0001.</p>
+   -</div></blockquote>
+   -<p>HWCAP2_SVEI8MM</p>
+   -<blockquote>
+   -<div><p>Functionality implied by ID_AA64ZFR0_EL1.I8MM == 0b0001.</p>
+   -</div></blockquote>
+   -<p>HWCAP2_SVEF32MM</p>
+   -<blockquote>
+   -<div><p>Functionality implied by ID_AA64ZFR0_EL1.F32MM == 0b0001.</p>
+   -</div></blockquote>
+   -<p>HWCAP2_SVEF64MM</p>
+   -<blockquote>
+   -<div><p>Functionality implied by ID_AA64ZFR0_EL1.F64MM == 0b0001.</p>
+   -</div></blockquote>
+   -<p>HWCAP2_SVEBF16</p>
+   -<blockquote>
+   -<div><p>Functionality implied by ID_AA64ZFR0_EL1.BF16 == 0b0001.</p>
+   -</div></blockquote>
+   -<p>HWCAP2_I8MM</p>
+   -<blockquote>
+   -<div><p>Functionality implied by ID_AA64ISAR1_EL1.I8MM == 0b0001.</p>
+   -</div></blockquote>
+   -<p>HWCAP2_BF16</p>
+   -<blockquote>
+   -<div><p>Functionality implied by ID_AA64ISAR1_EL1.BF16 == 0b0001.</p>
+   -</div></blockquote>
+   -<p>HWCAP2_DGH</p>
+   -<blockquote>
+   -<div><p>Functionality implied by ID_AA64ISAR1_EL1.DGH == 0b0001.</p>
+   -</div></blockquote>
+   -<p>HWCAP2_RNG</p>
+   -<blockquote>
+   -<div><p>Functionality implied by ID_AA64ISAR0_EL1.RNDR == 0b0001.</p>
+   -</div></blockquote>
+   -<p>HWCAP2_BTI</p>
+   -<blockquote>
+   -<div><p>Functionality implied by ID_AA64PFR0_EL1.BT == 0b0001.</p>
+   -</div></blockquote>
+   -<p>HWCAP2_MTE</p>
+   -<blockquote>
+   -<div><p>Functionality implied by ID_AA64PFR1_EL1.MTE == 0b0010, as described
+   +<dt>HWCAP2_DCPODP</dt><dd><p>Functionality implied by ID_AA64ISAR1_EL1.DPB == 0b0010.</p>
+   +</dd>
+   +<dt>HWCAP2_SVE2</dt><dd><p>Functionality implied by ID_AA64ZFR0_EL1.SVEVer == 0b0001.</p>
+   +</dd>
+   +<dt>HWCAP2_SVEAES</dt><dd><p>Functionality implied by ID_AA64ZFR0_EL1.AES == 0b0001.</p>
+   +</dd>
+   +<dt>HWCAP2_SVEPMULL</dt><dd><p>Functionality implied by ID_AA64ZFR0_EL1.AES == 0b0010.</p>
+   +</dd>
+   +<dt>HWCAP2_SVEBITPERM</dt><dd><p>Functionality implied by ID_AA64ZFR0_EL1.BitPerm == 0b0001.</p>
+   +</dd>
+   +<dt>HWCAP2_SVESHA3</dt><dd><p>Functionality implied by ID_AA64ZFR0_EL1.SHA3 == 0b0001.</p>
+   +</dd>
+   +<dt>HWCAP2_SVESM4</dt><dd><p>Functionality implied by ID_AA64ZFR0_EL1.SM4 == 0b0001.</p>
+   +</dd>
+   +<dt>HWCAP2_FLAGM2</dt><dd><p>Functionality implied by ID_AA64ISAR0_EL1.TS == 0b0010.</p>
+   +</dd>
+   +<dt>HWCAP2_FRINT</dt><dd><p>Functionality implied by ID_AA64ISAR1_EL1.FRINTTS == 0b0001.</p>
+   +</dd>
+   +<dt>HWCAP2_SVEI8MM</dt><dd><p>Functionality implied by ID_AA64ZFR0_EL1.I8MM == 0b0001.</p>
+   +</dd>
+   +<dt>HWCAP2_SVEF32MM</dt><dd><p>Functionality implied by ID_AA64ZFR0_EL1.F32MM == 0b0001.</p>
+   +</dd>
+   +<dt>HWCAP2_SVEF64MM</dt><dd><p>Functionality implied by ID_AA64ZFR0_EL1.F64MM == 0b0001.</p>
+   +</dd>
+   +<dt>HWCAP2_SVEBF16</dt><dd><p>Functionality implied by ID_AA64ZFR0_EL1.BF16 == 0b0001.</p>
+   +</dd>
+   +<dt>HWCAP2_I8MM</dt><dd><p>Functionality implied by ID_AA64ISAR1_EL1.I8MM == 0b0001.</p>
+   +</dd>
+   +<dt>HWCAP2_BF16</dt><dd><p>Functionality implied by ID_AA64ISAR1_EL1.BF16 == 0b0001.</p>
+   +</dd>
+   +<dt>HWCAP2_DGH</dt><dd><p>Functionality implied by ID_AA64ISAR1_EL1.DGH == 0b0001.</p>
+   +</dd>
+   +<dt>HWCAP2_RNG</dt><dd><p>Functionality implied by ID_AA64ISAR0_EL1.RNDR == 0b0001.</p>
+   +</dd>
+   +<dt>HWCAP2_BTI</dt><dd><p>Functionality implied by ID_AA64PFR0_EL1.BT == 0b0001.</p>
+   +</dd>
+   +<dt>HWCAP2_MTE</dt><dd><p>Functionality implied by ID_AA64PFR1_EL1.MTE == 0b0010, as described
+    by <a class="reference internal" href="memory-tagging-extension.html"><span class="doc">Memory Tagging Extension (MTE) in AArch64 Linux</span></a>.</p>
+    -</div></blockquote>
+    -<p>HWCAP2_ECV</p>
+    -<blockquote>
+    -<div><p>Functionality implied by ID_AA64MMFR0_EL1.ECV == 0b0001.</p>
+    -</div></blockquote>
+    -<p>HWCAP2_AFP</p>
+    -<blockquote>
+    -<div><p>Functionality implied by ID_AA64MFR1_EL1.AFP == 0b0001.</p>
+    -</div></blockquote>
+    -<p>HWCAP2_RPRES</p>
+    -<blockquote>
+    -<div><p>Functionality implied by ID_AA64ISAR2_EL1.RPRES == 0b0001.</p>
+    -</div></blockquote>
+    -<p>HWCAP2_MTE3</p>
+    -<blockquote>
+    -<div><p>Functionality implied by ID_AA64PFR1_EL1.MTE == 0b0011, as described
+    +</dd>
+    +<dt>HWCAP2_ECV</dt><dd><p>Functionality implied by ID_AA64MMFR0_EL1.ECV == 0b0001.</p>
+    +</dd>
+    +<dt>HWCAP2_AFP</dt><dd><p>Functionality implied by ID_AA64MFR1_EL1.AFP == 0b0001.</p>
+    +</dd>
+    +<dt>HWCAP2_RPRES</dt><dd><p>Functionality implied by ID_AA64ISAR2_EL1.RPRES == 0b0001.</p>
+    +</dd>
+    +<dt>HWCAP2_MTE3</dt><dd><p>Functionality implied by ID_AA64PFR1_EL1.MTE == 0b0011, as described
+     by <a class="reference internal" href="memory-tagging-extension.html"><span class="doc">Memory Tagging Extension (MTE) in AArch64 Linux</span></a>.</p>
+     -</div></blockquote>
+     +</dd>
+     +</dl>
+      </section>
+       <section id="unused-at-hwcap-bits">
+        <h2>4. Unused AT_HWCAP bits<a class="headerlink" href="#unused-at-hwcap-bits" title="Permalink to this headline">¶</a></h2>
 
+So basically this doesn't promotes HWCAP2_* as headings, but rather changes
+HTML element used by them from <div> & <p> to <dl> & <dd>. Otherwise I don't
+see any visual differences.
 
+Regarding the patch subject, I don't know what unifying the vertical spacing
+is, so I can't tell whether the patch is correct on this context or not.
+
+Also, when submitting next iterations of your patch series, don't forget
+to pass -v <number> to git-format-patch(1) so that the patch subject
+prefix contains the correct version numbers. I gave that advice because
+I don't see that this patch is sent as v2 of [2].
+
+CCing Akira to help reviewing.
+
+[1]: https://lore.kernel.org/linux-doc/4752814a-091c-9dd5-762c-6fd1a476c4bb@gmail.com/
+[2]: https://lore.kernel.org/linux-doc/b95b3128-f010-dcba-1f6a-1a85dd2d20a5@suse.cz/
+
+-- 
+An old man doll... just what I always wanted! - Clara

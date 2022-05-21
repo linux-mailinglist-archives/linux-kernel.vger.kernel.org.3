@@ -2,186 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66FC052FD35
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 16:20:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24D2852FD3D
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 16:23:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244282AbiEUOUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 10:20:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57892 "EHLO
+        id S242280AbiEUOXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 10:23:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244213AbiEUOU1 (ORCPT
+        with ESMTP id S232339AbiEUOXo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 10:20:27 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D1562CD2
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 07:20:26 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id g16so12424801lja.3
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 07:20:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=xrVvgGpFwC0qfTU8CkXMR2gz4gvqWYcjZfKq5E02l7I=;
-        b=eIz2Zhyd7jFETbpfLY2ODuuP0mBnfCi4/JRwZmkwhGV8pAooU3w7uazeCICpmUBuCq
-         Sk337CsQwzwG/8tPIY2OWFXjCh53+TBmWNdblYb7sMppqOStOhU99LVr7P6Gu8Bx855N
-         wNBp/A9wiXOexdfSLN2KY84Jy0zm5SAOjSSrbMEvXgfKjdE+PhCrPLLcGD+ulbDUZQGK
-         hg4jlt4BmrREyepjX7y5DcKT2kZKUkhQSHhiHVhA/hBPIDkpyKR14jFdiJBK8elV7nOL
-         0uPeY+PJQpIc8s8F8fKDhVvfYEnoMrR1igEwThKq2kkbRsaaoZK3G3lVDSFmLWKKm1uP
-         NM+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=xrVvgGpFwC0qfTU8CkXMR2gz4gvqWYcjZfKq5E02l7I=;
-        b=AsmzvESRQUb7La564YvcuWBLibIBVF5a/ccZSPH+0Ge13Mys8PkGb+ODAxaJUvaUu7
-         BrFxbAX5/IHn8VJSYWtdLzDRcXoxj+X6+E0acUGYbyHO6gVwTdskmr3E5L1GFY8OL97T
-         4T+QO4WNfn2hoYupOIEjr2VnsFHV3mH0mzDQ2t0CQVD7yVEF437S0FLJJX8CN9YGS1NZ
-         PnnrjK6UAfYINWBH8hn01NpjqZZ0sUlYZyJQTok9xTKZE+ZYR4MgjRlxoJVmCK+SB8xP
-         p/2rKb4SKzC07f8GS8HOBSXUlWgxhnTVulkkQRQ29NJplEjo4XWTZZJUxRvrfBDMlj/B
-         oZFw==
-X-Gm-Message-State: AOAM533Wwbbo3rNhegQvubznfp8xKcACE+50GPMo5KBaiwKXSgur6If9
-        gNqetfqNyRUWG4uPh4SjOyht1Nd6LNztYk9D
-X-Google-Smtp-Source: ABdhPJwwnngd/0Mx/PI34JuKwmKYxubLU9MWgXgvRgl9EQbWdC5uXxSWXIe1139D4SRIrwVAX0KfsQ==
-X-Received: by 2002:a2e:b1c7:0:b0:253:dfbf:56cf with SMTP id e7-20020a2eb1c7000000b00253dfbf56cfmr3680430lja.513.1653142824967;
-        Sat, 21 May 2022 07:20:24 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id n6-20020a2e8786000000b0024f3d1daee3sm115913lji.107.2022.05.21.07.20.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 21 May 2022 07:20:24 -0700 (PDT)
-Message-ID: <023e6b0c-26a8-1563-1861-9a5cfe715c1f@linaro.org>
-Date:   Sat, 21 May 2022 16:20:23 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCHv2 2/6] thermal: exynos: Reorder the gpu clock
- initialization for exynos5420 SoC
-Content-Language: en-US
-To:     Anand Moon <linux.amoon@gmail.com>
-Cc:     Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel <linux-kernel@vger.kernel.org>
-References: <20220515064126.1424-1-linux.amoon@gmail.com>
- <20220515064126.1424-3-linux.amoon@gmail.com>
- <68969550-e18b-3c27-d449-1478b314e129@linaro.org>
- <CANAwSgRBpm9gybfUWZbu3-eXLTYkpTZ=s3fmhpNyQcuj7+xdOA@mail.gmail.com>
- <a197ed7f-6115-4407-6931-f37b719587be@linaro.org>
- <CANAwSgRLFr=3GGQ6AZWnzoL9knJrWCY3ONdozd_pbqhFwgpHvg@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CANAwSgRLFr=3GGQ6AZWnzoL9knJrWCY3ONdozd_pbqhFwgpHvg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 21 May 2022 10:23:44 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9A80336E28;
+        Sat, 21 May 2022 07:23:43 -0700 (PDT)
+Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 4554E20B6C7C;
+        Sat, 21 May 2022 07:23:43 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4554E20B6C7C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1653143023;
+        bh=dJ9FOpSCgx5aFau9EXn3cqD6jLljJRXBBXibNoXWwbs=;
+        h=From:To:Subject:Date:From;
+        b=H55LDMs3ElWgyB3rRWyalm4i8ziWUCQUSXUdrPSIpXwF2uOsjuWjG09P4R57VYlL1
+         VL1QFf+T/bjfjXXna3wsrvH+BLLNm3ZaugGh2Fk5ekClq+1nk2mcIlXBcA3A402qsL
+         NxKsVBNnPN9f3bQX3CYuTgnF8vL3xRURRc3wfRgM=
+From:   Saurabh Sengar <ssengar@linux.microsoft.com>
+To:     ssengar@microsoft.com, drawat.floss@gmail.com, airlied@linux.ie,
+        daniel@ffwll.ch, linux-hyperv@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        decui@microsoft.com, haiyangz@microsoft.com
+Subject: [PATCH v2] drm/hyperv : Removing the restruction of VRAM allocation with PCI bar size
+Date:   Sat, 21 May 2022 07:23:39 -0700
+Message-Id: <1653143019-20032-1-git-send-email-ssengar@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/05/2022 11:51, Anand Moon wrote:
-> Hi Krzysztof,
-> 
-> On Wed, 18 May 2022 at 12:58, Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 17/05/2022 20:43, Anand Moon wrote:
->>> Hi Krzysztof,
->>>
->>> On Sun, 15 May 2022 at 15:11, Krzysztof Kozlowski
->>> <krzysztof.kozlowski@linaro.org> wrote:
->>>>
->>>> On 15/05/2022 08:41, Anand Moon wrote:
->>>>> Reorder the tmu_gpu clock initialization for exynos5422 SoC.
->>>>
->>>> Why?
->>> It just code reorder
->>
->> I know what it is. I asked why. The answer in English to question "Why"
->> is starting with "Because".
->>
->> You repeated again the argument what are you doing to my question "Why
->> are you doing it".
->>
-> tmu_triminfo_apbif is not a core driver to all the Exynos SOC board
-> it is only used by the Exynos542x SOC family
-> 
-> If we look into the original code its place in between
-> the devm_clk_get(data->clk) and clk_prepare(data->clk)
-> after this change, the code is in the correct order of initialization
-> of the clock.
+There were two different approaches getting used in this driver to
+allocate vram:
+	1. VRAM allocation from PCI region for Gen1
+	2. VRAM alloaction from MMIO region for Gen2
+First approach limilts the vram to PCI BAR size, which is 64 MB in most
+legacy systems. This limits the maximum resolution to be restricted to
+64 MB size, and with recent conclusion on fbdev issue its concluded to have
+similar allocation strategy for both Gen1 and Gen2. This patch unifies
+the Gen1 and Gen2 vram allocation strategy.
 
-What was wrong with original order? You still did not explain it.
+Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+Reviewed-by: Deepak Rawat <drawat.floss@gmail.com>
+---
+ drivers/gpu/drm/hyperv/hyperv_drm_drv.c | 74 ++-------------------------------
+ 1 file changed, 3 insertions(+), 71 deletions(-)
 
-> 
->> It was the same before, many, many times. It's a waste of reviewers
->> time, because you receive a review and you do not implement the feedback.
->>
->>>>
->>>>>
->>>>> Cc: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>
->>>>> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
->>>>> ---
->>>>> v1: split the changes and improve the commit messages
->>>>> ---
->>>>>  drivers/thermal/samsung/exynos_tmu.c | 43 ++++++++++++++--------------
->>>>>  1 file changed, 21 insertions(+), 22 deletions(-)
->>>>>
->>>>> diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
->>>>> index 75b3afadb5be..1ef90dc52c08 100644
->>>>> --- a/drivers/thermal/samsung/exynos_tmu.c
->>>>> +++ b/drivers/thermal/samsung/exynos_tmu.c
->>>>> @@ -1044,42 +1044,41 @@ static int exynos_tmu_probe(struct platform_device *pdev)
->>>>>               dev_err(&pdev->dev, "Failed to get clock\n");
->>>>>               ret = PTR_ERR(data->clk);
->>>>>               goto err_sensor;
->>>>> -     }
->>>>> -
->>>>> -     data->clk_sec = devm_clk_get(&pdev->dev, "tmu_triminfo_apbif");
->>>>> -     if (IS_ERR(data->clk_sec)) {
->>>>> -             if (data->soc == SOC_ARCH_EXYNOS5420_TRIMINFO) {
->>>>> -                     dev_err(&pdev->dev, "Failed to get triminfo clock\n");
->>>>> -                     ret = PTR_ERR(data->clk_sec);
->>>>> -                     goto err_sensor;
->>>>> -             }
->>>>>       } else {
->>>>> -             ret = clk_prepare_enable(data->clk_sec);
->>>>> +             ret = clk_prepare_enable(data->clk);
->>>>
->>>> This looks a bit odd. The clock was before taken unconditionally, not
->>>> within "else" branch...
->>>
->>> The whole *clk_sec*  ie tmu_triminfo_apbif clock enable is being moved
->>> down to the switch case.
->>> tmu_triminfo_apbif  clock is not used by Exynos4412 and Exynos5433 and
->>> Exynos7 SoC.
->>
->> This is not the answer. Why are you preparing data->clk within else{}
->> branch?
->>
-> After cleanly applying the patches I see the below changes.
-> if you want me to remove the else part below and keep
-> the original code I am ok.
-> 
->         data->clk = devm_clk_get(&pdev->dev, "tmu_apbif");
->         if (IS_ERR(data->clk)) {
->                 dev_err(&pdev->dev, "Failed to get clock\n");
->                 ret = PTR_ERR(data->clk);
->                 goto err_sensor;
->         } else {
->                 ret = clk_prepare_enable(data->clk);
+diff --git a/drivers/gpu/drm/hyperv/hyperv_drm_drv.c b/drivers/gpu/drm/hyperv/hyperv_drm_drv.c
+index 4a8941f..6d11e79 100644
+--- a/drivers/gpu/drm/hyperv/hyperv_drm_drv.c
++++ b/drivers/gpu/drm/hyperv/hyperv_drm_drv.c
+@@ -69,56 +69,7 @@ static void hyperv_pci_remove(struct pci_dev *pdev)
+ 	.remove =	hyperv_pci_remove,
+ };
+ 
+-static int hyperv_setup_gen1(struct hyperv_drm_device *hv)
+-{
+-	struct drm_device *dev = &hv->dev;
+-	struct pci_dev *pdev;
+-	int ret;
+-
+-	pdev = pci_get_device(PCI_VENDOR_ID_MICROSOFT,
+-			      PCI_DEVICE_ID_HYPERV_VIDEO, NULL);
+-	if (!pdev) {
+-		drm_err(dev, "Unable to find PCI Hyper-V video\n");
+-		return -ENODEV;
+-	}
+-
+-	ret = drm_aperture_remove_conflicting_pci_framebuffers(pdev, &hyperv_driver);
+-	if (ret) {
+-		drm_err(dev, "Not able to remove boot fb\n");
+-		return ret;
+-	}
+-
+-	if (pci_request_region(pdev, 0, DRIVER_NAME) != 0)
+-		drm_warn(dev, "Cannot request framebuffer, boot fb still active?\n");
+-
+-	if ((pdev->resource[0].flags & IORESOURCE_MEM) == 0) {
+-		drm_err(dev, "Resource at bar 0 is not IORESOURCE_MEM\n");
+-		ret = -ENODEV;
+-		goto error;
+-	}
+-
+-	hv->fb_base = pci_resource_start(pdev, 0);
+-	hv->fb_size = pci_resource_len(pdev, 0);
+-	if (!hv->fb_base) {
+-		drm_err(dev, "Resource not available\n");
+-		ret = -ENODEV;
+-		goto error;
+-	}
+-
+-	hv->fb_size = min(hv->fb_size,
+-			  (unsigned long)(hv->mmio_megabytes * 1024 * 1024));
+-	hv->vram = devm_ioremap(&pdev->dev, hv->fb_base, hv->fb_size);
+-	if (!hv->vram) {
+-		drm_err(dev, "Failed to map vram\n");
+-		ret = -ENOMEM;
+-	}
+-
+-error:
+-	pci_dev_put(pdev);
+-	return ret;
+-}
+-
+-static int hyperv_setup_gen2(struct hyperv_drm_device *hv,
++static int hyperv_setup_vram(struct hyperv_drm_device *hv,
+ 			     struct hv_device *hdev)
+ {
+ 	struct drm_device *dev = &hv->dev;
+@@ -181,10 +132,7 @@ static int hyperv_vmbus_probe(struct hv_device *hdev,
+ 		goto err_hv_set_drv_data;
+ 	}
+ 
+-	if (efi_enabled(EFI_BOOT))
+-		ret = hyperv_setup_gen2(hv, hdev);
+-	else
+-		ret = hyperv_setup_gen1(hv);
++	ret = hyperv_setup_vram(hv, hdev);
+ 
+ 	if (ret)
+ 		goto err_vmbus_close;
+@@ -225,29 +173,13 @@ static int hyperv_vmbus_remove(struct hv_device *hdev)
+ {
+ 	struct drm_device *dev = hv_get_drvdata(hdev);
+ 	struct hyperv_drm_device *hv = to_hv(dev);
+-	struct pci_dev *pdev;
+ 
+ 	drm_dev_unplug(dev);
+ 	drm_atomic_helper_shutdown(dev);
+ 	vmbus_close(hdev->channel);
+ 	hv_set_drvdata(hdev, NULL);
+ 
+-	/*
+-	 * Free allocated MMIO memory only on Gen2 VMs.
+-	 * On Gen1 VMs, release the PCI device
+-	 */
+-	if (efi_enabled(EFI_BOOT)) {
+-		vmbus_free_mmio(hv->mem->start, hv->fb_size);
+-	} else {
+-		pdev = pci_get_device(PCI_VENDOR_ID_MICROSOFT,
+-				      PCI_DEVICE_ID_HYPERV_VIDEO, NULL);
+-		if (!pdev) {
+-			drm_err(dev, "Unable to find PCI Hyper-V video\n");
+-			return -ENODEV;
+-		}
+-		pci_release_region(pdev, 0);
+-		pci_dev_put(pdev);
+-	}
++	vmbus_free_mmio(hv->mem->start, hv->fb_size);
+ 
+ 	return 0;
+ }
+-- 
+1.8.3.1
 
-Which is wrong and does not make any sense. This is third question - why
-the main clock is prepared within 'else' branch?
-
-Best regards,
-Krzysztof

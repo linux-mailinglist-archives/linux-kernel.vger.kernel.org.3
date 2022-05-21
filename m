@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB59552FBC2
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:20:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD77F52FBBC
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:20:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355055AbiEULTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 07:19:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50186 "EHLO
+        id S240282AbiEULTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 07:19:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354825AbiEULMl (ORCPT
+        with ESMTP id S1354828AbiEULMl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 21 May 2022 07:12:41 -0400
 Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43AF38784;
-        Sat, 21 May 2022 04:12:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0FE13EA85;
+        Sat, 21 May 2022 04:12:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=inria.fr; s=dc;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=yEykGpJkRalEBg6KxHSq1jJWVkU42El1h5fs3XAbx7g=;
-  b=If+DFAxlBY0JiBk0se2ALkzIyOAPUkGVtovuN1fj6Zi+kCG8RAkEBLo8
-   1mZYYn8SwHJR4PxfwzHCxTNE900sO4z3JrFFjPBnlLIR/iLCeWVi/E0yy
-   D0Dwwg2KGGtPh91wQb+qPJlofzObFbQk4k9tL0z+/3WpYD/q4jrFqfya3
-   g=;
+  bh=9wrNYIqEvyrnG9iiMAt+K7orQjSJi1d7S7pYQrFwucI=;
+  b=EfF0aOKSs4g3wIIaklisoXUwQF+siyCP+iLoqh8+Ts2ANXeSXtlxpOEA
+   8bv0ot52CkAASAgnLiwGstKTOL4eDALptGDX26OB47+hXzgWv8zq39RdM
+   PWFAHHjMxXGD9P9el3K+BOta4etD1Bg8i2WNj1vcy5Rg/50IzYrWSLOmy
+   4=;
 Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
 X-IronPort-AV: E=Sophos;i="5.91,242,1647298800"; 
-   d="scan'208";a="14727954"
+   d="scan'208";a="14727955"
 Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
   by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 13:12:01 +0200
 From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Guenter Roeck <linux@roeck-us.net>
+To:     Neil Armstrong <narmstrong@baylibre.com>
 Cc:     kernel-janitors@vger.kernel.org,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: typec: tcpm: fix typo in comment
-Date:   Sat, 21 May 2022 13:11:02 +0200
-Message-Id: <20220521111145.81697-52-Julia.Lawall@inria.fr>
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] i2c: meson: fix typo in comment
+Date:   Sat, 21 May 2022 13:11:03 +0200
+Message-Id: <20220521111145.81697-53-Julia.Lawall@inria.fr>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -57,20 +59,20 @@ Detected with the help of Coccinelle.
 Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
 ---
- drivers/usb/typec/tcpm/tcpm.c |    2 +-
+ drivers/i2c/busses/i2c-meson.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 3bc2f4ebd1fe..7039383eac6d 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -471,7 +471,7 @@ struct tcpm_port {
- 
- 	/*
- 	 * When set, port requests PD_P_SNK_STDBY_MW upon entering SNK_DISCOVERY and
--	 * the actual currrent limit after RX of PD_CTRL_PSRDY for PD link,
-+	 * the actual current limit after RX of PD_CTRL_PSRDY for PD link,
- 	 * SNK_READY for non-pd link.
- 	 */
- 	bool slow_charger_loop;
+diff --git a/drivers/i2c/busses/i2c-meson.c b/drivers/i2c/busses/i2c-meson.c
+index 195a9716da31..61cc5b2462c6 100644
+--- a/drivers/i2c/busses/i2c-meson.c
++++ b/drivers/i2c/busses/i2c-meson.c
+@@ -82,7 +82,7 @@ enum {
+  * @done:	Completion used to wait for transfer termination
+  * @tokens:	Sequence of tokens to be written to the device
+  * @num_tokens:	Number of tokens
+- * @data:	Pointer to the controlller's platform data
++ * @data:	Pointer to the controller's platform data
+  */
+ struct meson_i2c {
+ 	struct i2c_adapter	adap;
 

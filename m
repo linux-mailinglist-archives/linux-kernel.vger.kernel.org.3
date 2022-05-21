@@ -2,41 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5986E52FBEA
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:29:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CAD052FB97
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:16:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355339AbiEULV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 07:21:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47290 "EHLO
+        id S1354822AbiEULPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 07:15:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242749AbiEULMH (ORCPT
+        with ESMTP id S242750AbiEULMI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 07:12:07 -0400
+        Sat, 21 May 2022 07:12:08 -0400
 Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B9F2AE24;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBB262AE01;
         Sat, 21 May 2022 04:12:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=inria.fr; s=dc;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=GGHSZfZEq1wjo88eIeTRCXEpazTetVjhbU0rJFiKV7s=;
-  b=N9WCEOVg6dcvdw3ZO1MuaH6r7vB1vDECXOWSRHdpRSCnCTMrVTOl8sp+
-   e+e5vs2R6yrDg9uF9OjW62tyzRw4VLwBaxz6t0WPLmV+YkwkPKbmXckLt
-   TT6T1Y/vqMai/EEw+gbzmd344UwOzUa2jAWMzjpEC3MSVGnDujXlhDgCV
-   I=;
+  bh=91FcthRZsnkKRXhwIYvDgOJJlKzvfDbh2te2fvYQnj0=;
+  b=hCWdnSbFQ9xzfyd+bTnkumDL9yBImrrPX17LI3gQ9hLP/nVknlGgoQ+1
+   Wh5qfmgtOxBI+O0mfd87eGVAGxyOGoEQ1N7f2CUjZHUww9LyMEAUEWkG2
+   AxDhlat6o9yWCh6zq1sKJp6uXGla7+8R9iClqXAlDFYCVM2IaKNPGXeuV
+   E=;
 Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
 X-IronPort-AV: E=Sophos;i="5.91,242,1647298800"; 
-   d="scan'208";a="14727921"
+   d="scan'208";a="14727922"
 Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
   by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 13:11:56 +0200
 From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     kernel-janitors@vger.kernel.org, Sagi Grimberg <sagi@grimberg.me>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] nvmet: fix typo in comment
-Date:   Sat, 21 May 2022 13:10:36 +0200
-Message-Id: <20220521111145.81697-26-Julia.Lawall@inria.fr>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     kernel-janitors@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] Input: fix typo in comment
+Date:   Sat, 21 May 2022 13:10:37 +0200
+Message-Id: <20220521111145.81697-27-Julia.Lawall@inria.fr>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -56,20 +55,20 @@ Detected with the help of Coccinelle.
 Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
 ---
- drivers/nvme/target/passthru.c |    2 +-
+ drivers/input/mouse/cypress_ps2.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/nvme/target/passthru.c b/drivers/nvme/target/passthru.c
-index 5247c24538eb..2cebb0da38d5 100644
---- a/drivers/nvme/target/passthru.c
-+++ b/drivers/nvme/target/passthru.c
-@@ -97,7 +97,7 @@ static u16 nvmet_passthru_override_id_ctrl(struct nvmet_req *req)
- 		id->sgls |= cpu_to_le32(1 << 20);
- 
+diff --git a/drivers/input/mouse/cypress_ps2.c b/drivers/input/mouse/cypress_ps2.c
+index 5f868009d35b..d272f1ec27ba 100644
+--- a/drivers/input/mouse/cypress_ps2.c
++++ b/drivers/input/mouse/cypress_ps2.c
+@@ -696,7 +696,7 @@ int cypress_init(struct psmouse *psmouse)
+ err_exit:
  	/*
--	 * When passsthru controller is setup using nvme-loop transport it will
-+	 * When passthru controller is setup using nvme-loop transport it will
- 	 * export the passthru ctrl subsysnqn (PCIe NVMe ctrl) and will fail in
- 	 * the nvme/host/core.c in the nvme_init_subsystem()->nvme_active_ctrl()
- 	 * code path with duplicate ctr subsynqn. In order to prevent that we
+ 	 * Reset Cypress Trackpad as a standard mouse. Then
+-	 * let psmouse driver commmunicating with it as default PS2 mouse.
++	 * let psmouse driver communicating with it as default PS2 mouse.
+ 	 */
+ 	cypress_reset(psmouse);
+ 
 

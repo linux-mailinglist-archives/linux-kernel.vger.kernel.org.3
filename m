@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD77F52FBBC
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:20:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5287752FBCB
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:20:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240282AbiEULTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 07:19:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50234 "EHLO
+        id S1355155AbiEULUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 07:20:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354828AbiEULMl (ORCPT
+        with ESMTP id S1354824AbiEULMl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 21 May 2022 07:12:41 -0400
 Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0FE13EA85;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C853E5C9;
         Sat, 21 May 2022 04:12:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=inria.fr; s=dc;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=9wrNYIqEvyrnG9iiMAt+K7orQjSJi1d7S7pYQrFwucI=;
-  b=EfF0aOKSs4g3wIIaklisoXUwQF+siyCP+iLoqh8+Ts2ANXeSXtlxpOEA
-   8bv0ot52CkAASAgnLiwGstKTOL4eDALptGDX26OB47+hXzgWv8zq39RdM
-   PWFAHHjMxXGD9P9el3K+BOta4etD1Bg8i2WNj1vcy5Rg/50IzYrWSLOmy
-   4=;
+  bh=bkgGfOq/sqtyjuTzi3x2694Qtf//9W6IooE4Jwf2APw=;
+  b=mtB8NBOW6MSTeQcIBg+7H48q/Y5fMXRYD8IB74NZQOSWHd8OnPeaDncg
+   OV44pbjDE/BqYRLYfkLuEI6uhpb2DJ5/o9W2QKLypZ/MrfRbR+D2yXZS/
+   T+KLUl0l0dkp3ARcUJu29pePHVaMeiFjn5Z+BpvDza/FeOsbAJxgz/R69
+   o=;
 Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
 X-IronPort-AV: E=Sophos;i="5.91,242,1647298800"; 
-   d="scan'208";a="14727955"
+   d="scan'208";a="14727957"
 Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
   by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 13:12:01 +0200
 From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Neil Armstrong <narmstrong@baylibre.com>
+To:     Andreas Klinger <ak@it-klinger.de>
 Cc:     kernel-janitors@vger.kernel.org,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] i2c: meson: fix typo in comment
-Date:   Sat, 21 May 2022 13:11:03 +0200
-Message-Id: <20220521111145.81697-53-Julia.Lawall@inria.fr>
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] iio: proximity: ping: fix typo in comment
+Date:   Sat, 21 May 2022 13:11:04 +0200
+Message-Id: <20220521111145.81697-54-Julia.Lawall@inria.fr>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -59,20 +57,20 @@ Detected with the help of Coccinelle.
 Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
 ---
- drivers/i2c/busses/i2c-meson.c |    2 +-
+ drivers/iio/proximity/ping.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/i2c-meson.c b/drivers/i2c/busses/i2c-meson.c
-index 195a9716da31..61cc5b2462c6 100644
---- a/drivers/i2c/busses/i2c-meson.c
-+++ b/drivers/i2c/busses/i2c-meson.c
-@@ -82,7 +82,7 @@ enum {
-  * @done:	Completion used to wait for transfer termination
-  * @tokens:	Sequence of tokens to be written to the device
-  * @num_tokens:	Number of tokens
-- * @data:	Pointer to the controlller's platform data
-+ * @data:	Pointer to the controller's platform data
-  */
- struct meson_i2c {
- 	struct i2c_adapter	adap;
+diff --git a/drivers/iio/proximity/ping.c b/drivers/iio/proximity/ping.c
+index d56e037378de..2ad69b150902 100644
+--- a/drivers/iio/proximity/ping.c
++++ b/drivers/iio/proximity/ping.c
+@@ -173,7 +173,7 @@ static int ping_read(struct iio_dev *indio_dev)
+ 
+ 	/*
+ 	 * read error code of laser ping sensor and give users chance to
+-	 * figure out error by using dynamic debuggging
++	 * figure out error by using dynamic debugging
+ 	 */
+ 	if (data->cfg->laserping_error) {
+ 		if ((time_ns > 12500000) && (time_ns <= 13500000)) {
 

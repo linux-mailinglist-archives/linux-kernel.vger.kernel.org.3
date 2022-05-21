@@ -2,93 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E0DA52FD14
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 16:01:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 299C552FD4A
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 16:29:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244071AbiEUOBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 10:01:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60074 "EHLO
+        id S244474AbiEUO3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 10:29:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237191AbiEUOBu (ORCPT
+        with ESMTP id S235561AbiEUO3P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 10:01:50 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF4E237BCF;
-        Sat, 21 May 2022 07:01:48 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: usama.anjum)
-        with ESMTPSA id 4D5FE1F45985
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1653141707;
-        bh=bRgwLFLkiauCbXyihimErrttLo91tws84Q5eVV4ePsQ=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=QMt257LM9O7uhUZ0il2kM2g42JZW0uaFL9+D3OM1Piezy1z3sbUqr1uQIN5D62j5+
-         q2RiSw9kg/vP8US2mmcqXrKJ6byRIR2PvvDFj1w/tJtUglA011Watq8CMh8AHkDuO9
-         GnXVfnftWJCX5zBWQNmAbJv5UTffp7RfOpEZEXGEpAhNVTzHKFcyxVuNHMvWI00Snz
-         jMjA18KPwqvS9Oykj2hZtbYnKyESerX31uo8wRi8f8khVJPsfZQrqq6sKy9ha7phL3
-         MeCZUQAWDzHl78m7VlOcbRzsrT1oCsQOYFYOCnLMiAsfMfode+LFv44wcYYcFJAIfJ
-         s/eoHUfgdmmaA==
-Message-ID: <27062abb-4ca1-b017-448b-f5529232cbdb@collabora.com>
-Date:   Sat, 21 May 2022 19:01:33 +0500
+        Sat, 21 May 2022 10:29:15 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E13FE3AA5E;
+        Sat, 21 May 2022 07:29:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=r96J06AA/hx9f6lJVo/su3KBEml3SMC6atekdO73IQM=; b=DA7AJxCsP7mGwECk9LimTyPCeq
+        mGKgm41gxsuHHV7QhgBYxPT8DUmPSCyenxJ71/uLaEg5vufk0igLqeQ+OZFcnaYb6Aq2PRGmnwkq5
+        NN1bQ+lQmxVO8nAmtFk7J0Y/KM7jdI/Q7Nw67nC4GQgYTJUkYAdwWLLSO0ym/EyuljdE=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nsPZq-003lku-2S; Sat, 21 May 2022 15:55:30 +0200
+Date:   Sat, 21 May 2022 15:55:30 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     vladimir.oltean@nxp.com, claudiu.manoil@nxp.com,
+        alexandre.belloni@bootlin.com, UNGLinuxDriver@microchip.com,
+        kuba@kernel.org, clement.leger@bootlin.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] net: ocelot: fix wrong time_after usage
+Message-ID: <YojvUsJ090H/wfEk@lunn.ch>
+References: <YoeMW+/KGk8VpbED@lunn.ch>
+ <20220520213115.7832-1-paskripkin@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Cc:     usama.anjum@collabora.com, mhocko@suse.com, rientjes@google.com,
-        willy@infradead.org, hannes@cmpxchg.org, guro@fb.com,
-        minchan@kernel.org, kirill@shutemov.name, aarcange@redhat.com,
-        brauner@kernel.org, hch@infradead.org, oleg@redhat.com,
-        david@redhat.com, jannh@google.com, shakeelb@google.com,
-        peterx@redhat.com, jhubbard@nvidia.com, shuah@kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH v3 1/1] selftests: vm: add process_mrelease tests
-Content-Language: en-US
-To:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
-References: <20220518204316.13131-1-surenb@google.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20220518204316.13131-1-surenb@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220520213115.7832-1-paskripkin@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/19/22 1:43 AM, Suren Baghdasaryan wrote:
-> Introduce process_mrelease syscall sanity tests which include tests
-> which expect to fail:
-> - process_mrelease with invalid pidfd and flags inputs
-> - process_mrelease on a live process with no pending signals
-> and valid process_mrelease usage which is expected to succeed.
-> Because process_mrelease has to be used against a process with a pending
-> SIGKILL, it's possible that the process exits before process_mrelease
-> gets called. In such cases we retry the test with a victim that allocates
-> twice more memory up to 1GB. This would require the victim process to
-> spend more time during exit and process_mrelease has a better chance of
-> catching the process before it exits and succeeding.
+On Sat, May 21, 2022 at 12:31:15AM +0300, Pavel Skripkin wrote:
+> Accidentally noticed, that this driver is the only user of
+> while (time_after(jiffies...)).
 > 
-> On success the test reports the amount of memory the child had to
-> allocate for reaping to succeed. Sample output:
+> It looks like typo, because likely this while loop will finish after 1st
+> iteration, because time_after() returns true when 1st argument _is after_
+> 2nd one.
 > 
-> $ mrelease_test
-> Success reaping a child with 1MB of memory allocations
+> There is one possible problem with this poll loop: the scheduler could put
+> the thread to sleep, and it does not get woken up for
+> OCELOT_FDMA_CH_SAFE_TIMEOUT_US. During that time, the hardware has done
+> its thing, but you exit the while loop and return -ETIMEDOUT.
 > 
-> On failure the test reports the failure. Sample outputs:
+> Fix it by using sane poll API that avoids all problems described above
 > 
-> $ mrelease_test
-> All process_mrelease attempts failed!
+> Fixes: 753a026cfec1 ("net: ocelot: add FDMA support")
+> Suggested-by: Andrew Lunn <andrew@lunn.ch>
+> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+> ---
 > 
-> $ mrelease_test
-> process_mrelease: Invalid argument
-> 
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> I can't say if 0 is a good choise for 5th readx_poll_timeout() argument,
+> so this patch is build-tested only.
 
-Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> Testing and suggestions are welcomed!
 
--- 
-Muhammad Usama Anjum
+If you had the hardware, i would suggest you profile how often it does
+complete on the first iteration. And when it does not complete on the
+first iteration, how many more iterations it needs.
+
+Tobias made an interesting observation with the mv88e6xxx switch. He
+found that two tight polls was enough 99% of the time. Putting a sleep
+in there doubles the time it took to setup the switch. So he ended up
+with a hybrid of open coded polling twice, followed by iopoll with a
+timer value set.
+
+That was with a heavily used poll function. How often is this function
+used? No point in overly optimising this if it is not used much.
+
+      Andrew
+ 

@@ -2,84 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD79552F74C
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 03:15:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFD9352F751
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 03:21:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354306AbiEUBPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 21:15:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42408 "EHLO
+        id S1348224AbiEUBVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 21:21:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232505AbiEUBP1 (ORCPT
+        with ESMTP id S1354320AbiEUBVJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 21:15:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E85D41B12E6;
-        Fri, 20 May 2022 18:15:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 999A6B82EEF;
-        Sat, 21 May 2022 01:15:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21206C385A9;
-        Sat, 21 May 2022 01:15:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653095724;
-        bh=5h1u9rIL0LMHGhntqNEZenEqpOh1+zfbjPRvQyknlKw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=lubYSphgq27MQ0eBYSqc7LblrhdRU9J15rSZLm0pyVb5Msj93lFGzoiwRfoB7DFcR
-         y4mrFUPq+c2g9t9uqE58DWbo4zeWkOTGkbwnlhIHpfRaOno7bargXoVHMeW+S7fgaV
-         8QLreMvyJ0eHgiNkWG+GYBjros80xXbNuDurTICOb5lMUI6DwoA89VO3Q3H7ZF8aDq
-         bl/rTs6WFuXPSbsSDoREP41TXawtNUnUBGM79nj0tHel/fn3aha28XOuY0nzvhS9q9
-         La1dRIAxqt+X/mEniU7TP7otE6qX2f+kemXKw5Zi8bAYavRb+aSvIZnPDbiY6sgdEz
-         ECpAhce/Lh/Rw==
-Date:   Fri, 20 May 2022 18:15:22 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     netdev@vger.kernel.org, Marc Dionne <marc.dionne@auristor.com>,
-        Xin Long <lucien.xin@gmail.com>,
-        Vadim Fedorenko <vfedorenko@novek.ru>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net 1/6] rxrpc: Enable IPv6 checksums on transport
- socket
-Message-ID: <20220520181522.42630ce9@kernel.org>
-In-Reply-To: <165306442878.34086.2437731947506679099.stgit@warthog.procyon.org.uk>
-References: <165306442115.34086.1818959430525328753.stgit@warthog.procyon.org.uk>
-        <165306442878.34086.2437731947506679099.stgit@warthog.procyon.org.uk>
+        Fri, 20 May 2022 21:21:09 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD223F589;
+        Fri, 20 May 2022 18:21:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=aLneGAaicP7hJgLs7K/60mukpOwB1SE1HTp33RQdMZQ=; b=YNnS5d8zRhoTzc1eQrHEqej/2F
+        uVR0V63Dhw61OSkUKQFZRgkIAJ0a4ikH2bZnBElWAoFR7xsCp5b6b2EVkpTmhqahUiigxiEJCU8W8
+        ygeuv8STRXY8QgwPHvdwu/eLe5mHIJPWjUGiLID/KuQVBeEHOWfKMPs/M5n0zDPguIi7/iR/evOfd
+        GRl1XxGTr+een5l5ie/9FWjkLVH3Q8PWIEYbCxUzXL2cIzHe2SoOHlkorxnuxLG83Dw8UmFNdN+gp
+        lWQJlJcW7r9+sRWL2/FygwFkb8rxZU+9wXfvSQlMboTeawcnLq16mBJmdK5D/EwDcaW6ofHQ3RSxb
+        mf2dyGLg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nsDnb-00F7xk-M2; Sat, 21 May 2022 01:20:55 +0000
+Date:   Fri, 20 May 2022 18:20:55 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Song Liu <song@kernel.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Borislav Petkov <bp@alien8.de>
+Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-mm@kvack.org, ast@kernel.org, daniel@iogearbox.net,
+        peterz@infradead.org, torvalds@linux-foundation.org,
+        kernel-team@fb.com
+Subject: Re: [PATCH v3 bpf-next 5/8] bpf: use module_alloc_huge for
+ bpf_prog_pack
+Message-ID: <Yog+d+oR5TtPp2cs@bombadil.infradead.org>
+References: <20220520031548.338934-1-song@kernel.org>
+ <20220520031548.338934-6-song@kernel.org>
+ <Yog5yXqAQZAmpgCD@bombadil.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yog5yXqAQZAmpgCD@bombadil.infradead.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 20 May 2022 17:33:48 +0100 David Howells wrote:
-> AF_RXRPC doesn't currently enable IPv6 UDP Tx checksums on the transport
-> socket it opens and the checksums in the packets it generates end up 0.
-> 
-> It probably should also enable IPv6 UDP Rx checksums and IPv4 UDP
-> checksums.  The latter only seem to be applied if the socket family is
-> AF_INET and don't seem to apply if it's AF_INET6.  IPv4 packets from an
-> IPv6 socket seem to have checksums anyway.
-> 
-> What seems to have happened is that the inet_inv_convert_csum() call didn't
-> get converted to the appropriate udp_port_cfg parameters - and
-> udp_sock_create() disables checksums unless explicitly told not too.
-> 
-> Fix this by enabling the three udp_port_cfg checksum options.
-> 
-> Fixes: 1a9b86c9fd95 ("rxrpc: use udp tunnel APIs instead of open code in rxrpc_open_socket")
-> Reported-by: Marc Dionne <marc.dionne@auristor.com>
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> Reviewed-by: Xin Long <lucien.xin@gmail.com>
-> Reviewed-by: Marc Dionne <marc.dionne@auristor.com>
+On Fri, May 20, 2022 at 06:00:57PM -0700, Luis Chamberlain wrote:
+> On Thu, May 19, 2022 at 08:15:45PM -0700, Song Liu wrote:
+> > Use module_alloc_huge for bpf_prog_pack so that BPF programs sit on
+> > PMD_SIZE pages. This benefits system performance by reducing iTLB miss
+> > rate. Benchmark of a real web service workload shows this change gives
+> > another ~0.2% performance boost on top of PAGE_SIZE bpf_prog_pack
+> > (which improve system throughput by ~0.5%).
 
-This is already in net..
-pw build got gave up on this series.
-Could you resend just the other 5 patches?
+Also, seems like a is a missed opportunity to show iTLB misses with more
+detail. If there was a selftest to stress bpf JIT you could use perf and
+enable anyone to quanitfy gains. Dave hinted with some ideas with perf:
+
+perf stat -e cpu/event=0x8,umask=0x84,name=dtlb_load_misses_walk_duration/,cpu/event=0x8,umask=0x82,name=dtlb_load_misses_walk_completed/,cpu/event=0x49,umask=0x4,name=dtlb_store_misses_walk_duration/,cpu/event=0x49,umask=0x2,name=dtlb_store_misses_walk_completed/,cpu/event=0x85,umask=0x4,name=itlb_misses_walk_duration/,cpu/event=0x85,umask=0x2,name=itlb_misses_walk_completed/ some_bpf_jit_test
+
+  Luis

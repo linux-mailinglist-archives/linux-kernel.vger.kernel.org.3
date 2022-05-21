@@ -2,65 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFF9C52FCB2
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 15:15:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FA4452FCB8
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 15:16:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355087AbiEUNPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 09:15:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34662 "EHLO
+        id S230331AbiEUNQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 09:16:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355015AbiEUNO3 (ORCPT
+        with ESMTP id S237249AbiEUNQH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 09:14:29 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF778F1367
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 06:14:22 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id i24so9865204pfa.7
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 06:14:22 -0700 (PDT)
+        Sat, 21 May 2022 09:16:07 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9A0315702;
+        Sat, 21 May 2022 06:16:05 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id a38so7044195pgl.9;
+        Sat, 21 May 2022 06:16:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=YyxbfrF93QriCFR9e9/Ieq2jTtQBkK6LoG1jr7zyJxk=;
-        b=L+FJhvKFhaWqIiE1WWps2YzkTNakQuR1Mcr9C1FbVikQjz3MT7BzsmHi70IwH0t0Mn
-         MvG9fJI9u77CAQ2MVtyUqKNTaqtvE48KnG+ukTf1KaiEkmhWTfJ3bEZFqVojAXikM0cV
-         i+g3YDrrCCwmrxORC5C1lroikF74fpJOJ6RigbhPJbXZrxXFE+dfOOL+PyaY2ePhRiIY
-         RJ0TKICOkoztEvnVKlpmh2ux1/vszSg6z7iZVbDAqpnbUsghYz1lj85eY1W4o9Lz4NxS
-         94dzGxA9FhVt/mrQZF1EkiZTBgiWl2nt/EHFuSqYSsieTMSmRRUOqRtzc4pRTa5S2AuX
-         kAIw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LEcoGUtASg7L12J/ZwcGjQp6K0Il0IXJCxqacljc2XE=;
+        b=F/XYIRLnlSp6q9kjViACzlTmOXyNfxxBRaXBaJfrDrSJF0exs0vTnoguUQcHI44cf8
+         qNsHp/wpzIM3sCtgfsc1nDLE+zhQzwgSUjDtFUYYzs1E8ghymyuhjlZ3o4GcqLUgkYpi
+         2G2Ho7HnkD/XmvCY9ObRwSf7FANCntENwkSE6JkL44h+mJnvjYtPnHmWeZ3DoEcTEehZ
+         ftC8jTJAy3jPvJ63WB+FOsff9puMcUXkuP5D22ZA5nE+ByJigWG6v7QoeSph8YnFEXDP
+         aQtKIgBQO5fhl+JnZveSna6TOS0u/8EaWgGUgyyxG2aJmbWO0xW4byDCErvIN351pmos
+         vQ/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=YyxbfrF93QriCFR9e9/Ieq2jTtQBkK6LoG1jr7zyJxk=;
-        b=L0xh+kGc5PMvKj3fSN2J/kxn/tgyN8xl+XsR3RHQ6fh+C6UObb5W/njWl9J3HOeTd8
-         RzG3zlj2WhuglVCwaBR2EkgZjBuiT5hW+CPBOPbawI0zyzG09hw/T2gZ1oi0N2TCF9FH
-         RFLeH3OrFbJBeaReMYzb0D/xhTBOp2chc+Mhkz+pCEB9SfYUeOyJvINsSnd6t2DUlb3Y
-         19hKZF+Q6Ygt9Xj2GBibjrrUClcQd808WUIj07fPaAPHiMo/JRZhzaHIzSKHumnC+0X+
-         JN9zPteTbIdYM7Zy4aRKo+o99Fex6jhiY6+1M5RNNFK0Oy4uwP/xtZITwh0YT47C58MX
-         jYkw==
-X-Gm-Message-State: AOAM533MnjNZKoMWC3LQ2mib2pxRMLZHGMDmEjB12GTzQfcsm9hlDRTA
-        Eos50NzFFe06pwUTWjonHtlGHaE3LcjUcg==
-X-Google-Smtp-Source: ABdhPJxLqb7CJFIz/ClcybmMMZS6eFmmU69eC19tG4rL2MMqWXC+N/q9QTunnuFV9pSgwJmET+BNfw==
-X-Received: by 2002:aa7:908e:0:b0:518:8fc8:f502 with SMTP id i14-20020aa7908e000000b005188fc8f502mr257115pfa.10.1653138861650;
-        Sat, 21 May 2022 06:14:21 -0700 (PDT)
-Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
-        by smtp.gmail.com with ESMTPSA id o17-20020a170903301100b0015e8d4eb1e5sm1563775pla.47.2022.05.21.06.14.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 May 2022 06:14:21 -0700 (PDT)
-From:   Stafford Horne <shorne@gmail.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Openrisc <openrisc@lists.librecores.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH v3 13/13] openrisc: Remove unused IMMU tlb workardound
-Date:   Sat, 21 May 2022 22:13:23 +0900
-Message-Id: <20220521131323.631209-14-shorne@gmail.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220521131323.631209-1-shorne@gmail.com>
-References: <20220521131323.631209-1-shorne@gmail.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LEcoGUtASg7L12J/ZwcGjQp6K0Il0IXJCxqacljc2XE=;
+        b=g3f/Nr2T5dA+0gzV/vB1NZWV3DKOhB29BRH5+oDZ1l11Q2DeYA53o6e5CDFOjyhQzc
+         CFqrtm0robuNIgAeHbGisi3oLnLtz3sJbf4X6YsS/NWcD+MhLWAqi5Gj2vmHIyir8pBY
+         ebo6CBrzG4KxLmK1gUQuWuBr9p6opdpC60vdc9OqFI7vxRT2TG3pVSPii+M7N4WrDKdg
+         bJNDd4QJKKOikdngsFzJ9YKEhntKaMtYlBUh7Vq+Ls6BDvupoT0LyvINHQSaGS4zqYt5
+         M8K62YuvADug8I8MwG/PWUVcijS5Kocn+GvNUQGXZf/elfLAV3bsE/FWC9SR0QrZiS/5
+         zNTA==
+X-Gm-Message-State: AOAM530YZ+hV/8vUins8w6+g2MrNObkM26M/7WXxHUcxz+Qjsn6+/yHl
+        4+J5FQlv/qMUTzAEvIR/AaQ71yPZl9k=
+X-Google-Smtp-Source: ABdhPJxQwtF2Y9oNu+2nqdsMxFCQx49TTaJbOD96LAv1aRM3/HZYTsZ/3h9DElZ+pEoCFth9FoENFQ==
+X-Received: by 2002:a05:6a00:2187:b0:50c:ef4d:ef3b with SMTP id h7-20020a056a00218700b0050cef4def3bmr14538539pfi.83.1653138964817;
+        Sat, 21 May 2022 06:16:04 -0700 (PDT)
+Received: from localhost ([47.251.4.198])
+        by smtp.gmail.com with ESMTPSA id o2-20020a170902d4c200b0016168e90f2csm1549877plg.208.2022.05.21.06.16.04
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 21 May 2022 06:16:04 -0700 (PDT)
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>
+Subject: [PATCH V3 00/12] KVM: X86/MMU: Use one-off local shadow page for special roots
+Date:   Sat, 21 May 2022 21:16:48 +0800
+Message-Id: <20220521131700.3661-1-jiangshanlai@gmail.com>
+X-Mailer: git-send-email 2.19.1.6.gb485710b
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,236 +72,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This looks to be some historical code that was used to convert TLB
-misses on branches from l.bf, l.jal, l.j etc all to a trampoline
-using l.jr (jump register).  I don't see this being used and I don't
-know the history of it so remove it.
+From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 
-Signed-off-by: Stafford Horne <shorne@gmail.com>
----
- arch/openrisc/kernel/head.S | 209 ------------------------------------
- 1 file changed, 209 deletions(-)
+Current code uses mmu->pae_root, mmu->pml4_root, and mmu->pml5_root to
+setup special roots.  The initialization code is complex and the roots
+are not associated with struct kvm_mmu_page which causes the code more
+complex.
 
-diff --git a/arch/openrisc/kernel/head.S b/arch/openrisc/kernel/head.S
-index 21db50563f97..9b59d0ca665c 100644
---- a/arch/openrisc/kernel/head.S
-+++ b/arch/openrisc/kernel/head.S
-@@ -1325,215 +1325,6 @@ i_pte_not_present:
- 
- /* =================================================[ debugging aids ]=== */
- 
--	.align 64
--_immu_trampoline:
--	.space 64
--_immu_trampoline_top:
--
--#define TRAMP_SLOT_0		(0x0)
--#define TRAMP_SLOT_1		(0x4)
--#define TRAMP_SLOT_2		(0x8)
--#define TRAMP_SLOT_3		(0xc)
--#define TRAMP_SLOT_4		(0x10)
--#define TRAMP_SLOT_5		(0x14)
--#define TRAMP_FRAME_SIZE	(0x18)
--
--ENTRY(_immu_trampoline_workaround)
--	// r2 EEA
--	// r6 is physical EEA
--	tophys(r6,r2)
--
--	LOAD_SYMBOL_2_GPR(r5,_immu_trampoline)
--	tophys	(r3,r5)			// r3 is trampoline (physical)
--
--	LOAD_SYMBOL_2_GPR(r4,0x15000000)
--	l.sw	TRAMP_SLOT_0(r3),r4
--	l.sw	TRAMP_SLOT_1(r3),r4
--	l.sw	TRAMP_SLOT_4(r3),r4
--	l.sw	TRAMP_SLOT_5(r3),r4
--
--					// EPC = EEA - 0x4
--	l.lwz	r4,0x0(r6)		// load op @ EEA + 0x0 (fc address)
--	l.sw	TRAMP_SLOT_3(r3),r4	// store it to _immu_trampoline_data
--	l.lwz	r4,-0x4(r6)		// load op @ EEA - 0x4 (f8 address)
--	l.sw	TRAMP_SLOT_2(r3),r4	// store it to _immu_trampoline_data
--
--	l.srli  r5,r4,26                // check opcode for write access
--	l.sfeqi r5,0                    // l.j
--	l.bf    0f
--	l.sfeqi r5,0x11                 // l.jr
--	l.bf    1f
--	l.sfeqi r5,1                    // l.jal
--	l.bf    2f
--	l.sfeqi r5,0x12                 // l.jalr
--	l.bf    3f
--	l.sfeqi r5,3                    // l.bnf
--	l.bf    4f
--	l.sfeqi r5,4                    // l.bf
--	l.bf    5f
--99:
--	l.nop
--	l.j	99b			// should never happen
--	l.nop	1
--
--	// r2 is EEA
--	// r3 is trampoline address (physical)
--	// r4 is instruction
--	// r6 is physical(EEA)
--	//
--	// r5
--
--2:	// l.jal
--
--	/* 19 20 aa aa	l.movhi r9,0xaaaa
--	 * a9 29 bb bb  l.ori	r9,0xbbbb
--	 *
--	 * where 0xaaaabbbb is EEA + 0x4 shifted right 2
--	 */
--
--	l.addi	r6,r2,0x4		// this is 0xaaaabbbb
--
--					// l.movhi r9,0xaaaa
--	l.ori	r5,r0,0x1920		// 0x1920 == l.movhi r9
--	l.sh	(TRAMP_SLOT_0+0x0)(r3),r5
--	l.srli	r5,r6,16
--	l.sh	(TRAMP_SLOT_0+0x2)(r3),r5
--
--					// l.ori   r9,0xbbbb
--	l.ori	r5,r0,0xa929		// 0xa929 == l.ori r9
--	l.sh	(TRAMP_SLOT_1+0x0)(r3),r5
--	l.andi	r5,r6,0xffff
--	l.sh	(TRAMP_SLOT_1+0x2)(r3),r5
--
--	/* falthrough, need to set up new jump offset */
--
--
--0:	// l.j
--	l.slli	r6,r4,6			// original offset shifted left 6 - 2
--//	l.srli	r6,r6,6			// original offset shifted right 2
--
--	l.slli	r4,r2,4			// old jump position: EEA shifted left 4
--//	l.srli	r4,r4,6			// old jump position: shifted right 2
--
--	l.addi	r5,r3,0xc		// new jump position (physical)
--	l.slli	r5,r5,4			// new jump position: shifted left 4
--
--	// calculate new jump offset
--	// new_off = old_off + (old_jump - new_jump)
--
--	l.sub	r5,r4,r5		// old_jump - new_jump
--	l.add	r5,r6,r5		// orig_off + (old_jump - new_jump)
--	l.srli	r5,r5,6			// new offset shifted right 2
--
--	// r5 is new jump offset
--					// l.j has opcode 0x0...
--	l.sw	TRAMP_SLOT_2(r3),r5	// write it back
--
--	l.j	trampoline_out
--	l.nop
--
--/* ----------------------------- */
--
--3:	// l.jalr
--
--	/* 19 20 aa aa	l.movhi r9,0xaaaa
--	 * a9 29 bb bb  l.ori	r9,0xbbbb
--	 *
--	 * where 0xaaaabbbb is EEA + 0x4 shifted right 2
--	 */
--
--	l.addi	r6,r2,0x4		// this is 0xaaaabbbb
--
--					// l.movhi r9,0xaaaa
--	l.ori	r5,r0,0x1920		// 0x1920 == l.movhi r9
--	l.sh	(TRAMP_SLOT_0+0x0)(r3),r5
--	l.srli	r5,r6,16
--	l.sh	(TRAMP_SLOT_0+0x2)(r3),r5
--
--					// l.ori   r9,0xbbbb
--	l.ori	r5,r0,0xa929		// 0xa929 == l.ori r9
--	l.sh	(TRAMP_SLOT_1+0x0)(r3),r5
--	l.andi	r5,r6,0xffff
--	l.sh	(TRAMP_SLOT_1+0x2)(r3),r5
--
--	l.lhz	r5,(TRAMP_SLOT_2+0x0)(r3)	// load hi part of jump instruction
--	l.andi	r5,r5,0x3ff		// clear out opcode part
--	l.ori	r5,r5,0x4400		// opcode changed from l.jalr -> l.jr
--	l.sh	(TRAMP_SLOT_2+0x0)(r3),r5 // write it back
--
--	/* falthrough */
--
--1:	// l.jr
--	l.j	trampoline_out
--	l.nop
--
--/* ----------------------------- */
--
--4:	// l.bnf
--5:	// l.bf
--	l.slli	r6,r4,6			// original offset shifted left 6 - 2
--//	l.srli	r6,r6,6			// original offset shifted right 2
--
--	l.slli	r4,r2,4			// old jump position: EEA shifted left 4
--//	l.srli	r4,r4,6			// old jump position: shifted right 2
--
--	l.addi	r5,r3,0xc		// new jump position (physical)
--	l.slli	r5,r5,4			// new jump position: shifted left 4
--
--	// calculate new jump offset
--	// new_off = old_off + (old_jump - new_jump)
--
--	l.add	r6,r6,r4		// (orig_off + old_jump)
--	l.sub	r6,r6,r5		// (orig_off + old_jump) - new_jump
--	l.srli	r6,r6,6			// new offset shifted right 2
--
--	// r6 is new jump offset
--	l.lwz	r4,(TRAMP_SLOT_2+0x0)(r3)	// load jump instruction
--	l.srli	r4,r4,16
--	l.andi	r4,r4,0xfc00		// get opcode part
--	l.slli	r4,r4,16
--	l.or	r6,r4,r6		// l.b(n)f new offset
--	l.sw	TRAMP_SLOT_2(r3),r6	// write it back
--
--	/* we need to add l.j to EEA + 0x8 */
--	tophys	(r4,r2)			// may not be needed (due to shifts down_
--	l.addi	r4,r4,(0x8 - 0x8)	// jump target = r2 + 0x8 (compensate for 0x8)
--					// jump position = r5 + 0x8 (0x8 compensated)
--	l.sub	r4,r4,r5		// jump offset = target - new_position + 0x8
--
--	l.slli	r4,r4,4			// the amount of info in imediate of jump
--	l.srli	r4,r4,6			// jump instruction with offset
--	l.sw	TRAMP_SLOT_4(r3),r4	// write it to 4th slot
--
--	/* fallthrough */
--
--trampoline_out:
--	// set up new EPC to point to our trampoline code
--	LOAD_SYMBOL_2_GPR(r5,_immu_trampoline)
--	l.mtspr	r0,r5,SPR_EPCR_BASE
--
--	// immu_trampoline is (4x) CACHE_LINE aligned
--	// and only 6 instructions long,
--	// so we need to invalidate only 2 lines
--
--	/* Establish cache block size
--	   If BS=0, 16;
--	   If BS=1, 32;
--	   r14 contain block size
--	*/
--	l.mfspr r21,r0,SPR_ICCFGR
--	l.andi	r21,r21,SPR_ICCFGR_CBS
--	l.srli	r21,r21,7
--	l.ori	r23,r0,16
--	l.sll	r14,r23,r21
--
--	l.mtspr	r0,r5,SPR_ICBIR
--	l.add	r5,r5,r14
--	l.mtspr	r0,r5,SPR_ICBIR
--
--	l.jr	r9
--	l.nop
--
- /*
-  * DESC: Prints ASCII character stored in r7
-  *
+So add new local shadow pages to simplify it.
+
+The local shadow pages are associated with struct kvm_mmu_page and
+VCPU-local.
+
+The local shadow pages are created and freed when the roots are
+changed (or one-off) which can be optimized but not in the patchset
+since the re-creating is light way (in normal case only the struct
+kvm_mmu_page needs to be re-allocated and sp->spt doens't, because
+it is likely to be mmu->pae_root)
+
+The patchset also fixes a possible bug described in:
+https://lore.kernel.org/lkml/20220415103414.86555-1-jiangshanlai@gmail.com/
+as patch1.
+
+And the fixing is simplifed in patch9 with the help of local shadow page.
+
+Note:
+using_local_root_page() can be implemented in two ways.
+
+static bool using_local_root_page(struct kvm_mmu *mmu)
+{
+	return mmu->root_role.level == PT32E_ROOT_LEVEL ||
+	       (!mmu->root_role.direct && mmu->cpu_role.base.level <= PT32E_ROOT_LEVEL);
+}
+
+static bool using_local_root_page(struct kvm_mmu *mmu)
+{
+	if (mmu->root_role.direct)
+		return mmu->root_role.level == PT32E_ROOT_LEVEL;
+	else
+		return mmu->cpu_role.base.level <= PT32E_ROOT_LEVEL;
+}
+
+I prefer the second way.  But when I wrote the documents for them.  I
+couldn't explain well enough for the second way.  Maybe I explained the
+second way in a wrong aspect or my English is not qualified to explain
+it.
+
+So I put the first way in patch 2 and the second way in patch3.
+Patch3 adds much more documents and changes the first way to the second
+way.  Patch3 can be discarded.
+
+Changed from v2:
+	Add document for using_local_root_page()
+	Update many documents
+	Address review comments
+	Add a patch that fix a possible bug (and split other patches for patch9)
+
+Changed from v1:
+	Rebase to newest kvm/queue. Slightly update patch4.
+
+[V2]: https://lore.kernel.org/lkml/20220503150735.32723-1-jiangshanlai@gmail.com/
+[V1]: https://lore.kernel.org/lkml/20220420132605.3813-1-jiangshanlai@gmail.com/
+
+
+Lai Jiangshan (12):
+  KVM: X86/MMU: Verify PDPTE for nested NPT in PAE paging mode when page
+    fault
+  KVM: X86/MMU: Add using_local_root_page()
+  KVM: X86/MMU: Reduce a check in using_local_root_page() for common
+    cases
+  KVM: X86/MMU: Add local shadow pages
+  KVM: X86/MMU: Link PAE root pagetable with its children
+  KVM: X86/MMU: Activate local shadow pages and remove old logic
+  KVM: X86/MMU: Remove the check of the return value of to_shadow_page()
+  KVM: X86/MMU: Allocate mmu->pae_root for PAE paging on-demand
+  KVM: X86/MMU: Move the verifying of NPT's PDPTE in FNAME(fetch)
+  KVM: X86/MMU: Remove unused INVALID_PAE_ROOT and IS_VALID_PAE_ROOT
+  KVM: X86/MMU: Don't use mmu->pae_root when shadowing PAE NPT in 64-bit
+    host
+  KVM: X86/MMU: Remove mmu_alloc_special_roots()
+
+ arch/x86/include/asm/kvm_host.h |   5 +-
+ arch/x86/kvm/mmu/mmu.c          | 575 ++++++++++++++------------------
+ arch/x86/kvm/mmu/mmu_internal.h |  10 -
+ arch/x86/kvm/mmu/paging_tmpl.h  |  51 ++-
+ arch/x86/kvm/mmu/spte.c         |   7 +
+ arch/x86/kvm/mmu/spte.h         |   1 +
+ arch/x86/kvm/mmu/tdp_mmu.h      |   7 +-
+ arch/x86/kvm/x86.c              |   4 +-
+ 8 files changed, 303 insertions(+), 357 deletions(-)
+
 -- 
-2.31.1
+2.19.1.6.gb485710b
 

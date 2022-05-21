@@ -2,116 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9FA652FFAD
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 23:57:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 069C152FFB8
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 00:06:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346882AbiEUV51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 17:57:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47300 "EHLO
+        id S1347056AbiEUWGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 18:06:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237130AbiEUV5Y (ORCPT
+        with ESMTP id S1347037AbiEUWF6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 17:57:24 -0400
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72B2342A24
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 14:57:21 -0700 (PDT)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-f17f1acffeso14042174fac.4
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 14:57:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=gAITwp43a4w30vT1uOOmJoUF5xFm7wkkasuEdQTf/Fk=;
-        b=bNkZRhnXoZZ5uhXo92mBOu73mygo/R5GNLxg5obG3gOyW7/ORTAmhTscXQcbfLNEQ1
-         QtgbRC9m0DSk/EXOho8u69FZK13Ea6S9b1Xmc2oHdMYWJ10lu4x+F5nCMLzEtSfJKJVi
-         Dy0xuYMXQo//jUgiFURvGWJawZzN69S9XbraN9tn75SF1FB0Z7nrAEo9bkfwRpoBOD4a
-         mDQYGWzKb5ERrU6YxR/cZvZMASYIYzjOH9loLCEzEzgEUSH+9XIDHx+o+MgPJPRhb74d
-         EcN6hyAirMWVFhDj7s8PLXOuRuM1z7BuHO8C5lVzKCs7mWQKem6/2OayIgUeQhI69C8A
-         Bo+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=gAITwp43a4w30vT1uOOmJoUF5xFm7wkkasuEdQTf/Fk=;
-        b=KI2iPnUTturLMECv6cYVXOVLR4QUMg11fJMj7a8qKsNVEEISEYAvIAalzmezLSBzo0
-         kuESHa80opqe5pqWFvu5NO8FdQL7RQRsoP2v5J/DlMcc+NXLuqLd6Zugd8CTldhIJC9h
-         jtK/By6OAKBjEP7+IWo7BMVzULgwz8vR7Ck6M6OIxjlFQHXPjdaxHLvSK5MAt3osaKTQ
-         mIAo5Fbo5hJY6InZOfDkVvP6n6gY+0fQLaXdZ/1B3JH/vca3pzuKptkww0onYXJVD1ww
-         x6Wt6xf7+ObBGdb0eVsdnZmzqXg+AtelSi1TFMMy0dxBjpMD4ZiZkIctu5246NwIgG3y
-         hGAQ==
-X-Gm-Message-State: AOAM531NNiYAmFsk5qA7NmPeiNlv7m5j4NSjcsnGJgEB/eTLTcrSS6vg
-        NmLLGVV4ZEu7l78hwYGkuFl88toPivs=
-X-Google-Smtp-Source: ABdhPJzltjAK+2MQ+KnlkH5rxNWyy/EZlDTj21LQ1U22Fyp6iyU7Bt80iI2IPVBUOEdsF1/h8AgAzQ==
-X-Received: by 2002:a05:6870:5487:b0:f1:98a6:6f79 with SMTP id f7-20020a056870548700b000f198a66f79mr8996604oan.221.1653170240847;
-        Sat, 21 May 2022 14:57:20 -0700 (PDT)
-Received: from ?IPV6:2603:8090:2005:39b3::100e? (2603-8090-2005-39b3-0000-0000-0000-100e.res6.spectrum.com. [2603:8090:2005:39b3::100e])
-        by smtp.gmail.com with ESMTPSA id m129-20020aca3f87000000b00325cda1ff99sm2617026oia.24.2022.05.21.14.57.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 21 May 2022 14:57:20 -0700 (PDT)
-Sender: Larry Finger <larry.finger@gmail.com>
-Message-ID: <b922eaa2-303a-69da-03ec-e053092c8682@lwfinger.net>
-Date:   Sat, 21 May 2022 16:57:17 -0500
+        Sat, 21 May 2022 18:05:58 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDB3DB871;
+        Sat, 21 May 2022 15:05:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653170756; x=1684706756;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6HTHMCVnQ4K4/esHmjURBt62rjHIzXzIoUJiVwHvEPE=;
+  b=bAycBBqufeQoX4Un5PG3zttMzFWZzl45gK2ZF56YoK53Ba8aGJntFIT5
+   UgfaQgh7q6MZ/EmoII7SHkgTUvbKzDWLtD82KZgShmuuUYX4NDE2wfbes
+   Us1gz/301rWHCKKxdC0blnRdYtcS1L4VrhDSsZcIz9iCWqyiLORAHZhJH
+   YRF9G3sxaAMr55uYx+rhih9k9lzLl21DBS8NzicpiynosLHNsIvXAHubU
+   zbwTPGCkTMxUWTy4FGBscbMbg+9UWpW5LdpgoS2fY45mbYLuwmfM3elNy
+   +FJ1oFV2IWB6RN/dtTsUibXqmG8lkVaY5CgnkG39jYYUYs91930EIN1CG
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10354"; a="260499936"
+X-IronPort-AV: E=Sophos;i="5.91,243,1647327600"; 
+   d="scan'208";a="260499936"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 15:05:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,243,1647327600"; 
+   d="scan'208";a="716081444"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 21 May 2022 15:05:53 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nsXEO-0006e2-Ka;
+        Sat, 21 May 2022 22:05:52 +0000
+Date:   Sun, 22 May 2022 06:05:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Vasily Averin <vvs@openvz.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        kernel@openvz.org, linux-kernel@vger.kernel.org,
+        Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org
+Subject: Re: [PATCH mm v2 6/9] memcg: enable accounting for percpu allocation
+ of struct cgroup_rstat_cpu
+Message-ID: <202205220531.AVnBFrgq-lkp@intel.com>
+References: <c0d01d6e-530c-9be3-1c9b-67a7f8ea09be@openvz.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v3] staging: r8188eu: add check for kzalloc
-Content-Language: en-US
-To:     Pavel Skripkin <paskripkin@gmail.com>,
-        Martin Kaiser <lists@kaiser.cx>,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     dan.carpenter@oracle.com, phil@philpotter.co.uk,
-        gregkh@linuxfoundation.org, straube.linux@gmail.com,
-        fmdefrancesco@gmail.com, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <20220518075957.514603-1-jiasheng@iscas.ac.cn>
- <20220521155017.7jjz7prdnspm2276@viti.kaiser.cx>
- <8fb49b5b-106b-3346-a75d-d54e0a065587@gmail.com>
-From:   Larry Finger <Larry.Finger@lwfinger.net>
-In-Reply-To: <8fb49b5b-106b-3346-a75d-d54e0a065587@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c0d01d6e-530c-9be3-1c9b-67a7f8ea09be@openvz.org>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/21/22 15:26, Pavel Skripkin wrote:
-> Hi Martin,
-> 
-> On 5/21/22 18:50, Martin Kaiser wrote:
->>
->>>      for (i = 0; i < 4; i++)
->>> @@ -1474,7 +1479,7 @@ s32 rtw_xmit_classifier(struct adapter *padapter, 
->>> struct xmit_frame *pxmitframe)
->>
->>
->> res is still 0 here - but the caller of _rtw_init_xmit_priv compares
->> this return value with _SUCCESS (1) or _FAIL (0) and interprets it as
->> _FAIL.
->>
-> 
-> I think, it's time to make
-> 
-> s/_SUCCESS/0/
-> s/_FAIL/-1
-> 
-> since developers from outside of staging are confused.
-> The main problem will be with functions that return an int (or s32).
-> 
-> Will take a look.
+Hi Vasily,
 
-I agree; however, this change will likely break a lot of pending patches.
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on tip/sched/core]
+[also build test ERROR on tj-cgroup/for-next driver-core/driver-core-testing linus/master v5.18-rc7 next-20220520]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Vasily-Averin/memcg-enable-accounting-for-struct-cgroup/20220522-004124
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 991d8d8142cad94f9c5c05db25e67fa83d6f772a
+config: arm-imxrt_defconfig (https://download.01.org/0day-ci/archive/20220522/202205220531.AVnBFrgq-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/c1b7edf1635aaef50d25ba8246a5e5c997a6bf44
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Vasily-Averin/memcg-enable-accounting-for-struct-cgroup/20220522-004124
+        git checkout c1b7edf1635aaef50d25ba8246a5e5c997a6bf44
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash kernel/cgroup/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   kernel/cgroup/rstat.c: In function 'cgroup_rstat_init':
+>> kernel/cgroup/rstat.c:261:70: error: macro "alloc_percpu_gfp" requires 2 arguments, but only 1 given
+     261 |                                                    GFP_KERNEL_ACCOUNT);
+         |                                                                      ^
+   In file included from include/linux/hrtimer.h:19,
+                    from include/linux/sched.h:19,
+                    from include/linux/cgroup.h:12,
+                    from kernel/cgroup/cgroup-internal.h:5,
+                    from kernel/cgroup/rstat.c:2:
+   include/linux/percpu.h:133: note: macro "alloc_percpu_gfp" defined here
+     133 | #define alloc_percpu_gfp(type, gfp)                                     \
+         | 
+>> kernel/cgroup/rstat.c:260:35: error: 'alloc_percpu_gfp' undeclared (first use in this function)
+     260 |                 cgrp->rstat_cpu = alloc_percpu_gfp(struct cgroup_rstat_cpu
+         |                                   ^~~~~~~~~~~~~~~~
+   kernel/cgroup/rstat.c:260:35: note: each undeclared identifier is reported only once for each function it appears in
 
 
-@GregKH: Could you apply all pending patches in preparation for this patch? If 
-so, then Pavel could make this transformation while the list is relatively idle.
+vim +/alloc_percpu_gfp +261 kernel/cgroup/rstat.c
 
-Larry
+   253	
+   254	int cgroup_rstat_init(struct cgroup *cgrp)
+   255	{
+   256		int cpu;
+   257	
+   258		/* the root cgrp has rstat_cpu preallocated */
+   259		if (!cgrp->rstat_cpu) {
+ > 260			cgrp->rstat_cpu = alloc_percpu_gfp(struct cgroup_rstat_cpu
+ > 261							   GFP_KERNEL_ACCOUNT);
+   262			if (!cgrp->rstat_cpu)
+   263				return -ENOMEM;
+   264		}
+   265	
+   266		/* ->updated_children list is self terminated */
+   267		for_each_possible_cpu(cpu) {
+   268			struct cgroup_rstat_cpu *rstatc = cgroup_rstat_cpu(cgrp, cpu);
+   269	
+   270			rstatc->updated_children = cgrp;
+   271			u64_stats_init(&rstatc->bsync);
+   272		}
+   273	
+   274		return 0;
+   275	}
+   276	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

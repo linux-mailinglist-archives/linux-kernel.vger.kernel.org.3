@@ -2,73 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B27452FCA9
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 15:14:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EE6C52FCAB
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 15:14:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354581AbiEUNOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 09:14:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33748 "EHLO
+        id S1349882AbiEUNOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 09:14:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351062AbiEUNOA (ORCPT
+        with ESMTP id S1354788AbiEUNOC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 09:14:00 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97CEB38BDE;
-        Sat, 21 May 2022 06:13:58 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id bh5so9415864plb.6;
-        Sat, 21 May 2022 06:13:58 -0700 (PDT)
+        Sat, 21 May 2022 09:14:02 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB2D3981C
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 06:14:01 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id x143so9854145pfc.11
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 06:14:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=oLH4/O4hnVy3wOLUc8vz0oBE8xaj2C4NuAcXjfnz4nc=;
-        b=niDfWBSUsX18Eo+z1BzxhZCU0ofsCu4DzD5HfoxNZ2DTnYgxx7Gju+frSRnrp+vCXH
-         56FcSy+kE3Tzknxnz265wjA6qtdrDw1NHLH7gpTBurdvVMhyQfaY0IKmh7x14FEGzU1J
-         sokW175+Q/YkF0Gw+GsrOdzkjO18FNWMHN1NdbBbAoMdbwIW0mTkc6R5dyILzQVh5azT
-         7Ga+jYtgsuuqtCBn5LRVaIhqfvZdesaxpIyqKyAymbcjamb7ctqYXusn8eTGtzEEFGP6
-         4CMKup3FFKMfsGCjPmY/nUiko07rH+dTyYeXaYgzHKD3aYcjlrH5w+6oDj6SX6PyVyaI
-         MVMA==
+        bh=ikZ+PR/EklJmOrxEmrNGimc9Z26aJRLTxGu7euJ5K94=;
+        b=EhoD7jpbnPzy8VdYE6Da9KaxEBcK5nlsjBo0jRUA7SnJIr9x2+QTmjnPEitkOsnQ82
+         FDg2A+qg3UXTXaiArxi5X5eEPUV5aJSNtwPRJeehjHA3VGR1mkM9C5CY4mJPLzuL4F36
+         lqOE23I4trR2zVBpBXiZ5DkATI9lNLbE/tpWLwCOkotOq/WoEN9czrR+EXYnsoQuNu2w
+         yxdEtbAxWmMD7yCjDPmH3Ww2RpP2+fVInj4SdXpr3CinpsbcVyd28TsoBVrWFzp4PAJp
+         piHHvviLyVYDKifOMHwjHo7umj0r/4EWj26lF67JrSC0X5NwZNYtWiE0GvlBsNS72TI1
+         KU9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=oLH4/O4hnVy3wOLUc8vz0oBE8xaj2C4NuAcXjfnz4nc=;
-        b=wrk5VsgdJssWNrao876mDNE2tiLGNdHfW1SIBi2LFS3nU/ITnC32Y366N1bjhoZcrg
-         sNBzqGoY1iF4X4a/lE5KquoZrMIW934hbIdIRbV22CKIhvjEKNb1DTwI7oKVZ/Zxu/wA
-         0EFnf3Y/XN3IY3gDk4sA/U9IBmmtEswDLFFU1NMKX6JyGttH4s9pJmLi07HqM63LmM0t
-         0L52cdgI17RZcezcT/QMG3hikzu4LL9FjtNyiFz8ugfFa+qce98jgA55UIzP3nC6se0B
-         DLrPzaHrDNC1x3Q8jg5lfTI3yLbGMZZSZEl8VCym7UDhiVWfn6GeUoB7haPNZkzL2/er
-         4F1g==
-X-Gm-Message-State: AOAM532fyjYQp0J0adzioKmSCancqTRZb+uoB7lnmcD4P0xf5UNnrQTw
-        ABsyKJiB0s088HuWq+S+PIHOEZbWKlEDMQ==
-X-Google-Smtp-Source: ABdhPJzKwRby6wAL6fXmsCoBg2Jo18skM3PQfHlN6h+jnaXjyVK1aQ/gnt4kwrr5w8dLwD11V0/c0A==
-X-Received: by 2002:a17:90b:1b41:b0:1e0:17f:d17 with SMTP id nv1-20020a17090b1b4100b001e0017f0d17mr7128754pjb.85.1653138837559;
-        Sat, 21 May 2022 06:13:57 -0700 (PDT)
+        bh=ikZ+PR/EklJmOrxEmrNGimc9Z26aJRLTxGu7euJ5K94=;
+        b=SIS0BLEE8KvwsRwig91ZiflbaQ3vV6OUXWBJM8aArVKnMccUamryP5s2CXY2teA9hs
+         PWuTddT9ujY3r7HqhrLgG8G5/1SKQDSKOIPgf+TkzvvHu8f7y04HTwYvbBHYbH5UjOut
+         HM5WRTQAxa/9O5dsr9zzxHx6PWFET+QHD0R/pfZW1LfvHI/X42Gzb7j6/DWKmDqsl6Um
+         amOu+7lriqdnxGiWyPRuD5xT/eNRCQ/FjdYnImdWFsFKYkgZK2qQz1Nxn/cMNT+CAgL2
+         C4CPv0CvGVlJ0UNWwVz41rchJ48Z62zxynnhmzCXYU99XfcBQ+g61uRwzSURtGyAZv0J
+         J5yQ==
+X-Gm-Message-State: AOAM5311z/SDETgxdlnJyPAQNOtmLeb4ixkOyeVkY0ckShb55y4zudtj
+        R4stjd7+bhw2fk4i03H8QwjzOAZfx9l97Q==
+X-Google-Smtp-Source: ABdhPJyKIW3WotfnL1yeSTCYDA2WB1z5y39r22s9dVdmWhEmBH6WpFdAXpzN0ZhCDdIOGpKXR7st3Q==
+X-Received: by 2002:a05:6a00:b94:b0:50f:2255:ae03 with SMTP id g20-20020a056a000b9400b0050f2255ae03mr14833395pfj.74.1653138840676;
+        Sat, 21 May 2022 06:14:00 -0700 (PDT)
 Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
-        by smtp.gmail.com with ESMTPSA id y16-20020a62b510000000b0051843980605sm3593579pfe.181.2022.05.21.06.13.56
+        by smtp.gmail.com with ESMTPSA id 190-20020a6204c7000000b0050dc76281basm3740557pfe.148.2022.05.21.06.13.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 May 2022 06:13:57 -0700 (PDT)
+        Sat, 21 May 2022 06:14:00 -0700 (PDT)
 From:   Stafford Horne <shorne@gmail.com>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     Openrisc <openrisc@lists.librecores.org>,
         Stafford Horne <shorne@gmail.com>,
         Jonas Bonn <jonas@southpole.se>,
         Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Karol Gugala <kgugala@antmicro.com>,
-        Mateusz Holenko <mholenko@antmicro.com>,
-        Gabriel Somlo <gsomlo@gmail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH v3 06/13] openrisc: Update litex defconfig to support glibc userland
-Date:   Sat, 21 May 2022 22:13:16 +0900
-Message-Id: <20220521131323.631209-7-shorne@gmail.com>
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: [PATCH v3 07/13] openrisc/traps: Declare file scope symbols as static
+Date:   Sat, 21 May 2022 22:13:17 +0900
+Message-Id: <20220521131323.631209-8-shorne@gmail.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220521131323.631209-1-shorne@gmail.com>
 References: <20220521131323.631209-1-shorne@gmail.com>
@@ -76,85 +68,48 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I have been using a litex SoC for glibc verification.  Update the
-default litex config to support required userspace API's needed for the
-full glibc testsuite to pass.
+Sparse was reporting the following warnings:
 
-This includes enabling the litex mmc driver and filesystems used
-in a typical litex environment.
+    arch/openrisc/kernel/traps.c:37:5: warning: symbol 'kstack_depth_to_print' was not declared. Should it be static?
+    arch/openrisc/kernel/traps.c:39:22: warning: symbol 'lwa_addr' was not declared. Should it be static?
+    arch/openrisc/kernel/traps.c:41:6: warning: symbol 'print_trace' was not declared. Should it be static?
+
+The function print_trace and local variables kstack_depth_to_print and
+lwa_addr are not used outside of this file.  This patch marks them as
+static.
 
 Signed-off-by: Stafford Horne <shorne@gmail.com>
 ---
- arch/openrisc/configs/or1klitex_defconfig | 32 +++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ arch/openrisc/kernel/traps.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/openrisc/configs/or1klitex_defconfig b/arch/openrisc/configs/or1klitex_defconfig
-index d695879a4d26..d3fb964b4f85 100644
---- a/arch/openrisc/configs/or1klitex_defconfig
-+++ b/arch/openrisc/configs/or1klitex_defconfig
-@@ -1,22 +1,54 @@
-+CONFIG_SYSVIPC=y
-+CONFIG_POSIX_MQUEUE=y
-+CONFIG_CGROUPS=y
-+CONFIG_NAMESPACES=y
-+CONFIG_USER_NS=y
- CONFIG_BLK_DEV_INITRD=y
- CONFIG_CC_OPTIMIZE_FOR_SIZE=y
-+CONFIG_SGETMASK_SYSCALL=y
- CONFIG_EMBEDDED=y
- CONFIG_OPENRISC_BUILTIN_DTB="or1klitex"
- CONFIG_HZ_100=y
-+CONFIG_OPENRISC_HAVE_SHADOW_GPRS=y
- CONFIG_NET=y
- CONFIG_PACKET=y
-+CONFIG_PACKET_DIAG=y
- CONFIG_UNIX=y
-+CONFIG_UNIX_DIAG=y
- CONFIG_INET=y
-+CONFIG_IP_MULTICAST=y
-+CONFIG_IP_ADVANCED_ROUTER=y
-+CONFIG_INET_UDP_DIAG=y
-+CONFIG_INET_RAW_DIAG=y
-+# CONFIG_WIRELESS is not set
-+# CONFIG_ETHTOOL_NETLINK is not set
- CONFIG_DEVTMPFS=y
- CONFIG_DEVTMPFS_MOUNT=y
- CONFIG_OF_OVERLAY=y
- CONFIG_NETDEVICES=y
- CONFIG_LITEX_LITEETH=y
-+# CONFIG_WLAN is not set
- CONFIG_SERIAL_LITEUART=y
- CONFIG_SERIAL_LITEUART_CONSOLE=y
- CONFIG_TTY_PRINTK=y
-+# CONFIG_GPIO_CDEV is not set
-+CONFIG_MMC=y
-+CONFIG_MMC_LITEX=y
-+# CONFIG_VHOST_MENU is not set
-+# CONFIG_IOMMU_SUPPORT is not set
- CONFIG_LITEX_SOC_CONTROLLER=y
-+CONFIG_EXT2_FS=y
-+CONFIG_EXT3_FS=y
-+CONFIG_MSDOS_FS=y
-+CONFIG_VFAT_FS=y
-+CONFIG_EXFAT_FS=y
- CONFIG_TMPFS=y
-+CONFIG_NFS_FS=y
-+CONFIG_NFS_V3_ACL=y
-+CONFIG_NFS_V4=y
-+CONFIG_NLS_CODEPAGE_437=y
-+CONFIG_NLS_ISO8859_1=y
-+CONFIG_LSM="lockdown,yama,loadpin,safesetid,integrity,bpf"
- CONFIG_PRINTK_TIME=y
- CONFIG_PANIC_ON_OOPS=y
- CONFIG_SOFTLOCKUP_DETECTOR=y
+diff --git a/arch/openrisc/kernel/traps.c b/arch/openrisc/kernel/traps.c
+index f2478bba77b9..9e0937eb31ca 100644
+--- a/arch/openrisc/kernel/traps.c
++++ b/arch/openrisc/kernel/traps.c
+@@ -34,11 +34,11 @@
+ #include <asm/unwinder.h>
+ #include <asm/sections.h>
+ 
+-int kstack_depth_to_print = 0x180;
++static int kstack_depth_to_print = 0x180;
+ int lwa_flag;
+-unsigned long __user *lwa_addr;
++static unsigned long __user *lwa_addr;
+ 
+-void print_trace(void *data, unsigned long addr, int reliable)
++static void print_trace(void *data, unsigned long addr, int reliable)
+ {
+ 	const char *loglvl = data;
+ 
 -- 
 2.31.1
 

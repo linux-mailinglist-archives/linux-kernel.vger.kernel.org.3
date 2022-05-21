@@ -2,97 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BCAD52FE99
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 19:38:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8745652FE9E
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 19:44:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350286AbiEURiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 13:38:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40428 "EHLO
+        id S1344343AbiEURoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 13:44:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236589AbiEURiF (ORCPT
+        with ESMTP id S229897AbiEURoe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 13:38:05 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF32A5D181;
-        Sat, 21 May 2022 10:38:01 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id a38so7402021pgl.9;
-        Sat, 21 May 2022 10:38:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4EbTUlhTEpoUgQqWiI/dseKqBh8sQfu3BdkMvRGGeSQ=;
-        b=gMxtn02BzmVK2fLgjDLTx3m0VlYVJFnXZwArUzwsiQLnp+C34BAbgoyxSI2ytRUJYF
-         1q2RfsV++yqeO4bLRenKF5eQXVrlhCcWh8aORpbzTKEYcOeD+1UbIlt11k7k4im7QGHJ
-         25SOwzcv9Po8qVkUrne1iVHdfKS9RJQUQgxjORkQft9TRAk4YSVevGSvxN0BZSw0df9P
-         CJ71Z+/m4cZR5oG93tcmJjkfy6wvjEuUtYPXM2DQnMsrbCG9IZZ0oX/q4cznO+V9tOjN
-         COZxKZvv+9+NUGPoxq8FBo/39XICXa86QQUszB+vofYbQEYgjum4bgzAUFE0DOi+aTIL
-         vrYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4EbTUlhTEpoUgQqWiI/dseKqBh8sQfu3BdkMvRGGeSQ=;
-        b=oGxyPOjYbopf3grRwaAP4TVpWIN7gMcBap/x5meZ+33/I6/UslRg7dhJ8XnDwrR2fJ
-         90czuPCzg2To1t0wHcxKrFK8PBH0pQN7/k+vKkHcaelbjgaPvGDyJqk+srq0hedaJmJ0
-         dzUPD0+AMLQsBqDMHDaED+wL1oPtrFy0W53q88ksRGQIhDYpE+99SXaGdgmgkuQCJunZ
-         8JuGLblUH9mC6l2IFgDuQd448cCi4qEN1CnKKdXAWmd5XRlnjQDJX2Y8jT0c6+VkTFrr
-         uaEBRGMi7SP/78jGrdR7f8kFjlGI8nKKA0/HqaMm1XrT0L2dQ75ALB+6qSZMuGoe4hFW
-         bitA==
-X-Gm-Message-State: AOAM532+oN6smvDi8woPp1jQSwLhMZko81uxzlQshq2JdS3Ne2H2Jq6c
-        DGUsmZx5gQm4NxyRIAiBNPhPR0YCb9arL34n71LnUBjAEQU=
-X-Google-Smtp-Source: ABdhPJzYQeVFwn0ZWuM9sm8UuKQynw5mtvsUTuEIgXR6kr5lI32ADsDs3R0xUlWigqGM85RL2tm8Jq6ZLYqLHEghlno=
-X-Received: by 2002:a05:6a00:1501:b0:510:7ab8:71c8 with SMTP id
- q1-20020a056a00150100b005107ab871c8mr15648138pfu.63.1653154681477; Sat, 21
- May 2022 10:38:01 -0700 (PDT)
+        Sat, 21 May 2022 13:44:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E69C5D5F6;
+        Sat, 21 May 2022 10:44:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4017F60C85;
+        Sat, 21 May 2022 17:44:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29773C385A5;
+        Sat, 21 May 2022 17:44:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653155072;
+        bh=EO84JGczgpntqsBiE0PFKKUwtkIBC7vQT45PS1nrYTM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=mLf/GRtnZ3q1ciVMuzDkYnEOKTsDT2jfwFJXyiuutQp8dgnkLSAC+iqUKGoddB38U
+         eNtiepYn+un7FTXa4fS+9fUCbQRWSC4uQZp7J5AsFGqxplizWSjG824CwOEi4IAViT
+         V8Q8rSPKq2THHVLB0DQhc6CuWzygK3Pllx91p4JRconHLosADsY2jespf42KWlWxnG
+         kYda1VOAsx28iaQfIdjkqflGklVkLc47XuInXCyEOnksXin+L2PQqm4dWZr8KNAagF
+         vVA0cZohdBxcoqO/yOR7IxARweX4iEqPGvLppqn31NPcPEuHk/gsgkfUTq7C1es5vO
+         CFajLlyyvFlBA==
+Date:   Sat, 21 May 2022 10:44:30 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     =?UTF-8?B?TcOlbnMgUnVsbGfDpXJk?= <mans@mansr.com>,
+        Pantelis Antoniou <pantelis.antoniou@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Vitaly Bordug <vbordug@ru.mvista.com>,
+        Dan Malek <dan@embeddededge.com>,
+        Joakim Tjernlund <joakim.tjernlund@lumentis.se>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] net: fs_enet: sync rx dma buffer before reading
+Message-ID: <20220521104430.1212bed5@kernel.org>
+In-Reply-To: <d8cc1123-30d2-d65b-84b1-2ffee0d50aab@csgroup.eu>
+References: <20220519192443.28681-1-mans@mansr.com>
+        <03f24864-9d4d-b4f9-354a-f3b271c0ae66@csgroup.eu>
+        <yw1xmtfc9yaj.fsf@mansr.com>
+        <b11dcb32-5915-c1c8-9f0e-3cfc57b55792@csgroup.eu>
+        <20220520104347.2b1b658a@kernel.org>
+        <d8cc1123-30d2-d65b-84b1-2ffee0d50aab@csgroup.eu>
 MIME-Version: 1.0
-References: <20220516165740.6256af51.alex.williamson@redhat.com>
- <20220518115432.76183-1-windy.bi.enflame@gmail.com> <20220520064148.GA20418@wunner.de>
- <CAGdb+H2_pX4TzG=sJ8XE6KiyWW9niJQawCbcDN2byxDfybukiA@mail.gmail.com> <20220521124910.GA13556@wunner.de>
-In-Reply-To: <20220521124910.GA13556@wunner.de>
-From:   Sheng Bi <windy.bi.enflame@gmail.com>
-Date:   Sun, 22 May 2022 01:37:50 +0800
-Message-ID: <CAGdb+H19bfbXM1cPJvhh6gixJbF7Sk=v53d9VpvWY8HEs0mSKg@mail.gmail.com>
-Subject: Re: [PATCH v2] PCI: Fix no-op wait after secondary bus reset
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 21, 2022 at 8:49 PM Lukas Wunner <lukas@wunner.de> wrote:
->
-> On Sat, May 21, 2022 at 04:36:10PM +0800, Sheng Bi wrote:
-> > If so, I also want to align the polling things mentioned in the
-> > question from Alex, since pci_dev_wait() is also used for reset
-> > functions other than SBR. To Bjorn, Alex, Lucas, how do you think if
-> > we need to change the polling in pci_dev_wait() to 20ms intervals, or
-> > keep binary exponential back-off with probable unexpected extra
-> > timeout delay.
->
-> The exponential backoff should probably be capped at some point
-> to avoid excessive wait delays.  I guess the rationale for
-> exponential backoff is to not poll too frequently.
-> Capping at 20 msec or 100 msec may be reasonable, i.e.:
->
-> -               delay *= 2;
-> +               delay = min(delay * 2, 100);
->
-> Thanks,
->
-> Lukas
+On Sat, 21 May 2022 06:44:41 +0000 Christophe Leroy wrote:
+> > Hm, I think the patch is necessary, sorry if you're also saying that
+> > and I'm misinterpreting.  
+> 
+> Well, I say the contrary.
+> 
+> On the mainline the patch may be applied as is, it won't harm.
+> 
+> However, it is gets applied to kernel 4.9 (based on the fixes: tag), it 
+> will break the driver for at least powerpc 8xx.
 
-Capping at 20 or 100 msec seems reasonable to me. Btw, since 20 msec
-is not a long time in these scenarios, how about changing to a fixed
-20 msec interval? Thanks,
+I see, we should make a note of that in the commit message so it doesn't
+get sucked into stable.
 
-windy
+> > Without the dma_sync_single_for_cpu() if swiotlb is used the data
+> > will not be copied back into the original buffer if there is no sync.  
+> 
+> I don't know how SWIOTLB works or even what it is, does any of the 
+> microcontrollers embedding freescale ethernet uses that at all ?
+
+AFAIU SWIOTLB basically forces the use of bounce buffers even if the
+device can reach the entire DRAM. I think some people also use it for
+added security? IDK. I mostly use it to check if I'm using the DMA API
+"right" :)

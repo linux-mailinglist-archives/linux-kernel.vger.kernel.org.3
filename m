@@ -2,216 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FE8052F7D8
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 05:03:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1668152F7D9
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 05:03:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354420AbiEUDD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 23:03:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42620 "EHLO
+        id S1354424AbiEUDDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 23:03:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347956AbiEUDDS (ORCPT
+        with ESMTP id S1352507AbiEUDDT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 23:03:18 -0400
-Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E6F6195BC0;
+        Fri, 20 May 2022 23:03:19 -0400
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 405E7195BD0
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 20:03:17 -0700 (PDT)
+Received: by mail-ot1-x334.google.com with SMTP id s23-20020a9d7597000000b0060ae566f9a1so3999668otk.1
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 20:03:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=iXC9iZNjKmQ1eM7aHBeF/bE9C630CTpntf6Q84d5u6o=;
+        b=hmJCr2aIfOiTE4SJ8sFjyWEHTBHGRPk3e87aK4iDcFte9TsADuQj/obm9fXKfGOfz3
+         hzJd7BiWkAZ4YkiaeIc84hveESITKP3lpGHjOGlKoTssgOWy1NhVYOXe+tw++V+gSgIa
+         RBg3DXclV7LE6uvzxnh+7k/+KsbfUqNKPjIoBg7oUnLqnpRIOESe+/xhzZ9vyPIzYN9w
+         vG42WtbHZNPsA6pZSe9eyHtk/bcOcdHGIrZKXeIxLeuXhd2Cq+Mc8yWxHmpi/MTpXAjt
+         sR3ABM7JnfpKRCZUidrDY7Zxf8wejXbFKEehwyVjd5Y+UQTxVkoqnGMSmGbFvLdiMuOc
+         NDPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iXC9iZNjKmQ1eM7aHBeF/bE9C630CTpntf6Q84d5u6o=;
+        b=TS0jZ6UvpZbMwHPJxJi4Wf6TtVWWfNPRRmUXzEjkX0qeyFWNlejhw2Mzic08iiVWhY
+         2rCVbXNAio2gU7E/RD8uidxBg19JZ0dmaCgLdncVRcywWlOyzajMF45Zx78wyGmL2sdp
+         MX1i6IjUigDxKFb4jQNgCPKdqHL44j27vZ63UwBvgOuHNWYBYxAuEgqjPzBmIj+vf0iL
+         5mQFbSXw+ddeHWdR7tfCedd6PwSACZz18Vte2eWkczFzoLSg4ZxYsxLmlPlWLNbCNNga
+         6RwVpZ91GoNKceogsBj3vuaCSrf1lqnqgadqxa6No808qrUgqhfaNP5F2Uxad7qhoVwW
+         uggA==
+X-Gm-Message-State: AOAM531tmbPNlAEDyWal0/YxMX6l0niqgwwFiQi8tPs9MqotXHcWkQ8d
+        QWUlszbJqEpi4l8k7J7Jz2VgcLKES7C2pg==
+X-Google-Smtp-Source: ABdhPJzf33hk+36nmQpALrQdURXvyXLsraIvq6uXSq7USAyA6BEgzR4igq3aDtnHAlZc/FbBD7CWmA==
+X-Received: by 2002:a05:6830:4d0:b0:60b:401:69df with SMTP id s16-20020a05683004d000b0060b040169dfmr110098otd.289.1653102196547;
         Fri, 20 May 2022 20:03:16 -0700 (PDT)
-Received: by mail.hallyn.com (Postfix, from userid 1001)
-        id 7FD571286; Fri, 20 May 2022 22:03:14 -0500 (CDT)
-Date:   Fri, 20 May 2022 22:03:14 -0500
-From:   "Serge E. Hallyn" <serge@hallyn.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        jpenumak@redhat.com, Christian Brauner <brauner@kernel.org>
-Subject: Re: [PATCH v12 07/26] ima: Move some IMA policy and filesystem
- related variables into ima_namespace
-Message-ID: <20220521030314.GE9107@mail.hallyn.com>
-References: <20220420140633.753772-1-stefanb@linux.ibm.com>
- <20220420140633.753772-8-stefanb@linux.ibm.com>
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id b7-20020a4aac87000000b0035eb4e5a6d6sm1848596oon.44.2022.05.20.20.03.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 May 2022 20:03:16 -0700 (PDT)
+Date:   Fri, 20 May 2022 20:05:33 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Harsh Agarwal <quic_harshq@quicinc.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com
+Subject: Re: [RFC 1/2] dt-bindings: usb: dwc3: Add support for multiport
+ related properties
+Message-ID: <YohW/W3Mk0J0AKVt@ripper>
+References: <1652963695-10109-1-git-send-email-quic_harshq@quicinc.com>
+ <1652963695-10109-2-git-send-email-quic_harshq@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220420140633.753772-8-stefanb@linux.ibm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <1652963695-10109-2-git-send-email-quic_harshq@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 10:06:14AM -0400, Stefan Berger wrote:
-> Move the variables ima_write_mutex, ima_fs_flag, and valid_policy, which
-> are related to updating the IMA policy, into the ima_namespace. This way
-> each IMA namespace can set these variables independently in its instance
-> of securityfs.
-> 
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> Acked-by: Christian Brauner <brauner@kernel.org>
-> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+On Thu 19 May 05:34 PDT 2022, Harsh Agarwal wrote:
 
-Acked-by: Serge Hallyn <serge@hallyn.com>
+> Added support for multiport, mport, num-ssphy and num-hsphy
+> properties. These properties are used to support devices having
+> a multiport controller.
+> 
+> Signed-off-by: Harsh Agarwal <quic_harshq@quicinc.com>
+
+Please do run dt_binding_check on your bindings, even though they are
+RFCs.
 
 > ---
->  security/integrity/ima/ima.h             |  5 ++++
->  security/integrity/ima/ima_fs.c          | 32 +++++++++++-------------
->  security/integrity/ima/ima_init_ima_ns.c |  4 +++
->  3 files changed, 23 insertions(+), 18 deletions(-)
+>  .../devicetree/bindings/usb/snps,dwc3.yaml         | 55 ++++++++++++++++++++++
+>  1 file changed, 55 insertions(+)
 > 
-> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-> index 82e8af2bf698..a144edfdb9a1 100644
-> --- a/security/integrity/ima/ima.h
-> +++ b/security/integrity/ima/ima.h
-> @@ -137,6 +137,11 @@ struct ima_namespace {
->  	struct ima_h_table ima_htable;
->  	struct list_head ima_measurements;	/* list of all measurements */
->  	unsigned long binary_runtime_size;	/* used by init_ima_ns */
+> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> index f4471f8..39c61483 100644
+> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> @@ -341,6 +341,35 @@ properties:
+>        This port is used with the 'usb-role-switch' property  to connect the
+>        dwc3 to type C connector.
+>  
+> +  multiport:
+
+Why are you inventing an of_graph lookalike here?
+
+> +    description:
+> +      If a single USB controller supports multiple ports, then it's referred to as
+> +      a multiport controller. Each port of the multiport controller can support
+> +      either High Speed or Super Speed or both and have their own PHY phandles. Each
+> +      port is represented by "mport" node and all the "mport" nodes are grouped
+> +      together inside the "multiport" node where individual "mport" node defines the
+> +      PHYs supported by that port.
+> +    required:
+> +      - mport
 > +
-> +	/* securityfs support related variables */
-> +	struct mutex ima_write_mutex;
-> +	unsigned long ima_fs_flags;
-> +	int valid_policy;
->  } __randomize_layout;
->  extern struct ima_namespace init_ima_ns;
->  
-> diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-> index 5ef0e2b2cf64..4cf786f0bba8 100644
-> --- a/security/integrity/ima/ima_fs.c
-> +++ b/security/integrity/ima/ima_fs.c
-> @@ -24,8 +24,6 @@
->  
->  #include "ima.h"
->  
-> -static DEFINE_MUTEX(ima_write_mutex);
-> -
->  bool ima_canonical_fmt;
->  static int __init default_canonical_fmt_setup(char *str)
->  {
-> @@ -36,8 +34,6 @@ static int __init default_canonical_fmt_setup(char *str)
->  }
->  __setup("ima_canonical_fmt", default_canonical_fmt_setup);
->  
-> -static int valid_policy = 1;
-> -
->  static ssize_t ima_show_htable_value(char __user *buf, size_t count,
->  				     loff_t *ppos, atomic_long_t *val)
->  {
-> @@ -338,7 +334,7 @@ static ssize_t ima_write_policy(struct file *file, const char __user *buf,
->  		goto out;
->  	}
->  
-> -	result = mutex_lock_interruptible(&ima_write_mutex);
-> +	result = mutex_lock_interruptible(&ns->ima_write_mutex);
->  	if (result < 0)
->  		goto out_free;
->  
-> @@ -353,12 +349,12 @@ static ssize_t ima_write_policy(struct file *file, const char __user *buf,
->  	} else {
->  		result = ima_parse_add_rule(ns, data);
->  	}
-> -	mutex_unlock(&ima_write_mutex);
-> +	mutex_unlock(&ns->ima_write_mutex);
->  out_free:
->  	kfree(data);
->  out:
->  	if (result < 0)
-> -		valid_policy = 0;
-> +		ns->valid_policy = 0;
->  
->  	return result;
->  }
-> @@ -375,8 +371,6 @@ enum ima_fs_flags {
->  	IMA_FS_BUSY,
->  };
->  
-> -static unsigned long ima_fs_flags;
-> -
->  #ifdef	CONFIG_IMA_READ_POLICY
->  static const struct seq_operations ima_policy_seqops = {
->  		.start = ima_policy_start,
-> @@ -391,6 +385,8 @@ static const struct seq_operations ima_policy_seqops = {
->   */
->  static int ima_open_policy(struct inode *inode, struct file *filp)
->  {
-> +	struct ima_namespace *ns = &init_ima_ns;
+> +  num-hsphy:
+> +    description: Total number of HS-PHYs defined by the multiport controller.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+
+I'm expecting that you wont' have any superspeed-only ports. As such
+this number would imply be the number of ports listed under the node.
+
 > +
->  	if (!(filp->f_flags & O_WRONLY)) {
->  #ifndef	CONFIG_IMA_READ_POLICY
->  		return -EACCES;
-> @@ -402,7 +398,7 @@ static int ima_open_policy(struct inode *inode, struct file *filp)
->  		return seq_open(filp, &ima_policy_seqops);
->  #endif
->  	}
-> -	if (test_and_set_bit(IMA_FS_BUSY, &ima_fs_flags))
-> +	if (test_and_set_bit(IMA_FS_BUSY, &ns->ima_fs_flags))
->  		return -EBUSY;
->  	return 0;
->  }
-> @@ -416,25 +412,25 @@ static int ima_open_policy(struct inode *inode, struct file *filp)
->   */
->  static int ima_release_policy(struct inode *inode, struct file *file)
->  {
-> -	const char *cause = valid_policy ? "completed" : "failed";
->  	struct ima_namespace *ns = &init_ima_ns;
-> +	const char *cause = ns->valid_policy ? "completed" : "failed";
->  
->  	if ((file->f_flags & O_ACCMODE) == O_RDONLY)
->  		return seq_release(inode, file);
->  
-> -	if (valid_policy && ima_check_policy(ns) < 0) {
-> +	if (ns->valid_policy && ima_check_policy(ns) < 0) {
->  		cause = "failed";
-> -		valid_policy = 0;
-> +		ns->valid_policy = 0;
->  	}
->  
->  	pr_info("policy update %s\n", cause);
->  	integrity_audit_msg(AUDIT_INTEGRITY_STATUS, NULL, NULL,
-> -			    "policy_update", cause, !valid_policy, 0);
-> +			    "policy_update", cause, !ns->valid_policy, 0);
->  
-> -	if (!valid_policy) {
-> +	if (!ns->valid_policy) {
->  		ima_delete_rules(ns);
-> -		valid_policy = 1;
-> -		clear_bit(IMA_FS_BUSY, &ima_fs_flags);
-> +		ns->valid_policy = 1;
-> +		clear_bit(IMA_FS_BUSY, &ns->ima_fs_flags);
->  		return 0;
->  	}
->  
-> @@ -443,7 +439,7 @@ static int ima_release_policy(struct inode *inode, struct file *file)
->  	securityfs_remove(ima_policy);
->  	ima_policy = NULL;
->  #elif defined(CONFIG_IMA_WRITE_POLICY)
-> -	clear_bit(IMA_FS_BUSY, &ima_fs_flags);
-> +	clear_bit(IMA_FS_BUSY, &ns->ima_fs_flags);
->  #elif defined(CONFIG_IMA_READ_POLICY)
->  	inode->i_mode &= ~S_IWUSR;
->  #endif
-> diff --git a/security/integrity/ima/ima_init_ima_ns.c b/security/integrity/ima/ima_init_ima_ns.c
-> index a7477072c587..425eed1c6838 100644
-> --- a/security/integrity/ima/ima_init_ima_ns.c
-> +++ b/security/integrity/ima/ima_init_ima_ns.c
-> @@ -26,6 +26,10 @@ static int ima_init_namespace(struct ima_namespace *ns)
->  	else
->  		ns->binary_runtime_size = ULONG_MAX;
->  
-> +	mutex_init(&ns->ima_write_mutex);
-> +	ns->valid_policy = 1;
-> +	ns->ima_fs_flags = 0;
+> +  num-ssphy:
+> +    description: Total number of SS-PHYs defined by the multiport controller.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+
+Can you please explain why it's necessary to specify usb_nop_phy?
+Wouldn't it be possible to omit the phy in the case of a HS-only port?
+In which case this could just be calculated as well.
+
+Regards,
+Bjorn
+
 > +
->  	return 0;
->  }
+> +  mport:
+> +    description: Each mport node represents one port of the multiport controller.
+> +    patternProperties: "^mport@[0-9a-f]+$"
+> +    oneOf:
+> +       - required:
+> +         - usb-phy
+> +       - required:
+> +          - phys
+> +          - phy-names
+> +
+>  unevaluatedProperties: false
 >  
+>  required:
+> @@ -369,4 +398,30 @@ examples:
+>        snps,dis_u2_susphy_quirk;
+>        snps,dis_enblslpm_quirk;
+>      };
+> +  - |
+> +    usb@4a000000 {
+> +      compatible = "snps,dwc3";
+> +      reg = <0x4a000000 0xcfff>;
+> +      interrupts = <0 92 4>;
+> +
+> +      multiport {
+> +
+> +	MP_1: mport@1 {
+> +          usb-phy = <&usb2_phy0>, <&usb3_phy0>;
+> +	};
+> +
+> +	MP_2: mport@2 {
+> +          usb-phy = <&usb2_phy1>, <&usb3_phy1>;
+> +	};
+> +
+> +	MP_3: mport@3 {
+> +          usb-phy = <&usb2_phy2>, <&usb_nop_phy>;
+> +	};
+> +
+> +	MP_4: mport@4 {
+> +          usb-phy = <&usb2_phy3>, <&usb_nop_phy>;
+> +	};
+> +
+> +      };
+> +    };
+>  ...
 > -- 
-> 2.34.1
+> 2.7.4
+> 

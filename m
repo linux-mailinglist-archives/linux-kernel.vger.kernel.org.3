@@ -2,120 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97F8A52FF85
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 22:57:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D271752FF88
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 23:07:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244143AbiEUU5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 16:57:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38160 "EHLO
+        id S244918AbiEUVFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 17:05:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233442AbiEUU46 (ORCPT
+        with ESMTP id S233442AbiEUVFi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 16:56:58 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1867939BBE
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 13:56:55 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id k126so6264098wme.2
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 13:56:55 -0700 (PDT)
+        Sat, 21 May 2022 17:05:38 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A151249C8E
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 14:05:37 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id y32so19619334lfa.6
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 14:05:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=philpotter-co-uk.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=JXAlvtqqW6tfWflMXAoMdK3ghKA1sIU+pzaSVEJLAmE=;
-        b=7YZUaGRBM2D6w5PSxPK+8AGXtQOmH0OOGAxLMRkZ34PDC26aBd6KUnTgaF8pCpgEML
-         uuNCtAv7lIHMnHch5/EVcM9nWsUaqD/JWVfOhT9bw47ONAQ3RF3OHrW/rymoX/KWwAXl
-         0WBpOyql/vf4q7QBUyUE9BoCfwJwrGqSUyvJ1lNklD8xdbSBqTAWMP+fLySoetn5Ixxo
-         ntwUfizpGU4V5haYxQGf0zxeLL2OBsktEm9CagdWR52b4yNxVKlRN190w0bX/bJpxzDM
-         WwngLGgL318HCtcvviKBkTv2Xm2nWTtVgkyFgwPdS2KBjSVziT6u29wAtoUw+IAF7lpf
-         XHKw==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=EkmajMsiYUhXvdrsUvmOT04jWZKTsPHdMPmsBMpezRw=;
+        b=HnpXN/wSHlv/VEmQGhFVZKncoGfope+/brDTF6S+FoYf38JOPI4PUWKS7X66g5CUpI
+         e168lzIxSSQw7MwsAk9amI/I5INXpyDzGztfYnmKODOuR+0BLjwICH+BO6IF8SAcI4OP
+         S+RXXC4uOK3C6sBqkhNrv0HBUpTpDcnQQunaFKthy7J8sUQbxBORbQNULb5XfaXYBIiY
+         KpEXuemSs7JU2JBDYzNvcHFQbCnE/m//B+7P6nPCkUZzakVFlYpvX3d4fp1cXcEgxiLN
+         i4IKuKgAmhDGHsmztaI1DmyDuNEHOuFPOIXMrRHXmg89gxpsBhyqPPJuqo8qulCjs8Fs
+         FJvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=JXAlvtqqW6tfWflMXAoMdK3ghKA1sIU+pzaSVEJLAmE=;
-        b=dg0yIhfNBrsPXJvSdHaRENxmkP/F9JkbYa2rDTSR2cBj5tFCSAI+OeU1XWPl9ISc0G
-         FwWaRowlukUHNQ41F9JoPa1HkV0ouZbu00A3XvyqYcSmwnhdEMFy2N8anVaSjo8jhku/
-         Xh/xQa8DuUQ8q2B+IIss56LuGNjoquCnBfY/k4tv0Ji+S3XkXQjLi+ip940ca2Q2h18n
-         wOPHxkBj4JJKnpFwkZNMiO6vzqL/Kj+7bCY/4ixUBvZA8Txo88Dngc3nu05CXVW6DxLY
-         V82XI+F54ddayP1Vplg/jXUmw29pnCc76JZpxKVrqHKClvt3a1RJ7R/muIRmPxPc3mK1
-         QjRA==
-X-Gm-Message-State: AOAM530zfOp5KBtsjDUESJcQIWSqY8UvsBpcdKSAjauQEM00C9qSge7r
-        CrMbtM/bCWat6yGcU8jwg5TQng==
-X-Google-Smtp-Source: ABdhPJwn4p5tuLjJ5faKGoRXTKmKV9Q5uXCJJuKbncS7PnIH8x5TWbFDZfn4WmxepzG1jlVsvAcUvg==
-X-Received: by 2002:a7b:c341:0:b0:37b:c619:c9f4 with SMTP id l1-20020a7bc341000000b0037bc619c9f4mr14140840wmj.38.1653166614153;
-        Sat, 21 May 2022 13:56:54 -0700 (PDT)
-Received: from equinox (2.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.a.1.e.e.d.f.d.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:dfde:e1a0::2])
-        by smtp.gmail.com with ESMTPSA id n1-20020a1c2701000000b003942a244ec5sm5367747wmn.10.2022.05.21.13.56.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 May 2022 13:56:53 -0700 (PDT)
-Date:   Sat, 21 May 2022 21:56:51 +0100
-From:   Phillip Potter <phil@philpotter.co.uk>
-To:     Pavel Skripkin <paskripkin@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=EkmajMsiYUhXvdrsUvmOT04jWZKTsPHdMPmsBMpezRw=;
+        b=NV095/wY26qj7L3gCMxR1A7RSrIHP0BJPk+k1URGLgMRMW3aULcEayB5IPWhnj+cwX
+         wGjs12F8xGol0xAFi4is5aL5iLCrKA1wGk3ZgDzSsWxBzwibeAbl13yZYkg7ly2km867
+         XuwvCeQUMk1vAOHe5epyU7TrZePdz42dn/4qN5EHOY8tz7mk3pyv6/tPk7H+GABNHxtW
+         gYo86E7r/qhLYyEXoM9rcd6DZl888pUVrCr1B1yU66OBGI20xCuMX5v1/zyNHr+OQA1x
+         6NpfHMttbK7lfvwWWyLPVnJ6gpuN7J9U2zXR4GS+SwGWVXEJJstwopvto9D/j9HYIE68
+         EXtA==
+X-Gm-Message-State: AOAM531FnF96xAUdV3qbGd2pYG771YnTw7AOlun6vMmo4hi+FvSxuCt5
+        0OMfjRZc7U8EuzyPyG3K72Y=
+X-Google-Smtp-Source: ABdhPJymc3KO6kebafKYNGTa/JzoZ5/Pot2UgArE7micAEnyJ3ghlHSadFTf1pLFKRQjJ+s4ajxoQw==
+X-Received: by 2002:a05:6512:4007:b0:474:2df9:573d with SMTP id br7-20020a056512400700b004742df9573dmr11524539lfb.166.1653167135821;
+        Sat, 21 May 2022 14:05:35 -0700 (PDT)
+Received: from [192.168.1.11] ([46.235.67.4])
+        by smtp.gmail.com with ESMTPSA id o27-20020a198c1b000000b00478509b44e6sm805221lfd.84.2022.05.21.14.05.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 21 May 2022 14:05:35 -0700 (PDT)
+Message-ID: <3e4761a4-5ee8-0ba0-d64c-fe8798f2f010@gmail.com>
+Date:   Sun, 22 May 2022 00:05:34 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v3] staging: r8188eu: add check for kzalloc
+Content-Language: en-US
+To:     Phillip Potter <phil@philpotter.co.uk>
 Cc:     Martin Kaiser <lists@kaiser.cx>,
         Jiasheng Jiang <jiasheng@iscas.ac.cn>,
         dan.carpenter@oracle.com, Larry.Finger@lwfinger.net,
-        phil@philpotter.co.uk, gregkh@linuxfoundation.org,
-        straube.linux@gmail.com, fmdefrancesco@gmail.com,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] staging: r8188eu: add check for kzalloc
-Message-ID: <YolRut+PJ68J9mcM@KernelVM>
+        gregkh@linuxfoundation.org, straube.linux@gmail.com,
+        fmdefrancesco@gmail.com, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
 References: <20220518075957.514603-1-jiasheng@iscas.ac.cn>
  <20220521155017.7jjz7prdnspm2276@viti.kaiser.cx>
- <8fb49b5b-106b-3346-a75d-d54e0a065587@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8fb49b5b-106b-3346-a75d-d54e0a065587@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+ <8fb49b5b-106b-3346-a75d-d54e0a065587@gmail.com> <YolRut+PJ68J9mcM@KernelVM>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <YolRut+PJ68J9mcM@KernelVM>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 21, 2022 at 11:26:55PM +0300, Pavel Skripkin wrote:
-> Hi Martin,
-> 
-> On 5/21/22 18:50, Martin Kaiser wrote:
-> > 
-> > >  	for (i = 0; i < 4; i++)
-> > > @@ -1474,7 +1479,7 @@ s32 rtw_xmit_classifier(struct adapter *padapter, struct xmit_frame *pxmitframe)
-> > 
-> > 
-> > res is still 0 here - but the caller of _rtw_init_xmit_priv compares
-> > this return value with _SUCCESS (1) or _FAIL (0) and interprets it as
-> > _FAIL.
-> > 
-> 
-> I think, it's time to make
-> 
-> s/_SUCCESS/0/
-> s/_FAIL/-1
-> 
-> since developers from outside of staging are confused.
-> The main problem will be with functions that return an int (or s32).
-> 
-> Will take a look.
-> 
-> 
-> 
-> With regards,
-> Pavel Skripkin
+Hi Phillip,
 
-Hi Pavel,
+On 5/21/22 23:56, Phillip Potter wrote:
+> Hi Pavel,
+> 
+> I agree with you totally - we should change these semantics to reflect
+> how the rest of the kernel generally does things. That said, that is a
+> bigger patch set and I noticed the driver was broken before I read this
+> thread, so I've submitted a patch already just to fix the breakage for
+> now.
+> 
+> Changing these semantics is a bigger patch/patchset and I wanted to get
+> this out in the meantime - if you are looking at doing this conversion I
+> will by all means leave that alone as no desire to tread on anyones
+> toes :-)
+> 
 
-I agree with you totally - we should change these semantics to reflect
-how the rest of the kernel generally does things. That said, that is a
-bigger patch set and I noticed the driver was broken before I read this
-thread, so I've submitted a patch already just to fix the breakage for
-now.
+I think, redoing more then 500 place will take quite a long time, but 
+driver should be fixed ASAP.
 
-Changing these semantics is a bigger patch/patchset and I wanted to get
-this out in the meantime - if you are looking at doing this conversion I
-will by all means leave that alone as no desire to tread on anyones
-toes :-)
+So let's apply your patch and then someone (maybe me) will cook a patch.
 
-Regards,
-Phil
+
+
+
+With regards,
+Pavel Skripkin

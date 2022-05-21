@@ -2,139 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1265C52F939
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 08:24:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 975E752F93D
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 08:31:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240169AbiEUGYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 02:24:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46420 "EHLO
+        id S240231AbiEUGb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 02:31:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbiEUGYN (ORCPT
+        with ESMTP id S238940AbiEUGbZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 02:24:13 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E08F17CE5A;
-        Fri, 20 May 2022 23:24:12 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id j21so9208682pga.13;
-        Fri, 20 May 2022 23:24:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=D+035shCGayoVZnHh6P8+prZuzk5qeaJC5UNIpCMpBI=;
-        b=DPMPF91IKlfD0xI4JyQCyHN9pvfG7aQ954msFUzst3pRk+TsDCxTnUJPl+G9xz35Ll
-         vrGQWBz5lvdKyt4Y1XtyXtTVehO56N4L7nu03CiQPil/XzaV2G6Qs5laH4ZzElWcVleb
-         k5UHlwpW7y4kWmuRtBI2KIihuQ8Cnv/wMOInRu51O1HfdzPySO92Fugc54VpjPpDbTPa
-         GulYWpKo6kZVN5KU8Y64qnU46c8GN+emJ82zZoHtUBjPWXoALmJdQ1O19lyPeWT/JiUk
-         QinVzT7E8wRvivtP72vJvffWYQgqTcm8IPdxzIG8akXCVg6Xm2B9yujOC/HEyHvg9CUJ
-         IXiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=D+035shCGayoVZnHh6P8+prZuzk5qeaJC5UNIpCMpBI=;
-        b=a2hsOJEiAOW45fMknfsEcx9aIlkQtZnPULLwp82FyQmUDvOerA+oTufTOzdX6O7Qz+
-         anpENupBXfhrLlurSQCzKuahUpt29s/MZ9MrzrQwt5eHpvU3HaYWMQP3gmCr814TsyoU
-         iV2Y2huHoGqfCKjq41l7bT/Ynl2C5tCKHpjhTnOcvPekRsHh1RF9HSgcGbG4eXpsGuiu
-         EYDuVeq3VeXJ1sUZBX2aTL7JbgWBLl8UD3PDvgvgctXi63OnGkbs1w95bh2PB1c42/jR
-         ra0NTEM89xFgoGVkvAWkyAAJhpkdffOTJybMbRvPnsoP+FGn7Ju9mLUDnZalKLfSIJhT
-         +Uhw==
-X-Gm-Message-State: AOAM531UFa1vHNug1kZf8nnKnWtSV5QZwEeIhXeUat59gIK3SJRFaCpD
-        ISeu0eEoZZVlj5sEXnfl2A==
-X-Google-Smtp-Source: ABdhPJxMBttmUWzz887BCqKJuXt9xNs8IZXr/b4QufxVfwdedzEseaozqS8YQDEY1FDHhIkIzXxmNg==
-X-Received: by 2002:a63:5959:0:b0:3f2:779d:de6c with SMTP id j25-20020a635959000000b003f2779dde6cmr11192176pgm.355.1653114251744;
-        Fri, 20 May 2022 23:24:11 -0700 (PDT)
-Received: from localhost.localdomain ([144.202.91.207])
-        by smtp.gmail.com with ESMTPSA id je15-20020a170903264f00b0015e8d4eb2a6sm747822plb.240.2022.05.20.23.24.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 23:24:11 -0700 (PDT)
-From:   Zheyu Ma <zheyuma97@gmail.com>
-To:     ezequiel@vanguardiasur.com.ar, mchehab@kernel.org
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zheyu Ma <zheyuma97@gmail.com>
-Subject: [PATCH] media: tw686x: Register the irq at the end of probe
-Date:   Sat, 21 May 2022 14:24:01 +0800
-Message-Id: <20220521062401.3294686-1-zheyuma97@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        Sat, 21 May 2022 02:31:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2E06C220FB
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 23:31:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653114682;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=zHLMnhFySsFtf9jU9mylcGPoZOFPA7Ix+k7LYTrmjHI=;
+        b=XKAru+MLp+iIbqSUZM3kz1zniOr3IAGzZnrSI18g6nj9F4H+oVWDO//c1CaKvMg6E7Df8t
+        9QFnG4kTmS27uWcIRM2FBrKIKEPrzX+7jn0H8oQjjD+Tq+jNG8URPYG8Lrn/6MOY+tHOdY
+        zZSJyL1IG4brkMiBXEqecMYdhJzrlN4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-675-hHJXGTQPMC-bMqlWE_U8PQ-1; Sat, 21 May 2022 02:31:18 -0400
+X-MC-Unique: hHJXGTQPMC-bMqlWE_U8PQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 357DB185A79C;
+        Sat, 21 May 2022 06:31:18 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 19A417ADD;
+        Sat, 21 May 2022 06:31:18 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: [GIT PULL] Final batch of KVM fixes for 5.18
+Date:   Sat, 21 May 2022 02:31:17 -0400
+Message-Id: <20220521063117.70051-1-pbonzini@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We got the following warning when booting the kernel:
+Linus,
 
-[    3.243674] INFO: trying to register non-static key.
-[    3.243922] The code is fine but needs lockdep annotation, or maybe
-[    3.244230] you didn't initialize this object before use?
-[    3.245642] Call Trace:
-[    3.247836]  lock_acquire+0xff/0x2d0
-[    3.248727]  tw686x_audio_irq+0x1a5/0xcc0 [tw686x]
-[    3.249211]  tw686x_irq+0x1f9/0x480 [tw686x]
+The following changes since commit 053d2290c0307e3642e75e0185ddadf084dc36c1:
 
-The lock 'vc->qlock' will be initialized in tw686x_video_init(), but the
-driver registers the irq before calling the tw686x_video_init(), and we
-got the warning.
+  KVM: VMX: Exit to userspace if vCPU has injected exception and invalid state (2022-05-06 13:08:06 -0400)
 
-Fix this by registering the irq at the end of probe
+are available in the Git repository at:
 
-Fixes: 704a84ccdbf1 ("[media] media: Support Intersil/Techwell TW686x-based video capture cards")
-Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
----
- drivers/media/pci/tw686x/tw686x-core.c | 18 ++++++++----------
- 1 file changed, 8 insertions(+), 10 deletions(-)
+  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
 
-diff --git a/drivers/media/pci/tw686x/tw686x-core.c b/drivers/media/pci/tw686x/tw686x-core.c
-index 6676e069b515..384d38754a4b 100644
---- a/drivers/media/pci/tw686x/tw686x-core.c
-+++ b/drivers/media/pci/tw686x/tw686x-core.c
-@@ -315,13 +315,6 @@ static int tw686x_probe(struct pci_dev *pci_dev,
- 
- 	spin_lock_init(&dev->lock);
- 
--	err = request_irq(pci_dev->irq, tw686x_irq, IRQF_SHARED,
--			  dev->name, dev);
--	if (err < 0) {
--		dev_err(&pci_dev->dev, "unable to request interrupt\n");
--		goto iounmap;
--	}
--
- 	timer_setup(&dev->dma_delay_timer, tw686x_dma_delay, 0);
- 
- 	/*
-@@ -333,18 +326,23 @@ static int tw686x_probe(struct pci_dev *pci_dev,
- 	err = tw686x_video_init(dev);
- 	if (err) {
- 		dev_err(&pci_dev->dev, "can't register video\n");
--		goto free_irq;
-+		goto iounmap;
- 	}
- 
- 	err = tw686x_audio_init(dev);
- 	if (err)
- 		dev_warn(&pci_dev->dev, "can't register audio\n");
- 
-+	err = request_irq(pci_dev->irq, tw686x_irq, IRQF_SHARED,
-+			  dev->name, dev);
-+	if (err < 0) {
-+		dev_err(&pci_dev->dev, "unable to request interrupt\n");
-+		goto iounmap;
-+	}
-+
- 	pci_set_drvdata(pci_dev, dev);
- 	return 0;
- 
--free_irq:
--	free_irq(pci_dev->irq, dev);
- iounmap:
- 	pci_iounmap(pci_dev, dev->mmio);
- free_region:
--- 
-2.36.1
+for you to fetch changes up to 9f46c187e2e680ecd9de7983e4d081c3391acc76:
+
+  KVM: x86/mmu: fix NULL pointer dereference on guest INVPCID (2022-05-20 13:49:52 -0400)
+
+Sorry for the relatively large change so close to the release, but in
+terms of lines added it's mostly selftests.
+
+----------------------------------------------------------------
+ARM:
+* Correctly expose GICv3 support even if no irqchip is created
+  so that userspace doesn't observe it changing pointlessly
+  (fixing a regression with QEMU)
+
+* Don't issue a hypercall to set the id-mapped vectors when
+  protected mode is enabled (fix for pKVM in combination with
+  CPUs affected by Spectre-v3a)
+
+x86: Five oneliners, of which the most interesting two are:
+
+* a NULL pointer dereference on INVPCID executed with
+  paging disabled, but only if KVM is using shadow paging
+
+* an incorrect bsearch comparison function which could truncate
+  the result and apply PMU event filtering incorrectly.  This one
+  comes with a selftests update too.
+
+----------------------------------------------------------------
+Aaron Lewis (3):
+      kvm: x86/pmu: Fix the compare function used by the pmu event filter
+      selftests: kvm/x86: Add the helper function create_pmu_event_filter
+      selftests: kvm/x86: Verify the pmu event filter matches the correct event
+
+Marc Zyngier (1):
+      KVM: arm64: vgic-v3: Consistently populate ID_AA64PFR0_EL1.GIC
+
+Paolo Bonzini (2):
+      Merge tag 'kvmarm-fixes-5.18-3' of git://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into HEAD
+      KVM: x86/mmu: fix NULL pointer dereference on guest INVPCID
+
+Quentin Perret (1):
+      KVM: arm64: Don't hypercall before EL2 init
+
+Sean Christopherson (2):
+      KVM: x86/mmu: Update number of zapped pages even if page list is stable
+      KVM: Free new dirty bitmap if creating a new memslot fails
+
+Wanpeng Li (1):
+      KVM: eventfd: Fix false positive RCU usage warning
+
+Yury Norov (1):
+      KVM: x86: hyper-v: fix type of valid_bank_mask
+
+ arch/arm64/kvm/arm.c                               |  3 +-
+ arch/arm64/kvm/sys_regs.c                          |  3 +-
+ arch/x86/kvm/hyperv.c                              |  4 +--
+ arch/x86/kvm/mmu/mmu.c                             | 16 ++++++----
+ arch/x86/kvm/pmu.c                                 |  7 ++--
+ .../selftests/kvm/x86_64/pmu_event_filter_test.c   | 37 +++++++++++++++++++---
+ virt/kvm/eventfd.c                                 |  3 +-
+ virt/kvm/kvm_main.c                                |  2 +-
+ 8 files changed, 56 insertions(+), 19 deletions(-)
 

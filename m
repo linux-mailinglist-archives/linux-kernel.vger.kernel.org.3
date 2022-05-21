@@ -2,40 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FDC352FBD3
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:29:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04BE452FBE9
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:29:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356121AbiEULWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 07:22:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51054 "EHLO
+        id S1356901AbiEULXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 07:23:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354936AbiEULM7 (ORCPT
+        with ESMTP id S1353244AbiEULNv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 07:12:59 -0400
+        Sat, 21 May 2022 07:13:51 -0400
 Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B7E2AE22;
-        Sat, 21 May 2022 04:12:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA2EF74B2;
+        Sat, 21 May 2022 04:12:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=inria.fr; s=dc;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=rMKMMl4ihKpnbEEt18X3rlVUd1mf+9F9wh4MmnsL4og=;
-  b=S5D4ZzoqiDR1hKQ8lyF25jk02dyp9KlyesV4iAmLzuQO7QQKbeE6PtZR
-   ml4eiOQwnq6dmtjybm/XuWywHezEaZ2orGYHSpJMhb3Wirxh9nEDhbjDQ
-   G/B0xrqoW+fVWupcuEtijX3q55qBSmeZZW77m8U4koA1SSURzpvifLtWF
-   0=;
+  bh=lfkmiRjm0rrMRH5/qVszM4Nbsakjf+VgxH/LVjz5wvc=;
+  b=N7ZFZHpoZF5kMF0I8jm8ws+3zweEwjnhZYpBt2bhpPPocUnCD1JpjWeT
+   ASHxqX7uwDLUNLUvBn4Go3/TuLmQ2HpB2BD3mGe4m3zrLrKi+Xxs0By9K
+   6OFHNBJUjtMBmtS2v0kZJpm12cLg4Gb14gd6/zhvqfY5WRls9EUq6RfS5
+   c=;
 Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
 X-IronPort-AV: E=Sophos;i="5.91,242,1647298800"; 
-   d="scan'208";a="14727985"
+   d="scan'208";a="14727986"
 Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 13:12:05 +0200
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 13:12:06 +0200
 From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Johannes Berg <johannes@sipsolutions.net>
-Cc:     kernel-janitors@vger.kernel.org, linux-wireless@vger.kernel.org,
+To:     Ariel Elior <aelior@marvell.com>
+Cc:     kernel-janitors@vger.kernel.org,
+        Manish Chopra <manishc@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] nl80211: fix typo in comment
-Date:   Sat, 21 May 2022 13:11:27 +0200
-Message-Id: <20220521111145.81697-77-Julia.Lawall@inria.fr>
+Subject: [PATCH] qed: fix typos in comments
+Date:   Sat, 21 May 2022 13:11:28 +0200
+Message-Id: <20220521111145.81697-78-Julia.Lawall@inria.fr>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -49,26 +54,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Spelling mistake (triple letters) in comment.
+Spelling mistakes (triple letters) in comments.
 Detected with the help of Coccinelle.
 
 Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
 ---
- include/uapi/linux/nl80211.h |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/qlogic/qed/qed_dbg_hsi.h |    2 +-
+ drivers/net/ethernet/qlogic/qed/qed_vf.h      |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/include/uapi/linux/nl80211.h b/include/uapi/linux/nl80211.h
-index d9490e3062a7..98f905f16411 100644
---- a/include/uapi/linux/nl80211.h
-+++ b/include/uapi/linux/nl80211.h
-@@ -5874,7 +5874,7 @@ enum nl80211_ap_sme_features {
-  * @NL80211_FEATURE_INACTIVITY_TIMER: This driver takes care of freeing up
-  *	the connected inactive stations in AP mode.
-  * @NL80211_FEATURE_CELL_BASE_REG_HINTS: This driver has been tested
-- *	to work properly to suppport receiving regulatory hints from
-+ *	to work properly to support receiving regulatory hints from
-  *	cellular base stations.
-  * @NL80211_FEATURE_P2P_DEVICE_NEEDS_CHANNEL: (no longer available, only
-  *	here to reserve the value for API/ABI compatibility)
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_dbg_hsi.h b/drivers/net/ethernet/qlogic/qed/qed_dbg_hsi.h
+index 9d5a0c9e1ca0..f6cd1b3efdfd 100644
+--- a/drivers/net/ethernet/qlogic/qed/qed_dbg_hsi.h
++++ b/drivers/net/ethernet/qlogic/qed/qed_dbg_hsi.h
+@@ -1282,7 +1282,7 @@ void qed_dbg_mcp_trace_set_meta_data(struct qed_hwfn *p_hwfn,
+  * @results_buf_size: (OUT) required buffer size (in bytes) for the parsed
+  *                    results.
+  *
+- * Return: Rrror if the parsing fails, ok otherwise.
++ * Return: Error if the parsing fails, ok otherwise.
+  */
+ enum dbg_status qed_get_mcp_trace_results_buf_size(struct qed_hwfn *p_hwfn,
+ 						   u32 *dump_buf,
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_vf.h b/drivers/net/ethernet/qlogic/qed/qed_vf.h
+index 306b5f4bc632..2bd51a41ce8d 100644
+--- a/drivers/net/ethernet/qlogic/qed/qed_vf.h
++++ b/drivers/net/ethernet/qlogic/qed/qed_vf.h
+@@ -225,7 +225,7 @@ struct pfvf_start_queue_resp_tlv {
+ };
+ 
+ /* Extended queue information - additional index for reference inside qzone.
+- * If commmunicated between VF/PF, each TLV relating to queues should be
++ * If communicated between VF/PF, each TLV relating to queues should be
+  * extended by one such [or have a future base TLV that already contains info].
+  */
+ struct vfpf_qid_tlv {
 

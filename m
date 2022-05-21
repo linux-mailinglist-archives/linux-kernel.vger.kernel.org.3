@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 760ED52FE52
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 18:47:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0548952FE44
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 18:47:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343875AbiEUQqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 12:46:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40234 "EHLO
+        id S1349280AbiEUQqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 12:46:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355444AbiEUQqF (ORCPT
+        with ESMTP id S1355447AbiEUQqF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 21 May 2022 12:46:05 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989D012A86
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 09:46:03 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id bu29so19095439lfb.0
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 09:46:03 -0700 (PDT)
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC940DF9A
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 09:46:04 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id u7so11950657ljd.11
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 09:46:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=KL627I96OYJURncrfoqim+72Sgnc3Jh9TbRtRh1RYGA=;
-        b=fgnnWtmFXtDfmlrF68KmFMj2A/G04G1vJ/ZGn+6ouUXd9gztNB5wcdj1hyzGe8nUhf
-         mR/wObB8nobZsV5DTKYCIUSgxpNSOQ4DVyDy6eGORu+/U3MY94UFkunBKf2VRv00PYOB
-         CG8OgWsrai7wZJjKou2Em8msMKvzvIWAn3s/GAGmMH422mAORuY0QAsbyi4G/D9QYetg
-         PQ5awO0V6xXTPNSr4e995Drni+149b6JUrileeRfrbpyYmq+XgBqKvgnkKqvnfmYnT5q
-         UuSxm39cE8601Kseg8cSR2mkUKhDpMx2SL2Nq1pL4uzaZx9uiEFr2vmsC9GBuNpN7Z9R
-         l/GA==
+        bh=1CNzdj/syMEdOL6sFg1I8zFQMw1U0E7UM4zdtExgB4s=;
+        b=elXP+yONQhW2Vfrcz/thcfYRN2plOGYWsXeGKE62nLVqmPxaZumOyPkkUj4VpCUW9f
+         SXJoDd1fx+iT6tilmZL1w8JPOM/wwTwfbawTCJasdIfpfcWSWtX/K6jlLVwbDbWBGTW5
+         h3167hKlBsNz+8d0yFVSKZY4VAg2tnPbJZS0pif4HShGmECwmVSU6XEnMXlTXXgogvxj
+         CqKiX1Bpqt5eerYIX9/AUYLe4QE8LUMn+Dd7P+wecWC8IBvtvYLtXAhlz7GHblsqJLrD
+         xcuAKFYYAQUItevQtXHdxxJ/K2UZHFFkNnzxLh6Ih2zKcvDwFXBJOZSWI8D7RsYwDEL1
+         VIAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=KL627I96OYJURncrfoqim+72Sgnc3Jh9TbRtRh1RYGA=;
-        b=Ad9Ww7fnwzhiyKcOwipgdM7ARUpCsq+WQQV9s4c4qUV19reSPvje1vNWXIrX65JN8A
-         XjFSZPMIL26a9xpzNDY9KvmT2ejw2UjTg/wRIwsfrMIxkW9bqXwHYLlK2C2Tz1qBJvJH
-         2BMbDCdAlvl+YvlHtwunV3vzdRd5w6IUZkSHOIFbt09T3T5/bj+IuT3CmoU17uH4jmYx
-         b77NNgueCBPRQaW8LJZF+ZBOeq4xZ6cL6b7RrA+pui1XKdMoYQ5uH3MSlvvIetlNgScL
-         iCeITR9tKqjP5Gu4/jzEOdKsUxGsW551m6f62Oc61xwZ3ccdx4rxPo8Eq98sd+E7Z+QO
-         dZ2A==
-X-Gm-Message-State: AOAM533xe8d3gl3KsIoyNFTY+078RJQKZIrkPhdaZ2OxESnMKNqoPMDE
-        /tdh6rjz4N1K+TpJBkU5SZjqQg==
-X-Google-Smtp-Source: ABdhPJyqvTk2Hjvz36PPOk82vfRDnOJCvvVaW9nReXFuEflMVpV60WIAW5ax0bi6OQDNHIWSykO+ww==
-X-Received: by 2002:a05:6512:33cd:b0:477:b113:caa9 with SMTP id d13-20020a05651233cd00b00477b113caa9mr11013814lfg.264.1653151563124;
-        Sat, 21 May 2022 09:46:03 -0700 (PDT)
+        bh=1CNzdj/syMEdOL6sFg1I8zFQMw1U0E7UM4zdtExgB4s=;
+        b=Wf+DmZAMSPzZfDiLKJTOqkL2ar5iwAkskzXE+CNu+oODP+/IhYU1CesyslMQAR4vf7
+         aA7w/4SCBF1tQ+gtPVyezGquYJuk7ZFfRy1vFlXTTiPOPY1TpRpKgymwIJB+apHN/8zj
+         DcvCrlyeitdIithG82VrFJuXFCJvTAe/zrqsXpmcByffiRvz+QGz6zhlmzKaTwKZ8LZd
+         2RWkAXvwn5os7jXvXH9MddcDWB26sG8L/05x2NkNDAZNuyrspFvFYsZsZf2rFRzeTGGU
+         W4ahFZQqX8EeV/yFtPBVwDZjOoXiq2/0zikvgyFLWiUJo9acD7AfWQ3bkjwd+S0k88NJ
+         r2Hw==
+X-Gm-Message-State: AOAM530cHQyq+fWboQ25f3pcVBJv9NmCFjh2/Ko2eXgMbrOEUIJPbcDo
+        Iy96DXJoUGcs1RUB4+Wf49k+pA==
+X-Google-Smtp-Source: ABdhPJzD2T3UaTWLdGznbdjSeezNWL3JILTrWVBx+t3eTuKGIGlzgSM/MCD+tz6R62EhUUc2kze+Lg==
+X-Received: by 2002:a2e:a90d:0:b0:250:8444:2681 with SMTP id j13-20020a2ea90d000000b0025084442681mr8694441ljq.342.1653151564347;
+        Sat, 21 May 2022 09:46:04 -0700 (PDT)
 Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id f26-20020a19ae1a000000b0047255d211cesm1114282lfc.253.2022.05.21.09.46.02
+        by smtp.gmail.com with ESMTPSA id f26-20020a19ae1a000000b0047255d211cesm1114282lfc.253.2022.05.21.09.46.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 May 2022 09:46:02 -0700 (PDT)
+        Sat, 21 May 2022 09:46:03 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -56,9 +56,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 09/12] dt-bindings: arm: qcom: add missing SM6350 board compatibles
-Date:   Sat, 21 May 2022 18:45:47 +0200
-Message-Id: <20220521164550.91115-9-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 10/12] ARM: dts: qcom: ipq4019: fix Micron SPI NOR compatible
+Date:   Sat, 21 May 2022 18:45:48 +0200
+Message-Id: <20220521164550.91115-10-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220521164550.91115-1-krzysztof.kozlowski@linaro.org>
 References: <20220521164550.91115-1-krzysztof.kozlowski@linaro.org>
@@ -74,37 +74,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document board compatibles already present in Linux kernel.
+The proper compatible for Micron n25q128a11 SPI NOR flash should include
+vendor-prefix and use jedec,spi-nor fallback.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- Documentation/devicetree/bindings/arm/qcom.yaml | 6 ++++++
- 1 file changed, 6 insertions(+)
+ arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1.dtsi   | 2 +-
+ arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c1.dts | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
-index 9f4be49aceb8..6c38c1387afd 100644
---- a/Documentation/devicetree/bindings/arm/qcom.yaml
-+++ b/Documentation/devicetree/bindings/arm/qcom.yaml
-@@ -54,6 +54,7 @@ description: |
-         sdx55
-         sdx65
-         sm6125
-+        sm6350
-         sm7225
-         sm8150
-         sm8250
-@@ -359,6 +360,11 @@ properties:
-               - sony,pdx201
-           - const: qcom,sm6125
- 
-+      - items:
-+          - enum:
-+              - sony,pdx213
-+          - const: qcom,sm6350
-+
-       - items:
-           - enum:
-               - fairphone,fp4
+diff --git a/arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1.dtsi b/arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1.dtsi
+index faeaa6bf0def..44a9597d8bfd 100644
+--- a/arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1.dtsi
++++ b/arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1.dtsi
+@@ -93,7 +93,7 @@ flash@0 {
+ 				#address-cells = <1>;
+ 				#size-cells = <1>;
+ 				reg = <0>;
+-				compatible = "n25q128a11";
++				compatible = "micron,n25q128a11", "jedec,spi-nor";
+ 				spi-max-frequency = <24000000>;
+ 			};
+ 		};
+diff --git a/arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c1.dts b/arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c1.dts
+index d596dd1180ae..c7a6e77da272 100644
+--- a/arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c1.dts
++++ b/arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c1.dts
+@@ -56,7 +56,7 @@ flash@0 {
+ 				#address-cells = <1>;
+ 				#size-cells = <1>;
+ 				reg = <0>;
+-				compatible = "n25q128a11";
++				compatible = "micron,n25q128a11", "jedec,spi-nor";
+ 				spi-max-frequency = <24000000>;
+ 			};
+ 		};
 -- 
 2.32.0
 

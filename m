@@ -2,53 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D35352FBE8
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:29:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0197152FBE5
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:29:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357012AbiEULYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 07:24:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49994 "EHLO
+        id S1354921AbiEULZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 07:25:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354797AbiEULOB (ORCPT
+        with ESMTP id S1355020AbiEULOF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 07:14:01 -0400
+        Sat, 21 May 2022 07:14:05 -0400
 Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 743E412B01F;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 870731312B0;
         Sat, 21 May 2022 04:12:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=inria.fr; s=dc;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=Jt4fa4YJrVj8M3pPplByGC4sCX+AxOeZAa6Dq52fmPQ=;
-  b=mcuS3coBhVGW3U5Ek0P5OMCciiBMFoRJuaa4h0PzR7tKhMKTD6DKTYJA
-   gH2ExqTNaA2kD2qvVyF2ypsQc4bT/AsGTPGvGxrmiq2k3n7K3k0VY6DY3
-   HJ2bkVD6JyKHV29V/9oUk/kSCgfu77g+nkuvxbqsYX81+9mPdPiQfdpAe
-   s=;
+  bh=k0xGUi45Pmhckpj1HUc6z8Jrm9BIzWJyP6t9OROWXAU=;
+  b=HFbqzgnxC9KLOvz/wGXvdMbu0Wiw6fJHSQ9vBxZMZ4FALLcn0U645L1U
+   lDkVW3yvDkgUPpYykoMk4w/pAN00Blb47vHAKZOW0XOjjF5z86dmNg3OY
+   oIsCj/eL5jNK+yur/uQ2D4nFhq7BUh4lYWFy/P0U1LuojTB6fNLo1P59k
+   w=;
 Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
 X-IronPort-AV: E=Sophos;i="5.91,242,1647298800"; 
-   d="scan'208";a="14727992"
+   d="scan'208";a="14727993"
 Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
   by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 13:12:07 +0200
 From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Ilya Leoshkevich <iii@linux.ibm.com>
+To:     Peter Chen <peter.chen@kernel.org>
 Cc:     kernel-janitors@vger.kernel.org,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-s390@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] s390/bpf: fix typo in comment
-Date:   Sat, 21 May 2022 13:11:34 +0200
-Message-Id: <20220521111145.81697-84-Julia.Lawall@inria.fr>
+Subject: [PATCH] USB: chipidea: fix typo in comment
+Date:   Sat, 21 May 2022 13:11:35 +0200
+Message-Id: <20220521111145.81697-85-Julia.Lawall@inria.fr>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -68,20 +62,20 @@ Detected with the help of Coccinelle.
 Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
 ---
- arch/s390/net/bpf_jit_comp.c |    2 +-
+ drivers/usb/chipidea/ci_hdrc_imx.h |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
-index aede9a3ca3f7..af35052d06ed 100644
---- a/arch/s390/net/bpf_jit_comp.c
-+++ b/arch/s390/net/bpf_jit_comp.c
-@@ -1809,7 +1809,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
- 	/*
- 	 * Three initial passes:
- 	 *   - 1/2: Determine clobbered registers
--	 *   - 3:   Calculate program size and addrs arrray
-+	 *   - 3:   Calculate program size and addrs array
- 	 */
- 	for (pass = 1; pass <= 3; pass++) {
- 		if (bpf_jit_prog(&jit, fp, extra_pass, stack_depth)) {
+diff --git a/drivers/usb/chipidea/ci_hdrc_imx.h b/drivers/usb/chipidea/ci_hdrc_imx.h
+index 999c65390b7f..7daccb9c5006 100644
+--- a/drivers/usb/chipidea/ci_hdrc_imx.h
++++ b/drivers/usb/chipidea/ci_hdrc_imx.h
+@@ -21,7 +21,7 @@ struct imx_usbmisc_data {
+ 	unsigned int pwr_pol:1; /* power polarity */
+ 	unsigned int evdo:1; /* set external vbus divider option */
+ 	unsigned int ulpi:1; /* connected to an ULPI phy */
+-	unsigned int hsic:1; /* HSIC controlller */
++	unsigned int hsic:1; /* HSIC controller */
+ 	unsigned int ext_id:1; /* ID from exteranl event */
+ 	unsigned int ext_vbus:1; /* Vbus from exteranl event */
+ 	struct usb_phy *usb_phy;
 

@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C80B452FBF3
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:29:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 908B752FBBE
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:20:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355862AbiEULWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 07:22:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50188 "EHLO
+        id S1346236AbiEULSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 07:18:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354898AbiEULMt (ORCPT
+        with ESMTP id S1354871AbiEULMp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 07:12:49 -0400
+        Sat, 21 May 2022 07:12:45 -0400
 Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C184F9C2;
-        Sat, 21 May 2022 04:12:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8907A5521D;
+        Sat, 21 May 2022 04:12:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=inria.fr; s=dc;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=gzpQJI/4l4hMaFVZeeSTL4mFsKH6STSl0UKXBUWewJE=;
-  b=oHGj8diLmpgthet+7zwIdUD8xrcky8GS0VRlcE0kb53O5GiQ/+221HBv
-   iyVAXhfwlnF3NZBo1UwYBsxHjWHzDwH4feJUCYDqA9aSrKOA23MWRtdCY
-   hvivKaSc+X4Ln2ilomXm0Ik7/LFyufqnzXXvzA/d0nF+NdclN/hKuAzqX
+  bh=jXfNNVnqv8/J/5t2QBjyt8m9VHzb0SlMFyA8fk+rE2g=;
+  b=iFdiC6ErTRgN1x5mVj3C3KtMOlNEJMxX3yQLK3jaAzGVHHF8wVID1uW2
+   4Qc5sDhGmrhNqxKmlZXwoANd8gTrVtr0be4yqg0jOcGS/qtCsX/HcaxQd
+   pGvQJ/HnldJYuNgTsq4+yholSdvKYTmMX8Q2naBtXRc7ksvWEf3Rf+VxM
    U=;
 Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
 X-IronPort-AV: E=Sophos;i="5.91,242,1647298800"; 
-   d="scan'208";a="14727967"
+   d="scan'208";a="14727968"
 Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
   by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 13:12:03 +0200
 From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Andy Gross <agross@kernel.org>
+To:     "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>
 Cc:     kernel-janitors@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, linux-arm-msm@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dmaengine: qcom: fix typo in comment
-Date:   Sat, 21 May 2022 13:11:12 +0200
-Message-Id: <20220521111145.81697-62-Julia.Lawall@inria.fr>
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] kprobes: fix typo in comment
+Date:   Sat, 21 May 2022 13:11:13 +0200
+Message-Id: <20220521111145.81697-63-Julia.Lawall@inria.fr>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -57,20 +58,20 @@ Detected with the help of Coccinelle.
 Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
 ---
- include/linux/dma/qcom-gpi-dma.h |    2 +-
+ kernel/kprobes.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/dma/qcom-gpi-dma.h b/include/linux/dma/qcom-gpi-dma.h
-index f46dc3372f11..6680dd1a43c6 100644
---- a/include/linux/dma/qcom-gpi-dma.h
-+++ b/include/linux/dma/qcom-gpi-dma.h
-@@ -26,7 +26,7 @@ enum spi_transfer_cmd {
-  * @clk_div: source clock divider
-  * @clk_src: serial clock
-  * @cmd: spi cmd
-- * @fragmentation: keep CS assserted at end of sequence
-+ * @fragmentation: keep CS asserted at end of sequence
-  * @cs: chip select toggle
-  * @set_config: set peripheral config
-  * @rx_len: receive length for buffer
+diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+index dd58c0be9ce2..4721b76e61a1 100644
+--- a/kernel/kprobes.c
++++ b/kernel/kprobes.c
+@@ -651,7 +651,7 @@ void wait_for_kprobe_optimizer(void)
+ 	while (!list_empty(&optimizing_list) || !list_empty(&unoptimizing_list)) {
+ 		mutex_unlock(&kprobe_mutex);
+ 
+-		/* This will also make 'optimizing_work' execute immmediately */
++		/* This will also make 'optimizing_work' execute immediately */
+ 		flush_delayed_work(&optimizing_work);
+ 		/* 'optimizing_work' might not have been queued yet, relax */
+ 		cpu_relax();
 

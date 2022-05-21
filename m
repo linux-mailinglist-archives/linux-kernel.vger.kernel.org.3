@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B745252FB85
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:16:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AFC052FB75
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:16:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346050AbiEULQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 07:16:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47290 "EHLO
+        id S237907AbiEULPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 07:15:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350437AbiEULMQ (ORCPT
+        with ESMTP id S243920AbiEULMP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 07:12:16 -0400
+        Sat, 21 May 2022 07:12:15 -0400
 Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FFAA2D1E8;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C05272E9F7;
         Sat, 21 May 2022 04:12:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=inria.fr; s=dc;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=WpJO9IIlhtJIy1ndH3Fx0N2Z7oaqY60RZ15hcaJQnNs=;
-  b=Vn63GHxq2QRE2XbKWE4aFJuqzPpS60Uvab5BIhpzc++CfRHDHulE5Rfg
-   x2hCiC9bRV3g+1rI0g50oAK9nw2xavd+uDKeG6M1GVCanZmhdJHBVEqwT
-   nWxfbbBN7RwZ07e3K2o5Pr720RvBYK5EObqVeluqhDtQK5I+2MvDSAxai
-   4=;
+  bh=ZXvAiOORZJk+2KUX1I0y/bK94Dd0mtx55RA5nLehi6Y=;
+  b=d5SlB1CMG3rFu+TRx3LRbslPbyGsXY+vCdqN9Xw+RNyTDuI0/elEifxF
+   FWyfb684wL9vIdBbqlBsoqwKGnA0AlcnAlk3HLKCzlUqJzyyu/O7cJRLD
+   31h2WRyaftNriGxA+tVO+Q6WMZXYvMK6d9MIhiHpo76t8r4rR6FJu+mse
+   g=;
 Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
 X-IronPort-AV: E=Sophos;i="5.91,242,1647298800"; 
-   d="scan'208";a="14727926"
+   d="scan'208";a="14727927"
 Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
   by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 13:11:57 +0200
 From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Stefan Richter <stefanr@s5r6.in-berlin.de>
-Cc:     kernel-janitors@vger.kernel.org,
-        linux1394-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org
-Subject: [PATCH] firewire: ohci: fix typo in comment
-Date:   Sat, 21 May 2022 13:10:41 +0200
-Message-Id: <20220521111145.81697-31-Julia.Lawall@inria.fr>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>
+Cc:     kernel-janitors@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] writeback: fix typo in comment
+Date:   Sat, 21 May 2022 13:10:42 +0200
+Message-Id: <20220521111145.81697-32-Julia.Lawall@inria.fr>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -55,20 +55,20 @@ Detected with the help of Coccinelle.
 Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
 ---
- drivers/firewire/ohci.c |    2 +-
+ fs/fs-writeback.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/firewire/ohci.c b/drivers/firewire/ohci.c
-index 17c9d825188b..616ca85a57ad 100644
---- a/drivers/firewire/ohci.c
-+++ b/drivers/firewire/ohci.c
-@@ -1277,7 +1277,7 @@ struct driver_data {
- };
- 
- /*
-- * This function apppends a packet to the DMA queue for transmission.
-+ * This function appends a packet to the DMA queue for transmission.
-  * Must always be called with the ochi->lock held to ensure proper
-  * generation handling and locking around packet queue manipulation.
-  */
+diff --git a/fs/fs-writeback.c b/fs/fs-writeback.c
+index a1074a26e784..a21d8f1a56d1 100644
+--- a/fs/fs-writeback.c
++++ b/fs/fs-writeback.c
+@@ -738,7 +738,7 @@ EXPORT_SYMBOL_GPL(wbc_attach_and_unlock_inode);
+  * incorrectly attributed).
+  *
+  * To resolve this issue, cgroup writeback detects the majority dirtier of
+- * an inode and transfers the ownership to it.  To avoid unnnecessary
++ * an inode and transfers the ownership to it.  To avoid unnecessary
+  * oscillation, the detection mechanism keeps track of history and gives
+  * out the switch verdict only if the foreign usage pattern is stable over
+  * a certain amount of time and/or writeback attempts.
 

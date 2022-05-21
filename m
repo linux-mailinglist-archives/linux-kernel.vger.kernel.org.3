@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 338C952FDE2
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 17:39:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 288A852FDE9
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 17:42:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355443AbiEUPjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 11:39:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50268 "EHLO
+        id S1355420AbiEUPjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 11:39:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245169AbiEUPii (ORCPT
+        with ESMTP id S245207AbiEUPij (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 11:38:38 -0400
+        Sat, 21 May 2022 11:38:39 -0400
 Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D2862CD2
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 08:38:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B42AF62CDE
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 08:38:38 -0700 (PDT)
 Received: from dslb-188-096-138-194.188.096.pools.vodafone-ip.de ([188.96.138.194] helo=martin-debian-2.paytec.ch)
         by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.89)
         (envelope-from <martin@kaiser.cx>)
-        id 1nsRBZ-0007XY-Dy; Sat, 21 May 2022 17:38:33 +0200
+        id 1nsRBa-0007XY-5j; Sat, 21 May 2022 17:38:34 +0200
 From:   Martin Kaiser <martin@kaiser.cx>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
@@ -28,9 +28,9 @@ Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
         Pavel Skripkin <paskripkin@gmail.com>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 06/12] staging: r8188eu: use mgmt to set the category
-Date:   Sat, 21 May 2022 17:38:18 +0200
-Message-Id: <20220521153824.218196-7-martin@kaiser.cx>
+Subject: [PATCH 07/12] staging: r8188eu: use mgmt to set the action codes
+Date:   Sat, 21 May 2022 17:38:19 +0200
+Message-Id: <20220521153824.218196-8-martin@kaiser.cx>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220521153824.218196-1-martin@kaiser.cx>
 References: <20220521153824.218196-1-martin@kaiser.cx>
@@ -45,41 +45,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the mgmt structure in issue_action_BA to set the category of the
-outgoing frame. Remove the rtw_set_fixed_ie call.
+Use the mgmt structure in issue_action_BA to set the action codes.
+We have to distinguish between the different message types.
 
-We can now use the define directly, the category variable can be removed.
-
-rtw_set_fixed_ie increments pattrib->pktlen, we have to do this ourselves
-now (until we use a proper way to calculate the packet length).
+We also have to increment the packet length manually as we're no longer
+calling rtw_set_fixed_ie, which increments the length.
 
 Signed-off-by: Martin Kaiser <martin@kaiser.cx>
 ---
- drivers/staging/r8188eu/core/rtw_mlme_ext.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/staging/r8188eu/core/rtw_mlme_ext.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-index 9a26b67d49bd..dd736416ddcf 100644
+index dd736416ddcf..efffbbfd495e 100644
 --- a/drivers/staging/r8188eu/core/rtw_mlme_ext.c
 +++ b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-@@ -5365,7 +5365,6 @@ int issue_deauth_ex(struct adapter *padapter, u8 *da, unsigned short reason, int
+@@ -5411,10 +5411,11 @@ void issue_action_BA(struct adapter *padapter, unsigned char *raddr, unsigned ch
  
- void issue_action_BA(struct adapter *padapter, unsigned char *raddr, unsigned char action, unsigned short status)
- {
--	u8 category = WLAN_CATEGORY_BACK;
- 	u16 start_seq;
- 	u16 BA_para_set;
- 	u16 reason_code;
-@@ -5410,7 +5409,8 @@ void issue_action_BA(struct adapter *padapter, unsigned char *raddr, unsigned ch
- 	pframe += sizeof(struct ieee80211_hdr_3addr);
- 	pattrib->pktlen = sizeof(struct ieee80211_hdr_3addr);
- 
--	pframe = rtw_set_fixed_ie(pframe, 1, &(category), &pattrib->pktlen);
-+	mgmt->u.action.category = WLAN_CATEGORY_BACK;
-+	pattrib->pktlen++;
- 	pframe = rtw_set_fixed_ie(pframe, 1, &(action), &pattrib->pktlen);
+ 	mgmt->u.action.category = WLAN_CATEGORY_BACK;
+ 	pattrib->pktlen++;
+-	pframe = rtw_set_fixed_ie(pframe, 1, &(action), &pattrib->pktlen);
  
  	switch (action) {
+ 	case WLAN_ACTION_ADDBA_REQ:
++		mgmt->u.action.u.addba_req.action_code = WLAN_ACTION_ADDBA_REQ;
++		pattrib->pktlen++;
+ 		do {
+ 			pmlmeinfo->dialogToken++;
+ 		} while (pmlmeinfo->dialogToken == 0);
+@@ -5440,6 +5441,8 @@ void issue_action_BA(struct adapter *padapter, unsigned char *raddr, unsigned ch
+ 		pframe = rtw_set_fixed_ie(pframe, 2, (unsigned char *)&le_tmp, &pattrib->pktlen);
+ 		break;
+ 	case WLAN_ACTION_ADDBA_RESP:
++		mgmt->u.action.u.addba_resp.action_code = WLAN_ACTION_ADDBA_RESP;
++		pattrib->pktlen++;
+ 		pframe = rtw_set_fixed_ie(pframe, 1, &pmlmeinfo->ADDBA_req.dialog_token, &pattrib->pktlen);
+ 		pframe = rtw_set_fixed_ie(pframe, 2, (unsigned char *)&status, &pattrib->pktlen);
+ 		BA_para_set = le16_to_cpu(pmlmeinfo->ADDBA_req.BA_para_set) & 0x3f;
+@@ -5455,6 +5458,8 @@ void issue_action_BA(struct adapter *padapter, unsigned char *raddr, unsigned ch
+ 		pframe = rtw_set_fixed_ie(pframe, 2, (unsigned char *)&pmlmeinfo->ADDBA_req.BA_timeout_value, &pattrib->pktlen);
+ 		break;
+ 	case WLAN_ACTION_DELBA:
++		mgmt->u.action.u.delba.action_code = WLAN_ACTION_DELBA;
++		pattrib->pktlen++;
+ 		BA_para_set = (status & 0x1F) << 3;
+ 		le_tmp = cpu_to_le16(BA_para_set);
+ 		pframe = rtw_set_fixed_ie(pframe, 2, (unsigned char *)&le_tmp, &pattrib->pktlen);
 -- 
 2.30.2
 

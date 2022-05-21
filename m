@@ -2,133 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F5ED52F812
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 05:33:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26B3C52F816
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 05:34:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354457AbiEUDdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 23:33:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59664 "EHLO
+        id S1354462AbiEUDeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 23:34:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241133AbiEUDdQ (ORCPT
+        with ESMTP id S240634AbiEUDee (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 23:33:16 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D513185C9B;
-        Fri, 20 May 2022 20:33:15 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L4q0f4M26zhYQn;
-        Sat, 21 May 2022 11:32:34 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 21 May 2022 11:33:13 +0800
-Received: from [10.174.176.73] (10.174.176.73) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 21 May 2022 11:33:12 +0800
-Subject: Re: [PATCH -next v2] blk-mq: fix panic during blk_mq_run_work_fn()
-To:     Ming Lei <ming.lei@redhat.com>
-CC:     <axboe@kernel.dk>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
-References: <20220520032542.3331610-1-yukuai3@huawei.com>
- <YocOsw6n3y11lNym@T590> <2b7a82e0-1e33-e2ff-74d7-d80f152fdc75@huawei.com>
- <afe9dec4-733d-88e9-850d-5c36e9201119@huawei.com> <YodSlSm/sIC8G2iG@T590>
- <dbe2deec-b007-470f-eb5a-35fae63ad134@huawei.com> <YodlGOo7vrUa7DZK@T590>
- <0e7967de-0c32-790d-fa08-b0bc9ef5923d@huawei.com> <Yod93DOdYosa+SvS@T590>
- <8e6a806b-f42e-319b-e6c8-de1f07befce2@huawei.com> <YoeeEw4SFvWtXNRk@T590>
-From:   "yukuai (C)" <yukuai3@huawei.com>
-Message-ID: <759cb032-ccb4-0d74-ad7f-e84c791fc0af@huawei.com>
-Date:   Sat, 21 May 2022 11:33:11 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Fri, 20 May 2022 23:34:34 -0400
+Received: from azure-sdnproxy-2.icoremail.net (azure-sdnproxy.icoremail.net [52.175.55.52])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id E21BD65D3D;
+        Fri, 20 May 2022 20:34:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pku.edu.cn; s=dkim; h=Received:Date:From:To:Cc:Subject:
+        In-Reply-To:References:Content-Transfer-Encoding:Content-Type:
+        MIME-Version:Message-ID; bh=lvbwqAeVRRu13wXpsUlhvmu4YHPhWENn0qKV
+        xRyax4Y=; b=Vb0wsHYRf6q/yARkC9PoZLAVGgWU991tfAUvijXf9SWV/y5qrqs9
+        JxPj7cIscUH0/OkpA0CNnFK8+2x3szzOeRFHo8F6ZTuZD7Q4+87nqjw6EyyEBiEd
+        trSzljyGGZdHcuzh/gX6KiaMI+2D8g2z80XGcO9JZFT534h0AZGoLvw=
+Received: by ajax-webmail-front01 (Coremail) ; Sat, 21 May 2022 11:34:12
+ +0800 (GMT+08:00)
+X-Originating-IP: [10.129.37.75]
+Date:   Sat, 21 May 2022 11:34:12 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   =?UTF-8?B?5YiY5rC45b+X?= <lyz_cs@pku.edu.cn>
+To:     agross@kernel.org, bjorn.andersson@linaro.org, jic23@kernel.org,
+        lars@metafoo.de, svarbanov@mm-sol.com, iivanov@mm-sol.com,
+        jonathan.cameron@huawei.com
+Cc:     linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hv_netvsc: Fix potential dereference of NULL pointer
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2022 www.mailtech.cn
+ mispb-1ea67e80-64e4-49d5-bd9f-3beeae24b9f2-pku.edu.cn
+In-Reply-To: <1653103862-36104-1-git-send-email-lyz_cs@pku.edu.cn>
+References: <20220520181323.00002892@huawei.com>
+ <1653103862-36104-1-git-send-email-lyz_cs@pku.edu.cn>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-In-Reply-To: <YoeeEw4SFvWtXNRk@T590>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.73]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <254e80a1.30e69.180e4ae082b.Coremail.lyz_cs@pku.edu.cn>
+X-Coremail-Locale: en_US
+X-CM-TRANSID: 5oFpogC33SW0XYhin9ulBw--.48328W
+X-CM-SenderInfo: irzqijirqukmo6sn3hxhgxhubq/1tbiAwEMBlPy7vKeCwAHsn
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_VALIDITY_RPBL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/05/20 21:56, Ming Lei 写道:
-> On Fri, May 20, 2022 at 08:01:31PM +0800, yukuai (C) wrote:
->> 在 2022/05/20 19:39, Ming Lei 写道:
->>
->>>
->>> In short:
->>>
->>> 1) run queue can be in-progress during cleanup queue, or returns from
->>> cleanup queue; we drain it in both blk_cleanup_queue() and
->>> disk_release_mq(), see commit 2a19b28f7929 ("blk-mq: cancel blk-mq dispatch
->>> work in both blk_cleanup_queue and disk_release()")
->> I understand that, however, there is no garantee new 'hctx->run_work'
->> won't be queued after 'drain it', for this crash, I think this is how
-> 
-> No, run queue activity will be shutdown after both disk_release_mq()
-> and blk_cleanup_queue() are done.
-> 
-> disk_release_mq() is called after all FS IOs are done, so there isn't
-> any run queue from FS IO code path, either sync or async.
-> 
-> In blk_cleanup_queue(), we only focus on passthrough request, and
-> passthrough request is always explicitly allocated & freed by
-> its caller, so once queue is frozen, all sync dispatch activity
-> for passthrough request has been done, then it is enough to just cancel
-> dispatch work for avoiding any dispatch activity.
-> 
-Hi, Ming
-
-Thanks for you explanation, it really help me understand the code
-better.
-
-In our test kernel, elevator_exit() is not called from
-disk_release_mq(), that is the reason I thought differently about
-root cause...
-
-> That is why both request queue and hctx can be released safely
-> after the two are done.
-> 
->> it triggered:
->>
->> assum that there is no io, while some bfq_queue is still busy:
->>
->> blk_cleanup_queue
->>   blk_freeze_queue
->>   blk_mq_cancel_work_sync
->>   cancel_delayed_work_sync(hctx1)
->> 				blk_mq_run_work_fn -> hctx2
->> 				 __blk_mq_run_hw_queue
->> 				  blk_mq_sched_dispatch_requests
->> 				   __blk_mq_do_dispatch_sched
->> 				    blk_mq_delay_run_hw_queues
->> 				     blk_mq_delay_run_hw_queue
->> 				      -> add hctx1->run_work again
->>   cancel_delayed_work_sync(hctx2)
-> 
-> Yes, even blk_mq_delay_run_hw_queues() can be called after all
-> hctx->run_work are canceled since __blk_mq_run_hw_queue() could be
-> running in sync io code path, not via ->run_work.
-> 
-> And my patch will fix the issue, won't it?
-
-Yes, like I said before, your patch do make sense. It seems like
-commit 28ce942fa2d5 ("block: move blk_exit_queue into disk_release")
-is the real fix for the crash in out test.
-
-Thanks,
-Kuai
-> 
-> 
-> Thanks,
-> Ming
-> 
-> .
-> 
+CgpJJ20gc29ycnkgdG8gc2VuZCB0aGlzIHRvIGxpbnV4LWlpbyBieSBtaXN0YWtlLiBJIHdpbGwg
+Y2F1dGlvdXNseSBzdWJtaXQgcGF0Y2hlcyBsYXRlci4KCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdl
+cy0tLS0tCj4gRnJvbTogIllvbmd6aGkgTGl1IiA8bHl6X2NzQHBrdS5lZHUuY24+Cj4gU2VudCBU
+aW1lOiAyMDIyLTA1LTIxIDExOjMxOjAyIChTYXR1cmRheSkKPiBUbzogYWdyb3NzQGtlcm5lbC5v
+cmcsIGJqb3JuLmFuZGVyc3NvbkBsaW5hcm8ub3JnLCBqaWMyM0BrZXJuZWwub3JnLCBsYXJzQG1l
+dGFmb28uZGUsIHN2YXJiYW5vdkBtbS1zb2wuY29tLCBpaXZhbm92QG1tLXNvbC5jb20sIGpvbmF0
+aGFuLmNhbWVyb25AaHVhd2VpLmNvbQo+IENjOiBsaW51eC1hcm0tbXNtQHZnZXIua2VybmVsLm9y
+ZywgbGludXgtaWlvQHZnZXIua2VybmVsLm9yZywgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9y
+ZywgZnV5cUBzdHUucGt1LmVkdS5jbiwgIllvbmd6aGkgTGl1IiA8bHl6X2NzQHBrdS5lZHUuY24+
+Cj4gU3ViamVjdDogW1BBVENIXSBodl9uZXR2c2M6IEZpeCBwb3RlbnRpYWwgZGVyZWZlcmVuY2Ug
+b2YgTlVMTCBwb2ludGVyCj4gCj4gVGhlIHJldHVybiB2YWx1ZSBvZiBuZXR2c2NfZGV2aW5mb19n
+ZXQoKQo+IG5lZWRzIHRvIGJlIGNoZWNrZWQgdG8gYXZvaWQgdXNlIG9mIE5VTEwKPiBwb2ludGVy
+IGluIGNhc2Ugb2YgYW4gYWxsb2NhdGlvbiBmYWlsdXJlLgo+IAo+IEZpeGVzOiAwZWZlZWE1ZmIg
+KCJodl9uZXR2c2M6IEFkZCB0aGUgc3VwcG9ydCBvZiBoaWJlcm5hdGlvbiIpCj4gCj4gU2lnbmVk
+LW9mZi1ieTogWW9uZ3poaSBMaXUgPGx5el9jc0Bwa3UuZWR1LmNuPgo+IC0tLQo+ICBkcml2ZXJz
+L25ldC9oeXBlcnYvbmV0dnNjX2Rydi5jIHwgNSArKysrLQo+ICAxIGZpbGUgY2hhbmdlZCwgNCBp
+bnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pCj4gCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmV0
+L2h5cGVydi9uZXR2c2NfZHJ2LmMgYi9kcml2ZXJzL25ldC9oeXBlcnYvbmV0dnNjX2Rydi5jCj4g
+aW5kZXggZmRlMWM0OS4uYjFkZWNlNiAxMDA2NDQKPiAtLS0gYS9kcml2ZXJzL25ldC9oeXBlcnYv
+bmV0dnNjX2Rydi5jCj4gKysrIGIvZHJpdmVycy9uZXQvaHlwZXJ2L25ldHZzY19kcnYuYwo+IEBA
+IC0yNjcxLDcgKzI2NzEsMTAgQEAgc3RhdGljIGludCBuZXR2c2Nfc3VzcGVuZChzdHJ1Y3QgaHZf
+ZGV2aWNlICpkZXYpCj4gIAo+ICAJLyogU2F2ZSB0aGUgY3VycmVudCBjb25maWcgaW5mbyAqLwo+
+ICAJbmRldl9jdHgtPnNhdmVkX25ldHZzY19kZXZfaW5mbyA9IG5ldHZzY19kZXZpbmZvX2dldChu
+dmRldik7Cj4gLQo+ICsJaWYgKCFuZGV2X2N0eC0+c2F2ZWRfbmV0dnNjX2Rldl9pbmZvKSB7Cj4g
+KwkJcmV0ID0gLUVOT01FTTsKPiArCQlnb3RvIG91dDsKPiArCX0KPiAgCXJldCA9IG5ldHZzY19k
+ZXRhY2gobmV0LCBudmRldik7Cj4gIG91dDoKPiAgCXJ0bmxfdW5sb2NrKCk7Cj4gLS0gCj4gMi43
+LjQK

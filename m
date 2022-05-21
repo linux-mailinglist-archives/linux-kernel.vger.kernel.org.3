@@ -2,191 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F5CB52F6D7
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 02:33:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30D9552F6EA
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 02:39:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354239AbiEUAc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 20:32:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35648 "EHLO
+        id S239523AbiEUAg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 20:36:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241274AbiEUAc6 (ORCPT
+        with ESMTP id S1354262AbiEUAgO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 20:32:58 -0400
-Received: from mail-oi1-x263.google.com (mail-oi1-x263.google.com [IPv6:2607:f8b0:4864:20::263])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F10301966A0
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 17:32:56 -0700 (PDT)
-Received: by mail-oi1-x263.google.com with SMTP id q10so11728077oia.9
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 17:32:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:dkim-signature:date:from:to:cc:subject
-         :message-id:references:content-disposition:in-reply-to;
-        bh=uKGN50vu+4GfXG0sgHNA4qzCjapPU1Kse30oS1F+Mz0=;
-        b=D5N/gruivvpBY0gal1LF7+lhODicuKwpSIc5ALP/rKYVjqQlXxFnNDNVMA2K38YY+T
-         cpBsqBLmI3xzpv6BjLNnBkoq0/nNOcdI9P3ya7bkkv6yYu4GDaO+iqyHf8vnatoSnA9S
-         z8cGfbLnsxZu0XOPLtMpXjlDYS7QhED3fo8twFixLBqgrahADfrml8FEF41MTqhxEYkQ
-         6Rhejp72FTjCblMbHc870xIALC5DmLF7xaYJzR7FTH9ev3/GZ6BlEsbPk0wneefNwdbA
-         /eU5DGtUqbIMXQHIhCj78BljbiOr/Wc5h+4Uijn7FU9Ofw9LMhi7c3ur6+rp+Uw8rjyX
-         vuhw==
-X-Gm-Message-State: AOAM531iK8O+/iGnYI9HXUApefsdkZxjcxxyEV78n7MLWp+RIiyxycZQ
-        8JmUF1mIQ8Ec3cKq7mdWpl134yPVUgvW5zaMx2ocOlXIBmFD
-X-Google-Smtp-Source: ABdhPJx5Tde5W9mWXWJv9R/IlJRR5cVmbZkn08TLXsh8C2TlLikx0u1fk85XfVyZOK7sa3+S/ewkQqnUitbo
-X-Received: by 2002:a05:6808:3021:b0:2f7:4c5b:2783 with SMTP id ay33-20020a056808302100b002f74c5b2783mr6926937oib.53.1653093176066;
-        Fri, 20 May 2022 17:32:56 -0700 (PDT)
-Received: from smtp.aristanetworks.com (smtp.aristanetworks.com. [54.193.82.35])
-        by smtp-relay.gmail.com with ESMTPS id x19-20020a4a4113000000b0035ecc74f8b3sm296899ooa.3.2022.05.20.17.32.55
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 20 May 2022 17:32:56 -0700 (PDT)
-X-Relaying-Domain: arista.com
-Received: from chmeee (unknown [10.95.70.242])
-        by smtp.aristanetworks.com (Postfix) with ESMTPS id 1EC2E3047DE0;
-        Fri, 20 May 2022 17:32:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arista.com;
-        s=Arista-A; t=1653093175;
-        bh=uKGN50vu+4GfXG0sgHNA4qzCjapPU1Kse30oS1F+Mz0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=0DyVyJXJt4FYoH8Kv0cX4olYdnqzSuA4lBBROmFHad3DGAhawAeQkq3DanjUAyYyv
-         ImkqFFtFUHvijhmZuNkN3DNSfJBhmRNbi6GWHwNRoYBUs6VpTIqIs5c4g9spoAAMqL
-         /ex/H6i0JBWv2wnR1xrrfbcf8t2ILB6T7P4H5QN1t4m6QbxhTJtqvXZYZZA9QKgPgd
-         t+f6Z8xIQNFb44GPzld79gtzN67mS+Q5cqwBcH4lg4co5S8Q4KKc/i7jOjzU8KM7bI
-         DUoOc4kk1/+H0lg1e5FgyCZbnREHrklWrgqVlUF8mP1ug0j/mjLgC5KPaFUDir95EQ
-         almPQRMxyu44w==
-Received: from kevmitch by chmeee with local (Exim 4.95)
-        (envelope-from <kevmitch@arista.com>)
-        id 1nsD37-001pZX-EI;
-        Fri, 20 May 2022 17:32:53 -0700
-Date:   Fri, 20 May 2022 17:32:52 -0700
-From:   Kevin Mitchell <kevmitch@arista.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     HATAYAMA Daisuke <d.hatayama@jp.fujitsu.com>,
-        stable@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        David Rientjes <rientjes@google.com>,
-        Dou Liyang <douly.fnst@cn.fujitsu.com>,
+        Fri, 20 May 2022 20:36:14 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171AA8B0AC;
+        Fri, 20 May 2022 17:36:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653093372; x=1684629372;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=rAz4yAhwgj3NFNx+VreVVn4yMWoGvU+LAyIFbgySPP4=;
+  b=luSRSsKVi/X2MiKGORfUMlhxyHbKTb/T5M3KSHgcpAq8Z9r5iy9Yj7PO
+   I4OgzITuT4p5UqSmE1B6x8bmeQ+sZp262Si2BQtWWkG88b83H/R0Zl9OU
+   Adgshfq8SpQnrftGUvIIVaD4cu+c6ZrfqTbukoAY43JtcVdYaC7b08CIK
+   GfU4F++gvbVbVfI6NZJ4/FCmeXEP6TogZP1+n2MV4nkaTJmg/8WyJxEZJ
+   2L03rqmG9Zi2ltFIcPznLNu0esv8jll3x33inzHLdJjMRs+XPzM+0QGhG
+   g0bJE/b//HMU9pWoq/d43uW+/xeSp35s8EHZpkCd4NqaWl3qP7rDBtbd0
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10353"; a="260365708"
+X-IronPort-AV: E=Sophos;i="5.91,240,1647327600"; 
+   d="scan'208";a="260365708"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 17:36:11 -0700
+X-IronPort-AV: E=Sophos;i="5.91,240,1647327600"; 
+   d="scan'208";a="628430955"
+Received: from rhweight-mobl.amr.corp.intel.com (HELO rhweight-mobl.ra.intel.com) ([10.251.21.47])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 17:36:10 -0700
+From:   Russ Weight <russell.h.weight@intel.com>
+To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+        lee.jones@linaro.org, linux-fpga@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] x86/mpparse: avoid overwriting
- boot_cpu_physical_apicid
-Message-ID: <YogzNIs7uBSaX1gE@chmeee>
-References: <20200609004451.1296880-1-kevmitch@arista.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200609004451.1296880-1-kevmitch@arista.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Cc:     trix@redhat.com, marpagan@redhat.com, lgoncalv@redhat.com,
+        matthew.gerlach@linux.intel.com,
+        basheer.ahmed.muddebihal@intel.com, tianfei.zhang@intel.com,
+        Russ Weight <russell.h.weight@intel.com>
+Subject: [PATCH v21 0/5] FPGA MAX10 BMC Secure Update Driver
+Date:   Fri, 20 May 2022 17:36:02 -0700
+Message-Id: <20220521003607.737734-1-russell.h.weight@intel.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 08, 2020 at 05:44:48PM -0700, Kevin Mitchell wrote:
-> When booting with ACPI unavailable or disabled, get_smp_config() ends up
-> calling MP_processor_info() for each CPU found in the MPS
-> table. Previously, this resulted in boot_cpu_physical_apicid getting
-> unconditionally overwritten by the apicid of whatever processor had the
-> CPU_BOOTPROCESSOR flag. This occurred even if boot_cpu_physical_apicid
-> had already been more reliably determined in register_lapic_address() by
-> calling read_apic_id() from the actual boot processor.
-> 
-> Ordinariliy, this is not a problem because the boot processor really is
-> the one with the CPU_BOOTPROCESSOR flag. However, kexec is an exception
-> in which the kernel may be booted from any processor regardless of the
-> MPS table contents. In this case, boot_cpu_physical_apicid may not
-> indicate the actual boot processor.
-> 
-> This was particularly problematic when the second kernel was booted with
-> NR_CPUS fewer than the number of physical processors. It's the job of
-> generic_processor_info() to decide which CPUs to bring up in this case.
-> That obviously must include the real boot processor which it takes care
-> to save a slot for. It relies upon the contents of
-> boot_cpu_physical_apicid to do this, which if incorrect, may result in
-> the boot processor getting left out.
-> 
-> This condition can be discovered by smp_sanity_check() and rectified by
-> adding the boot processor to the phys_cpu_present_map with the warning
-> "weird, boot CPU (#%d) not listed by the BIOS". However, commit
-> 3e730dad3b6da ("x86/apic: Unify interrupt mode setup for SMP-capable
-> system") caused setup_local_APIC() to be called before this could happen
-> resulting in a BUG_ON(!apic->apic_id_registered()):
-> 
-> [    0.655452] ------------[ cut here ]------------
-> [    0.660610] Kernel BUG at setup_local_APIC+0x74/0x280 [verbose debug info unavailable]
-> [    0.669466] invalid opcode: 0000 [#1] SMP
-> [    0.673948] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 4.19.109.Ar-16509018.eostrunkkernel419 #1
-> [    0.683670] Hardware name: Quanta Quanta LY6 (1LY6UZZ0FBC), BIOS 1.0.6.0-e7d6a55 11/26/2015
-> [    0.693007] RIP: 0010:setup_local_APIC+0x74/0x280
-> [    0.698264] Code: 80 e4 fe bf f0 00 00 00 89 c6 48 8b 05 0f 1a 8e 00 ff 50 10 e8 12 53 fd ff 48 8b 05 00 1a 8e 00 ff 90 a0 00 00 00 85 c0 75 02 <0f> 0b 48 8b 05 ed 19 8e 00 41 be 00 02 00 00 ff 90 b0 00 00 00 48
-> [    0.719251] RSP: 0000:ffffffff81a03e20 EFLAGS: 00010246
-> [    0.725091] RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
-> [    0.733066] RDX: 0000000000000000 RSI: 000000000000000f RDI: 0000000000000020
-> [    0.741041] RBP: ffffffff81a03e98 R08: 0000000000000002 R09: 0000000000000000
-> [    0.749014] R10: ffffffff81a204e0 R11: ffffffff81b50ea7 R12: 0000000000000000
-> [    0.756989] R13: ffffffff81aef920 R14: ffffffff81af60a0 R15: 0000000000000000
-> [    0.764965] FS:  0000000000000000(0000) GS:ffff888036800000(0000) knlGS:0000000000000000
-> [    0.774007] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [    0.780427] CR2: ffff888035c01000 CR3: 0000000035a08000 CR4: 00000000000006b0
-> [    0.788401] Call Trace:
-> [    0.791137]  ? amd_iommu_prepare+0x15/0x2a
-> [    0.795717]  apic_bsp_setup+0x55/0x75
-> [    0.799808]  apic_intr_mode_init+0x169/0x16e
-> [    0.804579]  x86_late_time_init+0x10/0x17
-> [    0.809062]  start_kernel+0x37e/0x3fe
-> [    0.813154]  x86_64_start_reservations+0x2a/0x2c
-> [    0.818316]  x86_64_start_kernel+0x72/0x75
-> [    0.822886]  secondary_startup_64+0xa4/0xb0
-> [    0.827564] ---[ end trace 237b64da0fd9b22e ]---
-> 
-> This change avoids these issues by only setting boot_cpu_physical_apicid
-> from the MPS table if it is not already set, which can occur in the
-> construct_default_ISA_mptable() path. Otherwise,
-> boot_cpu_physical_apicid will already have been set in
-> register_lapic_address() and should therefore remain untouched.
-> 
-> Looking through all the places where boot_cpu_physical_apicid is
-> accessed, nearly all of them assume that boot_cpu_physical_apicid should
-> match read_apic_id() on the booting processor. The only place that might
-> intend to use the BSP apicid listed in the MPS table is amd_numa_init(),
-> which explicitly requires boot_cpu_physical_apicid to be the lowest
-> apicid of all processors. Ironically, due to the early exit short
-> circuit in early_get_smp_config(), it instead gets
-> boot_cpu_physical_apicid = read_apic_id() rather than the MPS table
-> BSP. The behaviour of amd_numa_init() is therefore unaffected by this
-> change.
-> 
-> Fixes: 3e730dad3b6da ("x86/apic: Unify interrupt mode setup for SMP-capable system")
-> Signed-off-by: Kevin Mitchell <kevmitch@arista.com>
-> Cc: <stable@vger.kernel.org>
-> ---
->  arch/x86/kernel/mpparse.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kernel/mpparse.c b/arch/x86/kernel/mpparse.c
-> index afac7ccce72f..6f22f09bfe11 100644
-> --- a/arch/x86/kernel/mpparse.c
-> +++ b/arch/x86/kernel/mpparse.c
-> @@ -64,7 +64,8 @@ static void __init MP_processor_info(struct mpc_cpu *m)
->  
->  	if (m->cpuflag & CPU_BOOTPROCESSOR) {
->  		bootup_cpu = " (Bootup-CPU)";
-> -		boot_cpu_physical_apicid = m->apicid;
-> +		if (boot_cpu_physical_apicid == -1U)
-> +			boot_cpu_physical_apicid = m->apicid;
->  	}
->  
->  	pr_info("Processor #%d%s\n", m->apicid, bootup_cpu);
-> -- 
-> 2.26.2
-> 
+The MAX10 BMC Secure Update driver instantiates the new Firmware
+Upload functionality of the Firmware Loader and provides the callback
+functions required to support secure updates on Intel n3000 PAC
+devices.  This driver is implemented as a sub-driver of the Intel MAX10
+BMC mfd driver.
 
-We've moved on to our next kernel upgrade to linux-5.10 and are still seeing
-this same issue with the upstream kernel. We will therefore be porting this
-patch forward, but still wondering if there is any interest in getting this into
-the mainline kernel so more people get (more) correct code? Both patches still
-apply to the mainline (linux-5.18-rc7 right now). Are there any
-alternative suggestions for avoiding this BUG_ON on kexec?
+This driver interacts with the HW secure update engine of the FPGA
+card BMC in order to transfer new FPGA and BMC images to FLASH on
+the FPGA card.  Security is enforced by hardware and firmware.  The
+FPGA Card BMC Secure Update driver interacts with the firmware to
+initiate an update, pass in the necessary data, and collect status
+on the update.
+
+This driver provides sysfs files for displaying the flash count, the
+root entry hashes (REH), and the code-signing-key (CSK) cancellation
+vectors.
+
+Changelog v20 -> v21:
+  - Replace WARN_ON() calls in flash_count_show() and show_canceled_csk()
+    with a more elaborate test. Return -EINVAL and write a message to the
+    kernel log. Call WARN_ON_ONCE().
+  - Update m10bmc_sec_prepare() to ensure that the base address for an
+    update image is aligned with stride.
+  - Update m10bmc_sec_write() to handle a block size that is not aligned
+    with stride by allocating a zero-filled block that is aligned, and
+    copying the data before calling regmap_bulk_write().
+
+Changelog v19 -> v20:
+  - Added text to commit messages to describe Root Entry Hashes (REH) and
+    Code Signing Key (CSK) cancellation.
+  - Use reverse christmas tree format for local variable declarations in
+    show_root_entry_hash().
+  - Remove WARN_ON() from show_root_entry_hash() and return -EINVAL if 
+    sha_num_bytes is not a multiple of stride.
+  - Move MODULE_DEVICE_TABLE() macro to just beneath the definition of
+    intel_m10bmc_sec_ids[].
+
+Changelog v18 -> v19:
+  - Change "card bmc" naming back to "m10 bmc" naming to be consistent
+    with the parent driver.
+
+Changelog v17 -> v18:
+  - Changed the ABI documentation for the Root Entry Hashes to specify
+    string as the format for the output.
+  - Updated comments, strings and config options to more consistently
+    refer to the driver as the Intel FPGA Card BMC Secure Update driver.
+  - Removed an instance of dev_dbg().
+  - Deferred the call to firmware_upload_register() to a later patch
+    where the required ops are provided.
+  - Switched from MODULE_ALIAS() to MODULE_DEVICE_TABLE() in anticipation
+    of additional cards to be supported by the same driver.
+
+Changelog v16 -> v17:
+  - Change m10bmc to cardbmc to reflect the fact that the future devices
+    will not necessarily use the MAX10. This affects filenames, configs,
+    symbol names, and the driver name.
+  - Update the Date and KernelVersion for the ABI documentation to Jul 2022
+    and 5.19 respectively.
+  - Updated the copyright end-date to 2022 for the secure update driver.
+  - Removed references to the FPGA Image Load class driver and replaced
+    them with the new firmware-upload service from the firmware loader.
+  - Use xarray_alloc to generate a unique number/name firmware-upload.
+  - Chang the license from GPL to GPLv2 per commit bf7fbeeae6db ("module:
+    Cure the MODULE_LICENSE "GPL" vs. "GPL v2" bogosity")
+  - fw_upload_ops functions will return "enum fw_upload_err" data types
+    instead of integer values.
+
+Changelog v15 -> v16:
+  - Use 0 instead of FPGA_IMAGE_ERR_NONE to indicate success.
+  - The size alignment check was moved from the FPGA Image Load framework
+    to the prepare() op.
+  - Added cancel_request boolean flag to struct m10bmc_sec.
+  - Moved the RSU cancellation logic from m10bmc_sec_cancel() to a new
+    rsu_cancel() function.
+  - The m10bmc_sec_cancel() function ONLY sets the cancel_request flag.
+    The cancel_request flag is checked at the beginning of the
+    m10bmc_sec_write() and m10bmc_sec_poll_complete() functions.
+  - Adapt to changed prototypes for the prepare() and write() ops. The
+    m10bmc_sec_write_blk() function has been renamed to
+    m10bmc_sec_write().
+  - Created a cleanup op, m10bmc_sec_cleanup(), to attempt to cancel an
+    ongoing op during when exiting the update process.
+
+Changelog v14 -> v15:
+  - Updated the Dates and KernelVersions in the ABI documentation
+  - Change driver name from "n3000bmc-secure" to "n3000bmc-sec-update".
+  - Change CONFIG_FPGA_M10_BMC_SECURE to CONFIG_FPGA_M10_BMC_SEC_UPDATE.
+  - Change instances of *bmc-secure to *bmc-sec-update in file name
+    and symbol names.
+  - Change instances of *m10bmc_secure* to *m10bmc-sec_update* in symbol
+    names.
+  - Adapted to changes in the FPGA Image Load framework:
+    (1) All enum types (progress and errors) are now type u32
+    (2) m10bmc_sec_write_blk() adds *blk_size and max_size parameters
+        and uses *blk_size as provided by the caller.
+    (3) m10bmc_sec_poll_complete() no long checks the driver_unload
+        flag.
+
+Changelog v13 -> v14:
+  - Changed symbol and text references to reflect the renaming of the
+    Security Manager Class driver to FPGA Image Load.
+
+Changelog v12 -> v13:
+  - Updated copyright to 2021
+  - Updated Date and KernelVersion fields in ABI documentation
+  - Call updated fpga_sec_mgr_register() and fpga_sec_mgr_unregister()
+    functions instead of devm_fpga_sec_mgr_create() and
+    devm_fpga_sec_mgr_register().
+
+Changelog v11 -> v12:
+  - Updated Date and KernelVersion fields in ABI documentation
+  - Removed size parameter from the write_blk() op. m10bmc_sec_write_blk()
+    no longer has a size parameter, and the block size is determined
+    in this (the lower-level) driver.
+
+Changelog v10 -> v11:
+  - Added Reviewed-by tag to patch #1
+
+Changelog v9 -> v10:
+  - Changed the path expressions in the sysfs documentation to
+    replace the n3000 reference with something more generic to
+    accommodate other devices that use the same driver.
+
+Changelog v8 -> v9:
+  - Rebased to 5.12-rc2 next
+  - Updated Date and KernelVersion in ABI documentation
+
+Changelog v7 -> v8:
+  - Split out patch "mfd: intel-m10-bmc: support for MAX10 BMC Secure
+    Updates" and submitted it separately:
+    https://marc.info/?l=linux-kernel&m=161126987101096&w=2
+
+Changelog v6 -> v7:
+  - Rebased patches for 5.11-rc2
+  - Updated Date and KernelVersion in ABI documentation
+
+Changelog v5 -> v6:
+  - Added WARN_ON() prior to several calls to regmap_bulk_read()
+    to assert that the (SIZE / stride) calculations did not result
+    in remainders.
+  - Changed the (size / stride) calculation in regmap_bulk_write()
+    call to ensure that we don't write one less than intended.
+  - Changed flash_count_show() parameter list to achieve
+    reverse-christmas tree format.
+  - Removed unnecessary call to rsu_check_complete() in
+    m10bmc_sec_poll_complete() and changed while loop to
+    do/while loop.
+  - Initialized auth_result and doorbell to HW_ERRINFO_POISON
+    in m10bmc_sec_hw_errinfo() and removed unnecessary if statements.
+
+Changelog v4 -> v5:
+  - Renamed sysfs node user_flash_count to flash_count and updated
+    the sysfs documentation accordingly to more accurately descirbe
+    the purpose of the count.
+
+Changelog v3 -> v4:
+  - Moved sysfs files for displaying the flash count, the root
+    entry hashes (REH), and the code-signing-key (CSK) cancellation
+    vectors from the FPGA Security Manager class driver to this
+    driver (as they are not generic enough for the class driver).
+  - Added a new ABI documentation file with informtaion about the
+    new sysfs entries: sysfs-driver-intel-m10-bmc-secure
+  - Updated the MAINTAINERS file to add the new ABI documentation
+    file: sysfs-driver-intel-m10-bmc-secure
+  - Removed unnecessary ret variable from m10bmc_secure_probe()
+  - Incorporated new devm_fpga_sec_mgr_register() function into
+    m10bmc_secure_probe() and removed the m10bmc_secure_remove()
+    function.
+
+Changelog v2 -> v3:
+  - Changed "MAX10 BMC Security Engine driver" to "MAX10 BMC Secure
+    Update driver"
+  - Changed from "Intel FPGA Security Manager" to FPGA Security Manager"
+  - Changed: iops -> sops, imgr -> smgr, IFPGA_ -> FPGA_, ifpga_ to fpga_
+  - Removed wrapper functions (m10bmc_raw_*, m10bmc_sys_*). The
+    underlying functions are now called directly.
+  - Changed "_root_entry_hash" to "_reh", with a comment explaining
+    what reh is.
+  - Renamed get_csk_vector() to m10bmc_csk_vector()
+  - Changed calling functions of functions that return "enum fpga_sec_err"
+    to check for (ret != FPGA_SEC_ERR_NONE) instead of (ret)
+
+Changelog v1 -> v2:
+  - These patches were previously submitted as part of a larger V1
+    patch set under the title "Intel FPGA Security Manager Class Driver".
+  - Grouped all changes to include/linux/mfd/intel-m10-bmc.h into a
+    single patch: "mfd: intel-m10-bmc: support for MAX10 BMC Security
+    Engine".
+  - Removed ifpga_sec_mgr_init() and ifpga_sec_mgr_uinit() functions.
+  - Adapted to changes in the Intel FPGA Security Manager by splitting
+    the single call to ifpga_sec_mgr_register() into two function
+    calls: devm_ifpga_sec_mgr_create() and ifpga_sec_mgr_register().
+  - Replaced small function-creation macros for explicit function
+    declarations.
+  - Bug fix for the get_csk_vector() function to properly apply the
+    stride variable in calls to m10bmc_raw_bulk_read().
+  - Added m10bmc_ prefix to functions in m10bmc_iops structure
+  - Implemented HW_ERRINFO_POISON for m10bmc_sec_hw_errinfo() to
+    ensure that corresponding bits are set to 1 if we are unable
+    to read the doorbell or auth_result registers.
+  - Added comments and additional code cleanup per V1 review.
+
+Russ Weight (5):
+  mfd: intel-m10-bmc: Rename n3000bmc-secure driver
+  fpga: m10bmc-sec: create max10 bmc secure update
+  fpga: m10bmc-sec: expose max10 flash update count
+  fpga: m10bmc-sec: expose max10 canceled keys in sysfs
+  fpga: m10bmc-sec: add max10 secure update functions
+
+ .../sysfs-driver-intel-m10-bmc-sec-update     |  61 ++
+ MAINTAINERS                                   |   7 +
+ drivers/fpga/Kconfig                          |  12 +
+ drivers/fpga/Makefile                         |   3 +
+ drivers/fpga/intel-m10-bmc-sec-update.c       | 640 ++++++++++++++++++
+ drivers/mfd/intel-m10-bmc.c                   |   2 +-
+ 6 files changed, 724 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-sec-update
+ create mode 100644 drivers/fpga/intel-m10-bmc-sec-update.c
+
+
+base-commit: 18ecd30af1a8402c162cca1bd58771c0e5be7815
+-- 
+2.25.1
+

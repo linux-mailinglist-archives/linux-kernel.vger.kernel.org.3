@@ -2,42 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E89AC52FB0F
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:12:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4006052FB1A
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:13:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354878AbiEULMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 07:12:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46862 "EHLO
+        id S1354932AbiEULM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 07:12:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240824AbiEULMA (ORCPT
+        with ESMTP id S240273AbiEULL7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 07:12:00 -0400
+        Sat, 21 May 2022 07:11:59 -0400
 Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6C3B2A270;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D78DA2AC6C;
         Sat, 21 May 2022 04:11:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=inria.fr; s=dc;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=sUMaQJx9OoQYbZAPgow8C7/7CAL2c6Y2tYZO0S3DjAQ=;
-  b=G2Y6JpnyH9CXiioJMsob+658UyW+lGq4Zmhp2KT69SALSqzHbp8C0VXx
-   d2EnqjHOh1ntHxpR4d1aY8KXWJG4nyf3U769yysfEImLYQkiqo0HxZuMp
-   bMwJ8rADZihbySZHvd3fWU59ZL0XEZ0AjTXNO9g0sVDQ9YqUlUnGfS9JT
-   Y=;
+  bh=JLUxnCmjuZpRDlAPV+Qqm/Wq355s+Yc5EE2zW9B19as=;
+  b=fHYikL8uz02hAUW0+KQi3TpWS4tpd35IJOPmOtiHBzL7PNpP7QAs1vcD
+   dpq4sd8hvXH7aI7IiKX92tCYe0/iYbJfRXiJIE1Q39Nw7PzogMzrborIy
+   d2EzwriPRD4gzQs08wH+jaBN9g5V9WrixD/Ga8i1xnxsgx8NsJuxYY8w2
+   I=;
 Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
 X-IronPort-AV: E=Sophos;i="5.91,242,1647298800"; 
-   d="scan'208";a="14727893"
+   d="scan'208";a="14727895"
 Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 13:11:52 +0200
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 13:11:53 +0200
 From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Chris Mason <clm@fb.com>
-Cc:     kernel-janitors@vger.kernel.org,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] btrfs: fix typos in comments
-Date:   Sat, 21 May 2022 13:10:15 +0200
-Message-Id: <20220521111145.81697-5-Julia.Lawall@inria.fr>
+To:     Evgeniy Polyakov <zbr@ioremap.net>
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] w1: w1_therm: fix typo in comment
+Date:   Sat, 21 May 2022 13:10:16 +0200
+Message-Id: <20220521111145.81697-6-Julia.Lawall@inria.fr>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -51,40 +48,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Spelling mistakes (triple letters) in comments.
+Spelling mistake (triple letters) in comment.
 Detected with the help of Coccinelle.
 
 Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
 ---
- fs/btrfs/ctree.h   |    2 +-
- fs/btrfs/subpage.c |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/w1/slaves/w1_therm.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/btrfs/ctree.h b/fs/btrfs/ctree.h
-index 0e49b1a0c071..5d7da73a4804 100644
---- a/fs/btrfs/ctree.h
-+++ b/fs/btrfs/ctree.h
-@@ -2734,7 +2734,7 @@ int btrfs_get_extent_inline_ref_type(const struct extent_buffer *eb,
- u64 hash_extent_data_ref(u64 root_objectid, u64 owner, u64 offset);
- 
- /*
-- * Take the number of bytes to be checksummmed and figure out how many leaves
-+ * Take the number of bytes to be checksummed and figure out how many leaves
-  * it would require to store the csums for that many bytes.
-  */
- static inline u64 btrfs_csum_bytes_to_leaves(
-diff --git a/fs/btrfs/subpage.c b/fs/btrfs/subpage.c
-index a105b291444f..0146fee730a0 100644
---- a/fs/btrfs/subpage.c
-+++ b/fs/btrfs/subpage.c
-@@ -123,7 +123,7 @@ int btrfs_attach_subpage(const struct btrfs_fs_info *fs_info,
- 	struct btrfs_subpage *subpage;
- 
- 	/*
--	 * We have cases like a dummy extent buffer page, which is not mappped
-+	 * We have cases like a dummy extent buffer page, which is not mapped
- 	 * and doesn't need to be locked.
- 	 */
- 	if (page->mapping)
+diff --git a/drivers/w1/slaves/w1_therm.c b/drivers/w1/slaves/w1_therm.c
+index 067692626cf0..d3f8974677f9 100644
+--- a/drivers/w1/slaves/w1_therm.c
++++ b/drivers/w1/slaves/w1_therm.c
+@@ -284,7 +284,7 @@ static int read_powermode(struct w1_slave *sl);
+  * trigger_bulk_read() - function to trigger a bulk read on the bus
+  * @dev_master: the device master of the bus
+  *
+- * Send a SKIP ROM follow by a CONVERT T commmand on the bus.
++ * Send a SKIP ROM follow by a CONVERT T command on the bus.
+  * It also set the status flag in each slave &struct w1_therm_family_data
+  * to signal that a conversion is in progress.
+  *
 

@@ -2,107 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6510C52FF60
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 22:30:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6D2152FF74
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 22:38:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343968AbiEUUa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 16:30:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51900 "EHLO
+        id S1345959AbiEUUiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 16:38:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233059AbiEUUaW (ORCPT
+        with ESMTP id S1344206AbiEUUh7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 16:30:22 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D005A2C4
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 13:30:21 -0700 (PDT)
-Received: from mail-yw1-f175.google.com ([209.85.128.175]) by
- mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MuDTn-1nZbF8223R-00ud5b for <linux-kernel@vger.kernel.org>; Sat, 21 May
- 2022 22:30:19 +0200
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-2ff39b44b06so115437057b3.13
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 13:30:19 -0700 (PDT)
-X-Gm-Message-State: AOAM531apC9iUp6ehTXbLxO0zX4vum9NEiWALnO3qI5cnPPpuKeymKxJ
-        HiMinqAeZAxD0F37HOJdkHRtp1iOJ7OISMuz+qM=
-X-Google-Smtp-Source: ABdhPJxdzeQ8ppWmG4FaNugj1IVJL8hVon5ICr2txVNKnWSwzCAfUIa/u3XB2kovYWtRi5zFhQ8P1BD7cK9iFDjy8rQ=
-X-Received: by 2002:a81:950:0:b0:2fe:d88e:5529 with SMTP id
- 77-20020a810950000000b002fed88e5529mr16185220ywj.320.1653165018339; Sat, 21
- May 2022 13:30:18 -0700 (PDT)
+        Sat, 21 May 2022 16:37:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2E4B73A5F0
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 13:37:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653165476;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=lV7BrdQ4ujV3JaRxGlibSyfD3tp6S+keiDHJLEnX4rI=;
+        b=RAqbyOmS51ievNl7ApfytWFWmF9+VsQ7oPavDcLx4zGmdhM5YYr0qykstW7Iy31DzHxZck
+        j7h6h4hstiuXSRTA89R5MvhtLxU+GlG4XafCnnLwJbbLQNCkiwodjwcnxzlKxDspUDjF8U
+        c7cZjbVGyIIMozgc8xfIY653FBTa6Xk=
+Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com
+ [209.85.210.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-479-LIRptqfbMu6q8kNVxYxapg-1; Sat, 21 May 2022 16:37:55 -0400
+X-MC-Unique: LIRptqfbMu6q8kNVxYxapg-1
+Received: by mail-ot1-f69.google.com with SMTP id c9-20020a0568301ae900b00606aa7e2d03so3327348otd.23
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 13:37:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lV7BrdQ4ujV3JaRxGlibSyfD3tp6S+keiDHJLEnX4rI=;
+        b=QlMdz/lqTIJlSSdB/T4A+jF2+VsOvab8pxmJRf/tukuoSBU9xCqBTMWzS+xqDgk7TR
+         4LATXkk+CjdszMl2KQjNHcCc/vV2Pls9l9CYhQeHADcQqEHD1YE45bxYuejHprJYdQe2
+         zAIGTjw2qzDFqCbF1cmaHw/U9+/LXU17kXuDgg7Mb3ZyNM3X2kNiA72Zj7sHGZmMhnvE
+         xmHpE/dcQNRYpgrkWCagU8N9lyfvCRHyl4s5R0ySWRvQMHDZhOTVnwVA2bl5qLFUi0cL
+         77T6E9wxNW48ZPjyrqlrboaLThP1cVw9VbRrLak/b7atgMAz6qUpR0hEasJyEAB2cBV7
+         IUHQ==
+X-Gm-Message-State: AOAM531tTt1aUegz+YvIAIZJAjITUX7wRle8JOPs7azffRFy/roKu+cq
+        YODuUN2lsOStPepXr8Ia3RjIcptGSwdoorty74afewM+L60Zx5TYRH2jKScFp8YuacnxCmjKTON
+        6OIuVwy/z8Muk/XmXWGllqGd+
+X-Received: by 2002:a05:6808:1814:b0:32b:851:35d5 with SMTP id bh20-20020a056808181400b0032b085135d5mr4002286oib.206.1653165474492;
+        Sat, 21 May 2022 13:37:54 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxIxKBUfhEWEra9+wIF21FKv7KmWa9pxAfcrwEuD/KklNUJaePTR27sfK5MfHrHG2DsQpmg6g==
+X-Received: by 2002:a05:6808:1814:b0:32b:851:35d5 with SMTP id bh20-20020a056808181400b0032b085135d5mr4002282oib.206.1653165474325;
+        Sat, 21 May 2022 13:37:54 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id s11-20020a9d58cb000000b006060322127bsm2388730oth.75.2022.05.21.13.37.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 21 May 2022 13:37:53 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     gregory.greenman@intel.com, kvalo@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        luciano.coelho@intel.com, miriam.rachel.korenblit@intel.com,
+        johannes.berg@intel.com, quic_srirrama@quicinc.com
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] iwlwifi: mvm: remove setting of 'sta' parameter
+Date:   Sat, 21 May 2022 16:37:46 -0400
+Message-Id: <20220521203746.442924-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20220519082552.117736-1-wangkefeng.wang@huawei.com> <20220519082552.117736-2-wangkefeng.wang@huawei.com>
-In-Reply-To: <20220519082552.117736-2-wangkefeng.wang@huawei.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Sat, 21 May 2022 22:30:01 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3AaYovsu+aOmi62y-2i+0tmHHqpGN_PdToGt_UnGw=Ag@mail.gmail.com>
-Message-ID: <CAK8P3a3AaYovsu+aOmi62y-2i+0tmHHqpGN_PdToGt_UnGw=Ag@mail.gmail.com>
-Subject: Re: [PATCH v3 1/6] ARM: mm: kill unused runtime hook arch_iounmap()
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Russell King <linux@armlinux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:EyHYTdRf6fVBn4QH+OGG17POm2ylUgIsX3SJ886CzOZYeKjc15D
- krzAaAWjsrKunYBRBFP9SttUpBW3GZAqV94vn7Qb0BLs/3rlIxb8T6V43Ckb512GXpbENmj
- S/oqUcX0bkPLforyIAUCK3i9GrLb1+QGvC8sGVKMGTaDiYDYr/OTvTmUWgM7ilTSwfw6m9z
- Hoj4/b1qCZvlQmBZBlyrA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Vo1Z3ZuSZUo=:vrhxz5YVbXAXV6/4I56+O3
- ws0Ba4m0X5sSPrOoejBrejsaav/QcwkSFTvwb0i6d8Q27eF3ir4i7Cbk9vFRZ3FxI7XkR6OnZ
- nugI8p3Xa1VTrDPqLqNQedtty+LckNnnYGacfqbdNeXpRysIH+HcmvJgxnD8tLrXv/o1tXCpB
- +AnrmrCEwLLNnGpDX4l5SJ/nKlPqWBgyBV+58ZNKilxkoddSUFIxChvLHr2TqxqIfQIUCS8Ts
- ikMi2sDE6q2qOmNGOt/aKPhJDNNA0IdwFeK/3fT6eorIk1Gl86/lcH0k63SuvxI6QdQg+YZrX
- JySl5j5Ou0SN9hwE7+I7bBSsrHay6G6wpRhYrEYmZqORimqIAhVLFkmvcebta6XF1u+LZQIhR
- 375RfEwloLoXdf+DaZ8SY7lqCIKrkEl/BRNBP6Hd99ypRJ5r4ILys8zWgtuYzd9L1tAJeY9H/
- TSvqx/+kvBNX6vE//qtO95+DZL0+C7p8imNPCAp1/DqHuJSK3gzNW/LE0jGNCkrelUfTpjlmC
- zXn6awZA0zo0kgaWPOy9VC81lNEv085/wLLJobVsdEsO5o1NHERuop2h3TFBcPF7ro2Uspv+W
- ccNePwTPWHtkz1wa0zbglXSVDBuu8Yiwr9wCyXCvyiez8FPD6HxPte73pYm/Vk30/OTx6hXrB
- VKq/z2+FY1Rpo4K3TEhttBwEDuvqNEYQx6ar24hvjbKfZ9h+X1pjG2HkCLxSt+S+Kd80AbnzV
- RHqVVGJ8PZT/A7PHLLUWuZ/wgReacPOkPZdhbkPbPjP2VNm+P0cAIy0js+n+6dhryL17WG0Zl
- vIdOLfDntmzg7/srIxKdVLOFYQ8OOAdPM5AT++gdl5zZTSrM3kaC1gwLNH/Q3tlKnl8wlBi4r
- +MF7qRPncSkG/d5F0Orw==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 10:25 AM Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
->
-> Since the following commits,
->
-> v5.4
->   commit 59d3ae9a5bf6 ("ARM: remove Intel iop33x and iop13xx support")
-> v5.11
->   commit 3e3f354bc383 ("ARM: remove ebsa110 platform")
->
-> The runtime hook arch_iounmap() on ARM is useless, kill arch_iounmap()
-> and __iounmap(), and the naming of arch_iounmap will be used in
-> GENERIC_IOREMAP with the later patch.
->
-> Cc: Russell King <linux@armlinux.org.uk>
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+cppcheck reports
+[drivers/net/wireless/intel/iwlwifi/mvm/rs.c:2686]: (warning) Assignment of function parameter has no effect outside the function. Did you forget dereferencing it?
 
-I had a very similar patch prototyped recently,
+The setting of the 'sta' parameter is not needed.  In the if-check that sets it
+to NULL, mvm_sta is also set to NULL.  Then the next statement checks if
+mvm_sta is NULL and does an early return. So remove setting sta.
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/net/wireless/intel/iwlwifi/mvm/rs.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-It would be nice to do the same for arch_ioremap_caller(), which now
-has two implementations left for mvebu and imx3, previously we had
-more for iop13xx, ebsa110, ixp4xx and msm.
+diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/rs.c b/drivers/net/wireless/intel/iwlwifi/mvm/rs.c
+index 974eeecc9153..d75e3024ae3d 100644
+--- a/drivers/net/wireless/intel/iwlwifi/mvm/rs.c
++++ b/drivers/net/wireless/intel/iwlwifi/mvm/rs.c
+@@ -2683,7 +2683,6 @@ static void rs_drv_get_rate(void *mvm_r, struct ieee80211_sta *sta,
+ 		/* if vif isn't initialized mvm doesn't know about
+ 		 * this station, so don't do anything with the it
+ 		 */
+-		sta = NULL;
+ 		mvm_sta = NULL;
+ 	}
+ 
+-- 
+2.27.0
 
-For both armada37x/380 and imx3, the only purpose is to override
-the mtype argument, and it feels like there should be a better way
-to do this, though I'm not sure what that is. Having an overridable
-mtype value per 256MB section of physical address space would
-be sufficient for both, but I don't know if that's any better than what
-we have.
-
-        Arnd

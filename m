@@ -2,191 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EBB852F6A6
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 02:16:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F53452F6B0
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 02:18:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354136AbiEUAQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 20:16:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60100 "EHLO
+        id S1354197AbiEUASm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 20:18:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354156AbiEUAQd (ORCPT
+        with ESMTP id S236743AbiEUASh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 20:16:33 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1326215F6CA
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 17:16:31 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-2ec42eae76bso101745567b3.10
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 17:16:31 -0700 (PDT)
+        Fri, 20 May 2022 20:18:37 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC8D1900EF;
+        Fri, 20 May 2022 17:18:36 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id i27so18269388ejd.9;
+        Fri, 20 May 2022 17:18:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=HMCB35Do4nxxJ5Deq7wXwHlJ7AFN2mSTmdz2CZTa0iA=;
-        b=NvEmPTccbXf/sm9VcR2JuXFNK+QOaXohjlLZE5gY0Tji0R59S3gNFYNqP5NKdemCbI
-         AXxHxvIQXgoHZKwOD0aSvd8yi/ia1ORjeMkBSAg0HvrzTeGRoyBge7DJC+mUTdpeVAYZ
-         +4nv6Z+Copf8E3yLYT2iITd/X7EVZ04k+gb57KzXUi3o/EHGsYrEUVcVmjn+nkNZ6Da+
-         skQUS0RdIFyeIFL+Yle2y5GRLCBHqZZOP5XevwC+0xFbCnxGcBFpA1vV14beBv1Up8Yu
-         pZjQ7FuclE5eCiQVB/BJk93rqcFhNqOH4cF5CZfPLUf+mWMG2m0AyceY7mD9a8PdgVwQ
-         Hh+A==
+        bh=kM3OJDwIslvJlnWNrIl5NE5xFr9ef8ObV315m3v55rA=;
+        b=XjWgEUO9MyF/ovVLAe9j/svrxlMHsPZ2np9duDNqsWlwCogi89DiUAJ1fP+ZZ4fYyG
+         H2RkczjFvHHmPu6kp4pmPtslZBkcYlzUJ8ZepRYj79FLe8GwOQiWIf+2dzZusy6LBuvY
+         LzXFs7PVRPbn6kcrofliShbVIWfCYbXs1RmMMKNiR9jut1u0wZBoiNEijLnCcqQhxPSu
+         xfxILYI1IxaLP45CZPS5lKnDYOuC+cEpFJbgRanqU6w7Laj+zzTbQSo6cHlOj5kvqo8L
+         4yc9mU/hNor0sq2lL5CHXguAPHL35uGFeerlxcyDJPvW+StWOOI2qu8qewWFE5RgQJk/
+         7+1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=HMCB35Do4nxxJ5Deq7wXwHlJ7AFN2mSTmdz2CZTa0iA=;
-        b=KJgsxXkxzjaTa6IXdhBynQwkuxCHka7fLk7EeezuAVUs0lASSpy7Jh6595A99VHRCo
-         dB1O16txtW9ESf3pNRG2uUJWpePUg1wV3wcL4URPQS+ydCcb7aJ3LySdeFehcXXebMP5
-         xuWGg9AJI9t5/4gbuPRpRFU6q6xK9CTgFVGbi0R1n5us8AE8sfgYFWVjBKGjLT69quPI
-         KW2BAJjaDb0NzPPpK1eqyiSOVKa/88eDodGtn4VsuD/7E7RF8V/96q2pSQuX2PrWsj/O
-         U0csAAUtn12wPC8me+tR8KPGWxizgXxznbAWNck1xn4sfiGkKqzfp8abqZgqT6Qhut58
-         sYZA==
-X-Gm-Message-State: AOAM533aDbw9tXShm/aRGOICN62z3hQWjf8vmIcbh/wMJGMv5kqqIUYt
-        rMTnPBENl4BsucHQSStoX0mNoR9DNzvXN91cvJYTUg==
-X-Google-Smtp-Source: ABdhPJzhnzpqOdgZiqzgNB98UYPOQpFUnarclYeZ96Ou9b+bvQZLF3CorJ9d+9aIjLP2AQ21QaUu7p6eQ3dAVJoU0io=
-X-Received: by 2002:a81:2154:0:b0:2f4:d79e:35dc with SMTP id
- h81-20020a812154000000b002f4d79e35dcmr13210290ywh.126.1653092191044; Fri, 20
- May 2022 17:16:31 -0700 (PDT)
+        bh=kM3OJDwIslvJlnWNrIl5NE5xFr9ef8ObV315m3v55rA=;
+        b=3OpeZ/elT7B2e7hE4LyC+RS1+r6d+KA8U09taMS8Rt6Rdtq/DzYC+joiQXKUxnWQNB
+         YCBNHV+VxY07VCgds3StzHxUCInevhX9Q1OQDU1D6rwRRV6uQIoIQZxGpRw3K4qs+fdI
+         DdvjOuYBV40dC1cPpJ6bZAMjwevhebOx28kT106nHH8Sbyo+A1URuuba1As3vHv2HB2j
+         6L6NiFo/6FIWdzc+R4sP+epak8jjFehyIQRMuaaL7nCLv3n7+XKiktoamYL1JGo7aNnx
+         0acFbUv2zRUS9/eop0TEQvcc61Gp2KG2QibxMA4juApYxy2X1Q7wIDdV74MmW2vUg/TU
+         kp1g==
+X-Gm-Message-State: AOAM530LWl17MfSmF7yNVSrBSlAYglsj8FS8L8LSTHZ5yEo/0uMPXU2E
+        pr7DneuuuEBB/M+vLdgHXZ8L0OPqO15VnLwtnts=
+X-Google-Smtp-Source: ABdhPJyAIwUtbMfms0jB0bpJ5a6HWEhVHfH/r19ZJ0jbxxU+WJCMlbdYTBoMYvJMVxmAehTN2HKurc6gf1A+eAK0/fg=
+X-Received: by 2002:a17:906:9b8b:b0:6fe:55db:14e with SMTP id
+ dd11-20020a1709069b8b00b006fe55db014emr10904327ejc.327.1653092314979; Fri, 20
+ May 2022 17:18:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220429220933.1350374-1-saravanak@google.com>
- <YogkhvFGVcjNQ21Z@dev-arch.thelio-3990X> <CAGETcx9nvBs1b4M=2hBhrLX_2-rzLtAmV9WfTXu0MC7JnsBvwA@mail.gmail.com>
- <YogsiMCDupNUhMgL@dev-fedora.thelio-3990X>
-In-Reply-To: <YogsiMCDupNUhMgL@dev-fedora.thelio-3990X>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Fri, 20 May 2022 17:15:55 -0700
-Message-ID: <CAGETcx-JyWwoGA3o8eep7E29Cm4DcVT6D1JFJh72jLcqm_mjCQ@mail.gmail.com>
-Subject: Re: [PATCH v1] driver core: Extend deferred probe timeout on driver registration
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Rob Herring <robh@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Thierry Reding <treding@nvidia.com>,
-        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
-        iommu@lists.linux-foundation.org, kernel-team@android.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org
+References: <20220518205924.399291-1-benjamin.tissoires@redhat.com>
+ <YoX7iHddAd4FkQRQ@infradead.org> <YoX904CAFOAfWeJN@kroah.com>
+ <YoYCIhYhzLmhIGxe@infradead.org> <CAO-hwJL4Pj4JaRquoXD1AtegcKnh22_T0Z0VY_peZ8FRko3kZw@mail.gmail.com>
+ <87ee0p951b.fsf@toke.dk> <CAO-hwJKwj6H0Nc_gqsN5okT2ipLL3H6fqe23_vpO+xC3PnX5uw@mail.gmail.com>
+In-Reply-To: <CAO-hwJKwj6H0Nc_gqsN5okT2ipLL3H6fqe23_vpO+xC3PnX5uw@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Fri, 20 May 2022 17:18:22 -0700
+Message-ID: <CAADnVQ+Qj9Farf-bp4STpe0P+=7Xr2Hqxm5Tru5bLCyPiBJMqg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 00/17] Introduce eBPF support for HID devices
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 5:04 PM Nathan Chancellor <nathan@kernel.org> wrote:
+On Thu, May 19, 2022 at 4:56 AM Benjamin Tissoires
+<benjamin.tissoires@redhat.com> wrote:
 >
-> On Fri, May 20, 2022 at 04:49:48PM -0700, Saravana Kannan wrote:
-> > On Fri, May 20, 2022 at 4:30 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> > >
-> > > Hi Saravana,
-> > >
-> > > On Fri, Apr 29, 2022 at 03:09:32PM -0700, Saravana Kannan wrote:
-> > > > The deferred probe timer that's used for this currently starts at
-> > > > late_initcall and runs for driver_deferred_probe_timeout seconds. The
-> > > > assumption being that all available drivers would be loaded and
-> > > > registered before the timer expires. This means, the
-> > > > driver_deferred_probe_timeout has to be pretty large for it to cover the
-> > > > worst case. But if we set the default value for it to cover the worst
-> > > > case, it would significantly slow down the average case. For this
-> > > > reason, the default value is set to 0.
-> > > >
-> > > > Also, with CONFIG_MODULES=y and the current default values of
-> > > > driver_deferred_probe_timeout=0 and fw_devlink=on, devices with missing
-> > > > drivers will cause their consumer devices to always defer their probes.
-> > > > This is because device links created by fw_devlink defer the probe even
-> > > > before the consumer driver's probe() is called.
-> > > >
-> > > > Instead of a fixed timeout, if we extend an unexpired deferred probe
-> > > > timer on every successful driver registration, with the expectation more
-> > > > modules would be loaded in the near future, then the default value of
-> > > > driver_deferred_probe_timeout only needs to be as long as the worst case
-> > > > time difference between two consecutive module loads.
-> > > >
-> > > > So let's implement that and set the default value to 10 seconds when
-> > > > CONFIG_MODULES=y.
-> > > >
-> > > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > > Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-> > > > Cc: Rob Herring <robh@kernel.org>
-> > > > Cc: Linus Walleij <linus.walleij@linaro.org>
-> > > > Cc: Will Deacon <will@kernel.org>
-> > > > Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> > > > Cc: Kevin Hilman <khilman@kernel.org>
-> > > > Cc: Thierry Reding <treding@nvidia.com>
-> > > > Cc: Mark Brown <broonie@kernel.org>
-> > > > Cc: Pavel Machek <pavel@ucw.cz>
-> > > > Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> > > > Cc: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-> > > > Cc: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> > > > Cc: linux-gpio@vger.kernel.org
-> > > > Cc: linux-pm@vger.kernel.org
-> > > > Cc: iommu@lists.linux-foundation.org
-> > > > Signed-off-by: Saravana Kannan <saravanak@google.com>
-> > >
-> > > I bisected a boot hang with ARCH=s390 defconfig in QEMU down to this
-> > > change as commit 2b28a1a84a0e ("driver core: Extend deferred probe
-> > > timeout on driver registration") in next-20220520 (bisect log below).
-> > >
-> > > $ make -skj"$(nproc)" ARCH=s390 CROSS_COMPILE=s390x-linux-gnu- defconfig bzImage
-> > >
-> > > $ timeout --foreground 15m stdbuf -oL -eL \
-> > > qemu-system-s390x \
-> > > -initrd ... \
-> > > -M s390-ccw-virtio \
-> > > -display none \
-> > > -kernel arch/s390/boot/bzImage \
-> > > -m 512m \
-> > > -nodefaults \
-> > > -serial mon:stdio
-> > > ...
-> > > [    2.077303] In-situ OAM (IOAM) with IPv6
-> > > [    2.077639] NET: Registered PF_PACKET protocol family
-> > > [    2.078063] bridge: filtering via arp/ip/ip6tables is no longer available by default. Update your scripts to load br_netfilter if you need this.
-> > > [    2.078795] Key type dns_resolver registered
-> > > [    2.079317] cio: Channel measurement facility initialized using format extended (mode autodetected)
-> > > [    2.081494] Discipline DIAG cannot be used without z/VM
-> > > [  260.626363] random: crng init done
-> > > qemu-system-s390x: terminating on signal 15 from pid 3815762 (timeout)
-> > >
-> > > We have a simple rootfs available if necessary:
-> > >
-> > > https://github.com/ClangBuiltLinux/boot-utils/raw/bc0d17785eb67f1edd0ee0a134970a807895f741/images/s390/rootfs.cpio.zst
-> > >
-> > > If there is any other information I can provide, please let me know!
-> >
-> > Hmm... strange. Can you please try the following command line options
-> > and tell me which of these has the issue and which don't?
+> As Greg mentioned in his reply, report descriptors fixups don't do
+> much besides changing a memory buffer at probe time. So we can either
+> have udev load the program, pin it and forget about it, or we can also
+> have the kernel do that for us.
 >
-> Sure thing!
+> So I envision the distribution to be hybrid:
+> - for plain fixups where no userspace is required, we should
+> distribute those programs in the kernel itself, in-tree.
+> This series already implements pre-loading of BPF programs for the
+> core part of HID-BPF, but I plan on working on some automation of
+> pre-loading of these programs from the kernel itself when we need to
+> do so.
 >
-> > 1) deferred_probe_timeout=0
+> Ideally, the process would be:
+> * user reports a bug
+> * developer produces an eBPF program (and maybe compile it if the user
+> doesn't have LLVM)
+> * user tests/validates the fix without having to recompile anything
+> * developer drops the program in-tree
+> * some automated magic happens (still unclear exactly how to define
+> which HID device needs which eBPF program ATM)
+> * when the kernel sees this exact same device (BUS/VID/PID/INTERFACE)
+> it loads the fixup
 >
-> No issue.
->
-> > 2) deferred_probe_timeout=1
-> > 3) deferred_probe_timeout=300
->
-> Both of these appear to hang in the same way, I let each sit for five
-> minutes.
+> - the other part of the hybrid solution is for when userspace is
+> heavily involved (because it exports a new dbus interface for that
+> particular feature on this device). We can not really automatically
+> preload the BPF program because we might not have the user in front of
+> it.
+> So in that case, the program would be hosted alongside the
+> application, out-of-the-tree, but given that to be able to call kernel
+> functions you need to be GPL, some public distribution of the sources
+> is required.
 
-Strange that a sufficiently large timeout isn't helping. Is it trying
-to boot off a network mount? I'll continue looking into this next
-week.
+Agree with everything you've said earlier.
+Just one additional comment:
+By default the source code is embedded in bpf objects.
+Here is an example.
+$ bpftool prog dump jited id 3927008|head -50
+void cwnd_event(long long unsigned int * ctx):
+bpf_prog_9b9adc0a36a25303_cwnd_event:
+; void BPF_STRUCT_OPS(cwnd_event, struct sock* sk, enum tcp_ca_event ev) {
+   0:    nopl   0x0(%rax,%rax,1)
+   5:    xchg   %ax,%ax
+...
+; switch (ev) {
+  25:    mov    %r14d,%edi
+  28:    add    $0xfffffffc,%edi
+...
+; ca->loss_cwnd = tp->snd_cwnd;
+  4a:    mov    %edi,0x18(%r13)
+  4e:    mov    $0x2,%edi
+; tp->snd_ssthresh = max(tp->snd_cwnd >> 1U, 2U);
+  53:    test   %rbx,%rbx
+  56:    jne    0x000000000000005c
 
--Saravana
-
->
-> Cheers,
-> Nathan
+It's not the full source, of course, but good enough in practice
+for a person to figure out what program is doing.

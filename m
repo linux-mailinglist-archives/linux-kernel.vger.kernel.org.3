@@ -2,57 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2749B52F8B5
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 06:32:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E86B152F8B8
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 06:35:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239023AbiEUEce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 00:32:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44734 "EHLO
+        id S242355AbiEUEev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 00:34:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238833AbiEUEca (ORCPT
+        with ESMTP id S240372AbiEUEeq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 00:32:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88898185433;
-        Fri, 20 May 2022 21:32:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2370D60B45;
-        Sat, 21 May 2022 04:32:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AFCBC385A5;
-        Sat, 21 May 2022 04:32:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653107548;
-        bh=MtA3HwgnwMddgCHNhZRtjdWToZWuCgimnJZfeEUrTv0=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=YDUfUoL6QncNRpPeKgWoKvgykXAYvpkoUHalIlWo3bBVKYG7fMG6cD0JRPngXgDa7
-         uk4UYOU/4laB3Ta09ZW3hEPzLpfNSVMU8FiFndXWqdQtZCauhNcuJVyyrXNWeD4aSB
-         lmig8M9z/kdr2c6XXLf38MveBBLHmZKPyua3B/lOQbFew9KElwZV23tMc4BJHy0+2c
-         mlWoRkPtLWDpMVEctwevi9BRDajJh7QONVOI27c7yJ1EfjM+W1vzMIYWpl79hf0EWT
-         llheKAkpKtRre+W0SGu98aNS/P5DtlRmEfBq61nVDZH/asYsclULkP7vCzP24Qg/yJ
-         710Ee0TaVlMIw==
-Content-Type: text/plain; charset="utf-8"
+        Sat, 21 May 2022 00:34:46 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0FD4195929;
+        Fri, 20 May 2022 21:34:45 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4L4rGd2svhzCsYl;
+        Sat, 21 May 2022 12:29:45 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
+ (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sat, 21 May
+ 2022 12:34:42 +0800
+From:   Zhengchao Shao <shaozhengchao@huawei.com>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <ast@kernel.org>,
+        <daniel@iogearbox.net>, <davem@davemloft.net>, <kuba@kernel.org>,
+        <hawk@kernel.org>, <john.fastabend@gmail.com>, <andrii@kernel.org>,
+        <kafai@fb.com>, <songliubraving@fb.com>, <yhs@fb.com>,
+        <kpsingh@kernel.org>
+CC:     <weiyongjun1@huawei.com>, <shaozhengchao@huawei.com>,
+        <yuehaibing@huawei.com>
+Subject: [PATCH v3,bpf-next] samples/bpf: check detach prog exist or not in xdp_fwd
+Date:   Sat, 21 May 2022 12:35:09 +0800
+Message-ID: <20220521043509.389007-1-shaozhengchao@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <49d726d11964ca0e3757bdb5659e3b3eaa1572b5.1653081643.git.christophe.jaillet@wanadoo.fr>
-References: <49d726d11964ca0e3757bdb5659e3b3eaa1572b5.1653081643.git.christophe.jaillet@wanadoo.fr>
-Subject: Re: [PATCH] clk: bcm: rpi: Use correct order for the parameters of devm_kcalloc()
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-clk@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-To:     Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>
-Date:   Fri, 20 May 2022 21:32:26 -0700
-User-Agent: alot/0.10
-Message-Id: <20220521043228.7AFCBC385A5@smtp.kernel.org>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500026.china.huawei.com (7.185.36.106)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,12 +50,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Christophe JAILLET (2022-05-20 14:20:58)
-> We should have 'n', then 'size', not the opposite.
-> This is harmless because the 2 values are just multiplied, but having
-> the correct order silence a (unpublished yet) smatch warning.
->=20
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
+Before detach the prog, we should check detach prog exist or not.
 
-Applied to clk-next
+Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+---
+ samples/bpf/xdp_fwd_user.c | 59 ++++++++++++++++++++++++++++++++------
+ 1 file changed, 50 insertions(+), 9 deletions(-)
+
+diff --git a/samples/bpf/xdp_fwd_user.c b/samples/bpf/xdp_fwd_user.c
+index 1828487bae9a..03a50f64e99a 100644
+--- a/samples/bpf/xdp_fwd_user.c
++++ b/samples/bpf/xdp_fwd_user.c
+@@ -47,17 +47,58 @@ static int do_attach(int idx, int prog_fd, int map_fd, const char *name)
+ 	return err;
+ }
+ 
+-static int do_detach(int idx, const char *name)
++static int do_detach(int ifindex, const char *ifname, const char *app_name)
+ {
+-	int err;
++	LIBBPF_OPTS(bpf_xdp_attach_opts, opts);
++	struct bpf_prog_info prog_info = {};
++	char prog_name[BPF_OBJ_NAME_LEN];
++	__u32 info_len, curr_prog_id;
++	int prog_fd;
++	int err = 1;
++
++	if (bpf_xdp_query_id(ifindex, xdp_flags, &curr_prog_id)) {
++		printf("ERROR: bpf_xdp_query_id failed (%s)\n",
++		       strerror(errno));
++		return err;
++	}
++
++	if (!curr_prog_id) {
++		printf("ERROR: flags(0x%x) xdp prog is not attached to %s\n",
++		       xdp_flags, ifname);
++		return err;
++	}
+ 
+-	err = bpf_xdp_detach(idx, xdp_flags, NULL);
+-	if (err < 0)
+-		printf("ERROR: failed to detach program from %s\n", name);
++	info_len = sizeof(prog_info);
++	prog_fd = bpf_prog_get_fd_by_id(curr_prog_id);
++	if (prog_fd < 0) {
++		printf("ERROR: bpf_prog_get_fd_by_id failed (%s)\n",
++		       strerror(errno));
++		return err;
++	}
++
++	err = bpf_obj_get_info_by_fd(prog_fd, &prog_info, &info_len);
++	if (err) {
++		printf("ERROR: bpf_obj_get_info_by_fd failed (%s)\n",
++		       strerror(errno));
++		return err;
++	}
++	snprintf(prog_name, sizeof(prog_name), "%s_prog", app_name);
++	prog_name[BPF_OBJ_NAME_LEN - 1] = '\0';
++
++	if (strcmp(prog_info.name, prog_name)) {
++		printf("ERROR: %s isn't attached to %s\n", app_name, ifname);
++		err = 1;
++	} else {
++		opts.old_prog_fd = prog_fd;
++		err = bpf_xdp_detach(ifindex, xdp_flags, &opts);
++		if (err < 0)
++			printf("ERROR: failed to detach program from %s (%s)\n",
++			       ifname, strerror(errno));
++		/* TODO: Remember to cleanup map, when adding use of shared map
++		 *  bpf_map_delete_elem((map_fd, &idx);
++		 */
++	}
+ 
+-	/* TODO: Remember to cleanup map, when adding use of shared map
+-	 *  bpf_map_delete_elem((map_fd, &idx);
+-	 */
+ 	return err;
+ }
+ 
+@@ -169,7 +210,7 @@ int main(int argc, char **argv)
+ 			return 1;
+ 		}
+ 		if (!attach) {
+-			err = do_detach(idx, argv[i]);
++			err = do_detach(idx, argv[i], prog_name);
+ 			if (err)
+ 				ret = err;
+ 		} else {
+-- 
+2.17.1
+

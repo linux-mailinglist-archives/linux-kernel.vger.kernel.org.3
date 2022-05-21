@@ -2,87 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2212052F73A
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 03:00:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31D8352F73C
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 03:01:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232046AbiEUBAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 21:00:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49362 "EHLO
+        id S1353655AbiEUBBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 21:01:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244884AbiEUBAO (ORCPT
+        with ESMTP id S1350544AbiEUBBE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 21:00:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B5441B092B;
-        Fri, 20 May 2022 18:00:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CAF1861E9F;
-        Sat, 21 May 2022 01:00:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2FDD2C36AE3;
-        Sat, 21 May 2022 01:00:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653094812;
-        bh=zilOOzTtILoXvxONEgyn+Rv3B2It2oRDDPX55bj6z2E=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=g6UQT8pKfgBZR5yyFueB7jOkKjwCcLsaCUlaktjrtHzkHB7C+nF4bhxs6Sk0awoDH
-         Zb7O8wz0yncFe0x16s05Ukb0tckP55PtdoG3Qkptx5pTE5i/DeZHPCCIt2lZFVD+Hq
-         nBupqWr3dAtTQ66Rpo1ZIlUUW3XJZ08S/iweRYV4p6JAfVSRl/H4+2AtUO7BsAxWpE
-         RJ61jeChyBiwBZNqHzgqutG8mK/RmcTm3i0HJyQTicmrDiedAOH+GEzsDAo8UXiKnY
-         W0SNrMUN9REmxatczEAUwyYgzP2VERa8jDsuiyyjvajLGSAi+GOf9A1nP9Nb9jfMQG
-         /oENKRsqPI9hg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 167F7F03935;
-        Sat, 21 May 2022 01:00:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 20 May 2022 21:01:04 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61354515A7;
+        Fri, 20 May 2022 18:01:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=4pzvRwoVdtYoVcWFyyAnPE0HISlku86yFUDDkjyuoZg=; b=C/vAXd2A8NSnWf9Ia9CxZQ7HWd
+        eC1jdZIkoq35cFPNjQB8DPs6mJdeEt29TIQKDtnkgjTYYrqS5utyu2EdsBEetVG2MYF9g3veZ6QWT
+        WUt6QyMaT+/NTh9CEbnVWqefeoZ1ZnVkPcl/PO6MzUPEkKQgLStT20xPGZ8aCDlbE/stjtP0o3iUY
+        FwCP/FbIfiRlr3xi5bOCpBew9Yh/5vgQsIHxVpMh3X4TrkWSNGpxpWZcOY+O0xoPid/aRQckcFURd
+        J1liBHgnehV8y9wgUXvJiGLzAgbrRWalq0pKefjdnhl6e0XK6iJRFCeZrjRYi2iz6PtNz9au59awl
+        O3qVzKrA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nsDUH-00F5i2-1l; Sat, 21 May 2022 01:00:57 +0000
+Date:   Fri, 20 May 2022 18:00:57 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Song Liu <song@kernel.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-mm@kvack.org, ast@kernel.org, daniel@iogearbox.net,
+        peterz@infradead.org, torvalds@linux-foundation.org,
+        kernel-team@fb.com
+Subject: Re: [PATCH v3 bpf-next 5/8] bpf: use module_alloc_huge for
+ bpf_prog_pack
+Message-ID: <Yog5yXqAQZAmpgCD@bombadil.infradead.org>
+References: <20220520031548.338934-1-song@kernel.org>
+ <20220520031548.338934-6-song@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] hv_netvsc: Fix potential dereference of NULL pointer
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165309481208.5645.11194329096449346020.git-patchwork-notify@kernel.org>
-Date:   Sat, 21 May 2022 01:00:12 +0000
-References: <1652962188-129281-1-git-send-email-lyz_cs@pku.edu.cn>
-In-Reply-To: <1652962188-129281-1-git-send-email-lyz_cs@pku.edu.cn>
-To:     =?utf-8?b?5YiY5rC45b+XIDxseXpfY3NAcGt1LmVkdS5jbj4=?=@ci.codeaurora.org
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, davem@davemloft.net,
-        kuba@kernel.org, pabeni@redhat.com, sashal@kernel.org,
-        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, fuyq@stu.pku.edu.cn
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220520031548.338934-6-song@kernel.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Thu, 19 May 2022 05:09:48 -0700 you wrote:
-> The return value of netvsc_devinfo_get()
-> needs to be checked to avoid use of NULL
-> pointer in case of an allocation failure.
+On Thu, May 19, 2022 at 08:15:45PM -0700, Song Liu wrote:
+> Also, remove set_vm_flush_reset_perms() from alloc_new_pack() and use
+> set_memory_[nx|rw] in bpf_prog_pack_free(). This is because
+> VM_FLUSH_RESET_PERMS does not work with huge pages yet. [1]
 > 
-> Fixes: 0efeea5fb ("hv_netvsc: Add the support of hibernation")
+> [1] https://lore.kernel.org/bpf/aeeeaf0b7ec63fdba55d4834d2f524d8bf05b71b.camel@intel.com/
+> Suggested-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> Signed-off-by: Song Liu <song@kernel.org>
+> ---
+
+Rick,
+
+although VM_FLUSH_RESET_PERMS is rather new my concern here is we're
+essentially enabling sloppy users to grow without also addressing
+what if we have to take the leash back to support VM_FLUSH_RESET_PERMS
+properly? If the hack to support this on other architectures other than
+x86 is as simple as the one you in vm_remove_mappings() today:
+
+	if (flush_reset && !IS_ENABLED(CONFIG_ARCH_HAS_SET_DIRECT_MAP)) {
+		set_memory_nx(addr, area->nr_pages);
+		set_memory_rw(addr, area->nr_pages);
+	}
+
+then I suppose this isn't a big deal. I'm just concerned here this being
+a slippery slope of sloppiness leading to something which we will
+regret later.
+
+My intution tells me this shouldn't be a big issue, but I just want to
+confirm.
+
+  Luis
+
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index cacd8684c3c4..b64d91fcb0ba 100644
+> @@ -949,6 +947,8 @@ static void bpf_prog_pack_free(struct bpf_binary_header *hdr)
+>  
+>  	mutex_lock(&pack_mutex);
+>  	if (hdr->size > bpf_prog_pack_size) {
+> +		set_memory_nx((unsigned long)hdr, hdr->size / PAGE_SIZE);
+> +		set_memory_rw((unsigned long)hdr, hdr->size / PAGE_SIZE);
+>  		module_memfree(hdr);
+>  		goto out;
+>  	}
+> @@ -975,6 +975,8 @@ static void bpf_prog_pack_free(struct bpf_binary_header *hdr)
+>  	if (bitmap_find_next_zero_area(pack->bitmap, bpf_prog_chunk_count(), 0,
+>  				       bpf_prog_chunk_count(), 0) == 0) {
+>  		list_del(&pack->list);
+> +		set_memory_nx((unsigned long)pack->ptr, bpf_prog_pack_size / PAGE_SIZE);
+> +		set_memory_rw((unsigned long)pack->ptr, bpf_prog_pack_size / PAGE_SIZE);
+>  		module_memfree(pack->ptr);
+>  		kfree(pack);
+>  	}
+> -- 
+> 2.30.2
 > 
-> Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
-> 
-> [...]
-
-Here is the summary with links:
-  - hv_netvsc: Fix potential dereference of NULL pointer
-    https://git.kernel.org/netdev/net/c/eb4c07889647
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-

@@ -2,62 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C64852FA0A
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 10:36:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CDFA52FA0B
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 10:36:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241128AbiEUIg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 04:36:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56276 "EHLO
+        id S238936AbiEUIgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 04:36:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238936AbiEUIgY (ORCPT
+        with ESMTP id S241392AbiEUIgi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 04:36:24 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 270C536310;
-        Sat, 21 May 2022 01:36:24 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id c2so9111268plh.2;
-        Sat, 21 May 2022 01:36:24 -0700 (PDT)
+        Sat, 21 May 2022 04:36:38 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF9959BA5;
+        Sat, 21 May 2022 01:36:35 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id e2so2568142wrc.1;
+        Sat, 21 May 2022 01:36:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ei1w+gAULw3a4Sp90/wPAPVRhqkQXbusQfV0z240l4M=;
-        b=E+7bjb/QwmEkUO8deR/PhBs6U3gxuFDSHnbQU7gNn3QKPN5mF5qRPTZ0GWj4l8In3L
-         4CRgnUMOcbQlDkqioBvhvd1qNGKDjF6Ee1CXwHfqv7aJwjfS8h63grHDSlmaCp4fLwfM
-         kNjWHzEvFnz+pXk+OmQrrDVb6ceE2aYycr6917ddc/9/wh8Z/llY2Ii1XhQkb49vjGTw
-         fqrQC31FXiDfugJcYscTRQU0PLWKXFRBlgNw2hqtSy3QW5V+XU+uwTDZqrZqbo41Ql4C
-         GqgPEr0rJKaEvkSIaCnoD5ZlU8KYD2g6n1Is53prmCWsPY0hgXBLaEnpvUmoc6jueFfR
-         qHaA==
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=N7GQcxlQmzuFm2GdLfuNosKdxkt6SYCMhr68Bo/2CKY=;
+        b=XwWwu7Z/xPBN19Q3XQRw1hX/M0t7sm82KatyyXMRAcxgRHTUkPP/Yoe4o/vjCtinnx
+         jTG1VEhVc1G3VBXTYul1SFutU7LrdiN45TSmaiKOU2akPit5b1KFwDh7dAd8n15fxjZa
+         QIdjkt02zY5r90zssnxaIawEziLiI2fUgAI5JNCsfY8kPUsGDNNCFrXuCTNKylJ3c5NU
+         7+R1d3w4psYatktbjL9c3tZtb6fEdBQFhHPEhcMVBW1RQhrMXOsuYM5WEoHBJI3nSuDE
+         Rab2r7OCWjkyJtKPJZoiECs9LsqpmWUJ3niXsEyqM2lVPnijhTgElL+UZVkvqdLpvSbG
+         PgUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ei1w+gAULw3a4Sp90/wPAPVRhqkQXbusQfV0z240l4M=;
-        b=Uh5B0GjgnhomGRlr3TZq3rjS8zq7c6twpZTKU3bJ5bWA45tmV1lMfXlORsWCBS3/j+
-         evwg3L4zTVrIERfS/54fYhDw50cyV9xqBargpfLA/107LBC1ffT3Dll4FtsvyQvfOo5L
-         D6F1/QqvNAHOzh45NfTq+gEjbHn+qyTo6Qyv8GQKsvOWp3yyjru+D84Qv9dWTgNfMS7s
-         XwG6fNeziHONVUhdsezcl+o9MkFTWlVgnq7H+zZI+NTvXAWMuLfBrsqY7HfLuVoTqdXt
-         FPeFkspG0AlT0kzCaVYsXrViSx9yWwWzHe3AnIQXhZMJq3UZy1U+QQM+jTZzVxtiEbpx
-         fI2w==
-X-Gm-Message-State: AOAM533PO+Mmz8CH0e294bLOCI6urANqIIj67QUao7SCtghiDa1DPn9Q
-        kxua4Jx0wNadR+J7zLqBrxptcfoRjBnThIsRm8Q=
-X-Google-Smtp-Source: ABdhPJwca2rFA5Q4M2AyfKg+2grC+dgJOl8pPVHGfhRhV0GOIoUoBTya/l9pec68R6KTBNux4R19JJmJXZDZZU9gGbg=
-X-Received: by 2002:a17:903:40cb:b0:162:6ea:a2 with SMTP id
- t11-20020a17090340cb00b0016206ea00a2mr1789753pld.34.1653122183639; Sat, 21
- May 2022 01:36:23 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to:user-agent;
+        bh=N7GQcxlQmzuFm2GdLfuNosKdxkt6SYCMhr68Bo/2CKY=;
+        b=foF8n4NUxjuYbPGlk11/QFbBk83lF15WdbjetZq8iXrISOSA1aNW0CJrokqIbLW7uH
+         INWHfkcxZBfRfMM9T7zIkTypRtuOzd8mHxXY/yyonrNMUx+MzvPd8o2r0PwS0/sge4um
+         GTX61HEoUb48hkOSbjq85nssozcesaxbL4pSKQJkrg27+QZNRftobpg4ZWmgYb8TRXPK
+         rybEM0kunYOUUmOFyeC6vXawliOrsN6yFkM4AUV7s1e0CnQZ4SaFNzP6rSFE2gvA6Kx9
+         kjPe05UvPUoLPuGy2NDSvOQPeEB1PnbjSNTFERi9N/0PJ69/lWnrGIvD3e4qy2MuKoDX
+         PGMA==
+X-Gm-Message-State: AOAM530jOsopEmp9sfhvkJj1FDHxSd24JTL1bHWiBEOrsawB9XpYJyWq
+        scpjFPrOKUJI7+kxCo6ft0Y=
+X-Google-Smtp-Source: ABdhPJwWdVCCSUaF6RxpyV4z+S0vfuk4oGrrixWd5wMdXgozc0XB6f56JRZ5J7/AAxX2UXqm+ZlAMg==
+X-Received: by 2002:a05:6000:1565:b0:20e:651d:7ff4 with SMTP id 5-20020a056000156500b0020e651d7ff4mr11505802wrz.641.1653122193583;
+        Sat, 21 May 2022 01:36:33 -0700 (PDT)
+Received: from gmail.com ([81.168.73.77])
+        by smtp.gmail.com with ESMTPSA id j39-20020a05600c48a700b00397071b10dfsm3734512wmp.10.2022.05.21.01.36.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 21 May 2022 01:36:33 -0700 (PDT)
+Date:   Sat, 21 May 2022 09:36:30 +0100
+From:   Martin Habets <habetsm.xilinx@gmail.com>
+To:     Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>
+Cc:     virtualization@lists.linux-foundation.org,
+        Jason Wang <jasowang@redhat.com>, kvm@vger.kernel.org,
+        "Michael S. Tsirkin" <mst@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Longpeng <longpeng2@huawei.com>,
+        Zhu Lingshan <lingshan.zhu@intel.com>, martinh@xilinx.com,
+        hanand@xilinx.com, Si-Wei Liu <si-wei.liu@oracle.com>,
+        dinang@xilinx.com, Eli Cohen <elic@nvidia.com>, lvivier@redhat.com,
+        pabloc@xilinx.com, gautam.dawar@amd.com,
+        Xie Yongji <xieyongji@bytedance.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        tanuj.kamde@amd.com, Wu Zongyong <wuzongyong@linux.alibaba.com>,
+        martinpo@xilinx.com, lulu@redhat.com, ecree.xilinx@gmail.com,
+        Parav Pandit <parav@nvidia.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Zhang Min <zhang.min9@zte.com.cn>
+Subject: Re: [PATCH 3/4] vhost-vdpa: uAPI to stop the device
+Message-ID: <20220521083630.GA5298@gmail.com>
+Mail-Followup-To: Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
+        virtualization@lists.linux-foundation.org,
+        Jason Wang <jasowang@redhat.com>, kvm@vger.kernel.org,
+        "Michael S. Tsirkin" <mst@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Longpeng <longpeng2@huawei.com>,
+        Zhu Lingshan <lingshan.zhu@intel.com>, martinh@xilinx.com,
+        hanand@xilinx.com, Si-Wei Liu <si-wei.liu@oracle.com>,
+        dinang@xilinx.com, Eli Cohen <elic@nvidia.com>, lvivier@redhat.com,
+        pabloc@xilinx.com, gautam.dawar@amd.com,
+        Xie Yongji <xieyongji@bytedance.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        tanuj.kamde@amd.com, Wu Zongyong <wuzongyong@linux.alibaba.com>,
+        martinpo@xilinx.com, lulu@redhat.com, ecree.xilinx@gmail.com,
+        Parav Pandit <parav@nvidia.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Zhang Min <zhang.min9@zte.com.cn>
+References: <20220520172325.980884-1-eperezma@redhat.com>
+ <20220520172325.980884-4-eperezma@redhat.com>
 MIME-Version: 1.0
-References: <20220516165740.6256af51.alex.williamson@redhat.com>
- <20220518115432.76183-1-windy.bi.enflame@gmail.com> <20220520064148.GA20418@wunner.de>
-In-Reply-To: <20220520064148.GA20418@wunner.de>
-From:   Sheng Bi <windy.bi.enflame@gmail.com>
-Date:   Sat, 21 May 2022 16:36:10 +0800
-Message-ID: <CAGdb+H2_pX4TzG=sJ8XE6KiyWW9niJQawCbcDN2byxDfybukiA@mail.gmail.com>
-Subject: Re: [PATCH v2] PCI: Fix no-op wait after secondary bus reset
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220520172325.980884-4-eperezma@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -68,71 +108,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 2:41 PM Lukas Wunner <lukas@wunner.de> wrote:
->
-> On Wed, May 18, 2022 at 07:54:32PM +0800, Sheng Bi wrote:
-> > +static int pci_bridge_secondary_bus_wait(struct pci_dev *bridge, int timeout)
-> > +{
-> > +     struct pci_dev *dev;
-> > +     int delay = 0;
-> > +
-> > +     if (!bridge->subordinate || list_empty(&bridge->subordinate->devices))
-> > +             return 0;
-> > +
-> > +     list_for_each_entry(dev, &bridge->subordinate->devices, bus_list) {
-> > +             while (!pci_device_is_present(dev)) {
-> > +                     if (delay > timeout) {
-> > +                             pci_warn(dev, "not ready %dms after secondary bus reset; giving up\n",
-> > +                                     delay);
-> > +                             return -ENOTTY;
-> > +                     }
-> > +
-> > +                     msleep(20);
-> > +                     delay += 20;
-> > +             }
-> > +
-> > +             if (delay > 1000)
-> > +                     pci_info(dev, "ready %dms after secondary bus reset\n",
-> > +                             delay);
-> > +     }
-> > +
-> > +     return 0;
-> > +}
->
-> An alternative approach you may want to consider is to call
-> pci_dev_wait() in the list_for_each_entry loop, but instead of
-> passing it a constant timeout you'd pass the remaining time.
->
-> Get the current time before and after each pci_dev_wait() call
-> from "jiffies", calculate the difference, convert to msecs with
-> jiffies_to_msecs() and subtract from the "timeout" parameter
-> passed in by the caller, then simply pass "timeout" to each
-> pci_dev_wait() call.
+On Fri, May 20, 2022 at 07:23:24PM +0200, Eugenio Pérez wrote:
+> The ioctl adds support for stop the device from userspace.
+> 
+> Signed-off-by: Eugenio Pérez <eperezma@redhat.com>
+> ---
+>  drivers/vhost/vdpa.c       | 18 ++++++++++++++++++
+>  include/uapi/linux/vhost.h |  3 +++
+>  2 files changed, 21 insertions(+)
+> 
+> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+> index a325bc259afb..da4a8c709bc1 100644
+> --- a/drivers/vhost/vdpa.c
+> +++ b/drivers/vhost/vdpa.c
+> @@ -478,6 +478,21 @@ static long vhost_vdpa_get_vqs_count(struct vhost_vdpa *v, u32 __user *argp)
+>  	return 0;
+>  }
+>  
+> +static long vhost_vdpa_stop(struct vhost_vdpa *v, u32 __user *argp)
+> +{
+> +	struct vdpa_device *vdpa = v->vdpa;
+> +	const struct vdpa_config_ops *ops = vdpa->config;
+> +	int stop;
+> +
+> +	if (!ops->stop)
+> +		return -EOPNOTSUPP;
+> +
+> +	if (copy_to_user(argp, &stop, sizeof(stop)))
 
-Thanks for your proposal, which can avoid doing duplicated things as
-pci_dev_wait().
+You want to use copy_from_user() here.
 
-If so, I also want to align the polling things mentioned in the
-question from Alex, since pci_dev_wait() is also used for reset
-functions other than SBR. To Bjorn, Alex, Lucas, how do you think if
-we need to change the polling in pci_dev_wait() to 20ms intervals, or
-keep binary exponential back-off with probable unexpected extra
-timeout delay.
+Martin
 
->
-> As a side note, traversing the bus list normally requires
-> holding the pci_bus_sem for reading.  But it's probably unlikely
-> that devices are added/removed concurrently to a bus reset
-> and we're doing it wrong pretty much everywhere in the
-> PCI reset code, so...
-
-Yeah... I think that is why I saw different coding there. I would
-prefer a separate thread for estimating which ones are real risks.
-
->
-> (I fixed up one of the reset functions with 10791141a6cf,
-> but plenty of others remain...)
->
-> Thanks,
->
-> Lukas
+> +		return -EFAULT;
+> +
+> +	return ops->stop(vdpa, stop);
+> +}
+> +
+>  static long vhost_vdpa_vring_ioctl(struct vhost_vdpa *v, unsigned int cmd,
+>  				   void __user *argp)
+>  {
+> @@ -649,6 +664,9 @@ static long vhost_vdpa_unlocked_ioctl(struct file *filep,
+>  	case VHOST_VDPA_GET_VQS_COUNT:
+>  		r = vhost_vdpa_get_vqs_count(v, argp);
+>  		break;
+> +	case VHOST_STOP:
+> +		r = vhost_vdpa_stop(v, argp);
+> +		break;
+>  	default:
+>  		r = vhost_dev_ioctl(&v->vdev, cmd, argp);
+>  		if (r == -ENOIOCTLCMD)
+> diff --git a/include/uapi/linux/vhost.h b/include/uapi/linux/vhost.h
+> index cab645d4a645..e7526968ab0c 100644
+> --- a/include/uapi/linux/vhost.h
+> +++ b/include/uapi/linux/vhost.h
+> @@ -171,4 +171,7 @@
+>  #define VHOST_VDPA_SET_GROUP_ASID	_IOW(VHOST_VIRTIO, 0x7C, \
+>  					     struct vhost_vring_state)
+>  
+> +/* Stop or resume a device so it does not process virtqueue requests anymore */
+> +#define VHOST_STOP			_IOW(VHOST_VIRTIO, 0x7D, int)
+> +
+>  #endif
+> -- 
+> 2.27.0

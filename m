@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DEBB52FC13
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:38:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 910EF52FC12
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:37:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244958AbiEULh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 07:37:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50912 "EHLO
+        id S243077AbiEULhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 07:37:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243870AbiEULhl (ORCPT
+        with ESMTP id S240191AbiEULhd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 07:37:41 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB29D4B1DB
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 04:37:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653133059; x=1684669059;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=StyTawR6ebpv/qFh9L5sVHJBQh7Ewr1uQvGAF/aS5UI=;
-  b=dwvjbhAidtx0mPd4on5e6bqynaPFI03Ok9yo9Bly9AYIPaIkqVKQIaSI
-   Lxt/qkbnqvkQQM5EDGUwTCtJqXGYVneQ4tMrULMzCTm9XVBD+PeIMyywh
-   nWpy3E6/YZGi9l47zyyJkKO3GUEPfiWJrzRvxyyFReUXtMOluJK+L2ihL
-   +uiCKuvXyEXVviueLpHtlYFgskXia4C4O4gjEUbyPPLyG+di0vYI/EDwo
-   9lh/87BYbEsrMje2JYTlJ6b06wnZfnUvV5QdbeKi1HpPFlfQpqEqZKkvc
-   We3Gx1YP597JzS2KzFD6f7J8/lmZJAAT00UQkBUSgJwTOVBWIwa8uE0eb
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10353"; a="271667117"
-X-IronPort-AV: E=Sophos;i="5.91,242,1647327600"; 
-   d="scan'208";a="271667117"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 04:37:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,242,1647327600"; 
-   d="scan'208";a="743885342"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 21 May 2022 04:37:38 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nsNQP-0006FH-HN;
-        Sat, 21 May 2022 11:37:37 +0000
-Date:   Sat, 21 May 2022 19:36:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [arm-integrator:kernel-in-vmalloc-v5.18-rc1 8/16]
- drivers/infiniband/sw/siw/siw_qp_tx.c:32:37: warning: passing argument 1 of
- 'virt_to_pfn' makes pointer from integer without a cast
-Message-ID: <202205211911.kEgr1rzS-lkp@intel.com>
+        Sat, 21 May 2022 07:37:33 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 602CD4A3D1
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 04:37:31 -0700 (PDT)
+Received: from fsav120.sakura.ne.jp (fsav120.sakura.ne.jp [27.133.134.247])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 24LBbO7W055564;
+        Sat, 21 May 2022 20:37:24 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav120.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav120.sakura.ne.jp);
+ Sat, 21 May 2022 20:37:24 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav120.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 24LBbNsB055561
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Sat, 21 May 2022 20:37:24 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <e9df5f75-2958-db1b-462d-dba4a0455f44@I-love.SAKURA.ne.jp>
+Date:   Sat, 21 May 2022 20:37:19 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v3] workqueue: Wrap flush_workqueue() using a macro
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <a0d6b5e4-b9c8-1a43-570f-4c73b0f6fc0c@I-love.SAKURA.ne.jp>
+ <Yn0538VavQPv+/Ws@slm.duckdns.org>
+ <7b2fecdb-59ae-2c54-5a5b-774ef7054d1b@I-love.SAKURA.ne.jp>
+ <1c1b272b-239c-e1d1-84de-47d02feb911e@I-love.SAKURA.ne.jp>
+ <YodK1czmhZtGmJ8E@slm.duckdns.org>
+ <5f417d30-34a7-8da1-0ad5-33bd750582c7@I-love.SAKURA.ne.jp>
+ <Yod3S8jmle+LYlES@slm.duckdns.org>
+ <1a1634ac-db0e-a44c-b286-a3aba55ad695@I-love.SAKURA.ne.jp>
+ <YofLmMTAjNVM+9nQ@slm.duckdns.org>
+ <d05f4745-ba08-61eb-4780-ddfe50d0f1b9@I-love.SAKURA.ne.jp>
+ <YohxUC45xk523g9I@slm.duckdns.org>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <YohxUC45xk523g9I@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,143 +63,153 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v5.18-rc1
-head:   b9b1d325d83c15b2e27bfa8635f99a7d20811457
-commit: 16d1427dc6f44107571afbf96254956716c9ad1f [8/16] ARM: Compile the kernel into VMALLOC
-config: arm-buildonly-randconfig-r002-20220519 (https://download.01.org/0day-ci/archive/20220521/202205211911.kEgr1rzS-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=16d1427dc6f44107571afbf96254956716c9ad1f
-        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
-        git fetch --no-tags arm-integrator kernel-in-vmalloc-v5.18-rc1
-        git checkout 16d1427dc6f44107571afbf96254956716c9ad1f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/infiniband/sw/siw/
+On 2022/05/21 13:57, Tejun Heo wrote:
+> How is that better tho? If we can just trigger build warning, that's way
+> better than asking people to hunt down some random define and shoot it down.
+> How would they do that?
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Subset of this patch already in linux-next.git without problems suggests that
+in-tree kernel modules (including the ones which will be added during next merge
+window) will not hit build failures with this patch.
 
-All warnings (new ones prefixed by >>):
+We don't take care of build failures for out-of-tree kernel modules, but
+some out-of-tree kernel module which cannot rewrite in a timely manner can
+workaround by just adding a #undef line. Patching out-of-tree kernel module is
+easier than patching .config or Makefile or include/linux/workqueue.h .
 
-   In file included from arch/arm/include/asm/memory.h:448,
-                    from arch/arm/include/asm/page.h:163,
-                    from arch/arm/include/asm/thread_info.h:14,
-                    from include/linux/thread_info.h:60,
-                    from include/asm-generic/preempt.h:5,
-                    from ./arch/arm/include/generated/asm/preempt.h:1,
-                    from include/linux/preempt.h:78,
-                    from include/linux/percpu.h:6,
-                    from include/linux/prandom.h:12,
-                    from include/linux/random.h:120,
-                    from include/linux/net.h:18,
-                    from drivers/infiniband/sw/siw/siw_qp_tx.c:8:
-   drivers/infiniband/sw/siw/siw_qp_tx.c: In function 'siw_get_pblpage':
->> drivers/infiniband/sw/siw/siw_qp_tx.c:32:37: warning: passing argument 1 of 'virt_to_pfn' makes pointer from integer without a cast [-Wint-conversion]
-      32 |                 return virt_to_page(paddr);
-         |                                     ^~~~~
-         |                                     |
-         |                                     dma_addr_t {aka unsigned int}
-   include/asm-generic/memory_model.h:18:46: note: in definition of macro '__pfn_to_page'
-      18 | #define __pfn_to_page(pfn)      (mem_map + ((pfn) - ARCH_PFN_OFFSET))
-         |                                              ^~~
-   drivers/infiniband/sw/siw/siw_qp_tx.c:32:24: note: in expansion of macro 'virt_to_page'
-      32 |                 return virt_to_page(paddr);
-         |                        ^~~~~~~~~~~~
-   In file included from arch/arm/include/asm/page.h:163,
-                    from arch/arm/include/asm/thread_info.h:14,
-                    from include/linux/thread_info.h:60,
-                    from include/asm-generic/preempt.h:5,
-                    from ./arch/arm/include/generated/asm/preempt.h:1,
-                    from include/linux/preempt.h:78,
-                    from include/linux/percpu.h:6,
-                    from include/linux/prandom.h:12,
-                    from include/linux/random.h:120,
-                    from include/linux/net.h:18,
-                    from drivers/infiniband/sw/siw/siw_qp_tx.c:8:
-   arch/arm/include/asm/memory.h:323:53: note: expected 'const void *' but argument is of type 'dma_addr_t' {aka 'unsigned int'}
-     323 | static inline unsigned long virt_to_pfn(const void *p)
-         |                                         ~~~~~~~~~~~~^
-   In file included from arch/arm/include/asm/memory.h:448,
-                    from arch/arm/include/asm/page.h:163,
-                    from arch/arm/include/asm/thread_info.h:14,
-                    from include/linux/thread_info.h:60,
-                    from include/asm-generic/preempt.h:5,
-                    from ./arch/arm/include/generated/asm/preempt.h:1,
-                    from include/linux/preempt.h:78,
-                    from include/linux/percpu.h:6,
-                    from include/linux/prandom.h:12,
-                    from include/linux/random.h:120,
-                    from include/linux/net.h:18,
-                    from drivers/infiniband/sw/siw/siw_qp_tx.c:8:
-   drivers/infiniband/sw/siw/siw_qp_tx.c: In function 'siw_tx_hdt':
-   drivers/infiniband/sw/siw/siw_qp_tx.c:538:67: warning: passing argument 1 of 'virt_to_pfn' makes pointer from integer without a cast [-Wint-conversion]
-     538 |                                 page_array[seg] = virt_to_page(va & PAGE_MASK);
-   include/asm-generic/memory_model.h:18:46: note: in definition of macro '__pfn_to_page'
-      18 | #define __pfn_to_page(pfn)      (mem_map + ((pfn) - ARCH_PFN_OFFSET))
-         |                                              ^~~
-   drivers/infiniband/sw/siw/siw_qp_tx.c:538:51: note: in expansion of macro 'virt_to_page'
-     538 |                                 page_array[seg] = virt_to_page(va & PAGE_MASK);
-         |                                                   ^~~~~~~~~~~~
-   In file included from arch/arm/include/asm/page.h:163,
-                    from arch/arm/include/asm/thread_info.h:14,
-                    from include/linux/thread_info.h:60,
-                    from include/asm-generic/preempt.h:5,
-                    from ./arch/arm/include/generated/asm/preempt.h:1,
-                    from include/linux/preempt.h:78,
-                    from include/linux/percpu.h:6,
-                    from include/linux/prandom.h:12,
-                    from include/linux/random.h:120,
-                    from include/linux/net.h:18,
-                    from drivers/infiniband/sw/siw/siw_qp_tx.c:8:
-   arch/arm/include/asm/memory.h:323:53: note: expected 'const void *' but argument is of type 'u64' {aka 'long long unsigned int'}
-     323 | static inline unsigned long virt_to_pfn(const void *p)
-         |                                         ~~~~~~~~~~~~^
+> We're talking in circles. If we can trigger warning, I don't see a reason
+> why we'd want to trigger build failures. It's a really bad user experience
+> for anybody who doesn't know what is going on exactly. So, nack on the
+> current patch.
 
+I wonder if we can trigger warning using __compiletime_warning, for init/Kconfig
+recommends CONFIG_WERROR=y (i.e. __compiletime_warning == __compiletime_error).
 
-vim +/virt_to_pfn +32 drivers/infiniband/sw/siw/siw_qp_tx.c
+----------
+config WERROR
+	bool "Compile the kernel with warnings as errors"
+	default COMPILE_TEST
+	help
+	  A kernel build should not cause any compiler warnings, and this
+	  enables the '-Werror' flag to enforce that rule by default.
 
-b9be6f18cf9ed0 Bernard Metzler 2019-06-20   5  
-b9be6f18cf9ed0 Bernard Metzler 2019-06-20   6  #include <linux/errno.h>
-b9be6f18cf9ed0 Bernard Metzler 2019-06-20   7  #include <linux/types.h>
-b9be6f18cf9ed0 Bernard Metzler 2019-06-20  @8  #include <linux/net.h>
-b9be6f18cf9ed0 Bernard Metzler 2019-06-20   9  #include <linux/scatterlist.h>
-b9be6f18cf9ed0 Bernard Metzler 2019-06-20  10  #include <linux/highmem.h>
-b9be6f18cf9ed0 Bernard Metzler 2019-06-20  11  #include <net/tcp.h>
-b9be6f18cf9ed0 Bernard Metzler 2019-06-20  12  
-b9be6f18cf9ed0 Bernard Metzler 2019-06-20  13  #include <rdma/iw_cm.h>
-b9be6f18cf9ed0 Bernard Metzler 2019-06-20  14  #include <rdma/ib_verbs.h>
-b9be6f18cf9ed0 Bernard Metzler 2019-06-20  15  #include <rdma/ib_user_verbs.h>
-b9be6f18cf9ed0 Bernard Metzler 2019-06-20  16  
-b9be6f18cf9ed0 Bernard Metzler 2019-06-20  17  #include "siw.h"
-b9be6f18cf9ed0 Bernard Metzler 2019-06-20  18  #include "siw_verbs.h"
-b9be6f18cf9ed0 Bernard Metzler 2019-06-20  19  #include "siw_mem.h"
-b9be6f18cf9ed0 Bernard Metzler 2019-06-20  20  
-b9be6f18cf9ed0 Bernard Metzler 2019-06-20  21  #define MAX_HDR_INLINE					\
-b9be6f18cf9ed0 Bernard Metzler 2019-06-20  22  	(((uint32_t)(sizeof(struct siw_rreq_pkt) -	\
-b9be6f18cf9ed0 Bernard Metzler 2019-06-20  23  		     sizeof(struct iwarp_send))) & 0xF8)
-b9be6f18cf9ed0 Bernard Metzler 2019-06-20  24  
-b9be6f18cf9ed0 Bernard Metzler 2019-06-20  25  static struct page *siw_get_pblpage(struct siw_mem *mem, u64 addr, int *idx)
-b9be6f18cf9ed0 Bernard Metzler 2019-06-20  26  {
-b9be6f18cf9ed0 Bernard Metzler 2019-06-20  27  	struct siw_pbl *pbl = mem->pbl;
-b9be6f18cf9ed0 Bernard Metzler 2019-06-20  28  	u64 offset = addr - mem->va;
-c536277e0db1ad Bernard Metzler 2019-08-22  29  	dma_addr_t paddr = siw_pbl_get_buffer(pbl, offset, NULL, idx);
-b9be6f18cf9ed0 Bernard Metzler 2019-06-20  30  
-b9be6f18cf9ed0 Bernard Metzler 2019-06-20  31  	if (paddr)
-b9be6f18cf9ed0 Bernard Metzler 2019-06-20 @32  		return virt_to_page(paddr);
-b9be6f18cf9ed0 Bernard Metzler 2019-06-20  33  
-b9be6f18cf9ed0 Bernard Metzler 2019-06-20  34  	return NULL;
-b9be6f18cf9ed0 Bernard Metzler 2019-06-20  35  }
-b9be6f18cf9ed0 Bernard Metzler 2019-06-20  36  
+	  However, if you have a new (or very old) compiler with odd and
+	  unusual warnings, or you have some architecture with problems,
+	  you may need to disable this config option in order to
+	  successfully build the kernel.
 
-:::::: The code at line 32 was first introduced by commit
-:::::: b9be6f18cf9ed04dd8087cb9d69de6e90d8ceb08 rdma/siw: transmit path
+	  If in doubt, say Y.
+----------
 
-:::::: TO: Bernard Metzler <bmt@zurich.ibm.com>
-:::::: CC: Jason Gunthorpe <jgg@mellanox.com>
+Anyway, something like below updated approach?
 
+---
+ include/linux/workqueue.h | 49 ++++++++++++++++++++++++++++++++++++---
+ kernel/workqueue.c        |  9 +++++++
+ 2 files changed, 55 insertions(+), 3 deletions(-)
+
+diff --git a/include/linux/workqueue.h b/include/linux/workqueue.h
+index 7fee9b6cfede..243d87fc0b85 100644
+--- a/include/linux/workqueue.h
++++ b/include/linux/workqueue.h
+@@ -563,15 +563,21 @@ static inline bool schedule_work(struct work_struct *work)
+ 	return queue_work(system_wq, work);
+ }
+ 
++/*
++ * See https://lkml.kernel.org/r/49925af7-78a8-a3dd-bce6-cfc02e1a9236@I-love.SAKURA.ne.jp
++ * for reasons and steps for converting system-wide workqueues into local workqueues.
++ */
++extern void __warn_flushing_systemwide_wq(void)
++	__compiletime_warning("Please avoid flushing system-wide workqueues.");
++
+ /**
+  * flush_scheduled_work - ensure that any scheduled work has run to completion.
+  *
+  * Forces execution of the kernel-global workqueue and blocks until its
+  * completion.
+  *
+- * Think twice before calling this function!  It's very easy to get into
+- * trouble if you don't take great care.  Either of the following situations
+- * will lead to deadlock:
++ * It's very easy to get into trouble if you don't take great care.
++ * Either of the following situations will lead to deadlock:
+  *
+  *	One of the work items currently on the workqueue needs to acquire
+  *	a lock held by your code or its caller.
+@@ -586,6 +592,10 @@ static inline bool schedule_work(struct work_struct *work)
+  * need to know that a particular work item isn't queued and isn't running.
+  * In such cases you should use cancel_delayed_work_sync() or
+  * cancel_work_sync() instead.
++ *
++ * Please stop calling this function! A conversion to stop flushing system-wide
++ * workqueues is in progress. This function will be removed after all in-tree
++ * users stopped calling this function.
+  */
+ static inline void flush_scheduled_work(void)
+ {
+@@ -663,4 +673,37 @@ int workqueue_offline_cpu(unsigned int cpu);
+ void __init workqueue_init_early(void);
+ void __init workqueue_init(void);
+ 
++/*
++ * Detect attempt to flush system-wide workqueues at compile time when possible.
++ *
++ * Always warn, for there is no in-tree flush_workqueue(system_*_wq) user.
++ */
++#define flush_workqueue(wq)						\
++do {									\
++	if ((__builtin_constant_p(&(wq) == &system_wq) &&		\
++	     &(wq) == &system_wq) ||					\
++	    (__builtin_constant_p(&(wq) == &system_highpri_wq) &&	\
++	     &(wq) == &system_highpri_wq) ||				\
++	    (__builtin_constant_p(&(wq) == &system_long_wq) &&		\
++	     &(wq) == &system_long_wq) ||				\
++	    (__builtin_constant_p(&(wq) == &system_unbound_wq) &&	\
++	     &(wq) == &system_unbound_wq) ||				\
++	    (__builtin_constant_p(&(wq) == &system_freezable_wq) &&	\
++	     &(wq) == &system_freezable_wq) ||				\
++	    (__builtin_constant_p(&(wq) == &system_power_efficient_wq) && \
++	     &(wq) == &system_power_efficient_wq) ||			\
++	    (__builtin_constant_p(&(wq) == &system_freezable_power_efficient_wq) && \
++	     &(wq) == &system_freezable_power_efficient_wq))		\
++		__warn_flushing_systemwide_wq();			\
++	flush_workqueue(wq);						\
++} while (0)
++
++/*
++ * Warn only if emitting warning message does not cause build failure and
++ * the developer wants warning about possibility of deadlock.
++ */
++#if !defined(CONFIG_WERROR) && defined(CONFIG_PROVE_LOCKING)
++#define flush_scheduled_work() flush_workqueue(system_wq)
++#endif
++
+ #endif
+diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+index 0d2514b4ff0d..3391e0d10f90 100644
+--- a/kernel/workqueue.c
++++ b/kernel/workqueue.c
+@@ -2794,6 +2794,7 @@ static bool flush_workqueue_prep_pwqs(struct workqueue_struct *wq,
+  * This function sleeps until all work items which were queued on entry
+  * have finished execution, but it is not livelocked by new incoming ones.
+  */
++#undef flush_workqueue
+ void flush_workqueue(struct workqueue_struct *wq)
+ {
+ 	struct wq_flusher this_flusher = {
+@@ -6111,3 +6112,11 @@ void __init workqueue_init(void)
+ 	wq_online = true;
+ 	wq_watchdog_init();
+ }
++
++/*
++ * Despite the naming, this is a no-op function which is here only for avoiding
++ * link error. Since compile-time warning may fail to catch, we will need to
++ * emit run-time warning from flush_workqueue().
++ */
++void __warn_flushing_systemwide_wq(void) { }
++EXPORT_SYMBOL(__warn_flushing_systemwide_wq);
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.18.4
+

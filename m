@@ -2,113 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60E8952F9C5
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 09:41:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 046CD52F9CD
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 09:45:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351486AbiEUHlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 03:41:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59414 "EHLO
+        id S1352742AbiEUHpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 03:45:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240940AbiEUHlh (ORCPT
+        with ESMTP id S240158AbiEUHpO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 03:41:37 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C621275E0
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 00:41:35 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id t11-20020a17090a6a0b00b001df6f318a8bso13241046pjj.4
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 00:41:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2nkC8R3wCXH68D4z7ykE31agm2/PPcd7YK33KMuJAW0=;
-        b=vXFtD6fPc1gHThhUFXmomjEpkhfM6kTHUB5fWVUzUEoPnn5HuqTWlqPolavNlHZvy+
-         0FKri/WoCMBQSGlELJV+KR7fTw4+8tGIsDjaX/RIWlzfbvhpUoz20d7rqP/yrcAHcfeL
-         ZfVIdSuGefvHjanN0MmWEM4FHiFAuVFkzFl4uzRhPUKGC/+nvnmkkQaz1yXfxoo6lPm9
-         sHPR8nmUyncXBVmtfZCWsW/6FfSErHLvfMCUIiEoN9BRY9I3bx+zTZ0aoCCp77b6hF0C
-         ge/WsubSF6bojhzcxGrXkSoFZPulJ24QsQSzmgqx1Vjh3Pi6ntMmwA+hm47wxdfb2FuM
-         t5aA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2nkC8R3wCXH68D4z7ykE31agm2/PPcd7YK33KMuJAW0=;
-        b=40LKDSFaqimMueqTgj7MZ9prE1ZvcUl+/YZXoOG+tgJi5iwPmO0z+NTpp9/Ttusiaw
-         923UdJDCXY3stDI6mO3CW9ttaP4PyKWccNjKD6DC10mjFq0ukGGbuoBK6bCml7yy32Dl
-         V2zLYOBziS1OxGfmPCC6ITVx46mQDO+AwzcVssBZi8BKBlUB9+vEBhiyaTaZEOvqSw3Y
-         XvsndpjXUYoN3lMtZvtvAcr2kaF7catrLZQGHvbzPobY5P2BfcjxlorZyH61wfZyS16y
-         KeORHXqonboNn9wSGXpuee3hQO1G6lm/l8mmMHRH7/hrAFzJojr9CeoqCdojo89pMXhj
-         Aedw==
-X-Gm-Message-State: AOAM531ohKyCzVDTvdomSLo6lCeYeHuwVyz0d3n/ZCYxmrgO5DSJYzRx
-        nTkdlCGKFsNswHa9tzeg+kvBDw==
-X-Google-Smtp-Source: ABdhPJyE2XaD09jR1f2y5cOWDtifOQaPbd0ax33DAYVfmiywF365Ow2gn8nIuH9JxKuaisEaM8BMEw==
-X-Received: by 2002:a17:902:c752:b0:161:7cb4:78b1 with SMTP id q18-20020a170902c75200b001617cb478b1mr13142696plq.166.1653118895053;
-        Sat, 21 May 2022 00:41:35 -0700 (PDT)
-Received: from FVFYT0MHHV2J.bytedance.net ([139.177.225.234])
-        by smtp.gmail.com with ESMTPSA id f64-20020a62db43000000b0050dc7628134sm3148755pfg.14.2022.05.21.00.41.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 May 2022 00:41:34 -0700 (PDT)
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     akpm@linux-foundation.org, mike.kravetz@oracle.com
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: [PATCH] MAINTAINERS: add Muchun as co-maintainer for HugeTLB
-Date:   Sat, 21 May 2022 15:41:03 +0800
-Message-Id: <20220521074103.79468-1-songmuchun@bytedance.com>
-X-Mailer: git-send-email 2.32.1 (Apple Git-133)
+        Sat, 21 May 2022 03:45:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6EF9F7A456
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 00:45:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653119112;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=O6fozRi1mUW+QNrhhiINZafrGClbm8pF3nfSfc4kXBw=;
+        b=Fqm60zCtp6AQfx/TxUQsnTw2mfHHxMPZHU48dpXlAqIrB2Ezsjy97mBp19nmsGnayYttej
+        /7fgY/Dq80TAnnwNl1953vop1H2NjpQzDeiOQ/EaA0c/XdqKNsaxSEq4RRcf+IlTQgPJsp
+        6Nic98IyW3kvI9YZi7Z4gqfruh7Eb7M=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-462-4OmVYJaCPcuttGdGOL7IpQ-1; Sat, 21 May 2022 03:45:10 -0400
+X-MC-Unique: 4OmVYJaCPcuttGdGOL7IpQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5078585A5AA;
+        Sat, 21 May 2022 07:45:10 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.8])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id ACB7CC44AE1;
+        Sat, 21 May 2022 07:45:09 +0000 (UTC)
+Subject: [PATCH net-next 0/7] rxrpc: Miscellaneous changes
+From:   David Howells <dhowells@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     dhowells@redhat.com, linux-afs@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Date:   Sat, 21 May 2022 08:45:08 +0100
+Message-ID: <165311910893.245906.4115532916417333325.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I have been focusing on mm for the past two years. e.g. developing,
-fixing bugs, reviewing related to HugeTLB system.  I would like to
-help Mike and other people working on HugeTLB by reviewing their
-work.
 
-When I fist introduced the vmemmmap reduction, I forgot to update
-MAINTAINERS file.  Let's update it as well.  And rename "HUGETLB
-FILESYSTEM" to "HUGETLB SUBSYSTEM" since some files are not only
-related to filesystem but also memory management (the name of
-FILESYSTEM cannot cover this area).
+Here are some miscellaneous changes for AF_RXRPC:
 
-Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+ (1) Allow the list of local endpoints to be viewed through /proc.
+
+ (2) Switch to using refcount_t for refcounting.
+
+ (3) Fix a locking issue found by lockdep.
+
+ (4) Autogenerate tracing symbol enums from symbol->string maps to make it
+     easier to keep them in sync.
+
+ (5) Return an error to sendmsg() if a call it tried to set up failed.
+     Because it failed at this point, no notification will be generated for
+     recvmsg to pick up - but userspace still needs to know about the
+     failure.
+
+ (6) Fix the selection of abort codes generated by internal events.  In
+     particular, rxrpc and kafs shouldn't be generating RX_USER_ABORT
+     unless it's because userspace did something to cancel a call.
+
+ (7) Adjust the interpretation and handling of certain ACK types to try and
+     detect NAT changes causing a call to seem to start mid-flow from a
+     different peer.
+
+The patches are tagged here:
+
+	git://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git
+	rxrpc-next-20220521
+
+and can also be found on the following branch:
+
+	http://git.kernel.org/cgit/linux/kernel/git/dhowells/linux-fs.git/log/?h=rxrpc-next
+
+Tested-by: kafs-testing+fedora34_64checkkafs-build-493@auristor.com
+
+Changes
+=======
+ver #2)
+ - Changed an rcu_dereference(->next) to list_head_next().
+
+David
+
+Link: https://lore.kernel.org/r/165306515409.34989.4713077338482294594.stgit@warthog.procyon.org.uk/ # v1
 ---
- MAINTAINERS | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+David Howells (7):
+      rxrpc: Allow list of in-use local UDP endpoints to be viewed in /proc
+      rxrpc: Use refcount_t rather than atomic_t
+      rxrpc: Fix locking issue
+      rxrpc: Automatically generate trace tag enums
+      rxrpc: Return an error to sendmsg if call failed
+      rxrpc, afs: Fix selection of abort codes
+      afs: Adjust ACK interpretation to try and cope with NAT
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 6516f9c6d28e..904657ffdcd8 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9087,16 +9087,20 @@ S:	Orphan
- F:	Documentation/networking/device_drivers/ethernet/huawei/hinic.rst
- F:	drivers/net/ethernet/huawei/hinic/
- 
--HUGETLB FILESYSTEM
-+HUGETLB SUBSYSTEM
- M:	Mike Kravetz <mike.kravetz@oracle.com>
-+M:	Muchun Song <songmuchun@bytedance.com>
- L:	linux-mm@kvack.org
- S:	Maintained
- F:	Documentation/ABI/testing/sysfs-kernel-mm-hugepages
- F:	Documentation/admin-guide/mm/hugetlbpage.rst
- F:	Documentation/vm/hugetlbfs_reserv.rst
-+F:	Documentation/vm/vmemmap_dedup.rst
- F:	fs/hugetlbfs/
- F:	include/linux/hugetlb.h
- F:	mm/hugetlb.c
-+F:	mm/hugetlb_vmemmap.c
-+F:	mm/hugetlb_vmemmap.h
- 
- HVA ST MEDIA DRIVER
- M:	Jean-Christophe Trotin <jean-christophe.trotin@foss.st.com>
--- 
-2.11.0
+
+ fs/afs/misc.c                |   5 +-
+ fs/afs/rotate.c              |   4 +
+ fs/afs/rxrpc.c               |   8 +-
+ fs/afs/write.c               |   1 +
+ fs/seq_file.c                |  32 +++++
+ include/linux/list.h         |  10 ++
+ include/linux/seq_file.h     |   4 +
+ include/trace/events/rxrpc.h | 263 ++++++-----------------------------
+ net/rxrpc/af_rxrpc.c         |   2 +-
+ net/rxrpc/ar-internal.h      |  25 ++--
+ net/rxrpc/call_accept.c      |  10 +-
+ net/rxrpc/call_event.c       |   4 +-
+ net/rxrpc/call_object.c      |  62 +++++----
+ net/rxrpc/conn_client.c      |  30 ++--
+ net/rxrpc/conn_object.c      |  51 +++----
+ net/rxrpc/conn_service.c     |   8 +-
+ net/rxrpc/input.c            |  31 ++++-
+ net/rxrpc/local_object.c     |  68 ++++-----
+ net/rxrpc/net_ns.c           |   7 +-
+ net/rxrpc/peer_object.c      |  40 +++---
+ net/rxrpc/proc.c             |  85 +++++++++--
+ net/rxrpc/sendmsg.c          |   6 +
+ net/rxrpc/skbuff.c           |   1 -
+ 23 files changed, 366 insertions(+), 391 deletions(-)
+
 

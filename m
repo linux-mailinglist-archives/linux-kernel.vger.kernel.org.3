@@ -2,84 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBC8E52FD2E
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 16:16:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61A1152FD31
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 16:20:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244089AbiEUOQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 10:16:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53018 "EHLO
+        id S244162AbiEUOT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 10:19:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244144AbiEUOQB (ORCPT
+        with ESMTP id S229733AbiEUOT5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 10:16:01 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6583FF58E
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 07:15:56 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id bu29so18721561lfb.0
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 07:15:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Ie8zVBkqSt3mxRxNew4V89gQfU1Dg5+Y7b1pz0Qwsgk=;
-        b=mJnsHPN/JuGfeOjYcqypPumJTBfx69JAky7b516fmsp+L2JhVIWo6S8hYfX40pP5sO
-         O4QGVQCO/2hvAOQU6QCbovNdtS454MYji7VLu1YJ54aYrpKLZz188Q1ecRX0BLBZDIaM
-         5Vhxa+HxWiOfTNy9JXX7W26LZJ4ZTCLwmW/FXYzWioVCW8oD8Wt3/kouyw5Hwm/Q0S57
-         70XmsKkaicL2hHlWi3hpguw2eYd+C3DmDPF/FW+KJFPL/3QKJhWLUjQ5TgpvmOG4wUYC
-         b7z2LfPTa/mszPl4G3d53Khs9HukTaxnTVjl/pLP/B28VfB/hWsp0MBlSU2ng0PTrmI/
-         waGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Ie8zVBkqSt3mxRxNew4V89gQfU1Dg5+Y7b1pz0Qwsgk=;
-        b=qeaYjWb0+jhnMhjRWVYkySarslVCXZ1P9TksKfi9ol7CZRG+w0S1Mi4YNxP2jiEHwn
-         gjWv5pKFuOPRVjsqAc7nnTQBCJ7to4BUOMWgvMNm9V5nnIzg8r8Ok2vkRXYRlJsHHJaY
-         ihnT6RMi5v9Ruu1hc93MY8qaVxgX6zSXRkT3CBy1ea0XqxSmWTXuhUaIFb7pCmkM3H/v
-         UHQlqtSaUmm3bBBIJtkgNS66AE3oBAzZCNbSNgXSd4iwNAv29ZkuW1u9EOZdY7qum/LL
-         ylbtlt5S+8PU28HmJf4dLnTdtxFvXDrYxMfZGW703NV4TFno6rITfSOEO0boz14lYBzw
-         lfbA==
-X-Gm-Message-State: AOAM531nKPAbZPHqyRERNfeanhcTCkkzFrSAWLTr2p/ZFm213XKuoaxH
-        bZ4qN2w+wLaL5RtOSME46ukwpg==
-X-Google-Smtp-Source: ABdhPJyNf03Ac2HOEK7HzwSC0r/Ht5ZW+xnDZkt2mHHpfBcY8kE6V4rhIbQTL+H9dqOAhuXXfYiROw==
-X-Received: by 2002:a05:6512:3b09:b0:478:66dd:3081 with SMTP id f9-20020a0565123b0900b0047866dd3081mr656946lfv.107.1653142554809;
-        Sat, 21 May 2022 07:15:54 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id u24-20020a2e8558000000b0024f3d1daea2sm721653ljj.42.2022.05.21.07.15.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 21 May 2022 07:15:54 -0700 (PDT)
-Message-ID: <6b35e16d-e08d-ebb1-9d3c-7e670e700bdf@linaro.org>
-Date:   Sat, 21 May 2022 16:15:53 +0200
+        Sat, 21 May 2022 10:19:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE2E62CD2;
+        Sat, 21 May 2022 07:19:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 906A460C48;
+        Sat, 21 May 2022 14:19:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEE7BC385A5;
+        Sat, 21 May 2022 14:19:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653142795;
+        bh=Gc4Avdshwpks385AtLygPfS1bHzClZtOPNgr+bgDVUY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=VjN6WIbg6eUzq4McdKDLjQDNJiftVYYEPduZHVFzFKcqwL8WvYA9x/yD3cPtA1w/A
+         4h5U6lpKWaMb3ie4oGLLSii200dIX/eBLfzRJDs2w2NDT70C2c+qIB06+RQZPdSrVi
+         bcPqpaaR1rpBaJsrCPYWZVUNeZUtR+izl5NU4HxuxnzC7zF6VdTls1DC0LL0M0l423
+         +SgOj1NOpv+gbWgE3VofeselK9y9WymhPEmqRDKMmeKgkfFD5touRbzLteY//0cpi4
+         SqoRZSCH+AcoQkGUcuk64OM5p7tzQRe7ZVb7GMyYojudsxKhg5AjHjMBiw7hVWxTxW
+         RutTPI0Y/hTQA==
+Date:   Sat, 21 May 2022 22:19:45 +0800
+From:   Gao Xiang <xiang@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, linux-fsdevel@vger.kernel.org,
+        linux-erofs@lists.ozlabs.org, David Howells <dhowells@redhat.com>,
+        Chao Yu <chao@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthew Wilcox <willy@infradead.org>, tianzichen@kuaishou.com,
+        Joseph Qi <joseph.qi@linux.alibaba.com>,
+        zhangjiachen.jaycee@bytedance.com, gerry@linux.alibaba.com,
+        Liu Bo <bo.liu@linux.alibaba.com>,
+        Yan Song <yansong.ys@antgroup.com>,
+        Xin Yin <yinxin.x@bytedance.com>,
+        Peng Tao <tao.peng@linux.alibaba.com>,
+        Zefan Li <lizefan.x@bytedance.com>, Tao Ma <boyu.mt@taobao.com>
+Subject: [GIT PULL] erofs updates for 5.19-rc1 (fscache part inclusive)
+Message-ID: <Yoj1AcHoBPqir++H@debian>
+Mail-Followup-To: Linus Torvalds <torvalds@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-fsdevel@vger.kernel.org,
+        linux-erofs@lists.ozlabs.org, David Howells <dhowells@redhat.com>,
+        Chao Yu <chao@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthew Wilcox <willy@infradead.org>, tianzichen@kuaishou.com,
+        Joseph Qi <joseph.qi@linux.alibaba.com>,
+        zhangjiachen.jaycee@bytedance.com, gerry@linux.alibaba.com,
+        Liu Bo <bo.liu@linux.alibaba.com>,
+        Yan Song <yansong.ys@antgroup.com>,
+        Xin Yin <yinxin.x@bytedance.com>,
+        Peng Tao <tao.peng@linux.alibaba.com>,
+        Zefan Li <lizefan.x@bytedance.com>, Tao Ma <boyu.mt@taobao.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCHv2 1/6] thermal: exynos: Enable core tmu hardware clk flag
- on exynos platform
-Content-Language: en-US
-To:     Anand Moon <linux.amoon@gmail.com>
-Cc:     Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel <linux-kernel@vger.kernel.org>
-References: <20220515064126.1424-1-linux.amoon@gmail.com>
- <20220515064126.1424-2-linux.amoon@gmail.com>
- <6a6ed76a-50fa-2b05-896e-8936d3c3f597@linaro.org>
- <CANAwSgTMwKhn6QDcoOXcSVgUqLGq1W6X4QvcSRHT-JSVfOe0rA@mail.gmail.com>
- <39336391-8882-b2cb-058f-18f59dcc90d3@linaro.org>
- <CANAwSgT0Vmq4D9nRNc9h=xXxjmN_wXjbhwjj4btX+4SkXePkrw@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CANAwSgT0Vmq4D9nRNc9h=xXxjmN_wXjbhwjj4btX+4SkXePkrw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -88,141 +75,211 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/05/2022 11:50, Anand Moon wrote:
-> Hi Krzysztof,
-> 
-> On Wed, 18 May 2022 at 12:55, Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 17/05/2022 20:42, Anand Moon wrote:
->>> Hi Krzysztof,
->>>
->>> On Sun, 15 May 2022 at 15:22, Krzysztof Kozlowski
->>> <krzysztof.kozlowski@linaro.org> wrote:
->>>>
->>>> On 15/05/2022 08:41, Anand Moon wrote:
->>>>> Use clk_prepare_enable api to enable tmu internal hardware clock
->>>>> flag on, use clk_disable_unprepare to disable the clock.
->>>>>
->>>>> Cc: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>
->>>>> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
->>>>
->>>> Here as well you ignored my first comment:
->>>> https://lore.kernel.org/lkml/CANAwSgS=08fVsqn95WHzSF71WTTyD2-=K2C6-BEz0tY0t6A1-g@mail.gmail.com/T/#mbfc57b40a7ed043dd4d4890bedb6bad8240058cd
->>>>
->>>> "This is not valid reason to do a change. What is clk_summary does not
->>>> really matter. Your change has negative impact on power consumption as
->>>> the clock stays enabled all the time. This is not what we want... so
->>>> please explain it more - why you need the clock to be enabled all the
->>>> time? What is broken (clk_summary is not broken in this case)?"
->>>>
-> 
-> This was just to update my knowledge on what is missing in the driver.
-> 
->> I don't understand how all this is relevant to the Exynos TMU driver.
->> You paste some COMMON_CLK framework links, but this is just a framework.
->> It has nothing to do with Exynos TMU.
->>
->> Since we are making circles, let's make it clearer. Answer these simple
->> questions:
->> 1. Is Exynos TMU driver operating correctly or not correctly?
-> 
-> Yes Exynos TMU clk is getting initialized, but not incorrect order.
-> within the exynos tmu driver we call
->    exynos_tmu_probe
->         ---> clk_prepare
->    exynos_tmu_initialize
->        ---> clk_enable
-> which is seem to work but it does not enable the clk in total.
+Hi Linus,
 
-Correct and this is done on purpose, to not have the clock enabled all
-the time.
-> 
-> But if we call *clk_prepare_enable* in  exynos_tmu_probe we enable the
-> clk correctly.
+Once the merge window opens, could you consider this pull request for
+5.19-rc1?  (Since we're in the weekend so I have some extra time to
+actually calm down, sort out and write down the whole story for the
+pull request itself. Thus it's a bit earlier than usual this time if
+there is no another extra -rc8. )
 
-It was enabled correctly. clk_prepare followed by clk_enabled is correct
-way.
+After keeping working on the mailing list for more than half a year,
+we finally form "erofs over fscache" feature into shape.  Hopefully it
+could bring more possibility to the communities.
 
-> 
-> *Note:* This current patch is missing the clean-up in
-> exynos_tmu_initialize function.
-> 
->>
->> 2. If incorrectly, how is the incorrectness visible?
-> 
-> See before the change in Exynos 5422
-> $ sudo cat /sys/kernel/debug/clk/clk_summary | grep tmu
->                          tmu_gpu       0        2        0    66600000
->          0     0  50000         N
->                          tmu          0        6        0    66600000
->       0     0  50000         N
-> 
-> $ sudo cat /sys/kernel/debug/clk/clk_summary | grep tmu
->                          tmu_gpu       2        2        0    66600000
->          0     0  50000         Y
->                          tmu          6        6        0    66600000
->       0     0  50000         Y
-> 
-> After the changes, the internal tmu clk internal hardware flag is set to 'Y'
-> * hence I mention this in the commit message.*
-> 
-> Before the patch
-> # cat /sys/kernel/debug/clk/tmu/clk_enable_count
-> 0
-> # cat /sys/kernel/debug/clk/tmu_gpu/clk_enable_count
-> 0
-> 
-> After the patch
-> # cat /sys/kernel/debug/clk/tmu/clk_enable_count
-> 6
->  # cat /sys/kernel/debug/clk/tmu_gpu/clk_enable_count
-> 2
+The story mainly started from a new project what we called "RAFS v6"
+[1] for Nydus image service almost a year ago, which enhances EROFS
+to be a new form of one bootstrap (which includes metadata representing
+the whole fs tree) + several data-deduplicated content addressable
+blobs (actually treated as multiple devices).  Each blob can represent
+one container image layer but not quite exactly since all new data can
+be fully existed in the previous blobs so no need to introduce another
+new blob.
 
-This proves your patch is incorrect, because you enabled clock for times
-when it is not needed. Original code looks ok.
+It is actually not a new idea (at least on my side it's much like a
+simpilied casync [2] for now) and has many benefits over per-file blobs
+or some other exist ways since typically each RAFS v6 image only has
+dozens of device blobs instead of thousands of per-file blobs.  It's
+easy to be signed with user keys as a golden image, transfered
+untouchedly with minimal overhead over the network, kept in some type
+of storage conveniently, and run with (optional) runtime verification
+but without involving too many irrelevant features crossing the system
+beyond EROFS itself.  At least it's our final goal and we're keeping
+working on it.  There was also a good summary of this approach from the
+casync author [3].
 
-> 
->> How can we trigger and see the issue?
-> 
-> We can trigger or see the issue but enable clk trace feature,
-> for example trace clk_enable, clk_prepare clk_enable_complete
-> 
-> I don't know how to trace clk during clk initialization
-> but I will try to find out more about this.
-> 
->>
->> 3. If it operates correctly, maybe it is operating in nonoptimal way?
->>
-> Few new things we could set in this TMU driver which control the internal timing
-> 
-> SAMPLING_INTERVAL  - sample interval
-> COUNTER_VALUE0      - Timing control of T_EN_TEMP_SEN on/off timing
-> COUNTER_VALUE1      - Timing control of CLK_SENSE on/off timing
+Regardless further optimizations, this work is almost done in the
+previous Linux release cycles.  In this round, we'd like to introduce
+on-demand load for EROFS with the fscache/cachefiles infrastructure,
+considering the following advantages:
 
-I don't understand this. Again, where is the non-optimal way?
+ - Introduce new file-based backend to EROFS.  Although each image only
+   contains dozens of blobs but in densely-deployed runC host for
+   example, there could still be massive blobs on a machine, which is
+   messy if each blob is treated as a device.  In contrast, fscache and
+   cachefiles are really great interfaces for us to make them work.
 
-> 
->> 4. If it is not optimal, then what states are not optimal and when?
-> 
-> We could drop the unnecessary clk_enable and clk_disable as we don't check
-> the return value of the function and it just toggles the clock which
-> does not look optimal.
+ - Introduce on-demand load to fscache and EROFS.  Previously, fscache
+   is mainly used to caching network-likewise filesystems, now it can
+   support on-demand downloading for local fses too with the exact
+   localfs on-disk format.  It has many advantages which we're been
+   described in the latest patchset cover letter [4].  In addition to
+   that, most importantly, the cached data is still stored in the
+   original local fs on-disk format so that it's still the one signed
+   with private keys but only could be partially available.  Users can
+   fully trust it during running.  Later, users can also back up
+   cachefiles easily to another machine.
 
-No, you don't understand the clocks. Enabling and disabling the clock is
-optimal.
+ - More reliable on-demand approach in principle.  After data is all
+   available locally, user daemon can be no longer online in some use
+   cases, which helps daemon crash recovery (filesystems can still in
+   service) and hot-upgrade (user daemon can be upgraded more
+   frequently due to new features or protocols introduced.)
 
-> 
-> Since CLK_SENSE internally has a timer to on/off and control the PMU operations.
+ - Other format can also be converted to EROFS filesystem format over
+   the internet on the fly with the new on-demand load feature and
+   mounted.  That is entirely possible with on-demand load feature as
+   long as such archive format metadata can be fetched in advance like
+   stargz.
 
-This could be better, what is this CLK_SENSE and which clocks are affected?
-
-> Look at following functions we could drop this
-> exynos_get_temp , exynos_tmu_control and exynos_tmu_set_emulation.
-
-I don't understand this sentence. Why do you want to drop entire
-functions? How is exynos_get_temp related to clocks?
+In addition, although currently our target user is Nydus image
+service [5], but laterly, it can be used for other use cases like
+on-demand system booting, etc.  As for the fscache on-demand load
+feature itself, strictly it can be used for other local fses too.
+Laterly we could promote most code to the iomap infrastructure and also
+enhance it in the read-write way if other local fses are interested.
 
 
-Best regards,
-Krzysztof
+Thanks David Howells for taking so much time and patience on this these
+months, many thanks with great respect here again!  Thanks Jeffle for
+working on this feature and Xin Yin from Bytedance for asynchronous I/O
+implementation as well as Zichen Tian, Jia Zhu, and Yan Song for
+testing, much appeciated.  We're also exploring more possibly over
+fscache cache management over FSDAX for secure containers and working
+on more improvements and useful features for fscache, cachefiles, and
+on-demand load.
+
+
+In addition to "erofs over fscache", NFS export and idmapped mount are
+also completed in this cycle for container use cases as well.  Details
+are all in the commit messages.
+
+
+All commits have been in -next for a while (actually recently I only
+added Chao's rvbs for most commits) and currently there is only a minor
+trivial merge conflict with folio tree [6] which can be easily resolved.
+
+
+(Btw, I will update EROFS roadmap for the following cycles for folio
+ adaption and rolling hash de-duplicated compression (since EROFS
+ supports variable length compression) and other pending features. )
+
+Many thanks!
+Gao Xiang
+
+
+[1] https://lore.kernel.org/r/20210730194625.93856-1-hsiangkao@linux.alibaba.com
+[2] https://github.com/systemd/casync
+[3] http://0pointer.net/blog/casync-a-tool-for-distributing-file-system-images.html
+[4] https://lore.kernel.org/r/20220509074028.74954-1-jefflexu@linux.alibaba.com
+[5] https://github.com/dragonflyoss/image-service
+[6] https://lore.kernel.org/r/20220502180425.7305c335@canb.auug.org.au
+
+
+The following changes since commit af2d861d4cd2a4da5137f795ee3509e6f944a25b:
+
+  Linux 5.18-rc4 (2022-04-24 14:51:22 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git tags/erofs-for-5.19-rc1
+
+for you to fetch changes up to ba73eadd23d1c2dc5c8dc0c0ae2eeca2b9b709a7:
+
+  erofs: scan devices from device table (2022-05-18 00:11:21 +0800)
+
+----------------------------------------------------------------
+Changes since last update:
+
+ - Add erofs on-demand load support over fscache;
+
+ - Support NFS export for erofs;
+
+ - Support idmapped mounts for erofs;
+
+ - Don't prompt for risk any more when using big pcluster;
+
+ - Fix buffer copy overflow of ztailpacking feature;
+
+ - Several minor cleanups.
+
+----------------------------------------------------------------
+Chao Yu (1):
+      erofs: support idmapped mounts
+
+Gao Xiang (3):
+      erofs: remove obsoleted comments
+      erofs: refine on-disk definition comments
+      erofs: fix buffer copy overflow of ztailpacking feature
+
+Hongnan Li (1):
+      erofs: make filesystem exportable
+
+Jeffle Xu (22):
+      cachefiles: extract write routine
+      cachefiles: notify the user daemon when looking up cookie
+      cachefiles: unbind cachefiles gracefully in on-demand mode
+      cachefiles: notify the user daemon when withdrawing cookie
+      cachefiles: implement on-demand read
+      cachefiles: enable on-demand read mode
+      cachefiles: add tracepoints for on-demand read mode
+      cachefiles: document on-demand read mode
+      erofs: make erofs_map_blocks() generally available
+      erofs: add fscache mode check helper
+      erofs: register fscache volume
+      erofs: add fscache context helper functions
+      erofs: add anonymous inode caching metadata for data blobs
+      erofs: add erofs_fscache_read_folios() helper
+      erofs: register fscache context for primary data blob
+      erofs: register fscache context for extra data blobs
+      erofs: implement fscache-based metadata read
+      erofs: implement fscache-based data read for non-inline layout
+      erofs: implement fscache-based data read for inline layout
+      erofs: implement fscache-based data readahead
+      erofs: add 'fsid' mount option
+      erofs: scan devices from device table
+
+Xin Yin (1):
+      erofs: change to use asynchronous io for fscache readpage/readahead
+
+Yue Hu (1):
+      erofs: do not prompt for risk any more when using big pcluster
+
+ Documentation/filesystems/caching/cachefiles.rst | 178 ++++++++
+ fs/cachefiles/Kconfig                            |  12 +
+ fs/cachefiles/Makefile                           |   1 +
+ fs/cachefiles/daemon.c                           | 117 ++++-
+ fs/cachefiles/interface.c                        |   2 +
+ fs/cachefiles/internal.h                         |  78 ++++
+ fs/cachefiles/io.c                               |  76 ++--
+ fs/cachefiles/namei.c                            |  16 +-
+ fs/cachefiles/ondemand.c                         | 503 ++++++++++++++++++++++
+ fs/erofs/Kconfig                                 |  10 +
+ fs/erofs/Makefile                                |   1 +
+ fs/erofs/data.c                                  |  26 +-
+ fs/erofs/decompressor.c                          |   7 +-
+ fs/erofs/erofs_fs.h                              |  50 ++-
+ fs/erofs/fscache.c                               | 521 +++++++++++++++++++++++
+ fs/erofs/inode.c                                 |  11 +-
+ fs/erofs/internal.h                              |  76 ++--
+ fs/erofs/namei.c                                 |   5 +-
+ fs/erofs/super.c                                 | 221 ++++++++--
+ fs/erofs/sysfs.c                                 |   4 +-
+ include/linux/fscache.h                          |   1 +
+ include/linux/netfs.h                            |   1 +
+ include/trace/events/cachefiles.h                | 176 ++++++++
+ include/uapi/linux/cachefiles.h                  |  68 +++
+ 24 files changed, 1997 insertions(+), 164 deletions(-)
+ create mode 100644 fs/cachefiles/ondemand.c
+ create mode 100644 fs/erofs/fscache.c
+ create mode 100644 include/uapi/linux/cachefiles.h

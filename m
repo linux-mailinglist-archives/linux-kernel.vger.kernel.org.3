@@ -2,96 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90E7F52FE40
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 18:46:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 760ED52FE52
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 18:47:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355413AbiEUQqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 12:46:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39694 "EHLO
+        id S1343875AbiEUQqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 12:46:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230294AbiEUQpw (ORCPT
+        with ESMTP id S1355444AbiEUQqF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 12:45:52 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54170FF3;
-        Sat, 21 May 2022 09:45:50 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id g3so9986222qtb.7;
-        Sat, 21 May 2022 09:45:50 -0700 (PDT)
+        Sat, 21 May 2022 12:46:05 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989D012A86
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 09:46:03 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id bu29so19095439lfb.0
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 09:46:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=hIMTrtnjZ9gqkDWInY5qR+iQZXXgSvv+Fs8Mw2FuFq0=;
-        b=fBn1s4wNEYbraZzXmKP2EyONUlmW8I8BgBrKTm5RQON25DyvbzWLg+/vl/bwdVHJKP
-         QLioOfyR5jbf6Mt2MzSfCjKCAdkuQc5TfsUvQ57u7K8AbEDJfIL87aaSCPXeCWwKkV3f
-         dMJqant5hrCiOAypmsMB/vmwysoDXDMAMLzq1gr4/q8Q2ESVzZBC9HKmlrD7Ah0d6xMj
-         ZkX9koF2urPM0YdiGb5YmK471qrZNZ8UtkIOgNpV2POVXJlc/AWy7TKU7Q48INKmVJVS
-         5s0b6e5rN7dcLAhe0mi7xDXh/BScbmWMvrX9cqvnKm8ONl3Vrfa/m8+TiYmJI+0Kymvn
-         17hA==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=KL627I96OYJURncrfoqim+72Sgnc3Jh9TbRtRh1RYGA=;
+        b=fgnnWtmFXtDfmlrF68KmFMj2A/G04G1vJ/ZGn+6ouUXd9gztNB5wcdj1hyzGe8nUhf
+         mR/wObB8nobZsV5DTKYCIUSgxpNSOQ4DVyDy6eGORu+/U3MY94UFkunBKf2VRv00PYOB
+         CG8OgWsrai7wZJjKou2Em8msMKvzvIWAn3s/GAGmMH422mAORuY0QAsbyi4G/D9QYetg
+         PQ5awO0V6xXTPNSr4e995Drni+149b6JUrileeRfrbpyYmq+XgBqKvgnkKqvnfmYnT5q
+         UuSxm39cE8601Kseg8cSR2mkUKhDpMx2SL2Nq1pL4uzaZx9uiEFr2vmsC9GBuNpN7Z9R
+         l/GA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hIMTrtnjZ9gqkDWInY5qR+iQZXXgSvv+Fs8Mw2FuFq0=;
-        b=rCulwQbc9YqiyOegLpjU1sWESCq2Df+PXRc6JdQ9Ib42hoCh+dYQJz/hbAH+qYVEix
-         ZwcS1AAb8wthz5sYuZlNtAbrIpRUmXjmZECxZTfjmAQdJEolaX+CMbAidg2E6Zqh6uTm
-         /h5q3Rw8dUKBriTmdQQVJOmlEXK9MudVa+YL1wy1QJ9923rHshZYPbF/0cb7ryIWzExL
-         kehHkWx1vURyUrh9K6DBJVKbayiH2o3dvbNcKjI1q0INUtJ9PfH5sZnQM6wkcgsyZBnz
-         I/fY9qPQqt4FaJ3X9xnRkegVUe7MJbiqfcvn7Z3vaqGo0m84QrZoPNd07Ie4513YnbaT
-         +wFg==
-X-Gm-Message-State: AOAM5324Xt2f2qOof7EG4eUI58MRjWS2WAKnqWBUi0XgGOm5IHqZAeSn
-        UVl6bKDhvQrtJmQwwedZYA==
-X-Google-Smtp-Source: ABdhPJyek8YSkEb5b3A0KQzbpWST89kREvGQc6v6hOXCeHBh9vLoseUyMrXzt0U1xN0KuHBx4A9llQ==
-X-Received: by 2002:a05:622a:41:b0:2f3:c678:34df with SMTP id y1-20020a05622a004100b002f3c67834dfmr11396132qtw.67.1653151549474;
-        Sat, 21 May 2022 09:45:49 -0700 (PDT)
-Received: from moria.home.lan (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
-        by smtp.gmail.com with ESMTPSA id y76-20020a37644f000000b0069ffe63228fsm1690243qkb.121.2022.05.21.09.45.48
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=KL627I96OYJURncrfoqim+72Sgnc3Jh9TbRtRh1RYGA=;
+        b=Ad9Ww7fnwzhiyKcOwipgdM7ARUpCsq+WQQV9s4c4qUV19reSPvje1vNWXIrX65JN8A
+         XjFSZPMIL26a9xpzNDY9KvmT2ejw2UjTg/wRIwsfrMIxkW9bqXwHYLlK2C2Tz1qBJvJH
+         2BMbDCdAlvl+YvlHtwunV3vzdRd5w6IUZkSHOIFbt09T3T5/bj+IuT3CmoU17uH4jmYx
+         b77NNgueCBPRQaW8LJZF+ZBOeq4xZ6cL6b7RrA+pui1XKdMoYQ5uH3MSlvvIetlNgScL
+         iCeITR9tKqjP5Gu4/jzEOdKsUxGsW551m6f62Oc61xwZ3ccdx4rxPo8Eq98sd+E7Z+QO
+         dZ2A==
+X-Gm-Message-State: AOAM533xe8d3gl3KsIoyNFTY+078RJQKZIrkPhdaZ2OxESnMKNqoPMDE
+        /tdh6rjz4N1K+TpJBkU5SZjqQg==
+X-Google-Smtp-Source: ABdhPJyqvTk2Hjvz36PPOk82vfRDnOJCvvVaW9nReXFuEflMVpV60WIAW5ax0bi6OQDNHIWSykO+ww==
+X-Received: by 2002:a05:6512:33cd:b0:477:b113:caa9 with SMTP id d13-20020a05651233cd00b00477b113caa9mr11013814lfg.264.1653151563124;
+        Sat, 21 May 2022 09:46:03 -0700 (PDT)
+Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id f26-20020a19ae1a000000b0047255d211cesm1114282lfc.253.2022.05.21.09.46.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 May 2022 09:45:48 -0700 (PDT)
-Date:   Sat, 21 May 2022 12:45:46 -0400
-From:   Kent Overstreet <kent.overstreet@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org, netdev@vger.kernel.org,
-        mcgrof@kernel.org, tytso@mit.edu
-Subject: Re: RFC: Ioctl v2
-Message-ID: <20220521164546.h7huckdwvguvmmyy@moria.home.lan>
-References: <20220520161652.rmhqlvwvfrvskg4w@moria.home.lan>
- <Yof6hsC1hLiYITdh@lunn.ch>
+        Sat, 21 May 2022 09:46:02 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 09/12] dt-bindings: arm: qcom: add missing SM6350 board compatibles
+Date:   Sat, 21 May 2022 18:45:47 +0200
+Message-Id: <20220521164550.91115-9-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220521164550.91115-1-krzysztof.kozlowski@linaro.org>
+References: <20220521164550.91115-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yof6hsC1hLiYITdh@lunn.ch>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 10:31:02PM +0200, Andrew Lunn wrote:
-> > I want to circulate this and get some comments and feedback, and if
-> > no one raises any serious objections - I'd love to get collaborators
-> > to work on this with me. Flame away!
-> 
-> Hi Kent
-> 
-> I doubt you will get much interest from netdev. netdev already
-> considers ioctl as legacy, and mostly uses netlink and a message
-> passing structure, which is easy to extend in a backwards compatible
-> manor.
+Document board compatibles already present in Linux kernel.
 
-The more I look at netlink the more I wonder what on earth it's targeted at or
-was trying to solve. It must exist for a reason, but I've written a few ioctls
-myself and I can't fathom a situation where I'd actually want any of the stuff
-netlink provides.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ Documentation/devicetree/bindings/arm/qcom.yaml | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Why bother with getting a special socket type? Why asynchronous messages with
-all the marshalling/unmarshalling that entails?
+diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+index 9f4be49aceb8..6c38c1387afd 100644
+--- a/Documentation/devicetree/bindings/arm/qcom.yaml
++++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+@@ -54,6 +54,7 @@ description: |
+         sdx55
+         sdx65
+         sm6125
++        sm6350
+         sm7225
+         sm8150
+         sm8250
+@@ -359,6 +360,11 @@ properties:
+               - sony,pdx201
+           - const: qcom,sm6125
+ 
++      - items:
++          - enum:
++              - sony,pdx213
++          - const: qcom,sm6350
++
+       - items:
+           - enum:
+               - fairphone,fp4
+-- 
+2.32.0
 
-From what I've seen all we really want is driver private syscalls, and the
-things about ioctls that suck are where it's _not_ like syscalls. Let's just
-make it work more like normal function calls.

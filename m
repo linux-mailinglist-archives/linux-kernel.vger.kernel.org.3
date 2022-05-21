@@ -2,90 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBC4A52F6C7
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 02:27:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C76252F6CC
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 02:31:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354233AbiEUA1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 20:27:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51544 "EHLO
+        id S1352598AbiEUAaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 20:30:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354224AbiEUA1j (ORCPT
+        with ESMTP id S235582AbiEUAaO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 20:27:39 -0400
-Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB7A75C764
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 17:27:37 -0700 (PDT)
-Date:   Fri, 20 May 2022 17:27:28 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1653092855;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ybD2DLbTD497o3f+a8Ge6qsT4YJzfBUJVdSBO1Z5I2c=;
-        b=J4JGNw8XxMYX+iMjs9avAhMHf7thryEg324HajnxGlDAo2CgNK2UEJT+kATb7Fflw0uOhj
-        uhvuRK6Ex1GWDxQHyhYMcFVg9iyYqB18Js1SdQejp/PVaWEbIq8ey5V9kmna4Wy7M7I3Nf
-        o1yfHDUUz0/k/n7gaNMNX4NojUokcDE=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Kent Overstreet <kent.overstreet@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Dave Chinner <dchinner@redhat.com>,
-        linux-kernel@vger.kernel.org, Hillf Danton <hdanton@sina.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: Re: [PATCH v3 2/6] mm: shrinkers: introduce debugfs interface for
- memory shrinkers
-Message-ID: <Yogx8K98SQ+kyOlG@carbon>
-References: <20220509183820.573666-1-roman.gushchin@linux.dev>
- <20220509183820.573666-3-roman.gushchin@linux.dev>
- <20220520164512.dqqbb5gkmfm6f4g6@moria.home.lan>
+        Fri, 20 May 2022 20:30:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B25B31A90E1;
+        Fri, 20 May 2022 17:30:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D93861E79;
+        Sat, 21 May 2022 00:30:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A29B6C34119;
+        Sat, 21 May 2022 00:30:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653093012;
+        bh=romPb1m7BCaZKliDlGaR9szxJOdOcNEB+jJBTqlaxZM=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Iaj2Smbi2urjtd4iTA6wKfARRCKtlZujdu7lKCLPtJVKhGBpvYDCQaeNUhXo7HuPS
+         eGR/ZncPbvcLm7DAwJkyLmpydxG/S1h89mFotZ8Gmmq8ZoJ4Db3pVZ7eoR7XW3Nxhw
+         J5gvXmHABvRsC/WtWm9QVH+RGoUPY1P5hl/HB3bflf94Hf2Xr0lH8uFAsmezDfK8Ya
+         LEPp5vR/nUPutiXz0KCS4xtRo4hgBGQevbdjkiJpLiNUv1XNz/jEQn17QPChrgkN82
+         DRbQp2qkJI2DR0yCb4bMZhBqxLb6rkV8H2yZJKlazYA0XMZejJW4lurrs6olrssVZv
+         lzqtEKlce0yCg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8CDD4F03935;
+        Sat, 21 May 2022 00:30:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220520164512.dqqbb5gkmfm6f4g6@moria.home.lan>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH -next v2] net: wwan: t7xx: use GFP_ATOMIC under spin lock in
+ t7xx_cldma_gpd_set_next_ptr()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165309301257.22995.9619477553610888846.git-patchwork-notify@kernel.org>
+Date:   Sat, 21 May 2022 00:30:12 +0000
+References: <20220519032108.2996400-1-yangyingliang@huawei.com>
+In-Reply-To: <20220519032108.2996400-1-yangyingliang@huawei.com>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+        haijun.liu@mediatek.com, chandrashekar.devegowda@intel.com,
+        ricardo.martinez@linux.intel.com, loic.poulain@linaro.org,
+        davem@davemloft.net, kuba@kernel.org
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 12:45:12PM -0400, Kent Overstreet wrote:
-> On Mon, May 09, 2022 at 11:38:16AM -0700, Roman Gushchin wrote:
-> > This commit introduces the /sys/kernel/debug/shrinker debugfs
-> > interface which provides an ability to observe the state of
-> > individual kernel memory shrinkers.
-> > 
-> > Because the feature adds some memory overhead (which shouldn't be
-> > large unless there is a huge amount of registered shrinkers), it's
-> > guarded by a config option (enabled by default).
-> > 
-> > This commit introduces the "count" interface for each shrinker
-> > registered in the system.
-> > 
-> > The output is in the following format:
-> > <cgroup inode id> <nr of objects on node 0> <nr of objects on node 1>...
-> > <cgroup inode id> <nr of objects on node 0> <nr of objects on node 1>...
-> > ...
-> > 
-> > To reduce the size of output on machines with many thousands cgroups,
-> > if the total number of objects on all nodes is 0, the line is omitted.
-> > 
-> > If the shrinker is not memcg-aware or CONFIG_MEMCG is off, 0 is
-> > printed as cgroup inode id. If the shrinker is not numa-aware, 0's are
-> > printed for all nodes except the first one.
-> > 
-> > This commit gives debugfs entries simple numeric names, which are not
-> > very convenient. The following commit in the series will provide
-> > shrinkers with more meaningful names.
-> > 
-> > Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
-> 
-> I think this looks reasonable
-> 
-> Reviewed-by: Kent Overstreet <kent.overstreet@gmail.com>
+Hello:
 
-Thank you!
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Thu, 19 May 2022 11:21:08 +0800 you wrote:
+> Sometimes t7xx_cldma_gpd_set_next_ptr() is called under spin lock,
+> so add 'gfp_mask' parameter in t7xx_cldma_gpd_set_next_ptr() to pass
+> the flag.
+> 
+> Fixes: 39d439047f1d ("net: wwan: t7xx: Add control DMA interface")
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> 
+> [...]
+
+Here is the summary with links:
+  - [-next,v2] net: wwan: t7xx: use GFP_ATOMIC under spin lock in t7xx_cldma_gpd_set_next_ptr()
+    https://git.kernel.org/netdev/net-next/c/9ee152ee3ee3
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

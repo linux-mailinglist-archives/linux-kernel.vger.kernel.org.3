@@ -2,157 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1609052FF28
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 22:06:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7654352FF2B
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 22:08:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343517AbiEUUGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 16:06:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40392 "EHLO
+        id S1345455AbiEUUHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 16:07:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234106AbiEUUGx (ORCPT
+        with ESMTP id S1343941AbiEUUHf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 16:06:53 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C145DA43;
-        Sat, 21 May 2022 13:06:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=6RJZZ9GKXF2oPgJqUmsSl8BxgwimEU+9Op6eCE+aZ18=; b=HAO8AdoDEjqRdjVRW84r8k7CfD
-        hvduhI426Sg+CUGZgzcKbmhoOQ3EcKVe+MWMqxLTInePwz9wiRtHQnyq3VjEXafbwqgh2UnmXTphj
-        cgIk6jUy+5bczT2ay9suMTuPG3+ho7h8hRw70mB27gxjsa7Vt3T0+RODEoazhzzc9MoWpRrX4KhQS
-        KA7sUaUtXhhb5HVMvtnSjdc1HaHFMJRiQBkWNdfiMmMRRD9ruUpO2SeOQBOit6cwGclQEzRqw2gPA
-        1ieksBLcX+qf53Ou51s1Uzmch6QIwGfFvHOH1Hx1f3R+QAKJ1kEs/p/Xo1nMGZFJx4IJrOTRZm5IX
-        eHG86slA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nsVN5-00HON3-Ba; Sat, 21 May 2022 20:06:43 +0000
-Date:   Sat, 21 May 2022 13:06:43 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Davidlohr Bueso <dave@stgolabs.net>
-Cc:     "song@kernel.org" <song@kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "kernel-team@fb.com" <kernel-team@fb.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Torvalds, Linus" <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v3 bpf-next 5/8] bpf: use module_alloc_huge for
- bpf_prog_pack
-Message-ID: <YolGU5JGE9NVrrrc@bombadil.infradead.org>
-References: <20220520031548.338934-1-song@kernel.org>
- <20220520031548.338934-6-song@kernel.org>
- <Yog5yXqAQZAmpgCD@bombadil.infradead.org>
- <17c6110273d59e3fdeea3338abefac03951ff404.camel@intel.com>
+        Sat, 21 May 2022 16:07:35 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC0A5DA46
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 13:07:32 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id p26so14547089eds.5
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 13:07:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kylehuey.com; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=eAal8RypfynzMAPCoGJz8xnvsI5t1hGAObOozarL8dc=;
+        b=Gj7vtGyosWBOjpGjH+2mAKKt92df+sZ2vr9GQKrKNLGn0vH+OJ9TTwpOMYqN5yA5B9
+         3/TzoarEMm3tmslGSZS0yBt4s0dtnRZer84Hvmc+y6fJolRsBPLk9Rd9eNbmlEuq54SV
+         dC7jy0DUR8Ka/XX4ssIXehfEBD/KcKOqQyexduY46biZunc2YF5gqSV9Z3t3JfTs4WcK
+         gEXGRH0oLTIkOsiNR9oWhGePDlvBpA17mU44DxCqZUMW2a7+cXENKSyJSth12HfNZH1H
+         LevlgSGvephON60mapXva5O03sh96wKCNIrRXoD8Q6wIctzuy4lQSABN6KeguYTU8P01
+         t9Dg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=eAal8RypfynzMAPCoGJz8xnvsI5t1hGAObOozarL8dc=;
+        b=mrJaTplXFvKcGaEDldAKasvl7tGHNh1iM9OrXX5B+0G2vspj5qlsNmfJ7L9yE3XNPi
+         GwidtlXW7Q3rPUc834F2mpRQSAvMfjOpSk49n3kNJ4XvszK2rL+C7cdJAgy/zD99Dxfw
+         y0bicKDVLKY08hU/dFhaAM++GbZPaXli5D+yqwtD3Vfimr24xl1/cYnrKiq0+NQ/ZXys
+         nUkjzN5xzk153rHp9j7+wcckaVTw/VcJcyufnqreccELq2G5r3PbWh8ZD3o1gy+1d8J7
+         VIgiIvnKRaS4EFgoT0F4VU5+/9dUb4x8BK93zZgIFwSg4SlOJxiULouFqRDqRGBL7ApE
+         G30A==
+X-Gm-Message-State: AOAM530Oj3dbu95PHMZtwU0hETjoquM2KmFtghwwbhaUOn986qpQvJhZ
+        YsfN4qp1NxE+CIpo91cv1lpLXyQ1wtB2Yz6pEAu4DtMnzdjCvg==
+X-Google-Smtp-Source: ABdhPJw9RO2aD6yIUe0ciilXst2aikPV74g4OJRT0QRqpxTBjjK+R1cThZ5ZV8l/dQWFabZwC/jawCWU2yNFsWinV5o=
+X-Received: by 2002:aa7:d38f:0:b0:42a:a2e6:90d9 with SMTP id
+ x15-20020aa7d38f000000b0042aa2e690d9mr16828975edq.305.1653163650914; Sat, 21
+ May 2022 13:07:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <17c6110273d59e3fdeea3338abefac03951ff404.camel@intel.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Kyle Huey <me@kylehuey.com>
+Date:   Sat, 21 May 2022 13:07:14 -0700
+Message-ID: <CAP045ApiMSvP--f2E0=VdMbjE8oibvy921m8JASf4kaCCuU2RA@mail.gmail.com>
+Subject: arm64 equivalents of PR_SET_TSC/ARCH_SET_CPUID
+To:     open list <linux-kernel@vger.kernel.org>
+Cc:     "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        yyc1992@gmail.com, Keno Fischer <keno@juliacomputing.com>,
+        "Robert O'Callahan" <robert@ocallahan.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>, Marc Zyngier <maz@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will.deacon@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 21, 2022 at 03:20:28AM +0000, Edgecombe, Rick P wrote:
-> On Fri, 2022-05-20 at 18:00 -0700, Luis Chamberlain wrote:
-> > although VM_FLUSH_RESET_PERMS is rather new my concern here is we're
-> > essentially enabling sloppy users to grow without also addressing
-> > what if we have to take the leash back to support
-> > VM_FLUSH_RESET_PERMS
-> > properly? If the hack to support this on other architectures other
-> > than
-> > x86 is as simple as the one you in vm_remove_mappings() today:
-> > 
-> >         if (flush_reset &&
-> > !IS_ENABLED(CONFIG_ARCH_HAS_SET_DIRECT_MAP)) {
-> >                 set_memory_nx(addr, area->nr_pages);
-> >                 set_memory_rw(addr, area->nr_pages);
-> >         }
-> > 
-> > then I suppose this isn't a big deal. I'm just concerned here this
-> > being
-> > a slippery slope of sloppiness leading to something which we will
-> > regret later.
-> > 
-> > My intution tells me this shouldn't be a big issue, but I just want
-> > to
-> > confirm.
-> 
-> Yea, I commented the same concern on the last thread:
-> 
-> https://lore.kernel.org/lkml/83a69976cb93e69c5ad7a9511b5e57c402eee19d.camel@intel.com/
-> 
-> Song said he plans to make kprobes and ftrace work with this new
-> allocator. If that happens VM_FLUSH_RESET_PERMS would only have one
-> user - modules. Care to chime in with your plans for modules?
+There is ongoing work by Yichao Yu to make rr, a userspace record and
+replay debugger[0], production quality on arm64[1]. One of the bigger
+remaining issues is the kernel's emulation of accesses to certain
+system registers[2] that reflect timing and CPU capabilities and are
+either non-deterministic or can vary from processor to processor. We
+would like to add the ability to tell the kernel to decline to emulate
+these instructions for a given task and pass that responsibility onto
+the supervising rr ptracer. There are analogous processor features and
+disabling mechanisms on x86. The RDTSC instruction is controlled by
+prctl(PR_SET_TSC) and the CPUID instruction is controlled (when the
+hardware allows) by arch_prctl(ARCH_SET_CPUID).
 
-My plans are to not break things and to slowly tidy things up. If
-you see linux-next, things are at least starting to be split in
-nice pieces. With time, clean that further so to not break things.
-You were the one who added VM_FLUSH_RESET_PERMS, wasn't that to deal
-with secmem stuff? So wouldn't you know better what you recommend for it?
+The questions I'd like to raise are:
 
-Seeing all this, given module_alloc() users are growing and seeing
-the tiny bit of growth of use in this space, I'd think we should
-rename module_alloc() to vmalloc_exec(), and likewise the same for
-module_memfree() to vmalloc_exec_free(). But it would be our first
-__weak vmalloc, and not sure if that's looked down upon.
+1. Is it appropriate to reuse PR_SET_TSC for roughly equivalent
+functionality on AArch64? (even if the AArch64 feature is not actually
+named Time Stamp Counter).
+2. Likewise for ARCH_SET_CPUID
+3. Since arch_prctl is x86-only, does it make more sense to add
+arch_prctl to arm64 or to duplicate ARCH_SET_CPUID into the prctl
+world? (e.g. a PR_SET_CPUID that works on both x86/arm64)
 
-> If there
-> are actual near term plans to keep working on this,
-> VM_FLUSH_RESET_PERMS might be changed again or turn into something
-> else. Like if we are about to re-think everything, then it doesn't
-> matter as much to fix what would then be old.
+- Kyle
 
-I think it's up to you as you added it and I'm not looking to add
-any bells or wistles, just tidy things up *slowly*.
-
-> Besides not fixing VM_FLUSH_RESET_PERMS/hibernate though, I think this
-> allocator still feels a little rough. For example I don't think we
-> actually know how much the huge mappings are helping.
-
-Right, 100% agreed. The performance numbers provided are nice but
-they are not anything folks can reproduce at all. I hinted towards
-perf stuff which could be used and enable other users later to also
-use similar stats to showcase its value if they want to move to
-huge pages.
-
-It is a side note, and perhaps a stupid question, as I don't grok mm,
-but I'm perplexed about the fact that if the value is seen so high towards
-huge pages for exec stuff in kernel, wouldn't there be a few folks who
-might want to try this for regular exec stuff? Wouldn't there be much
-more gains there?
-
-> It is also
-> allocating memory in a big chunk from a single node and reusing it,
-> where before we were allocating based on numa node for each jit. Would
-> some user's suffer from that? Maybe it's obvious to others, but I would
-> have expected to see more discussion of MM things like that.
-
-Curious, why was it moved to use a single node?
-
-> But I like general direction of caching and using text_poke() to write
-> the jits a lot. However it works, it seems to make a big impact in at
-> least some workloads.
-> 
-> So yea, seems sloppy, but probably (...I guess?) more good for users
-> then sloppy for us.
-
-The impact of sloppiness lies in possible odd bugs later and trying to
-decipher what was being done. So I do have concerns with the immediate
-tribal knowlege incurred by the current implementation. What is your
-own roadmap for VM_FLUSH_RESET_PERMS? Sounds like a future possibly
-maybe re-do?
-
-  Luis
+[0] https://rr-project.org/
+[1] https://github.com/rr-debugger/rr/issues/3234
+[2] e.g. CNTVCT_EL0 and MIDR_EL1, among others

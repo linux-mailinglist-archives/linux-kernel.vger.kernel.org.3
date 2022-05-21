@@ -2,105 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ED2452F83E
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 06:09:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFD1052F840
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 06:14:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239881AbiEUEI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 00:08:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33698 "EHLO
+        id S241494AbiEUEN4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 00:13:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233175AbiEUEIx (ORCPT
+        with ESMTP id S233175AbiEUENu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 00:08:53 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E65161957BA
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 21:08:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Ep/HlQahuRcVVZzIJ7PCmW4pLZjACil5uuEGryHFqyA=; b=GZtsc0BNl+Dmf8evJeJ01QEF5B
-        3j/Yo3DDYSP9FfB7qKwhW6IuMJey0bssC1BPX5oLpJllbfx/cQN+W7X811hgZWSqYbg34xBGzn9gc
-        FELENlxos/j0OYOLMzptkcKh9r8vr6MJIRLyeY5rMo0gqH/Pdp8TbN/prR5aD6SHv5KNZ/qM70NMK
-        m3glK6Fv9rLvfoWxAvZby01Fld4BwA+/diZL6TRpRvg+WC/xkpoq5P1pG6p80BrL4CLFJLb2uo8lU
-        RQLLNyfE5dt6maeD8vOiDbcOiHXbHXmAXUmtwNMpg72MUFhLQbab3s2clLiCKXBKY/JOX/b8Dag8f
-        qFSQfX+g==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nsGPR-00EMUQ-1M; Sat, 21 May 2022 04:08:09 +0000
-Date:   Sat, 21 May 2022 05:08:09 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Chih-En Lin <shiyn.lin@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        William Kucharski <william.kucharski@oracle.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Yunsheng Lin <linyunsheng@huawei.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Colin Cross <ccross@google.com>,
-        Feng Tang <feng.tang@intel.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Daniel Axtens <dja@axtens.net>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Peter Xu <peterx@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        linux-kernel@vger.kernel.org, Kaiyang Zhao <zhao776@purdue.edu>,
-        Huichun Feng <foxhoundsk.tw@gmail.com>,
-        Jim Huang <jserv.tw@gmail.com>
-Subject: Re: [RFC PATCH 5/6] mm, pgtable: Add the reference counter for COW
- PTE
-Message-ID: <YohlqalOBlJHAT1u@casper.infradead.org>
-References: <20220519183127.3909598-1-shiyn.lin@gmail.com>
- <20220519183127.3909598-6-shiyn.lin@gmail.com>
+        Sat, 21 May 2022 00:13:50 -0400
+Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 818F3AF1C5;
+        Fri, 20 May 2022 21:13:49 -0700 (PDT)
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176]) (authenticated)
+        by conssluserg-03.nifty.com with ESMTP id 24L4DK2q027193;
+        Sat, 21 May 2022 13:13:20 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 24L4DK2q027193
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1653106400;
+        bh=l0jnxTYMQ+einh42QUtyR5KEJNXZYp44NPYbbHl4Gxs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=sd5Skt6f3VurMXt5yhrtPI6uLY0krE0xiOnSxvKESWZeBs6mXJKK7XkPbgQPNHtsQ
+         w/zexhv88CfDWesdsGdN4Cfc+YwIGsfTr9e8JjjyTvsnnzFNeu4xbGz2ZWhSWfgTTx
+         O5jWTWbb9J81OTusmiZT9gqcOGNsZ/pN0AIAxdwBi9iQ4xbzismIfdzIjYIu7CANk3
+         v2jjLaIKUk0occAC1tI27flxadhMJq8JFWlAeBLbE9si0sPsNDmcAEc/dMFCZNPKGb
+         eQuMzPXBMU8olS1sodK/CoZIj3bOD8Fs7b//KLVh5oR5pgJyrpR/M7Q7xl+4f6kmPR
+         EulfIbEV+I+Uw==
+X-Nifty-SrcIP: [209.85.210.176]
+Received: by mail-pf1-f176.google.com with SMTP id bo5so9241216pfb.4;
+        Fri, 20 May 2022 21:13:20 -0700 (PDT)
+X-Gm-Message-State: AOAM5325KldPcz5pYtzw2U4yaxYjLdoUwRz3bA+6E/fX3ih2qcAABDyL
+        19I2ncyTEx/iG0x76tD46PutcnTapX/5N8LpELg=
+X-Google-Smtp-Source: ABdhPJw1AsOYGWIj+yvZJTCKNKYKKsbmQJJOhJyF3fQ5aMkMnJqrTIcQ++lJlPJIW3w4X9wOzRz7FfdDlbiCVzQ49Mk=
+X-Received: by 2002:a05:6a00:a02:b0:4fd:f9dd:5494 with SMTP id
+ p2-20020a056a000a0200b004fdf9dd5494mr13624800pfh.68.1653106399660; Fri, 20
+ May 2022 21:13:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220519183127.3909598-6-shiyn.lin@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <18500f18-9cd5-a81c-4a55-14e999ed4496@infradead.org>
+In-Reply-To: <18500f18-9cd5-a81c-4a55-14e999ed4496@infradead.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sat, 21 May 2022 13:12:42 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAShN5=0a_+XyXg-1+q=fbdcxMxR2fwts8eZyz2HAtn5bw@mail.gmail.com>
+Message-ID: <CAK7LNAShN5=0a_+XyXg-1+q=fbdcxMxR2fwts8eZyz2HAtn5bw@mail.gmail.com>
+Subject: Re: kbuild problem: ERROR: modpost: missing MODULE_LICENSE() in drivers/iio/afe/iio-rescale.o
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-iio@vger.kernel.org, Peter Rosin <peda@axentia.se>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 02:31:26AM +0800, Chih-En Lin wrote:
-> +++ b/include/linux/mm_types.h
-> @@ -221,6 +221,7 @@ struct page {
->  #ifdef LAST_CPUPID_NOT_IN_PAGE_FLAGS
->  	int _last_cpupid;
->  #endif
-> +	atomic_t cow_pgtable_refcount; /* COW page table */
->  	pmd_t *cow_pte_owner; /* cow pte: pmd */
->  } _struct_page_alignment;
+On Sat, May 21, 2022 at 11:40 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+> Hi,
+>
+> In March I reported that a randconfig build complained:
+>
+> ERROR: modpost: missing MODULE_LICENSE() in drivers/iio/afe/iio-rescale.o
+>
+> (https://lore.kernel.org/all/16509fb6-e40c-e31b-2c80-264c44b0beb9@infradead.org/)
+>
+> I am still seeing this problem so I tried to dig into it a bit.
+> However, I don't see why get_next_modinfo() and friends don't find the
+> MODULE_LICENSE() since it is in the iio-rescale.o file.
+>
+> (BTW, I see this build error on many different $ARCH [around 15 tested]
+> and with 2 different versions of GCC.)
+>
+> Q1: Is modpost checking both vmlinux and iio-rescale.o for modinfo license
+> strings?
 
-Oh.  You need another 4 bytes.  Hmm.
 
-Can you share _refcount?
+MODULE_LICENSE() is no-op for vmlinux.
 
-Using _pt_pad_2 should be possible, but some care will be needed to make
-sure it's (a) in a union with an unsigned long to keep the alignment
-as expected, and (b) is definitely zero before the page is freed (or
-the page allocator will squawk at you).
+modpost checks this only for modules.
+
+
+
+>
+> It looks like it is, because it appears (?) that modpost is looking at
+> drivers/iio/test/iio-test-rescale.o (<<<<< a kunit test, which is builtin
+> in my .config) and at drivers/iio/afe/iio-rescale.o (which is built as a
+> loadable module).
+>
+> Is this confusing modpost?
+> I renamed drivers/iio/afe/iio-rescale.c to afe-rescale.c and changed its
+> Makefile entry accordingly and the MODULE_LICENSE error goes away.
+>
+> Is this a modpost error or is kunit messing things up?
+>
+> thanks for looking.
+> --
+> ~Randy
+
+
+
+-- 
+Best Regards
+Masahiro Yamada

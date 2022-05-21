@@ -2,62 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67EFB52FC8D
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 15:06:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20C2B52FC92
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 15:10:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348829AbiEUNGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 09:06:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48752 "EHLO
+        id S1346446AbiEUNKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 09:10:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245616AbiEUNGO (ORCPT
+        with ESMTP id S233555AbiEUNKU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 09:06:14 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B0B48890
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 06:06:13 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id nk9-20020a17090b194900b001df2fcdc165so13695633pjb.0
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 06:06:13 -0700 (PDT)
+        Sat, 21 May 2022 09:10:20 -0400
+Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649D66339E;
+        Sat, 21 May 2022 06:10:15 -0700 (PDT)
+Received: by mail-ua1-x935.google.com with SMTP id k13so1245378uad.0;
+        Sat, 21 May 2022 06:10:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :content-transfer-encoding;
-        bh=HJQAargzbSV/bcfEc4GQyAdjSAm8VTpErNGyJaNS7Vw=;
-        b=hRn+s4n6HCd9ByvhNlx1TN2XBtvnDw7J/piVBgoGQV1joLdzAUf5NxncpIUhQeR4vT
-         CLtW4B+hODgzY09hgBVaBw/z8w55Vtqw9RlOFK1E75Mll3WrQicBR+TrnLjDXD+vEPtK
-         lAi7c9AX+gd3pt1HF9LsTfYfw4ikA5Ny0fwgo5i/ojtIuIoGYqS1yMvIwgJF8U7xE1cE
-         rxHpi4QtbF2AH//N2SHYRzjr8s3pPHfEQG2LATkawx2eBnKWGHGcBjxCO96aF3HgNSu/
-         eQ18rMlVE8PBBr8zObrT+e00fQsgvEX2FZXSp8/DzguumoG7G+mEeHyPaTzkl2Z5u+Ae
-         l3WA==
+        bh=gY5YVxSZXZa4246xLEbiahVb0abGv5fP2xn0Bj47TQk=;
+        b=MMm10EHw5NfVdmbzl5QnYyuVlnEypnTwmxnUjZrASRiX2RdolTkvhEPaQEtTnLzUcB
+         ZPAuRWUOk+JmMv9bCijbs03VPBKqVtjZ7zq6h8L2C+h3o8rJT3OajJkR2cAaX5auDWCW
+         +avBzKF5XDR+EziuGPLwVH/foFpjhWUxdS91ikc3apcg+i12qRKv9rzwBOjRNcNhBezU
+         aYXJaFYNxGJXFmu0+EqfbFRLe+EaHYb4jbQ0NMowo3xV4VLAgCK54EguUwQZggvFLcMq
+         7QuXzDy12eydEhmCkozNV9kXSyckNYYMHmeIUyUOkCP5dJOC4OTWamw8CWnWFI4OsfMj
+         OziQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HJQAargzbSV/bcfEc4GQyAdjSAm8VTpErNGyJaNS7Vw=;
-        b=HA/ASGxSkcCXldF9A0Cei2Juyvu6BUjrltawGJUgqNUVLxwF9tCcqyO7xnT5rUiNUU
-         lDxe3OyJF6n+zpjkU1msKW3PaSSS5merY7Yi1fzQciuv677RRo+hgv/veFBKvzB67VMk
-         WZzcx4F16thzmN4cY5cJ4ZH/X8qaBVJ1C/WfMVbZ4Birx+Prvpqrnk6Fd1AeRInqKgv7
-         Q8eQWeYZmywjIq37B//ze/UEYSML28fZKl4Biq/r1xRkbDehsllQmqLU1AaqeUnmTDZa
-         iWsw96sfRJsvT/nVIuDt2xnwXuDksW53B0bJwrWavbQuFeqNe8jiLSjTiYyBRmL8eylD
-         ORng==
-X-Gm-Message-State: AOAM532Syw1GsYH+HWc4c0eGtKnEuIeTBndMZqvSqhGuPb0jk25F0H+8
-        BVcHtAUJU2A6p/X2ctI+h2WrQrZofzHcaqBR
-X-Google-Smtp-Source: ABdhPJzMrkUJvtywftBmdzAuAlsNsNjJWqVurrcfzlSPO97CWehLqortg2nUjQEq9cS5R/cDseGdXQ==
-X-Received: by 2002:a17:903:32d2:b0:161:d485:613f with SMTP id i18-20020a17090332d200b00161d485613fmr14412470plr.173.1653138373026;
-        Sat, 21 May 2022 06:06:13 -0700 (PDT)
-Received: from ubuntu.localdomain ([103.230.148.185])
-        by smtp.gmail.com with ESMTPSA id s7-20020a170902988700b0015e8d4eb267sm1580157plp.177.2022.05.21.06.06.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 May 2022 06:06:12 -0700 (PDT)
-From:   Gautam Menghani <gautam.linuxkernel@gmail.com>
-To:     airlied@linux.ie
-Cc:     Gautam Menghani <gautam.linuxkernel@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] drivers/char/agp: Remove unnecessary assignment in cache_nbs()
-Date:   Sat, 21 May 2022 06:06:06 -0700
-Message-Id: <20220521130606.52642-1-gautam.linuxkernel@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=gY5YVxSZXZa4246xLEbiahVb0abGv5fP2xn0Bj47TQk=;
+        b=f2Uu0XpgqxufFdZpYN1BHvvqBO3sNsKtKrBBjSXrfs5/aHUsXG2d2841XXH7BFGWkt
+         LVdV4uUIIqWuOLR+gFiuh5hD5fuyPZB7SwEc9H8YrxHDEqkuV7G+X6tViD+d8tbX6tFL
+         xP3fDiLSyeo+wG3XRFOeXCBX6p9gv05LN0OySAQWB3OWuDmC0wrtPR2WNyfN0O0F9ZhS
+         07t9IbimIze7I1eZ7RK83W8lh7ijwUGVrBzGYltohfS8rlWhFQPR1S/8L6rAYd0OiJZ1
+         KmDx+GMvaJTelmzhOvtJettSuLnBfcVD4rOlz1nzc51EJbmHp6TgQwm8kMr2wBCbqWte
+         RmLg==
+X-Gm-Message-State: AOAM531cJZ4Yorq9u8sUod2kvcUZCt8pHKLWdbTgOCZQUY46wVPEtuPO
+        JjLHakTq6TorNuIwgpJIfW63l/eJMilotPTGfw==
+X-Google-Smtp-Source: ABdhPJxMM64PIFeMevBuR5+/jP8tWbXAUSF3xQaHJhxiF1PXLUgVCD+aHXQWr5I9X4Fu4iz9yZN9yRf/dfAQ0K4A0Y4=
+X-Received: by 2002:ab0:2e90:0:b0:368:acd4:f2cd with SMTP id
+ f16-20020ab02e90000000b00368acd4f2cdmr5227856uaa.116.1653138614398; Sat, 21
+ May 2022 06:10:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220517101142.28421-1-warp5tw@gmail.com> <20220517101142.28421-10-warp5tw@gmail.com>
+ <YoiAF3fcFJiH4nGP@shikoro>
+In-Reply-To: <YoiAF3fcFJiH4nGP@shikoro>
+From:   Tyrone Ting <warp5tw@gmail.com>
+Date:   Sat, 21 May 2022 21:10:02 +0800
+Message-ID: <CACD3sJb6OParLBQxe+JwcGRpnLfihFRLMOQWEwC_DJHrpzcr_w@mail.gmail.com>
+Subject: Re: [PATCH v5 09/10] i2c: npcm: Support NPCM845
+To:     Wolfram Sang <wsa@kernel.org>, Tyrone Ting <warp5tw@gmail.com>,
+        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        andriy.shevchenko@linux.intel.com, jarkko.nikula@linux.intel.com,
+        semen.protsenko@linaro.org, rafal@milecki.pl, sven@svenpeter.dev,
+        jsd@semihalf.com, lukas.bulwahn@gmail.com, arnd@arndb.de,
+        olof@lixom.net, tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
+        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        kfting@nuvoton.com, openbmc@lists.ozlabs.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -68,28 +77,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove unnecessary assignment for the variable i. This fixes the clang
-scan warning : 
-warning: Value stored to 'i' is never read [deadcode.DeadStores]
-        i = 0;
+Hi Wolfram:
 
-Signed-off-by: Gautam Menghani <gautam.linuxkernel@gmail.com>
----
- drivers/char/agp/amd64-agp.c | 1 -
- 1 file changed, 1 deletion(-)
+Thank you for your reminder.
 
-diff --git a/drivers/char/agp/amd64-agp.c b/drivers/char/agp/amd64-agp.c
-index dc78a4fb879e..5f64991c73bf 100644
---- a/drivers/char/agp/amd64-agp.c
-+++ b/drivers/char/agp/amd64-agp.c
-@@ -333,7 +333,6 @@ static int cache_nbs(struct pci_dev *pdev, u32 cap_ptr)
- 	if (!amd_nb_has_feature(AMD_NB_GART))
- 		return -ENODEV;
- 
--	i = 0;
- 	for (i = 0; i < amd_nb_num(); i++) {
- 		struct pci_dev *dev = node_to_amd_nb(i)->misc;
- 		if (fix_northbridge(dev, pdev, cap_ptr) < 0) {
--- 
-2.25.1
+Wolfram Sang <wsa@kernel.org> =E6=96=BC 2022=E5=B9=B45=E6=9C=8821=E6=97=A5 =
+=E9=80=B1=E5=85=AD =E4=B8=8B=E5=8D=882:01=E5=AF=AB=E9=81=93=EF=BC=9A
 
+>
+> On Tue, May 17, 2022 at 06:11:41PM +0800, Tyrone Ting wrote:
+> > From: Tyrone Ting <kfting@nuvoton.com>
+> >
+> > Add NPCM8XX I2C support.
+> > The NPCM8XX uses a similar i2c module as NPCM7XX.
+> > The internal HW FIFO is larger in NPCM8XX.
+> >
+> > Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
+>
+> Would be great to get an ack from one of the listed Nuvoton maintainers.
+>
+
+Best Regards,
+Tyrone

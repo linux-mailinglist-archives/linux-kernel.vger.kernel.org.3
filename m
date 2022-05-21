@@ -2,128 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 564D852FA32
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 11:14:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D681652FA38
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 11:18:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239161AbiEUJN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 05:13:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33614 "EHLO
+        id S241570AbiEUJSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 05:18:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230144AbiEUJNy (ORCPT
+        with ESMTP id S230144AbiEUJSA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 05:13:54 -0400
-Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F3354198;
-        Sat, 21 May 2022 02:13:53 -0700 (PDT)
-Received: by mail-ua1-x92d.google.com with SMTP id 63so3687795uaw.10;
-        Sat, 21 May 2022 02:13:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xLfza2d9jzWSXETuWGWxHMn70hKxdLj4BEKjI+ZN4KU=;
-        b=oSIMjo+HBdeabEZsbQ2Tknmp8ML4BwyqlGIQbOvpgvEgNmn7vZeTww6VUJqw9sLz37
-         a3uXXO18DxKzzA8bTJazl+uJ6rFE9nZTMhXdFWl3LJRDhADCRszXzAHbhw1cWIrc+xIi
-         5jSjPrkpKkJ5hZoNeB86u1oZDgOphLkh7CCZdoO3job5/1ffzcxGIZeQGbQ4xCOax/hl
-         8yXkFoVSN36VhJ0BsrwsxrHoh183yVltVm39xSwrooDgDtgMPj+JGD/EQQC9AHGOUXbM
-         4cKbJOwhWlGiH36Xqbe65bsdyQac0gTbpDYYR3w/Qonby0sGWeRtx5Wy0wejprXd1qT7
-         qibQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xLfza2d9jzWSXETuWGWxHMn70hKxdLj4BEKjI+ZN4KU=;
-        b=fWbFIdo869+PVN6F/yjoP9OjxUNzeKDYfZevgk7cEGYDfYY2unleGqadXYlqbyfPsr
-         Ub8FHB7qPPIE38UPnN0wFg/nnxH9gWlFkzBZ+tt0/G/vGgpYEIenseGP1s4eMoaZXm/A
-         4tTkImQ31YvdmV6zdQwBhqVawKwKxbLPT6L5xyLuyeq7c+hSnzuTD/Bc86YzXif0ppTF
-         +R5seXbP+v1cydnh1ED+i1QAYSYpr63QXP1gbbYTSaI0ah5u/17KaBwwROCoyCTb8rZR
-         EL5FXo8XsrYHnlJYLubS8mLXbk74m+SJuzArzq2w2F6tWhuNFhtNZWOgr2U05QRSe5vo
-         9o6A==
-X-Gm-Message-State: AOAM531HQSLKNRsbV9u0Yf61MqhcVm4rfeLY2pnwvinw/EKW4fQN3Tte
-        sPikxymcTkxWX7u2tJCoYdvOdaaR8bXfkfGgGY4=
-X-Google-Smtp-Source: ABdhPJyhyvWZH9qrdJngswSfpnin3gAydt0836+qEP+NLvaL1+4syh6qaBPTfW5wDBLc4t4TyTFHx0CWjQq10QuKJUo=
-X-Received: by 2002:a9f:354f:0:b0:368:c2c0:f2b5 with SMTP id
- o73-20020a9f354f000000b00368c2c0f2b5mr5086632uao.96.1653124432029; Sat, 21
- May 2022 02:13:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220518092619.1269111-1-chenhuacai@loongson.cn>
- <20220518092619.1269111-10-chenhuacai@loongson.cn> <CAMj1kXEBVWi2ZdR5Le5-G0DA43u-AMxmSO=pVt39qwN=PkzQfw@mail.gmail.com>
- <0bae0df1-48ae-d02f-bce4-d1f69acf269e@redhat.com> <CAAhV-H5dqNiecER3fChkBjQUGGszj6gwcpOFM1b4Kaax5vz27g@mail.gmail.com>
- <cdbb002a-9f0a-caa9-445e-4ba20328171a@redhat.com> <CAAhV-H7yKVWaiU_VKnc2YnCSeZPOwedRWMY8ZTS-VWwk+vE0AA@mail.gmail.com>
- <256e0b82-5d0f-cf40-87c6-c2505d2a6d3b@redhat.com> <CAAhV-H7bJv5V5UKJCWgEbOdOWZhnma3_3eAXbbY1MX_uKodjgg@mail.gmail.com>
- <859d5489-9361-3db0-1da4-1417ed2fad6c@redhat.com> <CAAhV-H4UxkyHr=NQGFAAjCXwXHXDLsN_CV-tSCn6oonOSSjb0A@mail.gmail.com>
- <7caec251-20e7-4a8c-93ee-b28558ec580f@redhat.com>
-In-Reply-To: <7caec251-20e7-4a8c-93ee-b28558ec580f@redhat.com>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Sat, 21 May 2022 17:13:45 +0800
-Message-ID: <CAAhV-H6pfv4OQ5PhSfzG9YM_q5DYdgZ0DHVT7Aac9sppXGgnaA@mail.gmail.com>
-Subject: Re: [PATCH V11 09/22] LoongArch: Add boot and setup routines
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        Sat, 21 May 2022 05:18:00 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A33513C0A8;
+        Sat, 21 May 2022 02:17:58 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id C199B5C00E0;
+        Sat, 21 May 2022 05:17:55 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Sat, 21 May 2022 05:17:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1653124675; x=
+        1653211075; bh=tSnVUwRgkIan0g05mJZYFNNv+SUzSaOd09kahxAg1rw=; b=h
+        95GWU0jeLj958g55gzl2t8b8Id8N4+oKTBAfK5Sste9K6tC/nU5FY9iB5TtjE8Bm
+        1xF3vxIGNxTvG+OujgkuJshqEVBGO6bIYtyoJjK6AIdj69Hwnk/HVJiaW4G/wBmk
+        vQ5pHzCtJlM84hts9w5bZnxrB2zCEuJJ+chsfPIzVJS7gttf6KItSr1JT2GyPd4K
+        Nph0cnoF7nZAdRBEk4gmELoM5p+/yDE2hbtWDgxPdI73tyDHQguwtcjikh0pvFUJ
+        iBHiGYUERPSWuRbh7CIymRE+vC0G/bhdMII3UIcSU1leUDDURq/uU+eRrd3jdNyh
+        BbLsqKISsG0yvPAj5KxDQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1653124675; x=
+        1653211075; bh=tSnVUwRgkIan0g05mJZYFNNv+SUzSaOd09kahxAg1rw=; b=F
+        BzyzQSXPexamp04Xoi34eEM+p28ClmXflxOxvz3uDnS6d3QUmMPI8ha+HwqlzCjG
+        izV4OWOYKe2yoM5zkFPhsl1GeB20Ao9xiaIqXdScG2MqX8d+lvkqwQxuzpJwrWBG
+        QKEzEcRyFUkAHgLCI35Pb1R/zN3AsUzNY+vVzIavtyyoV6m2dN4kD7TLydiUOpe2
+        d8J6gBijtxuR7+f0JSicuAjb1wV0Un2360muscfugOcXJ26w1JuG1Ffx4QOtO6MO
+        W7sqW5e3E6rfgmbL7J1iaRX0AHMmK6X9RLvBidKTNSA/+QEKoJeS0xOvG2jGQZg+
+        V2wcQHxg4Wz20ythBnpiw==
+X-ME-Sender: <xms:Qq6IYrXi6tgcwroDAryeztq43ACQIuhqzJpcoWhczgMMJZNEU9-Tmg>
+    <xme:Qq6IYjlBg6ADlBd46elz5uAARkP3tUhBMioqx8fybJ3EFN9K9YcPBXjSKDUgdLcbO
+    Qj8avwGehF5E1axsz0>
+X-ME-Received: <xmr:Qq6IYnZTaMoJGd8BI1YIUhLV8qoOtSKl4zQW3A-ju3uoD8C73UdypDcZcvJZxLJVMcrd9KD99xuQx1kUUNLWm7ZPR_tGJzHfeW8WeYE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrieeigddtjecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtugfgjgesthhqredttddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeetgfelgefggeekkefggfeludeiudffjeffgeevveekjedukedtudeuteef
+    teefgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:Qq6IYmX5EnMoY8tVNERTNOlE1aC4PNwXAAeTgMvNnFEuaZnpbIJOOg>
+    <xmx:Qq6IYlmyhMafBCp4RU2B7oUKV5gboicdUv3xQI71wcpPPgdfN2vNlg>
+    <xmx:Qq6IYjeCrtdgEjHaIAVLxD03RqqyPWuIjjuWEbF2sCBjq0iX1D-zaw>
+    <xmx:Q66IYq-3CSZZbbSQClpxpipR4iPen0OzP1gwUntfhLdUAK-ne95P8Q>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 21 May 2022 05:17:54 -0400 (EDT)
+Date:   Sat, 21 May 2022 11:17:51 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     dri-devel@lists.freedesktop.org,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Philip Chen <philipchen@chromium.org>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        freedreno@lists.freedesktop.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
         David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-efi <linux-efi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/4] drm/bridge: Add devm_drm_bridge_add()
+Message-ID: <20220521091751.opeiqbmc5c2okdq6@houat>
+References: <20220510192944.2408515-1-dianders@chromium.org>
+ <20220510122726.v3.3.Iba4b9bf6c7a1ee5ea2835ad7bd5eaf84d7688520@changeid>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220510122726.v3.3.Iba4b9bf6c7a1ee5ea2835ad7bd5eaf84d7688520@changeid>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Javier,
+Hi,
 
-On Sat, May 21, 2022 at 5:06 PM Javier Martinez Canillas
-<javierm@redhat.com> wrote:
->
-> Hello Huacai,
->
-> On 5/21/22 09:37, Huacai Chen wrote:
->
-> [snip]
->
-> >>
-> >> A problem with moving to subsys_initcall_sync() is that this will delay
-> >> more when a display is available in the system, and just to cope up with
-> >> a corner case (as mentioned the common case is native drivers as module).
-> > OK, your method seems better, but I think moving to
-> > subsys_initcall_sync() can make the screen display as early as
-> > possible.
-> >
->
-> But it doesn't cover all cases. For example, you will get the same error
-> if for example your native driver is built-in and efifb built as module.
->
-> So my opinion is that instead of playing with the init call levels, is
-> just better for you to build your native driver as a module instead of
-> making it built-in.
-I mean moving to subsys_initcall_sync() on top of your patchset, not
-replacing them (Just for display earlier).
+On Tue, May 10, 2022 at 12:29:43PM -0700, Douglas Anderson wrote:
+> This adds a devm managed version of drm_bridge_add(). Like other
+> "devm" function listed in drm_bridge.h, this function takes an
+> explicit "dev" to use for the lifetime management. A few notes:
+> * In general we have a "struct device" for bridges that makes a good
+>   candidate for where the lifetime matches exactly what we want.
+> * The "bridge->dev->dev" device appears to be the encoder
+>   device. That's not the right device to use for lifetime management.
+>=20
+> Suggested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
 
-Huacai
->
-> --
-> Best regards,
->
-> Javier Martinez Canillas
-> Linux Engineering
-> Red Hat
->
+If we are to introduce more managed helpers, I think it'd be wiser to
+introduce them as DRM-managed, and not device managed.
+
+Otherwise, you'll end up in a weird state when a device has been removed
+but the DRM device is still around.
+
+Maxime

@@ -2,89 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A903C52F7E3
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 05:11:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A2E652F804
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 05:25:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239538AbiEUDLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 23:11:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54006 "EHLO
+        id S235064AbiEUDZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 23:25:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239550AbiEUDLB (ORCPT
+        with ESMTP id S231743AbiEUDZO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 23:11:01 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5EB1583B;
-        Fri, 20 May 2022 20:10:59 -0700 (PDT)
-Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L4pVz44DVzhYx0;
-        Sat, 21 May 2022 11:10:19 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by kwepemi500015.china.huawei.com
- (7.221.188.92) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sat, 21 May
- 2022 11:10:57 +0800
-From:   Zheng Bin <zhengbin13@huawei.com>
-To:     <rafael@kernel.org>, <viresh.kumar@linaro.org>,
-        <Pierre.Gondois@arm.com>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <zhengbin13@huawei.com>, <gaochao49@huawei.com>
-Subject: [PATCH -next] cpufreq: CPPC: Fix build error without CONFIG_ACPI_CPPC_CPUFREQ_FIE
-Date:   Sat, 21 May 2022 11:24:38 +0800
-Message-ID: <20220521032438.2504155-1-zhengbin13@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Fri, 20 May 2022 23:25:14 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E05187D8F;
+        Fri, 20 May 2022 20:25:12 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id gg20so9528989pjb.1;
+        Fri, 20 May 2022 20:25:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=srHucyXa3M3L2xwtZzIWQdA+RV7TAlhAfzh/7sAefe8=;
+        b=NTqXHE9UCcyj7Bih4sgeeQfhBLD7/niyepd8g2nJpwh3FEhdqVm1Lb13kRt+qOogHX
+         owgvx4hSBva1Y9OvIwr3lxDFxN0quT7ul8Bn3r4xRK72lRAQsq+EkrgtbWmPuHWRK0NC
+         F6qm2rsKnWWuIqSL0VChbsbwzF9+8rRSLV4wJALe2OQ5bShU3wXbGtUUk8INKcNplcn1
+         XGKUi0cUDD5O160LpOhU91QAW8+nMiEd4JkBdWIN3tz8WsBj90ker8ZL5aTmzWWmUEtQ
+         eBywN02hMHBhmc8lj22ZmpRGqb9LGM2cPYOtSdJlCd6A1zBO4dfbpedwHHcPTrYaoMFB
+         KWiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=srHucyXa3M3L2xwtZzIWQdA+RV7TAlhAfzh/7sAefe8=;
+        b=e2lctWyqxzTYYbcOseXuDpZSnRqI2twfV/QxYmNG1qGgY/RHfF6j2jP1jEDOfwKIV2
+         Qf639iy1QC65/L6731Z5T3M+kWzkSHQRTYEDX0komp7pJbJxF0Y4ALumS5J2TILHhJda
+         zpABNVw5FBoh5S/X2kqS8OE29xAZ89ZffaGQnSYhDVASbLewJE4o2oruQGT+6RBecebz
+         iZ7g3rEdVPa4KaTJd3XYsaoLOZc6vcoS1lM0ke4KK2n5Mt/9OnrNIYT7+cr1zSFTT2Tl
+         0TX/GUhUGE4FQj/3FswiKjJVZnCowte03cDTtqQiSTPU1aszrmcj6Y4NYURSJAGxeDl7
+         368g==
+X-Gm-Message-State: AOAM5337xhiLphQXoBVSLa6BXG+FnCB/PGq+l5N4izXMNkp8UJGkgsbs
+        fKEwbokTX3sjwbpEhchxUrc=
+X-Google-Smtp-Source: ABdhPJz7hkAsuMIxzrZUQvOGLFk7XGtePhFKoNgQzk26Rbwa+SGIYLu8hqxi0XatY3eNzsWsIrWgRg==
+X-Received: by 2002:a17:903:3112:b0:161:80df:f11 with SMTP id w18-20020a170903311200b0016180df0f11mr12268414plc.68.1653103512206;
+        Fri, 20 May 2022 20:25:12 -0700 (PDT)
+Received: from hyeyoo ([114.29.24.243])
+        by smtp.gmail.com with ESMTPSA id e1-20020a170902b78100b0015e8d4eb229sm448235pls.115.2022.05.20.20.24.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 May 2022 20:25:11 -0700 (PDT)
+Date:   Sat, 21 May 2022 12:24:56 +0900
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Byungchul Park <byungchul.park@lge.com>
+Cc:     torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
+        linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org, peterz@infradead.org,
+        will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
+        joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
+        chris@chris-wilson.co.uk, duyuyang@gmail.com,
+        johannes.berg@intel.com, tj@kernel.org, tytso@mit.edu,
+        willy@infradead.org, david@fromorbit.com, amir73il@gmail.com,
+        bfields@fieldses.org, gregkh@linuxfoundation.org,
+        kernel-team@lge.com, linux-mm@kvack.org, akpm@linux-foundation.org,
+        mhocko@kernel.org, minchan@kernel.org, hannes@cmpxchg.org,
+        vdavydov.dev@gmail.com, sj@kernel.org, jglisse@redhat.com,
+        dennis@kernel.org, cl@linux.com, penberg@kernel.org,
+        rientjes@google.com, vbabka@suse.cz, ngupta@vflare.org,
+        linux-block@vger.kernel.org, paolo.valente@linaro.org,
+        josef@toxicpanda.com, linux-fsdevel@vger.kernel.org,
+        viro@zeniv.linux.org.uk, jack@suse.cz, jack@suse.com,
+        jlayton@kernel.org, dan.j.williams@intel.com, hch@infradead.org,
+        djwong@kernel.org, dri-devel@lists.freedesktop.org,
+        airlied@linux.ie, rodrigosiqueiramelo@gmail.com,
+        melissa.srw@gmail.com, hamohammed.sa@gmail.com
+Subject: Re: [PATCH RFC v6 02/21] dept: Implement Dept(Dependency Tracker)
+Message-ID: <YohbiJquna5LlgVv@hyeyoo>
+References: <1651652269-15342-1-git-send-email-byungchul.park@lge.com>
+ <1651652269-15342-3-git-send-email-byungchul.park@lge.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemi500015.china.huawei.com (7.221.188.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1651652269-15342-3-git-send-email-byungchul.park@lge.com>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If CONFIG_ACPI_CPPC_CPUFREQ_FIE is not set, building fails:
+On Wed, May 04, 2022 at 05:17:30PM +0900, Byungchul Park wrote:
+> CURRENT STATUS
+> +/*
 
-drivers/cpufreq/cppc_cpufreq.c: In function ‘populate_efficiency_class’:
-drivers/cpufreq/cppc_cpufreq.c:584:2: error: ‘cppc_cpufreq_driver’ undeclared (first use in this function); did you mean ‘cpufreq_driver’?
-  cppc_cpufreq_driver.register_em = cppc_cpufreq_register_em;
-  ^~~~~~~~~~~~~~~~~~~
-  cpufreq_driver
+[...]
 
-Make declare of cppc_cpufreq_driver out of CONFIG_ACPI_CPPC_CPUFREQ_FIE
-to fix this.
+> + * Ensure it has been called on ON/OFF transition.
+> + */
+> +void dept_enirq_transition(unsigned long ip)
+> +{
+> +	struct dept_task *dt = dept_task();
+> +	unsigned long flags;
+> +
+> +	if (unlikely(READ_ONCE(dept_stop) || in_nmi()))
+> +		return;
+> +
+> +	/*
+> +	 * IRQ ON/OFF transition might happen while Dept is working.
+> +	 * We cannot handle recursive entrance. Just ingnore it.
+> +	 * Only transitions outside of Dept will be considered.
+> +	 */
+> +	if (dt->recursive)
+> +		return;
+> +
+> +	flags = dept_enter();
+> +
+> +	enirq_update(ip);
+> +
+> +	dept_exit(flags);
+> +}
 
-Fixes: 740fcdc2c20e ("cpufreq: CPPC: Register EM based on efficiency class information")
-Signed-off-by: Zheng Bin <zhengbin13@huawei.com>
----
- drivers/cpufreq/cppc_cpufreq.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+EXPORT_SYMBOL_GPL(dept_enirq_transition);
 
-diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-index 3eaa23d1aaf5..1837f2ce8243 100644
---- a/drivers/cpufreq/cppc_cpufreq.c
-+++ b/drivers/cpufreq/cppc_cpufreq.c
-@@ -61,6 +61,8 @@ static struct cppc_workaround_oem_info wa_info[] = {
- 	}
- };
+ERROR: modpost: "dept_enirq_transition" [arch/x86/kvm/kvm-amd.ko] undefined!
+ERROR: modpost: "dept_enirq_transition" [arch/x86/kvm/kvm-intel.ko] undefined!
 
-+static struct cpufreq_driver cppc_cpufreq_driver;
-+
- #ifdef CONFIG_ACPI_CPPC_CPUFREQ_FIE
+This function needs to be exported for modules.
 
- /* Frequency invariance support */
-@@ -75,7 +77,6 @@ struct cppc_freq_invariance {
- static DEFINE_PER_CPU(struct cppc_freq_invariance, cppc_freq_inv);
- static struct kthread_worker *kworker_fie;
+Thanks.
 
--static struct cpufreq_driver cppc_cpufreq_driver;
- static unsigned int hisi_cppc_cpufreq_get_rate(unsigned int cpu);
- static int cppc_perf_from_fbctrs(struct cppc_cpudata *cpu_data,
- 				 struct cppc_perf_fb_ctrs *fb_ctrs_t0,
---
-2.31.1
-
+-- 
+Thanks,
+Hyeonggon

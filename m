@@ -2,97 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E515052F9A7
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 09:25:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3201C52F9AF
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 09:27:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352951AbiEUHYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 03:24:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54752 "EHLO
+        id S240954AbiEUH1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 03:27:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232990AbiEUHYG (ORCPT
+        with ESMTP id S232990AbiEUH07 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 03:24:06 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45AD16CA91;
-        Sat, 21 May 2022 00:24:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653117845; x=1684653845;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=3asQqEgN3HAp03iRISKotmL8Hzh0H0AiQ5h1mdRd4mU=;
-  b=dLksq0kCgeneLrIg7mul/8YOhdwXbgG9ejzHDLGiuwwVna9ncgzrQHy8
-   TIIQ9NkKNcOrPrF6micVC7/5SYVFusSyXtp0Dg20naCsBZO0IVK13Ior6
-   LmquI+TSuqbZ7tgtSmTW16VilI3HIR80O0c9NoWwy6lD4yN8UmjdRtAZ3
-   T9jjBkcII9EHxpqtP+waM2Gk2jEaFi0aeqtOmBMRGmwbo1/vtXuHGJMNK
-   iJiiZfq5yI1TPWlwlD5p8VIBSNFji2kMmuS6nhS3iknP5iSBGdshu4dpI
-   1oe9HtE8jNTDANiTYA4vy465tIXLt9ElHiN2znHVy0Ni2eJTXL/hjn2Zk
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10353"; a="254871996"
-X-IronPort-AV: E=Sophos;i="5.91,240,1647327600"; 
-   d="scan'208";a="254871996"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 00:24:04 -0700
-X-IronPort-AV: E=Sophos;i="5.91,240,1647327600"; 
-   d="scan'208";a="599658223"
-Received: from tower.bj.intel.com ([10.238.157.62])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 00:24:01 -0700
-From:   Yanfei Xu <yanfei.xu@intel.com>
-To:     pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
-        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, wei.w.wang@intel.com,
-        kan.liang@intel.com
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] KVM: x86: Fix the intel_pt PMI handling wrongly considered from guest
-Date:   Sat, 21 May 2022 15:23:18 +0800
-Message-Id: <20220521072318.1226928-1-yanfei.xu@intel.com>
-X-Mailer: git-send-email 2.32.0
+        Sat, 21 May 2022 03:26:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D5A5159B86
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 00:26:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653118015;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hSV8xdTtoZicP5dxKU003xS7Nq8DX7sZpRoZ3HyTw7k=;
+        b=Yj22kMHU2NpxgkQvY5CllUS8FVngenYFBchtIykjVyLzi6IIwF9NkY9m5EUUehbRuIi3WW
+        UcWo+ZQrSEXvgOjCLuUDecgal5wx638WmpZcMMUMK/IDhG3yIvq3FJnG2jjDtNiuv+7/ik
+        MLmpCaO6TylfgGxQ+tCRV9htIfEWdNM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-589-WWf0tMTvMImep9URp11lRg-1; Sat, 21 May 2022 03:26:52 -0400
+X-MC-Unique: WWf0tMTvMImep9URp11lRg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E91B1811E75;
+        Sat, 21 May 2022 07:26:51 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.8])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3CDBE7ADD;
+        Sat, 21 May 2022 07:26:51 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20220520181118.47ca2bdc@kernel.org>
+References: <20220520181118.47ca2bdc@kernel.org> <165306515409.34989.4713077338482294594.stgit@warthog.procyon.org.uk> <165306517397.34989.14593967592142268589.stgit@warthog.procyon.org.uk>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     dhowells@redhat.com, netdev@vger.kernel.org,
+        linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 3/7] rxrpc: Fix locking issue
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <207585.1653118010.1@warthog.procyon.org.uk>
+Date:   Sat, 21 May 2022 08:26:50 +0100
+Message-ID: <207586.1653118010@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When kernel handles the vm-exit caused by external interrupts and NMI,
-it always set a type of kvm_intr_type to handling_intr_from_guest to
-tell if it's dealing an IRQ or NMI. For the PMI scenario, it could be
-IRQ or NMI.
-However the intel_pt PMI certainly is a NMI PMI, hence using
-kvm_handling_nmi_from_guest() to distinguish if the intel_pt PMI comes
-from guest is more appropriate. This modification can avoid the host
-wrongly considered the intel_pt PMI comes from a guest once the host
-intel_pt PMI breaks the handling of vm-exit of external interrupts.
+Jakub Kicinski <kuba@kernel.org> wrote:
 
-Fixes: db215756ae59 ("KVM: x86: More precisely identify NMI from guest when handling PMI")
-Signed-off-by: Yanfei Xu <yanfei.xu@intel.com>
----
-v1->v2:
-1.Fix vmx_handle_intel_pt_intr() directly instead of changing the generic function.
-2.Tune the commit message.
+> > +	lh = rcu_dereference(((struct list_head *)v)->next);
+> 
+> Can we use list_next_rcu() here maybe ? to avoid the sparse warning?
 
- arch/x86/kvm/vmx/vmx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Sure.
 
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 610355b9ccce..378036c1cf94 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -7856,7 +7856,7 @@ static unsigned int vmx_handle_intel_pt_intr(void)
- 	struct kvm_vcpu *vcpu = kvm_get_running_vcpu();
- 
- 	/* '0' on failure so that the !PT case can use a RET0 static call. */
--	if (!kvm_arch_pmi_in_guest(vcpu))
-+	if (!kvm_handling_nmi_from_guest(vcpu))
- 		return 0;
- 
- 	kvm_make_request(KVM_REQ_PMI, vcpu);
--- 
-2.32.0
+David
 

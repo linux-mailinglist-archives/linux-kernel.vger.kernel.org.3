@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A91E52FBAD
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:17:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2D3552FBB4
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:17:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354958AbiEULRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 07:17:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47350 "EHLO
+        id S241851AbiEULRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 07:17:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353485AbiEULMT (ORCPT
+        with ESMTP id S1353474AbiEULMT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 21 May 2022 07:12:19 -0400
 Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0D631372;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4DA433351;
         Sat, 21 May 2022 04:12:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=inria.fr; s=dc;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=oPdcALAaBw9fcOVQZXeV7Yoon9/2TK0QuC9S3pvCoog=;
-  b=rrEX98JdyfaDH4iOqv44r1t8Lxt5w4sFze+MuN8ruu4cVyJPxL4eWyX5
-   OMyJmYJvA0P451C+b0E5J2kdPD4BP2vQn8fG23dzRasBTYveT38IgfgxL
-   7c5mProM2uPdk5qmeZyDotPjEorGb8V04cL0s3dymVASfugDlLP1KIpFN
-   s=;
+  bh=zQtBKPg+d+cC4XEdv1IkBWPPxZwE5zveLcgSMEEGK7k=;
+  b=FQWHsvmiTLuqeVMY/uIL3NAmScLE+bf7gE4E6RdyY7bh6G5qnwAmKapw
+   2QO4cqiqehvX38tprHeZpMH/V6MvliexjmRMBNItTE0WqvdYUsET7c7nu
+   +uJu8ztdaUCLncnxWrOg0NhAl3hqR1hFNDA+U897f++cg33l+kGrl0nne
+   o=;
 Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
 X-IronPort-AV: E=Sophos;i="5.91,242,1647298800"; 
-   d="scan'208";a="14727935"
+   d="scan'208";a="14727936"
 Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 13:11:58 +0200
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 13:11:59 +0200
 From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     kernel-janitors@vger.kernel.org, John Allen <john.allen@amd.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] crypto: ccp - fix typo in comment
-Date:   Sat, 21 May 2022 13:10:48 +0200
-Message-Id: <20220521111145.81697-38-Julia.Lawall@inria.fr>
+To:     Khuong Dinh <khuong@os.amperecomputing.com>
+Cc:     kernel-janitors@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] EDAC/xgene: fix typo in comment
+Date:   Sat, 21 May 2022 13:10:49 +0200
+Message-Id: <20220521111145.81697-39-Julia.Lawall@inria.fr>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -57,20 +59,20 @@ Detected with the help of Coccinelle.
 Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
 ---
- drivers/crypto/ccp/ccp-dev.h |    2 +-
+ drivers/edac/xgene_edac.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/crypto/ccp/ccp-dev.h b/drivers/crypto/ccp/ccp-dev.h
-index a5d9123a22ea..83350e2d9821 100644
---- a/drivers/crypto/ccp/ccp-dev.h
-+++ b/drivers/crypto/ccp/ccp-dev.h
-@@ -366,7 +366,7 @@ struct ccp_device {
+diff --git a/drivers/edac/xgene_edac.c b/drivers/edac/xgene_edac.c
+index 7197f9fa0245..54081403db4f 100644
+--- a/drivers/edac/xgene_edac.c
++++ b/drivers/edac/xgene_edac.c
+@@ -501,7 +501,7 @@ static int xgene_edac_mc_remove(struct xgene_edac_mc_ctx *mcu)
+ #define MEMERR_L2C_L2ESRA_PAGE_OFFSET		0x0804
  
- 	/* Master lists that all cmds are queued on. Because there can be
- 	 * more than one CCP command queue that can process a cmd a separate
--	 * backlog list is neeeded so that the backlog completion call
-+	 * backlog list is needed so that the backlog completion call
- 	 * completes before the cmd is available for execution.
- 	 */
- 	spinlock_t cmd_lock ____cacheline_aligned;
+ /*
+- * Processor Module Domain (PMD) context - Context for a pair of processsors.
++ * Processor Module Domain (PMD) context - Context for a pair of processors.
+  * Each PMD consists of 2 CPUs and a shared L2 cache. Each CPU consists of
+  * its own L1 cache.
+  */
 

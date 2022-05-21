@@ -2,120 +2,312 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F40C52F77E
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 04:08:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAE3B52F786
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 04:19:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353571AbiEUCIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 22:08:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42078 "EHLO
+        id S239195AbiEUCTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 22:19:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229829AbiEUCI0 (ORCPT
+        with ESMTP id S232004AbiEUCTe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 22:08:26 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51C9E185436
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 19:08:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653098905; x=1684634905;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=b9S9Aqrr0Lj8pYHLyu8e12E8vWzlnWY3ZNeBgajyeXM=;
-  b=mmCJbGCSLydsmLQk4lhyxGOb7R3+WkoGxJba+syds6TQjVzlgVnHFbU/
-   k+cN+t+VmXjNzKZrWaglkCaFHUBfkvMVSHN8pqcMH4SqS0oQhanLYaHVz
-   LiAzJ/lJMCGj2tE7+H5hiYPqgIxRJ/VrualjUr1qH469AlNEwnu+dLFCn
-   3Ov3jqLoNh2beMxjFY/uPAIiXpIqvOxrtqZXTTKB5uA2jXCTBAb7L0oou
-   NuL08QsIlldxt0g0SMhB5hkeImRKxCtXznK4dWaXT0MnPKCmnlU4nw/II
-   /gv2PZpE1nyZlyTCeh6whhfGfv93Xso3GJdglqVezHQJJDdrdnBMtdIRy
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10353"; a="298104098"
-X-IronPort-AV: E=Sophos;i="5.91,240,1647327600"; 
-   d="scan'208";a="298104098"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 19:08:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,240,1647327600"; 
-   d="scan'208";a="557726970"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 20 May 2022 19:08:23 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nsEXX-0005mD-1j;
-        Sat, 21 May 2022 02:08:23 +0000
-Date:   Sat, 21 May 2022 10:07:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: xillybus_of.c:undefined reference to `devm_platform_ioremap_resource'
-Message-ID: <202205211012.u258CWm7-lkp@intel.com>
+        Fri, 20 May 2022 22:19:34 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F8D195EAB
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 19:19:31 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id gh17so5514707ejc.6
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 19:19:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=sQlK8EPAE1nmulIIgv5jRhcGPrhGOTgo4V3rKxqmaH4=;
+        b=rnCv4bfcViQifT0EnuLazBJP+RPyjJedUNb+XaGcQSXhNUZkgOYt7ievywxjV1c2EE
+         MJycHcYkWvToUmN9fth48vtDpbQ8998jU959vlLAp8q+kxszB9zEEIou0KXawjZ0tTVy
+         gIKIwNNtpdmIBb2uKjvJhKJoClgHdIw4qEo3rWw4wDzrYVOCXfuwX/+junNVwel4K6KY
+         DZMasQmbk8jAgtbeKOxbDF7OHmI6gInClz5ODkttVNJ9T4h+dbgBVX+8jOUQt572JzP/
+         q1QAJRiIxjo0ghtkLxdrCVDrXpSQXDQivzghlBw2O5NyNSWzB32vrSjS7mHu9XuiTqWp
+         PU3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=sQlK8EPAE1nmulIIgv5jRhcGPrhGOTgo4V3rKxqmaH4=;
+        b=xFScdTmMf+0hrEwr3PtUIEP2zQb74FzZ865aGW54vp/fO+G8KE7WdpuutWeGvfsPdf
+         NjUZw0ucESjc2LBY2Bqb1e8C/hDMZ72Ymz5VI6QrF8tYJcY0avDtY7l/oxzigDj4+gNa
+         tygQ1/WKQy0kbCEj5hPfb1veG/iUvmXQd7hAiya7aNS7wG9+/cVkf/0Ls0Ebok0HIffy
+         FOkVbeg0v0JeJWET8qPo154qxSmAE42D0HgjlKyEpQTPxuk9vOqgzUc3lBNsuTrW85ZT
+         mqoN8tLAcw0//zcEpi12KHNcCLRNFRu/DerDzomFAk/+EZaqf6r7CCKtiLXOGzbQ+ZKo
+         XGJQ==
+X-Gm-Message-State: AOAM532zYpGOpUSdWrzDea4ndUKSBcv0bHft0yGMG28x5v6TeA3qjyoE
+        293FdAndPf21gElq1y9K+UCNdkOOG5Fny45zr/EzBQ==
+X-Google-Smtp-Source: ABdhPJzma20Jw8z2jDhsEaXVdc6gwk7GyQZeyDajs1P9GPAR8KSzzRz5P+0if2lufkSUvXOh/v8I91ajvbIFbhkcjPg=
+X-Received: by 2002:a17:906:6a0f:b0:6f5:15cf:2e5 with SMTP id
+ qw15-20020a1709066a0f00b006f515cf02e5mr10844216ejc.584.1653099569797; Fri, 20
+ May 2022 19:19:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220510235653.933868-1-tjmercier@google.com> <20220519093034.541481-1-eballetbo@kernel.org>
+In-Reply-To: <20220519093034.541481-1-eballetbo@kernel.org>
+From:   "T.J. Mercier" <tjmercier@google.com>
+Date:   Fri, 20 May 2022 19:19:18 -0700
+Message-ID: <CABdmKX17aS3nh0UHf+FoM3VPdvMn5NvrZTkGSisznDgjZyeQxw@mail.gmail.com>
+Subject: Re: [PATCH v7 1/6] gpu: rfc: Proposal for a GPU cgroup controller
+To:     eballetbo@kernel.org
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Tejun Heo <tj@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Todd Kjos <tkjos@android.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Liam Mark <lmark@codeaurora.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Laura Abbott <labbott@redhat.com>, cgroups@vger.kernel.org,
+        kernel-team@android.com, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        Carlos Llamas <cmllamas@google.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Kenny.Ho@amd.com,
+        linux-kselftest@vger.kernel.org,
+        Kalesh Singh <kaleshsingh@google.com>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        John Stultz <jstultz@google.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Herbert,
+On Thu, May 19, 2022 at 2:31 AM <eballetbo@kernel.org> wrote:
+>
+> From: Enric Balletbo i Serra <eballetbo@kernel.org>
+>
+> On Tue, 10 May 2022 23:56:45 +0000, T.J. Mercier wrote:
+> > From: Hridya Valsaraju <hridya@google.com>
+> >
+>
+> Hi T.J. Mercier,
+>
+> Many thanks for this effort. It caught my attention because we might have=
+ a use
+> case where this feature can be useful for us. Hence I'd like to jump and =
+be part
+> of the discussion, I'd really appreciate if you can cc'me for next versio=
+ns.
+>
+Hi Enric,
 
-FYI, the error/warning still remains.
+Sure thing, thanks for engaging.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   3b5e1590a26713a8c76896f0f1b99f52ec24e72f
-commit: a1315dcb7b6a7d3a78df848eed5b331a4b3ec28a hwrng: ks-sa - Add dependency on IOMEM and OF
-date:   1 year, 6 months ago
-config: s390-buildonly-randconfig-r006-20220520 (https://download.01.org/0day-ci/archive/20220521/202205211012.u258CWm7-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a1315dcb7b6a7d3a78df848eed5b331a4b3ec28a
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout a1315dcb7b6a7d3a78df848eed5b331a4b3ec28a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+> While reading the full patchset I was a bit confused about the status of =
+this
+> proposal. In fact, the rfc in the subject combined with the number of ite=
+rations
+> (already seven) confused me. So I'm wondering if this is a RFC or a 'real=
+'
+> proposal already that you want to land.
+>
+I'm sorry about this. I'm quite new to kernel development (this is my
+first set of patches) and the point at which I should have
+transitioned from RFC to PATCH was not clear to me. The status now
+could be described as adding initial support for accounting that would
+be built upon to expand what is tracked (more than just buffers from
+heaps) and to add support for limiting. I see you have also commented
+about this below.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> If this is still a RFC I'd remove the 'rfc: Proposal' and use the more ca=
+nonical
+> way that is put RFC in the []. I.e [PATCH RFC v7] cgroup: Add a GPU cgrou=
+p
+> controller.
+>
+> If it is not, I'd just remove the RFC and make the subject in the cgroup
+> subsystem instead of the gpu. I.E [PATCH v7] cgroup: Add a GPU cgroup
+>
+> I don't want to nitpick but IMO that helps new people to join to the hist=
+ory of
+> the patchset.
+>
+> > This patch adds a proposal for a new GPU cgroup controller for
+> > accounting/limiting GPU and GPU-related memory allocations.
+>
+> As far as I can see the only thing that is adding here is the accounting,=
+ so I'd
+> remove any reference to limiting and just explain what the patch really
+> introduces, not the future, otherwise is confusing an you expect more tha=
+n the
+> patch really does.
+>
+> It is important maintain the commit message sync with what the patch real=
+ly
+> does.
+>
+Acknowledged, thank you.
 
-All errors (new ones prefixed by >>):
+> > The proposed controller is based on the DRM cgroup controller[1] and
+> > follows the design of the RDMA cgroup controller.
+> >
+> > The new cgroup controller would:
+> > * Allow setting per-device limits on the total size of buffers
+> >   allocated by device within a cgroup.
+> > * Expose a per-device/allocator breakdown of the buffers charged to a
+> >   cgroup.
+> >
+> > The prototype in the following patches is only for memory accounting
+> > using the GPU cgroup controller and does not implement limit setting.
+> >
+> > [1]: https://lore.kernel.org/amd-gfx/20210126214626.16260-1-brian.welty=
+@intel.com/
+> >
+>
+> I think this is material for the cover more than the commit message. When=
+ I read
+> this I was expecting all this in this patch.
+>
+> > Signed-off-by: Hridya Valsaraju <hridya@google.com>
+> > Signed-off-by: T.J. Mercier <tjmercier@google.com>
+> > ---
+> > v7 changes
+> > Remove comment about duplicate name rejection which is not relevant to
+> > cgroups users per Michal Koutn=C3=BD.
+> >
+> > v6 changes
+> > Move documentation into cgroup-v2.rst per Tejun Heo.
+> >
+> > v5 changes
+> > Drop the global GPU cgroup "total" (sum of all device totals) portion
+> > of the design since there is no currently known use for this per
+> > Tejun Heo.
+> >
+> > Update for renamed functions/variables.
+> >
+> > v3 changes
+> > Remove Upstreaming Plan from gpu-cgroup.rst per John Stultz.
+> >
+> > Use more common dual author commit message format per John Stultz.
+> > ---
+> >  Documentation/admin-guide/cgroup-v2.rst | 23 +++++++++++++++++++++++
+> >  1 file changed, 23 insertions(+)
+> >
+> > diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/ad=
+min-guide/cgroup-v2.rst
+> > index 69d7a6983f78..2e1d26e327c7 100644
+> > --- a/Documentation/admin-guide/cgroup-v2.rst
+> > +++ b/Documentation/admin-guide/cgroup-v2.rst
+> > @@ -2352,6 +2352,29 @@ first, and stays charged to that cgroup until th=
+at resource is freed. Migrating
+> >  a process to a different cgroup does not move the charge to the destin=
+ation
+> >  cgroup where the process has moved.
+> >
+> > +
+> > +GPU
+> > +---
+> > +
+> > +The GPU controller accounts for device and system memory allocated by =
+the GPU
+> > +and related subsystems for graphics use. Resource limits are not curre=
+ntly
+> > +supported.
+> > +
+> > +GPU Interface Files
+> > +~~~~~~~~~~~~~~~~~~~~
+> > +
+> > +  gpu.memory.current
+> > +     A read-only file containing memory allocations in flat-keyed form=
+at. The key
+> > +     is a string representing the device name. The value is the size o=
+f the memory
+> > +     charged to the device in bytes. The device names are globally uni=
+que.::
+> > +
+> > +       $ cat /sys/kernel/fs/cgroup1/gpu.memory.current
+>
+> I think this is outdated, you are using cgroup v2, right?
+>
+Oh "cgroup1" was meant to refer to the name of a cgroup, not to cgroup
+v1. A different name would be better here.
 
-   s390-linux-ld: drivers/irqchip/irq-imx-intmux.o: in function `imx_intmux_probe':
-   irq-imx-intmux.c:(.text+0x522): undefined reference to `devm_platform_ioremap_resource'
-   s390-linux-ld: drivers/phy/marvell/phy-mvebu-a3700-utmi.o: in function `mvebu_a3700_utmi_phy_probe':
-   phy-mvebu-a3700-utmi.c:(.text+0x152): undefined reference to `devm_platform_ioremap_resource'
-   s390-linux-ld: drivers/soc/fsl/dpaa2-console.o: in function `dpaa2_console_close':
-   dpaa2-console.c:(.text+0x8c): undefined reference to `iounmap'
-   s390-linux-ld: drivers/soc/fsl/dpaa2-console.o: in function `dpaa2_console_probe':
-   dpaa2-console.c:(.text+0xea): undefined reference to `of_address_to_resource'
-   s390-linux-ld: drivers/soc/fsl/dpaa2-console.o: in function `dpaa2_generic_console_open.constprop.0':
-   dpaa2-console.c:(.text+0x212): undefined reference to `ioremap'
-   s390-linux-ld: dpaa2-console.c:(.text+0x254): undefined reference to `iounmap'
-   s390-linux-ld: dpaa2-console.c:(.text+0x28a): undefined reference to `ioremap'
-   s390-linux-ld: dpaa2-console.c:(.text+0x45a): undefined reference to `iounmap'
-   s390-linux-ld: drivers/char/hw_random/exynos-trng.o: in function `exynos_trng_probe':
-   exynos-trng.c:(.text+0x318): undefined reference to `devm_platform_ioremap_resource'
-   s390-linux-ld: drivers/char/hw_random/meson-rng.o: in function `meson_rng_probe':
-   meson-rng.c:(.text+0xc2): undefined reference to `devm_platform_ioremap_resource'
-   s390-linux-ld: drivers/char/hw_random/mtk-rng.o: in function `mtk_rng_probe':
-   mtk-rng.c:(.text+0x380): undefined reference to `devm_platform_ioremap_resource'
-   s390-linux-ld: drivers/char/hw_random/npcm-rng.o: in function `npcm_rng_probe':
-   npcm-rng.c:(.text+0x2da): undefined reference to `devm_platform_ioremap_resource'
-   s390-linux-ld: drivers/char/xillybus/xillybus_of.o: in function `xilly_drv_probe':
->> xillybus_of.c:(.text+0x20c): undefined reference to `devm_platform_ioremap_resource'
-   s390-linux-ld: drivers/watchdog/sirfsoc_wdt.o:sirfsoc_wdt.c:(.text+0x1d8): more undefined references to `devm_platform_ioremap_resource' follow
-   s390-linux-ld: drivers/clocksource/timer-of.o: in function `timer_of_init':
-   timer-of.c:(.init.text+0x66): undefined reference to `of_iomap'
-   s390-linux-ld: timer-of.c:(.init.text+0x300): undefined reference to `iounmap'
-   s390-linux-ld: drivers/clocksource/timer-of.o: in function `timer_of_cleanup':
-   timer-of.c:(.init.text+0x3dc): undefined reference to `iounmap'
+> > +       dev1 4194304
+> > +       dev2 104857600
+> > +
+>
+> When I applied the full series I was expecting see the memory allocated b=
+y the
+> gpu devices or users of the gpu in this file but, after some experiments,=
+ what I
+> saw is the memory allocated via any process that uses the dma-buf heap AP=
+I (not
+> necessary gpu users). For example, if you create a small program that all=
+ocates
+> some memory via the dma-buf heap API and then you cat the gpu.memory.curr=
+ent
+> file, you see that the memory accounted is not related to the gpu.
+>
+> This is really confusing, looks to me that the patches evolved to account=
+ memory
+> that is not really related to the GPU but allocated vi the dma-buf heap A=
+PI. IMO
+> the name of the file should be according to what really does to avoid
+> confusions.
+>
+> So, is this patchset meant to be GPU specific? If the answer is yes that'=
+s good
+> but that's not what I experienced. I'm missing something?
+>
+There are two reasons this exists as a GPU controller. The first is
+that most graphics buffers in Android come from these heaps, and this
+is primarily what we are interested in accounting. However the idea is
+to account other graphics memory types more commonly used on desktop
+under different resource names with this controller. The second reason
+predates my involvement, but my understanding is that Hridya tried to
+upstream heap tracking via tracepoints but was asked to try to use GPU
+cgroups instead, which led to her initial version of this series. So
+this is a starting point. Any commentary on why this controller would
+our would not work for any use cases you have in mind (provided the
+appropriate charging/uncharging code is plugged in) would be
+appreciated!
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+By the way, discussion around earlier proposals on this topic
+suggested the "G" should be for "general" instead of "graphics", I
+think in recognition of the breadth of resources that would eventually
+be tracked by it.
+https://lore.kernel.org/amd-gfx/YBp4ap+1l2KWbqEJ@phenom.ffwll.local/
+
+
+
+> If the answer is that evolved to track dma-buf heap allocations I think a=
+ll the
+> patches need some rework to adapt the wording as right now, the gpu wordi=
+ng
+> seems confusing to me.
+>
+> > +     The device name string is set by a device driver when it register=
+s with the
+> > +     GPU cgroup controller to participate in resource accounting.
+> > +
+> >  Others
+> >  ------
+> >
+> >
+> Thanks,
+>  Enric
+>

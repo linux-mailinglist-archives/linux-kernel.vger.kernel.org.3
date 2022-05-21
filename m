@@ -2,186 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D07C752FA64
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 11:49:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C621652FA67
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 11:49:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245081AbiEUJil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 05:38:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40066 "EHLO
+        id S1346066AbiEUJiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 05:38:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238242AbiEUJij (ORCPT
+        with ESMTP id S238242AbiEUJiw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 05:38:39 -0400
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120048.outbound.protection.outlook.com [40.107.12.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E649BA88A6
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 02:38:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oa3HwM/RUAZGv+K7wRxF8aY8So9+ehKDhc+6Yi/f2JS+WItDI2ZWsWVEtuEtqC2aA7sRr0jj+6LZqpv9lBUDNS+O2nQc9szeVH5l2yz+7GTX/NQ+8rF19TV5gR/0PTxS1sORID5QoRPtcXlbzfU/2/yxgIKjG7aXPR/a80Qra5MkUcHspa0IakOj3CrveI3cwo9REchLBVLQzbM6UKB1g1dHMeJvc5/eZZv6MRWg9PSDK9xB0ve7AH0rtXg4eDiWfp4iLw4N1G/ng/GFqjXhtAMUVPoaC+Ghxqj+onieypGz2Svr+w7AoAmwZ2Me+8MlnaMpDHDRxhdrGrmvV+/YnA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HOoblDFttOBCeTLk3wf2KJIPO7zvP2+1YVGPhq0DFAw=;
- b=J8P2hwlkLoJoowEVpzRVxkn+24EBqiI6FybuxU5KQRg1WKXvPxZto48uZfpYBR6AQYmYHoDVECCESc2AEGAK1mdaYjPmjR8v3IfP3m+Hef+shOaOczbNScAHCxOBCt28hGdqthNFAbYH1lWeqcyOC5Y4x35LxjhbI8DNYFNDwUSyKmb1yzehk/TxXJkJfGWtWzR/wunYCsYjy3mH81O617m905ZVo2t6CGxeLRHiEt5kO2OReI7Fvgghb5G0q1CarwAL915UK5XoY/y5TxkNxAwb9DWb03BsKa6sr13vVB2Cnl4SXZ9xmkoxtWy21d6kZ8Z3L98SeFvJX52FHvGpEg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MRZP264MB2603.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:1c::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.16; Sat, 21 May
- 2022 09:38:35 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::ad4e:c157:e9ac:385d]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::ad4e:c157:e9ac:385d%8]) with mapi id 15.20.5273.019; Sat, 21 May 2022
- 09:38:35 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-CC:     Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "aik@ozlabs.ru" <aik@ozlabs.ru>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "naveen.n.rao@linux.vnet.ibm.com" <naveen.n.rao@linux.vnet.ibm.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        Sathvika Vasireddy <sv@linux.ibm.com>
-Subject: Re: [RFC PATCH 3/3] objtool/mcount: Add powerpc specific functions
-Thread-Topic: [RFC PATCH 3/3] objtool/mcount: Add powerpc specific functions
-Thread-Index: AQHYOsOkMhd+XrYXYE6fzWpV8XELvKzS/yUAgAJH8wCARmM5AIAABXAAgA3HzIA=
-Date:   Sat, 21 May 2022 09:38:35 +0000
-Message-ID: <bedd240b-d5b1-72f9-156d-96d160f180d4@csgroup.eu>
-References: <20220318105140.43914-1-sv@linux.ibm.com>
- <20220318105140.43914-4-sv@linux.ibm.com>
- <YjR6kHq4c/rjCTpr@hirez.programming.kicks-ass.net>
- <0b55f122-4760-c1ba-840a-0911cefec2ad@csgroup.eu>
- <20220328195920.dqlfra3lcardko6r@treble>
- <b8fac6e2-c117-86cf-2901-5ae0852ca403@csgroup.eu>
- <20220512151206.dphxz5jyeshwc4jb@treble>
-In-Reply-To: <20220512151206.dphxz5jyeshwc4jb@treble>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 71455fcd-ff7c-4e19-80b5-08da3b0dad52
-x-ms-traffictypediagnostic: MRZP264MB2603:EE_
-x-microsoft-antispam-prvs: <MRZP264MB2603F1127EC73E5DA7E96878EDD29@MRZP264MB2603.FRAP264.PROD.OUTLOOK.COM>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: HEPJlvjhknNS2ixyMnlfMs7SbVpyLylrA7c8IT4BkbKylSd2Dumn8xapx4gQaAwqHI1p1WXbK8Ub52h8rvSN0NTDhoOjmY119Jikb35FPbpM1bXPBAfsziT0z7mS88if9luzxM+6OMVJWdjJ9XMXOiVMK/x7O+jKMvTjHo6gcScS/EFOXd5Jr/VxPhKTGT6D4NC3xiSBuOVOaS5UBC/S6S48+9c7nfyM6EIrbH6B3hFekaVFn65dxA/QTLYPaeF4wC22qhrczgW3sws8zbNlEAvZienDf5C/aqgt4Ptj130ZJVzV+1CNc2THcr1L1PNASJm30QMHJ6jap894QtxhjqqLDlJ81cb/4SRMTzJffG5W4ndF+UeCLnUwLod9T1ehKwQMCu7qDc+37Ed0N3QE4N6RvFcPMnQGYWtWv+SAG++mZ0B1wkPoDOUheKYqY/NdOZ+940JwKB5569LKmE19aQGSQ+vESHIokH2BvkOm7risN7k2Oyhkl0RgzHop7nAsjYhMfj+uWrTry9yeWMQ0dFJ3t3GcHLlBpTfb5mN/iddl2/Vz0WgCKFtyGTLfaeAUd8xhZQEtBZ6rO96WR0aXzzK8FdJ5Mt2aTorI0hXM8J059TXKl/EDI0qUfUelgb/kBmAvmX0z5xt59PRrYOM9HiBsxKhRCOdE/o7Wb68yJNFB4E9UTQGQOkw4/i1H5NluzvzUIDV16Pra5h1kZf0wqaVK5EdNej65knkMA9Ggl9agaiYCxWjMhIFJltFasu+aS7ziPYjSIVKhUP4gPDCB3w==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8676002)(64756008)(66556008)(66446008)(66476007)(66946007)(4326008)(91956017)(71200400001)(6916009)(316002)(54906003)(76116006)(86362001)(31686004)(6506007)(6512007)(31696002)(26005)(122000001)(44832011)(508600001)(6486002)(66574015)(186003)(2616005)(83380400001)(36756003)(38070700005)(38100700002)(2906002)(8936002)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?aDFQWGhjSm1lNytXTFVvY0pjMUMvZDViblY4NklwQmFDS0l5VEo5RURtM2JN?=
- =?utf-8?B?cFFUVHZNTm1pWlVpTUl3eFJHeXBxZjZIdDFmUzNNbnkvcDhMeUZ1S3I0TnVO?=
- =?utf-8?B?UTF4dStNeFl3QzhnZFFLemhIcTNjNkc2dStiL2tRRDFVMWdLMWUrY3dOY3ht?=
- =?utf-8?B?eThaMHI5Ky9pSEdwb0MzczRsUnRMREp1UVJGQS9lV2NmeVM0NUFiN3dwOWxt?=
- =?utf-8?B?ejlnV3hPd2xDQ3ByUjRMd2RsOSs1MTc5dVN0WXVkamtLcFZHVVJtOUdmeHJM?=
- =?utf-8?B?bmIrZHV3MGlVcExCVmdTQzVLYlova2tZTUViNllBL0c4N3BETUlrNUdnTTY5?=
- =?utf-8?B?R1hRZGxkR01JOW5IaUNQNmlYK25CMDZXRk5uNHB4L0RpeUhSKzE2M1BJbVVi?=
- =?utf-8?B?TzhnMVhXSXRFTE5FOHV2UDZhVDNBeklaUFlJeE5hY2NPTGpWcTBtL3V6Z1ZN?=
- =?utf-8?B?RXA1WkRZL2Z4cUVSSzhlZW4vcWhkRGFqcU5rTC9VbUh1Y1hnVzYwdUhPNWlC?=
- =?utf-8?B?NDVFd0Fnc1VZYlkvcG9wbGZWRDFrWlhMRGRydmtKYU4zSUcrakEvTG9QdGUr?=
- =?utf-8?B?LzBJMkJlZ3hJM3pTUS8zZGs5T3hOcW9XWUh4N2QyS2MyUnZ1ejB1T3VsNWpY?=
- =?utf-8?B?N2xsTDZ0WkpWMzdQc0JsZ0lLR1JDaHNoVHF4VHY0UGYyRnR0aU1TMlJxZTZY?=
- =?utf-8?B?bDN4WFBrdW94b1dVM3dRUFNoZjdjc2gweFNNUXJ1QUN1cEUxcVZ0a3NlVVFC?=
- =?utf-8?B?U1FYNjZGa2orREtZZ1N2TW1IaUI4WWtLaWN2UEtsOHcrZW0wS0NKREc1YUIw?=
- =?utf-8?B?VGtBUW5vb0xkdE1ZUSt6SnBJTlhtTyszVElOMDR6ZE0rWVkvMFEyZlpiYmxG?=
- =?utf-8?B?ZkRjUTJGTHo5ZXRydWJUZHROT0tpMzZIbHdQWXNKQzlNM3ZwVWp4RE4wMTgz?=
- =?utf-8?B?cU9aTGRORU5kZkUzT242cFNoS0s2U0tRVm9hd3QyUXkyS0NZdkpabkl6Tmpm?=
- =?utf-8?B?V2dSTENvVlRmTTQ2dVJlODJ0cEVxMW9qUjAybFNuUGRreStwRzRycDNZdFJU?=
- =?utf-8?B?YWhDK3o4SThPOW9MaXlHNkdXbzZwTENHRWdRMk5wRUtlZ2tkSEJOeE5kZSts?=
- =?utf-8?B?cGpudGdKcGhtV2JwcnM4eEN6NFNTUXFkb2x4ei9zOGFjNm5lM3VhNUVtT0FP?=
- =?utf-8?B?UzhCUCtxek04Sm52ZVhERU5XWlpxVXJ4VnhrYzI3MnpObkt5akFXVW9kQjZX?=
- =?utf-8?B?NzBYQW5IaWUyRHlBanBKK3RQSXpBVHZFNEhsd1FGZEprR2VVWk91WXZKQjZx?=
- =?utf-8?B?UXB4KzV0ZHNrNUZseURMRVd1dU5MVWdzRGhxR3NJUUJtYjJ1RzIrVDZyYVls?=
- =?utf-8?B?YjE3Mm5SVTRVSk1wR2V6MFk2a0xDVHVCbVBIYWZPaGRUaEpqQjFYb2RsZzlN?=
- =?utf-8?B?WG9uUUtJTjZkTjZudGt1SEhPaWVCQ2NpQXNxclNMZGFyamVlMlE0Tkg5d0Nt?=
- =?utf-8?B?MERCVTY3d3p2TGlPamFYaFpGWGxpeWoycTdIbk9rdFhLMlJpRU52QU43OEZC?=
- =?utf-8?B?NkI4NHB4dk1lNStRdHJrWnBjS2dzMWhBMzNpYTdPY0IxejRrcW9FZlNwbnJv?=
- =?utf-8?B?K2pjeFFUL3lSVW0wOVEzdjRRSEYrZllhVURmcVBjZTNvbnNuNXlvTG01bTVT?=
- =?utf-8?B?cHlvM2QxTE1VU3NWNmc2SzFYeEI5Szl3aktOSFN2Qy9TWjNhbzY4dkErVHow?=
- =?utf-8?B?TVBjZ2lnbldvWktUenBSY09oZ1FDaXJESC92bUZMVzhIdm1KNE9kN0VybUNF?=
- =?utf-8?B?SDA4L1Rka1o1ZzBuL0NvN1lDRlZJVVY3NHB0QVhOVGRKS2phRWNoenl0UGtG?=
- =?utf-8?B?UFhKZjJNa2lydlVpRGNZUjBFa1gyVHZYc1Q3SWtxL09oQXlTelUxSmNRMEdM?=
- =?utf-8?B?ZTVmVnBzUjI2aFZqeUpXU2IxeGlzbmZncmw2bW9Pb0VHZUpHa3kxaStIM0tV?=
- =?utf-8?B?aXQ4T2hFN0FoTnVXdldPZWZFQjNka1hueUdSYkM4azIrUStpNVN0WldLRHlW?=
- =?utf-8?B?KzNtdGpzaGFCV0QzYzgrNXBnTmJoMHVJWStZSDcwSWlhcjExaHlBMk1ucGVK?=
- =?utf-8?B?SzRrK2M5QkZWU1VSSzAyUjNxZS9NNkFMN3E3bEhZNEY1Y0poRzdJcUtVVVZT?=
- =?utf-8?B?cE1TTnBCY00xYlJvNzhnSy80Q01uN3AxZjd2QW9YSTBpUXRrUGgrNkVlVy80?=
- =?utf-8?B?ZHA2NmxudEFFdTl4YjR6ZkxIaS9RYWNvZHE2NTU0N0hacytlekpPVGN4cmhF?=
- =?utf-8?B?QytISW5UQUxrdUZ1VjlweXFkTkMrNjZsWWI5NjVSUGdKVmhxTzZGdVVaOXIy?=
- =?utf-8?Q?9oPZNPUGoJdrxJwTJS/7qMMdYKTckqy4qbA5Z?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <59FD544E88CFDF41AB96E7573AF0C44B@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Sat, 21 May 2022 05:38:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0453A88B2;
+        Sat, 21 May 2022 02:38:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AAA54B81B1C;
+        Sat, 21 May 2022 09:38:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48873C3411E;
+        Sat, 21 May 2022 09:38:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653125928;
+        bh=sEe5CESGHLlLTk2rNVU7p1b/wzeswvHfJfDdSu6tdSw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BkLNqTLyznJmPMwSPWG0NxmTJ7dDRtJ+UULq9DnUqv0Ww3Ko21VHPmVuRiN3xbdht
+         96q7UiHrNy40QFa+WZF/VxzpHqJKYAaiANfUh7KQqj31YJKkr1uNBbDjnLGY2HS/+o
+         xSgozmiubv83NMR5Xu9WPEHy54HYbz0fGXekDa4ZS2HLUtnqHmibvJfrrfu24I3Ezp
+         zgQPUy+pA/cfhiECeF/pIOfgalcMKlKTtfg1TGvN8cv8RCsIvoAWfVLJwfLEaqh0BX
+         9BFORqFdsspS5ybtgU9QHC6Gf7ITRpaG4n9y+HeZnJbiWRxdp9LRc74KWGhJ1+BU9I
+         xB0Y7HdPHxd3w==
+Date:   Sat, 21 May 2022 11:38:39 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     "Serge E. Hallyn" <serge@hallyn.com>
+Cc:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        christian.brauner@ubuntu.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        jpenumak@redhat.com,
+        James Bottomley <James.Bottomley@HansenPartnership.com>
+Subject: Re: [PATCH v12 02/26] securityfs: Extend securityfs with namespacing
+ support
+Message-ID: <20220521093839.3srwejkeqthgk2fq@wittgenstein>
+References: <20220420140633.753772-1-stefanb@linux.ibm.com>
+ <20220420140633.753772-3-stefanb@linux.ibm.com>
+ <20220521022302.GA8575@mail.hallyn.com>
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 71455fcd-ff7c-4e19-80b5-08da3b0dad52
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 May 2022 09:38:35.4356
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Dunn6jY2AS0GO5p5NUIRFC0P8gSt0hd1U4AvvLJeb7Br4hYTOIQfm3AP/1OnnAEl7ydW/vBLNQ3TOecZTIoyQmALqZeSFjaAMFp2+kRF9GA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRZP264MB2603
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220521022302.GA8575@mail.hallyn.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-TGUgMTIvMDUvMjAyMiDDoCAxNzoxMiwgSm9zaCBQb2ltYm9ldWYgYSDDqWNyaXTCoDoNCj4gT24g
-VGh1LCBNYXkgMTIsIDIwMjIgYXQgMDI6NTI6NDBQTSArMDAwMCwgQ2hyaXN0b3BoZSBMZXJveSB3
-cm90ZToNCj4+IEhpIEpvc2gsDQo+Pg0KPj4gTGUgMjgvMDMvMjAyMiDDoCAyMTo1OSwgSm9zaCBQ
-b2ltYm9ldWYgYSDDqWNyaXQgOg0KPj4+IE9uIFN1biwgTWFyIDI3LCAyMDIyIGF0IDA5OjA5OjIw
-QU0gKzAwMDAsIENocmlzdG9waGUgTGVyb3kgd3JvdGU6DQo+Pj4+IFdoYXQgYXJlIGN1cnJlbnQg
-d29ya3MgaW4gcHJvZ3Jlc3Mgb24gb2JqdG9vbCA/IFNob3VsZCBJIHdhaXQgSm9zaCdzDQo+Pj4+
-IGNoYW5nZXMgYmVmb3JlIHN0YXJ0aW5nIGxvb2tpbmcgYXQgYWxsIHRoaXMgPyBTaG91bGQgSSB3
-YWl0IGZvciBhbnl0aGluZw0KPj4+PiBlbHNlID8NCj4+Pg0KPj4+IEknbSBub3QgbWFraW5nIGFu
-eSBtYWpvciBjaGFuZ2VzIHRvIHRoZSBjb2RlLCBqdXN0IHNodWZmbGluZyB0aGluZ3MNCj4+PiBh
-cm91bmQgdG8gbWFrZSB0aGUgaW50ZXJmYWNlIG1vcmUgbW9kdWxhci4gIEkgaG9wZSB0byBoYXZl
-IHNvbWV0aGluZw0KPj4+IHNvb24gKHRoaXMgd2VlaykuICBQZXRlciByZWNlbnRseSBhZGRlZCBh
-IGJpZyBmZWF0dXJlIChJbnRlbCBJQlQpIHdoaWNoDQo+Pj4gaXMgYWxyZWFkeSBpbiAtbmV4dC4N
-Cj4+Pg0KPj4NCj4+IFdlcmUgeW91IGFibGUgdG8gc2VuZCBvdXQgc29tZXRoaW5nID8NCj4gDQo+
-IFllcywgdGhlIG9ianRvb2wgcmV3cml0ZSBpcyBub3cgaW4gdGlwL29ianRvb2wvY29yZSBhbmQg
-bGludXgtbmV4dC4NCg0KTmljZS4NCg0KSSBnYXZlIGl0IGEgdHJ5IHRoaXMgbW9ybmluZywgSSBz
-ZWxlY3RlZCBIQVZFX09CSlRPT0wgYW5kIA0KSEFWRV9PQkpUT09MX01DT1VOVCBmcm9tIGFyY2gv
-cG93ZXJwYy9LY29uZmlnDQoNCg0KU2VlbXMgbGlrZSB0aGVyZSBhcmUgc3RpbGwgc29tZSB4ODYg
-YXJjaCBzcGVjaWZpYyBzdHVmZiBpbiBjb21tb24gY29tbW9uIA0KY29kZSBhbmQgSSBnZXQgdGhl
-IGZvbGxvd2luZyBlcnJvcnMuDQoNCkFsc28sIGlzIGl0IG5vcm1hbCB0byBnZXQgdGhvc2UgZnVu
-Y3Rpb25zIGJ1aWx0IGFsbHRob3VnaCBJIGhhdmUgbm90IA0Kc2VsZWN0ZWQgSEFWRV9TVEFDS19W
-QUxJREFUSU9OID8NCg0KICAgQ0MgICAgICAvaG9tZS9jaGxlcm95L2xpbnV4LXBvd2VycGMvdG9v
-bHMvb2JqdG9vbC9jaGVjay5vDQpjaGVjay5jOiBJbiBmdW5jdGlvbiAnaGFzX3ZhbGlkX3N0YWNr
-X2ZyYW1lJzoNCmNoZWNrLmM6MjM2OTozMDogZXJyb3I6ICdDRklfQlAnIHVuZGVjbGFyZWQgKGZp
-cnN0IHVzZSBpbiB0aGlzIA0KZnVuY3Rpb24pOyBkaWQgeW91IG1lYW4gJ0NGSV9TUCc/DQogIDIz
-NjkgfCAgICAgICAgIGlmIChjZmktPmNmYS5iYXNlID09IENGSV9CUCAmJg0KICAgICAgIHwgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICBefn5+fn4NCiAgICAgICB8ICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgQ0ZJX1NQDQpjaGVjay5jOjIzNjk6MzA6IG5vdGU6IGVhY2ggdW5kZWNs
-YXJlZCBpZGVudGlmaWVyIGlzIHJlcG9ydGVkIG9ubHkgb25jZSANCmZvciBlYWNoIGZ1bmN0aW9u
-IGl0IGFwcGVhcnMgaW4NCmNoZWNrLmM6MjM3MTo0NDogZXJyb3I6ICdDRklfUkEnIHVuZGVjbGFy
-ZWQgKGZpcnN0IHVzZSBpbiB0aGlzIA0KZnVuY3Rpb24pOyBkaWQgeW91IG1lYW4gJ0NGSV9SMyc/
-DQogIDIzNzEgfCAgICAgICAgICAgICBjaGVja19yZWdfZnJhbWVfcG9zKCZjZmktPnJlZ3NbQ0ZJ
-X1JBXSwgDQotY2ZpLT5jZmEub2Zmc2V0ICsgOCkpDQogICAgICAgfCAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgXn5+fn5+DQogICAgICAgfCAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgQ0ZJX1IzDQpjaGVjay5jOiBJbiBmdW5jdGlv
-biAndXBkYXRlX2NmaV9zdGF0ZSc6DQpjaGVjay5jOjI0OTk6NzA6IGVycm9yOiAnQ0ZJX0JQJyB1
-bmRlY2xhcmVkIChmaXJzdCB1c2UgaW4gdGhpcyANCmZ1bmN0aW9uKTsgZGlkIHlvdSBtZWFuICdD
-RklfU1AnPw0KICAyNDk5IHwgICAgICAgICAgICAgICAgICAgICAgICAgaWYgKG9wLT5zcmMucmVn
-ID09IENGSV9TUCAmJiANCm9wLT5kZXN0LnJlZyA9PSBDRklfQlAgJiYNCiAgICAgICB8IA0KICAg
-ICAgIF5+fn5+fg0KICAgICAgIHwgDQogICAgICAgQ0ZJX1NQDQptYWtlWzNdOiAqKiogWy9ob21l
-L2NobGVyb3kvbGludXgtcG93ZXJwYy90b29scy9idWlsZC9NYWtlZmlsZS5idWlsZDo5NzogDQov
-aG9tZS9jaGxlcm95L2xpbnV4LXBvd2VycGMvdG9vbHMvb2JqdG9vbC9jaGVjay5vXSBFcnJvciAx
-DQptYWtlWzJdOiAqKiogW01ha2VmaWxlOjU0OiANCi9ob21lL2NobGVyb3kvbGludXgtcG93ZXJw
-Yy90b29scy9vYmp0b29sL29ianRvb2wtaW4ub10gRXJyb3IgMg0KbWFrZVsxXTogKioqIFtNYWtl
-ZmlsZTo2OTogb2JqdG9vbF0gRXJyb3IgMg0KbWFrZTogKioqIFtNYWtlZmlsZToxMzM3OiB0b29s
-cy9vYmp0b29sXSBFcnJvciAyDQoNCg0KV2hhdCB3b3VsZCBiZSB0aGUgYmVzdCBhcHByb2FjaCB0
-byBmaXggdGhhdCA/DQoNClRoYW5rcw0KQ2hyaXN0b3BoZQ==
+On Fri, May 20, 2022 at 09:23:02PM -0500, Serge Hallyn wrote:
+> On Wed, Apr 20, 2022 at 10:06:09AM -0400, Stefan Berger wrote:
+> > Enable multiple instances of securityfs by keying each instance with a
+> > pointer to the user namespace it belongs to.
+> > 
+> > Since we do not need the pinning of the filesystem for the virtualization
+> > case, limit the usage of simple_pin_fs() and simpe_release_fs() to the
+> > case when the init_user_ns is active. This simplifies the cleanup for the
+> > virtualization case where usage of securityfs_remove() to free dentries
+> > is therefore not needed anymore.
+> > 
+> > For the initial securityfs, i.e. the one mounted in the host userns mount,
+> > nothing changes. The rules for securityfs_remove() are as before and it is
+> > still paired with securityfs_create(). Specifically, a file created via
+> > securityfs_create_dentry() in the initial securityfs mount still needs to
+> > be removed by a call to securityfs_remove(). Creating a new dentry in the
+> > initial securityfs mount still pins the filesystem like it always did.
+> > Consequently, the initial securityfs mount is not destroyed on
+> > umount/shutdown as long as at least one user of it still has dentries that
+> > it hasn't removed with a call to securityfs_remove().
+> > 
+> > Prevent mounting of an instance of securityfs in another user namespace
+> > than it belongs to. Also, prevent accesses to files and directories by
+> > a user namespace that is neither the user namespace it belongs to
+> > nor an ancestor of the user namespace that the instance of securityfs
+> > belongs to. Do not prevent access if securityfs was bind-mounted and
+> > therefore the init_user_ns is the owning user namespace.
+> > 
+> > Suggested-by: Christian Brauner <brauner@kernel.org>
+> > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> > Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+> > 
+> > ---
+> > v11:
+> >  - Formatted comment's first line to be '/*'
+> > ---
+> >  security/inode.c | 73 ++++++++++++++++++++++++++++++++++++++++--------
+> >  1 file changed, 62 insertions(+), 11 deletions(-)
+> > 
+> > diff --git a/security/inode.c b/security/inode.c
+> > index 13e6780c4444..84c9396792a9 100644
+> > --- a/security/inode.c
+> > +++ b/security/inode.c
+> > @@ -21,9 +21,38 @@
+> >  #include <linux/security.h>
+> >  #include <linux/lsm_hooks.h>
+> >  #include <linux/magic.h>
+> > +#include <linux/user_namespace.h>
+> >  
+> > -static struct vfsmount *mount;
+> > -static int mount_count;
+> > +static struct vfsmount *init_securityfs_mount;
+> > +static int init_securityfs_mount_count;
+> > +
+> > +static int securityfs_permission(struct user_namespace *mnt_userns,
+> > +				 struct inode *inode, int mask)
+> > +{
+> > +	int err;
+> > +
+> > +	err = generic_permission(&init_user_ns, inode, mask);
+> > +	if (!err) {
+> > +		/*
+> > +		 * Unless bind-mounted, deny access if current_user_ns() is not
+> > +		 * ancestor.
+> 
+> This comment has confused me the last few times I looked at this.  I see
+> now you're using "bind-mounted" as a shortcut for saying "bind mounted from
+> the init_user_ns into a child_user_ns container".  I do think that needs
+> to be made clearer in this comment.
+> 
+> Should the init_user_ns really be special here?  What if I'm running a
+> first level container with uptodate userspace that mounts its own
+> securityfs, but in that i want to run a nested older userspace that
+> bind mounts the parent securityfs?  Is there a good reason to deny that?
+> 
+> It would seem to me the better check would be
+> 
+> 	if (!is_original_mounter_of(current_user_ns, inode->i_sb->s_user_ns) &&
+> 	     !in_userns(current_user_ns(), inode->i_sb->s_user_ns))
+> 		err = -EACCESS;
+> 
+> the is_original_mounter_of() would require the user_ns to cache first
+> its parent securityfs userns, and, when a task in the user_ns mounts
+> securityfs, then cache its own userns.  (without a reference).
+> If current_user_ns() has mounted a securityfs for a user_ns other than
+> inode->i_sb->s_user_ns (or init_user_ns), then reject the mount.
+> Otherwise check current_user_ns()->parent, etc, until init_user_ns.
+> If you reach init_user_ns, or an ns which mounted inode->i_sb->s_user_ns,
+> then allow, else deny.
+> 
+> It's the kind of special casing we've worked hard to avoid in other
+> namespaces.
+> 
+> > +		 */
+> > +		if (inode->i_sb->s_user_ns != &init_user_ns &&
+> > +		    !in_userns(current_user_ns(), inode->i_sb->s_user_ns))
+> > +			err = -EACCES;
+> > +	}
+> > +
+> > +	return err;
+> > +}
+> > +
+> > +static const struct inode_operations securityfs_dir_inode_operations = {
+> > +	.permission	= securityfs_permission,
+> > +	.lookup		= simple_lookup,
+> > +};
+> > +
+> > +static const struct inode_operations securityfs_file_inode_operations = {
+> > +	.permission	= securityfs_permission,
+> > +};
+> >  
+> >  static void securityfs_free_inode(struct inode *inode)
+> >  {
+> > @@ -40,20 +69,25 @@ static const struct super_operations securityfs_super_operations = {
+> >  static int securityfs_fill_super(struct super_block *sb, struct fs_context *fc)
+> >  {
+> >  	static const struct tree_descr files[] = {{""}};
+> > +	struct user_namespace *ns = fc->user_ns;
+> >  	int error;
+> >  
+> > +	if (WARN_ON(ns != current_user_ns()))
+> > +		return -EINVAL;
+> > +
+> >  	error = simple_fill_super(sb, SECURITYFS_MAGIC, files);
+> >  	if (error)
+> >  		return error;
+> >  
+> >  	sb->s_op = &securityfs_super_operations;
+> > +	sb->s_root->d_inode->i_op = &securityfs_dir_inode_operations;
+> >  
+> >  	return 0;
+> >  }
+> >  
+> >  static int securityfs_get_tree(struct fs_context *fc)
+> >  {
+> > -	return get_tree_single(fc, securityfs_fill_super);
+> > +	return get_tree_keyed(fc, securityfs_fill_super, fc->user_ns);
+> >  }
+> >  
+> >  static const struct fs_context_operations securityfs_context_ops = {
+> > @@ -71,6 +105,7 @@ static struct file_system_type fs_type = {
+> >  	.name =		"securityfs",
+> >  	.init_fs_context = securityfs_init_fs_context,
+> >  	.kill_sb =	kill_litter_super,
+> > +	.fs_flags =	FS_USERNS_MOUNT,
+> >  };
+> >  
+> >  /**
+> > @@ -109,6 +144,7 @@ static struct dentry *securityfs_create_dentry(const char *name, umode_t mode,
+> >  					const struct file_operations *fops,
+> >  					const struct inode_operations *iops)
+> >  {
+> > +	struct user_namespace *ns = current_user_ns();
+> >  	struct dentry *dentry;
+> >  	struct inode *dir, *inode;
+> >  	int error;
+> > @@ -118,12 +154,19 @@ static struct dentry *securityfs_create_dentry(const char *name, umode_t mode,
+> >  
+> >  	pr_debug("securityfs: creating file '%s'\n",name);
+> >  
+> > -	error = simple_pin_fs(&fs_type, &mount, &mount_count);
+> > -	if (error)
+> > -		return ERR_PTR(error);
+> > +	if (ns == &init_user_ns) {
+> > +		error = simple_pin_fs(&fs_type, &init_securityfs_mount,
+> > +				      &init_securityfs_mount_count);
+> 
+> So ...  it's less work for the kernel to skip the simple_pin_fs()
+> here, but it's more code, and more confusing code, to skip it.
+> 
+> So I just want to ask, to make sure:  is it worth it?  Or should
+> it just be done for all namespaces here (and below and for release),
+> for shorter, simpler, easier to read and grok code?
+
+I think you might've skipped a few version of the thread.
+It would be more code and a lot more confusing to try and keep the
+simple_pin_fs(). You will need a per-userns vfsmount pointer and you
+still need to change securityfs_create_dentry and securityfs_remove. For
+more context see [1] and [2].
+
+[1]: https://lore.kernel.org/lkml/20211206172600.1495968-12-stefanb@linux.ibm.com
+[2]: https://lore.kernel.org/lkml/20211206172600.1495968-13-stefanb@linux.ibm.com
+
+The fs pinning logic is most suited for single-superblock, almost
+system-lifetime bound pseudo filesystems such as debugfs or configfs.
+It becomes a rather huge burden when a pseudo fs is supposed to
+support multiple superblocks (in this case keyed by userns).

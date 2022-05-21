@@ -2,326 +2,294 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92E7452F7CA
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 04:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DCA052F7D3
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 05:02:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239501AbiEUC4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 22:56:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60012 "EHLO
+        id S1354407AbiEUDB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 23:01:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239452AbiEUC4t (ORCPT
+        with ESMTP id S1347782AbiEUDBv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 22:56:49 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E258CCDA
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 19:56:46 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id m6-20020a05683023a600b0060612720715so6633053ots.10
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 19:56:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=+fFcBjSAf87UPP4n61BZh84pFQOLteecqDYIAnGnP44=;
-        b=UXCHYgV8LaiNYBX3aKHW32IpE+/JK3Gs2fh7pNcCj0hhgsb9Vy6/3HDiDiSK5hAgd3
-         iNKcpdKWUjylyxk5nx6xrQDFbtAoAOp2UBcvKee8vGG1FXK3+WgLUHVvdjbH/1GEy2E0
-         I8suv6pmxfgrg7eO3dcuuny3+AlmHGY1bTXaE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=+fFcBjSAf87UPP4n61BZh84pFQOLteecqDYIAnGnP44=;
-        b=HVYIitNZe2eAvC4CY66wkSruD4BrS1LEv08Vx7UG3ueeBTAMoMXTLZ9i/SjZIiP8BE
-         UHllkupv84V0ZSzUGDwfO3qHWb4CtwdnAk4oFXBZ9lJFGE+95HHANyU3Uq2Vk8jQ7uBU
-         EzfpCiOKAWcwXWZVbXVh/4YHz12xCfpTevTco3acvf5bpbK7gQc21pDJxZwYHscsqZiQ
-         LdJ0zUzjX2VNT0ZZGJb0C0AzBNvk6sV5RNeaao0Nyd+YcgUCQuraK5R9nvl8gpbGmviA
-         FMMW4wf/P/ggD892wSppAzqRdQvwz18Z/JvkRgfGvvUltb6BPd4O/swQO8xmbD5hymqy
-         ZZ6g==
-X-Gm-Message-State: AOAM530zw4p06IlaZYOLlzG2yYk3IKqN9IOF2/m767Jk+nhMtFpUEubh
-        fx83nA6RPtqivUtXpmX78zZ60QIbmRJ9xJ3g5WL5jQ==
-X-Google-Smtp-Source: ABdhPJyUCFPlWbeQHF0wnCW4EeqrHUI8rKoFENV7Tv3m3t2Am+k4t7VXLbQT6TsrVp2Fm8jo9Di1GQVefUdMKmGciT4=
-X-Received: by 2002:a9d:63cd:0:b0:606:9e7f:79f8 with SMTP id
- e13-20020a9d63cd000000b006069e7f79f8mr5186433otl.77.1653101805482; Fri, 20
- May 2022 19:56:45 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 20 May 2022 19:56:45 -0700
+        Fri, 20 May 2022 23:01:51 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D8E3054B;
+        Fri, 20 May 2022 20:01:49 -0700 (PDT)
+Received: from kwepemi500026.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4L4pCP4mH5zCsW8;
+        Sat, 21 May 2022 10:56:49 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi500026.china.huawei.com (7.221.188.247) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 21 May 2022 11:01:47 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 21 May 2022 11:01:46 +0800
+Subject: Re: [PATCH -next v3 2/2] blk-throttle: fix io hung due to
+ configuration updates
+To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+CC:     <tj@kernel.org>, <axboe@kernel.dk>, <ming.lei@redhat.com>,
+        <geert@linux-m68k.org>, <cgroups@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yi.zhang@huawei.com>
+References: <20220519085811.879097-1-yukuai3@huawei.com>
+ <20220519085811.879097-3-yukuai3@huawei.com>
+ <20220519095857.GE16096@blackbody.suse.cz>
+ <a8953189-af42-0225-3031-daf61347524a@huawei.com>
+ <20220519161026.GG16096@blackbody.suse.cz>
+ <73464ca6-9412-cc55-d9c0-f2e8a10f0607@huawei.com>
+ <fe3c03f7-9b52-7948-075d-cbdf431363e1@huawei.com>
+ <20220520160305.GA17335@blackbody.suse.cz>
+From:   "yukuai (C)" <yukuai3@huawei.com>
+Message-ID: <a2faaf5a-8e45-ec38-b2f3-7fa0368a393b@huawei.com>
+Date:   Sat, 21 May 2022 11:01:45 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <1653043777-24003-8-git-send-email-quic_c_skakit@quicinc.com>
-References: <1653043777-24003-1-git-send-email-quic_c_skakit@quicinc.com> <1653043777-24003-8-git-send-email-quic_c_skakit@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Fri, 20 May 2022 19:56:44 -0700
-Message-ID: <CAE-0n53WLYR1pjnr6wASVmXXQ7xTq5n2Q7GdeKOCkWf4H4n=0A@mail.gmail.com>
-Subject: Re: [PATCH V13 7/9] regulator: Add a regulator driver for the PM8008 PMIC
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Satya Priya <quic_c_skakit@quicinc.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_collinsd@quicinc.com, quic_subbaram@quicinc.com,
-        quic_jprakash@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220520160305.GA17335@blackbody.suse.cz>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Satya Priya (2022-05-20 03:49:35)
-> diff --git a/drivers/regulator/qcom-pm8008-regulator.c b/drivers/regulator/qcom-pm8008-regulator.c
-> new file mode 100644
-> index 0000000..6e815c6
-> --- /dev/null
-> +++ b/drivers/regulator/qcom-pm8008-regulator.c
-> @@ -0,0 +1,225 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/* Copyright (c) 2022, The Linux Foundation. All rights reserved. */
-> +
-> +#include <linux/device.h>
-> +#include <linux/kernel.h>
-> +#include <linux/mfd/qcom_pm8008.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/of_device.h>
+在 2022/05/21 0:03, Michal Koutný 写道:
+> On Fri, May 20, 2022 at 09:36:11AM +0800, "yukuai (C)" <yukuai3@huawei.com> wrote:
+>> Just to simplify explanation (assum that throtl_slice is greater than
+>> 0.5s):
+>> Without this patch:
+>> wait time is caculated based on issuing 9k from now(3s) without any
+>> bytes aready dispatched.
+> 
+> I acknowledge that pre-patch state is incorrect because it erases
+> already passed wait-time from the previous slice.
+> 
+>> With this patch:
+>> wait time is caculated based on issuing 9k from 0s with 0.5 bytes
+>> aready dispatched.
+> 
+> Thanks for your further hint. Hopefully, I'm getting closer to real
+> understanding. Now, I calculate the wait times as durations between
+> current moment and timepoint when a bio can be dispatched.
+> 
+> IIUC, after config change the ideal wait time of a bio is
+> 
+>      wait_ideal := (disp + bio - Δt*l_old) / l_new
+> 
+> where Δt is the elapsed time of the current slice.
+> You maintain the slice but scale disp, so you get
+> 
+>      wait_kuai := ((l_new/l_old)*disp + bio - Δt*l_lew) / l_new
+>                 = disp / l_old + bio / l_new - Δt
+> 
+> Please confirm we're on the same page here.
+Hi, Michal
 
-What in of_device.h is used?
+Yes we're on the same page here.
+> 
+> Then I look at
+> 
+>      error := wait_kuai - wait_ideal
+>            ...
+> 	  = (Δt * l_old - disp) * (1/l_new - 1/l_old)
+> 	  = (Δt * l_old - disp) * (1 - α) / (α * l_old)
+> where
+>      α = l_new / l_old
+> 
+> The leftmost term is a unconsumed IO of the slice. Say it's positive,
+> while the bigger bio is throttled at the moment of a config change.
+> If the config change increases throttling (α < 1), the error grows very
+> high (i.e. over-throttling similar to the existing behavior).
+> If the config change relieves throttling (α > 1), the wait time's
+> slightly shorter (under-throttling) wrt the ideal.
+Yew, you are right.
+> 
+> If I was to propose a correction, it'd be like the patch at the bottom
+> derived from your but not finished (the XXX part). It's for potential
+> further discussion.
+I thought about it, however, I was thing that for such corner case,
+fixing io hung if probably enough. Now with the formula that you sorted
+out, it's right this is better.
 
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +#include <linux/regulator/driver.h>
-> +
-> +#define VSET_STEP_MV                   8
-> +#define VSET_STEP_UV                   (VSET_STEP_MV * 1000)
-> +
-> +#define LDO_ENABLE_REG(base)           ((base) + 0x46)
-> +#define ENABLE_BIT                     BIT(7)
-> +
-> +#define LDO_VSET_LB_REG(base)          ((base) + 0x40)
-> +
-> +#define LDO_STEPPER_CTL_REG(base)      ((base) + 0x3b)
-> +#define DEFAULT_VOLTAGE_STEPPER_RATE   38400
-> +#define STEP_RATE_MASK                 GENMASK(1, 0)
-> +
-> +struct pm8008_regulator_data {
-> +       const char                      *name;
-> +       const char                      *supply_name;
-> +       int                             min_uv;
-> +       int                             max_uv;
-> +       int                             min_dropout_uv;
-> +       const struct linear_range       *voltage_range;
-> +};
-> +
-> +struct pm8008_regulator {
-> +       struct device           *dev;
-> +       struct regmap           *regmap;
-> +       struct regulator_desc   rdesc;
-> +       u16                     base;
-> +       int                     step_rate;
-> +       int                     voltage_selector;
-> +};
-> +
-> +static const struct linear_range nldo_ranges[] = {
-> +       REGULATOR_LINEAR_RANGE(528000, 0, 122, 8000),
-> +};
-> +
-> +static const struct linear_range pldo_ranges[] = {
-> +       REGULATOR_LINEAR_RANGE(1504000, 0, 237, 8000),
-> +};
-> +
-> +static const struct pm8008_regulator_data reg_data[] = {
-> +       /* name  parent       min_uv  max_uv  headroom_uv voltage_range */
-> +       { "ldo1", "vdd_l1_l2", 528000, 1504000, 225000, nldo_ranges, },
-> +       { "ldo2", "vdd_l1_l2", 528000, 1504000, 225000, nldo_ranges, },
-> +       { "ldo3", "vdd_l3_l4", 1504000, 3400000, 300000, pldo_ranges, },
-> +       { "ldo4", "vdd_l3_l4", 1504000, 3400000, 300000, pldo_ranges, },
-> +       { "ldo5", "vdd_l5",    1504000, 3400000, 200000, pldo_ranges, },
-> +       { "ldo6", "vdd_l6",    1504000, 3400000, 200000, pldo_ranges, },
-> +       { "ldo7", "vdd_l7",    1504000, 3400000, 200000, pldo_ranges, },
-
-If min/max_uv isn't changing per voltage_range maybe we can compare the
-voltage_range pointer and set the min/max based on the pointer. That
-would save some space in this table.
-
-> +};
-> +
-> +static int pm8008_regulator_get_voltage(struct regulator_dev *rdev)
+Thanks,
+Kuai
+> 
+> 
+> I had myself carried a way with the formulas. If I go back to the
+> beginning:
+> 
+>> Then io hung can be triggered by always submmiting new configuration
+>> before the throttled bio is dispatched.
+> 
+> How big is this a problem actually? Is it only shooting oneself in the leg
+> or can there be a user who's privileged enough to modify throttling
+> configuration yet not privileged enough to justify the hung's
+> consequences (like some global FS locks).
+> 
+> 
+> Thanks,
+> Michal
+> 
+> --- 8< ---
+> diff --git a/block/blk-throttle.c b/block/blk-throttle.c
+> index 469c483719be..3fd458d16f31 100644
+> --- a/block/blk-throttle.c
+> +++ b/block/blk-throttle.c
+> @@ -1274,7 +1274,62 @@ static int tg_print_conf_uint(struct seq_file *sf, void *v)
+>   	return 0;
+>   }
+>   
+> -static void tg_conf_updated(struct throtl_grp *tg, bool global)
+> +static u64 throtl_update_slice_scale(unsigned int slice_start, u64 new_limit,
+> +				     u64 old_limit)
 > +{
-> +       struct pm8008_regulator *pm8008_reg = rdev_get_drvdata(rdev);
+> +	if (new_limit == old_limit)
+> +		return slice_start;
 > +
-> +       return pm8008_reg->voltage_selector;
-
-Can this read the hardware instead of caching the value from
-pm8008_regulator_set_voltage()?
-
+> +	/* This shouldn't really matter but semantically we want to extend the
+> +	 * slice from the earliest possible point of time. */
+> +	if (WARN_ON(new_limit == 0))
+> +		return 0;
+> +
+> +	return jiffies - div64_u64((jiffies - slice_start) * old_limit, new_limit);
 > +}
 > +
-> +static inline int pm8008_write_voltage(struct pm8008_regulator *pm8008_reg,
-> +                                                       int mV)
+> +static void throtl_update_slice(struct throtl_grp *tg, u64 *old_limits)
 > +{
-> +       __le16 vset_raw;
+> +	/*
+> +	 * How does this work? We're going to calculate new wait time in
+> +	 * tg_with_in_bps_limit(). Ideal wait time after config change is
+> +	 *
+> +	 *   wait_ideal := (disp + bio - Δt*l_old) / l_new
+> +	 *
+> +	 * where Δt = jiffies - tg->slice_start (elapsed time of slice).
+> +	 * In reality, the function has no idea about l_old so it calculates
+> +	 *
+> +	 *   wait_skewed := (disp + bio - Δt*l_new) / l_new
+> +	 *
+> +	 * So we modify slice_start to get correct number
+> +	 *
+> +	 *   wait_fixed := (disp + bio - Δt'*l_new) / l_new == wait_ideal
+> +	 *
+> +	 * from that
+> +	 *   Δt' = Δt * l_old / l_new
+> +	 * or
+> +	 *   jiffies - slice_start' = (jiffies - slice_start) * l_old / l_new
+> +	 * .
+> +	 */
+> +	tg->slice_start[READ]  = throtl_update_slice_scale(tg->slice_start[READ],
+> +							   tg_bps_limit(tg, READ),
+> +							   old_limits[0]);
+> +	tg->slice_start[WRITE] = throtl_update_slice_scale(tg->slice_start[WRITE],
+> +							   tg_bps_limit(tg, WRITE),
+> +							   old_limits[1]);
 > +
-> +       vset_raw = cpu_to_le16(mV);
-> +
-> +       return regmap_bulk_write(pm8008_reg->regmap,
-> +                       LDO_VSET_LB_REG(pm8008_reg->base),
-> +                       (const void *)&vset_raw, sizeof(vset_raw));
+> +	// XXX This looks like OK since we should not change BPS and IOPS limit
+> +	// at the same time but it is not actually OK because scaling
+> +	// slice_start for one limit breaks the other anyway.
+> +	tg->slice_start[READ]  = throtl_update_slice_scale(tg->slice_start[READ],
+> +							   tg_iops_limit(tg, READ),
+> +							   old_limits[2]);
+> +	tg->slice_start[WRITE] = throtl_update_slice_scale(tg->slice_start[WRITE],
+> +							   tg_iops_limit(tg, WRITE),
+> +							   old_limits[3]);
 > +}
 > +
-> +static int pm8008_regulator_set_voltage_time(struct regulator_dev *rdev,
-> +                               int old_uV, int new_uv)
+> +static void tg_conf_updated(struct throtl_grp *tg, u64 *old_limits, bool global)
+>   {
+>   	struct throtl_service_queue *sq = &tg->service_queue;
+>   	struct cgroup_subsys_state *pos_css;
+> @@ -1313,16 +1368,7 @@ static void tg_conf_updated(struct throtl_grp *tg, bool global)
+>   				parent_tg->latency_target);
+>   	}
+>   
+> -	/*
+> -	 * We're already holding queue_lock and know @tg is valid.  Let's
+> -	 * apply the new config directly.
+> -	 *
+> -	 * Restart the slices for both READ and WRITES. It might happen
+> -	 * that a group's limit are dropped suddenly and we don't want to
+> -	 * account recently dispatched IO with new low rate.
+> -	 */
+> -	throtl_start_new_slice(tg, READ);
+> -	throtl_start_new_slice(tg, WRITE);
+> +	throtl_update_slice(tg, old_limits);
+>   
+>   	if (tg->flags & THROTL_TG_PENDING) {
+>   		tg_update_disptime(tg);
+> @@ -1330,6 +1376,14 @@ static void tg_conf_updated(struct throtl_grp *tg, bool global)
+>   	}
+>   }
+>   
+> +static void tg_get_limits(struct throtl_grp *tg, u64 *limits)
 > +{
-> +       struct pm8008_regulator *pm8008_reg = rdev_get_drvdata(rdev);
-> +
-> +       return DIV_ROUND_UP(abs(new_uv - old_uV), pm8008_reg->step_rate);
+> +	limits[0] = tg_bps_limit(tg, READ);
+> +	limits[1] = tg_bps_limit(tg, WRITE);
+> +	limits[2] = tg_iops_limit(tg, READ);
+> +	limits[3] = tg_iops_limit(tg, WRITE);
 > +}
 > +
-> +static int pm8008_regulator_set_voltage(struct regulator_dev *rdev,
-> +                                       unsigned int selector)
-> +{
-> +       struct pm8008_regulator *pm8008_reg = rdev_get_drvdata(rdev);
-> +       int rc, mV;
-> +
-> +       /* voltage control register is set with voltage in millivolts */
-> +       mV = DIV_ROUND_UP(regulator_list_voltage_linear_range(rdev, selector),
-
-If regulator_list_voltage_linear_range() returns an error value then
-we're going to div round up by 1000 and return it? Will it even be an
-error value anymore?
-
-Check for an error before div round up I suspect.
-
-> +                                               1000);
-> +       if (mV < 0)
-> +               return mV;
-> +
-> +       rc = pm8008_write_voltage(pm8008_reg, mV);
-> +       if (rc < 0)
-> +               return rc;
-> +
-> +       pm8008_reg->voltage_selector = selector;
-> +       dev_dbg(&rdev->dev, "voltage set to %d\n", mV * 1000);
-
-We have tracepoints for this, right? Remove the debug printk please and
-use tracepoints instead.
-
-> +       return 0;
-> +}
-> +
-> +static const struct regulator_ops pm8008_regulator_ops = {
-> +       .enable                 = regulator_enable_regmap,
-> +       .disable                = regulator_disable_regmap,
-> +       .is_enabled             = regulator_is_enabled_regmap,
-> +       .set_voltage_sel        = pm8008_regulator_set_voltage,
-> +       .get_voltage_sel        = pm8008_regulator_get_voltage,
-> +       .list_voltage           = regulator_list_voltage_linear,
-> +       .set_voltage_time       = pm8008_regulator_set_voltage_time,
-> +};
-> +
-> +static int pm8008_regulator_probe(struct platform_device *pdev)
-> +{
-> +       int rc, i;
-> +       u32 base;
-> +       unsigned int reg;
-> +       const char *name;
-> +       struct device *dev = &pdev->dev;
-> +       struct regulator_config reg_config = {};
-> +       struct regulator_dev    *rdev;
-> +       const struct pm8008_data *chip = dev_get_drvdata(pdev->dev.parent);
-> +       struct pm8008_regulator *pm8008_reg;
-> +
-> +       pm8008_reg = devm_kzalloc(dev, sizeof(*pm8008_reg), GFP_KERNEL);
-> +       if (!pm8008_reg)
-> +               return -ENOMEM;
-> +
-> +       pm8008_reg->regmap = pm8008_get_regmap(chip);
-> +       if (!pm8008_reg->regmap) {
-> +               dev_err(dev, "parent regmap is missing\n");
-> +               return -EINVAL;
-> +       }
-> +
-> +       pm8008_reg->dev = dev;
-> +
-> +       rc = of_property_read_string(dev->of_node, "regulator-name", &name);
-> +       if (rc)
-> +               return rc;
-> +
-> +       /* get the required regulator data */
-> +       for (i = 0; i < ARRAY_SIZE(reg_data); i++)
-> +               if (strstr(name, reg_data[i].name))
-
-Why not find this via reg/address instead? It would save storing the
-regulator name in the reg_data table.
-
-> +                       break;
-> +
-> +       if (i == ARRAY_SIZE(reg_data)) {
-> +               dev_err(dev, "Invalid regulator name %s\n", name);
-> +               return -EINVAL;
-> +       }
-> +
-> +       rc = of_property_read_u32_index(dev->of_node, "reg", 1, &base);
-> +       if (rc < 0) {
-> +               dev_err(dev, "%s: failed to get regulator base rc=%d\n", name, rc);
-> +               return rc;
-> +       }
-> +       pm8008_reg->base = base;
-> +
-> +       /* get slew rate */
-> +       rc = regmap_bulk_read(pm8008_reg->regmap,
-> +                       LDO_STEPPER_CTL_REG(pm8008_reg->base), &reg, 1);
-> +       if (rc < 0) {
-> +               dev_err(dev, "failed to read step rate configuration rc=%d\n", rc);
-> +               return rc;
-> +       }
-> +       reg &= STEP_RATE_MASK;
-> +       pm8008_reg->step_rate = DEFAULT_VOLTAGE_STEPPER_RATE >> reg;
-> +
-> +       pm8008_reg->rdesc.type = REGULATOR_VOLTAGE;
-> +       pm8008_reg->rdesc.ops = &pm8008_regulator_ops;
-> +       pm8008_reg->rdesc.name = reg_data[i].name;
-
-The name could be set via dev_name()?
-
-> +       pm8008_reg->rdesc.supply_name = reg_data[i].supply_name;
-> +       pm8008_reg->rdesc.of_match = reg_data[i].name;
-
-Is this used?
-
-> +       pm8008_reg->rdesc.uV_step = VSET_STEP_UV;
-> +       pm8008_reg->rdesc.min_uV = reg_data[i].min_uv;
-> +       pm8008_reg->rdesc.n_voltages
-> +               = ((reg_data[i].max_uv - reg_data[i].min_uv)
-> +                       / pm8008_reg->rdesc.uV_step) + 1;
-> +       pm8008_reg->rdesc.linear_ranges = reg_data[i].voltage_range;
-> +       pm8008_reg->rdesc.n_linear_ranges = 1;
-
-We should make sure nldo_ranges and pldo_ranges doesn't become larger
-and we forget to update this. Can we use some static assert?
-
-	static_assert(ARRAY_SIZE(pldo_ranges) == 1 && ARRAY_SIZE(nldo_ranges) == 1);
-
-> +       pm8008_reg->rdesc.enable_reg = LDO_ENABLE_REG(pm8008_reg->base);
-> +       pm8008_reg->rdesc.enable_mask = ENABLE_BIT;
-> +       pm8008_reg->rdesc.min_dropout_uV = reg_data[i].min_dropout_uv;
-> +       pm8008_reg->voltage_selector = -ENOTRECOVERABLE;
-> +
-> +       reg_config.dev = dev->parent;
-> +       reg_config.driver_data = pm8008_reg;
-> +       reg_config.regmap = pm8008_reg->regmap;
-> +
-> +       rdev = devm_regulator_register(dev, &pm8008_reg->rdesc, &reg_config);
-> +       if (IS_ERR(rdev)) {
-> +               rc = PTR_ERR(rdev);
-> +               dev_err(dev, "%s: failed to register regulator rc=%d\n",
-> +                               reg_data[i].name, rc);
-> +               return rc;
-> +       }
-> +
-> +       return 0;
-> +}
-> +
+>   static ssize_t tg_set_conf(struct kernfs_open_file *of,
+>   			   char *buf, size_t nbytes, loff_t off, bool is_u64)
+>   {
+> @@ -1338,6 +1392,7 @@ static ssize_t tg_set_conf(struct kernfs_open_file *of,
+>   	struct throtl_grp *tg;
+>   	int ret;
+>   	u64 v;
+> +	u64 old_limits[4];
+>   
+>   	ret = blkg_conf_prep(blkcg, &blkcg_policy_throtl, buf, &ctx);
+>   	if (ret)
+> @@ -1350,13 +1405,14 @@ static ssize_t tg_set_conf(struct kernfs_open_file *of,
+>   		v = U64_MAX;
+>   
+>   	tg = blkg_to_tg(ctx.blkg);
+> +	tg_get_limits(tg, old_limits);
+>   
+>   	if (is_u64)
+>   		*(u64 *)((void *)tg + of_cft(of)->private) = v;
+>   	else
+>   		*(unsigned int *)((void *)tg + of_cft(of)->private) = v;
+>   
+> -	tg_conf_updated(tg, false);
+> +	tg_conf_updated(tg, old_limits, false);
+>   	ret = 0;
+>   out_finish:
+>   	blkg_conf_finish(&ctx);
+> @@ -1526,6 +1582,7 @@ static ssize_t tg_set_limit(struct kernfs_open_file *of,
+>   	struct blkg_conf_ctx ctx;
+>   	struct throtl_grp *tg;
+>   	u64 v[4];
+> +	u64 old_limits[4];
+>   	unsigned long idle_time;
+>   	unsigned long latency_time;
+>   	int ret;
+> @@ -1536,6 +1593,7 @@ static ssize_t tg_set_limit(struct kernfs_open_file *of,
+>   		return ret;
+>   
+>   	tg = blkg_to_tg(ctx.blkg);
+> +	tg_get_limits(tg, old_limits);
+>   
+>   	v[0] = tg->bps_conf[READ][index];
+>   	v[1] = tg->bps_conf[WRITE][index];
+> @@ -1627,7 +1685,7 @@ static ssize_t tg_set_limit(struct kernfs_open_file *of,
+>   			tg->td->limit_index = LIMIT_LOW;
+>   	} else
+>   		tg->td->limit_index = LIMIT_MAX;
+> -	tg_conf_updated(tg, index == LIMIT_LOW &&
+> +	tg_conf_updated(tg, old_limits, index == LIMIT_LOW &&
+>   		tg->td->limit_valid[LIMIT_LOW]);
+>   	ret = 0;
+>   out_finish:
+> .
+> 

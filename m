@@ -2,68 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6B5C52F9B9
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 09:32:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFB8852F986
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 09:21:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241111AbiEUHcn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 03:32:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45574 "EHLO
+        id S240771AbiEUHVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 03:21:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235342AbiEUHcj (ORCPT
+        with ESMTP id S232213AbiEUHVr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 03:32:39 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 868C517064A;
-        Sat, 21 May 2022 00:32:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653118358; x=1684654358;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hoOOM5CAOzlhTkn74IGlT9QSDPamrwRXxRrc9NAlZrY=;
-  b=Fl93PkkOglGtRPBOVFD08/Y9W3BlZxLs74nQRzPi6oXDqQYeBzzNt64Z
-   kROOr3tLFyvl6BB0Ts0a6esuIHu0OhwxO44A/9K9P3mktUFX5/3/Hmi+T
-   KB/fk+B9VCIrkvYLGIcVAdzC15Uri4p2kXU+9pANKxvSqMq/LB5EJmTGa
-   d0MvmZQb+uv3AR2qob19h+jLCh41x1M2lLRdHVTXJNjJzxYcqteyUsnXb
-   y0RQzbhMrZgZPsy2IY1sVOihM8ufehPCr3bFp0VJxj/dWJM7UB6nYn7qa
-   DZ6c/ymKjoRr5Mg6LGiAFqQe28lEJm6pY8MFu0PtGZTUY/LHBimmEAyQU
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10353"; a="359225709"
-X-IronPort-AV: E=Sophos;i="5.91,240,1647327600"; 
-   d="scan'208";a="359225709"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 00:32:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,240,1647327600"; 
-   d="scan'208";a="702123548"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 21 May 2022 00:32:33 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nsJbE-00064p-N4;
-        Sat, 21 May 2022 07:32:32 +0000
-Date:   Sat, 21 May 2022 15:32:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Qin Jian <qinjian@cqplus1.com>, sboyd@kernel.org
-Cc:     Paul Gazzillo <paul@pgazz.com>,
-        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-        kbuild-all@lists.01.org, krzysztof.kozlowski@linaro.org,
-        robh+dt@kernel.org, mturquette@baylibre.com, tglx@linutronix.de,
-        maz@kernel.org, p.zabel@pengutronix.de, linux@armlinux.org.uk,
-        arnd@arndb.de, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, Qin Jian <qinjian@cqplus1.com>
-Subject: Re: [PATCH v16 08/10] ARM: sunplus: Add initial support for Sunplus
- SP7021 SoC
-Message-ID: <202205211551.WXBmoQuh-lkp@intel.com>
-References: <5b8f48113ddea6a1e8cdd6b1b6e5c9999dbe7332.1653027644.git.qinjian@cqplus1.com>
+        Sat, 21 May 2022 03:21:47 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2065C4BFED;
+        Sat, 21 May 2022 00:21:46 -0700 (PDT)
+Received: from kwepemi100023.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L4w3Q4bZRzgY81;
+        Sat, 21 May 2022 15:20:18 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi100023.china.huawei.com (7.221.188.59) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 21 May 2022 15:21:43 +0800
+Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
+ (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sat, 21 May
+ 2022 15:21:43 +0800
+From:   Yu Kuai <yukuai3@huawei.com>
+To:     <jack@suse.cz>, <axboe@kernel.dk>, <paolo.valente@linaro.org>
+CC:     <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yukuai3@huawei.com>,
+        <yi.zhang@huawei.com>
+Subject: [PATCH -next v2 0/6] multiple cleanup patches for bfq
+Date:   Sat, 21 May 2022 15:35:17 +0800
+Message-ID: <20220521073523.3118246-1-yukuai3@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5b8f48113ddea6a1e8cdd6b1b6e5c9999dbe7332.1653027644.git.qinjian@cqplus1.com>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,49 +51,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Qin,
+Changes in v2:
+ - add missing blank line in patch 1.
+ - remove patch 7,8, since they are wrong.
+ - add reviewed-by tag
 
-I love your patch! Perhaps something to improve:
+There are no functional changes in this patchset, just some places
+that I think can be improved during code review.
 
-[auto build test WARNING on pza/reset/next]
-[also build test WARNING on robh/for-next clk/clk-next tip/irq/core linus/master v5.18-rc7 next-20220520]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+This patchset is rebased based on this patchset:
+https://lore.kernel.org/all/20220428120837.3737765-1-yukuai3@huawei.com/
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Qin-Jian/Add-Sunplus-SP7021-SoC-Support/20220520-150501
-base:   https://git.pengutronix.de/git/pza/linux reset/next
-config: (https://download.01.org/0day-ci/archive/20220521/202205211551.WXBmoQuh-lkp@intel.com/config)
-reproduce:
-        # https://github.com/intel-lab-lkp/linux/commit/a18534d0375224dcbfbd6d313ec16c9042212661
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Qin-Jian/Add-Sunplus-SP7021-SoC-Support/20220520-150501
-        git checkout a18534d0375224dcbfbd6d313ec16c9042212661
-        # 1. reproduce by kismet
-           # install kmax per https://github.com/paulgazz/kmax/blob/master/README.md
-           kismet --linux-ksrc=linux --selectees CONFIG_SERIAL_SUNPLUS_CONSOLE --selectors CONFIG_SOC_SP7021 -a=arm
-        # 2. reproduce by make
-           # save the config file to linux source tree
-           cd linux
-           make ARCH=arm olddefconfig
+Previous version:
+v1: https://lore.kernel.org/all/20220514090522.1669270-1-yukuai3@huawei.com/
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Yu Kuai (6):
+  block, bfq: cleanup bfq_weights_tree add/remove apis
+  block, bfq: cleanup __bfq_weights_tree_remove()
+  block, bfq: factor out code to update 'active_entities'
+  block, bfq: don't declare 'bfqd' as type 'void *' in bfq_group
+  block, bfq: cleanup bfq_activate_requeue_entity()
+  block, bfq: remove dead code for updating 'rq_in_driver'
 
-
-kismet warnings: (new ones prefixed by >>)
->> kismet: WARNING: unmet direct dependencies detected for SERIAL_SUNPLUS_CONSOLE when selected by SOC_SP7021
-   
-   WARNING: unmet direct dependencies detected for SERIAL_SUNPLUS
-     Depends on [n]: TTY [=n] && HAS_IOMEM [=y] && (ARCH_SUNPLUS [=y] || COMPILE_TEST [=n])
-     Selected by [y]:
-     - SOC_SP7021 [=y] && ARCH_SUNPLUS [=y]
-   
-   WARNING: unmet direct dependencies detected for SERIAL_SUNPLUS_CONSOLE
-     Depends on [n]: TTY [=n] && HAS_IOMEM [=y] && SERIAL_SUNPLUS [=y]
-     Selected by [y]:
-     - SOC_SP7021 [=y] && ARCH_SUNPLUS [=y]
+ block/bfq-cgroup.c  |  2 +-
+ block/bfq-iosched.c | 38 +++----------------
+ block/bfq-iosched.h | 11 ++----
+ block/bfq-wf2q.c    | 91 ++++++++++++++++++++-------------------------
+ 4 files changed, 51 insertions(+), 91 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.31.1
+

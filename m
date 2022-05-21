@@ -2,83 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AC4752FED2
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 20:37:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9B3752FED5
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 20:39:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344649AbiEUShC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 14:37:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47474 "EHLO
+        id S1344713AbiEUSjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 14:39:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238619AbiEUShA (ORCPT
+        with ESMTP id S235790AbiEUSjS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 14:37:00 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2614457A7
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 11:36:57 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id u30so19264671lfm.9
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 11:36:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvz-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:from:subject:to:cc
-         :references:content-language:in-reply-to:content-transfer-encoding;
-        bh=xtMMO/oDHzJHIOHScwiZ+J4PQk+a+0aBTO/nBIMmFRY=;
-        b=JwTl3pFMeVKGy8g359/U2CB7Hbsh7Qmmxd0j2ZC8UdQuEs8O9J51t9Jd8mYEG3WbcC
-         rX0tB4qT9ze9LM7PNetcF8DOBRFRFFihcznS1WyLr0dLbnfftxgFt7nxbMrOLLlFDSqW
-         nlhvyCx4Uo3fnFGwWAk/SWII2zoYSW7KN2Ad19Z112xIk6JAtcN5c5GdrschS+npKqak
-         0EcHbO9CjPFE4E3XbJfVDZDmk8JH1vI50VYRqyf2kdrOOyozCO2/jZ+vmWrzcWhXlIAh
-         fdRIMY7XbCIm/Q2HGdn0o7Ynw7mBIIWWZLhzdgspdeUO1zHLay8Gdv4hHfC0CR8cZNvO
-         bJPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:references:content-language:in-reply-to
-         :content-transfer-encoding;
-        bh=xtMMO/oDHzJHIOHScwiZ+J4PQk+a+0aBTO/nBIMmFRY=;
-        b=YJWcN5zqXctUDJGocDDhvh6h4v41Pz/c7R4bYU69zYcCysKhVQlZnkCYMUHj6gsl0r
-         uOJe5CXxOA1jb6WqTAhmdXM3lfOx8YgCA7KqsDuEeKKvkhbiPGqLpG/6Q8OP07ya/2l9
-         mgHUR3AXN3JD3PpD/DCwhuPwBbscebNJH+Pa+z6LDFfjvZvDHyVb/ye/qVnoAaJd4TDr
-         ktWQes0yp1RBM0m3Uhb0ykw11GgG3+Qtj93ig8aDLMENJrNQCRDe7PEo4tPMZpXgIjPP
-         jU+KCQVstUuUzeIfJzBsneY1OcOZHjAw5+vAA14hzcRDNjqmV21AI65LI95VCre+hq0x
-         vLCA==
-X-Gm-Message-State: AOAM533tRFtavltJ9Y9YNyTOE0nH39pci2jsr5kMm5SKh6pBkxBV/geo
-        ekd5l4tjMw50g+E2yS0LXwtXLg==
-X-Google-Smtp-Source: ABdhPJyX+sXp/pfy+FHhFCecMrfQktYTHpFJWNupNsLbDEu+ETre8MdsorW2BXW6x3rvrtjBKUUGJw==
-X-Received: by 2002:ac2:5509:0:b0:477:b18a:b5b5 with SMTP id j9-20020ac25509000000b00477b18ab5b5mr10720498lfk.297.1653158216303;
-        Sat, 21 May 2022 11:36:56 -0700 (PDT)
-Received: from [192.168.1.65] ([46.188.121.185])
-        by smtp.gmail.com with ESMTPSA id dt8-20020a0565122a8800b00477cdd53190sm892505lfb.74.2022.05.21.11.36.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 21 May 2022 11:36:55 -0700 (PDT)
-Message-ID: <a1e54672-d824-3ee1-cb68-9ceaa46fc70f@openvz.org>
-Date:   Sat, 21 May 2022 21:36:54 +0300
+        Sat, 21 May 2022 14:39:18 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 278DB3D1E8;
+        Sat, 21 May 2022 11:39:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=u+CCaJtF3iQl0PRzlEodOhhTq5AcNipDkc0XAaATyi0=; b=ONMMw/MGS0FsktEeV6XBMh4zpm
+        mq4qFsrb3uv2tsgbybKYfixXr2NjV04SwtZTLV8qYhWnC9abWn7LlOJ3Iz6M2gyUckfOYuKgQXBkY
+        /KsvUSfZ2vnsoOpR+Iyvw98k3Drr+HrQ0vXbUEaW19cmlgfaSRLG3/L2/lyRaYOq+P8o=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nsU0E-003nDX-CU; Sat, 21 May 2022 20:39:02 +0200
+Date:   Sat, 21 May 2022 20:39:02 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+Cc:     michael@amarulasolutions.com, alberto.bianchi@amarulasolutions.com,
+        linux-amarula@amarulasolutions.com, linuxfancy@googlegroups.com,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] net: phy: DP83822: enable rgmii mode if
+ phy_interface_is_rgmii
+Message-ID: <YokxxlyFTJZ8c+5y@lunn.ch>
+References: <20220520235846.1919954-1-tommaso.merciai@amarulasolutions.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-From:   Vasily Averin <vvs@openvz.org>
-Subject: [PATCH v4] tracing: add 'accounted' entry into output of allocation
- tracepoints
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     kernel@openvz.org, linux-kernel@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, linux-mm@kvack.org,
-        Shakeel Butt <shakeelb@google.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        David Rientjes <rientjes@google.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Muchun Song <songmuchun@bytedance.com>
-References: <0c73ce5c-3625-6187-820e-1277e168b3bc@openvz.org>
-Content-Language: en-US
-In-Reply-To: <0c73ce5c-3625-6187-820e-1277e168b3bc@openvz.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220520235846.1919954-1-tommaso.merciai@amarulasolutions.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,387 +55,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Slab caches marked with SLAB_ACCOUNT force accounting for every
-allocation from this cache even if __GFP_ACCOUNT flag is not passed.
-Unfortunately, at the moment this flag is not visible in ftrace output,
-and this makes it difficult to analyze the accounted allocations.
+On Sat, May 21, 2022 at 01:58:46AM +0200, Tommaso Merciai wrote:
+> RGMII mode can be enable from dp83822 straps, and also writing bit 9
+> of register 0x17 - RMII and Status Register (RCSR).
+> When phy_interface_is_rgmii rgmii mode must be enabled, same for
+> contrary, this prevents malconfigurations of hw straps
+> 
+> References:
+>  - https://www.ti.com/lit/gpn/dp83822i p66
+> 
+> Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+> Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
+> Suggested-by: Alberto Bianchi <alberto.bianchi@amarulasolutions.com>
+> Tested-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
 
-This patch adds boolean "accounted" entry into trace output,
-and set it to 'true' for calls used __GFP_ACCOUNT flag and
-for allocations from caches marked with SLAB_ACCOUNT.
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
-Signed-off-by: Vasily Averin <vvs@openvz.org>
-Acked-by: Shakeel Butt <shakeelb@google.com>
----
-v4:
- 1) replaced in patch descripion: "accounted" instead of "allocated"
- 2) added "Acked-by" from Shakeel,
- 3) re-addressed to akpm@
+If you want to, you could go further. If bit 9 is clear, bit 5 defines
+the mode, either RMII or MII. There are interface modes defined for
+these, so you could get bit 5 as well.
 
-v3:
- 1) rework kmem_cache_alloc* tracepoints once again,
-    added struct kmem_cache argument into existing templates,
-	thanks to Matthew Wilcox
- 2) updated according trace_* calls
- 3) added boolean "allocated" entry into trace output,
-	thanks to Roman
- 4) updated patch subject and description
-
-v2:
- 1) handle kmem_cache_alloc_node(), thanks to Shakeel
- 2) rework kmem_cache_alloc* tracepoints to use cachep instead
-    of current cachep->*size parameters.
-    NB: kmem_cache_alloc_node tracepoint in SLOB cannot use cachep,
-        and therefore it was replaced by kmalloc_node.
----
- include/trace/events/kmem.h | 38 +++++++++++++++++++++++--------------
- mm/slab.c                   | 10 +++++-----
- mm/slab_common.c            |  9 ++++-----
- mm/slob.c                   |  8 ++++----
- mm/slub.c                   | 20 +++++++++----------
- 5 files changed, 47 insertions(+), 38 deletions(-)
-
-diff --git a/include/trace/events/kmem.h b/include/trace/events/kmem.h
-index 71c141804222..5bfeb6f276f1 100644
---- a/include/trace/events/kmem.h
-+++ b/include/trace/events/kmem.h
-@@ -13,11 +13,12 @@ DECLARE_EVENT_CLASS(kmem_alloc,
- 
- 	TP_PROTO(unsigned long call_site,
- 		 const void *ptr,
-+		 struct kmem_cache *s,
- 		 size_t bytes_req,
- 		 size_t bytes_alloc,
- 		 gfp_t gfp_flags),
- 
--	TP_ARGS(call_site, ptr, bytes_req, bytes_alloc, gfp_flags),
-+	TP_ARGS(call_site, ptr, s, bytes_req, bytes_alloc, gfp_flags),
- 
- 	TP_STRUCT__entry(
- 		__field(	unsigned long,	call_site	)
-@@ -25,6 +26,7 @@ DECLARE_EVENT_CLASS(kmem_alloc,
- 		__field(	size_t,		bytes_req	)
- 		__field(	size_t,		bytes_alloc	)
- 		__field(	unsigned long,	gfp_flags	)
-+		__field(	bool,		accounted	)
- 	),
- 
- 	TP_fast_assign(
-@@ -33,42 +35,46 @@ DECLARE_EVENT_CLASS(kmem_alloc,
- 		__entry->bytes_req	= bytes_req;
- 		__entry->bytes_alloc	= bytes_alloc;
- 		__entry->gfp_flags	= (__force unsigned long)gfp_flags;
-+		__entry->accounted	= (gfp_flags & __GFP_ACCOUNT) ||
-+					  (s && s->flags & SLAB_ACCOUNT);
- 	),
- 
--	TP_printk("call_site=%pS ptr=%p bytes_req=%zu bytes_alloc=%zu gfp_flags=%s",
-+	TP_printk("call_site=%pS ptr=%p bytes_req=%zu bytes_alloc=%zu gfp_flags=%s accounted=%s",
- 		(void *)__entry->call_site,
- 		__entry->ptr,
- 		__entry->bytes_req,
- 		__entry->bytes_alloc,
--		show_gfp_flags(__entry->gfp_flags))
-+		show_gfp_flags(__entry->gfp_flags),
-+		__entry->accounted ? "true" : "false")
- );
- 
- DEFINE_EVENT(kmem_alloc, kmalloc,
- 
--	TP_PROTO(unsigned long call_site, const void *ptr,
-+	TP_PROTO(unsigned long call_site, const void *ptr, struct kmem_cache *s,
- 		 size_t bytes_req, size_t bytes_alloc, gfp_t gfp_flags),
- 
--	TP_ARGS(call_site, ptr, bytes_req, bytes_alloc, gfp_flags)
-+	TP_ARGS(call_site, ptr, s, bytes_req, bytes_alloc, gfp_flags)
- );
- 
- DEFINE_EVENT(kmem_alloc, kmem_cache_alloc,
- 
--	TP_PROTO(unsigned long call_site, const void *ptr,
-+	TP_PROTO(unsigned long call_site, const void *ptr, struct kmem_cache *s,
- 		 size_t bytes_req, size_t bytes_alloc, gfp_t gfp_flags),
- 
--	TP_ARGS(call_site, ptr, bytes_req, bytes_alloc, gfp_flags)
-+	TP_ARGS(call_site, ptr, s, bytes_req, bytes_alloc, gfp_flags)
- );
- 
- DECLARE_EVENT_CLASS(kmem_alloc_node,
- 
- 	TP_PROTO(unsigned long call_site,
- 		 const void *ptr,
-+		 struct kmem_cache *s,
- 		 size_t bytes_req,
- 		 size_t bytes_alloc,
- 		 gfp_t gfp_flags,
- 		 int node),
- 
--	TP_ARGS(call_site, ptr, bytes_req, bytes_alloc, gfp_flags, node),
-+	TP_ARGS(call_site, ptr, s, bytes_req, bytes_alloc, gfp_flags, node),
- 
- 	TP_STRUCT__entry(
- 		__field(	unsigned long,	call_site	)
-@@ -77,6 +83,7 @@ DECLARE_EVENT_CLASS(kmem_alloc_node,
- 		__field(	size_t,		bytes_alloc	)
- 		__field(	unsigned long,	gfp_flags	)
- 		__field(	int,		node		)
-+		__field(	bool,		accounted	)
- 	),
- 
- 	TP_fast_assign(
-@@ -86,33 +93,36 @@ DECLARE_EVENT_CLASS(kmem_alloc_node,
- 		__entry->bytes_alloc	= bytes_alloc;
- 		__entry->gfp_flags	= (__force unsigned long)gfp_flags;
- 		__entry->node		= node;
-+		__entry->accounted	= (gfp_flags & __GFP_ACCOUNT) ||
-+					  (s && s->flags & SLAB_ACCOUNT);
- 	),
- 
--	TP_printk("call_site=%pS ptr=%p bytes_req=%zu bytes_alloc=%zu gfp_flags=%s node=%d",
-+	TP_printk("call_site=%pS ptr=%p bytes_req=%zu bytes_alloc=%zu gfp_flags=%s node=%d accounted=%s",
- 		(void *)__entry->call_site,
- 		__entry->ptr,
- 		__entry->bytes_req,
- 		__entry->bytes_alloc,
- 		show_gfp_flags(__entry->gfp_flags),
--		__entry->node)
-+		__entry->node,
-+		__entry->accounted ? "true" : "false")
- );
- 
- DEFINE_EVENT(kmem_alloc_node, kmalloc_node,
- 
- 	TP_PROTO(unsigned long call_site, const void *ptr,
--		 size_t bytes_req, size_t bytes_alloc,
-+		 struct kmem_cache *s, size_t bytes_req, size_t bytes_alloc,
- 		 gfp_t gfp_flags, int node),
- 
--	TP_ARGS(call_site, ptr, bytes_req, bytes_alloc, gfp_flags, node)
-+	TP_ARGS(call_site, ptr, s, bytes_req, bytes_alloc, gfp_flags, node)
- );
- 
- DEFINE_EVENT(kmem_alloc_node, kmem_cache_alloc_node,
- 
- 	TP_PROTO(unsigned long call_site, const void *ptr,
--		 size_t bytes_req, size_t bytes_alloc,
-+		 struct kmem_cache *s, size_t bytes_req, size_t bytes_alloc,
- 		 gfp_t gfp_flags, int node),
- 
--	TP_ARGS(call_site, ptr, bytes_req, bytes_alloc, gfp_flags, node)
-+	TP_ARGS(call_site, ptr, s, bytes_req, bytes_alloc, gfp_flags, node)
- );
- 
- TRACE_EVENT(kfree,
-diff --git a/mm/slab.c b/mm/slab.c
-index 0edb474edef1..e5802445c7d6 100644
---- a/mm/slab.c
-+++ b/mm/slab.c
-@@ -3492,7 +3492,7 @@ void *__kmem_cache_alloc_lru(struct kmem_cache *cachep, struct list_lru *lru,
- {
- 	void *ret = slab_alloc(cachep, lru, flags, cachep->object_size, _RET_IP_);
- 
--	trace_kmem_cache_alloc(_RET_IP_, ret,
-+	trace_kmem_cache_alloc(_RET_IP_, ret, cachep,
- 			       cachep->object_size, cachep->size, flags);
- 
- 	return ret;
-@@ -3581,7 +3581,7 @@ kmem_cache_alloc_trace(struct kmem_cache *cachep, gfp_t flags, size_t size)
- 	ret = slab_alloc(cachep, NULL, flags, size, _RET_IP_);
- 
- 	ret = kasan_kmalloc(cachep, ret, size, flags);
--	trace_kmalloc(_RET_IP_, ret,
-+	trace_kmalloc(_RET_IP_, ret, cachep,
- 		      size, cachep->size, flags);
- 	return ret;
- }
-@@ -3606,7 +3606,7 @@ void *kmem_cache_alloc_node(struct kmem_cache *cachep, gfp_t flags, int nodeid)
- {
- 	void *ret = slab_alloc_node(cachep, flags, nodeid, cachep->object_size, _RET_IP_);
- 
--	trace_kmem_cache_alloc_node(_RET_IP_, ret,
-+	trace_kmem_cache_alloc_node(_RET_IP_, ret, cachep,
- 				    cachep->object_size, cachep->size,
- 				    flags, nodeid);
- 
-@@ -3625,7 +3625,7 @@ void *kmem_cache_alloc_node_trace(struct kmem_cache *cachep,
- 	ret = slab_alloc_node(cachep, flags, nodeid, size, _RET_IP_);
- 
- 	ret = kasan_kmalloc(cachep, ret, size, flags);
--	trace_kmalloc_node(_RET_IP_, ret,
-+	trace_kmalloc_node(_RET_IP_, ret, cachep,
- 			   size, cachep->size,
- 			   flags, nodeid);
- 	return ret;
-@@ -3708,7 +3708,7 @@ static __always_inline void *__do_kmalloc(size_t size, gfp_t flags,
- 	ret = slab_alloc(cachep, NULL, flags, size, caller);
- 
- 	ret = kasan_kmalloc(cachep, ret, size, flags);
--	trace_kmalloc(caller, ret,
-+	trace_kmalloc(caller, ret, cachep,
- 		      size, cachep->size, flags);
- 
- 	return ret;
-diff --git a/mm/slab_common.c b/mm/slab_common.c
-index 2b3206a2c3b5..a345e8600e00 100644
---- a/mm/slab_common.c
-+++ b/mm/slab_common.c
-@@ -25,13 +25,12 @@
- #include <asm/page.h>
- #include <linux/memcontrol.h>
- 
--#define CREATE_TRACE_POINTS
--#include <trace/events/kmem.h>
--
- #include "internal.h"
--
- #include "slab.h"
- 
-+#define CREATE_TRACE_POINTS
-+#include <trace/events/kmem.h>
-+
- enum slab_state slab_state;
- LIST_HEAD(slab_caches);
- DEFINE_MUTEX(slab_mutex);
-@@ -967,7 +966,7 @@ EXPORT_SYMBOL(kmalloc_order);
- void *kmalloc_order_trace(size_t size, gfp_t flags, unsigned int order)
- {
- 	void *ret = kmalloc_order(size, flags, order);
--	trace_kmalloc(_RET_IP_, ret, size, PAGE_SIZE << order, flags);
-+	trace_kmalloc(_RET_IP_, ret, NULL, size, PAGE_SIZE << order, flags);
- 	return ret;
- }
- EXPORT_SYMBOL(kmalloc_order_trace);
-diff --git a/mm/slob.c b/mm/slob.c
-index 40ea6e2d4ccd..dbefa0da0dfc 100644
---- a/mm/slob.c
-+++ b/mm/slob.c
-@@ -505,7 +505,7 @@ __do_kmalloc_node(size_t size, gfp_t gfp, int node, unsigned long caller)
- 		*m = size;
- 		ret = (void *)m + minalign;
- 
--		trace_kmalloc_node(caller, ret,
-+		trace_kmalloc_node(caller, ret, NULL,
- 				   size, size + minalign, gfp, node);
- 	} else {
- 		unsigned int order = get_order(size);
-@@ -514,7 +514,7 @@ __do_kmalloc_node(size_t size, gfp_t gfp, int node, unsigned long caller)
- 			gfp |= __GFP_COMP;
- 		ret = slob_new_pages(gfp, order, node);
- 
--		trace_kmalloc_node(caller, ret,
-+		trace_kmalloc_node(caller, ret, NULL,
- 				   size, PAGE_SIZE << order, gfp, node);
- 	}
- 
-@@ -610,12 +610,12 @@ static void *slob_alloc_node(struct kmem_cache *c, gfp_t flags, int node)
- 
- 	if (c->size < PAGE_SIZE) {
- 		b = slob_alloc(c->size, flags, c->align, node, 0);
--		trace_kmem_cache_alloc_node(_RET_IP_, b, c->object_size,
-+		trace_kmem_cache_alloc_node(_RET_IP_, b, NULL, c->object_size,
- 					    SLOB_UNITS(c->size) * SLOB_UNIT,
- 					    flags, node);
- 	} else {
- 		b = slob_new_pages(flags, get_order(c->size), node);
--		trace_kmem_cache_alloc_node(_RET_IP_, b, c->object_size,
-+		trace_kmem_cache_alloc_node(_RET_IP_, b, NULL, c->object_size,
- 					    PAGE_SIZE << get_order(c->size),
- 					    flags, node);
- 	}
-diff --git a/mm/slub.c b/mm/slub.c
-index ed5c2c03a47a..9b10591646dd 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -3231,7 +3231,7 @@ void *__kmem_cache_alloc_lru(struct kmem_cache *s, struct list_lru *lru,
- {
- 	void *ret = slab_alloc(s, lru, gfpflags, _RET_IP_, s->object_size);
- 
--	trace_kmem_cache_alloc(_RET_IP_, ret, s->object_size,
-+	trace_kmem_cache_alloc(_RET_IP_, ret, s, s->object_size,
- 				s->size, gfpflags);
- 
- 	return ret;
-@@ -3254,7 +3254,7 @@ EXPORT_SYMBOL(kmem_cache_alloc_lru);
- void *kmem_cache_alloc_trace(struct kmem_cache *s, gfp_t gfpflags, size_t size)
- {
- 	void *ret = slab_alloc(s, NULL, gfpflags, _RET_IP_, size);
--	trace_kmalloc(_RET_IP_, ret, size, s->size, gfpflags);
-+	trace_kmalloc(_RET_IP_, ret, s, size, s->size, gfpflags);
- 	ret = kasan_kmalloc(s, ret, size, gfpflags);
- 	return ret;
- }
-@@ -3266,7 +3266,7 @@ void *kmem_cache_alloc_node(struct kmem_cache *s, gfp_t gfpflags, int node)
- {
- 	void *ret = slab_alloc_node(s, NULL, gfpflags, node, _RET_IP_, s->object_size);
- 
--	trace_kmem_cache_alloc_node(_RET_IP_, ret,
-+	trace_kmem_cache_alloc_node(_RET_IP_, ret, s,
- 				    s->object_size, s->size, gfpflags, node);
- 
- 	return ret;
-@@ -3280,7 +3280,7 @@ void *kmem_cache_alloc_node_trace(struct kmem_cache *s,
- {
- 	void *ret = slab_alloc_node(s, NULL, gfpflags, node, _RET_IP_, size);
- 
--	trace_kmalloc_node(_RET_IP_, ret,
-+	trace_kmalloc_node(_RET_IP_, ret, s,
- 			   size, s->size, gfpflags, node);
- 
- 	ret = kasan_kmalloc(s, ret, size, gfpflags);
-@@ -4409,7 +4409,7 @@ void *__kmalloc(size_t size, gfp_t flags)
- 
- 	ret = slab_alloc(s, NULL, flags, _RET_IP_, size);
- 
--	trace_kmalloc(_RET_IP_, ret, size, s->size, flags);
-+	trace_kmalloc(_RET_IP_, ret, s, size, s->size, flags);
- 
- 	ret = kasan_kmalloc(s, ret, size, flags);
- 
-@@ -4443,7 +4443,7 @@ void *__kmalloc_node(size_t size, gfp_t flags, int node)
- 	if (unlikely(size > KMALLOC_MAX_CACHE_SIZE)) {
- 		ret = kmalloc_large_node(size, flags, node);
- 
--		trace_kmalloc_node(_RET_IP_, ret,
-+		trace_kmalloc_node(_RET_IP_, ret, NULL,
- 				   size, PAGE_SIZE << get_order(size),
- 				   flags, node);
- 
-@@ -4457,7 +4457,7 @@ void *__kmalloc_node(size_t size, gfp_t flags, int node)
- 
- 	ret = slab_alloc_node(s, NULL, flags, node, _RET_IP_, size);
- 
--	trace_kmalloc_node(_RET_IP_, ret, size, s->size, flags, node);
-+	trace_kmalloc_node(_RET_IP_, ret, s, size, s->size, flags, node);
- 
- 	ret = kasan_kmalloc(s, ret, size, flags);
- 
-@@ -4916,7 +4916,7 @@ void *__kmalloc_track_caller(size_t size, gfp_t gfpflags, unsigned long caller)
- 	ret = slab_alloc(s, NULL, gfpflags, caller, size);
- 
- 	/* Honor the call site pointer we received. */
--	trace_kmalloc(caller, ret, size, s->size, gfpflags);
-+	trace_kmalloc(caller, ret, s, size, s->size, gfpflags);
- 
- 	return ret;
- }
-@@ -4932,7 +4932,7 @@ void *__kmalloc_node_track_caller(size_t size, gfp_t gfpflags,
- 	if (unlikely(size > KMALLOC_MAX_CACHE_SIZE)) {
- 		ret = kmalloc_large_node(size, gfpflags, node);
- 
--		trace_kmalloc_node(caller, ret,
-+		trace_kmalloc_node(caller, ret, NULL,
- 				   size, PAGE_SIZE << get_order(size),
- 				   gfpflags, node);
- 
-@@ -4947,7 +4947,7 @@ void *__kmalloc_node_track_caller(size_t size, gfp_t gfpflags,
- 	ret = slab_alloc_node(s, NULL, gfpflags, node, caller, size);
- 
- 	/* Honor the call site pointer we received. */
--	trace_kmalloc_node(caller, ret, size, s->size, gfpflags, node);
-+	trace_kmalloc_node(caller, ret, s, size, s->size, gfpflags, node);
- 
- 	return ret;
- }
--- 
-2.31.1
-
+    Andrew

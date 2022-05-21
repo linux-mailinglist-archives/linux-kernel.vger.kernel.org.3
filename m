@@ -2,76 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B517C52FDF0
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 17:44:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80BB952FDF6
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 17:45:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238462AbiEUPoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 11:44:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34398 "EHLO
+        id S243526AbiEUPoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 11:44:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230091AbiEUPn5 (ORCPT
+        with ESMTP id S230091AbiEUPou (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 11:43:57 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C9B5DA7F
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 08:43:56 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id m6so12580623ljb.2
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 08:43:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=wJtjegKQirvwB32gH9239SE+3TpnMc7sTBARznemBeA=;
-        b=rHnU0AJfxYSJk4dWu+EQZOT00DrtLky7GJSRI7opNKA72fhNtZWArdLTC2YX1cEZt0
-         qB56Rb2t79QRgrbOsyeg4G3meKOaY6AtdtyNaPLPZJXT7Gr3egY3trprPigWNj+9qZUY
-         Rz1bvezh4ASHEh+Dpou1FTh0uUyoHahD72vUmeqUsg1zXKvDNpYZjk0119+EWX7VuC3a
-         va4y42+07uOVkUgvw7dxnszTTL+2RraiKCJmA2dORYp/VsqXwp65niaIB+QYEtBVtBmN
-         s0EMgB6qv3jQIeL1v/vreYC4pxZTIuQf12i+WIgZ6zqolZtHRfoXzB97Nq1VEhv297e2
-         T1rQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=wJtjegKQirvwB32gH9239SE+3TpnMc7sTBARznemBeA=;
-        b=2OacHrmYnusvwMYCCLvivWzqV0QhzGBUbZ10SH0AuOmPlRCcMTNHWqQDE0HUyJRT79
-         Lr/N3Y3Jy91RukprkRv/JTx48bBvZm2H6J5TlA5bTEIhJJkFERV1hGUxnhDJirN+JFxY
-         abNjpUd/9hbYxlAk97plL6RuiCoEPthwhtLhzQcRqM7r8gZw827iDHhM0hYRyGwahTpr
-         cBgOV9ZZiK7RpD3Z3xfAnlOoRxZtg8CijDQy/wSKV88mQ4RuJziPJsAEK3qkBSyI6JTk
-         Yd+ez8YiWLu3KQdJ8BBJrW7ov3bDpy7IYfqreeKO7zFBwDiultaNalOUasbXIccwCPF6
-         8A2g==
-X-Gm-Message-State: AOAM530UDtT+k+DGXalExN4dTXBjlwJespgtGPX1dJI4UQ5hhiP/PDD4
-        IQnd//yFWU/rC5h6ENIepLFLLw==
-X-Google-Smtp-Source: ABdhPJyfXeTYFTH2YSm07Q4/SRjtLq6RdF2FJbLzE7a3ieXX5ldwJm5T9cajy78FDGgCkN/KkaIH6g==
-X-Received: by 2002:a05:651c:2120:b0:24f:555d:a2d3 with SMTP id a32-20020a05651c212000b0024f555da2d3mr8302036ljq.157.1653147834421;
-        Sat, 21 May 2022 08:43:54 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id d24-20020a056512369800b0047255d211fbsm1093133lfs.298.2022.05.21.08.43.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 21 May 2022 08:43:53 -0700 (PDT)
-Message-ID: <5c426fdc-6250-60fe-6c10-109a0ceb3e0c@linaro.org>
-Date:   Sat, 21 May 2022 17:43:52 +0200
+        Sat, 21 May 2022 11:44:50 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7533F5DBDF;
+        Sat, 21 May 2022 08:44:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=N2cvmr5qgix9dsJyM3EfaeMcwlENDUG0UMFYTRsjfQ4=; b=CLKUW997PJmzXpkLm8NkNDEmp3
+        finCe4jD1sKqY1neC9/6XkIiPNSsxDy0iBsVPQwzSWlltXaeh7nhLFxziihweE+QzM8wS9R2wLPKb
+        /N/FNPVabP5+g0pY9VT4+6PRMxJOL66gkwobhTz0t1Cry2ccrs+sG143dimrT18QYfD1RFHquN3WH
+        VsNhe9mmCxGCnWUERc7cLv6p4fhBPQ33RK+WoHVPmTpIzlQOlW5KiBHGO2YbRYFu9wUB3o29PESiu
+        zns3936IaAkjg65aj0w440+XrUERAZ9AZJTPc2u46m7tFNRASa5vdeJJB2oEIyLU9YKeid1qAwFB0
+        o2P1KDXQ==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nsRHZ-00Ek1R-7r; Sat, 21 May 2022 15:44:45 +0000
+Message-ID: <a728cf17-4866-1151-0740-56b06257c917@infradead.org>
+Date:   Sat, 21 May 2022 08:44:41 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH net-next] dt-bindings: net: xilinx: document xilinx
- emaclite driver binding
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v5] crc-itu-t: Fix typo in CRC ITU-T polynom comment
 Content-Language: en-US
-To:     Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, harini.katakam@amd.com,
-        michal.simek@amd.com
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, git@amd.com
-References: <1653031473-21032-1-git-send-email-radhey.shyam.pandey@amd.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1653031473-21032-1-git-send-email-radhey.shyam.pandey@amd.com>
+To:     Roger Knecht <roger@norberthealth.com>,
+        linux-kernel@vger.kernel.org, Ivo van Doorn <IvDoorn@gmail.com>
+Cc:     kernel-janitors@vger.kernel.org, linux-doc@vger.kernel.org,
+        Kristian Hoegsberg <krh@redhat.com>,
+        Stefan Richter <stefanr@s5r6.in-berlin.de>
+References: <20220521124745.8747-1-roger@norberthealth.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220521124745.8747-1-roger@norberthealth.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,103 +55,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/05/2022 09:24, Radhey Shyam Pandey wrote:
-> Add basic description for the xilinx emaclite driver DT bindings.
+Hi Roger,
+
+On 5/21/22 05:47, Roger Knecht wrote:
+> The code comment says that the polynom is x^16 + x^12 + x^15 + 1, but the
+> correct polynom is x^16 + x^12 + x^5 + 1.
 > 
-> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-> ---
-> Changes since RFC:
-> - Add ethernet-controller yaml reference.
-> - 4 space indent for DTS example.
-> ---
->  .../bindings/net/xlnx,emaclite.yaml           | 63 +++++++++++++++++++
->  1 file changed, 63 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/xlnx,emaclite.yaml
+> Quote from page 2 in the ITU-T V.41 specification:
+>   "2 Encoding and checking process
 > 
-> diff --git a/Documentation/devicetree/bindings/net/xlnx,emaclite.yaml b/Documentation/devicetree/bindings/net/xlnx,emaclite.yaml
-> new file mode 100644
-> index 000000000000..6105122ad583
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/xlnx,emaclite.yaml
-> @@ -0,0 +1,63 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/xlnx,emaclite.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Xilinx Emaclite Ethernet controller
-> +
-> +allOf:
-> +  - $ref: ethernet-controller.yaml#
+>   The service bits and information bits, taken in conjunction, correspond
+>   to the coefficients of a message polynomial having terms from x^(n-1)
+>   (n = total number of bits in a block or sequence) down to x^16. This
+>   polynomial is divided, modulo 2, by the generating polynomial
+>   x^16 + x^12 + x^5 + 1. [...]"
+> 
+> Source: https://www.itu.int/rec/T-REC-V.41-198811-I/en)
+> The hex polynom 0x1021 and CRC code implementation are correct.
+> 
+> Signed-off-by: Roger Knecht <roger@norberthealth.com>
+> Acked-by: Randy Dunlap <rdunlap@infradead.org>
 
-This goes just before properties (so after maintainers).
+I don't know which maintainer will merge this since no one is Cc:ed on it.
+You will probably need to choose some maintainer to send the patch to.
 
-> +
-> +maintainers:
-> +  - Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-> +  - Harini Katakam <harini.katakam@amd.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - xlnx,opb-ethernetlite-1.01.a
-> +      - xlnx,opb-ethernetlite-1.01.b
-> +      - xlnx,xps-ethernetlite-1.00.a
-> +      - xlnx,xps-ethernetlite-2.00.a
-> +      - xlnx,xps-ethernetlite-2.01.a
-> +      - xlnx,xps-ethernetlite-3.00.a
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  phy-handle: true
-> +
-> +  local-mac-address: true
-> +
-> +  xlnx,tx-ping-pong:
-> +    type: boolean
-> +    description: hardware supports tx ping pong buffer.
-> +
-> +  xlnx,rx-ping-pong:
-> +    type: boolean
-> +    description: hardware supports rx ping pong buffer.
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - phy-handle
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    axi_ethernetlite_1: ethernet@40e00000 {
-> +        compatible = "xlnx,xps-ethernetlite-3.00.a";
-> +        interrupt-parent = <&axi_intc_1>;
-> +        interrupts = <1 0>;
+But let's add the people who merged the header file in the first place
+for their comments/review. (done)
 
-Is "0" an interrupt none type? If yes, then this should be rather a
-define and a proper type, not none.
+> ---
+> Changes:
+> v5: Clean up patch description and added acked-by
+> v4: Changed comment from /** to /* (the comment is not a kernel doc comment)
+> v3: Moved "changes and thanks" out of the commit message.
+> v2: Extended patch description
+> 
+>  include/linux/crc-itu-t.h | 2 +-
+>  lib/crc-itu-t.c           | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/linux/crc-itu-t.h b/include/linux/crc-itu-t.h
+> index a4367051e192..2f991a427ade 100644
+> --- a/include/linux/crc-itu-t.h
+> +++ b/include/linux/crc-itu-t.h
+> @@ -4,7 +4,7 @@
+>   *
+>   * Implements the standard CRC ITU-T V.41:
+>   *   Width 16
+> - *   Poly  0x1021 (x^16 + x^12 + x^15 + 1)
+> + *   Poly  0x1021 (x^16 + x^12 + x^5 + 1)
+>   *   Init  0
+>   */
+>  
+> diff --git a/lib/crc-itu-t.c b/lib/crc-itu-t.c
+> index 1974b355c148..1d26a1647da5 100644
+> --- a/lib/crc-itu-t.c
+> +++ b/lib/crc-itu-t.c
+> @@ -7,7 +7,7 @@
+>  #include <linux/module.h>
+>  #include <linux/crc-itu-t.h>
+>  
+> -/** CRC table for the CRC ITU-T V.41 0x1021 (x^16 + x^12 + x^15 + 1) */
+> +/* CRC table for the CRC ITU-T V.41 0x1021 (x^16 + x^12 + x^5 + 1) */
+>  const u16 crc_itu_t_table[256] = {
+>  	0x0000, 0x1021, 0x2042, 0x3063, 0x4084, 0x50a5, 0x60c6, 0x70e7,
+>  	0x8108, 0x9129, 0xa14a, 0xb16b, 0xc18c, 0xd1ad, 0xe1ce, 0xf1ef,
 
-> +        local-mac-address = [00 0a 35 00 00 00];
-
-Each device should get it's own MAC address, right? I understand you
-leave it for bootloader, then just fill it with 0.
-
-> +        phy-handle = <&phy0>;
-> +        reg = <0x40e00000 0x10000>;
-
-Put the reg after compatible in DTS code.
-
-> +        xlnx,rx-ping-pong;
-> +        xlnx,tx-ping-pong;
-> +    };
-
-
-Best regards,
-Krzysztof
+-- 
+~Randy

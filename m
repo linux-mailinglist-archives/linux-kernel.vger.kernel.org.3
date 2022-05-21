@@ -2,104 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 099E452FF9A
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 23:35:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F91A52FF9C
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 23:36:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346331AbiEUVfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 17:35:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38896 "EHLO
+        id S1346480AbiEUVf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 17:35:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237367AbiEUVfK (ORCPT
+        with ESMTP id S237367AbiEUVf4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 17:35:10 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A48B03E5FE
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 14:35:09 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id g184so10550365pgc.1
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 14:35:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6FG27lBVQnY3sW1qr+3lTil/aSlsNAs4hsByJ/IiO+o=;
-        b=Q2lvXkm8Au5J0g4yU1+wo2VFEu1ry0wpBSOZ7q+73S3WN4WezFtKZucJH875SDJTi6
-         T5CXHETsQ2vlwmEZwXkIkGCnryL/12ZawPU6er9ftMQG9FPc/08GSb9/eZaBPQRBUJbZ
-         Y32iam+NDnJ+IiJ3hkEuTBmE7FDIZc56kkBnrjqlsfO7NvJlbWa4NFZguZNgD5FsFh1c
-         mSVAiXFqmfidCM7uzGhGxNB/iS+2oy2Rtwvh8qD5LFJoNubN6jZL4wGZhx8GYsuQnvHO
-         enKb9QYI2eavJgYcBkkLsdGKB7Ye9LQMK3cGfh3YtLn/VCwihXZY0odav5rkygqfw98E
-         1dFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6FG27lBVQnY3sW1qr+3lTil/aSlsNAs4hsByJ/IiO+o=;
-        b=z3Q4DM9RXDBf+N4y+flHBsbWpskNmBUvdsgng+gGw3FG5p6RSqXMMtAONGMNxnF+8L
-         dHsx61i98rC8Wt3XrwJAc3BGma93JkFZXaNtOD6pcbtFHWe9MOKlPMhqUENoX9juH1u5
-         17oUrW5kBDTgSIbf5l5pYe9ntwUwn5WeLEbvhCcV7CfVQdLILphqtGjzOpOdNRP6JwjE
-         TjO+lHV6gxxmivtUJWkiSBmsDjCRS7HspllUibQLBPNberNwtqiHmFu6Psfq8EOQ+Zmy
-         Q0DAcGItDVLPrxHc7YrAfLNCT1468pM2XOn88Y2pYQ+JB4y+TQf+7O/4itu3cYLgs+UX
-         kCcA==
-X-Gm-Message-State: AOAM530bOh7VjtRvQMjr/imq5oY7nIjDZTNQn8hJeqPQ/MxJsKIhkZgH
-        1PWerLL3X8F63YZ3vocvUFCHdRDc4WuRF+oeRa4WXg==
-X-Google-Smtp-Source: ABdhPJxt/l4bOp8SSCZDM6zebWox/h+cKICoPjL9oOZ/PSoYaM7yyml1UJAzTugs3YIo++viEP+Jmvi/5Kp7BcC1I/E=
-X-Received: by 2002:a63:d4c:0:b0:3f5:cc48:9fa3 with SMTP id
- 12-20020a630d4c000000b003f5cc489fa3mr10038056pgn.509.1653168908742; Sat, 21
- May 2022 14:35:08 -0700 (PDT)
+        Sat, 21 May 2022 17:35:56 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B51D910FE1
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 14:35:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653168954; x=1684704954;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=zR7Y1g/C/Z6Cz8ORNwIwd2RSqbEMll7sIDR6xIUT72s=;
+  b=eF2eLBmX/M8yN10q2x7P/0JEP0PoDSM6dluTdJwxPnYYyrsn8uN4O0kM
+   272d0LaVFwVyK1y6MsaLsHul00y1In/PJV9Axb+Ky2PK31Ml7X8QbsHdv
+   l2dKPoTymM1f34Iyq6/5QjnazMvcDQ7i2SCVzVVLLf62KbY0Ctv9f1EyE
+   XBe/V/lJ5b2O4IzCvcEClbMFfH1htORs/Cgpn2H5BadoVw7BGl6NN7hOu
+   3TdiC8IeNKBzYsSl9PaCxn/f0AQqiFWvlduU8fJsmzv63FyUomHBqBcli
+   hozVNFedO40rEtMJwV9TGvnnROjivvVmTYbfCxqtP5jP5Nh/VfjIuzAZO
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10354"; a="270488198"
+X-IronPort-AV: E=Sophos;i="5.91,243,1647327600"; 
+   d="scan'208";a="270488198"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 14:35:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,243,1647327600"; 
+   d="scan'208";a="744019050"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 21 May 2022 14:35:52 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nsWlM-0006cy-6u;
+        Sat, 21 May 2022 21:35:52 +0000
+Date:   Sun, 22 May 2022 05:35:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Cong Wang <xiyou.wangcong@gmail.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [congwang:sch_bpf 1/3] net/core/skb_map.c:264:36: warning: unused
+ variable 'bpf_skb_map_pop_proto'
+Message-ID: <202205220540.iNtltJFv-lkp@intel.com>
 MIME-Version: 1.0
-References: <Yn6aL3cO7VdrmHHp@carbon> <16f17021-61a3-c6f4-f60c-1acd3a0b66b9@openvz.org>
-In-Reply-To: <16f17021-61a3-c6f4-f60c-1acd3a0b66b9@openvz.org>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Sat, 21 May 2022 14:34:57 -0700
-Message-ID: <CALvZod4883iOgYMnHmM4F3NP-KE5c6hrOWDWnvU-hp6rkWX3Tg@mail.gmail.com>
-Subject: Re: [PATCH mm v2 5/9] memcg: enable accounting for percpu allocation
- of struct psi_group_cpu
-To:     Vasily Averin <vvs@openvz.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, kernel@openvz.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>,
-        Cgroups <cgroups@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 21, 2022 at 9:38 AM Vasily Averin <vvs@openvz.org> wrote:
->
-> struct pci_group_cpu is percpu allocated for each new cgroup and can
-> consume a significant portion of all allocated memory on nodes with
-> a large number of CPUs.
->
-> Common part of the cgroup creation:
-> Allocs  Alloc   $1*$2   Sum     Allocation
-> number  size
-> --------------------------------------------
-> 16  ~   352     5632    5632    KERNFS
-> 1   +   4096    4096    9728    (cgroup_mkdir+0xe4)
-> 1       584     584     10312   (radix_tree_node_alloc.constprop.0+0x89)
-> 1       192     192     10504   (__d_alloc+0x29)
-> 2       72      144     10648   (avc_alloc_node+0x27)
-> 2       64      128     10776   (percpu_ref_init+0x6a)
-> 1       64      64      10840   (memcg_list_lru_alloc+0x21a)
-> percpu:
-> 1   +   192     192     192     call_site=psi_cgroup_alloc+0x1e
-> 1   +   96      96      288     call_site=cgroup_rstat_init+0x5f
-> 2       12      24      312     call_site=percpu_ref_init+0x23
-> 1       6       6       318     call_site=__percpu_counter_init+0x22
->
->  '+' -- to be accounted,
->  '~' -- partially accounted
->
-> Signed-off-by: Vasily Averin <vvs@openvz.org>
+tree:   https://github.com/congwang/linux.git sch_bpf
+head:   c3a4f3837326ac3d30a3775f7671467b27cc42b7
+commit: a9c541fc36e03672a64d65cfa7a08e65743f34c2 [1/3] bpf: introduce skb map
+config: hexagon-randconfig-r006-20220522 (https://download.01.org/0day-ci/archive/20220522/202205220540.iNtltJFv-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b369762beb70dfef22c7e793aed79b94d7dc0757)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/congwang/linux/commit/a9c541fc36e03672a64d65cfa7a08e65743f34c2
+        git remote add congwang https://github.com/congwang/linux.git
+        git fetch --no-tags congwang sch_bpf
+        git checkout a9c541fc36e03672a64d65cfa7a08e65743f34c2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash net/core/
 
-Acked-by: Shakeel Butt <shakeelb@google.com>
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> net/core/skb_map.c:264:36: warning: unused variable 'bpf_skb_map_pop_proto' [-Wunused-const-variable]
+   static const struct bpf_func_proto bpf_skb_map_pop_proto = {
+                                      ^
+>> net/core/skb_map.c:287:36: warning: unused variable 'bpf_skb_map_push_proto' [-Wunused-const-variable]
+   static const struct bpf_func_proto bpf_skb_map_push_proto = {
+                                      ^
+   2 warnings generated.
+
+
+vim +/bpf_skb_map_pop_proto +264 net/core/skb_map.c
+
+   263	
+ > 264	static const struct bpf_func_proto bpf_skb_map_pop_proto = {
+   265		.func		= bpf_skb_map_pop,
+   266		.gpl_only	= false,
+   267		.ret_type	= RET_INTEGER,
+   268		.arg1_type	= ARG_CONST_MAP_PTR,
+   269		.arg2_type	= ARG_ANYTHING,
+   270	};
+   271	
+   272	BPF_CALL_3(bpf_skb_map_push, struct bpf_map *, map, struct sk_buff *, skb, u64, key)
+   273	{
+   274		struct bpf_skb_map *rb = bpf_skb_map(map);
+   275		unsigned long flags;
+   276	
+   277		if (atomic_inc_return(&rb->count) > rb->map.max_entries)
+   278			return -ENOBUFS;
+   279		skb = skb_get(skb);
+   280		skb_map_cb(skb)->rank = key;
+   281		raw_spin_lock_irqsave(&rb->lock, flags);
+   282		skb_rb_push(&rb->root, skb);
+   283		raw_spin_unlock_irqrestore(&rb->lock, flags);
+   284		return 0;
+   285	}
+   286	
+ > 287	static const struct bpf_func_proto bpf_skb_map_push_proto = {
+   288		.func		= bpf_skb_map_push,
+   289		.gpl_only	= false,
+   290		.ret_type	= RET_INTEGER,
+   291		.arg1_type	= ARG_CONST_MAP_PTR,
+   292		.arg2_type	= ARG_PTR_TO_CTX,
+   293		.arg3_type	= ARG_ANYTHING,
+   294	};
+   295	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

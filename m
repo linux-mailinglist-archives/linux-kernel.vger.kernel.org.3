@@ -2,176 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8698A52F97F
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 09:07:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D592452F981
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 09:18:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347635AbiEUHHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 03:07:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56300 "EHLO
+        id S240613AbiEUHSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 03:18:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232213AbiEUHHD (ORCPT
+        with ESMTP id S232213AbiEUHSi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 03:07:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8E67F69CFA
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 00:07:00 -0700 (PDT)
+        Sat, 21 May 2022 03:18:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D9A31163F42
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 00:18:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653116819;
+        s=mimecast20190719; t=1653117516;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rj0IBToDEEzws01ZsJ5TxaznVfv/rUulQJs9O//SMwo=;
-        b=H4TRgsXDHoAOtXwnQooBuI673fgozMAipnv34SjHpDWaqEeAunsnk+WKZqNiI4Ca1yDCVa
-        nfiDii1trVmmQ1wbQGeDN02HKoGNHBw/pTvzPgYkgDtHrGsepWaOw3gCb87Jni4K2BPS/y
-        yv0pNxCvCEQpB/cBGOJq5ps9MuVqkfI=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+         content-transfer-encoding:content-transfer-encoding;
+        bh=1yTCoDRJvqGj7AA5Nj4TtGqeOJVmsCsgoM9y6NAj+ic=;
+        b=e7Ly6qOLzpRFtwyaL8SinlgfXD2hdrPgYzkf/dwsrmROREPGdHGLZMfvFvtkMyWZFoVSES
+        rTQ8d76+/Fp/OJyRvNWI4GbSULeALesjCBJAMi3/GKWt5996eDKvQP/EiYrK/n9tCU6QtO
+        FxNfNdG8X94yiASJJVjC7WTzlknAYbw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-395-BYRDlUhAMUiDcxFflAVrKQ-1; Sat, 21 May 2022 03:06:58 -0400
-X-MC-Unique: BYRDlUhAMUiDcxFflAVrKQ-1
-Received: by mail-wm1-f69.google.com with SMTP id h206-20020a1c21d7000000b003972daa86deso1372833wmh.4
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 00:06:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=rj0IBToDEEzws01ZsJ5TxaznVfv/rUulQJs9O//SMwo=;
-        b=3/tsl5gw6ZrxTka392ueHMf2uMAI9U7uu1sKEPntMEu+lwNzS+ivGLTXny7efpHZ//
-         3KdEjWZyDnozAVYRsCuDC9FtwhvXZCeUVBIA4YVCSpVLbkwX/z12gdgfGYj4FeMNHYVJ
-         w//x4x45XAzIgTcX/dMg7NutiP3m2GrRsY3ZIjSGqdU5jN0zw2HTXnSgRfPlemcNWiPU
-         AlBdNtSQPu9ybXEj+SkyEB8JETya3wpPObMHlxH1GrvEu4S0i3KvnhZxE+wacOu/VT8f
-         GDVjQTK94Dldb+qC5UgQuGrNZ42rsjtF1mtqTeZFkWi23vw0i7p0TYVlA2zaXxwnl2rq
-         7P7A==
-X-Gm-Message-State: AOAM530BFt6CD3dhgM3ECgrqUqSDfpVfg88v0prPZf5TlP20sMm1hcpA
-        sq7U1hoMwgsjD0VzT4eYvr2SgYwcyIhYM/wKj0zL0bmqCEzvJ9Pz7hbMwHQTA7oz1kBWUgr0iZU
-        0dT31hblG89v8xf1et9BjNsJ+
-X-Received: by 2002:a5d:6d48:0:b0:20e:5f80:bd29 with SMTP id k8-20020a5d6d48000000b0020e5f80bd29mr10961811wri.428.1653116816840;
-        Sat, 21 May 2022 00:06:56 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyXpt2pKfnjTmWvEr6j3KFLKUHf1Ptl4A/ZxFxx5bUmYfVNLnhv5FvUFHaPu23JY72oswJHZQ==
-X-Received: by 2002:a5d:6d48:0:b0:20e:5f80:bd29 with SMTP id k8-20020a5d6d48000000b0020e5f80bd29mr10961789wri.428.1653116816614;
-        Sat, 21 May 2022 00:06:56 -0700 (PDT)
-Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id p14-20020adfaa0e000000b0020d02ddf4d0sm4179454wrd.69.2022.05.21.00.06.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 21 May 2022 00:06:56 -0700 (PDT)
-Message-ID: <859d5489-9361-3db0-1da4-1417ed2fad6c@redhat.com>
-Date:   Sat, 21 May 2022 09:06:54 +0200
+ us-mta-320-uxnVpYHIP5mRzaBOfMBHMw-1; Sat, 21 May 2022 03:18:30 -0400
+X-MC-Unique: uxnVpYHIP5mRzaBOfMBHMw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DA2EB185A79C;
+        Sat, 21 May 2022 07:18:29 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.8])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C150C492C3B;
+        Sat, 21 May 2022 07:18:28 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH] afs: Fix afs_getattr() to refetch file status if callback
+ break occurred
+From:   David Howells <dhowells@redhat.com>
+To:     torvalds@linux-foundation.org
+Cc:     Markus Suvanto <markus.suvanto@gmail.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        linux-afs@lists.infradead.org,
+        Markus Suvanto <markus.suvanto@gmail.com>,
+        kafs-testing+fedora34_64checkkafs-build-496@auristor.com,
+        dhowells@redhat.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Sat, 21 May 2022 08:18:28 +0100
+Message-ID: <165311750805.192844.10284715285667771691.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH V11 09/22] LoongArch: Add boot and setup routines
-Content-Language: en-US
-To:     Huacai Chen <chenhuacai@gmail.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-efi <linux-efi@vger.kernel.org>
-References: <20220518092619.1269111-1-chenhuacai@loongson.cn>
- <20220518092619.1269111-10-chenhuacai@loongson.cn>
- <CAMj1kXEBVWi2ZdR5Le5-G0DA43u-AMxmSO=pVt39qwN=PkzQfw@mail.gmail.com>
- <0bae0df1-48ae-d02f-bce4-d1f69acf269e@redhat.com>
- <CAAhV-H5dqNiecER3fChkBjQUGGszj6gwcpOFM1b4Kaax5vz27g@mail.gmail.com>
- <cdbb002a-9f0a-caa9-445e-4ba20328171a@redhat.com>
- <CAAhV-H7yKVWaiU_VKnc2YnCSeZPOwedRWMY8ZTS-VWwk+vE0AA@mail.gmail.com>
- <256e0b82-5d0f-cf40-87c6-c2505d2a6d3b@redhat.com>
- <CAAhV-H7bJv5V5UKJCWgEbOdOWZhnma3_3eAXbbY1MX_uKodjgg@mail.gmail.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <CAAhV-H7bJv5V5UKJCWgEbOdOWZhnma3_3eAXbbY1MX_uKodjgg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Huacai,
+If a callback break occurs (change notification), afs_getattr() needs to
+issue an FS.FetchStatus RPC operation to update the status of the file
+being examined by the stat-family of system calls.
 
-On 5/21/22 03:40, Huacai Chen wrote:
-> Hi, Javier,
+Fix afs_getattr() to do this if AFS_VNODE_CB_PROMISED has been cleared on a
+vnode by a callback break.  Skip this if AT_STATX_DONT_SYNC is set.
 
-[snip]
+This can be tested by appending to a file on one AFS client and then using
+"stat -L" to examine its length on a machine running kafs.  This can also
+be watched through tracing on the kafs machine.  The callback break is
+seen:
 
->>>> Conversely, if the sysfb_init() is executed first then the platform device
->>>> will be registered and latter when the driver's init register the driver
->>>> this will match the already registered device.
->>> Yes, you are right, my consideration is too complex. The only real
->>> problem is a harmless error "efifb: a framebuffer is already
->>> registered" when both efifb and the native display driver are
->>> built-in.
->>>
->>
->> But this shouldn't be a problem if you drop your register_gop_device() that
->> registers an "efi-framebuffer", since sysfb would either register a platform
->> device "simple-framebufer" or "efi-framebuffer", but never both. Those are
->> mutually exclusive.
->>
->> I think what's happening now is that sysfb is registering a "simple-framebuffer"
->> but your register_gop_device() function is also registering an "efi-framebuffer".
-> No, I have already removed register_gop_device(). Now my problem is like this:
-> 1, efifb (or simpledrm) is built-in;
-> 2, a native display driver (such as radeon) is also built-in.
->
+     kworker/1:1-46      [001] .....   978.910812: afs_cb_call: c=0000005f YFSCB.CallBack
+     kworker/1:1-46      [001] ...1.   978.910829: afs_cb_break: 100058:23b4c:242d2c2 b=2 s=1 break-cb
+     kworker/1:1-46      [001] .....   978.911062: afs_call_done:    c=0000005f ret=0 ab=0 [0000000082994ead]
 
-Ah, I see. The common configuration is for the firmware-provide framebuffer
-drivers ({efi,simple}fb,simpledrm,etc) to be built-in and native drivers to
-be built as a module.
+And then the stat command generated no traffic if unpatched, but with this
+change a call to fetch the status can be observed:
+
+            stat-4471    [000] .....   986.744122: afs_make_fs_call: c=000000ab 100058:023b4c:242d2c2 YFS.FetchStatus
+            stat-4471    [000] .....   986.745578: afs_call_done:    c=000000ab ret=0 ab=0 [0000000087fc8c84]
+
+Fixes: 08e0e7c82eea ("[AF_RXRPC]: Make the in-kernel AFS filesystem use AF_RXRPC.")
+Reported-by: Markus Suvanto <markus.suvanto@gmail.com>
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Marc Dionne <marc.dionne@auristor.com>
+cc: linux-afs@lists.infradead.org
+Tested-by: Markus Suvanto <markus.suvanto@gmail.com>
+Tested-by: kafs-testing+fedora34_64checkkafs-build-496@auristor.com
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=216010
+Link: https://lore.kernel.org/r/165308359800.162686.14122417881564420962.stgit@warthog.procyon.org.uk/ # v1
+---
+
+ fs/afs/inode.c |   14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/fs/afs/inode.c b/fs/afs/inode.c
+index 2fe402483ad5..30b066299d39 100644
+--- a/fs/afs/inode.c
++++ b/fs/afs/inode.c
+@@ -740,10 +740,22 @@ int afs_getattr(struct user_namespace *mnt_userns, const struct path *path,
+ {
+ 	struct inode *inode = d_inode(path->dentry);
+ 	struct afs_vnode *vnode = AFS_FS_I(inode);
+-	int seq = 0;
++	struct key *key;
++	int ret, seq = 0;
  
-> Because efifb, radeon and sysfb are all in device_initcall() level,
-> the order in practise is like this:
-> 
-> efifb registered at first, but no "efi-framebuffer" device yet.
-> radeon registered later, and /dev/fb0 created.
-> sysfb_init() comes at last, it registers "efi-framebuffer" and then
-> causes the error "efifb: a framebuffer is already registered".
+ 	_enter("{ ino=%lu v=%u }", inode->i_ino, inode->i_generation);
+ 
++	if (!(query_flags & AT_STATX_DONT_SYNC) &&
++	    !test_bit(AFS_VNODE_CB_PROMISED, &vnode->flags)) {
++		key = afs_request_key(vnode->volume->cell);
++		if (IS_ERR(key))
++			return PTR_ERR(key);
++		ret = afs_validate(vnode, key);
++		key_put(key);
++		if (ret < 0)
++			return ret;
++	}
++
+ 	do {
+ 		read_seqbegin_or_lock(&vnode->cb_lock, &seq);
+ 		generic_fillattr(&init_user_ns, inode, stat);
 
-Yes, this is problem because only conflicting framebuffers and associated
-devices are unregistered when a real driver is registered, but no devices
-that have not matched with drivers and registered framebuffers or disable
-devices to be registered later.
-
-I proposed the following patch series but the conclusion was that this has
-to be fixed in a more general way:
-
-https://lore.kernel.org/lkml/20220511112438.1251024-1-javierm@redhat.com/
-
-> make sysfb_init() to be subsys_initcall_sync() can avoid this.
->
-
-Right, now I understand your problem and you are correct that this will
-avoid it. But I believe is just papering over the issue, the problem is
-that if a native fbdev or DRM driver probed, then sysfb (or any other
-platform code) should not register a device to match a driver that will
-attempt to use a firmware-provided framebuffer.
-
-A problem with moving to subsys_initcall_sync() is that this will delay
-more when a display is available in the system, and just to cope up with
-a corner case (as mentioned the common case is native drivers as module).
- -- 
-Best regards,
-
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
 

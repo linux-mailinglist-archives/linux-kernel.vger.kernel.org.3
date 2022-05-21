@@ -2,146 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDBF452F9A1
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 09:25:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E515052F9A7
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 09:25:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354721AbiEUHXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 03:23:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50816 "EHLO
+        id S1352951AbiEUHYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 03:24:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240582AbiEUHXJ (ORCPT
+        with ESMTP id S232990AbiEUHYG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 03:23:09 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD57A52B12;
-        Sat, 21 May 2022 00:23:04 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L4w394LRczQjw5;
-        Sat, 21 May 2022 15:20:05 +0800 (CST)
-Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 21 May 2022 15:23:02 +0800
-Received: from [10.174.178.178] (10.174.178.178) by
- dggpemm500002.china.huawei.com (7.185.36.229) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 21 May 2022 15:23:02 +0800
-Message-ID: <9fc88a71-b484-c471-66cd-a4d87d8c02c4@huawei.com>
-Date:   Sat, 21 May 2022 15:23:01 +0800
+        Sat, 21 May 2022 03:24:06 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45AD16CA91;
+        Sat, 21 May 2022 00:24:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653117845; x=1684653845;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=3asQqEgN3HAp03iRISKotmL8Hzh0H0AiQ5h1mdRd4mU=;
+  b=dLksq0kCgeneLrIg7mul/8YOhdwXbgG9ejzHDLGiuwwVna9ncgzrQHy8
+   TIIQ9NkKNcOrPrF6micVC7/5SYVFusSyXtp0Dg20naCsBZO0IVK13Ior6
+   LmquI+TSuqbZ7tgtSmTW16VilI3HIR80O0c9NoWwy6lD4yN8UmjdRtAZ3
+   T9jjBkcII9EHxpqtP+waM2Gk2jEaFi0aeqtOmBMRGmwbo1/vtXuHGJMNK
+   iJiiZfq5yI1TPWlwlD5p8VIBSNFji2kMmuS6nhS3iknP5iSBGdshu4dpI
+   1oe9HtE8jNTDANiTYA4vy465tIXLt9ElHiN2znHVy0Ni2eJTXL/hjn2Zk
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10353"; a="254871996"
+X-IronPort-AV: E=Sophos;i="5.91,240,1647327600"; 
+   d="scan'208";a="254871996"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 00:24:04 -0700
+X-IronPort-AV: E=Sophos;i="5.91,240,1647327600"; 
+   d="scan'208";a="599658223"
+Received: from tower.bj.intel.com ([10.238.157.62])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 00:24:01 -0700
+From:   Yanfei Xu <yanfei.xu@intel.com>
+To:     pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
+        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, wei.w.wang@intel.com,
+        kan.liang@intel.com
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] KVM: x86: Fix the intel_pt PMI handling wrongly considered from guest
+Date:   Sat, 21 May 2022 15:23:18 +0800
+Message-Id: <20220521072318.1226928-1-yanfei.xu@intel.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.0.3
-Subject: Re: [PATCH 1/2] psi: add support for multi level pressure stall
- trigger
-To:     Alex Shi <seakeel@gmail.com>,
-        Suren Baghdasaryan <surenb@google.com>
-CC:     LKML <linux-kernel@vger.kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Alex Shi <alexs@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-References: <20220516033524.3130816-1-chenwandun@huawei.com>
- <30b37eeb-e77b-882e-fc24-3367321a8ca3@gmail.com>
- <CAJuCfpE7fBsp8ntYVeLsW7Cd0Z09OmxN75X9Az_Qco0GJrz3Wg@mail.gmail.com>
- <CAJuCfpH-BDqsft1YvGFhkbR60VC0TJgfXKRVN+80e0iqQdhxpA@mail.gmail.com>
- <3a31521f-a68a-b2a9-baae-9a458ee17033@huawei.com>
- <070fe87d-43a0-5e4f-e4c7-c44782c2c195@gmail.com>
- <CAJuCfpH1mTxe5hmzZTe+AbPFse9heenx8uhGzCXE6fAh5G8SzA@mail.gmail.com>
- <29d66a46-d141-2d02-45dd-a8931786588e@gmail.com>
-From:   Chen Wandun <chenwandun@huawei.com>
-In-Reply-To: <29d66a46-d141-2d02-45dd-a8931786588e@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.178]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500002.china.huawei.com (7.185.36.229)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When kernel handles the vm-exit caused by external interrupts and NMI,
+it always set a type of kvm_intr_type to handling_intr_from_guest to
+tell if it's dealing an IRQ or NMI. For the PMI scenario, it could be
+IRQ or NMI.
+However the intel_pt PMI certainly is a NMI PMI, hence using
+kvm_handling_nmi_from_guest() to distinguish if the intel_pt PMI comes
+from guest is more appropriate. This modification can avoid the host
+wrongly considered the intel_pt PMI comes from a guest once the host
+intel_pt PMI breaks the handling of vm-exit of external interrupts.
 
+Fixes: db215756ae59 ("KVM: x86: More precisely identify NMI from guest when handling PMI")
+Signed-off-by: Yanfei Xu <yanfei.xu@intel.com>
+---
+v1->v2:
+1.Fix vmx_handle_intel_pt_intr() directly instead of changing the generic function.
+2.Tune the commit message.
 
-在 2022/5/19 14:15, Alex Shi 写道:
->
-> On 5/19/22 05:38, Suren Baghdasaryan wrote:
->> On Wed, May 18, 2022 at 3:29 AM Alex Shi <seakeel@gmail.com> wrote:
->>>
->>>
->>> On 5/17/22 20:46, Chen Wandun wrote:
->>>>>>> This breaks the old ABI. And why you need this new function?
->>>>>> Both great points.
->>>>> BTW, I think the additional max_threshold parameter could be
->>>>> implemented in a backward compatible way so that the old API is not
->>>>> broken:
->>>>>
->>>>> arg_count = sscanf(buf, "some %u %u %u", &min_threshold_us,  &arg2, &arg3);
->>>>> if (arg_count < 2) return ERR_PTR(-EINVAL);
->>>>> if (arg_count < 3) {
->>>>>       max_threshold_us = INT_MAX;
->>>>>       window_us = arg2;
->>>>> } else {
->>>>>       max_threshold_us = arg2;
->>>>>       window_us = arg3;
->>>>> }
->>>> OK
->>>>
->>>> Thanks.
->>>>> But again, the motivation still needs to be explained.
->>>> we want do different operation for different stall level,
->>>> just as prev email explain, multi trigger is also OK in old
->>>> ways, but it is a litter complex.
->>> In fact, I am not keen for this solution, the older and newer
->>> interface is easy to be confused by users, for some resolvable
->>> unclear issues. It's not a good idea.
->> Maybe adding the max_threshold as an optional last argument will be
->> less confusing? Smth like this:
->>
->> some/full min_threshold window_size [max_threshold]
-> It's already confused enough. :)
-which point make you confused？
-Interface suggest by Suren is compatible with current version,
-I think it is more reasonable and there is no difficuty to understand it.
-> BTW, I still don't see the strong reason for the pressure range.
-Considering this case:
-I divide pressure into multi levels, and each level corresponds to a
-hander,  I have to register multi triggers and wait for fire events,
-nowadays, these trigger is something like:
-echo “some 150000 1000000” > /proc/pressure/memory
-echo “some 350000 1000000” > /proc/pressure/memory
-echo “some 550000 1000000” > /proc/pressure/memory
-echo “some 750000 1000000” > /proc/pressure/memory
+ arch/x86/kvm/vmx/vmx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-In the best case, stall pressure between 150000 and 350000,
-only one trigger fire, and only one wakeup.
-
-In any other case,  multi triggers fire and multi wakeup, but it
-indeed is no need.
-
-New implement make the fire and wakeup more precise,
-userspace code will be more simple, no confusing fire event,
-no need to filter fire event anymore, maybe minor performance
-improved.
-
-Thanks.
->
->>> Also, if we do decide to add it, there should be a warning in the
->> documentation that max_threshold usage might lead to a stall being
->> missed completely. In your example:
->>
->> echo "some 150000 350000 1000000" > /proc/pressure/memory
->>
->> If there is a stall of more than 350ms within a given window, that
->> trigger will not fire at all.
-> Right.
-> And what if others propose more pressure combinations?
-> Maybe leave them to user space is more likely workable?
->
-> Thanks
-> Alex
-> .
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 610355b9ccce..378036c1cf94 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -7856,7 +7856,7 @@ static unsigned int vmx_handle_intel_pt_intr(void)
+ 	struct kvm_vcpu *vcpu = kvm_get_running_vcpu();
+ 
+ 	/* '0' on failure so that the !PT case can use a RET0 static call. */
+-	if (!kvm_arch_pmi_in_guest(vcpu))
++	if (!kvm_handling_nmi_from_guest(vcpu))
+ 		return 0;
+ 
+ 	kvm_make_request(KVM_REQ_PMI, vcpu);
+-- 
+2.32.0
 

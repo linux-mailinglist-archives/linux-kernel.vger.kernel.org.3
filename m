@@ -2,119 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29E7452FD0E
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 16:00:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B7F452FD11
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 16:00:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243206AbiEUOAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 10:00:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56666 "EHLO
+        id S243991AbiEUOA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 10:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232799AbiEUN77 (ORCPT
+        with ESMTP id S243755AbiEUOAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 09:59:59 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D78343EAB4
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 06:59:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653141598; x=1684677598;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=nJrHbVAnwhCplJ8yJDycYC4XSOIr+JdJ0a7J+bkbb0k=;
-  b=aGxQ9Ajc3WcaORyKEyALSJktP87VazejI7oWnHNyqNV+6XL7hVr3izcQ
-   NZAhPiPPgsktd3A8cAJu29vZwDqKDcd8WKkX3dVF0NcmMHo85wTfKf6bu
-   rQg3qvjT8uTSaOZHIeIV0mHwguJjM3XLX85awMATVZ3HcbhYA2wqLK2yn
-   yQrfkrAt+dZQkVY0aDE8pdj25UoGZuBv8DZE3PmJRproKoRn1YT2Z7xz8
-   xAz7j1K9UsHAB2MfisoULu+dl3+bDVHrv8H//Co97ZkZ4bOgFmiMN8s1B
-   ynOLhEJDaPOV4oDd/otSzUs/IIRlhrMB4vZV5cj1sk9Zdy0qs5rTHII2d
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10354"; a="270440802"
-X-IronPort-AV: E=Sophos;i="5.91,242,1647327600"; 
-   d="scan'208";a="270440802"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 06:59:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,242,1647327600"; 
-   d="scan'208";a="547135125"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 21 May 2022 06:59:41 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nsPds-0006LO-PF;
-        Sat, 21 May 2022 13:59:40 +0000
-Date:   Sat, 21 May 2022 21:59:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [dhowells-fs:rxrpc-next 3/7] fs/seq_file.c:960:12: sparse: sparse:
- incorrect type in assignment (different address spaces)
-Message-ID: <202205212138.PGuJkwT2-lkp@intel.com>
+        Sat, 21 May 2022 10:00:23 -0400
+Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 777633EF1B;
+        Sat, 21 May 2022 07:00:19 -0700 (PDT)
+Received: by ajax-webmail-mail-app4 (Coremail) ; Sat, 21 May 2022 21:59:46
+ +0800 (GMT+08:00)
+X-Originating-IP: [124.236.130.193]
+Date:   Sat, 21 May 2022 21:59:46 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   duoming@zju.edu.cn
+To:     "Kalle Valo" <kvalo@kernel.org>
+Cc:     "Jeff Johnson" <quic_jjohnson@quicinc.com>,
+        linux-kernel@vger.kernel.org, amitkarwar@gmail.com,
+        ganapathi017@gmail.com, sharvari.harisangam@nxp.com,
+        huxinming820@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH net v2] net: wireless: marvell: mwifiex: fix sleep in
+ atomic context bugs
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
+In-Reply-To: <87ilpzwg3e.fsf@kernel.org>
+References: <20220519135345.109936-1-duoming@zju.edu.cn>
+ <87zgjd1sd4.fsf@kernel.org>
+ <699e56d5.22006.180dce26e02.Coremail.duoming@zju.edu.cn>
+ <18852332-ee42-ef7e-67a3-bbd91a6694ba@quicinc.com>
+ <4e778cb1.22654.180decbcb8e.Coremail.duoming@zju.edu.cn>
+ <ec16c0b5-b8c7-3bd1-e733-f054ec3c2cd1@quicinc.com>
+ <ed03525.253c1.180e4a21950.Coremail.duoming@zju.edu.cn>
+ <87ilpzwg3e.fsf@kernel.org>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <4cd03c34.25fad.180e6eac2d7.Coremail.duoming@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: cS_KCgDXQCBS8IhitCeLAA--.13906W
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgQRAVZdtZzwSwAAsP
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VW3Jw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git rxrpc-next
-head:   ff8a9d0bfd1189450a3048de45bcf4e4a2e95108
-commit: 295f57b1849bfb1d838e611367f87479b2fb8959 [3/7] rxrpc: Fix locking issue
-config: s390-randconfig-s032-20220519 (https://download.01.org/0day-ci/archive/20220521/202205212138.PGuJkwT2-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 11.3.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/commit/?id=295f57b1849bfb1d838e611367f87479b2fb8959
-        git remote add dhowells-fs https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git
-        git fetch --no-tags dhowells-fs rxrpc-next
-        git checkout 295f57b1849bfb1d838e611367f87479b2fb8959
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=s390 SHELL=/bin/bash
+SGVsbG8sCgpPbiBTYXQsIDIxIE1heSAyMDIyIDA5OjMyOjM3ICswMzAwIEthbGxlIFZhbG8gd3Jv
+dGU6Cgo+ID4+ID4+Pj4+IFRoZXJlIGFyZSBzbGVlcCBpbiBhdG9taWMgY29udGV4dCBidWdzIHdo
+ZW4gdXBsb2FkaW5nIGRldmljZSBkdW1wCj4gPj4gPj4+Pj4gZGF0YSBvbiB1c2IgaW50ZXJmYWNl
+LiBUaGUgcm9vdCBjYXVzZSBpcyB0aGF0IHRoZSBvcGVyYXRpb25zIHRoYXQKPiA+PiA+Pj4+PiBt
+YXkgc2xlZXAgYXJlIGNhbGxlZCBpbiBmd19kdW1wX3RpbWVyX2ZuIHdoaWNoIGlzIGEgdGltZXIg
+aGFuZGxlci4KPiA+PiA+Pj4+PiBUaGUgY2FsbCB0cmVlIHNob3dzIHRoZSBleGVjdXRpb24gcGF0
+aHMgdGhhdCBjb3VsZCBsZWFkIHRvIGJ1Z3M6Cj4gPj4gPj4+Pj4KPiA+PiA+Pj4+PiAgICAgIChJ
+bnRlcnJ1cHQgY29udGV4dCkKPiA+PiA+Pj4+PiBmd19kdW1wX3RpbWVyX2ZuCj4gPj4gPj4+Pj4g
+ICAgIG13aWZpZXhfdXBsb2FkX2RldmljZV9kdW1wCj4gPj4gPj4+Pj4gICAgICAgZGV2X2NvcmVk
+dW1wdiguLi4sIEdGUF9LRVJORUwpCj4gPj4gPj4KPiA+PiA+PiBqdXN0IGxvb2tpbmcgYXQgdGhp
+cyBkZXNjcmlwdGlvbiwgd2h5IGlzbid0IHRoZSBzaW1wbGUgZml4IGp1c3QgdG8KPiA+PiA+PiBj
+aGFuZ2UgdGhpcyBjYWxsIHRvIHVzZSBHRlBfQVRPTUlDPwo+ID4+ID4gCj4gPj4gPiBCZWNhdXNl
+IGNoYW5nZSB0aGUgcGFyYW1ldGVyIG9mIGRldl9jb3JlZHVtcHYoKSB0byBHRlBfQVRPTUlDIGNv
+dWxkIG9ubHkgc29sdmUKPiA+PiA+IHBhcnRpYWwgcHJvYmxlbS4gVGhlIGZvbGxvd2luZyBHRlBf
+S0VSTkVMIHBhcmFtZXRlcnMgYXJlIGluIC9saWIva29iamVjdC5jCj4gPj4gPiB3aGljaCBpcyBu
+b3QgaW5mbHVlbmNlZCBieSBkZXZfY29yZWR1bXB2KCkuCj4gPj4gPiAKPiA+PiA+ICAga29iamVj
+dF9zZXRfbmFtZV92YXJncwo+ID4+ID4gICAgIGt2YXNwcmludGZfY29uc3QoR0ZQX0tFUk5FTCwg
+Li4uKTsgLy9tYXkgc2xlZXAKPiA+PiA+ICAgICBrc3RyZHVwKHMsIEdGUF9LRVJORUwpOyAvL21h
+eSBzbGVlcAo+ID4+IAo+ID4+IFRoZW4gaXQgc2VlbXMgdGhlcmUgaXMgYSBwcm9ibGVtIHdpdGgg
+ZGV2X2NvcmVkdW1wbSgpLgo+ID4+IAo+ID4+IGRldl9jb3JlZHVtcG0oKSB0YWtlcyBhIGdmcCBw
+YXJhbSB3aGljaCBtZWFucyBpdCBleHBlY3RzIHRvIGJlIGNhbGxlZCBpbiAKPiA+PiBhbnkgY29u
+dGV4dCwgYnV0IGl0IHRoZW4gY2FsbHMgZGV2X3NldF9uYW1lKCkgd2hpY2gsIGFzIHlvdSBwb2lu
+dCBvdXQsIAo+ID4+IGNhbm5vdCBiZSBjYWxsZWQgZnJvbSBhbiBhdG9taWMgY29udGV4dC4KPiA+
+PiAKPiA+PiBTbyBpZiB3ZSBjYW5ub3QgY2hhbmdlIHRoZSBmYWN0IHRoYXQgZGV2X3NldF9uYW1l
+KCkgY2Fubm90IGJlIGNhbGxlZCAKPiA+PiBmcm9tIGFuIGF0b21pYyBjb250ZXh0LCB0aGVuIGl0
+IHdvdWxkIHNlZW0gdG8gZm9sbG93IHRoYXQgCj4gPj4gZGV2X2NvcmVkdW1wdiBhbHNvIGNhbm5v
+dCBiZSBjYWxsZWQgZnJvbSBhbiBhdG9taWMgCj4gPj4gY29udGV4dCBhbmQgaGVuY2UgdGhlaXIg
+Z2ZwIHBhcmFtIGlzIHBvaW50bGVzcyBhbmQgc2hvdWxkIHByZXN1bWFibHkgYmUgCj4gPj4gcmVt
+b3ZlZC4KPiA+Cj4gPiBUaGFua3MgZm9yIHlvdXIgdGltZSBhbmQgc3VnZ2VzdGlvbnMhIEkgdGhp
+bmsgdGhlIGdmcF90IHBhcmFtZXRlciBvZiBkZXZfY29yZWR1bXB2IGFuZAo+ID4gZGV2X2NvcmVk
+dW1wbSBtYXkgbm90IGJlIHJlbW92ZWQsIGJlY2F1c2UgaXQgY291bGQgYmUgdXNlZCB0byBwYXNz
+IHZhbHVlIHRvIGdmcF90Cj4gPiBwYXJhbWV0ZXIgb2Yga3phbGxvYyBpbiBkZXZfY29yZWR1bXBt
+LiBXaGF0J3MgbW9yZSwgdGhlcmUgYXJlIGFsc28gbWFueSBvdGhlciBwbGFjZXMKPiA+IHVzZSBk
+ZXZfY29yZWR1bXB2IGFuZCBkZXZfY29yZWR1bXBtLCBpZiB3ZSByZW1vdmUgdGhlIGdmcF90IHBh
+cmFtZXRlciwgdGhlcmUgYXJlIHRvbyBtYW55Cj4gPiBwbGFjZXMgdGhhdCBuZWVkIHRvIG1vZGlm
+eSBhbmQgdGhlc2UgcGxhY2VzIGFyZSBub3QgaW4gaW50ZXJydXB0Cj4gPiBjb250ZXh0Lgo+IAo+
+ICJUb28gbWFueSB1c2VycyIgaXMgbm90IGEgdmFsaWQgcmVhc29uIHRvIGxlYXZlIGEgYnVnIGlu
+IHBsYWNlLCBlaXRoZXIKPiBkZXZfY29yZWR1bXB2KCkgc2hvdWxkIHN1cHBvcnQgR0ZQX0FUT01J
+QyBvciB0aGUgZ2ZwX3QgcGFyYW1ldGVyIHNob3VsZAo+IGJlIHJlbW92ZWQuCgpUaGUgZm9sbG93
+aW5nIGlzIG9uZSBtZXRob2QgdGhhdCBsZXR0aW5nIGRldl9jb3JlZHVtcCgpIHN1cHBvcnQgR0ZQ
+X0FUT01JQzoKCkkgdGhpbmsgZGV2X3NldF9uYW1lKCkgaXMgdXNlZCB0byBhbGxvY2F0ZSBtZW1v
+cnkgdG8gc2V0IGEgZGV2aWNlIG5hbWUsIAp3aGljaCBuZWVkIG9ubHkgc2V2ZXJhbCBieXRlcyBh
+bmQgdGhlcmUgaXMgbGl0dGxlIGNoYW5jZSB0byBzbGVlcCBpbiB0aGUKcmVhbCB3b3JsZC4gSG93
+ZXZlciB0aGUgZGV2X2NvcmVkdW1wdigpIGlzIHVzZWQgdG8gYWxsb2NhdGUgbWVtb3J5IHRvIHN0
+b3JlCmRldmljZSBjb3JlZHVtcCwgd2hpY2ggbmVlZCBsb3RzIG9mIG1lbW9yeSBzcGFjZSBhbmQg
+aGF2ZSBtb3JlIGNoYW5jZXMKdG8gc2xlZXAuIFNvIEkgdGhpbmsgb25seSBjaGFuZ2UgdGhlIGdm
+cF90IHBhcmFtZXRlciBvZiBkZXZfY29yZWR1bXB2KCkKZnJvbSBHRlBfS0VSTkVMIHRvIEdGUF9B
+VE9NSUMgaXMgb2suCgpkaWZmIC0tZ2l0IGEvZHJpdmVycy9uZXQvd2lyZWxlc3MvbWFydmVsbC9t
+d2lmaWV4L21haW4uYyBiL2RyaXZlcnMvbmV0L3dpcmVsZXNzL21hcnZlbGwvbXdpZmlleC9tYWlu
+LmMKaW5kZXggYWNlNzM3MWM0NzcuLjI1ODkwNjkyMGEyIDEwMDY0NAotLS0gYS9kcml2ZXJzL25l
+dC93aXJlbGVzcy9tYXJ2ZWxsL213aWZpZXgvbWFpbi5jCisrKyBiL2RyaXZlcnMvbmV0L3dpcmVs
+ZXNzL21hcnZlbGwvbXdpZmlleC9tYWluLmMKQEAgLTExMTYsNyArMTExNiw3IEBAIHZvaWQgbXdp
+ZmlleF91cGxvYWRfZGV2aWNlX2R1bXAoc3RydWN0IG13aWZpZXhfYWRhcHRlciAqYWRhcHRlcikK
+ICAgICAgICBtd2lmaWV4X2RiZyhhZGFwdGVyLCBNU0csCiAgICAgICAgICAgICAgICAgICAgIj09
+IG13aWZpZXggZHVtcCBpbmZvcm1hdGlvbiB0byAvc3lzL2NsYXNzL2RldmNvcmVkdW1wIHN0YXJ0
+XG4iKTsKICAgICAgICBkZXZfY29yZWR1bXB2KGFkYXB0ZXItPmRldiwgYWRhcHRlci0+ZGV2ZHVt
+cF9kYXRhLCBhZGFwdGVyLT5kZXZkdW1wX2xlbiwKLSAgICAgICAgICAgICAgICAgICAgIEdGUF9L
+RVJORUwpOworICAgICAgICAgICAgICAgICAgICAgR0ZQX0FUT01JQyk7CiAgICAgICAgbXdpZmll
+eF9kYmcoYWRhcHRlciwgTVNHLAogICAgICAgICAgICAgICAgICAgICI9PSBtd2lmaWV4IGR1bXAg
+aW5mb3JtYXRpb24gdG8gL3N5cy9jbGFzcy9kZXZjb3JlZHVtcCBlbmRcbiIpOwoKPiA+IFRoZXJl
+IGFyZSB0d28gc29sdXRpb25zIG5vdzogb25lIGlzIHRvIG1vdmVzIHRoZSBvcGVyYXRpb25zIHRo
+YXQgbWF5Cj4gPiBzbGVlcCBpbnRvIGEgd29yayBpdGVtLgo+IAo+IFRoYXQgZG9lcyBub3QgZml4
+IHRoZSByb290IGNhdXNlIHRoYXQgZGV2X2NvcmVkdW1wdigpIGNsYWltcyBpdCBjYW4gYmUKPiBj
+YWxsZWQgaW4gYXRvbWljIGNvbnRleHRzLgoKSSBhZ3JlZSB3aXRoIHlvdS4gVGhlcmUgaXMgbm90
+IEdGUF9BVE9NSUMgaW4gbGliL2tvYmplY3QuYy4gU2hvdWxkIHdlIG1vZGlmeQp0aGUgZ2ZwX3Qg
+cGFyYW1ldGVyIGluIGtvYmplY3QuYyBpbiBvcmRlciB0byBzdXBwb3J0IGF0b21pYyBjb250ZXh0
+cz8gRG8geW91IGhhdmUKYW55IG90aGVyIGdvb2QgbWV0aG9kcz8KCj4gPiBBbm90aGVyIGlzIHRv
+IGNoYW5nZSB0aGUgZ2ZwX3QgcGFyYW1ldGVyIG9mIGRldl9jb3JlZHVtcHYgZnJvbSBHRlBfS0VS
+TkVMIHRvIEdGUF9BVE9NSUMsIGFuZAo+ID4gY2hhbmdlIHRoZSBnZnBfdCBwYXJhbWV0ZXIgb2Yg
+a3Zhc3ByaW50Zl9jb25zdCBhbmQga3N0cmR1cCBmcm9tIEdGUF9LRVJORUwgdG8gCj4gPiAiaW5f
+aW50ZXJydXB0KCkgPyBHRlBfQVRPTUlDIDogR0ZQX0tFUk5FTCIuCj4gCj4gaW5faW50ZXJydXB0
+KCkgaXMgZGVwcmVjYXRlZCBhbmQgc2hvdWxkIG5vdCBiZSB1c2VkLiBBbmQgSSBkb24ndCB0aGlu
+awo+IGl0IGRldGVjdHMgYWxsIGF0b21pYyBjb250ZXh0cyBsaWtlIHNwaW5sb2Nrcy4KCkkgYWdy
+ZWUgd2l0aCB5b3UsIHRoZSBpbl9pbnRlcnJ1cHQoKSBpcyBub3QgcHJvcGVyLgoKVGhhbmtzIGZv
+ciB5b3VyIHRpbWUgYW5kIHN1Z2dlc3Rpb25zIQoKQmVzdCByZWdhcmRzLApEdW9taW5nIFpob3UK
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-
-sparse warnings: (new ones prefixed by >>)
-   fs/seq_file.c:938:9: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   fs/seq_file.c:938:9: sparse:    struct list_head [noderef] __rcu *
-   fs/seq_file.c:938:9: sparse:    struct list_head *
-   fs/seq_file.c:938:9: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   fs/seq_file.c:938:9: sparse:    struct list_head [noderef] __rcu *
-   fs/seq_file.c:938:9: sparse:    struct list_head *
->> fs/seq_file.c:960:12: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct list_head *lh @@     got struct list_head [noderef] __rcu * @@
-   fs/seq_file.c:960:12: sparse:     expected struct list_head *lh
-   fs/seq_file.c:960:12: sparse:     got struct list_head [noderef] __rcu *
-   fs/seq_file.c:1087:24: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   fs/seq_file.c:1087:24: sparse:    struct hlist_node [noderef] __rcu *
-   fs/seq_file.c:1087:24: sparse:    struct hlist_node *
-   fs/seq_file.c:1089:24: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   fs/seq_file.c:1089:24: sparse:    struct hlist_node [noderef] __rcu *
-   fs/seq_file.c:1089:24: sparse:    struct hlist_node *
-
-vim +960 fs/seq_file.c
-
-   954	
-   955	struct list_head *seq_list_next_rcu(void *v, struct list_head *head,
-   956					    loff_t *ppos)
-   957	{
-   958		struct list_head *lh;
-   959	
- > 960		lh = list_next_rcu((struct list_head *)v);
-   961		++*ppos;
-   962		return lh == head ? NULL : lh;
-   963	}
-   964	EXPORT_SYMBOL(seq_list_next_rcu);
-   965	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

@@ -2,79 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 503FC52F9B1
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 09:27:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9619E52F9B5
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 09:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354765AbiEUH11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 03:27:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60718 "EHLO
+        id S241018AbiEUH2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 03:28:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241028AbiEUH1R (ORCPT
+        with ESMTP id S235342AbiEUH2w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 03:27:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E06C5AED2
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 00:27:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653118030;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wWP7xEjpOwg8ids+6r+D9zTeelTaC/A9uLuPxebtVZE=;
-        b=Cf5KmfIYHyh5niulO0qOmyrUzTKyEvG1HmbNWztCsQs8EbmVRUrlGVs7vWdxa/7Q/wFb2X
-        DkIIEU0hcy4815UvYW0c+6wCdjODl66ljdR1YlLD3RiZb78ZjH2z9MriEmNFilSZkpnQip
-        CpKtCCvTNNTO8pvCebEfc8nbL1wy+74=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-111-jzMYw0VQO_-eQAt-_J5Nyw-1; Sat, 21 May 2022 03:27:09 -0400
-X-MC-Unique: jzMYw0VQO_-eQAt-_J5Nyw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 88E8480013E;
-        Sat, 21 May 2022 07:27:08 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.8])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 005E540D2820;
-        Sat, 21 May 2022 07:27:06 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20220520181522.42630ce9@kernel.org>
-References: <20220520181522.42630ce9@kernel.org> <165306442115.34086.1818959430525328753.stgit@warthog.procyon.org.uk> <165306442878.34086.2437731947506679099.stgit@warthog.procyon.org.uk>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     dhowells@redhat.com, netdev@vger.kernel.org,
-        Marc Dionne <marc.dionne@auristor.com>,
-        Xin Long <lucien.xin@gmail.com>,
-        Vadim Fedorenko <vfedorenko@novek.ru>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net 1/6] rxrpc: Enable IPv6 checksums on transport socket
+        Sat, 21 May 2022 03:28:52 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48516166685
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 00:28:51 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id y32so17691154lfa.6
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 00:28:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=openvz-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=7V73RXe3dU41vM2yXc5RdFK0d/D3JpjuPldiMy6fTKw=;
+        b=Esn+ulXtp2NG4hm6JqTfL5/p0EfkrSuWUCOO9w7zITqkI+Wwl0e6DtqieOfHEaVUKT
+         CB1xY2oebbxCY3E8LwiqBz+y2Zf2z9agssq/85w0pSqE/4dqYAPZBtarkvx2muFGrykT
+         EZ2UKFoJT8TmJ5oJv7ZyDvNWs08PxumdZ4lgVtdlpMVYHdQqHDUZ0N02osjAQ0fSHNjw
+         Vy049oSifghAwEI6PVkb5XQ8uUEeCz3gQ2UzxnUvmlvpcmm+yyr53Y8OHR04t0s8wPnF
+         e7PcC3M+g8ioR3SvtmreqXQJ3ku+cu9rH1uB4Meyz3/UKxJ5w+ehGz4L4RnJmh6r52bp
+         aosQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=7V73RXe3dU41vM2yXc5RdFK0d/D3JpjuPldiMy6fTKw=;
+        b=ZxVH0CPMCxpcpY0RsTCAxpzrnCQdtEdt3ZbWBsofCiSNqWrAA0Wgcoxk3PmffKRkaI
+         2swWLUf0DdtUP/FO/ASH/HgZCuFIIRuvMJQHAIQf/4giS4ySPnMfCk7DwOaxACaFgRSf
+         HKYOjj90QJWFNxs0+LWTP5RKbQudGllgRHBCTZYwx0rfFqdW2Wnciu7eRg3WwIP3hqGg
+         BFhIdFzJlijw4ELFUpFvUY2cFdWNYPaiXngw1+Enb9CNluInadi5GQqrwMleTUHC35LS
+         B08g8FOPF4en4J7yE8L3KcUScqH+GXRlkdOX/LYPCgLIBEZlSTGsdMhTTSs/erZlyK1Y
+         0AmA==
+X-Gm-Message-State: AOAM533zd9PetMAoMaaUVzp13beFFc8LJmff5kAjBO0Vqr8AQwZMRnmQ
+        BEGq4DCx7BLpOTHADzZWbK3Mgw==
+X-Google-Smtp-Source: ABdhPJy8dJsO28tYQXR1SlsZ1sX3R6DcdHNk1mOeJjQZ21k3u6ki9d4E/+FSVYEDZ7GwfjP8JwT2ug==
+X-Received: by 2002:a05:6512:31ce:b0:473:be54:ba76 with SMTP id j14-20020a05651231ce00b00473be54ba76mr9467947lfe.627.1653118129567;
+        Sat, 21 May 2022 00:28:49 -0700 (PDT)
+Received: from [192.168.1.65] ([46.188.121.185])
+        by smtp.gmail.com with ESMTPSA id d13-20020ac24c8d000000b00477a61abff4sm953722lfl.63.2022.05.21.00.28.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 21 May 2022 00:28:49 -0700 (PDT)
+Message-ID: <c8835a1c-2266-0131-7fd6-e6449750353b@openvz.org>
+Date:   Sat, 21 May 2022 10:28:47 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <209507.1653118025.1@warthog.procyon.org.uk>
-Date:   Sat, 21 May 2022 08:27:05 +0100
-Message-ID: <209513.1653118025@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 3/4] memcg: enable accounting for struct cgroup
+Content-Language: en-US
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        Shakeel Butt <shakeelb@google.com>, kernel@openvz.org,
+        linux-kernel@vger.kernel.org, Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org
+References: <Ynv7+VG+T2y9rpdk@carbon>
+ <a17be77f-dc3b-d69a-16e2-f7309959c525@openvz.org>
+ <20220519165325.GA2434@blackbody.suse.cz>
+ <740dfcb1-5c5f-6a40-0f71-65f277f976d6@openvz.org>
+ <d28233ee-bccb-7bc3-c2ec-461fd7f95e6a@openvz.org> <Yog4jCygrYPtPXg5@carbon>
+From:   Vasily Averin <vvs@openvz.org>
+In-Reply-To: <Yog4jCygrYPtPXg5@carbon>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jakub Kicinski <kuba@kernel.org> wrote:
+On 5/21/22 03:55, Roman Gushchin wrote:
+> On Fri, May 20, 2022 at 11:16:32PM +0300, Vasily Averin wrote:
 
-> This is already in net..
-> pw build got gave up on this series.
-> Could you resend just the other 5 patches?
+>> common part:
+>> 16  ~   352     5632    5632    KERNFS (*)
+>> 1   +   4096    4096    9728    (cgroup_mkdir+0xe4)
+>> 1       584     584     10312   (radix_tree_node_alloc.constprop.0+0x89)
+>> 1       192     192     10504   (__d_alloc+0x29)
+>> 2       72      144     10648   (avc_alloc_node+0x27)
+>> 2       64      128     10776   (percpu_ref_init+0x6a)
+>> 1       64      64      10840   (memcg_list_lru_alloc+0x21a)
+>>
+>> 1   +   192     192     192     call_site=psi_cgroup_alloc+0x1e
+>> 1   +   96      96      288     call_site=cgroup_rstat_init+0x5f
+>> 2       12      24      312     call_site=percpu_ref_init+0x23
+>> 1       6       6       318     call_site=__percpu_counter_init+0x22
+> 
+> I'm curios, how do you generate these data?
 
-Will do.
+trace_cmd + awk + /dev/hand
 
-David
+> Just an idea: it could be a nice tool, placed somewhere in tools/cgroup/...
 
+I'm agree, nice idea. I'll try to implement it.

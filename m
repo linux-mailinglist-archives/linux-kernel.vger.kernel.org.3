@@ -2,126 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47D1452FA85
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 12:01:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDFF152FA7B
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 12:01:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349907AbiEUJwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 05:52:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38510 "EHLO
+        id S244207AbiEUJym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 05:54:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236810AbiEUJwc (ORCPT
+        with ESMTP id S229808AbiEUJyi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 05:52:32 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B0AADFF67;
-        Sat, 21 May 2022 02:52:30 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id d198so5876820iof.12;
-        Sat, 21 May 2022 02:52:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HgU6CVcBQStjcDR5gk2dFy7rEHS5OgkX1HJgnqEvLw4=;
-        b=OiM5dSKoVRtHFckOGNUBmUfGQYcX+ecD9ipw8M8AS5csnbpWH32uLwtiwQ5hVwyHvx
-         IXAXwm0FLv8yQMy78Z9KQP1t9L8hg9KCEcFQ03HQqWFTtYvy/NQWY9Eopwga0Lneqpje
-         MTZTZKTpQW1eUtDAZ/V04SNZKFIUZ/wyPuD+vklv/a72S+41O+iD9i1rgiHoQHhWaSXt
-         XzLgATlHRwU1liDoo+vw5sC8C9YIa/rMHzfOYIS2Q69Pgfo665nC0hbioBh7Xq4ltYsd
-         G3enkBJb1ElKXAi9fLqDNjcb/WPpJRvhnf3GGKWCVDz0x2GRhQXs25q4TnvHb8DLK9SY
-         QGPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HgU6CVcBQStjcDR5gk2dFy7rEHS5OgkX1HJgnqEvLw4=;
-        b=beLGFEJLOMSwk5MejloaXs2WzITbxUZjE4+w3N/d/XieNIcxXUHLQr1n8umCo7DvC3
-         eElkDaKDPvwyJUMNvqv+WS/FiIHUuO654SqZY05alA45HJaf+oqWw6WgZkj8Z5SNm8X2
-         jlZ4PhDiXw8v2Cg0uifyNwQQog7AFuRCZjPSynCVPQIhZT44s2hncZuE3i7UOa7fi46O
-         +JQljLA8/W8oYhhe0d84S9pm/ma9xnARrZSYiez0SeCogPjWI1SFZuS8a6OsnCVt1M07
-         xLLXccZ8iRB7acNK1FL//lInhpXhn3na5suJiZU0YUGmMz+LQSYvwo1CsfzncOSudVss
-         66mg==
-X-Gm-Message-State: AOAM531QE6sPZrfZn642JIaL0HCB1381c41F3DyL9EULDhmyVjEIqdEc
-        FoFSmf4ZNq5kGCKtp6wUlh41fiUCowhQrmIYEQI=
-X-Google-Smtp-Source: ABdhPJw2I3LiVPq9ZApoyJMwbFaJnOwaKOIo4UqmVWX6E5YU3HM68MY2KtVhBgJPSi2J0ZE+/mU127hS/nAp5g+gsCo=
-X-Received: by 2002:a05:6638:130a:b0:32b:b608:1676 with SMTP id
- r10-20020a056638130a00b0032bb6081676mr7729318jad.108.1653126749775; Sat, 21
- May 2022 02:52:29 -0700 (PDT)
+        Sat, 21 May 2022 05:54:38 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B52E64C9
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 02:54:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653126877; x=1684662877;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=eQYNWnsx4uzsmBzUeMGWvfVQmlMLqEV4v/I3wtd9E7M=;
+  b=akQUSfxgKtqizxqOnMSNGHqhag3Wv4NkmPb2flSM3LpjrXFazbiHnz9Q
+   gyTa53JOVrGOWEL3U8JoAGMNEvW0NACUC8Ts0bXw8Rsk41zJHNYzq9aAj
+   CHEBMMrVJwuEEOnMtjs2Q+Bex6kswtmMtuI2VUdAi30AHM0/vkpaUwGL4
+   tipKhDgWZC40XPx9huf0mJJKSE4vkjVSmoNiytUH1EHCH3+HRomvqDaxA
+   Al+pLDgTJbqeMb261WkgCDE6XA7hiN+gaQzZBAQfWPgrXiFjabuawQsIR
+   jg/5nlMc+p5ti3fDoju//gqpR6gBX8b5Io/7vti0lKck3vCaqJCc+xdEm
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10353"; a="333462179"
+X-IronPort-AV: E=Sophos;i="5.91,242,1647327600"; 
+   d="scan'208";a="333462179"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 02:54:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,242,1647327600"; 
+   d="scan'208";a="662656575"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 21 May 2022 02:54:35 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nsLoh-0006AY-21;
+        Sat, 21 May 2022 09:54:35 +0000
+Date:   Sat, 21 May 2022 17:54:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     =?iso-8859-1?Q?Jo=E3o_M=E1rio?= Domingos 
+        <joao.mario@tecnico.ulisboa.pt>
+Cc:     kbuild-all@lists.01.org, Atish Patra <Atish.Patra@wdc.com>,
+        linux-kernel@vger.kernel.org, Atish Patra <atishp@rivosinc.com>
+Subject: [atishp04:unmatched_pmu 1/4] drivers/perf/riscv_pmu_sbi.c:709:41:
+ warning: right shift count >= width of type
+Message-ID: <202205211740.XMg1JXoD-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220515064126.1424-1-linux.amoon@gmail.com> <20220515064126.1424-7-linux.amoon@gmail.com>
- <79b727f8-0631-5a96-fbc6-6e5d637bab7d@linaro.org> <CANAwSgSY=4zOLjw22GN+a7cc5j=myWWkD7gEQ4_3sgEaTS74Rw@mail.gmail.com>
- <018b97c2-efab-699d-653d-c220a98f5ec3@linaro.org>
-In-Reply-To: <018b97c2-efab-699d-653d-c220a98f5ec3@linaro.org>
-From:   Anand Moon <linux.amoon@gmail.com>
-Date:   Sat, 21 May 2022 15:22:13 +0530
-Message-ID: <CANAwSgQe9uveBMgrt3VNUTmFodW3P0Pxhc28KfB8MyEogOtOjQ@mail.gmail.com>
-Subject: Re: [PATCHv2 6/6] thermal: exynos: Add runtime power management for tmu
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+tree:   https://github.com/atishp04/linux unmatched_pmu
+head:   7b75dbb7c4c01dceb7a974c352945fd86eb88c25
+commit: 04bc56e83a7e6e851694e34da95f26c57abc7132 [1/4] RISC-V: Create unique identification for SoC PMU
+config: riscv-randconfig-r001-20220519 (https://download.01.org/0day-ci/archive/20220521/202205211740.XMg1JXoD-lkp@intel.com/config)
+compiler: riscv32-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/atishp04/linux/commit/04bc56e83a7e6e851694e34da95f26c57abc7132
+        git remote add atishp04 https://github.com/atishp04/linux
+        git fetch --no-tags atishp04 unmatched_pmu
+        git checkout 04bc56e83a7e6e851694e34da95f26c57abc7132
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/perf/
 
-On Wed, 18 May 2022 at 12:49, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 17/05/2022 20:45, Anand Moon wrote:
-> > Hi Krzysztof,
-> >
-> > On Sun, 15 May 2022 at 15:18, Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> >>
-> >> On 15/05/2022 08:41, Anand Moon wrote:
-> >>> Add runtime power management for exynos thermal driver.
-> >>
-> >> First of all - why? Second, I do not see it being added. Where are the
-> >> runtime callbacks?
-> >>
-> >
-> > To control runtime control PMU, did I miss something?
->
-> Controlling runtime PM by itself is not a goal. What does it change if
-> it is enabled?
->
-It means we could have efficient power management for this driver.
-as per my understanding, it controls runtime sleep and improves power efficiency
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> > I looked into imx thermal driver # drivers/thermal/imx_thermal.c
-> > to enable run-time power management for exynos driver.
->
-> So you have runtime PM enabled and then what happens? Where is the power
-> saving? Since you did not implement the callbacks, all this should be
-> explained in commit msg.
->
-Ok, As per the original code, it just registers the SIMPLE_DEV_PM_OPS
-with .pm = &exynos_tmu_pm
-So I have made sure that suspend resume feature works correctly
- with these changes on SBC Odroid U3 and XU4.
+All warnings (new ones prefixed by >>):
 
-I will try to look into setting RUNTIME_PM_OPS
-or use UNIVERSAL_DEV_PM_OPS instead of SIMPLE_DEV_PM_OPS
-any thought on this?
+   drivers/perf/riscv_pmu_sbi.c: In function 'pmu_sbi_get_pmu_id':
+>> drivers/perf/riscv_pmu_sbi.c:709:41: warning: right shift count >= width of type [-Wshift-count-overflow]
+     709 |         pmuid.arch = (sbi_get_marchid() >> (63 - 15) & (1 << 15)) | (sbi_get_marchid() & 0x7FFF);
+         |                                         ^~
 
->
-> Best regards,
-> Krzysztof
 
-Thanks and Regards
+vim +709 drivers/perf/riscv_pmu_sbi.c
 
--Anand
+   695	
+   696	static uint64_t pmu_sbi_get_pmu_id(void)
+   697	{
+   698		union sbi_pmu_id {
+   699			uint64_t value;
+   700			struct {
+   701				uint16_t imp:16;
+   702				uint16_t arch:16;
+   703				uint32_t vendor:32;
+   704			};
+   705		} pmuid;
+   706	
+   707		pmuid.value = 0;
+   708		pmuid.vendor = (uint32_t) sbi_get_mvendorid();
+ > 709		pmuid.arch = (sbi_get_marchid() >> (63 - 15) & (1 << 15)) | (sbi_get_marchid() & 0x7FFF);
+   710		pmuid.imp = (sbi_get_mimpid() >> 16);
+   711	
+   712		return pmuid.value;
+   713	}
+   714	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

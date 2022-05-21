@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB79B52FBCA
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:20:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A01DF52FBC1
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351348AbiEULTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 07:19:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50256 "EHLO
+        id S1354263AbiEULTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 07:19:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354837AbiEULMm (ORCPT
+        with ESMTP id S1354860AbiEULMp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 07:12:42 -0400
+        Sat, 21 May 2022 07:12:45 -0400
 Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F43D4553A;
-        Sat, 21 May 2022 04:12:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35AC92AE24;
+        Sat, 21 May 2022 04:12:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=inria.fr; s=dc;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=lTFEVnoIDC5LKQmyxjDTFhn2hrsCSGKVLvv14vfENGo=;
-  b=IF/7KeW4DSd6UgIfZbp7pPPlSfA/uxJU/Tgs7aYYeU8t/q+BTCJOCJy3
-   RcOR16grx8Ffeh0UjWMovQIRBe/o7JSWmUbMT8qQE4P5nSXY480we+MV8
-   /u1AJYy+9BzsJ+o4+etOc8ke6FGEObJtFz2Cd2WgX279uYKyBhTm3lVc+
-   Q=;
+  bh=UX86kqzxt9SnOMIadq/iiAiQLXfK5Xylhc0sXYKGfbE=;
+  b=facg9zEz9S9z6Lez6slU+xhqKN3rNeDfBoxPc40YuHm5UMMDiRxw2uxq
+   dilsoi5GQCVHG/e9TWxaQ8F5CVXc/7enoReDOz3A2fyz9fUM/P6sPcelj
+   MJDvGWiE31rVAkvfVmTMJZQXw48iv5m3wWCXy6hu2Boh0FKL82ZsvB28d
+   4=;
 Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
 X-IronPort-AV: E=Sophos;i="5.91,242,1647298800"; 
-   d="scan'208";a="14727963"
+   d="scan'208";a="14727964"
 Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
   by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 13:12:02 +0200
 From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Don Brace <don.brace@microchip.com>
+To:     Rob Herring <robh+dt@kernel.org>
 Cc:     kernel-janitors@vger.kernel.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        storagedev@microchip.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] scsi: smartpqi: fix typo in comment
-Date:   Sat, 21 May 2022 13:11:08 +0200
-Message-Id: <20220521111145.81697-58-Julia.Lawall@inria.fr>
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] of/irq: fix typo in comment
+Date:   Sat, 21 May 2022 13:11:09 +0200
+Message-Id: <20220521111145.81697-59-Julia.Lawall@inria.fr>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -58,20 +56,20 @@ Detected with the help of Coccinelle.
 Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
 ---
- drivers/scsi/smartpqi/smartpqi.h |    2 +-
+ drivers/of/irq.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/smartpqi/smartpqi.h b/drivers/scsi/smartpqi/smartpqi.h
-index c4c48272d8ad..2e40320129c0 100644
---- a/drivers/scsi/smartpqi/smartpqi.h
-+++ b/drivers/scsi/smartpqi/smartpqi.h
-@@ -1082,7 +1082,7 @@ struct pqi_stream_data {
- };
+diff --git a/drivers/of/irq.c b/drivers/of/irq.c
+index aa485eb312ac..d22f605fa7ee 100644
+--- a/drivers/of/irq.c
++++ b/drivers/of/irq.c
+@@ -284,7 +284,7 @@ int of_irq_parse_raw(const __be32 *addr, struct of_phandle_args *out_irq)
+ 		}
  
- struct pqi_scsi_dev {
--	int	devtype;		/* as reported by INQUIRY commmand */
-+	int	devtype;		/* as reported by INQUIRY command */
- 	u8	device_type;		/* as reported by */
- 					/* BMIC_IDENTIFY_PHYSICAL_DEVICE */
- 					/* only valid for devtype = TYPE_DISK */
+ 		/*
+-		 * Successfully parsed an interrrupt-map translation; copy new
++		 * Successfully parsed an interrupt-map translation; copy new
+ 		 * interrupt specifier into the out_irq structure
+ 		 */
+ 		match_array = imap - newaddrsize - newintsize;
 

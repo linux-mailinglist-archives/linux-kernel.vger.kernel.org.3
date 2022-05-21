@@ -2,103 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74F9052FDEA
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 17:42:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B517C52FDF0
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 17:44:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237501AbiEUPj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 11:39:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50352 "EHLO
+        id S238462AbiEUPoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 11:44:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245276AbiEUPin (ORCPT
+        with ESMTP id S230091AbiEUPn5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 11:38:43 -0400
-Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B46D162CD2
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 08:38:42 -0700 (PDT)
-Received: from dslb-188-096-138-194.188.096.pools.vodafone-ip.de ([188.96.138.194] helo=martin-debian-2.paytec.ch)
-        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <martin@kaiser.cx>)
-        id 1nsRBe-0007XY-Ff; Sat, 21 May 2022 17:38:38 +0200
-From:   Martin Kaiser <martin@kaiser.cx>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Michael Straube <straube.linux@gmail.com>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 12/12] staging: r8188eu: calculate the addba request length
-Date:   Sat, 21 May 2022 17:38:24 +0200
-Message-Id: <20220521153824.218196-13-martin@kaiser.cx>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220521153824.218196-1-martin@kaiser.cx>
-References: <20220521153824.218196-1-martin@kaiser.cx>
+        Sat, 21 May 2022 11:43:57 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C9B5DA7F
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 08:43:56 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id m6so12580623ljb.2
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 08:43:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=wJtjegKQirvwB32gH9239SE+3TpnMc7sTBARznemBeA=;
+        b=rHnU0AJfxYSJk4dWu+EQZOT00DrtLky7GJSRI7opNKA72fhNtZWArdLTC2YX1cEZt0
+         qB56Rb2t79QRgrbOsyeg4G3meKOaY6AtdtyNaPLPZJXT7Gr3egY3trprPigWNj+9qZUY
+         Rz1bvezh4ASHEh+Dpou1FTh0uUyoHahD72vUmeqUsg1zXKvDNpYZjk0119+EWX7VuC3a
+         va4y42+07uOVkUgvw7dxnszTTL+2RraiKCJmA2dORYp/VsqXwp65niaIB+QYEtBVtBmN
+         s0EMgB6qv3jQIeL1v/vreYC4pxZTIuQf12i+WIgZ6zqolZtHRfoXzB97Nq1VEhv297e2
+         T1rQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=wJtjegKQirvwB32gH9239SE+3TpnMc7sTBARznemBeA=;
+        b=2OacHrmYnusvwMYCCLvivWzqV0QhzGBUbZ10SH0AuOmPlRCcMTNHWqQDE0HUyJRT79
+         Lr/N3Y3Jy91RukprkRv/JTx48bBvZm2H6J5TlA5bTEIhJJkFERV1hGUxnhDJirN+JFxY
+         abNjpUd/9hbYxlAk97plL6RuiCoEPthwhtLhzQcRqM7r8gZw827iDHhM0hYRyGwahTpr
+         cBgOV9ZZiK7RpD3Z3xfAnlOoRxZtg8CijDQy/wSKV88mQ4RuJziPJsAEK3qkBSyI6JTk
+         Yd+ez8YiWLu3KQdJ8BBJrW7ov3bDpy7IYfqreeKO7zFBwDiultaNalOUasbXIccwCPF6
+         8A2g==
+X-Gm-Message-State: AOAM530UDtT+k+DGXalExN4dTXBjlwJespgtGPX1dJI4UQ5hhiP/PDD4
+        IQnd//yFWU/rC5h6ENIepLFLLw==
+X-Google-Smtp-Source: ABdhPJyfXeTYFTH2YSm07Q4/SRjtLq6RdF2FJbLzE7a3ieXX5ldwJm5T9cajy78FDGgCkN/KkaIH6g==
+X-Received: by 2002:a05:651c:2120:b0:24f:555d:a2d3 with SMTP id a32-20020a05651c212000b0024f555da2d3mr8302036ljq.157.1653147834421;
+        Sat, 21 May 2022 08:43:54 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id d24-20020a056512369800b0047255d211fbsm1093133lfs.298.2022.05.21.08.43.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 21 May 2022 08:43:53 -0700 (PDT)
+Message-ID: <5c426fdc-6250-60fe-6c10-109a0ceb3e0c@linaro.org>
+Date:   Sat, 21 May 2022 17:43:52 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH net-next] dt-bindings: net: xilinx: document xilinx
+ emaclite driver binding
+Content-Language: en-US
+To:     Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, harini.katakam@amd.com,
+        michal.simek@amd.com
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, git@amd.com
+References: <1653031473-21032-1-git-send-email-radhey.shyam.pandey@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1653031473-21032-1-git-send-email-radhey.shyam.pandey@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When issue_action_BA compiles an addba request, it does not add any
-extensions. start_seq_num is the last field of the addba request.
+On 20/05/2022 09:24, Radhey Shyam Pandey wrote:
+> Add basic description for the xilinx emaclite driver DT bindings.
+> 
+> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+> ---
+> Changes since RFC:
+> - Add ethernet-controller yaml reference.
+> - 4 space indent for DTS example.
+> ---
+>  .../bindings/net/xlnx,emaclite.yaml           | 63 +++++++++++++++++++
+>  1 file changed, 63 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/xlnx,emaclite.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/net/xlnx,emaclite.yaml b/Documentation/devicetree/bindings/net/xlnx,emaclite.yaml
+> new file mode 100644
+> index 000000000000..6105122ad583
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/xlnx,emaclite.yaml
+> @@ -0,0 +1,63 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/xlnx,emaclite.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Xilinx Emaclite Ethernet controller
+> +
+> +allOf:
+> +  - $ref: ethernet-controller.yaml#
 
-The length of the request is the offset of the end of start_seq_num in the
-struct ieee80211_mgmt that defines the message.
+This goes just before properties (so after maintainers).
 
-Use offsetofend to calculate this offset and drop the intermediate pktlen
-increments as we add addba request components. (We have to keep the
-increments for other message types until we use offsetofend for them as
-well.)
+> +
+> +maintainers:
+> +  - Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+> +  - Harini Katakam <harini.katakam@amd.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - xlnx,opb-ethernetlite-1.01.a
+> +      - xlnx,opb-ethernetlite-1.01.b
+> +      - xlnx,xps-ethernetlite-1.00.a
+> +      - xlnx,xps-ethernetlite-2.00.a
+> +      - xlnx,xps-ethernetlite-2.01.a
+> +      - xlnx,xps-ethernetlite-3.00.a
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  phy-handle: true
+> +
+> +  local-mac-address: true
+> +
+> +  xlnx,tx-ping-pong:
+> +    type: boolean
+> +    description: hardware supports tx ping pong buffer.
+> +
+> +  xlnx,rx-ping-pong:
+> +    type: boolean
+> +    description: hardware supports rx ping pong buffer.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - phy-handle
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    axi_ethernetlite_1: ethernet@40e00000 {
+> +        compatible = "xlnx,xps-ethernetlite-3.00.a";
+> +        interrupt-parent = <&axi_intc_1>;
+> +        interrupts = <1 0>;
 
-Signed-off-by: Martin Kaiser <martin@kaiser.cx>
----
- drivers/staging/r8188eu/core/rtw_mlme_ext.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+Is "0" an interrupt none type? If yes, then this should be rather a
+define and a proper type, not none.
 
-diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-index 3e293ec59b7f..e56135efa1f8 100644
---- a/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-+++ b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-@@ -5415,22 +5415,18 @@ void issue_action_BA(struct adapter *padapter, unsigned char *raddr, unsigned ch
- 	switch (action) {
- 	case WLAN_ACTION_ADDBA_REQ:
- 		mgmt->u.action.u.addba_req.action_code = WLAN_ACTION_ADDBA_REQ;
--		pattrib->pktlen++;
- 		do {
- 			pmlmeinfo->dialogToken++;
- 		} while (pmlmeinfo->dialogToken == 0);
- 		mgmt->u.action.u.addba_req.dialog_token = pmlmeinfo->dialogToken;
--		pattrib->pktlen++;
- 
- 		/* immediate ack & 64 buffer size */
- 		capab = u16_encode_bits(64, IEEE80211_ADDBA_PARAM_BUF_SIZE_MASK);
- 		capab |= u16_encode_bits(1, IEEE80211_ADDBA_PARAM_POLICY_MASK);
- 		capab |= u16_encode_bits(status, IEEE80211_ADDBA_PARAM_TID_MASK);
- 		mgmt->u.action.u.addba_req.capab = cpu_to_le16(capab);
--		pattrib->pktlen += 2;
- 
- 		mgmt->u.action.u.addba_req.timeout = cpu_to_le16(5000); /* 5 ms */
--		pattrib->pktlen += 2;
- 
- 		psta = rtw_get_stainfo(pstapriv, raddr);
- 		if (psta) {
-@@ -5441,7 +5437,9 @@ void issue_action_BA(struct adapter *padapter, unsigned char *raddr, unsigned ch
- 			BA_starting_seqctrl = start_seq << 4;
- 		}
- 		mgmt->u.action.u.addba_req.start_seq_num = cpu_to_le16(BA_starting_seqctrl);
--		pattrib->pktlen += 2;
-+
-+		pattrib->pktlen = offsetofend(struct ieee80211_mgmt,
-+					      u.action.u.addba_req.start_seq_num);
- 		break;
- 	case WLAN_ACTION_ADDBA_RESP:
- 		mgmt->u.action.u.addba_resp.action_code = WLAN_ACTION_ADDBA_RESP;
--- 
-2.30.2
+> +        local-mac-address = [00 0a 35 00 00 00];
 
+Each device should get it's own MAC address, right? I understand you
+leave it for bootloader, then just fill it with 0.
+
+> +        phy-handle = <&phy0>;
+> +        reg = <0x40e00000 0x10000>;
+
+Put the reg after compatible in DTS code.
+
+> +        xlnx,rx-ping-pong;
+> +        xlnx,tx-ping-pong;
+> +    };
+
+
+Best regards,
+Krzysztof

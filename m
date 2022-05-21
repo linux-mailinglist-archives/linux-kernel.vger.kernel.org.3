@@ -2,175 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74D2F52FE1C
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 18:30:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C4D252FE1F
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 18:32:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245543AbiEUQ25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 12:28:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41132 "EHLO
+        id S245590AbiEUQbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 12:31:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230071AbiEUQ2y (ORCPT
+        with ESMTP id S230071AbiEUQbt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 12:28:54 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B71015DA4C
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 09:28:53 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id q10so13223539oia.9
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 09:28:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oK1yB+pWX7DUbSOpiHUXdRbl5cSW3whx4lZdoBBpZGI=;
-        b=UrqSD+LVWpiMGbElInA4v1zLlY3zz44S8My+BazS33dvc4USn2c/ACJivVLw21vW59
-         8tcYf2szyzOj5GjVLttevS5n+e2k7DtbJ5OHAGJ8NqfuwDOqtJhB9RSQnh9LeV5FuIid
-         DBCRdv47mdQhwfLitq4LgbXd3yizYz5n1gG0s=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oK1yB+pWX7DUbSOpiHUXdRbl5cSW3whx4lZdoBBpZGI=;
-        b=PyOd2vl+oXoBVfIxiso2iVoyFUQqIP4Q/LJm8uYd43S93EeuJeDppjNywvQ2QrDajK
-         Zau8eQgwNHBOJ41C2QMgGGE0c01aJGXQbinfFdu0CZYbV3fDD3uYnymBd1Qqv14oY7/9
-         zQdU4fVTPBDBeBLWF9D4TO2PbzfZyya7+HX2dyfU0xzHWuUb0QWD7Xbv6jAHtVgcEoAY
-         EIMGy/lR10mb8O+nuItkRAmZau8wCmPuphuSi9mJa0CVoZSOPb6OuSqJo61Jr7QHjMqH
-         TsdPq6iZ8gtDUDEcY6O7b/3xYOoAIl/nJbzIrquLHbe3HOGaMrdke65l5T+/bV460KRQ
-         QCnw==
-X-Gm-Message-State: AOAM531ErVaHZYtRIYef9OIoVFLWoHjrr6Qv/FDyi6sYwPduL1uS+nh0
-        CS8ddKmhHnU6DBzfrGb9nrcqhd8vzb2k+/ql4sowlw==
-X-Google-Smtp-Source: ABdhPJwjzViPzNj+UQE/C64zn+ilBV2EKusiLYfvuHVAdSNoX/9mTgUSq3Zi0TP0zUvswqDoY3TGHCLcMRNQuEz5lBY=
-X-Received: by 2002:a05:6808:2181:b0:326:901e:f5e7 with SMTP id
- be1-20020a056808218100b00326901ef5e7mr8641168oib.7.1653150533098; Sat, 21 May
- 2022 09:28:53 -0700 (PDT)
+        Sat, 21 May 2022 12:31:49 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 259EC5DD1E
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 09:31:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653150708; x=1684686708;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=PB0LVkRhNYxLHkmCHC4bTytsuw+bRI1tm3gD2okPrec=;
+  b=CgILwIZ+gCiEAxGjCRLfVy1Mf2K6rUbCgkDdbeq5tJ4nhjYafoVGYlXj
+   vOeQTzfNru3pnzAFBe3aHGiWwmPPnY08DPn9TLXgcvQ0QRdD/vCAS1unv
+   xpu7Bb3y9DleDe/uXneMytAnNtwAXXZN/K696mc0GSCsISbajuEpjOaSE
+   8G9abXmuCJlpt1TrXKh0L6j42RQ7dB+KeIDO6V5zhnBQzlPzE3Td7vRkz
+   Bc8u7Zc0Ha/Iwb4O6MNxeYcRcFZm90141Fgc9hWZBOq7LEFWo9WIhglEj
+   EHrZUqsVNUcE1jPVsaKUfmqfM8lJPT9eHoyjtVTnqixHhMX8PjR9jyNPl
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10354"; a="333503856"
+X-IronPort-AV: E=Sophos;i="5.91,242,1647327600"; 
+   d="scan'208";a="333503856"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 09:31:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,242,1647327600"; 
+   d="scan'208";a="628644032"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 21 May 2022 09:31:46 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nsS13-0006Ri-I1;
+        Sat, 21 May 2022 16:31:45 +0000
+Date:   Sun, 22 May 2022 00:31:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:auto-latest] BUILD SUCCESS
+ 10edb53c5d7c67a9fe09c492288d752e17172909
+Message-ID: <628913cb.8o8vjqmwkFRWyx+U%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20220422084720.959271-1-xji@analogixsemi.com> <20220422084720.959271-4-xji@analogixsemi.com>
- <CAG3jFytWGSUM9mevHewdmEe-hq3JgB74s7_f0fsEQqkXr9VUHg@mail.gmail.com>
- <CAG3jFyvEYbwkdGtiNR-6vFEXTLjcyT_viqp9qeVxFTu0PrJEVA@mail.gmail.com>
- <CAGXv+5E1cCNWD98fMDjC38y2UztZd=PNQ+=G=wrBYfoXkswvHA@mail.gmail.com>
- <20220425091419.GA967110@anxtwsw-Precision-3640-Tower> <CAG3jFyvTim7P_y2G1Br5j3Pwz4KzvRjWgci_qQ3m_YW=3Bog8A@mail.gmail.com>
- <CAKMK7uFHyYTnGtP+vCzo2Uan90DW-QZpPFPn5S9bQ5aPiY=qzA@mail.gmail.com>
-In-Reply-To: <CAKMK7uFHyYTnGtP+vCzo2Uan90DW-QZpPFPn5S9bQ5aPiY=qzA@mail.gmail.com>
-From:   Daniel Vetter <daniel@ffwll.ch>
-Date:   Sat, 21 May 2022 18:28:42 +0200
-Message-ID: <CAKMK7uHFGsPMZf2SUF4HDXo3XuOLjP3-DLfyp=gB2qpKR964Eg@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] drm/bridge: anx7625: Use DPI bus type
-To:     Robert Foss <robert.foss@linaro.org>
-Cc:     Xin Ji <xji@analogixsemi.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        David Airlie <airlied@linux.ie>, qwen@analogixsemi.com,
-        Jonas Karlman <jonas@kwiboo.se>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Chen-Yu Tsai <wenst@chromium.org>, bliang@analogixsemi.com,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 21 May 2022 at 18:07, Daniel Vetter <daniel@ffwll.ch> wrote:
->
-> On Tue, 17 May 2022 at 18:09, Robert Foss <robert.foss@linaro.org> wrote:
-> >
-> > On Mon, 25 Apr 2022 at 11:14, Xin Ji <xji@analogixsemi.com> wrote:
-> > >
-> > > On Mon, Apr 25, 2022 at 04:24:50PM +0800, Chen-Yu Tsai wrote:
-> > > > On Fri, Apr 22, 2022 at 10:13 PM Robert Foss <robert.foss@linaro.org> wrote:
-> > > > >
-> > > > > On Fri, 22 Apr 2022 at 16:01, Robert Foss <robert.foss@linaro.org> wrote:
-> > > > > >
-> > > > > > On Fri, 22 Apr 2022 at 10:49, Xin Ji <xji@analogixsemi.com> wrote:
-> > > > > > >
-> > > > > > > As V4L2_FWNODE_BUS_TYPE_PARALLEL not properly descript for DPI
-> > > > > > > interface, this patch use new defined V4L2_FWNODE_BUS_TYPE_DPI for it.
-> > > > > > >
-> > > > > > > Fixes: fd0310b6fe7d ("drm/bridge: anx7625: add MIPI DPI input feature")
-> > > > > > > Signed-off-by: Xin Ji <xji@analogixsemi.com>
-> > > > > > > ---
-> > > > > > >  drivers/gpu/drm/bridge/analogix/anx7625.c | 8 ++++----
-> > > > > > >  1 file changed, 4 insertions(+), 4 deletions(-)
-> > > > > > >
-> > > > > > > diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> > > > > > > index 376da01243a3..71df977e8f53 100644
-> > > > > > > --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-> > > > > > > +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> > > > > > > @@ -1623,14 +1623,14 @@ static int anx7625_parse_dt(struct device *dev,
-> > > > > > >
-> > > > > > >         anx7625_get_swing_setting(dev, pdata);
-> > > > > > >
-> > > > > > > -       pdata->is_dpi = 1; /* default dpi mode */
-> > > > > > > +       pdata->is_dpi = 0; /* default dsi mode */
-> > > > > > >         pdata->mipi_host_node = of_graph_get_remote_node(np, 0, 0);
-> > > > > > >         if (!pdata->mipi_host_node) {
-> > > > > > >                 DRM_DEV_ERROR(dev, "fail to get internal panel.\n");
-> > > > > > >                 return -ENODEV;
-> > > > > > >         }
-> > > > > > >
-> > > > > > > -       bus_type = V4L2_FWNODE_BUS_TYPE_PARALLEL;
-> > > > > > > +       bus_type = 0;
-> > > > > > >         mipi_lanes = MAX_LANES_SUPPORT;
-> > > > > > >         ep0 = of_graph_get_endpoint_by_regs(np, 0, 0);
-> > > > > > >         if (ep0) {
-> > > > > > > @@ -1640,8 +1640,8 @@ static int anx7625_parse_dt(struct device *dev,
-> > > > > > >                 mipi_lanes = of_property_count_u32_elems(ep0, "data-lanes");
-> > > > > > >         }
-> > > > > > >
-> > > > > > > -       if (bus_type == V4L2_FWNODE_BUS_TYPE_PARALLEL) /* bus type is Parallel(DSI) */
-> > > > > > > -               pdata->is_dpi = 0;
-> > > > > > > +       if (bus_type == V4L2_FWNODE_BUS_TYPE_DPI) /* bus type is DPI */
-> > > > > > > +               pdata->is_dpi = 1;
-> > > > > > >
-> > > > > > >         pdata->mipi_lanes = mipi_lanes;
-> > > > > > >         if (pdata->mipi_lanes > MAX_LANES_SUPPORT || pdata->mipi_lanes <= 0)
-> > > > > >
-> > > > > > Reviewed-by: Robert Foss <robert.foss@linaro.org>
-> > > > >
-> > > > > Acked-by: Robert Foss <robert.foss@linaro.org>
-> > > >
-> > > > Tested-by: Chen-Yu Tsai <wenst@chromium.org>
-> > > >
-> > > > Confirmed this fixes the display on Juniper (Acer Chromebook Spin 311) on
-> > > > mainline (next-20220422).
-> > > >
-> > > > Xin, in the future, please send the whole series to all recipients of
-> > > > all patches listed by get_maintainers.pl, not just the recipients of
-> > > > each patch. In the case of this series, they should have been sent
-> > > > to all of the mailing lists (media, devicetree, dri-devel) so that
-> > > > everyone has the same, full view of the patches.
-> > > Hi ChenYu, OK, I'll send to all media, devicetree, dri-devel next time.
-> > > Thanks,
-> > > Xin
-> > > >
-> > > > ChenYu
-> >
-> > Applied 3/4 + 4/4 to drm-misc-next.
->
-> This patch doesn't even compile. Can you pls fix this up asap? Also
-> pls compile-test before pushing ...
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git auto-latest
+branch HEAD: 10edb53c5d7c67a9fe09c492288d752e17172909  Merge branch into tip/master: 'x86/sev'
 
-Marek says the prerequisite landed through linux-media, and that's why
-it compilers on linux-next but not in drm-misc-next.
+elapsed time: 3345m
 
-Don't do that.
+configs tested: 162
+configs skipped: 5
 
-Instead:
-- merge all patches through one branch, with the foreign patches acked
-for that merge patch
-- wait until you can backmerge all the dependencies
-- do a topic branch
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-This probably needs to be reverted here and instead merged through
-linux-media. Or you wait until -rc1 and then apply it to
-drm-misc-next.
--Daniel
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+m68k                          hp300_defconfig
+m68k                             alldefconfig
+openrisc                 simple_smp_defconfig
+sh                         microdev_defconfig
+xtensa                generic_kc705_defconfig
+riscv                               defconfig
+mips                           ci20_defconfig
+x86_64                              defconfig
+s390                       zfcpdump_defconfig
+arm                         axm55xx_defconfig
+ia64                      gensparse_defconfig
+arm                         s3c6400_defconfig
+powerpc                     taishan_defconfig
+ia64                        generic_defconfig
+powerpc                      chrp32_defconfig
+s390                          debug_defconfig
+mips                  maltasmvp_eva_defconfig
+powerpc                     mpc83xx_defconfig
+sh                           se7705_defconfig
+arm                        mini2440_defconfig
+xtensa                           allyesconfig
+m68k                            q40_defconfig
+sh                           se7721_defconfig
+arm                           tegra_defconfig
+arm                        cerfcube_defconfig
+arm                           corgi_defconfig
+xtensa                          iss_defconfig
+um                                  defconfig
+powerpc                        cell_defconfig
+sh                                  defconfig
+arm                        realview_defconfig
+xtensa                    smp_lx200_defconfig
+xtensa                       common_defconfig
+alpha                               defconfig
+arm                           h5000_defconfig
+arm                        multi_v7_defconfig
+ia64                         bigsur_defconfig
+sh                          landisk_defconfig
+arc                            hsdk_defconfig
+mips                    maltaup_xpa_defconfig
+arc                      axs103_smp_defconfig
+powerpc                 mpc834x_mds_defconfig
+h8300                       h8s-sim_defconfig
+powerpc                      ep88xc_defconfig
+arm                            lart_defconfig
+sh                          urquell_defconfig
+x86_64                           alldefconfig
+powerpc                 canyonlands_defconfig
+arm                      footbridge_defconfig
+sh                          sdk7786_defconfig
+mips                 decstation_r4k_defconfig
+mips                         mpc30x_defconfig
+powerpc                 mpc837x_mds_defconfig
+arm                           viper_defconfig
+xtensa                         virt_defconfig
+parisc                           alldefconfig
+mips                         rt305x_defconfig
+m68k                           sun3_defconfig
+arm                           sama5_defconfig
+arc                         haps_hs_defconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220519
+ia64                             allmodconfig
+ia64                             allyesconfig
+ia64                                defconfig
+riscv                             allnoconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                            allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+s390                                defconfig
+s390                             allmodconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+sparc                               defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+powerpc                          allyesconfig
+i386                          randconfig-a003
+i386                          randconfig-a005
+i386                          randconfig-a001
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+x86_64                        randconfig-a011
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+arc                  randconfig-r043-20220519
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                                  kexec
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+
+clang tested configs:
+powerpc              randconfig-c003-20220519
+x86_64                        randconfig-c007
+riscv                randconfig-c006-20220519
+mips                 randconfig-c004-20220519
+i386                          randconfig-c001
+arm                  randconfig-c002-20220519
+mips                      malta_kvm_defconfig
+arm                          ixp4xx_defconfig
+arm                              alldefconfig
+arm                          pxa168_defconfig
+powerpc                   bluestone_defconfig
+powerpc                        icon_defconfig
+powerpc                      katmai_defconfig
+powerpc                      ppc44x_defconfig
+arm                       spear13xx_defconfig
+mips                           rs90_defconfig
+arm                         shannon_defconfig
+powerpc                       ebony_defconfig
+arm                         orion5x_defconfig
+powerpc                          allmodconfig
+arm                         palmz72_defconfig
+mips                            e55_defconfig
+arm                        mvebu_v5_defconfig
+powerpc                  mpc885_ads_defconfig
+powerpc                    gamecube_defconfig
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+s390                 randconfig-r044-20220519
+hexagon              randconfig-r045-20220519
+hexagon              randconfig-r041-20220519
+riscv                randconfig-r042-20220519
+
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+0-DAY CI Kernel Test Service
+https://01.org/lkp

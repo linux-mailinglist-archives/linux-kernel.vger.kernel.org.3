@@ -2,125 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B118752F933
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 08:14:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1265C52F939
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 08:24:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240144AbiEUGOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 02:14:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56248 "EHLO
+        id S240169AbiEUGYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 02:24:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233827AbiEUGOs (ORCPT
+        with ESMTP id S229786AbiEUGYN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 02:14:48 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6040F166696;
-        Fri, 20 May 2022 23:14:44 -0700 (PDT)
+        Sat, 21 May 2022 02:24:13 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E08F17CE5A;
+        Fri, 20 May 2022 23:24:12 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id j21so9208682pga.13;
+        Fri, 20 May 2022 23:24:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1653113685; x=1684649685;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=88h/XalmwpDNbt5yjyOWwQF42/+dZnwpPutE6jurIgQ=;
-  b=pmPbP2xduwmAoyr9upRgZ6pqJARGWpFOU95YojDWjVGscpv06uqPLd7r
-   qB7AImcbIp4nJTPfUmOjWSp3kHULj7+wMJOBWx61Lcu3Wiha4klc287xZ
-   nq70OokbY387Iv7qsej4lFJlz7RqMS2XsbwyPUGfj71Eeohy2G6t8WWWw
-   E=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 20 May 2022 23:14:44 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 23:14:44 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 20 May 2022 23:14:43 -0700
-Received: from [10.79.43.230] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 20 May
- 2022 23:14:41 -0700
-Subject: Re: [PATCH 2/2 V2] remoteproc: qcom: Add full coredump fallback
- mechanism
-To:     Yogesh Lal <quic_ylal@quicinc.com>, <bjorn.andersson@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Siddharth Gupta <sidgup@codeaurora.org>
-References: <1652181930-22212-1-git-send-email-quic_ylal@quicinc.com>
- <1652181930-22212-2-git-send-email-quic_ylal@quicinc.com>
-From:   Sibi Sankar <quic_sibis@quicinc.com>
-Message-ID: <271132da-4a6a-afd9-4509-47035dd18a8e@quicinc.com>
-Date:   Sat, 21 May 2022 11:44:38 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=D+035shCGayoVZnHh6P8+prZuzk5qeaJC5UNIpCMpBI=;
+        b=DPMPF91IKlfD0xI4JyQCyHN9pvfG7aQ954msFUzst3pRk+TsDCxTnUJPl+G9xz35Ll
+         vrGQWBz5lvdKyt4Y1XtyXtTVehO56N4L7nu03CiQPil/XzaV2G6Qs5laH4ZzElWcVleb
+         k5UHlwpW7y4kWmuRtBI2KIihuQ8Cnv/wMOInRu51O1HfdzPySO92Fugc54VpjPpDbTPa
+         GulYWpKo6kZVN5KU8Y64qnU46c8GN+emJ82zZoHtUBjPWXoALmJdQ1O19lyPeWT/JiUk
+         QinVzT7E8wRvivtP72vJvffWYQgqTcm8IPdxzIG8akXCVg6Xm2B9yujOC/HEyHvg9CUJ
+         IXiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=D+035shCGayoVZnHh6P8+prZuzk5qeaJC5UNIpCMpBI=;
+        b=a2hsOJEiAOW45fMknfsEcx9aIlkQtZnPULLwp82FyQmUDvOerA+oTufTOzdX6O7Qz+
+         anpENupBXfhrLlurSQCzKuahUpt29s/MZ9MrzrQwt5eHpvU3HaYWMQP3gmCr814TsyoU
+         iV2Y2huHoGqfCKjq41l7bT/Ynl2C5tCKHpjhTnOcvPekRsHh1RF9HSgcGbG4eXpsGuiu
+         EYDuVeq3VeXJ1sUZBX2aTL7JbgWBLl8UD3PDvgvgctXi63OnGkbs1w95bh2PB1c42/jR
+         ra0NTEM89xFgoGVkvAWkyAAJhpkdffOTJybMbRvPnsoP+FGn7Ju9mLUDnZalKLfSIJhT
+         +Uhw==
+X-Gm-Message-State: AOAM531UFa1vHNug1kZf8nnKnWtSV5QZwEeIhXeUat59gIK3SJRFaCpD
+        ISeu0eEoZZVlj5sEXnfl2A==
+X-Google-Smtp-Source: ABdhPJxMBttmUWzz887BCqKJuXt9xNs8IZXr/b4QufxVfwdedzEseaozqS8YQDEY1FDHhIkIzXxmNg==
+X-Received: by 2002:a63:5959:0:b0:3f2:779d:de6c with SMTP id j25-20020a635959000000b003f2779dde6cmr11192176pgm.355.1653114251744;
+        Fri, 20 May 2022 23:24:11 -0700 (PDT)
+Received: from localhost.localdomain ([144.202.91.207])
+        by smtp.gmail.com with ESMTPSA id je15-20020a170903264f00b0015e8d4eb2a6sm747822plb.240.2022.05.20.23.24.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 May 2022 23:24:11 -0700 (PDT)
+From:   Zheyu Ma <zheyuma97@gmail.com>
+To:     ezequiel@vanguardiasur.com.ar, mchehab@kernel.org
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zheyu Ma <zheyuma97@gmail.com>
+Subject: [PATCH] media: tw686x: Register the irq at the end of probe
+Date:   Sat, 21 May 2022 14:24:01 +0800
+Message-Id: <20220521062401.3294686-1-zheyuma97@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-In-Reply-To: <1652181930-22212-2-git-send-email-quic_ylal@quicinc.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Yogesh,
-Looks like you missed adding the patch that uses the exported
-rproc_cleanup api.
+We got the following warning when booting the kernel:
 
+[    3.243674] INFO: trying to register non-static key.
+[    3.243922] The code is fine but needs lockdep annotation, or maybe
+[    3.244230] you didn't initialize this object before use?
+[    3.245642] Call Trace:
+[    3.247836]  lock_acquire+0xff/0x2d0
+[    3.248727]  tw686x_audio_irq+0x1a5/0xcc0 [tw686x]
+[    3.249211]  tw686x_irq+0x1f9/0x480 [tw686x]
 
-On 5/10/22 4:55 PM, Yogesh Lal wrote:
-> From: Siddharth Gupta <sidgup@codeaurora.org>
-> 
-> If a remoteproc's firmware does not support minidump but the driver
-> adds an ID, the minidump driver does not collect any coredumps when
-> the remoteproc crashes. This hinders the purpose of coredump
-> collection. This change adds a fallback mechanism in the event of a
-> crash.
-> 
+The lock 'vc->qlock' will be initialized in tw686x_video_init(), but the
+driver registers the irq before calling the tw686x_video_init(), and we
+got the warning.
 
-Reviewed-by: Sibi Sankar <quic_sibis@quicinc.com>
+Fix this by registering the irq at the end of probe
 
-> Signed-off-by: Siddharth Gupta <sidgup@codeaurora.org>
-> Signed-off-by: Yogesh Lal <quic_ylal@quicinc.com>
-> ---
->   drivers/remoteproc/qcom_common.c   | 7 +++++--
->   drivers/remoteproc/qcom_q6v5_pas.c | 1 +
->   2 files changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/remoteproc/qcom_common.c b/drivers/remoteproc/qcom_common.c
-> index 4b91e3c..b3fdc66 100644
-> --- a/drivers/remoteproc/qcom_common.c
-> +++ b/drivers/remoteproc/qcom_common.c
-> @@ -163,8 +163,11 @@ void qcom_minidump(struct rproc *rproc, unsigned int minidump_id)
->   	 */
->   	if (subsystem->regions_baseptr == 0 ||
->   	    le32_to_cpu(subsystem->status) != 1 ||
-> -	    le32_to_cpu(subsystem->enabled) != MD_SS_ENABLED ||
-> -	    le32_to_cpu(subsystem->encryption_status) != MD_SS_ENCR_DONE) {
-> +	    le32_to_cpu(subsystem->enabled) != MD_SS_ENABLED) {
-> +		return rproc_coredump(rproc);
-> +	}
-> +
-> +	if (le32_to_cpu(subsystem->encryption_status) != MD_SS_ENCR_DONE) {
->   		dev_err(&rproc->dev, "Minidump not ready, skipping\n");
->   		return;
->   	}
-> diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
-> index 401b1ec..6e5cbca 100644
-> --- a/drivers/remoteproc/qcom_q6v5_pas.c
-> +++ b/drivers/remoteproc/qcom_q6v5_pas.c
-> @@ -274,6 +274,7 @@ static const struct rproc_ops adsp_minidump_ops = {
->   	.start = adsp_start,
->   	.stop = adsp_stop,
->   	.da_to_va = adsp_da_to_va,
-> +	.parse_fw = qcom_register_dump_segments,
->   	.load = adsp_load,
->   	.panic = adsp_panic,
->   	.coredump = adsp_minidump,
-> 
+Fixes: 704a84ccdbf1 ("[media] media: Support Intersil/Techwell TW686x-based video capture cards")
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+---
+ drivers/media/pci/tw686x/tw686x-core.c | 18 ++++++++----------
+ 1 file changed, 8 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/media/pci/tw686x/tw686x-core.c b/drivers/media/pci/tw686x/tw686x-core.c
+index 6676e069b515..384d38754a4b 100644
+--- a/drivers/media/pci/tw686x/tw686x-core.c
++++ b/drivers/media/pci/tw686x/tw686x-core.c
+@@ -315,13 +315,6 @@ static int tw686x_probe(struct pci_dev *pci_dev,
+ 
+ 	spin_lock_init(&dev->lock);
+ 
+-	err = request_irq(pci_dev->irq, tw686x_irq, IRQF_SHARED,
+-			  dev->name, dev);
+-	if (err < 0) {
+-		dev_err(&pci_dev->dev, "unable to request interrupt\n");
+-		goto iounmap;
+-	}
+-
+ 	timer_setup(&dev->dma_delay_timer, tw686x_dma_delay, 0);
+ 
+ 	/*
+@@ -333,18 +326,23 @@ static int tw686x_probe(struct pci_dev *pci_dev,
+ 	err = tw686x_video_init(dev);
+ 	if (err) {
+ 		dev_err(&pci_dev->dev, "can't register video\n");
+-		goto free_irq;
++		goto iounmap;
+ 	}
+ 
+ 	err = tw686x_audio_init(dev);
+ 	if (err)
+ 		dev_warn(&pci_dev->dev, "can't register audio\n");
+ 
++	err = request_irq(pci_dev->irq, tw686x_irq, IRQF_SHARED,
++			  dev->name, dev);
++	if (err < 0) {
++		dev_err(&pci_dev->dev, "unable to request interrupt\n");
++		goto iounmap;
++	}
++
+ 	pci_set_drvdata(pci_dev, dev);
+ 	return 0;
+ 
+-free_irq:
+-	free_irq(pci_dev->irq, dev);
+ iounmap:
+ 	pci_iounmap(pci_dev, dev->mmio);
+ free_region:
+-- 
+2.36.1
+

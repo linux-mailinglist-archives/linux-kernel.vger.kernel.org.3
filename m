@@ -2,119 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C00052F79A
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 04:35:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A24B452F79E
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 04:39:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232004AbiEUCfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 22:35:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48826 "EHLO
+        id S1350567AbiEUCje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 22:39:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354350AbiEUCe7 (ORCPT
+        with ESMTP id S239204AbiEUCj3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 22:34:59 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9200617996A
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 19:34:57 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id v6so6090368qtx.12
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 19:34:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GPOY2d2iNuO65egkCFZw3rXLU46LbwzRq0Gho1bvrl4=;
-        b=gYTL0x/S9SWMzL5yr5pHjL2Os0iUM04qyTCySwDHjdtl4ZDNWVsWyGNPYQTmwR+Wa5
-         vVvdRd0+/BHBjj+ZE+kimSd/G5xlwM+XO/ecdcutR1uZwUMaxdUWmyB2RMOqH+6zgwko
-         ggJRNM7RXDYfxEO2YdBlTCPs9OiAGlPOnrs9/BOwORDAc5THxIwoVjG1ZxrNO1Wqp1un
-         Xae4Tn5esHxugHU4Md0EVA17aJQTl0MJwZ9IfrTBn0P1+CYouofVbq7Gs1KNJI9rt+Lq
-         hDWArAengQ0djrKjfvMKg39LWXmqeEcUV8yYVD9rNhDOPtjQrbnxQlXYRbWwysYvePbD
-         P4Fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GPOY2d2iNuO65egkCFZw3rXLU46LbwzRq0Gho1bvrl4=;
-        b=qxdHwMNW3kaa8Ge1MAB0rNQ2DAE6DP6a7emChiAk2nbbT59Cpndrle/C8ZOlFbCCat
-         xtUXU4VBJJvm1vIawi8N2XG1t6B8c9iUNR2rwyqt/q4Ohz3NVj4xX07wBapDL2ggv7SO
-         wVGGdNJLTMpziaB5XdWXddlHCcy+1SDljmZF2MEVKy7MsAeY/wDs/Amc3CXDPlnrztcG
-         Drk9PpcBcxfbzHe4j6PikKjYDWS6Qq/FeY8um2Gf5ua4yktCyPCS7wQdlsSdeI4FwHKD
-         hwxL4ossueMWao1Nsi/Hotyscv3k8XTakTinvi8rFaAqoi9y29DC/3l0gCJq7bwx03Zu
-         b0rA==
-X-Gm-Message-State: AOAM532+yX4ouH2VnXvs+MjQep1symN8ra0GsknFHhIMcHBC+e/TL8sT
-        b5BxEqIuZuuDSSoFadIYPIYiPogn/7fAOkzRO+fqNg==
-X-Google-Smtp-Source: ABdhPJwd+HVn4+3QpKDEw2AoM1qT+hYBOJBZ2hv6MdNy7IotYmml2BidH2U0zIMWITMViRtg63Jxg05O6pU/nFgGjzU=
-X-Received: by 2002:ac8:5845:0:b0:2f9:1c6a:f65f with SMTP id
- h5-20020ac85845000000b002f91c6af65fmr5026503qth.168.1653100496556; Fri, 20
- May 2022 19:34:56 -0700 (PDT)
+        Fri, 20 May 2022 22:39:29 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8854318FF0D
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 19:39:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653100768; x=1684636768;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1HhJywIEmfL+qtTi5BFNwiwjLbhMBstdEXIaQHLOt2U=;
+  b=IkSKOTNPNPLvVBSOyjnCnbVyG1rHvMQQNgcBin5p/21uuBt7YlcvSywE
+   dHEoxVDUsToBdwnsayOtjt6wuRLIc6KtXlzZAGTHDB4iZJCVE5sQnMnuc
+   /qe7wQ9D+SoDhC3z72rlaLdHRPzwn09+z525AMmsElk1DMoy+VBoPOT/a
+   W2281QfHxM1MfbFsYS06n10AYPRrT3eqFuxGXs1EDC+x8lPZwbWUy4p0J
+   RVdcB4JI7Mi0zTgzxhuqel7GBW9/FvQIgf3pDevn0nMcpHoSGdh0SRWoO
+   5wGgKrmxuEquWqub8I9WAUOe+mQnbLylb/gh0Bvjj/UjA+tnxh8GjfDeZ
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10353"; a="298107480"
+X-IronPort-AV: E=Sophos;i="5.91,240,1647327600"; 
+   d="scan'208";a="298107480"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 19:39:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,240,1647327600"; 
+   d="scan'208";a="599559957"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 20 May 2022 19:39:24 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nsF1X-0005nG-OF;
+        Sat, 21 May 2022 02:39:23 +0000
+Date:   Sat, 21 May 2022 10:38:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Josh Don <joshdon@google.com>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Tejun Heo <tj@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Cruz Zhao <CruzZhao@linux.alibaba.com>,
+        Josh Don <joshdon@google.com>
+Subject: Re: [PATCH v2] sched/core: add forced idle accounting for cgroups
+Message-ID: <202205211029.u32ZBjjj-lkp@intel.com>
+References: <20220520235138.3140590-1-joshdon@google.com>
 MIME-Version: 1.0
-References: <20220520012133.1217211-1-yosryahmed@google.com>
- <20220520012133.1217211-4-yosryahmed@google.com> <YodGI73xq8aIBrNM@slm.duckdns.org>
- <CAJD7tkbvMcMWESMcWi6TtdCKLr6keBNGgZTnqcHZvBrPa1qWPw@mail.gmail.com>
- <YodNLpxut+Zddnre@slm.duckdns.org> <73fd9853-5dab-8b59-24a0-74c0a6cae88e@fb.com>
- <YofFli6UCX4J5YnU@slm.duckdns.org> <CA+khW7gjWVKrwCgDD-4ZdCf5CMcA4-YL0bLm6aWM74+qNQ4c0A@mail.gmail.com>
- <CAJD7tkaJQjfSy+YARFRkqQ8m7OGJHO9v91mSk-cFeo9Z5UVJKg@mail.gmail.com>
- <20220520221919.jnqgv52k4ajlgzcl@MBP-98dd607d3435.dhcp.thefacebook.com>
- <Yogc0Kb5ZVDaQ0oU@slm.duckdns.org> <5b301151-0a65-df43-3a3a-6d57e10cfc2d@fb.com>
-In-Reply-To: <5b301151-0a65-df43-3a3a-6d57e10cfc2d@fb.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Fri, 20 May 2022 19:34:45 -0700
-Message-ID: <CA+khW7gGrwTrDsfWp7wj=QaCg01FNj381a1QLs1ThsjAkW85eQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 3/5] bpf: Introduce cgroup iter
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Tejun Heo <tj@kernel.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Michal Hocko <mhocko@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220520235138.3140590-1-joshdon@google.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 5:59 PM Yonghong Song <yhs@fb.com> wrote:
-> On 5/20/22 3:57 PM, Tejun Heo wrote:
-> > Hello,
-> >
-> > On Fri, May 20, 2022 at 03:19:19PM -0700, Alexei Starovoitov wrote:
-> >> We have bpf_map iterator that walks all bpf maps.
-> >> When map iterator is parametrized with map_fd the iterator walks
-> >> all elements of that map.
-> >> cgroup iterator should have similar semantics.
-> >> When non-parameterized it will walk all cgroups and their descendent
-> >> depth first way. I believe that's what Yonghong is proposing.
-> >> When parametrized it will start from that particular cgroup and
-> >> walk all descendant of that cgroup only.
-> >> The bpf prog can stop the iteration right away with ret 1.
-> >> Maybe we can add two parameters. One -> cgroup_fd to use and another ->
-> >> the order of iteration css_for_each_descendant_pre vs _post.
-> >> wdyt?
-> >
-> > Sounds perfectly reasonable to me.
->
-> This works for me too. Thanks!
->
+Hi Josh,
 
-This sounds good to me. Thanks. Let's try to do it in the next iteration.
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on tj-cgroup/for-next]
+[also build test WARNING on tip/sched/core tip/master v5.18-rc7 next-20220520]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Josh-Don/sched-core-add-forced-idle-accounting-for-cgroups/20220521-075311
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git for-next
+config: hexagon-randconfig-r033-20220519 (https://download.01.org/0day-ci/archive/20220521/202205211029.u32ZBjjj-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b369762beb70dfef22c7e793aed79b94d7dc0757)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/0575a42c9f10cda618b09b949cc42fe97abea479
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Josh-Don/sched-core-add-forced-idle-accounting-for-cgroups/20220521-075311
+        git checkout 0575a42c9f10cda618b09b949cc42fe97abea479
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/cgroup/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> kernel/cgroup/rstat.c:489:9: warning: variable 'forceidle_time' is uninitialized when used here [-Wuninitialized]
+           do_div(forceidle_time, NSEC_PER_USEC);
+                  ^~~~~~~~~~~~~~
+   include/asm-generic/div64.h:225:12: note: expanded from macro 'do_div'
+                   __rem = (n) & (__base - 1);             \
+                            ^
+   kernel/cgroup/rstat.c:465:35: note: initialize the variable 'forceidle_time' to silence this warning
+           u64 __maybe_unused forceidle_time;
+                                            ^
+                                             = 0
+   1 warning generated.
+
+
+vim +/forceidle_time +489 kernel/cgroup/rstat.c
+
+   459	
+   460	void cgroup_base_stat_cputime_show(struct seq_file *seq)
+   461	{
+   462		struct cgroup *cgrp = seq_css(seq)->cgroup;
+   463		u64 usage, utime, stime;
+   464		struct cgroup_base_stat bstat;
+   465		u64 __maybe_unused forceidle_time;
+   466	
+   467		if (cgroup_parent(cgrp)) {
+   468			cgroup_rstat_flush_hold(cgrp);
+   469			usage = cgrp->bstat.cputime.sum_exec_runtime;
+   470			cputime_adjust(&cgrp->bstat.cputime, &cgrp->prev_cputime,
+   471				       &utime, &stime);
+   472	#ifdef CONFIG_SCHED_CORE
+   473			forceidle_time = cgrp->bstat.forceidle_sum;
+   474	#endif
+   475			cgroup_rstat_flush_release();
+   476		} else {
+   477			root_cgroup_cputime(&bstat);
+   478			usage = bstat.cputime.sum_exec_runtime;
+   479			utime = bstat.cputime.utime;
+   480			stime = bstat.cputime.stime;
+   481	#ifdef CONFIG_SCHED_CORE
+   482			forceidle_time = bstat.forceidle_sum;
+   483	#endif
+   484		}
+   485	
+   486		do_div(usage, NSEC_PER_USEC);
+   487		do_div(utime, NSEC_PER_USEC);
+   488		do_div(stime, NSEC_PER_USEC);
+ > 489		do_div(forceidle_time, NSEC_PER_USEC);
+   490	
+   491		seq_printf(seq, "usage_usec %llu\n"
+   492			   "user_usec %llu\n"
+   493			   "system_usec %llu\n",
+   494			   usage, utime, stime);
+   495	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

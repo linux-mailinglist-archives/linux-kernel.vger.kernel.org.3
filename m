@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C29752FE27
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 18:37:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E69952FE2C
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 18:38:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239132AbiEUQhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 12:37:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55334 "EHLO
+        id S245666AbiEUQh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 12:37:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245666AbiEUQhl (ORCPT
+        with ESMTP id S1349958AbiEUQhw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 12:37:41 -0400
+        Sat, 21 May 2022 12:37:52 -0400
 Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA0426161A
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 09:37:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB5E61616
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 09:37:50 -0700 (PDT)
 Received: by mail-lj1-x233.google.com with SMTP id v9so3386162lja.12
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 09:37:39 -0700 (PDT)
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 09:37:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=openvz-org.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:user-agent:from:subject:to:cc
          :references:content-language:in-reply-to:content-transfer-encoding;
-        bh=xrngHl+k++nVK8AbvZFVt0lPwWgRKfDuqq3cdMG2V38=;
-        b=f1PXoIqYpQV8rPyrcOXuJMO+8R6A7YB7wOl2JgT1Hf6DAW3jEWx8DiwYevJN9foxuT
-         xqiD1JUsuSwtjJZzckPQ3HIyQb9qTI5GEoRhiia9vtQ1x5RRZdszPcxAfZwYVEI5c33b
-         VjnW9ysQLT9rOXQIiehcO96AGCYWBcl4Amg6kyIghtr3Q0+4ub1xxGeYiUIjoUksEB7o
-         X/6VCEapIUnJBuwQ/DxpPiakNFhwFkl9PWhuGlK64PbQVDgPjgD5RGN8Q/2bPlNgcAPY
-         6q7Eymqt7gNxIWnXR/Qc5Ho3xK7NewmCD2fraMyhTaUzx2AQl+FnXT2wNDTbKpRYFgAj
-         gQMA==
+        bh=IVDqiXzI4dIEBMTsaaQRM7ta9ARirhRNc6apB4FJmT4=;
+        b=EtLP8pxVwmIKt66WFCvOclrJgEDpp4X1B1T1JnZ7B39hZcHA/QLCYXBWJxjJd8pcIn
+         lPowuGK/5K7RomQjyNJyh25sw01fJiLswg8uBKe7UwNYxrTR/UYqixFMFH9Kg3zSr8o0
+         kA5sXr7Clen8UoGgs9FvZsKN2VPvgHy2ziuaqbmxMaS7uHK1gl8pK6fP/ymVim8sU6Zr
+         BKqoipnZGWxy1V2JtyXxotPu0Iycs57GEAoUef3xEuleqmg+XkokIek+j2p/XY6v1PAK
+         zkwFtJ4C3Tkwhu0SAOsQv0JgOS6cceETuFVTySGKI/A/j54qwu1CQneG+vRqOvOqUVA1
+         cJ3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:from
          :subject:to:cc:references:content-language:in-reply-to
          :content-transfer-encoding;
-        bh=xrngHl+k++nVK8AbvZFVt0lPwWgRKfDuqq3cdMG2V38=;
-        b=PN/i/XQFdX2F8C7GruCT7ieZZCY7a6POomids+HhqP0zqTdyhpJ/HRn7sXnOP3aOGW
-         7NuqGApqAkeW1RRty+zO7yuQ2tw+THKE/FQhJi52AxAlUsM/BNcjWmRR020igaC0nV4W
-         X2BxU4Zf7gMqrSK30PQQDKnp+EaSgNFnHI+wCWV/SgyIUSaxL4NUK6jq+z8e7+Oy5XkW
-         i7GrjPksj9H3Q56tKvQWGZCXtwshk1wB0oyoMWL3SNwCsZP0yEqoK3I5vDxvr4JOHIEi
-         gAkz+kMwdyQxMxd49ew8CuzKZZ8GAjgs3ycCpibx3L/LR1wQz8/9MP5Yt9nmpjJIfhXm
-         joZg==
-X-Gm-Message-State: AOAM531uxuTrodgZBbU4nACe7JSFbhHhIJrD4pdRy5zuiqAmNkxjXEkm
-        FDiu7QhHz/QWtKgKtbOx2gQk9g==
-X-Google-Smtp-Source: ABdhPJyK+2dAF2mDmvzbdrtAY2ubkJvsKXq+zufNECKywzZuKACWqwQFPtM6ejdRbkkXoekoqH7oSw==
-X-Received: by 2002:a2e:a493:0:b0:253:d23f:16d9 with SMTP id h19-20020a2ea493000000b00253d23f16d9mr8212181lji.446.1653151058102;
-        Sat, 21 May 2022 09:37:38 -0700 (PDT)
+        bh=IVDqiXzI4dIEBMTsaaQRM7ta9ARirhRNc6apB4FJmT4=;
+        b=lhPV+mtMMtyLLxfX7TCpk/hd8pUN+bouJvTC82Bf6vrAu24CCgARzRAw9+xD9A7d+N
+         F/LXSaOy1VU+qJ11G6tskSF0MF5htOBolCY9CstO8bI2WKHMvVeSKXzlq/rAsOEcqapE
+         p2Yglayk4zbNPM2smVRcVY9+p8deX5ZdPCgYfhaUNVw4rADCQEWKLmBRGvrV9LkODXmF
+         pDLuqJhAjhi9w4OVz2rvWcgHg87QvavS7cDwlBNrMpT5Pjy/HtDR8FLeY7Wadj1WeaRH
+         lgBGGxnDtzE5Ggzc8H+Pd30CsvcQYQZ/zPpq5xU7ESGo4qW5FBDUNNpDi5SLdeQm8CXd
+         fwnw==
+X-Gm-Message-State: AOAM530ip9yCqnbn34jKXJkVmoflLAoCfZ8QXgXQpgkXF5OUWuJIQO5L
+        YH6HOTUZMmfKXeUFaKkP+HQjhA==
+X-Google-Smtp-Source: ABdhPJwTeHS4NovOhmuXmVJAEPnop69XY0S2sk+u6JhnkIHtEODDGFf4FcjmtHxM/Xhv4BUHh0QVsQ==
+X-Received: by 2002:a2e:96d2:0:b0:253:d8f1:66f8 with SMTP id d18-20020a2e96d2000000b00253d8f166f8mr6552746ljj.321.1653151070521;
+        Sat, 21 May 2022 09:37:50 -0700 (PDT)
 Received: from [192.168.1.65] ([46.188.121.185])
-        by smtp.gmail.com with ESMTPSA id f5-20020ac24e45000000b0047255d21141sm1116573lfr.112.2022.05.21.09.37.37
+        by smtp.gmail.com with ESMTPSA id w11-20020a05651c102b00b0024f3d1daebasm749238ljm.66.2022.05.21.09.37.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 21 May 2022 09:37:37 -0700 (PDT)
-Message-ID: <a76dc143-68d9-41f4-81d1-85ec15135b1e@openvz.org>
-Date:   Sat, 21 May 2022 19:37:36 +0300
+        Sat, 21 May 2022 09:37:50 -0700 (PDT)
+Message-ID: <4f129690-88fe-18f2-2142-b179a804924b@openvz.org>
+Date:   Sat, 21 May 2022 19:37:49 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
 From:   Vasily Averin <vvs@openvz.org>
-Subject: [PATCH mm v2 1/9] memcg: enable accounting for struct cgroup
+Subject: [PATCH mm v2 2/9] memcg: enable accounting for kernfs nodes
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     kernel@openvz.org, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, Shakeel Butt <shakeelb@google.com>,
@@ -70,62 +70,63 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Creating each new cgroup allocates 4Kb for struct cgroup. This is the
-largest memory allocation in this scenario and is epecially important
-for small VMs with 1-2 CPUs.
+kernfs nodes are quite small kernel objects, however there are few
+scenarios where it consumes significant piece of all allocated memory:
 
-Common part of the cgroup creation:
-Allocs  Alloc   $1*$2   Sum     Allocation
+1) creating a new netdevice allocates ~50Kb of memory, where ~10Kb
+   was allocated for 80+ kernfs nodes.
+
+2) cgroupv2 mkdir allocates ~60Kb of memory, ~10Kb of them are kernfs
+   structures.
+
+3) Shakeel Butt reports that Google has workloads which create 100s
+   of subcontainers and they have observed high system overhead
+   without memcg accounting of kernfs.
+
+Usually new kernfs node creates few other objects:
+
+Allocs  Alloc   Allocation
 number  size
 --------------------------------------------
-16  ~   352     5632    5632    KERNFS
-1   +   4096    4096    9728    (cgroup_mkdir+0xe4)
-1       584     584     10312   (radix_tree_node_alloc.constprop.0+0x89)
-1       192     192     10504   (__d_alloc+0x29)
-2       72      144     10648   (avc_alloc_node+0x27)
-2       64      128     10776   (percpu_ref_init+0x6a)
-1       64      64      10840   (memcg_list_lru_alloc+0x21a)
-percpu:
-1   +   192     192     192     call_site=psi_cgroup_alloc+0x1e
-1   +   96      96      288     call_site=cgroup_rstat_init+0x5f
-2       12      24      312     call_site=percpu_ref_init+0x23
-1       6       6       318     call_site=__percpu_counter_init+0x22
+1   +  128      (__kernfs_new_node+0x4d)	kernfs node
+1   +   88      (__kernfs_iattrs+0x57)		kernfs iattrs
+1   +   96      (simple_xattr_alloc+0x28)	simple_xattr, can grow over 4Kb
+1       32      (simple_xattr_set+0x59)
+1       8       (__kernfs_new_node+0x30)
 
- '+' -- to be accounted,
- '~' -- partially accounted
+'+' -- to be accounted
 
-Accounting of this memory helps to avoid misuse inside memcg-limited
-containers.
+This patch enables accounting for kernfs nodes slab cache.
 
 Signed-off-by: Vasily Averin <vvs@openvz.org>
 Reviewed-by: Roman Gushchin <roman.gushchin@linux.dev>
 Reviewed-by: Michal Koutný <mkoutny@suse.com>
 Acked-by: Shakeel Butt <shakeelb@google.com>
 ---
- kernel/cgroup/cgroup.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/kernfs/mount.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-index adb820e98f24..7595127c5b3a 100644
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -5353,7 +5353,7 @@ static struct cgroup *cgroup_create(struct cgroup *parent, const char *name,
+diff --git a/fs/kernfs/mount.c b/fs/kernfs/mount.c
+index cfa79715fc1a..3ac4191b1c40 100644
+--- a/fs/kernfs/mount.c
++++ b/fs/kernfs/mount.c
+@@ -391,7 +391,8 @@ void __init kernfs_init(void)
+ {
+ 	kernfs_node_cache = kmem_cache_create("kernfs_node_cache",
+ 					      sizeof(struct kernfs_node),
+-					      0, SLAB_PANIC, NULL);
++					      0, SLAB_PANIC | SLAB_ACCOUNT,
++					      NULL);
  
- 	/* allocate the cgroup and its ID, 0 is reserved for the root */
- 	cgrp = kzalloc(struct_size(cgrp, ancestor_ids, (level + 1)),
--		       GFP_KERNEL);
-+		       GFP_KERNEL_ACCOUNT);
- 	if (!cgrp)
- 		return ERR_PTR(-ENOMEM);
- 
+ 	/* Creates slab cache for kernfs inode attributes */
+ 	kernfs_iattrs_cache  = kmem_cache_create("kernfs_iattrs_cache",
 -- 
 2.36.1
 

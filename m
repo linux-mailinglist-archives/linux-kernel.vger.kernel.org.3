@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E2FE52F9A5
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 09:25:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64BF652F99D
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 09:25:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351240AbiEUHYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 03:24:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54882 "EHLO
+        id S1354746AbiEUHYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 03:24:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354724AbiEUHYP (ORCPT
+        with ESMTP id S1354726AbiEUHYP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 21 May 2022 03:24:15 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B98E2166688;
-        Sat, 21 May 2022 00:24:13 -0700 (PDT)
-Received: from kwepemi100014.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4L4w2962p0zCsjW;
-        Sat, 21 May 2022 15:19:13 +0800 (CST)
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C325166475;
+        Sat, 21 May 2022 00:24:14 -0700 (PDT)
+Received: from kwepemi100015.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L4w6t5tfwzjWwt;
+        Sat, 21 May 2022 15:23:18 +0800 (CST)
 Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi100014.china.huawei.com (7.221.188.106) with Microsoft SMTP Server
+ kwepemi100015.china.huawei.com (7.221.188.125) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 21 May 2022 15:24:11 +0800
+ 15.1.2375.24; Sat, 21 May 2022 15:24:12 +0800
 Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
  (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sat, 21 May
- 2022 15:24:10 +0800
+ 2022 15:24:11 +0800
 From:   Yu Kuai <yukuai3@huawei.com>
 To:     <josef@toxicpanda.com>, <axboe@kernel.dk>, <yukuai3@huawei.com>,
         <ming.lei@redhat.com>
 CC:     <linux-block@vger.kernel.org>, <nbd@other.debian.org>,
         <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
-Subject: [PATCH -next v3 2/6] nbd: fix race between nbd_alloc_config() and module removal
-Date:   Sat, 21 May 2022 15:37:45 +0800
-Message-ID: <20220521073749.3146892-3-yukuai3@huawei.com>
+Subject: [PATCH -next v3 3/6] nbd: don't clear 'NBD_CMD_INFLIGHT' flag if request is not completed
+Date:   Sat, 21 May 2022 15:37:46 +0800
+Message-ID: <20220521073749.3146892-4-yukuai3@huawei.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220521073749.3146892-1-yukuai3@huawei.com>
 References: <20220521073749.3146892-1-yukuai3@huawei.com>
@@ -53,114 +53,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When nbd module is being removing, nbd_alloc_config() may be
-called concurrently by nbd_genl_connect(), although try_module_get()
-will return false, but nbd_alloc_config() doesn't handle it.
+Otherwise io will hung because request will only be completed if the
+cmd has the flag 'NBD_CMD_INFLIGHT'.
 
-The race may lead to the leak of nbd_config and its related
-resources (e.g, recv_workq) and oops in nbd_read_stat() due
-to the unload of nbd module as shown below:
-
-  BUG: kernel NULL pointer dereference, address: 0000000000000040
-  Oops: 0000 [#1] SMP PTI
-  CPU: 5 PID: 13840 Comm: kworker/u17:33 Not tainted 5.14.0+ #1
-  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
-  Workqueue: knbd16-recv recv_work [nbd]
-  RIP: 0010:nbd_read_stat.cold+0x130/0x1a4 [nbd]
-  Call Trace:
-   recv_work+0x3b/0xb0 [nbd]
-   process_one_work+0x1ed/0x390
-   worker_thread+0x4a/0x3d0
-   kthread+0x12a/0x150
-   ret_from_fork+0x22/0x30
-
-Fixing it by checking the return value of try_module_get()
-in nbd_alloc_config(). As nbd_alloc_config() may return ERR_PTR(-ENODEV),
-assign nbd->config only when nbd_alloc_config() succeeds to ensure
-the value of nbd->config is binary (valid or NULL).
-
-Also adding a debug message to check the reference counter
-of nbd_config during module removal.
-
-Signed-off-by: Hou Tao <houtao1@huawei.com>
+Fixes: 07175cb1baf4 ("nbd: make sure request completion won't concurrent")
 Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 ---
- drivers/block/nbd.c | 28 +++++++++++++++++++---------
- 1 file changed, 19 insertions(+), 9 deletions(-)
+ drivers/block/nbd.c | 18 ++++++++++++++----
+ 1 file changed, 14 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
-index a73e853f5833..2ee1e376d5c4 100644
+index 2ee1e376d5c4..a0d0910dae2a 100644
 --- a/drivers/block/nbd.c
 +++ b/drivers/block/nbd.c
-@@ -1518,15 +1518,20 @@ static struct nbd_config *nbd_alloc_config(void)
- {
- 	struct nbd_config *config;
+@@ -403,13 +403,14 @@ static enum blk_eh_timer_return nbd_xmit_timeout(struct request *req,
+ 	if (!mutex_trylock(&cmd->lock))
+ 		return BLK_EH_RESET_TIMER;
  
-+	if (!try_module_get(THIS_MODULE))
-+		return ERR_PTR(-ENODEV);
-+
- 	config = kzalloc(sizeof(struct nbd_config), GFP_NOFS);
--	if (!config)
--		return NULL;
-+	if (!config) {
-+		module_put(THIS_MODULE);
-+		return ERR_PTR(-ENOMEM);
-+	}
-+
- 	atomic_set(&config->recv_threads, 0);
- 	init_waitqueue_head(&config->recv_wq);
- 	init_waitqueue_head(&config->conn_wait);
- 	config->blksize_bits = NBD_DEF_BLKSIZE_BITS;
- 	atomic_set(&config->live_connections, 0);
--	try_module_get(THIS_MODULE);
- 	return config;
- }
- 
-@@ -1553,12 +1558,13 @@ static int nbd_open(struct block_device *bdev, fmode_t mode)
- 			mutex_unlock(&nbd->config_lock);
- 			goto out;
- 		}
--		config = nbd->config = nbd_alloc_config();
--		if (!config) {
--			ret = -ENOMEM;
-+		config = nbd_alloc_config();
-+		if (IS_ERR(config)) {
-+			ret = PTR_ERR(config);
- 			mutex_unlock(&nbd->config_lock);
- 			goto out;
- 		}
-+		nbd->config = config;
- 		refcount_set(&nbd->config_refs, 1);
- 		refcount_inc(&nbd->refs);
- 		mutex_unlock(&nbd->config_lock);
-@@ -1964,13 +1970,14 @@ static int nbd_genl_connect(struct sk_buff *skb, struct genl_info *info)
- 		nbd_put(nbd);
- 		return -EINVAL;
+-	if (!__test_and_clear_bit(NBD_CMD_INFLIGHT, &cmd->flags)) {
++	if (!test_bit(NBD_CMD_INFLIGHT, &cmd->flags)) {
+ 		mutex_unlock(&cmd->lock);
+ 		return BLK_EH_DONE;
  	}
--	config = nbd->config = nbd_alloc_config();
--	if (!nbd->config) {
-+	config = nbd_alloc_config();
-+	if (IS_ERR(config)) {
- 		mutex_unlock(&nbd->config_lock);
- 		nbd_put(nbd);
- 		printk(KERN_ERR "nbd: couldn't allocate config\n");
--		return -ENOMEM;
-+		return PTR_ERR(config);
- 	}
-+	nbd->config = config;
- 	refcount_set(&nbd->config_refs, 1);
- 	set_bit(NBD_RT_BOUND, &config->runtime_flags);
  
-@@ -2543,6 +2550,9 @@ static void __exit nbd_cleanup(void)
- 	while (!list_empty(&del_list)) {
- 		nbd = list_first_entry(&del_list, struct nbd_device, list);
- 		list_del_init(&nbd->list);
-+		if (refcount_read(&nbd->config_refs))
-+			printk(KERN_ERR "nbd: possibly leaking nbd_config (ref %d)\n",
-+					refcount_read(&nbd->config_refs));
- 		if (refcount_read(&nbd->refs) != 1)
- 			printk(KERN_ERR "nbd: possibly leaking a device\n");
- 		nbd_put(nbd);
+ 	if (!refcount_inc_not_zero(&nbd->config_refs)) {
+ 		cmd->status = BLK_STS_TIMEOUT;
++		__clear_bit(NBD_CMD_INFLIGHT, &cmd->flags);
+ 		mutex_unlock(&cmd->lock);
+ 		goto done;
+ 	}
+@@ -478,6 +479,7 @@ static enum blk_eh_timer_return nbd_xmit_timeout(struct request *req,
+ 	dev_err_ratelimited(nbd_to_dev(nbd), "Connection timed out\n");
+ 	set_bit(NBD_RT_TIMEDOUT, &config->runtime_flags);
+ 	cmd->status = BLK_STS_IOERR;
++	__clear_bit(NBD_CMD_INFLIGHT, &cmd->flags);
+ 	mutex_unlock(&cmd->lock);
+ 	sock_shutdown(nbd);
+ 	nbd_config_put(nbd);
+@@ -745,7 +747,7 @@ static struct nbd_cmd *nbd_handle_reply(struct nbd_device *nbd, int index,
+ 	cmd = blk_mq_rq_to_pdu(req);
+ 
+ 	mutex_lock(&cmd->lock);
+-	if (!__test_and_clear_bit(NBD_CMD_INFLIGHT, &cmd->flags)) {
++	if (!test_bit(NBD_CMD_INFLIGHT, &cmd->flags)) {
+ 		dev_err(disk_to_dev(nbd->disk), "Suspicious reply %d (status %u flags %lu)",
+ 			tag, cmd->status, cmd->flags);
+ 		ret = -ENOENT;
+@@ -854,8 +856,16 @@ static void recv_work(struct work_struct *work)
+ 		}
+ 
+ 		rq = blk_mq_rq_from_pdu(cmd);
+-		if (likely(!blk_should_fake_timeout(rq->q)))
+-			blk_mq_complete_request(rq);
++		if (likely(!blk_should_fake_timeout(rq->q))) {
++			bool complete;
++
++			mutex_lock(&cmd->lock);
++			complete = __test_and_clear_bit(NBD_CMD_INFLIGHT,
++							&cmd->flags);
++			mutex_unlock(&cmd->lock);
++			if (complete)
++				blk_mq_complete_request(rq);
++		}
+ 		percpu_ref_put(&q->q_usage_counter);
+ 	}
+ 
 -- 
 2.31.1
 

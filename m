@@ -2,110 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AB7152FC80
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 14:58:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F4A952FC84
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 14:58:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236416AbiEUM60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 08:58:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36486 "EHLO
+        id S242878AbiEUM6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 08:58:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231732AbiEUM6Y (ORCPT
+        with ESMTP id S231732AbiEUM6n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 08:58:24 -0400
-Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0BF65E770;
-        Sat, 21 May 2022 05:58:22 -0700 (PDT)
-Received: by mail-vk1-xa2b.google.com with SMTP id bc42so5179651vkb.12;
-        Sat, 21 May 2022 05:58:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=bykWdl7RkLd7Jog7GhgIWoVbo/GRYcAx6n48qBmXwJQ=;
-        b=gTDImOFg2B6vBdQngixeW/HBPTktxpECBn/wsKGgzGqvIB/rHUt2m6Lx8G2UhwbFR6
-         eFHv+2FUP23EXjhF0JGO7oeZH9VWAWwPx+yH7evdpZuMu8ew1iTVo53uGCD0Ywz03b08
-         1Rb+j7cO8b99jzj5uYdBfnAw08STnAdQ0JQV5lp3sjiKzwyrkMgEkZmkeF+MjKjL0Pgd
-         98uyQnUMYaQrHP02V5PitoHKi6JBPLag0nQyoEJUWuFjRZkklusWihMRj6th0Xx83rKM
-         98UzlkRgsztjyb0ZklsrVWu4+aLKj3XECXsaTMG82pEfx9JO+WIe3Vdil8drO7OKMD4E
-         WW0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=bykWdl7RkLd7Jog7GhgIWoVbo/GRYcAx6n48qBmXwJQ=;
-        b=Jc4C5eNg+LgYMVczlpsg+jLja+XAXcodL+SjXRiOqVBXVrfK1r2YmZ49r5/mj+sj2P
-         Jb6XlS+o01K8HTXEGDjDl8ricEh9DRwJ15vCDb04vNlfXMkh9DLFruuex2JZAZwKTLNZ
-         cjjUmr9mnDoDb5mimOLxjLg0qH5OoFQmMWfsJJ9T8Bb7a+14ATFYl2nk8WC/RkmcdQAN
-         wMzuv01KezMzkuYANKibMDagzJpBadrRo/7lqUbXH402ZTPhrt3uCrKNK9g6gUYPR4DB
-         oYxwIErNjba+ynksiYBcPHjsPhcCgWdOY+WJTBc0rHRP/rwagMbL5v0CkFWDQIO+OObL
-         iBTw==
-X-Gm-Message-State: AOAM5316l48yzqpo5degmqGAGBQe4ahe8d+b7VAS2IfoqmdXFu+BiEil
-        +7nHr5n9HI/O/Y8UdkTYm86ubqKuZFR8rEFnQw==
-X-Google-Smtp-Source: ABdhPJw2hjnkCON9vjPf/cymYkRdWh75PM+u9FYDAz5c58fDuAVkVCoVnkqkOCnc/jPPILXIWW5ufceScMZiovqk4Os=
-X-Received: by 2002:a1f:3254:0:b0:34e:b02d:bdd7 with SMTP id
- y81-20020a1f3254000000b0034eb02dbdd7mr5659802vky.11.1653137902033; Sat, 21
- May 2022 05:58:22 -0700 (PDT)
+        Sat, 21 May 2022 08:58:43 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57EE95E770
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 05:58:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653137922; x=1684673922;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=nEnp9HM2nF2IP6mT6gPoV7lVbueY7ygz70W8riczFBE=;
+  b=eE0AU2Hv+3eBaP6FbhYFundCb3NpTkXjSj7vlJGtQbhMwLHGYgmSVGjp
+   VIPfg6vE49qRYD0DLttTbbEDWOiErdHGj/1fVep0qBu8/KezoDpGnpWOq
+   uivf1C8hF9vVHA6MapKnbkPfC91jtMSr3n91bQZtJRbe6NWy9D0ndEhvo
+   VTARpDeEtoQPRETCeWZPq29gn71na5mu7ogGANDtwklInrp6TLlKwRDuv
+   0cETDBEk+AYPB2yNa06pTiProqC6nhm579PLq1ox/u9I35AR1PAG2OJGm
+   jWPtdBa3uyA2fY8IZZDsNnxsQKjSgm+gAfLLloypB7+fk1Rsth3CKPmzB
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10353"; a="270431799"
+X-IronPort-AV: E=Sophos;i="5.91,242,1647327600"; 
+   d="scan'208";a="270431799"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 05:58:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,242,1647327600"; 
+   d="scan'208";a="702195775"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 21 May 2022 05:58:40 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nsOgp-0006JP-Ro;
+        Sat, 21 May 2022 12:58:39 +0000
+Date:   Sat, 21 May 2022 20:58:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [peterz-queue:sched/idle 4/9] vmlinux.o: warning: objtool:
+ acpi_idle_enter+0x48: call to ftrace_likely_update() leaves .noinstr.text
+ section
+Message-ID: <202205212012.fAYFb9k5-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220517101142.28421-1-warp5tw@gmail.com> <20220517101142.28421-7-warp5tw@gmail.com>
- <Yoh+RUTtmiQsrCg3@shikoro>
-In-Reply-To: <Yoh+RUTtmiQsrCg3@shikoro>
-From:   Tyrone Ting <warp5tw@gmail.com>
-Date:   Sat, 21 May 2022 20:58:10 +0800
-Message-ID: <CACD3sJb1GOFNeXU3csDWR7mSeUEDqqNkT+JvKVavRL1Epik-zw@mail.gmail.com>
-Subject: Re: [PATCH v5 06/10] i2c: npcm: Correct register access width
-To:     Wolfram Sang <wsa@kernel.org>, Tyrone Ting <warp5tw@gmail.com>,
-        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        venture@google.com, yuenn@google.com, benjaminfair@google.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        andriy.shevchenko@linux.intel.com, jarkko.nikula@linux.intel.com,
-        semen.protsenko@linaro.org, rafal@milecki.pl, sven@svenpeter.dev,
-        jsd@semihalf.com, lukas.bulwahn@gmail.com, arnd@arndb.de,
-        olof@lixom.net, tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
-        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
-        kfting@nuvoton.com, openbmc@lists.ozlabs.org,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     jie.deng@intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wolfram:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/idle
+head:   0d249da1c3122b643b87a578c821dfb35c3bb633
+commit: 052cc4b07ec6563980544627712a3ea5e08527f4 [4/9] idle: Fix rcu_idle_*() usage
+config: x86_64-randconfig-c022 (https://download.01.org/0day-ci/archive/20220521/202205212012.fAYFb9k5-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=052cc4b07ec6563980544627712a3ea5e08527f4
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue sched/idle
+        git checkout 052cc4b07ec6563980544627712a3ea5e08527f4
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Thank you for your help.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Wolfram Sang <wsa@kernel.org> =E6=96=BC 2022=E5=B9=B45=E6=9C=8821=E6=97=A5 =
-=E9=80=B1=E5=85=AD =E4=B8=8B=E5=8D=881:53=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> On Tue, May 17, 2022 at 06:11:38PM +0800, Tyrone Ting wrote:
-> > From: Tyrone Ting <kfting@nuvoton.com>
-> >
-> > The SMBnCTL3 register is 8-bit wide and the 32-bit access was always
-> > incorrect, but simply didn't cause a visible error on the 32-bit machin=
-e.
-> >
-> > On the 64-bit machine, the kernel message reports that ESR value is
-> > 0x96000021. Checking Arm Architecture Reference Manual Armv8 suggests t=
-hat
-> > it's the alignment fault.
-> >
-> > SMBnCTL3's address is 0xE.
-> >
-> > Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller dri=
-ver")
-> > Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
-> > Reviewed-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
->
-> Applied to for-next, thanks!
->
+All warnings (new ones prefixed by >>):
 
-Best Regards,
-Tyrone
+   vmlinux.o: warning: objtool: __rdgsbase_inactive+0x32: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: __wrgsbase_inactive+0x37: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: fixup_bad_iret+0x71: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: noist_exc_debug+0x39: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: exc_nmi+0xb8: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: poke_int3_handler+0x47: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: mce_check_crashing_cpu+0xd: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: do_machine_check+0x49: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: exc_machine_check+0x4e: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_nmi_enter+0x45: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_nmi_exit+0x8a: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: enter_from_user_mode+0x57: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x5c: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x57: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x57: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_exit+0x3a: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: acpi_idle_enter_bm+0x1e9: call to acpi_idle_do_entry() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: acpi_idle_enter_s2idle+0x8a: call to acpi_idle_do_entry() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: acpi_idle_enter+0x48: call to ftrace_likely_update() leaves .noinstr.text section
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

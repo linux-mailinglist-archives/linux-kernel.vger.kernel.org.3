@@ -2,55 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E373952FA8E
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 12:08:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B60952FAA1
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 12:18:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348279AbiEUKDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 06:03:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56196 "EHLO
+        id S1343708AbiEUKSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 06:18:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbiEUKC7 (ORCPT
+        with ESMTP id S232724AbiEUKSn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 06:02:59 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B37555B884
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 03:02:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=LfyHbALNTPecA2HX176Hbr8CB/YSXoZN5WLuIRvvUns=; b=KJrPx6vSz3NPryjADqppadBwTA
-        mSvmLa4/k7ZxTcLMwmZArlrhTFcxnr1s9Dh03Ohx6vZcVQpCm7B11BgUkZ/9wyu5Jk/3qYyZ5m6zM
-        /4qCgbT9Oa/9vvhSNTRwUWFDXsPOHQ1aqOnkLenIvi/K6sS3kn6DoZGNyijF4qbMmWbcMpe04zmfF
-        f/wvInPZ7UmV2ERXcUtqa9L79NyM5OEfZCmmlJFRc5JWtuJNiXwGwxn/8UN6sPEcTHFFAz0+yZIQG
-        SS2Wd5RYvsOJl+Bg7pNXIR6BiQ1G2DCnj43apbGVFk6wWPzWb+awCJKZmMyb+XpKuFYtBbcnCM6RU
-        /87HB9Uw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nsLwH-000CKT-HV; Sat, 21 May 2022 10:02:26 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id BF36D980E99; Sat, 21 May 2022 12:02:24 +0200 (CEST)
-Date:   Sat, 21 May 2022 12:02:24 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Giovanni Gherdovich <ggherdovich@suse.cz>
-Cc:     Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] x86: Fix return value in frequency invariance setup
- for XEON_PHI_KNL/KNM
-Message-ID: <20220521100224.GB2578@worktop.programming.kicks-ass.net>
-References: <20220520161022.5972-1-ggherdovich@suse.cz>
+        Sat, 21 May 2022 06:18:43 -0400
+X-Greylist: delayed 371 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 21 May 2022 03:18:40 PDT
+Received: from pokefinder.org (sauhun.de [88.99.104.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C981A5A83;
+        Sat, 21 May 2022 03:18:39 -0700 (PDT)
+Received: from localhost (p54ac0650.dip0.t-ipconnect.de [84.172.6.80])
+        by pokefinder.org (Postfix) with ESMTPSA id 4E04D2C0024;
+        Sat, 21 May 2022 12:12:27 +0200 (CEST)
+Date:   Sat, 21 May 2022 12:12:26 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        matthias.bgg@gmail.com, sr@denx.de, christophe.jaillet@wanadoo.fr
+Subject: Re: [PATCH -next v2 1/2] i2c: mt7621: fix missing
+ clk_disable_unprepare() on error in mtk_i2c_probe()
+Message-ID: <Yoi7CtG+ZoNHvKdl@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        matthias.bgg@gmail.com, sr@denx.de, christophe.jaillet@wanadoo.fr
+References: <20220514023148.305457-1-yangyingliang@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="/QvgFcbHc+KnC2YM"
 Content-Disposition: inline
-In-Reply-To: <20220520161022.5972-1-ggherdovich@suse.cz>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <20220514023148.305457-1-yangyingliang@huawei.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,17 +48,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 06:10:21PM +0200, Giovanni Gherdovich wrote:
-> knl_set_max_freq_ratio() should return true on success and false
-> otherwise. If the last line of the function body is reached, it means no
-> appropriate value for turbo_freq was found: the setup is unsuccessful and
-> it should return false.
-> 
-> Fixes: 8bea0dfb4a82 ("x86, sched: Add support for frequency invariance on XEON_PHI_KNL/KNM")
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Signed-off-by: Giovanni Gherdovich <ggherdovich@suse.cz>
-> ---
->  arch/x86/kernel/smpboot.c | 2 +-
 
-You seems to have missed all that code moved in tip. This no longer
-applies.
+--/QvgFcbHc+KnC2YM
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Sat, May 14, 2022 at 10:31:47AM +0800, Yang Yingliang wrote:
+> Fix the missing clk_disable_unprepare() before return
+> from mtk_i2c_probe() in the error handling case.
+>=20
+> Fixes: d04913ec5f89 ("i2c: mt7621: Add MediaTek MT7621/7628/7688 I2C driv=
+er")
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+
+Applied to for-current, thanks!
+
+
+--/QvgFcbHc+KnC2YM
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKIuwoACgkQFA3kzBSg
+KbaAgg//aO+UxNd59hJiNRJesX7hbSoNvNi/Am6E07iqb75UlXN1Ljx1FhagnAGY
+GvFXynEZsyCG8kFRRi2SN11MSYm0KVcGTQ9R5ZPPMB7YMZkNoUMzm1TOCUPKk1vV
+I862euXxp00U7PTZ6MlyzabWcEPhjBTU0pLmSDb5LAnT0QD5Qsb69hvk64ZWk3i6
+bpuN+DUehqjQ5tnDURtC6UBwGar7WoY/sAQtLh80fBgKrLY1Q7SzYMmuLerCJmiU
+QFR/L+/aJZw9ZLsN9sKFhT83xNxkQRfbBYQ+SY+WSoNapX8q0KajBQkdH9a2lzs0
+ORJhGv25QzIudNLVAB1crTPq/uKN4o22T6HZlngIh9Dl+yFiI2WWZg1De2TevgwT
+MTV+L9hm9SCkrAwIwpxWHzXdcz31Fh2yM1wNn/HRhH6dxiIxlsEqBW2NeIvbNwzZ
+KNLPW5Xa2vE5PI8OeNDBpIMN/hu/YXs9ZBLb/0JjiWbsrpJTrLCwHQ78yxYHk2WN
+OvNzqj4cUXeyhTox8xJUFSHtQa1EKxPyRF4QDR7alh7oQ1PQfUDDX1b4PM5oplkf
+e9nclfIbgN3l/AgumUc0EGYzUXPGNiznz0rDbQInIGZAjCY6ldLaYjMR9XSxrfW0
+Dw22qdw2mTXZ01Iy1BYwNow/BHcyZNIMM1MVvdg3HayduC2xCvA=
+=VY7J
+-----END PGP SIGNATURE-----
+
+--/QvgFcbHc+KnC2YM--

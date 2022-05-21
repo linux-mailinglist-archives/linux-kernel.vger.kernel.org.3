@@ -2,112 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFD1052F840
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 06:14:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FEDC52F845
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 06:15:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241494AbiEUEN4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 00:13:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40772 "EHLO
+        id S1343862AbiEUEOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 00:14:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233175AbiEUENu (ORCPT
+        with ESMTP id S233175AbiEUEOv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 00:13:50 -0400
-Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 818F3AF1C5;
-        Fri, 20 May 2022 21:13:49 -0700 (PDT)
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 24L4DK2q027193;
-        Sat, 21 May 2022 13:13:20 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 24L4DK2q027193
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1653106400;
-        bh=l0jnxTYMQ+einh42QUtyR5KEJNXZYp44NPYbbHl4Gxs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=sd5Skt6f3VurMXt5yhrtPI6uLY0krE0xiOnSxvKESWZeBs6mXJKK7XkPbgQPNHtsQ
-         w/zexhv88CfDWesdsGdN4Cfc+YwIGsfTr9e8JjjyTvsnnzFNeu4xbGz2ZWhSWfgTTx
-         O5jWTWbb9J81OTusmiZT9gqcOGNsZ/pN0AIAxdwBi9iQ4xbzismIfdzIjYIu7CANk3
-         v2jjLaIKUk0occAC1tI27flxadhMJq8JFWlAeBLbE9si0sPsNDmcAEc/dMFCZNPKGb
-         eQuMzPXBMU8olS1sodK/CoZIj3bOD8Fs7b//KLVh5oR5pgJyrpR/M7Q7xl+4f6kmPR
-         EulfIbEV+I+Uw==
-X-Nifty-SrcIP: [209.85.210.176]
-Received: by mail-pf1-f176.google.com with SMTP id bo5so9241216pfb.4;
-        Fri, 20 May 2022 21:13:20 -0700 (PDT)
-X-Gm-Message-State: AOAM5325KldPcz5pYtzw2U4yaxYjLdoUwRz3bA+6E/fX3ih2qcAABDyL
-        19I2ncyTEx/iG0x76tD46PutcnTapX/5N8LpELg=
-X-Google-Smtp-Source: ABdhPJw1AsOYGWIj+yvZJTCKNKYKKsbmQJJOhJyF3fQ5aMkMnJqrTIcQ++lJlPJIW3w4X9wOzRz7FfdDlbiCVzQ49Mk=
-X-Received: by 2002:a05:6a00:a02:b0:4fd:f9dd:5494 with SMTP id
- p2-20020a056a000a0200b004fdf9dd5494mr13624800pfh.68.1653106399660; Fri, 20
- May 2022 21:13:19 -0700 (PDT)
+        Sat, 21 May 2022 00:14:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10C6BB227D;
+        Fri, 20 May 2022 21:14:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A5ABEB80011;
+        Sat, 21 May 2022 04:14:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43926C385A5;
+        Sat, 21 May 2022 04:14:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653106487;
+        bh=7gM14UvdWAoUM3vw+F70R7QTBfcPO+x3EXyC2ksiP5Q=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=H7qk/Ipgntr4U5EYaEa7XRNb4Of6ZBLxywWEQnHa1IfWDXEIt3SXD8GOEAdTcjRwD
+         Ox/E3yTX77qLt1NTywtdGcq3IQJ1ZTcBVUjfI4SCVm7xnWiOkntglcA+pmGrwJRENx
+         2K4I93WFtEum6dngyCADKlzLR5oDtzakknb/0EOdXraGxkPXz6VbJaSq7FGSQyMj6B
+         Zt4ubXp7Cfyrig5oc5dhcESk3q7fwaq6RrkdV70z7oernbvYWHMscoaT3c7l583vRr
+         QExx+RT3e2Jw6Zu/0B28RPcYLz7seM6phnCq+nwFysCH8witjVh07ekVlWfzRpnl3d
+         4NQ+ZFopRwQlg==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <18500f18-9cd5-a81c-4a55-14e999ed4496@infradead.org>
-In-Reply-To: <18500f18-9cd5-a81c-4a55-14e999ed4496@infradead.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sat, 21 May 2022 13:12:42 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAShN5=0a_+XyXg-1+q=fbdcxMxR2fwts8eZyz2HAtn5bw@mail.gmail.com>
-Message-ID: <CAK7LNAShN5=0a_+XyXg-1+q=fbdcxMxR2fwts8eZyz2HAtn5bw@mail.gmail.com>
-Subject: Re: kbuild problem: ERROR: modpost: missing MODULE_LICENSE() in drivers/iio/afe/iio-rescale.o
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-iio@vger.kernel.org, Peter Rosin <peda@axentia.se>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220516070600.7692-2-gabriel.fernandez@foss.st.com>
+References: <20220516070600.7692-1-gabriel.fernandez@foss.st.com> <20220516070600.7692-2-gabriel.fernandez@foss.st.com>
+Subject: Re: [PATCH v4 01/14] dt-bindings: rcc: stm32: add new compatible for STM32MP13 SoC
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+To:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>
+Date:   Fri, 20 May 2022 21:14:45 -0700
+User-Agent: alot/0.10
+Message-Id: <20220521041447.43926C385A5@smtp.kernel.org>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 21, 2022 at 11:40 AM Randy Dunlap <rdunlap@infradead.org> wrote:
->
-> Hi,
->
-> In March I reported that a randconfig build complained:
->
-> ERROR: modpost: missing MODULE_LICENSE() in drivers/iio/afe/iio-rescale.o
->
-> (https://lore.kernel.org/all/16509fb6-e40c-e31b-2c80-264c44b0beb9@infradead.org/)
->
-> I am still seeing this problem so I tried to dig into it a bit.
-> However, I don't see why get_next_modinfo() and friends don't find the
-> MODULE_LICENSE() since it is in the iio-rescale.o file.
->
-> (BTW, I see this build error on many different $ARCH [around 15 tested]
-> and with 2 different versions of GCC.)
->
-> Q1: Is modpost checking both vmlinux and iio-rescale.o for modinfo license
-> strings?
+Quoting gabriel.fernandez@foss.st.com (2022-05-16 00:05:47)
+> From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+>=20
+> New compatible to manage clock and reset of STM32MP13 SoC.
+>=20
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+> ---
 
-
-MODULE_LICENSE() is no-op for vmlinux.
-
-modpost checks this only for modules.
-
-
-
->
-> It looks like it is, because it appears (?) that modpost is looking at
-> drivers/iio/test/iio-test-rescale.o (<<<<< a kunit test, which is builtin
-> in my .config) and at drivers/iio/afe/iio-rescale.o (which is built as a
-> loadable module).
->
-> Is this confusing modpost?
-> I renamed drivers/iio/afe/iio-rescale.c to afe-rescale.c and changed its
-> Makefile entry accordingly and the MODULE_LICENSE error goes away.
->
-> Is this a modpost error or is kunit messing things up?
->
-> thanks for looking.
-> --
-> ~Randy
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+Applied to clk-next

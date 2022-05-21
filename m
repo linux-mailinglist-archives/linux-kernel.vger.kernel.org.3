@@ -2,78 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 551CB52FC36
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:48:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18E1052FC37
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:51:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353297AbiEULsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 07:48:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39596 "EHLO
+        id S1345349AbiEULuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 07:50:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231287AbiEULsS (ORCPT
+        with ESMTP id S231287AbiEULuu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 07:48:18 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DECE75F27C;
-        Sat, 21 May 2022 04:48:17 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id w3so2690133plp.13;
-        Sat, 21 May 2022 04:48:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=BgikS+FD68kYSqbiCR2/IjVUgexnyJ8rdyhsXWcQ0aM=;
-        b=oq34Liz3tSGXMGm2kchBFttiAM3MqDkP08MsKHpP8RCQzUouVCmf+H7ognvcHXnD9x
-         ymQ5IGkE45KIvift7C4nO8UvyWM8AUOkwUOvoy44YB/ha6DOkDEPStmFkr8aG3D81Hf+
-         x0OP0MqLiKTk6UqXjw4ex+vMawVZotF4651ACiwRga4BGnn9oSwztPhPPCqg/dgz3/st
-         q33heDOOVH46XxRY5frTdOzhWos0+Fv6Hdh5aEfh/koKVWx1xHGdeAYiMsg8ENExotot
-         cW5aNyuq8VzgrAMXUpeqIK1AGDurKspCWZ+3L73o/0Y1rlNZK74oJuGBC+e8c/3qOegs
-         OKeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=BgikS+FD68kYSqbiCR2/IjVUgexnyJ8rdyhsXWcQ0aM=;
-        b=nUG9oNyjO45R/M1XSVP+gtU2WYGIIteV94M1CSWWjXxxfEuLj8pn+Jzs5MGjfsn4DK
-         llBnm3M/WXtTvOl3s0osxpfeSuhn+HWycNrz8KDgetoi+Klaj14YvFh574iW+MWj5rGy
-         VJVXzcsF3JDkypkL8LZvQr1xXn7x8PL819qmZzPM2VRP53MEi/475Mzwwia7Od8WUG1Q
-         plsis+oVgm1SAJTYQkoPrKyGKT1tcmWIQttc186J22ro20P7vbo5J9S9KQ3JPW3JvTjh
-         bwnvIfO8yUxS0n7sMyVjhuFnW2pymYtyftWVINm08B7GTywGzrfhpGaGgybVyTcnlmG4
-         XXvg==
-X-Gm-Message-State: AOAM533u6yH5rPzueWZX4eg3FjuQfwY7AZsijLTR8IU9mUqLsPNCiflE
-        0A++Up0MxA06STh/ZvfKPGtpfqGSBwS+wnjG6A==
-X-Google-Smtp-Source: ABdhPJw4CoC+4YnPx9paZUF1NjvKVL9vT95MwMy2+cmxzWTEI2uG3jXylRkYQEBDHuyrhoKNdhBBS01EBIzuaZDy4NI=
-X-Received: by 2002:a17:90b:2318:b0:1df:af66:1e8 with SMTP id
- mt24-20020a17090b231800b001dfaf6601e8mr15887140pjb.240.1653133697418; Sat, 21
- May 2022 04:48:17 -0700 (PDT)
+        Sat, 21 May 2022 07:50:50 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57B742623;
+        Sat, 21 May 2022 04:50:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=tBqF11f/Pfve6vYK0C0UtDJ8LKpLRNRFFTC1tti/yvg=; b=SIqzWV1jH6xPkrVylOZRnT+8Qo
+        DS+qxc+ERhJafqUYNtPfZIxjhyCWjNNdT90BA84b6dkL2QADh5RaV1o/B3jeRjoTV4QXyAK1+9I5B
+        8rnUWXqAMLATy4VGC8HC0nrpyJ7zcBCDBdLUt4ElDjm9rlc1XRgnoE5OVgkBYi1WRNyKGXsMQj+3k
+        gzD7V72w76BQt/0tpC+QKrtCKyl5i+4qzBcqgX/ttUE1894rUDBGxfBE3ds5yAT2g8+yXHDcTJ2De
+        MdXy/wu0c0GjuwQ5zT8YC195j1gGwJPxNzqxlDzSAoMS/NLnUNlhvL8RYiGnHrAjeQDhv5EHzNDRZ
+        IhMo51KA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nsNd9-00GQpP-5S; Sat, 21 May 2022 11:50:47 +0000
+Date:   Sat, 21 May 2022 04:50:47 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Logan Gunthorpe <logang@deltatee.com>
+Cc:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
+        Song Liu <song@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Guoqing Jiang <guoqing.jiang@linux.dev>,
+        Xiao Ni <xni@redhat.com>, Stephen Bates <sbates@raithlin.com>,
+        Martin Oliveira <Martin.Oliveira@eideticom.com>,
+        David Sloan <David.Sloan@eideticom.com>
+Subject: Re: [PATCH v1 12/15] md/raid5-cache: Add RCU protection to conf->log
+ accesses
+Message-ID: <YojSF1CYN4Irv8XD@infradead.org>
+References: <20220519191311.17119-1-logang@deltatee.com>
+ <20220519191311.17119-13-logang@deltatee.com>
 MIME-Version: 1.0
-From:   Zheyu Ma <zheyuma97@gmail.com>
-Date:   Sat, 21 May 2022 19:48:06 +0800
-Message-ID: <CAMhUBjmfenZo5c3Tn5NJ-mMvKhig=Rf0H24zgKK51QsgmJcK1Q@mail.gmail.com>
-Subject: [BUG] atm: idt77252: Found a bug when removing the module
-To:     3chas3@gmail.com
-Cc:     linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220519191311.17119-13-logang@deltatee.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, May 19, 2022 at 01:13:08PM -0600, Logan Gunthorpe wrote:
+> The mdadm test 21raid5cache randomly fails with NULL pointer accesses
+> conf->log when run repeatedly. conf->log was sort of protected with
+> a RCU, but most dereferences were not done with the correct functions.
+> 
+> Add rcu_read_locks() and rcu_access_pointers() to the appropriate
+> places.
+> 
+> Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
+> ---
+>  drivers/md/raid5-cache.c | 135 +++++++++++++++++++++++++++------------
+>  drivers/md/raid5-log.h   |  14 ++--
+>  drivers/md/raid5.c       |   4 +-
+>  drivers/md/raid5.h       |   2 +-
+>  4 files changed, 104 insertions(+), 51 deletions(-)
+> 
+> diff --git a/drivers/md/raid5-cache.c b/drivers/md/raid5-cache.c
+> index f7b402138d16..1dbc7c4b9a15 100644
+> --- a/drivers/md/raid5-cache.c
+> +++ b/drivers/md/raid5-cache.c
+> @@ -254,7 +254,14 @@ static bool __r5c_is_writeback(struct r5l_log *log)
+>  
+>  bool r5c_is_writeback(struct r5conf *conf)
+>  {
+> -	return __r5c_is_writeback(conf->log);
+> +	struct r5l_log *log;
+> +	bool ret;
+> +
+> +	rcu_read_lock();
+> +	log = rcu_dereference(conf->log);
+> +	ret = __r5c_is_writeback(log);
 
-I found a bug in the driver idt77252, when removing the module, I got
-the following flaw:
+Nit: I'd do away with the local variable
 
-[   14.576507] BUG: KASAN: use-after-free in
-idt77252_interrupt+0xfde/0x13c0 [idt77252]
-[   14.576980] Read of size 8 at addr ffff88800a428008 by task modprobe/292
-[   14.578516] Call Trace:
-[   14.580577]  idt77252_interrupt+0xfde/0x13c0 [idt77252]
+	ret = __r5c_is_writeback(rcu_dereference(conf->log));
 
-The bug occurs in line 2770, I guess that the reason is that the
-driver free the irq too late.
+> +static struct r5l_log *get_log_for_io(struct r5conf *conf)
+> +{
+> +	/*
+> +	 * rcu_dereference_protected is safe because the array will be
+> +	 * quiesced before log_exit() so it can't be called while
+> +	 * an IO is in progress.
+> +	 */
+> +	return rcu_dereference_protected(conf->log, 1);
+> +}
 
-Zheyu Ma
+The hardcoded one (shouldn't that be a true, btw?) kinda defeats the
+purpose of rcu_dereference_protected.  But I can't really think of any
+good runtime assert that we could use here.
+
+>  void r5c_check_stripe_cache_usage(struct r5conf *conf)
+>  {
+> +	struct r5l_log *log = get_log_for_io(conf);
+>  	int total_cached;
+>  
+> -	if (!r5c_is_writeback(conf))
+> +	if (!__r5c_is_writeback(log))
+
+This mostly just undoes earlier chanes.  Maybe we should have just let
+r5c_is_writeback as-is and have a r5c_conf_is_writeback helper on top and
+avoid this churn?  In general it would also be nice to have all these
+newly added or removal local variables in place before the big fixup.
+
+>  void r5c_check_cached_full_stripe(struct r5conf *conf)
+>  {
+> -	if (!r5c_is_writeback(conf))
+> -		return;
+> +	struct r5l_log *log = get_log_for_io(conf);
+
+This looks odd.
+

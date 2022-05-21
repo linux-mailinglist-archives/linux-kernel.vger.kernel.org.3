@@ -2,242 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94A9952FED8
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 20:54:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C11B52FEDD
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 20:54:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344740AbiEUSvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 14:51:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38074 "EHLO
+        id S1344846AbiEUSwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 14:52:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232075AbiEUSvt (ORCPT
+        with ESMTP id S1344774AbiEUSv4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 14:51:49 -0400
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A7C65C341;
-        Sat, 21 May 2022 11:51:48 -0700 (PDT)
-Received: from pps.filterd (m0150244.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24L5sKQd012955;
-        Sat, 21 May 2022 18:51:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pps0720;
- bh=f/nb2sdJ017GBg8l5Oko9eF9krsbKwx/8bmgKqM+NbA=;
- b=o6j3u+TPhm9h1ha59HwSMvD+iXqn9smZtAkvHed/rttvl+47DdfBFFplevra3VcpTw7/
- B1argWc7jegRgzgeSMaZ/H+GYvFDZTYXFtgloRM23MsmOp6pAduL1uBOHm241iGXevNw
- M22RJVv7cFN9hEtGLBz49dpAeik5Z6CiGK9TDb/SQk7p8bEJViXZCf5/y+k+X2qxfWtT
- C0jG+DubfVygEFCedb0MfUztSjtaQh2t05UawnRTYOdpo/CEaO8nXOpzvssZEeRNvkmY
- 8hnHiwkr21dg9YpdpSEnC32sKJ388vd08WBX+Q8v2cJ4YF1/ilq97+bYzM5JuoI9OUfb hw== 
-Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3g6rr736sx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 21 May 2022 18:51:02 +0000
-Received: from p1wg14926.americas.hpqcorp.net (unknown [10.119.18.115])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by p1lg14879.it.hpe.com (Postfix) with ESMTPS id CF84513046;
-        Sat, 21 May 2022 18:51:00 +0000 (UTC)
-Received: from p1wg14928.americas.hpqcorp.net (10.119.18.116) by
- p1wg14926.americas.hpqcorp.net (10.119.18.115) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Sat, 21 May 2022 06:50:36 -1200
-Received: from P1WG14918.americas.hpqcorp.net (16.230.19.121) by
- p1wg14928.americas.hpqcorp.net (10.119.18.116) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15
- via Frontend Transport; Sat, 21 May 2022 06:50:36 -1200
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (192.58.206.38)
- by edge.it.hpe.com (16.230.19.121) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Sat, 21 May 2022 18:50:36 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oV4q0uvpnAE6eXSPPMnMlOp+gl6n+5OgpMRfMhkJwbaEhXKQNgKyUhqvEzeYBmzQl1QX/+ebgfdox5e1zRyz0FH3fkBxq2RpCv04bqOB7/ZK79JsyFtmKWjLNePJ8eY4DKJBy9IHtVA/erMO0GqllnlplbOn3zOs1Xo9n8eWjmhTz5Nh7z8OS0Be7jaJB48ApQPfZQpNm/mVDzL6dXCfWFvurK239Ds6QENthx8Iw5wFcLrCnIYhzOr2dKhS76joM/j5qCx/9MhYeim0dBcLkAtzCq1XeYsyBbpLXmoa5t+iVVwXolECkcBaqa23Cj4wP5Z1vWS3/sYvSlaTivMAZA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=f/nb2sdJ017GBg8l5Oko9eF9krsbKwx/8bmgKqM+NbA=;
- b=Tij8XrTv0Y7pgFzyQqoHoc1M5gbwGY6hEoiouXZtKzbeUiPjfke6ZeQ3mAb/9wdPPAFHQqoqluYzsqa/aMv9pKTE6pXHi7NlE7sd55D/OoTgckjviFuYlx0oPuc2JVb84NU4xKkbnaVZBM1/M6m1HB0PECFn34lcYtb8+4JY6x5GRHOq5ZpFGcmEIcyDJgbtXwhxvxecwDU281y2Ykh19hJ9PnIticBV1ffLhPRUfIo3ns716wTTuer2gbb9t7/+gBSFPnIw1ku16+Hvffa7S0CGM+yXwH5KgqWdfOq6Alx5XcyoQj9ccB6NobvlIaNWCTkEy8FwWDz5tAVlMAeqhg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
- header.d=hpe.com; arc=none
-Received: from SJ1PR84MB3044.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:a03:45f::6)
- by MW4PR84MB1705.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:303:1a4::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.15; Sat, 21 May
- 2022 18:50:34 +0000
-Received: from SJ1PR84MB3044.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::f4a7:a91b:7fa0:7d4a]) by SJ1PR84MB3044.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::f4a7:a91b:7fa0:7d4a%8]) with mapi id 15.20.5206.024; Sat, 21 May 2022
- 18:50:34 +0000
-From:   "Travis, Mike" <mike.travis@hpe.com>
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Wahl, Steve" <steve.wahl@hpe.com>,
-        "x86@kernel.org" <x86@kernel.org>
-CC:     "Sivanich, Dimitri" <dimitri.sivanich@hpe.com>,
-        Andy Shevchenko <andy@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Anderson, Russ" <russ.anderson@hpe.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "Travis, Mike" <mike.travis@hpe.com>
-Subject: Re: [PATCH] x86/platform/uv: Dont use smp_processor_id while
- preemptable
-Thread-Topic: [PATCH] x86/platform/uv: Dont use smp_processor_id while
- preemptable
-Thread-Index: AQHYbImZaP+RHM7abU6A9/aPZMC2cq0pXHaAgABRe5Q=
-Date:   Sat, 21 May 2022 18:50:34 +0000
-Message-ID: <SJ1PR84MB30446EC71AAC4B36B00CFEC8E7D29@SJ1PR84MB3044.NAMPRD84.PROD.OUTLOOK.COM>
-References: <20220520203755.266337-1-mike.travis@hpe.com>
- <ed048405-9b22-d0eb-907a-dc00433db507@redhat.com>
-In-Reply-To: <ed048405-9b22-d0eb-907a-dc00433db507@redhat.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-suggested_attachment_session_id: 0ec37663-fccf-9111-fd64-18be3d76e357
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 69c38bad-8a13-4b94-b028-08da3b5ac988
-x-ms-traffictypediagnostic: MW4PR84MB1705:EE_
-x-microsoft-antispam-prvs: <MW4PR84MB17050CAA08A24F6F3729E245E7D29@MW4PR84MB1705.NAMPRD84.PROD.OUTLOOK.COM>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: I7wIRFyDZP2CMSZzlSNbMSUJmXyYjhcYeWiBEW4B/DH+FevCIdj9m+ulncWaYRXJwD4Ibs1HmRDVjqGuvV+2xgrFO7zTRhzI1ikbhIztGRJqvPSj7ZKclt32u23Vv1MFbUj81HQgmXO7xRDFWwYocDUuGPQ0E7KJuvaQ+9YqJwGmpzDS2HdvX0a4OOtV2rynX+Zw9s2wo6LI118JoHiGAFisFJLR1n3tDCzU1i6P4+TDW5lxVI2wysaUSnCWh+3p4dmk6kXUNqFJHS9hTIt8JNlibhonnJdeEfA2BSSpV2vE9/nysa/Ha4/wGLaz77M6jzdCOLWogpzDIArzv5TR+LvUc2chakybJA1UABc4PgkenWWdQPN3BFEog3lVdX0iisQ5ObFriqNlD39+msYqvzJotQhfx5QYHvzQ+e+GGqem3vMo3VPHATHLsk3wb3yc8c97AHj8lxFPnDZKyI5C9xhOyeqY5Nb4yY8a0PTkiAR1QG7XNkcTh+Tn4xTpHq6PYdgzRYTvNblNBBLW5nQUb4eqDR0dj187mizeHO1ShPfIIqQCi1lvtlu/sjzKUlDQKV/JdEMBFdiSQLMYEepL7qPH+tV8M38nwM9wF1BgfptE+DwOUXtbqV5sjfs26g6TOAzACUT/n3kZHWZuK+jXRzidlR0IiJ/ys61KYlqPN7mY+nM4Oy/Xgkj0vFqR2VbpHU8hRcZ6EqnY4a3XdtQMA829zGDw/K8RaoTtY0RAPaE=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR84MB3044.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(366004)(316002)(8676002)(4326008)(38070700005)(66946007)(76116006)(66556008)(64756008)(508600001)(66476007)(66446008)(54906003)(71200400001)(55016003)(82960400001)(110136005)(5660300002)(122000001)(8936002)(52536014)(38100700002)(2906002)(6506007)(186003)(7696005)(53546011)(9686003)(83380400001)(7416002)(86362001)(33656002)(26005)(192303002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?QfDRC/HpV40bXJWoTUZDyKNzfCVzQxa5f6/HHDXZoYqhYQZUOXwIzjzwsIBb?=
- =?us-ascii?Q?phprHUm7bQyGhlOrus5g+vm6F7lfSufqNqyouXDhn/UVBkXv4XYq+z7fLTK8?=
- =?us-ascii?Q?LNLb+0r8O5S0UxQvlJQPMZKAYyQz0hWAhViKk5AwhtQkjrWHdLstyffZoQHH?=
- =?us-ascii?Q?uz0SYa7/Qn5TDoAiUzo5PUU1+h5LD9x95YV9Gp8c7SUnqqlB0zWy/hY765MV?=
- =?us-ascii?Q?Nc/JaURb7WOk4XjJqOmW3BCq+J534YHCOQCdZzED8MjlGlLpM81LebTvnsdE?=
- =?us-ascii?Q?0NT2dfJfaq2NLQxECbgcn5rdNlX53ITnixpP1k4exDgD20Z27BNvIN5eWv2R?=
- =?us-ascii?Q?zmaWAmao0VXsZwzMqBs3rBbvOCoPgEi8HOdfP/1Yghr2PK4mCL3sLcYNaemb?=
- =?us-ascii?Q?40OSzqQjaHKacvI4Ow+WZLBrFEgzh9LZfv2SOQ5EwuAfQggeIswpVgxYfS8f?=
- =?us-ascii?Q?Hzm5+xyzeifaNKwwtsy0MvqkGxJ076zPXemv6QzWeknk+/KY+czt2AXsKxCL?=
- =?us-ascii?Q?aB376zUtNMSzjhMww6T0D0p6jpiGk2upliwDMq/MA7iljJd6OR6gP/IXCxRY?=
- =?us-ascii?Q?+LL/YTUiDoMv8DYQ6tBPdNqrRLtwdovelEJpY05oD9VMXcqCntilNd4CyIPu?=
- =?us-ascii?Q?UBHN7VHPaQpx4LYipD5Rbc43S6I2uKgRlittZnrcyfjG4JuZK+Gi5mLLR5hl?=
- =?us-ascii?Q?PkdQptJWR9gvCskITSiQTHFjnwwedcsWghloKAQphq80mOIAycol3tTueXRr?=
- =?us-ascii?Q?ZKjw5khxkcr6/WSU/RN1qN7qpzQC3wi0MKOKW6diAtTrubTCqCVkI+/9vgjf?=
- =?us-ascii?Q?tYOtrl0+4BxhnS87qh8jwHrsxl5HVKAyrb7r5EF+tRL0hsYZ2hSgZ5cORQaH?=
- =?us-ascii?Q?B4Zq/pNU35TWQP2uTLOIWpz45No90IguSUKjO/FWga+ltD1O0ioJmi16TUU/?=
- =?us-ascii?Q?kxP03IA3zyEJuEjjZxTZhNMQhrmKKrQzdp88wGoBqWKRemWueUK3UaMNvRr0?=
- =?us-ascii?Q?scN6YidCele3EOPbDHCw4o0DzlrEVJH8lSYmy1cozrBIbpIO15bP5we6zGY9?=
- =?us-ascii?Q?7G0euONXEUVceM/SAqz06aLwhBeQ7138h7iRNJYUWpmscdvagWLN17is7oFZ?=
- =?us-ascii?Q?vTYySDUCpWvbr4AIJ3gZHWDW/lFbzcJummA7pelbNJYe08pE+qNvak3JkZrK?=
- =?us-ascii?Q?7yQepMHF9Oovpmbp9iK5imyoVTdFqtfwMNkk9zutfFI5jZQbtlPlVJ0emdPj?=
- =?us-ascii?Q?hgurFpxMmR+wugX5GlalLvxRCGv2hwTmjk9uV00cxqQmzL2p5neyyvZ1WDfu?=
- =?us-ascii?Q?T4QstvZgkplz70xUcyQreFW4K74uuL6MxD6uS7i54y2n55A7keCXddrrkDeu?=
- =?us-ascii?Q?dfKGNE6nq31S4AGQLk4wgnbXb5w841iJ/vlPAMU73PTwGITsS6tfkTmXLCfn?=
- =?us-ascii?Q?7sZ+lzRahiEPKmsidlUco/gl6gv7lasYq1mg08xVohufwkIesi80jQgL/Oq0?=
- =?us-ascii?Q?82oLHPFf/mUmZYHoOIzNAhZi9fpndeRCrkvpCrYEVbQaI2Bqm8gL/8WHVyQz?=
- =?us-ascii?Q?3JJSK0ss4fZpZsA+mlTMgaAS9Wbctbt7OvfytecTIxIKf5u7iLetiGI5Bv0h?=
- =?us-ascii?Q?LGwSokWcy0K5aPxtnhS+W9IgOnCp3LNtLq60XPblxHcqpOevkH6DE+hPxQvL?=
- =?us-ascii?Q?qxwCwXG0yU72kn8UnqL5Vh7bPO3mYvtf6wGLY3LgPOmtIJTB3ctiCRSRCHpp?=
- =?us-ascii?Q?EbSQi8o3Sw=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Sat, 21 May 2022 14:51:56 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05CCA5C359;
+        Sat, 21 May 2022 11:51:55 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id v66so13485863oib.3;
+        Sat, 21 May 2022 11:51:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iVL4I5m+wb94H8NYF6zCO0ltg5mRlY60c0R22l/iI+A=;
+        b=CnSWn5tWuaro/W8HifGINIM6J08IrorqwDiBFEh0twJ5xg6tcdtXrDIDyCGy++un+4
+         ORI8IfjGjth1rmsOV5dWV/R5edptaHXrS19xoj/nvUkPf/wigy74oq4TLp9bNHbxaHAj
+         9VPzuq/1vXuSy4kgYX5KEyJf1jfDCew6Jfvj56Y5pl6ISCbckXKJwd03yjq/sSrZ/Bm7
+         2gt+GyZtuykoxy/oqRpy+ju+yESnpF14Q2kfsbnp26YtxLjsEDA7PdBbLgFAdJIVSbmf
+         4HOuF9npSWsOKO6jSLCrVPLVBSG3hBX7FhsK7gzOvLNSxnVGH7/LUrifAh4HTiL2WsXs
+         2Vww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iVL4I5m+wb94H8NYF6zCO0ltg5mRlY60c0R22l/iI+A=;
+        b=RjigCg59XV8HBMJT1+83EBDkli16v1qmREaxuYCRWkoZ1iFprXMpy3+E2qantqL6fu
+         7RAOl28ngHCOVMyjCcjpDzdUoDbLE+jM4KwedZ92bIBHm+djA+b2r20tgqNA2Hp7stbW
+         xIsyTOlhAg/Obyt9vE/tgS+qzgqBSEiJbZ/KpicspAyi34BBxBj2wKEp4iU3JwKIEko8
+         Zm1BNrQUa7Rymg4oZeTrGuH/CbxEsTVe9m2ACIs+TvnJhFJ27W0D3SyImHGUc8HaAeo1
+         z+zh/x4dlaGNYzzLbY/o1e4MlZXDF9A/J1PWuYX/mwTdpil7u6z32ooUFAiU24iSEd8j
+         ENtg==
+X-Gm-Message-State: AOAM532esmUEK9HTpMK2KZ1VVflsrsUgWg8gFvxOUfHfVa3lCgqltnSu
+        FeNLS9hXinqNZLoIQK7PfRUbMApUJID8q+xRkGI=
+X-Google-Smtp-Source: ABdhPJz9GCCHInZssTuhbKPJnao681PuLaqBKrfaVBud1jisvwLRtYh9utUbkj1Z7DIJpk7HQmopaI+jZDLldFQIYFM=
+X-Received: by 2002:a05:6808:148e:b0:326:abe8:af49 with SMTP id
+ e14-20020a056808148e00b00326abe8af49mr8611096oiw.73.1653159114268; Sat, 21
+ May 2022 11:51:54 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ1PR84MB3044.NAMPRD84.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 69c38bad-8a13-4b94-b028-08da3b5ac988
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 May 2022 18:50:34.0151
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: tlrinmtQRxytQ6F/Yf1sU6T41Tor/SSJaPb7xUfXZZwTNXc+A5iRVuOBV3fk8AWInTRqSU4DaTvAiNvQ+EbwLg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR84MB1705
-X-OriginatorOrg: hpe.com
-X-Proofpoint-GUID: BiH1xxJQdHtT47LF9nlkbPunHp29RMBl
-X-Proofpoint-ORIG-GUID: BiH1xxJQdHtT47LF9nlkbPunHp29RMBl
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-21_06,2022-05-20_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
- priorityscore=1501 mlxscore=0 clxscore=1011 adultscore=0 mlxlogscore=999
- impostorscore=0 spamscore=0 lowpriorityscore=0 phishscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2205210120
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220518194211.20143-1-jim2101024@gmail.com> <20220521164303.GA106705@bhelgaas>
+In-Reply-To: <20220521164303.GA106705@bhelgaas>
+From:   Jim Quinlan <jim2101024@gmail.com>
+Date:   Sat, 21 May 2022 14:51:42 -0400
+Message-ID: <CANCKTBvqp7_MSG3aMpp6pmNoPUnYpH0c+8-r7Pzgebuzb4sZPA@mail.gmail.com>
+Subject: Re: [PATCH v1] PCI: brcmstb: Fix regression regarding missing PCIe linkup
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     linux-pci <linux-pci@vger.kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        James Dutton <james.dutton@gmail.com>,
+        Cyril Brulebois <kibi@debian.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Jim Quinlan <james.quinlan@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks, I'll do that.
-
-________________________________________
-From: Hans de Goede <hdegoede@redhat.com>
-Sent: Saturday, May 21, 2022 6:57 AM
-To: Travis, Mike; Borislav Petkov; Dave Hansen; Ingo Molnar; Thomas Gleixne=
-r; Wahl, Steve; x86@kernel.org
-Cc: Sivanich, Dimitri; Andy Shevchenko; Darren Hart; H. Peter Anvin; Anders=
-on, Russ; linux-kernel@vger.kernel.org; platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH] x86/platform/uv: Dont use smp_processor_id while preem=
-ptable
-
-Hi Mike,
-
-On 5/20/22 22:37, Mike Travis wrote:
-> To avoid a "BUG: using smp_processor_id() in preemptible" debug
-> warning message, disable preemption around use of the processor id.
+On Sat, May 21,
+2CONFIG_INITRAMFS_SOURCE="/work3/jq921458/cpio/54-arm64-rootfs.cpio022
+at 12:43 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
 >
-> Signed-off-by: Mike Travis <mike.travis@hpe.com>
-> Reviewed-by: Steve Wahl <steve.wahl@hpe.com>
-> Reviewed-by: Dimitri Sivanich <dimitri.sivanich@hpe.com>
+> [+cc Rafael, linux-pm because I think there are interesting power
+> management questions here]
+>
+> On Wed, May 18, 2022 at 03:42:11PM -0400, Jim Quinlan wrote:
+> > commit 93e41f3fca3d ("PCI: brcmstb: Add control of subdevice voltage regulators")
+> >
+> > introduced a regression on the PCIe RPi4 Compute Module.  If the PCIe
+> > endpoint node described in [2] was missing, no linkup would be attempted,
+> > and subsequent accesses would cause a panic because this particular PCIe HW
+> > causes a CPU abort on illegal accesses (instead of returning 0xffffffff).
+> >
+> > We fix this by allowing the DT endpoint subnode to be missing.  This is
+> > important for platforms like the CM4 which have a standard PCIe socket and
+> > the endpoint device is unknown.
+>
+> I think the problem here is that on the CM, we try to enumerate
+> devices that are not powered up, isn't it?  The commit log should say
+> something about that power situation and how the driver learns aboutCONFIG_INITRAMFS_SOURCE="/work3/jq921458/cpio/54-arm64-rootfs.cpio
+> the power regulators instead of just pointing at an DT endpoint node.
+Hi Bjorn,
 
-A git blame shows that this code has been around for quite
-a while; so presumably this should be backported to some of
-the stable kernel series ?
+This is incorrect.  The regression occurred because the code mistakenly
+skips PCIe-linkup if the PCI portdrv DT node  does not exist. With our
+RC HW, doing a config space access to bus 1  w/o first linking up results
+in a  CPU abort.  This regression has nothing to do with EP power at all.
 
-Maybe add an appropriate Cc: stable tag with the range of
-kernels this should be added to and/or add a Fixes: tag?
+The RPi does not use the "PCIe regulator" feature of my original patchset.
+It is currently used only by our STB and Cable Modem  products.
+
+>
+> I guess the intent of this patch is to turn on the power to downstream
+> devices before enumerating them?
+Are you referring to my original patchset or the one I just submitted?
+ If the former,
+yes.  If the latter, no.
+
+>  What happens if we turn on the power
+> but don't find any downstream devices?
+They are turned off to conserve power.
+
+> From looking at the code, I
+> assume we just leave the power on.  Maybe that's what you want, I
+> dunno.
+For STB and Cable Modem products we do not leave the power on.  In
+fact, our Cable
+Modem group was the first to request this feature.   It appears that the RPi CM4
+always keeps endpoint power on but I do not know for sure.
+
+>
+> I added Rafael because this seems vaguely similar to runtime power
+> management, and if we can integrate with that somehow, I'd sure like
+> to avoid building a parallel infrastructure for it.
+>
+> The current path we're on is to move some of this code that's
+> currently in pcie-brcmstb.c to the PCIe portdrv [0].  I'm a little
+> hesitant about that because ACPI does just fine without it.  If we're
+> adding new DT functionality that could not be implemented via ACPI,
+> that's one thing.  But I'm not convinced this is that new.
+AFAICT, Broadcom STB and Cable Modem products do not have/use/want ACPI.
+We are fine with keeping this "PCIe regulator" feature private to our driver and
+giving you speedy and full support in maintaining it.
+
+> That's a longer term question.  In the short term we need to fix the
+> regression.  More specifics about that below.
+>
+> [0] https://lore.kernel.org/r/20211110221456.11977-6-jim2101024@gmail.com
+>
+> > [1] https://bugzilla.kernel.org/show_bug.cgi?id=215925
+> > [2] Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml
+> >
+> > Fixes: 93e41f3fca3d ("PCI: brcmstb: Add control of subdevice voltage regulators")
+> > Fixes: 830aa6f29f07 ("PCI: brcmstb: Split brcm_pcie_setup() into two funcs")
+> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=215925
+> > Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
+> > ---
+> >  drivers/pci/controller/pcie-brcmstb.c | 8 +++++---
+> >  1 file changed, 5 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/pci/controller/pcie-brcmstb.c b/drivers/pci/controller/pcie-brcmstb.c
+> > index ba5c120816b2..adca74e235cb 100644
+> > --- a/drivers/pci/controller/pcie-brcmstb.c
+> > +++ b/drivers/pci/controller/pcie-brcmstb.c
+> > @@ -540,16 +540,18 @@ static int pci_subdev_regulators_add_bus(struct pci_bus *bus)
+> >
+> >  static int brcm_pcie_add_bus(struct pci_bus *bus)
+> >  {
+> > -     struct device *dev = &bus->dev;
+> >       struct brcm_pcie *pcie = (struct brcm_pcie *) bus->sysdata;
+> >       int ret;
+> >
+> > -     if (!dev->of_node || !bus->parent || !pci_is_root_bus(bus->parent))
+> > +     /* Only busno==1 requires us to linkup */
+> > +     if ((int)bus->number != 1)
+> >               return 0;
+> >
+> >       ret = pci_subdev_regulators_add_bus(bus);
+> > -     if (ret)
+> > +     if (ret) {
+> > +             pcie->refusal_mode = true;
+> >               return ret;
+> > +     }
+> >
+> >       /* Grab the regulators for suspend/resume */
+> >       pcie->sr = bus->dev.driver_data;
+>
+> IIUC, this path:
+>
+>   pci_alloc_child_bus
+>     brcm_pcie_add_bus                   # .add_bus method
+>       pci_subdev_regulators_add_bus     # in pcie-brcmstb.c for now
+>         alloc_subdev_regulators         # in pcie-brcmstb.c for now
+>         regulator_bulk_get
+>         regulator_bulk_enable
+>       brcm_pcie_linkup                  # bring link up
+>
+> is basically so we can leave power to downstream devices off, then
+> turn it on when we're ready to enumerate those downstream devices.
+Yes  -- it is the "chicken-and-egg" problem.  Ideally, we would like
+for the endpoint
+driver to turn on its own regulators, but even to know which endpoint
+driver to probe
+we must turn on the regulator to establish linkup.
+
+> I think the brcmstb root bus is always bus 0, it only has a single
+> Root Port on the root bus, and it always leads to bus 1, so it sort of
+> makes sense that we only need to turn on power when we're about to
+> scan "bus->number == 1".
+Correct.
+
+>
+> But this power management seems like a pattern that other controllers
+> will use.  Other controllers will have several Root Ports, so checking
+> the bus number won't work for them.  Instead of checking the bus
+> number, I think brcmstb should check more directly for a power
+> regulator.
+I agree.  That is why I said that we should consider removing the "busno==1"
+conditional if we want this feature for general use.  If you want,
+I can submit a V2 that removes this conditional.
+
+I'm guessing here but I think the Rockchip folks could use this "pcie
+regulator"  feature.
+They got regulator DT properties in their PCIe RC DT node upstreamed
+but we were denied for trying the same approach.
+
+>
+> Tangent 1: I think this means a downstream device goes from D3cold to
+> D0uninitialized?  Does this code account for the required delays
+> accesses to the device?  I see some in brcm_pcie_linkup(), but I don't
+> see anything that looks like Tpvperl (the time PERST# must remain
+> asserted after power becomes valid) or Tperst (when asserted, PERST#
+> must remain asserted at least this long) (both from PCIe r6.0, sec
+> 6.6.1).
+I have a series of patches coming up that address some of these concerns.
+Can we please take this up then but allow us to escape "revert jail" first?
+I promise I will copy your tangents and address all of them with the
+future patchset.
+
+>
+> Tangent 2: "brcm_pcie_link_up()" makes sense -- it's the conventional
+> name for the simple boolean function that tells us whether the link is
+> up.  "brcm_pcie_linkup()", which *brings* the link up, is confusing
+> because it's too similar to "brcm_pcie_link_up()".  The conventional
+> name for this would be "brcm_pcie_start_link()".
+I will fix this in the future patchset.
+
+>
+> Tangent 3: There are fewer than 20 forward function declarations in
+> drivers/pci/controller/, and 9 of them are in pcie-brcmstb.c.  It's a
+> lot easier to maintain all these drivers if they use a common style.
+> Generally speaking, Linux code orders function definitions to avoid
+> the need for forward declarations.
+I will improve the situation in the future patchset
 
 Regards,
-
-Hans
-
-
-> ---
->  arch/x86/platform/uv/uv_time.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
+Jim Quinlan
+Broadcom STB
 >
-> diff --git a/arch/x86/platform/uv/uv_time.c b/arch/x86/platform/uv/uv_tim=
-e.c
-> index 54663f3e00cb..094190814a28 100644
-> --- a/arch/x86/platform/uv/uv_time.c
-> +++ b/arch/x86/platform/uv/uv_time.c
-> @@ -275,14 +275,17 @@ static int uv_rtc_unset_timer(int cpu, int force)
->   */
->  static u64 uv_read_rtc(struct clocksource *cs)
->  {
-> -     unsigned long offset;
-> +     unsigned long offset, time;
-> +     unsigned int cpu =3D get_cpu();
->
->       if (uv_get_min_hub_revision_id() =3D=3D 1)
->               offset =3D 0;
->       else
-> -             offset =3D (uv_blade_processor_id() * L1_CACHE_BYTES) % PAG=
-E_SIZE;
-> +             offset =3D (uv_cpu_blade_processor_id(cpu) * L1_CACHE_BYTES=
-) % PAGE_SIZE;
->
-> -     return (u64)uv_read_local_mmr(UVH_RTC | offset);
-> +     time =3D (u64)uv_read_local_mmr(UVH_RTC | offset);
-> +     put_cpu();
-> +     return time;
->  }
->
->  /*
-
+> Bjorn

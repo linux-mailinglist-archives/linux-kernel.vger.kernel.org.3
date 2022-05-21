@@ -2,59 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B08BC52F948
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 08:36:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5300152F950
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 08:38:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352818AbiEUGgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 02:36:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37046 "EHLO
+        id S1354683AbiEUGiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 02:38:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbiEUGgo (ORCPT
+        with ESMTP id S240014AbiEUGiK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 02:36:44 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93F4215A0A;
-        Fri, 20 May 2022 23:36:43 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id y199so9383532pfb.9;
-        Fri, 20 May 2022 23:36:43 -0700 (PDT)
+        Sat, 21 May 2022 02:38:10 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1272515A773;
+        Fri, 20 May 2022 23:38:09 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id x143so9383155pfc.11;
+        Fri, 20 May 2022 23:38:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=LI4LxelWEjEaX1Q8c74mSsIuglj1BIMj7hPy6RZdBWU=;
-        b=krDiS0tWzf4yZqe9YLwZohr5GraL2gzIFd9ot/Kj0fRMoOtw4+cET5/WyGnPwPHIyw
-         dckRcE/nyT+u8ePN8HZxY85dxQYBJfVDY89t61rOHerC9SIN/2SbOjgZNG3QQQuv+0Qr
-         cl4Wx3mhK0wz3gvKpssMoO4H3eVFoyUaIhqdr4kGYyN8WcjKRWqHBztrmM+GGlUueuH2
-         8AMjuRBj+X/QTfzvNJqIe+/HydLmpzzogZgcZzbw6c7ky8pN8M5dPaUwI0gEaKTt4k9s
-         eQsq9Hvv449COPCNLiz5gPMq3uXJW0G+i2Oh/4+INPoQ4VkdCaCM965ild5pQpnNen0i
-         kofw==
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=smaHFvOwAesiG7cYWVCNK0rzH0N79mjIDdkzCW+d3SU=;
+        b=Xxj6incOCD6+c1sZEp8cdl1Iubj82KGyzf6Gufs0MVXDHm+WvHgQqbaTA1zK4z8Lyp
+         rUQLnh1q7csxY8FzDUyyvi7Wt3kk2QOQPW7ZqUkx69AyD4OLXNG9GBpW9CPsHkoIJoeM
+         jR9lKGoKYhHDzqkRmFFVSAu2SHGfgwhaTceECagDcaqou03DJGxovzRsXxdf3LV/2dZV
+         D2hs+7WnM/mc+ycfZzAPyAKpD4JLc+E6xPfre3hoU7pbeylYCXZPtPvRV/E2XhMAHbbS
+         KrNkwbOYflvd7rv0e5sTCHhhpkb6/tSYxgV5HxzKFsepTYRHtt9QBpXEp+xa5bWg1uEE
+         Gj0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=LI4LxelWEjEaX1Q8c74mSsIuglj1BIMj7hPy6RZdBWU=;
-        b=m6lkSfF5EH7kL9lOZydWkYR88XjhryVQL2FRSl47cQPSFjSeg5Y/bk3NqIbxRoaZ5B
-         4mXy0hW6mYkqebW6P521nk00MUq/yOlsxzo4SrXmNhkEp/tSasJCvvl4/HH0HxGktaHS
-         iAoHia11U8uogjj5zBL4naqvWXeYc5DgrtfHsoG7upeStauf6H685R7Rp3ds3XOSFzR2
-         XYbo1ItWOC6CgUBxvy/2xgZ48R+6t4gKy1udXVfjZorCPHwPiPe5BCtE9pvZZm6ZlZDy
-         kXVs8bQNq6lAmoXZ3JOd1n8/e55/M8tLIv3nvxNc/xm5dX9jnUqfgsGoQzN/pkt+Bow6
-         NPeQ==
-X-Gm-Message-State: AOAM533JUGcpj0bk4SzJ3pg2o8Y4uwERFtWneGvrF+veAngMCmIDNspG
-        Td2opDA7u11XkBjKL1k6kvbCO5CWsebXDQ==
-X-Google-Smtp-Source: ABdhPJzDUUyxPh+4E2F/F1Ikqk8CKNA1QtsqzcgZ7yuZwLkqqeloj+WzWL3eWZPGPvlRSOK6iO6mIA==
-X-Received: by 2002:a63:f355:0:b0:3f6:41f4:b551 with SMTP id t21-20020a63f355000000b003f641f4b551mr9790328pgj.383.1653115002830;
-        Fri, 20 May 2022 23:36:42 -0700 (PDT)
-Received: from Negi ([207.151.52.3])
-        by smtp.gmail.com with ESMTPSA id h5-20020a62de05000000b0051831863f10sm2848702pfg.109.2022.05.20.23.36.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 23:36:42 -0700 (PDT)
-From:   Soumya Negi <soumya.negi97@gmail.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Soumya Negi <soumya.negi97@gmail.com>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: drivers/dma-buf: Improve message in selftest summary
-Date:   Fri, 20 May 2022 23:36:10 -0700
-Message-Id: <20220521063610.4924-1-soumya.negi97@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=smaHFvOwAesiG7cYWVCNK0rzH0N79mjIDdkzCW+d3SU=;
+        b=IxMmVDVPHJiN1TOfp9qAtblqFdZwo7rj1UPTqKEXTQNV8a9o0ewGMO5KaZtg2dQ++N
+         qQ1CLKB5Rw9FC58zPzlwB58oPio4rDRnE0yRxel7Zp10kGtZG41qH5wKJeP8k59V7NmI
+         flL9kJS3b1AwB1xYDPkIO9MU12GeAfbARZYODzkxwdItvv7ChrhSddyGYPXDhuarW/nA
+         I1XZNf+hiNZEH96Ydv7+x8YSG5JQ/phFz6BXD/ajwXauR/KvjPo6pWf+CbDsKVG7AWgy
+         HuQO6LEiuo5lng6S0f4BQtX4iXJJhMMoLAvZTaTGe1v3VWvqb0froheVtj/bRIVdrBs4
+         m7bw==
+X-Gm-Message-State: AOAM533FO9HnV5AsGKpcLos8uEJeFFXjxNHLwEon8Ko0gHxAWOkY5+0t
+        j3dfGK/xmXqsX0OUsznUkctxZCmWcYuYYcr/BQ==
+X-Google-Smtp-Source: ABdhPJzeV4LovcLtaXuvqmqsLafmDVX4iKvf+5XD6MPWdPxgl4vN/pJYu7JazY9Ir3jgpykLQ7GF/SMAT3Ai7TG0Ce0=
+X-Received: by 2002:a63:9043:0:b0:3f9:6c36:3de3 with SMTP id
+ a64-20020a639043000000b003f96c363de3mr4363866pge.616.1653115088581; Fri, 20
+ May 2022 23:38:08 -0700 (PDT)
+MIME-Version: 1.0
+From:   Zheyu Ma <zheyuma97@gmail.com>
+Date:   Sat, 21 May 2022 14:37:57 +0800
+Message-ID: <CAMhUBjmSVGUm+9tki3J029z=JWKY8TOB73V5hQOgn_zjodhj1Q@mail.gmail.com>
+Subject: [BUG] mfd: tps65217: Got a warning when removing the module
+To:     tony@atomide.com, Lee Jones <lee.jones@linaro.org>
+Cc:     linux-omap@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -65,31 +62,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Selftest udmabuf for the dma-buf driver is skipped when the device file
-(e.g. /dev/udmabuf) for the DMA buffer cannot be opened i.e. no DMA buffer
-has been allocated.
+Hello,
 
-This patch adds clarity to the SKIP message.
+I found a bug in the driver tps65217, the following log reveals it:
 
-Signed-off-by: Soumya Negi <soumya.negi97@gmail.com>
----
- tools/testing/selftests/drivers/dma-buf/udmabuf.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+[   53.301059] remove_proc_entry: removing non-empty directory
+'irq/1', leaking at least 'i8042'
+[   53.301774] WARNING: CPU: 0 PID: 305 at fs/proc/generic.c:717
+remove_proc_entry+0x389/0x3f0
+[   53.304647] RIP: 0010:remove_proc_entry+0x389/0x3f0
+[   53.308912] Call Trace:
+[   53.309044]  <TASK>
+[   53.309158]  unregister_irq_proc+0x14c/0x170
+[   53.309377]  irq_free_descs+0x94/0xe0
+[   53.309777]  tps65217_remove+0x117/0x280 [tps65217]
 
-diff --git a/tools/testing/selftests/drivers/dma-buf/udmabuf.c b/tools/testing/selftests/drivers/dma-buf/udmabuf.c
-index de1c4e6de0b2..c812080e304e 100644
---- a/tools/testing/selftests/drivers/dma-buf/udmabuf.c
-+++ b/tools/testing/selftests/drivers/dma-buf/udmabuf.c
-@@ -32,7 +32,8 @@ int main(int argc, char *argv[])
- 
- 	devfd = open("/dev/udmabuf", O_RDWR);
- 	if (devfd < 0) {
--		printf("%s: [skip,no-udmabuf]\n", TEST_PREFIX);
-+		printf("%s: [skip,no-udmabuf: Unable to access DMA buffer device file]\n",
-+		       TEST_PREFIX);
- 		exit(77);
- 	}
- 
--- 
-2.17.1
-
+Regards,
+Zheyu Ma

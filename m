@@ -2,40 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAB1352FBB6
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:17:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB59552FBC2
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354885AbiEULRm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 07:17:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47424 "EHLO
+        id S1355055AbiEULTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 07:19:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354815AbiEULMj (ORCPT
+        with ESMTP id S1354825AbiEULMl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 07:12:39 -0400
+        Sat, 21 May 2022 07:12:41 -0400
 Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED18436E24;
-        Sat, 21 May 2022 04:12:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43AF38784;
+        Sat, 21 May 2022 04:12:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=inria.fr; s=dc;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=oeoGIolh+B9ZKlRkght98N+Q1Q4N0R0ACfahDR8k8E0=;
-  b=t0WGoZZkithIR0lsLcF5kJUvFhQjWfgtfuiQPWCqIflq8HdSPL49Uwkm
-   wkKmfhZ2K6fU29BPSBtNxVriFfumR5zXL+SH4zK/6Sdrd3HgHzAwf7R5c
-   8O62uz80+GW8lYMfVBAa1akYtNaR5lCXrE7JZe+gk3R2e+Y13ZsJM7xnm
-   Y=;
+  bh=yEykGpJkRalEBg6KxHSq1jJWVkU42El1h5fs3XAbx7g=;
+  b=If+DFAxlBY0JiBk0se2ALkzIyOAPUkGVtovuN1fj6Zi+kCG8RAkEBLo8
+   1mZYYn8SwHJR4PxfwzHCxTNE900sO4z3JrFFjPBnlLIR/iLCeWVi/E0yy
+   D0Dwwg2KGGtPh91wQb+qPJlofzObFbQk4k9tL0z+/3WpYD/q4jrFqfya3
+   g=;
 Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
 X-IronPort-AV: E=Sophos;i="5.91,242,1647298800"; 
-   d="scan'208";a="14727953"
+   d="scan'208";a="14727954"
 Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
   by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 13:12:01 +0200
 From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     kernel-janitors@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] dmaengine: fix typos in comments
-Date:   Sat, 21 May 2022 13:11:01 +0200
-Message-Id: <20220521111145.81697-51-Julia.Lawall@inria.fr>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     kernel-janitors@vger.kernel.org,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: typec: tcpm: fix typo in comment
+Date:   Sat, 21 May 2022 13:11:02 +0200
+Message-Id: <20220521111145.81697-52-Julia.Lawall@inria.fr>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -49,40 +51,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Spelling mistakes (triple letters) in comments.
+Spelling mistake (triple letters) in comment.
 Detected with the help of Coccinelle.
 
 Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
 ---
- drivers/dma/amba-pl08x.c |    2 +-
- drivers/dma/mv_xor_v2.c  |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/usb/typec/tcpm/tcpm.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/dma/amba-pl08x.c b/drivers/dma/amba-pl08x.c
-index a4a794e62ac2..487a01aa207d 100644
---- a/drivers/dma/amba-pl08x.c
-+++ b/drivers/dma/amba-pl08x.c
-@@ -231,7 +231,7 @@ enum pl08x_dma_chan_state {
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 3bc2f4ebd1fe..7039383eac6d 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -471,7 +471,7 @@ struct tcpm_port {
  
- /**
-  * struct pl08x_dma_chan - this structure wraps a DMA ENGINE channel
-- * @vc: wrappped virtual channel
-+ * @vc: wrapped virtual channel
-  * @phychan: the physical channel utilized by this channel, if there is one
-  * @name: name of channel
-  * @cd: channel platform data
-diff --git a/drivers/dma/mv_xor_v2.c b/drivers/dma/mv_xor_v2.c
-index f10b29034da1..f629ef6fd3c2 100644
---- a/drivers/dma/mv_xor_v2.c
-+++ b/drivers/dma/mv_xor_v2.c
-@@ -313,7 +313,7 @@ mv_xor_v2_tx_submit(struct dma_async_tx_descriptor *tx)
- 		"%s sw_desc %p: async_tx %p\n",
- 		__func__, sw_desc, &sw_desc->async_tx);
- 
--	/* assign coookie */
-+	/* assign cookie */
- 	spin_lock_bh(&xor_dev->lock);
- 	cookie = dma_cookie_assign(tx);
- 
+ 	/*
+ 	 * When set, port requests PD_P_SNK_STDBY_MW upon entering SNK_DISCOVERY and
+-	 * the actual currrent limit after RX of PD_CTRL_PSRDY for PD link,
++	 * the actual current limit after RX of PD_CTRL_PSRDY for PD link,
+ 	 * SNK_READY for non-pd link.
+ 	 */
+ 	bool slow_charger_loop;
 

@@ -2,65 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 556E752FCAD
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 15:14:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAE0C52FCB0
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 15:15:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354942AbiEUNOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 09:14:52 -0400
+        id S1353316AbiEUNPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 09:15:00 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351062AbiEUNO1 (ORCPT
+        with ESMTP id S1354859AbiEUNO1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 21 May 2022 09:14:27 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 523B639B80
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 06:14:09 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id s14so9413288plk.8
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 06:14:08 -0700 (PDT)
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27575644DF
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 06:14:12 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id z11so357589pjc.3
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 06:14:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=g7Q4DIyBFdkOfQfLesIacT6b2x85qOReA4ewSFpfUcU=;
-        b=DXSLnl6bzRiqQd9B3yCFb3QN0I29DuZvmyvMOt1C5IzPBsMZujmBjjyjiPXn8dM5Mi
-         1EI6K4reqiBhLCza62OYrJa3ud9LTNNkk1lz32pXboLjnSv9jja0+LzxK8QgXWcXidAL
-         JUi/BgVHD1aLJfk6SrAZans9hpJJaDzzW4PwoCNXGGJxW3Fl7Guwjot7Kfi1ws4O8UB/
-         TfYKuiNdoCEO6UmA0QqO8qghU9qoscOe0g+tEcxinZ5zkle3SWuNXXlUqaEudsZ+q8mS
-         AckGqF8C890g19t7+O78uuwQig6Pj3bmEq4dmoKbNDK9GfOvCVYN0pn9Jt0kRQPsNTEQ
-         EIYg==
+        bh=JuZm0iyeNXKvBw7CRNXXxjER+lmIsZfs9nGcE1KNIMA=;
+        b=Sc6A9rrs2CNpuzMYl9NDxDJMyzMrUdwkEL59QOtbB4CGMTiqKNH5Eg7kFRFTYWvOCi
+         KvMrO/BhJz/8I7CnQdHfCLQgstx5qL4qj7Y7M19/MggfMwPalkmrzQC42OPUc1pRxZDA
+         RkbI9VeBT3mvPmUnph6SIduSb9zMORPBz4/duPZy+nTp70iBYDIcLVZt2thsIE8+AlOW
+         7EGtjoXIcFgOjCQTVo3gXAxD65fsE2+00LDr/l2QZ1Rw2YLz1G4OpUhP00RoFstbDbhp
+         qBRYtHKJnMZprRtRK9CEX8TxxQabMo4eFO2kDaT6+YaE++952T73XbPODjIMZW7beYu/
+         jlEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=g7Q4DIyBFdkOfQfLesIacT6b2x85qOReA4ewSFpfUcU=;
-        b=2ONfr7WJ9qfFmPBBLdzqNsFeZIZ2AtuNr391KXg0hZtIBZjCoPGUFrj+oUgJQE+IsJ
-         c8Km7zXabGpUGZnd8sV0mpHsz0PXSL+vkOE2acvibuXLGy1cTD/FPWOnQyHjLUDQj/4a
-         DlZ9ZqFWDO1TYoz0uZFCphIzlnC5FyAPWlntbZA8ZGpzEm1uhTngH75+d8F8YFVeTXrj
-         KgsRvHZcQIB2yVhv0HmFTUd24jg3OjyMjL7gC8QpeAUovfhxQKg96NeJ3YPY5Yuh90A4
-         kkUeYl3Qwi++gGItpcOjinI0nmHcwO5/IhOEb7c5QSezpYi2Q0rGC7zSVrRniuvqK+Sc
-         QJ4g==
-X-Gm-Message-State: AOAM530Gy0/YagirfnwuOqMRsg2nDp8X4hY87o0Cx/8Ub812CMqF3LAB
-        tmKTF8ozvb43KjzYgJoB8vP6NRPyxLoCng==
-X-Google-Smtp-Source: ABdhPJzRR6zf4/aFz4vGSyRfNAJ3VFLw0FA+iXux+gNdzSOHEVGhZYeu9Oa58IX6yFdO8P/mN1weHQ==
-X-Received: by 2002:a17:902:ea53:b0:15b:1bb8:ac9e with SMTP id r19-20020a170902ea5300b0015b1bb8ac9emr14147213plg.45.1653138848062;
-        Sat, 21 May 2022 06:14:08 -0700 (PDT)
+        bh=JuZm0iyeNXKvBw7CRNXXxjER+lmIsZfs9nGcE1KNIMA=;
+        b=UY/X9UAT+LlRxkgBub6/+zOzmXiXgYFsQlLy58RkSBJN+3uQP1Qa6arWyescOzSTds
+         Gyhf3PcZENko3xQAUYk3XiLXV4pOab53MqbItI3vJqfkiFs07HStN4IiFVY2IbRTgv40
+         iunYc4YTi+5ld2LYKQuj4V6yJdnPGIm7gGNbt+8UpjHSjxncYlnddVUEwG9KeDP4fF2M
+         xuRYtLJPn9KaSlAcSmvdWLYdCdKmx/TWh2AcVD+CLeC7W7nsvoomv0XbpZK9MlBFy1xH
+         OHMpGDQivlTBSkLouWtrzWJuYLilOYgrUaaIWwdpenIJ9ny8z3Gks+OgReE7otweJGxK
+         D2Ow==
+X-Gm-Message-State: AOAM530lDfJ/tgnjdUPWAb7n/x8Vc17QTa1PYHv34a3xoPLFZPc66g0S
+        9BC+eLg8S3V04R/rzNahgV9UGH6p1JjaDg==
+X-Google-Smtp-Source: ABdhPJzskd466pWvMA9IpEpSRlwXzHnjwv1BqbS+UhQIKkByXjc1R/mTGqRMDsXeqdEZ64pVE3orRA==
+X-Received: by 2002:a17:90b:180b:b0:1df:b2ac:fafc with SMTP id lw11-20020a17090b180b00b001dfb2acfafcmr17065256pjb.101.1653138851293;
+        Sat, 21 May 2022 06:14:11 -0700 (PDT)
 Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
-        by smtp.gmail.com with ESMTPSA id z17-20020a170903019100b00161c3fc7a44sm1581665plg.108.2022.05.21.06.14.07
+        by smtp.gmail.com with ESMTPSA id e4-20020a17090301c400b0015e8d4eb2d6sm1187912plh.288.2022.05.21.06.14.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 May 2022 06:14:07 -0700 (PDT)
+        Sat, 21 May 2022 06:14:10 -0700 (PDT)
 From:   Stafford Horne <shorne@gmail.com>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     Openrisc <openrisc@lists.librecores.org>,
         Stafford Horne <shorne@gmail.com>,
         Jonas Bonn <jonas@southpole.se>,
         Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH v3 09/13] openrisc/traps: Declare unhandled_exception for asmlinkage
-Date:   Sat, 21 May 2022 22:13:19 +0900
-Message-Id: <20220521131323.631209-10-shorne@gmail.com>
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH v3 10/13] openrisc/time: Fix symbol scope warnings
+Date:   Sat, 21 May 2022 22:13:20 +0900
+Message-Id: <20220521131323.631209-11-shorne@gmail.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220521131323.631209-1-shorne@gmail.com>
 References: <20220521131323.631209-1-shorne@gmail.com>
@@ -76,27 +74,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Noticed this when workin on warnings.  As unhandled_exception is used in
-entry.S we should attribute it with asmlinkage.
+Spare reported the following warnings:
+    arch/openrisc/kernel/time.c:64:1: warning: symbol 'clockevent_openrisc_timer' was not declared. Should it be static?
+    arch/openrisc/kernel/time.c:66:6: warning: symbol 'openrisc_clockevent_init' was not declared. Should it be static?
+
+This patch fixes by:
+
+ - Add static declaration to clockevent_openrisc_timer as it's used only in
+   this file.
+ - Add include for asm/time.h for openrisc_clockevent_init declaration.
 
 Signed-off-by: Stafford Horne <shorne@gmail.com>
 ---
- arch/openrisc/kernel/traps.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/openrisc/kernel/time.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/openrisc/kernel/traps.c b/arch/openrisc/kernel/traps.c
-index 99cd2e6f8873..fd9a0f2b66c4 100644
---- a/arch/openrisc/kernel/traps.c
-+++ b/arch/openrisc/kernel/traps.c
-@@ -235,7 +235,7 @@ void __noreturn die(const char *str, struct pt_regs *regs, long err)
- 	make_task_dead(SIGSEGV);
- }
+diff --git a/arch/openrisc/kernel/time.c b/arch/openrisc/kernel/time.c
+index 6d18989d63d0..8e26c1af5441 100644
+--- a/arch/openrisc/kernel/time.c
++++ b/arch/openrisc/kernel/time.c
+@@ -23,6 +23,7 @@
+ #include <linux/of_clk.h>
  
--void unhandled_exception(struct pt_regs *regs, int ea, int vector)
-+asmlinkage void unhandled_exception(struct pt_regs *regs, int ea, int vector)
+ #include <asm/cpuinfo.h>
++#include <asm/time.h>
+ 
+ /* Test the timer ticks to count, used in sync routine */
+ inline void openrisc_timer_set(unsigned long count)
+@@ -61,7 +62,7 @@ static int openrisc_timer_set_next_event(unsigned long delta,
+  * timers) we cannot enable the PERIODIC feature.  The tick timer can run using
+  * one-shot events, so no problem.
+  */
+-DEFINE_PER_CPU(struct clock_event_device, clockevent_openrisc_timer);
++static DEFINE_PER_CPU(struct clock_event_device, clockevent_openrisc_timer);
+ 
+ void openrisc_clockevent_init(void)
  {
- 	printk("Unable to handle exception at EA =0x%x, vector 0x%x",
- 	       ea, vector);
 -- 
 2.31.1
 

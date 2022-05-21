@@ -2,46 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08C7952FBBF
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:20:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAB1352FBB6
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:17:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355157AbiEULUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 07:20:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48658 "EHLO
+        id S1354885AbiEULRm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 07:17:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354793AbiEULMj (ORCPT
+        with ESMTP id S1354815AbiEULMj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 21 May 2022 07:12:39 -0400
 Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DACD036E23;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED18436E24;
         Sat, 21 May 2022 04:12:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=inria.fr; s=dc;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=h9/JLNwcfi/UY5XpGVBvv5kFeV8RXwx4GEz/iaYQX+U=;
-  b=cKB/R5Gfg8TWn1SfPypRD8jrZI/29M4NQMYtmp85N2SNBeg6kCETahRa
-   qlxV7ugiJEmc6zNaX3bslOXg710vAiTVVTX1zJ7kkqXFV1PALXp6GcTs/
-   lQkckbvWFuJ7qlGgv0/IUrRuXDKGIBMV082QG41d/fO5pZIj6lHT7hQI9
-   4=;
+  bh=oeoGIolh+B9ZKlRkght98N+Q1Q4N0R0ACfahDR8k8E0=;
+  b=t0WGoZZkithIR0lsLcF5kJUvFhQjWfgtfuiQPWCqIflq8HdSPL49Uwkm
+   wkKmfhZ2K6fU29BPSBtNxVriFfumR5zXL+SH4zK/6Sdrd3HgHzAwf7R5c
+   8O62uz80+GW8lYMfVBAa1akYtNaR5lCXrE7JZe+gk3R2e+Y13ZsJM7xnm
+   Y=;
 Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
 X-IronPort-AV: E=Sophos;i="5.91,242,1647298800"; 
-   d="scan'208";a="14727951"
+   d="scan'208";a="14727953"
 Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
   by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 13:12:01 +0200
 From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Jesse Brandeburg <jesse.brandeburg@intel.com>
-Cc:     kernel-janitors@vger.kernel.org,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     kernel-janitors@vger.kernel.org, dmaengine@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] drivers/net/ethernet/intel: fix typos in comments
-Date:   Sat, 21 May 2022 13:11:00 +0200
-Message-Id: <20220521111145.81697-50-Julia.Lawall@inria.fr>
+Subject: [PATCH] dmaengine: fix typos in comments
+Date:   Sat, 21 May 2022 13:11:01 +0200
+Message-Id: <20220521111145.81697-51-Julia.Lawall@inria.fr>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -61,48 +55,34 @@ Detected with the help of Coccinelle.
 Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
 ---
- drivers/net/ethernet/intel/fm10k/fm10k_mbx.c   |    2 +-
- drivers/net/ethernet/intel/ice/ice_lib.c       |    2 +-
- drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c |    2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ drivers/dma/amba-pl08x.c |    2 +-
+ drivers/dma/mv_xor_v2.c  |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/fm10k/fm10k_mbx.c b/drivers/net/ethernet/intel/fm10k/fm10k_mbx.c
-index 30ca9ee1900b..f2fba6e1d0f7 100644
---- a/drivers/net/ethernet/intel/fm10k/fm10k_mbx.c
-+++ b/drivers/net/ethernet/intel/fm10k/fm10k_mbx.c
-@@ -1825,7 +1825,7 @@ static void fm10k_sm_mbx_process_error(struct fm10k_mbx_info *mbx)
- 		fm10k_sm_mbx_connect_reset(mbx);
- 		break;
- 	case FM10K_STATE_CONNECT:
--		/* try connnecting at lower version */
-+		/* try connecting at lower version */
- 		if (mbx->remote) {
- 			while (mbx->local > 1)
- 				mbx->local--;
-diff --git a/drivers/net/ethernet/intel/ice/ice_lib.c b/drivers/net/ethernet/intel/ice/ice_lib.c
-index 454e01ae09b9..70961c0343e7 100644
---- a/drivers/net/ethernet/intel/ice/ice_lib.c
-+++ b/drivers/net/ethernet/intel/ice/ice_lib.c
-@@ -2403,7 +2403,7 @@ static void ice_set_agg_vsi(struct ice_vsi *vsi)
- 				agg_id);
- 			return;
- 		}
--		/* aggregator node is created, store the neeeded info */
-+		/* aggregator node is created, store the needed info */
- 		agg_node->valid = true;
- 		agg_node->agg_id = agg_id;
- 	}
-diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c
-index 3e74ab82868b..3f5ef5269bb2 100644
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c
-@@ -77,7 +77,7 @@ static int __ixgbe_enable_sriov(struct ixgbe_adapter *adapter,
- 	IXGBE_WRITE_REG(hw, IXGBE_PFDTXGSWC, IXGBE_PFDTXGSWC_VT_LBEN);
- 	adapter->bridge_mode = BRIDGE_MODE_VEB;
+diff --git a/drivers/dma/amba-pl08x.c b/drivers/dma/amba-pl08x.c
+index a4a794e62ac2..487a01aa207d 100644
+--- a/drivers/dma/amba-pl08x.c
++++ b/drivers/dma/amba-pl08x.c
+@@ -231,7 +231,7 @@ enum pl08x_dma_chan_state {
  
--	/* limit trafffic classes based on VFs enabled */
-+	/* limit traffic classes based on VFs enabled */
- 	if ((adapter->hw.mac.type == ixgbe_mac_82599EB) && (num_vfs < 16)) {
- 		adapter->dcb_cfg.num_tcs.pg_tcs = MAX_TRAFFIC_CLASS;
- 		adapter->dcb_cfg.num_tcs.pfc_tcs = MAX_TRAFFIC_CLASS;
+ /**
+  * struct pl08x_dma_chan - this structure wraps a DMA ENGINE channel
+- * @vc: wrappped virtual channel
++ * @vc: wrapped virtual channel
+  * @phychan: the physical channel utilized by this channel, if there is one
+  * @name: name of channel
+  * @cd: channel platform data
+diff --git a/drivers/dma/mv_xor_v2.c b/drivers/dma/mv_xor_v2.c
+index f10b29034da1..f629ef6fd3c2 100644
+--- a/drivers/dma/mv_xor_v2.c
++++ b/drivers/dma/mv_xor_v2.c
+@@ -313,7 +313,7 @@ mv_xor_v2_tx_submit(struct dma_async_tx_descriptor *tx)
+ 		"%s sw_desc %p: async_tx %p\n",
+ 		__func__, sw_desc, &sw_desc->async_tx);
+ 
+-	/* assign coookie */
++	/* assign cookie */
+ 	spin_lock_bh(&xor_dev->lock);
+ 	cookie = dma_cookie_assign(tx);
+ 
 

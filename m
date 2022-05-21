@@ -2,106 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A5E052F82E
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 05:51:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BA1A52F832
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 05:53:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354495AbiEUDva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 23:51:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54980 "EHLO
+        id S1351761AbiEUDwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 23:52:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354490AbiEUDvT (ORCPT
+        with ESMTP id S232048AbiEUDwc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 23:51:19 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B5A0DF41;
-        Fri, 20 May 2022 20:51:15 -0700 (PDT)
-Received: from kwepemi500009.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L4qNX0XZszgY8y;
-        Sat, 21 May 2022 11:49:48 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi500009.china.huawei.com (7.221.188.199) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 21 May 2022 11:51:13 +0800
-Received: from [10.174.176.73] (10.174.176.73) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 21 May 2022 11:51:12 +0800
-Subject: Re: [PATCH -next v3 2/2] blk-throttle: fix io hung due to
- configuration updates
-To:     Tejun Heo <tj@kernel.org>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-CC:     <axboe@kernel.dk>, <ming.lei@redhat.com>, <geert@linux-m68k.org>,
-        <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
-References: <20220519085811.879097-1-yukuai3@huawei.com>
- <20220519085811.879097-3-yukuai3@huawei.com>
- <20220519095857.GE16096@blackbody.suse.cz>
- <a8953189-af42-0225-3031-daf61347524a@huawei.com>
- <20220519161026.GG16096@blackbody.suse.cz>
- <73464ca6-9412-cc55-d9c0-f2e8a10f0607@huawei.com>
- <fe3c03f7-9b52-7948-075d-cbdf431363e1@huawei.com>
- <20220520160305.GA17335@blackbody.suse.cz> <Yoe/1BRYzSRI0JBd@slm.duckdns.org>
-From:   "yukuai (C)" <yukuai3@huawei.com>
-Message-ID: <97be6af0-ea94-f4ee-5ab2-02b6fc02cbff@huawei.com>
-Date:   Sat, 21 May 2022 11:51:11 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Fri, 20 May 2022 23:52:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9DDB5C853;
+        Fri, 20 May 2022 20:52:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 60589B82E0E;
+        Sat, 21 May 2022 03:52:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FD9AC385A9;
+        Sat, 21 May 2022 03:52:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653105148;
+        bh=IJFPrEy8FPKljy7dggxaDoQSTSF/XCWVm/MCYmWCcfA=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=U/coIXKJ31ChOzrurF+JcO+Q4+6Cwm5xCBWbJrbmXUxUccXGs8axElsM9s4EFqhGZ
+         sjFfIUISCeRV30dJRAx62/Y59WPmy5/0WYnmt/UTRGR9hr1GtgFnUonFXf17f89S3q
+         lMJ/xPeFeIah2Hf0VNbwZE5GnARHzUdSy7R54guubey/GiHZK6e/IC9n0vddp3+hvl
+         ZWZySjOZoRKARD9rDp0oePaAgvnXgFYLBeV991KreOCQACrC1FUqsMruKFW9DevAxV
+         aFN/1t4mZRxJKBskSVXQqjL9EbBCXA0kFfIMvc/unDPaKzZDEQIPU6RJvKh5NMZWbE
+         yJrdEhUOQv9GQ==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <Yoe/1BRYzSRI0JBd@slm.duckdns.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.73]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220520100948.19622-3-johan+linaro@kernel.org>
+References: <20220520100948.19622-1-johan+linaro@kernel.org> <20220520100948.19622-3-johan+linaro@kernel.org>
+Subject: Re: [PATCH 2/3] clk: qcom: gdsc: add support for collapse-vote registers
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Johan Hovold <johan+linaro@kernel.org>
+Date:   Fri, 20 May 2022 20:52:26 -0700
+User-Agent: alot/0.10
+Message-Id: <20220521035228.1FD9AC385A9@smtp.kernel.org>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/05/21 0:20, Tejun Heo 写道:
-> Hello,
-> 
-> On Fri, May 20, 2022 at 06:03:05PM +0200, Michal Koutný wrote:
->>> Then io hung can be triggered by always submmiting new configuration
->>> before the throttled bio is dispatched.
->>
->> How big is this a problem actually? Is it only shooting oneself in the leg
->> or can there be a user who's privileged enough to modify throttling
->> configuration yet not privileged enough to justify the hung's
->> consequences (like some global FS locks).
-> 
-> So, the problem in itself is of the self-inflicted type and I'd prefer to
-> ignore it. Unfortunately, the kernel doesn't have the kind of isolation
-> where stalling out some aribtrary tasks is generally safe, especially not
-> blk-throtl as it doesn't handle bio_issue_as_root() and thus can have a
-> pretty severe priority inversions where IOs which can block system-wide
-> operations (e.g. memory reclaim) get trapped in a random cgroup.
-Hi, Tejun
+Quoting Johan Hovold (2022-05-20 03:09:47)
+> Recent Qualcomm platforms have APCS collapse-vote registers that allow
+> for sharing GDSCs with other masters (e.g. LPASS).
 
-It's right the problem is self-inflicted. However, I do think with
-Michal's suggestion, how throttled bios are handled while new config is
-submitted really make sense from the functional poinit of view.
+Maybe just say 'with other subsystems' because LPASS is an entire
+subsystem.
 
-Do you think the solution is OK?
-
-Thnaks,
-Kuai
-> 
-> Even ignoring that, the kernel in general assumes some forward progress from
-> everybody and when a part stalls it's relatively easy to spread to the rest
-> of the system, sometimes gradually, sometimes suddenly - e.g. if the stalled
-> IO was being performed while holding the mmap_sem, which isn't rare, then
-> anything which tries to read its proc cmdline will hang behind it.
-> 
-> So, we wanna avoid a situation where a non-priviledged user can cause
-> indefinite UNINTERRUPTIBLE sleeps to prevent local DoS attacks. I mean,
-> preventing local attacks is almost never fool proof but we don't want to
-> make it too easy at least.
-> 
-> Thanks.
-> 
+>=20
+> Add support for using such vote registers instead of the control
+> register when updating the GDSC power state.
+>=20
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>

@@ -2,262 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38F0952FD79
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 16:55:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4725752FD91
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 17:09:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355298AbiEUOy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 10:54:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37580 "EHLO
+        id S1355353AbiEUPJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 11:09:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232481AbiEUOyx (ORCPT
+        with ESMTP id S241878AbiEUPJL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 10:54:53 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E6627A45A
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 07:54:52 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id bq30so18774548lfb.3
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 07:54:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=yn6GM8YC4at4apwkmsAaz+qykkWhY/lONZlHvlsp1dQ=;
-        b=moEappeT2eaGHlq6uVdacAt4RqDY2VmRmWOPyazxw1F4+U0RwMzllt3jJQ+CboaINs
-         H1zvvRaO6WSf7bmeldHkaszOJzhFGGzKb7nSXmFa7WMO/0mtYe8WbP02QaqPrL5tNr4L
-         4e68QHG7HiREkxHyHAYBvpZIydsiDwKAReMA5hEZMq5N9u9Es+fL7rvh6oZQgcorTBpp
-         SUeUiG7fJk2nvPw4plNGahNfhUiF5kTGlVT7znwtHkoDqaJAlaUlcy0/NEQdd/s+95si
-         wcALlluRuXm58wEw5qzJGJOZKYAyKcpG9yrMxlaT/oIBNFnJsA8Gw6CI10tsw5dtnnr0
-         H8xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=yn6GM8YC4at4apwkmsAaz+qykkWhY/lONZlHvlsp1dQ=;
-        b=vPlqWb9IG6Z1lTwZZHy/mVHzne9UqwuvpDDTNIqkXH25JeZk5NZMuT0IcQpbGZY3LU
-         YPM3/otLw7gBcIXbfYFoRUWserR/cF3GoipCD4hFkiCYAICQKh7fQ5nvk8g5W+kEjFHH
-         JlYZASF/BEpIgaO8ELX8yHmd4JPulzpiq0xhJStHO4QlZqZcy4ScuQlW0k7dgvFefOm3
-         OcxRE1JiYv1ilv90aYBu4Ar4EGh9hWzo/TvqiO2HzsNOdIBc4rHcPM0rJ4acHmX7U+sZ
-         p5m8anB6Qe8/9JQRSawLGUb/AV4lNiSdxuBA6vk3eQI6KurEAdFzE5deFehlrz1ukKGF
-         82fQ==
-X-Gm-Message-State: AOAM5323wgUpWPY7LfFKVAZeVEcdvoxX1aOT6Fs1MLZzrD0xErhHNbDe
-        KDbAslI0WyzwHtG3pEXL176toQ==
-X-Google-Smtp-Source: ABdhPJziD7p5qbR0BrOtimlL6OK89yBMxM0pzyjaOlo79nfvj3tIX4LpKOe1HaUgI/Fgm5rb++WXCQ==
-X-Received: by 2002:a05:6512:1691:b0:46f:1e0:d0 with SMTP id bu17-20020a056512169100b0046f01e000d0mr10051158lfb.91.1653144890831;
-        Sat, 21 May 2022 07:54:50 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id a11-20020a2e980b000000b00253df2d526asm615073ljj.77.2022.05.21.07.54.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 21 May 2022 07:54:50 -0700 (PDT)
-Message-ID: <f2073815-3302-d092-5a94-61dcaf72e29c@linaro.org>
-Date:   Sat, 21 May 2022 16:54:48 +0200
+        Sat, 21 May 2022 11:09:11 -0400
+Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE9D9344F;
+        Sat, 21 May 2022 08:09:08 -0700 (PDT)
+Received: by mail.hallyn.com (Postfix, from userid 1001)
+        id 058E266D; Sat, 21 May 2022 10:09:06 -0500 (CDT)
+Date:   Sat, 21 May 2022 10:09:06 -0500
+From:   "Serge E. Hallyn" <serge@hallyn.com>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        christian.brauner@ubuntu.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        jpenumak@redhat.com,
+        James Bottomley <James.Bottomley@HansenPartnership.com>
+Subject: Re: [PATCH v12 02/26] securityfs: Extend securityfs with namespacing
+ support
+Message-ID: <20220521150906.GA13961@mail.hallyn.com>
+References: <20220420140633.753772-1-stefanb@linux.ibm.com>
+ <20220420140633.753772-3-stefanb@linux.ibm.com>
+ <20220521022302.GA8575@mail.hallyn.com>
+ <20220521093839.3srwejkeqthgk2fq@wittgenstein>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 1/2] dt-bindings: arm: Convert CoreSight bindings to DT
- schema
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220520214416.302127-1-robh@kernel.org>
- <20220520214416.302127-2-robh@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220520214416.302127-2-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220521093839.3srwejkeqthgk2fq@wittgenstein>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/05/2022 23:44, Rob Herring wrote:
-> Each CoreSight component has slightly different requirements and
-> nothing applies to every component, so each CoreSight component has its
-> own schema document.
+On Sat, May 21, 2022 at 11:38:39AM +0200, Christian Brauner wrote:
+> On Fri, May 20, 2022 at 09:23:02PM -0500, Serge Hallyn wrote:
+> > On Wed, Apr 20, 2022 at 10:06:09AM -0400, Stefan Berger wrote:
+> > > Enable multiple instances of securityfs by keying each instance with a
+> > > pointer to the user namespace it belongs to.
+> > > 
+> > > Since we do not need the pinning of the filesystem for the virtualization
+> > > case, limit the usage of simple_pin_fs() and simpe_release_fs() to the
+> > > case when the init_user_ns is active. This simplifies the cleanup for the
+> > > virtualization case where usage of securityfs_remove() to free dentries
+> > > is therefore not needed anymore.
+> > > 
+> > > For the initial securityfs, i.e. the one mounted in the host userns mount,
+> > > nothing changes. The rules for securityfs_remove() are as before and it is
+> > > still paired with securityfs_create(). Specifically, a file created via
+> > > securityfs_create_dentry() in the initial securityfs mount still needs to
+> > > be removed by a call to securityfs_remove(). Creating a new dentry in the
+> > > initial securityfs mount still pins the filesystem like it always did.
+> > > Consequently, the initial securityfs mount is not destroyed on
+> > > umount/shutdown as long as at least one user of it still has dentries that
+> > > it hasn't removed with a call to securityfs_remove().
+> > > 
+> > > Prevent mounting of an instance of securityfs in another user namespace
+> > > than it belongs to. Also, prevent accesses to files and directories by
+> > > a user namespace that is neither the user namespace it belongs to
+> > > nor an ancestor of the user namespace that the instance of securityfs
+> > > belongs to. Do not prevent access if securityfs was bind-mounted and
+> > > therefore the init_user_ns is the owning user namespace.
+> > > 
+> > > Suggested-by: Christian Brauner <brauner@kernel.org>
+> > > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> > > Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+> > > 
+> > > ---
+> > > v11:
+> > >  - Formatted comment's first line to be '/*'
+> > > ---
+> > >  security/inode.c | 73 ++++++++++++++++++++++++++++++++++++++++--------
+> > >  1 file changed, 62 insertions(+), 11 deletions(-)
+> > > 
+> > > diff --git a/security/inode.c b/security/inode.c
+> > > index 13e6780c4444..84c9396792a9 100644
+> > > --- a/security/inode.c
+> > > +++ b/security/inode.c
+> > > @@ -21,9 +21,38 @@
+> > >  #include <linux/security.h>
+> > >  #include <linux/lsm_hooks.h>
+> > >  #include <linux/magic.h>
+> > > +#include <linux/user_namespace.h>
+> > >  
+> > > -static struct vfsmount *mount;
+> > > -static int mount_count;
+> > > +static struct vfsmount *init_securityfs_mount;
+> > > +static int init_securityfs_mount_count;
+> > > +
+> > > +static int securityfs_permission(struct user_namespace *mnt_userns,
+> > > +				 struct inode *inode, int mask)
+> > > +{
+> > > +	int err;
+> > > +
+> > > +	err = generic_permission(&init_user_ns, inode, mask);
+> > > +	if (!err) {
+> > > +		/*
+> > > +		 * Unless bind-mounted, deny access if current_user_ns() is not
+> > > +		 * ancestor.
+> > 
+> > This comment has confused me the last few times I looked at this.  I see
+> > now you're using "bind-mounted" as a shortcut for saying "bind mounted from
+> > the init_user_ns into a child_user_ns container".  I do think that needs
+> > to be made clearer in this comment.
+> > 
+> > Should the init_user_ns really be special here?  What if I'm running a
+> > first level container with uptodate userspace that mounts its own
+> > securityfs, but in that i want to run a nested older userspace that
+> > bind mounts the parent securityfs?  Is there a good reason to deny that?
+> > 
+> > It would seem to me the better check would be
+> > 
+> > 	if (!is_original_mounter_of(current_user_ns, inode->i_sb->s_user_ns) &&
+> > 	     !in_userns(current_user_ns(), inode->i_sb->s_user_ns))
+> > 		err = -EACCESS;
+> > 
+> > the is_original_mounter_of() would require the user_ns to cache first
+> > its parent securityfs userns, and, when a task in the user_ns mounts
+> > securityfs, then cache its own userns.  (without a reference).
+> > If current_user_ns() has mounted a securityfs for a user_ns other than
+> > inode->i_sb->s_user_ns (or init_user_ns), then reject the mount.
+> > Otherwise check current_user_ns()->parent, etc, until init_user_ns.
+> > If you reach init_user_ns, or an ns which mounted inode->i_sb->s_user_ns,
+> > then allow, else deny.
+> > 
+> > It's the kind of special casing we've worked hard to avoid in other
+> > namespaces.
+> > 
+> > > +		 */
+> > > +		if (inode->i_sb->s_user_ns != &init_user_ns &&
+> > > +		    !in_userns(current_user_ns(), inode->i_sb->s_user_ns))
+> > > +			err = -EACCES;
+> > > +	}
+> > > +
+> > > +	return err;
+> > > +}
+> > > +
+> > > +static const struct inode_operations securityfs_dir_inode_operations = {
+> > > +	.permission	= securityfs_permission,
+> > > +	.lookup		= simple_lookup,
+> > > +};
+> > > +
+> > > +static const struct inode_operations securityfs_file_inode_operations = {
+> > > +	.permission	= securityfs_permission,
+> > > +};
+> > >  
+> > >  static void securityfs_free_inode(struct inode *inode)
+> > >  {
+> > > @@ -40,20 +69,25 @@ static const struct super_operations securityfs_super_operations = {
+> > >  static int securityfs_fill_super(struct super_block *sb, struct fs_context *fc)
+> > >  {
+> > >  	static const struct tree_descr files[] = {{""}};
+> > > +	struct user_namespace *ns = fc->user_ns;
+> > >  	int error;
+> > >  
+> > > +	if (WARN_ON(ns != current_user_ns()))
+> > > +		return -EINVAL;
+> > > +
+> > >  	error = simple_fill_super(sb, SECURITYFS_MAGIC, files);
+> > >  	if (error)
+> > >  		return error;
+> > >  
+> > >  	sb->s_op = &securityfs_super_operations;
+> > > +	sb->s_root->d_inode->i_op = &securityfs_dir_inode_operations;
+> > >  
+> > >  	return 0;
+> > >  }
+> > >  
+> > >  static int securityfs_get_tree(struct fs_context *fc)
+> > >  {
+> > > -	return get_tree_single(fc, securityfs_fill_super);
+> > > +	return get_tree_keyed(fc, securityfs_fill_super, fc->user_ns);
+> > >  }
+> > >  
+> > >  static const struct fs_context_operations securityfs_context_ops = {
+> > > @@ -71,6 +105,7 @@ static struct file_system_type fs_type = {
+> > >  	.name =		"securityfs",
+> > >  	.init_fs_context = securityfs_init_fs_context,
+> > >  	.kill_sb =	kill_litter_super,
+> > > +	.fs_flags =	FS_USERNS_MOUNT,
+> > >  };
+> > >  
+> > >  /**
+> > > @@ -109,6 +144,7 @@ static struct dentry *securityfs_create_dentry(const char *name, umode_t mode,
+> > >  					const struct file_operations *fops,
+> > >  					const struct inode_operations *iops)
+> > >  {
+> > > +	struct user_namespace *ns = current_user_ns();
+> > >  	struct dentry *dentry;
+> > >  	struct inode *dir, *inode;
+> > >  	int error;
+> > > @@ -118,12 +154,19 @@ static struct dentry *securityfs_create_dentry(const char *name, umode_t mode,
+> > >  
+> > >  	pr_debug("securityfs: creating file '%s'\n",name);
+> > >  
+> > > -	error = simple_pin_fs(&fs_type, &mount, &mount_count);
+> > > -	if (error)
+> > > -		return ERR_PTR(error);
+> > > +	if (ns == &init_user_ns) {
+> > > +		error = simple_pin_fs(&fs_type, &init_securityfs_mount,
+> > > +				      &init_securityfs_mount_count);
+> > 
+> > So ...  it's less work for the kernel to skip the simple_pin_fs()
+> > here, but it's more code, and more confusing code, to skip it.
+> > 
+> > So I just want to ask, to make sure:  is it worth it?  Or should
+> > it just be done for all namespaces here (and below and for release),
+> > for shorter, simpler, easier to read and grok code?
 > 
+> I think you might've skipped a few version of the thread.
 
-(...)
+I sure did :)
 
-> +        const: arm,coresight-dynamic-funnel
-> +  required:
-> +    - compatible
-> +
-> +allOf:
-> +  - $ref: /schemas/arm/primecell.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - const: arm,coresight-dynamic-funnel
-> +      - const: arm,primecell
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    minItems: 1
-> +    maxItems: 2
-> +
-> +  clock-names:
-> +    minItems: 1
-> +    items:
-> +      - const: apb_pclk
-> +      - const: atclk
-> +
-> +  in-ports:
-> +    $ref: /schemas/graph.yaml#/properties/ports
+> It would be more code and a lot more confusing to try and keep the
+> simple_pin_fs(). You will need a per-userns vfsmount pointer and you
 
-Shouldn't this be with unevaluatedProperties:false?
+Ah, yes, and here you can just use &init_securityfs_mount.
 
-> +
-> +    patternProperties:
-> +      '^port(@[0-7])?$':
-> +        description: Input connections from CoreSight Trace bus
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +
-> +  out-ports:
-> +    $ref: /schemas/graph.yaml#/properties/ports
-> +    additionalProperties: false
-> +
-> +    properties:
-> +      port:
-> +        description: Output connection to CoreSight Trace bus
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +
+> still need to change securityfs_create_dentry and securityfs_remove. For
+> more context see [1] and [2].
+> 
+> [1]: https://lore.kernel.org/lkml/20211206172600.1495968-12-stefanb@linux.ibm.com
+> [2]: https://lore.kernel.org/lkml/20211206172600.1495968-13-stefanb@linux.ibm.com
+> 
+> The fs pinning logic is most suited for single-superblock, almost
+> system-lifetime bound pseudo filesystems such as debugfs or configfs.
+> It becomes a rather huge burden when a pseudo fs is supposed to
+> support multiple superblocks (in this case keyed by userns).
 
-(...)
+Thanks!
 
-> +title: Arm CoreSight Static Trace Bus Replicator
-> +
-> +maintainers:
-> +  - Mathieu Poirier <mathieu.poirier@linaro.org>
-> +  - Mike Leach <mike.leach@linaro.org>
-> +  - Leo Yan <leo.yan@linaro.org>
-> +  - Suzuki K Poulose <suzuki.poulose@arm.com>
-> +
-> +description: |
-> +  CoreSight components are compliant with the ARM CoreSight architecture
-> +  specification and can be connected in various topologies to suit a particular
-> +  SoCs tracing needs. These trace components can generally be classified as
-> +  sinks, links and sources. Trace data produced by one or more sources flows
-> +  through the intermediate links connecting the source to the currently selected
-> +  sink.
-> +
-> +  The Coresight replicator splits a single trace stream into two trace streams
-> +  for systems that have more than one trace sink component.
-> +
-> +properties:
-> +  compatible:
-> +    const: arm,coresight-static-replicator
-> +
-> +  in-ports:
-> +    $ref: /schemas/graph.yaml#/properties/ports
-> +    additionalProperties: false
-> +
-> +    properties:
-> +      port:
-> +        description: Input connection from CoreSight Trace bus
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +
-> +  out-ports:
-> +    $ref: /schemas/graph.yaml#/properties/ports
-> +
-> +    patternProperties:
-> +      '^port@[01]$':
-> +        description: Output connections to CoreSight Trace bus
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +
+Acked-by: Serge Hallyn <serge@hallyn.com>
 
-Same question.
-
-(...)
-
-> +title: Arm CoreSight Trace Memory Controller
-> +
-> +maintainers:
-> +  - Mathieu Poirier <mathieu.poirier@linaro.org>
-> +  - Mike Leach <mike.leach@linaro.org>
-> +  - Leo Yan <leo.yan@linaro.org>
-> +  - Suzuki K Poulose <suzuki.poulose@arm.com>
-> +
-> +description: |
-> +  CoreSight components are compliant with the ARM CoreSight architecture
-> +  specification and can be connected in various topologies to suit a particular
-> +  SoCs tracing needs. These trace components can generally be classified as
-> +  sinks, links and sources. Trace data produced by one or more sources flows
-> +  through the intermediate links connecting the source to the currently selected
-> +  sink.
-> +
-> +  Trace Memory Controller is used for Embedded Trace Buffer(ETB), Embedded Trace
-> +  FIFO(ETF) and Embedded Trace Router(ETR) configurations. The configuration
-> +  mode (ETB, ETF, ETR) is discovered at boot time when the device is probed.
-> +
-> +# Need a custom select here or 'arm,primecell' will match on lots of nodes
-> +select:
-> +  properties:
-> +    compatible:
-> +      contains:
-> +        const: arm,coresight-tmc
-> +  required:
-> +    - compatible
-> +
-> +allOf:
-> +  - $ref: /schemas/arm/primecell.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - const: arm,coresight-tmc
-> +      - const: arm,primecell
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    minItems: 1
-> +    maxItems: 2
-> +
-> +  clock-names:
-> +    minItems: 1
-> +    items:
-> +      - const: apb_pclk
-> +      - const: atclk
-> +
-> +  arm,buffer-size:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    deprecated: true
-> +    description:
-> +      Size of contiguous buffer space for TMC ETR (embedded trace router). The
-> +      buffer size can be configured dynamically via buffer_size property in
-> +      sysfs instead.
-> +
-> +  arm,scatter-gather:
-> +    type: boolean
-> +    description:
-> +      Indicates that the TMC-ETR can safely use the SG mode on this system.
-> +
-> +  arm,max-burst-size:
-> +    description:
-> +      The maximum burst size initiated by TMC on the AXI master interface. The
-> +      burst size can be in the range [0..15], the setting supports one data
-> +      transfer per burst up to a maximum of 16 data transfers per burst.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    maximum: 15
-> +
-> +
-
-Just one blank line
-
-Best regards,
-Krzysztof

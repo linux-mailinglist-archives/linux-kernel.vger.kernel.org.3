@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0966F52FB7D
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:16:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AB2652FBDE
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:29:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355135AbiEULP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 07:15:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47306 "EHLO
+        id S1355269AbiEULU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 07:20:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243828AbiEULMP (ORCPT
+        with ESMTP id S1350642AbiEULMQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 07:12:15 -0400
+        Sat, 21 May 2022 07:12:16 -0400
 Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C03D92E9F3;
-        Sat, 21 May 2022 04:12:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C742ED70;
+        Sat, 21 May 2022 04:12:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=inria.fr; s=dc;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=aEtLv6/sHpKdEIHHv47IliOQ3MF2mvDe3gJfa14qUM4=;
-  b=nE7iGePxisTsaiDzj7rnXaAZ7YFIvNc31Ee6LEk446uzGR/mrrAmXP6s
-   qF8lke5uJ7693Sy2s23Od4oq0Qsbp35kENF1AS6O124xWZI+cpE1YGhg7
-   mBE9D2eZVYSl0BFrB8KJ0f1zJn9W6a8UH41WVTu2mkPGVpcjIsH/hdc+r
-   M=;
+  bh=VlTqO9iHIDSjv7qWppQ7vdZBA2XKfkhsHv8HI9x2iF0=;
+  b=mSZdQ/rOUlQRW8ZCETVsw3oBv79/b7595cN0gjZSrHiGNOp5VfcCemNE
+   8iXM8flfF3Shqo8kEi8s2SJOOCl5x2hFfV91XWSL4+y4ic2uKd5jTOwrF
+   k5olQVXWXPfrLXYYiJhsA/mv2N0RG06hVF2xYDANUJFNwnvJceSeWGZO4
+   Y=;
 Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
 X-IronPort-AV: E=Sophos;i="5.91,242,1647298800"; 
-   d="scan'208";a="14727928"
+   d="scan'208";a="14727929"
 Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 13:11:57 +0200
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 13:11:58 +0200
 From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Lucas Stach <l.stach@pengutronix.de>
+To:     Amit Kucheria <amitk@kernel.org>
 Cc:     kernel-janitors@vger.kernel.org,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, etnaviv@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/etnaviv: fix typo in comment
-Date:   Sat, 21 May 2022 13:10:43 +0200
-Message-Id: <20220521111145.81697-33-Julia.Lawall@inria.fr>
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] thermal/drivers/tsens: fix typo in comment
+Date:   Sat, 21 May 2022 13:10:44 +0200
+Message-Id: <20220521111145.81697-34-Julia.Lawall@inria.fr>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -59,20 +61,20 @@ Detected with the help of Coccinelle.
 Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
 ---
- drivers/gpu/drm/etnaviv/etnaviv_gpu.c |    2 +-
+ drivers/thermal/qcom/tsens.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
-index 37018bc55810..ac9c29d3a1c5 100644
---- a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
-+++ b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
-@@ -716,7 +716,7 @@ static void etnaviv_gpu_hw_init(struct etnaviv_gpu *gpu)
- 	etnaviv_gpu_enable_mlcg(gpu);
- 
- 	/*
--	 * Update GPU AXI cache atttribute to "cacheable, no allocate".
-+	 * Update GPU AXI cache attribute to "cacheable, no allocate".
- 	 * This is necessary to prevent the iMX6 SoC locking up.
- 	 */
- 	gpu_write(gpu, VIVS_HI_AXI_CONFIG,
+diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+index 7963ee33bf75..c96a188b73e1 100644
+--- a/drivers/thermal/qcom/tsens.c
++++ b/drivers/thermal/qcom/tsens.c
+@@ -26,7 +26,7 @@
+  * @up_viol:        upper threshold violated
+  * @up_thresh:      upper threshold temperature value
+  * @up_irq_mask:    mask register for upper threshold irqs
+- * @up_irq_clear:   clear register for uppper threshold irqs
++ * @up_irq_clear:   clear register for upper threshold irqs
+  * @low_viol:       lower threshold violated
+  * @low_thresh:     lower threshold temperature value
+  * @low_irq_mask:   mask register for lower threshold irqs
 

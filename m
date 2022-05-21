@@ -2,72 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAB3652FD4E
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 16:31:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB5F952FD52
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 16:33:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355150AbiEUOa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 10:30:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50448 "EHLO
+        id S1355241AbiEUOdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 10:33:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353151AbiEUOav (ORCPT
+        with ESMTP id S1355226AbiEUOdM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 10:30:51 -0400
-Received: from sender4-pp-o94.zoho.com (sender4-pp-o94.zoho.com [136.143.188.94])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21922B59;
-        Sat, 21 May 2022 07:30:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1653143370; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=YmQVY556BiB5ox5y8PXNUjNRS9ozj0KmNZjYG6fzzLqWPKOljAcAZUugMmn4fFcsMs/AZqSKWdDeRKd0h/xokD9wMmPeUhEUxeGQL6TEWgW50DvxPK5v0f3nzdbiNx8OtQCCozZ5kcWh+KMwnvMNVHo8uICWQEAHvPEPd42zwaw=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1653143370; h=Content-Type:Content-Transfer-Encoding:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=1uplxa2t3JmqaYVHdP2jpDOm9CDjpZeLGLqC5pe6p6U=; 
-        b=APLirMOzbpNRybXIsKwmw1CqKXq5aCeN30dkdlJsHl5XVyMIdjsClOOHzkHIt7DJxvMyJNf1YUQeps7sliMM1UPn5zGcK2oyMDctSK9kxWrr30t1IkZRlOx5RYQ3avVfvIglGwLz1mndcf0ByTt7LQbaAhY/6ZyjdmIZ1rTqB7o=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=zohomail.com;
-        spf=pass  smtp.mailfrom=lchen.firstlove@zohomail.com;
-        dmarc=pass header.from=<lchen.firstlove@zohomail.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1653143370;
-        s=zm2022; d=zohomail.com; i=lchen.firstlove@zohomail.com;
-        h=Date:Date:From:From:To:To:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Feedback-ID:Message-Id:Reply-To:Cc;
-        bh=1uplxa2t3JmqaYVHdP2jpDOm9CDjpZeLGLqC5pe6p6U=;
-        b=DgOMEtCpUZ2ARhoTMr2uAQ8hXFJgspYlzQSLE9n2DmG9yOgzMrWV548fuOrUdKkV
-        G1chSwAMCVkx4pMC/dzWyXVZ6RmqaPXop1y04YXCFwgoJDfMQ/Ko4PYJmS3cILwrBRm
-        +m4TKssaUEsfhUHZG/Wg+jOTxaPehmVjcpk5I7k0=
-Received: from mail.zoho.com by mx.zohomail.com
-        with SMTP id 1653143369973677.7315354282247; Sat, 21 May 2022 07:29:29 -0700 (PDT)
-Received: from  [45.12.140.94] by mail.zoho.com
-        with HTTP;Sat, 21 May 2022 07:29:29 -0700 (PDT)
-Date:   Sat, 21 May 2022 07:29:29 -0700
-From:   Li Chen <lchen.firstlove@zohomail.com>
-To:     "Mark Brown" <broonie@kernel.org>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "linux-gpio" <linux-gpio@vger.kernel.org>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        "linux-arm-kernel" <linux-arm-kernel@lists.infradead.org>,
-        "Patrice Chotard" <patrice.chotard@foss.st.com>,
-        "linux-sunxi" <linux-sunxi@lists.linux.dev>,
-        "Liam Girdwood" <lgirdwood@gmail.com>,
-        "Jaroslav Kysela" <perex@perex.cz>,
-        "Takashi Iwai" <tiwai@suse.com>, "Chen-Yu Tsai" <wens@csie.org>,
-        "Jernej Skrabec" <jernej.skrabec@gmail.com>,
-        "Samuel Holland" <samuel@sholland.org>,
-        "Philipp Zabel" <p.zabel@pengutronix.de>
-Message-ID: <180e705f8de.1012cdc8c45890.1645144071309904245@zohomail.com>
-In-Reply-To: <180e702a15f.e737e37e45859.3135149506136486394@zohomail.com>
-References: <180e702a15f.e737e37e45859.3135149506136486394@zohomail.com>
-Subject: [PATCH 4/4] pinctrl: st: Switch to use regmap_field_test_bits
+        Sat, 21 May 2022 10:33:12 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D2E160043
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 07:33:10 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id l13so12010674lfp.11
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 07:33:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Hn1tpaExx4W+/e0w4YZThPk8OvIZPTL/mPjUx1/h2t4=;
+        b=cKZtkaIjNKIn8y6S+OXauTN4MPMFZ8458LigpDSBhWV76hYXxYBdqHWjYYzTFz9gzK
+         9J8yEJ9NsTW4U0FxzdG4RKJr4DMj81BSBvuJgKyYZ77lvujT3ufH15rxd+/L8KtBb5le
+         LeQSrU494fo6TMGAJQOP2cTf+5AIZ6EO/EIzZIRIpF5Lpp8/AwKlx79/PRfwcHw93UrB
+         kr/NZdnBb0ysyfY96bSS0k4xXjPormKhzj5JKYhy/rspkqFDzHc4Cnr8TVt0YDItzc+o
+         9Rd63W88lrb2ERvIb9uW6v5IKs0EmuW2S+GdliJIqeuQzRlG1AI9rtaxLb4F2rwojlAm
+         Vlcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Hn1tpaExx4W+/e0w4YZThPk8OvIZPTL/mPjUx1/h2t4=;
+        b=P/+VXjIbHAGftPP9wAkKPbePuhcg4JgibF180UWKDrxMqThyXhgVtbzbbHbkh6BUah
+         jdgNjR/e6uqgJBLC8AWKnC7QbezfC6I4iHdC95oRs8wKGmDJcuFSrO3FmrZN76UnROf7
+         lf6HWexqgP411p+z9MYnAAr+clenbSi2UFUiSZGGFonJPBMdP6m27lfL3cw28+pTb1Bj
+         YYqDvQnaq70+B1SatH11f6+g0Feot1p+vrPpIz+a4BaEldix7t1crWZXAbXQVX/p3Tl1
+         rzjl6FVZn9aeO/wYps4ez/PJ3AFL5vs9vod3LubZXbVsa/35sZeMNkgZ36gkpk11ZKmS
+         LYRQ==
+X-Gm-Message-State: AOAM533i1L0ZVCVs1uQaUrtqRUAsOSNGhxGFDn61dwQnaPDfvWre/5xd
+        hI0tRQnSFPXgm5DoKNICxH9xNc3bRlEzOvCL
+X-Google-Smtp-Source: ABdhPJyx6Mwjo8UHnCdnLrCqjRw6qNRdRwXtYGACm3ClOhYNuNa7LoKqXYd5gtbZXBA3V855VgXOlQ==
+X-Received: by 2002:a05:6512:ad2:b0:478:623e:ca73 with SMTP id n18-20020a0565120ad200b00478623eca73mr1771941lfu.290.1653143588422;
+        Sat, 21 May 2022 07:33:08 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id s25-20020a2e81d9000000b00253bb2564cbsm726024ljg.134.2022.05.21.07.33.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 21 May 2022 07:33:07 -0700 (PDT)
+Message-ID: <2a7ff8d1-9ef8-af6c-e541-80417aba7782@linaro.org>
+Date:   Sat, 21 May 2022 16:33:06 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v4 2/3] dt-bindings: remoteproc: qcom: Convert SC7280 MSS
+ bindings to YAML
+Content-Language: en-US
+To:     Sibi Sankar <quic_sibis@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>, bjorn.andersson@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org
+Cc:     ohad@wizery.com, agross@kernel.org, mathieu.poirier@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mka@chromium.org
+References: <1652978825-5304-1-git-send-email-quic_sibis@quicinc.com>
+ <1652978825-5304-3-git-send-email-quic_sibis@quicinc.com>
+ <CAE-0n50iYAUmj6GEdCuOJ1d_SgeeFWtoxqWf7qN=jZ_js4wBcQ@mail.gmail.com>
+ <1289c2e4-5607-b515-88b1-f44585e62cd3@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1289c2e4-5607-b515-88b1-f44585e62cd3@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
-Feedback-ID: rr080112267cf364621b3b792c124082760000e7e088bdddfac7607cfb9ed75c25ebb0ae36151ee2127976:zu08011227a6949e549385956098fdd8970000b0614889ccf8be8f90fa47d8a8e113acf06e6c8b3d7d8d0400:rf0801122c15ba42b8235095a91707cffe0000a891b0ca85c325025b4f94f07a70129da6fe31daec4a1e77eb2e73b78d41:ZohoMail
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,77 +82,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Li Chen <lchen@ambarella.com>
+On 20/05/2022 20:46, Sibi Sankar wrote:
+>>> +  memory-region:
+>>> +    maxItems: 2
+>>> +    description: Phandle reference to the reserved-memory for the MBA region followed
+>>> +                 by the modem region.
+>>> +
+>>> +  firmware-name:
+>>> +    $ref: /schemas/types.yaml#/definitions/string-array
+>>> +    maxItems: 2
+>>
+>> Instead of maxItems can this be
+>>
+>>         items:
+>>           - description: Name of MBA firmware
+>> 	 - description: Name of modem firmware
+>>
+>> so that we know the order? Same for 'memory-region' above.
+> 
+> ack
+> 
+>>
+>>> +    description:
+>>> +      The name of the MBA and modem firmware to be loaded for this remote processor.
+>>> +
+>>> +  qcom,halt-regs:
+>>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+>>
+>> Should this have maxItems: 1? Or that's implicit from description?
+> 
+> It's implicit!
 
-Appropriately change calls to regmap_field_read() with
-regmap_field_test_bits() for improved readability.
+I am not aware of such implicit rule in schema. maxItems are always
+required. If this is maxItems:1 it is not even an array.
 
-Signed-off-by: Li Chen <lchen@ambarella.com>
----
- drivers/pinctrl/pinctrl-st.c | 23 +++++++++--------------
- 1 file changed, 9 insertions(+), 14 deletions(-)
+> 
+>>
+>>> +    description:
+>>> +      Phandle reference to a syscon representing TCSR followed by the
+>>> +      four offsets within syscon for q6, modem, nc and vq6 halt registers.
+>>> +
+>>> +  qcom,ext-regs:
+>>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+>>
+>> Should this have min/maxItems: 2?
+> 
+> ack
 
-diff --git a/drivers/pinctrl/pinctrl-st.c b/drivers/pinctrl/pinctrl-st.c
-index 0fea71fd9a00..971b54bb478a 100644
---- a/drivers/pinctrl/pinctrl-st.c
-+++ b/drivers/pinctrl/pinctrl-st.c
-@@ -573,23 +573,18 @@ static void st_pinconf_set_retime_dedicated(struct st_pinctrl *info,
- static void st_pinconf_get_direction(struct st_pio_control *pc,
- 	int pin, unsigned long *config)
- {
--	unsigned int oe_value, pu_value, od_value;
--
- 	if (pc->oe) {
--		regmap_field_read(pc->oe, &oe_value);
--		if (oe_value & BIT(pin))
-+		if (regmap_field_test_bits(pc->oe, BIT(pin)))
- 			ST_PINCONF_PACK_OE(*config);
- 	}
- 
- 	if (pc->pu) {
--		regmap_field_read(pc->pu, &pu_value);
--		if (pu_value & BIT(pin))
-+		if (regmap_field_test_bits(pc->pu, BIT(pin)))
- 			ST_PINCONF_PACK_PU(*config);
- 	}
- 
- 	if (pc->od) {
--		regmap_field_read(pc->od, &od_value);
--		if (od_value & BIT(pin))
-+		if (regmap_field_test_bits(pc->od, &od_value, BIT(pin)))
- 			ST_PINCONF_PACK_OD(*config);
- 	}
- }
-@@ -599,22 +594,22 @@ static int st_pinconf_get_retime_packed(struct st_pinctrl *info,
- {
- 	const struct st_pctl_data *data = info->data;
- 	struct st_retime_packed *rt_p = &pc->rt.rt_p;
--	unsigned int delay_bits, delay, delay0, delay1, val;
-+	unsigned int delay_bits, delay, delay0, delay1;
- 	int output = ST_PINCONF_UNPACK_OE(*config);
- 
--	if (!regmap_field_read(rt_p->retime, &val) && (val & BIT(pin)))
-+	if (!regmap_field_test_bits(rt_p->retime, BIT(pin)))
- 		ST_PINCONF_PACK_RT(*config);
- 
--	if (!regmap_field_read(rt_p->clk1notclk0, &val) && (val & BIT(pin)))
-+	if (!regmap_field_test_bits(rt_p->clk1notclk0, BIT(pin)))
- 		ST_PINCONF_PACK_RT_CLK(*config, 1);
- 
--	if (!regmap_field_read(rt_p->clknotdata, &val) && (val & BIT(pin)))
-+	if (!regmap_field_test_bits(rt_p->clknotdata, BIT(pin)))
- 		ST_PINCONF_PACK_RT_CLKNOTDATA(*config);
- 
--	if (!regmap_field_read(rt_p->double_edge, &val) && (val & BIT(pin)))
-+	if (!regmap_field_test_bits(rt_p->double_edge, BIT(pin)))
- 		ST_PINCONF_PACK_RT_DOUBLE_EDGE(*config);
- 
--	if (!regmap_field_read(rt_p->invertclk, &val) && (val & BIT(pin)))
-+	if (!regmap_field_test_bits(rt_p->invertclk, BIT(pin)))
- 		ST_PINCONF_PACK_RT_INVERTCLK(*config);
- 
- 	regmap_field_read(rt_p->delay_0, &delay0);
--- 
-2.36.1
+You should also define the items. This applies to all such fields. Check
+the examples of syscon consumers.
+
+> 
+>>
+>>> +    description:
+>>> +      Two phandle references to syscons representing TCSR_REG and TCSR register
+>>> +      space followed by the two offsets within the syscon to force_clk_en/rscc_disable
+>>> +      and axim1_clk_off/crypto_clk_off registers respectively.
+>>> +
+>>> +  qcom,qaccept-regs:
+>>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+>>> +    description:
+>>> +      Phandle reference to a syscon representing TCSR followed by the
+>>> +      three offsets within syscon for mdm, cx and axi qaccept registers.
+>>> +
+>>> +  qcom,qmp:
+>>> +    $ref: /schemas/types.yaml#/definitions/phandle
+>>> +    description: Reference to the AOSS side-channel message RAM.
+>>> +
+>>> +  qcom,smem-states:
+>>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+>>> +    description: States used by the AP to signal the Hexagon core
+>>> +    items:
+>>> +      - description: Stop the modem
+>>
+>> This one did items for a phandle array so I think we should follow the
+>> same above.
+> 
+> ack
+> 
+>>
+>>> +
+>>> +  qcom,smem-state-names:
+>>> +    description: The names of the state bits used for SMP2P output
+>>> +    const: stop
+>>> +
+>>> +  glink-edge:
+>>> +    $ref: qcom,glink-edge.yaml#
+>>> +    description:
+>>> +      Qualcomm G-Link subnode which represents communication edge, channels
+>>> +      and devices related to the DSP.
+>> [..]
+>>> +        power-domain-names = "cx", "mss";
+>>> +
+>>> +        memory-region = <&mba_mem>, <&mpss_mem>;
+>>> +
+>>> +        qcom,qmp = <&aoss_qmp>;
+>>> +
+>>> +        qcom,smem-states = <&modem_smp2p_out 0>;
+>>> +        qcom,smem-state-names = "stop";
+>>> +
+>>> +        resets = <&aoss_reset AOSS_CC_MSS_RESTART>,
+>>> +                 <&pdc_reset PDC_MODEM_SYNC_RESET>;
+>>> +        reset-names = "mss_restart", "pdc_reset";
+>>> +
+>>> +        qcom,halt-regs = <&tcsr_mutex 0x23000 0x25000 0x28000 0x33000>;
+>>> +        qcom,ext-regs = <&tcsr 0x10000 0x10004 &tcsr_mutex 0x26004 0x26008>;
+>>
+>> Because it's two items I'd expect:
+>> 	
+>> 	<&tcsr 0x10000 0x10004>, <&tcsr_mutex 0x26004 0x26008>;
+> 
+> I guess both the ways work since the driver uses
+> of_parse_phandle_with_fixed_args.
+
+But only one is correct...
 
 
+Best regards,
+Krzysztof

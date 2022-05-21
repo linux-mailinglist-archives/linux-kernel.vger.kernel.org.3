@@ -2,109 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DC4752F972
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 08:58:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFE4752F976
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 08:59:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240566AbiEUG6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 02:58:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43978 "EHLO
+        id S235451AbiEUG7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 02:59:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232686AbiEUG6j (ORCPT
+        with ESMTP id S234174AbiEUG7n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 02:58:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F158AE25A;
-        Fri, 20 May 2022 23:58:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 42BD2B82DC0;
-        Sat, 21 May 2022 06:58:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20A6BC385A5;
-        Sat, 21 May 2022 06:58:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653116314;
-        bh=n7ISQ52fmTirYXGkOGDSWt2dlrzq64OUgt9spbHNesA=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=PoMz3/MOpSTcS3dE1bNNKjir9/ZAwj+MXXp4WIVjPgAB4jOKPV4KEXhcHq0jNdf19
-         V95kZ7vQLrcxWlAddOByv4PQheumGOmSTPTk4WRvxU2MZFgJ1N3Jox1jG6LBZpyn3V
-         NFPvE+CqKud8G3KTkdIzHoGcrygGq3wZS5IVEA4tIXZd6dc24cHpkXEU8ko+LTnJx9
-         WI6n/tgNMDL+0BKCeNwbfDeh0yVlUuwRnxUn2k2nxAdeMk7TJLFHP/JQAu7jmYkkZx
-         PC0eqPPbTqECYObQ02Qj3/R/0oTdLqzpZ/My9wpPRpWKsxXP077IX8T9qJjDiTxqbX
-         iGFVQekEX+YAQ==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     johannes@sipsolutions.net, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org, toke@toke.dk,
-        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>
-Subject: Re: [PATCH net-next 2/8] wifi: ath9k: silence array-bounds warning on GCC 12
-References: <20220520194320.2356236-1-kuba@kernel.org>
-        <20220520194320.2356236-3-kuba@kernel.org>
-Date:   Sat, 21 May 2022 09:58:28 +0300
-In-Reply-To: <20220520194320.2356236-3-kuba@kernel.org> (Jakub Kicinski's
-        message of "Fri, 20 May 2022 12:43:14 -0700")
-Message-ID: <87h75j1iej.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Sat, 21 May 2022 02:59:43 -0400
+Received: from smtp.smtpout.orange.fr (smtp05.smtpout.orange.fr [80.12.242.127])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F37B4185402
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 23:59:42 -0700 (PDT)
+Received: from pop-os.home ([86.243.180.246])
+        by smtp.orange.fr with ESMTPA
+        id sJ5QntxL2dfessJ5QnlRCH; Sat, 21 May 2022 08:59:41 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sat, 21 May 2022 08:59:41 +0200
+X-ME-IP: 86.243.180.246
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-spi@vger.kernel.org
+Subject: [PATCH] spi: intel: Use correct order for the parameters of devm_kcalloc()
+Date:   Sat, 21 May 2022 08:59:35 +0200
+Message-Id: <d114558dd0351b863ced8cc01b31754a5a4b960d.1653116362.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ arnd, kees, lkml
+We should have 'n', then 'size', not the opposite.
+This is harmless because the 2 values are just multiplied, but having
+the correct order silence a (unpublished yet) smatch warning.
 
-Jakub Kicinski <kuba@kernel.org> writes:
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/spi/spi-intel.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> GCC 12 says:
->
-> drivers/net/wireless/ath/ath9k/mac.c: In function =E2=80=98ath9k_hw_reset=
-txqueue=E2=80=99:
-> drivers/net/wireless/ath/ath9k/mac.c:373:22: warning: array subscript
-> 32 is above array bounds of =E2=80=98struct ath9k_tx_queue_info[10]=E2=80=
-=99
-> [-Warray-bounds]
->   373 |         qi =3D &ah->txq[q];
->       |               ~~~~~~~^~~
->
-> I don't know where it got the 32 from, relegate the warning to W=3D1+.
->
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
-> CC: toke@toke.dk
-> CC: kvalo@kernel.org
-> CC: linux-wireless@vger.kernel.org
-> ---
->  drivers/net/wireless/ath/ath9k/Makefile | 5 +++++
->  1 file changed, 5 insertions(+)
->
-> diff --git a/drivers/net/wireless/ath/ath9k/Makefile b/drivers/net/wirele=
-ss/ath/ath9k/Makefile
-> index eff94bcd1f0a..9bdfcee2f448 100644
-> --- a/drivers/net/wireless/ath/ath9k/Makefile
-> +++ b/drivers/net/wireless/ath/ath9k/Makefile
-> @@ -45,6 +45,11 @@ ath9k_hw-y:=3D	\
->  		ar9003_eeprom.o \
->  		ar9003_paprd.o
->=20=20
-> +# FIXME: temporarily silence -Warray-bounds on non W=3D1+ builds
-> +ifndef KBUILD_EXTRA_WARN
-> +CFLAGS_mac.o +=3D -Wno-array-bounds
-> +endif
+diff --git a/drivers/spi/spi-intel.c b/drivers/spi/spi-intel.c
+index 50f42983b950..66063687ae27 100644
+--- a/drivers/spi/spi-intel.c
++++ b/drivers/spi/spi-intel.c
+@@ -1236,8 +1236,8 @@ static int intel_spi_populate_chip(struct intel_spi *ispi)
+ 		return -ENOMEM;
+ 
+ 	pdata->nr_parts = 1;
+-	pdata->parts = devm_kcalloc(ispi->dev, sizeof(*pdata->parts),
+-				    pdata->nr_parts, GFP_KERNEL);
++	pdata->parts = devm_kcalloc(ispi->dev, pdata->nr_parts,
++				    sizeof(*pdata->parts), GFP_KERNEL);
+ 	if (!pdata->parts)
+ 		return -ENOMEM;
+ 
+-- 
+2.34.1
 
-There are now four wireless drivers which need this hack. Wouldn't it be
-easier to add -Wno-array-bounds for GCC 12 globally instead of adding
-the same hack to multiple drivers?
-
---=20
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatc=
-hes

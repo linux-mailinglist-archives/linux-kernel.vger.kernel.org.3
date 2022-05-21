@@ -2,136 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 101A052F824
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 05:50:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C350D52F82A
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 05:51:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354480AbiEUDuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 23:50:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53262 "EHLO
+        id S1354493AbiEUDvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 23:51:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbiEUDuQ (ORCPT
+        with ESMTP id S229773AbiEUDvP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 23:50:16 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65238187DB4
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 20:50:15 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso9314133pjg.0
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 20:50:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=1thg0gD9LkoJN152HkT0OTmkJzX4+vIrjo7MEWofe+w=;
-        b=jo+qEFyNr7yZv2BLra+Du20hufyMVTOka43o6y0X1kCVL+qxdrbSb5wGRDLDcy2mIC
-         QKiAYZ0hDQOUN8R1P7p9IrIv0f8K8ABeeWf2kbJxnPoD9wUZYXXYODjWq6E3yzztuTCP
-         fb3gCYiMvrJMqdFuPG+bzQHnbx++aq0T3HQB2VTzc2ClYYftzifKCX2hK6aX+iWrzYnh
-         CEYyGv22r8ctZ6Dfk15ecRT9apCGJNWpiNjfTT3L2OJq+IR7EdVaau5CFLkBT8XmkSV4
-         pKnHnIKhCno5XvopZ4/Y12x6tzcUXnUVAmtpu97+601e7uTHdM8OOCSYK9HkuFiF4v6+
-         dSaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=1thg0gD9LkoJN152HkT0OTmkJzX4+vIrjo7MEWofe+w=;
-        b=4Yvljn+soJ1zTXDSTRJtUKCv0EiAxK0Lt6Erb1eC6jIPfI89I7KPSn2t47HorXiSoP
-         7hwOOu9AEedsk6lahCoBn8jCKBMwCU1mZdhFFbwCM4+z5nShaEEpvHy+f5OGwojJmVd+
-         lunmmL0fYAlRFVgb9ser5vVmme7hPNaZmLXJZ24aIov6FAxLzyVM2RLm3NgbQJWAkunM
-         HN//Eo8qXZXoit4hjQcmrIFcfVx9aTEMzjA8DGBzKocS5XW9dqzFQLi7LwpyuSwwE+4z
-         4x1VyABNm9uSaknjFDdC1fPmlJsB9Jtd6fwK4Ri3CfNaDA9tD6SHYiR05+ONYftaAniT
-         u0bA==
-X-Gm-Message-State: AOAM5313QyIe/3/Ns6eXcOXNtaSEQo7UZO+U4reXKu/uskG0UBrxiDea
-        7VlBHUEkC6aKWgH8MXwX7Qs=
-X-Google-Smtp-Source: ABdhPJwrmcJWaI5Mv2ARLKgUuuvw86bgEuR9UlPJEFOvrpvfOBAMVgMH/2LtnJltOwaKfoPbKAFROQ==
-X-Received: by 2002:a17:902:f647:b0:161:67af:6bf0 with SMTP id m7-20020a170902f64700b0016167af6bf0mr12093832plg.100.1653105014641;
-        Fri, 20 May 2022 20:50:14 -0700 (PDT)
-Received: from strix-laptop (2001-b011-20e0-15d4-84b3-8c62-a0b8-199e.dynamic-ip6.hinet.net. [2001:b011:20e0:15d4:84b3:8c62:a0b8:199e])
-        by smtp.gmail.com with ESMTPSA id z15-20020a170903018f00b0015e8d4eb2easm445903plg.308.2022.05.20.20.50.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 20:50:14 -0700 (PDT)
-Date:   Sat, 21 May 2022 11:50:06 +0800
-From:   Chih-En Lin <shiyn.lin@gmail.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        William Kucharski <william.kucharski@oracle.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Yunsheng Lin <linyunsheng@huawei.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Colin Cross <ccross@google.com>,
-        Feng Tang <feng.tang@intel.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Daniel Axtens <dja@axtens.net>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Peter Xu <peterx@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Kaiyang Zhao <zhao776@purdue.edu>,
-        Huichun Feng <foxhoundsk.tw@gmail.com>,
-        Jim Huang <jserv.tw@gmail.com>
-Subject: Re: [RFC PATCH 2/6] mm: clone3: Add CLONE_COW_PGTABLE flag
-Message-ID: <20220521035006.GB1506735@strix-laptop>
-References: <20220519183127.3909598-1-shiyn.lin@gmail.com>
- <20220519183127.3909598-3-shiyn.lin@gmail.com>
- <7cb4c588-7a24-8557-6cd6-3ec59051c2b1@csgroup.eu>
+        Fri, 20 May 2022 23:51:15 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111D3DF41;
+        Fri, 20 May 2022 20:51:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=4WwopnVdiZchgwgyYgiOR5oYH5rI/26dfgb7iblNhk0=; b=IWc3nqi4c5ufGx+0zpQ3nEFFKl
+        4trofu8qu12i5wvDEhin7ta6+7OkCxakqrp4LNtnQ0yZllkPdAlxzlvR9ecDQ27MkTPKxGAuh4g/g
+        PzvakYn065Z/qEILQAb8ou518LJAXH5S/sYVzCY//Wwl2huSamsieZlK5TzdyzXu7ymuCiFxfLkVG
+        y60l1BrwB46WxHKYCRy9lRxvsyxMdoYBcwv0+luCZwji+kkiQmjTCCMPy6S/UghV8EwD2yEDE0oEa
+        QJGta8hoV1OVcSH93QOjsf1PpaLPuspGOwMCVzBzimaK0R2B/gN3v9ucIP0SUldWXNDqJKqv8DTxb
+        9tD4g3WQ==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nsG8z-00ELwI-CT; Sat, 21 May 2022 03:51:09 +0000
+Message-ID: <6601a387-de9a-a0d0-11b5-01e0cfa75657@infradead.org>
+Date:   Fri, 20 May 2022 20:51:05 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7cb4c588-7a24-8557-6cd6-3ec59051c2b1@csgroup.eu>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: kbuild problem: ERROR: modpost: missing MODULE_LICENSE() in
+ drivers/iio/afe/iio-rescale.o
+Content-Language: en-US
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Liam Beguin <liambeguin@gmail.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-iio@vger.kernel.org, Peter Rosin <peda@axentia.se>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>
+References: <18500f18-9cd5-a81c-4a55-14e999ed4496@infradead.org>
+ <3ae306e0-c6c7-ed12-cacd-62b1c26dba3c@infradead.org>
+ <6671de03-c09c-bfaf-e06c-e45af70d4354@infradead.org>
+In-Reply-To: <6671de03-c09c-bfaf-e06c-e45af70d4354@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 02:13:25PM +0000, Christophe Leroy wrote:
+Ok, one more.
+[also adding Liam here]
+
+On 5/20/22 20:17, Randy Dunlap wrote:
 > 
 > 
-> Le 19/05/2022 à 20:31, Chih-En Lin a écrit :
-> > Add CLONE_COW_PGTABLE flag to support clone3() system call to enable the
-> > Copy-On-Write (COW) mechanism on the page table.
+> On 5/20/22 20:08, Randy Dunlap wrote:
+>>
+>>
+>> On 5/20/22 19:40, Randy Dunlap wrote:
+>>> Hi,
+>>>
+>>> In March I reported that a randconfig build complained:
+>>>
+>>> ERROR: modpost: missing MODULE_LICENSE() in drivers/iio/afe/iio-rescale.o
+>>>
+>>> (https://lore.kernel.org/all/16509fb6-e40c-e31b-2c80-264c44b0beb9@infradead.org/)
+>>>
+>>> I am still seeing this problem so I tried to dig into it a bit.
+>>> However, I don't see why get_next_modinfo() and friends don't find the
+>>> MODULE_LICENSE() since it is in the iio-rescale.o file.
+>>>
+>>> (BTW, I see this build error on many different $ARCH [around 15 tested]
+>>> and with 2 different versions of GCC.)
+>>>
+>>> Q1: Is modpost checking both vmlinux and iio-rescale.o for modinfo license
+>>> strings?
+>>>
+>>> It looks like it is, because it appears (?) that modpost is looking at
+>>> drivers/iio/test/iio-test-rescale.o (<<<<< a kunit test, which is builtin
+>>> in my .config) and at drivers/iio/afe/iio-rescale.o (which is built as a
+>>> loadable module).
+>>>
+>>> Is this confusing modpost?
+>>> I renamed drivers/iio/afe/iio-rescale.c to afe-rescale.c and changed its
+>>> Makefile entry accordingly and the MODULE_LICENSE error goes away.
+>>
+>> Oh well. This rename causes drivers/iio/test/iio-test-rescale.c to have
+>> build errors, so that's not a solution, just some info...
 > 
-> Is that really something we want the user to decide ? Isn't it an 
-> internal stuff that should be transparent for users ?
+> and that was due to not updating drivers/iio/test/Makefile.
+> When that is done, the missing MODULE_LICENSE() is back in afe-rescale.o.
 > 
-> As far as I know, there is no way today to decide whether you want COW 
-> or not for main memory. Why should there be a choice for the COW of page 
-> tables ?
+>>
+>>> Is this a modpost error or is kunit messing things up?
+>>>
+>>> thanks for looking.
 
-Agree.
-It should not expose to the user.
-COW of page table should become the configuration.
-Or, if the change is fine, it can even be the default setting.
+Does this look OK? It allows afe/iio-rescale.o to build XOR
+test/iio-rescale.o (not both of them).
 
-Thanks.
+--- a/drivers/iio/test/Kconfig
++++ b/drivers/iio/test/Kconfig
+@@ -6,7 +6,7 @@
+ # Keep in alphabetical order
+ config IIO_RESCALE_KUNIT_TEST
+        bool "Test IIO rescale conversion functions"
+-       depends on KUNIT=y && !IIO_RESCALE
++       depends on KUNIT=y && IIO_RESCALE=n
+        default KUNIT_ALL_TESTS
+        help
+          If you want to run tests on the iio-rescale code say Y here.
 
----
 
-Sorry I did not group reply the first time.
+-- 
+~Randy

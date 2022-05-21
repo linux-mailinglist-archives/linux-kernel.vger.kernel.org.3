@@ -2,172 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43F5952F7B2
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 04:46:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09DA652F7B8
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 04:47:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354379AbiEUCql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 22:46:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39182 "EHLO
+        id S229822AbiEUCrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 22:47:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239378AbiEUCqh (ORCPT
+        with ESMTP id S1351151AbiEUCq5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 22:46:37 -0400
-Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBFAB5B895;
-        Fri, 20 May 2022 19:46:34 -0700 (PDT)
-Received: by mail.hallyn.com (Postfix, from userid 1001)
-        id 26D073F4; Fri, 20 May 2022 21:46:33 -0500 (CDT)
-Date:   Fri, 20 May 2022 21:46:33 -0500
-From:   "Serge E. Hallyn" <serge@hallyn.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        jpenumak@redhat.com, Christian Brauner <brauner@kernel.org>
-Subject: Re: [PATCH v12 04/26] ima: Move arch_policy_entry into ima_namespace
-Message-ID: <20220521024633.GB9107@mail.hallyn.com>
-References: <20220420140633.753772-1-stefanb@linux.ibm.com>
- <20220420140633.753772-5-stefanb@linux.ibm.com>
+        Fri, 20 May 2022 22:46:57 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E8B6353F;
+        Fri, 20 May 2022 19:46:56 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id bo5so9149868pfb.4;
+        Fri, 20 May 2022 19:46:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hlMWsJTCZidavUuAPKzwU9yhf4WgPtPDAYKHfwZT1Kk=;
+        b=QI24hacwG+UXk14hfyOzgbyuqZGE9Jc+lSW/TFk5ve7qn3j3BS7C46wRq/kvQhwyov
+         TdX+YRaN4v9iAuPnq13vnHilN0DUGkdqFAO2gjar0TcABj9t0chpVmJdxhmle8Jk7IRK
+         QGnEXhQFcfZoBp3mFCsxiovbDAmb/1pFKIAQSyciyQFI0cQY5GD85QkOt3len3rHA+ik
+         OKjuE2i+HUW3llK+C6bAtaExagW+4HhCx9KW977jPnoFPu9us8CrdaSZ0CRT57E3TQFl
+         DM/F5ro7O+Cq4In1Yeej8/kKHTBWYdL/CTC6IkCE1XQg/KT3rip9v/DKWq/QpKIOt+FW
+         O6NA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hlMWsJTCZidavUuAPKzwU9yhf4WgPtPDAYKHfwZT1Kk=;
+        b=7V7z3oHhL4u+jClR4q6LmIQzihMYVU9zbdp42U9iuxDDAVla8dayTzIAvSAFJI04Nh
+         yY/kSKBfJWqi7M4Mlwh/8B6FHadaihOEvuOtCBpDUJ5rtkBrrs4cPumQ1iJWlVyjvdvA
+         IqZ1fjObMUrjbQR9OOnBuJbXchPS/eoGeziII2mNg4lzVTnco/T/awn0Gkv43mcRexD8
+         kS9/NkGtMny+IWGN4htOW6ouqf+hYisLiGWcc3kDOB77rVLQnsWI4ALZ1PEzeK1Owa/j
+         In+tIHhW3dCU1qdBQHcJbK0wGeIp9ueSMyCNOSHZghSY+kdBs1IioDxedELymXHoJ1LV
+         IXIw==
+X-Gm-Message-State: AOAM533MRcMmh4Zo2R+ZQQ3CkGAewgxcHU+kovqCnVkUKRTXzuE0U7T8
+        Hr7spXrco0udq9hYBf0au8Q=
+X-Google-Smtp-Source: ABdhPJxTMM/zJvD/ZsVF7ArHkK+UgEQYH2UcY6QfJhpPSJ8N2T5v3ir2qxN5yEPI61s0GafkZ4S5Xw==
+X-Received: by 2002:a63:f255:0:b0:3c6:afc0:56b4 with SMTP id d21-20020a63f255000000b003c6afc056b4mr11017538pgk.407.1653101216241;
+        Fri, 20 May 2022 19:46:56 -0700 (PDT)
+Received: from MBP-98dd607d3435.dhcp.thefacebook.com ([2620:10d:c090:400::4:d798])
+        by smtp.gmail.com with ESMTPSA id d19-20020a170902c19300b00161947ecc82sm403281pld.199.2022.05.20.19.46.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 May 2022 19:46:55 -0700 (PDT)
+Date:   Fri, 20 May 2022 19:46:51 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH bpf-next v5 13/17] HID: bpf: allow to change the report
+ descriptor
+Message-ID: <20220521024651.ngjv52kk7jrkt6mo@MBP-98dd607d3435.dhcp.thefacebook.com>
+References: <20220518205924.399291-1-benjamin.tissoires@redhat.com>
+ <20220518205924.399291-14-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220420140633.753772-5-stefanb@linux.ibm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220518205924.399291-14-benjamin.tissoires@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 10:06:11AM -0400, Stefan Berger wrote:
-> The architecture-specific policy rules, currently defined for EFI and
-> powerpc, require the kexec kernel image and kernel modules to be
-> validly signed and measured, based on the system's secure boot and/or
-> trusted boot mode and the IMA_ARCH_POLICY Kconfig option being enabled.
+On Wed, May 18, 2022 at 10:59:20PM +0200, Benjamin Tissoires wrote:
+> Add a new tracepoint hid_bpf_rdesc_fixup() so we can trigger a
+> report descriptor fixup in the bpf world.
 > 
-> To avoid special-casing init_ima_ns as much as possible, move the
-> arch_policy_entry into the ima_namespace.
+> Whenever the program gets attached/detached, the device is reconnected
+> meaning that userspace will see it disappearing and reappearing with
+> the new report descriptor.
 > 
-> When freeing the arch_policy_entry set the pointer to NULL.
+> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 > 
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> Acked-by: Christian Brauner <brauner@kernel.org>
-> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 > ---
->  security/integrity/ima/ima.h             |  3 +++
->  security/integrity/ima/ima_init_ima_ns.c |  1 +
->  security/integrity/ima/ima_policy.c      | 23 +++++++++++------------
->  3 files changed, 15 insertions(+), 12 deletions(-)
 > 
-> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-> index 9bcde1a24e74..2305bf223a98 100644
-> --- a/security/integrity/ima/ima.h
-> +++ b/security/integrity/ima/ima.h
-> @@ -125,6 +125,9 @@ struct ima_namespace {
->  
->  	struct list_head __rcu *ima_rules;  /* Pointer to the current policy */
->  	int ima_policy_flag;
-> +
-> +	/* An array of architecture specific rules */
-> +	struct ima_rule_entry *arch_policy_entry;
->  } __randomize_layout;
->  extern struct ima_namespace init_ima_ns;
->  
-> diff --git a/security/integrity/ima/ima_init_ima_ns.c b/security/integrity/ima/ima_init_ima_ns.c
-> index c919a456b525..ae33621c3955 100644
-> --- a/security/integrity/ima/ima_init_ima_ns.c
-> +++ b/security/integrity/ima/ima_init_ima_ns.c
-> @@ -15,6 +15,7 @@ static int ima_init_namespace(struct ima_namespace *ns)
->  	INIT_LIST_HEAD(&ns->ima_temp_rules);
->  	ns->ima_rules = (struct list_head __rcu *)(&ns->ima_default_rules);
->  	ns->ima_policy_flag = 0;
-> +	ns->arch_policy_entry = NULL;
->  
->  	return 0;
->  }
-> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-> index 69b19f4d5fee..0a7c61ca3265 100644
-> --- a/security/integrity/ima/ima_policy.c
-> +++ b/security/integrity/ima/ima_policy.c
-> @@ -228,9 +228,6 @@ static struct ima_rule_entry critical_data_rules[] __ro_after_init = {
->  	{.action = MEASURE, .func = CRITICAL_DATA, .flags = IMA_FUNC},
->  };
->  
-> -/* An array of architecture specific rules */
-> -static struct ima_rule_entry *arch_policy_entry __ro_after_init;
-> -
->  static int ima_policy __initdata;
->  
->  static int __init default_measure_policy_setup(char *str)
-> @@ -859,9 +856,10 @@ static int __init ima_init_arch_policy(struct ima_namespace *ns)
->  	for (rules = arch_rules; *rules != NULL; rules++)
->  		arch_entries++;
->  
-> -	arch_policy_entry = kcalloc(arch_entries + 1,
-> -				    sizeof(*arch_policy_entry), GFP_KERNEL);
-> -	if (!arch_policy_entry)
-> +	ns->arch_policy_entry = kcalloc(arch_entries + 1,
-> +					sizeof(*ns->arch_policy_entry),
-> +					GFP_KERNEL);
-> +	if (!ns->arch_policy_entry)
->  		return 0;
->  
->  	/* Convert each policy string rules to struct ima_rule_entry format */
-> @@ -871,13 +869,13 @@ static int __init ima_init_arch_policy(struct ima_namespace *ns)
->  
->  		result = strscpy(rule, *rules, sizeof(rule));
->  
-> -		INIT_LIST_HEAD(&arch_policy_entry[i].list);
-> -		result = ima_parse_rule(ns, rule, &arch_policy_entry[i]);
-> +		INIT_LIST_HEAD(&ns->arch_policy_entry[i].list);
-> +		result = ima_parse_rule(ns, rule, &ns->arch_policy_entry[i]);
->  		if (result) {
->  			pr_warn("Skipping unknown architecture policy rule: %s\n",
->  				rule);
-> -			memset(&arch_policy_entry[i], 0,
-> -			       sizeof(*arch_policy_entry));
-> +			memset(&ns->arch_policy_entry[i], 0,
-> +			       sizeof(ns->arch_policy_entry[i]));
->  			continue;
->  		}
->  		i++;
-> @@ -925,7 +923,7 @@ void __init ima_init_policy(struct ima_namespace *ns)
->  	if (!arch_entries)
->  		pr_info("No architecture policies found\n");
->  	else
-> -		add_rules(ns, arch_policy_entry, arch_entries,
-> +		add_rules(ns, ns->arch_policy_entry, arch_entries,
->  			  IMA_DEFAULT_POLICY | IMA_CUSTOM_POLICY);
->  
->  	/*
-> @@ -1005,7 +1003,8 @@ void ima_update_policy(struct ima_namespace *ns)
->  		 * on boot.  After loading a custom policy, free the
->  		 * architecture specific rules stored as an array.
->  		 */
-> -		kfree(arch_policy_entry);
-> +		kfree(ns->arch_policy_entry);
-> +		ns->arch_policy_entry = NULL;
+> changes in v5:
+> - adapted for new API
+> 
+> not in v4
+> 
+> changes in v3:
+> - ensure the ctx.size is properly bounded by allocated size
+> - s/link_attached/post_link_attach/
+> - removed the switch statement with only one case
+> 
+> changes in v2:
+> - split the series by bpf/libbpf/hid/selftests and samples
+> ---
+>  drivers/hid/bpf/entrypoints/entrypoints.bpf.c |   6 +
+>  .../hid/bpf/entrypoints/entrypoints.lskel.h   | 965 +++++++++---------
 
-So the thing that prevents multiple racing occurances of the above two lines is
-that ima_open_policy() sets IMA_FS_BUSY (or returns EBUSY) and then removes
-this file before clearing the flag, right?
+Probably add the lskel once in the series to avoid the churn.
+It's not reviewable anyway.
 
-Seems good.
+>  drivers/hid/bpf/hid_bpf_dispatch.c            |  77 +-
+>  drivers/hid/bpf/hid_bpf_dispatch.h            |   1 +
+>  drivers/hid/bpf/hid_bpf_jmp_table.c           |   8 +
 
-Reviewed-by: Serge Hallyn <serge@hallyn.com>
-
-
->  	}
->  	ima_update_policy_flags(ns);
->  
-> -- 
-> 2.34.1
+I'll take a close look at dispatch logic next week.

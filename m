@@ -2,123 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80BB952FDF6
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 17:45:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B789752FDFB
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 17:50:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243526AbiEUPoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 11:44:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34886 "EHLO
+        id S1348064AbiEUPud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 11:50:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230091AbiEUPou (ORCPT
+        with ESMTP id S230091AbiEUPu2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 11:44:50 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7533F5DBDF;
-        Sat, 21 May 2022 08:44:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=N2cvmr5qgix9dsJyM3EfaeMcwlENDUG0UMFYTRsjfQ4=; b=CLKUW997PJmzXpkLm8NkNDEmp3
-        finCe4jD1sKqY1neC9/6XkIiPNSsxDy0iBsVPQwzSWlltXaeh7nhLFxziihweE+QzM8wS9R2wLPKb
-        /N/FNPVabP5+g0pY9VT4+6PRMxJOL66gkwobhTz0t1Cry2ccrs+sG143dimrT18QYfD1RFHquN3WH
-        VsNhe9mmCxGCnWUERc7cLv6p4fhBPQ33RK+WoHVPmTpIzlQOlW5KiBHGO2YbRYFu9wUB3o29PESiu
-        zns3936IaAkjg65aj0w440+XrUERAZ9AZJTPc2u46m7tFNRASa5vdeJJB2oEIyLU9YKeid1qAwFB0
-        o2P1KDXQ==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nsRHZ-00Ek1R-7r; Sat, 21 May 2022 15:44:45 +0000
-Message-ID: <a728cf17-4866-1151-0740-56b06257c917@infradead.org>
-Date:   Sat, 21 May 2022 08:44:41 -0700
+        Sat, 21 May 2022 11:50:28 -0400
+Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649FC674FB
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 08:50:27 -0700 (PDT)
+Received: from martin by viti.kaiser.cx with local (Exim 4.89)
+        (envelope-from <martin@viti.kaiser.cx>)
+        id 1nsRMv-0007kO-Vo; Sat, 21 May 2022 17:50:17 +0200
+Date:   Sat, 21 May 2022 17:50:17 +0200
+From:   Martin Kaiser <lists@kaiser.cx>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     dan.carpenter@oracle.com, Larry.Finger@lwfinger.net,
+        phil@philpotter.co.uk, gregkh@linuxfoundation.org,
+        straube.linux@gmail.com, fmdefrancesco@gmail.com,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] staging: r8188eu: add check for kzalloc
+Message-ID: <20220521155017.7jjz7prdnspm2276@viti.kaiser.cx>
+References: <20220518075957.514603-1-jiasheng@iscas.ac.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v5] crc-itu-t: Fix typo in CRC ITU-T polynom comment
-Content-Language: en-US
-To:     Roger Knecht <roger@norberthealth.com>,
-        linux-kernel@vger.kernel.org, Ivo van Doorn <IvDoorn@gmail.com>
-Cc:     kernel-janitors@vger.kernel.org, linux-doc@vger.kernel.org,
-        Kristian Hoegsberg <krh@redhat.com>,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>
-References: <20220521124745.8747-1-roger@norberthealth.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220521124745.8747-1-roger@norberthealth.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220518075957.514603-1-jiasheng@iscas.ac.cn>
+User-Agent: NeoMutt/20170113 (1.7.2)
+Sender: Martin Kaiser <martin@viti.kaiser.cx>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Roger,
+Thus wrote Jiasheng Jiang (jiasheng@iscas.ac.cn):
 
-On 5/21/22 05:47, Roger Knecht wrote:
-> The code comment says that the polynom is x^16 + x^12 + x^15 + 1, but the
-> correct polynom is x^16 + x^12 + x^5 + 1.
-> 
-> Quote from page 2 in the ITU-T V.41 specification:
->   "2 Encoding and checking process
-> 
->   The service bits and information bits, taken in conjunction, correspond
->   to the coefficients of a message polynomial having terms from x^(n-1)
->   (n = total number of bits in a block or sequence) down to x^16. This
->   polynomial is divided, modulo 2, by the generating polynomial
->   x^16 + x^12 + x^5 + 1. [...]"
-> 
-> Source: https://www.itu.int/rec/T-REC-V.41-198811-I/en)
-> The hex polynom 0x1021 and CRC code implementation are correct.
-> 
-> Signed-off-by: Roger Knecht <roger@norberthealth.com>
-> Acked-by: Randy Dunlap <rdunlap@infradead.org>
+> As kzalloc() may return null pointer, it should be better to
+> check the return value and return error if fails in order
+> to avoid dereference of null pointer.
+> Moreover, the return value of rtw_alloc_hwxmits() should also
+> be dealt with.
 
-I don't know which maintainer will merge this since no one is Cc:ed on it.
-You will probably need to choose some maintainer to send the patch to.
-
-But let's add the people who merged the header file in the first place
-for their comments/review. (done)
-
+> Fixes: 15865124feed ("staging: r8188eu: introduce new core dir for RTL8188eu driver")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 > ---
-> Changes:
-> v5: Clean up patch description and added acked-by
-> v4: Changed comment from /** to /* (the comment is not a kernel doc comment)
-> v3: Moved "changes and thanks" out of the commit message.
-> v2: Extended patch description
-> 
->  include/linux/crc-itu-t.h | 2 +-
->  lib/crc-itu-t.c           | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/linux/crc-itu-t.h b/include/linux/crc-itu-t.h
-> index a4367051e192..2f991a427ade 100644
-> --- a/include/linux/crc-itu-t.h
-> +++ b/include/linux/crc-itu-t.h
-> @@ -4,7 +4,7 @@
->   *
->   * Implements the standard CRC ITU-T V.41:
->   *   Width 16
-> - *   Poly  0x1021 (x^16 + x^12 + x^15 + 1)
-> + *   Poly  0x1021 (x^16 + x^12 + x^5 + 1)
->   *   Init  0
->   */
->  
-> diff --git a/lib/crc-itu-t.c b/lib/crc-itu-t.c
-> index 1974b355c148..1d26a1647da5 100644
-> --- a/lib/crc-itu-t.c
-> +++ b/lib/crc-itu-t.c
-> @@ -7,7 +7,7 @@
->  #include <linux/module.h>
->  #include <linux/crc-itu-t.h>
->  
-> -/** CRC table for the CRC ITU-T V.41 0x1021 (x^16 + x^12 + x^15 + 1) */
-> +/* CRC table for the CRC ITU-T V.41 0x1021 (x^16 + x^12 + x^5 + 1) */
->  const u16 crc_itu_t_table[256] = {
->  	0x0000, 0x1021, 0x2042, 0x3063, 0x4084, 0x50a5, 0x60c6, 0x70e7,
->  	0x8108, 0x9129, 0xa14a, 0xb16b, 0xc18c, 0xd1ad, 0xe1ce, 0xf1ef,
+> Changelog
 
--- 
-~Randy
+> v1 -> v2:
+
+> *Change 1. Make rtw_alloc_hwxmits() return -ENOMEM on failure
+> and zero on success.
+
+> v2 -> v3
+
+> *Change 1. Add "res = _FAIL".
+> ---
+>  drivers/staging/r8188eu/core/rtw_xmit.c    | 13 +++++++++++--
+>  drivers/staging/r8188eu/include/rtw_xmit.h |  2 +-
+>  2 files changed, 12 insertions(+), 3 deletions(-)
+
+> diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
+> index c2a550e7250e..2ee92bbe66a0 100644
+> --- a/drivers/staging/r8188eu/core/rtw_xmit.c
+> +++ b/drivers/staging/r8188eu/core/rtw_xmit.c
+> @@ -178,7 +178,12 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
+
+>  	pxmitpriv->free_xmit_extbuf_cnt = num_xmit_extbuf;
+
+> -	rtw_alloc_hwxmits(padapter);
+> +	res = rtw_alloc_hwxmits(padapter);
+
+This commit introduces a regression.
+
+res is now 0 if the allocation succeeds.
+
+> +	if (res) {
+> +		res = _FAIL;
+> +		goto exit;
+> +	}
+> +
+>  	rtw_init_hwxmits(pxmitpriv->hwxmits, pxmitpriv->hwxmit_entry);
+
+>  	for (i = 0; i < 4; i++)
+> @@ -1474,7 +1479,7 @@ s32 rtw_xmit_classifier(struct adapter *padapter, struct xmit_frame *pxmitframe)
+
+
+res is still 0 here - but the caller of _rtw_init_xmit_priv compares
+this return value with _SUCCESS (1) or _FAIL (0) and interprets it as
+_FAIL.
+
+[ 3893.464932] r8188eu: module is from the staging directory, the quality is unknown, you have been warned.
+[ 3893.543204] Chip Version Info: CHIP_8188E_Normal_Chip_TSMC_D_CUT_1T1R_RomVer(0)
+[ 3893.713123] EEPROM ID = 0x8129
+[ 3893.719205] r8188eu 1-1.5:1.0: _rtw_init_xmit_priv failed
+[ 3893.823102] usb 1-1.5: reset full-speed USB device number 4 using ci_hdrc
+[ 3893.986936] usbcore: registered new interface driver r8188eu
+
+>  	return res;
+>  }

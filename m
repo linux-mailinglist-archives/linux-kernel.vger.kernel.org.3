@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF17552FA7E
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 12:01:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47D1452FA85
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 12:01:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237752AbiEUJvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 05:51:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33936 "EHLO
+        id S1349907AbiEUJwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 05:52:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349907AbiEUJvc (ORCPT
+        with ESMTP id S236810AbiEUJwc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 05:51:32 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 723225641D;
-        Sat, 21 May 2022 02:51:26 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id o16so6937650ilq.8;
-        Sat, 21 May 2022 02:51:26 -0700 (PDT)
+        Sat, 21 May 2022 05:52:32 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B0AADFF67;
+        Sat, 21 May 2022 02:52:30 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id d198so5876820iof.12;
+        Sat, 21 May 2022 02:52:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=6tJ3wJ8Zdt9XhT+IGej+mRCHHGWY+7eB7aTqh81bNi8=;
-        b=LyKHvjiTTQZlpIxlbYhPoU3iF4IPHjf5NxfrVW0hpfFsehOhGhCIJczX4JQKRp/nPG
-         KaZwT4/Rb/0q/EKYnsoIbRMvkrAX2ExjwWxHQTUz62Ji69/ZnIdxsVzQvPJGQCRAzxGQ
-         gf9tFfL3MhP8OKerXF+IYanIZAj2Wq34WMd6ZYwiVPatmXe+li8F47gi8EJ1b3ytiwcf
-         fH4PFv8YN1eeswtZN2UyswJljiaoYqyGsvXlnYb1PWRkJBnU1QytXWz6QRUfMLieq4Qw
-         Xh56V2XHPtXgwCM0znK/T6NTWsz6gnbqutSX3A1T1DuWF7M8IU5Xk6RHELxJmFB7ac6H
-         VVDQ==
+        bh=HgU6CVcBQStjcDR5gk2dFy7rEHS5OgkX1HJgnqEvLw4=;
+        b=OiM5dSKoVRtHFckOGNUBmUfGQYcX+ecD9ipw8M8AS5csnbpWH32uLwtiwQ5hVwyHvx
+         IXAXwm0FLv8yQMy78Z9KQP1t9L8hg9KCEcFQ03HQqWFTtYvy/NQWY9Eopwga0Lneqpje
+         MTZTZKTpQW1eUtDAZ/V04SNZKFIUZ/wyPuD+vklv/a72S+41O+iD9i1rgiHoQHhWaSXt
+         XzLgATlHRwU1liDoo+vw5sC8C9YIa/rMHzfOYIS2Q69Pgfo665nC0hbioBh7Xq4ltYsd
+         G3enkBJb1ElKXAi9fLqDNjcb/WPpJRvhnf3GGKWCVDz0x2GRhQXs25q4TnvHb8DLK9SY
+         QGPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=6tJ3wJ8Zdt9XhT+IGej+mRCHHGWY+7eB7aTqh81bNi8=;
-        b=HV9Oy/uNVPRMppWMRDmONnjpS/Z2wwbR6I+BclnYFIi/OwgEuOErhaSp6rWWphCJIp
-         j/fUOzJsiFIme3PaJzh12Lw6GT1MOwSf4hOu1tw5V810JIm8naeMsqqn8cTyzgJrW+ro
-         +o6flMg37HwLBBDQpClVpPN//xfNkZKw5xaRI5ZNezbHLnSoaoN1zZDw74nljDAvr6NZ
-         BXkNFkPKv8qD8XsY/c08YPAIHEId6oMBHfeqZMNpEhvVls34zo5U4Y1xf2Unj3SvEKmI
-         j23NqQRdQGoOkhzEMPelGHFn6POxRgoyrLDftHXbAfw0IOXHm0bZq+sv/Bg4HJxEDcgT
-         AhgQ==
-X-Gm-Message-State: AOAM530Zf4OsZkihjbsdEzZINW5ZJipuKlDKNJmn3URhi+Cn0yRHbLS3
-        MHdbXWG1wmZiuTZYqpvxf9+iIIKxW3TXDh85RoM=
-X-Google-Smtp-Source: ABdhPJwjAT51VSypAN+WRVdDPgokwvFgXtI1FA0eQBI/BOcUy50kiuDCUoPkgQzJMRJHBNEB2HDBbQtEHGZkroxqwG8=
-X-Received: by 2002:a05:6e02:188a:b0:2cf:7adc:7a86 with SMTP id
- o10-20020a056e02188a00b002cf7adc7a86mr7468132ilu.276.1653126685896; Sat, 21
- May 2022 02:51:25 -0700 (PDT)
+        bh=HgU6CVcBQStjcDR5gk2dFy7rEHS5OgkX1HJgnqEvLw4=;
+        b=beLGFEJLOMSwk5MejloaXs2WzITbxUZjE4+w3N/d/XieNIcxXUHLQr1n8umCo7DvC3
+         eElkDaKDPvwyJUMNvqv+WS/FiIHUuO654SqZY05alA45HJaf+oqWw6WgZkj8Z5SNm8X2
+         jlZ4PhDiXw8v2Cg0uifyNwQQog7AFuRCZjPSynCVPQIhZT44s2hncZuE3i7UOa7fi46O
+         +JQljLA8/W8oYhhe0d84S9pm/ma9xnARrZSYiez0SeCogPjWI1SFZuS8a6OsnCVt1M07
+         xLLXccZ8iRB7acNK1FL//lInhpXhn3na5suJiZU0YUGmMz+LQSYvwo1CsfzncOSudVss
+         66mg==
+X-Gm-Message-State: AOAM531QE6sPZrfZn642JIaL0HCB1381c41F3DyL9EULDhmyVjEIqdEc
+        FoFSmf4ZNq5kGCKtp6wUlh41fiUCowhQrmIYEQI=
+X-Google-Smtp-Source: ABdhPJw2I3LiVPq9ZApoyJMwbFaJnOwaKOIo4UqmVWX6E5YU3HM68MY2KtVhBgJPSi2J0ZE+/mU127hS/nAp5g+gsCo=
+X-Received: by 2002:a05:6638:130a:b0:32b:b608:1676 with SMTP id
+ r10-20020a056638130a00b0032bb6081676mr7729318jad.108.1653126749775; Sat, 21
+ May 2022 02:52:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220515064126.1424-1-linux.amoon@gmail.com> <20220515064126.1424-3-linux.amoon@gmail.com>
- <68969550-e18b-3c27-d449-1478b314e129@linaro.org> <CANAwSgRBpm9gybfUWZbu3-eXLTYkpTZ=s3fmhpNyQcuj7+xdOA@mail.gmail.com>
- <a197ed7f-6115-4407-6931-f37b719587be@linaro.org>
-In-Reply-To: <a197ed7f-6115-4407-6931-f37b719587be@linaro.org>
+References: <20220515064126.1424-1-linux.amoon@gmail.com> <20220515064126.1424-7-linux.amoon@gmail.com>
+ <79b727f8-0631-5a96-fbc6-6e5d637bab7d@linaro.org> <CANAwSgSY=4zOLjw22GN+a7cc5j=myWWkD7gEQ4_3sgEaTS74Rw@mail.gmail.com>
+ <018b97c2-efab-699d-653d-c220a98f5ec3@linaro.org>
+In-Reply-To: <018b97c2-efab-699d-653d-c220a98f5ec3@linaro.org>
 From:   Anand Moon <linux.amoon@gmail.com>
-Date:   Sat, 21 May 2022 15:21:09 +0530
-Message-ID: <CANAwSgRLFr=3GGQ6AZWnzoL9knJrWCY3ONdozd_pbqhFwgpHvg@mail.gmail.com>
-Subject: Re: [PATCHv2 2/6] thermal: exynos: Reorder the gpu clock
- initialization for exynos5420 SoC
+Date:   Sat, 21 May 2022 15:22:13 +0530
+Message-ID: <CANAwSgQe9uveBMgrt3VNUTmFodW3P0Pxhc28KfB8MyEogOtOjQ@mail.gmail.com>
+Subject: Re: [PATCHv2 6/6] thermal: exynos: Add runtime power management for tmu
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -79,130 +78,46 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Krzysztof,
 
-On Wed, 18 May 2022 at 12:58, Krzysztof Kozlowski
+On Wed, 18 May 2022 at 12:49, Krzysztof Kozlowski
 <krzysztof.kozlowski@linaro.org> wrote:
 >
-> On 17/05/2022 20:43, Anand Moon wrote:
+> On 17/05/2022 20:45, Anand Moon wrote:
 > > Hi Krzysztof,
 > >
-> > On Sun, 15 May 2022 at 15:11, Krzysztof Kozlowski
+> > On Sun, 15 May 2022 at 15:18, Krzysztof Kozlowski
 > > <krzysztof.kozlowski@linaro.org> wrote:
 > >>
 > >> On 15/05/2022 08:41, Anand Moon wrote:
-> >>> Reorder the tmu_gpu clock initialization for exynos5422 SoC.
+> >>> Add runtime power management for exynos thermal driver.
 > >>
-> >> Why?
-> > It just code reorder
->
-> I know what it is. I asked why. The answer in English to question "Why"
-> is starting with "Because".
->
-> You repeated again the argument what are you doing to my question "Why
-> are you doing it".
->
-tmu_triminfo_apbif is not a core driver to all the Exynos SOC board
-it is only used by the Exynos542x SOC family
-
-If we look into the original code its place in between
-the devm_clk_get(data->clk) and clk_prepare(data->clk)
-after this change, the code is in the correct order of initialization
-of the clock.
-
-> It was the same before, many, many times. It's a waste of reviewers
-> time, because you receive a review and you do not implement the feedback.
->
+> >> First of all - why? Second, I do not see it being added. Where are the
+> >> runtime callbacks?
 > >>
-> >>>
-> >>> Cc: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>
-> >>> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
-> >>> ---
-> >>> v1: split the changes and improve the commit messages
-> >>> ---
-> >>>  drivers/thermal/samsung/exynos_tmu.c | 43 ++++++++++++++--------------
-> >>>  1 file changed, 21 insertions(+), 22 deletions(-)
-> >>>
-> >>> diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
-> >>> index 75b3afadb5be..1ef90dc52c08 100644
-> >>> --- a/drivers/thermal/samsung/exynos_tmu.c
-> >>> +++ b/drivers/thermal/samsung/exynos_tmu.c
-> >>> @@ -1044,42 +1044,41 @@ static int exynos_tmu_probe(struct platform_device *pdev)
-> >>>               dev_err(&pdev->dev, "Failed to get clock\n");
-> >>>               ret = PTR_ERR(data->clk);
-> >>>               goto err_sensor;
-> >>> -     }
-> >>> -
-> >>> -     data->clk_sec = devm_clk_get(&pdev->dev, "tmu_triminfo_apbif");
-> >>> -     if (IS_ERR(data->clk_sec)) {
-> >>> -             if (data->soc == SOC_ARCH_EXYNOS5420_TRIMINFO) {
-> >>> -                     dev_err(&pdev->dev, "Failed to get triminfo clock\n");
-> >>> -                     ret = PTR_ERR(data->clk_sec);
-> >>> -                     goto err_sensor;
-> >>> -             }
-> >>>       } else {
-> >>> -             ret = clk_prepare_enable(data->clk_sec);
-> >>> +             ret = clk_prepare_enable(data->clk);
-> >>
-> >> This looks a bit odd. The clock was before taken unconditionally, not
-> >> within "else" branch...
 > >
-> > The whole *clk_sec*  ie tmu_triminfo_apbif clock enable is being moved
-> > down to the switch case.
-> > tmu_triminfo_apbif  clock is not used by Exynos4412 and Exynos5433 and
-> > Exynos7 SoC.
+> > To control runtime control PMU, did I miss something?
 >
-> This is not the answer. Why are you preparing data->clk within else{}
-> branch?
+> Controlling runtime PM by itself is not a goal. What does it change if
+> it is enabled?
 >
-After cleanly applying the patches I see the below changes.
-if you want me to remove the else part below and keep
-the original code I am ok.
+It means we could have efficient power management for this driver.
+as per my understanding, it controls runtime sleep and improves power efficiency
 
-        data->clk = devm_clk_get(&pdev->dev, "tmu_apbif");
-        if (IS_ERR(data->clk)) {
-                dev_err(&pdev->dev, "Failed to get clock\n");
-                ret = PTR_ERR(data->clk);
-                goto err_sensor;
-        } else {
-                ret = clk_prepare_enable(data->clk);
-                if (ret) {
-                        dev_err(&pdev->dev, "Failed to get clock\n");
-                        goto err_sensor;
-                }
-        }
+> > I looked into imx thermal driver # drivers/thermal/imx_thermal.c
+> > to enable run-time power management for exynos driver.
+>
+> So you have runtime PM enabled and then what happens? Where is the power
+> saving? Since you did not implement the callbacks, all this should be
+> explained in commit msg.
+>
+Ok, As per the original code, it just registers the SIMPLE_DEV_PM_OPS
+with .pm = &exynos_tmu_pm
+So I have made sure that suspend resume feature works correctly
+ with these changes on SBC Odroid U3 and XU4.
 
-        switch (data->soc) {
-        case SOC_ARCH_EXYNOS5420_TRIMINFO:
-                data->clk_sec = devm_clk_get(&pdev->dev, "tmu_triminfo_apbif");
-                if (IS_ERR(data->clk_sec)) {
-                        dev_err(&pdev->dev, "Failed to get triminfo clock\n");
-                        ret = PTR_ERR(data->clk_sec);
-                        goto err_clk_apbif;
-                } else {
-                        ret = clk_prepare_enable(data->clk_sec);
-                        if (ret) {
-                                dev_err(&pdev->dev, "Failed to get clock\n");
-                                goto err_clk_apbif;
-                        }
-                }
-                break;
-        case SOC_ARCH_EXYNOS5433:
-        case SOC_ARCH_EXYNOS7:
-                data->sclk = devm_clk_get(&pdev->dev, "tmu_sclk");
-                if (IS_ERR(data->sclk)) {
-                        dev_err(&pdev->dev, "Failed to get sclk\n");
-                        ret = PTR_ERR(data->sclk);
-                        goto err_clk_sec;
-                } else {
-                        ret = clk_prepare_enable(data->sclk);
-                        if (ret) {
-                                dev_err(&pdev->dev, "Failed to enable sclk\n");
-                                goto err_clk_sec;
-                        }
-                }
-                break;
-        default:
-                break;
-        }
+I will try to look into setting RUNTIME_PM_OPS
+or use UNIVERSAL_DEV_PM_OPS instead of SIMPLE_DEV_PM_OPS
+any thought on this?
+
 >
 > Best regards,
 > Krzysztof

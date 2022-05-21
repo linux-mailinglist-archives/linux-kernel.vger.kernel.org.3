@@ -2,87 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94E0F52F8CF
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 07:01:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA3CB52F8D1
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 07:02:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354515AbiEUFBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 01:01:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53272 "EHLO
+        id S1354569AbiEUFB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 01:01:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbiEUFBW (ORCPT
+        with ESMTP id S1354536AbiEUFBu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 01:01:22 -0400
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC9215A1F
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 22:01:20 -0700 (PDT)
-Received: by mail-ot1-x332.google.com with SMTP id r3-20020a9d5cc3000000b0060ae1789875so4396263oti.13
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 22:01:20 -0700 (PDT)
+        Sat, 21 May 2022 01:01:50 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7917B5C350
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 22:01:49 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id n10so18875848ejk.5
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 22:01:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=UDZikmMmW7LOzsqIKZTF2VDpB2asoObujnIee+1iKNY=;
-        b=AhhaXBrzRd+nwAFIiNxrEAC/SaV/MgI8LvHywhtLFr9VtKyhi5wBqo1dcSCmGKjN+Q
-         oL5jLN4RZCNte7cb24HNsFGamFSvPxJQTjrLqk5E55yxFJO/xolDOXC9VJPJ1tpjOSJE
-         nwu/Muu56VxqTQDE+T8d+UdqTYjStkJj6Ec1w=
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+JP7eb9X89dzmMi77NTEFpsoLT6OioYPHTkokdTxBHc=;
+        b=cQzbMTyiE3pGwpfX4bEhpbYVQq+AvZNw60MIRF7N3gv42F9YVuqaF8j3RZf5Kc2Zx7
+         yIFe8S3IfJm4FOgTmmlvYMn2RZTN3K23qkz2gZv8lX4lFoRTrFCZs4AUUAouLsXxSkd3
+         dDYwffr2dYvPunf5WQ66AzJlIoyBw7YtXbuUo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=UDZikmMmW7LOzsqIKZTF2VDpB2asoObujnIee+1iKNY=;
-        b=1BWRziCk3wcUJNccIJtXNuLkJJsQfBwykql1HFF7HcYY18JGHSy+Mr9SCJEs6lgKjW
-         S7EsL7SIWSQQ4key3jh40vR3jzbnk6ePFEbBtvqXzq94zJpbgTWftp2lTCyMVhQZbReX
-         IhpGtbJqfueiwP2L6D2hgem4Rr08JH8Hp3Y36ZlEEiAd02FHF2VCKBn4H0BCAadprGI9
-         /DBwcClQd46jokawm1/jCHAhlwZcH2LoBNg2eoZ9jE8yfUjsvN+AGO4t1HC1y/sODgBZ
-         +eCKMoOeyeaD3bVOkgF/HqQNAc1X1Oa7kN4p0SEr0ZEu1zJSZB7486hz+reQgc3/OgWV
-         yI7Q==
-X-Gm-Message-State: AOAM5304R9D6brGpfsBPwgKIw5fWM7nkj8vmP/fUSEW5iLKgWYBXTgIb
-        Vl/k6rgb2Ae0DeCu6cGGCahI6an/7TkE0skEhffnVQ==
-X-Google-Smtp-Source: ABdhPJw2H/9RSW7B0qvFpp3EOJxZL1aXhQhGDUiRoZhZl36I3tUWGyRJz/81nw1c3KAvwm96RO/Ni8d0d8GQdpEcTm4=
-X-Received: by 2002:a9d:63cd:0:b0:606:9e7f:79f8 with SMTP id
- e13-20020a9d63cd000000b006069e7f79f8mr5288634otl.77.1653109279965; Fri, 20
- May 2022 22:01:19 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 20 May 2022 22:01:19 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+JP7eb9X89dzmMi77NTEFpsoLT6OioYPHTkokdTxBHc=;
+        b=mC0DuwvBflBCMUCr6gCJvCBqD9y9/4BLpJRNdZEsuWA/8CqUYhKv2jiX6pofMhLNtP
+         z1siTDRCjg45Sq1hLSqL4Ih5DhxWWHf01Zs8o1JA2ZLrl5ZpEGOKyMkEOKLh/tfY9rB/
+         ZXFyvFg7l7JQiTZ62Z5Vd/HJLByriJ0nNfUmPINomMOPliShLR3eQJQ3lu/u22BqQ4Yi
+         xuEYqJVVQYG0Jhxylk1WRViXeNxBFtHSlagSEcz2x3inx/eUPBEnYP7hgwVpykRgoCp/
+         SLBBHrRSxcXCseKejNZTu8UezXCz84/4HoseWGR98bercqJ5dJGEgQcn4txwltql3LfD
+         dbYw==
+X-Gm-Message-State: AOAM530ywlt2KGyt1/5YNgTGsEFc25lT2njGf+VFSQujjlOnVVCuKjSp
+        xqe7G7v5bKUujGavZzkVtfJC1SNjEi+uBsRr
+X-Google-Smtp-Source: ABdhPJzj5mWDJv3O6+T/dJ24WmPYTB75dUDNvBLEDJGTnInJ1x+G6LjU8eNIsbRyVpsPINyzbqYg1w==
+X-Received: by 2002:a17:906:c142:b0:6f5:2632:adb7 with SMTP id dp2-20020a170906c14200b006f52632adb7mr11551003ejc.637.1653109307863;
+        Fri, 20 May 2022 22:01:47 -0700 (PDT)
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com. [209.85.128.50])
+        by smtp.gmail.com with ESMTPSA id er8-20020a170907738800b006f3ef214e45sm3837329ejc.171.2022.05.20.22.01.45
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 May 2022 22:01:46 -0700 (PDT)
+Received: by mail-wm1-f50.google.com with SMTP id v191-20020a1cacc8000000b00397001398c0so7820638wme.5
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 22:01:45 -0700 (PDT)
+X-Received: by 2002:a05:600c:4f06:b0:394:836b:1552 with SMTP id
+ l6-20020a05600c4f0600b00394836b1552mr11323806wmq.145.1653109305450; Fri, 20
+ May 2022 22:01:45 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220520155305.v2.1.I26eca1856f99e6160d30de6d50ecab60e6226354@changeid>
-References: <20220520155305.v2.1.I26eca1856f99e6160d30de6d50ecab60e6226354@changeid>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Fri, 20 May 2022 22:01:19 -0700
-Message-ID: <CAE-0n50=dM90ekon-rA3zBV7DKt4xL4GHgzSigW2uOPL6HTnBA@mail.gmail.com>
-Subject: Re: [PATCH v2] soc: qcom: socinfo: Add an ID for sc7180P
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-Cc:     matvore@chromium.org, Andy Gross <agross@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <CAHk-=wi0vqZQUAS67tBsJQW+dtt89m+dqA-Z4bOs8CH-mm8u2w@mail.gmail.com>
+ <165209064657.193515.10163777181547077546@leemhuis.info> <CAHk-=wj0gHsG6iw3D8ufptm9a_dvTSqrrOFY9WopObbYbyuwnA@mail.gmail.com>
+ <54664f6a-b046-1330-e794-cb533e942a94@redhat.com> <04f2e08c-4c39-16d3-d785-f36494c6256c@redhat.com>
+ <063d7fdb-2d4c-5798-773b-d82b4f0e918a@redhat.com>
+In-Reply-To: <063d7fdb-2d4c-5798-773b-d82b4f0e918a@redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 20 May 2022 19:01:29 -1000
+X-Gmail-Original-Message-ID: <CAHk-=wjKtV3mT3S=vxgqe__MUzxRrZ7=fopKQtTKOeQJAVyoUQ@mail.gmail.com>
+Message-ID: <CAHk-=wjKtV3mT3S=vxgqe__MUzxRrZ7=fopKQtTKOeQJAVyoUQ@mail.gmail.com>
+Subject: Re: Linux regressions report for mainline [2022-05-09] (was: Linux 5.18-rc6)
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "Regzbot (on behalf of Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Matthew Auld <matthew.auld@intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux regressions mailing list <regressions@lists.linux.dev>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Douglas Anderson (2022-05-20 15:53:10)
-> Some sc7180 Chromebooks actually have sc7180P (known by many names,
-> apparently, including possibly sc7180 Pro and sc7185). This is a
-> sc7180 part that has slightly higher clock speeds.
+On Thu, May 19, 2022 at 6:10 AM Hans de Goede <hdegoede@redhat.com> wrote:
 >
-> The official ID numbrer allocated to these devices by Qualcomm is 495
+> Note this is not part of any pending drm-fixes* pull-reqs yet though.
 
-s/numbrer/number/
+It has now hit my tree as part of Dave's drm pull today.
 
-> so we'll add an entry to the table for them. Note that currently
-> shipping BIOS for these devices will actually end up reporting an ID
-> of 407 due to a bug but eventually a new BIOS will be released which
-> corrects it to 495.
->
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
+Will go out after the usual basic build test.
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+               Linus

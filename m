@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53D2252FDE5
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 17:39:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1A0E52FDE1
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 17:39:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245223AbiEUPik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 11:38:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50238 "EHLO
+        id S245329AbiEUPix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 11:38:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230448AbiEUPig (ORCPT
+        with ESMTP id S245121AbiEUPig (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 21 May 2022 11:38:36 -0400
 Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57BE662CE1
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E3FE62CE5
         for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 08:38:34 -0700 (PDT)
 Received: from dslb-188-096-138-194.188.096.pools.vodafone-ip.de ([188.96.138.194] helo=martin-debian-2.paytec.ch)
         by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.89)
         (envelope-from <martin@kaiser.cx>)
-        id 1nsRBT-0007XY-Mu; Sat, 21 May 2022 17:38:27 +0200
+        id 1nsRBV-0007XY-FV; Sat, 21 May 2022 17:38:29 +0200
 From:   Martin Kaiser <martin@kaiser.cx>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
@@ -28,10 +28,12 @@ Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
         Pavel Skripkin <paskripkin@gmail.com>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 00/12] staging: r8188eu: start cleaning up issue_action_BA
-Date:   Sat, 21 May 2022 17:38:12 +0200
-Message-Id: <20220521153824.218196-1-martin@kaiser.cx>
+Subject: [PATCH 01/12] staging: r8188eu: remove unnecessary category check
+Date:   Sat, 21 May 2022 17:38:13 +0200
+Message-Id: <20220521153824.218196-2-martin@kaiser.cx>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220521153824.218196-1-martin@kaiser.cx>
+References: <20220521153824.218196-1-martin@kaiser.cx>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
@@ -43,28 +45,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Start cleaning up the issue_action_BA function. Use helpers from
-ieee80211.h to populate some of the fields of the outgoing frame.
+Remove the unnecessary category check in issue_action_BA. category is
+initialised to 3 (WLAN_CATEGORY_BACK) and never updated.
 
-(I'll send more patches for the remaining fields and messages.)
+The rtw_set_fixed_ie call gets a pointer to category but it doesn't update
+the value.
 
-Martin Kaiser (12):
-  staging: r8188eu: remove unnecessary category check
-  staging: r8188eu: use defines for the block action codes
-  staging: r8188eu: use ieee80211_mgmt in issue_action_BA
-  staging: r8188eu: use mgmt to set the addresses
-  staging: r8188eu: use mgmt to set the sequence number
-  staging: r8188eu: use mgmt to set the category
-  staging: r8188eu: use mgmt to set the action codes
-  staging: r8188eu: use mgmt to set the dialog token
-  staging: r8188eu: use mgmt to set the timeout
-  staging: r8188eu: use ieee80211 to set addba capabilities
-  staging: r8188eu: use mgmt to set start sequence number
-  staging: r8188eu: calculate the addba request length
+Signed-off-by: Martin Kaiser <martin@kaiser.cx>
+---
+ drivers/staging/r8188eu/core/rtw_mlme_ext.c | 94 ++++++++++-----------
+ 1 file changed, 46 insertions(+), 48 deletions(-)
 
- drivers/staging/r8188eu/core/rtw_mlme_ext.c | 124 ++++++++++----------
- 1 file changed, 63 insertions(+), 61 deletions(-)
-
+diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+index faf23fc950c5..f47cf3e7316c 100644
+--- a/drivers/staging/r8188eu/core/rtw_mlme_ext.c
++++ b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+@@ -5415,60 +5415,58 @@ void issue_action_BA(struct adapter *padapter, unsigned char *raddr, unsigned ch
+ 	pframe = rtw_set_fixed_ie(pframe, 1, &(category), &pattrib->pktlen);
+ 	pframe = rtw_set_fixed_ie(pframe, 1, &(action), &pattrib->pktlen);
+ 
+-	if (category == 3) {
+-		switch (action) {
+-		case 0: /* ADDBA req */
+-			do {
+-				pmlmeinfo->dialogToken++;
+-			} while (pmlmeinfo->dialogToken == 0);
+-			pframe = rtw_set_fixed_ie(pframe, 1, &pmlmeinfo->dialogToken, &pattrib->pktlen);
++	switch (action) {
++	case 0: /* ADDBA req */
++		do {
++			pmlmeinfo->dialogToken++;
++		} while (pmlmeinfo->dialogToken == 0);
++		pframe = rtw_set_fixed_ie(pframe, 1, &pmlmeinfo->dialogToken, &pattrib->pktlen);
+ 
+-			BA_para_set = (0x1002 | ((status & 0xf) << 2)); /* immediate ack & 64 buffer size */
+-			le_tmp = cpu_to_le16(BA_para_set);
+-			pframe = rtw_set_fixed_ie(pframe, 2, (unsigned char *)&le_tmp, &pattrib->pktlen);
++		BA_para_set = (0x1002 | ((status & 0xf) << 2)); /* immediate ack & 64 buffer size */
++		le_tmp = cpu_to_le16(BA_para_set);
++		pframe = rtw_set_fixed_ie(pframe, 2, (unsigned char *)&le_tmp, &pattrib->pktlen);
+ 
+-			BA_timeout_value = 5000;/*  5ms */
+-			le_tmp = cpu_to_le16(BA_timeout_value);
+-			pframe = rtw_set_fixed_ie(pframe, 2, (unsigned char *)&le_tmp, &pattrib->pktlen);
++		BA_timeout_value = 5000;/*  5ms */
++		le_tmp = cpu_to_le16(BA_timeout_value);
++		pframe = rtw_set_fixed_ie(pframe, 2, (unsigned char *)&le_tmp, &pattrib->pktlen);
+ 
+-			psta = rtw_get_stainfo(pstapriv, raddr);
+-			if (psta) {
+-				start_seq = (psta->sta_xmitpriv.txseq_tid[status & 0x07] & 0xfff) + 1;
++		psta = rtw_get_stainfo(pstapriv, raddr);
++		if (psta) {
++			start_seq = (psta->sta_xmitpriv.txseq_tid[status & 0x07] & 0xfff) + 1;
+ 
+-				psta->BA_starting_seqctrl[status & 0x07] = start_seq;
++			psta->BA_starting_seqctrl[status & 0x07] = start_seq;
+ 
+-				BA_starting_seqctrl = start_seq << 4;
+-			}
+-			le_tmp = cpu_to_le16(BA_starting_seqctrl);
+-			pframe = rtw_set_fixed_ie(pframe, 2, (unsigned char *)&le_tmp, &pattrib->pktlen);
+-			break;
+-		case 1: /* ADDBA rsp */
+-			pframe = rtw_set_fixed_ie(pframe, 1, &pmlmeinfo->ADDBA_req.dialog_token, &pattrib->pktlen);
+-			pframe = rtw_set_fixed_ie(pframe, 2, (unsigned char *)&status, &pattrib->pktlen);
+-			BA_para_set = le16_to_cpu(pmlmeinfo->ADDBA_req.BA_para_set) & 0x3f;
+-			BA_para_set |= 0x1000; /* 64 buffer size */
+-
+-			if (pregpriv->ampdu_amsdu == 0)/* disabled */
+-				BA_para_set = BA_para_set & ~BIT(0);
+-			else if (pregpriv->ampdu_amsdu == 1)/* enabled */
+-				BA_para_set = BA_para_set | BIT(0);
+-			le_tmp = cpu_to_le16(BA_para_set);
+-
+-			pframe = rtw_set_fixed_ie(pframe, 2, (unsigned char *)&le_tmp, &pattrib->pktlen);
+-			pframe = rtw_set_fixed_ie(pframe, 2, (unsigned char *)&pmlmeinfo->ADDBA_req.BA_timeout_value, &pattrib->pktlen);
+-			break;
+-		case 2:/* DELBA */
+-			BA_para_set = (status & 0x1F) << 3;
+-			le_tmp = cpu_to_le16(BA_para_set);
+-			pframe = rtw_set_fixed_ie(pframe, 2, (unsigned char *)&le_tmp, &pattrib->pktlen);
+-
+-			reason_code = 37;/* Requested from peer STA as it does not want to use the mechanism */
+-			le_tmp = cpu_to_le16(reason_code);
+-			pframe = rtw_set_fixed_ie(pframe, 2, (unsigned char *)&le_tmp, &pattrib->pktlen);
+-			break;
+-		default:
+-			break;
++			BA_starting_seqctrl = start_seq << 4;
+ 		}
++		le_tmp = cpu_to_le16(BA_starting_seqctrl);
++		pframe = rtw_set_fixed_ie(pframe, 2, (unsigned char *)&le_tmp, &pattrib->pktlen);
++		break;
++	case 1: /* ADDBA rsp */
++		pframe = rtw_set_fixed_ie(pframe, 1, &pmlmeinfo->ADDBA_req.dialog_token, &pattrib->pktlen);
++		pframe = rtw_set_fixed_ie(pframe, 2, (unsigned char *)&status, &pattrib->pktlen);
++		BA_para_set = le16_to_cpu(pmlmeinfo->ADDBA_req.BA_para_set) & 0x3f;
++		BA_para_set |= 0x1000; /* 64 buffer size */
++
++		if (pregpriv->ampdu_amsdu == 0)/* disabled */
++			BA_para_set = BA_para_set & ~BIT(0);
++		else if (pregpriv->ampdu_amsdu == 1)/* enabled */
++			BA_para_set = BA_para_set | BIT(0);
++		le_tmp = cpu_to_le16(BA_para_set);
++
++		pframe = rtw_set_fixed_ie(pframe, 2, (unsigned char *)&le_tmp, &pattrib->pktlen);
++		pframe = rtw_set_fixed_ie(pframe, 2, (unsigned char *)&pmlmeinfo->ADDBA_req.BA_timeout_value, &pattrib->pktlen);
++		break;
++	case 2:/* DELBA */
++		BA_para_set = (status & 0x1F) << 3;
++		le_tmp = cpu_to_le16(BA_para_set);
++		pframe = rtw_set_fixed_ie(pframe, 2, (unsigned char *)&le_tmp, &pattrib->pktlen);
++
++		reason_code = 37;/* Requested from peer STA as it does not want to use the mechanism */
++		le_tmp = cpu_to_le16(reason_code);
++		pframe = rtw_set_fixed_ie(pframe, 2, (unsigned char *)&le_tmp, &pattrib->pktlen);
++		break;
++	default:
++		break;
+ 	}
+ 
+ 	pattrib->last_txcmdsz = pattrib->pktlen;
 -- 
 2.30.2
 

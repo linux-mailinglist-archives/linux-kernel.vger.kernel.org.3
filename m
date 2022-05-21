@@ -2,151 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 069C152FFB8
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 00:06:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B772D52FFC4
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 00:19:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347056AbiEUWGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 18:06:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55666 "EHLO
+        id S1347344AbiEUWTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 18:19:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347037AbiEUWF6 (ORCPT
+        with ESMTP id S1347080AbiEUWTc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 18:05:58 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDB3DB871;
-        Sat, 21 May 2022 15:05:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653170756; x=1684706756;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6HTHMCVnQ4K4/esHmjURBt62rjHIzXzIoUJiVwHvEPE=;
-  b=bAycBBqufeQoX4Un5PG3zttMzFWZzl45gK2ZF56YoK53Ba8aGJntFIT5
-   UgfaQgh7q6MZ/EmoII7SHkgTUvbKzDWLtD82KZgShmuuUYX4NDE2wfbes
-   Us1gz/301rWHCKKxdC0blnRdYtcS1L4VrhDSsZcIz9iCWqyiLORAHZhJH
-   YRF9G3sxaAMr55uYx+rhih9k9lzLl21DBS8NzicpiynosLHNsIvXAHubU
-   zbwTPGCkTMxUWTy4FGBscbMbg+9UWpW5LdpgoS2fY45mbYLuwmfM3elNy
-   +FJ1oFV2IWB6RN/dtTsUibXqmG8lkVaY5CgnkG39jYYUYs91930EIN1CG
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10354"; a="260499936"
-X-IronPort-AV: E=Sophos;i="5.91,243,1647327600"; 
-   d="scan'208";a="260499936"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 15:05:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,243,1647327600"; 
-   d="scan'208";a="716081444"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 21 May 2022 15:05:53 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nsXEO-0006e2-Ka;
-        Sat, 21 May 2022 22:05:52 +0000
-Date:   Sun, 22 May 2022 06:05:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vasily Averin <vvs@openvz.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     kbuild-all@lists.01.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        kernel@openvz.org, linux-kernel@vger.kernel.org,
-        Shakeel Butt <shakeelb@google.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org
-Subject: Re: [PATCH mm v2 6/9] memcg: enable accounting for percpu allocation
- of struct cgroup_rstat_cpu
-Message-ID: <202205220531.AVnBFrgq-lkp@intel.com>
-References: <c0d01d6e-530c-9be3-1c9b-67a7f8ea09be@openvz.org>
+        Sat, 21 May 2022 18:19:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DE414EF60
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 15:19:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EE233B8013C
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 22:19:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11FBCC385A9;
+        Sat, 21 May 2022 22:19:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653171566;
+        bh=ngKViRklTPe3qp0sAQn1sxccZmlTT0C88H2AvrRNxUo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=L4efQY4wXKZ8fdSNY/3SLLvQHMVzrVR7J+HE4uOULF4ZB3pYnzzQpy60rtACo9wdm
+         2gqoFPuV2LKMa49z77cF3A8Jq+GIucTFmb9GuLTiyKd2WRwgG3YPnbxVC74I0cQSy0
+         UR0O12vuW+cGohFhTy65ov3l17Y3+XYr5PWH0nozTIaSRnoiTb92VPubAYXoqOXh1K
+         494I9lkz40huR8XXobXAbMtAK+pkgWWk9WnR2pU/9Zr+DxWEgNRFgz2qmqpTH5tdyD
+         ei0SjP+3jNjjDT5ektRqNchgieZjzyrUvDxPFZiFA/2P+YCEx0FJxKXKWABf3qxl7u
+         ED/uCgM1KwRcA==
+Message-ID: <64d0da08-6ffd-4bce-bc66-5097913937b4@kernel.org>
+Date:   Sat, 21 May 2022 15:19:24 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c0d01d6e-530c-9be3-1c9b-67a7f8ea09be@openvz.org>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [RFC PATCH 0/6] Introduce Copy-On-Write to Page Table
+Content-Language: en-US
+To:     Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>
+Cc:     Chih-En Lin <shiyn.lin@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        William Kucharski <william.kucharski@oracle.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Yunsheng Lin <linyunsheng@huawei.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Colin Cross <ccross@google.com>,
+        Feng Tang <feng.tang@intel.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Daniel Axtens <dja@axtens.net>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Peter Xu <peterx@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        linux-kernel@vger.kernel.org, Kaiyang Zhao <zhao776@purdue.edu>,
+        Huichun Feng <foxhoundsk.tw@gmail.com>,
+        Jim Huang <jserv.tw@gmail.com>
+References: <20220519183127.3909598-1-shiyn.lin@gmail.com>
+ <d1810538-9b4c-7f19-852f-7f6d255533c7@redhat.com>
+ <YolHr1GwfA++i9jj@casper.infradead.org>
+From:   Andy Lutomirski <luto@kernel.org>
+In-Reply-To: <YolHr1GwfA++i9jj@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vasily,
+On 5/21/22 13:12, Matthew Wilcox wrote:
+> On Sat, May 21, 2022 at 06:07:27PM +0200, David Hildenbrand wrote:
+>> I'm missing the most important point: why do we care and why should we
+>> care to make our COW/fork implementation even more complicated?
+>>
+>> Yes, we might save some page tables and we might reduce the fork() time,
+>> however, which specific workload really benefits from this and why do we
+>> really care about that workload? Without even hearing about an example
+>> user in this cover letter (unless I missed it), I naturally wonder about
+>> relevance in practice.
+> 
+> As I get older (and crankier), I get less convinced that fork() is
+> really the right solution for implementing system().  I feel that a
+> better model is to create a process with zero threads, but have an fd
+> to it.  Then manipulate the child process through its fd (eg mmap
+> ld.so, open new fds in that process's fdtable, etc).  Closing the fd
+> launches a new thread in the process (ensuring nobody has an fd to a
+> running process, particularly one which is setuid).
 
-Thank you for the patch! Yet something to improve:
+Heh, I learned serious programming on Windows, and I thought fork() was 
+entertaining, cool, and a bad idea when I first learned about it.  (I 
+admit I did think the fact that POSIX fork and exec had many fewer 
+arguments than CreateProcess was a good thing.)  Don't even get me 
+started on setuid -- if I had my way, distros would set NO_NEW_PRIVS on 
+boot for the entire system.
 
-[auto build test ERROR on tip/sched/core]
-[also build test ERROR on tj-cgroup/for-next driver-core/driver-core-testing linus/master v5.18-rc7 next-20220520]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+I can see a rather different use for this type of shared-pagetable 
+technology, though: monstrous MAP_SHARED mappings.  For database and 
+some VM users, multiple processes will map the same file.  If there was 
+a way to ensure appropriate alignment (or at least encourage it) and a 
+way to handle mappings that don't cover the whole file, then having 
+multiple mappings share the same page tables could be a decent 
+efficiently gain.  This doesn't even need COW -- it's "just" pagetable 
+sharing.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vasily-Averin/memcg-enable-accounting-for-struct-cgroup/20220522-004124
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 991d8d8142cad94f9c5c05db25e67fa83d6f772a
-config: arm-imxrt_defconfig (https://download.01.org/0day-ci/archive/20220522/202205220531.AVnBFrgq-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/c1b7edf1635aaef50d25ba8246a5e5c997a6bf44
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Vasily-Averin/memcg-enable-accounting-for-struct-cgroup/20220522-004124
-        git checkout c1b7edf1635aaef50d25ba8246a5e5c997a6bf44
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash kernel/cgroup/
+It's probably a pipe dream, but I like to imagine that the bookkeeping 
+that would enable this would also enable a much less ad-hoc concept of 
+who owns which pagetable page.  Then things like x86's KPTI LDT mappings 
+would be less disgusting under the hood.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Android would probably like a similar feature for MAP_ANONYMOUS or that 
+could otherwise enable Zygote to share paging structures (ideally 
+without fork(), although that's my dream, not necessarily Android's). 
+This is more complex, since COW is involved.  Also possibly less 
+valuable -- possibly the entire benefit and then some would be achieved 
+by using huge pages for Zygote and arranging for CoWing one normal-size 
+page out of a hugepage COW mapping to only COW the one page.
 
-All errors (new ones prefixed by >>):
-
-   kernel/cgroup/rstat.c: In function 'cgroup_rstat_init':
->> kernel/cgroup/rstat.c:261:70: error: macro "alloc_percpu_gfp" requires 2 arguments, but only 1 given
-     261 |                                                    GFP_KERNEL_ACCOUNT);
-         |                                                                      ^
-   In file included from include/linux/hrtimer.h:19,
-                    from include/linux/sched.h:19,
-                    from include/linux/cgroup.h:12,
-                    from kernel/cgroup/cgroup-internal.h:5,
-                    from kernel/cgroup/rstat.c:2:
-   include/linux/percpu.h:133: note: macro "alloc_percpu_gfp" defined here
-     133 | #define alloc_percpu_gfp(type, gfp)                                     \
-         | 
->> kernel/cgroup/rstat.c:260:35: error: 'alloc_percpu_gfp' undeclared (first use in this function)
-     260 |                 cgrp->rstat_cpu = alloc_percpu_gfp(struct cgroup_rstat_cpu
-         |                                   ^~~~~~~~~~~~~~~~
-   kernel/cgroup/rstat.c:260:35: note: each undeclared identifier is reported only once for each function it appears in
-
-
-vim +/alloc_percpu_gfp +261 kernel/cgroup/rstat.c
-
-   253	
-   254	int cgroup_rstat_init(struct cgroup *cgrp)
-   255	{
-   256		int cpu;
-   257	
-   258		/* the root cgrp has rstat_cpu preallocated */
-   259		if (!cgrp->rstat_cpu) {
- > 260			cgrp->rstat_cpu = alloc_percpu_gfp(struct cgroup_rstat_cpu
- > 261							   GFP_KERNEL_ACCOUNT);
-   262			if (!cgrp->rstat_cpu)
-   263				return -ENOMEM;
-   264		}
-   265	
-   266		/* ->updated_children list is self terminated */
-   267		for_each_possible_cpu(cpu) {
-   268			struct cgroup_rstat_cpu *rstatc = cgroup_rstat_cpu(cgrp, cpu);
-   269	
-   270			rstatc->updated_children = cgrp;
-   271			u64_stats_init(&rstatc->bsync);
-   272		}
-   273	
-   274		return 0;
-   275	}
-   276	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+--Andy

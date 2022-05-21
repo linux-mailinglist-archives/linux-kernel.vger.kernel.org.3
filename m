@@ -2,144 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84E8052F779
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 04:00:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F40C52F77E
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 04:08:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354343AbiEUCAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 22:00:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58378 "EHLO
+        id S1353571AbiEUCIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 22:08:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232860AbiEUCAb (ORCPT
+        with ESMTP id S229829AbiEUCI0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 22:00:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6121915F6C6;
-        Fri, 20 May 2022 19:00:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F3E6C61ECF;
-        Sat, 21 May 2022 02:00:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B859C385A9;
-        Sat, 21 May 2022 02:00:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653098429;
-        bh=lASD+l4g0VxygFaghqtOSOuG8Fp0yTmMNSbT1Tkf6/0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=sR/BLWRhIvrFAhzfhttDCos3C6XDIzfGPvr7vybnNmFAO05kG806HMuKcVIOEZsEn
-         tqyf1gOgE3XQVJobDDKX3Oa+uw+OqaUHpcU0X6j19fkr0BsL9ZFhFb8zRe5c1n/a2o
-         HrOnSUqYpcp7Hai+wDUsBeu8bE6AzlHsR9m9shGEt8A7EvpMzsdWn+dRnK2siVMVwM
-         HCMLDHcdfsJ7EYuiuV/iA28FAPf6beehB6XeU7kLQbtZQrJh51zBNRK8RGOOouo87F
-         3ms4/1v7KOglIdmVcrBK7BjXeB5UROKsmXPOBkowt188hfPPY6VkCVgB+JbpguXY2d
-         wigWzNwBOw8qA==
-Message-ID: <5f189615-8701-e2ca-d9a6-d6037f8799aa@kernel.org>
-Date:   Fri, 20 May 2022 20:00:23 -0600
+        Fri, 20 May 2022 22:08:26 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51C9E185436
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 19:08:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653098905; x=1684634905;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=b9S9Aqrr0Lj8pYHLyu8e12E8vWzlnWY3ZNeBgajyeXM=;
+  b=mmCJbGCSLydsmLQk4lhyxGOb7R3+WkoGxJba+syds6TQjVzlgVnHFbU/
+   k+cN+t+VmXjNzKZrWaglkCaFHUBfkvMVSHN8pqcMH4SqS0oQhanLYaHVz
+   LiAzJ/lJMCGj2tE7+H5hiYPqgIxRJ/VrualjUr1qH469AlNEwnu+dLFCn
+   3Ov3jqLoNh2beMxjFY/uPAIiXpIqvOxrtqZXTTKB5uA2jXCTBAb7L0oou
+   NuL08QsIlldxt0g0SMhB5hkeImRKxCtXznK4dWaXT0MnPKCmnlU4nw/II
+   /gv2PZpE1nyZlyTCeh6whhfGfv93Xso3GJdglqVezHQJJDdrdnBMtdIRy
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10353"; a="298104098"
+X-IronPort-AV: E=Sophos;i="5.91,240,1647327600"; 
+   d="scan'208";a="298104098"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 19:08:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,240,1647327600"; 
+   d="scan'208";a="557726970"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 20 May 2022 19:08:23 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nsEXX-0005mD-1j;
+        Sat, 21 May 2022 02:08:23 +0000
+Date:   Sat, 21 May 2022 10:07:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: xillybus_of.c:undefined reference to `devm_platform_ioremap_resource'
+Message-ID: <202205211012.u258CWm7-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: [PATCH net-next v3] net/ipv6: Introduce accept_unsolicited_na
- knob to implement router-side changes for RFC9131
-Content-Language: en-US
-To:     Arun Ajith S <aajith@arista.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        yoshfuji@linux-ipv6.org, kuba@kernel.org, pabeni@redhat.com,
-        corbet@lwn.net, prestwoj@gmail.com, gilligan@arista.com,
-        noureddine@arista.com, gk@arista.com
-References: <20220413143434.527-1-aajith@arista.com>
- <350f6a02-2975-ac1b-1c9d-ab738722a9fe@kernel.org>
- <CAOvjArTAce_68CkoUff_=Hi+mr731dsWcQdEbaev4xaMDFZNug@mail.gmail.com>
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <CAOvjArTAce_68CkoUff_=Hi+mr731dsWcQdEbaev4xaMDFZNug@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/20/22 1:19 AM, Arun Ajith S wrote:
-> On Thu, Apr 14, 2022 at 3:37 AM David Ahern <dsahern@kernel.org> wrote:
->>
->> On 4/13/22 8:34 AM, Arun Ajith S wrote:
->>> diff --git a/tools/testing/selftests/net/ndisc_unsolicited_na_test.py b/tools/testing/selftests/net/ndisc_unsolicited_na_test.py
->>> new file mode 100755
->>> index 000000000000..f508657ee126
->>> --- /dev/null
->>> +++ b/tools/testing/selftests/net/ndisc_unsolicited_na_test.py
->>> @@ -0,0 +1,255 @@
->>> +#!/bin/bash
->>
->> that file name suffix should be .sh since it is a bash script; not .py
->>
->> other than that looks good to me.
->>
->> Reviewed-by: David Ahern <dsahern@kernel.org>
-> 
-> Hi David,
-> 
-> It has been pointed out to me that I might have read RFC9131 in a
-> narrower sense than what was intended.
-> The behavior of adding a new entry in the neighbour cache on receiving
-> a NA if none exists presently
-> shouldn't be limited to unsolicited NAs like in my original patch,
-> rather it should extend to all NAs.
-> 
-> I am quoting from the RFC below
-> 
->    |  When a valid Neighbor Advertisement is received (either solicited
->    |  or unsolicited), the Neighbor Cache is searched for the target's
->    |  entry.  If no entry exists:
->    |
->    |  *  Hosts SHOULD silently discard the advertisement.  There is no
->    |     need to create an entry if none exists, since the recipient has
->    |     apparently not initiated any communication with the target.
->    |
->    |  *  Routers SHOULD create a new entry for the target address with
->    |     the link-layer address set to the Target Link-Layer Address
->    |     Option (if supplied).  The entry's reachability state MUST be
->    |     set to STALE.  If the received Neighbor Advertisement does not
->    |     contain the Target Link-Layer Address Option, the advertisement
->    |     SHOULD be silently discarded.
-> 
-> I want to fix this, but this would mean the sysctl name
-> accept_unsolicited_na is no longer appropriate
-> I see that the net-next window for 5.19 is still open and changing the
-> sysctl name
-> wouldn't mean changing an existing interface.
-> I was thinking of renaming the sysctl to accept_untracked_na to
-> highlight that we are accepting NAs even if there is
-> no corresponding entry tracked in the neighbor cache.
-> 
-> Also, there's an error in my comment, where I say "pass up the stack"
-> as we don't pass NAs up the stack.
-> The comment can be updated as:
->         /* RFC 9131 updates original Neighbour Discovery RFC 4861.
->          * NAs with Target LL Address option without a corresponding
->          * entry in the neighbour cache can now create a STALE neighbour
->          * cache entry on routers.
->          *
->          *   entry accept  fwding  solicited        behaviour
->          * ------- ------  ------  ---------    ----------------------
->          * present      X       X         0     Set state to STALE
->          * present      X       X         1     Set state to REACHABLE
->          *  absent      0       X         X     Do nothing
->          *  absent      1       0         X     Do nothing
->          *  absent      1       1         X     Add a new STALE entry
->          */
-> 
-> In summary
-> 1. accept=0 keeps original(5.18) behavior for all cases.
-> 2. accept=1 changes original behavior for entry=asbent, fwding=1 case
-> provided the NA had specified target link-layer address.
-> 
-> Please let me know what you think.
-> 
+Hi Herbert,
 
-Changes can be made until it is in a released kernel to users. This
-feature has many weeks before it hits that level.
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   3b5e1590a26713a8c76896f0f1b99f52ec24e72f
+commit: a1315dcb7b6a7d3a78df848eed5b331a4b3ec28a hwrng: ks-sa - Add dependency on IOMEM and OF
+date:   1 year, 6 months ago
+config: s390-buildonly-randconfig-r006-20220520 (https://download.01.org/0day-ci/archive/20220521/202205211012.u258CWm7-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a1315dcb7b6a7d3a78df848eed5b331a4b3ec28a
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout a1315dcb7b6a7d3a78df848eed5b331a4b3ec28a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   s390-linux-ld: drivers/irqchip/irq-imx-intmux.o: in function `imx_intmux_probe':
+   irq-imx-intmux.c:(.text+0x522): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/phy/marvell/phy-mvebu-a3700-utmi.o: in function `mvebu_a3700_utmi_phy_probe':
+   phy-mvebu-a3700-utmi.c:(.text+0x152): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/soc/fsl/dpaa2-console.o: in function `dpaa2_console_close':
+   dpaa2-console.c:(.text+0x8c): undefined reference to `iounmap'
+   s390-linux-ld: drivers/soc/fsl/dpaa2-console.o: in function `dpaa2_console_probe':
+   dpaa2-console.c:(.text+0xea): undefined reference to `of_address_to_resource'
+   s390-linux-ld: drivers/soc/fsl/dpaa2-console.o: in function `dpaa2_generic_console_open.constprop.0':
+   dpaa2-console.c:(.text+0x212): undefined reference to `ioremap'
+   s390-linux-ld: dpaa2-console.c:(.text+0x254): undefined reference to `iounmap'
+   s390-linux-ld: dpaa2-console.c:(.text+0x28a): undefined reference to `ioremap'
+   s390-linux-ld: dpaa2-console.c:(.text+0x45a): undefined reference to `iounmap'
+   s390-linux-ld: drivers/char/hw_random/exynos-trng.o: in function `exynos_trng_probe':
+   exynos-trng.c:(.text+0x318): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/char/hw_random/meson-rng.o: in function `meson_rng_probe':
+   meson-rng.c:(.text+0xc2): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/char/hw_random/mtk-rng.o: in function `mtk_rng_probe':
+   mtk-rng.c:(.text+0x380): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/char/hw_random/npcm-rng.o: in function `npcm_rng_probe':
+   npcm-rng.c:(.text+0x2da): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/char/xillybus/xillybus_of.o: in function `xilly_drv_probe':
+>> xillybus_of.c:(.text+0x20c): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/watchdog/sirfsoc_wdt.o:sirfsoc_wdt.c:(.text+0x1d8): more undefined references to `devm_platform_ioremap_resource' follow
+   s390-linux-ld: drivers/clocksource/timer-of.o: in function `timer_of_init':
+   timer-of.c:(.init.text+0x66): undefined reference to `of_iomap'
+   s390-linux-ld: timer-of.c:(.init.text+0x300): undefined reference to `iounmap'
+   s390-linux-ld: drivers/clocksource/timer-of.o: in function `timer_of_cleanup':
+   timer-of.c:(.init.text+0x3dc): undefined reference to `iounmap'
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

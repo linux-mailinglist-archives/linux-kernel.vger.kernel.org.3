@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12DB552FBE2
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:29:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 801C552FBD9
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:29:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356594AbiEULXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 07:23:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52932 "EHLO
+        id S1356974AbiEULX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 07:23:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349966AbiEULNa (ORCPT
+        with ESMTP id S1355000AbiEULOB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 07:13:30 -0400
+        Sat, 21 May 2022 07:14:01 -0400
 Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2053B1059C7;
-        Sat, 21 May 2022 04:12:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 746AE12B036;
+        Sat, 21 May 2022 04:12:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=inria.fr; s=dc;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=ajlODn0UBCgHpmr/xDSe9adH/UaGKwJcJ/bx4WGDDLU=;
-  b=qns+9z60FQq4RCGA7pZ29gmbZeEQ6FiACDHafewG8k9tJupBJ89ClEl1
-   QOPMjAiwYj9OVI6vIPOZWZtYqxOrPRUwZ+Kg2pxU/ydEbqQjVG3AeKECF
-   R7P/7Ghc3kEeyBdF2u3o/Qy7O7KJlokb8n4hFjyhVN6KPiZSonzZ1D4TF
-   o=;
+  bh=v+ZPMIx9AjXYp92+fHcfEdS/GpROmWYy/KwD1X8Vw3E=;
+  b=Q1pE42yk/Yvt6vOxeSfKrdtGd4QlL7mM5PK713gHGZNz+rMiNqAdhp4O
+   vf8tnyFvzHE/YX8pcDInCMEyaD8yfIsmApyFoUZxL+yT3+gdy/D1X0P83
+   K16DNFqiQJe1XfE64LVH6bJiH8R6D7dFzB8FI4+3F55inDZOgIwDnrXDA
+   4=;
 Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
 X-IronPort-AV: E=Sophos;i="5.91,242,1647298800"; 
-   d="scan'208";a="14727990"
+   d="scan'208";a="14727991"
 Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
   by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 13:12:06 +0200
 From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Frederic Barrat <fbarrat@linux.ibm.com>
-Cc:     kernel-janitors@vger.kernel.org,
-        Andrew Donnellan <ajd@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] cxl: fix typo in comment
-Date:   Sat, 21 May 2022 13:11:32 +0200
-Message-Id: <20220521111145.81697-82-Julia.Lawall@inria.fr>
+To:     Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
+Cc:     kernel-janitors@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] IB/hf1: fix typo in comment
+Date:   Sat, 21 May 2022 13:11:33 +0200
+Message-Id: <20220521111145.81697-83-Julia.Lawall@inria.fr>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -56,20 +56,20 @@ Detected with the help of Coccinelle.
 Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
 ---
- include/misc/cxl.h |    2 +-
+ drivers/infiniband/hw/hfi1/efivar.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/misc/cxl.h b/include/misc/cxl.h
-index 0410412de16b..d8044299d654 100644
---- a/include/misc/cxl.h
-+++ b/include/misc/cxl.h
-@@ -30,7 +30,7 @@ unsigned int cxl_pci_to_cfg_record(struct pci_dev *dev);
- /*
-  * Context lifetime overview:
-  *
-- * An AFU context may be inited and then started and stoppped multiple times
-+ * An AFU context may be inited and then started and stopped multiple times
-  * before it's released. ie.
-  *    - cxl_dev_context_init()
-  *      - cxl_start_context()
+diff --git a/drivers/infiniband/hw/hfi1/efivar.c b/drivers/infiniband/hw/hfi1/efivar.c
+index e8ed05516bf2..7741a1d69097 100644
+--- a/drivers/infiniband/hw/hfi1/efivar.c
++++ b/drivers/infiniband/hw/hfi1/efivar.c
+@@ -72,7 +72,7 @@ static int read_efi_var(const char *name, unsigned long *size,
+ 	 * is in the EFIVAR_FS code and may not be compiled in.
+ 	 * However, even that is insufficient since it does not cover
+ 	 * EFI_BUFFER_TOO_SMALL which could be an important return.
+-	 * For now, just split out succces or not found.
++	 * For now, just split out success or not found.
+ 	 */
+ 	ret = status == EFI_SUCCESS   ? 0 :
+ 	      status == EFI_NOT_FOUND ? -ENOENT :
 

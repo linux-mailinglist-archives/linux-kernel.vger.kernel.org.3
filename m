@@ -2,108 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F8EC52FFCE
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 01:17:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6878152FFD0
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 01:23:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242140AbiEUXRB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 19:17:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49942 "EHLO
+        id S1345688AbiEUXXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 19:23:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231722AbiEUXQ7 (ORCPT
+        with ESMTP id S231722AbiEUXXC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 19:16:59 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 113433BA7F
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 16:16:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653175017; x=1684711017;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Rycxr443wFid+g2GJ0o9jGmTRhZeCqNzHxVhatzRSCo=;
-  b=kufpzR53orrm8ly/9DBUVJRmginzneA4x9dpkc1cvI+xgwohpM0E8aCL
-   CSzOUL8KdxPuKXzpPLqpBFnWrO2hUA8T6O2g1tj4ENKEf6uJxJ41RPu36
-   zVv4OTDWNfypl6M9WMd4/QF7pGp54hFbS12u3WY/8oppEJzkHuTExaY9X
-   pAQkGd0mVNvuSX54hnsI36iewwBqJo5XbIRs9ozxebRWMGjl+Gfwo8NA+
-   gxY7iipINEPQUhmkCHHu+IsduTe2z0uaCy7UQNS5gVoUsUKTkaZT9lu9j
-   XLp0XKb8Z7oOgk5ZhKSS3jFrSJRUX7Fd4tIMc0oR9mCDAmaZOSa/xcuwE
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10354"; a="272623882"
-X-IronPort-AV: E=Sophos;i="5.91,243,1647327600"; 
-   d="scan'208";a="272623882"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 16:16:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,243,1647327600"; 
-   d="scan'208";a="558038650"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 21 May 2022 16:16:54 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nsYL8-0006hM-7I;
-        Sat, 21 May 2022 23:16:54 +0000
-Date:   Sun, 22 May 2022 07:16:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jim Quinlan <jim2101024@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: arch/mips/bmips/dma.c:7:6: warning: no previous prototype for
- 'arch_sync_dma_for_cpu_all'
-Message-ID: <202205220745.AYB1Q33g-lkp@intel.com>
+        Sat, 21 May 2022 19:23:02 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE2341F8F
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 16:23:00 -0700 (PDT)
+Received: from [192.168.1.107] ([37.4.249.107]) by mrelayeu.kundenserver.de
+ (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MtfRp-1naCv71a5H-00v56E; Sun, 22 May 2022 01:22:02 +0200
+Message-ID: <77d6d498-7dd9-03eb-60f2-d7e682bb1b20@i2se.com>
+Date:   Sun, 22 May 2022 01:22:00 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Content-Language: en-US
+To:     Marcelo Tosatti <mtosatti@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>
+Cc:     Borislav Petkov <bp@alien8.de>, Minchan Kim <minchan@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Phil Elwell <phil@raspberrypi.com>, regressions@lists.linux.dev
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+Subject: vchiq: Performance regression since 5.18-rc1
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:rd1cpxzMrn3SOHrTFF5zZUZ+MyEdYrLnnFtzNhw6NDyO+22glyu
+ r0DsQ26+qvx7bbyHXAbhlpFs7NcpxGkkiPsahc6ylqEqE7yzbcdGXMkT5GCTU6EzkNaFNbV
+ DH5rSUxT4TsO6SX5yC7dQcUnMd0IpcqFKHV8pZVLKeTN5IzMFNeeqy1I812kZxKOuFHjxDw
+ r9Ff3KZtGm3XuAGsCR08A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Yvu4QkXgvVk=:vO/qTOUlGO8FDcx4GPQGUr
+ nrIP7WShLJdoP4371yy0Znn56kBpY2sK9smuDvNBoxWou8x7xGYRln3L1SBVJx61VtOr0Ld7O
+ tIQ7/ldbL70jyZ7Lvcz5ZmDFvNEDhOvQuKDyZbL8+2KzKqrtq1BX15/qQstBrJ+0yAquG6soW
+ 9wXqAmj6HAi/oqT1uITT5Ua/xkNmoyknv2LUqL/SzP18bcg9KcONN4hN0jiC5ADymMkv2WuYP
+ l3ViDx4EF9dMKcYV0xd7xjZfOSUF8LuUbFKI2bqJtjRcM1HDcs/WttLF9kp14dZLe4kdAy/L1
+ rtQwpDK6L7URTatED8Ku3O6D1QkgKbGQe4Rl138WjX6ZOkvenefQ/LpFX7bYTTIKrelHAE9Ut
+ FF7/f71sci3Uem508wNQMMscJ+ViRaMglNcFKH8Z5DPl1OeckarVtWnduCoa0fonFmu5OoPAW
+ cXhlFwMZhEpZ81xwGGjmuj7x6ENjCwEc2g9cU7Ab22LU6FQht4A36NZFZgCHSLtgPXMBQMA7R
+ yeW4q2BStXLir5l5F/xqhFGLPwJMBRheCOLGOLWK4KB3v2NTzwAMOmm2zxf6hp6V3durEo1ui
+ xmYha3dcrXAu4/PD6lwYbaFKBTCm/zs3TP+58GuUf8qH2P3yLj7X51k4rYp7L1ZKTw1MBeXGd
+ pelkgNsJdINeBQKioxEPAJTSIPplROLHJMxqk3qQErSJ1kokfGhRIARGr9qTMkb7RZvQfKmIy
+ TFw7IBWKw5v6Sh560HtpIWis+oleaatGuu2zXe46m2f14TK+7oDE/3HvSDA=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jim,
+Hi,
 
-FYI, the error/warning still remains.
+while testing the staging/vc04_services/interface/vchiq_arm driver with 
+my Raspberry Pi 3 B+ (multi_v7_defconfig) i noticed a huge performance 
+regression since [ff042f4a9b050895a42cae893cc01fa2ca81b95c] mm: 
+lru_cache_disable: replace work queue synchronization with synchronize_rcu
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   6c3f5bec9b40b9437410abb08eccd5cdd1598a3c
-commit: d552ddeaab4a15a8dc157ac007833aa0b3706862 MIPS: bmips: Remove obsolete DMA mapping support
-date:   4 months ago
-config: mips-randconfig-r004-20220522 (https://download.01.org/0day-ci/archive/20220522/202205220745.AYB1Q33g-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d552ddeaab4a15a8dc157ac007833aa0b3706862
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout d552ddeaab4a15a8dc157ac007833aa0b3706862
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/bmips/
+Usually i run "vchiq_test -f 1" to see the driver is still working [1].
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Before commit:
 
-All warnings (new ones prefixed by >>):
+real    0m1,500s
+user    0m0,068s
+sys    0m0,846s
 
->> arch/mips/bmips/dma.c:7:6: warning: no previous prototype for 'arch_sync_dma_for_cpu_all' [-Wmissing-prototypes]
-       7 | void arch_sync_dma_for_cpu_all(void)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~
+After commit:
+
+real    7m11,449s
+user    0m2,049s
+sys    0m0,023s
+
+Best regards
+
+[1] - https://github.com/raspberrypi/userland
 
 
-vim +/arch_sync_dma_for_cpu_all +7 arch/mips/bmips/dma.c
-
-d666cd0246f78b arch/mips/bcm3384/dma.c Kevin Cernekee    2014-10-20  6  
-56e35f9c5b87ec arch/mips/bmips/dma.c   Christoph Hellwig 2019-11-07 @7  void arch_sync_dma_for_cpu_all(void)
-
-:::::: The code at line 7 was first introduced by commit
-:::::: 56e35f9c5b87ec1ae93e483284e189c84388de16 dma-mapping: drop the dev argument to arch_sync_dma_for_*
-
-:::::: TO: Christoph Hellwig <hch@lst.de>
-:::::: CC: Christoph Hellwig <hch@lst.de>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

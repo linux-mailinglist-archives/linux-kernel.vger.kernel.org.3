@@ -2,135 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A2E652F804
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 05:25:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 777A252F809
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 05:29:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235064AbiEUDZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 23:25:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46540 "EHLO
+        id S239580AbiEUD2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 23:28:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231743AbiEUDZO (ORCPT
+        with ESMTP id S230497AbiEUD2v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 23:25:14 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E05187D8F;
-        Fri, 20 May 2022 20:25:12 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id gg20so9528989pjb.1;
-        Fri, 20 May 2022 20:25:12 -0700 (PDT)
+        Fri, 20 May 2022 23:28:51 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96ABF17856B;
+        Fri, 20 May 2022 20:28:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=srHucyXa3M3L2xwtZzIWQdA+RV7TAlhAfzh/7sAefe8=;
-        b=NTqXHE9UCcyj7Bih4sgeeQfhBLD7/niyepd8g2nJpwh3FEhdqVm1Lb13kRt+qOogHX
-         owgvx4hSBva1Y9OvIwr3lxDFxN0quT7ul8Bn3r4xRK72lRAQsq+EkrgtbWmPuHWRK0NC
-         F6qm2rsKnWWuIqSL0VChbsbwzF9+8rRSLV4wJALe2OQ5bShU3wXbGtUUk8INKcNplcn1
-         XGKUi0cUDD5O160LpOhU91QAW8+nMiEd4JkBdWIN3tz8WsBj90ker8ZL5aTmzWWmUEtQ
-         eBywN02hMHBhmc8lj22ZmpRGqb9LGM2cPYOtSdJlCd6A1zBO4dfbpedwHHcPTrYaoMFB
-         KWiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=srHucyXa3M3L2xwtZzIWQdA+RV7TAlhAfzh/7sAefe8=;
-        b=e2lctWyqxzTYYbcOseXuDpZSnRqI2twfV/QxYmNG1qGgY/RHfF6j2jP1jEDOfwKIV2
-         Qf639iy1QC65/L6731Z5T3M+kWzkSHQRTYEDX0komp7pJbJxF0Y4ALumS5J2TILHhJda
-         zpABNVw5FBoh5S/X2kqS8OE29xAZ89ZffaGQnSYhDVASbLewJE4o2oruQGT+6RBecebz
-         iZ7g3rEdVPa4KaTJd3XYsaoLOZc6vcoS1lM0ke4KK2n5Mt/9OnrNIYT7+cr1zSFTT2Tl
-         0TX/GUhUGE4FQj/3FswiKjJVZnCowte03cDTtqQiSTPU1aszrmcj6Y4NYURSJAGxeDl7
-         368g==
-X-Gm-Message-State: AOAM5337xhiLphQXoBVSLa6BXG+FnCB/PGq+l5N4izXMNkp8UJGkgsbs
-        fKEwbokTX3sjwbpEhchxUrc=
-X-Google-Smtp-Source: ABdhPJz7hkAsuMIxzrZUQvOGLFk7XGtePhFKoNgQzk26Rbwa+SGIYLu8hqxi0XatY3eNzsWsIrWgRg==
-X-Received: by 2002:a17:903:3112:b0:161:80df:f11 with SMTP id w18-20020a170903311200b0016180df0f11mr12268414plc.68.1653103512206;
-        Fri, 20 May 2022 20:25:12 -0700 (PDT)
-Received: from hyeyoo ([114.29.24.243])
-        by smtp.gmail.com with ESMTPSA id e1-20020a170902b78100b0015e8d4eb229sm448235pls.115.2022.05.20.20.24.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 20:25:11 -0700 (PDT)
-Date:   Sat, 21 May 2022 12:24:56 +0900
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Byungchul Park <byungchul.park@lge.com>
-Cc:     torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
-        linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, peterz@infradead.org,
-        will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
-        joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
-        chris@chris-wilson.co.uk, duyuyang@gmail.com,
-        johannes.berg@intel.com, tj@kernel.org, tytso@mit.edu,
-        willy@infradead.org, david@fromorbit.com, amir73il@gmail.com,
-        bfields@fieldses.org, gregkh@linuxfoundation.org,
-        kernel-team@lge.com, linux-mm@kvack.org, akpm@linux-foundation.org,
-        mhocko@kernel.org, minchan@kernel.org, hannes@cmpxchg.org,
-        vdavydov.dev@gmail.com, sj@kernel.org, jglisse@redhat.com,
-        dennis@kernel.org, cl@linux.com, penberg@kernel.org,
-        rientjes@google.com, vbabka@suse.cz, ngupta@vflare.org,
-        linux-block@vger.kernel.org, paolo.valente@linaro.org,
-        josef@toxicpanda.com, linux-fsdevel@vger.kernel.org,
-        viro@zeniv.linux.org.uk, jack@suse.cz, jack@suse.com,
-        jlayton@kernel.org, dan.j.williams@intel.com, hch@infradead.org,
-        djwong@kernel.org, dri-devel@lists.freedesktop.org,
-        airlied@linux.ie, rodrigosiqueiramelo@gmail.com,
-        melissa.srw@gmail.com, hamohammed.sa@gmail.com
-Subject: Re: [PATCH RFC v6 02/21] dept: Implement Dept(Dependency Tracker)
-Message-ID: <YohbiJquna5LlgVv@hyeyoo>
-References: <1651652269-15342-1-git-send-email-byungchul.park@lge.com>
- <1651652269-15342-3-git-send-email-byungchul.park@lge.com>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1653103728; x=1684639728;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0LDXVKVdyKs0GAHKkPbR5zauQdlYZvFTlw+hJZ4BOLc=;
+  b=PVahPzGcmj2rvYjndNmPbHYpETu2GMMHzIcM1fryh1vZ1vT3SInKsOfQ
+   F5OcxuED1VKd6Y4uPHGCBKyTy6r7f8a9coszg1zD38Uao8yn/6jmp/ZtC
+   wKrX3V7e+KOIEGSpUoDzLF/Z87mDofpZmi4TFHUgYza693nUM39nlXP+0
+   M=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 20 May 2022 20:28:48 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 20:28:48 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 20 May 2022 20:28:47 -0700
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 20 May 2022 20:28:43 -0700
+Date:   Sat, 21 May 2022 08:58:39 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Harsh Agarwal <quic_harshq@quicinc.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>
+Subject: Re: [RFC 1/2] dt-bindings: usb: dwc3: Add support for multiport
+ related properties
+Message-ID: <20220521032839.GA15121@hu-pkondeti-hyd.qualcomm.com>
+References: <1652963695-10109-1-git-send-email-quic_harshq@quicinc.com>
+ <1652963695-10109-2-git-send-email-quic_harshq@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <1651652269-15342-3-git-send-email-byungchul.park@lge.com>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <1652963695-10109-2-git-send-email-quic_harshq@quicinc.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 05:17:30PM +0900, Byungchul Park wrote:
-> CURRENT STATUS
-> +/*
+Hi Harsh,
 
-[...]
-
-> + * Ensure it has been called on ON/OFF transition.
-> + */
-> +void dept_enirq_transition(unsigned long ip)
-> +{
-> +	struct dept_task *dt = dept_task();
-> +	unsigned long flags;
+On Thu, May 19, 2022 at 06:04:54PM +0530, Harsh Agarwal wrote:
+> Added support for multiport, mport, num-ssphy and num-hsphy
+> properties. These properties are used to support devices having
+> a multiport controller.
+> 
+> Signed-off-by: Harsh Agarwal <quic_harshq@quicinc.com>
+> ---
+>  .../devicetree/bindings/usb/snps,dwc3.yaml         | 55 ++++++++++++++++++++++
+>  1 file changed, 55 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> index f4471f8..39c61483 100644
+> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> @@ -341,6 +341,35 @@ properties:
+>        This port is used with the 'usb-role-switch' property  to connect the
+>        dwc3 to type C connector.
+>  
+> +  multiport:
+> +    description:
+> +      If a single USB controller supports multiple ports, then it's referred to as
+> +      a multiport controller. Each port of the multiport controller can support
+> +      either High Speed or Super Speed or both and have their own PHY phandles. Each
+> +      port is represented by "mport" node and all the "mport" nodes are grouped
+> +      together inside the "multiport" node where individual "mport" node defines the
+> +      PHYs supported by that port.
+> +    required:
+> +      - mport
 > +
-> +	if (unlikely(READ_ONCE(dept_stop) || in_nmi()))
-> +		return;
+> +  num-hsphy:
+> +    description: Total number of HS-PHYs defined by the multiport controller.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
 > +
-> +	/*
-> +	 * IRQ ON/OFF transition might happen while Dept is working.
-> +	 * We cannot handle recursive entrance. Just ingnore it.
-> +	 * Only transitions outside of Dept will be considered.
-> +	 */
-> +	if (dt->recursive)
-> +		return;
+> +  num-ssphy:
+> +    description: Total number of SS-PHYs defined by the multiport controller.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
 > +
-> +	flags = dept_enter();
+Do we need this properties at all? Atleast your next patch in this series is
+not parsing those properties. The idea I believe is to maintain the same
+usb-phy / phys semantics as of today. i.e we expect first PHY to be USB2 PHY
+and 2nd PHY to be USB3 PHY. Obviously, we need to make sure that all ports
+defined under multiport node are passing PHYs without any holes. For example,
+if the controller has 3 ports and passing phys for 1st and 3rd port is not
+acceptible. In any case we need to know the number of HS and SS PHYs so that 
+the GUSB2PHYCFG/GUSB3PIPECTL are configured correctly, irrespective of how we
+handle phy(s) in this node.
+
+Can you please clarify on the need for num-hsphy and num-ssphy and what
+happens for USB2 only ports?
+
+> +  mport:
+> +    description: Each mport node represents one port of the multiport controller.
+> +    patternProperties: "^mport@[0-9a-f]+$"
+> +    oneOf:
+> +       - required:
+> +         - usb-phy
+> +       - required:
+> +          - phys
+> +          - phy-names
 > +
-> +	enirq_update(ip);
-> +
-> +	dept_exit(flags);
-> +}
 
-EXPORT_SYMBOL_GPL(dept_enirq_transition);
-
-ERROR: modpost: "dept_enirq_transition" [arch/x86/kvm/kvm-amd.ko] undefined!
-ERROR: modpost: "dept_enirq_transition" [arch/x86/kvm/kvm-intel.ko] undefined!
-
-This function needs to be exported for modules.
-
-Thanks.
-
--- 
 Thanks,
-Hyeonggon
+Pavan

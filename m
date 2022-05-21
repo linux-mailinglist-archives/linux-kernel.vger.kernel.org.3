@@ -2,74 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A55552FA47
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 11:22:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2912252FA4A
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 11:23:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234960AbiEUJWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 05:22:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45722 "EHLO
+        id S241953AbiEUJW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 05:22:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230144AbiEUJWO (ORCPT
+        with ESMTP id S230144AbiEUJWy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 05:22:14 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A11562C0;
-        Sat, 21 May 2022 02:22:12 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id g184so9638295pgc.1;
-        Sat, 21 May 2022 02:22:12 -0700 (PDT)
+        Sat, 21 May 2022 05:22:54 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC535FF20;
+        Sat, 21 May 2022 02:22:53 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id y32so17935201lfa.6;
+        Sat, 21 May 2022 02:22:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=eVwXSEcM8+RBhdBEqFU8SHdsjcjqQ0piyTZmYlpvgv8=;
-        b=FrbzxtqI3XnSH1ZKqSIHEUFu3S3YmFm91+WFgC24lWj/eX6XmO4c9aXP4IOCuGxKPN
-         FOHIGN0QJsOenvchZOmLM+nhVXKkLGkp9kji1nPPPbntW953AlYuTXixLYCcuF6GenFk
-         ZA8qqGWzu/9XlfskmIE4opoqhHH81b25NXtmDVL0CNiEclIrevx85xHTAs4tn0R9UU5R
-         Drt9oOKh1b4i9hKDK6isYcavVtqkHI+umn/nHJdlgxaIAG3j3AlRDLQiKsFVDPINX3NX
-         Lzcdl5ybSSw9LhaR7eAH99Eq++PSd+mcyon0oyt2IFEl80OkIS/cNtArkKjJXehHq46D
-         7SAA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=xSyipWzorTdApD5hrRaa+nfQZ/aw7gdMuxHBe7jS38A=;
+        b=CzZBBjq3IOtZg3o41CjyZtHO4GWSWmOMRR8i2cL0rW279ta4tuwiVm3y09R3Mh0NSr
+         9om8PIxVHWHD46udUf8GwqvPgDSFHQHT7D+3j1ExzZZzyQuR9pIe9BjWllWJoaiz6fUd
+         Ufa9bl8DKAsayliGX1vkxQYZ8Q5ImmEyMv5n+2G1PHkgGmEfg58kuSxmCA/3uubQGFIS
+         hpc+ge6QIiqpj/Z7/7dBUNbZgv8ym9/rBjDug4kzdBU88JnUd13CtMu1gBE1QopfA5qg
+         Mb0vuWP2gdruH2xXv0fJKYUNVj8HWDdDM8S3xrUgVmjEIoEbW8iHM2t160fOUNXKQokI
+         Sneg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=eVwXSEcM8+RBhdBEqFU8SHdsjcjqQ0piyTZmYlpvgv8=;
-        b=ocwKHj6j9/8he0J90aaXBZ6pDM+NtPGXeN6eN6Zi9GvalYuQYVMwQMTf3pOAIhE4h5
-         Dfz9NGczYPoCJA7Q3rkFJPWRsMOaDsWRTyoqT9DrIJ75QpZwnY4UcEkG4+NKIkY+c26E
-         cDucqkh6wZWGU3mJYNz6IRqZy1fvOvb9zdEbYUaxgAOvskOCzYLrh3OG+OAJbKNkiU5b
-         bV3a/vdHzdEymhjDKlszg2GeTPcR+nQ2erUSPVSZQfoHFSWjdBJLvFSFks1ck0CjkZKC
-         ojtub28Vz1K8M8aad8rP7H0qj9emo/E8i11O9q7DxWTTzCrn7zPL5yDdv5I9NBVheKgn
-         7J4Q==
-X-Gm-Message-State: AOAM533e5jLA8gZKjNAHoUWKFg3Bc9XizU5kj2FDbFDOHvSyVCUp+2mS
-        CrpQuQLi0GDEodrr7IY5vzQ=
-X-Google-Smtp-Source: ABdhPJwPjKksW38Ww2pukzKZutD2as5QPONASQrrXNAUvBkhwf1IVt0HFlydQXEHCRXBlEphR7RApQ==
-X-Received: by 2002:a05:6a00:1784:b0:50d:d8cb:7a4f with SMTP id s4-20020a056a00178400b0050dd8cb7a4fmr14004963pfg.23.1653124931472;
-        Sat, 21 May 2022 02:22:11 -0700 (PDT)
-Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id k21-20020a170902761500b0015e8d4eb2a9sm1122482pll.243.2022.05.21.02.22.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 21 May 2022 02:22:10 -0700 (PDT)
-Message-ID: <0846c96d-62fa-555f-b0ab-1f5ec33fd5fb@gmail.com>
-Date:   Sat, 21 May 2022 18:22:06 +0900
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xSyipWzorTdApD5hrRaa+nfQZ/aw7gdMuxHBe7jS38A=;
+        b=Cru7UW+QqoJ6moF0awwTh3euLtD2dAfrY8qlqE0PaVQSGBYZisCi5P+XIfsK2n7jSc
+         uKpA4NzMUsQdnBxBxV2ISt6uKyyu4TJ5WxB5dTcYDRblO8gCEGnpIDNAjZCo27yqHIjs
+         UxZCDjWZnzd8edQjce+MfnjXXvAhwZtD7ymVqYmzkZwv7ctn+d5brZcuRcOaKko9OlLi
+         Qs2NFOFj/VwJCyqHAuzRwTdcUAJgYtCCwy6ArmXnLuZGcb+Qxno6BydmyUE4N0ZcUGZQ
+         teJvbkmihg3aRbiJHM4uFMfYNBE9mXHdZODceLsUYBrgJOiiDtmPif0jns48AyEjBeDZ
+         bXcA==
+X-Gm-Message-State: AOAM531+UKIP0gl541Ph7gx/nGL4/Kxa5yukmc/ky0P5K0V9ckOJ9Ykp
+        kB7eKoLXdRfh8VXJavczsvQ=
+X-Google-Smtp-Source: ABdhPJwqzAH9mwnk7Q3kT/zCIM9JpdEx0e/aHxhgjPrkO5JLsy17sG1nmg7lfgJDNZsE2e27ZzHkgg==
+X-Received: by 2002:a05:6512:3e26:b0:478:5972:54b7 with SMTP id i38-20020a0565123e2600b00478597254b7mr3674055lfv.646.1653124971545;
+        Sat, 21 May 2022 02:22:51 -0700 (PDT)
+Received: from mobilestation ([95.79.189.214])
+        by smtp.gmail.com with ESMTPSA id c11-20020a056512104b00b00477ce466e59sm712506lfb.153.2022.05.21.02.22.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 21 May 2022 02:22:50 -0700 (PDT)
+Date:   Sat, 21 May 2022 12:22:48 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 01/23] dt-bindings: ata: ahci-platform: Drop
+ dma-coherent property declaration
+Message-ID: <20220521092248.7i53lxf3gx26fmi5@mobilestation>
+References: <20220511231810.4928-1-Sergey.Semin@baikalelectronics.ru>
+ <20220511231810.4928-2-Sergey.Semin@baikalelectronics.ru>
+ <20220517185841.GA1388602-robh@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] arm64: Unify vertical spacing in HWCAPS
-Content-Language: en-US
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        =?UTF-8?Q?Martin_Li=c5=a1ka?= <mliska@suse.cz>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        corbet@lwn.net, Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-References: <4752814a-091c-9dd5-762c-6fd1a476c4bb@gmail.com>
- <e3921517-f903-3ad5-afa4-d7959051e5dd@suse.cz> <YoieFI7hdJPJW5qy@debian.me>
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <YoieFI7hdJPJW5qy@debian.me>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220517185841.GA1388602-robh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,207 +80,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+Cc: arm64 maintainers]
-Hi Martin,
+On Tue, May 17, 2022 at 01:58:41PM -0500, Rob Herring wrote:
+> On Thu, May 12, 2022 at 02:17:48AM +0300, Serge Semin wrote:
+> > It's redundant to have the 'dma-coherent' property explicitly specified in
+> > the DT schema because it's a generic property described in the core
+> > DT-schema by which the property is always evaluated.
+> 
 
-On 2022/05/21 17:08,
-Bagas Sanjaya wrote:
-> On Fri, May 20, 2022 at 04:01:33PM +0200, Martin Li=C5=A1ka wrote:
->> Promote headings by removing intermediate blank lines.
->>
->> Signed-off-by: Martin Liska <mliska@suse.cz>
->> ---
->>  Documentation/arm64/elf_hwcaps.rst | 23 -----------------------
->>  1 file changed, 23 deletions(-)
->>
->> diff --git a/Documentation/arm64/elf_hwcaps.rst b/Documentation/arm64/=
-elf_hwcaps.rst
->> index a8f30963e550..1e79044f51a2 100644
->> --- a/Documentation/arm64/elf_hwcaps.rst
->> +++ b/Documentation/arm64/elf_hwcaps.rst
->> @@ -171,96 +171,73 @@ HWCAP_PACG
->>      Documentation/arm64/pointer-authentication.rst.
->> =20
->>  HWCAP2_DCPODP
->> -
->>      Functionality implied by ID_AA64ISAR1_EL1.DPB =3D=3D 0b0010.
->> =20
->>  HWCAP2_SVE2
->> -
->>      Functionality implied by ID_AA64ZFR0_EL1.SVEVer =3D=3D 0b0001.
->> =20
->>  HWCAP2_SVEAES
->> -
->>      Functionality implied by ID_AA64ZFR0_EL1.AES =3D=3D 0b0001.
->> =20
->>  HWCAP2_SVEPMULL
->> -
->>      Functionality implied by ID_AA64ZFR0_EL1.AES =3D=3D 0b0010.
->> =20
->>  HWCAP2_SVEBITPERM
->> -
->>      Functionality implied by ID_AA64ZFR0_EL1.BitPerm =3D=3D 0b0001.
->> =20
->>  HWCAP2_SVESHA3
->> -
->>      Functionality implied by ID_AA64ZFR0_EL1.SHA3 =3D=3D 0b0001.
->> =20
->>  HWCAP2_SVESM4
->> -
->>      Functionality implied by ID_AA64ZFR0_EL1.SM4 =3D=3D 0b0001.
->> =20
->>  HWCAP2_FLAGM2
->> -
->>      Functionality implied by ID_AA64ISAR0_EL1.TS =3D=3D 0b0010.
->> =20
->>  HWCAP2_FRINT
->> -
->>      Functionality implied by ID_AA64ISAR1_EL1.FRINTTS =3D=3D 0b0001.
->> =20
->>  HWCAP2_SVEI8MM
->> -
->>      Functionality implied by ID_AA64ZFR0_EL1.I8MM =3D=3D 0b0001.
->> =20
->>  HWCAP2_SVEF32MM
->> -
->>      Functionality implied by ID_AA64ZFR0_EL1.F32MM =3D=3D 0b0001.
->> =20
->>  HWCAP2_SVEF64MM
->> -
->>      Functionality implied by ID_AA64ZFR0_EL1.F64MM =3D=3D 0b0001.
->> =20
->>  HWCAP2_SVEBF16
->> -
->>      Functionality implied by ID_AA64ZFR0_EL1.BF16 =3D=3D 0b0001.
->> =20
->>  HWCAP2_I8MM
->> -
->>      Functionality implied by ID_AA64ISAR1_EL1.I8MM =3D=3D 0b0001.
->> =20
->>  HWCAP2_BF16
->> -
->>      Functionality implied by ID_AA64ISAR1_EL1.BF16 =3D=3D 0b0001.
->> =20
->>  HWCAP2_DGH
->> -
->>      Functionality implied by ID_AA64ISAR1_EL1.DGH =3D=3D 0b0001.
->> =20
->>  HWCAP2_RNG
->> -
->>      Functionality implied by ID_AA64ISAR0_EL1.RNDR =3D=3D 0b0001.
->> =20
->>  HWCAP2_BTI
->> -
->>      Functionality implied by ID_AA64PFR0_EL1.BT =3D=3D 0b0001.
->> =20
->>  HWCAP2_MTE
->> -
->>      Functionality implied by ID_AA64PFR1_EL1.MTE =3D=3D 0b0010, as de=
-scribed
->>      by Documentation/arm64/memory-tagging-extension.rst.
->> =20
->>  HWCAP2_ECV
->> -
->>      Functionality implied by ID_AA64MMFR0_EL1.ECV =3D=3D 0b0001.
->> =20
->>  HWCAP2_AFP
->> -
->>      Functionality implied by ID_AA64MFR1_EL1.AFP =3D=3D 0b0001.
->> =20
->>  HWCAP2_RPRES
->> -
->>      Functionality implied by ID_AA64ISAR2_EL1.RPRES =3D=3D 0b0001.
->> =20
->>  HWCAP2_MTE3
->> -
->>      Functionality implied by ID_AA64PFR1_EL1.MTE =3D=3D 0b0011, as de=
-scribed
->>      by Documentation/arm64/memory-tagging-extension.rst.
->> =20
->> --=20
->> 2.36.1
->>
->=20
-> Hi,
->=20
-> Sorry for misunderstanding of this topic on my reply at [1].
->=20
-> After applying this patch and doing htmldocs build, I see the HTML
-> diff below.
+> It is not redundant.
+> 
+> The core schema defines the property (as a boolean), but this schema 
+> defines it being used in this binding. Otherwise, it won't be allowed.
 
-Hey Bagas, please don't speak in HTML diffs.
-Let's talk about ReST formatting.
+I thought that the generic properties like ranges, dma-ranges, etc
+including the dma-coherent one due to being defined in the dt-core
+schema are always evaluated. As such seeing the unevaluatedProperties
+property is set to false here, they can be used in the DT-nodes with
+no need to be explicitly specified in the DT node bindings. In
+addition to that I tested this assumption by dropping the dma-coherent
+property definition from the AHCI-common schema and executed the
+DT-bindings check procedure. No error has been spotted:
 
-So, the earlier part of the lists read:
+> [fancer@mobilestation] kernel $ cat Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml | grep dma-coherent
+>        dma-coherent;
+> [fancer@mobilestation] kernel $ make -j8 DT_SCHEMA_FILES=Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml dt_binding_check
+>   LINT    Documentation/devicetree/bindings
+>   DTEX    Documentation/devicetree/bindings/ata/snps,dwc-ahci.example.dts
+>   CHKDT   Documentation/devicetree/bindings/processed-schema.json
+>   SCHEMA  Documentation/devicetree/bindings/processed-schema.json
+>   DTC     Documentation/devicetree/bindings/ata/snps,dwc-ahci.example.dtb
+>   CHECK   Documentation/devicetree/bindings/ata/snps,dwc-ahci.example.dtb
+> [fancer@mobilestation] kernel $ cat Documentation/devicetree/bindings/ata/snps,dwc-ahci.example.dts | grep dma-coherent
+>           dma-coherent;
+> [fancer@mobilestation] kernel $ echo $?
+> 0
 
-----
-HWCAP_FP
-    Functionality implied by ID_AA64PFR0_EL1.FP =3D=3D 0b0000.
+Due to that here are a few backward questions:
+1) Am I doing something wrong in the framework of the DT-bindings
+evaluation? Really I even tried to specify unknown property in the
+DT-bindings example like "bla-bla-bla;" and no evaluation error was
+printed. Anyway If what you are saying was correct I would have got an
+error during the DT-bindings evaluation, but as you can see there was
+none.
+2) Am I wrong in thinking that the unevaluatedProperties setting
+concerns the generic properties defined in the DT-core schema? If it
+doesn't concern the generic properties then does it work for the
+$ref'ed schemas only? 
 
-HWCAP_ASIMD
-    Functionality implied by ID_AA64PFR0_EL1.AdvSIMD =3D=3D 0b0000.
 
-HWCAP_EVTSTRM
-    The generic timer is configured to generate events at a frequency of
-    approximately 10KHz.
-[...]
------
+Getting back to the patch topic. We need to drop the dma-coherent
+property from the schema anyway. AHCI-specification doesn't
+regulate the DMA operations coherency. The dma-coherent property is
+more specific to the particular controller implementation mainly
+dependent on the platform settings. So I'll change the patch log, but
+get to keep the patch in the series. What do you think?
 
-I see that what Martin wants is the consistency of the format of the list=
-s.
-I think the change is quite reasonable.
+-Sergey
 
-The list construct is called "Definition lists" in ReST. See:
-https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#defini=
-tion-lists
-
-This construct makes the defined terms be rendered in bolder
-face.  On the other hand, similar looking existing lists:
-
-----
-HWCAP2_DCPODP
-
-    Functionality implied by ID_AA64ISAR1_EL1.DPB =3D=3D 0b0010.
-
-HWCAP2_SVE2
-
-    Functionality implied by ID_AA64ZFR0_EL1.SVEVer =3D=3D 0b0001.
-
-[...]
-----
-
-are not recognized as "Definition lists" and rendered differently.
-Actually speaking, they are not in any list format.
-
-So my suggestion of the title would be:
-
-  "docs/arm64: elf_hwcaps: Unify HWCAP lists as description lists"
-
-[...]
-> Also, when submitting next iterations of your patch series, don't forge=
-t
-> to pass -v <number> to git-format-patch(1) so that the patch subject
-> prefix contains the correct version numbers. I gave that advice because=
-
-> I don't see that this patch is sent as v2 of [2].
->=20
-> CCing Akira to help reviewing.
->=20
-> [1]: https://lore.kernel.org/linux-doc/4752814a-091c-9dd5-762c-6fd1a476=
-c4bb@gmail.com/
-> [2]: https://lore.kernel.org/linux-doc/b95b3128-f010-dcba-1f6a-1a85dd2d=
-20a5@suse.cz/
->=20
-
-Yeah, please post the next version as a v3.
-
-Also, please note that this document belongs to the ARM64 PORT
-(AARCH64 ARCHITECTURE) subsystem.
-So please consult the entry in MAINTAINERS and prepare a
-patch against its tree at:
-
-T:	git git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
-
-and CC to the maintainers and the list of the subsystem.
-
-        Thanks, Akira
+> 
+> Rob

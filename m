@@ -2,50 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A02D352F998
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 09:22:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4B0A52F9C0
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 09:38:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354749AbiEUHWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 03:22:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46924 "EHLO
+        id S1349145AbiEUHiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 03:38:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240838AbiEUHVv (ORCPT
+        with ESMTP id S232064AbiEUHiJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 03:21:51 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B70F4C423;
-        Sat, 21 May 2022 00:21:50 -0700 (PDT)
-Received: from kwepemi100019.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L4w4P3YCtzhYsK;
-        Sat, 21 May 2022 15:21:09 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi100019.china.huawei.com (7.221.188.189) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 21 May 2022 15:21:48 +0800
-Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
- (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sat, 21 May
- 2022 15:21:47 +0800
-From:   Yu Kuai <yukuai3@huawei.com>
-To:     <jack@suse.cz>, <axboe@kernel.dk>, <paolo.valente@linaro.org>
-CC:     <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yukuai3@huawei.com>,
-        <yi.zhang@huawei.com>
-Subject: [PATCH -next v2 6/6] block, bfq: remove dead code for updating 'rq_in_driver'
-Date:   Sat, 21 May 2022 15:35:23 +0800
-Message-ID: <20220521073523.3118246-7-yukuai3@huawei.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220521073523.3118246-1-yukuai3@huawei.com>
-References: <20220521073523.3118246-1-yukuai3@huawei.com>
+        Sat, 21 May 2022 03:38:09 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95C7017D39F;
+        Sat, 21 May 2022 00:38:07 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id 686CC1F41DC7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1653118686;
+        bh=1mZ8cwoInROONWuhTnsZHEew9Oj6lZBNbHe4imfY4go=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mqGEZhYRlV39fiHFvJ8f5n/bf6mcyfVdAB6AMVNSb5evx/uhtIBcmR8Qe90UbMFog
+         Ksazz3MjUkp8wZUmD7pAskomaah1mB/28ymbS8EV8JlKi9eNrsj2olW+fNtDn0E7Tp
+         M4co91yyQikyv/fGowQUZ2wwmMNI3QYsTqIXtLB8OIWXyAJYk8iSvww417K8ytP39s
+         ABG8psZ5W7kMB9KqepswkbDulrfpHW6YtDe+dxhfJ8swa4qCmEIEKxpDDJ2EIaX6sX
+         IZ4Bou3u88GlE3Ws2GxmzhnnYOXMCv2BpothIkIViCoXcwHplC1DvoC6eV0wTSHzoD
+         J8S/AWEdpNW9A==
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+To:     Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        kernel@collabora.com, bagasdotme@gmail.com,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] docs/kselftest: add more guidelines for adding new tests
+Date:   Sat, 21 May 2022 12:36:51 +0500
+Message-Id: <20220521073651.4191910-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,41 +50,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Such code are not even compiled since they are inside marco "#if 0".
+Improve and add instructions to add new tests. Add build commands to
+test before sending the new test patch.
 
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 ---
- block/bfq-iosched.c | 16 ----------------
- 1 file changed, 16 deletions(-)
+Changes in v2:
+- Updated commit message
+- Removed dependence of this patch from other patch
+- Updated instructions
+---
+ Documentation/dev-tools/kselftest.rst | 27 ++++++++++++++++++++++++++-
+ 1 file changed, 26 insertions(+), 1 deletion(-)
 
-diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-index c0bc463d236c..be75bd9835f5 100644
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -2323,22 +2323,6 @@ static sector_t get_sdist(sector_t last_pos, struct request *rq)
- 	return 0;
- }
+diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
+index a833ecf12fbc1..ee6467ca8293f 100644
+--- a/Documentation/dev-tools/kselftest.rst
++++ b/Documentation/dev-tools/kselftest.rst
+@@ -208,6 +208,14 @@ In general, the rules for selftests are
+ Contributing new tests (details)
+ ================================
  
--#if 0 /* Still not clear if we can do without next two functions */
--static void bfq_activate_request(struct request_queue *q, struct request *rq)
--{
--	struct bfq_data *bfqd = q->elevator->elevator_data;
--
--	bfqd->rq_in_driver++;
--}
--
--static void bfq_deactivate_request(struct request_queue *q, struct request *rq)
--{
--	struct bfq_data *bfqd = q->elevator->elevator_data;
--
--	bfqd->rq_in_driver--;
--}
--#endif
--
- static void bfq_remove_request(struct request_queue *q,
- 			       struct request *rq)
- {
++ * In your Makefile, use facilities from lib.mk by including it instead of
++   reinventing the wheel. Specify flags and binaries generation flags on
++   need basis before including lib.mk. ::
++
++    CFLAGS = $(KHDR_INCLUDES)
++    TEST_GEN_PROGS := close_range_test
++    include ../lib.mk
++
+  * Use TEST_GEN_XXX if such binaries or files are generated during
+    compiling.
+ 
+@@ -230,13 +238,30 @@ Contributing new tests (details)
+  * First use the headers inside the kernel source and/or git repo, and then the
+    system headers.  Headers for the kernel release as opposed to headers
+    installed by the distro on the system should be the primary focus to be able
+-   to find regressions.
++   to find regressions. Use KHDR_INCLUDES in Makefile to include headers from
++   the kernel source.
+ 
+  * If a test needs specific kernel config options enabled, add a config file in
+    the test directory to enable them.
+ 
+    e.g: tools/testing/selftests/android/config
+ 
++ * Create a .gitignore file inside test directory and add all generated objects
++   in it.
++
++ * Add new test name in TARGETS in selftests/Makefile::
++
++    TARGETS += android
++
++ * All changes should pass::
++
++    kselftest-{all,install,clean,gen_tar}
++    kselftest-{all,install,clean,gen_tar} O=abo_path
++    kselftest-{all,install,clean,gen_tar} O=rel_path
++    make -C tools/testing/selftests {all,install,clean,gen_tar}
++    make -C tools/testing/selftests {all,install,clean,gen_tar} O=abs_path
++    make -C tools/testing/selftests {all,install,clean,gen_tar} O=rel_path
++
+ Test Module
+ ===========
+ 
 -- 
-2.31.1
+2.30.2
 

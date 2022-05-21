@@ -2,112 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7D1052FF3A
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 22:16:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27DB552FF3D
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 22:18:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237524AbiEUUQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 16:16:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53786 "EHLO
+        id S242100AbiEUUSQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 16:18:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236231AbiEUUQS (ORCPT
+        with ESMTP id S236231AbiEUUSO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 16:16:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 882F327149
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 13:16:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653164175;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=aYfGbu7Vp6C9Yi7GEbgp8ZiZyefeISQ36nK1X14PBlY=;
-        b=WpXp1yOLveQLAEZonO82eDQ4Qp9dIvZJrgYdUc2mOkj3fa1vgTzMFR39/c6luEH1ZF0708
-        O9ZGZFmCk1pJJLsVFcl7PeDdgZx2igP22TW+cNPF6S37yP+F031RLODBk8zE2rS2tlC8wc
-        nokhoZlg3UpyFB40bUeiRSaMSX1cfQQ=
-Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com
- [209.85.161.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-468-uLPgRV37NkSWdmxu67aLqQ-1; Sat, 21 May 2022 16:16:13 -0400
-X-MC-Unique: uLPgRV37NkSWdmxu67aLqQ-1
-Received: by mail-oo1-f71.google.com with SMTP id b8-20020a056820134800b0035f6e70c82cso5399256oow.2
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 13:16:13 -0700 (PDT)
+        Sat, 21 May 2022 16:18:14 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749AF45059;
+        Sat, 21 May 2022 13:18:11 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id d22so9931754plr.9;
+        Sat, 21 May 2022 13:18:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=ECDza/wM60kuM1rzRXS/IlPvbAhsprpMRKVGkbqUmVg=;
+        b=eqJos4Oo6ZC9fT0aKuKS5uGvS5wXcUip14am5fuOpU8pWWycJRC0lDBKDvY3vsxodn
+         J8teEmpqM1yCQucklH/s0p/p4xgQdMevcxoIrSZEJAMerKZ0nLl+my3YrUvTbDwnp9E8
+         0TTWZY2s3DtlLR2E70qqyBz6K1lAXAmDHXWoTvcql7Q/D4CmUyEa7vykXsU30GB7s/e3
+         5u6UIlVAWJF2jLU1rCmOXV3c97KNuMq453M1hlYVokGYF4wNtCJ9Mp2Nc01fqt/KYeNc
+         K6ogKcCgLC/spa3xxcHwUhIcu84L69pYNNZPNtnF2G0TCWWxwP66FgWWiSzwYEoWn3PS
+         yNXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aYfGbu7Vp6C9Yi7GEbgp8ZiZyefeISQ36nK1X14PBlY=;
-        b=nzLoLS8mVDdFldOsHqi8HtHkUmFoUpm8cVLaG+zvdowZEqdrqm31TWORUklcYMm2QQ
-         yf7FpfklozZMZpydCT1OAzuP5Ok+jtzipdSSrTWOnpTrENCzOMgXA/i/DoXvC+3R4y0Q
-         sILYpGesXaqYa2I0MCWwNXC5risDkft3Ttx086oT7RjJ4PAVEVt15kNN2DIn2Mfd/Wli
-         zC8D6j7claEP8JHkNxQcSlP+kU/Zj7IDeiavY/ImaV9wix/EAo4jMpncK2e4hYk8lOtw
-         kA8El2lT8m6hwAulgU/GBRjUSIbkfh/Q7sYJWthkpBzF4t4w+IvmkhUY42LCL1ovGTHT
-         kmbg==
-X-Gm-Message-State: AOAM533bNYtV3XMsytZ8SJa2A6mh+rTzLFcSEz7UVmope8Bl0erxNevZ
-        uJOzL1ZycyuZB54UcaY/k7xSG8I6nxHd/wBQ0rl2sW+eEQ9KMP5RCyL8ii5JNcR23CtI2QgM0Or
-        1NDrQgmnD1CzcXiHxnojQyRNR
-X-Received: by 2002:a05:6870:9725:b0:f1:b173:4241 with SMTP id n37-20020a056870972500b000f1b1734241mr8540988oaq.237.1653164173157;
-        Sat, 21 May 2022 13:16:13 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyinaf10Wrq70gpKW7je3hbPTX3Ya2gPfVjAXkFtyz8wq/mvsZfgZkuy8Uw80NSj96eyaud+w==
-X-Received: by 2002:a05:6870:9725:b0:f1:b173:4241 with SMTP id n37-20020a056870972500b000f1b1734241mr8540980oaq.237.1653164172971;
-        Sat, 21 May 2022 13:16:12 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id r81-20020aca4454000000b00326a7d33635sm2537289oia.27.2022.05.21.13.16.11
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=ECDza/wM60kuM1rzRXS/IlPvbAhsprpMRKVGkbqUmVg=;
+        b=CQ/P4a2acgeuTWAAYHm+F4heNTyiELVxcRhS/1FtHIPZBQ5sTJmntB1WzM5KpcSiVi
+         Qao8/aJHTd0bNOrcu16MmvZfcHZA0ha1rH05maHegLHLeF5XuTN7EyERlsThqNnNJAiB
+         wzGC++N9N1us8Cs+tgK7gHOgsXLgbXdbhjXRZJHTo7nvGZAm5JGhdithiWZQfOp6MLEC
+         y36Y6jDCeTT1CW/VnA+DaCDPNM8drhWcFIuS2GjrG6+wB7Se6ziBPi+Tnuuh0IQNj6wL
+         PqT/VZ1N72Zy8cN0rlxhKsGTSCG6CO/uQkD32pAPBBJktYy+ESOlTp4ZdGRmaAyap/Lo
+         CY/A==
+X-Gm-Message-State: AOAM531BJTPLmi0zHWgFINrcFGZf9YZP6C1ni5T4zkU3VBwvAx9WJEvz
+        /VmpX7rPiMdmkppwLngJWbk/wqPhu0g=
+X-Google-Smtp-Source: ABdhPJxvJJ2Fv8vVemJMHOsIGOWQ5OS6JVyBYKLyrvsGs63HtUO1PZMe8HXBAmxZrBpaqgBq/QRuRg==
+X-Received: by 2002:a17:90b:350d:b0:1dc:6680:6f1d with SMTP id ls13-20020a17090b350d00b001dc66806f1dmr18471151pjb.27.1653164290642;
+        Sat, 21 May 2022 13:18:10 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:cb52:1dc9:39a:7637])
+        by smtp.gmail.com with ESMTPSA id b134-20020a63348c000000b003c14af5062dsm1867999pga.69.2022.05.21.13.18.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 May 2022 13:16:12 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     njavali@marvell.com, jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     GR-QLogic-Storage-Upstream@marvell.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH] scsi: qla2xxx: remove setting of 'req' and 'rsp' parameter
-Date:   Sat, 21 May 2022 16:16:07 -0400
-Message-Id: <20220521201607.4145298-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Sat, 21 May 2022 13:18:09 -0700 (PDT)
+Date:   Sat, 21 May 2022 13:18:07 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
+Subject: [git pull] Input updates for v5.18-rc7
+Message-ID: <YolI/0sPArJSnlIZ@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cppcheck reports
-[drivers/scsi/qla2xxx/qla_mid.c:594]: (warning) Assignment of function parameter has no effect outside the function. Did you forget dereferencing it?
-[drivers/scsi/qla2xxx/qla_mid.c:620]: (warning) Assignment of function parameter has no effect outside the function. Did you forget dereferencing it?
+Hi Linus,
 
-The functions qla25xx_free_req_que and qla25xx_free_rsp_que are similar.
-They free a 'req' and a 'rsp' parameter respectively.  The last statement of
-both functions is setting the parameter to NULL.  This has no effect and
-can be removed.
+Please pull from:
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/scsi/qla2xxx/qla_mid.c | 2 --
- 1 file changed, 2 deletions(-)
+	git://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git tags/input-for-v5.18-rc7
 
-diff --git a/drivers/scsi/qla2xxx/qla_mid.c b/drivers/scsi/qla2xxx/qla_mid.c
-index e6b5c4ccce97..346d47b61c07 100644
---- a/drivers/scsi/qla2xxx/qla_mid.c
-+++ b/drivers/scsi/qla2xxx/qla_mid.c
-@@ -591,7 +591,6 @@ qla25xx_free_req_que(struct scsi_qla_host *vha, struct req_que *req)
- 	}
- 	kfree(req->outstanding_cmds);
- 	kfree(req);
--	req = NULL;
- }
- 
- static void
-@@ -617,7 +616,6 @@ qla25xx_free_rsp_que(struct scsi_qla_host *vha, struct rsp_que *rsp)
- 		mutex_unlock(&ha->vport_lock);
- 	}
- 	kfree(rsp);
--	rsp = NULL;
- }
- 
- int
+to receive updates for the input subsystem. You will get a small fixup
+to ili210x touchscreen driver, and updated maintainer entry for the
+device tree binding of Mediatek 6779 keypad.
+
+Changelog:
+---------
+
+Marek Vasut (2):
+      Input: ili210x - fix reset timing
+      Input: ili210x - use one common reset implementation
+
+Mattijs Korpershoek (1):
+      dt-bindings: input: mediatek,mt6779-keypad: update maintainer
+
+Diffstat:
+--------
+
+ .../bindings/input/mediatek,mt6779-keypad.yaml       |  2 +-
+ drivers/input/touchscreen/ili210x.c                  | 20 ++++++++------------
+ 2 files changed, 9 insertions(+), 13 deletions(-)
+
+Thanks.
+
+
 -- 
-2.27.0
-
+Dmitry

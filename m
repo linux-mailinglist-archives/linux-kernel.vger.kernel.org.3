@@ -2,91 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B772D52FFC4
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 00:19:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FC6652FFC9
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 00:32:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347344AbiEUWTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 18:19:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45706 "EHLO
+        id S244696AbiEUWbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 18:31:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347080AbiEUWTc (ORCPT
+        with ESMTP id S234785AbiEUWbG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 18:19:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DE414EF60
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 15:19:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EE233B8013C
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 22:19:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11FBCC385A9;
-        Sat, 21 May 2022 22:19:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653171566;
-        bh=ngKViRklTPe3qp0sAQn1sxccZmlTT0C88H2AvrRNxUo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=L4efQY4wXKZ8fdSNY/3SLLvQHMVzrVR7J+HE4uOULF4ZB3pYnzzQpy60rtACo9wdm
-         2gqoFPuV2LKMa49z77cF3A8Jq+GIucTFmb9GuLTiyKd2WRwgG3YPnbxVC74I0cQSy0
-         UR0O12vuW+cGohFhTy65ov3l17Y3+XYr5PWH0nozTIaSRnoiTb92VPubAYXoqOXh1K
-         494I9lkz40huR8XXobXAbMtAK+pkgWWk9WnR2pU/9Zr+DxWEgNRFgz2qmqpTH5tdyD
-         ei0SjP+3jNjjDT5ektRqNchgieZjzyrUvDxPFZiFA/2P+YCEx0FJxKXKWABf3qxl7u
-         ED/uCgM1KwRcA==
-Message-ID: <64d0da08-6ffd-4bce-bc66-5097913937b4@kernel.org>
-Date:   Sat, 21 May 2022 15:19:24 -0700
+        Sat, 21 May 2022 18:31:06 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD7ED63CA
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 15:31:03 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id z20so3477043iof.1
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 15:31:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FonIHMi/3lO9Jffb1ttV3+nPKi58eDv/a59C6q9nmzI=;
+        b=NaAO8pGGJ3T+MKNvg6WEHzeviTfr99ijUwaHhRJvuBfYsjLET3d2JzRD+AbYnPvVsp
+         UUiKuvcF2XUO2+p4aKPweMWzrGVFtR00l7hYnztPRs5axpgJ3hnruLd7i165qiT0EPyo
+         KdMMBVmFCSSl1Q6foB6wS++7HnFaNF+pHuyzZ68DogBZwEbz+Kgy5N11MsKwDzacegxo
+         jH3CdtTIsOrfdezE0zxgJmKFy2YRJkWJNGOMEfBdjDirby+7ZdR0JvKy+kB8RFVBXbEe
+         7mzHsxgyZgWOEdBtjPCcY7ZNvGQv7476Y0XvRO8aKvysFgECGRaSKYS3qRAijP4WtZys
+         5TuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FonIHMi/3lO9Jffb1ttV3+nPKi58eDv/a59C6q9nmzI=;
+        b=LUCJHWw+HHpcQl00E0ADpWbkwOBdYZBHJRgH/fklxHtGOaSbT05nINQUMheY5YZHPB
+         hyi07LulHTGU+7MXy8oXtgt6e9idyUBFhCknQgmCSfxkjEQPtVT1Y+qfaDvCjrayAU1B
+         T+iHtBoTARRYxzFWVswn+6NDaxWFuZ2TWoBcZY0bl6fJ+IclK7Po0jCbe6+/8wcIq+sF
+         YHU6ksrhTIuIjLhUiFb/jLAtshy1wtF9NG/Vufvs0Tnpkqdy6MXF1QiKGNm3G0V/p85L
+         tNm29yDTrOZsgaAWJGSOS6wtcx8G+JF4lSWbeFxyyLoLlC2hqmJnjNxh34tZqJfRyem1
+         RGgg==
+X-Gm-Message-State: AOAM532HzcFUcFmhtyfLLnEDIkDl4VQ0q4QYRXGdIOrdpRY8ioavxN3f
+        E5HfxPSGuKESPuuZgfukbsG7QEu4B9zJ9hmR1F0=
+X-Google-Smtp-Source: ABdhPJzZ3q9U8SzINmFXzXhh1wuHsq2L8h2lKquyKk70w4Hj7ZmKbqyB6DmkTDCvjEzonsVoYuXQLydy0bsaZUjcTyQ=
+X-Received: by 2002:a05:6638:381c:b0:32e:49f9:5b6e with SMTP id
+ i28-20020a056638381c00b0032e49f95b6emr8942455jav.71.1653172263265; Sat, 21
+ May 2022 15:31:03 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [RFC PATCH 0/6] Introduce Copy-On-Write to Page Table
-Content-Language: en-US
-To:     Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>
-Cc:     Chih-En Lin <shiyn.lin@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        William Kucharski <william.kucharski@oracle.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Yunsheng Lin <linyunsheng@huawei.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Colin Cross <ccross@google.com>,
-        Feng Tang <feng.tang@intel.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Daniel Axtens <dja@axtens.net>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Peter Xu <peterx@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        linux-kernel@vger.kernel.org, Kaiyang Zhao <zhao776@purdue.edu>,
-        Huichun Feng <foxhoundsk.tw@gmail.com>,
-        Jim Huang <jserv.tw@gmail.com>
-References: <20220519183127.3909598-1-shiyn.lin@gmail.com>
- <d1810538-9b4c-7f19-852f-7f6d255533c7@redhat.com>
- <YolHr1GwfA++i9jj@casper.infradead.org>
-From:   Andy Lutomirski <luto@kernel.org>
-In-Reply-To: <YolHr1GwfA++i9jj@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <cover.1649877511.git.andreyknvl@google.com> <YlgVa+AP0g4IYvzN@lakrids>
+In-Reply-To: <YlgVa+AP0g4IYvzN@lakrids>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Sun, 22 May 2022 00:30:52 +0200
+Message-ID: <CA+fCnZcM-1oxVeZSPHnnwy-9CiksZhWfqEbms-yg22hRjr7EFw@mail.gmail.com>
+Subject: Re: [PATCH v3 0/3] kasan, arm64, scs: collect stack traces from
+ Shadow Call Stack
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     andrey.konovalov@linux.dev, Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        Florian Mayer <fmayer@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,52 +82,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/21/22 13:12, Matthew Wilcox wrote:
-> On Sat, May 21, 2022 at 06:07:27PM +0200, David Hildenbrand wrote:
->> I'm missing the most important point: why do we care and why should we
->> care to make our COW/fork implementation even more complicated?
->>
->> Yes, we might save some page tables and we might reduce the fork() time,
->> however, which specific workload really benefits from this and why do we
->> really care about that workload? Without even hearing about an example
->> user in this cover letter (unless I missed it), I naturally wonder about
->> relevance in practice.
-> 
-> As I get older (and crankier), I get less convinced that fork() is
-> really the right solution for implementing system().  I feel that a
-> better model is to create a process with zero threads, but have an fd
-> to it.  Then manipulate the child process through its fd (eg mmap
-> ld.so, open new fds in that process's fdtable, etc).  Closing the fd
-> launches a new thread in the process (ensuring nobody has an fd to a
-> running process, particularly one which is setuid).
+On Thu, Apr 14, 2022 at 2:37 PM Mark Rutland <mark.rutland@arm.com> wrote:
+>
 
-Heh, I learned serious programming on Windows, and I thought fork() was 
-entertaining, cool, and a bad idea when I first learned about it.  (I 
-admit I did think the fact that POSIX fork and exec had many fewer 
-arguments than CreateProcess was a good thing.)  Don't even get me 
-started on setuid -- if I had my way, distros would set NO_NEW_PRIVS on 
-boot for the entire system.
+Hi Mark,
 
-I can see a rather different use for this type of shared-pagetable 
-technology, though: monstrous MAP_SHARED mappings.  For database and 
-some VM users, multiple processes will map the same file.  If there was 
-a way to ensure appropriate alignment (or at least encourage it) and a 
-way to handle mappings that don't cover the whole file, then having 
-multiple mappings share the same page tables could be a decent 
-efficiently gain.  This doesn't even need COW -- it's "just" pagetable 
-sharing.
+Sorry for the delayed response, it took some time getting my hands on
+hardware for testing these changes.
 
-It's probably a pipe dream, but I like to imagine that the bookkeeping 
-that would enable this would also enable a much less ad-hoc concept of 
-who owns which pagetable page.  Then things like x86's KPTI LDT mappings 
-would be less disgusting under the hood.
+> Just to be clear: QEMU TCG mode is *in no way* representative of HW
+> performance, and has drastically different performance characteristics
+> compared to real HW. Please be very clear when you are quoting
+> performance figures from QEMU TCG mode.
+>
+> Previously you said you were trying to optimize this so that some
+> version of KASAN could be enabled in production builds, and the above is
+> not a suitable benchmark system for that.
 
-Android would probably like a similar feature for MAP_ANONYMOUS or that 
-could otherwise enable Zygote to share paging structures (ideally 
-without fork(), although that's my dream, not necessarily Android's). 
-This is more complex, since COW is involved.  Also possibly less 
-valuable -- possibly the entire benefit and then some would be achieved 
-by using huge pages for Zygote and arranging for CoWing one normal-size 
-page out of a hugepage COW mapping to only COW the one page.
+Understood.
 
---Andy
+My expectation was that performance numbers from QEMU would be close
+to hardware. I knew that there are instructions that take longer to be
+emulated, but I expected that they would be uniformly spread across
+the code.
+
+However, your explanation proved this wrong. This indeed doesn't apply
+when measuring the performance of a piece of code with a different
+density of function calls.
+
+Thank you for the detailed explanation! Those QEMU arguments will
+definitely be handy when I need a faster QEMU setup.
+
+> Is that *actually* what you're trying to enable, or are you just trying
+> to speed up running instances under QEMU (e.g. for arm64 Syzkaller runs
+> on GCE)?
+
+No, I'm not trying to speed up QEMU. QEMU was just the only setup that
+I had access to at that moment.
+
+The goal is to allow enabling stack trace collection in production on
+HW_TAGS-enabled devices once those are created.
+
+[...]
+
+> While the SCS unwinder is still faster, the difference is nowhere near
+> as pronounced. As I mentioned before, there are changes that we can make
+> to the regular unwinder to close that gap somewhat, some of which I
+> intend to make as part of ongoing cleanup/rework in that area.
+
+I tried running the same experiments on Pixel 6.
+
+Unfortunately, I was only able to test the OUTLINE SW_TAGS mode
+(without STACK instrumentation, as HW_TAGS doesn't support STACK at
+the moment.) All of the other modes either fail to flash or fail to
+boot with AOSP on Pixel 6 :(
+
+The results are (timestamps were measured when "ALSA device list" was
+printed to the kernel log):
+
+sw_tags outline nostacks: 2.218
+sw_tags outline: 2.516 (+13.4%)
+sw_tags outline nosanitize: 2.364 (+6.5%)
+sw_tags outline nosanitize __set_bit: 2.364 (+6.5%)
+sw_tags outline nosanitize scs: 2.236 (+0.8%)
+
+Used markings:
+
+nostacks: patch from master-no-stack-traces applied
+nosanitize: KASAN_SANITIZE_stacktrace.o := n
+__set_bit: set_bit -> __set_bit change applied
+scs: patches from up-scs-stacks-v3 applied
+
+First, disabling instrumentation of stacktrace.c is indeed a great
+idea for software KASAN modes! I will send a patch for this later.
+
+Changing set_bit to __set_bit seems to make no difference on Pixel 6.
+
+The awesome part is that the overhead of collecting stack traces with
+SCS and even saving them into the stack depot is less than 1%.
+
+However once again note, that this is for OUTLINE SW_TAGS without STACK.
+
+> I haven't bothered testing HW_TAGS, because the performance
+> characteristics of emulated MTE are also nothing like that of a real HW
+> implementation.
+>
+> So, given that and the problems I mentioned before, I don't think
+> there's a justification for adding a separate SCS unwinder. As before,
+> I'm still happy to try to make the regular unwinder faster (and I'm
+> happy to make changes which benefit QEMU TCG mode if those don't harm
+> the maintainability of the unwinder).
+>
+> NAK to adding an SCS-specific unwinder, regardless of where in the
+> source tree that is placed.
+
+I see.
+
+Perhaps, it makes sense to wait until there's HW_TAGS-enabled hardware
+available before continuing to look into this. At the end, the
+performance overhead for that setup is what matters.
+
+I'll look into improving the performance of the existing unwinder a
+bit more. However, I don't think I'll be able to speed it up to < 1%.
+Which means that we'll likely need a sample-based approach for HW_TAGS
+stack collection to reduce the overhead.
+
+Thank you!

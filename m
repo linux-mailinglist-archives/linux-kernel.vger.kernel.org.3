@@ -2,57 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9321352F6E3
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 02:39:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8BF252F6E1
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 02:38:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354315AbiEUAgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 20:36:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38108 "EHLO
+        id S1354362AbiEUAg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 20:36:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354272AbiEUAgS (ORCPT
+        with ESMTP id S1354249AbiEUAgZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 20:36:18 -0400
+        Fri, 20 May 2022 20:36:25 -0400
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D09F48B0AC;
-        Fri, 20 May 2022 17:36:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB8118BD37;
+        Fri, 20 May 2022 17:36:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653093376; x=1684629376;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=W9jAjZCpIQNI1oUY2wo5mZyiZS+5a62kQu+A5Cn+WOg=;
-  b=W58ipWxQe1XYcFoJ9X/6TrN4EareJmSodwSuQQxyLlZ3p3RPH+vTSv+4
-   JC9SkeN+aCq7Z7IcPHDxJX/sIN31PRj8M/E9hbU2bfmLVHbAE59YEVQBL
-   GYnDu8/2qyoPbHZOftB5gV6nW9dmu82CXuwxFb5kDbeDwyy6yRcgssBnP
-   r07s/Ivud4V5rQySxTMhgcN3GJGvj6rwXA3AVF4CnSYGnhekdFPYA67MF
-   JDI2DCzuQwya02NdzS2284MkZs2zQBDtH9ZaBzmuLeFMd+rf1Y7zb0uB4
-   UTI3s61Ucu6lcUiwxwZTI76bDqC8WaKAE55W3Bi/m/qpx/I7z0DAc2HqC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10353"; a="260365771"
+  t=1653093384; x=1684629384;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=moajTP5vLKvRPrRQrfHD9WUylqn/YUXmfF1J6vIZVFY=;
+  b=MZuQwQawI8+Bj4akzvRjm5lTyr7Vz7xxPs/Tzy40fivBpf/y5onizrAX
+   ldGPtCL6Hb8hUPJQO8FAHDeUUWcgpqadMgGp4B5WAHZfYfroF+qzU1mVN
+   k99VuSd+OoLFadomCptYTGfdm9Ed4eEJSN++O4T8eSCS0OCKqvanJOEas
+   s/WuTO174FhHJUH+M/fkE5h6633HaLEfaAcfdpGMymHiHbRE2Rh0a+5K2
+   ZNf7IseDzXXPvz24EOgvMq28j+7yolnvnaL/WsqAWTsR8Z0q+quqaLQ9i
+   JlDTL9uOgtu8Csgu659TIIQHYKTV6eNpOSaQbGuU81DCIJXeevB8iPCeW
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10353"; a="260365782"
 X-IronPort-AV: E=Sophos;i="5.91,240,1647327600"; 
-   d="scan'208";a="260365771"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 17:36:16 -0700
+   d="scan'208";a="260365782"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 17:36:24 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,240,1647327600"; 
-   d="scan'208";a="628430998"
-Received: from rhweight-mobl.amr.corp.intel.com (HELO rhweight-mobl.ra.intel.com) ([10.251.21.47])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 17:36:14 -0700
-From:   Russ Weight <russell.h.weight@intel.com>
-To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
-        lee.jones@linaro.org, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     trix@redhat.com, marpagan@redhat.com, lgoncalv@redhat.com,
-        matthew.gerlach@linux.intel.com,
-        basheer.ahmed.muddebihal@intel.com, tianfei.zhang@intel.com,
-        Russ Weight <russell.h.weight@intel.com>
-Subject: [PATCH v21 4/5] fpga: m10bmc-sec: expose max10 canceled keys in sysfs
-Date:   Fri, 20 May 2022 17:36:06 -0700
-Message-Id: <20220521003607.737734-5-russell.h.weight@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220521003607.737734-1-russell.h.weight@intel.com>
-References: <20220521003607.737734-1-russell.h.weight@intel.com>
+   d="scan'208";a="640560077"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 20 May 2022 17:36:20 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nsD6S-0005fe-4S;
+        Sat, 21 May 2022 00:36:20 +0000
+Date:   Sat, 21 May 2022 08:36:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Qin Jian <qinjian@cqplus1.com>, sboyd@kernel.org
+Cc:     Paul Gazzillo <paul@pgazz.com>,
+        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
+        kbuild-all@lists.01.org, krzysztof.kozlowski@linaro.org,
+        robh+dt@kernel.org, mturquette@baylibre.com, tglx@linutronix.de,
+        maz@kernel.org, p.zabel@pengutronix.de, linux@armlinux.org.uk,
+        arnd@arndb.de, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, Qin Jian <qinjian@cqplus1.com>
+Subject: Re: [PATCH v16 08/10] ARM: sunplus: Add initial support for Sunplus
+ SP7021 SoC
+Message-ID: <202205210849.KurlP56L-lkp@intel.com>
+References: <5b8f48113ddea6a1e8cdd6b1b6e5c9999dbe7332.1653027644.git.qinjian@cqplus1.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5b8f48113ddea6a1e8cdd6b1b6e5c9999dbe7332.1653027644.git.qinjian@cqplus1.com>
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -63,196 +71,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Extend the MAX10 BMC Secure Update driver to provide sysfs files to
-expose the 128 bit code signing key (CSK) cancellation vectors. These use
-the standard bitmap list format (e.g. 1,2-6,9).
+Hi Qin,
 
-Each CSK is assigned an ID, a number between 0-127, during the signing
-process. CSK ID cancellation information is stored in 128-bit fields in
-write-once locations in flash.  The cancellation of a CSK can be used
-to prevent the card from being rolled back to older images that were
-signed with a CSK that is now cancelled.
+I love your patch! Perhaps something to improve:
 
-Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-Reviewed-by: Tom Rix <trix@redhat.com>
----
-v21:
-  - Replace WARN_ON(size % stride) with a more elaborate test. Return
-    -EINVAL and write a message to the kernel log. Call WARN_ON_ONCE().
-v20:
-  - Added text to the commit message to further describe the cancellation of
-    code signing keys.
-v19:
-  - Change "card bmc" naming back to "m10 bmc" naming to be consistent
-    with the parent driver.
-v18:
-  - No change
-v17:
-  - Update the Date and KernelVersion for the ABI documentation to Jul 2022
-    and 5.19 respectively.
-  - Change "m10bmc" in symbol names to "cardbmc" to reflect the fact that the
-    future devices will not necessarily use the MAX10.
-v16:
-  - No Change
-v15:
-  - Updated the Dates and KernelVersions in the ABI documentation
-v14:
-  - No changes
-v13:
-  - Updated ABI documentation date and kernel version
-v12:
-  - Updated Date and KernelVersion fields in ABI documentation
-v11:
-  - No change
-v10:
-  - Changed the path expressions in the sysfs documentation to
-    replace the n3000 reference with something more generic to
-    accomodate other devices that use the same driver.
-v9:
-  - Rebased to 5.12-rc2 next
-  - Updated Date and KernelVersion in ABI documentation
-v8:
-  - Previously patch 4/6, otherwise no change
-v7:
-  - Updated Date and KernelVersion in ABI documentation
-v6:
-  - Added WARN_ON() call for (size / stride) to ensure
-    that the proper count is passed to regmap_bulk_read().
-v5:
-  - No change
-v4:
-  - Moved sysfs files for displaying the code-signing-key (CSK)
-    cancellation vectors from the FPGA Security Manger class driver
-    to here. The m10bmc_csk_vector() and m10bmc_csk_cancel_nbits()
-    functions are removed and the functionality from these functions
-    is moved into a show_canceled_csk() function for for displaying
-    the CSK vectors.
-  - Added ABI documentation for new sysfs entries
-v3:
-  - Changed: iops -> sops, imgr -> smgr, IFPGA_ -> FPGA_, ifpga_ to fpga_
-  - Changed "MAX10 BMC Secure Engine driver" to "MAX10 BMC Secure Update
-    driver"
-  - Removed wrapper functions (m10bmc_raw_*, m10bmc_sys_*). The
-    underlying functions are now called directly.
-  - Renamed get_csk_vector() to m10bmc_csk_vector()
-v2:
-  - Replaced small function-creation macros for explicit function
-    declarations.
-  - Fixed get_csk_vector() function to properly apply the stride
-    variable in calls to m10bmc_raw_bulk_read()
-  - Added m10bmc_ prefix to functions in m10bmc_iops structure
----
- .../sysfs-driver-intel-m10-bmc-sec-update     | 24 +++++++++
- drivers/fpga/intel-m10-bmc-sec-update.c       | 54 +++++++++++++++++++
- 2 files changed, 78 insertions(+)
+[auto build test WARNING on pza/reset/next]
+[also build test WARNING on robh/for-next clk/clk-next tip/irq/core linus/master v5.18-rc7 next-20220520]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-diff --git a/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-sec-update b/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-sec-update
-index 1132e39b2125..ca5a34c1c31f 100644
---- a/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-sec-update
-+++ b/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-sec-update
-@@ -28,6 +28,30 @@ Description:	Read only. Returns the root entry hash for the BMC image
- 		underlying device supports it.
- 		Format: string.
- 
-+What:		/sys/bus/platform/drivers/intel-m10bmc-sec-update/.../security/sr_canceled_csks
-+Date:		Jul 2022
-+KernelVersion:	5.19
-+Contact:	Russ Weight <russell.h.weight@intel.com>
-+Description:	Read only. Returns a list of indices for canceled code
-+		signing keys for the static region. The standard bitmap
-+		list format is used (e.g. "1,2-6,9").
-+
-+What:		/sys/bus/platform/drivers/intel-m10bmc-sec-update/.../security/pr_canceled_csks
-+Date:		Jul 2022
-+KernelVersion:	5.19
-+Contact:	Russ Weight <russell.h.weight@intel.com>
-+Description:	Read only. Returns a list of indices for canceled code
-+		signing keys for the partial reconfiguration region. The
-+		standard bitmap list format is used (e.g. "1,2-6,9").
-+
-+What:		/sys/bus/platform/drivers/intel-m10bmc-sec-update/.../security/bmc_canceled_csks
-+Date:		Jul 2022
-+KernelVersion:	5.19
-+Contact:	Russ Weight <russell.h.weight@intel.com>
-+Description:	Read only. Returns a list of indices for canceled code
-+		signing keys for the BMC.  The standard bitmap list format
-+		is used (e.g. "1,2-6,9").
-+
- What:		/sys/bus/platform/drivers/intel-m10bmc-sec-update/.../security/flash_count
- Date:		Jul 2022
- KernelVersion:	5.19
-diff --git a/drivers/fpga/intel-m10-bmc-sec-update.c b/drivers/fpga/intel-m10-bmc-sec-update.c
-index 25b21f116976..65fec2a70901 100644
---- a/drivers/fpga/intel-m10-bmc-sec-update.c
-+++ b/drivers/fpga/intel-m10-bmc-sec-update.c
-@@ -78,6 +78,57 @@ DEVICE_ATTR_SEC_REH_RO(bmc, BMC_PROG_MAGIC, BMC_PROG_ADDR, BMC_REH_ADDR);
- DEVICE_ATTR_SEC_REH_RO(sr, SR_PROG_MAGIC, SR_PROG_ADDR, SR_REH_ADDR);
- DEVICE_ATTR_SEC_REH_RO(pr, PR_PROG_MAGIC, PR_PROG_ADDR, PR_REH_ADDR);
- 
-+#define CSK_BIT_LEN		128U
-+#define CSK_32ARRAY_SIZE	DIV_ROUND_UP(CSK_BIT_LEN, 32)
-+
-+static ssize_t
-+show_canceled_csk(struct device *dev, u32 addr, char *buf)
-+{
-+	unsigned int i, stride, size = CSK_32ARRAY_SIZE * sizeof(u32);
-+	struct m10bmc_sec *sec = dev_get_drvdata(dev);
-+	DECLARE_BITMAP(csk_map, CSK_BIT_LEN);
-+	__le32 csk_le32[CSK_32ARRAY_SIZE];
-+	u32 csk32[CSK_32ARRAY_SIZE];
-+	int ret;
-+
-+	stride = regmap_get_reg_stride(sec->m10bmc->regmap);
-+	if (size % stride) {
-+		dev_err(sec->dev,
-+			"CSK vector size (0x%x) not aligned to stride (0x%x)\n",
-+			size, stride);
-+		WARN_ON_ONCE(1);
-+		return -EINVAL;
-+	}
-+
-+	ret = regmap_bulk_read(sec->m10bmc->regmap, addr, csk_le32,
-+			       size / stride);
-+	if (ret) {
-+		dev_err(sec->dev, "failed to read CSK vector: %x cnt %x: %d\n",
-+			addr, size / stride, ret);
-+		return ret;
-+	}
-+
-+	for (i = 0; i < CSK_32ARRAY_SIZE; i++)
-+		csk32[i] = le32_to_cpu(((csk_le32[i])));
-+
-+	bitmap_from_arr32(csk_map, csk32, CSK_BIT_LEN);
-+	bitmap_complement(csk_map, csk_map, CSK_BIT_LEN);
-+	return bitmap_print_to_pagebuf(1, buf, csk_map, CSK_BIT_LEN);
-+}
-+
-+#define DEVICE_ATTR_SEC_CSK_RO(_name, _addr) \
-+static ssize_t _name##_canceled_csks_show(struct device *dev, \
-+					  struct device_attribute *attr, \
-+					  char *buf) \
-+{ return show_canceled_csk(dev, _addr, buf); } \
-+static DEVICE_ATTR_RO(_name##_canceled_csks)
-+
-+#define CSK_VEC_OFFSET 0x34
-+
-+DEVICE_ATTR_SEC_CSK_RO(bmc, BMC_PROG_ADDR + CSK_VEC_OFFSET);
-+DEVICE_ATTR_SEC_CSK_RO(sr, SR_PROG_ADDR + CSK_VEC_OFFSET);
-+DEVICE_ATTR_SEC_CSK_RO(pr, PR_PROG_ADDR + CSK_VEC_OFFSET);
-+
- #define FLASH_COUNT_SIZE 4096	/* count stored as inverted bit vector */
- 
- static ssize_t flash_count_show(struct device *dev,
-@@ -125,6 +176,9 @@ static struct attribute *m10bmc_security_attrs[] = {
- 	&dev_attr_bmc_root_entry_hash.attr,
- 	&dev_attr_sr_root_entry_hash.attr,
- 	&dev_attr_pr_root_entry_hash.attr,
-+	&dev_attr_sr_canceled_csks.attr,
-+	&dev_attr_pr_canceled_csks.attr,
-+	&dev_attr_bmc_canceled_csks.attr,
- 	NULL,
- };
- 
+url:    https://github.com/intel-lab-lkp/linux/commits/Qin-Jian/Add-Sunplus-SP7021-SoC-Support/20220520-150501
+base:   https://git.pengutronix.de/git/pza/linux reset/next
+config: (https://download.01.org/0day-ci/archive/20220521/202205210849.KurlP56L-lkp@intel.com/config)
+reproduce:
+        # https://github.com/intel-lab-lkp/linux/commit/a18534d0375224dcbfbd6d313ec16c9042212661
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Qin-Jian/Add-Sunplus-SP7021-SoC-Support/20220520-150501
+        git checkout a18534d0375224dcbfbd6d313ec16c9042212661
+        # 1. reproduce by kismet
+           # install kmax per https://github.com/paulgazz/kmax/blob/master/README.md
+           kismet --linux-ksrc=linux --selectees CONFIG_SERIAL_SUNPLUS --selectors CONFIG_SOC_SP7021 -a=arm
+        # 2. reproduce by make
+           # save the config file to linux source tree
+           cd linux
+           make ARCH=arm olddefconfig
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+
+kismet warnings: (new ones prefixed by >>)
+>> kismet: WARNING: unmet direct dependencies detected for SERIAL_SUNPLUS when selected by SOC_SP7021
+   
+   WARNING: unmet direct dependencies detected for SERIAL_SUNPLUS
+     Depends on [n]: TTY [=n] && HAS_IOMEM [=y] && (ARCH_SUNPLUS [=y] || COMPILE_TEST [=n])
+     Selected by [y]:
+     - SOC_SP7021 [=y] && ARCH_SUNPLUS [=y]
+   
+   WARNING: unmet direct dependencies detected for SERIAL_SUNPLUS_CONSOLE
+     Depends on [n]: TTY [=n] && HAS_IOMEM [=y] && SERIAL_SUNPLUS [=y]
+     Selected by [y]:
+     - SOC_SP7021 [=y] && ARCH_SUNPLUS [=y]
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

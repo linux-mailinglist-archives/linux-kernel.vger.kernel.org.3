@@ -2,223 +2,324 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1139852FC41
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:53:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE23B52FC45
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 14:03:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242494AbiEULxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 07:53:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49596 "EHLO
+        id S236919AbiEUMDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 08:03:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231675AbiEULxe (ORCPT
+        with ESMTP id S231675AbiEUMDl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 07:53:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E6E4606E5
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 04:53:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5BB0AB81706
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 11:53:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10437C385A9;
-        Sat, 21 May 2022 11:53:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653134010;
-        bh=Nuha3hJoHlLCjB7VUgxtbrEtLUTdFgw7Zdxa2enI9Pc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=qCUIPTNKpp4WJe5GfTfjOkC+uyM3igbLnSdwhbCPsjCfaSUub7/YgEWHdBrdsgYQN
-         9etzGFPcEIrt9ksfW+uuLV6sZIXrAuocpMFCwCRAKX0gopFxugkf+4ESsnXzS2D8Ag
-         kdEOrgayBSvP7ybebMWqHX9YGzGmymFXCFpEIGD5webQD3MIMm2lhQckmD/3qpDpW/
-         ixUPr3ClR0ZfL2GfnP+fzjbCEnly5X5Zx93BcZJEW2agK4exODVbX9h+avuWuQoSj/
-         K4iZAbHGL+zIwTUSY0VdxMk2GXy+s96clD6SCt9o6B1ucZ6rywAUSpOtFGFr6wWbCl
-         chTQXLrVo4m8g==
-Date:   Sat, 21 May 2022 14:53:25 +0300
-From:   Oded Gabbay <ogabbay@kernel.org>
-To:     gregkh@linuxfoundation.org
+        Sat, 21 May 2022 08:03:41 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B3139164
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 05:03:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653134620; x=1684670620;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=BkEq0WMHuivqcmeBAQbzeoV4slsy1jifff58ar4CHKY=;
+  b=ltEWYgM7jSKD2WAZ0w3c+egT2zR89BNjx7XmPcoR/fc/rFANh4+keQV1
+   0qeOh4JhYMrziAWmt2pSgNQXngMBCFTUpY7TUE/FVbudybIMuvKGgXu4Q
+   HLZYU6BVULQMNKuO5cFfwRN5l7VIygRVrIOBoc9GBnwxa974Q5RTLbZBJ
+   VtQFm+Iks4ONXeXcz1A9doMOIyqhdmp6iEK/BSmio4Qr7FKqHdq8b2lRe
+   9pTi4VQFTngfcURantB32vGH30/tLSp/7v4Lgjid9tiaSghrgSjBKM4Yr
+   oEcHRycjgqQNL+dbX3qlsLycQHjmnMY2DZ3JcTA4HrgoKVCwjwREwFFF4
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10353"; a="298158860"
+X-IronPort-AV: E=Sophos;i="5.91,242,1647327600"; 
+   d="scan'208";a="298158860"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 05:03:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,242,1647327600"; 
+   d="scan'208";a="525070179"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 21 May 2022 05:03:38 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nsNpa-0006Gk-6c;
+        Sat, 21 May 2022 12:03:38 +0000
+Date:   Sat, 21 May 2022 20:03:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
 Cc:     linux-kernel@vger.kernel.org
-Subject: [git pull] habanalabs pull request for kernel 5.19
-Message-ID: <20220521115325.GA1965670@ogabbay-vm-u20.habana-labs.com>
+Subject: [paulmck-rcu:dev.2022.05.17a] BUILD REGRESSION
+ 9a9671fb7a3966dfc7dc67f6aa80acdfe185d72d
+Message-ID: <6288d508.2BUectugl0ScEvvp%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2022.05.17a
+branch HEAD: 9a9671fb7a3966dfc7dc67f6aa80acdfe185d72d  rcu: Apply noinstr to rcu_idle_enter() and rcu_idle_exit()
 
-This is habanalabs pull request for the merge window of kernel 5.19.
-We added a few minor features, such as support eventfd registration
-for device events, and the ability to scrub the device memory
-through debugfs. 
+Error/Warning reports:
 
-We did some refactoring such as adding a centralized memory
-manager inside the driver for allocating mmapable memory and tracking
-it, so we can remove different code paths that basically duplicated
-that functionality.
+https://lore.kernel.org/lkml/202205181919.oILbHBZa-lkp@intel.com
 
-And, as usual, there are multiple bug fixes.
+Error/Warning: (recently discovered and may have been fixed)
 
-Full details are in the tag.
+ERROR: modpost: "rcu_tasks_trace_qs_blkd" [kernel/rcu/rcuscale.ko] undefined!
+ERROR: modpost: "rcu_tasks_trace_qs_blkd" [kernel/torture.ko] undefined!
 
-Thanks,
-Oded
+Unverified Error/Warning (likely false positive, please contact us if interested):
 
-The following changes since commit cafada1fe932ce761d6c0bc1d56967e27abe4cff:
+cat: 'smatch_trinity_*': No such file or directory
+grep: smatch_trinity_*: No such file or directory
 
-  Revert "speakup: Generate speakupmap.h automatically" (2022-05-20 21:07:05 +0200)
+Error/Warning ids grouped by kconfigs:
 
-are available in the Git repository at:
+gcc_recent_errors
+|-- arm-allmodconfig
+|   |-- ERROR:rcu_tasks_trace_qs_blkd-kernel-rcu-rcuscale.ko-undefined
+|   `-- ERROR:rcu_tasks_trace_qs_blkd-kernel-torture.ko-undefined
+|-- i386-randconfig-a003
+|   |-- ERROR:rcu_tasks_trace_qs_blkd-kernel-rcu-rcuscale.ko-undefined
+|   `-- ERROR:rcu_tasks_trace_qs_blkd-kernel-torture.ko-undefined
+|-- i386-randconfig-a005
+|   |-- ERROR:rcu_tasks_trace_qs_blkd-kernel-rcu-rcuscale.ko-undefined
+|   `-- ERROR:rcu_tasks_trace_qs_blkd-kernel-torture.ko-undefined
+|-- i386-randconfig-a012
+|   |-- ERROR:rcu_tasks_trace_qs_blkd-kernel-rcu-rcuscale.ko-undefined
+|   `-- ERROR:rcu_tasks_trace_qs_blkd-kernel-torture.ko-undefined
+|-- i386-randconfig-a014
+|   |-- ERROR:rcu_tasks_trace_qs_blkd-kernel-rcu-rcuscale.ko-undefined
+|   `-- ERROR:rcu_tasks_trace_qs_blkd-kernel-torture.ko-undefined
+|-- i386-randconfig-a016
+|   |-- ERROR:rcu_tasks_trace_qs_blkd-kernel-rcu-rcuscale.ko-undefined
+|   `-- ERROR:rcu_tasks_trace_qs_blkd-kernel-torture.ko-undefined
+|-- i386-randconfig-c021
+|   |-- ERROR:rcu_tasks_trace_qs_blkd-kernel-rcu-rcuscale.ko-undefined
+|   `-- ERROR:rcu_tasks_trace_qs_blkd-kernel-torture.ko-undefined
+|-- i386-randconfig-m021
+|   |-- ERROR:rcu_tasks_trace_qs_blkd-kernel-rcu-rcuscale.ko-undefined
+|   |-- ERROR:rcu_tasks_trace_qs_blkd-kernel-torture.ko-undefined
+|   |-- cat:smatch_trinity_:No-such-file-or-directory
+|   `-- grep:smatch_trinity_:No-such-file-or-directory
+|-- ia64-randconfig-r033-20220519
+|   `-- ERROR:rcu_tasks_trace_qs_blkd-kernel-rcu-rcuscale.ko-undefined
+|-- m68k-allmodconfig
+|   |-- ERROR:rcu_tasks_trace_qs_blkd-kernel-rcu-rcuscale.ko-undefined
+|   `-- ERROR:rcu_tasks_trace_qs_blkd-kernel-torture.ko-undefined
+|-- microblaze-randconfig-r014-20220519
+|   `-- ERROR:rcu_tasks_trace_qs_blkd-kernel-rcu-rcuscale.ko-undefined
+|-- parisc-randconfig-r036-20220519
+|   `-- ERROR:rcu_tasks_trace_qs_blkd-kernel-rcu-rcuscale.ko-undefined
+|-- powerpc-allmodconfig
+|   |-- ERROR:rcu_tasks_trace_qs_blkd-kernel-rcu-rcuscale.ko-undefined
+|   `-- ERROR:rcu_tasks_trace_qs_blkd-kernel-torture.ko-undefined
+|-- riscv-allmodconfig
+|   |-- ERROR:rcu_tasks_trace_qs_blkd-kernel-rcu-rcuscale.ko-undefined
+|   `-- ERROR:rcu_tasks_trace_qs_blkd-kernel-torture.ko-undefined
+|-- riscv-randconfig-r004-20220519
+|   `-- ERROR:rcu_tasks_trace_qs_blkd-kernel-torture.ko-undefined
+|-- s390-defconfig
+|   `-- ERROR:rcu_tasks_trace_qs_blkd-kernel-torture.ko-undefined
+|-- s390-randconfig-r044-20220518
+|   |-- ERROR:rcu_tasks_trace_qs_blkd-kernel-rcu-rcuscale.ko-undefined
+|   `-- ERROR:rcu_tasks_trace_qs_blkd-kernel-torture.ko-undefined
+|-- x86_64-randconfig-a004
+|   |-- ERROR:rcu_tasks_trace_qs_blkd-kernel-rcu-rcuscale.ko-undefined
+|   `-- ERROR:rcu_tasks_trace_qs_blkd-kernel-torture.ko-undefined
+|-- x86_64-randconfig-a006
+|   |-- ERROR:rcu_tasks_trace_qs_blkd-kernel-rcu-rcuscale.ko-undefined
+|   `-- ERROR:rcu_tasks_trace_qs_blkd-kernel-torture.ko-undefined
+|-- x86_64-randconfig-a011
+|   |-- ERROR:rcu_tasks_trace_qs_blkd-kernel-rcu-rcuscale.ko-undefined
+|   `-- ERROR:rcu_tasks_trace_qs_blkd-kernel-torture.ko-undefined
+|-- x86_64-randconfig-a013
+|   |-- ERROR:rcu_tasks_trace_qs_blkd-kernel-rcu-rcuscale.ko-undefined
+|   `-- ERROR:rcu_tasks_trace_qs_blkd-kernel-torture.ko-undefined
+|-- x86_64-randconfig-a015
+|   |-- ERROR:rcu_tasks_trace_qs_blkd-kernel-rcu-rcuscale.ko-undefined
+|   `-- ERROR:rcu_tasks_trace_qs_blkd-kernel-torture.ko-undefined
+|-- x86_64-randconfig-c022
+|   |-- ERROR:rcu_tasks_trace_qs_blkd-kernel-rcu-rcuscale.ko-undefined
+|   `-- ERROR:rcu_tasks_trace_qs_blkd-kernel-torture.ko-undefined
+|-- x86_64-randconfig-s022
+|   |-- ERROR:rcu_tasks_trace_qs_blkd-kernel-rcu-rcuscale.ko-undefined
+|   `-- ERROR:rcu_tasks_trace_qs_blkd-kernel-torture.ko-undefined
+|-- x86_64-rhel-8.3-func
+|   `-- ERROR:rcu_tasks_trace_qs_blkd-kernel-torture.ko-undefined
+`-- xtensa-buildonly-randconfig-r002-20220519
+    |-- ERROR:rcu_tasks_trace_qs_blkd-kernel-rcu-rcuscale.ko-undefined
+    `-- ERROR:rcu_tasks_trace_qs_blkd-kernel-torture.ko-undefined
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git tags/misc-habanalabs-next-2022-05-21
+elapsed time: 4736m
 
-for you to fetch changes up to 93f742b13260b070a695f44d6b6ff696cb5cbcd8:
+configs tested: 152
+configs skipped: 5
 
-  habanalabs: use separate structure info for each error collect data (2022-05-21 14:42:17 +0300)
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+parisc                           alldefconfig
+powerpc                 mpc834x_mds_defconfig
+mips                            gpr_defconfig
+sh                               j2_defconfig
+s390                       zfcpdump_defconfig
+arm                         axm55xx_defconfig
+ia64                      gensparse_defconfig
+mips                           ci20_defconfig
+xtensa                          iss_defconfig
+h8300                    h8300h-sim_defconfig
+sh                   sh7770_generic_defconfig
+powerpc                      pcm030_defconfig
+arm                        mini2440_defconfig
+xtensa                           allyesconfig
+m68k                            q40_defconfig
+sh                           se7721_defconfig
+arm                           tegra_defconfig
+arm                        cerfcube_defconfig
+arm                           corgi_defconfig
+um                                  defconfig
+powerpc                        cell_defconfig
+sh                                  defconfig
+powerpc64                           defconfig
+powerpc                        warp_defconfig
+mips                       capcella_defconfig
+powerpc                 linkstation_defconfig
+alpha                               defconfig
+arm                           h5000_defconfig
+arm                        multi_v7_defconfig
+ia64                         bigsur_defconfig
+sh                          landisk_defconfig
+h8300                       h8s-sim_defconfig
+powerpc                     mpc83xx_defconfig
+powerpc                      ep88xc_defconfig
+arm                      footbridge_defconfig
+sh                          sdk7786_defconfig
+mips                 decstation_r4k_defconfig
+um                             i386_defconfig
+m68k                          hp300_defconfig
+mips                         mpc30x_defconfig
+m68k                             allyesconfig
+arm                           imxrt_defconfig
+powerpc                      ppc6xx_defconfig
+sh                   secureedge5410_defconfig
+arm                        realview_defconfig
+sh                   rts7751r2dplus_defconfig
+sh                          urquell_defconfig
+sh                           se7724_defconfig
+sh                 kfr2r09-romimage_defconfig
+ia64                                defconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                            allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+s390                                defconfig
+s390                             allmodconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+sparc                               defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+i386                          randconfig-a003
+i386                          randconfig-a001
+i386                          randconfig-a005
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a015
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+arc                  randconfig-r043-20220518
+riscv                randconfig-r042-20220518
+s390                 randconfig-r044-20220518
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+x86_64                                  kexec
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
 
-----------------------------------------------------------------
-This tag contains habanalabs driver changes for v5.19:
+clang tested configs:
+s390                 randconfig-c005-20220518
+powerpc              randconfig-c003-20220518
+x86_64                        randconfig-c007
+riscv                randconfig-c006-20220518
+mips                 randconfig-c004-20220518
+i386                          randconfig-c001
+arm                  randconfig-c002-20220518
+powerpc                   microwatt_defconfig
+powerpc                      acadia_defconfig
+arm                          pxa168_defconfig
+mips                      bmips_stb_defconfig
+powerpc                    socrates_defconfig
+mips                     cu1000-neo_defconfig
+arm                         palmz72_defconfig
+mips                            e55_defconfig
+arm                        mvebu_v5_defconfig
+arm                              alldefconfig
+powerpc                  mpc885_ads_defconfig
+powerpc                    gamecube_defconfig
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a011
+i386                          randconfig-a013
+i386                          randconfig-a015
+hexagon              randconfig-r045-20220519
+hexagon              randconfig-r041-20220519
+s390                 randconfig-r044-20220519
+riscv                randconfig-r042-20220519
+hexagon              randconfig-r045-20220518
+hexagon              randconfig-r041-20220518
 
-- Add memory manager that can be used by various features in the driver.
-  The memory manager provides common framework to allocate memory and track
-  its usage, export its handle to the userspace and support mmaping it.
-
-- Add debugfs entry to scrub device memory.
-
-- Add support for doing prefetch when adding new entries to MMU pgt.
-
-- Add support for notifying userspace on device events through eventfd.
-  Until now, events were only printed to dmesg. This change will allow
-  the user application to register on events and perform specific
-  actions per events.
-
-- Refactor kernel log messages to reduce spamming of log
-
-- Unify debugfs code for accessing device's memory/registers. This is
-  necessary as the number of supported ASICs grow and the code is
-  mostly the same between all ASICs.
-
-- Allow userspace to inquire id device is currently acquired by a user.
-
-- Support different page sizes for device memory's MMU and allow user to
-  choose which page size to use.
-
-- Fix multiple bugs such as race in device fini, wrong kapi used to
-  acquire pid, too small timeouts, losing information after device
-  reset, returning correct error codes and more.
-
-----------------------------------------------------------------
-Dafna Hirschfeld (6):
-      habanalabs/gaudi: Use correct sram size macro for debugfs
-      habanalabs: add callback and field to be used for debugfs refactor
-      habanalabs: unify code for memory access from debugfs
-      habanalabs: enforce alignment upon registers access through debugfs
-      habanalabs: remove debugfs read/write callbacks
-      habanalabs: add device memory scrub ability through debugfs
-
-Dani Liberman (2):
-      habanalabs: use get_task_pid() to take PID
-      habanalabs: handle race in driver fini
-
-Jakob Koschel (1):
-      habanalabs: replace usage of found with dedicated list iterator variable
-
-Moti Haimovski (1):
-      habanalabs: support debugfs Byte access to device DRAM
-
-Oded Gabbay (7):
-      habanalabs: remove redundant info print
-      habanalabs: change a reset print to debug level
-      habanalabs: don't print normal reset operations
-      habanalabs: remove user interrupt debug print
-      habanalabs: update firmware header
-      habanalabs: use NULL for eventfd
-      habanalabs: return -EFAULT on copy_to_user error
-
-Ofir Bitton (6):
-      habanalabs: add new return code to device fd open
-      habanalabs: expose compute ctx status through info ioctl
-      habanalabs/gaudi: increase submission resources
-      habanalabs: parse full firmware versions
-      habanalabs: save f/w preboot major version
-      habanalabs/gaudi: set arbitration timeout to a high value
-
-Ohad Sharabi (13):
-      habanalabs: set non-0 value in dram default page size
-      habanalabs: add DRAM default page size to HW info
-      habanalabs: change mmu_get_real_page_size to be ASIC-specific
-      habanalabs: convert all MMU masks/shifts to arrays
-      habanalabs: add user API to get valid DRAM page sizes
-      habanalabs: add MMU prefetch to ASIC-specific code
-      habanalabs: rephrase device out-of-memory message
-      habanalabs/gaudi: add debugfs to fetch internal sync status
-      habanalabs: refactor HOP functions in MMU V1
-      habanalabs: use for_each_sgtable_dma_sg for dma sgt
-      habanalabs: add prefetch flag to the MAP operation
-      habanalabs: do MMU prefetch as deferred work
-      habanalabs: remove hdev from hl_ctx_get args
-
-Rajaravi Krishna Katta (2):
-      habanalabs: fix comments according to kernel-doc
-      habanalabs/gaudi: use lower_32_bits() for casting
-
-Robin Murphy (1):
-      habanalabs: Stop using iommu_present()
-
-Tal Cohen (2):
-      habanalabs: add support for notification via eventfd
-      habanalabs: use separate structure info for each error collect data
-
-Tomer Tayar (2):
-      habanalabs/gaudi: avoid resetting max power in hard reset
-      habanalabs: modify dma_mask to be ASIC specific property
-
-Yuri Nudelman (10):
-      habanalabs: unified memory manager infrastructure
-      habanalabs: convert ts to use unified memory manager
-      habanalabs: wrong handle removal in memory manager
-      habanalabs: hide memory manager page shift
-      habanalabs: add put by handle method to memory manager
-      habanalabs: unified memory manager new code for CB flow
-      habanalabs: use unified memory manager for CB flow
-      habanalabs: add topic to memory manager buffer
-      habanalabs: order memory manager messages
-      habanalabs: fix missing handle shift during mmap
-
-farah kassabri (1):
-      habanalabs: Add separate poll interval value for protocol
-
-kernel test robot (1):
-      habanalabs: hl_ts_behavior can be static
-
- .../ABI/testing/debugfs-driver-habanalabs          |  38 ++
- drivers/misc/habanalabs/common/Makefile            |   2 +-
- drivers/misc/habanalabs/common/command_buffer.c    | 413 +++++++-------------
- .../misc/habanalabs/common/command_submission.c    |  89 +++--
- drivers/misc/habanalabs/common/context.c           |   4 +-
- drivers/misc/habanalabs/common/debugfs.c           | 304 +++++++++++----
- drivers/misc/habanalabs/common/device.c            | 280 +++++++++++++-
- drivers/misc/habanalabs/common/firmware_if.c       |  86 ++++-
- drivers/misc/habanalabs/common/habanalabs.h        | 415 +++++++++++++--------
- drivers/misc/habanalabs/common/habanalabs_drv.c    |  44 ++-
- drivers/misc/habanalabs/common/habanalabs_ioctl.c  | 108 +++++-
- drivers/misc/habanalabs/common/irq.c               |  14 +-
- drivers/misc/habanalabs/common/memory.c            | 289 ++++----------
- drivers/misc/habanalabs/common/memory_mgr.c        | 349 +++++++++++++++++
- drivers/misc/habanalabs/common/mmu/mmu.c           | 296 ++++++++-------
- drivers/misc/habanalabs/common/mmu/mmu_v1.c        | 297 +++++----------
- drivers/misc/habanalabs/common/pci/pci.c           |  10 +-
- drivers/misc/habanalabs/gaudi/gaudi.c              | 412 ++++++--------------
- drivers/misc/habanalabs/gaudi/gaudiP.h             |   4 +-
- drivers/misc/habanalabs/goya/goya.c                | 363 +++---------------
- drivers/misc/habanalabs/include/common/cpucp_if.h  |  70 +++-
- .../habanalabs/include/hw_ip/mmu/mmu_general.h     |  10 +
- include/uapi/misc/habanalabs.h                     |  87 +++--
- 23 files changed, 2158 insertions(+), 1826 deletions(-)
- create mode 100644 drivers/misc/habanalabs/common/memory_mgr.c
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

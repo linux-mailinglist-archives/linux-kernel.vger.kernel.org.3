@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B979652FBE1
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:29:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC57552FBDA
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:29:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229549AbiEUL0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 07:26:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52932 "EHLO
+        id S1355273AbiEUL0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 07:26:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345255AbiEULOq (ORCPT
+        with ESMTP id S1345604AbiEULOq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 21 May 2022 07:14:46 -0400
 Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F106C13F40C;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A5B213F933;
         Sat, 21 May 2022 04:12:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=inria.fr; s=dc;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=p6V465uNmAq3ubAdDfHRwMfcpCXCnpd+OVHaaTb/7SY=;
-  b=HTdGOvLkh+wLeztuLh8IdUohECUnPC6qV+wCCvjPMqpfHQb2lVSB/IhS
-   pK/FN7b1hRuvEkr/SdvCHAKe/3x6f33XlX8PfmFIDeQeaCrkfQIXM4SpH
-   vd4IF+HvcsZXkTf0giDOSwJnZGq6D4D1hDEx69dRQsZHCeOsz+bMXWsJ5
-   g=;
+  bh=y5bDNelPvC1Af06qeU1zinzPlEpQHukBeO/ewLou8cw=;
+  b=g48IdpdKNFc1DU+zmQi98JsJgCIoNUf10IuIZginiE3qDiAKv3jIPQMb
+   CXAbsvhG/PxEyi4iPZm6gEvSgepfIm/1Ujx4hv0HEFCMPOOBSXG3OAZsR
+   T3sPcJ2DsMDBR6kG00QPzl6otqxr65Fsot6U9zdpd4+91+J6Xkqq9YZ7z
+   U=;
 Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
 X-IronPort-AV: E=Sophos;i="5.91,242,1647298800"; 
-   d="scan'208";a="14728002"
+   d="scan'208";a="14728003"
 Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 13:12:08 +0200
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 13:12:09 +0200
 From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     kernel-janitors@vger.kernel.org, linux-mm@kvack.org,
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     kernel-janitors@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] ksm: fix typo in comment
-Date:   Sat, 21 May 2022 13:11:44 +0200
-Message-Id: <20220521111145.81697-94-Julia.Lawall@inria.fr>
+Subject: [PATCH] tty: fix typos in comments
+Date:   Sat, 21 May 2022 13:11:45 +0200
+Message-Id: <20220521111145.81697-95-Julia.Lawall@inria.fr>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -49,26 +49,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Spelling mistake (triple letters) in comment.
+Spelling mistakes (triple letters) in comments.
 Detected with the help of Coccinelle.
 
 Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
 ---
- mm/ksm.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/tty/mips_ejtag_fdc.c |    2 +-
+ drivers/tty/tty_io.c         |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/mm/ksm.c b/mm/ksm.c
-index 9ee82c9bce94..54f78c9eecae 100644
---- a/mm/ksm.c
-+++ b/mm/ksm.c
-@@ -1590,7 +1590,7 @@ static struct page *stable_tree_search(struct page *page)
- 		 * the rbtree instead as a regular stable_node (in
- 		 * order to collapse the stable_node chain if a single
- 		 * stable_node dup was found in it). In such case the
--		 * stable_node is overwritten by the calleee to point
-+		 * stable_node is overwritten by the callee to point
- 		 * to the stable_node_dup that was collapsed in the
- 		 * stable rbtree and stable_node will be equal to
- 		 * stable_node_dup like if the chain never existed.
+diff --git a/drivers/tty/mips_ejtag_fdc.c b/drivers/tty/mips_ejtag_fdc.c
+index 31dceb5039b5..49907427a165 100644
+--- a/drivers/tty/mips_ejtag_fdc.c
++++ b/drivers/tty/mips_ejtag_fdc.c
+@@ -1222,7 +1222,7 @@ static void kgdbfdc_push_one(void)
+ 
+ 	/* Construct a word from any data in buffer */
+ 	word = mips_ejtag_fdc_encode(bufs, &kgdbfdc_wbuflen, 1);
+-	/* Relocate any remaining data to beginnning of buffer */
++	/* Relocate any remaining data to beginning of buffer */
+ 	kgdbfdc_wbuflen -= word.bytes;
+ 	for (i = 0; i < kgdbfdc_wbuflen; ++i)
+ 		kgdbfdc_wbuf[i] = kgdbfdc_wbuf[i + word.bytes];
+diff --git a/drivers/tty/tty_io.c b/drivers/tty/tty_io.c
+index 8fec1d8648f5..82a8855981f7 100644
+--- a/drivers/tty/tty_io.c
++++ b/drivers/tty/tty_io.c
+@@ -1663,7 +1663,7 @@ void tty_kclose(struct tty_struct *tty)
+ 	 */
+ 	tty_ldisc_release(tty);
+ 
+-	/* Wait for pending work before tty destruction commmences */
++	/* Wait for pending work before tty destruction commences */
+ 	tty_flush_works(tty);
+ 
+ 	tty_debug_hangup(tty, "freeing structure\n");
 

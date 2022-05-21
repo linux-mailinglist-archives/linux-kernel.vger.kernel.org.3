@@ -2,70 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFE4752F976
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 08:59:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 011DC52F979
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 09:02:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235451AbiEUG7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 02:59:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44826 "EHLO
+        id S242824AbiEUHCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 03:02:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234174AbiEUG7n (ORCPT
+        with ESMTP id S232213AbiEUHCI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 02:59:43 -0400
-Received: from smtp.smtpout.orange.fr (smtp05.smtpout.orange.fr [80.12.242.127])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F37B4185402
-        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 23:59:42 -0700 (PDT)
-Received: from pop-os.home ([86.243.180.246])
-        by smtp.orange.fr with ESMTPA
-        id sJ5QntxL2dfessJ5QnlRCH; Sat, 21 May 2022 08:59:41 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sat, 21 May 2022 08:59:41 +0200
-X-ME-IP: 86.243.180.246
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-spi@vger.kernel.org
-Subject: [PATCH] spi: intel: Use correct order for the parameters of devm_kcalloc()
-Date:   Sat, 21 May 2022 08:59:35 +0200
-Message-Id: <d114558dd0351b863ced8cc01b31754a5a4b960d.1653116362.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Sat, 21 May 2022 03:02:08 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5575711C;
+        Sat, 21 May 2022 00:02:07 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id 498B91F46903
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1653116526;
+        bh=sH7UfRS3UIUyKaHG2wGRnh4xyDEGveCZlyH381jkeBM=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=VqS6LSySAqQZ3JKakpXk+RNPCsmH3C7OVYMrB/92uFJ2zD9lZGicwJbUnhLbrbEny
+         lV1p9o/Vu9eHZsk76jzZkBMPekXuXeOn9Osopfy5FF2psSm/hbcELr4r1Nn6Rzf+Qw
+         O+bmZmYJEngCSbE7qTQuQFdGM2xxFyTfvD1z1ITr3gNWnfmc+QN6xlUDYv+D6memeb
+         0uOqog9QwCNfCeo5O62e0ObCvgyCWeOkVklcu58yGGziqUv22gTivgYRVinWnqWrRx
+         2XnqPEtzblh2s+3egs6y2KZUJJnIvmvkwXGSGZTjVfArlbO9jQKus0AUNdofGEYrFJ
+         a4zW7FMJe7hTg==
+Message-ID: <3dfca666-21b7-f5fd-a22e-54562e9215f6@collabora.com>
+Date:   Sat, 21 May 2022 12:02:00 +0500
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Cc:     usama.anjum@collabora.com, kernel@collabora.com,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] docs/kselftest: add more guidelines for adding new tests
+Content-Language: en-US
+To:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>
+References: <20220317172758.582690-1-usama.anjum@collabora.com>
+ <07033c8a-fe1a-f97e-49b3-48d1da1e0413@gmail.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <07033c8a-fe1a-f97e-49b3-48d1da1e0413@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We should have 'n', then 'size', not the opposite.
-This is harmless because the 2 values are just multiplied, but having
-the correct order silence a (unpublished yet) smatch warning.
+On 3/18/22 9:50 AM, Bagas Sanjaya wrote:
+>> + * Use lib.mk instead of writing Makefile from sratch. Specify flags and
+>> +   binaries generation flags on need basis before including lib.mk. ::
+>> +
+>> +    CFLAGS = $(KHDR_INCLUDES)
+>> +    TEST_GEN_PROGS := close_range_test
+>> +    include ../lib.mk
+>> +
+> 
+> I think what you mean is "In your Makefile, use facilities from lib.mk by
+> including it instead of reinventing the wheel.", right?
+Yes, right.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/spi/spi-intel.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+>> + * Add new test name in TARGETS in selftests/Makefile::
+>> +
+>> +    TARGETS += android
+>> +
+>> + * All of the following build commands should be successful
+>> +
+>> +   - Same directory build of kselftests::
+>> +
+>> +      make kselftest-all
+>> +      make kselftest-install
+>> +      make kselftest-clean
+>> +      make kselftest-gen_tar
+>> +
+>> +   - Build with absolute output directory path::
+>> +
+>> +      make kselftest-all O=/abs_build_path
+>> +      make kselftest-install O=/abs_build_path
+>> +      make kselftest-clean O=/abs_build_path
+>> +      make kselftest-gen_tar O=/abs_build_path
+>> +
+>> +   - Build with relative output directory path::
+>> +
+>> +      make kselftest-all O=relative_path
+>> +      make kselftest-install O=relative_path
+>> +      make kselftest-clean O=relative_path
+>> +      make kselftest-gen_tar O=relative_path
+>> +
+>> +   - Build from Makefile of selftests directly::
+>> +
+>> +      make -C tools/testing/selftests
+>> +      make -C tools/testing/selftests O=/abs_build_path
+>> +      make -C tools/testing/selftests O=relative_path
+>> +
+> 
+> For simplicity, we can say "All changes should pass
+> kselftest-{all,install,clean,gen_tar} builds."
+We (me and maintainer) want a list of commands to run before patch
+submission. I'll use the {...} short hand method and update.
 
-diff --git a/drivers/spi/spi-intel.c b/drivers/spi/spi-intel.c
-index 50f42983b950..66063687ae27 100644
---- a/drivers/spi/spi-intel.c
-+++ b/drivers/spi/spi-intel.c
-@@ -1236,8 +1236,8 @@ static int intel_spi_populate_chip(struct intel_spi *ispi)
- 		return -ENOMEM;
- 
- 	pdata->nr_parts = 1;
--	pdata->parts = devm_kcalloc(ispi->dev, sizeof(*pdata->parts),
--				    pdata->nr_parts, GFP_KERNEL);
-+	pdata->parts = devm_kcalloc(ispi->dev, pdata->nr_parts,
-+				    sizeof(*pdata->parts), GFP_KERNEL);
- 	if (!pdata->parts)
- 		return -ENOMEM;
- 
+> You don't need to spell out full command-line in the guideline unless
+> absolutely necessary, in general.
+> 
+
 -- 
-2.34.1
-
+Muhammad Usama Anjum

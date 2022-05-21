@@ -2,150 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F19D252F6C2
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 02:27:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48B7552F6C3
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 02:27:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354205AbiEUA03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 20 May 2022 20:26:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46090 "EHLO
+        id S1354207AbiEUA1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 20 May 2022 20:27:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354203AbiEUA0X (ORCPT
+        with ESMTP id S1346094AbiEUA1O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 20 May 2022 20:26:23 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AFC058E63;
-        Fri, 20 May 2022 17:26:19 -0700 (PDT)
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24KMsHPj029476;
-        Fri, 20 May 2022 17:25:40 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=message-id : date :
- subject : from : to : cc : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=facebook;
- bh=lUQZDpirbqGUX51sgXUNWIBRff0Rzrt0VIkwMtO27qg=;
- b=ncFeVLftJbTI6juNvZ2ONryxLFUm2QtAwB0rJFUXtb7aLfxlfQlvIepgMTurPVs1YHyF
- MPP2ZlyDavXqFrW6IQN3LN1QrAb2efwkS7XOehaS/d9P90nOndHoDBSDPlGxHISIxaoF
- muvemwg8DusVJwvHF8zSsI+kV2WUudYTfZE= 
-Received: from nam02-dm3-obe.outbound.protection.outlook.com (mail-dm3nam07lp2044.outbound.protection.outlook.com [104.47.56.44])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3g5xexftwu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 May 2022 17:25:40 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SEmGxHqdfD45Ot47Li6kUaUuFwPDzniTA6rnUrD3nQuMd+5DCJO0OhshRAvPThY67G2E1j2AYuoBV9Fx+7UPo/TDkvx72STUTmsB5pOOXPSSBMn5+inBXN8U2w/cjK618wKYmZyCf9aevc9fFXq424Ku+mTf7Ea4NDKzqY4WNsh8Ptx9nrPSrSOOOrQaNB0crGzPLZFmguaclQtalgngNJSlPQVEFe7FCCu/+YhndymGyiDhUoUh81JK4QHDeVTcmZhFocTS/yyVLuoJDuvug1PZyAN5sLQETOPWgAW0JIt+ODjLyYmob+Lu/cH7E0lex+8Hf5VD59qohmVvvzvdAA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lUQZDpirbqGUX51sgXUNWIBRff0Rzrt0VIkwMtO27qg=;
- b=Z7eyK6janTKUVM2RhhfoZpv219eTS9yuprwvnTTJ6KFJIm/j8v7ak8THYRRHhssvskDjiyqct+rfJR8imvoJDjZ6kWdASAP9sm7bUML2sEdEKJX6TWHHA7/sSQ2TCmjVTtvyfR+VMWLBeSOZXL3b3b9WFDzePbyHB38hfVM7eEhAWHHqsQxQ6dXRYb9yCI8XilF7CVM8/eb3X6FJti/vLMFgIG+V/VGhjMKcnlTBmUjhbBHDJu90ttQ5S9EFw1kAvjMQI7Zujt4eGjUMuKhaQ0BQApafMYeM6RmQ8TeJPMzM9nWJKX+7RBeWC7s8V2r81CMEwfgaQwfTTOqY6Qur4A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by DM5PR15MB1898.namprd15.prod.outlook.com (2603:10b6:4:4e::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.17; Sat, 21 May
- 2022 00:25:38 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::5811:4996:bbfd:3c53]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::5811:4996:bbfd:3c53%7]) with mapi id 15.20.5273.017; Sat, 21 May 2022
- 00:25:38 +0000
-Message-ID: <0cf50c32-ab67-ef23-7b84-ef1d4e007c33@fb.com>
-Date:   Fri, 20 May 2022 17:25:36 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: [PATCH bpf-next 2/4] bpf: verifier: explain opcode check in
- check_ld_imm()
-Content-Language: en-US
-From:   Yonghong Song <yhs@fb.com>
-To:     Shung-Hsi Yu <shung-hsi.yu@suse.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>
-References: <20220520113728.12708-1-shung-hsi.yu@suse.com>
- <20220520113728.12708-3-shung-hsi.yu@suse.com>
- <f9511485-cda4-4e5e-fe1f-60ffe57e27d1@fb.com>
-In-Reply-To: <f9511485-cda4-4e5e-fe1f-60ffe57e27d1@fb.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BYAPR07CA0004.namprd07.prod.outlook.com
- (2603:10b6:a02:bc::17) To SN6PR1501MB2064.namprd15.prod.outlook.com
- (2603:10b6:805:d::27)
+        Fri, 20 May 2022 20:27:14 -0400
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C585C764
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 17:27:10 -0700 (PDT)
+Date:   Fri, 20 May 2022 17:27:04 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1653092828;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=y1FEu8HyQRjr/eREuqJXaUmbStCzspnGbiQi4WtGL3w=;
+        b=qKSKeHCl6hkSBNjsqCznu21xVrYZJ0XVtlXQHrL8SApWHg+Gg+2YyVIem9SHmVww3pjnYk
+        hRFZe3JS97iQjr+WB1JD9TPzBfW5Qyke4oBGQ4GhSQSvV1jXDjOtuHnzzVoK/eSu7XFufG
+        6dMrln8QIXI9i7ie2PfornX+LlV/OPk=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Dave Chinner <dchinner@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Hillf Danton <hdanton@sina.com>
+Subject: Re: [PATCH v3 2/6] mm: shrinkers: introduce debugfs interface for
+ memory shrinkers
+Message-ID: <Yogx2BzID3JXm8sn@carbon>
+References: <20220509183820.573666-1-roman.gushchin@linux.dev>
+ <20220509183820.573666-3-roman.gushchin@linux.dev>
+ <d938e52e-3704-d095-cafe-a6218701896a@wanadoo.fr>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 157a102f-cebf-459e-fa0c-08da3ac06e38
-X-MS-TrafficTypeDiagnostic: DM5PR15MB1898:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR15MB189806E72023B179BC05E5BAD3D29@DM5PR15MB1898.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 30NObPz7DzMz9+jm31lPqLel0phaklOwMrsyg53D4fwzubsAfJOIJ7UdI2xeQ0jqCqnSwsFWG0W1BK1eL75oTyXa7MKmoNYKNgr/1XYMDETElt/aEd4FiXkbJYxyfaA2O18fSFoQfe+pmWZKrtEznneLK4oxdf4flmqk8e8nFyd0PCdRSkEzJ+1+Gb8yTMOS5pEeFuDROVxx56DuSAjJV8+FcmMT2VgrRSkB40T+LNRQ4RtAJE83yGHDbR9wRl3vs5b9Yqv+pZkJWjJ/T1bNeUmxML93lh7B5u9urmfYU1yJAgjnfEwrueAuLIsCzWSkhWuYSMGNyitUlgKxGgkmchuGAQmdEb60WZ46AwTG1qep+2EnfWIcDjx1EUnQr7F+kDC889GCrKL5gSXv0b8oDFStPVOkC6qzFsqi/GfEtC57eC00tLK+QCafw75elNMg+D2enHXsmOO2YYVP0Irin9zLNMR0JzKiJhwmDWMGRr9QUi31uqvbC9baNcNKY77G4tnwqx3JupxFhgtovqC0/zbUmRuD7Yhb+Dpn7hWWBxtna7Md3aIXO2ks4xD0l4+jvDOt0mh0jMYoPN/Tetnj1K6IFT9nqmP3cNr52CAULlKnYUIA/xWIzCdgAgj5KD96/7t4E03w7H7NfR2ykuE+GCyEFJRDT92xkHukP/STD5z8Y/5oHP+7V/QO5U8wyuRxrs9wlKAhynt8vxhbAfH3KpBSv3vKfHW1hAqE8Gw1AG+aPreoD550IPLoZGEfelK6
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8936002)(83380400001)(508600001)(36756003)(6486002)(4326008)(38100700002)(54906003)(5660300002)(6506007)(6512007)(2616005)(31686004)(31696002)(66946007)(66476007)(186003)(8676002)(316002)(2906002)(53546011)(86362001)(66556008)(52116002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eUNpeDhxNVhFNmkxNS9oMU5MTGV6eW9ORTZ2QlNIcmhYWm83aFF6TFdKb21V?=
- =?utf-8?B?dTFmcDdxOS9DWkFRWWVkS2Zmd1dkQUE3TUFDbDNEVFVob3M2dEo3a3J4K1Fw?=
- =?utf-8?B?TTgzN0U2UnZFbWcxWDk0NFovYnphcm9ueStQWWRxcjhSQy9pckFsZm1hS2ZG?=
- =?utf-8?B?Qzg1N2JXb0FYSm5EWmJZempsVkRCU0I5azJFY0FLNFBPRlFXRTFNVHlmWDB0?=
- =?utf-8?B?TnAwK3FMSGhwa2ZkS1FCNnNVUHAva2pGTy81Qk1NZEUxZ3hFaTVYaDRsZGNR?=
- =?utf-8?B?V25Cc1hySC9GVDZGcUd2azA1RDJzTzI5YXJxR1B3b0NkZWZJcUtQVmxScWtX?=
- =?utf-8?B?YkhDU3lkYXhhTHhuS0NsQm1mM3lxSFI5cnNmUzNsUkJPcTB1cnBNTW9wVENN?=
- =?utf-8?B?TWRQOXp6VEppRTE5ZE0zeTA3bUpTMUNVajNMemdvQldaNENscHlySkcyOUEr?=
- =?utf-8?B?V1orZUF0NjBJbXcxVndoZE1WZEpFSTJvbkN6ZEd0bUFuOG1jZGQvWE1IVDE3?=
- =?utf-8?B?bWR3cEJDaTJ6RTJ1enZacEo1MTB4bzJXTXNXdkVqTDEwem16VWRyOW1lL1Fu?=
- =?utf-8?B?RlcwOXlQK3ZxNlBTMGhkMVZudHcySTU3NnZ1S3JPUW1BbWtGcUVFcFBLOG95?=
- =?utf-8?B?dEh0VFFmQ2Q2a0ZHcUIxRlBFT0NHZDFFZkJNMmxrVkgvZnM5dDVVcHVUMGlF?=
- =?utf-8?B?SXdXVGk4dUYvOU9sc21XR3VVZjVGOHkzQ0s1OUYvRVo1NGhXR0Vycjc0aFRn?=
- =?utf-8?B?T2d0dE9nbXVDS1pqek5FSDNXWm9EMjg0RFVZdWxBTnFFOVJOWnB2VU5vWUNp?=
- =?utf-8?B?aXI2WHhRVEtoWFd5RzZ0Yk40bTF6Z3RTSE15MEg1dk1zT3hER0swclFXcktm?=
- =?utf-8?B?MDFVWmpSS3d3TzQ4VERtR29pSHpwS2ZZVnFTS3hyQW1zN3FndHhod2x0RGxo?=
- =?utf-8?B?NDllNVVocmpUcGJZTURNU1MwMWhidDZidVg5b2tia3hLZUJCTjFSTDJEUzZs?=
- =?utf-8?B?UVJta0haQnR2TWNUOXY2WkxLeXR3NmZoaDhmSHkralBoaHhFWVYvUnJMbTlN?=
- =?utf-8?B?WG5VZ1dkSmFZa09XaTl6UWlCc3h0UXBvTjJMdk9tdStsb0IxaS9jVm9oTUdv?=
- =?utf-8?B?Z25uMDNFQ25sYjM5T1dHcE5DRWhlSER4c3JQMlFPMDRyWjBPUytuQVIwVG56?=
- =?utf-8?B?RFA3TEdkZFZNYVhJa21nNCtQdyt5MHNSZElUeUhPUUxRK3psTCt3QmNUSG5K?=
- =?utf-8?B?ZXFaVWNRbE1pdlg1bFliSUsrK2sydDBJaWdvbTFhWXYyWWRkeXpIVGliK25o?=
- =?utf-8?B?VUxjUmdwaE9OUFdZOGk2U2pMKzErMkRubXV0RTNzT2RrOWdicEFPY3hlbHJP?=
- =?utf-8?B?bUNSRFdEUHNRNWdvVGoraldBY3hnZk5BRmRYdEtQNVVCSGNnbUp4VnNpQTZB?=
- =?utf-8?B?TGVpc2NhclhMd0FXMUtGMHRRTm16cys5V24wUjN5bWxXaEJyVW5JSkJBd0Zt?=
- =?utf-8?B?Qk5PYUllMmlmWFIrWUdNNlp6SzVSWUhTT1VJZTJ2d051RSt0WnVzY3JwYWcw?=
- =?utf-8?B?NDRnOWRabkJHa0dpV2ZCWXZtVWJPNmpjM0Jkb01aaXZVeUV1N2x0SGtVOUJ5?=
- =?utf-8?B?aml4dW1hVXJzaVVsbHBiajlhY0VnZ1Z4VWpHa3hiTEtONHdWTUswbmJUd1F6?=
- =?utf-8?B?Mjc2YkJRRmQ3SXVCSm1iT29FOVVwZGNEeW9ZbnNsTWhFTk5vcnZ0OVFjNW5l?=
- =?utf-8?B?aGw5R0ROMk9kV1ptNjFmVWdsMTNBdFhGaW9vSitxY2JQNGFSdlU2YUx1cHRO?=
- =?utf-8?B?bVRTRkZLbUVmMEJ2aHJEeERlS3kybk1JMkY2MVJUR00xUEZaaGlKM2NveUhv?=
- =?utf-8?B?VXhIL0hHaXQ4ZnlQQUF5bEg3b1VIeUlySDhGUU96ZU12U1ZJbWNYU2NKMU12?=
- =?utf-8?B?d0o0cFAzWlA2eVhxMmpyNlliUU5MNWtvd1dPclkvU0RTTXlsM2VCeTFrdVFy?=
- =?utf-8?B?R3lRVUFENlI2SlpBYll4Rm4wU1JLQzljWVZ3OFUzb3lZbTlBaDFlK282SFd2?=
- =?utf-8?B?Y2pCR01YSGxqRm9rR1Y2c1l1QnFaQ05ESXFXVy96dkhpS1JJSWpKU3hXanl1?=
- =?utf-8?B?ekRoVXV6RFlrYzFjRVAxQzFYcnN2VHJkZHprQkN4dWx3RDBUKzBPcmFiOE1U?=
- =?utf-8?B?TTdRSmtQRGJPMnFYNTh5YlJRUGpzM3JNNmJBUlBpaEMyNWNwZ2ZndVF2U2h6?=
- =?utf-8?B?N1F6VGEzcStRUmVYd1lFSVdCS3ZzMllEem5IVjRoY3BuZlcveWxYd05Oajdz?=
- =?utf-8?B?ZzBYdDIyRkpJMDV2SWZFNTJ2NkdjTWNYSktpcHJDUTBpempYd2NvYXE0ZDFL?=
- =?utf-8?Q?JceA275BEgLUm3+g=3D?=
-X-OriginatorOrg: fb.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 157a102f-cebf-459e-fa0c-08da3ac06e38
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 May 2022 00:25:38.5268
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ry5r6tel94UwBgDH9W5Fte7EIiv6bgckNtG5hqzNc3suTmIzKBaCjWQH3QW3OTET
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR15MB1898
-X-Proofpoint-ORIG-GUID: MC0rCGygHAnDa7l9PqwRTX2V7VDEkloo
-X-Proofpoint-GUID: MC0rCGygHAnDa7l9PqwRTX2V7VDEkloo
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-20_08,2022-05-20_02,2022-02-23_01
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d938e52e-3704-d095-cafe-a6218701896a@wanadoo.fr>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -153,82 +57,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, May 20, 2022 at 06:58:12PM +0200, Christophe JAILLET wrote:
+> Le 09/05/2022 � 20:38, Roman Gushchin a �crit�:
+> > This commit introduces the /sys/kernel/debug/shrinker debugfs
+> > interface which provides an ability to observe the state of
+> > individual kernel memory shrinkers.
+> > 
+> > Because the feature adds some memory overhead (which shouldn't be
+> > large unless there is a huge amount of registered shrinkers), it's
+> > guarded by a config option (enabled by default).
+> > 
+> > This commit introduces the "count" interface for each shrinker
+> > registered in the system.
+> > 
+> > The output is in the following format:
+> > <cgroup inode id> <nr of objects on node 0> <nr of objects on node 1>...
+> > <cgroup inode id> <nr of objects on node 0> <nr of objects on node 1>...
+> > ...
+> > 
+> > To reduce the size of output on machines with many thousands cgroups,
+> > if the total number of objects on all nodes is 0, the line is omitted.
+> > 
+> > If the shrinker is not memcg-aware or CONFIG_MEMCG is off, 0 is
+> > printed as cgroup inode id. If the shrinker is not numa-aware, 0's are
+> > printed for all nodes except the first one.
+> > 
+> > This commit gives debugfs entries simple numeric names, which are not
+> > very convenient. The following commit in the series will provide
+> > shrinkers with more meaningful names.
+> > 
+> > Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+> > ---
+> >   include/linux/shrinker.h |  19 ++++-
+> >   lib/Kconfig.debug        |   9 +++
+> >   mm/Makefile              |   1 +
+> >   mm/shrinker_debug.c      | 171 +++++++++++++++++++++++++++++++++++++++
+> >   mm/vmscan.c              |   6 +-
+> >   5 files changed, 203 insertions(+), 3 deletions(-)
+> >   create mode 100644 mm/shrinker_debug.c
+> > 
+> > diff --git a/include/linux/shrinker.h b/include/linux/shrinker.h
+> > index 76fbf92b04d9..2ced8149c513 100644
+> > --- a/include/linux/shrinker.h
+> > +++ b/include/linux/shrinker.h
+> > @@ -72,6 +72,10 @@ struct shrinker {
+> >   #ifdef CONFIG_MEMCG
+> >   	/* ID in shrinker_idr */
+> >   	int id;
+> > +#endif
+> > +#ifdef CONFIG_SHRINKER_DEBUG
+> > +	int debugfs_id;
+> > +	struct dentry *debugfs_entry;
+> >   #endif
+> >   	/* objs pending delete, per node */
+> >   	atomic_long_t *nr_deferred;
+> > @@ -94,4 +98,17 @@ extern int register_shrinker(struct shrinker *shrinker);
+> >   extern void unregister_shrinker(struct shrinker *shrinker);
+> >   extern void free_prealloced_shrinker(struct shrinker *shrinker);
+> >   extern void synchronize_shrinkers(void);
+> > -#endif
+> > +
+> > +#ifdef CONFIG_SHRINKER_DEBUG
+> > +extern int shrinker_debugfs_add(struct shrinker *shrinker);
+> > +extern void shrinker_debugfs_remove(struct shrinker *shrinker);
+> > +#else /* CONFIG_SHRINKER_DEBUG */
+> > +static inline int shrinker_debugfs_add(struct shrinker *shrinker)
+> > +{
+> > +	return 0;
+> > +}
+> > +static inline void shrinker_debugfs_remove(struct shrinker *shrinker)
+> > +{
+> > +}
+> > +#endif /* CONFIG_SHRINKER_DEBUG */
+> > +#endif /* _LINUX_SHRINKER_H */
+> > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> > index 3fd7a2e9eaf1..5fa65a649798 100644
+> > --- a/lib/Kconfig.debug
+> > +++ b/lib/Kconfig.debug
+> > @@ -733,6 +733,15 @@ config SLUB_STATS
+> >   	  out which slabs are relevant to a particular load.
+> >   	  Try running: slabinfo -DA
+> > +config SHRINKER_DEBUG
+> > +	default y
+> 
+> The previous version of the serie had default 'n'.
+> Is it intentional to have it now activated by default? It looked more like a
+> tuning functionality when fine grained mangement of shrinker is needed.
 
+Yes, it is intentional.
+The overhead is small, so I don't think we have a good reason to hide it
+by default behind a config option. In my opinion, enabling it be default
+will increase the chances to gather a useful data.
+It was the feedback I've received for one of the previous versions of
+the patchset, and I think it's totally valid.
+And preserving the config option allows to have a zero overhead for
+really constrained systems.
 
-On 5/20/22 4:50 PM, Yonghong Song wrote:
-> 
-> 
-> On 5/20/22 4:37 AM, Shung-Hsi Yu wrote:
->> The BPF_SIZE check in the beginning of check_ld_imm() actually guard
->> against program with JMP instructions that goes to the second
->> instruction of BPF_LD_IMM64, but may be easily dismissed as an simple
->> opcode check that's duplicating the effort of bpf_opcode_in_insntable().
->>
->> Add comment to better reflect the importance of the check.
->>
->> Signed-off-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
->> ---
->>   kernel/bpf/verifier.c | 4 ++++
->>   1 file changed, 4 insertions(+)
->>
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index 79a2695ee2e2..133929751f80 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -9921,6 +9921,10 @@ static int check_ld_imm(struct bpf_verifier_env 
->> *env, struct bpf_insn *insn)
->>       struct bpf_map *map;
->>       int err;
->> +    /* checks that this is not the second part of BPF_LD_IMM64, which is
->> +     * skipped over during opcode check, but a JMP with invalid 
->> offset may
->> +     * cause check_ld_imm() to be called upon it.
->> +     */
-> 
-> The check_ld_imm() call context is:
-> 
->                  } else if (class == BPF_LD) {
->                          u8 mode = BPF_MODE(insn->code);
-> 
->                          if (mode == BPF_ABS || mode == BPF_IND) {
->                                  err = check_ld_abs(env, insn);
->                                  if (err)
->                                          return err;
-> 
->                          } else if (mode == BPF_IMM) {
->                                  err = check_ld_imm(env, insn);
->                                  if (err)
->                                          return err;
-> 
->                                  env->insn_idx++;
->                                  sanitize_mark_insn_seen(env);
->                          } else {
->                                  verbose(env, "invalid BPF_LD mode\n");
->                                  return -EINVAL;
->                          }
->                  }
-> 
-> which is a normal checking of LD_imm64 insn.
-> 
-> I think the to-be-added comment is incorrect and unnecessary.
-
-Okay, double check again and now I understand what happens
-when hitting the second insn of ldimm64 with a branch target.
-Here we have BPF_LD = 0 and BPF_IMM = 0, so for a branch
-target to the 2nd part of ldimm64, it will come to
-check_ld_imm() and have error "invalid BPF_LD_IMM insn"
-
-So check_ld_imm() is to check whether the insn is a
-*legal* insn for the first part of ldimm64.
-
-So the comment may be rewritten as below.
-
-This is to verify whether an insn is a BPF_LD_IMM64
-or not. But since BPF_LD = 0 and BPF_IMM = 0, if the branch
-target comes to the second part of BPF_LD_IMM64,
-the control may come here as well.
-
-> 
->>       if (BPF_SIZE(insn->code) != BPF_DW) {
->>           verbose(env, "invalid BPF_LD_IMM insn\n");
->>           return -EINVAL;
+Thanks!

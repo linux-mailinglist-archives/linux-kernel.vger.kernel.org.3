@@ -2,87 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00C9652FC64
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 14:33:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4497652FC69
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 14:36:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241954AbiEUMcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 08:32:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57404 "EHLO
+        id S243377AbiEUMgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 08:36:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242064AbiEUMcq (ORCPT
+        with ESMTP id S232693AbiEUMgc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 08:32:46 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8A59C2EA
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 05:32:45 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id h9so1672481pgl.4
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 05:32:45 -0700 (PDT)
+        Sat, 21 May 2022 08:36:32 -0400
+Received: from mail-vk1-xa29.google.com (mail-vk1-xa29.google.com [IPv6:2607:f8b0:4864:20::a29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E92DFE0AC;
+        Sat, 21 May 2022 05:36:30 -0700 (PDT)
+Received: by mail-vk1-xa29.google.com with SMTP id m203so5168290vke.13;
+        Sat, 21 May 2022 05:36:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
-         :mime-version:content-transfer-encoding;
-        bh=JgECGUYQPfzQccxjQJUi8fr2KJeySrPf4gVLNaVPy0U=;
-        b=WXY1ugt3fKDzvhExzkLtPKfAnoaTleIm5nLQSD1VDR4y9vBVjrL0twjYEe0rHhtMV6
-         1RyA3k/9mC8X7ckdY1XjXshHVglKqwrEMD2ZwIElo41MmucmJlUFkiMHR61XvU+Zf/6Z
-         mylPQ6yvSzXb3yoRzuFcEw3dgwcJJ/uKKF355S7fw325qu/3dGuDPXD/sxL2KlkTWXcL
-         spDpLa6rx2va0TFSjedicNGQH+fWRBMhIG0Zpx2uNTcJpO2y63MXlYsCKf0O5dCyLf/D
-         8FLzBK1swN4AFRFmYptHnjLmAke3cowmC+hgzlRSKMV260ru/V6fjelTbufXtI8ZVVWU
-         P/GA==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=88aWhuqLs48EjscpwDp8i6PCYgkUo8462NUVXo2FVNA=;
+        b=gUz5LdAEB5GxPpTjh1e8cjpjIMcrQpFsYNFNVGK/BPs9nt34cI8exCnEEZ0o1WMZee
+         NI9JISZwwxqCJJfphAhwkxrcNyEFmuPHazmMcTWaKXs46ziSwGLgkwKoRdFfsZjfGJhV
+         DwRmE4ispD/0SbCLONa7xQWSuS8nPeioFkLaucUZJrtKSf8n+Mf78bQ0yuaaAFPLwVUT
+         BOQNxNjCGJv/ediiRTnsaZVxABohBoI/JoSfXXA3LmBqM+lv8pJJZfb6tXQ8rERKuTVE
+         55QiOLT0vwwraKtz93jSzeQGofeCM0AJXP7LwEXnrcVpFF9nfyCkeQFguZDUObMfc7w2
+         FVyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=JgECGUYQPfzQccxjQJUi8fr2KJeySrPf4gVLNaVPy0U=;
-        b=gRrUd/eXkY2uZ1oMYjjQij4MTCTgELy+5nEVLV+Q4vby2wsSogUpXunF59ZSaZmkph
-         nKSjc0Gn2CNIt2hjFShvUzJTG4yfgvS+hHTDkN30CEjTStm8wyvGKOMmoiFKzsQDRCIt
-         wwydj/arSZQDLQPivCDabxWIKc6gwSoBiyF2fS35Nx9kiVwTs5QW9AcnPwRTVwZLKJ2u
-         nhl+13VHOrpW2Vd3F5ftUzoBozNz0v7MsbyX3iw2OV3BvHR/I+I0cJxEhLh2QIaErmhf
-         7fdLBj9IAe6q9CXvYWAfcD6ODPh/unW7rFX9vXGLVDYwsjC09KLcO6c5hzNKZClz/Hvq
-         jEOQ==
-X-Gm-Message-State: AOAM531GgVRpWEwJajzJOursxUggBtp1rTKs+c+O2SDmpyU8S+99Bsw0
-        +u8lROupKapisFO6+2Fn8ovs+h9ry5KAYA==
-X-Google-Smtp-Source: ABdhPJyywiQeka0cL1QIQ52HrCa75B117/TtMloSmZELBFW0UPcqBV4nCigEW/gs58JskI9ne6BDZg==
-X-Received: by 2002:a63:4765:0:b0:3ab:812a:ded2 with SMTP id w37-20020a634765000000b003ab812aded2mr12851246pgk.214.1653136365061;
-        Sat, 21 May 2022 05:32:45 -0700 (PDT)
-Received: from [127.0.1.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id e20-20020a170902ed9400b0015e8d4eb1f5sm1506394plj.63.2022.05.21.05.32.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 May 2022 05:32:44 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Julia.Lawall@inria.fr
-Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-In-Reply-To: <20220521111145.81697-28-Julia.Lawall@inria.fr>
-References: <20220521111145.81697-28-Julia.Lawall@inria.fr>
-Subject: Re: [PATCH] mtip32xx: fix typo in comment
-Message-Id: <165313636386.19482.14816930857839555999.b4-ty@kernel.dk>
-Date:   Sat, 21 May 2022 06:32:43 -0600
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=88aWhuqLs48EjscpwDp8i6PCYgkUo8462NUVXo2FVNA=;
+        b=PaLBjj2PYtnkmPkkoI3Npb0UsPXHZMVrGlbx33GC2XPKwKJ3BS2JKPQteM614beQKw
+         eixh3yfgOaENuMK8FX6CflJYHMN0MmCFG+BMu5oXDQk398dsgU6wcJ1BzEP4MEmbAKLK
+         2IU6rQbLM4OZDjJYNhnBgxBqzeMu0Q10B9p05gDiinODQBlForQfDPs3INCmCD7YmGJr
+         svJFFiVp+UoqjzuiJgkwDc9J0c+WjLzcJyd2zQQWAZ1WdmLayrvCrwulXjRkpIv3uPPQ
+         a22ycJDm5IRlY5r2zFQ6vg72aeYSnlNEt4yjQ+HquZ7/a2W0O5sTmsEU4iE08Ail8alJ
+         myPA==
+X-Gm-Message-State: AOAM530cHkNcVF3gp8O8mfbanJOg7TOFyFl8vy+BzvlkdoRR8WisQmBh
+        MIj1yZ+Jo45NnEEbkzCYLOEmysCsAb7gHls9cg==
+X-Google-Smtp-Source: ABdhPJyKo2dgiaE4q9V+2eJn02CIy5nUblJlWy/nu1zDZs6GmSd3FvSRN3TranOng2H4DBrLGGjHIZvth/2ZQBBIKng=
+X-Received: by 2002:a05:6122:8c5:b0:357:8a48:5239 with SMTP id
+ 5-20020a05612208c500b003578a485239mr162784vkg.5.1653136589971; Sat, 21 May
+ 2022 05:36:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220517101142.28421-1-warp5tw@gmail.com> <20220517101142.28421-3-warp5tw@gmail.com>
+ <Yoh9yL1FO7aXme69@shikoro>
+In-Reply-To: <Yoh9yL1FO7aXme69@shikoro>
+From:   Tyrone Ting <warp5tw@gmail.com>
+Date:   Sat, 21 May 2022 20:36:18 +0800
+Message-ID: <CACD3sJYuPJM5NCrD85gnBe=JEvfsfyjZN18prDwY043GqHAj+w@mail.gmail.com>
+Subject: Re: [PATCH v5 02/10] i2c: npcm: Change the way of getting GCR regmap
+To:     Wolfram Sang <wsa@kernel.org>, Tyrone Ting <warp5tw@gmail.com>,
+        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        andriy.shevchenko@linux.intel.com, jarkko.nikula@linux.intel.com,
+        semen.protsenko@linaro.org, rafal@milecki.pl, sven@svenpeter.dev,
+        jsd@semihalf.com, jie.deng@intel.com, lukas.bulwahn@gmail.com,
+        arnd@arndb.de, olof@lixom.net, tali.perry@nuvoton.com,
+        Avi.Fishman@nuvoton.com, tomer.maimon@nuvoton.com,
+        KWLIU@nuvoton.com, JJLIU0@nuvoton.com, kfting@nuvoton.com,
+        openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 21 May 2022 13:10:38 +0200, Julia Lawall wrote:
-> Spelling mistake (triple letters) in comment.
-> Detected with the help of Coccinelle.
-> 
-> 
+Hi Wolfram:
 
-Applied, thanks!
+Got it and thank you for your review.
 
-[1/1] mtip32xx: fix typo in comment
-      commit: 537b9f2bf60f4bbd8ab89cea16aaab70f0c1560d
+Wolfram Sang <wsa@kernel.org> =E6=96=BC 2022=E5=B9=B45=E6=9C=8821=E6=97=A5 =
+=E9=80=B1=E5=85=AD =E4=B8=8B=E5=8D=881:51=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On Tue, May 17, 2022 at 06:11:34PM +0800, Tyrone Ting wrote:
+> > From: Tali Perry <tali.perry1@gmail.com>
+> >
+> > Change the way of getting NPCM system manager reigster (GCR)
+> > and still maintain the old mechanism as a fallback if getting
+> > nuvoton,sys-mgr fails while working with the legacy devicetree
+> > file.
+> >
+> > Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller dri=
+ver")
+> > Signed-off-by: Tali Perry <tali.perry1@gmail.com>
+> > Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
+> > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>
+> Applied to for-next, thanks!
+>
+> I dropped the Fixes tag, doesn't look like a bugfix to me.
+>
 
-Best regards,
--- 
-Jens Axboe
-
-
+Best Regards,
+Tyrone

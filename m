@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA6EB52FBF0
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:29:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 183C252FBEE
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:29:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356437AbiEULXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 07:23:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51590 "EHLO
+        id S1356304AbiEULXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 07:23:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354926AbiEULM5 (ORCPT
+        with ESMTP id S1354944AbiEULM7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 07:12:57 -0400
+        Sat, 21 May 2022 07:12:59 -0400
 Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 891A190CCB;
-        Sat, 21 May 2022 04:12:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFD44CEBB4;
+        Sat, 21 May 2022 04:12:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=inria.fr; s=dc;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=xYRDzENhcBEuFr81DrVcFNYvESNY7pY0uh+ZFfsrubc=;
-  b=mwi8F52nRAJS/SCf5EATUYUfIAI6y/v0GfB0UGgdxVwjI/Kjmo4navwg
-   smYeKb71pADASm2LiGK4wqZCH9huQffnINw//0bTCygwO5wb4sOBs3xw2
-   AWaKaIksjC0ogK0+eELj5y7K0LN1AhaOHdDSA0jdHodqQSoP0aN8jpkjF
-   U=;
+  bh=RtTVxN54Lq7Viw5TbSNoFtvVJKPyGUhQEKorRvAW9F8=;
+  b=Vv1VpNaCKetaH7ZWe3M1Zv4Ip7C3x4hjG0RZBygAEE+/Y21I4bEpNjCh
+   VCar0IiSchmoBBE0dSo0WC09SH1MkJd7e2dsc94x1qqErTbvrfDxA25Ei
+   4A/MNE6+Et+pyzBV0ownfHspyiNlwSGMB3UZj+agenv4lnriMv3CoUD8G
+   0=;
 Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
 X-IronPort-AV: E=Sophos;i="5.91,242,1647298800"; 
-   d="scan'208";a="14727981"
+   d="scan'208";a="14727982"
 Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
   by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 13:12:05 +0200
 From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     kernel-janitors@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, oss-drivers@corigine.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] nfp: flower: fix typo in comment
-Date:   Sat, 21 May 2022 13:11:23 +0200
-Message-Id: <20220521111145.81697-73-Julia.Lawall@inria.fr>
+To:     Felix Kuehling <Felix.Kuehling@amd.com>
+Cc:     kernel-janitors@vger.kernel.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/amdkfd: fix typo in comment
+Date:   Sat, 21 May 2022 13:11:24 +0200
+Message-Id: <20220521111145.81697-74-Julia.Lawall@inria.fr>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -58,20 +60,20 @@ Detected with the help of Coccinelle.
 Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
 ---
- drivers/net/ethernet/netronome/nfp/flower/lag_conf.c |    2 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/netronome/nfp/flower/lag_conf.c b/drivers/net/ethernet/netronome/nfp/flower/lag_conf.c
-index 63907aeb3884..ede90e086b28 100644
---- a/drivers/net/ethernet/netronome/nfp/flower/lag_conf.c
-+++ b/drivers/net/ethernet/netronome/nfp/flower/lag_conf.c
-@@ -576,7 +576,7 @@ nfp_fl_lag_changeupper_event(struct nfp_fl_lag *lag,
- 	group->dirty = true;
- 	group->slave_cnt = slave_count;
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
+index 8b5452a8d330..67abf8dcd30a 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
+@@ -1621,7 +1621,7 @@ int amdgpu_amdkfd_gpuvm_free_memory_of_gpu(
  
--	/* Group may have been on queue for removal but is now offfloable. */
-+	/* Group may have been on queue for removal but is now offloable. */
- 	group->to_remove = false;
- 	mutex_unlock(&lag->lock);
+ 	mutex_lock(&mem->lock);
  
+-	/* Unpin MMIO/DOORBELL BO's that were pinnned during allocation */
++	/* Unpin MMIO/DOORBELL BO's that were pinned during allocation */
+ 	if (mem->alloc_flags &
+ 	    (KFD_IOC_ALLOC_MEM_FLAGS_DOORBELL |
+ 	     KFD_IOC_ALLOC_MEM_FLAGS_MMIO_REMAP)) {
 

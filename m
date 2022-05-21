@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0E4552FB6F
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:16:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E2DA52FB6A
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:14:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348451AbiEULPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 07:15:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47208 "EHLO
+        id S1345939AbiEULOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 07:14:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242419AbiEULMD (ORCPT
+        with ESMTP id S242538AbiEULME (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 07:12:03 -0400
+        Sat, 21 May 2022 07:12:04 -0400
 Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 328E22B18B;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 327762AC71;
         Sat, 21 May 2022 04:12:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=inria.fr; s=dc;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=/Xjy/3p4SMUmqBnwUcbwEf3XXUDh3xvEAhklGc46AYY=;
-  b=jIfusPeiipJzcirL00ToLr9nx6jUigHG5UTc9xobojbH1tSnYlXqHZVE
-   M+tr2TFjkTyTNO0cXiqV1E7cbGQFigzc0Xxh8mSvNa4TAClqp31E+dBmi
-   o+p3kJ0oeR2SOh6CQxjobFX2Xm6KIrqamVw1Ee3NvEYHkoNlYaHQzdMfn
-   8=;
+  bh=qNf+LXKP5nv8dOD9AyBMbAWa2fVy5WdgtmvX/YL3SSA=;
+  b=tEfiQ5DUi7QvDM5CaerfMpqurmYag9IA5ADmM0lLII/JVNGF0Sn/VP95
+   a6hQAowoSJI2JypCHyWyXvhuj+pGSHDpUvce/nbHQVffRC6jmH9fqEAPt
+   q+QFdfiAHFPAAZVvR/r90amk54WmZYtnAUHWUDFtrrT24VaY4y68shTpv
+   I=;
 Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
 X-IronPort-AV: E=Sophos;i="5.91,242,1647298800"; 
-   d="scan'208";a="14727912"
+   d="scan'208";a="14727913"
 Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
   by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 13:11:55 +0200
 From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     kernel-janitors@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] dmaengine: ste_dma40: fix typo in comment
-Date:   Sat, 21 May 2022 13:10:27 +0200
-Message-Id: <20220521111145.81697-17-Julia.Lawall@inria.fr>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     kernel-janitors@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] media: platform: exynos-gsc: fix typo in comment
+Date:   Sat, 21 May 2022 13:10:28 +0200
+Message-Id: <20220521111145.81697-18-Julia.Lawall@inria.fr>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -56,20 +58,20 @@ Detected with the help of Coccinelle.
 Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
 ---
- drivers/dma/ste_dma40.c |    2 +-
+ drivers/media/platform/samsung/exynos-gsc/gsc-core.h |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/dma/ste_dma40.c b/drivers/dma/ste_dma40.c
-index e1827393143f..f093e08c23b1 100644
---- a/drivers/dma/ste_dma40.c
-+++ b/drivers/dma/ste_dma40.c
-@@ -1970,7 +1970,7 @@ static int d40_config_memcpy(struct d40_chan *d40c)
- 		   dma_has_cap(DMA_SLAVE, cap)) {
- 		d40c->dma_cfg = dma40_memcpy_conf_phy;
- 
--		/* Generate interrrupt at end of transfer or relink. */
-+		/* Generate interrupt at end of transfer or relink. */
- 		d40c->dst_def_cfg |= BIT(D40_SREG_CFG_TIM_POS);
- 
- 		/* Generate interrupt on error. */
+diff --git a/drivers/media/platform/samsung/exynos-gsc/gsc-core.h b/drivers/media/platform/samsung/exynos-gsc/gsc-core.h
+index e894e85e84a4..1ea5fa1bf3c8 100644
+--- a/drivers/media/platform/samsung/exynos-gsc/gsc-core.h
++++ b/drivers/media/platform/samsung/exynos-gsc/gsc-core.h
+@@ -222,7 +222,7 @@ struct gsc_m2m_device {
+  *  @org_scaler_input_w: max pixel width when the scaler is enabled
+  *  @org_scaler_input_h: max pixel height when the scaler is enabled
+  *  @real_rot_dis_w: max pixel src cropped height with the rotator is off
+- *  @real_rot_dis_h: max pixel src croppped width with the rotator is off
++ *  @real_rot_dis_h: max pixel src cropped width with the rotator is off
+  *  @real_rot_en_w: max pixel src cropped width with the rotator is on
+  *  @real_rot_en_h: max pixel src cropped height with the rotator is on
+  *  @target_rot_dis_w: max pixel dst scaled width with the rotator is off
 

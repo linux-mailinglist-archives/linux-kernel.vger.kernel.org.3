@@ -2,107 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3053952FC0C
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:34:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5209D52FC0E
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244485AbiEULeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 07:34:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43562 "EHLO
+        id S238901AbiEULgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 07:36:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354870AbiEULd4 (ORCPT
+        with ESMTP id S230146AbiEULge (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 07:33:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B044036140;
-        Sat, 21 May 2022 04:33:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DD22960C84;
-        Sat, 21 May 2022 11:33:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83905C385A9;
-        Sat, 21 May 2022 11:33:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653132826;
-        bh=l9by86nw6iePCzOmDkZQU5SCVcvIjg3rIH78FcJrxnk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vPBjUecgsVVV+Rur5PY4bm1PRiEojRK9gCAXChl0pEH0hJWeZmRyT3qqPCpz+F06W
-         zatZylozBgQY8aDCI9OmrH6IhfKNry2gjURTt1yfKqaVGvmYiDQbt1/g3kCx/1l+UL
-         DKryVlwuLKerKaa0GTpbevegruq4iHjs01lcyUwV7Jz2pqu0c9bzVmRdXGmwwJoRyU
-         yzl4pVSKJOhlHR+W+GANr0K6QrL+gQHSY4w5jI18DjEpwadJHgJxCBqujzqmghupO2
-         SzN6U+ywJBfMPyAVnmNw9kZ2Q24yLgWg+HhkDE6yrlDqrdEwJutbYxRVDPsbMBXrS5
-         JRAeXkua22QSQ==
-Date:   Sat, 21 May 2022 13:33:42 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Julia Lawall <Julia.Lawall@inria.fr>
-Cc:     Neil Armstrong <narmstrong@baylibre.com>,
-        kernel-janitors@vger.kernel.org,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: meson: fix typo in comment
-Message-ID: <YojOFtmzkQ9IH8UE@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        kernel-janitors@vger.kernel.org,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220521111145.81697-53-Julia.Lawall@inria.fr>
+        Sat, 21 May 2022 07:36:34 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA85531211;
+        Sat, 21 May 2022 04:36:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=M7NmYC/Iylm9myghHwqILim55SAUt9QrM+UZYk0eJlw=; b=ms6iDCsEC5Jy/8ZWf+DwOUqOYW
+        um3RS/D1p7o6KTtaDnvE7NM+pTA3LjW4bcN64ZvUP7qHe4drGGacioBpAkeEZHZ5m9s4BAbyRsKyU
+        CZvhy+6cxeSR9GTvVHRhreYYGh2a0QW8CKdCnSX5ACtIpyfQaEjMUYmckpPxCuyA6nGnLuGpU9yJl
+        /7LD5PyoU66+lKuPh71ArfCariiW5to9Yxzcc5kMMMV4CYG7AiT8DPi3haXh1QRWvH0c2RBj/q3yw
+        ZqKi+f1dNtbyG6EoAvicZbubJy1vlzRNreBq9rz0u8/6CGl5ni6Fzmai35vngJsNxUv9rpTfNYRci
+        8ePW1pzw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nsNPK-00GP6m-Ie; Sat, 21 May 2022 11:36:30 +0000
+Date:   Sat, 21 May 2022 04:36:30 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Logan Gunthorpe <logang@deltatee.com>
+Cc:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
+        Song Liu <song@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Guoqing Jiang <guoqing.jiang@linux.dev>,
+        Xiao Ni <xni@redhat.com>, Stephen Bates <sbates@raithlin.com>,
+        Martin Oliveira <Martin.Oliveira@eideticom.com>,
+        David Sloan <David.Sloan@eideticom.com>
+Subject: Re: [PATCH v1 01/15] md/raid5-log: Drop extern decorators for
+ function prototypes
+Message-ID: <YojOvutsFv2+jaBS@infradead.org>
+References: <20220519191311.17119-1-logang@deltatee.com>
+ <20220519191311.17119-2-logang@deltatee.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fYqSdqxjDeDE3M9G"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220521111145.81697-53-Julia.Lawall@inria.fr>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220519191311.17119-2-logang@deltatee.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Looks good:
 
---fYqSdqxjDeDE3M9G
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Sat, May 21, 2022 at 01:11:03PM +0200, Julia Lawall wrote:
-> Spelling mistake (triple letters) in comment.
-> Detected with the help of Coccinelle.
->=20
-> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
->=20
-
-Applied to for-next, thanks!
-
-
---fYqSdqxjDeDE3M9G
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKIzhYACgkQFA3kzBSg
-KbZP+Q/+M2eKB9fBFm0ki/BdRKVvwXbqZBQHMvjPeORijOnWqLSUqY8b/bGmFxaP
-Bzjii2CgLl059ir58BeYWUCawy9uRK3aeHONPD1ZtiN8XQRiJ3dAgHZSFUOYc6YX
-pZwftv7y3c1XmSCZtsZy3liAwbKrk9RK2s8lLpEl3IrI1+Za3PpMX3jbO0WJILpl
-LAD7X9dEsJ+HkjwvSs1trMwn3Xfun2wQBV84R/1ZqhrCxPnmroomfI3YJUrF6L78
-yVvc4x/rJ0dLFKzy/FnHBu01ifUm3BwGxwWnntT3jOwfUufy4E65gsHiC+qf9xU6
-q4XEqqZPC5lXyL5c0uelcQn9KxrNwHqoNkRR32xputrN5B4TPzDmaVUphg6XVTme
-1v6ykpneJOkb6LYwHHx9mw1386C14hUQHH82ByFLMggVmbOOrXbYbqh3zuala8bN
-X1sPNYJKSo6oyKiWYzIj3mODcftyqV+Dn9Rn1MpsFK1nzHu6rR6dT+XyKK6zOTa5
-5oxp2Bd9qWSAZ/WH9N2LJm1qRJDX1Hk+6oG0cqbqkQSCFbqnIi6bEYnOKSstI06E
-lEwCNheKDK6HpMAIkzIRWYbwqkkTVF2UDzOQSY7Ojhy9dGwzwbAlmuUk3ABn2Fbr
-MywuhDhGO68vdD3e2tpgg7X9k5/qMHbXs+G16G4TPbvKDYCYQqM=
-=YTwd
------END PGP SIGNATURE-----
-
---fYqSdqxjDeDE3M9G--
+Reviewed-by: Christoph Hellwig <hch@lst.de>

@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 183C252FBEE
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:29:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3413452FBD8
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 13:29:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356304AbiEULXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 07:23:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50614 "EHLO
+        id S1356199AbiEULW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 07:22:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354944AbiEULM7 (ORCPT
+        with ESMTP id S1354946AbiEULM7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 21 May 2022 07:12:59 -0400
 Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFD44CEBB4;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFE5CCEBBC;
         Sat, 21 May 2022 04:12:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=inria.fr; s=dc;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=RtTVxN54Lq7Viw5TbSNoFtvVJKPyGUhQEKorRvAW9F8=;
-  b=Vv1VpNaCKetaH7ZWe3M1Zv4Ip7C3x4hjG0RZBygAEE+/Y21I4bEpNjCh
-   VCar0IiSchmoBBE0dSo0WC09SH1MkJd7e2dsc94x1qqErTbvrfDxA25Ei
-   4A/MNE6+Et+pyzBV0ownfHspyiNlwSGMB3UZj+agenv4lnriMv3CoUD8G
-   0=;
+  bh=YnnUMA5VHqoqMuN0yfzZQ/Plpe6oSBxoCFVFs0qsS9M=;
+  b=RER8Zah9jk4RlcgdMtHdFtncxNo2GhAaFoPGiuR/a4Wc5/wT9+Izr7Xx
+   GEbqumPPbaJ0Qv34JSDpXvYes46HuXhaG6bxGavrsSWH7BqaDwSPkQ3bF
+   8qE1RWg2e/bR2wuWawRjM9OIlUaEJa1Uj6hWCO2fUC5mjmdbmWf1l5lvr
+   8=;
 Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
 X-IronPort-AV: E=Sophos;i="5.91,242,1647298800"; 
-   d="scan'208";a="14727982"
+   d="scan'208";a="14727983"
 Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
   by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 13:12:05 +0200
 From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Felix Kuehling <Felix.Kuehling@amd.com>
-Cc:     kernel-janitors@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/amdkfd: fix typo in comment
-Date:   Sat, 21 May 2022 13:11:24 +0200
-Message-Id: <20220521111145.81697-74-Julia.Lawall@inria.fr>
+To:     Saurav Kashyap <skashyap@marvell.com>
+Cc:     kernel-janitors@vger.kernel.org, Javed Hasan <jhasan@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] scsi: qedf: fix typo in comment
+Date:   Sat, 21 May 2022 13:11:25 +0200
+Message-Id: <20220521111145.81697-75-Julia.Lawall@inria.fr>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -60,20 +58,20 @@ Detected with the help of Coccinelle.
 Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c |    2 +-
+ drivers/scsi/qedf/qedf_io.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
-index 8b5452a8d330..67abf8dcd30a 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
-@@ -1621,7 +1621,7 @@ int amdgpu_amdkfd_gpuvm_free_memory_of_gpu(
+diff --git a/drivers/scsi/qedf/qedf_io.c b/drivers/scsi/qedf/qedf_io.c
+index e57cc22453d0..4750ec5789a8 100644
+--- a/drivers/scsi/qedf/qedf_io.c
++++ b/drivers/scsi/qedf/qedf_io.c
+@@ -893,7 +893,7 @@ int qedf_post_io_req(struct qedf_rport *fcport, struct qedf_ioreq *io_req)
+ 		return -EINVAL;
+ 	}
  
- 	mutex_lock(&mem->lock);
+-	/* Record LUN number for later use if we neeed them */
++	/* Record LUN number for later use if we need them */
+ 	io_req->lun = (int)sc_cmd->device->lun;
  
--	/* Unpin MMIO/DOORBELL BO's that were pinnned during allocation */
-+	/* Unpin MMIO/DOORBELL BO's that were pinned during allocation */
- 	if (mem->alloc_flags &
- 	    (KFD_IOC_ALLOC_MEM_FLAGS_DOORBELL |
- 	     KFD_IOC_ALLOC_MEM_FLAGS_MMIO_REMAP)) {
+ 	/* Obtain free SQE */
 

@@ -2,104 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51AE352F967
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 08:56:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AC0E52F96F
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 08:57:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240171AbiEUG4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 02:56:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39912 "EHLO
+        id S240557AbiEUG5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 02:57:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbiEUG4a (ORCPT
+        with ESMTP id S240245AbiEUG5V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 02:56:30 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7177C5DBFB;
-        Fri, 20 May 2022 23:56:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653116187; x=1684652187;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=3JboGVIBiDz+7ckicjuLV5se6lRR3eFp6LO8B17IW64=;
-  b=B7LGjbYurUbFTv4raVm9G4nsTk/uDhN3VhRGFnRF5GhnyWuFduItLJBP
-   8q+74cNauOjVEKivAGr0bhwVIuddOLsq0d7S7vjJBHwdQyVtuAyR1czHQ
-   eDoXuYquJAvl09r10zumzU9FAa/XTgqGKOynIpU9vs4C/QgQJrExEWi2j
-   V4g1kmzHpHJHGXCVXVXWLvunORs70C4845S9cAq2iteNdLDP3dmfpLgsm
-   qwTs27yhGDhp8hZ1h9LaD6m0FTT1HQySXu56f0IgCbb3W7RFBBKyix+eY
-   JhLBPkY52Z0RJcZ3RddqTKvPAiPFkrCnN+YREAkwIcSCwAuNs+3yhxrWO
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10353"; a="253332285"
-X-IronPort-AV: E=Sophos;i="5.91,240,1647327600"; 
-   d="scan'208";a="253332285"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 23:56:27 -0700
-X-IronPort-AV: E=Sophos;i="5.91,240,1647327600"; 
-   d="scan'208";a="743823241"
-Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.125])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 23:56:25 -0700
-From:   Zqiang <qiang1.zhang@intel.com>
-To:     paulmck@kernel.org, frederic@kernel.org
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] rcu/rcuscale: Fix using smp_processor_id() in preemptible warnings
-Date:   Sat, 21 May 2022 14:56:26 +0800
-Message-Id: <20220521065626.1815175-1-qiang1.zhang@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Sat, 21 May 2022 02:57:21 -0400
+Received: from smtp.smtpout.orange.fr (smtp01.smtpout.orange.fr [80.12.242.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB1EE17996D
+        for <linux-kernel@vger.kernel.org>; Fri, 20 May 2022 23:57:19 -0700 (PDT)
+Received: from pop-os.home ([86.243.180.246])
+        by smtp.orange.fr with ESMTPA
+        id sJ34n96Lf3JPEsJ34n8Vfn; Sat, 21 May 2022 08:57:17 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sat, 21 May 2022 08:57:17 +0200
+X-ME-IP: 86.243.180.246
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org
+Subject: [PATCH] ice: Use correct order for the parameters of devm_kcalloc()
+Date:   Sat, 21 May 2022 08:57:13 +0200
+Message-Id: <627df513c3acf65f9aa5f43ca2bf7826a73c0c7b.1653116222.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-BUG: using smp_processor_id() in preemptible [00000000] code: rcu_scale_write/69
-CPU: 0 PID: 66 Comm: rcu_scale_write Not tainted 5.18.0-rc7-next-20220517-yoctodev-standard+
-caller is debug_smp_processor_id+0x17/0x20
-Call Trace:
-<TASK>
-dump_stack_lvl+0x49/0x5e
-dump_stack+0x10/0x12
-check_preemption_disabled+0xdf/0xf0
-debug_smp_processor_id+0x17/0x20
-rcu_scale_writer+0x2b5/0x580
-kthread+0x177/0x1b0
-ret_from_fork+0x22/0x30
-</TASK>
+We should have 'n', then 'size', not the opposite.
+This is harmless because the 2 values are just multiplied, but having
+the correct order silence a (unpublished yet) smatch warning.
 
-Reproduction method:
-runqemu kvm slirp nographic qemuparams="-m 4096 -smp 8" bootparams="isolcpus=2,3
-nohz_full=2,3 rcu_nocbs=2,3 rcutree.dump_tree=1 rcuscale.shutdown=false
-rcuscale.gp_async=true" -d
+While at it use '*tun_seg' instead '*seg'. The both variable have the same
+type, so the result is the same, but it lokks more logical.
 
-when the CONFIG_DEBUG_PREEMPT is enabled, this_cpu_ptr() will call
-debug_smp_processor_id() get current CPU number, this warning is triggered by
-is_percpu_thread() in debug_smp_processor_id(), the is_percpu_thread() need to
-check whether 'current->nr_cpus_allowed  == 1' and 'current->flags & PF_NO_SETAFFINITY',
-invoke set_cpus_allowed_ptr() only set kthreads->nr_cpus_allowed, but the
-PF_NO_SETAFFINITY is not set to kthread->flags, so add PF_NO_SETAFFINITY flags
-setting.
-
-Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- kernel/rcu/rcuscale.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/ethernet/intel/ice/ice_ethtool_fdir.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/rcu/rcuscale.c b/kernel/rcu/rcuscale.c
-index 277a5bfb37d4..3ef02d4a8108 100644
---- a/kernel/rcu/rcuscale.c
-+++ b/kernel/rcu/rcuscale.c
-@@ -419,6 +419,7 @@ rcu_scale_writer(void *arg)
- 	VERBOSE_SCALEOUT_STRING("rcu_scale_writer task started");
- 	WARN_ON(!wdpp);
- 	set_cpus_allowed_ptr(current, cpumask_of(me % nr_cpu_ids));
-+	current->flags |= PF_NO_SETAFFINITY;
- 	sched_set_fifo_low(current);
+diff --git a/drivers/net/ethernet/intel/ice/ice_ethtool_fdir.c b/drivers/net/ethernet/intel/ice/ice_ethtool_fdir.c
+index 5d10c4f84a36..ead6d50fc0ad 100644
+--- a/drivers/net/ethernet/intel/ice/ice_ethtool_fdir.c
++++ b/drivers/net/ethernet/intel/ice/ice_ethtool_fdir.c
+@@ -852,7 +852,7 @@ ice_create_init_fdir_rule(struct ice_pf *pf, enum ice_fltr_ptype flow)
+ 	if (!seg)
+ 		return -ENOMEM;
  
- 	if (holdoff)
+-	tun_seg = devm_kcalloc(dev, sizeof(*seg), ICE_FD_HW_SEG_MAX,
++	tun_seg = devm_kcalloc(dev, ICE_FD_HW_SEG_MAX, sizeof(*tun_seg),
+ 			       GFP_KERNEL);
+ 	if (!tun_seg) {
+ 		devm_kfree(dev, seg);
+@@ -1214,7 +1214,7 @@ ice_cfg_fdir_xtrct_seq(struct ice_pf *pf, struct ethtool_rx_flow_spec *fsp,
+ 	if (!seg)
+ 		return -ENOMEM;
+ 
+-	tun_seg = devm_kcalloc(dev, sizeof(*seg), ICE_FD_HW_SEG_MAX,
++	tun_seg = devm_kcalloc(dev, ICE_FD_HW_SEG_MAX, sizeof(*tun_seg),
+ 			       GFP_KERNEL);
+ 	if (!tun_seg) {
+ 		devm_kfree(dev, seg);
 -- 
-2.25.1
+2.34.1
 

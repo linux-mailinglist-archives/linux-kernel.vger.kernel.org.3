@@ -2,103 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 308D552FDDC
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 17:32:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53D2252FDE5
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 17:39:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245125AbiEUPcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 11:32:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37360 "EHLO
+        id S245223AbiEUPik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 11:38:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230448AbiEUPcN (ORCPT
+        with ESMTP id S230448AbiEUPig (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 11:32:13 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A632AE23
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 08:32:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=W4TUiEIdq5HcuLZw5jcWt2qZJ3RX3G8mxdh0nA1JeNU=; b=i548B275KQ2uVw/gK+rQS7z83v
-        7ywiroVH4OOObHSfKdxZ9yjAn5ePtZfG0DwPCXbnp8N7FfeJrHs8pvTPhFKHQedQV/69LXFqf6/Da
-        IVc76CWnsVlJa3/b+t3XLIKFqdAUCmmtAU1qa1ndxLN5l2A9p/kw4c5zEH3kuysBYjmnFe/37ubmI
-        v+HV2QUdjyV6xunUXTotgYL5GBR0xoyDMO7ti5lYzftAVGt9Btpn8BjvVd0qHjrZ0x8A7YFUYjdqP
-        D3qB5sATLmsxWT8k5cfbsEirYBD3cXKLqloJenajbnI7NdCKZRzB34ISvIK8ihIekcAMVxfNhYJLE
-        5xod/fdw==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nsR5D-00EjdF-Jk; Sat, 21 May 2022 15:31:59 +0000
-Message-ID: <c02b4ae7-218e-2349-afcb-9ada25beb934@infradead.org>
-Date:   Sat, 21 May 2022 08:31:54 -0700
+        Sat, 21 May 2022 11:38:36 -0400
+Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57BE662CE1
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 08:38:34 -0700 (PDT)
+Received: from dslb-188-096-138-194.188.096.pools.vodafone-ip.de ([188.96.138.194] helo=martin-debian-2.paytec.ch)
+        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <martin@kaiser.cx>)
+        id 1nsRBT-0007XY-Mu; Sat, 21 May 2022 17:38:27 +0200
+From:   Martin Kaiser <martin@kaiser.cx>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Martin Kaiser <martin@kaiser.cx>
+Subject: [PATCH 00/12] staging: r8188eu: start cleaning up issue_action_BA
+Date:   Sat, 21 May 2022 17:38:12 +0200
+Message-Id: <20220521153824.218196-1-martin@kaiser.cx>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] fscache: fix misdocumented parameter name
-Content-Language: en-US
-To:     Khalid Masum <khalid.masum.92@gmail.com>,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        David Howells <dhowells@redhat.com>, linux-cachefs@redhat.com,
-        linux-kernel@vger.kernel.org
-References: <20220521142446.4746-1-khalid.masum.92@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220521142446.4746-1-khalid.masum.92@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Start cleaning up the issue_action_BA function. Use helpers from
+ieee80211.h to populate some of the fields of the outgoing frame.
 
+(I'll send more patches for the remaining fields and messages.)
 
-On 5/21/22 07:24, Khalid Masum wrote:
-> To fix warning generated by make docs in the file fscache.h:
-> The functions fscache_use_cookie and fscache_unuse_cookie have a
-> parameter named cookie. But they are documented with the name "object".
-> Which generates warning when creating docs. This commit will replace
-> the documentation with a better one named "cookie". This new
-> documentation
-> line is taken from the function fscache_update_cookie in the same
-> file.
-> 
-> Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
+Martin Kaiser (12):
+  staging: r8188eu: remove unnecessary category check
+  staging: r8188eu: use defines for the block action codes
+  staging: r8188eu: use ieee80211_mgmt in issue_action_BA
+  staging: r8188eu: use mgmt to set the addresses
+  staging: r8188eu: use mgmt to set the sequence number
+  staging: r8188eu: use mgmt to set the category
+  staging: r8188eu: use mgmt to set the action codes
+  staging: r8188eu: use mgmt to set the dialog token
+  staging: r8188eu: use mgmt to set the timeout
+  staging: r8188eu: use ieee80211 to set addba capabilities
+  staging: r8188eu: use mgmt to set start sequence number
+  staging: r8188eu: calculate the addba request length
 
-LGTM. Thanks.
-
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-
-> ---
->  include/linux/fscache.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/linux/fscache.h b/include/linux/fscache.h
-> index e25539072..32cf593b8 100644
-> --- a/include/linux/fscache.h
-> +++ b/include/linux/fscache.h
-> @@ -256,7 +256,7 @@ struct fscache_cookie *fscache_acquire_cookie(struct fscache_volume *volume,
->  
->  /**
->   * fscache_use_cookie - Request usage of cookie attached to an object
-> - * @object: Object description
-> + * @cookie: The cookie representing the cache object
->   * @will_modify: If cache is expected to be modified locally
->   *
->   * Request usage of the cookie attached to an object.  The caller should tell
-> @@ -272,7 +272,7 @@ static inline void fscache_use_cookie(struct fscache_cookie *cookie,
->  
->  /**
->   * fscache_unuse_cookie - Cease usage of cookie attached to an object
-> - * @object: Object description
-> + * @cookie: The cookie representing the cache object
->   * @aux_data: Updated auxiliary data (or NULL)
->   * @object_size: Revised size of the object (or NULL)
->   *
+ drivers/staging/r8188eu/core/rtw_mlme_ext.c | 124 ++++++++++----------
+ 1 file changed, 63 insertions(+), 61 deletions(-)
 
 -- 
-~Randy
+2.30.2
+

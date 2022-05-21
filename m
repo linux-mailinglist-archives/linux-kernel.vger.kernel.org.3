@@ -2,181 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8583152FCFF
-	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 15:53:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4F5652FD03
+	for <lists+linux-kernel@lfdr.de>; Sat, 21 May 2022 15:56:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354859AbiEUNxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 09:53:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48598 "EHLO
+        id S237395AbiEUN4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 09:56:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238598AbiEUNxS (ORCPT
+        with ESMTP id S229779AbiEUN4p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 09:53:18 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8472C125;
-        Sat, 21 May 2022 06:53:16 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: usama.anjum)
-        with ESMTPSA id 940081F41DBC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1653141195;
-        bh=i90XVsem0f1OAQg4dG01+GakdBc/QjFw1uj4M0ILyaI=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=ULRBT/M1z/IqYXKTHOQMol066J5Ys/J/0M4al7RJ6XF0i8J/rliReeq4Fj/9LQe4Z
-         3z0Ny2QRu3u2MpuOEpkaetWfmzqGr7yG0CXt8tind+YN2tO0CaOQrxLY9Fxkkp79ZM
-         X6ZhlRFZ20hwrRXmJ9TgANek/YS/4cklDcrRXUj7NN0RKpvmQht0L5dg9SiLRusraa
-         KLHP/HxFcqOn5YNmJN7mRmMKWYc9UD8Dizx/azktFM/87UXHFcGL0+5IZZj6oJDaFY
-         yoHS0YmQ4LKNPLnf2IKpSK+QM4GukwoXbKvocBue1bQWw8CZ2e5mWuh3qGbjaigmKm
-         G12QRCYaYI12g==
-Message-ID: <5f893d8c-5419-99c6-ad0b-47a0b41b150b@collabora.com>
-Date:   Sat, 21 May 2022 18:53:08 +0500
+        Sat, 21 May 2022 09:56:45 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19FD83EAA4;
+        Sat, 21 May 2022 06:56:45 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id w3so2854719plp.13;
+        Sat, 21 May 2022 06:56:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=kFTe+XhGcQtsCoxkdaBMhP9gdy39T6uFw4OY1itArqs=;
+        b=lf4BRQDe4TQwfCGwiFVP/JssPHosaBGPwsqgMBj4ZWP4Vq5KIPUFkHC3txKh1EI7n5
+         Mdc6RCiKccE+hg0QxPUTXIufN2yu1sG39zY7FvBoiNKvRhbPMxWyW1cDR2VWNkMXUCh5
+         +UOYrrV0+XMrypDknkx1bP4T1+tFPXSTqM7ZyWExtyp2bYkqm4VvnJqJSYfxnpHRjYPp
+         oqqQlOW6VO8GXAodLWFC0Cq0Uq44yvyWbmq6rEu1IK5pNrTphnWqkzVaO6OubxQ6GU/b
+         56Fr/OdvvDLfK0FoLkWiSxrDaJGJXmI4xPCZMKEvmaPwKQhE+YW5MBlh0OPsT7RfkGIF
+         vIXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=kFTe+XhGcQtsCoxkdaBMhP9gdy39T6uFw4OY1itArqs=;
+        b=JlkhkFdNxWR2Q5jh1x+d76Ia0Z+rIY7yWC8mAzi1CNkFafYCc2E7zc7r6HYqRiuVvg
+         2+DlRghTWFcEiIjHrCWmA4fZ0atzTiS7MAg1/rlNgcg3G6I4nFpGp3HNGjxR9lRJaJWk
+         CyzxE8u+fL+YV/8j2Z2A/RMDI4KHwGweGk/hwVcG9vQwkH9jkfJfG73CzP9nT4pjIvEV
+         XR5fHVEVxhrWgpwsNayerr5Up16iU1UGf4NAhF3UvL3PXc9Ol0620FNb8LXSWdaY31Gm
+         9NUr3BDAqlZHN7DXwRY6RCwAtjpPfi43pCyAZ/aLNA0rOagb6kEeixJVlrK1O4sfHR+v
+         FbfQ==
+X-Gm-Message-State: AOAM532uMazO2lgATp1avdaoW+Lz+5ExwHqKg72gn09bZjlEp/wbMKeO
+        lDm6p4oBByt1oR9bE2tk58EGt/v9yMq+ou9e
+X-Google-Smtp-Source: ABdhPJy1JKi1c7JDWXFWM58P3YBC8dI7WvgxnvWbgjGMf2zWcYOH0NoWoucyWHrXIRYfzVAxGdFomA==
+X-Received: by 2002:a17:902:ccd0:b0:156:7ac2:5600 with SMTP id z16-20020a170902ccd000b001567ac25600mr14348873ple.156.1653141404604;
+        Sat, 21 May 2022 06:56:44 -0700 (PDT)
+Received: from [172.16.10.243] ([219.142.146.204])
+        by smtp.gmail.com with ESMTPSA id e19-20020a170902f1d300b001617541c94fsm1628412plc.60.2022.05.21.06.56.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 21 May 2022 06:56:44 -0700 (PDT)
+Message-ID: <efacce9b-8fcc-5b57-b112-ea96d1e5a742@gmail.com>
+Date:   Sat, 21 May 2022 21:56:36 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Cc:     usama.anjum@collabora.com
-Subject: Re: [PATCH v4 2/2] selftests: drivers/s390x: Add uvdevice tests
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] i2c: bcm2835: Fix error handling in bcm2835_i2c_probe
 Content-Language: en-US
-To:     Steffen Eiden <seiden@linux.ibm.com>, Greg KH <greg@kroah.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Nico Boehr <nrb@linux.ibm.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kvm@vger.kernel.org
-References: <20220510144724.3321985-1-seiden@linux.ibm.com>
- <20220510144724.3321985-3-seiden@linux.ibm.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20220510144724.3321985-3-seiden@linux.ibm.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Wolfram Sang <wsa@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Eric Anholt <eric@anholt.net>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Annaliese McDermond <nh6z@nh6z.net>, linux-i2c@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220403063310.7525-1-linmq006@gmail.com>
+ <YojRB2043uYeV0XH@shikoro> <dd299256-2266-4736-e50f-17b417529699@wanadoo.fr>
+From:   Miaoqian Lin <linmq006@gmail.com>
+In-Reply-To: <dd299256-2266-4736-e50f-17b417529699@wanadoo.fr>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/10/22 7:47 PM, Steffen Eiden wrote:
-> Adds some selftests to test ioctl error paths of the uv-uapi.
-> The Kconfig S390_UV_UAPI must be selected and the Ultravisor facility
-> must be available. The test can be executed by non-root, however, the
-> uvdevice special file /dev/uv must be accessible for reading and
-> writing which may imply root privileges.
-> 
->   ./test-uv-device
->   TAP version 13
->   1..6
->   # Starting 6 tests from 3 test cases.
->   #  RUN           uvio_fixture.att.fault_ioctl_arg ...
->   #            OK  uvio_fixture.att.fault_ioctl_arg
->   ok 1 uvio_fixture.att.fault_ioctl_arg
->   #  RUN           uvio_fixture.att.fault_uvio_arg ...
->   #            OK  uvio_fixture.att.fault_uvio_arg
->   ok 2 uvio_fixture.att.fault_uvio_arg
->   #  RUN           uvio_fixture.att.inval_ioctl_cb ...
->   #            OK  uvio_fixture.att.inval_ioctl_cb
->   ok 3 uvio_fixture.att.inval_ioctl_cb
->   #  RUN           uvio_fixture.att.inval_ioctl_cmd ...
->   #            OK  uvio_fixture.att.inval_ioctl_cmd
->   ok 4 uvio_fixture.att.inval_ioctl_cmd
->   #  RUN           attest_fixture.att_inval_request ...
->   #            OK  attest_fixture.att_inval_request
->   ok 5 attest_fixture.att_inval_request
->   #  RUN           attest_fixture.att_inval_addr ...
->   #            OK  attest_fixture.att_inval_addr
->   ok 6 attest_fixture.att_inval_addr
->   # PASSED: 6 / 6 tests passed.
->   # Totals: pass:6 fail:0 xfail:0 xpass:0 skip:0 error:0
-Maybe we shouldn't add the result like this in the commit message. The
-test order may change and it may become invalid soon. Just put it after
-the commit message.
 
-> Signed-off-by: Steffen Eiden <seiden@linux.ibm.com>
-> Acked-by: Janosch Frank <frankja@linux.ibm.com>
-> ---
->  MAINTAINERS                                   |   1 +
->  tools/testing/selftests/Makefile              |   1 +
->  tools/testing/selftests/drivers/.gitignore    |   1 +
->  .../selftests/drivers/s390x/uvdevice/Makefile |  22 ++
->  .../selftests/drivers/s390x/uvdevice/config   |   1 +
->  .../drivers/s390x/uvdevice/test_uvdevice.c    | 276 ++++++++++++++++++
->  6 files changed, 302 insertions(+)
->  create mode 100644 tools/testing/selftests/drivers/s390x/uvdevice/Makefile
->  create mode 100644 tools/testing/selftests/drivers/s390x/uvdevice/config
->  create mode 100644 tools/testing/selftests/drivers/s390x/uvdevice/test_uvdevice.c
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index b42ab4a35e18..46a9b1467380 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -10786,6 +10786,7 @@ F:	arch/s390/kernel/uv.c
->  F:	arch/s390/kvm/
->  F:	arch/s390/mm/gmap.c
->  F:	drivers/s390/char/uvdevice.c
-> +F:	tools/testing/selftests/drivers/s390x/uvdevice/
->  F:	tools/testing/selftests/kvm/*/s390x/
->  F:	tools/testing/selftests/kvm/s390x/
->  
-> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-> index 2319ec87f53d..d6b307371ef7 100644
-> --- a/tools/testing/selftests/Makefile
-> +++ b/tools/testing/selftests/Makefile
-> @@ -10,6 +10,7 @@ TARGETS += core
->  TARGETS += cpufreq
->  TARGETS += cpu-hotplug
->  TARGETS += drivers/dma-buf
-> +TARGETS += drivers/s390x/uvdevice
->  TARGETS += efivarfs
->  TARGETS += exec
->  TARGETS += filesystems
-> diff --git a/tools/testing/selftests/drivers/.gitignore b/tools/testing/selftests/drivers/.gitignore
-> index ca74f2e1c719..09e23b5afa96 100644
-> --- a/tools/testing/selftests/drivers/.gitignore
-> +++ b/tools/testing/selftests/drivers/.gitignore
-> @@ -1,2 +1,3 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  /dma-buf/udmabuf
-> +/s390x/uvdevice/test_uvdevice
-> diff --git a/tools/testing/selftests/drivers/s390x/uvdevice/Makefile b/tools/testing/selftests/drivers/s390x/uvdevice/Makefile
-> new file mode 100644
-> index 000000000000..5e701d2708d4
-> --- /dev/null
-> +++ b/tools/testing/selftests/drivers/s390x/uvdevice/Makefile
-> @@ -0,0 +1,22 @@
-> +include ../../../../../build/Build.include
-> +
-> +UNAME_M := $(shell uname -m)
-> +
-> +ifneq ($(UNAME_M),s390x)
-> +nothing:
-> +.PHONY: all clean run_tests install
-> +.SILENT:
-> +else
-> +
-> +TEST_GEN_PROGS := test_uvdevice
-> +
-> +top_srcdir ?= ../../../../../..
-> +KSFT_KHDR_INSTALL := 1
-> +khdr_dir = $(top_srcdir)/usr/include
-This doesn't work in different build cases. Please use $(KHDR_INCLUDES)
-instead.
+On 2022/5/21 20:28, Christophe JAILLET wrote:
+> Le 21/05/2022 à 13:46, Wolfram Sang a écrit :
+>> On Sun, Apr 03, 2022 at 06:33:08AM +0000, Miaoqian Lin wrote:
+>>> In the error handling path, the clk_prepare_enable() function
+>>> call should be balanced by a corresponding 'clk_disable_unprepare()'
+>>> call. And clk_set_rate_exclusive calls clk_rate_exclusive_get(),
+>>> it should be balanced with call to clk_rate_exclusive_put().
+>>> , as already done in the remove function.
+>>>
+>>> Fixes: bebff81fb8b9 ("i2c: bcm2835: Model Divider in CCF")
+>>> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+>>
+>> Looking for a reviewer here, pretty please?
+>
+> Hi,
+>
+> on which tree are you working?
+> A similar patch is already available in -next since several months. (see [1])
+>
 
-> +LINUX_TOOL_ARCH_INCLUDE = $(top_srcdir)/tools/arch/$(ARCH)/include
-Which header files do you need from here? I'm not sure what is the
-purpose of the header files in $(top_srcdir)/tools/arch and where they
-are used.
+Hi,
 
-> +
-> +CFLAGS += -Wall -Werror -static -I$(khdr_dir) -I$(LINUX_TOOL_ARCH_INCLUDE)
-> +
-> +include ../../../lib.mk
-> +
-> +endif
--- 
-Muhammad Usama Anjum
+I mainly work on master, sorry I didn't notice it when submitted.
+
+I may make a mistake with synchronize, thanks for your reply.
+
+> CJ
+>
+> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/drivers/i2c/busses/i2c-bcm2835.c?id=b205f5850263632b6897d8f0bfaeeea4955f8663
+>>
+>>> ---
+>>>   drivers/i2c/busses/i2c-bcm2835.c | 21 ++++++++++++++++-----
+>>>   1 file changed, 16 insertions(+), 5 deletions(-)
+>>>
+>>> diff --git a/drivers/i2c/busses/i2c-bcm2835.c b/drivers/i2c/busses/i2c-bcm2835.c
+>>> index 5149454eef4a..d794448866a7 100644
+>>> --- a/drivers/i2c/busses/i2c-bcm2835.c
+>>> +++ b/drivers/i2c/busses/i2c-bcm2835.c
+>>> @@ -454,18 +454,21 @@ static int bcm2835_i2c_probe(struct platform_device *pdev)
+>>>       ret = clk_prepare_enable(i2c_dev->bus_clk);
+>>>       if (ret) {
+>>>           dev_err(&pdev->dev, "Couldn't prepare clock");
+>>> -        return ret;
+>>> +        goto err_put_clk;
+>>>       }
+>>>         i2c_dev->irq = platform_get_irq(pdev, 0);
+>>> -    if (i2c_dev->irq < 0)
+>>> -        return i2c_dev->irq;
+>>> +    if (i2c_dev->irq < 0) {
+>>> +        ret =  i2c_dev->irq;
+>>> +        goto err_disable_clk;
+>>> +    }
+>>>         ret = request_irq(i2c_dev->irq, bcm2835_i2c_isr, IRQF_SHARED,
+>>>                 dev_name(&pdev->dev), i2c_dev);
+>>>       if (ret) {
+>>>           dev_err(&pdev->dev, "Could not request IRQ\n");
+>>> -        return -ENODEV;
+>>> +        ret = -ENODEV;
+>>> +        goto err_disable_clk;
+>>>       }
+>>>         adap = &i2c_dev->adapter;
+>>> @@ -489,8 +492,16 @@ static int bcm2835_i2c_probe(struct platform_device *pdev)
+>>>         ret = i2c_add_adapter(adap);
+>>>       if (ret)
+>>> -        free_irq(i2c_dev->irq, i2c_dev);
+>>> +        goto err_free_irq;
+>>> +
+>>> +    return ret;
+>>>   +err_free_irq:
+>>> +    free_irq(i2c_dev->irq, i2c_dev);
+>>> +err_disable_clk:
+>>> +    clk_disable_unprepare(i2c_dev->bus_clk);
+>>> +err_put_clk:
+>>> +    clk_rate_exclusive_put(i2c_dev->bus_clk);
+>>>       return ret;
+>>>   }
+>>>   -- 
+>>> 2.17.1
+>>>
+>

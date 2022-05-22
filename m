@@ -2,28 +2,28 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C1BA5304AE
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 18:30:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAAD85304A6
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 18:29:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350006AbiEVQac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 12:30:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38452 "EHLO
+        id S1350177AbiEVQ3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 12:29:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349480AbiEVQ3F (ORCPT
+        with ESMTP id S1349885AbiEVQ3I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 12:29:05 -0400
+        Sun, 22 May 2022 12:29:08 -0400
 Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A0783B551;
-        Sun, 22 May 2022 09:28:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B13F83BA53;
+        Sun, 22 May 2022 09:28:54 -0700 (PDT)
 Received: from g550jk.arnhem.chello.nl (a246182.upc-a.chello.nl [62.163.246.182])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id DF3D8CCD41;
-        Sun, 22 May 2022 16:28:16 +0000 (UTC)
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 3925ACCD42;
+        Sun, 22 May 2022 16:28:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1653236897; bh=qao02Sq/9rfFn0GElYrCHwPimBxw5VShTKS3u0yw8zE=;
+        t=1653236897; bh=Z+OJGa1Upy60KMZOvZpycQ7yyyNT0Zo+p/WeDLbPSN8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=xlUs/1s3Z6pC+MeAA549gOsltzukgS/iZuCYgYnl4/1omqGPOaVa7z6VqUZ3JMyYQ
-         oebR6NjZmBHTdydmmIZRPL3v2RO6IlKfegopA7Z+YwIhAkWhHC42OQjMJJa63Cq3Gu
-         wlBh9BWlbUbxa4ESbL+dT8zTdz67Ta1fPtZaRU8U=
+        b=B6TZQEWkDFp+qwDk/WMeNG1Pq3VsYA8P2YgW7HoQUfFa+4yBek68T1mSJSD54IrqI
+         Vrw0m1eJEVp70b3iWsWROGKkuAECPwruxRDTJMnS4ixTBqvWDR/MMFZZIhk4T/sAUe
+         PeyYgAjkN00lTxvaLhggf+sPob5Epjy5IAaH46+c=
 From:   Luca Weiss <luca@z3ntu.xyz>
 To:     linux-arm-msm@vger.kernel.org
 Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
@@ -38,9 +38,9 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
         linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         matti.lehtimaki@gmail.com, Luca Weiss <luca@z3ntu.xyz>
-Subject: [RFC PATCH 04/14] media: camss: video: Add support for 8x74
-Date:   Sun, 22 May 2022 18:27:52 +0200
-Message-Id: <20220522162802.208275-5-luca@z3ntu.xyz>
+Subject: [RFC PATCH 05/14] media: camss: csid: Add support for 8x74
+Date:   Sun, 22 May 2022 18:27:53 +0200
+Message-Id: <20220522162802.208275-6-luca@z3ntu.xyz>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220522162802.208275-1-luca@z3ntu.xyz>
 References: <20220522162802.208275-1-luca@z3ntu.xyz>
@@ -59,28 +59,28 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Matti Lehtimäki <matti.lehtimaki@gmail.com>
 
-Video formats in 8x16 and 8x74 are similar.
+CSID hardware module on 8x74 is similar to 8x16.
 
 Signed-off-by: Matti Lehtimäki <matti.lehtimaki@gmail.com>
 Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 ---
- drivers/media/platform/qcom/camss/camss-video.c | 3 ++-
+ drivers/media/platform/qcom/camss/camss-csid.c | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/qcom/camss/camss-video.c b/drivers/media/platform/qcom/camss/camss-video.c
-index 307bb1dc4589..ca955808fd6d 100644
---- a/drivers/media/platform/qcom/camss/camss-video.c
-+++ b/drivers/media/platform/qcom/camss/camss-video.c
-@@ -990,7 +990,8 @@ int msm_video_register(struct camss_video *video, struct v4l2_device *v4l2_dev,
+diff --git a/drivers/media/platform/qcom/camss/camss-csid.c b/drivers/media/platform/qcom/camss/camss-csid.c
+index f993f349b66b..6b5cd9a66ff6 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid.c
++++ b/drivers/media/platform/qcom/camss/camss-csid.c
+@@ -570,7 +570,8 @@ int msm_csid_subdev_init(struct camss *camss, struct csid_device *csid,
+ 	csid->camss = camss;
+ 	csid->id = id;
  
- 	mutex_init(&video->lock);
- 
--	if (video->camss->version == CAMSS_8x16) {
-+	if (video->camss->version == CAMSS_8x16 ||
-+		video->camss->version == CAMSS_8x74) {
- 		if (is_pix) {
- 			video->formats = formats_pix_8x16;
- 			video->nformats = ARRAY_SIZE(formats_pix_8x16);
+-	if (camss->version == CAMSS_8x16) {
++	if (camss->version == CAMSS_8x16 ||
++		camss->version == CAMSS_8x74) {
+ 		csid->ops = &csid_ops_4_1;
+ 	} else if (camss->version == CAMSS_8x96 ||
+ 		   camss->version == CAMSS_660) {
 -- 
 2.36.0
 

@@ -2,83 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 095255301CE
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 10:15:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B64215301D3
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 10:21:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241205AbiEVIOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 04:14:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37634 "EHLO
+        id S241387AbiEVIVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 04:21:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239120AbiEVIOI (ORCPT
+        with ESMTP id S230461AbiEVIVe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 04:14:08 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E785227FCB
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 01:14:05 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id br17so8512856lfb.2
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 01:14:05 -0700 (PDT)
+        Sun, 22 May 2022 04:21:34 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9C51B79B
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 01:21:33 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-2ff1ed64f82so121805247b3.1
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 01:21:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Et+7DOTTQH1JqVpXKSqRPgxVrV1oOzeHvnh2fubRt1A=;
-        b=k7F8Fidfxb4gmUhFCDJVU0LHLtsVdZsyeamFnEqSX+/iUh9u/66KhhnLYfQkaVuM9B
-         aUT5IqNMGTJ/4Ewd0Vfqc7W05jnqVT27dax0L/Fxh8ZF271LiGTSyOptKN9UK6LQKBJW
-         fYp1vuJzrnTbDPpeEPeHa+2Y7apTU2k6uF/gfoAAdrPLdsWeMpG8LuGhciDFaJ3I8q7F
-         kO5mbYKP3eZiE9xwPOo5ueHOk5GyBlewRHeGDqbU+U/LOfkis6wsyF4hEN66W+QTHnUa
-         yaevaJ1FRUuoWRSfbL1pN5GPlq6ZPB295vwB7buySPS8wf2XTY4ucyU9kQwWTlYixKQ6
-         xoHQ==
+        d=atishpatra.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Znw7LJlbn1r+wdsACS1F0N9XbG/RiiVDOXyDXO5CsQE=;
+        b=oI5Lsg53Bix9/s98Dk6RwCbWEJtDNIO6hHRev5nvmxWVtypqgkp09ZLZmxl7WuChR8
+         LdcdeJwLgDHQzEW1HEq/uwiQpgs5NECaDSRup/YaGHZ6YCWvsXWwVsF/PB/1Oka6zHVa
+         0F5wghO4TAWAr6ItAuRaO3TLHmMzJKFmnWskQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Et+7DOTTQH1JqVpXKSqRPgxVrV1oOzeHvnh2fubRt1A=;
-        b=myOUZvd9GV1HQocUEfJW4RSyL8RAd17iLr9mz1b+YI34J0U7BZdWFSPzgMd/y9OPSh
-         zOV53Ci+Wg6pJ6i/ulbDUlBz41lPvwlE6DWbqhBUfaST/ueTuYbA1X1LjCMcLs9LaVPg
-         kn+VfUuB8JXGNW+MTTOOPpntmie5R0nvGQt6O0IWXJuj21GT3XeZk8aXwQ/mAlDKa/Jc
-         w7Q0gSYof4o1bQGHTjIxDm/JAC897PjIGKvaJFVxt3VUQblRK3A8+KDd4tSB2iwRqpIH
-         IYFQ98e9XdVkiiF+XOCq7MC2oDjFB5pAGMjXXpIByICCY0N3nb9r8Yczc7i9XUU0WVsO
-         aALw==
-X-Gm-Message-State: AOAM5314Ibsjub6UEEt2vMRi9b1HdTnh5/ueLFiV/rWw42zzFFdOP8i2
-        k2W5OtC76GXozCy1H8lJnoEjmg==
-X-Google-Smtp-Source: ABdhPJw7AMfd8auxqz+NezYyJzs8m23LxjPNettf01T47OdWMoQSUrsWnhIz5oOq++dKWhKByY0tGg==
-X-Received: by 2002:a19:640d:0:b0:472:75e:7373 with SMTP id y13-20020a19640d000000b00472075e7373mr12289744lfb.46.1653207244246;
-        Sun, 22 May 2022 01:14:04 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id m25-20020ac24299000000b0047255d2117csm1362254lfh.171.2022.05.22.01.14.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 22 May 2022 01:14:03 -0700 (PDT)
-Message-ID: <996ac5f2-3cf3-e67a-144b-4fdac9bbc20d@linaro.org>
-Date:   Sun, 22 May 2022 10:14:02 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Znw7LJlbn1r+wdsACS1F0N9XbG/RiiVDOXyDXO5CsQE=;
+        b=yAbMdq3jErelaPV7l7D+nv/3i1U5TUbiN7CPVxgJvqjnGbW3AcQeSj4c5GPkntiBx+
+         qbGw62olCBciGagLvAub7XcnHKZFn4M/k/SgpZIGTq/5lEEKyUaJ289SZCWQR6iz9UPU
+         uGuB07J1Z6fGmBRHQ+H0fwDtTsySNHcPDgb3YJOTaUz9OSY5olkOoXpHZMRTImqsmeIW
+         36u6C5jDRaRRHVDoGlrMXyKxb5QHv7Y1NjYe4SkW37WLKL//ziWvayU/pTcoZleVTYdp
+         mwGzc+5PS2beR/2wOXA78zLoA/YIIGaUT6v+0yCopqz31f4sWo4etTYQQMBTyqrGdl81
+         CvKw==
+X-Gm-Message-State: AOAM533ezYm7S/l4OSCeRyf5Wjg43nbTcBIFZ6yXaR3BpwJwxxckybrQ
+        eEOcib4+l0FSWi+EepqQWIYQlKOxxVidmcEkodau
+X-Google-Smtp-Source: ABdhPJzPUEYEU781zCIU9/dh8A2Evos/v/c0AEiyTU81BdY0IPzvjMDDVTC7tJgmrtM8d3WDf0TgxCnJdVQPY8Dh8N0=
+X-Received: by 2002:a81:8494:0:b0:2fe:ff73:cdb7 with SMTP id
+ u142-20020a818494000000b002feff73cdb7mr17834758ywf.373.1653207692599; Sun, 22
+ May 2022 01:21:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v2 1/2] dt-bindings: net: broadcom-bluetooth: Add property
- for autobaud mode
-Content-Language: en-US
-To:     Hakan Jansson <hakan.jansson@infineon.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        linux-bluetooth@vger.kernel.org
-References: <cover.1653057480.git.hakan.jansson@infineon.com>
- <cb20a6f49c91521d54c847ee4dc14451b0ee91dd.1653057480.git.hakan.jansson@infineon.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <cb20a6f49c91521d54c847ee4dc14451b0ee91dd.1653057480.git.hakan.jansson@infineon.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220516143204.2603-1-jszhang@kernel.org>
+In-Reply-To: <20220516143204.2603-1-jszhang@kernel.org>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Sun, 22 May 2022 01:21:21 -0700
+Message-ID: <CAOnJCUJcEiRMKj7=77qnE8RpGmWnJALNhCTaeTo2rb9-NqEpZg@mail.gmail.com>
+Subject: Re: [PATCH v2] riscv: mm: init: make pt_ops_set_[early|late|fixmap] static
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        Anup Patel <anup@brainfault.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,62 +67,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/05/2022 17:07, Hakan Jansson wrote:
-> Some devices (e.g. CYW5557x) require autobaud mode to enable FW loading.
-
-Which devices support this? You probably need allOf:if:then.
-
-> Autobaud mode can also be required on some boards where the controller
-> device is using a non-standard baud rate when first powered on.
-> 
-> This patch adds a property, "brcm,uses-autobaud-mode", to enable autobaud
-> mode selection.
-
-Don't use "This patch":
-https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
-
-> 
-> Signed-off-by: Hakan Jansson <hakan.jansson@infineon.com>
+On Mon, May 16, 2022 at 7:41 AM Jisheng Zhang <jszhang@kernel.org> wrote:
+>
+> These three functions are only used in init.c, so make them static.
+> Fix W=1 warnings like below:
+>
+> arch/riscv/mm/init.c:721:13: warning: no previous prototype for function
+> 'pt_ops_set_early' [-Wmissing-prototypes]
+>    void __init pt_ops_set_early(void)
+>                ^
+>
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> Reviewed-by: Anup Patel <anup@brainfault.org>
 > ---
-> V1 -> V2: Modify property description
-> 
->  .../devicetree/bindings/net/broadcom-bluetooth.yaml      | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml b/Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml
-> index 5aac094fd217..a29f059c21cc 100644
-> --- a/Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml
-> +++ b/Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml
-> @@ -92,6 +92,15 @@ properties:
->         pcm-sync-mode: slave, master
->         pcm-clock-mode: slave, master
->  
-> +  brcm,uses-autobaud-mode:
+>
+> since v1:
+>  - collect Reviewed-by tag
+>  - move out from the static key series as a separate patch
+>
+>  arch/riscv/mm/init.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+> index 05ed641a1134..5f3f26dd9f21 100644
+> --- a/arch/riscv/mm/init.c
+> +++ b/arch/riscv/mm/init.c
+> @@ -849,7 +849,7 @@ static void __init create_fdt_early_page_table(pgd_t *pgdir, uintptr_t dtb_pa)
+>   * MMU is not enabled, the page tables are allocated directly using
+>   * early_pmd/pud/p4d and the address returned is the physical one.
+>   */
+> -void __init pt_ops_set_early(void)
+> +static void __init pt_ops_set_early(void)
+>  {
+>         pt_ops.alloc_pte = alloc_pte_early;
+>         pt_ops.get_pte_virt = get_pte_virt_early;
+> @@ -871,7 +871,7 @@ void __init pt_ops_set_early(void)
+>   * Note that this is called with MMU disabled, hence kernel_mapping_pa_to_va,
+>   * but it will be used as described above.
+>   */
+> -void __init pt_ops_set_fixmap(void)
+> +static void __init pt_ops_set_fixmap(void)
+>  {
+>         pt_ops.alloc_pte = kernel_mapping_pa_to_va((uintptr_t)alloc_pte_fixmap);
+>         pt_ops.get_pte_virt = kernel_mapping_pa_to_va((uintptr_t)get_pte_virt_fixmap);
+> @@ -889,7 +889,7 @@ void __init pt_ops_set_fixmap(void)
+>   * MMU is enabled and page table setup is complete, so from now, we can use
+>   * generic page allocation functions to setup page table.
+>   */
+> -void __init pt_ops_set_late(void)
+> +static void __init pt_ops_set_late(void)
+>  {
+>         pt_ops.alloc_pte = alloc_pte_late;
+>         pt_ops.get_pte_virt = get_pte_virt_late;
+> --
+> 2.34.1
+>
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
-Based on description, I understand the host triggers using autobaud.
-However here you word it as "uses", so it is independent of host, it
-looks like property of a device. The commit msg describes it even
-different - "require autobaud".
 
-This leads to second issue - it looks like there is some hardware
-property (requiring to use autobaud) which should be described by
-bindings. But instead you describe desired operational feature.
+Reviewed-by: Atish Patra <atishp@rivosinc.com>
 
-> +    type: boolean
-> +    description: >
-
-No need for '>'.
-
-> +      Setting this property will make the host (driver) assert the controller
-> +      chip's BT_UART_CTS_N prior to asserting BT_REG_ON. This will make the
-> +      controller start up in autobaud mode. The controller will then detect the
-> +      baud rate of the first incoming (HCI Reset) command from the host and
-> +      subsequently use that baud rate.
-> +
->    interrupts:
->      items:
->        - description: Handle to the line HOST_WAKE used to wake
-
-
-Best regards,
-Krzysztof
+-- 
+Regards,
+Atish

@@ -2,700 +2,294 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CECA1530650
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 23:44:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF808530653
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 23:46:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351753AbiEVVor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 17:44:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39322 "EHLO
+        id S1345659AbiEVVqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 17:46:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346917AbiEVVon (ORCPT
+        with ESMTP id S229521AbiEVVqi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 17:44:43 -0400
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D61B237BF4;
-        Sun, 22 May 2022 14:44:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:To:From:Sender:Reply-To:Cc:
-        Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Z+IZlfxm6Z4pKRYtUkljgvsWeSYZmMMarZhzlPp+u5A=; b=edFqmEz3FMxJheY8YJIz6FZggd
-        54haiIbuNjcSXVrCmg88O5TTWa8SGlfvTSJ6f5HN99ca/my6AlqXc1dK4FxudkvCDKuWgWbb2PFrZ
-        x1rINSDqzv6O2432WW6IEPIRMv1ycvyM6gUsPfhb/yMqwxbJK4RkyifEH4knWmyFq6P0=;
-Received: from p200300ccff4f2e001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff4f:2e00:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1nstNB-0007GH-8p; Sun, 22 May 2022 23:44:25 +0200
-Received: from andi by aktux with local (Exim 4.94.2)
-        (envelope-from <andreas@kemnade.info>)
-        id 1nstNA-0014LB-MZ; Sun, 22 May 2022 23:44:24 +0200
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        arnd@arndb.de, olof@lixom.net, soc@kernel.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, l.stach@pengutronix.de,
-        alexander.stein@ew.tq-group.com, marcel.ziswiler@toradex.com,
-        linux@rempel-privat.de, andreas@kemnade.info,
-        matthias.schiffer@ew.tq-group.com, cniedermaier@dh-electronics.com,
-        sebastian.reichel@collabora.com, leoyang.li@nxp.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, nicolecrivain@gmail.com
-Subject: [PATCH 2/2] ARM: dts: imx: Add devicetree for Kobo Aura 2
-Date:   Sun, 22 May 2022 23:44:15 +0200
-Message-Id: <20220522214415.254959-3-andreas@kemnade.info>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220522214415.254959-1-andreas@kemnade.info>
-References: <20220522214415.254959-1-andreas@kemnade.info>
+        Sun, 22 May 2022 17:46:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C89F31356
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 14:46:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D732FB80DF1
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 21:46:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 361DAC385B8;
+        Sun, 22 May 2022 21:46:33 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="hq0/m2W7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1653255991;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=M+FqTUSA+ZPr4HVI5tCMJ+I6y9+mnEd6UrarCHUelXw=;
+        b=hq0/m2W76ioEwhsKp07uMQQtsnhRUVumE2AS6kO+j9OhI4cZTcdnFS4Wr4vQPtWxgHvIqZ
+        ee+f4bwFL2cjcelpIsEwVjQXyXOzhtrG+7KbzuAr6kBBwdnIY6I3wvm04jQ2JmRB2mmg3S
+        6jIYjqyh31/GjDhriq7sQXUG/XaxwUI=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d7585df9 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Sun, 22 May 2022 21:46:31 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [GIT PULL] random number generator updates for 5.19-rc1
+Date:   Sun, 22 May 2022 23:44:57 +0200
+Message-Id: <20220522214457.37108-1-Jason@zx2c4.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Score: -1.0 (-)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds a devicetree for the Kobo Aura 2 Ebook reader. It is based
-on boards marked with "37NB-E60QL0+4B1". It is equipped with an i.MX6SL
-SoC.
+Hi Linus,
 
-Expected to work:
-  - Buttons
-  - Wifi (with external module)
-  - LED
-  - uSD
-  - USB
-  - RTC
-  - Fuel Gauge
-  - Backlight (if the required regulator is probed before the backlight,
-    specifying a supply is not supported by backlightdriver)
+Please pull the following random number generator updates for 5.19-rc1. These
+updates continue to refine the work began in 5.17 and 5.18 of modernizing the
+RNG's crypto and streamlining and documenting its code. New for 5.19, the
+updates aim to improve entropy collection methods and make some initial
+decisions regarding the "premature next" problem and our threat model. The
+cloc utility now reports that random.c is 931 lines of code and 466 lines of
+comments, not that basic metrics like that mean all that much, but at the very
+least it tells you that this is very much a manageable driver now.
 
-Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
----
- arch/arm/boot/dts/Makefile              |   1 +
- arch/arm/boot/dts/imx6sl-kobo-aura2.dts | 595 ++++++++++++++++++++++++
- 2 files changed, 596 insertions(+)
- create mode 100644 arch/arm/boot/dts/imx6sl-kobo-aura2.dts
+Here's a summary of the various patches in this pull:
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 7c16f8a2b738..549a457bb0de 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -661,6 +661,7 @@ dtb-$(CONFIG_SOC_IMX6Q) += \
- 	imx6s-dhcom-drc02.dtb
- dtb-$(CONFIG_SOC_IMX6SL) += \
- 	imx6sl-evk.dtb \
-+	imx6sl-kobo-aura2.dtb \
- 	imx6sl-tolino-shine2hd.dtb \
- 	imx6sl-tolino-shine3.dtb \
- 	imx6sl-tolino-vision5.dtb \
-diff --git a/arch/arm/boot/dts/imx6sl-kobo-aura2.dts b/arch/arm/boot/dts/imx6sl-kobo-aura2.dts
-new file mode 100644
-index 000000000000..3dc794c04abe
---- /dev/null
-+++ b/arch/arm/boot/dts/imx6sl-kobo-aura2.dts
-@@ -0,0 +1,595 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Device tree for the Kobo Aura 2 ebook reader
-+ *
-+ * Name on mainboard is: 37NB-E60QL0+4B1
-+ * Serials start with: E60QL2
-+ *
-+ * Copyright 2022 Andreas Kemnade
-+ */
-+
-+/dts-v1/;
-+
-+#include <dt-bindings/input/input.h>
-+#include <dt-bindings/gpio/gpio.h>
-+#include "imx6sl.dtsi"
-+
-+/ {
-+	model = "Kobo Aura 2";
-+	compatible = "kobo,aura2", "fsl,imx6sl";
-+
-+	aliases {
-+		mmc0 = &usdhc2;
-+		mmc1 = &usdhc3;
-+	};
-+
-+	chosen {
-+		stdout-path = &uart1;
-+	};
-+
-+	gpio_keys: gpio-keys {
-+		compatible = "gpio-keys";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_gpio_keys>;
-+
-+		cover {
-+			label = "Cover";
-+			gpios = <&gpio5 12 GPIO_ACTIVE_LOW>;
-+			linux,code = <SW_LID>;
-+			linux,input-type = <EV_SW>;
-+			wakeup-source;
-+		};
-+
-+		power {
-+			label = "Power";
-+			gpios = <&gpio5 8 GPIO_ACTIVE_LOW>;
-+			linux,code = <KEY_POWER>;
-+			wakeup-source;
-+		};
-+	};
-+
-+	leds: leds {
-+		compatible = "gpio-leds";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_led>;
-+
-+		on {
-+			label = "koboaura2:white:on";
-+			gpios = <&gpio5 7 GPIO_ACTIVE_LOW>;
-+			linux,default-trigger = "timer";
-+		};
-+	};
-+
-+	memory@80000000 {
-+		device_type = "memory";
-+		reg = <0x80000000 0x10000000>;
-+	};
-+
-+	reg_wifi: regulator-wifi {
-+		compatible = "regulator-fixed";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_wifi_power>;
-+		regulator-name = "SD3_SPWR";
-+		regulator-min-microvolt = <3000000>;
-+		regulator-max-microvolt = <3000000>;
-+		gpio = <&gpio4 29 GPIO_ACTIVE_LOW>;
-+	};
-+
-+	wifi_pwrseq: wifi_pwrseq {
-+		compatible = "mmc-pwrseq-simple";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_wifi_reset>;
-+		post-power-on-delay-ms = <20>;
-+		reset-gpios = <&gpio5 0 GPIO_ACTIVE_LOW>;
-+	};
-+};
-+
-+&i2c1 {
-+	pinctrl-names = "default","sleep";
-+	pinctrl-0 = <&pinctrl_i2c1>;
-+	pinctrl-1 = <&pinctrl_i2c1_sleep>;
-+	status = "okay";
-+
-+	lm3630a: backlight@36 {
-+		compatible = "ti,lm3630a";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_lm3630a_bl_gpio>;
-+		reg = <0x36>;
-+		enable-gpios = <&gpio2 10 GPIO_ACTIVE_HIGH>;
-+
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		led@0 {
-+			reg = <0>;
-+			led-sources = <0>;
-+			label = "backlight";
-+			default-brightness = <0>;
-+			max-brightness = <255>;
-+		};
-+	};
-+};
-+
-+&i2c2 {
-+	pinctrl-names = "default","sleep";
-+	pinctrl-0 = <&pinctrl_i2c2>;
-+	pinctrl-1 = <&pinctrl_i2c2_sleep>;
-+	clock-frequency = <100000>;
-+	status = "okay";
-+
-+	/* eKTF2232 at 0x15 */
-+	/* FP9928 at 0x48 */
-+};
-+
-+&i2c3 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_i2c3>;
-+	clock-frequency = <400000>;
-+	status = "okay";
-+
-+	ricoh619: pmic@32 {
-+		compatible = "ricoh,rc5t619";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_ricoh_gpio>;
-+		reg = <0x32>;
-+		interrupt-parent = <&gpio5>;
-+		interrupts = <11 IRQ_TYPE_LEVEL_LOW>;
-+		system-power-controller;
-+
-+		regulators {
-+			dcdc1_reg: DCDC1 {
-+				regulator-name = "DCDC1";
-+				regulator-min-microvolt = <300000>;
-+				regulator-max-microvolt = <1875000>;
-+				regulator-always-on;
-+				regulator-boot-on;
-+
-+				regulator-state-mem {
-+					regulator-on-in-suspend;
-+					regulator-suspend-max-microvolt = <900000>;
-+					regulator-suspend-min-microvolt = <900000>;
-+				};
-+			};
-+
-+			/* Core3_3V3 */
-+			dcdc2_reg: DCDC2 {
-+				regulator-name = "DCDC2";
-+				regulator-always-on;
-+				regulator-boot-on;
-+
-+				regulator-state-mem {
-+					regulator-on-in-suspend;
-+					regulator-suspend-max-microvolt = <3100000>;
-+					regulator-suspend-min-microvolt = <3100000>;
-+				};
-+			};
-+
-+			dcdc3_reg: DCDC3 {
-+				regulator-name = "DCDC3";
-+				regulator-min-microvolt = <300000>;
-+				regulator-max-microvolt = <1875000>;
-+				regulator-always-on;
-+				regulator-boot-on;
-+
-+				regulator-state-mem {
-+					regulator-on-in-suspend;
-+					regulator-suspend-max-microvolt = <1140000>;
-+					regulator-suspend-min-microvolt = <1140000>;
-+				};
-+			};
-+
-+			/* Core4_1V2 */
-+			dcdc4_reg: DCDC4 {
-+				regulator-name = "DCDC4";
-+				regulator-min-microvolt = <1200000>;
-+				regulator-max-microvolt = <1200000>;
-+				regulator-always-on;
-+				regulator-boot-on;
-+
-+				regulator-state-mem {
-+					regulator-on-in-suspend;
-+					regulator-suspend-max-microvolt = <1140000>;
-+					regulator-suspend-min-microvolt = <1140000>;
-+				};
-+			};
-+
-+			/* Core4_1V8 */
-+			dcdc5_reg: DCDC5 {
-+				regulator-name = "DCDC5";
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <1800000>;
-+				regulator-always-on;
-+				regulator-boot-on;
-+
-+				regulator-state-mem {
-+					regulator-on-in-suspend;
-+					regulator-suspend-max-microvolt = <1700000>;
-+					regulator-suspend-min-microvolt = <1700000>;
-+				};
-+			};
-+
-+			/* IR_3V3 */
-+			ldo1_reg: LDO1  {
-+				regulator-name = "LDO1";
-+				regulator-always-on;
-+				regulator-boot-on;
-+			};
-+
-+			/* Core1_3V3 */
-+			ldo2_reg: LDO2  {
-+				regulator-name = "LDO2";
-+				regulator-always-on;
-+				regulator-boot-on;
-+
-+				regulator-state-mem {
-+					regulator-on-in-suspend;
-+					regulator-suspend-max-microvolt = <3000000>;
-+					regulator-suspend-min-microvolt = <3000000>;
-+				};
-+			};
-+
-+			/* Core5_1V2 */
-+			ldo3_reg: LDO3  {
-+				regulator-name = "LDO3";
-+				regulator-always-on;
-+				regulator-boot-on;
-+			};
-+
-+			ldo4_reg: LDO4 {
-+				regulator-name = "LDO4";
-+				regulator-boot-on;
-+			};
-+
-+			/* SPD_3V3 */
-+			ldo5_reg: LDO5 {
-+				regulator-name = "LDO5";
-+				regulator-always-on;
-+				regulator-boot-on;
-+			};
-+
-+			/* DDR_0V6 */
-+			ldo6_reg: LDO6 {
-+				regulator-name = "LDO6";
-+				regulator-always-on;
-+				regulator-boot-on;
-+			};
-+
-+			/* VDD_PWM */
-+			ldo7_reg: LDO7 {
-+				regulator-name = "LDO7";
-+				regulator-always-on;
-+				regulator-boot-on;
-+			};
-+
-+			/* ldo_1v8 */
-+			ldo8_reg: LDO8 {
-+				regulator-name = "LDO8";
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <1800000>;
-+				regulator-always-on;
-+				regulator-boot-on;
-+			};
-+
-+			ldo9_reg: LDO9 {
-+				regulator-name = "LDO9";
-+				regulator-boot-on;
-+			};
-+
-+			ldo10_reg: LDO10 {
-+				regulator-name = "LDO10";
-+				regulator-boot-on;
-+			};
-+
-+			ldortc1_reg: LDORTC1  {
-+				regulator-name = "LDORTC1";
-+				regulator-always-on;
-+				regulator-boot-on;
-+			};
-+		};
-+	};
-+};
-+
-+&iomuxc {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_hog>;
-+
-+	pinctrl_gpio_keys: gpio-keysgrp {
-+		fsl,pins = <
-+			MX6SL_PAD_SD1_DAT1__GPIO5_IO08  0x17059
-+			MX6SL_PAD_SD1_DAT4__GPIO5_IO12  0x17059
-+		>;
-+	};
-+
-+	pinctrl_hog: hoggrp {
-+		fsl,pins = <
-+			MX6SL_PAD_LCD_DAT0__GPIO2_IO20	0x79
-+			MX6SL_PAD_LCD_DAT1__GPIO2_IO21	0x79
-+			MX6SL_PAD_LCD_DAT2__GPIO2_IO22	0x79
-+			MX6SL_PAD_LCD_DAT3__GPIO2_IO23	0x79
-+			MX6SL_PAD_LCD_DAT4__GPIO2_IO24	0x79
-+			MX6SL_PAD_LCD_DAT5__GPIO2_IO25	0x79
-+			MX6SL_PAD_LCD_DAT6__GPIO2_IO26	0x79
-+			MX6SL_PAD_LCD_DAT7__GPIO2_IO27	0x79
-+			MX6SL_PAD_LCD_DAT8__GPIO2_IO28	0x79
-+			MX6SL_PAD_LCD_DAT9__GPIO2_IO29	0x79
-+			MX6SL_PAD_LCD_DAT10__GPIO2_IO30	0x79
-+			MX6SL_PAD_LCD_DAT11__GPIO2_IO31	0x79
-+			MX6SL_PAD_LCD_DAT12__GPIO3_IO00	0x79
-+			MX6SL_PAD_LCD_DAT13__GPIO3_IO01	0x79
-+			MX6SL_PAD_LCD_DAT14__GPIO3_IO02	0x79
-+			MX6SL_PAD_LCD_DAT15__GPIO3_IO03	0x79
-+			MX6SL_PAD_LCD_DAT16__GPIO3_IO04	0x79
-+			MX6SL_PAD_LCD_DAT17__GPIO3_IO05	0x79
-+			MX6SL_PAD_LCD_DAT18__GPIO3_IO06	0x79
-+			MX6SL_PAD_LCD_DAT19__GPIO3_IO07	0x79
-+			MX6SL_PAD_LCD_DAT20__GPIO3_IO08	0x79
-+			MX6SL_PAD_LCD_DAT21__GPIO3_IO09	0x79
-+			MX6SL_PAD_LCD_DAT22__GPIO3_IO10	0x79
-+			MX6SL_PAD_LCD_DAT23__GPIO3_IO11	0x79
-+			MX6SL_PAD_LCD_CLK__GPIO2_IO15		0x79
-+			MX6SL_PAD_LCD_ENABLE__GPIO2_IO16	0x79
-+			MX6SL_PAD_LCD_HSYNC__GPIO2_IO17	0x79
-+			MX6SL_PAD_LCD_VSYNC__GPIO2_IO18	0x79
-+			MX6SL_PAD_LCD_RESET__GPIO2_IO19	0x79
-+			MX6SL_PAD_KEY_COL3__GPIO3_IO30		0x79
-+			MX6SL_PAD_KEY_ROW7__GPIO4_IO07		0x79
-+			MX6SL_PAD_ECSPI2_MOSI__GPIO4_IO13	0x79
-+			MX6SL_PAD_KEY_COL5__GPIO4_IO02		0x79
-+		>;
-+	};
-+
-+	pinctrl_i2c1: i2c1grp {
-+		fsl,pins = <
-+			MX6SL_PAD_I2C1_SCL__I2C1_SCL	 0x4001f8b1
-+			MX6SL_PAD_I2C1_SDA__I2C1_SDA	 0x4001f8b1
-+		>;
-+	};
-+
-+	pinctrl_i2c1_sleep: i2c1grp-sleep {
-+		fsl,pins = <
-+			MX6SL_PAD_I2C1_SCL__I2C1_SCL	 0x400108b1
-+			MX6SL_PAD_I2C1_SDA__I2C1_SDA	 0x400108b1
-+		>;
-+	};
-+
-+	pinctrl_i2c2: i2c2grp {
-+		fsl,pins = <
-+			MX6SL_PAD_I2C2_SCL__I2C2_SCL	 0x4001f8b1
-+			MX6SL_PAD_I2C2_SDA__I2C2_SDA	 0x4001f8b1
-+		>;
-+	};
-+
-+	pinctrl_i2c2_sleep: i2c2grp-sleep {
-+		fsl,pins = <
-+			MX6SL_PAD_I2C2_SCL__I2C2_SCL	 0x400108b1
-+			MX6SL_PAD_I2C2_SDA__I2C2_SDA	 0x400108b1
-+		>;
-+	};
-+
-+	pinctrl_i2c3: i2c3grp {
-+		fsl,pins = <
-+			MX6SL_PAD_REF_CLK_24M__I2C3_SCL  0x4001f8b1
-+			MX6SL_PAD_REF_CLK_32K__I2C3_SDA  0x4001f8b1
-+		>;
-+	};
-+
-+	pinctrl_led: ledgrp {
-+		fsl,pins = <
-+			MX6SL_PAD_SD1_DAT6__GPIO5_IO07 0x17059
-+		>;
-+	};
-+
-+	pinctrl_lm3630a_bl_gpio: lm3630a-bl-gpiogrp {
-+		fsl,pins = <
-+			MX6SL_PAD_EPDC_PWRCTRL3__GPIO2_IO10 0x10059 /* HWEN */
-+		>;
-+	};
-+
-+	pinctrl_ricoh_gpio: ricoh_gpiogrp {
-+		fsl,pins = <
-+			MX6SL_PAD_SD1_CLK__GPIO5_IO15	0x1b8b1 /* ricoh619 chg */
-+			MX6SL_PAD_SD1_DAT0__GPIO5_IO11	0x1b8b1 /* ricoh619 irq */
-+			MX6SL_PAD_KEY_COL2__GPIO3_IO28	0x1b8b1 /* ricoh619 bat_low_int */
-+		>;
-+	};
-+
-+	pinctrl_uart1: uart1grp {
-+		fsl,pins = <
-+			MX6SL_PAD_UART1_TXD__UART1_TX_DATA 0x1b0b1
-+			MX6SL_PAD_UART1_RXD__UART1_RX_DATA 0x1b0b1
-+		>;
-+	};
-+
-+	pinctrl_uart4: uart4grp {
-+		fsl,pins = <
-+			MX6SL_PAD_KEY_ROW6__UART4_TX_DATA 0x1b0b1
-+			MX6SL_PAD_KEY_COL6__UART4_RX_DATA 0x1b0b1
-+		>;
-+	};
-+
-+	pinctrl_usbotg1: usbotg1grp {
-+		fsl,pins = <
-+			MX6SL_PAD_EPDC_PWRCOM__USB_OTG1_ID 0x17059
-+		>;
-+	};
-+
-+	pinctrl_usdhc2: usdhc2grp {
-+		fsl,pins = <
-+			MX6SL_PAD_SD2_CMD__SD2_CMD		0x17059
-+			MX6SL_PAD_SD2_CLK__SD2_CLK		0x13059
-+			MX6SL_PAD_SD2_DAT0__SD2_DATA0		0x17059
-+			MX6SL_PAD_SD2_DAT1__SD2_DATA1		0x17059
-+			MX6SL_PAD_SD2_DAT2__SD2_DATA2		0x17059
-+			MX6SL_PAD_SD2_DAT3__SD2_DATA3		0x17059
-+		>;
-+	};
-+
-+	pinctrl_usdhc2_100mhz: usdhc2grp-100mhz {
-+		fsl,pins = <
-+			MX6SL_PAD_SD2_CMD__SD2_CMD		0x170b9
-+			MX6SL_PAD_SD2_CLK__SD2_CLK		0x130b9
-+			MX6SL_PAD_SD2_DAT0__SD2_DATA0		0x170b9
-+			MX6SL_PAD_SD2_DAT1__SD2_DATA1		0x170b9
-+			MX6SL_PAD_SD2_DAT2__SD2_DATA2		0x170b9
-+			MX6SL_PAD_SD2_DAT3__SD2_DATA3		0x170b9
-+		>;
-+	};
-+
-+	pinctrl_usdhc2_200mhz: usdhc2grp-200mhz {
-+		fsl,pins = <
-+			MX6SL_PAD_SD2_CMD__SD2_CMD		0x170f9
-+			MX6SL_PAD_SD2_CLK__SD2_CLK		0x130f9
-+			MX6SL_PAD_SD2_DAT0__SD2_DATA0		0x170f9
-+			MX6SL_PAD_SD2_DAT1__SD2_DATA1		0x170f9
-+			MX6SL_PAD_SD2_DAT2__SD2_DATA2		0x170f9
-+			MX6SL_PAD_SD2_DAT3__SD2_DATA3		0x170f9
-+		>;
-+	};
-+
-+	pinctrl_usdhc2_sleep: usdhc2grp-sleep {
-+		fsl,pins = <
-+			MX6SL_PAD_SD2_CMD__GPIO5_IO04		0x100f9
-+			MX6SL_PAD_SD2_CLK__GPIO5_IO05		0x100f9
-+			MX6SL_PAD_SD2_DAT0__GPIO5_IO01		0x100f9
-+			MX6SL_PAD_SD2_DAT1__GPIO4_IO30		0x100f9
-+			MX6SL_PAD_SD2_DAT2__GPIO5_IO03		0x100f9
-+			MX6SL_PAD_SD2_DAT3__GPIO4_IO28		0x100f9
-+		>;
-+	};
-+
-+	pinctrl_usdhc3: usdhc3grp {
-+		fsl,pins = <
-+			MX6SL_PAD_SD3_CMD__SD3_CMD	0x11059
-+			MX6SL_PAD_SD3_CLK__SD3_CLK	0x11059
-+			MX6SL_PAD_SD3_DAT0__SD3_DATA0	0x11059
-+			MX6SL_PAD_SD3_DAT1__SD3_DATA1	0x11059
-+			MX6SL_PAD_SD3_DAT2__SD3_DATA2	0x11059
-+			MX6SL_PAD_SD3_DAT3__SD3_DATA3	0x11059
-+		>;
-+	};
-+
-+	pinctrl_usdhc3_100mhz: usdhc3grp-100mhz {
-+		fsl,pins = <
-+			MX6SL_PAD_SD3_CMD__SD3_CMD	0x170b9
-+			MX6SL_PAD_SD3_CLK__SD3_CLK	0x170b9
-+			MX6SL_PAD_SD3_DAT0__SD3_DATA0	0x170b9
-+			MX6SL_PAD_SD3_DAT1__SD3_DATA1	0x170b9
-+			MX6SL_PAD_SD3_DAT2__SD3_DATA2	0x170b9
-+			MX6SL_PAD_SD3_DAT3__SD3_DATA3	0x170b9
-+		>;
-+	};
-+
-+	pinctrl_usdhc3_200mhz: usdhc3grp-200mhz {
-+		fsl,pins = <
-+			MX6SL_PAD_SD3_CMD__SD3_CMD	0x170f9
-+			MX6SL_PAD_SD3_CLK__SD3_CLK	0x170f9
-+			MX6SL_PAD_SD3_DAT0__SD3_DATA0	0x170f9
-+			MX6SL_PAD_SD3_DAT1__SD3_DATA1	0x170f9
-+			MX6SL_PAD_SD3_DAT2__SD3_DATA2	0x170f9
-+			MX6SL_PAD_SD3_DAT3__SD3_DATA3	0x170f9
-+		>;
-+	};
-+
-+	pinctrl_usdhc3_sleep: usdhc3grp-sleep {
-+		fsl,pins = <
-+			MX6SL_PAD_SD3_CMD__GPIO5_IO21	0x100c1
-+			MX6SL_PAD_SD3_CLK__GPIO5_IO18	0x100c1
-+			MX6SL_PAD_SD3_DAT0__GPIO5_IO19	0x100c1
-+			MX6SL_PAD_SD3_DAT1__GPIO5_IO20	0x100c1
-+			MX6SL_PAD_SD3_DAT2__GPIO5_IO16	0x100c1
-+			MX6SL_PAD_SD3_DAT3__GPIO5_IO17	0x100c1
-+		>;
-+	};
-+
-+	pinctrl_wifi_power: wifi-powergrp {
-+		fsl,pins = <
-+			MX6SL_PAD_SD2_DAT6__GPIO4_IO29	0x10059	/* WIFI_3V3_ON */
-+		>;
-+	};
-+
-+	pinctrl_wifi_reset: wifi-resetgrp {
-+		fsl,pins = <
-+			MX6SL_PAD_SD2_DAT7__GPIO5_IO00	0x10059	/* WIFI_RST */
-+		>;
-+	};
-+};
-+
-+&reg_vdd1p1 {
-+	vin-supply = <&dcdc2_reg>;
-+};
-+
-+&reg_vdd2p5 {
-+	vin-supply = <&dcdc2_reg>;
-+};
-+
-+&reg_arm {
-+	vin-supply = <&dcdc3_reg>;
-+};
-+
-+&reg_soc {
-+	vin-supply = <&dcdc1_reg>;
-+};
-+
-+&reg_pu {
-+	vin-supply = <&dcdc1_reg>;
-+};
-+
-+&snvs_rtc {
-+	/*
-+	 * We are using the RTC in the PMIC, but this one is not disabled
-+	 * in imx6sl.dtsi.
-+	 */
-+	status = "disabled";
-+};
-+
-+&uart1 {
-+	/* J4, through-holes */
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_uart1>;
-+	status = "okay";
-+};
-+
-+&uart4 {
-+	/* TP198, next to J4, SMD pads */
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_uart4>;
-+	status = "okay";
-+};
-+
-+&usdhc2 {
-+	pinctrl-names = "default", "state_100mhz", "state_200mhz", "sleep";
-+	pinctrl-0 = <&pinctrl_usdhc2>;
-+	pinctrl-1 = <&pinctrl_usdhc2_100mhz>;
-+	pinctrl-2 = <&pinctrl_usdhc2_200mhz>;
-+	pinctrl-3 = <&pinctrl_usdhc2_sleep>;
-+	non-removable;
-+	status = "okay";
-+
-+	/* internal uSD card */
-+};
-+
-+&usdhc3 {
-+	pinctrl-names = "default", "state_100mhz", "state_200mhz", "sleep";
-+	pinctrl-0 = <&pinctrl_usdhc3>;
-+	pinctrl-1 = <&pinctrl_usdhc3_100mhz>;
-+	pinctrl-2 = <&pinctrl_usdhc3_200mhz>;
-+	pinctrl-3 = <&pinctrl_usdhc3_sleep>;
-+	vmmc-supply = <&reg_wifi>;
-+	mmc-pwrseq = <&wifi_pwrseq>;
-+	cap-power-off-card;
-+	non-removable;
-+	status = "okay";
-+
-+	/*
-+	 * RTL8189F SDIO WiFi
-+	 */
-+};
-+
-+&usbotg1 {
-+	pinctrl-names = "default";
-+	disable-over-current;
-+	srp-disable;
-+	hnp-disable;
-+	adp-disable;
-+	status = "okay";
-+};
--- 
-2.30.2
+- The random_get_entropy() function now always returns something at least
+  minimally useful. This is the primary entropy source in most collectors,
+  which in the best case expands to something like RDTSC, but prior to this
+  change, in the worst case it would just return 0, contributing nothing. For
+  5.19, additional architectures are wired up, and architectures that are
+  entirely missing a cycle counter now have a generic fallback path, which
+  uses the highest resolution clock available from the timekeeping subsystem.
+  Some of those clocks can actually be quite good, despite the CPU not having
+  a cycle counter of its own, and going off-core for a stamp is generally
+  thought to increase jitter, something positive from the perspective of
+  entropy gathering. Done very early on in the development cycle, this has
+  been sitting in next getting some testing for a while now and has relevant
+  acks from the archs, so it should be pretty well tested and fine, but is
+  nonetheless the thing I'll be keeping my eye on most closely.
 
+- Of particular note with the random_get_entropy() improvements is MIPS,
+  which, on CPUs that lack the c0 count register, will now combine the
+  high-speed but short-cycle c0 random register with the lower-speed but
+  long-cycle generic fallback path.
+
+- With random_get_entropy() now always returning something useful, the
+  interrupt handler now collects entropy in a consistent construction.
+
+- Rather than comparing two samples of random_get_entropy() for the jitter
+  dance, the algorithm now tests many samples, and uses the amount of
+  differing ones to determine whether or not jitter entropy is usable and how
+  laborious it must be. The problem with comparing only two samples was that
+  if the cycle counter was extremely slow, but just so happened to be on the
+  cusp of a change, the slowness wouldn't be detected. Taking many samples
+  fixes that to some degree. This, combined with the other improvements to
+  random_get_entropy(), should make future unification of /dev/random and
+  /dev/urandom maybe more possible. At the very least, were we to attempt it
+  again today (we're not), it wouldn't break any of Guenter's test rigs that
+  broke when we tried it with 5.18. So, not today, but perhaps down the road,
+  that's something we can revisit.
+
+- We attempt to reseed the RNG immediately upon waking up from system suspend
+  or hibernation, making use of the various timestamps about suspend time and
+  such available, as well as the usual inputs such as RDRAND when available.
+
+- Batched randomness now falls back to ordinary randomness before the RNG is
+  initialized. This provides more consistent guarantees to the types of random
+  numbers being returned by the various accessors.
+
+- The "pre-init injection" code is now gone for good. I suspect you in
+  particular will be happy to read that, as I recall you expressing your
+  distaste for it a few months ago. Instead, to avoid a "premature first"
+  issue, while still allowing for maximal amount of entropy availability
+  during system boot, the first 128 bits of estimated entropy are used
+  immediately as it arrives, with the next 128 bits being buffered. And, as
+  before, after the RNG has been fully initialized, it winds up reseeding
+  anyway a few seconds later in most cases. This resulted in a pretty big
+  simplification of the initialization code and let us remove various ad-hoc
+  mechanisms like the ugly crng_pre_init_inject().
+
+- The RNG no longer pretends to handle the "premature next" security model,
+  something that various academics and other RNG designs have tried to care
+  about in the past. After an interesting mailing list thread, these issues
+  are thought to be a) mainly academic and not practical at all, and b)
+  actively harming the real security of the RNG by delaying new entropy
+  additions after a potential compromise, making a potentially bad situation
+  even worse. As well, in the first place, our RNG never even properly handled
+  the premature next issue, so removing an incomplete solution to a fake
+  problem was particularly nice.  This allowed for numerous other
+  simplifications in the code, which is a lot cleaner as a consequence. If you
+  didn't see it before, https://lore.kernel.org/lkml/YmlMGx6+uigkGiZ0@zx2c4.com/
+  may be a thread worth skimming through.
+
+- While the interrupt handler received a separate code path years ago that
+  avoids locks by using per-cpu data structures and a faster mixing algorithm,
+  in order to reduce interrupt latency, input and disk events that are
+  triggered in hardirq handlers were still hitting locks and more expensive
+  algorithms. Those are now redirected to use the faster per-cpu data
+  structures.
+
+- Rather than having the fake-crypto almost-siphash-based random32
+  implementation be used right and left, and in many places where
+  cryptographically secure randomness is desirable, the batched entropy code
+  is now fast enough to replace that.
+
+- As usual, numerous code quality and documentation cleanups. For example, the
+  initialization state machine now uses enum symbolic constants instead of
+  just hard coding numbers everywhere.
+
+- Since the RNG initializes once, and then is always initialized thereafter, a
+  pretty heavy amount of code used during that initialization is never used
+  again. It is now completely cordoned off using static branches and it winds
+  up in the .text.unlikely section so that it doesn't reduce cache compactness
+  after the RNG is ready.
+
+- A variety of functions meant for waiting on the RNG to be initialized were
+  only used by vsprintf, and in not a particularly optimal way. Replacing that
+  usage with a more ordinary setup made it possible to remove those functions.
+
+- A cleanup of how we warn userspace about the use of uninitialized
+  /dev/urandom and uninitialized get_random_bytes() usage. Interestingly, with
+  the change you merged for 5.18 that attempts to use jitter (but does not
+  block if it can't), the majority of users should never see those warnings
+  for /dev/urandom at all now, and the one for in-kernel usage is mainly a
+  debug thing.
+
+- The file_operations struct for /dev/[u]random now implements .read_iter and
+  .write_iter instead of .read and .write, allowing it to also implement
+  .splice_read and .splice_write, which makes splice(2) work again after it
+  was broken here (and in many other places in the tree) during the set_fs()
+  removal. This was a bit of a last minute arrival from Jens that hasn't had
+  as much time to bake, so I'll be keeping my eye on this as well, but it
+  seems fairly ordinary. Unfortunately, read_iter() is around 3% slower than
+  read() in my tests, which I'm not thrilled about. But Jens and Al, spurred
+  by this observation, seem to be making progress in removing the bottlenecks
+  on the iter paths in the VFS layer in general, which should remove the
+  performance gap for all drivers.
+
+- Assorted other bug fixes, cleanups, and optimizations.
+
+- A small SipHash cleanup. Note: Greg has an SPDX SipHash patch in his tree
+  that changes the same files, which git should handle automatically, but
+  heads up in case there's merge trouble.
+
+Regards,
+Jason
+
+The following changes since commit c5eb0a61238dd6faf37f58c9ce61c9980aaffd7a:
+
+  Linux 5.18-rc6 (2022-05-08 13:54:17 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git tags/random-5.19-rc1-for-linus
+
+for you to fetch changes up to 1ce6c8d68f8ac587f54d0a271ac594d3d51f3efb:
+
+  random: check for signals after page of pool writes (2022-05-22 22:34:31 +0200)
+
+----------------------------------------------------------------
+Random number generator updates for Linux 5.19-rc1.
+----------------------------------------------------------------
+
+Jason A. Donenfeld (46):
+      random: fix sysctl documentation nits
+      init: call time_init() before rand_initialize()
+      ia64: define get_cycles macro for arch-override
+      s390: define get_cycles macro for arch-override
+      parisc: define get_cycles macro for arch-override
+      alpha: define get_cycles macro for arch-override
+      powerpc: define get_cycles macro for arch-override
+      openrisc: start CPU timer early in boot
+      timekeeping: Add raw clock fallback for random_get_entropy()
+      m68k: use fallback for random_get_entropy() instead of zero
+      riscv: use fallback for random_get_entropy() instead of zero
+      mips: use fallback for random_get_entropy() instead of just c0 random
+      arm: use fallback for random_get_entropy() instead of zero
+      nios2: use fallback for random_get_entropy() instead of zero
+      x86/tsc: Use fallback for random_get_entropy() instead of zero
+      um: use fallback for random_get_entropy() instead of zero
+      sparc: use fallback for random_get_entropy() instead of zero
+      xtensa: use fallback for random_get_entropy() instead of zero
+      random: insist on random_get_entropy() existing in order to simplify
+      random: vary jitter iterations based on cycle counter speed
+      random: mix in timestamps and reseed on system restore
+      random: do not use batches when !crng_ready()
+      random: use first 128 bits of input as fast init
+      random: do not pretend to handle premature next security model
+      random: order timer entropy functions below interrupt functions
+      random: do not use input pool from hard IRQs
+      random: help compiler out with fast_mix() by using simpler arguments
+      siphash: use one source of truth for siphash permutations
+      random32: use real rng for non-deterministic randomness
+      random: use symbolic constants for crng_init states
+      random: avoid initializing twice in credit race
+      random: move initialization out of reseeding hot path
+      random: remove ratelimiting for in-kernel unseeded randomness
+      random: use proper jiffies comparison macro
+      random: handle latent entropy and command line from random_init()
+      random: credit architectural init the exact amount
+      random: use static branch for crng_ready()
+      random: remove extern from functions in header
+      random: use proper return types on get_random_{int,long}_wait()
+      random: make consistent use of buf and len
+      random: move initialization functions out of hot pages
+      random: remove get_random_bytes_arch() and add rng_has_arch_random()
+      random: remove mostly unused async readiness notifier
+      random: move randomize_page() into mm where it belongs
+      random: unify batched entropy implementations
+      random: check for signals after page of pool writes
+
+Jens Axboe (3):
+      random: convert to using fops->read_iter()
+      random: convert to using fops->write_iter()
+      random: wire up fops->splice_{read,write}_iter()
+
+ Documentation/admin-guide/sysctl/kernel.rst |    8 +-
+ arch/alpha/include/asm/timex.h              |    1 +
+ arch/arm/include/asm/timex.h                |    1 +
+ arch/ia64/include/asm/timex.h               |    1 +
+ arch/m68k/include/asm/timex.h               |    2 +-
+ arch/mips/include/asm/timex.h               |   17 +-
+ arch/nios2/include/asm/timex.h              |    3 +
+ arch/openrisc/include/asm/timex.h           |    1 +
+ arch/openrisc/kernel/head.S                 |    9 +
+ arch/parisc/include/asm/timex.h             |    3 +-
+ arch/powerpc/include/asm/timex.h            |    1 +
+ arch/riscv/include/asm/timex.h              |    2 +-
+ arch/s390/include/asm/timex.h               |    1 +
+ arch/sparc/include/asm/timex_32.h           |    4 +-
+ arch/um/include/asm/timex.h                 |    9 +-
+ arch/x86/include/asm/timex.h                |    9 +
+ arch/x86/include/asm/tsc.h                  |    7 +-
+ arch/xtensa/include/asm/timex.h             |    6 +-
+ drivers/char/random.c                       | 1346 +++++++++++----------------
+ include/linux/mm.h                          |    1 +
+ include/linux/prandom.h                     |   61 +-
+ include/linux/random.h                      |   90 +-
+ include/linux/siphash.h                     |   28 +
+ include/linux/timex.h                       |    8 +
+ init/main.c                                 |   13 +-
+ kernel/time/timekeeping.c                   |   15 +
+ kernel/time/timer.c                         |    2 -
+ lib/Kconfig.debug                           |    3 +-
+ lib/random32.c                              |  347 +------
+ lib/siphash.c                               |   32 +-
+ lib/vsprintf.c                              |   67 +-
+ mm/util.c                                   |   32 +
+ net/core/dev.c                              |    3 -
+ net/ipv4/devinet.c                          |    4 +-
+ net/ipv6/addrconf.c                         |    2 -
+ 35 files changed, 784 insertions(+), 1355 deletions(-)

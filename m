@@ -2,147 +2,344 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3433530076
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 06:03:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D435A530079
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 06:09:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234422AbiEVEDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 00:03:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53128 "EHLO
+        id S233838AbiEVEJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 00:09:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbiEVEDb (ORCPT
+        with ESMTP id S229545AbiEVEJD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 00:03:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32DF93E5CD;
-        Sat, 21 May 2022 21:03:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 74D05B80AC0;
-        Sun, 22 May 2022 04:03:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 279FEC34116;
-        Sun, 22 May 2022 04:03:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653192207;
-        bh=H8VxeRRGU1YvvB/gDGQdsDIur//wMHZ+GBccWBSTA4s=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=ogO7bURGMZjZY7Se7Ca+PlvmooeylSGOcmEVhlOvBfxQ6eNBOuYSlc7lye/lzX1gw
-         oSZpH68lcUNhCGBQPbOoCPttQczz9lqiGvLSS7zpjlBVCKhlvLJT8sgEYqFORXxr88
-         LMa7WENGD63Rs+0T7UBliYzNh0naPxCDjvfVYxbFM53JAyW+3GAlREGLSiBfnCMvU1
-         LRmIXsOvNqqm3Z7p8jDzMg8ntEJaWd8QxCHVKjPWh48mnpAzrD3Va7p6rC5eMABYu0
-         X/VekAVyZqB/w/yNgdEOTq2RhTUrVFjxKVBv0le1cPXUJ6sXoz0egBoAsTMe93KYsW
-         vVtz8zIpWIjmw==
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailauth.nyi.internal (Postfix) with ESMTP id E57B027C0054;
-        Sun, 22 May 2022 00:03:24 -0400 (EDT)
-Received: from imap48 ([10.202.2.98])
-  by compute2.internal (MEProxy); Sun, 22 May 2022 00:03:24 -0400
-X-ME-Sender: <xms:C7aJYqXjGfM4wQuodo607NjCU7PYVCu2Nf4CmUoeKrg1BJLSx7XzZg>
-    <xme:C7aJYmlHnv72dQ8EoYnKirE_LOZ3kTXO40X-kdOe5RXnWn49nNecmEywlY7yQopLh
-    28ExrBKGpBdj_3Cstk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrieejgdejjecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetnhgu
-    hicunfhuthhomhhirhhskhhifdcuoehluhhtoheskhgvrhhnvghlrdhorhhgqeenucggtf
-    frrghtthgvrhhnpedvhfeuvddthfdufffhkeekffetgffhledtleegffetheeugeejffdu
-    hefgteeihfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpegrnhguhidomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqudduiedukeeh
-    ieefvddqvdeifeduieeitdekqdhluhhtoheppehkvghrnhgvlhdrohhrgheslhhinhhugi
-    drlhhuthhordhush
-X-ME-Proxy: <xmx:C7aJYuYVuXc6-n2rtnHJr-4hXRuGMt2-n6Fi-6i-PRQbwWRrklD5pQ>
-    <xmx:C7aJYhVjZixJLh_aI5dYUZ-ppl2q-9UUAw-iaNwXiutFsbo6JXT1jg>
-    <xmx:C7aJYknSPK7hrO2kEN3oZsQQWBSL9WHgDO8QD1SQXxvC326OwMbEKA>
-    <xmx:DLaJYuvHWMkfc_q-57cYIYJF2SXVodDLkZm9p2keZbWlQiDzjMXLE8biMqU>
-Feedback-ID: ieff94742:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 3F6EB31A005D; Sun, 22 May 2022 00:03:23 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-591-gfe6c3a2700-fm-20220427.001-gfe6c3a27
-Mime-Version: 1.0
-Message-Id: <f0f9c66d-ae94-4eb1-b7e5-6a0a9f0d4798@www.fastmail.com>
-In-Reply-To: <YofeZps9YXgtP3f1@google.com>
-References: <20220519153713.819591-1-chao.p.peng@linux.intel.com>
- <20220519153713.819591-5-chao.p.peng@linux.intel.com>
- <8840b360-cdb2-244c-bfb6-9a0e7306c188@kernel.org>
- <YofeZps9YXgtP3f1@google.com>
-Date:   Sat, 21 May 2022 21:03:01 -0700
-From:   "Andy Lutomirski" <luto@kernel.org>
-To:     "Sean Christopherson" <seanjc@google.com>
-Cc:     "Chao Peng" <chao.p.peng@linux.intel.com>,
-        "kvm list" <kvm@vger.kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        "Linux API" <linux-api@vger.kernel.org>, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, "Paolo Bonzini" <pbonzini@redhat.com>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        "Vitaly Kuznetsov" <vkuznets@redhat.com>,
-        "Wanpeng Li" <wanpengli@tencent.com>,
-        "Jim Mattson" <jmattson@google.com>,
-        "Joerg Roedel" <joro@8bytes.org>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Hugh Dickins" <hughd@google.com>,
-        "Jeff Layton" <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Mike Rapoport" <rppt@kernel.org>,
-        "Steven Price" <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        "Vlastimil Babka" <vbabka@suse.cz>,
-        "Vishal Annapurve" <vannapurve@google.com>,
-        "Yu Zhang" <yu.c.zhang@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        "Dave Hansen" <dave.hansen@intel.com>,
-        "Andi Kleen" <ak@linux.intel.com>,
-        "David Hildenbrand" <david@redhat.com>, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        "Quentin Perret" <qperret@google.com>,
-        "Michael Roth" <michael.roth@amd.com>,
-        "Michal Hocko" <mhocko@suse.com>
-Subject: Re: [PATCH v6 4/8] KVM: Extend the memslot to support fd-based private memory
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 22 May 2022 00:09:03 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 203BC40A08
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 21:09:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653192542; x=1684728542;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=+89R5I/8wOnyqytimtMkueBUF2iW65SsUjiJuOqDOQw=;
+  b=SKhp/leALkRRGjYt6C7cqqJnmshbjLjPhpRk0vomAn5p57G9oPHU/F8q
+   Ymv9vnvLwrIL40g+7IgD8FvERDP9GAPRA7AvLBhj3ZVA1jo2DZdw9DEQG
+   hnuo55jT0dfhUzQIK3V+LbE62hYkJ51/O1/yDsQcc+654eZ2O4VsVHMqg
+   TxNxScQCOl8y+WTc0DOIkNn1RLKFT+6cMWy15kSC5dm0QiiExbDxmqMMU
+   SmIWVlew9fEqRmzY3Umzyku+VRxtzxXKsO+FbECor/OWfdAvLOJxtVX73
+   xTTobT9mXkV/mhAtoPs22sLehUKZUOQgMmF8Q1bBZerfHHAnjeS4zoSxy
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10354"; a="272651778"
+X-IronPort-AV: E=Sophos;i="5.91,243,1647327600"; 
+   d="scan'208";a="272651778"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 21:09:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,243,1647327600"; 
+   d="scan'208";a="558097380"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 21 May 2022 21:09:00 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nsctn-0006uM-GV;
+        Sun, 22 May 2022 04:08:59 +0000
+Date:   Sun, 22 May 2022 12:08:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:locking/core] BUILD SUCCESS
+ 8491d1bdf5de152f27fc941e2dcdc4e66c950542
+Message-ID: <6289b737.Rz6RK1doaP5fy3TD%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git locking/core
+branch HEAD: 8491d1bdf5de152f27fc941e2dcdc4e66c950542  sched/clock: Use try_cmpxchg64 in sched_clock_{local,remote}
 
+elapsed time: 3222m
 
-On Fri, May 20, 2022, at 11:31 AM, Sean Christopherson wrote:
+configs tested: 255
+configs skipped: 5
 
-> But a dedicated KVM ioctl() to add/remove shared ranges would be easy 
-> to implement
-> and wouldn't necessarily even need to interact with the memslots.  It 
-> could be a
-> consumer of memslots, e.g. if we wanted to disallow registering regions 
-> without an
-> associated memslot, but I think we'd want to avoid even that because 
-> things will
-> get messy during memslot updates, e.g. if dirty logging is toggled or a 
-> shared
-> memory region is temporarily removed then we wouldn't want to destroy 
-> the tracking.
->
-> I don't think we'd want to use a bitmap, e.g. for a well-behaved guest, XArray
-> should be far more efficient.
->
-> One benefit to explicitly tracking this in KVM is that it might be 
-> useful for
-> software-only protected VMs, e.g. KVM could mark a region in the XArray 
-> as "pending"
-> based on guest hypercalls to share/unshare memory, and then complete 
-> the transaction
-> when userspace invokes the ioctl() to complete the share/unshare.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-That makes sense.
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+powerpc64                           defconfig
+arc                                 defconfig
+powerpc                     asp8347_defconfig
+m68k                            mac_defconfig
+ia64                            zx1_defconfig
+ia64                      gensparse_defconfig
+arm                            pleb_defconfig
+sh                            titan_defconfig
+sh                            migor_defconfig
+arm                      footbridge_defconfig
+s390                          debug_defconfig
+xtensa                    xip_kc705_defconfig
+sh                               j2_defconfig
+um                                  defconfig
+um                               alldefconfig
+arm                        shmobile_defconfig
+mips                      maltasmvp_defconfig
+powerpc                    sam440ep_defconfig
+powerpc                      cm5200_defconfig
+arm                        cerfcube_defconfig
+mips                         db1xxx_defconfig
+sh                          rsk7269_defconfig
+powerpc                     pq2fads_defconfig
+parisc                           allyesconfig
+mips                           ci20_defconfig
+s390                             allyesconfig
+xtensa                          iss_defconfig
+ia64                        generic_defconfig
+powerpc                      chrp32_defconfig
+mips                  maltasmvp_eva_defconfig
+riscv                            allyesconfig
+powerpc                      pcm030_defconfig
+sh                   sh7770_generic_defconfig
+h8300                    h8300h-sim_defconfig
+arm                        mini2440_defconfig
+xtensa                           allyesconfig
+m68k                            q40_defconfig
+sh                           se7721_defconfig
+arm                           tegra_defconfig
+ia64                          tiger_defconfig
+sh                           se7750_defconfig
+mips                  decstation_64_defconfig
+arm                            zeus_defconfig
+h8300                            allyesconfig
+arm                          badge4_defconfig
+arm                           corgi_defconfig
+xtensa                  audio_kc705_defconfig
+arm                            lart_defconfig
+sh                          r7785rp_defconfig
+sh                        sh7763rdp_defconfig
+sh                         microdev_defconfig
+arm                      jornada720_defconfig
+powerpc                     sequoia_defconfig
+powerpc                        cell_defconfig
+sh                                  defconfig
+powerpc                    klondike_defconfig
+arm                       imx_v6_v7_defconfig
+sh                           se7206_defconfig
+powerpc                        warp_defconfig
+mips                       capcella_defconfig
+powerpc                 linkstation_defconfig
+arm                           h3600_defconfig
+parisc                generic-64bit_defconfig
+sh                           se7619_defconfig
+alpha                               defconfig
+arm                           h5000_defconfig
+arm                        multi_v7_defconfig
+ia64                         bigsur_defconfig
+sh                          landisk_defconfig
+alpha                            allyesconfig
+arm                        realview_defconfig
+arm                            qcom_defconfig
+sh                           se7343_defconfig
+nios2                            alldefconfig
+arc                        nsimosci_defconfig
+powerpc                     stx_gp3_defconfig
+sparc64                          alldefconfig
+i386                                defconfig
+powerpc                      ep88xc_defconfig
+h8300                       h8s-sim_defconfig
+powerpc                     mpc83xx_defconfig
+powerpc                 mpc834x_mds_defconfig
+sh                          urquell_defconfig
+m68k                       m5208evb_defconfig
+m68k                       bvme6000_defconfig
+mips                             allyesconfig
+x86_64                           alldefconfig
+powerpc                 canyonlands_defconfig
+powerpc                       eiger_defconfig
+sh                   rts7751r2dplus_defconfig
+powerpc                   motionpro_defconfig
+arc                          axs103_defconfig
+sh                          sdk7786_defconfig
+mips                 decstation_r4k_defconfig
+um                             i386_defconfig
+s390                       zfcpdump_defconfig
+arm                           sama5_defconfig
+m68k                          hp300_defconfig
+mips                         mpc30x_defconfig
+m68k                             allyesconfig
+powerpc                 mpc837x_mds_defconfig
+arm                           viper_defconfig
+powerpc                 mpc837x_rdb_defconfig
+h8300                     edosk2674_defconfig
+arc                           tb10x_defconfig
+m68k                          multi_defconfig
+arm                             pxa_defconfig
+m68k                        mvme147_defconfig
+arm                        keystone_defconfig
+openrisc                 simple_smp_defconfig
+xtensa                generic_kc705_defconfig
+powerpc                       holly_defconfig
+arc                          axs101_defconfig
+powerpc                     rainier_defconfig
+powerpc                      mgcoge_defconfig
+mips                     loongson1b_defconfig
+arc                         haps_hs_defconfig
+sh                               allmodconfig
+sh                   secureedge5410_defconfig
+m68k                           sun3_defconfig
+sparc64                             defconfig
+arm                            xcep_defconfig
+arc                 nsimosci_hs_smp_defconfig
+powerpc                mpc7448_hpc2_defconfig
+nios2                         3c120_defconfig
+sh                        sh7757lcr_defconfig
+m68k                          sun3x_defconfig
+powerpc                      ppc6xx_defconfig
+m68k                          amiga_defconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220519
+arm                  randconfig-c002-20220522
+ia64                                defconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+riscv                             allnoconfig
+m68k                             allmodconfig
+m68k                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+csky                                defconfig
+nios2                            allyesconfig
+s390                                defconfig
+s390                             allmodconfig
+parisc                              defconfig
+parisc64                            defconfig
+sparc                               defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+arc                  randconfig-r043-20220522
+s390                 randconfig-r044-20220522
+riscv                randconfig-r042-20220522
+arc                  randconfig-r043-20220519
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+x86_64                                  kexec
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
 
-If KVM goes this route, perhaps there the allowed states for a GPA should include private, shared, and also private-and-shared.  Then anyone who wanted to use the same masked GPA for shared and private on TDX could do so if they wanted to.
+clang tested configs:
+powerpc              randconfig-c003-20220519
+x86_64                        randconfig-c007
+riscv                randconfig-c006-20220519
+mips                 randconfig-c004-20220519
+i386                          randconfig-c001
+arm                  randconfig-c002-20220519
+s390                 randconfig-c005-20220519
+arm                  randconfig-c002-20220522
+s390                 randconfig-c005-20220522
+powerpc              randconfig-c003-20220522
+riscv                randconfig-c006-20220522
+mips                 randconfig-c004-20220522
+powerpc                          g5_defconfig
+hexagon                             defconfig
+mips                      pic32mzda_defconfig
+arm                          ep93xx_defconfig
+mips                     loongson2k_defconfig
+powerpc                     tqm8560_defconfig
+hexagon                          alldefconfig
+powerpc                       ebony_defconfig
+mips                      malta_kvm_defconfig
+arm                              alldefconfig
+arm                          ixp4xx_defconfig
+powerpc                      pmac32_defconfig
+powerpc                     tqm5200_defconfig
+i386                             allyesconfig
+powerpc                    socrates_defconfig
+powerpc                   microwatt_defconfig
+powerpc                      acadia_defconfig
+riscv                          rv32_defconfig
+mips                           ip22_defconfig
+arm                     davinci_all_defconfig
+arm                         mv78xx0_defconfig
+powerpc                    ge_imp3a_defconfig
+arm                         s5pv210_defconfig
+powerpc                 mpc8560_ads_defconfig
+powerpc                   bluestone_defconfig
+powerpc                      katmai_defconfig
+powerpc                        icon_defconfig
+powerpc                      ppc44x_defconfig
+powerpc                 mpc836x_rdk_defconfig
+arm                       spear13xx_defconfig
+mips                           rs90_defconfig
+powerpc                          allmodconfig
+powerpc                 mpc8272_ads_defconfig
+powerpc                     tqm8540_defconfig
+arm                         palmz72_defconfig
+mips                            e55_defconfig
+arm                        mvebu_v5_defconfig
+powerpc                  mpc885_ads_defconfig
+powerpc                    gamecube_defconfig
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a011
+i386                          randconfig-a013
+i386                          randconfig-a015
+hexagon              randconfig-r045-20220519
+hexagon              randconfig-r041-20220519
+hexagon              randconfig-r045-20220522
+hexagon              randconfig-r041-20220522
+riscv                randconfig-r042-20220519
+s390                 randconfig-r044-20220519
+hexagon              randconfig-r045-20220521
+hexagon              randconfig-r041-20220521
+s390                 randconfig-r044-20220521
+riscv                randconfig-r042-20220521
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

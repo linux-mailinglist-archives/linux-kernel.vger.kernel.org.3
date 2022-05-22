@@ -2,227 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EB9053004E
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 04:35:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA1CB530051
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 04:40:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235422AbiEVCfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 22:35:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36382 "EHLO
+        id S235820AbiEVCkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 22:40:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbiEVCfJ (ORCPT
+        with ESMTP id S232927AbiEVCkU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 22:35:09 -0400
-Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A63D34647;
-        Sat, 21 May 2022 19:35:07 -0700 (PDT)
-Received: by mail.hallyn.com (Postfix, from userid 1001)
-        id B17D1666; Sat, 21 May 2022 21:35:05 -0500 (CDT)
-Date:   Sat, 21 May 2022 21:35:05 -0500
-From:   "Serge E. Hallyn" <serge@hallyn.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        jpenumak@redhat.com
-Subject: Re: [PATCH v12 09/26] ima: Move ima_lsm_policy_notifier into
- ima_namespace
-Message-ID: <20220522023505.GA18987@mail.hallyn.com>
-References: <20220420140633.753772-1-stefanb@linux.ibm.com>
- <20220420140633.753772-10-stefanb@linux.ibm.com>
+        Sat, 21 May 2022 22:40:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0C3823EAA7
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 19:40:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653187219;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CUBw8GFTyhDBg8PslsY0hFMfNEXHrEOXs4oed7UJ/6Y=;
+        b=XVwdEgAD7aSrRD0jx2QJ+n+ugv548JalGghSxnBiSP7OedU18t7cdF75X8NVu3dtVANxKr
+        GCL98/Ru6usZ7z7qZg21IMY9lqTJeGXtRkhq80y6KbhRY+/fGxgIZ+YhdTYCztXRLI+JX+
+        aX+dSJCfH4wqQ4dmY4nMGP4nZyydMoc=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-556-98KPwqGtOviqGQT_QgQmhQ-1; Sat, 21 May 2022 22:40:15 -0400
+X-MC-Unique: 98KPwqGtOviqGQT_QgQmhQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EB86E1C05EA4;
+        Sun, 22 May 2022 02:40:14 +0000 (UTC)
+Received: from [10.22.8.34] (unknown [10.22.8.34])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 855307C2A;
+        Sun, 22 May 2022 02:40:13 +0000 (UTC)
+Message-ID: <ed130232-144e-9763-2602-7d8a71e41cb6@redhat.com>
+Date:   Sat, 21 May 2022 22:40:13 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220420140633.753772-10-stefanb@linux.ibm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v11 8/8] kselftest/cgroup: Add cpuset v2 partition root
+ state test
+Content-Language: en-US
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
+Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+References: <20220510153413.400020-1-longman@redhat.com>
+ <20220510153413.400020-9-longman@redhat.com>
+ <0ede5fe6-89c8-5e63-0c0c-265b57ea5ca6@collabora.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <0ede5fe6-89c8-5e63-0c0c-265b57ea5ca6@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 10:06:16AM -0400, Stefan Berger wrote:
-> Move the ima_lsm_policy_notifier into the ima_namespace. Each IMA
-> namespace can now register its own LSM policy change notifier callback.
-> The policy change notifier for the init_ima_ns still remains in init_ima()
-> and therefore handle the registration of the callback for all other
-> namespaces in init_ima_namespace().
-> 
-> Rate-limit the kernel warning 'rule for LSM <label> is undefined` for
-> IMA namespace to avoid flooding the kernel log with this type of message.
-> 
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+On 5/21/22 06:24, Muhammad Usama Anjum wrote:
+> On 5/10/22 8:34 PM, Waiman Long wrote:
+>> diff --git a/tools/testing/selftests/cgroup/Makefile b/tools/testing/selftests/cgroup/Makefile
+>> index 745fe25fa0b9..01687418b92f 100644
+>> --- a/tools/testing/selftests/cgroup/Makefile
+>> +++ b/tools/testing/selftests/cgroup/Makefile
+>> @@ -1,10 +1,11 @@
+>>   # SPDX-License-Identifier: GPL-2.0
+>>   CFLAGS += -Wall -pthread
+>>   
+>> -all:
+>> +all: ${HELPER_PROGS}
+>>   
+>>   TEST_FILES     := with_stress.sh
+>> -TEST_PROGS     := test_stress.sh
+>> +TEST_PROGS     := test_stress.sh test_cpuset_prs.sh
+>> +TEST_GEN_FILES := wait_inotify
+> Please add wait_inotify to .gitignore file.
+>
+>>   TEST_GEN_PROGS = test_memcontrol
+>>   TEST_GEN_PROGS += test_kmem
+>>   TEST_GEN_PROGS += test_core
 
-Acked-by: Serge Hallyn <serge@hallyn.com>
+Right. Sorry for missing that. Will add it to the next version.
 
-> 
-> ---
-> v11:
->  - Renamed 'rc' to 'ret'
->  - Use pr_warn_ratelimited('rule for LSM...') for IMA namespaces
-> 
-> v10:
->  - Only call pr_warn('rule for LSM <label> is undefined`) for init_ima_ns
-> ---
->  security/integrity/ima/ima.h             |  2 ++
->  security/integrity/ima/ima_init_ima_ns.c | 14 +++++++++++++
->  security/integrity/ima/ima_main.c        |  6 +-----
->  security/integrity/ima/ima_policy.c      | 26 ++++++++++++++++--------
->  4 files changed, 35 insertions(+), 13 deletions(-)
-> 
-> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-> index b35c8504ef87..c68b5117d034 100644
-> --- a/security/integrity/ima/ima.h
-> +++ b/security/integrity/ima/ima.h
-> @@ -144,6 +144,8 @@ struct ima_namespace {
->  	int valid_policy;
->  
->  	struct dentry *ima_policy;
-> +
-> +	struct notifier_block ima_lsm_policy_notifier;
->  } __randomize_layout;
->  extern struct ima_namespace init_ima_ns;
->  
-> diff --git a/security/integrity/ima/ima_init_ima_ns.c b/security/integrity/ima/ima_init_ima_ns.c
-> index 425eed1c6838..c4fe8f3e9a73 100644
-> --- a/security/integrity/ima/ima_init_ima_ns.c
-> +++ b/security/integrity/ima/ima_init_ima_ns.c
-> @@ -10,6 +10,8 @@
->  
->  static int ima_init_namespace(struct ima_namespace *ns)
->  {
-> +	int ret;
-> +
->  	INIT_LIST_HEAD(&ns->ima_default_rules);
->  	INIT_LIST_HEAD(&ns->ima_policy_rules);
->  	INIT_LIST_HEAD(&ns->ima_temp_rules);
-> @@ -30,6 +32,15 @@ static int ima_init_namespace(struct ima_namespace *ns)
->  	ns->valid_policy = 1;
->  	ns->ima_fs_flags = 0;
->  
-> +	if (ns != &init_ima_ns) {
-> +		ns->ima_lsm_policy_notifier.notifier_call =
-> +						ima_lsm_policy_change;
-> +		ret = register_blocking_lsm_notifier
-> +						(&ns->ima_lsm_policy_notifier);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
->  	return 0;
->  }
->  
-> @@ -39,5 +50,8 @@ int __init ima_ns_init(void)
->  }
->  
->  struct ima_namespace init_ima_ns = {
-> +	.ima_lsm_policy_notifier = {
-> +		.notifier_call = ima_lsm_policy_change,
-> +	},
->  };
->  EXPORT_SYMBOL(init_ima_ns);
-> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-> index 005f9e784e7b..d44faf1c065d 100644
-> --- a/security/integrity/ima/ima_main.c
-> +++ b/security/integrity/ima/ima_main.c
-> @@ -38,10 +38,6 @@ int ima_appraise;
->  int __ro_after_init ima_hash_algo = HASH_ALGO_SHA1;
->  static int hash_setup_done;
->  
-> -static struct notifier_block ima_lsm_policy_notifier = {
-> -	.notifier_call = ima_lsm_policy_change,
-> -};
-> -
->  static int __init hash_setup(char *str)
->  {
->  	struct ima_template_desc *template_desc = ima_template_desc_current();
-> @@ -1089,7 +1085,7 @@ static int __init init_ima(void)
->  	if (error)
->  		return error;
->  
-> -	error = register_blocking_lsm_notifier(&ima_lsm_policy_notifier);
-> +	error = register_blocking_lsm_notifier(&ns->ima_lsm_policy_notifier);
->  	if (error)
->  		pr_warn("Couldn't register LSM notifier, error %d\n", error);
->  
-> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-> index 0a7c61ca3265..23c559c8fae9 100644
-> --- a/security/integrity/ima/ima_policy.c
-> +++ b/security/integrity/ima/ima_policy.c
-> @@ -368,7 +368,8 @@ static void ima_free_rule(struct ima_rule_entry *entry)
->  	kfree(entry);
->  }
->  
-> -static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry)
-> +static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_namespace *ns,
-> +						struct ima_rule_entry *entry)
->  {
->  	struct ima_rule_entry *nentry;
->  	int i;
-> @@ -399,18 +400,25 @@ static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry)
->  		ima_filter_rule_init(nentry->lsm[i].type, Audit_equal,
->  				     nentry->lsm[i].args_p,
->  				     &nentry->lsm[i].rule);
-> -		if (!nentry->lsm[i].rule)
-> -			pr_warn("rule for LSM \'%s\' is undefined\n",
-> -				nentry->lsm[i].args_p);
-> +		if (!nentry->lsm[i].rule) {
-> +			if (ns == &init_ima_ns)
-> +				pr_warn("rule for LSM \'%s\' is undefined\n",
-> +					nentry->lsm[i].args_p);
-> +			else
-> +				pr_warn_ratelimited
-> +					("rule for LSM \'%s\' is undefined\n",
-> +					 nentry->lsm[i].args_p);
-> +		}
->  	}
->  	return nentry;
->  }
->  
-> -static int ima_lsm_update_rule(struct ima_rule_entry *entry)
-> +static int ima_lsm_update_rule(struct ima_namespace *ns,
-> +			       struct ima_rule_entry *entry)
->  {
->  	struct ima_rule_entry *nentry;
->  
-> -	nentry = ima_lsm_copy_rule(entry);
-> +	nentry = ima_lsm_copy_rule(ns, entry);
->  	if (!nentry)
->  		return -ENOMEM;
->  
-> @@ -453,7 +461,7 @@ static void ima_lsm_update_rules(struct ima_namespace *ns)
->  		if (!ima_rule_contains_lsm_cond(entry))
->  			continue;
->  
-> -		result = ima_lsm_update_rule(entry);
-> +		result = ima_lsm_update_rule(ns, entry);
->  		if (result) {
->  			pr_err("lsm rule update error %d\n", result);
->  			return;
-> @@ -464,12 +472,14 @@ static void ima_lsm_update_rules(struct ima_namespace *ns)
->  int ima_lsm_policy_change(struct notifier_block *nb, unsigned long event,
->  			  void *lsm_data)
->  {
-> -	struct ima_namespace *ns = &init_ima_ns;
-> +	struct ima_namespace *ns;
->  
->  	if (event != LSM_POLICY_CHANGE)
->  		return NOTIFY_DONE;
->  
-> +	ns = container_of(nb, struct ima_namespace, ima_lsm_policy_notifier);
->  	ima_lsm_update_rules(ns);
-> +
->  	return NOTIFY_OK;
->  }
->  
-> -- 
-> 2.34.1
+Thanks,
+Longman
+

@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C253753041D
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 17:58:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0D51530410
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 17:58:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348140AbiEVP6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 11:58:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37964 "EHLO
+        id S1349059AbiEVP5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 11:57:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348937AbiEVP6J (ORCPT
+        with ESMTP id S1348426AbiEVP5W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 11:58:09 -0400
+        Sun, 22 May 2022 11:57:22 -0400
 Received: from herzl.nuvoton.co.il (unknown [212.199.177.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C98863B2A1;
-        Sun, 22 May 2022 08:58:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47EC3B295;
+        Sun, 22 May 2022 08:57:17 -0700 (PDT)
 Received: from taln60.nuvoton.co.il (ntil-fw [212.199.177.25])
-        by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 24MFp9as031646;
+        by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 24MFp9e2031647;
         Sun, 22 May 2022 18:51:09 +0300
 Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
-        id 6AD4263A4A; Sun, 22 May 2022 18:51:09 +0300 (IDT)
+        id 78CD763A4C; Sun, 22 May 2022 18:51:09 +0300 (IDT)
 From:   Tomer Maimon <tmaimon77@gmail.com>
 To:     avifishman70@gmail.com, tali.perry1@gmail.com, joel@jms.id.au,
         venture@google.com, yuenn@google.com, benjaminfair@google.com,
@@ -38,14 +38,13 @@ Cc:     soc@kernel.org, devicetree@vger.kernel.org,
         linux-serial@vger.kernel.org, linux-watchdog@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         Tomer Maimon <tmaimon77@gmail.com>
-Subject: [PATCH v1 13/19] dt-bindings: arm: npcm: Add maintainer
-Date:   Sun, 22 May 2022 18:50:40 +0300
-Message-Id: <20220522155046.260146-14-tmaimon77@gmail.com>
+Subject: [PATCH v1 14/19] dt-bindings: arm: npcm: Add nuvoton,npcm845 compatible string
+Date:   Sun, 22 May 2022 18:50:41 +0300
+Message-Id: <20220522155046.260146-15-tmaimon77@gmail.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20220522155046.260146-1-tmaimon77@gmail.com>
 References: <20220522155046.260146-1-tmaimon77@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
         FORGED_GMAIL_RCVD,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
@@ -59,38 +58,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Tomer Maimon to the maintainers list.
+Add a compatible string for Nuvoton BMC NPCM845 SoC and a board
+specific device tree for the NPCM845 (Arbel) evaluation board.
 
 Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
 ---
- Documentation/devicetree/bindings/arm/npcm/npcm.yaml        | 1 +
- Documentation/devicetree/bindings/arm/npcm/nuvoton,gcr.yaml | 1 +
- 2 files changed, 2 insertions(+)
+ Documentation/devicetree/bindings/arm/npcm/npcm.yaml | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/arm/npcm/npcm.yaml b/Documentation/devicetree/bindings/arm/npcm/npcm.yaml
-index 95e51378089c..ea9c3103761d 100644
+index ea9c3103761d..43409e5721d5 100644
 --- a/Documentation/devicetree/bindings/arm/npcm/npcm.yaml
 +++ b/Documentation/devicetree/bindings/arm/npcm/npcm.yaml
-@@ -8,6 +8,7 @@ title: NPCM Platforms Device Tree Bindings
+@@ -27,4 +27,10 @@ properties:
+               - nuvoton,npcm750-evb         # NPCM750 evaluation board
+           - const: nuvoton,npcm750
  
- maintainers:
-   - Jonathan Neuschäfer <j.neuschaefer@gmx.net>
-+  - Tomer Maimon <tmaimon77@gmail.com>
- 
- properties:
-   $nodename:
-diff --git a/Documentation/devicetree/bindings/arm/npcm/nuvoton,gcr.yaml b/Documentation/devicetree/bindings/arm/npcm/nuvoton,gcr.yaml
-index fcb211add7d3..aad7c85e787f 100644
---- a/Documentation/devicetree/bindings/arm/npcm/nuvoton,gcr.yaml
-+++ b/Documentation/devicetree/bindings/arm/npcm/nuvoton,gcr.yaml
-@@ -8,6 +8,7 @@ title: Global Control Registers block in Nuvoton SoCs
- 
- maintainers:
-   - Jonathan Neuschäfer <j.neuschaefer@gmx.net>
-+  - Tomer Maimon <tmaimon77@gmail.com>
- 
- description:
-   The Global Control Registers (GCR) are a block of registers in Nuvoton SoCs
++      - description: NPCM845 based boards
++        items:
++          - enum:
++              - nuvoton,npcm845-evb         # NPCM845 evaluation board
++          - const: nuvoton,npcm845
++
+ additionalProperties: true
 -- 
 2.33.0
 

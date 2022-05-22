@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25CDA53025D
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 12:22:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8499453025A
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 12:22:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241331AbiEVKWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 06:22:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60996 "EHLO
+        id S243451AbiEVKWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 06:22:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230244AbiEVKV6 (ORCPT
+        with ESMTP id S243791AbiEVKWT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 06:21:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B7C335A8C
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 03:21:54 -0700 (PDT)
+        Sun, 22 May 2022 06:22:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1001F36B55
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 03:22:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653214913;
+        s=mimecast20190719; t=1653214937;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ajSKHpDgMxCnIlOKAJfBL23NVlLdxTAamDLVJE7LOew=;
-        b=D6wvRPrUreFhDLPEhWvPD9xozK3MjAh1fcPUTqExhmoLlExpE51bpnEfgsfXHhDQNMquDq
-        kXb5BhOVv8GCHUrIL8ZD2Qr36zLuvy8/USEXOL85uPbtwWzEMxJz/P8i8j74RkPK1FA+Jk
-        vq9n1anzr9VIMY6w7R6zSF+d7+0B00M=
+        bh=b/PRTGgzJSajLmASm1ImWykhYRAoLKce07yOgwd/E/o=;
+        b=IH0X6jqtlg4aOOaWaSkgVaGjYNZinM6AZuLW8bQyte9qQtpCSGvLiUkzMFOyWiTp2MCON6
+        ET4mZs2dIRV5st3Yy4Pz/zsmX6wmS4Eo2s3GDitVIa3uxN+ofKT+Tb6YR3UdXzKWU/0RdO
+        s9PhEBjHpnwECDdgfozJqsv719VhHEM=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-621-LOb20kgOPOukB8UtH84T5A-1; Sun, 22 May 2022 06:21:50 -0400
-X-MC-Unique: LOb20kgOPOukB8UtH84T5A-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+ us-mta-292-78527TvaMxCx363TuhOEMA-1; Sun, 22 May 2022 06:22:13 -0400
+X-MC-Unique: 78527TvaMxCx363TuhOEMA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E1D461C05AED;
-        Sun, 22 May 2022 10:21:48 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0ADC71C05AEF;
+        Sun, 22 May 2022 10:22:12 +0000 (UTC)
 Received: from starship (unknown [10.40.192.55])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B29232026D6A;
-        Sun, 22 May 2022 10:21:42 +0000 (UTC)
-Message-ID: <e79a98afda1920a3f8fadd13dc6a20ef2719eeb2.camel@redhat.com>
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7845340CFD00;
+        Sun, 22 May 2022 10:22:06 +0000 (UTC)
+Message-ID: <5ed0d0e5a88bbee2f95d794dbbeb1ad16789f319.camel@redhat.com>
 Subject: Re: [RFC PATCH v3 04/19] KVM: x86: mmu: allow to enable write
  tracking externally
 From:   Maxim Levitsky <mlevitsk@redhat.com>
@@ -64,18 +64,18 @@ Cc:     kvm@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
         intel-gvt-dev@lists.freedesktop.org,
         dri-devel@lists.freedesktop.org
-Date:   Sun, 22 May 2022 13:21:41 +0300
-In-Reply-To: <YoZv8HmRc7tqQbuL@google.com>
+Date:   Sun, 22 May 2022 13:22:05 +0300
+In-Reply-To: <YoZyWOh4NPA0uN5J@google.com>
 References: <20220427200314.276673-1-mlevitsk@redhat.com>
-         <20220427200314.276673-5-mlevitsk@redhat.com> <YoZv8HmRc7tqQbuL@google.com>
+         <20220427200314.276673-5-mlevitsk@redhat.com> <YoZyWOh4NPA0uN5J@google.com>
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,132 +83,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-05-19 at 16:27 +0000, Sean Christopherson wrote:
+On Thu, 2022-05-19 at 16:37 +0000, Sean Christopherson wrote:
 > On Wed, Apr 27, 2022, Maxim Levitsky wrote:
-> > This will be used to enable write tracking from nested AVIC code
-> > and can also be used to enable write tracking in GVT-g module
-> > when it actually uses it as opposed to always enabling it,
-> > when the module is compiled in the kernel.
+> > @@ -5753,6 +5752,10 @@ int kvm_mmu_init_vm(struct kvm *kvm)
+> >  	node->track_write = kvm_mmu_pte_write;
+> >  	node->track_flush_slot = kvm_mmu_invalidate_zap_pages_in_memslot;
+> >  	kvm_page_track_register_notifier(kvm, node);
 > 
-> Wrap at ~75.
-Well, the checkpatch.pl didn't complain, so I didn't notice.
+> Can you add a patch to move this call to kvm_page_track_register_notifier() into
+> mmu_enable_write_tracking(), and simultaneously add a WARN in the register path
+> that page tracking is enabled?
+> 
+> Oh, actually, a better idea. Add an inner __kvm_page_track_register_notifier()
+> that is not exported and thus used only by KVM, invoke mmu_enable_write_tracking()
+> from the exported kvm_page_track_register_notifier(), and then do the above.
+> That will require modifying KVMGT and KVM in a single patch, but that's ok.
+> 
+> That will avoid any possibility of an external user failing to enabling tracking
+> before registering its notifier, and also avoids bikeshedding over what to do with
+> the one-line wrapper to enable tracking.
+> 
 
-> 
-> > No functional change intended.
-> > 
-> > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> > ---
-> >  arch/x86/include/asm/kvm_host.h       |  2 +-
-> >  arch/x86/include/asm/kvm_page_track.h |  1 +
-> >  arch/x86/kvm/mmu.h                    |  8 +++++---
-> >  arch/x86/kvm/mmu/mmu.c                | 17 ++++++++++-------
-> >  arch/x86/kvm/mmu/page_track.c         | 10 ++++++++--
-> >  5 files changed, 25 insertions(+), 13 deletions(-)
-> > 
-> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> > index 636df87542555..fc7df778a3d71 100644
-> > --- a/arch/x86/include/asm/kvm_host.h
-> > +++ b/arch/x86/include/asm/kvm_host.h
-> > @@ -1254,7 +1254,7 @@ struct kvm_arch {
-> >  	 * is used as one input when determining whether certain memslot
-> >  	 * related allocations are necessary.
-> >  	 */
-> 
-> The above comment needs to be rewritten.
-Good catch, thank a lot!!
+This is a good idea as well, especially looking at kvmgt and seeing that
+it registers the page track notifier, when the vGPU is opened.
 
-> 
-> > -	bool shadow_root_allocated;
-> > +	bool mmu_page_tracking_enabled;
-> >  #if IS_ENABLED(CONFIG_HYPERV)
-> >  	hpa_t	hv_root_tdp;
-> > diff --git a/arch/x86/include/asm/kvm_page_track.h b/arch/x86/include/asm/kvm_page_track.h
-> > index eb186bc57f6a9..955a5ae07b10e 100644
-> > --- a/arch/x86/include/asm/kvm_page_track.h
-> > +++ b/arch/x86/include/asm/kvm_page_track.h
-> > @@ -50,6 +50,7 @@ int kvm_page_track_init(struct kvm *kvm);
-> >  void kvm_page_track_cleanup(struct kvm *kvm);
-> >  
-> >  bool kvm_page_track_write_tracking_enabled(struct kvm *kvm);
-> > +int kvm_page_track_write_tracking_enable(struct kvm *kvm);
-> >  int kvm_page_track_write_tracking_alloc(struct kvm_memory_slot *slot);
-> >  
-> >  void kvm_page_track_free_memslot(struct kvm_memory_slot *slot);
-> > diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
-> > index 671cfeccf04e9..44d15551f7156 100644
-> > --- a/arch/x86/kvm/mmu.h
-> > +++ b/arch/x86/kvm/mmu.h
-> > @@ -269,7 +269,7 @@ int kvm_arch_write_log_dirty(struct kvm_vcpu *vcpu);
-> >  int kvm_mmu_post_init_vm(struct kvm *kvm);
-> >  void kvm_mmu_pre_destroy_vm(struct kvm *kvm);
-> >  
-> > -static inline bool kvm_shadow_root_allocated(struct kvm *kvm)
-> > +static inline bool mmu_page_tracking_enabled(struct kvm *kvm)
-> >  {
-> >  	/*
-> >  	 * Read shadow_root_allocated before related pointers. Hence, threads
-> > @@ -277,9 +277,11 @@ static inline bool kvm_shadow_root_allocated(struct kvm *kvm)
-> >  	 * see the pointers. Pairs with smp_store_release in
-> >  	 * mmu_first_shadow_root_alloc.
-> >  	 */
-> 
-> This comment also needs to be rewritten.
-Also thanks a lot, next time I'll check comments better.
+I'll do this in the next series.
 
-> 
-> > -	return smp_load_acquire(&kvm->arch.shadow_root_allocated);
-> > +	return smp_load_acquire(&kvm->arch.mmu_page_tracking_enabled);
-> >  }
-> 
-> ...
-> 
-> > diff --git a/arch/x86/kvm/mmu/page_track.c b/arch/x86/kvm/mmu/page_track.c
-> > index 2e09d1b6249f3..8857d629036d7 100644
-> > --- a/arch/x86/kvm/mmu/page_track.c
-> > +++ b/arch/x86/kvm/mmu/page_track.c
-> > @@ -21,10 +21,16 @@
-> >  
-> >  bool kvm_page_track_write_tracking_enabled(struct kvm *kvm)
-> 
-> This can be static, it's now used only by page_track.c.
-I'll fix this.
-> 
-> >  {
-> > -	return IS_ENABLED(CONFIG_KVM_EXTERNAL_WRITE_TRACKING) ||
-> > -	       !tdp_enabled || kvm_shadow_root_allocated(kvm);
-> > +	return mmu_page_tracking_enabled(kvm);
-> >  }
-> >  
-> > +int kvm_page_track_write_tracking_enable(struct kvm *kvm)
-> 
-> This is too similar to the "enabled" version; "kvm_page_track_enable_write_tracking()"
-> would maintain namespacing and be less confusing.
-Makes sense, thanks, will do!
-
-> 
-> Hmm, I'd probably vote to make this a "static inline" in kvm_page_track.h, and
-> rename mmu_enable_write_tracking() to kvm_mmu_enable_write_tracking and export.
-> Not a strong preference, just feels silly to export a one-liner.
-
-The sole reason I did it this way, because 'page_track.c' this way contains all the interfaces
-that an external user of write tracking needs to use.
-
-> 
-> > +{
-> > +	return mmu_enable_write_tracking(kvm);
-> > +}
-> > +EXPORT_SYMBOL_GPL(kvm_page_track_write_tracking_enable);
-> > +
-> > +
-> >  void kvm_page_track_free_memslot(struct kvm_memory_slot *slot)
-> >  {
-> >  	int i;
-> > -- 
-> > 2.26.3
-> > 
+Thanks for the review!
 
 Best regards,
 	Maxim Levitsky
-
-
 

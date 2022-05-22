@@ -2,425 +2,471 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8C86530274
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 12:37:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32AE353026F
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 12:34:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241595AbiEVKhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 06:37:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58646 "EHLO
+        id S244018AbiEVKeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 06:34:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231797AbiEVKhC (ORCPT
+        with ESMTP id S230336AbiEVKeA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 06:37:02 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C0EEF591
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 03:37:00 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id n18so10773502plg.5
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 03:37:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KGP10ZJ775EICU1/ZGH2ozhsaykkvwVH39/rwkQrEKs=;
-        b=ED2NiYr/e2/8BQILNcZO0Vo1+bXBAM890Ml7OaVVmLatyJ9QS02Tm2dnr/SFNU1nef
-         RKGSy9WXlr/wHF3BMJbCJJBfKaFLbdwb3GRyJwHl3R+b1JPhHmIgDLZZHeHUYTsDCJIV
-         v+YXgdNKYZSLoHsbu5Wh/KZj1G46Y1MqYR1wmoFyCKRbQ8YGw3rP1NPG+2kWbynkjlqt
-         8KS97sERdMW38BZICFxXQsVZC7hHlNhql54orzJmtUZJQPqHO04Wd/dL7n/Oapy+hfIf
-         68XO3hSawqnvDCalCc5/IK4Uq/4roWvdR9ZSf6TvrUN0WrCzqfD13wGfS9ZmFSUC3wLS
-         xtZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KGP10ZJ775EICU1/ZGH2ozhsaykkvwVH39/rwkQrEKs=;
-        b=WIDmXkapjBLT4F/opWX2IcHkH6PTvFWsnrDjY/OODmo23lFyF2DiVkYVtLuTVZwmec
-         tSkbY+kE3Fs7uXWb0ZoIkpMzjsnIqOqxSncuDfpzw66GsiDa4yjEGXcS4qH+IPOUhMuP
-         torREMpRXdGMGb7lF6lCEJ0NjOyy8zs4D3c8PUbKksCjhKU5yfHj22bhLM7x/UnxZ6Vb
-         khrM+E0uxK+Fqh0ldoFqL9SFapOydWbhI6jomeSuCst+nz3WAGocS74c+wgyHsaBcz3t
-         ISuO1r0bgxgQgdq57z2y+qQqGHONMwjo8fwbeAQXdI9ojqz2wGXISEETMgTXfHnQQXNR
-         vK1Q==
-X-Gm-Message-State: AOAM532qM+RmfAbY56TohBCFiG5gFscMqqCuKm5NsJqaPA8ksGa5KD1d
-        eqWXZjUhIpju39TKhb2xXuGe+w==
-X-Google-Smtp-Source: ABdhPJwW5MGb9dFPhPFRtJ79q3A+O5JvUtkFqn+AQMDu+PninjQSsA9TwstHa1a8UCknztuk3139Bw==
-X-Received: by 2002:a17:903:40cc:b0:162:7ca:d83b with SMTP id t12-20020a17090340cc00b0016207cad83bmr6124087pld.56.1653215819738;
-        Sun, 22 May 2022 03:36:59 -0700 (PDT)
-Received: from localhost ([139.177.225.234])
-        by smtp.gmail.com with ESMTPSA id a5-20020a170902ecc500b0015e8d4eb1b6sm2943022plh.0.2022.05.22.03.36.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 May 2022 03:36:59 -0700 (PDT)
-Date:   Sun, 22 May 2022 18:36:56 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Dave Chinner <dchinner@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: Re: [PATCH v3 2/6] mm: shrinkers: introduce debugfs interface for
- memory shrinkers
-Message-ID: <YooSSCnphhuwfOOc@FVFYT0MHHV2J.usts.net>
-References: <20220509183820.573666-1-roman.gushchin@linux.dev>
- <20220509183820.573666-3-roman.gushchin@linux.dev>
+        Sun, 22 May 2022 06:34:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15A4A26130;
+        Sun, 22 May 2022 03:33:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D16560F83;
+        Sun, 22 May 2022 10:33:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A63A3C385AA;
+        Sun, 22 May 2022 10:33:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653215637;
+        bh=85hkRNVyf1Uy2k5yw9ykzV4vt2NUhhJ7URmre6Dk6Iw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=MWlTWgGr6KrmcwCvoyg73jQurgqxNbiZbq84DBrGxH5o3oxYgTMvmb4AcAdqNt3Es
+         7ulgzty4fWhbgRw7/JkxWnfOyyOghcG74L1k+yDJfrv76feYGhsJsChcR17JJMb+7L
+         Clk4vS9e6Ecd8wO/yZg5PFBTlwKWHS4HjB5xt5fEup/o22LKYgRkKQ6LG0dI+NGY8n
+         5aMgy5UGVECK3tubeFGpuzWdAhMQSXrVJ1RSN5V2DCXf1lHe2eoPFGVaDCJLFDMNhb
+         GzMPaE4zXq9KZuhstWDIwYNZ6hkD73cktybs+xqwXe0n76mkBehNTF7CRViUN8Kum2
+         ZXZPMqMdVkqKw==
+Date:   Sun, 22 May 2022 11:42:43 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lars@metafoo.de, joel@jms.id.au
+Subject: Re: [PATCH] iio: pressure: dps310: Reset chip if MEAS_CFG is
+ corrupt
+Message-ID: <20220522114243.27e20f56@jic23-huawei>
+In-Reply-To: <75aa9c31-380d-c6f6-8cb3-9dd50bacabda@linux.ibm.com>
+References: <20220511192724.51845-1-eajames@linux.ibm.com>
+        <20220514160200.091d40ca@jic23-huawei>
+        <75aa9c31-380d-c6f6-8cb3-9dd50bacabda@linux.ibm.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220509183820.573666-3-roman.gushchin@linux.dev>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 09, 2022 at 11:38:16AM -0700, Roman Gushchin wrote:
-> This commit introduces the /sys/kernel/debug/shrinker debugfs
-> interface which provides an ability to observe the state of
-> individual kernel memory shrinkers.
-> 
-> Because the feature adds some memory overhead (which shouldn't be
-> large unless there is a huge amount of registered shrinkers), it's
-> guarded by a config option (enabled by default).
-> 
-> This commit introduces the "count" interface for each shrinker
-> registered in the system.
-> 
-> The output is in the following format:
+On Wed, 18 May 2022 09:07:08 -0500
+Eddie James <eajames@linux.ibm.com> wrote:
 
-Hi Roman,
-
-Shoud we print a title to show what those numbers mean?  In this case,
-it is more understandable.
-
-> <cgroup inode id> <nr of objects on node 0> <nr of objects on node 1>...
-> <cgroup inode id> <nr of objects on node 0> <nr of objects on node 1>...
-> ...
-> 
-> To reduce the size of output on machines with many thousands cgroups,
-> if the total number of objects on all nodes is 0, the line is omitted.
-> 
-> If the shrinker is not memcg-aware or CONFIG_MEMCG is off, 0 is
-> printed as cgroup inode id. If the shrinker is not numa-aware, 0's are
-> printed for all nodes except the first one.
-> 
-> This commit gives debugfs entries simple numeric names, which are not
-> very convenient. The following commit in the series will provide
-> shrinkers with more meaningful names.
-> 
-> Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
-> ---
->  include/linux/shrinker.h |  19 ++++-
->  lib/Kconfig.debug        |   9 +++
->  mm/Makefile              |   1 +
->  mm/shrinker_debug.c      | 171 +++++++++++++++++++++++++++++++++++++++
->  mm/vmscan.c              |   6 +-
->  5 files changed, 203 insertions(+), 3 deletions(-)
->  create mode 100644 mm/shrinker_debug.c
-> 
-> diff --git a/include/linux/shrinker.h b/include/linux/shrinker.h
-> index 76fbf92b04d9..2ced8149c513 100644
-> --- a/include/linux/shrinker.h
-> +++ b/include/linux/shrinker.h
-> @@ -72,6 +72,10 @@ struct shrinker {
->  #ifdef CONFIG_MEMCG
->  	/* ID in shrinker_idr */
->  	int id;
-> +#endif
-> +#ifdef CONFIG_SHRINKER_DEBUG
-> +	int debugfs_id;
-> +	struct dentry *debugfs_entry;
->  #endif
->  	/* objs pending delete, per node */
->  	atomic_long_t *nr_deferred;
-> @@ -94,4 +98,17 @@ extern int register_shrinker(struct shrinker *shrinker);
->  extern void unregister_shrinker(struct shrinker *shrinker);
->  extern void free_prealloced_shrinker(struct shrinker *shrinker);
->  extern void synchronize_shrinkers(void);
-> -#endif
-> +
-> +#ifdef CONFIG_SHRINKER_DEBUG
-> +extern int shrinker_debugfs_add(struct shrinker *shrinker);
-> +extern void shrinker_debugfs_remove(struct shrinker *shrinker);
-> +#else /* CONFIG_SHRINKER_DEBUG */
-> +static inline int shrinker_debugfs_add(struct shrinker *shrinker)
-> +{
-> +	return 0;
-> +}
-> +static inline void shrinker_debugfs_remove(struct shrinker *shrinker)
-> +{
-> +}
-> +#endif /* CONFIG_SHRINKER_DEBUG */
-> +#endif /* _LINUX_SHRINKER_H */
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index 3fd7a2e9eaf1..5fa65a649798 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -733,6 +733,15 @@ config SLUB_STATS
->  	  out which slabs are relevant to a particular load.
->  	  Try running: slabinfo -DA
->  
-> +config SHRINKER_DEBUG
-> +	default y
-> +	bool "Enable shrinker debugging support"
-> +	depends on DEBUG_FS
-> +	help
-> +	  Say Y to enable the shrinker debugfs interface which provides
-> +	  visibility into the kernel memory shrinkers subsystem.
-> +	  Disable it to avoid an extra memory footprint.
-> +
->  config HAVE_DEBUG_KMEMLEAK
->  	bool
->  
-> diff --git a/mm/Makefile b/mm/Makefile
-> index 298c9991ab75..8083fa85a348 100644
-> --- a/mm/Makefile
-> +++ b/mm/Makefile
-> @@ -133,3 +133,4 @@ obj-$(CONFIG_PAGE_REPORTING) += page_reporting.o
->  obj-$(CONFIG_IO_MAPPING) += io-mapping.o
->  obj-$(CONFIG_HAVE_BOOTMEM_INFO_NODE) += bootmem_info.o
->  obj-$(CONFIG_GENERIC_IOREMAP) += ioremap.o
-> +obj-$(CONFIG_SHRINKER_DEBUG) += shrinker_debug.o
-> diff --git a/mm/shrinker_debug.c b/mm/shrinker_debug.c
-> new file mode 100644
-> index 000000000000..fd1f805a581a
-> --- /dev/null
-> +++ b/mm/shrinker_debug.c
-> @@ -0,0 +1,171 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <linux/idr.h>
-> +#include <linux/slab.h>
-> +#include <linux/debugfs.h>
-> +#include <linux/seq_file.h>
-> +#include <linux/shrinker.h>
-> +#include <linux/memcontrol.h>
-> +
-> +/* defined in vmscan.c */
-> +extern struct rw_semaphore shrinker_rwsem;
-> +extern struct list_head shrinker_list;
-> +
-> +static DEFINE_IDA(shrinker_debugfs_ida);
-> +static struct dentry *shrinker_debugfs_root;
-> +
-> +static unsigned long shrinker_count_objects(struct shrinker *shrinker,
-> +					    struct mem_cgroup *memcg,
-> +					    unsigned long *count_per_node)
-> +{
-> +	unsigned long nr, total = 0;
-> +	int nid;
-> +
-> +	for_each_node(nid) {
-> +		if (nid == 0 || (shrinker->flags & SHRINKER_NUMA_AWARE)) {
-> +			struct shrink_control sc = {
-> +				.gfp_mask = GFP_KERNEL,
-> +				.nid = nid,
-> +				.memcg = memcg,
-> +			};
-> +
-> +			nr = shrinker->count_objects(shrinker, &sc);
-> +			if (nr == SHRINK_EMPTY)
-> +				nr = 0;
-> +		} else {
-> +			nr = 0;
-
-For efficiency, we could break here, right?
-
-> +		}
-> +
-> +		count_per_node[nid] = nr;
-> +		total += nr;
-> +	}
-> +
-> +	return total;
-> +}
-> +
-> +static int shrinker_debugfs_count_show(struct seq_file *m, void *v)
-> +{
-> +	struct shrinker *shrinker = (struct shrinker *)m->private;
-
-Maybe we cound drop the cast since m->private is a void * type.
-
-> +	unsigned long *count_per_node = NULL;
-
-Do not need to be initialized, right?
-
-> +	struct mem_cgroup *memcg;
-> +	unsigned long total;
-> +	bool memcg_aware;
-> +	int ret, nid;
-> +
-> +	count_per_node = kcalloc(nr_node_ids, sizeof(unsigned long), GFP_KERNEL);
-> +	if (!count_per_node)
-> +		return -ENOMEM;
-> +
-> +	ret = down_read_killable(&shrinker_rwsem);
-> +	if (ret) {
-> +		kfree(count_per_node);
-> +		return ret;
-> +	}
-> +	rcu_read_lock();
-> +
-> +	memcg_aware = shrinker->flags & SHRINKER_MEMCG_AWARE;
-> +
-> +	memcg = mem_cgroup_iter(NULL, NULL, NULL);
-> +	do {
-> +		if (memcg && !mem_cgroup_online(memcg))
-> +			continue;
-> +
-> +		total = shrinker_count_objects(shrinker,
-> +					       memcg_aware ? memcg : NULL,
-> +					       count_per_node);
-> +		if (total) {
-> +			seq_printf(m, "%lu", mem_cgroup_ino(memcg));
-> +			for_each_node(nid)
-> +				seq_printf(m, " %lu", count_per_node[nid]);
-> +			seq_puts(m, "\n");
-
-seq_putc(m, '\n') is more efficient.
-
-> +		}
-> +
-> +		if (!memcg_aware) {
-> +			mem_cgroup_iter_break(NULL, memcg);
-> +			break;
-> +		}
-> +
-> +		if (signal_pending(current)) {
-> +			mem_cgroup_iter_break(NULL, memcg);
-> +			ret = -EINTR;
-> +			break;
-> +		}
-> +
-> +		cond_resched();
-
-We are in rcu read lock, cannot be scheduled, right?
-
-> +	} while ((memcg = mem_cgroup_iter(NULL, memcg, NULL)) != NULL);
-> +
-> +	rcu_read_unlock();
-> +	up_read(&shrinker_rwsem);
-> +
-> +	kfree(count_per_node);
-> +	return ret;
-> +}
-> +DEFINE_SHOW_ATTRIBUTE(shrinker_debugfs_count);
-> +
-> +int shrinker_debugfs_add(struct shrinker *shrinker)
-> +{
-> +	struct dentry *entry;
-> +	char buf[16];
-> +	int id;
-> +
-> +	lockdep_assert_held(&shrinker_rwsem);
-> +
-> +	/* debugfs isn't initialized yet, add debugfs entries later. */
-> +	if (!shrinker_debugfs_root)
-> +		return 0;
-> +
-> +	id = ida_alloc(&shrinker_debugfs_ida, GFP_KERNEL);
-> +	if (id < 0)
-> +		return id;
-> +	shrinker->debugfs_id = id;
-> +
-> +	snprintf(buf, sizeof(buf), "%d", id);
-> +
-> +	/* create debugfs entry */
-> +	entry = debugfs_create_dir(buf, shrinker_debugfs_root);
-> +	if (IS_ERR(entry)) {
-> +		ida_free(&shrinker_debugfs_ida, id);
-> +		return PTR_ERR(entry);
-> +	}
-> +	shrinker->debugfs_entry = entry;
-> +
-> +	debugfs_create_file("count", 0220, entry, shrinker,
-> +			    &shrinker_debugfs_count_fops);
-> +	return 0;
-> +}
-> +
-> +void shrinker_debugfs_remove(struct shrinker *shrinker)
-> +{
-> +	lockdep_assert_held(&shrinker_rwsem);
-> +
-> +	if (!shrinker->debugfs_entry)
-> +		return;
-> +
-> +	debugfs_remove_recursive(shrinker->debugfs_entry);
-> +	ida_free(&shrinker_debugfs_ida, shrinker->debugfs_id);
-> +}
-> +
-> +static int __init shrinker_debugfs_init(void)
-> +{
-> +	struct shrinker *shrinker;
-> +	int ret;
-> +
-> +	if (!debugfs_initialized())
-> +		return -ENODEV;
-> +
-
-Redundant check since it is checked in debugfs_create_dir().
-So I think we could remove this.
-
-> +	shrinker_debugfs_root = debugfs_create_dir("shrinker", NULL);
-
-We should use IS_ERR() to detect the error code.  So the following
-check is wrong.
-
-> +	if (!shrinker_debugfs_root)
-> +		return -ENOMEM;
-> +
-> +	/* Create debugfs entries for shrinkers registered at boot */
-> +	ret = down_write_killable(&shrinker_rwsem);
-
-How could we kill this process?  IIUC, late_initcall() is called
-from early init process, there is no way to kill this. Right?
-If yes, I think we could just use down_write().
-
-Thanks.
-
-> +	if (ret)
-> +		return ret;
-> +
-> +	list_for_each_entry(shrinker, &shrinker_list, list)
-> +		if (!shrinker->debugfs_entry)
-> +			ret = shrinker_debugfs_add(shrinker);
-> +	up_write(&shrinker_rwsem);
-> +
-> +	return ret;
-> +}
-> +late_initcall(shrinker_debugfs_init);
-> diff --git a/mm/vmscan.c b/mm/vmscan.c
-> index c6918fff06e1..024f7056b98c 100644
-> --- a/mm/vmscan.c
-> +++ b/mm/vmscan.c
-> @@ -190,8 +190,8 @@ static void set_task_reclaim_state(struct task_struct *task,
->  	task->reclaim_state = rs;
->  }
->  
-> -static LIST_HEAD(shrinker_list);
-> -static DECLARE_RWSEM(shrinker_rwsem);
-> +LIST_HEAD(shrinker_list);
-> +DECLARE_RWSEM(shrinker_rwsem);
->  
->  #ifdef CONFIG_MEMCG
->  static int shrinker_nr_max;
-> @@ -655,6 +655,7 @@ void register_shrinker_prepared(struct shrinker *shrinker)
->  	down_write(&shrinker_rwsem);
->  	list_add_tail(&shrinker->list, &shrinker_list);
->  	shrinker->flags |= SHRINKER_REGISTERED;
-> +	WARN_ON_ONCE(shrinker_debugfs_add(shrinker));
->  	up_write(&shrinker_rwsem);
->  }
->  
-> @@ -682,6 +683,7 @@ void unregister_shrinker(struct shrinker *shrinker)
->  	shrinker->flags &= ~SHRINKER_REGISTERED;
->  	if (shrinker->flags & SHRINKER_MEMCG_AWARE)
->  		unregister_memcg_shrinker(shrinker);
-> +	shrinker_debugfs_remove(shrinker);
->  	up_write(&shrinker_rwsem);
->  
->  	kfree(shrinker->nr_deferred);
-> -- 
-> 2.35.3
+> On 5/14/22 10:02, Jonathan Cameron wrote:
+> > On Wed, 11 May 2022 14:27:24 -0500
+> > Eddie James <eajames@linux.ibm.com> wrote:
+> >  
+> >> Corruption of the MEAS_CFG register has been observed soon after
+> >> system boot. In order to recover this scenario, check MEAS_CFG if
+> >> measurement isn't ready, and if it's incorrect, reset the DPS310
+> >> and write all the necessary registers.
+> >>
+> >> Signed-off-by: Eddie James <eajames@linux.ibm.com>  
+> > It's a large patch, so not an ideal 'fix' to backport, but
+> > if we need to for platforms to work we should do so.
+> >
+> > Hence, please add a Fixes tag (which I'm guessing will be the driver
+> > being added in the first place).
+> >
+> > Whilst tidying up might be nice, we shouldn't do refactoring that's not
+> > strictly necessary in a fix patch.  Hence I'd prefer this as a two patch
+> > series. Refactor with no functional changes, then the actual change.  
 > 
 > 
+> Sure thing.
+> 
+> 
+> >
+> > A couple of minor queries inline,
+> >
+> > Thanks,
+> >
+> > Jonathan
+> >
+> >
+> >  
+> >> ---
+> >>   drivers/iio/pressure/dps310.c | 280 +++++++++++++++++++++-------------
+> >>   1 file changed, 173 insertions(+), 107 deletions(-)
+> >>
+> >> diff --git a/drivers/iio/pressure/dps310.c b/drivers/iio/pressure/dps310.c
+> >> index 36fb7ae0d0a9..39f84614f44e 100644
+> >> --- a/drivers/iio/pressure/dps310.c
+> >> +++ b/drivers/iio/pressure/dps310.c
+> >> @@ -159,6 +159,106 @@ static int dps310_get_coefs(struct dps310_data *data)
+> >>   	return 0;
+> >>   }
+> >>   
+> >> +/*
+> >> + * Some verions of chip will read temperatures in the ~60C range when
+> >> + * its actually ~20C. This is the manufacturer recommended workaround
+> >> + * to correct the issue. The registers used below are undocumented.
+> >> + */
+> >> +static int dps310_temp_workaround(struct dps310_data *data)
+> >> +{
+> >> +	int rc;
+> >> +	int reg;
+> >> +
+> >> +	rc = regmap_read(data->regmap, 0x32, &reg);
+> >> +	if (rc < 0)
+> >> +		return rc;
+> >> +
+> >> +	/*
+> >> +	 * If bit 1 is set then the device is okay, and the workaround does not
+> >> +	 * need to be applied
+> >> +	 */
+> >> +	if (reg & BIT(1))
+> >> +		return 0;
+> >> +
+> >> +	rc = regmap_write(data->regmap, 0x0e, 0xA5);
+> >> +	if (rc < 0)
+> >> +		return rc;
+> >> +
+> >> +	rc = regmap_write(data->regmap, 0x0f, 0x96);
+> >> +	if (rc < 0)
+> >> +		return rc;
+> >> +
+> >> +	rc = regmap_write(data->regmap, 0x62, 0x02);
+> >> +	if (rc < 0)
+> >> +		return rc;
+> >> +
+> >> +	rc = regmap_write(data->regmap, 0x0e, 0x00);
+> >> +	if (rc < 0)
+> >> +		return rc;
+> >> +
+> >> +	return regmap_write(data->regmap, 0x0f, 0x00);
+> >> +}
+> >> +
+> >> +static int dps310_startup(struct dps310_data *data)
+> >> +{
+> >> +	int rc;
+> >> +	int ready;
+> >> +
+> >> +	/*
+> >> +	 * Set up pressure sensor in single sample, one measurement per second
+> >> +	 * mode
+> >> +	 */
+> >> +	rc = regmap_write(data->regmap, DPS310_PRS_CFG, 0);
+> >> +	if (rc < 0)
+> >> +		return rc;
+> >> +
+> >> +	/*
+> >> +	 * Set up external (MEMS) temperature sensor in single sample, one
+> >> +	 * measurement per second mode
+> >> +	 */
+> >> +	rc = regmap_write(data->regmap, DPS310_TMP_CFG, DPS310_TMP_EXT);
+> >> +	if (rc < 0)
+> >> +		return rc;
+> >> +
+> >> +	/* Temp and pressure shifts are disabled when PRC <= 8 */
+> >> +	rc = regmap_write_bits(data->regmap, DPS310_CFG_REG,
+> >> +			       DPS310_PRS_SHIFT_EN | DPS310_TMP_SHIFT_EN, 0);
+> >> +	if (rc < 0)
+> >> +		return rc;
+> >> +
+> >> +	/* MEAS_CFG doesn't update correctly unless first written with 0 */
+> >> +	rc = regmap_write_bits(data->regmap, DPS310_MEAS_CFG,
+> >> +			       DPS310_MEAS_CTRL_BITS, 0);
+> >> +	if (rc < 0)
+> >> +		return rc;
+> >> +
+> >> +	/* Turn on temperature and pressure measurement in the background */
+> >> +	rc = regmap_write_bits(data->regmap, DPS310_MEAS_CFG,
+> >> +			       DPS310_MEAS_CTRL_BITS, DPS310_PRS_EN |
+> >> +			       DPS310_TEMP_EN | DPS310_BACKGROUND);
+> >> +	if (rc < 0)
+> >> +		return rc;
+> >> +
+> >> +	/*
+> >> +	 * Calibration coefficients required for reporting temperature.
+> >> +	 * They are available 40ms after the device has started
+> >> +	 */
+> >> +	rc = regmap_read_poll_timeout(data->regmap, DPS310_MEAS_CFG, ready,
+> >> +				      ready & DPS310_COEF_RDY, 10000, 40000);
+> >> +	if (rc < 0)
+> >> +		return rc;
+> >> +
+> >> +	rc = dps310_get_coefs(data);
+> >> +	if (rc < 0)
+> >> +		return rc;
+> >> +
+> >> +	rc = dps310_temp_workaround(data);
+> >> +	if (rc < 0)
+> >> +		return rc;
+> >> +
+> >> +	return 0;
+> >> +}
+> >> +
+> >>   static int dps310_get_pres_precision(struct dps310_data *data)
+> >>   {
+> >>   	int rc;
+> >> @@ -297,6 +397,38 @@ static int dps310_get_temp_k(struct dps310_data *data)
+> >>   	return scale_factors[ilog2(rc)];
+> >>   }
+> >>   
+> >> +/* Called with lock held */
+> >> +static int dps310_verify_meas_cfg(struct dps310_data *data, int ready_bit)  
+> > Hmm. I'm not immediately coming up with a better name, but it does
+> > seem odd that a verify function would do a reset.  
+> 
+> 
+> Sure, I'll try and think of a better name.
+> 
+> 
+> >  
+> >> +{
+> >> +	int en = DPS310_PRS_EN | DPS310_TEMP_EN | DPS310_BACKGROUND;
+> >> +	int meas_cfg;
+> >> +	int rc = regmap_read(data->regmap, DPS310_MEAS_CFG, &meas_cfg);
+> >> +
+> >> +	if (rc < 0)
+> >> +		return rc;
+> >> +
+> >> +	if (meas_cfg & ready_bit)
+> >> +		return 0;
+> >> +
+> >> +	if ((meas_cfg & en) != en) {
+> >> +		/* DPS310 register state corrupt, better start from scratch */
+> >> +		rc = regmap_write(data->regmap, DPS310_RESET, DPS310_RESET_MAGIC);
+> >> +		if (rc < 0)
+> >> +			return rc;
+> >> +
+> >> +		/* Wait for device chip access: 2.5ms in specification */
+> >> +		usleep_range(2500, 12000);
+> >> +		rc = dps310_startup(data);
+> >> +		if (rc)
+> >> +			return rc;
+> >> +
+> >> +		dev_info(&data->client->dev,
+> >> +			 "recovered from corrupted MEAS_CFG=%02x\n", meas_cfg);
+> >> +	}
+> >> +
+> >> +	return 1;
+> >> +}
+> >> +
+> >>   static int dps310_read_pres_raw(struct dps310_data *data)
+> >>   {
+> >>   	int rc;
+> >> @@ -309,15 +441,25 @@ static int dps310_read_pres_raw(struct dps310_data *data)
+> >>   	if (mutex_lock_interruptible(&data->lock))
+> >>   		return -EINTR;
+> >>   
+> >> -	rate = dps310_get_pres_samp_freq(data);
+> >> -	timeout = DPS310_POLL_TIMEOUT_US(rate);
+> >> -
+> >> -	/* Poll for sensor readiness; base the timeout upon the sample rate. */
+> >> -	rc = regmap_read_poll_timeout(data->regmap, DPS310_MEAS_CFG, ready,
+> >> -				      ready & DPS310_PRS_RDY,
+> >> -				      DPS310_POLL_SLEEP_US(timeout), timeout);
+> >> -	if (rc)
+> >> -		goto done;
+> >> +	rc = dps310_verify_meas_cfg(data, DPS310_PRS_RDY);
+> >> +	if (rc) {  
+> > So at this point we potentially reset. Is there a race condition against
+> > the device register state corrupting again?  If so I guess we are relying
+> > on the timeout and userspace trying again.  Maybe worth adding a comment
+> > if that is the case.  
+> 
+> 
+> Well, I don't know what causes the corruption at this point. The lock is 
+> held, so nothing else should touch the device, so I'm assuming it won't 
+> get corrupted. And assuming the reset works, then the sensor measurement 
+> should return valid data now, so any problem should be invisible to 
+> userspace (except this read will take a long time).
+
+Fair enough - I was guessing we were looking at noise / brownout or
+similar causing a loss of register value.  If we think it's related
+to actual traffic (or don't know :) then I'm fine with this unless
+we get reports of more problems even with this 'hack' in place.
+
+Thanks,
+
+Jonathan
+
+> 
+> 
+> Thanks for the review.
+> 
+> Eddie
+> 
+> 
+> >  
+> >> +		if (rc < 0)
+> >> +			goto done;
+> >> +
+> >> +		rate = dps310_get_pres_samp_freq(data);
+> >> +		timeout = DPS310_POLL_TIMEOUT_US(rate);
+> >> +
+> >> +		/*
+> >> +		 * Poll for sensor readiness; base the timeout upon the sample
+> >> +		 * rate.
+> >> +		 */
+> >> +		rc = regmap_read_poll_timeout(data->regmap, DPS310_MEAS_CFG,
+> >> +					      ready, ready & DPS310_PRS_RDY,
+> >> +					      DPS310_POLL_SLEEP_US(timeout),
+> >> +					      timeout);
+> >> +		if (rc)
+> >> +			goto done;
+> >> +	}
+> >>   
+> >>   	rc = regmap_bulk_read(data->regmap, DPS310_PRS_BASE, val, sizeof(val));
+> >>   	if (rc < 0)
+> >> @@ -358,15 +500,25 @@ static int dps310_read_temp_raw(struct dps310_data *data)
+> >>   	if (mutex_lock_interruptible(&data->lock))
+> >>   		return -EINTR;
+> >>   
+> >> -	rate = dps310_get_temp_samp_freq(data);
+> >> -	timeout = DPS310_POLL_TIMEOUT_US(rate);
+> >> -
+> >> -	/* Poll for sensor readiness; base the timeout upon the sample rate. */
+> >> -	rc = regmap_read_poll_timeout(data->regmap, DPS310_MEAS_CFG, ready,
+> >> -				      ready & DPS310_TMP_RDY,
+> >> -				      DPS310_POLL_SLEEP_US(timeout), timeout);
+> >> -	if (rc < 0)
+> >> -		goto done;
+> >> +	rc = dps310_verify_meas_cfg(data, DPS310_TMP_RDY);
+> >> +	if (rc) {
+> >> +		if (rc < 0)
+> >> +			goto done;
+> >> +
+> >> +		rate = dps310_get_temp_samp_freq(data);
+> >> +		timeout = DPS310_POLL_TIMEOUT_US(rate);
+> >> +
+> >> +		/*
+> >> +		 * Poll for sensor readiness; base the timeout upon the sample
+> >> +		 * rate.
+> >> +		 */
+> >> +		rc = regmap_read_poll_timeout(data->regmap, DPS310_MEAS_CFG,
+> >> +					      ready, ready & DPS310_TMP_RDY,
+> >> +					      DPS310_POLL_SLEEP_US(timeout),
+> >> +					      timeout);
+> >> +		if (rc < 0)
+> >> +			goto done;
+> >> +	}
+> >>   
+> >>   	rc = dps310_read_temp_ready(data);
+> >>   
+> >> @@ -677,52 +829,12 @@ static const struct iio_info dps310_info = {
+> >>   	.write_raw = dps310_write_raw,
+> >>   };
+> >>   
+> >> -/*
+> >> - * Some verions of chip will read temperatures in the ~60C range when
+> >> - * its actually ~20C. This is the manufacturer recommended workaround
+> >> - * to correct the issue. The registers used below are undocumented.
+> >> - */
+> >> -static int dps310_temp_workaround(struct dps310_data *data)
+> >> -{
+> >> -	int rc;
+> >> -	int reg;
+> >> -
+> >> -	rc = regmap_read(data->regmap, 0x32, &reg);
+> >> -	if (rc < 0)
+> >> -		return rc;
+> >> -
+> >> -	/*
+> >> -	 * If bit 1 is set then the device is okay, and the workaround does not
+> >> -	 * need to be applied
+> >> -	 */
+> >> -	if (reg & BIT(1))
+> >> -		return 0;
+> >> -
+> >> -	rc = regmap_write(data->regmap, 0x0e, 0xA5);
+> >> -	if (rc < 0)
+> >> -		return rc;
+> >> -
+> >> -	rc = regmap_write(data->regmap, 0x0f, 0x96);
+> >> -	if (rc < 0)
+> >> -		return rc;
+> >> -
+> >> -	rc = regmap_write(data->regmap, 0x62, 0x02);
+> >> -	if (rc < 0)
+> >> -		return rc;
+> >> -
+> >> -	rc = regmap_write(data->regmap, 0x0e, 0x00);
+> >> -	if (rc < 0)
+> >> -		return rc;
+> >> -
+> >> -	return regmap_write(data->regmap, 0x0f, 0x00);
+> >> -}
+> >> -
+> >>   static int dps310_probe(struct i2c_client *client,
+> >>   			const struct i2c_device_id *id)
+> >>   {
+> >>   	struct dps310_data *data;
+> >>   	struct iio_dev *iio;
+> >> -	int rc, ready;
+> >> +	int rc;
+> >>   
+> >>   	iio = devm_iio_device_alloc(&client->dev,  sizeof(*data));
+> >>   	if (!iio)
+> >> @@ -747,54 +859,8 @@ static int dps310_probe(struct i2c_client *client,
+> >>   	if (rc)
+> >>   		return rc;
+> >>   
+> >> -	/*
+> >> -	 * Set up pressure sensor in single sample, one measurement per second
+> >> -	 * mode
+> >> -	 */
+> >> -	rc = regmap_write(data->regmap, DPS310_PRS_CFG, 0);  
+> > Lack of error checking in original code is odd. Deliberate or not is the
+> > question... (probably not deliberate as rc = is there).
+> >  
+> >> -
+> >> -	/*
+> >> -	 * Set up external (MEMS) temperature sensor in single sample, one
+> >> -	 * measurement per second mode
+> >> -	 */
+> >> -	rc = regmap_write(data->regmap, DPS310_TMP_CFG, DPS310_TMP_EXT);
+> >> -	if (rc < 0)
+> >> -		return rc;
+> >> -
+> >> -	/* Temp and pressure shifts are disabled when PRC <= 8 */
+> >> -	rc = regmap_write_bits(data->regmap, DPS310_CFG_REG,
+> >> -			       DPS310_PRS_SHIFT_EN | DPS310_TMP_SHIFT_EN, 0);
+> >> -	if (rc < 0)
+> >> -		return rc;
+> >> -
+> >> -	/* MEAS_CFG doesn't update correctly unless first written with 0 */
+> >> -	rc = regmap_write_bits(data->regmap, DPS310_MEAS_CFG,
+> >> -			       DPS310_MEAS_CTRL_BITS, 0);
+> >> -	if (rc < 0)
+> >> -		return rc;
+> >> -
+> >> -	/* Turn on temperature and pressure measurement in the background */
+> >> -	rc = regmap_write_bits(data->regmap, DPS310_MEAS_CFG,
+> >> -			       DPS310_MEAS_CTRL_BITS, DPS310_PRS_EN |
+> >> -			       DPS310_TEMP_EN | DPS310_BACKGROUND);
+> >> -	if (rc < 0)
+> >> -		return rc;
+> >> -
+> >> -	/*
+> >> -	 * Calibration coefficients required for reporting temperature.
+> >> -	 * They are available 40ms after the device has started
+> >> -	 */
+> >> -	rc = regmap_read_poll_timeout(data->regmap, DPS310_MEAS_CFG, ready,
+> >> -				      ready & DPS310_COEF_RDY, 10000, 40000);
+> >> -	if (rc < 0)
+> >> -		return rc;
+> >> -
+> >> -	rc = dps310_get_coefs(data);
+> >> -	if (rc < 0)
+> >> -		return rc;
+> >> -
+> >> -	rc = dps310_temp_workaround(data);
+> >> -	if (rc < 0)
+> >> +	rc = dps310_startup(data);
+> >> +	if (rc)
+> >>   		return rc;
+> >>   
+> >>   	rc = devm_iio_device_register(&client->dev, iio);  
+

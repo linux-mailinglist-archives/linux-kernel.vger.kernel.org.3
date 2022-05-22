@@ -2,63 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48FEB530604
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 22:57:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EABCB53060A
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 23:01:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346232AbiEVU5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 16:57:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57200 "EHLO
+        id S1351446AbiEVVB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 17:01:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235201AbiEVU5w (ORCPT
+        with ESMTP id S242846AbiEVVBY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 16:57:52 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530B738BD8
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 13:57:51 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id d137so22244986ybc.13
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 13:57:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5NDRtCt5IKvrD75rRnXcuTW8iRXjJ/s5YNzt05pMQFc=;
-        b=DtY/tZ/S/a4gtZJC3fElPoyFJfvl2m3F3LvHtQGgfyG623p97p9BSoIipaI8oQES9D
-         hcGg4yM2FV+bvl0iHVBGzpt0u+ozsRBcY9EOzcCeUTcX4pQfmiWvJLjmO+HtWTei8iYQ
-         uGO7+wYy5VNBlRN7TFauG7DzUXnu+uiFE6unoU6C5n+MJlriQxiCJnxjXbzbpQwf3HK3
-         JKl8kj7l2fO6CFbnxHlfhSbfJqbFzWf/bg8E6RAEJixnfu4cYCdZdq7yMe9SyCHw+p0d
-         1W5xLB9J8f/7EAf9dEWCDVeKEQfeIB13Wi0KwB8gAmU2uDkk+5fHaB3INM7dMOCEpfBG
-         BfQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5NDRtCt5IKvrD75rRnXcuTW8iRXjJ/s5YNzt05pMQFc=;
-        b=6xIS29QSndexwJrUiFw5mYX3TlEG6uKCNzBq7sX2XFd3OC9Lhho6UZsT66LqZaB5Zq
-         N4QREL5EW6rg2C6x5TR5aI00WvZvWru+wi9N9ldMsRG/KPen8sVIxVJxDTQaNQ/CLoMq
-         WwRCFyet0NYO50WsUnTvIEa410MYrZWz6mimfm/Qvt3Y+bZfhN27CFsQb96BRbX5uT3T
-         Z9saPEY+Mp8aiQ9jHuzL3aeWay02zC+vgM4i1I39qZWgkQvKau/iPYXUa5ZEWu0kgXyp
-         schMR6ofJWOivE/v3gqALvK4AANpBXgDq/svek+qlg4uEoskCh8unTCZZgAcrwJBsptY
-         xbVA==
-X-Gm-Message-State: AOAM532qEZQoWYnHQHu+WQOvfi/6RxPoTjnx/p0V46NunXJ+lQP+TT0C
-        ZJtrXo7+Z1nugWzTr6OITCS5tEFnLRCcegK/rvCRBw==
-X-Google-Smtp-Source: ABdhPJx/ekEjROZtlx4zO2rTZDqWJXb55TJCuZIiQvSwU8m6RMcAhb++WSUaqowRDibkhPUXxwRZLb/YXDf6rORlip4=
-X-Received: by 2002:a5b:691:0:b0:64d:ab44:f12e with SMTP id
- j17-20020a5b0691000000b0064dab44f12emr18769020ybq.533.1653253070562; Sun, 22
- May 2022 13:57:50 -0700 (PDT)
+        Sun, 22 May 2022 17:01:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9358BE0DC;
+        Sun, 22 May 2022 14:01:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4B2B5B80DE8;
+        Sun, 22 May 2022 21:01:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C580C385AA;
+        Sun, 22 May 2022 21:01:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653253280;
+        bh=/iO/G51ICpP7nAV1aua3N/ufHh2RdulJqh3DRDEyHpM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=f7N/wjHJsDi9d1uabOvzQvS8CsrzRvmcsqMf+fsWLsWyqZN4mHy6aJJcOnbJ60XBx
+         kAIdUVxqLTlADrEfJqeFCp6UzgNFcd6nKzg4OvkubSBbMDzs7ugVSQmn23jAj8Y/8G
+         RQhSqtaco44yAveLwy72SuNw46sl5hKp0SRS6/+0Yg/4Y2+z235l6Tbmy6K+AJt4kM
+         ZICefZuVVDqBI3fZfUjmSoYkFJ7Aam951Nzxmvf7QXP5L/2aisGHOA1Mt/l3E4SwLP
+         cAVNd3GBG6THxIK4IUQhIocruOh71R2ooytCwtE1Undaw/oi9W6XshwVRjXrdoly6X
+         z1GBqS6nJ2nPw==
+Date:   Sun, 22 May 2022 23:01:16 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Miaoqian Lin <linmq006@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Eric Anholt <eric@anholt.net>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Annaliese McDermond <nh6z@nh6z.net>, linux-i2c@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: bcm2835: Fix error handling in bcm2835_i2c_probe
+Message-ID: <YoqknF3026XOYjbT@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Eric Anholt <eric@anholt.net>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Annaliese McDermond <nh6z@nh6z.net>, linux-i2c@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220403063310.7525-1-linmq006@gmail.com>
+ <YojRB2043uYeV0XH@shikoro>
+ <dd299256-2266-4736-e50f-17b417529699@wanadoo.fr>
 MIME-Version: 1.0
-References: <20220521111145.81697-17-Julia.Lawall@inria.fr>
-In-Reply-To: <20220521111145.81697-17-Julia.Lawall@inria.fr>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 22 May 2022 22:57:39 +0200
-Message-ID: <CACRpkdZBvfyCBzPsD1S2RWKy1eUhiQDeaFb2xuF5VgFnY3rGOA@mail.gmail.com>
-Subject: Re: [PATCH] dmaengine: ste_dma40: fix typo in comment
-To:     Julia Lawall <Julia.Lawall@inria.fr>
-Cc:     kernel-janitors@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="f++9MMOOnQgxRNCo"
+Content-Disposition: inline
+In-Reply-To: <dd299256-2266-4736-e50f-17b417529699@wanadoo.fr>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,14 +80,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 21, 2022 at 1:11 PM Julia Lawall <Julia.Lawall@inria.fr> wrote:
 
-> Spelling mistake (triple letters) in comment.
-> Detected with the help of Coccinelle.
->
-> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+--f++9MMOOnQgxRNCo
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Yours,
-Linus Walleij
+> on which tree are you working?
+
+Thanks for the heads up!
+
+
+--f++9MMOOnQgxRNCo
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKKpJgACgkQFA3kzBSg
+KbYxPg//VOh/1fBdA1LJr9u5cZUz1KEFUunMFuT114ocdoeDVAZRsT4FpMUFpT4g
+ijVWw4hBea435chIp3ApluXzYxdNaDoRUvuuAu6rhTJ9K1+4EwbPjklkw2fJTITs
+KUg/XwiV53Ssal4DNmqOcWO9U0iuxmBS3RpuPQWTYnw6jihNZCI/PJ1TdVlrbZuC
+ngv/3M7z+gF7E16siHJfbwT/Nqr9IGFcOONuzYCZn1r74M7bUo1wGsSU5StLoRGh
+GMBO0fElkexFGYhJ+wuy9ifN8HEnrm1/NzSXJt180wmkQ3on+pb8NCvYPbGT/3hT
+YqTzf9KJY0B9MN8+OQ+Zt4+C/1YEKhMk/1Kpvsb7lEvgpRHX7n24OuRjOOxzmpbZ
+GBwqMXl+3zENcaZcXJFOekBtzvFFtx0B750MHWqtMAtGjzR8QSB2Gpg1fHWoOEXH
+EXwie/W+kWmpBMLQX1r46BieDrF0TA0P7WYqGJfbM+jg/Sco+KOe9etTI5TBxjzR
+tQ6AFzW9e6Bw/0pyRhgcNbiQQSYMcFBFWIKZkdgvGwergMnJoqcKgu1uU5Jd19FO
+/eqa0fow69Gk62mfNu/Jdi/PwQ3Tk9xqBZPjR/+QV778DnOJflIOn1RlTaqWP4ax
+TSTCH3VxsGGDZf+zo8EywOmRWcppZRXM4WpuUyLYweH7R/LkAS8=
+=tIF6
+-----END PGP SIGNATURE-----
+
+--f++9MMOOnQgxRNCo--

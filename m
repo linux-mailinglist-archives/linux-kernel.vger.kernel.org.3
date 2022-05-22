@@ -2,93 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6247F530674
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 00:16:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFD69530679
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 00:21:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238322AbiEVWQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 18:16:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35516 "EHLO
+        id S1345212AbiEVWVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 18:21:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbiEVWQc (ORCPT
+        with ESMTP id S230175AbiEVWVe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 18:16:32 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C7B2BC31
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 15:16:31 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1nsts8-0006nK-OP; Mon, 23 May 2022 00:16:24 +0200
-Message-ID: <80306a31-462c-4ce3-5c54-c0f74ad828f8@pengutronix.de>
-Date:   Mon, 23 May 2022 00:16:18 +0200
+        Sun, 22 May 2022 18:21:34 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 847461C126
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 15:21:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653258093; x=1684794093;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=PlOTnZ8DceWHQRrs52ps3Pqs1XjD9A7Vo/umIMX0t5s=;
+  b=E/v10J5I8sSGg+714oRS4PtHplvL46f36pxLSaToMWmxjAFWKQcO4psY
+   wGFw9sMQYYKiFnYjQdptGwM2J3olV6dUM1JBPanO22rZFD0Y6mT8tKRqU
+   NOREqypcNorNKCJxnVyLv3rbDqP4YaMSs2D0BpXeSnBtbrzQclKpQECRG
+   y6HeEp9KsPUygQzfI84P5OTlqannyuQ8UmS3ovXePHNqfPEwFfa39ULZa
+   kzkTwadPGODP1ktsgy/QRiiINbUL2xa4KjLN5e8haGgmfB1EIGmYdF7QA
+   DTkqy8ikg/sGaCGQP+wIdiAZe8xrbJF8CxHySwM8bG+2og9DVnjlYGaNY
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10355"; a="270622638"
+X-IronPort-AV: E=Sophos;i="5.91,244,1647327600"; 
+   d="scan'208";a="270622638"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2022 15:21:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,244,1647327600"; 
+   d="scan'208";a="558361849"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 22 May 2022 15:21:32 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nstx5-0000f1-DY;
+        Sun, 22 May 2022 22:21:31 +0000
+Date:   Mon, 23 May 2022 06:20:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [madvenka786:orc_v2 7/20] arch/x86/kernel/setup.c:1243: undefined
+ reference to `unwind_init'
+Message-ID: <202205230628.BFRpX4yZ-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 1/2] dt-bindings: bluetooth: broadcom: Add BCM4349B1 DT
- binding
-Content-Language: en-US
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
-References: <20220521200734.421223-1-a.fatoum@pengutronix.de>
- <CACRpkdbKUHu-T2whY4wgk5xnR7X-hptEg+Jm5Hudq8ieQi3VwA@mail.gmail.com>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <CACRpkdbKUHu-T2whY4wgk5xnR7X-hptEg+Jm5Hudq8ieQi3VwA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22.05.22 23:03, Linus Walleij wrote:
-> On Sat, May 21, 2022 at 10:07 PM Ahmad Fatoum <a.fatoum@pengutronix.de> wrote:
-> 
->> The BCM4349B1 chip is a single-chip Bluetooth 5.0 controller and
->> Transceiver. It is contained in the CYW/BCM89359 WiFi+BT package.
-> 
-> So the BT and the package have two different names.
+tree:   https://github.com/madvenka786/linux orc_v2
+head:   ed9a1d5c036130a53c639eb712485e3d13ab4372
+commit: a4c6af5b74f86f69cebc1b18d8a31a3beff7cd8e [7/20] objtool: Reorganize ORC kernel code
+config: i386-randconfig-a004-20220523 (https://download.01.org/0day-ci/archive/20220523/202205230628.BFRpX4yZ-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/madvenka786/linux/commit/a4c6af5b74f86f69cebc1b18d8a31a3beff7cd8e
+        git remote add madvenka786 https://github.com/madvenka786/linux
+        git fetch --no-tags madvenka786 orc_v2
+        git checkout a4c6af5b74f86f69cebc1b18d8a31a3beff7cd8e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-The package also goes by the name BCM4349B1 apparently.
-Cypress support had later confirmed BCM4349B1 and BCM89359 to
-be the same chipset. I should probably rephrase the commit message.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   ld: arch/x86/kernel/setup.o: in function `setup_arch':
+>> arch/x86/kernel/setup.c:1243: undefined reference to `unwind_init'
 
 
->> +      - brcm,bcm4349-bt
-> 
-> Then why do you have to tag on "-bt" on this compatible?
-> 
-> That is typically used when the wifi and bt has the *same* name, so
-> the only way to distinguish between them is a suffix.
-I think that's the case here too.
+vim +1243 arch/x86/kernel/setup.c
 
-Cheers,
-Ahmad
+ee9f8fce996408 arch/x86/kernel/setup.c  Josh Poimboeuf 2017-07-24  1242  
+ee9f8fce996408 arch/x86/kernel/setup.c  Josh Poimboeuf 2017-07-24 @1243  	unwind_init();
+^1da177e4c3f41 arch/i386/kernel/setup.c Linus Torvalds 2005-04-16  1244  }
+5649b7c30316a5 arch/x86/kernel/setup.c  Ingo Molnar    2008-09-16  1245  
 
-> 
-> Yours,
-> Linus Walleij
-> 
+:::::: The code at line 1243 was first introduced by commit
+:::::: ee9f8fce99640811b2b8e79d0d1dbe8bab69ba67 x86/unwind: Add the ORC unwinder
 
+:::::: TO: Josh Poimboeuf <jpoimboe@redhat.com>
+:::::: CC: Ingo Molnar <mingo@kernel.org>
 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,121 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 655F4530267
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 12:27:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EE6953026D
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 12:30:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236175AbiEVK1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 06:27:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43512 "EHLO
+        id S243748AbiEVKao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 06:30:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230336AbiEVK1E (ORCPT
+        with ESMTP id S230336AbiEVKak (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 06:27:04 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A806381A4
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 03:27:01 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id t25so21068340lfg.7
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 03:27:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=fMNwqXeV2uBe+evUoLZgmTmVyGADR/eLkrGswoXQxA4=;
-        b=aiibXUoW6fGLAoY6m08x9kmFx17Wpj3QAahbMWPFXr7lHKX9J/dIS0qEnZTETp7pR6
-         BXljZldyjeA/sEDbPTZZxFqRfCKzBghbv9+jA3nEv6XiAyYart5kdSwfL5uFBQFCW+4T
-         SYYqBsbg6Zt+sYdVpHpUgJwkGnCl2FTaM3RyUOdqqd8Rk6MYRRvGgwtkng73huayt0mz
-         3fL2gI41mb+624m0aYB4Tavh50F77LNgianztzQs8PT4RvbA3dsYUgdeqTagB4s3pZSz
-         IbcZGQDhTM0R8D0rSQa16x9DxmFB1/cyNMzcZZusyBUQChqAB1DH0BtZD6QBAvRtwZZ7
-         CaxQ==
+        Sun, 22 May 2022 06:30:40 -0400
+Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB9EF3C4A4;
+        Sun, 22 May 2022 03:30:37 -0700 (PDT)
+Received: by mail-qk1-f180.google.com with SMTP id l82so6313591qke.3;
+        Sun, 22 May 2022 03:30:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=fMNwqXeV2uBe+evUoLZgmTmVyGADR/eLkrGswoXQxA4=;
-        b=hHGHXMEDDOFbXGu5v1my9ptnq9W2wz15+WyGxW0QDHuIu3fqmS5zKsLveWk+zFEh5X
-         GMlkwmB+JZLR3cyq1IU2xpEWVm8gJ3YOpcCnel6YiLIlMxPoj4pNFzP4wE5oxmHTOPRU
-         mupLNB2aagfOulIL6+H72SVo4HtgLK+FPE85kamQUo+MR9Sk7zqFh+sakmc7ErPWm/5S
-         KCHcRk2xES5uKqct2CagdkNO3ZZRx52ctsCiDZTf9GeikYT85kSVPac68gItvjhlb7Mb
-         3XSA/VW1yUGbFmJMyfcnltNAlZq3R4TOg/NdSAlEjWau9uLHwdvRlaIVAmnin+fMDSje
-         5L4w==
-X-Gm-Message-State: AOAM532qosv1rOpfJ4cucJo+cyOsHU7reTgsunvNOmJIqxx9y8vQaHJ0
-        esNmwrwvMjQAIwwModfJGEQPPA==
-X-Google-Smtp-Source: ABdhPJyOR4yZnga56TAbIe1Pgby+ggk+HW859Rb54J83gtSMzvrVoXi6kzlOGEy8W5sTI3Ees33A8Q==
-X-Received: by 2002:a05:6512:1585:b0:445:908b:ad71 with SMTP id bp5-20020a056512158500b00445908bad71mr12439284lfb.200.1653215219755;
-        Sun, 22 May 2022 03:26:59 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id f17-20020a056512093100b0047255d21162sm1403396lft.145.2022.05.22.03.26.58
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=flUjSOL8jzsTLGzNGG4aRYZ3gOkmaTV1EbLGclXSu1o=;
+        b=gvSciXPezHSav3XeGMzqlNnZOsyt+SbrnV3k9DQHNIyue31Gb+TbFLVBfcUIgPXPej
+         zggrsb+LT5lprakqGJrE50HR4q6RMK5c5E2C8qwrKX11pD0iSJznMV28leTwJHZ56h5U
+         gZqJ7TYHcG1fpgHU614mPR707YTxCrtN3z3PE1rLQVqkaX4EwER4vKH4RYF4OIgSSkAZ
+         Lx9cvRUdC689B49BiM6rD/6Ax16UuZQozr1eA/fm/lozoliRNSYJww807nVx2Q2cDbPI
+         2/mNDhxJ5MeKWM8gbD47ZFmCfhhUdSS6zVzwf0hmnDxCTFEgCXP0KehGyVf4m9uGSvzO
+         /U2g==
+X-Gm-Message-State: AOAM530gpwQdJdOkDSzWEzzmE+oQ7YJ3+kCZ6+c28RT0wKO1AiWy6h7i
+        Ssf9sU2uMWOwtIiVCaXJn+yjRgyGCoBKpw==
+X-Google-Smtp-Source: ABdhPJyPezFjsQ57Ik1Yi+cCusxHehUmA3ZdCiwFpnAfoF+cxxi8moochi2BV+z+QFW857gIx8mGsA==
+X-Received: by 2002:a05:620a:370c:b0:6a0:999:21c6 with SMTP id de12-20020a05620a370c00b006a0099921c6mr10846590qkb.644.1653215436935;
+        Sun, 22 May 2022 03:30:36 -0700 (PDT)
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
+        by smtp.gmail.com with ESMTPSA id x4-20020ac81204000000b002f3e153f47csm2594152qti.0.2022.05.22.03.30.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 22 May 2022 03:26:59 -0700 (PDT)
-Message-ID: <eb915633-4d88-ec9a-d51a-7d5f5ecc0843@linaro.org>
-Date:   Sun, 22 May 2022 12:26:57 +0200
+        Sun, 22 May 2022 03:30:36 -0700 (PDT)
+Received: by mail-yb1-f179.google.com with SMTP id x2so20489120ybi.8;
+        Sun, 22 May 2022 03:30:36 -0700 (PDT)
+X-Received: by 2002:a25:e04d:0:b0:64d:6f23:b906 with SMTP id
+ x74-20020a25e04d000000b0064d6f23b906mr16858388ybg.380.1653215436251; Sun, 22
+ May 2022 03:30:36 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: Removal of qcom,board-id and qcom,msm-id
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Olof Johansson <olof@lixom.net>, Rob Herring <robh@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+References: <20220521195942.645048-1-trix@redhat.com>
+In-Reply-To: <20220521195942.645048-1-trix@redhat.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Sun, 22 May 2022 12:30:23 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVELy4M2Xog+NykEpb=k5sw+B1iYzC6O1Otsz75qMWBRA@mail.gmail.com>
+Message-ID: <CAMuHMdVELy4M2Xog+NykEpb=k5sw+B1iYzC6O1Otsz75qMWBRA@mail.gmail.com>
+Subject: Re: [PATCH] xen: remove setting of 'transp' parameter
+To:     Tom Rix <trix@redhat.com>
+Cc:     Helge Deller <deller@gmx.de>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <a3c932d1-a102-ce18-deea-18cbbd05ecab@linaro.org>
- <35051bec-98ea-b4c5-f734-06b3f22f3562@linaro.org>
- <8a90ffbc-b376-9115-fb91-0b46d98873b7@linaro.org>
- <40f29157-52c0-001f-6c14-fb90b351756a@linaro.org>
- <20220519221227.B66D3C385AA@smtp.kernel.org>
- <CAA8EJpqjcAcoooaZ6iTSCy4B1x4=HTUgvJ4VqX_Fr_hSMEbfDA@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAA8EJpqjcAcoooaZ6iTSCy4B1x4=HTUgvJ4VqX_Fr_hSMEbfDA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/05/2022 03:39, Dmitry Baryshkov wrote:
-> 
->>
->> I vaguely recall that the properties had to be extracted during the
->> boot.img creation process to create a table of contents header. But
->> after some time the bootloader started scanning the DTBs directly for
->> the vendor properties and thus the header was deprecated/removed. If the
->> bootloader is doing the scanning then I'm not sure what is preventing
->> the properties from being documented and allowed. I think the main
->> rejection was that the properties were added purely to be extracted
->> during post processing and placed into the table of contents header,
->> i.e. they weren't actually used by the kernel or the bootloader. If they
->> are now used by the bootloader it sounds OK to me if they're kept
->> around.
-> 
-> Yes, as far as I understand, they are used by the bootloader directly.
-> 
+On Sun, May 22, 2022 at 3:22 AM Tom Rix <trix@redhat.com> wrote:
+> cppcheck reports
+> [drivers/video/fbdev/xen-fbfront.c:226]: (style) Assignment of function parameter has no effect outside the function.
+>
+> The value parameter 'transp' is not used, so setting it can be removed.
+>
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-I entirely missed one part - Stephen's patches from 2015 were actually
-applied and since 2015 we expect all boards to follow convention:
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-compatible =
-"qcom,<SoC>[-<soc_version>][-<foundry_id>]-<board>[/<subtype>][-<board_version>]"
+Gr{oetje,eeting}s,
 
-The patchset was accepted, although in the thread I do not see "Applied"
-message.
+                        Geert
 
-Stephen,
-can you or anyone else confirm that the dtbTool Qualcomm uses (and/or
-bootloader) are adjusted as well to these new compatibles?
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-If yes, we can simply remove board-id and msm-id properties from new
-boards, because 7 years was enough to switch to these new tools...
-
-Best regards,
-Krzysztof
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

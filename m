@@ -2,123 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65ED353057D
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 21:43:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40FF653057F
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 21:46:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344757AbiEVTmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 15:42:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43400 "EHLO
+        id S1350222AbiEVTq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 15:46:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230252AbiEVTmO (ORCPT
+        with ESMTP id S230252AbiEVTq0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 15:42:14 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C362FFC1
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 12:42:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=VJOiU6BQi5P886CY3iFuhDrifu3rFeIvy3Ts/J6ugWs=; b=rQdbGHWULvJr/+YfcZL2BWrq9P
-        oblMQR2ONoZ8H6J19kBsRKhePWr3eYFB20yLweMhTw3F/IwXNEXqmYc9+BPeM+yUyyl/QUnXNSkhU
-        a0+0SPge7Oy2nI1lnaebibi+fSjO6GMLNeGwTncNF33YaBhDJURU8vgfKWmj+PQ7YnDsHeccvwH8T
-        rCLiLgGsZNYiRpKCN/VuHJZxZW743LKi6358SohTqtJdBgsvihnj8N+gu2BLyLcHLqrjZ2ZM10hiB
-        DeW/V8ci9utfz5HFPMr+zRk9RMMS/R4wnBVyYVFaFjJtQsxIB5aokIgduAGC3FpL0+5PQvQ+ngtcW
-        sHW9DZXw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nsrRU-00FZ4M-P3; Sun, 22 May 2022 19:40:44 +0000
-Date:   Sun, 22 May 2022 20:40:44 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Chih-En Lin <shiyn.lin@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Ingo Molnar <mingo@redhat.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        William Kucharski <william.kucharski@oracle.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Yunsheng Lin <linyunsheng@huawei.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Colin Cross <ccross@google.com>,
-        Feng Tang <feng.tang@intel.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Daniel Axtens <dja@axtens.net>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Peter Xu <peterx@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kaiyang Zhao <zhao776@purdue.edu>,
-        Huichun Feng <foxhoundsk.tw@gmail.com>,
-        Jim Huang <jserv.tw@gmail.com>
-Subject: Re: [RFC PATCH 0/6] Introduce Copy-On-Write to Page Table
-Message-ID: <YoqRvDn2P+9i0SrF@casper.infradead.org>
-References: <20220519183127.3909598-1-shiyn.lin@gmail.com>
- <d1810538-9b4c-7f19-852f-7f6d255533c7@redhat.com>
- <YolHr1GwfA++i9jj@casper.infradead.org>
- <64d0da08-6ffd-4bce-bc66-5097913937b4@kernel.org>
- <YomERsAM3gF7XxRZ@casper.infradead.org>
- <c82ac102-7935-4b07-9d8c-82a2efe59956@www.fastmail.com>
+        Sun, 22 May 2022 15:46:26 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3392D2A275;
+        Sun, 22 May 2022 12:46:25 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id w4so18313074wrg.12;
+        Sun, 22 May 2022 12:46:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CHiuUqPQofXVNtOmlbKgS9gvW1ZOU+ziWXGacGyqfnU=;
+        b=Wqw7ixDSCQiUlqiBUjLbcdlqFgG0D1NMrx5wJDqD1NENo2MoEihGvDTEgBeA0n9cKy
+         BGCBmuCQJPD7pL5i6gwGmdc774TAduxuheQTaL+3qdQuYRnWoq1jRmOktknLWiilOJvK
+         7iniCUhbCJdsYMGXDcgbRNEsMWN+xP9VNDOnp7jUBEKCbxfFDUh0wCw1purbeG/GQrv8
+         wq2ExyqLN+eWJ+w2sFaGGKx8+RzapyAHh3Bl4wyvPPMFyyMj2ox6YTa3aJV59hVDwL0Y
+         F+FEeG4Gc3GrjIGNELtjcEDm1zW7oAvkLrt4u6fWcO8sGfbpRzrnH5Q7agCZzuvLK9rD
+         1N6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CHiuUqPQofXVNtOmlbKgS9gvW1ZOU+ziWXGacGyqfnU=;
+        b=AoO0lYWO1HF4jxLQT3dQUB2W0jPMX3ML2W8qdQ6R4LZXgZPmMQ780TGNZWEcHkMFbS
+         IZ21jqQ29dKTuHNGCOj3Ef9MeR7t33k2cy9L0q8KpwV4/1kIwjuywDn1tMLJllWomGPI
+         miTHa8S8x7wD3Gc4Ce7I4yux4oN3BwcbMpgAloVL8T4j6+TxG2IRGY7ipHQpv8OJau7I
+         Bv8szeNkQJcUg7jSSaXDautsq0zNPxQ8wot0PSWQOB4kzGd+y3b4wII8ZYI5q8szchoJ
+         +AUdeb0L5s132QIMlMG/PbuokW/6+F4qsshDxiGZfN3VnI68/m3jP3ZQSQ/VgWSUQbiS
+         MNdQ==
+X-Gm-Message-State: AOAM533dtMxZYA33+4iAfuFY6/qMPCmAvGle1StiSaCAov1Nvu1hXzBr
+        Rp7IJg3IatqD0NZe7sGuauPCqE5y3SI=
+X-Google-Smtp-Source: ABdhPJz7m1zS1+0VOawboYY3emg62RWneM0bmRRFX9ocb8dLbKQ9xmTU/3SxCxxx4fzKvoa61b3wYQ==
+X-Received: by 2002:a05:6000:168a:b0:20f:d6e8:a5b with SMTP id y10-20020a056000168a00b0020fd6e80a5bmr2831116wrd.41.1653248783731;
+        Sun, 22 May 2022 12:46:23 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id h19-20020adfaa93000000b0020c5253d8f7sm8217026wrc.67.2022.05.22.12.46.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 May 2022 12:46:23 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Evgeniy Polyakov <zbr@ioremap.net>
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] w1: ds2438: remove redundant initialization of variable crc
+Date:   Sun, 22 May 2022 20:46:22 +0100
+Message-Id: <20220522194622.13277-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <c82ac102-7935-4b07-9d8c-82a2efe59956@www.fastmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 22, 2022 at 08:20:05AM -0700, Andy Lutomirski wrote:
-> On Sat, May 21, 2022, at 5:31 PM, Matthew Wilcox wrote:
-> > On Sat, May 21, 2022 at 03:19:24PM -0700, Andy Lutomirski wrote:
-> >> I can see a rather different use for this type of shared-pagetable
-> >> technology, though: monstrous MAP_SHARED mappings.  For database and some VM
-> >> users, multiple processes will map the same file.  If there was a way to
-> >> ensure appropriate alignment (or at least encourage it) and a way to handle
-> >> mappings that don't cover the whole file, then having multiple mappings
-> >> share the same page tables could be a decent efficiently gain.  This doesn't
-> >> even need COW -- it's "just" pagetable sharing.
-> >
-> > The mshare proposal did not get a warm reception at LSFMM ;-(
-> >
-> > The conceptual model doesn't seem to work for the MM developers who were
-> > in the room.  "Fear" was the most-used word.  Not sure how we're going
-> > to get to a model of sharing page tables that doesn't scare people.
-> 
-> FWIW, I didn’t like mshare.  mshare was weird: it seemed to have
-> one mm own some page tables and other mms share them.  I’m talking
-> about having a *file* own page tables and mms map them.  This seems less
-> fear-inducing to me.  Circular dependencies are impossible, mmap calls
-> don’t need to propagate, etc.
+Variable crc is being initialized with a value that is never read,
+it is being re-assigned later on. The initialization is redundant
+and can be removed.
 
-OK, so that doesn't work for our use case.  We need an object to own page
-tables that can be shared between different (co-operating) processes.
-Because we need the property that calling mprotect() changes the
-protection in all processes at the same time.
+Cleans up clang scan build warning:
+warning: Value stored to 'crc' is never read [deadcode.DeadStores]
 
-Obviously we want that object to be referenced by a file descriptor, and
-it can also have a name.  That object doesn't have to be an mm_struct.
-Maybe that would be enough of a change to remove the fear.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/w1/slaves/w1_ds2438.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/drivers/w1/slaves/w1_ds2438.c b/drivers/w1/slaves/w1_ds2438.c
+index ca64f99c8f3d..e008c27b3db9 100644
+--- a/drivers/w1/slaves/w1_ds2438.c
++++ b/drivers/w1/slaves/w1_ds2438.c
+@@ -66,8 +66,6 @@ static int w1_ds2438_get_page(struct w1_slave *sl, int pageno, u8 *buf)
+ 	size_t count;
+ 
+ 	while (retries--) {
+-		crc = 0;
+-
+ 		if (w1_reset_select_slave(sl))
+ 			continue;
+ 		w1_buf[0] = W1_DS2438_RECALL_MEMORY;
+-- 
+2.35.3
+

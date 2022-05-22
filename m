@@ -2,90 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6D2B5304FB
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 19:39:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FBE35304FD
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 19:41:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349890AbiEVRj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 13:39:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34266 "EHLO
+        id S1350137AbiEVRlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 13:41:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231196AbiEVRjX (ORCPT
+        with ESMTP id S1349968AbiEVRlP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 13:39:23 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAB10186C0;
-        Sun, 22 May 2022 10:39:22 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id i68so10182122qke.11;
-        Sun, 22 May 2022 10:39:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xkCujTokcqPtWiwpiGRk5TtIbZPWLmLWKiJpPt/OGWo=;
-        b=ZItGJ02c4c8FBNvKfrvVRaMVpja1L3Tmz8glCrjwgC0rSrah9foKJrdU0Tr9NhfMLi
-         sDgQPqgUU/yA2kK4MP44nJSubsFxdeCwx58ISc4L4wbA8tGdUmgbZqHfu8OjXcuaezeS
-         3yR61TbCcYS0ugkO0Mqj3tPxUcR55UQ2Oi6FlDTKkAeW4W7Tzrfe4rjVmB9gpGfKo+J9
-         xDXmHPuy9wD37TRxdKm9qecP4CdqrmyoOzXXfwBVLCXfeu3872/BqZZRSWNNvQ1xJdbL
-         Iewvssuu0kfzz2fi7BzWE0CI3OOzRUJ2eyWyDpXbtQufRixNtdnW87DMcLUFmwNVdQv+
-         afoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xkCujTokcqPtWiwpiGRk5TtIbZPWLmLWKiJpPt/OGWo=;
-        b=Ro0vMim7NWqB/JR38phM8T3DlVb0kEOsHqz+QJvYjQ3xfDhQERcMt4GIytBdDKcvRh
-         lQQ1qajF02/NeNlxdAkMr+AMp826fD6Ghj3CIuUDKEC9uJPy0nyFSCruCzk6dTrnS/Ww
-         nxLPePQ925rj0/Raf9zDXwtOOaMajHkYk46SxfaWlTt9uqRn9EqkVrZRf+uXcst3uEsJ
-         tztKjGEsNnZH0B/wu8E/KyOHW4bQRslslQDUg2hVXkesfWao5FH7UmWlj+j+ZveA/p03
-         bK64SZBQwkpwcAe191oF+vPxGb370MNb2Uvw40OJQwRCRN8/rQkFjjE1oS1iljXRwP1s
-         Ttlw==
-X-Gm-Message-State: AOAM533/ba9FLtk6bQaTXFKNSrK2k1rCBv+FHO+rNgi59gp0Y6sjmr2d
-        k0aGaoTI7NM6u2GwvIcQY1I=
-X-Google-Smtp-Source: ABdhPJxZLxs0+TkUltsfJwRF5N/FN9ogf4uiCB2TmPZQWm1f9m2I7PENOE+YgL9VRGB4i56uZKRmTw==
-X-Received: by 2002:a37:6685:0:b0:6a3:686f:699a with SMTP id a127-20020a376685000000b006a3686f699amr4169112qkc.390.1653241161897;
-        Sun, 22 May 2022 10:39:21 -0700 (PDT)
-Received: from localhost (c-69-254-185-160.hsd1.fl.comcast.net. [69.254.185.160])
-        by smtp.gmail.com with ESMTPSA id h11-20020a05620a21cb00b006a36b7e55b3sm2642393qka.4.2022.05.22.10.39.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 May 2022 10:39:21 -0700 (PDT)
-Date:   Sun, 22 May 2022 10:39:19 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        David Laight <David.Laight@aculab.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joe Perches <joe@perches.com>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Nicolas Palix <nicolas.palix@imag.fr>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        linux-kernel@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>, kvm@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: [PATCH 11/22] KVM: x86: hyper-v: replace bitmap_weight() with
- hweight64()
-Message-ID: <Yop1R+Z7OtIcfrvA@yury-laptop>
-References: <20220510154750.212913-1-yury.norov@gmail.com>
- <20220510154750.212913-12-yury.norov@gmail.com>
- <20220522145357.GA244394@roeck-us.net>
+        Sun, 22 May 2022 13:41:15 -0400
+Received: from smtp.smtpout.orange.fr (smtp08.smtpout.orange.fr [80.12.242.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6132D15FE8
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 10:41:13 -0700 (PDT)
+Received: from pop-os.home ([86.243.180.246])
+        by smtp.orange.fr with ESMTPA
+        id spZjnWR0UgNxBspZjnfQ7n; Sun, 22 May 2022 19:41:11 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sun, 22 May 2022 19:41:11 +0200
+X-ME-IP: 86.243.180.246
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Vinod Koul <vkoul@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Amireddy Mallikarjuna reddy 
+        <mallikarjunax.reddy@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        dmaengine@vger.kernel.org
+Subject: [PATCH] dmaengine: lgm: Fix an error handling path in intel_ldma_probe()
+Date:   Sun, 22 May 2022 19:41:05 +0200
+Message-Id: <18504549bc4d2b62a72a02cb22a2e4d8e6a58720.1653241224.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220522145357.GA244394@roeck-us.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,27 +45,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 22, 2022 at 07:53:57AM -0700, Guenter Roeck wrote:
-> On Tue, May 10, 2022 at 08:47:39AM -0700, Yury Norov wrote:
-> > kvm_hv_flush_tlb() applies bitmap API to a u64 variable valid_bank_mask.
-> > Since valid_bank_mask has a fixed size, we can use hweight64() and avoid
-> > excessive bloating.
-> 
-> In kvm_hv_send_ipi(), valid_bank_mask is unsigned long, not u64.
-> 
-> This results in:
-> 
-> arch/x86/kvm/hyperv.c: In function 'kvm_hv_send_ipi':
-> include/asm-generic/bitops/const_hweight.h:21:76: error: right shift count >= width of type
-> 
-> on all 32-bit builds.
-> 
-> Guenter
+ldma_clk_disable() calls both:
+	clk_disable_unprepare(d->core_clk);
+	reset_control_assert(d->rst);
 
-Hi Guenter,
+So, should devm_reset_control_get_optional() fail, core_clk should not
+be prepare_enable'd before it, otherwise it will never be
+disable_unprepare'd.
 
-The fix is in Paolo's tree:
-https://lore.kernel.org/lkml/20220519171504.1238724-1-yury.norov@gmail.com/T/
+Reorder the code to handle the error handling path as expected.
 
-Thanks,
-Yury
+Fixes: 32d31c79a1a4 ("dmaengine: Add Intel LGM SoC DMA support.")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/dma/lgm/lgm-dma.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/dma/lgm/lgm-dma.c b/drivers/dma/lgm/lgm-dma.c
+index efe8bd3a0e2a..9b9184f964be 100644
+--- a/drivers/dma/lgm/lgm-dma.c
++++ b/drivers/dma/lgm/lgm-dma.c
+@@ -1593,11 +1593,12 @@ static int intel_ldma_probe(struct platform_device *pdev)
+ 	d->core_clk = devm_clk_get_optional(dev, NULL);
+ 	if (IS_ERR(d->core_clk))
+ 		return PTR_ERR(d->core_clk);
+-	clk_prepare_enable(d->core_clk);
+ 
+ 	d->rst = devm_reset_control_get_optional(dev, NULL);
+ 	if (IS_ERR(d->rst))
+ 		return PTR_ERR(d->rst);
++
++	clk_prepare_enable(d->core_clk);
+ 	reset_control_deassert(d->rst);
+ 
+ 	ret = devm_add_action_or_reset(dev, ldma_clk_disable, d);
+-- 
+2.34.1
+

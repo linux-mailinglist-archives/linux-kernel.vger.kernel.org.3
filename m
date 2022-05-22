@@ -2,52 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA0975303D0
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 17:24:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98ACD5303E2
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 17:35:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347997AbiEVPYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 11:24:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46926 "EHLO
+        id S1348133AbiEVPfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 11:35:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230290AbiEVPX6 (ORCPT
+        with ESMTP id S241366AbiEVPfs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 11:23:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8EF12A240;
-        Sun, 22 May 2022 08:23:56 -0700 (PDT)
+        Sun, 22 May 2022 11:35:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773F639164
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 08:35:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 99488B80ABE;
-        Sun, 22 May 2022 15:23:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47F56C385AA;
-        Sun, 22 May 2022 15:23:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 14CB460FEB
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 15:35:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 712FDC385AA;
+        Sun, 22 May 2022 15:35:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653233034;
-        bh=/dRB9ARQoycZM8OhCD/nxLnWWI+qtkJfGJrWisUvU+c=;
-        h=Date:From:To:Cc:Subject:From;
-        b=oaeWJAPNlK3v/gWH0TB+aDd2xBsEUYincWjW3ddFm2m1kJ+Kh0WVcQCEsjy6w2bn0
-         MzjvfLEoKp2X2JLIfSqA5fujfGAHZpM7QrqxDLWnL2YFbpAHJ4Q/6m8hVkz4uOHXvF
-         qHcR0Be2lxEvLEZB1UKv3LIDrDNXSgAJXCCFx0r+zEd8X8WjoSlkSRChDYVKOYGYZQ
-         Y8t0GPfR05gXs2yAIHb4+7Digz9WlUM/y9tr2JNgOKUA0ixFeptIhDJgIXCus1D7Gv
-         02jV3mDSNAnj4I9mMTz6SurA+utlBwqsNd68vFivu2wr8cEc9rtk2Jp/EOogVu2ARi
-         hm4x1mwVw4x/A==
-Date:   Sun, 22 May 2022 17:23:46 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PULL REQUEST] i2c for v5.18
-Message-ID: <YopVgt6ACGuAQfR0@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="YnArdn3qbQ9VtP5L"
-Content-Disposition: inline
+        s=k20201202; t=1653233745;
+        bh=Ni6fjoGMdQzbQmZpLoAHQFcIXLw4p5hqcCJJSrIedEw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=pdjkKNJpUux7FDHj3pAlVI8Su/CRzMtqOihjp6TXsFhRzMS1+TsROlMXw5Ibh/w2J
+         fg4V2aoORBmfWJumujotUYxbAovyL9q/+r3vHk0oEXoLbD0rX866pSTc59ufmIegkO
+         gZiIFLgvD/Jm/FzEToUSe1Z5guBbx4S0upkXpOAL7DsLHM///1vCwxUMyIDidlityq
+         s0DBG4rXrXcvCayRLwNlCB5M9d0rf7Xzdu33YBi8Y8o7tUG9WUrZAVwmbClQsoDGos
+         9I0ANxrZHrkSf6yhTOxXVzfmFh+NC5qblIIdTaRVAxFnrs8wnYxa4y9JvdR/u82R7Q
+         diJEurUswCyRQ==
+Received: from ppp-94-66-34-157.home.otenet.gr ([94.66.34.157] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nsncM-00D06N-UA; Sun, 22 May 2022 16:35:43 +0100
+Date:   Sun, 22 May 2022 16:35:40 +0100
+Message-ID: <87ilpxmvg3.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Kyle Huey <me@kylehuey.com>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        yyc1992@gmail.com, Keno Fischer <keno@juliacomputing.com>,
+        "Robert O'Callahan" <robert@ocallahan.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will.deacon@arm.com>
+Subject: Re: arm64 equivalents of PR_SET_TSC/ARCH_SET_CPUID
+In-Reply-To: <CAP045ApiMSvP--f2E0=VdMbjE8oibvy921m8JASf4kaCCuU2RA@mail.gmail.com>
+References: <CAP045ApiMSvP--f2E0=VdMbjE8oibvy921m8JASf4kaCCuU2RA@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 94.66.34.157
+X-SA-Exim-Rcpt-To: me@kylehuey.com, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, x86@kernel.org, yyc1992@gmail.com, keno@juliacomputing.com, robert@ocallahan.org, tglx@linutronix.de, bp@alien8.de, suzuki.poulose@arm.com, will.deacon@arm.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,77 +73,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, 21 May 2022 21:07:14 +0100,
+Kyle Huey <me@kylehuey.com> wrote:
+>=20
+> There is ongoing work by Yichao Yu to make rr, a userspace record and
+> replay debugger[0], production quality on arm64[1]. One of the bigger
+> remaining issues is the kernel's emulation of accesses to certain
+> system registers[2] that reflect timing and CPU capabilities and are
+> either non-deterministic or can vary from processor to processor.
 
---YnArdn3qbQ9VtP5L
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Just to make things clear: the kernel usually doesn't provide any
+emulation for registers such as CNTVCT_EL0. On sane HW, userspace is
+free to access it directly without any mediation (we only use the trap
+for the sake of dealing with HW bugs).
 
-Linus,
+> We
+> would like to add the ability to tell the kernel to decline to emulate
+> these instructions for a given task and pass that responsibility onto
+> the supervising rr ptracer. There are analogous processor features and
+> disabling mechanisms on x86. The RDTSC instruction is controlled by
+> prctl(PR_SET_TSC) and the CPUID instruction is controlled (when the
+> hardware allows) by arch_prctl(ARCH_SET_CPUID).
+>=20
+> The questions I'd like to raise are:
+>=20
+> 1. Is it appropriate to reuse PR_SET_TSC for roughly equivalent
+> functionality on AArch64? (even if the AArch64 feature is not actually
+> named Time Stamp Counter).
 
-here are some I2C driver bugfixes for 5.18. Nothing spectacular but
-worth fixing.
+My gut feeling is that you really don't want to hijack an existing
+API, because this is fundamentally different. The Linux arm64 ABI
+mandates that the counter (and the frequency register associated with
+it) are accessible, and you can't make them disappear.
 
-Next pull request will be sigend, promised!
+=46rom what I understand, you are relying on the TSC being disabled in
+the tracee and intercepting the signal that gets delivered when it
+accesses the counter. Is that correct?
+
+Assuming I'm right, I think it'd make a lot more sense if there was a
+first class ptrace option, if only because this would mandate the
+kernel to start trapping things that are not trapped today.
+
+It also begs the question of the fate of CNTFRQ_EL0, since you want to
+be able to replay traces from one system to another (and the counter
+is meaningless without the frequency).
+
+Finally, what of the VDSO, which is by far the most common user of the
+counter? I can totally imagine the VDSO getting stuck if emulation is
+used and the sequence counter moves synchronously with the traps
+(which is why we disable the VDSO when trapping CNTVCT_EL0).
+
+> 2. Likewise for ARCH_SET_CPUID
+
+We don't just emulate a single register, but a whole class of them. If
+you are to present a different view for any of those, you'll need to
+handle the lot (I really can't see why one would be more important
+than the others).
+
+So SET_CPUID really is the wrong tool. I'd rather there was (again) an
+API that described exactly that.
+
+> 3. Since arch_prctl is x86-only, does it make more sense to add
+> arch_prctl to arm64 or to duplicate ARCH_SET_CPUID into the prctl
+> world? (e.g. a PR_SET_CPUID that works on both x86/arm64)
+
+I don't think any applies here. Different architectures have different
+ABI requirements, and you can't really merge the two. Because the next
+thing you know, you'll ask for the same thing for PMU registers, and
+try to map them onto something else.
+
+Overall, this would be better served by a framework for userspace
+delegation of sysreg access by a ptrace'd process. Let's try to look
+at it in those terms rather than casting arm64 into a seemingly
+unrelated API.
 
 Thanks,
 
-   Wolfram
+	M.
 
+>=20
+> - Kyle
+>=20
+> [0] https://rr-project.org/
+> [1] https://github.com/rr-debugger/rr/issues/3234
+> [2] e.g. CNTVCT_EL0 and MIDR_EL1, among others
+>=20
 
-The following changes since commit 42226c989789d8da4af1de0c31070c96726d990c:
-
-  Linux 5.18-rc7 (2022-05-15 18:08:58 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
-
-for you to fetch changes up to 03a35bc856ddc09f2cc1f4701adecfbf3b464cb3:
-
-  drivers: i2c: thunderx: Allow driver to work with ACPI defined TWSI controllers (2022-05-21 13:41:28 +0200)
-
-----------------------------------------------------------------
-Mika Westerberg (1):
-      i2c: ismt: Provide a DMA buffer for Interrupt Cause Logging
-
-Piyush Malgujar (1):
-      drivers: i2c: thunderx: Allow driver to work with ACPI defined TWSI controllers
-
-Yang Yingliang (1):
-      i2c: mt7621: fix missing clk_disable_unprepare() on error in mtk_i2c_probe()
-
-
-with much appreciated quality assurance from
-----------------------------------------------------------------
-Andy Shevchenko (1):
-      (Rev.) i2c: ismt: Provide a DMA buffer for Interrupt Cause Logging
-
-Stefan Roese (1):
-      (Rev.) i2c: mt7621: fix missing clk_disable_unprepare() on error in mtk_i2c_probe()
-
- drivers/i2c/busses/i2c-ismt.c            | 14 ++++++++++++++
- drivers/i2c/busses/i2c-mt7621.c          | 10 ++++++++--
- drivers/i2c/busses/i2c-thunderx-pcidrv.c |  1 +
- 3 files changed, 23 insertions(+), 2 deletions(-)
-
---YnArdn3qbQ9VtP5L
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKKVX4ACgkQFA3kzBSg
-KbbTRA//ewi8DxYoCjv64/4n9TIJDJ+G35lguuamnZEkQoT6DoiaY01i0g9go4hp
-6F+wNu5HJJczjxpXjUQvHotmWyrVFj1bLLsRwAtHYJiccKo+0P/Slp/9Y21/qbWu
-N+WAufddcxOkKIGKX09OhDhkfDuRfEnAvL/sJdqYOTEGnsMQHzXByvbzLAiRNDNL
-t9CpKy1LXKnR0Zi/HGuY80M7v8DEmtacqvJDMW724KUQd6kQINB/0S1XYyBWqv8q
-XO49gxyx5lWBICKNb/Pna8adJ0bNyb2BzAoJOBaNbXXPm6T2E9xoc8FcWYHXTm/h
-+YFBWQScFD5lhTCN3Q58crloXYtl1+lhYWz2D4r20YY3FBTs3GNOVmL8dksVUuT7
-e+U+9aWNgMTcldwVVV28NiYtVd5dCv29UhBlfBC2MlFuvBRDKB6l0McXF/g2zONA
-6WyQpyXP7GPM1NI2YchUDm7kO3CczZ13Du79wAHVKaD76eSGJaV6ingusidwn5Im
-lvzkpgRtyfIO9nqfdp4hMN96jiGwLa4v9iocogbZaNgBEPYPYZLdR73ZJ3fsjwKD
-gIQbHXlWBxnVRvyplhqlTsk1nyxUREcNqJ1G8Jyost49NDReJ7347Aia1e/sf6ut
-OZPLJ6684254ztOkG0v70gCZewk0YGR/3vbusIOkgE2Bv2bghwE=
-=5Hsz
------END PGP SIGNATURE-----
-
---YnArdn3qbQ9VtP5L--
+--=20
+Without deviation from the norm, progress is not possible.

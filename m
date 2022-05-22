@@ -2,135 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4290A530161
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 08:55:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8949A53015C
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 08:55:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245598AbiEVGul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 02:50:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46726 "EHLO
+        id S243675AbiEVGuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 02:50:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244601AbiEVGuj (ORCPT
+        with ESMTP id S239944AbiEVGuO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 02:50:39 -0400
-Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 145CA366A8;
-        Sat, 21 May 2022 23:50:36 -0700 (PDT)
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 24M6oAek017213;
-        Sun, 22 May 2022 15:50:11 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 24M6oAek017213
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1653202211;
-        bh=5TwfumVCNM+fvix8eWg6i86pc65IzESlNEbAwwhHqrU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ojV6XLeO60FMwlo+YWIjhWtRGEEawpk4CVTb4L9aglvOsxoK5f7z7QbZSOZfJ/tak
-         alBhcAPXcIxYqPD77l9IRzaTuM1+hmJzoN/AY0CLlXq3RF133ODYyShafJ1NmxJjCa
-         q0lpyWHvIylOEdH/w5NWWS57WrNaaAJ1LH6EpwkqOq/sHCzQtTbTby/WMAjGehyBu4
-         kVp9a8pzx79AFXB+F86AeNMng169Yna619lykZelRBT/YmqMzU/NmFg613kiYe1zhM
-         gliHIyRLAvkJUkXtL+XM5BQLs9Sn5t2kQlyC6svng8bF7Ur/kDDSJ0tasHLmdhpwVA
-         4ZAHOIk6oYabQ==
-X-Nifty-SrcIP: [209.85.210.176]
-Received: by mail-pf1-f176.google.com with SMTP id j6so11048580pfe.13;
-        Sat, 21 May 2022 23:50:11 -0700 (PDT)
-X-Gm-Message-State: AOAM532fMMBst104p0OK6IfasNpJJ+yYm0/NoVVgVsywwWk3D97q1g1L
-        YfOKYFhFVqsZOA/3WLXxgrlEa/opzqqV8kKt0/c=
-X-Google-Smtp-Source: ABdhPJxhJ2rh9Olkm7eNlJF8gpCf6NRGhN1KHbnGfK8m1IcXzz+fxX+v0f9XGq/1eBPx2nbsbhKNAZoEfz+GfSITou8=
-X-Received: by 2002:a63:9043:0:b0:3f9:6c36:3de3 with SMTP id
- a64-20020a639043000000b003f96c363de3mr8127619pge.616.1653202210391; Sat, 21
- May 2022 23:50:10 -0700 (PDT)
+        Sun, 22 May 2022 02:50:14 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08D536699
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 23:50:12 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id p139so20363156ybc.11
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 23:50:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xBwtB9T65QzhNPtQZ0QXYA7XAPyjsJvSWqKsiu1+O3c=;
+        b=1tl+DtjUID/Yit6XMR1sy4CgTCo7HJWlhuAjY9JG40KKnRyzU6DDTBO7B8l8eQHvs5
+         HCM1hEkHgCiX8lbuD66I4Wg6aom5XMll2U7YYcjZ8YFM9a1TDI+HJflEKyxUunm8Lx5t
+         2DN0t8GjjEE5K2TKo4NqLvLu6Dqrx8grDcdVi34AwfAju6scjTPeKVdb0NuAEAZ9oDAh
+         CqTsDqWcF3ZoMr7K1uQmsMtv5yVqDCA+QZsfWMEPE9pcfKpzks4o+OoxvCn8OjO9fHY+
+         u+6D2zwnTQKV7bZYNGgg6da2F230kRqfS2eXe9sPxUX9yJLUnrjbvXDNsYzkpHqJeN0V
+         kKnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xBwtB9T65QzhNPtQZ0QXYA7XAPyjsJvSWqKsiu1+O3c=;
+        b=bbYtD58JuyzVNIjDQH983Jv37egNrTTDUhUtSun4ux8BQpuMUrqmb3HM4kX+b9DDbU
+         AmgfrVykQmaA/rGnCcLAr+/k8MUnezI4PI/By9ypA2hZOsOIWZIPW2sOmkzoN8DMkZjJ
+         FOZgtoNZ5F75i7j+KqYZqSNjWDDYqOf/klQUjXVCsIFbS8QsiLvQHcpL/oBXm9HxwUc+
+         dqOmCf4MfSOVlOXwP5/ksnVBKdV49xQEikJCNVBVpNcultwWnlc3GYt1Ta9SewaQQuRx
+         3T8kXlmrxWPTGfNdJQ9HvDLBAkQhDzluGOvjssehVx5Y82KZLWNxznOGSazC6U+OPtSO
+         OcJA==
+X-Gm-Message-State: AOAM531rPMK+gQh+X45HyWcMEz7hEkiL2Ay+sz9HEIVWzBZVh7Lb7fpz
+        0ngP83cZlPBxBS4Qthd0VZCVeXG+ATh3XhWjKclmiA==
+X-Google-Smtp-Source: ABdhPJxG7bFPCW5S+Nizupv0nufUjwDo2jXDHFEk/7XVc3m5J4NbnaL1ymOAP0Uw17amoGe2vIpChAn7wQbK1KbLxrY=
+X-Received: by 2002:a25:3452:0:b0:64e:1776:ce90 with SMTP id
+ b79-20020a253452000000b0064e1776ce90mr16686330yba.261.1653202212242; Sat, 21
+ May 2022 23:50:12 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220513113930.10488-1-masahiroy@kernel.org> <CAK7LNAQvneCi11myLpkikuXh=i5PLtTaLe0nGpDZXgv_Q1L0Ow@mail.gmail.com>
- <CA+icZUUWww3fXvjQcefgFuq=tPO6+FYDbHE2E5PmL-BSJg4+cw@mail.gmail.com>
-In-Reply-To: <CA+icZUUWww3fXvjQcefgFuq=tPO6+FYDbHE2E5PmL-BSJg4+cw@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 22 May 2022 15:49:33 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATx1QcM6BdqBSascV8J8rD6etRgRZj9PjBno5Qrb=p3Yg@mail.gmail.com>
-Message-ID: <CAK7LNATx1QcM6BdqBSascV8J8rD6etRgRZj9PjBno5Qrb=p3Yg@mail.gmail.com>
-Subject: Re: [PATCH v6 00/10] kbuild: yet another series of cleanups (modpost,
- LTO, MODULE_REL_CRCS, export.h)
-To:     Sedat Dilek <sedat.dilek@gmail.com>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-modules <linux-modules@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>
+References: <Yn6aL3cO7VdrmHHp@carbon> <46bbde64-7290-cabb-8fef-6f4a30263d8c@openvz.org>
+In-Reply-To: <46bbde64-7290-cabb-8fef-6f4a30263d8c@openvz.org>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Sun, 22 May 2022 14:49:36 +0800
+Message-ID: <CAMZfGtUg65D2KemysdhcQM3-gnz+c_tahzJ=WzBUcY451WBv4Q@mail.gmail.com>
+Subject: Re: [PATCH mm v2 8/9] memcg: enable accounting for allocations in alloc_fair_sched_group
+To:     Vasily Averin <vvs@openvz.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, kernel@openvz.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@suse.com>,
+        Cgroups <cgroups@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 22, 2022 at 10:45 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+On Sun, May 22, 2022 at 12:39 AM Vasily Averin <vvs@openvz.org> wrote:
 >
-> On Fri, May 13, 2022 at 4:31 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> >
-> > On Fri, May 13, 2022 at 8:42 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> > >
-> > >
-> > > This is the third batch of cleanups in this development cycle.
-> > >
-> >
-> >
-> > This series is available at
-> > git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
-> >  lto-cleanup-v6
-> >
+> Creating of each new cpu cgroup allocates two 512-bytes kernel objects
+> per CPU. This is especially important for cgroups shared parent memory
+> cgroup. In this scenario, on nodes with multiple processors, these
+> allocations become one of the main memory consumers.
 >
-> Hi Masahiro,
+> Memory allocated during new cpu cgroup creation:
+> common part:    ~11Kb   +  318 bytes percpu
+> cpu cgroup:     ~2.5Kb  + 1036 bytes percpu
 >
-> I cloned the repository on top of latest Linus Git.
+> Accounting for this memory helps to avoid misuse inside memcg-limited
+> contianers.
 >
-> Not able to boot in Quemu - Not able to boot on bare metal.
->
-> $ grep module_layout log_quemu-5.18.0-rc7-2-amd64-clang14-lto.txt
-> 366:[    2.173265] floppy: disagrees about version of symbol module_layout
-> 367:[    2.198746] scsi_common: disagrees about version of symbol module_layout
-> 368:[    2.205573] i2c_piix4: disagrees about version of symbol module_layout
-> 369:[    2.210610] psmouse: disagrees about version of symbol module_layout
-> 370:[    2.225138] scsi_common: disagrees about version of symbol module_layout
-> 371:[    2.235536] scsi_common: disagrees about version of symbol module_layout
-> 375:Begin: Running /scripts/local-premount ... [    2.298555]
-> crc32c_intel: disagrees about version of symbol module_layout
-> 376:[    2.303335] crc32c_generic: disagrees about version of symbol
-> module_layout
-> 377:[    2.306667] libcrc32c: disagrees about version of symbol module_layout
->
-> Infos: LLVM-14 + CONFIG_LTO_CLANG_THIN=y
->
-> My linux-config and qemu-log are attached.
->
+> Signed-off-by: Vasily Averin <vvs@openvz.org>
 
-
-Thanks for your testing.
-
-I was also able to reproduce this issue.
-
-
-The problematic parts are:
-
-[    2.298555] crc32c_intel: disagrees about version of symbol module_layout
-[    2.303335] crc32c_generic: disagrees about version of symbol module_layout
-[    2.306667] libcrc32c: disagrees about version of symbol module_layout
-
-
-
-When CONFIG_LTO_CLANG_THIN=y,
-I cannot see any __crc_* symbols in "nm  vmlinux".
-
-Perhaps, LTO might have discarded all the __crc_* symbols
-from vmlinux, but I am still checking the details...
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>

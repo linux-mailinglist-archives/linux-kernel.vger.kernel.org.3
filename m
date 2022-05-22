@@ -2,72 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D2085302E9
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 14:08:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 121EA5302EC
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 14:08:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344302AbiEVMIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 08:08:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57016 "EHLO
+        id S1344457AbiEVMIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 08:08:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235275AbiEVMIG (ORCPT
+        with ESMTP id S1344247AbiEVMIf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 08:08:06 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C738A33A15
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 05:08:04 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id bu29so21351611lfb.0
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 05:08:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvz-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:from:subject:cc
-         :content-language:to:content-transfer-encoding;
-        bh=nL/dVGmV8SVJ8XY9T2y2Xs22TOu5OlKd3euuTOmb9S4=;
-        b=dY9UcXK/oJMSJoYU12izmW/FnAYwMTMLETztr1WWz4D35LIy+rNOSlcLBClNMExUV4
-         eHEeIEy+7ymmdgalKmq++LKhP+izXt0PfSl8q2zKMjp4O2exWq2yLZxkn8re8UVRiVIr
-         oM5roUeyoU4kPZxOGlwqIyUf+anbiXuarA+i8RhdcGfZKwY2dPikHRkZokh7QyG28yHq
-         LThHQM0PsCHxCAZDma4zPtDWmsgClF7dfUUo+G8Ji2OxnkKX9bNhVohFctjMBrviEv5Z
-         qSP5tIL2QsZ7m3I/h2+XQ5zdb8bOkcgtVdg9v7G9Jvq7CHfciSKIxASYktFZXeHUzkAr
-         uZnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:cc:content-language:to:content-transfer-encoding;
-        bh=nL/dVGmV8SVJ8XY9T2y2Xs22TOu5OlKd3euuTOmb9S4=;
-        b=H0LPJO62Oa+v6wxY/5Udg5BTU4LIKJNHdmv5g0y18pU9A714P5idycUF7vG5NsbEPU
-         CFZ72K3qEgKwwHyL9XYpzv/u18kCTjhFeQ1HQfYdzX3v2MhFpGS2oOTKwR61Z2jhQwVG
-         tluAU27jt0qJBlv0bEjX50NgJAjttE+CSdYaK7J7wb6QNHUbUUXhwHmcAZGmzwnXgEFc
-         1Zc8VeabiYG82nA5Ka0wSswbqtEeagMi/OyRrszCDpPNicT4lhwFe4AkIepUEm7qJAKu
-         r8HCjBmZN4MpSPMt+R3S1KrbWCF7lmHoex6dkfC4CIwEjyCpCSmV3AenVdPRCWW0DEJz
-         DmiA==
-X-Gm-Message-State: AOAM532cgdsJNogwjBDE2YYzdDzAFFDV73FVeHxf8qvL33dnnRBEK+5y
-        jjEcngkQ6F2gb42T0bJ+fMbJfQ==
-X-Google-Smtp-Source: ABdhPJz4u143hIp4L2y7X/tAAADLwuCPw7Sg31/7fzUEYGRi6yX27/JAVA8CEjTrAmFDQdog8/Yeeg==
-X-Received: by 2002:a05:6512:3c84:b0:478:19f2:bc2e with SMTP id h4-20020a0565123c8400b0047819f2bc2emr9440081lfv.324.1653221283073;
-        Sun, 22 May 2022 05:08:03 -0700 (PDT)
-Received: from [192.168.1.65] ([46.188.121.185])
-        by smtp.gmail.com with ESMTPSA id u1-20020ac24c21000000b0047255d2118csm1433942lfq.187.2022.05.22.05.08.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 22 May 2022 05:08:02 -0700 (PDT)
-Message-ID: <9adfd6ac-1b89-791e-796b-49ada3293985@openvz.org>
-Date:   Sun, 22 May 2022 15:08:02 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-From:   Vasily Averin <vvs@openvz.org>
-Subject: [PATCH v3] fanotify: fix incorrect fmode_t casts
-Cc:     kernel@openvz.org, linux-kernel@vger.kernel.org,
+        Sun, 22 May 2022 08:08:35 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC38633A15;
+        Sun, 22 May 2022 05:08:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=M7NmYC/Iylm9myghHwqILim55SAUt9QrM+UZYk0eJlw=; b=0l6/d9syUyRiu0Hhxfi8aVzCCh
+        3Zf/THxZ09eEElli9wurtQxzUxY9OTZV4Rn2qT1NWVOjw1qR68nAoFM6TiIwPEr7ZUmMm6S2vi22y
+        ehCQ5+uKuFWtRp5Lt/XK2/Xz3Jtdd7sU61Yu27dolyqvG5XEru+rXuC0ujPBjcamfNuOOJBJ046yB
+        gFf/3slVeQ/w+WkxoPkV7hTGY040cHD5OjsNsfiACq8J0FHOUZMXvwYzqoIa4IbkXwk0lN5IMaDYB
+        j2FNPJhcjVHFF12jmmWe25ieH65yicJNO8yZyBo2Re4HjuY8+HtZ+OR0QZBXuQtBixbKbcP/QuXpa
+        6kifZmZA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nskNu-001GfX-6U; Sun, 22 May 2022 12:08:34 +0000
+Date:   Sun, 22 May 2022 05:08:34 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Vasily Averin <vvs@openvz.org>
+Cc:     linux-fsdevel@vger.kernel.org, kernel@openvz.org,
+        linux-kernel@vger.kernel.org,
         Christoph Hellwig <hch@infradead.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Matthew Bobrowski <repnop@google.com>,
-        linux-fsdevel@vger.kernel.org
-Content-Language: en-US
-To:     Jan Kara <jack@suse.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>
+Subject: Re: [PATCH v3] fs/open.c: fix incorrect fmode_t cast in
+ build_open_how
+Message-ID: <Yoonwi1DC3bN+aCY@infradead.org>
+References: <eeaba25e-7c79-3c46-c39e-a2352dbfe007@openvz.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <eeaba25e-7c79-3c46-c39e-a2352dbfe007@openvz.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,45 +54,6 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixes sparce warnings:
-fs/notify/fanotify/fanotify_user.c:267:63: sparse:
- warning: restricted fmode_t degrades to integer
-fs/notify/fanotify/fanotify_user.c:1351:28: sparse:
- warning: restricted fmode_t degrades to integer
+Looks good:
 
-FMODE_NONTIFY have bitwise fmode_t type and requires __force attribute
-for any casts.
-
-Signed-off-by: Vasily Averin <vvs@openvz.org>
-Reviewed-by: Christian Brauner (Microsoft) <brauner@kernel.org>
----
-v3: split, according to Christoph Hellwig recommendation
----
- fs/notify/fanotify/fanotify_user.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/fs/notify/fanotify/fanotify_user.c b/fs/notify/fanotify/fanotify_user.c
-index a792e21c5309..16d8fc84713a 100644
---- a/fs/notify/fanotify/fanotify_user.c
-+++ b/fs/notify/fanotify/fanotify_user.c
-@@ -264,7 +264,7 @@ static int create_fd(struct fsnotify_group *group, struct path *path,
- 	 * originally opened O_WRONLY.
- 	 */
- 	new_file = dentry_open(path,
--			       group->fanotify_data.f_flags | FMODE_NONOTIFY,
-+			       group->fanotify_data.f_flags | __FMODE_NONOTIFY,
- 			       current_cred());
- 	if (IS_ERR(new_file)) {
- 		/*
-@@ -1348,7 +1348,7 @@ SYSCALL_DEFINE2(fanotify_init, unsigned int, flags, unsigned int, event_f_flags)
- 	    (!(fid_mode & FAN_REPORT_NAME) || !(fid_mode & FAN_REPORT_FID)))
- 		return -EINVAL;
- 
--	f_flags = O_RDWR | FMODE_NONOTIFY;
-+	f_flags = O_RDWR | __FMODE_NONOTIFY;
- 	if (flags & FAN_CLOEXEC)
- 		f_flags |= O_CLOEXEC;
- 	if (flags & FAN_NONBLOCK)
--- 
-2.36.1
-
+Reviewed-by: Christoph Hellwig <hch@lst.de>

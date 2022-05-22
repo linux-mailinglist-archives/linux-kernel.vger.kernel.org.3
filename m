@@ -2,115 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8032530222
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 11:43:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7A86530227
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 11:46:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242351AbiEVJnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 05:43:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59542 "EHLO
+        id S242826AbiEVJqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 05:46:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234369AbiEVJnR (ORCPT
+        with ESMTP id S241841AbiEVJqR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 05:43:17 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6368E369F5;
-        Sun, 22 May 2022 02:43:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653212596; x=1684748596;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=J1uRxreTk2vcgBP+Mv+o2kjbzDSrcYl4+WqXF1IBsU8=;
-  b=XLdFBFgoTxYniEX/Tgn4Zn+eawD1UL5Q246madtsbUR93j8vJQJxGjGC
-   DSmUBRbgrz1vTIcybBLpuT4IxU6VLCyv0S4x5GShKFED4IgCb7Oq0htuq
-   JJzS5PP8EuSazctx0FafiAytjCG4YkwDjJ5d6xursevIyPMC/3+XZEYQ1
-   CU5NPbb35V0FZkTgnA4oN/pGVkgMvKLyufNbocRKD+0rRB1WL6DbGOvvc
-   E+3c6wF9N2x1TKJgnidh20sMU/i4ItCB0LdyCiNVDifDZTBXvtFyhs6rO
-   nm7O4P7n9m8b3D3NeSXjti3nte6hgIqoLVXtK5ZhGD9Ga2Gu4dtfRq+KA
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10354"; a="260564934"
-X-IronPort-AV: E=Sophos;i="5.91,244,1647327600"; 
-   d="scan'208";a="260564934"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2022 02:43:15 -0700
-X-IronPort-AV: E=Sophos;i="5.91,244,1647327600"; 
-   d="scan'208";a="571562866"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2022 02:43:06 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nsi73-000IR6-9y;
-        Sun, 22 May 2022 12:43:01 +0300
-Date:   Sun, 22 May 2022 12:43:01 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Maninder Singh <maninder1.s@samsung.com>, keescook@chromium.org,
-        pmladek@suse.com, bcain@quicinc.com, mpe@ellerman.id.au,
-        benh@kernel.crashing.org, paulus@samba.org, hca@linux.ibm.com,
-        gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com, satishkh@cisco.com,
-        sebaddel@cisco.com, kartilak@cisco.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, mcgrof@kernel.org,
-        jason.wessel@windriver.com, daniel.thompson@linaro.org,
-        dianders@chromium.org, naveen.n.rao@linux.ibm.com,
-        anil.s.keshavamurthy@intel.com, davem@davemloft.net,
-        mhiramat@kernel.org, peterz@infradead.org, mingo@redhat.com,
-        will@kernel.org, boqun.feng@gmail.com, rostedt@goodmis.org,
-        senozhatsky@chromium.org, linux@rasmusvillemoes.dk,
-        akpm@linux-foundation.org, arnd@arndb.de,
-        linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-modules@vger.kernel.org,
-        kgdb-bugreport@lists.sourceforge.net, v.narang@samsung.com,
-        onkarnath.1@samsung.com
-Subject: Re: [PATCH 1/5] kallsyms: pass buffer size in sprint_* APIs
-Message-ID: <YooFpVGuDoyfoQPS@smile.fi.intel.com>
-References: <20220520083701.2610975-1-maninder1.s@samsung.com>
- <CGME20220520083725epcas5p1c3e2989c991e50603a40c81ccc4982e0@epcas5p1.samsung.com>
- <20220520083701.2610975-2-maninder1.s@samsung.com>
- <f3627eae-f5ae-1d30-2c09-1820a255334a@redhat.com>
+        Sun, 22 May 2022 05:46:17 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1843186F8;
+        Sun, 22 May 2022 02:46:15 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id d198so7623819iof.12;
+        Sun, 22 May 2022 02:46:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=suXXqsi9+jjSf0b0zBPpTnO09e3zkBqF8Eabr9WKKbE=;
+        b=Sc+Bu3TQQ+v5pOsrEs+Do5GftmhkiMiSIxCa44mlZDq7mNYcxLdkwdfXKicn7DRWyb
+         HJy6WmcdRs7iPjaePufoTRon/RgIAXRWuGvptGfFgSCtrtB5Uc3R//N868TVfZjB0KKK
+         9YG5tmYdNtYXGnx0n/C24yH/MXnMVP1DCbqXmxIaMfuINtLRrNcmjX1RCmXKqzFDtkQX
+         fenF6PfTaReYHMKNKQ02fqcpEST8I0hVooiLdcFQenVyu8jQfaCI4oyDyJI9fyMlZM7M
+         drpEdkzSHlAIHKUlBsm7tUUApxovLGVTWYtzm+Y9cAPxGhuGtksm4XsjcItCKvLCCXWE
+         zY9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=suXXqsi9+jjSf0b0zBPpTnO09e3zkBqF8Eabr9WKKbE=;
+        b=sEKslnHCLPFVLUAnU3qM9DFG2tdPg4YT1XiQCo+7g+3wJby0YYlRjeEqkGGspwHByC
+         +dbidlCAD4AQ2jt3Q5NSwbGNiT+EZm5t6rom3IOXet61M2sBxJsLRjuG86p/J6WZt4bQ
+         jCZFKUFpLPS9ygky8veYBo3QZ4wIuzIZuL0cZEUfsSYkhFAUzgWcsSoraGuyfDDbR5k5
+         j4Efnbb5E1gEgE0h9bYKR1e3o10SaeIOlcOteM192LnKxkSkjSJhG92nAW2KsYIlzvvO
+         Tg+yu02WprondTFb+Wg7r9p44s3m5HarKJvB9rcidfhxjF+X6aBbgqXBOe38I/UUIreg
+         dFiQ==
+X-Gm-Message-State: AOAM530QUmQDIhShA4qH7MOBImmqAY4HOxClvI7NdkQhSGk5AOVNlBAC
+        7hAtXmvklQ9b48fyhl1Fox1CEbj0ey55e8ixLoM=
+X-Google-Smtp-Source: ABdhPJwk75eAgmPLNvyHtlfHoP5i7/H2Vm4/MJ4t9PpFPunYJ+u9wWBwvWaEctXhAxfGgh6zp9BW4bjDSvEZguLIAA4=
+X-Received: by 2002:a05:6602:1542:b0:65a:bc5d:db78 with SMTP id
+ h2-20020a056602154200b0065abc5ddb78mr8040039iow.128.1653212775197; Sun, 22
+ May 2022 02:46:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f3627eae-f5ae-1d30-2c09-1820a255334a@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220513113930.10488-1-masahiroy@kernel.org> <CAK7LNAQvneCi11myLpkikuXh=i5PLtTaLe0nGpDZXgv_Q1L0Ow@mail.gmail.com>
+ <CA+icZUUWww3fXvjQcefgFuq=tPO6+FYDbHE2E5PmL-BSJg4+cw@mail.gmail.com> <CAK7LNATx1QcM6BdqBSascV8J8rD6etRgRZj9PjBno5Qrb=p3Yg@mail.gmail.com>
+In-Reply-To: <CAK7LNATx1QcM6BdqBSascV8J8rD6etRgRZj9PjBno5Qrb=p3Yg@mail.gmail.com>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Sun, 22 May 2022 11:45:39 +0200
+Message-ID: <CA+icZUV=PwX_e3U3mZwLOVvsA02pgNNAPsGJSMCPitu9ndWbqg@mail.gmail.com>
+Subject: Re: [PATCH v6 00/10] kbuild: yet another series of cleanups (modpost,
+ LTO, MODULE_REL_CRCS, export.h)
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-modules <linux-modules@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 03:52:01PM -0400, Waiman Long wrote:
-> On 5/20/22 04:36, Maninder Singh wrote:
+On Sun, May 22, 2022 at 8:50 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> On Sun, May 22, 2022 at 10:45 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> >
+> > On Fri, May 13, 2022 at 4:31 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> > >
+> > > On Fri, May 13, 2022 at 8:42 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> > > >
+> > > >
+> > > > This is the third batch of cleanups in this development cycle.
+> > > >
+> > >
+> > >
+> > > This series is available at
+> > > git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
+> > >  lto-cleanup-v6
+> > >
+> >
+> > Hi Masahiro,
+> >
+> > I cloned the repository on top of latest Linus Git.
+> >
+> > Not able to boot in Quemu - Not able to boot on bare metal.
+> >
+> > $ grep module_layout log_quemu-5.18.0-rc7-2-amd64-clang14-lto.txt
+> > 366:[    2.173265] floppy: disagrees about version of symbol module_layout
+> > 367:[    2.198746] scsi_common: disagrees about version of symbol module_layout
+> > 368:[    2.205573] i2c_piix4: disagrees about version of symbol module_layout
+> > 369:[    2.210610] psmouse: disagrees about version of symbol module_layout
+> > 370:[    2.225138] scsi_common: disagrees about version of symbol module_layout
+> > 371:[    2.235536] scsi_common: disagrees about version of symbol module_layout
+> > 375:Begin: Running /scripts/local-premount ... [    2.298555]
+> > crc32c_intel: disagrees about version of symbol module_layout
+> > 376:[    2.303335] crc32c_generic: disagrees about version of symbol
+> > module_layout
+> > 377:[    2.306667] libcrc32c: disagrees about version of symbol module_layout
+> >
+> > Infos: LLVM-14 + CONFIG_LTO_CLANG_THIN=y
+> >
+> > My linux-config and qemu-log are attached.
+> >
+>
+>
+> Thanks for your testing.
+>
+> I was also able to reproduce this issue.
+>
+>
+> The problematic parts are:
+>
+> [    2.298555] crc32c_intel: disagrees about version of symbol module_layout
+> [    2.303335] crc32c_generic: disagrees about version of symbol module_layout
+> [    2.306667] libcrc32c: disagrees about version of symbol module_layout
+>
+>
+>
+> When CONFIG_LTO_CLANG_THIN=y,
+> I cannot see any __crc_* symbols in "nm  vmlinux".
+>
+> Perhaps, LTO might have discarded all the __crc_* symbols
+> from vmlinux, but I am still checking the details...
+>
 
-...
+Thanks for taking care.
 
-> > -		sprint_symbol(sym, addr);
-> > +		sprint_symbol(sym, KSYM_SYMBOL_LEN, addr);
-> 
-> Instead of hardcoding KSYM_SYMBOL_LEN everywhere, will it better to hide it
-> like this:
-> 
->         extern int __sprint_symbol(char *buffer, size_t size, unsigned long
-> address);
->         #define sprint_symbol(buf, addr)        __sprint_symbol(buf,
-> sizeof(buf), addr)
-> 
-> Or you can use sizeof(buf) directly instead of KSYM_SYMBOL_LEN.
+Just for the records:
 
-This assumes that buf is defined as char [], which might be not always the
-case. If you are going with the macro, than ARRAY_SIZE() seems appropriate
-to perform a check against the above mentioned constraint.
+$ grep CONFIG_MODVERSIONS /boot/config-5.18.0-rc7-2-amd64-clang14-lto
+CONFIG_MODVERSIONS=y
 
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+-Sedat-

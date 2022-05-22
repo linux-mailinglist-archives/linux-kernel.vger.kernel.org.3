@@ -2,93 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B234153024B
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 12:09:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 793565302E3
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 14:07:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243292AbiEVKJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 06:09:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37902 "EHLO
+        id S1343669AbiEVMG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 08:06:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230244AbiEVKIz (ORCPT
+        with ESMTP id S230254AbiEVMGy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 06:08:55 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 063683EB86;
-        Sun, 22 May 2022 03:08:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653214135; x=1684750135;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=+ldVfAkI63e7T9H9+Tu6rkR3XDiV/+stA3qHNtz8ShU=;
-  b=fqMcbs48cA3u/tkSq0h0hOc/tsat7AIBWsHThBL2I3/Mte54HeMaXpXe
-   K+ovU99hntEQEHj50yvPvfSryz40huKAtsNRrSlbyT4HkfP3w1PLVpmTu
-   8FDIFop5Bltlh9FI2lSRA9djUsfzq7K3W2QfLrZNQRzUEZe5Uygm+W+P0
-   9IqRpo6uPsvSM+fcr5opM8HtiMD9XVknclTxM7/zDyyqFbgyC3elICCFZ
-   wjxLx59jCQKtaQw1bndoDnQsXqB6gbv/NBnsMe95aplRu6JL3U/yhCumX
-   EFzbb+B/yyzfZV8JiVzmqGiH4BOMSeHb6Z7zvNpJpPecfg1Cf+/58R6bh
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10354"; a="272956338"
-X-IronPort-AV: E=Sophos;i="5.91,244,1647327600"; 
-   d="scan'208";a="272956338"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2022 03:08:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,244,1647327600"; 
-   d="scan'208";a="628872786"
-Received: from q.bj.intel.com ([10.238.154.102])
-  by fmsmga008.fm.intel.com with ESMTP; 22 May 2022 03:08:50 -0700
-From:   shaoqin.huang@intel.com
-To:     pbonzini@redhat.com
-Cc:     Shaoqin Huang <shaoqin.huang@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: x86/mmu: Check every prev_roots in __kvm_mmu_free_obsolete_roots()
-Date:   Sun, 22 May 2022 19:09:48 -0600
-Message-Id: <20220523010948.2018342-1-shaoqin.huang@intel.com>
-X-Mailer: git-send-email 2.30.2
+        Sun, 22 May 2022 08:06:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 379D833A15;
+        Sun, 22 May 2022 05:06:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DB66CB80ABE;
+        Sun, 22 May 2022 12:06:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFD86C385AA;
+        Sun, 22 May 2022 12:06:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653221210;
+        bh=Bv4fPAC02UiEzOpCW/6I2VdtMA0+IkET8ctddcaHySw=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=s7mxyYOGYPOEYXDnU5scfo/z7dUPNJnM0qoSoDeJGbwXGuhILMm4gjujLc6uy6CFh
+         1ROnra4bCAyeOMVYlCKijZmR9JF3uBFyO39NF+CkGoeO+fSiVuQXvAcOjwhReaIsvi
+         Wn846qegZsELrlhVg71ccCfaBsq8LOxRuL++x0HuzwX3EA+CsfNtXFFeDFQu3nm1m8
+         HAJRCMcfFq4WPMSvrCtJkLsKfr99ICpOrbm016rls+RsXmVGZfoNbMi8Fmw4y5ILhO
+         NMbPmjEKEEcDlSzMgsaMtiPmWLydjC6+DA+6gThNSGUrKeD0rkVnPnHCK7KyPNf04l
+         8lPVEqQL5+nfg==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     johannes@sipsolutions.net, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org, toke@toke.dk,
+        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH net-next 2/8] wifi: ath9k: silence array-bounds warning on GCC 12
+In-Reply-To: <20220521105347.39cac555@kernel.org> (Jakub Kicinski's message of
+        "Sat, 21 May 2022 10:53:47 -0700")
+References: <20220520194320.2356236-1-kuba@kernel.org>
+        <20220520194320.2356236-3-kuba@kernel.org> <87h75j1iej.fsf@kernel.org>
+        <20220521105347.39cac555@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+Date:   Sun, 22 May 2022 15:06:43 +0300
+Message-ID: <87bkvp22lo.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shaoqin Huang <shaoqin.huang@intel.com>
+Jakub Kicinski <kuba@kernel.org> writes:
 
-Iterate every prev_roots and only zap obsoleted roots.
+> On Sat, 21 May 2022 09:58:28 +0300 Kalle Valo wrote:
+>> > +# FIXME: temporarily silence -Warray-bounds on non W=1+ builds
+>> > +ifndef KBUILD_EXTRA_WARN
+>> > +CFLAGS_mac.o += -Wno-array-bounds
+>> > +endif  
+>> 
+>> There are now four wireless drivers which need this hack. Wouldn't it be
+>> easier to add -Wno-array-bounds for GCC 12 globally instead of adding
+>> the same hack to multiple drivers?
+>
+> I mean.. it's definitely a hack, I'm surprised more people aren't
+> complaining. Kees was against disabling it everywhere, AFAIU:
+>
+> https://lore.kernel.org/all/202204201117.F44DCF9@keescook/
 
-Signed-off-by: Shaoqin Huang <shaoqin.huang@intel.com>
----
- arch/x86/kvm/mmu/mmu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Wasn't Kees objecting of disabling array-bounds for all GCC versions?
+That I understand, but I'm merely suggesting to disable the warning only
+on GCC 12 until the compiler is fixed or the drivers are fixed.
 
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 45e1573f8f1d..22803916a609 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -5168,7 +5168,7 @@ static void __kvm_mmu_free_obsolete_roots(struct kvm *kvm, struct kvm_mmu *mmu)
- 		roots_to_free |= KVM_MMU_ROOT_CURRENT;
- 
- 	for (i = 0; i < KVM_MMU_NUM_PREV_ROOTS; i++) {
--		if (is_obsolete_root(kvm, mmu->root.hpa))
-+		if (is_obsolete_root(kvm, mmu->prev_roots.hpa))
- 			roots_to_free |= KVM_MMU_ROOT_PREVIOUS(i);
- 	}
- 
+> WiFi is a bit unfortunate but we only have 3 cases in the rest of
+> networking so it's not _terribly_ common.
+>
+> IDK, I'd love to not see all the warnings every time someone touches
+> netdevice.h :( I made a note to remove the workaround once GCC 12 gets
+> its act together, that's the best I could come up with.
+
+Ok, fair enough. I'm just worried these will be left lingering for a
+long time and do more harm than good :)
+
 -- 
-2.30.2
+https://patchwork.kernel.org/project/linux-wireless/list/
 
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

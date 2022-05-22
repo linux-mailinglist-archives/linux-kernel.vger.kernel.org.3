@@ -2,101 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDAC75301EF
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 10:57:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7A1E5301F4
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 11:02:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242057AbiEVI5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 04:57:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44104 "EHLO
+        id S242443AbiEVJCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 05:02:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229913AbiEVI5m (ORCPT
+        with ESMTP id S234153AbiEVJCM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 04:57:42 -0400
-Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C36243FDAB
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 01:57:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1653209860; x=1684745860;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=G5+4rscONIhG5vVdjFzi7fHQ8fXcbe5d465rNf7CvYk=;
-  b=lfUqEyBEm8Fc/DyrEVr+8JlxH462uzUwqLdMDm0Lo85JxULlZBRigWM3
-   8QsKeIQkF7eTqhPxmJ1KczTFxKRXqzzWsMv/C0+cgYuj4q5mlOdiTeL56
-   jmiio8ftN7u9vRmUDZc7clD+KgjvAEExSIjIlOJVZFlSSP2Wh3IXwPT/t
-   yfEJEMaeWUBHiWBiMB/gqQ9XmWyrYpjHiIIMso/0U1w0X3dUy2sG7RbZ/
-   /ErxReK8t7PPrEbB5e9yEL1WL+kQuI/hxz+w2FLADhFYRab5fqjnQmvUt
-   ZjUkwucJop9GQtjRRpmHHa6dNI1A/jPNMojaSTTVXrYbAOWs3r/pvVc7x
-   w==;
-X-IronPort-AV: E=Sophos;i="5.91,244,1647273600"; 
-   d="scan'208";a="313046358"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 22 May 2022 16:57:40 +0800
-IronPort-SDR: mgF3fzMoj0biCYP5BjaX2IlQ3kB/AlfkmVS5pldOZ2esHpyzFkYd+w6OJK1tgS/4Hlkt20b4cY
- 8qr677S0EyY9YFuFWGOUIFTQrh3KV3lcBpIUSWoj4M9Z7vhkJyzykl9ry8KGTVlotwhS85PDSn
- 1Wi5bjeySvht4IjmIwOLlTutoztvGimPsS6SjvbTVzv/TpZ1wfO09vk8vt1toJcL4UHkpWdIgV
- 569o3yOXSIEHHqIz0id5eQrvajaIkUiemyzSNZm4V9BG0BP434RVcKqQkHPNXd25noIUAPEuis
- Rd5nd0xJJShaRsWImeOxYXss
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 22 May 2022 01:21:41 -0700
-IronPort-SDR: N7E+rCFpfMaGWlVKlGIE7YomLUY65EsbuQz1b/aQW0kBGZreaRkxyzb75j1AdLMgdX4vTxO0xl
- R3LuxWr2SGSXdRoei7gm5CryXVR3mzc0T+UGIGqWzjvQgyk5EbIBEci+kfWGJDLQ89mMQpr1TV
- R7k3yzSUToTYVc/bNfIAvwVkEx+41u5cS+l39SNVrvZxfN7eMPOqTpMoVaaTOsJVPKGYHc4w6W
- N11Co211TxKZLQQqXFcGa53+IjJIC0t8d4/3nNXw9nH4CND7TbtQA+zl7z+dpP0YFZEdAUJe2M
- QXE=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 22 May 2022 01:57:40 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4L5Z9H4nnVz1SVp5
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 01:57:39 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1653209858; x=1655801859; bh=G5+4rscONIhG5vVdjFzi7fHQ8fXcbe5d465
-        rNf7CvYk=; b=pZvIrPItFbCSSksFipwO6soign0J4ZbSXjZVDPLF1mxgU7HoG6y
-        Qes7nT6CCQ4EhTqcnR2oZdmis4YLHMS0BhcC+I2Ms+NfIXZ4Rv1d9FLG+ss3DuRm
-        CVchfne/rs4uPAGvJXyyp8j4EoRTWMPhUIJmEHYxc8cmW3Fy1mRW6U2uehQ2hDBD
-        bZKpv1i1ZFn6wTrMWnfeUl1r5WRRMkorVCtfNZruWJRQugdLqWaoP+BqL7fWmIZQ
-        0VD1fppWF/N9ETROkL9Id4vKRra+GjCsY9J0QF9jr+j4XlkI2weYJz4LKzYiMWMG
-        SSwcKgg/RGD/ps3Bs9I9BBtklGd5H8G4PUQ==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id nnEJmRbHHtkR for <linux-kernel@vger.kernel.org>;
-        Sun, 22 May 2022 01:57:38 -0700 (PDT)
-Received: from [10.225.163.51] (unknown [10.225.163.51])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4L5Z9D07Fnz1Rvlc;
-        Sun, 22 May 2022 01:57:35 -0700 (PDT)
-Message-ID: <54be2e4a-29e4-04f9-2b73-7705d595d6a6@opensource.wdc.com>
-Date:   Sun, 22 May 2022 17:57:34 +0900
+        Sun, 22 May 2022 05:02:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4EBA71658F
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 02:02:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653210130;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lHhQz7yGeH9M0bT14FqcQt3xWJJwKp6CTxN9gSJseho=;
+        b=EkOVD1tcdvgJjHoKUnYaveKkd0A4zOdSbyh6lc2i5sNJpOs0Q3K58eectNx5K27Wz+ybqu
+        kY3IuzWHPiB0lL06rmBYeA4rdPIewTqrwObIhEx05RlNqhYgD+7A//w0IRQA66TZbCr6Jn
+        K6Z8zZLb3+vANqpaRi15Af1HVQIF8Xw=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-344-xF3jqyc_NQ-5Tgbu_BvSSQ-1; Sun, 22 May 2022 05:02:05 -0400
+X-MC-Unique: xF3jqyc_NQ-5Tgbu_BvSSQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2421D3C02B60;
+        Sun, 22 May 2022 09:02:04 +0000 (UTC)
+Received: from starship (unknown [10.40.192.55])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 01D1640CF8E7;
+        Sun, 22 May 2022 09:01:56 +0000 (UTC)
+Message-ID: <d1df82a17e6e89ab58d5f6aa911ee2d532efee31.camel@redhat.com>
+Subject: Re: [RFC PATCH v3 03/19] KVM: x86: SVM: remove avic's broken code
+ that updated APIC ID
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        intel-gfx@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
+        linux-kernel@vger.kernel.org, Jim Mattson <jmattson@google.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        intel-gvt-dev@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org
+Date:   Sun, 22 May 2022 12:01:55 +0300
+In-Reply-To: <YoZr9wC2KjTFHrQ7@google.com>
+References: <20220427200314.276673-1-mlevitsk@redhat.com>
+         <20220427200314.276673-4-mlevitsk@redhat.com> <YoZr9wC2KjTFHrQ7@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v3] RISC-V: Add CONFIG_{NON,}PORTABLE
-Content-Language: en-US
-To:     Palmer Dabbelt <palmer@rivosinc.com>,
-        linux-riscv@lists.infradead.org
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>, aou@eecs.berkeley.edu,
-        rdunlap@infradead.org, Arnd Bergmann <arnd@arndb.de>,
-        anup@brainfault.org, alexandre.ghiti@canonical.com,
-        Atish Patra <atishp@rivosinc.com>, axboe@kernel.dk,
-        guoren@kernel.org, mchitale@ventanamicro.com,
-        linux-kernel@vger.kernel.org, linux@rivosinc.com
-References: <20220521193356.26562-1-palmer@rivosinc.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220521193356.26562-1-palmer@rivosinc.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -104,20 +83,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/22/22 04:33, Palmer Dabbelt wrote:
-> From: Palmer Dabbelt <palmer@rivosinc.com>
+On Thu, 2022-05-19 at 16:10 +0000, Sean Christopherson wrote:
+> On Wed, Apr 27, 2022, Maxim Levitsky wrote:
+> > AVIC is now inhibited if the guest changes apic id, thus remove
+> > that broken code.
 > 
-> The RISC-V port has collected a handful of options that are
-> fundamentally non-portable.  To prevent users from shooting themselves
-> in the foot, hide them all behind a config entry that explicitly calls
-> out that non-portable binaries may be produced.
+> Can you explicitly call out what's broken?  Just something short on the code not
+> handling the scenario where APIC ID is changed back to vcpu_id to help future
+> archaeologists.  I forget if there are other bugs...
 > 
-> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
 
-Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
--- 
-Damien Le Moal
-Western Digital Research
+Well, the avic_handle_apic_id_update is called each time the AVIC is uninhibited,
+because while it is inhibited, the AVIC code doesn't track changes to APIC ID and such.
+
+Also there are many ways it is broken for example
+
+1. a CPU can't move its APIC ID to a free slot due to (!new) check
+
+2. If APIC ID is moved to a used slot, then the CPU that used that overwritten
+slot can't correctly move it, since its now not its slot, not to mention races.
+
+
+BTW, if you see a value in it, I can fix this code instead - a lock + going over all the apic ids,
+should be quite easy to implement. In case of two vCPUs using the same APIC ID,
+I can write non present entry to the table, so none will be able to be addressed,
+hoping that the situation is only temporary.
+
+Same can be done for IPIv.
+
+Best regards,
+	Maxim Levitsky
+

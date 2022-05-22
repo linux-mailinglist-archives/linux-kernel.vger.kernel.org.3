@@ -2,58 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 293AC530121
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 07:50:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45776530134
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 08:09:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239218AbiEVFuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 01:50:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42988 "EHLO
+        id S238222AbiEVGJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 02:09:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238064AbiEVFuE (ORCPT
+        with ESMTP id S229530AbiEVGJO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 01:50:04 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51DE14093B
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 22:50:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653198602; x=1684734602;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=lURrqWQ4Bp3TuV0mtrGGqW8+CVdAW7nh+lfYSkx6HmI=;
-  b=LiSlFl0cotNIXWeNCQkPSxTgtct1SahfhTI3KxgC7BorHoC4EKoI81R9
-   UaXC4sf2cbzjwVJkJYgWegY39ZJ+a0hqqjNZMKB5B7BBAREuYuseK8/ZI
-   SKsDhllPzuRS6sh/4c8LBQl4ljnR+BTKdPhfC9FiIlktpIvqPNjyn3EKL
-   nRzJbL0qXnZY/QNElNkKiqHZjuU5rPmL3jLLWF04FRzTedQocMVNZT7tk
-   sRfndVlpCtIznJ5c+Shzdt+AD7C7o/J8pzbuQ9gev/xUgdEcquB0uoW/9
-   rIxYibiPuhMyFUHxejZVfrvfaeWpLAKLOFOLPzCENyc4cuMGemK8oWvxW
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10354"; a="336002732"
-X-IronPort-AV: E=Sophos;i="5.91,243,1647327600"; 
-   d="scan'208";a="336002732"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 22:50:01 -0700
-X-IronPort-AV: E=Sophos;i="5.91,243,1647327600"; 
-   d="scan'208";a="600047771"
-Received: from unknown (HELO jiaqingz-server.sh.intel.com) ([10.239.48.171])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 22:50:00 -0700
-From:   Jiaqing Zhao <jiaqing.zhao@linux.intel.com>
-To:     linux-mtd@lists.infradead.org,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Michael Walle <michael@walle.cc>
-Cc:     linux-kernel@vger.kernel.org,
-        Jiaqing Zhao <jiaqing.zhao@linux.intel.com>
-Subject: [PATCH 2/2] mtd: spi-nor: micron: Add SPI_NOR_DUAL_READ flag on mt25ql02g
-Date:   Sun, 22 May 2022 13:48:02 +0800
-Message-Id: <20220522054802.1719443-2-jiaqing.zhao@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220522054802.1719443-1-jiaqing.zhao@linux.intel.com>
-References: <20220522054802.1719443-1-jiaqing.zhao@linux.intel.com>
+        Sun, 22 May 2022 02:09:14 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FFA73C704;
+        Sat, 21 May 2022 23:09:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=f8vODVBPPT4aieHBVtPQZPwEE8oetsAgiBP0SHP03Ns=; b=dVrwKB+az4x8MRcYyIRObMC3Kz
+        0/Lk5RsZ/uHq7rxWTwLfDctoffMnHd/XYI6CywnbwDoBtQ0kGP0IAReMVRjqBcN7i0SOfz0WyQzjA
+        72LMGsN8V9ohaRMa+yuZL8XoU9VwEiQiE2PgbZvQra5fAtbw50/0JLdprjgLYkqxfuWFiZ6BP/ylm
+        NxxYXDcrYvan5XviHSu6Iu2oEMAP9rTCG164FVGAiNtLsWVSqGCba2HcD3pGV4AYzuLQExeQAeT4l
+        L1Dtehj+OTr3rq74yGZS0MDlKvD/f3IME9yzaWi1wHGZN47KQaz/+4mUl1RmIeJIrS4yLTIpAl1X9
+        obWQzOxQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nsekq-000fUe-8y; Sun, 22 May 2022 06:07:52 +0000
+Date:   Sat, 21 May 2022 23:07:52 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Maninder Singh <maninder1.s@samsung.com>
+Cc:     keescook@chromium.org, pmladek@suse.com, bcain@quicinc.com,
+        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com, satishkh@cisco.com,
+        sebaddel@cisco.com, kartilak@cisco.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, mcgrof@kernel.org,
+        jason.wessel@windriver.com, daniel.thompson@linaro.org,
+        dianders@chromium.org, naveen.n.rao@linux.ibm.com,
+        anil.s.keshavamurthy@intel.com, davem@davemloft.net,
+        mhiramat@kernel.org, peterz@infradead.org, mingo@redhat.com,
+        will@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
+        rostedt@goodmis.org, senozhatsky@chromium.org,
+        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
+        akpm@linux-foundation.org, arnd@arndb.de,
+        linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-modules@vger.kernel.org,
+        kgdb-bugreport@lists.sourceforge.net, v.narang@samsung.com,
+        onkarnath.1@samsung.com
+Subject: Re: [PATCH 0/5] kallsyms: make kallsym APIs more safe with scnprintf
+Message-ID: <YonTOL4zC4CytVrn@infradead.org>
+References: <CGME20220520083715epcas5p400b11adef4d540756c985feb20ba29bc@epcas5p4.samsung.com>
+ <20220520083701.2610975-1-maninder1.s@samsung.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220520083701.2610975-1-maninder1.s@samsung.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,27 +69,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Micron mt25ql02g supports x2 width dual mode operation. This patch
-adds the SPI_NOR_DUAL_READ flag to its flash_info entry.
+On Fri, May 20, 2022 at 02:06:56PM +0530, Maninder Singh wrote:
+> kallsyms functionality depends on KSYM_NAME_LEN directly.
+> but if user passed array length lesser than it, sprintf
+> can cause issues of buffer overflow attack.
+> 
+> So changing *sprint* and *lookup* APIs in this patch set
+> to have buffer size as an argument and replacing sprintf with
+> scnprintf.
 
-Signed-off-by: Jiaqing Zhao <jiaqing.zhao@linux.intel.com>
----
- drivers/mtd/spi-nor/micron-st.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/mtd/spi-nor/micron-st.c b/drivers/mtd/spi-nor/micron-st.c
-index 8a20475ce77a..da0251c1a263 100644
---- a/drivers/mtd/spi-nor/micron-st.c
-+++ b/drivers/mtd/spi-nor/micron-st.c
-@@ -233,7 +233,7 @@ static const struct flash_info st_nor_parts[] = {
- 	},
- 	{ "mt25ql02g",   INFO(0x20ba22, 0, 64 * 1024, 4096)
- 		FLAGS(NO_CHIP_ERASE)
--		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_QUAD_READ)
-+		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)
- 		MFR_FLAGS(USE_FSR)
- 	},
- 	{ "mt25qu02g",   INFO(0x20bb22, 0, 64 * 1024, 4096)
--- 
-2.34.1
+This is still a pretty horrible API.  Passing something like
+a struct seq_buf seems like the much better API here.  Also with
+the amount of arguments and by reference passing it might be worth
+to pass them as a structure while you're at it.
 

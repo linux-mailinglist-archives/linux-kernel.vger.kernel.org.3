@@ -2,97 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40FF653057F
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 21:46:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE82F5305C7
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 22:14:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350222AbiEVTq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 15:46:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50928 "EHLO
+        id S1351102AbiEVUOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 16:14:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230252AbiEVTq0 (ORCPT
+        with ESMTP id S241222AbiEVUO2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 15:46:26 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3392D2A275;
-        Sun, 22 May 2022 12:46:25 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id w4so18313074wrg.12;
-        Sun, 22 May 2022 12:46:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CHiuUqPQofXVNtOmlbKgS9gvW1ZOU+ziWXGacGyqfnU=;
-        b=Wqw7ixDSCQiUlqiBUjLbcdlqFgG0D1NMrx5wJDqD1NENo2MoEihGvDTEgBeA0n9cKy
-         BGCBmuCQJPD7pL5i6gwGmdc774TAduxuheQTaL+3qdQuYRnWoq1jRmOktknLWiilOJvK
-         7iniCUhbCJdsYMGXDcgbRNEsMWN+xP9VNDOnp7jUBEKCbxfFDUh0wCw1purbeG/GQrv8
-         wq2ExyqLN+eWJ+w2sFaGGKx8+RzapyAHh3Bl4wyvPPMFyyMj2ox6YTa3aJV59hVDwL0Y
-         F+FEeG4Gc3GrjIGNELtjcEDm1zW7oAvkLrt4u6fWcO8sGfbpRzrnH5Q7agCZzuvLK9rD
-         1N6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CHiuUqPQofXVNtOmlbKgS9gvW1ZOU+ziWXGacGyqfnU=;
-        b=AoO0lYWO1HF4jxLQT3dQUB2W0jPMX3ML2W8qdQ6R4LZXgZPmMQ780TGNZWEcHkMFbS
-         IZ21jqQ29dKTuHNGCOj3Ef9MeR7t33k2cy9L0q8KpwV4/1kIwjuywDn1tMLJllWomGPI
-         miTHa8S8x7wD3Gc4Ce7I4yux4oN3BwcbMpgAloVL8T4j6+TxG2IRGY7ipHQpv8OJau7I
-         Bv8szeNkQJcUg7jSSaXDautsq0zNPxQ8wot0PSWQOB4kzGd+y3b4wII8ZYI5q8szchoJ
-         +AUdeb0L5s132QIMlMG/PbuokW/6+F4qsshDxiGZfN3VnI68/m3jP3ZQSQ/VgWSUQbiS
-         MNdQ==
-X-Gm-Message-State: AOAM533dtMxZYA33+4iAfuFY6/qMPCmAvGle1StiSaCAov1Nvu1hXzBr
-        Rp7IJg3IatqD0NZe7sGuauPCqE5y3SI=
-X-Google-Smtp-Source: ABdhPJz7m1zS1+0VOawboYY3emg62RWneM0bmRRFX9ocb8dLbKQ9xmTU/3SxCxxx4fzKvoa61b3wYQ==
-X-Received: by 2002:a05:6000:168a:b0:20f:d6e8:a5b with SMTP id y10-20020a056000168a00b0020fd6e80a5bmr2831116wrd.41.1653248783731;
-        Sun, 22 May 2022 12:46:23 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id h19-20020adfaa93000000b0020c5253d8f7sm8217026wrc.67.2022.05.22.12.46.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 May 2022 12:46:23 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Evgeniy Polyakov <zbr@ioremap.net>
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] w1: ds2438: remove redundant initialization of variable crc
-Date:   Sun, 22 May 2022 20:46:22 +0100
-Message-Id: <20220522194622.13277-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.3
+        Sun, 22 May 2022 16:14:28 -0400
+X-Greylist: delayed 1525 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 22 May 2022 13:14:28 PDT
+Received: from out5.nocdirect.com (out5.nocdirect.com [69.73.171.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B48C369DA
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 13:14:27 -0700 (PDT)
+Received: from binky.nswebhost.com ([69.73.168.248])
+        by spamexperts03.nocdirect.com with esmtpsa (TLSv1.2:AES128-GCM-SHA256:128)
+        (Exim 4.92)
+        (envelope-from <support@iesottawa.ca>)
+        id 1nsrZS-0000Rr-1N
+        for linux-kernel@vger.kernel.org; Sun, 22 May 2022 15:48:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=iesottawa.ca; s=default; h=Sender:Content-Type:MIME-Version:Message-ID:
+        Reply-To:From:Date:Subject:To:Cc:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=tsytaq9P6jbx84sZaeZ2ujyYY054YqWU2QI73VCcE8s=; b=zy3AB4uzyneHulkftVgzocu6pd
+        MABaKWRbIcAdqN6k3etK3RVRwIFTva5FI6ue07oFU5KGDQn/Y0Y6V1mOEMu7IhoSzxeTO7GkZt2bg
+        zbn8JXS0/tulF5H3D59xWuTnDk1JsD/z0nUhFOQEsAxLP6xFceI9w9IWWuD2CFxMik8xgqZQl/7AE
+        Oqb1jzN/4z0f5FhASlklszUleqPEfImb1CvO5ihmIsF+zIU11lmgxOk+iYNUy4laeb5okUj+URMUh
+        euQMo/2cCgH0Nacjbs/BY847gWCnncF5vPdHV7CPV47j3R7jDWQutew6ud5oT1nyWwkCW7cUjBcEC
+        IbA3qL/A==;
+Received: from ottawa by binky.nswebhost.com with local (Exim 4.93)
+        (envelope-from <support@iesottawa.ca>)
+        id 1nsrYQ-00078F-Nq
+        for linux-kernel@vger.kernel.org; Sun, 22 May 2022 15:47:54 -0400
+To:     linux-kernel@vger.kernel.org
+Subject: Re: Looking forward to hearing from you
+X-PHP-Script: iesottawa.ca/modules/mod_simplefileuploadv1.3/elements/bcqkhulk.php for 36.37.185.70
+Date:   Sun, 22 May 2022 19:47:54 +0000
+From:   "Mrs. Mamand Mashamsul" <support@iesottawa.ca>
+Reply-To: mrsmamands@gmail.com
+Message-ID: <c8007d75efc87d5c08acf625fb52bec4@iesottawa.ca>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Sender:  <ottawa@binky.nswebhost.com>
+X-Originating-IP: 69.73.168.248
+X-SpamExperts-Domain: nocdirect.com
+X-SpamExperts-Username: binky
+Authentication-Results: nocdirect.com; auth=pass (login) smtp.auth=binky@nocdirect.com
+X-SpamExperts-Outgoing-Class: unsure
+X-SpamExperts-Outgoing-Evidence: Combined (0.83)
+X-Recommended-Action: accept
+X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT9NxnHXhFI9aLFhf4G9YVDvPUtbdvnXkggZ
+ 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5z4WkZ/TJaiaBbP2NJqrVHtfCzdNGNoLjYW00m5NbCHvI9w
+ knWGobBIYos3d1n2bREdEtB1ZMYATUElPOm9F2QL5WCy5VkstzhnxgTXqsdmp/Wn05gqPZge6fRu
+ MJPh6sDu/e86mZjV6Sy6Asexqznjdhvi3DEM5gl7QMCSadIaw/xBB7G59hKJv5m89DUmcUOKgBRI
+ fcZUfZwN89VAi8ym19ilIzt3BUAOXsUYvJDWUnTaeQtlKubP6iUTjj6yPASOmrbMWhZFkvyjvYIF
+ be8tdb9BwqvSI91oKEKHszPrHGBuMmAYf4hbVE3z3Ot33ZD69jSlw+osi/uaVnmuT0ZJdzvP3W79
+ /xjWif9pd+MBAjpgtEJiC/RNPkrUEgky+JPZ4xpigOktCp6Xcz12tfjFPd0rEuGjFyZoidhtHm+W
+ of0KyhOJV75thdWrPXwaDw7qAlzlYouTdrqAP9b5VrNZltK+MtP+Q+MOaQQT+Vn8BIlSPGIn6LIh
+ 6vfZt6Tuc+uVfVL7ygxIxIEhQBgsu7ia6J1fhOzjF0b4LXcjJZ5los0t+yXgVv1fVKFGpgDKkeVe
+ 5S10FHDQLMw7J6FDq9AYEe5lbnSaWYwizmSCrJReSFse4eZ470w+Lz+8dxPiymjRtFuayQSHKxuV
+ s+RmqoRq3CRiRJK4GhOXBQPqhauyDxzi9cft92qJ+i0lqzcyoqFVlQ1vUe1/iWWVtQAedSdo9av6
+ EFOzO12YHcsnIh1JW4zbg0PPWMPuZRPoz/Oktjchu1/rdU1t/SWu+yxj6TsAEdwhoW9jAAyH9d93
+ /xvErl0K1XacwNVrdseLPwMNJOx8ZEDeLRyWnNuP8Qfo5808h6acV+m/1HtJVsJEtDsfABYzpPqG
+ BvR0ks1/IouSjksSHgDvqOblwwr6dI9qLjQ+Yt1DGpoalxmasWifUN8mz4PFqAsJjBDQgYPkM7DW
+ +lBUfKHrqn8cv69cP2IsSSTyMS+4ayUpOtEhdxekWDmK9g==
+X-Report-Abuse-To: spam@spamexperts01.nocdirect.com
+X-Spam-Status: Yes, score=6.8 required=5.0 tests=BAYES_60,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        HK_NAME_MR_MRS,PHP_SCRIPT,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.7 RCVD_IN_DNSWL_LOW RBL: Sender listed at https://www.dnswl.org/,
+        *       low trust
+        *      [69.73.171.4 listed in list.dnswl.org]
+        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
+        *      [score: 0.6719]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.7 SPF_SOFTFAIL SPF: sender does not match SPF record (softfail)
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.5 PHP_SCRIPT Sent by PHP script
+        *  1.0 HK_NAME_MR_MRS No description available.
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Variable crc is being initialized with a value that is never read,
-it is being re-assigned later on. The initialization is redundant
-and can be removed.
+Greatings Dear
 
-Cleans up clang scan build warning:
-warning: Value stored to 'crc' is never read [deadcode.DeadStores]
-
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/w1/slaves/w1_ds2438.c | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/drivers/w1/slaves/w1_ds2438.c b/drivers/w1/slaves/w1_ds2438.c
-index ca64f99c8f3d..e008c27b3db9 100644
---- a/drivers/w1/slaves/w1_ds2438.c
-+++ b/drivers/w1/slaves/w1_ds2438.c
-@@ -66,8 +66,6 @@ static int w1_ds2438_get_page(struct w1_slave *sl, int pageno, u8 *buf)
- 	size_t count;
+I am Mrs. Mamand Mashamsul, from Kabul, Capital of Afghanistan. With due respect, I want to know if foreigners can buy and own properties in your beautiful country, I desire to relocate my investment capital abroad where it will generate more returns. 
  
- 	while (retries--) {
--		crc = 0;
--
- 		if (w1_reset_select_slave(sl))
- 			continue;
- 		w1_buf[0] = W1_DS2438_RECALL_MEMORY;
--- 
-2.35.3
+I will appreciate your response. Please let me know your ideas and knowledge regarding my research. In Any viable investment idea you suggest to me will be also be considered. 
+ 
+Looking forward to hearing from you.
+
+Best regards,
+Mrs. Mamand Mashamsul
 

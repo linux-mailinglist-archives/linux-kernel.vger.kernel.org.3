@@ -2,47 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2B6F530294
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 13:09:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55C0553029C
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 13:17:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244885AbiEVLJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 07:09:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47316 "EHLO
+        id S241198AbiEVLRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 07:17:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241469AbiEVLJI (ORCPT
+        with ESMTP id S235232AbiEVLRP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 07:09:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1682D3BBE8;
-        Sun, 22 May 2022 04:09:07 -0700 (PDT)
+        Sun, 22 May 2022 07:17:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2B503D1E1;
+        Sun, 22 May 2022 04:17:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BCA32B80AC0;
-        Sun, 22 May 2022 11:09:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EA7FC385AA;
-        Sun, 22 May 2022 11:09:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2FE65B80AFD;
+        Sun, 22 May 2022 11:17:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84466C385AA;
+        Sun, 22 May 2022 11:17:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653217744;
-        bh=AVArGOXhwSYyaL2HHKnlBrQQIXmOh82zUGw0Op8w/cU=;
+        s=k20201202; t=1653218231;
+        bh=FMgjFVda0G8ynRHRjbeXhrPkJH/y/1VulbL8kZ8FO5U=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=MhFKBcGQrQ6ZWTKEHjFXDxI4gY9yQHRvAH7+QMr8gxivFu5Rd6N+FAiZkDkrMqUkf
-         YKeaqM39mCMsUD/B+Xvx6+1t35adBDnU8l7HMtiRPYgQZlXlsJy8nBWPuB+v1gfVsq
-         LEwLsarbXwK4nAK+/gidZb+Wx7H51xTEAJazPMqkNnwCdxU0z0l6t8u+bRSGqrXXEb
-         ENFJ9kFAMZlGFo+54ENYAE0esCysdlAS3AlEhyE5NT47RWLguBuYCagPIKv55JvG9m
-         CGIy1JIzSO55fCqlA6t38x5Yd8vp0dQ/jw0lr2k2YeHF0ob5DfG/KbrzIWpgNP3WNk
-         FmMaJCG+QUbww==
-Date:   Sun, 22 May 2022 12:17:49 +0100
+        b=JQP7/FX4pAUCuhCG47MYkdEGEsGVAtOmlHUI9e/RJrHFXYRIhQEUQ6Nthx/1dWbt0
+         1qmd8pel24MZj+rtu0xUsoZPdjV2/vXvLXevdbDFP9VOlqHywzVupWW3zqxr1vW6vv
+         jqr+r7kDa8MKgvgLXcl6rs3E+g3RRnosp1kFcBffXOBg9xDyMytuJhQ4xHVilKVh54
+         WyIG6LCnVHqrxLtA5qENeMZ3H0/iI8pSsw2npKoeNraquCQcdKspfSbSie5zhz57F2
+         l1wz2BI9yd/T2RjAs7Gtmy+GrCin2aNdI5zjYeC1nWIxyrRNLXyMiSPO+FIOXOlR2f
+         mOaF7U7Gx8wBQ==
+Date:   Sun, 22 May 2022 12:25:55 +0100
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
-Cc:     lars@metafoo.de, robh+dt@kernel.org, tomas.melin@vaisala.com,
-        andy.shevchenko@gmail.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
-Subject: Re: [PATCH V7 5/5] iio: accel: sca3300: Add inclination channels
-Message-ID: <20220522121749.01807970@jic23-huawei>
-In-Reply-To: <20220522070419.409556-6-Qing-wu.Li@leica-geosystems.com.cn>
-References: <20220522070419.409556-1-Qing-wu.Li@leica-geosystems.com.cn>
-        <20220522070419.409556-6-Qing-wu.Li@leica-geosystems.com.cn>
+To:     Tamseel Shams <m.shams@samsung.com>
+Cc:     lars@metafoo.de, robh+dt@kernel.org, krzk+dt@kernel.org,
+        geert@linux-m68k.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org, alim.akhtar@samsung.com,
+        paul@crapouillou.net, linux-fsd@tesla.com
+Subject: Re: [PATCH v2 2/3] iio: adc: exynos-adc: Add support for ADC FSD-HW
+ controller
+Message-ID: <20220522122555.6c65d2b6@jic23-huawei>
+In-Reply-To: <20220520145820.67667-3-m.shams@samsung.com>
+References: <20220520145820.67667-1-m.shams@samsung.com>
+        <CGME20220520145802epcas5p2153cb572493e3bccd702e0ecce1171fb@epcas5p2.samsung.com>
+        <20220520145820.67667-3-m.shams@samsung.com>
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -57,220 +62,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 22 May 2022 07:04:19 +0000
-LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn> wrote:
+On Fri, 20 May 2022 20:28:19 +0530
+Tamseel Shams <m.shams@samsung.com> wrote:
 
-> Different from SCA3300, SCL3300 can output inclination angles.
-> Angles are formed from acceleration with following equations:
-> ANG_X = atan2(accx , sqrt(pow(accy , 2) + pow(accz , 2)))
-> ANG_Y = atan2(accy , sqrt(pow(accx , 2) + pow(accz , 2)))
-> ANG_Z = atan2(accz , sqrt(pow(accx , 2) + pow(accy , 2)))
+> From: Alim Akhtar <alim.akhtar@samsung.com>
 > 
-> The commit adds the output of the raw value, scale
-> and scale_available of angles.
+> Exynos's ADC-FSD-HW has some difference in registers set, number of
+> programmable channels (16 channel) etc. This patch adds support for
+> ADC-FSD-HW controller version.
 > 
-> New interfaces:
->   in_incli_scale
->   in_incli_scale_available
->   in_incli_x_raw
->   in_incli_y_raw
->   in_incli_z_raw
-> Data converted by application of scale to degrees.
-> 
-> Signed-off-by: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
+> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
+> Signed-off-by: Tamseel Shams <m.shams@samsung.com>
 
-Hi Li,
+Hi,
 
-A few small things to tidy up in this patch. See inline.
-
+One suggestion inline, otherwise LGTM. Plenty of time to tidy this up as
+this won't make the upcoming merge window - I'll be queuing it up for 5.20
 
 Thanks,
 
 Jonathan
 
 > ---
->  drivers/iio/accel/sca3300.c | 76 +++++++++++++++++++++++++++++++++++--
->  1 file changed, 73 insertions(+), 3 deletions(-)
+> - Changes since v1
+> * Addressed Jonathan's comment by using already provided isr handle
 > 
-> diff --git a/drivers/iio/accel/sca3300.c b/drivers/iio/accel/sca3300.c
-> index 10bedb14d4f0..9094f16458de 100644
-> --- a/drivers/iio/accel/sca3300.c
-> +++ b/drivers/iio/accel/sca3300.c
-> @@ -44,12 +44,18 @@
->  #define SCA3300_VALUE_RS_ERROR	0x3
->  #define SCA3300_MASK_RS_STATUS	GENMASK(1, 0)
+>  drivers/iio/adc/exynos_adc.c | 55 ++++++++++++++++++++++++++++++++++++
+>  1 file changed, 55 insertions(+)
+> 
+> diff --git a/drivers/iio/adc/exynos_adc.c b/drivers/iio/adc/exynos_adc.c
+> index cff1ba57fb16..183ae591327a 100644
+> --- a/drivers/iio/adc/exynos_adc.c
+> +++ b/drivers/iio/adc/exynos_adc.c
+> @@ -55,6 +55,11 @@
+>  #define ADC_V2_INT_ST(x)	((x) + 0x14)
+>  #define ADC_V2_VER(x)		((x) + 0x20)
 >  
-> +#define SCL3300_REG_ANG_CTRL 0x0C
-> +#define SCL3300_ANG_ENABLE   0x1F
+> +/* ADC_FSD_HW register definitions */
+> +#define ADC_FSD_DAT(x)			((x) + 0x08)
+
+I mention this below, but these different register sets
+should be in the struct exynos_adc_data to avoid the need
+for an if "compatible" == check on each use of them.
+
+
+> +#define ADC_FSD_DAT_SUM(x)		((x) + 0x0C)
+> +#define ADC_FSD_DBG_DATA(x)		((x) + 0x1C)
 > +
->  enum sca3300_scan_indexes {
->  	SCA3300_ACC_X = 0,
->  	SCA3300_ACC_Y,
->  	SCA3300_ACC_Z,
->  	SCA3300_TEMP,
->  	SCA3300_TIMESTAMP,
-> +	SCA3300_INCLI_X,
-> +	SCA3300_INCLI_Y,
-> +	SCA3300_INCLI_Z,
+>  /* Bit definitions for ADC_V1 */
+>  #define ADC_V1_CON_RES		(1u << 16)
+>  #define ADC_V1_CON_PRSCEN	(1u << 14)
+> @@ -92,6 +97,7 @@
+>  
+>  /* Bit definitions for ADC_V2 */
+>  #define ADC_V2_CON1_SOFT_RESET	(1u << 2)
+> +#define ADC_V2_CON1_SOFT_NON_RESET	(1u << 1)
+>  
+>  #define ADC_V2_CON2_OSEL	(1u << 10)
+>  #define ADC_V2_CON2_ESEL	(1u << 9)
+> @@ -100,6 +106,7 @@
+>  #define ADC_V2_CON2_ACH_SEL(x)	(((x) & 0xF) << 0)
+>  #define ADC_V2_CON2_ACH_MASK	0xF
+>  
+> +#define MAX_ADC_FSD_CHANNELS		16
+>  #define MAX_ADC_V2_CHANNELS		10
+>  #define MAX_ADC_V1_CHANNELS		8
+>  #define MAX_EXYNOS3250_ADC_CHANNELS	2
+> @@ -484,6 +491,43 @@ static const struct exynos_adc_data exynos7_adc_data = {
+>  	.start_conv	= exynos_adc_v2_start_conv,
 >  };
 >  
->  #define SCA3300_ACCEL_CHANNEL(index, reg, axis) {			\
-> @@ -73,6 +79,24 @@ enum sca3300_scan_indexes {
->  	},								\
->  }
->  
-> +#define SCA3300_INCLI_CHANNEL(index, reg, axis) {			\
-> +	.type = IIO_INCLI,						\
-> +	.address = reg,							\
-> +	.modified = 1,							\
-> +	.channel2 = IIO_MOD_##axis,					\
-> +	.info_mask_shared_by_type = BIT(IIO_CHAN_INFO_SCALE),		\
-> +	.info_mask_separate = BIT(IIO_CHAN_INFO_RAW),			\
-> +	.info_mask_shared_by_type_available =				\
-> +	BIT(IIO_CHAN_INFO_SCALE),					\
-
-I don't think you need this line wrap.
-
-> +	.scan_index = index,						\
-> +	.scan_type = {							\
-> +		.sign = 's',						\
-> +		.realbits = 16,						\
-> +		.storagebits = 16,					\
-> +		.endianness = IIO_CPU,					\
-> +	},								\
+> +static void exynos_adc_fsd_init_hw(struct exynos_adc *info)
+> +{
+> +	u32 con2;
+> +
+> +	writel(ADC_V2_CON1_SOFT_RESET, ADC_V2_CON1(info->regs));
+> +
+> +	writel(ADC_V2_CON1_SOFT_NON_RESET, ADC_V2_CON1(info->regs));
+> +
+> +	con2 = ADC_V2_CON2_C_TIME(6);
+> +	writel(con2, ADC_V2_CON2(info->regs));
+> +
+> +	/* Enable interrupts */
+> +	writel(1, ADC_V2_INT_EN(info->regs));
 > +}
 > +
->  #define SCA3300_TEMP_CHANNEL(index, reg) {				\
->  		.type = IIO_TEMP,					\
->  		.address = reg,						\
-> @@ -106,15 +130,36 @@ static const int sca3300_accel_scale_map[] = {0, 1, 2, 2};
->  static const int scl3300_accel_scale[][2] = {{0, 167}, {0, 333}, {0, 83}};
->  static const int scl3300_accel_scale_map[] = {0, 1, 2};
->  
-> +static const int scl3300_incli_scale[][2] = {{0, 5495}};
-> +static const int scl3300_incli_scale_map[] = {0, 0, 0};
+> +static void exynos_adc_fsd_exit_hw(struct exynos_adc *info)
+> +{
+> +	u32 con2;
 > +
->  static const int sca3300_avail_modes_map[] = {0, 1, 2, 3};
->  static const int scl3300_avail_modes_map[] = {0, 1, 3};
->  
-> +static const struct iio_chan_spec scl3300_channels[] = {
-> +	SCA3300_ACCEL_CHANNEL(SCA3300_ACC_X, 0x1, X),
-> +	SCA3300_ACCEL_CHANNEL(SCA3300_ACC_Y, 0x2, Y),
-> +	SCA3300_ACCEL_CHANNEL(SCA3300_ACC_Z, 0x3, Z),
-> +	SCA3300_TEMP_CHANNEL(SCA3300_TEMP, 0x05),
-> +	IIO_CHAN_SOFT_TIMESTAMP(4),
-> +	SCA3300_INCLI_CHANNEL(SCA3300_INCLI_X, 0x09, X),
-> +	SCA3300_INCLI_CHANNEL(SCA3300_INCLI_Y, 0x0A, Y),
-> +	SCA3300_INCLI_CHANNEL(SCA3300_INCLI_Z, 0x0B, Z),
+> +	con2 = readl(ADC_V2_CON2(info->regs));
+> +	con2 &= ~ADC_V2_CON2_C_TIME(7);
+> +	writel(con2, ADC_V2_CON2(info->regs));
+> +
+> +	/* Disable interrupts */
+> +	writel(0, ADC_V2_INT_EN(info->regs));
+> +}
+> +
+> +static const struct exynos_adc_data fsd_hw_adc_data = {
+> +	.num_channels	= MAX_ADC_FSD_CHANNELS,
+> +	.mask		= ADC_DATX_MASK, /* 12 bit ADC resolution */
+> +
+> +	.init_hw	= exynos_adc_fsd_init_hw,
+> +	.exit_hw	= exynos_adc_fsd_exit_hw,
+> +	.clear_irq	= exynos_adc_v2_clear_irq,
+> +	.start_conv	= exynos_adc_v2_start_conv,
 > +};
 > +
->  static const unsigned long sca3300_scan_masks[] = {
->  	BIT(SCA3300_ACC_X) | BIT(SCA3300_ACC_Y) | BIT(SCA3300_ACC_Z) |
->  	BIT(SCA3300_TEMP),
->  	0
->  };
->  
-> +static const unsigned long scl3300_scan_masks[] = {
-> +	BIT(SCA3300_ACC_X) | BIT(SCA3300_ACC_Y) | BIT(SCA3300_ACC_Z) |
-> +	BIT(SCA3300_TEMP) |
-> +	BIT(SCA3300_INCLI_X) | BIT(SCA3300_INCLI_Y) | BIT(SCA3300_INCLI_Z),
-> +	0
-> +};
-> +
->  struct sca3300_chip_info {
->  	const char *name;
->  	const unsigned long *scan_masks;
-> @@ -123,6 +168,9 @@ struct sca3300_chip_info {
->  	u8 num_accel_scales;
->  	const int (*accel_scale)[2];
->  	const int *accel_scale_map;
-> +	const int (*incli_scale)[2];
-> +	const int *incli_scale_map;
-> +	u8 num_incli_scales;
->  	u8 num_freqs;
->  	const int *freq_table;
->  	const int *freq_map;
-> @@ -131,6 +179,7 @@ struct sca3300_chip_info {
->  	u8 chip_id;
->  };
->  
-> +
-Unrelated and unwanted white space chagne.
-
->  /**
->   * struct sca3300_data - device data
->   * @spi: SPI device structure
-> @@ -168,12 +217,16 @@ static const struct sca3300_chip_info sca3300_chip_tbl[] = {
->  		.num_avail_modes = 4,
->  		.chip_id = SCA3300_WHOAMI_ID,
+>  static const struct of_device_id exynos_adc_match[] = {
+>  	{
+>  		.compatible = "samsung,s3c2410-adc",
+> @@ -518,6 +562,9 @@ static const struct of_device_id exynos_adc_match[] = {
+>  	}, {
+>  		.compatible = "samsung,exynos7-adc",
+>  		.data = &exynos7_adc_data,
+> +	}, {
+> +		.compatible = "samsung,exynos-adc-fsd-hw",
+> +		.data = &fsd_hw_adc_data,
 >  	},
-> -	{	.scan_masks = sca3300_scan_masks,
-> -		.channels = sca3300_channels,
-> -		.num_channels = ARRAY_SIZE(sca3300_channels),
-> +	{
+>  	{},
+>  };
+> @@ -626,6 +673,8 @@ static irqreturn_t exynos_adc_isr(int irq, void *dev_id)
+>  		info->ts_x = readl(ADC_V1_DATX(info->regs));
+>  		info->ts_y = readl(ADC_V1_DATY(info->regs));
+>  		writel(ADC_TSC_WAIT4INT | ADC_S3C2443_TSC_UD_SEN, ADC_V1_TSC(info->regs));
+> +	} else if (of_device_is_compatible(info->dev->of_node, "samsung,exynos-adc-fsd-hw")) {
 
-ah. The whitespace change belongs in patch 4.
+Rather than a fairly expensive look up into a device tree node, why not add
+the information to the struct exynos_adc_adc in some fashion?  Maybe as an offset
+for the register block?
 
-> +		.scan_masks = scl3300_scan_masks,
-> +		.channels = scl3300_channels,
-> +		.num_channels = ARRAY_SIZE(scl3300_channels),
->  		.num_accel_scales = ARRAY_SIZE(scl3300_accel_scale)*2,
->  		.accel_scale = scl3300_accel_scale,
->  		.accel_scale_map = scl3300_accel_scale_map,
-> +		.incli_scale = scl3300_incli_scale,
-> +		.incli_scale_map = scl3300_incli_scale_map,
-> +		.num_incli_scales =  ARRAY_SIZE(scl3300_incli_scale)*2,
->  		.num_freqs = ARRAY_SIZE(scl3300_lp_freq),
->  		.freq_table = scl3300_lp_freq,
->  		.freq_map = scl3300_lp_freq_map,
-> @@ -400,6 +453,11 @@ static int sca3300_read_raw(struct iio_dev *indio_dev,
->  		if (ret)
->  			return ret;
->  		switch (chan->type) {
-> +		case IIO_INCLI:
-> +			index = data->chip->incli_scale_map[index];
-> +			*val  = data->chip->incli_scale[index][0];
-> +			*val2 = data->chip->incli_scale[index][1];
-> +			return IIO_VAL_INT_PLUS_MICRO;
->  		case IIO_ACCEL:
->  			index = data->chip->accel_scale_map[index];
->  			*val  = data->chip->accel_scale[index][0];
-> @@ -486,6 +544,13 @@ static int sca3300_init(struct sca3300_data *sca_data,
+ 
+> +		info->value = readl(ADC_FSD_DAT(info->regs)) & mask;
+>  	} else {
+>  		info->value = readl(ADC_V1_DATX(info->regs)) & mask;
+>  	}
+> @@ -719,6 +768,12 @@ static const struct iio_chan_spec exynos_adc_iio_channels[] = {
+>  	ADC_CHANNEL(7, "adc7"),
+>  	ADC_CHANNEL(8, "adc8"),
+>  	ADC_CHANNEL(9, "adc9"),
+> +	ADC_CHANNEL(10, "adc10"),
+> +	ADC_CHANNEL(11, "adc11"),
+> +	ADC_CHANNEL(12, "adc12"),
+> +	ADC_CHANNEL(13, "adc13"),
+> +	ADC_CHANNEL(14, "adc14"),
+> +	ADC_CHANNEL(15, "adc15"),
+>  };
 >  
->  	sca_data->chip = &sca3300_chip_tbl[i];
->  
-> +	if (value == SCL3300_WHOAMI_ID) {
-
-I don't like feature decisions being based directly on a WHOAMI.
-That tends not to scale as you add more supported parts to the driver.
-
-I think this is the only case you now have.
-
-Better would be to add a 'inclination_supported' bool to your chip info
-and make the decision based on that.  I wouldn't use whether incli_scale
-is set as that would hurt readability when compared to a new member
-serving just this purpose.
-
-
-> +		ret = sca3300_write_reg(sca_data, SCL3300_REG_ANG_CTRL,
-> +					SCL3300_ANG_ENABLE);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
->  	return 0;
->  }
->  
-> @@ -521,6 +586,11 @@ static int sca3300_read_avail(struct iio_dev *indio_dev,
->  	switch (mask) {
->  	case IIO_CHAN_INFO_SCALE:
->  		switch (chan->type) {
-> +		case IIO_INCLI:
-> +			*vals = (const int *)data->chip->incli_scale;
-> +			*length = data->chip->num_incli_scales;
-> +			*type = IIO_VAL_INT_PLUS_MICRO;
-> +			return IIO_AVAIL_LIST;
->  		case IIO_ACCEL:
->  			*vals = (const int *)data->chip->accel_scale;
->  			*length = data->chip->num_accel_scales;
+>  static int exynos_adc_remove_devices(struct device *dev, void *c)
 

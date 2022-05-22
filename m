@@ -2,53 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2E9B5305E1
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 22:40:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49AD75305EC
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 22:46:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351143AbiEVUkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 16:40:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48426 "EHLO
+        id S1351208AbiEVUqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 16:46:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235481AbiEVUkQ (ORCPT
+        with ESMTP id S1349856AbiEVUqb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 16:40:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4187F39160;
-        Sun, 22 May 2022 13:40:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CF6F960BB1;
-        Sun, 22 May 2022 20:40:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 38920C34119;
-        Sun, 22 May 2022 20:40:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653252014;
-        bh=pD6xEom4/FmHU0/kdHLrVWPmnU98ehKtE17Xkq11YpI=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=jO4RZYLECFCUBVxxVEbkhfdIzuT9AoK/9M7BtdqV1eDta5jfRhE934TT841RBuQn1
-         l0Y601BmvRncOtS+Y0kPNZBuiOrnwgZtAaiMdOZO+k+PO6cBNCmT5jbzMqGJChFwEk
-         DoRFGMO+WMT3/0cZHgy8X3dK9oj9c2tIouRr6kb57OBHPf78Gwuya3raN4OW7JWJBQ
-         5YHKzRme615sH80QmR3N6DPJUp9J8rrgG0+7t+kJEKFOQyKf0x3b4xK/yOan2TwP6i
-         GVLk/oOgW6LJA60+O+8yCbZ+hIvebQjJqGjZ61kBBQ4ciX/dSGDgqN3Tl3mON9Wtku
-         KCGe5HMexoboQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2563AF03943;
-        Sun, 22 May 2022 20:40:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Sun, 22 May 2022 16:46:31 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14461186DD
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 13:46:30 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-2ff7b90e635so63481267b3.5
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 13:46:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cyojD6n8i4EzxUISCBdDfpa/iegMOVhEame9/6yeCc4=;
+        b=c2yRe1R2iCspNJMu8fSP4l5Jz+ZxiGtVqnFGzGb6idOS9rlHADsVkGWkvrcNIKP7wr
+         9RYLPJhGxNw0BsEU+9Wz5eKzTEyMb5uTxPJyonyl9iJqYMHSetvzKT3PtPGCzsOKagUr
+         D8e1kIXHGqszuUGa+Rd5ZBVOh5hdO6E0PCXOO38lwFfTwyBV31vCGgYCkMKBUQ3mR0Bp
+         V0ASBqLpSL0AHqb1bKhnY9Zb7FJA4IzKCB7JV1chFeAxbXG0m6lLEn2Ps98AHyZBBOBQ
+         5JsjhuMptdrFiFA2knd2GsFTdS41sq+dFroJ11UQeoOmHAub+dZvqEO5o0UUGWjCfUTV
+         9WTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cyojD6n8i4EzxUISCBdDfpa/iegMOVhEame9/6yeCc4=;
+        b=JWjagXJZsIUkGbaTVikMobysjPs/TjUrAHEdceEuLdKdELTie0zfFLTLcIWrtvjNos
+         OWt55XKd8cb9fyIL2zJh7WzkrlrPyf9+bF8OZe7wYlIo1JoZ/xOzf/vLipIZWI6SpXdH
+         uGWV1ymMYKsWa/TfvExX0dwRjjthOTB0CmWQq7Y0rXs4SW3dBDZl1d8afdi0FZUX1uyH
+         aXrBdPBXWWItyR2oCDqXmQhemiDyFi1s2gQ577NVuKKcCLpGyEhAhLSCc9jqUJHpplVf
+         mjYmv0yXus4pT3Sv9WeNLw9/N4F9Kd7eDJPrHtWF0Jcb9vXmhN4o3U/PyUbeobZqGeCy
+         HAAw==
+X-Gm-Message-State: AOAM531ZKyKePIfxofC3+KBGICybYZy2WtC3jxRCZnCUqjXY1L5z0iZZ
+        t4FdOSYntsP/ejqBoRjHs944IdYL9a3SL3RHJ7HCUlj8k7I=
+X-Google-Smtp-Source: ABdhPJwyLkMRtzNRYSmeJ4yT/Fvvn7Nuu3SKjR6DAAZVsJ52glL6OQXAXga09V/gacjOX41kQVFMpLLZcQCzycx7zIk=
+X-Received: by 2002:a81:99d8:0:b0:2ff:f419:59aa with SMTP id
+ q207-20020a8199d8000000b002fff41959aamr2086655ywg.437.1653252389296; Sun, 22
+ May 2022 13:46:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 0/7] rxrpc: Miscellaneous changes
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165325201415.15566.283158235872361657.git-patchwork-notify@kernel.org>
-Date:   Sun, 22 May 2022 20:40:14 +0000
-References: <165311910893.245906.4115532916417333325.stgit@warthog.procyon.org.uk>
-In-Reply-To: <165311910893.245906.4115532916417333325.stgit@warthog.procyon.org.uk>
-To:     David Howells <dhowells@redhat.com>
-Cc:     netdev@vger.kernel.org, linux-afs@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220520052021.25631-1-zhaoxiao@uniontech.com>
+In-Reply-To: <20220520052021.25631-1-zhaoxiao@uniontech.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sun, 22 May 2022 22:46:18 +0200
+Message-ID: <CACRpkdbTq2HD_8c11bngEQOA6ZFyVY0g=JGqbCjG1zYVrF_xtQ@mail.gmail.com>
+Subject: Re: [PATCH] pinctrl: berlin: bg4ct: Use devm_platform_*ioremap_resource()
+ APIs
+To:     zhaoxiao <zhaoxiao@uniontech.com>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,41 +66,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Fri, May 20, 2022 at 7:20 AM zhaoxiao <zhaoxiao@uniontech.com> wrote:
 
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
+> Use devm_platform_get_and_ioremap_resource() and
+> devm_platform_ioremap_resource() APIs instead of their
+> open coded analogues.
+>
+> Signed-off-by: zhaoxiao <zhaoxiao@uniontech.com>
 
-On Sat, 21 May 2022 08:45:08 +0100 you wrote:
-> Here are some miscellaneous changes for AF_RXRPC:
-> 
->  (1) Allow the list of local endpoints to be viewed through /proc.
-> 
->  (2) Switch to using refcount_t for refcounting.
-> 
->  (3) Fix a locking issue found by lockdep.
-> 
-> [...]
+Patch applied!
 
-Here is the summary with links:
-  - [net-next,1/7] rxrpc: Allow list of in-use local UDP endpoints to be viewed in /proc
-    https://git.kernel.org/netdev/net-next/c/33912c2639ad
-  - [net-next,2/7] rxrpc: Use refcount_t rather than atomic_t
-    https://git.kernel.org/netdev/net-next/c/a05754295e01
-  - [net-next,3/7] rxrpc: Fix locking issue
-    https://git.kernel.org/netdev/net-next/c/ad25f5cb3987
-  - [net-next,4/7] rxrpc: Automatically generate trace tag enums
-    https://git.kernel.org/netdev/net-next/c/dc9fd093b2eb
-  - [net-next,5/7] rxrpc: Return an error to sendmsg if call failed
-    https://git.kernel.org/netdev/net-next/c/4ba68c519255
-  - [net-next,6/7] rxrpc, afs: Fix selection of abort codes
-    https://git.kernel.org/netdev/net-next/c/de696c4784f0
-  - [net-next,7/7] afs: Adjust ACK interpretation to try and cope with NAT
-    https://git.kernel.org/netdev/net-next/c/adc9613ff66c
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Yours,
+Linus Walleij

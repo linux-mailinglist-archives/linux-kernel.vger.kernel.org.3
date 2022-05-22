@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFA3653027A
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 12:46:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4408D53027D
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 12:46:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242205AbiEVKqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 06:46:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41396 "EHLO
+        id S244306AbiEVKqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 06:46:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236524AbiEVKp5 (ORCPT
+        with ESMTP id S244237AbiEVKqR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 06:45:57 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4ED6A19F;
-        Sun, 22 May 2022 03:45:53 -0700 (PDT)
+        Sun, 22 May 2022 06:46:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27641205E1;
+        Sun, 22 May 2022 03:46:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 1C62CCE0AF7;
-        Sun, 22 May 2022 10:45:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED660C385AA;
-        Sun, 22 May 2022 10:45:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ACE1360F7C;
+        Sun, 22 May 2022 10:46:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82F41C385AA;
+        Sun, 22 May 2022 10:46:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653216350;
-        bh=kwD3mtm4Hvanzvn5hDWN2epjuaFZqIjGopPobIPCHiU=;
+        s=k20201202; t=1653216375;
+        bh=tUiB0mjT6bn4bMX9OLe5ONRikydVfNZrTIHbogIIqSo=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=X0y0X3jIBWbYu4AL6d8N1vK//G5SPnCYZMs0Eye/ktWqePA81oqMTixK1CS4N4xFg
-         qFW67nhRnrqVBoeMo4gS14V6CUj1E8tvS03GfwU2cQ7nK+x/1Gssu31D9Ir/zJiHcd
-         zR1F0VZoMp2PDRdqkpuDuv72oH0eNBwrOeSLqSCygRtM/jI1Dv6J2UOxFjXjzkgIpj
-         0F1ZyDVp+8gh23KDxxxN4sMe/PinYX+omBCfmTZh62Qk2mPhFrURcj/mm4y3EQrfUR
-         nN1l1BXtVKrRqtA0qAI3VbXUkB02akSYdbaWB6LaNj4h2EdFjLF5ONzwX3XGdx4rC+
-         yk+n/ZSqJ8eiA==
-Date:   Sun, 22 May 2022 11:54:36 +0100
+        b=I/gmUEFBAgDBJElgsixnhDMy+meO59XpKdTFZFmomSIoAtmxVamLIjpBab5KXFJgg
+         6iQvR5wbXgd34oG52k2ojGl/r3wq3D15E9PNEOPcKWl1Jn/XNY71RKA4Cv8zusDlmT
+         sRX3EvBg6NGRa3qbtZwWCphG4QgMaeVWJnPLKXNq/+CHPLWu8LZ9isbHtN1dQB7sCS
+         9WFIqbwBEeBLz70UPl8aDcskQWChhC4LgFe8VyK1aoHtu4aJGkBIQT/kQTUe2bpiPN
+         JA7jVcdVZD8lxb7+/F5Ly3uBd+vQiHHex71NiLeICdyl7UfMASaNnCAbn0H6samdep
+         X9QSaU9Q4F44Q==
+Date:   Sun, 22 May 2022 11:55:00 +0100
 From:   Jonathan Cameron <jic23@kernel.org>
 To:     Julia Lawall <Julia.Lawall@inria.fr>
-Cc:     kernel-janitors@vger.kernel.org,
+Cc:     Andreas Klinger <ak@it-klinger.de>,
+        kernel-janitors@vger.kernel.org,
         Lars-Peter Clausen <lars@metafoo.de>,
         linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iio: chemical: bme680: fix typo in comment
-Message-ID: <20220522115436.267704d6@jic23-huawei>
-In-Reply-To: <20220521111145.81697-68-Julia.Lawall@inria.fr>
-References: <20220521111145.81697-68-Julia.Lawall@inria.fr>
+Subject: Re: [PATCH] iio: proximity: ping: fix typo in comment
+Message-ID: <20220522115500.63c601b2@jic23-huawei>
+In-Reply-To: <20220521111145.81697-54-Julia.Lawall@inria.fr>
+References: <20220521111145.81697-54-Julia.Lawall@inria.fr>
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -56,14 +57,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 21 May 2022 13:11:18 +0200
+On Sat, 21 May 2022 13:11:04 +0200
 Julia Lawall <Julia.Lawall@inria.fr> wrote:
 
 > Spelling mistake (triple letters) in comment.
 > Detected with the help of Coccinelle.
 > 
 > Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
-Applied for 5.20.
+Applied for 5.20
 
 Thanks,
 
@@ -71,21 +72,21 @@ Jonathan
 
 > 
 > ---
->  drivers/iio/chemical/bme680_core.c |    2 +-
+>  drivers/iio/proximity/ping.c |    2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/iio/chemical/bme680_core.c b/drivers/iio/chemical/bme680_core.c
-> index 16ff7a98c9f0..ef5e0e46fd34 100644
-> --- a/drivers/iio/chemical/bme680_core.c
-> +++ b/drivers/iio/chemical/bme680_core.c
-> @@ -638,7 +638,7 @@ static int bme680_read_temp(struct bme680_data *data, int *val)
->  	comp_temp = bme680_compensate_temp(data, adc_temp);
+> diff --git a/drivers/iio/proximity/ping.c b/drivers/iio/proximity/ping.c
+> index d56e037378de..2ad69b150902 100644
+> --- a/drivers/iio/proximity/ping.c
+> +++ b/drivers/iio/proximity/ping.c
+> @@ -173,7 +173,7 @@ static int ping_read(struct iio_dev *indio_dev)
+>  
 >  	/*
->  	 * val might be NULL if we're called by the read_press/read_humid
-> -	 * routine which is callled to get t_fine value used in
-> +	 * routine which is called to get t_fine value used in
->  	 * compensate_press/compensate_humid to get compensated
->  	 * pressure/humidity readings.
+>  	 * read error code of laser ping sensor and give users chance to
+> -	 * figure out error by using dynamic debuggging
+> +	 * figure out error by using dynamic debugging
 >  	 */
+>  	if (data->cfg->laserping_error) {
+>  		if ((time_ns > 12500000) && (time_ns <= 13500000)) {
 > 
 

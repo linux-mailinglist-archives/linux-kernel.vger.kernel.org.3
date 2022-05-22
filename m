@@ -2,65 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00CF3530248
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 12:08:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25CDA53025D
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 12:22:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240657AbiEVKIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 06:08:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37532 "EHLO
+        id S241331AbiEVKWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 06:22:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230244AbiEVKIY (ORCPT
+        with ESMTP id S230244AbiEVKV6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 06:08:24 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DACFE3E5FB;
-        Sun, 22 May 2022 03:08:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653214102; x=1684750102;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pVft9LSqtJKDfrQbwqF0zRGlcBrMn4ja8wUJvCE+/nY=;
-  b=TgXqUcUTGFU6F8r0VXovUIBN2fNlx8wzJpIROEyOcNthc90/1Td4D6JC
-   RazkWMCmSb85wsCwjmeQe1lFf/gp+TncapCCGiG3VjrcocfKqwaV11qkt
-   8Ck95hQtXEXOnO+8rIGOdte3kNDDSud1F1gqqWfSffSd7i95KrE2boQU/
-   n/CrAyuaSW0fWEarJ93s/Z+GP9y/rX0afSVgHFRp+xj2n4RWpNrfvKyrz
-   nuEY8qIicTfEPFM+HVsAlgZ8aZgzhPyng2h41Pi9kQgAk96mFpUo9V0w+
-   8p3MnwGWv60NgoNxEhG6lcrepVh6LmDm7Wxc7RlxWhH5EMFlBOb/atl0v
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10354"; a="333605223"
-X-IronPort-AV: E=Sophos;i="5.91,244,1647327600"; 
-   d="scan'208";a="333605223"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2022 03:08:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,244,1647327600"; 
-   d="scan'208";a="819309267"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 22 May 2022 03:08:18 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nsiVW-0000HU-6O;
-        Sun, 22 May 2022 10:08:18 +0000
-Date:   Sun, 22 May 2022 18:07:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Pavel Skripkin <paskripkin@gmail.com>, toke@toke.dk,
-        kvalo@kernel.org, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, senthilkumar@atheros.com
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Jeff Johnson <quic_jjohnson@quicinc.com>
-Subject: Re: [PATCH v5 2/2] ath9k: htc: clean up statistics macros
-Message-ID: <202205221713.VsmyJA1I-lkp@intel.com>
-References: <7bb006bb88e280c596d0e86ece7d251a21b8ed1f.1653168225.git.paskripkin@gmail.com>
+        Sun, 22 May 2022 06:21:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B7C335A8C
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 03:21:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653214913;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ajSKHpDgMxCnIlOKAJfBL23NVlLdxTAamDLVJE7LOew=;
+        b=D6wvRPrUreFhDLPEhWvPD9xozK3MjAh1fcPUTqExhmoLlExpE51bpnEfgsfXHhDQNMquDq
+        kXb5BhOVv8GCHUrIL8ZD2Qr36zLuvy8/USEXOL85uPbtwWzEMxJz/P8i8j74RkPK1FA+Jk
+        vq9n1anzr9VIMY6w7R6zSF+d7+0B00M=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-621-LOb20kgOPOukB8UtH84T5A-1; Sun, 22 May 2022 06:21:50 -0400
+X-MC-Unique: LOb20kgOPOukB8UtH84T5A-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E1D461C05AED;
+        Sun, 22 May 2022 10:21:48 +0000 (UTC)
+Received: from starship (unknown [10.40.192.55])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B29232026D6A;
+        Sun, 22 May 2022 10:21:42 +0000 (UTC)
+Message-ID: <e79a98afda1920a3f8fadd13dc6a20ef2719eeb2.camel@redhat.com>
+Subject: Re: [RFC PATCH v3 04/19] KVM: x86: mmu: allow to enable write
+ tracking externally
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        intel-gfx@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
+        linux-kernel@vger.kernel.org, Jim Mattson <jmattson@google.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        intel-gvt-dev@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org
+Date:   Sun, 22 May 2022 13:21:41 +0300
+In-Reply-To: <YoZv8HmRc7tqQbuL@google.com>
+References: <20220427200314.276673-1-mlevitsk@redhat.com>
+         <20220427200314.276673-5-mlevitsk@redhat.com> <YoZv8HmRc7tqQbuL@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7bb006bb88e280c596d0e86ece7d251a21b8ed1f.1653168225.git.paskripkin@gmail.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,141 +83,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Pavel,
+On Thu, 2022-05-19 at 16:27 +0000, Sean Christopherson wrote:
+> On Wed, Apr 27, 2022, Maxim Levitsky wrote:
+> > This will be used to enable write tracking from nested AVIC code
+> > and can also be used to enable write tracking in GVT-g module
+> > when it actually uses it as opposed to always enabling it,
+> > when the module is compiled in the kernel.
+> 
+> Wrap at ~75.
+Well, the checkpatch.pl didn't complain, so I didn't notice.
 
-Thank you for the patch! Yet something to improve:
+> 
+> > No functional change intended.
+> > 
+> > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> > ---
+> >  arch/x86/include/asm/kvm_host.h       |  2 +-
+> >  arch/x86/include/asm/kvm_page_track.h |  1 +
+> >  arch/x86/kvm/mmu.h                    |  8 +++++---
+> >  arch/x86/kvm/mmu/mmu.c                | 17 ++++++++++-------
+> >  arch/x86/kvm/mmu/page_track.c         | 10 ++++++++--
+> >  5 files changed, 25 insertions(+), 13 deletions(-)
+> > 
+> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> > index 636df87542555..fc7df778a3d71 100644
+> > --- a/arch/x86/include/asm/kvm_host.h
+> > +++ b/arch/x86/include/asm/kvm_host.h
+> > @@ -1254,7 +1254,7 @@ struct kvm_arch {
+> >  	 * is used as one input when determining whether certain memslot
+> >  	 * related allocations are necessary.
+> >  	 */
+> 
+> The above comment needs to be rewritten.
+Good catch, thank a lot!!
 
-[auto build test ERROR on wireless-next/main]
-[also build test ERROR on next-20220520]
-[cannot apply to wireless/main linus/master v5.18-rc7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> 
+> > -	bool shadow_root_allocated;
+> > +	bool mmu_page_tracking_enabled;
+> >  #if IS_ENABLED(CONFIG_HYPERV)
+> >  	hpa_t	hv_root_tdp;
+> > diff --git a/arch/x86/include/asm/kvm_page_track.h b/arch/x86/include/asm/kvm_page_track.h
+> > index eb186bc57f6a9..955a5ae07b10e 100644
+> > --- a/arch/x86/include/asm/kvm_page_track.h
+> > +++ b/arch/x86/include/asm/kvm_page_track.h
+> > @@ -50,6 +50,7 @@ int kvm_page_track_init(struct kvm *kvm);
+> >  void kvm_page_track_cleanup(struct kvm *kvm);
+> >  
+> >  bool kvm_page_track_write_tracking_enabled(struct kvm *kvm);
+> > +int kvm_page_track_write_tracking_enable(struct kvm *kvm);
+> >  int kvm_page_track_write_tracking_alloc(struct kvm_memory_slot *slot);
+> >  
+> >  void kvm_page_track_free_memslot(struct kvm_memory_slot *slot);
+> > diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
+> > index 671cfeccf04e9..44d15551f7156 100644
+> > --- a/arch/x86/kvm/mmu.h
+> > +++ b/arch/x86/kvm/mmu.h
+> > @@ -269,7 +269,7 @@ int kvm_arch_write_log_dirty(struct kvm_vcpu *vcpu);
+> >  int kvm_mmu_post_init_vm(struct kvm *kvm);
+> >  void kvm_mmu_pre_destroy_vm(struct kvm *kvm);
+> >  
+> > -static inline bool kvm_shadow_root_allocated(struct kvm *kvm)
+> > +static inline bool mmu_page_tracking_enabled(struct kvm *kvm)
+> >  {
+> >  	/*
+> >  	 * Read shadow_root_allocated before related pointers. Hence, threads
+> > @@ -277,9 +277,11 @@ static inline bool kvm_shadow_root_allocated(struct kvm *kvm)
+> >  	 * see the pointers. Pairs with smp_store_release in
+> >  	 * mmu_first_shadow_root_alloc.
+> >  	 */
+> 
+> This comment also needs to be rewritten.
+Also thanks a lot, next time I'll check comments better.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Pavel-Skripkin/ath9k-fix-use-after-free-in-ath9k_hif_usb_rx_cb/20220522-053020
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220522/202205221713.VsmyJA1I-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1443dbaba6f0e57be066995db9164f89fb57b413)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/712472af928db8726d53f2c63ea05430e57f4727
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Pavel-Skripkin/ath9k-fix-use-after-free-in-ath9k_hif_usb_rx_cb/20220522-053020
-        git checkout 712472af928db8726d53f2c63ea05430e57f4727
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/net/wireless/ath/ath9k/
+> 
+> > -	return smp_load_acquire(&kvm->arch.shadow_root_allocated);
+> > +	return smp_load_acquire(&kvm->arch.mmu_page_tracking_enabled);
+> >  }
+> 
+> ...
+> 
+> > diff --git a/arch/x86/kvm/mmu/page_track.c b/arch/x86/kvm/mmu/page_track.c
+> > index 2e09d1b6249f3..8857d629036d7 100644
+> > --- a/arch/x86/kvm/mmu/page_track.c
+> > +++ b/arch/x86/kvm/mmu/page_track.c
+> > @@ -21,10 +21,16 @@
+> >  
+> >  bool kvm_page_track_write_tracking_enabled(struct kvm *kvm)
+> 
+> This can be static, it's now used only by page_track.c.
+I'll fix this.
+> 
+> >  {
+> > -	return IS_ENABLED(CONFIG_KVM_EXTERNAL_WRITE_TRACKING) ||
+> > -	       !tdp_enabled || kvm_shadow_root_allocated(kvm);
+> > +	return mmu_page_tracking_enabled(kvm);
+> >  }
+> >  
+> > +int kvm_page_track_write_tracking_enable(struct kvm *kvm)
+> 
+> This is too similar to the "enabled" version; "kvm_page_track_enable_write_tracking()"
+> would maintain namespacing and be less confusing.
+Makes sense, thanks, will do!
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> 
+> Hmm, I'd probably vote to make this a "static inline" in kvm_page_track.h, and
+> rename mmu_enable_write_tracking() to kvm_mmu_enable_write_tracking and export.
+> Not a strong preference, just feels silly to export a one-liner.
 
-All errors (new ones prefixed by >>):
+The sole reason I did it this way, because 'page_track.c' this way contains all the interfaces
+that an external user of write tracking needs to use.
 
->> drivers/net/wireless/ath/ath9k/hif_usb.c:372:15: error: use of undeclared identifier 'hiv_dev'; did you mean 'hif_dev'?
-                   TX_STAT_INC(hiv_dev, buf_queued);
-                               ^~~~~~~
-                               hif_dev
-   drivers/net/wireless/ath/ath9k/htc.h:335:16: note: expanded from macro 'TX_STAT_INC'
-                   __STAT_SAFE((hif_dev), (hif_dev)->htc_handle->drv_priv->debug.tx_stats.c++)
-                                ^
-   drivers/net/wireless/ath/ath9k/htc.h:330:38: note: expanded from macro '__STAT_SAFE'
-   #define __STAT_SAFE(hif_dev, expr)      ((hif_dev)->htc_handle->drv_priv ? (expr) : 0)
-                                             ^
-   drivers/net/wireless/ath/ath9k/hif_usb.c:310:48: note: 'hif_dev' declared here
-   static int __hif_usb_tx(struct hif_device_usb *hif_dev)
-                                                  ^
->> drivers/net/wireless/ath/ath9k/hif_usb.c:372:15: error: use of undeclared identifier 'hiv_dev'; did you mean 'hif_dev'?
-                   TX_STAT_INC(hiv_dev, buf_queued);
-                               ^~~~~~~
-                               hif_dev
-   drivers/net/wireless/ath/ath9k/htc.h:335:27: note: expanded from macro 'TX_STAT_INC'
-                   __STAT_SAFE((hif_dev), (hif_dev)->htc_handle->drv_priv->debug.tx_stats.c++)
-                                           ^
-   drivers/net/wireless/ath/ath9k/htc.h:330:72: note: expanded from macro '__STAT_SAFE'
-   #define __STAT_SAFE(hif_dev, expr)      ((hif_dev)->htc_handle->drv_priv ? (expr) : 0)
-                                                                               ^
-   drivers/net/wireless/ath/ath9k/hif_usb.c:310:48: note: 'hif_dev' declared here
-   static int __hif_usb_tx(struct hif_device_usb *hif_dev)
-                                                  ^
-   2 errors generated.
+> 
+> > +{
+> > +	return mmu_enable_write_tracking(kvm);
+> > +}
+> > +EXPORT_SYMBOL_GPL(kvm_page_track_write_tracking_enable);
+> > +
+> > +
+> >  void kvm_page_track_free_memslot(struct kvm_memory_slot *slot)
+> >  {
+> >  	int i;
+> > -- 
+> > 2.26.3
+> > 
+
+Best regards,
+	Maxim Levitsky
 
 
-vim +372 drivers/net/wireless/ath/ath9k/hif_usb.c
 
-   308	
-   309	/* TX lock has to be taken */
-   310	static int __hif_usb_tx(struct hif_device_usb *hif_dev)
-   311	{
-   312		struct tx_buf *tx_buf = NULL;
-   313		struct sk_buff *nskb = NULL;
-   314		int ret = 0, i;
-   315		u16 tx_skb_cnt = 0;
-   316		u8 *buf;
-   317		__le16 *hdr;
-   318	
-   319		if (hif_dev->tx.tx_skb_cnt == 0)
-   320			return 0;
-   321	
-   322		/* Check if a free TX buffer is available */
-   323		if (list_empty(&hif_dev->tx.tx_buf))
-   324			return 0;
-   325	
-   326		tx_buf = list_first_entry(&hif_dev->tx.tx_buf, struct tx_buf, list);
-   327		list_move_tail(&tx_buf->list, &hif_dev->tx.tx_pending);
-   328		hif_dev->tx.tx_buf_cnt--;
-   329	
-   330		tx_skb_cnt = min_t(u16, hif_dev->tx.tx_skb_cnt, MAX_TX_AGGR_NUM);
-   331	
-   332		for (i = 0; i < tx_skb_cnt; i++) {
-   333			nskb = __skb_dequeue(&hif_dev->tx.tx_skb_queue);
-   334	
-   335			/* Should never be NULL */
-   336			BUG_ON(!nskb);
-   337	
-   338			hif_dev->tx.tx_skb_cnt--;
-   339	
-   340			buf = tx_buf->buf;
-   341			buf += tx_buf->offset;
-   342			hdr = (__le16 *)buf;
-   343			*hdr++ = cpu_to_le16(nskb->len);
-   344			*hdr++ = cpu_to_le16(ATH_USB_TX_STREAM_MODE_TAG);
-   345			buf += 4;
-   346			memcpy(buf, nskb->data, nskb->len);
-   347			tx_buf->len = nskb->len + 4;
-   348	
-   349			if (i < (tx_skb_cnt - 1))
-   350				tx_buf->offset += (((tx_buf->len - 1) / 4) + 1) * 4;
-   351	
-   352			if (i == (tx_skb_cnt - 1))
-   353				tx_buf->len += tx_buf->offset;
-   354	
-   355			__skb_queue_tail(&tx_buf->skb_queue, nskb);
-   356			TX_STAT_INC(hif_dev, skb_queued);
-   357		}
-   358	
-   359		usb_fill_bulk_urb(tx_buf->urb, hif_dev->udev,
-   360				  usb_sndbulkpipe(hif_dev->udev, USB_WLAN_TX_PIPE),
-   361				  tx_buf->buf, tx_buf->len,
-   362				  hif_usb_tx_cb, tx_buf);
-   363	
-   364		ret = usb_submit_urb(tx_buf->urb, GFP_ATOMIC);
-   365		if (ret) {
-   366			tx_buf->len = tx_buf->offset = 0;
-   367			ath9k_skb_queue_complete(hif_dev, &tx_buf->skb_queue, false);
-   368			__skb_queue_head_init(&tx_buf->skb_queue);
-   369			list_move_tail(&tx_buf->list, &hif_dev->tx.tx_buf);
-   370			hif_dev->tx.tx_buf_cnt++;
-   371		} else {
- > 372			TX_STAT_INC(hiv_dev, buf_queued);
-   373		}
-   374	
-   375		return ret;
-   376	}
-   377	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

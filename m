@@ -2,329 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45EDE5301FD
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 11:03:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E1A4530200
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 11:08:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242536AbiEVJD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 05:03:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54352 "EHLO
+        id S242785AbiEVJIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 05:08:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240935AbiEVJDX (ORCPT
+        with ESMTP id S240935AbiEVJIN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 05:03:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8914F1CB14
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 02:03:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653210201;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iZk3PNgU+m5QGZbYbM3Q/AYoB1xcu8VqIfJcE4Df1D8=;
-        b=RACHC0nP6DPi3/uyZgDoCdVipe1XEQ/ClFRxrYiRl1+N4BcoUmDdLSyypeudkzVMkB307c
-        smhqF+KEjtUo0leyUKNkquQBnoeKzv8RqX9ku3lj53kjvoLPBFop/Kg8U3U9qd5XuJqMdV
-        mFuiQhesixax4tZ1QDSZglW2nlL+Qlk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-619-lDNHqC-NPg6GqFVGjvEqjQ-1; Sun, 22 May 2022 05:03:18 -0400
-X-MC-Unique: lDNHqC-NPg6GqFVGjvEqjQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Sun, 22 May 2022 05:08:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8C18344EB
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 02:07:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 29ECD811E7A;
-        Sun, 22 May 2022 09:03:17 +0000 (UTC)
-Received: from starship (unknown [10.40.192.55])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 97593492C14;
-        Sun, 22 May 2022 09:03:11 +0000 (UTC)
-Message-ID: <e32f6c904c92e9e9efabcc697917a232f5e88881.camel@redhat.com>
-Subject: Re: [RFC PATCH v3 02/19] KVM: x86: inhibit APICv/AVIC when the
- guest and/or host changes apic id/base from the defaults.
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        intel-gfx@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
-        linux-kernel@vger.kernel.org, Jim Mattson <jmattson@google.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        intel-gvt-dev@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org
-Date:   Sun, 22 May 2022 12:03:10 +0300
-In-Reply-To: <YoZrG3n5fgMp4LQl@google.com>
-References: <20220427200314.276673-1-mlevitsk@redhat.com>
-         <20220427200314.276673-3-mlevitsk@redhat.com> <YoZrG3n5fgMp4LQl@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5693DB80ACC
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 09:07:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52A0EC385AA;
+        Sun, 22 May 2022 09:07:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653210476;
+        bh=Tnd9k7iRjgfdcQgXzfq2JZ4qYtO5XwbTFBmo19t2jIA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=S8xXimqwBxzn98bU6z1yaq8fOwEkP+dYMHN4eCURaFRz1fCsgAvfxI9/nsO9Umk+2
+         SA1sZoI38b6YE61f3Lya/sy7xMavAKqSUYWRuKg3zXQwN9jIf337VBGkqckkyI6Yco
+         gFjd7P1zz1tNPnfmBUGwqel+eI3I5ACsqtRgOrSnpcMl2Jdjh7+joPY4TioEsLFQ//
+         i8+ZpTnOSrNQWUuShcWtDsJuzaS41D/07R1BjG1RnAXK/cpBCEnrasRXZqNAi4iMpU
+         8ZNZzzXyYbLAEbPAbWYRW0XdJWbCqEIedtT3HnQ4A7UsGV2LLJGCTYJiF4ZSTiQc0a
+         NdZYWnmCuBQjQ==
+Message-ID: <a673356d-4534-afd9-b85f-b8de7f58c9a8@kernel.org>
+Date:   Sun, 22 May 2022 11:07:52 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [Ksummit-discuss] uninitialized variables bugs
+Content-Language: en-US
+To:     Dan Carpenter <dan.carpenter@oracle.com>,
+        ksummit-discuss@lists.linuxfoundation.org,
+        linux-kernel@vger.kernel.org
+Cc:     Nathan Chancellor <natechancellor@gmail.com>, kbuild@lists.01.org,
+        lkp@intel.com
+References: <20220506091338.GE4031@kadam>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220506091338.GE4031@kadam>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-05-19 at 16:06 +0000, Sean Christopherson wrote:
-> On Wed, Apr 27, 2022, Maxim Levitsky wrote:
-> > Neither of these settings should be changed by the guest and it is
-> > a burden to support it in the acceleration code, so just inhibit
-> > it instead.
-> > 
-> > Also add a boolean 'apic_id_changed' to indicate if apic id ever changed.
-> > 
-> > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> > ---
-> >  arch/x86/include/asm/kvm_host.h |  3 +++
-> >  arch/x86/kvm/lapic.c            | 25 ++++++++++++++++++++++---
-> >  arch/x86/kvm/lapic.h            |  8 ++++++++
-> >  3 files changed, 33 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> > index 63eae00625bda..636df87542555 100644
-> > --- a/arch/x86/include/asm/kvm_host.h
-> > +++ b/arch/x86/include/asm/kvm_host.h
-> > @@ -1070,6 +1070,8 @@ enum kvm_apicv_inhibit {
-> >  	APICV_INHIBIT_REASON_ABSENT,
-> >  	/* AVIC is disabled because SEV doesn't support it */
-> >  	APICV_INHIBIT_REASON_SEV,
-> > +	/* APIC ID and/or APIC base was changed by the guest */
+On 06/05/2022 11:13, Dan Carpenter wrote:
+> There is also stuff like this which is harmless:
 > 
-> I don't see any reason to inhibit APICv if the APIC base is changed.  KVM has
-> never supported that, and disabling APICv won't "fix" anything.
+> 	uint val;
+> 
+> 	ret = read(&val);
+> 	*p = val;  // <-- uninitialized variable if read() fails
+> 	return ret;
+> 
+> Btw, here is how to run Smatch on your code:
+> https://staticthinking.wordpress.com/2022/04/25/how-to-run-smatch-on-your-code/
 
-I kind of tacked the APIC base on the thing just to be a good citezen.
+In the topic of suppressing false positives we also have several
+"fixes", sometimes pointed out incorrectly by Coverity, for missing
+check for of_device_get_match_data().
 
-In theory currently if the guest changes the APIC base, neither APICv
-nor AVIC will even notice, so the guest will still be able to access the
-default APIC base and the new APIC base, which is kind of wrong.
+Compare:
+https://elixir.bootlin.com/linux/v5.18-rc7/source/drivers/clk/clk-aspeed.c#L415
+https://elixir.bootlin.com/linux/v5.18-rc7/source/drivers/clk/clk-oxnas.c#L216
 
-Inhibiting APICv/AVIC in this case makes it better and it is very cheap to do.
+Although in theory the of_device_get_match_data() can return NULL, in
+practice it is not possible because driver matches via OF thus there
+will be always of_device_id->driver data.
 
-If you still think that it shouln't be done, I'll remove it.
-
-
-> 
-> Ignoring that is a minor simplification, but also allows for a more intuitive
-> name, e.g.
-> 
-> 	APICV_INHIBIT_REASON_APIC_ID_MODIFIED,
-> 
-> The inhibit also needs to be added avic_check_apicv_inhibit_reasons() and
-> vmx_check_apicv_inhibit_reasons().
-> 
-> > +	APICV_INHIBIT_REASON_RO_SETTINGS,
-
-> >  };
-> >  
-> >  struct kvm_arch {
-> > @@ -1258,6 +1260,7 @@ struct kvm_arch {
-> >  	hpa_t	hv_root_tdp;
-> >  	spinlock_t hv_root_tdp_lock;
-> >  #endif
-> > +	bool apic_id_changed;
-> >  };
-> >  
-> >  struct kvm_vm_stat {
-> > diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-> > index 66b0eb0bda94e..8996675b3ef4c 100644
-> > --- a/arch/x86/kvm/lapic.c
-> > +++ b/arch/x86/kvm/lapic.c
-> > @@ -2038,6 +2038,19 @@ static void apic_manage_nmi_watchdog(struct kvm_lapic *apic, u32 lvt0_val)
-> >  	}
-> >  }
-> >  
-> > +static void kvm_lapic_check_initial_apic_id(struct kvm_lapic *apic)
-> 
-> The "check" part is misleading/confusing.  "check" helpers usually query and return
-> state.  I assume you avoided "changed" because the ID may or may not actually be
-> changing.  Maybe kvm_apic_id_updated()?  Ah, better idea.  What about
-> kvm_lapic_xapic_id_updated()?  See below for reasoning.
-
-This is a very good idea!
-
-> 
-> > +{
-> > +	if (kvm_apic_has_initial_apic_id(apic))
-> 
-> Rather than add a single-use helper, invoke the helper from kvm_apic_state_fixup()
-> in the !x2APIC path, then this can KVM_BUG_ON() x2APIC to help document that KVM
-> should never allow the ID to change for x2APIC.
-
-yes, but we do allow non default x2apic id via userspace api - I wasn't able to convience
-you to remove this :)
-
-> 
-> > +		return;
-> > +
-> > +	pr_warn_once("APIC ID change is unsupported by KVM");
-> 
-> It's supported (modulo x2APIC shenanigans), otherwise KVM wouldn't need to disable
-> APICv.
-
-Here, as I said, it would be nice to see that warning if someone complains.
-Fact is that AVIC code was totally broken in this regard, and there are probably more,
-so it would be nice to see if anybody complains.
-
-If you insist, I'll remove this warning.
-
-> 
-> > +	kvm_set_apicv_inhibit(apic->vcpu->kvm,
-> > +			APICV_INHIBIT_REASON_RO_SETTINGS);
-> > +
-> > +	apic->vcpu->kvm->arch.apic_id_changed = true;
-> > +}
-> > +
-> >  static int kvm_lapic_reg_write(struct kvm_lapic *apic, u32 reg, u32 val)
-> >  {
-> >  	int ret = 0;
-> > @@ -2046,9 +2059,11 @@ static int kvm_lapic_reg_write(struct kvm_lapic *apic, u32 reg, u32 val)
-> >  
-> >  	switch (reg) {
-> >  	case APIC_ID:		/* Local APIC ID */
-> > -		if (!apic_x2apic_mode(apic))
-> > +		if (!apic_x2apic_mode(apic)) {
-> > +
-> 
-> Spurious newline.
-Will fix.
-> 
-> >  			kvm_apic_set_xapic_id(apic, val >> 24);
-> > -		else
-> > +			kvm_lapic_check_initial_apic_id(apic);
-> > +		} else
-> 
-> Needs curly braces for both paths.
-Will fix.
-> 
-> >  			ret = 1;
-> >  		break;
-> >  
-> 
-> E.g.
-> 
-> ---
->  arch/x86/include/asm/kvm_host.h |  1 +
->  arch/x86/kvm/lapic.c            | 21 +++++++++++++++++++--
->  arch/x86/kvm/svm/avic.c         |  3 ++-
->  arch/x86/kvm/vmx/vmx.c          |  3 ++-
->  4 files changed, 24 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index d895d25c5b2f..d888fa1bae77 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -1071,6 +1071,7 @@ enum kvm_apicv_inhibit {
->  	APICV_INHIBIT_REASON_BLOCKIRQ,
->  	APICV_INHIBIT_REASON_ABSENT,
->  	APICV_INHIBIT_REASON_SEV,
-> +	APICV_INHIBIT_REASON_APIC_ID_MODIFIED,
->  };
-> 
->  struct kvm_arch {
-> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-> index 5fd678c90288..6fe8f20f03d8 100644
-> --- a/arch/x86/kvm/lapic.c
-> +++ b/arch/x86/kvm/lapic.c
-> @@ -2039,6 +2039,19 @@ static void apic_manage_nmi_watchdog(struct kvm_lapic *apic, u32 lvt0_val)
->  	}
->  }
-> 
-> +static void kvm_lapic_xapic_id_updated(struct kvm_lapic *apic)
-> +{
-> +	struct kvm *kvm = apic->vcpu->kvm;
-> +
-> +	if (KVM_BUG_ON(apic_x2apic_mode(apic), kvm))
-> +		return;
-> +
-> +	if (kvm_xapic_id(apic) == apic->vcpu->vcpu_id)
-> +		return;
-> +
-> +	kvm_set_apicv_inhibit(kvm, APICV_INHIBIT_REASON_APIC_ID_MODIFIED);
-> +}
-> +
->  static int kvm_lapic_reg_write(struct kvm_lapic *apic, u32 reg, u32 val)
->  {
->  	int ret = 0;
-> @@ -2047,10 +2060,12 @@ static int kvm_lapic_reg_write(struct kvm_lapic *apic, u32 reg, u32 val)
-> 
->  	switch (reg) {
->  	case APIC_ID:		/* Local APIC ID */
-> -		if (!apic_x2apic_mode(apic))
-> +		if (!apic_x2apic_mode(apic)) {
->  			kvm_apic_set_xapic_id(apic, val >> 24);
-> -		else
-> +			kvm_lapic_xapic_id_updated(apic);
-> +		} else {
->  			ret = 1;
-> +		}
->  		break;
-> 
->  	case APIC_TASKPRI:
-> @@ -2665,6 +2680,8 @@ static int kvm_apic_state_fixup(struct kvm_vcpu *vcpu,
->  			icr = __kvm_lapic_get_reg64(s->regs, APIC_ICR);
->  			__kvm_lapic_set_reg(s->regs, APIC_ICR2, icr >> 32);
->  		}
-> +	} else {
-> +		kvm_lapic_xapic_id_updated(vcpu->arch.apic);
->  	}
-> 
->  	return 0;
-> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-> index 54fe03714f8a..239c3e8b1f3f 100644
-> --- a/arch/x86/kvm/svm/avic.c
-> +++ b/arch/x86/kvm/svm/avic.c
-> @@ -910,7 +910,8 @@ bool avic_check_apicv_inhibit_reasons(enum kvm_apicv_inhibit reason)
->  			  BIT(APICV_INHIBIT_REASON_PIT_REINJ) |
->  			  BIT(APICV_INHIBIT_REASON_X2APIC) |
->  			  BIT(APICV_INHIBIT_REASON_BLOCKIRQ) |
-> -			  BIT(APICV_INHIBIT_REASON_SEV);
-> +			  BIT(APICV_INHIBIT_REASON_SEV) |
-> +			  BIT(APICV_INHIBIT_REASON_APIC_ID_MODIFIED);
-> 
->  	return supported & BIT(reason);
->  }
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index b06eafa5884d..941adade21ea 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -7818,7 +7818,8 @@ static bool vmx_check_apicv_inhibit_reasons(enum kvm_apicv_inhibit reason)
->  	ulong supported = BIT(APICV_INHIBIT_REASON_DISABLE) |
->  			  BIT(APICV_INHIBIT_REASON_ABSENT) |
->  			  BIT(APICV_INHIBIT_REASON_HYPERV) |
-> -			  BIT(APICV_INHIBIT_REASON_BLOCKIRQ);
-> +			  BIT(APICV_INHIBIT_REASON_BLOCKIRQ) |
-> +			  BIT(APICV_INHIBIT_REASON_APIC_ID_MODIFIED);
-> 
->  	return supported & BIT(reason);
->  }
-> 
-> base-commit: 6ab6e3842d18e4529fa524fb6c668ae8a8bf54f4
-
-
+Coverity screams about it, people fix it by adding checks for NULL,
+which is pointless. Half of drivers add the !NULL check, half do not...
 
 Best regards,
-	Thanks for the review,
-		Maxim Levitsky
-> --
-> 
-
-
+Krzysztof

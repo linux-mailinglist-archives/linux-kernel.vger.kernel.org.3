@@ -2,124 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBF59530308
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 14:23:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4177530303
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 14:22:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344809AbiEVMW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 08:22:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51798 "EHLO
+        id S241888AbiEVMWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 08:22:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229928AbiEVMWz (ORCPT
+        with ESMTP id S229928AbiEVMWT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 08:22:55 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D3403BBE2;
-        Sun, 22 May 2022 05:22:54 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id f4so21246349lfu.12;
-        Sun, 22 May 2022 05:22:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XRfWg+fADolIfuSMnQcCvTeo8WWZuP6coPsptzZ15Zo=;
-        b=Jpp1WVJfjpx5sfKi9o0xU6v3+1cYklN0lbfX1+fgn3g0YQTDxYYOoP6NBWMSS0dFu+
-         2nzm9LtcFeeJ7V0j7uhZhPjbqPjuhZpjmVKrK4uDqJk512oRkZvPNMAdI0/XUQNassHS
-         pvkjdnYzgquEDDAk401q3Ib0kVDCFL7c4ezJmBWPrpgQH3qwUhjl8MHfhfzOeXFp2Nkk
-         hsrhD9xFiGf3k2fzOxOry37dBAhxrIu4gmMFTddXPjucx+iJvdowatGuLov9OpSTf5ow
-         +geqp32YJQoaGiyn1j3a2sRLlExRv5Ci+Gf0K62dA3rrpaSz4lZR15goaPcRPp3TD9c0
-         Ja8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XRfWg+fADolIfuSMnQcCvTeo8WWZuP6coPsptzZ15Zo=;
-        b=QkqTO+eDfwbtRApVslmPQUTWyVJ/NKs+/VgbdkmkZItrckhw51SYkU0KD1u3Dv4b4f
-         VT3IuARFcx13Bg5unAdkfjNSXvwZuro4xBQBeYnUmpyfxUVjRwDGkMs2hbdFIIySiLSv
-         ye8sowuPT9YJbYD6cGUohG8zNL0q9iEf6R7wDCdNbxpmbJGS67CkTDPrMNg/YPX5nCF0
-         QROtBQQK/HvmX7n0IsgVIL00GXqsscUNZvSw4dyEsWNV49d0D02baWHGX/KhZoxnBc0j
-         i+Ns95OTQ4gJVcRdIuqxvmWZ2qD4xRMkdP8keX6gBM8KdlUTNVUtz2xM3dEDEwqtdHuo
-         Uk2Q==
-X-Gm-Message-State: AOAM530lkPZhVebWZBdHULiWWEEhrzGVWQMoBqK0anTEMzT44/DzR3dL
-        M5H43A93V+Idzopgd1nd1Apd21wnDzc2e8Ps
-X-Google-Smtp-Source: ABdhPJyIYoNmUuNJRBbm7baPesHb98dp37/DtqE6vy81O13lZnqSeVO/k84JfU2g0zrTo8QVm4ACXA==
-X-Received: by 2002:a05:6512:33c3:b0:473:d099:919 with SMTP id d3-20020a05651233c300b00473d0990919mr13755971lfg.430.1653222172718;
-        Sun, 22 May 2022 05:22:52 -0700 (PDT)
-Received: from fedora.. ([93.100.99.176])
-        by smtp.gmail.com with ESMTPSA id q16-20020ac25a10000000b0047255d2112esm1434245lfn.93.2022.05.22.05.22.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 May 2022 05:22:52 -0700 (PDT)
-From:   Dmitry Klochkov <kdmitry556@gmail.com>
-To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Stefan Raspl <raspl@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Dmitry Klochkov <kdmitry556@gmail.com>
-Subject: [PATCH] tools/kvm_stat: fix display of error when multiple processes are found
-Date:   Sun, 22 May 2022 15:21:41 +0300
-Message-Id: <20220522122141.11640-1-kdmitry556@gmail.com>
-X-Mailer: git-send-email 2.32.0
+        Sun, 22 May 2022 08:22:19 -0400
+Received: from smtp.smtpout.orange.fr (smtp09.smtpout.orange.fr [80.12.242.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A143BBD8
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 05:22:16 -0700 (PDT)
+Received: from pop-os.home ([86.243.180.246])
+        by smtp.orange.fr with ESMTPA
+        id skb3n6umQV0xUskb3n9oTi; Sun, 22 May 2022 14:22:14 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sun, 22 May 2022 14:22:14 +0200
+X-ME-IP: 86.243.180.246
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     dan.carpenter@oracle.com, Qii Wang <qii.wang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Wolfram Sang <wsa@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH] i2c: mediatek: Fix an error handling path in mtk_i2c_probe()
+Date:   Sun, 22 May 2022 14:22:07 +0200
+Message-Id: <8001bcdbee9f8afc85118c99b8166eb6473dcba5.1653222111.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of printing an error message, kvm_stat script fails when we
-restrict statistics to a guest by its name and there are multiple guests
-with such name:
+The clsk are prepared, enabled, then disabled. So if an error occurs after
+the disable step, they are still prepared.
 
-  # kvm_stat -g my_vm
-  Traceback (most recent call last):
-    File "/usr/bin/kvm_stat", line 1819, in <module>
-      main()
-    File "/usr/bin/kvm_stat", line 1779, in main
-      options = get_options()
-    File "/usr/bin/kvm_stat", line 1718, in get_options
-      options = argparser.parse_args()
-    File "/usr/lib64/python3.10/argparse.py", line 1825, in parse_args
-      args, argv = self.parse_known_args(args, namespace)
-    File "/usr/lib64/python3.10/argparse.py", line 1858, in parse_known_args
-      namespace, args = self._parse_known_args(args, namespace)
-    File "/usr/lib64/python3.10/argparse.py", line 2067, in _parse_known_args
-      start_index = consume_optional(start_index)
-    File "/usr/lib64/python3.10/argparse.py", line 2007, in consume_optional
-      take_action(action, args, option_string)
-    File "/usr/lib64/python3.10/argparse.py", line 1935, in take_action
-      action(self, namespace, argument_values, option_string)
-    File "/usr/bin/kvm_stat", line 1649, in __call__
-      ' to specify the desired pid'.format(" ".join(pids)))
-  TypeError: sequence item 0: expected str instance, int found
+Add an error handling path to unprepare the clks in such a case, as already
+done in the .remove function.
 
-To avoid this, it's needed to convert pids int values to strings before
-pass them to join().
-
-Signed-off-by: Dmitry Klochkov <kdmitry556@gmail.com>
+Fixes: 8b4fc246c3ff ("i2c: mediatek: Optimize master_xfer() and avoid circular locking")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- tools/kvm/kvm_stat/kvm_stat | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/i2c/busses/i2c-mt65xx.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/tools/kvm/kvm_stat/kvm_stat b/tools/kvm/kvm_stat/kvm_stat
-index 5a5bd74f55bd..9c366b3a676d 100755
---- a/tools/kvm/kvm_stat/kvm_stat
-+++ b/tools/kvm/kvm_stat/kvm_stat
-@@ -1646,7 +1646,8 @@ Press any other key to refresh statistics immediately.
-                          .format(values))
-             if len(pids) > 1:
-                 sys.exit('Error: Multiple processes found (pids: {}). Use "-p"'
--                         ' to specify the desired pid'.format(" ".join(pids)))
-+                         ' to specify the desired pid'
-+                         .format(" ".join(map(str, pids))))
-             namespace.pid = pids[0]
+diff --git a/drivers/i2c/busses/i2c-mt65xx.c b/drivers/i2c/busses/i2c-mt65xx.c
+index bdecb78bfc26..8e6985354fd5 100644
+--- a/drivers/i2c/busses/i2c-mt65xx.c
++++ b/drivers/i2c/busses/i2c-mt65xx.c
+@@ -1420,17 +1420,22 @@ static int mtk_i2c_probe(struct platform_device *pdev)
+ 	if (ret < 0) {
+ 		dev_err(&pdev->dev,
+ 			"Request I2C IRQ %d fail\n", irq);
+-		return ret;
++		goto err_bulk_unprepare;
+ 	}
  
-     argparser = argparse.ArgumentParser(description=description_text,
-
-base-commit: 9f46c187e2e680ecd9de7983e4d081c3391acc76
+ 	i2c_set_adapdata(&i2c->adap, i2c);
+ 	ret = i2c_add_adapter(&i2c->adap);
+ 	if (ret)
+-		return ret;
++		goto err_bulk_unprepare;
+ 
+ 	platform_set_drvdata(pdev, i2c);
+ 
+ 	return 0;
++
++err_bulk_unprepare:
++	clk_bulk_unprepare(I2C_MT65XX_CLK_MAX, i2c->clocks);
++
++	return ret;
+ }
+ 
+ static int mtk_i2c_remove(struct platform_device *pdev)
 -- 
-2.32.0
+2.34.1
 

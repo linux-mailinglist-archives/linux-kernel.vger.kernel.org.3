@@ -2,58 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1936E530020
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 02:59:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B76B530025
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 03:01:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244534AbiEVA7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 20:59:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36156 "EHLO
+        id S1348130AbiEVBAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 21:00:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232208AbiEVA7A (ORCPT
+        with ESMTP id S232208AbiEVBAG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 20:59:00 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D53EC3981F
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 17:58:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653181138; x=1684717138;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kh/DoQMfb9sTFZQv3G3UBcKMKfD2SQO4bJVgpgoSD/c=;
-  b=iUL/i72qBGMzruj3PuiFV5BDEeFWIkGZHONHXrv4bJxTHx51jGSS/qUH
-   jBnfgGClj98rfMKfYcQSp6rK3giAxznoFyrW6+9gFg/ZXzZnTQhw8j6qs
-   GU9wHR7YKQ1COoJ5rzd2+A+eSSXFYPIBKdOwn3M0W9AiAnOsiDvuwsXwR
-   F4yfYC8ZsMyvN/jta3q/OwkwRV/KwcLHKOKLWzGZ3oagknzA4S85Mhxf2
-   S8mmv1ONc2Wp6J7+BDBCx5RVSQ3/2UOZmHcTT004c5pt/LGU69SQEC6Rz
-   BElw3hLv/B4Dv15Lj9azoQXYdHlUSJjvS11eT3zgu4OGXV708lno9lq3w
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10354"; a="272904107"
-X-IronPort-AV: E=Sophos;i="5.91,243,1647327600"; 
-   d="scan'208";a="272904107"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 17:58:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,243,1647327600"; 
-   d="scan'208";a="547275690"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 21 May 2022 17:58:57 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nsZvs-0006ng-Q2;
-        Sun, 22 May 2022 00:58:56 +0000
-Date:   Sun, 22 May 2022 08:58:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Cong Wang <xiyou.wangcong@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [congwang:sch_bpf 1/3] powerpc-linux-ld:
- kernel/bpf/syscall.o:undefined reference to `skb_map_ops'
-Message-ID: <202205220855.HbbxNMrI-lkp@intel.com>
+        Sat, 21 May 2022 21:00:06 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF27639832
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 18:00:03 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id 3so7734387ily.2
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 18:00:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3DYtEGQTzZvi1A4S1uBZ9fxUeN5xjNbN/cQ8OVKWFZo=;
+        b=Xv87cvPO2H2UNr3ucH+UOLEI/XDgeZ0NFghtFlxZw0gFhnfMP3jE5opSVhewtEssRr
+         5cr0ZY6us8S9HMzcPk7DcoTNEG+70my2Ri/bGgn9meyFB1/P1noWQhAZuJiegCd8POfx
+         7wxlW4Ix4PgrJodQvJ3ZUI6cgpOhNAf8aS0xqyElmb1/DByTQQcaNvWImc2dLAuZEhfq
+         ZAZfLnQNoCg4We7dUvyOm2sX9T0V+xMCrXzIXRBySkfoT9Ae0yh0aAolQjXzmBcx5Wos
+         qpD3Qph9/5uku47hhx/xp305xTuW51xaXaCf15Rk8zJHfICEVCERFSTIsYCxE9A0lyzU
+         IZjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3DYtEGQTzZvi1A4S1uBZ9fxUeN5xjNbN/cQ8OVKWFZo=;
+        b=HICP8odBJVzj3ylsH2vgBlUg5x5yfz+wE+Kgdz3mFT1AHVh77xdOL0cwrR6LwkiodR
+         4abdPuyCeNL2TRdIUnNsX2EJjTCXl5cp6QPJ4Tka+9i0E7ZawbPB7U0ulk7lWEJ0DqMq
+         8v6wPJr4gjYyHjBnbX+nL2bluj+B/MtF+ZZLySQvZsQCwfS/zwsmrNARZxwqPvNzV1bF
+         QV0qy0Pv8i5kHvwxGo9ajL3EgpZq6UAJgalDgrpyN0bq0am3uZH9O0tVVrqjubp2nCzL
+         bqKjH2nraDtRK3ZatbfEd0qsSEHk/Xyf12RMj0zacsLVztd/8ayqYHGefmVvxj2OGHs5
+         cFyQ==
+X-Gm-Message-State: AOAM530i9dGE5a9xfSZfwQ0R6nk9BaiwRuTWNmrWUmJUIgT81BvNW21E
+        9J2W8nmtyzXuCbliOStBUDCnfw==
+X-Google-Smtp-Source: ABdhPJxlApPYWy/uTHm10OGIiNGTelkTBlw8UxIizWZv44ke5ccT70BBYSUtRxrCLUNxUUnwNsNkLw==
+X-Received: by 2002:a05:6e02:194e:b0:2cf:9d32:fefc with SMTP id x14-20020a056e02194e00b002cf9d32fefcmr8980615ilu.217.1653181203189;
+        Sat, 21 May 2022 18:00:03 -0700 (PDT)
+Received: from presto.localdomain (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.gmail.com with ESMTPSA id t21-20020a02c495000000b0032eacab7e07sm939366jam.93.2022.05.21.18.00.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 21 May 2022 18:00:02 -0700 (PDT)
+From:   Alex Elder <elder@linaro.org>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     mka@chromium.org, evgreen@chromium.org, bjorn.andersson@linaro.org,
+        quic_cpratapa@quicinc.com, quic_avuyyuru@quicinc.com,
+        quic_jponduru@quicinc.com, quic_subashab@quicinc.com,
+        elder@kernel.org, netdev@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net 0/2] net: ipa: fix page free in two spots
+Date:   Sat, 21 May 2022 19:59:57 -0500
+Message-Id: <20220522005959.1175181-1-elder@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,29 +72,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/congwang/linux.git sch_bpf
-head:   9f6c12a2c218c56af7d37feeaf21c5b62a8192a0
-commit: ef56eb898b1d5c229db544d5933e9c686132ef28 [1/3] bpf: introduce skb map
-config: powerpc-randconfig-r021-20220522 (https://download.01.org/0day-ci/archive/20220522/202205220855.HbbxNMrI-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/congwang/linux/commit/ef56eb898b1d5c229db544d5933e9c686132ef28
-        git remote add congwang https://github.com/congwang/linux.git
-        git fetch --no-tags congwang sch_bpf
-        git checkout ef56eb898b1d5c229db544d5933e9c686132ef28
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
+When a receive buffer is not wrapped in an SKB and passed to the
+network stack, the (compound) page gets freed within the IPA driver.
+This is currently quite rare.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+The pages are freed using __free_pages(), but they should instead be
+freed using page_put().  This series fixes this, in two spots.
 
-All errors (new ones prefixed by >>):
+These patches work for Linux v5.18-rc7 and v5.17.y, but won't apply
+cleanly to earlier stable branches.  (Nevertheless, the fix is
+trivial.)
 
->> powerpc-linux-ld: kernel/bpf/syscall.o:(.rodata+0x538): undefined reference to `skb_map_ops'
+					-Alex
+
+Alex Elder (2):
+  net: ipa: fix page free in ipa_endpoint_trans_release()
+  net: ipa: fix page free in ipa_endpoint_replenish_one()
+
+ drivers/net/ipa/ipa_endpoint.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.32.0
+

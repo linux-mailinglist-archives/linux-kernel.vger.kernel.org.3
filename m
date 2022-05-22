@@ -2,170 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 446165303C5
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 17:12:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A87FC5303CA
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 17:20:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347788AbiEVPMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 11:12:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60132 "EHLO
+        id S1347828AbiEVPUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 11:20:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230290AbiEVPMq (ORCPT
+        with ESMTP id S230290AbiEVPUd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 11:12:46 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61CA2237D5
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 08:12:44 -0700 (PDT)
-Received: from [192.168.1.107] ([37.4.249.95]) by mrelayeu.kundenserver.de
- (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MTiHd-1oILX11I8z-00U1ez; Sun, 22 May 2022 17:11:42 +0200
-Message-ID: <bfad3d08-3268-5528-17c1-c17ef3949d96@i2se.com>
-Date:   Sun, 22 May 2022 17:11:36 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: vchiq: Performance regression since 5.18-rc1
-Content-Language: en-US
-To:     paulmck@kernel.org
-Cc:     Marcelo Tosatti <mtosatti@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Minchan Kim <minchan@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        regressions@lists.linux.dev, riel@surriel.com,
-        viro@zeniv.linux.org.uk
-References: <77d6d498-7dd9-03eb-60f2-d7e682bb1b20@i2se.com>
- <20220521234616.GO1790663@paulmck-ThinkPad-P17-Gen-1>
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-In-Reply-To: <20220521234616.GO1790663@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:Q7W4EvkD5FS32nrU71vNeT8z0yPIXNczX4elRQCT4wO9DzrgxY2
- DzjPxqQNr3wRCuCPPCLQr7c3v8cdV/mCI7NlGB5xFmr1sKojnUfP2BH/x8TwfWGX9w68o6F
- yvyq3T/c2BqlBBwANnsMnCu0YEf6Jwoza3iaJEoRrDxGCZ6/3Uc1R3c88r7GIBA23FFIRbm
- 2VLhewpNiQEBEvW9Il/Zw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:g8oTkQDDkxY=:uFjwQvTOfgsxKh4vQPj23+
- 2SxfvvXiyCfOzDwJieJFCPs8eOZNBycESZwOyusgJ9kpHuVvDM+r7/Un8qiHtHNirx90jag+z
- Gye/6r0mfgrQxQ/7CbImTR8BApjRtqB5ApsgaaBKPZWSrDhyZXj0keIsAZrFamg8QPOkydkJD
- Sv8O69BpsDXcD4uDVVcOHrg/mbC9+RwSNQjBIbiuhzPA4jR4ZNWgIwsMNbc3VvBtoceAh5qMU
- bDQPt9vXHwyFh2AL0hmyWh/IV6bPgQtpcYQvfo3z7ah/uFPs/nnKgUUYdmZABJp9k9eZ7p0P5
- OPhZ67laxa0Z1TY0nRtQU/LoDg/LSmCwMguWT9ipkpZTDa3XIZQN1d+5ILUIH9GgrEH8VJtgL
- UwT29qylhZ+2nBijixXkiOIObiLXApJqhC39CKubvuIG4Dp3oCz374/uV2DF/LoPmbnNtwad8
- 4sHWi6K0kY65xIhkO/QULz5KOKfb/I9hxFTiDB6tEgAjRW9JrZLESek4gsCQU1ZrtcHq2WoAG
- dCdBgRlScy2Hy+evD1O9h43PtpeIDmwQatrx46T9YkaWtr/uwIKg4dlLXB3ADhv8/Mg9BlZwK
- o79msgVdgtFL9/y7AOeOLFmRhxbWSWo66SMKwm5uP75vTZ5/xY4dMOUMoVqbEno5uUiz2bkGG
- ZIGyH79RbAaX8S/1ThLA6QB87BU2mb+2DJ17prbGLzQZ5wMujrV0ydIC3NoDI0aK62VY6A5ph
- 0WnBdSAhw9jZcqB5VdhHM9F0FqlvMWCHHMu5bX3BisgxUNuOhiVbirNW8PA=
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 22 May 2022 11:20:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 214EA13F09
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 08:20:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B1D5260FDE
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 15:20:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A365C385AA;
+        Sun, 22 May 2022 15:20:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653232832;
+        bh=SWE2SZXviYHJb3fNQDeOWauK0tH4udqCDq6KTNopSuk=;
+        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+        b=u0EraHkQKmwe76AVYlZ0QfFV8bz81Y0Xn88jmW9xTwq/MYOIr8yX8GccCYsqSNaGw
+         pwASnPM2tFRwqDKACDXopjG4S2P61OGaygxKZJlYudBYbKfZA0ih7OyrkI+S8LrPEJ
+         596u00mcHY/sK6Ohk63lJBz9uJ39Tfv4sAZFrnvL/zQirpDn9t8HlUegQFZiShbKbh
+         U3T7/gXHf+MUt+uJ1FaAOnMdhG5AQznNuWcfRsIe9ImcV9AVkCi6tv2JHtbVkOLN0K
+         WxAuylUp8210t8kldxltmGJMzU7mWepZEwn+0/ndU3Wn68TMJAW3sKlwtd96FvQzqQ
+         yOpunhFwsmqUg==
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailauth.nyi.internal (Postfix) with ESMTP id F031A27C0054;
+        Sun, 22 May 2022 11:20:28 -0400 (EDT)
+Received: from imap48 ([10.202.2.98])
+  by compute2.internal (MEProxy); Sun, 22 May 2022 11:20:29 -0400
+X-ME-Sender: <xms:ulSKYpF8tqYGarKUwR_XWMcOABhsH8bH0k4pfn6q5nwHGvuWuNPZTA>
+    <xme:ulSKYuVrP8vQ-Rfe-0ktCjsIj0sUB0bmC-roX2-MJze3aIZ8VjlO_khzVcN5HoUcS
+    NkpZAtnhXguNirLI1I>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrieekgdeklecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedftehn
+    ugihucfnuhhtohhmihhrshhkihdfuceolhhuthhosehkvghrnhgvlhdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepudevffdvgedvfefhgeejjeelgfdtffeukedugfekuddvtedvudei
+    leeugfejgefgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homheprghnugihodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduudeiudek
+    heeifedvqddvieefudeiiedtkedqlhhuthhopeepkhgvrhhnvghlrdhorhhgsehlihhnuh
+    igrdhluhhtohdruhhs
+X-ME-Proxy: <xmx:ulSKYrIGbYkWolY_VIGHitGUrYBda-75WuihnM-LPsQavBC3BPt6Dg>
+    <xmx:ulSKYvExa0Q4tzQQJycXeiZ5769tHBDP6yT7rSer0NDy7uOro6wmHg>
+    <xmx:ulSKYvWN8rSa_CVZs6ValpcRz0e7wBrKznnFGGsOLzE9ORLTs2YOHw>
+    <xmx:vFSKYtfZfRkbxQTZ3SNBki4GZ5TUp5qjuJc_ovowYHlMvaop9AzAnTG8ozE>
+Feedback-ID: ieff94742:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id BE05431A005D; Sun, 22 May 2022 11:20:26 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-591-gfe6c3a2700-fm-20220427.001-gfe6c3a27
+Mime-Version: 1.0
+Message-Id: <c82ac102-7935-4b07-9d8c-82a2efe59956@www.fastmail.com>
+In-Reply-To: <YomERsAM3gF7XxRZ@casper.infradead.org>
+References: <20220519183127.3909598-1-shiyn.lin@gmail.com>
+ <d1810538-9b4c-7f19-852f-7f6d255533c7@redhat.com>
+ <YolHr1GwfA++i9jj@casper.infradead.org>
+ <64d0da08-6ffd-4bce-bc66-5097913937b4@kernel.org>
+ <YomERsAM3gF7XxRZ@casper.infradead.org>
+Date:   Sun, 22 May 2022 08:20:05 -0700
+From:   "Andy Lutomirski" <luto@kernel.org>
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     "David Hildenbrand" <david@redhat.com>,
+        "Chih-En Lin" <shiyn.lin@gmail.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        "Ingo Molnar" <mingo@redhat.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        "Juri Lelli" <juri.lelli@redhat.com>,
+        "Vincent Guittot" <vincent.guittot@linaro.org>,
+        "Dietmar Eggemann" <dietmar.eggemann@arm.com>,
+        "Steven Rostedt" <rostedt@goodmis.org>,
+        "Ben Segall" <bsegall@google.com>, "Mel Gorman" <mgorman@suse.de>,
+        "Daniel Bristot de Oliveira" <bristot@redhat.com>,
+        "Christian Brauner" <brauner@kernel.org>,
+        "Vlastimil Babka" <vbabka@suse.cz>,
+        "William Kucharski" <william.kucharski@oracle.com>,
+        "John Hubbard" <jhubbard@nvidia.com>,
+        "Yunsheng Lin" <linyunsheng@huawei.com>,
+        "Arnd Bergmann" <arnd@arndb.de>,
+        "Suren Baghdasaryan" <surenb@google.com>,
+        "Colin Cross" <ccross@google.com>,
+        "Feng Tang" <feng.tang@intel.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        "Mike Rapoport" <rppt@kernel.org>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        "Anshuman Khandual" <anshuman.khandual@arm.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        "Daniel Axtens" <dja@axtens.net>,
+        "Jonathan Marek" <jonathan@marek.ca>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "Pasha Tatashin" <pasha.tatashin@soleen.com>,
+        "Peter Xu" <peterx@redhat.com>,
+        "Andrea Arcangeli" <aarcange@redhat.com>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>,
+        "Fenghua Yu" <fenghua.yu@intel.com>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        "Kaiyang Zhao" <zhao776@purdue.edu>,
+        "Huichun Feng" <foxhoundsk.tw@gmail.com>,
+        "Jim Huang" <jserv.tw@gmail.com>
+Subject: Re: [RFC PATCH 0/6] Introduce Copy-On-Write to Page Table
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
 
-Am 22.05.22 um 01:46 schrieb Paul E. McKenney:
-> On Sun, May 22, 2022 at 01:22:00AM +0200, Stefan Wahren wrote:
->> Hi,
->>
->> while testing the staging/vc04_services/interface/vchiq_arm driver with my
->> Raspberry Pi 3 B+ (multi_v7_defconfig) i noticed a huge performance
->> regression since [ff042f4a9b050895a42cae893cc01fa2ca81b95c] mm:
->> lru_cache_disable: replace work queue synchronization with synchronize_rcu
->>
->> Usually i run "vchiq_test -f 1" to see the driver is still working [1].
->>
->> Before commit:
->>
->> real    0m1,500s
->> user    0m0,068s
->> sys    0m0,846s
->>
->> After commit:
->>
->> real    7m11,449s
->> user    0m2,049s
->> sys    0m0,023s
->>
->> Best regards
->>
->> [1] - https://github.com/raspberrypi/userland
-> Please feel free to try the patch shown below.  Or the pair of patches
-> from Rik here:
->
-> https://lore.kernel.org/lkml/20220218183114.2867528-2-riel@surriel.com/
-> https://lore.kernel.org/lkml/20220218183114.2867528-3-riel@surriel.com/
 
-I tried your patch and Rik's patches but in both cases vchiq_test runs 7 
-minutes instead of ~ 1 second.
+On Sat, May 21, 2022, at 5:31 PM, Matthew Wilcox wrote:
+> On Sat, May 21, 2022 at 03:19:24PM -0700, Andy Lutomirski wrote:
+>> I can see a rather different use for this type of shared-pagetable
+>> technology, though: monstrous MAP_SHARED mappings.  For database and =
+some VM
+>> users, multiple processes will map the same file.  If there was a way=
+ to
+>> ensure appropriate alignment (or at least encourage it) and a way to =
+handle
+>> mappings that don't cover the whole file, then having multiple mappin=
+gs
+>> share the same page tables could be a decent efficiently gain.  This =
+doesn't
+>> even need COW -- it's "just" pagetable sharing.
+>
+> The mshare proposal did not get a warm reception at LSFMM ;-(
+>
+> The conceptual model doesn't seem to work for the MM developers who we=
+re
+> in the room.  "Fear" was the most-used word.  Not sure how we're going
+> to get to a model of sharing page tables that doesn't scare people.
 
-Best regards
+FWIW, I didn=E2=80=99t like mshare.  mshare was weird: it seemed to have=
+ one mm own some page tables and other mms share them.  I=E2=80=99m talk=
+ing about having a *file* own page tables and mms map them.  This seems =
+less fear-inducing to me.  Circular dependencies are impossible, mmap ca=
+lls don=E2=80=99t need to propagate, etc.
 
->
-> There is work ongoing to produce something better, but ongoing slowly.
-> Especially my part of that work.
->
-> 							Thanx, Paul
->
-> ------------------------------------------------------------------------
->
->  From paulmck@kernel.org Mon Feb 14 11:05:49 2022
-> Date: Mon, 14 Feb 2022 11:05:49 -0800
-> From: "Paul E. McKenney" <paulmck@kernel.org>
-> To: clm@fb.com
-> Cc: riel@surriel.com, viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org,
-> 	linux-fsdevel@vger.kernel.org, kernel-team@fb.com
-> Subject: [PATCH RFC fs/namespace] Make kern_unmount() use
->   synchronize_rcu_expedited()
-> Message-ID: <20220214190549.GA2815154@paulmck-ThinkPad-P17-Gen-1>
-> Reply-To: paulmck@kernel.org
-> MIME-Version: 1.0
-> Content-Type: text/plain; charset=us-ascii
-> Content-Disposition: inline
-> Status: RO
-> Content-Length: 1036
-> Lines: 32
->
-> Experimental.  Not for inclusion.  Yet, anyway.
->
-> Freeing large numbers of namespaces in quick succession can result in
-> a bottleneck on the synchronize_rcu() invoked from kern_unmount().
-> This patch applies the synchronize_rcu_expedited() hammer to allow
-> further testing and fault isolation.
->
-> Hey, at least there was no need to change the comment!  ;-)
->
-> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-> Cc: <linux-fsdevel@vger.kernel.org>
-> Cc: <linux-kernel@vger.kernel.org>
-> Not-yet-signed-off-by: Paul E. McKenney <paulmck@kernel.org>
->
-> ---
->
->   namespace.c |    2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/fs/namespace.c b/fs/namespace.c
-> index 40b994a29e90d..79c50ad0ade5b 100644
-> --- a/fs/namespace.c
-> +++ b/fs/namespace.c
-> @@ -4389,7 +4389,7 @@ void kern_unmount(struct vfsmount *mnt)
->   	/* release long term mount so mount point can be released */
->   	if (!IS_ERR_OR_NULL(mnt)) {
->   		real_mount(mnt)->mnt_ns = NULL;
-> -		synchronize_rcu();	/* yecchhh... */
-> +		synchronize_rcu_expedited();	/* yecchhh... */
->   		mntput(mnt);
->   	}
->   }
->
+It would still be quite a change, though.

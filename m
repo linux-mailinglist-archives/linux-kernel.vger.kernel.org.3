@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52B86530145
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 08:40:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B08DE530143
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 08:40:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239699AbiEVGh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 02:37:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54458 "EHLO
+        id S240287AbiEVGih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 02:38:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239474AbiEVGhv (ORCPT
+        with ESMTP id S239898AbiEVGi3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 02:37:51 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C4A241637
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 23:37:50 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id j21so10887361pga.13
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 23:37:50 -0700 (PDT)
+        Sun, 22 May 2022 02:38:29 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3B704163C
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 23:38:27 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id bo5so11068254pfb.4
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 23:38:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=ww3nAvlupQzAe15WForrvTUe0x5VHXpHFHGu6B8UAqk=;
-        b=0hlZr6B8DnKA9bzHBoPJuI3N0q1Cxa5yWd71jCU7B3Tojl9HOUU6wHR4PdRbt3926z
-         PpD0UBUcN4KB8EJzNWlrONVu2XF79Mb0TPZzt/dIniiOGp2rJCglibNMQXQ+A/RSU6Rc
-         bmYuSZKGQVZ/C/nDTW+7XeQ3KZPgqd/uXpcV1t8SgG1FqN2j9TGmal5wzxx24mLowb1l
-         /UiUu9pXvWMx7UtkUuN2gLwaB+MxIGAajXVqNAzSILYsGx9OE+2KcuJx2a6NQUsAxms5
-         rpYLG0Q+Iwna4R2DVnj4xz7A7aRXcBJ0umOpePq3Q5K/YuGiI5xvVIUehHJI8gbZ8d96
-         LhKg==
+        bh=63w6MmKKarIOHYX+K5PAEKcR1bSxb1g9RSGqBi4nt8U=;
+        b=Wx+SmgtailJYnAhwvCnC+y1AuVwXo46QNLoLpoUb8rjVzBy5xo17x6lY2EmUp6sVHu
+         l8rGunXcntC+8LTB0b38OVBedUWlQ47Xv+fYt8y2hIK2D9iH7/CRngOu9kSVBGc6TXFL
+         7RR9Zbl4Se+3YzKL9QmEf0AjB3Au30OSZlbshIcHneNizPzLdf4qfKySRtWPH6eV1RaD
+         dCWHf2/vyiL69waPlmn2Ld3st9Y0kgrihwiSDETjrQ5145s8fQdluLTJ/0ltDMOY/OTR
+         oRtt0ry2h3Xz7CDwMzplhnN0OtOJ3ZmREN/4PdnvTXgPq9UEFWaLcwwACBJihbNQeMim
+         japQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=ww3nAvlupQzAe15WForrvTUe0x5VHXpHFHGu6B8UAqk=;
-        b=wBo1yguH31Gybm8EGqR35ZGXaaseOJmYHhugAKqIiSzTrofV+dKLdeBXb+EC5jOz9U
-         kTLNUKlFcfjdVOiG4zv4EtoesE0fzvaFZ0oS6Hfpgdh3zoK+ku8C+QIX5aGJD4148qWj
-         a5h6OyGfeHA0xXAYut82RfHdTIfGQDVIf4O/DfoRhDxK76DD7ZtHTw5C0pKT9Nzbo2V4
-         cKujKJLeSueuB7Ldp1JsW2RnVdV1mhab8F/JYafnv9LtZ7G+pDWMAK7MBFVlJIcoiBV1
-         MG1M0SeGTfKPDarydHvS8tIySjEEQc3Q2S7qnlXINYkb3L/TBN9SieftlgSlaCETDEcn
-         7KKA==
-X-Gm-Message-State: AOAM530PDEQ/VNeDpkgiFCIPYxCYc0sFOrMrirkDC8PZqfsT9XrpuKk2
-        dy+TTkl+2FoYpP34iXIahdT80Q==
-X-Google-Smtp-Source: ABdhPJyIZBcGgFP+4UB+K5yfgjsT0tzgCFbeo9E8vscX0ilcaErCbOnQlu7MK/v16rVc8+9e3lECGA==
-X-Received: by 2002:a05:6a00:1805:b0:50d:ee59:b579 with SMTP id y5-20020a056a00180500b0050dee59b579mr18075256pfa.70.1653201469791;
-        Sat, 21 May 2022 23:37:49 -0700 (PDT)
+        bh=63w6MmKKarIOHYX+K5PAEKcR1bSxb1g9RSGqBi4nt8U=;
+        b=UWMtp9JZwmdQ4cSuLKLGbnWMiUuHn9fScGxhL4y/sh5qiEmVuT3winIXw1QcezyVLt
+         bEUhyssjE0FVJF86YIXhmDaaOI/PTQnHG4Jo87byYARmRe/iO47WRNgNA9DxLQaOlD91
+         X8MsAAONtreL0F/xnbcw6tCiPUq2+8tldSejSd0WhWbZ8zpTYVNrjaDcBgRvMtNEXoUJ
+         JdpcFtYWleC7NRZfdSl+ZXjjkdsop/jeeenVxMYmPGIiCZ7kkSbRM+G06BunbKI372Qd
+         sOXaTLN9vhwK3bbYDa8gAUbCUUYkT6QxaDl3cTbwaS4KAVKCnB//lv5Z7tJ8Wi6J0Ttb
+         VCPw==
+X-Gm-Message-State: AOAM530zvbqAdi+ZeXS9GiwH4GZTqIh68P6oBtIbCs8vLen8C3SUtugl
+        roFMDK2n82iiPzmqknBYIn26Tg==
+X-Google-Smtp-Source: ABdhPJyPgv2iVQpJ6evav+1kuZZv/Jsj382BjCK/UoWqPhAihMGhNLl0bmXOsZNbznk/KBMm7ROnOw==
+X-Received: by 2002:aa7:86cb:0:b0:518:3e92:f78b with SMTP id h11-20020aa786cb000000b005183e92f78bmr16689664pfo.61.1653201507382;
+        Sat, 21 May 2022 23:38:27 -0700 (PDT)
 Received: from localhost ([139.177.225.234])
-        by smtp.gmail.com with ESMTPSA id a3-20020a170902ecc300b0015e8d4eb26dsm2544678plh.183.2022.05.21.23.37.49
+        by smtp.gmail.com with ESMTPSA id n89-20020a17090a5ae200b001df6173700dsm4549568pji.49.2022.05.21.23.38.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 May 2022 23:37:49 -0700 (PDT)
-Date:   Sun, 22 May 2022 14:37:46 +0800
+        Sat, 21 May 2022 23:38:27 -0700 (PDT)
+Date:   Sun, 22 May 2022 14:38:24 +0800
 From:   Muchun Song <songmuchun@bytedance.com>
 To:     Vasily Averin <vvs@openvz.org>
 Cc:     Andrew Morton <akpm@linux-foundation.org>, kernel@openvz.org,
@@ -58,24 +58,25 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>, kernel@openvz.org,
         Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
         Vlastimil Babka <vbabka@suse.cz>,
         Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org
-Subject: Re: [PATCH mm v2 2/9] memcg: enable accounting for kernfs nodes
-Message-ID: <YonaOq6jrGygwbcH@FVFYT0MHHV2J.usts.net>
+Subject: Re: [PATCH mm v2 3/9] memcg: enable accounting for kernfs iattrs
+Message-ID: <YonaYCdTkxoyz815@FVFYT0MHHV2J.usts.net>
 References: <Yn6aL3cO7VdrmHHp@carbon>
- <4f129690-88fe-18f2-2142-b179a804924b@openvz.org>
+ <e5a8bbc2-3d97-d016-f2ba-4b2b3073a9d3@openvz.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4f129690-88fe-18f2-2142-b179a804924b@openvz.org>
+In-Reply-To: <e5a8bbc2-3d97-d016-f2ba-4b2b3073a9d3@openvz.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 21, 2022 at 07:37:49PM +0300, Vasily Averin wrote:
+On Sat, May 21, 2022 at 07:37:59PM +0300, Vasily Averin wrote:
 > kernfs nodes are quite small kernel objects, however there are few
 > scenarios where it consumes significant piece of all allocated memory:
 > 
@@ -91,18 +92,18 @@ On Sat, May 21, 2022 at 07:37:49PM +0300, Vasily Averin wrote:
 > 
 > Usually new kernfs node creates few other objects:
 > 
-> Allocs  Alloc   Allocation
+> Allocs  Alloc    Allocation
 > number  size
 > --------------------------------------------
-> 1   +  128      (__kernfs_new_node+0x4d)	kernfs node
-> 1   +   88      (__kernfs_iattrs+0x57)		kernfs iattrs
-> 1   +   96      (simple_xattr_alloc+0x28)	simple_xattr, can grow over 4Kb
+> 1   +  128      (__kernfs_new_node+0x4d)        kernfs node
+> 1   +   88      (__kernfs_iattrs+0x57)          kernfs iattrs
+> 1   +   96      (simple_xattr_alloc+0x28)       simple_xattr, can grow over 4Kb
 > 1       32      (simple_xattr_set+0x59)
 > 1       8       (__kernfs_new_node+0x30)
 > 
 > '+' -- to be accounted
 > 
-> This patch enables accounting for kernfs nodes slab cache.
+> This patch enables accounting for kernfs_iattrs_cache slab cache
 > 
 > Signed-off-by: Vasily Averin <vvs@openvz.org>
 

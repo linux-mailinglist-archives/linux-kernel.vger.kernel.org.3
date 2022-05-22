@@ -2,143 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 495905301B3
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 09:48:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2547C5301B9
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 09:51:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234973AbiEVHs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 03:48:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50150 "EHLO
+        id S236176AbiEVHvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 03:51:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232559AbiEVHs1 (ORCPT
+        with ESMTP id S236250AbiEVHvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 03:48:27 -0400
-Received: from smtp.smtpout.orange.fr (smtp07.smtpout.orange.fr [80.12.242.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC3B740E50
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 00:48:25 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.180.246])
-        by smtp.orange.fr with ESMTPA
-        id sgK6nMsvlvNzHsgK6nK1rI; Sun, 22 May 2022 09:48:23 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 22 May 2022 09:48:23 +0200
-X-ME-IP: 86.243.180.246
-Message-ID: <88ec0bd3-234c-a5ae-8a1a-a7a90e66e87c@wanadoo.fr>
-Date:   Sun, 22 May 2022 09:48:22 +0200
+        Sun, 22 May 2022 03:51:13 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8038C659A
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 00:51:11 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id v8so18843173lfd.8
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 00:51:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=88owq8uKXDsheKyfsbWWUMK1Cxn07lBnqHB3aJaGB1U=;
+        b=HVhU/XPrfs70po+5RBr7uTXEFc/VT5WW15xfZyh/B66A+4JMDjApfrPm9LRtsDlVDx
+         rn4F21ZXGLeqWNK6TPvES0lJnTpmWCfIDKIIQKrhwl5a5jq+U03iw57s2C+vvGGiEaTa
+         K92fGdP1dmnlb2nq/bKbPysPtwIOUuZc0KgZ3pzvbRgmExF722IxMHjeKrj1xbqGKvy0
+         OHdyWGfX/JJXBD6AvvCredZcZamJSn5dzrg6726hKyC+yDDqAZxIF1ZnRyWlxgAnF9tA
+         x/zX17rGo5nQAgaLZYBoVVJG9yl9byHEjzzdusuHaqplRK85L/MKn+jf/6y7/vBOO7G9
+         Q1xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=88owq8uKXDsheKyfsbWWUMK1Cxn07lBnqHB3aJaGB1U=;
+        b=rfNiIw6KjfNF6ztXNpdRyEedblmQnkAxgkU0+Wme19DyhwyV+4KT29vN3fKs1ef+Zc
+         eBo6dW7P4APE4gycwM0rZ5Nbz4U8juZngqn1DhhzrSHKkEvkI9vBDPZkG+RX4pWmmvax
+         hsVMIxRZtwmDeYulXegFh5d9GBWxc6cdF1LKiu8LGA9XbbCPpipEGtOCyDl/GuhAyISD
+         lY6rI2gykLKGxUPvPdQPFF7u9H0bXrJ65Kd29ZzSG/fi4CM0jRtrH008wY1vICYYSCkn
+         KVS3pUSF/OuYT0/jTD9+pbe4KrJ3bZwELbQb5RjD+RVFaQZJQwiZL1U3XusAAj1GjzDA
+         mzew==
+X-Gm-Message-State: AOAM533Rz4pgNh8BvVoTAcg1eiQ4xH0BkU3haxPEPhpDPJTmMr/paZMw
+        m6jhbWtf00Ie2BZ6cSe2yZ+Blg==
+X-Google-Smtp-Source: ABdhPJxn3SFCU7olnoR4mSUevcHXgr6rUAve15/U4XQVAOEFghCkWDWlZk6zSIXXpDyWWLZER5dIUg==
+X-Received: by 2002:a05:6512:150a:b0:474:bb9:5174 with SMTP id bq10-20020a056512150a00b004740bb95174mr11826565lfb.207.1653205869755;
+        Sun, 22 May 2022 00:51:09 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id q6-20020ac25286000000b0047255d211c1sm1354476lfm.240.2022.05.22.00.51.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 22 May 2022 00:51:09 -0700 (PDT)
+Message-ID: <e15d74d0-2cae-230f-a410-0e1106f490a3@linaro.org>
+Date:   Sun, 22 May 2022 09:51:08 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
-Subject: Re: [PATCH V7 4/5] iio: accel: sca3300: Add support for SCL3300
+Subject: Re: [PATCH] dt-bindings: mips: Convert plain text file to ReST
 Content-Language: en-US
-To:     jic23@kernel.org, lars@metafoo.de, robh+dt@kernel.org,
-        tomas.melin@vaisala.com, andy.shevchenko@gmail.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Qing-wu.Li@leica-geosystems.com.cn
-Cc:     linux-iio <linux-iio@vger.kernel.org>
-References: <20220522070419.409556-1-Qing-wu.Li@leica-geosystems.com.cn>
- <20220522070419.409556-5-Qing-wu.Li@leica-geosystems.com.cn>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20220522070419.409556-5-Qing-wu.Li@leica-geosystems.com.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+To:     Soumya Negi <soumya.negi97@gmail.com>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>
+References: <20220521015613.6197-1-soumya.negi97@gmail.com>
+ <7fd80a4b-5e60-0117-b790-359f6d94aeef@linaro.org>
+ <20220521202412.GE14144@Negi>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220521202412.GE14144@Negi>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 22/05/2022 à 09:04, LI Qingwu a écrit :
-> Add support for Murata SCL3300, a 3-axis MEMS accelerometer.
-> Same as SCA3300, it has the accelerometer and temperature output.
+On 21/05/2022 22:24, Soumya Negi wrote:
+> On Sat, May 21, 2022 at 04:25:07PM +0200, Krzysztof Kozlowski wrote:
+>> On 21/05/2022 03:56, Soumya Negi wrote:
+>>> Converts .txt documentation file to ReST format(.rst).
+>>>
+>>> Signed-off-by: Soumya Negi <soumya.negi97@gmail.com>
+>>> ---
+>>>  .../devicetree/bindings/mips/cpu_irq.rst      | 56 +++++++++++++++++++
+>>>  1 file changed, 56 insertions(+)
+>>>  create mode 100644 Documentation/devicetree/bindings/mips/cpu_irq.rst
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/mips/cpu_irq.rst b/Documentation/devicetree/bindings/mips/cpu_irq.rst
+>>> new file mode 100644
+>>> index 000000000000..601cc12caa2a
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/mips/cpu_irq.rst
+>>> @@ -0,0 +1,56 @@
+>>> +=============================
+>>> +MIPS CPU interrupt controller
+>>> +=============================
+>>> +
+>>> +On MIPS the ``mips_cpu_irq_of_init()`` helper can be used to initialize the 8 CPU
+>>> +IRQs from a devicetree file and create a ``irq_domain`` for IRQ controller.
+>>
+>> Bindings is not a place for code. No.
+>>
+>>> +
+>>> +With the ``irq_domain`` in place we can describe how the 8 IRQs are wired to the
+>>> +platforms internal interrupt controller cascade.
+>>> +
+>>> +Below is an example of a platform describing the cascade inside the devicetree
+>>> +and the code used to load it inside ``arch_init_irq()``.
+>>> +
+>>> +Required properties
+>>> +-------------------
+>>> +* compatible: Should be **"mti,cpu-interrupt-controller"**
+>>
+>> If you wanted to add bindings, please use DT schema format (see
+>> writing-schema, writing-bindings and example-schema files).
 > 
-> Datasheet: www.murata.com/en-us/products/sensor/inclinometer/overview/lineup/scl3300
-> Signed-off-by: LI Qingwu <Qing-wu.Li-t1cy0uBObHa2smIkw38IFAiE/XJ0vlP8@public.gmane.org>
-> ---
->   drivers/iio/accel/sca3300.c | 28 ++++++++++++++++++++++++++--
->   1 file changed, 26 insertions(+), 2 deletions(-)
+> Hi, 
+> I don't want to add bindings. I want to the convert the doc file
+> Documentation/devicetree/bindings/mips/cpu_irq.txt to ReST file format.
 > 
-> diff --git a/drivers/iio/accel/sca3300.c b/drivers/iio/accel/sca3300.c
-> index e57aba79c32b..10bedb14d4f0 100644
-> --- a/drivers/iio/accel/sca3300.c
-> +++ b/drivers/iio/accel/sca3300.c
-> @@ -38,6 +38,7 @@
->   /* Device ID */
->   #define SCA3300_REG_WHOAMI	0x10
->   #define SCA3300_WHOAMI_ID	0x51
-> +#define SCL3300_WHOAMI_ID	0xC1
->   
->   /* Device return status and mask */
->   #define SCA3300_VALUE_RS_ERROR	0x3
-> @@ -96,10 +97,18 @@ static const struct iio_chan_spec sca3300_channels[] = {
->   static const int sca3300_lp_freq[] = {70, 10};
->   static const int sca3300_lp_freq_map[] = {0, 0, 0, 1};
->   
-> +static const int scl3300_lp_freq[] = {40, 70, 10};
-> +static const int scl3300_lp_freq_map[] = {0, 1, 2};
-> +
->   static const int sca3300_accel_scale[][2] = {{0, 370}, {0, 741}, {0, 185}};
->   static const int sca3300_accel_scale_map[] = {0, 1, 2, 2};
->   
-> +static const int scl3300_accel_scale[][2] = {{0, 167}, {0, 333}, {0, 83}};
-> +static const int scl3300_accel_scale_map[] = {0, 1, 2};
-> +
->   static const int sca3300_avail_modes_map[] = {0, 1, 2, 3};
-> +static const int scl3300_avail_modes_map[] = {0, 1, 3};
-> +
->   static const unsigned long sca3300_scan_masks[] = {
->   	BIT(SCA3300_ACC_X) | BIT(SCA3300_ACC_Y) | BIT(SCA3300_ACC_Z) |
->   	BIT(SCA3300_TEMP),
-> @@ -159,6 +168,20 @@ static const struct sca3300_chip_info sca3300_chip_tbl[] = {
->   		.num_avail_modes = 4,
->   		.chip_id = SCA3300_WHOAMI_ID,
->   	},
-> +	{	.scan_masks = sca3300_scan_masks,
-> +		.channels = sca3300_channels,
-> +		.num_channels = ARRAY_SIZE(sca3300_channels),
-> +		.num_accel_scales = ARRAY_SIZE(scl3300_accel_scale)*2,
-> +		.accel_scale = scl3300_accel_scale,
-> +		.accel_scale_map = scl3300_accel_scale_map,
-> +		.num_freqs = ARRAY_SIZE(scl3300_lp_freq),
-> +		.freq_table = scl3300_lp_freq,
-> +		.freq_map = scl3300_lp_freq_map,
-> +		.name = "scl3300",
-> +		.avail_modes_table = scl3300_avail_modes_map,
-> +		.num_avail_modes = 3,
-> +		.chip_id = SCL3300_WHOAMI_ID,
-> +	},
->   };
->   
->   DECLARE_CRC8_TABLE(sca3300_crc_table);
-> @@ -444,9 +467,9 @@ static int sca3300_init(struct sca3300_data *sca_data,
->   
->   	/*
->   	 * Wait 1ms after SW-reset command.
-> -	 * Wait 15ms for settling of signal paths.
-> +	 * Wait 25ms for settling of signal paths.
-
-Hi,
-maybe the comment (IIUC) should say that the timing depends of sca3300 
-(15 ms) or scl3300 (25 ms) and that the max of the 2 values is taken.
-Or have this delay depends of the chip in the code below.
-
-CJ
+> I referred to this page(https://wiki.linuxfoundation.org/lkmp/lkmp_task_list) while
+> creating the patch. It also mentions exceptions that should be kept as plain text 
+> files. Does this file count as an exception?
 
 
+The original file you mention is a dt-bindings file, not a doc file. As
+you see it is in the bindings subdirectory. All (or almost all) files in
+Documentation/devicetree/bindings are bindings.
 
->   	 */
-> -	usleep_range(16e3, 50e3);
-> +	usleep_range(26e3, 50e3);
->   
->   	ret = sca3300_read_reg(sca_data, SCA3300_REG_WHOAMI, &value);
->   	if (ret)
-> @@ -573,6 +596,7 @@ static int sca3300_probe(struct spi_device *spi)
->   
->   static const struct of_device_id sca3300_dt_ids[] = {
->   	{ .compatible = "murata,sca3300"},
-> +	{ .compatible = "murata,scl3300"},
->   	{}
->   };
->   MODULE_DEVICE_TABLE(of, sca3300_dt_ids);
+It should be stripped out of C code and converted to DT schema (and
+moved to interrupt-controllers), not to ReST.
 
+Best regards,
+Krzysztof

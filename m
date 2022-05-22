@@ -2,105 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1096753000D
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 02:36:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5CC9530013
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 02:47:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348498AbiEVAdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 20:33:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50068 "EHLO
+        id S240082AbiEVArC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 20:47:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348180AbiEVAcj (ORCPT
+        with ESMTP id S229498AbiEVArA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 20:32:39 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C0A40A26
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 17:32:35 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id q203so12180802iod.0
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 17:32:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=doVlcQ6Xlwn2BqCTeY/iG09ipnCZzy9t3u/uMA+1XFU=;
-        b=rXoH1vIlolKTcPa7XyPoQrChIH0W6X5hmQjuJx0KajKXf88oC9gsolgD1vM/3SDwtO
-         KXp+4BffG/nUhOQ7WUIjHGwgqxKMIPaG7CqYHCWPtxHWZZMTtESo4MyAvC5Q0MN4Bw8W
-         BpuFXH+vpHdAxYC3GXEbEzaCEPfOscQuRN0Q3PGWONxd0Xvd/lpeK3uxlLK05NQJkgRE
-         Q32LKVwDrXeFkAaVbL+y258ggOHaOSkbqf+uy6VDWksjVVy4Hv0ywnW4NXrWOIEWyUi1
-         vczwXnuDN43CPTg++j/C9QPxBQxI45ixSnGD/1UIzmK/qd+mFQmaDxKwMymOURD3iutk
-         bZ/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=doVlcQ6Xlwn2BqCTeY/iG09ipnCZzy9t3u/uMA+1XFU=;
-        b=SpGA3qcv+gujswvHMCHNwulnPsMKZqaTqLhPf2v4XhEBJQxejGP679wa/wDuNJExMY
-         uDHjUI+qDDuGRwEiAPv74TnOVeywXEhsogwjKgIho2SH2L47gKHtY3PwoKN0QA3aAUwm
-         g1d3R6U1qYBAlskBwaT0mesKk5Snkz6c1ZpV6/ZwKuK6OQ6dZFlc6uSLHV0rTuX9V2dO
-         hY3c9CvYsaz22iDfoTqQPmBYTLF7BQYNqH5vAZTjyThlfYiLf9LS1J1MJ14GmZeqdjSn
-         30z3kabn46kKXPn43bZ2GbgF5JS11yO5vTBtoTd4rVTUbRr/PH5R1iiAsxe0lFT5ltM3
-         fncQ==
-X-Gm-Message-State: AOAM532k5ueEpUvoiD+cPdEewpAaloGM2BJrOAQzBMmErEmduzbVVzk+
-        xFtllnPkk6Ye4PhnAzymlLShMA==
-X-Google-Smtp-Source: ABdhPJyXsa5e5p8ofFsd6pLkt2bgKU0IrEydH4ftdbr15h1s+8SWttkScVwWZvGizVvPjJPscGqlQw==
-X-Received: by 2002:a05:6638:34a4:b0:32b:b205:ca82 with SMTP id t36-20020a05663834a400b0032bb205ca82mr8167007jal.165.1653179555689;
-        Sat, 21 May 2022 17:32:35 -0700 (PDT)
-Received: from presto.localdomain (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.gmail.com with ESMTPSA id g8-20020a02c548000000b0032b5e78bfcbsm1757115jaj.135.2022.05.21.17.32.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 May 2022 17:32:35 -0700 (PDT)
-From:   Alex Elder <elder@linaro.org>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     mka@chromium.org, evgreen@chromium.org, bjorn.andersson@linaro.org,
-        quic_cpratapa@quicinc.com, quic_avuyyuru@quicinc.com,
-        quic_jponduru@quicinc.com, quic_subashab@quicinc.com,
-        elder@kernel.org, netdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v2 9/9] net: ipa: use data space for command opcodes
-Date:   Sat, 21 May 2022 19:32:23 -0500
-Message-Id: <20220522003223.1123705-10-elder@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220522003223.1123705-1-elder@linaro.org>
-References: <20220522003223.1123705-1-elder@linaro.org>
+        Sat, 21 May 2022 20:47:00 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C7A04A3D3;
+        Sat, 21 May 2022 17:46:55 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L5MGx4dHpz4xYY;
+        Sun, 22 May 2022 10:46:49 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1653180410;
+        bh=PzWpbljlaU30cowHirg0r+udzrSFYNJMiFwu1EJW0f4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=XeJ5hg52Io9Ce6Fkx/WPG0zVX12hSjTMjCpmcephKyHut3ctZdrge1YCtGz/FHO5n
+         hRtFD2i6Mck0wiJ79DcXNyPgKfunJsw1LeK6+MxQVS+U/GkOzLShzFERxLGFcLAuVs
+         XrvyMUUtmbDWEWUS4cwD+9JJ7z2tFcO+K4UzUYeDXEHIcc2Y/8yw/N3XqFdcNAy7gY
+         +EyvWsHzxG2RlkWEZjKj31+EN1PNWvrMfLcw/y/8ESwe7EsOLSPl7Ao2cJ/Jy6MWAt
+         qbOV8WwweSdQodo2AZKvaUSkcunaenpgByUuCtxRVEVEKx5sMe0BvtBALwurAEQoV5
+         E44/XZs5dQhLQ==
+Date:   Sun, 22 May 2022 10:46:43 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the tip tree
+Message-ID: <20220522104643.21248cd7@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/7dDniTGeYNy4rw_fDLdD93x";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 64-bit data field in a transaction is not used for commands.
-And the opcode array is *only* used for commands.  They're
-(currently) the same size; save a little space in the transaction
-structure by enclosing the two fields in a union.
+--Sig_/7dDniTGeYNy4rw_fDLdD93x
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Alex Elder <elder@linaro.org>
----
- drivers/net/ipa/gsi_trans.h | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Hi all,
 
-diff --git a/drivers/net/ipa/gsi_trans.h b/drivers/net/ipa/gsi_trans.h
-index 99ce2cba0dc3c..020c3b32de1d7 100644
---- a/drivers/net/ipa/gsi_trans.h
-+++ b/drivers/net/ipa/gsi_trans.h
-@@ -60,8 +60,10 @@ struct gsi_trans {
- 	u8 used;			/* # entries used in sgl[] */
- 	u32 len;			/* total # bytes across sgl[] */
- 
--	void *data;
--	u8 cmd_opcode[IPA_COMMAND_TRANS_TRE_MAX];
-+	union {
-+		void *data;
-+		u8 cmd_opcode[IPA_COMMAND_TRANS_TRE_MAX];
-+	};
- 	struct scatterlist *sgl;
- 	enum dma_data_direction direction;
- 
--- 
-2.32.0
+In commit
 
+  991d8d8142ca ("topology: Remove unused cpu_cluster_mask()")
+
+Fixes tag
+
+  Fixes: 778c558f49a2c ("sched: Add cluster scheduler level in core and
+
+has these problem(s):
+
+  - Subject has leading but no trailing parentheses
+  - Subject has leading but no trailing quotes
+
+Please do not split Fixes tags over more than one line.  Also, please keep
+all the commit message tags together at the end of the commit message.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/7dDniTGeYNy4rw_fDLdD93x
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKJh/QACgkQAVBC80lX
+0GxMPAgAisu9nNjyDGjhLrXWn6WgMoQP4n6n/HqQOV+JYOaLoNdgh6sldm8VrIyF
+uo5T9rwobTASlIz+ijUn4nbBv2fEDplKB2mHg7G9ltPJeWGVCF0wMt4qo00l/5Eg
+LAYaqItMUniqIS/lKuCv6du7KnCGHabWoSD3ekb8DMvqHifL3e3i8knHWIuLTyim
+9i3w250wZR47NZd7uFPKG6y/IIzhhm/W3D/axkVM5AyzQm1+DPTr33xEhpxvrt3Q
+ph4UHrgB1yobfcpRf1E8Q65ltEyqSyC4RtAz7LjsRJ7M5xu0wMZHtvya9JqOdCyN
+9AeobqyjoX7d5QfgwJ3Lu0nHlWjGdg==
+=bfpq
+-----END PGP SIGNATURE-----
+
+--Sig_/7dDniTGeYNy4rw_fDLdD93x--

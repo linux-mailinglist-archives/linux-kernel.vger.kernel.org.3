@@ -2,156 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A320853039E
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 16:54:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50F405303B8
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 17:05:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347518AbiEVOyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 10:54:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54368 "EHLO
+        id S1347628AbiEVPFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 11:05:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231316AbiEVOyD (ORCPT
+        with ESMTP id S230290AbiEVPFI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 10:54:03 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D0D17A9B;
-        Sun, 22 May 2022 07:54:00 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id m25so15234080oih.2;
-        Sun, 22 May 2022 07:54:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5LAbxrhQvqJ0rVfTPKOc9msHJuHfL3/0vpviQnQBTYc=;
-        b=dOtQFWNI1v40juuCcEn6eX/Y3w480xRXQjpjzy8XpyCy9Rm9YG0ckRhKwymMFFGirT
-         CZjFjBfF51RmbI1OZh+5wyzKWBWGlAKt7iumNqSa1lz3Pnc8rYzkFG9fmwh4t73vE47b
-         WmHTK8KO11FfJlvE/slPMPHLg6ljiuIE8xBbnuZVGvPTEkZ5BRqVXIpsH4FNVnB3qFaV
-         3CgPtVRQJkwNZ6l4M2nwVSE+qQxZ1/xCSLOozUDvqrfY48Ty2roAI1uxlIFOC2Qezhej
-         bGp8IM29EZfr7fRhbDbiAx44GAgCzJ75ZdLvTMYF2IdZckXJ6mVPCDJ2Ci6IxKRUZjzq
-         Vz3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=5LAbxrhQvqJ0rVfTPKOc9msHJuHfL3/0vpviQnQBTYc=;
-        b=KygNY0mPzSa+fHDYreyq6JmjCDYlvDOYRbanip3ZIzKmkmtU2cDQTRxXwdrUT5nw2t
-         s586P1DJ3212pejlcqz/Ygey3IsddqIiXpi9BnymzkdAdnkl8fzOgXF5s9N09LjXFw/a
-         o7tcssQrZky+XPq15kiwcY7+sEkMz9GSHMVm3ICqzr+HFOVVwQl5jPA61y1OEjz9YQgg
-         hY0vuFFg/UFeYpHXaFRi2fwIXpHvXwP6pQUpJjkzzG8haqHFFWG03Q+nT/qahXtb1hof
-         HoqtEhKC4akehVy+C04Uz9NGoIC9rCs5+YCbWA0g3Ct3CTOOAz96cSXejHhwGXmrDLk9
-         uJ4Q==
-X-Gm-Message-State: AOAM530cFejO56bnts9HgaBqAvs3HH05ldMWWL8P7JQLykuVgEI0S9BH
-        OVAcoqbUCRc0Z1b6F37REQA=
-X-Google-Smtp-Source: ABdhPJwKF59QPrNBVWllhBArNbXrS0RC9c7vVQQ9CXmuSl0IUuGaYikoD6KlKTyFqi7MK616GxHrWw==
-X-Received: by 2002:aca:4b87:0:b0:326:b2bf:b10a with SMTP id y129-20020aca4b87000000b00326b2bfb10amr10296097oia.213.1653231239958;
-        Sun, 22 May 2022 07:53:59 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i23-20020a4addd7000000b0035eb4e5a6bdsm3367006oov.19.2022.05.22.07.53.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 May 2022 07:53:58 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 22 May 2022 07:53:57 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        David Laight <David.Laight@ACULAB.COM>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joe Perches <joe@perches.com>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Nicolas Palix <nicolas.palix@imag.fr>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        linux-kernel@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>, kvm@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: [PATCH 11/22] KVM: x86: hyper-v: replace bitmap_weight() with
- hweight64()
-Message-ID: <20220522145357.GA244394@roeck-us.net>
-References: <20220510154750.212913-1-yury.norov@gmail.com>
- <20220510154750.212913-12-yury.norov@gmail.com>
+        Sun, 22 May 2022 11:05:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 551DF33A2D
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 08:05:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E0CBE60FF4
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 15:05:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5691BC385AA;
+        Sun, 22 May 2022 15:04:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653231905;
+        bh=KniY7pvwgyzzI8U0IRj4T1voF2HIUSR1WmeVb4knjw8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ORx7IJg7vRBKv36vpBlMw6Gw3Zaq/16KO5WX1O6GtP3G6iw2Gm0BxSXK18OHw2qdc
+         tpizCbodNYk87YkBONv4aviQOq4+cENYki8qpn50J5YRC/B7EUEaDEhfJKjjpj4I/e
+         ELz1ReGl9hilTupJLZ/7J9zVu3XDs1x2n0gp9z8J8pHgyyVHnOxl5gslijBPl6fTjb
+         Uux9QDDFzX/Np8078IoJdv5JY1VLVkc8PbyM5TBEohhivPlCh20fCedkMGvVmmJpcM
+         g+avP6xAsp9WPdgfcsUfV5znwHS9D7iWBEvqeEh7JaYabNQ8Jdk0WWQFHf7m1rOH6/
+         eR96ZUvC3RtBQ==
+Date:   Sun, 22 May 2022 22:56:25 +0800
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Atish Patra <atishp@atishpatra.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/2] riscv: introduce unified static key mechanism for
+ ISA extensions
+Message-ID: <YopPGSboPkZbbbGD@xhacker>
+References: <20220517184453.3558-1-jszhang@kernel.org>
+ <20220517184453.3558-2-jszhang@kernel.org>
+ <CAOnJCU+aRoLRUjbum3o8N8J63vW+Y2974TjBueE__7PQAeJCQw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220510154750.212913-12-yury.norov@gmail.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <CAOnJCU+aRoLRUjbum3o8N8J63vW+Y2974TjBueE__7PQAeJCQw@mail.gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 08:47:39AM -0700, Yury Norov wrote:
-> kvm_hv_flush_tlb() applies bitmap API to a u64 variable valid_bank_mask.
-> Since valid_bank_mask has a fixed size, we can use hweight64() and avoid
-> excessive bloating.
-
-In kvm_hv_send_ipi(), valid_bank_mask is unsigned long, not u64.
-
-This results in:
-
-arch/x86/kvm/hyperv.c: In function 'kvm_hv_send_ipi':
-include/asm-generic/bitops/const_hweight.h:21:76: error: right shift count >= width of type
-
-on all 32-bit builds.
-
-Guenter
-
+On Sun, May 22, 2022 at 12:33:12AM -0700, Atish Patra wrote:
+> On Tue, May 17, 2022 at 11:53 AM Jisheng Zhang <jszhang@kernel.org> wrote:
+> >
+> > Currently, riscv has several extensions which may not be supported on
+> > all riscv platforms, for example, FPU and so on. To support unified
+> > kernel Image style, we need to check whether the feature is supported
 > 
-> CC: Borislav Petkov <bp@alien8.de>
-> CC: Dave Hansen <dave.hansen@linux.intel.com>
-> CC: H. Peter Anvin <hpa@zytor.com>
-> CC: Ingo Molnar <mingo@redhat.com>
-> CC: Jim Mattson <jmattson@google.com>
-> CC: Joerg Roedel <joro@8bytes.org>
-> CC: Paolo Bonzini <pbonzini@redhat.com>
-> CC: Sean Christopherson <seanjc@google.com>
-> CC: Thomas Gleixner <tglx@linutronix.de>
-> CC: Vitaly Kuznetsov <vkuznets@redhat.com>
-> CC: Wanpeng Li <wanpengli@tencent.com>
-> CC: kvm@vger.kernel.org
-> CC: linux-kernel@vger.kernel.org
-> CC: x86@kernel.org
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> ---
->  arch/x86/kvm/hyperv.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> /s/suportted/supported
+
+Thanks, will fix it in v2 soon.
 > 
-> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-> index 41585f0edf1e..b652b856df2b 100644
-> --- a/arch/x86/kvm/hyperv.c
-> +++ b/arch/x86/kvm/hyperv.c
-> @@ -1855,7 +1855,7 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
->  		all_cpus = flush_ex.hv_vp_set.format !=
->  			HV_GENERIC_SET_SPARSE_4K;
->  
-> -		if (hc->var_cnt != bitmap_weight((unsigned long *)&valid_bank_mask, 64))
-> +		if (hc->var_cnt != hweight64(valid_bank_mask))
->  			return HV_STATUS_INVALID_HYPERCALL_INPUT;
->  
->  		if (all_cpus)
-> @@ -1956,7 +1956,7 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
->  		valid_bank_mask = send_ipi_ex.vp_set.valid_bank_mask;
->  		all_cpus = send_ipi_ex.vp_set.format == HV_GENERIC_SET_ALL;
->  
-> -		if (hc->var_cnt != bitmap_weight(&valid_bank_mask, 64))
-> +		if (hc->var_cnt != hweight64(valid_bank_mask))
->  			return HV_STATUS_INVALID_HYPERCALL_INPUT;
->  
->  		if (all_cpus)
-> -- 
-> 2.32.0
+> > or not. If the check sits at hot code path, then performance will be
+> > impacted a lot. static key can be used to solve the issue. In the past
+> > FPU support has been converted to use static key mechanism. I believe
+> > we will have similar cases in the future.
+> >
+> > this patch tries to add an unified mechanism to use static keys for
+> > some ISA extensions by implementing an array of default-false static keys
+> > and enabling them when detected.
+> >
+> > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> > ---
+> >  arch/riscv/include/asm/hwcap.h | 40 ++++++++++++++++++++++++++++++++++
+> >  arch/riscv/kernel/cpufeature.c |  7 ++++++
+> >  2 files changed, 47 insertions(+)
+> >
+> > diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
+> > index 0734e42f74f2..b0433d2b880d 100644
+> > --- a/arch/riscv/include/asm/hwcap.h
+> > +++ b/arch/riscv/include/asm/hwcap.h
+> > @@ -12,6 +12,7 @@
+> >  #include <uapi/asm/hwcap.h>
+> >
+> >  #ifndef __ASSEMBLY__
+> > +#include <linux/jump_label.h>
+> >  /*
+> >   * This yields a mask that user programs can use to figure out what
+> >   * instruction set this cpu supports.
+> > @@ -55,6 +56,16 @@ enum riscv_isa_ext_id {
+> >         RISCV_ISA_EXT_ID_MAX = RISCV_ISA_EXT_MAX,
+> >  };
+> >
+> > +/*
+> > + * This enum represents the logical ID for each RISC-V ISA extension static
+> > + * keys. We can use static key to optimize code path if some ISA extensions
+> > + * are available.
+> > + */
+> > +enum riscv_isa_ext_key {
+> > +       RISCV_ISA_EXT_KEY_FPU,          /* For 'F' and 'D' */
+> > +       RISCV_ISA_EXT_KEY_MAX,
+> > +};
+> > +
+> >  struct riscv_isa_ext_data {
+> >         /* Name of the extension displayed to userspace via /proc/cpuinfo */
+> >         char uprop[RISCV_ISA_EXT_NAME_LEN_MAX];
+> > @@ -62,6 +73,35 @@ struct riscv_isa_ext_data {
+> >         unsigned int isa_ext_id;
+> >  };
+> >
+> > +extern struct static_key_false riscv_isa_ext_keys[RISCV_ISA_EXT_KEY_MAX];
+> > +
+> > +static __always_inline int riscv_isa_ext2key(int num)
+> > +{
+> > +       switch (num) {
+> > +       case RISCV_ISA_EXT_f:
+> > +               return RISCV_ISA_EXT_KEY_FPU;
+> > +       case RISCV_ISA_EXT_d:
+> > +               return RISCV_ISA_EXT_KEY_FPU;
+> > +       default:
+> > +               return -EINVAL;
+> > +       }
+> > +}
+> > +
+> > +/*
+> > + * @num must be a compile-time constant.
+> > + */
+> > +static __always_inline bool riscv_isa_have_key_extension(int num)
+> > +{
+> > +       if (RISCV_ISA_EXT_ID_MAX <= num)
+> > +               return false;
+> > +
+> > +       num = riscv_isa_ext2key(num);
+>  > +       if (RISCV_ISA_EXT_KEY_MAX <= num || num < 0)
+> > +               return false;
+> > +
 > 
+> Why do you need the additional check in the hot path ?
+> riscv_isa_ext_keys array can be directly accessed at the caller
+> instead of calling this function.
+
+directly accessing the keys can make the code simpler, thanks for
+the hint.

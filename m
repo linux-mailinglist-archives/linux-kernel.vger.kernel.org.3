@@ -2,82 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5305D530321
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 14:44:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9DAF530325
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 14:46:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345217AbiEVMoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 08:44:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58592 "EHLO
+        id S1345322AbiEVMqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 08:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239267AbiEVMoA (ORCPT
+        with ESMTP id S1345258AbiEVMqM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 08:44:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 233E53584A
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 05:44:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9976360FB7
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 12:43:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1534CC385AA;
-        Sun, 22 May 2022 12:43:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653223439;
-        bh=DEteYEjM+AM/wXkRopNu1+2DJQAvofJ3C+iGOSkSiPA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=aHQE+A/MzK8H3SZ55YRN+/j56oazYVYQ9CsJl4y5fwEWnyK/Mijf4P0TQydnVpQTW
-         dHM6eZx5jem8IvprgD7NqgxO7DjguXTtSlODsjo8H2B9v/8FQjojehfc/XAMeZM8bL
-         ur1UaNIQs+WL1Pu3JhBL3yoydHFApgCNfj66Sbtz9vdJ8gzoqFOs+SmpR2SMNCrMue
-         lZqyuGuBssNW3FLeP/nJ2nzczX0+mGiihmn/KXi8J22SPPSPFJodYDl/hYrOwYCjSZ
-         H6yELqghWGGdFqkfNOI+CbFPtmCZiNqY5l/8g1s+45D9DQuVUJxKw700UcYjtHvIE2
-         yr6ayKVyAJbdQ==
-Message-ID: <dd1ea728-4cb6-e35d-dc76-a1d62bead69a@kernel.org>
-Date:   Sun, 22 May 2022 20:43:56 +0800
+        Sun, 22 May 2022 08:46:12 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F5D2F012
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 05:46:10 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id y15so6666918qtx.4
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 05:46:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=z9V1W249zALQzWHiAtZPoaL65EZlj/9URHZe/haLICQ=;
+        b=GLtfwI+lhlzd1uVR2zN59m3yhU/Krnfw4ZVaEeTAX0yEIwZ0qmY2LNEGQMN1An+fe6
+         VX56+Fz/lvlsqyI95zH9LFDsSyBRlzKn3acrCIErD8igtr1XEjgeuR5JTFj6uYKobtgp
+         RbdwdcZYl0H0H1GCBLzM7W84EdVGdBrTnxSj1OzwkK/P9+Dm37+SXSxXM+DmMM1//tC/
+         QRuWYmxiudtjnIIUMdOygFnmxt/Bsq+x7ij6XzCTXUvY/LZsgV42/M7wlXiL/BAAkhv9
+         Oze46thssYFPQ272e8I5cIgbE5Okmh6aLRk4BCKnQuqt0Aexo5i2c+H4/HDfGpig3UC7
+         b3lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=z9V1W249zALQzWHiAtZPoaL65EZlj/9URHZe/haLICQ=;
+        b=07PUhkGewwQ+D+kQr/w8912MNRPX/3o6ahUY4+APq+UEF3zu4CYWTpzF3IV5yIiuk4
+         avu4DgM9nYk8PraRFpus9o4L5hsUWMstge57XcX6YFvgMPP7RBqxHmEjap3W4a/MdX5q
+         K/HhJ8HREyx7UoJFdkRPWgrk4fQeAU1T1ZkQsEdz6o+eaRTaIClYCNiS9r4XpN1vNqBa
+         HBxYWxjQBhdoEInySPK2pX0pRSBelUA987iBCOrKtzXjSo9G+e3C9y7Ugpi0dpw2hwqo
+         Aka/eKYZ1cWvnyux0ZC0H06AIuCLRImmT+ssBtKX+1a5SsQ5f2HuRM2gf+7yphuXloQq
+         4/jw==
+X-Gm-Message-State: AOAM530NGhJPvCzJE+xHeuFYRjmcYCtuZkfLNN+9VwshsumRZTdC7MEk
+        FyZPcnVfyZ9pr4drTDza4q+57Q==
+X-Google-Smtp-Source: ABdhPJzGQXO+DHntP6x4u2fTddzWClTANimOTcQYK++DehFlNl8xjJgjLFDfcwG/tsnkD/M4yVGjgg==
+X-Received: by 2002:a05:622a:3c8:b0:2f3:ef89:fa28 with SMTP id k8-20020a05622a03c800b002f3ef89fa28mr13604105qtx.136.1653223569197;
+        Sun, 22 May 2022 05:46:09 -0700 (PDT)
+Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id q24-20020a05620a0c9800b006a04256022bsm2710166qki.107.2022.05.22.05.46.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 22 May 2022 05:46:08 -0700 (PDT)
+Message-ID: <59c6347c-2689-24bf-47b8-b635fef2e530@linaro.org>
+Date:   Sun, 22 May 2022 07:46:07 -0500
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [f2fs-dev] [PATCH v3] f2fs: change the current atomic write way
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH net 0/2] net: ipa: fix page free in two spots
 Content-Language: en-US
-To:     Daeho Jeong <daeho43@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com
-Cc:     Daeho Jeong <daehojeong@google.com>
-References: <20220428181809.2352352-1-daeho43@gmail.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20220428181809.2352352-1-daeho43@gmail.com>
+From:   Alex Elder <elder@linaro.org>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     mka@chromium.org, evgreen@chromium.org, bjorn.andersson@linaro.org,
+        quic_cpratapa@quicinc.com, quic_avuyyuru@quicinc.com,
+        quic_jponduru@quicinc.com, quic_subashab@quicinc.com,
+        elder@kernel.org, netdev@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220522005959.1175181-1-elder@linaro.org>
+In-Reply-To: <20220522005959.1175181-1-elder@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/4/29 2:18, Daeho Jeong wrote:> +		*old_addr = dn.data_blkaddr;
-> +		f2fs_truncate_data_blocks_range(&dn, 1);
-> +		dec_valid_block_count(sbi, F2FS_I(inode)->cow_inode, count);
-> +		inc_valid_block_count(sbi, inode, &count);
-> +		f2fs_replace_block(sbi, &dn, dn.data_blkaddr, new_addr,
-> +					ni.version, true, false);
+On 5/21/22 7:59 PM, Alex Elder wrote:
+> When a receive buffer is not wrapped in an SKB and passed to the
+> network stack, the (compound) page gets freed within the IPA driver.
+> This is currently quite rare.
+> 
+> The pages are freed using __free_pages(), but they should instead be
+> freed using page_put().  This series fixes this, in two spots.
+> 
+> These patches work for Linux v5.18-rc7 and v5.17.y, but won't apply
+> cleanly to earlier stable branches.  (Nevertheless, the fix is
+> trivial.)
+> 
+> 					-Alex
 
-My concern is, if cow_inode's data was persisted into previous checkpoint,
-and then f2fs_replace_block() will update SSA from cow_inode to inode?
-it will cause inconsistent status of last valid checkpoint? Or am I mssing
-something?
+I accidentally based this on net-next/master rather than net/master.
+Sorry about that.  I'll send version 2 in a few days.
 
-> -		f2fs_submit_merged_write_cond(sbi, inode, NULL, 0, DATA);
-> +			new = f2fs_kmem_cache_alloc(revoke_entry_slab, GFP_NOFS,
-> +							true, NULL);
-> +			if (!new) {
-> +				f2fs_put_dnode(&dn);
-> +				ret = -ENOMEM;
-> +				goto out;
+					-Alex
 
-It doesn't need to handle failure of f2fs_kmem_cache_alloc()
-due to nofail parameter is true.
+> Alex Elder (2):
+>    net: ipa: fix page free in ipa_endpoint_trans_release()
+>    net: ipa: fix page free in ipa_endpoint_replenish_one()
+> 
+>   drivers/net/ipa/ipa_endpoint.c | 9 +++------
+>   1 file changed, 3 insertions(+), 6 deletions(-)
+> 
 
-Thanks,

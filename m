@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 297F8530193
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 09:32:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AA7153019F
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 09:35:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239465AbiEVHb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 03:31:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54292 "EHLO
+        id S240733AbiEVHdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 03:33:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232975AbiEVHbx (ORCPT
+        with ESMTP id S232975AbiEVHcx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 03:31:53 -0400
+        Sun, 22 May 2022 03:32:53 -0400
 Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 555F52C665;
-        Sun, 22 May 2022 00:31:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADFF52CC89;
+        Sun, 22 May 2022 00:32:50 -0700 (PDT)
 Received: from [192.168.0.175] (ip5f5aea9a.dynamic.kabel-deutschland.de [95.90.234.154])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
         (Authenticated sender: buczek)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 6816161EA1928;
-        Sun, 22 May 2022 09:31:47 +0200 (CEST)
-Message-ID: <62b09487-9223-db3d-2165-789a51230060@molgen.mpg.de>
-Date:   Sun, 22 May 2022 09:31:46 +0200
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 33B2961EA1929;
+        Sun, 22 May 2022 09:32:49 +0200 (CEST)
+Message-ID: <571344e2-6e43-a72f-bd12-04d650e669fd@molgen.mpg.de>
+Date:   Sun, 22 May 2022 09:32:48 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
+From:   Donald Buczek <buczek@molgen.mpg.de>
 Subject: Re: [PATCH v1 12/15] md/raid5-cache: Add RCU protection to conf->log
  accesses
-Content-Language: en-US
 To:     Logan Gunthorpe <logang@deltatee.com>,
         linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
         Song Liu <song@kernel.org>
@@ -40,10 +40,10 @@ Cc:     Christoph Hellwig <hch@infradead.org>,
         David Sloan <David.Sloan@eideticom.com>
 References: <20220519191311.17119-1-logang@deltatee.com>
  <20220519191311.17119-13-logang@deltatee.com>
-From:   Donald Buczek <buczek@molgen.mpg.de>
+Content-Language: en-US
 In-Reply-To: <20220519191311.17119-13-logang@deltatee.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
@@ -148,6 +148,15 @@ On 19.05.22 21:13, Logan Gunthorpe wrote:
 >   	wait_event(mddev->sb_wait,
 > -		   conf->log == NULL ||
 > +		   rcu_access_pointer(conf->log) ||
+
+Reversed condition?
+
+I think, some examples in Documentation/RCU/Design/Requirements/Requirements.rst are reversed, too.
+
+Best
+   Donald
+
+
 >   		   (!test_bit(MD_SB_CHANGE_PENDING, &mddev->sb_flags) &&
 >   		    (locked = mddev_trylock(mddev))));
 >   	if (locked) {
@@ -449,62 +458,6 @@ On 19.05.22 21:13, Logan Gunthorpe wrote:
 >   
 > -	if (conf->log) {
 > +	if (rcu_access_pointer(conf->log)) {
-
-
-A problem here is that `struct r5l_log` of `conf->log` is private to raid5-cache.c and gcc below version 10 (wrongly) regards the `typeof(*p) *local` declaration of __rcu_access_pointer as a dereference:
-
-   CC      drivers/md/raid5.o
-
-In file included from ./include/linux/rculist.h:11:0,
-
-                  from ./include/linux/dcache.h:8,
-
-                  from ./include/linux/fs.h:8,
-
-                  from ./include/linux/highmem.h:5,
-
-                  from ./include/linux/bvec.h:10,
-
-                  from ./include/linux/blk_types.h:10,
-
-                  from ./include/linux/blkdev.h:9,
-
-                  from drivers/md/raid5.c:38:
-
-drivers/md/raid5-log.h: In function ‘log_stripe’:
-
-./include/linux/rcupdate.h:384:9: error: dereferencing pointer to incomplete type ‘struct r5l_log’
-
-   typeof(*p) *local = (typeof(*p) *__force)READ_ONCE(p); \
-
-          ^
-
-./include/linux/rcupdate.h:495:31: note: in expansion of macro ‘__rcu_access_pointer’
-
-  #define rcu_access_pointer(p) __rcu_access_pointer((p), __UNIQUE_ID(rcu), __rcu)
-
-                                ^~~~~~~~~~~~~~~~~~~~
-
-drivers/md/raid5-log.h:61:6: note: in expansion of macro ‘rcu_access_pointer’
-
-   if (rcu_access_pointer(conf->log)) {
-
-       ^~~~~~~~~~~~~~~~~~
-
-make[2]: *** [scripts/Makefile.build:288: drivers/md/raid5.o] Error 1
-
-make[1]: *** [scripts/Makefile.build:550: drivers/md] Error 2
-
-make: *** [Makefile:1834: drivers] Error 2
-
-
-See https://godbolt.org/z/TPP8MdKbc to test compiler versions with this construct.
-
-Best
-
-   Donald
-
-
 >   		if (!test_bit(STRIPE_R5C_CACHING, &sh->state)) {
 >   			/* writing out phase */
 >   			if (s->waiting_extra_page)

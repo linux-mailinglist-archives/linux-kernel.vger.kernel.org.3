@@ -2,152 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4077953037C
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 16:20:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90827530375
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 16:16:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346819AbiEVOUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 10:20:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33440 "EHLO
+        id S1346627AbiEVOQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 10:16:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239031AbiEVOUn (ORCPT
+        with ESMTP id S240313AbiEVOQ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 10:20:43 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B2E2393F4;
-        Sun, 22 May 2022 07:20:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653229242; x=1684765242;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dnsZgBhs9A3uGidq6HnfcAZEYWg1tr5b83aPqknMOhQ=;
-  b=Ot2FSlk9fTI8gmBcv4dPDXZF5ppH2lSIoEeIUQx8EqDU6iviq9E2WXQw
-   t/OHYfD9im2+7Je6kQR9ExQybun1CMps89U1NAhiF8Zz4SSqrMzhPUtQD
-   X4noHX4Cu2ekyQicPUlFALlfnzSqWiFWvpZEcKekPhxGqjMWZU1meWKct
-   AWJegSkkn9SFvz0UsYmNXq07TPq3TWkrNsPg4avRCI8OldzZri/dI0LbS
-   tbd3r4Z5Ln14u3s5RFVaWslg6F7RZaNOw2t0BWe4AlBrpa9UH3tTH7g5y
-   dY25CoIb+RCCX9ynKJt8wNtAKKCZs6D5jZMYgefpK72vfoiNpizrqdZDH
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10355"; a="255057737"
-X-IronPort-AV: E=Sophos;i="5.91,244,1647327600"; 
-   d="scan'208";a="255057737"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2022 07:20:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,244,1647327600"; 
-   d="scan'208";a="571638117"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
-  by orsmga007.jf.intel.com with ESMTP; 22 May 2022 07:20:38 -0700
-Date:   Sun, 22 May 2022 22:13:01 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
-        Conor.Dooley@microchip.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        system@metrotek.ru
-Subject: Re: [PATCH v12 1/3] fpga: fpga-mgr: support bitstream offset in
-  image buffer
-Message-ID: <20220522141301.GA90764@yilunxu-OptiPlex-7050>
-References: <20220513162755.16201-1-i.bornyakov@metrotek.ru>
- <20220513162755.16201-2-i.bornyakov@metrotek.ru>
- <20220522130145.GA89204@yilunxu-OptiPlex-7050>
+        Sun, 22 May 2022 10:16:27 -0400
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C70F1CB37;
+        Sun, 22 May 2022 07:16:26 -0700 (PDT)
+Received: by mail-io1-xd33.google.com with SMTP id a10so12976893ioe.9;
+        Sun, 22 May 2022 07:16:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=3dfbftv0bHItknlzHvUMl9TypfZzWyDtE0vtZuY9/u4=;
+        b=MHTLDzSqR55aJLipGdUoc1ij6dSycjmCtcPhxekYYtNoAaTpxDgNlFEJiNWSvuCPKk
+         YqPMjRwVBlCIpm8BoCjocOl+ryyq2axnL0Ag06xaO8Bv0BJV+E7L4n5Fs03F+SJIf3z2
+         2RmvJtOjN8l8ZPXYdnLn8p9j+TfpxjorO7S4ssdtYjIm23PSZ0lDRAMo7DmrUmTomSJm
+         I135LF5cD/TxFPDEEkJ7wyEQQfo6COQCUYwF8upa8nM/abv6UJgBTUj33wDdK1nwtU5i
+         bsaTHXNb0MVpQA6KpIyFG6mj1rbeAdiusPNFOWy0aWtL37ygRJhXmeNX0rm/4b33euRY
+         kwow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=3dfbftv0bHItknlzHvUMl9TypfZzWyDtE0vtZuY9/u4=;
+        b=MJlsr7oOTp8fmlxHm89o/GUR0wfawX0J7tdqV/o8u2WBpdRWa6lkzh8SZZN2nQwp0X
+         Ufe6pgloqP6vmD0sjz3oL6VY8QTnhF3DA9yxQPg0YtwSk4t9MI+nCMsvFmGRrhGGHSgZ
+         B5edlBl7H7uBERzmKCI9Ac60xsvQ0yYQqzFnMunxWMi4A0mEE593lcQ2wGU24H+LOK/f
+         xEN8c8gHyWojtKdbCvTcgtKAS/k3bWAOE7oTMNYRDz3laygstPcXzq8GA33pogm9BZWj
+         qk5SlrR1c1/1rD8Y9340qQIIs5CnSqf2jqhokGzeU2OD60rDjlgQP6tAhRp+pvUyv93z
+         YADg==
+X-Gm-Message-State: AOAM531Jp3L0Ud6CNZuM7cbEagRuTfd+4rzL6BvjdWl1YuVa6WbWvp5f
+        OMLJZsqUQo2iW+AD8i3dFZ7cvfkebdcUzRj3jeI=
+X-Google-Smtp-Source: ABdhPJw1CV7WTOX07Dg1AJ+AhSUJ6vQaIcAn8P91Nmcnn2lOvrQfZXjGzRCF2gJknGRsDu4GWUaiXA7t05oIb69dBIg=
+X-Received: by 2002:a05:6638:14cb:b0:32e:cf97:4ac with SMTP id
+ l11-20020a05663814cb00b0032ecf9704acmr198855jak.80.1653228985425; Sun, 22 May
+ 2022 07:16:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220522130145.GA89204@yilunxu-OptiPlex-7050>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220513113930.10488-1-masahiroy@kernel.org> <CAK7LNAQvneCi11myLpkikuXh=i5PLtTaLe0nGpDZXgv_Q1L0Ow@mail.gmail.com>
+ <CA+icZUUWww3fXvjQcefgFuq=tPO6+FYDbHE2E5PmL-BSJg4+cw@mail.gmail.com>
+ <CAK7LNATx1QcM6BdqBSascV8J8rD6etRgRZj9PjBno5Qrb=p3Yg@mail.gmail.com> <CA+icZUV=PwX_e3U3mZwLOVvsA02pgNNAPsGJSMCPitu9ndWbqg@mail.gmail.com>
+In-Reply-To: <CA+icZUV=PwX_e3U3mZwLOVvsA02pgNNAPsGJSMCPitu9ndWbqg@mail.gmail.com>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Sun, 22 May 2022 16:15:49 +0200
+Message-ID: <CA+icZUWttwjhDNPO1VuVyiMoReH5e83nsYDd0rEoY8-Uwv6pHw@mail.gmail.com>
+Subject: Re: [PATCH v6 00/10] kbuild: yet another series of cleanups (modpost,
+ LTO, MODULE_REL_CRCS, export.h)
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-modules <linux-modules@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 22, 2022 at 09:01:45PM +0800, Xu Yilun wrote:
-> On Fri, May 13, 2022 at 07:27:53PM +0300, Ivan Bornyakov wrote:
-> > At the moment FPGA manager core loads to the device entire image
-> > provided to fpga_mgr_load(). But it is not always whole FPGA image
-> > buffer meant to be written to the device. In particular, .dat formatted
-> > image for Microchip MPF contains meta info in the header that is not
-> > meant to be written to the device. This is issue for those low level
-> > drivers that loads data to the device with write() fpga_manager_ops
-> > callback, since write() can be called in iterator over scatter-gather
-> > table, not only linear image buffer. On the other hand, write_sg()
-> > callback is provided with whole image in scatter-gather form and can
-> > decide itself which part should be sent to the device.
-> > 
-> > Add header_size and data_size to the fpga_image_info struct and adjust
-> > fpga_mgr_write() callers with respect to them.
-> > 
-> >   * info->header_size indicates part at the beginning of image buffer
-> >     that is *not* meant to be written to the device. It is optional and
-> >     can be 0.
-> > 
-> >   * info->data_size is the size of actual bitstream data that *is* meant
-> >     to be written to the device, starting at info->header_size from the
-> >     beginning of image buffer. It is also optional and can be 0, which
-> >     means bitstream data is up to the end of image buffer.
-> > 
-> > Also add parse_header() callback to fpga_manager_ops, which purpose is
-> > to set info->header_size and info->data_size. At least
-> > initial_header_size bytes of image buffer will be passed into
-> > parse_header() first time. If it is not enough, parse_header() should
-> > set desired size into info->header_size and return -EAGAIN, than it will
-> > be called again with greater part of image buffer on the input.
-> > 
-> > Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
-> > ---
-> >  drivers/fpga/fpga-mgr.c       | 150 ++++++++++++++++++++++++++--------
-> >  include/linux/fpga/fpga-mgr.h |  13 ++-
-> >  2 files changed, 127 insertions(+), 36 deletions(-)
-> > 
-> > diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
-> > index a3595ecc3f79..c6ca395909a0 100644
-> > --- a/drivers/fpga/fpga-mgr.c
-> > +++ b/drivers/fpga/fpga-mgr.c
-> > @@ -74,6 +74,15 @@ static inline int fpga_mgr_write_complete(struct fpga_manager *mgr,
-> >  	return 0;
-> >  }
-> >  
-> > +static inline int fpga_mgr_parse_header(struct fpga_manager *mgr,
-> > +					struct fpga_image_info *info,
-> > +					const char *buf, size_t count)
-> > +{
-> > +	if (buf && mgr->mops->parse_header)
-> > +		return mgr->mops->parse_header(mgr, info, buf, count);
-> > +	return 0;
-> > +}
-> > +
-> >  static inline int fpga_mgr_write_init(struct fpga_manager *mgr,
-> >  				      struct fpga_image_info *info,
-> >  				      const char *buf, size_t count)
-> > @@ -136,32 +145,61 @@ void fpga_image_info_free(struct fpga_image_info *info)
-> >  EXPORT_SYMBOL_GPL(fpga_image_info_free);
-> >  
-> >  /*
-> > - * Call the low level driver's write_init function.  This will do the
-> > - * device-specific things to get the FPGA into the state where it is ready to
-> > - * receive an FPGA image. The low level driver only gets to see the first
-> > - * initial_header_size bytes in the buffer.
-> > + * Call the low level driver's parse_header then write_init functions.
-> > + * This will do the device-specific things to get the FPGA into the state
-> > + * where it is ready to receive an FPGA image. If parse_header sets
-> > + * info->header_size, the low level driver's write_init only gets to see the
-> > + * first info->header_size bytes in the buffer, mgr->mops->initial_header_size
-> > + * otherwise. If neither initial_header_size nor header_size are not set,
-> > + * write_init will not get any bytes of image buffer.
-> 
-> Could we always initialize the info->header_size = initial_header_size
-> at early stage, maybe in fpga_mgr_load(), and only query
-> info->header_size afterward. This is to make the logic for header size
-> simpler.
+On Sun, May 22, 2022 at 11:45 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+>
+> On Sun, May 22, 2022 at 8:50 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> >
+> > On Sun, May 22, 2022 at 10:45 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> > >
+> > > On Fri, May 13, 2022 at 4:31 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> > > >
+> > > > On Fri, May 13, 2022 at 8:42 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> > > > >
+> > > > >
+> > > > > This is the third batch of cleanups in this development cycle.
+> > > > >
+> > > >
+> > > >
+> > > > This series is available at
+> > > > git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
+> > > >  lto-cleanup-v6
+> > > >
+> > >
+> > > Hi Masahiro,
+> > >
+> > > I cloned the repository on top of latest Linus Git.
+> > >
+> > > Not able to boot in Quemu - Not able to boot on bare metal.
+> > >
+> > > $ grep module_layout log_quemu-5.18.0-rc7-2-amd64-clang14-lto.txt
+> > > 366:[    2.173265] floppy: disagrees about version of symbol module_layout
+> > > 367:[    2.198746] scsi_common: disagrees about version of symbol module_layout
+> > > 368:[    2.205573] i2c_piix4: disagrees about version of symbol module_layout
+> > > 369:[    2.210610] psmouse: disagrees about version of symbol module_layout
+> > > 370:[    2.225138] scsi_common: disagrees about version of symbol module_layout
+> > > 371:[    2.235536] scsi_common: disagrees about version of symbol module_layout
+> > > 375:Begin: Running /scripts/local-premount ... [    2.298555]
+> > > crc32c_intel: disagrees about version of symbol module_layout
+> > > 376:[    2.303335] crc32c_generic: disagrees about version of symbol
+> > > module_layout
+> > > 377:[    2.306667] libcrc32c: disagrees about version of symbol module_layout
+> > >
+> > > Infos: LLVM-14 + CONFIG_LTO_CLANG_THIN=y
+> > >
+> > > My linux-config and qemu-log are attached.
+> > >
+> >
+> >
+> > Thanks for your testing.
+> >
+> > I was also able to reproduce this issue.
+> >
+> >
+> > The problematic parts are:
+> >
+> > [    2.298555] crc32c_intel: disagrees about version of symbol module_layout
+> > [    2.303335] crc32c_generic: disagrees about version of symbol module_layout
+> > [    2.306667] libcrc32c: disagrees about version of symbol module_layout
+> >
+> >
+> >
+> > When CONFIG_LTO_CLANG_THIN=y,
+> > I cannot see any __crc_* symbols in "nm  vmlinux".
+> >
+> > Perhaps, LTO might have discarded all the __crc_* symbols
+> > from vmlinux, but I am still checking the details...
+> >
+>
+> Thanks for taking care.
+>
+> Just for the records:
+>
+> $ grep CONFIG_MODVERSIONS /boot/config-5.18.0-rc7-2-amd64-clang14-lto
+> CONFIG_MODVERSIONS=y
+>
 
-Sorry I remember some existing drivers are using initial_header_size but
-still deal with no buffer offset in write(), so we cannot force
-info->header_size be filled. Forget about the previous comment.
+Did not try CONFIG_MODVERSIONS=n.
 
-Thanks,
-Yilun
+We have a new file:
+
+[ include/linux/export-internal.h ]
+/* SPDX-License-Identifier: GPL-2.0-only */
+/*
+* Please do not include this explicitly.
+* This is used by C files generated by modpost.
+*/
+
+#ifndef __LINUX_EXPORT_INTERNAL_H__
+#define __LINUX_EXPORT_INTERNAL_H__
+
+#include <linux/compiler.h>
+#include <linux/types.h>
+
+#define SYMBOL_CRC(sym, crc, sec)   \
+       u32 __section("___kcrctab" sec "+" #sym) __crc_##sym = crc
+
+#endif /* __LINUX_EXPORT_INTERNAL_H__ */
+
+But we discard __kcrctab in scripts/module.lds.S file.
+
+Maybe we need:
+
+$ git diff scripts/module.lds.S
+diff --git a/scripts/module.lds.S b/scripts/module.lds.S
+index 1d0e1e4dc3d2..c04b596c364b 100644
+--- a/scripts/module.lds.S
++++ b/scripts/module.lds.S
+@@ -21,8 +21,6 @@ SECTIONS {
+
+       __ksymtab               0 : { *(SORT(___ksymtab+*)) }
+       __ksymtab_gpl           0 : { *(SORT(___ksymtab_gpl+*)) }
+-       __kcrctab               0 : { *(SORT(___kcrctab+*)) }
+-       __kcrctab_gpl           0 : { *(SORT(___kcrctab_gpl+*)) }
+
+       .ctors                  0 : ALIGN(8) { *(SORT(.ctors.*)) *(.ctors) }
+       .init_array             0 : ALIGN(8) { *(SORT(.init_array.*))
+*(.init_array) }
+
+Or even?
+
+$ git diff scripts/kallsyms.c
+diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+index 8caabddf817c..fb3601fe8aa3 100644
+--- a/scripts/kallsyms.c
++++ b/scripts/kallsyms.c
+@@ -109,7 +109,6 @@ static bool is_ignored_symbol(const char *name, char type)
+       static const char * const ignored_prefixes[] = {
+               "$",                    /* local symbols for ARM, MIPS, etc. */
+               ".L",                   /* local labels,
+.LBB,.Ltmpxxx,.L__unnamed_xx,.LASANPC, etc. */
+-               "__crc_",               /* modversions */
+               "__efistub_",           /* arm64 EFI stub namespace */
+               "__kvm_nvhe_",          /* arm64 non-VHE KVM namespace */
+               "__AArch64ADRPThunk_",  /* arm64 lld */
+
+- Sedat -

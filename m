@@ -2,83 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FBE35304FD
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 19:41:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1894B5304FF
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 19:42:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350137AbiEVRlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 13:41:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35784 "EHLO
+        id S1349943AbiEVRmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 13:42:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349968AbiEVRlP (ORCPT
+        with ESMTP id S243789AbiEVRmu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 13:41:15 -0400
-Received: from smtp.smtpout.orange.fr (smtp08.smtpout.orange.fr [80.12.242.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6132D15FE8
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 10:41:13 -0700 (PDT)
-Received: from pop-os.home ([86.243.180.246])
-        by smtp.orange.fr with ESMTPA
-        id spZjnWR0UgNxBspZjnfQ7n; Sun, 22 May 2022 19:41:11 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 22 May 2022 19:41:11 +0200
-X-ME-IP: 86.243.180.246
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Vinod Koul <vkoul@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Amireddy Mallikarjuna reddy 
-        <mallikarjunax.reddy@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        dmaengine@vger.kernel.org
-Subject: [PATCH] dmaengine: lgm: Fix an error handling path in intel_ldma_probe()
-Date:   Sun, 22 May 2022 19:41:05 +0200
-Message-Id: <18504549bc4d2b62a72a02cb22a2e4d8e6a58720.1653241224.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Sun, 22 May 2022 13:42:50 -0400
+Received: from mail.parknet.co.jp (mail.parknet.co.jp [210.171.160.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1BB183968A
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 10:42:49 -0700 (PDT)
+Received: from ibmpc.myhome.or.jp (server.parknet.ne.jp [210.171.168.39])
+        by mail.parknet.co.jp (Postfix) with ESMTPSA id 37C9D20012BA;
+        Mon, 23 May 2022 02:42:48 +0900 (JST)
+Received: from devron.myhome.or.jp (foobar@devron.myhome.or.jp [192.168.0.3])
+        by ibmpc.myhome.or.jp (8.16.1/8.16.1/Debian-3) with ESMTPS id 24MHgj7L103712
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Mon, 23 May 2022 02:42:46 +0900
+Received: from devron.myhome.or.jp (foobar@localhost [127.0.0.1])
+        by devron.myhome.or.jp (8.16.1/8.16.1/Debian-3) with ESMTPS id 24MHgjs7296574
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Mon, 23 May 2022 02:42:45 +0900
+Received: (from hirofumi@localhost)
+        by devron.myhome.or.jp (8.16.1/8.16.1/Submit) id 24MHgiGO296573;
+        Mon, 23 May 2022 02:42:44 +0900
+From:   OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Colin Walters <walters@verbum.org>,
+        Peter Jones <pjones@redhat.com>,
+        Alexander Larsson <alexl@redhat.com>,
+        Alberto Ruiz <aruiz@redhat.com>,
+        Christian Kellner <ckellner@redhat.com>,
+        Lennart Poettering <lennart@poettering.net>,
+        Chung-Chiang Cheng <cccheng@synology.com>
+Subject: Re: [RFC PATCH 2/3] fat: add renameat2 RENAME_EXCHANGE flag support
+References: <20220519092343.2776414-1-javierm@redhat.com>
+        <20220519092343.2776414-3-javierm@redhat.com>
+Date:   Mon, 23 May 2022 02:42:44 +0900
+In-Reply-To: <20220519092343.2776414-3-javierm@redhat.com> (Javier Martinez
+        Canillas's message of "Thu, 19 May 2022 11:23:42 +0200")
+Message-ID: <87fsl1cvl7.fsf@mail.parknet.co.jp>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/29.0.50 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ldma_clk_disable() calls both:
-	clk_disable_unprepare(d->core_clk);
-	reset_control_assert(d->rst);
+Javier Martinez Canillas <javierm@redhat.com> writes:
 
-So, should devm_reset_control_get_optional() fail, core_clk should not
-be prepare_enable'd before it, otherwise it will never be
-disable_unprepare'd.
+> The renameat2 RENAME_EXCHANGE flag allows to atomically exchange two paths
+> but is currently not supported by the Linux vfat filesystem driver.
+>
+> Add a vfat_rename_exchange() helper function that implements this support.
+>
+> The super block lock is acquired during the operation to ensure atomicity,
+> and in the error path actions made are reversed also with the mutex held,
+> making the whole operation transactional.
 
-Reorder the code to handle the error handling path as expected.
+I'm not fully reviewed yet though (write order and race), basically
+looks like good.
 
-Fixes: 32d31c79a1a4 ("dmaengine: Add Intel LGM SoC DMA support.")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/dma/lgm/lgm-dma.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+> +	/* if directories are not the same, get ".." info to update */
+> +	if (old_dir != new_dir) {
+> +		if (S_ISDIR(old_inode->i_mode))
+> +			if (fat_get_dotdot_entry(old_inode, &old_dotdot_bh, &old_dotdot_de)) {
+> +				err = -EIO;
+> +				goto out;
+> +			}
+> +		if (S_ISDIR(new_inode->i_mode))
+> +			if (fat_get_dotdot_entry(new_inode, &new_dotdot_bh, &new_dotdot_de)) {
+> +				err = -EIO;
+> +				goto out;
+> +			}
+> +	}
 
-diff --git a/drivers/dma/lgm/lgm-dma.c b/drivers/dma/lgm/lgm-dma.c
-index efe8bd3a0e2a..9b9184f964be 100644
---- a/drivers/dma/lgm/lgm-dma.c
-+++ b/drivers/dma/lgm/lgm-dma.c
-@@ -1593,11 +1593,12 @@ static int intel_ldma_probe(struct platform_device *pdev)
- 	d->core_clk = devm_clk_get_optional(dev, NULL);
- 	if (IS_ERR(d->core_clk))
- 		return PTR_ERR(d->core_clk);
--	clk_prepare_enable(d->core_clk);
- 
- 	d->rst = devm_reset_control_get_optional(dev, NULL);
- 	if (IS_ERR(d->rst))
- 		return PTR_ERR(d->rst);
-+
-+	clk_prepare_enable(d->core_clk);
- 	reset_control_deassert(d->rst);
- 
- 	ret = devm_add_action_or_reset(dev, ldma_clk_disable, d);
+It may not be linux coding style though, please add {}
+
+	if () {
+        	...
+	}
+
+for non one liner body.
+
+> +	/* update ".." directory entry info */
+> +	if (old_dotdot_de) {
+> +		fat_set_start(old_dotdot_de, MSDOS_I(new_dir)->i_logstart);
+> +		mark_buffer_dirty_inode(old_dotdot_bh, old_inode);
+> +		if (IS_DIRSYNC(new_dir)) {
+> +			err = sync_dirty_buffer(old_dotdot_bh);
+> +			if (err)
+> +				goto error_old_dotdot;
+> +		}
+> +		drop_nlink(old_dir);
+> +		inc_nlink(new_dir);
+> +	}
+> +
+> +	if (new_dotdot_de) {
+> +		fat_set_start(new_dotdot_de, MSDOS_I(old_dir)->i_logstart);
+> +		mark_buffer_dirty_inode(new_dotdot_bh, new_inode);
+> +		if (IS_DIRSYNC(old_dir)) {
+> +			err = sync_dirty_buffer(new_dotdot_bh);
+> +			if (err)
+> +				goto error_new_dotdot;
+> +		}
+> +		drop_nlink(new_dir);
+> +		inc_nlink(old_dir);
+> +	}
+
+There are some copy&paste codes, for example above, it may be better to
+use function and consolidate? If you had some intent, it is ok though.
+
+Thanks.
 -- 
-2.34.1
-
+OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>

@@ -2,202 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AE395304BB
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 18:39:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 053D85304C0
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 18:46:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239657AbiEVQi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 12:38:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54298 "EHLO
+        id S241941AbiEVQqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 12:46:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236511AbiEVQix (ORCPT
+        with ESMTP id S235505AbiEVQqA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 12:38:53 -0400
-Received: from smtp.smtpout.orange.fr (smtp06.smtpout.orange.fr [80.12.242.128])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B7F381B2
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 09:38:50 -0700 (PDT)
-Received: from pop-os.home ([86.243.180.246])
-        by smtp.orange.fr with ESMTPA
-        id sobQnlvPfxzw2sobQnis1j; Sun, 22 May 2022 18:38:49 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 22 May 2022 18:38:49 +0200
-X-ME-IP: 86.243.180.246
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     dan.carpenter@oracle.com, Thomas Gleixner <tglx@linutronix.de>,
-        John Stultz <jstultz@google.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [RFC PATCH] timers: Optimize usleep_range()
-Date:   Sun, 22 May 2022 18:38:38 +0200
-Message-Id: <d7fc85736adee02ce52ee88a54fa7477fbd18ed2.1653236802.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Sun, 22 May 2022 12:46:00 -0400
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98342C3F;
+        Sun, 22 May 2022 09:45:56 -0700 (PDT)
+Received: by mail-ot1-x32d.google.com with SMTP id g13-20020a9d6b0d000000b0060b13026e0dso627337otp.8;
+        Sun, 22 May 2022 09:45:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=A3MW2E4hPy/aQENWXOJ2JWZ+xI8KBMasjdB1XQlQXhk=;
+        b=fKUUM7yY2M3lYi3DacllA37dpumIb+5hsm4dGf862dt912aTwJh8O+JEDrr8XE4/Ao
+         /O+xEx8SUbw2Z+V0qTdJmLn/1+t41l7ol0S7LAxefEQMBwC1XJhqQOtfCtIB73JgXOR3
+         OvjT1vbQbn93hcd2cAQdnZVGk8QLX4BxAh2XE/2kB3vu5Gun01Sq2aL6hCWl19gFDqS+
+         lXWmOGGP8f4NAEyrFbYAffWuz9qh/9lkvljoE2Tk7ZAPBhSnGZIGz36rtY1x1R/nCoRr
+         KMy1HxbOp1tN4zmy2vN1V9LnSn1Tz1sizrk7jMXsGuDrFlZBLzLp+P6BMJ3xlz9i09Q4
+         zZ8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=A3MW2E4hPy/aQENWXOJ2JWZ+xI8KBMasjdB1XQlQXhk=;
+        b=PsV6Dl6fWHWkcpYhMc6q8FdySKWwq3RV9w6/8IK0SIX6uI7v/20RQf6atR3OjfVy3k
+         xBnlmcmUr/aFHAEbYDAYHBY61G8VQ2ErPneOP1QsK6UQUbpQlraOHApvgy1tP6Zy8a4S
+         4CizkQODhv6OSnvOF8sKvSr0C0zG8Nj3Yt7eOesyLPOhqkpHXeW8xT4RlEp/Af9LpDGa
+         2KmxknrNRAaeu8bqYj9e0FiEMJufvn/VuB0bnCO0UkHQgmb6AXfcpvcWW7cPVL/vW5iV
+         SypR7jHGfCZs+4Xr5kL1/sv86EoDXXshPI5w85RbS+xvGVRPlhsomkwQC8P4c6ubJM+R
+         tVzw==
+X-Gm-Message-State: AOAM533MBEXeGN/fuLr9rOi77m2dBqixXL2YOjsifoIKRBslam3JP245
+        JU6DvbDkmtPiOVg0Hu3UiPc=
+X-Google-Smtp-Source: ABdhPJwF7V+fwRvOwZOSp3lwb6vsxQ0qSZ6aw4g7kZDyU1NwNpYq17KF/k0k72MH8MxbQ3y6RscDVw==
+X-Received: by 2002:a05:6830:124e:b0:60a:fff3:c05b with SMTP id s14-20020a056830124e00b0060afff3c05bmr2616441otp.264.1653237955725;
+        Sun, 22 May 2022 09:45:55 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m12-20020a4a390c000000b0035eb4e5a6cbsm3423043ooa.33.2022.05.22.09.45.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 22 May 2022 09:45:54 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <6d691a7d-7601-a077-fc8e-67e0c4917615@roeck-us.net>
+Date:   Sun, 22 May 2022 09:45:50 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v1 06/19] watchdog: npcm_wdt: Add NPCM845 watchdog support
+Content-Language: en-US
+To:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
+        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
+        yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, daniel.lezcano@linaro.org,
+        tglx@linutronix.de, wim@linux-watchdog.org,
+        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+        olof@lixom.net, jirislaby@kernel.org, shawnguo@kernel.org,
+        bjorn.andersson@linaro.org, geert+renesas@glider.be,
+        marcel.ziswiler@toradex.com, vkoul@kernel.org,
+        biju.das.jz@bp.renesas.com, nobuhiro1.iwamatsu@toshiba.co.jp,
+        robert.hancock@calian.com, j.neuschaefer@gmx.net, lkundrak@v3.sk
+Cc:     soc@kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220522155046.260146-1-tmaimon77@gmail.com>
+ <20220522155046.260146-7-tmaimon77@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220522155046.260146-7-tmaimon77@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Most of the time the 'min' and 'max' parameters of usleep_range() are
-constant. We can take advantage of it to pre-compute at compile time
-some values used in usleep_range_state().
+On 5/22/22 08:50, Tomer Maimon wrote:
+> Add Nuvoton BMC NPCM845 watchdog support.
+> The NPCM845 uses the same watchdog as the NPCM750.
+> 
+> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> ---
+>   drivers/watchdog/npcm_wdt.c | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/watchdog/npcm_wdt.c b/drivers/watchdog/npcm_wdt.c
+> index 28a24caa2627..0b91a3fbec09 100644
+> --- a/drivers/watchdog/npcm_wdt.c
+> +++ b/drivers/watchdog/npcm_wdt.c
+> @@ -231,6 +231,7 @@ static int npcm_wdt_probe(struct platform_device *pdev)
+>   static const struct of_device_id npcm_wdt_match[] = {
+>   	{.compatible = "nuvoton,wpcm450-wdt"},
+>   	{.compatible = "nuvoton,npcm750-wdt"},
+> +	{.compatible = "nuvoton,npcm845-wdt"},
+>   	{},
+>   };
+>   MODULE_DEVICE_TABLE(of, npcm_wdt_match);
 
-introduced a new __nsleep_range_delta_state() function that mimics
-usleep_range_state() but takes as parameters the pre-computed values.
-
-The main benefit is to save a few instructions, especially 2
-multiplications (x1000 when converting us to ns).
-
-A hand simplified diff of the generated asm is given below. It was
-produced on a Intel(R) Core(TM) i7-3770, with gcc 11.2.0.
-
-The asm produced in the caller is mostly the same. Only constant values
-passed to usleep_range_state() or __nsleep_range_delta_state() are
-different. No other instructions or whatever is different.
-
---- timer.asm	2022-05-22 17:43:09.160513527 +0200
-+++ timer2.asm	2022-05-22 17:59:34.791072278 +0200
-@@ -7,16 +7,14 @@
- 41 56                	push   %r14
- 49 c7 c6 00 00 00 00 	mov    $0x0,%r14
- 41 55                	push   %r13
--41 89 d5             	mov    %edx,%r13d
-+49 89 f5             	mov    %rsi,%r13
- 41 54                	push   %r12
--49 89 f4             	mov    %rsi,%r12
-+41 89 d4             	mov    %edx,%r12d
- 55                   	push   %rbp
--44 89 ed             	mov    %r13d,%ebp
-+44 89 e5             	mov    %r12d,%ebp
- 53                   	push   %rbx
- 48 89 fb             	mov    %rdi,%rbx
- 81 e5 cc 00 00 00    	and    $0xcc,%ebp
--49 29 dc             	sub    %rbx,%r12
--4d 69 e4 e8 03 00 00 	imul   $0x3e8,%r12,%r12
- 48 83 ec 68          	sub    $0x68,%rsp
- 48 c7 44 24 08 b3 8a 	movq   $0x41b58ab3,0x8(%rsp)
- b5 41
-@@ -36,18 +34,16 @@
- 31 c0                	xor    %eax,%eax
- e8 00 00 00 00       	call
- e8 00 00 00 00       	call
--49 89 c0             	mov    %rax,%r8
--48 69 c3 e8 03 00 00 	imul   $0x3e8,%rbx,%rax
-+48 01 d8             	add    %rbx,%rax
-+48 89 44 24 28       	mov    %rax,0x28(%rsp)
- 65 48 8b 1c 25 00 00 	mov    %gs:0x0,%rbx
- 00 00
--4c 01 c0             	add    %r8,%rax
--48 89 44 24 28       	mov    %rax,0x28(%rsp)
- e8 00 00 00 00       	call
- 31 ff                	xor    %edi,%edi
- 89 ee                	mov    %ebp,%esi
-@@ -55,9 +51,9 @@
- 4c 89 b3 68 30 00 00 	mov    %r14,0x3068(%rbx)
- 48 8d 7b 18          	lea    0x18(%rbx),%rdi
- e8 00 00 00 00       	call
--44 89 6b 18          	mov    %r13d,0x18(%rbx)
-+44 89 63 18          	mov    %r12d,0x18(%rbx)
- 31 d2                	xor    %edx,%edx
--4c 89 e6             	mov    %r12,%rsi
-+4c 89 ee             	mov    %r13,%rsi
- 48 8d 7c 24 28       	lea    0x28(%rsp),%rdi
- e8 00 00 00 00       	call
- 31 ff                	xor    %edi,%edi
-@@ -88,16 +84,11 @@
- 89 c1                	mov    %eax,%ecx
- 89 c6                	mov    %eax,%esi
- 89 c7                	mov    %eax,%edi
--41 89 c0             	mov    %eax,%r8d
- c3                   	ret
- cc                   	int3
- e8 00 00 00 00       	call
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-This saves some cycles, okay, but it adds complexity and a new function.
-How is the balance?
-
-Apparently multiplications are really fast on recent x86, but maybe on some
-other architectures saving some multiplications is great?
-
-My own feeling is that it is sad not to compile-time compute what we can.
-
-I let you decide if it worth it.
----
- include/linux/delay.h | 15 ++++++++++++++-
- kernel/time/timer.c   | 27 +++++++++++++++++++++++++++
- 2 files changed, 41 insertions(+), 1 deletion(-)
-
-diff --git a/include/linux/delay.h b/include/linux/delay.h
-index 039e7e0c7378..e84e7f9c1a47 100644
---- a/include/linux/delay.h
-+++ b/include/linux/delay.h
-@@ -61,10 +61,23 @@ void msleep(unsigned int msecs);
- unsigned long msleep_interruptible(unsigned int msecs);
- void usleep_range_state(unsigned long min, unsigned long max,
- 			unsigned int state);
-+void __nsleep_range_delta_state(u64 min, u64 delta, unsigned int state);
- 
- static inline void usleep_range(unsigned long min, unsigned long max)
- {
--	usleep_range_state(min, max, TASK_UNINTERRUPTIBLE);
-+	/*
-+	 * Most of the time min and max are constant, so the time delta and the
-+	 * convertion to ns can be computed at compile time.
-+	 */
-+	if (__builtin_constant_p(min) &&
-+	    __builtin_constant_p(max)) {
-+		u64 delta = (u64)(max - min) * NSEC_PER_USEC;
-+
-+		__nsleep_range_delta_state(min * NSEC_PER_USEC, delta,
-+					   TASK_UNINTERRUPTIBLE);
-+	} else {
-+		usleep_range_state(min, max, TASK_UNINTERRUPTIBLE);
-+	}
- }
- 
- static inline void usleep_idle_range(unsigned long min, unsigned long max)
-diff --git a/kernel/time/timer.c b/kernel/time/timer.c
-index 717fcb9fb14a..c71d745f743f 100644
---- a/kernel/time/timer.c
-+++ b/kernel/time/timer.c
-@@ -2134,3 +2134,30 @@ void __sched usleep_range_state(unsigned long min, unsigned long max,
- 	}
- }
- EXPORT_SYMBOL(usleep_range_state);
-+
-+/**
-+ * __nsleep_range_delta_state - Sleep for an approximate time in a given state
-+ * @min:	Minimum time in nsecs to sleep
-+ * @delta:	Maximum time in nsecs to sleep
-+ * @state:	State of the current task that will be while sleeping
-+ *
-+ * This function is the same as usleep_range_state(), except that:
-+ *   - the time delta is precomputed by the caller
-+ *   - the times are given in ns instead of us
-+ *
-+ * It is not intended to direct use, but is used in a compile-time optimized
-+ * path in usleep_range().
-+ */
-+void __sched __nsleep_range_delta_state(u64 min, u64 delta,
-+				        unsigned int state)
-+{
-+	ktime_t exp = ktime_add_ns(ktime_get(), min);
-+
-+	for (;;) {
-+		__set_current_state(state);
-+		/* Do not return before the requested sleep time has elapsed */
-+		if (!schedule_hrtimeout_range(&exp, delta, HRTIMER_MODE_ABS))
-+			break;
-+	}
-+}
-+EXPORT_SYMBOL(__nsleep_range_delta_state);
--- 
-2.34.1
-
+Acked-by: Guenter Roeck <linux@roeck-us.net>

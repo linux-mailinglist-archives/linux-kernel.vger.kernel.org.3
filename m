@@ -2,81 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B2FD530263
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 12:23:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 655F4530267
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 12:27:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244257AbiEVKXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 06:23:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36644 "EHLO
+        id S236175AbiEVK1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 06:27:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244364AbiEVKWq (ORCPT
+        with ESMTP id S230336AbiEVK1E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 06:22:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6B9B637A32
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 03:22:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653214955;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lsPbt2EDsFllYzK/7L7lTHe+KfYj5ghUR9vmWSox+jk=;
-        b=ceBVBWEWsKJBsi1INqqcILfubRltrV+f1YN1YnTuUBKI4IFUAIind5gJqqNUKLzjfEhIPO
-        7G0VS1vk6GCCQtzloT6ZBjKzqnvpo9wuRhO6KvcrMO4Ekp3vKmU9Uf0CZHYBAFmfbsokqz
-        deZUtwvHn6kFgPKeUp7/OXEZXqmmX/Y=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-321-mGS1BWIbPBmSuVqrzBns2g-1; Sun, 22 May 2022 06:22:31 -0400
-X-MC-Unique: mGS1BWIbPBmSuVqrzBns2g-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8A55E3804517;
-        Sun, 22 May 2022 10:22:29 +0000 (UTC)
-Received: from starship (unknown [10.40.192.55])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 00619492C14;
-        Sun, 22 May 2022 10:22:23 +0000 (UTC)
-Message-ID: <008e29b8acd3f6c5a8c7da461c3c92fc927c10bd.camel@redhat.com>
-Subject: Re: [RFC PATCH v3 14/19] KVM: x86: rename
- .set_apic_access_page_addr to reload_apic_access_page
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        intel-gfx@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
-        linux-kernel@vger.kernel.org, Jim Mattson <jmattson@google.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        intel-gvt-dev@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org
-Date:   Sun, 22 May 2022 13:22:22 +0300
-In-Reply-To: <YoZ2dh+ZujErT5nk@google.com>
-References: <20220427200314.276673-1-mlevitsk@redhat.com>
-         <20220427200314.276673-15-mlevitsk@redhat.com>
-         <YoZ2dh+ZujErT5nk@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Sun, 22 May 2022 06:27:04 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A806381A4
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 03:27:01 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id t25so21068340lfg.7
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 03:27:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=fMNwqXeV2uBe+evUoLZgmTmVyGADR/eLkrGswoXQxA4=;
+        b=aiibXUoW6fGLAoY6m08x9kmFx17Wpj3QAahbMWPFXr7lHKX9J/dIS0qEnZTETp7pR6
+         BXljZldyjeA/sEDbPTZZxFqRfCKzBghbv9+jA3nEv6XiAyYart5kdSwfL5uFBQFCW+4T
+         SYYqBsbg6Zt+sYdVpHpUgJwkGnCl2FTaM3RyUOdqqd8Rk6MYRRvGgwtkng73huayt0mz
+         3fL2gI41mb+624m0aYB4Tavh50F77LNgianztzQs8PT4RvbA3dsYUgdeqTagB4s3pZSz
+         IbcZGQDhTM0R8D0rSQa16x9DxmFB1/cyNMzcZZusyBUQChqAB1DH0BtZD6QBAvRtwZZ7
+         CaxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=fMNwqXeV2uBe+evUoLZgmTmVyGADR/eLkrGswoXQxA4=;
+        b=hHGHXMEDDOFbXGu5v1my9ptnq9W2wz15+WyGxW0QDHuIu3fqmS5zKsLveWk+zFEh5X
+         GMlkwmB+JZLR3cyq1IU2xpEWVm8gJ3YOpcCnel6YiLIlMxPoj4pNFzP4wE5oxmHTOPRU
+         mupLNB2aagfOulIL6+H72SVo4HtgLK+FPE85kamQUo+MR9Sk7zqFh+sakmc7ErPWm/5S
+         KCHcRk2xES5uKqct2CagdkNO3ZZRx52ctsCiDZTf9GeikYT85kSVPac68gItvjhlb7Mb
+         3XSA/VW1yUGbFmJMyfcnltNAlZq3R4TOg/NdSAlEjWau9uLHwdvRlaIVAmnin+fMDSje
+         5L4w==
+X-Gm-Message-State: AOAM532qosv1rOpfJ4cucJo+cyOsHU7reTgsunvNOmJIqxx9y8vQaHJ0
+        esNmwrwvMjQAIwwModfJGEQPPA==
+X-Google-Smtp-Source: ABdhPJyOR4yZnga56TAbIe1Pgby+ggk+HW859Rb54J83gtSMzvrVoXi6kzlOGEy8W5sTI3Ees33A8Q==
+X-Received: by 2002:a05:6512:1585:b0:445:908b:ad71 with SMTP id bp5-20020a056512158500b00445908bad71mr12439284lfb.200.1653215219755;
+        Sun, 22 May 2022 03:26:59 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id f17-20020a056512093100b0047255d21162sm1403396lft.145.2022.05.22.03.26.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 22 May 2022 03:26:59 -0700 (PDT)
+Message-ID: <eb915633-4d88-ec9a-d51a-7d5f5ecc0843@linaro.org>
+Date:   Sun, 22 May 2022 12:26:57 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: Removal of qcom,board-id and qcom,msm-id
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Olof Johansson <olof@lixom.net>, Rob Herring <robh@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <a3c932d1-a102-ce18-deea-18cbbd05ecab@linaro.org>
+ <35051bec-98ea-b4c5-f734-06b3f22f3562@linaro.org>
+ <8a90ffbc-b376-9115-fb91-0b46d98873b7@linaro.org>
+ <40f29157-52c0-001f-6c14-fb90b351756a@linaro.org>
+ <20220519221227.B66D3C385AA@smtp.kernel.org>
+ <CAA8EJpqjcAcoooaZ6iTSCy4B1x4=HTUgvJ4VqX_Fr_hSMEbfDA@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAA8EJpqjcAcoooaZ6iTSCy4B1x4=HTUgvJ4VqX_Fr_hSMEbfDA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,46 +84,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-05-19 at 16:55 +0000, Sean Christopherson wrote:
-> On Wed, Apr 27, 2022, Maxim Levitsky wrote:
-> > This will be used on SVM to reload shadow page of the AVIC physid table
-> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > index d2f73ce87a1e3..ad744ab99734c 100644
-> > --- a/arch/x86/kvm/x86.c
-> > +++ b/arch/x86/kvm/x86.c
-> > @@ -9949,12 +9949,12 @@ void kvm_arch_mmu_notifier_invalidate_range(struct kvm *kvm,
-> >  		kvm_make_all_cpus_request(kvm, KVM_REQ_APIC_PAGE_RELOAD);
-> >  }
-> >  
-> > -static void kvm_vcpu_reload_apic_access_page(struct kvm_vcpu *vcpu)
-> > +static void kvm_vcpu_reload_apic_pages(struct kvm_vcpu *vcpu)
-> >  {
-> >  	if (!lapic_in_kernel(vcpu))
-> >  		return;
-> >  
-> > -	static_call_cond(kvm_x86_set_apic_access_page_addr)(vcpu);
-> > +	static_call_cond(kvm_x86_reload_apic_pages)(vcpu);
-> >  }
-> >  
-> >  void __kvm_request_immediate_exit(struct kvm_vcpu *vcpu)
-> > @@ -10071,7 +10071,7 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
-> >  		if (kvm_check_request(KVM_REQ_LOAD_EOI_EXITMAP, vcpu))
-> >  			vcpu_load_eoi_exitmap(vcpu);
-> >  		if (kvm_check_request(KVM_REQ_APIC_PAGE_RELOAD, vcpu))
-> > -			kvm_vcpu_reload_apic_access_page(vcpu);
-> > +			kvm_vcpu_reload_apic_pages(vcpu);
+On 20/05/2022 03:39, Dmitry Baryshkov wrote:
 > 
-> My vote is to add a new request and new kvm_x86_ops hook instead of piggybacking
-> KVM_REQ_APIC_PAGE_RELOAD.  The usage in kvm_arch_mmu_notifier_invalidate_range()
-> very subtlies relies on the memslot and vma being allocated/controlled by KVM.
+>>
+>> I vaguely recall that the properties had to be extracted during the
+>> boot.img creation process to create a table of contents header. But
+>> after some time the bootloader started scanning the DTBs directly for
+>> the vendor properties and thus the header was deprecated/removed. If the
+>> bootloader is doing the scanning then I'm not sure what is preventing
+>> the properties from being documented and allowed. I think the main
+>> rejection was that the properties were added purely to be extracted
+>> during post processing and placed into the table of contents header,
+>> i.e. they weren't actually used by the kernel or the bootloader. If they
+>> are now used by the bootloader it sounds OK to me if they're kept
+>> around.
 > 
-> The use in avic_physid_shadow_table_flush_memslot() is too similar in that it
-> also deals with memslot changes, but at the same time is _very_ different in that
-> it's dealing with user controlled memslots.
+> Yes, as far as I understand, they are used by the bootloader directly.
 > 
 
-No objections, will do.
+I entirely missed one part - Stephen's patches from 2015 were actually
+applied and since 2015 we expect all boards to follow convention:
+
+compatible =
+"qcom,<SoC>[-<soc_version>][-<foundry_id>]-<board>[/<subtype>][-<board_version>]"
+
+The patchset was accepted, although in the thread I do not see "Applied"
+message.
+
+Stephen,
+can you or anyone else confirm that the dtbTool Qualcomm uses (and/or
+bootloader) are adjusted as well to these new compatibles?
+
+If yes, we can simply remove board-id and msm-id properties from new
+boards, because 7 years was enough to switch to these new tools...
 
 Best regards,
-	Maxim Levitsky
-
+Krzysztof

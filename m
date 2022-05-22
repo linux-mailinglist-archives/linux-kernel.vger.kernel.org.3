@@ -2,198 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 079B05301A0
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 09:35:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 263655301A5
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 09:37:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346326AbiEVHdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 03:33:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57300 "EHLO
+        id S1344951AbiEVHhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 03:37:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244601AbiEVHdY (ORCPT
+        with ESMTP id S235982AbiEVHhB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 03:33:24 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F713BBF6
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 00:33:23 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-2ec42eae76bso120724397b3.10
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 00:33:23 -0700 (PDT)
+        Sun, 22 May 2022 03:37:01 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD0923CA61;
+        Sun, 22 May 2022 00:36:59 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id gi33so14343169ejc.3;
+        Sun, 22 May 2022 00:36:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pesXPNx/Q+LkyGC2G6a4mEcdtswlqCibLEjGfoAcaaM=;
-        b=l3n22jSViyQmkbqULtIU4toqqsIvYxj0DLnbM8qlKeL6z1o6AccdaQxqVdVjpYIoPb
-         efyRW+UCEO6INY+5411QwiXx9DMSPB3pZoIe9jRh21F0KplJmkH25JBRfGIqQxZdbIVO
-         mzln7BBnH/6RScZN044BXG9xa47vYazntURco=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=WXPZMIuDMh3nH2dL31GT3vk5sClUvSn8jN8RcdsCbL4=;
+        b=k91qRNUzU0dwmpRuQtkAG3m/N0VPpXanYb3QoApiKq42cFZT4HQL5JmtaVxgdYhlBu
+         MqX+fzyKkAde9IqUMQ0ovn6zF3DCuzqSl+F5AuJTnBj1MReyWEs9yN57f6OyO4qogsD2
+         LPbJGJ0hX0TxPvAR1qJMdENQajTcq/1bF2wGNhtkxjTqzB4Wu43kDbSZoMjz03+w7IQ9
+         vLe4QTWG+wPpI4jcChvpgtHBbmzd3GPKw/PLATBgy2wuK+52Nt9U0kDxRSpQ+LstVk5J
+         PFTRxCRtvjj1l436l5vtgAVlthegT4+iCUwVWPVjwTOxrB6fxEFMgY+oERNLFI+K/aIO
+         D5SQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pesXPNx/Q+LkyGC2G6a4mEcdtswlqCibLEjGfoAcaaM=;
-        b=5l0Xr3NdquAHbhiAvh9WMQHhLCuaZvc4zi9zQgGJsGwX1slHxSkFUB8X4D8dpjGK5d
-         kkVlvaIQ3E1g+vu5PcwQygPd/gJDL7dAXaV6fRTnl0OsB3YcuDkeFDeTeNGkl1gug7X4
-         cudy3VQwHWXRp3A0cbxVWYjtYKCu7m00SWsxzLUSHYRKxhkkW5hguoAxSoUr23sFgIY7
-         fGRQPBgs9ZrIcAVdNTaGkYrQaELUZ1AxDRhZt03DYq0vZpqrM5maMYpizaDFOqUaGQo3
-         kwh3luVr9Kq2dF1nnahTkIeFXbq6l/6hBrbA8yNey3c/x1W/BVyP8FSIU2iOrZrNFFLk
-         ig/A==
-X-Gm-Message-State: AOAM530CjlmEW7nJmJJCrHoDp/oxUaB9sIqGUCIMpEQgzPFM5VE2ETY2
-        KSqwrwSXQWsorriIDYQKEbg24lXuZ1AssfDWDsyn
-X-Google-Smtp-Source: ABdhPJwY0E/JZfP4w+tD03WSMJ6az9j2LZ2XB9LZ01T8gUgkeoRVtV0LCPF4jvGjdMy/bYam1s6yGNYwM9HYX0zN0Bk=
-X-Received: by 2002:a0d:e88c:0:b0:2fe:da96:1b77 with SMTP id
- r134-20020a0de88c000000b002feda961b77mr17730906ywe.262.1653204802756; Sun, 22
- May 2022 00:33:22 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=WXPZMIuDMh3nH2dL31GT3vk5sClUvSn8jN8RcdsCbL4=;
+        b=BAD5nx4NDmBzVvU1AlTQshWE6eSUGaQ6o2e65PxjXpvIdylDxqR1tx1OeTU0AMoKxc
+         k1RAKhGOQR4fpuJSS73BQosdXNSzxfaky407lndvqmB69lvuWxLmVAXuCLqWQzsSqJXP
+         SgjqR8PBst/uEoUo9Cn0caMMhtxa62UTKaO+iYV+hMGZf+bxpGurcLfHJM6nNZtUB16E
+         kspyEb9kkPK1AoJvwKMDLfyWUtopuyI9mJyPX4X8NWAmCSr6n9Ye5nqwinhs2K+1aHeO
+         +r7CMES5hfgMzCoiye+IJ3QBnRUsFxc7KBgiVk9BkHwLonhVmXiHyUGthQOXA8J1Jhai
+         KLlw==
+X-Gm-Message-State: AOAM530+vPVXN5H4Gpov6lktsxlqJTWR0ZaEog96lbXAvNC0hyIIvn8v
+        gxwz+5N0LIHW+8Q9FiJPtkvEISy0YTfipw==
+X-Google-Smtp-Source: ABdhPJx8/8naAzFBDiHnI0FTe8FKv3lYnIyerQW26X4ehpEB/p2aGjgHgEbyP6lICoR5V1gtsekP1Q==
+X-Received: by 2002:a17:907:7283:b0:6f4:ff4f:1b6e with SMTP id dt3-20020a170907728300b006f4ff4f1b6emr14752427ejc.344.1653205018257;
+        Sun, 22 May 2022 00:36:58 -0700 (PDT)
+Received: from jernej-laptop.localnet (89-212-118-115.static.t-2.net. [89.212.118.115])
+        by smtp.gmail.com with ESMTPSA id s27-20020a170906221b00b006f3ef214dbdsm4911430ejs.35.2022.05.22.00.36.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 May 2022 00:36:57 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-spdx@vger.kernel.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-sunxi@lists.linux.dev
+Subject: Re: [patch 09/10] clocksource/drivers/timer-sun4i: Convert to SPDX identifier
+Date:   Sun, 22 May 2022 09:36:56 +0200
+Message-ID: <5567157.DvuYhMxLoT@jernej-laptop>
+In-Reply-To: <20220510171254.908144392@linutronix.de>
+References: <20220510171003.952873904@linutronix.de> <20220510171254.908144392@linutronix.de>
 MIME-Version: 1.0
-References: <20220517184453.3558-1-jszhang@kernel.org> <20220517184453.3558-2-jszhang@kernel.org>
-In-Reply-To: <20220517184453.3558-2-jszhang@kernel.org>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Sun, 22 May 2022 00:33:12 -0700
-Message-ID: <CAOnJCU+aRoLRUjbum3o8N8J63vW+Y2974TjBueE__7PQAeJCQw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] riscv: introduce unified static key mechanism for ISA extensions
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 11:53 AM Jisheng Zhang <jszhang@kernel.org> wrote:
->
-> Currently, riscv has several extensions which may not be supported on
-> all riscv platforms, for example, FPU and so on. To support unified
-> kernel Image style, we need to check whether the feature is supported
+Dne torek, 10. maj 2022 ob 19:24:49 CEST je Thomas Gleixner napisal(a):
+> The license information clearly states GPL version 2 only. The extra text
+> which excludes warranties is an excerpt of the corresponding GPLv2 clause
+> 11.
+> 
+> So the SPDX identifier covers it completely.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Chen-Yu Tsai <wens@csie.org>
+> Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
+> Cc: Samuel Holland <samuel@sholland.org>
+> Cc: linux-sunxi@lists.linux.dev
 
-/s/suportted/supported
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
+Best regards,
+Jernej
 
-> or not. If the check sits at hot code path, then performance will be
-> impacted a lot. static key can be used to solve the issue. In the past
-> FPU support has been converted to use static key mechanism. I believe
-> we will have similar cases in the future.
->
-> this patch tries to add an unified mechanism to use static keys for
-> some ISA extensions by implementing an array of default-false static keys
-> and enabling them when detected.
->
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
 > ---
->  arch/riscv/include/asm/hwcap.h | 40 ++++++++++++++++++++++++++++++++++
->  arch/riscv/kernel/cpufeature.c |  7 ++++++
->  2 files changed, 47 insertions(+)
->
-> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
-> index 0734e42f74f2..b0433d2b880d 100644
-> --- a/arch/riscv/include/asm/hwcap.h
-> +++ b/arch/riscv/include/asm/hwcap.h
-> @@ -12,6 +12,7 @@
->  #include <uapi/asm/hwcap.h>
->
->  #ifndef __ASSEMBLY__
-> +#include <linux/jump_label.h>
+>  drivers/clocksource/timer-sun4i.c |    5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> --- a/drivers/clocksource/timer-sun4i.c
+> +++ b/drivers/clocksource/timer-sun4i.c
+> @@ -1,3 +1,4 @@
+> +// SPDX-License-Identifier: GPL-2.0
 >  /*
->   * This yields a mask that user programs can use to figure out what
->   * instruction set this cpu supports.
-> @@ -55,6 +56,16 @@ enum riscv_isa_ext_id {
->         RISCV_ISA_EXT_ID_MAX = RISCV_ISA_EXT_MAX,
->  };
->
-> +/*
-> + * This enum represents the logical ID for each RISC-V ISA extension static
-> + * keys. We can use static key to optimize code path if some ISA extensions
-> + * are available.
-> + */
-> +enum riscv_isa_ext_key {
-> +       RISCV_ISA_EXT_KEY_FPU,          /* For 'F' and 'D' */
-> +       RISCV_ISA_EXT_KEY_MAX,
-> +};
-> +
->  struct riscv_isa_ext_data {
->         /* Name of the extension displayed to userspace via /proc/cpuinfo */
->         char uprop[RISCV_ISA_EXT_NAME_LEN_MAX];
-> @@ -62,6 +73,35 @@ struct riscv_isa_ext_data {
->         unsigned int isa_ext_id;
->  };
->
-> +extern struct static_key_false riscv_isa_ext_keys[RISCV_ISA_EXT_KEY_MAX];
-> +
-> +static __always_inline int riscv_isa_ext2key(int num)
-> +{
-> +       switch (num) {
-> +       case RISCV_ISA_EXT_f:
-> +               return RISCV_ISA_EXT_KEY_FPU;
-> +       case RISCV_ISA_EXT_d:
-> +               return RISCV_ISA_EXT_KEY_FPU;
-> +       default:
-> +               return -EINVAL;
-> +       }
-> +}
-> +
-> +/*
-> + * @num must be a compile-time constant.
-> + */
-> +static __always_inline bool riscv_isa_have_key_extension(int num)
-> +{
-> +       if (RISCV_ISA_EXT_ID_MAX <= num)
-> +               return false;
-> +
-> +       num = riscv_isa_ext2key(num);
- > +       if (RISCV_ISA_EXT_KEY_MAX <= num || num < 0)
-> +               return false;
-> +
-
-Why do you need the additional check in the hot path ?
-riscv_isa_ext_keys array can be directly accessed at the caller
-instead of calling this function.
-
-> +       return static_branch_likely(&riscv_isa_ext_keys[num]);
-> +}
-> +
+>   * Allwinner A1X SoCs timer handling.
+>   *
+> @@ -8,10 +9,6 @@
+>   * Based on code from
+>   * Allwinner Technology Co., Ltd. <www.allwinnertech.com>
+>   * Benn Huang <benn@allwinnertech.com>
+> - *
+> - * This file is licensed under the terms of the GNU General Public
+> - * License version 2.  This program is licensed "as is" without any
+> - * warranty of any kind, whether express or implied.
+>   */
+> 
+>  #include <linux/clk.h>
 
 
 
->  unsigned long riscv_isa_extension_base(const unsigned long *isa_bitmap);
->
->  #define riscv_isa_extension_mask(ext) BIT_MASK(RISCV_ISA_EXT_##ext)
-> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> index 1b2d42d7f589..89f886b35357 100644
-> --- a/arch/riscv/kernel/cpufeature.c
-> +++ b/arch/riscv/kernel/cpufeature.c
-> @@ -24,6 +24,8 @@ static DECLARE_BITMAP(riscv_isa, RISCV_ISA_EXT_MAX) __read_mostly;
->  #ifdef CONFIG_FPU
->  __ro_after_init DEFINE_STATIC_KEY_FALSE(cpu_hwcap_fpu);
->  #endif
-> +__ro_after_init DEFINE_STATIC_KEY_ARRAY_FALSE(riscv_isa_ext_keys, RISCV_ISA_EXT_KEY_MAX);
-> +EXPORT_SYMBOL(riscv_isa_ext_keys);
->
->  /**
->   * riscv_isa_extension_base() - Get base extension word
-> @@ -232,6 +234,11 @@ void __init riscv_fill_hwcap(void)
->                         print_str[j++] = (char)('a' + i);
->         pr_info("riscv: ELF capabilities %s\n", print_str);
->
-> +       for_each_set_bit(i, riscv_isa, RISCV_ISA_EXT_MAX) {
-> +               j = riscv_isa_ext2key(i);
-> +               if (j >= 0)
-> +                       static_branch_enable(&riscv_isa_ext_keys[j]);
-> +       }
->  #ifdef CONFIG_FPU
->         if (elf_hwcap & (COMPAT_HWCAP_ISA_F | COMPAT_HWCAP_ISA_D))
->                 static_branch_enable(&cpu_hwcap_fpu);
-> --
-> 2.34.1
->
 
-
---
-Regards,
-Atish

@@ -2,318 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56BED5300C6
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 06:40:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 094C4530100
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 07:07:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236738AbiEVEkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 00:40:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53450 "EHLO
+        id S236117AbiEVFHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 01:07:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233151AbiEVEkS (ORCPT
+        with ESMTP id S233151AbiEVFHM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 00:40:18 -0400
-Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8910140A0B;
-        Sat, 21 May 2022 21:40:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-        s=42; h=From:Cc:To:Date:Message-ID;
-        bh=7ihJWPodsu4HoFFfUGbAyKnFOLBpvhPdC/j8qB/xhqs=; b=hJ3vcSDnGvepDitO4g6Nf1Gplv
-        Tbf7ejH3Owq5rndd0R6dVOnFfK5p5noKcBgViPP8rgJcyjuaKz18zvHvjLsYV4Z6n/cRLeJObT1JN
-        cySHYIcZOts5xrwHRnZ/SdQ3av/QPksAnynj4QHxhiQQX+cnFP8x6n00jWwzePn1HmlIoB/UkDjla
-        LXBfZxdMJii3vFjeZ/t3GkRn9u3koUFVLPOW2IWtKoQKz3kiTG+9k9FgX8L/95G7SiTxZ9nRwOrhh
-        3i4cB4QtxdA+AppUIn8rfMxlmpJAg7aOBfJkyIXESN2DP2hCwPN8cfAl7v0tguFCzX8CVOMVVVKA/
-        2fMKr0m9JwYVxACxQVE/Q22SvTbdluhvVs4vU008EqQXsihOG5HLgaTJ0wzuF3y9Ms5uUL4P8F29v
-        hgaPnSo9gaboKeKJm0+0VlfXf/26nQdvVedl5ctLAK8S6zuSz9Jstt/flL8HariWg6KncdC9tv5nl
-        cqKKd81GSTC9Zdk8pX4W8vvy;
-Received: from [127.0.0.2] (localhost [127.0.0.1])
-        by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
-        (Exim)
-        id 1nsdNz-001xw6-9A; Sun, 22 May 2022 04:40:12 +0000
-Message-ID: <1c766d88-6130-1523-26d4-fefebc15af27@samba.org>
-Date:   Sat, 21 May 2022 23:40:08 -0500
+        Sun, 22 May 2022 01:07:12 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD783669D
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 22:07:11 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id b5so3413962plx.10
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 22:07:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/zVdOgntLPr65qEklFl4nAPYvyRm9z2iaUah6eFKKVI=;
+        b=LEDxfmuaQi4BsWb0dD8OMVEJL0VqYqptPmyWiVlyr1UfGIbklnwhjDrJoZjsK+v0fN
+         xZgHC1rbHfNGUbGIjML5QYuX7VoU46LeBxtoGxmwYkV5QBIS4Y4a4xcXkSEabsepmMTU
+         FmSXwkRwV4E49YGiunirk4XzJpuDptlddnT/QdT3TILzxh3z1yqUwdW5Lv2Y3BVlHGZb
+         vcvZtGQFPoKrQASld/vwuPfXYu2UWPpSndzFRRp9Fn++IlzFJOgac2IkDrMWo80tZGdW
+         eUu9EI4klpqBtONc4zSP0YacweFF4oj8g0nrkUqurtrpLF9PhVlW1PB3JGQNTU7nHiqq
+         VcKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/zVdOgntLPr65qEklFl4nAPYvyRm9z2iaUah6eFKKVI=;
+        b=4j5XXuSTUk1aoDsVvxMgw1LKWOEAorrjjrjWXhNf8ve+IxjdDEGRGBMOyT0vJM46/i
+         2wj6wXK4S1K03sNcgLg1iJqGV4s713IwaA3PHfQ2rh34JaIy4JdWJJzbnvJEZRGiLRGs
+         4W5H3XWeiLDpn2gI/0yE4StB0GUr6ed+DXLEFT7tIUDW2XwV+O3mzut2azQapPTgRuGG
+         yDFjqfFZOV1YaYikqe9lOZ1km0QCKtrnbqE2mZCJ8mkIOs6ISZ9dXbJdhNZO1/GVuIMq
+         pxryvj6QkhNQ9J2nyry9ztz0CWM4eNNwOo7NHsCA6BB0yLyzdUNfWTeQ9F0Hhu2/AY3Y
+         sBhA==
+X-Gm-Message-State: AOAM533IyIo/zjzZ2JhGB7GhWszhJQtPKeew6Jbi7crEu2JWEDHT+2FB
+        JjMxiSw1SxNqqlrjk8/XjnKcnKFyW6igILxdno82PYTQfaI2t1LcMA==
+X-Google-Smtp-Source: ABdhPJzMw4wR7ICo7g7/CU+NSffUREE2U8zYqhKmtleP97GJDDM18JtsTySQaYvuLz6C9H815du6UFsezjXQcU1X8kg=
+X-Received: by 2002:a17:903:240b:b0:14b:1100:aebc with SMTP id
+ e11-20020a170903240b00b0014b1100aebcmr17447032plo.133.1653196030813; Sat, 21
+ May 2022 22:07:10 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: CIFS regression mounting vers=1.0 NTLMSSP when hostname is too
- long
-Content-Language: en-US
-To:     Paulo Alcantara <pc@cjr.nz>, Byron Stanoszek <gandalf@winds.org>,
-        Steve French <smfrench@gmail.com>
-Cc:     linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <e6837098-15d9-acb6-7e34-1923cf8c6fe1@winds.org>
- <874k1nj3p4.fsf@cjr.nz>
-From:   Steven French <sfrench@samba.org>
-In-Reply-To: <874k1nj3p4.fsf@cjr.nz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <Yn9XwHxWsLIJXlHu@kroah.com> <20220514114819.2773691-1-zheyuma97@gmail.com>
+ <Yn+va5fTsuaFTxVR@kroah.com> <CAMhUBj=RMJwn2K+rQC9rQ=QEe5QkiJ29rMd8KzEC8B7vtXo+ug@mail.gmail.com>
+ <Yocp+WZ0On9/wObu@kroah.com>
+In-Reply-To: <Yocp+WZ0On9/wObu@kroah.com>
+From:   Zheyu Ma <zheyuma97@gmail.com>
+Date:   Sun, 22 May 2022 13:06:59 +0800
+Message-ID: <CAMhUBj=J5-V_D_kucpiWz6ZdOSSR1N9nRXQxOKgmwRA+LxW17Q@mail.gmail.com>
+Subject: Re: [PATCH v2] char: xillybus: Check endpoint type before allocing
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     eli.billauer@gmail.com, arnd@arndb.de,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Yes - please let us know if this worked.
+On Fri, May 20, 2022 at 1:41 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Fri, May 20, 2022 at 11:32:51AM +0800, Zheyu Ma wrote:
+> > On Sat, May 14, 2022 at 9:32 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > On Sat, May 14, 2022 at 07:48:19PM +0800, Zheyu Ma wrote:
+> > > > The driver submits bulk urb without checking the endpoint type is
+> > > > actually bulk.
+> > > >
+> > > > [    3.108690] usb 1-1: BOGUS urb xfer, pipe 3 != type 1
+> > > > [    3.108983] WARNING: CPU: 0 PID: 211 at drivers/usb/core/urb.c:503 usb_submit_urb+0xcd9/0x18b0
+> > > > [    3.110976] RIP: 0010:usb_submit_urb+0xcd9/0x18b0
+> > > > [    3.115318] Call Trace:
+> > > > [    3.115452]  <TASK>
+> > > > [    3.115570]  try_queue_bulk_in+0x43c/0x6e0 [xillyusb]
+> > > > [    3.115838]  xillyusb_probe+0x488/0x1230 [xillyusb]
+> > > >
+> > > > Add a check in endpoint_alloc() to fix the bug.
+> > > >
+> > > > Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+> > > > ---
+> > > > Changes in v2:
+> > > >     - Check the endpoint type at probe time
+> > > > ---
+> > > >  drivers/char/xillybus/xillyusb.c | 27 ++++++++++++++++++++++++++-
+> > > >  1 file changed, 26 insertions(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/drivers/char/xillybus/xillyusb.c b/drivers/char/xillybus/xillyusb.c
+> > > > index dc3551796e5e..4467f13993ef 100644
+> > > > --- a/drivers/char/xillybus/xillyusb.c
+> > > > +++ b/drivers/char/xillybus/xillyusb.c
+> > > > @@ -167,6 +167,7 @@ struct xillyusb_dev {
+> > > >       struct device           *dev; /* For dev_err() and such */
+> > > >       struct kref             kref;
+> > > >       struct workqueue_struct *workq;
+> > > > +     struct usb_interface *intf;
+> > > >
+> > > >       int error;
+> > > >       spinlock_t error_lock; /* protect @error */
+> > > > @@ -475,6 +476,25 @@ static void endpoint_dealloc(struct xillyusb_endpoint *ep)
+> > > >       kfree(ep);
+> > > >  }
+> > > >
+> > > > +static int xillyusb_check_endpoint(struct xillyusb_dev *xdev, u8 ep_num)
+> > > > +{
+> > > > +     struct usb_host_interface *if_desc = xdev->intf->altsetting;
+> > > > +     int i;
+> > > > +
+> > > > +     for (i = 0; i < if_desc->desc.bNumEndpoints; i++) {
+> > > > +             struct usb_endpoint_descriptor *ep = &if_desc->endpoint[i].desc;
+> > > > +
+> > > > +             if (ep->bEndpointAddress != ep_num)
+> > > > +                     continue;
+> > > > +
+> > > > +             if ((usb_pipein(ep_num) && usb_endpoint_is_bulk_in(ep)) ||
+> > > > +                     (usb_pipeout(ep_num) && usb_endpoint_is_bulk_out(ep)))
+> > > > +                     return 0;
+> > > > +     }
+> > >
+> > > Why not use the built-in usb core functions that do this for you instead
+> > > of hand-parsing this?  Look at usb_find_common_endpoints() and related
+> > > functions, that should make this much easier.
+> >
+> > Thanks for your reminder. But in this driver, we have to check not
+> > only the type and direction of the endpoint, but also the address of
+> > it. And the endpoint's address is sometimes dynamic. For example,  in
+> > the function xillyusb_open():
+> >
+> > out_ep = endpoint_alloc(xdev, (chan->chan_idx + 2) | USB_DIR_OUT,
+> > bulk_out_work, BUF_SIZE_ORDER, BUFNUM);
+> >
+> > However, usb_find_common_endpoints() can only find the first endpoint
+> > that satisfies the condition, not on a specific address. I cannot find
+> > a more suitable built-in core function, please correct me if I'm
+> > wrong.
+>
+> I do not understand the problem here, it looks like your code above that
+> I responded to doesn't care about specific addresses at all.  It is just
+> walking all of them and making sure that it is a bulk in/out endpoint.
 
-On 5/17/22 15:37, Paulo Alcantara wrote:
-> Hi Byron,
->
-> Byron Stanoszek <gandalf@winds.org> writes:
->
->> I would like to report a regression in the CIFS fs. Sometime between Linux 4.14
->> and 5.16, mounting CIFS with option vers=1.0 (and
->> CONFIG_CIFS_ALLOW_INSECURE_LEGACY=y set appropriately) with security type
->> NTLMSSP stopped working for me. The server side is a Windows 2003 Server.
->>
->> I found that this behavior depends on the length of the Linux client's
->> host+domain name (e.g. utsname()->nodename), where the mount works as long as
->> the name is 16 characters or less. Anything 17 or above returns -EIO, per the
->> following example:
->>
->> /etc/fstab entry:
->>
->> //10.0.0.12/xxxxxxxxx /ext0     cifs    vers=1.0,user=xxxxx,pass=xxxxxxxxxxx,dom=xxxxxxxxxxx,dir_mode=0755,file_mode=0644,noauto 0 0
->>
->> # hostname 12345678901234567;mount /ext0
->> mount error(5): Input/output error
->> Refer to the mount.cifs(8) manual page (e.g. man mount.cifs) and kernel log messages (dmesg)
->> # hostname 1234567890123456;mount /ext0
->> #
-> Could you please try below patch?
->
-> Let me know if I missed something else.  Thanks.
->
->  From bf63fb30ac90c06f45e40acbd3bbd2284d8ffffb Mon Sep 17 00:00:00 2001
-> From: Paulo Alcantara <pc@cjr.nz>
-> Date: Tue, 17 May 2022 17:23:23 -0300
-> Subject: [PATCH] cifs: fix ntlmssp on old servers
->
-> Some older servers seem to require the workstation name during ntlmssp
-> to be at most 15 chars (RFC1001 name length), so truncate it before
-> sending when using insecure dialects.
->
-> Link: https://lore.kernel.org/r/e6837098-15d9-acb6-7e34-1923cf8c6fe1@winds.org
-> Reported-by: Byron Stanoszek <gandalf@winds.org>
-> Fixes: 49bd49f983b5 ("cifs: send workstation name during ntlmssp session setup")
-> Signed-off-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
-> ---
->   fs/cifs/cifsglob.h   | 15 ++++++++++++++-
->   fs/cifs/connect.c    | 22 ++++------------------
->   fs/cifs/fs_context.c | 29 ++++-------------------------
->   fs/cifs/fs_context.h |  2 +-
->   fs/cifs/misc.c       |  1 -
->   fs/cifs/sess.c       |  6 +++---
->   6 files changed, 26 insertions(+), 49 deletions(-)
->
-> diff --git a/fs/cifs/cifsglob.h b/fs/cifs/cifsglob.h
-> index 8de977c359b1..5024b6792dab 100644
-> --- a/fs/cifs/cifsglob.h
-> +++ b/fs/cifs/cifsglob.h
-> @@ -944,7 +944,7 @@ struct cifs_ses {
->   				   and after mount option parsing we fill it */
->   	char *domainName;
->   	char *password;
-> -	char *workstation_name;
-> +	char workstation_name[CIFS_MAX_WORKSTATION_LEN];
->   	struct session_key auth_key;
->   	struct ntlmssp_auth *ntlmssp; /* ciphertext, flags, server challenge */
->   	enum securityEnum sectype; /* what security flavor was specified? */
-> @@ -1979,4 +1979,17 @@ static inline bool cifs_is_referral_server(struct cifs_tcon *tcon,
->   	return is_tcon_dfs(tcon) || (ref && (ref->flags & DFSREF_REFERRAL_SERVER));
->   }
->   
-> +static inline size_t ntlmssp_workstation_name_size(const struct cifs_ses *ses)
-> +{
-> +	if (WARN_ON_ONCE(!ses || !ses->server))
-> +		return 0;
-> +	/*
-> +	 * Make workstation name no more than 15 chars when using insecure dialects as some legacy
-> +	 * servers do require it during NTLMSSP.
-> +	 */
-> +	if (ses->server->dialect <= SMB20_PROT_ID)
-> +		return min_t(size_t, sizeof(ses->workstation_name), RFC1001_NAME_LEN_WITH_NULL);
-> +	return sizeof(ses->workstation_name);
-> +}
-> +
->   #endif	/* _CIFS_GLOB_H */
-> diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
-> index 42e14f408856..6ae5193fb562 100644
-> --- a/fs/cifs/connect.c
-> +++ b/fs/cifs/connect.c
-> @@ -2037,18 +2037,7 @@ cifs_set_cifscreds(struct smb3_fs_context *ctx, struct cifs_ses *ses)
->   		}
->   	}
->   
-> -	ctx->workstation_name = kstrdup(ses->workstation_name, GFP_KERNEL);
-> -	if (!ctx->workstation_name) {
-> -		cifs_dbg(FYI, "Unable to allocate memory for workstation_name\n");
-> -		rc = -ENOMEM;
-> -		kfree(ctx->username);
-> -		ctx->username = NULL;
-> -		kfree_sensitive(ctx->password);
-> -		ctx->password = NULL;
-> -		kfree(ctx->domainname);
-> -		ctx->domainname = NULL;
-> -		goto out_key_put;
-> -	}
-> +	strscpy(ctx->workstation_name, ses->workstation_name, sizeof(ctx->workstation_name));
->   
->   out_key_put:
->   	up_read(&key->sem);
-> @@ -2157,12 +2146,9 @@ cifs_get_smb_ses(struct TCP_Server_Info *server, struct smb3_fs_context *ctx)
->   		if (!ses->domainName)
->   			goto get_ses_fail;
->   	}
-> -	if (ctx->workstation_name) {
-> -		ses->workstation_name = kstrdup(ctx->workstation_name,
-> -						GFP_KERNEL);
-> -		if (!ses->workstation_name)
-> -			goto get_ses_fail;
-> -	}
-> +
-> +	strscpy(ses->workstation_name, ctx->workstation_name, sizeof(ses->workstation_name));
-> +
->   	if (ctx->domainauto)
->   		ses->domainAuto = ctx->domainauto;
->   	ses->cred_uid = ctx->cred_uid;
-> diff --git a/fs/cifs/fs_context.c b/fs/cifs/fs_context.c
-> index a92e9eec521f..fbb0e98c7d2c 100644
-> --- a/fs/cifs/fs_context.c
-> +++ b/fs/cifs/fs_context.c
-> @@ -312,7 +312,6 @@ smb3_fs_context_dup(struct smb3_fs_context *new_ctx, struct smb3_fs_context *ctx
->   	new_ctx->password = NULL;
->   	new_ctx->server_hostname = NULL;
->   	new_ctx->domainname = NULL;
-> -	new_ctx->workstation_name = NULL;
->   	new_ctx->UNC = NULL;
->   	new_ctx->source = NULL;
->   	new_ctx->iocharset = NULL;
-> @@ -327,7 +326,6 @@ smb3_fs_context_dup(struct smb3_fs_context *new_ctx, struct smb3_fs_context *ctx
->   	DUP_CTX_STR(UNC);
->   	DUP_CTX_STR(source);
->   	DUP_CTX_STR(domainname);
-> -	DUP_CTX_STR(workstation_name);
->   	DUP_CTX_STR(nodename);
->   	DUP_CTX_STR(iocharset);
->   
-> @@ -766,8 +764,7 @@ static int smb3_verify_reconfigure_ctx(struct fs_context *fc,
->   		cifs_errorf(fc, "can not change domainname during remount\n");
->   		return -EINVAL;
->   	}
-> -	if (new_ctx->workstation_name &&
-> -	    (!old_ctx->workstation_name || strcmp(new_ctx->workstation_name, old_ctx->workstation_name))) {
-> +	if (strcmp(new_ctx->workstation_name, old_ctx->workstation_name)) {
->   		cifs_errorf(fc, "can not change workstation_name during remount\n");
->   		return -EINVAL;
->   	}
-> @@ -814,7 +811,6 @@ static int smb3_reconfigure(struct fs_context *fc)
->   	STEAL_STRING(cifs_sb, ctx, username);
->   	STEAL_STRING(cifs_sb, ctx, password);
->   	STEAL_STRING(cifs_sb, ctx, domainname);
-> -	STEAL_STRING(cifs_sb, ctx, workstation_name);
->   	STEAL_STRING(cifs_sb, ctx, nodename);
->   	STEAL_STRING(cifs_sb, ctx, iocharset);
->   
-> @@ -1467,22 +1463,15 @@ static int smb3_fs_context_parse_param(struct fs_context *fc,
->   
->   int smb3_init_fs_context(struct fs_context *fc)
->   {
-> -	int rc;
->   	struct smb3_fs_context *ctx;
->   	char *nodename = utsname()->nodename;
->   	int i;
->   
->   	ctx = kzalloc(sizeof(struct smb3_fs_context), GFP_KERNEL);
-> -	if (unlikely(!ctx)) {
-> -		rc = -ENOMEM;
-> -		goto err_exit;
-> -	}
-> +	if (unlikely(!ctx))
-> +		return -ENOMEM;
->   
-> -	ctx->workstation_name = kstrdup(nodename, GFP_KERNEL);
-> -	if (unlikely(!ctx->workstation_name)) {
-> -		rc = -ENOMEM;
-> -		goto err_exit;
-> -	}
-> +	strscpy(ctx->workstation_name, nodename, sizeof(ctx->workstation_name));
->   
->   	/*
->   	 * does not have to be perfect mapping since field is
-> @@ -1555,14 +1544,6 @@ int smb3_init_fs_context(struct fs_context *fc)
->   	fc->fs_private = ctx;
->   	fc->ops = &smb3_fs_context_ops;
->   	return 0;
-> -
-> -err_exit:
-> -	if (ctx) {
-> -		kfree(ctx->workstation_name);
-> -		kfree(ctx);
-> -	}
-> -
-> -	return rc;
->   }
->   
->   void
-> @@ -1588,8 +1569,6 @@ smb3_cleanup_fs_context_contents(struct smb3_fs_context *ctx)
->   	ctx->source = NULL;
->   	kfree(ctx->domainname);
->   	ctx->domainname = NULL;
-> -	kfree(ctx->workstation_name);
-> -	ctx->workstation_name = NULL;
->   	kfree(ctx->nodename);
->   	ctx->nodename = NULL;
->   	kfree(ctx->iocharset);
-> diff --git a/fs/cifs/fs_context.h b/fs/cifs/fs_context.h
-> index e54090d9ef36..3a156c143925 100644
-> --- a/fs/cifs/fs_context.h
-> +++ b/fs/cifs/fs_context.h
-> @@ -170,7 +170,7 @@ struct smb3_fs_context {
->   	char *server_hostname;
->   	char *UNC;
->   	char *nodename;
-> -	char *workstation_name;
-> +	char workstation_name[CIFS_MAX_WORKSTATION_LEN];
->   	char *iocharset;  /* local code page for mapping to and from Unicode */
->   	char source_rfc1001_name[RFC1001_NAME_LEN_WITH_NULL]; /* clnt nb name */
->   	char target_rfc1001_name[RFC1001_NAME_LEN_WITH_NULL]; /* srvr nb name */
-> diff --git a/fs/cifs/misc.c b/fs/cifs/misc.c
-> index afaf59c22193..114810e563a9 100644
-> --- a/fs/cifs/misc.c
-> +++ b/fs/cifs/misc.c
-> @@ -95,7 +95,6 @@ sesInfoFree(struct cifs_ses *buf_to_free)
->   	kfree_sensitive(buf_to_free->password);
->   	kfree(buf_to_free->user_name);
->   	kfree(buf_to_free->domainName);
-> -	kfree(buf_to_free->workstation_name);
->   	kfree_sensitive(buf_to_free->auth_key.response);
->   	kfree(buf_to_free->iface_list);
->   	kfree_sensitive(buf_to_free);
-> diff --git a/fs/cifs/sess.c b/fs/cifs/sess.c
-> index 32f478c7a66d..1a0995bb5d90 100644
-> --- a/fs/cifs/sess.c
-> +++ b/fs/cifs/sess.c
-> @@ -714,9 +714,9 @@ static int size_of_ntlmssp_blob(struct cifs_ses *ses, int base_size)
->   	else
->   		sz += sizeof(__le16);
->   
-> -	if (ses->workstation_name)
-> +	if (ses->workstation_name[0])
->   		sz += sizeof(__le16) * strnlen(ses->workstation_name,
-> -			CIFS_MAX_WORKSTATION_LEN);
-> +					       ntlmssp_workstation_name_size(ses));
->   	else
->   		sz += sizeof(__le16);
->   
-> @@ -960,7 +960,7 @@ int build_ntlmssp_auth_blob(unsigned char **pbuffer,
->   
->   	cifs_security_buffer_from_str(&sec_blob->WorkstationName,
->   				      ses->workstation_name,
-> -				      CIFS_MAX_WORKSTATION_LEN,
-> +				      ntlmssp_workstation_name_size(ses),
->   				      *pbuffer, &tmp,
->   				      nls_cp);
->   
+Please correct me if I'm wrong. I think the driver needs to check if
+the urb has the correct type before submitting the urb, and this check
+should be done early.
+This driver uses endpoint_alloc() to allocate an endpoint and then
+uses this endpoint for transfers. And one of the arguments of
+endpoint_alloc() is 'ep_num'. So I want to iterate over the endpoints
+and exclude the unwanted address as follows:
+
+ if (ep->bEndpointAddress != ep_num)
+    continue;
+
+> And why do you care about the address of the endpoint?  If you know
+> that, then there's no need to walk them all and you can check that even
+> easier.
+
+I care about the address of the endpoint because it is an argument of
+endpoint_alloc(). I don't know a better solution to check the endpoint
+even if I know the address.
+
+Thanks,
+Zheyu Ma

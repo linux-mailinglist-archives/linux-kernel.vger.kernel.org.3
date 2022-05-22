@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFF91530408
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 17:57:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3365B530455
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 18:00:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348878AbiEVP5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 11:57:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36994 "EHLO
+        id S1349098AbiEVP71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 11:59:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348660AbiEVP5P (ORCPT
+        with ESMTP id S1348791AbiEVP57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 11:57:15 -0400
+        Sun, 22 May 2022 11:57:59 -0400
 Received: from herzl.nuvoton.co.il (unknown [212.199.177.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2057D3B296;
-        Sun, 22 May 2022 08:57:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6439F3B3C6;
+        Sun, 22 May 2022 08:57:47 -0700 (PDT)
 Received: from taln60.nuvoton.co.il (ntil-fw [212.199.177.25])
-        by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 24MFp0Oo031613;
-        Sun, 22 May 2022 18:51:00 +0300
+        by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 24MFp3eJ031624;
+        Sun, 22 May 2022 18:51:03 +0300
 Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
-        id 4D28F63A4E; Sun, 22 May 2022 18:51:00 +0300 (IDT)
+        id 7B97D63A4F; Sun, 22 May 2022 18:51:01 +0300 (IDT)
 From:   Tomer Maimon <tmaimon77@gmail.com>
 To:     avifishman70@gmail.com, tali.perry1@gmail.com, joel@jms.id.au,
         venture@google.com, yuenn@google.com, benjaminfair@google.com,
@@ -38,9 +38,9 @@ Cc:     soc@kernel.org, devicetree@vger.kernel.org,
         linux-serial@vger.kernel.org, linux-watchdog@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         Tomer Maimon <tmaimon77@gmail.com>
-Subject: [PATCH v1 04/19] tty: serial: 8250: Add NPCM845 UART support
-Date:   Sun, 22 May 2022 18:50:31 +0300
-Message-Id: <20220522155046.260146-5-tmaimon77@gmail.com>
+Subject: [PATCH v1 05/19] dt-bindings: watchdog: npcm: Add npcm845 compatible string
+Date:   Sun, 22 May 2022 18:50:32 +0300
+Message-Id: <20220522155046.260146-6-tmaimon77@gmail.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20220522155046.260146-1-tmaimon77@gmail.com>
 References: <20220522155046.260146-1-tmaimon77@gmail.com>
@@ -58,26 +58,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Nuvoton BMC NPCM845 UART support.
-The NPCM845 uses the same UART as the NPCM750.
+Add a compatible string for Nuvoton BMC NPCM845 watchdog.
 
 Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
 ---
- drivers/tty/serial/8250/8250_of.c | 1 +
- 1 file changed, 1 insertion(+)
+ .../devicetree/bindings/watchdog/nuvoton,npcm-wdt.txt          | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/8250/8250_of.c b/drivers/tty/serial/8250/8250_of.c
-index be8626234627..b155c596e614 100644
---- a/drivers/tty/serial/8250/8250_of.c
-+++ b/drivers/tty/serial/8250/8250_of.c
-@@ -333,6 +333,7 @@ static const struct of_device_id of_platform_serial_table[] = {
- 	{ .compatible = "ti,da830-uart", .data = (void *)PORT_DA830, },
- 	{ .compatible = "nuvoton,wpcm450-uart", .data = (void *)PORT_NPCM, },
- 	{ .compatible = "nuvoton,npcm750-uart", .data = (void *)PORT_NPCM, },
-+	{ .compatible = "nuvoton,npcm845-uart", .data = (void *)PORT_NPCM, },
- 	{ /* end of list */ },
- };
- MODULE_DEVICE_TABLE(of, of_platform_serial_table);
+diff --git a/Documentation/devicetree/bindings/watchdog/nuvoton,npcm-wdt.txt b/Documentation/devicetree/bindings/watchdog/nuvoton,npcm-wdt.txt
+index 9059f54dc023..866a958b8a2b 100644
+--- a/Documentation/devicetree/bindings/watchdog/nuvoton,npcm-wdt.txt
++++ b/Documentation/devicetree/bindings/watchdog/nuvoton,npcm-wdt.txt
+@@ -6,7 +6,8 @@ expiry.
+ 
+ Required properties:
+ - compatible      : "nuvoton,npcm750-wdt" for NPCM750 (Poleg), or
+-                    "nuvoton,wpcm450-wdt" for WPCM450 (Hermon).
++                    "nuvoton,wpcm450-wdt" for WPCM450 (Hermon), or
++                    "nuvoton,npcm845-wdt" for NPCM845 (Arbel).
+ - reg             : Offset and length of the register set for the device.
+ - interrupts      : Contain the timer interrupt with flags for
+                     falling edge.
 -- 
 2.33.0
 

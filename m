@@ -2,146 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A6995304D2
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 19:06:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFAF75304E8
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 19:17:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349480AbiEVRGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 13:06:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37210 "EHLO
+        id S1349669AbiEVRQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 13:16:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiEVRGq (ORCPT
+        with ESMTP id S232802AbiEVRQU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 13:06:46 -0400
-Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32A203A73D;
-        Sun, 22 May 2022 10:06:43 -0700 (PDT)
-Received: by mail.hallyn.com (Postfix, from userid 1001)
-        id 7B8C23F4; Sun, 22 May 2022 12:06:41 -0500 (CDT)
-Date:   Sun, 22 May 2022 12:06:41 -0500
-From:   "Serge E. Hallyn" <serge@hallyn.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        jpenumak@redhat.com
-Subject: Re: [PATCH v12 10/26] ima: Switch to lazy lsm policy updates for
- better performance
-Message-ID: <20220522170641.GA24041@mail.hallyn.com>
-References: <20220420140633.753772-1-stefanb@linux.ibm.com>
- <20220420140633.753772-11-stefanb@linux.ibm.com>
+        Sun, 22 May 2022 13:16:20 -0400
+Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ED5013E00;
+        Sun, 22 May 2022 10:16:16 -0700 (PDT)
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id 24MHFw3s024765;
+        Mon, 23 May 2022 02:15:58 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 24MHFw3s024765
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1653239758;
+        bh=iJUQ11zdibvEKML1MoaBG63neGvxnn+10KFJyibTf7w=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=B4fFu8cukgve1ap2HSFu/zK9ZKa0IO6x2O3sFN4Xgne3SmGdYp/Cwn2J0KN2Fr2+v
+         vswDVXXi+gfrSowdrbrW7fm4vq+q0edVZukOWju5bHFui1E5pE5JS+J/PquoG8Mshl
+         bfqJ8TBLiT5LsCkN4U5b6kmKrwGpGorXoKP901TjdzieEafo/QvNESyitHxe7Nmrqu
+         TaOsWdmXOXI/FQQVBSlTH5TZ5DHuqZ2hlVpXgBcK7AQpPlTqeUBneRrAYfErbDekKU
+         JWGJIrIf2JGcwrb1cdzuLmQxpNmxJcQ8POo8oZwK8aYS9KHzP9MRs/aagXoJuF40pH
+         3BGPj6hkEZhhg==
+X-Nifty-SrcIP: [209.85.216.50]
+Received: by mail-pj1-f50.google.com with SMTP id oe17-20020a17090b395100b001df77d29587so15534658pjb.2;
+        Sun, 22 May 2022 10:15:58 -0700 (PDT)
+X-Gm-Message-State: AOAM533DRXsn1szpLeIOX1rUsa4ARzt4ZVPuFEIG+QKSkNKLaeG7lvoA
+        h3MzyoNt6fFb/recYhEgHiBRcrgkMp+LFsKCBFE=
+X-Google-Smtp-Source: ABdhPJyykpXi7s5uskolfZaSKiw35bTUvst8h7wiyAxDIQaxc0v050U9CgKdvdYtN8pvyfJgabdVf0hLsDvSHfbVMIs=
+X-Received: by 2002:a17:90b:1e50:b0:1e0:3a08:9b12 with SMTP id
+ pi16-20020a17090b1e5000b001e03a089b12mr4350049pjb.119.1653239757627; Sun, 22
+ May 2022 10:15:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220420140633.753772-11-stefanb@linux.ibm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <c25d7ea7-4f72-4a2b-d8c3-d317e64fcbbb@collabora.com>
+In-Reply-To: <c25d7ea7-4f72-4a2b-d8c3-d317e64fcbbb@collabora.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 23 May 2022 02:15:20 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATL4nMmKgrjS8meavnpn=HisD30QxuPUKDqtWWgbGcSZw@mail.gmail.com>
+Message-ID: <CAK7LNATL4nMmKgrjS8meavnpn=HisD30QxuPUKDqtWWgbGcSZw@mail.gmail.com>
+Subject: Re: [Bug Report] - kselftest build fails if output directory is first
+ level sub-directory
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        KERNEL SELFTEST FRAMEWORK <linux-kselftest@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "kernelci@groups.io" <kernelci@groups.io>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 10:06:17AM -0400, Stefan Berger wrote:
-> Instead of calling ima_lsm_update_rules() for every namespace upon
-> invocation of the ima_lsm_policy_change() notification function,
-> only set a flag in a namespace and defer the call to
-> ima_lsm_update_rules() to before the policy is accessed the next time,
-> which is either in ima_policy_start(), when displaying the policy via
-> the policy file in securityfs, or when calling ima_match_policy().
-> 
-> The performance numbers before this change for a test enabling
-> and disabling an SELinux module was as follows with a given number
-> of IMA namespaces that each a have a policy containing 2 rules
-> with SELinux labels:
-> 
-> 2: ~9s
-> 192: ~11s
-> 1920: ~80s
-> 
-> With this change:
-> 
-> 2: ~6.5s
-> 192: ~7s
-> 1920: ~8.3s
-> 
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+On Sat, May 21, 2022 at 3:44 PM Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+>
+> Hello,
+>
+> kselftest can be built using the kernel's top most Makefile without
+> using kselftest's Makefile directly. But there is bug in the top most
+> Makefile. The build fails if the specified output directory is first
+> level sub-directory. Here is a example to reproduce this bug:
+>
+> make kselftest-all O=build
+>
+> "The Make is working in a wrong directory, that is why the relative path
+> does not work." Masahiro Yamada. Feel free to fix it if someone pin the bug.
+>
+> It should be noted that the build works in some other combinations:
+> make kselftest-all (works)
+> make kselftest-all O=/tmp (works)
+> make kselftest-all O=build/build2 (works)
+>
+> My unsuccessful attempt to fix this bug can be found here:
+> https://lore.kernel.org/lkml/20220223191016.1658728-1-usama.anjum@collabora.com/
+>
+> Thanks,
+> Muhammad Usama Anjum
 
-Acked-by: Serge Hallyn <serge@hallyn.com>
 
-> ---
->  security/integrity/ima/ima.h        |  4 ++++
->  security/integrity/ima/ima_policy.c | 15 ++++++++++++++-
->  2 files changed, 18 insertions(+), 1 deletion(-)
-> 
-> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-> index c68b5117d034..5bf7f080c2be 100644
-> --- a/security/integrity/ima/ima.h
-> +++ b/security/integrity/ima/ima.h
-> @@ -123,6 +123,10 @@ struct ima_h_table {
->  };
->  
->  struct ima_namespace {
-> +	unsigned long ima_ns_flags;
-> +/* Bit numbers for above flags; use BIT() to get flag */
-> +#define IMA_NS_LSM_UPDATE_RULES		0
-> +
->  	/* policy rules */
->  	struct list_head ima_default_rules; /* Kconfig, builtin & arch rules */
->  	struct list_head ima_policy_rules;  /* arch & custom rules */
-> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-> index 23c559c8fae9..59e4ae5a6361 100644
-> --- a/security/integrity/ima/ima_policy.c
-> +++ b/security/integrity/ima/ima_policy.c
-> @@ -228,6 +228,14 @@ static struct ima_rule_entry critical_data_rules[] __ro_after_init = {
->  	{.action = MEASURE, .func = CRITICAL_DATA, .flags = IMA_FUNC},
->  };
->  
-> +static void ima_lsm_update_rules(struct ima_namespace *ns);
-> +
-> +static inline void ima_lazy_lsm_update_rules(struct ima_namespace *ns)
-> +{
-> +	if (test_and_clear_bit(IMA_NS_LSM_UPDATE_RULES, &ns->ima_ns_flags))
-> +		ima_lsm_update_rules(ns);
-> +}
-> +
->  static int ima_policy __initdata;
->  
->  static int __init default_measure_policy_setup(char *str)
-> @@ -478,7 +486,8 @@ int ima_lsm_policy_change(struct notifier_block *nb, unsigned long event,
->  		return NOTIFY_DONE;
->  
->  	ns = container_of(nb, struct ima_namespace, ima_lsm_policy_notifier);
-> -	ima_lsm_update_rules(ns);
-> +
-> +	set_bit(IMA_NS_LSM_UPDATE_RULES, &ns->ima_ns_flags);
->  
->  	return NOTIFY_OK;
->  }
-> @@ -705,6 +714,8 @@ int ima_match_policy(struct ima_namespace *ns,
->  	if (template_desc && !*template_desc)
->  		*template_desc = ima_template_desc_current();
->  
-> +	ima_lazy_lsm_update_rules(ns);
-> +
->  	rcu_read_lock();
->  	ima_rules_tmp = rcu_dereference(ns->ima_rules);
->  	list_for_each_entry_rcu(entry, ima_rules_tmp, list) {
-> @@ -1907,6 +1918,8 @@ void *ima_policy_start(struct seq_file *m, loff_t *pos)
->  	struct ima_rule_entry *entry;
->  	struct list_head *ima_rules_tmp;
->  
-> +	ima_lazy_lsm_update_rules(ns);
-> +
->  	rcu_read_lock();
->  	ima_rules_tmp = rcu_dereference(ns->ima_rules);
->  	list_for_each_entry_rcu(entry, ima_rules_tmp, list) {
-> -- 
-> 2.34.1
+This problem starts from the bad design of the kselftest framework.
+I did some research before. I think I can fix the root cause but
+currently I do not have enough time to do it.
+
+
+KBUILD_ABS_SRCTREE is a user-interface to request
+Kbuild to use the absolute path.
+If it is forced in the top Makefile, users have no way to
+negate it.
+It is true that using the absolute path is a quick work-around
+because you do not need to care about the current working directory.
+
+If you insist on it,  just go ahead.  It is just two line changes.
+Once the issue is fixed in a better way, your patch can be reverted easily.
+
+
+
+-- 
+Best Regards
+Masahiro Yamada

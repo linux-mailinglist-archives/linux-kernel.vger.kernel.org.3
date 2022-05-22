@@ -2,187 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE16C530164
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 08:58:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12B1753016C
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 09:04:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234756AbiEVG44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 02:56:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58932 "EHLO
+        id S239854AbiEVHEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 03:04:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231375AbiEVG4v (ORCPT
+        with ESMTP id S234574AbiEVHE2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 02:56:51 -0400
-Received: from mail-vk1-xa30.google.com (mail-vk1-xa30.google.com [IPv6:2607:f8b0:4864:20::a30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 422B03A734;
-        Sat, 21 May 2022 23:56:48 -0700 (PDT)
-Received: by mail-vk1-xa30.google.com with SMTP id t12so5797009vkt.5;
-        Sat, 21 May 2022 23:56:48 -0700 (PDT)
+        Sun, 22 May 2022 03:04:28 -0400
+Received: from EUR02-AM5-obe.outbound.protection.outlook.com (mail-eopbgr00132.outbound.protection.outlook.com [40.107.0.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43D842E0BE;
+        Sun, 22 May 2022 00:04:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mcOjuuHWKlFqugi+9ZSgMXovlWWkoPxecG22eRjeo8RVdEeDnsZQo+gLNheQlMUdqXlLAis5xSJGwZUPLufXOh4nDLcIqSRIBpCVGXDBqMJkJp39jzcr7jf2lfSLTLpobwPHlbX3UTr2A/TGlBLjexIH56TTSszrdAikf8JFlct/tRP8cJD/e/6U1QDaSQ7gsmcP81lSKXULeW43B00x1SxS70ByAzstgUTSR1Fh/mju6vqGaHp5daYPnb5FbYb/AKAds/s2TTK0A9pKiQpmSMZ/+9dcfa1YbKMg37xnZR8IdteImUmLUwt1I12QXq2jPgzxI0pWzXTcp3gpEGQEhQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5y6qHCdnPPHrNn51qWjmdQSTTIaKZdRXb1ZaNLAbxBQ=;
+ b=LajIhABhB/4gO4pRrSWZqsaPH8LafPtubeQn7urQzwyx2LBBqIspbxp2e6Al0U7Qw4njqgOGAbgPHDZkFeDkorED3UDlfVTlzCjtMDSHSY7yuJc0FAzr+hacYeSIVwBpVligFXypQrCeqCTKoaP0UAqlLUiZw/D9w359Opwdg1pp/XtQ72nDCDjwtX9ScYiKtnzDGy7z9Qq7iPCwhd7g3hSmKyrKG7/3wpXzNJqd4kWgtDzdBnbMFtN6gqp8oUfrafoZc6nq4vumfOzPC8xEmSMAZx6E4CplXldmFiTVbLHutOxnchFN7Vgsy3Oukz1MFUHDP/60cDZ/+Dj5gommLA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 193.8.40.94) smtp.rcpttodomain=kernel.org
+ smtp.mailfrom=leica-geosystems.com.cn; dmarc=pass (p=quarantine sp=quarantine
+ pct=100) action=none header.from=leica-geosystems.com.cn; dkim=none (message
+ not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=qDo9UUCdw4SMj2aM3ERRiVJpDYvO4JgoJi8WdLoZ0lU=;
-        b=dl7Ft5A/2X6nUPIBbpqjdW58KNi+xMUoc3zBFTctHHzVONK2CleyYzTWzBi/tDqjiU
-         ngBC6pjX9j2B8a4/cHW3x51cqt96agpMOEbL25qEyOhW8WoeaIi4CaqNhxFMoknQqmgX
-         Hb92DxvrvrrhyWTQvtBtnpikiCAPoxZYtU0r1Er+KQ7pW9Di4NzF3qO/EB3Fgv6DRroc
-         tdToxaiNPp9FWXeYERnMhDVYlPxaO29Q4rdHUVWACuFXi7QauT/ZgeUE6UXika1MryAS
-         w+yaEXyIB1vEU7MFvH4ifImAxayMZvQFqJ3jRsn1yM+6XxwcfZA/t9Iad9SzKx1Ftvt4
-         aMmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=qDo9UUCdw4SMj2aM3ERRiVJpDYvO4JgoJi8WdLoZ0lU=;
-        b=MPvx5bkpKzBmO5MdmKrPE5RGFFaqBrguKM/JpaxoJqVkUJc3gAqEe9mk5OCRBN8VLE
-         PSDWJ6U9QPE8+y0QdoRNJp9dhNcQdd4rvIFUqf6QxfVc9FTlxlkYM4zcxDh5/1my8tQw
-         6MvWajGXrfjW0xnGXhaC0ThFixZPi279kGN/Nlsa4ugK0RyptzVolNQXfHKhQd2SEM0B
-         /sGqvLBcCbMshFphtUkfxaEv3f58WPNzczAg2gOIAOqlJCTnuq0nzpOoZqVlTci0ADyD
-         RDXYGVlSIBDGYbFmKQD0DqnenxJnKy2O/dTzVXX1lgXN7Kcb4G9TMgCGnd4e8/sMTKam
-         p9yw==
-X-Gm-Message-State: AOAM5339TDhVZDsfUPzFJS7jXu9phK4brhqpF3CjeKGMY6wzuupz6NVr
-        D9F48KHuRwpuAL+TZJZWXgcCdIpteCa+CWD1fgch65Yghyp/OA==
-X-Google-Smtp-Source: ABdhPJzSFsR0sEXSSM5qtNrvyCk4BshQuchdzAr1Kwogd9LEeS00mSfb8t/DqERH2KTXWr8GoqbKL8OpiYoYlSFsncY=
-X-Received: by 2002:a1f:1d11:0:b0:357:733d:a6d with SMTP id
- d17-20020a1f1d11000000b00357733d0a6dmr1374013vkd.26.1653202607265; Sat, 21
- May 2022 23:56:47 -0700 (PDT)
+ d=leica-geosystems.com.cn; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5y6qHCdnPPHrNn51qWjmdQSTTIaKZdRXb1ZaNLAbxBQ=;
+ b=kTvdQfNGhpRgC2+CqpiS+F08EqiMgZQCN/5LbXuxwq6iCUKfJUCVo5g6vO2HtxFtztNIKORTdSqNgVu+dWNRqjyqPCy78rtXvksN0hagpc/F9UU95Hc9qdBa59ryF76IIHxCvad3qD0ptBiCsv2oWYVGSxciLHXxCVFxY5WskzU=
+Received: from AM0PR10CA0119.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:208:e6::36)
+ by DB7PR06MB5321.eurprd06.prod.outlook.com (2603:10a6:10:76::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.17; Sun, 22 May
+ 2022 07:04:23 +0000
+Received: from VE1EUR02FT008.eop-EUR02.prod.protection.outlook.com
+ (2603:10a6:208:e6:cafe::39) by AM0PR10CA0119.outlook.office365.com
+ (2603:10a6:208:e6::36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.13 via Frontend
+ Transport; Sun, 22 May 2022 07:04:23 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 193.8.40.94)
+ smtp.mailfrom=leica-geosystems.com.cn; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=leica-geosystems.com.cn;
+Received-SPF: Pass (protection.outlook.com: domain of leica-geosystems.com.cn
+ designates 193.8.40.94 as permitted sender) receiver=protection.outlook.com;
+ client-ip=193.8.40.94; helo=aherlnxbspsrv01.lgs-net.com; pr=C
+Received: from aherlnxbspsrv01.lgs-net.com (193.8.40.94) by
+ VE1EUR02FT008.mail.protection.outlook.com (10.152.12.72) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5273.14 via Frontend Transport; Sun, 22 May 2022 07:04:21 +0000
+From:   LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
+To:     jic23@kernel.org, lars@metafoo.de, robh+dt@kernel.org,
+        tomas.melin@vaisala.com, andy.shevchenko@gmail.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Qing-wu.Li@leica-geosystems.com.cn
+Cc:     linux-iio@vger.kernel.org
+Subject: [PATCH V7 0/5] iio: accel: sca3300: add compatible for scl3300
+Date:   Sun, 22 May 2022 07:04:14 +0000
+Message-Id: <20220522070419.409556-1-Qing-wu.Li@leica-geosystems.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220517101142.28421-1-warp5tw@gmail.com> <20220517101142.28421-9-warp5tw@gmail.com>
- <Yoh/nEYPu++LZSvb@shikoro>
-In-Reply-To: <Yoh/nEYPu++LZSvb@shikoro>
-From:   Tali Perry <tali.perry1@gmail.com>
-Date:   Sun, 22 May 2022 09:56:36 +0300
-Message-ID: <CAHb3i=uKwe1RdvzQA=oO6zNmEvyA_awx09+C2w8kbRq_NGi54w@mail.gmail.com>
-Subject: Re: [PATCH v5 08/10] i2c: npcm: Remove own slave addresses 2:10
-To:     Wolfram Sang <wsa@kernel.org>, Tyrone Ting <warp5tw@gmail.com>,
-        avifishman70@gmail.com, Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        jarkko.nikula@linux.intel.com, semen.protsenko@linaro.org,
-        rafal@milecki.pl, sven@svenpeter.dev, jsd@semihalf.com,
-        jie.deng@intel.com, lukas.bulwahn@gmail.com, arnd@arndb.de,
-        olof@lixom.net, Tali Perry <tali.perry@nuvoton.com>,
-        Avi Fishman <Avi.Fishman@nuvoton.com>,
-        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
-        kfting@nuvoton.com, OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: 1799c782-1112-4999-e8c9-08da3bc14c13
+X-MS-TrafficTypeDiagnostic: DB7PR06MB5321:EE_
+X-Microsoft-Antispam-PRVS: <DB7PR06MB53212465DAA2C1BA4699DD4ED7D59@DB7PR06MB5321.eurprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: nDMQI6UAsZW56i0+zk3thhZRYygb+2ObVVqsYOlWErPCP0pSdFFJ7uLBx1cvcSZ6z/n1tcjecuJxNbCg5KmeRZk41k/EJsCzml+PdjC1chDH+iaXKVVh/tyQw4OLGQS/hQdTyxP7keafMSP+uG0HWMPNCd9EYfADHusjKCMGfnyCdvU464XDL0K/yHkbQeLR9fqu5RLPZO9rHYMwV+VlDiPL5UXkFyKmm6spc5sIJY4+k+D+E5oIDguptftMBZrspO5iZ1GNe5YQezK6PGeUrudz+5kgdmm3V7bCnFfsN/oviK+rSdlELA5Aw6T8enIKvIlasx6wC4L9m04O2x55aG8xnfTh/IVhX3ENW15E2qal+vXoabUzD3zz6uufr0fO04mTjJ8Y5ylQlYisYNMSO6Fc1Km80960Zxkui+Rr0HWurDT3ikyeZcMvEYMAncu07fv+tmcus45rM94rnnzcuONYNXjJb3+QbCHnhiyzDrEmh6/AIMM2HhvrKcoFOWMyFEorCKKS2AYuf6QyJVNOQIM143hTUOJpXPpM5s4jJkIdlRW9PETQTOBgomi8sAaEkqma2BovkavtkLZ30mlZHXZgrkz2jHFewvMuSHPVDRz4e1+pIHnRWxh0E0VB+H11yv2fwJFG8LJ/g0juQhwU4zgAC/rXv7NNLOSyEAXMze5b+Z1XUpP1UJwW6wYBRUOD
+X-Forefront-Antispam-Report: CIP:193.8.40.94;CTRY:CH;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:aherlnxbspsrv01.lgs-net.com;PTR:ahersrvdom50.leica-geosystems.com;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(81166007)(8936002)(70206006)(186003)(47076005)(70586007)(8676002)(4326008)(2616005)(956004)(336012)(1076003)(508600001)(83380400001)(356005)(118246002)(82310400005)(316002)(6506007)(36756003)(36736006)(4744005)(6666004)(6486002)(40460700003)(36860700001)(26005)(86362001)(5660300002)(6512007)(2906002);DIR:OUT;SFP:1102;
+X-OriginatorOrg: leica-geosystems.com.cn
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 May 2022 07:04:21.5259
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1799c782-1112-4999-e8c9-08da3bc14c13
+X-MS-Exchange-CrossTenant-Id: 1b16ab3e-b8f6-4fe3-9f3e-2db7fe549f6a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=1b16ab3e-b8f6-4fe3-9f3e-2db7fe549f6a;Ip=[193.8.40.94];Helo=[aherlnxbspsrv01.lgs-net.com]
+X-MS-Exchange-CrossTenant-AuthSource: VE1EUR02FT008.eop-EUR02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR06MB5321
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Sat, May 21, 2022 at 8:58 AM Wolfram Sang <wsa@kernel.org> wrote:
->
-> > NPCM can support up to 10 own slave addresses. In practice, only one
-> > address is actually being used. In order to access addresses 2 and above,
-> > need to switch register banks. The switch needs spinlock.
-> > To avoid using spinlock for this useless feature removed support of SA >=
-> > 2. Also fix returned slave event enum.
->
-> Is the spinlock contention so high? The code paths do not really look
-> like hot paths to me. A bit sad to see this feature go.
->
+The current driver support sca3300 only, modified to support SCL3300.
+Verified with SCL3300 on IMX8MM.
 
-The module has two seperate banks, accessible with a bit change. The
-first one is used
-for most of the runtime operations. Second bank is used mostly during init.
-Unfortunetly, the first two own slave addresses are in the first bank
-and the other
-8 are in the second bank.
+SCL3300 is a three-axis accelerometer sensor with angle output, 
+the change adds the support of scl3300 and inclination data output.
 
-Every time the module switchs from master to slave mode, those
-registers are accessed.
-In theory, a spinlock can be used to protect those registers.
-In practice, none of our customers use the extra addresses.
-In fact they only need one.
 
-The driver also does not allow you to register more then one slave per bus,
-so this HW feature was not fully available to begin with.
+Changes in v7: 
+  - Add comments inline for non-obvious code.
+  - Documentation for sca3300_data change.
+  - Small refactor function sca3300_set_frequency.
 
-So when we encounter a deadlock with this spinlock we decided to get rid of this
-unused feature and get both a stable fix for the issue + performance benefits.
-We work closely with all our customers so we know that this HW
-feature is useless to them.
 
-> >  static const int npcm_i2caddr[I2C_NUM_OWN_ADDR] = {
-> >       NPCM_I2CADDR1, NPCM_I2CADDR2, NPCM_I2CADDR3, NPCM_I2CADDR4,
-> >       NPCM_I2CADDR5, NPCM_I2CADDR6, NPCM_I2CADDR7, NPCM_I2CADDR8,
->
-> Why do we keep this array if we drop the support?
->
-This array represents the HW so we left it as-is. But I agree it can
-be shortened to one\two.
+LI Qingwu (5):
+  dt-bindings: iio: accel: sca3300: Document murata,scl3300
+  iio: accel: sca3300: add define for temp channel for reuse.
+  iio: accel: sca3300: modified to support multi chips
+  iio: accel: sca3300: Add support for SCL3300
+  iio: accel: sca3300: Add inclination channels
 
-> > @@ -604,8 +602,7 @@ static int npcm_i2c_slave_enable(struct npcm_i2c *bus, enum i2c_addr addr_type,
-> >                       i2cctl1 &= ~NPCM_I2CCTL1_GCMEN;
-> >               iowrite8(i2cctl1, bus->reg + NPCM_I2CCTL1);
-> >               return 0;
-> > -     }
-> > -     if (addr_type == I2C_ARP_ADDR) {
-> > +     } else if (addr_type == I2C_ARP_ADDR) {
->
+ .../bindings/iio/accel/murata,sca3300.yaml    |   1 +
+ drivers/iio/accel/sca3300.c                   | 323 +++++++++++++++---
+ 2 files changed, 269 insertions(+), 55 deletions(-)
 
-addr_type type can be one of several options.
-The code was
-if (addr_type is 1st option)
-...
-if (addr_type is 2st option)
-...
-etc.
+-- 
+2.25.1
 
-Adding that else is more accurate, but ommiting this change works as well.
-
-> I might be wrong but this looks like a seperate change?
->
-> > @@ -924,11 +918,15 @@ static int npcm_i2c_slave_get_wr_buf(struct npcm_i2c *bus)
-> >       for (i = 0; i < I2C_HW_FIFO_SIZE; i++) {
-> >               if (bus->slv_wr_size >= I2C_HW_FIFO_SIZE)
-> >                       break;
-> > -             i2c_slave_event(bus->slave, I2C_SLAVE_READ_REQUESTED, &value);
-> > +             if (bus->state == I2C_SLAVE_MATCH) {
-> > +                     i2c_slave_event(bus->slave, I2C_SLAVE_READ_REQUESTED, &value);
-> > +                     bus->state = I2C_OPER_STARTED;
-> > +             } else {
-> > +                     i2c_slave_event(bus->slave, I2C_SLAVE_READ_PROCESSED, &value);
-> > +             }
-> >               ind = (bus->slv_wr_ind + bus->slv_wr_size) % I2C_HW_FIFO_SIZE;
-> >               bus->slv_wr_buf[ind] = value;
-> >               bus->slv_wr_size++;
-> > -             i2c_slave_event(bus->slave, I2C_SLAVE_READ_PROCESSED, &value);
-> >       }
-> >       return I2C_HW_FIFO_SIZE - ret;
-> >  }
-> > @@ -976,7 +974,6 @@ static void npcm_i2c_slave_xmit(struct npcm_i2c *bus, u16 nwrite,
-> >       if (nwrite == 0)
-> >               return;
-> >
-> > -     bus->state = I2C_OPER_STARTED;
-> >       bus->operation = I2C_WRITE_OPER;
->
-> This is definately a seperate change!
->
-
-OK, we will move the last two to a separate patch. BTW, this change
-appears in the title as well.
-
-But now I'm not sure: if you already apply for-next patches [1:7], and
-we change patch [8:10]
-do we need to re-submit [1:7]?
-
-> All the best!
-
-Thanks, Wolfram, for your review!
-Much appreciated
-
-Tali

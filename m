@@ -2,48 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA24C53037A
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 16:19:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FABF53037F
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 16:22:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346775AbiEVOTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 10:19:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32826 "EHLO
+        id S1346832AbiEVOWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 10:22:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240935AbiEVOTD (ORCPT
+        with ESMTP id S239031AbiEVOWZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 10:19:03 -0400
-Received: from smtp.smtpout.orange.fr (smtp01.smtpout.orange.fr [80.12.242.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B16101570C
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 07:18:59 -0700 (PDT)
-Received: from pop-os.home ([86.243.180.246])
-        by smtp.orange.fr with ESMTPA
-        id smQ0ncTUqeg3psmQ1nn8Nq; Sun, 22 May 2022 16:18:57 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 22 May 2022 16:18:57 +0200
-X-ME-IP: 86.243.180.246
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     dan.carpenter@oracle.com, Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Shuah Khan <shuah@kernel.org>,
-        David Vernet <void@manifault.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH] cgroup: Fix an error handling path in alloc_pagecache_max_30M()
-Date:   Sun, 22 May 2022 16:18:51 +0200
-Message-Id: <628312312eb40e0e39463a2c06415fde5295c716.1653229120.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Sun, 22 May 2022 10:22:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD09A3968C
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 07:22:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 80462B80AE9
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 14:22:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BE5DC385AA;
+        Sun, 22 May 2022 14:22:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653229341;
+        bh=5jwl99JxBIUjh3Qh5dWJ3BCJiWyb5trvHhe0CaZLHdo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=r8DCVZq+h53FFG2HiBhtx6fqFfPoWp9FQpIEVSnY1xL1bCwYER3Gg3PI3DsnioD3T
+         debkWl9utxa5WSxuyCgoLVAVEop78dj95Cgn23Dg60wKypGmWxFLTPqZoawfLnAa4o
+         5knxwUZVEKv4BG5uqbFN23+se71IsgnPfQRwDGbwapWWFJyR+dshfvKhFChAWqL5IT
+         17lHuQ0RD8TceaqJz2a6Qlz+hZBtqZ5Ns27AWr8webq75EIaYpiNXBA5f56MBQWIYz
+         6CexGKbnp8TzkhbHJqSzUF2SD7eDZQrAE3GicNZyUHnWEWV7Ij2MU2NPBV0Zkgdlk1
+         sGefprsLXYr3Q==
+Date:   Sun, 22 May 2022 23:22:16 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Jeff Xie <xiehuan09@gmail.com>
+Cc:     rostedt@goodmis.org, mingo@redhat.com, mhiramat@kernel.org,
+        zanussi@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v10 2/4] trace/objtrace: Get the value of the object
+Message-Id: <20220522232216.bb1451fb6efc18c2bccc8d09@kernel.org>
+In-Reply-To: <20220512170008.1301613-3-xiehuan09@gmail.com>
+References: <20220512170008.1301613-1-xiehuan09@gmail.com>
+        <20220512170008.1301613-3-xiehuan09@gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,28 +56,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the first goto is taken, 'fd' is not opened yet (and is un-initialized).
-So a direct return is safer.
+Hi Jeff,
 
-Fixes: c1a31a2f7a9c ("cgroup: fix racy check in alloc_pagecache_max_30M() helper function")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- tools/testing/selftests/cgroup/test_memcontrol.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Fri, 13 May 2022 01:00:06 +0800
+Jeff Xie <xiehuan09@gmail.com> wrote:
 
-diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
-index c3d0d5f7b19c..8833359556f3 100644
---- a/tools/testing/selftests/cgroup/test_memcontrol.c
-+++ b/tools/testing/selftests/cgroup/test_memcontrol.c
-@@ -448,7 +448,7 @@ static int alloc_pagecache_max_30M(const char *cgroup, void *arg)
- 	high = cg_read_long(cgroup, "memory.high");
- 	max = cg_read_long(cgroup, "memory.max");
- 	if (high != MB(30) && max != MB(30))
--		goto cleanup;
-+		return -1;
- 
- 	fd = get_temp_fd();
- 	if (fd < 0)
+[...]
+> @@ -175,9 +271,27 @@ trace_object_trigger(struct event_trigger_data *data,
+>  
+>  	field = obj_data->field;
+>  	memcpy(&obj, rec + field->offset, sizeof(obj));
+> -	set_trace_object(obj, tr);
+> +	/* set the offset from the special object and the type size of the value*/
+> +	set_trace_object(obj, obj_data->obj_offset,
+> +			obj_data->obj_value_type_size, tr);
+>  }
+>  
+> +static const struct objtrace_fetch_type objtrace_fetch_types[] = {
+> +	{"u8", 1},
+> +	{"s8", 1},
+> +	{"x8", 1},
+> +	{"u16", 2},
+> +	{"s16", 2},
+> +	{"x16", 2},
+> +	{"u32", 4},
+> +	{"s32", 4},
+> +	{"x32", 4},
+> +	{"u64", 8},
+> +	{"s64", 8},
+> +	{"x64", 8},
+
+Hmm, as far as I can see, you don't distinguish the prefix 'u','s','x'.
+If so, please support only 'x' at this moment. kprobe events supports
+those types, and it distinguishes the types when printing the logged
+data. E.g. 's16' shows '-1' for 0xffff, but 'x16' shows '0xffff'.
+You can add another patch to support such different types afterwards.
+
+> +	{}
+
+If this array is null terminated, please explictly do that, like
+
+	{NULL, 0},
+
+for readability.
+
+Thank you,
+
 -- 
-2.34.1
-
+Masami Hiramatsu (Google) <mhiramat@kernel.org>

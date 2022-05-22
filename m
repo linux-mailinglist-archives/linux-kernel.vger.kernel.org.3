@@ -2,91 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3846D530537
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 20:38:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99146530549
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 20:52:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239758AbiEVSh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 14:37:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37410 "EHLO
+        id S1350016AbiEVSwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 14:52:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232321AbiEVSh4 (ORCPT
+        with ESMTP id S1348836AbiEVSwb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 14:37:56 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E7938D9F;
-        Sun, 22 May 2022 11:37:55 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id i66so15562557oia.11;
-        Sun, 22 May 2022 11:37:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=HgD4/UV0T4CMdJdyNWhiVY1tdpZnMQ26PVn3Eujh3Yc=;
-        b=WvehMKF8LnI95IfxYZ3GUOdQRX5ypxSVD5hkUqgbmXIFNBWFP/viptKfu6hDaxaHvP
-         ixG+aK2pOylKSsacX4PUSPQcVe6aNVmFNTDTPg+uH5VBsHLhXvcLMVm/SFlPBaWUc1NF
-         vGtw8fm+Wyt5a2xeEneYdi3N0E4AcTVFCmmVYznxN4dx0Vkuqzj3mllAUaFlCaLvnih8
-         xKHTb9d8Dex4JryrA4EXUSb4nwAJMlQ8dPPkoVR4VPjKERGCHbP94TTVcBzZI4MjaWCk
-         Yz91uOaOnvnsVXodugamnNWQdoqy5XkwSBs6QxgNKGblJgfMiFx6+MuX3YBEY9xvCF1Z
-         t17Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=HgD4/UV0T4CMdJdyNWhiVY1tdpZnMQ26PVn3Eujh3Yc=;
-        b=VerQskb1RzOGpTmMxWQuPtugZkOtopqYfVjZBxK6WsBOvEu8qCaTgyyhKHQuzQBJcm
-         fxHQGA0iFBgWDYBEVMn6r7nBbOLMg8pne9Vt/tbwlXAuG5hkXo20iidC/Cq5vcwuNhpS
-         ARMEoWT8+XsxWBOOQ3P/eM610zr1BWecam1FeUxcVJtXRMzYcWltYczCiEe4o9LBTDEv
-         O0kV5iuJwrvLUt2uzjS+3yzjz9sxGLqVkUrYrsbofdEFV0d6cEMYn11lZ8SzuCeRREFR
-         9jGz1cNi1YELSgtwx7MyX1yeoYhpObcn2iO7tOd7ZX2nOH/Gk4I7AKMNXcnNmkXJu6o3
-         tq6Q==
-X-Gm-Message-State: AOAM531s/AFKZ55VfOq2nxrZAvSg/t+6EUL2oY95E9qg5eBZFxOjYFOo
-        84XxVpULVOqojFbY4CCHod0=
-X-Google-Smtp-Source: ABdhPJxO3FfL9cUMqhzrHkeyOF9WvfIKh2UANKhgd3xSmIY9DYKejRkV3FdAm6ee7Cqf50OhiFkJfA==
-X-Received: by 2002:a05:6808:1189:b0:322:3293:4b30 with SMTP id j9-20020a056808118900b0032232934b30mr9512923oil.277.1653244675086;
-        Sun, 22 May 2022 11:37:55 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e2-20020a056870920200b000f2776dd2acsm82709oaf.27.2022.05.22.11.37.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 22 May 2022 11:37:54 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e2a64cca-add2-7fcd-0327-5d217f1d3762@roeck-us.net>
-Date:   Sun, 22 May 2022 11:37:52 -0700
+        Sun, 22 May 2022 14:52:31 -0400
+Received: from mail.wantyapps.xyz (unknown [66.135.5.160])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2349A289B5
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 11:52:29 -0700 (PDT)
+Received: from localhost (bzq-79-183-83-88.red.bezeqint.net [79.183.83.88])
+        by mail.wantyapps.xyz (Postfix) with ESMTPSA id D76867D5A3;
+        Sun, 22 May 2022 18:52:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=wantyapps.xyz;
+        s=mail; t=1653245547;
+        bh=HSHomg1+PZF9S2AE2J3Yhrm7QPBTAHwfUatSdKbFLUc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Wue4TwFiibtqmM287PABPs2S/4Urm0jyPoyHXD8RZ/0xV4dkpI31Ps1mu1gFoO7dL
+         W3id5X9zrpiX8+vbB1+Blip/g4KfeBbWQrmVy7UW8cNjmKRymp9C0rdnODNdphWfx+
+         wd8BAkhfZUypz2E2ys8EtJ1qoOQ/hHQYa8RIW0lYYewjPMGACpMZJYE/3ikdoSJt25
+         Ov1xdtgcd8K+iqICKZYXS5x4DqE0WJBMXWxuS+RwzSH7zqc+oXBzZkey8czXuixwAI
+         RFx+Et7GIxD68Z+0HLjHo0/pBz7aQHNERs33bSipjya7Aye7eI1yvaXPg9Bc7EkZfq
+         8Hi9Phf3CFJbA==
+From:   Uri Arev <me@wantyapps.xyz>
+Cc:     Uri Arev <me@wantyapps.xyz>, Viresh Kumar <vireshk@kernel.org>,
+        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] staging: greybus: Fix indentation
+Date:   Sun, 22 May 2022 21:51:56 +0300
+Message-Id: <20220522185157.151125-1-me@wantyapps.xyz>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Fix an error handling path
- in aqc_probe()
-Content-Language: en-US
-To:     Aleksa Savic <savicaleksa83@gmail.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     dan.carpenter@oracle.com, Jack Doan <me@jackdoan.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-hwmon@vger.kernel.org
-References: <be6b955d50de140fcc96bd116150b435021bf567.1653225250.git.christophe.jaillet@wanadoo.fr>
- <YoqCKdfYQKyrFtxN@DESKTOP-A98GP49>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <YoqCKdfYQKyrFtxN@DESKTOP-A98GP49>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        FROM_SUSPICIOUS_NTLD_FP,PDS_OTHER_BAD_TLD,RDNS_DYNAMIC,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/22/22 11:34, Aleksa Savic wrote:
-> Thank you Christophe!
-> 
-> Aleksa
+Reported by Checkpatch:
+CHECK: Alignment should match open parenthesis
 
-A Reviewed-by: tag would be useful.
+- Uri
+---
+ drivers/staging/greybus/fw-management.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Thanks,
-Guenter
+diff --git a/drivers/staging/greybus/fw-management.c b/drivers/staging/greybus/fw-management.c
+index 687c6405c65b..3342b84597da 100644
+--- a/drivers/staging/greybus/fw-management.c
++++ b/drivers/staging/greybus/fw-management.c
+@@ -102,7 +102,7 @@ static struct fw_mgmt *get_fw_mgmt(struct cdev *cdev)
+ }
+ 
+ static int fw_mgmt_interface_fw_version_operation(struct fw_mgmt *fw_mgmt,
+-		struct fw_mgmt_ioc_get_intf_version *fw_info)
++						  struct fw_mgmt_ioc_get_intf_version *fw_info)
+ {
+ 	struct gb_connection *connection = fw_mgmt->connection;
+ 	struct gb_fw_mgmt_interface_fw_version_response response;
+@@ -240,7 +240,7 @@ static int fw_mgmt_interface_fw_loaded_operation(struct gb_operation *op)
+ }
+ 
+ static int fw_mgmt_backend_fw_version_operation(struct fw_mgmt *fw_mgmt,
+-		struct fw_mgmt_ioc_get_backend_version *fw_info)
++						struct fw_mgmt_ioc_get_backend_version *fw_info)
+ {
+ 	struct gb_connection *connection = fw_mgmt->connection;
+ 	struct gb_fw_mgmt_backend_fw_version_request request;
+@@ -473,7 +473,7 @@ static int fw_mgmt_ioctl(struct fw_mgmt *fw_mgmt, unsigned int cmd,
+ 			return -EFAULT;
+ 
+ 		ret = fw_mgmt_backend_fw_update_operation(fw_mgmt,
+-				backend_update.firmware_tag);
++							  backend_update.firmware_tag);
+ 		if (ret)
+ 			return ret;
+ 
+-- 
+2.36.1
+

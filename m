@@ -2,89 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC22F53001E
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 02:53:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1936E530020
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 02:59:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236770AbiEVAw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 20:52:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54298 "EHLO
+        id S244534AbiEVA7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 20:59:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242353AbiEVAw5 (ORCPT
+        with ESMTP id S232208AbiEVA7A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 20:52:57 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CDD022BC4;
-        Sat, 21 May 2022 17:52:56 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L5MPz09fzz4xXj;
-        Sun, 22 May 2022 10:52:54 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1653180775;
-        bh=3gkcarpBsg8B0PJslz0L+4gUs/4VG6lvkZ8za1+rT5I=;
-        h=Date:From:To:Cc:Subject:From;
-        b=IoRApmRtRTDehfKhGWGafrKAN+kUAvpHqivsjhym3IMj7ThD0nrwwCWd7yMCQ2g2H
-         KBOlU6hqgOWQOgU9QanmW/YjEOVMxWGH1BMZN4LLZai32/ENBKBl0vxBXuAuQEfPJa
-         seAyHhCrHnkVCe3QtMwJonApcweodeRqAIcXLYDxVlhschIU0ItqoubMFdq+bRYGaW
-         AYCLbq6upspCQcNHA2gwePomTNLzcRzaky2oR7xhClUzq6YcJmxbfUFbZH7RtFtDQO
-         3CbIXQYiQwibFuYuHfzugySSs/oK5cLOfvmRd9D94JqUwZZ1L9xIbjyRopQVYlNf+H
-         IaWX4HuNauEHg==
-Date:   Sun, 22 May 2022 10:52:53 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commits in the kvm tree
-Message-ID: <20220522105253.0d8fcb5a@canb.auug.org.au>
+        Sat, 21 May 2022 20:59:00 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D53EC3981F
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 17:58:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653181138; x=1684717138;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=kh/DoQMfb9sTFZQv3G3UBcKMKfD2SQO4bJVgpgoSD/c=;
+  b=iUL/i72qBGMzruj3PuiFV5BDEeFWIkGZHONHXrv4bJxTHx51jGSS/qUH
+   jBnfgGClj98rfMKfYcQSp6rK3giAxznoFyrW6+9gFg/ZXzZnTQhw8j6qs
+   GU9wHR7YKQ1COoJ5rzd2+A+eSSXFYPIBKdOwn3M0W9AiAnOsiDvuwsXwR
+   F4yfYC8ZsMyvN/jta3q/OwkwRV/KwcLHKOKLWzGZ3oagknzA4S85Mhxf2
+   S8mmv1ONc2Wp6J7+BDBCx5RVSQ3/2UOZmHcTT004c5pt/LGU69SQEC6Rz
+   BElw3hLv/B4Dv15Lj9azoQXYdHlUSJjvS11eT3zgu4OGXV708lno9lq3w
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10354"; a="272904107"
+X-IronPort-AV: E=Sophos;i="5.91,243,1647327600"; 
+   d="scan'208";a="272904107"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 17:58:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,243,1647327600"; 
+   d="scan'208";a="547275690"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 21 May 2022 17:58:57 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nsZvs-0006ng-Q2;
+        Sun, 22 May 2022 00:58:56 +0000
+Date:   Sun, 22 May 2022 08:58:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Cong Wang <xiyou.wangcong@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [congwang:sch_bpf 1/3] powerpc-linux-ld:
+ kernel/bpf/syscall.o:undefined reference to `skb_map_ops'
+Message-ID: <202205220855.HbbxNMrI-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/zhhe5XcUE8EY6vejhjY8XQd";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/zhhe5XcUE8EY6vejhjY8XQd
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+tree:   https://github.com/congwang/linux.git sch_bpf
+head:   9f6c12a2c218c56af7d37feeaf21c5b62a8192a0
+commit: ef56eb898b1d5c229db544d5933e9c686132ef28 [1/3] bpf: introduce skb map
+config: powerpc-randconfig-r021-20220522 (https://download.01.org/0day-ci/archive/20220522/202205220855.HbbxNMrI-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/congwang/linux/commit/ef56eb898b1d5c229db544d5933e9c686132ef28
+        git remote add congwang https://github.com/congwang/linux.git
+        git fetch --no-tags congwang sch_bpf
+        git checkout ef56eb898b1d5c229db544d5933e9c686132ef28
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
 
-Hi all,
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Commits
+All errors (new ones prefixed by >>):
 
-  e7b0b98c7fcb ("KVM: x86/pmu: Update global enable_pmu when PMU is undetec=
-ted")
-  32bf991699ee ("KVM: selftests: x86: Sync the new name of the test case to=
- .gitignore")
-  af86c314f050 ("KVM: x86/pmu: Move the vmx_icl_pebs_cpu[] definition out o=
-f the header file")
+>> powerpc-linux-ld: kernel/bpf/syscall.o:(.rodata+0x538): undefined reference to `skb_map_ops'
 
-are missing a Signed-off-by from their committer.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/zhhe5XcUE8EY6vejhjY8XQd
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKJiWUACgkQAVBC80lX
-0GyAwQf8CY0NY/stF5ir/UGK+BwDGT47yyjrpAbm12SRuuJVZnZL0z32/XeSGR0x
-oU65qn+NHcgVOl+mLFLNl4cJYiB5vZTbpZdnu0Tp5ftqPnHofHdg332ocLlGPoZZ
-wiFqyJkl0YUgdSScKBhRIJOU7MftSMI3QhfV6yvQkIqMfoO5FpHFfjN4uu9GK9Co
-IexvSwBT3C0sGDMzrLZaXxr6IlpWbCQfXy7V8tDeYIMPZ6O3J4Oqmtr6HP1kmwtr
-ipY5QGm5hvkX/1gDJ8zcnHoKAZPdJov7x0hx4SF7IMQ67j1rB3YFi1in3yXtXbLo
-RzXwrqlGjyDm6gfAThP2jYmculHe5Q==
-=PbqU
------END PGP SIGNATURE-----
-
---Sig_/zhhe5XcUE8EY6vejhjY8XQd--
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

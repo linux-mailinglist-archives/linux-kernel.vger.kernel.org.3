@@ -2,64 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B64215301D3
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 10:21:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BFC25301D6
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 10:25:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241387AbiEVIVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 04:21:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49266 "EHLO
+        id S241549AbiEVIZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 04:25:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230461AbiEVIVe (ORCPT
+        with ESMTP id S230461AbiEVIZM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 04:21:34 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9C51B79B
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 01:21:33 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-2ff1ed64f82so121805247b3.1
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 01:21:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Znw7LJlbn1r+wdsACS1F0N9XbG/RiiVDOXyDXO5CsQE=;
-        b=oI5Lsg53Bix9/s98Dk6RwCbWEJtDNIO6hHRev5nvmxWVtypqgkp09ZLZmxl7WuChR8
-         LdcdeJwLgDHQzEW1HEq/uwiQpgs5NECaDSRup/YaGHZ6YCWvsXWwVsF/PB/1Oka6zHVa
-         0F5wghO4TAWAr6ItAuRaO3TLHmMzJKFmnWskQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Znw7LJlbn1r+wdsACS1F0N9XbG/RiiVDOXyDXO5CsQE=;
-        b=yAbMdq3jErelaPV7l7D+nv/3i1U5TUbiN7CPVxgJvqjnGbW3AcQeSj4c5GPkntiBx+
-         qbGw62olCBciGagLvAub7XcnHKZFn4M/k/SgpZIGTq/5lEEKyUaJ289SZCWQR6iz9UPU
-         uGuB07J1Z6fGmBRHQ+H0fwDtTsySNHcPDgb3YJOTaUz9OSY5olkOoXpHZMRTImqsmeIW
-         36u6C5jDRaRRHVDoGlrMXyKxb5QHv7Y1NjYe4SkW37WLKL//ziWvayU/pTcoZleVTYdp
-         mwGzc+5PS2beR/2wOXA78zLoA/YIIGaUT6v+0yCopqz31f4sWo4etTYQQMBTyqrGdl81
-         CvKw==
-X-Gm-Message-State: AOAM533ezYm7S/l4OSCeRyf5Wjg43nbTcBIFZ6yXaR3BpwJwxxckybrQ
-        eEOcib4+l0FSWi+EepqQWIYQlKOxxVidmcEkodau
-X-Google-Smtp-Source: ABdhPJzPUEYEU781zCIU9/dh8A2Evos/v/c0AEiyTU81BdY0IPzvjMDDVTC7tJgmrtM8d3WDf0TgxCnJdVQPY8Dh8N0=
-X-Received: by 2002:a81:8494:0:b0:2fe:ff73:cdb7 with SMTP id
- u142-20020a818494000000b002feff73cdb7mr17834758ywf.373.1653207692599; Sun, 22
- May 2022 01:21:32 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220516143204.2603-1-jszhang@kernel.org>
-In-Reply-To: <20220516143204.2603-1-jszhang@kernel.org>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Sun, 22 May 2022 01:21:21 -0700
-Message-ID: <CAOnJCUJcEiRMKj7=77qnE8RpGmWnJALNhCTaeTo2rb9-NqEpZg@mail.gmail.com>
-Subject: Re: [PATCH v2] riscv: mm: init: make pt_ops_set_[early|late|fixmap] static
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        Anup Patel <anup@brainfault.org>
+        Sun, 22 May 2022 04:25:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3E0D62AE01
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 01:25:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653207910;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=szAUKKH9xMkRATj2GZMW6t9r5YJHNSX8m10DwWFv7CI=;
+        b=bEdx+4mk4sUaL0uYah4T+RboFNEb7ZcRPsSvlvjADnMuWZ0yXuO/flS5oljY2HTKXfuOpB
+        FBnxFbUGn09syJyzrRkbC2t4uBlbvv80Or0RzoTyda1N+zsu25pQx1jJ5xw7HkF849iD4y
+        PO2V4BBxG7tDnp9HBN5FJ3EJ+YmjuHM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-255-nWP7kcY9OJ6VrqtqxhOy6g-1; Sun, 22 May 2022 04:25:05 -0400
+X-MC-Unique: nWP7kcY9OJ6VrqtqxhOy6g-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 118AC802A5B;
+        Sun, 22 May 2022 08:25:05 +0000 (UTC)
+Received: from starship (unknown [10.40.192.55])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7DB2540CFD00;
+        Sun, 22 May 2022 08:25:00 +0000 (UTC)
+Message-ID: <67ff4a7b7f5c920c370efc11e7190a61a075ec1b.camel@redhat.com>
+Subject: Re: [PATCH] KVM: x86: SVM: fix nested PAUSE filtering
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Borislav Petkov <bp@alien8.de>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+Date:   Sun, 22 May 2022 11:24:59 +0300
+In-Reply-To: <fb4a9151-e56c-d16c-f09c-ac098e41a791@redhat.com>
+References: <20220518072709.730031-1-mlevitsk@redhat.com>
+         <fb4a9151-e56c-d16c-f09c-ac098e41a791@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,70 +72,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 7:41 AM Jisheng Zhang <jszhang@kernel.org> wrote:
->
-> These three functions are only used in init.c, so make them static.
-> Fix W=1 warnings like below:
->
-> arch/riscv/mm/init.c:721:13: warning: no previous prototype for function
-> 'pt_ops_set_early' [-Wmissing-prototypes]
->    void __init pt_ops_set_early(void)
->                ^
->
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> Reviewed-by: Anup Patel <anup@brainfault.org>
-> ---
->
-> since v1:
->  - collect Reviewed-by tag
->  - move out from the static key series as a separate patch
->
->  arch/riscv/mm/init.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-> index 05ed641a1134..5f3f26dd9f21 100644
-> --- a/arch/riscv/mm/init.c
-> +++ b/arch/riscv/mm/init.c
-> @@ -849,7 +849,7 @@ static void __init create_fdt_early_page_table(pgd_t *pgdir, uintptr_t dtb_pa)
->   * MMU is not enabled, the page tables are allocated directly using
->   * early_pmd/pud/p4d and the address returned is the physical one.
->   */
-> -void __init pt_ops_set_early(void)
-> +static void __init pt_ops_set_early(void)
->  {
->         pt_ops.alloc_pte = alloc_pte_early;
->         pt_ops.get_pte_virt = get_pte_virt_early;
-> @@ -871,7 +871,7 @@ void __init pt_ops_set_early(void)
->   * Note that this is called with MMU disabled, hence kernel_mapping_pa_to_va,
->   * but it will be used as described above.
->   */
-> -void __init pt_ops_set_fixmap(void)
-> +static void __init pt_ops_set_fixmap(void)
->  {
->         pt_ops.alloc_pte = kernel_mapping_pa_to_va((uintptr_t)alloc_pte_fixmap);
->         pt_ops.get_pte_virt = kernel_mapping_pa_to_va((uintptr_t)get_pte_virt_fixmap);
-> @@ -889,7 +889,7 @@ void __init pt_ops_set_fixmap(void)
->   * MMU is enabled and page table setup is complete, so from now, we can use
->   * generic page allocation functions to setup page table.
->   */
-> -void __init pt_ops_set_late(void)
-> +static void __init pt_ops_set_late(void)
->  {
->         pt_ops.alloc_pte = alloc_pte_late;
->         pt_ops.get_pte_virt = get_pte_virt_late;
-> --
-> 2.34.1
->
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+On Fri, 2022-05-20 at 16:05 +0200, Paolo Bonzini wrote:
+> On 5/18/22 09:27, Maxim Levitsky wrote:
+> > To fix this, change the fallback strategy - ignore the guest threshold
+> > values, but use/update the host threshold values, instead of using zeros.
+> 
+> Hmm, now I remember why it was using the guest values.  It's because, if
+> the L1 hypervisor specifies COUNT=0 or does not have filtering enabled,
+> we need to obey and inject a vmexit on every PAUSE.  So something like this:
+> 
+> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
+> index f209c1ca540c..e6153fd3ae47 100644
+> --- a/arch/x86/kvm/svm/nested.c
+> +++ b/arch/x86/kvm/svm/nested.c
+> @@ -616,6 +616,8 @@ static void nested_vmcb02_prepare_control(struct vcpu_svm *svm)
+>   	struct kvm_vcpu *vcpu = &svm->vcpu;
+>   	struct vmcb *vmcb01 = svm->vmcb01.ptr;
+>   	struct vmcb *vmcb02 = svm->nested.vmcb02.ptr;
+> +	u32 pause_count12;
+> +	u32 pause_thresh12;
+>   
+>   	/*
+>   	 * Filled at exit: exit_code, exit_code_hi, exit_info_1, exit_info_2,
+> @@ -671,20 +673,25 @@ static void nested_vmcb02_prepare_control(struct vcpu_svm *svm)
+>   	if (!nested_vmcb_needs_vls_intercept(svm))
+>   		vmcb02->control.virt_ext |= VIRTUAL_VMLOAD_VMSAVE_ENABLE_MASK;
+>   
+> +	pause_count12 = svm->pause_filter_enabled ? svm->nested.ctl.pause_filter_count : 0;
+> +	pause_thresh12 = svm->pause_threshold_enabled ? svm->nested.ctl.pause_filter_thresh : 0;
+>   	if (kvm_pause_in_guest(svm->vcpu.kvm)) {
+> -		/* use guest values since host doesn't use them */
+> -		vmcb02->control.pause_filter_count =
+> -				svm->pause_filter_enabled ?
+> -				svm->nested.ctl.pause_filter_count : 0;
+> -
+> -		vmcb02->control.pause_filter_thresh =
+> -				svm->pause_threshold_enabled ?
+> -				svm->nested.ctl.pause_filter_thresh : 0;
+> +		/* use guest values since host doesn't intercept PAUSE */
+> +		vmcb02->control.pause_filter_count = pause_count12;
+> +		vmcb02->control.pause_filter_thresh = pause_thresh12;
+>   
+>   	} else {
+> -		/* use host values otherwise */
+> +		/* start from host values otherwise */
+>   		vmcb02->control.pause_filter_count = vmcb01->control.pause_filter_count;
+>   		vmcb02->control.pause_filter_thresh = vmcb01->control.pause_filter_thresh;
+> +
+> +		/* ... but ensure filtering is disabled if so requested.  */
+> +		if (vmcb12_is_intercept(&svm->nested.ctl, INTERCEPT_PAUSE)) {
+> +			if (!pause_count12)
+> +				vmcb02->control.pause_filter_count = 0;
+> +			if (!pause_thresh12)
+> +				vmcb02->control.pause_filter_thresh = 0;
+> +		}
+
+Makes sense!
+
+I also need to remember to return the '!old' check to the shrink_ple_window,
+otherwise it will once again convert 0 to the minimum value.
+
+I'll send a patch soon with this.
+
+Thanks!
+
+>   	}
+>   
+>   	nested_svm_transition_tlb_flush(vcpu);
+> 
+> 
+> What do you think?
+> 
 
 
-Reviewed-by: Atish Patra <atishp@rivosinc.com>
+Best regards,
+	Maxim Levitsky
 
--- 
-Regards,
-Atish

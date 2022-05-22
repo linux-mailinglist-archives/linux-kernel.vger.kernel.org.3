@@ -2,153 +2,343 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BBD153006D
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 05:57:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48DCD53006F
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 05:59:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233060AbiEVD5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 23:57:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43252 "EHLO
+        id S233589AbiEVD7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 23:59:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230109AbiEVD5A (ORCPT
+        with ESMTP id S230109AbiEVD7D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 23:57:00 -0400
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21EEF3466F
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 20:56:57 -0700 (PDT)
-Received: by mail-il1-x12b.google.com with SMTP id i5so7879584ilv.0
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 20:56:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=WD+OIKZpSTJyD5Vd4IIbMe/iBHfwL25mMqv6khTOaQc=;
-        b=pfN4pPEeY9LYegHJheV6brjF5IhI9WGaVam03hHJvQ45QTGNF+vrM2IC9RhsClS8oP
-         ixAPLv0NJgoRuoPloqF+4j55f1fEuVVWQv46D8DXTahs0bftZvpWZOcK3d7yQXpT5kC0
-         rtDRcDPi7xUQH3EtXLkKYnOHKilzRci6W66tPcPffgtxHt8OX+HN5Q0r6sTeff0bqHLQ
-         TfXca2REfKX9shwxKV5KIRbBb8k/hKBjF54qBxwdfS7cxmqUGVHvL5/yg5GZ2crvVNoD
-         oVYrRiqiAd4lEptLPKaHNa9rg4M+4LsLKIIuGlj724HV2fOUd8iUhPtNnAj3Jju8QHrK
-         RYpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WD+OIKZpSTJyD5Vd4IIbMe/iBHfwL25mMqv6khTOaQc=;
-        b=mChbYxIZ2qNV3zQdimjnVCfYpBXEGsMK/Tzw4v4rRact1sbN44rjH20evZgWeZQVDe
-         5swhoAWJdoSnc7KQ3Mi45nktbrygP7NINOVYRzWAcnEbyqJKHKZ0+FZJqKdJnQEA36DC
-         1wO1OsIdM78ZBoxYf2ZdkY7EA8qqrQ+Vg5Cj71vZLXam/WUs/l4I+oFWuyXfAOAad9WY
-         SkAcPxDr+KugdnLveKVs7Jwaq5IxRPMJ9g3AaXoixzKbriz85QE3QnnVFaSR3hKSXzC5
-         SDPCnOK2nJznvV6VdG8HJDpEtB8brOqpyJ3zz+BsY2iBjyFvFf6JLnCCbe/N7oQ+UjZ7
-         VyVA==
-X-Gm-Message-State: AOAM5335t6OtUnBVCWOBlMb79/oAh9grMdhvqaxanX5DmecEaoOOEW86
-        InlgtQE1+ik6oUpDJaNaLGo=
-X-Google-Smtp-Source: ABdhPJyRBpAs9QXdK3UcexEhJHfxO8KKO3LQ830mo1fzt+XW+RBn5su2d0kvUMJS6s/h202Aygl5Dg==
-X-Received: by 2002:a05:6e02:1c87:b0:2cf:2d3d:dd89 with SMTP id w7-20020a056e021c8700b002cf2d3ddd89mr9182543ill.36.1653191816560;
-        Sat, 21 May 2022 20:56:56 -0700 (PDT)
-Received: from n2.us-central1-a.c.spheric-algebra-350919.internal (151.16.70.34.bc.googleusercontent.com. [34.70.16.151])
-        by smtp.gmail.com with ESMTPSA id b101-20020a0295ee000000b0032e13e37940sm1806124jai.140.2022.05.21.20.56.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 May 2022 20:56:55 -0700 (PDT)
-Date:   Sun, 22 May 2022 03:56:54 +0000
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Mel Gorman <mgorman@techsingularity.net>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, vbabka@suse.cz,
-        akpm@linux-foundation.org, willy@infradead.org
-Subject: Re: Is _PAGE_PROTNONE set only for user mappings?
-Message-ID: <Yom0hiDXuCuY4OUP@n2.us-central1-a.c.spheric-algebra-350919.internal>
-References: <20220506051940.156952-1-42.hyeyoo@gmail.com>
- <56f89895-601e-44c9-bda4-5fae6782e27e@amd.com>
- <YnpTHMvOO/pLJQ+l@hyeyoo>
- <5fe161cb-6c55-6c4d-c208-16c77e115d3f@amd.com>
- <8c2735ac-0335-6e2a-8341-8266d5d13c30@intel.com>
- <YntHrTX12TGp35aF@hyeyoo>
- <20220512103748.GH3441@techsingularity.net>
- <Yn3tssUR8w8mC1DJ@hyeyoo>
- <3f2f7c09-ddf3-6052-9860-8554a4ff2798@intel.com>
+        Sat, 21 May 2022 23:59:03 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7594A3BF84
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 20:59:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653191942; x=1684727942;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=2QjdotgwKQKorZJOzawJahNioB6bjgbNZgTkCR94oQc=;
+  b=ULmha+sm27wHknxv3BgOAHUWW75j44/tEe9a+rA4CcqtWvt38rMgs5wb
+   DeLVGHQUDo3+T/Le/nvPiBWRSjyRy+FyWbNnlhNPL4sY7W8U12VrXQd3G
+   FjoP9bQnFOrFjg2Ruu1fMPMkrmLaV3j5du6aNWFLitVkgAxN1WkvSt4bc
+   7Bv/i2Iija/yCTQVTmBA4ktL2ThYu/HwOpHM4H7PIJNKg93WLAqolWxSg
+   ayNirecrfIVLtJ9TNUOSAGn6JLfLiiVdZW84s8fgOcMZ1n9DLXEV+iLcM
+   arC1aYHYa3Y/lMcRB8CArXPx5hTd0jULyePQa7JngSvbVHpO7S/LnoQFc
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10354"; a="359344325"
+X-IronPort-AV: E=Sophos;i="5.91,243,1647327600"; 
+   d="scan'208";a="359344325"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 20:59:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,243,1647327600"; 
+   d="scan'208";a="675285690"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 21 May 2022 20:59:00 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nsck7-0006u6-Dn;
+        Sun, 22 May 2022 03:58:59 +0000
+Date:   Sun, 22 May 2022 11:58:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/asm] BUILD SUCCESS
+ 036c07c0c3b8a57d5c96e1f2aab62da0056f8f21
+Message-ID: <6289b4ff.KSFt9sRMiauIklTe%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3f2f7c09-ddf3-6052-9860-8554a4ff2798@intel.com>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 07:04:32AM -0700, Dave Hansen wrote:
-> On 5/12/22 22:33, Hyeonggon Yoo wrote:
-> > Thanks Mel, and IIUC nor does do_kern_addr_fault() in arch/x86/mm/fault.c
-> > expect _PAGE_PROTNONE instead of _PAGE_GLOBAL. I want to make it clear
-> > in the code that _PAGE_PROTNONE is only used for user mappings.
-> > 
-> > How does below look?
-> > 
-> > diff --git a/arch/x86/include/asm/pgtable_types.h b/arch/x86/include/asm/pgtable_types.h
-> > index 40497a9020c6..f8d02b91a90c 100644
-> > --- a/arch/x86/include/asm/pgtable_types.h
-> > +++ b/arch/x86/include/asm/pgtable_types.h
-> > @@ -35,7 +35,10 @@
-> >  #define _PAGE_BIT_DEVMAP	_PAGE_BIT_SOFTW4
-> >  
-> >  /* If _PAGE_BIT_PRESENT is clear, we use these: */
-> > -/* - if the user mapped it with PROT_NONE; pte_present gives true */
-> > +/*
-> > + * if the user mapped it with PROT_NONE; pte_present gives true
-> > + * this is only used for user mappings (with _PAGE_BIT_USER)
-> > + */
-> >  #define _PAGE_BIT_PROTNONE	_PAGE_BIT_GLOBAL
-> >  
-> >  #define _PAGE_PRESENT	(_AT(pteval_t, 1) << _PAGE_BIT_PRESENT)
-> > @@ -115,7 +118,8 @@
-> >  #define _PAGE_DEVMAP	(_AT(pteval_t, 0))
-> >  #endif
-> >  
-> > -#define _PAGE_PROTNONE	(_AT(pteval_t, 1) << _PAGE_BIT_PROTNONE)
-> > +#define _PAGE_PROTNONE	((_AT(pteval_t, 1) << _PAGE_BIT_USER) | \
-> > +			 (_AT(pteval_t, 1) << _PAGE_BIT_PROTNONE))
-> >  
-> >  /*
-> >   * Set of bits not changed in pte_modify.  The pte's
-> 
-> I don't like the idea of _PAGE_BIT_USER being so implicit.  It is
-> something kernel users should know explicitly that they are messing with.
->
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/asm
+branch HEAD: 036c07c0c3b8a57d5c96e1f2aab62da0056f8f21  x86/entry: Fix register corruption in compat syscall
 
-Sounds reasonable. Better explicit than implicit.
+elapsed time: 3211m
 
-> I was thinking of something more along the lines of taking the
-> set_memory.c code and ensuring that it never sets (or even observes)
-> _PAGE_BIT_GLOBAL on a _PAGE_USER mapping.
+configs tested: 255
+configs skipped: 5
 
-Yeah that would be a bit more explicit solution.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> There was also a question of
-> if set_memory.c is ever used on userspace mappings.  It would be good to
-> validate whether it's possible in-tree today and if not, enforce that
-> _PAGE_USER PTEs should never even be observed with set_memory.c.
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+powerpc64                           defconfig
+arc                                 defconfig
+powerpc                     asp8347_defconfig
+m68k                            mac_defconfig
+ia64                            zx1_defconfig
+ia64                      gensparse_defconfig
+arm                            pleb_defconfig
+sh                            titan_defconfig
+sh                            migor_defconfig
+arm                      footbridge_defconfig
+s390                          debug_defconfig
+xtensa                    xip_kc705_defconfig
+sh                               j2_defconfig
+um                                  defconfig
+um                               alldefconfig
+arm                        shmobile_defconfig
+mips                      maltasmvp_defconfig
+powerpc                    sam440ep_defconfig
+powerpc                      cm5200_defconfig
+arm                        cerfcube_defconfig
+mips                         db1xxx_defconfig
+sh                          rsk7269_defconfig
+powerpc                     pq2fads_defconfig
+parisc                           allyesconfig
+mips                           ci20_defconfig
+s390                             allyesconfig
+xtensa                          iss_defconfig
+ia64                        generic_defconfig
+powerpc                      chrp32_defconfig
+mips                  maltasmvp_eva_defconfig
+riscv                            allyesconfig
+powerpc                      pcm030_defconfig
+sh                   sh7770_generic_defconfig
+h8300                    h8300h-sim_defconfig
+arm                        mini2440_defconfig
+xtensa                           allyesconfig
+m68k                            q40_defconfig
+sh                           se7721_defconfig
+arm                           tegra_defconfig
+ia64                          tiger_defconfig
+sh                           se7750_defconfig
+mips                  decstation_64_defconfig
+arm                            zeus_defconfig
+h8300                            allyesconfig
+arm                          badge4_defconfig
+arm                           corgi_defconfig
+xtensa                  audio_kc705_defconfig
+arm                            lart_defconfig
+sh                          r7785rp_defconfig
+sh                        sh7763rdp_defconfig
+sh                         microdev_defconfig
+arm                      jornada720_defconfig
+powerpc                     sequoia_defconfig
+powerpc                        cell_defconfig
+sh                                  defconfig
+powerpc                    klondike_defconfig
+arm                       imx_v6_v7_defconfig
+sh                           se7206_defconfig
+powerpc                        warp_defconfig
+mips                       capcella_defconfig
+powerpc                 linkstation_defconfig
+arm                           h3600_defconfig
+parisc                generic-64bit_defconfig
+sh                           se7619_defconfig
+alpha                               defconfig
+arm                           h5000_defconfig
+arm                        multi_v7_defconfig
+ia64                         bigsur_defconfig
+sh                          landisk_defconfig
+alpha                            allyesconfig
+arm                        realview_defconfig
+arm                            qcom_defconfig
+sh                           se7343_defconfig
+nios2                            alldefconfig
+arc                        nsimosci_defconfig
+powerpc                     stx_gp3_defconfig
+sparc64                          alldefconfig
+i386                                defconfig
+powerpc                      ep88xc_defconfig
+h8300                       h8s-sim_defconfig
+powerpc                     mpc83xx_defconfig
+powerpc                 mpc834x_mds_defconfig
+sh                          urquell_defconfig
+m68k                       m5208evb_defconfig
+m68k                       bvme6000_defconfig
+mips                             allyesconfig
+x86_64                           alldefconfig
+powerpc                 canyonlands_defconfig
+powerpc                       eiger_defconfig
+sh                   rts7751r2dplus_defconfig
+powerpc                   motionpro_defconfig
+arc                          axs103_defconfig
+sh                          sdk7786_defconfig
+mips                 decstation_r4k_defconfig
+um                             i386_defconfig
+s390                       zfcpdump_defconfig
+arm                           sama5_defconfig
+m68k                          hp300_defconfig
+mips                         mpc30x_defconfig
+m68k                             allyesconfig
+powerpc                 mpc837x_mds_defconfig
+arm                           viper_defconfig
+powerpc                 mpc837x_rdb_defconfig
+h8300                     edosk2674_defconfig
+arc                           tb10x_defconfig
+m68k                          multi_defconfig
+arm                             pxa_defconfig
+m68k                        mvme147_defconfig
+arm                        keystone_defconfig
+openrisc                 simple_smp_defconfig
+xtensa                generic_kc705_defconfig
+powerpc                       holly_defconfig
+arc                          axs101_defconfig
+powerpc                     rainier_defconfig
+powerpc                      mgcoge_defconfig
+mips                     loongson1b_defconfig
+arc                         haps_hs_defconfig
+sh                               allmodconfig
+sh                   secureedge5410_defconfig
+m68k                           sun3_defconfig
+sparc64                             defconfig
+arm                            xcep_defconfig
+arc                 nsimosci_hs_smp_defconfig
+powerpc                mpc7448_hpc2_defconfig
+nios2                         3c120_defconfig
+sh                        sh7757lcr_defconfig
+m68k                          sun3x_defconfig
+powerpc                      ppc6xx_defconfig
+m68k                          amiga_defconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220519
+arm                  randconfig-c002-20220522
+ia64                                defconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+riscv                             allnoconfig
+m68k                             allmodconfig
+m68k                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+csky                                defconfig
+nios2                            allyesconfig
+s390                                defconfig
+s390                             allmodconfig
+parisc                              defconfig
+parisc64                            defconfig
+sparc                               defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+arc                  randconfig-r043-20220522
+s390                 randconfig-r044-20220522
+riscv                randconfig-r042-20220522
+arc                  randconfig-r043-20220519
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+x86_64                                  kexec
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
 
-Simply adding dump_stack() tells me my kernel on my machine does not use
-set_memory.c for userspace mappings but Hmm I'll take a look.
+clang tested configs:
+powerpc              randconfig-c003-20220519
+x86_64                        randconfig-c007
+riscv                randconfig-c006-20220519
+mips                 randconfig-c004-20220519
+i386                          randconfig-c001
+arm                  randconfig-c002-20220519
+s390                 randconfig-c005-20220519
+arm                  randconfig-c002-20220522
+s390                 randconfig-c005-20220522
+powerpc              randconfig-c003-20220522
+riscv                randconfig-c006-20220522
+mips                 randconfig-c004-20220522
+powerpc                          g5_defconfig
+hexagon                             defconfig
+mips                      pic32mzda_defconfig
+arm                          ep93xx_defconfig
+mips                     loongson2k_defconfig
+powerpc                     tqm8560_defconfig
+hexagon                          alldefconfig
+powerpc                       ebony_defconfig
+mips                      malta_kvm_defconfig
+arm                              alldefconfig
+arm                          ixp4xx_defconfig
+powerpc                      pmac32_defconfig
+powerpc                     tqm5200_defconfig
+i386                             allyesconfig
+powerpc                    socrates_defconfig
+powerpc                   microwatt_defconfig
+powerpc                      acadia_defconfig
+riscv                          rv32_defconfig
+mips                           ip22_defconfig
+arm                     davinci_all_defconfig
+arm                         mv78xx0_defconfig
+powerpc                    ge_imp3a_defconfig
+arm                         s5pv210_defconfig
+powerpc                 mpc8560_ads_defconfig
+powerpc                   bluestone_defconfig
+powerpc                      katmai_defconfig
+powerpc                        icon_defconfig
+powerpc                      ppc44x_defconfig
+powerpc                 mpc836x_rdk_defconfig
+arm                       spear13xx_defconfig
+mips                           rs90_defconfig
+powerpc                          allmodconfig
+powerpc                 mpc8272_ads_defconfig
+powerpc                     tqm8540_defconfig
+arm                         palmz72_defconfig
+mips                            e55_defconfig
+arm                        mvebu_v5_defconfig
+powerpc                  mpc885_ads_defconfig
+powerpc                    gamecube_defconfig
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a011
+i386                          randconfig-a013
+i386                          randconfig-a015
+hexagon              randconfig-r045-20220519
+hexagon              randconfig-r041-20220519
+hexagon              randconfig-r045-20220522
+hexagon              randconfig-r041-20220522
+riscv                randconfig-r042-20220519
+s390                 randconfig-r044-20220519
+hexagon              randconfig-r045-20220521
+hexagon              randconfig-r041-20220521
+s390                 randconfig-r044-20220521
+riscv                randconfig-r042-20220521
 
-> The arch/x86/mm/dump_pagetables.c code is also a reasonable place to put
-> assumptions about the page tables since it walks *everything* when asked.
-
-Thanks for that information!
-
-Thanks,
-Hyeonggon
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

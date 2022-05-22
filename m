@@ -2,106 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA1CB530051
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 04:40:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1DF1530055
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 04:42:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235820AbiEVCkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 22:40:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43666 "EHLO
+        id S235924AbiEVCmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 22:42:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232927AbiEVCkU (ORCPT
+        with ESMTP id S230406AbiEVCmj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 22:40:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0C3823EAA7
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 19:40:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653187219;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CUBw8GFTyhDBg8PslsY0hFMfNEXHrEOXs4oed7UJ/6Y=;
-        b=XVwdEgAD7aSrRD0jx2QJ+n+ugv548JalGghSxnBiSP7OedU18t7cdF75X8NVu3dtVANxKr
-        GCL98/Ru6usZ7z7qZg21IMY9lqTJeGXtRkhq80y6KbhRY+/fGxgIZ+YhdTYCztXRLI+JX+
-        aX+dSJCfH4wqQ4dmY4nMGP4nZyydMoc=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-556-98KPwqGtOviqGQT_QgQmhQ-1; Sat, 21 May 2022 22:40:15 -0400
-X-MC-Unique: 98KPwqGtOviqGQT_QgQmhQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EB86E1C05EA4;
-        Sun, 22 May 2022 02:40:14 +0000 (UTC)
-Received: from [10.22.8.34] (unknown [10.22.8.34])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 855307C2A;
-        Sun, 22 May 2022 02:40:13 +0000 (UTC)
-Message-ID: <ed130232-144e-9763-2602-7d8a71e41cb6@redhat.com>
-Date:   Sat, 21 May 2022 22:40:13 -0400
+        Sat, 21 May 2022 22:42:39 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0ABB3EAA7
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 19:42:37 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id ev18so11110704pjb.4
+        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 19:42:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=BEYJzOXAgO3ju6y7nFXErlj0Xnqfz03ITvQGsQDwCZ0=;
+        b=JnC8DONHOKbMHJlWqL5gqPhE+zhCxFt7bABMG+fLtN36KqqGRHJ3mbyEAnOhFMhpTY
+         +lSi9cG3TWQ7kWfIS9IaxOV9aQz/mzgCJ/aeYz1Yc8WODc2EIK7R+GJhVu0IOiSeyd1h
+         uHL/ejOiKiJOzQRBHGSFF3Ji4W9MTOVQefsrCyCMUd0w6s47MIHtNllHKoCjMFIGe5TC
+         XOIWUt8HFzjFBEacpvz747zfOKkrSfTKFdXY/7JsQgsWOYucgQsHRdcPchAFXvTYzRc8
+         IAMLroDnwV/obMSxVvHhzLe0EgkXHZGykQ1dufSDmPQIzAW5D1uMGaS11AuTKDGe+Z20
+         cXSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=BEYJzOXAgO3ju6y7nFXErlj0Xnqfz03ITvQGsQDwCZ0=;
+        b=pi0oo/Jmfv3Rv5K04WHE2JZzcug6rhBusi+ye/ZzPYkHaTndg+pUHKWnoZ/ES2NY2T
+         YmtBpGrAvs7wWgfu2QeDD+67ZdJjwOCfkRA24mByj2SMoXB1l0/SegA93HA8nPDMBi1h
+         Frs2lKAzHIhZrxAXnOPvst9t6P7ENyWCiwzc2+HvAGy53DxWjTs+2/QOLPtQRkTFdUg8
+         MIvfOa0lRWaOrKvdl0R0bJXsnfgey2tctB8scsP2/VF0IQlhvHKc46/1omwXqaBi/+Wc
+         RMwe2HjFHOJFjrtIPIMjTZWaqFWITAjW15Pw0wTpGsL8+PIWI6NKV+38+tFV6D4yQECM
+         Rr8Q==
+X-Gm-Message-State: AOAM5312cUrRQ9/wQ4GyT6k/pn3TcXBOQP8pYbHEpI1gi44I/+ul8kqP
+        D95AO0NprGhjsw/rKB/SoT8WLQ==
+X-Google-Smtp-Source: ABdhPJzMZgaEWwQGObsTlQmGTkipXRR0npY/AmvuEuoWsjgz23PZqwcIr60ULjdDsDCLU5IhX5ltgA==
+X-Received: by 2002:a17:903:2304:b0:162:ed1:ed9c with SMTP id d4-20020a170903230400b001620ed1ed9cmr3619063plh.122.1653187357427;
+        Sat, 21 May 2022 19:42:37 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id i62-20020a636d41000000b003c14af505f6sm2155924pgc.14.2022.05.21.19.42.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 21 May 2022 19:42:36 -0700 (PDT)
+Message-ID: <00772002-8df8-3a41-6e6c-20e3854ad3f0@kernel.dk>
+Date:   Sat, 21 May 2022 20:42:35 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v11 8/8] kselftest/cgroup: Add cpuset v2 partition root
- state test
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] io_uring: add a schedule condition in io_submit_sqes
 Content-Language: en-US
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
-Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-References: <20220510153413.400020-1-longman@redhat.com>
- <20220510153413.400020-9-longman@redhat.com>
- <0ede5fe6-89c8-5e63-0c0c-265b57ea5ca6@collabora.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <0ede5fe6-89c8-5e63-0c0c-265b57ea5ca6@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Guo Xuenan <guoxuenan@huawei.com>, asml.silence@gmail.com,
+        io-uring@vger.kernel.org
+Cc:     houtao1@huawei.com, yi.zhang@huawei.com, chengzhihao1@huawei.com,
+        linux-kernel@vger.kernel.org
+References: <20220521143327.3959685-1-guoxuenan@huawei.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20220521143327.3959685-1-guoxuenan@huawei.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/21/22 06:24, Muhammad Usama Anjum wrote:
-> On 5/10/22 8:34 PM, Waiman Long wrote:
->> diff --git a/tools/testing/selftests/cgroup/Makefile b/tools/testing/selftests/cgroup/Makefile
->> index 745fe25fa0b9..01687418b92f 100644
->> --- a/tools/testing/selftests/cgroup/Makefile
->> +++ b/tools/testing/selftests/cgroup/Makefile
->> @@ -1,10 +1,11 @@
->>   # SPDX-License-Identifier: GPL-2.0
->>   CFLAGS += -Wall -pthread
->>   
->> -all:
->> +all: ${HELPER_PROGS}
->>   
->>   TEST_FILES     := with_stress.sh
->> -TEST_PROGS     := test_stress.sh
->> +TEST_PROGS     := test_stress.sh test_cpuset_prs.sh
->> +TEST_GEN_FILES := wait_inotify
-> Please add wait_inotify to .gitignore file.
->
->>   TEST_GEN_PROGS = test_memcontrol
->>   TEST_GEN_PROGS += test_kmem
->>   TEST_GEN_PROGS += test_core
+On 5/21/22 8:33 AM, Guo Xuenan wrote:
+> when set up sq ring size with IORING_MAX_ENTRIES, io_submit_sqes may
+> looping ~32768 times which may trigger soft lockups. add need_resched
+> condition to avoid this bad situation.
+> 
+> set sq ring size 32768 and using io_sq_thread to perform stress test
+> as follows:
+> watchdog: BUG: soft lockup - CPU#2 stuck for 26s! [iou-sqp-600:601]
+> Kernel panic - not syncing: softlockup: hung tasks
+> CPU: 2 PID: 601 Comm: iou-sqp-600 Tainted: G L 5.18.0-rc7+ #3
+> Hardware name: linux,dummy-virt (DT)
+> Call trace:
+>  dump_backtrace+0x218/0x228
+>  show_stack+0x20/0x68
+>  dump_stack_lvl+0x68/0x84
+>  dump_stack+0x1c/0x38
+>  panic+0x1ec/0x3ec
+>  watchdog_timer_fn+0x28c/0x300
+>  __hrtimer_run_queues+0x1d8/0x498
+>  hrtimer_interrupt+0x238/0x558
+>  arch_timer_handler_virt+0x48/0x60
+>  handle_percpu_devid_irq+0xdc/0x270
+>  generic_handle_domain_irq+0x50/0x70
+>  gic_handle_irq+0x8c/0x4bc
+>  call_on_irq_stack+0x2c/0x38
+>  do_interrupt_handler+0xc4/0xc8
+>  el1_interrupt+0x48/0xb0
+>  el1h_64_irq_handler+0x18/0x28
+>  el1h_64_irq+0x74/0x78
+>  console_unlock+0x5d0/0x908
+>  vprintk_emit+0x21c/0x470
+>  vprintk_default+0x40/0x50
+>  vprintk+0xd0/0x128
+>  _printk+0xb4/0xe8
+>  io_issue_sqe+0x1784/0x2908
+>  io_submit_sqes+0x538/0x2880
+>  io_sq_thread+0x328/0x7b0
+>  ret_from_fork+0x10/0x20
+> SMP: stopping secondary CPUs
+> Kernel Offset: 0x40f1e8600000 from 0xffff800008000000
+> PHYS_OFFSET: 0xfffffa8c80000000
+> CPU features: 0x110,0000cf09,00001006
+> Memory Limit: none
+> ---[ end Kernel panic - not syncing: softlockup: hung tasks ]---
+> 
+> Signed-off-by: Guo Xuenan <guoxuenan@huawei.com>
+> ---
+>  fs/io_uring.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/fs/io_uring.c b/fs/io_uring.c
+> index 92ac50f139cd..d897c6798f00 100644
+> --- a/fs/io_uring.c
+> +++ b/fs/io_uring.c
+> @@ -7864,7 +7864,7 @@ static int io_submit_sqes(struct io_ring_ctx *ctx, unsigned int nr)
+>  			if (!(ctx->flags & IORING_SETUP_SUBMIT_ALL))
+>  				break;
+>  		}
+> -	} while (submitted < nr);
+> +	} while (submitted < nr && !need_resched());
+>  
+>  	if (unlikely(submitted != nr)) {
+>  		int ref_used = (submitted == -EAGAIN) ? 0 : submitted;
 
-Right. Sorry for missing that. Will add it to the next version.
+This is wrong, you'll potentially end up doing random short submits for
+non-sqpoll as well.
 
-Thanks,
-Longman
+sqpoll already supports capping how many it submits in one go, it just
+doesn't do it if it's only running one ring. As simple as the below,
+with 1024 pulled out of thin air. Would be great if you could experiment
+and submit a v2 based on this principle instead. Might still need a
+cond_resched() carefully placed in io_sq_thread().
+
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index e0823f58f795..3830d7b493b9 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -7916,7 +7916,8 @@ static int __io_sq_thread(struct io_ring_ctx *ctx, bool cap_entries)
+ 	unsigned int to_submit;
+ 	int ret = 0;
+ 
+-	to_submit = io_sqring_entries(ctx);
++	/* cap at 1024 to avoid doing too much in one submit round */
++	to_submit = min(io_sqring_entries(ctx), 1024U);
+ 	/* if we're handling multiple rings, cap submit size for fairness */
+ 	if (cap_entries && to_submit > IORING_SQPOLL_CAP_ENTRIES_VALUE)
+ 		to_submit = IORING_SQPOLL_CAP_ENTRIES_VALUE;
+
+-- 
+Jens Axboe
 

@@ -2,512 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 717B15305CA
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 22:18:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 227E45305CF
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 22:18:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350798AbiEVUSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 16:18:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48676 "EHLO
+        id S1350697AbiEVUSj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 16:18:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233422AbiEVUR7 (ORCPT
+        with ESMTP id S233422AbiEVUSg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 16:17:59 -0400
-Received: from mail.mutex.one (mail.mutex.one [62.77.152.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2001436695;
-        Sun, 22 May 2022 13:17:57 -0700 (PDT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.mutex.one (Postfix) with ESMTP id CE2D816C006C;
-        Sun, 22 May 2022 23:17:54 +0300 (EEST)
-X-Virus-Scanned: Debian amavisd-new at mail.mutex.one
-Received: from mail.mutex.one ([127.0.0.1])
-        by localhost (mail.mutex.one [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id fXd59JdzWtS6; Sun, 22 May 2022 23:17:54 +0300 (EEST)
-From:   Marian Postevca <posteuca@mutex.one>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mutex.one; s=default;
-        t=1653250674; bh=ZankfS5MIMjTEgPBst3Scd31RiAckWZN6APLJFt3AY4=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=ZVes3qHlEwxeNgg9KdJQwv8IgSildxPF7Nmf6ozAMav2heaOjuJSTiammU8hnvs54
-         cppdP77da4R578kh7LUF6DcyLohOqV82VWonvV2abF3AaBEdcMOYi9lGgra5qyppdg
-         zrPD1I/a4Sp7QLwQxhhpsXZVrWlgHri7L4A4r0Uk=
-To:     Maximilian Senftleben <kernel@mail.msdigital.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: PROBLEM: No static MAC address for usb gadget ethernet via
- kernel parameter any more.
-In-Reply-To: <83b013eb-b320-f397-0ecc-f4824f3f45b9@msdigital.de>
-References: <dfaa54ab-1b03-7aec-5927-d52a4233e56a@msdigital.de>
- <6c0eb462-3fab-473d-8989-b56e5748e5f7@mutex.one>
- <83b013eb-b320-f397-0ecc-f4824f3f45b9@msdigital.de>
-Date:   Sun, 22 May 2022 23:17:40 +0300
-Message-ID: <874k1htj8b.fsf@mutex.one>
+        Sun, 22 May 2022 16:18:36 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E40436695;
+        Sun, 22 May 2022 13:18:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653250715; x=1684786715;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=mZRSpyF9iYaBRnsEI6jUB0RQpJsiKbD6o8QAcovoo6I=;
+  b=Q5Ao8XUSiWmcJGUN+pbThQ4KjUhOagaNYhajD49Ec3Qkc+6DzgF7ftAH
+   lQ+esX+b9SujkwDa1Rp+klPn7l3uOeLzVaDfDG2K6+MIQx114tWtOJ+iK
+   D2R9hrtfeVw4OPyvLo6TLJAVuTmi++NuIuJcGyhQRwaUsl21SLikYmIa7
+   2k9ykGXGHI+yh9/E6ERBA46zPPxK0zrIDvLtyYMWdkZ6Y+j+20ji13EwU
+   IVoeV7v5xlPXu+87K4AGS3ZW9bVJ+zcZDyIHzGZk/cntwzsFmNlETY/LA
+   JKOUEPRV3tJwQzt0jZZ4yw3MBEERLEZTzjJxEV5Q0Fpg2wBv749rA0bCx
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10355"; a="271860173"
+X-IronPort-AV: E=Sophos;i="5.91,244,1647327600"; 
+   d="scan'208";a="271860173"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2022 13:18:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,244,1647327600"; 
+   d="scan'208";a="577085910"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 22 May 2022 13:18:33 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nss24-0000ar-U6;
+        Sun, 22 May 2022 20:18:32 +0000
+Date:   Mon, 23 May 2022 04:17:48 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: drivers/media/platform/mediatek/mdp/mtk_mdp_core.c:31:34: warning:
+ unused variable 'mtk_mdp_comp_dt_ids'
+Message-ID: <202205230419.k5fZHsKJ-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75 autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Maximilian Senftleben <kernel@mail.msdigital.de> writes:
+Hi Mauro,
 
-> - During debugging and testing we noticed that while 
-> "dev_set_mac_address" used to set "addr_assign_type" to NET_ADDR_SET, 
-> the mentioned commit directly sets "addr_assign_type" to NET_ADDR_RANDOM 
-> and the called "eth_hw_addr_set" does not modify the type afterwards.
-> If I change line 874 "net->addr_assign_type = NET_ADDR_RANDOM;" to 
-> "net->addr_assign_type = NET_ADDR_SET;" then the issue seems to be solved.
+FYI, the error/warning still remains.
 
-Are you using systemd on the system where this issue is visible?
-I managed to reproduce it only on systemd-systems.
-It seems that systemd, by default, will try to give a persistent
-MAC address to ethernet interfaces that have a random MAC address.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   978df3e158467ae09be635b27e9e1eb990704e0b
+commit: 2023a99811110aebba9eee4aa09ef7bd21a8a249 media: platform: rename mediatek/mtk-jpeg/ to mediatek/jpeg/
+date:   9 weeks ago
+config: hexagon-randconfig-r045-20220522 (https://download.01.org/0day-ci/archive/20220523/202205230419.k5fZHsKJ-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1443dbaba6f0e57be066995db9164f89fb57b413)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2023a99811110aebba9eee4aa09ef7bd21a8a249
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 2023a99811110aebba9eee4aa09ef7bd21a8a249
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/platform/mediatek/mdp/
 
-That is why "net->addr_assign_type = NET_ADDR_SET" fixes the issue,
-systemd sees that the interface doesn't have a random MAC address and
-leaves the one set by the kernel(in your case the one set on the command
-line), but if it sees that the interface has a random MAC address it
-will change the address from the one supplied on the command line, to
-some internal MAC address that systemd generated.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-If you are using systemd you can workaround this issue with the
-following systemd link file:
+All warnings (new ones prefixed by >>):
 
-[Match]
-OriginalName=usb*
+>> drivers/media/platform/mediatek/mdp/mtk_mdp_core.c:31:34: warning: unused variable 'mtk_mdp_comp_dt_ids' [-Wunused-const-variable]
+   static const struct of_device_id mtk_mdp_comp_dt_ids[] = {
+                                    ^
+   1 warning generated.
 
-[Link]
-MACAddressPolicy=none
 
-You can put the file in /etc/systemd/network/90-bridge.link
-And then reboot the system.
+vim +/mtk_mdp_comp_dt_ids +31 drivers/media/platform/mediatek/mdp/mtk_mdp_core.c
 
-I will send a patch that fixes this issue completely. But in the
-meantime please let me know if the workaround solves the issue for you.
->
-> - Regarding bootargs and defconfig, we encountered the issue with our 
-> custom board and some own/modified drivers and additional patches, which 
-> might make it difficult to reproduce the issue outside of our setup.
->
-> bootargs:
-> "root=ubi0:userspace0 ubi.mtd=ubi_volumes rootfstype=ubifs 
-> consoleblank=0 vt.global_cursor_default=0 console=ttyS0 
-> g_ether.dev_addr=46:A2:73:A9:44:56 g_ether.host_addr=46:A2:73:A9:44:55"
->
-> defconfig:
->
-> CONFIG_KERNEL_XZ=y
-> CONFIG_SYSVIPC=y
-> CONFIG_NO_HZ=y
-> CONFIG_HIGH_RES_TIMERS=y
-> CONFIG_PREEMPT_VOLUNTARY=y
-> CONFIG_IKCONFIG=y
-> CONFIG_IKCONFIG_PROC=y
-> CONFIG_LOG_BUF_SHIFT=18
-> CONFIG_CGROUPS=y
-> CONFIG_RELAY=y
-> CONFIG_BOOT_CONFIG=y
-> CONFIG_EXPERT=y
-> CONFIG_PERF_EVENTS=y
-> # CONFIG_SLUB_DEBUG is not set
-> # CONFIG_COMPAT_BRK is not set
-> CONFIG_ARCH_MULTI_V6=y
-> CONFIG_ARCH_MXC=y
-> CONFIG_SOC_IMX6Q=y
-> # CONFIG_HARDEN_BRANCH_HISTORY is not set
-> CONFIG_ARM_ERRATA_814220=y
-> CONFIG_SMP=y
-> CONFIG_SCHED_MC=y
-> CONFIG_HAVE_ARM_ARCH_TIMER=y
-> CONFIG_HOTPLUG_CPU=y
-> CONFIG_ARM_PSCI=y
-> CONFIG_HIGHMEM=y
-> CONFIG_ZBOOT_ROM_TEXT=0
-> CONFIG_ZBOOT_ROM_BSS=0
-> CONFIG_CMDLINE="noinitrd console=ttymxc0,115200"
-> CONFIG_CPU_FREQ=y
-> CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND=y
-> CONFIG_ARM_IMX6Q_CPUFREQ=y
-> CONFIG_CPU_IDLE=y
-> CONFIG_VFP=y
-> CONFIG_NEON=y
-> # CONFIG_SUSPEND is not set
-> CONFIG_PM=y
-> CONFIG_PM_DEBUG=y
-> CONFIG_ACMEINC_SPI_CLRC663=y
-> # CONFIG_MXC_GPU_VIV is not set
-> CONFIG_U_DMA_BUF=y
-> CONFIG_MXC_VPU=y
-> CONFIG_WILC_SDIO=y
-> # CONFIG_SECCOMP is not set
-> CONFIG_NET=y
-> CONFIG_PACKET=y
-> CONFIG_UNIX=y
-> CONFIG_INET=y
-> CONFIG_IP_PNP=y
-> CONFIG_IP_PNP_DHCP=y
-> CONFIG_MPTCP=y
-> CONFIG_NETFILTER=y
-> # CONFIG_NETFILTER_EGRESS is not set
-> CONFIG_BRIDGE=y
-> CONFIG_CFG80211=y
-> # CONFIG_CFG80211_DEFAULT_PS is not set
-> CONFIG_CFG80211_DEBUGFS=y
-> CONFIG_CFG80211_WEXT=y
-> CONFIG_MAC80211=y
-> CONFIG_MAC80211_DEBUGFS=y
-> CONFIG_RFKILL=y
-> CONFIG_RFKILL_INPUT=y
-> CONFIG_PCI=y
-> CONFIG_UEVENT_HELPER=y
-> CONFIG_DEVTMPFS=y
-> CONFIG_DEVTMPFS_MOUNT=y
-> # CONFIG_STANDALONE is not set
-> CONFIG_EXTRA_FIRMWARE="mchp/wilc1000_wifi_firmware.bin 
-> imx/sdma/sdma-imx6q.bin vpu_fw_imx6d.bin brcm/brcmfmac43455-sdio.bin 
-> brcm/brcmfmac43455-sdio.acmeinc,imx6q-doorvision.txt vpu_fw_imx6q.bin"
-> CONFIG_EXTRA_FIRMWARE_DIR="drivers/base/firmware_loader/builtin"
-> CONFIG_IMX_WEIM=y
-> CONFIG_CONNECTOR=y
-> CONFIG_MTD=y
-> CONFIG_MTD_CMDLINE_PARTS=y
-> CONFIG_MTD_BLOCK=y
-> CONFIG_MTD_CFI=y
-> CONFIG_MTD_JEDECPROBE=y
-> CONFIG_MTD_CFI_INTELEXT=y
-> CONFIG_MTD_CFI_AMDSTD=y
-> CONFIG_MTD_CFI_STAA=y
-> CONFIG_MTD_DATAFLASH=y
-> CONFIG_MTD_SST25L=y
-> CONFIG_MTD_RAW_NAND=y
-> CONFIG_MTD_NAND_GPMI_NAND=y
-> CONFIG_MTD_SPI_NOR=y
-> CONFIG_MTD_UBI=y
-> CONFIG_MTD_UBI_FASTMAP=y
-> CONFIG_MTD_UBI_BLOCK=y
-> CONFIG_BLK_DEV_LOOP=y
-> CONFIG_BLK_DEV_RAM=y
-> CONFIG_BLK_DEV_RAM_SIZE=65536
-> CONFIG_EEPROM_AT24=y
-> CONFIG_EEPROM_AT25=y
-> CONFIG_SCSI=y
-> # CONFIG_SCSI_PROC_FS is not set
-> CONFIG_BLK_DEV_SD=y
-> # CONFIG_BLK_DEV_BSG is not set
-> CONFIG_SCSI_CONSTANTS=y
-> CONFIG_SCSI_LOGGING=y
-> CONFIG_SCSI_SCAN_ASYNC=y
-> # CONFIG_SCSI_LOWLEVEL is not set
-> CONFIG_NETDEVICES=y
-> # CONFIG_NET_VENDOR_3COM is not set
-> # CONFIG_NET_VENDOR_ADAPTEC is not set
-> # CONFIG_NET_VENDOR_AGERE is not set
-> # CONFIG_NET_VENDOR_ALACRITECH is not set
-> # CONFIG_NET_VENDOR_ALTEON is not set
-> # CONFIG_NET_VENDOR_AMAZON is not set
-> # CONFIG_NET_VENDOR_AMD is not set
-> # CONFIG_NET_VENDOR_AQUANTIA is not set
-> # CONFIG_NET_VENDOR_ARC is not set
-> # CONFIG_NET_VENDOR_ASIX is not set
-> # CONFIG_NET_VENDOR_ATHEROS is not set
-> # CONFIG_NET_VENDOR_BROADCOM is not set
-> # CONFIG_NET_VENDOR_CADENCE is not set
-> # CONFIG_NET_VENDOR_CAVIUM is not set
-> # CONFIG_NET_VENDOR_CHELSIO is not set
-> # CONFIG_NET_VENDOR_CIRRUS is not set
-> # CONFIG_NET_VENDOR_CISCO is not set
-> # CONFIG_NET_VENDOR_CORTINA is not set
-> # CONFIG_NET_VENDOR_DEC is not set
-> # CONFIG_NET_VENDOR_DLINK is not set
-> # CONFIG_NET_VENDOR_EMULEX is not set
-> # CONFIG_NET_VENDOR_ENGLEDER is not set
-> # CONFIG_NET_VENDOR_EZCHIP is not set
-> # CONFIG_NET_VENDOR_FARADAY is not set
-> # CONFIG_NET_VENDOR_GOOGLE is not set
-> # CONFIG_NET_VENDOR_HISILICON is not set
-> # CONFIG_NET_VENDOR_HUAWEI is not set
-> # CONFIG_NET_VENDOR_INTEL is not set
-> # CONFIG_NET_VENDOR_MARVELL is not set
-> # CONFIG_NET_VENDOR_MELLANOX is not set
-> # CONFIG_NET_VENDOR_MICREL is not set
-> # CONFIG_NET_VENDOR_MICROCHIP is not set
-> # CONFIG_NET_VENDOR_MICROSEMI is not set
-> # CONFIG_NET_VENDOR_MYRI is not set
-> # CONFIG_NET_VENDOR_NI is not set
-> # CONFIG_NET_VENDOR_NATSEMI is not set
-> # CONFIG_NET_VENDOR_NETERION is not set
-> # CONFIG_NET_VENDOR_NETRONOME is not set
-> # CONFIG_NET_VENDOR_NVIDIA is not set
-> # CONFIG_NET_VENDOR_OKI is not set
-> # CONFIG_NET_VENDOR_PACKET_ENGINES is not set
-> # CONFIG_NET_VENDOR_PENSANDO is not set
-> # CONFIG_NET_VENDOR_QLOGIC is not set
-> # CONFIG_NET_VENDOR_BROCADE is not set
-> # CONFIG_NET_VENDOR_QUALCOMM is not set
-> # CONFIG_NET_VENDOR_RDC is not set
-> # CONFIG_NET_VENDOR_REALTEK is not set
-> # CONFIG_NET_VENDOR_RENESAS is not set
-> # CONFIG_NET_VENDOR_ROCKER is not set
-> # CONFIG_NET_VENDOR_SAMSUNG is not set
-> # CONFIG_NET_VENDOR_SEEQ is not set
-> # CONFIG_NET_VENDOR_SILAN is not set
-> # CONFIG_NET_VENDOR_SIS is not set
-> # CONFIG_NET_VENDOR_SOLARFLARE is not set
-> # CONFIG_NET_VENDOR_SMSC is not set
-> # CONFIG_NET_VENDOR_SOCIONEXT is not set
-> # CONFIG_NET_VENDOR_STMICRO is not set
-> # CONFIG_NET_VENDOR_SUN is not set
-> # CONFIG_NET_VENDOR_SYNOPSYS is not set
-> # CONFIG_NET_VENDOR_TEHUTI is not set
-> # CONFIG_NET_VENDOR_TI is not set
-> # CONFIG_NET_VENDOR_VERTEXCOM is not set
-> # CONFIG_NET_VENDOR_VIA is not set
-> # CONFIG_NET_VENDOR_WIZNET is not set
-> # CONFIG_NET_VENDOR_XILINX is not set
-> CONFIG_DP83867_PHY=y
-> CONFIG_USB_USBNET=y
-> # CONFIG_WLAN_VENDOR_ADMTEK is not set
-> # CONFIG_WLAN_VENDOR_ATH is not set
-> # CONFIG_WLAN_VENDOR_ATMEL is not set
-> CONFIG_BRCMFMAC=y
-> # CONFIG_WLAN_VENDOR_CISCO is not set
-> # CONFIG_WLAN_VENDOR_INTEL is not set
-> # CONFIG_WLAN_VENDOR_INTERSIL is not set
-> # CONFIG_WLAN_VENDOR_MARVELL is not set
-> # CONFIG_WLAN_VENDOR_MEDIATEK is not set
-> # CONFIG_WLAN_VENDOR_MICROCHIP is not set
-> # CONFIG_WLAN_VENDOR_RALINK is not set
-> # CONFIG_WLAN_VENDOR_REALTEK is not set
-> # CONFIG_WLAN_VENDOR_RSI is not set
-> # CONFIG_WLAN_VENDOR_ST is not set
-> # CONFIG_WLAN_VENDOR_TI is not set
-> # CONFIG_WLAN_VENDOR_ZYDAS is not set
-> # CONFIG_WLAN_VENDOR_QUANTENNA is not set
-> CONFIG_INPUT_EVDEV=y
-> CONFIG_KEYBOARD_GPIO=y
-> CONFIG_KEYBOARD_IMX=y
-> # CONFIG_MOUSE_PS2 is not set
-> CONFIG_INPUT_TOUCHSCREEN=y
-> CONFIG_TOUCHSCREEN_EDT_FT5X06=y
-> CONFIG_INPUT_MISC=y
-> # CONFIG_SERIO_SERPORT is not set
-> # CONFIG_LEGACY_PTYS is not set
-> CONFIG_SERIAL_IMX=y
-> CONFIG_SERIAL_IMX_CONSOLE=y
-> # CONFIG_SERIAL_IMX_EARLYCON is not set
-> CONFIG_SERIAL_FSL_LPUART=y
-> CONFIG_SERIAL_FSL_LPUART_CONSOLE=y
-> # CONFIG_I2C_COMPAT is not set
-> CONFIG_I2C_CHARDEV=y
-> CONFIG_I2C_MUX_GPIO=y
-> # CONFIG_I2C_HELPER_AUTO is not set
-> CONFIG_I2C_GPIO=y
-> CONFIG_I2C_IMX=y
-> CONFIG_SPI=y
-> CONFIG_SPI_FSL_QUADSPI=y
-> CONFIG_SPI_IMX=y
-> CONFIG_SPI_SPIDEV=y
-> CONFIG_PINCTRL_MICROCHIP_SGPIO=y
-> CONFIG_GPIO_SYSFS=y
-> CONFIG_GPIO_MXC=y
-> CONFIG_GPIO_PCA953X=y
-> CONFIG_POWER_RESET=y
-> CONFIG_POWER_RESET_SYSCON=y
-> CONFIG_POWER_RESET_SYSCON_POWEROFF=y
-> CONFIG_POWER_SUPPLY=y
-> CONFIG_SENSORS_GPIO_FAN=y
-> CONFIG_SENSORS_IIO_HWMON=y
-> CONFIG_CPU_THERMAL=y
-> CONFIG_IMX_THERMAL=y
-> CONFIG_WATCHDOG=y
-> CONFIG_RN5T618_WATCHDOG=y
-> CONFIG_IMX2_WDT=y
-> CONFIG_MFD_RN5T618=y
-> CONFIG_REGULATOR=y
-> CONFIG_REGULATOR_FIXED_VOLTAGE=y
-> CONFIG_REGULATOR_ANATOP=y
-> CONFIG_REGULATOR_GPIO=y
-> CONFIG_REGULATOR_RN5T618=y
-> # CONFIG_MEDIA_CEC_SUPPORT is not set
-> CONFIG_MEDIA_SUPPORT=y
-> CONFIG_MEDIA_SUBDRV_AUTOSELECT=y
-> # CONFIG_DVB_NET is not set
-> # CONFIG_DVB_DYNAMIC_MINORS is not set
-> # CONFIG_RADIO_ADAPTERS is not set
-> CONFIG_V4L_PLATFORM_DRIVERS=y
-> CONFIG_VIDEO_MUX=y
-> CONFIG_V4L_MEM2MEM_DRIVERS=y
-> CONFIG_VIDEO_CODA=y
-> CONFIG_VIDEO_IMX_PXP=y
-> CONFIG_VIDEO_MEM2MEM_DEINTERLACE=y
-> CONFIG_VIDEO_IMX219=y
-> CONFIG_VIDEO_IMX415=y
-> CONFIG_IMX_IPUV3_CORE=y
-> CONFIG_DRM=y
-> CONFIG_DRM_PANEL_SIMPLE=y
-> CONFIG_DRM_LVDS_CODEC=y
-> CONFIG_DRM_IMX=y
-> CONFIG_DRM_IMX_PARALLEL_DISPLAY=y
-> CONFIG_DRM_IMX_TVE=y
-> CONFIG_DRM_IMX_LDB=y
-> CONFIG_DRM_IMX_HDMI=y
-> CONFIG_DRM_ETNAVIV=y
-> CONFIG_DRM_MXSFB=y
-> CONFIG_FB=y
-> CONFIG_FB_MODE_HELPERS=y
-> CONFIG_LCD_CLASS_DEVICE=y
-> CONFIG_LCD_PLATFORM=y
-> CONFIG_BACKLIGHT_PWM=y
-> CONFIG_BACKLIGHT_GPIO=y
-> CONFIG_FRAMEBUFFER_CONSOLE=y
-> CONFIG_LOGO=y
-> # CONFIG_LOGO_LINUX_MONO is not set
-> # CONFIG_LOGO_LINUX_VGA16 is not set
-> # CONFIG_LOGO_LINUX_CLUT224 is not set
-> CONFIG_SOUND=y
-> CONFIG_SND=y
-> CONFIG_SND_VERBOSE_PRINTK=y
-> CONFIG_SND_DEBUG=y
-> CONFIG_SND_DEBUG_VERBOSE=y
-> # CONFIG_SND_PCI is not set
-> # CONFIG_SND_USB is not set
-> CONFIG_SND_SOC=y
-> CONFIG_SND_SOC_FSL_ASRC=y
-> CONFIG_SND_SOC_FSL_SPDIF=y
-> CONFIG_SND_IMX_SOC=y
-> CONFIG_SND_SOC_IMX_ZL38060=y
-> CONFIG_SND_SOC_FSL_ASOC_CARD=y
-> CONFIG_SND_SOC_TLV320AIC3X_I2C=y
-> CONFIG_SND_SIMPLE_CARD=y
-> CONFIG_SND_AUDIO_GRAPH_CARD=y
-> CONFIG_USB=y
-> CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
-> CONFIG_USB_EHCI_HCD=y
-> CONFIG_USB_CHIPIDEA=y
-> CONFIG_USB_CHIPIDEA_UDC=y
-> CONFIG_USB_CHIPIDEA_HOST=y
-> CONFIG_NOP_USB_XCEIV=y
-> CONFIG_USB_MXS_PHY=y
-> CONFIG_USB_GADGET=y
-> CONFIG_USB_ETH=y
-> CONFIG_MMC=y
-> CONFIG_MMC_SDHCI=y
-> CONFIG_MMC_SDHCI_PLTFM=y
-> CONFIG_MMC_SDHCI_ESDHC_IMX=y
-> CONFIG_NEW_LEDS=y
-> CONFIG_LEDS_CLASS=y
-> CONFIG_LEDS_GPIO=y
-> CONFIG_LEDS_PWM=y
-> CONFIG_LEDS_TRIGGERS=y
-> CONFIG_LEDS_TRIGGER_TIMER=y
-> CONFIG_LEDS_TRIGGER_ONESHOT=y
-> CONFIG_LEDS_TRIGGER_HEARTBEAT=y
-> CONFIG_LEDS_TRIGGER_BACKLIGHT=y
-> CONFIG_LEDS_TRIGGER_GPIO=y
-> CONFIG_RTC_CLASS=y
-> CONFIG_RTC_INTF_DEV_UIE_EMUL=y
-> CONFIG_RTC_DRV_PCF8563=y
-> CONFIG_RTC_DRV_MXC=y
-> CONFIG_RTC_DRV_MXC_V2=y
-> CONFIG_RTC_DRV_SNVS=y
-> CONFIG_DMADEVICES=y
-> CONFIG_FSL_EDMA=y
-> CONFIG_IMX_SDMA=y
-> CONFIG_MXS_DMA=y
-> # CONFIG_VIRTIO_MENU is not set
-> CONFIG_STAGING=y
-> CONFIG_STAGING_MEDIA=y
-> CONFIG_VIDEO_IMX_MEDIA=y
-> CONFIG_COMMON_CLK_PWM=y
-> CONFIG_IMX_GPCV2_PM_DOMAINS=y
-> CONFIG_IIO=y
-> CONFIG_VF610_ADC=y
-> CONFIG_OPT3001=y
-> CONFIG_VCNL4000=y
-> CONFIG_VCNL4200=y
-> CONFIG_MPL3115=y
-> CONFIG_PWM=y
-> CONFIG_PWM_FSL_FTM=y
-> CONFIG_PWM_IMX27=y
-> CONFIG_RAS=y
-> CONFIG_NVMEM_IMX_OCOTP=y
-> CONFIG_NVMEM_SNVS_LPGPR=y
-> CONFIG_MUX_MMIO=y
-> CONFIG_VALIDATE_FS_PARSER=y
-> CONFIG_QUOTA=y
-> CONFIG_QUOTA_NETLINK_INTERFACE=y
-> # CONFIG_PRINT_QUOTA_WARNING is not set
-> CONFIG_AUTOFS4_FS=y
-> CONFIG_FUSE_FS=y
-> CONFIG_MSDOS_FS=y
-> CONFIG_VFAT_FS=y
-> CONFIG_JFFS2_FS=y
-> CONFIG_JFFS2_FS_WBUF_VERIFY=y
-> CONFIG_JFFS2_COMPRESSION_OPTIONS=y
-> CONFIG_UBIFS_FS=y
-> CONFIG_SQUASHFS=y
-> CONFIG_NFS_FS=y
-> CONFIG_NFS_V3_ACL=y
-> CONFIG_NFS_V4=y
-> CONFIG_ROOT_NFS=y
-> CONFIG_NLS_DEFAULT="cp437"
-> CONFIG_NLS_CODEPAGE_437=y
-> CONFIG_NLS_CODEPAGE_850=y
-> CONFIG_NLS_ASCII=y
-> CONFIG_NLS_ISO8859_1=y
-> CONFIG_NLS_ISO8859_15=y
-> CONFIG_NLS_UTF8=y
-> CONFIG_SECURITYFS=y
-> CONFIG_LSM="yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor"
-> CONFIG_CRYPTO_ECDH=y
-> CONFIG_CRYPTO_SEQIV=y
-> CONFIG_CRYPTO_SHA1=y
-> CONFIG_CRYPTO_DES=y
-> CONFIG_CRYPTO_DEV_FSL_CAAM=y
-> CONFIG_CRYPTO_DEV_SAHARA=y
-> CONFIG_CRC_CCITT=y
-> CONFIG_CRC_T10DIF=y
-> CONFIG_CRC_ITU_T=y
-> CONFIG_CRC7=y
-> CONFIG_LIBCRC32C=y
-> CONFIG_CMA_SIZE_MBYTES=64
-> CONFIG_FONTS=y
-> CONFIG_FONT_8x8=y
-> CONFIG_FONT_8x16=y
-> CONFIG_PRINTK_TIME=y
-> # CONFIG_DEBUG_BUGVERBOSE is not set
-> CONFIG_MAGIC_SYSRQ=y
-> CONFIG_DEBUG_FS=y
-> CONFIG_PANIC_TIMEOUT=1
-> # CONFIG_SCHED_DEBUG is not set
-> CONFIG_PROVE_LOCKING=y
-> # CONFIG_RCU_TRACE is not set
-> # CONFIG_FTRACE is not set
->
->
->
-> Am 17.05.2022 um 20:55 schrieb Marian Postevca:
->> 12 May 2022 16:39:02 Maximilian Senftleben<kernel@mail.msdigital.de>:
->>
->>> [1.] One line summary of the problem:
->>>
->>> No static MAC address for usb gadget ethernet via kernel boot parameter any more.
->>>
->>> [2.] Full description of the problem/report:
->>>
->>> In 5.15. and before we were able to set a static MAC address for the usb gadget ethernet connection using kernel parameters "g_ether.dev_addr" and "g_ether.host_addr".
->>> Since 5.16. and more concrete after commit 890d5b40908bfd1a79be018d2d297cf9df60f4ee, this is no longer possible, and a random MAC address is assigned.
->>> (Possible Regression)
->>>
->>> [3.] Keywords (i.e., modules, networking, kernel):
->>> usb, gadget, mac, g_ether
->>>
->>> [4.] Kernel information
->>> [4.1.] Kernel version (from /proc/version):
->>> Linux version 5.17.4-141174-ge11818a6ec02 (ms@local) (arm-v7a-linux-gnueabihf-gcc (OSELAS.Toolchain-2020.08.0 10-20200822) 10.2.1 20200822, GNU ld (GNU Binutils) 2.35) #14 SMP Thu May 12 13:51:50 CEST 2022
->>> [4.2.] Kernel .config file:
->>> -
->> Could you please send the kernel .config file and kernel command line with which you reproduce this issue?
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  30  
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08 @31  static const struct of_device_id mtk_mdp_comp_dt_ids[] = {
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  32  	{
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  33  		.compatible = "mediatek,mt8173-mdp-rdma",
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  34  		.data = (void *)MTK_MDP_RDMA
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  35  	}, {
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  36  		.compatible = "mediatek,mt8173-mdp-rsz",
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  37  		.data = (void *)MTK_MDP_RSZ
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  38  	}, {
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  39  		.compatible = "mediatek,mt8173-mdp-wdma",
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  40  		.data = (void *)MTK_MDP_WDMA
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  41  	}, {
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  42  		.compatible = "mediatek,mt8173-mdp-wrot",
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  43  		.data = (void *)MTK_MDP_WROT
+55d80506c5f7c3 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Vincent Stehlé 2016-10-27  44  	},
+55d80506c5f7c3 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Vincent Stehlé 2016-10-27  45  	{ },
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  46  };
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  47  
+
+:::::: The code at line 31 was first introduced by commit
+:::::: c8eb2d7e8202fd9cb912f5d33cc34ede66dcb24a [media] media: Add Mediatek MDP Driver
+
+:::::: TO: Minghsiu Tsai <minghsiu.tsai@mediatek.com>
+:::::: CC: Mauro Carvalho Chehab <mchehab@s-opensource.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

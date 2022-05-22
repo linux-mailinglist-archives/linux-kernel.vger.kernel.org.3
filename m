@@ -2,45 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56B365303BA
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 17:06:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58FE55303C0
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 17:07:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347652AbiEVPFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 11:05:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45816 "EHLO
+        id S236184AbiEVPGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 11:06:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230290AbiEVPFv (ORCPT
+        with ESMTP id S230290AbiEVPGr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 11:05:51 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B4733A2D;
-        Sun, 22 May 2022 08:05:50 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 6B3541C0B82; Sun, 22 May 2022 17:05:48 +0200 (CEST)
-Date:   Sun, 22 May 2022 17:05:47 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Pablo Ceballos <pceballos@google.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>
-Subject: Re: [PATCH] HID: Driver for Google Hangouts Meet Speakermic
-Message-ID: <20220522150546.GA8071@localhost>
-References: <20220405183953.2094007-1-pceballos@google.com>
- <nycvar.YFH.7.76.2204210947590.30217@cbobk.fhfr.pm>
- <CAKdAkRQ7yxFFGJg41UxptxapKiP4bmHsfw7dRNE+LPzs1PRk=A@mail.gmail.com>
- <nycvar.YFH.7.76.2205121252090.28985@cbobk.fhfr.pm>
- <CAO9JgFwA5ZhwOOY0cU3HpMOV69CTumQ50zEgU6SPNAF0zDbCGg@mail.gmail.com>
- <Yn2OlQAa9I++N80B@penguin>
- <CAO-hwJ+Rs=LYseLP7Vvr00vLvm+fTCRdh8pQ-rEduj4izSyiYA@mail.gmail.com>
+        Sun, 22 May 2022 11:06:47 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97BAF34BAA;
+        Sun, 22 May 2022 08:06:46 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1653232005;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WQJxoIOG9BwCxxHhxQMhF2ZBIhG1CDWoR7s9LjjPX0Y=;
+        b=W7okeNoZ6TeXYA9CiZ8DUMjWTYHZ++NYvSYoc6xB+vqeT9ZfbQQZDoDDUFvguvDe+eY3YX
+        uqSKcrAd279SjCUAUHbgFYHI5S/FYuERBof46BnwS8+zH48h/V6K65hPCQKYATHwJ/EXXe
+        BKprNgYX9lo5HgRDyfYHDsGEJoWkT2Xu3RobDM7HJ8jW6fr0vJ024EHDZ5Y26ZvJIWNLf4
+        9p90Lb7HcabJTEVg/QSOgijHEgrYwQt1MqsRJ6a1dwLTSYybWiRy8/TrZgQSal64A2mJfx
+        FAci8rRLfFNTFpD1X6PU72+CNcNZyMmBk5qiuRJvW1SeY4g4Y02alsjMrxsGdw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1653232005;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WQJxoIOG9BwCxxHhxQMhF2ZBIhG1CDWoR7s9LjjPX0Y=;
+        b=W/lqxyrm75peM69EweXkxgQFSW4gzSeg0W15Y0rs3B6x5LRaGKDp9wBeI/DRQNI17aXPN2
+        yVde12xMql8cddDQ==
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>, tj@kernel.org,
+        akpm@linux-foundation.org, jeyu@kernel.org, shuah@kernel.org,
+        bvanassche@acm.org, dan.j.williams@intel.com, joe@perches.com,
+        keescook@chromium.org, rostedt@goodmis.org, minchan@kernel.org,
+        linux-spdx@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v9 3/6] selftests: add tests_sysfs module
+In-Reply-To: <YopM5XGMdqVCU+bL@kroah.com>
+References: <20211029184500.2821444-1-mcgrof@kernel.org>
+ <20211029184500.2821444-4-mcgrof@kernel.org> <Yao3vtSKBKLyQY1E@kroah.com>
+ <87fsl1iqg0.ffs@tglx> <YopM5XGMdqVCU+bL@kroah.com>
+Date:   Sun, 22 May 2022 17:06:44 +0200
+Message-ID: <87czg5ip2z.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAO-hwJ+Rs=LYseLP7Vvr00vLvm+fTCRdh8pQ-rEduj4izSyiYA@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,22 +62,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+On Sun, May 22 2022 at 16:47, Greg KH wrote:
+> On Sun, May 22, 2022 at 04:37:19PM +0200, Thomas Gleixner wrote:
+>> On Fri, Dec 03 2021 at 16:29, Greg KH wrote:
+>> 
+>> While I agree that we want to keep the number of licenses as small as
+>> possible, we cannot really dictate which dual licensing options a
+>> submitter selects unless the license is GPL-2.0-only incompatible, which
+>> copyleft-next is not.
+>> 
+>> Can we just get over this, add the license with the SPDX identifier and
+>> move on?
+>
+> From what I recall, I had technical reasons I didn't take this series,
+> but that was a long time ago and I would be glad to review it again if
+> it were rebased and resubmitted after the next merge window is closed.
 
-> > No, that is exactly what I had in mind, thank you. Please submit this
-> > entry to upstream systemd/udev project (and we can cherry-pick it into
-> > our udev as well).
-> >
-> > In general I think we should try to avoid trivial "fixup" HID drivers if
-> > it is possible. I also wondered if we could be supplying fixed-up HID
-> > descriptors via request_firmware() for HID devices.
-> 
-> Just FYI, in case you haven't noticed it :)
-> I am currently working on supporting exactly this kind of fixups
-> through eBPF. I had in the past a request_firmware() patch for wacom
+The license addition and the SPDX identifier cleanup should be seperated
+from the new test code which was part of the series.
 
-Is that good idea? eBPF is fairly dangerous thing, so I'd preffer
-basic functionality not depend on it...
+Thanks,
 
-Best regards,
-							Pavel
+        tglx

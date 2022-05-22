@@ -2,101 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFD69530679
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 00:21:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2E99530683
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 00:22:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345212AbiEVWVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 18:21:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44910 "EHLO
+        id S1351833AbiEVWWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 18:22:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbiEVWVe (ORCPT
+        with ESMTP id S230175AbiEVWWi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 18:21:34 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 847461C126
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 15:21:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653258093; x=1684794093;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=PlOTnZ8DceWHQRrs52ps3Pqs1XjD9A7Vo/umIMX0t5s=;
-  b=E/v10J5I8sSGg+714oRS4PtHplvL46f36pxLSaToMWmxjAFWKQcO4psY
-   wGFw9sMQYYKiFnYjQdptGwM2J3olV6dUM1JBPanO22rZFD0Y6mT8tKRqU
-   NOREqypcNorNKCJxnVyLv3rbDqP4YaMSs2D0BpXeSnBtbrzQclKpQECRG
-   y6HeEp9KsPUygQzfI84P5OTlqannyuQ8UmS3ovXePHNqfPEwFfa39ULZa
-   kzkTwadPGODP1ktsgy/QRiiINbUL2xa4KjLN5e8haGgmfB1EIGmYdF7QA
-   DTkqy8ikg/sGaCGQP+wIdiAZe8xrbJF8CxHySwM8bG+2og9DVnjlYGaNY
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10355"; a="270622638"
-X-IronPort-AV: E=Sophos;i="5.91,244,1647327600"; 
-   d="scan'208";a="270622638"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2022 15:21:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,244,1647327600"; 
-   d="scan'208";a="558361849"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 22 May 2022 15:21:32 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nstx5-0000f1-DY;
-        Sun, 22 May 2022 22:21:31 +0000
-Date:   Mon, 23 May 2022 06:20:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [madvenka786:orc_v2 7/20] arch/x86/kernel/setup.c:1243: undefined
- reference to `unwind_init'
-Message-ID: <202205230628.BFRpX4yZ-lkp@intel.com>
+        Sun, 22 May 2022 18:22:38 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27ACC240B3;
+        Sun, 22 May 2022 15:22:38 -0700 (PDT)
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24MFaj3F025929;
+        Sun, 22 May 2022 22:22:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=5CkdRqjRscNq/Ois0QptfV9yb1J2HpaTPOg5VbcQ8DM=;
+ b=ShFAZ760kNLQYQxjy+FL61em62g/2n0j5me7facf9m9W/gxImVhntSrsQzpfVvo9tJi4
+ ff4TtoU6GCnXzPtEi0T20VCw47GgpEEZlvFKiMEBeJEbMdZhkp/C8G0YV94p3rkHYPBB
+ P+Sio2DbjRPy4PQVxaI9lpHSd1gaRQ7qgwaHE7ipG6WCk08aUIMM8gXCkns3g+gbcftd
+ /zOyCLZA9gZ4a3FWJ9jzAb+6y8oVUZ0KJMFqcAcxEyhvilEceewfCBtUKUfCrAuTSs0l
+ UGqLfcpCOeu+ckjL0uhB0nVLkrylE+2F3URtHah0Xtz1/mK8uiXgR8G6J4E1sDOuh86V ag== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g79f4y0m6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 22 May 2022 22:22:21 +0000
+Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24MMKcRX020257;
+        Sun, 22 May 2022 22:22:20 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g79f4y0ke-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 22 May 2022 22:22:20 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24MMCtgG010241;
+        Sun, 22 May 2022 22:22:18 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma01fra.de.ibm.com with ESMTP id 3g6qq8t2pv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 22 May 2022 22:22:17 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24MMMEQE24052000
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 22 May 2022 22:22:14 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5E876AE045;
+        Sun, 22 May 2022 22:22:14 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 898D6AE051;
+        Sun, 22 May 2022 22:22:13 +0000 (GMT)
+Received: from [9.171.72.230] (unknown [9.171.72.230])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Sun, 22 May 2022 22:22:13 +0000 (GMT)
+Message-ID: <63d07a63565b0f059f5b04dbe294dc4f8d4c91fb.camel@linux.ibm.com>
+Subject: Re: [PATCH] s390/bpf: fix typo in comment
+From:   Ilya Leoshkevich <iii@linux.ibm.com>
+To:     Julia Lawall <Julia.Lawall@inria.fr>
+Cc:     kernel-janitors@vger.kernel.org,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 23 May 2022 00:22:13 +0200
+In-Reply-To: <20220521111145.81697-84-Julia.Lawall@inria.fr>
+References: <20220521111145.81697-84-Julia.Lawall@inria.fr>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 2B8uQRJxfEHvQ1900hIT0sofz4GMyRxR
+X-Proofpoint-ORIG-GUID: -ZVWZf9s398XuI8rUJoJfa6A7Zahz82o
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-22_12,2022-05-20_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
+ impostorscore=0 mlxscore=0 suspectscore=0 clxscore=1011 phishscore=0
+ mlxlogscore=999 adultscore=0 priorityscore=1501 spamscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205220140
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/madvenka786/linux orc_v2
-head:   ed9a1d5c036130a53c639eb712485e3d13ab4372
-commit: a4c6af5b74f86f69cebc1b18d8a31a3beff7cd8e [7/20] objtool: Reorganize ORC kernel code
-config: i386-randconfig-a004-20220523 (https://download.01.org/0day-ci/archive/20220523/202205230628.BFRpX4yZ-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/madvenka786/linux/commit/a4c6af5b74f86f69cebc1b18d8a31a3beff7cd8e
-        git remote add madvenka786 https://github.com/madvenka786/linux
-        git fetch --no-tags madvenka786 orc_v2
-        git checkout a4c6af5b74f86f69cebc1b18d8a31a3beff7cd8e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+On Sat, 2022-05-21 at 13:11 +0200, Julia Lawall wrote:
+> Spelling mistake (triple letters) in comment.
+> Detected with the help of Coccinelle.
+> 
+> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+> 
+> ---
+>  arch/s390/net/bpf_jit_comp.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/s390/net/bpf_jit_comp.c
+> b/arch/s390/net/bpf_jit_comp.c
+> index aede9a3ca3f7..af35052d06ed 100644
+> --- a/arch/s390/net/bpf_jit_comp.c
+> +++ b/arch/s390/net/bpf_jit_comp.c
+> @@ -1809,7 +1809,7 @@ struct bpf_prog *bpf_int_jit_compile(struct
+> bpf_prog *fp)
+>         /*
+>          * Three initial passes:
+>          *   - 1/2: Determine clobbered registers
+> -        *   - 3:   Calculate program size and addrs arrray
+> +        *   - 3:   Calculate program size and addrs array
+>          */
+>         for (pass = 1; pass <= 3; pass++) {
+>                 if (bpf_jit_prog(&jit, fp, extra_pass, stack_depth))
+> {
+> 
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks!
 
-All errors (new ones prefixed by >>):
-
-   ld: arch/x86/kernel/setup.o: in function `setup_arch':
->> arch/x86/kernel/setup.c:1243: undefined reference to `unwind_init'
-
-
-vim +1243 arch/x86/kernel/setup.c
-
-ee9f8fce996408 arch/x86/kernel/setup.c  Josh Poimboeuf 2017-07-24  1242  
-ee9f8fce996408 arch/x86/kernel/setup.c  Josh Poimboeuf 2017-07-24 @1243  	unwind_init();
-^1da177e4c3f41 arch/i386/kernel/setup.c Linus Torvalds 2005-04-16  1244  }
-5649b7c30316a5 arch/x86/kernel/setup.c  Ingo Molnar    2008-09-16  1245  
-
-:::::: The code at line 1243 was first introduced by commit
-:::::: ee9f8fce99640811b2b8e79d0d1dbe8bab69ba67 x86/unwind: Add the ORC unwinder
-
-:::::: TO: Josh Poimboeuf <jpoimboe@redhat.com>
-:::::: CC: Ingo Molnar <mingo@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Acked-by: Ilya Leoshkevich <iii@linux.ibm.com>

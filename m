@@ -2,133 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E53CA5301D8
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 10:27:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFD145301DB
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 10:30:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236827AbiEVI1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 04:27:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56374 "EHLO
+        id S240025AbiEVIaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 04:30:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236571AbiEVI1T (ORCPT
+        with ESMTP id S235045AbiEVIaQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 04:27:19 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E94836E2B
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 01:27:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653208038; x=1684744038;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LteJ72TWNsYKXEonDajzghmVGbT4VlhAsqMZEfLzdiQ=;
-  b=mSqDS/ouUC8r5w5+JVrC9mquypBhlsDdkwp/fWzA6LxZIO6p1RbFwilO
-   ccjXjvvuaKlH9gY/LKgbOKmxDzoQoKpRZyvRfXSJfPF3+8YQ8M1ja39ZP
-   7q/JV0hsNfv3Q5XCu1go8JlTmsAH0owL9JLu+O308zTypFn9wDzfHbmup
-   +6pViLT+a8o0G9aPOhvkG9WpjqneZSwgTSXJrhfjyNPaAHXryXm2Ln0UY
-   DQIEL4QENDsQ9O/DmP97hYMbiGS8DSOWEQnYCY0rvRZr/0uapZv0HYsCq
-   Y4gB2k0EesekpwJ5rHT82wBg7U94hPj0nRXJl6mra5TdymEd2G0TCcToA
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10354"; a="272675679"
-X-IronPort-AV: E=Sophos;i="5.91,243,1647327600"; 
-   d="scan'208";a="272675679"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2022 01:27:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,243,1647327600"; 
-   d="scan'208";a="819283116"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 22 May 2022 01:27:16 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nsgvj-0000DH-Ff;
-        Sun, 22 May 2022 08:27:15 +0000
-Date:   Sun, 22 May 2022 16:26:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nathan Huckleberry <nhuck@google.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Eric Biggers <ebiggers@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: [ebiggers:crypto-pending 8/9]
- arch/arm64/crypto/polyval-ce-glue.c:187:1: error: redefinition of
- '__inittest'
-Message-ID: <202205221607.4vYxE0vQ-lkp@intel.com>
+        Sun, 22 May 2022 04:30:16 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25EC73BF8C
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 01:30:15 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id 1so594197ljh.8
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 01:30:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=XqWzQpy3oPnX1lfphyq4b5xThmFgDWnY8w8vH3221Eg=;
+        b=sohKLdGi5rNl57zueyhzR9jMzFV1Ae2ZzGcMZDIU06VcgWnlrjUyM7X6QXD4nEh87a
+         TtxztpWVlrAPKemqDZ0ZjkrKz+XhumZZRiRs21D6GllcYuJuNyNwgMw8mFUCE+roFvgp
+         5x8NBw7MHtCZhIvBV2Jc/HdN0+7Z7eB+cyDrlIchCvn/lCGJraiU4A2XyfCfcbvxw/DJ
+         R0zf/ppSPfQc6RFD1+kFK2RQHlmbK+BZE1PrStTteFpH2ui0upD4lwyb21JK7SUKanrC
+         dxTnuNOzhaEC1czCe4Gu2ZyxA8JEKLKl0Kgkqxy8SY7/+Gq97RlR7imlUPPwsE8xxW2e
+         u+ZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=XqWzQpy3oPnX1lfphyq4b5xThmFgDWnY8w8vH3221Eg=;
+        b=NW/tsf56EZWezPRr32xxxDcnevoi1HgYdc+CotL4zoUQK0xDXb7D80bNG9Cbuh3/bw
+         sydXJjvk/6/D2zt7g+ASm94LA5lnVsR1uckQsyuFjlq8j0cWB+sp0Egvr719wX4nzraI
+         tmwqF5kRQUZ9ZiQM2j5zmWbV7FD1eAO1XsEeGgNdUPhs7bzrt1Hfn8Kn53HnzMuNsRjH
+         VSQma6yF8mO51N8CMkmkgY3iZtC2kqsMUqwZRgafTpZ2ZjBSVmmpTF+oLReokGi908GI
+         +fnAscfA3MWDpWfb/aSoudnqQhj0A3kbs5OArxvj/k76cY9EsBUViQ5Vkqotju0//e4b
+         nyNQ==
+X-Gm-Message-State: AOAM532+arei5CR0fxd+JliVJDOk/Tgr1fYAIQZrQuf1hJ1/tjPQQTUZ
+        lWbiHKXXNwEc5eZYIQi5CudFDTKcCMHHvkgu
+X-Google-Smtp-Source: ABdhPJyUHHgTlviw7qP3mGx9nBdHLSO/sotDdyEvnur7XEEu0EmriTrNpkvKL8TcRtQhHJvAUF3QpA==
+X-Received: by 2002:a2e:894e:0:b0:253:e480:1fff with SMTP id b14-20020a2e894e000000b00253e4801fffmr2986699ljk.245.1653208213554;
+        Sun, 22 May 2022 01:30:13 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id a11-20020a2e980b000000b00253df2d526asm969093ljj.77.2022.05.22.01.30.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 22 May 2022 01:30:13 -0700 (PDT)
+Message-ID: <02596f22-3d19-8872-75fd-2a8f563c8270@linaro.org>
+Date:   Sun, 22 May 2022 10:30:11 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v3 1/2] tpm: Add tpm_tis_i2c backend for tpm_tis_core
+Content-Language: en-US
+To:     Alexander Steffen <Alexander.Steffen@infineon.com>,
+        jarkko@kernel.org, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, krzysztof.kozlowski+dt@linaro.org,
+        Johannes Holland <johannes.holland@infineon.com>,
+        Amir Mizinski <amirmizi6@gmail.com>
+References: <20220520172422.4309-1-Alexander.Steffen@infineon.com>
+ <20220520172422.4309-2-Alexander.Steffen@infineon.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220520172422.4309-2-Alexander.Steffen@infineon.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git crypto-pending
-head:   22ca50a7cbeef1cde1ea3d99686ad3575bd7d4ed
-commit: bfa275a9bb4e16067b9056e8019bd478da798bc9 [8/9] crypto: arm64/polyval: Add PMULL accelerated implementation of POLYVAL
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220522/202205221607.4vYxE0vQ-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b369762beb70dfef22c7e793aed79b94d7dc0757)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git/commit/?id=bfa275a9bb4e16067b9056e8019bd478da798bc9
-        git remote add ebiggers https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git
-        git fetch --no-tags ebiggers crypto-pending
-        git checkout bfa275a9bb4e16067b9056e8019bd478da798bc9
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+On 20/05/2022 19:24, Alexander Steffen wrote:
+>
+> +MODULE_DEVICE_TABLE(i2c, tpm_tis_i2c_id);
+> +
+> +#ifdef CONFIG_OF
+> +static const struct of_device_id of_tis_i2c_match[] = {
+> +	{ .compatible = "infineon,slb9673", },
+> +	{ .compatible = "tcg,tpm_tis-i2c", },
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Please run checkpatch on your patches. You add undocumented compatibles.
 
-All errors (new ones prefixed by >>):
+Without bindings, new compatibles and properties cannot be accepted, so NAK.
 
->> arch/arm64/crypto/polyval-ce-glue.c:187:1: error: redefinition of '__inittest'
-   module_init(polyval_ce_mod_init);
-   ^
-   include/linux/module.h:131:42: note: expanded from macro 'module_init'
-           static inline initcall_t __maybe_unused __inittest(void)                \
-                                                   ^
-   arch/arm64/crypto/polyval-ce-glue.c:185:1: note: previous definition is here
-   module_cpu_feature_match(PMULL, polyval_ce_mod_init)
-   ^
-   include/linux/cpufeature.h:54:10: note: expanded from macro 'module_cpu_feature_match'
-   }                                                               \
-                                                                   ^
-   include/linux/module.h:131:42: note: expanded from macro '\
-   module_init'
-           static inline initcall_t __maybe_unused __inittest(void)                \
-                                                   ^
->> arch/arm64/crypto/polyval-ce-glue.c:187:1: error: redefinition of 'init_module'
-   module_init(polyval_ce_mod_init);
-   ^
-   include/linux/module.h:133:6: note: expanded from macro 'module_init'
-           int init_module(void) __copy(initfn)                    \
-               ^
-   arch/arm64/crypto/polyval-ce-glue.c:185:1: note: previous definition is here
-   module_cpu_feature_match(PMULL, polyval_ce_mod_init)
-   ^
-   include/linux/cpufeature.h:54:10: note: expanded from macro 'module_cpu_feature_match'
-   }                                                               \
-                                                                   ^
-   include/linux/module.h:133:6: note: expanded from macro '\
-   module_init'
-           int init_module(void) __copy(initfn)                    \
-               ^
-   2 errors generated.
-
-
-vim +/__inittest +187 arch/arm64/crypto/polyval-ce-glue.c
-
-   186	
- > 187	module_init(polyval_ce_mod_init);
-   188	module_exit(polyval_ce_mod_exit);
-   189	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best regards,
+Krzysztof

@@ -2,105 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FABF53037F
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 16:22:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D75A4530383
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 16:22:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346832AbiEVOWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 10:22:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39522 "EHLO
+        id S1347155AbiEVOWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 10:22:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239031AbiEVOWZ (ORCPT
+        with ESMTP id S1346654AbiEVOWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 10:22:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD09A3968C
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 07:22:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 80462B80AE9
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 14:22:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BE5DC385AA;
-        Sun, 22 May 2022 14:22:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653229341;
-        bh=5jwl99JxBIUjh3Qh5dWJ3BCJiWyb5trvHhe0CaZLHdo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=r8DCVZq+h53FFG2HiBhtx6fqFfPoWp9FQpIEVSnY1xL1bCwYER3Gg3PI3DsnioD3T
-         debkWl9utxa5WSxuyCgoLVAVEop78dj95Cgn23Dg60wKypGmWxFLTPqZoawfLnAa4o
-         5knxwUZVEKv4BG5uqbFN23+se71IsgnPfQRwDGbwapWWFJyR+dshfvKhFChAWqL5IT
-         17lHuQ0RD8TceaqJz2a6Qlz+hZBtqZ5Ns27AWr8webq75EIaYpiNXBA5f56MBQWIYz
-         6CexGKbnp8TzkhbHJqSzUF2SD7eDZQrAE3GicNZyUHnWEWV7Ij2MU2NPBV0Zkgdlk1
-         sGefprsLXYr3Q==
-Date:   Sun, 22 May 2022 23:22:16 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Jeff Xie <xiehuan09@gmail.com>
-Cc:     rostedt@goodmis.org, mingo@redhat.com, mhiramat@kernel.org,
-        zanussi@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v10 2/4] trace/objtrace: Get the value of the object
-Message-Id: <20220522232216.bb1451fb6efc18c2bccc8d09@kernel.org>
-In-Reply-To: <20220512170008.1301613-3-xiehuan09@gmail.com>
-References: <20220512170008.1301613-1-xiehuan09@gmail.com>
-        <20220512170008.1301613-3-xiehuan09@gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 22 May 2022 10:22:44 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C89B39698
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 07:22:43 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id v66so15171120oib.3
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 07:22:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=TU6sSgMKeqRSiWt5TJD7Hv1A6wt4RMRql0Ea/R3Hyvw=;
+        b=qXm0oHx9cNRduPUbEbR16k7GA3DUzurMKMcgOpSqayi9jPpdbSEcVS27un3inNM/0g
+         gPWtiwMzrMC8N+G/s5CWTWa5TmEIDpNbLwmBoh+ZpsLEQWY8hc0LtvhTvbkO0zD4wBm/
+         WblqbfHWrkyuMfH7l6RcfpqLK3olWfm2UmF7Pu3nBIuFcHqozWpI8jRRPb64DZAt1oac
+         dt9kAgUbRPCRlCu9cDucQHma0yiXD4aunfPPo/G6yB8gTsJX63Fps477MFh8QYQjrLZV
+         2IsDN1zevNZRu5XwOOoXFcfbyOiscfFlA+L3M+bIWlMUa4sKxB2mt3TnupCTm1HtCbjW
+         m3Dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=TU6sSgMKeqRSiWt5TJD7Hv1A6wt4RMRql0Ea/R3Hyvw=;
+        b=i2iN6iLDJ/QgubcwtnZJYFrBN7/GdI0SUKIzSkKtNFGa5wYemkfCURDUREWludcXhF
+         xK91ku3eL6nA9Tm/HRXJSXhRgxzWFVbH13dCXd7MFQTnfEqUkDgSfa2xdmWY57b6uo81
+         QY420gViU/XDmK8ogiW2CbT6gPiMJYncgP+D5gdwP6qbWk9Ugs72f6bjIKCUeztG88zI
+         1Y0pvm0LOzf6E8nI1xUL8grKVchAN1o1wsUsw5UWkX6omdANMpl0SChlZP+QEYb0U0Aw
+         CIgNBIvwWDIbtQgopeNIdXL7gYObsirIjsken9MCEdwh1esQxRkn8Jb9VXETKRxO59uK
+         Z81g==
+X-Gm-Message-State: AOAM531Py7f8R2LhpvRhqtjXSST3fJhJ+sqrLu/1JSjFxeVhdUS9bioj
+        McIhS7ftPybtLCo0QKcjFsH0wY3C+tynggsI1Pk=
+X-Google-Smtp-Source: ABdhPJwpTwYyTF+jm4Hd+yTe2cvcng5jbxS+ZqPjMz/yLesT7SY9XU5xhaGrb3Lpsjyj03u+cYMQZDE18mvr3xscHUw=
+X-Received: by 2002:a05:6808:ed0:b0:2f9:c6f8:8b38 with SMTP id
+ q16-20020a0568080ed000b002f9c6f88b38mr9924652oiv.215.1653229362693; Sun, 22
+ May 2022 07:22:42 -0700 (PDT)
+MIME-Version: 1.0
+Reply-To: elodieantoine78875@yahoo.com
+Sender: mmrsmarian@gmail.com
+Received: by 2002:a05:6358:2c52:b0:a3:38b9:ca5f with HTTP; Sun, 22 May 2022
+ 07:22:41 -0700 (PDT)
+From:   Mrs Elodie Antoine <mrselodieatonie32@gmail.com>
+Date:   Sun, 22 May 2022 07:22:41 -0700
+X-Google-Sender-Auth: 5njPBFsuA_A92DbjgPn0NLVvLYc
+Message-ID: <CADY_32MQ1wHAtyj+aOM0ioRyaFy1p83p0EecaJucOxM3yf2aDg@mail.gmail.com>
+Subject: May God bless you In Jesus name Amen!!!
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:229 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5391]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [elodieantoine78875[at]yahoo.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [mmrsmarian[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  3.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  1.7 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  1.1 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jeff,
+Dear Altruist,
 
-On Fri, 13 May 2022 01:00:06 +0800
-Jeff Xie <xiehuan09@gmail.com> wrote:
+With confidence that this message will find you in good fate, i wish
+to share with you my last wish. I have a terminal ailment and writing
+from my hospital bed. I got your contact from humanitarian event with
+hope you have the welfare of less privilege around the globe at heart.
+I wish to submit my remaining fund the sum of ($ 6,200,000.00 Dollars)
+to you for continuation of charity service. My life is no longer
+promising as a result of cancer.
+I need your urgent cooperation for more details.
 
-[...]
-> @@ -175,9 +271,27 @@ trace_object_trigger(struct event_trigger_data *data,
->  
->  	field = obj_data->field;
->  	memcpy(&obj, rec + field->offset, sizeof(obj));
-> -	set_trace_object(obj, tr);
-> +	/* set the offset from the special object and the type size of the value*/
-> +	set_trace_object(obj, obj_data->obj_offset,
-> +			obj_data->obj_value_type_size, tr);
->  }
->  
-> +static const struct objtrace_fetch_type objtrace_fetch_types[] = {
-> +	{"u8", 1},
-> +	{"s8", 1},
-> +	{"x8", 1},
-> +	{"u16", 2},
-> +	{"s16", 2},
-> +	{"x16", 2},
-> +	{"u32", 4},
-> +	{"s32", 4},
-> +	{"x32", 4},
-> +	{"u64", 8},
-> +	{"s64", 8},
-> +	{"x64", 8},
+Thanks in advance for your kind heart and quick response to this gesture.
 
-Hmm, as far as I can see, you don't distinguish the prefix 'u','s','x'.
-If so, please support only 'x' at this moment. kprobe events supports
-those types, and it distinguishes the types when printing the logged
-data. E.g. 's16' shows '-1' for 0xffff, but 'x16' shows '0xffff'.
-You can add another patch to support such different types afterwards.
-
-> +	{}
-
-If this array is null terminated, please explictly do that, like
-
-	{NULL, 0},
-
-for readability.
-
-Thank you,
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Yours faithfully,
+Elodie Antoine.

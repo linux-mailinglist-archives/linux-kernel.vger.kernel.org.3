@@ -2,62 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61901530311
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 14:30:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53229530312
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 14:30:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344854AbiEVM36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 08:29:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58414 "EHLO
+        id S1344918AbiEVMa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 08:30:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240899AbiEVM3z (ORCPT
+        with ESMTP id S238812AbiEVMaZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 08:29:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EAF63CA65;
-        Sun, 22 May 2022 05:29:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 074DF60FC9;
-        Sun, 22 May 2022 12:29:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B385AC385AA;
-        Sun, 22 May 2022 12:29:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653222594;
-        bh=pQa0Xfjqbbh3fqvKaRXDPRrQF3+yVWTnEMtE0LqO6bo=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=RLi6vuckQutx3V0a3ySVeCd85K4m+tV7vG3hnhJ9i/JIJhVC8xXu6B5AKpksJW2dh
-         mc8+fE00D3z3pecaYVxgahx48PY8juKa0uA21WQ0aENItOn63l4j6aTchI8FvAg6YP
-         j3dQXZ7+zgNWy6neF9tYsownHEItAFzaKXvgx9V421oQ4nlAj2xyU+V+Id5zHHx2cp
-         KXyIX0We37G/+aPo1XjwEryab8d1BWOSYxVOOpz/7BowK5eNO4fjG/4LI/cdBjLMjS
-         M+Meu177PJ+ylUR/+615ZioCHplEKnwwyZVbmI4a10J76oSt0sxfxYfeVWxARKQQTZ
-         HKDtB6hZrA6IA==
-Content-Type: text/plain; charset="utf-8"
+        Sun, 22 May 2022 08:30:25 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5381F3CA6A
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 05:30:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653222624; x=1684758624;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=yl6oCepAkkyMdyLVyBENcfFzAAEHfF1+hGSnyy1z5Is=;
+  b=eTF9rk4HUX0lxrHhSt6kZ/G7dMmDKQh+2EcDg8vwQjaPMAdMAztlq2e5
+   XDI1uGBaMM/8EspXwgfYvFjLMDrmrQIf8NgUg5FeSEyGWvj8Ue3El09oz
+   bEpwiSCRtCQhmUj4iuyuPbSfvBLIt7YZdndHhmjmB6VPxFYIs5JL+UoxS
+   EcSJNg1S3/BKoDdnPkJPWX5nDBvXSaDHRrqyGIQydBdd23L6G+kxSzHXT
+   dccRTt8rH2rJVzORK/746pNIuHz3Uks07jlYlT6ZNaRNRdQ3KR/5OcdaJ
+   zhYxn2WLWAnw5NaibtofM2uLTxBAlUUf2B/BcBXZC7yuW2P94wKM73Gbj
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10354"; a="273113710"
+X-IronPort-AV: E=Sophos;i="5.91,244,1647327600"; 
+   d="scan'208";a="273113710"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2022 05:30:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,244,1647327600"; 
+   d="scan'208";a="702544936"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 22 May 2022 05:30:22 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nskiz-0000M3-JI;
+        Sun, 22 May 2022 12:30:21 +0000
+Date:   Sun, 22 May 2022 20:30:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>
+Subject: kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address
+ space '__rcu' of expression
+Message-ID: <202205222029.xpW3PM1y-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH linux-next v2] net: ath5k: replace ternary operator with
- min()
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20220517023923.76989-1-guozhengkui@vivo.com>
-References: <20220517023923.76989-1-guozhengkui@vivo.com>
-To:     Guo Zhengkui <guozhengkui@vivo.com>
-Cc:     Jiri Slaby <jirislaby@kernel.org>,
-        Nick Kossifidis <mickflemm@gmail.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-wireless@vger.kernel.org (open list:ATHEROS ATH5K WIRELESS DRIVER),
-        netdev@vger.kernel.org (open list:NETWORKING DRIVERS),
-        linux-kernel@vger.kernel.org (open list),
-        zhengkui_guo@outlook.com, Guo Zhengkui <guozhengkui@vivo.com>
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <165322258657.774.8414386492190244747.kvalo@kernel.org>
-Date:   Sun, 22 May 2022 12:29:51 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,22 +62,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Guo Zhengkui <guozhengkui@vivo.com> wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   eaea45fc0e7b6ae439526b4a41d91230c8517336
+commit: 782347b6bcad07ddb574422e01e22c92e05928c8 xdp: Add proper __rcu annotations to redirect map entries
+date:   11 months ago
+config: ia64-randconfig-s031-20220522 (https://download.01.org/0day-ci/archive/20220522/202205222029.xpW3PM1y-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 11.3.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=782347b6bcad07ddb574422e01e22c92e05928c8
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 782347b6bcad07ddb574422e01e22c92e05928c8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=ia64 SHELL=/bin/bash kernel/bpf/
 
-> Fix the following coccicheck warning:
-> 
-> drivers/net/wireless/ath/ath5k/phy.c:3139:62-63: WARNING
-> opportunity for min()
-> 
-> Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
-> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Patch applied to ath-next branch of ath.git, thanks.
 
-b380d2056ebb ath5k: replace ternary operator with min()
+sparse warnings: (new ones prefixed by >>)
+   kernel/bpf/devmap.c:561:29: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct bpf_dtab_netdev *dst @@     got struct bpf_dtab_netdev [noderef] __rcu * @@
+   kernel/bpf/devmap.c:561:29: sparse:     expected struct bpf_dtab_netdev *dst
+   kernel/bpf/devmap.c:561:29: sparse:     got struct bpf_dtab_netdev [noderef] __rcu *
+   kernel/bpf/devmap.c:657:29: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct bpf_dtab_netdev *dst @@     got struct bpf_dtab_netdev [noderef] __rcu * @@
+   kernel/bpf/devmap.c:657:29: sparse:     expected struct bpf_dtab_netdev *dst
+   kernel/bpf/devmap.c:657:29: sparse:     got struct bpf_dtab_netdev [noderef] __rcu *
+>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+
+vim +/__rcu +1030 kernel/bpf/devmap.c
+
+   990	
+   991	static int dev_map_notification(struct notifier_block *notifier,
+   992					ulong event, void *ptr)
+   993	{
+   994		struct net_device *netdev = netdev_notifier_info_to_dev(ptr);
+   995		struct bpf_dtab *dtab;
+   996		int i, cpu;
+   997	
+   998		switch (event) {
+   999		case NETDEV_REGISTER:
+  1000			if (!netdev->netdev_ops->ndo_xdp_xmit || netdev->xdp_bulkq)
+  1001				break;
+  1002	
+  1003			/* will be freed in free_netdev() */
+  1004			netdev->xdp_bulkq = alloc_percpu(struct xdp_dev_bulk_queue);
+  1005			if (!netdev->xdp_bulkq)
+  1006				return NOTIFY_BAD;
+  1007	
+  1008			for_each_possible_cpu(cpu)
+  1009				per_cpu_ptr(netdev->xdp_bulkq, cpu)->dev = netdev;
+  1010			break;
+  1011		case NETDEV_UNREGISTER:
+  1012			/* This rcu_read_lock/unlock pair is needed because
+  1013			 * dev_map_list is an RCU list AND to ensure a delete
+  1014			 * operation does not free a netdev_map entry while we
+  1015			 * are comparing it against the netdev being unregistered.
+  1016			 */
+  1017			rcu_read_lock();
+  1018			list_for_each_entry_rcu(dtab, &dev_map_list, list) {
+  1019				if (dtab->map.map_type == BPF_MAP_TYPE_DEVMAP_HASH) {
+  1020					dev_map_hash_remove_netdev(dtab, netdev);
+  1021					continue;
+  1022				}
+  1023	
+  1024				for (i = 0; i < dtab->map.max_entries; i++) {
+  1025					struct bpf_dtab_netdev *dev, *odev;
+  1026	
+  1027					dev = rcu_dereference(dtab->netdev_map[i]);
+  1028					if (!dev || netdev != dev->dev)
+  1029						continue;
+> 1030					odev = unrcu_pointer(cmpxchg(&dtab->netdev_map[i], RCU_INITIALIZER(dev), NULL));
+  1031					if (dev == odev)
+  1032						call_rcu(&dev->rcu,
+  1033							 __dev_map_entry_free);
+  1034				}
+  1035			}
+  1036			rcu_read_unlock();
+  1037			break;
+  1038		default:
+  1039			break;
+  1040		}
+  1041		return NOTIFY_OK;
+  1042	}
+  1043	
 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20220517023923.76989-1-guozhengkui@vivo.com/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

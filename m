@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F7CD53043A
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 17:59:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63669530447
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 17:59:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348736AbiEVP60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 11:58:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38478 "EHLO
+        id S235082AbiEVP6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 11:58:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347192AbiEVP6H (ORCPT
+        with ESMTP id S1349255AbiEVP61 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 11:58:07 -0400
+        Sun, 22 May 2022 11:58:27 -0400
 Received: from herzl.nuvoton.co.il (unknown [212.199.177.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C10183B565;
-        Sun, 22 May 2022 08:58:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBD773B2BC;
+        Sun, 22 May 2022 08:58:23 -0700 (PDT)
 Received: from taln60.nuvoton.co.il (ntil-fw [212.199.177.25])
-        by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 24MFp6F1031639;
-        Sun, 22 May 2022 18:51:06 +0300
+        by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 24MFp9Mi031642;
+        Sun, 22 May 2022 18:51:09 +0300
 Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
-        id DBCFE63A4A; Sun, 22 May 2022 18:51:06 +0300 (IDT)
+        id 4975063A4A; Sun, 22 May 2022 18:51:09 +0300 (IDT)
 From:   Tomer Maimon <tmaimon77@gmail.com>
 To:     avifishman70@gmail.com, tali.perry1@gmail.com, joel@jms.id.au,
         venture@google.com, yuenn@google.com, benjaminfair@google.com,
@@ -38,9 +38,9 @@ Cc:     soc@kernel.org, devicetree@vger.kernel.org,
         linux-serial@vger.kernel.org, linux-watchdog@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         Tomer Maimon <tmaimon77@gmail.com>
-Subject: [PATCH v1 10/19] reset: npcm: using syscon instead of device data
-Date:   Sun, 22 May 2022 18:50:37 +0300
-Message-Id: <20220522155046.260146-11-tmaimon77@gmail.com>
+Subject: [PATCH v1 11/19] dt-bindings: reset: npcm: Add support for NPCM8XX
+Date:   Sun, 22 May 2022 18:50:38 +0300
+Message-Id: <20220522155046.260146-12-tmaimon77@gmail.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20220522155046.260146-1-tmaimon77@gmail.com>
 References: <20220522155046.260146-1-tmaimon77@gmail.com>
@@ -58,45 +58,184 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Using syscon device tree property instead of
-device data to handle the NPCM GCR registers.
+Add binding document and device tree binding
+constants for Nuvoton BMC NPCM8XX reset controller.
 
 Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
 ---
- drivers/reset/reset-npcm.c | 11 +++--------
- 1 file changed, 3 insertions(+), 8 deletions(-)
+ .../bindings/reset/nuvoton,npcm-reset.txt     |  17 ++-
+ .../dt-bindings/reset/nuvoton,npcm8xx-reset.h | 124 ++++++++++++++++++
+ 2 files changed, 139 insertions(+), 2 deletions(-)
+ create mode 100644 include/dt-bindings/reset/nuvoton,npcm8xx-reset.h
 
-diff --git a/drivers/reset/reset-npcm.c b/drivers/reset/reset-npcm.c
-index 2ea4d3136e15..0c963b21eddc 100644
---- a/drivers/reset/reset-npcm.c
-+++ b/drivers/reset/reset-npcm.c
-@@ -138,8 +138,7 @@ static int npcm_reset_xlate(struct reset_controller_dev *rcdev,
- }
+diff --git a/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.txt b/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.txt
+index cb1613092ee7..b7eb8615b68b 100644
+--- a/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.txt
++++ b/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.txt
+@@ -1,14 +1,15 @@
+ Nuvoton NPCM Reset controller
  
- static const struct of_device_id npcm_rc_match[] = {
--	{ .compatible = "nuvoton,npcm750-reset",
--		.data = (void *)"nuvoton,npcm750-gcr" },
-+	{ .compatible = "nuvoton,npcm750-reset"},
- 	{ }
- };
+ Required properties:
+-- compatible : "nuvoton,npcm750-reset" for NPCM7XX BMC
++- compatible : "nuvoton,npcm750-reset" for Poleg NPCM7XX BMC.
++               "nuvoton,npcm845-reset" for Arbel NPCM8XX BMC.
+ - reg : specifies physical base address and size of the register.
+ - #reset-cells: must be set to 2
+ - syscon: a phandle to access GCR registers.
  
-@@ -155,14 +154,10 @@ static int npcm_usb_reset(struct platform_device *pdev, struct npcm_rc_data *rc)
- 	u32 ipsrst1_bits = 0;
- 	u32 ipsrst2_bits = NPCM_IPSRST2_USB_HOST;
- 	u32 ipsrst3_bits = 0;
--	const char *gcr_dt;
+ Optional property:
+ - nuvoton,sw-reset-number - Contains the software reset number to restart the SoC.
+-  NPCM7xx contain four software reset that represent numbers 1 to 4.
++  NPCM7xx and NPCM8xx contain four software reset that represent numbers 1 to 4.
  
--	gcr_dt = (const char *)
--	of_match_device(dev->driver->of_match_table, dev)->data;
--
--	gcr_regmap = syscon_regmap_lookup_by_compatible(gcr_dt);
-+	gcr_regmap = syscon_regmap_lookup_by_phandle(dev->of_node, "syscon");
- 	if (IS_ERR(gcr_regmap)) {
--		dev_err(&pdev->dev, "Failed to find %s\n", gcr_dt);
-+		dev_err(&pdev->dev, "Failed to find gcr syscon");
- 		return PTR_ERR(gcr_regmap);
- 	}
+   If 'nuvoton,sw-reset-number' is not specified software reset is disabled.
  
+@@ -32,3 +33,15 @@ example:
+         };
+ 
+ The index could be found in <dt-bindings/reset/nuvoton,npcm7xx-reset.h>.
++
++Specifying reset lines connected to IP NPCM8XX modules
++======================================================
++example:
++
++        spi0: spi@..... {
++                ...
++                resets = <&rstc NPCM8XX_RESET_IPSRST2 NPCM8XX_RESET_PSPI1>;
++                ...
++        };
++
++The index could be found in <dt-bindings/reset/nuvoton,npcm8xx-reset.h>.
+diff --git a/include/dt-bindings/reset/nuvoton,npcm8xx-reset.h b/include/dt-bindings/reset/nuvoton,npcm8xx-reset.h
+new file mode 100644
+index 000000000000..4b832a0fd1dd
+--- /dev/null
++++ b/include/dt-bindings/reset/nuvoton,npcm8xx-reset.h
+@@ -0,0 +1,124 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++// Copyright (c) 2022 Nuvoton Technology corporation.
++
++#ifndef _DT_BINDINGS_NPCM8XX_RESET_H
++#define _DT_BINDINGS_NPCM8XX_RESET_H
++
++#define NPCM8XX_RESET_IPSRST1		0x20
++#define NPCM8XX_RESET_IPSRST2		0x24
++#define NPCM8XX_RESET_IPSRST3		0x34
++#define NPCM8XX_RESET_IPSRST4		0x74
++
++/* Reset lines on IP1 reset module (NPCM8XX_RESET_IPSRST1) */
++#define NPCM8XX_RESET_GDMA0		3
++#define NPCM8XX_RESET_UDC1		5
++#define NPCM8XX_RESET_GMAC3		6
++#define NPCM8XX_RESET_UART_2_3		7
++#define NPCM8XX_RESET_UDC2		8
++#define NPCM8XX_RESET_PECI		9
++#define NPCM8XX_RESET_AES		10
++#define NPCM8XX_RESET_UART_0_1		11
++#define NPCM8XX_RESET_MC		12
++#define NPCM8XX_RESET_SMB2		13
++#define NPCM8XX_RESET_SMB3		14
++#define NPCM8XX_RESET_SMB4		15
++#define NPCM8XX_RESET_SMB5		16
++#define NPCM8XX_RESET_PWM_M0		18
++#define NPCM8XX_RESET_TIMER_0_4		19
++#define NPCM8XX_RESET_TIMER_5_9		20
++#define NPCM8XX_RESET_GMAC4		21
++#define NPCM8XX_RESET_UDC4		22
++#define NPCM8XX_RESET_UDC5		23
++#define NPCM8XX_RESET_UDC6		24
++#define NPCM8XX_RESET_UDC3		25
++#define NPCM8XX_RESET_ADC		27
++#define NPCM8XX_RESET_SMB6		28
++#define NPCM8XX_RESET_SMB7		29
++#define NPCM8XX_RESET_SMB0		30
++#define NPCM8XX_RESET_SMB1		31
++
++/* Reset lines on IP2 reset module (NPCM8XX_RESET_IPSRST2) */
++#define NPCM8XX_RESET_MFT0		0
++#define NPCM8XX_RESET_MFT1		1
++#define NPCM8XX_RESET_MFT2		2
++#define NPCM8XX_RESET_MFT3		3
++#define NPCM8XX_RESET_MFT4		4
++#define NPCM8XX_RESET_MFT5		5
++#define NPCM8XX_RESET_MFT6		6
++#define NPCM8XX_RESET_MFT7		7
++#define NPCM8XX_RESET_MMC		8
++#define NPCM8XX_RESET_GFX_SYS		10
++#define NPCM8XX_RESET_AHB_PCIBRG	11
++#define NPCM8XX_RESET_VDMA		12
++#define NPCM8XX_RESET_ECE		13
++#define NPCM8XX_RESET_VCD		14
++#define NPCM8XX_RESET_VIRUART1		16
++#define NPCM8XX_RESET_VIRUART2		17
++#define NPCM8XX_RESET_SIOX1		18
++#define NPCM8XX_RESET_SIOX2		19
++#define NPCM8XX_RESET_BT		20
++#define NPCM8XX_RESET_3DES		21
++#define NPCM8XX_RESET_PSPI2		23
++#define NPCM8XX_RESET_GMAC2		25
++#define NPCM8XX_RESET_USBH1		26
++#define NPCM8XX_RESET_GMAC1		28
++#define NPCM8XX_RESET_CP1		31
++
++/* Reset lines on IP3 reset module (NPCM8XX_RESET_IPSRST3) */
++#define NPCM8XX_RESET_PWM_M1		0
++#define NPCM8XX_RESET_SMB12		1
++#define NPCM8XX_RESET_SPIX		2
++#define NPCM8XX_RESET_SMB13		3
++#define NPCM8XX_RESET_UDC0		4
++#define NPCM8XX_RESET_UDC7		5
++#define NPCM8XX_RESET_UDC8		6
++#define NPCM8XX_RESET_UDC9		7
++#define NPCM8XX_RESET_USBHUB		8
++#define NPCM8XX_RESET_PCI_MAILBOX	9
++#define NPCM8XX_RESET_GDMA1		10
++#define NPCM8XX_RESET_GDMA2		11
++#define NPCM8XX_RESET_SMB14		12
++#define NPCM8XX_RESET_SHA		13
++#define NPCM8XX_RESET_SEC_ECC		14
++#define NPCM8XX_RESET_PCIE_RC		15
++#define NPCM8XX_RESET_TIMER_10_14	16
++#define NPCM8XX_RESET_RNG		17
++#define NPCM8XX_RESET_SMB15		18
++#define NPCM8XX_RESET_SMB8		19
++#define NPCM8XX_RESET_SMB9		20
++#define NPCM8XX_RESET_SMB10		21
++#define NPCM8XX_RESET_SMB11		22
++#define NPCM8XX_RESET_ESPI		23
++#define NPCM8XX_RESET_USB_PHY_1		24
++#define NPCM8XX_RESET_USB_PHY_2		25
++
++/* Reset lines on IP4 reset module (NPCM8XX_RESET_IPSRST4) */
++#define NPCM8XX_RESET_SMB16		0
++#define NPCM8XX_RESET_SMB17		1
++#define NPCM8XX_RESET_SMB18		2
++#define NPCM8XX_RESET_SMB19		3
++#define NPCM8XX_RESET_SMB20		4
++#define NPCM8XX_RESET_SMB21		5
++#define NPCM8XX_RESET_SMB22		6
++#define NPCM8XX_RESET_SMB23		7
++#define NPCM8XX_RESET_I3C0		8
++#define NPCM8XX_RESET_I3C1		9
++#define NPCM8XX_RESET_I3C2		10
++#define NPCM8XX_RESET_I3C3		11
++#define NPCM8XX_RESET_I3C4		12
++#define NPCM8XX_RESET_I3C5		13
++#define NPCM8XX_RESET_UART4		16
++#define NPCM8XX_RESET_UART5		17
++#define NPCM8XX_RESET_UART6		18
++#define NPCM8XX_RESET_PCIMBX2		19
++#define NPCM8XX_RESET_SMB24		22
++#define NPCM8XX_RESET_SMB25		23
++#define NPCM8XX_RESET_SMB26		24
++#define NPCM8XX_RESET_USBPHY3		25
++#define NPCM8XX_RESET_PCIRCPHY		27
++#define NPCM8XX_RESET_PWM_M2		28
++#define NPCM8XX_RESET_JTM1		29
++#define NPCM8XX_RESET_JTM2		30
++#define NPCM8XX_RESET_USBH2		31
++
++#endif
 -- 
 2.33.0
 

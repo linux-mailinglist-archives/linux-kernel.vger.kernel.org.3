@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 263655301A5
+	by mail.lfdr.de (Postfix) with ESMTP id CB89D5301A7
 	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 09:37:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344951AbiEVHhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 03:37:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33882 "EHLO
+        id S1346469AbiEVHhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 03:37:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235982AbiEVHhB (ORCPT
+        with ESMTP id S1345986AbiEVHhS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 03:37:01 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD0923CA61;
-        Sun, 22 May 2022 00:36:59 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id gi33so14343169ejc.3;
-        Sun, 22 May 2022 00:36:59 -0700 (PDT)
+        Sun, 22 May 2022 03:37:18 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B92A33E0EC;
+        Sun, 22 May 2022 00:37:16 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id i27so22823964ejd.9;
+        Sun, 22 May 2022 00:37:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=WXPZMIuDMh3nH2dL31GT3vk5sClUvSn8jN8RcdsCbL4=;
-        b=k91qRNUzU0dwmpRuQtkAG3m/N0VPpXanYb3QoApiKq42cFZT4HQL5JmtaVxgdYhlBu
-         MqX+fzyKkAde9IqUMQ0ovn6zF3DCuzqSl+F5AuJTnBj1MReyWEs9yN57f6OyO4qogsD2
-         LPbJGJ0hX0TxPvAR1qJMdENQajTcq/1bF2wGNhtkxjTqzB4Wu43kDbSZoMjz03+w7IQ9
-         vLe4QTWG+wPpI4jcChvpgtHBbmzd3GPKw/PLATBgy2wuK+52Nt9U0kDxRSpQ+LstVk5J
-         PFTRxCRtvjj1l436l5vtgAVlthegT4+iCUwVWPVjwTOxrB6fxEFMgY+oERNLFI+K/aIO
-         D5SQ==
+        bh=OdhdDP/uxlcANINOeHwQJ1MfvJN8y/K+wdplfOLCUbg=;
+        b=Q7vTZzoeodbfmkaLaMjIU/yoC1tkECqU3K6iKZ4VlVbZVdYZymn4X8AizZmULhwZZW
+         HKh4Bq4IpzdMFY8uupDPGDVXPIc+okstubtxys/zfpxcQytXclhiT0DQ5lNaAviPpoGi
+         G2HhydMwmWaX/5N2cvyefWrUjHYjdQw0u0LdTibjGwH2ZKjOwgkopi3lokgOa4XJ6gxf
+         6IVL19F9sSqP/068BF/oY7XJeoT6aCCthhjNCmqJDgodHVJqDS36f1rlGs0mjR0GY4G2
+         B2KtbUrSNltXro6jngVpNd56rSWb7gqC+rQXfJgG99jAT2YxrUdbONXd4nwIL77GTf70
+         zALQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=WXPZMIuDMh3nH2dL31GT3vk5sClUvSn8jN8RcdsCbL4=;
-        b=BAD5nx4NDmBzVvU1AlTQshWE6eSUGaQ6o2e65PxjXpvIdylDxqR1tx1OeTU0AMoKxc
-         k1RAKhGOQR4fpuJSS73BQosdXNSzxfaky407lndvqmB69lvuWxLmVAXuCLqWQzsSqJXP
-         SgjqR8PBst/uEoUo9Cn0caMMhtxa62UTKaO+iYV+hMGZf+bxpGurcLfHJM6nNZtUB16E
-         kspyEb9kkPK1AoJvwKMDLfyWUtopuyI9mJyPX4X8NWAmCSr6n9Ye5nqwinhs2K+1aHeO
-         +r7CMES5hfgMzCoiye+IJ3QBnRUsFxc7KBgiVk9BkHwLonhVmXiHyUGthQOXA8J1Jhai
-         KLlw==
-X-Gm-Message-State: AOAM530+vPVXN5H4Gpov6lktsxlqJTWR0ZaEog96lbXAvNC0hyIIvn8v
-        gxwz+5N0LIHW+8Q9FiJPtkvEISy0YTfipw==
-X-Google-Smtp-Source: ABdhPJx8/8naAzFBDiHnI0FTe8FKv3lYnIyerQW26X4ehpEB/p2aGjgHgEbyP6lICoR5V1gtsekP1Q==
-X-Received: by 2002:a17:907:7283:b0:6f4:ff4f:1b6e with SMTP id dt3-20020a170907728300b006f4ff4f1b6emr14752427ejc.344.1653205018257;
-        Sun, 22 May 2022 00:36:58 -0700 (PDT)
+        bh=OdhdDP/uxlcANINOeHwQJ1MfvJN8y/K+wdplfOLCUbg=;
+        b=PsxBPvToXZ/AcHYJ59VFyyxa/o8ybIoFdUET1ugHuLrVEjXRYmUjMnkmN8Qn0v5kDO
+         LzOuQZXuUqA+8U5Wh9eFoM3aVeA02z3FfLfGBwW4LWXseNpXmKN0h2nR5LeqCY9gMjYo
+         LbFZseBKe9Blj9fZL3GEFnMJ2jy6NeWAbfYYbvtNdWhjpQvQFdQfiv108dOXXVqhGN4R
+         QdghXpURTua4tPYTTVXG98qXxJyGAN7w1J8bz7A+r+9cxmRw+uzGzGwLU6R8VZ2n9zdY
+         6Q/ch8XYXXg+PrabDtrQL7jmwd5iO1etrAWSelIbgZaLfCMa48Kj8jh5A/2PxSU5ZdVi
+         32xw==
+X-Gm-Message-State: AOAM5328JCgAzBDSrtgyCvtUuhw8FH4Xjh0Vvt4CJY69ViBOGPrKrhza
+        Zq6V6YVWmZPXXc+O7Inuh1aAENDbH0yVZw==
+X-Google-Smtp-Source: ABdhPJxQBeuln8XMeRYo4K+y9ER4XF9UILSt1sR+YydK3j1021j2KKwVo/wXR5MBMrpqHT1JvAHAqg==
+X-Received: by 2002:a17:907:2d10:b0:6fe:debf:bfc7 with SMTP id gs16-20020a1709072d1000b006fedebfbfc7mr304155ejc.502.1653205034817;
+        Sun, 22 May 2022 00:37:14 -0700 (PDT)
 Received: from jernej-laptop.localnet (89-212-118-115.static.t-2.net. [89.212.118.115])
-        by smtp.gmail.com with ESMTPSA id s27-20020a170906221b00b006f3ef214dbdsm4911430ejs.35.2022.05.22.00.36.57
+        by smtp.gmail.com with ESMTPSA id k16-20020a1709067ad000b006fed8dfcf78sm238483ejo.225.2022.05.22.00.37.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 May 2022 00:36:57 -0700 (PDT)
+        Sun, 22 May 2022 00:37:14 -0700 (PDT)
 From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
 To:     LKML <linux-kernel@vger.kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>
@@ -55,12 +55,13 @@ Cc:     linux-spdx@vger.kernel.org,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Chen-Yu Tsai <wens@csie.org>,
         Samuel Holland <samuel@sholland.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
         linux-sunxi@lists.linux.dev
-Subject: Re: [patch 09/10] clocksource/drivers/timer-sun4i: Convert to SPDX identifier
-Date:   Sun, 22 May 2022 09:36:56 +0200
-Message-ID: <5567157.DvuYhMxLoT@jernej-laptop>
-In-Reply-To: <20220510171254.908144392@linutronix.de>
-References: <20220510171003.952873904@linutronix.de> <20220510171254.908144392@linutronix.de>
+Subject: Re: [patch 10/10] clocksource/drivers/timer-sun5i: Convert to SPDX identifier
+Date:   Sun, 22 May 2022 09:37:13 +0200
+Message-ID: <4737788.31r3eYUQgx@jernej-laptop>
+In-Reply-To: <20220510171254.970933294@linutronix.de>
+References: <20220510171003.952873904@linutronix.de> <20220510171254.970933294@linutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -74,7 +75,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne torek, 10. maj 2022 ob 19:24:49 CEST je Thomas Gleixner napisal(a):
+Dne torek, 10. maj 2022 ob 19:24:51 CEST je Thomas Gleixner napisal(a):
 > The license information clearly states GPL version 2 only. The extra text
 > which excludes warranties is an excerpt of the corresponding GPLv2 clause
 > 11.
@@ -84,8 +85,8 @@ Dne torek, 10. maj 2022 ob 19:24:49 CEST je Thomas Gleixner napisal(a):
 > Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 > Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
 > Cc: Chen-Yu Tsai <wens@csie.org>
-> Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
 > Cc: Samuel Holland <samuel@sholland.org>
+> Cc: Philipp Zabel <p.zabel@pengutronix.de>
 > Cc: linux-sunxi@lists.linux.dev
 
 Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
@@ -94,20 +95,19 @@ Best regards,
 Jernej
 
 > ---
->  drivers/clocksource/timer-sun4i.c |    5 +----
+>  drivers/clocksource/timer-sun5i.c |    5 +----
 >  1 file changed, 1 insertion(+), 4 deletions(-)
 > 
-> --- a/drivers/clocksource/timer-sun4i.c
-> +++ b/drivers/clocksource/timer-sun4i.c
-> @@ -1,3 +1,4 @@
+> --- a/drivers/clocksource/timer-sun5i.c
+> +++ b/drivers/clocksource/timer-sun5i.c
+> @@ -1,13 +1,10 @@
 > +// SPDX-License-Identifier: GPL-2.0
 >  /*
->   * Allwinner A1X SoCs timer handling.
+>   * Allwinner SoCs hstimer driver.
 >   *
-> @@ -8,10 +9,6 @@
->   * Based on code from
->   * Allwinner Technology Co., Ltd. <www.allwinnertech.com>
->   * Benn Huang <benn@allwinnertech.com>
+>   * Copyright (C) 2013 Maxime Ripard
+>   *
+>   * Maxime Ripard <maxime.ripard@free-electrons.com>
 > - *
 > - * This file is licensed under the terms of the GNU General Public
 > - * License version 2.  This program is licensed "as is" without any

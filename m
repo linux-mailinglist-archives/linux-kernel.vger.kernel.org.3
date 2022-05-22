@@ -2,109 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E9C85304F9
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 19:38:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6D2B5304FB
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 19:39:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349800AbiEVRiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 13:38:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33842 "EHLO
+        id S1349890AbiEVRj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 13:39:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231196AbiEVRir (ORCPT
+        with ESMTP id S231196AbiEVRjX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 13:38:47 -0400
-Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 622B714086;
-        Sun, 22 May 2022 10:38:46 -0700 (PDT)
-Received: by mail.hallyn.com (Postfix, from userid 1001)
-        id A91883F4; Sun, 22 May 2022 12:38:44 -0500 (CDT)
-Date:   Sun, 22 May 2022 12:38:44 -0500
-From:   "Serge E. Hallyn" <serge@hallyn.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        jpenumak@redhat.com, Christian Brauner <brauner@kernel.org>
-Subject: Re: [PATCH v12 12/26] ima: Only accept AUDIT rules for
- non-init_ima_ns namespaces for now
-Message-ID: <20220522173844.GA24519@mail.hallyn.com>
-References: <20220420140633.753772-1-stefanb@linux.ibm.com>
- <20220420140633.753772-13-stefanb@linux.ibm.com>
+        Sun, 22 May 2022 13:39:23 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAB10186C0;
+        Sun, 22 May 2022 10:39:22 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id i68so10182122qke.11;
+        Sun, 22 May 2022 10:39:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=xkCujTokcqPtWiwpiGRk5TtIbZPWLmLWKiJpPt/OGWo=;
+        b=ZItGJ02c4c8FBNvKfrvVRaMVpja1L3Tmz8glCrjwgC0rSrah9foKJrdU0Tr9NhfMLi
+         sDgQPqgUU/yA2kK4MP44nJSubsFxdeCwx58ISc4L4wbA8tGdUmgbZqHfu8OjXcuaezeS
+         3yR61TbCcYS0ugkO0Mqj3tPxUcR55UQ2Oi6FlDTKkAeW4W7Tzrfe4rjVmB9gpGfKo+J9
+         xDXmHPuy9wD37TRxdKm9qecP4CdqrmyoOzXXfwBVLCXfeu3872/BqZZRSWNNvQ1xJdbL
+         Iewvssuu0kfzz2fi7BzWE0CI3OOzRUJ2eyWyDpXbtQufRixNtdnW87DMcLUFmwNVdQv+
+         afoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xkCujTokcqPtWiwpiGRk5TtIbZPWLmLWKiJpPt/OGWo=;
+        b=Ro0vMim7NWqB/JR38phM8T3DlVb0kEOsHqz+QJvYjQ3xfDhQERcMt4GIytBdDKcvRh
+         lQQ1qajF02/NeNlxdAkMr+AMp826fD6Ghj3CIuUDKEC9uJPy0nyFSCruCzk6dTrnS/Ww
+         nxLPePQ925rj0/Raf9zDXwtOOaMajHkYk46SxfaWlTt9uqRn9EqkVrZRf+uXcst3uEsJ
+         tztKjGEsNnZH0B/wu8E/KyOHW4bQRslslQDUg2hVXkesfWao5FH7UmWlj+j+ZveA/p03
+         bK64SZBQwkpwcAe191oF+vPxGb370MNb2Uvw40OJQwRCRN8/rQkFjjE1oS1iljXRwP1s
+         Ttlw==
+X-Gm-Message-State: AOAM533/ba9FLtk6bQaTXFKNSrK2k1rCBv+FHO+rNgi59gp0Y6sjmr2d
+        k0aGaoTI7NM6u2GwvIcQY1I=
+X-Google-Smtp-Source: ABdhPJxZLxs0+TkUltsfJwRF5N/FN9ogf4uiCB2TmPZQWm1f9m2I7PENOE+YgL9VRGB4i56uZKRmTw==
+X-Received: by 2002:a37:6685:0:b0:6a3:686f:699a with SMTP id a127-20020a376685000000b006a3686f699amr4169112qkc.390.1653241161897;
+        Sun, 22 May 2022 10:39:21 -0700 (PDT)
+Received: from localhost (c-69-254-185-160.hsd1.fl.comcast.net. [69.254.185.160])
+        by smtp.gmail.com with ESMTPSA id h11-20020a05620a21cb00b006a36b7e55b3sm2642393qka.4.2022.05.22.10.39.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 May 2022 10:39:21 -0700 (PDT)
+Date:   Sun, 22 May 2022 10:39:19 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        David Laight <David.Laight@aculab.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joe Perches <joe@perches.com>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Nicolas Palix <nicolas.palix@imag.fr>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        linux-kernel@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>, kvm@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: [PATCH 11/22] KVM: x86: hyper-v: replace bitmap_weight() with
+ hweight64()
+Message-ID: <Yop1R+Z7OtIcfrvA@yury-laptop>
+References: <20220510154750.212913-1-yury.norov@gmail.com>
+ <20220510154750.212913-12-yury.norov@gmail.com>
+ <20220522145357.GA244394@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220420140633.753772-13-stefanb@linux.ibm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220522145357.GA244394@roeck-us.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 10:06:19AM -0400, Stefan Berger wrote:
-> Only accept AUDIT rules for non-init_ima_ns namespaces for now. Reject
-
-This sentence gives me trouble - i keep thinking you mean that you'll
-reject AUDIT rules for init_ima_ns :)  Can you rephrase it as something
-like
-
-For non-init_ima_ns namespaces, only accept AUDIT rules for now.
-
-:)
-
-> all rules that require support for measuring, appraisal, and hashing.
+On Sun, May 22, 2022 at 07:53:57AM -0700, Guenter Roeck wrote:
+> On Tue, May 10, 2022 at 08:47:39AM -0700, Yury Norov wrote:
+> > kvm_hv_flush_tlb() applies bitmap API to a u64 variable valid_bank_mask.
+> > Since valid_bank_mask has a fixed size, we can use hweight64() and avoid
+> > excessive bloating.
 > 
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> Acked-by: Christian Brauner <brauner@kernel.org>
-> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> In kvm_hv_send_ipi(), valid_bank_mask is unsigned long, not u64.
 > 
-> ---
-> v9:
->   - Jump to err_audit when unsupported rules are detected
-> ---
->  security/integrity/ima/ima_policy.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
+> This results in:
 > 
-> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-> index 59e4ae5a6361..45a997709200 100644
-> --- a/security/integrity/ima/ima_policy.c
-> +++ b/security/integrity/ima/ima_policy.c
-> @@ -1812,6 +1812,17 @@ static int ima_parse_rule(struct ima_namespace *ns,
->  			result = -EINVAL;
->  			break;
->  		}
-> +
-> +		/* IMA namespace only accepts AUDIT rules */
-> +		if (ns != &init_ima_ns && result == 0) {
-> +			switch (entry->action) {
-> +			case MEASURE:
-> +			case APPRAISE:
-> +			case HASH:
+> arch/x86/kvm/hyperv.c: In function 'kvm_hv_send_ipi':
+> include/asm-generic/bitops/const_hweight.h:21:76: error: right shift count >= width of type
+> 
+> on all 32-bit builds.
+> 
+> Guenter
 
-So... what about DONT_MEASURE and DONT_APPRAISE?
+Hi Guenter,
 
-> +				result = -EINVAL;
-> +				goto err_audit;
-> +			}
-> +		}
->  	}
->  	if (!result && !ima_validate_rule(entry))
->  		result = -EINVAL;
-> @@ -1824,6 +1835,7 @@ static int ima_parse_rule(struct ima_namespace *ns,
->  		check_template_modsig(template_desc);
->  	}
->  
-> +err_audit:
->  	audit_log_format(ab, "res=%d", !result);
->  	audit_log_end(ab);
->  	return result;
-> -- 
-> 2.34.1
+The fix is in Paolo's tree:
+https://lore.kernel.org/lkml/20220519171504.1238724-1-yury.norov@gmail.com/T/
+
+Thanks,
+Yury

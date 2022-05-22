@@ -2,90 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D4EA530015
-	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 02:49:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16F0F530018
+	for <lists+linux-kernel@lfdr.de>; Sun, 22 May 2022 02:49:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346499AbiEVAtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 21 May 2022 20:49:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44788 "EHLO
+        id S234796AbiEVAtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 21 May 2022 20:49:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiEVAs7 (ORCPT
+        with ESMTP id S1348667AbiEVAtP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 21 May 2022 20:48:59 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 480304A901
-        for <linux-kernel@vger.kernel.org>; Sat, 21 May 2022 17:48:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653180538; x=1684716538;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=MwZ/siLcOEqv/6vMAg4l/paZ1NqwDsWxbmBCIPD/QJY=;
-  b=fr2Qam7G8Zlgqr9kWKcOijZ5D6yK3FSrlgJ+3Y7u78fCpBbp7p4WW+9z
-   HF5yxqHPOy0PS0nmMQNHmZGoAswyD71hUzhFR1xeUFJUqIKi5jDuqYbel
-   MEE/XN7IlwLoVkmCVBb6+W30nrl3PhrYP+58wKitSbfpzGLrQ0MVa54Rv
-   sFwTONUDvuU7Z/EjthzQGDlLPZk2QTjk2cSKLTb19M+rpcGjoREFviZYv
-   QvYI7Y5wPpxzFPgAlC6lSFOhBDdkm4BxtgLYV2k4eeh8HLxfewEivODTQ
-   MxrL58PvHPXW+wu+8xWyJyielHnQrz5OvSBKhw0utql1i5SlzEkfnm9U4
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10354"; a="359326745"
-X-IronPort-AV: E=Sophos;i="5.91,243,1647327600"; 
-   d="scan'208";a="359326745"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 17:48:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,243,1647327600"; 
-   d="scan'208";a="899968011"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 21 May 2022 17:48:57 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nsZmC-0006nD-KU;
-        Sun, 22 May 2022 00:48:56 +0000
-Date:   Sun, 22 May 2022 08:48:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Chuck Lever <chuck.lever@oracle.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [cel:topic-rpc-with-tls-upcall 16/19] xprtsock.c:undefined reference
- to `tls_client_hello_x509'
-Message-ID: <202205220844.ZVEdxK1Z-lkp@intel.com>
+        Sat, 21 May 2022 20:49:15 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A684AE29;
+        Sat, 21 May 2022 17:49:11 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L5MKb39Qlz4xYX;
+        Sun, 22 May 2022 10:49:07 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1653180547;
+        bh=6GBGQUNfenayWdG4wh7MBp6v8WRidvRkLBy3XrNfZ60=;
+        h=Date:From:To:Cc:Subject:From;
+        b=tqZfawZXWar8odKzH0NaVBTc6kdmbYm9rFgRcoXiLUhc4h7pFx6q5w8oyb+4T2NlW
+         a0ZvYY17Y4CGC3fI+1Jn++Hyvy2Ysgle6EUlRmbRa5yy+IOV8V5e/Mmuw5MaG0HOHs
+         qK49bbkfw7Zf3MZbPJDa6c0ge+AC5nVd4k8EUjaiRZ2D/hKueN4VKjnD6qN3PJS53M
+         w9VnTHWQ+RKccY1pi9L721yNzAxt01lHRrRf4pNARBDxdTUSwd6LhyYLAyFcEGj6/V
+         EzCsGPuVFJeLnG0/zMTV2xZ2I0nbZ6TNpymMvOb7dVNVjKTIeyoYmKF83lMm1xgiQI
+         lVtvRFvwjCoog==
+Date:   Sun, 22 May 2022 10:49:06 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
+Cc:     Wanpeng Li <wanpengli@tencent.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the kvm tree
+Message-ID: <20220522104906.6d905d11@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/cLSV4iuw14whB3Xv2gynlzz";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux topic-rpc-with-tls-upcall
-head:   c484b8917f3569f6fdf4026936f9452dbeb1a8c3
-commit: ff786916b6c43d3db9b03c15b3379fd96b4bb05c [16/19] SUNRPC: Add RPC-with-TLS support to xprtsock.c
-config: m68k-defconfig (https://download.01.org/0day-ci/archive/20220522/202205220844.ZVEdxK1Z-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/cel/linux.git/commit/?id=ff786916b6c43d3db9b03c15b3379fd96b4bb05c
-        git remote add cel git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux
-        git fetch --no-tags cel topic-rpc-with-tls-upcall
-        git checkout ff786916b6c43d3db9b03c15b3379fd96b4bb05c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
+--Sig_/cLSV4iuw14whB3Xv2gynlzz
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Hi all,
 
-All errors (new ones prefixed by >>):
+In commit
 
-   m68k-linux-ld: net/sunrpc/xprtsock.o: in function `xs_tls_connect':
->> xprtsock.c:(.text+0x2832): undefined reference to `tls_client_hello_x509'
->> m68k-linux-ld: xprtsock.c:(.text+0x2876): undefined reference to `tls_client_hello_psk'
+  abaaf90e1cb9 ("KVM: LAPIC: Drop pending LAPIC timer injection when cancel=
+ing the timer")
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Fixes tag
+
+  Fixes: 4427593258 (KVM: x86: thoroughly disarm LAPIC timer around TSC dea=
+dline switch)
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+    This can be fixed for the future by setting core.abbrev to 12 (or
+    more) or (for git v2.11 or later) just making sure it is not set
+    (or set to "auto").
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/cLSV4iuw14whB3Xv2gynlzz
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKJiIIACgkQAVBC80lX
+0GykiAf9E7tHEsjAxemxzP+zoGiThH9xQ4ulDS3y9+Vn2ar9lDGCUXAicD8wBdPB
+C17a0OQ79rcARUtUXseDOxXtzeVBDjLmifI2YJuGMOSJXsu7e+vkHMXCDF6owLm3
+ZOqU86eunLfvaJN86jjIe2hsdb1983RJvufl52QysE1chbGI69D/nkDHrTl9zm+h
+8RwhuadUahIb5ryGdF76SVi8t+AIa7365ECAPz3pXvdzDMToTVLdYZLTnRZxQlQq
+2PadSpa+fDFMB6Bq8zrmKRj5aqVOzm2vFBGPhtbRG8XjTT/12DRzIdCiV3RS56BS
+PFhRv1zjsimRFc2mnLZGpTEZadHEcQ==
+=rEO3
+-----END PGP SIGNATURE-----
+
+--Sig_/cLSV4iuw14whB3Xv2gynlzz--

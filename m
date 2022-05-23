@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78CBC530E33
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:43:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1954530E23
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:43:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234019AbiEWKX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 06:23:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46180 "EHLO
+        id S234035AbiEWKYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 06:24:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231636AbiEWKXt (ORCPT
+        with ESMTP id S233908AbiEWKXw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 06:23:49 -0400
+        Mon, 23 May 2022 06:23:52 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E43BF403E8;
-        Mon, 23 May 2022 03:23:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1AE941F9A;
+        Mon, 23 May 2022 03:23:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 75544611E3;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D9B8611E4;
+        Mon, 23 May 2022 10:23:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 600D8C34119;
         Mon, 23 May 2022 10:23:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D2C4C385AA;
-        Mon, 23 May 2022 10:23:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653301426;
-        bh=RKbhgRnFKOvcisV3ozO+bwt7WBkGZfXPEVSqBRPTwl0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=MDRR+57dQIAYgbRtJ8m+9znwxcwJ94g+YoVvJ6g5GIMJubu5S4asMBLg9evoNasU7
-         DJALQ0fCZbumlYu7Rls1Hv2rCWrpJN8LxkR88n1OaHy3u9ZYs3iWbvWEqhP5ZGYWKy
-         KhJ36Ha3UHngZKhecbUGM69croNzM3esqKguhXep0lleY6d4AZsvPLPq5XW1fso/ys
-         KV5rdDgkNoZxdi5MQOOaGB4pUEZlQqYwfoY/W7YTjpFdy0BqtCM8HWbI2FpG3CBZfA
-         QOK45yK2MNYTi0EeBUUKz0WtnZxSYl7fpsVAKtWXydnknbl3FjYWIGHal5UVWYk8gL
-         YW4c3OHrJU1mw==
+        s=k20201202; t=1653301430;
+        bh=vUsnPjeIxXkyjg70eNAh8JZuEF/mFk5yfd2/sAihNms=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=JfbsIsSyH3KzxP0Soh/5qiLLMFKa8ZgGOC5rI8NsETXsLEdTXaL5SqgQh0kpdIPJe
+         SytazElEMl6XNx95MZY/Df16kjPyY5XuKoAdzXx+RSOqrUxwOK6oGR367FFhdpe6so
+         Pdk2VHogUSWRUJcf1zLycF7pwjfb97f4fT5bupP/v1WweXd8iYwvqVMqxdojhpbgz9
+         PyukX45GlyPFwOnMJcjSJgTzeAOJ5eg8ACe0bYPJQ6G/pIniM3Xgn5GIziHsHYhGFb
+         2/OMJjDpBz16fgWoHqyG0eFWYiLbXR7nzW5nrMxMbIxLeIaDAQaVCXfxdeJI1HdnoZ
+         TdGZ9cM8bU7fQ==
 From:   matthias.bgg@kernel.org
 To:     mturquette@baylibre.com, sboyd@kernel.org
 Cc:     allen-kh.cheng@mediatek.com, weiyi.lu@mediatek.com,
@@ -44,10 +44,12 @@ Cc:     allen-kh.cheng@mediatek.com, weiyi.lu@mediatek.com,
         Matthias Brugger <matthias.bgg@gmail.com>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
         devicetree@vger.kernel.org
-Subject: [PATCH v3 0/2] Delete MT8192 msdc gate (was "clk: mediatek: Delete MT8192 msdc gate")
-Date:   Mon, 23 May 2022 12:23:37 +0200
-Message-Id: <20220523102339.21927-1-matthias.bgg@kernel.org>
+Subject: [PATCH v3 1/2] dt-bindings: ARM: Mediatek: Remove msdc binding of MT8192 clock
+Date:   Mon, 23 May 2022 12:23:38 +0200
+Message-Id: <20220523102339.21927-2-matthias.bgg@kernel.org>
 X-Mailer: git-send-email 2.36.0
+In-Reply-To: <20220523102339.21927-1-matthias.bgg@kernel.org>
+References: <20220523102339.21927-1-matthias.bgg@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -62,30 +64,53 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Matthias Brugger <matthias.bgg@gmail.com>
 
+The code controlling msdc clock gate was moved inthe the consumer, the MMC
+driver. This node did never represent a working implementation of any
+peripheral. It was just a lonely clock gate that wasn't used. Delete the
+binding description of this node.
 
-The mt8192-msdc clock is only a single clock gate. This gate is accessed
-from the mmc driver directly. With
-4a1d1379ebf6 ("arm64: dts: mt8192: Add mmc device nodes")
-the only consumer of this binding was deleted. Delete the binding
-decription and the clock driver bound to it.
+Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: Miles Chen <miles.chen@mediatek.com>
+
+---
 
 Changes in v3:
 - Update commit message to explain better why we do ABI breakage here
-- add Reviewed-by tag
 
 Changes in v2:
 - Delete compatible in binding descprition as well
 - Add RvB tags
-- add Reviewed-by tag
 
-Matthias Brugger (2):
-  dt-bindings: ARM: Mediatek: Remove msdc binding of MT8192 clock
-  clk: mediatek: Delete MT8192 msdc gate
+ .../bindings/arm/mediatek/mediatek,mt8192-clock.yaml      | 8 --------
+ 1 file changed, 8 deletions(-)
 
- .../arm/mediatek/mediatek,mt8192-clock.yaml   |  8 -------
- drivers/clk/mediatek/clk-mt8192-msdc.c        | 21 -------------------
- 2 files changed, 29 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8192-clock.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8192-clock.yaml
+index c8c67c033f8c..b57cc2e69efb 100644
+--- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8192-clock.yaml
++++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8192-clock.yaml
+@@ -24,7 +24,6 @@ properties:
+           - mediatek,mt8192-imp_iic_wrap_w
+           - mediatek,mt8192-imp_iic_wrap_n
+           - mediatek,mt8192-msdc_top
+-          - mediatek,mt8192-msdc
+           - mediatek,mt8192-mfgcfg
+           - mediatek,mt8192-imgsys
+           - mediatek,mt8192-imgsys2
+@@ -107,13 +106,6 @@ examples:
+         #clock-cells = <1>;
+     };
+ 
+-  - |
+-    msdc: clock-controller@11f60000 {
+-        compatible = "mediatek,mt8192-msdc";
+-        reg = <0x11f60000 0x1000>;
+-        #clock-cells = <1>;
+-    };
+-
+   - |
+     mfgcfg: clock-controller@13fbf000 {
+         compatible = "mediatek,mt8192-mfgcfg";
 -- 
 2.36.0
 

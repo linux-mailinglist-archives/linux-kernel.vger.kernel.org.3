@@ -2,67 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8ABC530B67
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 11:03:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3852D530BCD
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 11:03:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231748AbiEWITF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 04:19:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34222 "EHLO
+        id S231760AbiEWITL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 04:19:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231744AbiEWITD (ORCPT
+        with ESMTP id S231758AbiEWITJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 04:19:03 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 645DC6448
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 01:18:57 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id z7-20020a17090abd8700b001df78c7c209so16834948pjr.1
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 01:18:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=f4J0ESP/V8Vnwz/yuHg3Z4IrDVJhBwYlkrbCGVndRBM=;
-        b=bO7z+R1t9wUhLnnnWDfhz6Zk6h2YBjLIxo/j4Y1MwDtpeUwI3PjDO9YQ56IeGCrnJ2
-         NcI5ekA6n2uks0MZqmmN3YR/0KlfnZDYlxt9So3GHsCdp4v4wRNBUWuHTgjXRxkmkZMe
-         I4r59ygYODe9ZgZTrQeb35X67mNcZ1baihrC8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=f4J0ESP/V8Vnwz/yuHg3Z4IrDVJhBwYlkrbCGVndRBM=;
-        b=0n+L0eXGYOFYUUJRhbSYAsbG3mmuuk+hRWUjN6vEiOE7RQyRfm7g2/1F6nCeic6eXU
-         2kRh/YyIE9D3PmxG6atZzmFaEWSVHyrXLkilAKKYVzZutbXiSuHeBB3ibSSorHdsg5c+
-         zOnHhhE2z1fas54bnTDFaPc9//4dHKxj3BnoOG2DqopBMa2XANpX5QDoUbEY0xCvKBt4
-         WJWPMJye/f45XKhNkcejrQiIr4qRrvLmlYCXpM+KhLBCwo9m+3HnPUC7GAJNaI5PKtz6
-         kCXLQhUx2l54mWyie+F87ER/HQVyo9mGHLv/mQTI6QasExcw1DmRxsL0Pfj6OCsbN/RG
-         lRJw==
-X-Gm-Message-State: AOAM532Guok1a0P0dejWGsRzrA8/qFL8woEVZKUH9gc6mgTZwzPYIHE4
-        utV8CuFaqdOFFMKPlG8fuZARtbxb/EDq8FIaIP/yW9tBye8cVd6B
-X-Google-Smtp-Source: ABdhPJyz7VKSjCLQcQvZEV0siVQk9omWx/CGAhMugNLkeDy42Ha1soXO862Gh9FBtycwWIni79O56+SGwz+by46Kqd8=
-X-Received: by 2002:a17:90b:4c47:b0:1df:ad5b:e32e with SMTP id
- np7-20020a17090b4c4700b001dfad5be32emr24827089pjb.59.1653293936890; Mon, 23
- May 2022 01:18:56 -0700 (PDT)
+        Mon, 23 May 2022 04:19:09 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C9FD513FB3
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 01:19:02 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-35-yelfvzMZOpeqA2HWpRXpXQ-1; Mon, 23 May 2022 09:18:59 +0100
+X-MC-Unique: yelfvzMZOpeqA2HWpRXpXQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36; Mon, 23 May 2022 09:18:59 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.036; Mon, 23 May 2022 09:18:59 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Jens Axboe' <axboe@kernel.dk>,
+        "'Jason A. Donenfeld'" <Jason@zx2c4.com>
+CC:     "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] fs: prefer read_iter over read and write_iter over write
+Thread-Topic: [PATCH] fs: prefer read_iter over read and write_iter over write
+Thread-Index: AQHYbFCwvu9LSlrdFk+NviNR2+4IRK0nyjDggABuI4CAABnZcP//82QAgAPZ0QA=
+Date:   Mon, 23 May 2022 08:18:59 +0000
+Message-ID: <ec2a3eb465d244338b922f50ff5f7fd4@AcuMS.aculab.com>
+References: <20220520135103.166972-1-Jason@zx2c4.com>
+ <39ed6917f2e64a07bad8dad63f8dceb4@AcuMS.aculab.com>
+ <YogIg9FG7C/f98bf@zx2c4.com>
+ <0da16e16caed4282ae97a86f1ba6f6db@AcuMS.aculab.com>
+ <471e5654-49d7-9023-62b4-fc98483b1d89@kernel.dk>
+In-Reply-To: <471e5654-49d7-9023-62b4-fc98483b1d89@kernel.dk>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <20220519075117.1003520-1-tommaso.merciai@amarulasolutions.com> <20220519075117.1003520-4-tommaso.merciai@amarulasolutions.com>
-In-Reply-To: <20220519075117.1003520-4-tommaso.merciai@amarulasolutions.com>
-From:   Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Date:   Mon, 23 May 2022 10:18:46 +0200
-Message-ID: <CAOf5uwkHm1Az+WOCy4bgoqJje2hVqfqVAQFBkZ==OEgXAhLJ+g@mail.gmail.com>
-Subject: Re: [PATCH 3/4] arm64: dts: rockchip: px30: add mux for mipi-pdn pad
-To:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-Cc:     linuxfancy@googlegroups.com, linux-amarula@amarulasolutions.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Shunqian Zheng <zhengsq@rock-chips.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,64 +64,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+RnJvbTogSmVucyBBeGJvZQ0KPiBTZW50OiAyMCBNYXkgMjAyMiAyMzoxOA0KPiANCj4gT24gNS8y
+MC8yMiA0OjA4IFBNLCBEYXZpZCBMYWlnaHQgd3JvdGU6DQo+ID4+ICAgIGh0dHBzOi8vbG9yZS5r
+ZXJuZWwub3JnL2xrbWwvWW9leStGT1lPNjlsUzVxUEB6eDJjNC5jb20vDQo+ID4+DQo+ID4+IFRo
+ZSBob3BlIGlzIHRoYXQgaXQgZXZlbnR1YWxseSBiZWNvbWVzIGZhc3Rlci4uLiA6LVwNCj4gPg0K
+PiA+IEkgc3VzcGVjdCBhbGwgdGhlIHh4eF9pdGVyIGZ1bmN0aW9ucyBuZWVkIG9wdGltaXNpbmcg
+Zm9yDQo+ID4gdGhlIGNvbW1vbiBjYXNlIG9mIGEgc2luZ2xlIGJ1ZmZlciBpbiB1c2Vyc3BhY2Uu
+DQo+ID4NCj4gPiBUaGF0IGFsc28gaW5jbHVkZXMgdGhlIGNvZGUgdG8gcmVhZCB0aGUgaW92W10g
+ZnJvbSB1c2VzcGFjZS4NCj4gPiBBdCB0aGUgbW9tZW50IEkgdGhpbmsgdGhlIDMyYml0IGNvbXBh
+dCBjb2RlIGlzIGFjdHVhbGx5DQo+ID4gZmFzdGVyIHRoYW4gdGhlIG5hdGl2ZSBhbWQ2NCB2ZXJz
+aW9uIQ0KPiA+IEkndmUgd3JpdHRlbiBzb21lIHBhdGNoZXMgdG8gc3BlZWQgdGhhdCB1cC4NCj4g
+PiBCdXQgdGhlIGJpZ2dlciBpbXByb3ZlbWVudHMgYWxsIGhpdCBtYXNzaXZlIGNoYW5nZXMNCj4g
+PiB0byB0aGUgaW9yaW5nIGNvZGUuDQo+IA0KPiBEbyB5b3UgaGF2ZSBhIGxpbmsgdG8gdGhvc2Ug
+cGF0Y2hlcz8gSSBjYW4gY2VydGFpbmx5IGhlbHAgd2l0aCB0aGUNCj4gaW9fdXJpbmcgc2lkZSBv
+ZiB0aGluZ3MsIGFuZCBJIGhhdmUgYSBnZW51aW5lIGludGVyZXN0IGluIGltcHJvdmluZyB0aGUN
+Cj4gY29yZSBhbmQgZ2V0dGluZyB0aGUgaXRlciBzaWRlIHVwIHRvIHNudWZmLg0KDQpJJ2xsIHNl
+ZSBpZiBJIGNhbiBmaW5kIHRoZW0uDQpTb21lIGJpdHMgb2YgdGhlIGxhc3QgcGF0Y2ggc2V0IGRp
+ZCBnZXQgYXBwbGllZC4NCg0KT25lIGFpbSB3YXMgdG8gY2hhbmdlIGFsbCB0aGUgY2FsbGVycyBv
+ZiBpbXBvcnRfaW92ZWMoKQ0KdG8gdXNlIGEgc3RydWN0dXJlIHRoYW4gY29udGFpbmVkIGJvdGgg
+dGhlICdpb3ZfaXRlcicgYW5kDQp0aGUgJ2lvdnN0YWNrW10nLg0KVGhlIGxpZmV0aW1lcyBvZiB0
+aGUgdHdvIHN0cnVjdHVyZXMgYXJlIGVmZmVjdGl2ZWx5IGlkZW50aWNhbC4NCnVzdWFsbHkgdGhl
+eSBhcmUgYm90aCBhbGxvY2F0ZWQgb24gc3RhY2sgdG9nZXRoZXIuDQoNCk1lcmdpbmcgdGhlbSB3
+b3VsZCBzaWduaWZpY2FudGx5IHNpbXBsaWZ5IHRoZSBjYWxsZXJzDQphbmQgcmVkdWNlIHRoZSBu
+dW1iZXIgb2YgcGFyYW1ldGVycyBwYXNzZWQgdGhyb3VnaA0KbXVsdGlwbGUgbGF5ZXJzIG9mIGZ1
+bmN0aW9ucyAtIGVzcGVjaWFsbHkgcG9pbnRlcnMNCnBhc3NlZCBieSB2YWx1ZS4NCg0KVGhhdCBj
+aGFuZ2UgbmVlZHMgd29yayBkb25lIHRvIHRoZSBpb191cmluZyBjb2RlIHRvIHNhbml0aXNlDQp0
+aGUgd2F5IGl0IHVzZXMgdGhlIGlvdnN0YWNrW10gY2FjaGUgYW5kIGFueSBleHRlbmRlZCBrbWFs
+bG9jKCllZA0KY29weS4NCg0KSSBuZWVkIHRvIGxvb2sgZWxzZXdoZXJlIGZvciB0aGUgb3B0aW1p
+c2F0aW9uIHRvIGltcG9ydF9pb3ZlYygpDQppdHNlbGYuDQoNCglEYXZpZA0KDQotDQpSZWdpc3Rl
+cmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtl
+eW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
-On Thu, May 19, 2022 at 9:51 AM Tommaso Merciai
-<tommaso.merciai@amarulasolutions.com> wrote:
->
-> Add right mux for mipi-pdn. Mux this pad as gpio2 14
->
-> Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-> Tested-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-> ---
->  arch/arm64/boot/dts/rockchip/px30-evb.dts | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/arm64/boot/dts/rockchip/px30-evb.dts b/arch/arm64/boot/dts/rockchip/px30-evb.dts
-> index 53930e28eadf..0d05a1b098bc 100644
-> --- a/arch/arm64/boot/dts/rockchip/px30-evb.dts
-> +++ b/arch/arm64/boot/dts/rockchip/px30-evb.dts
-> @@ -450,8 +450,8 @@ ov5695: ov5695@36 {
->                 dvdd-supply = <&vcc1v5_dvp>;
->                 dovdd-supply = <&vcc1v8_dvp>;
->                 pinctrl-names = "default";
-> -               pinctrl-0 = <&cif_clkout_m0>;
->                 reset-gpios = <&gpio2 14 GPIO_ACTIVE_LOW>;
-> +               pinctrl-0 = <&cif_clkout_m0 &mipi_pdn>;
->
->                 port {
->                         ucam_out: endpoint {
-> @@ -544,6 +544,12 @@ cif_clkout_m0: cif-clkout-m0 {
->                                 <2 RK_PB3 1 &pcfg_pull_none_12ma>;
->                 };
->         };
-> +
-> +       mipi {
-> +               mipi_pdn: mipi-pdn {
-> +                       rockchip,pins = <2 RK_PB6 RK_FUNC_GPIO &pcfg_pull_none>;
-> +               };
-> +       };
->  };
->
-
-Reviewed-by: Michael Trimarchi <michael@amarulasolutions.com>
-
-Michael
->  &pmu_io_domains {
-> --
-> 2.25.1
->
-
-
--- 
-Michael Nazzareno Trimarchi
-Co-Founder & Chief Executive Officer
-M. +39 347 913 2170
-michael@amarulasolutions.com
-__________________________________
-
-Amarula Solutions BV
-Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
-T. +31 (0)85 111 9172
-info@amarulasolutions.com
-www.amarulasolutions.com

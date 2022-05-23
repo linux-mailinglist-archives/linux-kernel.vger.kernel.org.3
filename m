@@ -2,383 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC7545316B6
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:52:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C08FA531C12
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:57:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230359AbiEWTnX convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 23 May 2022 15:43:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42576 "EHLO
+        id S231253AbiEWTnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 15:43:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234717AbiEWTmx (ORCPT
+        with ESMTP id S230350AbiEWTm7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 15:42:53 -0400
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9B73D8;
-        Mon, 23 May 2022 12:42:33 -0700 (PDT)
-Received: by mail-yb1-f179.google.com with SMTP id d137so27214592ybc.13;
-        Mon, 23 May 2022 12:42:33 -0700 (PDT)
+        Mon, 23 May 2022 15:42:59 -0400
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121911B1
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 12:42:58 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id w130so19098218oig.0
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 12:42:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Vr6T/UqgVGLQWoul1vnNoytTWzJsPkn14WICohkLY7I=;
+        b=Fs0S3Msok1ksTRe7NGFi2Ry+axura59LsvHOsYFwgudYlyVCr2tTvaiG818YWZuDf0
+         IZZwL+wqiL6MtCfFD0gPzV0afDz9zib5f4lVh48rMdFUVgj+K3yQKYmuvHWZ98c1Knvk
+         jDLi+BFuargstaoHS5pNBPjYIKTiAaoOaD3CI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=Fj/OpzWZFCIbCTU6BT7NErmOvtdXQjyKLPhUjJvPsZI=;
-        b=zmIKLJwzMEeX/UjLXqbPzGQBKcNmXYkUmvmJlRC6iPvZzBYuh4v58nEJwYooAlDmQu
-         RwumVQ0C1PDZLk0IU7CtUtNgrYUeSYubGQwrlE94TgyzrLRvxpyVPawT3D9vxNmATj8/
-         QYMQRXdW5W2PJ2qcENNheWcf9rNhyK4EGHQegSZEePO4U8vbX0iSTFxFiUCKfYKYqCGh
-         RrXdZ9B2krCRiEh/km3HXYZBvoRxpqYCAQb05Lk/W9wIHw369UlmBW/yS1EUMJTd8aI3
-         tx2FwNYys1+XDme106dID/d7ZJAdFkDlUr5PN5APYOfzScWaIXsQYBREPEcWOIixBn22
-         TiAA==
-X-Gm-Message-State: AOAM532C2KCGZ5ikYcv+ukmcuFGe7cr9V8nvCRrDZPqJ3iNW2avLBFDW
-        +TISBAObUm/5efueEAS2LzAszgoiyu/JN+SMLvb+6lamWHE=
-X-Google-Smtp-Source: ABdhPJzCQZdHarxpehn7z3mBO6JP5/1KETp1N8jqBF7HtQbNu+yU36E2JTRk9F7hvBk51gNrgp5oS2HdDGUi9nSniHg=
-X-Received: by 2002:a25:2004:0:b0:650:740:f31d with SMTP id
- g4-20020a252004000000b006500740f31dmr3905294ybg.81.1653334953110; Mon, 23 May
- 2022 12:42:33 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Vr6T/UqgVGLQWoul1vnNoytTWzJsPkn14WICohkLY7I=;
+        b=mXngLdtSs+/o/6SiqEpj2Hg2E5sICf8c/Wuful0tVa1nqkIzNw8PuW14tuLZoSdBBf
+         txFm5qB0uYeTpeQKZM08ZjSXbmsFq8Fb/az2fSQlRyN9Q91zqhuDFAosI4WLvhsOrQgj
+         BUFQDlIeJ1y3P/wbuonArqUadd9pFou6je2tCSTnAiXMTtu0kI8RM0+g58leVIYTHefS
+         FUJn6PVCCkdSabQv10Zy11hp0px8Wr/wJC9xrXPk5dpzC81g5A2j5jgTUsbv3WRGHZ8m
+         CnzSpEKgbl87qw2jcKFVQghriDW4om7OXDTy1UWvd6PURytkpiBxao5KOD3grDquEyNP
+         wf+Q==
+X-Gm-Message-State: AOAM533/zg5Pz/Xn6qu5iVokC0Dsjt2c28mSPPvxN2dPf2TtNmOq0cwJ
+        VZwRspfRhZ4w3oY6Mv3QcK0zN/jodLXvJA==
+X-Google-Smtp-Source: ABdhPJwaP5vB/86lkItxbhagXO0TXXeyCbjWCf1G+L7nzuoTQsTnCVD1C+q/+fJ8QX8JpXeTA1BjWw==
+X-Received: by 2002:a54:4f88:0:b0:325:a26e:5278 with SMTP id g8-20020a544f88000000b00325a26e5278mr394439oiy.76.1653334977115;
+        Mon, 23 May 2022 12:42:57 -0700 (PDT)
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com. [209.85.167.179])
+        by smtp.gmail.com with ESMTPSA id w2-20020acaad02000000b0032af1c6bf02sm4287407oie.45.2022.05.23.12.42.55
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 May 2022 12:42:56 -0700 (PDT)
+Received: by mail-oi1-f179.google.com with SMTP id w130so19098127oig.0
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 12:42:55 -0700 (PDT)
+X-Received: by 2002:a05:6808:140c:b0:326:cd8f:eb71 with SMTP id
+ w12-20020a056808140c00b00326cd8feb71mr341566oiv.257.1653334975556; Mon, 23
+ May 2022 12:42:55 -0700 (PDT)
 MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 23 May 2022 21:42:22 +0200
-Message-ID: <CAJZ5v0hKBt3js65w18iKxzWoN5QuEc84_2xcM6paSv-ZHwe3Rw@mail.gmail.com>
-Subject: [GIT PULL] Power management updates for v5.19-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220523052810.24767-1-duoming@zju.edu.cn> <87o7zoxrdf.fsf@email.froward.int.ebiederm.org>
+ <6a270950.2c659.180f1a46e8c.Coremail.duoming@zju.edu.cn>
+In-Reply-To: <6a270950.2c659.180f1a46e8c.Coremail.duoming@zju.edu.cn>
+From:   Brian Norris <briannorris@chromium.org>
+Date:   Mon, 23 May 2022 12:42:44 -0700
+X-Gmail-Original-Message-ID: <CA+ASDXNBeN6k6y+eY06FkheNTNWN02P2uT9bB09KtBok0LVFfQ@mail.gmail.com>
+Message-ID: <CA+ASDXNBeN6k6y+eY06FkheNTNWN02P2uT9bB09KtBok0LVFfQ@mail.gmail.com>
+Subject: Re: [PATCH v3] mwifiex: fix sleep in atomic context bugs caused by dev_coredumpv
+To:     Duoming Zhou <duoming@zju.edu.cn>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        amit karwar <amitkarwar@gmail.com>,
+        Ganapathi Bhat <ganapathi017@gmail.com>,
+        Sharvari Harisangam <sharvari.harisangam@nxp.com>,
+        Xinming Hu <huxinming820@gmail.com>, kvalo@kernel.org,
+        "David S. Miller" <davem@davemloft.net>, edumazet@google.com,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "<netdev@vger.kernel.org>" <netdev@vger.kernel.org>,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+(I think people generally agreed on this approach, but please submit a
+new series, with separate patches)
 
-Please pull from the tag
+On Mon, May 23, 2022 at 12:27 PM <duoming@zju.edu.cn> wrote:
+> What's more, I move the operations that may sleep into a work item and use
+> schedule_work() to call a kernel thread to do the operations that may sleep.
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-5.19-rc1
+You end up with a timer that just exists to kick a work item. Eric
+suggested you just use a delayed_work, and then you don't need both a
+timer and a work struct.
 
-with top-most commit 0d64482bf29917e659c556aa36cea241b17c33df
-
- Merge branch 'pm-tools'
-
-on top of commit 42226c989789d8da4af1de0c31070c96726d990c
-
- Linux 5.18-rc7
-
-to receive power management updates for 5.19-rc1.
-
-These add support for "artificial" Energy Models in which power numbers
-for different entities may be in different scales, add support for some
-new hardware, fix bugs and clean up code in multiple places.
-
-Specifics:
-
- - Update the Energy Model support code to allow the Energy Model to be
-   artificial, which means that the power values may not be on a uniform
-   scale with other devices providing power information, and update the
-   cpufreq_cooling and devfreq_cooling thermal drivers to support
-   artificial Energy Models (Lukasz Luba).
-
- - Make DTPM check the Energy Model type (Lukasz Luba).
-
- - Fix policy counter decrementation in cpufreq if Energy Model is in
-   use (Pierre Gondois).
-
- - Add CPU-based scaling support to passive devfreq governor (Saravana
-   Kannan, Chanwoo Choi).
-
- - Update the rk3399_dmc devfreq driver (Brian Norris).
-
- - Export dev_pm_ops instead of suspend() and resume() in the IIO
-   chemical scd30 driver (Jonathan Cameron).
-
- - Add namespace variants of EXPORT[_GPL]_SIMPLE_DEV_PM_OPS and
-   PM-runtime counterparts (Jonathan Cameron).
-
- - Move symbol exports in the IIO chemical scd30 driver into the
-   IIO_SCD30 namespace (Jonathan Cameron).
-
- - Avoid device PM-runtime usage count underflows (Rafael Wysocki).
-
- - Allow dynamic debug to control printing of PM messages  (David
-   Cohen).
-
- - Fix some kernel-doc comments in hibernation code (Yang Li, Haowen
-   Bai).
-
- - Preserve ACPI-table override during hibernation (Amadeusz Sławiński).
-
- - Improve support for suspend-to-RAM for PSCI OSI mode (Ulf Hansson).
-
- - Make Intel RAPL power capping driver support the RaptorLake and
-   AlderLake N processors (Zhang Rui, Sumeet Pawnikar).
-
- - Remove redundant store to value after multiply in the RAPL power
-   capping driver (Colin Ian King).
-
- - Add AlderLake processor support to the intel_idle driver (Zhang Rui).
-
- - Fix regression leading to no genpd governor in the PSCI cpuidle
-   driver and fix the riscv-sbi cpuidle driver to allow a genpd
-   governor to be used (Ulf Hansson).
-
- - Fix cpufreq governor clean up code to avoid using kfree() directly
-   to free kobject-based items (Kevin Hao).
-
- - Prepare cpufreq for powerpc's asm/prom.h cleanup (Christophe Leroy).
-
- - Make intel_pstate notify frequency invariance code when no_turbo is
-   turned on and off (Chen Yu).
-
- - Add Sapphire Rapids OOB mode support to intel_pstate (Srinivas
-   Pandruvada).
-
- - Make cpufreq avoid unnecessary frequency updates due to mismatch
-   between hardware and the frequency table (Viresh Kumar).
-
- - Make remove_cpu_dev_symlink() clear the real_cpus mask to simplify
-   code (Viresh Kumar).
-
- - Rearrange cpufreq_offline() and cpufreq_remove_dev() to make the
-   calling convention for some driver callbacks consistent (Rafael
-   Wysocki).
-
- - Avoid accessing half-initialized cpufreq policies from the show()
-   and store() sysfs functions (Schspa Shi).
-
- - Rearrange cpufreq_offline() to make the calling convention for some
-   driver callbacks consistent (Schspa Shi).
-
- - Update CPPC handling in cpufreq (Pierre Gondois).
-
- - Extend dev_pm_domain_detach() doc (Krzysztof Kozlowski).
-
- - Move genpd's time-accounting to ktime_get_mono_fast_ns() (Ulf
-   Hansson).
-
- - Improve the way genpd deals with its governors (Ulf Hansson).
-
- - Update the turbostat utility to version 2022.04.16 (Len Brown,
-   Dan Merillat, Sumeet Pawnikar, Zephaniah E. Loss-Cutler-Hull, Chen
-   Yu).
-
-Thanks!
-
-
----------------
-
-Amadeusz Sławiński (1):
-      x86/ACPI: Preserve ACPI-table override during hibernation
-
-Brian Norris (15):
-      dt-bindings: devfreq: rk3399_dmc: Convert to YAML
-      dt-bindings: devfreq: rk3399_dmc: Deprecate unused/redundant properties
-      dt-bindings: devfreq: rk3399_dmc: Fix Hz units
-      dt-bindings: devfreq: rk3399_dmc: Specify idle params in nanoseconds
-      dt-bindings: devfreq: rk3399_dmc: Add more disable-freq properties
-      PM / devfreq: rk3399_dmc: Drop undocumented ondemand DT props
-      PM / devfreq: rk3399_dmc: Drop excess timing properties
-      PM / devfreq: rk3399_dmc: Use bitfield macro definitions for ODT_PD
-      PM / devfreq: rk3399_dmc: Support new disable-freq properties
-      PM / devfreq: rk3399_dmc: Support new *-ns properties
-      PM / devfreq: rk3399_dmc: Disable edev on remove()
-      PM / devfreq: rk3399_dmc: Use devm_pm_opp_of_add_table()
-      PM / devfreq: rk3399_dmc: Avoid static (reused) profile
-      soc: rockchip: power-domain: Manage resource conflicts with firmware
-      PM / devfreq: rk3399_dmc: Block PMU during transitions
-
-Chanwoo Choi (4):
-      PM / devfreq: Export devfreq_get_freq_range symbol within devfreq
-      PM / devfreq: passive: Reduce duplicate code when passive_devfreq case
-      PM / devfreq: passive: Keep cpufreq_policy for possible cpus
-      PM / devfreq: passive: Return non-error when not-supported event
-is required
-
-Chen Yu (2):
-      cpufreq: intel_pstate: Handle no_turbo in frequency invariance
-      tools/power turbostat: Support thermal throttle count print
-
-Christophe Leroy (1):
-      cpufreq: Prepare cleanup of powerpc's asm/prom.h
-
-Colin Ian King (1):
-      powercap: intel_rapl: remove redundant store to value after multiply
-
-Dan Merillat (1):
-      tools/power turbostat: fix dump for AMD cpus
-
-David Cohen (2):
-      PM: sleep: Narrow down -DDEBUG on kernel/power/ files
-      PM: sleep: enable dynamic debug support within pm_pr_dbg()
-
-Haowen Bai (1):
-      PM: hibernate: Don't mark comment as kernel-doc
-
-Jonathan Cameron (3):
-      iio: chemical: scd30: Export dev_pm_ops instead of suspend() and resume()
-      PM: core: Add NS varients of EXPORT[_GPL]_SIMPLE_DEV_PM_OPS and
-runtime pm equiv
-      iio: chemical: scd30: Move symbol exports into IIO_SCD30 namespace
-
-Kevin Hao (1):
-      cpufreq: governor: Use kobject release() method to free dbs_data
-
-Krzysztof Kozlowski (1):
-      PM: domains: Extend dev_pm_domain_detach() doc
-
-Len Brown (5):
-      tools/power turbostat: tweak --show and --hide capability
-      tools/power turbostat: fix ICX DRAM power numbers
-      tools/power turbostat: be more useful as non-root
-      tools/power turbostat: No build warnings with -Wextra
-      tools/power turbostat: version 2022.04.16
-
-Lukasz Luba (7):
-      PM: EM: Add .get_cost() callback
-      PM: EM: Use the new .get_cost() callback while registering EM
-      PM: EM: Change the order of arguments in the .active_power() callback
-      PM: EM: Remove old debugfs files and print all 'flags'
-      Documentation: EM: Add artificial EM registration description
-      thermal: cooling: Check Energy Model type in cpufreq_cooling and
-devfreq_cooling
-      powercap: DTPM: Check for Energy Model type
-
-Pierre Gondois (9):
-      PM: EM: Add artificial EM flag
-      cpufreq: CPPC: Add per_cpu efficiency_class
-      cpufreq: CPPC: Register EM based on efficiency class information
-      PM: EM: Decrement policy counter
-      ACPI: CPPC: Check _OSC for flexible address space
-      ACPI: bus: Set CPPC _OSC bits for all and when CPPC_LIB is supported
-      ACPI: CPPC: Assume no transition latency if no PCCT
-      cpufreq: CPPC: Enable fast_switch
-      cpufreq: CPPC: Enable dvfs_possible_from_any_cpu
-
-Rafael J. Wysocki (4):
-      PM: runtime: Avoid device usage count underflows
-      cpufreq: Reorganize checks in cpufreq_offline()
-      cpufreq: Split cpufreq_offline()
-      cpufreq: Rearrange locking in cpufreq_remove_dev()
-
-Saravana Kannan (1):
-      PM / devfreq: Add cpu based scaling support to passive governor
-
-Schspa Shi (3):
-      cpufreq: Fix possible race in cpufreq online error path
-      cpufreq: Abort show()/store() for half-initialized policies
-      cpufreq: make interface functions and lock holding state clear
-
-Srinivas Pandruvada (1):
-      cpufreq: intel_pstate: Support Sapphire Rapids OOB mode
-
-Sumeet Pawnikar (3):
-      tools/power turbostat: Add Power Limit4 support
-      tools/power turbostat: print power values upto three decimal
-      powercap: RAPL: Add Power Limit4 support for RaptorLake
-
-Ulf Hansson (19):
-      PM: runtime: Allow to call __pm_runtime_set_status() from atomic context
-      cpuidle: PSCI: Improve support for suspend-to-RAM for PSCI OSI mode
-      PM: domains: Move genpd's time-accounting to ktime_get_mono_fast_ns()
-      cpuidle: psci: Fix regression leading to no genpd governor
-      cpuidle: riscv-sbi: Fix code to allow a genpd governor to be used
-      PM: domains: Add GENPD_FLAG_RPM_ALWAYS_ON for the always-on governor
-      PM: domains: Drop redundant code for genpd always-on governor
-      PM: domains: Don't check PM_QOS_FLAG_NO_POWER_OFF in genpd
-      PM: domains: Rename irq_safe_dev_in_no_sleep_domain() in genpd
-      PM: domains: Skip another warning in irq_safe_dev_in_sleep_domain()
-      PM: domains: Allocate gpd_timing_data dynamically based on governor
-      PM: domains: Move the next_wakeup variable into the struct gpd_timing_data
-      PM: domains: Measure suspend/resume latencies in genpd based on governor
-      PM: domains: Fixup QoS latency measurements for IRQ safe devices in genpd
-      PM: domains: Fix initialization of genpd's next_wakeup
-      PM: domains: Clean up some code in pm_genpd_init() and genpd_remove()
-      PM: domains: Allocate governor data dynamically based on a genpd governor
-      PM: domains: Measure power-on/off latencies in genpd based on a governor
-      PM: domains: Trust domain-idle-states from DT to be correct by genpd
-
-Viresh Kumar (3):
-      cpufreq: Avoid unnecessary frequency updates due to mismatch
-      Revert "cpufreq: Fix possible race in cpufreq online error path"
-      cpufreq: Clear real_cpus mask from remove_cpu_dev_symlink()
-
-Yang Li (1):
-      PM: hibernate: Fix some kernel-doc comments
-
-Zephaniah E. Loss-Cutler-Hull (2):
-      tools/power turbostat: Allow -e for all names.
-      tools/power turbostat: Allow printing header every N iterations
-
-Zhang Rui (3):
-      powercap: intel_rapl: add support for RaptorLake
-      intel_idle: Add AlderLake support
-      powercap: intel_rapl: add support for ALDERLAKE_N
-
----------------
-
- .../devicetree/bindings/devfreq/rk3399_dmc.txt     | 212 --------
- .../memory-controllers/rockchip,rk3399-dmc.yaml    | 384 +++++++++++++
- Documentation/power/energy-model.rst               |  24 +-
- arch/arm64/kernel/smp.c                            |   1 +
- arch/x86/include/asm/msr-index.h                   |   1 +
- arch/x86/kernel/acpi/boot.c                        |   2 +-
- drivers/acpi/bus.c                                 |  34 +-
- drivers/acpi/cppc_acpi.c                           |  44 +-
- drivers/base/power/common.c                        |   8 +-
- drivers/base/power/domain.c                        | 278 ++++++----
- drivers/base/power/domain_governor.c               |  65 +--
- drivers/base/power/runtime.c                       |  53 +-
- drivers/cpufreq/cppc_cpufreq.c                     | 211 ++++++++
- drivers/cpufreq/cpufreq.c                          | 112 ++--
- drivers/cpufreq/cpufreq_governor.c                 |  20 +-
- drivers/cpufreq/cpufreq_governor.h                 |   1 +
- drivers/cpufreq/intel_pstate.c                     |   2 +
- drivers/cpufreq/mediatek-cpufreq-hw.c              |   4 +-
- drivers/cpufreq/pasemi-cpufreq.c                   |   1 -
- drivers/cpufreq/pmac32-cpufreq.c                   |   2 +-
- drivers/cpufreq/pmac64-cpufreq.c                   |   2 +-
- drivers/cpufreq/ppc_cbe_cpufreq.c                  |   1 -
- drivers/cpufreq/ppc_cbe_cpufreq_pmi.c              |   2 +-
- drivers/cpufreq/scmi-cpufreq.c                     |   4 +-
- drivers/cpuidle/cpuidle-psci-domain.c              |   4 +-
- drivers/cpuidle/cpuidle-psci.c                     |  46 ++
- drivers/cpuidle/cpuidle-riscv-sbi.c                |   4 +-
- drivers/devfreq/devfreq.c                          |  20 +-
- drivers/devfreq/governor.h                         |  27 +
- drivers/devfreq/governor_passive.c                 | 403 +++++++++++---
- drivers/devfreq/rk3399_dmc.c                       | 312 +++++------
- drivers/idle/intel_idle.c                          | 133 +++++
- drivers/iio/chemical/scd30.h                       |   5 +-
- drivers/iio/chemical/scd30_core.c                  |  10 +-
- drivers/iio/chemical/scd30_i2c.c                   |   3 +-
- drivers/iio/chemical/scd30_serial.c                |   3 +-
- drivers/opp/of.c                                   |   6 +-
- drivers/powercap/dtpm_cpu.c                        |   2 +-
- drivers/powercap/intel_rapl_common.c               |   4 +-
- drivers/powercap/intel_rapl_msr.c                  |   1 +
- drivers/soc/rockchip/pm_domains.c                  | 118 ++++
- drivers/thermal/cpufreq_cooling.c                  |   2 +-
- drivers/thermal/devfreq_cooling.c                  |   8 +-
- include/acpi/cppc_acpi.h                           |   5 +
- include/linux/acpi.h                               |   2 +
- include/linux/devfreq.h                            |  17 +-
- include/linux/energy_model.h                       |  35 +-
- include/linux/pm.h                                 |  14 +-
- include/linux/pm_domain.h                          |  24 +-
- include/linux/pm_runtime.h                         |  10 +-
- include/linux/suspend.h                            |  44 +-
- include/soc/rockchip/pm_domains.h                  |  25 +
- kernel/power/Makefile                              |   6 +-
- kernel/power/energy_model.c                        |  65 ++-
- kernel/power/main.c                                |  29 -
- kernel/power/process.c                             |   3 -
- kernel/power/snapshot.c                            |  12 +-
- tools/power/x86/turbostat/Makefile                 |   2 +-
- tools/power/x86/turbostat/turbostat.8              |   2 +-
- tools/power/x86/turbostat/turbostat.c              | 594 +++++++++++++--------
- 60 files changed, 2463 insertions(+), 1005 deletions(-)
+Brian

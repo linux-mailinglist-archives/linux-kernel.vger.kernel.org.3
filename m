@@ -2,56 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDFA1530B7D
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 11:03:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 738F8530C2A
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 11:04:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231454AbiEWIDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 04:03:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46916 "EHLO
+        id S231520AbiEWIDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 04:03:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231504AbiEWID0 (ORCPT
+        with ESMTP id S231557AbiEWIDo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 04:03:26 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E348F237F3
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 01:03:22 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id BEEB62223E;
-        Mon, 23 May 2022 10:03:16 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1653292998;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=viZm/10OcsyYDfI4zcvzPEqIUAuMcVQMGHS11NyoqCU=;
-        b=rzyRiyMplNYpkNlTswdcfFl/9ZAlOULv3f4nYk5h8RoA8pS+DopSACMlctDaiwRs9rbBdW
-        /tCLruXOiw5IZOCTpTkUS8LyV1DNhPsGmQHem8grzTsQQuy9zC9rACRQ/XgoCtTGppIQ23
-        Thphe6d75F+ROTnQbFgL1UeHRHKnSqE=
+        Mon, 23 May 2022 04:03:44 -0400
+Received: from azure-sdnproxy-3.icoremail.net (azure-sdnproxy.icoremail.net [20.232.28.96])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 4B28C2494F
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 01:03:37 -0700 (PDT)
+Received: by ajax-webmail-mail-app2 (Coremail) ; Mon, 23 May 2022 16:03:32
+ +0800 (GMT+08:00)
+X-Originating-IP: [124.236.130.193]
+Date:   Mon, 23 May 2022 16:03:32 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   duoming@zju.edu.cn
+To:     linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] mwifiex: fix sleep in atomic context bugs caused by
+ dev_coredumpv
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Mon, 23 May 2022 10:03:16 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
-Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Martijn Braam <martijn@brixit.nl>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mtd: spi-nor: gigadevice: add support for gd25lq128e
-In-Reply-To: <20220523055541.724422-1-tom@tom-fitzhenry.me.uk>
-References: <20220523055541.724422-1-tom@tom-fitzhenry.me.uk>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <65339d49135ffb578b5cd5ae459cea8a@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Message-ID: <6d8c70c0.2b1f1.180eff156be.Coremail.duoming@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: by_KCgDH3EDUP4tird6fAA--.15170W
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgkTAVZdtZ1ANAAPsB
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,65 +46,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-05-23 07:55, schrieb Tom Fitzhenry:
-> The GD25LQ128EWIGR[0] reports an JEDEC id with a different vendor,
-> otherwise it seems to fit neatly in the gigadevice list.
-
-According to JEP106BC the vendor code 0x25 is Tristar. I'm
-not sure what is going on here.
-
-> Tested to work on the Pine64 PinePhone Pro[1].
-> 
-> Attribution: initial version was written by
-> Martijn Braam <martijn@brixit.nl> for the Pine64 vendor kernel[2].
-> 
-> Also in use in vendor u-boot builds[3].
-> 
-> 0. https://www.gigadevice.com/flash-memory/gd25lq128e/
-> 1. https://wiki.pine64.org/wiki/PinePhone_Pro
-> 2. https://gitlab.com/pine64-org/linux/-/merge_requests/29
-> 3.
-> https://github.com/Tow-Boot/Tow-Boot/blob/b94838dfb8971cdeb841d3922051aaa8e108b085/boards/pine64-pinephonePro/0001-mtd-spi-nor-ids-Add-GigaDevice-GD25LQ128E-entry.patch
-
-Do we need this? If you like you can provide a datasheet
-with the Link: tag at the end of the commit.
-
-This flash supports SFDP, please provide an SFDP dump, see [1].
-
-> Signed-off-by: Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
-> ---
->  drivers/mtd/spi-nor/gigadevice.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/mtd/spi-nor/gigadevice.c 
-> b/drivers/mtd/spi-nor/gigadevice.c
-> index 33895002eeea..871c9dee11dc 100644
-> --- a/drivers/mtd/spi-nor/gigadevice.c
-> +++ b/drivers/mtd/spi-nor/gigadevice.c
-> @@ -56,6 +56,10 @@ static const struct flash_info 
-> gigadevice_nor_parts[] = {
->  		FLAGS(SPI_NOR_HAS_LOCK | SPI_NOR_HAS_TB)
->  		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
->  			      SPI_NOR_QUAD_READ) },
-> +	{ "gd25lq128e", INFO(0x257018, 0, 64 * 1024, 256)
-> +		FLAGS(SPI_NOR_HAS_LOCK | SPI_NOR_HAS_TB)
-
-Did you test locking?
-
-> +		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
-> +			      SPI_NOR_QUAD_READ) },
-
-As this flash supports SFDP, please use SNOR_ID3(0x257018)
-and drop both the INFO() and the NO_SFDP_FLAGS(). You'll
-need my SNOR_ID3() patches [2].
-
->  	{ "gd25q128", INFO(0xc84018, 0, 64 * 1024, 256)
->  		FLAGS(SPI_NOR_HAS_LOCK | SPI_NOR_HAS_TB)
->  		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
-
--michael
-
-[1] 
-https://lore.kernel.org/linux-mtd/4304e19f3399a0a6e856119d01ccabe0@walle.cc/
-[2] 
-https://lore.kernel.org/linux-mtd/20220510140232.3519184-1-michael@walle.cc/
+SGVsbG8sCgpPbiBNb24sIDIzIE1heSAyMDIyIDA4OjMxOjQ2ICswMjAwIEdyZWcgS0ggd3JvdGU6
+Cgo+ID4gVGhlcmUgYXJlIHNsZWVwIGluIGF0b21pYyBjb250ZXh0IGJ1Z3Mgd2hlbiB1cGxvYWRp
+bmcgZGV2aWNlIGR1bXAKPiA+IGRhdGEgaW4gbXdpZmlleC4gVGhlIHJvb3QgY2F1c2UgaXMgdGhh
+dCBkZXZfY29yZWR1bXB2IGNvdWxkIG5vdAo+ID4gYmUgdXNlZCBpbiBhdG9taWMgY29udGV4dHMs
+IGJlY2F1c2UgaXQgY2FsbHMgZGV2X3NldF9uYW1lIHdoaWNoCj4gPiBpbmNsdWRlIG9wZXJhdGlv
+bnMgdGhhdCBtYXkgc2xlZXAuIFRoZSBjYWxsIHRyZWUgc2hvd3MgZXhlY3V0aW9uCj4gPiBwYXRo
+cyB0aGF0IGNvdWxkIGxlYWQgdG8gYnVnczoKPiA+IAo+ID4gICAgKEludGVycnVwdCBjb250ZXh0
+KQo+ID4gZndfZHVtcF90aW1lcl9mbgo+ID4gICBtd2lmaWV4X3VwbG9hZF9kZXZpY2VfZHVtcAo+
+ID4gICAgIGRldl9jb3JlZHVtcHYoLi4uLCBHRlBfS0VSTkVMKQo+ID4gICAgICAgZGV2X2NvcmVk
+dW1wbSgpCj4gPiAgICAgICAgIGt6YWxsb2Moc2l6ZW9mKCpkZXZjZCksIGdmcCk7IC8vbWF5IHNs
+ZWVwCj4gPiAgICAgICAgIGRldl9zZXRfbmFtZQo+ID4gICAgICAgICAgIGtvYmplY3Rfc2V0X25h
+bWVfdmFyZ3MKPiA+ICAgICAgICAgICAgIGt2YXNwcmludGZfY29uc3QoR0ZQX0tFUk5FTCwgLi4u
+KTsgLy9tYXkgc2xlZXAKPiA+ICAgICAgICAgICAgIGtzdHJkdXAocywgR0ZQX0tFUk5FTCk7IC8v
+bWF5IHNsZWVwCj4gPiAKPiA+IEluIG9yZGVyIHRvIGxldCBkZXZfY29yZWR1bXB2IHN1cHBvcnQg
+YXRvbWljIGNvbnRleHRzLCB0aGlzIHBhdGNoCj4gPiBjaGFuZ2VzIHRoZSBnZnBfdCBwYXJhbWV0
+ZXIgb2Yga3Zhc3ByaW50Zl9jb25zdCBhbmQga3N0cmR1cCBpbgo+ID4ga29iamVjdF9zZXRfbmFt
+ZV92YXJncyBmcm9tIEdGUF9LRVJORUwgdG8gR0ZQX0FUT01JQy4gV2hhdCdzIG1vcmUsCj4gPiBJ
+biBvcmRlciB0byBtaXRpZ2F0ZSBidWcsIHRoaXMgcGF0Y2ggY2hhbmdlcyB0aGUgZ2ZwX3QgcGFy
+YW1ldGVyCj4gPiBvZiBkZXZfY29yZWR1bXB2IGZyb20gR0ZQX0tFUk5FTCB0byBHRlBfQVRPTUlD
+Lgo+ID4gCj4gPiBGaXhlczogNTc2NzBlZTg4MmQ0ICgibXdpZmlleDogZGV2aWNlIGR1bXAgc3Vw
+cG9ydCB2aWEgZGV2Y29yZWR1bXAgZnJhbWV3b3JrIikKPiA+IFNpZ25lZC1vZmYtYnk6IER1b21p
+bmcgWmhvdSA8ZHVvbWluZ0B6anUuZWR1LmNuPgo+ID4gLS0tCj4gPiBDaGFuZ2VzIGluIHYzOgo+
+ID4gICAtIExldCBkZXZfY29yZWR1bXB2IHN1cHBvcnQgYXRvbWljIGNvbnRleHRzLgo+ID4gCj4g
+PiAgZHJpdmVycy9uZXQvd2lyZWxlc3MvbWFydmVsbC9td2lmaWV4L21haW4uYyB8IDIgKy0KPiA+
+ICBsaWIva29iamVjdC5jICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgNCArKy0tCj4g
+PiAgMiBmaWxlcyBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pCj4gPiAK
+PiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL25ldC93aXJlbGVzcy9tYXJ2ZWxsL213aWZpZXgvbWFp
+bi5jIGIvZHJpdmVycy9uZXQvd2lyZWxlc3MvbWFydmVsbC9td2lmaWV4L21haW4uYwo+ID4gaW5k
+ZXggYWNlNzM3MWM0NzcuLjI1ODkwNjkyMGEyIDEwMDY0NAo+ID4gLS0tIGEvZHJpdmVycy9uZXQv
+d2lyZWxlc3MvbWFydmVsbC9td2lmaWV4L21haW4uYwo+ID4gKysrIGIvZHJpdmVycy9uZXQvd2ly
+ZWxlc3MvbWFydmVsbC9td2lmaWV4L21haW4uYwo+ID4gQEAgLTExMTYsNyArMTExNiw3IEBAIHZv
+aWQgbXdpZmlleF91cGxvYWRfZGV2aWNlX2R1bXAoc3RydWN0IG13aWZpZXhfYWRhcHRlciAqYWRh
+cHRlcikKPiA+ICAJbXdpZmlleF9kYmcoYWRhcHRlciwgTVNHLAo+ID4gIAkJICAgICI9PSBtd2lm
+aWV4IGR1bXAgaW5mb3JtYXRpb24gdG8gL3N5cy9jbGFzcy9kZXZjb3JlZHVtcCBzdGFydFxuIik7
+Cj4gPiAgCWRldl9jb3JlZHVtcHYoYWRhcHRlci0+ZGV2LCBhZGFwdGVyLT5kZXZkdW1wX2RhdGEs
+IGFkYXB0ZXItPmRldmR1bXBfbGVuLAo+ID4gLQkJICAgICAgR0ZQX0tFUk5FTCk7Cj4gPiArCQkg
+ICAgICBHRlBfQVRPTUlDKTsKPiA+ICAJbXdpZmlleF9kYmcoYWRhcHRlciwgTVNHLAo+ID4gIAkJ
+ICAgICI9PSBtd2lmaWV4IGR1bXAgaW5mb3JtYXRpb24gdG8gL3N5cy9jbGFzcy9kZXZjb3JlZHVt
+cCBlbmRcbiIpOwo+ID4gIAo+ID4gZGlmZiAtLWdpdCBhL2xpYi9rb2JqZWN0LmMgYi9saWIva29i
+amVjdC5jCj4gPiBpbmRleCA1ZjBlNzFhYjI5Mi4uNzY3MmM1NDk0NGMgMTAwNjQ0Cj4gPiAtLS0g
+YS9saWIva29iamVjdC5jCj4gPiArKysgYi9saWIva29iamVjdC5jCj4gPiBAQCAtMjU0LDcgKzI1
+NCw3IEBAIGludCBrb2JqZWN0X3NldF9uYW1lX3ZhcmdzKHN0cnVjdCBrb2JqZWN0ICprb2JqLCBj
+b25zdCBjaGFyICpmbXQsCj4gPiAgCWlmIChrb2JqLT5uYW1lICYmICFmbXQpCj4gPiAgCQlyZXR1
+cm4gMDsKPiA+ICAKPiA+IC0JcyA9IGt2YXNwcmludGZfY29uc3QoR0ZQX0tFUk5FTCwgZm10LCB2
+YXJncyk7Cj4gPiArCXMgPSBrdmFzcHJpbnRmX2NvbnN0KEdGUF9BVE9NSUMsIGZtdCwgdmFyZ3Mp
+Owo+ID4gIAlpZiAoIXMpCj4gPiAgCQlyZXR1cm4gLUVOT01FTTsKPiA+ICAKPiA+IEBAIC0yNjcs
+NyArMjY3LDcgQEAgaW50IGtvYmplY3Rfc2V0X25hbWVfdmFyZ3Moc3RydWN0IGtvYmplY3QgKmtv
+YmosIGNvbnN0IGNoYXIgKmZtdCwKPiA+ICAJaWYgKHN0cmNocihzLCAnLycpKSB7Cj4gPiAgCQlj
+aGFyICp0Owo+ID4gIAo+ID4gLQkJdCA9IGtzdHJkdXAocywgR0ZQX0tFUk5FTCk7Cj4gPiArCQl0
+ID0ga3N0cmR1cChzLCBHRlBfQVRPTUlDKTsKPiA+ICAJCWtmcmVlX2NvbnN0KHMpOwo+ID4gIAkJ
+aWYgKCF0KQo+ID4gIAkJCXJldHVybiAtRU5PTUVNOwo+IAo+IFBsZWFzZSBubywgeW91IGFyZSBo
+dXJ0aW5nIHRoZSB3aG9sZSBrZXJuZWwgYmVjYXVzZSBvZiBvbmUgb2RkIHVzZXIuCj4gUGxlYXNl
+IGRvIG5vdCBtYWtlIHRoZXNlIGNhbGxzIHVuZGVyIGF0b21pYyBjb250ZXh0LgoKVGhhbmtzIGZv
+ciB5b3VyIHRpbWUgYW5kIHN1Z2dlc3Rpb25zLiBJIHdpbGwgcmVtb3ZlIHRoZSBnZnBfdCBwYXJh
+bWV0ZXIgb2YgZGV2X2NvcmVkdW1wdgppbiBvcmRlciB0byBzaG93IGl0IGNvdWxkIG5vdCBiZSB1
+c2VkIGluIGF0b21pYyBjb250ZXh0LgoKQmVzdCBSZWdhcmRzLApEdW9taW5nIFpob3U=

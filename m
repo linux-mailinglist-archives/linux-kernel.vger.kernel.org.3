@@ -2,180 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AACC753087D
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 06:49:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFFBD53087F
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 06:52:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbiEWEsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 00:48:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55250 "EHLO
+        id S1349319AbiEWEvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 00:51:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbiEWEsW (ORCPT
+        with ESMTP id S229835AbiEWEvf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 00:48:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B66CA1209C
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 21:48:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 60C27B80EEA
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 04:48:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8F39C385AA;
-        Mon, 23 May 2022 04:48:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653281299;
-        bh=UAsQaM3XapPuVS8owCcWhOqf2ldnFQUOPTmA49wofLw=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=hKBgwlySIzKch9x8LZ086v01hxYtPmJ++Xy69xLtC6JNIArX6eTE+GpsIcSDWoaV6
-         +/4lok4Z4/LJbdFAHGnHBOC3u83i6dIcKS/iG33d08PDn3zV7lzlcxV+YAiJJJfxFF
-         Pn2mjfWGqa601qXuq/F8F1SDgXCbxLb0NMDf44cjAKYABJt17RNkV3+P+89KJtJTrJ
-         xTRbHD+ZBGfxZZqE2tHizQ2G7tY8VWiTlVkSTpqljdgRwo9FVRE/yUGWvU0UliML+8
-         HT7pzzeb3FvZLkKlQ/NU0X+iLZWO8HmaowwfHcf1fai6TunBVlKt/qOFMe9RJRm4Rn
-         WxIKWP8Er6cZg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 8AE4D5C033A; Sun, 22 May 2022 21:48:18 -0700 (PDT)
-Date:   Sun, 22 May 2022 21:48:18 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Stefan Wahren <stefan.wahren@i2se.com>
-Cc:     Marcelo Tosatti <mtosatti@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Minchan Kim <minchan@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        regressions@lists.linux.dev, riel@surriel.com,
-        viro@zeniv.linux.org.uk
-Subject: Re: vchiq: Performance regression since 5.18-rc1
-Message-ID: <20220523044818.GS1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <77d6d498-7dd9-03eb-60f2-d7e682bb1b20@i2se.com>
- <20220521234616.GO1790663@paulmck-ThinkPad-P17-Gen-1>
- <bfad3d08-3268-5528-17c1-c17ef3949d96@i2se.com>
+        Mon, 23 May 2022 00:51:35 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EED96363;
+        Sun, 22 May 2022 21:51:34 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id nr2-20020a17090b240200b001df2b1bfc40so16400233pjb.5;
+        Sun, 22 May 2022 21:51:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=BreetYWTsmmdO6stIJQjRnOxhkNpGdp8Cj6UELkhpv4=;
+        b=mSQk8IugJIT7TxFSLEZqXH1qMjQIQJpOChkViXRA3SMMoV2ROU1Yu67p5Q+lSKHWmd
+         zpkB5dbftFup58N2KEW5d7aztZZ/tsK27DJkK5lcyTSPqSlXSGO5dMnQWLofueCLzShv
+         dLoRqx1fHjfm+L02szCFwiHn5J0akL8qJ5sxlIjptagQ1g1SafyDgN0iWXrXmkiSbynt
+         bJd9vrca0j7djr8LfqiQeGExkzNRqYTWnuUFHgwWkn44xVKzYVhopKIsXnBXtqRr9kY8
+         vcb72rzHRZDGKOyP7k4ebHbuejPeAYr27A9jiSuv4VSXu6xeBgXZNQ0Cw+fcVvHjkGoM
+         i9Tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=BreetYWTsmmdO6stIJQjRnOxhkNpGdp8Cj6UELkhpv4=;
+        b=x3w+yPuvtTmFWW6z4Sd/md3HmCu6UyH25Y71Cty2NQqVQlbvh1liZfTIvj3/EvQS0K
+         r5zxasxptYkctM4oYY/zpy0lSaAcTi/M2nmWXHulwseqPQSsonT5kjNohBpWDvd7D+F2
+         wH2OFCGFWNfVV6J9sSfjcQQj3zvCogmo7BhbX4U+qrPUaFdjGj1yPhEQAijDpqfphbr0
+         6NHYC1jsM4goJZABnzhweUEQTJgGoVWWsYHu5mKiPe/44sH4Q8u5nJzunb8Ke+XI2Z7d
+         IIvAXrZvKQofHY6nAAu8GPEelZxIbMeD/TgrxlYwHPaF7MDdMXHhyVQXKnM7Nj6wfUaU
+         cR0A==
+X-Gm-Message-State: AOAM531js8Unz5k4z5dDqm5V55OpCV6dwFAYApr09SrOzXo7LcSrzaDX
+        esjtFJqUAffQDf5zURkl3kU=
+X-Google-Smtp-Source: ABdhPJwJ5SsDwYlXSr639JsqEyRvwH/SthXrMRADPBYVm16UnhX26NYYNJT45SYhWvFudnV3aMZc/Q==
+X-Received: by 2002:a17:90b:38c1:b0:1e0:16da:86e with SMTP id nn1-20020a17090b38c100b001e016da086emr11344584pjb.149.1653281493378;
+        Sun, 22 May 2022 21:51:33 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:d84e:5dcd:9d68:ebbf])
+        by smtp.gmail.com with ESMTPSA id jh22-20020a170903329600b0015e8d4eb285sm3950442plb.207.2022.05.22.21.51.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 May 2022 21:51:32 -0700 (PDT)
+Date:   Sun, 22 May 2022 21:51:29 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     matthias.bgg@gmail.com, mkorpershoek@baylibre.com,
+        linux-input@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/5] Input: mtk-pmic-keys - Use regmap_{set,clear}_bits
+ where possible
+Message-ID: <YosS0ZvAovyl8cF5@google.com>
+References: <20220520125132.229191-1-angelogioacchino.delregno@collabora.com>
+ <20220520125132.229191-3-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <bfad3d08-3268-5528-17c1-c17ef3949d96@i2se.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220520125132.229191-3-angelogioacchino.delregno@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 22, 2022 at 05:11:36PM +0200, Stefan Wahren wrote:
-> Hi Paul,
+On Fri, May 20, 2022 at 02:51:29PM +0200, AngeloGioacchino Del Regno wrote:
+> Instead of always using regmap_update_bits(), let's go for the shorter
+> regmap_set_bits() and regmap_clear_bits() where possible.
 > 
-> Am 22.05.22 um 01:46 schrieb Paul E. McKenney:
-> > On Sun, May 22, 2022 at 01:22:00AM +0200, Stefan Wahren wrote:
-> > > Hi,
-> > > 
-> > > while testing the staging/vc04_services/interface/vchiq_arm driver with my
-> > > Raspberry Pi 3 B+ (multi_v7_defconfig) i noticed a huge performance
-> > > regression since [ff042f4a9b050895a42cae893cc01fa2ca81b95c] mm:
-> > > lru_cache_disable: replace work queue synchronization with synchronize_rcu
-> > > 
-> > > Usually i run "vchiq_test -f 1" to see the driver is still working [1].
-> > > 
-> > > Before commit:
-> > > 
-> > > real    0m1,500s
-> > > user    0m0,068s
-> > > sys    0m0,846s
-> > > 
-> > > After commit:
-> > > 
-> > > real    7m11,449s
-> > > user    0m2,049s
-> > > sys    0m0,023s
-> > > 
-> > > Best regards
-> > > 
-> > > [1] - https://github.com/raspberrypi/userland
-> > Please feel free to try the patch shown below.  Or the pair of patches
-> > from Rik here:
-> > 
-> > https://lore.kernel.org/lkml/20220218183114.2867528-2-riel@surriel.com/
-> > https://lore.kernel.org/lkml/20220218183114.2867528-3-riel@surriel.com/
+> No functional change.
 > 
-> I tried your patch and Rik's patches but in both cases vchiq_test runs 7
-> minutes instead of ~ 1 second.
-
-That is surprising.  Do you boot with rcupdate.rcu_normal=1?  That would
-nullify my patch, but I would expect that Rik's patch would still provide
-increased performance even in that case.
-
-Could you please characterize where the slowdown is occurring?
-
-							Thanx, Paul
-
-> Best regards
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  drivers/input/keyboard/mtk-pmic-keys.c | 24 ++++++------------------
+>  1 file changed, 6 insertions(+), 18 deletions(-)
 > 
-> > 
-> > There is work ongoing to produce something better, but ongoing slowly.
-> > Especially my part of that work.
-> > 
-> > 							Thanx, Paul
-> > 
-> > ------------------------------------------------------------------------
-> > 
-> >  From paulmck@kernel.org Mon Feb 14 11:05:49 2022
-> > Date: Mon, 14 Feb 2022 11:05:49 -0800
-> > From: "Paul E. McKenney" <paulmck@kernel.org>
-> > To: clm@fb.com
-> > Cc: riel@surriel.com, viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org,
-> > 	linux-fsdevel@vger.kernel.org, kernel-team@fb.com
-> > Subject: [PATCH RFC fs/namespace] Make kern_unmount() use
-> >   synchronize_rcu_expedited()
-> > Message-ID: <20220214190549.GA2815154@paulmck-ThinkPad-P17-Gen-1>
-> > Reply-To: paulmck@kernel.org
-> > MIME-Version: 1.0
-> > Content-Type: text/plain; charset=us-ascii
-> > Content-Disposition: inline
-> > Status: RO
-> > Content-Length: 1036
-> > Lines: 32
-> > 
-> > Experimental.  Not for inclusion.  Yet, anyway.
-> > 
-> > Freeing large numbers of namespaces in quick succession can result in
-> > a bottleneck on the synchronize_rcu() invoked from kern_unmount().
-> > This patch applies the synchronize_rcu_expedited() hammer to allow
-> > further testing and fault isolation.
-> > 
-> > Hey, at least there was no need to change the comment!  ;-)
-> > 
-> > Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-> > Cc: <linux-fsdevel@vger.kernel.org>
-> > Cc: <linux-kernel@vger.kernel.org>
-> > Not-yet-signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > 
-> > ---
-> > 
-> >   namespace.c |    2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/fs/namespace.c b/fs/namespace.c
-> > index 40b994a29e90d..79c50ad0ade5b 100644
-> > --- a/fs/namespace.c
-> > +++ b/fs/namespace.c
-> > @@ -4389,7 +4389,7 @@ void kern_unmount(struct vfsmount *mnt)
-> >   	/* release long term mount so mount point can be released */
-> >   	if (!IS_ERR_OR_NULL(mnt)) {
-> >   		real_mount(mnt)->mnt_ns = NULL;
-> > -		synchronize_rcu();	/* yecchhh... */
-> > +		synchronize_rcu_expedited();	/* yecchhh... */
-> >   		mntput(mnt);
-> >   	}
-> >   }
-> > 
+> diff --git a/drivers/input/keyboard/mtk-pmic-keys.c b/drivers/input/keyboard/mtk-pmic-keys.c
+> index 8e4fa7cd16e6..83d0b90cc8cb 100644
+> --- a/drivers/input/keyboard/mtk-pmic-keys.c
+> +++ b/drivers/input/keyboard/mtk-pmic-keys.c
+> @@ -157,28 +157,16 @@ static void mtk_pmic_keys_lp_reset_setup(struct mtk_pmic_keys *keys,
+>  
+>  	switch (long_press_mode) {
+>  	case LP_ONEKEY:
+> -		regmap_update_bits(keys->regmap, pmic_rst_reg,
+> -				   MTK_PMIC_PWRKEY_RST,
+> -				   MTK_PMIC_PWRKEY_RST);
+> -		regmap_update_bits(keys->regmap, pmic_rst_reg,
+> -				   MTK_PMIC_HOMEKEY_RST,
+> -				   0);
+> +		regmap_set_bits(keys->regmap, pmic_rst_reg, MTK_PMIC_PWRKEY_RST);
+> +		regmap_clear_bits(keys->regmap, pmic_rst_reg, MTK_PMIC_HOMEKEY_RST);
+
+Why not combine this into a single update instead? I.e. assuming
+
+#define MTK_PMIC_KEY_RST_MASK GENMASK(6, 5)
+
+		regmap_update_bits(keys->regmap, pmic_rst_reg,
+				   MTK_PMIC_KEY_RST_MASK,
+				   MTK_PMIC_PWRKEY_RST);
+
+>  		break;
+>  	case LP_TWOKEY:
+> -		regmap_update_bits(keys->regmap, pmic_rst_reg,
+> -				   MTK_PMIC_PWRKEY_RST,
+> -				   MTK_PMIC_PWRKEY_RST);
+> -		regmap_update_bits(keys->regmap, pmic_rst_reg,
+> -				   MTK_PMIC_HOMEKEY_RST,
+> -				   MTK_PMIC_HOMEKEY_RST);
+> +		regmap_set_bits(keys->regmap, pmic_rst_reg, MTK_PMIC_PWRKEY_RST);
+> +		regmap_set_bits(keys->regmap, pmic_rst_reg, MTK_PMIC_HOMEKEY_RST);
+
+		regmap_update_bits(keys->regmap, pmic_rst_reg,
+				   MTK_PMIC_KEY_RST_MASK,
+				   MTK_PMIC_PWRKEY_RST | MTK_PMIC_HOMEKEY_RST);
+
+>  		break;
+>  	case LP_DISABLE:
+> -		regmap_update_bits(keys->regmap, pmic_rst_reg,
+> -				   MTK_PMIC_PWRKEY_RST,
+> -				   0);
+> -		regmap_update_bits(keys->regmap, pmic_rst_reg,
+> -				   MTK_PMIC_HOMEKEY_RST,
+> -				   0);
+> +		regmap_clear_bits(keys->regmap, pmic_rst_reg, MTK_PMIC_PWRKEY_RST);
+> +		regmap_clear_bits(keys->regmap, pmic_rst_reg, MTK_PMIC_HOMEKEY_RST);
+
+		regmap_update_bits(keys->regmap, pmic_rst_reg,
+				   MTK_PMIC_KEY_RST_MASKi, 0);
+
+>  		break;
+>  	default:
+>  		break;
+> -- 
+> 2.35.1
+> 
+
+Thanks.
+
+-- 
+Dmitry

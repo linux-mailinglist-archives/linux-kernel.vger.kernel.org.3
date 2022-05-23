@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26981531BCA
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C87C75317B2
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:53:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240011AbiEWRPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:15:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37580 "EHLO
+        id S241804AbiEWRbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:31:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240531AbiEWRMb (ORCPT
+        with ESMTP id S241793AbiEWRWh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:12:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C458762CCB;
-        Mon, 23 May 2022 10:11:42 -0700 (PDT)
+        Mon, 23 May 2022 13:22:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 057197CB10;
+        Mon, 23 May 2022 10:19:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B47861509;
-        Mon, 23 May 2022 17:10:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E404C34118;
-        Mon, 23 May 2022 17:10:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 00EFDB811FE;
+        Mon, 23 May 2022 17:13:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32C3EC385AA;
+        Mon, 23 May 2022 17:13:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653325809;
-        bh=G9ZRHRw/SjKlN1Cm8RgRF6kGTUhjJSALMeiIry7VasE=;
+        s=korg; t=1653325995;
+        bh=Z6/7f7HNKOU9oPu3ojflFpWYnzcyZfoFiGG0zJfOUSQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0qKOAybkDRj3DRcDBWp6VXdpzjCvAuBs9PSdcs7NPV1f+/DX703bfjCguU337i3Lq
-         +fVttgc9PnTegps2jxDEEUl0PyR5Nn8+8Yvw+YWusL3YqzEc0WcBCg7NHrMO1APeph
-         tZjmeeLR8sAk2aOpqTUlq8t8o7VNLT7OSJcy7flo=
+        b=Ai3jJBH9JbJrFnmJp3c4PnfKXmqwZip4vt35xosMGBpKbES1wfuO/lroFj73eYlXU
+         AHWRyrFHv5PFz/trYGwmTTfe1Pozz15DzvgeM/QcXRujWEBjJnEv2XpAJpYIHGf+St
+         rrOflOUXg2azjwanzZPIgmPHquQ3FYvt4D7sbSvY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Subject: [PATCH 4.19 18/44] mmc: core: Specify timeouts for BKOPS and CACHE_FLUSH for eMMC
+        stable@vger.kernel.org, Jae Hyun Yoo <quic_jaehyoo@quicinc.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Joel Stanley <joel@jms.id.au>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 35/68] ARM: dts: aspeed-g6: fix SPI1/SPI2 quad pin group
 Date:   Mon, 23 May 2022 19:05:02 +0200
-Message-Id: <20220523165756.536633554@linuxfoundation.org>
+Message-Id: <20220523165808.400971223@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165752.797318097@linuxfoundation.org>
-References: <20220523165752.797318097@linuxfoundation.org>
+In-Reply-To: <20220523165802.500642349@linuxfoundation.org>
+References: <20220523165802.500642349@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,55 +55,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ulf Hansson <ulf.hansson@linaro.org>
+From: Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
 
-commit 24ed3bd01d6a844fd5e8a75f48d0a3d10ed71bf9 upstream
+[ Upstream commit 890362d41b244536ab63591f813393f5fdf59ed7 ]
 
-The timeout values used while waiting for a CMD6 for BKOPS or a CACHE_FLUSH
-to complete, are not defined by the eMMC spec. However, a timeout of 10
-minutes as is currently being used, is just silly for both of these cases.
-Instead, let's specify more reasonable timeouts, 120s for BKOPS and 30s for
-CACHE_FLUSH.
+Fix incorrect function mappings in pinctrl_qspi1_default and
+pinctrl_qspi2_default since their function should be SPI1 and
+SPI2 respectively.
 
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-Link: https://lore.kernel.org/r/20200122142747.5690-2-ulf.hansson@linaro.org
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: f510f04c8c83 ("ARM: dts: aspeed: Add AST2600 pinmux nodes")
+Signed-off-by: Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
+Reviewed-by: Andrew Jeffery <andrew@aj.id.au>
+Link: https://lore.kernel.org/r/20220329173932.2588289-8-quic_jaehyoo@quicinc.com
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mmc/core/mmc_ops.c |    9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/mmc/core/mmc_ops.c
-+++ b/drivers/mmc/core/mmc_ops.c
-@@ -23,7 +23,9 @@
- #include "host.h"
- #include "mmc_ops.h"
+diff --git a/arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi b/arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi
+index 4792b3d9459d..ac723fe898c7 100644
+--- a/arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi
++++ b/arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi
+@@ -648,12 +648,12 @@ pinctrl_pwm9g1_default: pwm9g1_default {
+ 	};
  
--#define MMC_OPS_TIMEOUT_MS	(10 * 60 * 1000) /* 10 minute timeout */
-+#define MMC_OPS_TIMEOUT_MS		(10 * 60 * 1000) /* 10min*/
-+#define MMC_BKOPS_TIMEOUT_MS		(120 * 1000) /* 120s */
-+#define MMC_CACHE_FLUSH_TIMEOUT_MS	(30 * 1000) /* 30s */
+ 	pinctrl_qspi1_default: qspi1_default {
+-		function = "QSPI1";
++		function = "SPI1";
+ 		groups = "QSPI1";
+ 	};
  
- static const u8 tuning_blk_pattern_4bit[] = {
- 	0xff, 0x0f, 0xff, 0x00, 0xff, 0xcc, 0xc3, 0xcc,
-@@ -947,7 +949,7 @@ void mmc_run_bkops(struct mmc_card *card
- 	 * urgent levels by using an asynchronous background task, when idle.
- 	 */
- 	err = mmc_switch(card, EXT_CSD_CMD_SET_NORMAL,
--			EXT_CSD_BKOPS_START, 1, MMC_OPS_TIMEOUT_MS);
-+			 EXT_CSD_BKOPS_START, 1, MMC_BKOPS_TIMEOUT_MS);
- 	if (err)
- 		pr_warn("%s: Error %d starting bkops\n",
- 			mmc_hostname(card->host), err);
-@@ -965,7 +967,8 @@ int mmc_flush_cache(struct mmc_card *car
+ 	pinctrl_qspi2_default: qspi2_default {
+-		function = "QSPI2";
++		function = "SPI2";
+ 		groups = "QSPI2";
+ 	};
  
- 	if (mmc_cache_enabled(card->host)) {
- 		err = mmc_switch(card, EXT_CSD_CMD_SET_NORMAL,
--				EXT_CSD_FLUSH_CACHE, 1, 0);
-+				 EXT_CSD_FLUSH_CACHE, 1,
-+				 MMC_CACHE_FLUSH_TIMEOUT_MS);
- 		if (err)
- 			pr_err("%s: cache flush error %d\n",
- 					mmc_hostname(card->host), err);
+-- 
+2.35.1
+
 
 

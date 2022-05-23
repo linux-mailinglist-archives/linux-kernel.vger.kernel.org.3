@@ -2,190 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC4B7531467
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:25:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DABA55313F2
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:24:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238415AbiEWQF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 12:05:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59636 "EHLO
+        id S238481AbiEWQGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 12:06:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238375AbiEWQFm (ORCPT
+        with ESMTP id S238483AbiEWQGL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 12:05:42 -0400
-Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53BDB427D4
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:05:41 -0700 (PDT)
-Received: by mail-wm1-x34a.google.com with SMTP id k35-20020a05600c1ca300b003946a9764baso10785068wms.1
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:05:41 -0700 (PDT)
+        Mon, 23 May 2022 12:06:11 -0400
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4ED186CB
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:06:08 -0700 (PDT)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-e93bbb54f9so18986616fac.12
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:06:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=/WdtMIUmyyQ0wzVn9eTkFE7BwdXKVqWgYYHPBjXthEc=;
-        b=aF1rBAAykQt59VR7BYd6nkyLaBIQSGBXyzfISv9DxoOtFD2zCgbi034usAav8b99KM
-         zXxuDdBuQ3Eg2qCtx6+F2WpzCOk9wNuVEuWZoB8Mco6OwvXb8vVTN/VvQzwYZj9WRVKL
-         b78W6A6PB7SYl5IGKfkltq78cuhZLmYm3djxXhBkmnrwmi6YEdrCb/y57XYdiKFO3Gt0
-         O4pKtg76UjepkhK1Hzdag1VMp6Grp1y4aFbbTaeOewMqXEMw/gSnuM/nkJYSPpKyRslM
-         0eQuGXa7zf6x7CX2xjHsb7n5yWkdiR42UogzHTREsfn7GaQWSy5etBOdP0qjo8fxs7yN
-         Dftw==
+        d=ffwll.ch; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wfWyXqKDw6KMyeqQToN3+pb4tfYQnyQoFUsrYr2tg34=;
+        b=kU/xLlvMMyizZPnrw/4g+bnPtd5LqlyHH+Wc94Nexqf4uQOgnwARiQhcDDDorC42GV
+         f+4eN4fP6cKJUo1p5XyyBY5O+rFnPqiEyC9e6YUpIxAbC67AnnKN5mqBPvGl846M+Ft8
+         Th/vxhr4vaBwomnkON2BJHdsPuv4Y2lnbNQAY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=/WdtMIUmyyQ0wzVn9eTkFE7BwdXKVqWgYYHPBjXthEc=;
-        b=JyKB/uAeMjmjAqF6wIKck9kOok1xtxyTAGbwoaCgE7vCcKeWMp/kK+rq8awlzAXKhO
-         u7NGD3apMH4Tc/M5uz3/DVjPgNI00BI9fvPsmgMoDQLIOvRA0aVj/hxO7gqXRB6IyzYX
-         nLWqr9OWaDM9pR2vHl+5X/JI1kYbwPiJBxr1mO9s6ql7KdK/48qrn8dej5bCnuuB0bB2
-         kEuQS3w28QfO0BsWNXdQamZJihY3R1rRkMLNpiJtsamicy0EXkg+WDnfxT0xaXAMvOYa
-         wkyW9WSH0u4+ElYEom9RUixTr0gj0vs+6UwsuxaIpDmORJbwDFDUTSscqfzfAEjM/tSa
-         upVQ==
-X-Gm-Message-State: AOAM531tSw9/NzQpH5z8v30U3v3mtAXJpKaRkA9AgTxIQUSkjUvUDI4H
-        rt05m8epRXXBgWb0aynMn+CqYUG5rpJ8DTLe
-X-Google-Smtp-Source: ABdhPJwBU+i7aJ9y/GOxT2EfsL3WPaeoum5y5IqzOO1JGSwgBrVvZAjtkzW1IP3luHrQOwgawj4qzP+rSQv0yW5x
-X-Received: from vdonnefort.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:2eea])
- (user=vdonnefort job=sendgmr) by 2002:a05:600c:1c91:b0:397:4711:e2a8 with
- SMTP id k17-20020a05600c1c9100b003974711e2a8mr8261188wms.82.1653321939883;
- Mon, 23 May 2022 09:05:39 -0700 (PDT)
-Date:   Mon, 23 May 2022 17:05:36 +0100
-Message-Id: <20220523160536.2889162-1-vdonnefort@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
-Subject: [PATCH v2] cpu/hotplug: Do not bail-out in DYING/STARTING sections
-From:   Vincent Donnefort <vdonnefort@google.com>
-To:     peterz@infradead.org, tglx@linutronix.de
-Cc:     linux-kernel@vger.kernel.org, vschneid@redhat.com,
-        kernel-team@android.com, Vincent Donnefort <vdonnefort@google.com>,
-        Derek Dolney <z23@posteo.net>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wfWyXqKDw6KMyeqQToN3+pb4tfYQnyQoFUsrYr2tg34=;
+        b=WqER5JR5T34eZ+fk79hphIsi7YtqDD3R+VBFsYbAzpk+HmArrFx6nvNqthsvCpxZ/G
+         d1E+IXlsjldp5mOrsnN6nhyn9t79Q/N+FsnIXoQGNYlTJlzy3TTMksnphYFCUpiAOaER
+         EWan1bvTOs22Lo2hz/aOEZUvQk44U4mhZmGt15niv7AWm8jLwMosEvxs1Y2qiW4YQgOm
+         m6bElUFFFemUDCsP8tg86aLPa4RZS1NEpaS7t0wZbPJKc+NQXbzvR1Y2ib9CXH17Ioy6
+         pZ9k4JUzkPRs7SLnXjhhdsiYaNoBRqCFqlopVhcGeXDAggxK6gRakRb95Se/UHMs851c
+         Qt4A==
+X-Gm-Message-State: AOAM5308MQYBkga0zV4sC0zmNt56vGXuxATVcnTNwFYTBIvOJZJqSBgp
+        jsGExEuQl3ePtGGF6kJ7y4qEMPw67Fv3Lt+fgyM74Q==
+X-Google-Smtp-Source: ABdhPJxCSCqEX0AX/mFMKV9Nszvd1kSvfb5PoopVXRLMDu0j/BF8/r6jTeX7U8ExRKBQB1j15KZ26tYC51B1MxbiPjE=
+X-Received: by 2002:a05:6870:eaa5:b0:da:b3f:2b45 with SMTP id
+ s37-20020a056870eaa500b000da0b3f2b45mr13576965oap.228.1653321967446; Mon, 23
+ May 2022 09:06:07 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220523084615.13510-1-robert.foss@linaro.org>
+ <CAG3jFytkFcmYjj6AHye3imsTDyP1LxHQvAzjswuRBsVVHRTnKg@mail.gmail.com> <CAG3jFytGDm29GVAQ5bs7XQ+hMDABd7btggFGN2pASBEzRPE50A@mail.gmail.com>
+In-Reply-To: <CAG3jFytGDm29GVAQ5bs7XQ+hMDABd7btggFGN2pASBEzRPE50A@mail.gmail.com>
+From:   Daniel Vetter <daniel@ffwll.ch>
+Date:   Mon, 23 May 2022 18:05:56 +0200
+Message-ID: <CAKMK7uGmnM1GXi_6yovZApBo34B5ojrN1KZOqpKBDgUUDorQ6w@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] Revert "drm/bridge: anx7625: Use DPI bus type"
+To:     Robert Foss <robert.foss@linaro.org>
+Cc:     andrzej.hajda@intel.com, narmstrong@baylibre.com,
+        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
+        jernej.skrabec@gmail.com, airlied@linux.ie, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, xji@analogixsemi.com,
+        hsinyi@chromium.org, sam@ravnborg.org, tzimmermann@suse.de,
+        maxime@cerno.tech, jose.exposito89@gmail.com,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DYING/STARTING callbacks are not expected to fail. However, as reported
-by Derek, drivers such as tboot are still free to return errors within
-those sections. In that case, there's nothing the hotplug machinery can do,
-so let's just proceed and log the failures.
+On Mon, 23 May 2022 at 14:54, Robert Foss <robert.foss@linaro.org> wrote:
+> These two patches need to be reverted since they were part (3/4 & 4/4)
+> of a series, that was partially (1/4 + 2/4) on the linux-media tree.
+> These two patches depend on the patches in the media tree, and will
+> not build without them, which leaves linux-drm-misc-next in a broken
+> state. Let's revert the two latter patches until rc1 has been branched
 
-Fixes: 453e41085183 (cpu/hotplug: Add cpuhp_invoke_callback_range())
-Reported-by: Derek Dolney <z23@posteo.net>
-Signed-off-by: Vincent Donnefort <vdonnefort@google.com>
+"rc1 has been backmerged into drm-misc-next" is missing here.
 
----
+> and the dependency wont cause issues any more.
 
-v1 -> v2: 
-   - Commit message rewording.
-   - More details in the warnings.
-   - Some variable renaming
+With explainer and sob added to both:
 
-diff --git a/kernel/cpu.c b/kernel/cpu.c
-index bbad5e375d3b..c3617683459e 100644
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -663,21 +663,51 @@ static bool cpuhp_next_state(bool bringup,
- 	return true;
- }
- 
--static int cpuhp_invoke_callback_range(bool bringup,
--				       unsigned int cpu,
--				       struct cpuhp_cpu_state *st,
--				       enum cpuhp_state target)
-+static int _cpuhp_invoke_callback_range(bool bringup,
-+					unsigned int cpu,
-+					struct cpuhp_cpu_state *st,
-+					enum cpuhp_state target,
-+					bool nofail)
- {
- 	enum cpuhp_state state;
--	int err = 0;
-+	int ret = 0;
- 
- 	while (cpuhp_next_state(bringup, &state, st, target)) {
-+		int err;
-+
- 		err = cpuhp_invoke_callback(cpu, state, bringup, NULL, NULL);
--		if (err)
-+		if (!err)
-+			continue;
-+
-+		if (nofail) {
-+			pr_warn("CPU %u %s state %s (%d) failed (%d)\n",
-+				cpu, bringup ? "UP" : "DOWN",
-+				cpuhp_get_step(st->state)->name,
-+				st->state, err);
-+			ret = -1;
-+		} else {
-+			ret = err;
- 			break;
-+		}
- 	}
- 
--	return err;
-+	return ret;
-+}
-+
-+static inline int cpuhp_invoke_callback_range(bool bringup,
-+					      unsigned int cpu,
-+					      struct cpuhp_cpu_state *st,
-+					      enum cpuhp_state target)
-+{
-+	return _cpuhp_invoke_callback_range(bringup, cpu, st, target, false);
-+}
-+
-+static inline void cpuhp_invoke_callback_range_nofail(bool bringup,
-+						      unsigned int cpu,
-+						      struct cpuhp_cpu_state *st,
-+						      enum cpuhp_state target)
-+{
-+	WARN_ON_ONCE(_cpuhp_invoke_callback_range(bringup, cpu, st, target, true));
- }
- 
- static inline bool can_rollback_cpu(struct cpuhp_cpu_state *st)
-@@ -999,7 +1029,6 @@ static int take_cpu_down(void *_param)
- 	struct cpuhp_cpu_state *st = this_cpu_ptr(&cpuhp_state);
- 	enum cpuhp_state target = max((int)st->target, CPUHP_AP_OFFLINE);
- 	int err, cpu = smp_processor_id();
--	int ret;
- 
- 	/* Ensure this CPU doesn't handle any more interrupts. */
- 	err = __cpu_disable();
-@@ -1012,13 +1041,11 @@ static int take_cpu_down(void *_param)
- 	 */
- 	WARN_ON(st->state != (CPUHP_TEARDOWN_CPU - 1));
- 
--	/* Invoke the former CPU_DYING callbacks */
--	ret = cpuhp_invoke_callback_range(false, cpu, st, target);
--
- 	/*
-+	 * Invoke the former CPU_DYING callbacks
- 	 * DYING must not fail!
- 	 */
--	WARN_ON_ONCE(ret);
-+	cpuhp_invoke_callback_range_nofail(false, cpu, st, target);
- 
- 	/* Give up timekeeping duties */
- 	tick_handover_do_timer();
-@@ -1296,16 +1323,14 @@ void notify_cpu_starting(unsigned int cpu)
- {
- 	struct cpuhp_cpu_state *st = per_cpu_ptr(&cpuhp_state, cpu);
- 	enum cpuhp_state target = min((int)st->target, CPUHP_AP_ONLINE);
--	int ret;
- 
- 	rcu_cpu_starting(cpu);	/* Enables RCU usage on this CPU. */
- 	cpumask_set_cpu(cpu, &cpus_booted_once_mask);
--	ret = cpuhp_invoke_callback_range(true, cpu, st, target);
- 
- 	/*
- 	 * STARTING must not fail!
- 	 */
--	WARN_ON_ONCE(ret);
-+	cpuhp_invoke_callback_range_nofail(true, cpu, st, target);
- }
- 
- /*
+Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+
+>
+> On Mon, 23 May 2022 at 14:50, Robert Foss <robert.foss@linaro.org> wrote:
+> >
+> > On Mon, 23 May 2022 at 10:46, Robert Foss <robert.foss@linaro.org> wrote:
+> > >
+> > > This reverts commit a77c2af0994e24ee36c7ffb6dc852770bdf06fb1.
+> > > ---
+> > >  drivers/gpu/drm/bridge/analogix/anx7625.c | 8 ++++----
+> > >  1 file changed, 4 insertions(+), 4 deletions(-)
+> > >
+> > > diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > > index 01f46d9189c1..53a5da6c49dd 100644
+> > > --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > > +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > > @@ -1623,14 +1623,14 @@ static int anx7625_parse_dt(struct device *dev,
+> > >
+> > >         anx7625_get_swing_setting(dev, pdata);
+> > >
+> > > -       pdata->is_dpi = 0; /* default dsi mode */
+> > > +       pdata->is_dpi = 1; /* default dpi mode */
+> > >         pdata->mipi_host_node = of_graph_get_remote_node(np, 0, 0);
+> > >         if (!pdata->mipi_host_node) {
+> > >                 DRM_DEV_ERROR(dev, "fail to get internal panel.\n");
+> > >                 return -ENODEV;
+> > >         }
+> > >
+> > > -       bus_type = 0;
+> > > +       bus_type = V4L2_FWNODE_BUS_TYPE_PARALLEL;
+> > >         mipi_lanes = MAX_LANES_SUPPORT;
+> > >         ep0 = of_graph_get_endpoint_by_regs(np, 0, 0);
+> > >         if (ep0) {
+> > > @@ -1640,8 +1640,8 @@ static int anx7625_parse_dt(struct device *dev,
+> > >                 mipi_lanes = of_property_count_u32_elems(ep0, "data-lanes");
+> > >         }
+> > >
+> > > -       if (bus_type == V4L2_FWNODE_BUS_TYPE_DPI) /* bus type is DPI */
+> > > -               pdata->is_dpi = 1;
+> > > +       if (bus_type == V4L2_FWNODE_BUS_TYPE_PARALLEL) /* bus type is Parallel(DSI) */
+> > > +               pdata->is_dpi = 0;
+> > >
+> > >         pdata->mipi_lanes = mipi_lanes;
+> > >         if (pdata->mipi_lanes > MAX_LANES_SUPPORT || pdata->mipi_lanes <= 0)
+> > > --
+> > > 2.34.1
+> > >
+> >
+> > Signed-off-by: Robert Foss <robert.foss@linaro.org>
+
+
+
 -- 
-2.36.1.124.g0e6072fb45-goog
-
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51DA45317D3
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:53:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3A6F531833
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:53:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242744AbiEWSEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 14:04:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35948 "EHLO
+        id S240012AbiEWRUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:20:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241806AbiEWRgG (ORCPT
+        with ESMTP id S240969AbiEWRQw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:36:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 124D88FF8E;
-        Mon, 23 May 2022 10:30:05 -0700 (PDT)
+        Mon, 23 May 2022 13:16:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50B86B665;
+        Mon, 23 May 2022 10:16:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BEF1E611EC;
-        Mon, 23 May 2022 17:29:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C88E3C385AA;
-        Mon, 23 May 2022 17:29:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 99935B81205;
+        Mon, 23 May 2022 17:13:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB92AC385A9;
+        Mon, 23 May 2022 17:12:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326957;
-        bh=BsltoaHFf01AQuDFN1N0mYkufnkqjRvwU6I+tIFyGV8=;
+        s=korg; t=1653325979;
+        bh=XmBQV3f1U39XKjofWdJcehcZCPUMgpflEGSWZaI+XD0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=I4324facxbJsCkQ+fmESfz6shN1lNpxyTgNABz/Nm/TYnYCg6mAKbNMThYPUemfZs
-         15o/ft2atafe28sJ7Ki7Xih6tfFxm9w/yD2RUPnxnwBGLWbp0UWBG4TFyYw1lcOLJS
-         dxqMruCwvtPzAOXfkOlR4IKGbrUFjyYSLzCzZNdY=
+        b=mK8mRP/92OrUtkg98ZJji2VdOdNTS5aqWNnB+PTdtyoSmLqho80UkrW/ubU8ORXrU
+         ckcq6DTv0rKhcmaAdEg2U78palmkPPLnxJv9AL1dtl9Swhp+XUiYCkpctownGJIOcd
+         ur7BWP+4EBE55P/2hiqVDxrXTogrsACeoBDjC/sM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 112/158] ARM: 9197/1: spectre-bhb: fix loop8 sequence for Thumb2
-Date:   Mon, 23 May 2022 19:04:29 +0200
-Message-Id: <20220523165849.573535084@linuxfoundation.org>
+        stable@vger.kernel.org, Miroslav Benes <mbenes@suse.cz>,
+        Juergen Gross <jgross@suse.com>,
+        Markus Boehme <markubo@amazon.com>
+Subject: [PATCH 5.4 03/68] x86/xen: Make the secondary CPU idle tasks reliable
+Date:   Mon, 23 May 2022 19:04:30 +0200
+Message-Id: <20220523165803.141513758@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165830.581652127@linuxfoundation.org>
-References: <20220523165830.581652127@linuxfoundation.org>
+In-Reply-To: <20220523165802.500642349@linuxfoundation.org>
+References: <20220523165802.500642349@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +55,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ard Biesheuvel <ardb@kernel.org>
+From: Miroslav Benes <mbenes@suse.cz>
 
-[ Upstream commit 3cfb3019979666bdf33a1010147363cf05e0f17b ]
+commit c3881eb58d56116c79ac4ee4f40fd15ead124c4b upstream.
 
-In Thumb2, 'b . + 4' produces a branch instruction that uses a narrow
-encoding, and so it does not jump to the following instruction as
-expected. So use W(b) instead.
+The unwinder reports the secondary CPU idle tasks' stack on XEN PV as
+unreliable, which affects at least live patching.
+cpu_initialize_context() sets up the context of the CPU through
+VCPUOP_initialise hypercall. After it is woken up, the idle task starts
+in cpu_bringup_and_idle() function and its stack starts at the offset
+right below pt_regs. The unwinder correctly detects the end of stack
+there but it is confused by NULL return address in the last frame.
 
-Fixes: 6c7cb60bff7a ("ARM: fix Thumb2 regression with Spectre BHB")
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Introduce a wrapper in assembly, which just calls
+cpu_bringup_and_idle(). The return address is thus pushed on the stack
+and the wrapper contains the annotation hint for the unwinder regarding
+the stack state.
+
+Signed-off-by: Miroslav Benes <mbenes@suse.cz>
+Reviewed-by: Juergen Gross <jgross@suse.com>
+Signed-off-by: Juergen Gross <jgross@suse.com>
+Signed-off-by: Markus Boehme <markubo@amazon.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/kernel/entry-armv.S | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/x86/xen/smp_pv.c   |    3 ++-
+ arch/x86/xen/xen-head.S |   10 ++++++++++
+ 2 files changed, 12 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/kernel/entry-armv.S b/arch/arm/kernel/entry-armv.S
-index ee3f7a599181..4bbd92d41031 100644
---- a/arch/arm/kernel/entry-armv.S
-+++ b/arch/arm/kernel/entry-armv.S
-@@ -1040,7 +1040,7 @@ vector_bhb_loop8_\name:
+--- a/arch/x86/xen/smp_pv.c
++++ b/arch/x86/xen/smp_pv.c
+@@ -53,6 +53,7 @@ static DEFINE_PER_CPU(struct xen_common_
+ static DEFINE_PER_CPU(struct xen_common_irq, xen_pmu_irq) = { .irq = -1 };
  
- 	@ bhb workaround
- 	mov	r0, #8
--3:	b	. + 4
-+3:	W(b)	. + 4
- 	subs	r0, r0, #1
- 	bne	3b
- 	dsb
--- 
-2.35.1
-
+ static irqreturn_t xen_irq_work_interrupt(int irq, void *dev_id);
++void asm_cpu_bringup_and_idle(void);
+ 
+ static void cpu_bringup(void)
+ {
+@@ -310,7 +311,7 @@ cpu_initialize_context(unsigned int cpu,
+ 	 * pointing just below where pt_regs would be if it were a normal
+ 	 * kernel entry.
+ 	 */
+-	ctxt->user_regs.eip = (unsigned long)cpu_bringup_and_idle;
++	ctxt->user_regs.eip = (unsigned long)asm_cpu_bringup_and_idle;
+ 	ctxt->flags = VGCF_IN_KERNEL;
+ 	ctxt->user_regs.eflags = 0x1000; /* IOPL_RING1 */
+ 	ctxt->user_regs.ds = __USER_DS;
+--- a/arch/x86/xen/xen-head.S
++++ b/arch/x86/xen/xen-head.S
+@@ -58,6 +58,16 @@ ENTRY(startup_xen)
+ 	call xen_start_kernel
+ END(startup_xen)
+ 	__FINIT
++
++#ifdef CONFIG_XEN_PV_SMP
++.pushsection .text
++SYM_CODE_START(asm_cpu_bringup_and_idle)
++	UNWIND_HINT_EMPTY
++
++	call cpu_bringup_and_idle
++SYM_CODE_END(asm_cpu_bringup_and_idle)
++.popsection
++#endif
+ #endif
+ 
+ .pushsection .text
 
 

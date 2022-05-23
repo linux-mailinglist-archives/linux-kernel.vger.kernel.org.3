@@ -2,158 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41620531641
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:50:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E7DA531660
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:50:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241319AbiEWSFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 14:05:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40314 "EHLO
+        id S245006AbiEWSMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 14:12:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242971AbiEWRhv (ORCPT
+        with ESMTP id S243686AbiEWRmX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:37:51 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 238E85D5E6
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 10:31:56 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id b135so2562397pfb.12
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 10:31:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=oCNJML7eA2j9L8f72NkyeKZiPIyN20wsxD5r9Tzx9cA=;
-        b=VQuspDaagiDbr8zDGAJevmwHk6IYCwXe0OQNbOee7Tu2IHo33cYxokGiFfbrhTIFD6
-         62hu7cw8t4yvx3aEBc40atCX/ZCXQYPABJD3A7WMv5dpWaPn1sujmMA8KBgCJG/jH4eb
-         Smd147syr5WmIcn7pwELo2ONgSQiNPsmRFuoyQ1Iuk1z/gxUK17CLFKinM4+1W81nEFo
-         hEWLTqC7ODI5yO9MfnJOT+geXR0KYCSJNoxov70DOAkLXuLYrQlTnAq0q3/2sT9qy69d
-         B46Q3eeaiIlELv+ptqM+emBDuE/X1ivWqBecmrCvvRl7jwiPmbCsJ3mCYHkXRYTX9XnL
-         9ZeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=oCNJML7eA2j9L8f72NkyeKZiPIyN20wsxD5r9Tzx9cA=;
-        b=058I9JufCLo/z+RcXgadaYPlwXpIIN+mTa9oS4WcPc6qKPgDdEWt+HGRN2wh5K8hg5
-         zCNBkuPZFXjSY1N3Lm3cJYRnRJHEwKgTvbYY+Da7iD9ah9doXRrY4Ph8Hca3HP7ahT2l
-         z2urgEeMbpcodmHXrsLUpmvfRqsDdV+fUO7GOFxoritQGpU/lncFoBJPRBUFS6DtkbzK
-         uUEv943kRxbQqhd5wP6x3O2Ui9uREY8fsO5mC+YyLPQuYJxM8FKtqt1WKjN1HjbB5Wu0
-         ADPQ9uMC2xXhfE3RwwCpYDHFtLmYMK2o1xcuBH9bV3bqNdNMKBo+xKyIbT51k/awq0ah
-         N6Tw==
-X-Gm-Message-State: AOAM530jwPyZI57/EiBV/TVjl+EKTUPhi+5L23IiZi+aFHiTMfbPazXg
-        xr0vh1YhZRY51wcm9Uu8yoV5gg==
-X-Google-Smtp-Source: ABdhPJyVqMoEcjNxptyUgqa9Zdq5WQzejBZ0z6wMNkkE4awFtw8fhM9i8OBMVMolSAtdF+aG4aq6XQ==
-X-Received: by 2002:a05:6a00:140a:b0:4e0:54d5:d01 with SMTP id l10-20020a056a00140a00b004e054d50d01mr24742544pfu.20.1653327068687;
-        Mon, 23 May 2022 10:31:08 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id ru13-20020a17090b2bcd00b001df4a0e9357sm7512221pjb.12.2022.05.23.10.31.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 10:31:08 -0700 (PDT)
-Date:   Mon, 23 May 2022 17:31:04 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Jim Mattson <jmattson@google.com>, kvm@vger.kernel.org,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        intel-gfx@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
-        linux-kernel@vger.kernel.org, Zhi Wang <zhi.a.wang@intel.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        intel-gvt-dev@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [RFC PATCH v3 02/19] KVM: x86: inhibit APICv/AVIC when the guest
- and/or host changes apic id/base from the defaults.
-Message-ID: <YovE2A67XobRyHc/@google.com>
-References: <20220427200314.276673-1-mlevitsk@redhat.com>
- <20220427200314.276673-3-mlevitsk@redhat.com>
- <YoZrG3n5fgMp4LQl@google.com>
- <e32f6c904c92e9e9efabcc697917a232f5e88881.camel@redhat.com>
- <CALMp9eSVji2CPW1AjFoSbWZ_b-r3y67HyatgdqXEqSyUaD1_BQ@mail.gmail.com>
- <65991ac329a32cf4128400b643d5b5ccf3918cfe.camel@redhat.com>
+        Mon, 23 May 2022 13:42:23 -0400
+Received: from mailout2.w2.samsung.com (mailout2.w2.samsung.com [211.189.100.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A399E9FE;
+        Mon, 23 May 2022 10:34:20 -0700 (PDT)
+Received: from uscas1p2.samsung.com (unknown [182.198.245.207])
+        by mailout2.w2.samsung.com (KnoxPortal) with ESMTP id 20220523173241usoutp029eb833155efa9a452e6edc55a6789a33~xzEsh8v_Q0898108981usoutp02U;
+        Mon, 23 May 2022 17:32:41 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w2.samsung.com 20220523173241usoutp029eb833155efa9a452e6edc55a6789a33~xzEsh8v_Q0898108981usoutp02U
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1653327161;
+        bh=HEfKl/NdTKSQGo39X2HbhKmB5mTaxUlPRuEMKR2+IH4=;
+        h=From:To:CC:Subject:Date:References:From;
+        b=EJ24G8MUIhxoL6zw7CYlzZoN9IGvWpIbRPyK0qzc+FBxerHJJUXj+RtHgtwMtYu4K
+         1Ik5TSTppp11+BVHiTYgYeCSmiKScTY+RsoTB/0ivbdPc2aKEjVu47nJ9xFmBRUhzZ
+         ToKAAQJO3V3jI+8a9LPHWMEdsawFmLZjQ3yO8hjA=
+Received: from ussmges2new.samsung.com (u111.gpu85.samsung.co.kr
+        [203.254.195.111]) by uscas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20220523173240uscas1p2022e4f537d4ef75e00ad54f8e4bc1d12~xzEr6-rYq0794907949uscas1p2Y;
+        Mon, 23 May 2022 17:32:40 +0000 (GMT)
+Received: from uscas1p2.samsung.com ( [182.198.245.207]) by
+        ussmges2new.samsung.com (USCPEMTA) with SMTP id 79.56.09642.835CB826; Mon,
+        23 May 2022 13:32:40 -0400 (EDT)
+Received: from ussmgxs1new.samsung.com (u89.gpu85.samsung.co.kr
+        [203.254.195.89]) by uscas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20220523173240uscas1p10a3b4a1eb034af351bb726cce48bc1f6~xzErtFZ9K3215732157uscas1p1K;
+        Mon, 23 May 2022 17:32:40 +0000 (GMT)
+X-AuditID: cbfec36f-bfdff700000025aa-e4-628bc5389d21
+Received: from SSI-EX3.ssi.samsung.com ( [105.128.2.145]) by
+        ussmgxs1new.samsung.com (USCPEXMTA) with SMTP id 2E.FB.52349.835CB826; Mon,
+        23 May 2022 13:32:40 -0400 (EDT)
+Received: from SSI-EX3.ssi.samsung.com (105.128.2.228) by
+        SSI-EX3.ssi.samsung.com (105.128.2.228) with Microsoft SMTP Server
+        (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+        15.1.2375.24; Mon, 23 May 2022 10:32:39 -0700
+Received: from SSI-EX3.ssi.samsung.com ([105.128.5.228]) by
+        SSI-EX3.ssi.samsung.com ([105.128.5.228]) with mapi id 15.01.2375.024; Mon,
+        23 May 2022 10:32:39 -0700
+From:   Adam Manzanares <a.manzanares@samsung.com>
+To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "ben@bwidawsk.net" <ben@bwidawsk.net>,
+        "dave@stgolabs.net" <dave@stgolabs.net>,
+        "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+Subject: [ANNOUNCE] CFP: CXL Microconference - Linux Plumbers Conference
+ 2022
+Thread-Topic: [ANNOUNCE] CFP: CXL Microconference - Linux Plumbers
+        Conference 2022
+Thread-Index: AQHYbssZbLXpAfi4tE2++gsNHiRkXQ==
+Date:   Mon, 23 May 2022 17:32:39 +0000
+Message-ID: <20220523173239.GB353513@bgt-140510-bm01>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [105.128.2.176]
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <821F680737C1394686B21DE39EFBA461@ssi.samsung.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <65991ac329a32cf4128400b643d5b5ccf3918cfe.camel@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-CFilter-Loop: Reflected
+X-Brightmail-Tracker: H4sIAAAAAAAAA02SfVCLcRzA/fbs2Z6m1dPCvjhcW/0zrLxdj+Pycv5Yx0nOCXFZ9ahOqzxP
+        Ia9ZJOt0UxdnJZVbinlboVG5ilCoztV6cXVcl5y3mRtCC3vmbv99vm/3/Xx/9yMwSRU+g0hK
+        SaeZFHWyTCDi32l1dMynHuXFhnT1yamcK4086lxRJ6Ku9pkQ1WFo41Mv75UIqEHTBL5SoOo8
+        dgtXXap/x1OZ7QVCVVHxUdVX8+wN+DbR8ng6OWkvzQSH7RQl3vw8hKU98dv/tsSKslCpjw55
+        EUAuBmP5E0yHRISErEZQlW9EXHCCB1pdA+9/1yttO48rXENwxjEh4AI7gh+jZnelEkFF7TfX
+        iIAMgV+Pb2H/eAq5CuqaHK4JjPyKoO3TeVyHCMKfjADLwEKuZxPYLjiFHCuhYeSz4B/zySAo
+        Lf7myovJJdBuyXXlETkNvreZXLswUgr9wxfdqn5QUVyPcTwNnPdeCzgOgKHv74Rc/zwou28X
+        cBwGn27ku3kuVJa/x7hdfvD0/DCfm50OTVW9bq4l4MuLWRyvgY6WPMTxTOi2FrkeEsiTCGz6
+        RpwL9AhefRxzWywD56ket4UPjP98g/RIbvA4wuAhaPAQNHgIGjwEyxB+BUkzWFaTQLMLU+h9
+        SlatYTNSEpRxqRoz+vuZ2p0tqXXI2v9F2Yx4BGpGQGCyKeK76txYiThenXmAZlJjmIxkmm1G
+        Mwm+TCquTLqplpAJ6nR6N02n0cz/Ko/wmpHF285k8Z3a6r6H6Y5TXW/ZYzsCpXrKbpkXuceW
+        mbesNH/OovCeXiEV51u1Inj9JObMIHlo6ZGRJnLCsiXmRc1AwomT0f6i3gOXTBKLZMMvxcbk
+        qNP6utsHGcuI/KFUe3k8N9A7VjYa9Cb8rEo2XG8sTzNHbw28rpM/ZyLWbgqYSuiHakK9l6iy
+        raH4Zo1Jo1yZE9uaZrdVi1XdusPWBYZCzWKbIn6sZvPgtvCG0dDxrVFxwln+uI1V5CimTux6
+        pm3sD6ho/pCNCuU1FaNNuWLTgyi8JXikZ93v1mhR+W8fR4O921gwNNn36rWBTH326iIv7zmR
+        xqey4zk7vIMmBcr4bKJ6gQJjWPUfB7aBnbsDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrLIsWRmVeSWpSXmKPExsWS2cA0UdfiaHeSwaxzAhZtq/YxWUyfeoHR
+        YvXNNYwW52edYrG4vGsOm8W9Nf9ZHdg8LjRuZPVYvOclk8emT5PYPabOrvf4vEkugDWKyyYl
+        NSezLLVI3y6BK2PD+/vMBScEK57Puc7YwDiPr4uRk0NCwETiTtNppi5GLg4hgdWMEr3zdkE5
+        nxglVvzZzwjhLANyHv1mBGlhEzCQ+H18IzOILSLgKLHj4Fc2kCJmgc+MElNWbmEFSQgL+Ers
+        ObCfBaIoRGLiIZgGPYm9z96zgdgsAqoS82Z/YwexeQVMJU7v7ACLMwqISXw/tYYJxGYWEJe4
+        9WQ+E8StAhJL9pxnhrBFJV4+/scKYStK3P/+kh2iXkdiwe5PbBC2ncS79X1QtrbEsoWvmSF2
+        CUqcnPmEBaJXUuLgihssExjFZiFZNwvJqFlIRs1CMmoWklELGFlXMYqXFhfnplcUG+allusV
+        J+YWl+al6yXn525iBMbo6X+HI3cwHr31Ue8QIxMH4yFGCQ5mJRHe7YkdSUK8KYmVValF+fFF
+        pTmpxYcYpTlYlMR5hVwnxgsJpCeWpGanphakFsFkmTg4pRqYnIsENbLDhLalaf9oSFF9q277
+        +LbV9aLKZVxHax8GHWmIalD7VX2Ov8t+/5bV+UfqJj1YJ39fJKN9jlJK8/lQoRVdTEGaR58c
+        esBr2FT63PrHZq/mpIa8m2ver/X6oRf/KGfhZeZpHW/yf7y54+Ntucf0dU0b5/Ore1jjWjnL
+        PLR+TLqc1paiNPO3ejXHV+V5W3Ue+Fxwdvx78s20aZc7cmuPPy49X7nUIGJmr2m/oozckjUm
+        /Y3ygktO/935X7rdS+ViZGKa6+U79cbmvzru7eo7u+xY1S2/mVqPv6/aExL4K+LljqlH9rR4
+        PHhod66yW20Rf9gXB4PWHdZ8TUddngftXM12u7XvzJewIyrpSizFGYmGWsxFxYkAEOshNUAD
+        AAA=
+X-CMS-MailID: 20220523173240uscas1p10a3b4a1eb034af351bb726cce48bc1f6
+CMS-TYPE: 301P
+X-CMS-RootMailID: 20220523173240uscas1p10a3b4a1eb034af351bb726cce48bc1f6
+References: <CGME20220523173240uscas1p10a3b4a1eb034af351bb726cce48bc1f6@uscas1p1.samsung.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022, Maxim Levitsky wrote:
-> On Sun, 2022-05-22 at 07:47 -0700, Jim Mattson wrote:
-> > On Sun, May 22, 2022 at 2:03 AM Maxim Levitsky <mlevitsk@redhat.com> wrote:
-> > > On Thu, 2022-05-19 at 16:06 +0000, Sean Christopherson wrote:
-> > > > On Wed, Apr 27, 2022, Maxim Levitsky wrote:
-> > > > > Neither of these settings should be changed by the guest and it is
-> > > > > a burden to support it in the acceleration code, so just inhibit
-> > > > > it instead.
-> > > > > 
-> > > > > Also add a boolean 'apic_id_changed' to indicate if apic id ever changed.
-> > > > > 
-> > > > > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> > > > > ---
-> > > > > +           return;
-> > > > > +
-> > > > > +   pr_warn_once("APIC ID change is unsupported by KVM");
-> > > > 
-> > > > It's supported (modulo x2APIC shenanigans), otherwise KVM wouldn't need to disable
-> > > > APICv.
-> > > 
-> > > Here, as I said, it would be nice to see that warning if someone complains.
-> > > Fact is that AVIC code was totally broken in this regard, and there are probably more,
-> > > so it would be nice to see if anybody complains.
-> > > 
-> > > If you insist, I'll remove this warning.
-> > 
-> > This may be fine for a hobbyist, but it's a terrible API in an
-> > enterprise environment. To be honest, I have no way of propagating
-> > this warning from /var/log/messages on a particular host to a
-> > potentially impacted customer. Worse, if they're not the first
-> > impacted customer since the last host reboot, there's no warning to
-> > propagate. I suppose I could just tell every later customer, "Your VM
-> > was scheduled to run on a host that previously reported, 'APIC ID
-> > change is unsupported by KVM.' If you notice any unusual behavior,
-> > that might be the reason for it," but that isn't going to inspire
-> > confidence. I could schedule a drain and reboot of the host, but that
-> > defeats the whole point of the "_once" suffix.
-> 
-> Mostly agree, and I read alrady few discussions about exactly this,
-> those warnings are mostly useless, but they are used in the
-> cases where we don't have the courage to just exit with KVM_EXIT_INTERNAL_ERROR.
-> 
-> I do not thing though that the warning is completely useless, 
-> as we often have the kernel log of the target machine when things go wrong, 
-> so *we* can notice it.
-> In other words a kernel warning is mostly useless but better that nothing.
+Compute Express Link is a cache coherent fabric that is gaining momentum in=
+ the
+industry. Several hardware vendors have begun to ramp up on CXL 2.0 hardwar=
+e
+development and the Linux plumbing needs to keep pace. There is foundationa=
+l
+infrastructure in place in the kernel, QEMU, and user tooling that represen=
+ts
+the beginning of the CXL enabling journey. However, there is more to do and
+plenty of opportunities to scale the contributions past the initial set of
+developers that got the CXL subsystem off the ground.
 
-IMO, it's worse than doing nothing.  Us developers become desensitized to the
-kernel message due to running tests, the existence of these message propagates
-the notion that they are a good thing (and we keep rehashing these discussions...),
-users may not realize it's a _once() printk and so think they _aren't_ affected
-when re-running a workload, etc...
+The Compute Express Link microconference focuses on how to evolve the Linux
+CXL kernel driver and userspace components for full support of the CXL 2.0
+spec (and beyond). The microconference provides a space to open the discuss=
+ion,
+incorporate more perspectives, and grow the CXL community with a goal that =
+the
+CXL Linux plumbing serves the needs of the CXL ecosystem while balancing th=
+e
+needs of the Linux kernel project. Specifically, this microconference welco=
+mes
+submissions detailing industry and academia use cases in order to develop u=
+sage
+model scenarios. Finally, it will be a good opportunity to have existing
+upstream CXL developers available in a forum to discuss current CXL support=
+ and
+to communicate areas that need additional involvement.
 
-And in this case, "APIC ID change is unsupported by KVM" is partly wrong.  KVM
-fully models Intel's behavior where the ID change isn't carried across x2APIC
-enabling, the only unsupported behavior is that the guest will lose APICv
-acceleration.
+Suggested topics:
+- Ecosystem & Architectural review
+- Regions
+- QEMU support
+- Security: IDE and SPDM
+- Managing vendor specificity
+- Type 2 accelerator support (bias flip management)
+- RAS (GPF, AER, Poison handling )
+- 1.1 to 2.0 compatibility
+- Hot add policy, daxctl
+- Hot remove
+- Industry and academia use cases
 
-> About KVM_EXIT_WARNING, this is IMHO a very good idea, probably combined
-> with some form of taint flag, which could be read by qemu and then shown
-> over hmp/qmp interfaces.
+If you are interested in participating in this microconference and have=20
+topics to propose, please use the LPC CFP process [1], and select "Compute
+Express Link MC" for the "Track".
+
+The submission deadline is June 30.
+
+Come and join us in the discussion. We hope to see you there!
+
+For more information, feel free to contact the Compute Express Link MC Lead=
+s:
+    Adam Manzanares <a.manzanares@samsung.com>
+    Dan Williams <dan.j.williams@intel.com>
+    Ben Widawsky <ben@bwidawsk.net>
+    Davidlohr Bueso <dave@stgolabs.net>
+
+[1] https://lpc.events/event/16/abstracts/=

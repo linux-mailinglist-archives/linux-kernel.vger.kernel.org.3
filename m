@@ -2,58 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E67EB5311E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:21:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85C8E53123B
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:22:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236112AbiEWNWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 09:22:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42698 "EHLO
+        id S236173AbiEWNXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 09:23:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236087AbiEWNWs (ORCPT
+        with ESMTP id S236134AbiEWNXF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 09:22:48 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7904631234;
-        Mon, 23 May 2022 06:22:44 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id D4B671F4332B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1653312162;
-        bh=zJBx/meEVKgnjWI/EklM+94hyPmWSwELMNThgJm6lUg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=BunFdwU73dubqPSW7rx74D895hMJcTYcd6qN8jpL/C2L2dkGSbvdf7x1JTB+M0ZKe
-         0Wxhc3HjHNPcNjomBvWRqZ7e7teC1cQKdJgXMhRZ4N4+dW2dMmF2k/cYamAYO5joX6
-         aTDmvnpDZoJGSyHPSbOYqJbDcFklr4mjrfsMzCjU2pauq31X6Fsp9NcI0oZm1k7C5U
-         NlJjXVTJkRO2QDEn2rurR3ku95M4Tcuz1Adurp5tjqooSo9L4bFwvRd+zFEQbMSGgJ
-         POT/pN634OKMiDfAnFoeuHMOo58bQ3Zh6JpNy5hpvkU0p/U2/XVVhK1ES06H3myDzO
-         7coEpax5GyFfw==
-Message-ID: <a6606891-d55f-dbce-7c5a-86390694e1c4@collabora.com>
-Date:   Mon, 23 May 2022 15:22:39 +0200
+        Mon, 23 May 2022 09:23:05 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BEB133A37
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 06:22:53 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id i40so19108650eda.7
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 06:22:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=r8WAmC01JdwEuRA91bKXEDq+9uWVDhRFE7DDNgirVT8=;
+        b=W4OGyqHL2ZKqiPmC+Hr840hwTtdA9uiv+Onp5DpklXJb0lXyIYeJM41tvTV/1gafHV
+         VB4Pptl9/AB1PutTxxwALFx6e9yR8tQ9dhA//i04ErhKBRAd2wdY7Guk+uMn85eVN4AA
+         aK3ofPTdLy1pgcJQgFawl51XYJcZXnlp0KaMA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=r8WAmC01JdwEuRA91bKXEDq+9uWVDhRFE7DDNgirVT8=;
+        b=O6ZNszow3szJ7Z27dzYA5nstyFQ1UWuIa0ZbcbJe7bQh97mTWkVUk7ANJiJxbMRsV3
+         EI54CDQMlbUut53sfH4+pr/2fNianKYcnFtXXayMROXlCyMdvbMXE8OhjRWCVTtO7bd7
+         sGtBwIWZ765tQKyM5YX7AiM8XAhAJYC04AH2Heg3ipwzuhR+5YvbCoSiPMgglJdOocYF
+         yuoCTanlE8qLXjoDyYo5Hq/Bz0HYRetnVCdkzqmsY476teAscP0sOYmnsRk/G3AY2XUE
+         U3tEGJZaf5OwB4RpC30wvBdCqH1b/7injeh6ZqP/iaNKbF6TZYveedYgFQQg64su42gt
+         mGDQ==
+X-Gm-Message-State: AOAM531+YBtD31DOrX1CHDXxLwJeKa2rX4R4vqFKgWUGq4KKv8gG7BqM
+        +uhUVp1QZe2dEFEq+rYm1j7/4d1aUKIHrQ==
+X-Google-Smtp-Source: ABdhPJyzCB3wSJCVIQ8lxcYGLb927QLmAjOhNbuxRB+//y0X8LXl4qCJl+xQS+M9DHvE4XqlF/tGcw==
+X-Received: by 2002:a05:6402:368b:b0:42b:42c7:f63f with SMTP id ej11-20020a056402368b00b0042b42c7f63fmr11364450edb.409.1653312171880;
+        Mon, 23 May 2022 06:22:51 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.pdxnet.pdxeng.ch (host-80-116-90-174.retail.telecomitalia.it. [80.116.90.174])
+        by smtp.gmail.com with ESMTPSA id cw12-20020a170906c78c00b006fec3b388edsm2249351ejb.95.2022.05.23.06.22.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 May 2022 06:22:51 -0700 (PDT)
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-amarula@amarulasolutions.com,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        Michael Trimarchi <michael@amarulasolutions.com>,
+        stable@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v2] dmaengine: mxs: fix driver registering
+Date:   Mon, 23 May 2022 15:22:47 +0200
+Message-Id: <20220523132247.1429321-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 2/4] regulator: Add driver for MT6331 PMIC regulators
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     lgirdwood@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20220520133305.265310-1-angelogioacchino.delregno@collabora.com>
- <20220520133305.265310-3-angelogioacchino.delregno@collabora.com>
- <YoepiTUfdhkYByo7@sirena.org.uk>
- <6cc68be9-e509-eae4-801d-997fdc01dcf2@collabora.com>
- <YouFcSapkVC7ZfuP@sirena.org.uk>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <YouFcSapkVC7ZfuP@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,75 +72,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 23/05/22 15:00, Mark Brown ha scritto:
-> On Mon, May 23, 2022 at 02:49:19PM +0200, AngeloGioacchino Del Regno wrote:
->> Il 20/05/22 16:45, Mark Brown ha scritto:
->>> On Fri, May 20, 2022 at 03:33:03PM +0200, AngeloGioacchino Del Regno wrote:
-> 
->>>> +static const unsigned int ldo_volt_table10[] = {
->>>> +	1200000, 1300000, 1500000, 1800000,
->>>> +	1200000, 1300000, 1500000, 1800000,
->>>> +	1200000, 1300000, 1500000, 1800000,
->>>> +	1200000, 1300000, 1500000, 1800000,
->>>> +};
-> 
->>> So the top bits of the voltate selection field just get ignored?  Might
->>> be easier to just write the code to not include the top bits.
->>>
-> 
->> No, they're all valid values for real... but I guess that I can simplify
->> this voltage table by simply modifying the bitmask that we use for the
->> regulators that are using this table....
-> 
-> Right, my point here is that it looks awfully like the documentation
-> (this came from documentation I guess?) is including some extra bits
-> that get ignored in the voltage selection field here.  That seems like a
-> weird choice somewhere along the line.
-> 
+Driver registration fails on SOC imx8mn as its supplier, the clock
+control module, is not ready. Since platform_driver_probe(), as
+reported by its description, is incompatible with deferred probing,
+we have to use platform_driver_register().
 
-I wish I had a datasheet for these parts...
+Fixes: a580b8c5429a ("dmaengine: mxs-dma: add dma support for i.MX23/28")
+Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
+Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc: stable@vger.kernel.org
 
-All of this comes from analyzing a running device on the downstream 3.4 kernel
-and on understanding the (not really readable) downstream kernel code...
-..but yes, I agree on the fact that this seems to be a weird choice.
+---
 
-Ah, besides, I hooked up an oscilloscope to the VCAM_IO and I can see that the
-vreg really does react as expected upon setting the upper bits.. but since it
-still works without, we can safely ignore them, which makes us able to simplify
-the driver (as no custom code for that will be required) and, at the same time,
-avoid seeing a table of values repeated 4 times in a row.
+Changes in v2:
+- Add the tag "Cc: stable@vger.kernel.org" in the sign-off area.
 
->>>> +	if (info->qi > 0) {
->>>> +		reg = info->desc.enable_reg;
->>>> +		en_mask = info->qi;
-> 
->>> If the regulator doesn't have status readback it shouldn't provide a
->>> get_status() operation.
-> 
->> What I've understood is that when there's no "QI" flag, the enable register
->> will provide the regulator status (EN/DIS) acting like QI, that's why I've
->> added that if branch...
-> 
->> Anyway, I'll recheck this part before sending the next version!
-> 
-> That would be fairly unusual, often a regulator won't even detect when
-> it's gone out of regulation.
+ drivers/dma/mxs-dma.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
-Actually, there *is* support for this kind of detection... luckily the registers
-and masks/bits are all dumped in a "upmu_hw.h" header downstream, regardless of
-whether they're used or not in the code, so at least there's that reference to
-look at... and I can see that there are bits to manage the overcurrent protection
-(OVP) and configurable (OCPLVL) overcurrent protection (OCP_EN / OC_EN)...
-
-...so, the regulator will indeed shut itself off and clear either/both the QI_EN
-and/or its relative bit in the enable register... I've also just found hints of
-the latter (enable register being set to 0) downstream, so I'm sure that this is
-indeed right.
-
-And finally... I would really like to test the OCP/OVP features to write some
-code managing that, but I'm using a production smartphone (a Xperia M5, like
-mentioned in the cover letter) for research and testing and you surely understand
-that it's not time yet to take this risk... I will, later - but I have to finish
-the upstreaming of this SoC and platform before chasing the green smoke... :-)
-
+diff --git a/drivers/dma/mxs-dma.c b/drivers/dma/mxs-dma.c
+index 994fc4d2aca4..b8a3e692330d 100644
+--- a/drivers/dma/mxs-dma.c
++++ b/drivers/dma/mxs-dma.c
+@@ -670,7 +670,7 @@ static enum dma_status mxs_dma_tx_status(struct dma_chan *chan,
+ 	return mxs_chan->status;
+ }
+ 
+-static int __init mxs_dma_init(struct mxs_dma_engine *mxs_dma)
++static int mxs_dma_init(struct mxs_dma_engine *mxs_dma)
+ {
+ 	int ret;
+ 
+@@ -741,7 +741,7 @@ static struct dma_chan *mxs_dma_xlate(struct of_phandle_args *dma_spec,
+ 				     ofdma->of_node);
+ }
+ 
+-static int __init mxs_dma_probe(struct platform_device *pdev)
++static int mxs_dma_probe(struct platform_device *pdev)
+ {
+ 	struct device_node *np = pdev->dev.of_node;
+ 	const struct mxs_dma_type *dma_type;
+@@ -839,10 +839,7 @@ static struct platform_driver mxs_dma_driver = {
+ 		.name	= "mxs-dma",
+ 		.of_match_table = mxs_dma_dt_ids,
+ 	},
++	.probe = mxs_dma_probe,
+ };
+ 
+-static int __init mxs_dma_module_init(void)
+-{
+-	return platform_driver_probe(&mxs_dma_driver, mxs_dma_probe);
+-}
+-subsys_initcall(mxs_dma_module_init);
++module_platform_driver(mxs_dma_driver);
+-- 
+2.32.0
 

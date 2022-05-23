@@ -2,97 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12D2B5307B1
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 04:30:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57D9D5307B4
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 04:30:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352851AbiEWCaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 22:30:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53540 "EHLO
+        id S1352917AbiEWCaq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 22:30:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbiEWCaF (ORCPT
+        with ESMTP id S1352906AbiEWCak (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 22:30:05 -0400
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 187643702D;
-        Sun, 22 May 2022 19:30:04 -0700 (PDT)
-Received: by mail-vs1-xe30.google.com with SMTP id i186so13601327vsc.9;
-        Sun, 22 May 2022 19:30:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qCDfB0gbeqJSiyKGU3STojVeMXIGNpqCQsaldHkSN3Y=;
-        b=YHqAnnX58v3Rh45tbrtMJnyYgDu7wXUizSUQUK+okI52BseQyIEKNVTF9ih6MHwYed
-         +rWCWa9xIBlDPyy4ftVJX8rswYnIqDeFRt9xWtDYxr2Jq6fesuwgZOQxmRBpiIaMVWVm
-         4Qg/pa33biCAmRlygmaQn+bp4OlCmSgyO2Z3KKSCum/cAaxZLsJMs6ClrH6OMnU7gn+u
-         5xLS06zaUrGmpZk5eM0v1Z7viCkAzDfon746s7oS0Q7Kqg0LLa/2xc/RcgfIkw3tFQlp
-         3u4IteRc5Y5xkNpWBj5tXuT1cD6M/xKjEAM38ctZ2ZixmAXP3oz588VLj2WJPI+Fqevf
-         8KVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qCDfB0gbeqJSiyKGU3STojVeMXIGNpqCQsaldHkSN3Y=;
-        b=mD/8ScL2A8rYROY153ZsDaBTFeXXCSXrXuHmIM17U6KuY4DTsBrQve5JnL9jmCJoo/
-         YonyOerdPHODt8GYmprSfYZZRG5e7/628HNYOVCk+FfnQtWxI+PIoT2vtzOMGUHNTNCl
-         u8oxLRYKPujBSjV0MQKlmA6/+hdn/LhWnj+tF3TCEjn1HhJBDq60QhkhAbC1oo3SBblX
-         CDGVteP6aDPv1lHONNtfqjrTyEe7mZUiSBHcoII70YWU+VjvtxeIHA8oKjPX9CmuiQst
-         +9acohp5qaZ6mBBMjuSINrJpZkUSp3QNTPZWk7Aq7Z2SGs6R2JZdMJmvguJEThwyoqKV
-         VaWg==
-X-Gm-Message-State: AOAM531Hvft02LpJh7hu7Xt5rO7FDgdP6SNrzHIT3xLl/lNdljy+Vtuo
-        wClEftRP9dSKknlevPYQHW8jDvgsSWxJaKICP1C4B/c0
-X-Google-Smtp-Source: ABdhPJxhkK3Kv7kE383vA3MdUVss8dslJvDBzQHHa8J2kT175OvzdocJ1VLYcw2tTU+bPDSDPGibc717CNxhagshITw=
-X-Received: by 2002:a05:6102:3a0e:b0:337:ab1f:3a8c with SMTP id
- b14-20020a0561023a0e00b00337ab1f3a8cmr1446856vsu.61.1653273003139; Sun, 22
- May 2022 19:30:03 -0700 (PDT)
+        Sun, 22 May 2022 22:30:40 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6585037A3D
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 19:30:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653273032; x=1684809032;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=4WK8aGbUDqaIUa1SiHIHoDVH53+ZD8ZQAWBCdkSvXdc=;
+  b=Q7mz4n7o7HO73IBarfTgfMLmw2Z+GrPRazofSTxGHJbois2rsAsrpSK6
+   uXsGAex263iOUSRxoH4p1kK6+GfBwNz3gZwtvcKp/ZVkx0QW6UCeT7Tct
+   1B7Ff9exTmszRIv69olamQHVi50wlY4Ix2gzxMPAqJKuxUEx14RMs1vl+
+   B0aQUWQIP6gY+oA4bNUS4d7SCN7I8tRAMfuTO5q61lPKWzcYdRSAUjHNI
+   Q79fAnuPovOhLcnv/CgaxoPxYRgCF5+LdTT13haXoMjx1HOWIzcsaVbQG
+   LBLEy6Uyh1u1F2xAUMck/1eTHKzCUa6eaN+VXbdduWK64weEcbYtnfuPr
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10355"; a="252955632"
+X-IronPort-AV: E=Sophos;i="5.91,245,1647327600"; 
+   d="scan'208";a="252955632"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2022 19:30:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,245,1647327600"; 
+   d="scan'208";a="716481815"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 22 May 2022 19:30:31 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nsxq2-0000pG-Bf;
+        Mon, 23 May 2022 02:30:30 +0000
+Date:   Mon, 23 May 2022 10:30:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [tomoyo-tomoyo-test1:master 1/1]
+ drivers/input/mouse/psmouse-smbus.c:320:2: warning: call to
+ __warn_flushing_systemwide_wq declared with 'warning' attribute: Please
+ avoid flushing system-wide workqueues.
+Message-ID: <202205231050.yd4wTc2M-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220523105736.1f42b837@canb.auug.org.au>
-In-Reply-To: <20220523105736.1f42b837@canb.auug.org.au>
-From:   Steve French <smfrench@gmail.com>
-Date:   Sun, 22 May 2022 21:29:52 -0500
-Message-ID: <CAH2r5msr=g=6-cSmmeTXm5x1zrdaeRykow7B=EL30PaRnTm4Jw@mail.gmail.com>
-Subject: Re: linux-next: build warning after merge of the cifs tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     CIFS <linux-cifs@vger.kernel.org>,
-        Enzo Matsumiya <ematsumiya@suse.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Added trivial patch to cifs-2.6.git for-next to fix the warning
+tree:   git://git.osdn.net/gitroot/tomoyo/tomoyo-test1.git master
+head:   84baad17cb8286b6b53b675f8c3d7343ee6a990c
+commit: 84baad17cb8286b6b53b675f8c3d7343ee6a990c [1/1] workqueue: Wrap flush_workqueue() using a macro
+config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220523/202205231050.yd4wTc2M-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 768a1ca5eccb678947f4155e38a5f5744dcefb56)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add tomoyo-tomoyo-test1 git://git.osdn.net/gitroot/tomoyo/tomoyo-test1.git
+        git fetch --no-tags tomoyo-tomoyo-test1 master
+        git checkout 84baad17cb8286b6b53b675f8c3d7343ee6a990c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/input/mouse/
 
-On Sun, May 22, 2022 at 7:57 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> After merging the cifs tree, today's linux-next build (powerpc
-> ppc64_defconfig) produced this warning:
->
-> fs/cifs/connect.c: In function 'is_path_remote':
-> fs/cifs/connect.c:3436:14: warning: unused variable 'nodfs' [-Wunused-variable]
->  3436 |         bool nodfs = cifs_sb->mnt_cifs_flags & CIFS_MOUNT_NO_DFS;
->       |              ^~~~~
->
-> Introduced by commit
->
->   421ef3d56513 ("cifs: don't call cifs_dfs_query_info_nonascii_quirk() if nodfs was set")
->
-> --
-> Cheers,
-> Stephen Rothwell
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/input/mouse/psmouse-smbus.c:320:2: warning: call to __warn_flushing_systemwide_wq declared with 'warning' attribute: Please avoid flushing system-wide workqueues. [-Wattribute-warning]
+           flush_scheduled_work();
+           ^
+   include/linux/workqueue.h:705:32: note: expanded from macro 'flush_scheduled_work'
+   #define flush_scheduled_work() flush_workqueue(system_wq)
+                                  ^
+   include/linux/workqueue.h:695:3: note: expanded from macro 'flush_workqueue'
+                   __warn_flushing_systemwide_wq();                        \
+                   ^
+   1 warning generated.
 
 
+vim +/warning +320 drivers/input/mouse/psmouse-smbus.c
+
+8eb92e5c91338e Benjamin Tissoires 2017-03-02  316  
+8eb92e5c91338e Benjamin Tissoires 2017-03-02  317  void psmouse_smbus_module_exit(void)
+8eb92e5c91338e Benjamin Tissoires 2017-03-02  318  {
+8eb92e5c91338e Benjamin Tissoires 2017-03-02  319  	bus_unregister_notifier(&i2c_bus_type, &psmouse_smbus_notifier);
+8eb92e5c91338e Benjamin Tissoires 2017-03-02 @320  	flush_scheduled_work();
+
+:::::: The code at line 320 was first introduced by commit
+:::::: 8eb92e5c91338eb19f86ffb2232258337ebf905b Input: psmouse - add support for SMBus companions
+
+:::::: TO: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+:::::: CC: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
 -- 
-Thanks,
-
-Steve
+0-DAY CI Kernel Test Service
+https://01.org/lkp

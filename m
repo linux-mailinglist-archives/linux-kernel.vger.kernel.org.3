@@ -2,122 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE6AF531BA0
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5544531B7C
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231824AbiEWTwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 15:52:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36310 "EHLO
+        id S229878AbiEWTwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 15:52:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231795AbiEWTwV (ORCPT
+        with ESMTP id S231817AbiEWTwi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 15:52:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CAAB45FF3C
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 12:52:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653335536;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KOYC9iIBfV1vzZrPUZwk0oyKY1xPZWZ/ayniepgLDTs=;
-        b=eT6/ydLrLnAZFrKlyEznc9q50dQ8RlJKkQfWSefyKc2pAd2k0cOWbH1oBdubGMkP9V5cFa
-        /NyhBTYaa3SrXWVhDNwNBvM93S/kFTfYuOEdFiDpFZBGHvV5iSJOclh11B/J24AuhogFIi
-        MZk7TW8qly7k+yqObieG9jXDpG1Bjg0=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-416-kHmINoTfNL-PBmC3uymk_g-1; Mon, 23 May 2022 15:52:15 -0400
-X-MC-Unique: kHmINoTfNL-PBmC3uymk_g-1
-Received: by mail-qk1-f197.google.com with SMTP id g3-20020a05620a108300b006a329bc4da3so10625281qkk.3
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 12:52:15 -0700 (PDT)
+        Mon, 23 May 2022 15:52:38 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E2860052
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 12:52:37 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id w2-20020a17090ac98200b001e0519fe5a8so237896pjt.4
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 12:52:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vJ/7h+gtdAcH6lg5046ozHJXlKfDaJ+7rqIOW4j5rFs=;
+        b=lTQCZCv5SjCSpZkO1elU8OQ5aWFQCrQkHtVcF9TDFzMsnqBFg7KzqJyiNaKPcKbRJj
+         i90imZ0Whn93Tu8MftddRbbWIGE4Z51y2k7ektQtHftyO4NCDzN8TCKYp6v4huEfqPiP
+         9EULlaFtpqTC5St9isyzpphnuuSOM7iPCBf+hZQdU/kF892Rd5g3H41PsxboienPw/+L
+         eQH9HkzV9iG5aCuHhZYSTJreYTOaKCjlfaxF3j2t6Pi5o2S41dP4XVx8pIyTds/M1Hzn
+         Sth5UH14P0IyZENuN5FAyQcocPp/wYtTbxP4sf5o+PgAQBR3okXLoeYO/K8CMJlOpwKV
+         ONDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:organization:user-agent:mime-version
-         :content-transfer-encoding;
-        bh=KOYC9iIBfV1vzZrPUZwk0oyKY1xPZWZ/ayniepgLDTs=;
-        b=Nw23biRnCldHKE9lxsK9avpNoBrCcYy3Sf8krTtdUyl9jD8mnuFRyydKCQPlewDFCa
-         Dh9n2O7CZhXhjKpGUVX5Y6wdnUdkjuXJJl1epiMlU1tSKQfpma9TM1ktAGS5GtNWZigv
-         YMUrZ7Yim3POD1TuTfp90ZHXmDjZfNQIqiknO+XAZF9kNDK9EYV7pX1/O1BfQCvy2F7V
-         lMqufehiun1pqn+oyqHPZ9lNsaQ/bfzF3JLH/qNWR7KaEr8OCN0TFr2H+zpqjL2mFg2P
-         aqfn0Z2SmoeAJg9uctK7MWGuaQwkhCol4Khbq5KI79IhG2Y6dh5vNVDhh7Pc95XUb0Tx
-         6GFA==
-X-Gm-Message-State: AOAM531eTFZx/7M9mvyrazJBEriZ0PmxyHqy6SaHkp8OdA7CvkNLa9tW
-        rmyXir2xgv9L06lm+O+AKgGcrZJnju/g+jQY3I7cAHdl71+yuRo8rkG/MlcwGuErMzypFmN9Yt7
-        Ma825aE2KJ4wbu8+dIeyktxC4
-X-Received: by 2002:a37:6650:0:b0:6a3:5fb9:7ff7 with SMTP id a77-20020a376650000000b006a35fb97ff7mr8582258qkc.90.1653335535109;
-        Mon, 23 May 2022 12:52:15 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwgZ4upgTLufDFLOHGMjBcNkvM4E+LvXn+UyvlAfFfBcrNLQCi/YNJUO8bUY6aCMfrUg56p0w==
-X-Received: by 2002:a37:6650:0:b0:6a3:5fb9:7ff7 with SMTP id a77-20020a376650000000b006a35fb97ff7mr8582253qkc.90.1653335534913;
-        Mon, 23 May 2022 12:52:14 -0700 (PDT)
-Received: from [192.168.8.138] (static-71-184-137-158.bstnma.ftas.verizon.net. [71.184.137.158])
-        by smtp.gmail.com with ESMTPSA id v128-20020a372f86000000b006a33009158esm4838303qkh.119.2022.05.23.12.52.11
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=vJ/7h+gtdAcH6lg5046ozHJXlKfDaJ+7rqIOW4j5rFs=;
+        b=axcR6C+MmuiWDvA+8c5L9FNLUMZzg4XfwbjglpuYBeveTFl9j3w84UlZAA8u3xWfD8
+         K9udnwoeD8ylaXtRWVoESaJiRJBpMyDCEPpGv0/Xlnqg+ksw/z0qf22KyHvmBUXrMYHk
+         fE/Wk46uJzrZZOlYJMK25I+GPnMdAKksyGocA/ZXUSYgsj39T1yr3Xq8T4XJxiIsL3Wj
+         5NZJeP52U9QA6s0HNu7Di4j8Glo/gsISBxW1lGLCmpNHBi4VrZWLmc3S8ws42fdoSjpg
+         dNoPdgw2++jP01uLkP6kqqJXPKNp/tSNACFJ5pHCbfu/2bAvMhcBJDMvwSnqnchD3b2R
+         7KhQ==
+X-Gm-Message-State: AOAM530q8700wmKlLtR6Ns/uzlJmTZb0oAo2pe+V4fYf+dQtWrNF27uk
+        eestkJp3WSZEJvo30VbpZsHW0A==
+X-Google-Smtp-Source: ABdhPJze5JLlUhh4DOxqmNYacegzQnT4dWAyORP1w+YfXIZRr1SHeDENWbQ94DWlMydgQBSrwKF7xw==
+X-Received: by 2002:a17:903:25c5:b0:162:e9f:4e6d with SMTP id jc5-20020a17090325c500b001620e9f4e6dmr11457165plb.60.1653335556517;
+        Mon, 23 May 2022 12:52:36 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id i12-20020a65484c000000b003fa5855ad66sm2314836pgs.64.2022.05.23.12.52.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 12:52:12 -0700 (PDT)
-Message-ID: <70daebd6d65b34f5ab85f0286df9a539b5c62146.camel@redhat.com>
-Subject: Re: [PATCH] drm/nouveau/mmu: fix typo in comment
-From:   Lyude Paul <lyude@redhat.com>
-To:     Julia Lawall <Julia.Lawall@inria.fr>,
-        Ben Skeggs <bskeggs@redhat.com>
-Cc:     kernel-janitors@vger.kernel.org, Karol Herbst <kherbst@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Date:   Mon, 23 May 2022 15:52:11 -0400
-In-Reply-To: <20220521111145.81697-57-Julia.Lawall@inria.fr>
-References: <20220521111145.81697-57-Julia.Lawall@inria.fr>
-Organization: Red Hat Inc.
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
-MIME-Version: 1.0
+        Mon, 23 May 2022 12:52:35 -0700 (PDT)
+Date:   Mon, 23 May 2022 12:52:35 -0700 (PDT)
+X-Google-Original-Date: Mon, 23 May 2022 12:52:31 PDT (-0700)
+Subject:     Re: [PATCH v4 1/1] MAINTAINERS: add polarfire rng, pci and clock drivers
+In-Reply-To: <875112a6-7328-a40d-bc78-bff4e7d14aa0@microchip.com>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Daire.McNamara@microchip.com, Lewis.Hanly@microchip.com,
+        Cyril.Jean@microchip.com
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     Conor.Dooley@microchip.com, Arnd Bergmann <arnd@arndb.de>
+Message-ID: <mhng-9bccd0ce-6754-49d4-bf6d-5a83b2226b5d@palmer-mbp2014>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Lyude Paul <lyude@redhat.com>
-
-Will fix that double space after the punctuation while I'm at it as well, and
-will push to the appropriate branch in a little bit. Thanks!
-
-On Sat, 2022-05-21 at 13:11 +0200, Julia Lawall wrote:
-> Spelling mistake (triple letters) in comment.
-> Detected with the help of Coccinelle.
+On Mon, 23 May 2022 04:42:53 PDT (-0700), Conor.Dooley@microchip.com wrote:
+> On 05/05/2022 11:55, Conor Dooley wrote:
+>> Hardware random, PCI and clock drivers for the PolarFire SoC have been
+>> upstreamed but are not covered by the MAINTAINERS entry, so add them.
+>> Daire is the author of the clock & PCI drivers, so add him as a
+>> maintainer in place of Lewis.
+>> 
+>> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 > 
-> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
-> 
-> ---
->  drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c
-> b/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c
-> index 8bf00b396ec1..8b11dfa0998d 100644
-> --- a/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c
-> +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c
-> @@ -280,7 +280,7 @@ nvkm_vmm_unref_ptes(struct nvkm_vmm_iter *it, bool pfn,
-> u32 ptei, u32 ptes)
->         if (desc->type == SPT && (pgt->refs[0] || pgt->refs[1]))
->                 nvkm_vmm_unref_sptes(it, pgt, desc, ptei, ptes);
->  
-> -       /* PT no longer neeed?  Destroy it. */
-> +       /* PT no longer needed?  Destroy it. */
->         if (!pgt->refs[type]) {
->                 it->lvl++;
->                 TRA(it, "%s empty", nvkm_vmm_desc_type(desc));
-> 
+> Hey Palmer,
+> I know youre busy etc but just a reminder :)
 
--- 
-Cheers,
- Lyude Paul (she/her)
- Software Engineer at Red Hat
+Sorry, I didn't realize this was aimed at the RISC-V tree.  I'm fine 
+taking it, but it seems like these should have gone in along with the 
+drivers.
 
+Arnd: maybe this is really an SOC tree sort of thing?  No big deal 
+either way on my end, just let me know.
+
+> Thanks,
+> Conor.
+> 
+>> ---
+>>   MAINTAINERS | 5 ++++-
+>>   1 file changed, 4 insertions(+), 1 deletion(-)
+>> 
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index fd768d43e048..d7602658b0a5 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -16939,12 +16939,15 @@ N:	riscv
+>>   K:	riscv
+>>   
+>>   RISC-V/MICROCHIP POLARFIRE SOC SUPPORT
+>> -M:	Lewis Hanly <lewis.hanly@microchip.com>
+>>   M:	Conor Dooley <conor.dooley@microchip.com>
+>> +M:	Daire McNamara <daire.mcnamara@microchip.com>
+>>   L:	linux-riscv@lists.infradead.org
+>>   S:	Supported
+>>   F:	arch/riscv/boot/dts/microchip/
+>> +F:	drivers/char/hw_random/mpfs-rng.c
+>> +F:	drivers/clk/microchip/clk-mpfs.c
+>>   F:	drivers/mailbox/mailbox-mpfs.c
+>> +F:	drivers/pci/controller/pcie-microchip-host.c
+>>   F:	drivers/soc/microchip/
+>>   F:	include/soc/microchip/mpfs.h
+>>   
+> 

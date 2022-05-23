@@ -2,67 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FA92531CCA
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:57:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0B61531D43
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 23:03:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbiEWU44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 16:56:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50470 "EHLO
+        id S229852AbiEWVAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 17:00:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiEWU4v (ORCPT
+        with ESMTP id S229437AbiEWVAe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 16:56:51 -0400
-Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEABD24090
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 13:56:49 -0700 (PDT)
-Received: by mail-vk1-xa2e.google.com with SMTP id x11so7155938vkn.11
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 13:56:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zzdR40l4t49BhcKjBeDt6RD1hRuvcftxidhZX+LxdXA=;
-        b=DZdJON7t3PwgCrrmoucnoFvSfX5CB986DtveajogrvKr6pbaUxLeSsuyQgxal0XNhS
-         KtUMABkOtZddGLrKTjmkE65iB7IBOMFLTOkO0T+JtTANcIxtK2pw75L4/fulZM/sIv3h
-         9w7OjUket0wgm0eyX2hnQquy+pbw3X7FBf0cdOz4/mr3FAKvSrbXpXxx4Px8rX0wzKxu
-         FK6Jc3VfmpkY39qs5xYc4jSO+jajCnvH6nUZ8z49/7le/3VS/Ut/yN2jQrVCSxGc1Eo/
-         u/QcFtp7hLmI/TtYQlEYEIeQLjQExhL4r5PyZsLRMj4OYJECPC3Edhqg9azGHa3WKDLS
-         wRBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zzdR40l4t49BhcKjBeDt6RD1hRuvcftxidhZX+LxdXA=;
-        b=jSp03P+iX2betISUQC3tz76bVfhYPV0yy6Mkkz5gE5wNi8Vcjvsvt3LgN6Zev3OSiL
-         Rtdat3FugBdvLud6nbLsvNB0TyPE2by49BzpwTimnm/Bn46ypPFpG8TK46hOA5rYuKYC
-         qTnm8ZTbi/9n4k9Hce8mCfeQJwf/fx9+fx+00ac/pfOa9Ega2YmKGMAlilMyr+vGuy3m
-         fuRsYF9VLnYFjpsMYvV0j5Vl1QBNoODZCh707ibzEIkbQw3ZlEs+F8NYXS6iY6pnr1NP
-         BR1yNkxu8+ga0+vKeJgF/oKWA22NUaJtEz+rWDbi5fHc6LOk2wNsOyy6BCZ8XkuSs19v
-         gNug==
-X-Gm-Message-State: AOAM532p+Gct4+oIPZnvGlu0WWiw7Fa9miHo1E7pLpof8XZzg6Mq4+Rg
-        a0sIuYfnbYOJN0hi45NVIk1hUCZexk6HvVSGo0r1Sw==
-X-Google-Smtp-Source: ABdhPJwGoP2jfrDhtWQgFx4bSOEJyIfQRib61SYaE0aRLL2I/I+lfsoRwqrX0NDaMtQIQfBFPy0Uz3uIFeL9+8Ja5x8=
-X-Received: by 2002:a1f:ec45:0:b0:34e:6cdc:334e with SMTP id
- k66-20020a1fec45000000b0034e6cdc334emr8914633vkh.26.1653339408905; Mon, 23
- May 2022 13:56:48 -0700 (PDT)
+        Mon, 23 May 2022 17:00:34 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B53BF39156;
+        Mon, 23 May 2022 14:00:31 -0700 (PDT)
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1ntFAD-00045c-Px; Mon, 23 May 2022 23:00:29 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1ntFAD-000BZ8-9q; Mon, 23 May 2022 23:00:29 +0200
+Subject: Re: [PATCH v2] libbpf: Fix determine_ptr_size() guessing
+To:     Douglas RAILLARD <douglas.raillard@arm.com>, bpf@vger.kernel.org
+Cc:     beata.michalska@arm.com, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20220523102955.43844-1-douglas.raillard@arm.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <4268b7c5-458e-32cc-36c4-79058be0480e@iogearbox.net>
+Date:   Mon, 23 May 2022 23:00:27 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-References: <YnWRVd5slCy5H0fC@creeky> <20220507015646.5377-1-hdanton@sina.com>
- <CAOUHufY=xAvDKSaV8vybgObXPBEsPqqS7R3+T_-6ix7bUvQc6w@mail.gmail.com> <YnweYF9E5mt2HIwV@creeky>
-In-Reply-To: <YnweYF9E5mt2HIwV@creeky>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Mon, 23 May 2022 14:56:12 -0600
-Message-ID: <CAOUHufZ_kBF+f3_RE9p8itJ8YN86cbEq9oXHCt+e1qw2Q-b8Zw@mail.gmail.com>
-Subject: Re: Alpha: rare random memory corruption/segfault in user space bisected
-To:     Michael Cree <mcree@orcon.net.nz>
-Cc:     Linux-MM <linux-mm@kvack.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Hillf Danton <hdanton@sina.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+In-Reply-To: <20220523102955.43844-1-douglas.raillard@arm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.5/26550/Mon May 23 10:05:39 2022)
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,41 +59,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 2:37 PM Michael Cree <mcree@orcon.net.nz> wrote:
->
-> On Sat, May 07, 2022 at 11:27:15AM -0700, Yu Zhao wrote:
-> > On Fri, May 6, 2022 at 6:57 PM Hillf Danton <hdanton@sina.com> wrote:
-> > >
-> > > On Sat, 7 May 2022 09:21:25 +1200 Michael Cree wrote:
-> > > > Alpha kernel has been exhibiting rare and random memory
-> > > > corruptions/segaults in user space since the 5.9.y kernel.  First seen
-> > > > on the Debian Ports build daemon when running 5.10.y kernel resulting
-> > > > in the occasional (one or two a day) build failures with gcc ICEs either
-> > > > due to self detected corrupt memory structures or segfaults.  Have been
-> > > > running 5.8.y kernel without such problems for over six months.
-> > > >
-> > > > Tried bisecting last year but went off track with incorrect good/bad
-> > > > determinations due to rare nature of bug.  After trying a 5.16.y kernel
-> > > > early this year and seen the bug is still present retried the bisection
-> > > > and have got to:
-> > > >
-> > > > aae466b0052e1888edd1d7f473d4310d64936196 is the first bad commit
-> > > > commit aae466b0052e1888edd1d7f473d4310d64936196
-> > > > Author: Joonsoo Kim <iamjoonsoo.kim@lge.com>
-> > > > Date:   Tue Aug 11 18:30:50 2020 -0700
-> > > >
-> > > >     mm/swap: implement workingset detection for anonymous LRU
-> >
-> > This commit seems innocent to me. While not ruling out anything, i.e.,
-> > this commit, compiler, qemu, userspace itself, etc., my wild guess is
-> > the problem is memory barrier related. Two lock/unlock pairs, which
-> > imply two full barriers, were removed. This is not a small deal on
-> > Alpha, since it imposes no constraints on cache coherency, AFAIK.
-> >
-> > Can you please try the attached patch on top of this commit? Thanks!
->
-> Thanks, I have that running now for a day without any problem showing
-> up, but that's not long enough to be sure it has fixed the problem. Will
-> get back to you after another day or two of testing.
+On 5/23/22 12:29 PM, Douglas RAILLARD wrote:
+> From: Douglas Raillard <douglas.raillard@arm.com>
+> 
+> One strategy employed by libbpf to guess the pointer size is by finding
+> the size of "unsigned long" type. This is achieved by looking for a type
+> of with the expected name and checking its size.
+> 
+> Unfortunately, the C syntax is friendlier to humans than to computers
+> as there is some variety in how such a type can be named. Specifically,
+> gcc and clang do not use the same name in debug info.
 
-Any luck? Thanks!
+Could you elaborate for the commit msg what both emit differently?
+
+> Lookup all the names for such a type so that libbpf can hope to find the
+> information it wants.
+> 
+> Signed-off-by: Douglas Raillard <douglas.raillard@arm.com>
+> ---
+>   tools/lib/bpf/btf.c | 15 +++++++++++++--
+>   1 file changed, 13 insertions(+), 2 deletions(-)
+> 
+>   CHANGELOG
+> 	v2:
+> 		* Added missing case for "long"
+> 
+> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+> index 1383e26c5d1f..ab92b3bc2724 100644
+> --- a/tools/lib/bpf/btf.c
+> +++ b/tools/lib/bpf/btf.c
+> @@ -489,8 +489,19 @@ static int determine_ptr_size(const struct btf *btf)
+>   		if (!name)
+>   			continue;
+>   
+> -		if (strcmp(name, "long int") == 0 ||
+> -		    strcmp(name, "long unsigned int") == 0) {
+> +		if (
+> +			strcmp(name, "long") == 0 ||
+> +			strcmp(name, "long int") == 0 ||
+> +			strcmp(name, "int long") == 0 ||
+> +			strcmp(name, "unsigned long") == 0 ||
+> +			strcmp(name, "long unsigned") == 0 ||
+> +			strcmp(name, "unsigned long int") == 0 ||
+> +			strcmp(name, "unsigned int long") == 0 ||
+> +			strcmp(name, "long unsigned int") == 0 ||
+> +			strcmp(name, "long int unsigned") == 0 ||
+> +			strcmp(name, "int unsigned long") == 0 ||
+> +			strcmp(name, "int long unsigned") == 0
+> +		) {
+
+I was wondering whether strstr(3) or regexec(3) would be better, but then it's
+probably not worth it and having the different combinations spelled out is
+probably still better. Pls make sure though to stick to kernel coding convention
+(similar alignment around strcmp() as the lines you remove).
+
+>   			if (t->size != 4 && t->size != 8)
+>   				continue;
+>   			return t->size;
+> 
+
+Thanks,
+Daniel

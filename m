@@ -2,63 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0B24531489
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:25:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF1595311FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:21:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237296AbiEWOlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 10:41:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54262 "EHLO
+        id S237345AbiEWOmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 10:42:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237280AbiEWOlr (ORCPT
+        with ESMTP id S237280AbiEWOmO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 10:41:47 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A601513CFF
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 07:41:46 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id q135so25791793ybg.10
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 07:41:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BW04Z/gvjhs+P0ULzNLfp7O87Y9+RbJCN4YeRs8+SKY=;
-        b=Soew57xnpel8YQd6sx781+vJHHd45Egx09p1KxaLo9hydn+G/B6Ok28cIxvAcIQKD/
-         1wl3bJ16TuctScAkxIiEr0SItslhTXK2cptNI8aWG7eps/8Ki4/mh7Hxeeg7YZ3oGF6A
-         /ZllW2ex8dBGPYn4/Os+85gZ4AHiTtkgC3HGc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BW04Z/gvjhs+P0ULzNLfp7O87Y9+RbJCN4YeRs8+SKY=;
-        b=TT4iBZgUyFcPF/Zx0851iEG7m0zEwc952OOBM/HJjrsCtHje860EWnmjw0Zuw1XkE8
-         QHKORBSAFryPoOZ3QLxX4sgm5fs9LCaPN3WIISsw7y3vyWliebNj5B2yVO/8y3//M0yu
-         iR7ebFyAKEZ68g9gEZn7/S67l/olr94mca8KL7c9TkQLrPKW3mqTit50z0PI4eHxbF8L
-         +yWXltRTPbnQ3iL/5iXDOGmgrph40si1r2UNRXk/1A/HlFJ/9UL17tVtbdXOiXibPZa3
-         fqV/yjhr3dtOqjPXEG8U0t5bSbnmYdBL3e/bXnQMOHMLSBQk/V0Oq4lQM+L1M8joOPPL
-         qx2Q==
-X-Gm-Message-State: AOAM532CzUgB3GJaRzDqkJ1BoICoUqIwL30cDmgfDf2qzcaSy7tAUt51
-        mJliewG4fHyS3H3+p9XWeyLszn/tZ2eN/oGUh0pbHPBmYw==
-X-Google-Smtp-Source: ABdhPJx9n8niQElJxbz6DJ61kucg+5EyeHTacZxxEMowuLTsGrUEdcGplrZrbAMZ1qlMPazwasGdO0i7lkLSij8v6Ig=
-X-Received: by 2002:a25:aa30:0:b0:64d:ebad:538d with SMTP id
- s45-20020a25aa30000000b0064debad538dmr23509454ybi.603.1653316905947; Mon, 23
- May 2022 07:41:45 -0700 (PDT)
+        Mon, 23 May 2022 10:42:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FBB126AFB;
+        Mon, 23 May 2022 07:42:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CB989611E3;
+        Mon, 23 May 2022 14:42:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36000C3411C;
+        Mon, 23 May 2022 14:42:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653316931;
+        bh=+pn/Aag3Y2GhS2+/HoXWr9nr1Lt0Lmr9+7jaO0VvYuo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=qjvyhsayW0yHC6C3Z5GhrrVaWktvr8ASpC9Olc1tkAMJAij5GQY58GuMcrLFNW/9A
+         C1JZzzjUTOjbY5sZwjkUowiJxSLMFNh8CbOvLRCiPsdrZExkCaahITJqIt0MsC4cO/
+         1/hPHMUppuqcI6KFdmdvfsBG2c9hwzCqjJdqHfbVf+moydsrWg3YUYScIS+3Uyv1Uc
+         Q3hDIucWEQpEmvlFo04X8piythLawYiFP/yJrO/aaxOhChVzd6y4imeoZWXJ1DxRlM
+         eUOJGB7+bFZF3nT+fChRSoQJ1/oUpWimV9wlZG4fjj+jC7LE9HsxVXxzAxxjPzV16V
+         Jt4ogDhn+fSPQ==
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-e93bbb54f9so18680543fac.12;
+        Mon, 23 May 2022 07:42:11 -0700 (PDT)
+X-Gm-Message-State: AOAM533d6axMe3YHv3xOX0YZqXF+RnCjcVqcWQuZKSg7mFdw5BHfT3Ey
+        nFLHVHjaTbLmueRCe46iyG9BAPo3jt5wSQe0d9A=
+X-Google-Smtp-Source: ABdhPJxNPJQumGg2r2267lmg4ZuxwjhwAj2wPi6tOvIo735VqndOP4syN/jAR+ON3DwuLvxLZIdsdol8ceNwEmlZYRk=
+X-Received: by 2002:a05:6870:f112:b0:f1:f1e9:e8f1 with SMTP id
+ k18-20020a056870f11200b000f1f1e9e8f1mr11327387oac.126.1653316930318; Mon, 23
+ May 2022 07:42:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220522153543.2656-1-jszhang@kernel.org> <20220522153543.2656-3-jszhang@kernel.org>
-In-Reply-To: <20220522153543.2656-3-jszhang@kernel.org>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Mon, 23 May 2022 07:41:35 -0700
-Message-ID: <CAOnJCU+2MgHaEOFK9_0Unb1GjnLP-Ge-B-C_Ndwj8aF2NxfpeA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] riscv: switch has_fpu() to the unified static key mechanism
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
+References: <CAMj1kXGSStDgj9ABmUaTLnBmpQFksh3wx4tx=mJohum4GQe3Gg@mail.gmail.com>
+ <20220419070150.254377-1-mawupeng1@huawei.com> <CAMj1kXHr2RdYSPor1st1ZnL=O42c8N6e=bNG+eFhatfefWLUrw@mail.gmail.com>
+ <c65d22b4-f654-21aa-bd5f-d4f8b0939a25@huawei.com> <7058b8d8-c0cb-108e-0db9-2fdf5fb154cf@huawei.com>
+ <CAMj1kXHnL12j6FPGtEeSQB2-kHzoVF+LJMUF9YBq43Yi1UntDg@mail.gmail.com> <7a1ce182-343a-75f9-5447-f7ca12cb0c36@huawei.com>
+In-Reply-To: <7a1ce182-343a-75f9-5447-f7ca12cb0c36@huawei.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Mon, 23 May 2022 16:41:58 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXE_xc4FvdOLqfK+awqTqoGje=Gy7bmVUFTZY_hjw1K9=w@mail.gmail.com>
+Message-ID: <CAMj1kXE_xc4FvdOLqfK+awqTqoGje=Gy7bmVUFTZY_hjw1K9=w@mail.gmail.com>
+Subject: Re: [PATCH 0/2] Add support to relocate kernel image to mirrored region
+To:     mawupeng <mawupeng1@huawei.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Joerg Roedel <jroedel@suse.de>, songmuchun@bytedance.com,
+        macro@orcam.me.uk, Frederic Weisbecker <frederic@kernel.org>,
+        W_Armin@gmx.de, John Garry <john.garry@huawei.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        chenhuacai@kernel.org, David Hildenbrand <david@redhat.com>,
+        gpiccoli@igalia.com, Mark Rutland <mark.rutland@arm.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        linux-ia64@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        Linux Memory Management List <linux-mm@kvack.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,70 +91,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 22, 2022 at 8:44 AM Jisheng Zhang <jszhang@kernel.org> wrote:
+On Mon, 23 May 2022 at 03:18, mawupeng <mawupeng1@huawei.com> wrote:
 >
-> This is to use the unified static key mechanism instead of putting
-> static key related here and there.
 >
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> ---
->  arch/riscv/include/asm/switch_to.h | 4 ++--
->  arch/riscv/kernel/cpufeature.c     | 7 -------
->  2 files changed, 2 insertions(+), 9 deletions(-)
 >
-> diff --git a/arch/riscv/include/asm/switch_to.h b/arch/riscv/include/asm/switch_to.h
-> index 0a3f4f95c555..11463489fec6 100644
-> --- a/arch/riscv/include/asm/switch_to.h
-> +++ b/arch/riscv/include/asm/switch_to.h
-> @@ -8,6 +8,7 @@
+> =E5=9C=A8 2022/5/20 14:52, Ard Biesheuvel =E5=86=99=E9=81=93:
+> > On Thu, 19 May 2022 at 13:09, mawupeng <mawupeng1@huawei.com> wrote:
+> >>
+> >>
+> >>
+> >> =E5=9C=A8 2022/5/7 17:28, mawupeng =E5=86=99=E9=81=93:
+> >>>
+> >>>
+> >>> =E5=9C=A8 2022/5/3 17:58, Ard Biesheuvel =E5=86=99=E9=81=93:
+> >>>> On Tue, 19 Apr 2022 at 08:43, Wupeng Ma <mawupeng1@huawei.com> wrote=
+:
+> >>>>>
+> >>>>> From: Ma Wupeng <mawupeng1@huawei.com>
+> >>>>>
+> >>>>> Now system image will perfer to be located to mirrored regions both=
+ KASLR
+> >>>>> on and off.
+> >>>>>
+> >>>>
+> >>>> Hello Ma Wupeng,
+> >>>>
+> >>>> I wonder if we could simplify this as follows:
+> >>>> - ignore the non-KASLR case for now, and rely on the bootloader  > l=
+oad the image into mirrored memory if it exists;
+> >>>
+> >>> In grub, memory for static image is allocated via the following path:
+> >>>
+> >>> grub_cmd_linux
+> >>>     kernel =3D grub_malloc(filelen)
+> >>>     kernel_alloc_addr =3D grub_efi_allocate_any_pages (kernel_alloc_p=
+ages)
+> >>>     grub_memcpy (kernel_addr, kernel, grub_min(filelen, kernel_size))
+> >>>      grub_loader_set (grub_linux_boot, grub_linux_unload, 0)
+> >>>
+> >>> Can we get memory from mirrored region by the following steps:
+> >>> 1. get memory map by calling grub_efi_get_memory_map()
+> >>> 2. iter all memory map to find a suitable mirrored memory area
+> >>> 3. locate kernel image to this area
+> >>>
+> >>> So, if kaslr is not enabled
+> >>>    - grub will load kernel into mirrored region
+> >>> else
+> >>>    - arm64-stub.c will relocate kernel image to mirrored region
+> >>>
+> >>> Is this feasible?
+> >>
+> >> Is this a feasible proposal to relocate the static kernel image itself
+> >> into more reliable memory?
+> >>
+> >
+> > I'm not sure, it all depends on the firmware.
+> >
+> > When GRUB calls LoadImage(), the firmware will reallocate the image
+> > and unpack it there. So it is really the firmware's job to ensure that
+> > the image is loaded into a suitable location.
+> >
+> > I have some code here that implements a EFI based decompressor, and
+> > which loads the kernel image into mirrored memory if it exists,
+> > without the need to move it again. It could trivially be modified to
+> > deal with non-randomized loads as well.
+> >
+> > But the bottom line is that UEFI should expose the ability to target
+> > mirrored memory, hacking around it like this is not a sustainable
+> > approach.
 >
->  #include <linux/jump_label.h>
->  #include <linux/sched/task_stack.h>
-> +#include <asm/hwcap.h>
->  #include <asm/processor.h>
->  #include <asm/ptrace.h>
->  #include <asm/csr.h>
-> @@ -56,10 +57,9 @@ static inline void __switch_to_aux(struct task_struct *prev,
->         fstate_restore(next, task_pt_regs(next));
->  }
+> Since firmware is responsible for put kernel static image into mirrored
+> region and kernel is responsible for relocate this image into mirrored
+> region if kaslr is enabled. There is no conflict between these two.
 >
-> -extern struct static_key_false cpu_hwcap_fpu;
->  static __always_inline bool has_fpu(void)
->  {
-> -       return static_branch_likely(&cpu_hwcap_fpu);
-> +       return static_branch_likely(&riscv_isa_ext_keys[RISCV_ISA_EXT_KEY_FPU]);
->  }
->  #else
->  static __always_inline bool has_fpu(void) { return false; }
-> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> index 89f886b35357..0235391be84b 100644
-> --- a/arch/riscv/kernel/cpufeature.c
-> +++ b/arch/riscv/kernel/cpufeature.c
-> @@ -21,9 +21,6 @@ unsigned long elf_hwcap __read_mostly;
->  /* Host ISA bitmap */
->  static DECLARE_BITMAP(riscv_isa, RISCV_ISA_EXT_MAX) __read_mostly;
->
-> -#ifdef CONFIG_FPU
-> -__ro_after_init DEFINE_STATIC_KEY_FALSE(cpu_hwcap_fpu);
-> -#endif
->  __ro_after_init DEFINE_STATIC_KEY_ARRAY_FALSE(riscv_isa_ext_keys, RISCV_ISA_EXT_KEY_MAX);
->  EXPORT_SYMBOL(riscv_isa_ext_keys);
->
-> @@ -239,8 +236,4 @@ void __init riscv_fill_hwcap(void)
->                 if (j >= 0)
->                         static_branch_enable(&riscv_isa_ext_keys[j]);
->         }
-> -#ifdef CONFIG_FPU
-> -       if (elf_hwcap & (COMPAT_HWCAP_ISA_F | COMPAT_HWCAP_ISA_D))
-> -               static_branch_enable(&cpu_hwcap_fpu);
-> -#endif
->  }
-> --
-> 2.34.1
+> Can we integrate the kernel part(introduce mirrored support to arm64) fir=
+st?
 >
 
-Reviewed-by: Atish Patra <atishp@rivosinc.com>
-
--- 
-Regards,
-Atish
+Yes. If you drop the changes related to fake memmap and rebase, please
+resend them after -rc1 is released.

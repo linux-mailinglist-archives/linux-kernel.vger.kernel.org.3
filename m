@@ -2,112 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C17CA531239
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:22:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 247415312A3
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:22:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238584AbiEWQJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 12:09:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43478 "EHLO
+        id S238561AbiEWQJ1 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 23 May 2022 12:09:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238387AbiEWQJ0 (ORCPT
+        with ESMTP id S238491AbiEWQJZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 12:09:26 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 058A163BDB
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:09:26 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 98EFF21A64;
-        Mon, 23 May 2022 16:09:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1653322164; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=dEMTXQwCYIQB+I/XBMpNaBLKvwTPXpcNcx1N2ihQ4ew=;
-        b=mV3xFRaN0z027T9GuqQ+a4GgKw+PSyAYlWJY+sL7tOmPBPPuZP2TSqLAmGa6SySabKC/24
-        oUtbWK+BA/CrJdsPNnTVLarM13brEaeYPrbHedWA92Vu8DlP/EUOhzu8zZePLBxapV16UY
-        D+qykR9bM2D9LtZkRxZ0wNJC5AOKjK8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1653322164;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=dEMTXQwCYIQB+I/XBMpNaBLKvwTPXpcNcx1N2ihQ4ew=;
-        b=PjCR99+01pX+q6nE9KnjQr7nDzUakOotkqcRRuixLywZUJu9Rjl7jC/RQ6xNfY8gyYcVOa
-        XxJwknRhprVlRRDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8D7D8139F5;
-        Mon, 23 May 2022 16:09:24 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id OB6AIrSxi2LDKQAAMHmgww
-        (envelope-from <bp@suse.de>); Mon, 23 May 2022 16:09:24 +0000
-Date:   Mon, 23 May 2022 18:09:20 +0200
-From:   Borislav Petkov <bp@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] x86/fpu for 5.19
-Message-ID: <YouxsHVKnPPiMckV@zn.tnic>
+        Mon, 23 May 2022 12:09:25 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8F20463BFC
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:09:24 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-312-qy4YyiMNMmOP33diHOjiWA-1; Mon, 23 May 2022 17:09:21 +0100
+X-MC-Unique: qy4YyiMNMmOP33diHOjiWA-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36; Mon, 23 May 2022 17:09:20 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.036; Mon, 23 May 2022 17:09:20 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Petr Malat' <oss@malat.biz>
+CC:     "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "Joern Engel" <joern@lazybastard.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: RE: [PATCH] mtd: phram: Map RAM using memremap instead of ioremap
+Thread-Topic: [PATCH] mtd: phram: Map RAM using memremap instead of ioremap
+Thread-Index: AQHYbrHUf5tSa7gm6kqFegI33HIF660si3RA///5tQCAABqkgA==
+Date:   Mon, 23 May 2022 16:09:20 +0000
+Message-ID: <e33f91a3eacc4aa3a08e6465fef9265c@AcuMS.aculab.com>
+References: <20220523142825.3144904-1-oss@malat.biz>
+ <3cab9a7f4ed34ca0b742a62c2bdc3bce@AcuMS.aculab.com>
+ <Youn9AmqY6/EExDw@ntb.petris.klfree.czf>
+In-Reply-To: <Youn9AmqY6/EExDw@ntb.petris.klfree.czf>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+From: Petr Malat
+> Sent: 23 May 2022 16:28
+> 
+> Hi!
+> 
+> On Mon, May 23, 2022 at 02:51:41PM +0000, David Laight wrote:
+> > From: Petr Malat
+> > > Sent: 23 May 2022 15:28
+> > >
+> > > One can't use memcpy on memory obtained by ioremap, because IO memory
+> > > may have different alignment and size access restriction than the system
+> > > memory. Use memremap as phram driver operates on RAM.
+> >
+> > Does that actually help?
+> > The memcpy() is still likely to issue unaligned accesses
+> > that the hardware can't handle.
+> 
+> Yes, it solves the issue. Memcpy can cause unaligned access only on
+> platforms, which can handle it. And on ARM64 it's handled only for
+> RAM and not for a device memory (__pgprot(PROT_DEVICE_*)).
 
-please pull a couple of x86/fpu fixes for 5.19.
+Does mapping it as memory cause it to be cached?
+So the hardware only sees cache line reads (which are aligned)
+and the cpu support for misaligned memory accesses then
+stop the faults?
 
-Thx.
+On x86 (which I know a lot more about) memcpy() has a nasty
+habit of getting implemented as 'rep movsb' relying on the
+cpu to speed it up.
+But that doesn't happen for uncached addresses - so you get
+very slow byte copies.
+OTOH misaligned PCIe transfers generate TLP that have the
+correct byte enables for the end words.
+Provided the PCIe target isn't broken they are fine.
 
----
+	David
 
-The following changes since commit af2d861d4cd2a4da5137f795ee3509e6f944a25b:
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
-  Linux 5.18-rc4 (2022-04-24 14:51:22 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_fpu_for_v5.19_rc1
-
-for you to fetch changes up to b91c0922bf1ed15b67a6faa404bc64e3ed532ec2:
-
-  x86/fpu: Cleanup variable shadowing (2022-05-02 09:28:31 +0200)
-
-----------------------------------------------------------------
-- Add support for XSAVEC - the Compacted XSTATE saving variant - and
-thus allow for guests to use this compacted XSTATE variant when the
-hypervisor exports that support
-
-- A variable shadowing cleanup
-
-----------------------------------------------------------------
-Thomas Gleixner (2):
-      x86/fpu/xsave: Support XSAVEC in the kernel
-      x86/fpu: Cleanup variable shadowing
-
- arch/x86/include/asm/cpufeatures.h |  2 +-
- arch/x86/kernel/fpu/xstate.c       | 60 +++++++++++++++++++++++++-------------
- arch/x86/kernel/fpu/xstate.h       | 14 +++++----
- 3 files changed, 49 insertions(+), 27 deletions(-)
-
--- 
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH
-GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
-(HRB 36809, AG Nürnberg)

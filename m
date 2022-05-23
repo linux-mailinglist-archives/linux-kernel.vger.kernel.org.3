@@ -2,52 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83E9C530AA0
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 10:01:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88A7D530A23
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 10:00:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230477AbiEWHtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 03:49:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39128 "EHLO
+        id S231189AbiEWHt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 03:49:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230456AbiEWHtP (ORCPT
+        with ESMTP id S231142AbiEWHtZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 03:49:15 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D92C140EB;
-        Mon, 23 May 2022 00:49:13 -0700 (PDT)
+        Mon, 23 May 2022 03:49:25 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 647FDFD05;
+        Mon, 23 May 2022 00:49:23 -0700 (PDT)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 4EE361F8CF;
-        Mon, 23 May 2022 07:49:12 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTP id 221BA21A64;
+        Mon, 23 May 2022 07:49:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1653292152; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1653292162; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=XAg+6nx5PUs28DZ7+XHOM+CyCealxuvpvLVJpUXQk44=;
-        b=gDp2PyW5NIpyNPBkBZMOfhM01lfIgUpcc1/yahhhuOIRalyhwvrDZMR5y6ekuuFh/WeazF
-        k4vyV66abLWtYrF3Farb0tIvV4jnxYRcRieABtxXm1HxXtYvYl0vUlJrjxXuXX5i0CHRzz
-        LJE6emx0QVHMEgVtAl2u+FC8dX4YlYE=
+        bh=oiiJwEw/hQJq5SdxOlRWe8tdZfyTmWnTFgXSPEubMnY=;
+        b=jXhPD+I8YXX5c6AZytS65orXMgRxf2siusQaRn5dFSS8wnf5FRt/lA399TQTrmU9fvEXJM
+        j5wZE42U+bYxKEU4ZVZY2R36CksT2NOx3JnoQA0h1TRVWMf5g97H5g0B6Rh89J6w2E0Wkg
+        nBSOS6RhTgvpFGjUQRr6ohKMf46EFak=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1653292152;
+        s=susede2_ed25519; t=1653292162;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=XAg+6nx5PUs28DZ7+XHOM+CyCealxuvpvLVJpUXQk44=;
-        b=nPYgmwnWMcMzTu1pFEiMckvlmuCFea5F+14LGYZ8yfIPmoTU4BUgXrZQGWNPZQxGOLkel+
-        ooVsBBwCF2TC9HAA==
+        bh=oiiJwEw/hQJq5SdxOlRWe8tdZfyTmWnTFgXSPEubMnY=;
+        b=ap/Vmq2TQqZA0Spn4ADUHkc79XAY3TdNlGVie+hUmE9PNEIl9QJcO/Ws753cRefVmNAj4z
+        aKuQHM6xSNE+QZDQ==
 Received: from valkyrie.site.suse.de (unknown [10.163.18.242])
-        by relay2.suse.de (Postfix) with ESMTP id 190442C141;
-        Mon, 23 May 2022 07:49:12 +0000 (UTC)
-Date:   Mon, 23 May 2022 09:49:11 +0200
-Message-ID: <871qwkofig.wl-tiwai@suse.de>
+        by relay2.suse.de (Postfix) with ESMTP id EDC112C141;
+        Mon, 23 May 2022 07:49:21 +0000 (UTC)
+Date:   Mon, 23 May 2022 09:49:20 +0200
+Message-ID: <87zgj8n0xr.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
 To:     Julia Lawall <Julia.Lawall@inria.fr>
-Cc:     Jaya Kumar <jayakumar.alsa@gmail.com>,
-        kernel-janitors@vger.kernel.org, Jaroslav Kysela <perex@perex.cz>,
+Cc:     Jaroslav Kysela <perex@perex.cz>, kernel-janitors@vger.kernel.org,
         Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ALSA: cs5535audio: fix typo in comment
-In-Reply-To: <20220521111145.81697-1-Julia.Lawall@inria.fr>
-References: <20220521111145.81697-1-Julia.Lawall@inria.fr>
+Subject: Re: [PATCH] ALSA: ctxfi: fix typo in comment
+In-Reply-To: <20220521111145.81697-44-Julia.Lawall@inria.fr>
+References: <20220521111145.81697-44-Julia.Lawall@inria.fr>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
  FLIM/1.14.9 (=?ISO-2022-JP-2?B?R29qGyQoRCtXGyhC?=) APEL/10.8 Emacs/27
  (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -63,7 +62,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 21 May 2022 13:10:11 +0200,
+On Sat, 21 May 2022 13:10:54 +0200,
 Julia Lawall wrote:
 > 
 > Spelling mistake (triple letters) in comment.

@@ -2,51 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D4DA5316D8
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:52:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 919DD5318AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:54:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243378AbiEWRq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:46:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39062 "EHLO
+        id S240738AbiEWRZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:25:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242497AbiEWR1q (ORCPT
+        with ESMTP id S240573AbiEWRQa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:27:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D96F17CB4F;
-        Mon, 23 May 2022 10:23:34 -0700 (PDT)
+        Mon, 23 May 2022 13:16:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C716E72E04;
+        Mon, 23 May 2022 10:15:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 67F09B81212;
-        Mon, 23 May 2022 17:23:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70A38C385A9;
-        Mon, 23 May 2022 17:23:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 10D88B81218;
+        Mon, 23 May 2022 17:15:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EF8BC34115;
+        Mon, 23 May 2022 17:15:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326603;
-        bh=EElDOJhrmrplxAnqdeL2YM32Vk1aHtjDVjTNQWjrJVY=;
+        s=korg; t=1653326114;
+        bh=rmjlrZ3jRBAG1u+k/uE6IQjsP8+3rNHHrRvB1TBMCIc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Dc5s8N9ET4lFJsYpGLG3UryIyNxoMgL4BWnUeAMTI67HMhenI5bQ07KqdV+T946IV
-         AzdWO2L5FpcXvxmiXIc5Sz2UflT30AjLeGtbRzgLOfhNHUSvr17GDHhnEpFa2O4pK/
-         B5YLoTK3GG78OwYvYHpcrdSbcvRJXfHHuScqR294=
+        b=si6/M4Cc2v4sWOlD404PIxGGnXIJGvj2bZKPxHBtZOtEYq2Ver8r8yULRDwXm+DAd
+         22GCuHtTTJPy0flfVCpGFmnrz6+wC36cociIH0BNb08uo2HefoLsG9ZzjhpDmgTkQB
+         2Vhmikn0oive4ilxBq1bGsjNru8gFAsIyUl63veQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ammy Yi <ammy.yi@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
-        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        stable@vger.kernel.org, Andre Przywara <andre.przywara@arm.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 110/132] perf regs x86: Fix arch__intr_reg_mask() for the hybrid platform
+Subject: [PATCH 5.10 15/97] rtc: sun6i: Fix time overflow handling
 Date:   Mon, 23 May 2022 19:05:19 +0200
-Message-Id: <20220523165841.742669302@linuxfoundation.org>
+Message-Id: <20220523165814.759854261@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
-References: <20220523165823.492309987@linuxfoundation.org>
+In-Reply-To: <20220523165812.244140613@linuxfoundation.org>
+References: <20220523165812.244140613@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,88 +56,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kan Liang <kan.liang@linux.intel.com>
+From: Andre Przywara <andre.przywara@arm.com>
 
-[ Upstream commit 01b28e4a58152e8906eeb5f1b55a0c404c48c7c8 ]
+[ Upstream commit 9f6cd82eca7e91a0d0311242a87c6aa3c2737968 ]
 
-The X86 specific arch__intr_reg_mask() is to check whether the kernel
-and hardware can collect XMM registers. But it doesn't work on some
-hybrid platform.
+Using "unsigned long" for UNIX timestamps is never a good idea, and
+comparing the value of such a variable against U32_MAX does not do
+anything useful on 32-bit systems.
 
-Without the patch on ADL-N:
+Use the proper time64_t type when dealing with timestamps, and avoid
+cutting down the time range unnecessarily. This also fixes the flawed
+check for the alarm time being too far into the future.
 
-  $ perf record -I?
-  available registers: AX BX CX DX SI DI BP SP IP FLAGS CS SS R8 R9 R10
-  R11 R12 R13 R14 R15
+The check for this condition is actually somewhat theoretical, as the
+RTC counts till 2033 only anyways, and 2^32 seconds from now is not
+before the year 2157 - at which point I hope nobody will be using this
+hardware anymore.
 
-The config of the test event doesn't contain the PMU information. The
-kernel may fail to initialize it on the correct hybrid PMU and return
-the wrong non-supported information.
-
-Add the PMU information into the config for the hybrid platform. The
-same register set is supported among different hybrid PMUs. Checking
-the first available one is good enough.
-
-With the patch on ADL-N:
-
-  $ perf record -I?
-  available registers: AX BX CX DX SI DI BP SP IP FLAGS CS SS R8 R9 R10
-  R11 R12 R13 R14 R15 XMM0 XMM1 XMM2 XMM3 XMM4 XMM5 XMM6 XMM7 XMM8 XMM9
-  XMM10 XMM11 XMM12 XMM13 XMM14 XMM15
-
-Fixes: 6466ec14aaf44ff1 ("perf regs x86: Add X86 specific arch__intr_reg_mask()")
-Reported-by: Ammy Yi <ammy.yi@intel.com>
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-Acked-by: Ian Rogers <irogers@google.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Kan Liang <kan.liang@linux.intel.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Xing Zhengjun <zhengjun.xing@linux.intel.com>
-Link: https://lore.kernel.org/r/20220518145125.1494156-1-kan.liang@linux.intel.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Link: https://lore.kernel.org/r/20220211122643.1343315-4-andre.przywara@arm.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/perf/arch/x86/util/perf_regs.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/rtc/rtc-sun6i.c | 14 +++++---------
+ 1 file changed, 5 insertions(+), 9 deletions(-)
 
-diff --git a/tools/perf/arch/x86/util/perf_regs.c b/tools/perf/arch/x86/util/perf_regs.c
-index 207c56805c55..0ed177991ad0 100644
---- a/tools/perf/arch/x86/util/perf_regs.c
-+++ b/tools/perf/arch/x86/util/perf_regs.c
-@@ -9,6 +9,8 @@
- #include "../../../util/perf_regs.h"
- #include "../../../util/debug.h"
- #include "../../../util/event.h"
-+#include "../../../util/pmu.h"
-+#include "../../../util/pmu-hybrid.h"
+diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
+index f2818cdd11d8..52b36b7c6129 100644
+--- a/drivers/rtc/rtc-sun6i.c
++++ b/drivers/rtc/rtc-sun6i.c
+@@ -138,7 +138,7 @@ struct sun6i_rtc_dev {
+ 	const struct sun6i_rtc_clk_data *data;
+ 	void __iomem *base;
+ 	int irq;
+-	unsigned long alarm;
++	time64_t alarm;
  
- const struct sample_reg sample_reg_masks[] = {
- 	SMPL_REG(AX, PERF_REG_X86_AX),
-@@ -284,12 +286,22 @@ uint64_t arch__intr_reg_mask(void)
- 		.disabled 		= 1,
- 		.exclude_kernel		= 1,
- 	};
-+	struct perf_pmu *pmu;
- 	int fd;
- 	/*
- 	 * In an unnamed union, init it here to build on older gcc versions
- 	 */
- 	attr.sample_period = 1;
+ 	struct clk_hw hw;
+ 	struct clk_hw *int_osc;
+@@ -510,10 +510,8 @@ static int sun6i_rtc_setalarm(struct device *dev, struct rtc_wkalrm *wkalrm)
+ 	struct sun6i_rtc_dev *chip = dev_get_drvdata(dev);
+ 	struct rtc_time *alrm_tm = &wkalrm->time;
+ 	struct rtc_time tm_now;
+-	unsigned long time_now = 0;
+-	unsigned long time_set = 0;
+-	unsigned long time_gap = 0;
+-	int ret = 0;
++	time64_t time_now, time_set;
++	int ret;
  
-+	if (perf_pmu__has_hybrid()) {
-+		/*
-+		 * The same register set is supported among different hybrid PMUs.
-+		 * Only check the first available one.
-+		 */
-+		pmu = list_first_entry(&perf_pmu__hybrid_pmus, typeof(*pmu), hybrid_list);
-+		attr.config |= (__u64)pmu->type << PERF_PMU_TYPE_SHIFT;
-+	}
-+
- 	event_attr_init(&attr);
+ 	ret = sun6i_rtc_gettime(dev, &tm_now);
+ 	if (ret < 0) {
+@@ -528,9 +526,7 @@ static int sun6i_rtc_setalarm(struct device *dev, struct rtc_wkalrm *wkalrm)
+ 		return -EINVAL;
+ 	}
  
- 	fd = sys_perf_event_open(&attr, 0, -1, -1, 0);
+-	time_gap = time_set - time_now;
+-
+-	if (time_gap > U32_MAX) {
++	if ((time_set - time_now) > U32_MAX) {
+ 		dev_err(dev, "Date too far in the future\n");
+ 		return -EINVAL;
+ 	}
+@@ -539,7 +535,7 @@ static int sun6i_rtc_setalarm(struct device *dev, struct rtc_wkalrm *wkalrm)
+ 	writel(0, chip->base + SUN6I_ALRM_COUNTER);
+ 	usleep_range(100, 300);
+ 
+-	writel(time_gap, chip->base + SUN6I_ALRM_COUNTER);
++	writel(time_set - time_now, chip->base + SUN6I_ALRM_COUNTER);
+ 	chip->alarm = time_set;
+ 
+ 	sun6i_rtc_setaie(wkalrm->enabled, chip);
 -- 
 2.35.1
 

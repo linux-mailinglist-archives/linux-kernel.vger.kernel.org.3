@@ -2,108 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A24C0530ED9
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:17:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B6B1530FF6
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:19:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235777AbiEWM7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 08:59:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35302 "EHLO
+        id S235834AbiEWNAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 09:00:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235726AbiEWM66 (ORCPT
+        with ESMTP id S235729AbiEWNAk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 08:58:58 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9018353A74;
-        Mon, 23 May 2022 05:58:57 -0700 (PDT)
-Received: from kwepemi500004.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4L6HT95KyrzDqLt;
-        Mon, 23 May 2022 20:58:53 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi500004.china.huawei.com (7.221.188.17) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 23 May 2022 20:58:55 +0800
-Received: from [10.174.176.73] (10.174.176.73) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 23 May 2022 20:58:54 +0800
-Subject: Re: [PATCH -next v5 0/3] support concurrent sync io for bfq on a
- specail occasion
-To:     Jens Axboe <axboe@kernel.dk>, <paolo.valente@linaro.org>
-CC:     <jack@suse.cz>, <tj@kernel.org>, <linux-block@vger.kernel.org>,
-        <cgroups@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <yi.zhang@huawei.com>
-References: <20220428120837.3737765-1-yukuai3@huawei.com>
- <d50df657-d859-79cf-c292-412eaa383d2c@huawei.com>
- <61b67d5e-829c-8130-7bda-81615d654829@huawei.com>
- <81411289-e13c-20f5-df63-c059babca57a@huawei.com>
- <d5a90a08-1ac6-587a-e900-0436bd45543a@kernel.dk>
- <55919e29-1f22-e8aa-f3d2-08c57d9e1c22@huawei.com>
- <b32ed748-a141-862c-ed35-debb474962ed@kernel.dk>
- <1172d00f-0843-1d7c-721f-fdb60a0945cb@huawei.com>
- <dfd2ac0b-74da-85f4-ff66-2eb307578d93@kernel.dk>
-From:   Yu Kuai <yukuai3@huawei.com>
-Message-ID: <8f0b5115-6a96-d5eb-5243-0be832cf121b@huawei.com>
-Date:   Mon, 23 May 2022 20:58:53 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Mon, 23 May 2022 09:00:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FC4353B49;
+        Mon, 23 May 2022 06:00:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EE84561345;
+        Mon, 23 May 2022 13:00:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C9BDC385A9;
+        Mon, 23 May 2022 13:00:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653310839;
+        bh=0gJAhDWK23rUCBEAT34CY4awugOC65Cdzpv/yAHbc7M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Kvm3v85Z6Fv+WogPmdKKfh3PQ36Ep86EwiFoAJsMmlPnVDmEKSnbaoVXbD+mjuCbR
+         7pVZ+OD+zZ6r2qmQ/jY+r4AOsPjfvQ/YJUWrKfxKSX52Wd/FG0clmH1Ew0vASF0kYj
+         zR90qdJyWkxltZQqCpOmgNgpWn9qxiEfIOb04TjwXYVQJJv80Ah0KkmSGSD26cjw7L
+         iKrBXWjokUFPC4ZvISgEpvBp0NZKXeftsNMe7eXtqzoD++yvvrtyLwDyfNTSDq7L93
+         SrZRxRQIbU6BELoDxcDp9N+IPb3T3iQU94Cmyv/++EDAFtRubC8Wolmh+A4ZFKSkxd
+         pkICzjHhbkFpA==
+Date:   Mon, 23 May 2022 14:00:33 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     lgirdwood@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH 2/4] regulator: Add driver for MT6331 PMIC regulators
+Message-ID: <YouFcSapkVC7ZfuP@sirena.org.uk>
+References: <20220520133305.265310-1-angelogioacchino.delregno@collabora.com>
+ <20220520133305.265310-3-angelogioacchino.delregno@collabora.com>
+ <YoepiTUfdhkYByo7@sirena.org.uk>
+ <6cc68be9-e509-eae4-801d-997fdc01dcf2@collabora.com>
 MIME-Version: 1.0
-In-Reply-To: <dfd2ac0b-74da-85f4-ff66-2eb307578d93@kernel.dk>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.73]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SCC_BODY_URI_ONLY,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zrq/BafcBysX3uNy"
+Content-Disposition: inline
+In-Reply-To: <6cc68be9-e509-eae4-801d-997fdc01dcf2@collabora.com>
+X-Cookie: Sales tax applies.
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/05/23 20:36, Jens Axboe 写道:
-> On 5/23/22 2:18 AM, Yu Kuai wrote:
->> ? 2022/05/23 9:24, Jens Axboe ??:
->>> On 5/22/22 7:10 PM, yukuai (C) wrote:
->>>> ? 2022/05/21 20:21, Jens Axboe ??:
->>>>> On 5/21/22 1:22 AM, yukuai (C) wrote:
->>>>>> ? 2022/05/14 17:29, yukuai (C) ??:
->>>>>>> ? 2022/05/05 9:00, yukuai (C) ??:
->>>>>>>> Hi, Paolo
->>>>>>>>
->>>>>>>> Can you take a look at this patchset? It has been quite a long time
->>>>>>>> since we spotted this problem...
->>>>>>>>
->>>>>>>
->>>>>>> friendly ping ...
->>>>>> friendly ping ...
->>>>>
->>>>> I can't speak for Paolo, but I've mentioned before that the majority
->>>>> of your messages end up in my spam. That's still the case, in fact
->>>>> I just marked maybe 10 of them as not spam.
->>>>>
->>>>> You really need to get this issued sorted out, or you will continue
->>>>> to have patches ignore because folks may simply not see them.
->>>>>
->>>> Hi,
->>>>
->>>> Thanks for your notice.
->>>>
->>>> Is it just me or do you see someone else's messages from *huawei.com
->>>> end up in spam? I tried to seek help from our IT support, however, they
->>>> didn't find anything unusual...
->>>
->>> Not sure, I think it's just you. It may be the name as well "yukuai (C)"
->> Hi, Jens
->>
->> I just change this default name "yukuai (C)" to "Yu Kuai", can you
->> please have a check if following emails still go to spam?
->>
->> https://lore.kernel.org/all/20220523082633.2324980-1-yukuai3@huawei.com/
-> 
-> These did not go into spam, were delivered just fine.
-> 
-Cheers for solving this, I'll resend this patchset just in case they are
-in spam for Paolo...
+
+--zrq/BafcBysX3uNy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Mon, May 23, 2022 at 02:49:19PM +0200, AngeloGioacchino Del Regno wrote:
+> Il 20/05/22 16:45, Mark Brown ha scritto:
+> > On Fri, May 20, 2022 at 03:33:03PM +0200, AngeloGioacchino Del Regno wr=
+ote:
+
+> > > +static const unsigned int ldo_volt_table10[] =3D {
+> > > +	1200000, 1300000, 1500000, 1800000,
+> > > +	1200000, 1300000, 1500000, 1800000,
+> > > +	1200000, 1300000, 1500000, 1800000,
+> > > +	1200000, 1300000, 1500000, 1800000,
+> > > +};
+
+> > So the top bits of the voltate selection field just get ignored?  Might
+> > be easier to just write the code to not include the top bits.
+> >=20
+
+> No, they're all valid values for real... but I guess that I can simplify
+> this voltage table by simply modifying the bitmask that we use for the
+> regulators that are using this table....
+
+Right, my point here is that it looks awfully like the documentation
+(this came from documentation I guess?) is including some extra bits
+that get ignored in the voltage selection field here.  That seems like a
+weird choice somewhere along the line.
+
+> > > +	if (info->qi > 0) {
+> > > +		reg =3D info->desc.enable_reg;
+> > > +		en_mask =3D info->qi;
+
+> > If the regulator doesn't have status readback it shouldn't provide a
+> > get_status() operation.
+
+> What I've understood is that when there's no "QI" flag, the enable regist=
+er
+> will provide the regulator status (EN/DIS) acting like QI, that's why I've
+> added that if branch...
+
+> Anyway, I'll recheck this part before sending the next version!
+
+That would be fairly unusual, often a regulator won't even detect when
+it's gone out of regulation.
+
+--zrq/BafcBysX3uNy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKLhXEACgkQJNaLcl1U
+h9A4gAf/S2iKtIJE+f3lzVnAs3dpnbYYgTd2ZdrDVFtyW/cH6sKeRTKVzvHefnRc
+t3SVVtMNVJ2TZNiO+p1WAm9qU/X1Z1QCsnD+8fqRl5GdVHLLcZCbajSb661dRKYg
+mg9WRUMZ66mk6o8F3mU1v1Ov5oitF2ng4hT9GLseXXyaLKd/72OwO/yhzLItjUWN
+IQmSkytWOrEJIUjDQcvzBkCIREMjOKASkpwfkVN0h08n5GoedQ/DrQL/hQ/vojrh
+Jc3FdWtaYWIxa9bUCOPWMAkJPvxS8BE1xkOxrS+I/BnD66WTigrlJRdnsIEy1XzJ
+51w8eBJpVpXGsRyh2h3SzY0hPouSHg==
+=YULk
+-----END PGP SIGNATURE-----
+
+--zrq/BafcBysX3uNy--

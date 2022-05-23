@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33A39531672
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:51:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 467A853176D
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:53:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239983AbiEWRNb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:13:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37770 "EHLO
+        id S243219AbiEWSJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 14:09:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239975AbiEWRLa (ORCPT
+        with ESMTP id S243457AbiEWRiO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:11:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CD366CF69;
-        Mon, 23 May 2022 10:10:50 -0700 (PDT)
+        Mon, 23 May 2022 13:38:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B90A18DDC4;
+        Mon, 23 May 2022 10:32:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CDAAB614E5;
-        Mon, 23 May 2022 17:09:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACF65C385A9;
-        Mon, 23 May 2022 17:09:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4F73EB81210;
+        Mon, 23 May 2022 17:30:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BBBAC3411A;
+        Mon, 23 May 2022 17:30:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653325793;
-        bh=rtSw1l7QdPTLRBp089iUJcQX1L9N+GkfaDN1OeqXWJ0=;
+        s=korg; t=1653327050;
+        bh=Q6WGn+T2IYOJX+pYvJtK4Xq4x5ALfQD1/9ZqxdvFrkU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EIiREeA5CJbZM0DnvwpZBoNzKWr3dg10uIWQIR3slARymuaQiNkhdMZi42IJk6Nob
-         qf2uUUcWsGfpGShL16H+thR3YjbFi5GCqzrfZPXII22wAdzlLXHG43dy+33vLNjuXB
-         tk6lrjSGmZWD0MCc4L8ett0m7yA9D4WYax28M4ao=
+        b=cmbeNHO9I4g/t5asLmNS+s9sTtpiGLXRbwI4POo8oGeLU3ggaaDL2L5WhXIaVJCuX
+         Dj7nkz5WmKsF1Os7jeg60+ZETs9lnN/lkSi1iOITZqIOvFGy7gAG10j4JH9mOcBwP5
+         LyBNeCRC6czkIohFDbADnzR35cXT+kLXZ/aCIn+g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zheng Yongjun <zhengyongjun3@huawei.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        stable@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
+        Krishna Kant <krishna.kant@purestorage.com>,
+        Seamus Connor <sconnor@purestorage.com>,
+        Brian Bunker <brian@purestorage.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 05/44] crypto: stm32 - fix reference leak in stm32_crc_remove
-Date:   Mon, 23 May 2022 19:04:49 +0200
-Message-Id: <20220523165754.415952096@linuxfoundation.org>
+Subject: [PATCH 5.17 133/158] scsi: scsi_dh_alua: Properly handle the ALUA transitioning state
+Date:   Mon, 23 May 2022 19:04:50 +0200
+Message-Id: <20220523165852.430311385@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165752.797318097@linuxfoundation.org>
-References: <20220523165752.797318097@linuxfoundation.org>
+In-Reply-To: <20220523165830.581652127@linuxfoundation.org>
+References: <20220523165830.581652127@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +58,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zheng Yongjun <zhengyongjun3@huawei.com>
+From: Brian Bunker <brian@purestorage.com>
 
-[ Upstream commit e9a36feecee0ee5845f2e0656f50f9942dd0bed3 ]
+[ Upstream commit 6056a92ceb2a7705d61df7ec5370548e96aee258 ]
 
-pm_runtime_get_sync() will increment pm usage counter even it
-failed. Forgetting to call pm_runtime_put_noidle will result
-in reference leak in stm32_crc_remove, so we should fix it.
+The handling of the ALUA transitioning state is currently broken. When a
+target goes into this state, it is expected that the target is allowed to
+stay in this state for the implicit transition timeout without a path
+failure. The handler has this logic, but it gets skipped currently.
 
-Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+When the target transitions, there is in-flight I/O from the initiator. The
+first of these responses from the target will be a unit attention letting
+the initiator know that the ALUA state has changed.  The remaining
+in-flight I/Os, before the initiator finds out that the portal state has
+changed, will return not ready, ALUA state is transitioning. The portal
+state will change to SCSI_ACCESS_STATE_TRANSITIONING. This will lead to all
+new I/O immediately failing the path unexpectedly. The path failure happens
+in less than a second instead of the expected successes until the
+transition timer is exceeded.
+
+Allow I/Os to continue while the path is in the ALUA transitioning
+state. The handler already takes care of a target that stays in the
+transitioning state for too long by changing the state to ALUA state
+standby once the transition timeout is exceeded at which point the path
+will fail.
+
+Link: https://lore.kernel.org/r/CAHZQxy+4sTPz9+pY3=7VJH+CLUJsDct81KtnR2be8ycN5mhqTg@mail.gmail.com
+Reviewed-by: Hannes Reinecke <hare@suse.de>
+Acked-by: Krishna Kant <krishna.kant@purestorage.com>
+Acked-by: Seamus Connor <sconnor@purestorage.com>
+Signed-off-by: Brian Bunker <brian@purestorage.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/crypto/stm32/stm32_crc32.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/scsi/device_handler/scsi_dh_alua.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/crypto/stm32/stm32_crc32.c b/drivers/crypto/stm32/stm32_crc32.c
-index 6848f34a9e66..de645bf84980 100644
---- a/drivers/crypto/stm32/stm32_crc32.c
-+++ b/drivers/crypto/stm32/stm32_crc32.c
-@@ -334,8 +334,10 @@ static int stm32_crc_remove(struct platform_device *pdev)
- 	struct stm32_crc *crc = platform_get_drvdata(pdev);
- 	int ret = pm_runtime_get_sync(crc->dev);
- 
--	if (ret < 0)
-+	if (ret < 0) {
-+		pm_runtime_put_noidle(crc->dev);
- 		return ret;
-+	}
- 
- 	spin_lock(&crc_list.lock);
- 	list_del(&crc->list);
+diff --git a/drivers/scsi/device_handler/scsi_dh_alua.c b/drivers/scsi/device_handler/scsi_dh_alua.c
+index 37d06f993b76..1d9be771f3ee 100644
+--- a/drivers/scsi/device_handler/scsi_dh_alua.c
++++ b/drivers/scsi/device_handler/scsi_dh_alua.c
+@@ -1172,9 +1172,8 @@ static blk_status_t alua_prep_fn(struct scsi_device *sdev, struct request *req)
+ 	case SCSI_ACCESS_STATE_OPTIMAL:
+ 	case SCSI_ACCESS_STATE_ACTIVE:
+ 	case SCSI_ACCESS_STATE_LBA:
+-		return BLK_STS_OK;
+ 	case SCSI_ACCESS_STATE_TRANSITIONING:
+-		return BLK_STS_AGAIN;
++		return BLK_STS_OK;
+ 	default:
+ 		req->rq_flags |= RQF_QUIET;
+ 		return BLK_STS_IOERR;
 -- 
 2.35.1
 

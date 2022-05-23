@@ -2,51 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A56C530BF6
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 11:04:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83EA2530C37
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 11:04:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231648AbiEWINY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 04:13:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44326 "EHLO
+        id S231822AbiEWI2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 04:28:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231488AbiEWINE (ORCPT
+        with ESMTP id S231812AbiEWI1z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 04:13:04 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6B9C63CB;
-        Mon, 23 May 2022 01:13:01 -0700 (PDT)
-Received: from kwepemi100004.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4L697G374MzDqNs;
-        Mon, 23 May 2022 16:12:58 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi100004.china.huawei.com (7.221.188.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 23 May 2022 16:12:59 +0800
-Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
- (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 23 May
- 2022 16:12:59 +0800
-From:   Yu Kuai <yukuai3@huawei.com>
-To:     <tj@kernel.org>, <mkoutny@suse.com>, <axboe@kernel.dk>,
-        <ming.lei@redhat.com>
-CC:     <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yukuai3@huawei.com>,
-        <yi.zhang@huawei.com>
-Subject: [PATCH -next v4 4/4] blk-throttle: fix io hung due to config updates
-Date:   Mon, 23 May 2022 16:26:33 +0800
-Message-ID: <20220523082633.2324980-5-yukuai3@huawei.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220523082633.2324980-1-yukuai3@huawei.com>
-References: <20220523082633.2324980-1-yukuai3@huawei.com>
+        Mon, 23 May 2022 04:27:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E8497DD4
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 01:27:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653294472;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=T/1kwIlur/LWGYGUmdTrROiOtB3QTQUmvrtaI59KDYw=;
+        b=Sakfvnrh/YIde8cp08rqzVdAkMf35/bkuFH3XdtLkLj9IiBbKMydeVMs0nzWbpp+vrqSi2
+        oI38VSENnjWdyMsbuuabeHgkbbLVLT8QQs5CON61f65zSgWgtqS7sLlaQMT2OwOJreFZM1
+        RWy+pDVz9OcQ6a1NAJwsLRmgKg6UBzI=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-127-OunGr0llOuS8mG_ynO3rbQ-1; Mon, 23 May 2022 04:27:50 -0400
+X-MC-Unique: OunGr0llOuS8mG_ynO3rbQ-1
+Received: by mail-qk1-f199.google.com with SMTP id v14-20020a05620a0f0e00b00699f4ea852cso10906122qkl.9
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 01:27:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=T/1kwIlur/LWGYGUmdTrROiOtB3QTQUmvrtaI59KDYw=;
+        b=QDT5kT5I+FMmiyZcZqvmljcczI2Ahlw/u0UAcHJ1UcYF2DP82vGlz88YIA43kvpRSN
+         plqiIQnGnFKHagr+CMoSTN4T7KwFk7m9C9UvigWdiTR4gJWJOYAPf0tlYTXr7Hu/l4C2
+         wGvDHkJrIWUcka/JZWsaNavs50iUmbeTWVmgumTeV/fcOYn+BU6pGA/54iExQxArIEzg
+         i2pibKAkmIVD9IuRd22UevtkKtrCAzeyle13/tlMU8RUpq5PKVdJ5ieOKTB66qoB4aRp
+         EHHtUi8ZyiDD/J1qs/mUvUYPHbtLNA/PxqBJqGp9hz2VBTfwLDDrC3f7HSlFE6o7t/dU
+         dKKg==
+X-Gm-Message-State: AOAM532huGHahu519XWpedmwpEm1rtET1acmqnD0EONQXKlsGZroa+8u
+        ilzoS7F5u/W/uecWwN9t0wWgbvwSFpUjlEV7lehk46FGf4J5Llt9Z+/sdnEKVFFAMT8oOEGeqPj
+        vBDu/qvditurpuuimFmYLXTJw
+X-Received: by 2002:ad4:5bef:0:b0:462:3068:9225 with SMTP id k15-20020ad45bef000000b0046230689225mr4664792qvc.26.1653294470036;
+        Mon, 23 May 2022 01:27:50 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxext/h6oF1JgzqF6JvJzAca18yRqrepSqFHtMgfDdKHE+p8QYTPMkUbIPydmmw9aPdDAkBCw==
+X-Received: by 2002:ad4:5bef:0:b0:462:3068:9225 with SMTP id k15-20020ad45bef000000b0046230689225mr4664769qvc.26.1653294469789;
+        Mon, 23 May 2022 01:27:49 -0700 (PDT)
+Received: from sgarzare-redhat (host-87-12-25-16.business.telecomitalia.it. [87.12.25.16])
+        by smtp.gmail.com with ESMTPSA id m24-20020ac866d8000000b002f932d920ccsm2544399qtp.64.2022.05.23.01.27.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 May 2022 01:27:49 -0700 (PDT)
+Date:   Mon, 23 May 2022 10:27:38 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Eugenio =?utf-8?B?UMOpcmV6?= <eperezma@redhat.com>
+Cc:     virtualization@lists.linux-foundation.org,
+        Jason Wang <jasowang@redhat.com>, kvm@vger.kernel.org,
+        "Michael S. Tsirkin" <mst@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Longpeng <longpeng2@huawei.com>,
+        Zhu Lingshan <lingshan.zhu@intel.com>, martinh@xilinx.com,
+        hanand@xilinx.com, Si-Wei Liu <si-wei.liu@oracle.com>,
+        dinang@xilinx.com, Eli Cohen <elic@nvidia.com>, lvivier@redhat.com,
+        pabloc@xilinx.com, gautam.dawar@amd.com,
+        Xie Yongji <xieyongji@bytedance.com>, habetsm.xilinx@gmail.com,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        tanuj.kamde@amd.com, Wu Zongyong <wuzongyong@linux.alibaba.com>,
+        martinpo@xilinx.com, lulu@redhat.com, ecree.xilinx@gmail.com,
+        Parav Pandit <parav@nvidia.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Zhang Min <zhang.min9@zte.com.cn>
+Subject: Re: [PATCH 4/4] vdpa_sim: Implement stop vdpa op
+Message-ID: <20220523082738.h7lvwkysnqhynf37@sgarzare-redhat>
+References: <20220520172325.980884-1-eperezma@redhat.com>
+ <20220520172325.980884-5-eperezma@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220520172325.980884-5-eperezma@redhat.com>
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,186 +93,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If new configuration is submitted while a bio is throttled, then new
-waiting time is recalculated regardless that the bio might aready wait
-for some time:
+On Fri, May 20, 2022 at 07:23:25PM +0200, Eugenio Pérez wrote:
+>Implement stop operation for vdpa_sim devices, so vhost-vdpa will offer
+>that backend feature and userspace can effectively stop the device.
+>
+>This is a must before get virtqueue indexes (base) for live migration,
+>since the device could modify them after userland gets them. There are
+>individual ways to perform that action for some devices
+>(VHOST_NET_SET_BACKEND, VHOST_VSOCK_SET_RUNNING, ...) but there was no
+>way to perform it for any vhost device (and, in particular, vhost-vdpa).
+>
+>Signed-off-by: Eugenio Pérez <eperezma@redhat.com>
+>---
+> drivers/vdpa/vdpa_sim/vdpa_sim.c     | 21 +++++++++++++++++++++
+> drivers/vdpa/vdpa_sim/vdpa_sim.h     |  1 +
+> drivers/vdpa/vdpa_sim/vdpa_sim_net.c |  3 +++
+> 3 files changed, 25 insertions(+)
+>
+>diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+>index 50d721072beb..0515cf314bed 100644
+>--- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
+>+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+>@@ -107,6 +107,7 @@ static void vdpasim_do_reset(struct vdpasim *vdpasim)
+> 	for (i = 0; i < vdpasim->dev_attr.nas; i++)
+> 		vhost_iotlb_reset(&vdpasim->iommu[i]);
+>
+>+	vdpasim->running = true;
+> 	spin_unlock(&vdpasim->iommu_lock);
+>
+> 	vdpasim->features = 0;
+>@@ -505,6 +506,24 @@ static int vdpasim_reset(struct vdpa_device *vdpa)
+> 	return 0;
+> }
+>
+>+static int vdpasim_stop(struct vdpa_device *vdpa, bool stop)
+>+{
+>+	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
+>+	int i;
+>+
+>+	spin_lock(&vdpasim->lock);
+>+	vdpasim->running = !stop;
+>+	if (vdpasim->running) {
+>+		/* Check for missed buffers */
+>+		for (i = 0; i < vdpasim->dev_attr.nvqs; ++i)
+>+			vdpasim_kick_vq(vdpa, i);
+>+
+>+	}
+>+	spin_unlock(&vdpasim->lock);
+>+
+>+	return 0;
+>+}
+>+
+> static size_t vdpasim_get_config_size(struct vdpa_device *vdpa)
+> {
+> 	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
+>@@ -694,6 +713,7 @@ static const struct vdpa_config_ops vdpasim_config_ops = {
+> 	.get_status             = vdpasim_get_status,
+> 	.set_status             = vdpasim_set_status,
+> 	.reset			= vdpasim_reset,
+>+	.stop			= vdpasim_stop,
+> 	.get_config_size        = vdpasim_get_config_size,
+> 	.get_config             = vdpasim_get_config,
+> 	.set_config             = vdpasim_set_config,
+>@@ -726,6 +746,7 @@ static const struct vdpa_config_ops vdpasim_batch_config_ops = {
+> 	.get_status             = vdpasim_get_status,
+> 	.set_status             = vdpasim_set_status,
+> 	.reset			= vdpasim_reset,
+>+	.stop			= vdpasim_stop,
+> 	.get_config_size        = vdpasim_get_config_size,
+> 	.get_config             = vdpasim_get_config,
+> 	.set_config             = vdpasim_set_config,
+>diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h b/drivers/vdpa/vdpa_sim/vdpa_sim.h
+>index 622782e92239..061986f30911 100644
+>--- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
+>+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
+>@@ -66,6 +66,7 @@ struct vdpasim {
+> 	u32 generation;
+> 	u64 features;
+> 	u32 groups;
+>+	bool running;
+> 	/* spinlock to synchronize iommu table */
+> 	spinlock_t iommu_lock;
+> };
+>diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
+>index 5125976a4df8..886449e88502 100644
+>--- a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
+>+++ b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
+>@@ -154,6 +154,9 @@ static void vdpasim_net_work(struct work_struct *work)
+>
+> 	spin_lock(&vdpasim->lock);
+>
+>+	if (!vdpasim->running)
+>+		goto out;
+>+
 
-tg_conf_updated
- throtl_start_new_slice
-  tg_update_disptime
-  throtl_schedule_next_dispatch
+It would be nice to do the same for vdpa_sim_blk as well.
 
-Then io hung can be triggered by always submmiting new configuration
-before the throttled bio is dispatched.
-
-Fix the problem by respecting the time that throttled bio aready waited.
-In order to do that, add new fields to record how many bytes/io already
-waited, and use it to calculate wait time for throttled bio under new
-configuration.
-
-Some simple test:
-1)
-cd /sys/fs/cgroup/blkio/
-echo $$ > cgroup.procs
-echo "8:0 2048" > blkio.throttle.write_bps_device
-{
-        sleep 3
-        echo "8:0 1024" > blkio.throttle.write_bps_device
-} &
-sleep 1
-dd if=/dev/zero of=/dev/sda bs=8k count=1 oflag=direct
-
-2)
-cd /sys/fs/cgroup/blkio/
-echo $$ > cgroup.procs
-echo "8:0 1024" > blkio.throttle.write_bps_device
-{
-        sleep 5
-        echo "8:0 2048" > blkio.throttle.write_bps_device
-} &
-sleep 1
-dd if=/dev/zero of=/dev/sda bs=8k count=1 oflag=direct
-
-test results: io finish time
-	before this patch	with this patch
-1)	10s			6s
-2)	8s			6s
-
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
----
- block/blk-throttle.c | 49 ++++++++++++++++++++++++++++++++++++++------
- block/blk-throttle.h |  4 ++++
- 2 files changed, 47 insertions(+), 6 deletions(-)
-
-diff --git a/block/blk-throttle.c b/block/blk-throttle.c
-index ded0d30ef49e..612bd221783c 100644
---- a/block/blk-throttle.c
-+++ b/block/blk-throttle.c
-@@ -656,12 +656,17 @@ static inline void throtl_start_new_slice_with_credit(struct throtl_grp *tg,
- 		   tg->slice_end[rw], jiffies);
- }
- 
--static inline void throtl_start_new_slice(struct throtl_grp *tg, bool rw)
-+static inline void throtl_start_new_slice(struct throtl_grp *tg, bool rw,
-+					  bool clear_skipped)
- {
- 	tg->bytes_disp[rw] = 0;
- 	tg->io_disp[rw] = 0;
- 	tg->slice_start[rw] = jiffies;
- 	tg->slice_end[rw] = jiffies + tg->td->throtl_slice;
-+	if (clear_skipped) {
-+		tg->bytes_skipped[rw] = 0;
-+		tg->io_skipped[rw] = 0;
-+	}
- 
- 	throtl_log(&tg->service_queue,
- 		   "[%c] new slice start=%lu end=%lu jiffies=%lu",
-@@ -784,6 +789,34 @@ static u64 calculate_bytes_allowed(u64 bps_limit,
- 	return mul_u64_u64_div_u64(bps_limit, (u64)jiffy_elapsed_rnd, (u64)HZ);
- }
- 
-+static void __tg_update_skipped(struct throtl_grp *tg, bool rw)
-+{
-+	unsigned long jiffy_elapsed = jiffies - tg->slice_start[rw];
-+	u64 bps_limit = tg_bps_limit(tg, rw);
-+	u32 iops_limit = tg_iops_limit(tg, rw);
-+
-+	if (bps_limit != U64_MAX)
-+		tg->bytes_skipped[rw] +=
-+			calculate_bytes_allowed(bps_limit, jiffy_elapsed) -
-+			tg->bytes_disp[rw];
-+	if (iops_limit != UINT_MAX)
-+		tg->io_skipped[rw] +=
-+			calculate_io_allowed(iops_limit, jiffy_elapsed) -
-+			tg->io_disp[rw];
-+}
-+
-+static void tg_update_skipped(struct throtl_grp *tg)
-+{
-+	if (tg->service_queue.nr_queued[READ])
-+		__tg_update_skipped(tg, READ);
-+	if (tg->service_queue.nr_queued[WRITE])
-+		__tg_update_skipped(tg, WRITE);
-+
-+	throtl_log(&tg->service_queue, "%s: %llu %llu %u %u\n", __func__,
-+		   tg->bytes_skipped[READ], tg->bytes_skipped[WRITE],
-+		   tg->io_skipped[READ], tg->io_skipped[WRITE]);
-+}
-+
- static bool tg_with_in_iops_limit(struct throtl_grp *tg, struct bio *bio,
- 				  u32 iops_limit, unsigned long *wait)
- {
-@@ -801,7 +834,8 @@ static bool tg_with_in_iops_limit(struct throtl_grp *tg, struct bio *bio,
- 
- 	/* Round up to the next throttle slice, wait time must be nonzero */
- 	jiffy_elapsed_rnd = roundup(jiffy_elapsed + 1, tg->td->throtl_slice);
--	io_allowed = calculate_io_allowed(iops_limit, jiffy_elapsed_rnd);
-+	io_allowed = calculate_io_allowed(iops_limit, jiffy_elapsed_rnd) +
-+		     tg->io_skipped[rw];
- 	if (tg->io_disp[rw] + 1 <= io_allowed) {
- 		if (wait)
- 			*wait = 0;
-@@ -838,7 +872,8 @@ static bool tg_with_in_bps_limit(struct throtl_grp *tg, struct bio *bio,
- 		jiffy_elapsed_rnd = tg->td->throtl_slice;
- 
- 	jiffy_elapsed_rnd = roundup(jiffy_elapsed_rnd, tg->td->throtl_slice);
--	bytes_allowed = calculate_bytes_allowed(bps_limit, jiffy_elapsed_rnd);
-+	bytes_allowed = calculate_bytes_allowed(bps_limit, jiffy_elapsed_rnd) +
-+			tg->bytes_skipped[rw];
- 	if (tg->bytes_disp[rw] + bio_size <= bytes_allowed) {
- 		if (wait)
- 			*wait = 0;
-@@ -899,7 +934,7 @@ static bool tg_may_dispatch(struct throtl_grp *tg, struct bio *bio,
- 	 * slice and it should be extended instead.
- 	 */
- 	if (throtl_slice_used(tg, rw) && !(tg->service_queue.nr_queued[rw]))
--		throtl_start_new_slice(tg, rw);
-+		throtl_start_new_slice(tg, rw, true);
- 	else {
- 		if (time_before(tg->slice_end[rw],
- 		    jiffies + tg->td->throtl_slice))
-@@ -1328,8 +1363,8 @@ static void tg_conf_updated(struct throtl_grp *tg, bool global)
- 	 * that a group's limit are dropped suddenly and we don't want to
- 	 * account recently dispatched IO with new low rate.
- 	 */
--	throtl_start_new_slice(tg, READ);
--	throtl_start_new_slice(tg, WRITE);
-+	throtl_start_new_slice(tg, READ, false);
-+	throtl_start_new_slice(tg, WRITE, false);
- 
- 	if (tg->flags & THROTL_TG_PENDING) {
- 		tg_update_disptime(tg);
-@@ -1357,6 +1392,7 @@ static ssize_t tg_set_conf(struct kernfs_open_file *of,
- 		v = U64_MAX;
- 
- 	tg = blkg_to_tg(ctx.blkg);
-+	tg_update_skipped(tg);
- 
- 	if (is_u64)
- 		*(u64 *)((void *)tg + of_cft(of)->private) = v;
-@@ -1543,6 +1579,7 @@ static ssize_t tg_set_limit(struct kernfs_open_file *of,
- 		return ret;
- 
- 	tg = blkg_to_tg(ctx.blkg);
-+	tg_update_skipped(tg);
- 
- 	v[0] = tg->bps_conf[READ][index];
- 	v[1] = tg->bps_conf[WRITE][index];
-diff --git a/block/blk-throttle.h b/block/blk-throttle.h
-index c1b602996127..845909c72f86 100644
---- a/block/blk-throttle.h
-+++ b/block/blk-throttle.h
-@@ -115,6 +115,10 @@ struct throtl_grp {
- 	uint64_t bytes_disp[2];
- 	/* Number of bio's dispatched in current slice */
- 	unsigned int io_disp[2];
-+	/* Number of bytes will be skipped in current slice */
-+	uint64_t bytes_skipped[2];
-+	/* Number of bio's will be skipped in current slice */
-+	unsigned int io_skipped[2];
- 
- 	unsigned long last_low_overflow_time[2];
- 
--- 
-2.31.1
+Thanks,
+Stefano
 

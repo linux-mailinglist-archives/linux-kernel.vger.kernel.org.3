@@ -2,60 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1118530E43
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:43:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BD56530CCB
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:41:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233398AbiEWJin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 05:38:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33898 "EHLO
+        id S233414AbiEWJjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 05:39:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233394AbiEWJiX (ORCPT
+        with ESMTP id S233207AbiEWJjO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 05:38:23 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0671863FF;
-        Mon, 23 May 2022 02:38:21 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id A64751F426E8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1653298698;
-        bh=XvaiufkFnN1wMlfvWPGiVI99J1BcUL6VmHZvtPIs1vM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=J3u7n8+ezDneiHNhUBpp+KDQ0k6O3Slu7Ag9EoZBw4/fJx9FORvGjuEQ3g79+vbRI
-         u1TR3W8Nlhoyi+mXH5Pe3Hg3ZwrCDHZk/aj7YqIgApW1JWsDnxY/RiNfBEKv15wjDo
-         Je8cDqtkSt+nFrtWHGoHiGRqtc2+cmvXoLapIEf1h8vlJVmMhdGQ43BTwttlACBcu/
-         s1gGnZ69LsTBCaCHHBV5QKhORxXk9tYuzndFX/8FV/FPqEw5drdpJyOKvT/kbGs4x5
-         eZfmh9xaB4C58q1aVCCqzFxAiiDTjwqvu6sPZPS5l0NMNwQfMlrihU/5JPty1/nkhY
-         gp0kO1HWK02lQ==
-Message-ID: <d9563b65-2391-d32c-8a07-ca7a13cae7c7@collabora.com>
-Date:   Mon, 23 May 2022 11:38:14 +0200
+        Mon, 23 May 2022 05:39:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E75A19FA8;
+        Mon, 23 May 2022 02:39:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CE52CB8100E;
+        Mon, 23 May 2022 09:39:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82B0AC385A9;
+        Mon, 23 May 2022 09:39:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653298749;
+        bh=aIcyCgc/p2LLDrwfgKccbx8NoqUUFgJUGse71d3Ph6A=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ThRxU4lXguBLpElKHUAOrgCi0JRy5qGht+sb6hj7xuoDx7P/LaQcOX3edf248xs2H
+         CkjU5JZgxg4DosqkpAXGV/7h2blatfFNEXwbbmEZ5FoiyZY7vyYG//5GAzlakBCoV7
+         H/aw+2EUWsXXy1NGtw8Nr8LcZv6uFUzh7xbrkhmpwg4qH5Meh0Iq9PWyriUAvhzPiO
+         5KGuZGz85XVn6mn7iHtusETXY4O7LfajSYWBLCTFdV1A1fMJZsCSsXCZAHNw9VYw+/
+         pELyvK5GIY65wcUrwgpJoO3i2Aw8aMGDXz+ZJYCiPB0xVXhxfcCzlEgEZDIWzTOajp
+         eW/9knL4UuLZg==
+From:   Christian Brauner <brauner@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] fs idmapped mount updates for v5.19
+Date:   Mon, 23 May 2022 11:38:36 +0200
+Message-Id: <20220523093835.1096673-1-brauner@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v3 4/4] soc: mediatek: svs: add support for mt8195
-Content-Language: en-US
-To:     Tim Chang <jia-wei.chang@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Roger Lu <roger.lu@mediatek.com>,
-        Kevin Hilman <khilman@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        hsinyi@google.com
-References: <20220523084034.26802-1-jia-wei.chang@mediatek.com>
- <20220523084034.26802-5-jia-wei.chang@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220523084034.26802-5-jia-wei.chang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,42 +51,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 23/05/22 10:40, Tim Chang ha scritto:
-> From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> 
-> To support svs on MT8195, add corresponding bank information, platform
-> data, probe and parsing function.
-> 
-> Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+Hey Linus,
 
+/* Summary */
+This contains two minor updates:
 
+* An update to the idmapping documentation by Rodrigo making it easier to
+  understand that we first introduce several use-cases that fail without
+  idmapped mounts simply to explain how they can be handled with idmapped
+  mounts.
 
-> ---
->   drivers/soc/mediatek/mtk-svs.c | 151 +++++++++++++++++++++++++++++++++
->   1 file changed, 151 insertions(+)
-> 
-> diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
-> index 656d0361ff7d..bb5021648143 100644
-> --- a/drivers/soc/mediatek/mtk-svs.c
-> +++ b/drivers/soc/mediatek/mtk-svs.c
-> @@ -1680,6 +1680,89 @@ static int svs_bank_resource_setup(struct svs_platform *svsp)
+* When changing a mount's idmapping we now hold writers to make it more robust.
 
-..snip..
+  This is similar to turning a mount ro with the difference that in contrast to
+  turning a mount ro changing the idmapping can only ever be done once while a
+  mount can transition between ro and rw as much as it wants.
 
-> @@ -2559,6 +2697,16 @@ static struct svs_bank svs_mt8183_banks[] = {
->   	},
->   };
->   
-> +static const struct svs_platform_data svs_mt8195_platform_data = {
-> +	.name = "mt8195-svs",
-> +	.banks = svs_mt8195_banks,
-> +	.efuse_parsing = svs_mt8195_efuse_parsing,
-> +	.probe = svs_mt8192_platform_probe,
-> +	.irqflags = IRQF_TRIGGER_HIGH,
+  The vfs layer itself takes care to retrieve the idmapping of a mount once
+  ensuring that the idmapping used for vfs permission checking is identical to
+  the idmapping passed down to the filesystem. All filesystems with
+  FS_ALLOW_IDMAP raised take the same precautions as the vfs in code-paths that
+  are outside of direct control of the vfs such as ioctl()s.
 
-Interrupt flags are specified in devicetree; avoid declaring irqflags.
+  However, holding writers makes this more robust and predictable for both the
+  kernel and userspace.
 
-After that:
+  This is a minor user-visible change. But it is extremely unlikely to matter.
+  The caller must've created a detached mount via OPEN_TREE_CLONE and then
+  handed that O_PATH fd to another process or thread which then must've gotten
+  a writable fd for that mount and started creating files in there while the
+  caller is still changing mount properties. While not impossible it will be an
+  extremely rare corner-case and should in general be considered a bug in the
+  application. Consider making a mount MOUNT_ATTR_NOEXEC or MOUNT_ATTR_NODEV
+  while allowing someone else to perform lookups or exec'ing in parallel by
+  handing them a copy of the OPEN_TREE_CLONE fd or another fd beneath that
+  mount.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+  I've pinged all major users of idmapped mounts pointing out this change and
+  none of them have active writers on a mount while still changing mount
+  properties. It would've been strange if they did.
 
+The rest and majority of the work will be coming through the overlayfs tree
+this cycle. In addition to overlayfs this cycle should also see support for
+idmapped mounts on erofs as I've acked a patch to this effect a little while
+ago.
+
+/* Testing */
+All patches are based on v5.18-rc4 and have been sitting in linux-next.
+Because of the patch changing how we set a mount's idmapping we had to remove
+the now invalid test 781bb995a149e ("vfs/idmapped-mounts: remove invalid test")
+from xfstests (see [1]). No build failures or warnings were observed and
+fstests and selftests have seen no regressions.
+
+Link: https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git/commit/?id=781bb995a149e0dae074019e56477855587198cf [1]
+
+/* Conflicts */
+At the time of creating this PR no merge conflicts were reported from
+linux-next and no merge conflicts showed up doing a test-merge with current
+mainline.
+
+The following changes since commit af2d861d4cd2a4da5137f795ee3509e6f944a25b:
+
+  Linux 5.18-rc4 (2022-04-24 14:51:22 -0700)
+
+are available in the Git repository at:
+
+  git@gitolite.kernel.org:pub/scm/linux/kernel/git/brauner/linux tags/fs.idmapped.v5.19
+
+for you to fetch changes up to e1bbcd277a53e08d619ffeec56c5c9287f2bf42f:
+
+  fs: hold writers when changing mount's idmapping (2022-05-12 10:12:00 +0200)
+
+Please consider pulling these changes from the signed fs.idmapped.v5.19 tag.
+
+Thanks!
+Christian
+
+----------------------------------------------------------------
+fs.idmapped.v5.19
+
+----------------------------------------------------------------
+Christian Brauner (1):
+      fs: hold writers when changing mount's idmapping
+
+Rodrigo Campos (1):
+      docs: Add small intro to idmap examples
+
+ Documentation/filesystems/idmappings.rst | 5 +++++
+ fs/namespace.c                           | 5 +++--
+ 2 files changed, 8 insertions(+), 2 deletions(-)

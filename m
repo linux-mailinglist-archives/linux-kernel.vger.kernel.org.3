@@ -2,127 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49155530706
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 03:13:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E567B530711
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 03:19:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242675AbiEWBNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 21:13:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42422 "EHLO
+        id S1345264AbiEWBTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 21:19:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233042AbiEWBNF (ORCPT
+        with ESMTP id S242395AbiEWBTf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 21:13:05 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08742377F9
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 18:13:04 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id r23so19186267wrr.2
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 18:13:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/H6FksuJpMo8QoRJSVxkZdGNLFn7WEdBNMVPknI1zCc=;
-        b=JUt8T6fbl6Th7kEeKaLn2/2ArJK5fVw0y9pO5ErspjNKXfJihcYko5H+uxiBaxBOEj
-         oWz5fZY2L+4+1EIDvUerBD26qp4SDlP+LP7PXib6LUclpa5BQ0ZUKppKAN9qlfupfmjw
-         +JTamby7bQYKRJKOtENFP+Su+AEFsjd03oRuBaGkYmSf4eyZZ1+ZxQgglSh2+H57x3AZ
-         gEiqdTaXwq2b6RAsWCG5woNaNJto8kcasufK+Oq3lFCDmC6LkAlBr97WS5PuXLXdjOtw
-         WSx8F17m2/2/DUx5UPuJXhh640klT1zkVKZSUQvNIqAsGEQq9G5ty6IZjMB2Yhw0uRpA
-         pWvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/H6FksuJpMo8QoRJSVxkZdGNLFn7WEdBNMVPknI1zCc=;
-        b=uyczi9xsL9Y8M7j6bJa59atidYIFnz4WCcrh+ALXzjYz6Y2lyQVELYDtX65ZxNOEgm
-         p1FtLhQh6HGpYZVQdM3fObMUeboLZYam+1Kq32BHYh3UfOiO0kk24EJx/FDw+bDA7rbu
-         6yknMEscK3odutlbGAKQI4B5vXMHqVXc9qdR6BobgzvgFHjg/6AeH8Dh13ZGpn8tQvZm
-         Qe70sFwWamas2ULghQg8t6jd28Gv/UeXUw5Bwf7iEut8E2Cso70i1/qGxxJc1Ea3loAW
-         5yg4mnV2AKQSwNlVrDVAj2KWpBmBBlXH9gM4FD8asBpCBxIOtMS/TlNDzzllgssG4zP1
-         x+gg==
-X-Gm-Message-State: AOAM530aaVANTsEyzT2Nh7IYuf7V+sG5MkmK2VJToFdm8YizxuILcuKm
-        28MEMcwhnloHA2r5kTHGukiWQMFMEIytl5ZAtN0=
-X-Google-Smtp-Source: ABdhPJwK/bhjXxNJEgSZV8LZfkfgLinCiFQdF/bzYTOp45Pz/r2/JOudOoBdnLt5nKBQvpO0C4Omhej8mXtuSfuOcrY=
-X-Received: by 2002:a5d:480c:0:b0:20e:6133:132 with SMTP id
- l12-20020a5d480c000000b0020e61330132mr17287906wrq.593.1653268382219; Sun, 22
- May 2022 18:13:02 -0700 (PDT)
+        Sun, 22 May 2022 21:19:35 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D758B63;
+        Sun, 22 May 2022 18:19:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653268774; x=1684804774;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=78kjYs7ZIDlhmHigjs7ovuAb6IYSuJcnZJtEKzQWmnM=;
+  b=JRCQU8GmuT/NtDyYCOZ7SvKDvVXxZd0bFI+v2jHCXSPLsLnNhkUi2HNq
+   MfOAbaVvjiijfLQvOAojxGavIhwMSsYzDjwWxSCqWU1ZtHKcp9kV6RMMl
+   nYFdxT1jp8swi4/tdnxGpdCiKijkHmWAQpwE8HG401gP5Zn9+dQsfA17A
+   CtcPBuewDglqQlpLcPW9m5pk1DPiULubyL3M1Or5FfyLuT9TT/K1UIEKu
+   Bm9OBkjSXgOWS7Fecm6l76hH3UhQkX+fYrTawhTLUJUKQEzvG+i7a/jJp
+   cZsstbpncPwIUBEre1HvnGTlozwB1j1APVuOzrsNYoaTO1FHFjorZOCzg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10355"; a="336126828"
+X-IronPort-AV: E=Sophos;i="5.91,245,1647327600"; 
+   d="scan'208";a="336126828"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2022 18:19:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,245,1647327600"; 
+   d="scan'208";a="629101669"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 22 May 2022 18:19:28 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nswjH-0000ms-Oz;
+        Mon, 23 May 2022 01:19:27 +0000
+Date:   Mon, 23 May 2022 09:18:32 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Judy Hsiao <judyhsiao@chromium.org>, Andy Gross <agross@kernel.org>
+Cc:     kbuild-all@lists.01.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Srini Kandagatla <srinivas.kandagatla@linaro.org>,
+        dianders@chromium.org, mka@chromium.org, cychiang@google.com,
+        judyhsiao@google.com, tzungbi@chromium.org, swboyd@chromium.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Judy Hsiao <judyhsiao@chromium.org>
+Subject: Re: [v1 3/3] arm64: dts: qcom: sc7280: include
+ sc7280-herobrine-audio-rt5682.dtsi in villager and herobrine-r1
+Message-ID: <202205230902.SjYN7dSW-lkp@intel.com>
+References: <20220519084119.675990-4-judyhsiao@chromium.org>
 MIME-Version: 1.0
-References: <20220512170008.1301613-1-xiehuan09@gmail.com> <20220512170008.1301613-3-xiehuan09@gmail.com>
- <20220522232216.bb1451fb6efc18c2bccc8d09@kernel.org>
-In-Reply-To: <20220522232216.bb1451fb6efc18c2bccc8d09@kernel.org>
-From:   Jeff Xie <xiehuan09@gmail.com>
-Date:   Mon, 23 May 2022 09:12:50 +0800
-Message-ID: <CAEr6+EAdrLg8ye=px4J30Kx6Rf_c43nrosyNJYWSNVdanCPRZw@mail.gmail.com>
-Subject: Re: [PATCH v10 2/4] trace/objtrace: Get the value of the object
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>, mingo@redhat.com,
-        Tom Zanussi <zanussi@kernel.org>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220519084119.675990-4-judyhsiao@chromium.org>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Masami,
+Hi Judy,
 
-On Sun, May 22, 2022 at 10:22 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
->
-> Hi Jeff,
->
-> On Fri, 13 May 2022 01:00:06 +0800
-> Jeff Xie <xiehuan09@gmail.com> wrote:
->
-> [...]
-> > @@ -175,9 +271,27 @@ trace_object_trigger(struct event_trigger_data *data,
-> >
-> >       field = obj_data->field;
-> >       memcpy(&obj, rec + field->offset, sizeof(obj));
-> > -     set_trace_object(obj, tr);
-> > +     /* set the offset from the special object and the type size of the value*/
-> > +     set_trace_object(obj, obj_data->obj_offset,
-> > +                     obj_data->obj_value_type_size, tr);
-> >  }
-> >
-> > +static const struct objtrace_fetch_type objtrace_fetch_types[] = {
-> > +     {"u8", 1},
-> > +     {"s8", 1},
-> > +     {"x8", 1},
-> > +     {"u16", 2},
-> > +     {"s16", 2},
-> > +     {"x16", 2},
-> > +     {"u32", 4},
-> > +     {"s32", 4},
-> > +     {"x32", 4},
-> > +     {"u64", 8},
-> > +     {"s64", 8},
-> > +     {"x64", 8},
->
-> Hmm, as far as I can see, you don't distinguish the prefix 'u','s','x'.
-> If so, please support only 'x' at this moment. kprobe events supports
-> those types, and it distinguishes the types when printing the logged
-> data. E.g. 's16' shows '-1' for 0xffff, but 'x16' shows '0xffff'.
-> You can add another patch to support such different types afterwards.
+Thank you for the patch! Yet something to improve:
 
-Thanks, I will add another patch to support it .
+[auto build test ERROR on soc/for-next]
+[cannot apply to robh/for-next arm/for-next arm64/for-next/core clk/clk-next kvmarm/next rockchip/for-next shawnguo/for-next keystone/next v5.18]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-> > +     {}
->
-> If this array is null terminated, please explictly do that, like
->
->         {NULL, 0},
->
-> for readability.
+url:    https://github.com/intel-lab-lkp/linux/commits/Judy-Hsiao/Add-dtsi-for-sc7280-boards-that-using-rt5682-codec/20220519-164227
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220523/202205230902.SjYN7dSW-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/7d7f6f8d1383ed458da5ba18090dd7ce30e1c96b
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Judy-Hsiao/Add-dtsi-for-sc7280-boards-that-using-rt5682-codec/20220519-164227
+        git checkout 7d7f6f8d1383ed458da5ba18090dd7ce30e1c96b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-Thank you for your reminder.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> Thank you,
->
-> --
-> Masami Hiramatsu (Google) <mhiramat@kernel.org>
+All errors (new ones prefixed by >>):
 
-Thanks,
-JeffXie
+   Error: arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi:615.1-13 Label or path mi2s1_data0 not found
+   Error: arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi:620.1-12 Label or path mi2s1_sclk not found
+   Error: arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi:625.1-10 Label or path mi2s1_ws not found
+>> Error: arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-rt5682.dtsi:29.29-30 syntax error
+   FATAL ERROR: Unable to parse input tree
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

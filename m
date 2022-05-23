@@ -2,213 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09F0F531076
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:20:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A46C6531018
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235692AbiEWMnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 08:43:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33404 "EHLO
+        id S235715AbiEWMnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 08:43:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235586AbiEWMnQ (ORCPT
+        with ESMTP id S235586AbiEWMnn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 08:43:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD2251591;
-        Mon, 23 May 2022 05:43:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BB0561328;
-        Mon, 23 May 2022 12:43:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E962C385AA;
-        Mon, 23 May 2022 12:43:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653309793;
-        bh=zW9uiCsuxykAehNhwe3g0mkRkT0Z9k/pe4p8dG5psYo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QIYM0jtVJAt0si8PuKuXgneadJOxBonjx7l5HW6pWIm4QE3rApReQmwxmL0lyzfHH
-         nsH2GK/DvSttv7UI/GYjghA2k7hJjx7xJaSb8xBlDqFFEZdZ3Hv8ocf0HybQKhlqe9
-         Jgg/RoGgSpH2XnnjAlKPnMxADKB85UISuS/EdD7GkEJXD0H1lq7HCU3L2+eYnt9rUi
-         6E/l8Er7Y0HVauv+WQKbuF7wGm/rHXVQKx5DPnn6v7yJg7ZMbqD0j1mmB8sxQOJi8N
-         RmrbvQ+svVaw9Tqx5hivxmyQQMtcL8IqR2JZr2vSD6I5J12iwrHY2+6ct5kE1XLWgs
-         S4JsP9/7obieA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 83FCD400B1; Mon, 23 May 2022 09:43:10 -0300 (-03)
-Date:   Mon, 23 May 2022 09:43:10 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Like Xu <likexu@tencent.com>, Alyssa Ross <hi@alyssa.is>,
-        Ian Rogers <irogers@google.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Adam Li <adamli@amperemail.onmicrosoft.com>,
-        Li Huafei <lihuafei1@huawei.com>,
-        German Gomez <german.gomez@arm.com>,
-        James Clark <james.clark@arm.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Ali Saidi <alisaidi@amazon.com>, Joe Mario <jmario@redhat.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 00/11] perf c2c: Support display for Arm64
-Message-ID: <YouBXricVunh1NhJ@kernel.org>
-References: <20220518055729.1869566-1-leo.yan@linaro.org>
- <YotJQwZVfBtrEyuI@krava>
+        Mon, 23 May 2022 08:43:43 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01olkn2054.outbound.protection.outlook.com [40.92.107.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9205C50E32;
+        Mon, 23 May 2022 05:43:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fYcwIDVWVFUJRHE0fG7NvDFkaQoANWTtLzQunOjW2tHh+Rkn8eZqEpU5Ln1XJi+Fd1hWtWlZn4CikLhCeuBIDjVbKdzRC5XF+zvYp55sRsBSd0Pujuy1nqnbjIttFdkUYGtu22aOiRBp4DfDhO23C+QNpuhT5+lwYw8mtfCOwCc0+vpPFM6sTLlH6i0IyHySmmQ9Kqaa2CgpZpfejaxb+0wtvQ9nJv69TZ0sBUnUTw/ejKmrzonz0a6NL1qLl+hOkiZyoOJBKVjQimhPFP4otcqiOIkEKs3rfIBrt9dKHFcEtKPYzyNClEKC/8DDzZ4i+P6qirc0qJhnI8lYk4aP0g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=G09Bp/zfflsXo4dEpBYIOw7hab95TLwL5QUyis5+1Jc=;
+ b=PYBJPmklffjjFk4VAtGQOneSAfvC9ebo0E/cdtLIJGztBKq4ToVS9MhCKUc7zaJT4nMOmy5Yxgjyb9LJf4UD62TucfWpr197jZahPjc2pMXhm+J4phEBmROfHfzaWWR58GfQsnWlK4YDW+exb+V5mbXtVU/DfjGoMJZC9D0mA1M42/1Lj0QerOREjXaKjACUJzkWZBrLpeDOX8ohpHG39Wf81Jf5B7IvJHx9/Goilm+Lm0DFKPpoVEbP33LT1/5GpbNl8jvx91rGBeR00ANJ76Z2N7zpBtbcUdD1VZMWC6ypi5QZgFsMbx/yuxy6jfP/XbwHLWmmGUUg7yT4eSHXBA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=G09Bp/zfflsXo4dEpBYIOw7hab95TLwL5QUyis5+1Jc=;
+ b=SQrghsSagLysv5PPlMPBDkOJcXYMCu9rQG6cg37kGnc/IPhVtuVVSZKHDn8xDmWsuNqzSWPGj3vPiFqRwQ9myGwkFKxkagWHw9UiM14dvgMl/JdifW1inA7itjvYMuavgaeZDMesA05tdIuL1vcICLLe+FEwbIDmOgD/aMYuYMMH0eU4N7/k+sLU+9SN0M8cT7kHTRWV4zj6MWmi81Eb9pzvXStU9rzD/0EbvlukVl6ku5jahsB0gWHWthpyybhyFw/dMS3IJiLtwRr/k/0azPb8Cfvh5iBDtfM/b/kjQs2IsN/nAugDAjQ5kqT/oT3LR4JgLcSKyga79w5ja8mN9g==
+Received: from HK0PR01MB2801.apcprd01.prod.exchangelabs.com
+ (2603:1096:203:95::22) by SG2PR01MB2013.apcprd01.prod.exchangelabs.com
+ (2603:1096:3:1c::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.22; Mon, 23 May
+ 2022 12:43:38 +0000
+Received: from HK0PR01MB2801.apcprd01.prod.exchangelabs.com
+ ([fe80::3022:ac4d:5d89:8c7c]) by HK0PR01MB2801.apcprd01.prod.exchangelabs.com
+ ([fe80::3022:ac4d:5d89:8c7c%5]) with mapi id 15.20.5273.023; Mon, 23 May 2022
+ 12:43:36 +0000
+Message-ID: <HK0PR01MB28018563577A29D4FE074964F8D49@HK0PR01MB2801.apcprd01.prod.exchangelabs.com>
+Subject: Re: [PATCH] USB / dwc3: remove the use of -ENOSYS from core.c
+From:   Kushagra Verma <kushagra765@outlook.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     balbi@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 23 May 2022 18:13:25 +0530
+In-Reply-To: <YodQRpxKA55g5Mt+@kroah.com>
+References: <HK0PR01MB280106E1D78EF51A5B8ED8BFF8CE9@HK0PR01MB2801.apcprd01.prod.exchangelabs.com>
+         <YoZpcqDCwoXIvI5q@kroah.com>
+         <HK0PR01MB2801E9A6A53F346BC3436845F8D39@HK0PR01MB2801.apcprd01.prod.exchangelabs.com>
+         <YodQRpxKA55g5Mt+@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1 
+X-TMN:  [scQ/4GRYEUTA/BfLb6HTVOC0+36bSr+WYtAkzP9rmJ52e2JF3pPlp8ksHnQvoi3U7mh9JbVcJSA=]
+X-ClientProxiedBy: SG3P274CA0013.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:be::25)
+ To HK0PR01MB2801.apcprd01.prod.exchangelabs.com (2603:1096:203:95::22)
+X-Microsoft-Original-Message-ID: <46f90c2aa3aad5d5fa80b00015d6f4b583753c0d.camel@outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YotJQwZVfBtrEyuI@krava>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 74af2da6-e3c9-4238-25c3-08da3cb9d8b7
+X-MS-TrafficTypeDiagnostic: SG2PR01MB2013:EE_
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: bfR9j5pw/QqauiFh/cr1xPnhpiALayth3owE8C457Ui+JSgOmicttIdegxJmMecNj/dAsc3MzbCet3PbleviZYVfEWEdhU87K8b/LBe8fo2BdhC/G3wcYgxb+jvCxKpTyyRp5yxMjuCF1oGbX4cu7kAJ3ejp5Qhv/SZvtJCjIsyyjIXGFJSORW8LDbgVnXaOCbLHjwTWd/klaxCcooRIZl+2x4cuzic0fHnXMaA2cRh7qxNRynJFOueDWGadB/pQ8Sqx3DV0MNgbhIzmkI3Zr6r3LQGUmhws6Uj1V8vYuMsCehoJTfw6kdQCMaL3ux3NF73zl3RIJDnGDJp4aUQWXlpWVuI2Xcyu4bnzfeHRShRBGDFG9BH6xAeqEIRWetqhij1meiqcjY9+CeqC2qPoVPoExdnjj13rtN0TnsaKTgYAhNYqmz3qz9BrGtJ0hrmx/QqrR66ZfTrjJr53jNvpTqO5DHRFuTnZOUCYWcFYlAwWbi6xiP6y1wSiiPRffx/NUaaTvTHPPNuqxID33/eG9zp6bVTxJL2NdUabs8VqUI5qmPiH6ZTNkb4s7gND9iw2yIU6WYqT+KKZhcoRRucFYw==
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MTZHamhXVHp6KzBIMVBNdVhnS1VOQnAxOWdYcFBWUVBHcEtDNmpNWE5Cc0M2?=
+ =?utf-8?B?S3JiNmtkRkI0MDkxcmlSVCtJZUdmeUowTlJRdTQvSFhNb0NXdHljSDhhbllv?=
+ =?utf-8?B?WXJNRXd1UkhzWmM1UVlaY3pkd0x0N0x2aWZBbzdkK3AydDhKYlY0OWJVa0NJ?=
+ =?utf-8?B?dy9XeUlDbWVKMGM0ek1wM0dHKzRQYkRsSklZUjFGaDBkMzRxNVZQdmNkdVNw?=
+ =?utf-8?B?MFl4eWE2d0Q4RjVNazJ1aWpmTFdoNTRGeVdMNGFIY2lLNFM3OW1lRjBGVzFw?=
+ =?utf-8?B?STdud3JzdEpXbzZOMXVBL2o2cUJMVkNoanloU0pQYTh6MjZGZXJ4RzEvZmVs?=
+ =?utf-8?B?Z1A1SXdxaHMySGQ1eFIrN1k0ay8xWEFtT09ueTVJOHpka25lSUlQNEFxZnhU?=
+ =?utf-8?B?aGdvZFRLVlNYSk5ZdHRqWW9hcFV0RWtnK2ZRT3VlUGt3Q3ZtVjlJWEY4ZTEw?=
+ =?utf-8?B?dWtIRDBSeFFiUm5KVFhnemRNSkQ0bmhDc0tBdW5ZZ2NqdHNsdS8xcGxiNDZy?=
+ =?utf-8?B?R3BFKzFjTmZ6SzR1eDBIVHRKZTVwRExCejY4dHZ2UnJ1MWdabXRxeFZxcEJN?=
+ =?utf-8?B?NnYySW9rcUtId2lKZnA5SGg4VFJjNzJDQXgrL0g0ck9QWlpuWnZtZW5DNytL?=
+ =?utf-8?B?czNKZzZwbGEwQkRwSSt2bGxhRVhPNGlheEx4Kyt5aFlRNDdUTWNmK2JoV0JL?=
+ =?utf-8?B?Smg5YzBZUnN1Vm00NWl0S0dVbVRRQU5uMVpkbWFuNVZJdDRaVStsd2pscGRo?=
+ =?utf-8?B?Y3NOd280RW90ZWdMdDFoUWErTG0xTWZBUzhFS0hiL1RFNUs5SUxJWkV4aDNQ?=
+ =?utf-8?B?U2J3b1I3N1k0S2JOSkcyeFJ0QWpLb3FEOUhRUUQ0OVNac2FWazRuSjg3bGY3?=
+ =?utf-8?B?K25hTHdPcXRBTjFwNDBjd0U0dUtjN01WMEtDb0VybkpnbG9IOHVhdHNJNmE1?=
+ =?utf-8?B?ZmFqSTJodjJIeU1oNHV4MTVseng1STRGUlBRVlVwYm5Sa2NjNWZnNjNuanB0?=
+ =?utf-8?B?SHBmeWtGNG0vbHRLSjNGZk1qTGdhbzJEejJ3TjR0SVJDamRIWEpUdFdmTTcy?=
+ =?utf-8?B?T1lISWVYQmxadDR4K1lJd05uSXovWk9aVzhoWms4RzRaMHl1dXlrZVh3VjQ4?=
+ =?utf-8?B?NzhtaUcyYjJ1Vk5RdTNqWTdSSFVVTDlkOWpNNDhoZHp3cm5YOExaME1xaTlK?=
+ =?utf-8?B?RnZRZzhDOXFVZWQwMWZXc05ua0xKWUlpSjNGOUVSZ1l1VWxOQ21xa0hyYWFX?=
+ =?utf-8?B?Yy9OT09qMXF4dnhiMndpckZ4VWtjQloxQ1hqbVJvZ3h2SHBtaG1YRU9zNXc0?=
+ =?utf-8?B?Zy80bE5DN0dBMmhVYjlvaDAwSjZZcFduM2JwRnZYU3ZGTEN1anVXQmw0YlNI?=
+ =?utf-8?B?VWk0cjZmVWhPbGRzUzJYb3ZHcUNodjcvWGVrZHJOa1Jsb052dzA1R1Bqdkhx?=
+ =?utf-8?B?Q3dtWHFqb1dHZHFQRkpvMWdDY2NlME9hekFiOW5ROFpRcUV6dW1ZMlRPbUE3?=
+ =?utf-8?B?bWxEdzhTUXpXVENXT2dMVldvL2VtdE44bWRkTENwY3lFZGNkLzd2NXJMWXg5?=
+ =?utf-8?B?YTduS1lQdDdRZlFCNVBXZ2JQT3NjeDRYeE1aQVV3UStYS0pwaU02WmgvYktK?=
+ =?utf-8?B?ZzZpVlFtMnh4dmJ1NDQvcXVSVEZIL0FLay9ZWTJYWE1vanhxcGtLODRZY2hB?=
+ =?utf-8?B?eCtOSy9RZ3NyaXBFVG5GeXBpdmlGWWI1UU5IWGQ4VUVsQ0t4RURhbGV0V0FV?=
+ =?utf-8?B?Vk8xUFplWGdMUWdwMmUyS1VUNTBFanlvRVF4UjF6YzVXOXlJTWxsd00vLzlz?=
+ =?utf-8?B?QUZUQWtiTWY4ZVVqOHdVekcxdm5ERzBpNkl5a1N1YTBJVml2NE9rVVpZUGda?=
+ =?utf-8?B?SEdocER5TmNXSFNSUTVKdFhQSWxNbFpWNkZ3d0pCOG5ReXhZMDl4cWJvaUtt?=
+ =?utf-8?B?eE1yeWplb0syb1RhbldMTW1aYm5XakdhZTFCd1BOTlFaVnZRMXpKYlZORUtx?=
+ =?utf-8?B?cENxcFpPeXlJR25zaEh1dHNCNytDV0JJd2l1TCtQWmFnRUY4YkVIQW44V0Ja?=
+ =?utf-8?Q?xulOlC?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 74af2da6-e3c9-4238-25c3-08da3cb9d8b7
+X-MS-Exchange-CrossTenant-AuthSource: HK0PR01MB2801.apcprd01.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2022 12:43:35.5405
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR01MB2013
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, May 23, 2022 at 10:43:47AM +0200, Jiri Olsa escreveu:
-> On Wed, May 18, 2022 at 01:57:18PM +0800, Leo Yan wrote:
-> > Arm64 Neoverse CPUs supports data source in Arm SPE trace, this allows
-> > us to detect cache line contention and transfers.
-> > 
-> > Unlike x86 architecture, Arm SPE trace data cannot provide 'HITM'
-> > snooping flag, Ali Said has a patch set v9 "perf: arm-spe: Decode SPE
-> > source and use for perf c2c" [1] which introduces 'peer' flag and
-> > synthesizes memory samples with this flag.
-> > 
-> > Based on patch set [1], this patch set is to finish the second half work
-> > to consume the 'peer' flag in perf c2c tool, it adds an extra display
-> > 'peer' mode.
-
-Ok, I'll look at the base patch set...
-
-> > Patches 01, 02 and 03 are to support 'N/A' metrics for store operations.
-> > 
-> > Patches 04 and 05 adds statistics and dimensions for memory samples with
-> > peer flag.
-> > 
-> > Patches 06, 07, 08 are for refactoring, it refines the code with more
-> > general naming so this can allow us to easier to extend display modes
-> > but not strictly bound to HITM tags.
-> > 
-> > Patches 09, 10 and 11 are to extend display 'peer' mode, it also updates
-> > the document and also changes to use 'peer' mode as default mode on
-> > Arm64 arches.
-> > 
-> > This patch set has been verified for both x86 and Arm64 memory samples.
-> > 
-> > The display result with x86 memory samples:
-> > 
-> >   =================================================
-> >              Shared Data Cache Line Table          
-> >   =================================================
-> >   #
-> >   #        ----------- Cacheline ----------      Tot  ------- Load Hitm -------    Snoop    Total    Total    Total  --------- Stores --------  ----- Core Load Hit -----  - LLC Load Hit --  - RMT Load Hit --  --- Load Dram ----
-> >   # Index             Address  Node  PA cnt     Hitm    Total  LclHitm  RmtHitm     Peer  records    Loads   Stores    L1Hit   L1Miss      N/A       FB       L1       L2    LclHit  LclHitm    RmtHit  RmtHitm       Lcl       Rmt
-> >   # .....  ..................  ....  ......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  ........  .......  ........  .......  ........  ........
-> >   #
-> >         0      0x55c8971f0080     0    1967   66.14%      252      252        0        0     6044     3550     2494     2024      470        0      528     2672       78        20      252         0        0         0         0
-> >         1      0x55c8971f00c0     0       1   33.86%      129      129        0        0      914      914        0        0        0        0      272      374       52        87      129         0        0         0         0
-> > 
-> >   =================================================
-> >         Shared Cache Line Distribution Pareto      
-> >   =================================================
-> >   #
-> >   #        ----- HITM -----    Snoop  ------- Store Refs ------  --------- Data address ---------                      --------------- cycles ---------------    Total       cpu                                     Shared                               
-> >   #   Num  RmtHitm  LclHitm     Peer   L1 Hit  L1 Miss      N/A              Offset  Node  PA cnt        Code address  rmt hitm  lcl hitm      load      peer  records       cnt                  Symbol             Object              Source:Line  Node
-> >   # .....  .......  .......  .......  .......  .......  .......  ..................  ....  ......  ..................  ........  ........  ........  ........  .......  ........  ......................  .................  .......................  ....
-> >   #
-> >     -------------------------------------------------------------------------------
-> >         0        0      252        0     2024      470        0      0x55c8971f0080
-> >     -------------------------------------------------------------------------------
-> >              0.00%   12.30%    0.00%    0.00%    0.00%    0.00%                 0x0     0       1      0x55c8971ed3e9         0      1313       863         0     1222         3  [.] 0x00000000000013e9  false_sharing.exe  false_sharing.exe[13e9]   0
-> >              0.00%    0.79%    0.00%   90.51%    0.00%    0.00%                 0x0     0       1      0x55c8971ed3e2         0      1800       878         0     3029         3  [.] 0x00000000000013e2  false_sharing.exe  false_sharing.exe[13e2]   0
-> >              0.00%    0.00%    0.00%    9.49%  100.00%    0.00%                 0x0     0       1      0x55c8971ed3f4         0         0         0         0      662         3  [.] 0x00000000000013f4  false_sharing.exe  false_sharing.exe[13f4]   0
-> >              0.00%   86.90%    0.00%    0.00%    0.00%    0.00%                0x20     0       1      0x55c8971ed447         0       141       103         0     1131         2  [.] 0x0000000000001447  false_sharing.exe  false_sharing.exe[1447]   0
-> > 
-> >     -------------------------------------------------------------------------------
-> >         1        0      129        0        0        0        0      0x55c8971f00c0
-> >     -------------------------------------------------------------------------------
-> >              0.00%  100.00%    0.00%    0.00%    0.00%    0.00%                0x20     0       1      0x55c8971ed455         0        88        94         0      914         2  [.] 0x0000000000001455  false_sharing.exe  false_sharing.exe[1455]   0
-> > 
-> > 
-> > The display result with Arm SPE memory samples:
-> > 
-> >   =================================================
-> >              Shared Data Cache Line Table          
-> >   =================================================
-> >   #
-> >   #        ----------- Cacheline ----------    Snoop  ------- Load Hitm -------    Snoop    Total    Total    Total  --------- Stores --------  ----- Core Load Hit -----  - LLC Load Hit --  - RMT Load Hit --  --- Load Dram ----
-> >   # Index             Address  Node  PA cnt     Peer    Total  LclHitm  RmtHitm     Peer  records    Loads   Stores    L1Hit   L1Miss      N/A       FB       L1       L2    LclHit  LclHitm    RmtHit  RmtHitm       Lcl       Rmt
-> >   # .....  ..................  ....  ......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  ........  .......  ........  .......  ........  ........
-> >   #
-> >         0      0xaaaac17d6000   N/A       0  100.00%        0        0        0       99    18851    18851        0        0        0        0        0    18752        0        99        0         0        0         0         0
-> > 
-> >   =================================================
-> >         Shared Cache Line Distribution Pareto      
-> >   =================================================
-> >   #
-> >   #        ----- HITM -----    Snoop  ------- Store Refs ------  --------- Data address ---------                      --------------- cycles ---------------    Total       cpu                                    Shared                       
-> >   #   Num  RmtHitm  LclHitm     Peer   L1 Hit  L1 Miss      N/A              Offset  Node  PA cnt        Code address  rmt hitm  lcl hitm      load      peer  records       cnt                  Symbol            Object      Source:Line  Node
-> >   # .....  .......  .......  .......  .......  .......  .......  ..................  ....  ......  ..................  ........  ........  ........  ........  .......  ........  ......................  ................  ...............  ....
-> >   #
-> >     -------------------------------------------------------------------------------
-> >         0        0        0       99        0        0        0      0xaaaac17d6000
-> >     -------------------------------------------------------------------------------
-> >              0.00%    0.00%    6.06%    0.00%    0.00%    0.00%                0x20   N/A       0      0xaaaac17c25ac         0         0        43       375    18469         2  [.] 0x00000000000025ac  memstress         memstress[25ac]   0
-> >              0.00%    0.00%   93.94%    0.00%    0.00%    0.00%                0x29   N/A       0      0xaaaac17c3e88         0         0       173       180      135         2  [.] 0x0000000000003e88  memstress         memstress[3e88]   0
-> > 
-> > [1] https://lore.kernel.org/lkml/20220517020326.18580-1-alisaidi@amazon.com/
-> > 
-> > Changes from v2:
-> > * Updated patch 04 to account metrics for both cache level and ld_peer
-> >   for PEER flag;
-> > * Updated document for metric 'rmt_hit' which is accounted for all
-> >   remote accesses (include remote DRAM and any upward caches).
-> 
-> LGTM
-> 
-> Acked-by: Jiri Olsa <jolsa@kernel.org>
-> 
+On Fri, 2022-05-20 at 10:24 +0200, Greg KH wrote:
+> On Fri, May 20, 2022 at 12:16:29PM +0530, Kushagra Verma wrote:
+> > On Thu, 2022-05-19 at 17:59 +0200, Greg KH wrote:
+> > > On Tue, May 17, 2022 at 08:22:00PM +0530, Kushagra Verma wrote:
+> > > > This patch removes the use of -ENOSYS as it is used when users try
+> > > > to call a
+> > > > syscall that doesn't exist. So, we don't need to check if 'ret =3D=
+=3D -
+> > > > ENOSYS'.
+> > >=20
+> > > ENOSYS is also used internally in the kernel for other things.
+> > >=20
+> > > >=20
+> > > > Signed-off-by: Kushagra Verma <kushagra765@outlook.com>
+> > > > ---
+> > > > =C2=A0drivers/usb/dwc3/core.c | 4 ++--
+> > > > =C2=A01 file changed, 2 insertions(+), 2 deletions(-)
+> > > >=20
+> > > > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > > > index c78205c5e19f..3c1a877d5183 100644
+> > > > --- a/drivers/usb/dwc3/core.c
+> > > > +++ b/drivers/usb/dwc3/core.c
+> > > > @@ -1283,7 +1283,7 @@ static int dwc3_core_get_phy(struct dwc3
+> > > > *dwc)
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dwc->usb2_generic_p=
+hy =3D devm_phy_get(dev, "usb2-phy");
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (IS_ERR(dwc->usb=
+2_generic_phy)) {
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret =3D PTR_ERR(dwc->usb2_generic_phy);
+> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0if (ret =3D=3D -ENOSYS || ret =3D=3D -ENODEV)
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0if (ret =3D=3D -ENODEV)
+> > >=20
+> > > Did you validate that no callers can ever set this to ENOSYS?
+> > Yes, I think no callers should ever set ret to ENOSYS unless it comes u=
+nder the other things ENOSYS is used for.
+>=20
+> Please audit the code to verify this and document it in the changelog
+> text when you resend this.
+I have audited the code and none of the callers return -ENOSYS. The devm_ph=
+y_get function calls phy_get to
+lookup and obtain a reference to a phy. This function returns the phy drive=
+r or -ENODEV if there is no such
+phy (according to the comments above it).
+>=20
+> > > Why was this added in the first place?=C2=A0 What commit added it?
+> > This was added by commit 57303488cd37d ("usb: dwc3: adapt dwc3 core to =
+use Generic PHY Framework").
+>=20
+> Great, please also include that information.
+Ok.
+>=20
 > thanks,
-> jirka
-> 
-> > 
-> > Changes from v1:
-> > * Updated patches 01, 02 and 03 to support 'N/A' metrics for store
-> >   operations, so can align with the patch set [1] for store samples.
-> > 
-> > 
-> > Leo Yan (11):
-> >   perf mem: Add stats for store operation with no available memory level
-> >   perf c2c: Add dimensions for 'N/A' metrics of store operation
-> >   perf c2c: Update documentation for store metric 'N/A'
-> >   perf mem: Add statistics for peer snooping
-> >   perf c2c: Add dimensions for peer load operations
-> >   perf c2c: Use explicit names for display macros
-> >   perf c2c: Rename dimension from 'percent_hitm' to
-> >     'percent_costly_snoop'
-> >   perf c2c: Refactor node header
-> >   perf c2c: Sort on peer snooping for load operations
-> >   perf c2c: Update documentation for new display option 'peer'
-> >   perf c2c: Use 'peer' as default display for Arm64
-> > 
-> >  tools/perf/Documentation/perf-c2c.txt |  34 ++-
-> >  tools/perf/builtin-c2c.c              | 357 ++++++++++++++++++++------
-> >  tools/perf/util/mem-events.c          |  25 +-
-> >  tools/perf/util/mem-events.h          |   2 +
-> >  4 files changed, 331 insertions(+), 87 deletions(-)
-> > 
-> > -- 
-> > 2.25.1
-> > 
+>=20
+> greg k-h
 
--- 
+Thanks,
 
-- Arnaldo
+Kushagra

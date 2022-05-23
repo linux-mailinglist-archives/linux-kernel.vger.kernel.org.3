@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2A64531AE3
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 860E2531C40
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:57:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242099AbiEWRb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:31:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49260 "EHLO
+        id S242559AbiEWSAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 14:00:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241541AbiEWRW1 (ORCPT
+        with ESMTP id S241037AbiEWRcl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:22:27 -0400
+        Mon, 23 May 2022 13:32:41 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3758671D83;
-        Mon, 23 May 2022 10:19:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF8077F05;
+        Mon, 23 May 2022 10:27:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D4F61B81217;
-        Mon, 23 May 2022 17:17:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10960C385A9;
-        Mon, 23 May 2022 17:17:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EF3A6B81202;
+        Mon, 23 May 2022 17:27:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33E3BC385A9;
+        Mon, 23 May 2022 17:27:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326252;
-        bh=AbRLW6KpKD4tIN4tfMldWC0Y7qjHWvaSMDBU+t7g3Ps=;
+        s=korg; t=1653326841;
+        bh=/Vp/mTzC2zQzuZMpQFRBDEVKDe4ulklZbwulRP4GhAk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dXDwqoiIyvKzyTVX48Cz/PgqwqUb/rECvZeWH8YZd2dfxoYxR4j+15nvzrAeDT78V
-         j0dZvatb1IgDJ0605Has5xodJL4S3kgOc3dsNQa+WQQoRHoxZlZkmNcFxdVgojSZ0N
-         MqWLpboVMJbnedetQLDySa+jY6+HBPwl1+T8ef6g=
+        b=bboBFDnCpCarytOdCTzLF9/gbSHRQsdVFDEI2xXaqd7ehBNs6ALUuuI4b1DsQiN4b
+         nP7qzTn+LEtlHsWio9FwyNp0REQGeoPdIkRYF/ZWcUWkc5kGXNbj0J2qoBKBtKKAPo
+         Urwnhx1CJ4zGs4o40gSLZZwld+TL+Kv0niZmkjPY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zheng Yongjun <zhengyongjun3@huawei.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        stable@vger.kernel.org, Alex Elder <elder@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 023/132] Input: stmfts - fix reference leak in stmfts_input_open
-Date:   Mon, 23 May 2022 19:03:52 +0200
-Message-Id: <20220523165827.357141933@linuxfoundation.org>
+Subject: [PATCH 5.17 076/158] net: ipa: certain dropped packets arent accounted for
+Date:   Mon, 23 May 2022 19:03:53 +0200
+Message-Id: <20220523165843.595929416@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
-References: <20220523165823.492309987@linuxfoundation.org>
+In-Reply-To: <20220523165830.581652127@linuxfoundation.org>
+References: <20220523165830.581652127@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,51 +55,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zheng Yongjun <zhengyongjun3@huawei.com>
+From: Alex Elder <elder@linaro.org>
 
-[ Upstream commit 26623eea0da3476446909af96c980768df07bbd9 ]
+[ Upstream commit 30b338ff7998b6ed7a90815870cd5db725f87168 ]
 
-pm_runtime_get_sync() will increment pm usage counter even it
-failed. Forgetting to call pm_runtime_put_noidle will result
-in reference leak in stmfts_input_open, so we should fix it.
+If an RX endpoint receives packets containing status headers, and a
+packet in the buffer is not dropped, ipa_endpoint_skb_copy() is
+responsible for wrapping the packet data in an SKB and forwarding it
+to ipa_modem_skb_rx() for further processing.
 
-Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
-Link: https://lore.kernel.org/r/20220317131604.53538-1-zhengyongjun3@huawei.com
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+If ipa_endpoint_skb_copy() gets a null pointer from build_skb(), it
+just returns early.  But in the process it doesn't record that as a
+dropped packet in the network device statistics.
+
+Instead, call ipa_modem_skb_rx() whether or not the SKB pointer is
+NULL; that function ensures the statistics are properly updated.
+
+Fixes: 1b65bbcc9a710 ("net: ipa: skip SKB copy if no netdev")
+Signed-off-by: Alex Elder <elder@linaro.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/input/touchscreen/stmfts.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/net/ipa/ipa_endpoint.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/input/touchscreen/stmfts.c b/drivers/input/touchscreen/stmfts.c
-index bc11203c9cf7..72e0b767e1ba 100644
---- a/drivers/input/touchscreen/stmfts.c
-+++ b/drivers/input/touchscreen/stmfts.c
-@@ -339,11 +339,11 @@ static int stmfts_input_open(struct input_dev *dev)
+diff --git a/drivers/net/ipa/ipa_endpoint.c b/drivers/net/ipa/ipa_endpoint.c
+index 68291a3efd04..2ecfc17544a6 100644
+--- a/drivers/net/ipa/ipa_endpoint.c
++++ b/drivers/net/ipa/ipa_endpoint.c
+@@ -1169,13 +1169,12 @@ static void ipa_endpoint_skb_copy(struct ipa_endpoint *endpoint,
+ 		return;
  
- 	err = pm_runtime_get_sync(&sdata->client->dev);
- 	if (err < 0)
--		return err;
-+		goto out;
+ 	skb = __dev_alloc_skb(len, GFP_ATOMIC);
+-	if (!skb)
+-		return;
+-
+-	/* Copy the data into the socket buffer and receive it */
+-	skb_put(skb, len);
+-	memcpy(skb->data, data, len);
+-	skb->truesize += extra;
++	if (skb) {
++		/* Copy the data into the socket buffer and receive it */
++		skb_put(skb, len);
++		memcpy(skb->data, data, len);
++		skb->truesize += extra;
++	}
  
- 	err = i2c_smbus_write_byte(sdata->client, STMFTS_MS_MT_SENSE_ON);
- 	if (err)
--		return err;
-+		goto out;
- 
- 	mutex_lock(&sdata->mutex);
- 	sdata->running = true;
-@@ -366,7 +366,9 @@ static int stmfts_input_open(struct input_dev *dev)
- 				 "failed to enable touchkey\n");
- 	}
- 
--	return 0;
-+out:
-+	pm_runtime_put_noidle(&sdata->client->dev);
-+	return err;
+ 	ipa_modem_skb_rx(endpoint->netdev, skb);
  }
- 
- static void stmfts_input_close(struct input_dev *dev)
 -- 
 2.35.1
 

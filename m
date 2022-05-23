@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 305ED53182F
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:53:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DBC3531A69
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:55:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242080AbiEWRgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:36:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42924 "EHLO
+        id S243545AbiEWSP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 14:15:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241109AbiEWR0S (ORCPT
+        with ESMTP id S244836AbiEWRwj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:26:18 -0400
+        Mon, 23 May 2022 13:52:39 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9134864BFD;
-        Mon, 23 May 2022 10:21:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1DA373552;
+        Mon, 23 May 2022 10:41:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 516FCB81205;
-        Mon, 23 May 2022 17:20:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5F03C385A9;
-        Mon, 23 May 2022 17:19:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EC6AEB811A1;
+        Mon, 23 May 2022 17:29:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44AB5C385A9;
+        Mon, 23 May 2022 17:29:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326400;
-        bh=Hu1SSyqCQVTMebo6dKa24xARffRVVzp7BTC3VU3XQ8A=;
+        s=korg; t=1653326991;
+        bh=Kbw3Xnbq7oGP6QE0nQJ/oVo/wLpyBdbsLPrTHZNtse0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RS54nRweIcEhfw/d5+k3b6S50eAEDb6kSOCnhm59awY4i1K285oCxWgP/IdbxwnXC
-         EX/ec5vWuZgXyOpjGKAA6nQLYykygh7xAAWREdw2Eb8ul20RC6JWcsj4rMYiXIVm59
-         LZmA0+OA3bbimLzSSaj0kunf38EyO2jRHWERcmwY=
+        b=ffzRN2h4BW52jvgtSJf212PAk9s/9hP51zSwecS+jFWAgBUTK62Q7PnDpAPx388HJ
+         hNVB97l1OxOF9+KI5GcNXJqoBCyL9c67P4aJhZ/WPn0Wx6GgBVJQuUF/YisjkDqLzQ
+         G60mvOcQqiHiVkNsLG+kM+ScG3ClJLWmh2s2LsKY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 069/132] ALSA: hda - fix unused Realtek function when PM is not enabled
-Date:   Mon, 23 May 2022 19:04:38 +0200
-Message-Id: <20220523165834.614670670@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 122/158] riscv: dts: sifive: fu540-c000: align dma node name with dtschema
+Date:   Mon, 23 May 2022 19:04:39 +0200
+Message-Id: <20220523165850.970191315@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
-References: <20220523165823.492309987@linuxfoundation.org>
+In-Reply-To: <20220523165830.581652127@linuxfoundation.org>
+References: <20220523165830.581652127@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,61 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-[ Upstream commit c3d9ca93f1e3bd3d1adfc4479a12c82fed424c87 ]
+[ Upstream commit b17410182b6f98191fbf7f42d3b4a78512769d29 ]
 
-When CONFIG_PM is not enabled, alc_shutup() is not needed,
-so move it inside the #ifdef CONFIG_PM guard.
-Also drop some contiguous #endif / #ifdef CONFIG_PM for simplicity.
+Fixes dtbs_check warnings like:
 
-Fixes this build warning:
-sound/pci/hda/patch_realtek.c:886:20: warning: unused function 'alc_shutup'
+  dma@3000000: $nodename:0: 'dma@3000000' does not match '^dma-controller(@.*)?$'
 
-Fixes: 08c189f2c552 ("ALSA: hda - Use generic parser codes for Realtek driver")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/r/20220430193318.29024-1-rdunlap@infradead.org
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Link: https://lore.kernel.org/r/20220407193856.18223-1-krzysztof.kozlowski@linaro.org
+Fixes: c5ab54e9945b ("riscv: dts: add support for PDMA device of HiFive Unleashed Rev A00")
+Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/pci/hda/patch_realtek.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ arch/riscv/boot/dts/sifive/fu540-c000.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-index 1880e30341a0..040825ea9a08 100644
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -932,6 +932,9 @@ static int alc_init(struct hda_codec *codec)
- 	return 0;
- }
- 
-+#define alc_free	snd_hda_gen_free
-+
-+#ifdef CONFIG_PM
- static inline void alc_shutup(struct hda_codec *codec)
- {
- 	struct alc_spec *spec = codec->spec;
-@@ -945,9 +948,6 @@ static inline void alc_shutup(struct hda_codec *codec)
- 		alc_shutup_pins(codec);
- }
- 
--#define alc_free	snd_hda_gen_free
--
--#ifdef CONFIG_PM
- static void alc_power_eapd(struct hda_codec *codec)
- {
- 	alc_auto_setup_eapd(codec, false);
-@@ -961,9 +961,7 @@ static int alc_suspend(struct hda_codec *codec)
- 		spec->power_hook(codec);
- 	return 0;
- }
--#endif
- 
--#ifdef CONFIG_PM
- static int alc_resume(struct hda_codec *codec)
- {
- 	struct alc_spec *spec = codec->spec;
+diff --git a/arch/riscv/boot/dts/sifive/fu540-c000.dtsi b/arch/riscv/boot/dts/sifive/fu540-c000.dtsi
+index 3eef52b1a59b..fd93fdadd28c 100644
+--- a/arch/riscv/boot/dts/sifive/fu540-c000.dtsi
++++ b/arch/riscv/boot/dts/sifive/fu540-c000.dtsi
+@@ -167,7 +167,7 @@ uart0: serial@10010000 {
+ 			clocks = <&prci PRCI_CLK_TLCLK>;
+ 			status = "disabled";
+ 		};
+-		dma: dma@3000000 {
++		dma: dma-controller@3000000 {
+ 			compatible = "sifive,fu540-c000-pdma";
+ 			reg = <0x0 0x3000000 0x0 0x8000>;
+ 			interrupt-parent = <&plic0>;
 -- 
 2.35.1
 

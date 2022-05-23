@@ -2,64 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D58A531241
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:22:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7010D5314B8
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:26:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237677AbiEWPHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 11:07:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50436 "EHLO
+        id S237654AbiEWPIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 11:08:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237618AbiEWPHp (ORCPT
+        with ESMTP id S237628AbiEWPIF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 11:07:45 -0400
-Received: from corp-front09-corp.i.nease.net (corp-front09-corp.i.nease.net [59.111.134.159])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CABE04EDED;
-        Mon, 23 May 2022 08:07:41 -0700 (PDT)
+        Mon, 23 May 2022 11:08:05 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1D475C74D
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 08:08:00 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id u3so21841132wrg.3
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 08:08:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=corp.netease.com; s=s210401; h=Received:From:To:Cc:Subject:
-        Date:Message-Id:MIME-Version:Content-Transfer-Encoding; bh=gASKp
-        OtgMj1BfL6/AQe7tCq6BG4t75k/9AW8Xenxz00=; b=c1QSzGY3SqO9iBPXUvARZ
-        DkalgaRs4AUN/V46FxOpWz15GOc2aS41M0at2ZVVPFnFtiDpvBakMpgpFdEr2B+z
-        t+xRsPSBi/DccGjktecbx7thMFIjLOoU22jWfZbM6tKuwxrsRMu/AW+v6zMnI/y8
-        lt3Nm6SstH/cDeJ6Q458og=
-Received: from pubt1-k8s74.yq.163.org (unknown [115.238.122.38])
-        by corp-front09-corp.i.nease.net (Coremail) with SMTP id nxDICgAXGV4to4tiArlgAA--.20394S2;
-        Mon, 23 May 2022 23:07:26 +0800 (HKT)
-From:   liuyacan@corp.netease.com
-To:     kgraul@linux.ibm.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com
-Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ubraun@linux.ibm.com,
-        liuyacan <liuyacan@corp.netease.com>
-Subject: [PATCH net] Revert "net/smc: fix listen processing for SMC-Rv2"
-Date:   Mon, 23 May 2022 23:07:09 +0800
-Message-Id: <20220523150709.306731-1-liuyacan@corp.netease.com>
-X-Mailer: git-send-email 2.20.1
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Ys4XdVscv5VNlcHHCYpLwgVZ+X8P1XO1ISLGENGjWOQ=;
+        b=BjX2AvhJL3a02i3+eGBxYQWW6FMsRR6Yrw5epDlnSmm4uVdIfmQG/bBKQ5CXnKJehC
+         gtN1AFqiK55TTf7VuHoIvbUZl3DuWzeGARd+XPNlKkTp4JPYZlb6SRbke/i8x3o0uHHU
+         +2EXNbvx2pVc1LY/DNgXEFgUMDFGP3IqFiOKR82Q0bimMXPKgTkPBFqWW27RGtupMw00
+         mZs6wkMjwJc+2Xs5uLu1CMxKi3ocrm5uTL4olmG7jKmysExazGkgyfYQv/Fd70CQhiyf
+         /NrIXUtXCURW8JEtBCkUAC2dxCuo2XnWQaVXRQflZPuYCtUSqXaSlHrUaE77P6Zi/U3t
+         Kkkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ys4XdVscv5VNlcHHCYpLwgVZ+X8P1XO1ISLGENGjWOQ=;
+        b=Vh6Kcw5axyWc6WEuDbPe07k2kp90q13I9+YLlRmjWUBW8+51HhzO5cJ/lHCVPKzhF+
+         ypnQFkC+0XtThdXTiI9f9DOAaEQjk3o/G8YV8VijzpWZKfF+rvX2y3T3V8l7HQh0eetJ
+         KWUEYaV8Sr3jfyK0OrpC8B40ebC1WzUASKGsZyrvPaYgCaQZTjgI678XjY1dCrb2MwFZ
+         Prb6b+KyrEActWPrQ93pK4n9BepsrfeWV6xTIsrllNhGnpZFvggj7afqrzCxubNfdswv
+         8NgQxdXxdVhfGMR+Yd9prGcOLBa0UZKt8bw/kK3Ag8qrrh5m2eQr1zQECDJJJ5eHUoJQ
+         SvWA==
+X-Gm-Message-State: AOAM530m7VKkHy/T858alOYf4OgF3jC8sGJw0OsfFCL3uvcV4YiyL/Rv
+        8/LJUa8asG5APrOJvdc7Ed/HamqD3aLZnU2dpUAmDA==
+X-Google-Smtp-Source: ABdhPJwKTbFlVMufZx9p5Z+x6LafUNHGnWotQYTTznqHO3KKhRIyZY9h5NSg25siQNu+a6YhKz9oUQE0cz4QQh+rVlo=
+X-Received: by 2002:a5d:6c6b:0:b0:1ea:77ea:dde8 with SMTP id
+ r11-20020a5d6c6b000000b001ea77eadde8mr19522626wrz.690.1653318479248; Mon, 23
+ May 2022 08:07:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: nxDICgAXGV4to4tiArlgAA--.20394S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxAw4fXw4DuFy8Cry3tw13Arb_yoW5tr4rpa
-        1Ykr9xZF4fGF4fGrs5tF13ZF1Yvw18Kry8C3srGr1SkwnFyryrtryIqr4Y9FZxGrW3t3WI
-        vFW8Cr1fWw45taUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUJab7IF0VACp39vda4lb7IF0VCFI7km07C26c804VAKzcIF0wAF
-        F20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r
-        1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAF
-        wI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aV
-        AFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2kK67ZEXf0FJ3sC6x9v
-        y-n0Xa0_Xr1Utr1kJwI_Jr4ln4vE4IxY62xKV4CY8xCE548m6r4UJryUGwAawVCIc40E5I
-        027xCE548m6r1DJr4UtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCqF7xvr2I5Mc02
-        F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI
-        0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CE
-        Vc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2xKxwAKzVCY07xG64k0F24l7I0Y64k_Mx
-        kI7II2jI8vz4vEwIxGrwCF04k20xvY0x0EwIxGrwCF72vEw2IIxxk0rwCFx2IqxVCFs4IE
-        7xkEbVWUJVW8JwCFI7vE0wC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r
-        106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AK
-        xVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7
-        xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_
-        Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0pRp6wAUUUUU=
-X-CM-SenderInfo: 5olx5txfdqquhrush05hwht23hof0z/1tbiBQAPCVt760qFUgAcsJ
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+References: <20220522153543.2656-1-jszhang@kernel.org> <20220522153543.2656-2-jszhang@kernel.org>
+In-Reply-To: <20220522153543.2656-2-jszhang@kernel.org>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Mon, 23 May 2022 20:37:47 +0530
+Message-ID: <CAAhSdy0Z7fqfNd7PGPmbRum=Yiu8ziRbjefF3NHeqihSKSS8SQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] riscv: introduce unified static key mechanism for
+ ISA extensions
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atishp@atishpatra.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,113 +70,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: liuyacan <liuyacan@corp.netease.com>
+On Sun, May 22, 2022 at 9:14 PM Jisheng Zhang <jszhang@kernel.org> wrote:
+>
+> Currently, riscv has several extensions which may not be supported on
+> all riscv platforms, for example, FPU and so on. To support unified
+> kernel Image style, we need to check whether the feature is supported
+> or not. If the check sits at hot code path, then performance will be
+> impacted a lot. static key can be used to solve the issue. In the past,
+> FPU support has been converted to use static key mechanism. I believe
+> we will have similar cases in the future.
+>
+> This patch tries to add an unified mechanism to use static keys for
+> some ISA extensions by implementing an array of default-false static keys
+> and enabling them when detected.
+>
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
 
-This reverts commit 5ec8b414b4381e8714731415fc221ef50a4e7b14.
+Looks good to me.
 
-Some rollback issue will be fixed in other patches in the future.
+Reviewed-by: Anup Patel <anup@brainfault.org>
 
-Link: https://lore.kernel.org/all/20220523055056.2078994-1-liuyacan@corp.netease.com/
-Fixes: 5ec8b414b438 ("net/smc: fix listen processing for SMC-Rv2")
-Signed-off-by: liuyacan <liuyacan@corp.netease.com>
----
- net/smc/af_smc.c | 44 +++++++++++++++++---------------------------
- 1 file changed, 17 insertions(+), 27 deletions(-)
+Regards,
+Anup
 
-diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
-index d3de54b70..45a24d242 100644
---- a/net/smc/af_smc.c
-+++ b/net/smc/af_smc.c
-@@ -2093,13 +2093,13 @@ static int smc_listen_rdma_reg(struct smc_sock *new_smc, bool local_first)
- 	return 0;
- }
- 
--static int smc_find_rdma_v2_device_serv(struct smc_sock *new_smc,
--					struct smc_clc_msg_proposal *pclc,
--					struct smc_init_info *ini)
-+static void smc_find_rdma_v2_device_serv(struct smc_sock *new_smc,
-+					 struct smc_clc_msg_proposal *pclc,
-+					 struct smc_init_info *ini)
- {
- 	struct smc_clc_v2_extension *smc_v2_ext;
- 	u8 smcr_version;
--	int rc = 0;
-+	int rc;
- 
- 	if (!(ini->smcr_version & SMC_V2) || !smcr_indicated(ini->smc_type_v2))
- 		goto not_found;
-@@ -2117,31 +2117,26 @@ static int smc_find_rdma_v2_device_serv(struct smc_sock *new_smc,
- 	ini->smcrv2.saddr = new_smc->clcsock->sk->sk_rcv_saddr;
- 	ini->smcrv2.daddr = smc_ib_gid_to_ipv4(smc_v2_ext->roce);
- 	rc = smc_find_rdma_device(new_smc, ini);
--	if (rc)
-+	if (rc) {
-+		smc_find_ism_store_rc(rc, ini);
- 		goto not_found;
--
-+	}
- 	if (!ini->smcrv2.uses_gateway)
- 		memcpy(ini->smcrv2.nexthop_mac, pclc->lcl.mac, ETH_ALEN);
- 
- 	smcr_version = ini->smcr_version;
- 	ini->smcr_version = SMC_V2;
- 	rc = smc_listen_rdma_init(new_smc, ini);
--	if (rc) {
--		ini->smcr_version = smcr_version;
--		goto not_found;
--	}
--	rc = smc_listen_rdma_reg(new_smc, ini->first_contact_local);
--	if (rc) {
--		ini->smcr_version = smcr_version;
--		goto not_found;
--	}
--	return 0;
-+	if (!rc)
-+		rc = smc_listen_rdma_reg(new_smc, ini->first_contact_local);
-+	if (!rc)
-+		return;
-+	ini->smcr_version = smcr_version;
-+	smc_find_ism_store_rc(rc, ini);
- 
- not_found:
--	rc = rc ?: SMC_CLC_DECL_NOSMCDEV;
- 	ini->smcr_version &= ~SMC_V2;
- 	ini->check_smcrv2 = false;
--	return rc;
- }
- 
- static int smc_find_rdma_v1_device_serv(struct smc_sock *new_smc,
-@@ -2174,7 +2169,6 @@ static int smc_listen_find_device(struct smc_sock *new_smc,
- 				  struct smc_init_info *ini)
- {
- 	int prfx_rc;
--	int rc;
- 
- 	/* check for ISM device matching V2 proposed device */
- 	smc_find_ism_v2_device_serv(new_smc, pclc, ini);
-@@ -2202,18 +2196,14 @@ static int smc_listen_find_device(struct smc_sock *new_smc,
- 		return ini->rc ?: SMC_CLC_DECL_NOSMCDDEV;
- 
- 	/* check if RDMA V2 is available */
--	rc = smc_find_rdma_v2_device_serv(new_smc, pclc, ini);
--	if (!rc)
-+	smc_find_rdma_v2_device_serv(new_smc, pclc, ini);
-+	if (ini->smcrv2.ib_dev_v2)
- 		return 0;
- 
--	/* skip V1 check if V2 is unavailable for non-Device reason */
--	if (rc != SMC_CLC_DECL_NOSMCDEV &&
--	    rc != SMC_CLC_DECL_NOSMCRDEV &&
--	    rc != SMC_CLC_DECL_NOSMCDDEV)
--		return rc;
--
- 	/* check if RDMA V1 is available */
- 	if (!prfx_rc) {
-+		int rc;
-+
- 		rc = smc_find_rdma_v1_device_serv(new_smc, pclc, ini);
- 		smc_find_ism_store_rc(rc, ini);
- 		return (!rc) ? 0 : ini->rc;
--- 
-2.20.1
-
+> ---
+>  arch/riscv/include/asm/hwcap.h | 25 +++++++++++++++++++++++++
+>  arch/riscv/kernel/cpufeature.c |  7 +++++++
+>  2 files changed, 32 insertions(+)
+>
+> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
+> index 0734e42f74f2..d3e113fe7366 100644
+> --- a/arch/riscv/include/asm/hwcap.h
+> +++ b/arch/riscv/include/asm/hwcap.h
+> @@ -12,6 +12,7 @@
+>  #include <uapi/asm/hwcap.h>
+>
+>  #ifndef __ASSEMBLY__
+> +#include <linux/jump_label.h>
+>  /*
+>   * This yields a mask that user programs can use to figure out what
+>   * instruction set this cpu supports.
+> @@ -55,6 +56,16 @@ enum riscv_isa_ext_id {
+>         RISCV_ISA_EXT_ID_MAX = RISCV_ISA_EXT_MAX,
+>  };
+>
+> +/*
+> + * This enum represents the logical ID for each RISC-V ISA extension static
+> + * keys. We can use static key to optimize code path if some ISA extensions
+> + * are available.
+> + */
+> +enum riscv_isa_ext_key {
+> +       RISCV_ISA_EXT_KEY_FPU,          /* For 'F' and 'D' */
+> +       RISCV_ISA_EXT_KEY_MAX,
+> +};
+> +
+>  struct riscv_isa_ext_data {
+>         /* Name of the extension displayed to userspace via /proc/cpuinfo */
+>         char uprop[RISCV_ISA_EXT_NAME_LEN_MAX];
+> @@ -62,6 +73,20 @@ struct riscv_isa_ext_data {
+>         unsigned int isa_ext_id;
+>  };
+>
+> +extern struct static_key_false riscv_isa_ext_keys[RISCV_ISA_EXT_KEY_MAX];
+> +
+> +static __always_inline int riscv_isa_ext2key(int num)
+> +{
+> +       switch (num) {
+> +       case RISCV_ISA_EXT_f:
+> +               return RISCV_ISA_EXT_KEY_FPU;
+> +       case RISCV_ISA_EXT_d:
+> +               return RISCV_ISA_EXT_KEY_FPU;
+> +       default:
+> +               return -EINVAL;
+> +       }
+> +}
+> +
+>  unsigned long riscv_isa_extension_base(const unsigned long *isa_bitmap);
+>
+>  #define riscv_isa_extension_mask(ext) BIT_MASK(RISCV_ISA_EXT_##ext)
+> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> index 1b2d42d7f589..89f886b35357 100644
+> --- a/arch/riscv/kernel/cpufeature.c
+> +++ b/arch/riscv/kernel/cpufeature.c
+> @@ -24,6 +24,8 @@ static DECLARE_BITMAP(riscv_isa, RISCV_ISA_EXT_MAX) __read_mostly;
+>  #ifdef CONFIG_FPU
+>  __ro_after_init DEFINE_STATIC_KEY_FALSE(cpu_hwcap_fpu);
+>  #endif
+> +__ro_after_init DEFINE_STATIC_KEY_ARRAY_FALSE(riscv_isa_ext_keys, RISCV_ISA_EXT_KEY_MAX);
+> +EXPORT_SYMBOL(riscv_isa_ext_keys);
+>
+>  /**
+>   * riscv_isa_extension_base() - Get base extension word
+> @@ -232,6 +234,11 @@ void __init riscv_fill_hwcap(void)
+>                         print_str[j++] = (char)('a' + i);
+>         pr_info("riscv: ELF capabilities %s\n", print_str);
+>
+> +       for_each_set_bit(i, riscv_isa, RISCV_ISA_EXT_MAX) {
+> +               j = riscv_isa_ext2key(i);
+> +               if (j >= 0)
+> +                       static_branch_enable(&riscv_isa_ext_keys[j]);
+> +       }
+>  #ifdef CONFIG_FPU
+>         if (elf_hwcap & (COMPAT_HWCAP_ISA_F | COMPAT_HWCAP_ISA_D))
+>                 static_branch_enable(&cpu_hwcap_fpu);
+> --
+> 2.34.1
+>

@@ -2,99 +2,284 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C08FA531C12
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:57:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5B245316A6
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:52:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231253AbiEWTnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 15:43:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45606 "EHLO
+        id S230450AbiEWTpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 15:45:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230350AbiEWTm7 (ORCPT
+        with ESMTP id S231816AbiEWTpL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 15:42:59 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121911B1
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 12:42:58 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id w130so19098218oig.0
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 12:42:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Vr6T/UqgVGLQWoul1vnNoytTWzJsPkn14WICohkLY7I=;
-        b=Fs0S3Msok1ksTRe7NGFi2Ry+axura59LsvHOsYFwgudYlyVCr2tTvaiG818YWZuDf0
-         IZZwL+wqiL6MtCfFD0gPzV0afDz9zib5f4lVh48rMdFUVgj+K3yQKYmuvHWZ98c1Knvk
-         jDLi+BFuargstaoHS5pNBPjYIKTiAaoOaD3CI=
+        Mon, 23 May 2022 15:45:11 -0400
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92FC4E77;
+        Mon, 23 May 2022 12:44:43 -0700 (PDT)
+Received: by mail-yb1-f181.google.com with SMTP id t26so27267492ybt.3;
+        Mon, 23 May 2022 12:44:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Vr6T/UqgVGLQWoul1vnNoytTWzJsPkn14WICohkLY7I=;
-        b=mXngLdtSs+/o/6SiqEpj2Hg2E5sICf8c/Wuful0tVa1nqkIzNw8PuW14tuLZoSdBBf
-         txFm5qB0uYeTpeQKZM08ZjSXbmsFq8Fb/az2fSQlRyN9Q91zqhuDFAosI4WLvhsOrQgj
-         BUFQDlIeJ1y3P/wbuonArqUadd9pFou6je2tCSTnAiXMTtu0kI8RM0+g58leVIYTHefS
-         FUJn6PVCCkdSabQv10Zy11hp0px8Wr/wJC9xrXPk5dpzC81g5A2j5jgTUsbv3WRGHZ8m
-         CnzSpEKgbl87qw2jcKFVQghriDW4om7OXDTy1UWvd6PURytkpiBxao5KOD3grDquEyNP
-         wf+Q==
-X-Gm-Message-State: AOAM533/zg5Pz/Xn6qu5iVokC0Dsjt2c28mSPPvxN2dPf2TtNmOq0cwJ
-        VZwRspfRhZ4w3oY6Mv3QcK0zN/jodLXvJA==
-X-Google-Smtp-Source: ABdhPJwaP5vB/86lkItxbhagXO0TXXeyCbjWCf1G+L7nzuoTQsTnCVD1C+q/+fJ8QX8JpXeTA1BjWw==
-X-Received: by 2002:a54:4f88:0:b0:325:a26e:5278 with SMTP id g8-20020a544f88000000b00325a26e5278mr394439oiy.76.1653334977115;
-        Mon, 23 May 2022 12:42:57 -0700 (PDT)
-Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com. [209.85.167.179])
-        by smtp.gmail.com with ESMTPSA id w2-20020acaad02000000b0032af1c6bf02sm4287407oie.45.2022.05.23.12.42.55
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 May 2022 12:42:56 -0700 (PDT)
-Received: by mail-oi1-f179.google.com with SMTP id w130so19098127oig.0
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 12:42:55 -0700 (PDT)
-X-Received: by 2002:a05:6808:140c:b0:326:cd8f:eb71 with SMTP id
- w12-20020a056808140c00b00326cd8feb71mr341566oiv.257.1653334975556; Mon, 23
- May 2022 12:42:55 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=1UFvX39NtfpENeFeSqm15Ok9Y3UgF929dIZB7DaqiWs=;
+        b=ZGM9hTCbNCNbSBX6DCgPqHl4On70SBxzJk2AtGUY7mxYnc4guZPOqQx1e2SyAB2sVt
+         m7zJpPNpwrUYr/TJjB4+ow3CfvekHTJKXxI8uTHno/w4qGKlIQjTeimpXmSKQxFh7otY
+         W2siGCVL2whjjjnbgxMpuyccA9lTSs3JiJ49H7F1vT5+U7gRlGrj6vBJXjSRAFVnVf0i
+         2vREcoutWQtAJD9YmZ0P5ScHIrD7TYIGrjZIp3p8vU7l/S2fPpecip53UsjofysTIPCx
+         +vQV2QQ7PIMOht/Y4UgZF4M6Ib1eIm3asjledULIy+JIjzt+JVB2p+xTAle0n1TM9HTX
+         JfDQ==
+X-Gm-Message-State: AOAM533+q2dOqnypAiAOYCjnWRbWwxf34YMUg5bNKfe026i3agzxWk4n
+        q5depf9ZVYB5rHy9Yu4G9UeTf8+MpdXx7ghW9lkF3yqYcs0=
+X-Google-Smtp-Source: ABdhPJw+r2WDnLRkeP7kU+jwLwLscbC6WPEeP6qV6zkunGQrssqr2ZBku4w+RoY2dwg/gysjjFPg9G+uixehaLCdgsM=
+X-Received: by 2002:a25:6b50:0:b0:64f:4b33:664 with SMTP id
+ o16-20020a256b50000000b0064f4b330664mr20740180ybm.153.1653335082793; Mon, 23
+ May 2022 12:44:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220523052810.24767-1-duoming@zju.edu.cn> <87o7zoxrdf.fsf@email.froward.int.ebiederm.org>
- <6a270950.2c659.180f1a46e8c.Coremail.duoming@zju.edu.cn>
-In-Reply-To: <6a270950.2c659.180f1a46e8c.Coremail.duoming@zju.edu.cn>
-From:   Brian Norris <briannorris@chromium.org>
-Date:   Mon, 23 May 2022 12:42:44 -0700
-X-Gmail-Original-Message-ID: <CA+ASDXNBeN6k6y+eY06FkheNTNWN02P2uT9bB09KtBok0LVFfQ@mail.gmail.com>
-Message-ID: <CA+ASDXNBeN6k6y+eY06FkheNTNWN02P2uT9bB09KtBok0LVFfQ@mail.gmail.com>
-Subject: Re: [PATCH v3] mwifiex: fix sleep in atomic context bugs caused by dev_coredumpv
-To:     Duoming Zhou <duoming@zju.edu.cn>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        amit karwar <amitkarwar@gmail.com>,
-        Ganapathi Bhat <ganapathi017@gmail.com>,
-        Sharvari Harisangam <sharvari.harisangam@nxp.com>,
-        Xinming Hu <huxinming820@gmail.com>, kvalo@kernel.org,
-        "David S. Miller" <davem@davemloft.net>, edumazet@google.com,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "<netdev@vger.kernel.org>" <netdev@vger.kernel.org>,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Johannes Berg <johannes@sipsolutions.net>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 23 May 2022 21:44:31 +0200
+Message-ID: <CAJZ5v0h803aUmDW-oHh6+DkBkSXftmrVTwD463YkHW-h+8c=kQ@mail.gmail.com>
+Subject: [GIT PULL] Thermal control updates for v5.19-rc1
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(I think people generally agreed on this approach, but please submit a
-new series, with separate patches)
+Hi Linus,
 
-On Mon, May 23, 2022 at 12:27 PM <duoming@zju.edu.cn> wrote:
-> What's more, I move the operations that may sleep into a work item and use
-> schedule_work() to call a kernel thread to do the operations that may sleep.
+Please pull from the tag
 
-You end up with a timer that just exists to kick a work item. Eric
-suggested you just use a delayed_work, and then you don't need both a
-timer and a work struct.
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ thermal-5.19-rc1
 
-Brian
+with top-most commit bbb544f3349197d1e7f4f9b921b75e919cd45f39
+
+ Merge branches 'thermal-int340x', 'thermal-pch' and 'thermal-misc'
+
+on top of commit 42226c989789d8da4af1de0c31070c96726d990c
+
+ Linux 5.18-rc7
+
+to receive thermal control updates for 5.19-rc1.
+
+These add a thermal library and thermal tools to wrap the netlink
+interface into event-based callbacks, improve overheat condition
+handling during suspend-to-idle on Intel SoCs, add some new hardware
+support, fix bugs and clean up code.
+
+Specifics:
+
+ - Add thermal library and thermal tools to encapsulate the netlink
+   into event based callbacks (Daniel Lezcano, Jiapeng Chong).
+
+ - Improve overheat condition handling during suspend-to-idle in the
+   Intel PCH thermal driver (Zhang Rui).
+
+ - Use local ops instead of global ops in devfreq_cooling (Kant Fan).
+
+ - Clean up _OSC handling in int340x (Davidlohr Bueso).
+
+ - Switch hisi_termal from CONFIG_PM_SLEEP guards to pm_sleep_ptr()
+   (Hesham Almatary).
+
+ - Add new k3 j72xx bangdap driver and the corresponding bindings
+   (Keerthy).
+
+ - Fix missing of_node_put() in the SC iMX driver at probe time
+   (Miaoqian Lin).
+
+ - Fix memory leak in __thermal_cooling_device_register() when
+   device_register() fails by calling thermal_cooling_device_destroy_sysfs()
+   (Yang Yingliang).
+
+ - Add sc8180x and sc8280xp compatible string in the DT bindings and
+   lMH support for QCom tsens driver (Bjorn Andersson).
+
+ - Fix OTP Calibration Register values conforming to the documentation
+   on RZ/G2L and bindings documentation for RZ/G2UL (Biju Das).
+
+ - Fix type in kerneldoc description for __thermal_bind_params (Corentin
+   Labbe).
+
+ - Fix potential NULL dereference in sr_thermal_probe() on Broadcom
+   platform (Zheng Yongjun).
+
+ - Add change mode ops to the thermal-of sensor (Manaf Meethalavalappu
+   Pallikunhi).
+
+ - Fix non-negative value support by preventing the value to be clamp
+   to zero (Stefan Wahren).
+
+ - Add compatible string and DT bindings for MSM8960 tsens driver
+   (Dmitry Baryshkov).
+
+ - Add hwmon support for K3 driver (Massimiliano Minella).
+
+ - Refactor and add multiple generations support for QCom ADC driver
+   (Jishnu Prakash).
+
+ - Use platform_get_irq_optional() to get the interrupt on RCar driver and
+   document Document RZ/V2L bindings (Lad Prabhakar).
+
+ - Remove NULL check after container_of() call from the Intel HFI
+   thermal driver (Haowen Bai).
+
+Thanks!
+
+
+---------------
+
+Biju Das (2):
+      dt-bindings: thermal: rzg2l-thermal: Document RZ/G2UL bindings
+      thermal/drivers/rz2gl: Fix OTP Calibration Register values
+
+Bjorn Andersson (3):
+      thermal/drivers/qcom/lmh: Add sc8180x compatible
+      dt-bindings: thermal: lmh: Add Qualcomm sc8180x compatible
+      dt-bindings: thermal: tsens: Add sc8280xp compatible
+
+Corentin Labbe (1):
+      thermal: thermal_of: fix typo on __thermal_bind_params
+
+Daniel Lezcano (4):
+      tools/lib/thermal: Add a thermal library
+      tools/thermal: Add util library
+      tools/thermal: Add a temperature capture tool
+      tools/thermal: Add thermal daemon skeleton
+
+Davidlohr Bueso (3):
+      thermal: int340x: Clean up unnecessary acpi_buffer pointer freeing
+      thermal: int340x: Consolidate freeing of acpi_buffer pointer
+      thermal: int340x: Clean up _OSC context init
+
+Dmitry Baryshkov (2):
+      dt-bindings: thermal: qcom-tsens.yaml: add msm8960 compat string
+      thermal/drivers/tsens: Add compat string for the qcom,msm8960
+
+Haowen Bai (1):
+      thermal: intel: hfi: remove NULL check after container_of() call
+
+Hesham Almatary (1):
+      thermal: hisi_termal: Switch from CONFIG_PM_SLEEP guards to pm_sleep_ptr()
+
+Jiapeng Chong (2):
+      tools/lib/thermal: remove unneeded semicolon
+      tools/thermal: remove unneeded semicolon
+
+Jishnu Prakash (4):
+      dt-bindings: thermal: qcom: add PMIC5 Gen2 ADC_TM bindings
+      iio: adc: qcom-vadc-common: add reverse scaling for PMIC5 Gen2 ADC_TM
+      thermal/drivers/qcom: Add support for multiple generations of devices
+      thermal/drivers/qcom: Add support for PMIC5 Gen2 ADCTM
+
+Kant Fan (1):
+      thermal: devfreq_cooling: use local ops instead of global ops
+
+Keerthy (2):
+      dt-bindings: thermal: k3-j72xx: Add VTM bindings documentation
+      thermal: k3_j72xx_bandgap: Add the bandgap driver support
+
+Lad Prabhakar (2):
+      dt-bindings: thermal: rzg2l-thermal: Document RZ/V2L bindings
+      thermal/drivers/rcar_thermal: Use platform_get_irq_optional() to
+get the interrupt
+
+Manaf Meethalavalappu Pallikunhi (1):
+      thermal/drivers/thermal_of: Add change_mode ops support for
+thermal_of sensor
+
+Massimiliano Minella (1):
+      thermal/drivers/k3: Add hwmon support
+
+Miaoqian Lin (1):
+      thermal/drivers/imx_sc_thermal: Fix refcount leak in imx_sc_thermal_probe
+
+Srinivas Pandruvada (1):
+      thermal: int340x: Mode setting with new OS handshake
+
+Stefan Wahren (1):
+      thermal/drivers/bcm2711: Don't clamp temperature at zero
+
+Yang Yingliang (1):
+      thermal/core: Fix memory leak in __thermal_cooling_device_register()
+
+Zhang Rui (4):
+      PM: wakeup: expose pm_wakeup_pending to modules
+      thermal: intel: pch: move cooling delay to suspend_noirq phase
+      thermal: intel: pch: enhance overheat handling
+      thermal: intel: pch: improve the cooling delay log
+
+Zheng Yongjun (1):
+      thermal/drivers/broadcom: Fix potential NULL dereference in
+sr_thermal_probe
+
+---------------
+
+ .../devicetree/bindings/thermal/qcom-lmh.yaml      |   1 +
+ .../bindings/thermal/qcom-spmi-adc-tm5.yaml        | 110 +++-
+ .../devicetree/bindings/thermal/qcom-tsens.yaml    |   5 +-
+ .../devicetree/bindings/thermal/rzg2l-thermal.yaml |   2 +
+ .../bindings/thermal/ti,j72xx-thermal.yaml         |  63 +++
+ MAINTAINERS                                        |   1 +
+ drivers/base/power/wakeup.c                        |   1 +
+ drivers/iio/adc/qcom-vadc-common.c                 |  11 +
+ drivers/thermal/Makefile                           |   2 +-
+ drivers/thermal/broadcom/bcm2711_thermal.c         |   5 +-
+ drivers/thermal/broadcom/sr-thermal.c              |   3 +
+ drivers/thermal/devfreq_cooling.c                  |  25 +-
+ drivers/thermal/hisi_thermal.c                     |   6 +-
+ drivers/thermal/imx_sc_thermal.c                   |   6 +-
+ .../intel/int340x_thermal/int3400_thermal.c        |  72 +--
+ drivers/thermal/intel/intel_hfi.c                  |   2 -
+ drivers/thermal/intel/intel_pch_thermal.c          |  43 +-
+ drivers/thermal/k3_bandgap.c                       |   5 +
+ drivers/thermal/k3_j72xx_bandgap.c                 | 566 ++++++++++++++++++++
+ drivers/thermal/qcom/lmh.c                         |   1 +
+ drivers/thermal/qcom/qcom-spmi-adc-tm5.c           | 486 +++++++++++++++--
+ drivers/thermal/qcom/tsens.c                       |   3 +
+ drivers/thermal/rcar_thermal.c                     |  17 +-
+ drivers/thermal/rzg2l_thermal.c                    |  10 +-
+ drivers/thermal/thermal_core.c                     |   1 +
+ drivers/thermal/thermal_of.c                       |  14 +-
+ include/linux/iio/adc/qcom-vadc-common.h           |   2 +
+ include/linux/thermal.h                            |   3 +
+ tools/Makefile                                     |  36 +-
+ tools/lib/thermal/.gitignore                       |   2 +
+ tools/lib/thermal/Build                            |   5 +
+ tools/lib/thermal/Makefile                         | 165 ++++++
+ tools/lib/thermal/commands.c                       | 349 +++++++++++++
+ tools/lib/thermal/events.c                         | 164 ++++++
+ tools/lib/thermal/include/thermal.h                | 142 +++++
+ tools/lib/thermal/libthermal.map                   |  25 +
+ tools/lib/thermal/libthermal.pc.template           |  12 +
+ tools/lib/thermal/sampling.c                       |  75 +++
+ tools/lib/thermal/thermal.c                        | 135 +++++
+ tools/lib/thermal/thermal_nl.c                     | 215 ++++++++
+ tools/lib/thermal/thermal_nl.h                     |  46 ++
+ tools/thermal/lib/Build                            |   3 +
+ tools/thermal/lib/Makefile                         | 158 ++++++
+ tools/thermal/lib/libthermal_tools.pc.template     |  12 +
+ tools/thermal/lib/log.c                            |  77 +++
+ tools/thermal/lib/log.h                            |  31 ++
+ tools/thermal/lib/mainloop.c                       | 120 +++++
+ tools/thermal/lib/mainloop.h                       |  15 +
+ tools/thermal/lib/thermal-tools.h                  |  10 +
+ tools/thermal/lib/uptimeofday.c                    |  40 ++
+ tools/thermal/lib/uptimeofday.h                    |  12 +
+ tools/thermal/thermal-engine/Build                 |   1 +
+ tools/thermal/thermal-engine/Makefile              |  28 +
+ tools/thermal/thermal-engine/thermal-engine.c      | 341 ++++++++++++
+ tools/thermal/thermometer/Build                    |   1 +
+ tools/thermal/thermometer/Makefile                 |  26 +
+ tools/thermal/thermometer/thermometer.8            |  92 ++++
+ tools/thermal/thermometer/thermometer.c            | 572 +++++++++++++++++++++
+ tools/thermal/thermometer/thermometer.conf         |   5 +
+ 59 files changed, 4263 insertions(+), 118 deletions(-)

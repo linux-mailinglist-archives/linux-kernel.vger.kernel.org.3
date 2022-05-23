@@ -2,216 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FDAA53131C
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:23:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24495531388
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:24:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236338AbiEWNft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 09:35:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43290 "EHLO
+        id S236284AbiEWNhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 09:37:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236297AbiEWNfq (ORCPT
+        with ESMTP id S236787AbiEWNgd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 09:35:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1E9DB19030
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 06:35:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653312943;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8c2zoLQL1fQT0gHH2dJM2YqDfdDFpygc8onqT1U47Dw=;
-        b=I5ZPtM+y2687zJGz9ZZWypYRScRAFSwnvi4kFBZ8CS3Vzj5qQcxgTl7fhmb4S5a7KiKszu
-        2UIihPoMHeyWTGMEfbap9I5+JassacBk7WPCFqGxQLjSwG4CT3blw+kBNzUhW8ZUrFw2vm
-        qAI4AIU+p1ZkRJQywPL1tChm8+GLeD8=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-348-y8_Bs4JVP9SoX72R9ams3g-1; Mon, 23 May 2022 09:35:41 -0400
-X-MC-Unique: y8_Bs4JVP9SoX72R9ams3g-1
-Received: by mail-qk1-f199.google.com with SMTP id b1-20020a05620a118100b006a36dec1b16so3844707qkk.2
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 06:35:41 -0700 (PDT)
+        Mon, 23 May 2022 09:36:33 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AAE13587F
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 06:36:30 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id s198-20020a6b2ccf000000b0065e4872af2dso7032916ios.21
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 06:36:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=8c2zoLQL1fQT0gHH2dJM2YqDfdDFpygc8onqT1U47Dw=;
-        b=Dn5cEDTR46601AQweAIClfFasZrKEC8IXDenojAqydqhy5fv+KQr8ko/WzOORMWkDt
-         UxTB5egdF8LIonMkqFErb3uPO+17uQY5Pis0AjbDsWAH39eSEspLFViwkWb6L7d8+luT
-         u1diZzMCckxKQ7N1pkzyt/TAN0LpJWpLOPLJ/u/AHXk75Mw9xcvKuSRUhe8xyrYeBR0i
-         VqsgjnbBkeDtFl38J44eGUyYi1dTek45e+VNqawSZooZDMaVoTkt14/0Ezcmst2Cfv6z
-         rLNA2MZS2uks7niI7HxT+Zu7gXplD4Um9BkfJG3Z9gKW3vEFHS4VtLUVdlfWOnOyRXM6
-         0kgg==
-X-Gm-Message-State: AOAM5318tPxIrk0I8Wv1t7gZS35CBoMCWBzfCnT7WdrjqusaR4xYR0mo
-        pkG02IUyvJOytaA7r01uwuOHVcPVKZbje8Il8NwU4Xni53ZAcxx1FqKGdOxeSWZPB8ll+yU09Nf
-        TGROPz4DfEOjxznuYBeKf2P1O
-X-Received: by 2002:a05:620a:4091:b0:6a0:54cf:c0ed with SMTP id f17-20020a05620a409100b006a054cfc0edmr13913339qko.578.1653312940952;
-        Mon, 23 May 2022 06:35:40 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw7aaYQSIoBF2JTokQMX1mwzzn3ulfSPWVZXo4pRiLF8pGAji9/Pxyw849JUfw99Dnqvcc5Qw==
-X-Received: by 2002:a05:620a:4091:b0:6a0:54cf:c0ed with SMTP id f17-20020a05620a409100b006a054cfc0edmr13913312qko.578.1653312940682;
-        Mon, 23 May 2022 06:35:40 -0700 (PDT)
-Received: from [192.168.98.18] ([107.12.98.143])
-        by smtp.gmail.com with ESMTPSA id w36-20020a05622a192400b002f39b99f69dsm4199479qtc.55.2022.05.23.06.35.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 May 2022 06:35:40 -0700 (PDT)
-Message-ID: <b26b64d8-9569-8d1d-aef5-3d01c819267c@redhat.com>
-Date:   Mon, 23 May 2022 09:35:38 -0400
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=PWVuKEE9bBkY12k8vg+z8QNr9+c6DLKmUQgNLGQRizg=;
+        b=E7xTQjFjJOkrAsulJlLVbMbNxY8g/NHgujUMiV7Qq29r6pq5aoYHd8vd0zlZgxdXCa
+         mHB5b6paYMVIDSmQan3y0pIOTfsr3w8fo0HCtHKfkM9diGD2pEWz5eMp7GDdlcy4F9hP
+         UpPulc9YLEe5kot1VZih1uWUE4WtmZFemZ3JcZDeHKM8e3gVbshYh1zBqMg95X9D5jJ8
+         A9hx53wGrJ5TZnu8e6iCuON2zeeY9piQCofpJLs+dw08CXaSRYNdUl0+9Bfv5O87DUMM
+         RgVFzV6eg14LKC3t8W6mJlO9svVwMekY9d50RKZwp8ekYUwqMAez8bEOjSSlwWyGVBbV
+         HWKw==
+X-Gm-Message-State: AOAM533WK8a/7gxwZyb5CfTA++r4smzPMyG5z897lHZ+JeuYX9xZ17zv
+        EbIYUr1pwY8kB4PeXSO9M329fQ33EqKDqpwPWCo1lUZx/Oxt
+X-Google-Smtp-Source: ABdhPJyNrF71n8Tw+UiKR3u1IltNUUevh3fpRdQ2ndEjTIsrqdtZ8vHzspy+MfGUPYvhr62sCxohmeb+sqYesDn01MUeKWJChiEl
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH net-next v3] bond: add mac filter option for balance-xor
-Content-Language: en-US
-To:     Nikolay Aleksandrov <razor@blackwall.org>, netdev@vger.kernel.org
-Cc:     toke@redhat.com, Long Xin <lxin@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jay Vosburgh <j.vosburgh@gmail.com>,
-        Veaceslav Falico <vfalico@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <b32eb6656d5a54c0cde6277e9fc5c249c63489ca.1652463336.git.jtoppins@redhat.com>
- <4c9db6ac-aa24-2ca2-3e44-18cfb23ac1bc@blackwall.org>
- <da6bbb3b-344c-f032-fe03-5e8c8ac3c388@blackwall.org>
-From:   Jonathan Toppins <jtoppins@redhat.com>
-In-Reply-To: <da6bbb3b-344c-f032-fe03-5e8c8ac3c388@blackwall.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:2165:b0:2d1:a330:b587 with SMTP id
+ s5-20020a056e02216500b002d1a330b587mr3596692ilv.50.1653312989351; Mon, 23 May
+ 2022 06:36:29 -0700 (PDT)
+Date:   Mon, 23 May 2022 06:36:29 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006ed46805dfaded18@google.com>
+Subject: [syzbot] INFO: trying to register non-static key in rxe_cleanup_task
+From:   syzbot <syzbot+833061116fa28df97f3b@syzkaller.appspotmail.com>
+To:     jgg@ziepe.ca, leon@kernel.org, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        zyjzyj2000@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/15/22 02:32, Nikolay Aleksandrov wrote:
-> On 15/05/2022 00:41, Nikolay Aleksandrov wrote:
->> On 13/05/2022 20:43, Jonathan Toppins wrote:
->>> Implement a MAC filter that prevents duplicate frame delivery when
->>> handling BUM traffic. This attempts to partially replicate OvS SLB
->>> Bonding[1] like functionality without requiring significant change
->>> in the Linux bridging code.
->>>
->>> A typical network setup for this feature would be:
->>>
->>>              .--------------------------------------------.
->>>              |         .--------------------.             |
->>>              |         |                    |             |
->>>         .-------------------.               |             |
->>>         |    | Bond 0  |    |               |             |
->>>         | .--'---. .---'--. |               |             |
->>>    .----|-| eth0 |-| eth1 |-|----.    .-----+----.   .----+------.
->>>    |    | '------' '------' |    |    | Switch 1 |   | Switch 2  |
->>>    |    '---,---------------'    |    |          +---+           |
->>>    |       /                     |    '----+-----'   '----+------'
->>>    |  .---'---.    .------.      |         |              |
->>>    |  |  br0  |----| VM 1 |      |      ~~~~~~~~~~~~~~~~~~~~~
->>>    |  '-------'    '------'      |     (                     )
->>>    |      |        .------.      |     ( Rest of Network     )
->>>    |      '--------| VM # |      |     (_____________________)
->>>    |               '------'      |
->>>    |  Host 1                     |
->>>    '-----------------------------'
->>>
->>> Where 'VM1' and 'VM#' are hosts connected to a Linux bridge, br0, with
->>> bond0 and its associated links, eth0 & eth1, provide ingress/egress. One
->>> can assume bond0, br1, and hosts VM1 to VM# are all contained in a
->>> single box, as depicted. Interfaces eth0 and eth1 provide redundant
->>> connections to the data center with the requirement to use all bandwidth
->>> when the system is functioning normally. Switch 1 and Switch 2 are
->>> physical switches that do not implement any advanced L2 management
->>> features such as MLAG, Cisco's VPC, or LACP.
->>>
->>> Combining this feature with vlan+srcmac hash policy allows a user to
->>> create an access network without the need to use expensive switches that
->>> support features like Cisco's VCP.
->>>
->>> [1] https://docs.openvswitch.org/en/latest/topics/bonding/#slb-bonding
->>>
->>> Co-developed-by: Long Xin <lxin@redhat.com>
->>> Signed-off-by: Long Xin <lxin@redhat.com>
->>> Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
->>> ---
->>>
->>> Notes:
->>>      v2:
->>>       * dropped needless abstraction functions and put code in module init
->>>       * renamed variable "rc" to "ret" to stay consistent with most of the
->>>         code
->>>       * fixed parameter setting management, when arp-monitor is turned on
->>>         this feature will be turned off similar to how miimon and arp-monitor
->>>         interact
->>>       * renamed bond_xor_recv to bond_mac_filter_recv for a little more
->>>         clarity
->>>       * it appears the implied default return code for any bonding recv probe
->>>         must be `RX_HANDLER_ANOTHER`. Changed the default return code of
->>>         bond_mac_filter_recv to use this return value to not break skb
->>>         processing when the skb dev is switched to the bond dev:
->>>           `skb->dev = bond->dev`
->>>      
->>>      v3: Nik's comments
->>>       * clarified documentation
->>>       * fixed inline and basic reverse Christmas tree formatting
->>>       * zero'ed entry in mac_create
->>>       * removed read_lock taking in bond_mac_filter_recv
->>>       * made has_expired() atomic and removed critical sections
->>>         surrounding calls to has_expired(), this also removed the
->>>         use-after-free that would have occurred:
->>>             spin_lock_irqsave(&entry->lock, flags);
->>>                 if (has_expired(bond, entry))
->>>                     mac_delete(bond, entry);
->>>             spin_unlock_irqrestore(&entry->lock, flags); <---
->>>       * moved init/destroy of mac_filter_tbl to bond_open/bond_close
->>>         this removed the complex option dependencies, the only behavioural
->>>         change the user will see is if the bond is up and mac_filter is
->>>         enabled if they try and set arp_interval they will receive -EBUSY
->>>       * in bond_changelink moved processing of mac_filter option just below
->>>         mode processing
->>>
->>>   Documentation/networking/bonding.rst  |  20 +++
->>>   drivers/net/bonding/Makefile          |   2 +-
->>>   drivers/net/bonding/bond_mac_filter.c | 201 ++++++++++++++++++++++++++
->>>   drivers/net/bonding/bond_mac_filter.h |  37 +++++
->>>   drivers/net/bonding/bond_main.c       |  30 ++++
->>>   drivers/net/bonding/bond_netlink.c    |  13 ++
->>>   drivers/net/bonding/bond_options.c    |  81 +++++++++--
->>>   drivers/net/bonding/bonding_priv.h    |   1 +
->>>   include/net/bond_options.h            |   1 +
->>>   include/net/bonding.h                 |   3 +
->>>   include/uapi/linux/if_link.h          |   1 +
->>>   11 files changed, 373 insertions(+), 17 deletions(-)
->>>   create mode 100644 drivers/net/bonding/bond_mac_filter.c
->>>   create mode 100644 drivers/net/bonding/bond_mac_filter.h
->>>
->>
-> [snip]
-> 
-> The same problem solved using a few nftables rules (in case you don't want to load eBPF):
-> $ nft 'add table netdev nt'
-> $ nft 'add chain netdev nt bond0EgressFilter { type filter hook egress device bond0 priority 0; }'
-> $ nft 'add chain netdev nt bond0IngressFilter { type filter hook ingress device bond0 priority 0; }'
-> $ nft 'add set netdev nt macset { type ether_addr; flags timeout; }'
-> $ nft 'add rule netdev nt bond0EgressFilter set update ether saddr timeout 5s @macset'
-> $ nft 'add rule netdev nt bond0IngressFilter ether saddr @macset counter drop'
+Hello,
 
-So I did some testing on this nft solution and it performs largely the 
-same as the bonding solution except for handling rule1 of the OVS SLB[1] 
-for multicast[2] and broadcast[3] traffic. If this can be corrected then 
-I think it would be a possible solution otherwise the bonding solution 
-fits the requirements better.
+syzbot found the following issue on:
 
--Jon
+HEAD commit:    cc63e8e92cb8 Add linux-next specific files for 20220523
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=17adae81f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c414c5699721a60d
+dashboard link: https://syzkaller.appspot.com/bug?extid=833061116fa28df97f3b
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-[1] https://docs.openvswitch.org/en/latest/topics/bonding/#slb-bonding
-[2] 
-https://gitlab.com/liali666/virtual-networking/-/blob/master/tests/test-0012-ovs-rule1-multicast
-[3] 
-https://gitlab.com/liali666/virtual-networking/-/blob/master/tests/test-0011-ovs-rule1-broadcast
+Unfortunately, I don't have any reproducer for this issue yet.
 
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+833061116fa28df97f3b@syzkaller.appspotmail.com
+
+infiniband syz1: set active
+infiniband syz1: added batadv_slave_1
+INFO: trying to register non-static key.
+INFO: trying to register non-static key.
+The code is fine but needs lockdep annotation, or maybe
+you didn't initialize this object before use?
+turning off the locking correctness validator.
+CPU: 1 PID: 8344 Comm: syz-executor.4 Not tainted 5.18.0-next-20220523-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ assign_lock_key kernel/locking/lockdep.c:979 [inline]
+ register_lock_class+0xf30/0x1130 kernel/locking/lockdep.c:1292
+ __lock_acquire+0x10a/0x5660 kernel/locking/lockdep.c:4932
+ lock_acquire kernel/locking/lockdep.c:5665 [inline]
+ lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5630
+ __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
+ _raw_spin_lock_bh+0x2f/0x40 kernel/locking/spinlock.c:178
+ spin_lock_bh include/linux/spinlock.h:365 [inline]
+ rxe_cleanup_task+0x6f/0xc0 drivers/infiniband/sw/rxe/rxe_task.c:117
+ rxe_qp_do_cleanup+0x88/0x8b0 drivers/infiniband/sw/rxe/rxe_qp.c:781
+ execute_in_process_context+0x37/0x150 kernel/workqueue.c:3351
+ rxe_elem_release drivers/infiniband/sw/rxe/rxe_pool.c:206 [inline]
+ kref_put include/linux/kref.h:65 [inline]
+ __rxe_put+0x107/0x1f0 drivers/infiniband/sw/rxe/rxe_pool.c:221
+ rxe_create_qp+0x2a5/0x320 drivers/infiniband/sw/rxe/rxe_verbs.c:435
+ create_qp+0x5ac/0x960 drivers/infiniband/core/verbs.c:1233
+ ib_create_qp_kernel+0x9d/0x310 drivers/infiniband/core/verbs.c:1344
+ ib_create_qp include/rdma/ib_verbs.h:3732 [inline]
+ create_mad_qp+0x177/0x2d0 drivers/infiniband/core/mad.c:2910
+ ib_mad_port_open drivers/infiniband/core/mad.c:2991 [inline]
+ ib_mad_init_device+0xd51/0x13f0 drivers/infiniband/core/mad.c:3082
+ add_client_context+0x405/0x5e0 drivers/infiniband/core/device.c:721
+ enable_device_and_get+0x1cd/0x3b0 drivers/infiniband/core/device.c:1332
+ ib_register_device drivers/infiniband/core/device.c:1420 [inline]
+ ib_register_device+0x814/0xaf0 drivers/infiniband/core/device.c:1366
+ rxe_register_device+0x2fe/0x3b0 drivers/infiniband/sw/rxe/rxe_verbs.c:1112
+ rxe_net_add+0x8c/0xe0 drivers/infiniband/sw/rxe/rxe_net.c:521
+ rxe_newlink drivers/infiniband/sw/rxe/rxe.c:195 [inline]
+ rxe_newlink+0xa9/0xd0 drivers/infiniband/sw/rxe/rxe.c:176
+ nldev_newlink+0x32e/0x5c0 drivers/infiniband/core/nldev.c:1717
+ rdma_nl_rcv_msg+0x36d/0x690 drivers/infiniband/core/netlink.c:195
+ rdma_nl_rcv_skb drivers/infiniband/core/netlink.c:239 [inline]
+ rdma_nl_rcv+0x2ee/0x430 drivers/infiniband/core/netlink.c:259
+ netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+ netlink_unicast+0x543/0x7f0 net/netlink/af_netlink.c:1345
+ netlink_sendmsg+0x917/0xe10 net/netlink/af_netlink.c:1921
+ sock_sendmsg_nosec net/socket.c:714 [inline]
+ sock_sendmsg+0xcf/0x120 net/socket.c:734
+ ____sys_sendmsg+0x6eb/0x810 net/socket.c:2492
+ ___sys_sendmsg+0xf3/0x170 net/socket.c:2546
+ __sys_sendmsg net/socket.c:2575 [inline]
+ __do_sys_sendmsg net/socket.c:2584 [inline]
+ __se_sys_sendmsg net/socket.c:2582 [inline]
+ __x64_sys_sendmsg+0x132/0x220 net/socket.c:2582
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+RIP: 0033:0x7f0c6ac890e9
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f0c6be25168 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 00007f0c6ad9bf60 RCX: 00007f0c6ac890e9
+RDX: 0000000000000000 RSI: 0000000020000240 RDI: 0000000000000003
+RBP: 00007f0c6ace308d R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffcdd7fce9f R14: 00007f0c6be25300 R15: 0000000000022000
+ </TASK>
+BUG: kernel NULL pointer dereference, address: 0000000000000000
+#PF: supervisor instruction fetch in kernel mode
+#PF: error_code(0x0010) - not-present page
+PGD 4dd1a067 P4D 4dd1a067 PUD 1ccf5067 PMD 0 
+Oops: 0010 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 8344 Comm: syz-executor.4 Not tainted 5.18.0-next-20220523-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:0x0
+Code: Unable to access opcode bytes at RIP 0xffffffffffffffd6.
+RSP: 0018:ffffc9000ddf6b50 EFLAGS: 00010246
+RAX: 0000000000040000 RBX: ffff88801ae9e568 RCX: ffffc90006d16000
+RDX: 0000000000040000 RSI: ffffffff86d3e56b RDI: 0000000000000000
+RBP: ffffed10035d3cbc R08: 0000000000000001 R09: ffff88801ae9e63f
+R10: ffffed10035d3cc7 R11: 0000000000000000 R12: 0000000000000000
+R13: ffffed10035d3cbd R14: ffff88801ae9e5e0 R15: ffff88801ae9e5e8
+FS:  00007f0c6be25700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffffffffd6 CR3: 0000000025396000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __rxe_do_task+0x56/0xc0 drivers/infiniband/sw/rxe/rxe_task.c:18
+ rxe_qp_do_cleanup+0x102/0x8b0 drivers/infiniband/sw/rxe/rxe_qp.c:792
+ execute_in_process_context+0x37/0x150 kernel/workqueue.c:3351
+ rxe_elem_release drivers/infiniband/sw/rxe/rxe_pool.c:206 [inline]
+ kref_put include/linux/kref.h:65 [inline]
+ __rxe_put+0x107/0x1f0 drivers/infiniband/sw/rxe/rxe_pool.c:221
+ rxe_create_qp+0x2a5/0x320 drivers/infiniband/sw/rxe/rxe_verbs.c:435
+ create_qp+0x5ac/0x960 drivers/infiniband/core/verbs.c:1233
+ ib_create_qp_kernel+0x9d/0x310 drivers/infiniband/core/verbs.c:1344
+ ib_create_qp include/rdma/ib_verbs.h:3732 [inline]
+ create_mad_qp+0x177/0x2d0 drivers/infiniband/core/mad.c:2910
+ ib_mad_port_open drivers/infiniband/core/mad.c:2991 [inline]
+ ib_mad_init_device+0xd51/0x13f0 drivers/infiniband/core/mad.c:3082
+ add_client_context+0x405/0x5e0 drivers/infiniband/core/device.c:721
+ enable_device_and_get+0x1cd/0x3b0 drivers/infiniband/core/device.c:1332
+ ib_register_device drivers/infiniband/core/device.c:1420 [inline]
+ ib_register_device+0x814/0xaf0 drivers/infiniband/core/device.c:1366
+ rxe_register_device+0x2fe/0x3b0 drivers/infiniband/sw/rxe/rxe_verbs.c:1112
+ rxe_net_add+0x8c/0xe0 drivers/infiniband/sw/rxe/rxe_net.c:521
+ rxe_newlink drivers/infiniband/sw/rxe/rxe.c:195 [inline]
+ rxe_newlink+0xa9/0xd0 drivers/infiniband/sw/rxe/rxe.c:176
+ nldev_newlink+0x32e/0x5c0 drivers/infiniband/core/nldev.c:1717
+ rdma_nl_rcv_msg+0x36d/0x690 drivers/infiniband/core/netlink.c:195
+ rdma_nl_rcv_skb drivers/infiniband/core/netlink.c:239 [inline]
+ rdma_nl_rcv+0x2ee/0x430 drivers/infiniband/core/netlink.c:259
+ netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+ netlink_unicast+0x543/0x7f0 net/netlink/af_netlink.c:1345
+ netlink_sendmsg+0x917/0xe10 net/netlink/af_netlink.c:1921
+ sock_sendmsg_nosec net/socket.c:714 [inline]
+ sock_sendmsg+0xcf/0x120 net/socket.c:734
+ ____sys_sendmsg+0x6eb/0x810 net/socket.c:2492
+ ___sys_sendmsg+0xf3/0x170 net/socket.c:2546
+ __sys_sendmsg net/socket.c:2575 [inline]
+ __do_sys_sendmsg net/socket.c:2584 [inline]
+ __se_sys_sendmsg net/socket.c:2582 [inline]
+ __x64_sys_sendmsg+0x132/0x220 net/socket.c:2582
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+RIP: 0033:0x7f0c6ac890e9
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f0c6be25168 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 00007f0c6ad9bf60 RCX: 00007f0c6ac890e9
+RDX: 0000000000000000 RSI: 0000000020000240 RDI: 0000000000000003
+RBP: 00007f0c6ace308d R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffcdd7fce9f R14: 00007f0c6be25300 R15: 0000000000022000
+ </TASK>
+Modules linked in:
+CR2: 0000000000000000
+---[ end trace 0000000000000000 ]---
+RIP: 0010:0x0
+Code: Unable to access opcode bytes at RIP 0xffffffffffffffd6.
+RSP: 0018:ffffc9000ddf6b50 EFLAGS: 00010246
+RAX: 0000000000040000 RBX: ffff88801ae9e568 RCX: ffffc90006d16000
+RDX: 0000000000040000 RSI: ffffffff86d3e56b RDI: 0000000000000000
+RBP: ffffed10035d3cbc R08: 0000000000000001 R09: ffff88801ae9e63f
+R10: ffffed10035d3cc7 R11: 0000000000000000 R12: 0000000000000000
+R13: ffffed10035d3cbd R14: ffff88801ae9e5e0 R15: ffff88801ae9e5e8
+FS:  00007f0c6be25700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffffffffd6 CR3: 0000000025396000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

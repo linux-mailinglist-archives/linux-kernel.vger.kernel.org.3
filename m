@@ -2,140 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C0CE530E27
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:43:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B527A530DEE
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:42:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232970AbiEWJXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 05:23:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47644 "EHLO
+        id S232995AbiEWJXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 05:23:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232871AbiEWJXK (ORCPT
+        with ESMTP id S232976AbiEWJXd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 05:23:10 -0400
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA621AF3F
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 02:23:06 -0700 (PDT)
-Received: by mail-yb1-f178.google.com with SMTP id q135so24310655ybg.10
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 02:23:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nSdESsXQYczC4k5qR6EUhoG55XqgQrQ395OHEw3icQs=;
-        b=Pi4LW90U1ShTzGmDT8SQ/xibhk2aC2q6v2wGZ975dtuViGwyrXikIW8b+JdJbC99mf
-         mDcf2tHMSFEeUr7u6c8yBuEL+mXJ/x1lkPQbi3ElWtrxayU2jOaRxCjIYvBBigLpxBqe
-         +ZNJabHY003bTYMx0kOceRcai2d9GfP1wtbnRo0d2YsEv5D2ciRURu/IT1zunA2YPkVQ
-         IaNuekRLYDTCm55r2QVVQO0GBEcFxqj1CbT1yQvr7cT5W3xWBy5qqxkorTCbiyiznYO4
-         BgotvFSYKq8MLuI6EGAJU/0C5oRTS5pHFdqsE4vEwJD+zPOcFXB7N2+7pC8sSAUCq964
-         yLrQ==
-X-Gm-Message-State: AOAM532n+s9B/dc1l2jov+ABJP+AkUpFAbNQQBno5Goma4ce5E1rupoM
-        G0kOn0u0p3peEXvH/7fRE9zR32VFywuoYbRNVCY=
-X-Google-Smtp-Source: ABdhPJyy8YU4QNP8+S3euZ1cip0Al7OTJHjUcN2ZpHTMyltrNjuzU9LvTTPZtV62bLbOXw9bFGPm+tKQq9FLJrOwEKI=
-X-Received: by 2002:a5b:491:0:b0:64a:f42f:6973 with SMTP id
- n17-20020a5b0491000000b0064af42f6973mr19994401ybp.20.1653297785863; Mon, 23
- May 2022 02:23:05 -0700 (PDT)
+        Mon, 23 May 2022 05:23:33 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A8CD1AF3F;
+        Mon, 23 May 2022 02:23:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1653297812; x=1684833812;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=NOm3tT8s+FVeZbLypi9zDeQ4MzTBMaDvwi44c+6B/9U=;
+  b=SXx5ZBjJkZ/O0v/TuR9Ry55B9stDLkh1blUlh5j6IoY7MlFSwSz2loAh
+   R3WJXNc5x5kpr5YlZ2S12ExkECCXdMMB4sBNj4GuCcxBi/LuRLmJ2f9ik
+   OJrT5g2hrF9Q0axjd6KLrQDsowCZy6KzlUgvwG/vWBtip04j5/qY/+wsX
+   Q=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 23 May 2022 02:23:31 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 02:23:30 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 23 May 2022 02:23:29 -0700
+Received: from hu-tdas-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 23 May 2022 02:23:26 -0700
+From:   Taniya Das <quic_tdas@quicinc.com>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        =?UTF-8?q?Michael=20Turquette=20=C2=A0?= <mturquette@baylibre.com>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-soc@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <robh@kernel.org>,
+        <robh+dt@kernel.org>, Taniya Das <quic_tdas@quicinc.com>
+Subject: [PATCH v2 0/3] Add support for audio clock gating resets for SC7280
+Date:   Mon, 23 May 2022 14:53:11 +0530
+Message-ID: <20220523092314.14252-1-quic_tdas@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr> <20220512011855.1189653-1-mailhol.vincent@wanadoo.fr>
-In-Reply-To: <20220512011855.1189653-1-mailhol.vincent@wanadoo.fr>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Mon, 23 May 2022 18:22:54 +0900
-Message-ID: <CAMZ6RqL-GBDW1f4=eE_N+jaBjSnD7A8kG_XsNjyvcp94M2Ok3g@mail.gmail.com>
-Subject: Re: [PATCH v4 0/2] x86/asm/bitops: optimize ff{s,z} functions for
- constant expressions
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, David Howells <dhowells@redhat.com>,
-        Jan Beulich <JBeulich@suse.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu. 12 May 2022 at 10:20, Vincent Mailhol
-<mailhol.vincent@wanadoo.fr> wrote:
-> The compilers provide some builtin expression equivalent to the ffs(),
-> __ffs() and ffz() function of the kernel. The kernel uses optimized
-> assembly which produces better code than the builtin
-> functions. However, such assembly code can not be optimized when used
-> on constant expression.
->
-> This series relies on __builtin_constant_p to select the optimal solution:
->
->   * use kernel assembly for non constant expressions
->
->   * use compiler's __builtin function for constant expressions.
->
-> I also think that the fls() and fls64() can be optimized in a similar
-> way, using __builtin_ctz() and __builtin_ctzll() but it is a bit less
-> trivial so I want to focus on this series first. If it get accepted, I
-> will then work on those two additionnal function.
->
->
-> ** Statistics **
->
-> Patch 1/2 optimizes 26.7% of ffs() calls and patch 2/2 optimizes 27.9%
-> of __ffs() and ffz() calls (details of the calculation in each patch).
->
->
-> ** Changelog **
->
-> v3 -> v4:
->
->   * (no changes on code, only commit comment was modified)
->
->   * Remove note and link to Nick's message in patch 1/2, c.f.:
->   https://lore.kernel.org/all/CAKwvOdnnDaiJcV1gr9vV+ya-jWxx7+2KJNTDThyFctVDOgt9zQ@mail.gmail.com/
->
->   * Add Reviewed-by: Nick Desaulniers <ndesaulniers@google.com> in tag in patch 2/2.
->
->
-> v2 -> v3:
->
->   * Redacted out the instructions after ret and before next function
->     in the assembly output.
->
->   * Added a note and a link to Nick's message on the constant
->     propagation missed-optimization in clang:
->     https://lore.kernel.org/all/CAKwvOdnH_gYv4qRN9pKY7jNTQK95xNeH1w1KZJJmvCkh8xJLBg@mail.gmail.com/
->
->   * Fix copy/paste typo in statistics of patch 1/2. Number of
->     occurences before patches are 1081 and not 3607 (percentage
->     reduction of 26.7% remains correct)
->
->   * Rename the functions as follow:
->     - __varible_ffs() -> variable___ffs()
->     - __variable_ffz() -> variable_ffz()
->
->   * Add Reviewed-by: Nick Desaulniers <ndesaulniers@google.com> in tag in patch 1/2.
->
-> Vincent Mailhol (2):
->   x86/asm/bitops: ffs: use __builtin_ffs to evaluate constant
->     expressions
->   x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to evaluate constant
->     expressions
+Add support for clock gating resets for lpass audio clock controller and
+also add support for external MCLKs for I2S.
 
-Hi Thomas, Ingo and Borislav,
+[v2]
+  * Update/fix the YAML for reg property against each compatible.
 
-Are there any chances for you to pick those two patches during this
-week's merge windows?
-https://lore.kernel.org/all/20220512011855.1189653-2-mailhol.vincent@wanadoo.fr/
-https://lore.kernel.org/all/20220512011855.1189653-3-mailhol.vincent@wanadoo.fr/
+[v1]
+  * Add support for clock gating resets for lpass audio clock
+    controller & MCLKs.
 
-Thank you!
+Taniya Das (3):
+  dt-bindings: clock: Add resets for LPASS audio clock controller for
+    SC7280
+  dt-bindings: clock: Add support for external MCLKs for LPASS on SC7280
+  clk: qcom: lpass: Add support for resets & external mclk for SC7280
 
+ .../clock/qcom,sc7280-lpasscorecc.yaml        | 20 +++++++++--
+ drivers/clk/qcom/lpassaudiocc-sc7280.c        | 17 +++++++++-
+ drivers/clk/qcom/lpasscorecc-sc7280.c         | 33 +++++++++++++++++++
+ .../clock/qcom,lpassaudiocc-sc7280.h          |  5 +++
+ .../clock/qcom,lpasscorecc-sc7280.h           |  2 ++
+ 5 files changed, 73 insertions(+), 4 deletions(-)
 
-Yours sincerely,
-Vincent Mailhol
+--
+2.17.1
+

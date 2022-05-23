@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD214531864
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:54:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F2855318BE
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:54:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241439AbiEWRar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:30:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48984 "EHLO
+        id S239331AbiEWRFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:05:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241714AbiEWRWd (ORCPT
+        with ESMTP id S239224AbiEWREg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:22:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B735F7B9CE;
-        Mon, 23 May 2022 10:19:20 -0700 (PDT)
+        Mon, 23 May 2022 13:04:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75D1606C2;
+        Mon, 23 May 2022 10:04:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6E2E6B811CC;
-        Mon, 23 May 2022 17:17:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C53ACC385A9;
-        Mon, 23 May 2022 17:17:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 03042614C1;
+        Mon, 23 May 2022 17:04:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05D54C385A9;
+        Mon, 23 May 2022 17:04:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326278;
-        bh=l+dweFhCBdHCnU3oBcjOgofbeTDxRhLUVlx7Mb2HFa0=;
+        s=korg; t=1653325474;
+        bh=J5AZ6YoBIpezjSlGXkcI10G3x5B8FyKLScmskPDYuuY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E6AJTzliV7iniNYW5DDKntKpQzkv9yTWbYWE4yc1Yh2U1UutstgGQDZaNC0XyYX+j
-         ODxHxAc8G7wqwC1Ww/ykRqZ7ONFyertnAtRJZTNCAwGLSnNe7V1vOqBZ3g/1Sk22QP
-         2V6FLSS0df/McDXOnmrirkeydO2O7amZyPP+o9+0=
+        b=z3GBQW4ybRAI86qc4CFzd/aCI8Az3Jx45p1CRwoaQPWJ14xO+IWx6+O0Vmj2lPICX
+         Quq1oq03SuBPwbVWzu2RJdUmjJMWmT5JrPI/8I6BUF/qOKXMVgDVWOy9l0yMpyrGIT
+         IaPylWTB9YqUGXDaEkq40/1YQsACcVHSJ0LLdKRI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Terry Bowman <terry.bowman@amd.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jean Delvare <jdelvare@suse.de>, Wolfram Sang <wsa@kernel.org>,
-        Mario Limonciello <Mario.Limonciello@amd.com>
-Subject: [PATCH 5.15 012/132] i2c: piix4: Enable EFCH MMIO for Family 17h+
+        stable@vger.kernel.org, Felix Fietkau <nbd@nbd.name>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 23/25] mac80211: fix rx reordering with non explicit / psmp ack policy
 Date:   Mon, 23 May 2022 19:03:41 +0200
-Message-Id: <20220523165825.647117603@linuxfoundation.org>
+Message-Id: <20220523165749.857405906@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
-References: <20220523165823.492309987@linuxfoundation.org>
+In-Reply-To: <20220523165743.398280407@linuxfoundation.org>
+References: <20220523165743.398280407@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,70 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Terry Bowman <terry.bowman@amd.com>
+From: Felix Fietkau <nbd@nbd.name>
 
-commit 6cf72f41808ab5db1d7718b999b3ff0166e67e45 upstream.
+[ Upstream commit 5e469ed9764d4722c59562da13120bd2dc6834c5 ]
 
-Enable EFCH MMIO using check for SMBus PCI revision ID value 0x51 or
-greater. This PCI revision ID check will enable family 17h and future
-AMD processors with the same EFCH SMBus controller HW.
+When the QoS ack policy was set to non explicit / psmp ack, frames are treated
+as not being part of a BA session, which causes extra latency on reordering.
+Fix this by only bypassing reordering for packets with no-ack policy
 
-Signed-off-by: Terry Bowman <terry.bowman@amd.com>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
-Cc: Mario Limonciello <Mario.Limonciello@amd.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Felix Fietkau <nbd@nbd.name>
+Link: https://lore.kernel.org/r/20220420105038.36443-1-nbd@nbd.name
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/busses/i2c-piix4.c |   17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
+ net/mac80211/rx.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
---- a/drivers/i2c/busses/i2c-piix4.c
-+++ b/drivers/i2c/busses/i2c-piix4.c
-@@ -229,6 +229,18 @@ static void piix4_sb800_region_release(s
- 	release_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE);
- }
+diff --git a/net/mac80211/rx.c b/net/mac80211/rx.c
+index 41af02a70742..02845bed07d7 100644
+--- a/net/mac80211/rx.c
++++ b/net/mac80211/rx.c
+@@ -1179,8 +1179,7 @@ static void ieee80211_rx_reorder_ampdu(struct ieee80211_rx_data *rx,
+ 		goto dont_reorder;
  
-+static bool piix4_sb800_use_mmio(struct pci_dev *PIIX4_dev)
-+{
-+	/*
-+	 * cd6h/cd7h port I/O accesses can be disabled on AMD processors
-+	 * w/ SMBus PCI revision ID 0x51 or greater. MMIO is supported on
-+	 * the same processors and is the recommended access method.
-+	 */
-+	return (PIIX4_dev->vendor == PCI_VENDOR_ID_AMD &&
-+		PIIX4_dev->device == PCI_DEVICE_ID_AMD_KERNCZ_SMBUS &&
-+		PIIX4_dev->revision >= 0x51);
-+}
-+
- static int piix4_setup(struct pci_dev *PIIX4_dev,
- 		       const struct pci_device_id *id)
- {
-@@ -339,7 +351,7 @@ static int piix4_setup_sb800_smba(struct
- 	u8 smba_en_hi;
- 	int retval;
+ 	/* not part of a BA session */
+-	if (ack_policy != IEEE80211_QOS_CTL_ACK_POLICY_BLOCKACK &&
+-	    ack_policy != IEEE80211_QOS_CTL_ACK_POLICY_NORMAL)
++	if (ack_policy == IEEE80211_QOS_CTL_ACK_POLICY_NOACK)
+ 		goto dont_reorder;
  
--	mmio_cfg.use_mmio = 0;
-+	mmio_cfg.use_mmio = piix4_sb800_use_mmio(PIIX4_dev);
- 	retval = piix4_sb800_region_request(&PIIX4_dev->dev, &mmio_cfg);
- 	if (retval)
- 		return retval;
-@@ -461,7 +473,7 @@ static int piix4_setup_sb800(struct pci_
- 			piix4_port_shift_sb800 = SB800_PIIX4_PORT_IDX_SHIFT;
- 		}
- 	} else {
--		mmio_cfg.use_mmio = 0;
-+		mmio_cfg.use_mmio = piix4_sb800_use_mmio(PIIX4_dev);
- 		retval = piix4_sb800_region_request(&PIIX4_dev->dev, &mmio_cfg);
- 		if (retval) {
- 			release_region(piix4_smba, SMBIOSIZE);
-@@ -944,6 +956,7 @@ static int piix4_add_adapter(struct pci_
- 		return -ENOMEM;
- 	}
- 
-+	adapdata->mmio_cfg.use_mmio = piix4_sb800_use_mmio(dev);
- 	adapdata->smba = smba;
- 	adapdata->sb800_main = sb800_main;
- 	adapdata->port = port << piix4_port_shift_sb800;
+ 	/* new, potentially un-ordered, ampdu frame - process it */
+-- 
+2.35.1
+
 
 

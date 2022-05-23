@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6115531796
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:53:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 908365319AE
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:55:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243088AbiEWRlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:41:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38810 "EHLO
+        id S239518AbiEWRKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:10:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242449AbiEWR1n (ORCPT
+        with ESMTP id S239743AbiEWRJ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:27:43 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A93867CB02;
-        Mon, 23 May 2022 10:23:29 -0700 (PDT)
+        Mon, 23 May 2022 13:09:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55BE86CF65;
+        Mon, 23 May 2022 10:09:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 25608CE16D6;
-        Mon, 23 May 2022 17:23:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 383BDC34115;
-        Mon, 23 May 2022 17:23:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A5A63614CE;
+        Mon, 23 May 2022 17:09:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CFFEC385A9;
+        Mon, 23 May 2022 17:09:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326596;
-        bh=lDk+F4HKPxn0d05h+U9p97RFT3X3tNvjgiBwT/4IaW8=;
+        s=korg; t=1653325744;
+        bh=J6r/QpIudsRd9kmTBML/fcglHaqE7Am2Dj6WFc1ZLw0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CAEgAOUZDFKPsp1ZzvqtfDEaVGtl+3Kh4loHoEnSJBw6dg+ULbttphj6w/8uj53L9
-         fC4rowAnkgmnK66bqFIKsjhvW6mGELHmDT0IQ9ov3ISX7BKEwADqay3wnoTT5KDrdz
-         pFXeZnudll9KCgWT8dC+mpg9zU7jrm3UTZTwD1C8=
+        b=NnbWJO5dO6X92oa1g6Ed13Ta3fwUl4GDZ3LihxxUWQT6rGVaPQNJ4e9ppN0SJ9XOY
+         aqtYSMVhfRCooQwwfH8gdob5zXNtBCe9ZZbbj05wEtJe+qisDs6V0t7hnJpcFRz85l
+         Mdpfdb9p1HSudwyPzgpsB+QIzj+ecfP2J1dsDvXE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
-        Haibo Chen <haibo.chen@nxp.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
+        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 108/132] gpio: gpio-vf610: do not touch other bits when set the target bit
-Date:   Mon, 23 May 2022 19:05:17 +0200
-Message-Id: <20220523165841.393038445@linuxfoundation.org>
+Subject: [PATCH 4.14 29/33] ethernet: tulip: fix missing pci_disable_device() on error in tulip_init_one()
+Date:   Mon, 23 May 2022 19:05:18 +0200
+Message-Id: <20220523165753.108638198@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
-References: <20220523165823.492309987@linuxfoundation.org>
+In-Reply-To: <20220523165746.957506211@linuxfoundation.org>
+References: <20220523165746.957506211@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,42 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Haibo Chen <haibo.chen@nxp.com>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-[ Upstream commit 9bf3ac466faa83d51a8fe9212131701e58fdef74 ]
+[ Upstream commit 51ca86b4c9c7c75f5630fa0dbe5f8f0bd98e3c3e ]
 
-For gpio controller contain register PDDR, when set one target bit,
-current logic will clear all other bits, this is wrong. Use operator
-'|=' to fix it.
+Fix the missing pci_disable_device() before return
+from tulip_init_one() in the error handling case.
 
-Fixes: 659d8a62311f ("gpio: vf610: add imx7ulp support")
-Reviewed-by: Peng Fan <peng.fan@nxp.com>
-Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Link: https://lore.kernel.org/r/20220506094250.3630615-1-yangyingliang@huawei.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpio/gpio-vf610.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/dec/tulip/tulip_core.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpio/gpio-vf610.c b/drivers/gpio/gpio-vf610.c
-index e0f2b67558e7..47e191e11c69 100644
---- a/drivers/gpio/gpio-vf610.c
-+++ b/drivers/gpio/gpio-vf610.c
-@@ -125,9 +125,13 @@ static int vf610_gpio_direction_output(struct gpio_chip *chip, unsigned gpio,
- {
- 	struct vf610_gpio_port *port = gpiochip_get_data(chip);
- 	unsigned long mask = BIT(gpio);
-+	u32 val;
+diff --git a/drivers/net/ethernet/dec/tulip/tulip_core.c b/drivers/net/ethernet/dec/tulip/tulip_core.c
+index 851b6d1f5a42..35bcb2c52dbc 100644
+--- a/drivers/net/ethernet/dec/tulip/tulip_core.c
++++ b/drivers/net/ethernet/dec/tulip/tulip_core.c
+@@ -1410,8 +1410,10 @@ static int tulip_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
  
--	if (port->sdata && port->sdata->have_paddr)
--		vf610_gpio_writel(mask, port->gpio_base + GPIO_PDDR);
-+	if (port->sdata && port->sdata->have_paddr) {
-+		val = vf610_gpio_readl(port->gpio_base + GPIO_PDDR);
-+		val |= mask;
-+		vf610_gpio_writel(val, port->gpio_base + GPIO_PDDR);
+ 	/* alloc_etherdev ensures aligned and zeroed private structures */
+ 	dev = alloc_etherdev (sizeof (*tp));
+-	if (!dev)
++	if (!dev) {
++		pci_disable_device(pdev);
+ 		return -ENOMEM;
 +	}
  
- 	vf610_gpio_set(chip, gpio, value);
+ 	SET_NETDEV_DEV(dev, &pdev->dev);
+ 	if (pci_resource_len (pdev, 0) < tulip_tbl[chip_idx].io_size) {
+@@ -1789,6 +1791,7 @@ static int tulip_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 
+ err_out_free_netdev:
+ 	free_netdev (dev);
++	pci_disable_device(pdev);
+ 	return -ENODEV;
+ }
  
 -- 
 2.35.1

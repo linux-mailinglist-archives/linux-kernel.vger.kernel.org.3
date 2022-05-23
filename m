@@ -2,229 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9098B53141D
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:25:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC4C0531236
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:22:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238843AbiEWQS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 12:18:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36878 "EHLO
+        id S238689AbiEWQSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 12:18:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238756AbiEWQSG (ORCPT
+        with ESMTP id S238721AbiEWQSV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 12:18:06 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E775001F;
-        Mon, 23 May 2022 09:17:59 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id c2so13563514plh.2;
-        Mon, 23 May 2022 09:17:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=XscYd2XthDWYUhAkxOPgE7MyEYQIXOYcrsFO2Eyz8Ag=;
-        b=Ki7jD0kLG6A9jqBBRwOmAbgHs0YQEKbXmx6QN+gwUBEyb1ZJYbe0yDwlxp69FhjUtX
-         qsk6JRwaHKF/LdvjW02F1oQkQ3EO8a8sybq4xvqzTFZustbTvuMALd3Tp3zYkYSe9QiB
-         CYdSSNUMnTaQQWR7sXpox7RUL/FhsZ9xYoUAAsthkKLyRmkaOrNM8YInpISw61yB8jes
-         iPVNQMygQbILNZoj4k5QKM2PTdrG3i/l6+Hv24SlCqYc4+6lNm4QWn8U/YiJfYegJDL8
-         yOW7DGQXrfNNIbRLSIXEGXh3pgyWIfooUG6qyZGFshjMWk3DGk6sJyFzp6xgRBkxE6ql
-         ORKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XscYd2XthDWYUhAkxOPgE7MyEYQIXOYcrsFO2Eyz8Ag=;
-        b=OjS6z/lf51rj8hlBi01WydhOo3zAcY9dX95p/J+PP2iIcQbYMF8aPFX+Oel8G+DT4m
-         t4isjcUzvGhmn2ox29luW9dxe8QFxvfTSq0Hng6o2lPC6xKdB/YujSczApB8A7sndnfI
-         sIGvUMgYr0ybVU/spJ8B+PQxSRSyD4aq0zwkQfukOxtwXqgJL7BK/YoANiy25z6eXUJv
-         vcT9BmAmUNE8hEylAvhEmWbc6zZoQyZjL6ntj9wmGAkZDtephmszu+75ec9xy63EZZJs
-         /9QDQZmt3vXSvmWC6B/w0dE/E9gNtz9chVChTa+ScrVep8niC9jlVRWZEsqo1ZYXYWjV
-         DYOw==
-X-Gm-Message-State: AOAM533zKKNJ2NzSEYj+sTGOXrHhRv87kiSOSz1y2cRZUEQL6UwM4R4e
-        27ZRzt2la9YuKajdMglwokc=
-X-Google-Smtp-Source: ABdhPJx1UvRPNtRDvXoFm4s4GFCfRU43KQsGhriUzOMYUgwZZJJ8O6kkqdWzCkCAWMgpP43D1W2s0g==
-X-Received: by 2002:a17:903:11c7:b0:154:b936:d1d4 with SMTP id q7-20020a17090311c700b00154b936d1d4mr23608030plh.78.1653322678114;
-        Mon, 23 May 2022 09:17:58 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:d84e:5dcd:9d68:ebbf])
-        by smtp.gmail.com with ESMTPSA id w4-20020a654104000000b003fa95b940bdsm595341pgp.88.2022.05.23.09.17.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 09:17:57 -0700 (PDT)
-Date:   Mon, 23 May 2022 09:17:54 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     matthias.bgg@gmail.com, mkorpershoek@baylibre.com,
-        linux-input@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/5] Input: mtk-pmic-keys - Add kerneldoc to driver
- structures
-Message-ID: <YouzshxT6bjxiRqr@google.com>
-References: <20220520125132.229191-1-angelogioacchino.delregno@collabora.com>
- <20220520125132.229191-2-angelogioacchino.delregno@collabora.com>
- <YosOsgPwMGuLk9dv@google.com>
- <56598535-5aa4-020e-25fd-295416f4d979@collabora.com>
+        Mon, 23 May 2022 12:18:21 -0400
+Received: from smtp11.infineon.com (smtp11.infineon.com [IPv6:2a00:18f0:1e00:4::5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B32CC674F5;
+        Mon, 23 May 2022 09:18:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
+  t=1653322697; x=1684858697;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=z8t769RTJ1v6wThwJD40WUm25oo8h2mVf0BG5uNRaCc=;
+  b=QsUaaVCYZ67dYpIAxoxr1Erzw784RBvGVRLnW0moaMNe/aWmzlgL7v1c
+   4nincVzD0wFO/OK6k4/Bh9KpDOmScsyNdHTQSK5flPgVFbYeDSQcQuP+Q
+   LGrx4/ZUiPPbdZ6duVIec/tFPtPLXEy+1tphYY4CYTG2xz/yLD51n+iJc
+   Q=;
+X-SBRS: None
+X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="297362362"
+X-IronPort-AV: E=Sophos;i="5.91,246,1647298800"; 
+   d="scan'208";a="297362362"
+Received: from unknown (HELO mucxv003.muc.infineon.com) ([172.23.11.20])
+  by smtp11.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 18:18:15 +0200
+Received: from MUCSE819.infineon.com (MUCSE819.infineon.com [172.23.29.45])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mucxv003.muc.infineon.com (Postfix) with ESMTPS;
+        Mon, 23 May 2022 18:18:14 +0200 (CEST)
+Received: from MUCSE817.infineon.com (172.23.29.43) by MUCSE819.infineon.com
+ (172.23.29.45) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Mon, 23 May
+ 2022 18:18:14 +0200
+Received: from [10.165.68.85] (10.165.68.85) by MUCSE817.infineon.com
+ (172.23.29.43) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Mon, 23 May
+ 2022 18:18:14 +0200
+Message-ID: <cbebf61b-71ab-b37d-c516-57a9155e1a94@infineon.com>
+Date:   Mon, 23 May 2022 18:18:02 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <56598535-5aa4-020e-25fd-295416f4d979@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3 1/2] tpm: Add tpm_tis_i2c backend for tpm_tis_core
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <jarkko@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-integrity@vger.kernel.org>
+CC:     <peterhuewe@gmx.de>, <jgg@ziepe.ca>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        Johannes Holland <johannes.holland@infineon.com>,
+        Amir Mizinski <amirmizi6@gmail.com>
+References: <20220520172422.4309-1-Alexander.Steffen@infineon.com>
+ <20220520172422.4309-2-Alexander.Steffen@infineon.com>
+ <02596f22-3d19-8872-75fd-2a8f563c8270@linaro.org>
+ <8f0d2098-8c7f-2347-3004-bf3e422de3a3@infineon.com>
+ <d4ab965c-d193-3b4b-9b88-95b8b2b40f80@linaro.org>
+ <9d9e04e9-463a-bd43-b116-a9488f6e154e@linaro.org>
+From:   Alexander Steffen <Alexander.Steffen@infineon.com>
+In-Reply-To: <9d9e04e9-463a-bd43-b116-a9488f6e154e@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.165.68.85]
+X-ClientProxiedBy: MUCSE807.infineon.com (172.23.29.33) To
+ MUCSE817.infineon.com (172.23.29.43)
+X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 10:54:03AM +0200, AngeloGioacchino Del Regno wrote:
-> Il 23/05/22 06:33, Dmitry Torokhov ha scritto:
-> > Hi AngeloGioacchino,
-> > 
-> > On Fri, May 20, 2022 at 02:51:28PM +0200, AngeloGioacchino Del Regno wrote:
-> > > To enhance human readability, add kerneldoc to all driver structs.
-> > 
-> > I am doubtful that this is useful. The reason is that I believe
-> > kerneldoc format is only useful for documenting cross-subsystem APIs.
-> > Kerneldoc for driver-private data and functions simply pollutes API
-> > docs.
-> > 
-> > > 
-> > > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> > > ---
-> > >   drivers/input/keyboard/mtk-pmic-keys.c | 30 +++++++++++++++++++++++++-
-> > >   1 file changed, 29 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/input/keyboard/mtk-pmic-keys.c b/drivers/input/keyboard/mtk-pmic-keys.c
-> > > index c31ab4368388..8e4fa7cd16e6 100644
-> > > --- a/drivers/input/keyboard/mtk-pmic-keys.c
-> > > +++ b/drivers/input/keyboard/mtk-pmic-keys.c
-> > > @@ -34,6 +34,13 @@
-> > >   #define MTK_PMIC_HOMEKEY_INDEX	1
-> > >   #define MTK_PMIC_MAX_KEY_COUNT	2
-> > > +/**
-> > > + * struct mtk_pmic_keys_regs - PMIC keys per-key registers
-> > > + * @deb_reg:             Debounced key status register
-> > > + * @deb_mask:            Bitmask of this key in status register
-> > > + * @intsel_reg:          Interrupt selector register
-> > > + * @intsel_mask:         Bitmask of this key in interrupt selector
-> > > + */
-> > >   struct mtk_pmic_keys_regs {
-> > >   	u32 deb_reg;
-> > >   	u32 deb_mask;
-> > > @@ -50,6 +57,11 @@ struct mtk_pmic_keys_regs {
-> > >   	.intsel_mask		= _intsel_mask,		\
-> > >   }
-> > > +/**
-> > > + * struct mtk_pmic_regs - PMIC Keys registers
-> > > + * @keys_regs:           Specific key registers
-> > 
-> > This new description of the structure and of the keys_regs does not add
-> > any information for me.
-> > 
-> > > + * @pmic_rst_reg:        PMIC Keys reset register
-> > > + */
-> > >   struct mtk_pmic_regs {
-> > >   	const struct mtk_pmic_keys_regs keys_regs[MTK_PMIC_MAX_KEY_COUNT];
-> > >   	u32 pmic_rst_reg;
-> > > @@ -85,15 +97,31 @@ static const struct mtk_pmic_regs mt6358_regs = {
-> > >   	.pmic_rst_reg = MT6358_TOP_RST_MISC,
-> > >   };
-> > > +/**
-> > > + * struct mtk_pmic_keys_info - PMIC Keys per-key params
-> > > + * @keys:                Pointer to main driver structure
-> > 
-> > That is obvious from the field definition.
-> > 
-> > > + * @regs:                Register offsets/masks for this key
-> > 
-> > Ditto.
-> > 
-> > > + * @keycode:             Key code for this key
-> > 
-> > Yep.
-> > 
-> > > + * @irq:                 Keypress or press/release interrupt
-> > > + * @irq_r:               Key release interrupt (optional)
-> > > + * @wakeup:              Indicates whether to use this key as a wakeup source
-> > > + */
-> > >   struct mtk_pmic_keys_info {
-> > >   	struct mtk_pmic_keys *keys;
-> > >   	const struct mtk_pmic_keys_regs *regs;
-> > >   	unsigned int keycode;
-> > >   	int irq;
-> > > -	int irq_r; /* optional: release irq if different */
-> > > +	int irq_r;
-> > >   	bool wakeup:1;
-> > >   };
-> > > +/**
-> > > + * struct mtk_pmic_keys - Main driver structure
-> > > + * @input_dev:           Input device pointer
-> > 
-> > I do not find this helpful.
-> > 
-> > > + * @dev:                 Device pointer
-> > 
-> > And neither this.
-> > 
-> > > + * @regmap:              Regmap handle
-> > 
-> > Nor this.
-> > 
-> > > + * @keys:                Per-key parameters
-> > > + */
-> > >   struct mtk_pmic_keys {
-> > >   	struct input_dev *input_dev;
-> > >   	struct device *dev;
-> > > -- 
-> > > 2.35.1
-> > > 
-> > 
-> > In the end we ended up with something that now has a chance of
-> > introducing warning when someone changes code, for very little benefit,
-> > if any at all.
-> > 
-> > For driver-private data and functions we should rely on expressive
-> > variable and function names and only use comments for something that
-> > might be unclear or requires additional qualification.
-> > 
+On 23.05.22 11:44, Krzysztof Kozlowski wrote:
+> On 23/05/2022 11:32, Krzysztof Kozlowski wrote:
+>> On 23/05/2022 10:55, Alexander Steffen wrote:
+>>> On 22.05.22 10:30, Krzysztof Kozlowski wrote:
+>>>> Without bindings, new compatibles and properties cannot be accepted, so NAK.
+>>>
+>>> Could you be more specific as to what the correct solution is here?
+>>> Usually, I'd just look at what the existing code does, but that is a
+>>> little messy:
+>>>
+>>>
+>>>
+>>> * socionext,synquacer-tpm-mmio is documented only in
+>>> Documentation/devicetree/bindings/trivial-devices.yaml
+>>>
+>>> * nuvoton,npct601 is documented in trivial-devices.yaml and is also
+>>> mentioned in Documentation/devicetree/bindings/security/tpm/tpm-i2c.txt
+>>>
+>>> * nuvoton,npct650 is only mentioned in tpm-i2c.txt, but appears nowhere
+>>> in the code
+>>>
+>>> * infineon,tpm_i2c_infineon appears only in tpm_i2c_infineon.c, but is
+>>> documented nowhere
+>>>
+>>> * tpm_tis_spi_main.c has all its compatibles documented in
+>>> tpm_tis_spi.txt, except google,cr50, which is documented in
+>>> google,cr50.txt, even though it has the same properties
+>>>
+>>> * tpm_tis_i2c_cr50.c uses the exact same google,cr50, even though that
+>>> is explicitly documented as a device "on SPI Bus" and lists
+>>> spi-max-frequency as one of its required properties, which does not make
+>>> any sense for an I2C device
+>>>
+>>> * According to the feedback in
+>>> https://patchwork.kernel.org/project/linux-integrity/patch/20220404081835.495-4-johannes.holland@infineon.com/#24801807,
+>>> the text format, that is currently used everywhere in
+>>> Documentation/devicetree/bindings/security/tpm/, is deprecated anyway
+>>> and should be replaced by YAML
+>>>
+>>>
+>>>
+>>> So would you be okay with just adding the compatibles from tpm_tis_i2c.c
+>>> to trivial-devices.yaml, so that checkpatch does not complain anymore,
+>>> and leave the cleanup of the mess above for later?
+>>
+> To trivial-devices you should add only bindings of really trivial
+> devices, which do not have any other properties, even when the bindings
+> are finished. This means you describe fully the hardware and still have
+> only reg+compatible.
 > 
-> Hello Dmitry,
+> If this device fits such case - no other hardware properties than reg -
+> then, feel free to document it in trivial-devices. However I am not sure
+> that TPM devices are that trivial... For example tpm-i2c.txt defines
+> also interrupts and label.
 > 
-> it's been very helpful for me to see kerneldoc documentation in the various
-> drivers across the kernel - helped me understanding what was going on in an
-> easier, more immediate way, especially when looking at drivers having some
-> kind of "complicated" flow.
-> About introducing warnings when someone changes code, I believe that this
-> may also be helpful (for a developer) in some *corner* cases, but I agree
-> that this is unnecessarily tedious in some others... in the end, it's all
-> about personal opinions...
-> 
-> Of course, some of the documentation being obvious is unavoidable when it
-> comes to kerneldoc as you either document 'em all, or nothing.
-> 
-> In any case, if you really dislike having this kind of documentation, I can
-> drop these commits and eventually add in-line comments to some variables to
-> make them perfectly understandable, or I can avoid documenting at all (even
-> though I am strongly for documenting things clearly).
+> If the device is not trivial, it should be documented in bindings,
+> either dedicated or some existing ones.
 
-I might be mistaken, but I think what you appreciated is not presence of
-comments particularly in kerneldoc format (you did not generate htmldocs
-or something to study the drivers internal API disconnected from the
-code, did you?) but rather the fact that some drivers have been
-well-commented.
+Ok, let's see whether I understood that correctly:
 
-To be clear, I am all for adding meaningful comments to the drivers
-structures and code, but kerneldoc is too rigid and adds too much noise.
-As I mentioned "this is a pointer to an input device" description might
-be OK when looking at HTML docs on the web or elsewhere, but really does
-not add anything when you see "struct input_dev *input_dev;" a few lines
-below.  So my preference would be to add free-form comments to places
-where intent is not clear. For example the original comment to "irq_r"
-was pretty good IMO - it called out some irregularity and explained what
-it is. We could definitely add comment to "irq" as well to tell that we
-expect it to fire on both press and release.
 
-Thanks.
 
--- 
-Dmitry
+I think, in general, TPMs are trivial devices: They sit on the I2C or 
+SPI bus waiting for commands, but don't do much else. They might have 
+TPM-specific properties, like whether they implement the 1.2 or 2.0 
+command set, but we don't encode those in the device tree, since the 
+driver tries to detect the available functionality dynamically (which 
+makes sense, since some TPMs can be upgraded from 1.2 to 2.0, so that is 
+not a static property of the device). Other properties, such as the 
+maximum SPI frequency, are not TPM-specific, but apply to every SPI 
+device and might be limited by either the SPI device itself or the SPI 
+controller (or the user, wishing to run at lower frequencies, for 
+whatever reason).
+
+
+
+Looking at the code, there are some TPM-specific properties in use 
+though: There is the powered-while-suspended flag, which only the TPM 
+driver looks at (in drivers/char/tpm/eventlog/of.c). It is not specific 
+to a single TPM (a single compatible string), but can be set for all the 
+TPMs. Also, the linux,sml-* properties might be TPM-specific, though 
+they get set in arch/powerpc/kernel/prom_init.c to communicate some 
+information to the TPM driver. And there is lpcpd-gpios, which is only 
+used by st33zp24.
+
+
+
+Now the purpose of trivial-devices.yaml is to specify a schema of valid 
+device definitions. It only allows the properties reg, interrupts and 
+spi-max-frequency in addition to the compatible strings. So, strictly 
+speaking, none of the TPMs should be listed there, since all the TPMs 
+can, in theory, use the powered-while-suspended flag, which is not 
+allowed by the schema. With other properties the schema does not seem to 
+be too strict, since it applies to both I2C and SPI devices, but allows 
+the spi-max-frequency property, even though that does not make sense for 
+I2C devices.
+
+
+
+So the correct solution could be this: Replace all the text files in 
+Documentation/devicetree/bindings/security/tpm/ with a single 
+trivial-tpms.yaml (similar to trivial-devices.yaml) and also move all 
+the TPMs from trivial-devices.yaml there. This allows to properly 
+document the powered-while-suspended flag and other generic TPM 
+properties. st33zp24 should get its own YAML, to document lpcpd-gpios, 
+that is only used by this driver. I'm not quite sure what to do with 
+ibmvtpm.txt, since that seems to document several properties, that are 
+not referenced in the TPM driver at all but instead get used by some 
+scsi driver (e.g. ibm,loc-code), so I'd probably ignore it for now. What 
+do you think?
+
+
+
+As for tpm_tis_i2c, if there are no other objections to its current 
+state, I'd add its compatible strings to trivial-devices.yaml for now, 
+then do the cleanup as described above later. It does not make the code 
+more wrong, since trivial-devices.yaml already contains some TPM 
+devices, that are very similar to what tpm_tis_i2c now supports (i.e. 
+that also don't have special properties), but allows for more time to do 
+the cleanup properly, without holding up tpm_tis_i2c.
+
+
+
+Kind regards
+
+Alexander

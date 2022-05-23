@@ -2,92 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F177531320
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:23:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 800B1531247
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:22:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237972AbiEWP26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 11:28:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40724 "EHLO
+        id S237883AbiEWP36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 11:29:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237968AbiEWP2z (ORCPT
+        with ESMTP id S238064AbiEWP2k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 11:28:55 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8EDF5EDF7
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 08:28:49 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id y13so28862580eje.2
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 08:28:49 -0700 (PDT)
+        Mon, 23 May 2022 11:28:40 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3815FF04;
+        Mon, 23 May 2022 08:28:24 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d22so13407518plr.9;
+        Mon, 23 May 2022 08:28:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=malat-biz.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=XPtsde4gyVo6IJJ2lowRrIJoC9Wl+ngKLvBmCGRosYU=;
-        b=he+tcNDA7ndcB7CTw1/DbteaPV0BHHiyChBmUWVYsesTwE4FheIylI/Ktcls1XAOlf
-         c3S5t0KEqwBQX9JX4xwIfmleuXXuktbt4EvMIBFVITv7lFRQo4UOVcfh4sYWfMSwx9Pi
-         U2Dez6pyB/M7lY0SPdYD6E202dPvVrynR4EtREr2cRXWjYjShDZHRqFQwkQ451aIjm1g
-         Yj5vbsF95Iiz1OewX+nUFxpPzlIUW6/66w8OnTPgzJ5PEuG+8FETwydWbBNjSzQ3FzWM
-         QBmel4mAnWj99UCYFVXz3muSbptC2IMAtsA0FLB+90gYv5Oqsq65HubkW3/YlLk27+Tn
-         Wvog==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cUC4YaTkSvnRYrJyCu9bbmLHjPFEHYU8Y+xctYQuBfo=;
+        b=pBMqPUwvyvmRiCSpJnrPcKBj4tXANwPwaJQfBeQZbvwD5TWozoyG0AJi0UUreYt344
+         zOf8BbJLr7L8Q27sVXv8Xe/01vjze+sZIZujLJtacMGT25Ek6OwfZJzjVLxZK7pnRZqq
+         w+NlZCn2XazKc9Q+SsUiwDR/EcgWrQCOtFh2AJkgN/dGFO7ntUZsjWuMBlNAjO7V8hp8
+         KM56AtIcTVjuRmWL68A2wCVioWILVggaPBR20LmcqgoOAbSmpWCZAKhMpwl6ObVUpORP
+         4ZNxuFZze22j3imNb4w8yFimrFs8SKdWRstnlHu8BGCnFqUf5JcdPkmeqsZ4Ly0QW9RN
+         yp/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XPtsde4gyVo6IJJ2lowRrIJoC9Wl+ngKLvBmCGRosYU=;
-        b=EJpQOshhBFCUp9Ul2DQtazGD9avWOk05SQOu3dmq7RPVdmsmj683GFmUtAK3Sul+CW
-         uxyfbGUWg5oObIXPLxdghphQYe9vLwjLwCkaXB+32tiNPO+qfLQ2J1Z8HfehKUMwXsyb
-         K5xEY+t0qsvFHXY7vuPk7rOeVbWA8P6Ry8utymgTXsY1pwBhLxtkUr9AEJovqFvBRfEt
-         bf3n/xNFrTKfDETH1LFdTkM3EqQkx+1adVRKkrX8hzb1CFstGdSfcf9wa1tFPWklEDSE
-         c7gwmG34/cTvSCXqjXqABCUQJ5LjicVLCt4A2GosIYObjDdJgFW7fk1FPMn5NwYpWB68
-         oNtQ==
-X-Gm-Message-State: AOAM5322HwqAZtyzQgNPHWF5HJ4TvyBN9WDI4Nt/BZ0CwRpkSbFu9gfw
-        66hzG7V4KAKrMbew0zPGShFP6Q==
-X-Google-Smtp-Source: ABdhPJwrxiEWnwMCc46nqTyw8Rb4U7FGGn9Q/ughz/Boi6eJRPID9+ui33r690dogZXwncyyksQf1g==
-X-Received: by 2002:a17:907:6d97:b0:6fe:f9e0:c03f with SMTP id sb23-20020a1709076d9700b006fef9e0c03fmr1908505ejc.219.1653319728245;
-        Mon, 23 May 2022 08:28:48 -0700 (PDT)
-Received: from ntb.petris.klfree.czf ([2a02:8070:d483:ed00:4bcc:154f:5c11:5870])
-        by smtp.gmail.com with ESMTPSA id b18-20020a056402139200b0042ab87ea713sm8285753edv.22.2022.05.23.08.28.47
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cUC4YaTkSvnRYrJyCu9bbmLHjPFEHYU8Y+xctYQuBfo=;
+        b=fA5ZzaXz0lHsK56YcpT7hgxF+7saNSM8Sc8qijxsKRrHs+hPaNjB3sebh0kWKxIhWu
+         XC7ekH8hIxzb26x0zXZtDDjcbO9UikcglDjfPCZf1MI+N3nyL4cBbb76F+x49wsHkkr1
+         qurM+WEwHmluTR++ezoN6CQdc1ce7B7fuDJJiZ4QwJoiDOdaH/B78bMyMtcDN9LGTY7B
+         PD7k6ts184eW/C/E1OolQZc7TBNNAxWT2JKwwZpPTvLPJz+MEn7fNzXc/MkIqpEtymPE
+         rWgEoaFrnNcuVMhtbG5585DLzMSwVl+yvL4jHAYTra/w7iGMnASNcR4MCa+uGLb6jjyj
+         yY7w==
+X-Gm-Message-State: AOAM5320em1uWd9xJd78fNkF1Puzx87sbUiHVrPccgAjrw1WLe0G5eDe
+        /DUp0nQ4Tljs+00/d8Ru6C0=
+X-Google-Smtp-Source: ABdhPJyiXyFb6VGU02rrA8lDxILq34YkqQDZvpgVob/1vxaCbMYzV8kEf0lpwxYeYymyJEiLCAvhpQ==
+X-Received: by 2002:a17:902:b58b:b0:162:2e01:9442 with SMTP id a11-20020a170902b58b00b001622e019442mr3261166pls.6.1653319700549;
+        Mon, 23 May 2022 08:28:20 -0700 (PDT)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id p1-20020a056a0026c100b0051810d460adsm7412307pfw.114.2022.05.23.08.28.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 08:28:47 -0700 (PDT)
-Date:   Mon, 23 May 2022 17:27:48 +0200
-From:   Petr Malat <oss@malat.biz>
-To:     David Laight <David.Laight@aculab.com>
-Cc:     "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        Joern Engel <joern@lazybastard.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH] mtd: phram: Map RAM using memremap instead of ioremap
-Message-ID: <Youn9AmqY6/EExDw@ntb.petris.klfree.czf>
-References: <20220523142825.3144904-1-oss@malat.biz>
- <3cab9a7f4ed34ca0b742a62c2bdc3bce@AcuMS.aculab.com>
+        Mon, 23 May 2022 08:28:20 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mike Turquette <mturquette@linaro.org>,
+        Stephen Warren <swarren@nvidia.com>, linux-clk@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] clk: tegra20: Fix refcount leak in tegra20_clock_init
+Date:   Mon, 23 May 2022 19:28:11 +0400
+Message-Id: <20220523152811.19692-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3cab9a7f4ed34ca0b742a62c2bdc3bce@AcuMS.aculab.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+of_find_matching_node() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+Add missing of_node_put() to avoid refcount leak.
 
-On Mon, May 23, 2022 at 02:51:41PM +0000, David Laight wrote:
-> From: Petr Malat
-> > Sent: 23 May 2022 15:28
-> > 
-> > One can't use memcpy on memory obtained by ioremap, because IO memory
-> > may have different alignment and size access restriction than the system
-> > memory. Use memremap as phram driver operates on RAM.
-> 
-> Does that actually help?
-> The memcpy() is still likely to issue unaligned accesses
-> that the hardware can't handle.
+Fixes: 37c26a906527 ("clk: tegra: add clock support for Tegra20")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/clk/tegra/clk-tegra20.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Yes, it solves the issue. Memcpy can cause unaligned access only on
-platforms, which can handle it. And on ARM64 it's handled only for
-RAM and not for a device memory (__pgprot(PROT_DEVICE_*)).
-  Petr
+diff --git a/drivers/clk/tegra/clk-tegra20.c b/drivers/clk/tegra/clk-tegra20.c
+index be3c33441cfc..8a4514f6d503 100644
+--- a/drivers/clk/tegra/clk-tegra20.c
++++ b/drivers/clk/tegra/clk-tegra20.c
+@@ -1131,6 +1131,7 @@ static void __init tegra20_clock_init(struct device_node *np)
+ 	}
+ 
+ 	pmc_base = of_iomap(node, 0);
++	of_node_put(node);
+ 	if (!pmc_base) {
+ 		pr_err("Can't map pmc registers\n");
+ 		BUG();
+-- 
+2.25.1
+

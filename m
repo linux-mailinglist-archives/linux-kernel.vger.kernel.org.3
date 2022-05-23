@@ -2,161 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 936045308F6
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 07:46:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57A2153090A
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 07:56:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232359AbiEWFp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 01:45:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51826 "EHLO
+        id S231948AbiEWF4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 01:56:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbiEWFpy (ORCPT
+        with ESMTP id S233218AbiEWF4Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 01:45:54 -0400
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1C52655D;
-        Sun, 22 May 2022 22:45:53 -0700 (PDT)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-e93bbb54f9so17116184fac.12;
-        Sun, 22 May 2022 22:45:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=kK4Ka04kceqN8VVd9w6tDOmbYPZ+nJZTIe88jIZoSJk=;
-        b=bXwOmwvptXUzVEf8w+LjU8kE7nkSzHrjDVPCC77O/zHZxaE7Um57oJfNSQvms127Vg
-         6bVR+SErg44S1V80Z6bc4GM2Z2FO9T4mQLwDIRDmL9hD/pvQuLzwjq9zNUFcrGLEc8LO
-         7OaccycPlYwewUEVPyM7GtavDiuB1e14X2NVHnRB5BLlpGtpNAEQNzd+Izih4uBvXhks
-         xd+08qJAhqvzotdJ7BMPNOIk/G/7GfyOHXvm0qGrS7Z3LC9XSTseYoj102Y7IlTZc6Sq
-         jKMw76OUOdxUurNA+tEjR3JNslzHLKtGCM+hn+4PYsPkOcm7T068yqc7PbOcaEZEsIQT
-         XThQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=kK4Ka04kceqN8VVd9w6tDOmbYPZ+nJZTIe88jIZoSJk=;
-        b=ns94DGshDvLoFDPitT38HsalfN7ZsVrUo7ThOeCHuuuw8Zc8NCVPMjOM5q4tVA/G9m
-         XiLiKKatw2Oa7U7aFGwxRaO106w6xy/ufl+EyTY2pi2c2qkM11YivW2mRhRaJgcehFWw
-         HgiB6dkK5ZcRkf6TDvn8uYU0gzk43BlEaq90kQ4Rw3mErRXFO+eydc2jcFemwr7RhHqx
-         QqSOlXYCzV0RhqkSjqLRqdqB1sT/v5aQ1aCD+J58EK6snvk5P0BacQFzQezmsHR5aU5E
-         LpGYgW2odWt0t+IAKuGVjFh46/MbR6R8nf2cGktETqgEVrkjfW4uKkLPYJmv8VKxPa7l
-         3ZoQ==
-X-Gm-Message-State: AOAM533adjBSqzIaiObngnyMdX9dAGv0UqiFHJW7nzQB6v/E8vgDbBNI
-        TAFASPygymp4KoPXJJTO8x4=
-X-Google-Smtp-Source: ABdhPJzFVeM2nlljQKtG8croc7W21cxaI0vylQicrB+nyqNUTxI9l8dpKFNg37Q+twl0LUnv80NpPQ==
-X-Received: by 2002:a05:6871:283:b0:f1:a2cb:1371 with SMTP id i3-20020a056871028300b000f1a2cb1371mr10792141oae.147.1653284752356;
-        Sun, 22 May 2022 22:45:52 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 106-20020a9d0bf3000000b0060603221276sm3660850oth.70.2022.05.22.22.45.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 May 2022 22:45:51 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 22 May 2022 22:45:50 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     guoren@kernel.org
-Cc:     palmer@dabbelt.com, arnd@arndb.de, gregkh@linuxfoundation.org,
-        hch@lst.de, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-parisc@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
-        heiko@sntech.de, Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH V9 20/20] riscv: compat: Add COMPAT Kbuild skeletal
- support
-Message-ID: <20220523054550.GA1511899@roeck-us.net>
-References: <20220322144003.2357128-1-guoren@kernel.org>
- <20220322144003.2357128-21-guoren@kernel.org>
+        Mon, 23 May 2022 01:56:16 -0400
+X-Greylist: delayed 577 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 22 May 2022 22:56:13 PDT
+Received: from gimli.rothwell.id.au (unknown [IPv6:2404:9400:2:0:216:3eff:fee1:997a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD716477;
+        Sun, 22 May 2022 22:56:12 -0700 (PDT)
+Received: from authenticated.rothwell.id.au (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.rothwell.id.au (Postfix) with ESMTPSA id 4L65t34C7Hzyt1;
+        Mon, 23 May 2022 15:46:19 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rothwell.id.au;
+        s=201702; t=1653284785;
+        bh=Di2ytdI20hGLvdYTu+D5TDiSjO5bL6Fmj+Y5Mr1n9UI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=p61dwhfIqraUBvusDZjXVmhi1S7L//Wylp+fxffPmqR/t8rAr7feaNgrNRD2uhxSY
+         ISAtl1pbw0tkHh3v38L2pHOPFyqcSWLFbZmXuWmOJV9RJVpgMDlak62ilVdmr/IG/j
+         f3sgtyRTnWrJ9fuL5dl/ZwmKuR+RVZBpOusaefBEROuPlOuSCKPk0fywELzPtiIpl8
+         +ngkx8zKgTDghwL76Esj3UGwvUv7nOJLLW0tehUSTvpHVGboDXwq4G7j8US7ednldH
+         +STNua4Fmh9ChrJBEOYyFk/ZhaBw0QbOn3TGm7k1sJqeSi12c5ecU/Sr9a+1ZlXHWN
+         +ATLXj79MAoUA==
+Date:   Mon, 23 May 2022 15:46:18 +1000
+From:   Stephen Rothwell <sfr@rothwell.id.au>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the tip tree with the kbuild tree
+Message-ID: <20220523154618.69c5f126@elm.ozlabs.ibm.com>
+In-Reply-To: <CAK7LNAQcRsuKrepsMiV20D+SSQQYWRqeoWqpo4UoQMtdW2A8SQ@mail.gmail.com>
+References: <20220523142431.10ff2f77@canb.auug.org.au>
+        <CAK7LNAQcRsuKrepsMiV20D+SSQQYWRqeoWqpo4UoQMtdW2A8SQ@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220322144003.2357128-21-guoren@kernel.org>
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/zluxm=Jzz5yePm7bHq5Ggbc";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 10:40:03PM +0800, guoren@kernel.org wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
-> 
-> Adds initial skeletal COMPAT Kbuild (Running 32bit U-mode on
-> 64bit S-mode) support.
->  - Setup kconfig & dummy functions for compiling.
->  - Implement compat_start_thread by the way.
-> 
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-> Tested-by: Heiko Stuebner <heiko@sntech.de>
-> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+--Sig_/zluxm=Jzz5yePm7bHq5Ggbc
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-With this patch in linux-next, all my riscv64 emulations crash.
+Hi Masahiro,
 
-[   11.600082] Run /sbin/init as init process
-[   11.628561] init[1]: unhandled signal 11 code 0x1 at 0x0000000000000000 in libc.so[ffffff8ad39000+a4000]
-[   11.629398] CPU: 0 PID: 1 Comm: init Not tainted 5.18.0-rc7-next-20220520 #1
-[   11.629462] Hardware name: riscv-virtio,qemu (DT)
-[   11.629546] epc : 00ffffff8ada1100 ra : 00ffffff8ada13c8 sp : 00ffffffc58199f0
-[   11.629586]  gp : 00ffffff8ad39000 tp : 00ffffff8ade0998 t0 : ffffffffffffffff
-[   11.629598]  t1 : 00ffffffc5819fd0 t2 : 0000000000000000 s0 : 00ffffff8ade0cc0
-[   11.629610]  s1 : 00ffffff8ade0cc0 a0 : 0000000000000000 a1 : 00ffffffc5819a00
-[   11.629622]  a2 : 0000000000000001 a3 : 000000000000001e a4 : 00ffffffc5819b00
-[   11.629634]  a5 : 00ffffffc5819b00 a6 : 0000000000000000 a7 : 0000000000000000
-[   11.629645]  s2 : 00ffffff8ade0ac8 s3 : 00ffffff8ade0ec8 s4 : 00ffffff8ade0728
-[   11.629656]  s5 : 00ffffff8ade0a90 s6 : 0000000000000000 s7 : 00ffffffc5819e40
-[   11.629667]  s8 : 00ffffff8ade0ca0 s9 : 00ffffff8addba50 s10: 0000000000000000
-[   11.629678]  s11: 0000000000000000 t3 : 0000000000000002 t4 : 0000000000000001
-[   11.629688]  t5 : 0000000000020000 t6 : ffffffffffffffff
-[   11.629699] status: 0000000000004020 badaddr: 0000000000000000 cause: 000000000000000d
-[   11.633421] Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
-[   11.633664] CPU: 0 PID: 1 Comm: init Not tainted 5.18.0-rc7-next-20220520 #1
-[   11.633784] Hardware name: riscv-virtio,qemu (DT)
-[   11.633881] Call Trace:
-[   11.633960] [<ffffffff80005e72>] dump_backtrace+0x1c/0x24
-[   11.634162] [<ffffffff809aa9ec>] show_stack+0x2c/0x38
-[   11.634274] [<ffffffff809b8482>] dump_stack_lvl+0x60/0x8e
-[   11.634386] [<ffffffff809b84c4>] dump_stack+0x14/0x1c
-[   11.634491] [<ffffffff809aaca0>] panic+0x116/0x2e2
-[   11.634596] [<ffffffff80015540>] do_exit+0x7ce/0x7d4
-[   11.634707] [<ffffffff80015666>] do_group_exit+0x24/0x7c
-[   11.634817] [<ffffffff80022294>] get_signal+0x7ee/0x830
-[   11.634924] [<ffffffff800051c0>] do_notify_resume+0x6c/0x41c
-[   11.635037] [<ffffffff80003ad4>] ret_from_exception+0x0/0x10
+On Mon, 23 May 2022 14:37:28 +0900 Masahiro Yamada <masahiroy@kernel.org> w=
+rote:
+>
+> On Mon, May 23, 2022 at 1:24 PM Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+> >
+> > I am not sure if I fixed this up correctly, please check the final resu=
+lt
+> > when linux-next is released.
+>=20
+> I think you can fix up around line 420
+> of scripts/Makefile.build
+>=20
+>=20
+> $(multi-obj-m): objtool-enabled :=3D $(delay-objtool)
+> $(multi-obj-m): part-of-module :=3D y
+> $(multi-obj-m): linked-object :=3D y                        <--- Add this
+> $(multi-obj-m): %.o: %.mod FORCE
+>         $(call if_changed_rule,ld_multi_m)
 
-Guenter
+Yeah, I tried that, but it needed more - see my upcoming reply to
+myself ... (which is probably overkill, but gets rid of lots of
+warnings).
+--=20
+Cheers,
+Stephen Rothwell
 
----
-# bad: [18ecd30af1a8402c162cca1bd58771c0e5be7815] Add linux-next specific files for 20220520
-# good: [42226c989789d8da4af1de0c31070c96726d990c] Linux 5.18-rc7
-git bisect start 'HEAD' 'v5.18-rc7'
-# bad: [f9b63740b666dd9887eb0282d21b5f65bb0cadd0] Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git
-git bisect bad f9b63740b666dd9887eb0282d21b5f65bb0cadd0
-# bad: [7db97132097c5973ff77466d0ee681650af653de] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux
-git bisect bad 7db97132097c5973ff77466d0ee681650af653de
-# good: [2b7d17d4b7c1ff40f58b0d32be40fc0bb6c582fb] soc: document merges
-git bisect good 2b7d17d4b7c1ff40f58b0d32be40fc0bb6c582fb
-# good: [69c9668f853fdd409bb8abbb37d615785510b29a] Merge branch 'clk-next' of git://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git
-git bisect good 69c9668f853fdd409bb8abbb37d615785510b29a
-# bad: [1577f290aa0d4c5b29c03c46ef52e4952a21bfbb] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git
-git bisect bad 1577f290aa0d4c5b29c03c46ef52e4952a21bfbb
-# good: [34f0971f8ca73d7e5502b4cf299788a9402120f7] powerpc/powernv/flash: Check OPAL flash calls exist before using
-git bisect good 34f0971f8ca73d7e5502b4cf299788a9402120f7
-# good: [0349d7dfc70a26b3facd8ca97de34980d4b60954] Merge branch 'mips-next' of git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git
-git bisect good 0349d7dfc70a26b3facd8ca97de34980d4b60954
-# bad: [20bfb54d3b121699674c17a854c5ebc7a8f97d81] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git
-git bisect bad 20bfb54d3b121699674c17a854c5ebc7a8f97d81
-# bad: [9be8459298eadb39b9fe9974b890239e9c123107] riscv: compat: Add COMPAT Kbuild skeletal support
-git bisect bad 9be8459298eadb39b9fe9974b890239e9c123107
-# good: [01abdfeac81b5f56062d0a78f2cdc805db937a75] riscv: compat: Support TASK_SIZE for compat mode
-git bisect good 01abdfeac81b5f56062d0a78f2cdc805db937a75
-# good: [f4b395e6f1a588ed6c9a30474e58cf6b27b65783] riscv: compat: Add hw capability check for elf
-git bisect good f4b395e6f1a588ed6c9a30474e58cf6b27b65783
-# good: [3092eb45637573c5e435fbf5eaf9516316e5f9c6] riscv: compat: vdso: Add setup additional pages implementation
-git bisect good 3092eb45637573c5e435fbf5eaf9516316e5f9c6
-# good: [4608c159594fb40a5101357d4f614fdde9ce1fdb] riscv: compat: ptrace: Add compat_arch_ptrace implement
-git bisect good 4608c159594fb40a5101357d4f614fdde9ce1fdb
-# first bad commit: [9be8459298eadb39b9fe9974b890239e9c123107] riscv: compat: Add COMPAT Kbuild skeletal support
+--Sig_/zluxm=Jzz5yePm7bHq5Ggbc
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKLH6oACgkQAVBC80lX
+0Gx3Wwf9El+4lthpJcxPmPWOWxiTDTEIFti7XxteURAqXoTgatfFXY6pPEn6yxQq
+Gp4U/n4bsdfsquPlHF43ZzUwz96BgBbpRjztMu6daNNPvEjHYJcorFHylyfSBk2t
+inwIwTg0zdGIEe5phEIWGr+3VShRd8WE4jwafajze7bJb4G96wd/XHRTkXW/87Hv
+wpmQsD0OUzlnVX7c3Z9cn1BayjqkAYMzWeNRJ5R7lUIl5ozxrqbN9Wb5t2Gnmfsr
+K1xGFuueLCVYZoG1nUiza6WjOsceZvG5wG0pLrCW4uLXTTZKOBSO/na3iY/Ff/0+
+/T9NcoxvxyIII2SHqkIlzGSUYKdFWw==
+=8MpL
+-----END PGP SIGNATURE-----
+
+--Sig_/zluxm=Jzz5yePm7bHq5Ggbc--

@@ -2,67 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA819531E67
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 00:13:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33CC6531E6F
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 00:14:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbiEWWNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 18:13:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51046 "EHLO
+        id S230501AbiEWWOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 18:14:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbiEWWNK (ORCPT
+        with ESMTP id S229697AbiEWWOW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 18:13:10 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68BA16D84C;
-        Mon, 23 May 2022 15:13:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1653343989; x=1684879989;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=1oLI91BTOI6Eyi1fnPHZpGOYWk4nzzAL6H5DtuhNDG8=;
-  b=jLLzooDIiEt1GWQVTfEAq2QLddZVDbmONkbOM1xzApgaSmGfPdhHUAJd
-   NcIDDrbuZZ4tgPlXPdXzH2SYHJyeZzMeAwt+vkr75ZO6TCpaJTZ1adtVX
-   eL+pCXrSMpFUssWOWz/YLKTQSds98J0EPHVNVUjcY/EsUYT4mkFNNGN82
-   4=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 23 May 2022 15:13:09 -0700
-X-QCInternal: smtphost
-Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 15:13:09 -0700
-Received: from [10.110.74.125] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 23 May
- 2022 15:13:08 -0700
-Message-ID: <bd3e2024-ad2c-71af-c4ff-970754ac975c@quicinc.com>
-Date:   Mon, 23 May 2022 15:13:07 -0700
+        Mon, 23 May 2022 18:14:22 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB9C56D945;
+        Mon, 23 May 2022 15:14:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E4A3CCE1941;
+        Mon, 23 May 2022 22:14:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17BD8C385A9;
+        Mon, 23 May 2022 22:14:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653344057;
+        bh=BtnYCdlUBKX6YqS/BraKh22u8nz1TCw7j+9R1vskYOQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=k9BhonP0X+z778fxt/u02FGrHj5D510oCITyE4f6lDSzAPgfHnXUes/jfy4VfLrE/
+         3QbasTeMap/V1oSB5s7BQ267SqGCKHWEc5s/yce5mwtQJluyG76bOMklKJ5vQedHxf
+         UZfm7iH5QC6Nximri882B/sWSXl0jnfN6ea1UZh3zNCHSML5+0rVqGGnf7w04x01at
+         F/dxZl77ZfP6VKQ0UNzEXcCS1hRU9XQfHPPtt1KIs1KwWohxf0SXgU2U2ODK2gtO9n
+         0Kramiu5uPQ5tbNXMh/2cRhdp0/W3KdxANznXrGIncJHq16yDli+3UX74fpP9Rzqpu
+         15hZuZYOOheFQ==
+Date:   Mon, 23 May 2022 15:14:14 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rob Herring <robh@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Thierry Reding <treding@nvidia.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, kernel-team@android.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org
+Subject: Re: [PATCH v1] driver core: Extend deferred probe timeout on driver
+ registration
+Message-ID: <YowHNo4sBjr9ijZr@dev-arch.thelio-3990X>
+References: <20220429220933.1350374-1-saravanak@google.com>
+ <YogkhvFGVcjNQ21Z@dev-arch.thelio-3990X>
+ <CAGETcx9nvBs1b4M=2hBhrLX_2-rzLtAmV9WfTXu0MC7JnsBvwA@mail.gmail.com>
+ <YogsiMCDupNUhMgL@dev-fedora.thelio-3990X>
+ <CAGETcx-JyWwoGA3o8eep7E29Cm4DcVT6D1JFJh72jLcqm_mjCQ@mail.gmail.com>
+ <Youleo3Ganxbc1sq@dev-arch.thelio-3990X>
+ <CAGETcx-sL08h2toEyxY6ztc6xNuJiPok6iDEeuJ1mOA3nvE+vA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: Removal of qcom,board-id and qcom,msm-id
-Content-Language: en-US
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        <agross@kernel.org>, <arnd@arndb.de>, <devicetree@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <olof@lixom.net>, <robh@kernel.org>, <sboyd@kernel.org>
-References: <a3c932d1-a102-ce18-deea-18cbbd05ecab@linaro.org>
- <20220522195138.35943-1-konrad.dybcio@somainline.org>
- <53d5999b-88ee-24db-fd08-ff9406e2b7b7@linaro.org>
- <02ab0276-b078-fe66-8596-fcec4378722b@somainline.org>
- <49a52870-9aab-c4bd-2077-66732f42bbba@linaro.org>
- <196459ad-704d-020c-c485-842f613ae618@quicinc.com>
- <Yov99WPNrGRg86sS@builder.lan>
-From:   Trilok Soni <quic_tsoni@quicinc.com>
-In-Reply-To: <Yov99WPNrGRg86sS@builder.lan>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGETcx-sL08h2toEyxY6ztc6xNuJiPok6iDEeuJ1mOA3nvE+vA@mail.gmail.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,119 +77,189 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bjorn,
+On Mon, May 23, 2022 at 01:04:03PM -0700, Saravana Kannan wrote:
+> On Mon, May 23, 2022 at 8:17 AM Nathan Chancellor <nathan@kernel.org> wrote:
+> >
+> > On Fri, May 20, 2022 at 05:15:55PM -0700, Saravana Kannan wrote:
+> > > On Fri, May 20, 2022 at 5:04 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> > > >
+> > > > On Fri, May 20, 2022 at 04:49:48PM -0700, Saravana Kannan wrote:
+> > > > > On Fri, May 20, 2022 at 4:30 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> > > > > >
+> > > > > > Hi Saravana,
+> > > > > >
+> > > > > > On Fri, Apr 29, 2022 at 03:09:32PM -0700, Saravana Kannan wrote:
+> > > > > > > The deferred probe timer that's used for this currently starts at
+> > > > > > > late_initcall and runs for driver_deferred_probe_timeout seconds. The
+> > > > > > > assumption being that all available drivers would be loaded and
+> > > > > > > registered before the timer expires. This means, the
+> > > > > > > driver_deferred_probe_timeout has to be pretty large for it to cover the
+> > > > > > > worst case. But if we set the default value for it to cover the worst
+> > > > > > > case, it would significantly slow down the average case. For this
+> > > > > > > reason, the default value is set to 0.
+> > > > > > >
+> > > > > > > Also, with CONFIG_MODULES=y and the current default values of
+> > > > > > > driver_deferred_probe_timeout=0 and fw_devlink=on, devices with missing
+> > > > > > > drivers will cause their consumer devices to always defer their probes.
+> > > > > > > This is because device links created by fw_devlink defer the probe even
+> > > > > > > before the consumer driver's probe() is called.
+> > > > > > >
+> > > > > > > Instead of a fixed timeout, if we extend an unexpired deferred probe
+> > > > > > > timer on every successful driver registration, with the expectation more
+> > > > > > > modules would be loaded in the near future, then the default value of
+> > > > > > > driver_deferred_probe_timeout only needs to be as long as the worst case
+> > > > > > > time difference between two consecutive module loads.
+> > > > > > >
+> > > > > > > So let's implement that and set the default value to 10 seconds when
+> > > > > > > CONFIG_MODULES=y.
+> > > > > > >
+> > > > > > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > > > > > Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+> > > > > > > Cc: Rob Herring <robh@kernel.org>
+> > > > > > > Cc: Linus Walleij <linus.walleij@linaro.org>
+> > > > > > > Cc: Will Deacon <will@kernel.org>
+> > > > > > > Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> > > > > > > Cc: Kevin Hilman <khilman@kernel.org>
+> > > > > > > Cc: Thierry Reding <treding@nvidia.com>
+> > > > > > > Cc: Mark Brown <broonie@kernel.org>
+> > > > > > > Cc: Pavel Machek <pavel@ucw.cz>
+> > > > > > > Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> > > > > > > Cc: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+> > > > > > > Cc: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> > > > > > > Cc: linux-gpio@vger.kernel.org
+> > > > > > > Cc: linux-pm@vger.kernel.org
+> > > > > > > Cc: iommu@lists.linux-foundation.org
+> > > > > > > Signed-off-by: Saravana Kannan <saravanak@google.com>
+> > > > > >
+> > > > > > I bisected a boot hang with ARCH=s390 defconfig in QEMU down to this
+> > > > > > change as commit 2b28a1a84a0e ("driver core: Extend deferred probe
+> > > > > > timeout on driver registration") in next-20220520 (bisect log below).
+> > > > > >
+> > > > > > $ make -skj"$(nproc)" ARCH=s390 CROSS_COMPILE=s390x-linux-gnu- defconfig bzImage
+> > > > > >
+> > > > > > $ timeout --foreground 15m stdbuf -oL -eL \
+> > > > > > qemu-system-s390x \
+> > > > > > -initrd ... \
+> > > > > > -M s390-ccw-virtio \
+> > > > > > -display none \
+> > > > > > -kernel arch/s390/boot/bzImage \
+> > > > > > -m 512m \
+> > > > > > -nodefaults \
+> > > > > > -serial mon:stdio
+> > > > > > ...
+> > > > > > [    2.077303] In-situ OAM (IOAM) with IPv6
+> > > > > > [    2.077639] NET: Registered PF_PACKET protocol family
+> > > > > > [    2.078063] bridge: filtering via arp/ip/ip6tables is no longer available by default. Update your scripts to load br_netfilter if you need this.
+> > > > > > [    2.078795] Key type dns_resolver registered
+> > > > > > [    2.079317] cio: Channel measurement facility initialized using format extended (mode autodetected)
+> > > > > > [    2.081494] Discipline DIAG cannot be used without z/VM
+> > > > > > [  260.626363] random: crng init done
+> > > > > > qemu-system-s390x: terminating on signal 15 from pid 3815762 (timeout)
+> > > > > >
+> > > > > > We have a simple rootfs available if necessary:
+> > > > > >
+> > > > > > https://github.com/ClangBuiltLinux/boot-utils/raw/bc0d17785eb67f1edd0ee0a134970a807895f741/images/s390/rootfs.cpio.zst
+> > > > > >
+> > > > > > If there is any other information I can provide, please let me know!
+> > > > >
+> > > > > Hmm... strange. Can you please try the following command line options
+> > > > > and tell me which of these has the issue and which don't?
+> > > >
+> > > > Sure thing!
+> > > >
+> > > > > 1) deferred_probe_timeout=0
+> > > >
+> > > > No issue.
+> > > >
+> > > > > 2) deferred_probe_timeout=1
+> > > > > 3) deferred_probe_timeout=300
+> > > >
+> > > > Both of these appear to hang in the same way, I let each sit for five
+> > > > minutes.
+> > >
+> > > Strange that a sufficiently large timeout isn't helping. Is it trying
+> > > to boot off a network mount? I'll continue looking into this next
+> > > week.
+> >
+> > I don't think so, it seems like doing that requires some extra flags
+> > that we do not have:
+> >
+> > https://wiki.qemu.org/Features/S390xNetworkBoot
+> >
+> > If you need any additional information or want something tested, please
+> > let me know!
+> 
+> I'll try to get qemu going on my end, but I'm not too confident I'll
+> be able to get to it in a timely fashion. So if you can help figure
+> out where this boot process is hanging, that'd be very much
+> appreciated.
 
-On 5/23/2022 2:34 PM, Bjorn Andersson wrote:
-> On Mon 23 May 11:41 CDT 2022, Trilok Soni wrote:
-> 
->> Hello Krzysztof,
->>
->> On 5/23/2022 5:14 AM, Krzysztof Kozlowski wrote:
->>> On 23/05/2022 14:02, Konrad Dybcio wrote:
->>>>
->>>> On 23/05/2022 09:21, Krzysztof Kozlowski wrote:
->>>>> On 22/05/2022 21:51, Konrad Dybcio wrote:
->>>>>> Hi,
->>>>>>
->>>>>> removing these properties will not bring almost any benefit (other than making
->>>>>> some checks happy any saving some <200 LoC) and will make the lives of almost
->>>>>> all people doing independent development for linux-on-msm harder. There are
->>>>>> almost unironically like 3 people outside Linaro and QUIC who have
->>>>>> non-vendor-fused development boards AND the sources to rebuild the
->>>>>> bootloader on their own. Making it harder to boot is only going to
->>>>>> discourage people from developing on these devices, which is already not
->>>>>> that pleasant, especially with newer platforms where you have to fight with
->>>>>> the oh-so-bright ideas of Android boot chain..
->>>>>>
->>>>>> This only concerns devices released before sm8350, as the new ones will not
->>>>>> even boot with these properties present (or at least SONY Sagami, but I
->>>>>> doubt it's an isolated case), so other than completing support for older
->>>>>> devices, it won't be an issue going forward, anyway. But there are give
->>>>>> or take 50 locked down devices in mainline right now, and many more waiting
->>>>>> to be upstreamed in various downstream close-to-mainline trees that should
->>>>>> not be disregarded just because Qualcomm is far from the best at making
->>>>>> their BSP software stack clean.
->>>>> I actually wonder why do you need these properties for community work on
->>>>> such boards? You ship kernel with one concatenated DTB and the
->>>>> bootloader does not need the board-id/msm-id fields, doesn't it?
->>>>
->>>> If that were the case, I would have never complained about this! It's
->>>> the bootloader itself that needs it, you can see it in a "Best match
->>>> [blah blah] 258/0x1000/...." log line, where it walks through the
->>>> appended (or otherwise compiled into the boot.img) DTBs and looks for
->>>> matches for the burnt-in msm-, board- and (on newer-older platforms)
->>>> pmic-id. If it cannot find these, it refuses to boot with an Android
->>>> Verified Boot red state and you get a not-so-nice "Your device has been
->>>> unlocked and the boot image is not working" or something like this on
->>>> your screen.
->>>>
->>>>
->>>>>
->>>>> Not mentioning that in the past bootloader was actually not using these
->>>>> properties at all, because it was the dtbTool who was parsing them.
->>>>
->>>> Not sure when that was the case, maybe with very old arm32 bootloaders
->>>> in the times before I did development on Qualcomm devices.
->>>>
->>>>
->>>>>     So
->>>>> in any case either your device works fine without these properties or
->>>>> you have to use dtbTool, right?
->>>>
->>>> To the best of my idea, wrong :( Unless the vendor modified the LK/XBL
->>>> code on their own, it looks for a "best match" (but if it's not a
->>>> precise match, it won't even bother trying to boot, just fyi..), meaning
->>>> it tries to go through a list of SoC ID and revision pairs (msm-id),
->>>> board IDs (board-id) and PMIC id+rev pairs (pmic-id) and if no match is
->>>> found, it doesn't even exit the bootloader and says something like "no
->>>> dtbs found".
->>>
->>> This would mean that dtbTool as described in the actual patch [1] is not
->>> used and bootloader ignores the table. If that's the case, the commit
->>> and requirement of such complex board-foundry-pmic-compatibles should be
->>> dropped. So I am getting now to what Dmitry said...
->>>
->>> [1]
->>> https://lore.kernel.org/all/1448062280-15406-2-git-send-email-sboyd@codeaurora.org/
->>
->>
->> The link above is from 2015. Lot has changed downstream. Most of what was
->> mentioned by Konrad is right. Application bootloader acts on picking on
->> platform DTBO based on the platform ID plus some combinations like PMIC etc;
->> These platform DTBOs gets overlay on top of SOC DTB by the Application
->> bootloader.
->>
->> We have moved to DTBO for all the latest targets, but I can understand that
->> some old targets at upstream could be using the very old approaches.
->>
->> Downstream all of the platforms including the DTBO files will need board-id
->> and msm-id since we also do the compile time stitching of dtb + dtbo and
->> dtbo + dtbo to generate the proper SOC DTB and PLATFORM DTBOs which gets
->> flashed in the DTBO partition and follows the Android boot requirements.
->> Application bootloader then picks the right Platform DTBO as mentioned above
->> w/ the right SOC DTB. It gets more complicated w/ GKI new requirements every
->> year (better for GKI, may not be better for upstream kernel + downstream
->> bootloader combination).
->>
-> 
-> FWIW, this doesn't fit with the upstream model at all. In particular the
-> DTBO that comes with the devices are not compatible with any upstream
-> DTB.
-> 
-> As such, the first step to run an upstream DTB+kernel is to zero out the
-> dtbo partitions.
-> 
-> 
-> With the DTBO cleared, most devices (all Qualcomm reference devices) can
-> be booted with the dtb appended to the Image.gz, without the
-> qcom,{board,msm}-id. As such I would say things are working okay
-> currently.
-> 
+Sure thing! Information included below, I am more than happy to continue
+to test and debug as you need.
 
-Thanks. Yup, I know things are working fine right now. May be we can 
-look at changing the downstream bootloader so that you don't need to 
-erase the DTBO partition for reference/unlocked devices. No promise, but 
-it will make easy for anyone do the upstream development on the 
-reference devices.
+> Couple of suggestions for debugging:
+> 
+> Can you add a log to "wait_for_device_probe()" and see if that's
+> getting called right before the boot process hangs? If it does, can
+> you get a stacktrace (I just add a WARN_ON(1) when I need a stack
+> trace)? It's unlikely this is the case because
+> deferred_probe_timeout=1 still causes an issue for you, but I'd be
+> good to rule out.
 
----Trilok Soni
+If I add a pr_info() call at the top of wait_for_device_probe(), I see
+it right before the process hangs. Adding WARN_ON(1) right below that
+reveals dasd_eckd_init() in drivers/s390/block/dasd_eckd.c calls
+wait_for_device_probe():
+
+[    4.610397] ------------[ cut here ]------------
+[    4.610520] WARNING: CPU: 0 PID: 1 at drivers/base/dd.c:742 wait_for_device_probe+0x28/0x110
+[    4.611134] Modules linked in:
+[    4.611593] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.18.0-next-20220523-dirty #1
+[    4.611830] Hardware name: QEMU 8561 QEMU (KVM/Linux)
+[    4.612017] Krnl PSW : 0704c00180000000 0000000000ce4b3c (wait_for_device_probe+0x2c/0x110)
+[    4.612258]            R:0 T:1 IO:1 EX:1 Key:0 M:1 W:0 P:0 AS:3 CC:0 PM:0 RI:0 EA:3
+[    4.612387] Krnl GPRS: 80000000fffff071 0000000000000027 000000000000000c 00000000017f91d8
+[    4.612457]            00000000fffff071 00000000017f9218 0000000001a655a0 0000000000000006
+[    4.612521]            0000000000000002 0000000001965810 00000000019d51a0 0000000000000000
+[    4.612585]            0000000002218000 000000000125bcc8 0000000000ce4b38 000003800000bc80
+[    4.614814] Krnl Code: 0000000000ce4b2c: e3e0f0980024        stg     %r14,152(%r15)
+[    4.614814]            0000000000ce4b32: c0e5ffff94cb        brasl   %r14,0000000000cd74c8
+[    4.614814]           #0000000000ce4b38: af000000            mc      0,0
+[    4.614814]           >0000000000ce4b3c: c0100054d1fa        larl    %r1,000000000177ef30
+[    4.614814]            0000000000ce4b42: e31010000012        lt      %r1,0(%r1)
+[    4.614814]            0000000000ce4b48: a784002d            brc     8,0000000000ce4ba2
+[    4.614814]            0000000000ce4b4c: d727f0a0f0a0        xc      160(40,%r15),160(%r15)
+[    4.614814]            0000000000ce4b52: 41b0f0a0            la      %r11,160(%r15)
+[    4.615698] Call Trace:
+[    4.616559]  [<0000000000ce4b3c>] wait_for_device_probe+0x2c/0x110
+[    4.616744] ([<0000000000ce4b38>] wait_for_device_probe+0x28/0x110)
+[    4.616841]  [<000000000196593e>] dasd_eckd_init+0x12e/0x178
+[    4.616913]  [<0000000000100936>] do_one_initcall+0x46/0x1e8
+[    4.616983]  [<0000000001920706>] do_initcalls+0x126/0x150
+[    4.617046]  [<000000000192095e>] kernel_init_freeable+0x1ae/0x1f0
+[    4.617110]  [<0000000000ce85a6>] kernel_init+0x2e/0x168
+[    4.617171]  [<0000000000103320>] __ret_from_fork+0x40/0x58
+[    4.617233]  [<0000000000cf5eaa>] ret_from_fork+0xa/0x40
+[    4.617352] Last Breaking-Event-Address:
+[    4.617393]  [<0000000000e0e098>] __s390_indirect_jump_r14+0x0/0xc
+[    4.617481] ---[ end trace 0000000000000000 ]---
+
+> Let's try to rule out if deferred_probe_extend_timeout() is causing
+> some issues. So, without my patch, what happens if you set:
+> deferred_probe_timeout=1
+> deferred_probe_timeout=300
+
+At commit 6ee60e9c9f2f ("MAINTAINERS: add Russ Weight as a firmware
+loader maintainer"), both deferred_probe_timeout=1 and
+deferred_probe_timeout=300 hang the boot.
+
+> If deferred_probe_timeout=1 causes an issue even without my patch,
+> then in addition, can you try commenting out the call to
+> fw_devlink_drivers_done() inside deferred_probe_timeout_work_func()
+> and try again?
+
+Sure, that does not appear to make a difference with
+deferred_probe_timeout=1.
+
+Cheers,
+Nathan

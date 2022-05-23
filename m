@@ -2,79 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBC81531DBE
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 23:30:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42012531DC0
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 23:30:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231795AbiEWV2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 17:28:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51434 "EHLO
+        id S232023AbiEWV2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 17:28:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231808AbiEWV1m (ORCPT
+        with ESMTP id S231784AbiEWV2S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 17:27:42 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B99069859B;
-        Mon, 23 May 2022 14:27:36 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1653341254;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lyoADbaI9emEad6jxvsYrqkAZsvu9nykyZtsZApDNGk=;
-        b=U5JSdkBfUq+/gQs6cgBxyfnRFOkp3Zi8j+l4uZcB0Kl8MdOLSVnp6TTibzHBwIUixnPKV2
-        Rtde+pvh2XvPAEX2n6oOFAiiR5aG5TDmwijdyvwEyHUXs/VrIDHg0G+OycqrPlB4XeS+1t
-        x46iIVpcqgmy1iMi6m7fkBxNDmPkU7UWHDQuwAX8XaY7kRNZI5ujTeIp36qt6ah3Gtpd1Q
-        a69DJyOnkP3forcj4Vju+62Y8+EYWoL+W80/BO42YfRUe5sM46RhApf0IEiZpEC6TRPuwd
-        FlxSXvkflX9xQ82ypW5chavkGnICUkKjzUQpGqr0DdwZzPQIqakzTZd+h+ZMjg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1653341254;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lyoADbaI9emEad6jxvsYrqkAZsvu9nykyZtsZApDNGk=;
-        b=ZRFd0DHKFx2tvHdvBqapAmLm1Gtb088QyRoFCfzolsaPjkOVDT7sbYSSrJPENH443xtZnY
-        djojoPCD2iM4FFBg==
-To:     Luis Chamberlain <mcgrof@kernel.org>, tj@kernel.org,
-        gregkh@linuxfoundation.org, akpm@linux-foundation.org,
-        jeyu@kernel.org, shuah@kernel.org
-Cc:     bvanassche@acm.org, dan.j.williams@intel.com, joe@perches.com,
-        mcgrof@kernel.org, keescook@chromium.org, rostedt@goodmis.org,
-        minchan@kernel.org, linux-spdx@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>,
-        Kuno Woudt <kuno@frob.nl>,
-        Richard Fontana <fontana@sharpeleven.org>,
-        copyleft-next@lists.fedorahosted.org,
-        Ciaran Farrell <Ciaran.Farrell@suse.com>,
-        Christopher De Nicolo <Christopher.DeNicolo@suse.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thorsten Leemhuis <linux@leemhuis.info>
-Subject: Re: [PATCH v9 1/6] LICENSES: Add the copyleft-next-0.3.1 license
-In-Reply-To: <20211029184500.2821444-2-mcgrof@kernel.org>
-References: <20211029184500.2821444-1-mcgrof@kernel.org>
- <20211029184500.2821444-2-mcgrof@kernel.org>
-Date:   Mon, 23 May 2022 23:27:34 +0200
-Message-ID: <87bkvo0wjd.ffs@tglx>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 23 May 2022 17:28:18 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8E61A30B0
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 14:28:17 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id p16-20020a170902e75000b00161d96620c4so7289750plf.14
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 14:28:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=P0dc/hsbLfI6NQ/lZ14Xz2MO6AZmT1SEz1e3p5QB+CU=;
+        b=KVrjJMgWtZ9fFnNlRcHeO9QfwmEQXGUYiM0Ui1qQ4KnHJmna9s7rviKOq0Z8+DZFab
+         WoTShCn3U+p969h7FMSarMxfW03rqebUa9FnCSrcgdW5FAMmQEy/3xslLTP+lVrtfbgh
+         FpTeL6PuyYBVU3AWdfm8cEvFE+jEyAdqJC3w6L29HQZgvlGaSpZWHwpmTbj9ZOYlyZ6T
+         3l2q52e67phuNwBvOtTsUP2MlvAzBOqe0Z5kmRkSj/ohrgU4t5KFApNEFcIeMwMHxR+J
+         Mik+DeJP40n01Fb3l9lUEze3hJ5QELzbKZAlITxvhPCXr0ajJTO+LpBkRh+EfmVJsPpk
+         78Pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=P0dc/hsbLfI6NQ/lZ14Xz2MO6AZmT1SEz1e3p5QB+CU=;
+        b=oW8CmVYmKUpuCIvNHpteShhV3OH0DGAgVuLDRvI9MU8d1hLV+jWkRmmr1y3jAtsrpv
+         yWxr1VjXGsuRNSIaKMLK2yBiC14L/UFKt6hCDIapSmkV1E6lA3WweU/B84590cRGqlWK
+         ro/ptbgRCXLPfW4vk4Jr+kjgCnBN/POIX1Y/jwBPDr6cpurm733ZCPOlT3TpMP+z2C2U
+         XiTAtxRkTFXLHQ0pMlBVibn16tcthUeSt5ATB8s6G/tsjnf23+N4oQV3XJunjfqpZPGD
+         GWJVNuT7+52U+R3MCvDQTH4965coEe3fDs/oawsGcn8FzEW6GycCjF8KDfPXWq6Cy8X/
+         N7Sg==
+X-Gm-Message-State: AOAM533aa4+cTzQG3fEfgumaW2HP4o56zlPlUM4vTa6ZM7OUGYGhbyOp
+        iKUOFmxebVNlLZPn8J3dchVgi1wja4P8
+X-Google-Smtp-Source: ABdhPJzgRdtm4fQ9Gk9r0fxFUaClViNc9qKqf3adycUhzmR2wWez23rCUHfEtkxkewzkPqALGbiYy8s3HHc3
+X-Received: from connoro.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:a99])
+ (user=connoro job=sendgmr) by 2002:aa7:9019:0:b0:4fa:7532:9551 with SMTP id
+ m25-20020aa79019000000b004fa75329551mr25987515pfo.26.1653341297002; Mon, 23
+ May 2022 14:28:17 -0700 (PDT)
+Date:   Mon, 23 May 2022 21:28:08 +0000
+Message-Id: <20220523212808.603526-1-connoro@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
+Subject: [PATCH bpf-next v2] libbpf: also check /sys/kernel/tracing for
+ tracefs files
+From:   "Connor O'Brien" <connoro@google.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Connor O'Brien" <connoro@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 29 2021 at 11:44, Luis Chamberlain wrote:
-> +    "FSF-Free" means classified as 'free' by the Free Software Foundation.
-> +
-> +    "OSI-Approved" means approved as 'Open Source' by the Open Source
-> +    Initiative.
+libbpf looks for tracefs files only under debugfs, but tracefs may be
+mounted even if debugfs is not. When /sys/kernel/debug/tracing is
+absent, try looking under /sys/kernel/tracing instead.
 
-copyleft-next is neither nor. Confused...
+Signed-off-by: Connor O'Brien <connoro@google.com>
+---
+v1->v2: cache result of debugfs check.
+
+ src/libbpf.c | 32 +++++++++++++++++++++++++-------
+ 1 file changed, 25 insertions(+), 7 deletions(-)
+
+diff --git a/src/libbpf.c b/src/libbpf.c
+index 2262bcd..cc47c52 100644
+--- a/src/libbpf.c
++++ b/src/libbpf.c
+@@ -9945,10 +9945,22 @@ static void gen_kprobe_legacy_event_name(char *buf, size_t buf_sz,
+ 		 __sync_fetch_and_add(&index, 1));
+ }
+ 
++static bool debugfs_available(void)
++{
++	static bool initialized = false, available;
++
++	if (!initialized) {
++		available = !access("/sys/kernel/debug/tracing", F_OK);
++		initialized = true;
++	}
++	return available;
++}
++
+ static int add_kprobe_event_legacy(const char *probe_name, bool retprobe,
+ 				   const char *kfunc_name, size_t offset)
+ {
+-	const char *file = "/sys/kernel/debug/tracing/kprobe_events";
++	const char *file = debugfs_available() ? "/sys/kernel/debug/tracing/kprobe_events" :
++		"/sys/kernel/tracing/kprobe_events";
+ 
+ 	return append_to_file(file, "%c:%s/%s %s+0x%zx",
+ 			      retprobe ? 'r' : 'p',
+@@ -9958,7 +9970,8 @@ static int add_kprobe_event_legacy(const char *probe_name, bool retprobe,
+ 
+ static int remove_kprobe_event_legacy(const char *probe_name, bool retprobe)
+ {
+-	const char *file = "/sys/kernel/debug/tracing/kprobe_events";
++	const char *file = debugfs_available() ? "/sys/kernel/debug/tracing/kprobe_events" :
++		"/sys/kernel/tracing/kprobe_events";
+ 
+ 	return append_to_file(file, "-:%s/%s", retprobe ? "kretprobes" : "kprobes", probe_name);
+ }
+@@ -9968,7 +9981,8 @@ static int determine_kprobe_perf_type_legacy(const char *probe_name, bool retpro
+ 	char file[256];
+ 
+ 	snprintf(file, sizeof(file),
+-		 "/sys/kernel/debug/tracing/events/%s/%s/id",
++		 debugfs_available() ? "/sys/kernel/debug/tracing/events/%s/%s/id" :
++		 "/sys/kernel/tracing/events/%s/%s/id",
+ 		 retprobe ? "kretprobes" : "kprobes", probe_name);
+ 
+ 	return parse_uint_from_file(file, "%d\n");
+@@ -10144,7 +10158,8 @@ static void gen_uprobe_legacy_event_name(char *buf, size_t buf_sz,
+ static inline int add_uprobe_event_legacy(const char *probe_name, bool retprobe,
+ 					  const char *binary_path, size_t offset)
+ {
+-	const char *file = "/sys/kernel/debug/tracing/uprobe_events";
++	const char *file = debugfs_available() ? "/sys/kernel/debug/tracing/uprobe_events" :
++		"/sys/kernel/tracing/uprobe_events";
+ 
+ 	return append_to_file(file, "%c:%s/%s %s:0x%zx",
+ 			      retprobe ? 'r' : 'p',
+@@ -10154,7 +10169,8 @@ static inline int add_uprobe_event_legacy(const char *probe_name, bool retprobe,
+ 
+ static inline int remove_uprobe_event_legacy(const char *probe_name, bool retprobe)
+ {
+-	const char *file = "/sys/kernel/debug/tracing/uprobe_events";
++	const char *file = debugfs_available() ? "/sys/kernel/debug/tracing/uprobe_events" :
++		"/sys/kernel/tracing/uprobe_events";
+ 
+ 	return append_to_file(file, "-:%s/%s", retprobe ? "uretprobes" : "uprobes", probe_name);
+ }
+@@ -10164,7 +10180,8 @@ static int determine_uprobe_perf_type_legacy(const char *probe_name, bool retpro
+ 	char file[512];
+ 
+ 	snprintf(file, sizeof(file),
+-		 "/sys/kernel/debug/tracing/events/%s/%s/id",
++		 debugfs_available() ? "/sys/kernel/debug/tracing/events/%s/%s/id" :
++		 "/sys/kernel/tracing/events/%s/%s/id",
+ 		 retprobe ? "uretprobes" : "uprobes", probe_name);
+ 
+ 	return parse_uint_from_file(file, "%d\n");
+@@ -10295,7 +10312,8 @@ static int determine_tracepoint_id(const char *tp_category,
+ 	int ret;
+ 
+ 	ret = snprintf(file, sizeof(file),
+-		       "/sys/kernel/debug/tracing/events/%s/%s/id",
++		       debugfs_available() ? "/sys/kernel/debug/tracing/events/%s/%s/id" :
++		       "/sys/kernel/tracing/events/%s/%s/id",
+ 		       tp_category, tp_name);
+ 	if (ret < 0)
+ 		return -errno;
+-- 
+2.36.1.124.g0e6072fb45-goog
+

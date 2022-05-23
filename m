@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71266531A60
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:55:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72AD3531BCC
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241578AbiEWRa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:30:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48720 "EHLO
+        id S242021AbiEWSAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 14:00:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241501AbiEWRWY (ORCPT
+        with ESMTP id S241007AbiEWRcl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:22:24 -0400
+        Mon, 23 May 2022 13:32:41 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 278267B9C9;
-        Mon, 23 May 2022 10:19:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E236D7890F;
+        Mon, 23 May 2022 10:27:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C06C60A2A;
-        Mon, 23 May 2022 17:17:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D791C34116;
-        Mon, 23 May 2022 17:17:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F298608C0;
+        Mon, 23 May 2022 17:27:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E5F3C385A9;
+        Mon, 23 May 2022 17:27:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326255;
-        bh=6f8285nghVkWx/s8BBOEdiOuq1Ad5h9KsR2MxrPZmRs=;
+        s=korg; t=1653326844;
+        bh=wP8oCIlK2oDbgwEMgq/WN9tjdtUuWnR4GBzeW+e+HSw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WQmvY1Ax5NJIMW4awCmyZuaU2swtpxt82U29utr4XcnlmXc6SB/8rzebrm8BDWGq+
-         kvSBbIxirrM1ZScTB9chPlKUj6wmnpiWZP2O0fagO8tRkrpi858qHcdM4d4tYjSXlL
-         7U2zZHsMG/Q0fUa95LGuSl2SdKB9fvXpnxxP5bO8=
+        b=Y0sFvTTGQ93AwdlsYIxuh6KuV9YQUMSQe/gNAV7JAyON3XHqOeLRFg01K39rsUxSf
+         WnhbcZno9zx7U6kMe3OJizOK1oUDrs7umAC23Ypf0VR/SvBiWO5fVekCd5i8hGPwh+
+         CLEbZ7xPmdQzrT27FupEQk09z6yE48S9TwpzyO6Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Monish Kumar R <monish.kumar.r@intel.com>,
-        Christoph Hellwig <hch@lst.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 024/132] nvme-pci: add quirks for Samsung X5 SSDs
-Date:   Mon, 23 May 2022 19:03:53 +0200
-Message-Id: <20220523165827.502935276@linuxfoundation.org>
+        stable@vger.kernel.org, Alex Elder <elder@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 077/158] net: ipa: record proper RX transaction count
+Date:   Mon, 23 May 2022 19:03:54 +0200
+Message-Id: <20220523165843.777492251@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
-References: <20220523165823.492309987@linuxfoundation.org>
+In-Reply-To: <20220523165830.581652127@linuxfoundation.org>
+References: <20220523165830.581652127@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,36 +55,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Monish Kumar R <monish.kumar.r@intel.com>
+From: Alex Elder <elder@linaro.org>
 
-[ Upstream commit bc360b0b1611566e1bd47384daf49af6a1c51837 ]
+[ Upstream commit d8290cbe1111105f92f0c8ab455bec8bf98d0630 ]
 
-Add quirks to not fail the initialization and to have quick resume
-latency after cold/warm reboot.
+Each time we are notified that some number of transactions on an RX
+channel has completed, we record the number of bytes that have been
+transferred since the previous notification.  We also track the
+number of transactions completed, but that is not currently being
+calculated correctly; we're currently counting the number of such
+notifications, but each notification can represent many transaction
+completions.  Fix this.
 
-Signed-off-by: Monish Kumar R <monish.kumar.r@intel.com>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
+Fixes: 650d1603825d8 ("soc: qcom: ipa: the generic software interface")
+Signed-off-by: Alex Elder <elder@linaro.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/nvme/host/pci.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/net/ipa/gsi.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
-index d7695bdbde8d..e6f55cf6e494 100644
---- a/drivers/nvme/host/pci.c
-+++ b/drivers/nvme/host/pci.c
-@@ -3379,7 +3379,10 @@ static const struct pci_device_id nvme_id_table[] = {
- 				NVME_QUIRK_128_BYTES_SQES |
- 				NVME_QUIRK_SHARED_TAGS |
- 				NVME_QUIRK_SKIP_CID_GEN },
--
-+	{ PCI_DEVICE(0x144d, 0xa808),   /* Samsung X5 */
-+		.driver_data =  NVME_QUIRK_DELAY_BEFORE_CHK_RDY|
-+				NVME_QUIRK_NO_DEEPEST_PS |
-+				NVME_QUIRK_IGNORE_DEV_SUBNQN, },
- 	{ PCI_DEVICE_CLASS(PCI_CLASS_STORAGE_EXPRESS, 0xffffff) },
- 	{ 0, }
- };
+diff --git a/drivers/net/ipa/gsi.c b/drivers/net/ipa/gsi.c
+index bc981043cc80..a701178a1d13 100644
+--- a/drivers/net/ipa/gsi.c
++++ b/drivers/net/ipa/gsi.c
+@@ -1367,9 +1367,10 @@ static void gsi_evt_ring_rx_update(struct gsi_evt_ring *evt_ring, u32 index)
+ 	struct gsi_event *event_done;
+ 	struct gsi_event *event;
+ 	struct gsi_trans *trans;
++	u32 trans_count = 0;
+ 	u32 byte_count = 0;
+-	u32 old_index;
+ 	u32 event_avail;
++	u32 old_index;
+ 
+ 	trans_info = &channel->trans_info;
+ 
+@@ -1390,6 +1391,7 @@ static void gsi_evt_ring_rx_update(struct gsi_evt_ring *evt_ring, u32 index)
+ 	do {
+ 		trans->len = __le16_to_cpu(event->len);
+ 		byte_count += trans->len;
++		trans_count++;
+ 
+ 		/* Move on to the next event and transaction */
+ 		if (--event_avail)
+@@ -1401,7 +1403,7 @@ static void gsi_evt_ring_rx_update(struct gsi_evt_ring *evt_ring, u32 index)
+ 
+ 	/* We record RX bytes when they are received */
+ 	channel->byte_count += byte_count;
+-	channel->trans_count++;
++	channel->trans_count += trans_count;
+ }
+ 
+ /* Initialize a ring, including allocating DMA memory for its entries */
 -- 
 2.35.1
 

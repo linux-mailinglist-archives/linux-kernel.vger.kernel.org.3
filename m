@@ -2,158 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 672AC531E59
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 00:07:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF045531E5F
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 00:10:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230368AbiEWWHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 18:07:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39516 "EHLO
+        id S231157AbiEWWKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 18:10:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiEWWHW (ORCPT
+        with ESMTP id S229491AbiEWWKn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 18:07:22 -0400
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB77B38BF2;
-        Mon, 23 May 2022 15:07:20 -0700 (PDT)
-Received: by mail-vs1-xe32.google.com with SMTP id b7so16483939vsq.1;
-        Mon, 23 May 2022 15:07:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XSlHjnTpNeJkBXf9g/KNtqsnSqM2X0+xdvEyIgTr6JQ=;
-        b=EWwnTLM16H2GID9+UMX+0nE+pP3lqI2zGGAdpDUwji1ya5dw7SMD1eY9VBTTyzZ97p
-         pnByUqrOiDK2UWSurC7DobSo4CmD+ZAvHtc04GRJIsGw0fSO+eLor7K60PCvjH5JEVyS
-         e/eH4dT5yygEZpGlkm6i0xZPBRNG+Bw7w0NVBq8AcoYzA9Xhu2CCIxlyaXrckX+jhUE2
-         zy0bMaodYI5pg8r4ys5ei2CpT7VSiYqgQjcmbmH/Tje8evG8fCsaD2DZ1WPXq+5aGyjR
-         8BpBP/zt3jvcyEp80mLe/oV8xS1aBQ8q6qqiPSdBWfwlFIc7IpG714GItGipaHKVGzvo
-         4cEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XSlHjnTpNeJkBXf9g/KNtqsnSqM2X0+xdvEyIgTr6JQ=;
-        b=YFFE/PyYILo4LQ9lw4dENDg8wPPNEAe+rXSPb6ldXkj9EutMboYNoDxm1oCaV+tYLU
-         UdYa0oqe8djUlXv0B/8Pq9FG4EV32y5Jx5c5jM8DFNvff6YqoAmP2HdpnjhzXFlgBUbY
-         5kvq6xPoJ20EY/igavjubXYHZRF0ucDwkj9IpOk08sOQmAradClDUA1h5yOysDX/kldB
-         /28hjqMJhn8Nt1PF20iAQ68wtIFL6SImQg5h3r9C9O8uVBI+ganf1gI1MJTBpYdpvGFB
-         Dj7ETNfbc+LUJmXnLdhDoL0xVDnJGhQJLLM4UKNYVMZvDiZ5um+PO+LgPhfQgQ6TOZCt
-         if0w==
-X-Gm-Message-State: AOAM533flFvpBr8awJ0XlfVmmdtY9uN0WfE8JihmYsUgOlbKX81MVjTq
-        3K40+9EOJSa9RrpUpWWv94ADRnYyKBGtOa8qk5k=
-X-Google-Smtp-Source: ABdhPJz1O2EWuAnkK+LM9P6gjKOn5UxPsEEewag3V5kdOD0oCJLqAcLdS5U+rPZbYmR16eX6VvASq4sH/ezCoCC8KQo=
-X-Received: by 2002:a05:6102:370a:b0:333:c0e7:77e8 with SMTP id
- s10-20020a056102370a00b00333c0e777e8mr9914433vst.54.1653343639818; Mon, 23
- May 2022 15:07:19 -0700 (PDT)
+        Mon, 23 May 2022 18:10:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91BD6BA553;
+        Mon, 23 May 2022 15:10:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3D388B8162C;
+        Mon, 23 May 2022 22:10:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C5AAC385AA;
+        Mon, 23 May 2022 22:10:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653343838;
+        bh=yQVurtYEo5Ovn07aQzlO31017UwCZBxe6EyP0GZUBI0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=pj5rw/4/Oehudh25vKqU7IKu15HY3CB/4gvutCSqOFZuHAZ34pq/7z/d4kwmWXUjC
+         kYjseRqkOfrCcXgvgU54/8v5SilNE4o88EDFNfQ2QrSGnh5yYtAf6igJ+7iBi7+Fw7
+         KJjU4/TS+z1cKpIEFzXBThVmJNJKAJJhYzCH8wWPuplyLR9RsnfzuGQCzEsLqaU63n
+         ebBPOMljRrR47dIYs7F71FgXSFwPAWnpvXaM+9MRqDAySTy1Dlm/By7UnW0r7+XhUQ
+         3024KG3TlRxKzzp8zYTe8Ous53CVXDFTtqYEJD6OobHEcPacqXfUa2AIi4M0BV0YPC
+         joBoDBsc5S2WQ==
+Date:   Mon, 23 May 2022 17:10:36 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Jim Quinlan <jim2101024@gmail.com>
+Cc:     linux-pci <linux-pci@vger.kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        James Dutton <james.dutton@gmail.com>,
+        Cyril Brulebois <kibi@debian.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Jim Quinlan <james.quinlan@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v1] PCI: brcmstb: Fix regression regarding missing PCIe
+ linkup
+Message-ID: <20220523221036.GA130515@bhelgaas>
 MIME-Version: 1.0
-References: <20220523102955.43844-1-douglas.raillard@arm.com> <4268b7c5-458e-32cc-36c4-79058be0480e@iogearbox.net>
-In-Reply-To: <4268b7c5-458e-32cc-36c4-79058be0480e@iogearbox.net>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 23 May 2022 15:07:08 -0700
-Message-ID: <CAEf4BzZH-vV8iVqcDr_izTm+VqnqQ4QCzCgPA0pVX3iuVm9iHg@mail.gmail.com>
-Subject: Re: [PATCH v2] libbpf: Fix determine_ptr_size() guessing
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Douglas RAILLARD <douglas.raillard@arm.com>,
-        bpf <bpf@vger.kernel.org>, beata.michalska@arm.com,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Networking <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANCKTBvqp7_MSG3aMpp6pmNoPUnYpH0c+8-r7Pzgebuzb4sZPA@mail.gmail.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 2:00 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
->
-> On 5/23/22 12:29 PM, Douglas RAILLARD wrote:
-> > From: Douglas Raillard <douglas.raillard@arm.com>
+On Sat, May 21, 2022 at 02:51:42PM -0400, Jim Quinlan wrote:
+> On Sat, May 21,
+> 2CONFIG_INITRAMFS_SOURCE="/work3/jq921458/cpio/54-arm64-rootfs.cpio022
+> at 12:43 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > On Wed, May 18, 2022 at 03:42:11PM -0400, Jim Quinlan wrote:
+> > > commit 93e41f3fca3d ("PCI: brcmstb: Add control of subdevice
+> > > voltage regulators")
+> > >
+> > > introduced a regression on the PCIe RPi4 Compute Module.  If the
+> > > PCIe endpoint node described in [2] was missing, no linkup would
+> > > be attempted, and subsequent accesses would cause a panic
+> > > because this particular PCIe HW causes a CPU abort on illegal
+> > > accesses (instead of returning 0xffffffff).
+> > >
+> > > We fix this by allowing the DT endpoint subnode to be missing.
+> > > This is important for platforms like the CM4 which have a
+> > > standard PCIe socket and the endpoint device is unknown.
 > >
-> > One strategy employed by libbpf to guess the pointer size is by finding
-> > the size of "unsigned long" type. This is achieved by looking for a type
-> > of with the expected name and checking its size.
-> >
-> > Unfortunately, the C syntax is friendlier to humans than to computers
-> > as there is some variety in how such a type can be named. Specifically,
-> > gcc and clang do not use the same name in debug info.
->
-> Could you elaborate for the commit msg what both emit differently?
->
-> > Lookup all the names for such a type so that libbpf can hope to find the
-> > information it wants.
-> >
-> > Signed-off-by: Douglas Raillard <douglas.raillard@arm.com>
-> > ---
-> >   tools/lib/bpf/btf.c | 15 +++++++++++++--
-> >   1 file changed, 13 insertions(+), 2 deletions(-)
-> >
-> >   CHANGELOG
-> >       v2:
-> >               * Added missing case for "long"
-> >
-> > diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-> > index 1383e26c5d1f..ab92b3bc2724 100644
-> > --- a/tools/lib/bpf/btf.c
-> > +++ b/tools/lib/bpf/btf.c
-> > @@ -489,8 +489,19 @@ static int determine_ptr_size(const struct btf *btf)
-> >               if (!name)
-> >                       continue;
-> >
-> > -             if (strcmp(name, "long int") == 0 ||
-> > -                 strcmp(name, "long unsigned int") == 0) {
-> > +             if (
-> > +                     strcmp(name, "long") == 0 ||
-> > +                     strcmp(name, "long int") == 0 ||
-> > +                     strcmp(name, "int long") == 0 ||
-> > +                     strcmp(name, "unsigned long") == 0 ||
-> > +                     strcmp(name, "long unsigned") == 0 ||
-> > +                     strcmp(name, "unsigned long int") == 0 ||
-> > +                     strcmp(name, "unsigned int long") == 0 ||
-> > +                     strcmp(name, "long unsigned int") == 0 ||
-> > +                     strcmp(name, "long int unsigned") == 0 ||
-> > +                     strcmp(name, "int unsigned long") == 0 ||
-> > +                     strcmp(name, "int long unsigned") == 0
-> > +             ) {
->
-> I was wondering whether strstr(3) or regexec(3) would be better, but then it's
+> > I think the problem here is that on the CM, we try to enumerate
+> > devices that are not powered up, isn't it?  The commit log should
+> > say something about that power situation and how the driver learns
+> > about the power regulators instead of just pointing at an DT
+> > endpoint node.
+> 
+> This is incorrect.  The regression occurred because the code
+> mistakenly skips PCIe-linkup if the PCI portdrv DT node does not
+> exist. With our RC HW, doing a config space access to bus 1 w/o
+> first linking up results in a CPU abort.  This regression has
+> nothing to do with EP power at all.
 
-regexec() seems like an overkill, but strstr() won't work because
-we'll mistakingly find "long long". Splitting by space and sorting
-also feels like going a bit too far. So I guess let's stick to this
-exhaustive comparison approach.
+OK, I think I'm starting to see, but I'm still missing some things.
 
-But Douglas, can you please a table instead of writing out all those strcmp():
+67211aadcb4b ("PCI: brcmstb: Add mechanism to turn on subdev
+regulators") added pci_subdev_regulators_add_bus() as an .add_bus()
+method.  This is called by pci_alloc_child_bus(), and if the DT
+describes any regulators for the bridge leading to the new child bus,
+we turn them on.
 
-const char *long_aliases[] = {
-    "long",
-    "long int",
-    ...
-}
+Then 93e41f3fca3d ("PCI: brcmstb: Add control of subdevice voltage
+regulators") added brcm_pcie_add_bus() and made *it* the .add_bus()
+method.  It turns on the regulators and brings the link up, but it
+skips both if there's no DT node for the bridge to the new bus.
 
-for (i = 0; i < ARRAY_SIZE(long_aliases); i++) { ... }
+I guess RPi4 CM has no DT node to describe regulators, so we skip both
+turning them on *and* bringing the link up?
 
-?
+But above you say it's the *endpoint* node that doesn't exist.  The
+existing code looks like it's checking for the *bridge* node
+(bus->dev->of_node).  We haven't even enumerated the devices on the
+child bus, so we don't know about them at this point.
 
-> probably not worth it and having the different combinations spelled out is
-> probably still better. Pls make sure though to stick to kernel coding convention
-> (similar alignment around strcmp() as the lines you remove).
+What happens if there is a DT node for the bridge, but it doesn't
+describe any regulators?  I assume regulator_bulk_get() will fail, and
+it looks like that might still keep us from bringing the link up?
+
+I would think that lack of regulator description in the DT would mean
+that any regulators are always on and the OS doesn't need to do
+anything.
+
+> >  What happens if we turn on the power but don't find any
+> >  downstream devices?
 >
-> >                       if (t->size != 4 && t->size != 8)
-> >                               continue;
-> >                       return t->size;
+> They are turned off to conserve power.
+> 
+> > From looking at the code, I assume we just leave the power on.
+> > Maybe that's what you want, I dunno.
+
+> For STB and Cable Modem products we do not leave the power on.  In
+> fact, our Cable Modem group was the first to request this feature.
+> It appears that the RPi CM4 always keeps endpoint power on but I do
+> not know for sure.
+
+I'm confused.  Why can't we tell by looking at pcie-brcmstb.c?  All I
+know is what's in pcie-brcmstb.c; I have no idea which things apply to
+which products.
+
+The only calls to regulator_bulk_disable() are in
+pci_subdev_regulators_remove_bus(), brcm_pcie_suspend(), and
+brcm_pcie_resume().  I don't think the fact that enumeration didn't
+find any devices necessarily leads to any of those.  What am I
+missing?  (This is really a tangent that isn't critical for fixing the
+regression.)
+
+> > I added Rafael because this seems vaguely similar to runtime power
+> > management, and if we can integrate with that somehow, I'd sure like
+> > to avoid building a parallel infrastructure for it.
 > >
+> > The current path we're on is to move some of this code that's
+> > currently in pcie-brcmstb.c to the PCIe portdrv [0].  I'm a little
+> > hesitant about that because ACPI does just fine without it.  If we're
+> > adding new DT functionality that could not be implemented via ACPI,
+> > that's one thing.  But I'm not convinced this is that new.
 >
-> Thanks,
-> Daniel
+> AFAICT, Broadcom STB and Cable Modem products do not have/use/want
+> ACPI.  We are fine with keeping this "PCIe regulator" feature
+> private to our driver and giving you speedy and full support in
+> maintaining it.
+
+I don't mean that you should use ACPI, only that ACPI platforms can do
+this sort of power control using the existing PCI core infrastructure,
+and maybe there's a way for OF/DT platforms to hook into that same
+infrastructure to minimize the driver-specific work.  E.g., maybe
+there's a way to extend platform_pci_set_power_state() and similar to
+manage these regulators.
+
+> > [0] https://lore.kernel.org/r/20211110221456.11977-6-jim2101024@gmail.com
+> >
+> > > [1] https://bugzilla.kernel.org/show_bug.cgi?id=215925
+> > > [2] Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml
+> > >
+> > > Fixes: 93e41f3fca3d ("PCI: brcmstb: Add control of subdevice voltage regulators")
+> > > Fixes: 830aa6f29f07 ("PCI: brcmstb: Split brcm_pcie_setup() into two funcs")
+> > > Link: https://bugzilla.kernel.org/show_bug.cgi?id=215925
+> > > Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
+> > > ---
+> > >  drivers/pci/controller/pcie-brcmstb.c | 8 +++++---
+> > >  1 file changed, 5 insertions(+), 3 deletions(-)
+> > >
+> > > diff --git a/drivers/pci/controller/pcie-brcmstb.c b/drivers/pci/controller/pcie-brcmstb.c
+> > > index ba5c120816b2..adca74e235cb 100644
+> > > --- a/drivers/pci/controller/pcie-brcmstb.c
+> > > +++ b/drivers/pci/controller/pcie-brcmstb.c
+> > > @@ -540,16 +540,18 @@ static int pci_subdev_regulators_add_bus(struct pci_bus *bus)
+> > >
+> > >  static int brcm_pcie_add_bus(struct pci_bus *bus)
+> > >  {
+> > > -     struct device *dev = &bus->dev;
+> > >       struct brcm_pcie *pcie = (struct brcm_pcie *) bus->sysdata;
+> > >       int ret;
+> > >
+> > > -     if (!dev->of_node || !bus->parent || !pci_is_root_bus(bus->parent))
+> > > +     /* Only busno==1 requires us to linkup */
+> > > +     if ((int)bus->number != 1)
+> > >               return 0;
+> > >
+> > >       ret = pci_subdev_regulators_add_bus(bus);
+> > > -     if (ret)
+> > > +     if (ret) {
+> > > +             pcie->refusal_mode = true;
+> > >               return ret;
+> > > +     }
+> > >
+> > >       /* Grab the regulators for suspend/resume */
+> > >       pcie->sr = bus->dev.driver_data;
+> >
+> > IIUC, this path:
+> >
+> >   pci_alloc_child_bus
+> >     brcm_pcie_add_bus                   # .add_bus method
+> >       pci_subdev_regulators_add_bus     # in pcie-brcmstb.c for now
+> >         alloc_subdev_regulators         # in pcie-brcmstb.c for now
+> >         regulator_bulk_get
+> >         regulator_bulk_enable
+> >       brcm_pcie_linkup                  # bring link up
+> >
+> > is basically so we can leave power to downstream devices off, then
+> > turn it on when we're ready to enumerate those downstream devices.
+>
+> Yes  -- it is the "chicken-and-egg" problem.  Ideally, we would like
+> for the endpoint driver to turn on its own regulators, but even to
+> know which endpoint driver to probe we must turn on the regulator to
+> establish linkup.
+
+I don't think having an endpoint driver turn on power to its device is
+the right goal.  As you said, if the power is off, we don't know
+whether there's an endpoint or what it is, so the driver isn't in the
+picture (I know sometimes endpoints are described in DT, and that
+might be needed for non-discoverable properties, but I don't think
+it's a good way to *enumerate* the device).
+
+I don't know much about ACPI power management, but I kind of think it
+turns on power to *everything* initially so we can enumerate all the
+devices (Rafael or others, please correct me!)  After enumeration, we
+can turn off devices we don't need, and the power management framework 
+already supports turning devices on again when we use them.
+
+> > I think the brcmstb root bus is always bus 0, it only has a single
+> > Root Port on the root bus, and it always leads to bus 1, so it sort of
+> > makes sense that we only need to turn on power when we're about to
+> > scan "bus->number == 1".
+>
+> Correct.
+> 
+> > But this power management seems like a pattern that other
+> > controllers will use.  Other controllers will have several Root
+> > Ports, so checking the bus number won't work for them.  Instead of
+> > checking the bus number, I think brcmstb should check more
+> > directly for a power regulator.
+>
+> I agree.  That is why I said that we should consider removing the
+> "busno==1" conditional if we want this feature for general use.  If
+> you want, I can submit a V2 that removes this conditional.
+
+If it's as easy as dropping a needlessly platform-dependent check, we
+should absolutely do it.  Are you saying the patch would just become
+this?
+
+> I have a series of patches coming up that address some of these concerns.
+> Can we please take this up then but allow us to escape "revert jail" first?
+
+Of course.  That's why I labeled these "tangents"; they're just things
+for future work that I noticed and didn't want to forget.
+
+Bjorn

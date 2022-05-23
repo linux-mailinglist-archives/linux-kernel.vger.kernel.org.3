@@ -2,52 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4916D531DAC
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 23:25:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA080531DBF
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 23:30:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231166AbiEWVZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 17:25:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43996 "EHLO
+        id S231807AbiEWV2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 17:28:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbiEWVZG (ORCPT
+        with ESMTP id S230227AbiEWV2R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 17:25:06 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4818568335
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 14:25:05 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ntFXw-0007Ww-4T; Mon, 23 May 2022 23:25:00 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ntFXw-0049Tq-GB; Mon, 23 May 2022 23:24:59 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ntFXt-00BgXU-U7; Mon, 23 May 2022 23:24:57 +0200
-Date:   Mon, 23 May 2022 23:24:57 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Tony Lindgren <tony@atomide.com>, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH 1/2] mfd: twl6030: Make twl6030_exit_irq() return void
-Message-ID: <20220523212457.3cd5f5afwla2ahxi@pengutronix.de>
-References: <20220113101430.12869-1-u.kleine-koenig@pengutronix.de>
- <20220113101430.12869-2-u.kleine-koenig@pengutronix.de>
- <Ymq/tVTo2JIEDEQa@google.com>
+        Mon, 23 May 2022 17:28:17 -0400
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 375B2A2053
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 14:28:16 -0700 (PDT)
+Received: by mail-oi1-x231.google.com with SMTP id v9so14679933oie.5
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 14:28:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=LZD/Zppu+JV4corcLquFb+tJaC7Y9GLTkq/38/brrSc=;
+        b=iZgYT+c5BVBpgsBQojxO1uEkOvetRImr9YQwwlimnqF43B53R3q4SxlOZUXAtOV3Pn
+         BHwv3wW8FmtlD2Wndm0AGXrw5MMb+awWvf/PvsYx+56x/p3CZUfBABYJbiIc+cRO/LHE
+         MyiPApQQsEjLIUT7PUdeE8s8raT4FE+L4vw8AW+L0iXOUN5ot1U6K267KN8QXfyETDAx
+         Zt2q1sluLeChulHZHvJQzEwz0NDNBn4DjkuZtJceiryK3NG9iygpyvbbiKP/ijtbXitp
+         mH29eWYrA26O4uC2pbOl7KNCbYW1umKr+dI1m2y7b73AtYOZeKt9F6j3LAcZqDEG94Nt
+         jGhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=LZD/Zppu+JV4corcLquFb+tJaC7Y9GLTkq/38/brrSc=;
+        b=eLqbJ/1ocweZl4s3sfLzAv7PBPqBVFkf1Xosydw84yOsOALgDMNFm/V9suGIysOols
+         Xs9cX/b7tT3X2cAnHjulFoEO/AOEkAQvsCVqc7hYqPJkkOkRF7c2I+zLTDInMa9qQLJ9
+         6I+RTtvGWtFJfpr5XI7d9/VnRlGts1eROIEjqFAdLQv03oneWZJSAlXUZbIQTztdN11x
+         eW32rwHffwgIbCoJWjI/2BNVae9R7rVEN/rAJoyeOpGX++8JoT8oOchjl/V67qt9D3VH
+         A9eIDkh61Ki6pnYKKgp65gRRrSMtW96V4ol69um/tQwOUeLdy6fXdrnwemv12JRAv+yj
+         jpqQ==
+X-Gm-Message-State: AOAM531Qt7yDUiUv19zakwa2brU+Yu1zYD/i5DZ/P0gZHdY4Idhgkvhh
+        Ip2pHltAh/0A2pQbHcWFRgzQ/R4ytSEEcw==
+X-Google-Smtp-Source: ABdhPJxdbYpNotodQL2bHtqTswSrQDWZO8uC9pio8AkGMlFCNEsqfHD9V3mItvnwn4tVwaUPm6+5cQ==
+X-Received: by 2002:a17:90b:4b50:b0:1df:7b60:f0b3 with SMTP id mi16-20020a17090b4b5000b001df7b60f0b3mr956373pjb.237.1653341285148;
+        Mon, 23 May 2022 14:28:05 -0700 (PDT)
+Received: from localhost.localdomain ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id q7-20020a170902edc700b0016168e90f37sm5587413plk.152.2022.05.23.14.28.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 May 2022 14:28:04 -0700 (PDT)
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Tadeusz Struk <tadeusz.struk@linaro.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, cgroups@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzbot+e42ae441c3b10acf9e9d@syzkaller.appspotmail.com
+Subject: [PATCH v2] cgroups: separate destroy_work into two separate wq
+Date:   Mon, 23 May 2022 14:27:24 -0700
+Message-Id: <20220523212724.233314-1-tadeusz.struk@linaro.org>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220412192459.227740-1-tadeusz.struk@linaro.org>
+References: <20220412192459.227740-1-tadeusz.struk@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fqbvmdiboxepjnhz"
-Content-Disposition: inline
-In-Reply-To: <Ymq/tVTo2JIEDEQa@google.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,58 +82,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Syzbot found a corrupted list bug scenario that can be triggered from
+cgroup css_create(). The reproduces writes to cgroup.subtree_control
+file, which invokes cgroup_apply_control_enable(), css_create(), and
+css_populate_dir(), which then randomly fails with a fault injected -ENOMEM.
+In such scenario the css_create() error path rcu enqueues css_free_rwork_fn
+work for an css->refcnt initialized with css_release() destructor,
+and there is a chance that the css_release() function will be invoked
+for a cgroup_subsys_state, for which a destroy_work has already been
+queued via css_create() error path. This causes a list_add corruption
+as can be seen in the syzkaller report [1].
+This can be fixed by separating the css_release and ref_kill paths
+to work with two separate work_structs.
 
---fqbvmdiboxepjnhz
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+[1] https://syzkaller.appspot.com/bug?id=e26e54d6eac9d9fb50b221ec3e4627b327465dbd
 
-Hello Lee,
+Cc: Tejun Heo <tj@kernel.org>
+Cc: Zefan Li <lizefan.x@bytedance.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Martin KaFai Lau <kafai@fb.com>
+Cc: Song Liu <songliubraving@fb.com>
+Cc: Yonghong Song <yhs@fb.com>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: KP Singh <kpsingh@kernel.org>
+Cc: <cgroups@vger.kernel.org>
+Cc: <netdev@vger.kernel.org>
+Cc: <bpf@vger.kernel.org>
+Cc: <stable@vger.kernel.org>
+Cc: <linux-kernel@vger.kernel.org>
 
-On Thu, Apr 28, 2022 at 05:24:21PM +0100, Lee Jones wrote:
-> On Thu, 13 Jan 2022, Uwe Kleine-K=F6nig wrote:
->=20
-> > This function returns 0 unconditionally, so there is no benefit in
-> > returning a value at all and make the caller do error checking.
-> >=20
-> > Also the caller (twl_remove()) cannot do anything sensible with an error
-> > code. Passing it up the call stack isn't a good option because the i2c =
-core
-> > ignores error codes (apart from emitting an error message).
-> >=20
-> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> > ---
-> >  drivers/mfd/twl-core.c    | 4 ++--
-> >  drivers/mfd/twl-core.h    | 2 +-
-> >  drivers/mfd/twl6030-irq.c | 3 +--
-> >  3 files changed, 4 insertions(+), 5 deletions(-)
->=20
-> Applied, thanks.
+Reported-and-tested-by: syzbot+e42ae441c3b10acf9e9d@syzkaller.appspotmail.com
+Fixes: 8f36aaec9c92 ("cgroup: Use rcu_work instead of explicit rcu and work item")
+Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
+---
+v2: Add a separate work_struct for the css_ref_kill path instead of
+    checking if a work has already been enqueued.
+---
+ include/linux/cgroup-defs.h |  5 +++--
+ kernel/cgroup/cgroup.c      | 14 +++++++-------
+ 2 files changed, 10 insertions(+), 9 deletions(-)
 
-I would have expected these to appear in next since you wrote to have
-applied this series. But they have not though your claim to have applied
-them is over three weeks old now?! :-\
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---fqbvmdiboxepjnhz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmKL+6YACgkQwfwUeK3K
-7Alx3wf+Pgvhe1l5WLnaEBEGjKDphT/lEXXiucONwPGZm8+iSs3zSCZSsO9+DSMp
-86EA9qc4rFval3zw4YnxxWQRDp1Hp3rAjduP/N6BhEizKdfaPEq4ZyZZwLctt20o
-KAt3oXT07jrpn1ZRH8Np6OBUhVBIUFZaVTVjRZ8LyyxZpqwHq9XqBiPv5f2WB4Tz
-Dv1Fs1UMv7fSDStJyyfryHlMijn1cUGhbh/jm/WG/ODI/VoB6xK/G2+xGcpSO5ec
-ju9iKw5h24KRm6eupEnIjsKryi4+DUYVRtCeZBwCJRtbXnBVAQx4FxRANOmGSz8V
-tVemjWWCMFsc68dNiPPSh7mc7uQmVg==
-=AN+o
------END PGP SIGNATURE-----
-
---fqbvmdiboxepjnhz--
+diff --git a/include/linux/cgroup-defs.h b/include/linux/cgroup-defs.h
+index 1bfcfb1af352..92b0c5e8c472 100644
+--- a/include/linux/cgroup-defs.h
++++ b/include/linux/cgroup-defs.h
+@@ -178,8 +178,9 @@ struct cgroup_subsys_state {
+ 	 */
+ 	atomic_t online_cnt;
+ 
+-	/* percpu_ref killing and RCU release */
+-	struct work_struct destroy_work;
++	/* percpu_ref killing, css release, and RCU release work structs */
++	struct work_struct release_work;
++	struct work_struct killed_ref_work;
+ 	struct rcu_work destroy_rwork;
+ 
+ 	/*
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index adb820e98f24..3e00a793e15d 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -5099,7 +5099,7 @@ static struct cftype cgroup_base_files[] = {
+  *    css_free_work_fn().
+  *
+  * It is actually hairier because both step 2 and 4 require process context
+- * and thus involve punting to css->destroy_work adding two additional
++ * and thus involve punting to css->release_work adding two additional
+  * steps to the already complex sequence.
+  */
+ static void css_free_rwork_fn(struct work_struct *work)
+@@ -5154,7 +5154,7 @@ static void css_free_rwork_fn(struct work_struct *work)
+ static void css_release_work_fn(struct work_struct *work)
+ {
+ 	struct cgroup_subsys_state *css =
+-		container_of(work, struct cgroup_subsys_state, destroy_work);
++		container_of(work, struct cgroup_subsys_state, release_work);
+ 	struct cgroup_subsys *ss = css->ss;
+ 	struct cgroup *cgrp = css->cgroup;
+ 
+@@ -5210,8 +5210,8 @@ static void css_release(struct percpu_ref *ref)
+ 	struct cgroup_subsys_state *css =
+ 		container_of(ref, struct cgroup_subsys_state, refcnt);
+ 
+-	INIT_WORK(&css->destroy_work, css_release_work_fn);
+-	queue_work(cgroup_destroy_wq, &css->destroy_work);
++	INIT_WORK(&css->release_work, css_release_work_fn);
++	queue_work(cgroup_destroy_wq, &css->release_work);
+ }
+ 
+ static void init_and_link_css(struct cgroup_subsys_state *css,
+@@ -5546,7 +5546,7 @@ int cgroup_mkdir(struct kernfs_node *parent_kn, const char *name, umode_t mode)
+ static void css_killed_work_fn(struct work_struct *work)
+ {
+ 	struct cgroup_subsys_state *css =
+-		container_of(work, struct cgroup_subsys_state, destroy_work);
++		container_of(work, struct cgroup_subsys_state, killed_ref_work);
+ 
+ 	mutex_lock(&cgroup_mutex);
+ 
+@@ -5567,8 +5567,8 @@ static void css_killed_ref_fn(struct percpu_ref *ref)
+ 		container_of(ref, struct cgroup_subsys_state, refcnt);
+ 
+ 	if (atomic_dec_and_test(&css->online_cnt)) {
+-		INIT_WORK(&css->destroy_work, css_killed_work_fn);
+-		queue_work(cgroup_destroy_wq, &css->destroy_work);
++		INIT_WORK(&css->killed_ref_work, css_killed_work_fn);
++		queue_work(cgroup_destroy_wq, &css->killed_ref_work);
+ 	}
+ }
+ 
+-- 
+2.36.1

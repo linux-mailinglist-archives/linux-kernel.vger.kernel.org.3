@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9505531750
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:52:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7B2D53190B
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:54:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242418AbiEWRud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:50:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33566 "EHLO
+        id S243577AbiEWSKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 14:10:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241715AbiEWR1F (ORCPT
+        with ESMTP id S243273AbiEWRiA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:27:05 -0400
+        Mon, 23 May 2022 13:38:00 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D317A6175;
-        Mon, 23 May 2022 10:22:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F6AA8BD12;
+        Mon, 23 May 2022 10:32:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 13043610E8;
-        Mon, 23 May 2022 17:21:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 140AFC385A9;
-        Mon, 23 May 2022 17:21:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 818B261261;
+        Mon, 23 May 2022 17:31:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88D15C385A9;
+        Mon, 23 May 2022 17:31:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326478;
-        bh=VcPpcPHrQ0SHo1DNrUEe4k1AjZowFc1+BAV9eUH1my4=;
+        s=korg; t=1653327062;
+        bh=E0vUSpxPLIELQGfG4YeyedZtqjlmxegQcKpK3CCbthE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TgW07DpulnUnOFwDG+aZQrPZ48WxcSg11nar66LTdfiqPpq+YHEPXWDYYg7uCOXJk
-         D/CcZzD+XUYpeIbK5gikNZy0oBfnAdu5QEld7f205w0mQeI820elxZDi67LPH3HLYH
-         Iokm6Xq5mahSdNDxqijkSwlMbadZALns4VYnuxu0=
+        b=AnxiVdAXZqZUMYWVp5U8psj/GIaYqbsxP9toPrQm/uZtxUQ0ieno1zCjrhRqe6udG
+         XaCWGJr7zr+Tb1G62CwIjgpwPsHtCTD6SzyB2oxTVdlpsPugsaIBlZPepNZd069xxC
+         XXwm45Wies2mR2kAK13I5MNyMQl1hqKPl9385YYA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        stable@vger.kernel.org,
+        Nicholas Kazlauskas <Nicholas.Kazlauskas@amd.com>,
+        Pavle Kotarac <Pavle.Kotarac@amd.com>,
+        Eric Yang <Eric.Yang2@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 093/132] ARM: 9196/1: spectre-bhb: enable for Cortex-A15
+Subject: [PATCH 5.17 145/158] drm/amd/display: undo clearing of z10 related function pointers
 Date:   Mon, 23 May 2022 19:05:02 +0200
-Message-Id: <20220523165838.736427771@linuxfoundation.org>
+Message-Id: <20220523165854.271190940@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
-References: <20220523165823.492309987@linuxfoundation.org>
+In-Reply-To: <20220523165830.581652127@linuxfoundation.org>
+References: <20220523165830.581652127@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,34 +58,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ard Biesheuvel <ardb@kernel.org>
+From: Eric Yang <Eric.Yang2@amd.com>
 
-[ Upstream commit 0dc14aa94ccd8ba35eb17a0f9b123d1566efd39e ]
+[ Upstream commit 9b9bd3f640640f94272a461b2dfe558f91b322c5 ]
 
-The Spectre-BHB mitigations were inadvertently left disabled for
-Cortex-A15, due to the fact that cpu_v7_bugs_init() is not called in
-that case. So fix that.
+[Why]
+Z10 and S0i3 have some shared path. Previous code clean up ,
+incorrectly removed these pointers, which breaks s0i3 restore
 
-Fixes: b9baf5c8c5c3 ("ARM: Spectre-BHB workaround")
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+[How]
+Do not clear the function pointers based on Z10 disable.
+
+Reviewed-by: Nicholas Kazlauskas <Nicholas.Kazlauskas@amd.com>
+Acked-by: Pavle Kotarac <Pavle.Kotarac@amd.com>
+Signed-off-by: Eric Yang <Eric.Yang2@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/mm/proc-v7-bugs.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/gpu/drm/amd/display/dc/dcn31/dcn31_init.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/arch/arm/mm/proc-v7-bugs.c b/arch/arm/mm/proc-v7-bugs.c
-index 06dbfb968182..fb9f3eb6bf48 100644
---- a/arch/arm/mm/proc-v7-bugs.c
-+++ b/arch/arm/mm/proc-v7-bugs.c
-@@ -288,6 +288,7 @@ void cpu_v7_ca15_ibe(void)
- {
- 	if (check_spectre_auxcr(this_cpu_ptr(&spectre_warned), BIT(0)))
- 		cpu_v7_spectre_v2_init();
-+	cpu_v7_spectre_bhb_init();
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_init.c b/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_init.c
+index d7559e5a99ce..e708f07fe75a 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_init.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_init.c
+@@ -153,9 +153,4 @@ void dcn31_hw_sequencer_construct(struct dc *dc)
+ 		dc->hwss.init_hw = dcn20_fpga_init_hw;
+ 		dc->hwseq->funcs.init_pipes = NULL;
+ 	}
+-	if (dc->debug.disable_z10) {
+-		/*hw not support z10 or sw disable it*/
+-		dc->hwss.z10_restore = NULL;
+-		dc->hwss.z10_save_init = NULL;
+-	}
  }
- 
- void cpu_v7_bugs_init(void)
 -- 
 2.35.1
 

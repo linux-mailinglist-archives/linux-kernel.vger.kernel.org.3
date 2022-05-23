@@ -2,79 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D2015310F6
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:20:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1223B5310F8
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:20:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236007AbiEWNTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 09:19:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60126 "EHLO
+        id S236039AbiEWNT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 09:19:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235970AbiEWNTb (ORCPT
+        with ESMTP id S235970AbiEWNTy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 09:19:31 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B0A7E1FA68
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 06:19:30 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-317-xygOjhI6PEOklHKxx9crOw-1; Mon, 23 May 2022 14:19:27 +0100
-X-MC-Unique: xygOjhI6PEOklHKxx9crOw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.36; Mon, 23 May 2022 14:19:26 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.036; Mon, 23 May 2022 14:19:26 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Vincent Guittot' <vincent.guittot@linaro.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>
-CC:     Chris Hyser <chris.hyser@oracle.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "juri.lelli@redhat.com" <juri.lelli@redhat.com>,
-        "dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "bsegall@google.com" <bsegall@google.com>,
-        "mgorman@suse.de" <mgorman@suse.de>,
-        "bristot@redhat.com" <bristot@redhat.com>,
-        "vschneid@redhat.com" <vschneid@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "parth@linux.ibm.com" <parth@linux.ibm.com>,
-        "qais.yousef@arm.com" <qais.yousef@arm.com>,
-        "valentin.schneider@arm.com" <valentin.schneider@arm.com>,
-        "patrick.bellasi@matbug.net" <patrick.bellasi@matbug.net>,
-        "pjt@google.com" <pjt@google.com>, "pavel@ucw.cz" <pavel@ucw.cz>,
-        "tj@kernel.org" <tj@kernel.org>,
-        "qperret@google.com" <qperret@google.com>,
-        "joshdon@google.com" <joshdon@google.com>,
-        "len.brown@intel.com" <len.brown@intel.com>
-Subject: RE: [PATCH v2 0/7] Add latency_nice priority
-Thread-Topic: [PATCH v2 0/7] Add latency_nice priority
-Thread-Index: AQHYbqP4zaEzexIx1U6fvq8Kco/Wm60scgmw
-Date:   Mon, 23 May 2022 13:19:26 +0000
-Message-ID: <d4467cd50d884b438dc8c2993669bed0@AcuMS.aculab.com>
-References: <20220512163534.2572-1-vincent.guittot@linaro.org>
- <f1f50c52673aa1873b4a4d3b6b15250d4bf390f9.camel@linux.intel.com>
- <CAKfTPtBEHyP202duKwJi+GVNTMza+L_PuK3hmUxcjKnODOuRjw@mail.gmail.com>
- <9c0f9158-2d0c-dba9-1505-79ba4e642684@oracle.com>
- <aa8746fbb27849ee34ddb0ff028d0a1ee064c506.camel@linux.intel.com>
- <CAKfTPtAotgr+C1zXyWDSZt59NFX7Twb7gQLMcSv5hm6ywM85+Q@mail.gmail.com>
-In-Reply-To: <CAKfTPtAotgr+C1zXyWDSZt59NFX7Twb7gQLMcSv5hm6ywM85+Q@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 23 May 2022 09:19:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10AB4BE18;
+        Mon, 23 May 2022 06:19:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A7A0AB810A1;
+        Mon, 23 May 2022 13:19:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F713C385AA;
+        Mon, 23 May 2022 13:19:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653311991;
+        bh=OKE+ZuenSXOm0/gUqhu8yMEFf/CM7dUNVe8QIzkUxpQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YurQuzIoYUxDu8T8L43hTUM/EstcR8bENWhD5t4DR90NdfC16i3IXnN+OFa1a5GhY
+         ZTxZx106k2g9PPHB913gLhyJj/jLZA11ipFZFFLkx77LZ1zN1p5Qi8f8uOYTlDdo7P
+         T1G0Cle/KuDnJ4Nb9z6WK8QsmAOGW/GdrrhdzJnUPTSGUWV9ZjxUnwJ4N/AJBNhgAb
+         u8VLoxYt76Gsk6VFv6lRFvPFlQzUCMqchb77r0TSR5+rLBXdNvJNJuUBCb9kTui9PX
+         FXs7N9LAA/OzxdBq+w1J3+EdRYDN4anDnibut0uYcLPvv5SdjewG2JQlup9Sz7yin9
+         3yx5C9zTcDVGg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 940F3400B1; Mon, 23 May 2022 10:19:48 -0300 (-03)
+Date:   Mon, 23 May 2022 10:19:48 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>, Leo Yan <leo.yan@linaro.org>,
+        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH V2 0/6] perf intel-pt: Add support for tracing KVM test
+ programs
+Message-ID: <YouJ9N7kpWPqRiXJ@kernel.org>
+References: <20220517131011.6117-1-adrian.hunter@intel.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220517131011.6117-1-adrian.hunter@intel.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,9 +61,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiA+ID4gPiA+IG1lZGlhIHBsYXliYWNrICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-IC0xNSB0byAtMTENCg0KSXNuJ3QgdGhhdCB3aGF0IHRoZSBSVCBzY2hlZHVsZXIgaXMgZm9yLi4u
-Lg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJv
-YWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24g
-Tm86IDEzOTczODYgKFdhbGVzKQ0K
+Em Tue, May 17, 2022 at 04:10:05PM +0300, Adrian Hunter escreveu:
+> Hi
+> 
+> A common case for KVM test programs is that the guest object code can be
+> found in the hypervisor process (i.e. the test program running on the
+> host).  Add support for that.
+> 
+> For some more details refer the 3rd patch "perf tools: Add guest_code
+> support"
+> 
+> For an example, see the last patch "perf intel-pt: Add guest_code support"
+> 
+> For more information about Perf tools support for Intel® Processor Trace
+> refer:
+> 
+>   https://perf.wiki.kernel.org/index.php/Perf_tools_support_for_Intel%C2%AE_Processor_Trace
+> 
+> 
+> Changes in V2:
+> 	Add more explanation to commits, comments and documentation.
 
+Thanks, applied.
+
+- Arnaldo
+
+ 
+> 
+> Adrian Hunter (6):
+>       perf tools: Add machine to machines back pointer
+>       perf tools: Factor out thread__set_guest_comm()
+>       perf tools: Add guest_code support
+>       perf script: Add guest_code support
+>       perf kvm report: Add guest_code support
+>       perf intel-pt: Add guest_code support
+> 
+>  tools/perf/Documentation/perf-intel-pt.txt |  70 ++++++++++++++++++++
+>  tools/perf/Documentation/perf-kvm.txt      |   3 +
+>  tools/perf/Documentation/perf-script.txt   |   4 ++
+>  tools/perf/builtin-kvm.c                   |   2 +
+>  tools/perf/builtin-script.c                |   5 +-
+>  tools/perf/util/event.c                    |   7 +-
+>  tools/perf/util/intel-pt.c                 |  20 +++++-
+>  tools/perf/util/machine.c                  | 101 ++++++++++++++++++++++++++++-
+>  tools/perf/util/machine.h                  |   4 ++
+>  tools/perf/util/session.c                  |   7 ++
+>  tools/perf/util/symbol_conf.h              |   3 +-
+>  11 files changed, 217 insertions(+), 9 deletions(-)
+> 
+> 
+> Regards
+> Adrian
+
+-- 
+
+- Arnaldo

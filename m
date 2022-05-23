@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3DF2531786
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:53:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29EE3531BC4
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240157AbiEWR2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:28:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48564 "EHLO
+        id S240155AbiEWRYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:24:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240492AbiEWRST (ORCPT
+        with ESMTP id S240505AbiEWRQY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:18:19 -0400
+        Mon, 23 May 2022 13:16:24 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7AB86B7D2;
-        Mon, 23 May 2022 10:17:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2DF76D3B5;
+        Mon, 23 May 2022 10:15:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6149461541;
-        Mon, 23 May 2022 17:15:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67620C385A9;
-        Mon, 23 May 2022 17:15:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 748AD61525;
+        Mon, 23 May 2022 17:14:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77334C385A9;
+        Mon, 23 May 2022 17:14:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326136;
-        bh=kyCpt+kxit9oAreUT89imPW8qUa5FVx/lcfqw+8Zcqo=;
+        s=korg; t=1653326088;
+        bh=PbB7C77+uD6w0+4mF6M8fnCmGhUXFeYrAwDI9Gltt64=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TI42MIfWJQqiyEuqLTsZyFQh/OuTqQkaCR19Sq9SmCR0E05oDSNBGnpvteblUIVWc
-         Bn6sx6mSrDYnahcNMSzWx70pZiG/aQl9CGw4JS8IxG0PzO75iL8vs5L7Y6nO2bI/Ys
-         gvibD2NLM30DrN2vOtXIGUyHt50H6gJUfKJ6nV20=
+        b=LwkaZ1V5I7UdZ2oxw9uK93/6LQ1iC+Ejj8eo8NDpR31xSb+lU8uTfc/mHCDgW2nNA
+         OuF1JwC7trkwHp7GEJHK3psp0GSygOfZujaZRfKPuqmGfs6zQkzSn/8aXYgmqDxATO
+         SHMJtEDgUFlZTze9P5CjwvgqRGt4iM9adVloBKIY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zheng Yongjun <zhengyongjun3@huawei.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        stable@vger.kernel.org,
+        Himanshu Madhani <himanshu.madhani@oracle.com>,
+        Gleb Chesnokov <Chesnokov.G@raidix.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 16/97] crypto: stm32 - fix reference leak in stm32_crc_remove
+Subject: [PATCH 5.4 53/68] scsi: qla2xxx: Fix missed DMA unmap for aborted commands
 Date:   Mon, 23 May 2022 19:05:20 +0200
-Message-Id: <20220523165814.896256749@linuxfoundation.org>
+Message-Id: <20220523165811.258317918@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165812.244140613@linuxfoundation.org>
-References: <20220523165812.244140613@linuxfoundation.org>
+In-Reply-To: <20220523165802.500642349@linuxfoundation.org>
+References: <20220523165802.500642349@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +57,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zheng Yongjun <zhengyongjun3@huawei.com>
+From: Gleb Chesnokov <Chesnokov.G@raidix.com>
 
-[ Upstream commit e9a36feecee0ee5845f2e0656f50f9942dd0bed3 ]
+[ Upstream commit 26f9ce53817a8fd84b69a73473a7de852a24c897 ]
 
-pm_runtime_get_sync() will increment pm usage counter even it
-failed. Forgetting to call pm_runtime_put_noidle will result
-in reference leak in stm32_crc_remove, so we should fix it.
+Aborting commands that have already been sent to the firmware can
+cause BUG in qlt_free_cmd(): BUG_ON(cmd->sg_mapped)
 
-Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+For instance:
+
+ - Command passes rdx_to_xfer state, maps sgl, sends to the firmware
+
+ - Reset occurs, qla2xxx performs ISP error recovery, aborts the command
+
+ - Target stack calls qlt_abort_cmd() and then qlt_free_cmd()
+
+ - BUG_ON(cmd->sg_mapped) in qlt_free_cmd() occurs because sgl was not
+   unmapped
+
+Thus, unmap sgl in qlt_abort_cmd() for commands with the aborted flag set.
+
+Link: https://lore.kernel.org/r/AS8PR10MB4952D545F84B6B1DFD39EC1E9DEE9@AS8PR10MB4952.EURPRD10.PROD.OUTLOOK.COM
+Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
+Signed-off-by: Gleb Chesnokov <Chesnokov.G@raidix.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/crypto/stm32/stm32-crc32.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/scsi/qla2xxx/qla_target.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/crypto/stm32/stm32-crc32.c b/drivers/crypto/stm32/stm32-crc32.c
-index be1bf39a317d..90a920e7f664 100644
---- a/drivers/crypto/stm32/stm32-crc32.c
-+++ b/drivers/crypto/stm32/stm32-crc32.c
-@@ -384,8 +384,10 @@ static int stm32_crc_remove(struct platform_device *pdev)
- 	struct stm32_crc *crc = platform_get_drvdata(pdev);
- 	int ret = pm_runtime_get_sync(crc->dev);
+diff --git a/drivers/scsi/qla2xxx/qla_target.c b/drivers/scsi/qla2xxx/qla_target.c
+index df598c377161..cb97565b6a33 100644
+--- a/drivers/scsi/qla2xxx/qla_target.c
++++ b/drivers/scsi/qla2xxx/qla_target.c
+@@ -3768,6 +3768,9 @@ int qlt_abort_cmd(struct qla_tgt_cmd *cmd)
  
--	if (ret < 0)
-+	if (ret < 0) {
-+		pm_runtime_put_noidle(crc->dev);
- 		return ret;
-+	}
- 
- 	spin_lock(&crc_list.lock);
- 	list_del(&crc->list);
+ 	spin_lock_irqsave(&cmd->cmd_lock, flags);
+ 	if (cmd->aborted) {
++		if (cmd->sg_mapped)
++			qlt_unmap_sg(vha, cmd);
++
+ 		spin_unlock_irqrestore(&cmd->cmd_lock, flags);
+ 		/*
+ 		 * It's normal to see 2 calls in this path:
 -- 
 2.35.1
 

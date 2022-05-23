@@ -2,222 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C043531B09
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47BD85318E4
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:54:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbiEWTSm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 15:18:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38716 "EHLO
+        id S242574AbiEWSaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 14:30:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiEWTS2 (ORCPT
+        with ESMTP id S241348AbiEWSaA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 15:18:28 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD26ABC6ED
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 11:53:17 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24NFUmeI027671;
-        Mon, 23 May 2022 17:56:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=i5RmRP/UH1mWrSQFsa6HrM9CKsDExZYIFAOg2rjZ7yo=;
- b=EK1j1RLuml3Fm86jB+cnCLFNo7Xz3XTRo0Y5jso730/cSdVkP0sEvbpAFV943vGow36F
- nxXc9JX5I2T4TzEqPzcn/shT7lyGFBzhVM+POWoBfc+BBmhzfv12hBYMetwsOUa9uteG
- S1vh//+sqgUXR0V25PwS2Aq31kU2jOLIm6mCfAIvaWQJCDHefTX+ITTxXL5MxIWA4SjV
- Wu+1hsvLRYLxT8pv45CrDamUnrO4+TKQqWLzh5MKrGceIubVoRDyVP9um9DZEPYSZTnE
- BIq9gIBwsWSxNYiSRhF64lUEuH3FE8XAEeCB/tclQScsQJYbNjdXtK+2BLoAeKmtiWNW cQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g88yvs48s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 23 May 2022 17:56:19 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24NHXA12018113;
-        Mon, 23 May 2022 17:56:18 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g88yvs480-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 23 May 2022 17:56:18 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24NHgoWG011584;
-        Mon, 23 May 2022 17:56:16 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma02fra.de.ibm.com with ESMTP id 3g6qq93jqd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 23 May 2022 17:56:16 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24NHtRwC31916520
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 23 May 2022 17:55:27 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 631B952050;
-        Mon, 23 May 2022 17:56:14 +0000 (GMT)
-Received: from li-c3569c4c-1ef8-11b2-a85c-ee139cda3133.ibm.com.com (unknown [9.43.16.198])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 2D30B5204F;
-        Mon, 23 May 2022 17:56:10 +0000 (GMT)
-From:   Sathvika Vasireddy <sv@linux.ibm.com>
-To:     linuxppc-dev@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org, jpoimboe@redhat.com,
-        peterz@infradead.org, mbenes@suse.cz, aik@ozlabs.ru,
-        mpe@ellerman.id.au, christophe.leroy@csgroup.eu,
-        rostedt@goodmis.org, naveen.n.rao@linux.vnet.ibm.com,
-        sv@linux.ibm.com
-Subject: [RFC PATCH 4/4] objtool/powerpc: Add --mcount specific implementation
-Date:   Mon, 23 May 2022 23:25:48 +0530
-Message-Id: <20220523175548.922671-5-sv@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220523175548.922671-1-sv@linux.ibm.com>
-References: <20220523175548.922671-1-sv@linux.ibm.com>
+        Mon, 23 May 2022 14:30:00 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC7013FD52
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 11:04:25 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id t2so9167586qkb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 11:04:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CJ4hCZhKAdwYtZTJlQiUAiJtEDoVXgbNXkSB87RTpgE=;
+        b=ZsrlKqbxp0gzWhNS8Yo54hieo0JeXRDymm8LiMaSiNsnVZ8d6vRpYISeaNhDzahYBU
+         hbv754gvFj1bedUixgENoivGZT7Sg70gHpP0yloaBa5L4CLm3C1TYhi1WiVh2g4JSjSk
+         nGuQJ6qj3w5Guj2/vkmkqrKNbZIUHDj1S+0jw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CJ4hCZhKAdwYtZTJlQiUAiJtEDoVXgbNXkSB87RTpgE=;
+        b=g5jEAHo+I+e00O2V8J/PlW8Fxb6PqDKmFIKEWcSO0ItK9mxGzksq7bhAtwG0ObKo6t
+         1LSNUM4O7hpDrJX/NUrV4PF4EUgZPDBiUKrS8ajZds1s2bo4C4d+a7ItGTCbIWLiDUyD
+         yxfoR03GsK82l2XqXX4ENTEk2ohtPIW9kOxnMaCXAsV6vynqmPM8e4KZQRWIFIbNGKAL
+         /igywqRKStyLMaoqx4EP9cn8MQiASukx6oscjrJTY6dRoBSB9u8a7twyFCh21HGEVCAV
+         LGnxViSDTIWAyhqBF0j140Wfx2UocJk0n3hrh+uN2cHdFVV5jjDfQFuGbwHCO4aA0UCn
+         9q+w==
+X-Gm-Message-State: AOAM532ib/5uzFo25l73N66HBXB3DjXAjWoEdqPFkpPriMTdDUR1Zb8E
+        VaIACljjjoVr6eybdHrF9EI2N2/p4gTm4g==
+X-Google-Smtp-Source: ABdhPJydQm7W16LpSU5u7avzYtIANISgno+bjJttP4L4pPBO7BV3W+5eqiV0rlux9PctEGq+gwKg1w==
+X-Received: by 2002:a05:620a:1a06:b0:6a3:7562:8ad9 with SMTP id bk6-20020a05620a1a0600b006a375628ad9mr5448731qkb.714.1653329044252;
+        Mon, 23 May 2022 11:04:04 -0700 (PDT)
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
+        by smtp.gmail.com with ESMTPSA id w7-20020ac857c7000000b002f9303ce545sm4298696qta.39.2022.05.23.11.04.03
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 May 2022 11:04:04 -0700 (PDT)
+Received: by mail-yb1-f172.google.com with SMTP id a3so26839013ybg.5
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 11:04:03 -0700 (PDT)
+X-Received: by 2002:a9d:58c3:0:b0:605:9fa7:f5b6 with SMTP id
+ s3-20020a9d58c3000000b006059fa7f5b6mr9077073oth.230.1653328563293; Mon, 23
+ May 2022 10:56:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: buX_qKCr5AM5AFX50afFueyUjRwiaumN
-X-Proofpoint-GUID: 9x78_XVgk9THSzak1_eAXXWTob5GjxeY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-23_07,2022-05-23_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- priorityscore=1501 mlxlogscore=731 impostorscore=0 malwarescore=0
- spamscore=0 phishscore=0 bulkscore=0 lowpriorityscore=0 mlxscore=0
- adultscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2202240000 definitions=main-2205230099
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220523052810.24767-1-duoming@zju.edu.cn>
+In-Reply-To: <20220523052810.24767-1-duoming@zju.edu.cn>
+From:   Brian Norris <briannorris@chromium.org>
+Date:   Mon, 23 May 2022 10:55:49 -0700
+X-Gmail-Original-Message-ID: <CA+ASDXNqYPknYUQ9D3JQBx0S__-0dTQZGg_+aoJJOt7y7japNA@mail.gmail.com>
+Message-ID: <CA+ASDXNqYPknYUQ9D3JQBx0S__-0dTQZGg_+aoJJOt7y7japNA@mail.gmail.com>
+Subject: Re: [PATCH v3] mwifiex: fix sleep in atomic context bugs caused by dev_coredumpv
+To:     Duoming Zhou <duoming@zju.edu.cn>
+Cc:     linux-wireless <linux-wireless@vger.kernel.org>,
+        amit karwar <amitkarwar@gmail.com>,
+        Ganapathi Bhat <ganapathi017@gmail.com>,
+        Sharvari Harisangam <sharvari.harisangam@nxp.com>,
+        Xinming Hu <huxinming820@gmail.com>, kvalo@kernel.org,
+        "David S. Miller" <davem@davemloft.net>, edumazet@google.com,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "<netdev@vger.kernel.org>" <netdev@vger.kernel.org>,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch enables objtool --mcount on powerpc, and
-adds implementation specific to powerpc.
++ Johannes (you should check MAINTAINERS; devcoredump has a specified
+maintainer)
 
-Signed-off-by: Sathvika Vasireddy <sv@linux.ibm.com>
----
- arch/powerpc/Kconfig                |  1 +
- tools/objtool/arch/powerpc/decode.c | 14 ++++++++++++++
- tools/objtool/check.c               | 12 +++++++-----
- tools/objtool/elf.c                 | 13 +++++++++++++
- tools/objtool/include/objtool/elf.h |  1 +
- 5 files changed, 36 insertions(+), 5 deletions(-)
+On Sun, May 22, 2022 at 10:29 PM Duoming Zhou <duoming@zju.edu.cn> wrote:
+>
+> There are sleep in atomic context bugs when uploading device dump
+> data in mwifiex. The root cause is that dev_coredumpv could not
+> be used in atomic contexts, because it calls dev_set_name which
+> include operations that may sleep. The call tree shows execution
+> paths that could lead to bugs:
+>
+>    (Interrupt context)
+> fw_dump_timer_fn
+>   mwifiex_upload_device_dump
+>     dev_coredumpv(..., GFP_KERNEL)
+>       dev_coredumpm()
+>         kzalloc(sizeof(*devcd), gfp); //may sleep
+>         dev_set_name
+>           kobject_set_name_vargs
+>             kvasprintf_const(GFP_KERNEL, ...); //may sleep
+>             kstrdup(s, GFP_KERNEL); //may sleep
 
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index 732a3f91ee5e..3373d44a1298 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -233,6 +233,7 @@ config PPC
- 	select HAVE_NMI				if PERF_EVENTS || (PPC64 && PPC_BOOK3S)
- 	select HAVE_OPTPROBES
- 	select HAVE_OBJTOOL			if PPC64
-+	select HAVE_OBJTOOL_MCOUNT		if HAVE_OBJTOOL
- 	select HAVE_PERF_EVENTS
- 	select HAVE_PERF_EVENTS_NMI		if PPC64
- 	select HAVE_PERF_REGS
-diff --git a/tools/objtool/arch/powerpc/decode.c b/tools/objtool/arch/powerpc/decode.c
-index e3b77a6ce357..ad3d79fffac2 100644
---- a/tools/objtool/arch/powerpc/decode.c
-+++ b/tools/objtool/arch/powerpc/decode.c
-@@ -40,12 +40,26 @@ int arch_decode_instruction(struct objtool_file *file, const struct section *sec
- 			    struct list_head *ops_list)
- {
- 	u32 insn;
-+	unsigned int opcode;
- 
- 	*immediate = 0;
- 	memcpy(&insn, sec->data->d_buf+offset, 4);
- 	*len = 4;
- 	*type = INSN_OTHER;
- 
-+	opcode = (insn >> 26);
-+
-+	switch (opcode) {
-+	case 18: /* bl */
-+		if ((insn & 3) == 1) {
-+			*type = INSN_CALL;
-+			*immediate = insn & 0x3fffffc;
-+			if (*immediate & 0x2000000)
-+				*immediate -= 0x4000000;
-+		}
-+		break;
-+	}
-+
- 	return 0;
- }
- 
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 056302d58e23..fd8bad092f89 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -832,7 +832,7 @@ static int create_mcount_loc_sections(struct objtool_file *file)
- 
- 		if (elf_add_reloc_to_insn(file->elf, sec,
- 					  idx * sizeof(unsigned long),
--					  R_X86_64_64,
-+					  elf_reloc_type_long(file->elf),
- 					  insn->sec, insn->offset))
- 			return -1;
- 
-@@ -2183,7 +2183,7 @@ static int classify_symbols(struct objtool_file *file)
- 			if (arch_is_retpoline(func))
- 				func->retpoline_thunk = true;
- 
--			if (!strcmp(func->name, "__fentry__"))
-+			if ((!strcmp(func->name, "__fentry__")) || (!strcmp(func->name, "_mcount")))
- 				func->fentry = true;
- 
- 			if (is_profiling_func(func->name))
-@@ -2259,9 +2259,11 @@ static int decode_sections(struct objtool_file *file)
- 	 * Must be before add_jump_destinations(), which depends on 'func'
- 	 * being set for alternatives, to enable proper sibling call detection.
- 	 */
--	ret = add_special_section_alts(file);
--	if (ret)
--		return ret;
-+	if (opts.stackval || opts.orc || opts.uaccess || opts.noinstr) {
-+		ret = add_special_section_alts(file);
-+		if (ret)
-+			return ret;
-+	}
- 
- 	ret = add_jump_destinations(file);
- 	if (ret)
-diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
-index c25e957c1e52..95763060d551 100644
---- a/tools/objtool/elf.c
-+++ b/tools/objtool/elf.c
-@@ -793,6 +793,19 @@ elf_create_section_symbol(struct elf *elf, struct section *sec)
- 	return sym;
- }
- 
-+int elf_reloc_type_long(struct elf *elf)
-+{
-+	switch (elf->ehdr.e_machine) {
-+	case EM_X86_64:
-+		return R_X86_64_64;
-+	case EM_PPC64:
-+		return R_PPC64_ADDR64;
-+	default:
-+		WARN("unknown machine...");
-+		exit(-1);
-+	}
-+}
-+
- int elf_add_reloc_to_insn(struct elf *elf, struct section *sec,
- 			  unsigned long offset, unsigned int type,
- 			  struct section *insn_sec, unsigned long insn_off)
-diff --git a/tools/objtool/include/objtool/elf.h b/tools/objtool/include/objtool/elf.h
-index adebfbc2b518..c43e23c0b3c8 100644
---- a/tools/objtool/include/objtool/elf.h
-+++ b/tools/objtool/include/objtool/elf.h
-@@ -144,6 +144,7 @@ static inline bool has_multiple_files(struct elf *elf)
- struct elf *elf_open_read(const char *name, int flags);
- struct section *elf_create_section(struct elf *elf, const char *name, unsigned int sh_flags, size_t entsize, int nr);
- 
-+int elf_reloc_type_long(struct elf *elf);
- int elf_add_reloc(struct elf *elf, struct section *sec, unsigned long offset,
- 		  unsigned int type, struct symbol *sym, s64 addend);
- int elf_add_reloc_to_insn(struct elf *elf, struct section *sec,
--- 
-2.25.1
+I was only half paying attention to this patch earlier, but I realize
+one source of my confusion: you're blaming the fix wrong. This piece
+of code was only added for mwifiex's USB support; the SDIO/PCIe
+support is totally fine, as we perform the dump from a worker, not a
+timer. So, you have the Fixes tag wrong.
 
+> In order to let dev_coredumpv support atomic contexts, this patch
+> changes the gfp_t parameter of kvasprintf_const and kstrdup in
+> kobject_set_name_vargs from GFP_KERNEL to GFP_ATOMIC. What's more,
+> In order to mitigate bug, this patch changes the gfp_t parameter
+> of dev_coredumpv from GFP_KERNEL to GFP_ATOMIC.
+>
+> Fixes: 57670ee882d4 ("mwifiex: device dump support via devcoredump framework")
+
+That's wrong. Should be:
+
+Fixes: f5ecd02a8b20 mwifiex: device dump support for usb interface
+
+> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+> ---
+> Changes in v3:
+>   - Let dev_coredumpv support atomic contexts.
+>
+>  drivers/net/wireless/marvell/mwifiex/main.c | 2 +-
+>  lib/kobject.c                               | 4 ++--
+
+You almost definitely want to split this in two. One to fix
+devcoredump to _really_ support the gfp arg (or else to drop it), and
+one to start using it appropriately in mwifiex.
+
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/net/wireless/marvell/mwifiex/main.c b/drivers/net/wireless/marvell/mwifiex/main.c
+> index ace7371c477..258906920a2 100644
+> --- a/drivers/net/wireless/marvell/mwifiex/main.c
+> +++ b/drivers/net/wireless/marvell/mwifiex/main.c
+> @@ -1116,7 +1116,7 @@ void mwifiex_upload_device_dump(struct mwifiex_adapter *adapter)
+>         mwifiex_dbg(adapter, MSG,
+>                     "== mwifiex dump information to /sys/class/devcoredump start\n");
+>         dev_coredumpv(adapter->dev, adapter->devdump_data, adapter->devdump_len,
+> -                     GFP_KERNEL);
+> +                     GFP_ATOMIC);
+
+As noted above, PCIe and SDIO support is working just fine. Seems a
+bit much to force it to be GFP_ATOMIC in those cases.
+
+Maybe you also need a gfp arg for mwifiex_upload_device_dump()?
+
+Brian
+
+>         mwifiex_dbg(adapter, MSG,
+>                     "== mwifiex dump information to /sys/class/devcoredump end\n");
+>

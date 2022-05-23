@@ -2,111 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F1C45306E8
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 02:43:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE78A5306EE
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 02:58:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232699AbiEWAnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 20:43:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56460 "EHLO
+        id S232804AbiEWA5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 20:57:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230095AbiEWAnY (ORCPT
+        with ESMTP id S230095AbiEWA5o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 20:43:24 -0400
-Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F3BF30569;
-        Sun, 22 May 2022 17:43:23 -0700 (PDT)
-Received: by mail.hallyn.com (Postfix, from userid 1001)
-        id 1BF61EB5; Sun, 22 May 2022 19:43:22 -0500 (CDT)
-Date:   Sun, 22 May 2022 19:43:22 -0500
-From:   "Serge E. Hallyn" <serge@hallyn.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        jpenumak@redhat.com
-Subject: Re: [PATCH v12 15/26] ima: Implement ima_free_policy_rules() for
- freeing of an ima_namespace
-Message-ID: <20220523004322.GB28089@mail.hallyn.com>
-References: <20220420140633.753772-1-stefanb@linux.ibm.com>
- <20220420140633.753772-16-stefanb@linux.ibm.com>
+        Sun, 22 May 2022 20:57:44 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00EEC33A19;
+        Sun, 22 May 2022 17:57:42 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L5zSy5xLWz4xD2;
+        Mon, 23 May 2022 10:57:38 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1653267459;
+        bh=fUDCzyj8Af0DxC4DaymxJY9DuT/QAHJbfvkEmZ++sfc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=YfwlUuXGEhtBQES05yQLIcEpzB6pQMTo2r47U1ydiszQ3c2IoF9GKQFTblM9f+6Av
+         mg7d4eKtd2cEQ9rhLj62q5rVioJ8gwFe1DwuV9ZjjJbUevmFm83KdW5Gw++IxZmciS
+         8hmIJawlOYxw8xX97rhGGwyrCXyIaa4+fCpnqogFZT5HxpCFo2bk2Nfa+xmThUJfGl
+         LMu4dlwD/MTQ54nCAI8N2IyLCwxHVz1dodcxj07S8UvcoLRCdSbQ1EA/aiQ/NdUWXZ
+         dn4FV8e5kB9wFxWlMiqtaJyTIPrY/Qcg75PpGypG0JmBQy9Tdb7U3QWjf0nAe9T7yT
+         2xLVxK77Y1Jng==
+Date:   Mon, 23 May 2022 10:57:36 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Steve French <smfrench@gmail.com>
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        Enzo Matsumiya <ematsumiya@suse.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the cifs tree
+Message-ID: <20220523105736.1f42b837@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220420140633.753772-16-stefanb@linux.ibm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/6yHFA/DI6U9t6CSTyBAS29o";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 10:06:22AM -0400, Stefan Berger wrote:
-> Implement ima_free_policy_rules() to free the current custom IMA policy's
-> rules. This function will be called when an ima_namespace is freed.
-> 
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+--Sig_/6yHFA/DI6U9t6CSTyBAS29o
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Serge Hallyn <serge@hallyn.com>
+Hi all,
 
-> 
-> ---
-> v10:
->   - Not calling ima_delete_rules() anymore
->   - Move access check from ima_delete_rules into very last patch
-> 
->  v9:
->   - Only reset temp_ima_appraise when using init_ima_ns.
-> ---
->  security/integrity/ima/ima.h        |  1 +
->  security/integrity/ima/ima_policy.c | 14 ++++++++++++++
->  2 files changed, 15 insertions(+)
-> 
-> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-> index 2775a6d89e6d..054b8f67be04 100644
-> --- a/security/integrity/ima/ima.h
-> +++ b/security/integrity/ima/ima.h
-> @@ -333,6 +333,7 @@ void ima_update_policy_flags(struct ima_namespace *ns);
->  ssize_t ima_parse_add_rule(struct ima_namespace *ns, char *rule);
->  void ima_delete_rules(struct ima_namespace *ns);
->  int ima_check_policy(struct ima_namespace *ns);
-> +void ima_free_policy_rules(struct ima_namespace *ns);
->  void *ima_policy_start(struct seq_file *m, loff_t *pos);
->  void *ima_policy_next(struct seq_file *m, void *v, loff_t *pos);
->  void ima_policy_stop(struct seq_file *m, void *v);
-> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-> index 45a997709200..eb10d895923d 100644
-> --- a/security/integrity/ima/ima_policy.c
-> +++ b/security/integrity/ima/ima_policy.c
-> @@ -1905,6 +1905,20 @@ void ima_delete_rules(struct ima_namespace *ns)
->  	}
->  }
->  
-> +/**
-> + * ima_free_policy_rules - free all policy rules
-> + * @ns: IMA namespace that has the policy
-> + */
-> +void ima_free_policy_rules(struct ima_namespace *ns)
-> +{
-> +	struct ima_rule_entry *entry, *tmp;
-> +
-> +	list_for_each_entry_safe(entry, tmp, &ns->ima_policy_rules, list) {
-> +		list_del(&entry->list);
-> +		ima_free_rule(entry);
-> +	}
-> +}
-> +
->  #define __ima_hook_stringify(func, str)	(#func),
->  
->  const char *const func_tokens[] = {
-> -- 
-> 2.34.1
+After merging the cifs tree, today's linux-next build (powerpc
+ppc64_defconfig) produced this warning:
+
+fs/cifs/connect.c: In function 'is_path_remote':
+fs/cifs/connect.c:3436:14: warning: unused variable 'nodfs' [-Wunused-varia=
+ble]
+ 3436 |         bool nodfs =3D cifs_sb->mnt_cifs_flags & CIFS_MOUNT_NO_DFS;
+      |              ^~~~~
+
+Introduced by commit
+
+  421ef3d56513 ("cifs: don't call cifs_dfs_query_info_nonascii_quirk() if n=
+odfs was set")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/6yHFA/DI6U9t6CSTyBAS29o
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKK3AAACgkQAVBC80lX
+0Gy8FQf/Y/Lv0gfLSOK2iF9IloLXDFfqU+OpGTraYddMNTO++b5tBmagQWLfe7NS
+R0wGQvryOFThdngSEhFmN43A07W2QUi5QG1A0khY4h5TXSUoVSHNvZ716Or0SgS2
+vnUOkHh9isFqcFCQnsIndRAvsofq313K852Hsd9N6K5Jqbfz6phZm5F39V2IXLNP
+1n0gWXUurZ046LHQf5T5yLd3/LOxPnVyyrktl6JQKAELAsmDBEF4zlOIKXnS9SnJ
+6+TQMKnhEOr5/YBefeWCx7SN3lHlCiPkRD8GBmgVTbzht80INQ5wUdiI5SKzlSvY
+yURyBYynK2/mOkVUbO+3OxCgu28j5w==
+=w341
+-----END PGP SIGNATURE-----
+
+--Sig_/6yHFA/DI6U9t6CSTyBAS29o--

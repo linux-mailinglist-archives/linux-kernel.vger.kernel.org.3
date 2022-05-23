@@ -2,216 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20703530B93
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 11:03:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DADD530B9F
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 11:03:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232065AbiEWInz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 04:43:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43658 "EHLO
+        id S232075AbiEWIoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 04:44:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231969AbiEWInx (ORCPT
+        with ESMTP id S231876AbiEWInz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 04:43:53 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D54515A1B
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 01:43:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653295432; x=1684831432;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=yrIx6pomST4Cy/AfAiPlIJCC/mgu8cCMhucs9oiKghY=;
-  b=B3fqS+rxrwJWmOelmOfzwQZfp6FENtLujSdWLlpW9grUHowSnxiqWQfT
-   3RIR4EDB1EHj+upfvb4zPThBbFF6BMC6fPnztsSIlJzisi5amkuVqJj8s
-   xE3utru2khIsOzqg/VLdeiv9+9WBo1lsMb9CdyxmVEBATEXm3J3ZDgHyo
-   Ma6fP7zb4Gv7QM7qjl2huyPWb9skgl7pF5Qj4nNO7Chv/Xp9iQWM09LgX
-   8lPu9XTjBxcuLGHs+8xwhb7pVPmrF21ehzBt61bOWu2kGvl0/P9D6BmVf
-   O3y9WcTQAgU70OZGhLeqQvfbzxaA7z7Zb6n5HcU9uxmbDYRIbdAQC56BR
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10355"; a="336210679"
-X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
-   d="scan'208";a="336210679"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 01:43:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
-   d="scan'208";a="525817497"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 23 May 2022 01:43:50 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nt3fJ-00010A-92;
-        Mon, 23 May 2022 08:43:49 +0000
-Date:   Mon, 23 May 2022 16:43:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: drivers/soc/ixp4xx/ixp4xx-qmgr.c:451:34: warning:
- 'ixp4xx_qmgr_of_match' defined but not used
-Message-ID: <202205231601.bE28TyYb-lkp@intel.com>
+        Mon, 23 May 2022 04:43:55 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F2D3FD94;
+        Mon, 23 May 2022 01:43:53 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id k30so20244079wrd.5;
+        Mon, 23 May 2022 01:43:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=XZSTdMReuFxUglr0zW1U7pUwHaY1HEM4FPwN5xMO+SM=;
+        b=qTIBqn47z/Fb9xSVfVb33gHPU8ENmkdSAQGe2zeXBtk9/ccAtnXgbZYjwBCvSJl6UU
+         Mvm+iH/61paNzSICE60vYxJcZp9YkUh0lCwoFFUoRkhXsljLzdiPCL7Pn58gEulfFJSn
+         DIcPPdegVwCht55TAoLZ3QiShSMYg07AVowohLuqMRKk1+6ynBfj11Bf7nPbPssXSEb5
+         vKICo9NK6G9FhexQ3+wb5DK8l1ngn5tez2zG5qCLW+vr5rsS4F19XgkOWzYQcUlAcDoH
+         BsH4/bpHRNNlumclQ4csid6K9NDFkk6MfjDwx0CIJrfPdCdP2DrInyvY0KY1VfR0bAxM
+         GE3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=XZSTdMReuFxUglr0zW1U7pUwHaY1HEM4FPwN5xMO+SM=;
+        b=6PeIaszUrpcuYGEQaBfUk4NbEIxmiQe3uW/FNOoLEnlsNzD0UGoD0kFQNqDziDndY/
+         WksDratGuScTRLB+Ou9T9l8U8byy6Rm+BaOIAZLQqGah9KiYuOhtCkp4J0+8bVsAsA5W
+         kXSDIsEtisfzhY6qkjCiJGK1fnpBLxM5SqejOD2ScgYckoykB/L03pF6fEVcw+AWTw1Y
+         FJaQMTwyhJW27tVaz0s8BQ8cwCsE+cBsx6XPsMjjlt0rKWRYV38eXdUSD7Of8Wam8tp/
+         g57772Gj15d8EgypWKBpbZI+pP6uLDib4QSrzVvupd4GFGLJp2pe6yRbkOjVXhFURRSJ
+         t0SA==
+X-Gm-Message-State: AOAM533tf84xqr1STBnfO78n787P8UjFk1YD3MWqWi8FucD47oxTnpXt
+        edp2WYaTKKIn5RB6KDvYftuErEb2fcnoU78P
+X-Google-Smtp-Source: ABdhPJw8Loff4lKBqUCywlJhjWTuhQom5m+9y93XSta5iwQyYShn7WaatdDduekh7G/s7jg1A9WHcw==
+X-Received: by 2002:a05:6000:178d:b0:20f:e84c:2f46 with SMTP id e13-20020a056000178d00b0020fe84c2f46mr1030243wrg.646.1653295432188;
+        Mon, 23 May 2022 01:43:52 -0700 (PDT)
+Received: from krava (net-93-65-240-241.cust.vodafonedsl.it. [93.65.240.241])
+        by smtp.gmail.com with ESMTPSA id u25-20020adfae59000000b0020d106c0386sm9535510wrd.89.2022.05.23.01.43.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 May 2022 01:43:51 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Mon, 23 May 2022 10:43:47 +0200
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Like Xu <likexu@tencent.com>, Alyssa Ross <hi@alyssa.is>,
+        Ian Rogers <irogers@google.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Adam Li <adamli@amperemail.onmicrosoft.com>,
+        Li Huafei <lihuafei1@huawei.com>,
+        German Gomez <german.gomez@arm.com>,
+        James Clark <james.clark@arm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Ali Saidi <alisaidi@amazon.com>, Joe Mario <jmario@redhat.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 00/11] perf c2c: Support display for Arm64
+Message-ID: <YotJQwZVfBtrEyuI@krava>
+References: <20220518055729.1869566-1-leo.yan@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220518055729.1869566-1-leo.yan@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+On Wed, May 18, 2022 at 01:57:18PM +0800, Leo Yan wrote:
+> Arm64 Neoverse CPUs supports data source in Arm SPE trace, this allows
+> us to detect cache line contention and transfers.
+> 
+> Unlike x86 architecture, Arm SPE trace data cannot provide 'HITM'
+> snooping flag, Ali Said has a patch set v9 "perf: arm-spe: Decode SPE
+> source and use for perf c2c" [1] which introduces 'peer' flag and
+> synthesizes memory samples with this flag.
+> 
+> Based on patch set [1], this patch set is to finish the second half work
+> to consume the 'peer' flag in perf c2c tool, it adds an extra display
+> 'peer' mode.
+> 
+> Patches 01, 02 and 03 are to support 'N/A' metrics for store operations.
+> 
+> Patches 04 and 05 adds statistics and dimensions for memory samples with
+> peer flag.
+> 
+> Patches 06, 07, 08 are for refactoring, it refines the code with more
+> general naming so this can allow us to easier to extend display modes
+> but not strictly bound to HITM tags.
+> 
+> Patches 09, 10 and 11 are to extend display 'peer' mode, it also updates
+> the document and also changes to use 'peer' mode as default mode on
+> Arm64 arches.
+> 
+> This patch set has been verified for both x86 and Arm64 memory samples.
+> 
+> The display result with x86 memory samples:
+> 
+>   =================================================
+>              Shared Data Cache Line Table          
+>   =================================================
+>   #
+>   #        ----------- Cacheline ----------      Tot  ------- Load Hitm -------    Snoop    Total    Total    Total  --------- Stores --------  ----- Core Load Hit -----  - LLC Load Hit --  - RMT Load Hit --  --- Load Dram ----
+>   # Index             Address  Node  PA cnt     Hitm    Total  LclHitm  RmtHitm     Peer  records    Loads   Stores    L1Hit   L1Miss      N/A       FB       L1       L2    LclHit  LclHitm    RmtHit  RmtHitm       Lcl       Rmt
+>   # .....  ..................  ....  ......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  ........  .......  ........  .......  ........  ........
+>   #
+>         0      0x55c8971f0080     0    1967   66.14%      252      252        0        0     6044     3550     2494     2024      470        0      528     2672       78        20      252         0        0         0         0
+>         1      0x55c8971f00c0     0       1   33.86%      129      129        0        0      914      914        0        0        0        0      272      374       52        87      129         0        0         0         0
+> 
+>   =================================================
+>         Shared Cache Line Distribution Pareto      
+>   =================================================
+>   #
+>   #        ----- HITM -----    Snoop  ------- Store Refs ------  --------- Data address ---------                      --------------- cycles ---------------    Total       cpu                                     Shared                               
+>   #   Num  RmtHitm  LclHitm     Peer   L1 Hit  L1 Miss      N/A              Offset  Node  PA cnt        Code address  rmt hitm  lcl hitm      load      peer  records       cnt                  Symbol             Object              Source:Line  Node
+>   # .....  .......  .......  .......  .......  .......  .......  ..................  ....  ......  ..................  ........  ........  ........  ........  .......  ........  ......................  .................  .......................  ....
+>   #
+>     -------------------------------------------------------------------------------
+>         0        0      252        0     2024      470        0      0x55c8971f0080
+>     -------------------------------------------------------------------------------
+>              0.00%   12.30%    0.00%    0.00%    0.00%    0.00%                 0x0     0       1      0x55c8971ed3e9         0      1313       863         0     1222         3  [.] 0x00000000000013e9  false_sharing.exe  false_sharing.exe[13e9]   0
+>              0.00%    0.79%    0.00%   90.51%    0.00%    0.00%                 0x0     0       1      0x55c8971ed3e2         0      1800       878         0     3029         3  [.] 0x00000000000013e2  false_sharing.exe  false_sharing.exe[13e2]   0
+>              0.00%    0.00%    0.00%    9.49%  100.00%    0.00%                 0x0     0       1      0x55c8971ed3f4         0         0         0         0      662         3  [.] 0x00000000000013f4  false_sharing.exe  false_sharing.exe[13f4]   0
+>              0.00%   86.90%    0.00%    0.00%    0.00%    0.00%                0x20     0       1      0x55c8971ed447         0       141       103         0     1131         2  [.] 0x0000000000001447  false_sharing.exe  false_sharing.exe[1447]   0
+> 
+>     -------------------------------------------------------------------------------
+>         1        0      129        0        0        0        0      0x55c8971f00c0
+>     -------------------------------------------------------------------------------
+>              0.00%  100.00%    0.00%    0.00%    0.00%    0.00%                0x20     0       1      0x55c8971ed455         0        88        94         0      914         2  [.] 0x0000000000001455  false_sharing.exe  false_sharing.exe[1455]   0
+> 
+> 
+> The display result with Arm SPE memory samples:
+> 
+>   =================================================
+>              Shared Data Cache Line Table          
+>   =================================================
+>   #
+>   #        ----------- Cacheline ----------    Snoop  ------- Load Hitm -------    Snoop    Total    Total    Total  --------- Stores --------  ----- Core Load Hit -----  - LLC Load Hit --  - RMT Load Hit --  --- Load Dram ----
+>   # Index             Address  Node  PA cnt     Peer    Total  LclHitm  RmtHitm     Peer  records    Loads   Stores    L1Hit   L1Miss      N/A       FB       L1       L2    LclHit  LclHitm    RmtHit  RmtHitm       Lcl       Rmt
+>   # .....  ..................  ....  ......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  ........  .......  ........  .......  ........  ........
+>   #
+>         0      0xaaaac17d6000   N/A       0  100.00%        0        0        0       99    18851    18851        0        0        0        0        0    18752        0        99        0         0        0         0         0
+> 
+>   =================================================
+>         Shared Cache Line Distribution Pareto      
+>   =================================================
+>   #
+>   #        ----- HITM -----    Snoop  ------- Store Refs ------  --------- Data address ---------                      --------------- cycles ---------------    Total       cpu                                    Shared                       
+>   #   Num  RmtHitm  LclHitm     Peer   L1 Hit  L1 Miss      N/A              Offset  Node  PA cnt        Code address  rmt hitm  lcl hitm      load      peer  records       cnt                  Symbol            Object      Source:Line  Node
+>   # .....  .......  .......  .......  .......  .......  .......  ..................  ....  ......  ..................  ........  ........  ........  ........  .......  ........  ......................  ................  ...............  ....
+>   #
+>     -------------------------------------------------------------------------------
+>         0        0        0       99        0        0        0      0xaaaac17d6000
+>     -------------------------------------------------------------------------------
+>              0.00%    0.00%    6.06%    0.00%    0.00%    0.00%                0x20   N/A       0      0xaaaac17c25ac         0         0        43       375    18469         2  [.] 0x00000000000025ac  memstress         memstress[25ac]   0
+>              0.00%    0.00%   93.94%    0.00%    0.00%    0.00%                0x29   N/A       0      0xaaaac17c3e88         0         0       173       180      135         2  [.] 0x0000000000003e88  memstress         memstress[3e88]   0
+> 
+> [1] https://lore.kernel.org/lkml/20220517020326.18580-1-alisaidi@amazon.com/
+> 
+> Changes from v2:
+> * Updated patch 04 to account metrics for both cache level and ld_peer
+>   for PEER flag;
+> * Updated document for metric 'rmt_hit' which is accounted for all
+>   remote accesses (include remote DRAM and any upward caches).
 
-First bad commit (maybe != root cause):
+LGTM
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   4b0986a3613c92f4ec1bdc7f60ec66fea135991f
-commit: 7f94b69ece515ac82defa60ef7cba2cf26180216 ARM: ixp4xx: fix compile-testing soc drivers
-date:   10 months ago
-config: i386-buildonly-randconfig-r002-20220523 (https://download.01.org/0day-ci/archive/20220523/202205231601.bE28TyYb-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7f94b69ece515ac82defa60ef7cba2cf26180216
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 7f94b69ece515ac82defa60ef7cba2cf26180216
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/clk/imx/ drivers/irqchip/ drivers/media/platform/ drivers/soc/ixp4xx/
+Acked-by: Jiri Olsa <jolsa@kernel.org>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+thanks,
+jirka
 
-All warnings (new ones prefixed by >>):
-
->> drivers/soc/ixp4xx/ixp4xx-qmgr.c:451:34: warning: 'ixp4xx_qmgr_of_match' defined but not used [-Wunused-const-variable=]
-     451 | static const struct of_device_id ixp4xx_qmgr_of_match[] = {
-         |                                  ^~~~~~~~~~~~~~~~~~~~
---
-   drivers/soc/ixp4xx/ixp4xx-npe.c:696:25: note: in expansion of macro 'dev_info'
-     696 |                         dev_info(dev, "NPE%d at 0x%08x-0x%08x not available\n",
-         |                         ^~~~~~~~
-   drivers/soc/ixp4xx/ixp4xx-npe.c:696:54: note: format string is defined here
-     696 |                         dev_info(dev, "NPE%d at 0x%08x-0x%08x not available\n",
-         |                                                   ~~~^
-         |                                                      |
-         |                                                      unsigned int
-         |                                                   %08llx
-   In file included from include/linux/device.h:15,
-                    from include/linux/dma-mapping.h:7,
-                    from drivers/soc/ixp4xx/ixp4xx-npe.c:15:
-   drivers/soc/ixp4xx/ixp4xx-npe.c:696:39: warning: format '%x' expects argument of type 'unsigned int', but argument 5 has type 'resource_size_t' {aka 'long long unsigned int'} [-Wformat=]
-     696 |                         dev_info(dev, "NPE%d at 0x%08x-0x%08x not available\n",
-         |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:19:22: note: in definition of macro 'dev_fmt'
-      19 | #define dev_fmt(fmt) fmt
-         |                      ^~~
-   drivers/soc/ixp4xx/ixp4xx-npe.c:696:25: note: in expansion of macro 'dev_info'
-     696 |                         dev_info(dev, "NPE%d at 0x%08x-0x%08x not available\n",
-         |                         ^~~~~~~~
-   drivers/soc/ixp4xx/ixp4xx-npe.c:696:61: note: format string is defined here
-     696 |                         dev_info(dev, "NPE%d at 0x%08x-0x%08x not available\n",
-         |                                                          ~~~^
-         |                                                             |
-         |                                                             unsigned int
-         |                                                          %08llx
-   In file included from include/linux/device.h:15,
-                    from include/linux/dma-mapping.h:7,
-                    from drivers/soc/ixp4xx/ixp4xx-npe.c:15:
-   drivers/soc/ixp4xx/ixp4xx-npe.c:705:39: warning: format '%x' expects argument of type 'unsigned int', but argument 4 has type 'resource_size_t' {aka 'long long unsigned int'} [-Wformat=]
-     705 |                         dev_info(dev, "NPE%d at 0x%08x-0x%08x does not reset\n",
-         |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:19:22: note: in definition of macro 'dev_fmt'
-      19 | #define dev_fmt(fmt) fmt
-         |                      ^~~
-   drivers/soc/ixp4xx/ixp4xx-npe.c:705:25: note: in expansion of macro 'dev_info'
-     705 |                         dev_info(dev, "NPE%d at 0x%08x-0x%08x does not reset\n",
-         |                         ^~~~~~~~
-   drivers/soc/ixp4xx/ixp4xx-npe.c:705:54: note: format string is defined here
-     705 |                         dev_info(dev, "NPE%d at 0x%08x-0x%08x does not reset\n",
-         |                                                   ~~~^
-         |                                                      |
-         |                                                      unsigned int
-         |                                                   %08llx
-   In file included from include/linux/device.h:15,
-                    from include/linux/dma-mapping.h:7,
-                    from drivers/soc/ixp4xx/ixp4xx-npe.c:15:
-   drivers/soc/ixp4xx/ixp4xx-npe.c:705:39: warning: format '%x' expects argument of type 'unsigned int', but argument 5 has type 'resource_size_t' {aka 'long long unsigned int'} [-Wformat=]
-     705 |                         dev_info(dev, "NPE%d at 0x%08x-0x%08x does not reset\n",
-         |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:19:22: note: in definition of macro 'dev_fmt'
-      19 | #define dev_fmt(fmt) fmt
-         |                      ^~~
-   drivers/soc/ixp4xx/ixp4xx-npe.c:705:25: note: in expansion of macro 'dev_info'
-     705 |                         dev_info(dev, "NPE%d at 0x%08x-0x%08x does not reset\n",
-         |                         ^~~~~~~~
-   drivers/soc/ixp4xx/ixp4xx-npe.c:705:61: note: format string is defined here
-     705 |                         dev_info(dev, "NPE%d at 0x%08x-0x%08x does not reset\n",
-         |                                                          ~~~^
-         |                                                             |
-         |                                                             unsigned int
-         |                                                          %08llx
-   In file included from include/linux/device.h:15,
-                    from include/linux/dma-mapping.h:7,
-                    from drivers/soc/ixp4xx/ixp4xx-npe.c:15:
-   drivers/soc/ixp4xx/ixp4xx-npe.c:710:31: warning: format '%x' expects argument of type 'unsigned int', but argument 4 has type 'resource_size_t' {aka 'long long unsigned int'} [-Wformat=]
-     710 |                 dev_info(dev, "NPE%d at 0x%08x-0x%08x registered\n",
-         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:19:22: note: in definition of macro 'dev_fmt'
-      19 | #define dev_fmt(fmt) fmt
-         |                      ^~~
-   drivers/soc/ixp4xx/ixp4xx-npe.c:710:17: note: in expansion of macro 'dev_info'
-     710 |                 dev_info(dev, "NPE%d at 0x%08x-0x%08x registered\n",
-         |                 ^~~~~~~~
-   drivers/soc/ixp4xx/ixp4xx-npe.c:710:46: note: format string is defined here
-     710 |                 dev_info(dev, "NPE%d at 0x%08x-0x%08x registered\n",
-         |                                           ~~~^
-         |                                              |
-         |                                              unsigned int
-         |                                           %08llx
-   In file included from include/linux/device.h:15,
-                    from include/linux/dma-mapping.h:7,
-                    from drivers/soc/ixp4xx/ixp4xx-npe.c:15:
-   drivers/soc/ixp4xx/ixp4xx-npe.c:710:31: warning: format '%x' expects argument of type 'unsigned int', but argument 5 has type 'resource_size_t' {aka 'long long unsigned int'} [-Wformat=]
-     710 |                 dev_info(dev, "NPE%d at 0x%08x-0x%08x registered\n",
-         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:19:22: note: in definition of macro 'dev_fmt'
-      19 | #define dev_fmt(fmt) fmt
-         |                      ^~~
-   drivers/soc/ixp4xx/ixp4xx-npe.c:710:17: note: in expansion of macro 'dev_info'
-     710 |                 dev_info(dev, "NPE%d at 0x%08x-0x%08x registered\n",
-         |                 ^~~~~~~~
-   drivers/soc/ixp4xx/ixp4xx-npe.c:710:53: note: format string is defined here
-     710 |                 dev_info(dev, "NPE%d at 0x%08x-0x%08x registered\n",
-         |                                                  ~~~^
-         |                                                     |
-         |                                                     unsigned int
-         |                                                  %08llx
-   At top level:
->> drivers/soc/ixp4xx/ixp4xx-npe.c:737:34: warning: 'ixp4xx_npe_of_match' defined but not used [-Wunused-const-variable=]
-     737 | static const struct of_device_id ixp4xx_npe_of_match[] = {
-         |                                  ^~~~~~~~~~~~~~~~~~~
-
-
-vim +/ixp4xx_qmgr_of_match +451 drivers/soc/ixp4xx/ixp4xx-qmgr.c
-
-82a96f5790ac93 arch/arm/mach-ixp4xx/ixp4xx_qmgr.c Krzysztof Halasa 2008-01-01  450  
-9e01a00958405f drivers/soc/ixp4xx/ixp4xx-qmgr.c   Linus Walleij    2019-02-10 @451  static const struct of_device_id ixp4xx_qmgr_of_match[] = {
-9e01a00958405f drivers/soc/ixp4xx/ixp4xx-qmgr.c   Linus Walleij    2019-02-10  452  	{
-9e01a00958405f drivers/soc/ixp4xx/ixp4xx-qmgr.c   Linus Walleij    2019-02-10  453  		.compatible = "intel,ixp4xx-ahb-queue-manager",
-9e01a00958405f drivers/soc/ixp4xx/ixp4xx-qmgr.c   Linus Walleij    2019-02-10  454          },
-9e01a00958405f drivers/soc/ixp4xx/ixp4xx-qmgr.c   Linus Walleij    2019-02-10  455  	{},
-9e01a00958405f drivers/soc/ixp4xx/ixp4xx-qmgr.c   Linus Walleij    2019-02-10  456  };
-9e01a00958405f drivers/soc/ixp4xx/ixp4xx-qmgr.c   Linus Walleij    2019-02-10  457  
-
-:::::: The code at line 451 was first introduced by commit
-:::::: 9e01a00958405f59e0a85fd16eb4e879e983ea74 soc: ixp4xx: qmgr: Add DT probe code
-
-:::::: TO: Linus Walleij <linus.walleij@linaro.org>
-:::::: CC: Linus Walleij <linus.walleij@linaro.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> 
+> Changes from v1:
+> * Updated patches 01, 02 and 03 to support 'N/A' metrics for store
+>   operations, so can align with the patch set [1] for store samples.
+> 
+> 
+> Leo Yan (11):
+>   perf mem: Add stats for store operation with no available memory level
+>   perf c2c: Add dimensions for 'N/A' metrics of store operation
+>   perf c2c: Update documentation for store metric 'N/A'
+>   perf mem: Add statistics for peer snooping
+>   perf c2c: Add dimensions for peer load operations
+>   perf c2c: Use explicit names for display macros
+>   perf c2c: Rename dimension from 'percent_hitm' to
+>     'percent_costly_snoop'
+>   perf c2c: Refactor node header
+>   perf c2c: Sort on peer snooping for load operations
+>   perf c2c: Update documentation for new display option 'peer'
+>   perf c2c: Use 'peer' as default display for Arm64
+> 
+>  tools/perf/Documentation/perf-c2c.txt |  34 ++-
+>  tools/perf/builtin-c2c.c              | 357 ++++++++++++++++++++------
+>  tools/perf/util/mem-events.c          |  25 +-
+>  tools/perf/util/mem-events.h          |   2 +
+>  4 files changed, 331 insertions(+), 87 deletions(-)
+> 
+> -- 
+> 2.25.1
+> 

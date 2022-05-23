@@ -2,126 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E80530B76
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 11:03:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F19A530B6C
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 11:03:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231719AbiEWIRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 04:17:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58926 "EHLO
+        id S231735AbiEWIS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 04:18:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231693AbiEWIRk (ORCPT
+        with ESMTP id S231715AbiEWISW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 04:17:40 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C498F6B
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 01:17:39 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id nk9-20020a17090b194900b001df2fcdc165so16872538pjb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 01:17:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Dy4PRGOoGRp4CN77V+ahn71XloGT7JKOsY/m9WJCOgs=;
-        b=AzXaGiokChbNSYAcaNoEb68tNdvAPafice8elKmzBRDkx67VTOkzB0UfvczZtXkNbU
-         PPtGg234U0xXDj+rxpktTyxqq2uZ3s4MrO7EDM1P3BTMbxkA+4PzI695hFFTQMF9dt1N
-         eP6rOZW+CIaEHzJv/DwyL9KOVWvV7r7cY9yqo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Dy4PRGOoGRp4CN77V+ahn71XloGT7JKOsY/m9WJCOgs=;
-        b=lyzL+daWPFLHWprhOIH0ucvoyLdBt/encRjykNSaxQUYAOmJRFqyrBeP7QYpkERMV3
-         Nz8/PIlKayu1XIcgaro1lABp6JiM3JhQk7NDPfFPwAENzlw1txCHCB4Fn1TP8OpqWQZX
-         jpM+oHqiaXVHOhlhFcryNovRLbGhHqAdEiO8iaS2BUo4C8MXHJ+QPSvOckAUBNV7mAws
-         1shqq/6nR2gM/VWE4PfILczgw6I47y77O36b+kIQV99HC/fApEeJblTD39ZCoqeCFeMC
-         fYUjXYe9SdymIF8yTt2DIsrx/XVPR8KppVt0euoysVM6hc5K1TgbpFLWoFO9RWm9qtzR
-         uLfg==
-X-Gm-Message-State: AOAM530hZk0hbGQQg0xcgLanoaR1+BfQexcok4iNKtYAi4oUFd/PpGTI
-        B4L3isJ5wGV9O3pEBafAYpc8zS8++w7+btMRlHuoDA==
-X-Google-Smtp-Source: ABdhPJxHY9GMvf0RIC495y4Lpy5llzcH99rikFg9l4mAhhiFP1DtpUB+uoazLXEXCSmo0XrRCTzyP9muVQ5LoOg8CIc=
-X-Received: by 2002:a17:902:b10f:b0:161:f196:b4e with SMTP id
- q15-20020a170902b10f00b00161f1960b4emr15830929plr.134.1653293858455; Mon, 23
- May 2022 01:17:38 -0700 (PDT)
+        Mon, 23 May 2022 04:18:22 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E0A360D2;
+        Mon, 23 May 2022 01:18:21 -0700 (PDT)
+Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4L69Cm163lz1JC84;
+        Mon, 23 May 2022 16:16:52 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi500024.china.huawei.com (7.221.188.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 23 May 2022 16:18:19 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 23 May 2022 16:18:19 +0800
+Subject: Re: [PATCH -next v5 0/3] support concurrent sync io for bfq on a
+ specail occasion
+To:     Jens Axboe <axboe@kernel.dk>, <paolo.valente@linaro.org>
+CC:     <jack@suse.cz>, <tj@kernel.org>, <linux-block@vger.kernel.org>,
+        <cgroups@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yi.zhang@huawei.com>
+References: <20220428120837.3737765-1-yukuai3@huawei.com>
+ <d50df657-d859-79cf-c292-412eaa383d2c@huawei.com>
+ <61b67d5e-829c-8130-7bda-81615d654829@huawei.com>
+ <81411289-e13c-20f5-df63-c059babca57a@huawei.com>
+ <d5a90a08-1ac6-587a-e900-0436bd45543a@kernel.dk>
+ <55919e29-1f22-e8aa-f3d2-08c57d9e1c22@huawei.com>
+ <b32ed748-a141-862c-ed35-debb474962ed@kernel.dk>
+From:   Yu Kuai <yukuai3@huawei.com>
+Message-ID: <1172d00f-0843-1d7c-721f-fdb60a0945cb@huawei.com>
+Date:   Mon, 23 May 2022 16:18:18 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <20220519075117.1003520-1-tommaso.merciai@amarulasolutions.com> <20220519075117.1003520-3-tommaso.merciai@amarulasolutions.com>
-In-Reply-To: <20220519075117.1003520-3-tommaso.merciai@amarulasolutions.com>
-From:   Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Date:   Mon, 23 May 2022 10:17:26 +0200
-Message-ID: <CAOf5uwmjBgSpQEqCswDt02H4e5jahO92TaQnk-91syskM_PZ_Q@mail.gmail.com>
-Subject: Re: [PATCH 2/4] arm64: dts: rockchip: px30: max drive-strength for cif_clkout_m0
-To:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-Cc:     linuxfancy@googlegroups.com, linux-amarula@amarulasolutions.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Shunqian Zheng <zhengsq@rock-chips.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <b32ed748-a141-862c-ed35-debb474962ed@kernel.dk>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+在 2022/05/23 9:24, Jens Axboe 写道:
+> On 5/22/22 7:10 PM, yukuai (C) wrote:
+>> ? 2022/05/21 20:21, Jens Axboe ??:
+>>> On 5/21/22 1:22 AM, yukuai (C) wrote:
+>>>> ? 2022/05/14 17:29, yukuai (C) ??:
+>>>>> ? 2022/05/05 9:00, yukuai (C) ??:
+>>>>>> Hi, Paolo
+>>>>>>
+>>>>>> Can you take a look at this patchset? It has been quite a long time
+>>>>>> since we spotted this problem...
+>>>>>>
+>>>>>
+>>>>> friendly ping ...
+>>>> friendly ping ...
+>>>
+>>> I can't speak for Paolo, but I've mentioned before that the majority
+>>> of your messages end up in my spam. That's still the case, in fact
+>>> I just marked maybe 10 of them as not spam.
+>>>
+>>> You really need to get this issued sorted out, or you will continue
+>>> to have patches ignore because folks may simply not see them.
+>>>
+>> Hi,
+>>
+>> Thanks for your notice.
+>>
+>> Is it just me or do you see someone else's messages from *huawei.com
+>> end up in spam? I tried to seek help from our IT support, however, they
+>> didn't find anything unusual...
+> 
+> Not sure, I think it's just you. It may be the name as well "yukuai (C)"
+Hi, Jens
 
-On Thu, May 19, 2022 at 9:51 AM Tommaso Merciai
-<tommaso.merciai@amarulasolutions.com> wrote:
->
-> Add max drive-strength for cif_clkout_m0. This fix the issue that
-> sometimes camera ov5695 is not probed correctly.
-> Tested on PX30_Mini_EVB_V11_20190507
->
-> Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-> Tested-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-> ---
->  arch/arm64/boot/dts/rockchip/px30-evb.dts | 7 +++++++
->  1 file changed, 7 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/rockchip/px30-evb.dts b/arch/arm64/boot/dts/rockchip/px30-evb.dts
-> index 848bc39cf86a..53930e28eadf 100644
-> --- a/arch/arm64/boot/dts/rockchip/px30-evb.dts
-> +++ b/arch/arm64/boot/dts/rockchip/px30-evb.dts
-> @@ -537,6 +537,13 @@ wifi_enable_h: wifi-enable-h {
->                                 <0 RK_PA2 RK_FUNC_GPIO &pcfg_pull_none>;
->                 };
->         };
-> +
-> +       cif-m0 {
-> +               cif_clkout_m0: cif-clkout-m0 {
-> +                       rockchip,pins =
-> +                               <2 RK_PB3 1 &pcfg_pull_none_12ma>;
-> +               };
-> +       };
->  };
+I just change this default name "yukuai (C)" to "Yu Kuai", can you
+please have a check if following emails still go to spam?
 
-This is the same now on rockchip bsp
-
-Reviewed-by: Michael Trimarchi <michael@amarulasolutios.com>
-
->
->  &pmu_io_domains {
-> --
-> 2.25.1
->
-
-
--- 
-Michael Nazzareno Trimarchi
-Co-Founder & Chief Executive Officer
-M. +39 347 913 2170
-michael@amarulasolutions.com
-__________________________________
-
-Amarula Solutions BV
-Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
-T. +31 (0)85 111 9172
-info@amarulasolutions.com
-www.amarulasolutions.com
+https://lore.kernel.org/all/20220523082633.2324980-1-yukuai3@huawei.com/
+> probably makes gmail think it's not a real name? Or maybe it's the
+> yukuai3 in the email? Pure speculation on my side.
+> 

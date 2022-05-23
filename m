@@ -2,101 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26552530B59
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 11:03:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0491530A7C
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 10:01:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231419AbiEWILo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 04:11:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38796 "EHLO
+        id S230319AbiEWHZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 03:25:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231905AbiEWILW (ORCPT
+        with ESMTP id S229750AbiEWHYC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 04:11:22 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D2FF69
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 01:11:20 -0700 (PDT)
+        Mon, 23 May 2022 03:24:02 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44C823A1B8
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 00:17:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653293480; x=1684829480;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=grfiXcB0a0o3DALs3UvtS53V45wFc/9o82K5h81wWJY=;
-  b=Y/RkSYvk8EguQr9U4N+WYfr09YsN8SvWXXLbpUHGBHJL1S25qYjEZk0+
-   DFMIgYTW04FYNA8WtTY1xmTusml/ahjv2bjO29asnCrXp7r9DkwsVvcc+
-   zyacKwEc0a8CSIr7yXF0h4WL0PGOcuspvwj2H9FXDTBaduw8gVzp+2EpH
-   uk6/dk7A2TY5qjx0cIGgVHqgRLahpSYtHa6HEPmfen4NhOGMQUXUsWd4y
-   KVQBYt521bFnMqv5SL39kvBAzbYf3kSdM9obPQQKgN9yyWCXA5AquDYD7
-   KfgYHkNouZcZRbj9SgN8ZRyK6MBC/RXI8Z5btr4kYzURrBAFttw8Rak8h
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10355"; a="272850007"
+  t=1653290259; x=1684826259;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=RkBnlh49x7+Hp8WBycVg2h1xf0cxa9S/tNTkHWNfXo8=;
+  b=CLznKgNL7LIwbnzjvOgY+FWTvJDhYhhPjVi+5O7dYW/ZdN+xJQtfByxa
+   SFbTBQo6i1tv4mAC353Zi0UCKMgqBnZHZLq2mc6hGBs4E++oSHk8k6NBm
+   bFjY5KCz6hMDZdiAiyt/aV+eBomH/9LtaJVttgk1rQBsET4HSe0r24BUB
+   JRH+nXAexv4GIsfpryCSCR0Z2es8jKHzj5PfBOIfk1zsDpbUk670Xsvij
+   2oniKodbCby4uZY5Jdgp5r8rTQW3JS0k1WszzobckakrkF7S4BE3cN/zH
+   RdK2z6F8d5NmZD5rdM+xRws+gM4BZAq+02u/KyraK6jN5iVwpA4LaRe4y
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10355"; a="359525441"
 X-IronPort-AV: E=Sophos;i="5.91,245,1647327600"; 
-   d="scan'208";a="272850007"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 00:12:26 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="359525441"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 00:13:01 -0700
 X-IronPort-AV: E=Sophos;i="5.91,245,1647327600"; 
-   d="scan'208";a="608062250"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 23 May 2022 00:12:24 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nt2Em-0000x0-Rv;
-        Mon, 23 May 2022 07:12:20 +0000
-Date:   Mon, 23 May 2022 15:11:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jack Yu <jack.yu@realtek.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Subject: sound/soc/codecs/rt1019.c:878:34: warning: 'rt1019_of_match' defined
- but not used
-Message-ID: <202205231529.IKeOZxBe-lkp@intel.com>
+   d="scan'208";a="571941238"
+Received: from jsun39-mobl.ccr.corp.intel.com (HELO [10.255.28.225]) ([10.255.28.225])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 00:12:57 -0700
+Message-ID: <316981d6-6b40-9e2a-09d3-b0d6f8687247@linux.intel.com>
+Date:   Mon, 23 May 2022 15:12:53 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Cc:     baolu.lu@linux.intel.com, Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+Subject: Re: [PATCH v7 03/10] iommu/sva: Add iommu_sva_domain support
+Content-Language: en-US
+To:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>
+References: <20220519072047.2996983-1-baolu.lu@linux.intel.com>
+ <20220519072047.2996983-4-baolu.lu@linux.intel.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20220519072047.2996983-4-baolu.lu@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   4b0986a3613c92f4ec1bdc7f60ec66fea135991f
-commit: 7ec79d3850d0cb6dc52e6aa472886ab3adf15863 ASoC: rt1019: add rt1019 amplifier driver
-date:   1 year, 2 months ago
-config: i386-buildonly-randconfig-r002-20220523 (https://download.01.org/0day-ci/archive/20220523/202205231529.IKeOZxBe-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7ec79d3850d0cb6dc52e6aa472886ab3adf15863
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 7ec79d3850d0cb6dc52e6aa472886ab3adf15863
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/clk/imx/ drivers/irqchip/ drivers/media/platform/ drivers/soc/ixp4xx/ sound/soc/codecs/
+On 2022/5/19 15:20, Lu Baolu wrote:
+> The iommu_sva_domain represents a hardware pagetable that the IOMMU
+> hardware could use for SVA translation. This adds some infrastructure
+> to support SVA domain in the iommu common layer. It includes:
+> 
+> - Add a new struct iommu_sva_domain and new IOMMU_DOMAIN_SVA domain
+>    type.
+> - Add a new domain ops pointer in iommu_ops. The IOMMU drivers that
+>    support SVA should provide the callbacks.
+> - Add helpers to allocate and free an SVA domain.
+> - Add helpers to set an SVA domain to a device and the reverse
+>    operation.
+> 
+> Some buses, like PCI, route packets without considering the PASID value.
+> Thus a DMA target address with PASID might be treated as P2P if the
+> address falls into the MMIO BAR of other devices in the group. To make
+> things simple, the attach/detach interfaces only apply to devices
+> belonging to the singleton groups, and the singleton is immutable in
+> fabric i.e. not affected by hotplug.
+> 
+> The iommu_set/block_device_pasid() can be used for other purposes,
+> such as kernel DMA with pasid, mediation device, etc. Hence, it is put
+> in the iommu.c.
+> 
+> Suggested-by: Jean-Philippe Brucker<jean-philippe@linaro.org>
+> Suggested-by: Jason Gunthorpe<jgg@nvidia.com>
+> Signed-off-by: Lu Baolu<baolu.lu@linux.intel.com>
+> ---
+>   include/linux/iommu.h         | 51 +++++++++++++++++++++++++
+>   drivers/iommu/iommu-sva-lib.h | 15 ++++++++
+>   drivers/iommu/iommu-sva-lib.c | 48 +++++++++++++++++++++++
+>   drivers/iommu/iommu.c         | 71 +++++++++++++++++++++++++++++++++++
+>   4 files changed, 185 insertions(+)
+> 
+> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+> index 0c358b7c583b..e8cf82d46ce1 100644
+> --- a/include/linux/iommu.h
+> +++ b/include/linux/iommu.h
+> @@ -64,6 +64,9 @@ struct iommu_domain_geometry {
+>   #define __IOMMU_DOMAIN_PT	(1U << 2)  /* Domain is identity mapped   */
+>   #define __IOMMU_DOMAIN_DMA_FQ	(1U << 3)  /* DMA-API uses flush queue    */
+>   
+> +#define __IOMMU_DOMAIN_SHARED	(1U << 4)  /* Page table shared from CPU  */
+> +#define __IOMMU_DOMAIN_HOST_VA	(1U << 5)  /* Host CPU virtual address */
+> +
+>   /*
+>    * This are the possible domain-types
+>    *
+> @@ -86,6 +89,8 @@ struct iommu_domain_geometry {
+>   #define IOMMU_DOMAIN_DMA_FQ	(__IOMMU_DOMAIN_PAGING |	\
+>   				 __IOMMU_DOMAIN_DMA_API |	\
+>   				 __IOMMU_DOMAIN_DMA_FQ)
+> +#define IOMMU_DOMAIN_SVA	(__IOMMU_DOMAIN_SHARED |	\
+> +				 __IOMMU_DOMAIN_HOST_VA)
+>   
+>   struct iommu_domain {
+>   	unsigned type;
+> @@ -254,6 +259,7 @@ struct iommu_ops {
+>   	int (*def_domain_type)(struct device *dev);
+>   
+>   	const struct iommu_domain_ops *default_domain_ops;
+> +	const struct iommu_domain_ops *sva_domain_ops;
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Per Joerg's comment in anther thread,
 
-All warnings (new ones prefixed by >>):
+https://lore.kernel.org/linux-iommu/YodVJ7ervpIdWfg+@8bytes.org/
 
->> sound/soc/codecs/rt1019.c:878:34: warning: 'rt1019_of_match' defined but not used [-Wunused-const-variable=]
-     878 | static const struct of_device_id rt1019_of_match[] = {
-         |                                  ^~~~~~~~~~~~~~~
+adding a sva_domain_ops here is not the right way to go.
 
+If no objection, I will make the sva domain go through the
+generic domain_alloc/free() callbacks in the next version.
 
-vim +/rt1019_of_match +878 sound/soc/codecs/rt1019.c
-
-   877	
- > 878	static const struct of_device_id rt1019_of_match[] = {
-   879		{ .compatible = "realtek,rt1019", },
-   880		{},
-   881	};
-   882	MODULE_DEVICE_TABLE(of, rt1019_of_match);
-   883	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best regards,
+baolu

@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0C755318E8
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:54:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65D1A531AC6
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243224AbiEWRlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:41:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38804 "EHLO
+        id S239958AbiEWRSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:18:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242445AbiEWR1n (ORCPT
+        with ESMTP id S239903AbiEWRP0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:27:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 510BE7CDE7;
-        Mon, 23 May 2022 10:23:29 -0700 (PDT)
+        Mon, 23 May 2022 13:15:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFACC60C4;
+        Mon, 23 May 2022 10:12:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0BF35B811FB;
-        Mon, 23 May 2022 17:23:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6515BC385A9;
-        Mon, 23 May 2022 17:23:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 91469614EB;
+        Mon, 23 May 2022 17:12:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93484C385A9;
+        Mon, 23 May 2022 17:12:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326599;
-        bh=hKElF9otkgLbePNPxfSEj+iBFI7kjq0H8+dEpqV4T/w=;
+        s=korg; t=1653325921;
+        bh=VNQl8dGsmKGY71mXz1qdZhPo1NOzDA42w45+wGdw6ng=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=khYrhC1az22OSCysuIXz9AfvbTsboDHQQR54swbKzGQNFlyc2cOaE2MWwg6bBx0la
-         JYYGZEMMqaERMoUHyBOIHcS1YGZu+RHWlejzB2Unl75Ly7b6kosMlS16lCk6XtmOqz
-         Xo4At3wKo2HGViNJsqNqGq/wX+fbw/iEQH+tnTbM=
+        b=RgQukUBsKd5RNpvapGn2XceVRdfHgKpGXzk8q1WVnSQ1SscQb02jSIYdQlBUz9Olp
+         LoRZ4hDnSzC1jEgHSxEa9ilDwQZJDyJ7pueMOId3Rh7A73vSf0j5DFP/YlBxbsSPZU
+         Vjeb0ypENBysxqsBAJoHRrkaHhOcLnArD4GKOU4w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -37,12 +37,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         <u.kleine-koenig@pengutronix.de>,
         Bartosz Golaszewski <brgl@bgdev.pl>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 109/132] gpio: mvebu/pwm: Refuse requests with inverted polarity
-Date:   Mon, 23 May 2022 19:05:18 +0200
-Message-Id: <20220523165841.573244770@linuxfoundation.org>
+Subject: [PATCH 4.19 35/44] gpio: mvebu/pwm: Refuse requests with inverted polarity
+Date:   Mon, 23 May 2022 19:05:19 +0200
+Message-Id: <20220523165759.598875127@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
-References: <20220523165823.492309987@linuxfoundation.org>
+In-Reply-To: <20220523165752.797318097@linuxfoundation.org>
+References: <20220523165752.797318097@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -73,10 +73,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+)
 
 diff --git a/drivers/gpio/gpio-mvebu.c b/drivers/gpio/gpio-mvebu.c
-index ad8822da7c27..1448dc874dfc 100644
+index 874caed72390..199b96967ca2 100644
 --- a/drivers/gpio/gpio-mvebu.c
 +++ b/drivers/gpio/gpio-mvebu.c
-@@ -707,6 +707,9 @@ static int mvebu_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+@@ -690,6 +690,9 @@ static int mvebu_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
  	unsigned long flags;
  	unsigned int on, off;
  
@@ -85,7 +85,7 @@ index ad8822da7c27..1448dc874dfc 100644
 +
  	val = (unsigned long long) mvpwm->clk_rate * state->duty_cycle;
  	do_div(val, NSEC_PER_SEC);
- 	if (val > UINT_MAX + 1ULL)
+ 	if (val > UINT_MAX)
 -- 
 2.35.1
 

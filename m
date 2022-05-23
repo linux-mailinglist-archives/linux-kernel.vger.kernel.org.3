@@ -2,94 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A54B531971
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:54:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B88F353179A
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:53:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243167AbiEWSPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 14:15:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36918 "EHLO
+        id S242825AbiEWSPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 14:15:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244896AbiEWRwm (ORCPT
+        with ESMTP id S244834AbiEWRwj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:52:42 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 996545D5C9;
-        Mon, 23 May 2022 10:41:58 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id u3so22435638wrg.3;
-        Mon, 23 May 2022 10:41:58 -0700 (PDT)
+        Mon, 23 May 2022 13:52:39 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 600EC72226;
+        Mon, 23 May 2022 10:41:51 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id p26so20065972eds.5;
+        Mon, 23 May 2022 10:41:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MxwV1CfEuXpa/Ro5Ob8LIp2Apb0tudNYCNQzjQS7PwI=;
+        b=bXWA05ojW5/cFfSc8rmYcBcQCXtWKXEQg+WJNjPooDUIPQeuyTxdbyxOuY+WE3wJcg
+         cvIhHWlqIEHV7JCMA9UK+MdkG2Nf2i6VKtw1BNWCVraUk0MPtPGp7T3zDr6+yIi6THiO
+         Xv+hKtoqFJpQD/5RGaYK/LHNsG2QImRsUsshVf3koVHvBtNtKJDZDxQ7X+vwY5t3FuE2
+         MpspJ75qaC+mlNsrwp4yZ9d34ifM+1vNdGCqAvM2x4lpjR5PW2HiZ+cjoOnC3M45gVGI
+         GHjp4n/eiQrYSbDIUXNu7iVYRtYR5v646COAb8tib3TkV0Jxx216UEElONxb8FQFaj7R
+         hqnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Ua1KG5+18UaDCNZFTJYl8j8EfhH8Jue+YMkQxpze3FM=;
-        b=Sdz2gbs7o9fmuAj7XPQKKfEVW+WF2BtEoCvdTcZXSOCVyvuqfPCQYBWcMDJ3jRT6JV
-         6Uu0Pc5R/37kWFz5guNRCA8Xtzx5VF6dpcTPguyHafKHMDrR6ybS5um+YTFAt38mVU96
-         RRwhnnts4z3QOAAn4/V6MjlGqn2As7r208T4DHvlJq5bd0eWxS9d3kXAeIDqhr/sH7uM
-         ECjJs6+SK5CnE9mG9xIb/1NkHBg4awuxG8lzvCBNG/FNEl8Drq8gyCsX7yoqiGZteSD5
-         Ykl8DzPXfKrnENYc1E64cIggTTU+QFJaWUJ1g5pXHMyoe850xO8MePojCXv9VQvSkKTd
-         8ygQ==
-X-Gm-Message-State: AOAM531a8bLtVhBz9pjnIeXdm4jWHo6TzFYmhnwn7O+bDkNFwIHMBL2c
-        B0GUy0dX/qaDHJI6b0rEKtU=
-X-Google-Smtp-Source: ABdhPJxCnDyHcwKiqN87su/K7JV25u7QznK3u4WJ7C556Si7ECVW2PYU+dvPeWktzLbqMV+ExD3CUg==
-X-Received: by 2002:a05:6000:18ab:b0:20c:8d82:52c3 with SMTP id b11-20020a05600018ab00b0020c8d8252c3mr19720747wri.701.1653327611353;
-        Mon, 23 May 2022 10:40:11 -0700 (PDT)
-Received: from localhost.localdomain ([94.205.35.240])
-        by smtp.googlemail.com with ESMTPSA id o8-20020a1c7508000000b003942a244f2fsm9444242wmc.8.2022.05.23.10.40.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 10:40:10 -0700 (PDT)
-From:   "Denis Efremov (Oracle)" <efremov@linux.com>
-To:     gregkh@linuxfoundation.org
-Cc:     "Denis Efremov (Oracle)" <efremov@linux.com>,
-        Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        dan.carpenter@oracle.com, straube.linux@gmail.com,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, stable <stable@vger.kernel.org>
-Subject: [PATCH v5.4-v4.14] staging: rtl8723bs: prevent ->Ssid overflow in rtw_wx_set_scan()
-Date:   Mon, 23 May 2022 21:39:43 +0400
-Message-Id: <20220523173943.12486-1-efremov@linux.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <YoZk3YLEDYKGG5xe@kroah.com>
-References: <YoZk3YLEDYKGG5xe@kroah.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MxwV1CfEuXpa/Ro5Ob8LIp2Apb0tudNYCNQzjQS7PwI=;
+        b=E7LkLPEOVS7GyNOnHpDUUnf+AAuUcpHDPqjZMFqEF0hErKXXuSTk+7RmYKSAfpfOuw
+         Ax4tA4wXTTkpQ8BGQYUNOBRtHN3lJaYOsei3suMMY/9Noo/RmbHq5oxV9TsJwuBSE6oq
+         pu2C90xDjMURxPttoRWCSuR/ZqQy3eANSmtwRJPCFsCrxkvnTQLXQgonJfV0ue/5coCq
+         mhkxdER6OXj2e94aFZ41g7dS7TP/Zv1gkahIsk1W5H+yCqegaRie5ozF8TuSMlIo3ngI
+         voLlU6ZGImkVnR8wOt7N8qoiGCFq7iW5lQl+PAdSbbx/FMKmsi6eiAe49k4HPcpyKva0
+         tzoA==
+X-Gm-Message-State: AOAM533/0zdvEoZSx+js8glFnQ0lkLAsk+sCLA2fytC6h+w3CtfAGnXq
+        p+u/6FfjK8PepDoQixgP297jbl82Se0/Cfxc6RY=
+X-Google-Smtp-Source: ABdhPJxTo01eW9mCXhiUa+2BxqxlzHLrc4YxjtNwNVqgKRWw5WAJOT3XELCwDaw93jNRgdmr5xO785H1pzc5fjfPbvo=
+X-Received: by 2002:aa7:df86:0:b0:42a:ba05:3ee7 with SMTP id
+ b6-20020aa7df86000000b0042aba053ee7mr24836246edy.141.1653327664065; Mon, 23
+ May 2022 10:41:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+References: <20220523164159.11579-1-ddrokosov@sberdevices.ru>
+In-Reply-To: <20220523164159.11579-1-ddrokosov@sberdevices.ru>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 23 May 2022 19:40:27 +0200
+Message-ID: <CAHp75VeuAxMWknoG28v8k-gKCpUQFJbwpq+pTaTVPeY45vQo2w@mail.gmail.com>
+Subject: Re: [PATCH v1 0/5] iio: treewide: rearrange iio trig get/register
+To:     Dmitry Rokosov <DDRokosov@sberdevices.ru>
+Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "jic23@kernel.org" <jic23@kernel.org>,
+        "lars@metafoo.de" <lars@metafoo.de>,
+        "lorenzo.bianconi83@gmail.com" <lorenzo.bianconi83@gmail.com>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "stephan@gerhold.net" <stephan@gerhold.net>,
+        "hdegoede@redhat.com" <hdegoede@redhat.com>,
+        "antoniu.miclaus@analog.com" <antoniu.miclaus@analog.com>,
+        "sean@geanix.com" <sean@geanix.com>,
+        "linmq006@gmail.com" <linmq006@gmail.com>,
+        "gwendal@chromium.org" <gwendal@chromium.org>,
+        "yangyingliang@huawei.com" <yangyingliang@huawei.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This code has a check to prevent read overflow but it needs another
-check to prevent writing beyond the end of the ->Ssid[] array.
+On Mon, May 23, 2022 at 6:42 PM Dmitry Rokosov <DDRokosov@sberdevices.ru> wrote:
+>
+> The following patchset resolves problems with iio_trigger_get() and
+> iio_trigger_register() call order in the different IIO drivers.
+>
+> IIO trigger interface function iio_trigger_get() should be called after
+> iio_trigger_register() (or its devm analogue) strictly, because of
+> iio_trigger_get() acquires module refcnt based on the trigger->owner
+> pointer, which is initialized inside iio_trigger_register() to
+> THIS_MODULE.
+> If this call order is wrong, the next iio_trigger_put() (from sysfs
+> callbacks or rmmod) will derefence "default" module refcnt, which is
 
-Fixes: 554c0a3abf21 ("staging: Add rtl8723bs sdio wifi driver")
-Cc: stable <stable@vger.kernel.org>
-Signed-off-by: Denis Efremov (Oracle) <efremov@linux.com>
----
- drivers/staging/rtl8723bs/os_dep/ioctl_linux.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+dereference
 
-diff --git a/drivers/staging/rtl8723bs/os_dep/ioctl_linux.c b/drivers/staging/rtl8723bs/os_dep/ioctl_linux.c
-index d8d44fd9a92f..ea2fd3a73c3a 100644
---- a/drivers/staging/rtl8723bs/os_dep/ioctl_linux.c
-+++ b/drivers/staging/rtl8723bs/os_dep/ioctl_linux.c
-@@ -1351,9 +1351,11 @@ static int rtw_wx_set_scan(struct net_device *dev, struct iw_request_info *a,
- 
- 					sec_len = *(pos++); len-= 1;
- 
--					if (sec_len>0 && sec_len<=len) {
-+					if (sec_len > 0 &&
-+					    sec_len <= len &&
-+					    sec_len <= 32) {
- 						ssid[ssid_index].SsidLength = sec_len;
--						memcpy(ssid[ssid_index].Ssid, pos, ssid[ssid_index].SsidLength);
-+						memcpy(ssid[ssid_index].Ssid, pos, sec_len);
- 						/* DBG_871X("%s COMBO_SCAN with specific ssid:%s, %d\n", __func__ */
- 						/* 	, ssid[ssid_index].Ssid, ssid[ssid_index].SsidLength); */
- 						ssid_index++;
+> completely incorrect.
+
+Cool set! But it sounds like a set of fixes, can you add a Fixes tag
+to each of the patches?
+
 -- 
-2.36.1
-
+With Best Regards,
+Andy Shevchenko

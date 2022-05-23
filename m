@@ -2,164 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9548D531365
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:24:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBF70531266
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:22:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236140AbiEWNVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 09:21:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35314 "EHLO
+        id S236229AbiEWNZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 09:25:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236160AbiEWNVN (ORCPT
+        with ESMTP id S236213AbiEWNZd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 09:21:13 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FC063DE
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 06:21:12 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id CDF3A21AD6;
-        Mon, 23 May 2022 13:21:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1653312070; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type;
-        bh=ewYw1fRxVPzaahbUqFNs5STtZWay9ceigZCWA51wXME=;
-        b=J5zwYsGflaUsl4B6PY4vfyuGwRyQ3hR4LH0PNF3GLk4MwilRuPFQnqp32ms6P1PL5R9Dep
-        9WV8zjlw/DeWcVE5LhQslKdA9w3X8wKARwdlVa4Mio/pMPAsWVj5niCC9yZZ32q6BrwPTt
-        f4O5FLAnzAj85rX9O6cR1UejKi/ypCI=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 682362C141;
-        Mon, 23 May 2022 13:21:10 +0000 (UTC)
-Date:   Mon, 23 May 2022 15:21:07 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Jan Kara <jack@suse.cz>, Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] printk for 5.19
-Message-ID: <YouKQw72H7y9EJQK@alley>
+        Mon, 23 May 2022 09:25:33 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF0803586F;
+        Mon, 23 May 2022 06:25:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653312332; x=1684848332;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=EW9q/Cvw2jkobQ73y88ztoczGNs8Sdg5pZ9/RmN9nZs=;
+  b=DshTQ/kTyQv0uT1tcBo4W3SOvUTPKJ7nLWQUgJB8Cicb2qDIwsmBgIV6
+   Ku0yn3jN6TZ2oO7bwFCOwwWddj31eJJnaJAMfPARPV40P4ym4/fPupuDw
+   J5qZT0tZu8L8XndvyhIN2z0/UC6iFKtxc8t2wnmIi+JTJ5SXry1QlP1Zt
+   SDJVuodSeSIUpYocgwOhdtiNr8Ny88toa7NVUywN8mBuKqmClOOYUPmDk
+   BymNq9i0BZ6iTE18/s3yw+rIb32kIR/Y5NSZ44omKJdzSdDrbQL+fEbwl
+   O3MnP5r7JxqE3fLFFYchJSXGwigWO8RmE2HeDzSX1hQq+DbpD1SqXke08
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10355"; a="272940238"
+X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
+   d="scan'208";a="272940238"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 06:25:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
+   d="scan'208";a="608195288"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
+  by orsmga001.jf.intel.com with ESMTP; 23 May 2022 06:25:20 -0700
+Date:   Mon, 23 May 2022 21:21:54 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Andy Lutomirski <luto@kernel.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com
+Subject: Re: [PATCH v6 4/8] KVM: Extend the memslot to support fd-based
+ private memory
+Message-ID: <20220523132154.GA947536@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220519153713.819591-1-chao.p.peng@linux.intel.com>
+ <20220519153713.819591-5-chao.p.peng@linux.intel.com>
+ <8840b360-cdb2-244c-bfb6-9a0e7306c188@kernel.org>
+ <YofeZps9YXgtP3f1@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <YofeZps9YXgtP3f1@google.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Fri, May 20, 2022 at 06:31:02PM +0000, Sean Christopherson wrote:
+> On Fri, May 20, 2022, Andy Lutomirski wrote:
+> > The alternative would be to have some kind of separate table or bitmap (part
+> > of the memslot?) that tells KVM whether a GPA should map to the fd.
+> > 
+> > What do you all think?
+> 
+> My original proposal was to have expolicit shared vs. private memslots, and punch
+> holes in KVM's memslots on conversion, but due to the way KVM (and userspace)
+> handle memslot updates, conversions would be painfully slow.  That's how we ended
+> up with the current propsoal.
+> 
+> But a dedicated KVM ioctl() to add/remove shared ranges would be easy to implement
+> and wouldn't necessarily even need to interact with the memslots.  It could be a
+> consumer of memslots, e.g. if we wanted to disallow registering regions without an
+> associated memslot, but I think we'd want to avoid even that because things will
+> get messy during memslot updates, e.g. if dirty logging is toggled or a shared
+> memory region is temporarily removed then we wouldn't want to destroy the tracking.
 
-please pull the latest printk changes from
+Even we don't tight that to memslots, that info can only be effective
+for private memslot, right? Setting this ioctl to memory ranges defined
+in a traditional non-private memslots just makes no sense, I guess we can
+comment that in the API document.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/printk/linux.git tags/printk-for-5.19
+> 
+> I don't think we'd want to use a bitmap, e.g. for a well-behaved guest, XArray
+> should be far more efficient.
 
-================================================
+What about the mis-behaved guest? I don't want to design for the worst
+case, but people may raise concern on the attack from such guest.
 
-- Offload writing printk() messages on consoles to per-console kthreads.
+> 
+> One benefit to explicitly tracking this in KVM is that it might be useful for
+> software-only protected VMs, e.g. KVM could mark a region in the XArray as "pending"
+> based on guest hypercalls to share/unshare memory, and then complete the transaction
+> when userspace invokes the ioctl() to complete the share/unshare.
 
-  It prevents soft-lockups when an extensive amount of messages is printed.
-  It was observed, for example, during boot of large systems with a lot
-  of peripherals like disks or network interfaces.
+OK, then this can be another field of states/flags/attributes. Let me
+dig up certain level of details:
 
-  It prevents live-lockups that were observed, for example, when messages
-  about allocation failures were reported and a CPU handled consoles
-  instead of reclaiming the memory. It was hard to solve even with
-  rate limiting because it would need to take into account the amount
-  of messages and the speed of all consoles.
+First, introduce below KVM ioctl
 
-  It is a must to have for real time. Otherwise, any printk() might break
-  latency guarantees.
+KVM_SET_MEMORY_ATTR
 
-  The per-console kthreads allow to handle each console on its own speed.
-  Slow consoles do not longer slow down faster ones. And printk() does
-  not longer unpredictably slows down various code paths.
+struct kvm_memory_attr {
+	__u64 addr;	/* page aligned */
+	__u64 size;	/* page aligned */
+#define KVM_MEMORY_ATTR_SHARED		(1 << 0)
+#define KVM_MEMORY_ATTR_PRIVATE		(1 << 1)
+	__u64 flags;
+}
 
-  There are situations when the kthreads are either not available or
-  not reliable, for example, early boot, suspend, or panic. In these
-  situations, printk() uses the legacy mode and tries to handle consoles
-  immediately.
+Second, check the KVM maintained guest memory attributes in page fault
+handler (instead of checking memory existence in private fd)
 
+Third, the memfile_notifier_ops (populate/invalidate) will be removed
+from current code, the old mapping zapping can be directly handled in
+this new KVM ioctl().
+ 
+Thought?
 
-- Add documentation for the printk index.
+Since this info is stored in KVM, which I think is reasonable. But for
+other potential memfile_notifier users like VFIO, some KVM-to-VFIO APIs
+might be needed depends on the implementaion.
 
+It is also possible to maintain this info purely in userspace. The only
+trick bit is implicit conversion support that has to be checked in KVM
+page fault handler and is in the fast path.
 
-===============================================
-
-Risk:
-
-There was always fear that messages might not reach the console when
-the kthreads could not be scheduled. It blocked introducing the kthreads
-for nearly a decade.
-
-It is clear that the kthreads adds some risk that the messages will
-not reach consoles. But the original solution was just the best
-effort either.
-
-The kthreads fix some real bugs as mentioned above. Also they allow
-to see the messages on other consoles when other consoles are slow
-or get stuck.
-
-The patchset has been in linux-next for nearly one month since April 26.
-It helped to find one already existing race when initializing
-a console device. It made the race more visible, see
-https://lore.kernel.org/r/20220508103547.626355-1-john.ogness@linutronix.de
-
-Nobody reported problems with missing messages. Of course, it just
-a good sign but it is not proof of anything. Let's see how it
-works when it gets more testing in the mainline. I am afraid
-that we won't find without trying.
-
-
-----------------------------------------------------------------
-Chris Down (1):
-      MAINTAINERS: Add printk indexing maintainers on mention of printk_index
-
-John Ogness (15):
-      printk: rename cpulock functions
-      printk: cpu sync always disable interrupts
-      printk: add missing memory barrier to wake_up_klogd()
-      printk: wake up all waiters
-      printk: wake waiters for safe and NMI contexts
-      printk: get caller_id/timestamp after migration disable
-      printk: call boot_delay_msec() in printk_delay()
-      printk: add con_printk() macro for console details
-      printk: refactor and rework printing logic
-      printk: move buffer definitions into console_emit_next_record() caller
-      printk: add pr_flush()
-      printk: add functions to prefer direct printing
-      printk: add kthread console printers
-      printk: extend console_lock for per-console locking
-      printk: remove @console_locked
-
-Marco Elver (1):
-      printk, tracing: fix console tracepoint
-
-Petr Mladek (2):
-      printk/index: Printk index feature documentation
-      Merge branch 'rework/kthreads' into for-linus
-
- Documentation/core-api/index.rst        |    1 +
- Documentation/core-api/printk-index.rst |  137 ++++
- MAINTAINERS                             |    2 +
- drivers/tty/sysrq.c                     |    2 +
- include/linux/console.h                 |   19 +
- include/linux/printk.h                  |   82 ++-
- kernel/hung_task.c                      |   11 +-
- kernel/panic.c                          |    4 +
- kernel/printk/printk.c                  | 1205 +++++++++++++++++++++++--------
- kernel/rcu/tree_stall.h                 |    2 +
- kernel/reboot.c                         |   14 +-
- kernel/watchdog.c                       |    4 +
- kernel/watchdog_hld.c                   |    4 +
- lib/dump_stack.c                        |    4 +-
- lib/nmi_backtrace.c                     |    4 +-
- 15 files changed, 1174 insertions(+), 321 deletions(-)
- create mode 100644 Documentation/core-api/printk-index.rst
+Thanks,
+Chao

@@ -2,82 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36437530E2C
+	by mail.lfdr.de (Postfix) with ESMTP id 84A34530E2D
 	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:43:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233916AbiEWKHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 06:07:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53392 "EHLO
+        id S233953AbiEWKOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 06:14:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233909AbiEWKHi (ORCPT
+        with ESMTP id S231636AbiEWKOF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 06:07:38 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DEF745AFB
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 03:07:35 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id v8so22754409lfd.8
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 03:07:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=2thMnipGQrwbIYaTpOIQFKO3y25BWCRS7OoW10wpgPY=;
-        b=gOYwbOEE0W/hGPnlp8cI+mSGkdABURnhZLtBSkEr/fnoUYgGhm5LtYOd5ZDT/33etE
-         d8Ibx95fMhsrpIdwMmHd94qinfWKsSNicrn+OoihHpl/J43cbm4m2UuQTg1tCvowHqEA
-         3/7FFW5aJ/6Tl6ObLR1eXSiYoV/D0FBdrzUdEDZQvus3LdE6v3phScBjxPJfww5hPkG1
-         a7KfbZdNVdEwgi3c2dnGPnMN3EBy6wIosOP4NrpkK++x/yuwD43DiGu3+XVHdbLAFKnz
-         n6Gws1leh/w6RS1FJKYec3eJmH34zhLc9v6I7ROxp/iBRQ/ZCRw8KR0gCQAqNYBC7tuW
-         MoJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=2thMnipGQrwbIYaTpOIQFKO3y25BWCRS7OoW10wpgPY=;
-        b=3qNx6UbLfIvLHhxvvI1Q1qZnf0ZPIomi6eYkOKkbaYPRIvwAntFaFweibPrAToLHB8
-         R050JT6Fb0ugB+arKTMfLm9o8YB6/nAFOAZwTAI0j/UWJYPUfn1B05UTNRXW67VSTstB
-         DmnwnDbSH9vEZcyhwTO5nvH8rg8UHEtdhAPq/VgGulv2QyxB8/3eMYMaOqtrbHecvYEV
-         noMTWDwTPMnF4ptT9VHoYE964aKPDMUAnNOlpuSPEbJaph8zo1R8yqbdvbnvn3GlcnYx
-         37NNfPjNu8gXpVycgX3lSnVOgGZi1vt+Ft/zgZv7uDs31RQgfs+EcakSKVFjA2I/C1kL
-         CVcQ==
-X-Gm-Message-State: AOAM533JwT13S5Tl4Su0KTdOkcAPYPtkYM+kMSY23RHfDiujhpOULmTO
-        Wx/RqZ7sY/MNekqJpmNiTg1qxA==
-X-Google-Smtp-Source: ABdhPJxs8EtqrTUt1LqsTXVl5KTJ4MPW7EjahL3tb7tKaF5mJmTmcP25Vknm6BhNib3K941QpLUjEA==
-X-Received: by 2002:a05:6512:32c1:b0:478:710f:d375 with SMTP id f1-20020a05651232c100b00478710fd375mr2677764lfg.147.1653300453721;
-        Mon, 23 May 2022 03:07:33 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id h26-20020a19701a000000b0047255d210fesm1894356lfc.45.2022.05.23.03.07.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 May 2022 03:07:33 -0700 (PDT)
-Message-ID: <36e378f1-9628-b22a-b3bf-2d5ae9e2da33@linaro.org>
-Date:   Mon, 23 May 2022 12:07:32 +0200
+        Mon, 23 May 2022 06:14:05 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9F1521A9
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 03:14:04 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1nt54T-0006QP-Ud; Mon, 23 May 2022 12:13:53 +0200
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1nt54S-0001yL-Nx; Mon, 23 May 2022 12:13:52 +0200
+Date:   Mon, 23 May 2022 12:13:52 +0200
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     Hans Ulli Kroll <linux@ulli-kroll.de>
+Cc:     linux-wireless@vger.kernel.org, Neo Jou <neojou@gmail.com>,
+        Ping-Ke Shih <pkshih@realtek.com>,
+        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        kernel@pengutronix.de, Johannes Berg <johannes@sipsolutions.net>
+Subject: Re: [PATCH 00/10] RTW88: Add support for USB variants
+Message-ID: <20220523101352.GM25578@pengutronix.de>
+References: <20220518082318.3898514-1-s.hauer@pengutronix.de>
+ <55f569899e4e894970b826548cd5439f5def2183.camel@ulli-kroll.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [RFC PATCH 09/14] dt-bindings: i2c: qcom-cci: add QCOM MSM8974
- compatible
-Content-Language: en-US
-To:     Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Todor Tomov <todor.too@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        matti.lehtimaki@gmail.com
-References: <20220522162802.208275-1-luca@z3ntu.xyz>
- <20220522162802.208275-10-luca@z3ntu.xyz>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220522162802.208275-10-luca@z3ntu.xyz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <55f569899e4e894970b826548cd5439f5def2183.camel@ulli-kroll.de>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 12:08:14 up 53 days, 22:37, 77 users,  load average: 0.16, 0.21,
+ 0.16
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,19 +62,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/05/2022 18:27, Luca Weiss wrote:
-> Add the compatible for the CCI found in MSM8974 which supports two I2C
-> masters.
+On Mon, May 23, 2022 at 06:07:16AM +0200, Hans Ulli Kroll wrote:
+> On Wed, 2022-05-18 at 10:23 +0200, Sascha Hauer wrote:
+> > This series adds support for the USB chip variants to the RTW88 driver.
+> > 
 > 
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> ---
->  Documentation/devicetree/bindings/i2c/i2c-qcom-cci.txt | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
+> Hi Sascha
 > 
+> glad you found some *working* devices for rtw88 !
+> 
+> I spend some of the weekend testing your driver submission.
+> 
+> for rtl8821cu devices I get following output
+> 
+> some Logilink device
+> 
+> [ 1686.605567] usb 1-5.1.2: New USB device found, idVendor=0bda, idProduct=c811, bcdDevice=
+> 2.00
 
+Most devices in the driver are described as:
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+	USB_DEVICE_AND_INTERFACE_INFO(0x0bda, 0xc82c, 0xff, 0xff, 0xff),
 
+This particular one has:
 
-Best regards,
-Krzysztof
+	USB_DEVICE(0x0bda, 0xc811),
+
+When I use USB_DEVICE() instead of USB_DEVICE_AND_INTERFACE_INFO() on my
+device then the Wifi driver tries to bind to the bluetooth interface on
+the same device which then fails with similar error messages. Maybe you
+have to use
+
+	USB_DEVICE_AND_INTERFACE_INFO(0x0bda, 0xc811, 0xff, 0xff, 0xff)
+
+instead. I could imagine that the plain USB_DEVICE() once worked for you
+because the bluetooth driver was faster to probe and only left the Wifi
+interface free for the Wifi driver to probe.
+
+Sascha
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

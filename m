@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17955531699
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:51:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6F0F531D10
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:58:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244667AbiEWR6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:58:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43040 "EHLO
+        id S243305AbiEWSFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 14:05:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241159AbiEWR01 (ORCPT
+        with ESMTP id S242952AbiEWRhv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:26:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8C7C64D11;
-        Mon, 23 May 2022 10:21:29 -0700 (PDT)
+        Mon, 23 May 2022 13:37:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D606351C;
+        Mon, 23 May 2022 10:31:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E8BC9B81201;
-        Mon, 23 May 2022 17:19:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D55DC34119;
-        Mon, 23 May 2022 17:19:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CD99B611E6;
+        Mon, 23 May 2022 17:30:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0CA0C385A9;
+        Mon, 23 May 2022 17:30:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326390;
-        bh=3pj742xwTH//GhvySybOz166D7IPXF4+QSlKRBP5RUY=;
+        s=korg; t=1653327040;
+        bh=JtVMK1J56BWXLZvCcn/YesZxEVRZCxup/GGdgk9PEC8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tRxOpZDZqCU8R9e7MeYNT8YHEaUl/lsyxkxhpJXpP6qx04h+RHEPIMxMgCz61YOfF
-         OM8mNq8elcBLPuhnOLRCPQhiV8F6jwUr28z9fkbHIhUvhMPWJMEKIi6eSrXQ0mui3U
-         OL3FmTz7KLOKRJSOUV7DibkyNhHeK6pvDIDU2r8g=
+        b=aG5iBD5yaBYWY0ASydJP8L1YhcTitrTOeyhwS0eji/SImztfjDy5S2nSVJG9KGdC6
+         2jwhSvpWL3zNf452dkhTizW1m5dfGaa38KA8vEOeY30Lfn9VN2rAFsNh7ECwp6MQ9U
+         yohSOXWgHl7imNoaDuz8j4beDUA/AhPO4YuD1z4s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable@kernel.org,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Subject: [PATCH 5.15 049/132] Fix double fget() in vhost_net_set_backend()
-Date:   Mon, 23 May 2022 19:04:18 +0200
-Message-Id: <20220523165831.389733999@linuxfoundation.org>
+        stable@vger.kernel.org, Maor Dickman <maord@nvidia.com>,
+        Yevgeny Kliteynik <kliteyn@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 102/158] net/mlx5: DR, Fix missing flow_source when creating multi-destination FW table
+Date:   Mon, 23 May 2022 19:04:19 +0200
+Message-Id: <20220523165848.231649115@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
-References: <20220523165823.492309987@linuxfoundation.org>
+In-Reply-To: <20220523165830.581652127@linuxfoundation.org>
+References: <20220523165830.581652127@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,69 +56,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Al Viro <viro@zeniv.linux.org.uk>
+From: Maor Dickman <maord@nvidia.com>
 
-commit fb4554c2232e44d595920f4d5c66cf8f7d13f9bc upstream.
+[ Upstream commit 2c5fc6cd269ad3476da99dad02521d2af4a8e906 ]
 
-Descriptor table is a shared resource; two fget() on the same descriptor
-may return different struct file references.  get_tap_ptr_ring() is
-called after we'd found (and pinned) the socket we'll be using and it
-tries to find the private tun/tap data structures associated with it.
-Redoing the lookup by the same file descriptor we'd used to get the
-socket is racy - we need to same struct file.
+In order to support multiple destination FTEs with SW steering
+FW table is created with single FTE with multiple actions and
+SW steering rule forward to it. When creating this table, flow
+source isn't set according to the original FTE.
 
-Thanks to Jason for spotting a braino in the original variant of patch -
-I'd missed the use of fd == -1 for disabling backend, and in that case
-we can end up with sock == NULL and sock != oldsock.
+Fix this by passing the original FTE flow source to the created
+FW table.
 
-Cc: stable@kernel.org
-Acked-by: Michael S. Tsirkin <mst@redhat.com>
-Signed-off-by: Jason Wang <jasowang@redhat.com>
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 34583beea4b7 ("net/mlx5: DR, Create multi-destination table for SW-steering use")
+Signed-off-by: Maor Dickman <maord@nvidia.com>
+Reviewed-by: Yevgeny Kliteynik <kliteyn@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/vhost/net.c |   15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
+ .../net/ethernet/mellanox/mlx5/core/steering/dr_action.c    | 6 ++++--
+ drivers/net/ethernet/mellanox/mlx5/core/steering/dr_fw.c    | 4 +++-
+ drivers/net/ethernet/mellanox/mlx5/core/steering/dr_types.h | 3 ++-
+ drivers/net/ethernet/mellanox/mlx5/core/steering/fs_dr.c    | 4 +++-
+ drivers/net/ethernet/mellanox/mlx5/core/steering/mlx5dr.h   | 3 ++-
+ 5 files changed, 14 insertions(+), 6 deletions(-)
 
---- a/drivers/vhost/net.c
-+++ b/drivers/vhost/net.c
-@@ -1450,13 +1450,9 @@ err:
- 	return ERR_PTR(r);
- }
- 
--static struct ptr_ring *get_tap_ptr_ring(int fd)
-+static struct ptr_ring *get_tap_ptr_ring(struct file *file)
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_action.c b/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_action.c
+index c61a5e83c78c..5d1caf97a8fc 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_action.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_action.c
+@@ -847,7 +847,8 @@ struct mlx5dr_action *
+ mlx5dr_action_create_mult_dest_tbl(struct mlx5dr_domain *dmn,
+ 				   struct mlx5dr_action_dest *dests,
+ 				   u32 num_of_dests,
+-				   bool ignore_flow_level)
++				   bool ignore_flow_level,
++				   u32 flow_source)
  {
- 	struct ptr_ring *ring;
--	struct file *file = fget(fd);
--
--	if (!file)
--		return NULL;
- 	ring = tun_get_tx_ring(file);
- 	if (!IS_ERR(ring))
- 		goto out;
-@@ -1465,7 +1461,6 @@ static struct ptr_ring *get_tap_ptr_ring
- 		goto out;
- 	ring = NULL;
- out:
--	fput(file);
- 	return ring;
- }
+ 	struct mlx5dr_cmd_flow_destination_hw_info *hw_dests;
+ 	struct mlx5dr_action **ref_actions;
+@@ -919,7 +920,8 @@ mlx5dr_action_create_mult_dest_tbl(struct mlx5dr_domain *dmn,
+ 				      reformat_req,
+ 				      &action->dest_tbl->fw_tbl.id,
+ 				      &action->dest_tbl->fw_tbl.group_id,
+-				      ignore_flow_level);
++				      ignore_flow_level,
++				      flow_source);
+ 	if (ret)
+ 		goto free_action;
  
-@@ -1552,8 +1547,12 @@ static long vhost_net_set_backend(struct
- 		r = vhost_net_enable_vq(n, vq);
- 		if (r)
- 			goto err_used;
--		if (index == VHOST_NET_VQ_RX)
--			nvq->rx_ring = get_tap_ptr_ring(fd);
-+		if (index == VHOST_NET_VQ_RX) {
-+			if (sock)
-+				nvq->rx_ring = get_tap_ptr_ring(sock->file);
-+			else
-+				nvq->rx_ring = NULL;
-+		}
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_fw.c b/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_fw.c
+index 68a4c32d5f34..f05ef0cd54ba 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_fw.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_fw.c
+@@ -104,7 +104,8 @@ int mlx5dr_fw_create_md_tbl(struct mlx5dr_domain *dmn,
+ 			    bool reformat_req,
+ 			    u32 *tbl_id,
+ 			    u32 *group_id,
+-			    bool ignore_flow_level)
++			    bool ignore_flow_level,
++			    u32 flow_source)
+ {
+ 	struct mlx5dr_cmd_create_flow_table_attr ft_attr = {};
+ 	struct mlx5dr_cmd_fte_info fte_info = {};
+@@ -139,6 +140,7 @@ int mlx5dr_fw_create_md_tbl(struct mlx5dr_domain *dmn,
+ 	fte_info.val = val;
+ 	fte_info.dest_arr = dest;
+ 	fte_info.ignore_flow_level = ignore_flow_level;
++	fte_info.flow_context.flow_source = flow_source;
  
- 		oldubufs = nvq->ubufs;
- 		nvq->ubufs = ubufs;
+ 	ret = mlx5dr_cmd_set_fte(dmn->mdev, 0, 0, &ft_info, *group_id, &fte_info);
+ 	if (ret) {
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_types.h b/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_types.h
+index 55fcb751e24a..64f41e7938e1 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_types.h
++++ b/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_types.h
+@@ -1463,7 +1463,8 @@ int mlx5dr_fw_create_md_tbl(struct mlx5dr_domain *dmn,
+ 			    bool reformat_req,
+ 			    u32 *tbl_id,
+ 			    u32 *group_id,
+-			    bool ignore_flow_level);
++			    bool ignore_flow_level,
++			    u32 flow_source);
+ void mlx5dr_fw_destroy_md_tbl(struct mlx5dr_domain *dmn, u32 tbl_id,
+ 			      u32 group_id);
+ #endif  /* _DR_TYPES_H_ */
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/steering/fs_dr.c b/drivers/net/ethernet/mellanox/mlx5/core/steering/fs_dr.c
+index 3f311462bedf..05393fe11132 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/steering/fs_dr.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/steering/fs_dr.c
+@@ -520,6 +520,7 @@ static int mlx5_cmd_dr_create_fte(struct mlx5_flow_root_namespace *ns,
+ 	} else if (num_term_actions > 1) {
+ 		bool ignore_flow_level =
+ 			!!(fte->action.flags & FLOW_ACT_IGNORE_FLOW_LEVEL);
++		u32 flow_source = fte->flow_context.flow_source;
+ 
+ 		if (num_actions == MLX5_FLOW_CONTEXT_ACTION_MAX ||
+ 		    fs_dr_num_actions == MLX5_FLOW_CONTEXT_ACTION_MAX) {
+@@ -529,7 +530,8 @@ static int mlx5_cmd_dr_create_fte(struct mlx5_flow_root_namespace *ns,
+ 		tmp_action = mlx5dr_action_create_mult_dest_tbl(domain,
+ 								term_actions,
+ 								num_term_actions,
+-								ignore_flow_level);
++								ignore_flow_level,
++								flow_source);
+ 		if (!tmp_action) {
+ 			err = -EOPNOTSUPP;
+ 			goto free_actions;
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/steering/mlx5dr.h b/drivers/net/ethernet/mellanox/mlx5/core/steering/mlx5dr.h
+index dfa223415fe2..74a7a2f4d50d 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/steering/mlx5dr.h
++++ b/drivers/net/ethernet/mellanox/mlx5/core/steering/mlx5dr.h
+@@ -96,7 +96,8 @@ struct mlx5dr_action *
+ mlx5dr_action_create_mult_dest_tbl(struct mlx5dr_domain *dmn,
+ 				   struct mlx5dr_action_dest *dests,
+ 				   u32 num_of_dests,
+-				   bool ignore_flow_level);
++				   bool ignore_flow_level,
++				   u32 flow_source);
+ 
+ struct mlx5dr_action *mlx5dr_action_create_drop(void);
+ 
+-- 
+2.35.1
+
 
 

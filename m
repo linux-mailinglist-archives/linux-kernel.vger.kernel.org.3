@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34F88531C19
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:57:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 245D5531BE0
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242101AbiEWRo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:44:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39602 "EHLO
+        id S1344067AbiEWSIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 14:08:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242794AbiEWR2F (ORCPT
+        with ESMTP id S243563AbiEWRiS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:28:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13F3D8BD1B;
-        Mon, 23 May 2022 10:24:27 -0700 (PDT)
+        Mon, 23 May 2022 13:38:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF9F71A3C;
+        Mon, 23 May 2022 10:32:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CE87DB81205;
-        Mon, 23 May 2022 17:23:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16633C385A9;
-        Mon, 23 May 2022 17:23:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 793ADB80EB0;
+        Mon, 23 May 2022 17:31:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A38BBC385A9;
+        Mon, 23 May 2022 17:31:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326612;
-        bh=avndaQch640ZfRGocl3/Glaq1ZfFlwbRC5EyDnOyZQ4=;
+        s=korg; t=1653327102;
+        bh=P7ifuMvgfCQC7c5AuL095K8fyYyVN8m4teyXLs5ZboM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AXlr4IY8uAdmzfcuuw9ilT9ksg8sZPF+KFdz+PqU1382uwLxq3ozUYtHpQ3sSEquN
-         0EzsV0YgyTVA/53ed3xbvxHmzhoALsHltdqyxMONVVp/NbE/znROt1IFcVq3N67ga2
-         E2LCAPwJPbVdMdFi5/tyIVRzBUKyON/Qdm4V6m68=
+        b=m3s1r76q4dkHaCBSyVdEwaT0ZMhdErNOUi1wvKTI6coogpcxJEo3hmIuEAKQnXRbj
+         4hq8A4t942K1lU4P/g7b+jzte3v5lsn6BtRU7kVlR8ND/5Hy6Hyc4Db/Ur9VrKWkH7
+         puF/TD0pX2kEMQHlTvQzcB7HiaQSBh5xzN5C9Dmo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ritaro Takenaka <ritarot634@gmail.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 103/132] netfilter: flowtable: move dst_check to packet path
-Date:   Mon, 23 May 2022 19:05:12 +0200
-Message-Id: <20220523165840.521396953@linuxfoundation.org>
+        stable@vger.kernel.org, Jae Hyun Yoo <quic_jaehyoo@quicinc.com>,
+        Rob Herring <robh@kernel.org>,
+        Andrew Jeffery <andrew@aj.id.au>, Joel Stanley <joel@jms.id.au>
+Subject: [PATCH 5.17 156/158] dt-bindings: pinctrl: aspeed-g6: remove FWQSPID group
+Date:   Mon, 23 May 2022 19:05:13 +0200
+Message-Id: <20220523165856.039264573@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
-References: <20220523165823.492309987@linuxfoundation.org>
+In-Reply-To: <20220523165830.581652127@linuxfoundation.org>
+References: <20220523165830.581652127@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,110 +55,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ritaro Takenaka <ritarot634@gmail.com>
+From: Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
 
-[ Upstream commit 2738d9d963bd1f06d5114c2b4fa5771a95703991 ]
+commit a29c96a4053dc3c1d39353b61089882f81c6b23d upstream.
 
-Fixes sporadic IPv6 packet loss when flow offloading is enabled.
+FWQSPID is not a group of FWSPID so remove it.
 
-IPv6 route GC and flowtable GC are not synchronized.
-When dst_cache becomes stale and a packet passes through the flow before
-the flowtable GC teardowns it, the packet can be dropped.
-So, it is necessary to check dst every time in packet path.
-
-Fixes: 227e1e4d0d6c ("netfilter: nf_flowtable: skip device lookup from interface index")
-Signed-off-by: Ritaro Takenaka <ritarot634@gmail.com>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 7488838f2315 ("dt-bindings: pinctrl: aspeed: Document AST2600 pinmux")
+Signed-off-by: Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
+Acked-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Andrew Jeffery <andrew@aj.id.au>
+Link: https://lore.kernel.org/r/20220329173932.2588289-4-quic_jaehyoo@quicinc.com
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/netfilter/nf_flow_table_core.c | 23 +----------------------
- net/netfilter/nf_flow_table_ip.c   | 19 +++++++++++++++++++
- 2 files changed, 20 insertions(+), 22 deletions(-)
+ Documentation/devicetree/bindings/pinctrl/aspeed,ast2600-pinctrl.yaml |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/netfilter/nf_flow_table_core.c b/net/netfilter/nf_flow_table_core.c
-index de783c9094d7..9fb407084c50 100644
---- a/net/netfilter/nf_flow_table_core.c
-+++ b/net/netfilter/nf_flow_table_core.c
-@@ -415,32 +415,11 @@ nf_flow_table_iterate(struct nf_flowtable *flow_table,
- 	return err;
- }
- 
--static bool flow_offload_stale_dst(struct flow_offload_tuple *tuple)
--{
--	struct dst_entry *dst;
--
--	if (tuple->xmit_type == FLOW_OFFLOAD_XMIT_NEIGH ||
--	    tuple->xmit_type == FLOW_OFFLOAD_XMIT_XFRM) {
--		dst = tuple->dst_cache;
--		if (!dst_check(dst, tuple->dst_cookie))
--			return true;
--	}
--
--	return false;
--}
--
--static bool nf_flow_has_stale_dst(struct flow_offload *flow)
--{
--	return flow_offload_stale_dst(&flow->tuplehash[FLOW_OFFLOAD_DIR_ORIGINAL].tuple) ||
--	       flow_offload_stale_dst(&flow->tuplehash[FLOW_OFFLOAD_DIR_REPLY].tuple);
--}
--
- static void nf_flow_offload_gc_step(struct nf_flowtable *flow_table,
- 				    struct flow_offload *flow, void *data)
- {
- 	if (nf_flow_has_expired(flow) ||
--	    nf_ct_is_dying(flow->ct) ||
--	    nf_flow_has_stale_dst(flow))
-+	    nf_ct_is_dying(flow->ct))
- 		flow_offload_teardown(flow);
- 
- 	if (test_bit(NF_FLOW_TEARDOWN, &flow->flags)) {
-diff --git a/net/netfilter/nf_flow_table_ip.c b/net/netfilter/nf_flow_table_ip.c
-index 6257d87c3a56..28026467b54c 100644
---- a/net/netfilter/nf_flow_table_ip.c
-+++ b/net/netfilter/nf_flow_table_ip.c
-@@ -227,6 +227,15 @@ static bool nf_flow_exceeds_mtu(const struct sk_buff *skb, unsigned int mtu)
- 	return true;
- }
- 
-+static inline bool nf_flow_dst_check(struct flow_offload_tuple *tuple)
-+{
-+	if (tuple->xmit_type != FLOW_OFFLOAD_XMIT_NEIGH &&
-+	    tuple->xmit_type != FLOW_OFFLOAD_XMIT_XFRM)
-+		return true;
-+
-+	return dst_check(tuple->dst_cache, tuple->dst_cookie);
-+}
-+
- static unsigned int nf_flow_xmit_xfrm(struct sk_buff *skb,
- 				      const struct nf_hook_state *state,
- 				      struct dst_entry *dst)
-@@ -346,6 +355,11 @@ nf_flow_offload_ip_hook(void *priv, struct sk_buff *skb,
- 	if (nf_flow_state_check(flow, iph->protocol, skb, thoff))
- 		return NF_ACCEPT;
- 
-+	if (!nf_flow_dst_check(&tuplehash->tuple)) {
-+		flow_offload_teardown(flow);
-+		return NF_ACCEPT;
-+	}
-+
- 	if (skb_try_make_writable(skb, thoff + hdrsize))
- 		return NF_DROP;
- 
-@@ -582,6 +596,11 @@ nf_flow_offload_ipv6_hook(void *priv, struct sk_buff *skb,
- 	if (nf_flow_state_check(flow, ip6h->nexthdr, skb, thoff))
- 		return NF_ACCEPT;
- 
-+	if (!nf_flow_dst_check(&tuplehash->tuple)) {
-+		flow_offload_teardown(flow);
-+		return NF_ACCEPT;
-+	}
-+
- 	if (skb_try_make_writable(skb, thoff + hdrsize))
- 		return NF_DROP;
- 
--- 
-2.35.1
-
+--- a/Documentation/devicetree/bindings/pinctrl/aspeed,ast2600-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/aspeed,ast2600-pinctrl.yaml
+@@ -58,7 +58,7 @@ patternProperties:
+           $ref: "/schemas/types.yaml#/definitions/string"
+           enum: [ ADC0, ADC1, ADC10, ADC11, ADC12, ADC13, ADC14, ADC15, ADC2,
+                   ADC3, ADC4, ADC5, ADC6, ADC7, ADC8, ADC9, BMCINT, EMMCG1, EMMCG4,
+-                  EMMCG8, ESPI, ESPIALT, FSI1, FSI2, FWSPIABR, FWSPID, FWQSPID, FWSPIWP,
++                  EMMCG8, ESPI, ESPIALT, FSI1, FSI2, FWSPIABR, FWSPID, FWSPIWP,
+                   GPIT0, GPIT1, GPIT2, GPIT3, GPIT4, GPIT5, GPIT6, GPIT7, GPIU0, GPIU1,
+                   GPIU2, GPIU3, GPIU4, GPIU5, GPIU6, GPIU7, HVI3C3, HVI3C4, I2C1, I2C10,
+                   I2C11, I2C12, I2C13, I2C14, I2C15, I2C16, I2C2, I2C3, I2C4, I2C5,
 
 

@@ -2,165 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E33D0531227
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:22:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 152345312DE
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:23:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236701AbiEWNbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 09:31:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44586 "EHLO
+        id S236270AbiEWN3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 09:29:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236355AbiEWN32 (ORCPT
+        with ESMTP id S236225AbiEWN3G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 09:29:28 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06D3539158;
-        Mon, 23 May 2022 06:29:24 -0700 (PDT)
-X-UUID: c1bc8a75783245159fc01e86e701549b-20220523
-X-CID-P-RULE: Spam_GS6885AD
-X-CID-O-INFO: VERSION:1.1.5,REQID:3fb5f878-bca2-4a0f-9558-90ef349916f8,OB:0,LO
-        B:20,IP:0,URL:25,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS6885AD
-        ,ACTION:quarantine,TS:120
-X-CID-INFO: VERSION:1.1.5,REQID:3fb5f878-bca2-4a0f-9558-90ef349916f8,OB:0,LOB:
-        20,IP:0,URL:25,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,A
-        CTION:quarantine,TS:120
-X-CID-META: VersionHash:2a19b09,CLOUDID:44fa3de3-edbf-4bd4-8a34-dfc5f7bb086d,C
-        OID:e8d14b50625a,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,QS:0,BEC:nil
-X-UUID: c1bc8a75783245159fc01e86e701549b-20220523
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <jiaxin.yu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 644441066; Mon, 23 May 2022 21:29:22 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Mon, 23 May 2022 21:29:21 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 23 May 2022 21:29:20 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 23 May 2022 21:29:19 +0800
-From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
-To:     <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <angelogioacchino.delregno@collabora.com>
-CC:     <aaronyu@google.com>, <matthias.bgg@gmail.com>,
-        <trevor.wu@mediatek.com>, <tzungbi@google.com>,
-        <julianbraha@gmail.com>, <alsa-devel@alsa-project.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Jiaxin Yu <jiaxin.yu@mediatek.com>
-Subject: [PATCH v5 20/20] dt-bindings: mediatek: mt8186: add mt8186-mt6366-rt1019-rt5682s document
-Date:   Mon, 23 May 2022 21:28:58 +0800
-Message-ID: <20220523132858.22166-21-jiaxin.yu@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220523132858.22166-1-jiaxin.yu@mediatek.com>
-References: <20220523132858.22166-1-jiaxin.yu@mediatek.com>
+        Mon, 23 May 2022 09:29:06 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99233240AA
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 06:29:03 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id ds11so14094000pjb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 06:29:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=C3bZbEaAq3Xu1O+OItJ+lvJSF2o3pyc0onzZAOeeJCk=;
+        b=mIybBL1U6Elcn4NFipNHc5oYx+P5Xk/K0gsj85ZVi5o0E3KwuASAj4EvcTaDp/36nj
+         jP1tJ4Jbnb4vasuwpfNDRsYJbfLxNA06dWhQ47QuAk/4RciDwvzHhvr4ZfEclYuY07jK
+         fyswcaPhtbpzv+HtgMjrpL14+hJxbjhHfys+P4F2FtOj+8fSuy/Ge9UahGkhgN3nyn5G
+         tcnNDsRQCe3AVMSUSp371ndlhVm2cueqcTjzWm4bmNxdo1wQse2nsxh9wEw/7THhxzz2
+         fsLXjpoEBx0WzKoOA3XUajKrGaIzhE1D5ZQ3bAfiHNHr18QdHkYwLtje3LghS5hTLHY5
+         8shw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=C3bZbEaAq3Xu1O+OItJ+lvJSF2o3pyc0onzZAOeeJCk=;
+        b=qpl0VdAWxq+HIrup4+RXBvSGLgp4fcmG+/7ZxKr3XDYlWICvPMItQlaQ+9xnovuCbB
+         4p8/qZ5oExNU/XnyqjxFwBmWnHVzkLgbi0/ETMZi/o6JqzEGJWdtkngrKTRtsmFWRTLh
+         GR758Zq8Mb6o7j5QbRGOjNZTd8gjLRJFREZUevNbZfFI4cGqyN5ItuDw6fexSJDLJVW1
+         BFL1YH4Gim8ZbiYJHY+lMu+TGoDHskFfLnGpFKJ6TrGsl4DBXjFrtf0Et9T2JikTO4FY
+         SxaP27x5OFOrltzmo7cz35s8QdXsLGjnAeZY2+/kkyMtuPsGK0eaUY68CRkAJEx8vp/B
+         L5aA==
+X-Gm-Message-State: AOAM530nGdT0SeRrMKpZt+6vOtGBSVfQ3PItt7QTXsf7s5zzUDMAq8lH
+        6hjHKwMrbymzTiOBDJ7Kw/KvvsIu3afWIA==
+X-Google-Smtp-Source: ABdhPJyb765pKTXIFpPUXz3mbvBfvf4qGd0h2/E1/qyzdrr0Bi3GVvZ4dyys9lszdqnXxEVrTyP2Dw==
+X-Received: by 2002:a17:902:e3d4:b0:162:23a7:a7e7 with SMTP id r20-20020a170902e3d400b0016223a7a7e7mr5406661ple.32.1653312542991;
+        Mon, 23 May 2022 06:29:02 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id c2-20020a62f842000000b0051800111b2fsm7347132pfm.216.2022.05.23.06.29.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 May 2022 06:29:02 -0700 (PDT)
+Message-ID: <f1a08877-e27f-6520-272d-a3e6598f97b9@kernel.dk>
+Date:   Mon, 23 May 2022 07:29:00 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH -next v5 0/3] support concurrent sync io for bfq on a
+ specail occasion
+Content-Language: en-US
+To:     Yu Kuai <yukuai3@huawei.com>, paolo.valente@linaro.org
+Cc:     jack@suse.cz, tj@kernel.org, linux-block@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com
+References: <20220428120837.3737765-1-yukuai3@huawei.com>
+ <d50df657-d859-79cf-c292-412eaa383d2c@huawei.com>
+ <61b67d5e-829c-8130-7bda-81615d654829@huawei.com>
+ <81411289-e13c-20f5-df63-c059babca57a@huawei.com>
+ <d5a90a08-1ac6-587a-e900-0436bd45543a@kernel.dk>
+ <55919e29-1f22-e8aa-f3d2-08c57d9e1c22@huawei.com>
+ <b32ed748-a141-862c-ed35-debb474962ed@kernel.dk>
+ <1172d00f-0843-1d7c-721f-fdb60a0945cb@huawei.com>
+ <dfd2ac0b-74da-85f4-ff66-2eb307578d93@kernel.dk>
+ <8f0b5115-6a96-d5eb-5243-0be832cf121b@huawei.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <8f0b5115-6a96-d5eb-5243-0be832cf121b@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add document for mt8186 board with mt6366, rt1019 and rt5682s.
+On 5/23/22 6:58 AM, Yu Kuai wrote:
+> ? 2022/05/23 20:36, Jens Axboe ??:
+>> On 5/23/22 2:18 AM, Yu Kuai wrote:
+>>> ? 2022/05/23 9:24, Jens Axboe ??:
+>>>> On 5/22/22 7:10 PM, yukuai (C) wrote:
+>>>>> ? 2022/05/21 20:21, Jens Axboe ??:
+>>>>>> On 5/21/22 1:22 AM, yukuai (C) wrote:
+>>>>>>> ? 2022/05/14 17:29, yukuai (C) ??:
+>>>>>>>> ? 2022/05/05 9:00, yukuai (C) ??:
+>>>>>>>>> Hi, Paolo
+>>>>>>>>>
+>>>>>>>>> Can you take a look at this patchset? It has been quite a long time
+>>>>>>>>> since we spotted this problem...
+>>>>>>>>>
+>>>>>>>>
+>>>>>>>> friendly ping ...
+>>>>>>> friendly ping ...
+>>>>>>
+>>>>>> I can't speak for Paolo, but I've mentioned before that the majority
+>>>>>> of your messages end up in my spam. That's still the case, in fact
+>>>>>> I just marked maybe 10 of them as not spam.
+>>>>>>
+>>>>>> You really need to get this issued sorted out, or you will continue
+>>>>>> to have patches ignore because folks may simply not see them.
+>>>>>>
+>>>>> Hi,
+>>>>>
+>>>>> Thanks for your notice.
+>>>>>
+>>>>> Is it just me or do you see someone else's messages from *huawei.com
+>>>>> end up in spam? I tried to seek help from our IT support, however, they
+>>>>> didn't find anything unusual...
+>>>>
+>>>> Not sure, I think it's just you. It may be the name as well "yukuai (C)"
+>>> Hi, Jens
+>>>
+>>> I just change this default name "yukuai (C)" to "Yu Kuai", can you
+>>> please have a check if following emails still go to spam?
+>>>
+>>> https://lore.kernel.org/all/20220523082633.2324980-1-yukuai3@huawei.com/
+>>
+>> These did not go into spam, were delivered just fine.
+>>
+> Cheers for solving this, I'll resend this patchset just in case they are
+> in spam for Paolo...
 
-Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
----
- .../sound/mt8186-mt6366-rt1019-rt5682s.yaml   | 75 +++++++++++++++++++
- 1 file changed, 75 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/sound/mt8186-mt6366-rt1019-rt5682s.yaml
+Let's hope it's solved, you never know with gmail... But that series did
+go through fine as well, fwiw.
 
-diff --git a/Documentation/devicetree/bindings/sound/mt8186-mt6366-rt1019-rt5682s.yaml b/Documentation/devicetree/bindings/sound/mt8186-mt6366-rt1019-rt5682s.yaml
-new file mode 100644
-index 000000000000..059a7629b2d3
---- /dev/null
-+++ b/Documentation/devicetree/bindings/sound/mt8186-mt6366-rt1019-rt5682s.yaml
-@@ -0,0 +1,75 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/sound/mt8186-mt6366-rt1019-rt5682s.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Mediatek MT8186 with MT6366, RT1019 and RT5682S ASoC sound card driver
-+
-+maintainers:
-+  - Jiaxin Yu <jiaxin.yu@mediatek.com>
-+
-+description:
-+  This binding describes the MT8186 sound card.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - mediatek,mt8186-mt6366-rt1019-rt5682s-sound
-+
-+  mediatek,platform:
-+    $ref: "/schemas/types.yaml#/definitions/phandle"
-+    description: The phandle of MT8186 ASoC platform.
-+
-+  headset-codec:
-+    type: object
-+    additionalProperties: false
-+    properties:
-+      sound-dai:
-+        maxItems: 1
-+    required:
-+      - sound-dai
-+
-+  playback-codecs:
-+    type: object
-+    additionalProperties: false
-+    properties:
-+      sound-dai:
-+        items:
-+          - description: phandle of dp codec
-+          - description: phandle of l channel speaker codec
-+          - description: phandle of r channel speaker codec
-+        minItems: 2
-+    required:
-+      - sound-dai
-+
-+additionalProperties: false
-+
-+required:
-+  - compatible
-+  - mediatek,platform
-+  - headset-codec
-+  - playback-codecs
-+
-+examples:
-+  - |
-+
-+    sound: mt8186-sound {
-+        compatible = "mediatek,mt8186-mt6366-rt1019-rt5682s-sound";
-+        mediatek,platform = <&afe>;
-+        pinctrl-names = "aud_clk_mosi_off",
-+                        "aud_clk_mosi_on";
-+        pinctrl-0 = <&aud_clk_mosi_off>;
-+        pinctrl-1 = <&aud_clk_mosi_on>;
-+
-+        headset-codec {
-+            sound-dai = <&rt5682s>;
-+        };
-+
-+        playback-codecs {
-+             sound-dai = <&it6505dptx>,
-+                         <&rt1019p>;
-+        };
-+    };
-+
-+...
 -- 
-2.18.0
+Jens Axboe
 

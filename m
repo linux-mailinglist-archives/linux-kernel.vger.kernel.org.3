@@ -2,111 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86ACB531BE8
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9517F53199F
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:55:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231704AbiEWTgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 15:36:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55840 "EHLO
+        id S231336AbiEWThW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 15:37:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231827AbiEWTfz (ORCPT
+        with ESMTP id S230360AbiEWTg4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 15:35:55 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 578007CDD1
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 12:22:37 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-30007f11f88so27807847b3.7
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 12:22:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=uMK4uhL7bbIrweYoyqO5hSjV8mXVqG8AbtrOT/hIh/w=;
-        b=DfvuwBWFA1bY926PzbhpxLvufY+nooaVA0eP6h8hcT7X+D1UMv1hYYv9qqR+rDToaY
-         XyLwkoO9fVzecw5cBDvm3kj83cqrZjGFNkcibIfd5VSKAWtuEl7H2O3Tmr3adHPeEklP
-         uy6usjU8YSanfDc5bmGBQm4qGMKQfTGxGnyDXoaOudbRJK+omFaVLQ2tPxoWiUiMwGnb
-         vq67eL4pwTOHiLdDiQ1KL1TD1YeJkIcTadmMwLP1CwcQ4W25q+cpUirao3A0BDo+Ydbm
-         ITV4GKXy9v6Mi3/oWTcngGYKlZG2DaH2gpqYlVmSIbuCFNN+GG/4VR4WqlBnPfl3lRWu
-         xc6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to:content-transfer-encoding;
-        bh=uMK4uhL7bbIrweYoyqO5hSjV8mXVqG8AbtrOT/hIh/w=;
-        b=J1K/RvoexCfdNDvTASNbb+QxfS15CvFWrCZD9OIPqL3UUEuNYlEKd5B86sTDaTsyGb
-         c5SEOKk+GnxNM1GC3tPJ4I9lS9uwElFtRjKSYWPQFK8nI4xSi6nPxS0aORTUAiM1R9CR
-         Sz3DF4otFcZbyrivYgfyUYWcw0T2GVnwdIIslsMfTcId7Iy7vFMw+WmXKVU5G+K+qc4c
-         iTS34wlDlUl9cXsGIelskqP7RMRqcdamdoz1qqYgbuIUrC6ZIFsuwEzsd7cVS2xQL6NM
-         nbzhW1b8e3pJezevbJ99jT0Da5r6vKnFgeq5jww4fpiLCdRoS9sS5RsU6U9qlT9Xs1sf
-         49Qg==
-X-Gm-Message-State: AOAM530iFRAuMU9rqP3Ccqhtdw1LdilQk2ZJC2tQ2vEE2jAQuasUwK+n
-        R1TsF5e/va8kpPEEESOZT+jZU/ypXn5ahIKDfMg=
-X-Google-Smtp-Source: ABdhPJyRu/kbjkbS/TQzQMnPEZSMdQ0deCMxQMSdVCSxPw7ECGRpM+wGw8FkR913/a2bupUeR+KfpqbtDKkD8zTvHV8=
-X-Received: by 2002:a81:6188:0:b0:2eb:4bd3:9b86 with SMTP id
- v130-20020a816188000000b002eb4bd39b86mr24122762ywb.46.1653333756537; Mon, 23
- May 2022 12:22:36 -0700 (PDT)
+        Mon, 23 May 2022 15:36:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 336377354A
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 12:24:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653333864;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=InjuNukk5AWJl2Wwz5sSwlsD5KfOc4voU8ewp772j2k=;
+        b=Y/G2/KveBcyv81azWsgNBkG6Lf5HCEQVNNRBfVummtp4W1jm2PNvOUO9o19C6PDiAkgvtH
+        sR9pf/qyG9y7lbxvhczIjtE5XyE3/tlDJNyz2gBGE4mxL3PyLRUklV+q47EaJ/+2NcN1He
+        oQt6c6qG5nKQTytKL85OJ3DPECFJBNI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-216-vlreVST7O8GEWgS7BFZBbw-1; Mon, 23 May 2022 15:24:20 -0400
+X-MC-Unique: vlreVST7O8GEWgS7BFZBbw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6C37F811E78;
+        Mon, 23 May 2022 19:24:20 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4634D492C3B;
+        Mon, 23 May 2022 19:24:20 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        linux-s390@vger.kernel.org
+Subject: [PATCH] s390/uv_uapi: depend on CONFIG_S390
+Date:   Mon, 23 May 2022 15:24:20 -0400
+Message-Id: <20220523192420.151184-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-Sender: ifeanyiomaka1@gmail.com
-Received: by 2002:a05:7010:2590:b0:2d2:29b8:55 with HTTP; Mon, 23 May 2022
- 12:22:36 -0700 (PDT)
-From:   Dina Mckenna <dinamckenna1894@gmail.com>
-Date:   Tue, 24 May 2022 07:22:36 +1200
-X-Google-Sender-Auth: opePKpipJqMLcNO-ayfr6Ucg_gk
-Message-ID: <CAO-KV1-Uvt1mrXXd3TJ0Wp9d5L8vKgse_iOO8QbyP-M-2XGYJw@mail.gmail.com>
-Subject: Calvary greetings,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.8 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_8,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello My Dear.,
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+---
+ drivers/s390/char/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Please do not feel disturbed for contacting =C2=A0you in this regards, It
-was based on the critical health condition I found myself. =C2=A0My names
-are Mrs. Dina Mckenna Howley. A widow and am suffering from brain
-tumor disease and this illness has gotten to a very bad stage, I
- married my husband for Ten years without any child. =C2=A0My husband died
-after a brief illness that lasted for few  days.
-Since the death of my husband, I decided not to remarry again, When my
-late husband was alive he deposited the sum of =C2=A0($ 11,000,000.00,
-Eleven Million Dollars) with the Bank. Presently this money is still
-in bank. And My  Doctor told me that I don't have much time to live
-because my illness has gotten to a very bad stage, Having known my
-condition I  decided to entrust over the deposited fund under your
-custody to take care of the less-privileged ones therein your country
-or position,
-which i believe that you will utilize this money the way I am going to
-instruct herein..
+diff --git a/drivers/s390/char/Kconfig b/drivers/s390/char/Kconfig
+index ef8f41833c1a..108e8eb06249 100644
+--- a/drivers/s390/char/Kconfig
++++ b/drivers/s390/char/Kconfig
+@@ -103,6 +103,7 @@ config SCLP_OFB
+ config S390_UV_UAPI
+ 	def_tristate m
+ 	prompt "Ultravisor userspace API"
++        depends on S390
+ 	help
+ 	  Selecting exposes parts of the UV interface to userspace
+ 	  by providing a misc character device at /dev/uv.
+-- 
+2.31.1
 
-However all I need and required from you is your sincerity and ability
-to carry out the transaction successfully and fulfill my final wish in
-implementing the charitable project as it requires absolute trust and
-devotion without any failure and I will be glad to see that the bank
-finally release and transfer the fund into your bank account in your
-country even before I die here in the hospital, because my present
-health condition is very critical at the moment everything needs to be
-process rapidly as soon as possible.
-It will be my pleasure to compensate you as my Investment
-Manager/Partner with 35 % percent of the total fund for your effort in
- handling the transaction, 5 % percent for any expenses or processing
-charges fee that will involve during this process while 60% of the
-fund will be Invested into the charity project there in your country
-for the mutual benefit of the orphans and the less privileges ones.
-Meanwhile I am waiting for your prompt respond, if only you are
-interested for further details of the transaction and execution of
-this  humanitarian project for the glory and honor of God the merciful
-compassionate.
-May God bless you and your family.
-Regards,
-Mrs. Dina Mckenna Howley..
-written from Hospital..

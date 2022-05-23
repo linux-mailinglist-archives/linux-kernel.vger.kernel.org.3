@@ -2,70 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 912D15317A4
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:53:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F0975316AD
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:52:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232730AbiEWUSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 16:18:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52420 "EHLO
+        id S232679AbiEWUQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 16:16:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233018AbiEWUPy (ORCPT
+        with ESMTP id S233372AbiEWUQM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 16:15:54 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F53EA889F
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 13:14:44 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id y12so16470353ior.7
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 13:14:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=2vp0MMS/nvxu6duSf/XEnD4yOQ25zTvmWT7ui8yftHI=;
-        b=EdZ3EoZNsBfIF3vb1gybA4QEABs1GgsVjZAOwUbNskNs6gqaa+1mGIdZsiVE3FWno9
-         RAdfS9kwfjSlmHdIz2H/oeCWvq6WF7SVHGywATmRIsSOSbcMalHoMxseo68lHAskg1ZN
-         rNJXRKMV18WA/dqlhvDFrjgqD41e0Rh7HqGPZvzaibysFy5K7GZfVPQwgyjdgyzX71T0
-         encoD5PY9rOu17eULUcVOyjbAKauaKhI+Q+eu7UP9oLA0K46GseesCox5CtiREtXR8Fh
-         rbuJ2xTvT/vnR+ONmFcpQ+0jgzQT5n2FiF78UWKT6WN8EIuvsncu5ELomMUqgaHu+cFh
-         ilrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=2vp0MMS/nvxu6duSf/XEnD4yOQ25zTvmWT7ui8yftHI=;
-        b=e4MgP/ha+DfsemDejwW/PZ/9r8HcJuNfDwKV6jowWq107UqzGJxKWzGJdWrto3S2pD
-         HzpubYXavg5zd4eJesdFk+5rvllfd9FVdpljOg1jJFJG42+NgjBMdFXxckKeuzMZ3drZ
-         ohZexpaSFVEqfOkd6RRPrF6aKaOQmvQeQUYLlOW4yWrurRTZDHS+3wSYjsW4mMghNKuU
-         JuXxU+k50cMYH+3XwVpmWkAP3an84QajzWrdn5EeenpPvgkgbI9Nxk5o429Ywfapnczw
-         MtS0Mr+djXXdgwdBXben5SbMcIi0HA/tDCgZGSCsIggJe3sAOcSmLkRIq5ooyg5YfGT0
-         zCCg==
-X-Gm-Message-State: AOAM531e5M7MVFXqYcuO9x5mz6ByV4EkE5MjHjg2GDM4gqOH8EhxJxMV
-        q1lTBZxkoC9KXe4HOAU5o77NJNhS5aEXVaEoX8FuZw==
-X-Google-Smtp-Source: ABdhPJzXVZsMlIcsfTWmHEvgkX+Yekfi/Nst5WNbxO8+xV3NtL2uQPX45xtzoDCC87H6sQybG3k4+UaeXo/yeImQbr4=
-X-Received: by 2002:a02:90ce:0:b0:32e:e2ce:b17c with SMTP id
- c14-20020a0290ce000000b0032ee2ceb17cmr615703jag.268.1653336883586; Mon, 23
- May 2022 13:14:43 -0700 (PDT)
+        Mon, 23 May 2022 16:16:12 -0400
+Received: from smtp.smtpout.orange.fr (smtp04.smtpout.orange.fr [80.12.242.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 093C110554
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 13:16:08 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.180.246])
+        by smtp.orange.fr with ESMTPA
+        id tETGnTFRzAym2tETGnHes4; Mon, 23 May 2022 22:16:07 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Mon, 23 May 2022 22:16:07 +0200
+X-ME-IP: 86.243.180.246
+Message-ID: <00061a71-4d7c-0605-80b5-3d909fc3dfaa@wanadoo.fr>
+Date:   Mon, 23 May 2022 22:16:05 +0200
 MIME-Version: 1.0
-References: <20220521075736.1225397-1-zenczykowski@gmail.com> <CAADnVQJcDvyeQ3y=uVDj-7JfqtxE+nJk+d5oVQrBhhQpicYk6A@mail.gmail.com>
-In-Reply-To: <CAADnVQJcDvyeQ3y=uVDj-7JfqtxE+nJk+d5oVQrBhhQpicYk6A@mail.gmail.com>
-From:   =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <zenczykowski@gmail.com>
-Date:   Mon, 23 May 2022 13:14:31 -0700
-Message-ID: <CANP3RGcn6ta7uZH7onuRwOzx_2UmizEtgOTMKvbMOL8FER0MXQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: print a little more info about maps via cat /sys/fs/bpf/pinned_name
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Linux Network Development Mailing List 
-        <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        BPF Mailing List <bpf@vger.kernel.org>,
-        "David S . Miller" <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [RFC PATCH] kbuild: Add an option to enable -O1 and speed-up
+ compilation time
+Content-Language: en-GB
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     dan.carpenter@oracle.com, Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>
+References: <23e0ba7863d51ab629498762a97d477645aeafea.1653123744.git.christophe.jaillet@wanadoo.fr>
+ <CAKwvOdneqUvq+Nz_zPmJmuPFfAvWQgnzrw1AJt=WqQF2hThF-A@mail.gmail.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <CAKwvOdneqUvq+Nz_zPmJmuPFfAvWQgnzrw1AJt=WqQF2hThF-A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,46 +51,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 12:32 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Sat, May 21, 2022 at 12:57 AM Maciej =C5=BBenczykowski
-> <zenczykowski@gmail.com> wrote:
-> >
-> > From: Maciej =C5=BBenczykowski <maze@google.com>
-> >
-> > While this information can be fetched via bpftool,
-> > the cli tool itself isn't always available on more limited systems.
-> >
-> > From the information printed particularly the 'id' is useful since
-> > when combined with /proc/pid/fd/X and /proc/pid/fdinfo/X it allows
-> > tracking down which bpf maps a process has open (which can be
-> > useful for tracking down fd leaks).
-> >
-> > Signed-off-by: Maciej =C5=BBenczykowski <maze@google.com>
-> > ---
-> >  kernel/bpf/inode.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> >
-> > diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
-> > index 4f841e16779e..784266e258fe 100644
-> > --- a/kernel/bpf/inode.c
-> > +++ b/kernel/bpf/inode.c
-> > @@ -257,6 +257,9 @@ static int map_seq_show(struct seq_file *m, void *v=
-)
-> >         if (unlikely(v =3D=3D SEQ_START_TOKEN)) {
-> >                 seq_puts(m, "# WARNING!! The output is for debug purpos=
-e only\n");
-> >                 seq_puts(m, "# WARNING!! The output format will change\=
-n");
-> > +               seq_printf(m, "# type: %d, key_size: %d, value_size: %d=
-, max_entries: %d, id: %d\n",
-> > +                          map->map_type, map->key_size, map->value_siz=
-e, map->max_entries,
-> > +                          map->id);
->
-> Maybe use cat /sys/fs/bpf/maps.debug instead?
-> It prints map id.
+Le 23/05/2022 à 20:26, Nick Desaulniers a écrit :
+> On Sat, May 21, 2022 at 2:04 AM Christophe JAILLET
+> <christophe.jaillet@wanadoo.fr> wrote:
+>>
+>> Add a new compilation option which speeds-up compilation time.
+>> This can be useful when using static checker such as smatch or build-bots.
+>> In such cases, the speed and quality of the generated code is not
+>> important.
+>>
+>> Using -O0 would be even better, but unfortunately, building fails with
+>> this option.
+> 
+> Which is a tragedy.
+> 
+> As with the Rust series, I'm not a fan of this (or
+> CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE_O3):
+> https://lore.kernel.org/lkml/CAKwvOd=7QTUH69+ZbT7e8einvgcosTbDkyohmPaUBv6_y8RfrQ@mail.gmail.com/
+> 
+> These feel more like attempts to wrap every conceivable command line
+> flag in a kconfig option, which makes me think of that meme from
+> Jurassic Park: "your scientists were so preoccupied with whether or
+> not they could, they didn't stop to think if they should."
+> Not a fan.  I'd ask for measurements, but that would be a request for
+> a "rock fetching quest" for something I still wouldn't be a fan of.
 
-Is this something that was very recently added?
-I'm not seeing it on my 5.16 machine with bpffs mounted at /sys/fs/bpf.
+Hi,
+
+some preliminary tests gave roughly a 5% build time speed-up with -O1.
+That is to say that the impact seems quite limited, after all.
+This was done on building /drivers/net/ or /drivers/net/ethernet/ only.
+
+I don't have numbers for the impact on memory consumption.
+
+Given the feedbacks on -O1 which is unlikely to be able to build a full 
+kernel and your position on yet another option for a very specific use 
+case, I won't push the idea further.
+
+I'll keep it in my own tree for (small) build time improvement when 
+running smatch.
+
+The idea of turning off a subset of -O2 options would just be some too 
+fine tuning. I'll certainly try it for my own use, but it would end to 
+an un-understandable list of flags in Makefile.
+-O1 (or -O0) was simple. A more complex solution is way too much.
+
+
+Thanks for your feedbacks.
+
+CJ
+
+> 
+>>
+>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+>> ---
+>>   Makefile     | 5 ++++-
+>>   init/Kconfig | 8 ++++++++
+>>   2 files changed, 12 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/Makefile b/Makefile
+>> index 1f8bef92868f..14467386f947 100644
+>> --- a/Makefile
+>> +++ b/Makefile
+>> @@ -817,7 +817,10 @@ KBUILD_CFLAGS      += $(call cc-disable-warning, format-truncation)
+>>   KBUILD_CFLAGS  += $(call cc-disable-warning, format-overflow)
+>>   KBUILD_CFLAGS  += $(call cc-disable-warning, address-of-packed-member)
+>>
+>> -ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE
+>> +ifdef CONFIG_CC_OPTIMIZE_FOR_COMPILATION_SPEED
+>> +KBUILD_CFLAGS += -O1
+>> +KBUILD_RUSTFLAGS_OPT_LEVEL_MAP := 1
+>> +else ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE
+>>   KBUILD_CFLAGS += -O2
+>>   KBUILD_RUSTFLAGS_OPT_LEVEL_MAP := 2
+>>   else ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE_O3
+>> diff --git a/init/Kconfig b/init/Kconfig
+>> index a96776a9b080..3177a1830c9a 100644
+>> --- a/init/Kconfig
+>> +++ b/init/Kconfig
+>> @@ -1384,6 +1384,14 @@ choice
+>>          prompt "Compiler optimization level"
+>>          default CC_OPTIMIZE_FOR_PERFORMANCE
+>>
+>> +config CC_OPTIMIZE_FOR_COMPILATION_SPEED
+>> +       bool "Optimize for compilation speed (-O1)"
+>> +       help
+>> +         This option can be useful when running a static checker such as smatch
+>> +         or a build-bot.
+>> +         Compilation time is slighly faster than -O2 and it requires less
+> 
+> s/slighly/slightly/
+
+Thanks for taking time for a full review, even on something you are not 
+fan on. This is really appreciated.
+
+CJ
+
+> 
+>> +         memory.
+>> +
+>>   config CC_OPTIMIZE_FOR_PERFORMANCE
+>>          bool "Optimize for performance (-O2)"
+>>          help
+>> --
+>> 2.34.1
+>>
+> 
+> 
+

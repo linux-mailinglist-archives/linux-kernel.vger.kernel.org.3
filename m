@@ -2,66 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F3E95313FE
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:25:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B75F653129C
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:22:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237083AbiEWOTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 10:19:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45168 "EHLO
+        id S237089AbiEWOTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 10:19:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237067AbiEWOTT (ORCPT
+        with ESMTP id S237073AbiEWOTb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 10:19:19 -0400
-Received: from corp-front10-corp.i.nease.net (corp-front11-corp.i.nease.net [42.186.62.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09C6B5A088;
-        Mon, 23 May 2022 07:19:15 -0700 (PDT)
+        Mon, 23 May 2022 10:19:31 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A27A95A2CE
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 07:19:25 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id g21so4135667qtg.5
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 07:19:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=corp.netease.com; s=s210401; h=Received:From:To:Cc:Subject:
-        Date:Message-Id:In-Reply-To:References:MIME-Version:
-        Content-Transfer-Encoding; bh=OdNib6xHnYB5XJQ8EWNTDexkpSG6zLdl/z
-        7jRrlRWQA=; b=ihna4uwGp6mc8Z+kPc29T2XEumkxn/QCTfzeP7ozw/AecMdCZa
-        lGe1VR3USjBUNaxRiedVrrtSvFdM7h/X7KASHmrIhhBxwJRVOROU19DgYWJASy/2
-        sh3SFLUlzoVAffzlbx25lAIoNVBvGdVw7C98fP0VEPBwDhgECbpgXxopY=
-Received: from pubt1-k8s74.yq.163.org (unknown [115.238.122.38])
-        by corp-front11-corp.i.nease.net (Coremail) with SMTP id aYG_CgCXrV_Zl4tiHYEgAA--.5304S2;
-        Mon, 23 May 2022 22:19:05 +0800 (HKT)
-From:   liuyacan@corp.netease.com
-To:     kgraul@linux.ibm.com
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
-        liuyacan@corp.netease.com, netdev@vger.kernel.org,
-        pabeni@redhat.com, ubraun@linux.ibm.com
-Subject: Re: [PATCH v2 net] net/smc: postpone sk_refcnt increment in connect()
-Date:   Mon, 23 May 2022 22:19:05 +0800
-Message-Id: <20220523141905.2791310-1-liuyacan@corp.netease.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <5ce801b7-d446-ee28-86ec-968b7c172a80@linux.ibm.com>
-References: <5ce801b7-d446-ee28-86ec-968b7c172a80@linux.ibm.com>
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=vWWc2ufu33khGKEV0bBRhozmdSQdZxaeJldqWqBjNU0=;
+        b=Ca4pS9a4zUlNfJS71/xyjcXZwSvHarFm9ArT3ZbYYlDSt9AQPBUQZjo1ap515khvib
+         lfG8oGwjxr5aUzbs9rrcRMb4QDXQxw5TsbNIjQBNXX6PHFaVAZZJL3sUld4GscV8Ustm
+         82oInsvFBsCy9EEB9w642rL77Gr+HYyy/8+6J6svU6js20GxtsJrBfZnr1B0tRCVShSp
+         tc7BSlvWSzkJ8c9fCuULWwENNs6hGAMxL1eq0ns3sjaqUNp7nN4NIocOV4YiRJMJEV3e
+         TYJORsIsv+C5YAoKj9CtvGjaaAnZU4V51d3eDApSMPEejh+mx+r7ChtuUUjEorPYlysD
+         58Mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vWWc2ufu33khGKEV0bBRhozmdSQdZxaeJldqWqBjNU0=;
+        b=04SU+DF2dPs/b876FxWloANP9MpDGBWxHs/XO596+Ky+GWgDtb3kj6KPJ1GIhVWm1h
+         boK5pPPne9Fb8nMCIdSBlihSZF2a1IDnyB9ja2tnu7ZOA51S+l61aKHZDC11G04+oprg
+         CfBtUAAsKxtNAPRMxJhULjmQvAGAHIkFnNUpR7Eqty1BJmZ7vRAweQUIJ4KzAD62aimo
+         niC9OnimaucZN5BGp8eDI1ytqhsFEGBY9Q4e0AKkxOsjTf4VVvcmj2RhSC6Vxd/JmuHu
+         l0P1jRogLPcT2KAACf3PFceIoxnb0xY88r+xAlhqeWZG6nTbUi0YCJKuy8onwDpV6p7p
+         +cIg==
+X-Gm-Message-State: AOAM530BjU+TB1yubcG1unKy6Xg2b1dJbcqjeX1WZhkHc0oIZDi6b2ak
+        KjHgpi6GKgMZ/vH3U4MHLQvORA==
+X-Google-Smtp-Source: ABdhPJwjIWZ/Xu8CISDgPppsp4d9DpRDuyDFiAKBdGorgak+hkFR3g6gfGmV423tCLSN+fnTZB80DQ==
+X-Received: by 2002:ac8:5dcc:0:b0:2f3:d8d2:7cf with SMTP id e12-20020ac85dcc000000b002f3d8d207cfmr16552559qtx.464.1653315564452;
+        Mon, 23 May 2022 07:19:24 -0700 (PDT)
+Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
+        by smtp.gmail.com with ESMTPSA id bc3-20020a05622a1cc300b002f39b99f6a2sm4165754qtb.60.2022.05.23.07.19.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 May 2022 07:19:24 -0700 (PDT)
+Date:   Mon, 23 May 2022 10:19:22 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Suren Baghdasaryan <surenb@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] sched/psi: Bounds-check state iterator against
+ NR_PSI_STATES
+Message-ID: <YouX6g1T7w3FDeM8@cmpxchg.org>
+References: <20220520165826.2140252-1-keescook@chromium.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: aYG_CgCXrV_Zl4tiHYEgAA--.5304S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrKry3tFWUtFyDCw1kJw13urg_yoW3twbEqr
-        sIkaykGr1rWrZ8W3WrGr4rGwsrK3yY9r97XF4kJw17JryrX398WrZ0gwnYqw1fJrWfCr4U
-        CrWxt3W0y34SkjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbEAYjxAI6xCIbckI1I0E57IF64kEYxAxM7AC8VAFwI0_Gr0_Xr1l
-        1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0I
-        I2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0
-        Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84
-        ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2kK67ZEXf0FJ3sC6x9vy-n0Xa0_Xr1Utr1k
-        JwI_Jr4ln4vE4IxY62xKV4CY8xCE548m6r4UJryUGwAa7VCY0VAaVVAqrcv_Jw1UWr13M2
-        AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6s8CjcxG0xyl5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v
-        6xkF7I0E8cxan2IY04v7M4kE6xkIj40Ew7xC0wCjxxvEw4Wlc2IjII80xcxEwVAKI48JMx
-        AIw28IcxkI7VAKI48JMxCjnVAK0II2c7xJMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbVAx
-        MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67
-        AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0
-        cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z2
-        80aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI
-        43ZEXa7sRiE_M7UUUUU==
-X-CM-SenderInfo: 5olx5txfdqquhrush05hwht23hof0z/1tbiBQAPCVt760qFUgAZsM
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220520165826.2140252-1-keescook@chromium.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,22 +79,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> This is a rather unusual problem that can come up when fallback=true BEFORE smc_connect()
-> is called. But nevertheless, it is a problem.
+On Fri, May 20, 2022 at 09:58:26AM -0700, Kees Cook wrote:
+> GCC 12 cannot tell that "t" will be bounded by NR_PSI_STATES, which could
+> lead to walking off the end of the tasks array, which is NR_PSI_STATES in
+> size. Explicitly bounds-check "t" as part of the loop.
 > 
-> Right now I am not sure if it is okay when we NOT hold a ref to smc->sk during all fallback
-> processing. This change also conflicts with a patch that is already on net-next (3aba1030).
+> In file included from ../kernel/sched/build_utility.c:97:
+> ../kernel/sched/psi.c: In function 'psi_group_change':
+> ../kernel/sched/psi.c:730:38: warning: array subscript 32 is above array bounds of 'unsigned int[5]' [-Warray-bounds]
+>   730 |                         groupc->tasks[t]++;
+>       |                         ~~~~~~~~~~~~~^~~
+> In file included from ../include/linux/psi.h:6,
+>                  from ../kernel/sched/build_utility.c:36:
+> ../include/linux/psi_types.h:84:22: note: while referencing 'tasks'
+>    84 |         unsigned int tasks[NR_PSI_TASK_COUNTS];
+>       |                      ^~~~~
+> ../kernel/sched/psi.c:730:38: warning: array subscript 32 is above array bounds of 'unsigned int[5]' [-Warray-bounds]
+>   730 |                         groupc->tasks[t]++;
+>       |                         ~~~~~~~~~~~~~^~~
+> ../include/linux/psi_types.h:84:22: note: while referencing 'tasks'
+>    84 |         unsigned int tasks[NR_PSI_TASK_COUNTS];
+>       |                      ^~~~~
+> 
+> Cc: Johannes Weiner <hannes@cmpxchg.org>
+> Cc: Suren Baghdasaryan <surenb@google.com>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Juri Lelli <juri.lelli@redhat.com>
+> Cc: Vincent Guittot <vincent.guittot@linaro.org>
+> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Ben Segall <bsegall@google.com>
+> Cc: Mel Gorman <mgorman@suse.de>
+> Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+> Cc: Valentin Schneider <vschneid@redhat.com>
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  kernel/sched/psi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+> index a337f3e35997..827f16a79936 100644
+> --- a/kernel/sched/psi.c
+> +++ b/kernel/sched/psi.c
+> @@ -725,7 +725,7 @@ static void psi_group_change(struct psi_group *group, int cpu,
+>  		}
+>  	}
+>  
+> -	for (t = 0; set; set &= ~(1 << t), t++)
+> +	for (t = 0; set && t < ARRAY_SIZE(groupc->tasks); set &= ~(1 << t), t++)
+>  		if (set & (1 << t))
+>  			groupc->tasks[t]++;
 
-Do you mean put the ref to smc->sk during all fallback processing unconditionally and remove 
-the fallback branch sock_put() in __smc_release()?
+This is a very hot path, it runs for every nested cgroup on every task
+switch, wakeup and sleep. We should avoid unnecessary instructions and
+branches if we can help it at all.
 
-> With the new patch on net-next it would also be possible to detect in __smc_release() that
-> the socket is in state sk->sk_state == SMC_INIT but the sock->state is SS_CONNECTING or 
-> SS_CONNECTED and call sock_put() in this case.
-> What do you think?
+Does the below patch address the warning for you? I can't test it
+myself, because I'm not getting it with gcc version 12.1.0. It's also
+odd that it didn't warn you about the loop over `clear' a few lines
+up, which ostensibly has the same "problem".
 
-Oh, I didn't notice this patch on net-next. Emm, I think I need to do some testing with this 
-patch.
+---
 
-Thank you.
-
+diff --git a/include/linux/psi_types.h b/include/linux/psi_types.h
+index c7fe7c089718..113861343733 100644
+--- a/include/linux/psi_types.h
++++ b/include/linux/psi_types.h
+@@ -41,6 +41,7 @@ enum psi_task_count {
+ #define TSK_RUNNING	(1 << NR_RUNNING)
+ #define TSK_ONCPU	(1 << NR_ONCPU)
+ #define TSK_MEMSTALL_RUNNING	(1 << NR_MEMSTALL_RUNNING)
++#define TSK_MASK	((1U << NR_PSI_TASK_COUNTS) - 1)
+ 
+ /* Resources that workloads could be stalled on */
+ enum psi_res {
+diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+index a4fa3aadfcba..fb7fd40af337 100644
+--- a/kernel/sched/psi.c
++++ b/kernel/sched/psi.c
+@@ -804,6 +804,8 @@ void psi_task_change(struct task_struct *task, int clear, int set)
+ 	void *iter = NULL;
+ 	u64 now;
+ 
++	WARN_ON_ONCE((clear|set) & ~TSK_MASK);
++
+ 	if (!task->pid)
+ 		return;
+ 

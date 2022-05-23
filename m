@@ -2,163 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D93C530CE5
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:41:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37715530D37
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:41:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233584AbiEWJyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 05:54:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37756 "EHLO
+        id S233631AbiEWJzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 05:55:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233552AbiEWJyL (ORCPT
+        with ESMTP id S233565AbiEWJzS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 05:54:11 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E8E1FA4A
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 02:54:10 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 2F5FF1F8D1;
-        Mon, 23 May 2022 09:54:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1653299649; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=erOshWmECESgqBp6Iuj7MaJ8okz8vOBNIGGhbQHexUI=;
-        b=h7CjHUa2NCOqxv9L/6RzM4jEjuzpoPTbkaU5SVmtb+1lXLGAM3UFxsqVgjvKvcjbmCm+1m
-        BCn0rD7a2/3dmnpykTxX4HGKHggenWNEvZnN9Qeymxe9Lsla+6h6otWe5iO3xXJC7DbOTa
-        KY6ltwuEdtdn2EFtfUzhejeEy7kSabw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1653299649;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=erOshWmECESgqBp6Iuj7MaJ8okz8vOBNIGGhbQHexUI=;
-        b=KuMdqXkkqrTFF0cBTGZ18aT7ud3Eii3GYBw8WNMefSNI8Mu22eo4cIOMW+KHSZ5F1lOPPT
-        oFSUQ1YpKGjY0RDg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 01D72139F5;
-        Mon, 23 May 2022 09:54:08 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id sxIhO8BZi2LYbgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 23 May 2022 09:54:08 +0000
-Message-ID: <8062f61e-5a4d-00a5-be1a-7921d3277e9d@suse.cz>
-Date:   Mon, 23 May 2022 11:54:08 +0200
+        Mon, 23 May 2022 05:55:18 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 570F21A3A5;
+        Mon, 23 May 2022 02:55:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653299717; x=1684835717;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eqM+jPOTUeunb8PUCCDFxOTPR27hmR70Sc5kkvXLcJ0=;
+  b=ddtIb2IBr49mgoQc0pV+QWuSM3yE3dBuI7Y+aJTWYU/QYMEYYCEKkKfO
+   ZuVHYs27aWylfX5rQa4UqJYmTQm6zWTGe3FRVwCnCcR5UFk7bCK7hcfsA
+   h3Ge3Q8SICAP8nu6pulazfINS49761Ej6dVBvzR7wPzvxhKOu/TB5yGxn
+   626TZeYeFuZ1N5mBTvJgOg8/+NnW8wfAp4c5ldYBLuWIgMAR0o7/mJipt
+   N6fyDgopt1sbz6xJmdXncKyjBGRhXYVFlUoMIvIO9NvpZeSz2d2qaFBJM
+   DRNqM/0StIe58Q3xeyOfxXOgovKYEfSlq+C09uq9QDWeLFqT2pVS/24yt
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10355"; a="273288353"
+X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
+   d="scan'208";a="273288353"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 02:55:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
+   d="scan'208";a="629291059"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 23 May 2022 02:54:53 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nt4m4-00013A-G3;
+        Mon, 23 May 2022 09:54:52 +0000
+Date:   Mon, 23 May 2022 17:54:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Corentin Labbe <clabbe@baylibre.com>, andrew@lunn.ch,
+        broonie@kernel.org, calvin.johnson@oss.nxp.com,
+        davem@davemloft.net, edumazet@google.com, hkallweit1@gmail.com,
+        jernej.skrabec@gmail.com, krzysztof.kozlowski+dt@linaro.org,
+        kuba@kernel.org, lgirdwood@gmail.com, linux@armlinux.org.uk,
+        pabeni@redhat.com, robh+dt@kernel.org, samuel@sholland.org,
+        wens@csie.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        netdev@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>
+Subject: Re: [PATCH v3 1/3] regulator: Add regulator_bulk_get_all
+Message-ID: <202205231748.IZoXf2Sf-lkp@intel.com>
+References: <20220523052807.4044800-2-clabbe@baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-From:   Vlastimil Babka <vbabka@suse.cz>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Content-Language: en-US
-Subject: [GIT PULL] slab for 5.19
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220523052807.4044800-2-clabbe@baylibre.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+Hi Corentin,
 
-please pull the latest slab changes from
+I love your patch! Yet something to improve:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git tags/slab-for-5.19
+[auto build test ERROR on broonie-regulator/for-next]
+[also build test ERROR on sunxi/sunxi/for-next linus/master v5.18 next-20220520]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-======================================
+url:    https://github.com/intel-lab-lkp/linux/commits/Corentin-Labbe/arm64-add-ethernet-to-orange-pi-3/20220523-133344
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+config: i386-randconfig-a012-20220523 (https://download.01.org/0day-ci/archive/20220523/202205231748.IZoXf2Sf-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 768a1ca5eccb678947f4155e38a5f5744dcefb56)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/179be86f748a2cce87423bb16f4f967c97bf5d9b
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Corentin-Labbe/arm64-add-ethernet-to-orange-pi-3/20220523-133344
+        git checkout 179be86f748a2cce87423bb16f4f967c97bf5d9b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-- Conversion of slub_debug stack traces to stackdepot, allowing
-  more useful debugfs-based inspection for e.g. memory leak
-  debugging.  Allocation and free debugfs info now includes full
-  traces and is sorted by the unique trace frequency.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-  The stackdepot conversion was already attempted last year but
-  reverted by ae14c63a9f20. The memory overhead (while not actually
-  enabled on boot) has been meanwhile solved by making the large
-  stackdepot allocation dynamic. The xfstest issues haven't been
-  reproduced on current kernel locally nor in -next, so the slab
-  cache layout changes that originally made that bug manifest were
-  probably not the root cause.
+All errors (new ones prefixed by >>):
 
-- Refactoring of dma-kmalloc caches creation.
+>> drivers/regulator/core.c:4870:2: error: call to undeclared function 'for_each_property_of_node'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           for_each_property_of_node(np, prop) {
+           ^
+>> drivers/regulator/core.c:4870:37: error: expected ';' after expression
+           for_each_property_of_node(np, prop) {
+                                              ^
+                                              ;
+>> drivers/regulator/core.c:4873:4: error: 'continue' statement not in loop statement
+                           continue;
+                           ^
+   drivers/regulator/core.c:4876:4: error: 'continue' statement not in loop statement
+                           continue;
+                           ^
+   drivers/regulator/core.c:4887:4: error: 'continue' statement not in loop statement
+                           continue;
+                           ^
+   5 errors generated.
 
-- Trivial cleanups such as removal of unused parameters, fixes
-  and clarifications of comments.
 
-- Hyeonggon Yoo joins as a reviewer.
+vim +/for_each_property_of_node +4870 drivers/regulator/core.c
 
-Thanks,
-Vlastimil
+  4839	
+  4840	/*
+  4841	 * regulator_bulk_get_all - get multiple regulator consumers
+  4842	 *
+  4843	 * @dev:	Device to supply
+  4844	 * @np:		device node to search for consumers
+  4845	 * @consumers:  Configuration of consumers; clients are stored here.
+  4846	 *
+  4847	 * @return number of regulators on success, an errno on failure.
+  4848	 *
+  4849	 * This helper function allows drivers to get several regulator
+  4850	 * consumers in one operation.  If any of the regulators cannot be
+  4851	 * acquired then any regulators that were allocated will be freed
+  4852	 * before returning to the caller.
+  4853	 */
+  4854	int regulator_bulk_get_all(struct device *dev, struct device_node *np,
+  4855				   struct regulator_bulk_data **consumers)
+  4856	{
+  4857		int num_consumers = 0;
+  4858		struct regulator *tmp;
+  4859		struct property *prop;
+  4860		int i, n = 0, ret;
+  4861		char name[64];
+  4862	
+  4863		*consumers = NULL;
+  4864	
+  4865	/*
+  4866	 * first pass: get numbers of xxx-supply
+  4867	 * second pass: fill consumers
+  4868	 * */
+  4869	restart:
+> 4870		for_each_property_of_node(np, prop) {
+  4871			i = is_supply_name(prop->name);
+  4872			if (i == 0)
+> 4873				continue;
+  4874			if (!*consumers) {
+  4875				num_consumers++;
+  4876				continue;
+  4877			} else {
+  4878				memcpy(name, prop->name, i);
+  4879				name[i] = '\0';
+  4880				tmp = regulator_get(dev, name);
+  4881				if (!tmp) {
+  4882					ret = -EINVAL;
+  4883					goto error;
+  4884				}
+  4885				(*consumers)[n].consumer = tmp;
+  4886				n++;
+  4887				continue;
+  4888			}
+  4889		}
+  4890		if (*consumers)
+  4891			return num_consumers;
+  4892		if (num_consumers == 0)
+  4893			return 0;
+  4894		*consumers = kmalloc_array(num_consumers,
+  4895					   sizeof(struct regulator_bulk_data),
+  4896					   GFP_KERNEL);
+  4897		if (!*consumers)
+  4898			return -ENOMEM;
+  4899		goto restart;
+  4900	
+  4901	error:
+  4902		while (--n >= 0)
+  4903			regulator_put(consumers[n]->consumer);
+  4904		return ret;
+  4905	}
+  4906	EXPORT_SYMBOL_GPL(regulator_bulk_get_all);
+  4907	
 
-----------------------------------------------------------------
-Andrey Konovalov (2):
-      mm: slab: fix comment for ARCH_KMALLOC_MINALIGN
-      mm: slab: fix comment for __assume_kmalloc_alignment
-
-Hyeonggon Yoo (2):
-      mm/slub, kunit: Make slub_kunit unaffected by user specified flags
-      MAINTAINERS: add myself as reviewer for slab
-
-JaeSang Yoo (2):
-      mm/slub: remove unused parameter in setup_object*()
-      mm/slub: remove meaningless node check in ___slab_alloc()
-
-Jiyoup Kim (1):
-      mm/slub: remove duplicate flag in allocate_slab()
-
-Miaohe Lin (3):
-      mm/slab: remove some unused functions
-      mm/slub: remove unneeded return value of slab_pad_check
-      mm/slub: remove unused kmem_cache_order_objects max
-
-Ohhoon Kwon (1):
-      mm/slab_common: move dma-kmalloc caches creation into new_kmalloc_cache()
-
-Oliver Glitta (4):
-      mm/slub: use stackdepot to save stack trace in objects
-      mm/slub: distinguish and print stack traces in debugfs files
-      mm/slub: sort debugfs output by frequency of stack traces
-      slab, documentation: add description of debugfs files for SLUB caches
-
-Vlastimil Babka (3):
-      lib/stackdepot: allow requesting early initialization dynamically
-      mm/slub: move struct track init out of set_track()
-      Merge branches 'slab/for-5.19/stackdepot' and 'slab/for-5.19/refactor' into slab/for-linus
-
-Yixuan Cao (1):
-      mm/slab.c: fix comments
-
- Documentation/vm/slub.rst  |  64 +++++++++++++++++
- MAINTAINERS                |   1 +
- include/linux/slab.h       |  15 ++--
- include/linux/slub_def.h   |   1 -
- include/linux/stackdepot.h |  26 +++++--
- init/Kconfig               |   1 +
- lib/Kconfig.debug          |   1 +
- lib/slub_kunit.c           |  10 +--
- lib/stackdepot.c           |  67 +++++++++++------
- mm/page_owner.c            |   9 ++-
- mm/slab.c                  |  29 +++-----
- mm/slab.h                  |   5 +-
- mm/slab_common.c           |  23 +++---
- mm/slub.c                  | 174 ++++++++++++++++++++++++++++-----------------
- 14 files changed, 283 insertions(+), 143 deletions(-)
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

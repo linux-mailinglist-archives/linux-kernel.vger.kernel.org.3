@@ -2,99 +2,389 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0372D53161B
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:50:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA7815317F2
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:53:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243551AbiEWSmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 14:42:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50328 "EHLO
+        id S241374AbiEWSnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 14:43:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244831AbiEWSl6 (ORCPT
+        with ESMTP id S243598AbiEWSnH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 14:41:58 -0400
-Received: from mail.wantyapps.xyz (unknown [66.135.5.160])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FA3E1912F4
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 11:22:49 -0700 (PDT)
-Received: from localhost (bzq-79-178-31-184.red.bezeqint.net [79.178.31.184])
-        by mail.wantyapps.xyz (Postfix) with ESMTPSA id 952A87D6DD;
-        Mon, 23 May 2022 18:22:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=wantyapps.xyz;
-        s=mail; t=1653330157;
-        bh=mYRY9mnO7zMIt2NucJujebHW7Y5Gx8FBoKuT5hw5hFo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=APOOvHCauvJBy9I3Fpf8u195Q5bLcrg+lRD0PFYZ0Z+hD42xn70/sGsRyLjdpDpN6
-         3dQt97J4OxnpbtMWoFxeHCWUgGECycIuvzISl8fsO0Ri3myDLhmvPDYqHYkv5YY2UK
-         xd9LFljGyOejfpqfhUa9TTYDDBO4/mO2GiCEU5H46xJJQ5SH+x4khkuzIr8maLv0Yn
-         Of+CV+8EERbtQjwx/+1cMjvW/ORRgGAtsk7n7uDwRTzryMi5/tQqmr1TvKWobybNPR
-         hnlEW5SUeD0r3/pH4fiUX7kyQmF9klesEBEk7lE9RxQL2lCyEKFMGLhUGCIysdu5aU
-         Kzvt4eHcKpS+A==
-From:   Uri Arev <me@wantyapps.xyz>
-Cc:     Uri Arev <me@wantyapps.xyz>, Viresh Kumar <vireshk@kernel.org>,
-        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3] staging: greybus: Fix indentation in fw-management.c
-Date:   Mon, 23 May 2022 21:22:26 +0300
-Message-Id: <20220523182226.405159-1-me@wantyapps.xyz>
-X-Mailer: git-send-email 2.36.1
+        Mon, 23 May 2022 14:43:07 -0400
+Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BFB2C1EF9
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 11:24:19 -0700 (PDT)
+Date:   Mon, 23 May 2022 11:24:10 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1653330257;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=y6AuiAvuIyM/CsUH/CMnODyxFz/bShUF1rnQJYrljlE=;
+        b=EgEHgh8dujAvL0awiHz7W9jnUr9lrdkpRQI8FNd8Jw4Rb3+MzhrF3fkkdCCAW9xmT8lna2
+        fwkiqqnW8jcQCyIDuk5vYnVjthtO7IZwTH8T8OEP8t9ZSkABL0mBx2SoqxaMUtv3is4EnE
+        Vo/o4XkWmZkIhnYIpYL1wJaXtgWw2QE=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Dave Chinner <dchinner@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH v3 2/6] mm: shrinkers: introduce debugfs interface for
+ memory shrinkers
+Message-ID: <YovRSpbpe5fIYXrK@carbon>
+References: <20220509183820.573666-1-roman.gushchin@linux.dev>
+ <20220509183820.573666-3-roman.gushchin@linux.dev>
+ <YooSSCnphhuwfOOc@FVFYT0MHHV2J.usts.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        FROM_SUSPICIOUS_NTLD_FP,PDS_OTHER_BAD_TLD,RDNS_DYNAMIC,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ***
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YooSSCnphhuwfOOc@FVFYT0MHHV2J.usts.net>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reported by Checkpatch:
-CHECK: Alignment should match open parenthesis
+On Sun, May 22, 2022 at 06:36:56PM +0800, Muchun Song wrote:
+> On Mon, May 09, 2022 at 11:38:16AM -0700, Roman Gushchin wrote:
+> > This commit introduces the /sys/kernel/debug/shrinker debugfs
+> > interface which provides an ability to observe the state of
+> > individual kernel memory shrinkers.
+> > 
+> > Because the feature adds some memory overhead (which shouldn't be
+> > large unless there is a huge amount of registered shrinkers), it's
+> > guarded by a config option (enabled by default).
+> > 
+> > This commit introduces the "count" interface for each shrinker
+> > registered in the system.
+> > 
+> > The output is in the following format:
+> 
+> Hi Roman,
 
-Signed-off-by: Uri Arev <me@wantyapps.xyz>
----
-v2: More understandable title, add Signed-off-by line
-v3: Remove my name signature from the patch description
+Hi Muchun!
 
- drivers/staging/greybus/fw-management.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Thank you for taking a look!
 
-diff --git a/drivers/staging/greybus/fw-management.c b/drivers/staging/greybus/fw-management.c
-index 687c6405c65b..3342b84597da 100644
---- a/drivers/staging/greybus/fw-management.c
-+++ b/drivers/staging/greybus/fw-management.c
-@@ -102,7 +102,7 @@ static struct fw_mgmt *get_fw_mgmt(struct cdev *cdev)
- }
- 
- static int fw_mgmt_interface_fw_version_operation(struct fw_mgmt *fw_mgmt,
--		struct fw_mgmt_ioc_get_intf_version *fw_info)
-+						  struct fw_mgmt_ioc_get_intf_version *fw_info)
- {
- 	struct gb_connection *connection = fw_mgmt->connection;
- 	struct gb_fw_mgmt_interface_fw_version_response response;
-@@ -240,7 +240,7 @@ static int fw_mgmt_interface_fw_loaded_operation(struct gb_operation *op)
- }
- 
- static int fw_mgmt_backend_fw_version_operation(struct fw_mgmt *fw_mgmt,
--		struct fw_mgmt_ioc_get_backend_version *fw_info)
-+						struct fw_mgmt_ioc_get_backend_version *fw_info)
- {
- 	struct gb_connection *connection = fw_mgmt->connection;
- 	struct gb_fw_mgmt_backend_fw_version_request request;
-@@ -473,7 +473,7 @@ static int fw_mgmt_ioctl(struct fw_mgmt *fw_mgmt, unsigned int cmd,
- 			return -EFAULT;
- 
- 		ret = fw_mgmt_backend_fw_update_operation(fw_mgmt,
--				backend_update.firmware_tag);
-+							  backend_update.firmware_tag);
- 		if (ret)
- 			return ret;
- 
--- 
-2.36.1
+> 
+> Shoud we print a title to show what those numbers mean?  In this case,
+> it is more understandable.
 
+No, I don't think so: this interface is not supposed to be used by
+an average user and those who will be using it can refer to the provided
+documentation. Printing the header each time will add some overhead for
+no good reason.
+
+> > <cgroup inode id> <nr of objects on node 0> <nr of objects on node 1>...
+> > <cgroup inode id> <nr of objects on node 0> <nr of objects on node 1>...
+> > ...
+> > 
+> > To reduce the size of output on machines with many thousands cgroups,
+> > if the total number of objects on all nodes is 0, the line is omitted.
+> > 
+> > If the shrinker is not memcg-aware or CONFIG_MEMCG is off, 0 is
+> > printed as cgroup inode id. If the shrinker is not numa-aware, 0's are
+> > printed for all nodes except the first one.
+> > 
+> > This commit gives debugfs entries simple numeric names, which are not
+> > very convenient. The following commit in the series will provide
+> > shrinkers with more meaningful names.
+> > 
+> > Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+> > ---
+> >  include/linux/shrinker.h |  19 ++++-
+> >  lib/Kconfig.debug        |   9 +++
+> >  mm/Makefile              |   1 +
+> >  mm/shrinker_debug.c      | 171 +++++++++++++++++++++++++++++++++++++++
+> >  mm/vmscan.c              |   6 +-
+> >  5 files changed, 203 insertions(+), 3 deletions(-)
+> >  create mode 100644 mm/shrinker_debug.c
+> > 
+> > diff --git a/include/linux/shrinker.h b/include/linux/shrinker.h
+> > index 76fbf92b04d9..2ced8149c513 100644
+> > --- a/include/linux/shrinker.h
+> > +++ b/include/linux/shrinker.h
+> > @@ -72,6 +72,10 @@ struct shrinker {
+> >  #ifdef CONFIG_MEMCG
+> >  	/* ID in shrinker_idr */
+> >  	int id;
+> > +#endif
+> > +#ifdef CONFIG_SHRINKER_DEBUG
+> > +	int debugfs_id;
+> > +	struct dentry *debugfs_entry;
+> >  #endif
+> >  	/* objs pending delete, per node */
+> >  	atomic_long_t *nr_deferred;
+> > @@ -94,4 +98,17 @@ extern int register_shrinker(struct shrinker *shrinker);
+> >  extern void unregister_shrinker(struct shrinker *shrinker);
+> >  extern void free_prealloced_shrinker(struct shrinker *shrinker);
+> >  extern void synchronize_shrinkers(void);
+> > -#endif
+> > +
+> > +#ifdef CONFIG_SHRINKER_DEBUG
+> > +extern int shrinker_debugfs_add(struct shrinker *shrinker);
+> > +extern void shrinker_debugfs_remove(struct shrinker *shrinker);
+> > +#else /* CONFIG_SHRINKER_DEBUG */
+> > +static inline int shrinker_debugfs_add(struct shrinker *shrinker)
+> > +{
+> > +	return 0;
+> > +}
+> > +static inline void shrinker_debugfs_remove(struct shrinker *shrinker)
+> > +{
+> > +}
+> > +#endif /* CONFIG_SHRINKER_DEBUG */
+> > +#endif /* _LINUX_SHRINKER_H */
+> > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> > index 3fd7a2e9eaf1..5fa65a649798 100644
+> > --- a/lib/Kconfig.debug
+> > +++ b/lib/Kconfig.debug
+> > @@ -733,6 +733,15 @@ config SLUB_STATS
+> >  	  out which slabs are relevant to a particular load.
+> >  	  Try running: slabinfo -DA
+> >  
+> > +config SHRINKER_DEBUG
+> > +	default y
+> > +	bool "Enable shrinker debugging support"
+> > +	depends on DEBUG_FS
+> > +	help
+> > +	  Say Y to enable the shrinker debugfs interface which provides
+> > +	  visibility into the kernel memory shrinkers subsystem.
+> > +	  Disable it to avoid an extra memory footprint.
+> > +
+> >  config HAVE_DEBUG_KMEMLEAK
+> >  	bool
+> >  
+> > diff --git a/mm/Makefile b/mm/Makefile
+> > index 298c9991ab75..8083fa85a348 100644
+> > --- a/mm/Makefile
+> > +++ b/mm/Makefile
+> > @@ -133,3 +133,4 @@ obj-$(CONFIG_PAGE_REPORTING) += page_reporting.o
+> >  obj-$(CONFIG_IO_MAPPING) += io-mapping.o
+> >  obj-$(CONFIG_HAVE_BOOTMEM_INFO_NODE) += bootmem_info.o
+> >  obj-$(CONFIG_GENERIC_IOREMAP) += ioremap.o
+> > +obj-$(CONFIG_SHRINKER_DEBUG) += shrinker_debug.o
+> > diff --git a/mm/shrinker_debug.c b/mm/shrinker_debug.c
+> > new file mode 100644
+> > index 000000000000..fd1f805a581a
+> > --- /dev/null
+> > +++ b/mm/shrinker_debug.c
+> > @@ -0,0 +1,171 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +#include <linux/idr.h>
+> > +#include <linux/slab.h>
+> > +#include <linux/debugfs.h>
+> > +#include <linux/seq_file.h>
+> > +#include <linux/shrinker.h>
+> > +#include <linux/memcontrol.h>
+> > +
+> > +/* defined in vmscan.c */
+> > +extern struct rw_semaphore shrinker_rwsem;
+> > +extern struct list_head shrinker_list;
+> > +
+> > +static DEFINE_IDA(shrinker_debugfs_ida);
+> > +static struct dentry *shrinker_debugfs_root;
+> > +
+> > +static unsigned long shrinker_count_objects(struct shrinker *shrinker,
+> > +					    struct mem_cgroup *memcg,
+> > +					    unsigned long *count_per_node)
+> > +{
+> > +	unsigned long nr, total = 0;
+> > +	int nid;
+> > +
+> > +	for_each_node(nid) {
+> > +		if (nid == 0 || (shrinker->flags & SHRINKER_NUMA_AWARE)) {
+> > +			struct shrink_control sc = {
+> > +				.gfp_mask = GFP_KERNEL,
+> > +				.nid = nid,
+> > +				.memcg = memcg,
+> > +			};
+> > +
+> > +			nr = shrinker->count_objects(shrinker, &sc);
+> > +			if (nr == SHRINK_EMPTY)
+> > +				nr = 0;
+> > +		} else {
+> > +			nr = 0;
+> 
+> For efficiency, we could break here, right?
+
+Not really, we need to fill count_per_node[] with zeros.
+
+> 
+> > +		}
+> > +
+> > +		count_per_node[nid] = nr;
+> > +		total += nr;
+> > +	}
+> > +
+> > +	return total;
+> > +}
+> > +
+> > +static int shrinker_debugfs_count_show(struct seq_file *m, void *v)
+> > +{
+> > +	struct shrinker *shrinker = (struct shrinker *)m->private;
+> 
+> Maybe we cound drop the cast since m->private is a void * type.
+
+Ok.
+
+> 
+> > +	unsigned long *count_per_node = NULL;
+> 
+> Do not need to be initialized, right?
+
+Right, will fix in v4.
+
+> 
+> > +	struct mem_cgroup *memcg;
+> > +	unsigned long total;
+> > +	bool memcg_aware;
+> > +	int ret, nid;
+> > +
+> > +	count_per_node = kcalloc(nr_node_ids, sizeof(unsigned long), GFP_KERNEL);
+> > +	if (!count_per_node)
+> > +		return -ENOMEM;
+> > +
+> > +	ret = down_read_killable(&shrinker_rwsem);
+> > +	if (ret) {
+> > +		kfree(count_per_node);
+> > +		return ret;
+> > +	}
+> > +	rcu_read_lock();
+> > +
+> > +	memcg_aware = shrinker->flags & SHRINKER_MEMCG_AWARE;
+> > +
+> > +	memcg = mem_cgroup_iter(NULL, NULL, NULL);
+> > +	do {
+> > +		if (memcg && !mem_cgroup_online(memcg))
+> > +			continue;
+> > +
+> > +		total = shrinker_count_objects(shrinker,
+> > +					       memcg_aware ? memcg : NULL,
+> > +					       count_per_node);
+> > +		if (total) {
+> > +			seq_printf(m, "%lu", mem_cgroup_ino(memcg));
+> > +			for_each_node(nid)
+> > +				seq_printf(m, " %lu", count_per_node[nid]);
+> > +			seq_puts(m, "\n");
+> 
+> seq_putc(m, '\n') is more efficient.
+
+Ok.
+
+> 
+> > +		}
+> > +
+> > +		if (!memcg_aware) {
+> > +			mem_cgroup_iter_break(NULL, memcg);
+> > +			break;
+> > +		}
+> > +
+> > +		if (signal_pending(current)) {
+> > +			mem_cgroup_iter_break(NULL, memcg);
+> > +			ret = -EINTR;
+> > +			break;
+> > +		}
+> > +
+> > +		cond_resched();
+> 
+> We are in rcu read lock, cannot be scheduled, right?
+
+This is a good one, thanks. Fixed.
+
+> 
+> > +	} while ((memcg = mem_cgroup_iter(NULL, memcg, NULL)) != NULL);
+> > +
+> > +	rcu_read_unlock();
+> > +	up_read(&shrinker_rwsem);
+> > +
+> > +	kfree(count_per_node);
+> > +	return ret;
+> > +}
+> > +DEFINE_SHOW_ATTRIBUTE(shrinker_debugfs_count);
+> > +
+> > +int shrinker_debugfs_add(struct shrinker *shrinker)
+> > +{
+> > +	struct dentry *entry;
+> > +	char buf[16];
+> > +	int id;
+> > +
+> > +	lockdep_assert_held(&shrinker_rwsem);
+> > +
+> > +	/* debugfs isn't initialized yet, add debugfs entries later. */
+> > +	if (!shrinker_debugfs_root)
+> > +		return 0;
+> > +
+> > +	id = ida_alloc(&shrinker_debugfs_ida, GFP_KERNEL);
+> > +	if (id < 0)
+> > +		return id;
+> > +	shrinker->debugfs_id = id;
+> > +
+> > +	snprintf(buf, sizeof(buf), "%d", id);
+> > +
+> > +	/* create debugfs entry */
+> > +	entry = debugfs_create_dir(buf, shrinker_debugfs_root);
+> > +	if (IS_ERR(entry)) {
+> > +		ida_free(&shrinker_debugfs_ida, id);
+> > +		return PTR_ERR(entry);
+> > +	}
+> > +	shrinker->debugfs_entry = entry;
+> > +
+> > +	debugfs_create_file("count", 0220, entry, shrinker,
+> > +			    &shrinker_debugfs_count_fops);
+> > +	return 0;
+> > +}
+> > +
+> > +void shrinker_debugfs_remove(struct shrinker *shrinker)
+> > +{
+> > +	lockdep_assert_held(&shrinker_rwsem);
+> > +
+> > +	if (!shrinker->debugfs_entry)
+> > +		return;
+> > +
+> > +	debugfs_remove_recursive(shrinker->debugfs_entry);
+> > +	ida_free(&shrinker_debugfs_ida, shrinker->debugfs_id);
+> > +}
+> > +
+> > +static int __init shrinker_debugfs_init(void)
+> > +{
+> > +	struct shrinker *shrinker;
+> > +	int ret;
+> > +
+> > +	if (!debugfs_initialized())
+> > +		return -ENODEV;
+> > +
+> 
+> Redundant check since it is checked in debugfs_create_dir().
+> So I think we could remove this.
+> 
+> > +	shrinker_debugfs_root = debugfs_create_dir("shrinker", NULL);
+> 
+> We should use IS_ERR() to detect the error code.  So the following
+> check is wrong.
+
+Right, will fix in the next version.
+
+> 
+> > +	if (!shrinker_debugfs_root)
+> > +		return -ENOMEM;
+> > +
+> > +	/* Create debugfs entries for shrinkers registered at boot */
+> > +	ret = down_write_killable(&shrinker_rwsem);
+> 
+> How could we kill this process?  IIUC, late_initcall() is called
+> from early init process, there is no way to kill this. Right?
+> If yes, I think we could just use down_write().
+
+Ok, agree.
+
+Thanks!

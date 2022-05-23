@@ -2,354 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6A16531CE1
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:57:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41620531641
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:50:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243413AbiEWSNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 14:13:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34344 "EHLO
+        id S241319AbiEWSFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 14:05:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241239AbiEWRu5 (ORCPT
+        with ESMTP id S242971AbiEWRhv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:50:57 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A158532DA;
-        Mon, 23 May 2022 10:37:51 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id p4so25402825lfg.4;
-        Mon, 23 May 2022 10:37:51 -0700 (PDT)
+        Mon, 23 May 2022 13:37:51 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 238E85D5E6
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 10:31:56 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id b135so2562397pfb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 10:31:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=mPzl0IxVpOBD7BXqIA/dVHyw+aKjOBb3ATUZ7spN2qg=;
-        b=YBXi34/97S1J6MVRP9bjFSy6nwf8akZPAOC/SZxPbaoEJt38sG+LmdKjzh08RriLXa
-         /82hF+iabCGUoXkCr++jGmyKd2eu0EPfZuPLmIYT2uuXAE1b2qAPOVGDak/cGhL4fEjO
-         W4MPf0p9X1zgwnrLxftV+Tzaxe6/boss5X1KQb5kPEawpyIt6kV100rXzWTZveBjJutc
-         wwFm+vv8k1hjJztqFZhroiNW32+bzO04NNPPf6PlnO8Z7YvGXEx3+RnfTBTFsaE0aTVf
-         hjech1zrcYaDw6PSWg8f9wOaMmC4Qn28WLbCEyYpLmkNv0YwawmXEPOS1JUsFnuEqS14
-         hz2g==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=oCNJML7eA2j9L8f72NkyeKZiPIyN20wsxD5r9Tzx9cA=;
+        b=VQuspDaagiDbr8zDGAJevmwHk6IYCwXe0OQNbOee7Tu2IHo33cYxokGiFfbrhTIFD6
+         62hu7cw8t4yvx3aEBc40atCX/ZCXQYPABJD3A7WMv5dpWaPn1sujmMA8KBgCJG/jH4eb
+         Smd147syr5WmIcn7pwELo2ONgSQiNPsmRFuoyQ1Iuk1z/gxUK17CLFKinM4+1W81nEFo
+         hEWLTqC7ODI5yO9MfnJOT+geXR0KYCSJNoxov70DOAkLXuLYrQlTnAq0q3/2sT9qy69d
+         B46Q3eeaiIlELv+ptqM+emBDuE/X1ivWqBecmrCvvRl7jwiPmbCsJ3mCYHkXRYTX9XnL
+         9ZeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=mPzl0IxVpOBD7BXqIA/dVHyw+aKjOBb3ATUZ7spN2qg=;
-        b=xS7cSLsS+H53gF5SLPgTeEzaPNM0bfMmRF7xCOjgDyzGGvx9iV0HtJ8+4bxdvGZLQy
-         bTh8TyTSn30eK7n44TuxNtuob7c2DNAahehKAhLnUmA16E1k1fXQpHH2dYpeG6uOiN7k
-         44JxSVjXCeAuGeJkHpD1KAL7PCkgJQG71dnoVEZpvtR9dHS+HhrAf+Scu8pKrVvqhyvk
-         Ka6N02bLGrWG0S6g7tCbdBE35z4XBYJO3gUqvUq0f3yKcBDH3hgu/7qeTn8DBwtswfi3
-         lFkQl0IeoA/HAk0kV7ZAylWZWGYQqaLBO3APWdpFEG6MsZpwq4YH7ClNzUoGKQJ/VnSA
-         smPA==
-X-Gm-Message-State: AOAM530SOsXqwWHUCgBw1kx5TCHtGCbjZmb3va1RUStSazz4CMYE2WK7
-        kiYyGxRBcrPikz9LRgZ5Q9TeO/zjZGw=
-X-Google-Smtp-Source: ABdhPJzwZfozEnQDt+CrjQ7uTvPbLWypALeKVlqUmFxBKfIWsyPw8Alci4bEMHh/m6nHITXZtcC2TA==
-X-Received: by 2002:a2e:7a0d:0:b0:253:decb:be0f with SMTP id v13-20020a2e7a0d000000b00253decbbe0fmr9414809ljc.525.1653327022433;
-        Mon, 23 May 2022 10:30:22 -0700 (PDT)
-Received: from [192.168.1.7] ([212.22.223.21])
-        by smtp.gmail.com with ESMTPSA id f11-20020a05651232cb00b004786243ab08sm1229661lfg.108.2022.05.23.10.30.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 May 2022 10:30:22 -0700 (PDT)
-Subject: Re: [PATCH V2 5/7] dt-bindings: Add xen,dev-domid property
- description for xen-grant DMA ops
-From:   Oleksandr <olekstysh@gmail.com>
-To:     Stefano Stabellini <sstabellini@kernel.org>,
-        xen-devel <xen-devel@lists.xenproject.org>,
-        "open list:DRM DRIVER FOR QEMU'S CIRRUS DEVICE" 
-        <virtualization@lists.linux-foundation.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Julien Grall <julien@xen.org>, Juergen Gross <jgross@suse.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-References: <1651947548-4055-1-git-send-email-olekstysh@gmail.com>
- <1651947548-4055-6-git-send-email-olekstysh@gmail.com>
- <CAK8P3a2cAnXr8TDDYTiFxTWzQxa67sGnYDQRRD+=Q8_cSb1mEw@mail.gmail.com>
- <56e8c32d-6771-7179-005f-26ca58555659@gmail.com>
- <CAK8P3a1YhkEZ8gcbXHEa5Bwx-4VVRJO8SUHf8=RNWRsc2Yo-+A@mail.gmail.com>
- <460a746c-6b61-214b-4653-44a1430e314d@gmail.com>
- <alpine.DEB.2.22.394.2205181802310.1905099@ubuntu-linux-20-04-desktop>
- <6f469e9c-c26e-f4be-9a85-710afb0d77eb@gmail.com>
-Message-ID: <390ba7bb-ee9e-b7b7-5f08-71a7245fa4ec@gmail.com>
-Date:   Mon, 23 May 2022 20:30:20 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=oCNJML7eA2j9L8f72NkyeKZiPIyN20wsxD5r9Tzx9cA=;
+        b=058I9JufCLo/z+RcXgadaYPlwXpIIN+mTa9oS4WcPc6qKPgDdEWt+HGRN2wh5K8hg5
+         zCNBkuPZFXjSY1N3Lm3cJYRnRJHEwKgTvbYY+Da7iD9ah9doXRrY4Ph8Hca3HP7ahT2l
+         z2urgEeMbpcodmHXrsLUpmvfRqsDdV+fUO7GOFxoritQGpU/lncFoBJPRBUFS6DtkbzK
+         uUEv943kRxbQqhd5wP6x3O2Ui9uREY8fsO5mC+YyLPQuYJxM8FKtqt1WKjN1HjbB5Wu0
+         ADPQ9uMC2xXhfE3RwwCpYDHFtLmYMK2o1xcuBH9bV3bqNdNMKBo+xKyIbT51k/awq0ah
+         N6Tw==
+X-Gm-Message-State: AOAM530jwPyZI57/EiBV/TVjl+EKTUPhi+5L23IiZi+aFHiTMfbPazXg
+        xr0vh1YhZRY51wcm9Uu8yoV5gg==
+X-Google-Smtp-Source: ABdhPJyVqMoEcjNxptyUgqa9Zdq5WQzejBZ0z6wMNkkE4awFtw8fhM9i8OBMVMolSAtdF+aG4aq6XQ==
+X-Received: by 2002:a05:6a00:140a:b0:4e0:54d5:d01 with SMTP id l10-20020a056a00140a00b004e054d50d01mr24742544pfu.20.1653327068687;
+        Mon, 23 May 2022 10:31:08 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id ru13-20020a17090b2bcd00b001df4a0e9357sm7512221pjb.12.2022.05.23.10.31.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 May 2022 10:31:08 -0700 (PDT)
+Date:   Mon, 23 May 2022 17:31:04 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     Jim Mattson <jmattson@google.com>, kvm@vger.kernel.org,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        intel-gfx@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
+        linux-kernel@vger.kernel.org, Zhi Wang <zhi.a.wang@intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        intel-gvt-dev@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [RFC PATCH v3 02/19] KVM: x86: inhibit APICv/AVIC when the guest
+ and/or host changes apic id/base from the defaults.
+Message-ID: <YovE2A67XobRyHc/@google.com>
+References: <20220427200314.276673-1-mlevitsk@redhat.com>
+ <20220427200314.276673-3-mlevitsk@redhat.com>
+ <YoZrG3n5fgMp4LQl@google.com>
+ <e32f6c904c92e9e9efabcc697917a232f5e88881.camel@redhat.com>
+ <CALMp9eSVji2CPW1AjFoSbWZ_b-r3y67HyatgdqXEqSyUaD1_BQ@mail.gmail.com>
+ <65991ac329a32cf4128400b643d5b5ccf3918cfe.camel@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <6f469e9c-c26e-f4be-9a85-710afb0d77eb@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <65991ac329a32cf4128400b643d5b5ccf3918cfe.camel@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, May 23, 2022, Maxim Levitsky wrote:
+> On Sun, 2022-05-22 at 07:47 -0700, Jim Mattson wrote:
+> > On Sun, May 22, 2022 at 2:03 AM Maxim Levitsky <mlevitsk@redhat.com> wrote:
+> > > On Thu, 2022-05-19 at 16:06 +0000, Sean Christopherson wrote:
+> > > > On Wed, Apr 27, 2022, Maxim Levitsky wrote:
+> > > > > Neither of these settings should be changed by the guest and it is
+> > > > > a burden to support it in the acceleration code, so just inhibit
+> > > > > it instead.
+> > > > > 
+> > > > > Also add a boolean 'apic_id_changed' to indicate if apic id ever changed.
+> > > > > 
+> > > > > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> > > > > ---
+> > > > > +           return;
+> > > > > +
+> > > > > +   pr_warn_once("APIC ID change is unsupported by KVM");
+> > > > 
+> > > > It's supported (modulo x2APIC shenanigans), otherwise KVM wouldn't need to disable
+> > > > APICv.
+> > > 
+> > > Here, as I said, it would be nice to see that warning if someone complains.
+> > > Fact is that AVIC code was totally broken in this regard, and there are probably more,
+> > > so it would be nice to see if anybody complains.
+> > > 
+> > > If you insist, I'll remove this warning.
+> > 
+> > This may be fine for a hobbyist, but it's a terrible API in an
+> > enterprise environment. To be honest, I have no way of propagating
+> > this warning from /var/log/messages on a particular host to a
+> > potentially impacted customer. Worse, if they're not the first
+> > impacted customer since the last host reboot, there's no warning to
+> > propagate. I suppose I could just tell every later customer, "Your VM
+> > was scheduled to run on a host that previously reported, 'APIC ID
+> > change is unsupported by KVM.' If you notice any unusual behavior,
+> > that might be the reason for it," but that isn't going to inspire
+> > confidence. I could schedule a drain and reboot of the host, but that
+> > defeats the whole point of the "_once" suffix.
+> 
+> Mostly agree, and I read alrady few discussions about exactly this,
+> those warnings are mostly useless, but they are used in the
+> cases where we don't have the courage to just exit with KVM_EXIT_INTERNAL_ERROR.
+> 
+> I do not thing though that the warning is completely useless, 
+> as we often have the kernel log of the target machine when things go wrong, 
+> so *we* can notice it.
+> In other words a kernel warning is mostly useless but better that nothing.
 
-On 19.05.22 09:03, Oleksandr wrote:
+IMO, it's worse than doing nothing.  Us developers become desensitized to the
+kernel message due to running tests, the existence of these message propagates
+the notion that they are a good thing (and we keep rehashing these discussions...),
+users may not realize it's a _once() printk and so think they _aren't_ affected
+when re-running a workload, etc...
 
-Hello Stefano, all
+And in this case, "APIC ID change is unsupported by KVM" is partly wrong.  KVM
+fully models Intel's behavior where the ID change isn't carried across x2APIC
+enabling, the only unsupported behavior is that the guest will lose APICv
+acceleration.
 
-
->
-> On 19.05.22 04:06, Stefano Stabellini wrote:
->
->
-> Hello Stefano, all
->
->> On Thu, 19 May 2022, Oleksandr wrote:
->>>> On Wed, May 18, 2022 at 5:06 PM Oleksandr <olekstysh@gmail.com> wrote:
->>>>> On 18.05.22 17:32, Arnd Bergmann wrote:
->>>>>> On Sat, May 7, 2022 at 7:19 PM Oleksandr Tyshchenko
->>>>>> <olekstysh@gmail.com> wrote:
->>>>>>     This would mean having a device
->>>>>> node for the grant-table mechanism that can be referred to using the
->>>>>> 'iommus'
->>>>>> phandle property, with the domid as an additional argument.
->>>>> I assume, you are speaking about something like the following?
->>>>>
->>>>>
->>>>> xen_dummy_iommu {
->>>>>       compatible = "xen,dummy-iommu";
->>>>>       #iommu-cells = <1>;
->>>>> };
->>>>>
->>>>> virtio@3000 {
->>>>>       compatible = "virtio,mmio";
->>>>>       reg = <0x3000 0x100>;
->>>>>       interrupts = <41>;
->>>>>
->>>>>       /* The device is located in Xen domain with ID 1 */
->>>>>       iommus = <&xen_dummy_iommu 1>;
->>>>> };
->>>> Right, that's that's the idea,
->>> thank you for the confirmation
->>>
->>>
->>>
->>>>    except I would not call it a 'dummy'.
->>>>   From the perspective of the DT, this behaves just like an IOMMU,
->>>> even if the exact mechanism is different from most hardware IOMMU
->>>> implementations.
->>> well, agree
->>>
->>>
->>>>>> It does not quite fit the model that Linux currently uses for 
->>>>>> iommus,
->>>>>> as that has an allocator for dma_addr_t space
->>>>> yes (# 3/7 adds grant-table based allocator)
->>>>>
->>>>>
->>>>>> , but it would think it's
->>>>>> conceptually close enough that it makes sense for the binding.
->>>>> Interesting idea. I am wondering, do we need an extra actions for 
->>>>> this
->>>>> to work in Linux guest (dummy IOMMU driver, etc)?
->>>> It depends on how closely the guest implementation can be made to
->>>> resemble a normal iommu. If you do allocate dma_addr_t addresses,
->>>> it may actually be close enough that you can just turn the grant-table
->>>> code into a normal iommu driver and change nothing else.
->>> Unfortunately, I failed to find a way how use grant references at the
->>> iommu_ops level (I mean to fully pretend that we are an IOMMU 
->>> driver). I am
->>> not too familiar with that, so what is written below might be wrong 
->>> or at
->>> least not precise.
->>>
->>> The normal IOMMU driver in Linux doesn’t allocate DMA addresses by 
->>> itself, it
->>> just maps (IOVA-PA) what was requested to be mapped by the upper 
->>> layer. The
->>> DMA address allocation is done by the upper layer (DMA-IOMMU which 
->>> is the glue
->>> layer between DMA API and IOMMU API allocates IOVA for PA?). But, 
->>> all what we
->>> need here is just to allocate our specific grant-table based DMA 
->>> addresses
->>> (DMA address = grant reference + offset in the page), so let’s say 
->>> we need an
->>> entity to take a physical address as parameter and return a DMA 
->>> address (what
->>> actually commit #3/7 is doing), and that’s all. So working at the 
->>> dma_ops
->>> layer we get exactly what we need, with the minimal changes to guest
->>> infrastructure. In our case the Xen itself acts as an IOMMU.
->>>
->>> Assuming that we want to reuse the IOMMU infrastructure somehow for 
->>> our needs.
->>> I think, in that case we will likely need to introduce a new 
->>> specific IOVA
->>> allocator (alongside with a generic one) to be hooked up by the 
->>> DMA-IOMMU
->>> layer if we run on top of Xen. But, even having the specific IOVA 
->>> allocator to
->>> return what we indeed need (DMA address = grant reference + offset 
->>> in the
->>> page) we will still need the specific minimal required IOMMU driver 
->>> to be
->>> present in the system anyway in order to track the mappings(?) and 
->>> do nothing
->>> with them, returning a success (this specific IOMMU driver should 
->>> have all
->>> mandatory callbacks implemented).
->>>
->>> I completely agree, it would be really nice to reuse generic IOMMU 
->>> bindings
->>> rather than introducing Xen specific property if what we are trying to
->>> implement in current patch series fits in the usage of "iommus" in 
->>> Linux
->>> more-less. But, if we will have to add more complexity/more 
->>> components to the
->>> code for the sake of reusing device tree binding, this raises a 
->>> question
->>> whether that’s worthwhile.
->>>
->>> Or I really missed something?
->> I think Arnd was primarily suggesting to reuse the IOMMU Device Tree
->> bindings, not necessarily the IOMMU drivers framework in Linux (although
->> that would be an added bonus.)
->>
->> I know from previous discussions with you that making the grant table
->> fit in the existing IOMMU drivers model is difficult, but just reusing
->> the Device Tree bindings seems feasible?
->
-> I started experimenting with that. As wrote in a separate email, I got 
-> a deferred probe timeout,
->
-> after inserting required nodes into guest device tree, which seems to 
-> be a consequence of the unavailability of IOMMU, I will continue to 
-> investigate this question.
-
-
-I have experimented with that. Yes, just reusing the Device Tree 
-bindings is technically feasible (and we are able to do this by only 
-touching grant-dma-ops.c), although deferred probe timeout still stands 
-(as there is no IOMMU driver being present actually).
-
-[    0.583771] virtio-mmio 2000000.virtio: deferred probe timeout, 
-ignoring dependency
-[    0.615556] virtio_blk virtio0: [vda] 4096000 512-byte logical blocks 
-(2.10 GB/1.95 GiB)
-
-
-Below the working diff (on top of current series):
-
-diff --git a/drivers/xen/grant-dma-ops.c b/drivers/xen/grant-dma-ops.c
-index da9c7ff..6586152 100644
---- a/drivers/xen/grant-dma-ops.c
-+++ b/drivers/xen/grant-dma-ops.c
-@@ -272,17 +272,24 @@ static const struct dma_map_ops xen_grant_dma_ops = {
-
-  bool xen_is_grant_dma_device(struct device *dev)
-  {
-+       struct device_node *iommu_np;
-+       bool has_iommu;
-+
-         /* XXX Handle only DT devices for now */
-         if (!dev->of_node)
-                 return false;
-
--       return of_property_read_bool(dev->of_node, "xen,backend-domid");
-+       iommu_np = of_parse_phandle(dev->of_node, "iommus", 0);
-+       has_iommu = iommu_np && of_device_is_compatible(iommu_np, 
-"xen,grant-dma");
-+       of_node_put(iommu_np);
-+
-+       return has_iommu;
-  }
-
-  void xen_grant_setup_dma_ops(struct device *dev)
-  {
-         struct xen_grant_dma_data *data;
--       uint32_t domid;
-+       struct of_phandle_args iommu_spec;
-
-         data = find_xen_grant_dma_data(dev);
-         if (data) {
-@@ -294,16 +301,30 @@ void xen_grant_setup_dma_ops(struct device *dev)
-         if (!dev->of_node)
-                 goto err;
-
--       if (of_property_read_u32(dev->of_node, "xen,backend-domid", 
-&domid)) {
--               dev_err(dev, "xen,backend-domid property is not present\n");
-+       if (of_parse_phandle_with_args(dev->of_node, "iommus", 
-"#iommu-cells",
-+                       0, &iommu_spec)) {
-+               dev_err(dev, "Cannot parse iommus property\n");
-+               goto err;
-+       }
-+
-+       if (!of_device_is_compatible(iommu_spec.np, "xen,grant-dma") ||
-+                       iommu_spec.args_count != 1) {
-+               dev_err(dev, "Incompatible IOMMU node\n");
-+               of_node_put(iommu_spec.np);
-                 goto err;
-         }
-
-+       of_node_put(iommu_spec.np);
-+
-         data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-         if (!data)
-                 goto err;
-
--       data->backend_domid = domid;
-+       /*
-+        * The endpoint ID here means the ID of the domain where the 
-corresponding
-+        * backend is running
-+        */
-+       data->backend_domid = iommu_spec.args[0];
-
-         if (xa_err(xa_store(&xen_grant_dma_devices, (unsigned long)dev, 
-data,
-                         GFP_KERNEL))) {
-(END)
-
-
-
-Below, the nodes generated by Xen toolstack:
-
-         xen_grant_dma {
-                 compatible = "xen,grant-dma";
-                 #iommu-cells = <0x01>;
-                 phandle = <0xfde9>;
-         };
-
-         virtio@2000000 {
-                 compatible = "virtio,mmio";
-                 reg = <0x00 0x2000000 0x00 0x200>;
-                 interrupts = <0x00 0x01 0xf01>;
-                 interrupt-parent = <0xfde8>;
-                 dma-coherent;
-                 iommus = <0xfde9 0x01>;
-         };
-
-
-
-I am wondering, would be the proper solution to eliminate deferred probe 
-timeout issue in our particular case (without introducing an extra IOMMU 
-driver)?
-
-
-
-
->
->
->
->
--- 
-Regards,
-
-Oleksandr Tyshchenko
-
+> About KVM_EXIT_WARNING, this is IMHO a very good idea, probably combined
+> with some form of taint flag, which could be read by qemu and then shown
+> over hmp/qmp interfaces.

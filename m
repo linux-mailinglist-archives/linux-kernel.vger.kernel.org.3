@@ -2,82 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E6845309AE
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 08:56:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AF3F5309D4
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 09:09:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbiEWGzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 02:55:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48960 "EHLO
+        id S230032AbiEWHIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 03:08:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiEWGyy (ORCPT
+        with ESMTP id S229950AbiEWHIQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 02:54:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D93CA54BF2
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 23:52:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653288637;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6or0LDEr8+Nq81Rkj47r4fBHy8teKoRGQNGc1avEiUw=;
-        b=I68yrpQY6wYtrKyB1x4shDgHigNQItPovUo/6bFTrUQ9v24K5iO1EVn3k0zioDHWS1P0Vs
-        6CUaDrHMJDSeeYOgx+NVf9n/GNuJ3h2Mi5tWYASinVs/ekHgwYV6JZbe70tB6R3cv2ELFj
-        m2MDYoOocAXG8fmuBfvUXTA+Hro6ifQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-509-eUJsIwmcNCqspPyOcQzEDw-1; Mon, 23 May 2022 02:50:33 -0400
-X-MC-Unique: eUJsIwmcNCqspPyOcQzEDw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 43A08801210;
-        Mon, 23 May 2022 06:50:32 +0000 (UTC)
-Received: from starship (unknown [10.40.192.55])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2C58041047E8;
-        Mon, 23 May 2022 06:50:25 +0000 (UTC)
-Message-ID: <65991ac329a32cf4128400b643d5b5ccf3918cfe.camel@redhat.com>
-Subject: Re: [RFC PATCH v3 02/19] KVM: x86: inhibit APICv/AVIC when the
- guest and/or host changes apic id/base from the defaults.
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Jim Mattson <jmattson@google.com>
-Cc:     Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        David Airlie <airlied@linux.ie>,
+        Mon, 23 May 2022 03:08:16 -0400
+Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-pr2fra01on060d.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e18::60d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F007E644CB;
+        Mon, 23 May 2022 00:01:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dA6pT0GPrQTZEV3Qx9QowTAUoUC7co0tybDZkFzRUoWWY3F4t/VcmT2BPVMaVfoxYEwfZoYDz1YX4Or2xfmx3a15pivUm7yKmDFcy8USFngf3mBLoSRHi3SskHewqxD/Sr4yjXsto6RQR0AnWE1XjWDNHA93rU8OJL2bQzkAF4aiXtPMfEab2EdbJiJ2PE55ZMz3Fg9oHnwTyZEi2NbzZVsalZwmYsmeSkTKtd7+jKEayXyeCQNu4LwPfYajFO7Nfikr6LMtICVR4V7jV532CNJu6z8/uZyB4blKt4mHOO4q7OcuKc1JpNtVctV4BkF7AAoS/8qojfB+OwGv6PrDnA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dDHo8F4M8OiD6rdVgokb3VrHgz1GgeMkPtkph7yCv7I=;
+ b=AbCiVmYdcYn4p7YqpN+MilvP0AfXKamq1/vbwgbeG1LXMc02D7M4LbVX9CEDVxc5ztIULFcO8niazNgnHL1nenq0FeBvudv5IHaqv8+ZXbX9FlLwcoqEdLsCDj7trgkwosN+WGaueCPPWSpEBql4PPD87IpPgMGF2wgetj3qQt38bBDKLahXARBHlimh9Hgp9fdjhFEzzEtlPARl2HnssBt5bi8Gs/klzY52CTwwmoBixPxz/KesZ9Sa5RzKquROLtbukxo0w7ehKt2JsOBrEghTp1ZI3UnK6Rw8voUxAA3/uAyr30FnMf12xMF/JVfb7IKFPuQ44VUae8tYSGlTIg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PR1P264MB3845.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:250::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.14; Mon, 23 May
+ 2022 06:51:47 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::ad4e:c157:e9ac:385d]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::ad4e:c157:e9ac:385d%8]) with mapi id 15.20.5273.022; Mon, 23 May 2022
+ 06:51:47 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Petr Mladek <pmladek@suse.com>
+CC:     Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        intel-gfx@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
-        linux-kernel@vger.kernel.org, Zhi Wang <zhi.a.wang@intel.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
-        intel-gvt-dev@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org
-Date:   Mon, 23 May 2022 09:50:24 +0300
-In-Reply-To: <CALMp9eSVji2CPW1AjFoSbWZ_b-r3y67HyatgdqXEqSyUaD1_BQ@mail.gmail.com>
-References: <20220427200314.276673-1-mlevitsk@redhat.com>
-         <20220427200314.276673-3-mlevitsk@redhat.com> <YoZrG3n5fgMp4LQl@google.com>
-         <e32f6c904c92e9e9efabcc697917a232f5e88881.camel@redhat.com>
-         <CALMp9eSVji2CPW1AjFoSbWZ_b-r3y67HyatgdqXEqSyUaD1_BQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: Re: [PATCH] livepatch: Remove klp_arch_set_pc() and asm/livepatch.h
+Thread-Topic: [PATCH] livepatch: Remove klp_arch_set_pc() and asm/livepatch.h
+Thread-Index: AQHYQmzcVzwq4WZnpECFcLJ2vYLmSKzWOdSAgFYkdQA=
+Date:   Mon, 23 May 2022 06:51:47 +0000
+Message-ID: <e1840187-6032-9f75-d7a8-b2b2fc5cbb58@csgroup.eu>
+References: <e029c7cfde436f6bbf99148ab14dc2da99add503.1648447981.git.christophe.leroy@csgroup.eu>
+ <YkLsEUgxJkYbLZ7Z@alley>
+In-Reply-To: <YkLsEUgxJkYbLZ7Z@alley>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: c527bfdb-f78c-4be0-1fe0-08da3c88b501
+x-ms-traffictypediagnostic: PR1P264MB3845:EE_
+x-microsoft-antispam-prvs: <PR1P264MB384520A6C5C2CA586ABF6431EDD49@PR1P264MB3845.FRAP264.PROD.OUTLOOK.COM>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: bE/76ad/J78vkdb2LMCK7qPvMC22p/TmUMk6i8dVPu5vn1lxvhMEbxkgpEWdtADCEDE8ys7X+w2+OYMUkGwcll0KyinoxWXdwE1YwaBd7ysdBFKhB0VpqUdKGdsiaYe3IR4+P3falGKubN0fAncEQUUVOm3kLrpcZTj0DOYATlPf8aZXbfUlw2sK8yAqCQ6MgvfpBWaEC8Yopn2mJ5f9ScmhS6eE0mN509IG9sRo/3rdFdABS4/d/JheU+euVKL8iP7v2cIjTljAUFtgPQzf3PW0pB1rxiLRPxhTmI23FGvSUvnyXmMhObRaKxH9UsHAZXu2JBKgsPJs/usVkx8PeHPS33tdxkcxUlF+aJgwBEonf6Yrh8iM+X+HN/tgwN6ifUF+aezAdNZxL6k3YPXtdOdJicmNB/aVA6uNOiUR2y6Zo/jpEFAM3Qx0jthX+BO4SMLWBfA5bl8NvToc7BPiEEjd3dy/8NzOJako/QTC94ZXYilvOw5qQl0OZiN5Y4T5rFJ6se2o6QNAMVdgL6mwSXc1PsUiZ1BC+3cqw3lAfYa9APwygORWGkAux3LGrzcbrrBLGO53+w43YCsNaW+jR0WTom8Mx+pdq5VNMno+Fkn3EJB95X7zft6pzREq6l5UCa7O4A8Brk2H4qmIcyS0A2Eu+svikjFVUjj7l6bK6V39r0bW5GxHt8vr9lpKcTHDejbpmkxAgQ0UfUrDwetz+7jkF3jB+JkZ9vaSal0b5SmqMyrjxskM34Ew7c0jo0oOvIZnYQmurrew13R6+TKeaA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(36756003)(66574015)(2906002)(5660300002)(4744005)(31686004)(7416002)(38070700005)(122000001)(38100700002)(44832011)(31696002)(316002)(54906003)(6916009)(186003)(8936002)(66476007)(66446008)(64756008)(66556008)(8676002)(66946007)(4326008)(76116006)(91956017)(26005)(6512007)(6506007)(6486002)(2616005)(86362001)(71200400001)(508600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?clFlNFNuZHFJRWROSVlmbFY5TnZUSUFmdUdIWHM0dDJVeGFDTCtVc2RNQ0sw?=
+ =?utf-8?B?WjYyeTN6RE1vMmFZWmRGamhFNjVXaEN6UlY2UGtiek9icjEzSmhQWldQRWNw?=
+ =?utf-8?B?VHlnVWk1SmpqdW1COE9xVDZrY25maXNBVXFJYkdWK3FKM2hpOEVvL04yclBL?=
+ =?utf-8?B?WUYxSDV1N08zYXJBYjFadTJ5L2N3UXk1OHI3MFN2Y3hnTjJxTUJFN1AxMTBs?=
+ =?utf-8?B?VVZCV3RIRGc4L2tKbmhQQ0VPVFdDaVFMM3lTMTB2UkVUUGtwb204K1U4N0tI?=
+ =?utf-8?B?U2IwNk1FSlFNTFRZbWdGQXB5K1YxRVRNbWZaTVM0dWUwa1g5cTFXQjV6TlU0?=
+ =?utf-8?B?TmZUZjRIN242QzBFS25yOUd1TEVMNFdIdDV1ZlVqY1BTZmlHRnczQmpiajBp?=
+ =?utf-8?B?N2ZPWUYvSkkzNFpwNUt1QU9kTlAvMEFVaFR2WmY4QkdpckFTb1ltMlMwM3Jy?=
+ =?utf-8?B?QjhpalhpSDR0TzQ5SVZTMlk1aVdvZkxTVWliNWgxZ2sxZGxnUk1Wdk8yZUR0?=
+ =?utf-8?B?azB6Z21janNoaGo4SHowUm9MRmJsQXhteTMwRDVTMVNmSFdBYW5mV1JZdzBF?=
+ =?utf-8?B?NGpCNHVJWXk0anVvcXU5eGxHUVNJRXkrQmczdlFZa3ZwMCs4NzQ5YzNyaUdk?=
+ =?utf-8?B?L0tzTnVoK2ZiaWJDTkNHT1dKN3VVT1JFQmsvNzhwd2ZNbzJDVE9wUFBBWkx4?=
+ =?utf-8?B?NG44TXNyeTNiK2NLelZQaS83U3ExbnAwbkdibjg1eGlsQmJUdW50ZlkxM0lT?=
+ =?utf-8?B?MVlzOXBLRERmVjV3b0J3MGQ4U1ZKcEhpQ0Yyd2V2cnl5RFRSc0RkenRBTjhj?=
+ =?utf-8?B?cDBkMFhOT0hUbkZXZGdzQWxucEovdmxvOVVRRUFzR1EzVmJqMjZ2eXFGL20x?=
+ =?utf-8?B?QklnMERDUmNvWTFuamhKL0ZFaE16WFlXVHBITVM2VHVRWXZWR1hyU2lnVzcx?=
+ =?utf-8?B?dTdUWXhXU3hPL0xQYWJWaDRvWlBST3V5aEdWc0tObzhtV2N5RDRqOUZvZnZN?=
+ =?utf-8?B?QVdxQVJrM3JxUzkveVFleW04NFI1RVFIdEsxYjBMaG81eXZBa0J4WjVQcW5I?=
+ =?utf-8?B?L3hwaTlxWUU3U2pKMWsxOGJZaC9OdHN0VzVuWHoybDErSmxVOG5aSlhZT0th?=
+ =?utf-8?B?SkM1eUVZdUhVKytaVEcrUzc4NVR4WThpM1h5cjlCTzJuVjl5V1cyaUNCdWVU?=
+ =?utf-8?B?UmtqamJOUGxCWm9hVmVFbHp0RzhyajNRVEkzbXVwaGViWEZoOGdYTWhDM1hP?=
+ =?utf-8?B?Yjd5RmlqTG9LeDZqVitacHEwSWI4OVVML3hweW1mNkJiRUptdVdlT243Q2Mr?=
+ =?utf-8?B?bnpUSUVjNDNYLy9wQSt2WkhqTXBhUXZmY0IxZHAwL210WEd5UXpDWkVGeHpC?=
+ =?utf-8?B?UkVyc1Jqb0dhdktvN2t5WkNxdFZkRkFMd05PYURxNWtSbzV0QUVCU1FHNTZO?=
+ =?utf-8?B?eW5YdUFycU42ekRxTTJZZTBTTVBhVjNKT2JSL3NLYnlacVI5MFZsVHRtMXl1?=
+ =?utf-8?B?blFOTjVrRkhYQ0M4WU1nVW9YdmMxSjJ5OVdFZzdWQXQyOHVWdzRzdE02Zm13?=
+ =?utf-8?B?QUVBN1dadFZIVThXc1V1bnNWQkJ1Mm9PMXZzeWZ2ZkEzQTVhbHB5Z0V6L01o?=
+ =?utf-8?B?SVlKYU5icjJaU3VsYlNHRVJiTndrOFR3MmFjZFNxdDVpenhWZFcwVzFST3lR?=
+ =?utf-8?B?TmZrVWdmT0dmRkg1eWR2SURrcTdWdXZ3QjQyUmdPaDRiS3g0K0lWekJYU0li?=
+ =?utf-8?B?MlZlYVdDT2lRazdlSmRnOG5obEg5VkhJcDZrMUJ3VVo5aVI2TFQ3cHlCMmhw?=
+ =?utf-8?B?ZWZzTzc2QUxIN0FsOVFmSmNUZ2ltTmtFVy8rSU1QUDFTelUyVVNzZkxlQXAr?=
+ =?utf-8?B?dFRnVEtSdGp4WFNVbSt2OG4vKzdIQ3g2dzRUNXNYZ09uWFROQTBXWkxjSGU1?=
+ =?utf-8?B?ZEovWW5JREVHbzVhQnI2cGUwejM0LzJiNHBlUXU0Z0h2NDFaTVVaWDBNZTJr?=
+ =?utf-8?B?YzhIbmZCWGlGNWM0cG8zNExNWWJzaVBXWUdVajFKeFpnN2NQNFdGL21jNFF2?=
+ =?utf-8?B?ZktzZmV1RTZoN0txL0Z2cERGR1ZZTmtMdHBqV3plTFl6YzZOT1o0YnJoclU0?=
+ =?utf-8?B?SGxyN3draENpWUV0MVdwQXZuQXIwelJLeE5FNUpLOGpJTUxiTHhvaE1iY0dC?=
+ =?utf-8?B?UEZ0OEljUERockNNeWFxRXNHb2s5Vm1OUGZTRjE2aEJrRGdrcTBZTG5xU3Zt?=
+ =?utf-8?B?TzU0VlZEYk03UEZ2R1MxdWhvNkxvdTBlNzdqNHZBRDJtdy94eTU3MjhkNktF?=
+ =?utf-8?B?ZDdFc3NCVW1jcEloMHFoY0MwcWJxSmlFVVorRGtFTXZyUHFJbHQ4cU5oV3dP?=
+ =?utf-8?Q?afFtHpymTs7VSESLFkUg/jQTaHj0YguUP0iR2?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <7C58D048D7717244B5E5F3EBE980332C@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: c527bfdb-f78c-4be0-1fe0-08da3c88b501
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 May 2022 06:51:47.6003
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: qxw7U/lymAidckQGiYHVAHuYT9xyTs+0XLn49yQRgsK5B3PdfVGF+ELvjYOKOE9k0dy2XXCqXFsmD2Zyg7TXTXeGWIWMydI8mgcPHOhyXEk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR1P264MB3845
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,74 +147,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2022-05-22 at 07:47 -0700, Jim Mattson wrote:
-> On Sun, May 22, 2022 at 2:03 AM Maxim Levitsky <mlevitsk@redhat.com> wrote:
-> > On Thu, 2022-05-19 at 16:06 +0000, Sean Christopherson wrote:
-> > > On Wed, Apr 27, 2022, Maxim Levitsky wrote:
-> > > > Neither of these settings should be changed by the guest and it is
-> > > > a burden to support it in the acceleration code, so just inhibit
-> > > > it instead.
-> > > > 
-> > > > Also add a boolean 'apic_id_changed' to indicate if apic id ever changed.
-> > > > 
-> > > > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> > > > ---
-> > > > +           return;
-> > > > +
-> > > > +   pr_warn_once("APIC ID change is unsupported by KVM");
-> > > 
-> > > It's supported (modulo x2APIC shenanigans), otherwise KVM wouldn't need to disable
-> > > APICv.
-> > 
-> > Here, as I said, it would be nice to see that warning if someone complains.
-> > Fact is that AVIC code was totally broken in this regard, and there are probably more,
-> > so it would be nice to see if anybody complains.
-> > 
-> > If you insist, I'll remove this warning.
-> 
-> This may be fine for a hobbyist, but it's a terrible API in an
-> enterprise environment. To be honest, I have no way of propagating
-> this warning from /var/log/messages on a particular host to a
-> potentially impacted customer. Worse, if they're not the first
-> impacted customer since the last host reboot, there's no warning to
-> propagate. I suppose I could just tell every later customer, "Your VM
-> was scheduled to run on a host that previously reported, 'APIC ID
-> change is unsupported by KVM.' If you notice any unusual behavior,
-> that might be the reason for it," but that isn't going to inspire
-> confidence. I could schedule a drain and reboot of the host, but that
-> defeats the whole point of the "_once" suffix.
-
-Mostly agree, and I read alrady few discussions about exactly this,
-those warnings are mostly useless, but they are used in the
-cases where we don't have the courage to just exit with KVM_EXIT_INTERNAL_ERROR.
-
-I do not thing though that the warning is completely useless, 
-as we often have the kernel log of the target machine when things go wrong, 
-so *we* can notice it.
-In other words a kernel warning is mostly useless but better that nothing.
-
-About KVM_EXIT_WARNING, this is IMHO a very good idea, probably combined
-with some form of taint flag, which could be read by qemu and then shown
-over hmp/qmp interfaces.
-
-Best regards,
-	Maxim levitsky
-
-
-> 
-> I know that there's a long history of doing this in KVM, but I'd like
-> to ask that we:
-> a) stop piling on
-> b) start fixing the existing uses
-> 
-> If KVM cannot emulate a perfectly valid operation, an exit to
-> userspace with KVM_EXIT_INTERNAL_ERROR is warranted. Perhaps for
-> operations that we suspect KVM might get wrong, we should have a new
-> userspace exit: KVM_EXIT_WARNING?
-> 
-> I'm not saying that you should remove the warning. I'm just asking
-> that it be augmented with a direct signal to userspace that KVM may no
-> longer be reliable.
-> 
-
-
+DQoNCkxlIDI5LzAzLzIwMjIgw6AgMTM6MjIsIFBldHIgTWxhZGVrIGEgw6ljcml0wqA6DQo+IE9u
+IE1vbiAyMDIyLTAzLTI4IDA4OjI2OjQ4LCBDaHJpc3RvcGhlIExlcm95IHdyb3RlOg0KPj4gQWxs
+IHRocmVlIHZlcnNpb25zIG9mIGtscF9hcmNoX3NldF9wYygpIGRvIGV4YWN0bHkgdGhlIHNhbWU6
+IHRoZXkNCj4+IGNhbGwgZnRyYWNlX2luc3RydWN0aW9uX3BvaW50ZXJfc2V0KCkuDQo+Pg0KPj4g
+Q2FsbCBmdHJhY2VfaW5zdHJ1Y3Rpb25fcG9pbnRlcl9zZXQoKSBkaXJlY3RseSBhbmQgcmVtb3Zl
+DQo+PiBrbHBfYXJjaF9zZXRfcGMoKS4NCj4+DQo+PiBBcyBrbHBfYXJjaF9zZXRfcGMoKSB3YXMg
+dGhlIG9ubHkgdGhpbmcgcmVtYWluaW5nIGluIGFzbS9saXZlcGF0Y2guaA0KPj4gb24geDg2IGFu
+ZCBzMzkwLCByZW1vdmUgYXNtL2xpdmVwYXRjaC5oDQo+Pg0KPj4gbGl2ZXBhdGNoLmggcmVtYWlu
+cyBvbiBwb3dlcnBjIGJ1dCBpdHMgY29udGVudCBpcyBleGNsdXNpdmVseSB1c2VkDQo+PiBieSBw
+b3dlcnBjIHNwZWNpZmljIGNvZGUuDQo+Pg0KPj4gU2lnbmVkLW9mZi1ieTogQ2hyaXN0b3BoZSBM
+ZXJveSA8Y2hyaXN0b3BoZS5sZXJveUBjc2dyb3VwLmV1Pg0KPiANCj4gQWNrZWQtYnk6IFBldHIg
+TWxhZGVrIDxwbWxhZGVrQHN1c2UuY29tPg0KPiANCj4gSSBhbSBnb2luZyB0byB0YWtlIGl0IHZp
+YSBsaXZlcGF0Y2gvbGl2ZXBhdGNoLmdpdCBmb3IgNS4xOS4gV2UgYXJlDQo+IGFscmVhZHkgaW4g
+dGhlIG1pZGRsZSBvZiB0aGUgbWVyZ2Ugd2luZG93IGFuZCB0aGlzIGlzIG5vdCBjcml0aWNhbC4N
+Cj4gDQoNCkkgaGF2ZW4ndCBzZWVuIGl0IGluIGxpbnV4LW5leHQuDQoNCkRvIHlvdSBzdGlsbCBw
+bGFuIHRvIHRha2UgaXQgZm9yIDUuMTkgPw0KDQpUaGFua3MNCkNocmlzdG9waGU=

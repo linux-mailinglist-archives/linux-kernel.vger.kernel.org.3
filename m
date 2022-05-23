@@ -2,51 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAEE55306FB
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 03:10:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBF125306FE
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 03:10:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237602AbiEWBKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 21:10:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33534 "EHLO
+        id S244284AbiEWBKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 21:10:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231186AbiEWBK3 (ORCPT
+        with ESMTP id S242675AbiEWBKo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 21:10:29 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24329377C6;
-        Sun, 22 May 2022 18:10:26 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L5zlg4BlGz4xXg;
-        Mon, 23 May 2022 11:10:23 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1653268224;
-        bh=eOTK4n9SkYDRGWdogVlDv82mfD+vR0bPl0p1Xhqr6eM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=E2yhFzALr25iM+46FmkqyyYqGRptGHYevdNixYgMSVGZvGB3tjkd2rGx1dJVPvOFB
-         tjmq1XPfEwHzy4PhSV1OFmUK3LtSi7lADyQgmU+9w9SpDTeH8VzsAwIFNOaxVsenkb
-         97c44yEAaBGCpH1Q8yigFyQSgDRxhGs9RDvzZlklDwfrTvUq3ghc0iFoHTyRYovHjk
-         h4cLkVWeKG5efqbLHtxzTYhcbu5QrYj05yWg3xd0FZF4Akj3hsIIWSlp4lTvqZHCVL
-         j2Rj3Y0tZ3TXi6+fv8XYytLWJXtd+fsqxTOD/N1y6ksa6+EY+PkSXMCvxdcBaZoXEI
-         UlhoHqN28GhgA==
-Date:   Mon, 23 May 2022 11:10:21 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>
-Cc:     Networking <netdev@vger.kernel.org>,
-        Harini Katakam <harini.katakam@xilinx.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Robert Hancock <robert.hancock@calian.com>
-Subject: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <20220523111021.31489367@canb.auug.org.au>
+        Sun, 22 May 2022 21:10:44 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D01E0377DA;
+        Sun, 22 May 2022 18:10:42 -0700 (PDT)
+Received: from kwepemi100024.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4L5zfD6V5WzDqKh;
+        Mon, 23 May 2022 09:05:40 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi100024.china.huawei.com (7.221.188.87) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 23 May 2022 09:10:40 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 23 May 2022 09:10:39 +0800
+Subject: Re: [PATCH -next v5 0/3] support concurrent sync io for bfq on a
+ specail occasion
+To:     Jens Axboe <axboe@kernel.dk>, <paolo.valente@linaro.org>
+CC:     <jack@suse.cz>, <tj@kernel.org>, <linux-block@vger.kernel.org>,
+        <cgroups@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yi.zhang@huawei.com>
+References: <20220428120837.3737765-1-yukuai3@huawei.com>
+ <d50df657-d859-79cf-c292-412eaa383d2c@huawei.com>
+ <61b67d5e-829c-8130-7bda-81615d654829@huawei.com>
+ <81411289-e13c-20f5-df63-c059babca57a@huawei.com>
+ <d5a90a08-1ac6-587a-e900-0436bd45543a@kernel.dk>
+From:   "yukuai (C)" <yukuai3@huawei.com>
+Message-ID: <55919e29-1f22-e8aa-f3d2-08c57d9e1c22@huawei.com>
+Date:   Mon, 23 May 2022 09:10:38 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/rJVZW_6UKvrEmkhGS8oX/mw";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <d5a90a08-1ac6-587a-e900-0436bd45543a@kernel.dk>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,122 +59,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/rJVZW_6UKvrEmkhGS8oX/mw
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+在 2022/05/21 20:21, Jens Axboe 写道:
+> On 5/21/22 1:22 AM, yukuai (C) wrote:
+>> 在 2022/05/14 17:29, yukuai (C) 写道:
+>>> 在 2022/05/05 9:00, yukuai (C) 写道:
+>>>> Hi, Paolo
+>>>>
+>>>> Can you take a look at this patchset? It has been quite a long time
+>>>> since we spotted this problem...
+>>>>
+>>>
+>>> friendly ping ...
+>> friendly ping ...
+> 
+> I can't speak for Paolo, but I've mentioned before that the majority
+> of your messages end up in my spam. That's still the case, in fact
+> I just marked maybe 10 of them as not spam.
+> 
+> You really need to get this issued sorted out, or you will continue
+> to have patches ignore because folks may simply not see them.
+>
+Hi,
 
-Hi all,
+Thanks for your notice.
 
-Today's linux-next merge of the net-next tree got a conflict in:
-
-  drivers/net/ethernet/cadence/macb_main.c
-
-between commit:
-
-  5cebb40bc955 ("net: macb: Fix PTP one step sync support")
-
-from the net tree and commit:
-
-  138badbc21a0 ("net: macb: use NAPI for TX completion path")
-
-from the net-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/net/ethernet/cadence/macb_main.c
-index 3a1b5ac48ca5,d6cdb97bfb38..000000000000
---- a/drivers/net/ethernet/cadence/macb_main.c
-+++ b/drivers/net/ethernet/cadence/macb_main.c
-@@@ -1123,57 -1119,20 +1120,50 @@@ static void macb_tx_error_task(struct w
-  	macb_writel(bp, NCR, macb_readl(bp, NCR) | MACB_BIT(TSTART));
- =20
-  	spin_unlock_irqrestore(&bp->lock, flags);
-+ 	napi_enable(&queue->napi_tx);
-  }
- =20
- +static bool ptp_one_step_sync(struct sk_buff *skb)
- +{
- +	struct ptp_header *hdr;
- +	unsigned int ptp_class;
- +	u8 msgtype;
- +
- +	/* No need to parse packet if PTP TS is not involved */
- +	if (likely(!(skb_shinfo(skb)->tx_flags & SKBTX_HW_TSTAMP)))
- +		goto not_oss;
- +
- +	/* Identify and return whether PTP one step sync is being processed */
- +	ptp_class =3D ptp_classify_raw(skb);
- +	if (ptp_class =3D=3D PTP_CLASS_NONE)
- +		goto not_oss;
- +
- +	hdr =3D ptp_parse_header(skb, ptp_class);
- +	if (!hdr)
- +		goto not_oss;
- +
- +	if (hdr->flag_field[0] & PTP_FLAG_TWOSTEP)
- +		goto not_oss;
- +
- +	msgtype =3D ptp_get_msgtype(hdr, ptp_class);
- +	if (msgtype =3D=3D PTP_MSGTYPE_SYNC)
- +		return true;
- +
- +not_oss:
- +	return false;
- +}
- +
-- static void macb_tx_interrupt(struct macb_queue *queue)
-+ static int macb_tx_complete(struct macb_queue *queue, int budget)
-  {
-- 	unsigned int tail;
-- 	unsigned int head;
-- 	u32 status;
-  	struct macb *bp =3D queue->bp;
-  	u16 queue_index =3D queue - bp->queues;
-+ 	unsigned int tail;
-+ 	unsigned int head;
-+ 	int packets =3D 0;
- =20
-- 	status =3D macb_readl(bp, TSR);
-- 	macb_writel(bp, TSR, status);
--=20
-- 	if (bp->caps & MACB_CAPS_ISR_CLEAR_ON_WRITE)
-- 		queue_writel(queue, ISR, MACB_BIT(TCOMP));
--=20
-- 	netdev_vdbg(bp->dev, "macb_tx_interrupt status =3D 0x%03lx\n",
-- 		    (unsigned long)status);
--=20
-+ 	spin_lock(&queue->tx_ptr_lock);
-  	head =3D queue->tx_head;
-- 	for (tail =3D queue->tx_tail; tail !=3D head; tail++) {
-+ 	for (tail =3D queue->tx_tail; tail !=3D head && packets < budget; tail++=
-) {
-  		struct macb_tx_skb	*tx_skb;
-  		struct sk_buff		*skb;
-  		struct macb_dma_desc	*desc;
-
---Sig_/rJVZW_6UKvrEmkhGS8oX/mw
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKK3v4ACgkQAVBC80lX
-0Gw5mwf8DC0QHsCJrn+g1jKU4ysIqP+XePG2ugM2/sEWkQE2JNkKa88RV6DxMFG1
-lgSmV4iFK2qD0Aj7ntlYnPgNUZnNDIpXwnZmAcAGHaCoY0Wc/uR3BrkLHNPMEhWV
-EMubNwhRHJnqs/qr3c2SAdgpZkkRCXmpWHIh22AVJDEt/3LFCH21/kzdRpCsS6gr
-cR8AmKCP0MiLgzgQnrPKl9uF5QwP63WkV8uDGMKZlmDsXh5gFY0B7e/vqpaBLdwB
-4D1IQKZZuIhJdBDmehjg9v1nTTcpOjCudDH0eSLcjgNn69USIqmTWrkM42ckDnD+
-dmEugOlnXGYOnrrCmSyDOh4WkFnP8w==
-=nSlw
------END PGP SIGNATURE-----
-
---Sig_/rJVZW_6UKvrEmkhGS8oX/mw--
+Is it just me or do you see someone else's messages from *huawei.com
+end up in spam? I tried to seek help from our IT support, however, they
+didn't find anything unusual...

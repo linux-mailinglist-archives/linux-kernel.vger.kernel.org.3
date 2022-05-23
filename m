@@ -2,52 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A6635317CF
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:53:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7112A531CB4
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:57:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239710AbiEWRNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:13:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34800 "EHLO
+        id S240484AbiEWRTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:19:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240193AbiEWRLq (ORCPT
+        with ESMTP id S240620AbiEWRQe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:11:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 532E310A4;
-        Mon, 23 May 2022 10:11:14 -0700 (PDT)
+        Mon, 23 May 2022 13:16:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5837160C6;
+        Mon, 23 May 2022 10:16:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E1F8B61507;
-        Mon, 23 May 2022 17:11:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7AB8C385A9;
-        Mon, 23 May 2022 17:11:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2534A61535;
+        Mon, 23 May 2022 17:15:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EF62C34115;
+        Mon, 23 May 2022 17:15:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653325873;
-        bh=VXtcAqn6/M6grVmBFWvrRlt1YfHPvmVTbARNuX4JhIs=;
+        s=korg; t=1653326127;
+        bh=fVbpWz7mvtZzq2d/Vrx1QGCm7tLdV6mrBEKJVLAYw64=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=piDoXEo54M1KxdfCC6Z4V6qNj+FfE4HrpG0CfvpZyqsIv4z1knTOexyqmArHbYQRq
-         b2jh1XQIqGdPusiDj/jPPm1CLBxuLp3gaqlBhdtjOR0WgqBjQvF4Z0ak7s0iIVkQYk
-         /Nl4oEyRdeRx06kPM2RF6xPV3eDchSZnbABf8Tjc=
+        b=SW0ifRfFsUuHMUZCR1BN9hFgDrqw9AJglA/g2EnOjrVy4o/QONp1wvBEjQ8lJAsNb
+         hkJanaCpKHrFN/sNR/tH3N1PisqezYMZbp4Pj3QcZoPiqQJeqBmMVLdUPdn7Ki2RCq
+         iWvlgR5YgjJpaNlqmHNZhFejby7QL18bEafyVJrw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ondrej Mosnacek <omosnace@redhat.com>,
-        Brian Masney <bmasney@redhat.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Subject: [PATCH 4.19 15/44] crypto: qcom-rng - fix infinite loop on requests not multiple of WORD_SZ
+        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
+        Lyude Paul <lyude@redhat.com>
+Subject: [PATCH 5.4 32/68] drm/dp/mst: fix a possible memory leak in fetch_monitor_name()
 Date:   Mon, 23 May 2022 19:04:59 +0200
-Message-Id: <20220523165756.026136368@linuxfoundation.org>
+Message-Id: <20220523165807.924092270@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165752.797318097@linuxfoundation.org>
-References: <20220523165752.797318097@linuxfoundation.org>
+In-Reply-To: <20220523165802.500642349@linuxfoundation.org>
+References: <20220523165802.500642349@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,40 +54,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ondrej Mosnacek <omosnace@redhat.com>
+From: Hangyu Hua <hbh25y@gmail.com>
 
-commit 16287397ec5c08aa58db6acf7dbc55470d78087d upstream.
+commit 6e03b13cc7d9427c2c77feed1549191015615202 upstream.
 
-The commit referenced in the Fixes tag removed the 'break' from the else
-branch in qcom_rng_read(), causing an infinite loop whenever 'max' is
-not a multiple of WORD_SZ. This can be reproduced e.g. by running:
+drm_dp_mst_get_edid call kmemdup to create mst_edid. So mst_edid need to be
+freed after use.
 
-    kcapi-rng -b 67 >/dev/null
-
-There are many ways to fix this without adding back the 'break', but
-they all seem more awkward than simply adding it back, so do just that.
-
-Tested on a machine with Qualcomm Amberwing processor.
-
-Fixes: a680b1832ced ("crypto: qcom-rng - ensure buffer for generate is completely filled")
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+Reviewed-by: Lyude Paul <lyude@redhat.com>
+Signed-off-by: Lyude Paul <lyude@redhat.com>
 Cc: stable@vger.kernel.org
-Signed-off-by: Ondrej Mosnacek <omosnace@redhat.com>
-Reviewed-by: Brian Masney <bmasney@redhat.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220516032042.13166-1-hbh25y@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/crypto/qcom-rng.c |    1 +
+ drivers/gpu/drm/drm_dp_mst_topology.c |    1 +
  1 file changed, 1 insertion(+)
 
---- a/drivers/crypto/qcom-rng.c
-+++ b/drivers/crypto/qcom-rng.c
-@@ -64,6 +64,7 @@ static int qcom_rng_read(struct qcom_rng
- 		} else {
- 			/* copy only remaining bytes */
- 			memcpy(data, &val, max - currsize);
-+			break;
- 		}
- 	} while (currsize < max);
+--- a/drivers/gpu/drm/drm_dp_mst_topology.c
++++ b/drivers/gpu/drm/drm_dp_mst_topology.c
+@@ -3657,6 +3657,7 @@ static void fetch_monitor_name(struct dr
  
+ 	mst_edid = drm_dp_mst_get_edid(port->connector, mgr, port);
+ 	drm_edid_get_monitor_name(mst_edid, name, namelen);
++	kfree(mst_edid);
+ }
+ 
+ /**
 
 

@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7CB35310E9
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:20:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DA6E531026
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:19:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234741AbiEWLQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 07:16:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40070 "EHLO
+        id S234764AbiEWLQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 07:16:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234659AbiEWLQV (ORCPT
+        with ESMTP id S234633AbiEWLQV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 23 May 2022 07:16:21 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA04DB00
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA30CBA8
         for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 04:16:16 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L6F9x29rGzhZ28;
-        Mon, 23 May 2022 19:15:33 +0800 (CST)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L6F9f0WpszjX07;
+        Mon, 23 May 2022 19:15:18 +0800 (CST)
 Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.24; Mon, 23 May 2022 19:16:14 +0800
 Received: from localhost.localdomain.localdomain (10.175.113.25) by
  dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 23 May 2022 19:16:13 +0800
+ 15.1.2375.24; Mon, 23 May 2022 19:16:14 +0800
 From:   Kefeng Wang <wangkefeng.wang@huawei.com>
 To:     <catalin.marinas@arm.com>, <will@kernel.org>,
         <akpm@linux-foundation.org>,
@@ -33,10 +33,11 @@ To:     <catalin.marinas@arm.com>, <will@kernel.org>,
         <linux-kernel@vger.kernel.org>
 CC:     <linux-mm@kvack.org>, <hch@infradead.org>, <arnd@arndb.de>,
         <anshuman.khandual@arm.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: [PATCH v4 1/2] asm-generic: Add memory barrier dma_mb()
-Date:   Mon, 23 May 2022 19:26:40 +0800
-Message-ID: <20220523112641.170060-2-wangkefeng.wang@huawei.com>
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        "Marco Elver" <elver@google.com>
+Subject: [PATCH v4 2/2] arm64: kcsan: Support detecting more missing memory barriers
+Date:   Mon, 23 May 2022 19:26:41 +0800
+Message-ID: <20220523112641.170060-3-wangkefeng.wang@huawei.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220523112641.170060-1-wangkefeng.wang@huawei.com>
 References: <20220523112641.170060-1-wangkefeng.wang@huawei.com>
@@ -56,73 +57,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The memory barrier dma_mb() is introduced by commit a76a37777f2c
-("iommu/arm-smmu-v3: Ensure queue is read after updating prod pointer"),
-which is used to ensure that prior (both reads and writes) accesses
-to memory by a CPU are ordered w.r.t. a subsequent MMIO write.
+As "kcsan: Support detecting a subset of missing memory barriers"[1]
+introduced KCSAN_STRICT/KCSAN_WEAK_MEMORY which make kcsan detects
+more missing memory barrier, but arm64 don't have KCSAN instrumentation
+for barriers, so the new selftest test_barrier() and test cases for
+memory barrier instrumentation in kcsan_test module will fail, even
+panic on selftest.
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de> # for asm-generic
+Let's prefix all barriers with __ on arm64, as asm-generic/barriers.h
+defined the final instrumented version of these barriers, which will
+fix the above issues.
+
+Note, barrier instrumentation that can be disabled via __no_kcsan with
+appropriate compiler-support (and not just with objtool help), see
+commit bd3d5bd1a0ad ("kcsan: Support WEAK_MEMORY with Clang where no
+objtool support exists"), it adds disable_sanitizer_instrumentation to
+__no_kcsan attribute which will remove all sanitizer instrumentation fully
+(with Clang 14.0). Meanwhile, GCC does the same thing with no_sanitize.
+
+[1] https://lore.kernel.org/linux-mm/20211130114433.2580590-1-elver@google.com/
+
+Acked-by: Marco Elver <elver@google.com>
 Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
 ---
- Documentation/memory-barriers.txt | 11 ++++++-----
- include/asm-generic/barrier.h     |  8 ++++++++
- 2 files changed, 14 insertions(+), 5 deletions(-)
+ arch/arm64/include/asm/barrier.h | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
-index b12df9137e1c..832b5d36e279 100644
---- a/Documentation/memory-barriers.txt
-+++ b/Documentation/memory-barriers.txt
-@@ -1894,6 +1894,7 @@ There are some more advanced barrier functions:
- 
-  (*) dma_wmb();
-  (*) dma_rmb();
-+ (*) dma_mb();
- 
-      These are for use with consistent memory to guarantee the ordering
-      of writes or reads of shared memory accessible to both the CPU and a
-@@ -1925,11 +1926,11 @@ There are some more advanced barrier functions:
-      The dma_rmb() allows us guarantee the device has released ownership
-      before we read the data from the descriptor, and the dma_wmb() allows
-      us to guarantee the data is written to the descriptor before the device
--     can see it now has ownership.  Note that, when using writel(), a prior
--     wmb() is not needed to guarantee that the cache coherent memory writes
--     have completed before writing to the MMIO region.  The cheaper
--     writel_relaxed() does not provide this guarantee and must not be used
--     here.
-+     can see it now has ownership.  The dma_mb() implies both a dma_rmb() and
-+     a dma_wmb().  Note that, when using writel(), a prior wmb() is not needed
-+     to guarantee that the cache coherent memory writes have completed before
-+     writing to the MMIO region.  The cheaper writel_relaxed() does not provide
-+     this guarantee and must not be used here.
- 
-      See the subsection "Kernel I/O barrier effects" for more information on
-      relaxed I/O accessors and the Documentation/core-api/dma-api.rst file for
-diff --git a/include/asm-generic/barrier.h b/include/asm-generic/barrier.h
-index fd7e8fbaeef1..961f4d88f9ef 100644
---- a/include/asm-generic/barrier.h
-+++ b/include/asm-generic/barrier.h
-@@ -38,6 +38,10 @@
- #define wmb()	do { kcsan_wmb(); __wmb(); } while (0)
+diff --git a/arch/arm64/include/asm/barrier.h b/arch/arm64/include/asm/barrier.h
+index 9f3e2c3d2ca0..2cfc4245d2e2 100644
+--- a/arch/arm64/include/asm/barrier.h
++++ b/arch/arm64/include/asm/barrier.h
+@@ -50,13 +50,13 @@
+ #define pmr_sync()	do {} while (0)
  #endif
  
-+#ifdef __dma_mb
-+#define dma_mb()	do { kcsan_mb(); __dma_mb(); } while (0)
-+#endif
-+
- #ifdef __dma_rmb
- #define dma_rmb()	do { kcsan_rmb(); __dma_rmb(); } while (0)
- #endif
-@@ -65,6 +69,10 @@
- #define wmb()	mb()
- #endif
+-#define mb()		dsb(sy)
+-#define rmb()		dsb(ld)
+-#define wmb()		dsb(st)
++#define __mb()		dsb(sy)
++#define __rmb()		dsb(ld)
++#define __wmb()		dsb(st)
  
-+#ifndef dma_mb
-+#define dma_mb()	mb()
-+#endif
-+
- #ifndef dma_rmb
- #define dma_rmb()	rmb()
- #endif
+-#define dma_mb()	dmb(osh)
+-#define dma_rmb()	dmb(oshld)
+-#define dma_wmb()	dmb(oshst)
++#define __dma_mb()	dmb(osh)
++#define __dma_rmb()	dmb(oshld)
++#define __dma_wmb()	dmb(oshst)
+ 
+ #define io_stop_wc()	dgh()
+ 
 -- 
 2.35.3
 

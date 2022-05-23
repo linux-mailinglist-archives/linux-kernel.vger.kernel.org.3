@@ -2,139 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10A36531401
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:25:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCC26531351
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:23:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238016AbiEWP3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 11:29:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40962 "EHLO
+        id S237871AbiEWP3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 11:29:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237988AbiEWP27 (ORCPT
+        with ESMTP id S237793AbiEWP3x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 11:28:59 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AE115EDE4
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 08:28:55 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 23 May 2022 11:29:53 -0400
+Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [5.144.164.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F8205EDF7
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 08:29:51 -0700 (PDT)
+Received: from [10.1.250.9] (riviera.nat.ds.pw.edu.pl [194.29.137.1])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 0C23821B51;
-        Mon, 23 May 2022 15:28:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1653319734; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=x+/1oXehIhqc8cKRJ9ERRgv2SHTK6AyPOx5K6vAtt8g=;
-        b=tmnRGdyREpebEZPDsD7YbvQ+wESmrCgriPVJGCvgU+0EHke1YjUCYdbgzC6IFtnBKVV3zv
-        Xmn9TEGDxHgoGP4+aawqSYYQZ59kGX3mn1nppL9boxOFppzVSoGNDPKtchmIs884LYxrck
-        trldFTraZnTDHJge2IdZmKZMVYZCsXE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1653319734;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=x+/1oXehIhqc8cKRJ9ERRgv2SHTK6AyPOx5K6vAtt8g=;
-        b=jPP7N9WALt7GqRLsttOYdzV2ovTFKmxZ/FN2x7RUoLRLnAiA/NgIft8qhgoeLA83Nujabe
-        Jjm5sgmb2DHC4LCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0119413AA5;
-        Mon, 23 May 2022 15:28:54 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id +kk9ADaoi2J9FwAAMHmgww
-        (envelope-from <bp@suse.de>); Mon, 23 May 2022 15:28:54 +0000
-Date:   Mon, 23 May 2022 17:28:49 +0200
-From:   Borislav Petkov <bp@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] x86/core for 5.19
-Message-ID: <YouoMW6jtD3BRavh@zn.tnic>
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 4D8711F6C6;
+        Mon, 23 May 2022 17:29:47 +0200 (CEST)
+Message-ID: <f8e569e4-9a6b-75eb-5094-f3e2d9a1ecf8@somainline.org>
+Date:   Mon, 23 May 2022 17:29:42 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.1
+Subject: Re: Removal of qcom,board-id and qcom,msm-id
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     agross@kernel.org, arnd@arndb.de, bjorn.andersson@linaro.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, olof@lixom.net, robh@kernel.org,
+        sboyd@kernel.org
+References: <a3c932d1-a102-ce18-deea-18cbbd05ecab@linaro.org>
+ <20220522195138.35943-1-konrad.dybcio@somainline.org>
+ <53d5999b-88ee-24db-fd08-ff9406e2b7b7@linaro.org>
+ <02ab0276-b078-fe66-8596-fcec4378722b@somainline.org>
+ <49a52870-9aab-c4bd-2077-66732f42bbba@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <49a52870-9aab-c4bd-2077-66732f42bbba@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
 
-please pull a set of x86/core fixes for 5.19.
+On 23/05/2022 14:14, Krzysztof Kozlowski wrote:
+> On 23/05/2022 14:02, Konrad Dybcio wrote:
+>> On 23/05/2022 09:21, Krzysztof Kozlowski wrote:
+>>> On 22/05/2022 21:51, Konrad Dybcio wrote:
+>>>> Hi,
+>>>>
+>>>> removing these properties will not bring almost any benefit (other than making
+>>>> some checks happy any saving some <200 LoC) and will make the lives of almost
+>>>> all people doing independent development for linux-on-msm harder. There are
+>>>> almost unironically like 3 people outside Linaro and QUIC who have
+>>>> non-vendor-fused development boards AND the sources to rebuild the
+>>>> bootloader on their own. Making it harder to boot is only going to
+>>>> discourage people from developing on these devices, which is already not
+>>>> that pleasant, especially with newer platforms where you have to fight with
+>>>> the oh-so-bright ideas of Android boot chain..
+>>>>
+>>>> This only concerns devices released before sm8350, as the new ones will not
+>>>> even boot with these properties present (or at least SONY Sagami, but I
+>>>> doubt it's an isolated case), so other than completing support for older
+>>>> devices, it won't be an issue going forward, anyway. But there are give
+>>>> or take 50 locked down devices in mainline right now, and many more waiting
+>>>> to be upstreamed in various downstream close-to-mainline trees that should
+>>>> not be disregarded just because Qualcomm is far from the best at making
+>>>> their BSP software stack clean.
+>>> I actually wonder why do you need these properties for community work on
+>>> such boards? You ship kernel with one concatenated DTB and the
+>>> bootloader does not need the board-id/msm-id fields, doesn't it?
+>> If that were the case, I would have never complained about this! It's
+>> the bootloader itself that needs it, you can see it in a "Best match
+>> [blah blah] 258/0x1000/...." log line, where it walks through the
+>> appended (or otherwise compiled into the boot.img) DTBs and looks for
+>> matches for the burnt-in msm-, board- and (on newer-older platforms)
+>> pmic-id. If it cannot find these, it refuses to boot with an Android
+>> Verified Boot red state and you get a not-so-nice "Your device has been
+>> unlocked and the boot image is not working" or something like this on
+>> your screen.
+>>
+>>
+>>> Not mentioning that in the past bootloader was actually not using these
+>>> properties at all, because it was the dtbTool who was parsing them.
+>> Not sure when that was the case, maybe with very old arm32 bootloaders
+>> in the times before I did development on Qualcomm devices.
+>>
+>>
+>>>    So
+>>> in any case either your device works fine without these properties or
+>>> you have to use dtbTool, right?
+>> To the best of my idea, wrong :( Unless the vendor modified the LK/XBL
+>> code on their own, it looks for a "best match" (but if it's not a
+>> precise match, it won't even bother trying to boot, just fyi..), meaning
+>> it tries to go through a list of SoC ID and revision pairs (msm-id),
+>> board IDs (board-id) and PMIC id+rev pairs (pmic-id) and if no match is
+>> found, it doesn't even exit the bootloader and says something like "no
+>> dtbs found".
+> This would mean that dtbTool as described in the actual patch [1] is not
+> used and bootloader ignores the table. If that's the case, the commit
+> and requirement of such complex board-foundry-pmic-compatibles should be
+> dropped. So I am getting now to what Dmitry said...
+>
+> [1]
+> https://lore.kernel.org/all/1448062280-15406-2-git-send-email-sboyd@codeaurora.org/
 
-Thx.
+This solution assumes everybody is using the so-called QCDT images, 
+which is not necessarily the case, as not all bootloaders (even if they 
+should, as their base BSP tags sometimes imply) support that. Others, in 
+turn, require that and will not recognize appended DTBs properly for 
+reasons unknown..
 
----
 
-The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+I once went as far as writing up solutions to getting a boot on almost 
+all combinations of these.. I may even still have it stashed somewhere.. 
+things get crazy when you factor in DTBO and GKI..
 
-  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
 
-are available in the Git repository at:
+Konrad
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_core_for_v5.19_rc1
-
-for you to fetch changes up to 69505e3d9a39a988aaed9b58aa6b3482238f6516:
-
-  bug: Use normal relative pointers in 'struct bug_entry' (2022-05-19 23:46:10 +0200)
-
-----------------------------------------------------------------
-- Remove all the code around GS switching on 32-bit now that it is not
-needed anymore
-
-- Other misc improvements
-
-----------------------------------------------------------------
-Brian Gerst (4):
-      x86/32: Simplify ELF_CORE_COPY_REGS
-      ELF: Remove elf_core_copy_kernel_regs()
-      x86/32: Remove lazy GS macros
-      x86/asm: Merge load_gs_index()
-
-Josh Poimboeuf (1):
-      bug: Use normal relative pointers in 'struct bug_entry'
-
-Thomas Gleixner (1):
-      x86/nmi: Make register_nmi_handler() more robust
-
- arch/arm64/include/asm/asm-bug.h           |  4 ++--
- arch/powerpc/include/asm/bug.h             | 14 ++++++++------
- arch/powerpc/kernel/fadump.c               |  2 +-
- arch/powerpc/platforms/powernv/opal-core.c |  2 +-
- arch/riscv/include/asm/bug.h               |  4 ++--
- arch/s390/include/asm/bug.h                |  5 +++--
- arch/x86/include/asm/bug.h                 |  2 +-
- arch/x86/include/asm/elf.h                 | 15 ++-------------
- arch/x86/include/asm/mmu_context.h         |  2 +-
- arch/x86/include/asm/nmi.h                 |  1 +
- arch/x86/include/asm/segment.h             | 12 ------------
- arch/x86/include/asm/special_insns.h       |  7 ++++---
- arch/x86/kernel/nmi.c                      | 12 ++++++++----
- arch/x86/kernel/process.c                  |  5 +----
- arch/x86/kernel/process_32.c               | 11 ++++-------
- arch/x86/kernel/ptrace.c                   |  6 +++---
- arch/x86/kernel/signal.c                   |  8 +++++---
- arch/x86/kernel/vm86_32.c                  |  4 ++--
- arch/x86/lib/insn-eval.c                   |  5 +++--
- arch/x86/math-emu/get_address.c            |  2 +-
- include/linux/elfcore.h                    |  9 ---------
- kernel/kexec_core.c                        |  2 +-
- lib/bug.c                                  | 15 +++++++--------
- 23 files changed, 61 insertions(+), 88 deletions(-)
-
--- 
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH
-GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
-(HRB 36809, AG Nürnberg)
+>
+>
+> Best regards,
+> Krzysztof

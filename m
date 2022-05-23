@@ -2,197 +2,374 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA3EC530B64
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 11:03:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34C02530BF9
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 11:04:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231782AbiEWIZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 04:25:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57774 "EHLO
+        id S231919AbiEWI0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 04:26:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231634AbiEWIZf (ORCPT
+        with ESMTP id S231797AbiEWIZn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 04:25:35 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2084.outbound.protection.outlook.com [40.107.93.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B0A56431;
-        Mon, 23 May 2022 01:25:32 -0700 (PDT)
+        Mon, 23 May 2022 04:25:43 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 487F42DA8D;
+        Mon, 23 May 2022 01:25:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653294341; x=1684830341;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=igM5Ma7k6eALC5kfFd9tq0y+ANq1lCOaYezXzYPWJnE=;
+  b=WZbFlL1KKOy3dDuoAtFgXOIOzufFmY2q06oWUFnjzkBWyg9mwskLzGTC
+   FKB3pN45sNGoNA3+66G3X9r4yNBfWF/y2lDK12dz912SdVX+R9qjgwRaS
+   lOymXxt8Y43JWcsmopJH3NIfN57rZAAmA38G+84zEh05yRgsK214XQHH6
+   Iw0J9xQSPi6zMEuWpH3oBtWEJX2DEIXdWVOwaN0RsAKYBMX3AMqbTksFv
+   fJ29+wp3DhXcdZ5R8Zh8JtCE9zX8FczUGzJ6D5Xf7uZCrrshUZApxn3Dy
+   DNnI1fB/iMGmlDt8DAeYSfdX63EbNFmMBPBUZXU5Kq2c8WKJF9LwoDwGS
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10355"; a="260750720"
+X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
+   d="scan'208";a="260750720"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 01:25:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
+   d="scan'208";a="571965970"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga007.jf.intel.com with ESMTP; 23 May 2022 01:25:38 -0700
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Mon, 23 May 2022 01:25:37 -0700
+Received: from orsmsx604.amr.corp.intel.com (10.22.229.17) by
+ ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Mon, 23 May 2022 01:25:36 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx604.amr.corp.intel.com (10.22.229.17) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Mon, 23 May 2022 01:25:36 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.47) by
+ edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Mon, 23 May 2022 01:25:35 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Y5eUOuHh38vsNzyujHO5gSxIOwNzQ8g+I9tlrrQrd3SjpUkXDbHmjnJXEovYl55u+Fwk83RtqbzfgbuowBeQ/deaGaORnKyQQseK7zESlTcnKqndeD94IR68D5nc1nRb/Kkx+wO1E6K8qhQXNp5ZINEvCIoIUI3Z5MvlbbHQ4znthjNa3HQrl1Az+3QkPacMPcYqRBDbLBLl6nm9MWH57lmRo/pwaKeIDzs32hOalz4B2adRl+9Lb4bPN/Zmxo7nprQgU1NeOdhZSZJTwLDEwsbOk9C/umyEK5oOYT3MolFsYCaqsti5wBzyJJuMkY1g32s7UvpUGiDvyrfqED3Oag==
+ b=jkbKe7AFEqusPJ2X94EKKSV7HxQ48Yq/JFAP4RMK1kpLEn5YjveDlYi0ecfqRYKKpiglyRjbhVvBIN7RG4k4gGegWq2Ab+QdGg3A25BW5wRXp8HRK+QbFcvn1cPP39j8zyFySlYZbrWeq9flXs6GNhNoRUjZ6LrfIW6Btjn2CxTS1R+2cE/5C4XDd9s4yaMukz3U2eWZ6wpd/Ceo7JIOCkgLABQkLiaTEbiFVPT17+8eIbl1yPzf1hpljtzuzLR8BnL7tPYtN7M5wPhgONTk8xOP7HDTKQboEMYcHeYYVZONw8jy7oe87ToxkAkjd8JMCs/VhsY1yslOJ1vjhYTW/Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uXizruybj1Qs5gl7fqQ2Vn+F4IDjtP338AIxTX0jacA=;
- b=d4A9XLN9bdXzGBGpWtPPNFJMOP/XYNaciqo/3FhKcG2Q6CL6xinQU89lEjB8DvWv18HBxFQCV3GWzdOK7RluIyrnf5nXkIZmkuBWTeGJeLGvGOlRoyZOS7fx4hquey9V7JLz1uVDZvr9v22xvWxyv8FoVFQKd+vJdjulNpqvRQi8GDdAcOs+7SPbs41xnKRI8JPVkzcMdt/dG7RKCX2l73GLwVOL9aKeEO1ikGroG/jOU70VUIYdGDlewMn0NKjZFW0DUN+mqpdNMwOSW4clfvpmOmlqWJsopCn5lN72xSxJd3RUXAS8DM2/SWUO7+TriUsokG+zYHJng6jawY5NLA==
+ bh=SUPcr5MNodFzKyOfga4eJJ75hC8ovKD8iBN7CfRCV1o=;
+ b=NTmjLDZ0nW34tvzgNSPAaCDvrSbA9e3RkWLDX38nzbhmjo8EJpGssokauFJP6wZYHn5kobWI6yR0XQkkFJTaNOeG7vyXg4rT0kJD4h+p/pCpvr2cnz4b8t3efIsp85aHgWrMd56acKa+021CnTWnVxJwo0mEZJuSMaZZwQJT4GKYAQb74yVxUUoaRtGO6BNCk0jE5YwuxvpTODMG7H3IpQ20Pju7fsVRWxffIfQeqJ5CxjDdikn5UGRERggyRbAUhczRNvZ3YGceDYCkCWfdXsNfY+/yVOSKH5Q8EDMsyeomxqXZg9dFVV4rJZ+dqSmWNUmoKI9hc7qatdsgQ4OR7A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uXizruybj1Qs5gl7fqQ2Vn+F4IDjtP338AIxTX0jacA=;
- b=to0B0zt2Nm7ijiW+0RXL13YKVcxC6XMruXV8kdobiD/c1rXGVhVGmn5o2wYOwVBgA9WcM7IC/krSJOhIX8kYYHEXMfbdGMP4NdI+2cIwbtFla+OHzvZCOMsoN9tHmNE5arpC6FuD0YIQwIajk6JtnImEE1mz66+jJxuAGWurR/E=
-Received: from DM4PR12MB6351.namprd12.prod.outlook.com (2603:10b6:8:a2::6) by
- IA1PR12MB6330.namprd12.prod.outlook.com (2603:10b6:208:3e4::22) with
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BL1PR11MB5271.namprd11.prod.outlook.com (2603:10b6:208:31a::21)
+ by DM6PR11MB3930.namprd11.prod.outlook.com (2603:10b6:5:197::26) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.22; Mon, 23 May
- 2022 08:25:30 +0000
-Received: from DM4PR12MB6351.namprd12.prod.outlook.com
- ([fe80::243c:893a:a5db:1689]) by DM4PR12MB6351.namprd12.prod.outlook.com
- ([fe80::243c:893a:a5db:1689%9]) with mapi id 15.20.5273.023; Mon, 23 May 2022
- 08:25:28 +0000
-From:   "Meng, Li (Jassmine)" <Li.Meng@amd.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-CC:     Shuah Khan <skhan@linuxfoundation.org>,
-        "Huang, Ray" <Ray.Huang@amd.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
-        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>,
-        "Yuan, Perry" <Perry.Yuan@amd.com>,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH V7 2/4] cpufreq: amd-pstate: Add test module for
- amd-pstate driver
-Thread-Topic: [PATCH V7 2/4] cpufreq: amd-pstate: Add test module for
- amd-pstate driver
-Thread-Index: AQHYbdLLgXfeBE11A0GbQrf3/h8d/a0sEryAgAAM7LA=
-Date:   Mon, 23 May 2022 08:25:28 +0000
-Message-ID: <DM4PR12MB6351C32C58F5BA063E89D1A8F7D49@DM4PR12MB6351.namprd12.prod.outlook.com>
-References: <20220522115423.1147282-1-li.meng@amd.com>
- <20220522115423.1147282-3-li.meng@amd.com>
- <20220523073201.asdi35v5f43aoaee@vireshk-i7>
-In-Reply-To: <20220523073201.asdi35v5f43aoaee@vireshk-i7>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.16; Mon, 23 May
+ 2022 08:25:34 +0000
+Received: from BL1PR11MB5271.namprd11.prod.outlook.com
+ ([fe80::3114:d1ec:335e:d303]) by BL1PR11MB5271.namprd11.prod.outlook.com
+ ([fe80::3114:d1ec:335e:d303%3]) with mapi id 15.20.5273.023; Mon, 23 May 2022
+ 08:25:34 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        "Lu Baolu" <baolu.lu@linux.intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "will@kernel.org" <will@kernel.org>
+CC:     "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        Eric Auger <eric.auger@redhat.com>
+Subject: RE: [PATCH v4 4/6] iommu: Add PASID support for DMA mapping API users
+Thread-Topic: [PATCH v4 4/6] iommu: Add PASID support for DMA mapping API
+ users
+Thread-Index: AQHYauOT13oDIcCFekWTxcG7Uq0rw60sIOpA
+Date:   Mon, 23 May 2022 08:25:33 +0000
+Message-ID: <BL1PR11MB5271E995E160E0C6A6C0C89A8CD49@BL1PR11MB5271.namprd11.prod.outlook.com>
+References: <20220518182120.1136715-1-jacob.jun.pan@linux.intel.com>
+ <20220518182120.1136715-5-jacob.jun.pan@linux.intel.com>
+In-Reply-To: <20220518182120.1136715-5-jacob.jun.pan@linux.intel.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2022-05-23T08:21:57Z;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=9dc4f8e7-3745-4e6b-9636-3ab89b8d27b7;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_enabled: true
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_setdate: 2022-05-23T08:25:26Z
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_method: Standard
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_name: General
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_actionid: 3e26b4d8-5895-4f63-815c-97c73a4a193c
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_contentbits: 0
 authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
+ header.d=none;dmarc=none action=none header.from=intel.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 35769cb5-cc03-47ff-d469-08da3c95cb8b
-x-ms-traffictypediagnostic: IA1PR12MB6330:EE_
-x-microsoft-antispam-prvs: <IA1PR12MB63308B6F151A44CF232CAD5BF7D49@IA1PR12MB6330.namprd12.prod.outlook.com>
+x-ms-office365-filtering-correlation-id: 96e41911-c5a1-44f1-3f1c-08da3c95ce8e
+x-ms-traffictypediagnostic: DM6PR11MB3930:EE_
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-microsoft-antispam-prvs: <DM6PR11MB393052E3A8AA4035585217AD8CD49@DM6PR11MB3930.namprd11.prod.outlook.com>
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: k9JSXQlOWYYg5lRZQyT0hL2ljXdUJS23+oN9RbKOtA3s2RRLJGtGA4v6hsTJ5GqeWu3/tyFnm/3/rWcjEt0f9ucI5Nbvh6ktmlk6gRYVtTiipciOgU69IyKoNk4/i274yXG03GWVWSPOaofOdCGFi3hhUw82VJGIDJzJExk8hii3TI/xE4Sopwkx26aDlmrPV3s2qfep5RPUSR6a4DX+zqklPaC6E/vF/K8sDBhkrTlc1stcII5AcblvehdFTgt7Apj6AEF5hlvEF/nK0LU9uZks/gkAgEK8I/hfNWthgwXQuHqsFtcsc/lomb88DMhiyFesb0AuTP+ba1a9xTufB4zynOomGbmF+6yuT7JHCs7iF2zOn8LdWSAR3wAVt64IZ99K4cspeuv07ox+fopI3hsOEYUQ5a+ME7M6aEBkehopsM2Vgqfx13jZsQqJzvLHE/EN83HV538OgeTIJpktxkPu4cVfG3PQfudtbRsCAnwUFszDdyS4Opq34by/5Zdsu8FZitvBkEwAXCGfCHlxTUwFd1B91PSMSsvhuLkEde41gcfjKV9mcfbDiMux9/dRAXBGVbMZowXmOO+FVlUmwadPAWjp1YwMGWbgUfciLsSuI5kcj+3A0bEbpnckNBeGtHDVp8H2rmCNvGi33tamwG6z8Jh9p0XW6j5YqYIba3mUD2RTAXThNVz1iDKRmzSswCleQIVsaiFq8LTrKjYMmA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6351.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6506007)(2906002)(86362001)(9686003)(7696005)(8936002)(52536014)(508600001)(53546011)(5660300002)(33656002)(76116006)(83380400001)(186003)(122000001)(38100700002)(38070700005)(64756008)(54906003)(316002)(55016003)(8676002)(4326008)(6916009)(66446008)(66556008)(66946007)(66476007)(71200400001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 2
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?3/BLtZf7yay6I+0sfSoPMhb/5XolqFfshbomnNpYFzFbJOf5tWhZtOL5P1xX?=
- =?us-ascii?Q?zvOym+TooEzXWfYYNHqVpgTM6t4r05tFFHITPMd5D+5XOUW4wGjYWHMZ62fe?=
- =?us-ascii?Q?m/unu9ybrBRju2CSD8Oz9aFld6zmz9jruWWe3XB95Nep2DrGf/hM03oKFJSP?=
- =?us-ascii?Q?pmcpHx+z8vYmTWSsjLNuJJyMxwzvRS4zsHE1Xr9ueK8XDo/qWcXVe5uE6X7W?=
- =?us-ascii?Q?OVTpu406O8rcEZMelxd3X+fEpEyqtR0JNUqvsgOLLzYL9St2+Vm2O1TiL+jh?=
- =?us-ascii?Q?eZ1WKC1Dt8ZCRbT6ZPXTJ0kYZ0udK5ub+auKpZr6iTC1LG11RmMcUQLsojR/?=
- =?us-ascii?Q?zJuKOEiqDWvvGFMMhlrLTXCAP89X0noXisWBgXiJqfv7r6NhbI61ZHrPFU2v?=
- =?us-ascii?Q?EbxE0b5zk4SFyybhjWSnIKvlvhP4r8haqPANptjL4DBv+9icT2TOl+f4LDlP?=
- =?us-ascii?Q?zmZJk22l70/phMiJK51PeLLSQLlXHTvT03aZU8LaYi10rjrG3/7BUqqRcv/f?=
- =?us-ascii?Q?ZofHhQRl8EgPCwHRe3wbfcPCIXrtYUqhLfjrZSUb9BaezzOIH6pcqHz3dpPZ?=
- =?us-ascii?Q?C2cvPMLaGXdwhzRym72pYwYNThUq/F3NUvbQJtl+RCl2AKi5bg3pmKderDjn?=
- =?us-ascii?Q?COTZ4PUgWCvEb482WBALTHrzxfxDRBC5ZqR4r5MOQzksYnDiGeJizNnxYdhY?=
- =?us-ascii?Q?+0tc0ppf/09K4QdJGTNtFZsZ54EQOz+XZxnHGJRV/Ckyp6GBs8OfkDJ8JeYm?=
- =?us-ascii?Q?j+Ym2tDPG5mw3RToEUsbOxLdHjcQLijfZhOoPMSWPYDSapIp1cTQXxRRi804?=
- =?us-ascii?Q?WkSwIus1Hlw3Rd4xpaUEXGi+LiTpEblIZL9KmpYbUB1TdHBiFKyzzBhKNwl9?=
- =?us-ascii?Q?HG8EPOLynTaDXE3udeS299hERC3oCHLXJ70U4ak0eOILoTp1/hAQVOJd9Vs2?=
- =?us-ascii?Q?1sOJcR42GnW1MwFDy96pEZ+LrWJuDNkjsQkW8qXq6lQMSxh0uPjBtGE8Sehm?=
- =?us-ascii?Q?CTYgfhMa2gYmmLPHhfVoBFrbshQzUsgmcPi8qdTV/StawtPVVa7DxwwvUTrb?=
- =?us-ascii?Q?gso9RKYNuefgKAvCrt5ZEFEIXPOFmhukghm5C6N3Rd+xTrCUi2d92Djz8WyV?=
- =?us-ascii?Q?dcCOg7UIfJGOvDN17139K19N8Hilc+Euc+e1TJmHSxNX3lS6XzmK0ijPtET8?=
- =?us-ascii?Q?HGdZ0PFFcgRkgXqBSSTogCSjrcmjW7gHuGvXX++u0+P1rwnMr3bOi26cpoZ9?=
- =?us-ascii?Q?pVtuPtE8keo2sxiDU3qg/J8xQjyJ1FF2zuX8j42ArrHjciuPyR2C4QRuB18A?=
- =?us-ascii?Q?7SR5kq0njbvRYbGXwqZtvAjm/05oDrBWH8MsZ/QWh5dbK64YJbJQlDn+lXxJ?=
- =?us-ascii?Q?S+YSKWrt7PXPW40FfoUq/5KyimaoVCu6EHFJIfas+3BZg2GlnCdvQAd4ZrRV?=
- =?us-ascii?Q?RdgOTcMKYPKnYww6uYUbcPa2Xuv0c1HbjGxUgOxn9ZAX8XNG+mgM/s/p3boT?=
- =?us-ascii?Q?tyAvTVnKLNXpAcjjr2NKnpZek4TVzePZxTxN/fpidfHxa2drPVQFZyesCo9a?=
- =?us-ascii?Q?NC6CYlKxDYmBptR0E3ErKC2YbqFnjPB+ByDfGaGnhZKqNoo5Qn47W8kWdtdD?=
- =?us-ascii?Q?r1sxQB+ME0mGoxjAP3O0YakgehQJje+H0PAOrscnu9fnJ+ir2s54A7MQ0VHT?=
- =?us-ascii?Q?i8IjncH7yG1ba1YdrO/aF+AY5M/yNH/tkyTpcicbUSgu4SvwtdiPf06iDx9c?=
- =?us-ascii?Q?tO1h4zavZ0Dd9lnpLhVctZnua6xOMx5AfMGMgQpmif1g2S+1lxjzhhYFk/hx?=
-x-ms-exchange-antispam-messagedata-1: zGp8oGF3VWxDCg==
+x-microsoft-antispam-message-info: tvZuz15qw5OsqjmiDLi12U60sJIjSvsjn0HTQo5eMMRvB4+AMzqaBYKRL7TfIB23r/D5X7Fuu5Pc7XluATERvRqKmnx36kPheGos7h8aHjn/noA2i8trADvcdq/8H3sAfkoDNUPLXptH2CqWRlsIQqc6qOwK6JkwJda0l/b9wbltSr8AoyzNPaN3VzWZIJHbfcH1snmUWAt9asOxma2xDiQIdACXlbzFU5P0JwEYWlMqgzJ45sHAAZji6Eu883VBm+iVYQMofsGrHxL3lFVfQeS0cnFkkCGFDZTGvTb0DIreGiFcuhUVxkzmHugoMCUUow8nSdcFVwcqKhrHAmmrzundIcGD/2xC8dw6ekH4mhDnM8f+y++9zt60U+KAuHfF3NgJBlev81sU9JPOr7OOFCndVL7h49ceYJSoNLHnsfYGHpSj/otMknkjVyeVJxmFEP+9ZEJleCfpL0QHaiDGbRqJiqOFmJ0YAZUxm23emvAtvZ01421zVoZALOZpOdg+gShkQ3yVQMiEwEfeFiOHmJOHnpDYj8I/iPSpovuu2DN5UMr6s/flaAlyhmlnTAHJ+IYWhkBNGQtwLYV5M+HdMHeENTrxFTW0uhmquooq9VUuSV01FRKLzqLFddgC9R0ykvlZxpUBmUBOyohNAtXK8tEEKNR0fm0YZ0HqSjO2KlS+/wpoUkpff08qzZU/q5mDXa4uRWHahLAu9Y4pSIyAO+RaY/hCxrIDdzUd7+XrCEE7hQdQirgoit44N/RyTK2GR9FwYrkSnrploWHuywvQVjb6Z3C8Y6Jvi7do3O+Y+ms=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5271.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(4326008)(921005)(38100700002)(2906002)(38070700005)(66946007)(8676002)(66446008)(64756008)(66476007)(66556008)(76116006)(82960400001)(55016003)(52536014)(122000001)(71200400001)(5660300002)(54906003)(110136005)(8936002)(7416002)(316002)(508600001)(9686003)(7696005)(26005)(86362001)(186003)(83380400001)(33656002)(6506007)(26730200005)(19860200003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?44w5/dcusEePT35zys05DpstC2T/PHIwZdlIFDRP4uUm5rrZghlOFSBOeQ2D?=
+ =?us-ascii?Q?OqoiDmtV0C1klcabZn4SZjTH8o/P38OUc9wXwJJ3t51aH8/PWvKUZysZQGa6?=
+ =?us-ascii?Q?XKBsOP57l/77XdtBrLs32I8JTEKRtlQ2KbSHrIWhmgPgVOAYeDNcOIYJnMAZ?=
+ =?us-ascii?Q?+yZtAt7Zvkgy84lpqiiRi2N/4JFjoqOAyXAc/m+5I9nKJ/Y3VxzlvJp+qrqc?=
+ =?us-ascii?Q?2hOuo5uJmWgTrFqrUhiDQm3PcyFj/OKMJkvfQbSglAz14J0iXgPIA+jG+glC?=
+ =?us-ascii?Q?pMiEhfM1dZ03X++PiWAzWbeyu1wC4nEoy3yCnsi3GsijTfMhCGNumSZbolfR?=
+ =?us-ascii?Q?xxf71s5wOwe2DIZhsqvwLONqJ6awHIuCT3TXz8jGf4bnGgnOQioN+sjae/OJ?=
+ =?us-ascii?Q?aH8fR9Vaoufff0tJa7yeb+3IL5t9wts/LDx51fj/deeDmCvNV99X7DC4Ho5P?=
+ =?us-ascii?Q?RuehCBSWZIV4zUU2rDgc+27pk8JkPnAxQPtJVQREj3aS9bIz7pytPLYs9ULe?=
+ =?us-ascii?Q?0kl1rsXXfK9qQmFXzhLDb5kbmt4YhpKiVZJbSHu0Vx14EivBamOY0Q6Di+9h?=
+ =?us-ascii?Q?eFUIPpcFchM5F6Arj2ZB7S8A0ZncitO7nJMLQ1j3JimvWQETndl4e0gfu3r3?=
+ =?us-ascii?Q?zApJRyYZd/jAb5DVwv4gjtI+vtgn4/0zKShd4xbHr5jaChbCJIVN+10soy2+?=
+ =?us-ascii?Q?nzPGnvVCmtUwKiyJOIUFnbikEIGdSGtsMaMYJcdrEScLnqeQ7QSJL7dpHzRs?=
+ =?us-ascii?Q?uzrJVAZIflQp8HjUxrxbtfvudF+VO+tlKceb7NU5olHQRESWwgAT2L5cUUeA?=
+ =?us-ascii?Q?fnDscte/pjW1Mlz2L6yoEntVvRJ9mad7HmdVK/MbnkPJxSb7ZhtcLJMa6Hpx?=
+ =?us-ascii?Q?NHkOsbaJcXvGAIrOaGX4ZFrZeeAIEbByhCNoOCaMkLoi1A+LK+2aYRBlYEor?=
+ =?us-ascii?Q?SMJws46zgkNfxzcn/fu3KR2mfKRogd6zbWBMowEUYJCroEAvp+xoIQNw5ZIL?=
+ =?us-ascii?Q?MEuIKezCiZl1pN9sY/+CikzTitpgIaJIxu/MZq9fcqUwi/IbvdWKeu0A5nVV?=
+ =?us-ascii?Q?yt01/ZGulAU/9DmiShN9A8uKzz4ocJM9vLUppDR8lWaXTTCQR4uFMQwN3jNb?=
+ =?us-ascii?Q?KMPEU8e0Lm718HTS/k12ogPX6ytXQ5d/R+SCJOLCW5EbrL+2OZQSoq/2q0rE?=
+ =?us-ascii?Q?0HYSKZjF+MOpv44EvkDaW7wOPOj1oaKIK281ViEu8A+JlHSlnWJSyY0pKg4I?=
+ =?us-ascii?Q?VMHfdetuj7+LgzXYSizLHzrwj0e3zusU8kFZD9ac6/hPACn/PIkRFPvyTtJ7?=
+ =?us-ascii?Q?150FiL0mizIohVxo7Q9V/n0861ceU7B/b52dEsQCNjFzTs1h+PgqinSg/vDc?=
+ =?us-ascii?Q?rl1yG76hxmBfSh2a3VZ+LnQtQZVi7CC+GtvVbbWPYkgBoB27FpifblMHa4bz?=
+ =?us-ascii?Q?MeNTSjA3nTFMbL5HxxXiT90pT3ppvmCkLU5/65bJC7FC/R95kBRyOGEub8hN?=
+ =?us-ascii?Q?MDdrNUWeVqnQfNklxskEHqNbbW6QM+p61rMhwajsczTbIS6yeb6ZPGGEfqPr?=
+ =?us-ascii?Q?BiHXDPvpg+U9UbEBQKZgC7u4kvfnOTDbmF3xKONPipYSUqUI8JIKQ3bjVWPD?=
+ =?us-ascii?Q?wrsu8ZvrieDmaQFpfstFaujZLWEwqT75/JZ2WHDVJk9+Rv1neme3McJr0aDE?=
+ =?us-ascii?Q?E1ZZYcNNknl6kgsL95+ELRdxxS6CrHKn7ABO/QJxhXiDYjLb4VibRN09KIuU?=
+ =?us-ascii?Q?NV9MmFa+8w=3D=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6351.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 35769cb5-cc03-47ff-d469-08da3c95cb8b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 May 2022 08:25:28.8454
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5271.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 96e41911-c5a1-44f1-3f1c-08da3c95ce8e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 May 2022 08:25:33.9412
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 1Bz+LNoQ6POIx25Kzs1mr+L1/nI3WXDcDwT9ZsYINuGG2GN4auFOBlUEMe89Bsp7Xwp0+j+AGFrQ/MmuvSGFnw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6330
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-userprincipalname: BE5mP+sEy7vCcPDiUihGcCiA3xcA2PipEHRK4QTGacbgBTmrS7m4Zcs1TNuMVwK8JJWqmKzaRD2lOM5cCt2ydw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB3930
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[AMD Official Use Only - General]
+> From: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> Sent: Thursday, May 19, 2022 2:21 AM
+>=20
+> DMA mapping API is the de facto standard for in-kernel DMA. It operates
+> on a per device/RID basis which is not PASID-aware.
+>=20
+> Some modern devices such as Intel Data Streaming Accelerator, PASID is
+> required for certain work submissions. To allow such devices use DMA
+> mapping API, we need the following functionalities:
+> 1. Provide device a way to retrieve a PASID for work submission within
+> the kernel
+> 2. Enable the kernel PASID on the IOMMU for the device
+> 3. Attach the kernel PASID to the device's default DMA domain, let it
+> be IOVA or physical address in case of pass-through.
+>=20
+> This patch introduces a driver facing API that enables DMA API
+> PASID usage. Once enabled, device drivers can continue to use DMA APIs as
+> is. There is no difference in dma_handle between without PASID and with
+> PASID.
+>=20
+> Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> ---
+>  drivers/iommu/dma-iommu.c | 114
+> ++++++++++++++++++++++++++++++++++++++
+>  include/linux/dma-iommu.h |   3 +
+>  2 files changed, 117 insertions(+)
+>=20
+> diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+> index 1ca85d37eeab..6ad7ba619ef0 100644
+> --- a/drivers/iommu/dma-iommu.c
+> +++ b/drivers/iommu/dma-iommu.c
+> @@ -34,6 +34,8 @@ struct iommu_dma_msi_page {
+>  	phys_addr_t		phys;
+>  };
+>=20
+> +static DECLARE_IOASID_SET(iommu_dma_pasid);
+> +
+>  enum iommu_dma_cookie_type {
+>  	IOMMU_DMA_IOVA_COOKIE,
+>  	IOMMU_DMA_MSI_COOKIE,
+> @@ -370,6 +372,118 @@ void iommu_put_dma_cookie(struct
+> iommu_domain *domain)
+>  	domain->iova_cookie =3D NULL;
+>  }
+>=20
+> +/* Protect iommu_domain DMA PASID data */
+> +static DEFINE_MUTEX(dma_pasid_lock);
+> +/**
+> + * iommu_attach_dma_pasid --Attach a PASID for in-kernel DMA. Use the
+> device's
+> + * DMA domain.
+> + * @dev: Device to be enabled
+> + * @pasid: The returned kernel PASID to be used for DMA
+> + *
+> + * DMA request with PASID will be mapped the same way as the legacy DMA.
+> + * If the device is in pass-through, PASID will also pass-through. If th=
+e
+> + * device is in IOVA, the PASID will point to the same IOVA page table.
+> + *
+> + * @return err code or 0 on success
+> + */
+> +int iommu_attach_dma_pasid(struct device *dev, ioasid_t *pasid)
 
+iommu_attach_dma_domain_pasid? 'dma_pasid' is too broad from
+a API p.o.v.
 
+> +{
+> +	struct iommu_domain *dom;
+> +	ioasid_t id, max;
+> +	int ret =3D 0;
+> +
+> +	dom =3D iommu_get_domain_for_dev(dev);
+> +	if (!dom || !dom->ops || !dom->ops->attach_dev_pasid)
+> +		return -ENODEV;
+> +
+> +	/* Only support domain types that DMA API can be used */
+> +	if (dom->type =3D=3D IOMMU_DOMAIN_UNMANAGED ||
+> +	    dom->type =3D=3D IOMMU_DOMAIN_BLOCKED) {
+> +		dev_warn(dev, "Invalid domain type %d", dom->type);
+> +		return -EPERM;
+> +	}
 
-> -----Original Message-----
-> From: Viresh Kumar <viresh.kumar@linaro.org>
-> Sent: Monday, May 23, 2022 3:32 PM
-> To: Meng, Li (Jassmine) <Li.Meng@amd.com>
-> Cc: Shuah Khan <skhan@linuxfoundation.org>; Huang, Ray
-> <Ray.Huang@amd.com>; linux-pm@vger.kernel.org; Rafael J . Wysocki
-> <rafael.j.wysocki@intel.com>; Fontenot, Nathan
-> <Nathan.Fontenot@amd.com>; Sharma, Deepak
-> <Deepak.Sharma@amd.com>; Deucher, Alexander
-> <Alexander.Deucher@amd.com>; Limonciello, Mario
-> <Mario.Limonciello@amd.com>; Su, Jinzhou (Joe) <Jinzhou.Su@amd.com>;
-> Yuan, Perry <Perry.Yuan@amd.com>; Du, Xiaojian <Xiaojian.Du@amd.com>;
-> Borislav Petkov <bp@alien8.de>; linux-kernel@vger.kernel.org
-> Subject: Re: [PATCH V7 2/4] cpufreq: amd-pstate: Add test module for amd-
-> pstate driver
+WARN_ON.
+
+and probably we can just check whether domain is default domain here.
+
+> +
+> +	mutex_lock(&dma_pasid_lock);
+> +	id =3D dom->dma_pasid;
+> +	if (!id) {
+> +		/*
+> +		 * First device to use PASID in its DMA domain, allocate
+> +		 * a single PASID per DMA domain is all we need, it is also
+> +		 * good for performance when it comes down to IOTLB flush.
+> +		 */
+> +		max =3D 1U << dev->iommu->pasid_bits;
+> +		if (!max) {
+> +			ret =3D -EINVAL;
+> +			goto done_unlock;
+> +		}
+> +
+> +		id =3D ioasid_alloc(&iommu_dma_pasid, 1, max, dev);
+> +		if (id =3D=3D INVALID_IOASID) {
+> +			ret =3D -ENOMEM;
+> +			goto done_unlock;
+> +		}
+> +
+> +		dom->dma_pasid =3D id;
+> +		atomic_set(&dom->dma_pasid_users, 1);
+
+this is always accessed with lock held hence no need to be atomic.
+
+> +	}
+> +
+> +	ret =3D iommu_attach_device_pasid(dom, dev, id);
+> +	if (!ret) {
+> +		*pasid =3D id;
+> +		atomic_inc(&dom->dma_pasid_users);
+> +		goto done_unlock;
+> +	}
+> +
+> +	if (atomic_dec_and_test(&dom->dma_pasid_users)) {
+> +		ioasid_free(id);
+> +		dom->dma_pasid =3D 0;
+> +	}
+> +done_unlock:
+> +	mutex_unlock(&dma_pasid_lock);
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL(iommu_attach_dma_pasid);
+> +
+> +/**
+> + * iommu_detach_dma_pasid --Disable in-kernel DMA request with PASID
+> + * @dev:	Device's PASID DMA to be disabled
+> + *
+> + * It is the device driver's responsibility to ensure no more incoming D=
+MA
+> + * requests with the kernel PASID before calling this function. IOMMU dr=
+iver
+> + * ensures PASID cache, IOTLBs related to the kernel PASID are cleared a=
+nd
+> + * drained.
+> + *
+> + */
+> +void iommu_detach_dma_pasid(struct device *dev)
+> +{
+> +	struct iommu_domain *dom;
+> +	ioasid_t pasid;
+> +
+> +	dom =3D iommu_get_domain_for_dev(dev);
+> +	if (WARN_ON(!dom || !dom->ops || !dom->ops->detach_dev_pasid))
+> +		return;
+> +
+> +	/* Only support DMA API managed domain type */
+> +	if (WARN_ON(dom->type =3D=3D IOMMU_DOMAIN_UNMANAGED ||
+> +		    dom->type =3D=3D IOMMU_DOMAIN_BLOCKED))
+> +		return;
+> +
+> +	mutex_lock(&dma_pasid_lock);
+> +	pasid =3D iommu_get_pasid_from_domain(dev, dom);
+> +	if (!pasid || pasid =3D=3D INVALID_IOASID) {
+> +		dev_err(dev, "No valid DMA PASID attached\n");
+> +		mutex_unlock(&dma_pasid_lock);
+> +		return;
+> +	}
+
+here just use dom->dma_pasid and let iommu driver to figure out
+underlying whether this device has been attached to the domain
+with the said pasid.
+
+> +	iommu_detach_device_pasid(dom, dev, pasid);
+> +	if (atomic_dec_and_test(&dom->dma_pasid_users)) {
+> +		ioasid_free(pasid);
+> +		dom->dma_pasid =3D 0;
+> +	}
+> +	mutex_unlock(&dma_pasid_lock);
+> +}
+> +EXPORT_SYMBOL(iommu_detach_dma_pasid);
+> +
+>  /**
+>   * iommu_dma_get_resv_regions - Reserved region driver helper
+>   * @dev: Device from iommu_get_resv_regions()
+> diff --git a/include/linux/dma-iommu.h b/include/linux/dma-iommu.h
+> index 24607dc3c2ac..538650b9cb75 100644
+> --- a/include/linux/dma-iommu.h
+> +++ b/include/linux/dma-iommu.h
+> @@ -18,6 +18,9 @@ int iommu_get_dma_cookie(struct iommu_domain
+> *domain);
+>  int iommu_get_msi_cookie(struct iommu_domain *domain, dma_addr_t
+> base);
+>  void iommu_put_dma_cookie(struct iommu_domain *domain);
 >=20
-> [CAUTION: External Email]
->=20
-> On 22-05-22, 19:54, Meng Li wrote:
-> > Add amd-pstate-ut module, which is conceptually out-of-tree module and
-> > provides ways for selftests/amd-pstate driver to test various kernel
-> > module-related functionality. This module will be expected by some of
-> > selftests to be present and loaded.
-> >
-> > Signed-off-by: Meng Li <li.meng@amd.com>
-> > Acked-by: Huang Rui <ray.huang@amd.com>
-> > ---
-> >  drivers/cpufreq/Kconfig.x86     |   7 +
-> >  drivers/cpufreq/Makefile        |   1 +
-> >  drivers/cpufreq/amd-pstate-ut.c | 293
-> > ++++++++++++++++++++++++++++++++
-> >  3 files changed, 301 insertions(+)
-> >  create mode 100644 drivers/cpufreq/amd-pstate-ut.c
->=20
-> I wonder if this should be moved to selftest directories instead ?
->=20
+> +int iommu_attach_dma_pasid(struct device *dev, ioasid_t *pasid);
+> +void iommu_detach_dma_pasid(struct device *dev);
+> +
+>  /* Setup call for arch DMA mapping code */
+>  void iommu_setup_dma_ops(struct device *dev, u64 dma_base, u64
+> dma_limit);
+>  int iommu_dma_init_fq(struct iommu_domain *domain);
 > --
-> Viresh
+> 2.25.1
 
-Thanks.
-We took Shuah's comments and put test driver under drivers/cpufreq.
-
-[Meng, Li (Jassmine)]=20

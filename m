@@ -2,173 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C2B55307C9
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 04:45:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35F5C5307CC
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 04:49:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240903AbiEWCpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 22:45:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55174 "EHLO
+        id S1353137AbiEWCta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 22:49:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234211AbiEWCpR (ORCPT
+        with ESMTP id S234211AbiEWCt0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 22:45:17 -0400
-Received: from lgeamrelo11.lge.com (lgeamrelo12.lge.com [156.147.23.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EC4152E09E
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 19:45:13 -0700 (PDT)
-Received: from unknown (HELO lgemrelse6q.lge.com) (156.147.1.121)
-        by 156.147.23.52 with ESMTP; 23 May 2022 11:45:12 +0900
-X-Original-SENDERIP: 156.147.1.121
-X-Original-MAILFROM: byungchul.park@lge.com
-Received: from unknown (HELO X58A-UD3R) (10.177.244.38)
-        by 156.147.1.121 with ESMTP; 23 May 2022 11:45:12 +0900
-X-Original-SENDERIP: 10.177.244.38
-X-Original-MAILFROM: byungchul.park@lge.com
-Date:   Mon, 23 May 2022 11:43:21 +0900
-From:   Byungchul Park <byungchul.park@lge.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, torvalds@linux-foundation.org,
-        damien.lemoal@opensource.wdc.com, linux-ide@vger.kernel.org,
-        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        mingo@redhat.com, linux-kernel@vger.kernel.org,
-        peterz@infradead.org, will@kernel.org, tglx@linutronix.de,
-        rostedt@goodmis.org, joel@joelfernandes.org, sashal@kernel.org,
-        daniel.vetter@ffwll.ch, chris@chris-wilson.co.uk,
-        duyuyang@gmail.com, johannes.berg@intel.com, tj@kernel.org,
-        tytso@mit.edu, willy@infradead.org, david@fromorbit.com,
-        amir73il@gmail.com, gregkh@linuxfoundation.org,
-        kernel-team@lge.com, linux-mm@kvack.org, akpm@linux-foundation.org,
-        mhocko@kernel.org, minchan@kernel.org, hannes@cmpxchg.org,
-        vdavydov.dev@gmail.com, sj@kernel.org, jglisse@redhat.com,
-        dennis@kernel.org, cl@linux.com, penberg@kernel.org,
-        rientjes@google.com, vbabka@suse.cz, ngupta@vflare.org,
-        linux-block@vger.kernel.org, paolo.valente@linaro.org,
-        josef@toxicpanda.com, linux-fsdevel@vger.kernel.org,
-        viro@zeniv.linux.org.uk, jack@suse.cz, jack@suse.com,
-        jlayton@kernel.org, dan.j.williams@intel.com, hch@infradead.org,
-        djwong@kernel.org, dri-devel@lists.freedesktop.org,
-        airlied@linux.ie, rodrigosiqueiramelo@gmail.com,
-        melissa.srw@gmail.com, hamohammed.sa@gmail.com
-Subject: Re: [PATCH RFC v6 00/21] DEPT(Dependency Tracker)
-Message-ID: <20220523024321.GB16721@X58A-UD3R>
-References: <CAHk-=whnPePcffsNQM+YSHMGttLXvpf8LbBQ8P7HEdqFXaV7Lg@mail.gmail.com>
- <1651795895-8641-1-git-send-email-byungchul.park@lge.com>
- <YnYd0hd+yTvVQxm5@hyeyoo>
- <20220509001637.GA6047@X58A-UD3R>
- <YnpJ9Mtf+pjx4JYm@hyeyoo>
- <20220510233929.GB18445@X58A-UD3R>
- <YnuKQ9UIhk9WYoz7@hyeyoo>
- <YoYXvsgVJwwaWrrZ@arm.com>
+        Sun, 22 May 2022 22:49:26 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6962C36E1D;
+        Sun, 22 May 2022 19:49:24 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L61xt02W1z4xD8;
+        Mon, 23 May 2022 12:49:21 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1653274162;
+        bh=8vRrqTTTdaOdgjSyiFkBry6La19dq3qrUOHOFmITwwM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=kQjXVig3BrrDkctZY3mC0Pl/OEc/TcXgNDjlPgSAGT+ikHn40yxT5TjYmNiTRJHYp
+         6MiWA+DMhyw44xRHAw/a5kOrmeKWak0P8M/6d7gwRLVPgwBTybMtaexhl5Co8O0rZa
+         Rw1AbNXBvF5f9GFBkMcrmtagi6boTUZH0Pxpx1Gl4iHp97eOVW7Y55RfuHJLw2sVMg
+         328/J/i4mb3r6H0hlakmo0u4NnhnliZrvDSyIsdl50WsqAaaYg5g0tvV90WS/G/dzC
+         WmtLwcarJ+hn+o7+rLa988v6crud0gzhyf26tRg7fLmyZ7fDGl6YHQqH9xqDOxQ/yB
+         Llnz8tqGW+OOw==
+Date:   Mon, 23 May 2022 12:49:21 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Coly Li <colyli@suse.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the block tree
+Message-ID: <20220523124921.7d6bbf34@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YoYXvsgVJwwaWrrZ@arm.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/ZtyPrewlH62vDJ+OMJGI0ml";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 11:11:10AM +0100, Catalin Marinas wrote:
-> On Wed, May 11, 2022 at 07:04:51PM +0900, Hyeonggon Yoo wrote:
-> > On Wed, May 11, 2022 at 08:39:29AM +0900, Byungchul Park wrote:
-> > > On Tue, May 10, 2022 at 08:18:12PM +0900, Hyeonggon Yoo wrote:
-> > > > On Mon, May 09, 2022 at 09:16:37AM +0900, Byungchul Park wrote:
-> > > > > CASE 1.
-> > > > > 
-> > > > >    lock L with depth n
-> > > > >    lock_nested L' with depth n + 1
-> > > > >    ...
-> > > > >    unlock L'
-> > > > >    unlock L
-> > > > > 
-> > > > > This case is allowed by Lockdep.
-> > > > > This case is allowed by DEPT cuz it's not a deadlock.
-> > > > > 
-> > > > > CASE 2.
-> > > > > 
-> > > > >    lock L with depth n
-> > > > >    lock A
-> > > > >    lock_nested L' with depth n + 1
-> > > > >    ...
-> > > > >    unlock L'
-> > > > >    unlock A
-> > > > >    unlock L
-> > > > > 
-> > > > > This case is allowed by Lockdep.
-> > > > > This case is *NOT* allowed by DEPT cuz it's a *DEADLOCK*.
-> > > > 
-> > > > Yeah, in previous threads we discussed this [1]
-> > > > 
-> > > > And the case was:
-> > > > 	scan_mutex -> object_lock -> kmemleak_lock -> object_lock
-> > > > And dept reported:
-> > > > 	object_lock -> kmemleak_lock, kmemleak_lock -> object_lock as
-> > > > 	deadlock.
-> > > > 
-> > > > But IIUC - What DEPT reported happens only under scan_mutex and it
-> > > > is not simple just not to take them because the object can be
-> > > > removed from the list and freed while scanning via kmemleak_free()
-> > > > without kmemleak_lock and object_lock.
-> 
-> The above kmemleak sequence shouldn't deadlock since those locks, even
-> if taken in a different order, are serialised by scan_mutex. For various
-> reasons, trying to reduce the latency, I ended up with some
-> fine-grained, per-object locking.
+--Sig_/ZtyPrewlH62vDJ+OMJGI0ml
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I understand why you introduced the fine-grained lock. However, the
-different order should be avoided anyway. As Steven said, Lockdep also
-should've detected this case, say, this would have been detected if
-Lockdep worked correctly.
+Hi all,
 
-It's not a technical issue to make a tool skip the reversed order when
-it's already protected by another lock. Because each lock has its own
-purpose as you explained, no body knows if the cases might arise that
-use kmemleak_lock and object_lock only w/o holding scan_mutex someday.
+After merging the block tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-I'm wondering how other folks think this case should be handled tho.
+drivers/md/bcache/btree.c: In function 'bch_btree_check':
+drivers/md/bcache/btree.c:2073:1: error: the frame size of 2184 bytes is la=
+rger than 2048 bytes [-Werror=3Dframe-larger-than=3D]
+ 2073 | }
+      | ^
 
-> For object allocation (rbtree modification) and tree search, we use
-> kmemleak_lock. During scanning (which can take minutes under
-> scan_mutex), we want to prevent (a) long latencies and (b) freeing the
-> object being scanned. We release the locks regularly for (a) and hold
-> the object->lock for (b).
-> 
-> In another thread Byungchul mentioned:
-> 
-> |    context X			context Y
-> | 
-> |    lock mutex A		lock mutex A
-> |    lock B			lock C
-> |    lock C			lock B
-> |    unlock C			unlock B
-> |    unlock B			unlock C
-> |    unlock mutex A		unlock mutex A
-> | 
-> | In my opinion, lock B and lock C are unnecessary if they are always
-> | along with lock mutex A. Or we should keep correct lock order across all
-> | the code.
-> 
-> If these are the only two places, yes, locks B and C would be
-> unnecessary. But we have those locks acquired (not nested) on the
-> allocation path (kmemleak_lock) and freeing path (object->lock). We
-> don't want to block those paths while scan_mutex is held.
-> 
-> That said, we may be able to use a single kmemleak_lock for everything.
-> The object freeing path may be affected slightly during scanning but the
-> code does release it every MAX_SCAN_SIZE bytes. It may even get slightly
-> faster as we'd hammer a single lock (I'll do some benchmarks).
-> 
-> But from a correctness perspective, I think the DEPT tool should be
-> improved a bit to detect when such out of order locking is serialised by
-> an enclosing lock/mutex.
+Caused by commit
 
-Again, I don't think this is a technical issue.
+  c766acd3d78e ("bcache: improve multithreaded bch_btree_check()")
 
-	Byungchul
-> 
-> -- 
-> Catalin
+struct btree_check_state is very large to put on the stack :-(
+
+I have reverted that commit for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/ZtyPrewlH62vDJ+OMJGI0ml
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKK9jEACgkQAVBC80lX
+0GwF2wf9HjrIEdKFVp9p1ny33ibl0ftizJ4Z9NUW2D4hkeGZr7i8LWMnwPA6dW+u
+DvHyu1oHT5AQZdPdOYzI/ScSy9MMs74ApxYJja7x+JQAfZ4pdhKXLQjk1GAav32e
+ndFUyn9aeczJGtUj4ktQZzgKVqFKzwzToTP/AwQW16gQHnoWucn+wK7V4gBQo+kp
+2Q7jz1FonSknbSdjQ7j+A2zCyjt19nJdN/GjdIBZuMv3wbLB6+dWpHLp1rRE7wHH
+HOk7uPqlLgnrk5EbRYR5LD3dRWN9IKCQ/u50e8RSyfO/RH+yvus1twnYgba4JQvD
+9QdOvNftaO9qPuQqw1fG7jp+QwzA2A==
+=2S6x
+-----END PGP SIGNATURE-----
+
+--Sig_/ZtyPrewlH62vDJ+OMJGI0ml--

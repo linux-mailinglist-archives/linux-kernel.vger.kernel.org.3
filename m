@@ -2,174 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49D44530FFA
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:19:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E65F530FEB
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:19:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235658AbiEWMgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 08:36:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45482 "EHLO
+        id S235467AbiEWMe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 08:34:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235509AbiEWMft (ORCPT
+        with ESMTP id S235417AbiEWMev (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 08:35:49 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C726D49CBB;
-        Mon, 23 May 2022 05:35:24 -0700 (PDT)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24N9xcs3026146;
-        Mon, 23 May 2022 14:34:51 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=qIqK8sKEylUqg49Cc+Izo93o3wEhAt3Jq4iiQrYTUbQ=;
- b=6PmZ9b6rKmjdRP4tdvYnyvxBnK6nHrMvYE2wr20DGpObItpskv+GN69bswIDXXVdfLt4
- WFXNY8YEhrBX6ZT/TLCcH+NrGaH4w80XSYp2irmLVpPquWcINhel53BlBSwmNEIkFbR3
- QENy0RM0AkAJoVSpIOSl513OCVsihsAfWToqnEVs8YrX3JkWOdVNh/O/OIpKtPmWjvYC
- obS4NLuJUwsIfmUtEta6n/Lf1OfPQNeShDtGaHQU/x1NtZ02n0M7cyuPIHmjOUDJGv+2
- 39RdwjCKdsfJ5llE4hs3erRbSpSfsyVy3kGLF5lGZmOM+i+KJ+LRfVQ7uyHMGBjtQFzx hQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3g6s02935u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 23 May 2022 14:34:51 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 182A8100034;
-        Mon, 23 May 2022 14:34:51 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 03D2322789E;
-        Mon, 23 May 2022 14:34:51 +0200 (CEST)
-Received: from [10.201.20.168] (10.75.127.49) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Mon, 23 May
- 2022 14:34:50 +0200
-Message-ID: <ceb2d1a3-dccd-865e-ed74-54444e49f349@foss.st.com>
-Date:   Mon, 23 May 2022 14:34:22 +0200
+        Mon, 23 May 2022 08:34:51 -0400
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CF2743EEF;
+        Mon, 23 May 2022 05:34:47 -0700 (PDT)
+Received: by mail-qk1-x72a.google.com with SMTP id p123so2486282qke.5;
+        Mon, 23 May 2022 05:34:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=zWW6thDJ98/KzWOHjOmZlsh4+inUgZI3sNPxS+N5zm4=;
+        b=Fb+2IhZRT4kRSIPikn+2vrZ3ASxWPm9JevY9AyDxBmT0f96Tnjg97FewA8Z2eOHV9d
+         3q6EtAFe80QFNOneuVVUOiPoyMHFCfKDdJfI99TA8S8/00y3BM0i+RAy/DTMamwLdVx3
+         LivEDJxlb54BM4jD+44FiMjqRvcC1m4a0vQr/7D/dKXQFxovELDKdyRS3Yd28qPvyfs/
+         z5fsbg4+TG+DgU+1p3W/Rl8KNKTucF/5+P5cMVxJSxoXxA28yYkJ5Eksnb4YX/3MFNb+
+         78tTvvlsUHn7MoUdk/K6sw00DibL6xOgbTxAJMEETVsd3ExtbZ0ILhwN15M7LwQWyu4h
+         iOsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zWW6thDJ98/KzWOHjOmZlsh4+inUgZI3sNPxS+N5zm4=;
+        b=kglG3W6T+/KJUZL2ee0Xs0viHQocBwigspQDWJJivBMy73TbfbIfCtOkPEuh36at4g
+         eE/KHm4LZTJ4BCwqc84n5TrTudrdB9qHTpvYfTPoFd4//7WK399Wa8etjcaL98GCBZRQ
+         1DByv294wlXCxzzoP0+ppT1gVcVD4ZhqcYjRsNveV7Kp9aj5PYW1O2NCNzjot4s426zf
+         zhaZRklgD72MlEKovku6tu3opLV/xNy4b59adAIZ6wNb2g0L9CnueagY9YXfUlwTSmJD
+         LW4PC0nhPKHY1cWB4eJL71ERH7bGlYWiclnGA4YnQZzl4ZfXqDyun5jyj9S2goT7qAy7
+         QQfA==
+X-Gm-Message-State: AOAM532Y8uZnWKXOF09L4dXhksT4xfF/Rna/tsBKc9NiyYVtPQg5GXxT
+        04C64TC0cUVNlOghGb0rpeI=
+X-Google-Smtp-Source: ABdhPJx6mxt2vccLVo+P6//wIKgsooq5eK5qasPIND7jHo2crxR3T9d9UlTX2rziojU63P7oPRzm9w==
+X-Received: by 2002:a37:a74e:0:b0:6a3:95f5:48f8 with SMTP id q75-20020a37a74e000000b006a395f548f8mr2585829qke.126.1653309286500;
+        Mon, 23 May 2022 05:34:46 -0700 (PDT)
+Received: from mail.google.com ([207.246.89.135])
+        by smtp.gmail.com with ESMTPSA id 9-20020a370809000000b006a346e0f653sm4374569qki.15.2022.05.23.05.34.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 May 2022 05:34:46 -0700 (PDT)
+Date:   Mon, 23 May 2022 20:34:36 +0800
+From:   Changbin Du <changbin.du@gmail.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kernel-janitors@vger.kernel.org,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Changbin Du <changbin.du@gmail.com>
+Subject: Re: [RFC PATCH] kbuild: Add an option to enable -O1 and speed-up
+ compilation time
+Message-ID: <20220523123436.b5gwj55xacc2hxcv@mail.google.com>
+References: <23e0ba7863d51ab629498762a97d477645aeafea.1653123744.git.christophe.jaillet@wanadoo.fr>
+ <CAK7LNASHGyzKS-d+S1GYz_L0pBxxSwk05YfvV+LK4ghZ5xx=cA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 2/6] dt-bindings: rtc: stm32: add alarm A out property to
- select output
-Content-Language: en-US
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-CC:     Alessandro Zummo <a.zummo@towertech.it>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        <linux-rtc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220504130233.330983-1-valentin.caron@foss.st.com>
- <20220504130617.331290-1-valentin.caron@foss.st.com>
- <YnLhw+Y7m8G2xJpK@mail.local>
-From:   Valentin CARON <valentin.caron@foss.st.com>
-In-Reply-To: <YnLhw+Y7m8G2xJpK@mail.local>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.49]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-23_06,2022-05-23_01,2022-02-23_01
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK7LNASHGyzKS-d+S1GYz_L0pBxxSwk05YfvV+LK4ghZ5xx=cA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alexandre,
+On Sun, May 22, 2022 at 12:38:17AM +0900, Masahiro Yamada wrote:
+> (+CC: Arnd, Changbin Du)
+> 
+> 
+> If -O1 support does not require additional effort,
+> I have no objection to this patch.
+> 
+> (but I do not have enough insight about
+> the compiler's inlining heuristic)
+> 
+> 
+> 
+> BTW, when we attempted to add the -Og support,
+> we fixed various parts, and Linus rejected it.
+> 
+> https://lore.kernel.org/linux-kbuild/CAK7LNARQggM3aKEPRKJqa4tunFAfmfErMZuS-rrnRv6UB1VpPQ@mail.gmail.com/
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+I am afraid that '-O1' has the same situation with '-Og'. As described in GCC
+mannual:
 
-On 5/4/22 22:27, Alexandre Belloni wrote:
-> Hello,
->
-> On 04/05/2022 15:06:13+0200, Valentin Caron wrote:
->> STM32 RTC can pulse some SOC pins when an alarm of RTC expires.
->>
->> This patch adds property to activate alarm A output. The pulse can
->> output on three pins RTC_OUT1, RTC_OUT2, RTC_OUT2_RMP
->> (PC13, PB2, PI8 on stm32mp15) (PC13, PB2, PI1 on stm32mp13).
->>
->> Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
->> ---
->>   .../devicetree/bindings/rtc/st,stm32-rtc.yaml | 19 ++++++++++++++++++-
->>   1 file changed, 18 insertions(+), 1 deletion(-)
->>
->> diff --git a/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml b/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml
->> index 56d46ea35c5d..71e02604e8de 100644
->> --- a/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml
->> +++ b/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml
->> @@ -59,6 +59,13 @@ properties:
->>         Refer to <include/dt-bindings/rtc/rtc-stm32.h> for the supported values.
->>         Pinctrl state named "default" may be defined to reserve pin for RTC output.
->>   
->> +  st,alarm:
->> +    $ref: "/schemas/types.yaml#/definitions/uint32"
->> +    description: |
->> +      To select and enable RTC Alarm A output.
->> +      Refer to <include/dt-bindings/rtc/rtc-stm32.h> for the supported values.
->> +      Pinctrl state named "default" may be defined to reserve pin for RTC output.
->> +
->>   allOf:
->>     - if:
->>         properties:
->> @@ -75,6 +82,9 @@ allOf:
->>           st,lsco:
->>             maxItems: 0
->>   
->> +        st,alarm:
->> +          maxItems: 0
->> +
->>           clock-names: false
->>   
->>         required:
->> @@ -95,6 +105,9 @@ allOf:
->>           st,lsco:
->>             maxItems: 0
->>   
->> +        st,alarm:
->> +          maxItems: 0
->> +
->>         required:
->>           - clock-names
->>           - st,syscfg
->> @@ -117,6 +130,9 @@ allOf:
->>           st,lsco:
->>             maxItems: 1
->>   
->> +        st,alarm:
->> +          maxItems: 1
->> +
->>         required:
->>           - clock-names
->>   
->> @@ -153,8 +169,9 @@ examples:
->>         clocks = <&rcc RTCAPB>, <&rcc RTC>;
->>         clock-names = "pclk", "rtc_ck";
->>         interrupts = <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>;
->> +      st,alarm = <RTC_OUT1>;
->>         st,lsco = <RTC_OUT2_RMP>;
-> Shouldn't that be exactly the opposite? You have two pins that can
-> output different functions. The property should be the pin and the value
-> the function. I'd go even further and I would say this is actually
-> pinmuxing.
->
-You're right, if the property is the pin and the value the function, 
-this looks like a pinctrl node.
-We choose to develop theses functionalities in the reverse order, to 
-avoid the complexity of adding
-the pinctrl framework to our driver. Moreover, LSCO and AlarmA may 
-haven't a peripheral client and
-this would probably require to also implement pinctrl hogging.
+Like -O0, -Og completely disables a number of optimization passes so that 
+individual options controlling them have no effect. Otherwise -Og enables all
+-O1 optimization flags except for those that may interfere with debugging:
+ -fbranch-count-reg  -fdelayed-branch 
+ -fdse  -fif-conversion  -fif-conversion2  
+ -finline-functions-called-once 
+ -fmove-loop-invariants  -fmove-loop-stores  -fssa-phiopt 
+ -ftree-bit-ccp  -ftree-dse  -ftree-pta  -ftree-sra
 
-Is the implementation that we have proposed is acceptable regarding 
-theses elements ?
 
-Thank you,
-Valentin
+> On Sat, May 21, 2022 at 6:04 PM Christophe JAILLET
+> <christophe.jaillet@wanadoo.fr> wrote:
+> >
+> > Add a new compilation option which speeds-up compilation time.
+> > This can be useful when using static checker such as smatch or build-bots.
+> > In such cases, the speed and quality of the generated code is not
+> > important.
+> >
+> > Using -O0 would be even better, but unfortunately, building fails with
+> > this option.
+> >
+> > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> > ---
+> >  Makefile     | 5 ++++-
+> >  init/Kconfig | 8 ++++++++
+> >  2 files changed, 12 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/Makefile b/Makefile
+> > index 1f8bef92868f..14467386f947 100644
+> > --- a/Makefile
+> > +++ b/Makefile
+> > @@ -817,7 +817,10 @@ KBUILD_CFLAGS      += $(call cc-disable-warning, format-truncation)
+> >  KBUILD_CFLAGS  += $(call cc-disable-warning, format-overflow)
+> >  KBUILD_CFLAGS  += $(call cc-disable-warning, address-of-packed-member)
+> >
+> > -ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE
+> > +ifdef CONFIG_CC_OPTIMIZE_FOR_COMPILATION_SPEED
+> > +KBUILD_CFLAGS += -O1
+> > +KBUILD_RUSTFLAGS_OPT_LEVEL_MAP := 1
+> > +else ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE
+> >  KBUILD_CFLAGS += -O2
+> >  KBUILD_RUSTFLAGS_OPT_LEVEL_MAP := 2
+> >  else ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE_O3
+> > diff --git a/init/Kconfig b/init/Kconfig
+> > index a96776a9b080..3177a1830c9a 100644
+> > --- a/init/Kconfig
+> > +++ b/init/Kconfig
+> > @@ -1384,6 +1384,14 @@ choice
+> >         prompt "Compiler optimization level"
+> >         default CC_OPTIMIZE_FOR_PERFORMANCE
+> >
+> > +config CC_OPTIMIZE_FOR_COMPILATION_SPEED
+> > +       bool "Optimize for compilation speed (-O1)"
+> > +       help
+> > +         This option can be useful when running a static checker such as smatch
+> > +         or a build-bot.
+> > +         Compilation time is slighly faster than -O2 and it requires less
+> > +         memory.
+> > +
+> >  config CC_OPTIMIZE_FOR_PERFORMANCE
+> >         bool "Optimize for performance (-O2)"
+> >         help
+> > --
+> > 2.34.1
+> >
+> 
+> 
+> -- 
+> Best Regards
+> Masahiro Yamada
 
+-- 
+Cheers,
+Changbin Du

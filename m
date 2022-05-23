@@ -2,95 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11804531430
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:25:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D2695314CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:26:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238592AbiEWQKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 12:10:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44716 "EHLO
+        id S238464AbiEWQJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 12:09:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238589AbiEWQKC (ORCPT
+        with ESMTP id S238387AbiEWQJQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 12:10:02 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C1363507
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:10:00 -0700 (PDT)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24NFUGXH022928;
-        Mon, 23 May 2022 16:09:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=GWi2svyv4xiTKuEkdoZOSj7G+LZzUVwd+iYBidPDUGU=;
- b=ZD0yAXI3NDFafBxw9P2NRSMwV30PmEiX2qNRVPao1IPEKL5HM+tjLqJmnGFvvMR9EaPd
- CXDdak0pB010MbHT/VSBoXefgESh2dhsBhtm4QTrWk2dltXOccnJYafppEHKEzyvU/Ps
- AYyifKRXC+6tERA5yq8uMaSaVAvDs/oWhY18ZT9+MCXy/jlOONMm+6cMcHG2ZaBK/mq+
- QDkE0CsL3ymm6H6SALO+YctA1TzlwK9X65/Vjtu1W6Wg2FSZBfBeqn3SIS8isnrppuX6
- BanEtEAfv/7gR1oq6kjA1ZC/T3KAieFmiIC6hZbolKUj+fWqbaSTga2PCcKzQiFw/1MK Lg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g8axj3x24-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 23 May 2022 16:09:46 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24NG9jvN005804;
-        Mon, 23 May 2022 16:09:46 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g8axj3x16-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 23 May 2022 16:09:46 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24NFwRmS028633;
-        Mon, 23 May 2022 16:09:43 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma03ams.nl.ibm.com with ESMTP id 3g6qq933jn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 23 May 2022 16:09:43 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24NG9fO246531026
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 23 May 2022 16:09:41 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 74A30A4051;
-        Mon, 23 May 2022 16:09:41 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 32C01A404D;
-        Mon, 23 May 2022 16:09:41 +0000 (GMT)
-Received: from [9.101.4.33] (unknown [9.101.4.33])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 23 May 2022 16:09:41 +0000 (GMT)
-Message-ID: <913bcf4d-dc78-dacb-4891-43a882f50017@linux.ibm.com>
-Date:   Mon, 23 May 2022 18:09:40 +0200
+        Mon, 23 May 2022 12:09:16 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD522186F8;
+        Mon, 23 May 2022 09:09:15 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 8C1AD21A64;
+        Mon, 23 May 2022 16:09:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1653322154; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=4ywoMr61UmNyulUm1OYgOzOzU4gEj3gsscFPBmvSZr0=;
+        b=d8CuZxzb28+AguRGeC9cq1qFeJlmern+8wNDOixtu6mV54Sm1yPmHWbOZcNRFCPwyNqaUc
+        NwUCvIuPcrwM6cOjmpMHXVsmg2N6xFHmwHjSgeD6URz49d0Fhbq2/7rlCIoh0FzZ6huKDI
+        kN0+gihk+pBzkZXziR51IXAAmia7ofY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1653322154;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=4ywoMr61UmNyulUm1OYgOzOzU4gEj3gsscFPBmvSZr0=;
+        b=ZXFNWEdOKAJQ9umVco/MxuBshhf2jIW4d5YMy71n/AicE6eq39HIVKLhJ6QsSqRo7iaUh7
+        hUn6iz0amKmZuKDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2F856139F5;
+        Mon, 23 May 2022 16:09:14 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id RCj5CKqxi2KsKQAAMHmgww
+        (envelope-from <lhenriques@suse.de>); Mon, 23 May 2022 16:09:14 +0000
+Received: from localhost (brahms.olymp [local])
+        by brahms.olymp (OpenSMTPD) with ESMTPA id a98d69dc;
+        Mon, 23 May 2022 16:09:52 +0000 (UTC)
+From:   =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>
+To:     Jeff Layton <jlayton@kernel.org>, Xiubo Li <xiubli@redhat.com>,
+        Ilya Dryomov <idryomov@gmail.com>
+Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>
+Subject: [PATCH] ceph: fix decoding of client session messages flags
+Date:   Mon, 23 May 2022 17:09:51 +0100
+Message-Id: <20220523160951.8781-1-lhenriques@suse.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: [PATCH] powerpc/64s: Don't read H_BLOCK_REMOVE characteristics in
- radix mode
-Content-Language: en-US
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "npiggin@gmail.com" <npiggin@gmail.com>
-Cc:     "aneesh.kumar@linux.ibm.com" <aneesh.kumar@linux.ibm.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220520155721.10211-1-ldufour@linux.ibm.com>
- <d87cca6d-8cc9-3347-f74a-28f12889cfe1@csgroup.eu>
-From:   Laurent Dufour <ldufour@linux.ibm.com>
-In-Reply-To: <d87cca6d-8cc9-3347-f74a-28f12889cfe1@csgroup.eu>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: bWbvRjAI3Z_YOw8z6DsLYMrMT_ea3MZk
-X-Proofpoint-GUID: xMHkeSi2CqnMpaGYbyj0Zg262cyz_h7v
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-23_06,2022-05-23_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
- mlxscore=0 impostorscore=0 spamscore=0 phishscore=0 suspectscore=0
- bulkscore=0 priorityscore=1501 malwarescore=0 clxscore=1015
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205230087
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -99,35 +71,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/05/2022, 18:15:39, Christophe Leroy wrote:
-> 
-> 
-> Le 20/05/2022 à 17:57, Laurent Dufour a écrit :
->> There is no need to read the H_BLOCK_REMOVE characteristics when running in
->> Radix mode because this hcall is never called.
->>
->> Signed-off-by: Laurent Dufour <ldufour@linux.ibm.com>
->> ---
->>   arch/powerpc/platforms/pseries/setup.c | 3 ++-
->>   1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/powerpc/platforms/pseries/setup.c b/arch/powerpc/platforms/pseries/setup.c
->> index c9fcc30a0365..654d2b999c25 100644
->> --- a/arch/powerpc/platforms/pseries/setup.c
->> +++ b/arch/powerpc/platforms/pseries/setup.c
->> @@ -803,7 +803,8 @@ static void __init pSeries_setup_arch(void)
->>   
->>   	pseries_setup_security_mitigations();
->>   #ifdef CONFIG_PPC_64S_HASH_MMU
->> -	pseries_lpar_read_hblkrm_characteristics();
->> +	if (!radix_enabled())
->> +		pseries_lpar_read_hblkrm_characteristics();
->>   #endif
-> 
-> As far as I can see the function always exists so the #ifdef can be removed.
+The cephfs kernel client started to show  the message:
 
-You're right, I'll do that in the v2
+ ceph: mds0 session blocklisted
 
->>   
->>   	/* By default, only probe PCI (can be overridden by rtas_pci) */
+when mounting a filesystem.  This is due to the fact that the session
+messages are being incorrectly decoded: the skip needs to take into
+account the 'len'.
 
+While there, fixed some whitespaces too.
+
+Fixes: e1c9788cb397 ("ceph: don't rely on error_string to validate blocklisted session.")
+Signed-off-by: Luís Henriques <lhenriques@suse.de>
+---
+ fs/ceph/mds_client.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
+
+diff --git a/fs/ceph/mds_client.c b/fs/ceph/mds_client.c
+index 00c3de177dd6..1bd3e1bb0fdf 100644
+--- a/fs/ceph/mds_client.c
++++ b/fs/ceph/mds_client.c
+@@ -3375,13 +3375,17 @@ static void handle_session(struct ceph_mds_session *session,
+ 	}
+ 
+ 	if (msg_version >= 5) {
+-		u32 flags;
+-		/* version >= 4, struct_v, struct_cv, len, metric_spec */
+-	        ceph_decode_skip_n(&p, end, 2 + sizeof(u32) * 2, bad);
++		u32 flags, len;
++
++		/* version >= 4 */
++		ceph_decode_skip_16(&p, end, bad); /* struct_v, struct_cv */
++		ceph_decode_32_safe(&p, end, len, bad); /* len */
++		ceph_decode_skip_n(&p, end, len, bad); /* metric_spec */
++
+ 		/* version >= 5, flags   */
+-                ceph_decode_32_safe(&p, end, flags, bad);
++		ceph_decode_32_safe(&p, end, flags, bad);
+ 		if (flags & CEPH_SESSION_BLOCKLISTED) {
+-		        pr_warn("mds%d session blocklisted\n", session->s_mds);
++			pr_warn("mds%d session blocklisted\n", session->s_mds);
+ 			blocklisted = true;
+ 		}
+ 	}

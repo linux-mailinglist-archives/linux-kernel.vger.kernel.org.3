@@ -2,106 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8CB8531AF4
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABFBD531B1B
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239893AbiEWSqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 14:46:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33798 "EHLO
+        id S235918AbiEWSZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 14:25:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243784AbiEWSpb (ORCPT
+        with ESMTP id S242545AbiEWSZb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 14:45:31 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A56F713277A
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 11:29:03 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id 146001F4350A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1653328898;
-        bh=6xhghlXrddQfIGnulUahWYp9wL4WrqaYscxpR23LmXM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=KJ+ydKSH5syI8xmeg0VHJToNfPgemgWqfP/M4SEWorawj4VoHJaBrZhl8qGqm0HjQ
-         qYeNUYwpFmwfreMVPxNQN8LUwJxDd3tJXvQOzDJ9IOsx+aK5eaKRUBlI2xaSWrBNUO
-         LieAI76yuamC7jiagn3zQi1i3qtK65Ogqi506SRt2s7wQfhv0vdzrlJs1U2OTC0S2g
-         lSm045ntOYSWweOCEE8OhJZkbKpLsFdIxpSx4Uin4SH0jjFv03CI1NVdshzSSeGNaN
-         74efk0LCPNMjbz+ixuzQjN3PQM6LJpq9K4R9nUz8jFfq/pAfoE9ujyojXv3iC/5Q47
-         Id9yLtJHR3p1g==
-Message-ID: <d51916d6-5be3-4bdb-ffba-39ad3ae2d5e4@collabora.com>
-Date:   Mon, 23 May 2022 21:01:35 +0300
+        Mon, 23 May 2022 14:25:31 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D6EEA005F;
+        Mon, 23 May 2022 10:58:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653328693; x=1684864693;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=See9p7fez/HBRV0YvEYQHd38Yl91KOYmJwyLfKNrjK8=;
+  b=GjwYdJHgteANkGXGRxphMfPuhMSMrokVrdUeD6zifSr8xP/5tKVwe39E
+   1BeAvQUJ2O0cWG8MIXXJHavA/78YMLjyAu7e8+cZ6/mgSpnuEdsDcEPyv
+   8Nl+A2EElqXwgVu/BClfPrRs7ZqquOB3zUirTyKNEbM1qZ06E2bV+npMO
+   pabRbgTYAsUB0LSNY10mprj0d//VNPFvBZ86iTp9I75QiAf6h89550B7t
+   4Oj/2n8vG/QnFDyPBQEN5giEgfDqAp2X2Tkd3gnQmiizB/kU1RA9qI4Gr
+   nvTsU9WmgOIQFfFNtHdu9TM+gwBn4hsOMCcP9jqD9aX60thkaieLl0/X8
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="273300244"
+X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
+   d="scan'208";a="273300244"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 10:58:06 -0700
+X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
+   d="scan'208";a="744857037"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.198.157])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 10:58:05 -0700
+Date:   Mon, 23 May 2022 11:01:58 -0700
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        "Lu Baolu" <baolu.lu@linux.intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH v4 2/6] iommu: Add a helper to do PASID lookup from
+ domain
+Message-ID: <20220523110158.3382b5fd@jacob-builder>
+In-Reply-To: <BN9PR11MB5276622272BCA2ED982EE3C18CD49@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20220518182120.1136715-1-jacob.jun.pan@linux.intel.com>
+        <20220518182120.1136715-3-jacob.jun.pan@linux.intel.com>
+        <BN9PR11MB5276622272BCA2ED982EE3C18CD49@BN9PR11MB5276.namprd11.prod.outlook.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH next] m68k: virt: Switch to new sys-off handler API
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Cc:     Laurent Vivier <laurent@vivier.eu>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org,
-        noreply@ellerman.id.au
-References: <20220523175520.949681-1-geert@linux-m68k.org>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <20220523175520.949681-1-geert@linux-m68k.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/23/22 20:55, Geert Uytterhoeven wrote:
-> On m68k with CONFIG_VIRT=y (e.g. virt_defconfig or allmodconfig):
-> 
->     arch/m68k/virt/config.c: In function ‘config_virt’:
->     arch/m68k/virt/config.c:129:2: error: ‘mach_power_off’ undeclared (first use in this function); did you mean ‘pm_power_off’?
->       129 |  mach_power_off = virt_halt;
-> 	  |  ^~~~~~~~~~~~~~
-> 	  |  pm_power_off
-> 
-> Commit 05d51e42df06f021 ("m68k: Introduce a virtual m68k machine")
-> introduced a new user of mach_power_off.
-> Convert it to the new sys-off handler API, too.
-> 
-> Reported-by: noreply@ellerman.id.au
-> Fixes: f0f7e5265b3b37b0 ("m68k: Switch to new sys-off handler API")
-> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> ---
->  arch/m68k/virt/config.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/m68k/virt/config.c b/arch/m68k/virt/config.c
-> index 68d29c8b87e18840..632ba200ad425245 100644
-> --- a/arch/m68k/virt/config.c
-> +++ b/arch/m68k/virt/config.c
-> @@ -1,5 +1,6 @@
->  // SPDX-License-Identifier: GPL-2.0
->  
-> +#include <linux/reboot.h>
->  #include <linux/serial_core.h>
->  #include <clocksource/timer-goldfish.h>
->  
-> @@ -126,5 +127,6 @@ void __init config_virt(void)
->  	mach_get_model = virt_get_model;
->  	mach_reset = virt_reset;
->  	mach_halt = virt_halt;
-> -	mach_power_off = virt_halt;
-> +
-> +	register_platform_power_off(virt_halt);
->  }
+Hi Kevin,
 
-Thanks, Geert! Indeed, I only compile-tested files that were directly
-affected by the core changes and haven't checked the whole m68k build,
-that was my oversight.
+On Mon, 23 May 2022 09:14:04 +0000, "Tian, Kevin" <kevin.tian@intel.com>
+wrote:
 
-Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> > From: Tian, Kevin
+> > Sent: Monday, May 23, 2022 3:55 PM
+> >   
+> > > From: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> > > +ioasid_t iommu_get_pasid_from_domain(struct device *dev, struct
+> > > iommu_domain *domain)
+> > > +{
+> > > +	struct iommu_domain *tdomain;
+> > > +	struct iommu_group *group;
+> > > +	unsigned long index;
+> > > +	ioasid_t pasid = INVALID_IOASID;
+> > > +
+> > > +	group = iommu_group_get(dev);
+> > > +	if (!group)
+> > > +		return pasid;
+> > > +
+> > > +	xa_for_each(&group->pasid_array, index, tdomain) {
+> > > +		if (domain == tdomain) {
+> > > +			pasid = index;
+> > > +			break;
+> > > +		}
+> > > +	}  
+> > 
+> > Don't we need to acquire the group lock here?
+> > 
+pasid_array is under RCU read lock so it is protected though may have stale
+data. It also used in atomic context for TLB flush, cannot take the
+group mutex. If the caller does detach_dev_pasid while doing TLB flush, it
+could result in extra flush but harmless.
 
--- 
-Best regards,
-Dmitry
+> > Btw the intention of this function is a bit confusing. Patch01 already
+> > stores the pasid under domain hence it's redundant to get it
+> > indirectly from xarray index. You could simply introduce a flag bit
+> > (e.g. dma_pasid_enabled) in device_domain_info and then directly
+> > use domain->dma_pasid once the flag is true.
+> >   
+> 
+> Just saw your discussion with Jason about v3. While it makes sense
+> to not specialize DMA domain in iommu driver, the use of this function
+> should only be that when the call chain doesn't pass down a pasid
+> value e.g. when doing cache invalidation for domain map/unmap. If
+> the upper interface already carries a pasid e.g. in detach_dev_pasid()
+> iommu driver can simply verify that the corresponding pasid xarray 
+> entry points to the specified domain instead of using this function to
+> loop xarray and then verify the returned pasid (as done in patch03/04).
+Excellent point, I could just use xa_load(pasid) to compare the domain
+instead of loop through xa.
+I will add another helper.
+
+bool iommu_is_pasid_domain_attached(struct device *dev, struct iommu_domain *domain, ioasid_t pasid)
+{
+	struct iommu_group *group;
+	bool ret = false;
+
+	group = iommu_group_get(dev);
+	if (WARN_ON(!group))
+		return false;
+
+	if (domain == xa_load(&group->pasid_array, pasid))
+		ret = true;
+
+	iommu_group_put(group);
+
+	return ret;
+}
+
+Thanks,
+
+Jacob

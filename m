@@ -2,83 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1DB15318B1
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:54:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97008531AAD
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:55:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbiEWTYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 15:24:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58328 "EHLO
+        id S230268AbiEWTYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 15:24:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230213AbiEWTXq (ORCPT
+        with ESMTP id S229903AbiEWTYY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 15:23:46 -0400
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14610C1ECF;
-        Mon, 23 May 2022 12:02:32 -0700 (PDT)
-Received: by mail-yb1-f170.google.com with SMTP id z7so5822104ybf.7;
-        Mon, 23 May 2022 12:02:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YwUAB/xmEW3kCFHamwODrMltMLrrJWIW+z2+9bNEEzM=;
-        b=7GidrMn3D/wKRHfl8nhAcq9hr54bJWf1qP2nSXWNClZ2sCncbgiZZfnYtMykgLIPi4
-         3Phmz1b8pVMzfzHkypLOxClcyNWeYibZdbznaZklSGifaXzonS051Ju6HjLtiXhMBimv
-         7Ql36hIf6D6+03XOQw75ORyfU+f2eLQ9ZxZFedQD2wM7s/8+viRIpf3ST52sHCIKWhdm
-         KkyqPEbvycXiUPfJY+ca6g3JLfhrh14HncElWLcfnPGEiQ0MQC3uxygOYJq8Ik++z9ZJ
-         gu3IHxwhMNbl3fswuwk2U67/CzHJxgIhwRE95SXWZnWYBbc+PXimpGwpkOlI65cjPZHA
-         ULhQ==
-X-Gm-Message-State: AOAM532Aljiq1gONZFO31Gb91kgcujTN0oGiq/Z5dFmWUZDaZrPKpbSE
-        GVm3+pfNkgjCbT0udNYBWi3Q0uj64zbTGzWVYnk=
-X-Google-Smtp-Source: ABdhPJy18QrqLhTLo5Fev9uXChTSTcA2vc0ub8iaGELzv9YkyhOz68miW3KPgkeuguuwPAF5Aq/wKGBrkZxz/Inpa8E=
-X-Received: by 2002:a25:8803:0:b0:64e:4a6a:afb9 with SMTP id
- c3-20020a258803000000b0064e4a6aafb9mr22950379ybl.482.1653332550682; Mon, 23
- May 2022 12:02:30 -0700 (PDT)
+        Mon, 23 May 2022 15:24:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 088BF16F36A;
+        Mon, 23 May 2022 12:03:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C8A24B811A1;
+        Mon, 23 May 2022 19:03:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 661A5C385A9;
+        Mon, 23 May 2022 19:03:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653332612;
+        bh=PwbpPaawIX6nShLpvjVPFYMb/e2PU/5rHBUKFQwfcQQ=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=mvt21geFFUqkirtTJT3/NF+0TPEb6xLlVDwlMfhr1IjTA6Xh4sCy4e/NXmZgXt+cS
+         hM0FuXJrsIxiQC0c/Q8uXf7/39NvP+ueTbykhzJHEelu+Hbb8gIV6vvFtbuJt6kumZ
+         36wCiwD7YuA6YX0TBqSw/J6A5E65niL5RxdfFH8TdBeoS1LKKqNxCdgOBQu0wUNqaM
+         eCqPSQucX8DY53AIoFBCiRMibRuF+dO6dk8KM0ExnSJ0CX/cur4DquTcEAkMyn/0LS
+         gVCmEGCGb5mBATsi9rX560fU9c5h1YjXKJ7ScbviYiCXm6Gqw+kN3oZamtLSzMoTc8
+         bWHFuzHMc1TVQ==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, ath11k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ath11k: fix IRQ affinity warning on shutdown
+References: <20220523143258.24818-1-johan+linaro@kernel.org>
+        <YoueemdqqRCwtk0z@hovoldconsulting.com>
+Date:   Mon, 23 May 2022 22:03:25 +0300
+In-Reply-To: <YoueemdqqRCwtk0z@hovoldconsulting.com> (Johan Hovold's message
+        of "Mon, 23 May 2022 16:47:22 +0200")
+Message-ID: <87a6b8ysua.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-References: <CAJZ5v0iHgtTpW+ox=wK68cnuG6D+KvFiOCh2UF96dxq08Z3BSA@mail.gmail.com>
- <20220523183238.GA174199@bhelgaas>
-In-Reply-To: <20220523183238.GA174199@bhelgaas>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 23 May 2022 21:02:19 +0200
-Message-ID: <CAJZ5v0joBi4socGHeF-tjhJerd04xrCecQLz+pVYSd6fdtT36w@mail.gmail.com>
-Subject: Re: [PATCH v5 2/2] PCI/PM: Fix pci_pm_suspend_noirq() to disable PTM
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        David Box <david.e.box@linux.intel.com>,
-        "Jingar, Rajvi" <rajvi.jingar@intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 8:32 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> On Thu, May 19, 2022 at 09:01:27PM +0200, Rafael J. Wysocki wrote:
-> > ...
->
-> > In the meantime, I think that it would make sense to pick up the first
-> > patch in this series which is a good cleanup regardless.
-> >
-> > Bjorn, could you do that, please?
->
-> As far as I know, this series has never actually made it to
-> linux-pci@vger.kernel.org, so I haven't seen the 1/2 patch.  This
-> query:
->
->   https://lore.kernel.org/linux-pci/?q=f%3Arajvi.jingar
->
-> finds only a couple responses.  I did mention this to Rajvi, but
-> haven't heard anything yet.
+Johan Hovold <johan@kernel.org> writes:
 
-OK, I'll resubmit that patch for him.
+> On Mon, May 23, 2022 at 04:32:58PM +0200, Johan Hovold wrote:
+>> Make sure to clear the IRQ affinity hint also on shutdown to avoid
+>> triggering a WARN_ON_ONCE() in __free_irq() when stopping MHI while
+>> using a single MSI vector.
+>
+> Forgot the tested-on tag, sorry.
+>
+> Tested-on: WCN6855 hw2.0 PCI WLAN.HSP.1.1-03125-QCAHSPSWPL_V1_V2_SILICONZ_LITE-3
+
+Thanks, added in the pending branch.
+
+>> Fixes: e94b07493da3 ("ath11k: Set IRQ affinity to CPU0 in case of one MSI vector")
+>> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+>
+> Let me know if I should resend.
+
+No need, I can easily edit commit logs.
+
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

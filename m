@@ -2,59 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DD3953182A
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:53:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1ABA531B6D
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242800AbiEWSrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 14:47:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34560 "EHLO
+        id S239505AbiEWSrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 14:47:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244530AbiEWSqb (ORCPT
+        with ESMTP id S243149AbiEWSrj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 14:46:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 795D513CA2F;
+        Mon, 23 May 2022 14:47:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7EBCA25C41
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 11:31:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653330622;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+GHDu8bX018Pj56HhIIQXnjcT5ZvQ3bky+5co5y7CGo=;
+        b=GxdkuVQwAKotC5mXQEw2wmn84Dyt4pwmCpvHYswabV4SVjmATsenFyPekfR+Xt5kIn0FL2
+        TZozsXW79oAsSsvT+8oz7H1iaybe/3TPGw/i7w1tY3MxVp9Eqin24sGNYc7uNIWgmSsJUv
+        ax/2AwFojxR+lbnmRkUgVFYdj2NmqqE=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-133-wif4f0_9N3KDsuLOdT-tTA-1; Mon, 23 May 2022 14:30:21 -0400
+X-MC-Unique: wif4f0_9N3KDsuLOdT-tTA-1
+Received: by mail-qk1-f200.google.com with SMTP id z13-20020a05620a100d00b006a3870a404bso2733250qkj.17
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 11:30:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=+GHDu8bX018Pj56HhIIQXnjcT5ZvQ3bky+5co5y7CGo=;
+        b=bQqd1XuyqXSiNac6xg9lbHK6ygraQqYpVNqkp5r3MK2C4p+TLtXBslaLiMYozSVS/1
+         PlK6SmbTtIIzzjYqgAk8hXl4GynOcsS1XEoPhXQXK8U6eE2mAFRsVWouBkBHZ3vgZaFZ
+         LkaHkdfIiIXCOAsc9UwtHvH8CPjvEPZrrfnaqo9QoDICkyy2woOFmNCem9cJkuCPZ+1A
+         3GFQA+s0arGiqY8eQnJz6SaYEbeZ5axMQJlXh/G91pjSaK8/3P18J5tDxPoawCLb3vmE
+         O9wZcC8srN6Jy9oPzcFkGekHphf0FJBvg1wxXcUNml67fex1Ek95USXymIOt3dzid4nR
+         A2lQ==
+X-Gm-Message-State: AOAM531A15GtM+wLnUTCdJYTtB3sNs2YRxLSZczPp3NiLLH5txSGO4bI
+        Ww2YWv+SzGSmJ3Lp2jWcby9geG59mO2Glnvk9cvF05mKOIJdICuge3joT8BC9Ae7LthVjE7aMra
+        j/t52qeVW3vyU9pL8kzXHez9X
+X-Received: by 2002:a05:620a:29ce:b0:6a0:e9a:f7a2 with SMTP id s14-20020a05620a29ce00b006a00e9af7a2mr14909663qkp.479.1653330620340;
+        Mon, 23 May 2022 11:30:20 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyiHkoWHUvw+vM4ygrqlFJMksFa2jJVr/bYTmHbbZwPGQtQuPfxdNSMdEAKmnGv/bC5IUBo3Q==
+X-Received: by 2002:a05:620a:29ce:b0:6a0:e9a:f7a2 with SMTP id s14-20020a05620a29ce00b006a00e9af7a2mr14909649qkp.479.1653330620095;
+        Mon, 23 May 2022 11:30:20 -0700 (PDT)
+Received: from xps13 (c-98-239-145-235.hsd1.wv.comcast.net. [98.239.145.235])
+        by smtp.gmail.com with ESMTPSA id m201-20020a37a3d2000000b006a34f6a7840sm4630388qke.57.2022.05.23.11.30.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Mon, 23 May 2022 11:30:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DD22360EFA;
-        Mon, 23 May 2022 18:30:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 38C7AC34115;
-        Mon, 23 May 2022 18:30:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653330612;
-        bh=ldOlWU/sFDboKzmSs2d15K53+qfF7cRhmm/mXvh/rH4=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Ey7e5Yb2SkWigE4SiYIlvfA9d4Q/dUbfry7ImvbBATUbnZivHqkD/GOKxLFqH2wmG
-         2XbvzGk4o4eAIYikpcyzZDZMH/VY+H6Bk0U5uroOp7Vn80vKRNA0aCTx9mYhu2iLac
-         of6IP3Mgf9HADdaeTFNFLG5zf5GK+arTr1joGsGTaSRX0UT5U2WPigwnoOyXlZ6bUP
-         a49hPu0PgapzMjNEJRik0aSdSGAVmkYtnfJMmQfWcCgSjY4MvNO9kcx3HoGwJzEj7e
-         c26vqOosvSu+VCrChn8V/08rdVUjbhcye/r1l0oTW0XGvaTd11SNqWR4djFOazLdxY
-         mU0guJE1SSiSw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 188C7F03935;
-        Mon, 23 May 2022 18:30:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+Date:   Mon, 23 May 2022 14:30:18 -0400
+From:   Brian Masney <bmasney@redhat.com>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        matti.lehtimaki@gmail.com
+Subject: Re: [RFC PATCH 00/14] CAMSS support for MSM8974
+Message-ID: <YovSurcGlyPW7v9s@xps13>
+References: <20220522162802.208275-1-luca@z3ntu.xyz>
+ <638d6986-616f-4a1c-f1d0-82835b000b2a@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] s390/bpf: fix typo in comment
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165333061209.5065.9063882337989202641.git-patchwork-notify@kernel.org>
-Date:   Mon, 23 May 2022 18:30:12 +0000
-References: <20220521111145.81697-84-Julia.Lawall@inria.fr>
-In-Reply-To: <20220521111145.81697-84-Julia.Lawall@inria.fr>
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     iii@linux.ibm.com, kernel-janitors@vger.kernel.org,
-        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <638d6986-616f-4a1c-f1d0-82835b000b2a@linaro.org>
+User-Agent: Mutt/2.2.1 (2022-02-19)
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,28 +89,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
-
-On Sat, 21 May 2022 13:11:34 +0200 you wrote:
-> Spelling mistake (triple letters) in comment.
-> Detected with the help of Coccinelle.
+On Mon, May 23, 2022 at 03:39:53PM +0300, Dmitry Baryshkov wrote:
+> On 22/05/2022 19:27, Luca Weiss wrote:
+> > This RFC series adds support for CAMSS and CCI that are found on
+> > msm8974, including the OV8865 found on the FP2.
+> > 
+> > The only reason it's marked RFC is that CAMSS doesn't behave properly on
+> > this SoC without the last commit which is obviously not upstreamable.
+> > Not sure if this should be a blocker for including most of the other
+> > patches because other than that it seems to work fine and I can get a
+> > picture from the camera sensor. When/if msm8974 gets IOMMU support I
+> > hope this should be resolved and it works without this hack.
+> > 
+> > I think at least the CCI patches could get applied as they're not
+> > dependent on the CAMSS hack?
 > 
-> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+> I'd also vote for the camcc patches to be applied.
 > 
-> ---
->  arch/s390/net/bpf_jit_comp.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> As for the camss, I'd suggest to get them verified to work properly with a
+> hacked/non-upstreamable/etc. IOMMU driver if one exists. Otherwise we can
+> easily get into a situation where we merge up code that contains bugs
+> itself.
 
-Here is the summary with links:
-  - s390/bpf: fix typo in comment
-    https://git.kernel.org/bpf/bpf-next/c/ff2095976ca8
+Last I checked, there's no IOMMU driver for msm8974 that works with an
+upstream kernel at the moment. About 2 years ago, I took a stab at
+attempting to enable IOMMU for the display and ran into some issues that
+I documented at:
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+https://lore.kernel.org/lkml/20200109002606.35653-1-masneyb@onstation.org/
 
+I'm not familiar with this part of the hardware and haven't had time
+since then to look into this further.
+
+Brian
 

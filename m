@@ -2,90 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C960530728
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 03:35:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAEDB530751
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 03:50:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351841AbiEWBfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 21:35:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50252 "EHLO
+        id S1351982AbiEWBul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 21:50:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233232AbiEWBfL (ORCPT
+        with ESMTP id S1352046AbiEWBui (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 21:35:11 -0400
+        Sun, 22 May 2022 21:50:38 -0400
 Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A493238BF6;
-        Sun, 22 May 2022 18:35:10 -0700 (PDT)
-Received: from kwepemi500025.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L60H85zpdzjWvg;
-        Mon, 23 May 2022 09:34:12 +0800 (CST)
-Received: from kwepemm600015.china.huawei.com (7.193.23.52) by
- kwepemi500025.china.huawei.com (7.221.188.170) with Microsoft SMTP Server
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FBAB1400B
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 18:50:37 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L60Zc6YgyzQk8W;
+        Mon, 23 May 2022 09:47:36 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 23 May 2022 09:35:08 +0800
-Received: from huawei.com (10.175.127.227) by kwepemm600015.china.huawei.com
- (7.193.23.52) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 23 May
- 2022 09:35:08 +0800
-From:   ChenXiaoSong <chenxiaosong2@huawei.com>
-To:     <miklos@szeredi.hu>
-CC:     <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <chenxiaosong2@huawei.com>, <liuyongqiang13@huawei.com>,
-        <yi.zhang@huawei.com>, <zhangxiaoxu5@huawei.com>
-Subject: [PATCH -next,v2] fuse: return the more nuanced writeback error on close()
-Date:   Mon, 23 May 2022 09:48:38 +0800
-Message-ID: <20220523014838.1647498-1-chenxiaosong2@huawei.com>
-X-Mailer: git-send-email 2.31.1
+ 15.1.2375.24; Mon, 23 May 2022 09:50:35 +0800
+Subject: Re: [PATCH next] mm/shmem: fix shmem folio swapoff hang
+To:     Hugh Dickins <hughd@google.com>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        Matthew Wilcox <willy@infradead.org>
+References: <c32bee8a-f0aa-245-f94e-24dd271924fa@google.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <2e4d5ba4-3525-322d-2aa6-3387d9822f5e@huawei.com>
+Date:   Mon, 23 May 2022 09:50:34 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
+In-Reply-To: <c32bee8a-f0aa-245-f94e-24dd271924fa@google.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
 X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600015.china.huawei.com (7.193.23.52)
+ canpemm500002.china.huawei.com (7.192.104.244)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As filemap_check_errors() only report -EIO or -ENOSPC, we return more nuanced
-writeback error -(file->f_mapping->wb_err & MAX_ERRNO).
+On 2022/5/22 10:53, Hugh Dickins wrote:
+> Shmem swapoff makes no progress: the index to indices is not incremented.
 
-  filemap_write_and_wait
-    filemap_write_and_wait_range
-      filemap_check_errors
-        -ENOSPC or -EIO
-  filemap_check_wb_err
-    errseq_check
-      return -(file->f_mapping->wb_err & MAX_ERRNO)
+Yes, there would be a infinite loop in the while loop in shmem_unuse_inode().
 
-Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
----
- fs/fuse/file.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> But "ret" is no longer a return value, so use folio_batch_count() instead.
+> 
+> Fixes: da08e9b79323 ("mm/shmem: convert shmem_swapin_page() to shmem_swapin_folio()")
+> Signed-off-by: Hugh Dickins <hughd@google.com>
 
-diff --git a/fs/fuse/file.c b/fs/fuse/file.c
-index f18d14d5fea1..9917bc2795e6 100644
---- a/fs/fuse/file.c
-+++ b/fs/fuse/file.c
-@@ -488,10 +488,10 @@ static int fuse_flush(struct file *file, fl_owner_t id)
- 	inode_unlock(inode);
- 
- 	err = filemap_check_errors(file->f_mapping);
-+	/* return more nuanced writeback errors */
- 	if (err)
--		return err;
-+		return filemap_check_wb_err(file->f_mapping, 0);
- 
--	err = 0;
- 	if (fm->fc->no_flush)
- 		goto inval_attr_out;
- 
--- 
-v2: remove redundant code: err = 0
+This patch looks good to me! Thanks!
 
-2.31.1
+Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
+Tested-by: Miaohe Lin <linmiaohe@huawei.com>
+
+BTW: When I try to fix infinite loop when swap in shmem error at swapoff time, I also found this
+issue last Saturday [1]. ;)
+
+[1] https://lore.kernel.org/linux-mm/0f6dc98b-88f4-c0c9-eb7b-5356ad0e08b1@huawei.com/
+
+> ---
+> 
+>  mm/shmem.c |    3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> --- a/mm/shmem.c
+> +++ b/mm/shmem.c
+> @@ -1171,7 +1171,6 @@ static int shmem_find_swap_entries(struc
+>  	XA_STATE(xas, &mapping->i_pages, start);
+>  	struct folio *folio;
+>  	swp_entry_t entry;
+> -	unsigned int ret = 0;
+>  
+>  	rcu_read_lock();
+>  	xas_for_each(&xas, folio, ULONG_MAX) {
+> @@ -1189,7 +1188,7 @@ static int shmem_find_swap_entries(struc
+>  		if (swp_type(entry) != type)
+>  			continue;
+>  
+> -		indices[ret] = xas.xa_index;
+> +		indices[folio_batch_count(fbatch)] = xas.xa_index;
+>  		if (!folio_batch_add(fbatch, folio))
+>  			break;
+>  
+> 
+> .
+> 
 

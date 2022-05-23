@@ -2,73 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FA42530FEE
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:19:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1ECD53101E
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:19:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235307AbiEWMSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 08:18:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36344 "EHLO
+        id S235312AbiEWMSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 08:18:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235301AbiEWMSJ (ORCPT
+        with ESMTP id S235297AbiEWMSj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 08:18:09 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4599219005;
-        Mon, 23 May 2022 05:18:08 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 01C8D1F8BE;
-        Mon, 23 May 2022 12:18:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1653308287; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=B0qnrRinaC3F4JUVaGGq2M9nBMqIOMymX1KLqQ5hWL4=;
-        b=xLv7ViaCFvoX6Zk6EFp59EDHmQurp9hgKcRToy8fIVK920P7wxXZ8qu7PYL6fRnJ8dXU0K
-        +3sJu6bKb56SIiJLyjC6BIj/DJ1v8KutNS7sWS9rU18j0a6FUtqJnk7cPpbExXKLpceveU
-        f3R+vp8UnQmB/oOl3t7ajiQ7mZpzlWI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1653308287;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=B0qnrRinaC3F4JUVaGGq2M9nBMqIOMymX1KLqQ5hWL4=;
-        b=7pz37GRwpYXcWrfrugejAbXMulvvJxbFKRWkjGTSE1VfQTYUoPgAPxSns1dcNNbotSJPGP
-        RVQ1oms0Iw1remDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B5F7013AA5;
-        Mon, 23 May 2022 12:18:06 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id fAz5Kn57i2LiNgAAMHmgww
-        (envelope-from <mliska@suse.cz>); Mon, 23 May 2022 12:18:06 +0000
-Message-ID: <d0e576ab-6121-b7d7-da5b-7750f05ca7f4@suse.cz>
-Date:   Mon, 23 May 2022 14:18:06 +0200
+        Mon, 23 May 2022 08:18:39 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BEED3EF2D
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 05:18:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653308317; x=1684844317;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=CgscfHbRv1zAuiZTsJog1ODh28vnfZ4B3mVu+ZHpAYM=;
+  b=kZY7bkK/hN5aQtwp1s0G8/C4TI6L1N/kcbFLO8inLNwu43siZ0I1KbNd
+   SjiBozOqEhC/tnZz5feZQrMGQ7zjp1gap1V61xjAM5Mx1HSwxxCkBJXS0
+   5svamsrC5kf0cboxb932ZL0PjfpVK40XK8mpE1AbQsYtResx7enDzxlPe
+   ZNUVBQnh2nnGKrGNNTeITrCCqH7aF3H8OSONU9xSet2GT6Gsxqrap4jz8
+   nQQPVf3IusYk3QUlwv8Hhailploeq8OUsSZn42YCzEhiZMkfwdmUJrob9
+   A49nHc8V+/RSw0lrRODA5xvP/R/IEP4Z6R/Unh3BxcOvn+lDPuk85G0Xu
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10355"; a="333846888"
+X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
+   d="scan'208";a="333846888"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 05:18:36 -0700
+X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
+   d="scan'208";a="600620980"
+Received: from jiaqingz-mobl.ccr.corp.intel.com (HELO [10.249.171.16]) ([10.249.171.16])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 05:18:35 -0700
+Message-ID: <2b859cff-2403-0526-f3ae-749920b3fd8b@linux.intel.com>
+Date:   Mon, 23 May 2022 20:18:32 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.0
-From:   =?UTF-8?Q?Martin_Li=c5=a1ka?= <mliska@suse.cz>
-Subject: [PATCH v3] docs/arm64: elf_hwcaps: Unify HWCAP lists as description
- lists
-To:     akiyks@gmail.com
-Cc:     bagasdotme@gmail.com, catalin.marinas@arm.com, corbet@lwn.net,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mliska@suse.cz, will@kernel.org
-References: <0846c96d-62fa-555f-b0ab-1f5ec33fd5fb@gmail.com>
+Subject: Re: [PATCH 1/2] mtd: spi-nor: macronix: Add support for mx66l2g45g
 Content-Language: en-US
-In-Reply-To: <0846c96d-62fa-555f-b0ab-1f5ec33fd5fb@gmail.com>
+To:     Michael Walle <michael@walle.cc>
+Cc:     linux-mtd@lists.infradead.org,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>, linux-kernel@vger.kernel.org
+References: <20220522054802.1719443-1-jiaqing.zhao@linux.intel.com>
+ <04c432289041752d113c15245361ade8@walle.cc>
+ <b3e85d41-9415-b911-6f61-941885af1955@linux.intel.com>
+ <fac4b7877f600a4067534fca672dc842@walle.cc>
+ <2bf3394e-0a78-c760-16ce-936c12b66b93@linux.intel.com>
+ <24cf182693a522ed1f7afd61c7c37029@walle.cc>
+From:   Jiaqing Zhao <jiaqing.zhao@linux.intel.com>
+In-Reply-To: <24cf182693a522ed1f7afd61c7c37029@walle.cc>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SORTED_RECIPS,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,112 +68,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Martin Liska <mliska@suse.cz>
----
- Documentation/arm64/elf_hwcaps.rst | 23 -----------------------
- 1 file changed, 23 deletions(-)
+Okay I've found this was a driver issue. After switching to the new aspeed
+spi-mem driver[1], the sysfs interface works.
 
-diff --git a/Documentation/arm64/elf_hwcaps.rst b/Documentation/arm64/elf_hwcaps.rst
-index a8f30963e550..1e79044f51a2 100644
---- a/Documentation/arm64/elf_hwcaps.rst
-+++ b/Documentation/arm64/elf_hwcaps.rst
-@@ -171,96 +171,73 @@ HWCAP_PACG
-     Documentation/arm64/pointer-authentication.rst.
- 
- HWCAP2_DCPODP
--
-     Functionality implied by ID_AA64ISAR1_EL1.DPB == 0b0010.
- 
- HWCAP2_SVE2
--
-     Functionality implied by ID_AA64ZFR0_EL1.SVEVer == 0b0001.
- 
- HWCAP2_SVEAES
--
-     Functionality implied by ID_AA64ZFR0_EL1.AES == 0b0001.
- 
- HWCAP2_SVEPMULL
--
-     Functionality implied by ID_AA64ZFR0_EL1.AES == 0b0010.
- 
- HWCAP2_SVEBITPERM
--
-     Functionality implied by ID_AA64ZFR0_EL1.BitPerm == 0b0001.
- 
- HWCAP2_SVESHA3
--
-     Functionality implied by ID_AA64ZFR0_EL1.SHA3 == 0b0001.
- 
- HWCAP2_SVESM4
--
-     Functionality implied by ID_AA64ZFR0_EL1.SM4 == 0b0001.
- 
- HWCAP2_FLAGM2
--
-     Functionality implied by ID_AA64ISAR0_EL1.TS == 0b0010.
- 
- HWCAP2_FRINT
--
-     Functionality implied by ID_AA64ISAR1_EL1.FRINTTS == 0b0001.
- 
- HWCAP2_SVEI8MM
--
-     Functionality implied by ID_AA64ZFR0_EL1.I8MM == 0b0001.
- 
- HWCAP2_SVEF32MM
--
-     Functionality implied by ID_AA64ZFR0_EL1.F32MM == 0b0001.
- 
- HWCAP2_SVEF64MM
--
-     Functionality implied by ID_AA64ZFR0_EL1.F64MM == 0b0001.
- 
- HWCAP2_SVEBF16
--
-     Functionality implied by ID_AA64ZFR0_EL1.BF16 == 0b0001.
- 
- HWCAP2_I8MM
--
-     Functionality implied by ID_AA64ISAR1_EL1.I8MM == 0b0001.
- 
- HWCAP2_BF16
--
-     Functionality implied by ID_AA64ISAR1_EL1.BF16 == 0b0001.
- 
- HWCAP2_DGH
--
-     Functionality implied by ID_AA64ISAR1_EL1.DGH == 0b0001.
- 
- HWCAP2_RNG
--
-     Functionality implied by ID_AA64ISAR0_EL1.RNDR == 0b0001.
- 
- HWCAP2_BTI
--
-     Functionality implied by ID_AA64PFR0_EL1.BT == 0b0001.
- 
- HWCAP2_MTE
--
-     Functionality implied by ID_AA64PFR1_EL1.MTE == 0b0010, as described
-     by Documentation/arm64/memory-tagging-extension.rst.
- 
- HWCAP2_ECV
--
-     Functionality implied by ID_AA64MMFR0_EL1.ECV == 0b0001.
- 
- HWCAP2_AFP
--
-     Functionality implied by ID_AA64MFR1_EL1.AFP == 0b0001.
- 
- HWCAP2_RPRES
--
-     Functionality implied by ID_AA64ISAR2_EL1.RPRES == 0b0001.
- 
- HWCAP2_MTE3
--
-     Functionality implied by ID_AA64PFR1_EL1.MTE == 0b0011, as described
-     by Documentation/arm64/memory-tagging-extension.rst.
- 
--- 
-2.36.1
+# xxd -p /sys/bus/spi/devices/spi0.0/spi-nor/sfdp
+53464450060102ff00060110300000ffc2000104100100ff84000102c000
+00ffffffffffffffffffffffffffffffffffe520fbffffffff7f44eb086b
+083b04bbfeffffffffff00ffffff44eb0c200f5210d800ff8749bd0084d2
+04e24403673830b030b0f7bdff5c4a9e29fff050f985ffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffff7f8fffff215cdcffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffff003600279df9c06485cbffffffffffff
+# md5sum /sys/bus/spi/devices/spi0.0/spi-nor/sfdp
+bc3c1443db0c6359432c3cccb6f97943  /sys/bus/spi/devices/spi0.0/spi-nor/sfdp
+# cat /sys/bus/spi/devices/spi0.0/spi-nor/jedec_id
+c2201c
+# cat /sys/bus/spi/devices/spi0.0/spi-nor/partname
+mx66l2g45g
+# cat /sys/bus/spi/devices/spi0.0/spi-nor/manufacturer
+macronix
 
+Since I'm using kernel 5.15, I copied the /drivers/mtd/spi-nor from 5.18-rc7
+(I know this it not a clean way, but it works), and applied the SNOR_ID3()
+patch. Verified using SNOR_ID3() macro works with this mx66l2g45g and the
+values dumped from sysfs are the same.
+
+[    1.696350] spi spi0.0: setup: ignoring unsupported mode bits 200
+[    1.703786] spi-nor spi0.0: mx66l2g45g (262144 Kbytes)
+[    1.764440] spi-aspeed-smc 1e620000.spi: CE0 read buswidth:2 [0x203c0641]
+
+Due to the lockdown in Shanghai, I am unable to test my 2nd patch at this
+time, please temporarily ignore it.
+
+I will perform more tests and update the patch later.
+
+[1] https://lore.kernel.org/linux-mtd/a17b2446-f5a6-d606-8ef4-3931b8bc94da@kaod.org/
+
+Thanks,
+Jiaqing
+
+On 2022-05-23 19:59, Michael Walle wrote:
+> Hi,
+> 
+> Am 2022-05-23 12:12, schrieb Jiaqing Zhao:
+>>> Am 2022-05-23 10:50, schrieb Jiaqing Zhao:
+>>>> Yes this one supports SFDP according to its spec.
+>>>>
+>>>> On my setup, I cannot see the sysfs object. Do I need to enable some specific
+>>>> kernel config or it's SPI controller related? My setup is running kernel 5.15.
+>>>
+>>> No, it should be there since v5.14. See commit 36ac02286265. And you shouldn't
+>>> need to enable any special configuration option.
+>>>
+>>> Did you do a "find /sys -name sfdp"?
+>>>
+>>> -michael
+>>
+>> I tried, it give empty result. The system I'm working on disables kernel module,
+>> and the SPI controller driver calls spi_nor_probe() directly, will this be the
+>> issue?
+>>
+>> And is it possible to manually load the spi-nor driver via the bind interface?
+>> If it is possible, what should the parameters be?
+> 
+> Is your spi flash probed at all?
+> 
+> -michael

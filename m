@@ -2,48 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEE06531082
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:20:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F844530F88
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:18:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234490AbiEWK5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 06:57:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36626 "EHLO
+        id S234265AbiEWK6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 06:58:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234437AbiEWK5j (ORCPT
+        with ESMTP id S234276AbiEWK5s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 06:57:39 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48BBD24BD6;
-        Mon, 23 May 2022 03:57:25 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L6Dmt0fkmz4xYY;
-        Mon, 23 May 2022 20:57:17 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1653303438;
-        bh=ipnmT+KYlz54CrCz7ax5U6ihv1QHFR3hGtNaRZQAscM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=qLjCUhTx1VqiGmIQCxQcmy0QDFsmIhShDJUNNkChx+cw4icvfMtjZxikJKre7LIdp
-         kg6UTWVceXsNpMyh/Kuy/BharAe7qHefPsif5GRlMjuAlRPXOanR0g2mj7WHrYOOR0
-         G5ocCT4Md/tYCpvZP8JOoU8xgvRKcm06OoHaK9KYM+QRWjV59/ETEBj+kQIfaO9bU6
-         gg4VZirDXbrUN2j11NeYc4MTGwTtcqeYR6wVT/Qe0dxKyAX/+ooIUYsYZcKCzEsRX2
-         HaprDCtUSBOViAeWqYUf6EsPh5brZ641o2lxXYIyinigrjx5k0W9szHJzjJ8/QG2U5
-         t7UXH0CT6EaBw==
-Date:   Mon, 23 May 2022 20:57:16 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kees Cook <keescook@chromium.org>,
-        David Howells <dhowells@redhat.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the kspp tree with the fscache tree
-Message-ID: <20220523205716.4a641c41@canb.auug.org.au>
+        Mon, 23 May 2022 06:57:48 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50073286E7;
+        Mon, 23 May 2022 03:57:35 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id u27so19956707wru.8;
+        Mon, 23 May 2022 03:57:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :content-transfer-encoding:user-agent:mime-version;
+        bh=BG7Id+lD+AQs0Pegzcqk1XktexibNQHiu13oHrpbb3M=;
+        b=R6hjr4vVGrFUXLG1QDuRZ3HDw6zAcnC9oR0wGnabT+tDUhO0BdqFnTJVAfJeALzc/j
+         ZHvPBQbbc4Z2heu9EjRjiZXXTt2cbdQEvBNNXqhGbkRwt+cQXmgMJ7/hG6fERNlGnlsx
+         SS2a01naIC5RPByBPFfaZBefQZ05aAJEnL9pZTrp6Z4Befp2M+K16xQ9Mi6VSuTT9fdK
+         iygWO3hIFNhbxo64OndbysVlNlMf6ZCpzspjLznSa+T4xhjplCz2L4299OArzxRkG4eL
+         UvvCugiIKttC7KT9lis3g0TzGRPLKsqKA6coX3ZK9CRs9lxK0jJYJS1ZR+oOvro/05SR
+         ZkhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:content-transfer-encoding:user-agent:mime-version;
+        bh=BG7Id+lD+AQs0Pegzcqk1XktexibNQHiu13oHrpbb3M=;
+        b=bghAPkaFy0OCRQ4M9rzTVymyIuxnZ5OqLBqMDnJ/Izvr3vm7SPePtrnaFJLEWwfwAg
+         cDCvGolQ9RYccT9zj4yc2qcPTNddsCzn+HW7KEcPtizHj9EGxqk83JQWyl2NcpPXUAVi
+         sePtP+gpWwimUM6lSKNq5k94nwk/ll7gc8Gjtb6xRuiWoxHEqmPZF5ajVpepxO8dJ+lC
+         rfPAqbF5KUzSAcxpxWuqASQMGyFhqSnLi8bz0gbmHZERtNjf15w25WX6QUQkmF+wO+xi
+         wBiKNhlLdUOhT0PkDIE01A6l8cS/KF3qkUxl4SlPbAHV8hV2xwdxQHK6iswkomlB015t
+         oOYA==
+X-Gm-Message-State: AOAM533DVUiB3dj7H6hHayVZwoESv5hk6MrkOFZHg5UMyW6JMa+smKa1
+        c+OYoMeAtbZDR1NrySkCDyw=
+X-Google-Smtp-Source: ABdhPJzcu/U7hQf2EKjkWxdjrxDDsZbj+4xkWy47utplrljg5CDn1H+9R4diFxBpCAClUAm6OUSYsQ==
+X-Received: by 2002:a05:6000:24b:b0:20d:24e:a1ce with SMTP id m11-20020a056000024b00b0020d024ea1cemr10309067wrz.159.1653303449301;
+        Mon, 23 May 2022 03:57:29 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id p2-20020adfa202000000b0020adc114136sm11704389wra.0.2022.05.23.03.57.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 May 2022 03:57:28 -0700 (PDT)
+Message-ID: <652139e639c7e80795e01b3b4f88ba03b85d66c5.camel@gmail.com>
+Subject: Re: [PATCH v10 03/21] drm/edid: Convert cea_sad helper struct to
+ kernelDoc
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+To:     Guillaume Ranquet <granquet@baylibre.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, Helge Deller <deller@gmx.de>,
+        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>
+Cc:     dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-fbdev@vger.kernel.org
+Date:   Mon, 23 May 2022 12:57:26 +0200
+In-Reply-To: <20220523104758.29531-4-granquet@baylibre.com>
+References: <20220523104758.29531-1-granquet@baylibre.com>
+         <20220523104758.29531-4-granquet@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1 
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/mHPv+uWcSHFbhN1peCdQU8l";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,52 +88,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/mHPv+uWcSHFbhN1peCdQU8l
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, 2022-05-23 at 12:47 +0200, Guillaume Ranquet wrote:
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+>=20
 
-Hi all,
+We need a commit message here.
 
-Today's linux-next merge of the kspp tree got a conflict in:
+> ---
+> =C2=A0include/drm/drm_edid.h | 12 +++++++++---
+> =C2=A01 file changed, 9 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/include/drm/drm_edid.h b/include/drm/drm_edid.h
+> index 144c495b99c4..37c420423625 100644
+> --- a/include/drm/drm_edid.h
+> +++ b/include/drm/drm_edid.h
+> @@ -359,12 +359,18 @@ struct edid {
+> =C2=A0
+> =C2=A0#define EDID_PRODUCT_ID(e) ((e)->prod_code[0] | ((e)->prod_code[1]
+> << 8))
+> =C2=A0
+> -/* Short Audio Descriptor */
+> +/**
+> + * struct cea_sad - Short Audio Descriptor.
+> + * @format: See HDMI_AUDIO_CODING_TYPE_*.
+> + * @channels: max number of channels - 1.
+> + * @freq: See CEA_SAD_FREQ_*.
+> + * @byte2: meaning depends on format.
+> + */
+> =C2=A0struct cea_sad {
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u8 format;
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u8 channels; /* max number of =
+channels - 1 */
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u8 channels;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u8 freq;
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u8 byte2; /* meaning depends o=
+n format */
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u8 byte2;
+> =C2=A0};
+> =C2=A0
+> =C2=A0struct drm_encoder;
 
-  include/linux/netfs.h
-
-between commit:
-
-  713423282ae1 ("netfs: Fix gcc-12 warning by embedding vfs inode in netfs_=
-i_context")
-
-from the fscache tree and commit:
-
-  3b5eed3c71a2 ("netfs: Eliminate Clang randstruct warning")
-
-from the kspp tree.
-
-I fixed it up (I just used the former) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/mHPv+uWcSHFbhN1peCdQU8l
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKLaIwACgkQAVBC80lX
-0GxJPAgAl0ATBZCiW5HFQtqyWIOy4ArICRqcAVaLJGEhnz0wnexaSqN0PtqA+zWi
-xrt+jPAqydSee2FNGmWjqUtLiO3X+aI2hN/87kx8rZrjCYmCxnEiNVi3Aq88aAcA
-OTAo6tv5diaqG6r96LgkBCUKu3xPfb7eDJB38/UP6WnT/KdcU8d8doOZL8mw6h8P
-5EXlA/rVqJtsl/y8ifxchImACf63afogT2If6Pr7Rb3m04FVZUKLPFosbuk5cI2r
-EMp5/8WkgMLAySWEx83ylfhyISfseMMVk/NrU7xH6kpyFnLq1P8Y0ppv8lF9q8sx
-GTDE4ePXnWLjGlAj859tb0uuT48Z/Q==
-=UZBv
------END PGP SIGNATURE-----
-
---Sig_/mHPv+uWcSHFbhN1peCdQU8l--

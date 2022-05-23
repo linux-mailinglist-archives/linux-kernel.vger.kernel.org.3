@@ -2,160 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F0975316AD
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AFB15316BD
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:52:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232679AbiEWUQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 16:16:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52342 "EHLO
+        id S232704AbiEWUQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 16:16:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233372AbiEWUQM (ORCPT
+        with ESMTP id S232671AbiEWUQq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 16:16:12 -0400
-Received: from smtp.smtpout.orange.fr (smtp04.smtpout.orange.fr [80.12.242.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 093C110554
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 13:16:08 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.180.246])
-        by smtp.orange.fr with ESMTPA
-        id tETGnTFRzAym2tETGnHes4; Mon, 23 May 2022 22:16:07 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Mon, 23 May 2022 22:16:07 +0200
-X-ME-IP: 86.243.180.246
-Message-ID: <00061a71-4d7c-0605-80b5-3d909fc3dfaa@wanadoo.fr>
-Date:   Mon, 23 May 2022 22:16:05 +0200
+        Mon, 23 May 2022 16:16:46 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8E409BACF
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 13:16:40 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D37D51F385;
+        Mon, 23 May 2022 20:16:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1653336998; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=goF6A2nn2xNGTTiUf76QCboMS9Lw4XitHpDEXqr8Lhs=;
+        b=ZXSmPYw3pjcohe6x31gdvN1CTkZjT9x9RWvJVS9YVCyMBQLEH0Db5yNY4zhyCCYHsy4dUY
+        AaBtTtqudhR1HHMTA9Dlyt6p0Y+CNOalqecsPHoXe/uyMN/00pZCzd5FHVpppoSsk3hmY1
+        utcfxlQeMjFQphBtfc0cm4+PcMnfl2I=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1653336998;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=goF6A2nn2xNGTTiUf76QCboMS9Lw4XitHpDEXqr8Lhs=;
+        b=VNkn28oBznI9e5BXioO0pdwzo2Z6KlBNToa8tU/WbkMNAQ8kqA63Wbws8rKIQ+61XCwh0H
+        RD1U5YeOELMNBRDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C6A6313AA5;
+        Mon, 23 May 2022 20:16:38 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id zQdwMKbri2LgBQAAMHmgww
+        (envelope-from <bp@suse.de>); Mon, 23 May 2022 20:16:38 +0000
+Date:   Mon, 23 May 2022 22:16:38 +0200
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] x86/microcode for 5.19
+Message-ID: <YovrpkI/2id4tctB@zn.tnic>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [RFC PATCH] kbuild: Add an option to enable -O1 and speed-up
- compilation time
-Content-Language: en-GB
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     dan.carpenter@oracle.com, Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>
-References: <23e0ba7863d51ab629498762a97d477645aeafea.1653123744.git.christophe.jaillet@wanadoo.fr>
- <CAKwvOdneqUvq+Nz_zPmJmuPFfAvWQgnzrw1AJt=WqQF2hThF-A@mail.gmail.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <CAKwvOdneqUvq+Nz_zPmJmuPFfAvWQgnzrw1AJt=WqQF2hThF-A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 23/05/2022 à 20:26, Nick Desaulniers a écrit :
-> On Sat, May 21, 2022 at 2:04 AM Christophe JAILLET
-> <christophe.jaillet@wanadoo.fr> wrote:
->>
->> Add a new compilation option which speeds-up compilation time.
->> This can be useful when using static checker such as smatch or build-bots.
->> In such cases, the speed and quality of the generated code is not
->> important.
->>
->> Using -O0 would be even better, but unfortunately, building fails with
->> this option.
-> 
-> Which is a tragedy.
-> 
-> As with the Rust series, I'm not a fan of this (or
-> CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE_O3):
-> https://lore.kernel.org/lkml/CAKwvOd=7QTUH69+ZbT7e8einvgcosTbDkyohmPaUBv6_y8RfrQ@mail.gmail.com/
-> 
-> These feel more like attempts to wrap every conceivable command line
-> flag in a kconfig option, which makes me think of that meme from
-> Jurassic Park: "your scientists were so preoccupied with whether or
-> not they could, they didn't stop to think if they should."
-> Not a fan.  I'd ask for measurements, but that would be a request for
-> a "rock fetching quest" for something I still wouldn't be a fan of.
+Hi Linus,
 
-Hi,
+please pull a single x86/microcode Kconfig fix for 5.19.
 
-some preliminary tests gave roughly a 5% build time speed-up with -O1.
-That is to say that the impact seems quite limited, after all.
-This was done on building /drivers/net/ or /drivers/net/ethernet/ only.
+Thx.
 
-I don't have numbers for the impact on memory consumption.
+---
 
-Given the feedbacks on -O1 which is unlikely to be able to build a full 
-kernel and your position on yet another option for a very specific use 
-case, I won't push the idea further.
+The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 
-I'll keep it in my own tree for (small) build time improvement when 
-running smatch.
+  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
 
-The idea of turning off a subset of -O2 options would just be some too 
-fine tuning. I'll certainly try it for my own use, but it would end to 
-an un-understandable list of flags in Makefile.
--O1 (or -O0) was simple. A more complex solution is way too much.
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_microcode_for_v5.19_rc1
 
-Thanks for your feedbacks.
+for you to fetch changes up to 9c55d99e099bd7aa6b91fce8718505c35d5dfc65:
 
-CJ
+  x86/microcode: Add explicit CPU vendor dependency (2022-05-20 11:28:32 +0200)
 
-> 
->>
->> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
->> ---
->>   Makefile     | 5 ++++-
->>   init/Kconfig | 8 ++++++++
->>   2 files changed, 12 insertions(+), 1 deletion(-)
->>
->> diff --git a/Makefile b/Makefile
->> index 1f8bef92868f..14467386f947 100644
->> --- a/Makefile
->> +++ b/Makefile
->> @@ -817,7 +817,10 @@ KBUILD_CFLAGS      += $(call cc-disable-warning, format-truncation)
->>   KBUILD_CFLAGS  += $(call cc-disable-warning, format-overflow)
->>   KBUILD_CFLAGS  += $(call cc-disable-warning, address-of-packed-member)
->>
->> -ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE
->> +ifdef CONFIG_CC_OPTIMIZE_FOR_COMPILATION_SPEED
->> +KBUILD_CFLAGS += -O1
->> +KBUILD_RUSTFLAGS_OPT_LEVEL_MAP := 1
->> +else ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE
->>   KBUILD_CFLAGS += -O2
->>   KBUILD_RUSTFLAGS_OPT_LEVEL_MAP := 2
->>   else ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE_O3
->> diff --git a/init/Kconfig b/init/Kconfig
->> index a96776a9b080..3177a1830c9a 100644
->> --- a/init/Kconfig
->> +++ b/init/Kconfig
->> @@ -1384,6 +1384,14 @@ choice
->>          prompt "Compiler optimization level"
->>          default CC_OPTIMIZE_FOR_PERFORMANCE
->>
->> +config CC_OPTIMIZE_FOR_COMPILATION_SPEED
->> +       bool "Optimize for compilation speed (-O1)"
->> +       help
->> +         This option can be useful when running a static checker such as smatch
->> +         or a build-bot.
->> +         Compilation time is slighly faster than -O2 and it requires less
-> 
-> s/slighly/slightly/
+----------------------------------------------------------------
+- Make CPU vendor dependency explicit against random config build failures
 
-Thanks for taking time for a full review, even on something you are not 
-fan on. This is really appreciated.
+----------------------------------------------------------------
+Borislav Petkov (1):
+      x86/microcode: Add explicit CPU vendor dependency
 
-CJ
+ arch/x86/Kconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> 
->> +         memory.
->> +
->>   config CC_OPTIMIZE_FOR_PERFORMANCE
->>          bool "Optimize for performance (-O2)"
->>          help
->> --
->> 2.34.1
->>
-> 
-> 
+-- 
+Regards/Gruss,
+    Boris.
 
+SUSE Software Solutions Germany GmbH
+GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
+(HRB 36809, AG Nürnberg)

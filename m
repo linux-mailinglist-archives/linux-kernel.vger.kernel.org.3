@@ -2,151 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A977E530BB7
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 11:03:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3388530B92
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 11:03:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232409AbiEWJAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 05:00:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54398 "EHLO
+        id S232438AbiEWJAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 05:00:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232420AbiEWI7u (ORCPT
+        with ESMTP id S232427AbiEWJAN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 04:59:50 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8671240928
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 01:59:49 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id ob14-20020a17090b390e00b001dff2a43f8cso5742447pjb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 01:59:49 -0700 (PDT)
+        Mon, 23 May 2022 05:00:13 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC3AA43AFB;
+        Mon, 23 May 2022 02:00:10 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id u30so24375659lfm.9;
+        Mon, 23 May 2022 02:00:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=RQjXK1tyA9xOYFhndd4nNr3xd4VXsIavQtRl5jsGh4c=;
-        b=meNdqL84O1gmdVv6NUiIDJn815273OPePWQVlLCtG6TSyOYKE4v2G4PfxBLToFL8pO
-         nUY0VM4BReYj05yWLnF2LyruQWkhcyhZ+XwNXzJeHEKBIZLPeU59T/CuMl7NZixuFi09
-         KXxlHmNQ/PJrF206symEyu+7Zq97H8GYXkS+k=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=RT1M9aqkbwA63MQnchS8s/33KgiJZVs9GXaf0mr/Gkc=;
+        b=UZw/vJV2m95kWc3FZbQ+rMmUAiUG/AhUnkoFhkuh2sLWH2TJdWbNSFXWfgt1dhy7t+
+         zYIzySVe2duntOJZbKwPxH6OSDXYpGXi2G0zqYCKNvtRtUOhD+Vrskqvh87Spfhx3Y4g
+         qPyyXhgDqGRJURGLdCGNODHYhFJjVypRmJZx0gUQFMfFMG56iM3Ub6e53aiJ1FStJ40a
+         sMSYSscq8mpModYLJSKke31b1CJt+AUjZTj6D2ycpJ+vnHABmXa8Z7d4qVdMjXN/coI5
+         Ay+FfFnFR8Q4H3O7zRpRJRhpVBXkuPCwDByBh1q01WMOFydGyZAwNIyNhryTBmdQfzL0
+         34Xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=RQjXK1tyA9xOYFhndd4nNr3xd4VXsIavQtRl5jsGh4c=;
-        b=j7ntdWs8z7C6xuRn6Yif1TmUjESiCBdpu2aQGww3bqf/eG1mSyAfnY8SGX2JWuIyLD
-         O7AT1w3alZitSdXMQz+rA43aQZ7QE4oqNKad3idjpALhx/m8QKT0+mhC2gwXIE1/RLY0
-         OicaQT1o/TFMFXcA8AmN7iY4zHtwO6u0UbXb285R4wlKezBUqfPGJKtT/79zarNPxrPk
-         /S6c1J3CK25TpEQfrYZAqRd2CDnX/BBUQaxze3DVNwVvYzz682e2xENcG33o4yshDyix
-         INTyXzhd6iiJd/eILs9Q6YLu7VjJ4zedTAjtd+C6WA4fu+0cmYTtB1bOWKSfzUd2S042
-         qXsQ==
-X-Gm-Message-State: AOAM530igXwUky7+ZvMrejN+xItgshTjnQAJaohjN45D2akvMQ92RggQ
-        hHZsM6qKN2Iko18t+PMqGU3xPA==
-X-Google-Smtp-Source: ABdhPJw7GzZaO7+1ExzM7fCYO6HG981ADv0zp7IOz83yeRMp6UwL1C+HSBrvI/3v7TVTfgTNPEgxRw==
-X-Received: by 2002:a17:90b:4a90:b0:1df:e3af:c6ad with SMTP id lp16-20020a17090b4a9000b001dfe3afc6admr21190655pjb.41.1653296388958;
-        Mon, 23 May 2022 01:59:48 -0700 (PDT)
-Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:1b8:7eae:9793:ff95])
-        by smtp.gmail.com with ESMTPSA id e11-20020a170902cf4b00b0015e8d4eb22csm4524719plg.118.2022.05.23.01.59.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 01:59:48 -0700 (PDT)
-From:   Chen-Yu Tsai <wenst@chromium.org>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Chen-Yu Tsai <wenst@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/4] clk: mediatek: mt8183: Add clk mux notifier for MFG mux
-Date:   Mon, 23 May 2022 16:59:23 +0800
-Message-Id: <20220523085923.1430470-5-wenst@chromium.org>
-X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
-In-Reply-To: <20220523085923.1430470-1-wenst@chromium.org>
-References: <20220523085923.1430470-1-wenst@chromium.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=RT1M9aqkbwA63MQnchS8s/33KgiJZVs9GXaf0mr/Gkc=;
+        b=v4ZW/JTiJm37FxVDXWeUyThj89n0LlWs66NUFe3p3kyo/0ujvg8QV7l/U3H+ZcebUZ
+         0oIHETBKekPnB8aaF3iZDjck2DS845baRKLtFheMb3/sWsgOEcw3bSNs9joBNO8pbIRL
+         QMwrQhavcsDcyVQ5vr9fsLncRI+frs4nCgCJ0HDhumCs46MQEatDMS7WiAbnCPAiMMtH
+         HwTikh1DqmQdoGDXEJ+y4k3fLGNoXVJcqRdlB48/YzebcRduMFCySduNejgCGIxPDwrc
+         C2TzfOQyVhqr5opqNL93SehsWQwnTo+1S8LITnxBjCUJw9zo/e1k0DXvpU34fz6vMhnv
+         JsVg==
+X-Gm-Message-State: AOAM5301cujg3tGiLNxdGCzMdfCalSEbNiG480S4ELE/wlmXEJla0+un
+        Fc58kOcHY7MH4S7zDd5DCfrReSluMJDo9FbKOz4=
+X-Google-Smtp-Source: ABdhPJyNDvtP6hAFs0NEen/Hds+ysvFRJrxOFRJzaG4fNAHvsJVaoMk+BPPQCr1KS7pJw2xKWp+CCVe3EwpDP2UfhWk=
+X-Received: by 2002:ac2:5f1c:0:b0:474:d376:336c with SMTP id
+ 28-20020ac25f1c000000b00474d376336cmr15180843lfq.22.1653296408966; Mon, 23
+ May 2022 02:00:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220517092927.19537-1-ctcchien@nuvoton.com> <20220517092927.19537-4-ctcchien@nuvoton.com>
+ <YoPzaSc/8BBVWWsB@mail.local> <CAHpyw9fw54hQrsPa4psbUs2VfBqHj+gMKDceL2N5k8_jU+434w@mail.gmail.com>
+ <YoSuS+nFJoD4+oKM@mail.local>
+In-Reply-To: <YoSuS+nFJoD4+oKM@mail.local>
+From:   Medad Young <medadyoung@gmail.com>
+Date:   Mon, 23 May 2022 16:59:56 +0800
+Message-ID: <CAHpyw9eeqY8xPaF_APEb9WDns6z3G5EcvXH-j16JPu6iSoWYYA@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] RTC: nuvoton: Add NCT3018Y real time clock driver
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Benjamin Fair <benjaminfair@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Patrick Venture <venture@google.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, a.zummo@towertech.it,
+        KWLIU@nuvoton.com, YSCHU@nuvoton.com, JJLIU0@nuvoton.com,
+        KFTING <KFTING@nuvoton.com>, ctcchien@nuvoton.com,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-rtc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the MFG PLL clock, which is upstream of the MFG clock, is changed,
-the downstream clock and consumers need to be switched away from the PLL
-over to a stable clock to avoid glitches.
+Dear Alexandre,
 
-This is done through the use of the newly added clk mux notifier. The
-notifier is set on the mux itself instead of the upstream PLL, but in
-practice this works, as the rate change notifitcations are propogated
-throughout the sub-tree hanging off the PLL. Just before rate changes,
-the MFG mux is temporarily and transparently switched to the 26 MHz
-main crystal. After the rate change, the mux is switched back.
+thanks for your comments
 
-Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
----
-Changes since v1;
-- Moved clk notifier registration into separate function
-- Fixed comment style
+Alexandre Belloni <alexandre.belloni@bootlin.com> =E6=96=BC 2022=E5=B9=B45=
+=E6=9C=8818=E6=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=884:29=E5=AF=AB=E9=
+=81=93=EF=BC=9A
+>
+> On 18/05/2022 11:11:00+0800, Medad Young wrote:
+> > > > +config RTC_DRV_NCT3018Y
+> > > > +     tristate "Nuvoton Real Time Clock"
+> > >
+> > > This definitively needs a better description
+> >
+> > OK, I will add a better description.
+>
+> To be clear, this needs at least the part number
 
- drivers/clk/mediatek/clk-mt8183.c | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+OK, I will add part number
 
-diff --git a/drivers/clk/mediatek/clk-mt8183.c b/drivers/clk/mediatek/clk-mt8183.c
-index b5c17988c337..d66acf2e5e19 100644
---- a/drivers/clk/mediatek/clk-mt8183.c
-+++ b/drivers/clk/mediatek/clk-mt8183.c
-@@ -1188,10 +1188,33 @@ static void clk_mt8183_top_init_early(struct device_node *node)
- CLK_OF_DECLARE_DRIVER(mt8183_topckgen, "mediatek,mt8183-topckgen",
- 			clk_mt8183_top_init_early);
- 
-+/* Register mux notifier for MFG mux */
-+static int clk_mt8183_reg_mfg_mux_notifier(struct device *dev, struct clk *clk)
-+{
-+	struct mtk_mux_nb *mfg_mux_nb;
-+	int i;
-+
-+	mfg_mux_nb = devm_kzalloc(dev, sizeof(*mfg_mux_nb), GFP_KERNEL);
-+	if (!mfg_mux_nb)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < ARRAY_SIZE(top_muxes); i++)
-+		if (top_muxes[i].id == CLK_TOP_MUX_MFG)
-+			break;
-+	if (i == ARRAY_SIZE(top_muxes))
-+		return -EINVAL;
-+
-+	mfg_mux_nb->mux = &top_muxes[i];
-+	mfg_mux_nb->bypass_index = 0; /* Bypass to 26M crystal */
-+
-+	return devm_mtk_clk_mux_notifier_register(dev, clk, mfg_mux_nb);
-+}
-+
- static int clk_mt8183_top_probe(struct platform_device *pdev)
- {
- 	void __iomem *base;
- 	struct device_node *node = pdev->dev.of_node;
-+	int ret;
- 
- 	base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(base))
-@@ -1217,6 +1240,11 @@ static int clk_mt8183_top_probe(struct platform_device *pdev)
- 	mtk_clk_register_gates(node, top_clks, ARRAY_SIZE(top_clks),
- 		top_clk_data);
- 
-+	ret = clk_mt8183_reg_mfg_mux_notifier(&pdev->dev,
-+					      top_clk_data->hws[CLK_TOP_MUX_MFG]->clk);
-+	if (ret)
-+		return ret;
-+
- 	return of_clk_add_hw_provider(node, of_clk_hw_onecell_get,
- 				      top_clk_data);
- }
--- 
-2.36.1.124.g0e6072fb45-goog
+>
+> > > > +     tm->tm_wday =3D buf[6] & 0x07;
+> > > > +     tm->tm_mday =3D bcd2bin(buf[7] & 0x3F);
+> > > > +     tm->tm_mon =3D bcd2bin(buf[8] & 0x1F) - 1 ; /* rtc mn 1-12 */
+> > > > +     tm->tm_year =3D bcd2bin(buf[9]) + 100;
+> > > > +
+> > > > +     dev_dbg(&client->dev, "%s:s=3D%d, m=3D%d, hr=3D%d, md=3D%d, m=
+=3D%d, yr=3D%d, wd=3D%d\n",
+> > > > +             __func__, tm->tm_sec, tm->tm_min, tm->tm_hour, tm->tm=
+_mday, tm->tm_mon,
+> > > > +             tm->tm_year, tm->tm_wday);
+> > > > +
+>
+> I forgot but this dev_dbg is not particularily useful as we have
+> tracepoint in the core. However, if you want to keep it, please use
+> %ptR.
 
+I understood, maybe I can remove it.
+>
+> > > > +     return 0;
+> > > > +}
+> > > > +
+> > > > +static int nct3018y_rtc_set_time(struct device *dev, struct rtc_ti=
+me *tm)
+> > > > +{
+> > > > +     struct i2c_client *client =3D to_i2c_client(dev);
+> > > > +     unsigned char buf[10] =3D {0};
+> > > > +     int err;
+> > > > +
+> > > > +     dev_dbg(&client->dev, "%s:s=3D%d, m=3D%d, hr=3D%d, md=3D%d, m=
+=3D%d, yr=3D%d, wd=3D%d\n",
+> > > > +             __func__, tm->tm_sec, tm->tm_min, tm->tm_hour, tm->tm=
+_mday, tm->tm_mon,
+> > > > +             tm->tm_year, tm->tm_wday);
+>
+> Ditto
+
+OK, I can remove it.
+
+>
+> > > > +
+> > > > +     err =3D nct3018y_read_block_data(client, NCT3018Y_REG_CTRL, 1=
+, buf);
+> > > > +     if (err)
+> > > > +             return err;
+> > > > +
+> > > > +     if (!(buf[0] & NCT3018Y_BIT_TWO)) {
+> > > > +             dev_err(&client->dev,
+> > > > +                     " TWO is not set.\n");
+> > >
+> > > This is not useful, what is TWO?
+> >
+> > TWO stands for Time Registers Write Ownership
+> > for NCT3018Y, driver needs to set this bit before writing to other regi=
+sters
+> >
+>
+> Can't you simply set it forcefully here instead of erroring out?
+
+I did set it forcefully in the probe function, so I will remove the
+same operation here.
+
+>
+> > >
+> > > > +             return -EINVAL;
+> > > > +     }
+> > > > +
+> > > > +     /* hours, minutes and seconds */
+> > > > +     buf[NCT3018Y_REG_SC] =3D bin2bcd(tm->tm_sec);
+> > > > +     buf[NCT3018Y_REG_MN] =3D bin2bcd(tm->tm_min);
+> > > > +     buf[NCT3018Y_REG_HR] =3D bin2bcd(tm->tm_hour);
+> > > > +     buf[NCT3018Y_REG_DW] =3D tm->tm_wday & 0x07;
+> > > > +     buf[NCT3018Y_REG_DM] =3D bin2bcd(tm->tm_mday);
+> > > > +
+> > > > +     /* month, 1 - 12 */
+> > > > +     buf[NCT3018Y_REG_MO] =3D bin2bcd(tm->tm_mon+1);
+> > > > +
+> > > > +     /* year and century */
+> > >
+> > > Were is the century?
+> >
+> > I will update the comment, for there is no century.
+> >
+> > >
+> > > > +     buf[NCT3018Y_REG_YR] =3D bin2bcd(tm->tm_year - 100);
+> > > > +
+> > > > +     return nct3018y_write_block_data(client, NCT3018Y_REG_SC, 10,=
+ buf);
+>
+> So this overwrites the alarm which is something you must not do.
+
+yes, I will correct it
+
+>
+> > > > +     buf[0] =3D bin2bcd(tm->time.tm_sec);
+> > > > +     buf[1] =3D bin2bcd(tm->time.tm_min);
+> > > > +     buf[2] =3D bin2bcd(tm->time.tm_hour);
+> > > > +
+> > > > +     err =3D nct3018y_write_block_data(client, NCT3018Y_REG_SCA, 1=
+, buf);
+> > > > +     if (err)
+> > > > +             return err;
+> > >
+> > >
+> > > Writing byte per byte opens a huge window for a race condition here.
+> > >
+> >
+> > I write byte per byte,
+> > because these three registers are not continuous
+> >
+>
+> Right, I did see it and then forgot.
+
+thanks
+
+>
+> > > > +     nct3018y->rtc =3D devm_rtc_allocate_device(&client->dev);
+> > > > +     if (IS_ERR(nct3018y->rtc))
+> > > > +             return PTR_ERR(nct3018y->rtc);
+> > > > +
+> > > > +     nct3018y->rtc->ops =3D &nct3018y_rtc_ops;
+> > > > +     nct3018y->rtc->range_min =3D RTC_TIMESTAMP_BEGIN_2000;
+> > > > +     nct3018y->rtc->range_max =3D RTC_TIMESTAMP_END_2099;
+> > > > +     nct3018y->rtc->set_start_time =3D true;
+> > >
+> > > Do you have a good reason to set set_start_time here?
+> > >
+> >
+> > Sorry, I am new here.
+> > I just follow other drivers.
+> > so you think I should not set set_start_time, right?
+> >
+>
+> There are very few drivers that needs it, when they used to window the
+> dates they support back to 1970 which is not something you seem to care
+> about.
+
+I got it.
+
+
+>
+>
+> --
+> Alexandre Belloni, co-owner and COO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+
+B.R.
+Medad

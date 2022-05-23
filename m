@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F28A8531C20
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:57:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F30D55317BE
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:53:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241163AbiEWRjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:39:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42532 "EHLO
+        id S240117AbiEWRSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:18:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241931AbiEWR1V (ORCPT
+        with ESMTP id S240147AbiEWRP2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:27:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E55079811;
-        Mon, 23 May 2022 10:22:29 -0700 (PDT)
+        Mon, 23 May 2022 13:15:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D38760CA;
+        Mon, 23 May 2022 10:12:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3271460A2A;
-        Mon, 23 May 2022 17:22:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BEDDC385A9;
-        Mon, 23 May 2022 17:22:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EF616B81201;
+        Mon, 23 May 2022 17:11:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4783FC385A9;
+        Mon, 23 May 2022 17:11:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326548;
-        bh=k8uQgKRYzDv5bvtHUWgEwNihhvA8//WvV+HXDM4GpjU=;
+        s=korg; t=1653325892;
+        bh=BUNLhRfompu2Orpy6NY8TgsXhVZK+k4CPtKbD4EVduU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SJ1UDfpQAhXvjpRsjyDEcTJL2tcsjRXNq4fuL2T0FNcXmqhTms2K1Xa/h9iU6gOFN
-         DZUgdCfNT/KHG+lq3wDkuwjEstwNmDWTcqtHRjTfJZpfTH/OIPptyFkS6Ke2CQCY7r
-         07CVIlNTTCC84w0uYJtnPFuoNFvzzKm0kyHplplQ=
+        b=i3v9gkTORiGsDNe9vqkHQkJC3NES/wcjrR6bYRbD8fD0r5isxzflJG35rWQZYJ8bH
+         bmKmCVt4wDPeIvuVFj19Gu0/mSkzn+uTWGUL3vtf28YBKPtobIpo7B8n7wJmHj8mqo
+         RPPU64k3l+d7o9T4rCjsBlhaIkQbUM6gBk2pp54E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Aashay Shringarpure <aashay@google.com>,
+        Yi Chou <yich@google.com>,
+        Shervin Oloumi <enlightened@google.com>,
+        Grant Grundler <grundler@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 116/132] selftests: add ping test with ping_group_range tuned
+Subject: [PATCH 4.19 41/44] net: atlantic: verify hw_head_ lies within TX buffer ring
 Date:   Mon, 23 May 2022 19:05:25 +0200
-Message-Id: <20220523165842.776478238@linuxfoundation.org>
+Message-Id: <20220523165800.814384078@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
-References: <20220523165823.492309987@linuxfoundation.org>
+In-Reply-To: <20220523165752.797318097@linuxfoundation.org>
+References: <20220523165752.797318097@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,65 +58,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+From: Grant Grundler <grundler@chromium.org>
 
-[ Upstream commit e71b7f1f44d3d88c677769c85ef0171caf9fc89f ]
+[ Upstream commit 2120b7f4d128433ad8c5f503a9584deba0684901 ]
 
-The 'ping' utility is able to manage two kind of sockets (raw or icmp),
-depending on the sysctl ping_group_range. By default, ping_group_range is
-set to '1 0', which forces ping to use an ip raw socket.
+Bounds check hw_head index provided by NIC to verify it lies
+within the TX buffer ring.
 
-Let's replay the ping tests by allowing 'ping' to use the ip icmp socket.
-After the previous patch, ipv4 tests results are the same with both kinds
-of socket. For ipv6, there are a lot a new failures (the previous patch
-fixes only two cases).
-
-Signed-off-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
-Reviewed-by: David Ahern <dsahern@kernel.org>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Reported-by: Aashay Shringarpure <aashay@google.com>
+Reported-by: Yi Chou <yich@google.com>
+Reported-by: Shervin Oloumi <enlightened@google.com>
+Signed-off-by: Grant Grundler <grundler@chromium.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/net/fcnal-test.sh | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/net/ethernet/aquantia/atlantic/hw_atl/hw_atl_b0.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
-index aec9e784d0b4..91f54112167f 100755
---- a/tools/testing/selftests/net/fcnal-test.sh
-+++ b/tools/testing/selftests/net/fcnal-test.sh
-@@ -803,10 +803,16 @@ ipv4_ping()
- 	setup
- 	set_sysctl net.ipv4.raw_l3mdev_accept=1 2>/dev/null
- 	ipv4_ping_novrf
-+	setup
-+	set_sysctl net.ipv4.ping_group_range='0 2147483647' 2>/dev/null
-+	ipv4_ping_novrf
+diff --git a/drivers/net/ethernet/aquantia/atlantic/hw_atl/hw_atl_b0.c b/drivers/net/ethernet/aquantia/atlantic/hw_atl/hw_atl_b0.c
+index c4f914a29c38..bdb0b37c048a 100644
+--- a/drivers/net/ethernet/aquantia/atlantic/hw_atl/hw_atl_b0.c
++++ b/drivers/net/ethernet/aquantia/atlantic/hw_atl/hw_atl_b0.c
+@@ -637,6 +637,13 @@ static int hw_atl_b0_hw_ring_tx_head_update(struct aq_hw_s *self,
+ 		err = -ENXIO;
+ 		goto err_exit;
+ 	}
++
++	/* Validate that the new hw_head_ is reasonable. */
++	if (hw_head_ >= ring->size) {
++		err = -ENXIO;
++		goto err_exit;
++	}
++
+ 	ring->hw_head = hw_head_;
+ 	err = aq_hw_err_from_flags(self);
  
- 	log_subsection "With VRF"
- 	setup "yes"
- 	ipv4_ping_vrf
-+	setup "yes"
-+	set_sysctl net.ipv4.ping_group_range='0 2147483647' 2>/dev/null
-+	ipv4_ping_vrf
- }
- 
- ################################################################################
-@@ -2324,10 +2330,16 @@ ipv6_ping()
- 	log_subsection "No VRF"
- 	setup
- 	ipv6_ping_novrf
-+	setup
-+	set_sysctl net.ipv4.ping_group_range='0 2147483647' 2>/dev/null
-+	ipv6_ping_novrf
- 
- 	log_subsection "With VRF"
- 	setup "yes"
- 	ipv6_ping_vrf
-+	setup "yes"
-+	set_sysctl net.ipv4.ping_group_range='0 2147483647' 2>/dev/null
-+	ipv6_ping_vrf
- }
- 
- ################################################################################
 -- 
 2.35.1
 

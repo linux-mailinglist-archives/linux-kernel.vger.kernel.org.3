@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72AD7531A1B
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:55:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46C78531B3A
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239627AbiEWRPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:15:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37672 "EHLO
+        id S240346AbiEWRZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:25:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240756AbiEWRMi (ORCPT
+        with ESMTP id S240588AbiEWRQb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:12:38 -0400
+        Mon, 23 May 2022 13:16:31 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56D6A6A016;
-        Mon, 23 May 2022 10:11:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E89726345;
+        Mon, 23 May 2022 10:15:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A5724B811FE;
-        Mon, 23 May 2022 17:11:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02A8EC385AA;
-        Mon, 23 May 2022 17:11:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CEBB0B81229;
+        Mon, 23 May 2022 17:15:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D2EDC385A9;
+        Mon, 23 May 2022 17:15:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653325876;
-        bh=Bex4+frImCRPD1WgTYjWBQykj4ze7sH8ElNkop69JK0=;
+        s=korg; t=1653326130;
+        bh=43ADYlVSU0bl+oIij0x957OoDs9ZCDv4I1yKzplQidc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pBkpVYl0veDJ5R7aIhxyVyM8lyayetv1UC8ptANcmfqlQW2f6izZj1BgHkYtAs9Tj
-         mKRsBH2rv96RiyWL617N/J3zxPTqMFA7H391zz4T665nkyCjeI+PMI+iZEXq2vGaNP
-         ALxCOImts9Ulll6ZAIbQaEK+hR8TfvLzoLaHpsC4=
+        b=zK0Dkypi6mJ0PwCnOQacVGyYABwhR8d/dV+tVPukLVaanm3Pm/IwT6DW7DVUzeQHL
+         nUo+qMAE+xgPa64EbvHMcDhfWnNx6memaARl9NqjHCfQtSZHDnLiLIFHxvkZrhPcsz
+         8KQafUsCUDFP3LkzaZTVKLmszlyfSP5Yn7PFbT74=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
-        Lyude Paul <lyude@redhat.com>
-Subject: [PATCH 4.19 16/44] drm/dp/mst: fix a possible memory leak in fetch_monitor_name()
+        stable@vger.kernel.org,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= 
+        <jerome.pouiller@silabs.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
+Subject: [PATCH 5.4 33/68] dma-buf: fix use of DMA_BUF_SET_NAME_{A,B} in userspace
 Date:   Mon, 23 May 2022 19:05:00 +0200
-Message-Id: <20220523165756.201186224@linuxfoundation.org>
+Message-Id: <20220523165808.093124227@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165752.797318097@linuxfoundation.org>
-References: <20220523165752.797318097@linuxfoundation.org>
+In-Reply-To: <20220523165802.500642349@linuxfoundation.org>
+References: <20220523165802.500642349@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,32 +56,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hangyu Hua <hbh25y@gmail.com>
+From: Jérôme Pouiller <jerome.pouiller@silabs.com>
 
-commit 6e03b13cc7d9427c2c77feed1549191015615202 upstream.
+commit 7c3e9fcad9c7d8bb5d69a576044fb16b1d2e8a01 upstream.
 
-drm_dp_mst_get_edid call kmemdup to create mst_edid. So mst_edid need to be
-freed after use.
+The typedefs u32 and u64 are not available in userspace. Thus user get
+an error he try to use DMA_BUF_SET_NAME_A or DMA_BUF_SET_NAME_B:
 
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-Reviewed-by: Lyude Paul <lyude@redhat.com>
-Signed-off-by: Lyude Paul <lyude@redhat.com>
-Cc: stable@vger.kernel.org
-Link: https://patchwork.freedesktop.org/patch/msgid/20220516032042.13166-1-hbh25y@gmail.com
+    $ gcc -Wall   -c -MMD -c -o ioctls_list.o ioctls_list.c
+    In file included from /usr/include/x86_64-linux-gnu/asm/ioctl.h:1,
+                     from /usr/include/linux/ioctl.h:5,
+                     from /usr/include/asm-generic/ioctls.h:5,
+                     from ioctls_list.c:11:
+    ioctls_list.c:463:29: error: ‘u32’ undeclared here (not in a function)
+      463 |     { "DMA_BUF_SET_NAME_A", DMA_BUF_SET_NAME_A, -1, -1 }, // linux/dma-buf.h
+          |                             ^~~~~~~~~~~~~~~~~~
+    ioctls_list.c:464:29: error: ‘u64’ undeclared here (not in a function)
+      464 |     { "DMA_BUF_SET_NAME_B", DMA_BUF_SET_NAME_B, -1, -1 }, // linux/dma-buf.h
+          |                             ^~~~~~~~~~~~~~~~~~
+
+The issue was initially reported here[1].
+
+[1]: https://github.com/jerome-pouiller/ioctl/pull/14
+
+Signed-off-by: Jérôme Pouiller <jerome.pouiller@silabs.com>
+Reviewed-by: Christian König <christian.koenig@amd.com>
+Fixes: a5bff92eaac4 ("dma-buf: Fix SET_NAME ioctl uapi")
+CC: stable@vger.kernel.org
+Link: https://patchwork.freedesktop.org/patch/msgid/20220517072708.245265-1-Jerome.Pouiller@silabs.com
+Signed-off-by: Christian König <christian.koenig@amd.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/drm_dp_mst_topology.c |    1 +
- 1 file changed, 1 insertion(+)
+ include/uapi/linux/dma-buf.h |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/gpu/drm/drm_dp_mst_topology.c
-+++ b/drivers/gpu/drm/drm_dp_mst_topology.c
-@@ -2987,6 +2987,7 @@ static void fetch_monitor_name(struct dr
+--- a/include/uapi/linux/dma-buf.h
++++ b/include/uapi/linux/dma-buf.h
+@@ -44,7 +44,7 @@ struct dma_buf_sync {
+  * between them in actual uapi, they're just different numbers.
+  */
+ #define DMA_BUF_SET_NAME	_IOW(DMA_BUF_BASE, 1, const char *)
+-#define DMA_BUF_SET_NAME_A	_IOW(DMA_BUF_BASE, 1, u32)
+-#define DMA_BUF_SET_NAME_B	_IOW(DMA_BUF_BASE, 1, u64)
++#define DMA_BUF_SET_NAME_A	_IOW(DMA_BUF_BASE, 1, __u32)
++#define DMA_BUF_SET_NAME_B	_IOW(DMA_BUF_BASE, 1, __u64)
  
- 	mst_edid = drm_dp_mst_get_edid(port->connector, mgr, port);
- 	drm_edid_get_monitor_name(mst_edid, name, namelen);
-+	kfree(mst_edid);
- }
- 
- /**
+ #endif
 
 

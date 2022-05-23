@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3566E531BBE
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38A58531627
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:50:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244099AbiEWRv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:51:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43696 "EHLO
+        id S244367AbiEWRwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:52:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241457AbiEWR0q (ORCPT
+        with ESMTP id S241422AbiEWR0q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 23 May 2022 13:26:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D49719D2;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD5F737BA;
         Mon, 23 May 2022 10:21:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9FE15B8120F;
-        Mon, 23 May 2022 17:20:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B24DC3411C;
-        Mon, 23 May 2022 17:20:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FB3461175;
+        Mon, 23 May 2022 17:20:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AE1FC385A9;
+        Mon, 23 May 2022 17:20:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326416;
-        bh=lhOmLS/R9QJKcENUCDPWK6y1PeRsDp5qBeu0TJ02EbQ=;
+        s=korg; t=1653326419;
+        bh=PStYNHifrHb/iPNvuKCDmvAMKGKOKHMZKdb3MQjoiAk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fVAoOkt70QgklKaasB2A1J9x6BCrxXjdtWoQBDQdQzqq50eyU06DGCDop35Bv6qnV
-         pHfcWRHUCOsjVxWErUXAUC/HxAFs1ElkoPdJhmtZox2iG+6zSQoEEZ3vXIKzJg6L/B
-         1ShI5JiNUOfxVjbEEFFeUBorIEug5TMrQHotWFQs=
+        b=DF/GsC+sPClTQnaB+yqUckTlJpQfEesUMflToZyp1pHi+kip1yfa8ahUMpwtPwKZg
+         P3pRQJC8wJWZtsvuPl4+YIkFSg1tBZG1M7DgGjKxYfeWmUbSr7yZUqy1L+oLsNjxa5
+         fivWye/OVCJ6vCvxWEgfcH8OPmWEoe2ALCdtNph0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Chee Hou Ong <chee.houx.ong@intel.com>,
-        Aman Kumar <aman.kumar@intel.com>,
-        Pallavi Kumari <kumari.pallavi@intel.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 5.15 051/132] Revert "can: m_can: pci: use custom bit timings for Elkhart Lake"
-Date:   Mon, 23 May 2022 19:04:20 +0200
-Message-Id: <20220523165831.688100631@linuxfoundation.org>
+        stable@vger.kernel.org, David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.15 052/132] KVM: x86/mmu: Update number of zapped pages even if page list is stable
+Date:   Mon, 23 May 2022 19:04:21 +0200
+Message-Id: <20220523165831.865928845@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
 References: <20220523165823.492309987@linuxfoundation.org>
@@ -58,133 +56,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+From: Sean Christopherson <seanjc@google.com>
 
-commit 14ea4a470494528c7e88da5c4116c24eb027059f upstream.
+commit b28cb0cd2c5e80a8c0feb408a0e4b0dbb6d132c5 upstream.
 
-This reverts commit 0e8ffdf3b86dfd44b651f91b12fcae76c25c453b.
+When zapping obsolete pages, update the running count of zapped pages
+regardless of whether or not the list has become unstable due to zapping
+a shadow page with its own child shadow pages.  If the VM is backed by
+mostly 4kb pages, KVM can zap an absurd number of SPTEs without bumping
+the batch count and thus without yielding.  In the worst case scenario,
+this can cause a soft lokcup.
 
-Commit 0e8ffdf3b86d ("can: m_can: pci: use custom bit timings for
-Elkhart Lake") broke the test case using bitrate switching.
+ watchdog: BUG: soft lockup - CPU#12 stuck for 22s! [dirty_log_perf_:13020]
+   RIP: 0010:workingset_activation+0x19/0x130
+   mark_page_accessed+0x266/0x2e0
+   kvm_set_pfn_accessed+0x31/0x40
+   mmu_spte_clear_track_bits+0x136/0x1c0
+   drop_spte+0x1a/0xc0
+   mmu_page_zap_pte+0xef/0x120
+   __kvm_mmu_prepare_zap_page+0x205/0x5e0
+   kvm_mmu_zap_all_fast+0xd7/0x190
+   kvm_mmu_invalidate_zap_pages_in_memslot+0xe/0x10
+   kvm_page_track_flush_slot+0x5c/0x80
+   kvm_arch_flush_shadow_memslot+0xe/0x10
+   kvm_set_memslot+0x1a8/0x5d0
+   __kvm_set_memory_region+0x337/0x590
+   kvm_vm_ioctl+0xb08/0x1040
 
-| ip link set can0 up type can bitrate 500000 dbitrate 4000000 fd on
-| ip link set can1 up type can bitrate 500000 dbitrate 4000000 fd on
-| candump can0 &
-| cangen can1 -I 0x800 -L 64 -e -fb \
-|     -D 11223344deadbeef55667788feedf00daabbccdd44332211 -n 1 -v -v
-
-Above commit does everything correctly according to the datasheet.
-However datasheet wasn't correct.
-
-I got confirmation from hardware engineers that the actual CAN
-hardware on Intel Elkhart Lake is based on M_CAN version v3.2.0.
-Datasheet was mirroring values from an another specification which was
-based on earlier M_CAN version leading to wrong bit timings.
-
-Therefore revert the commit and switch back to common bit timings.
-
-Fixes: ea4c1787685d ("can: m_can: pci: use custom bit timings for Elkhart Lake")
-Link: https://lore.kernel.org/all/20220512124144.536850-1-jarkko.nikula@linux.intel.com
-Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Reported-by: Chee Hou Ong <chee.houx.ong@intel.com>
-Reported-by: Aman Kumar <aman.kumar@intel.com>
-Reported-by: Pallavi Kumari <kumari.pallavi@intel.com>
-Cc: <stable@vger.kernel.org> # v5.16+
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Fixes: fbb158cb88b6 ("KVM: x86/mmu: Revert "Revert "KVM: MMU: zap pages in batch""")
+Reported-by: David Matlack <dmatlack@google.com>
+Reviewed-by: Ben Gardon <bgardon@google.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+Message-Id: <20220511145122.3133334-1-seanjc@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/can/m_can/m_can_pci.c |   48 +++-----------------------------------
- 1 file changed, 4 insertions(+), 44 deletions(-)
+ arch/x86/kvm/mmu/mmu.c |   10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
---- a/drivers/net/can/m_can/m_can_pci.c
-+++ b/drivers/net/can/m_can/m_can_pci.c
-@@ -18,14 +18,9 @@
- 
- #define M_CAN_PCI_MMIO_BAR		0
- 
-+#define M_CAN_CLOCK_FREQ_EHL		200000000
- #define CTL_CSR_INT_CTL_OFFSET		0x508
- 
--struct m_can_pci_config {
--	const struct can_bittiming_const *bit_timing;
--	const struct can_bittiming_const *data_timing;
--	unsigned int clock_freq;
--};
--
- struct m_can_pci_priv {
- 	struct m_can_classdev cdev;
- 
-@@ -89,40 +84,9 @@ static struct m_can_ops m_can_pci_ops =
- 	.read_fifo = iomap_read_fifo,
- };
- 
--static const struct can_bittiming_const m_can_bittiming_const_ehl = {
--	.name = KBUILD_MODNAME,
--	.tseg1_min = 2,		/* Time segment 1 = prop_seg + phase_seg1 */
--	.tseg1_max = 64,
--	.tseg2_min = 1,		/* Time segment 2 = phase_seg2 */
--	.tseg2_max = 128,
--	.sjw_max = 128,
--	.brp_min = 1,
--	.brp_max = 512,
--	.brp_inc = 1,
--};
--
--static const struct can_bittiming_const m_can_data_bittiming_const_ehl = {
--	.name = KBUILD_MODNAME,
--	.tseg1_min = 2,		/* Time segment 1 = prop_seg + phase_seg1 */
--	.tseg1_max = 16,
--	.tseg2_min = 1,		/* Time segment 2 = phase_seg2 */
--	.tseg2_max = 8,
--	.sjw_max = 4,
--	.brp_min = 1,
--	.brp_max = 32,
--	.brp_inc = 1,
--};
--
--static const struct m_can_pci_config m_can_pci_ehl = {
--	.bit_timing = &m_can_bittiming_const_ehl,
--	.data_timing = &m_can_data_bittiming_const_ehl,
--	.clock_freq = 200000000,
--};
--
- static int m_can_pci_probe(struct pci_dev *pci, const struct pci_device_id *id)
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -5590,6 +5590,7 @@ static void kvm_zap_obsolete_pages(struc
  {
- 	struct device *dev = &pci->dev;
--	const struct m_can_pci_config *cfg;
- 	struct m_can_classdev *mcan_class;
- 	struct m_can_pci_priv *priv;
- 	void __iomem *base;
-@@ -150,8 +114,6 @@ static int m_can_pci_probe(struct pci_de
- 	if (!mcan_class)
- 		return -ENOMEM;
+ 	struct kvm_mmu_page *sp, *node;
+ 	int nr_zapped, batch = 0;
++	bool unstable;
  
--	cfg = (const struct m_can_pci_config *)id->driver_data;
--
- 	priv = cdev_to_priv(mcan_class);
+ restart:
+ 	list_for_each_entry_safe_reverse(sp, node,
+@@ -5621,11 +5622,12 @@ restart:
+ 			goto restart;
+ 		}
  
- 	priv->base = base;
-@@ -163,9 +125,7 @@ static int m_can_pci_probe(struct pci_de
- 	mcan_class->dev = &pci->dev;
- 	mcan_class->net->irq = pci_irq_vector(pci, 0);
- 	mcan_class->pm_clock_support = 1;
--	mcan_class->bit_timing = cfg->bit_timing;
--	mcan_class->data_timing = cfg->data_timing;
--	mcan_class->can.clock.freq = cfg->clock_freq;
-+	mcan_class->can.clock.freq = id->driver_data;
- 	mcan_class->ops = &m_can_pci_ops;
+-		if (__kvm_mmu_prepare_zap_page(kvm, sp,
+-				&kvm->arch.zapped_obsolete_pages, &nr_zapped)) {
+-			batch += nr_zapped;
++		unstable = __kvm_mmu_prepare_zap_page(kvm, sp,
++				&kvm->arch.zapped_obsolete_pages, &nr_zapped);
++		batch += nr_zapped;
++
++		if (unstable)
+ 			goto restart;
+-		}
+ 	}
  
- 	pci_set_drvdata(pci, mcan_class);
-@@ -218,8 +178,8 @@ static SIMPLE_DEV_PM_OPS(m_can_pci_pm_op
- 			 m_can_pci_suspend, m_can_pci_resume);
- 
- static const struct pci_device_id m_can_pci_id_table[] = {
--	{ PCI_VDEVICE(INTEL, 0x4bc1), (kernel_ulong_t)&m_can_pci_ehl, },
--	{ PCI_VDEVICE(INTEL, 0x4bc2), (kernel_ulong_t)&m_can_pci_ehl, },
-+	{ PCI_VDEVICE(INTEL, 0x4bc1), M_CAN_CLOCK_FREQ_EHL, },
-+	{ PCI_VDEVICE(INTEL, 0x4bc2), M_CAN_CLOCK_FREQ_EHL, },
- 	{  }	/* Terminating Entry */
- };
- MODULE_DEVICE_TABLE(pci, m_can_pci_id_table);
+ 	/*
 
 

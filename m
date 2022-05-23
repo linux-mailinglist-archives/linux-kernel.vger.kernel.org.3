@@ -2,102 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B733D5318D4
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:54:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58B8C531AA6
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:55:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233043AbiEWUbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 16:31:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60978 "EHLO
+        id S233129AbiEWUdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 16:33:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233041AbiEWUbA (ORCPT
+        with ESMTP id S233079AbiEWUdM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 16:31:00 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C3A473AD
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 13:30:57 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id i40so20592060eda.7
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 13:30:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6nbUGzUOgeo3D78bqQ+maj5c5YVeZLaDtwoE3ePbgRg=;
-        b=UoRh6ARF5eMZ2C6FMreRbDTlJm162xJ1tuzyHrHmFT/3Q36IbQO9iSO2ULmDGIDVQH
-         b7CHe+V1XXW6hofsd5knxDERRWblVFbDlw294mOlszSHwfFAt+Ooh53PQLXip6K0VKv8
-         P9wJy/F05fNoQo2LWS9tCQ4RrwAvpIXtMAvY8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6nbUGzUOgeo3D78bqQ+maj5c5YVeZLaDtwoE3ePbgRg=;
-        b=REYqELFZBd4PGB8wXY0jLZiLdTtUTzR2VCXWPqZxLigfJy4VTPgeS6BNs3Kym6h+uR
-         ItU9126aTEEc5E/tQf9CH/s9ORJXgn/hyOB0K4woH7RRg0gRn6ZIrceqA9noBp0vIoTk
-         zaclwhC7U7FSfHGuk0ZKrJtBh0K9L3cfxt+3PeH/dClzTcW0ual5X3rkSxMx2sNTHyPW
-         JLXPIvTbkSdw1PczHaGA+ORduf6L/KDYZBatRd4apKTY3iuIglp9rnfjckNPqky05XJy
-         KMLoTP0lmKg8sJKkR1OjPNHT14RtvBI4GBF2F0Dv6HKAE8xhLRFRdebBbS5uDUIPfebF
-         RTfQ==
-X-Gm-Message-State: AOAM5335T9ThbYDcFdN0TNgssOfwWkIVMlVIA5c3rRECiNVTE42RVy+U
-        omH0h/fUhySav++0yRls1FUfC3Ncxzf5aeejMas=
-X-Google-Smtp-Source: ABdhPJxPHKH8vihPrZ/y3FXXHQtaX2w5uonzXwKn7sAsfMEhlFJv5Zrgv05+nIFskEaToZb58ow4/w==
-X-Received: by 2002:a05:6402:34c2:b0:42b:66d3:7b07 with SMTP id w2-20020a05640234c200b0042b66d37b07mr7649696edc.275.1653337855486;
-        Mon, 23 May 2022 13:30:55 -0700 (PDT)
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com. [209.85.221.54])
-        by smtp.gmail.com with ESMTPSA id ta16-20020a1709078c1000b006fec27575f1sm2721525ejc.123.2022.05.23.13.30.54
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 May 2022 13:30:54 -0700 (PDT)
-Received: by mail-wr1-f54.google.com with SMTP id s28so22811622wrb.7
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 13:30:54 -0700 (PDT)
-X-Received: by 2002:a5d:58cc:0:b0:20e:643d:e46a with SMTP id
- o12-20020a5d58cc000000b0020e643de46amr19712672wrf.97.1653337853963; Mon, 23
- May 2022 13:30:53 -0700 (PDT)
+        Mon, 23 May 2022 16:33:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1D9D3888;
+        Mon, 23 May 2022 13:33:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A846614C5;
+        Mon, 23 May 2022 20:33:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76106C385AA;
+        Mon, 23 May 2022 20:33:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653337991;
+        bh=VNVQzR9kS5xu6l5roSausKAujCRxQKGSD7vdR797KGE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hIJVMVPO4q0ZiGjXpeP/mp4WoS7qMOycauFqdeUAuUGM43xRdfvgUY8U5T6wMqW1L
+         zMPwuEAUOEXE75o6b8ynAoLKUQhYAvGJ0ymtZ1WAwPxNpjZO0V49qzIyyFprsl1zAP
+         8s3OG0kh5AngMWZjGcnxwNJOMNzDrPepOl+1DPt7XkAqz8gfKLlqQg516vupKzVIL/
+         TxUEMRRj8+CXre1EU5IRDttOTfc7nBok6vfvfW8mHhpuDbK2eizWsbWMngOCKATCwz
+         Z7SOdDnPK8DfSpFWHOsq5M8fXFUT+49SGHKfi6/C6UAT0Y+OZE+EuW5lBjz53bDXLM
+         LW3NXhYYO/qPA==
+Date:   Mon, 23 May 2022 23:31:29 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kees Cook <keescook@chromium.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Gary Guo <gary@garyguo.net>, Boqun Feng <boqun.feng@gmail.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        live-patching@vger.kernel.org, linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v7 03/25] kallsyms: increase maximum kernel symbol length
+ to 512
+Message-ID: <YovvIQeN3lmOYzJO@kernel.org>
+References: <20220523020209.11810-1-ojeda@kernel.org>
+ <20220523020209.11810-4-ojeda@kernel.org>
 MIME-Version: 1.0
-References: <20220520182428.GA3791250@paulmck-ThinkPad-P17-Gen-1>
- <CAHk-=wgpAHhPVSqBWb4gYT=CRJzKAZ4inmrL_kcpeNWGkcg3pg@mail.gmail.com>
- <20220523195605.GA13032@1wt.eu> <20220523202336.GB13032@1wt.eu>
-In-Reply-To: <20220523202336.GB13032@1wt.eu>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 23 May 2022 13:30:37 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiX8P8atcx9at_N=-8pjU-d5cG509E=oZHfsVb1R41RZQ@mail.gmail.com>
-Message-ID: <CAHk-=wiX8P8atcx9at_N=-8pjU-d5cG509E=oZHfsVb1R41RZQ@mail.gmail.com>
-Subject: Re: [GIT PULL] nolibc changes for v5.19
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kernel Team <kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220523020209.11810-4-ojeda@kernel.org>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 1:23 PM Willy Tarreau <w@1wt.eu> wrote:
->
-> So I've figured it again. When you run:
->
->    make tools/help
->
-> you get the help of tools/ commands, [..]
+On Mon, May 23, 2022 at 04:01:16AM +0200, Miguel Ojeda wrote:
+> Rust symbols can become quite long due to namespacing introduced
+> by modules, types, traits, generics, etc. For instance,
+> the following code:
+> 
+>     pub mod my_module {
+>         pub struct MyType;
+>         pub struct MyGenericType<T>(T);
+> 
+>         pub trait MyTrait {
+>             fn my_method() -> u32;
+>         }
+> 
+>         impl MyTrait for MyGenericType<MyType> {
+>             fn my_method() -> u32 {
+>                 42
+>             }
+>         }
+>     }
+> 
+> generates a symbol of length 96 when using the upcoming v0 mangling scheme:
+> 
+>     _RNvXNtCshGpAVYOtgW1_7example9my_moduleINtB2_13MyGenericTypeNtB2_6MyTypeENtB2_7MyTrait9my_method
+> 
+> At the moment, Rust symbols may reach up to 300 in length.
+> Setting 512 as the maximum seems like a reasonable choice to
+> keep some headroom.
 
-You speak the words, but you don't actually look at what it does.
+There's no description what the patch does.
 
-Try it.
+> 
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Reviewed-by: Petr Mladek <pmladek@suse.com>
+> Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
+> Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
+> Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
+> Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
+> Co-developed-by: Gary Guo <gary@garyguo.net>
+> Signed-off-by: Gary Guo <gary@garyguo.net>
+> Co-developed-by: Boqun Feng <boqun.feng@gmail.com>
+> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> ---
+> This is a prerequisite patch, independently submitted at:
+> 
+>     https://lore.kernel.org/lkml/20220506203443.24721-4-ojeda@kernel.org/
+> 
+>  include/linux/kallsyms.h            | 2 +-
+>  kernel/livepatch/core.c             | 4 ++--
+>  scripts/kallsyms.c                  | 4 ++--
+>  tools/include/linux/kallsyms.h      | 2 +-
+>  tools/lib/perf/include/perf/event.h | 2 +-
+>  tools/lib/symbol/kallsyms.h         | 2 +-
+>  6 files changed, 8 insertions(+), 8 deletions(-)
+> 
+> diff --git a/include/linux/kallsyms.h b/include/linux/kallsyms.h
+> index ce1bd2fbf23e..e5ad6e31697d 100644
+> --- a/include/linux/kallsyms.h
+> +++ b/include/linux/kallsyms.h
+> @@ -15,7 +15,7 @@
+>  
+>  #include <asm/sections.h>
+>  
+> -#define KSYM_NAME_LEN 128
+> +#define KSYM_NAME_LEN 512
+>  #define KSYM_SYMBOL_LEN (sizeof("%s+%#lx/%#lx [%s %s]") + \
+>  			(KSYM_NAME_LEN - 1) + \
+>  			2*(BITS_PER_LONG*3/10) + (MODULE_NAME_LEN - 1) + \
+> diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
+> index bc475e62279d..ec06ce59d728 100644
+> --- a/kernel/livepatch/core.c
+> +++ b/kernel/livepatch/core.c
+> @@ -213,7 +213,7 @@ static int klp_resolve_symbols(Elf_Shdr *sechdrs, const char *strtab,
+>  	 * we use the smallest/strictest upper bound possible (56, based on
+>  	 * the current definition of MODULE_NAME_LEN) to prevent overflows.
+>  	 */
+> -	BUILD_BUG_ON(MODULE_NAME_LEN < 56 || KSYM_NAME_LEN != 128);
+> +	BUILD_BUG_ON(MODULE_NAME_LEN < 56 || KSYM_NAME_LEN != 512);
+>  
+>  	relas = (Elf_Rela *) relasec->sh_addr;
+>  	/* For each rela in this klp relocation section */
+> @@ -227,7 +227,7 @@ static int klp_resolve_symbols(Elf_Shdr *sechdrs, const char *strtab,
+>  
+>  		/* Format: .klp.sym.sym_objname.sym_name,sympos */
+>  		cnt = sscanf(strtab + sym->st_name,
+> -			     ".klp.sym.%55[^.].%127[^,],%lu",
+> +			     ".klp.sym.%55[^.].%511[^,],%lu",
+>  			     sym_objname, sym_name, &sympos);
+>  		if (cnt != 3) {
+>  			pr_err("symbol %s has an incorrectly formatted name\n",
+> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+> index 7e99799aa7b9..275044b840dc 100644
+> --- a/scripts/kallsyms.c
+> +++ b/scripts/kallsyms.c
+> @@ -30,10 +30,10 @@
+>  #define _stringify_1(x)	#x
+>  #define _stringify(x)	_stringify_1(x)
+>  
+> -#define KSYM_NAME_LEN		128
+> +#define KSYM_NAME_LEN		512
+>  
+>  /* A substantially bigger size than the current maximum. */
+> -#define KSYM_NAME_LEN_BUFFER	512
+> +#define KSYM_NAME_LEN_BUFFER	2048
+>  _Static_assert(
+>  	KSYM_NAME_LEN_BUFFER == KSYM_NAME_LEN * 4,
+>  	"Please keep KSYM_NAME_LEN_BUFFER in sync with KSYM_NAME_LEN"
+> diff --git a/tools/include/linux/kallsyms.h b/tools/include/linux/kallsyms.h
+> index efb6c3f5f2a9..5a37ccbec54f 100644
+> --- a/tools/include/linux/kallsyms.h
+> +++ b/tools/include/linux/kallsyms.h
+> @@ -6,7 +6,7 @@
+>  #include <stdio.h>
+>  #include <unistd.h>
+>  
+> -#define KSYM_NAME_LEN 128
+> +#define KSYM_NAME_LEN 512
+>  
+>  struct module;
+>  
+> diff --git a/tools/lib/perf/include/perf/event.h b/tools/lib/perf/include/perf/event.h
+> index e7758707cadd..116a80c31675 100644
+> --- a/tools/lib/perf/include/perf/event.h
+> +++ b/tools/lib/perf/include/perf/event.h
+> @@ -95,7 +95,7 @@ struct perf_record_throttle {
+>  };
+>  
+>  #ifndef KSYM_NAME_LEN
+> -#define KSYM_NAME_LEN 256
+> +#define KSYM_NAME_LEN 512
+>  #endif
+>  
+>  struct perf_record_ksymbol {
+> diff --git a/tools/lib/symbol/kallsyms.h b/tools/lib/symbol/kallsyms.h
+> index 72ab9870454b..542f9b059c3b 100644
+> --- a/tools/lib/symbol/kallsyms.h
+> +++ b/tools/lib/symbol/kallsyms.h
+> @@ -7,7 +7,7 @@
+>  #include <linux/types.h>
+>  
+>  #ifndef KSYM_NAME_LEN
+> -#define KSYM_NAME_LEN 256
+> +#define KSYM_NAME_LEN 512
+>  #endif
+>  
+>  static inline u8 kallsyms2elf_binding(char type)
+> -- 
+> 2.36.1
+> 
 
-Yes,  "make tools/help" works. Yes, it lists targets, and talks about
-how you can use the "<tool>_install" target.
-
-But none of that then matches the rest of what you write.
-
-You talk about nolibc_headers". That's not something that is actually
-listed in the help at all.
-
-So please, can you read your own email message as somebody who doesn't
-actually know the code, and try the commands you talk about, and see
-the disconnect here?
-
-                  Linus
+BR, Jarkko

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47726531636
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:50:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2A64531AE3
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242663AbiEWSAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 14:00:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39104 "EHLO
+        id S242099AbiEWRb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:31:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240994AbiEWRck (ORCPT
+        with ESMTP id S241541AbiEWRW1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:32:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C3575232;
-        Mon, 23 May 2022 10:27:21 -0700 (PDT)
+        Mon, 23 May 2022 13:22:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3758671D83;
+        Mon, 23 May 2022 10:19:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 84EAAB81201;
-        Mon, 23 May 2022 17:27:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7850C385A9;
-        Mon, 23 May 2022 17:27:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D4F61B81217;
+        Mon, 23 May 2022 17:17:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10960C385A9;
+        Mon, 23 May 2022 17:17:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326838;
-        bh=f/gxUlTFfj5frVlRI3KJBmQ/F3Zpezwb6EMBb3DBUTw=;
+        s=korg; t=1653326252;
+        bh=AbRLW6KpKD4tIN4tfMldWC0Y7qjHWvaSMDBU+t7g3Ps=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2B2Ms9YcNExZ6Z7GaQMmMq1xQxsGpVHBaBEsuUqsx0ghCGBQFLTO4E9GKqngje8KJ
-         0muF7APF6ia2lu9Zk0lRL/F0tWacjG4LSaI68CLjmEPPWNgWU23pv5DMG12+yXELIS
-         Mp9T6T/3eWMuLbzm2r6EV98Q/pDzOniocwPmJxgk=
+        b=dXDwqoiIyvKzyTVX48Cz/PgqwqUb/rECvZeWH8YZd2dfxoYxR4j+15nvzrAeDT78V
+         j0dZvatb1IgDJ0605Has5xodJL4S3kgOc3dsNQa+WQQoRHoxZlZkmNcFxdVgojSZ0N
+         MqWLpboVMJbnedetQLDySa+jY6+HBPwl1+T8ef6g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 075/158] ALSA: hda - fix unused Realtek function when PM is not enabled
+        stable@vger.kernel.org, Zheng Yongjun <zhengyongjun3@huawei.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 023/132] Input: stmfts - fix reference leak in stmfts_input_open
 Date:   Mon, 23 May 2022 19:03:52 +0200
-Message-Id: <20220523165843.404303095@linuxfoundation.org>
+Message-Id: <20220523165827.357141933@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165830.581652127@linuxfoundation.org>
-References: <20220523165830.581652127@linuxfoundation.org>
+In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
+References: <20220523165823.492309987@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,61 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Zheng Yongjun <zhengyongjun3@huawei.com>
 
-[ Upstream commit c3d9ca93f1e3bd3d1adfc4479a12c82fed424c87 ]
+[ Upstream commit 26623eea0da3476446909af96c980768df07bbd9 ]
 
-When CONFIG_PM is not enabled, alc_shutup() is not needed,
-so move it inside the #ifdef CONFIG_PM guard.
-Also drop some contiguous #endif / #ifdef CONFIG_PM for simplicity.
+pm_runtime_get_sync() will increment pm usage counter even it
+failed. Forgetting to call pm_runtime_put_noidle will result
+in reference leak in stmfts_input_open, so we should fix it.
 
-Fixes this build warning:
-sound/pci/hda/patch_realtek.c:886:20: warning: unused function 'alc_shutup'
-
-Fixes: 08c189f2c552 ("ALSA: hda - Use generic parser codes for Realtek driver")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/r/20220430193318.29024-1-rdunlap@infradead.org
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
+Link: https://lore.kernel.org/r/20220317131604.53538-1-zhengyongjun3@huawei.com
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/pci/hda/patch_realtek.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ drivers/input/touchscreen/stmfts.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-index 779205bf5862..e38acdbe1a3b 100644
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -937,6 +937,9 @@ static int alc_init(struct hda_codec *codec)
- 	return 0;
+diff --git a/drivers/input/touchscreen/stmfts.c b/drivers/input/touchscreen/stmfts.c
+index bc11203c9cf7..72e0b767e1ba 100644
+--- a/drivers/input/touchscreen/stmfts.c
++++ b/drivers/input/touchscreen/stmfts.c
+@@ -339,11 +339,11 @@ static int stmfts_input_open(struct input_dev *dev)
+ 
+ 	err = pm_runtime_get_sync(&sdata->client->dev);
+ 	if (err < 0)
+-		return err;
++		goto out;
+ 
+ 	err = i2c_smbus_write_byte(sdata->client, STMFTS_MS_MT_SENSE_ON);
+ 	if (err)
+-		return err;
++		goto out;
+ 
+ 	mutex_lock(&sdata->mutex);
+ 	sdata->running = true;
+@@ -366,7 +366,9 @@ static int stmfts_input_open(struct input_dev *dev)
+ 				 "failed to enable touchkey\n");
+ 	}
+ 
+-	return 0;
++out:
++	pm_runtime_put_noidle(&sdata->client->dev);
++	return err;
  }
  
-+#define alc_free	snd_hda_gen_free
-+
-+#ifdef CONFIG_PM
- static inline void alc_shutup(struct hda_codec *codec)
- {
- 	struct alc_spec *spec = codec->spec;
-@@ -950,9 +953,6 @@ static inline void alc_shutup(struct hda_codec *codec)
- 		alc_shutup_pins(codec);
- }
- 
--#define alc_free	snd_hda_gen_free
--
--#ifdef CONFIG_PM
- static void alc_power_eapd(struct hda_codec *codec)
- {
- 	alc_auto_setup_eapd(codec, false);
-@@ -966,9 +966,7 @@ static int alc_suspend(struct hda_codec *codec)
- 		spec->power_hook(codec);
- 	return 0;
- }
--#endif
- 
--#ifdef CONFIG_PM
- static int alc_resume(struct hda_codec *codec)
- {
- 	struct alc_spec *spec = codec->spec;
+ static void stmfts_input_close(struct input_dev *dev)
 -- 
 2.35.1
 

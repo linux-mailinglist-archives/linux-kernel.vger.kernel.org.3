@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 060E15319F3
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:55:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DE25531BE3
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239357AbiEWRFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:05:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47736 "EHLO
+        id S242312AbiEWRyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:54:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239257AbiEWREx (ORCPT
+        with ESMTP id S241423AbiEWRap (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:04:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E6D674C5;
-        Mon, 23 May 2022 10:04:51 -0700 (PDT)
+        Mon, 23 May 2022 13:30:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A46AC6007A;
+        Mon, 23 May 2022 10:26:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DD3E7614BB;
-        Mon, 23 May 2022 17:04:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E74E7C385A9;
-        Mon, 23 May 2022 17:04:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 44B86611CB;
+        Mon, 23 May 2022 17:26:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4891EC385A9;
+        Mon, 23 May 2022 17:26:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653325490;
-        bh=1vNedQjfYeJf4gSkwmjMImK2i6aez+HKQrc2U7rc+6M=;
+        s=korg; t=1653326764;
+        bh=RTDzHiDei7ULDBzcavq5W0If3VTGoCPC3qmIElAhzlc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VN5GSvfiMJbyUtpdXUPlIxLCHopfeeZ3EO0Wl9UTuqqMmqvvcKgM4Khao9jXhYhop
-         1nlKjm9NFu3gTLMHEL8lCLvE5UFriZd4ylqoNC25HGKkiOvgvf+TOHcuiVy6/xeFRR
-         VwGY3fL/OJTzjTPXjaP4GvbEwsNIJYHAjJKRY8fk=
+        b=AkNhqteeaR1KBnXBWYPOey8DfU4LK7bPWJxSecSnhPjrROZzpxfi2ArCxqFPXGDFt
+         5kVPfimcfwvVY6fGQWavEbLUYqYc1pK3asXYkquxXAtg7ay5bGf3ljq9cgUCEHbfCU
+         /tIQSC2OI7GkKdSNqriYhIVebIKEcWrCN0QUf4oQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Subject: [PATCH 4.9 09/25] mmc: core: Default to generic_cmd6_time as timeout in __mmc_switch()
-Date:   Mon, 23 May 2022 19:03:27 +0200
-Message-Id: <20220523165746.295047581@linuxfoundation.org>
+        stable@vger.kernel.org, Julian Orth <ju.orth@gmail.com>,
+        Paul Moore <paul@paul-moore.com>
+Subject: [PATCH 5.17 051/158] audit,io_uring,io-wq: call __audit_uring_exit for dummy contexts
+Date:   Mon, 23 May 2022 19:03:28 +0200
+Message-Id: <20220523165839.183895296@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165743.398280407@linuxfoundation.org>
-References: <20220523165743.398280407@linuxfoundation.org>
+In-Reply-To: <20220523165830.581652127@linuxfoundation.org>
+References: <20220523165830.581652127@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,52 +54,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ulf Hansson <ulf.hansson@linaro.org>
+From: Julian Orth <ju.orth@gmail.com>
 
-commit 533a6cfe08f96a7b5c65e06d20916d552c11b256 upstream
+commit 69e9cd66ae1392437234a63a3a1d60b6655f92ef upstream.
 
-All callers of __mmc_switch() should now be specifying a valid timeout for
-the CMD6 command. However, just to be sure, let's print a warning and
-default to use the generic_cmd6_time in case the provided timeout_ms
-argument is zero.
+Not calling the function for dummy contexts will cause the context to
+not be reset. During the next syscall, this will cause an error in
+__audit_syscall_entry:
 
-In this context, let's also simplify some of the corresponding code and
-clarify some related comments.
+	WARN_ON(context->context != AUDIT_CTX_UNUSED);
+	WARN_ON(context->name_count);
+	if (context->context != AUDIT_CTX_UNUSED || context->name_count) {
+		audit_panic("unrecoverable error in audit_syscall_entry()");
+		return;
+	}
 
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-Link: https://lore.kernel.org/r/20200122142747.5690-4-ulf.hansson@linaro.org
-Signed-off-by: Kamal Dasu <kdasu.kdev@gmail.com>
-[kamal: Drop non-existent hunks in 4.9's __mmc_switch]
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+These problematic dummy contexts are created via the following call
+chain:
+
+       exit_to_user_mode_prepare
+    -> arch_do_signal_or_restart
+    -> get_signal
+    -> task_work_run
+    -> tctx_task_work
+    -> io_req_task_submit
+    -> io_issue_sqe
+    -> audit_uring_entry
+
+Cc: stable@vger.kernel.org
+Fixes: 5bd2182d58e9 ("audit,io_uring,io-wq: add some basic audit support to io_uring")
+Signed-off-by: Julian Orth <ju.orth@gmail.com>
+[PM: subject line tweaks]
+Signed-off-by: Paul Moore <paul@paul-moore.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/mmc/core/mmc_ops.c |    9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ include/linux/audit.h |    2 +-
+ kernel/auditsc.c      |    6 ++++++
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
---- a/drivers/mmc/core/mmc_ops.c
-+++ b/drivers/mmc/core/mmc_ops.c
-@@ -22,8 +22,6 @@
- #include "host.h"
- #include "mmc_ops.h"
+--- a/include/linux/audit.h
++++ b/include/linux/audit.h
+@@ -339,7 +339,7 @@ static inline void audit_uring_entry(u8
+ }
+ static inline void audit_uring_exit(int success, long code)
+ {
+-	if (unlikely(!audit_dummy_context()))
++	if (unlikely(audit_context()))
+ 		__audit_uring_exit(success, code);
+ }
+ static inline void audit_syscall_entry(int major, unsigned long a0,
+--- a/kernel/auditsc.c
++++ b/kernel/auditsc.c
+@@ -1959,6 +1959,12 @@ void __audit_uring_exit(int success, lon
+ {
+ 	struct audit_context *ctx = audit_context();
  
--#define MMC_OPS_TIMEOUT_MS	(10 * 60 * 1000) /* 10 minute timeout */
--
- static const u8 tuning_blk_pattern_4bit[] = {
- 	0xff, 0x0f, 0xff, 0x00, 0xff, 0xcc, 0xc3, 0xcc,
- 	0xc3, 0x3c, 0xcc, 0xff, 0xfe, 0xff, 0xfe, 0xef,
-@@ -530,8 +528,11 @@ int __mmc_switch(struct mmc_card *card,
- 		ignore_crc = false;
- 
- 	/* We have an unspecified cmd timeout, use the fallback value. */
--	if (!timeout_ms)
--		timeout_ms = MMC_OPS_TIMEOUT_MS;
-+	if (!timeout_ms) {
-+		pr_warn("%s: unspecified timeout for CMD6 - use generic\n",
-+			mmc_hostname(host));
-+		timeout_ms = card->ext_csd.generic_cmd6_time;
++	if (ctx->dummy) {
++		if (ctx->context != AUDIT_CTX_URING)
++			return;
++		goto out;
 +	}
- 
- 	/* Must check status to be sure of no errors. */
- 	timeout = jiffies + msecs_to_jiffies(timeout_ms) + 1;
++
+ 	if (ctx->context == AUDIT_CTX_SYSCALL) {
+ 		/*
+ 		 * NOTE: See the note in __audit_uring_entry() about the case
 
 

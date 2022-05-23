@@ -2,172 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 479A55311FE
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:21:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AE925312EB
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:23:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238709AbiEWQR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 12:17:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35302 "EHLO
+        id S238751AbiEWQSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 12:18:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238751AbiEWQRn (ORCPT
+        with ESMTP id S238769AbiEWQRt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 12:17:43 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A52A7666BC
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:17:33 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id gh17so16862108ejc.6
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:17:33 -0700 (PDT)
+        Mon, 23 May 2022 12:17:49 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15E0A66AFB
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:17:39 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id j21so13889245pga.13
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:17:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=PCQH17jF4yaNt95ownveF3EeYN5ShcjQ8EacLUuPu7Q=;
-        b=WMJecfnwXOWvirU9vw8U1e4rSbx8otVKr+DnbzNJxhlpIRARuz1o2twyOPZlzc/YWT
-         QiwqiIrYAga4po26Hx5KAVWvOW8+Le3wLCUGiL2M8xzwODyX8w+0MIG/Rx+OD8KGKAk/
-         yCFgSTGP4O+iwYr37oBFFm0D5NnPA6+ctOTbCovksijNhI37jSKrWqzD0IXjMX0hXSr6
-         XemxkGkRbDMwULuHcEHVQHA+4kkxs0ISJfszANrJ+hZVVSEVdPifjumO57Anhzu4lG0V
-         OBzZAQdjTl5IljJNskUKpywQoIL3zJ0eSO7GJpB87OZSt5btpY6txgZ0ws2biTUwJlX7
-         HhEQ==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=eNbcOsis/KpOazxwoapGqmAzQvleW1ZvCZVss5TACNY=;
+        b=PvlTBp13muG1TUI68g94aTQ/FiuK9qHmMCLEhGVjZ0ZOVhN6vz5vhhS+wmUP4+Lno7
+         7IlNEdS8L46cr3LPygXWejIC2R5nVJHYFz2RQibrrPusEsaLKGvIB9h6v7KfX7A7i0kB
+         v+P2h1gE9IKmT0G5rBzwpuio2B55DiAPk8drqySZQ6ng/a9/tF4skaP1vmmzJ5HO8Eae
+         PxGQp8Gqh3zX4GFCTSCnZ/kLWXYyzDQ0QstOp7r3CfZjsMSi22A3To/WeaVSCKJ0a/sA
+         PopRzqh3tQ/XAtcJTZ/asZNoRcRGEGNwG+tcYnQThEJqQPzA4Ro2opqfmf1ZUxg77Xkw
+         zo6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :mime-version:content-disposition;
-        bh=PCQH17jF4yaNt95ownveF3EeYN5ShcjQ8EacLUuPu7Q=;
-        b=ywGWRlTStNTxWKKFHAkUKne8MVYq+xRajUv/KQbSJpAQg9/hEIHcLteB417LDcRF21
-         mDAqMoL0lqCzEwsnQzNG6/CuPVmNXUkovOayp8o4RO0gIXLDiBUxIx/uZ5TmMJqOzFBw
-         FMLGrDT02EddeBL3zybdy+BYuE1D8sYTSogc8JVtYkJQsN+yB5DD8HIx/YS8jZuciSOB
-         I48gcJvUjTIte2DXnE44oTYO8yzNwvQXxUmSE7HnHQe9Olhh5a13ZUIwoi5QzMZNB/1b
-         fQhtqZhu4LQn/FIFew4G1YKKP07/x5o3D4DfYquW5a3KJ07GJnI2VZm/Fvb5HCnQhP6p
-         AKPg==
-X-Gm-Message-State: AOAM532PQDj0Ild5BAQrKakAl30XIjHErcQ0GITi1KXFkZ2StbLnyMW0
-        cs1CplCOvOKppMaANUV4cN0=
-X-Google-Smtp-Source: ABdhPJwptTyJfccR0i2aaf7qKQXymAvH8V9XrRvC+whQ5p4yRUwIiOo592EU70514OOtsS15K8y70g==
-X-Received: by 2002:a17:907:7ea8:b0:6f5:941:cba9 with SMTP id qb40-20020a1709077ea800b006f50941cba9mr19689459ejc.213.1653322652035;
-        Mon, 23 May 2022 09:17:32 -0700 (PDT)
-Received: from gmail.com (84-236-113-78.pool.digikabel.hu. [84.236.113.78])
-        by smtp.gmail.com with ESMTPSA id u12-20020aa7d88c000000b0042aca5edba7sm8492562edq.57.2022.05.23.09.17.30
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=eNbcOsis/KpOazxwoapGqmAzQvleW1ZvCZVss5TACNY=;
+        b=jZpdC9nHBj4EdHG51MiyT+tDa2K3omtb+Dd+WJLR96VvC/roNcMWX9p0EaLn914n4v
+         PwBQQz+G5i3y25ucALvygq8NYqXYZpLfZdmv1rrBKFlsSIbrnit6PLDUs59j0rx2JDaq
+         U35vi/lBcdfUB+gOZOjTuVZB2aW4719v/CcQq+1OFejjyxroIEnR/DnBLCvpOTLjH+tY
+         AHim8Lcq7qynhdqMIPVNASZjyAstApeF0gRSdccO6T82nO2d/Vn5qMpZUvFEjLDdn5tO
+         oG+tawVO0nRuDoT1VpbVl9Yvt42A4t2gKxy+8nLYrjzC0q2PW3+THtvo7TZCqz3qnVSI
+         rP2w==
+X-Gm-Message-State: AOAM530TfWCsR9HPWRWf5jM7gvZoqv74gmQhdR1z2cDU8ezfQh+2VQfD
+        Yu1AzASoht572icoFH2UxeAGmQ==
+X-Google-Smtp-Source: ABdhPJxjulk6DvCNQRz3GNKlx5A5+lWZ+jpdQDxApa+oqiYCn513L8CGqWxpc26B7Dlc/KO80E966g==
+X-Received: by 2002:a05:6a00:1511:b0:510:30d1:e8fd with SMTP id q17-20020a056a00151100b0051030d1e8fdmr24535196pfu.37.1653322658336;
+        Mon, 23 May 2022 09:17:38 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id e18-20020a170902f11200b00162017529easm5297369plb.167.2022.05.23.09.17.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 09:17:31 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Mon, 23 May 2022 18:17:29 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
+        Mon, 23 May 2022 09:17:37 -0700 (PDT)
+Date:   Mon, 23 May 2022 16:17:34 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     shaoqin.huang@intel.com
+Cc:     pbonzini@redhat.com, Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [GIT PULL] locking changes for v5.19
-Message-ID: <YouzmQ23tV62Ni+F@gmail.com>
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: x86/mmu: Check every prev_roots in
+ __kvm_mmu_free_obsolete_roots()
+Message-ID: <YouznrVYM7H5IoMK@google.com>
+References: <20220523010948.2018342-1-shaoqin.huang@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220523010948.2018342-1-shaoqin.huang@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+On Sun, May 22, 2022, shaoqin.huang@intel.com wrote:
+> From: Shaoqin Huang <shaoqin.huang@intel.com>
+> 
+> Iterate every prev_roots and only zap obsoleted roots.
 
-Please pull the latest locking/core git tree from:
+Better would be something like:
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git locking-core-2022-05-23
+  When freeing obsolete previous roots, check prev_roots as intended, not
+  the current root.
 
-   # HEAD: 8491d1bdf5de152f27fc941e2dcdc4e66c950542 sched/clock: Use try_cmpxchg64 in sched_clock_{local,remote}
+Ugh, my bad.  This escaped into v5.18 :-(
 
-Locking changes in this cycle were:
+Fixes: 527d5cd7eece ("KVM: x86/mmu: Zap only obsolete roots if a root shadow page is zapped")
+Cc: stable@vger.kernel.org
 
- - rwsem cleanups & optimizations/fixes:
-    - Conditionally wake waiters in reader/writer slowpaths
-    - Always try to wake waiters in out_nolock path
+> 
+> Signed-off-by: Shaoqin Huang <shaoqin.huang@intel.com>
+> ---
+>  arch/x86/kvm/mmu/mmu.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 45e1573f8f1d..22803916a609 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -5168,7 +5168,7 @@ static void __kvm_mmu_free_obsolete_roots(struct kvm *kvm, struct kvm_mmu *mmu)
+>  		roots_to_free |= KVM_MMU_ROOT_CURRENT;
+>  
+>  	for (i = 0; i < KVM_MMU_NUM_PREV_ROOTS; i++) {
+> -		if (is_obsolete_root(kvm, mmu->root.hpa))
+> +		if (is_obsolete_root(kvm, mmu->prev_roots.hpa))
 
- - Add try_cmpxchg64() implementation, with arch optimizations - and use it to
-   micro-optimize sched_clock_{local,remote}()
+My version is bad, but at least it compiles ;-)
 
- - Various force-inlining fixes to address objdump instrumentation-check warnings
-
- - Add lock contention tracepoints:
-
-    lock:contention_begin
-    lock:contention_end
-
- - Misc smaller fixes & cleanups
-
- Thanks,
-
-	Ingo
-
------------------->
-Borislav Petkov (3):
-      task_stack, x86/cea: Force-inline stack helpers
-      x86/kvm/svm: Force-inline GHCB accessors
-      x86/mm: Force-inline __phys_addr_nodebug()
-
-Namhyung Kim (2):
-      locking: Add lock contention tracepoints
-      locking: Apply contention tracepoints in the slow path
-
-Nick Desaulniers (1):
-      lockdep: Fix -Wunused-parameter for _THIS_IP_
-
-Peter Zijlstra (1):
-      locking/mutex: Make contention tracepoints more consistent wrt adaptive spinning
-
-Sebastian Andrzej Siewior (1):
-      futex: Remove a PREEMPT_RT_FULL reference.
-
-Thomas Gleixner (1):
-      lockdep: Delete local_irq_enable_in_hardirq()
-
-Uros Bizjak (3):
-      locking/atomic: Add generic try_cmpxchg64 support
-      locking/atomic/x86: Introduce arch_try_cmpxchg64
-      sched/clock: Use try_cmpxchg64 in sched_clock_{local,remote}
-
-Waiman Long (4):
-      locking/rwsem: No need to check for handoff bit if wait queue empty
-      locking/rwsem: Conditionally wake waiters in reader/writer slowpaths
-      locking/rwsem: Always try to wake waiters in out_nolock path
-      locking/qrwlock: Change "queue rwlock" to "queued rwlock"
+arch/x86/kvm/mmu/mmu.c: In function ‘__kvm_mmu_free_obsolete_roots’:
+arch/x86/kvm/mmu/mmu.c:5182:58: error: ‘(struct kvm_mmu_root_info *)&mmu->prev_roots’ is a pointer; did you mean to use ‘->’?
+ 5182 |                 if (is_obsolete_root(kvm, mmu->prev_roots.hpa))
+      |                                                          ^
+      |                                                          ->
 
 
- arch/arm64/kernel/entry-common.c            |   8 +-
- arch/x86/include/asm/cmpxchg_32.h           |  21 +++++
- arch/x86/include/asm/cmpxchg_64.h           |   6 ++
- arch/x86/include/asm/cpu_entry_area.h       |   2 +-
- arch/x86/include/asm/page_64.h              |   2 +-
- arch/x86/include/asm/svm.h                  |   8 +-
- include/asm-generic/qrwlock.h               |  28 +++---
- include/asm-generic/qrwlock_types.h         |   2 +-
- include/linux/atomic/atomic-arch-fallback.h |  72 ++++++++++++++-
- include/linux/atomic/atomic-instrumented.h  |  40 ++++++++-
- include/linux/interrupt.h                   |  18 ----
- include/linux/irqflags.h                    |   4 +-
- include/linux/kvm_host.h                    |   2 +-
- include/linux/sched/task_stack.h            |   2 +-
- include/trace/events/lock.h                 |  63 +++++++++++++-
- kernel/entry/common.c                       |   6 +-
- kernel/futex/pi.c                           |   2 +-
- kernel/locking/lockdep.c                    |  23 ++---
- kernel/locking/mutex.c                      |  18 +++-
- kernel/locking/percpu-rwsem.c               |   5 ++
- kernel/locking/qrwlock.c                    |  17 +++-
- kernel/locking/qspinlock.c                  |   5 ++
- kernel/locking/rtmutex.c                    |  11 +++
- kernel/locking/rwbase_rt.c                  |   7 ++
- kernel/locking/rwsem.c                      | 130 +++++++++++++++++-----------
- kernel/locking/semaphore.c                  |  15 +++-
- kernel/sched/clock.c                        |   4 +-
- kernel/sched/idle.c                         |   2 +-
- kernel/trace/trace_preemptirq.c             |   4 +-
- scripts/atomic/gen-atomic-fallback.sh       |  31 ++++---
- scripts/atomic/gen-atomic-instrumented.sh   |   2 +-
- 31 files changed, 412 insertions(+), 148 deletions(-)
+		if (is_obsolete_root(kvm, mmu->prev_roots[i].hpa))
+		
+>  			roots_to_free |= KVM_MMU_ROOT_PREVIOUS(i);
+>  	}
+>  
+> -- 
+> 2.30.2
+> 

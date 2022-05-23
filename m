@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22C5A53164D
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:50:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7AC953160B
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:50:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240242AbiEWRSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:18:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34030 "EHLO
+        id S242497AbiEWRut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:50:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240166AbiEWRP3 (ORCPT
+        with ESMTP id S241656AbiEWR04 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:15:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05FF062CE;
-        Mon, 23 May 2022 10:12:43 -0700 (PDT)
+        Mon, 23 May 2022 13:26:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F17074DF7;
+        Mon, 23 May 2022 10:22:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B4D12614CA;
-        Mon, 23 May 2022 17:12:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6571C385A9;
-        Mon, 23 May 2022 17:12:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D4BA6B81212;
+        Mon, 23 May 2022 17:22:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37BD4C385A9;
+        Mon, 23 May 2022 17:22:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653325963;
-        bh=iaOavnu9uVLIPR/Pfk/FPb5GyxAQ7s5vYCI00gmarEU=;
+        s=korg; t=1653326526;
+        bh=qNHebJRGb8uPHTrOIkZkAqrNApxnintuF7GRvK2g2j0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1Yrg43+CiIjizx0a3kXSKPvqrxKSW2Lvk7PRNtECzXJyDlDM3wH8awXeNqumlvAYB
-         JmdoAhAaGF5L9yNj6BrdsPzTyAL3B3+WG536gFlu97n1R8d0pWGShYn8CbvL5Uhok4
-         CTrc33KHD58cHDVlb6uVzpFBZENEoMeXyegpkivc=
+        b=LdcfPcxKoiXSLLzYoby1ZFgcTcBlY4lzUvENuMSGeW4lK4fZ/QPYLChruHK5gcj9l
+         rSPQtxT01T0v5pUD73sZyLpFOWRGtd+KCvwve8+OARam7xg8vH11hQwNvsGKPLob2j
+         CXbZex3veR8/WYDyM/8bs0K9ub6fnVykMAe/hucA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Meena Shanmugam <meenashanmugam@google.com>
-Subject: [PATCH 5.4 23/68] SUNRPC: Prevent immediate close+reconnect
+        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
+        Zixuan Fu <r33s3n6@gmail.com>, Paolo Abeni <pabeni@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 081/132] net: vmxnet3: fix possible use-after-free bugs in vmxnet3_rq_alloc_rx_buf()
 Date:   Mon, 23 May 2022 19:04:50 +0200
-Message-Id: <20220523165806.474707162@linuxfoundation.org>
+Message-Id: <20220523165836.529172539@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165802.500642349@linuxfoundation.org>
-References: <20220523165802.500642349@linuxfoundation.org>
+In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
+References: <20220523165823.492309987@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,45 +55,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Meena Shanmugam <meenashanmugam@google.com>
+From: Zixuan Fu <r33s3n6@gmail.com>
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+[ Upstream commit 9e7fef9521e73ca8afd7da9e58c14654b02dfad8 ]
 
-commit 3be232f11a3cc9b0ef0795e39fa11bdb8e422a06 upstream.
+In vmxnet3_rq_alloc_rx_buf(), when dma_map_single() fails, rbi->skb is
+freed immediately. Similarly, in another branch, when dma_map_page() fails,
+rbi->page is also freed. In the two cases, vmxnet3_rq_alloc_rx_buf()
+returns an error to its callers vmxnet3_rq_init() -> vmxnet3_rq_init_all()
+-> vmxnet3_activate_dev(). Then vmxnet3_activate_dev() calls
+vmxnet3_rq_cleanup_all() in error handling code, and rbi->skb or rbi->page
+are freed again in vmxnet3_rq_cleanup_all(), causing use-after-free bugs.
 
-If we have already set up the socket and are waiting for it to connect,
-then don't immediately close and retry.
+To fix these possible bugs, rbi->skb and rbi->page should be cleared after
+they are freed.
 
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
-Signed-off-by: Meena Shanmugam <meenashanmugam@google.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+The error log in our fault-injection testing is shown as follows:
+
+[   14.319016] BUG: KASAN: use-after-free in consume_skb+0x2f/0x150
+...
+[   14.321586] Call Trace:
+...
+[   14.325357]  consume_skb+0x2f/0x150
+[   14.325671]  vmxnet3_rq_cleanup_all+0x33a/0x4e0 [vmxnet3]
+[   14.326150]  vmxnet3_activate_dev+0xb9d/0x2ca0 [vmxnet3]
+[   14.326616]  vmxnet3_open+0x387/0x470 [vmxnet3]
+...
+[   14.361675] Allocated by task 351:
+...
+[   14.362688]  __netdev_alloc_skb+0x1b3/0x6f0
+[   14.362960]  vmxnet3_rq_alloc_rx_buf+0x1b0/0x8d0 [vmxnet3]
+[   14.363317]  vmxnet3_activate_dev+0x3e3/0x2ca0 [vmxnet3]
+[   14.363661]  vmxnet3_open+0x387/0x470 [vmxnet3]
+...
+[   14.367309]
+[   14.367412] Freed by task 351:
+...
+[   14.368932]  __dev_kfree_skb_any+0xd2/0xe0
+[   14.369193]  vmxnet3_rq_alloc_rx_buf+0x71e/0x8d0 [vmxnet3]
+[   14.369544]  vmxnet3_activate_dev+0x3e3/0x2ca0 [vmxnet3]
+[   14.369883]  vmxnet3_open+0x387/0x470 [vmxnet3]
+[   14.370174]  __dev_open+0x28a/0x420
+[   14.370399]  __dev_change_flags+0x192/0x590
+[   14.370667]  dev_change_flags+0x7a/0x180
+[   14.370919]  do_setlink+0xb28/0x3570
+[   14.371150]  rtnl_newlink+0x1160/0x1740
+[   14.371399]  rtnetlink_rcv_msg+0x5bf/0xa50
+[   14.371661]  netlink_rcv_skb+0x1cd/0x3e0
+[   14.371913]  netlink_unicast+0x5dc/0x840
+[   14.372169]  netlink_sendmsg+0x856/0xc40
+[   14.372420]  ____sys_sendmsg+0x8a7/0x8d0
+[   14.372673]  __sys_sendmsg+0x1c2/0x270
+[   14.372914]  do_syscall_64+0x41/0x90
+[   14.373145]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+...
+
+Fixes: 5738a09d58d5a ("vmxnet3: fix checks for dma mapping errors")
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+Signed-off-by: Zixuan Fu <r33s3n6@gmail.com>
+Link: https://lore.kernel.org/r/20220514050656.2636588-1-r33s3n6@gmail.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/sunrpc/xprt.c     |    3 ++-
- net/sunrpc/xprtsock.c |    2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ drivers/net/vmxnet3/vmxnet3_drv.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/net/sunrpc/xprt.c
-+++ b/net/sunrpc/xprt.c
-@@ -722,7 +722,8 @@ EXPORT_SYMBOL_GPL(xprt_disconnect_done);
-  */
- static void xprt_schedule_autoclose_locked(struct rpc_xprt *xprt)
- {
--	set_bit(XPRT_CLOSE_WAIT, &xprt->state);
-+	if (test_and_set_bit(XPRT_CLOSE_WAIT, &xprt->state))
-+		return;
- 	if (test_and_set_bit(XPRT_LOCKED, &xprt->state) == 0)
- 		queue_work(xprtiod_workqueue, &xprt->task_cleanup);
- 	else if (xprt->snd_task && !test_bit(XPRT_SND_IS_COOKIE, &xprt->state))
---- a/net/sunrpc/xprtsock.c
-+++ b/net/sunrpc/xprtsock.c
-@@ -2469,7 +2469,7 @@ static void xs_connect(struct rpc_xprt *
- 
- 	WARN_ON_ONCE(!xprt_lock_connect(xprt, task, transport));
- 
--	if (transport->sock != NULL) {
-+	if (transport->sock != NULL && !xprt_connecting(xprt)) {
- 		dprintk("RPC:       xs_connect delayed xprt %p for %lu "
- 				"seconds\n",
- 				xprt, xprt->reestablish_timeout / HZ);
+diff --git a/drivers/net/vmxnet3/vmxnet3_drv.c b/drivers/net/vmxnet3/vmxnet3_drv.c
+index 5b0215b7c176..8ab86bbdbf5e 100644
+--- a/drivers/net/vmxnet3/vmxnet3_drv.c
++++ b/drivers/net/vmxnet3/vmxnet3_drv.c
+@@ -589,6 +589,7 @@ vmxnet3_rq_alloc_rx_buf(struct vmxnet3_rx_queue *rq, u32 ring_idx,
+ 				if (dma_mapping_error(&adapter->pdev->dev,
+ 						      rbi->dma_addr)) {
+ 					dev_kfree_skb_any(rbi->skb);
++					rbi->skb = NULL;
+ 					rq->stats.rx_buf_alloc_failure++;
+ 					break;
+ 				}
+@@ -613,6 +614,7 @@ vmxnet3_rq_alloc_rx_buf(struct vmxnet3_rx_queue *rq, u32 ring_idx,
+ 				if (dma_mapping_error(&adapter->pdev->dev,
+ 						      rbi->dma_addr)) {
+ 					put_page(rbi->page);
++					rbi->page = NULL;
+ 					rq->stats.rx_buf_alloc_failure++;
+ 					break;
+ 				}
+-- 
+2.35.1
+
 
 

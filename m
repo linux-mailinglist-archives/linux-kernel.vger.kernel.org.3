@@ -2,115 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 810F8531006
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:19:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34C7B530EFA
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:18:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234290AbiEWKq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 06:46:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56978 "EHLO
+        id S234320AbiEWKrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 06:47:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234273AbiEWKqV (ORCPT
+        with ESMTP id S234317AbiEWKrQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 06:46:21 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C1D40E5D;
-        Mon, 23 May 2022 03:46:18 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L6DW351QHzjX2m;
-        Mon, 23 May 2022 18:45:19 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 23 May 2022 18:46:15 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 23 May 2022 18:46:14 +0800
-Message-ID: <36c7224c-87a6-aa31-cfaa-06a0b168c68d@huawei.com>
-Date:   Mon, 23 May 2022 18:46:14 +0800
+        Mon, 23 May 2022 06:47:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E9EBD4C43B
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 03:47:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653302827;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Tufy4k9IUm7Dd+4tryigNXPHptoH5ASjzZkRMX/8R8c=;
+        b=hxmHKjkGD9lWdi7z0anGxA0fIzE9FGfPmzph0Q+IWPfzqjKlAczfnkplqCtwW+McUaEC3B
+        jD/PtnQsTdZk3O6ZfLdF3KidprcFd5T8udkEK9UI8Lcq1noAjArhdIY6PDXdO9gJXi9xwy
+        J0Tb7Bbn6UnwE7Re4H/c4fShBQxlWGc=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-212-KDjXxgU3PtSpCbc6xpsVuA-1; Mon, 23 May 2022 06:47:02 -0400
+X-MC-Unique: KDjXxgU3PtSpCbc6xpsVuA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 78C7E3C222C5;
+        Mon, 23 May 2022 10:47:01 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.8])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8D71D1121314;
+        Mon, 23 May 2022 10:46:58 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <1b5daa4695b62795b617049e32c784052deabad4.camel@kernel.org>
+References: <1b5daa4695b62795b617049e32c784052deabad4.camel@kernel.org> <165305805651.4094995.7763502506786714216.stgit@warthog.procyon.org.uk>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     dhowells@redhat.com, keescook@chromium.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Christian Schoenebeck <linux_oss@crudebyte.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        Xiubo Li <xiubli@redhat.com>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Steve French <smfrench@gmail.com>,
+        William Kucharski <william.kucharski@oracle.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-doc@vger.kernel.org, v9fs-developer@lists.sourceforge.net,
+        linux-afs@lists.infradead.org, ceph-devel@vger.kernel.org,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-fsdevel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] netfs: Fix gcc-12 warning by embedding vfs inode in netfs_i_context
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v3 1/2] asm-generic: Add memory barrier dma_mb()
-Content-Language: en-US
-To:     Marco Elver <elver@google.com>
-CC:     <catalin.marinas@arm.com>, <will@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <mark.rutland@arm.com>,
-        Jonathan Corbet <corbet@lwn.net>, <linux-doc@vger.kernel.org>
-References: <20220523020051.141460-1-wangkefeng.wang@huawei.com>
- <20220523020051.141460-2-wangkefeng.wang@huawei.com>
- <CANpmjNMxmRsWVvqe=30JEhCqPdGvUcKUgLoe2VjfMbKfHwFyaA@mail.gmail.com>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <CANpmjNMxmRsWVvqe=30JEhCqPdGvUcKUgLoe2VjfMbKfHwFyaA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <658390.1653302817.1@warthog.procyon.org.uk>
+Date:   Mon, 23 May 2022 11:46:57 +0100
+Message-ID: <658391.1653302817@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Jeff Layton <jlayton@kernel.org> wrote:
 
-On 2022/5/23 16:22, Marco Elver wrote:
-> On Mon, 23 May 2022 at 03:50, Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
->> The memory barrier dma_mb() is introduced by commit a76a37777f2c
->> ("iommu/arm-smmu-v3: Ensure queue is read after updating prod pointer"),
->> which is used to ensure that prior (both reads and writes) accesses
->> to memory by a CPU are ordered w.r.t. a subsequent MMIO write, this
->> is only defined on arm64, but it is a generic memory barrier, let's
->> add dma_mb() into documentation and include/asm-generic/barrier.h.
->>
->> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
->> ---
->>   Documentation/memory-barriers.txt | 11 ++++++-----
->>   include/asm-generic/barrier.h     |  8 ++++++++
->>   2 files changed, 14 insertions(+), 5 deletions(-)
->>
->> diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
->> index b12df9137e1c..07a8b8e1b12a 100644
->> --- a/Documentation/memory-barriers.txt
->> +++ b/Documentation/memory-barriers.txt
->> @@ -1894,6 +1894,7 @@ There are some more advanced barrier functions:
->>
->>    (*) dma_wmb();
->>    (*) dma_rmb();
->> + (*) dma_mb();
->>
->>        These are for use with consistent memory to guarantee the ordering
->>        of writes or reads of shared memory accessible to both the CPU and a
->> @@ -1925,11 +1926,11 @@ There are some more advanced barrier functions:
->>        The dma_rmb() allows us guarantee the device has released ownership
->>        before we read the data from the descriptor, and the dma_wmb() allows
->>        us to guarantee the data is written to the descriptor before the device
->> -     can see it now has ownership.  Note that, when using writel(), a prior
->> -     wmb() is not needed to guarantee that the cache coherent memory writes
->> -     have completed before writing to the MMIO region.  The cheaper
->> -     writel_relaxed() does not provide this guarantee and must not be used
->> -     here.
->> +     can see it now has ownership. The dma_mb() implies both a dma_rmb() and
->> +     a dma_wmb().  Note that, when using writel(), a prior wmb() is not needed
->> +     to guarantee that the cache coherent memory writes have completed before
->> +     writing to the MMIO region. The cheaper writel_relaxed() does not provide
->> +     this guarantee and must not be used here.
-> It seems you've changed that spacing. This document uses 2 spaces
-> after a sentence-ending '.'. (My original suggestion included the 2
-> spaces after dots.)
+> 
+> Note that there are some conflicts between this patch and some of the
+> patches in the current ceph-client/testing branch. Depending on the
+> order of merge, one or the other will need to be fixed.
 
-I don't know the rules, it seems that some uses 1 spaces, others are 2 
-spaces, but most
+Do you think it could be taken through the ceph tree?
 
-uses 2 spaces, will update.
+David
 
-> Otherwise it all looks fine to me.
->
-> Thanks,
-> -- Marco
-> .

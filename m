@@ -2,145 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91C67531265
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:22:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44544531267
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:22:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236844AbiEWN5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 09:57:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55252 "EHLO
+        id S236792AbiEWN62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 09:58:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236786AbiEWN5O (ORCPT
+        with ESMTP id S236762AbiEWN6Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 09:57:14 -0400
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB77B5640D;
-        Mon, 23 May 2022 06:57:11 -0700 (PDT)
-Received: by mail-oi1-f181.google.com with SMTP id r68so3678017oie.12;
-        Mon, 23 May 2022 06:57:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Po7FG18ouzsaIFjxHouDmjoMSySPkXjz2dpCEjFO8eo=;
-        b=KkM3K3kVdH+7ev8c1Eu0/vxsMhuzt0iqICeG6cqEkOx4Iy/lbGhdb1i87c1cWVQlqB
-         tPqV4KcT2S+/z5yfeWNDsHb08GsGLzJ/LaDAopo0nbtctSP6HaBZ+Px1D3jtgP9fkwue
-         f36FQmMYKQ2x9Una1bPkL7tFDhOGmqY3F4tR18e3FGwFCYfLR0DkCiVhzji9yyeicKD0
-         UEYJoukndo3wQrxxHACS6ks/WTh7DBel3egNDeUbkb/o51a6MsyFrKeR3WrvJRpDraqH
-         wbReb4qjbWDbwYNF8l8Joypx0/WAwvS9yZEMG5hjSvMRykyA1Nzf7Y/681D2Ikjj+/Wf
-         xa/w==
-X-Gm-Message-State: AOAM53245PhPqp5zGsvL3SdW520DR/0h2u0amU8ulspOSFvLtLTyleRd
-        vgvR2+RKLs/hLjAzrR3wYg==
-X-Google-Smtp-Source: ABdhPJwlzEkicwFPVbidQP0R1gspMyr9ArD/Z5ORMkC6y/9Bomvgsb1YW74/8oDH+BhWuSEvJmr8FQ==
-X-Received: by 2002:aca:d8c5:0:b0:325:e353:a6b9 with SMTP id p188-20020acad8c5000000b00325e353a6b9mr10790833oig.135.1653314230773;
-        Mon, 23 May 2022 06:57:10 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id w12-20020a4ab6cc000000b0035eb4e5a6d0sm4190681ooo.38.2022.05.23.06.57.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 06:57:10 -0700 (PDT)
-Received: (nullmailer pid 1499377 invoked by uid 1000);
-        Mon, 23 May 2022 13:57:09 -0000
-Date:   Mon, 23 May 2022 08:57:09 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        "coresight >> Coresight ML" <coresight@lists.linaro.org>
-Subject: Re: [PATCH 1/2] dt-bindings: arm: Convert CoreSight bindings to DT
- schema
-Message-ID: <20220523135709.GB1385486-robh@kernel.org>
-References: <20220520214416.302127-1-robh@kernel.org>
- <20220520214416.302127-2-robh@kernel.org>
- <9a9b40eb-be8d-bf8c-39be-e0abb507820f@arm.com>
+        Mon, 23 May 2022 09:58:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FACE56FBE;
+        Mon, 23 May 2022 06:58:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A4E76114D;
+        Mon, 23 May 2022 13:58:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54A97C385AA;
+        Mon, 23 May 2022 13:58:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653314303;
+        bh=bMQ76dp2HmQ3uXRMykYlpLogfkiug4VqJggIc37zUrM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Rhu8OE2IygT78Kmgi0veHK3UCRU45Wa1lKf0qRn0eRRSfxWy/znDUceR1oMSY55by
+         b/Qjp4WqXMjPxggvmrJcC0RWd7ISbVc4buSL335hPdmnd2FbWEy07P0apQgYY7H11+
+         NFlr8OEtHhW7GJ19ciDaIYgTWsKV1vSBJJWX4qSZ5rMgEPypBdhRc5bD8iHWcFmgwf
+         if4LTn3sIyl73Q+1hgTvOuYTzaXOBuU1ZdpC5irzwKSc81r7BU7d44Qfg04P23t3Wj
+         xjPCV1EQ8qgX5fLkrsY98A1lDRWt1NrDy4qNgFPCtMrf6R9Y+4BKiSHtAS13/wW86d
+         X2gY2kmU5w6bQ==
+Message-ID: <8e440c28-d4b9-2fc6-0294-f77544264d5c@kernel.org>
+Date:   Mon, 23 May 2022 08:58:16 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9a9b40eb-be8d-bf8c-39be-e0abb507820f@arm.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v4 06/11] nios2: use fallback for random_get_entropy()
+ instead of zero
+Content-Language: en-US
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        tglx@linutronix.de, arnd@arndb.de
+Cc:     Theodore Ts'o <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "David S . Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-riscv@lists.infradead.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, x86@kernel.org,
+        linux-xtensa@linux-xtensa.org
+References: <20220413115411.21489-1-Jason@zx2c4.com>
+ <20220413115411.21489-7-Jason@zx2c4.com>
+From:   Dinh Nguyen <dinguyen@kernel.org>
+In-Reply-To: <20220413115411.21489-7-Jason@zx2c4.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-11.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 12:03:36PM +0100, Suzuki K Poulose wrote:
-> Hi Rob,
-> 
-> Thanks a lot for converting these to yaml. Some minor comments below.
-> 
-> In general, the "clocks" and "clock-names" are optional (e.g, for
-> etm4 with system register access).
 
-Reality, based on running dtbs_checks, seems to be that all 
-instances have them, and the original doc said required.
 
+On 4/13/22 06:54, Jason A. Donenfeld wrote:
+> In the event that random_get_entropy() can't access a cycle counter or
+> similar, falling back to returning 0 is really not the best we can do.
+> Instead, at least calling random_get_entropy_fallback() would be
+> preferable, because that always needs to return _something_, even
+> falling back to jiffies eventually. It's not as though
+> random_get_entropy_fallback() is super high precision or guaranteed to
+> be entropic, but basically anything that's not zero all the time is
+> better than returning zero all the time.
 > 
-> On 20/05/2022 22:44, Rob Herring wrote:
-> > Each CoreSight component has slightly different requirements and
-> > nothing applies to every component, so each CoreSight component has its
-> > own schema document.
-> > 
-> > Signed-off-by: Rob Herring <robh@kernel.org>
-> > ---
-> >   .../bindings/arm/arm,coresight-catu.yaml      | 101 +++++
-> >   .../arm/arm,coresight-dynamic-funnel.yaml     | 126 ++++++
-> >   .../bindings/arm/arm,coresight-etb10.yaml     |  92 ++++
-> >   .../bindings/arm/arm,coresight-etm.yaml       | 156 +++++++
-> >   .../arm/arm,coresight-static-replicator.yaml  |  90 ++++
-> >   .../bindings/arm/arm,coresight-stm.yaml       | 101 +++++
-> >   .../bindings/arm/arm,coresight-tmc.yaml       | 132 ++++++
-> >   .../bindings/arm/arm,coresight-tpiu.yaml      |  91 ++++
-> >   .../devicetree/bindings/arm/coresight.txt     | 402 ------------------
-> >   9 files changed, 889 insertions(+), 402 deletions(-)
-> >   create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-catu.yaml
-> >   create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-dynamic-funnel.yaml
-> >   create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-etb10.yaml
-> >   create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-etm.yaml
-> >   create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-static-replicator.yaml
-> >   create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-stm.yaml
-> >   create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-tmc.yaml
-> >   create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-tpiu.yaml
-> >   delete mode 100644 Documentation/devicetree/bindings/arm/coresight.txt
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Dinh Nguyen <dinguyen@kernel.org>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> ---
+>   arch/nios2/include/asm/timex.h | 2 ++
+>   1 file changed, 2 insertions(+)
 > 
-> ...
-> 
-> > diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-tmc.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-tmc.yaml
-> > new file mode 100644
-> > index 000000000000..ee1ce47225be
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/arm/arm,coresight-tmc.yaml
-> > @@ -0,0 +1,132 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/arm/arm,coresight-tmc.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Arm CoreSight Trace Memory Controller
-> > +
-> 
-> ...
-> 
-> > +  out-ports:
-> > +    $ref: /schemas/graph.yaml#/properties/ports
-> > +    additionalProperties: false
-> > +
-> > +    properties:
-> > +      port:
-> > +        description: AXI Master output connection. Used for ETR and ETF
-> > +          configurations.
-> 
-> nit: This is only for ETRs. Never for ETFs.
+> diff --git a/arch/nios2/include/asm/timex.h b/arch/nios2/include/asm/timex.h
+> index a769f871b28d..d9a3f426cdda 100644
+> --- a/arch/nios2/include/asm/timex.h
+> +++ b/arch/nios2/include/asm/timex.h
+> @@ -9,4 +9,6 @@ typedef unsigned long cycles_t;
+>   
+>   extern cycles_t get_cycles(void);
+>   
+> +#define random_get_entropy() (((unsigned long)get_cycles()) ?: random_get_entropy_fallback())
+> +
+>   #endif
 
-What about this example[1]? It's not AXI, but ATB actually.
-
-Rob
-
-[1] https://developer.arm.com/documentation/ddi0461/b/Introduction/Example-systems-with-different-configurations/ETF--ETR--and-TPIU
+Acked-by: Dinh Nguyen <dinguyen@kernel.org>

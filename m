@@ -2,149 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D724531451
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:25:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 523A65312F2
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:23:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237033AbiEWOY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 10:24:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33484 "EHLO
+        id S237121AbiEWOZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 10:25:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237000AbiEWOYz (ORCPT
+        with ESMTP id S237117AbiEWOZR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 10:24:55 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DFC35932E
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 07:24:54 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id m25so18007849oih.2
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 07:24:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=4OpdJcTXXlsXGiX1+XWS8FUX7vG0MIs+nKrykIWk69U=;
-        b=nFxf6AifF1xWCibSO89FnoHlSuZG9NFqIZqE/C1zN6DwHUzkkIw5bg6YsEfTG3nnFH
-         rzPVTb0QJF/8T9GvAHZ65lb9My3m9/P7fMHkWrPapvr4Z3VLSl3j8/gMUCQDI+IcrDN4
-         ITPkSPKtfENkGrub7kzYFjG8RmSjXn81BUnrKBCPpDzBD8C91PzqU2PATrUrmOkuU8bb
-         3CbcizVhKidnwQzmKdzeDgNKld1erhQQuz9TnoHVCHGMdApEHXF+pZEprxc+JQ110VvV
-         cXJWGCQlbHXWc+RoSErtCW7j3fIoWPWBC5kQFRKQ0N6Gcw+e8Y8pKUDEuSSS+thBKaZC
-         F6lQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=4OpdJcTXXlsXGiX1+XWS8FUX7vG0MIs+nKrykIWk69U=;
-        b=cKYrwFysCGUUK+fTm6MRxl3kU4eHufg4YHiZi1WMXhw1vgnanRynlWNo6IKQ6zfYaf
-         +jWmQWU/J8DiOTs3k6hCLvSfxrl/f4Er60BJDDR3Ch+7wOHvMKs3HJbDZ94F3Es/myU4
-         sdmq6t6fYnCXkuHfAFANat6sL0ReBEIGh6cMCip6qBe6FLLrbL69Duo3ANw0YrVZNU6T
-         ay5bQu0G7oJq8JfV0DiQd8mkHuNUWn6Sfq64DRbpAg+dnfVE0oKGXPfEWniWBgBoAr6G
-         4UGgffkCDF72XajhqYyYXZjXM4X0Z3oe8Pl6TBM2hWrZKDkiYvR5rSaQqxB3Y84OxBvJ
-         i4AQ==
-X-Gm-Message-State: AOAM532T+X7x8Rp8+0oUpyhGK3onXW7qrd2sV/VBvhjp/KRNaj60xtkG
-        xoYUcKu+10b+tFjwK5OvOuQ=
-X-Google-Smtp-Source: ABdhPJyojZP5Ppcr09qGrQR2qP1Q7DsMch2dZxIrAqjJBHMyN3+6kkFVi9V7MSDJWHP4JGLwrXCa7w==
-X-Received: by 2002:a05:6808:1a01:b0:32b:1edc:9c4d with SMTP id bk1-20020a0568081a0100b0032b1edc9c4dmr4175160oib.279.1653315893783;
-        Mon, 23 May 2022 07:24:53 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b124-20020acab282000000b0032ae369c25esm4149529oif.53.2022.05.23.07.24.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 07:24:53 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 23 May 2022 07:24:52 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Peter Collingbourne <pcc@google.com>
-Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        vbabka@suse.cz, penberg@kernel.org, roman.gushchin@linux.dev,
-        iamjoonsoo.kim@lge.com, rientjes@google.com,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>
-Subject: Re: [PATCH v5 1/2] printk: stop including cache.h from printk.h
-Message-ID: <20220523142452.GA3164183@roeck-us.net>
-References: <20220427195820.1716975-1-pcc@google.com>
+        Mon, 23 May 2022 10:25:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C185A582;
+        Mon, 23 May 2022 07:25:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 17E7AB81100;
+        Mon, 23 May 2022 14:25:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBC4DC385A9;
+        Mon, 23 May 2022 14:25:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653315912;
+        bh=4vLh4ue1tMMosFDoK6263Dar2yYqNCg/G7FWJAgLPp8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=r/qpw7GGCIz7a5LLJurI22VqpnfZPjCvUilv1WtvGhte7xO3Zl4zmE0M9g7GC3NGG
+         rGKDBc6/bHSkH6bE3mKH9G1LtslYjnqyyeptjtibGprZDPkKLueriLMdselH4vnA44
+         LPPPZHvmWc3AsbVqQ+gJNDiGFZYcrF4FJdbdJWrz9UBGg8ML7flJhJAYF7Gm2MCGjb
+         0ng2XYOQ6E4h+M91DkR5eoUZ+Y7dcnO4E0Cz7wEbwAT5sMXOSpRJxBKKhC2Xu1cfYT
+         SKH/4XHglOuFn16JEX3bNahmLeW37KB6Yu8BE2dTtsutcMO/YsOZNrd2p0LAzqiyGu
+         pR5o/ewDnTIMw==
+Received: by mail-ed1-f49.google.com with SMTP id g12so19369632edq.4;
+        Mon, 23 May 2022 07:25:12 -0700 (PDT)
+X-Gm-Message-State: AOAM530XevtgSa9wN2p6npVkyjHN21bseyPwEwAK96QFaZYSIN/AYgaH
+        W23PYC14X9A3+Ze/b8W1mEw0b6oJxgvGLiLT4g==
+X-Google-Smtp-Source: ABdhPJwoOeWMZ55frHI3XEH4l/rWGlWP0SKbPSv8LWz5GQV6XKBYerjQpqXQjeWUQavlCQXH9Ze9HnGb4cM8NySG3R4=
+X-Received: by 2002:a05:6402:1e93:b0:42b:5134:6bf6 with SMTP id
+ f19-20020a0564021e9300b0042b51346bf6mr9903039edf.40.1653315911050; Mon, 23
+ May 2022 07:25:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220427195820.1716975-1-pcc@google.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220509133947.20987-1-quic_jinlmao@quicinc.com>
+ <20220509133947.20987-9-quic_jinlmao@quicinc.com> <beba5968-3115-3c09-cda6-67095ca55226@arm.com>
+In-Reply-To: <beba5968-3115-3c09-cda6-67095ca55226@arm.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Mon, 23 May 2022 09:24:57 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqK8Z_J2xaOsBM-U4hhHPgQCudd=SGmPqwdipArWmTXJYw@mail.gmail.com>
+Message-ID: <CAL_JsqK8Z_J2xaOsBM-U4hhHPgQCudd=SGmPqwdipArWmTXJYw@mail.gmail.com>
+Subject: Re: [PATCH v7 08/10] dt-bindings: arm: Adds CoreSight TPDA hardware definitions
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mao Jinlong <quic_jinlmao@quicinc.com>
+Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Coresight ML <coresight@lists.linaro.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 12:58:19PM -0700, Peter Collingbourne wrote:
-> An inclusion of cache.h in printk.h was added in 2014 in
-> commit c28aa1f0a847 ("printk/cache: mark printk_once test variable
-> __read_mostly") in order to bring in the definition of __read_mostly. The
-> usage of __read_mostly was later removed in commit 3ec25826ae33 ("printk:
-> Tie printk_once / printk_deferred_once into .data.once for reset")
-> which made the inclusion of cache.h unnecessary, so remove it.
-> 
-> We have a small amount of code that depended on the inclusion of cache.h
-> from printk.h; fix that code to include the appropriate header.
-> 
-> This fixes a circular inclusion on arm64 (linux/printk.h -> linux/cache.h
-> -> asm/cache.h -> linux/kasan-enabled.h -> linux/static_key.h ->
-> linux/jump_label.h -> linux/bug.h -> asm/bug.h -> linux/printk.h) that
-> would otherwise be introduced by the next patch.
-> 
-> Build tested using {allyesconfig,defconfig} x {arm64,x86_64}.
+On Mon, May 23, 2022 at 4:44 AM Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
+>
+> Cc: Rob Herring
+>
 
-But not powerpc:corenet64_smp_defconfig, where it results in lots of
-build errors such as
+Will or will not have any effect...
 
-powerpc64-linux-ld: fs/freevxfs/vxfs_fshead.o:(.bss+0x0):
-	multiple definition of `____cacheline_aligned';
-	fs/freevxfs/vxfs_bmap.o:(.bss+0x0): first defined here
+Please use get_maintainers.pl and send your patches to the right
+lists/maintainers. DT patches only get reviewed if sent to DT list. So
+please resend to the DT list. But before you do, I can tell this
+binding hasn't been tested so fix all the warnings first.
 
-Reverting this patch fixes the problem.
+Rob
 
-Guenter
-
----
-# bad: [18ecd30af1a8402c162cca1bd58771c0e5be7815] Add linux-next specific files for 20220520
-# good: [42226c989789d8da4af1de0c31070c96726d990c] Linux 5.18-rc7
-git bisect start 'HEAD' 'v5.18-rc7'
-# good: [f9b63740b666dd9887eb0282d21b5f65bb0cadd0] Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git
-git bisect good f9b63740b666dd9887eb0282d21b5f65bb0cadd0
-# good: [1f5eb3e76303572f0318e8c50da51c516580aa03] Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
-git bisect good 1f5eb3e76303572f0318e8c50da51c516580aa03
-# good: [4c1d9cc0363691893ef94fa0d798faca013e27d3] Merge branch 'staging-next' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git
-git bisect good 4c1d9cc0363691893ef94fa0d798faca013e27d3
-# good: [a3204ed0fc565fc76901c67dfc8e04c91a5c8ea4] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/rppt/memblock.git
-git bisect good a3204ed0fc565fc76901c67dfc8e04c91a5c8ea4
-# bad: [ca228447682904bc749c0702695681543b5dc709] Merge branch 'mm-nonmm-unstable' into mm-everything
-git bisect bad ca228447682904bc749c0702695681543b5dc709
-# bad: [c0eeeb02d9df878c71a457008900b650d94bd0d9] selftests/uffd: enable uffd-wp for shmem/hugetlbfs
-git bisect bad c0eeeb02d9df878c71a457008900b650d94bd0d9
-# good: [0a7a0f6f7f3679c906fc55e3805c1d5e2c566f55] hugetlb: fix wrong use of nr_online_nodes
-git bisect good 0a7a0f6f7f3679c906fc55e3805c1d5e2c566f55
-# good: [c9fe66560bf2dc7d109754414e309888cb8c9ba9] mm/mprotect: do not flush when not required architecturally
-git bisect good c9fe66560bf2dc7d109754414e309888cb8c9ba9
-# bad: [97d482f4592fde2322c319f07bc54f3a0d37861c] mm/damon/sysfs: reuse damon_set_regions() for regions setting
-git bisect bad 97d482f4592fde2322c319f07bc54f3a0d37861c
-# good: [54205e9c5425049aef1bc7a812f890f00b5f79c7] mm: rmap: move the cache flushing to the correct place for hugetlb PMD sharing
-git bisect good 54205e9c5425049aef1bc7a812f890f00b5f79c7
-# bad: [9994715333515e82865e533250e488496b9742f4] selftest/vm: test that mremap fails on non-existent vma
-git bisect bad 9994715333515e82865e533250e488496b9742f4
-# bad: [d949a8155d139aa890795b802004a196b7f00598] mm: make minimum slab alignment a runtime property
-git bisect bad d949a8155d139aa890795b802004a196b7f00598
-# bad: [534aa1dc975ac883ad89110534585a96630802a0] printk: stop including cache.h from printk.h
-git bisect bad 534aa1dc975ac883ad89110534585a96630802a0
-# good: [dfc7ab57560da385f705b28e2bf50e3b90444a6b] mm: rmap: use flush_cache_range() to flush cache for hugetlb pages
-git bisect good dfc7ab57560da385f705b28e2bf50e3b90444a6b
-# first bad commit: [534aa1dc975ac883ad89110534585a96630802a0] printk: stop including cache.h from printk.h
+>
+>
+> On 09/05/2022 14:39, Mao Jinlong wrote:
+> > Adds new coresight-tpda.yaml file describing the bindings required
+> > to define tpda in the device trees.
+> >
+> > Reviewed-by: Mike Leach <mike.leach@linaro.org>
+> > Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+> > Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
+> > ---
+> >   .../bindings/arm/coresight-tpda.yaml          | 119 ++++++++++++++++++
+> >   MAINTAINERS                                   |   1 +
+> >   2 files changed, 120 insertions(+)
+> >   create mode 100644 Documentation/devicetree/bindings/arm/coresight-tpda.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/arm/coresight-tpda.yaml b/Documentation/devicetree/bindings/arm/coresight-tpda.yaml
+> > new file mode 100644
+> > index 000000000000..4948ac13e7f8
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/arm/coresight-tpda.yaml
+> > @@ -0,0 +1,119 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
+> > +# Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/arm/coresight-tpda.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Trace, Profiling and Diagnostics Aggregator - TPDA
+> > +
+> > +description: |
+> > +  TPDAs are responsible for packetization and timestamping of data sets
+> > +  utilizing the MIPI STPv2 packet protocol. Pulling data sets from one or
+> > +  more attached TPDM and pushing the resultant (packetized) data out a
+> > +  master ATB interface. Performing an arbitrated ATB interleaving (funneling)
+> > +  task for free-flowing data from TPDM (i.e. CMB and DSB data set flows).
+> > +
+> > +maintainers:
+> > +  - Mao Jinlong <quic_jinlmao@quicinc.com>
+> > +  - Tao Zhang <quic_taozha@quicinc.com>
+> > +
+> > +properties:
+> > +  $nodename:
+> > +    pattern: "^tpda(@[0-9a-f]+)$"
+> > +  compatible:
+> > +    items:
+> > +      - const: qcom,coresight-tpda
+> > +      - const: arm,primecell
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    maxItems: 1
+> > +
+> > +  clock-names:
+> > +    items:
+> > +      - const: apb_pclk
+> > +
+> > +  in-ports:
+> > +    type: object
+> > +    description: |
+> > +      Input connections from TPDM to TPDA
+> > +    $ref: /schemas/graph.yaml#/properties/ports
+> > +
+>
+> --->8---
+> > +    properties:
+> > +      '#address-cells':
+> > +        const: 1
+> > +
+> > +      '#size-cells':
+> > +        const: 0
+> > +
+> > +    patternProperties:
+> > +      "^port@[0-9a-f]+$":
+> > +        type: object
+> > +        required:
+> > +          - reg
+> > +
+> > +    required:
+> > +      - '#size-cells'
+> > +      - '#address-cells'
+>
+> ---8<---
+>
+> I believe the above snippet is not needed and is covered by the generic
+> ports.
+>
+>
+> > +
+> > +  out-ports:
+> > +    type: object
+> > +    description: |
+> > +      Output connections from the TPDA to legacy CoreSight trace bus.
+> > +    $ref: /schemas/graph.yaml#/properties/ports
+> > +
+> > +    properties:
+> > +     port:
+> > +       description:
+> > +         Output connection from the TPDA to legacy CoreSight Trace bus.
+> > +       $ref: /schemas/graph.yaml#/properties/port
+> > +
+> > +required:
+> > +    - compatible
+> > +    - reg
+> > +    - clocks
+> > +    - clock-names
+> > +    - in-ports
+> > +    - out-ports
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  # minimum tpda definition.
+> > +  - |
+> > +    tpda@6004000 {
+> > +       compatible = "qcom,coresight-tpda", "arm,primecell";
+> > +       reg = <0x6004000 0x1000>;
+> > +
+> > +       qcom,tpda-atid = <65>;
+> > +
+> > +       clocks = <&aoss_qmp>;
+> > +       clock-names = "apb_pclk";
+> > +
+> > +       in-ports {
+> > +         #address-cells = <1>;
+> > +         #size-cells = <0>;
+> > +
+> > +        port@0 {
+> > +          reg = <0>;
+> > +          tpda_qdss_0_in_tpdm_dcc: endpoint {
+> > +            remote-endpoint =
+> > +              <&tpdm_dcc_out_tpda_qdss_0>;
+> > +            };
+> > +        };
+> > +      };
+> > +
+> > +       out-ports {
+> > +         port {
+> > +                 tpda_qdss_out_funnel_in0: endpoint {
+> > +                    remote-endpoint =
+> > +                    <&funnel_in0_in_tpda_qdss>;
+> > +                  };
+> > +          };
+> > +       };
+> > +    };
+> > +
+> > +...
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 28d32b3f3f5c..5d2d8c0ee340 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -1978,6 +1978,7 @@ T:      git git://git.kernel.org/pub/scm/linux/kernel/git/coresight/linux.git
+> >   F:  Documentation/ABI/testing/sysfs-bus-coresight-devices-*
+> >   F:  Documentation/devicetree/bindings/arm/coresight-cpu-debug.txt
+> >   F:  Documentation/devicetree/bindings/arm/coresight-cti.yaml
+> > +F:   Documentation/devicetree/bindings/arm/coresight-tpda.yaml
+> >   F:  Documentation/devicetree/bindings/arm/coresight-tpdm.yaml
+> >   F:  Documentation/devicetree/bindings/arm/coresight.txt
+> >   F:  Documentation/devicetree/bindings/arm/ete.yaml
+>
+> Otherwise looks good to me.
+>
+> Suzuki

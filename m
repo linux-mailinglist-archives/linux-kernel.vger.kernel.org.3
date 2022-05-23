@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 912C3531BF4
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12893531A1E
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:55:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242415AbiEWRzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:55:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43414 "EHLO
+        id S243721AbiEWSKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 14:10:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241253AbiEWR0i (ORCPT
+        with ESMTP id S242812AbiEWRhr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:26:38 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC7F6D3AE;
-        Mon, 23 May 2022 10:21:33 -0700 (PDT)
+        Mon, 23 May 2022 13:37:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1762E5D64F;
+        Mon, 23 May 2022 10:31:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E0E43CE1705;
-        Mon, 23 May 2022 17:19:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8427C34119;
-        Mon, 23 May 2022 17:19:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6ADF5B811F6;
+        Mon, 23 May 2022 17:29:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA1E9C385A9;
+        Mon, 23 May 2022 17:29:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326384;
-        bh=kePXsJT2lZ2fQxyGP+ajHTM8R08PGr6ZcmBpYcLI058=;
+        s=korg; t=1653326979;
+        bh=jMIzHqt1QTdiyQEd3y75sOxgA5an0wZmedRi1HIY8/U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JqIfwy89fjPJhvrHcRX5t/zdz+mPFgwsNH4D7Hx4ftMQ1C4q6/pgQRB9cG/3UIlMz
-         GX0+sYEgV3ajKrutMUyfp88BekATSQc7UNoGU6G8+r1DzmFBe3kGG1xR9uCr1KdH81
-         rY9/RrkeXR2tgyPcvOM9GjKp+tzVm6WTV6YZ7+6c=
+        b=tk5d1bpdVlIm63C+Mu9T+hO84mn/u1N/jvlGL0c10vebak2efFxQT+hSRXVKtV4pi
+         AjGFg0G7wdHF4k2lujESn86bZYIlOKb9QE8FgQb+5PwkKia9wfiuKsS5bHXTtdpVS7
+         B3gOQCPS2KJ7HfVNuKf85PyAYK8ACbEdojUKPJME=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eddie James <eajames@linux.ibm.com>,
-        Joel Stanley <joel@jms.id.au>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 065/132] ARM: dts: aspeed: Add ADC for AST2600 and enable for Rainier and Everest
-Date:   Mon, 23 May 2022 19:04:34 +0200
-Message-Id: <20220523165834.029161364@linuxfoundation.org>
+        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 118/158] netfilter: flowtable: pass flowtable to nf_flow_table_iterate()
+Date:   Mon, 23 May 2022 19:04:35 +0200
+Message-Id: <20220523165850.431058428@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
-References: <20220523165823.492309987@linuxfoundation.org>
+In-Reply-To: <20220523165830.581652127@linuxfoundation.org>
+References: <20220523165830.581652127@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,111 +54,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eddie James <eajames@linux.ibm.com>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-[ Upstream commit eaad40466bd715c4b342ac9f7c889f5281714feb ]
+[ Upstream commit 217cff36e885627c41a14e803fc44f9cbc945767 ]
 
-Add the ADC nodes to the AST2600 devicetree. Enable ADC1 for Rainier and
-Everest systems and add an iio-hwmon node for the 7th channel to report
-the battery voltage.
+The flowtable object is already passed as argument to
+nf_flow_table_iterate(), do use not data pointer to pass flowtable.
 
-Tested on Rainier:
-~# cat /sys/class/hwmon/hwmon11/in1_input
-1347
-
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
-Link: https://lore.kernel.org/r/20210916210045.31769-1-eajames@linux.ibm.com
-Signed-off-by: Joel Stanley <joel@jms.id.au>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/aspeed-bmc-ibm-everest.dts | 15 +++++++++++++++
- arch/arm/boot/dts/aspeed-bmc-ibm-rainier.dts | 15 +++++++++++++++
- arch/arm/boot/dts/aspeed-g6.dtsi             | 20 ++++++++++++++++++++
- 3 files changed, 50 insertions(+)
+ net/netfilter/nf_flow_table_core.c | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/arch/arm/boot/dts/aspeed-bmc-ibm-everest.dts b/arch/arm/boot/dts/aspeed-bmc-ibm-everest.dts
-index 2efd70666738..af7ea7cab8cf 100644
---- a/arch/arm/boot/dts/aspeed-bmc-ibm-everest.dts
-+++ b/arch/arm/boot/dts/aspeed-bmc-ibm-everest.dts
-@@ -231,6 +231,21 @@ led-pcieslot-power {
- 			gpios = <&gpio0 ASPEED_GPIO(P, 4) GPIO_ACTIVE_LOW>;
- 		};
- 	};
-+
-+	iio-hwmon {
-+		compatible = "iio-hwmon";
-+		io-channels = <&adc1 7>;
-+	};
-+};
-+
-+&adc1 {
-+	status = "okay";
-+	aspeed,int-vref-microvolt = <2500000>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_adc8_default &pinctrl_adc9_default
-+				 &pinctrl_adc10_default &pinctrl_adc11_default
-+				 &pinctrl_adc12_default &pinctrl_adc13_default
-+				 &pinctrl_adc14_default &pinctrl_adc15_default>;
- };
+diff --git a/net/netfilter/nf_flow_table_core.c b/net/netfilter/nf_flow_table_core.c
+index 58f3f77b3eb2..de783c9094d7 100644
+--- a/net/netfilter/nf_flow_table_core.c
++++ b/net/netfilter/nf_flow_table_core.c
+@@ -382,7 +382,8 @@ EXPORT_SYMBOL_GPL(flow_offload_lookup);
  
- &gpio0 {
-diff --git a/arch/arm/boot/dts/aspeed-bmc-ibm-rainier.dts b/arch/arm/boot/dts/aspeed-bmc-ibm-rainier.dts
-index 6419c9762c0b..6c9f34396a3a 100644
---- a/arch/arm/boot/dts/aspeed-bmc-ibm-rainier.dts
-+++ b/arch/arm/boot/dts/aspeed-bmc-ibm-rainier.dts
-@@ -246,6 +246,21 @@ fan5-presence {
- 			linux,code = <11>;
- 		};
- 	};
-+
-+	iio-hwmon {
-+		compatible = "iio-hwmon";
-+		io-channels = <&adc1 7>;
-+	};
-+};
-+
-+&adc1 {
-+	status = "okay";
-+	aspeed,int-vref-microvolt = <2500000>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_adc8_default &pinctrl_adc9_default
-+		&pinctrl_adc10_default &pinctrl_adc11_default
-+		&pinctrl_adc12_default &pinctrl_adc13_default
-+		&pinctrl_adc14_default &pinctrl_adc15_default>;
- };
+ static int
+ nf_flow_table_iterate(struct nf_flowtable *flow_table,
+-		      void (*iter)(struct flow_offload *flow, void *data),
++		      void (*iter)(struct nf_flowtable *flowtable,
++				   struct flow_offload *flow, void *data),
+ 		      void *data)
+ {
+ 	struct flow_offload_tuple_rhash *tuplehash;
+@@ -406,7 +407,7 @@ nf_flow_table_iterate(struct nf_flowtable *flow_table,
  
- &ehci1 {
-diff --git a/arch/arm/boot/dts/aspeed-g6.dtsi b/arch/arm/boot/dts/aspeed-g6.dtsi
-index 1b47be1704f8..ee171b3364fa 100644
---- a/arch/arm/boot/dts/aspeed-g6.dtsi
-+++ b/arch/arm/boot/dts/aspeed-g6.dtsi
-@@ -364,6 +364,26 @@ xdma: xdma@1e6e7000 {
- 				status = "disabled";
- 			};
+ 		flow = container_of(tuplehash, struct flow_offload, tuplehash[0]);
  
-+			adc0: adc@1e6e9000 {
-+				compatible = "aspeed,ast2600-adc0";
-+				reg = <0x1e6e9000 0x100>;
-+				clocks = <&syscon ASPEED_CLK_APB2>;
-+				resets = <&syscon ASPEED_RESET_ADC>;
-+				interrupts = <GIC_SPI 46 IRQ_TYPE_LEVEL_HIGH>;
-+				#io-channel-cells = <1>;
-+				status = "disabled";
-+			};
-+
-+			adc1: adc@1e6e9100 {
-+				compatible = "aspeed,ast2600-adc1";
-+				reg = <0x1e6e9100 0x100>;
-+				clocks = <&syscon ASPEED_CLK_APB2>;
-+				resets = <&syscon ASPEED_RESET_ADC>;
-+				interrupts = <GIC_SPI 46 IRQ_TYPE_LEVEL_HIGH>;
-+				#io-channel-cells = <1>;
-+				status = "disabled";
-+			};
-+
- 			gpio0: gpio@1e780000 {
- 				#gpio-cells = <2>;
- 				gpio-controller;
+-		iter(flow, data);
++		iter(flow_table, flow, data);
+ 	}
+ 	rhashtable_walk_stop(&hti);
+ 	rhashtable_walk_exit(&hti);
+@@ -434,10 +435,9 @@ static bool nf_flow_has_stale_dst(struct flow_offload *flow)
+ 	       flow_offload_stale_dst(&flow->tuplehash[FLOW_OFFLOAD_DIR_REPLY].tuple);
+ }
+ 
+-static void nf_flow_offload_gc_step(struct flow_offload *flow, void *data)
++static void nf_flow_offload_gc_step(struct nf_flowtable *flow_table,
++				    struct flow_offload *flow, void *data)
+ {
+-	struct nf_flowtable *flow_table = data;
+-
+ 	if (nf_flow_has_expired(flow) ||
+ 	    nf_ct_is_dying(flow->ct) ||
+ 	    nf_flow_has_stale_dst(flow))
+@@ -462,7 +462,7 @@ static void nf_flow_offload_work_gc(struct work_struct *work)
+ 	struct nf_flowtable *flow_table;
+ 
+ 	flow_table = container_of(work, struct nf_flowtable, gc_work.work);
+-	nf_flow_table_iterate(flow_table, nf_flow_offload_gc_step, flow_table);
++	nf_flow_table_iterate(flow_table, nf_flow_offload_gc_step, NULL);
+ 	queue_delayed_work(system_power_efficient_wq, &flow_table->gc_work, HZ);
+ }
+ 
+@@ -578,7 +578,8 @@ int nf_flow_table_init(struct nf_flowtable *flowtable)
+ }
+ EXPORT_SYMBOL_GPL(nf_flow_table_init);
+ 
+-static void nf_flow_table_do_cleanup(struct flow_offload *flow, void *data)
++static void nf_flow_table_do_cleanup(struct nf_flowtable *flow_table,
++				     struct flow_offload *flow, void *data)
+ {
+ 	struct net_device *dev = data;
+ 
+@@ -620,11 +621,10 @@ void nf_flow_table_free(struct nf_flowtable *flow_table)
+ 
+ 	cancel_delayed_work_sync(&flow_table->gc_work);
+ 	nf_flow_table_iterate(flow_table, nf_flow_table_do_cleanup, NULL);
+-	nf_flow_table_iterate(flow_table, nf_flow_offload_gc_step, flow_table);
++	nf_flow_table_iterate(flow_table, nf_flow_offload_gc_step, NULL);
+ 	nf_flow_table_offload_flush(flow_table);
+ 	if (nf_flowtable_hw_offload(flow_table))
+-		nf_flow_table_iterate(flow_table, nf_flow_offload_gc_step,
+-				      flow_table);
++		nf_flow_table_iterate(flow_table, nf_flow_offload_gc_step, NULL);
+ 	rhashtable_destroy(&flow_table->rhashtable);
+ }
+ EXPORT_SYMBOL_GPL(nf_flow_table_free);
 -- 
 2.35.1
 

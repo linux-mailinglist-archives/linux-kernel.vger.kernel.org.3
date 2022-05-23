@@ -2,138 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1904E530DEC
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:42:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C5CB530CB8
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:40:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234004AbiEWKYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 06:24:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46214 "EHLO
+        id S234044AbiEWKYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 06:24:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233988AbiEWKX4 (ORCPT
+        with ESMTP id S233988AbiEWKYK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 06:23:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 547DA403E8;
-        Mon, 23 May 2022 03:23:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DCB9E611CA;
-        Mon, 23 May 2022 10:23:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A984C385A9;
-        Mon, 23 May 2022 10:23:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653301434;
-        bh=y+sP4vTc6GXPb2q2jeON7sbrRR8FJJVBeRF9X7Rz+Fc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UMA00BlSIzMMi7wqj/fmwy8D9Uf5fSJz66AOEWfc6ECF219ZDuqs5y4UyrFMWJGpt
-         bUq3+P4EZPrgf4v/7s/bwWxDaXoXZRBG6XzR5ngvrN6RvFIMSB35cxj6leENtOInIQ
-         4/I30rTjMIt8QCi4sAkpJUsk0ZMTurXC+wuF4HxtX6pEXUDHqChF3+LdDO3d0mxfao
-         X1SFFs1RFIpIVhdrQB/Hhue0tMXZVI0ieCvqy8soIDAbkkOexpW/VAHhXITWzwQkK3
-         vkGWI089NJVKGFfKVRfhlcgBObeBawSRcnzcQDFBTae+h13N4A5oj7K2sWgi9G7bkv
-         sc7bGflnzCPWw==
-From:   matthias.bgg@kernel.org
-To:     mturquette@baylibre.com, sboyd@kernel.org
-Cc:     allen-kh.cheng@mediatek.com, weiyi.lu@mediatek.com,
-        chun-jie.chen@mediatek.com, linux-kernel@vger.kernel.org,
-        ikjn@chromium.org, miles.chen@mediatek.com, robh+dt@kernel.org,
-        linux-mediatek@lists.infradead.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        angelogioacchino.delregno@collabora.com,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Subject: [PATCH v3 2/2] clk: mediatek: Delete MT8192 msdc gate
-Date:   Mon, 23 May 2022 12:23:39 +0200
-Message-Id: <20220523102339.21927-3-matthias.bgg@kernel.org>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220523102339.21927-1-matthias.bgg@kernel.org>
-References: <20220523102339.21927-1-matthias.bgg@kernel.org>
+        Mon, 23 May 2022 06:24:10 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 577A04A3D2;
+        Mon, 23 May 2022 03:24:09 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0A15811FB;
+        Mon, 23 May 2022 03:24:09 -0700 (PDT)
+Received: from [10.57.82.55] (unknown [10.57.82.55])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4CB9F3F73D;
+        Mon, 23 May 2022 03:24:07 -0700 (PDT)
+Message-ID: <6f1f48e2-a54d-58d6-8946-853cffeb55df@arm.com>
+Date:   Mon, 23 May 2022 11:24:02 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 0/2] dma-mapping, remoteproc: Fix dma_mem leak after
+ rproc_shutdown
+Content-Language: en-GB
+To:     Mark-PK Tsai <mark-pk.tsai@mediatek.com>, hch@lst.de
+Cc:     bjorn.andersson@linaro.org, iommu@lists.linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-remoteproc@vger.kernel.org, m.szyprowski@samsung.com,
+        mathieu.poirier@linaro.org, matthias.bgg@gmail.com,
+        yj.chiang@mediatek.com
+References: <20220423174650.GA29219@lst.de>
+ <20220523101516.29934-1-mark-pk.tsai@mediatek.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220523101516.29934-1-mark-pk.tsai@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matthias Brugger <matthias.bgg@gmail.com>
+On 2022-05-23 11:15, Mark-PK Tsai wrote:
+>> Sigh.  In theory drivers should never declare coherent memory like
+>> this, and there has been some work to fix remoteproc in that regard.
+>>
+>> But I guess until that is merged we'll need somthing like this fix.
+> 
+> Hi,
+> 
+> Thanks for your comment.
+> As I didn't see other fix of this issue, should we use this patch
+> before the remoteproc work you mentioned is merged?
 
-The msdc gate is part of the MMC driver. Delete the not used code.
+TBH I think it would be better "fixed" with a kmemleak_ignore() and a 
+big comment, rather than adding API cruft for something that isn't a 
+real problem. I'm quite sure that no real-world user is unbinding 
+remoteproc drivers frequently enough that leaking a 48-byte allocation 
+each time has any practical significance.
 
-Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Miles Chen <miles.chen@mediatek.com>
-
----
-
-Changes in v3:
-- add Reviewed-by tag
-
-Changes in v2:
-- add Reviewed-by tag
-
- drivers/clk/mediatek/clk-mt8192-msdc.c | 21 ---------------------
- 1 file changed, 21 deletions(-)
-
-diff --git a/drivers/clk/mediatek/clk-mt8192-msdc.c b/drivers/clk/mediatek/clk-mt8192-msdc.c
-index 87c3b79b79cf..635f7a0b629a 100644
---- a/drivers/clk/mediatek/clk-mt8192-msdc.c
-+++ b/drivers/clk/mediatek/clk-mt8192-msdc.c
-@@ -12,28 +12,15 @@
- 
- #include <dt-bindings/clock/mt8192-clk.h>
- 
--static const struct mtk_gate_regs msdc_cg_regs = {
--	.set_ofs = 0xb4,
--	.clr_ofs = 0xb4,
--	.sta_ofs = 0xb4,
--};
--
- static const struct mtk_gate_regs msdc_top_cg_regs = {
- 	.set_ofs = 0x0,
- 	.clr_ofs = 0x0,
- 	.sta_ofs = 0x0,
- };
- 
--#define GATE_MSDC(_id, _name, _parent, _shift)	\
--	GATE_MTK(_id, _name, _parent, &msdc_cg_regs, _shift, &mtk_clk_gate_ops_no_setclr_inv)
--
- #define GATE_MSDC_TOP(_id, _name, _parent, _shift)	\
- 	GATE_MTK(_id, _name, _parent, &msdc_top_cg_regs, _shift, &mtk_clk_gate_ops_no_setclr_inv)
- 
--static const struct mtk_gate msdc_clks[] = {
--	GATE_MSDC(CLK_MSDC_AXI_WRAP, "msdc_axi_wrap", "axi_sel", 22),
--};
--
- static const struct mtk_gate msdc_top_clks[] = {
- 	GATE_MSDC_TOP(CLK_MSDC_TOP_AES_0P, "msdc_top_aes_0p", "aes_msdcfde_sel", 0),
- 	GATE_MSDC_TOP(CLK_MSDC_TOP_SRC_0P, "msdc_top_src_0p", "infra_msdc0_src", 1),
-@@ -52,11 +39,6 @@ static const struct mtk_gate msdc_top_clks[] = {
- 	GATE_MSDC_TOP(CLK_MSDC_TOP_AHB2AXI_BRG_AXI, "msdc_top_ahb2axi_brg_axi", "axi_sel", 14),
- };
- 
--static const struct mtk_clk_desc msdc_desc = {
--	.clks = msdc_clks,
--	.num_clks = ARRAY_SIZE(msdc_clks),
--};
--
- static const struct mtk_clk_desc msdc_top_desc = {
- 	.clks = msdc_top_clks,
- 	.num_clks = ARRAY_SIZE(msdc_top_clks),
-@@ -64,9 +46,6 @@ static const struct mtk_clk_desc msdc_top_desc = {
- 
- static const struct of_device_id of_match_clk_mt8192_msdc[] = {
- 	{
--		.compatible = "mediatek,mt8192-msdc",
--		.data = &msdc_desc,
--	}, {
- 		.compatible = "mediatek,mt8192-msdc_top",
- 		.data = &msdc_top_desc,
- 	}, {
--- 
-2.36.0
-
+Thanks,
+Robin.

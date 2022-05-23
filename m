@@ -2,56 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5390531B9B
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99F79531AF9
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241391AbiEWRf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:35:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43402 "EHLO
+        id S242232AbiEWRtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:49:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240624AbiEWRZw (ORCPT
+        with ESMTP id S241890AbiEWR1T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:25:52 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6107413FBC
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 10:21:03 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id n18so13693675plg.5
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 10:21:03 -0700 (PDT)
+        Mon, 23 May 2022 13:27:19 -0400
+Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC897628A
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 10:22:23 -0700 (PDT)
+Received: by mail-oo1-xc33.google.com with SMTP id j25-20020a4ad199000000b0040e50cc687cso2179260oor.9
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 10:22:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=VcVFk3FcEgzfyMwYD0aU10qnYcHMUzYlGb8aE1VELAQ=;
-        b=sq3P/fw7RUx9aBXoSaVhkvBFulT5vCvnYlKSTPsTothpsy2pNOKALFyKKhn9W44OlL
-         +cZjRjNgRJKzURqhNHFr0bUheleEFwIHlJUOjHe6+8/H6czcQuaTKrXLrynQfLXa1OF7
-         yUB2nwoJ+3wh0pucpP+eqxwtGsKcnBiHhM/w+W1JdgmtzaTY+2NwOkQaG6/PtzHj0GWT
-         bVT25LrcpTLBknZo92GNsZz5UoQm3/XU+3fhcdLnlT4+qGXOXOpf5/bXgmbXK5zaHcwr
-         jCsXk2nSI0snXcDdnj6SEgHzF+u1KK7yHVrsA2Gf0yoGU3gPFccu7ykntQLChDo2pHOe
-         QTRA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Jyra7hAVNbxUBiQeSeny3J1iXMJn4cpxNxDSkBqSwwc=;
+        b=VHi49t2yJ8XZt3l4544whGRcgSG9/chQbJzw/Wb+5ioQ+fsmX3cRpBx6OQxRGk/Ap+
+         wPsNDHmdeGfiSYG4yhVoaP8kdesRh7Z3VHHegl8q1JSEQj0W1/AxEFXVJe2KlCYoWN13
+         25ePZeus2t/0M9W2csYI07b8jnWviHlnRWgHzXP6/J5XohAxHvEmdaxSNcoc7lfQnDsr
+         8T4k7IU1HI2NNx9aZZvGD+J0Egdg5hSd6Pb1Fq4vl+wFkF6Jrauch0gNhrXAGtT7m/+u
+         B9nF1ndDN2ey4SNsqLm4DJPsUNy/pqBr0mrYuds8wBJOa6h5x0I5D1XD3LaQVxke7Z+C
+         zY6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VcVFk3FcEgzfyMwYD0aU10qnYcHMUzYlGb8aE1VELAQ=;
-        b=dU/Ktf2cdsoIzv9eIwV+4gq7MFyumemMG+g2ErLXK0ODX0P0KC/Ab6slhGE2J7/N1J
-         N7lbzMesNJNIRSXQVJCWgDQIMCSKlr9Zqp6cemx5h6CbXfhL8C2pITBgW08LJD2v2JKp
-         uUScclGbDRg4KY8qCVfpEH+upAE3Hviv7iXVPwOxK1+DmzlnR5hp+xlgfui5mylI4vCW
-         PhhmUIi23sJuTAZlzP5ID+FPIosRlJKlp6L6dmoV/z//m6pobwwu3N9UOCV5CrayIgDZ
-         9vjs9vhn70undkUIUeT/DkKXA8WSxVRAHROMy2ohiZ3ME04F54jXdDzJ9PIKB3xYmJQb
-         8bew==
-X-Gm-Message-State: AOAM531J9R13KnMs3GrwMjmu6rm6dbKjb8linL9bZa7jzuNuFESgwLbs
-        jqMsYohRAZJvop6m1xlkm1dv2A==
-X-Google-Smtp-Source: ABdhPJz0WtrjOJCip7mt3F57oMADC6YJYPp4ap9cajQlDw45E7nedRqS2OqtCHvUvpJcdnhIjwCnKw==
-X-Received: by 2002:a17:902:8501:b0:15f:173:40e1 with SMTP id bj1-20020a170902850100b0015f017340e1mr23539994plb.74.1653326361089;
-        Mon, 23 May 2022 10:19:21 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id t2-20020a170902e84200b0015e8d4eb273sm5392051plg.189.2022.05.23.10.19.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 10:19:20 -0700 (PDT)
-Date:   Mon, 23 May 2022 17:19:16 +0000
-From:   Sean Christopherson <seanjc@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Jyra7hAVNbxUBiQeSeny3J1iXMJn4cpxNxDSkBqSwwc=;
+        b=g2frVU4Gv8SMpYteB9x1jUz14j6SYL0ibzwbR1yINR7tsQrqwmyNk/kU7FNKHG2BiQ
+         N5VYkdrdvLuGiOM4Bm6YgkVqVd8mcLOoYrotDPzJ2u0ygINsVSlZdXkwYxylachgE735
+         dmZpA5/fj/irQ+RS4C1wgpiYXc+b1tubpgtlJLSMgQ8DePYOlYEbHJ+yGqU50L9lkePN
+         30AMSUkZpI6o5XMoXNmDmi59rtfjVcsdWHH0P6n2dz/t/q1zPEzYnLlkn+9NkZqBxCHR
+         E5gvpkLzU8Rp2bdSaYPUWrbCRn5ZT54N5P1kA/GDHB3cKebu5T/Ytoyx4WCHjMeR+4CJ
+         5efw==
+X-Gm-Message-State: AOAM530JCcZXG8jcH8PglrQXVSBN/O/IcVTj3Oen/DNagpmniVQYBsrY
+        +nLDZw+psq/cRjDwxj1fspYexhTQC/bd79ItKN3vUQ==
+X-Google-Smtp-Source: ABdhPJzHh/9qmSDYM9XAg5E0fgrqqHi95efq7cL0KZAg+w4CMPYF3qt7r4C+naxClkSjib2q5Q/h0H1EBI7lu9EI0tU=
+X-Received: by 2002:a4a:c90a:0:b0:40e:95bf:268d with SMTP id
+ v10-20020a4ac90a000000b0040e95bf268dmr1156358ooq.85.1653326540061; Mon, 23
+ May 2022 10:22:20 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220427200314.276673-1-mlevitsk@redhat.com> <20220427200314.276673-3-mlevitsk@redhat.com>
+ <YoZrG3n5fgMp4LQl@google.com> <e32f6c904c92e9e9efabcc697917a232f5e88881.camel@redhat.com>
+ <CALMp9eSVji2CPW1AjFoSbWZ_b-r3y67HyatgdqXEqSyUaD1_BQ@mail.gmail.com> <65991ac329a32cf4128400b643d5b5ccf3918cfe.camel@redhat.com>
+In-Reply-To: <65991ac329a32cf4128400b643d5b5ccf3918cfe.camel@redhat.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Mon, 23 May 2022 10:22:09 -0700
+Message-ID: <CALMp9eTS4MZPh4fwTPkNxnWgjT-xiqpxhMyVfdP8TZD0x81CMg@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 02/19] KVM: x86: inhibit APICv/AVIC when the guest
+ and/or host changes apic id/base from the defaults.
 To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     kvm@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
+Cc:     Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
+        Wanpeng Li <wanpengli@tencent.com>,
         Vitaly Kuznetsov <vkuznets@redhat.com>,
         Jani Nikula <jani.nikula@linux.intel.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
@@ -66,23 +72,12 @@ Cc:     kvm@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
         Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
         intel-gfx@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
         Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
-        linux-kernel@vger.kernel.org, Jim Mattson <jmattson@google.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
+        linux-kernel@vger.kernel.org, Zhi Wang <zhi.a.wang@intel.com>,
         Brijesh Singh <brijesh.singh@amd.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
         intel-gvt-dev@lists.freedesktop.org,
         dri-devel@lists.freedesktop.org
-Subject: Re: [RFC PATCH v3 03/19] KVM: x86: SVM: remove avic's broken code
- that updated APIC ID
-Message-ID: <YovCFBn5cKcv3iwD@google.com>
-References: <20220427200314.276673-1-mlevitsk@redhat.com>
- <20220427200314.276673-4-mlevitsk@redhat.com>
- <YoZr9wC2KjTFHrQ7@google.com>
- <d1df82a17e6e89ab58d5f6aa911ee2d532efee31.camel@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d1df82a17e6e89ab58d5f6aa911ee2d532efee31.camel@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -94,35 +89,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 22, 2022, Maxim Levitsky wrote:
-> On Thu, 2022-05-19 at 16:10 +0000, Sean Christopherson wrote:
-> > On Wed, Apr 27, 2022, Maxim Levitsky wrote:
-> > > AVIC is now inhibited if the guest changes apic id, thus remove
-> > > that broken code.
-> > 
-> > Can you explicitly call out what's broken?  Just something short on the code not
-> > handling the scenario where APIC ID is changed back to vcpu_id to help future
-> > archaeologists.  I forget if there are other bugs...
-> > 
-> 
-> 
-> Well, the avic_handle_apic_id_update is called each time the AVIC is uninhibited,
-> because while it is inhibited, the AVIC code doesn't track changes to APIC ID and such.
-> 
-> Also there are many ways it is broken for example
-> 
-> 1. a CPU can't move its APIC ID to a free slot due to (!new) check
-> 
-> 2. If APIC ID is moved to a used slot, then the CPU that used that overwritten
-> slot can't correctly move it, since its now not its slot, not to mention races.
+On Sun, May 22, 2022 at 11:50 PM Maxim Levitsky <mlevitsk@redhat.com> wrote:
+>
+> On Sun, 2022-05-22 at 07:47 -0700, Jim Mattson wrote:
+> > On Sun, May 22, 2022 at 2:03 AM Maxim Levitsky <mlevitsk@redhat.com> wrote:
+> > > On Thu, 2022-05-19 at 16:06 +0000, Sean Christopherson wrote:
+> > > > On Wed, Apr 27, 2022, Maxim Levitsky wrote:
+> > > > > Neither of these settings should be changed by the guest and it is
+> > > > > a burden to support it in the acceleration code, so just inhibit
+> > > > > it instead.
+> > > > >
+> > > > > Also add a boolean 'apic_id_changed' to indicate if apic id ever changed.
+> > > > >
+> > > > > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> > > > > ---
+> > > > > +           return;
+> > > > > +
+> > > > > +   pr_warn_once("APIC ID change is unsupported by KVM");
+> > > >
+> > > > It's supported (modulo x2APIC shenanigans), otherwise KVM wouldn't need to disable
+> > > > APICv.
+> > >
+> > > Here, as I said, it would be nice to see that warning if someone complains.
+> > > Fact is that AVIC code was totally broken in this regard, and there are probably more,
+> > > so it would be nice to see if anybody complains.
+> > >
+> > > If you insist, I'll remove this warning.
+> >
+> > This may be fine for a hobbyist, but it's a terrible API in an
+> > enterprise environment. To be honest, I have no way of propagating
+> > this warning from /var/log/messages on a particular host to a
+> > potentially impacted customer. Worse, if they're not the first
+> > impacted customer since the last host reboot, there's no warning to
+> > propagate. I suppose I could just tell every later customer, "Your VM
+> > was scheduled to run on a host that previously reported, 'APIC ID
+> > change is unsupported by KVM.' If you notice any unusual behavior,
+> > that might be the reason for it," but that isn't going to inspire
+> > confidence. I could schedule a drain and reboot of the host, but that
+> > defeats the whole point of the "_once" suffix.
+>
+> Mostly agree, and I read alrady few discussions about exactly this,
+> those warnings are mostly useless, but they are used in the
+> cases where we don't have the courage to just exit with KVM_EXIT_INTERNAL_ERROR.
+>
+> I do not thing though that the warning is completely useless,
+> as we often have the kernel log of the target machine when things go wrong,
+> so *we* can notice it.
+> In other words a kernel warning is mostly useless but better that nothing.
 
-The more the merrier :-)  Any/all of those examples are great, just so long as it's
-obvious to future readers that the code truly is busted.
+I don't know how this works for you, but *we* are rarely involved when
+things go wrong. :-(
 
-> BTW, if you see a value in it, I can fix this code instead - a lock + going over all the apic ids,
-> should be quite easy to implement. In case of two vCPUs using the same APIC ID,
-> I can write non present entry to the table, so none will be able to be addressed,
-> hoping that the situation is only temporary.
-
-Very strong "no", let's keep this as simple as possible without outright killing
-the guest or breaking ABI.  Disabling APICv/AVIC is perfect.
+> About KVM_EXIT_WARNING, this is IMHO a very good idea, probably combined
+> with some form of taint flag, which could be read by qemu and then shown
+> over hmp/qmp interfaces.
+>
+> Best regards,
+>         Maxim levitsky
+>
+>
+> >
+> > I know that there's a long history of doing this in KVM, but I'd like
+> > to ask that we:
+> > a) stop piling on
+> > b) start fixing the existing uses
+> >
+> > If KVM cannot emulate a perfectly valid operation, an exit to
+> > userspace with KVM_EXIT_INTERNAL_ERROR is warranted. Perhaps for
+> > operations that we suspect KVM might get wrong, we should have a new
+> > userspace exit: KVM_EXIT_WARNING?
+> >
+> > I'm not saying that you should remove the warning. I'm just asking
+> > that it be augmented with a direct signal to userspace that KVM may no
+> > longer be reliable.
+> >
+>
+>

@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BBB853160A
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:50:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8C4B531A76
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:55:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239130AbiEWRIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:08:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59424 "EHLO
+        id S240421AbiEWRMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:12:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239577AbiEWRHo (ORCPT
+        with ESMTP id S239577AbiEWRKE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:07:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1DC76AA77;
-        Mon, 23 May 2022 10:07:21 -0700 (PDT)
+        Mon, 23 May 2022 13:10:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A72466CABA;
+        Mon, 23 May 2022 10:09:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 87E12614D8;
-        Mon, 23 May 2022 17:07:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6ADD9C385A9;
-        Mon, 23 May 2022 17:07:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DE331B81201;
+        Mon, 23 May 2022 17:09:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 094DBC385AA;
+        Mon, 23 May 2022 17:09:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653325639;
-        bh=N9Cqymp8pKXu4Y9O5HZccS0xfN9veRewpmqi8BaRNzE=;
+        s=korg; t=1653325769;
+        bh=5jhTzv1tXdLg5gn1SaUB3V7Al5kukdCxzi/6c+9V9go=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0TaPZtg+KhSXhlHwdznq1poXjK6ijcVJd0l4k+fBCYpLZLi9JPYCZ6H3WQDAPwJ1X
-         DAM41ONg/rUWOWePuMemqXX5Gi8faNb/XGxEJMSA4l760NLngU/Eq7akIigV2d3dlz
-         RxOnhAh+qvDSkDSi5rL5AJkVtbQkXpo/0v1ACgG0=
+        b=xq70TMYl77G9wl/zvtQ8k1x7utsvUKjZG+RHMP7MqfNc/NAGlPYc8R3YkJ8jEJHiO
+         +0LWE7DTkqwgl/FYJHTaQgAgZtzoigklOJi3mW+KsFGOBLHxhxHJHGGOKujCGY8L+S
+         yBje9ldSTGVe4s4cAxLYGhuiHnVseRZWvVyYpC5g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.10 02/97] io_uring: always grab file table for deferred statx
+        stable@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 17/33] net/qla3xxx: Fix a test in ql_reset_work()
 Date:   Mon, 23 May 2022 19:05:06 +0200
-Message-Id: <20220523165812.675707833@linuxfoundation.org>
+Message-Id: <20220523165750.768280085@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165812.244140613@linuxfoundation.org>
-References: <20220523165812.244140613@linuxfoundation.org>
+In-Reply-To: <20220523165746.957506211@linuxfoundation.org>
+References: <20220523165746.957506211@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,43 +56,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jens Axboe <axboe@kernel.dk>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-Lee reports that there's a use-after-free of the process file table.
-There's an assumption that we don't need the file table for some
-variants of statx invocation, but that turns out to be false and we
-end up with not grabbing a reference for the request even if the
-deferred execution uses it.
+[ Upstream commit 5361448e45fac6fb96738df748229432a62d78b6 ]
 
-Get rid of the REQ_F_NO_FILE_TABLE optimization for statx, and always
-grab that reference.
+test_bit() tests if one bit is set or not.
+Here the logic seems to check of bit QL_RESET_PER_SCSI (i.e. 4) OR bit
+QL_RESET_START (i.e. 3) is set.
 
-This issues doesn't exist upstream since the native workers got
-introduced with 5.12.
+In fact, it checks if bit 7 (4 | 3 = 7) is set, that is to say
+QL_ADAPTER_UP.
 
-Link: https://lore.kernel.org/io-uring/YoOJ%2FT4QRKC+fAZE@google.com/
-Reported-by: Lee Jones <lee.jones@linaro.org>
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+This looks harmless, because this bit is likely be set, and when the
+ql_reset_work() delayed work is scheduled in ql3xxx_isr() (the only place
+that schedule this work), QL_RESET_START or QL_RESET_PER_SCSI is set.
+
+This has been spotted by smatch.
+
+Fixes: 5a4faa873782 ("[PATCH] qla3xxx NIC driver")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Link: https://lore.kernel.org/r/80e73e33f390001d9c0140ffa9baddf6466a41a2.1652637337.git.christophe.jaillet@wanadoo.fr
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/io_uring.c |    6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ drivers/net/ethernet/qlogic/qla3xxx.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -4252,12 +4252,8 @@ static int io_statx(struct io_kiocb *req
- 	struct io_statx *ctx = &req->statx;
- 	int ret;
+diff --git a/drivers/net/ethernet/qlogic/qla3xxx.c b/drivers/net/ethernet/qlogic/qla3xxx.c
+index ecd345ca160f..9d384fb3b746 100644
+--- a/drivers/net/ethernet/qlogic/qla3xxx.c
++++ b/drivers/net/ethernet/qlogic/qla3xxx.c
+@@ -3629,7 +3629,8 @@ static void ql_reset_work(struct work_struct *work)
+ 		qdev->mem_map_registers;
+ 	unsigned long hw_flags;
  
--	if (force_nonblock) {
--		/* only need file table for an actual valid fd */
--		if (ctx->dfd == -1 || ctx->dfd == AT_FDCWD)
--			req->flags |= REQ_F_NO_FILE_TABLE;
-+	if (force_nonblock)
- 		return -EAGAIN;
--	}
+-	if (test_bit((QL_RESET_PER_SCSI | QL_RESET_START), &qdev->flags)) {
++	if (test_bit(QL_RESET_PER_SCSI, &qdev->flags) ||
++	    test_bit(QL_RESET_START, &qdev->flags)) {
+ 		clear_bit(QL_LINK_MASTER, &qdev->flags);
  
- 	ret = do_statx(ctx->dfd, ctx->filename, ctx->flags, ctx->mask,
- 		       ctx->buffer);
+ 		/*
+-- 
+2.35.1
+
 
 

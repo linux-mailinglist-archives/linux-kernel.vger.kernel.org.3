@@ -2,192 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E23CE530872
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 06:34:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90941530878
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 06:41:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229807AbiEWEeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 00:34:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35092 "EHLO
+        id S229539AbiEWEl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 00:41:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbiEWEd7 (ORCPT
+        with ESMTP id S229851AbiEWElX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 00:33:59 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C89EEE32;
-        Sun, 22 May 2022 21:33:58 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id l14so12936698pjk.2;
-        Sun, 22 May 2022 21:33:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xApiqltHmk4fyXwXr+XV2jx+tTOQK7lfXdQNYlo3OWA=;
-        b=dKORMaWHU6VYYZHO/QN/983RYf7FOcdoNBoBChVvfewXi6kGWiFALeOPl4pyCTeDyn
-         wDGcce/hVH15VJhJFl4sK8gqtQD78GtlHrgEbdQOo7FYmAzl0LwaUQpJQmBzX3/YIZ1q
-         luprMRGI8MhJmIqF+cl8sjzMFIlWA8zIoixeaiFC731EC1Hhxl0vlgF0ojZiphrXDb8k
-         7XcOwkce2iFlxiJow/KOK8LjMLmfOOJG4pdon+VmJJO5TYhsXfuY3ETKZiKN7EB1FVRV
-         jrTSwY8pWH+D8f/Kp+9nkOXAJxiMqx/qcuLCxZFVsbjbE8aHJXpbeG/r4jQZp/9Ry4R7
-         Z5mA==
+        Mon, 23 May 2022 00:41:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B1EBE6345
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 21:41:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653280879;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=08y9EJtcz+7a/JcW5CAQJh1vaSn+lYtCa1y1S5/rUOM=;
+        b=dOTxSxS1WagJmeEityGz2xpT572VJvoCT4WbLvvORnu5BDY6jQISUTPYdIrYH4AYuXUUO8
+        N1LIuyNtz8szUiV6eVVA9lrPQ7kOmH/mYLV9kIs+EiA07gjrG1Xx7WEuGY01ehA8GSKnK+
+        8xTBU9F8TGmXOpQrYvaRAnOwh04x8+w=
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
+ [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-354-BZV11lDBMbGupL4Hp6xfDA-1; Mon, 23 May 2022 00:41:18 -0400
+X-MC-Unique: BZV11lDBMbGupL4Hp6xfDA-1
+Received: by mail-lf1-f71.google.com with SMTP id bi27-20020a0565120e9b00b004786caccc7dso1019730lfb.11
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 21:41:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xApiqltHmk4fyXwXr+XV2jx+tTOQK7lfXdQNYlo3OWA=;
-        b=e+1dFViOsxECwoIRyCxzHWf/8kjJIfwxH+GLgaYP048bMx5Z/QG00h3ZDwFm+6I0Q7
-         liNX2RmzZTrRA9pxOFJLIwKMcJFOfpI6qm/KQyWhZzcsUhGfC1semjYg1dhK2EUcyDbV
-         eXYE2y6Wi4Z1ST3/wz+7q0DBmgKKsRaeGWzhjSp247ZB3KZJKMpPtOMBy6thizOMPKwA
-         wiyLMhj8+KP8Pdzm/4KzoMksOy8ZqAoqPT4tPfOVVYywFyuZOjEtNhkJuwsx/0ZvH/s2
-         /3Vh9y8BQcJae+hEb/S8p1zV9KrTpGtWKB7VLPAUv8bFuSDsN2lJPFqxFz7obFRLIEUM
-         IejQ==
-X-Gm-Message-State: AOAM5335CldCV/Lk0DiQLe6C/JKzPSDBdurp6eDcM/GCgthP1Y0GxBL/
-        pHJTFl7njbhuw3RTtrjmXaY=
-X-Google-Smtp-Source: ABdhPJyaSrK2SdCAtH5n8v0I1+G03otcxlmwvNPisgzXUjAUYDWrroszN1RpvQvnxVOf3DRs6hUm4w==
-X-Received: by 2002:a17:902:ef43:b0:156:9c5d:b0fe with SMTP id e3-20020a170902ef4300b001569c5db0femr21193813plx.158.1653280437721;
-        Sun, 22 May 2022 21:33:57 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:d84e:5dcd:9d68:ebbf])
-        by smtp.gmail.com with ESMTPSA id bi10-20020a170902bf0a00b001621a1ef9c7sm1977254plb.137.2022.05.22.21.33.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 May 2022 21:33:56 -0700 (PDT)
-Date:   Sun, 22 May 2022 21:33:54 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     matthias.bgg@gmail.com, mkorpershoek@baylibre.com,
-        linux-input@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/5] Input: mtk-pmic-keys - Add kerneldoc to driver
- structures
-Message-ID: <YosOsgPwMGuLk9dv@google.com>
-References: <20220520125132.229191-1-angelogioacchino.delregno@collabora.com>
- <20220520125132.229191-2-angelogioacchino.delregno@collabora.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=08y9EJtcz+7a/JcW5CAQJh1vaSn+lYtCa1y1S5/rUOM=;
+        b=jKpdboXlB6u/QnmcfTBeGZt0ULwS7eJsQEYM8ADZ2JDlciNzc4CQwwXTYZx86D0tcZ
+         16GXFfyICQ88G0Px0IUDU6jhtrJQ3HokWsMV3jw7pg22qsSh++OGylDBNOAAfLXOU1GI
+         nq6lB5z9f4NhMxuMYdoFF3dkDaXg3P40+/tByMJa3Pg4I1sgUA9tGLwu/j/Q4WiD16xo
+         7YUjh+rDxqh/08+ueeAtIzMyihgxkA2GODvM1tKIM7HrHEXlY0LeeICGSwjjazwkFx0L
+         /P2KsbIIC/WbNt0q1NzV/59qdnJVePubDdU2HX2R/EFe4QCyhDGttQJ89aIoJEclAb6U
+         36Sw==
+X-Gm-Message-State: AOAM530Eb22NeZzSCiC/t0cJ3oDjPkJM1FM94Yt8XNfj8E8mFfCG7fmU
+        2B/46uHsRu7ZaiNMbS/Ziui5661XPZFNkRl3Rf5zfLLJhAwECIfvuYNf+QWMnvhLCa3COAswdr7
+        +Pegpf+dlC7TuVjMvxi2QJl0luFzzxpIBvQMRBMFX
+X-Received: by 2002:a05:6512:1588:b0:477:a556:4ab2 with SMTP id bp8-20020a056512158800b00477a5564ab2mr15008560lfb.376.1653280875765;
+        Sun, 22 May 2022 21:41:15 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxqRetp33JcfidVaUk+iFKExKrB3v7QK7jBSPRLyLJwJHS8cGFd1P5dpWd3xCNGBT0hiuY9YQ5gpi2GOTwnZdI=
+X-Received: by 2002:a05:6512:1588:b0:477:a556:4ab2 with SMTP id
+ bp8-20020a056512158800b00477a5564ab2mr15008553lfb.376.1653280875600; Sun, 22
+ May 2022 21:41:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220520125132.229191-2-angelogioacchino.delregno@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <89ef0ae4c26ac3cfa440c71e97e392dcb328ac1b.1653227924.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <89ef0ae4c26ac3cfa440c71e97e392dcb328ac1b.1653227924.git.christophe.jaillet@wanadoo.fr>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Mon, 23 May 2022 12:41:03 +0800
+Message-ID: <CACGkMEtvgL+MxBmhWZ-Hn-QjfS-MBm7gvLoQHhazOiwrLxxUJA@mail.gmail.com>
+Subject: Re: [PATCH] vhost-vdpa: Fix some error handling path in vhost_vdpa_process_iotlb_msg()
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Gautam Dawar <gautam.dawar@xilinx.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        kernel-janitors@vger.kernel.org, kvm <kvm@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi AngeloGioacchino,
-
-On Fri, May 20, 2022 at 02:51:28PM +0200, AngeloGioacchino Del Regno wrote:
-> To enhance human readability, add kerneldoc to all driver structs.
-
-I am doubtful that this is useful. The reason is that I believe
-kerneldoc format is only useful for documenting cross-subsystem APIs.
-Kerneldoc for driver-private data and functions simply pollutes API
-docs.
-
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+On Sun, May 22, 2022 at 9:59 PM Christophe JAILLET
+<christophe.jaillet@wanadoo.fr> wrote:
+>
+> In the error paths introduced by the commit in the Fixes tag, a mutex may
+> be left locked.
+> Add the correct goto instead of a direct return.
+>
+> Fixes: a1468175bb17 ("vhost-vdpa: support ASID based IOTLB API")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 > ---
->  drivers/input/keyboard/mtk-pmic-keys.c | 30 +++++++++++++++++++++++++-
->  1 file changed, 29 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/input/keyboard/mtk-pmic-keys.c b/drivers/input/keyboard/mtk-pmic-keys.c
-> index c31ab4368388..8e4fa7cd16e6 100644
-> --- a/drivers/input/keyboard/mtk-pmic-keys.c
-> +++ b/drivers/input/keyboard/mtk-pmic-keys.c
-> @@ -34,6 +34,13 @@
->  #define MTK_PMIC_HOMEKEY_INDEX	1
->  #define MTK_PMIC_MAX_KEY_COUNT	2
->  
-> +/**
-> + * struct mtk_pmic_keys_regs - PMIC keys per-key registers
-> + * @deb_reg:             Debounced key status register
-> + * @deb_mask:            Bitmask of this key in status register
-> + * @intsel_reg:          Interrupt selector register
-> + * @intsel_mask:         Bitmask of this key in interrupt selector
-> + */
->  struct mtk_pmic_keys_regs {
->  	u32 deb_reg;
->  	u32 deb_mask;
-> @@ -50,6 +57,11 @@ struct mtk_pmic_keys_regs {
->  	.intsel_mask		= _intsel_mask,		\
->  }
->  
-> +/**
-> + * struct mtk_pmic_regs - PMIC Keys registers
-> + * @keys_regs:           Specific key registers
+> WARNING: This patch only fixes the goto vs return mix-up in this function.
+> However, the 2nd hunk looks really spurious to me. I think that the:
+> -               return -EINVAL;
+> +               r = -EINVAL;
+> +               goto unlock;
+> should be done only in the 'if (!iotlb)' block.
 
-This new description of the structure and of the keys_regs does not add
-any information for me.
+It should be fine, the error happen if
 
-> + * @pmic_rst_reg:        PMIC Keys reset register
-> + */
->  struct mtk_pmic_regs {
->  	const struct mtk_pmic_keys_regs keys_regs[MTK_PMIC_MAX_KEY_COUNT];
->  	u32 pmic_rst_reg;
-> @@ -85,15 +97,31 @@ static const struct mtk_pmic_regs mt6358_regs = {
->  	.pmic_rst_reg = MT6358_TOP_RST_MISC,
->  };
->  
-> +/**
-> + * struct mtk_pmic_keys_info - PMIC Keys per-key params
-> + * @keys:                Pointer to main driver structure
+1) the batched ASID based request is not equal (the first if)
+2) there's no IOTLB for this ASID (the second if)
 
-That is obvious from the field definition.
+But I agree the code could be tweaked to use two different if instead
+of using a or condition here.
 
-> + * @regs:                Register offsets/masks for this key
+Acked-by: Jason Wang <jasowang@redhat.com>
 
-Ditto.
+>
+> As I don't know this code, I just leave it as-is but draw your attention
+> in case this is another bug lurking.
+> ---
+>  drivers/vhost/vdpa.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+> index 1f1d1c425573..3e86080041fc 100644
+> --- a/drivers/vhost/vdpa.c
+> +++ b/drivers/vhost/vdpa.c
+> @@ -1000,7 +1000,8 @@ static int vhost_vdpa_process_iotlb_msg(struct vhost_dev *dev, u32 asid,
+>                 if (!as) {
+>                         dev_err(&v->dev, "can't find and alloc asid %d\n",
+>                                 asid);
+> -                       return -EINVAL;
+> +                       r = -EINVAL;
+> +                       goto unlock;
+>                 }
+>                 iotlb = &as->iotlb;
+>         } else
+> @@ -1013,7 +1014,8 @@ static int vhost_vdpa_process_iotlb_msg(struct vhost_dev *dev, u32 asid,
+>                 }
+>                 if (!iotlb)
+>                         dev_err(&v->dev, "no iotlb for asid %d\n", asid);
+> -               return -EINVAL;
+> +               r = -EINVAL;
+> +               goto unlock;
+>         }
+>
+>         switch (msg->type) {
+> --
+> 2.34.1
+>
 
-> + * @keycode:             Key code for this key
-
-Yep.
-
-> + * @irq:                 Keypress or press/release interrupt
-> + * @irq_r:               Key release interrupt (optional)
-> + * @wakeup:              Indicates whether to use this key as a wakeup source
-> + */
->  struct mtk_pmic_keys_info {
->  	struct mtk_pmic_keys *keys;
->  	const struct mtk_pmic_keys_regs *regs;
->  	unsigned int keycode;
->  	int irq;
-> -	int irq_r; /* optional: release irq if different */
-> +	int irq_r;
->  	bool wakeup:1;
->  };
->  
-> +/**
-> + * struct mtk_pmic_keys - Main driver structure
-> + * @input_dev:           Input device pointer
-
-I do not find this helpful.
-
-> + * @dev:                 Device pointer
-
-And neither this.
-
-> + * @regmap:              Regmap handle
-
-Nor this.
-
-> + * @keys:                Per-key parameters
-> + */
->  struct mtk_pmic_keys {
->  	struct input_dev *input_dev;
->  	struct device *dev;
-> -- 
-> 2.35.1
-> 
-
-In the end we ended up with something that now has a chance of
-introducing warning when someone changes code, for very little benefit,
-if any at all.
-
-For driver-private data and functions we should rely on expressive
-variable and function names and only use comments for something that
-might be unclear or requires additional qualification.
-
-Thanks.
-
--- 
-Dmitry

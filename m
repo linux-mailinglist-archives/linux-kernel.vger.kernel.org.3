@@ -2,104 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63B3D53169A
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:51:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B567E531737
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:52:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbiEWTV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 15:21:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48538 "EHLO
+        id S229949AbiEWTWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 15:22:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbiEWTVP (ORCPT
+        with ESMTP id S229897AbiEWTVQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 15:21:15 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E422BF50;
-        Mon, 23 May 2022 11:59:34 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id w2-20020a17090ac98200b001e0519fe5a8so115574pjt.4;
-        Mon, 23 May 2022 11:59:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Z0mv39OqDgZ8RxW5qBdf3G/9tpcn8YoRwpPOzCu5TGU=;
-        b=JsuvkZ2CB/hi6lgGt5mG3LcRgUwbvDhMGAjGyWnt+3GAD8P4dqQr5pXIc9bvkhCE4Q
-         8OKVjX1pDB1yCbBCrUxMywwyw20MK2m+3g3IJuAV9ffDy9ZTBtUIHTm52cwImBdqgcIt
-         ZyUA0ZOlQCbFdHr7/ZbbyuAzbdyVc7oYNa0+/Moln5tcQKow/fPB7jVYiVgEgJBZ5mhJ
-         +OXcBYL3I+iUuy6/nV87EwpsKVPRjVetpLoGXkjkd18PRx0bpuFdSIKE9aq+i3SQXHFS
-         ubc+VHMXw0NgWjZObiW2oBPTlZIbAZSkZe5KxhG3bp0wf57p1DHHxa2xun4qxpU0JK4j
-         7kgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Z0mv39OqDgZ8RxW5qBdf3G/9tpcn8YoRwpPOzCu5TGU=;
-        b=meOKnKQvRuPECDv8LskcGdk5SHXU3mYdU05OWFsEXsoMVutA5GMgdhUdW/qfii2NEd
-         R4rI7MLQurqp5jUnVnhpm0uZtVIGmOTXuBnL6+0udQ9dVmus0l0ZuEQwkx0S79QZh/PA
-         P/tnFNln1OrhRnsdOocpK9p6t2RFlPajh4meVKzlFm1dlYcmHEh0NR0LqCV/3QHlOdJg
-         OV7Vel6tfSJzsLnB7c7E7t7AgjHOPOX5TxsndQVo+w4xcQqt0Wad877kjKNL/fTD2jWm
-         Ny8rMFih1CO8VAZ4puDU5Wky0ZH8nEbDLPEiq2bwWPnIsaWuMyFxCfc97cGWGG6HbM5f
-         1cTQ==
-X-Gm-Message-State: AOAM533uNc4qQrYTbUzYx88m7vTY6bKyDSK9CcFJbJbBCpR1057NPH1O
-        mKPK/G7tOWVGIWwxGHp7c2U=
-X-Google-Smtp-Source: ABdhPJwHkwHPgV4OcofLcHHU2VqVyeEST/CIl8XaowcmISu3+5i0w6BkAzM32kkKUBBoofccFNWd9Q==
-X-Received: by 2002:a17:902:9a07:b0:161:fdc3:3b9d with SMTP id v7-20020a1709029a0700b00161fdc33b9dmr14765427plp.94.1653332374122;
-        Mon, 23 May 2022 11:59:34 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id h17-20020a656391000000b003db6f4a96c4sm5064476pgv.32.2022.05.23.11.59.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 May 2022 11:59:33 -0700 (PDT)
-Message-ID: <eb70aa93-4107-f868-6d77-ebf8f5daf8bc@gmail.com>
-Date:   Mon, 23 May 2022 11:59:31 -0700
+        Mon, 23 May 2022 15:21:16 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34B27229;
+        Mon, 23 May 2022 11:59:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653332399; x=1684868399;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=NFWQ8Vo8BSVG/1PeY8TJCl1o40zJKtLANlhbW40DMqw=;
+  b=j2XRB2r2esDM94H2dph0KnwiPmAtHlrriT/EZz1eC5T6vEcWRPKSv/cC
+   9HzvHQLwZ6eWl+FiaqSpYDpB4tdLlyKVi1qhVPj01deaZwLp5ogGmg1hF
+   PBFQF7kiIsG76rEfqKjYmQK4m5NbRDwz/PYj4ThTMrsKV+zz/K4/QAFAF
+   jDvjeGppF98iLY/gahKhEQ3nWzzW0UUR+U0PR3/XQutZ3Yoi4TV+FTINr
+   cbINWyGXfTbfla7GNXR9xhCIrGND0rbR/VnNfc/WZC8coQMUKaKlwRalJ
+   alN+tYHhNZBWPiYCdI/1FNIUEDzTJgcbnHka+64c3V87DvxXhJG2n5Jaf
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="272142633"
+X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
+   d="scan'208";a="272142633"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 11:59:57 -0700
+X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
+   d="scan'208";a="548122603"
+Received: from schen9-mobl.amr.corp.intel.com ([10.251.3.38])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 11:59:57 -0700
+Message-ID: <3d6d559e9a23dc2dc79cf453fd64488a4a45cc1b.camel@linux.intel.com>
+Subject: Re: [PATCH] Revert "mm/vmscan: never demote for memcg reclaim"
+From:   Tim Chen <tim.c.chen@linux.intel.com>
+To:     "ying.huang@intel.com" <ying.huang@intel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com,
+        Zi Yan <ziy@nvidia.com>, Michal Hocko <mhocko@suse.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <guro@fb.com>
+Date:   Mon, 23 May 2022 11:59:57 -0700
+In-Reply-To: <ee1408cb15dbd2e979fe637e2ab91644f6190d0e.camel@intel.com>
+References: <20220518190911.82400-1-hannes@cmpxchg.org>
+         <ee1408cb15dbd2e979fe637e2ab91644f6190d0e.camel@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 5.17 000/158] 5.17.10-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220523165830.581652127@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220523165830.581652127@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/23/22 10:02, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.17.10 release.
-> There are 158 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Thu, 2022-05-19 at 15:42 +0800, ying.huang@intel.com wrote:
+> On Wed, 2022-05-18 at 15:09 -0400, Johannes Weiner wrote:
+> > This reverts commit 3a235693d3930e1276c8d9cc0ca5807ef292cf0a.
+> > 
+> > Its premise was that cgroup reclaim cares about freeing memory inside
+> > the cgroup, and demotion just moves them around within the cgroup
+> > limit. Hence, pages from toptier nodes should be reclaimed directly.
+> > 
+> > However, with NUMA balancing now doing tier promotions, demotion is
+> > part of the page aging process. Global reclaim demotes the coldest
+> > toptier pages to secondary memory, where their life continues and from
+> > which they have a chance to get promoted back. Essentially, tiered
+> > memory systems have an LRU order that spans multiple nodes.
+> > 
+> > When cgroup reclaims pages coming off the toptier directly, there can
+> > be colder pages on lower tier nodes that were demoted by global
+> > reclaim. This is an aging inversion, not unlike if cgroups were to
+> > reclaim directly from the active lists while there are inactive pages.
+> > 
+> > Proactive reclaim is another factor. The goal of that it is to offload
+> > colder pages from expensive RAM to cheaper storage. When lower tier
+> > memory is available as an intermediate layer, we want offloading to
+> > take advantage of it instead of bypassing to storage.
+> > 
+> > Revert the patch so that cgroups respect the LRU order spanning the
+> > memory hierarchy.
+> > 
+> > Of note is a specific undercommit scenario, where all cgroup limits in
+> > the system add up to <= available toptier memory. In that case,
+> > shuffling pages out to lower tiers first to reclaim them from there is
+> > inefficient. This is something could be optimized/short-circuited
+> > later on (although care must be taken not to accidentally recreate the
+> > aging inversion). Let's ensure correctness first.
+> > 
+> > Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+> > Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> > Cc: "Huang, Ying" <ying.huang@intel.com>
+> > Cc: Yang Shi <yang.shi@linux.alibaba.com>
+> > Cc: Zi Yan <ziy@nvidia.com>
+> > Cc: Michal Hocko <mhocko@suse.com>
+> > Cc: Shakeel Butt <shakeelb@google.com>
+> > Cc: Roman Gushchin <guro@fb.com>
 > 
-> Responses should be made by Wed, 25 May 2022 16:56:55 +0000.
-> Anything received after that time might be too late.
+> Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.10-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+> This is also required by Tim's DRAM partition among cgroups in tiered
+> sytstem.
 
+Yes, while testing cgroup demotion, I also have to revert
+the commit in question.
+ 
+Acked-by: Tim Chen <tim.c.chen@linux.intel.com>
+> 
+> Best Regards,
+> Huang, Ying
+> 
+> > ---
+> >  mm/vmscan.c | 9 ++-------
+> >  1 file changed, 2 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/mm/vmscan.c b/mm/vmscan.c
+> > index c6918fff06e1..7a4090712177 100644
+> > --- a/mm/vmscan.c
+> > +++ b/mm/vmscan.c
+> > @@ -528,13 +528,8 @@ static bool can_demote(int nid, struct scan_control *sc)
+> >  {
+> >  	if (!numa_demotion_enabled)
+> >  		return false;
+> > -	if (sc) {
+> > -		if (sc->no_demotion)
+> > -			return false;
+> > -		/* It is pointless to do demotion in memcg reclaim */
+> > -		if (cgroup_reclaim(sc))
+> > -			return false;
+> > -	}
+> > +	if (sc && sc->no_demotion)
+> > +		return false;
+> >  	if (next_demotion_node(nid) == NUMA_NO_NODE)
+> >  		return false;
+> >  
+> > 
+> > 
+> > 
+> 
+> 
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
-
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian

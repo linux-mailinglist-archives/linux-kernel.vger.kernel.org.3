@@ -2,76 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3CC9531341
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:23:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D22E53140C
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:25:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238031AbiEWPgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 11:36:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60880 "EHLO
+        id S238038AbiEWPh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 11:37:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237953AbiEWPgn (ORCPT
+        with ESMTP id S238030AbiEWPhv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 11:36:43 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E5E2E096
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 08:36:42 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-2ff53d86abbso133344177b3.8
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 08:36:42 -0700 (PDT)
+        Mon, 23 May 2022 11:37:51 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8132830579
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 08:37:49 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id e4so17133229ljb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 08:37:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bwKyiDYE51FSv2CgfXwlvAU5QYU7Qji4+KtmcFnvQRo=;
-        b=cuoKHK+r8FryJks2SiHnPmXbZ/0sz66qtrC9b7De2jR3MFvupZAnkge7TLUHTUftmk
-         hH04HskNl8S6CIKkI3pSobr6ljmvwjGEQ5SLW5+EN6z20wELFfLyfiCgYsa1X88WffY1
-         IPuh48E3wTPsp+xkSEzkItDpmLD5m9Y1kmFXzQ0iKXifUl4kFw7KpX2zrOoJ7zW/m3T8
-         UqFjH9tMom7RFG7cXEKk9DCqJpZ/UjnEODqFS5oEbwsPQTHISkCIDHCWyXKtuONLb8eU
-         kfl7hZe/eS+aMU/biXWBROYoE5Qbv4GW9mDFhbbozTiCG90Oec7gHj+fSEKpdwtJTmVF
-         JHuw==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=CNVGYK72FSE/DjXuo5FhnaPlB7gNCfpfmdbuSxUtMOc=;
+        b=iau23czuiMXjm0hyqdsK5LqTD+cKYVfnaA9S+hQdET23Y0mX06Yvmm6kF7vXaHTfPy
+         8//i31Rg+IIST3l9Sr0HyecMRQN5OqkZNKc8CS9yKXVH/8RbMhhmXeqzZSfepaj/zkwe
+         ofB4tGj5QcepTEaNJQGL0uCSEQ2ADJPDbE222xkpnEOy/i6hOMC2Gogln7uIOXz1Z2Un
+         eEdA7dxiMWE4KY6pnEhnPDqWZSOM1zSWeijmWVE9dewujOLdGsLSCspFY3jrwHLY5uJy
+         G/qZz7B6FWs1eIB6vxDShca3e0arrF3KoP7sa7f+DQmKL7DLNfpzlnJHap6kywfaaz7X
+         P+oA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bwKyiDYE51FSv2CgfXwlvAU5QYU7Qji4+KtmcFnvQRo=;
-        b=t1kG+zaoe0qLusaZOih4Jmd+dBjx1pZQ2gU+PHcoLdQlIjS4O8nZjBEsSmzzB63S2P
-         Id1/bjp9H8rp4hV3iz10s4iWSO9++osS0dpyosnCnTH6KDPF9ZDiOfFwGJxLmpoti6Ax
-         eOfNX1H3sskr6F+TJi4o6z3TAB/F6tvwdaUj9ArBhm7u2957uMAB6NoJYxjaJlWbYryF
-         7jq945tnO/DpTr8aB/sn5xKut+tU6KkBoet1WEMknCqxQA4BrNrPBDjr5yDC0Kj1Rrhx
-         XjLzNSCKLhwYwU8TW/k96JsrPc727bX1g9LytWDKjpkRgGhpeXHKAM8aVc/WBEeqwSWQ
-         lCYQ==
-X-Gm-Message-State: AOAM533oc7gbSwuPBN0jY8wtdOfJXKFZ+dXAZZDgYdZ7wZNiMX5YLjad
-        6+cMEPJLkGgbX/vwCVoK4Ftv2iIfWkv0gggpxg7dgw==
-X-Google-Smtp-Source: ABdhPJxwifdebyZIjHjo+6FIcWEXxKK5AxqP1kfrmFVZEXQZ90DURVqYsnAn7XK1Cj9gjdCqY1n6PeNvLmi36cUnP2E=
-X-Received: by 2002:a81:1f09:0:b0:2ff:dd8d:7d56 with SMTP id
- f9-20020a811f09000000b002ffdd8d7d56mr7146556ywf.67.1653320201337; Mon, 23 May
- 2022 08:36:41 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=CNVGYK72FSE/DjXuo5FhnaPlB7gNCfpfmdbuSxUtMOc=;
+        b=VQkeuGYygKnLEVc8GCRcd2IvhoT7rAghVJxjWYejJbkW6CRR6bf7XFjSq1PnDaX6VJ
+         9rdVeY1m0u1RLg75TM5S0hIRSVxCV1YO2AYwEBuyr3TXkz5ukSaeYyKPjuYgTwOtSlZ1
+         vAJJ9tgsxINoI5PEyV0/gMLZY1IyiMnhdXzeAgSOnDf/YaVfo0hu+fUbykyOXe8YJO+K
+         4DjI/fvGrK8O+2x4KGiXzKg2uFDnDIoLE7PezOtkWytowuwm/hzY6Uh6sqREVgNdVkWs
+         xqsC9cHIw7rNp/O6Dm/rXEEZ0BryXC4+OPR0eGGyegSYGIohWm5TqNKCitairw5WDKjz
+         ilcw==
+X-Gm-Message-State: AOAM530MsjmPuXZkPaVj5c0Mz+8cyHGCFzZLShyxUex2oCMD4U8/bUPL
+        ZK+I/Jfx5yczD3yEbpUIs2Cpkw==
+X-Google-Smtp-Source: ABdhPJytSX0vw8XiyL0IPRTPz7bNI0Vb5IqxXheMy8cJ6OyJZo+/AZv6Os8PjXd8yRyNcZKkTN4sOg==
+X-Received: by 2002:a05:651c:b06:b0:253:e51a:c507 with SMTP id b6-20020a05651c0b0600b00253e51ac507mr6361505ljr.420.1653320267494;
+        Mon, 23 May 2022 08:37:47 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id o14-20020a05651205ce00b0047255d211c2sm2036295lfo.241.2022.05.23.08.37.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 May 2022 08:37:46 -0700 (PDT)
+Message-ID: <fd52f328-c895-e27e-4807-eb0b8f14a247@linaro.org>
+Date:   Mon, 23 May 2022 17:37:44 +0200
 MIME-Version: 1.0
-References: <20220518100841.1497391-1-fam.zheng@bytedance.com>
- <20220518102140.GF10117@worktop.programming.kicks-ass.net>
- <CAG+v+Kb5ON2-49t8ZZwH2jT31Jvi+F_HYW0gQ3ss040GKdp0Zw@mail.gmail.com>
- <CAKfTPtBAkQpKtZMC5uV6hNeMqe9rJHd_GLHVFf2o3r=HvqH9fg@mail.gmail.com>
- <CAG+v+Kbfy-TuAWR9sfuWGyKb5Y+xjHDzB9hcoHuAN1kjYv5gWw@mail.gmail.com>
- <CAKfTPtA4qRUpMK4gw0STFg3kQqhpxCJpOMy9HgbSKaeVwfSjEQ@mail.gmail.com> <CAG+v+Kaa6Rfza_WewMw4K=vRTrt9UhRXp7G3XVi9cd_LvZkVEQ@mail.gmail.com>
-In-Reply-To: <CAG+v+Kaa6Rfza_WewMw4K=vRTrt9UhRXp7G3XVi9cd_LvZkVEQ@mail.gmail.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Mon, 23 May 2022 17:36:29 +0200
-Message-ID: <CAKfTPtB9gd5M6vvX+h3aZdOBVkWw0d+U5G5kUUtwsWuH_vanZA@mail.gmail.com>
-Subject: Re: [External] Re: [RFC PATCH] sched: Enable root level cgroup
- bandwidth control
-To:     "Feiran Zheng ." <fam.zheng@bytedance.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        zhouchengming@bytedance.com, fam@euphon.net,
-        Mel Gorman <mgorman@suse.de>, Ingo Molnar <mingo@redhat.com>,
-        songmuchun@bytedance.com, Juri Lelli <juri.lelli@redhat.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v1 18/19] arm64: dts: nuvoton: Add initial NPCM845 EVB
+ device tree
+Content-Language: en-US
+To:     Tomer Maimon <tmaimon77@gmail.com>, Arnd Bergmann <arnd@arndb.de>
+Cc:     Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        gregkh <gregkh@linuxfoundation.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Cristian Marussi <cristian.marussi@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Olof Johansson <olof@lixom.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        robert.hancock@calian.com,
+        nathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Lubomir Rintel <lkundrak@v3.sk>, SoC Team <soc@kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+References: <20220522155046.260146-1-tmaimon77@gmail.com>
+ <20220522155046.260146-19-tmaimon77@gmail.com>
+ <CAK8P3a1LCkM-w_Oi2qUqgq_Qxsg64uoGg5aaz=X8pBENHBhj0A@mail.gmail.com>
+ <CAP6Zq1j8PEQ2m7rG5YztesiOfXExCr=UMPFhD=Oe+GYDwGP95g@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAP6Zq1j8PEQ2m7rG5YztesiOfXExCr=UMPFhD=Oe+GYDwGP95g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,34 +111,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 18 May 2022 at 17:55, Feiran Zheng . <fam.zheng@bytedance.com> wrote:
->
-> On Wed, May 18, 2022 at 3:31 PM Vincent Guittot
-> <vincent.guittot@linaro.org> wrote:
-> > there is a DTPM powercap provider in the latest kernel and a scmi
-> > power capp provider is under review
->
->
-> Thanks, so DTPM can be a good solution for ARM. We could also deal
-> with AMD with acpi-cpufreq if powercap is not supported yet.
->
-> That aside, I think cpu cgroup has a familiar and simple sysfs
-> interface, and is more importantly hardware agnostic so it would be
-> really nice to have.
+On 23/05/2022 16:17, Tomer Maimon wrote:
+> Hi,
+> 
+> Thanks for your comments.
+> 
+> the patch will modify according to your comments and will be sent in the
+> next kernel revision 5.19.rc1
+> 
 
-cgroup is about allocating runtime to a group but you want to force a
-system idle for power consideration so it looks like abusing the
-interface
+None of your emails reach lists because of using HTML. Please use
+appropriate messaging format.
 
->
-> Alternatively, I assume we can look into a device-independent idle
-> injection mechanism?
-
-Yes, idle injection is  device-independent and fit better with your needs
-
-thermal framework already support cpu idle cooling device but I'm not
-sure your case is only related to thermal so you might want a more
-generic interface like powercap--> dtpm --> idle injection
-
->
-> Fam
+Best regards,
+Krzysztof

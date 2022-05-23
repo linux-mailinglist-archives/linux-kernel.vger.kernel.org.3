@@ -2,173 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4449E53122E
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:22:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4FA6531356
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:23:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237270AbiEWOme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 10:42:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56800 "EHLO
+        id S237201AbiEWOnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 10:43:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237344AbiEWOmS (ORCPT
+        with ESMTP id S237143AbiEWOnE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 10:42:18 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D41032AC44
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 07:42:16 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id q135so25791793ybg.10
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 07:42:16 -0700 (PDT)
+        Mon, 23 May 2022 10:43:04 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD4EF473AE;
+        Mon, 23 May 2022 07:43:03 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id c14so13919626pfn.2;
+        Mon, 23 May 2022 07:43:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=n4mxW9+NVwxMICOw3jO9PrjfCAz9jdp3jsvfj227EPg=;
-        b=EF0GWx8UNYIYNstiWdAmmkdSzkdJYO99EBTTmNPqf1cB1FdvlufPxll84nE5B5/zkz
-         bT3Bo38zrmJLcsYVkqfwEwSTOG8x+vi535RCGyzCXP+B8sLqVxi9RU+EdXfPzXhncodb
-         K13fFKDMMgegVRT60+A69ITgSsQ8Wy8FkzviA=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=myT6Fqbqu1LXacuDQiYi2tYK9nlNzCLLy9owGdyn/GM=;
+        b=W40Zi+DyWWgFk6zFggk1cM4+12Ds4CLiWxJJFIDCHVXXfyZ8Ad7Cqymjsn1kfL8jkv
+         nicUZszJNr5iELKl2BnH40TNaf8VmqkNmstv8EuCzvV/9LsKDXT9DaMPoeb/tUSM/7Ea
+         idPCl3UFMH9bUO0zky1Ig2MFMJT0VA9o4O3uWdp7NlycKRqaAXTb4+dbwEeIw/2EAh39
+         IyVaGbrtl2LNmWaGYYRz5wul6aoaS7lXvjqDT5xYJvlJJzQeMNPbgQiUKnmE8nOIozqc
+         5Dm5He0lxBru+N6WH0o+8ItFZ8380cIozkrcBwM1DlBkDL1i9PpJIEnNk9z5JOMm2gSM
+         yETg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=n4mxW9+NVwxMICOw3jO9PrjfCAz9jdp3jsvfj227EPg=;
-        b=7AG5n2uW/Yw242eBLcUtAqTiY4Itns1tSWCiBLUoVim8YsmIhu2EuYEZoyRBg2GC6x
-         wPLCe1N0an32x7uU7rp6QvgNUoyt2y2VOKHM+PJFnG/+sLLZSNdaqk34sY7VAVFYo4YU
-         DXkQqRuFNjjwwV+3HEaz6hZHryFPI2VFqCN2qgbfLuDQqECc/QFerK9JHUCIkbDJcygt
-         ZqqyR07xkNtX+lLokcnK2EegSYOUdCHTVHg53I4YINgLjpVL6Fnwdjr7427gS7s4O1A2
-         a1pCagRzE6ad6ngqwVVezkteeMK2HZmqpUKWA6ejVISP9YHC00PNYjS3jS57gQGDxzYJ
-         A/eg==
-X-Gm-Message-State: AOAM531EP432bE3/imEF3yx64DNEPOPzhkNMQAkExhsWiOkw/eeWc0IW
-        tu1l2M3IYSqjXBqGugrirAQWLrJv7s8LwCH+RSfW
-X-Google-Smtp-Source: ABdhPJzPyzEnfurzkCwkKWDtQQF4jnYD50VKSEntRgx7xMi7Pjar3xLLr31w71++FsTvo2uChRIhtO6raAx2YYhcoEQ=
-X-Received: by 2002:a25:be82:0:b0:64a:20f1:94fc with SMTP id
- i2-20020a25be82000000b0064a20f194fcmr20826851ybk.538.1653316936001; Mon, 23
- May 2022 07:42:16 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=myT6Fqbqu1LXacuDQiYi2tYK9nlNzCLLy9owGdyn/GM=;
+        b=DJhmo0U2XjahFsIpT0XnBaSqjP7NIDX5Omqxd5EUX1TnqA5ogntomP7wHduwEl9a0x
+         EvNVL6kcRqIydfqocYbvzZY6HqHK74x7F0xClEjPr9qM2Nmqp1BM9wMmcklPazg+evbO
+         NqHA3yCuaqvq9U6fMsYREB9VtSBv4rYJsh1XE4/sQR+3lkKhyKpw79aORH2Dn3uD8JSC
+         daEUSdvCSTT+LsfqJjYQ838RYw55VTlKYqEYTzF23XkvRYFcJFNImJbDtihA3Cedjhik
+         reOMNVENpxoPf41ttCoJyEY6r7XKgGpdi4pwnh15ILu2522QC5+vg2UTzH5cmi24BWCJ
+         +XYw==
+X-Gm-Message-State: AOAM531n0W92XfKVeIU9nS178M/aHQrQQx+swOLsDj7IjKVciPzFYLPT
+        L5FzguTNFa142N63MLl1Y/8=
+X-Google-Smtp-Source: ABdhPJzxucuNqwrbGbtCTMKQBFrCjgq5q/YqLdQJUtRcvT+v69kGz63GH3c5bW+pWxOxdNB+QMbYLQ==
+X-Received: by 2002:a05:6a00:10cc:b0:505:ada6:e03e with SMTP id d12-20020a056a0010cc00b00505ada6e03emr24006767pfu.45.1653316983287;
+        Mon, 23 May 2022 07:43:03 -0700 (PDT)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id jb15-20020a170903258f00b0015e8d4eb256sm5218430plb.160.2022.05.23.07.43.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 May 2022 07:43:03 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        yangbo lu <yangbo.lu@nxp.com>, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] mmc: sdhci-of-esdhc: Fix refcount leak in esdhc_signal_voltage_switch
+Date:   Mon, 23 May 2022 18:42:54 +0400
+Message-Id: <20220523144255.10310-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220522153543.2656-1-jszhang@kernel.org> <20220522153543.2656-2-jszhang@kernel.org>
-In-Reply-To: <20220522153543.2656-2-jszhang@kernel.org>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Mon, 23 May 2022 07:42:04 -0700
-Message-ID: <CAOnJCUJUBZ=G+nhoz06aNjSLsWQDcePnCSJiS4z4wg-ncY5cRw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] riscv: introduce unified static key mechanism for
- ISA extensions
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 22, 2022 at 8:44 AM Jisheng Zhang <jszhang@kernel.org> wrote:
->
-> Currently, riscv has several extensions which may not be supported on
-> all riscv platforms, for example, FPU and so on. To support unified
-> kernel Image style, we need to check whether the feature is supported
-> or not. If the check sits at hot code path, then performance will be
-> impacted a lot. static key can be used to solve the issue. In the past,
-> FPU support has been converted to use static key mechanism. I believe
-> we will have similar cases in the future.
->
-> This patch tries to add an unified mechanism to use static keys for
-> some ISA extensions by implementing an array of default-false static keys
-> and enabling them when detected.
->
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> ---
->  arch/riscv/include/asm/hwcap.h | 25 +++++++++++++++++++++++++
->  arch/riscv/kernel/cpufeature.c |  7 +++++++
->  2 files changed, 32 insertions(+)
->
-> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
-> index 0734e42f74f2..d3e113fe7366 100644
-> --- a/arch/riscv/include/asm/hwcap.h
-> +++ b/arch/riscv/include/asm/hwcap.h
-> @@ -12,6 +12,7 @@
->  #include <uapi/asm/hwcap.h>
->
->  #ifndef __ASSEMBLY__
-> +#include <linux/jump_label.h>
->  /*
->   * This yields a mask that user programs can use to figure out what
->   * instruction set this cpu supports.
-> @@ -55,6 +56,16 @@ enum riscv_isa_ext_id {
->         RISCV_ISA_EXT_ID_MAX = RISCV_ISA_EXT_MAX,
->  };
->
-> +/*
-> + * This enum represents the logical ID for each RISC-V ISA extension static
-> + * keys. We can use static key to optimize code path if some ISA extensions
-> + * are available.
-> + */
-> +enum riscv_isa_ext_key {
-> +       RISCV_ISA_EXT_KEY_FPU,          /* For 'F' and 'D' */
-> +       RISCV_ISA_EXT_KEY_MAX,
-> +};
-> +
->  struct riscv_isa_ext_data {
->         /* Name of the extension displayed to userspace via /proc/cpuinfo */
->         char uprop[RISCV_ISA_EXT_NAME_LEN_MAX];
-> @@ -62,6 +73,20 @@ struct riscv_isa_ext_data {
->         unsigned int isa_ext_id;
->  };
->
-> +extern struct static_key_false riscv_isa_ext_keys[RISCV_ISA_EXT_KEY_MAX];
-> +
-> +static __always_inline int riscv_isa_ext2key(int num)
-> +{
-> +       switch (num) {
-> +       case RISCV_ISA_EXT_f:
-> +               return RISCV_ISA_EXT_KEY_FPU;
-> +       case RISCV_ISA_EXT_d:
-> +               return RISCV_ISA_EXT_KEY_FPU;
-> +       default:
-> +               return -EINVAL;
-> +       }
-> +}
-> +
->  unsigned long riscv_isa_extension_base(const unsigned long *isa_bitmap);
->
->  #define riscv_isa_extension_mask(ext) BIT_MASK(RISCV_ISA_EXT_##ext)
-> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> index 1b2d42d7f589..89f886b35357 100644
-> --- a/arch/riscv/kernel/cpufeature.c
-> +++ b/arch/riscv/kernel/cpufeature.c
-> @@ -24,6 +24,8 @@ static DECLARE_BITMAP(riscv_isa, RISCV_ISA_EXT_MAX) __read_mostly;
->  #ifdef CONFIG_FPU
->  __ro_after_init DEFINE_STATIC_KEY_FALSE(cpu_hwcap_fpu);
->  #endif
-> +__ro_after_init DEFINE_STATIC_KEY_ARRAY_FALSE(riscv_isa_ext_keys, RISCV_ISA_EXT_KEY_MAX);
-> +EXPORT_SYMBOL(riscv_isa_ext_keys);
->
->  /**
->   * riscv_isa_extension_base() - Get base extension word
-> @@ -232,6 +234,11 @@ void __init riscv_fill_hwcap(void)
->                         print_str[j++] = (char)('a' + i);
->         pr_info("riscv: ELF capabilities %s\n", print_str);
->
-> +       for_each_set_bit(i, riscv_isa, RISCV_ISA_EXT_MAX) {
-> +               j = riscv_isa_ext2key(i);
-> +               if (j >= 0)
-> +                       static_branch_enable(&riscv_isa_ext_keys[j]);
-> +       }
->  #ifdef CONFIG_FPU
->         if (elf_hwcap & (COMPAT_HWCAP_ISA_F | COMPAT_HWCAP_ISA_D))
->                 static_branch_enable(&cpu_hwcap_fpu);
-> --
-> 2.34.1
->
+of_find_matching_node() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+Add missing of_node_put() to avoid refcount leak.
+of_node_put() checks null pointer.
 
+Fixes: ea35645a3c66 ("mmc: sdhci-of-esdhc: add support for signal voltage switch")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/mmc/host/sdhci-of-esdhc.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Reviewed-by: Atish Patra <atishp@rivosinc.com>
+diff --git a/drivers/mmc/host/sdhci-of-esdhc.c b/drivers/mmc/host/sdhci-of-esdhc.c
+index d9dc41143bb3..8b3d8119f388 100644
+--- a/drivers/mmc/host/sdhci-of-esdhc.c
++++ b/drivers/mmc/host/sdhci-of-esdhc.c
+@@ -904,6 +904,7 @@ static int esdhc_signal_voltage_switch(struct mmc_host *mmc,
+ 		scfg_node = of_find_matching_node(NULL, scfg_device_ids);
+ 		if (scfg_node)
+ 			scfg_base = of_iomap(scfg_node, 0);
++		of_node_put(scfg_node);
+ 		if (scfg_base) {
+ 			sdhciovselcr = SDHCIOVSELCR_TGLEN |
+ 				       SDHCIOVSELCR_VSELVAL;
 -- 
-Regards,
-Atish
+2.25.1
+

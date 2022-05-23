@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EF345318B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:54:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD214531864
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:54:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239327AbiEWRFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:05:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46650 "EHLO
+        id S241439AbiEWRar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:30:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239256AbiEWREf (ORCPT
+        with ESMTP id S241714AbiEWRWd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:04:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00CEE60B85;
-        Mon, 23 May 2022 10:04:33 -0700 (PDT)
+        Mon, 23 May 2022 13:22:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B735F7B9CE;
+        Mon, 23 May 2022 10:19:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 74880B811E9;
-        Mon, 23 May 2022 17:04:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DBC9C385A9;
-        Mon, 23 May 2022 17:04:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6E2E6B811CC;
+        Mon, 23 May 2022 17:17:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C53ACC385A9;
+        Mon, 23 May 2022 17:17:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653325471;
-        bh=sBS5VQKb5ioj3Nk8RgBkunxitCuvKvoRM4eCzRa6ets=;
+        s=korg; t=1653326278;
+        bh=l+dweFhCBdHCnU3oBcjOgofbeTDxRhLUVlx7Mb2HFa0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nTTw5TuuOyWdUNbNkYn9mzqD/tFKCyMbLLRSCF8wMS4WNbCTPAh3Fu/dMZyX2+yK7
-         4Sv2rbP9EFJfXZ/lsmDLoZIl34++GT4wiyoyLGeqn/h+8+lmSnCitf9yukcaB1HUrM
-         13lUfZ8sNxQWVG/YQmCzsXoM9voFWsNLXKU13IEU=
+        b=E6AJTzliV7iniNYW5DDKntKpQzkv9yTWbYWE4yc1Yh2U1UutstgGQDZaNC0XyYX+j
+         ODxHxAc8G7wqwC1Ww/ykRqZ7ONFyertnAtRJZTNCAwGLSnNe7V1vOqBZ3g/1Sk22QP
+         2V6FLSS0df/McDXOnmrirkeydO2O7amZyPP+o9+0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Himanshu Madhani <himanshu.madhani@oracle.com>,
-        Gleb Chesnokov <Chesnokov.G@raidix.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 22/25] scsi: qla2xxx: Fix missed DMA unmap for aborted commands
-Date:   Mon, 23 May 2022 19:03:40 +0200
-Message-Id: <20220523165749.618286779@linuxfoundation.org>
+        stable@vger.kernel.org, Terry Bowman <terry.bowman@amd.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Jean Delvare <jdelvare@suse.de>, Wolfram Sang <wsa@kernel.org>,
+        Mario Limonciello <Mario.Limonciello@amd.com>
+Subject: [PATCH 5.15 012/132] i2c: piix4: Enable EFCH MMIO for Family 17h+
+Date:   Mon, 23 May 2022 19:03:41 +0200
+Message-Id: <20220523165825.647117603@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165743.398280407@linuxfoundation.org>
-References: <20220523165743.398280407@linuxfoundation.org>
+In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
+References: <20220523165823.492309987@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,51 +56,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gleb Chesnokov <Chesnokov.G@raidix.com>
+From: Terry Bowman <terry.bowman@amd.com>
 
-[ Upstream commit 26f9ce53817a8fd84b69a73473a7de852a24c897 ]
+commit 6cf72f41808ab5db1d7718b999b3ff0166e67e45 upstream.
 
-Aborting commands that have already been sent to the firmware can
-cause BUG in qlt_free_cmd(): BUG_ON(cmd->sg_mapped)
+Enable EFCH MMIO using check for SMBus PCI revision ID value 0x51 or
+greater. This PCI revision ID check will enable family 17h and future
+AMD processors with the same EFCH SMBus controller HW.
 
-For instance:
-
- - Command passes rdx_to_xfer state, maps sgl, sends to the firmware
-
- - Reset occurs, qla2xxx performs ISP error recovery, aborts the command
-
- - Target stack calls qlt_abort_cmd() and then qlt_free_cmd()
-
- - BUG_ON(cmd->sg_mapped) in qlt_free_cmd() occurs because sgl was not
-   unmapped
-
-Thus, unmap sgl in qlt_abort_cmd() for commands with the aborted flag set.
-
-Link: https://lore.kernel.org/r/AS8PR10MB4952D545F84B6B1DFD39EC1E9DEE9@AS8PR10MB4952.EURPRD10.PROD.OUTLOOK.COM
-Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
-Signed-off-by: Gleb Chesnokov <Chesnokov.G@raidix.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Terry Bowman <terry.bowman@amd.com>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Cc: Mario Limonciello <Mario.Limonciello@amd.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/qla2xxx/qla_target.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/i2c/busses/i2c-piix4.c |   17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_target.c b/drivers/scsi/qla2xxx/qla_target.c
-index 6ef7a094ee51..b4a21adb3e73 100644
---- a/drivers/scsi/qla2xxx/qla_target.c
-+++ b/drivers/scsi/qla2xxx/qla_target.c
-@@ -3286,6 +3286,9 @@ int qlt_abort_cmd(struct qla_tgt_cmd *cmd)
+--- a/drivers/i2c/busses/i2c-piix4.c
++++ b/drivers/i2c/busses/i2c-piix4.c
+@@ -229,6 +229,18 @@ static void piix4_sb800_region_release(s
+ 	release_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE);
+ }
  
- 	spin_lock_irqsave(&cmd->cmd_lock, flags);
- 	if (cmd->aborted) {
-+		if (cmd->sg_mapped)
-+			qlt_unmap_sg(vha, cmd);
++static bool piix4_sb800_use_mmio(struct pci_dev *PIIX4_dev)
++{
++	/*
++	 * cd6h/cd7h port I/O accesses can be disabled on AMD processors
++	 * w/ SMBus PCI revision ID 0x51 or greater. MMIO is supported on
++	 * the same processors and is the recommended access method.
++	 */
++	return (PIIX4_dev->vendor == PCI_VENDOR_ID_AMD &&
++		PIIX4_dev->device == PCI_DEVICE_ID_AMD_KERNCZ_SMBUS &&
++		PIIX4_dev->revision >= 0x51);
++}
 +
- 		spin_unlock_irqrestore(&cmd->cmd_lock, flags);
- 		/*
- 		 * It's normal to see 2 calls in this path:
--- 
-2.35.1
-
+ static int piix4_setup(struct pci_dev *PIIX4_dev,
+ 		       const struct pci_device_id *id)
+ {
+@@ -339,7 +351,7 @@ static int piix4_setup_sb800_smba(struct
+ 	u8 smba_en_hi;
+ 	int retval;
+ 
+-	mmio_cfg.use_mmio = 0;
++	mmio_cfg.use_mmio = piix4_sb800_use_mmio(PIIX4_dev);
+ 	retval = piix4_sb800_region_request(&PIIX4_dev->dev, &mmio_cfg);
+ 	if (retval)
+ 		return retval;
+@@ -461,7 +473,7 @@ static int piix4_setup_sb800(struct pci_
+ 			piix4_port_shift_sb800 = SB800_PIIX4_PORT_IDX_SHIFT;
+ 		}
+ 	} else {
+-		mmio_cfg.use_mmio = 0;
++		mmio_cfg.use_mmio = piix4_sb800_use_mmio(PIIX4_dev);
+ 		retval = piix4_sb800_region_request(&PIIX4_dev->dev, &mmio_cfg);
+ 		if (retval) {
+ 			release_region(piix4_smba, SMBIOSIZE);
+@@ -944,6 +956,7 @@ static int piix4_add_adapter(struct pci_
+ 		return -ENOMEM;
+ 	}
+ 
++	adapdata->mmio_cfg.use_mmio = piix4_sb800_use_mmio(dev);
+ 	adapdata->smba = smba;
+ 	adapdata->sb800_main = sb800_main;
+ 	adapdata->port = port << piix4_port_shift_sb800;
 
 

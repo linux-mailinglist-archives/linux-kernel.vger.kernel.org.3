@@ -2,116 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A361530B73
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 11:03:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 515C6530C0D
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 11:04:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231939AbiEWId7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 04:33:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34308 "EHLO
+        id S231953AbiEWIgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 04:36:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231942AbiEWIdx (ORCPT
+        with ESMTP id S232053AbiEWIgM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 04:33:53 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D82937025;
-        Mon, 23 May 2022 01:33:51 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 67EE91F383;
-        Mon, 23 May 2022 08:33:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1653294830; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HGRKxMXzRmZxPbqeCp3nH/JisTTafTR7VNUx1nyPrA0=;
-        b=Fw4PPATbwIAM/+syB+5pNwbui6zzq48ItTTCRJoCdZxsq1oeLi5HUjJKkrHQrYOXiy6R17
-        +bqvRSVTHw/Y39VQRaeeBUmpmR9qt0hE+UyJ/+X1a4TgPBvLPcIIB0sxPok9Tx4Bv0fXn6
-        kTeFy5M9c1ROaqtzP+uCIdCFqncmFrs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1653294830;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HGRKxMXzRmZxPbqeCp3nH/JisTTafTR7VNUx1nyPrA0=;
-        b=w1UJ/lv2rM4pTCF88m3xyXaSpKqwbsTOVq4QJVvJSftW4VhvLptpMJJebYswy7a/fb5RBS
-        BC3ow6030YTwz3Dw==
-Received: from lion.mk-sys.cz (unknown [10.100.200.14])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 4FA872C141;
-        Mon, 23 May 2022 08:33:50 +0000 (UTC)
-Received: by lion.mk-sys.cz (Postfix, from userid 1000)
-        id E652760294; Mon, 23 May 2022 10:33:49 +0200 (CEST)
-Date:   Mon, 23 May 2022 10:33:49 +0200
-From:   Michal Kubecek <mkubecek@suse.cz>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     steffen.klassert@secunet.com, herbert@gondor.apana.org.au,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: REGRESSION (?) (Re: [PATCH] net: af_key: add check for
- pfkey_broadcast in function pfkey_process)
-Message-ID: <20220523083349.zzgdmoq2bzstxla6@lion.mk-sys.cz>
-References: <20220517094231.414168-1-jiasheng@iscas.ac.cn>
- <20220523022438.ofhehjievu2alj3h@lion.mk-sys.cz>
+        Mon, 23 May 2022 04:36:12 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E45B364E0
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 01:36:10 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id p22so24259522lfo.10
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 01:36:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=64FblKzsQYdGz6fqkSHe4/Mnt+TinFiqj0bwW9V3nQ8=;
+        b=B+TVMJ5dSczlHf5hzCe9CK0Uj1rFfGdBn7KefVcBPApXD17SLcM3OGQ90A1xIofsNv
+         +PETzFrxt2sdHhthin7x03r59noroWWNCRxu4OfEK6QA26aRTpZpqq1oLVoUjmxVZvda
+         cpPHPCK7bRtoU2IWYPwfuUSTLGO77qH94EGzJ8PZfafDZq502nwFq5CCO31iNOQGbTVV
+         wNG3D8QAq7VKM1DR7MJXy9ZC+Q5cRd3RY51RArwhbSSMk8bwLoHs88uH7rKlj2lvFYHL
+         MYfqjXitAlDssggn4Li97mzBL/j559MP3s0GfD6KeZU7LW4RkV7jJo2eBTJ5T+ZHiXLd
+         pXYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=64FblKzsQYdGz6fqkSHe4/Mnt+TinFiqj0bwW9V3nQ8=;
+        b=4hik1e1+FRVnJmZu5A4vnaauTA4IzNzPuePlC+nTIGaAO+9nyFJ5zHTQqYY3/Cl3Nd
+         u+U8199dPhY4vFFSP8lTm0ziMLilR9tzP4Qf0bApBvpoNVgVYXsN/1K/Jh1Qi0J3g8wM
+         GYF8wR1lIjnrhXQfhl1AkjWhL+K0axFs2ug/7ZxncDVVjVfRol4lxOdcP7YUhkrv/lzx
+         GPZvvRI8hKy3LMIV09Ta1t6tk7UvN93S9gvNqWoGuNuuV11EfssefXIS5QE0utYapKA4
+         Qv83s6+Z9ZuE+E67W2DCkRo3dyGWJIf0L8IrtNS4g8A37k6WfNRJ8uYPHw54+orFoZtW
+         TgAQ==
+X-Gm-Message-State: AOAM533AW1nRR8hnbRUAK3BiWdd/T/clmjy5Ha/aeTqq57oivWBR4Op5
+        LnWHP9bx15JYST64s6SuzkbCNfglTPwN9E3CeAF0ow==
+X-Google-Smtp-Source: ABdhPJzfBH1kHFR9kNrtbR06c7LH74ucbt8enU+3V++mcBeFmHUd7OphsNKGBrMJRzhlCYzUbLF5FS8Pbs4QHhtUmw4=
+X-Received: by 2002:a05:6512:ace:b0:473:cca7:a7fa with SMTP id
+ n14-20020a0565120ace00b00473cca7a7famr15173051lfu.410.1653294969007; Mon, 23
+ May 2022 01:36:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="r6vmbsg4u3vtaqzd"
-Content-Disposition: inline
-In-Reply-To: <20220523022438.ofhehjievu2alj3h@lion.mk-sys.cz>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220523063033.1778974-1-liu3101@purdue.edu>
+In-Reply-To: <20220523063033.1778974-1-liu3101@purdue.edu>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Mon, 23 May 2022 10:35:57 +0200
+Message-ID: <CACT4Y+Zpasug=cr2k-17aD_EBsvMZB8kQnaJ+KPgoPOZAj___Q@mail.gmail.com>
+Subject: Re: [PATCH] tracing: disable kcov on trace_preemptirq.c
+To:     Congyu Liu <liu3101@purdue.edu>
+Cc:     andreyknvl@gmail.com, rostedt@goodmis.org, mingo@redhat.com,
+        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 23 May 2022 at 08:30, Congyu Liu <liu3101@purdue.edu> wrote:
+>
+> Functions in trace_preemptirq.c could be invoked from early interrupt
+> code that bypasses kcov trace function's in_task() check. Disable kcov
+> on this file to reduce random code coverage.
+>
+> Signed-off-by: Congyu Liu <liu3101@purdue.edu>
 
---r6vmbsg4u3vtaqzd
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Acked-by: Dmitry Vyukov <dvyukov@google.com>
 
-On Mon, May 23, 2022 at 04:24:38AM +0200, Michal Kubecek wrote:
-> After upgrading from 5.18-rc7 to 5.18 final, my racoon daemon refuses to
-> start because it cannot find some algorithms (it says "aes"). I have not
-> finished the debugging completely but this patch, mainline commit
-> 4dc2a5a8f675 ("net: af_key: add check for pfkey_broadcast in function
-> pfkey_process"), seems to be the most promising candidate.
-
-Tested now, reverting commit 4dc2a5a8f675 ("net: af_key: add check for
-pfkey_broadcast in function pfkey_process") seems to fix the issue,
-after rebuilding the af_key module with this commit reverted and
-reloading it, racoon daemon starts and works and /proc/crypto shows
-algrorithms it did not without the revert.
-
-We might get away with changing the test to
-
-	if (err && err != -ESRCH)
-		return err;
-
-but I'm not sure if bailing up on failed notification broadcast is
-really what we want. Also, most other calling sites of pfkey_broadcast()
-do not check the return value either so if we want to add the check, it
-should probably be done more consistently. So for now, a revert is IMHO
-more appropriate.
-
-Michal
-
---r6vmbsg4u3vtaqzd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCAAdFiEEWN3j3bieVmp26mKO538sG/LRdpUFAmKLRuIACgkQ538sG/LR
-dpWMpwgA0INRLLZ4ZINyjhZoeu1j1yh4Mwtsb/aGEW3OB2E+pZHsWwqDwoq++1vH
-um5qLGrN6mrKIi9X3LhVKuXry2RGNW8rbTUaXihcg0JFl72XAXySQUwEh13Rn7D9
-MgvSq4MznjNLuvfFBEWvkNaYbZ6NTVtlG2thTKi4GfftwsYsDWVQisCI4z2ZZ0Pn
-Pd1j8thJreCJSNxoK8ylNyNkCAzLksItEivKz/UM+Y7HMpkI3nYZJLVAUVYZQKO6
-97qCnqcMriy3XpDz6IVn6nVUHfGay8bmlfet67IOCrxYghyR47Wy147LP8+tVzrb
-O46GqysFnczjK0px39AqsMrgUkp9sQ==
-=ZgNq
------END PGP SIGNATURE-----
-
---r6vmbsg4u3vtaqzd--
+> ---
+>  kernel/trace/Makefile | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/kernel/trace/Makefile b/kernel/trace/Makefile
+> index d77cd8032213..0d261774d6f3 100644
+> --- a/kernel/trace/Makefile
+> +++ b/kernel/trace/Makefile
+> @@ -31,6 +31,10 @@ ifdef CONFIG_GCOV_PROFILE_FTRACE
+>  GCOV_PROFILE := y
+>  endif
+>
+> +# Functions in this file could be invoked from early interrupt
+> +# code and produce random code coverage.
+> +KCOV_INSTRUMENT_trace_preemptirq.o := n
+> +
+>  CFLAGS_bpf_trace.o := -I$(src)
+>
+>  CFLAGS_trace_benchmark.o := -I$(src)
+> --
+> 2.34.1
+>

@@ -2,94 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B643531474
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:25:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D91005313E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:24:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237958AbiEWPeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 11:34:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57342 "EHLO
+        id S237977AbiEWPea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 11:34:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237865AbiEWPeR (ORCPT
+        with ESMTP id S237974AbiEWPeZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 11:34:17 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B4B6289A1
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 08:34:17 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id o13-20020a17090a9f8d00b001df3fc52ea7so17844308pjp.3
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 08:34:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=W4RCFlHPKPzBpfZ4VSRaqmfuqEsVoa/sGTVsUgYmMkw=;
-        b=YGoYoVqwdqHR20dUUiThyv7mSi+CuU7dvhVuKDwnSf55afYm8Xq8utr0ljcFgoU5GW
-         zpCKB2yh8ZSQlJPZEKqm4ujVrHmMxNP8RnjYJfz/TF8/wYudZRnhVjY7UD5MdXuMTgfM
-         mydwtqvtrXgQg7io3VCJ92Bq23W+uR1pqrqBHarN4OzCGuRGlRO8vR5qFT+7xg/UYt/M
-         OTEvcbdSiIvoH8/KvTQr6J3cY8zPw/Dn57bZ4Qs/ryjn/Wm8mtPyFATqOhyaGsz9L50i
-         GdTOX+RIbrnFiJWxCaI4Br6yirCtDZvUEDHiR0nSszHCcQjb1+BT8zs0cSe68Zf/AwMt
-         nZNg==
+        Mon, 23 May 2022 11:34:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7DA534EA1F
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 08:34:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653320062;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kS62TLggA7d4kYtFghh4t0qh5AGp4VCERVELUWHCR+g=;
+        b=W4GD3miMzr9zByIqtaxf1ybzRQJM6jBUnxwXfBy6SFHVaMCCPUBeXVKQDMJpwQR6xcW/Ch
+        q9rZdFcYMAHmrMzDr0QZClUgaGWZdMIi9yTS5usT0Hxo1GmucMNJnfm+I7ULDroAb8aTQB
+        ggV0ATSSm8fLndxbyxWpYots026I7Jc=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-658-tBKQHMkoOhWhcAWLdCvFiA-1; Mon, 23 May 2022 11:34:20 -0400
+X-MC-Unique: tBKQHMkoOhWhcAWLdCvFiA-1
+Received: by mail-wm1-f71.google.com with SMTP id k16-20020a7bc310000000b0038e6cf00439so5810829wmj.0
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 08:34:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=W4RCFlHPKPzBpfZ4VSRaqmfuqEsVoa/sGTVsUgYmMkw=;
-        b=PD68BD6CLwhm+KN7gtRFCfFkzTSxBlqwKPVRZ8THP/6UsVIwFBxlxDzWpZHjhfMw9B
-         /EncNI/NiYhXb8/hZuNd3/lfUotb1qMWQRDaf2ergn0G6SqRXVq6qwkbCB1IYAMvQv99
-         tqKxjjxgu+YXb1XU1B5VG1javw5nMcztK5NJGjOmpHtQJSZ6G3k+6Y7WmZ5AcqZfhU4K
-         r0y7sH5ZpxcSROxYcnFhDv97Yn/q6W1fE9uLmmK66vp8vc32IjQ/ENSrUEChQvWCxEuW
-         TVue4ZhaYyUerutwlRvSdM2Un4n5hdoloOapaZtsr/VVUZ6YYBlCMArkhMxte3so5gw8
-         8MGQ==
-X-Gm-Message-State: AOAM53015No0eUUIvA/J0T2lfdH4GK/NubAQ8vrj0q3PcKLvI9O2vTY7
-        qDaomX4Gsr7bMXsxtkcaAz8=
-X-Google-Smtp-Source: ABdhPJzljZ11lQunxi5u5KVqo9IYckGYCLPpmtlOuo+7t/bCcHtXT+XiPLzpWe6/z4+bvzkEyU285w==
-X-Received: by 2002:a17:902:f549:b0:161:f216:4f46 with SMTP id h9-20020a170902f54900b00161f2164f46mr16620819plf.70.1653320056826;
-        Mon, 23 May 2022 08:34:16 -0700 (PDT)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id n8-20020a17090a160800b001d92e2e5694sm7316928pja.1.2022.05.23.08.34.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 08:34:16 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] bus: arm-integrator-lm: Fix refcount leak in integrator_ap_lm_probe
-Date:   Mon, 23 May 2022 19:34:09 +0400
-Message-Id: <20220523153409.22949-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        bh=kS62TLggA7d4kYtFghh4t0qh5AGp4VCERVELUWHCR+g=;
+        b=itQsZqW/zgnygqXcueE9g0LqzjKlaDsfpHHz5OLLGqiiiuRtWYX2VYA9O9r6hiMSBS
+         eOWBAe7sWKhJTe1Ki10HWPboZY/ctqOHK+7KpnswROXu9NC11+YBdnw6Ekn1hzzHwfXR
+         wkO8G4gLhZkMJbOagl/+e4ue6xYCMZYrXYF0aCzDHpFi6EqkQJQi7QMSxeHBSOuval80
+         +QR1Fvp7gNfuwlq7s6FiSLWzEFA2nBfc8kM8ayCX3X2il+MQSy31SDpyfc56Qxz8U1fP
+         ueFJ+Nc0UWkGeHKbCmzbwdbhSdc/gTJfu1eIoQzm/NsmS8xYGpLFj12aSnNvD8bqwd+9
+         B3LA==
+X-Gm-Message-State: AOAM531lADmi2VmtGUd5OfKP85pNsnoiB7ok/+8PS3FEkbmCaZlmOfxu
+        5G16hdvoVIh+eQ8J5ZIjj69Hh4jkS2FhVNgeSb91hCG8cogF725YPfphVVEY2v4FSsKGuVNqfYl
+        mOW5+MebKj3+WmyAOxkc7nas5
+X-Received: by 2002:a05:600c:4f4f:b0:394:97e1:ca99 with SMTP id m15-20020a05600c4f4f00b0039497e1ca99mr20705463wmq.143.1653320059459;
+        Mon, 23 May 2022 08:34:19 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzohqvE3SaiMrjQcvbmhmEhj8s9YdHQ62Q3d5eMEn1Q2BwSSrKw1AK1OS7G4qtFk3qcqbotHw==
+X-Received: by 2002:a05:600c:4f4f:b0:394:97e1:ca99 with SMTP id m15-20020a05600c4f4f00b0039497e1ca99mr20705438wmq.143.1653320059170;
+        Mon, 23 May 2022 08:34:19 -0700 (PDT)
+Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id f25-20020a7bc8d9000000b0039748be12dbsm3883414wml.47.2022.05.23.08.34.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 May 2022 08:34:18 -0700 (PDT)
+Message-ID: <6a6ca822-ac6a-8484-0bc8-aaa1dce3d8ef@redhat.com>
+Date:   Mon, 23 May 2022 17:34:17 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [RFC PATCH 2/3] fat: add renameat2 RENAME_EXCHANGE flag support
+Content-Language: en-US
+To:     Colin Walters <walters@verbum.org>, linux-kernel@vger.kernel.org
+Cc:     Peter Jones <pjones@redhat.com>,
+        Alexander Larsson <alexl@redhat.com>,
+        Alberto Ruiz <aruiz@redhat.com>,
+        Christian Kellner <ckellner@redhat.com>,
+        Lennart Poettering <lennart@poettering.net>,
+        Chung-Chiang Cheng <cccheng@synology.com>,
+        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
+References: <20220519092343.2776414-1-javierm@redhat.com>
+ <20220519092343.2776414-3-javierm@redhat.com>
+ <7963aad6-203c-4da4-ba9f-cf716d350121@www.fastmail.com>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <7963aad6-203c-4da4-ba9f-cf716d350121@www.fastmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_find_matching_node() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when not need anymore.
-Add missing of_node_put() to avoid refcount leak.
+Hello Colin,
 
-Fixes: ccea5e8a5918 ("bus: Add driver for Integrator/AP logic modules")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/bus/arm-integrator-lm.c | 1 +
- 1 file changed, 1 insertion(+)
+Thanks for your feedback.
 
-diff --git a/drivers/bus/arm-integrator-lm.c b/drivers/bus/arm-integrator-lm.c
-index 2344d560b144..ab5fad8aaa99 100644
---- a/drivers/bus/arm-integrator-lm.c
-+++ b/drivers/bus/arm-integrator-lm.c
-@@ -85,6 +85,7 @@ static int integrator_ap_lm_probe(struct platform_device *pdev)
- 		return -ENODEV;
- 	}
- 	map = syscon_node_to_regmap(syscon);
-+	of_node_put(syscon);
- 	if (IS_ERR(map)) {
- 		dev_err(dev,
- 			"could not find Integrator/AP system controller\n");
+On 5/23/22 12:40, Colin Walters wrote:
+> On Thu, May 19, 2022, at 5:23 AM, Javier Martinez Canillas wrote:
+>> The renameat2 RENAME_EXCHANGE flag allows to atomically exchange two paths
+>> but is currently not supported by the Linux vfat filesystem driver.
+>>
+>> Add a vfat_rename_exchange() helper function that implements this support.
+>>
+>> The super block lock is acquired during the operation to ensure atomicity,
+>> and in the error path actions made are reversed also with the mutex held,
+>> making the whole operation transactional.
+> 
+> Transactional with respect to the mounted kernel, but AIUI because vfat does not have journaling, the semantics on hard failure are...unspecified?  Is it possible for example we could see no file at all in the destination path?
+>
+
+That's correct, it's transactional within the constraints imposed by vfat.
+That is, there's no journal replay that would be done if something gets
+corrupted in the filesystem.
+
+But I believe that's also true with any journaled filesystem and GRUB too?
+Since GRUB doesn't mount filesystems but just attempt to read it without
+trying to do any journal replay. Even if is able to detect that something
+is wrong with the filesystem, it just tries in an best effort basis, i.e:
+
+https://git.savannah.gnu.org/cgit/grub.git/commit/?id=777276063e2
+
+About the semantics for a hard failure, that's not documented in the man
+page for the renameat(2) system call but what most filesystems do AFAICT
+is revert the operation if possible and print an error.
+
+I don't think that not having a file at all at destination is a possible
+outcome of a failure since the function does a detach, attach and sync
+and only the sync can fail.
+
+If the sync fails, then the detach/attach are reverted and another sync
+is attempted. If this succeeds, then the old state would be preserved
+and if it fails, then no sync was made so it should be good too I think.
+
+But I'm not a filesystem expert so maybe someone else more familiar with
+vfat and filesystems in general could chime in.
+
+> This relates to https://github.com/ostreedev/ostree/issues/1951
+> 
+> TL;DR I'd been thinking that in order to have things be maximally robust we need to:
+> 
+> 1. Write new desired bootloader config
+> 2. fsync it
+> 3. fsync containing directory (I guess for vfat really, syncfs())
+> 4. remove old config, syncfs()
+>
+
+Yes, I've seen that issue before but I (wrongly) understood that it was a
+way to workaround the lack of renameat2(..., RENAME_EXCHANGE) in vfat. On
+a second read I see that you also mention the journaled fs writes vs no
+replay in the bootloader issue that I mentioned above. So it makes sense
+to do the two phase commit even for journaled filesystems.
+ 
+> And here the bootloader would know to prefer the "new" file if it exists, and to delete the old one if it's still present on the next boot.
+>
+
+This is the disadvantage of this approach, that then we will need to make
+all bootloaders aware of the two phase commit as well. I'm OK with that but
+then I believe that we should document the expectations clearly as a part
+of the https://systemd.io/BOOT_LOADER_SPECIFICATION/.
+
+Anyways, I don't think this is the place to discuss this though and we should
+just focus on the actual kernel patches :) 
+ 
+> (Now obviously this is a small patch which will surely be generally useful, e.g. for tools that operate on things like mounted USB sticks, being able to do an atomic exchange at least from the running kernel PoV is just as useful as it is on other "regular" (and journaled) mounted filesystems)
+>
+
+Agreed. I think that it wouldn't hurt to have this implementation in vfat.
+ 
+> So assuming we have this, I guess the flow could be:
+> 
+> 1. rename_exchange(old, new)
+> 2. syncfs()
+>
+
+Correct. In fact, Alex pointed me out that I should do sync in the test too
+before checking that the rename succeeded. I was mostly interested that the
+logic worked even if only the in-memory representation or page cache was
+used. But I've added a `sudo sync -f "${MNT_PATH}"` for the next iteration.
+ 
+> ?  But that's assuming that the implementation of this doesn't e.g. have any "holes" where in theory we could flush an intermediate state.
+> 
+
+Ogawa said that didn't fully review it yet but gave useful feedback that I
+will also address in the next version. As said, is my first contribution to
+a filesystem driver so it would be good if people with more experience can
+let me know if there are holes in the implementation.
+
 -- 
-2.25.1
+Best regards,
+
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 

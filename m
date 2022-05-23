@@ -2,119 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6D6D530910
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 07:58:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D08D4530914
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 08:00:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231403AbiEWF6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 01:58:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43366 "EHLO
+        id S229825AbiEWGAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 02:00:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbiEWF6P (ORCPT
+        with ESMTP id S229634AbiEWGA0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 01:58:15 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5BD72A260
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 22:58:13 -0700 (PDT)
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 4AE5C3F170
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 05:58:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1653285491;
-        bh=5fCLgio4eOhfw1k5CS2PLumAftaAOSFd6efiEZiEJqo=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=vhhaQz2imbrVUdDwJspFtl7yEoiAZHMkeskuYOFq1f+ALPzZiFGHe6PkZlofxzle4
-         r9MJiACl9cbkbdy+4jYUH3t2Nah6mM77sQaGjXutqm0vrL08wmrCKBKW6InafHOkkr
-         Exwf25SFDn4TSB6qO1MQ/oCHlt6Vh0hXNbRMpO2awYWx95cfYQXZ/omty4cz8O3tho
-         QTIk1tOlkDWxCn2i6kDX4QHDNGzaVCE6GYrF2ih7G01YmTFASmfm51wLJbOTq8BiGo
-         mhrQBflNCt/Z0FE+BB24WP3Y81+qh+La8Czpg/CoMsbp7aQM4Ssv9XM6WgQHixrbMB
-         V/CD9JpyvS/tA==
-Received: by mail-ed1-f69.google.com with SMTP id n7-20020a05640206c700b0042aaeb9d702so9837243edy.19
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 22:58:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=5fCLgio4eOhfw1k5CS2PLumAftaAOSFd6efiEZiEJqo=;
-        b=oDfZhtQ7GzLseNJ88Wgh511YhqgqpLhL2kTsN/jUNWMS0Js2NcgCdLZJOWg3nLL2Bz
-         ey7jME0vM+x+RGgUdFWXo/BqPOc5d9CFf9m0puKEyvgDlC/8VjpcaawqMum9325tV2N9
-         T1n4FHWvP0Xb9LbNHX4zqQlaxKj8mhrbmOEHrez4sGhMYICbwQimn76A+ICHcU4Mlq3l
-         TVv20z3guxcmY/pwV8VZlcVbjjekBb7YJeTuyImOtJGqYcCIqFnsPjlpM9z3J6sJTTLo
-         lM/zlq5Mzn7NMsNV7T4HbeZkA67pSFfVbIgmPDm64ocHJ3FoM97HxmlwMFAe5srtEV1L
-         m+1Q==
-X-Gm-Message-State: AOAM533pLa2FT4TNXkMiFVQjdVV+c/Kg6N+sq9GA6sDKy9OlRbDptULM
-        IYsUwjiR2IqAWmtTMDMjgHJaj8DXdtf9/IHG9lLwl/zFtNeXJZ5ewLkMe4nKjsd9/WdGrf/H8tg
-        J5hNZprkhdNWjIujT/rogh5aqRTHvDHc5bMMEOP2M1w==
-X-Received: by 2002:a17:907:7e84:b0:6fe:cded:7d1f with SMTP id qb4-20020a1709077e8400b006fecded7d1fmr4980119ejc.35.1653285491009;
-        Sun, 22 May 2022 22:58:11 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxfJtcFSbeKmiGpMnperQwR7MKkXvhirZBqreQSPSqS1L8LPlV0rM0x+Qgcxcb9LgCvBNK+zQ==
-X-Received: by 2002:a17:907:7e84:b0:6fe:cded:7d1f with SMTP id qb4-20020a1709077e8400b006fecded7d1fmr4980108ejc.35.1653285490869;
-        Sun, 22 May 2022 22:58:10 -0700 (PDT)
-Received: from gollum.fritz.box ([194.191.244.86])
-        by smtp.gmail.com with ESMTPSA id bf15-20020a0564021a4f00b0042a9fcd7c73sm7782160edb.46.2022.05.22.22.58.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 May 2022 22:58:10 -0700 (PDT)
-From:   Juerg Haefliger <juerg.haefliger@canonical.com>
-X-Google-Original-From: Juerg Haefliger <juergh@canonical.com>
-To:     hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        linux-s390@vger.kernel.org, joe@perches.com
-Cc:     linux-kernel@vger.kernel.org,
-        Juerg Haefliger <juergh@canonical.com>
-Subject: [PATCH 1/2 v2] s390: Kconfig: Fix indentation
-Date:   Mon, 23 May 2022 07:57:35 +0200
-Message-Id: <20220523055735.4538-1-juergh@canonical.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <8d86b87edc9c9fa33b6a18fac8b160ee56e6a07c.camel@perches.com>
-References: <8d86b87edc9c9fa33b6a18fac8b160ee56e6a07c.camel@perches.com>
+        Mon, 23 May 2022 02:00:26 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96EB3340C2
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 23:00:24 -0700 (PDT)
+Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L668Z2CpDzgY8H;
+        Mon, 23 May 2022 13:58:54 +0800 (CST)
+Received: from [10.174.177.174] (10.174.177.174) by
+ dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 23 May 2022 14:00:21 +0800
+Message-ID: <c2f49973-e5be-475a-1b92-77fc6e86ba37@huawei.com>
+Date:   Mon, 23 May 2022 14:00:21 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH -next] jffs2: fix memory leak in jffs2_do_fill_super
+To:     <richard@nod.at>, <dwmw2@infradead.org>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+CC:     <yukuai3@huawei.com>, Baokun Li <libaokun1@huawei.com>
+References: <20220412093816.2280678-1-libaokun1@huawei.com>
+From:   "libaokun (A)" <libaokun1@huawei.com>
+In-Reply-To: <20220412093816.2280678-1-libaokun1@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.177.174]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500020.china.huawei.com (7.185.36.88)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The convention for indentation seems to be a single tab. Help text is
-further indented by an additional two whitespaces. Fix the lines that
-violate these rules.
+ping
 
-Signed-off-by: Juerg Haefliger <juergh@canonical.com>
----
-v2:
-  Drop trailing endmenu comments.
+在 2022/4/12 17:38, Baokun Li 写道:
+> If jffs2_iget() or d_make_root() in jffs2_do_fill_super() returns
+> an error, we can observe the following kmemleak report:
+>
+> --------------------------------------------
+> unreferenced object 0xffff888105a65340 (size 64):
+>    comm "mount", pid 710, jiffies 4302851558 (age 58.239s)
+>    hex dump (first 32 bytes):
+>      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>    backtrace:
+>      [<ffffffff859c45e5>] kmem_cache_alloc_trace+0x475/0x8a0
+>      [<ffffffff86160146>] jffs2_sum_init+0x96/0x1a0
+>      [<ffffffff86140e25>] jffs2_do_mount_fs+0x745/0x2120
+>      [<ffffffff86149fec>] jffs2_do_fill_super+0x35c/0x810
+>      [<ffffffff8614aae9>] jffs2_fill_super+0x2b9/0x3b0
+>      [...]
+> unreferenced object 0xffff8881bd7f0000 (size 65536):
+>    comm "mount", pid 710, jiffies 4302851558 (age 58.239s)
+>    hex dump (first 32 bytes):
+>      bb bb bb bb bb bb bb bb bb bb bb bb bb bb bb bb  ................
+>      bb bb bb bb bb bb bb bb bb bb bb bb bb bb bb bb  ................
+>    backtrace:
+>      [<ffffffff858579ba>] kmalloc_order+0xda/0x110
+>      [<ffffffff85857a11>] kmalloc_order_trace+0x21/0x130
+>      [<ffffffff859c2ed1>] __kmalloc+0x711/0x8a0
+>      [<ffffffff86160189>] jffs2_sum_init+0xd9/0x1a0
+>      [<ffffffff86140e25>] jffs2_do_mount_fs+0x745/0x2120
+>      [<ffffffff86149fec>] jffs2_do_fill_super+0x35c/0x810
+>      [<ffffffff8614aae9>] jffs2_fill_super+0x2b9/0x3b0
+>      [...]
+> --------------------------------------------
+>
+> This is because the resources allocated in jffs2_sum_init() are not
+> released. Call jffs2_sum_exit() to release these resources to solve
+> the problem.
+>
+> Fixes: e631ddba5887 ("[JFFS2] Add erase block summary support (mount time improvement)")
+> Signed-off-by: Baokun Li <libaokun1@huawei.com>
+> ---
+>   fs/jffs2/fs.c | 1 +
+>   1 file changed, 1 insertion(+)
+>
+> diff --git a/fs/jffs2/fs.c b/fs/jffs2/fs.c
+> index 71f03a5d36ed..f83a468b6488 100644
+> --- a/fs/jffs2/fs.c
+> +++ b/fs/jffs2/fs.c
+> @@ -604,6 +604,7 @@ int jffs2_do_fill_super(struct super_block *sb, struct fs_context *fc)
+>   	jffs2_free_raw_node_refs(c);
+>   	kvfree(c->blocks);
+>   	jffs2_clear_xattr_subsystem(c);
+> +	jffs2_sum_exit(c);
+>    out_inohash:
+>   	kfree(c->inocache_list);
+>    out_wbuf:
 
----
- arch/s390/Kconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
-index e084c72104f8..543e859905df 100644
---- a/arch/s390/Kconfig
-+++ b/arch/s390/Kconfig
-@@ -736,11 +736,11 @@ config VFIO_AP
- 	depends on S390_AP_IOMMU && VFIO_MDEV && KVM
- 	depends on ZCRYPT
- 	help
--		This driver grants access to Adjunct Processor (AP) devices
--		via the VFIO mediated device interface.
-+	  This driver grants access to Adjunct Processor (AP) devices
-+	  via the VFIO mediated device interface.
- 
--		To compile this driver as a module, choose M here: the module
--		will be called vfio_ap.
-+	  To compile this driver as a module, choose M here: the module
-+	  will be called vfio_ap.
- 
- endmenu
- 
--- 
-2.32.0
 

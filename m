@@ -2,118 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1C5D530BCF
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 11:03:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BB23530BD9
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 11:03:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232369AbiEWI7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 04:59:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53360 "EHLO
+        id S232383AbiEWI7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 04:59:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232329AbiEWI7G (ORCPT
+        with ESMTP id S232333AbiEWI7k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 04:59:06 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D231C3EAB5;
-        Mon, 23 May 2022 01:59:05 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 7DC3621998;
-        Mon, 23 May 2022 08:59:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1653296344; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=h1QuB3M+BmdTEHvDbJ/48/qLXP8QUk8L4+wxn4b3JqE=;
-        b=rZ+SQ9qfiHZw+b4x1x93KOH97ACbM8txlwl7+4DjUI1B9uu2F8p5huYe0KZJV6PhmLenGI
-        /9pILZIIIJWcMF+BCk6vdTMDMbhQXj+VC8y9+To+2Rs2io0FF/X5sHXKShFqjUWZFpvWD2
-        2Qan9NrxdGvwUwV47jUecy4SyZZwch4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1653296344;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=h1QuB3M+BmdTEHvDbJ/48/qLXP8QUk8L4+wxn4b3JqE=;
-        b=UTh5pzrrDqKQxilv/HUuRQHZel4jue/bNpbW5iFLK+uFLL6KEgaRovHb4Cq7L/5LXVPIgN
-        uIHOwEt7pP/JwFAw==
-Received: from quack3.suse.cz (unknown [10.100.224.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 64E892C141;
-        Mon, 23 May 2022 08:59:04 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id E0083A0632; Mon, 23 May 2022 10:59:02 +0200 (CEST)
-Date:   Mon, 23 May 2022 10:59:02 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     "yukuai (C)" <yukuai3@huawei.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, paolo.valente@linaro.org,
-        jack@suse.cz, tj@kernel.org, linux-block@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com
-Subject: Re: [PATCH -next v5 0/3] support concurrent sync io for bfq on a
- specail occasion
-Message-ID: <20220523085902.wmxoebyq3crerecr@quack3.lan>
-References: <20220428120837.3737765-1-yukuai3@huawei.com>
- <d50df657-d859-79cf-c292-412eaa383d2c@huawei.com>
- <61b67d5e-829c-8130-7bda-81615d654829@huawei.com>
- <81411289-e13c-20f5-df63-c059babca57a@huawei.com>
- <d5a90a08-1ac6-587a-e900-0436bd45543a@kernel.dk>
- <55919e29-1f22-e8aa-f3d2-08c57d9e1c22@huawei.com>
+        Mon, 23 May 2022 04:59:40 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D153F887
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 01:59:38 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id v10so13099701pgl.11
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 01:59:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NMEwaRdkK6gE09/mmANscyqoJ+JW8Xoy8gSdws+X3CU=;
+        b=mkNY3d+5RlbDWdouuXPsy1WvOh+zU87uNKtUTkm9AcaCWm0r9V283zxllQK6aSJoKQ
+         Ucs1qBRgu/49mmaFA5seFi/iJq6QCbChfS2b7YwFwaXDRy1MIYOlLE9ekoe27o4nQtan
+         EYO88bor9rTAR40gMFXe1fFcDUiNgsEuJjG1E=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NMEwaRdkK6gE09/mmANscyqoJ+JW8Xoy8gSdws+X3CU=;
+        b=0/kRqlEDyG2UcFgDgyryP8d8wu3aJHZcEU7V7cidr7AUNKqH2WDO/SBwwrL0Rp7Vyh
+         0HWAZwpW/qCXmHPOKavmszYTqfKOluo6yrjG+LGfl7EzAmw1UXgMZaUQ5qg3jW3+kHqr
+         RgxIUh6I1X3MqWreTWQT45Ob+jfo4a07t45cxnYUl1GQKbAb+JjuH/46l5sCzd/xB4UN
+         UfIAxazlnk+lQaIKeRHdBsoHZSE72SSVrBoxLd5tll0H269q/LRsOF+pJ3bRzPe0xjzS
+         UAsx62Qu7CCDNXIMrQ/OZ7lcIS6mXZPLXaHmAN2IK8qOjZwRtYvvNzE/En4iZYbpe+w9
+         i10Q==
+X-Gm-Message-State: AOAM530mIxRqvP+nBwlE1AvtQYGrXPjssuUBYCwTiJtG3NT7D+CKuDuE
+        wslyMJm3IU2cYPtLAMTeiWofkA==
+X-Google-Smtp-Source: ABdhPJzNLddUk7ipQY1wuXRZkYOdiG4wWOnnnSjuM50zWAjN7OkfYPxwabHbECLBOj6SZkTW6IPA+A==
+X-Received: by 2002:a65:6413:0:b0:3f5:f306:d2f7 with SMTP id a19-20020a656413000000b003f5f306d2f7mr19551046pgv.341.1653296377785;
+        Mon, 23 May 2022 01:59:37 -0700 (PDT)
+Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:1b8:7eae:9793:ff95])
+        by smtp.gmail.com with ESMTPSA id e11-20020a170902cf4b00b0015e8d4eb22csm4524719plg.118.2022.05.23.01.59.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 May 2022 01:59:37 -0700 (PDT)
+From:   Chen-Yu Tsai <wenst@chromium.org>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Chen-Yu Tsai <wenst@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/4] clk: mediatek: mt8183: Fix GPU/MFG clock rate changing
+Date:   Mon, 23 May 2022 16:59:19 +0800
+Message-Id: <20220523085923.1430470-1-wenst@chromium.org>
+X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <55919e29-1f22-e8aa-f3d2-08c57d9e1c22@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 23-05-22 09:10:38, yukuai (C) wrote:
-> 在 2022/05/21 20:21, Jens Axboe 写道:
-> > On 5/21/22 1:22 AM, yukuai (C) wrote:
-> > > 在 2022/05/14 17:29, yukuai (C) 写道:
-> > > > 在 2022/05/05 9:00, yukuai (C) 写道:
-> > > > > Hi, Paolo
-> > > > > 
-> > > > > Can you take a look at this patchset? It has been quite a long time
-> > > > > since we spotted this problem...
-> > > > > 
-> > > > 
-> > > > friendly ping ...
-> > > friendly ping ...
-> > 
-> > I can't speak for Paolo, but I've mentioned before that the majority
-> > of your messages end up in my spam. That's still the case, in fact
-> > I just marked maybe 10 of them as not spam.
-> > 
-> > You really need to get this issued sorted out, or you will continue
-> > to have patches ignore because folks may simply not see them.
-> > 
-> Hi,
-> 
-> Thanks for your notice.
-> 
-> Is it just me or do you see someone else's messages from *huawei.com
-> end up in spam? I tried to seek help from our IT support, however, they
-> didn't find anything unusual...
+Hi everyone,
 
-So actually I have noticed that a lot of (valid) email from huawei.com (not
-just you) ends up in the spam mailbox. For me direct messages usually pass
-(likely matching SPF records for originating mail server save the email
-from going to spam) but messages going through mailing lists are flagged as
-spam because the emails are missing valid DKIM signature but huawei.com
-DMARC config says there should be DKIM signature (even direct messages are
-missing DKIM so this does not seem as a mailing list configuration issue).
-So this seems as some misconfiguration of the mails on huawei.com side
-(likely missing DKIM signing of outgoing email).
+This is v2 of my MT8183 GPU clock rate fix series.
 
-								Honza
+Changes since v1;
+- Moved clk notifier registration into separate function
+- Fixed comment style
+
+This series fixes the clock rate changing for the GPU. This work came
+about as part of adding DVFS support for the Mali GPU on MT8183, to
+support efforts in testing the SVS patches [1] on MT8183.
+
+This series fixes a couple things:
+
+1. Fix the clock reference for the GPU. The device tree incorrectly
+   references the top level PLL, when in fact it is fed from the clock
+   gate in the MFGCFG block. Fixed in patch 1.
+
+2. Clock rate requests on the MFG clock gate aren't propagated up the
+   tree. Fixed in patch 2 by adding CLK_SET_RATE_PARENT.
+
+3. MFG clock needs to be temporarily muxed away from MFG PLL during PLL
+   reconfiguration, to avoid glitches. This is done using a notifier.
+   The framework is added in patch 3, and added to the driver in patch 4.
+
+This is based on my "clk: mediatek: Move to struct clk_hw provider APIs"
+series version 3 [2], which was just merged.
+
+Please have a look.
+
+The GPU DVFS stuff will be sent separately, as that part is a bit more
+contentious, and the changes span more subsystems.
+
+
+Regards
+ChenYu
+
+[1] https://lore.kernel.org/linux-mediatek/20220516004311.18358-1-roger.lu@mediatek.com/
+[2] https://lore.kernel.org/linux-mediatek/20220519071610.423372-1-wenst@chromium.org/
+
+Chen-Yu Tsai (4):
+  arm64: dts: mt8183: Fix Mali GPU clock
+  clk: mediatek: mt8183: mfgcfg: Propagate rate changes to parent
+  clk: mediatek: mux: add clk notifier functions
+  clk: mediatek: mt8183: Add clk mux notifier for MFG mux
+
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi |  2 +-
+ drivers/clk/mediatek/clk-mt8183-mfgcfg.c |  6 ++--
+ drivers/clk/mediatek/clk-mt8183.c        | 28 ++++++++++++++++
+ drivers/clk/mediatek/clk-mux.c           | 42 ++++++++++++++++++++++++
+ drivers/clk/mediatek/clk-mux.h           | 15 +++++++++
+ 5 files changed, 89 insertions(+), 4 deletions(-)
+
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+2.36.1.124.g0e6072fb45-goog
+

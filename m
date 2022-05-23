@@ -2,70 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C1A0530D19
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:41:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D56FB530D01
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:41:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234005AbiEWKVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 06:21:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42512 "EHLO
+        id S234020AbiEWKWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 06:22:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234064AbiEWKVA (ORCPT
+        with ESMTP id S233986AbiEWKWS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 06:21:00 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9DD5C30
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 03:20:57 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id i40so18474976eda.7
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 03:20:57 -0700 (PDT)
+        Mon, 23 May 2022 06:22:18 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CDB7248F4
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 03:22:17 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id w14so24690910lfl.13
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 03:22:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mVZuqJKxfK/LKRySxF+QMkbTfearZe0k0KO+kDBVY5o=;
-        b=VKpvgn4WCt46NyC6Afa1B13yW2JftlOPDLNcTegz/NYS+RNaSOeNz0zuyoicV5TJor
-         T3waBzR/q32WtORp9+t0DVglZCVQx/aTqUCoO7HiovOq3K+HxtvezFtLpz5wBf7OMSjn
-         MbrpNZ6f/cvDkURYavv/cNIiy/3YXg5+bLXDE=
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=HNshsQ+jjwxazxWRShiy1xQPJQNvQBGxNnmIIrcdM+8=;
+        b=eWB8K4d6dGx2vtV8LZ16/Z5P9sYbaAwVmxtAmLUbP8zPUkxvDrDQ1Zp35Ehg6Xk0Zt
+         f3FnUI2rRroOi5uxhh1TEXOQ51XDnBVWwmZ24lKmC0Agb4jQ8cbQ5f7+nk1jUcyMUde9
+         B+XSIeGu886HX7x5VNbKhcO/TQ58/5ZvSZ9O6UtO/YaDbkpv4Hk9R5zZK9jE7+dZAAFk
+         c4X/nlbrOwEPtc8yCJ/vIrff9QkxD1kIsV1cADEwBAAloRGQAOEFoN+cfFwKAk0f+xtB
+         qIFX8U69PWug5AiZwTx7hOSU+dKbXMaAVGMnanb+h7faMkHGA0HlsaiZfBAtDRI2xtS9
+         c2jQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mVZuqJKxfK/LKRySxF+QMkbTfearZe0k0KO+kDBVY5o=;
-        b=PppoGl/3ZTpNfdQ/O02TlJgZf4p/PbCzZcGjgLy1N9sid7tGU82kt9IzlAnylF2GJS
-         qWCIJL8BQ2lVsYCCrfnGwXQ3bsxvb+KNeqHAibZab7HmlwX5THXevU4KsulSzhkYHq1C
-         6IJ3WFvp11SqvyrHSKDoCYEKDKUINRgbyQsFeEvsBcWGxnb9PFo9kbob1xKIfHUOkHHw
-         bHmzpeKhaSsIA/J1ywqBFOiRcrEAVABYPlF6ZbiXvAxgLVvO8HYT8y5nqSDAPf9x9hWg
-         IQ+f4vAiKNlN4hYkVYpCbk9084M7Loo/MapdsRMv9p80047zcE2P/FxsgJDZFT+Yufhn
-         xGVQ==
-X-Gm-Message-State: AOAM533R4Ny9LM2tMI/Hr875XaXUge1BXHVP2RJm0qCPfBQ3rmvR/FId
-        6oAwcYoyWpX7RscrzzjAHuEWfTqQWzthG3UDNDJPUw==
-X-Google-Smtp-Source: ABdhPJwyPxH505ssPSiwcnGCp/gh53GQfd3OdkSl+YIKxP5ZwvhsNKaopABMSpb5F/H5ljruU7uWoZ/2wSR6xBTVs1s=
-X-Received: by 2002:a05:6402:1704:b0:42a:c480:dcc8 with SMTP id
- y4-20020a056402170400b0042ac480dcc8mr23397872edu.59.1653301256295; Mon, 23
- May 2022 03:20:56 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=HNshsQ+jjwxazxWRShiy1xQPJQNvQBGxNnmIIrcdM+8=;
+        b=PSQTfIgxDBda+h4mjPnPVRFHrSeOLud6sYDgHYwuAyU1qShfK4b+tfCSmrEb15JE7z
+         CIMhVL3blfSXRMfIWULnY0uyzdq7D25B8/SQTQkK78OThv0gU2jUIWY8lXL8zCzF6O0/
+         QIY9D2+WFb97XWma2NLDJy3sBK9+8LfUFTUZZ3QlBo/51qpeY7AAR0BHxwHuFAJa3RS9
+         RXuOs1/NIurC6PnXpYfEr9i9DKsqZYU7Zj6n2IFvza5TAjXoqPe/Ea1frB8VDTMHiqe5
+         Sub429F4veu8KgQS+VwaWlvLC4pZMOy/jmehGlPBeDGrba36kXFkZTYKMxRI45I96aFn
+         oQUQ==
+X-Gm-Message-State: AOAM530TCnsa7BM2zQeXLlCJRbhNHF5LqJvOSYtuuzx61VCF62CIfP75
+        QwevGK3su3YVGZfl0rLQYDWKFg==
+X-Google-Smtp-Source: ABdhPJwlll0aDgo5Ev/QIHW25Kv2LtXA5WwszdfvpkXDcLDBMOGt9NFWl0tHQ0BayjkbbGmbr4cMEw==
+X-Received: by 2002:a05:6512:401d:b0:478:69b9:2a39 with SMTP id br29-20020a056512401d00b0047869b92a39mr5175918lfb.500.1653301335563;
+        Mon, 23 May 2022 03:22:15 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id d11-20020a0565123d0b00b0047862c69e83sm1032131lfv.40.2022.05.23.03.22.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 May 2022 03:22:15 -0700 (PDT)
+Message-ID: <d04b6d8c-0117-b5a6-dcb5-aa328ad5d1f5@linaro.org>
+Date:   Mon, 23 May 2022 12:22:14 +0200
 MIME-Version: 1.0
-References: <20220523085923.1430470-1-wenst@chromium.org> <20220523085923.1430470-4-wenst@chromium.org>
- <f6cd735b-2ba4-7456-684d-b20f0b46effe@collabora.com>
-In-Reply-To: <f6cd735b-2ba4-7456-684d-b20f0b46effe@collabora.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Mon, 23 May 2022 18:20:45 +0800
-Message-ID: <CAGXv+5EO+JFr0xrh5JhoLSL7uuEbwHc9xEtY9HFsao2nTzMNvQ@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] clk: mediatek: mux: add clk notifier functions
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2 3/3] arm64: dts: fsd: Add ADC device tree node
+Content-Language: en-US
+To:     Tamseel Shams <m.shams@samsung.com>, jic23@kernel.org,
+        lars@metafoo.de, robh+dt@kernel.org, krzk+dt@kernel.org
+Cc:     geert@linux-m68k.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org, alim.akhtar@samsung.com,
+        paul@crapouillou.net, linux-fsd@tesla.com
+References: <20220520145820.67667-1-m.shams@samsung.com>
+ <CGME20220520145804epcas5p2925e66d30b18378fc62c92999ec269f7@epcas5p2.samsung.com>
+ <20220520145820.67667-4-m.shams@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220520145820.67667-4-m.shams@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,174 +80,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 6:04 PM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> Il 23/05/22 10:59, Chen-Yu Tsai ha scritto:
-> > With device frequency scaling, the mux clock that (indirectly) feeds the
-> > device selects between a dedicated PLL, and some other stable clocks.
-> >
-> > When a clk rate change is requested, the (normally) upstream PLL is
-> > reconfigured. It's possible for the clock output of the PLL to become
-> > unstable during this process.
-> >
-> > To avoid causing the device to glitch, the mux should temporarily be
-> > switched over to another "stable" clock during the PLL rate change.
-> > This is done with clk notifiers.
-> >
-> > This patch adds common functions for notifiers to temporarily and
-> > transparently reparent mux clocks.
-> >
-> > This was loosely based on commit 8adfb08605a9 ("clk: sunxi-ng: mux: Add
-> > clk notifier functions").
-> >
-> > Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-> > ---
-> >   drivers/clk/mediatek/clk-mux.c | 42 ++++++++++++++++++++++++++++++++++
-> >   drivers/clk/mediatek/clk-mux.h | 15 ++++++++++++
-> >   2 files changed, 57 insertions(+)
-> >
-> > diff --git a/drivers/clk/mediatek/clk-mux.c b/drivers/clk/mediatek/clk-mux.c
-> > index cd5f9fd8cb98..f84a5a753c09 100644
-> > --- a/drivers/clk/mediatek/clk-mux.c
-> > +++ b/drivers/clk/mediatek/clk-mux.c
-> > @@ -4,6 +4,7 @@
-> >    * Author: Owen Chen <owen.chen@mediatek.com>
-> >    */
-> >
-> > +#include <linux/clk.h>
-> >   #include <linux/clk-provider.h>
-> >   #include <linux/compiler_types.h>
-> >   #include <linux/container_of.h>
-> > @@ -259,4 +260,45 @@ void mtk_clk_unregister_muxes(const struct mtk_mux *muxes, int num,
-> >   }
-> >   EXPORT_SYMBOL_GPL(mtk_clk_unregister_muxes);
-> >
-> > +/*
-> > + * This clock notifier is called when the frequency of the of the parent
-> > + * PLL clock is to be changed. The idea is to switch the parent to a
-> > + * stable clock, such as the main oscillator, while the PLL frequency
-> > + * stabilizes.
-> > + */
-> > +static int mtk_clk_mux_notifier_cb(struct notifier_block *nb,
-> > +                                unsigned long event, void *_data)
-> > +{
-> > +     struct clk_notifier_data *data = _data;
-> > +     struct mtk_mux_nb *mux_nb = to_mtk_mux_nb(nb);
-> > +     const struct mtk_mux *mux = mux_nb->mux;
-> > +     struct clk_hw *hw;
-> > +     int ret = 0;
-> > +
-> > +     hw = __clk_get_hw(data->clk);
-> > +
-> > +     switch (event) {
-> > +     case PRE_RATE_CHANGE:
-> > +             mux_nb->original_index = mux->ops->get_parent(hw);
-> > +             ret = mux->ops->set_parent(hw, mux_nb->bypass_index);
-> > +             break;
-> > +
-> > +     case POST_RATE_CHANGE:
-> > +     case ABORT_RATE_CHANGE:
->
-> I agree with this change, entirely - but there's an issue here.
-> If we enter ABORT_RATE_CHANGE, this means that "something has failed": now,
-> what if the failure point was the PLL being unable to lock?
+On 20/05/2022 16:58, Tamseel Shams wrote:
+> From: Alim Akhtar <alim.akhtar@samsung.com>
+> 
+> This patch adds ADC device tree node and enables the same
+> on fsd platform.
+> 
+> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
+> Signed-off-by: Tamseel Shams <m.shams@samsung.com>
+> ---
+> - Changes since v1
+> * Addressed Krzysztof's comment for corrections in dt files
+> 
+>  arch/arm64/boot/dts/tesla/fsd-evb.dts |  4 ++++
+>  arch/arm64/boot/dts/tesla/fsd.dtsi    | 11 +++++++++++
+>  2 files changed, 15 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/tesla/fsd-evb.dts b/arch/arm64/boot/dts/tesla/fsd-evb.dts
+> index 5af560c1b5e6..63f26a85053a 100644
+> --- a/arch/arm64/boot/dts/tesla/fsd-evb.dts
+> +++ b/arch/arm64/boot/dts/tesla/fsd-evb.dts
+> @@ -34,6 +34,10 @@
+>  	clock-frequency = <24000000>;
+>  };
+>  
+> +&adc {
+> +	status = "okay";
 
-I think this is a valid concern. But the MediaTek clk driver library doesn't
-actually check if the PLL locked or not. It simply sets it and returns.
+Please test your bindings (`make dtbs_check`). There is no way it passes
+since you miss at least supply (maybe more?).
 
-Also, if the notifier weren't there, there'd be no transparent muxing
-either, and the GPU would always be clocked from the PLL, locked or
-not.
 
-Considering that muxing away is temporary and transparent, muxing back
-simply restores the system to the way the CCF thinks it is. If the PLL
-fails to lock, we need other fixes or constraints.
 
-> In that case, we would switch the parent back to a PLL that's not outputting
-> any clock, crashing the GPU, or a bogus rate, potentially undervolting the GPU.
 
-For MT8183, there is no other "safe" PLL. The stable ones run faster than
-the lowest OPP.
-
-> I think that the best idea here would be to do something like..
->
->         switch (event) {
->         case PRE_RATE_CHANGE:
->                 mux_nb->old_parent_idx = mux->ops->get_parent(hw);
->                 ret = mux->ops->set_parent(hw, mux_nb->safe_parent_idx);
->                 break;
->         case POST_RATE_CHANGE:
->                 ret = mux->ops->set_parent(hw, mux_nb->old_parent_idx);
->                 break;
->         case ABORT_RATE_CHANGE:
->                 ret = -EINVAL; /* or -ECANCELED, whatever... */
->                 break;
->         }
->
-> > +             ret = mux->ops->set_parent(hw, mux_nb->original_index);
-> > +             break;
-> > +     }
-> > +
-> > +     return notifier_from_errno(ret);
-> > +}
-> > +
-> > +int devm_mtk_clk_mux_notifier_register(struct device *dev, struct clk *clk,
-> > +                                    struct mtk_mux_nb *mux_nb)
-> > +{
-> > +     mux_nb->nb.notifier_call = mtk_clk_mux_notifier_cb;
-> > +
-> > +     return devm_clk_notifier_register(dev, clk, &mux_nb->nb);
-> > +}
-> > +EXPORT_SYMBOL_GPL(devm_mtk_clk_mux_notifier_register);
-> > +
-> >   MODULE_LICENSE("GPL");
-> > diff --git a/drivers/clk/mediatek/clk-mux.h b/drivers/clk/mediatek/clk-mux.h
-> > index 6539c58f5d7d..506e91125a3d 100644
-> > --- a/drivers/clk/mediatek/clk-mux.h
-> > +++ b/drivers/clk/mediatek/clk-mux.h
-> > @@ -7,12 +7,14 @@
-> >   #ifndef __DRV_CLK_MTK_MUX_H
-> >   #define __DRV_CLK_MTK_MUX_H
-> >
-> > +#include <linux/notifier.h>
-> >   #include <linux/spinlock.h>
-> >   #include <linux/types.h>
-> >
-> >   struct clk;
-> >   struct clk_hw_onecell_data;
-> >   struct clk_ops;
-> > +struct device;
-> >   struct device_node;
-> >
-> >   struct mtk_mux {
-> > @@ -89,4 +91,17 @@ int mtk_clk_register_muxes(const struct mtk_mux *muxes,
-> >   void mtk_clk_unregister_muxes(const struct mtk_mux *muxes, int num,
-> >                             struct clk_hw_onecell_data *clk_data);
-> >
-> > +struct mtk_mux_nb {
-> > +     struct notifier_block   nb;
-> > +     const struct mtk_mux    *mux;
-> > +
-> > +     u8      bypass_index;   /* Which parent to temporarily use */
-> > +     u8      original_index; /* Set by notifier callback */
->
-> I think that the following names are more explanatory:
->
->         u8      safe_parent_idx;
->         u8      old_parent_idx;
->
-> ...because I see this as a mechanism to switch the mux to a "safe" clock output
-> and then back to the PLL (like it's done on some qcom clocks as well).
-
-The names were taken from the sunxi-ng driver, which always muxed to a
-crystal clock, so in a way was bypassing the PLL.
-
-ChenYu
-
-> You're free to ignore this comment, as this is, of course, just a personal opinion.
->
-> Cheers,
-> Angelo
->
->
+Best regards,
+Krzysztof

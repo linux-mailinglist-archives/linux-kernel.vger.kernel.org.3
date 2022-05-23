@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADC3B531EDD
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 00:51:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01F12531EE3
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 00:52:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231742AbiEWWvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 18:51:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58452 "EHLO
+        id S231789AbiEWWwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 18:52:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231723AbiEWWvu (ORCPT
+        with ESMTP id S230064AbiEWWwp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 18:51:50 -0400
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F076764D05
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 15:51:48 -0700 (PDT)
-Received: by mail-qv1-xf2d.google.com with SMTP id y20so13105524qvx.3
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 15:51:48 -0700 (PDT)
+        Mon, 23 May 2022 18:52:45 -0400
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63C9F9BAC4
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 15:52:44 -0700 (PDT)
+Received: by mail-qv1-xf2b.google.com with SMTP id b11so4498586qvv.4
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 15:52:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=3vcI1skfMKoqTzgW6PwoPYdHQpeyuuPuHAsg8j4YyY0=;
-        b=SK9Ai50QmK6g6drZEH6TCZVx1ybdkR30gnwYdm8OX2MZCjPFMpadH8tfGN3bx+9Td/
-         JV4EOdx30Sjs+Wg+3M4XzuL+MmICDQvxsjNn2upQIy/Cr3xj68l6ozh5NDZaEZ1s1MhM
-         TP2EZ2UeFyTtIUDrq0OkG13phXlQ3YEFq2qdYhlMDss/hhT0i37Q23MzydGmfgrwxVVD
-         1Ynl64Hw5+VjP6MxxOe8LC+afzQGyF94jDraJmba/Q9zz0VC4aa7Y7boG0hwCN5gTW2x
-         eABDT1He8d4kgRdJTTSaINbiF16ijulZOPa6HhTqFr7VSpwqjfwhDTQs328T9QCkXIj2
-         8nrQ==
+        bh=CUVpHrGsWFdpmHijjTHWgW3zbODgXYO9/RKM5yTRDuI=;
+        b=dbwT19t5cpVruIALgVmfGy44+S5C32idyjwxhDCuTYIvCRilH0ylGpz6YxpJPRg+xn
+         MEg4hduZqdTC46dHgHZNetXKPRkJT+V0xntPmDgNck+9MGz049AyhRjDVo+T9DdR0nyH
+         rkxTcTti1/4X39o14uHqaGdH/w3KW/zqoIfUlMWVbR6VcJhXsytkmfjtPNI2IGVze1IE
+         0Q+oyv1yhdkLWhjIKaI7oLbk1edD+liaDjWF4+Lv35Rxgt8/r9VircuNHbltNvVsadcx
+         0izyRQYCDe7bUrJvl/zQrTR2TSPnv5/fVQpNV4ONkyk3sqAJxl6mz8GyruRIIOjwECNb
+         mo+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=3vcI1skfMKoqTzgW6PwoPYdHQpeyuuPuHAsg8j4YyY0=;
-        b=G/vSwEGUPvSaZhYJqEmvwhoyvVAJq1qz+1USsjaYE1lenTZHFoXbrlCa6bM2vCbNDH
-         gfsAncltCI+LyKPySO/Fr+R6Y9xZ1dk9S3I1efglWW3xVSfxdxTZ3sEODSk6LuPCBc3t
-         ZcrnVBz1miXGHgpPFFM5KrPdtGDc4J6NjFMHiJl2j0Is1StlO3P9JE5uCpJdpUMErEEh
-         uECkuruLaRsM1+J7d+hVpmtDmiKoO42g0xbqTomz+eHaOrtpGJi464ab1LnHhXb+qo43
-         krNenMqvmWyhPX6SHgLF052zN2C8r4hWTc2YjbDtgJSeRaxP5tnSRgeeknzROFfHN0bT
-         IRgw==
-X-Gm-Message-State: AOAM532dCRd43gW1hL2v8fW62UgA8SAIDLIMgl/8o9pG1v9NvrTekBLO
-        BQ7wIIwoj8QywWKlAx3XhxbE1tIT9A33h5qDMoREYw==
-X-Google-Smtp-Source: ABdhPJwMUeQdsntLd2uLatzH66lXWsSEabtV+kiZYKsXgWX2xbdL3qvvkkPq6NF2azOSQPNRYAvN0l9Dt1B7OzOioVM=
-X-Received: by 2002:ad4:5f4e:0:b0:462:3d31:6faf with SMTP id
- p14-20020ad45f4e000000b004623d316fafmr5677472qvg.119.1653346308200; Mon, 23
- May 2022 15:51:48 -0700 (PDT)
+        bh=CUVpHrGsWFdpmHijjTHWgW3zbODgXYO9/RKM5yTRDuI=;
+        b=5M3DFBPzL+iy3AA1L0lwGQmv3V0odWJg0+Q73yz8JJQ3A8U5cA22zVT8twOH8yuD05
+         8eSmPwF+dNRIMGmuaifoJ+/APg4z3TTotLM1gM7z1iTG8F26acWvT225fwqGJcJi4O34
+         RLfL4XI9DueaItuRZq4xsXswsJNGkGkBv76D+/uIUYKLmUEHmjAwWpCbdTCugxnRoD/K
+         sKJM/Wasr1vmCbaqp56QcrbDExNGY9wQb2LlzS5S1GlLfH0e673ec15CmcMJdu5z9Ump
+         mYMQffZGYzFvrdag1tk7PptE1l3iyZTwHGG06cavaTC1oEuqkI3QdM35wTJjVbKzPJph
+         xApA==
+X-Gm-Message-State: AOAM5318Y7oegyLAIE1GJNdE2nRw9FDNYNpyEse5X9GVslSvg0UdOWVJ
+        RdQr+y+n+soHQgjf3NdcilwC9CrsbBwScgfrZFwNCg==
+X-Google-Smtp-Source: ABdhPJz0L862d4LbPRYNVicS2bt3U+l7geWkMJ97OKfiAKAymqSQWmgMZll4IQHbb+ItHL14MvPGMGWpODDcIwbZ36g=
+X-Received: by 2002:a05:6214:931:b0:461:d289:b7f6 with SMTP id
+ dk17-20020a056214093100b00461d289b7f6mr19245958qvb.55.1653346363592; Mon, 23
+ May 2022 15:52:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220523213837.1016542-1-marijn.suijten@somainline.org> <20220523213837.1016542-9-marijn.suijten@somainline.org>
-In-Reply-To: <20220523213837.1016542-9-marijn.suijten@somainline.org>
+References: <20220523213837.1016542-1-marijn.suijten@somainline.org> <20220523213837.1016542-10-marijn.suijten@somainline.org>
+In-Reply-To: <20220523213837.1016542-10-marijn.suijten@somainline.org>
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 24 May 2022 01:51:37 +0300
-Message-ID: <CAA8EJpoPv_J=hpc9ETjngyAxxqJYvSFtJUgu3U3r6n8JNMuJWQ@mail.gmail.com>
-Subject: Re: [PATCH 8/9] drm/msm/dsi_phy_10nm: Replace parent names with
- clk_hw pointers
+Date:   Tue, 24 May 2022 01:52:32 +0300
+Message-ID: <CAA8EJpqfS6xi40Zewm+v7La=jER5CR6s1=htn1C7jLka5SuKGQ@mail.gmail.com>
+Subject: Re: [PATCH 9/9] drm/msm/dsi_phy_7nm: Replace parent names with clk_hw pointers
 To:     Marijn Suijten <marijn.suijten@somainline.org>
 Cc:     phone-devel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
         ~postmarketos/upstreaming@lists.sr.ht,
@@ -84,7 +83,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 24 May 2022 at 00:38, Marijn Suijten
+On Tue, 24 May 2022 at 00:39, Marijn Suijten
 <marijn.suijten@somainline.org> wrote:
 >
 > parent_hw pointers are easier to manage and cheaper to use than
@@ -96,8 +95,8 @@ On Tue, 24 May 2022 at 00:38, Marijn Suijten
 Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
 > ---
->  drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c | 92 ++++++++++------------
->  1 file changed, 40 insertions(+), 52 deletions(-)
+>  drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c | 92 +++++++++++------------
+>  1 file changed, 42 insertions(+), 50 deletions(-)
 >
 
 -- 

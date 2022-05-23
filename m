@@ -2,161 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BAC5531214
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:22:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F3EB5314D0
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:26:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237517AbiEWPJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 11:09:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52384 "EHLO
+        id S237626AbiEWPME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 11:12:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236571AbiEWPJK (ORCPT
+        with ESMTP id S237587AbiEWPL7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 11:09:10 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 200B15C37F
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 08:09:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653318549; x=1684854549;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=aszdY+qE/Mvif+pY9ZtGe77pA6WoR6j8tsvbF7aZQns=;
-  b=a22JgJZvpZs/9QckxnChv8ArP+n/qXC8/ukxd/M9EKLfzAdcd6rJXRmE
-   ixNncoxNRfLKtfh3T+XvSCtzMyIKelhcUrspcBJP8SF/zd6r8V8Gd8KDM
-   eCkHr3cplVtMmqASmYytZfMkdXQAEPYkGwVkUfERrdjbE64WmougbMTce
-   dHTYTxeHhkYPYs7cUJaCcpZf7WpCzJgYQEZGUp0y19AANMwX4lyb3aayM
-   hnM83xiAmPiTJEUbrvbzB1VpWwUzN/TrlVzuAwgVRy4Wt2iiUN/dai1KA
-   6d65lByJfEc+/pNQQp4DDRnYpbJ7RmxK7URZdvyOh3wDRZLGTtYTbVx8+
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="253751854"
-X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
-   d="scan'208";a="253751854"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 08:09:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
-   d="scan'208";a="548017136"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 23 May 2022 08:09:07 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nt9gA-0001CU-Lv;
-        Mon, 23 May 2022 15:09:06 +0000
-Date:   Mon, 23 May 2022 23:08:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [arm-integrator:kernel-in-vmalloc-v5.18-rc1 8/17] init.c:undefined
- reference to `kernel_sec_start'
-Message-ID: <202205232342.Lnhi7WhN-lkp@intel.com>
+        Mon, 23 May 2022 11:11:59 -0400
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DDAC47AEC;
+        Mon, 23 May 2022 08:11:57 -0700 (PDT)
+Received: by mail-ed1-f54.google.com with SMTP id c10so19567049edr.2;
+        Mon, 23 May 2022 08:11:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0QPzY5dv4g1MBNtDQB96ePR1IDzyzraTlb4TcmcBYLI=;
+        b=drb7p5u1yRpP455qf5piYTpoXrza+dHWO3cX6HwTu/Cp9ZtutdaTNwvhMHrxngkXA2
+         z2a/m6JoN/+dNwk7NTKEiJ4RFyAiZhaTC6XPLqucHQmrxyA95AvumfbRqoVBvOrrhipH
+         67QIdfCuixdD/0khTRXF2Gt3iAuYvT9XTOFpnNOjF9Ab46zRfeuT4OGktMkIgyO52HYE
+         qL6IVp7GFU36/AxJeM/UK2V7TuZA720sG/KEzF0HmI2G0tcZ+RdxOz2lbX3qD72dZejE
+         AJLu6c1qnXvgIuVQt93KGbuUxE3oHKO+NQFpPYc7j8RJVZPQolvuxZXwhrrf1XY8D8Ot
+         mwrQ==
+X-Gm-Message-State: AOAM531303ivmkc6X5ETqX2Qgtp8OEwR0qT2sNYfjOxjMDUe1o6l8/VS
+        lDtNphR1y80nm6jp35OyDp7vE7OUxK66fbon
+X-Google-Smtp-Source: ABdhPJyzJtYNQF9FW8ZDSNAhOVugSa25KhyQNGZ8/xGycXW0STeEPhPlSRI9XDapoAu/NQaJ1Y1c4A==
+X-Received: by 2002:a50:fe8d:0:b0:42a:b3a4:6ac2 with SMTP id d13-20020a50fe8d000000b0042ab3a46ac2mr24108454edt.131.1653318714696;
+        Mon, 23 May 2022 08:11:54 -0700 (PDT)
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com. [209.85.221.45])
+        by smtp.gmail.com with ESMTPSA id ci18-20020a170907267200b006fe8c831632sm5794165ejc.73.2022.05.23.08.11.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 May 2022 08:11:54 -0700 (PDT)
+Received: by mail-wr1-f45.google.com with SMTP id f2so21873480wrc.0;
+        Mon, 23 May 2022 08:11:54 -0700 (PDT)
+X-Received: by 2002:a05:6512:1520:b0:443:ec43:5fe8 with SMTP id
+ bq32-20020a056512152000b00443ec435fe8mr16745443lfb.589.1653318703688; Mon, 23
+ May 2022 08:11:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220522155046.260146-1-tmaimon77@gmail.com> <20220522155046.260146-12-tmaimon77@gmail.com>
+ <86cd6a37-70ad-3a90-bc8a-dcd8b41f1175@linaro.org> <CAP6Zq1i2Wj4FCA4-eseVoJyMof5=ocFCUcitVquJqYJ4Z3JTYQ@mail.gmail.com>
+ <CAMuHMdVCCrKTpNHng2_kKGViuEXf=O3MsfpjjzMusuUcKE6HiA@mail.gmail.com> <62562cdf-93e3-f642-5bbd-48329eff33ea@linaro.org>
+In-Reply-To: <62562cdf-93e3-f642-5bbd-48329eff33ea@linaro.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 23 May 2022 17:11:30 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVFV02t+vbwzEpNbpkSP4M3sGnJpzFMPBw7RkrJ9YvyKw@mail.gmail.com>
+Message-ID: <CAMuHMdVFV02t+vbwzEpNbpkSP4M3sGnJpzFMPBw7RkrJ9YvyKw@mail.gmail.com>
+Subject: Re: [PATCH v1 11/19] dt-bindings: reset: npcm: Add support for NPCM8XX
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Tomer Maimon <tmaimon77@gmail.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        =?UTF-8?Q?Bj=C3=B6rn_Andersson?= <bjorn.andersson@linaro.org>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Robert Hancock <robert.hancock@calian.com>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Lubomir Rintel <lkundrak@v3.sk>, arm-soc <soc@kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v5.18-rc1
-head:   a9b76a04739b5b4dbad86664342c8945e83d8e95
-commit: 06f73703766c6f636c79d04aae9f83446f1b8ff2 [8/17] ARM: Compile the kernel into VMALLOC
-config: arm-randconfig-r005-20220522 (https://download.01.org/0day-ci/archive/20220523/202205232342.Lnhi7WhN-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=06f73703766c6f636c79d04aae9f83446f1b8ff2
-        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
-        git fetch --no-tags arm-integrator kernel-in-vmalloc-v5.18-rc1
-        git checkout 06f73703766c6f636c79d04aae9f83446f1b8ff2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+Hi Krzysztof,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+On Mon, May 23, 2022 at 4:26 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+> On 23/05/2022 16:22, Geert Uytterhoeven wrote:
+> > On Mon, May 23, 2022 at 4:03 PM Tomer Maimon <tmaimon77@gmail.com> wrote:
+> >> On Mon, 23 May 2022 at 12:01, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> >>> On 22/05/2022 17:50, Tomer Maimon wrote:
+> >>>> Add binding document and device tree binding
+> >>>> constants for Nuvoton BMC NPCM8XX reset controller.
+> >>>>
+> >>>> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> >
+> >>>> --- /dev/null
+> >>>> +++ b/include/dt-bindings/reset/nuvoton,npcm8xx-reset.h
+> >>>> @@ -0,0 +1,124 @@
+> >>>> +/* SPDX-License-Identifier: GPL-2.0 */
+> >>>> +// Copyright (c) 2022 Nuvoton Technology corporation.
+> >>>> +
+> >>>> +#ifndef _DT_BINDINGS_NPCM8XX_RESET_H
+> >>>> +#define _DT_BINDINGS_NPCM8XX_RESET_H
+> >>>> +
+> >>>> +#define NPCM8XX_RESET_IPSRST1                0x20
+> >>>> +#define NPCM8XX_RESET_IPSRST2                0x24
+> >>>> +#define NPCM8XX_RESET_IPSRST3                0x34
+> >>>> +#define NPCM8XX_RESET_IPSRST4                0x74
+> >>>
+> >>> What are these? All IDs should be incremental, decimal and start from 0.
+> >>
+> >> Register offset, we use the same method in NPCM7xx. please refer
+> >> https://elixir.bootlin.com/linux/v5.18/source/include/dt-bindings/reset/nuvoton,npcm7xx-reset.h
+> >>
+> >> and the driver asserts the reset according to the reset include definitions
+> >
+> > So if they're easy to look up the values, you could do without the
+> > definitions? Cfr. the interrupts properties in .dtsi files, where we
+> > typically just use the hardcoded numbers.
+> >
+> > If you do decide to keep them, a comment explaining their origins
+> > would be useful.
+> >
+> >>>> +
+> >>>> +/* Reset lines on IP1 reset module (NPCM8XX_RESET_IPSRST1) */
+> >>>> +#define NPCM8XX_RESET_GDMA0          3
+> >>>
+> >>> IDs start from 0 and do not have holes.
+> >>
+> >> This represents the reset BIT in the reset register.
+> >
+> > Likewise, I think it's a good idea to document that in a comment, cfr.
+> > https://elixir.bootlin.com/linux/v5.18/source/include/dt-bindings/power/r8a7795-sysc.h#L8
+>
+> Renesas is also doing it not correct (just like many others). The
+> bindings are not for register bits or offsets. Such data can be DTS but
+> not part of bindings.
 
-All error/warnings (new ones prefixed by >>):
+I think you are taking a too-extremist standpoint.
+The two extremes are:
+  1. Numbers correspond to hardware numbers, and are easy to look up
+    in the hardware documentation (e.g. GIC SPI interrupt numbers).
+     => Use the hardcoded numbers in DTS.
+  2. Numbers do not correspond to hardware numbers, so we had to
+     invent our own definitions and numbers, usually loosely
+     based on some table in the hardware documentation.
+     The driver will have to look up the numbers in a data
+     structure, to know how to program the hardware.
+     The numbers become part of the DT ABI, and cannot be changed
+     (header file is append-only).
+     => Use the binding definitions in DTS.
 
-   arm-linux-gnueabi-ld: arch/arm/mm/init.o: in function `arm_memblock_init':
->> init.c:(.init.text+0x200): undefined reference to `kernel_sec_start'
+We are taking the middle ground: there is a one-to-one relation between
+numbers and hardware numbers that can be looked up in or derived from
+the hardware documentation, but the conversion is non-trivial (for the
+casual human reviewer), or the documentation refers to names instead
+of numbers in most sections (e.g. named power domains). Then why not
+let the numbers match some feature in the hardware (e.g. register
+offset or register bit)?
+
+> Imagine now you made mistake in this register
+> offset and hardware uses slightly different value. What now? Change
+> bindings? No. Bindings hold here ID, the abstraction, and ID stays fixed.
+
+I see no difference here with using the wrong interrupt number in an
+interrupts property in DTS.  What do we do in that case? Fix the DTS.
+
+BTW, are you aware of any driver that transforms interrupt numbers
+obtained from DTS, because the DTS used the wrong number?
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 --
-   In file included from arch/arm/include/asm/memory.h:447,
-                    from arch/arm/include/asm/page.h:163,
-                    from arch/arm/include/asm/thread_info.h:14,
-                    from include/linux/thread_info.h:60,
-                    from include/asm-generic/preempt.h:5,
-                    from ./arch/arm/include/generated/asm/preempt.h:1,
-                    from include/linux/preempt.h:78,
-                    from include/linux/spinlock.h:55,
-                    from mm/gup.c:5:
-   mm/gup.c: In function '__get_user_pages_locked':
->> mm/gup.c:1599:49: warning: passing argument 1 of 'virt_to_pfn' makes pointer from integer without a cast [-Wint-conversion]
-    1599 |                         pages[i] = virt_to_page(start);
-         |                                                 ^~~~~
-         |                                                 |
-         |                                                 long unsigned int
-   include/asm-generic/memory_model.h:18:46: note: in definition of macro '__pfn_to_page'
-      18 | #define __pfn_to_page(pfn)      (mem_map + ((pfn) - ARCH_PFN_OFFSET))
-         |                                              ^~~
-   mm/gup.c:1599:36: note: in expansion of macro 'virt_to_page'
-    1599 |                         pages[i] = virt_to_page(start);
-         |                                    ^~~~~~~~~~~~
-   In file included from arch/arm/include/asm/page.h:163,
-                    from arch/arm/include/asm/thread_info.h:14,
-                    from include/linux/thread_info.h:60,
-                    from include/asm-generic/preempt.h:5,
-                    from ./arch/arm/include/generated/asm/preempt.h:1,
-                    from include/linux/preempt.h:78,
-                    from include/linux/spinlock.h:55,
-                    from mm/gup.c:5:
-   arch/arm/include/asm/memory.h:322:53: note: expected 'const void *' but argument is of type 'long unsigned int'
-     322 | static inline unsigned long virt_to_pfn(const void *p)
-         |                                         ~~~~~~~~~~~~^
---
-   In file included from arch/arm/include/asm/memory.h:447,
-                    from arch/arm/include/asm/page.h:163,
-                    from arch/arm/include/asm/thread_info.h:14,
-                    from include/linux/thread_info.h:60,
-                    from include/asm-generic/preempt.h:5,
-                    from ./arch/arm/include/generated/asm/preempt.h:1,
-                    from include/linux/preempt.h:78,
-                    from include/linux/spinlock.h:55,
-                    from include/linux/mmzone.h:8,
-                    from include/linux/gfp.h:6,
-                    from include/linux/mm.h:7,
-                    from mm/nommu.c:20:
-   mm/nommu.c: In function 'free_page_series':
->> mm/nommu.c:501:50: warning: passing argument 1 of 'virt_to_pfn' makes pointer from integer without a cast [-Wint-conversion]
-     501 |                 struct page *page = virt_to_page(from);
-         |                                                  ^~~~
-         |                                                  |
-         |                                                  long unsigned int
-   include/asm-generic/memory_model.h:18:46: note: in definition of macro '__pfn_to_page'
-      18 | #define __pfn_to_page(pfn)      (mem_map + ((pfn) - ARCH_PFN_OFFSET))
-         |                                              ^~~
-   mm/nommu.c:501:37: note: in expansion of macro 'virt_to_page'
-     501 |                 struct page *page = virt_to_page(from);
-         |                                     ^~~~~~~~~~~~
-   In file included from arch/arm/include/asm/page.h:163,
-                    from arch/arm/include/asm/thread_info.h:14,
-                    from include/linux/thread_info.h:60,
-                    from include/asm-generic/preempt.h:5,
-                    from ./arch/arm/include/generated/asm/preempt.h:1,
-                    from include/linux/preempt.h:78,
-                    from include/linux/spinlock.h:55,
-                    from include/linux/mmzone.h:8,
-                    from include/linux/gfp.h:6,
-                    from include/linux/mm.h:7,
-                    from mm/nommu.c:20:
-   arch/arm/include/asm/memory.h:322:53: note: expected 'const void *' but argument is of type 'long unsigned int'
-     322 | static inline unsigned long virt_to_pfn(const void *p)
-         |                                         ~~~~~~~~~~~~^
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

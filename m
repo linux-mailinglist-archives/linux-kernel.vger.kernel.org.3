@@ -2,101 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3CD6530722
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 03:25:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB65E53072C
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 03:37:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349093AbiEWBZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 21:25:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58670 "EHLO
+        id S244170AbiEWBhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 21:37:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349555AbiEWBYz (ORCPT
+        with ESMTP id S232679AbiEWBg5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 21:24:55 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13389387BB
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 18:24:49 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id x12so12380947pgj.7
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 18:24:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=L4SbZUHV57IOdhtxt7xLH6bNMt6ZWWMzVkJzxIHiEH0=;
-        b=mKhLX5Tl0/hJE/WYln3le1t/gPQuRKOiDHXpUCFFlMUfiqaQJhiCx5ESuSoqzPiwxY
-         FXa/cYM1iJaf72An99no6KGCCFyWV/Y2vRmv9AyIf1bZRVEt0Io5RGmKrwslo9UMVfbn
-         V3ZRIolNVAS+vrRVoHgUVKsfwMQfVoH8KJlOmRHHVgYUnelmfQuTSvoSoYfQgPYexLSb
-         47m/RqFJLuZB/TU+1yL9seNjlqVFWx72k1DMQFHQm/IGAOMlqlsM6TwMN6E4Wcxdc2LN
-         MZVGrcLrcF06ZuDyy5Ed6nFp/U+N3coelcUamn32psMV6ZgaQg6mqhYx6vEjvMjCWMeE
-         E8LQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=L4SbZUHV57IOdhtxt7xLH6bNMt6ZWWMzVkJzxIHiEH0=;
-        b=HSi+X+hq5VHBUP6Y36zjzSHxntPQgHTBpHLzU8t/74I0PWpsm+sZkshTd05qw291iw
-         FocJizdGmxl5zi/HnHtqGJivmCWAZhQ+8YChf3fWAR1tKtWYBobLNJf+r86ZqBdNWss6
-         yCePLDybLAUA9Ynkxwzj0ej5kqldCLCL3kMJ+iKYqlr1llecyong9aD/JKvZXp6bTQqn
-         uiw6e0WR/cgCX1eb8kL+XQSFTG9WqRiHf1aVwmR54wz1OmTqwYtxLtyb4JW9+ZU6w7Gz
-         XRFrsxKW5QYwzfZn8TwX/Y82Q0wH1ttAUyJNhq0Cj0jSxFrvLi0TWUUYnrGkSV9J96k2
-         vzlw==
-X-Gm-Message-State: AOAM533lkliOOLtRfyAySgU1d/hzRy4bVEDds8ZEbZzfqConK3VcHbRP
-        AOM0rAgDjAD8F2OADMEmTLmWiw==
-X-Google-Smtp-Source: ABdhPJx0C/kAHO9Og4a8sFT18y/We0Q5yc2XHHJxoU1ByVr+bvY/kxzcZ7clBGdH5p/Z1lU+2tLtsg==
-X-Received: by 2002:a05:6a00:24c6:b0:518:7e6e:ee3c with SMTP id d6-20020a056a0024c600b005187e6eee3cmr10143984pfv.15.1653269088360;
-        Sun, 22 May 2022 18:24:48 -0700 (PDT)
-Received: from [2620:15c:29:204:fa22:6f61:557f:9cd2] ([2620:15c:29:204:fa22:6f61:557f:9cd2])
-        by smtp.gmail.com with ESMTPSA id q6-20020a17090a1b0600b001df7612950dsm5900242pjq.7.2022.05.22.18.24.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 May 2022 18:24:47 -0700 (PDT)
-Date:   Sun, 22 May 2022 18:24:47 -0700 (PDT)
-From:   David Rientjes <rientjes@google.com>
-To:     John Allen <john.allen@amd.com>
-cc:     herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
-        seanjc@google.com, Thomas.Lendacky@amd.com, Ashish.Kalra@amd.com,
-        linux-kernel@vger.kernel.org, theflow@google.com,
-        pgonda@google.com, stable@vger.kernel.org
-Subject: Re: [PATCH v4] crypto: ccp - Use kzalloc for sev ioctl interfaces
- to prevent kernel memory leak
-In-Reply-To: <20220518153126.265074-1-john.allen@amd.com>
-Message-ID: <81d016a4-891c-47e6-8a85-7cd9e5661729@google.com>
-References: <20220518153126.265074-1-john.allen@amd.com>
+        Sun, 22 May 2022 21:36:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 091AD2F399
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 18:36:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D36660FA9
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 01:36:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1AAEC341C6
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 01:36:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653269812;
+        bh=L6h6qT+8nc10xaEUPypDDnsnQ4L6qOJI2IkYaR1N0QA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=O/fVkXaQICAKI8TeLh/3g55975QrYytC9Zj8DgRPCvgtKljx0u5I6uvOuBSBA8+bQ
+         4BjFse2W6uERi0GXiYtNbBiH7cJiej2DETjY8V+nFt03WAcsFqedhfgeld1YUDCGC4
+         G5tbKz+hBO/hde9oUtaCbuYH0LjqR5Rh2Zr5VIOo00u6DWqvbNbmCN5XJYVKCa8dmg
+         +DnbTnN7dDDaJhYfWwH0velWxUkKZKZT/7XyvsMi1ppdA+Tcs7vZ98ufHodArkXj2t
+         UqoMfLbhgMWEzBQtAOxYyeKcaK5ilFq4kHmcGKRlT+a2iuzuUztB4gFCY8Z/3+1Hsg
+         bj1ywxNlY1KUQ==
+Received: by mail-lf1-f48.google.com with SMTP id p22so23066490lfo.10
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 18:36:52 -0700 (PDT)
+X-Gm-Message-State: AOAM531CQ5TNXLxlo77CAMNT7sIysttIzJRa4jZw0chO75xIvfZ0v6Hj
+        9Uu7i8ntqn13IYtm4nM0DCO8HFZ6UjaaS9D1uyfCYQ==
+X-Google-Smtp-Source: ABdhPJzNMfUSnjPL4tskSLO9/0qH0Iujngwr3hBiPy5ZdMwuNLZtASCMVPJR2EEsK4dUQC+cUo0tl+kZ2sYROe7TD1o=
+X-Received: by 2002:a05:6512:3a84:b0:472:6384:4de0 with SMTP id
+ q4-20020a0565123a8400b0047263844de0mr14237606lfu.456.1653269810602; Sun, 22
+ May 2022 18:36:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220518131638.3401509-1-xukuohai@huawei.com> <20220518131638.3401509-6-xukuohai@huawei.com>
+In-Reply-To: <20220518131638.3401509-6-xukuohai@huawei.com>
+From:   KP Singh <kpsingh@kernel.org>
+Date:   Mon, 23 May 2022 03:36:39 +0200
+X-Gmail-Original-Message-ID: <CACYkzJ7r=hP_w_brOv3_d1JAta1_Obi2-EvMu4TEQTyBQMSs6g@mail.gmail.com>
+Message-ID: <CACYkzJ7r=hP_w_brOv3_d1JAta1_Obi2-EvMu4TEQTyBQMSs6g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 5/6] bpf, arm64: bpf trampoline for arm64
+To:     Xu Kuohai <xukuohai@huawei.com>
+Cc:     bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        hpa@zytor.com, Shuah Khan <shuah@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Daniel Kiss <daniel.kiss@arm.com>,
+        Steven Price <steven.price@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Mark Brown <broonie@kernel.org>,
+        Delyan Kratunov <delyank@fb.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 18 May 2022, John Allen wrote:
+On Wed, May 18, 2022 at 3:54 PM Xu Kuohai <xukuohai@huawei.com> wrote:
+>
+> Add bpf trampoline support for arm64. Most of the logic is the same as
+> x86.
+>
+> Tested on raspberry pi 4b and qemu with KASLR disabled (avoid long jump),
+> result:
+>  #9  /1     bpf_cookie/kprobe:OK
+>  #9  /2     bpf_cookie/multi_kprobe_link_api:FAIL
+>  #9  /3     bpf_cookie/multi_kprobe_attach_api:FAIL
+>  #9  /4     bpf_cookie/uprobe:OK
+>  #9  /5     bpf_cookie/tracepoint:OK
+>  #9  /6     bpf_cookie/perf_event:OK
+>  #9  /7     bpf_cookie/trampoline:OK
+>  #9  /8     bpf_cookie/lsm:OK
+>  #9         bpf_cookie:FAIL
+>  #18 /1     bpf_tcp_ca/dctcp:OK
+>  #18 /2     bpf_tcp_ca/cubic:OK
+>  #18 /3     bpf_tcp_ca/invalid_license:OK
+>  #18 /4     bpf_tcp_ca/dctcp_fallback:OK
+>  #18 /5     bpf_tcp_ca/rel_setsockopt:OK
+>  #18        bpf_tcp_ca:OK
+>  #51 /1     dummy_st_ops/dummy_st_ops_attach:OK
+>  #51 /2     dummy_st_ops/dummy_init_ret_value:OK
+>  #51 /3     dummy_st_ops/dummy_init_ptr_arg:OK
+>  #51 /4     dummy_st_ops/dummy_multiple_args:OK
+>  #51        dummy_st_ops:OK
+>  #55        fentry_fexit:OK
+>  #56        fentry_test:OK
+>  #57 /1     fexit_bpf2bpf/target_no_callees:OK
+>  #57 /2     fexit_bpf2bpf/target_yes_callees:OK
+>  #57 /3     fexit_bpf2bpf/func_replace:OK
+>  #57 /4     fexit_bpf2bpf/func_replace_verify:OK
+>  #57 /5     fexit_bpf2bpf/func_sockmap_update:OK
+>  #57 /6     fexit_bpf2bpf/func_replace_return_code:OK
+>  #57 /7     fexit_bpf2bpf/func_map_prog_compatibility:OK
+>  #57 /8     fexit_bpf2bpf/func_replace_multi:OK
+>  #57 /9     fexit_bpf2bpf/fmod_ret_freplace:OK
+>  #57        fexit_bpf2bpf:OK
+>  #58        fexit_sleep:OK
+>  #59        fexit_stress:OK
+>  #60        fexit_test:OK
+>  #67        get_func_args_test:OK
+>  #68        get_func_ip_test:OK
+>  #104       modify_return:OK
+>  #237       xdp_bpf2bpf:OK
+>
+> bpf_cookie/multi_kprobe_link_api and bpf_cookie/multi_kprobe_attach_api
+> failed due to lack of multi_kprobe on arm64.
+>
+> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+> Acked-by: Song Liu <songliubraving@fb.com>
 
-> For some sev ioctl interfaces, input may be passed that is less than or
-> equal to SEV_FW_BLOB_MAX_SIZE, but larger than the data that PSP
-> firmware returns. In this case, kmalloc will allocate memory that is the
-> size of the input rather than the size of the data. Since PSP firmware
-> doesn't fully overwrite the buffer, the sev ioctl interfaces with the
-> issue may return uninitialized slab memory.
-> 
-> Currently, all of the ioctl interfaces in the ccp driver are safe, but
-> to prevent future problems, change all ioctl interfaces that allocate
-> memory with kmalloc to use kzalloc and memset the data buffer to zero
-> in sev_ioctl_do_platform_status.
-> 
-> Fixes: 38103671aad3 ("crypto: ccp: Use the stack and common buffer for status commands")
-> Fixes: e799035609e15 ("crypto: ccp: Implement SEV_PEK_CSR ioctl command")
-> Fixes: 76a2b524a4b1d ("crypto: ccp: Implement SEV_PDH_CERT_EXPORT ioctl command")
-> Fixes: d6112ea0cb344 ("crypto: ccp - introduce SEV_GET_ID2 command")
-> Cc: stable@vger.kernel.org
-> Reported-by: Andy Nguyen <theflow@google.com>
-> Suggested-by: David Rientjes <rientjes@google.com>
-> Suggested-by: Peter Gonda <pgonda@google.com>
-> Signed-off-by: John Allen <john.allen@amd.com>
+Acked-by: KP Singh <kpsingh@kernel.org>
 
-Acked-by: David Rientjes <rientjes@google.com>
-
-Thanks John!
+Thanks! This is exciting.

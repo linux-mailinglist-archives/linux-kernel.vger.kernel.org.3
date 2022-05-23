@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7010D5314B8
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:26:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52EFC53132B
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:23:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237654AbiEWPIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 11:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51072 "EHLO
+        id S237571AbiEWPIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 11:08:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237628AbiEWPIF (ORCPT
+        with ESMTP id S237624AbiEWPIf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 11:08:05 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1D475C74D
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 08:08:00 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id u3so21841132wrg.3
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 08:08:00 -0700 (PDT)
+        Mon, 23 May 2022 11:08:35 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB115C75C
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 08:08:34 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id e28so21210896wra.10
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 08:08:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=brainfault-org.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Ys4XdVscv5VNlcHHCYpLwgVZ+X8P1XO1ISLGENGjWOQ=;
-        b=BjX2AvhJL3a02i3+eGBxYQWW6FMsRR6Yrw5epDlnSmm4uVdIfmQG/bBKQ5CXnKJehC
-         gtN1AFqiK55TTf7VuHoIvbUZl3DuWzeGARd+XPNlKkTp4JPYZlb6SRbke/i8x3o0uHHU
-         +2EXNbvx2pVc1LY/DNgXEFgUMDFGP3IqFiOKR82Q0bimMXPKgTkPBFqWW27RGtupMw00
-         mZs6wkMjwJc+2Xs5uLu1CMxKi3ocrm5uTL4olmG7jKmysExazGkgyfYQv/Fd70CQhiyf
-         /NrIXUtXCURW8JEtBCkUAC2dxCuo2XnWQaVXRQflZPuYCtUSqXaSlHrUaE77P6Zi/U3t
-         Kkkw==
+        bh=ItmOvQlJYrSM4iWYsCl26IX50qJOEZAdJld7IVn+tno=;
+        b=LsRuUDeOP1ovU54Dh18ebFB16BExOoHwxIDcfdVVL4ZqEZ7P0dV/akxSzJQw6+0ysJ
+         xICyWob4dPqfM1q/NWHMH9dsdjh2CpYDFJgjnKBDjLtDP5M+lhfLt2NJp+xxyhu5QWaO
+         tdalyOStVL89wsfoE9JMIW3jTf4IQaPurgIH1M92jeIRBolhvDSCBYPRiOf2b0qvtpp2
+         lzJ4AMiNEjSWfe76/LxKcXViUjCgcKoZuTrm3yLLGT9JAysy42C/xz04UrnnRxMqTlTD
+         6Z2He18cfJq1KfIVt8I3Y7xrbKp3LpIohcFdtBUiyTSYIvJJ3VQQ7XFtP5ASnmX169bj
+         RW5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Ys4XdVscv5VNlcHHCYpLwgVZ+X8P1XO1ISLGENGjWOQ=;
-        b=Vh6Kcw5axyWc6WEuDbPe07k2kp90q13I9+YLlRmjWUBW8+51HhzO5cJ/lHCVPKzhF+
-         ypnQFkC+0XtThdXTiI9f9DOAaEQjk3o/G8YV8VijzpWZKfF+rvX2y3T3V8l7HQh0eetJ
-         KWUEYaV8Sr3jfyK0OrpC8B40ebC1WzUASKGsZyrvPaYgCaQZTjgI678XjY1dCrb2MwFZ
-         Prb6b+KyrEActWPrQ93pK4n9BepsrfeWV6xTIsrllNhGnpZFvggj7afqrzCxubNfdswv
-         8NgQxdXxdVhfGMR+Yd9prGcOLBa0UZKt8bw/kK3Ag8qrrh5m2eQr1zQECDJJJ5eHUoJQ
-         SvWA==
-X-Gm-Message-State: AOAM530m7VKkHy/T858alOYf4OgF3jC8sGJw0OsfFCL3uvcV4YiyL/Rv
-        8/LJUa8asG5APrOJvdc7Ed/HamqD3aLZnU2dpUAmDA==
-X-Google-Smtp-Source: ABdhPJwKTbFlVMufZx9p5Z+x6LafUNHGnWotQYTTznqHO3KKhRIyZY9h5NSg25siQNu+a6YhKz9oUQE0cz4QQh+rVlo=
-X-Received: by 2002:a5d:6c6b:0:b0:1ea:77ea:dde8 with SMTP id
- r11-20020a5d6c6b000000b001ea77eadde8mr19522626wrz.690.1653318479248; Mon, 23
- May 2022 08:07:59 -0700 (PDT)
+        bh=ItmOvQlJYrSM4iWYsCl26IX50qJOEZAdJld7IVn+tno=;
+        b=vE9WcGazELqiD/aIPuSmuzGEK87WvAHhw9GQbI3R3qu2zMO22cwSWpZwqf2Ye7W+t2
+         bmxmkeQyPeQWD+9iFwTPkZdE8nUKRwpQdVTHDQ4b/Ad0opq/m0W0v2dJk6+ufEEQeMHM
+         m1O9/IcdfyWncsqfNWYMoU7YwRti/iov5RxrulX10PBR2y68gJHHFrQv6ixjpkNqiK3N
+         i+46kCrvbWhZ6RMVbx3YYwPbae82+p5SI8VXlqbojglE/Kp/UH/VrGNEBMNtulrOVakK
+         0FhAWlUnmczd/9gVIkt6pnF2vI6XMTnD3DLUhMbXA4A4Nj+87RR4JwF21tBjYTZhBsY/
+         2p4Q==
+X-Gm-Message-State: AOAM530CO4Kir0nUXhGdWg413akJsp7e1lKzM+NFU0So6JVdflc01sv/
+        QKIUKQX7gxNWDccS1JsePQdygWJTeJka5aIdeBukPQ==
+X-Google-Smtp-Source: ABdhPJx1e94Ti+/mNHRd3xRYlgW0W6+8SRz7GMAuSCGBs5ejjusMofOeZunmCSg3wni9uefjakk2/CCrLVm8hNTcLlc=
+X-Received: by 2002:a05:6000:1f18:b0:20f:e61b:520e with SMTP id
+ bv24-20020a0560001f1800b0020fe61b520emr2900622wrb.214.1653318512593; Mon, 23
+ May 2022 08:08:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220522153543.2656-1-jszhang@kernel.org> <20220522153543.2656-2-jszhang@kernel.org>
-In-Reply-To: <20220522153543.2656-2-jszhang@kernel.org>
+References: <20220522153543.2656-1-jszhang@kernel.org> <20220522153543.2656-3-jszhang@kernel.org>
+In-Reply-To: <20220522153543.2656-3-jszhang@kernel.org>
 From:   Anup Patel <anup@brainfault.org>
-Date:   Mon, 23 May 2022 20:37:47 +0530
-Message-ID: <CAAhSdy0Z7fqfNd7PGPmbRum=Yiu8ziRbjefF3NHeqihSKSS8SQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] riscv: introduce unified static key mechanism for
- ISA extensions
+Date:   Mon, 23 May 2022 20:38:20 +0530
+Message-ID: <CAAhSdy0nTPbEa21-xttic2CfsMBa6BBEfa+y2MgT46aCPjQTsQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] riscv: switch has_fpu() to the unified static key mechanism
 To:     Jisheng Zhang <jszhang@kernel.org>
 Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
@@ -72,17 +71,8 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Sun, May 22, 2022 at 9:14 PM Jisheng Zhang <jszhang@kernel.org> wrote:
 >
-> Currently, riscv has several extensions which may not be supported on
-> all riscv platforms, for example, FPU and so on. To support unified
-> kernel Image style, we need to check whether the feature is supported
-> or not. If the check sits at hot code path, then performance will be
-> impacted a lot. static key can be used to solve the issue. In the past,
-> FPU support has been converted to use static key mechanism. I believe
-> we will have similar cases in the future.
->
-> This patch tries to add an unified mechanism to use static keys for
-> some ISA extensions by implementing an array of default-false static keys
-> and enabling them when detected.
+> This is to use the unified static key mechanism instead of putting
+> static key related here and there.
 >
 > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
 
@@ -94,85 +84,57 @@ Regards,
 Anup
 
 > ---
->  arch/riscv/include/asm/hwcap.h | 25 +++++++++++++++++++++++++
->  arch/riscv/kernel/cpufeature.c |  7 +++++++
->  2 files changed, 32 insertions(+)
+>  arch/riscv/include/asm/switch_to.h | 4 ++--
+>  arch/riscv/kernel/cpufeature.c     | 7 -------
+>  2 files changed, 2 insertions(+), 9 deletions(-)
 >
-> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
-> index 0734e42f74f2..d3e113fe7366 100644
-> --- a/arch/riscv/include/asm/hwcap.h
-> +++ b/arch/riscv/include/asm/hwcap.h
-> @@ -12,6 +12,7 @@
->  #include <uapi/asm/hwcap.h>
+> diff --git a/arch/riscv/include/asm/switch_to.h b/arch/riscv/include/asm/switch_to.h
+> index 0a3f4f95c555..11463489fec6 100644
+> --- a/arch/riscv/include/asm/switch_to.h
+> +++ b/arch/riscv/include/asm/switch_to.h
+> @@ -8,6 +8,7 @@
 >
->  #ifndef __ASSEMBLY__
-> +#include <linux/jump_label.h>
->  /*
->   * This yields a mask that user programs can use to figure out what
->   * instruction set this cpu supports.
-> @@ -55,6 +56,16 @@ enum riscv_isa_ext_id {
->         RISCV_ISA_EXT_ID_MAX = RISCV_ISA_EXT_MAX,
->  };
+>  #include <linux/jump_label.h>
+>  #include <linux/sched/task_stack.h>
+> +#include <asm/hwcap.h>
+>  #include <asm/processor.h>
+>  #include <asm/ptrace.h>
+>  #include <asm/csr.h>
+> @@ -56,10 +57,9 @@ static inline void __switch_to_aux(struct task_struct *prev,
+>         fstate_restore(next, task_pt_regs(next));
+>  }
 >
-> +/*
-> + * This enum represents the logical ID for each RISC-V ISA extension static
-> + * keys. We can use static key to optimize code path if some ISA extensions
-> + * are available.
-> + */
-> +enum riscv_isa_ext_key {
-> +       RISCV_ISA_EXT_KEY_FPU,          /* For 'F' and 'D' */
-> +       RISCV_ISA_EXT_KEY_MAX,
-> +};
-> +
->  struct riscv_isa_ext_data {
->         /* Name of the extension displayed to userspace via /proc/cpuinfo */
->         char uprop[RISCV_ISA_EXT_NAME_LEN_MAX];
-> @@ -62,6 +73,20 @@ struct riscv_isa_ext_data {
->         unsigned int isa_ext_id;
->  };
->
-> +extern struct static_key_false riscv_isa_ext_keys[RISCV_ISA_EXT_KEY_MAX];
-> +
-> +static __always_inline int riscv_isa_ext2key(int num)
-> +{
-> +       switch (num) {
-> +       case RISCV_ISA_EXT_f:
-> +               return RISCV_ISA_EXT_KEY_FPU;
-> +       case RISCV_ISA_EXT_d:
-> +               return RISCV_ISA_EXT_KEY_FPU;
-> +       default:
-> +               return -EINVAL;
-> +       }
-> +}
-> +
->  unsigned long riscv_isa_extension_base(const unsigned long *isa_bitmap);
->
->  #define riscv_isa_extension_mask(ext) BIT_MASK(RISCV_ISA_EXT_##ext)
+> -extern struct static_key_false cpu_hwcap_fpu;
+>  static __always_inline bool has_fpu(void)
+>  {
+> -       return static_branch_likely(&cpu_hwcap_fpu);
+> +       return static_branch_likely(&riscv_isa_ext_keys[RISCV_ISA_EXT_KEY_FPU]);
+>  }
+>  #else
+>  static __always_inline bool has_fpu(void) { return false; }
 > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> index 1b2d42d7f589..89f886b35357 100644
+> index 89f886b35357..0235391be84b 100644
 > --- a/arch/riscv/kernel/cpufeature.c
 > +++ b/arch/riscv/kernel/cpufeature.c
-> @@ -24,6 +24,8 @@ static DECLARE_BITMAP(riscv_isa, RISCV_ISA_EXT_MAX) __read_mostly;
->  #ifdef CONFIG_FPU
->  __ro_after_init DEFINE_STATIC_KEY_FALSE(cpu_hwcap_fpu);
->  #endif
-> +__ro_after_init DEFINE_STATIC_KEY_ARRAY_FALSE(riscv_isa_ext_keys, RISCV_ISA_EXT_KEY_MAX);
-> +EXPORT_SYMBOL(riscv_isa_ext_keys);
+> @@ -21,9 +21,6 @@ unsigned long elf_hwcap __read_mostly;
+>  /* Host ISA bitmap */
+>  static DECLARE_BITMAP(riscv_isa, RISCV_ISA_EXT_MAX) __read_mostly;
 >
->  /**
->   * riscv_isa_extension_base() - Get base extension word
-> @@ -232,6 +234,11 @@ void __init riscv_fill_hwcap(void)
->                         print_str[j++] = (char)('a' + i);
->         pr_info("riscv: ELF capabilities %s\n", print_str);
+> -#ifdef CONFIG_FPU
+> -__ro_after_init DEFINE_STATIC_KEY_FALSE(cpu_hwcap_fpu);
+> -#endif
+>  __ro_after_init DEFINE_STATIC_KEY_ARRAY_FALSE(riscv_isa_ext_keys, RISCV_ISA_EXT_KEY_MAX);
+>  EXPORT_SYMBOL(riscv_isa_ext_keys);
 >
-> +       for_each_set_bit(i, riscv_isa, RISCV_ISA_EXT_MAX) {
-> +               j = riscv_isa_ext2key(i);
-> +               if (j >= 0)
-> +                       static_branch_enable(&riscv_isa_ext_keys[j]);
-> +       }
->  #ifdef CONFIG_FPU
->         if (elf_hwcap & (COMPAT_HWCAP_ISA_F | COMPAT_HWCAP_ISA_D))
->                 static_branch_enable(&cpu_hwcap_fpu);
+> @@ -239,8 +236,4 @@ void __init riscv_fill_hwcap(void)
+>                 if (j >= 0)
+>                         static_branch_enable(&riscv_isa_ext_keys[j]);
+>         }
+> -#ifdef CONFIG_FPU
+> -       if (elf_hwcap & (COMPAT_HWCAP_ISA_F | COMPAT_HWCAP_ISA_D))
+> -               static_branch_enable(&cpu_hwcap_fpu);
+> -#endif
+>  }
 > --
 > 2.34.1
 >

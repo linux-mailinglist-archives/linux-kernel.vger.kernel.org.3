@@ -2,173 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 066E05319B0
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:55:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD619531A2E
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:55:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241036AbiEWSwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 14:52:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51698 "EHLO
+        id S229748AbiEWTEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 15:04:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243330AbiEWSvq (ORCPT
+        with ESMTP id S235554AbiEWTAL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 14:51:46 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A717B9E2
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 11:37:29 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id 27so13308032ljw.0
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 11:37:29 -0700 (PDT)
+        Mon, 23 May 2022 15:00:11 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F13239CF30;
+        Mon, 23 May 2022 11:42:31 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id b135so2710223pfb.12;
+        Mon, 23 May 2022 11:42:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EF+HyK8Q8jGuUKnfQuJxpTAac/v3/lWJSDPnpLDl6Oo=;
-        b=TCLbLPu4fY1PFTWqGZrYvI6Pr9Tf9y4nNjADncA9r7BdaknOYHzxkVKNaTHXlmeNGC
-         W6kp2ErMbL7AOgGIzhk0VMgEbX0d6PXEt2wQvaDfWNcT2zEi2fO5bRfqWkx3r2IQcqGp
-         g6XfeFgEKTbvx9b9F/8hvOvfmVxaJebt7qwUrSWrOl6LivjY/5+CEkfcegFxM2refumh
-         S/z/yJ9ihpNe2Dy9uXTlvUKhLXwgWykV+uttif6YpUco0RELnkLYACOuS7ZQOy+5nM28
-         Z6ErChTWtmlCRrvh6mFnCaY0rniF+9rEOxSZN9tddOcODiN47nTr1xmuvreCEbPD+XMr
-         oSxw==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=fgKolKo2W9u+egkoBMmdYH2ux7YY09TR3IB+igLpG2c=;
+        b=STOsn+K+LqaIbQ3/N7nJeBjk7q/pHMyxd7sghc0rywCfK5W+38c9HtqLZ3V85YQTIf
+         D79CtNFN6LDGzlQcTwBLhbTM9EJN5n28lgkzQEwgV924qEhDtpRMZKayCPQT51T8a+DB
+         AYrHmdKgH3CR9Al9K+F4I8YCkUMQfkoH4XoDPXB6TSAPJWEMeCsgqhSKH2mXUAPfyqL/
+         FKr3DDQ3g2RjpqGEh2h0lPnUvys2MQWHpCdciEwN2h9f7Fz1gypXfnG+T+5v/QTmiabK
+         tmYYsgfJAkqQDjHb/LIYRx+tTutaFzcT9dyVoLDnRfnWEd1hV845cYeYwR2tV7VuJDzh
+         jvRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EF+HyK8Q8jGuUKnfQuJxpTAac/v3/lWJSDPnpLDl6Oo=;
-        b=P93o62/xdetFoLQGaqPnKPmZ8utM7FhdcMvsliateLLHJweZ9svi7bk2QzeRw43GRb
-         8ORJrikDVYrQckGLR8PbzggEjdhTFuVAN7dLEsMZuOKD4n9xH7S8w1j9VoeR66M3LILT
-         FSJNSwAXvTlFjcT4llZMpEqAG1ilYqXEaLmYxuXx0Gxiqn7/6nSfOhups3x+yAh8DjEj
-         3uRplU/txi9n1lRrB4330/TJIhdHkD/MTA3RyDfZfHuE9HwjRyOUCqsxg5n17l4nkaSv
-         13iRbSkc9/XYYYQhs/j0sgcAbasqBMSoKxnh929u8UtAz7xlESEVYz923z+/puOBESak
-         lwaw==
-X-Gm-Message-State: AOAM530pBdSPcelqr2BBB5MKQ46ow1EqwcJrZa78/KY1qfgwM6O2tUMJ
-        VAuoL7s9grIt3G6a3gPVlOpwVFvmo+7T9dWECSGxXQ==
-X-Google-Smtp-Source: ABdhPJxYVniwTfnUp7XmacTlpjyteWqqznZ4V6ahXVd90eLHa2Bxx/nJfBnlIm3HDOaYJ6eC16xsJ3VlTw6xiy6liNw=
-X-Received: by 2002:a2e:98d0:0:b0:253:e3a3:ec6c with SMTP id
- s16-20020a2e98d0000000b00253e3a3ec6cmr6861584ljj.493.1653331047863; Mon, 23
- May 2022 11:37:27 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=fgKolKo2W9u+egkoBMmdYH2ux7YY09TR3IB+igLpG2c=;
+        b=zxjaZiQWYJFRKlBGC+BdcH40AMufpN3DbGo4tg3weRxt6LT9HlPVvATR4h3yKl7NcS
+         +lDlXzMQVZ9emzip9++IQF0WF3ij9i6SF96JYUEjGa4M6SlF77EUr86lK/XniPL8XhuT
+         +h9WTqFcJ1jbbRzTSPJg0wjo4YtPyahWh1MNLGf4d07ZP0c+WyYMXd2YB/y+SW6i9NLB
+         v8NV45IEycLjJygQNVfrJ3JpMge4cnV3O/cuulNWiSb2iRHYGnJo0jGAe92nOIgqRaFC
+         xgckokmSKahgoT3Ka7jwiSH20sAHWKPyDTsAstueH+2iZ/C9EWiK2fRudN7k6HJj5gfv
+         TWxA==
+X-Gm-Message-State: AOAM530T/HiCyi2VduCSa+gyxYOi7yQNbJqIM9Tf6BhcJe9NFnF8vv3b
+        0VQH7OY+BX+jiSa2L0xJKJ4=
+X-Google-Smtp-Source: ABdhPJyk2Lrb1HpWnHNXReRUG4aDAML6PzDtEzBBJNXMSgc2YbMWr5FvOEpBFlmY2HIqlhhCltFztw==
+X-Received: by 2002:a63:1543:0:b0:3fa:8e73:d7a5 with SMTP id 3-20020a631543000000b003fa8e73d7a5mr2120735pgv.160.1653331351416;
+        Mon, 23 May 2022 11:42:31 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id f9-20020a170902ab8900b00161ccdc172dsm5490546plr.300.2022.05.23.11.42.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 May 2022 11:42:30 -0700 (PDT)
+Message-ID: <ac6ae3f6-1e04-7f7d-cc3a-d5b04c9dbd61@gmail.com>
+Date:   Mon, 23 May 2022 11:42:29 -0700
 MIME-Version: 1.0
-References: <20220523020209.11810-1-ojeda@kernel.org> <20220523020209.11810-7-ojeda@kernel.org>
-In-Reply-To: <20220523020209.11810-7-ojeda@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 23 May 2022 11:37:16 -0700
-Message-ID: <CAKwvOd=mFhxjKRP_qt3Yu69dj_P6VUMSUSQm7fY6yS2bsO8Y2w@mail.gmail.com>
-Subject: Re: [PATCH v7 06/25] rust: add `compiler_builtins` crate
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Gary Guo <gary@garyguo.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 5.15 000/132] 5.15.42-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220523165823.492309987@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 22, 2022 at 7:03 PM Miguel Ojeda <ojeda@kernel.org> wrote:
->
-> Rust provides `compiler_builtins` as a port of LLVM's `compiler-rt`.
-> Since we do not need the vast majority of them, we avoid the
-> dependency by providing our own crate.
->
-> Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
-> Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
-> Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
-> Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
-> Co-developed-by: Sven Van Asbroeck <thesven73@gmail.com>
-> Signed-off-by: Sven Van Asbroeck <thesven73@gmail.com>
-> Co-developed-by: Gary Guo <gary@garyguo.net>
-> Signed-off-by: Gary Guo <gary@garyguo.net>
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-> ---
->  rust/compiler_builtins.rs | 57 +++++++++++++++++++++++++++++++++++++++
->  1 file changed, 57 insertions(+)
->  create mode 100644 rust/compiler_builtins.rs
->
-> diff --git a/rust/compiler_builtins.rs b/rust/compiler_builtins.rs
-> new file mode 100644
-> index 000000000000..80ca4c0dcd24
-> --- /dev/null
-> +++ b/rust/compiler_builtins.rs
-> @@ -0,0 +1,57 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +//! Our own `compiler_builtins`.
-> +//!
-> +//! Rust provides [`compiler_builtins`] as a port of LLVM's [`compiler-rt`].
-> +//! Since we do not need the vast majority of them, we avoid the dependency
-> +//! by providing this file.
-> +//!
-> +//! At the moment, some builtins are required that should not be. For instance,
-> +//! [`core`] has 128-bit integers functionality which we should not be compiling
-> +//! in. We will work with upstream [`core`] to provide feature flags to disable
-> +//! the parts we do not need. For the moment, we define them to [`panic!`] at
+On 5/23/22 10:03, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.42 release.
+> There are 132 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 25 May 2022 16:56:55 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.42-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-^ Any progress on this? Got any links to any feature requests or bug reports.
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
 
-Also, I'm not sure my concern about explicit build failures for C code
-was ever addressed?  We have a constant problem with `long long`
-division on ARCH=arm32 and ARCH=i386 in C code.
-https://lore.kernel.org/lkml/CAKwvOdk+A2PBdjSFVUhj4xyCGCKujtej1uPgywQgrKPiK2ksPw@mail.gmail.com/
-
-> +//! runtime for simplicity to catch mistakes, instead of performing surgery
-> +//! on `core.o`.
-> +//!
-> +//! In any case, all these symbols are weakened to ensure we do not override
-> +//! those that may be provided by the rest of the kernel.
-> +//!
-> +//! [`compiler_builtins`]: https://github.com/rust-lang/compiler-builtins
-> +//! [`compiler-rt`]: https://compiler-rt.llvm.org/
-> +
-> +#![feature(compiler_builtins)]
-> +#![compiler_builtins]
-> +#![no_builtins]
-> +#![no_std]
-> +
-> +macro_rules! define_panicking_intrinsics(
-> +    ($reason: tt, { $($ident: ident, )* }) => {
-> +        $(
-> +            #[doc(hidden)]
-> +            #[no_mangle]
-> +            pub extern "C" fn $ident() {
-> +                panic!($reason);
-> +            }
-> +        )*
-> +    }
-> +);
-> +
-> +define_panicking_intrinsics!("`i128` should not be used", {
-> +    __ashrti3,
-> +    __muloti4,
-> +    __multi3,
-> +});
-> +
-> +define_panicking_intrinsics!("`u128` should not be used", {
-> +    __ashlti3,
-> +    __lshrti3,
-> +    __udivmodti4,
-> +    __udivti3,
-> +    __umodti3,
-> +});
-> +
-> +#[cfg(target_arch = "arm")]
-> +define_panicking_intrinsics!("`u64` division/modulo should not be used", {
-> +    __aeabi_uldivmod,
-> +    __mulodi4,
-> +});
-> --
-> 2.36.1
->
-
-
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-Thanks,
-~Nick Desaulniers
+Florian

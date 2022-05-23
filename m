@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A5ED5318B3
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:54:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6115531796
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:53:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241032AbiEWR0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:26:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37708 "EHLO
+        id S243088AbiEWRlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:41:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240521AbiEWRQZ (ORCPT
+        with ESMTP id S242449AbiEWR1n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:16:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62AD56FA1E;
-        Mon, 23 May 2022 10:15:10 -0700 (PDT)
+        Mon, 23 May 2022 13:27:43 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A93867CB02;
+        Mon, 23 May 2022 10:23:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 462AA6153C;
-        Mon, 23 May 2022 17:15:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44867C385A9;
-        Mon, 23 May 2022 17:15:01 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 25608CE16D6;
+        Mon, 23 May 2022 17:23:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 383BDC34115;
+        Mon, 23 May 2022 17:23:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326101;
-        bh=dc9g7pKCCXGPpvSZYkwOO+GtH7VnkiFJIONPj6O+gdk=;
+        s=korg; t=1653326596;
+        bh=lDk+F4HKPxn0d05h+U9p97RFT3X3tNvjgiBwT/4IaW8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YiCzndnzS5uoorZgC8sk2MqYLKFacLygMTF40aB6DbXU7wgKh/w8xz2a1Oqbc4DNS
-         2be/UkCzuySyZU/ImGEl7Y2GGm/kRsWcJslytL7EHsSKShhUGmg1KIPcV1qWY1vTR3
-         WagTEQgcqSYlePP6JnKt7eZKJ/cHGoqU0zcS2A2s=
+        b=CAEgAOUZDFKPsp1ZzvqtfDEaVGtl+3Kh4loHoEnSJBw6dg+ULbttphj6w/8uj53L9
+         fC4rowAnkgmnK66bqFIKsjhvW6mGELHmDT0IQ9ov3ISX7BKEwADqay3wnoTT5KDrdz
+         pFXeZnudll9KCgWT8dC+mpg9zU7jrm3UTZTwD1C8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Monish Kumar R <monish.kumar.r@intel.com>,
-        Christoph Hellwig <hch@lst.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 13/97] nvme-pci: add quirks for Samsung X5 SSDs
+        stable@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
+        Haibo Chen <haibo.chen@nxp.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 108/132] gpio: gpio-vf610: do not touch other bits when set the target bit
 Date:   Mon, 23 May 2022 19:05:17 +0200
-Message-Id: <20220523165814.453433514@linuxfoundation.org>
+Message-Id: <20220523165841.393038445@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165812.244140613@linuxfoundation.org>
-References: <20220523165812.244140613@linuxfoundation.org>
+In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
+References: <20220523165823.492309987@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,36 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Monish Kumar R <monish.kumar.r@intel.com>
+From: Haibo Chen <haibo.chen@nxp.com>
 
-[ Upstream commit bc360b0b1611566e1bd47384daf49af6a1c51837 ]
+[ Upstream commit 9bf3ac466faa83d51a8fe9212131701e58fdef74 ]
 
-Add quirks to not fail the initialization and to have quick resume
-latency after cold/warm reboot.
+For gpio controller contain register PDDR, when set one target bit,
+current logic will clear all other bits, this is wrong. Use operator
+'|=' to fix it.
 
-Signed-off-by: Monish Kumar R <monish.kumar.r@intel.com>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
+Fixes: 659d8a62311f ("gpio: vf610: add imx7ulp support")
+Reviewed-by: Peng Fan <peng.fan@nxp.com>
+Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/nvme/host/pci.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/gpio/gpio-vf610.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
-index 6939b03a16c5..a36db0701d17 100644
---- a/drivers/nvme/host/pci.c
-+++ b/drivers/nvme/host/pci.c
-@@ -3265,7 +3265,10 @@ static const struct pci_device_id nvme_id_table[] = {
- 				NVME_QUIRK_128_BYTES_SQES |
- 				NVME_QUIRK_SHARED_TAGS |
- 				NVME_QUIRK_SKIP_CID_GEN },
--
-+	{ PCI_DEVICE(0x144d, 0xa808),   /* Samsung X5 */
-+		.driver_data =  NVME_QUIRK_DELAY_BEFORE_CHK_RDY|
-+				NVME_QUIRK_NO_DEEPEST_PS |
-+				NVME_QUIRK_IGNORE_DEV_SUBNQN, },
- 	{ PCI_DEVICE_CLASS(PCI_CLASS_STORAGE_EXPRESS, 0xffffff) },
- 	{ 0, }
- };
+diff --git a/drivers/gpio/gpio-vf610.c b/drivers/gpio/gpio-vf610.c
+index e0f2b67558e7..47e191e11c69 100644
+--- a/drivers/gpio/gpio-vf610.c
++++ b/drivers/gpio/gpio-vf610.c
+@@ -125,9 +125,13 @@ static int vf610_gpio_direction_output(struct gpio_chip *chip, unsigned gpio,
+ {
+ 	struct vf610_gpio_port *port = gpiochip_get_data(chip);
+ 	unsigned long mask = BIT(gpio);
++	u32 val;
+ 
+-	if (port->sdata && port->sdata->have_paddr)
+-		vf610_gpio_writel(mask, port->gpio_base + GPIO_PDDR);
++	if (port->sdata && port->sdata->have_paddr) {
++		val = vf610_gpio_readl(port->gpio_base + GPIO_PDDR);
++		val |= mask;
++		vf610_gpio_writel(val, port->gpio_base + GPIO_PDDR);
++	}
+ 
+ 	vf610_gpio_set(chip, gpio, value);
+ 
 -- 
 2.35.1
 

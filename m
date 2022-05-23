@@ -2,78 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09DE6530AF8
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 10:02:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38C61530A1C
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 10:00:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230073AbiEWHdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 03:33:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47080 "EHLO
+        id S230241AbiEWHdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 03:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230396AbiEWHci (ORCPT
+        with ESMTP id S229963AbiEWHcj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 03:32:38 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26951FF1
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 00:32:04 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id q18so12324798pln.12
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 00:32:04 -0700 (PDT)
+        Mon, 23 May 2022 03:32:39 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9F4311
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 00:32:17 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id v8so22113390lfd.8
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 00:32:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=l6vKoyEya/r3/MqVEEJWzCpNcuuesZvhsyqXin89G20=;
-        b=QkkPzppkGobaBMNtLMjTdS88K0En7cKbJRSLr/uCDJHYpNDsXdoNt7dKWMSOumeJuW
-         2hUbrbUVFiJiun2+NVvuDJghnz5x3AhxhqVZh7ilPtoik3nOgS6EwjLGMR57IVlIsMIS
-         E51jAnuW6i5mKRZ36FgcV6rz2yQXfXyZdbsLWcMk4m3+fvRBa2MD3Dy1nAg1QiRfXSkv
-         ZqsxVjyeUlyzPoEpqYpxtQy5j0L6WE2P3v486BQvYR0FuuXCjYH+CSGEucQ0NFS/aM7K
-         oGOQU/xmKbrDqirJI0e1slSZb2NDdorb53JovJb8o4GRFSKF3iRHzvvfECqhiufy81fH
-         fO9g==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=17JqV26wVHdgo28ZqibLwQLBrW+2wdRYXH2zbWrVfCo=;
+        b=Ib9IYf1AvLT27iihXTu9RkqmCryClPTfougnJ4FyWIlLyfyQLNoahME9lk60jT7YXm
+         jD+7fF0WQXgTnEJ244khLVZ2ruXBE8MS1uUVUlTeK2ut3gzKojOjbTDWEHyZ98VTUslE
+         NjdYJQZNiVrEOIgva4BhEJiS4Ewom+kaGwXmokXK9WVHBOaGDsVce74hQ1PaoCqMtfm7
+         tmQCCcjUUAYxDvOTYI9RRd+9Bf0ud4XjKoAI+6sp0abtcwlOGdCJsf7ESg6hkRNhtrw8
+         nO0lprI8/GsPSj3vbIte8Vsmr0wnD5DbJ9z2/t0tu+2zMycYVUyl8WY7wWrEoa1qh7HP
+         gHmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=l6vKoyEya/r3/MqVEEJWzCpNcuuesZvhsyqXin89G20=;
-        b=VrvP1Ai0BrzRMHrB4PSEWYQu43uoPRhZmXZ1pa72Z4JfcNGEB9Uy11gcCjb2hxf1iQ
-         pKnW1utK2frlngtN1BcHkWARyke2FkbTN920c1eps/lWcCSy3ZG07j1/h/8qLfqs2xyf
-         e9+AI6itd1ONLmP6JPqBQ1Y9kuRdsg9eeB5RvAaeGxAWgvx2uTkTBgizA99/8442rTGO
-         hzqO+KyhFtJJl647VqCBV9eh1VvlWhFuwcjVrCkogCNGacu3P0eRUwWwK01vsh3CzGbS
-         d5dc4Btw4ETaUYd5H2rarYIaIbFmbHyD2JDtrpCN8eDJ3ZN6KRsAEyAAJZxpzfKbovve
-         NJqQ==
-X-Gm-Message-State: AOAM530Yy2K1wciNBWNGM40XLN50BeDZ7Kv4ZFJHG1e9Skv4MVDjAvnE
-        jONcbHt6Ki8xEinmM1J0WV3vNQ==
-X-Google-Smtp-Source: ABdhPJxua26V/dTD9Xrx6ogoO6c0plBdrLo/kP7vn5fAlM3y5vBZrLDMIXXKyZRHMsd33ZQVnFsxyA==
-X-Received: by 2002:a17:902:f710:b0:15f:165f:b50b with SMTP id h16-20020a170902f71000b0015f165fb50bmr22287217plo.158.1653291123694;
-        Mon, 23 May 2022 00:32:03 -0700 (PDT)
-Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id u6-20020a17090341c600b0015e8d4eb2d8sm4322308ple.290.2022.05.23.00.32.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 00:32:03 -0700 (PDT)
-Date:   Mon, 23 May 2022 13:02:01 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Meng Li <li.meng@amd.com>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Huang Rui <ray.huang@amd.com>, linux-pm@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Jinzhou Su <Jinzhou.Su@amd.com>,
-        Perry Yuan <Perry.Yuan@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V7 2/4] cpufreq: amd-pstate: Add test module for
- amd-pstate driver
-Message-ID: <20220523073201.asdi35v5f43aoaee@vireshk-i7>
-References: <20220522115423.1147282-1-li.meng@amd.com>
- <20220522115423.1147282-3-li.meng@amd.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=17JqV26wVHdgo28ZqibLwQLBrW+2wdRYXH2zbWrVfCo=;
+        b=RuXd3XViSIR2zpe4lpNxOLL7SId5VV2EZCrAHDhjOSDPwts6MRXWzC/KpLbX30MUQS
+         ltxYi2U+D3kUzJVUxDzBl7q8q/SRykT1JtkcMYtHtVzmdplsw9hUaYMaa0v90Y6+bZvw
+         dYELh9V94LPV2NyhcheNTQmVuVkdlIINb6EwvP0xoefJqVu/vRsXZRPX8Q5w4/TUNp1Y
+         aeyBRZaicK/tTaclsoBJanCOZe2NMw2bgZZuIXYzlT52WJ5lzy9dOhPXghaqGx9WvXn+
+         HKT3d1fhiWX7ooDvJv+BEkJ+73mqOtnUsTbmR8Q5DU8KEigp28K0ExSVzYCqtK7FDepD
+         j3Lg==
+X-Gm-Message-State: AOAM533X/tJ7g9k+KTmcdy1gtVI4PthE6nC7MZelaq73jYUDAd30sV48
+        Km44QqCGxM7IISdUnbdcb3rbtQ==
+X-Google-Smtp-Source: ABdhPJwr/sSdCGIN0en6yM1a+IjJKGEZWdESs2RUoX6hwQ9lIqGKLwQqPAREwe3x2yxzBpnbbnpjpg==
+X-Received: by 2002:ac2:43a1:0:b0:478:5867:5047 with SMTP id t1-20020ac243a1000000b0047858675047mr9556576lfl.37.1653291135678;
+        Mon, 23 May 2022 00:32:15 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id r5-20020a19ac45000000b0047255d21167sm1828342lfc.150.2022.05.23.00.32.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 May 2022 00:32:15 -0700 (PDT)
+Message-ID: <d48f8b9b-92e2-2fc9-6d06-0b1496768d4e@linaro.org>
+Date:   Mon, 23 May 2022 09:32:13 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220522115423.1147282-3-li.meng@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v1 03/19] dt-bindings: serial: 8250: Add npcm845
+ compatible string
+Content-Language: en-US
+To:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
+        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
+        yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, daniel.lezcano@linaro.org,
+        tglx@linutronix.de, wim@linux-watchdog.org, linux@roeck-us.net,
+        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+        olof@lixom.net, jirislaby@kernel.org, shawnguo@kernel.org,
+        bjorn.andersson@linaro.org, geert+renesas@glider.be,
+        marcel.ziswiler@toradex.com, vkoul@kernel.org,
+        biju.das.jz@bp.renesas.com, nobuhiro1.iwamatsu@toshiba.co.jp,
+        robert.hancock@calian.com, j.neuschaefer@gmx.net, lkundrak@v3.sk
+Cc:     soc@kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220522155046.260146-1-tmaimon77@gmail.com>
+ <20220522155046.260146-4-tmaimon77@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220522155046.260146-4-tmaimon77@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,22 +90,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-05-22, 19:54, Meng Li wrote:
-> Add amd-pstate-ut module, which is conceptually out-of-tree module
-> and provides ways for selftests/amd-pstate driver to test various
-> kernel module-related functionality. This module will be expected by
-> some of selftests to be present and loaded.
+On 22/05/2022 17:50, Tomer Maimon wrote:
+> Add a compatible string for Nuvoton BMC NPCM845 UART.
 > 
-> Signed-off-by: Meng Li <li.meng@amd.com>
-> Acked-by: Huang Rui <ray.huang@amd.com>
+> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
 > ---
->  drivers/cpufreq/Kconfig.x86     |   7 +
->  drivers/cpufreq/Makefile        |   1 +
->  drivers/cpufreq/amd-pstate-ut.c | 293 ++++++++++++++++++++++++++++++++
->  3 files changed, 301 insertions(+)
->  create mode 100644 drivers/cpufreq/amd-pstate-ut.c
 
-I wonder if this should be moved to selftest directories instead ?
 
--- 
-viresh
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+Best regards,
+Krzysztof

@@ -2,137 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C4AA530831
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 06:03:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A2DB530834
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 06:05:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239835AbiEWEDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 00:03:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47220 "EHLO
+        id S1345546AbiEWEFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 00:05:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233803AbiEWEDk (ORCPT
+        with ESMTP id S233803AbiEWEFc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 00:03:40 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3BF2637B
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 21:03:38 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id u23so23458839lfc.1
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 21:03:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvz-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=bW8c38TBHTmvyMlXrqCJyQD8PokjGer3+J4297zdGvw=;
-        b=mcaThTE5dBITBMOf1I3i4Cl2+VlmZiPovGLxnCuy5cWkgcunGL7C/YxSF0y6DggkXv
-         R0uVzqeGidlnUs7ovAgpLar5Iu8ez3btY9/fbIDvmLRJHG8X1K6W+rp9vYVPwmgpwcwI
-         UPbSkzH/KoX2ArYCODZl8ct5UU+oojXM0wIEvlfRYCYqUqhRltTtgguRYvpEIDvND1g6
-         sch/HcigSO1OuIruiaxkxpgiJ1eQJi9idVtVIWYemUE8jugwPxHNGf8fumqbIxL+I+hT
-         NnouJ1Xwi1pCkLBA8r7gL/5k729DtAssUzqQKqXOdmQjx42wHjPJl0hrxzGs1DsJD8e/
-         Y8pA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=bW8c38TBHTmvyMlXrqCJyQD8PokjGer3+J4297zdGvw=;
-        b=U+s6I1e7JHT0Bvb4FXdIX/4fDBX/9/8s8iq6KgctLDhyO6KQ+SDitw9GeBqsUY3bjA
-         PA4ke7QFiYtJvdhiwPsqnRzHqyug6q4MPM8LIkRd6lK+nKOOSOe0SmzVyIZtpe34h1pg
-         ntqirWkf59Q/oqsch9/7ZCSdqb5xzTB9X0O4SDeTY4bgOSh8YRlaDFQhIzvRg4qJOwOP
-         EXpcIxrcG1uee6yEOZrE/CJO1wGPzQXlZtD1gxdOO3EwgNcgey93GWlUxD4C2A2rshj2
-         HAwyMgOpsuHupNEnfFdQ1Qvon3TuQBeoulCg+/Oc4TWdZ6Su0Tc2HZ15OXcUK2r+D0vB
-         dZAA==
-X-Gm-Message-State: AOAM533eH5vabe+UiGd4R36nCkgAIj8I+cQC2b+L1oO0WcHBcKG3MRXp
-        m0yH5mq1uvd3ZFKabzE2S/N08w==
-X-Google-Smtp-Source: ABdhPJzIdI/x9LBEDi6uVpcUNQbRCydpymBuic4N4Er1ZRdfASJDu7LBkXgCVuun8mCeH9K6wUW/JQ==
-X-Received: by 2002:a19:6516:0:b0:477:c159:e6b5 with SMTP id z22-20020a196516000000b00477c159e6b5mr15395297lfb.615.1653278617345;
-        Sun, 22 May 2022 21:03:37 -0700 (PDT)
-Received: from [192.168.1.65] ([46.188.121.185])
-        by smtp.gmail.com with ESMTPSA id z4-20020a195044000000b0047844f5301asm1382188lfj.290.2022.05.22.21.03.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 22 May 2022 21:03:37 -0700 (PDT)
-Message-ID: <100d8ba9-80e4-4ba8-0568-a77f0dbd4f78@openvz.org>
-Date:   Mon, 23 May 2022 07:03:36 +0300
+        Mon, 23 May 2022 00:05:32 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D19C5637B;
+        Sun, 22 May 2022 21:05:29 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L63df6XHSz4xD7;
+        Mon, 23 May 2022 14:05:26 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1653278728;
+        bh=Fzn4hoMSmZbg4otScjy8jrN/eCp69Sk3KAuu65T0H78=;
+        h=Date:From:To:Cc:Subject:From;
+        b=np2nYaEFc7uz/Wfbg7Ku/8dpkEX2TSR3PdQBiQtPUE8o+HFiJQu4dWsJVggvDsJQr
+         nKp3eWSMLA5zuqxr6VjuDBWqNyXT1Nhj2rzqGGIrcmbQZPjvK6QN8Dbijp6ogWZUMo
+         qIKk6kFUTPcawFXKY04++2tzCSg+sjMLDz9j8CfWJYI6ux8QYq7+T0HI5pznRleu1W
+         zi9DDTmowz6jCEBoEDPNZeEq2QBFdorxxJd9n3n1qO03x0wrpY0sjAm9QZWrrRweDA
+         jK4sRMqIrFuKTxeyNm2Ni2q+z4wCc0n5WbWcIbxJAgUSeDfv9IzNZUmx5tZ6t9dkld
+         swUAjXqjAnHig==
+Date:   Mon, 23 May 2022 14:05:25 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jassi Brar <jaswinder.singh@linaro.org>,
+        Rob Herring <robherring2@gmail.com>
+Cc:     David Heidelberg <david@ixit.cz>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Rob Herring <robh@kernel.org>
+Subject: linux-next: manual merge of the mailbox tree with the devicetree
+ tree
+Message-ID: <20220523140525.4ad591d0@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v4] tracing: add 'accounted' entry into output of
- allocation tracepoints
-Content-Language: en-US
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, kernel@openvz.org,
-        linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        linux-mm@kvack.org, Shakeel Butt <shakeelb@google.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        David Rientjes <rientjes@google.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Muchun Song <songmuchun@bytedance.com>
-References: <0c73ce5c-3625-6187-820e-1277e168b3bc@openvz.org>
- <a1e54672-d824-3ee1-cb68-9ceaa46fc70f@openvz.org>
- <YomzXwN9rvCGAZJ0@n2.us-central1-a.c.spheric-algebra-350919.internal>
- <1621d82a-439d-0657-2b7e-5e90c42c2087@openvz.org>
- <20220522160943.5e5950e0@gandalf.local.home>
-From:   Vasily Averin <vvs@openvz.org>
-In-Reply-To: <20220522160943.5e5950e0@gandalf.local.home>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/=rAw.59tZ1cA61PxWG775Ar";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/22/22 23:09, Steven Rostedt wrote:
-> On Sun, 22 May 2022 07:33:08 +0300
-> Vasily Averin <vvs@openvz.org> wrote:
-> 
->>> slab_flags=SLAB_RECLAIM_ACCOUNT|SLAB_ACCOUNT|SLAB_STORE_USER
->>> instead of just printing 'accounted=true/false'. This patch is too
->>> specific to SLAB_ACCOUNT.  
->>
->> Any extra output degrades performance.
->> For my task it's not important to know SLAB flags, I just need to understand,
->> is current allocation accounted or not.
-> 
-> If you do save the flags in the event, you can report that on output with
-> the __print_flags() macro:
-> 
->  TP_fast_assign(
-> 	[..]
-> 	__entry->sflags = s ? s->flags;
-> 	[..]
->  )
->  TP_printk("... slab_flags=%s ..",
-> 	[..]
-> 	__print_flags(sflags, "|",
-> 		{ SLAB_CONSISTENCY_CHECKS, "CONSISTENCY_CHECKS" },
-> 		{ SLAB_RED_ZONE, "RED_ZONE" },
-> 		{ SLAB_POISON, "POISON" },
-> 		{ SLAB_HWCACHE_ALIGN, "HWCACHE_ALIGN" },
-> 		{ SLAB_CACHE_DMA, "CACHE_DMA" },
-> 		{ SLAB_CACHE_DMA32, "CACHE_DMA32" },
-> 		{ SLAB_STORE_USER, "STORE_USER" },
-> 		{ SLAB_PANIC, "PANIC" }), ... )
-> 
-> 
-> And you get the flag output looking nicely, and all the processing is done
-> on the reader path.
-> 
-> That's if you find it useful at all.
+--Sig_/=rAw.59tZ1cA61PxWG775Ar
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for explanation!
-Yes, we can do it however I really doubt that any other slab flags are of interest to anyone.
+Hi all,
 
-Btw. in this form slab flags array causes sparse warnings,
-because SLAB_* are defined as bitwise slab_flags_t.
-This should be translated to unsigned long similarly to gfp_t flags.
+Today's linux-next merge of the mailbox tree got a conflict in:
 
-Thank you,
-	Vasily Averin
+  Documentation/devicetree/bindings/mailbox/qcom-ipcc.yaml
+
+between commit:
+
+  b20eee62ee89 ("dt-bindings: mailbox: qcom-ipcc: add missing properties in=
+to example")
+
+from the devicetree tree and commit:
+
+  cd285535b8ee ("dt-bindings: mailbox: qcom-ipcc: simplify the example")
+
+from the mailbox tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc Documentation/devicetree/bindings/mailbox/qcom-ipcc.yaml
+index 50f9aa72c670,dfdc72345a2a..000000000000
+--- a/Documentation/devicetree/bindings/mailbox/qcom-ipcc.yaml
++++ b/Documentation/devicetree/bindings/mailbox/qcom-ipcc.yaml
+@@@ -62,28 -61,14 +62,28 @@@ additionalProperties: fals
+ =20
+  examples:
+    - |
+-         #include <dt-bindings/interrupt-controller/arm-gic.h>
+-         #include <dt-bindings/mailbox/qcom-ipcc.h>
++     #include <dt-bindings/interrupt-controller/arm-gic.h>
++     #include <dt-bindings/mailbox/qcom-ipcc.h>
+ =20
+-         mailbox@408000 {
+-                 compatible =3D "qcom,sm8250-ipcc", "qcom,ipcc";
+-                 reg =3D <0x408000 0x1000>;
+-                 interrupts =3D <GIC_SPI 229 IRQ_TYPE_LEVEL_HIGH>;
+-                 interrupt-controller;
+-                 #interrupt-cells =3D <3>;
+-                 #mbox-cells =3D <2>;
+-         };
++     mailbox@408000 {
++         compatible =3D "qcom,sm8250-ipcc", "qcom,ipcc";
++         reg =3D <0x408000 0x1000>;
++         interrupts =3D <GIC_SPI 229 IRQ_TYPE_LEVEL_HIGH>;
++         interrupt-controller;
++         #interrupt-cells =3D <3>;
++         #mbox-cells =3D <2>;
++     };
+ +
+-         smp2p-modem {
+-                 compatible =3D "qcom,smp2p";
+-                 qcom,smem =3D <443>, <429>;
+-                 interrupts-extended =3D <&ipcc IPCC_CLIENT_LPASS
+-                                              IPCC_MPROC_SIGNAL_SMP2P
+-                                              IRQ_TYPE_EDGE_RISING>;
+-                 mboxes =3D <&ipcc IPCC_CLIENT_LPASS
+-                                 IPCC_MPROC_SIGNAL_SMP2P>;
+++    smp2p-modem {
+++        compatible =3D "qcom,smp2p";
+++        qcom,smem =3D <443>, <429>;
+++        interrupts-extended =3D <&ipcc IPCC_CLIENT_LPASS
+++                                     IPCC_MPROC_SIGNAL_SMP2P
+++                                     IRQ_TYPE_EDGE_RISING>;
+++        mboxes =3D <&ipcc IPCC_CLIENT_LPASS
+++                        IPCC_MPROC_SIGNAL_SMP2P>;
+ +
+-                 qcom,local-pid =3D <0>;
+-                 qcom,remote-pid =3D <2>;
+-                 /* Other SMP2P fields */
+-         };
+++        qcom,local-pid =3D <0>;
+++        qcom,remote-pid =3D <2>;
+++        /* Other SMP2P fields */
+++    };
+
+--Sig_/=rAw.59tZ1cA61PxWG775Ar
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKLCAUACgkQAVBC80lX
+0Gwojgf/cR82xL5ati0hnrmEAMdVEmCro6867KtJMJGl2PLJLd0Dbu3ddup8w1oI
+X45Ygca6jXzz2w5BYFO7IfkKVrYHa4nT2zy6vq7uZDUD/CczkoPCzsw3q6uU6bYO
+hrkIPjVsmHLliXV34JresvCKKZ1AoSjxOxO6PT1gDAJ4zwWcgEQFw3Q1juqmi1Q3
+/B2AClq38vYDdPSCPgezTqwNhAc3D9lwkbUqn8HzlVjzEtuD/dVg5P/bWpkFo5L7
+eTKnxVt6KqwyrLgd2TPzEtq+RUxY2T6ik5N5MGT0p9snJbPNKMgISnflXcbf1yGy
+wluyUqDDQ6BhzO7sqx87VDHGkswsxg==
+=J6Cr
+-----END PGP SIGNATURE-----
+
+--Sig_/=rAw.59tZ1cA61PxWG775Ar--

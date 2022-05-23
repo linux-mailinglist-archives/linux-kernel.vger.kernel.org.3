@@ -2,61 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97CD5530D7A
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:42:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B36CE530E13
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:43:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233907AbiEWKGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 06:06:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49072 "EHLO
+        id S233877AbiEWKHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 06:07:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233793AbiEWKF5 (ORCPT
+        with ESMTP id S233791AbiEWKHQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 06:05:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 74B0D44A11
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 03:05:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653300355;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=o6NjBzDr0abUPkWwfcw8udxm2iTvapM2gAXQlVu3sNM=;
-        b=XyHKwD0qit2gj5bByhoi/vYrvrXcVo0/Y8GwRlqORxjmbT2KWfzuV3m4sEgOze3EeFMa/w
-        15jGSREevkCT0C+ggHl/nB1BcQEEC81hM7JRRb/ManUMu12nMzYkjZ7IjsvycC8IUNbVrk
-        Y3YS03OwgTWGEcO5XXH6GQH+0FQWuwI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-606-Utfr81TKPSSGXRDNN8YdLA-1; Mon, 23 May 2022 06:05:54 -0400
-X-MC-Unique: Utfr81TKPSSGXRDNN8YdLA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DA02F811E75;
-        Mon, 23 May 2022 10:05:53 +0000 (UTC)
-Received: from fedora (unknown [10.40.194.17])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4198B1410DD5;
-        Mon, 23 May 2022 10:05:52 +0000 (UTC)
-Date:   Mon, 23 May 2022 12:05:49 +0200
-From:   Lukas Czerner <lczerner@redhat.com>
-To:     Baokun Li <libaokun1@huawei.com>
-Cc:     linux-ext4@vger.kernel.org, tytso@mit.edu,
-        adilger.kernel@dilger.ca, jack@suse.cz, ritesh.list@gmail.com,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        yebin10@huawei.com, yukuai3@huawei.com
-Subject: Re: [PATCH 2/2] ext4: correct the judgment of BUG in
- ext4_mb_normalize_request
-Message-ID: <20220523100549.jjzspu64lr4igt3m@fedora>
-References: <20220521134217.312071-1-libaokun1@huawei.com>
- <20220521134217.312071-3-libaokun1@huawei.com>
+        Mon, 23 May 2022 06:07:16 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3E843DDF4
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 03:07:13 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id v9so7319462lja.12
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 03:07:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=F4taQ5+IrXRMwOAhNcJUo/s1Ca6XrXb6YnUM76RxKpE=;
+        b=hX7ISdFon39d4aZ4z+AZ7AYEURkSDfboUIf7TkGGh7Z5DkqaT9KiJRDsY0VAxjH1Bc
+         z4DBfFwGuF5ibhJKm8kqPiyPNksBcGHKRcW9iwmNYcbKvVg3p8zoQPRoNEgd/aXVpQMr
+         itMwpv/WO6/dE4lRl7sKPKzDcNNsIa/amVUWyKxQSPtpwICmd9BuEPvMq64h12fuCy1p
+         I6tFyK/+ks1PQLol1jf5ng59rpGrN4CqlGMmd0+uL1wj0MmgrHUPkGTBOJ9fyGK5UMrM
+         oSqQdnCizMO8lXw4hsWxV9vF4QsteELBxkri21RDgsQn1xdgJlT6pwplVS+rFwNs9Hd5
+         DDkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=F4taQ5+IrXRMwOAhNcJUo/s1Ca6XrXb6YnUM76RxKpE=;
+        b=n0Z3nNthyXdtPoiLdzvVP7C6cryIZNHJGEK6XbURklmqIcowd2fVgUevWy6Cp5LubP
+         9dcrsygzenZsv9du710rqSaXKqn5OePZ1bNvdWAqtU0NUUyRcw1nw9i/hlQCQZH5Xl2l
+         +Xc7Pr9UaGbHIUOkyESOxHgZc2vePm8Bah4IYPx3IxGVRKl5gEucFfu4laxse9Flv8ok
+         6ztLieT9nNAUzawjPb986x4mYJfU8FILAFd+Fe4/rvRsdvkMjAX0Y05Vrg/ZSxmEqKaf
+         856vuBZ2CNWN2aEJrLQbhB/x8yz0vdnUvGuSR7oIiFoHuApFH1GVqy7o7IimjwBSild5
+         uwHg==
+X-Gm-Message-State: AOAM5304h2A9wJ2cisIZlGOjzsiXOwctHk9tFc/H63ijmR8rpOXk+Hdb
+        zkZl827XfItL9EZpjYHYGf89Tw==
+X-Google-Smtp-Source: ABdhPJxMjrqPZFZvMoxN4x/AxW+GX9hdhs+gP+izmBR2K0BBNuq8/KL6QCSUi/r+3onn1sJRZlR8NA==
+X-Received: by 2002:a2e:a794:0:b0:250:5de1:1ec5 with SMTP id c20-20020a2ea794000000b002505de11ec5mr12601741ljf.270.1653300431926;
+        Mon, 23 May 2022 03:07:11 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id z6-20020a196506000000b0047861c163d0sm1063397lfb.37.2022.05.23.03.07.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 May 2022 03:07:11 -0700 (PDT)
+Message-ID: <170dd20b-ab0b-0f61-bfe9-cb9167a2e133@linaro.org>
+Date:   Mon, 23 May 2022 12:07:10 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220521134217.312071-3-libaokun1@huawei.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [RFC PATCH 01/14] media: dt-bindings: media: camss: Add
+ qcom,msm8974-camss binding
+Content-Language: en-US
+To:     Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        matti.lehtimaki@gmail.com
+References: <20220522162802.208275-1-luca@z3ntu.xyz>
+ <20220522162802.208275-2-luca@z3ntu.xyz>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220522162802.208275-2-luca@z3ntu.xyz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,38 +86,366 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 21, 2022 at 09:42:17PM +0800, Baokun Li wrote:
-> When either of the "start + size <= ac->ac_o_ex.fe_logical" or
-> "start > ac->ac_o_ex.fe_logical" conditions is met, it indicates
-> that the fe_logical is not in the allocated range.
-> In this case, it should be bug_ON.
+On 22/05/2022 18:27, Luca Weiss wrote:
+> From: Matti Lehtimäki <matti.lehtimaki@gmail.com>
 
-This seems wrong, I think that this condition is testing overflow and
-it's correct as it is. Or am I missing something?
-
--Lukas
+Thank you for your patch. There is something to discuss/improve.
 
 > 
-> Fixes: dfe076c106f6 ("ext4: get rid of code duplication")
-> Signed-off-by: Baokun Li <libaokun1@huawei.com>
+> Add bindings for qcom,msm8974-camss in order to support the camera
+> subsystem on MSM8974.
+> 
+> Signed-off-by: Matti Lehtimäki <matti.lehtimaki@gmail.com>
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 > ---
->  fs/ext4/mballoc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  .../bindings/media/qcom,msm8974-camss.yaml    | 321 ++++++++++++++++++
+>  1 file changed, 321 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/qcom,msm8974-camss.yaml
 > 
-> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
-> index 32410b79b664..d0fb57970648 100644
-> --- a/fs/ext4/mballoc.c
-> +++ b/fs/ext4/mballoc.c
-> @@ -4190,7 +4190,7 @@ ext4_mb_normalize_request(struct ext4_allocation_context *ac,
->  	}
->  	rcu_read_unlock();
->  
-> -	if (start + size <= ac->ac_o_ex.fe_logical &&
-> +	if (start + size <= ac->ac_o_ex.fe_logical ||
->  			start > ac->ac_o_ex.fe_logical) {
->  		ext4_msg(ac->ac_sb, KERN_ERR,
->  			 "start %lu, size %lu, fe_logical %lu",
-> -- 
-> 2.31.1
-> 
+> diff --git a/Documentation/devicetree/bindings/media/qcom,msm8974-camss.yaml b/Documentation/devicetree/bindings/media/qcom,msm8974-camss.yaml
+> new file mode 100644
+> index 000000000000..f8f71e477535
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/qcom,msm8974-camss.yaml
+> @@ -0,0 +1,321 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/media/qcom,msm8974-camss.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: Qualcomm CAMSS ISP
+> +
+> +maintainers:
+> +  - Robert Foss <robert.foss@linaro.org>
+> +
+> +description: |
+> +  The CAMSS IP is a CSI decoder and ISP present on Qualcomm platforms
+> +
+> +properties:
+> +  compatible:
+> +    const: qcom,msm8974-camss
+> +
+> +  clocks:
+> +    minItems: 31
 
+No need for minItems, they are equal to max by default.
+
+> +    maxItems: 31
+> +
+> +  clock-names:
+> +    items:
+> +      - const: top_ahb
+> +      - const: ispif_ahb
+> +      - const: csiphy0_timer
+> +      - const: csiphy1_timer
+> +      - const: csiphy2_timer
+> +      - const: csi0_ahb
+> +      - const: csi0
+> +      - const: csi0_phy
+> +      - const: csi0_pix
+> +      - const: csi0_rdi
+> +      - const: csi1_ahb
+> +      - const: csi1
+> +      - const: csi1_phy
+> +      - const: csi1_pix
+> +      - const: csi1_rdi
+> +      - const: csi2_ahb
+> +      - const: csi2
+> +      - const: csi2_phy
+> +      - const: csi2_pix
+> +      - const: csi2_rdi
+> +      - const: csi3_ahb
+> +      - const: csi3
+> +      - const: csi3_phy
+> +      - const: csi3_pix
+> +      - const: csi3_rdi
+> +      - const: vfe0
+> +      - const: vfe1
+> +      - const: csi_vfe0
+> +      - const: csi_vfe1
+> +      - const: iface
+> +      - const: bus
+> +
+> +  interrupts:
+> +    minItems: 10
+
+Same.
+
+> +    maxItems: 10
+> +
+> +  interrupt-names:
+> +    items:
+> +      - const: csiphy0
+> +      - const: csiphy1
+> +      - const: csiphy2
+> +      - const: csid0
+> +      - const: csid1
+> +      - const: csid2
+> +      - const: csid3
+> +      - const: ispif
+> +      - const: vfe0
+> +      - const: vfe1
+> +
+> +  power-domains:
+> +    items:
+> +      - description: VFE GDSC - Video Front End, Global Distributed Switch Controller.
+> +
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +
+> +    description:
+> +      CSI input ports.
+> +
+> +    properties:
+> +      port@0:
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> +        unevaluatedProperties: false
+> +        description:
+> +          Input port for receiving CSI data.
+> +
+> +        properties:
+> +          endpoint:
+> +            $ref: video-interfaces.yaml#
+> +            unevaluatedProperties: false
+> +
+> +            properties:
+> +              clock-lanes:
+> +                items:
+> +                  - const: 1
+> +
+> +              data-lanes:
+> +                minItems: 1
+> +                maxItems: 4
+> +
+> +            required:
+> +              - clock-lanes
+> +              - data-lanes
+> +
+> +      port@1:
+
+These look all the same, so just use patternPropreties (in "ports") with
+proper pattern.
+
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> +        unevaluatedProperties: false
+> +        description:
+> +          Input port for receiving CSI data.
+> +
+> +        properties:
+> +          endpoint:
+> +            $ref: video-interfaces.yaml#
+> +            unevaluatedProperties: false
+> +
+> +            properties:
+> +              clock-lanes:
+> +                items:
+> +                  - const: 1
+> +
+> +              data-lanes:
+> +                minItems: 1
+> +                maxItems: 4
+> +
+> +            required:
+> +              - clock-lanes
+> +              - data-lanes
+> +
+> +      port@2:
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> +        unevaluatedProperties: false
+> +        description:
+> +          Input port for receiving CSI data.
+> +
+> +        properties:
+> +          endpoint:
+> +            $ref: video-interfaces.yaml#
+> +            unevaluatedProperties: false
+> +
+> +            properties:
+> +              clock-lanes:
+> +                items:
+> +                  - const: 1
+> +
+> +              data-lanes:
+> +                minItems: 1
+> +                maxItems: 4
+> +
+> +            required:
+> +              - clock-lanes
+> +              - data-lanes
+> +
+> +  reg:
+> +    minItems: 14
+> +    maxItems: 14
+> +
+> +  reg-names:
+> +    items:
+> +      - const: csiphy0
+> +      - const: csiphy0_clk_mux
+> +      - const: csiphy1
+> +      - const: csiphy1_clk_mux
+> +      - const: csiphy2
+> +      - const: csiphy2_clk_mux
+> +      - const: csid0
+> +      - const: csid1
+> +      - const: csid2
+> +      - const: csid3
+> +      - const: ispif
+> +      - const: csi_clk_mux
+> +      - const: vfe0
+> +      - const: vfe1
+> +
+> +  vdda-supply:
+> +    description:
+> +      Definition of the regulator used as analog power supply.
+> +
+> +required:
+> +  - clock-names
+> +  - clocks
+> +  - compatible
+> +  - interrupt-names
+> +  - interrupts
+> +  - power-domains
+> +  - reg
+> +  - reg-names
+> +  - vdda-supply
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/clock/qcom,gcc-msm8974.h>
+> +    #include <dt-bindings/clock/qcom,mmcc-msm8974.h>
+> +    camss@fda00000 {
+
+Generic node name, so "isp" I guess?
+
+> +        compatible = "qcom,msm8974-camss";
+> +        reg = <0xfda0ac00 0x200>,
+> +              <0xfda00030 0x4>,
+> +              <0xfda0b000 0x200>,
+> +              <0xfda00038 0x4>,
+> +              <0xfda0b400 0x200>,
+> +              <0xfda00040 0x4>,
+> +              <0xfda08000 0x100>,
+> +              <0xfda08400 0x100>,
+> +              <0xfda08800 0x100>,
+> +              <0xfda08c00 0x100>,
+> +              <0xfda0a000 0x800>,
+> +              <0xfda00020 0x10>,
+> +              <0xfda10000 0x1000>,
+> +              <0xfda14000 0x1000>;
+> +        reg-names = "csiphy0",
+> +                    "csiphy0_clk_mux",
+> +                    "csiphy1",
+> +                    "csiphy1_clk_mux",
+> +                    "csiphy2",
+> +                    "csiphy2_clk_mux",
+> +                    "csid0",
+> +                    "csid1",
+> +                    "csid2",
+> +                    "csid3",
+> +                    "ispif",
+> +                    "csi_clk_mux",
+> +                    "vfe0",
+> +                    "vfe1";
+> +        interrupts = <GIC_SPI 78 IRQ_TYPE_EDGE_RISING>,
+> +                     <GIC_SPI 79 IRQ_TYPE_EDGE_RISING>,
+> +                     <GIC_SPI 80 IRQ_TYPE_EDGE_RISING>,
+> +                     <GIC_SPI 51 IRQ_TYPE_EDGE_RISING>,
+> +                     <GIC_SPI 52 IRQ_TYPE_EDGE_RISING>,
+> +                     <GIC_SPI 53 IRQ_TYPE_EDGE_RISING>,
+> +                     <GIC_SPI 54 IRQ_TYPE_EDGE_RISING>,
+> +                     <GIC_SPI 55 IRQ_TYPE_EDGE_RISING>,
+> +                     <GIC_SPI 57 IRQ_TYPE_EDGE_RISING>,
+> +                     <GIC_SPI 58 IRQ_TYPE_EDGE_RISING>;
+> +        interrupt-names = "csiphy0",
+> +                          "csiphy1",
+> +                          "csiphy2",
+> +                          "csid0",
+> +                          "csid1",
+> +                          "csid2",
+> +                          "csid3",
+> +                          "ispif",
+> +                          "vfe0",
+> +                          "vfe1";
+> +        power-domains = <&mmcc CAMSS_VFE_GDSC>;
+> +        clocks = <&mmcc CAMSS_TOP_AHB_CLK>,
+> +                 <&mmcc CAMSS_ISPIF_AHB_CLK>,
+> +                 <&mmcc CAMSS_PHY0_CSI0PHYTIMER_CLK>,
+> +                 <&mmcc CAMSS_PHY1_CSI1PHYTIMER_CLK>,
+> +                 <&mmcc CAMSS_PHY2_CSI2PHYTIMER_CLK>,
+> +                 <&mmcc CAMSS_CSI0_AHB_CLK>,
+> +                 <&mmcc CAMSS_CSI0_CLK>,
+> +                 <&mmcc CAMSS_CSI0PHY_CLK>,
+> +                 <&mmcc CAMSS_CSI0PIX_CLK>,
+> +                 <&mmcc CAMSS_CSI0RDI_CLK>,
+> +                 <&mmcc CAMSS_CSI1_AHB_CLK>,
+> +                 <&mmcc CAMSS_CSI1_CLK>,
+> +                 <&mmcc CAMSS_CSI1PHY_CLK>,
+> +                 <&mmcc CAMSS_CSI1PIX_CLK>,
+> +                 <&mmcc CAMSS_CSI1RDI_CLK>,
+> +                 <&mmcc CAMSS_CSI2_AHB_CLK>,
+> +                 <&mmcc CAMSS_CSI2_CLK>,
+> +                 <&mmcc CAMSS_CSI2PHY_CLK>,
+> +                 <&mmcc CAMSS_CSI2PIX_CLK>,
+> +                 <&mmcc CAMSS_CSI2RDI_CLK>,
+> +                 <&mmcc CAMSS_CSI3_AHB_CLK>,
+> +                 <&mmcc CAMSS_CSI3_CLK>,
+> +                 <&mmcc CAMSS_CSI3PHY_CLK>,
+> +                 <&mmcc CAMSS_CSI3PIX_CLK>,
+> +                 <&mmcc CAMSS_CSI3RDI_CLK>,
+> +                 <&mmcc CAMSS_VFE_VFE0_CLK>,
+> +                 <&mmcc CAMSS_VFE_VFE1_CLK>,
+> +                 <&mmcc CAMSS_CSI_VFE0_CLK>,
+> +                 <&mmcc CAMSS_CSI_VFE1_CLK>,
+> +                 <&mmcc CAMSS_VFE_VFE_AHB_CLK>,
+> +                 <&mmcc CAMSS_VFE_VFE_AXI_CLK>;
+> +        clock-names = "top_ahb",
+> +                      "ispif_ahb",
+> +                      "csiphy0_timer",
+> +                      "csiphy1_timer",
+> +                      "csiphy2_timer",
+> +                      "csi0_ahb",
+> +                      "csi0",
+> +                      "csi0_phy",
+> +                      "csi0_pix",
+> +                      "csi0_rdi",
+> +                      "csi1_ahb",
+> +                      "csi1",
+> +                      "csi1_phy",
+> +                      "csi1_pix",
+> +                      "csi1_rdi",
+> +                      "csi2_ahb",
+> +                      "csi2",
+> +                      "csi2_phy",
+> +                      "csi2_pix",
+> +                      "csi2_rdi",
+> +                      "csi3_ahb",
+> +                      "csi3",
+> +                      "csi3_phy",
+> +                      "csi3_pix",
+> +                      "csi3_rdi",
+> +                      "vfe0",
+> +                      "vfe1",
+> +                      "csi_vfe0",
+> +                      "csi_vfe1",
+> +                      "iface",
+> +                      "bus";
+> +
+> +        vdda-supply = <&pm8941_l12>;
+> +
+> +        ports {
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+
+This is not a complete example... empty ports node is useless, isn't it?
+
+> +        };
+> +    };
+
+
+Best regards,
+Krzysztof

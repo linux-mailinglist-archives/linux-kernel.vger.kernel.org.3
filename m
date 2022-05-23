@@ -2,60 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D48BA530DDB
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:42:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80817530E3F
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:43:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233796AbiEWKEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 06:04:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47230 "EHLO
+        id S233859AbiEWKFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 06:05:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233679AbiEWKEn (ORCPT
+        with ESMTP id S233821AbiEWKFB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 06:04:43 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B22E4DE2;
-        Mon, 23 May 2022 03:04:41 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 695421F41C08
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1653300280;
-        bh=nikwer9gVP1aMdWQqAPZU00MWdHcjPiQkcZmJpOI/6c=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=P7YTLX+Ym2FYe6eT9rDUdd8ETIPiIiYCbk00+vqVPBQtImH8hKHshZE/5KaFgW7Dq
-         GloerK1d+zp5JuMNh3T+Z12lQNImk3xXtm4tSHjd1o5swfkAUyhztOu1cPGkMQQ2cK
-         jecf4h2mzW29htMQYH1G42J4czNU3mvWlo49snE4tzvbOFqrQgKG//CkknAS7mr1mK
-         DEDCkQTFIR7jPt8owr4oRvRmIeEv2Xt02dLr57SKdE7zz+kd2Cd+wmDOQE9+KUvU69
-         TagWWRwuK470WQHtltpIUsHTLcJ2YpC9hDcJ5OfYZdZuxg3M8oSGKlxOlr9/7vGbUb
-         kLl+OL6aZcglw==
-Message-ID: <f6cd735b-2ba4-7456-684d-b20f0b46effe@collabora.com>
-Date:   Mon, 23 May 2022 12:04:37 +0200
+        Mon, 23 May 2022 06:05:01 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592D017AAC;
+        Mon, 23 May 2022 03:04:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653300299; x=1684836299;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ggL90ToVu7qh9RF4iy+2ZjsDqdtGnMx14duWRCjmabI=;
+  b=eg2c45XEARSUDygpZHi3cpp28QACJtDWGaAQGdP9D1MuLDyyQ5N1zWY6
+   OLczJCbwnY6pXjesErMekh5jN6qFOR61jf3EuULCfTAPMrAvn0IDiHWoh
+   NSgKrnw7sjyJy1+5Q0c4SGSbvZ6n1/tMh+Wp7i/oDhc4JpTtNsXbZsTfh
+   WUQfHLDuj1rrjC/PUN8NG0gqVv71SLVcseiN8Phc7WQSN9sId2wfbMVYL
+   KDSj3FONQODu1EKY1w8FcdjA6jG9PW3XRpXq9QGxszIrmTnyxJUWN4ZTV
+   Nr3DCNUgT/nhfSvMbk4kn4Fhc7hk+bs0BtmLsY0xefXci0tA0/LQbPtOX
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10355"; a="333814162"
+X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
+   d="scan'208";a="333814162"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 03:04:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
+   d="scan'208";a="675791641"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 23 May 2022 03:04:53 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nt4vk-00013a-WC;
+        Mon, 23 May 2022 10:04:53 +0000
+Date:   Mon, 23 May 2022 18:04:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Corentin Labbe <clabbe@baylibre.com>, andrew@lunn.ch,
+        broonie@kernel.org, calvin.johnson@oss.nxp.com,
+        davem@davemloft.net, edumazet@google.com, hkallweit1@gmail.com,
+        jernej.skrabec@gmail.com, krzysztof.kozlowski+dt@linaro.org,
+        kuba@kernel.org, lgirdwood@gmail.com, linux@armlinux.org.uk,
+        pabeni@redhat.com, robh+dt@kernel.org, samuel@sholland.org,
+        wens@csie.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        netdev@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>
+Subject: Re: [PATCH v3 1/3] regulator: Add regulator_bulk_get_all
+Message-ID: <202205231709.3Wo0pW9z-lkp@intel.com>
+References: <20220523052807.4044800-2-clabbe@baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v2 3/4] clk: mediatek: mux: add clk notifier functions
-Content-Language: en-US
-To:     Chen-Yu Tsai <wenst@chromium.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220523085923.1430470-1-wenst@chromium.org>
- <20220523085923.1430470-4-wenst@chromium.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220523085923.1430470-4-wenst@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220523052807.4044800-2-clabbe@baylibre.com>
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,152 +72,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 23/05/22 10:59, Chen-Yu Tsai ha scritto:
-> With device frequency scaling, the mux clock that (indirectly) feeds the
-> device selects between a dedicated PLL, and some other stable clocks.
-> 
-> When a clk rate change is requested, the (normally) upstream PLL is
-> reconfigured. It's possible for the clock output of the PLL to become
-> unstable during this process.
-> 
-> To avoid causing the device to glitch, the mux should temporarily be
-> switched over to another "stable" clock during the PLL rate change.
-> This is done with clk notifiers.
-> 
-> This patch adds common functions for notifiers to temporarily and
-> transparently reparent mux clocks.
-> 
-> This was loosely based on commit 8adfb08605a9 ("clk: sunxi-ng: mux: Add
-> clk notifier functions").
-> 
-> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-> ---
->   drivers/clk/mediatek/clk-mux.c | 42 ++++++++++++++++++++++++++++++++++
->   drivers/clk/mediatek/clk-mux.h | 15 ++++++++++++
->   2 files changed, 57 insertions(+)
-> 
-> diff --git a/drivers/clk/mediatek/clk-mux.c b/drivers/clk/mediatek/clk-mux.c
-> index cd5f9fd8cb98..f84a5a753c09 100644
-> --- a/drivers/clk/mediatek/clk-mux.c
-> +++ b/drivers/clk/mediatek/clk-mux.c
-> @@ -4,6 +4,7 @@
->    * Author: Owen Chen <owen.chen@mediatek.com>
->    */
->   
-> +#include <linux/clk.h>
->   #include <linux/clk-provider.h>
->   #include <linux/compiler_types.h>
->   #include <linux/container_of.h>
-> @@ -259,4 +260,45 @@ void mtk_clk_unregister_muxes(const struct mtk_mux *muxes, int num,
->   }
->   EXPORT_SYMBOL_GPL(mtk_clk_unregister_muxes);
->   
-> +/*
-> + * This clock notifier is called when the frequency of the of the parent
-> + * PLL clock is to be changed. The idea is to switch the parent to a
-> + * stable clock, such as the main oscillator, while the PLL frequency
-> + * stabilizes.
-> + */
-> +static int mtk_clk_mux_notifier_cb(struct notifier_block *nb,
-> +				   unsigned long event, void *_data)
-> +{
-> +	struct clk_notifier_data *data = _data;
-> +	struct mtk_mux_nb *mux_nb = to_mtk_mux_nb(nb);
-> +	const struct mtk_mux *mux = mux_nb->mux;
-> +	struct clk_hw *hw;
-> +	int ret = 0;
-> +
-> +	hw = __clk_get_hw(data->clk);
-> +
-> +	switch (event) {
-> +	case PRE_RATE_CHANGE:
-> +		mux_nb->original_index = mux->ops->get_parent(hw);
-> +		ret = mux->ops->set_parent(hw, mux_nb->bypass_index);
-> +		break;
-> +
-> +	case POST_RATE_CHANGE:
-> +	case ABORT_RATE_CHANGE:
+Hi Corentin,
 
-I agree with this change, entirely - but there's an issue here.
-If we enter ABORT_RATE_CHANGE, this means that "something has failed": now,
-what if the failure point was the PLL being unable to lock?
+I love your patch! Yet something to improve:
 
-In that case, we would switch the parent back to a PLL that's not outputting
-any clock, crashing the GPU, or a bogus rate, potentially undervolting the GPU.
+[auto build test ERROR on broonie-regulator/for-next]
+[also build test ERROR on sunxi/sunxi/for-next linus/master v5.18 next-20220520]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-I think that the best idea here would be to do something like..
+url:    https://github.com/intel-lab-lkp/linux/commits/Corentin-Labbe/arm64-add-ethernet-to-orange-pi-3/20220523-133344
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+config: hexagon-buildonly-randconfig-r002-20220522 (https://download.01.org/0day-ci/archive/20220523/202205231709.3Wo0pW9z-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 768a1ca5eccb678947f4155e38a5f5744dcefb56)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/179be86f748a2cce87423bb16f4f967c97bf5d9b
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Corentin-Labbe/arm64-add-ethernet-to-orange-pi-3/20220523-133344
+        git checkout 179be86f748a2cce87423bb16f4f967c97bf5d9b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/
 
-	switch (event) {
-	case PRE_RATE_CHANGE:
-		mux_nb->old_parent_idx = mux->ops->get_parent(hw);
-		ret = mux->ops->set_parent(hw, mux_nb->safe_parent_idx);
-		break;
-	case POST_RATE_CHANGE:
-		ret = mux->ops->set_parent(hw, mux_nb->old_parent_idx);
-		break;
-	case ABORT_RATE_CHANGE:
-		ret = -EINVAL; /* or -ECANCELED, whatever... */
-		break;
-	}
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> +		ret = mux->ops->set_parent(hw, mux_nb->original_index);
-> +		break;
-> +	}
-> +
-> +	return notifier_from_errno(ret);
-> +}
-> +
-> +int devm_mtk_clk_mux_notifier_register(struct device *dev, struct clk *clk,
-> +				       struct mtk_mux_nb *mux_nb)
-> +{
-> +	mux_nb->nb.notifier_call = mtk_clk_mux_notifier_cb;
-> +
-> +	return devm_clk_notifier_register(dev, clk, &mux_nb->nb);
-> +}
-> +EXPORT_SYMBOL_GPL(devm_mtk_clk_mux_notifier_register);
-> +
->   MODULE_LICENSE("GPL");
-> diff --git a/drivers/clk/mediatek/clk-mux.h b/drivers/clk/mediatek/clk-mux.h
-> index 6539c58f5d7d..506e91125a3d 100644
-> --- a/drivers/clk/mediatek/clk-mux.h
-> +++ b/drivers/clk/mediatek/clk-mux.h
-> @@ -7,12 +7,14 @@
->   #ifndef __DRV_CLK_MTK_MUX_H
->   #define __DRV_CLK_MTK_MUX_H
->   
-> +#include <linux/notifier.h>
->   #include <linux/spinlock.h>
->   #include <linux/types.h>
->   
->   struct clk;
->   struct clk_hw_onecell_data;
->   struct clk_ops;
-> +struct device;
->   struct device_node;
->   
->   struct mtk_mux {
-> @@ -89,4 +91,17 @@ int mtk_clk_register_muxes(const struct mtk_mux *muxes,
->   void mtk_clk_unregister_muxes(const struct mtk_mux *muxes, int num,
->   			      struct clk_hw_onecell_data *clk_data);
->   
-> +struct mtk_mux_nb {
-> +	struct notifier_block	nb;
-> +	const struct mtk_mux	*mux;
-> +
-> +	u8	bypass_index;	/* Which parent to temporarily use */
-> +	u8	original_index;	/* Set by notifier callback */
+All errors (new ones prefixed by >>):
 
-I think that the following names are more explanatory:
-
-	u8	safe_parent_idx;
-	u8	old_parent_idx;
-
-...because I see this as a mechanism to switch the mux to a "safe" clock output
-and then back to the PLL (like it's done on some qcom clocks as well).
-
-You're free to ignore this comment, as this is, of course, just a personal opinion.
-
-Cheers,
-Angelo
+>> drivers/regulator/core.c:4870:2: error: call to undeclared function 'for_each_property_of_node'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           for_each_property_of_node(np, prop) {
+           ^
+>> drivers/regulator/core.c:4870:37: error: expected ';' after expression
+           for_each_property_of_node(np, prop) {
+                                              ^
+                                              ;
+>> drivers/regulator/core.c:4873:4: error: 'continue' statement not in loop statement
+                           continue;
+                           ^
+   drivers/regulator/core.c:4876:4: error: 'continue' statement not in loop statement
+                           continue;
+                           ^
+   drivers/regulator/core.c:4887:4: error: 'continue' statement not in loop statement
+                           continue;
+                           ^
+   5 errors generated.
 
 
+vim +/for_each_property_of_node +4870 drivers/regulator/core.c
+
+  4839	
+  4840	/*
+  4841	 * regulator_bulk_get_all - get multiple regulator consumers
+  4842	 *
+  4843	 * @dev:	Device to supply
+  4844	 * @np:		device node to search for consumers
+  4845	 * @consumers:  Configuration of consumers; clients are stored here.
+  4846	 *
+  4847	 * @return number of regulators on success, an errno on failure.
+  4848	 *
+  4849	 * This helper function allows drivers to get several regulator
+  4850	 * consumers in one operation.  If any of the regulators cannot be
+  4851	 * acquired then any regulators that were allocated will be freed
+  4852	 * before returning to the caller.
+  4853	 */
+  4854	int regulator_bulk_get_all(struct device *dev, struct device_node *np,
+  4855				   struct regulator_bulk_data **consumers)
+  4856	{
+  4857		int num_consumers = 0;
+  4858		struct regulator *tmp;
+  4859		struct property *prop;
+  4860		int i, n = 0, ret;
+  4861		char name[64];
+  4862	
+  4863		*consumers = NULL;
+  4864	
+  4865	/*
+  4866	 * first pass: get numbers of xxx-supply
+  4867	 * second pass: fill consumers
+  4868	 * */
+  4869	restart:
+> 4870		for_each_property_of_node(np, prop) {
+  4871			i = is_supply_name(prop->name);
+  4872			if (i == 0)
+> 4873				continue;
+  4874			if (!*consumers) {
+  4875				num_consumers++;
+  4876				continue;
+  4877			} else {
+  4878				memcpy(name, prop->name, i);
+  4879				name[i] = '\0';
+  4880				tmp = regulator_get(dev, name);
+  4881				if (!tmp) {
+  4882					ret = -EINVAL;
+  4883					goto error;
+  4884				}
+  4885				(*consumers)[n].consumer = tmp;
+  4886				n++;
+  4887				continue;
+  4888			}
+  4889		}
+  4890		if (*consumers)
+  4891			return num_consumers;
+  4892		if (num_consumers == 0)
+  4893			return 0;
+  4894		*consumers = kmalloc_array(num_consumers,
+  4895					   sizeof(struct regulator_bulk_data),
+  4896					   GFP_KERNEL);
+  4897		if (!*consumers)
+  4898			return -ENOMEM;
+  4899		goto restart;
+  4900	
+  4901	error:
+  4902		while (--n >= 0)
+  4903			regulator_put(consumers[n]->consumer);
+  4904		return ret;
+  4905	}
+  4906	EXPORT_SYMBOL_GPL(regulator_bulk_get_all);
+  4907	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 929E75316A0
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:52:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35C9B531AE1
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240634AbiEWRZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:25:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34034 "EHLO
+        id S240199AbiEWRQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:16:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240797AbiEWRQn (ORCPT
+        with ESMTP id S240350AbiEWRL6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:16:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D23062BC3;
-        Mon, 23 May 2022 10:16:32 -0700 (PDT)
+        Mon, 23 May 2022 13:11:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D338E1BE98;
+        Mon, 23 May 2022 10:11:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2163FB811F6;
-        Mon, 23 May 2022 17:13:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CC46C385A9;
-        Mon, 23 May 2022 17:13:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 963D1614E9;
+        Mon, 23 May 2022 17:09:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 949D3C385AA;
+        Mon, 23 May 2022 17:09:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326014;
-        bh=AjV0KidD6laytPE2vdH+XdL8fxaQdJo0NN4+hqr5dqw=;
+        s=korg; t=1653325776;
+        bh=uDIOecDU8Abr+cZEuvulgCr1RfQHBxfq9SyEzp2mV1U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VBjZhLWgeEXC9EA4gPa1vhAVBCUCwFgYZ4Xd4XMboMmyyDwA5IKOPOJcuZUZKQvyw
-         +1SJbkU3FF4EZHBd8G7jj5WO4G9id/A+eZz9tpmjYeNh2klWFGgE9ZO7jwLs75dY7P
-         3+iV653K1lXpmoH1sZQwr66urBO8ltLDmiFmOPsk=
+        b=mzNM2gXywURdWaPHZ0kSfVTm/ufRrFc2MOloT5T+Qs7n4EII6J62GOyzHt/FrgMvP
+         tSPN/U3z/f6UzZh0o5+1/LTMRWFqqgPhvI2E5sdGpKf3em+PPpFvr8ylvKlYOmRXiq
+         +mhkuljnTP6Fah1CtBajFwy/MAagLVX7Tt3pAYSk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 41/68] clk: at91: generated: consider range when calculating best rate
+Subject: [PATCH 4.14 19/33] net: af_key: add check for pfkey_broadcast in function pfkey_process
 Date:   Mon, 23 May 2022 19:05:08 +0200
-Message-Id: <20220523165809.389122273@linuxfoundation.org>
+Message-Id: <20220523165751.192947211@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165802.500642349@linuxfoundation.org>
-References: <20220523165802.500642349@linuxfoundation.org>
+In-Reply-To: <20220523165746.957506211@linuxfoundation.org>
+References: <20220523165746.957506211@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,40 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit d0031e6fbed955ff8d5f5bbc8fe7382482559cec ]
+[ Upstream commit 4dc2a5a8f6754492180741facf2a8787f2c415d7 ]
 
-clk_generated_best_diff() helps in finding the parent and the divisor to
-compute a rate closest to the required one. However, it doesn't take into
-account the request's range for the new rate. Make sure the new rate
-is within the required range.
+If skb_clone() returns null pointer, pfkey_broadcast() will
+return error.
+Therefore, it should be better to check the return value of
+pfkey_broadcast() and return error if fails.
 
-Fixes: 8a8f4bf0c480 ("clk: at91: clk-generated: create function to find best_diff")
-Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-Link: https://lore.kernel.org/r/20220413071318.244912-1-codrin.ciubotariu@microchip.com
-Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/at91/clk-generated.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ net/key/af_key.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/clk/at91/clk-generated.c b/drivers/clk/at91/clk-generated.c
-index d7fe1303f79d..0e7ec5075689 100644
---- a/drivers/clk/at91/clk-generated.c
-+++ b/drivers/clk/at91/clk-generated.c
-@@ -105,6 +105,10 @@ static void clk_generated_best_diff(struct clk_rate_request *req,
- 		tmp_rate = parent_rate;
- 	else
- 		tmp_rate = parent_rate / div;
-+
-+	if (tmp_rate < req->min_rate || tmp_rate > req->max_rate)
-+		return;
-+
- 	tmp_diff = abs(req->rate - tmp_rate);
+diff --git a/net/key/af_key.c b/net/key/af_key.c
+index d7adac31b0fd..3d5a46080169 100644
+--- a/net/key/af_key.c
++++ b/net/key/af_key.c
+@@ -2834,8 +2834,10 @@ static int pfkey_process(struct sock *sk, struct sk_buff *skb, const struct sadb
+ 	void *ext_hdrs[SADB_EXT_MAX];
+ 	int err;
  
- 	if (*best_diff < 0 || *best_diff >= tmp_diff) {
+-	pfkey_broadcast(skb_clone(skb, GFP_KERNEL), GFP_KERNEL,
+-			BROADCAST_PROMISC_ONLY, NULL, sock_net(sk));
++	err = pfkey_broadcast(skb_clone(skb, GFP_KERNEL), GFP_KERNEL,
++			      BROADCAST_PROMISC_ONLY, NULL, sock_net(sk));
++	if (err)
++		return err;
+ 
+ 	memset(ext_hdrs, 0, sizeof(ext_hdrs));
+ 	err = parse_exthdrs(skb, hdr, ext_hdrs);
 -- 
 2.35.1
 

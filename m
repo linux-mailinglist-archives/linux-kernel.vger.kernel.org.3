@@ -2,66 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2881531B52
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C508C531BA1
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232921AbiEWU0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 16:26:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50990 "EHLO
+        id S233018AbiEWU1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 16:27:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233150AbiEWU0H (ORCPT
+        with ESMTP id S233015AbiEWU0y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 16:26:07 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82F8325FE;
-        Mon, 23 May 2022 13:26:06 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id i74so9787123ioa.4;
-        Mon, 23 May 2022 13:26:06 -0700 (PDT)
+        Mon, 23 May 2022 16:26:54 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD57B4161C;
+        Mon, 23 May 2022 13:26:53 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id v14so13433668qtc.3;
+        Mon, 23 May 2022 13:26:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3BLAGqefFcKnKvrDQkzzllfdtEJDFmKt1hLfJEqkgnw=;
-        b=DtD1+J6MZV3anfLnN976u1SvMRB4p3Dv+GFIL2oz2VSCrPQcQszE9qmG45a+XMQz3x
-         LBbsWr8WJxvhuFUtvkNLPt3PegpxtJr4gAVZimKb96TyytKTD/gz6wfy5VHS3LwtuNTV
-         jX2WvinoI665o4G/AOZz7+6xfaKBT6g8miAdJGjLZB3Cazi3wNXwg7hpl3gA0zzbGtn4
-         ysRilot8XAIkQlk7RvSFkp1Ya5PJFx+41DG3NctQbJXAUOAHkUVztYwEa6Qert5CnGQ1
-         einJtgHT/+Zd9T59hQde59zDNlAgaTIX1lroraSCp0ail3Put4Z2+W3JpKSWVvCWPR+/
-         H7GQ==
+        h=date:from:to:subject:message-id:mime-version:content-disposition;
+        bh=TneNowabt0wjfzcxvQYZmn9RWQW8O4p43QsS4BuL4Dc=;
+        b=e1TDt/NRrfz4ypJXJ1NfIg0Ve5DTTcDwjCMlowV3pyQ0izpa5NAHmyd7TsQlZ+GHJs
+         zdvFIsIY3zGT7Brd2Ua+3ox7t8IWK0JFr8HcUVZRfJ8SWFO9W57lwA3RuuF1zUYGxxeZ
+         rRUjs3WiD5g9vQc8R+V/vDtmzlLSDY4sraJEioNKgOL0UQPtJaCYH7lFxWoMcrvfDeVo
+         Cr/wdW3EymvdF3L23Fg8uT0+/8TRXzwW3U41Xru4ygGOWs6QfzSwnJA0RlvPSRX1xx6a
+         /fssiRVo1N2uFsBDOR3WrYSFAC9nXgseXfKe03Gi7ckpMoAc1bvn3x/KiAnc5ifgZDtD
+         ewKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3BLAGqefFcKnKvrDQkzzllfdtEJDFmKt1hLfJEqkgnw=;
-        b=l/9nll5kdOo4z3hrBl4s5r4XSezyWrpXubdHB4ZUBstK/BsHl6FXk9IJeIzbkV8Amt
-         LvWGmrd3mF1E1dGU+veeWm6jkLi+7nmK4i3wz8BrkAYGzqnp7ZnWwdK4lhqoZsXJgP0D
-         uDcw0USvL4XNAZfexWZt/EkmDqe4zBzvUmhxJEBn3bOJ32gffvRWaHP5ZZDjSN9/a5ch
-         5ZNjFKVJ8bpZFOgFxsqbYGkq4uZAwAIWw1pvB/Uwe/mrpaRKl4OU7QznVN+6SPWIbBzg
-         iQ/6RGiSn0WFYHQGF/zG4YogosBgdpp1XBlIuhPk9oN6zld/aGtt4HOX1RNlaS+SRaGL
-         1gqw==
-X-Gm-Message-State: AOAM5320GH3vSPM+i2OVVSY/axnz4H9E7w3PHO1XttWcarm4VlYnWCnK
-        DiRgmDb//HMYEJCKhsQGVpKhMLFmbyy2f9Snlk0=
-X-Google-Smtp-Source: ABdhPJyCkvOTLidTHrw62Wg9JHrwDBE4wyrSaTiPgYgmFPwwAAXuPSf9xiIV/Qgb+mPgIIU99uUs8vla9Hn77s+n27I=
-X-Received: by 2002:a05:6638:16cf:b0:32b:6ee7:8d7d with SMTP id
- g15-20020a05663816cf00b0032b6ee78d7dmr12242004jat.256.1653337566001; Mon, 23
- May 2022 13:26:06 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+         :content-disposition;
+        bh=TneNowabt0wjfzcxvQYZmn9RWQW8O4p43QsS4BuL4Dc=;
+        b=yICmhUtSL1xkukmTotgfb3ttECrbLYDtOhJolaL1TAcuYvmH/weKBcZquJsrqEDFag
+         9NK9Yz05+j8cY6RprCDcyKFzi+xQxewmk1heitYs8hEXK+OoQQLjtL51O5Eu03ik1wpt
+         S5fr6W7KE/hWTBaAzJAtDRHVKCnGp1zIzKV+gFIlU9wwif3/4Eenmy6QhBQ+2t1XBcc8
+         YqjvIDhZWC5JAvBVQJ0GLhO7suaRFzqGQkGTTmOhvE9xS51aGAzBPg1juwVffn7pEBIn
+         Plx9mh48mkOudMkN0bDIktf3owWNqpSekmYEc8cfge5C4SznEfZKQKORMYc9PAu34fqo
+         kiOg==
+X-Gm-Message-State: AOAM533Vfm89dEtZscZNZffkSAh21GTuwyExTy3j1iv1bwTQ0h48moEq
+        KsEKUhzLqOI882q2ZGXjjE5Hq7O4kb9r3Q==
+X-Google-Smtp-Source: ABdhPJx+GTqxMCPSbvVea/sP0y3LdvjzYe3CmSBpp3szH5MjEEVnyVxGQftCkBeg+wfP//3sAGjtOw==
+X-Received: by 2002:ac8:5892:0:b0:2f9:1720:9e43 with SMTP id t18-20020ac85892000000b002f917209e43mr14664867qta.627.1653337612864;
+        Mon, 23 May 2022 13:26:52 -0700 (PDT)
+Received: from jup ([2607:fea8:e2e4:d600::6ece])
+        by smtp.gmail.com with ESMTPSA id x11-20020a05620a0ecb00b006a33c895d25sm4865604qkm.21.2022.05.23.13.26.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 May 2022 13:26:52 -0700 (PDT)
+Date:   Mon, 23 May 2022 16:26:49 -0400
+From:   Michael Mullin <masmullin@gmail.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] bpftool: mmaped fields missing map structure in generated
+ skeletons
+Message-ID: <20220523202649.6iiz4h2wf5ryx3w2@jup>
 MIME-Version: 1.0
-References: <23e0ba7863d51ab629498762a97d477645aeafea.1653123744.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <23e0ba7863d51ab629498762a97d477645aeafea.1653123744.git.christophe.jaillet@wanadoo.fr>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Mon, 23 May 2022 22:25:55 +0200
-Message-ID: <CANiq72=GZs5CmAMGAMaHrp1yJ8b7nv3HrsWNeQ42kfy0z5uuAg@mail.gmail.com>
-Subject: Re: [RFC PATCH] kbuild: Add an option to enable -O1 and speed-up
- compilation time
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Dan <dan.carpenter@oracle.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -72,14 +73,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christophe,
+When generating a skeleton which has an mmaped map field, bpftool's
+output is missing the map structure.  This causes a compile break when
+the generated skeleton is compiled as the field belongs to the internal
+struct maps, not directly to the obj.
 
-On Mon, May 23, 2022 at 9:11 AM Christophe JAILLET
-<christophe.jaillet@wanadoo.fr> wrote:
->
-> +KBUILD_RUSTFLAGS_OPT_LEVEL_MAP := 1
+Signed-off-by: Michael Mullin <masmullin@gmail.com>
+---
+ tools/bpf/bpftool/gen.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The patch seems based on linux-next -- is this intended? Thanks!
+diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
+index f158dc1c2149..b49293795ba0 100644
+--- a/tools/bpf/bpftool/gen.c
++++ b/tools/bpf/bpftool/gen.c
+@@ -853,7 +853,7 @@ codegen_maps_skeleton(struct bpf_object *obj, size_t map_cnt, bool mmaped)
+ 			i, bpf_map__name(map), i, ident);
+ 		/* memory-mapped internal maps */
+ 		if (mmaped && is_internal_mmapable_map(map, ident, sizeof(ident))) {
+-			printf("\ts->maps[%zu].mmaped = (void **)&obj->%s;\n",
++			printf("\ts->maps[%zu].mmaped = (void **)&obj->maps.%s;\n",
+ 				i, ident);
+ 		}
+ 		i++;
+-- 
+2.36.1
 
-Cheers,
-Miguel

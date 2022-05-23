@@ -2,133 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B75B45316EA
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:52:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD858531B6C
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239095AbiEWQ5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 12:57:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50856 "EHLO
+        id S238995AbiEWQ7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 12:59:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238990AbiEWQ5i (ORCPT
+        with ESMTP id S238994AbiEWQ7h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 12:57:38 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2047.outbound.protection.outlook.com [40.107.237.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4E6D35245
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:57:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fyXWvrOSUfDPleNwMYcfJKLHcuimQjg24gvw/Inm7CUWjp21AOAYggoJRIH7nTN3N87/J+17RxHuaTZCh0zgvyPAAVxnJh6lpiG9eJP4vWQnYazcZa4NOa8NUYDJ6md9rIl0WgvByE2WoTsZkX+ZICbovoRbrW/uRRKP/Pz0ZDR/0y/OFIgwHIBwkE7oAc/ChvKLyyhv6Hr55xe7N3bWC7Sc4BTHAL63gxtTIJ2WeqJqNYuaXbe/SLIrIWGjzpGLv/UIDuo/4dfFM3cwsdTtgPB8KsIEpaeoMr5ti9Oh58asdEY7D61uDhOunL2enHmUZeZP38Aj94GRHXp3Dk+O+Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=A7ECY2R7lfPhHdoS6gi72mheN9mfHiC20ANwgk5qNUw=;
- b=boD9AetC3GJXmSqtazfmsIZ+XF0zaLkMprGRUolo5PeGEUDekx61xc3BrO3WVpxu97gB/tD+rjh174bQSeFutCGiw71/M6yB9wLf7vTo0+SrutfOpSsBqoKlwmZOWYicoaHGftn5ILMMg9k+/2VE+hBgN0xG9yv0Hyq4SJr6+UAMxSzMkyh5IsWxDj9QfsyyBXp0mJdQV1GXGSDSZMzKDPuSb+2xb2wDeoBh6jUowLqIeFyUe/t2mq8o27K52vT32y7o2hO0aTXvezvn7JFwmFs/rP6vqcZUpMc1Bf4eK7o8i2fhK8/d3LJ9LCgYJWCUyx6HX03To4H2IfoLPFgrsQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=A7ECY2R7lfPhHdoS6gi72mheN9mfHiC20ANwgk5qNUw=;
- b=gp20cCtOpD7cgxRhClfhDyN1zktSQ0OP4cmG55WdI78zzczzlBB3S+qEyCJqE068eSln+YQTKsN50py+FQQ8OC213rDOIZA8wuv5X78KMaZTecec3YOwvYfZSQDs9WsEh/O2gBQma41+VChCL2UTZHLK3b91UrhZCgVuYQ1Wpm0=
-Received: from DM5PR06CA0092.namprd06.prod.outlook.com (2603:10b6:3:4::30) by
- DM5PR12MB1641.namprd12.prod.outlook.com (2603:10b6:4:10::23) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5273.15; Mon, 23 May 2022 16:57:34 +0000
-Received: from DM6NAM11FT013.eop-nam11.prod.protection.outlook.com
- (2603:10b6:3:4:cafe::e7) by DM5PR06CA0092.outlook.office365.com
- (2603:10b6:3:4::30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.22 via Frontend
- Transport; Mon, 23 May 2022 16:57:34 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT013.mail.protection.outlook.com (10.13.173.142) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5273.14 via Frontend Transport; Mon, 23 May 2022 16:57:34 +0000
-Received: from beas.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 23 May
- 2022 11:57:26 -0500
-From:   Wyes Karny <wyes.karny@amd.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <Lewis.Carroll@amd.com>, <Mario.Limonciello@amd.com>,
-        <gautham.shenoy@amd.com>, <Ananth.Narayan@amd.com>,
-        <bharata@amd.com>, <len.brown@intel.com>, <x86@kernel.org>,
-        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-        <dave.hansen@linux.intel.com>, <hpa@zytor.com>,
-        <peterz@infradead.org>, <chang.seok.bae@intel.com>,
-        <keescook@chromium.org>, <metze@samba.org>,
-        <zhengqi.arch@bytedance.com>, <mark.rutland@arm.com>,
-        <rui.zhang@intel.com>, <puwen@hygon.cn>,
-        <rafael.j.wysocki@intel.com>, <andrew.cooper3@citrix.com>,
-        <jing2.liu@intel.com>, <jmattson@google.com>,
-        <pawan.kumar.gupta@linux.intel.com>
-Subject: [PATCH v4 3/3] x86: Fix comment for X86_FEATURE_ZEN
-Date:   Mon, 23 May 2022 22:25:51 +0530
-Message-ID: <2333afe4e6acb52999c941ad20713d1b445223bd.1653324016.git-series.wyes.karny@amd.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <cover.7d2ba81d1918bbfd8ae5e6774db8da0502f7ed67.1653324016.git-series.wyes.karny@amd.com>
-References: <cover.7d2ba81d1918bbfd8ae5e6774db8da0502f7ed67.1653324016.git-series.wyes.karny@amd.com>
+        Mon, 23 May 2022 12:59:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C5C340D5;
+        Mon, 23 May 2022 09:59:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 135E2614AB;
+        Mon, 23 May 2022 16:59:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF590C385AA;
+        Mon, 23 May 2022 16:59:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653325175;
+        bh=JD4vUg5P0ha+qnAxEQ/1K+c2zyCjSh6N/g9oM1/e13s=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hHEVLd+W+IKAK7huRJaRTprXZYDkmj/tkJXO5eY1IwPr4caapKhNueUPpQzFc57za
+         NgyyRmm8MvuMsbpiiVWbf+k2cKQfe1y7iGbodIelhjKJ1Q+shafuEydxAm1REbARIa
+         8Q5JKYumb4AFVVttum0/cu83SRg3uZHMiUN6yBfEbJc/Djhy660C1xqPD6p4nVI+fe
+         lOFFezmlIAT5HhlHTvcaEiZFTTdGTKjW3G2wtTgtERDwuHZf+Hgm80pJFHK2rUY560
+         /nELiROQKN6SCm3DSswNB+qkN9fnl9ldPDRo++t46tIQdWf4ma4DD4ERlPrBCA0OJc
+         7Aw1nDWeYNjgg==
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: [GIT PULL] TPM DEVICE DRIVER updates for v5.19-rc1
+Date:   Mon, 23 May 2022 19:57:44 +0300
+Message-Id: <20220523165744.48234-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=y
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5d819281-39a4-4aad-8471-08da3cdd5577
-X-MS-TrafficTypeDiagnostic: DM5PR12MB1641:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR12MB164100A94CE44B0DA96DFCDF84D49@DM5PR12MB1641.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: oTIWPe4r35KCRiv67ncvlsK0IPaDkJPP81smlfILJEgbGlK6yoSdxUPrm84EwTEgEbJh+FvZbSuDMznlpYVb5/XbkJgRDlqRLj9YpnNQ9r98QjOm2fXmq3OCRqGEjQMtPD4/amGkGljvzR0hQDJrZ0rVBsajaNYSPqBad94ybT/6NVImbdk/psWtlk4J4T7lWb//uqQEgCWthrCIbaxdHIKYDju+ekgmIxid1TLwqgTjTlq39ZH5cf/ekVj/8108mFfIw364GniXKmvo7RfrxU/An6qO7SMCpBIep1JBmplaYPAfrjrMvieIAOI4agy0arSHejgneyG4ueZcPzCditRXIG0HmRKuc+UdMR3vgvbGzvtScRZujYFgrjfYpUNt9pn5YE+y34Y6lDElZDj21NaWCzxQljSu4iprZeXFoQPW0b/GCp83alh8nJEkCVrEN2jSUKixbqQ0bELyyXaTTomXzk7vL0R7wIKWNzZVK7dlhks1k8Ieq0q+JJTFt2r4RMIK4ZnnFaLvp8F/Fiwm94J3Yll8mYgpwUB9ueNnPSls6cWIu9gdb5U7uU79I8MXKwYbKFumJj3gRk4tS49YJGR5L+fV952b2sl6ohVnCQKYDvjCac3rXeUXskhB6FtlgdntTPVhU8f3hPxa0/twWVkzqbRHnuQO+7/Hb1KkEUTguZ5dv0lIAF/mU5CPFkQTL+5gvq4FmKgrJQxZ2MspCA==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(8676002)(4326008)(70586007)(82310400005)(81166007)(5660300002)(316002)(83380400001)(8936002)(7416002)(44832011)(2906002)(70206006)(356005)(86362001)(6666004)(7696005)(426003)(2616005)(26005)(186003)(16526019)(336012)(47076005)(54906003)(6916009)(40460700003)(508600001)(36756003)(36860700001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2022 16:57:34.4744
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5d819281-39a4-4aad-8471-08da3cdd5577
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT013.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1641
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The feature X86_FEATURE_ZEN implies that the CPU based on Zen
-microarchitecture. Call this out explicitly in the comment.
+The following changes since commit 4b0986a3613c92f4ec1bdc7f60ec66fea135991f:
 
-Signed-off-by: Wyes Karny <wyes.karny@amd.com>
----
- arch/x86/include/asm/cpufeatures.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+  Linux 5.18 (2022-05-22 09:52:31 -1000)
 
-diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-index 73e643ae94b6..6141457cda38 100644
---- a/arch/x86/include/asm/cpufeatures.h
-+++ b/arch/x86/include/asm/cpufeatures.h
-@@ -219,7 +219,7 @@
- #define X86_FEATURE_IBRS		( 7*32+25) /* Indirect Branch Restricted Speculation */
- #define X86_FEATURE_IBPB		( 7*32+26) /* Indirect Branch Prediction Barrier */
- #define X86_FEATURE_STIBP		( 7*32+27) /* Single Thread Indirect Branch Predictors */
--#define X86_FEATURE_ZEN			( 7*32+28) /* "" CPU is AMD family 0x17 or above (Zen) */
-+#define X86_FEATURE_ZEN			(7*32+28) /* "" CPU based on Zen microarchitecture */
- #define X86_FEATURE_L1TF_PTEINV		( 7*32+29) /* "" L1TF workaround PTE inversion */
- #define X86_FEATURE_IBRS_ENHANCED	( 7*32+30) /* Enhanced IBRS */
- #define X86_FEATURE_MSR_IA32_FEAT_CTL	( 7*32+31) /* "" MSR IA32_FEAT_CTL configured */
--- 
-git-series 0.9.1
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/ tags/tpmdd-next-v5.19-rc1
+
+for you to fetch changes up to 7f3113e3b9f7207f0bd57b5fdae1a1b9c8215e08:
+
+  MAINTAINERS: add KEYS-TRUSTED-CAAM (2022-05-23 18:47:50 +0300)
+
+----------------------------------------------------------------
+tpmdd updates for v5.19-rc1
+
+- Strictened validation of key hashes for SYSTEM_BLACKLIST_HASH_LIST.  An
+  invalid hash format causes a compilation error.  Previously, they got
+  included to the kernel binary but were silently ignored at run-time.
+- Allow root user to append new hashes to the blacklist keyring.
+- Trusted keys backed with Cryptographic Acceleration and Assurance Module
+  (CAAM), which part of some of the new NXP's SoC's.  Now there is total
+  three hardware backends for trusted keys: TPM, ARM TEE and CAAM.
+- A scattered set of fixes and small improvements for the TPM driver.
+
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+
+----------------------------------------------------------------
+Ahmad Fatoum (7):
+      KEYS: trusted: allow use of TEE as backend without TCG_TPM support
+      KEYS: trusted: allow use of kernel RNG for key material
+      crypto: caam - determine whether CAAM supports blob encap/decap
+      crypto: caam - add in-kernel interface for blob generator
+      KEYS: trusted: Introduce support for NXP CAAM-based trusted keys
+      doc: trusted-encrypted: describe new CAAM trust source
+      MAINTAINERS: add KEYS-TRUSTED-CAAM
+
+Haowen Bai (1):
+      tpm/tpm_ftpm_tee: Return true/false (not 1/0) from bool functions
+
+Jes B. Klinke (1):
+      tpm: cr50: Add new device/vendor ID 0x504a6666
+
+Johannes Holland (1):
+      tpm: Remove read16/read32/write32 calls from tpm_tis_phy_ops
+
+Mickaël Salaün (6):
+      tools/certs: Add print-cert-tbs-hash.sh
+      certs: Factor out the blacklist hash creation
+      certs: Make blacklist_vet_description() more strict
+      certs: Check that builtin blacklist hashes are valid
+      certs: Allow root user to append signed hashes to the blacklist keyring
+      certs: Explain the rationale to call panic()
+
+Stefan Mahnke-Hartmann (2):
+      tpm: Fix buffer access in tpm2_get_tpm_pt()
+      tpm: Add field upgrade mode support for Infineon TPM2 modules
+
+Uwe Kleine-König (1):
+      char: tpm: cr50_i2c: Suppress duplicated error message in .remove()
+
+Xiu Jianfeng (1):
+      tpm: ibmvtpm: Correct the return value in tpm_ibmvtpm_probe()
+
+ Documentation/admin-guide/kernel-parameters.txt    |  11 +
+ Documentation/security/keys/trusted-encrypted.rst  |  60 +++++-
+ MAINTAINERS                                        |  11 +
+ certs/.gitignore                                   |   1 +
+ certs/Kconfig                                      |  17 +-
+ certs/Makefile                                     |  14 +-
+ certs/blacklist.c                                  | 227 ++++++++++++++++-----
+ crypto/asymmetric_keys/x509_public_key.c           |   3 +-
+ drivers/char/tpm/tpm2-cmd.c                        |  17 +-
+ drivers/char/tpm/tpm_ftpm_tee.c                    |   2 +-
+ drivers/char/tpm/tpm_ibmvtpm.c                     |   1 +
+ drivers/char/tpm/tpm_tis.c                         |  67 +++---
+ drivers/char/tpm/tpm_tis_core.h                    |  58 ++++--
+ drivers/char/tpm/tpm_tis_i2c_cr50.c                |  11 +-
+ drivers/char/tpm/tpm_tis_spi.h                     |   4 -
+ drivers/char/tpm/tpm_tis_spi_cr50.c                |   7 +-
+ drivers/char/tpm/tpm_tis_spi_main.c                |  45 +---
+ drivers/char/tpm/tpm_tis_synquacer.c               |  98 ++++-----
+ drivers/crypto/caam/Kconfig                        |   3 +
+ drivers/crypto/caam/Makefile                       |   1 +
+ drivers/crypto/caam/blob_gen.c                     | 182 +++++++++++++++++
+ drivers/crypto/caam/ctrl.c                         |  17 +-
+ drivers/crypto/caam/intern.h                       |   1 +
+ drivers/crypto/caam/regs.h                         |   4 +-
+ include/keys/system_keyring.h                      |  14 +-
+ include/keys/trusted-type.h                        |   2 +-
+ include/keys/trusted_caam.h                        |  11 +
+ include/soc/fsl/caam-blob.h                        | 103 ++++++++++
+ scripts/check-blacklist-hashes.awk                 |  37 ++++
+ .../integrity/platform_certs/keyring_handler.c     |  26 +--
+ security/keys/Kconfig                              |  18 +-
+ security/keys/trusted-keys/Kconfig                 |  38 ++++
+ security/keys/trusted-keys/Makefile                |  10 +-
+ security/keys/trusted-keys/trusted_caam.c          |  80 ++++++++
+ security/keys/trusted-keys/trusted_core.c          |  45 +++-
+ tools/certs/print-cert-tbs-hash.sh                 |  91 +++++++++
+ 36 files changed, 1056 insertions(+), 281 deletions(-)
+ create mode 100644 drivers/crypto/caam/blob_gen.c
+ create mode 100644 include/keys/trusted_caam.h
+ create mode 100644 include/soc/fsl/caam-blob.h
+ create mode 100755 scripts/check-blacklist-hashes.awk
+ create mode 100644 security/keys/trusted-keys/Kconfig
+ create mode 100644 security/keys/trusted-keys/trusted_caam.c
+ create mode 100755 tools/certs/print-cert-tbs-hash.sh

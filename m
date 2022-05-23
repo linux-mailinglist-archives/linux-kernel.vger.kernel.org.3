@@ -2,179 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EA23530F37
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:18:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E39F530F71
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:18:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236002AbiEWNNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 09:13:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35776 "EHLO
+        id S235966AbiEWNN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 09:13:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235959AbiEWNMg (ORCPT
+        with ESMTP id S235975AbiEWNMf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 09:12:36 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2E642BB2C
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 06:12:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D11ECCE136A
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 13:12:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B844CC385A9;
-        Mon, 23 May 2022 13:12:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653311551;
-        bh=0fw8Lio2R1KT24divy6cchQMAkg5Ovz0dNaSYiBu9H0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=eNLX/fkTLhC/5eE9Sk91gBQsbDiQOUbZXwLN/TwqM/85LeiT991xO6OgGyBiROfGx
-         V+wQJJCU3vP2dhZ/ccML/vVpKNTzmG+Ktob+TP3b4QxfVv7pvthL8UYNPTF35ahSy0
-         oW09EHTbzyQyeJeXmTfo+DAr0te+Lsy5a06zOOs4p2nYUQ6gx8bi4Iw6ztFae+YBXV
-         WP3NQUYWb4HRR4fBHgsCWVGXMpanSNsJoAPxKZ8U3+X/b39mi5qneGALvsv6wCMXYD
-         3sLgYPwxmbLxiBXy8WpjfAlMUO+1zvQz03y86EGoxjYXGgiBIEzErdeNshHoyRbp3L
-         UUka4Mko88lIA==
-From:   Mark Brown <broonie@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Subject: [GIT PULL] regulator updates for v5.19
-Date:   Mon, 23 May 2022 14:12:19 +0100
-Message-Id: <20220523131230.B844CC385A9@smtp.kernel.org>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        PP_MIME_FAKE_ASCII_TEXT,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 23 May 2022 09:12:35 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C0302C67F;
+        Mon, 23 May 2022 06:12:33 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id c10so19095454edr.2;
+        Mon, 23 May 2022 06:12:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=7NA2oe+MVM7ExjHQjWCs0WPJ0CBdjVVraxVqOmP4Fes=;
+        b=cWAVdSaZXqJGz+OvDHUfqE01JxN72tuVNTGyDJG/XwACyy5uHOtfrYd3bahvHlGjar
+         KzINXyw3H4tL6Ake6FKsbtO7F/yse6h77LrQ38UC12dKBH2v8NwTd7LBY6N0JCUkAqqH
+         KlLH+X3+YvnJ3CixwM/G8TY45RTZD8UqLNMdg0daLYBi1pZfwhueqgwJ6+sPVCibOR9N
+         rxpaR9w9jhFpSmJGefzqTtDCC4h2SMnIqJgN5fFQKBRG21ZQmEKRzlMEy8UTfo8ciRE3
+         nAwYL6KH2XbR/6FcIxc5vy2QnmNFJNfF0bZ7NnZk0adNBiHt3UA1CPbg/DBLAWYnldh/
+         E2hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=7NA2oe+MVM7ExjHQjWCs0WPJ0CBdjVVraxVqOmP4Fes=;
+        b=SWNYq69etqMP/FrLV3vPC+c3kaFGObYcBlfQbdgRjbKSWX0M4MBdh0jUQZyupqjZ9w
+         7Bl5tdVd9BYT8/tPSgSq6dM3hhHl4ttXX0Ia1mSYRBqvjjewyAteGGT7p0ijMm6pgCjf
+         yZ3jHuIEyepAXJbMW1yAY8NKdx6Vm7FHJlnHzrm37cmpzRmWJEamSTiC28gBchu5ZlvF
+         W/ckZmj3zLX05qy50TrK8ZkRb0PiA2pWzZH6ot601fw+46czVqXNjNu9T68tERJn8I5W
+         KixDwiFWfeC7tooWczZD2jXoC90n6r2w8PUhluRTNWdWkzXQGKY3n2pfKrqm3G5DQ8t5
+         ohoA==
+X-Gm-Message-State: AOAM533Q+2NFWgwdUuqXCmfjtbziviqG5lHvgLXYR0qboUS2Wzzh48Aw
+        zyTsj5YHGC3pz7jK9N1OqZs=
+X-Google-Smtp-Source: ABdhPJzUoE4/x0Lb9cEwrCB6U8QMGVPzd8davX3nPNrRmeHUE4waHiTZbekOYW7zuT42kOklIF7Tvw==
+X-Received: by 2002:a05:6402:206f:b0:42a:a8c1:1637 with SMTP id bd15-20020a056402206f00b0042aa8c11637mr23391901edb.302.1653311551744;
+        Mon, 23 May 2022 06:12:31 -0700 (PDT)
+Received: from krava (net-93-65-240-241.cust.vodafonedsl.it. [93.65.240.241])
+        by smtp.gmail.com with ESMTPSA id jz27-20020a17090775fb00b006f3ef214e6dsm6076136ejc.211.2022.05.23.06.12.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 May 2022 06:12:31 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Mon, 23 May 2022 15:12:28 +0200
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Jiri Olsa <olsajiri@gmail.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH bpf-next 1/2] cpuidle/rcu: Making arch_cpu_idle and
+ rcu_idle_exit noinstr
+Message-ID: <YouIPHx2l0S3bMLv@krava>
+References: <20220515203653.4039075-1-jolsa@kernel.org>
+ <20220516042535.GV1790663@paulmck-ThinkPad-P17-Gen-1>
+ <20220516114922.GA349949@lothringen>
+ <YoN1WULUoKtMKx8v@krava>
+ <20220518162118.GA2661055@paulmck-ThinkPad-P17-Gen-1>
+ <YoYq/M6ZSQ+U2sar@krava>
+ <20220519135439.GX1790663@paulmck-ThinkPad-P17-Gen-1>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220519135439.GX1790663@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit dfd2b37edf7ef469574ef7f36e3a1905ac9ead62:
+On Thu, May 19, 2022 at 06:54:39AM -0700, Paul E. McKenney wrote:
+> On Thu, May 19, 2022 at 01:33:16PM +0200, Jiri Olsa wrote:
+> > On Wed, May 18, 2022 at 09:21:18AM -0700, Paul E. McKenney wrote:
+> > > On Tue, May 17, 2022 at 12:13:45PM +0200, Jiri Olsa wrote:
+> > > > On Mon, May 16, 2022 at 01:49:22PM +0200, Frederic Weisbecker wrote:
+> > > > > On Sun, May 15, 2022 at 09:25:35PM -0700, Paul E. McKenney wrote:
+> > > > > > On Sun, May 15, 2022 at 10:36:52PM +0200, Jiri Olsa wrote:
+> > > > > > > Making arch_cpu_idle and rcu_idle_exit noinstr. Both functions run
+> > > > > > > in rcu 'not watching' context and if there's tracer attached to
+> > > > > > > them, which uses rcu (e.g. kprobe multi interface) it will hit RCU
+> > > > > > > warning like:
+> > > > > > > 
+> > > > > > >   [    3.017540] WARNING: suspicious RCU usage
+> > > > > > >   ...
+> > > > > > >   [    3.018363]  kprobe_multi_link_handler+0x68/0x1c0
+> > > > > > >   [    3.018364]  ? kprobe_multi_link_handler+0x3e/0x1c0
+> > > > > > >   [    3.018366]  ? arch_cpu_idle_dead+0x10/0x10
+> > > > > > >   [    3.018367]  ? arch_cpu_idle_dead+0x10/0x10
+> > > > > > >   [    3.018371]  fprobe_handler.part.0+0xab/0x150
+> > > > > > >   [    3.018374]  0xffffffffa00080c8
+> > > > > > >   [    3.018393]  ? arch_cpu_idle+0x5/0x10
+> > > > > > >   [    3.018398]  arch_cpu_idle+0x5/0x10
+> > > > > > >   [    3.018399]  default_idle_call+0x59/0x90
+> > > > > > >   [    3.018401]  do_idle+0x1c3/0x1d0
+> > > > > > > 
+> > > > > > > The call path is following:
+> > > > > > > 
+> > > > > > > default_idle_call
+> > > > > > >   rcu_idle_enter
+> > > > > > >   arch_cpu_idle
+> > > > > > >   rcu_idle_exit
+> > > > > > > 
+> > > > > > > The arch_cpu_idle and rcu_idle_exit are the only ones from above
+> > > > > > > path that are traceble and cause this problem on my setup.
+> > > > > > > 
+> > > > > > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > > > > > 
+> > > > > > From an RCU viewpoint:
+> > > > > > 
+> > > > > > Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
+> > > > > > 
+> > > > > > [ I considered asking for an instrumentation_on() in rcu_idle_exit(),
+> > > > > > but there is no point given that local_irq_restore() isn't something
+> > > > > > you instrument anyway. ]
+> > > > > 
+> > > > > So local_irq_save() in the beginning of rcu_idle_exit() is unsafe because
+> > > > > it is instrumentable by the function (graph)  tracers and the irqsoff tracer.
+> > > > > 
+> > > > > Also it calls into lockdep that might make use of RCU.
+> > > > > 
+> > > > > That's why rcu_idle_exit() is not noinstr yet. See this patch:
+> > > > > 
+> > > > > https://lore.kernel.org/lkml/20220503100051.2799723-4-frederic@kernel.org/
+> > > > 
+> > > > I see, could we mark it at least with notrace meanwhile?
+> > > 
+> > > For the RCU part, how about as follows?
+> > > 
+> > > If this approach is reasonable, my guess would be that Frederic will pull
+> > > it into his context-tracking series, perhaps using a revert of this patch
+> > > to maintain sanity in the near term.
+> > > 
+> > > If this approach is unreasonable, well, that is Murphy for you!
+> > 
+> > I checked and it works in my test ;-)
+> 
+> Whew!!!  One piece of the problem might be solved, then.  ;-)
+> 
+> > > For the x86 idle part, my feeling is still that the rcu_idle_enter()
+> > > and rcu_idle_exit() need to be pushed deeper into the code.  Perhaps
+> > > an ongoing process as the idle loop continues to be dug deeper?
+> > 
+> > for arch_cpu_idle with noinstr I'm getting this W=1 warning:
+> > 
+> > vmlinux.o: warning: objtool: arch_cpu_idle()+0xb: call to {dynamic}() leaves .noinstr.text section
+> > 
+> > we could have it with notrace if that's a problem
+> 
+> I would be happy to queue the arch_cpu_idle() portion of your patch on
+> -rcu, if that would move things forward.  I suspect that additional
+> x86_idle() surgery is required, but maybe I am just getting confused
+> about what the x86_idle() function pointer can point to.  But it looks
+> to me like these need further help:
+> 
+> o	static void amd_e400_idle(void)
+> 	Plus things it calls, like tick_broadcast_enter() and
+> 	tick_broadcast_exit().
+> 
+> o	static __cpuidle void mwait_idle(void)
+> 
+> So it might not be all that much additional work, even if I have avoided
+> confusion about what the x86_idle() function pointer can point to.  But
+> I do not trust my ability to test this accurately.
 
-  regulator: dt-bindings: Revise the rt5190a buck/ldo description (2022-04-22 12:37:22 +0100)
+same here ;-) you're right, there will be other places based
+on x86_idle function pointer.. I'll check it, but perhaps we
+could address that when someone reports that
 
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git tags/regulator-v5.19
-
-for you to fetch changes up to a5b8e4a5ceec0ab6453176bc7f5eceafa78bf8a9:
-
-  Merge remote-tracking branch 'regulator/for-5.19' into regulator-next (2022-05-17 16:59:05 +0100)
-
-----------------------------------------------------------------
-regulator: Updates for v5.19
-
-This is mostly a drivers update including a couple of new drivers but we
-do have some fixes and improvements to the core as well.
-
- - Make sure we don't log spuriously about uncontrollable regulators.
- - Don't use delays when we should use sleeps for regulators with
-   larger ramp times.
- - Support for MediaTek MT6358 and MT6366, Richtek RT5759 and Silicon
-   Mitus SM5703.
-
-----------------------------------------------------------------
-Andy Shevchenko (1):
-      regulator: rpi-panel-attiny: Get rid of duplicate of_node assignment
-
-Brian Norris (2):
-      regulator: core: Rename _regulator_enable_delay()
-      regulator: core: Sleep (not delay) in set_voltage()
-
-ChiYuan Huang (2):
-      regulator: rt5759: Add support for Richtek RT5759 DCDC converter
-      regulator: Add binding for Richtek RT5759 DCDC converter
-
-Johnson Wang (4):
-      regulator: mt6366: Add support for MT6366 regulator
-      regulator: Add BUCK and LDO document for MT6358 and MT6366
-      regulator: Add BUCK and LDO document for MT6358 and MT6366
-      regulator: mt6366: Add support for MT6366 regulator
-
-Konrad Dybcio (1):
-      regulator: qcom_smd: Fix up PM8950 regulator configuration
-
-Krzysztof Kozlowski (7):
-      regulator: dt-bindings: richtek,rt4801: minor comments adjustments
-      regulator: dt-bindings: qcom,rpmh: document h and k ID
-      regulator: dt-bindings: richtek,rt4801: use existing ena_gpiod feature
-      regulator: richtek,rt4801: parse GPIOs per regulator
-      regulator: dt-bindings: qcom,rpmh: update maintainers
-      regulator: dt-bindings: qcom,rpmh: document supplies per variant
-      regulator: dt-bindings: qcom,rpmh: document vdd-l7-bob-supply on PMR735A
-
-Kunihiko Hayashi (2):
-      regulator: uniphier: Clean up clocks, resets, and their names using compatible string
-      regulator: uniphier: Use unevaluatedProperties
-
-Mark Brown (7):
-      regulator: fixed: Remove print on allocation failure
-      regulator: Flag uncontrollable regulators as always_on
-      regulator: Add support for MediaTek PMIC MT6366
-      Add support for MediaTek PMIC MT6366
-      regulator Add Richtek RT5759 buck converter support
-      regulator: dt-bindings: qcom,rpmh: minor cleanups and extend supplies
-      Merge remote-tracking branch 'regulator/for-5.19' into regulator-next
-
-Markuss Broks (3):
-      dt-bindings: regulator: Add bindings for Silicon Mitus SM5703 regulators
-      regulator: sm5703-regulator: Add regulators support for SM5703 MFD
-      regulator: sm5703: Correct reference to the common regulator schema
-
-Miaoqian Lin (2):
-      regulator: pfuze100: Fix refcount leak in pfuze_parse_regulators_dt
-      regulator: scmi: Fix refcount leak in scmi_regulator_probe
-
-Minghao Chi (1):
-      regulator: stm32-vrefbuf: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
-
-Nícolas F. R. A. Prado (1):
-      regulator: mt6315: Enforce regulator-compatible, not name
-
-Per-Daniel Olsson (2):
-      regulator: Add property for I2C level shifter
-      regulator: pca9450: Make I2C Level Translator configurable
-
-Rickard x Andersson (3):
-      regulator: Add property for WDOG_B warm reset
-      regulator: pca9450: Make warm reset on WDOG_B assertion
-      regulator: pca9450: Enable DVS control via PMIC_STBY_REQ
-
-Wei Yongjun (1):
-      regulator: da9121: Fix uninit-value in da9121_assign_chip_model()
-
-Zev Weiss (2):
-      regulator: core: Add error flags to sysfs attributes
-      regulator: core: Fix enable_count imbalance with EXCLUSIVE_GET
-
- Documentation/ABI/testing/sysfs-class-regulator    |  81 +++++
- .../bindings/regulator/mt6315-regulator.yaml       |   2 +-
- .../bindings/regulator/mt6358-regulator.txt        |  22 +-
- .../bindings/regulator/nxp,pca9450-regulator.yaml  |  11 +
- .../bindings/regulator/qcom,rpmh-regulator.yaml    | 262 ++++++++++++++-
- .../regulator/richtek,rt4801-regulator.yaml        |  21 +-
- .../regulator/richtek,rt5759-regulator.yaml        |  90 +++++
- .../regulator/siliconmitus,sm5703-regulator.yaml   |  49 +++
- .../regulator/socionext,uniphier-regulator.yaml    |  57 +++-
- drivers/regulator/Kconfig                          |  17 +
- drivers/regulator/Makefile                         |   2 +
- drivers/regulator/core.c                           |  93 +++++-
- drivers/regulator/da9121-regulator.c               |   2 +
- drivers/regulator/fixed.c                          |   5 +-
- drivers/regulator/mt6358-regulator.c               | 213 +++++++++++-
- drivers/regulator/pca9450-regulator.c              |  27 +-
- drivers/regulator/pfuze100-regulator.c             |   2 +
- drivers/regulator/qcom_smd-regulator.c             |  35 +-
- drivers/regulator/rpi-panel-attiny-regulator.c     |   1 -
- drivers/regulator/rt4801-regulator.c               |  49 ++-
- drivers/regulator/rt5759-regulator.c               | 369 +++++++++++++++++++++
- drivers/regulator/scmi-regulator.c                 |   2 +-
- drivers/regulator/sm5703-regulator.c               | 167 ++++++++++
- drivers/regulator/stm32-vrefbuf.c                  |  30 +-
- include/linux/regulator/mt6358-regulator.h         |  45 +++
- include/linux/regulator/pca9450.h                  |   7 +
- 26 files changed, 1538 insertions(+), 123 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/regulator/richtek,rt5759-regulator.yaml
- create mode 100644 Documentation/devicetree/bindings/regulator/siliconmitus,sm5703-regulator.yaml
- create mode 100644 drivers/regulator/rt5759-regulator.c
- create mode 100644 drivers/regulator/sm5703-regulator.c
+jirka

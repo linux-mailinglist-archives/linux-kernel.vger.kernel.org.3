@@ -2,70 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E710531619
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:50:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBCCF531CE9
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:57:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230405AbiEWTcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 15:32:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41028 "EHLO
+        id S230143AbiEWTdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 15:33:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232174AbiEWTbn (ORCPT
+        with ESMTP id S230399AbiEWTck (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 15:31:43 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C46B1A35B1
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 12:15:03 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id q18so13938645pln.12
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 12:15:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=cjRWuQZ93kuxRw6yGmaFXUYJuxX5iPSMUJJ9xKa/vYo=;
-        b=JVK82Ctnwdwz61WxUTfwDOYI3ZVFigTNJQ8LlEDBLTt3cACXrmOKg/qoijzXyli87x
-         9T4uBrM2lRmzwV1gec1ZMSjGViC1ioL6nlMnXMuEyPvbcpQ3S+7iHsFIXS1GCsuXMKMK
-         +K93KzpF3ygjm1GQFC1xq7pCJxv+KKVCzJaSY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=cjRWuQZ93kuxRw6yGmaFXUYJuxX5iPSMUJJ9xKa/vYo=;
-        b=oXB3Bd6aTJBCgkIZ0gWyhOwBtB7gBiVpOggzbZqyAn/s2/3/bdRkBzSo61UuPCBy7R
-         fwp3Hv8L9v6bmHU6V4f/lVsryujTNpJqEc729eXVu2RCosE5H00nYt+eTLv5z0yicBqc
-         +Ci52CmbK0GFs8yR+I82GD34z0wBazFFhMlaufACcFcFIk+Zo4dum015WTIz7vDNbK8b
-         NMDkFJg9Zn9WQSlC+hgtNaSZjWha5mMTkS3AObJFL0TUkfgylbL7msFzDDl/+PrJG3u7
-         O10UQam81qAJeLsVX1k6ZWwl0rO3DlVr3/4t1jHPK5feFbA4HZUUKkPfa7IkoHij50hc
-         79Jg==
-X-Gm-Message-State: AOAM5308RNYr/CbmFbTGUF1hHnHRlKx6RUDNb0fyMN2jnVr2T6LAAwi/
-        lSoYhhHTCpOEhQDqnPTpF1Et0Q==
-X-Google-Smtp-Source: ABdhPJxzOIkdif6JjqjzG4OZ0myjpLUV6IyYJXeSyqcSbsVInXtmky5R6N/yKD6TWbhHqlyDcFWirw==
-X-Received: by 2002:a17:902:e989:b0:15f:1545:326d with SMTP id f9-20020a170902e98900b0015f1545326dmr24252520plb.119.1653333302974;
-        Mon, 23 May 2022 12:15:02 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id n6-20020a17090a928600b001df82551cf2sm39174pjo.44.2022.05.23.12.15.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 12:15:02 -0700 (PDT)
-Date:   Mon, 23 May 2022 12:15:01 -0700
-From:   Kees Cook <keescook@chromium.org>
+        Mon, 23 May 2022 15:32:40 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 406DABF78
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 12:16:26 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id DAA3E1F747;
+        Mon, 23 May 2022 19:16:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1653333384; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Go5nZzNXHmKF4R7s+PkX6pCw7htskuScNkZKhciSpNE=;
+        b=muz1sonuVvEvBeiI6PSi0friQ6+E/JQ3JFanxLzulgRViz5ALQPMsTo9YjqnYe+JvAj/HX
+        hHYnnZmWYeckIhuAdbMtFwcYcBwmiCXsYhReN8WgdY3WT5m1rJrSoi3GoTyRED5kj//mNQ
+        DlV9I8E03se32nv7iYg7IUWvVXAXAxM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1653333384;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Go5nZzNXHmKF4R7s+PkX6pCw7htskuScNkZKhciSpNE=;
+        b=WfHJFgcZbytEA0XJC2onqEM+faiRWTacY9l0I+8loq+YUXEOJkU7yhFaGLS6JUy71STckl
+        vlzAUJ+6v5vyX5Aw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CDE2513AA5;
+        Mon, 23 May 2022 19:16:24 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id JpE6Mojdi2KocAAAMHmgww
+        (envelope-from <bp@suse.de>); Mon, 23 May 2022 19:16:24 +0000
+Date:   Mon, 23 May 2022 21:16:20 +0200
+From:   Borislav Petkov <bp@suse.de>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Christian Brauner <brauner@kernel.org>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        David Yang <davidcomponentone@gmail.com>,
-        Jann Horn <jannh@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        linux-kselftest@vger.kernel.org, Sargun Dhillon <sargun@sargun.me>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Tycho Andersen <tycho@tycho.pizza>,
-        Yang Guang <yang.guang5@zte.com.cn>
-Subject: [GIT PULL] seccomp updates for v5.19-rc1
-Message-ID: <202205231214.ED9D18F@keescook>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] x86/apic for 5.19
+Message-ID: <YovdhH0QBN7csz/b@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -74,59 +69,46 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Linus,
 
-Please pull these seccomp updates for v5.19-rc1.
+two fixes in x86/apic for 5.19, this time around.
 
-Thanks!
+Please pull,
+thx.
 
--Kees
+---
 
-The following changes since commit 2bfed7d2ffa5d86c462d3e2067f2832eaf8c04c7:
+The following changes since commit ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e:
 
-  selftests/seccomp: Don't call read() on TTY from background pgrp (2022-04-29 11:28:41 -0700)
+  Linux 5.18-rc2 (2022-04-10 14:21:36 -1000)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/seccomp-v5.19-rc1
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_apic_for_v5.19_rc1
 
-for you to fetch changes up to 5e91d2a4146946ea0abc984ca957f12b70632901:
+for you to fetch changes up to 7a116a2dd32d96869f0f93bac00b900859ba0434:
 
-  selftests/seccomp: Fix spelling mistake "Coud" -> "Could" (2022-05-04 13:31:21 -0700)
-
-----------------------------------------------------------------
-seccomp updates for v5.19-rc1
-
-- Rework USER_NOTIF notification ordering and kill logic (Sargun Dhillon)
-
-- Improved PTRACE_O_SUSPEND_SECCOMP selftest (Jann Horn)
-
-- Gracefully handle failed unshare() in selftests (Yang Guang)
-
-- Spelling fix (Colin Ian King)
+  x86/apic: Do apic driver probe for "nosmp" use case (2022-05-01 22:40:29 +0200)
 
 ----------------------------------------------------------------
-Colin Ian King (1):
-      selftests/seccomp: Fix spelling mistake "Coud" -> "Could"
+- Always do default APIC routing setup so that cpumasks are properly
+allocated and are present when later accessed ("nosmp" and x2APIC)
 
-Jann Horn (1):
-      selftests/seccomp: Test PTRACE_O_SUSPEND_SECCOMP without CAP_SYS_ADMIN
+- Clarify the bit overlap between an old APIC and a modern, integrated one
 
-Sargun Dhillon (5):
-      seccomp: Use FIFO semantics to order notifications
-      selftests/seccomp: Ensure that notifications come in FIFO order
-      seccomp: Add wait_killable semantic to seccomp user notifier
-      selftests/seccomp: Refactor get_proc_stat to split out file reading code
-      selftests/seccomp: Add test for wait killable notifier
+----------------------------------------------------------------
+Kuppuswamy Sathyanarayanan (1):
+      x86/apic: Do apic driver probe for "nosmp" use case
 
-Yang Guang (1):
-      selftests/seccomp: Add SKIP for failed unshare()
+Thomas Gleixner (1):
+      x86/apic: Clarify i82489DX bit overlap in APIC_LVT0
 
- Documentation/userspace-api/seccomp_filter.rst |  10 +
- include/linux/seccomp.h                        |   3 +-
- include/uapi/linux/seccomp.h                   |   2 +
- kernel/seccomp.c                               |  44 ++-
- tools/testing/selftests/seccomp/Makefile       |   1 +
- tools/testing/selftests/seccomp/seccomp_bpf.c  | 427 ++++++++++++++++++++++++-
- 6 files changed, 482 insertions(+), 5 deletions(-)
+ arch/x86/include/asm/apicdef.h |  6 ------
+ arch/x86/kernel/apic/apic.c    | 16 ++++++++++++----
+ 2 files changed, 12 insertions(+), 10 deletions(-)
 
 -- 
-Kees Cook
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH
+GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
+(HRB 36809, AG Nürnberg)

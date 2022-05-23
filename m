@@ -2,97 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4FA6531356
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:23:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4236B53131F
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:23:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237201AbiEWOnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 10:43:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60956 "EHLO
+        id S237198AbiEWOpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 10:45:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237143AbiEWOnE (ORCPT
+        with ESMTP id S237143AbiEWOpO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 10:43:04 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD4EF473AE;
-        Mon, 23 May 2022 07:43:03 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id c14so13919626pfn.2;
-        Mon, 23 May 2022 07:43:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=myT6Fqbqu1LXacuDQiYi2tYK9nlNzCLLy9owGdyn/GM=;
-        b=W40Zi+DyWWgFk6zFggk1cM4+12Ds4CLiWxJJFIDCHVXXfyZ8Ad7Cqymjsn1kfL8jkv
-         nicUZszJNr5iELKl2BnH40TNaf8VmqkNmstv8EuCzvV/9LsKDXT9DaMPoeb/tUSM/7Ea
-         idPCl3UFMH9bUO0zky1Ig2MFMJT0VA9o4O3uWdp7NlycKRqaAXTb4+dbwEeIw/2EAh39
-         IyVaGbrtl2LNmWaGYYRz5wul6aoaS7lXvjqDT5xYJvlJJzQeMNPbgQiUKnmE8nOIozqc
-         5Dm5He0lxBru+N6WH0o+8ItFZ8380cIozkrcBwM1DlBkDL1i9PpJIEnNk9z5JOMm2gSM
-         yETg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=myT6Fqbqu1LXacuDQiYi2tYK9nlNzCLLy9owGdyn/GM=;
-        b=DJhmo0U2XjahFsIpT0XnBaSqjP7NIDX5Omqxd5EUX1TnqA5ogntomP7wHduwEl9a0x
-         EvNVL6kcRqIydfqocYbvzZY6HqHK74x7F0xClEjPr9qM2Nmqp1BM9wMmcklPazg+evbO
-         NqHA3yCuaqvq9U6fMsYREB9VtSBv4rYJsh1XE4/sQR+3lkKhyKpw79aORH2Dn3uD8JSC
-         daEUSdvCSTT+LsfqJjYQ838RYw55VTlKYqEYTzF23XkvRYFcJFNImJbDtihA3Cedjhik
-         reOMNVENpxoPf41ttCoJyEY6r7XKgGpdi4pwnh15ILu2522QC5+vg2UTzH5cmi24BWCJ
-         +XYw==
-X-Gm-Message-State: AOAM531n0W92XfKVeIU9nS178M/aHQrQQx+swOLsDj7IjKVciPzFYLPT
-        L5FzguTNFa142N63MLl1Y/8=
-X-Google-Smtp-Source: ABdhPJzxucuNqwrbGbtCTMKQBFrCjgq5q/YqLdQJUtRcvT+v69kGz63GH3c5bW+pWxOxdNB+QMbYLQ==
-X-Received: by 2002:a05:6a00:10cc:b0:505:ada6:e03e with SMTP id d12-20020a056a0010cc00b00505ada6e03emr24006767pfu.45.1653316983287;
-        Mon, 23 May 2022 07:43:03 -0700 (PDT)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id jb15-20020a170903258f00b0015e8d4eb256sm5218430plb.160.2022.05.23.07.43.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 07:43:03 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        yangbo lu <yangbo.lu@nxp.com>, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] mmc: sdhci-of-esdhc: Fix refcount leak in esdhc_signal_voltage_switch
-Date:   Mon, 23 May 2022 18:42:54 +0400
-Message-Id: <20220523144255.10310-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 23 May 2022 10:45:14 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1704E2981A;
+        Mon, 23 May 2022 07:45:12 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24NEh7Zu007499;
+        Mon, 23 May 2022 14:45:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=6cGHlwlrnJy/ZsxuQfgFcfPK1pFXQCxiI7jNqHSM/2o=;
+ b=p6ubl54P8qTCYr39of8lRGkgqnt/vOwtr524RUaCvRubz4/m4vtONmTiI1BSqahxqyqk
+ MDIbxnkcK+17cTgSNcWAuj0ifjCXhBsn8cjZDFEYAXs5JrDCggOo5cFu5qLtmuO/PpCD
+ hCejjWqBjbinfn7hOLuEqdb+hX3I19CdUva+ETsHAuLaSoOQdZVuWFmKBQAFc9nHJOw1
+ 7izectOvyxL9dgNtPQ+QAajWdggTJtX5yCuNipmD7W5I70xSEEadUexesTt3Y88R7fIg
+ IM57Hr5+OstJo3tUgUS3wfLNn7xcW6y94yWGHrbU8DG0NyiwPLxbLw2fYUpV4S2sGRPb Xg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g8c9cg113-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 23 May 2022 14:45:03 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24NEiGTo011957;
+        Mon, 23 May 2022 14:45:02 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g8c9cg0yw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 23 May 2022 14:45:02 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24NEd64i004356;
+        Mon, 23 May 2022 14:45:00 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma01fra.de.ibm.com with ESMTP id 3g6qq8ub1k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 23 May 2022 14:45:00 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24NEiwNd38470142
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 23 May 2022 14:44:58 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 185FFA4060;
+        Mon, 23 May 2022 14:44:58 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C1CB4A405C;
+        Mon, 23 May 2022 14:44:57 +0000 (GMT)
+Received: from [9.152.222.246] (unknown [9.152.222.246])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 23 May 2022 14:44:57 +0000 (GMT)
+Message-ID: <e0b64b80-90e1-5aed-1ca4-f6d20ebac6b7@linux.ibm.com>
+Date:   Mon, 23 May 2022 16:44:57 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v2 net] net/smc: postpone sk_refcnt increment in connect()
+Content-Language: en-US
+To:     liuyacan@corp.netease.com
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com, ubraun@linux.ibm.com
+References: <5ce801b7-d446-ee28-86ec-968b7c172a80@linux.ibm.com>
+ <20220523141905.2791310-1-liuyacan@corp.netease.com>
+From:   Karsten Graul <kgraul@linux.ibm.com>
+Organization: IBM Deutschland Research & Development GmbH
+In-Reply-To: <20220523141905.2791310-1-liuyacan@corp.netease.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: jmcfSzowpcL_SaOEd9NjJpJxo70dlrIL
+X-Proofpoint-ORIG-GUID: qpf_3J9lSgJDrxhBB6hmz2bMj0ObisEk
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-23_06,2022-05-23_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
+ malwarescore=0 adultscore=0 phishscore=0 spamscore=0 priorityscore=1501
+ lowpriorityscore=0 impostorscore=0 clxscore=1015 mlxscore=0
+ mlxlogscore=651 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205230081
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_find_matching_node() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when not need anymore.
-Add missing of_node_put() to avoid refcount leak.
-of_node_put() checks null pointer.
+On 23/05/2022 16:19, liuyacan@corp.netease.com wrote:
+>> This is a rather unusual problem that can come up when fallback=true BEFORE smc_connect()
+>> is called. But nevertheless, it is a problem.
+>>
+>> Right now I am not sure if it is okay when we NOT hold a ref to smc->sk during all fallback
+>> processing. This change also conflicts with a patch that is already on net-next (3aba1030).
+> 
+> Do you mean put the ref to smc->sk during all fallback processing unconditionally and remove 
+> the fallback branch sock_put() in __smc_release()?
 
-Fixes: ea35645a3c66 ("mmc: sdhci-of-esdhc: add support for signal voltage switch")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/mmc/host/sdhci-of-esdhc.c | 1 +
- 1 file changed, 1 insertion(+)
+What I had in mind was to eventually call sock_put() in __smc_release() even if sk->sk_state == SMC_INIT
+(currently the extra check in the if() for sk->sk_state != SMC_INIT prevents the sock_put()), but only
+when it is sure that we actually reached the sock_hold() in smc_connect() before.
 
-diff --git a/drivers/mmc/host/sdhci-of-esdhc.c b/drivers/mmc/host/sdhci-of-esdhc.c
-index d9dc41143bb3..8b3d8119f388 100644
---- a/drivers/mmc/host/sdhci-of-esdhc.c
-+++ b/drivers/mmc/host/sdhci-of-esdhc.c
-@@ -904,6 +904,7 @@ static int esdhc_signal_voltage_switch(struct mmc_host *mmc,
- 		scfg_node = of_find_matching_node(NULL, scfg_device_ids);
- 		if (scfg_node)
- 			scfg_base = of_iomap(scfg_node, 0);
-+		of_node_put(scfg_node);
- 		if (scfg_base) {
- 			sdhciovselcr = SDHCIOVSELCR_TGLEN |
- 				       SDHCIOVSELCR_VSELVAL;
--- 
-2.25.1
-
+But maybe we find out that the sock_hold() is not needed for fallback sockets, I don't know...

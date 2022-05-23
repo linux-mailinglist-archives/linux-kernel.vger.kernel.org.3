@@ -2,68 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6D485313E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:24:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3676D531322
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:23:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236790AbiEWOIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 10:08:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51772 "EHLO
+        id S236872AbiEWOI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 10:08:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236771AbiEWOIS (ORCPT
+        with ESMTP id S236797AbiEWOIV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 10:08:18 -0400
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D638345043;
-        Mon, 23 May 2022 07:08:17 -0700 (PDT)
-Received: by mail-oi1-f174.google.com with SMTP id q8so17872408oif.13;
-        Mon, 23 May 2022 07:08:17 -0700 (PDT)
+        Mon, 23 May 2022 10:08:21 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DA8A424B7
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 07:08:20 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id z17so1991402wmf.1
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 07:08:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=kSCKDXwEEunLOsamUA7LNSGFHLKFqgNb3gX19KhjkC8=;
+        b=iu+mFkYp5zBqhcUjMzVm8Tpj9X9vSwLz3IJalNLWsIvwu43zWGujLqGvAxraMdw+Sv
+         Wdmmc3lcjdWjGWrHh46HrzNEubOy4olomrSlWU+Iu79BCXCoM12Svsciijh1ivtb1A3W
+         xievkWFOPlr2DQE6nHLmK8nJMwxGVmd0hoJnZCfUK1CowlZi83u6dNjwhnMgjb+jIN2Y
+         gdv3Y+H/PvOqDSxtyrOy8zFduH0Ri3kiRLIerg8bJmvLFJ08Gg1WgrdIz/iZ/O5pvMRZ
+         KbQD+VbD5faOby66iuVU+sMyu3DImPy/TxUVupCZuNfejxQneAk62RHGdYLKTQ/Y99VA
+         Wqaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=c/Revpi/NQeBVLl9e7ZCFj2VurS2hZIRuL3sCTpYBPU=;
-        b=h4bKEGPDUv+aqQGhlSd9nSPZ0PS+CNGGXG2Ia49s/D+obo+afWH4klPjn/agbUpFkJ
-         3viJ2Ig98DMxJ2YQdmvsuqDdtcCopLmSP83shWp5yWok/4FN0omlPHLUjYtB5Il6EziX
-         hvncMkNFF9pvQTMdzY2R90YgF0jqytU11FFIe9hhmFfY0APAQ9PnZ2z6bTMooDCKHoZU
-         9lGVj5J6z/JY4yj96iRddMa1/HtatIIfVx3vB1jlo6xwd4tsOgNP5H6LtSAmtDpdOprK
-         vB2n3WH4xeKWZ7oDVx1O4rr3jjYqE/rQUzrJHmomYSOr+QmKzHMfzJRF+TpHEi0QtAk6
-         LdzA==
-X-Gm-Message-State: AOAM530yjFnzw2DmfPoFXP7nDcB/HHwz7OVfC4d0N0y5hR/jO4KAZZaz
-        rfFv3ctHzBWzlVy/SJuQvQ==
-X-Google-Smtp-Source: ABdhPJzQukjWCQT1QEmWzFgP+OVp9orwtCbowykGqCuwEbqMpR+WgnafwDT9QfD0g/ABT99ODaPCxg==
-X-Received: by 2002:a05:6808:1314:b0:328:eb31:99b6 with SMTP id y20-20020a056808131400b00328eb3199b6mr11775397oiv.12.1653314897097;
-        Mon, 23 May 2022 07:08:17 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id g4-20020a9d6484000000b006060322125asm4025063otl.42.2022.05.23.07.08.15
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=kSCKDXwEEunLOsamUA7LNSGFHLKFqgNb3gX19KhjkC8=;
+        b=ZenW+akavojsKjptuQLFgyckJ281Ul+pqJW177PauTax91GU6NTV6AvlklbaeNQulK
+         hJyu4P+VgCtjgTOXhUpnbSiHyMWVK+CV+9cYnNkotc6layDBRHF2aJk5t9auCv1TE3tn
+         ldw5Um8JDRABbA/WClInEiQxrpCr3vGcV7sWWVyNoRDeRPrVHpc+pTNDe73JyxfUHG3R
+         vano2UCgRSbXEuH9FFHORSUC0KCXbCDyo4gJjeQbao2KTUvizAunhp3u8hwrfHQn8Bvv
+         4S6GkFWNVoRKx7iGNnMTirDAsrWRmuRRsh9Pq+tFKfKEREd5EjpOCbkT36EeE2mT8UF+
+         ksMQ==
+X-Gm-Message-State: AOAM530Sq3gMLMtxHiXXWzD4V1UnCmU08937ghZ+8wvvzHr7obU4t7Sx
+        4am98Q46xW+m+VwL9LsBVhTOVw==
+X-Google-Smtp-Source: ABdhPJzOhn5A+SiWzdh+V/J9geib1g73WqHWDbVTgfRYJXw628Nf783GozEqC+kmjp1j+fHhz/BDcw==
+X-Received: by 2002:a1c:f717:0:b0:396:f89f:897c with SMTP id v23-20020a1cf717000000b00396f89f897cmr19724234wmh.165.1653314898749;
+        Mon, 23 May 2022 07:08:18 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id bd15-20020a05600c1f0f00b00397393419e3sm8578160wmb.28.2022.05.23.07.08.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 07:08:16 -0700 (PDT)
-Received: (nullmailer pid 1515070 invoked by uid 1000);
-        Mon, 23 May 2022 14:08:15 -0000
-Date:   Mon, 23 May 2022 09:08:15 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        sboyd@kernel.org, chun-jie.chen@mediatek.com,
-        rex-bc.chen@mediatek.com, wenst@chromium.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] dt-bindings: arm: mtk-clocks: Set #clock-cells as
- required property
-Message-ID: <20220523140815.GA1500210-robh@kernel.org>
-References: <20220518093631.25491-1-angelogioacchino.delregno@collabora.com>
- <20220518093631.25491-3-angelogioacchino.delregno@collabora.com>
- <20220520221910.GA348732-robh@kernel.org>
- <288690ac-b23b-92f8-64b4-d994f249f21c@linaro.org>
+        Mon, 23 May 2022 07:08:18 -0700 (PDT)
+Date:   Mon, 23 May 2022 15:08:16 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     linux-kernel@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH] mfd: rt4831: Improve error reporting for problems during
+ .remove()
+Message-ID: <YouVUAsimQj79pyK@google.com>
+References: <20220502191012.53259-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <288690ac-b23b-92f8-64b4-d994f249f21c@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220502191012.53259-1-u.kleine-koenig@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,33 +73,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 21, 2022 at 04:05:01PM +0200, Krzysztof Kozlowski wrote:
-> On 21/05/2022 00:19, Rob Herring wrote:
-> > On Wed, May 18, 2022 at 11:36:31AM +0200, AngeloGioacchino Del Regno wrote:
-> >> This is a clock-controller binding, so it needs #clock-cells, or
-> >> it would be of no use: add that to the list of required properties.
-> >>
-> >> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> >> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-> >> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> >> ---
-> >>  .../devicetree/bindings/arm/mediatek/mediatek,mt8186-clock.yaml  | 1 +
-> >>  .../bindings/arm/mediatek/mediatek,mt8186-sys-clock.yaml         | 1 +
-> >>  .../devicetree/bindings/arm/mediatek/mediatek,mt8192-clock.yaml  | 1 +
-> >>  .../bindings/arm/mediatek/mediatek,mt8192-sys-clock.yaml         | 1 +
-> >>  .../devicetree/bindings/arm/mediatek/mediatek,mt8195-clock.yaml  | 1 +
-> >>  .../bindings/arm/mediatek/mediatek,mt8195-sys-clock.yaml         | 1 +
-> >>  6 files changed, 6 insertions(+)
-> > 
-> > Acked-by: Rob Herring <robh@kernel.org>
-> > 
-> > Wasn't there some discussion about moving these to bindings/clocks/? 
-> > Maybe that was another one, it's all a blur...
+On Mon, 02 May 2022, Uwe Kleine-König wrote:
+
+> Returning an error value in an i2c remove callback results in a generic
+> error message being emitted by the i2c core, but otherwise it doesn't make
+> a difference. The device goes away anyhow and the devm cleanups are
+> called.
 > 
-> Yes, there was such idea although I am not sure if this is worth by
-> itself - messes up with the git history.
+> So instead of triggering the generic i2c error message, emit a more helpful
+> message if a problem occurs and return 0 to suppress the generic message.
+> 
+> This patch is a preparation for making i2c remove callbacks return void.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> ---
+>  drivers/mfd/rt4831.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
 
-There shouldn't be too much history since converting to schema. For just 
-a move git is smart enough to see across moves.
+Applied, thanks.
 
-Rob
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

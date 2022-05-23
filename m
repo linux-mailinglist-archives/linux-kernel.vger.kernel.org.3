@@ -2,52 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5CFA530F79
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:18:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C60B453108D
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:20:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236025AbiEWNM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 09:12:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59730 "EHLO
+        id S236162AbiEWNMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 09:12:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236155AbiEWNMO (ORCPT
+        with ESMTP id S236032AbiEWNMP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 09:12:14 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C8812CDCD
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 06:12:07 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id x5-20020a923005000000b002d1a91c4d13so2002828ile.4
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 06:12:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=bb2fBgp8rleyQWFo5k2i1W76jOqpII6fQInRn3aiZCM=;
-        b=rBry863PiNeGBK2UfgxFcVhZet3EVx1MTfCq2Y1wj2GUmVIRCPfh3l0ih2D+eam8Nq
-         TeIT9lF0I1/WyUQh15IiPluo9Ng5G5+4CLKYF67ThePtvN0YhvsfzfGYyyT6m8BrCItg
-         FRccCxGiEMFrYPHUIuQvd68A2rcmblXkrKj7a2P/IHoxFtuWNwCVE9OwLtyqDfGaeQPH
-         RsPD3b28Lhjk6FC+Dl5IPB3aijZeNHwXbW8pQk4fbB5xUBEQyzL6cDdEW0GtZEYON8cF
-         stwIcwFGgJw2JPZpIaQOiMpt5KDXmUi9DdPX9MiP/lBvbYqTyaW3j/PRSOceRZUHTf6Z
-         PVHQ==
-X-Gm-Message-State: AOAM531UyJz7WG7lgJB8KxvrlNqIKKTcA48XJAWtcZNm3ytLTuwS+hEH
-        1j34kHhBxGy58GbEW803G2cH77FCxoluCuk7Q2KO7U5puzwP
-X-Google-Smtp-Source: ABdhPJwe1+FrHSgI6wqF3zuZeASXQ7uUonOys7HC27c2cvFQ8E1uHvOXxfJ1eNSneOwceUOK9uPyMn0SWjXOkjAiWCkmfrKFKcVN
+        Mon, 23 May 2022 09:12:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BAF62669
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 06:12:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A1C9AB810AD
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 13:12:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B828C385AA;
+        Mon, 23 May 2022 13:12:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653311531;
+        bh=sQH8pLW5zGb26Lk/aNAhQwXPoKxk9hGgY13tGh91Y8E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GJuQJe0W/QoCP7IgYE3761/xx8U8nHQ5ffbzxvwoEgEef4EqohCB+YfZdkI89zPIg
+         hEeUGxe1YejKbyn8wvPaRYvuwKmU15AGXZp38gHzJFxOwBXgMt2KcZ/KViB9NM32VB
+         Si/VZiT1y29luyB2gPdpP7ITK6Xngr5tHEtBbGNUuYDgQj0q/7rETy8Z8wpSKPMjuL
+         MzauARYGuHGMorIpqlXylJHwrOadIwT5yFRYoOHypj0fb3xYfjSS3XYOuaR32Fzogk
+         ZtEP5sNOy62vVQF9obCzDZeYVx6Odlj04uXuI7Q+Haa0HW/r8qZqMjP++JebohSPMr
+         8oQHgIwP49mYg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 5AD50400B1; Mon, 23 May 2022 10:12:09 -0300 (-03)
+Date:   Mon, 23 May 2022 10:12:09 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/5] perf inject: Minor improvements
+Message-ID: <YouIKVUs2S0KSjT8@kernel.org>
+References: <20220520132404.25853-1-adrian.hunter@intel.com>
+ <YotC+NbrBENmqtAh@krava>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:2cca:b0:664:d9c6:3674 with SMTP id
- j10-20020a0566022cca00b00664d9c63674mr1759652iow.67.1653311526774; Mon, 23
- May 2022 06:12:06 -0700 (PDT)
-Date:   Mon, 23 May 2022 06:12:06 -0700
-In-Reply-To: <20220523124859.3210-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000041ae3505dfad968c@google.com>
-Subject: Re: [syzbot] general protection fault in ath9k_hif_usb_rx_cb (2)
-From:   syzbot <syzbot+c6dde1f690b60e0b9fbe@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YotC+NbrBENmqtAh@krava>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,19 +59,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Em Mon, May 23, 2022 at 10:16:56AM +0200, Jiri Olsa escreveu:
+> On Fri, May 20, 2022 at 04:23:59PM +0300, Adrian Hunter wrote:
+> > Hi
+> > 
+> > Here are patches for 2 minor improvements for perf inject:
+> > 1. Keep some features sections from input file
+> > 2. Keep a copy of kcore_dir
+> > 
+> > 
+> > Adrian Hunter (5):
+> >       perf header: Add ability to keep feature sections
+> >       libperf: Add preadn()
+> >       perf inject: Keep some features sections from input file
+> >       perf data: Add has_kcore_dir()
+> >       perf inject: Keep a copy of kcore_dir
+> 
+> LGTM
+> 
+> Acked-by: Jiri Olsa <jolsa@kernel.org>
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Thanks, applied.
 
-Reported-and-tested-by: syzbot+c6dde1f690b60e0b9fbe@syzkaller.appspotmail.com
+- Arnaldo
 
-Tested on:
+ 
+> thanks,
+> jirka
+> 
+> > 
+> >  tools/lib/perf/include/internal/lib.h |   2 +
+> >  tools/lib/perf/lib.c                  |  20 +++++
+> >  tools/perf/builtin-inject.c           | 162 +++++++++++++++++++++++++++++++++-
+> >  tools/perf/util/data.c                |  14 +++
+> >  tools/perf/util/data.h                |   1 +
+> >  tools/perf/util/header.c              |  62 +++++++++++--
+> >  tools/perf/util/header.h              |  15 ++++
+> >  7 files changed, 264 insertions(+), 12 deletions(-)
+> > 
+> > 
+> > Regards
+> > Adrian
 
-commit:         4b0986a3 Linux 5.18
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=55eba09345624206
-dashboard link: https://syzkaller.appspot.com/bug?extid=c6dde1f690b60e0b9fbe
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=10c01fc3f00000
+-- 
 
-Note: testing is done by a robot and is best-effort only.
+- Arnaldo

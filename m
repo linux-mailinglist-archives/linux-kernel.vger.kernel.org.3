@@ -2,128 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C727530F21
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:18:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37AF5530ED5
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:17:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235466AbiEWMdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 08:33:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41814 "EHLO
+        id S235632AbiEWMgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 08:36:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235407AbiEWMdf (ORCPT
+        with ESMTP id S235650AbiEWMeO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 08:33:35 -0400
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBF9342EDA;
-        Mon, 23 May 2022 05:33:33 -0700 (PDT)
-Received: by mail-ot1-f48.google.com with SMTP id c15-20020a9d684f000000b0060b097c71ecso3069056oto.10;
-        Mon, 23 May 2022 05:33:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=dwplQogufcM/dnnYWbT96twlhQ0Bm+4bOAAUZPHPafc=;
-        b=S2iu8LAwk8AjNRz1QIZc9g2YZSYbTiwx1AvqJN4rYfzxqZ2K8qO31G01YGo6UL8GbA
-         vDE13GbPIgfxCp8NAUzrdVrlyj27q4fcB65GSh5zleYON+zcxDBHbpJ8AWGQKUdyWneq
-         r+QkxaC4lxPFYMd6PQnxxSdRzNlc+vXRaEMVAZOG+ZbI9ftIvocGmxfHJJEu+qC4f/YM
-         Vj3WZ9JCg89TTv7rc0bikGBplYQ7S7Ox2PoXV8d+kt2MAz/irZnvIbDH+rSSCDf32zlj
-         /IiVBkvVBF+YQE9iDi+rtko7xrx9I1vXZgxYsrX8+3f7iPfUZM0xlOQ/e1t2+nxo4+wm
-         FnMw==
-X-Gm-Message-State: AOAM531phNhEzby07u4+pB7SQPnQOoEwfzoRtoMqLuko0cVaw+nBnvXo
-        UTlbYCtGyRFXhgS5VZ5Zdxa4NEJJZw==
-X-Google-Smtp-Source: ABdhPJzOzSqNJr1zdhtsACskzJXsKeaw//EGjnzfH3hQzqBN9/ua9XgE+VlORI2w/MC1vWk22fnwNA==
-X-Received: by 2002:a9d:768e:0:b0:60a:ed4f:2403 with SMTP id j14-20020a9d768e000000b0060aed4f2403mr5811132otl.237.1653309212748;
-        Mon, 23 May 2022 05:33:32 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id v132-20020aca618a000000b00325cda1ffabsm3894886oib.42.2022.05.23.05.33.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 05:33:32 -0700 (PDT)
-Received: (nullmailer pid 1378075 invoked by uid 1000);
-        Mon, 23 May 2022 12:33:31 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-Cc:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-leds@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220523084958.2723943-2-jjhiblot@traphandler.com>
-References: <20220523084958.2723943-1-jjhiblot@traphandler.com> <20220523084958.2723943-2-jjhiblot@traphandler.com>
-Subject: Re: [PATCH 1/3] dt-bindings: leds: Add bindings for the TLC5925 controller
-Date:   Mon, 23 May 2022 07:33:31 -0500
-Message-Id: <1653309211.132000.1378074.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Mon, 23 May 2022 08:34:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C667542A39;
+        Mon, 23 May 2022 05:34:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7D134B80FF4;
+        Mon, 23 May 2022 12:34:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0082C385AA;
+        Mon, 23 May 2022 12:34:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653309251;
+        bh=IqR90Auy8+tT5aBpfUUHrQsHhH/KbDi15pMJuDCIMFc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=imDXnGyIkgwwzqBvghc35XlYOcVmZcIlk/acnHhC5QP+tPXLaT8oHoiSYIRyVJiOp
+         MjSi1ss6NJPbXhE9hGfUWHWL1MOfG4qc5LxnLDw0w4tcnmiiRYIm0IxnHgGXg+mllw
+         he3OmR83kipEPT9BP9NqKRyXpeYO7O4IKFJr2Lh/I51p9s0ra41n1V8FoBJbsIQxpG
+         GIOECSmMZgDGeYPkDIMXu4g7nEypp+EsvLa9+J+Ni3aqsNqq6S/LBuZGhecVcuPOW3
+         StAfBCcMyRNiC7BDd+arC80MCOsv832gnMGvOgz8sTqTF+rHuoqTWoAKFlyfOX7Aab
+         TrjYb0mcY4Izg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 02E33400B1; Mon, 23 May 2022 09:34:07 -0300 (-03)
+Date:   Mon, 23 May 2022 09:34:07 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH] perf build: Error for BPF skeletons without LIBBPF
+Message-ID: <Yot/P/QO0sAK2iwg@kernel.org>
+References: <20220520211826.1828180-1-irogers@google.com>
+ <YotP8BrIK/dwLJLL@krava>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YotP8BrIK/dwLJLL@krava>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 23 May 2022 10:49:55 +0200, Jean-Jacques Hiblot wrote:
-> Add bindings documentation for the TLC5925 LED controller.
+Em Mon, May 23, 2022 at 11:12:16AM +0200, Jiri Olsa escreveu:
+> On Fri, May 20, 2022 at 02:18:26PM -0700, Ian Rogers wrote:
+> > LIBBPF requires LIBELF so doing "make BUILD_BPF_SKEL=1 NO_LIBELF=1"
+> > fails with compiler errors about missing declarations. Similar could
+> > happen if libbpf feature detection fails. Prefer to error when
+> > BUILD_BPF_SKEL is enabled but LIBBPF isn't.
+> > 
+> > Signed-off-by: Ian Rogers <irogers@google.com>
 > 
-> Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-> ---
-> devicetree@vger.kernel.org
->  .../bindings/leds/leds-tlc5925.yaml           | 100 ++++++++++++++++++
->  1 file changed, 100 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/leds/leds-tlc5925.yaml
+> Acked-by: Jiri Olsa <jolsa@kernel.org>
+
+Thanks, applied.
+
+- Arnaldo
+
+ 
+> thanks,
+> jirka
 > 
+> > ---
+> >  tools/perf/Makefile.config | 3 +++
+> >  1 file changed, 3 insertions(+)
+> > 
+> > diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+> > index d9b699ad402c..bedb734bd6f2 100644
+> > --- a/tools/perf/Makefile.config
+> > +++ b/tools/perf/Makefile.config
+> > @@ -664,6 +664,9 @@ ifdef BUILD_BPF_SKEL
+> >    ifeq ($(feature-clang-bpf-co-re), 0)
+> >      dummy := $(error Error: clang too old/not installed. Please install recent clang to build with BUILD_BPF_SKEL)
+> >    endif
+> > +  ifeq ($(filter -DHAVE_LIBBPF_SUPPORT, $(CFLAGS)),)
+> > +    dummy := $(error Error: BPF skeleton support requires libbpf)
+> > +  endif
+> >    $(call detected,CONFIG_PERF_BPF_SKEL)
+> >    CFLAGS += -DHAVE_BPF_SKEL
+> >  endif
+> > -- 
+> > 2.36.1.124.g0e6072fb45-goog
+> > 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+-- 
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/leds/leds-tlc5925.yaml:52:15: [error] empty value in block mapping (empty-values)
-
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/leds/leds-tlc5925.yaml: patternProperties:@[a-f0-9]+$:properties:reg:items: 'anyOf' conditional failed, one must be fixed:
-	None is not of type 'object', 'boolean'
-	None is not of type 'array'
-	from schema $id: http://json-schema.org/draft-07/schema#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/leds/leds-tlc5925.yaml: patternProperties:@[a-f0-9]+$:properties:reg:items: 'oneOf' conditional failed, one must be fixed:
-	None is not of type 'object'
-	None is not of type 'array'
-	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/leds/leds-tlc5925.yaml: 'oneOf' conditional failed, one must be fixed:
-	'unevaluatedProperties' is a required property
-	'additionalProperties' is a required property
-	hint: Either unevaluatedProperties or additionalProperties must be present
-	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/leds/leds-tlc5925.yaml: patternProperties:@[a-f0-9]+$:properties:reg: 'anyOf' conditional failed, one must be fixed:
-	'maxItems' is a required property
-		hint: Only "maxItems" is required for a single entry if there are no constraints defined for the values.
-	'items' is not one of ['maxItems', 'description', 'deprecated']
-		hint: Only "maxItems" is required for a single entry if there are no constraints defined for the values.
-	'items' is not one of ['description', 'deprecated', 'const', 'enum', 'minimum', 'maximum', 'multipleOf', 'default', '$ref', 'oneOf']
-	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/leds/leds-tlc5925.yaml: patternProperties:@[a-f0-9]+$:properties:reg:items: 'oneOf' conditional failed, one must be fixed:
-		None is not of type 'object'
-		None is not of type 'array'
-		hint: "items" can be a list defining each entry or a schema applying to all items. A list has an implicit size. A schema requires minItems/maxItems to define the size.
-		from schema $id: http://devicetree.org/meta-schemas/core.yaml#
-	hint: cell array properties must define how many entries and what the entries are when there is more than one entry.
-	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/leds/leds-tlc5925.yaml: ignoring, error in schema: patternProperties: @[a-f0-9]+$: properties: reg: items
-Error: Documentation/devicetree/bindings/leds/leds-tlc5925.example.dts:18.9-14 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:364: Documentation/devicetree/bindings/leds/leds-tlc5925.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1401: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+- Arnaldo

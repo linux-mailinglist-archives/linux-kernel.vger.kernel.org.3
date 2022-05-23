@@ -2,210 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0994531ED3
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 00:50:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34688531ED7
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 00:51:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231192AbiEWWuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 18:50:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55034 "EHLO
+        id S231724AbiEWWvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 18:51:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230228AbiEWWuV (ORCPT
+        with ESMTP id S229545AbiEWWvO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 18:50:21 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4B4D814A0
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 15:50:19 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id b200so4940883qkc.7
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 15:50:19 -0700 (PDT)
+        Mon, 23 May 2022 18:51:14 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 433361003
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 15:51:12 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id h5so22165352wrb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 15:51:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=RupDdku696YI2aJ6LFtSWAU5mlc/9wa0HAPdVsaaX/g=;
-        b=R74stxJhmvV8DOQAtRBN0/hGyLdW6u51nBr0b0EvrakKeyBawMzZGF95fa6y18lmTh
-         SKeUFQl0ZVdMxd+mPnH0+IOovnvAM3oXBlz8XbzBjiQ8DGTqYfguS+rNgCLQG757PsqM
-         3V+iv7wk6dRbJTm9w1guUxDiXAYsNiyP+OXyR5UApn35Q7fnRQpqNts40p4cVyyRm0Vq
-         WdzU4P/iL3F0TcsmWvm2UvYDTuA8Xqzam5VgvuBOpwO5fFqER3xAGsu9Zb4eASs3TUTr
-         2BGNOejDyBEl3knkhGfD07/RHO2bv3sXPvNEEzT87txTupfaYaEhdA1rMNh5/Im2xyIF
-         EaKg==
+        bh=tNZwUkKZtlmZ14jNWylohEgLi2zUCj6Z0VWU+7uDZNM=;
+        b=r+jnJOIBusH635WqI8fbwufkzACI9oCjiSIfKUDvHLseBJPHh9vUSZlWtwSH8Sydl+
+         p0/3xnIcp17otnrYR/qZYEtr6fCmmo/gji7kOUYPP6UyvM1lhwAZhAh+PfEezkRw1I+b
+         0l+aqABzU+E1xxYyggSXp2yt3nt7hQt8aIVYsfT0XMAZIcoUsbXMGNq3dYHqcSyQidme
+         Y+uNXLp/WE5SR/6z9aJrefZIBRRQrknYRS8H+rvGVbIqlCI6X3PKndf5zmU9QieV6U0v
+         r4hmfFl33JKtb0OxMQi2LHy5P1cGQYOlOTDCinO58dnFAPIIEWMTyKmgebufRzp65StN
+         2U6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=RupDdku696YI2aJ6LFtSWAU5mlc/9wa0HAPdVsaaX/g=;
-        b=A2/IheBrxWMsjECkcULx9xrb9uMwfplf+syr8tk0NjiQuVzzquOeFrPaWLwT+mrsyZ
-         oiWBnJWRWJRJ5QjjxFRItp35cZRJE/JAzjubiQMpWpD7hCQBhYJAYRUJPOoWQOUb2WKD
-         Qci7boHOLNxTW3mrO048erUV+KcyNPEfk6cEu/TAmxpilThJWJ0fy6NzUuSK3begjXZr
-         ELoKhtfVgdzHt2fMuXFK4DaLgD33Q+ocm3xh7SQOgx/mj+Jwc4sYzvKOfHRGiklGvebI
-         DcIjhV81Oc8mqjMxyRxvg8qeValrxdkOF9Et8keJ8UalGxRetexpQxr+so+EVvxZtM9I
-         8cvw==
-X-Gm-Message-State: AOAM533S2RSVXm0An/sv7lvJ/r/hPIn8PLutSRWtvmemQovOhg6dv5Lr
-        xfS/P/vNsiJa0zEkTriVrxj6IA5C/0K+jPRYQM7kDg==
-X-Google-Smtp-Source: ABdhPJzZdapOYYj/QSmAr5fRdCMSDzn5R35SYPpAvq0ZsnvOd7pRBzd1D2aYKF1/xQ4y3KqMOChYjVUwSAl6uMA8JBA=
-X-Received: by 2002:a05:620a:2a11:b0:6a0:4ae4:fee6 with SMTP id
- o17-20020a05620a2a1100b006a04ae4fee6mr15742412qkp.30.1653346218984; Mon, 23
- May 2022 15:50:18 -0700 (PDT)
+        bh=tNZwUkKZtlmZ14jNWylohEgLi2zUCj6Z0VWU+7uDZNM=;
+        b=t+KxhMivCuNwipQpKUkPYqiHibmM6yc39lidK1ljPAlSSnqnWE/rhhW1gwWjC16zB3
+         DBFQfdWpWNgwvLGrx2tX3ZyV4O0v1Jnbm1PKMH7rLtztlQNetuzkXtbIly19vLCK5hMN
+         LPot1Pyo0tma6FnMJgPbDl+liYi7xwU2tTM8egbVky1Nuvk940tzzVXmGNYlTkvuhzAA
+         HWWxZCVLTfIs7g1/4+jjAVDBSGIdKx7RmEYvSHif/xjGxUI1zBHrHZYV+brnlg1Ws8Js
+         WE18kdSpBpcNMFdwnG1flWLQnxY+7TU85dfxJ3CrdHggsv9faSivzvlwV196D67L0Cg2
+         b72w==
+X-Gm-Message-State: AOAM530oXB6ihaT8bAXh+v5wvVdHsoOEojCzPW9Ve4lFuy4uFZdZt+wt
+        PN/Vs7GkWxnK4jfQFdrsebnsZ4N6MDJuW3+lp9KNzQ==
+X-Google-Smtp-Source: ABdhPJwNWihoJDJtk6stNWiKlnvaBN9W1TfY/EaTKT4C/wu5BxD5tfoShvs5v+/05rendS8OylZaKLqH68mkRbWu7qY=
+X-Received: by 2002:a05:6000:1548:b0:20f:c4bb:defd with SMTP id
+ 8-20020a056000154800b0020fc4bbdefdmr11656246wry.210.1653346270703; Mon, 23
+ May 2022 15:51:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220523213837.1016542-1-marijn.suijten@somainline.org> <20220523213837.1016542-8-marijn.suijten@somainline.org>
-In-Reply-To: <20220523213837.1016542-8-marijn.suijten@somainline.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 24 May 2022 01:50:08 +0300
-Message-ID: <CAA8EJpr5iY8=VX8ixY7BOrzkqhvg=bJcP+WCHW03d7rmYo+_VQ@mail.gmail.com>
-Subject: Re: [PATCH 7/9] drm/msm/dsi_phy_14nm: Replace parent names with
- clk_hw pointers
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     phone-devel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rajeev Nandan <quic_rajeevny@quicinc.com>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Marek <jonathan@marek.ca>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org
+References: <20220518223815.809858-1-vaibhav@linux.ibm.com>
+ <YoYj4sLJfGke5IGT@dhcp22.suse.cz> <87zgjcg4xs.fsf@vajain21.in.ibm.com> <YodDaFVeU33bu7yQ@dhcp22.suse.cz>
+In-Reply-To: <YodDaFVeU33bu7yQ@dhcp22.suse.cz>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Mon, 23 May 2022 15:50:34 -0700
+Message-ID: <CAJD7tkYwv2LDZeV2F5pxuniw7LCNjBapDCm3WuRhzwTH-jN3PA@mail.gmail.com>
+Subject: Re: [PATCH] memcg: provide reclaim stats via 'memory.reclaim'
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Vaibhav Jain <vaibhav@linux.ibm.com>,
+        Cgroups <cgroups@vger.kernel.org>, linux-doc@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Shakeel Butt <shakeelb@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 24 May 2022 at 00:38, Marijn Suijten
-<marijn.suijten@somainline.org> wrote:
+On Fri, May 20, 2022 at 12:29 AM Michal Hocko <mhocko@suse.com> wrote:
 >
-> parent_hw pointers are easier to manage and cheaper to use than
-> repeatedly formatting the parent name and subsequently leaving the clk
-> framework to perform lookups based on that name.
+> On Fri 20-05-22 10:45:43, Vaibhav Jain wrote:
+> >
+> > Thanks for looking into this patch Michal,
+> >
+> > Michal Hocko <mhocko@suse.com> writes:
+> >
+> > > On Thu 19-05-22 04:08:15, Vaibhav Jain wrote:
+> > >> [1] Provides a way for user-space to trigger proactive reclaim by introducing
+> > >> a write-only memcg file 'memory.reclaim'. However reclaim stats like number
+> > >> of pages scanned and reclaimed is still not directly available to the
+> > >> user-space.
+> > >>
+> > >> This patch proposes to extend [1] to make the memcg file 'memory.reclaim'
+> > >> readable which returns the number of pages scanned / reclaimed during the
+> > >> reclaim process from 'struct vmpressure' associated with each memcg. This should
+> > >> let user-space asses how successful proactive reclaim triggered from memcg
+> > >> 'memory.reclaim' was ?
+> > >>
+> > >> With the patch following command flow is expected:
+> > >>
+> > >>  # echo "1M" > memory.reclaim
+> > >>
+> > >>  # cat memory.reclaim
+> > >>    scanned 76
+> > >>    reclaimed 32
+> > >
+> > > Why cannot you use memory.stat? Sure it would require to iterate over
+> > > the reclaimed hierarchy but the information about scanned and reclaimed
+> > > pages as well as other potentially useful stats is there.
+> >
+> > Agree that "memory.stat" is more suitable for scanned/reclaimed stats as
+> > it already is exposing bunch of other stats.
+> >
+> > The discussion on this patch however seems to have split into two parts:
+> >
+> > 1. Is it a good idea to expose nr_scanned/nr_reclaimed to users-space
+> > and if yes how ?
+> >
+> > IMHO, I think it will be better to expose this info via 'memory.stat' as it
+> > can be useful insight into the reclaim efficiency  and vmpressure.
 >
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> We already do that with some more metrics
+> pgrefill 9801926
+> pgscan 27329762
+> pgsteal 22715987
+> pgactivate 250691267
+> pgdeactivate 9521843
+> pglazyfree 0
+> pglazyfreed 0
+>
+> > 2. Will it be useful to provide feedback to userspace when it writes to
+> > 'memory.reclaim' on how much memory has been reclaimed ?
+> >
+> > IMHO, this will be a useful feeback to userspace to better adjust future
+> > proactive reclaim requests via 'memory.reclaim'
+>
+> How precise this information should be? A very simplistic approach would
+> be
+> cp memory.stat stats.before
+> echo $WHATEVER > memory.reclaim
+> cp memory.stat stats.after
+>
+> This will obviously contain also activity outside of the explicitly
+> triggered reclaim (racing background/direct reclaim) but isn't that what
+> actually matters? Are there any cases where the only metric you care
+> about is the triggered reclaim in isolation?
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+I think it might be useful to have a dedicated entry in memory.stat
+for proactively reclaimed memory. A case where this would be useful is
+tuning and evaluating userspace proactive reclaimers. For instance, if
+a userspace agent is asking the kernel to reclaim 100M, but it could
+only reclaim 10M, then most probably the proactive reclaimer is not
+using a good methodology to figure out how much memory do we need to
+reclaim.
 
-Nit: my rant regarding syntax changes applies here too.
+IMO this is more useful, and a superset of just reading the last
+reclaim request status through memory.reclaim (read stat before and
+after).
 
-> ---
->  drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c | 36 ++++++++++------------
->  1 file changed, 17 insertions(+), 19 deletions(-)
+Additionally, things get complicated if the userspace agent is
+multi-threaded. For a cumulative entry in memory.stat, it shouldn't
+matter by a lot as we are looking at the total for all threads
+cumulatively anyway. If we are only reading the memory reclaimed in
+the last request (through memory.reclaim), then we can easily get the
+results of a request that happened on a different thread.
+
 >
-> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c
-> index 8199c53567f4..574f95ab2f22 100644
-> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c
-> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c
-> @@ -764,14 +764,14 @@ static int dsi_14nm_set_usecase(struct msm_dsi_phy *phy)
->
->  static struct clk_hw *pll_14nm_postdiv_register(struct dsi_pll_14nm *pll_14nm,
->                                                 const char *name,
-> -                                               const char *parent_name,
-> +                                               const struct clk_hw *parent_hw,
->                                                 unsigned long flags,
->                                                 u8 shift)
->  {
->         struct dsi_pll_14nm_postdiv *pll_postdiv;
->         struct device *dev = &pll_14nm->phy->pdev->dev;
->         struct clk_init_data postdiv_init = {
-> -               .parent_names = (const char *[]) { parent_name },
-> +               .parent_hws = (const struct clk_hw *[]) { parent_hw },
->                 .num_parents = 1,
->                 .name = name,
->                 .flags = flags,
-> @@ -800,7 +800,7 @@ static struct clk_hw *pll_14nm_postdiv_register(struct dsi_pll_14nm *pll_14nm,
->
->  static int pll_14nm_register(struct dsi_pll_14nm *pll_14nm, struct clk_hw **provided_clocks)
->  {
-> -       char clk_name[32], parent[32], vco_name[32];
-> +       char clk_name[32], vco_name[32];
->         struct clk_init_data vco_init = {
->                 .parent_data = &(const struct clk_parent_data) {
->                         .fw_name = "ref",
-> @@ -811,7 +811,7 @@ static int pll_14nm_register(struct dsi_pll_14nm *pll_14nm, struct clk_hw **prov
->                 .ops = &clk_ops_dsi_pll_14nm_vco,
->         };
->         struct device *dev = &pll_14nm->phy->pdev->dev;
-> -       struct clk_hw *hw;
-> +       struct clk_hw *hw, *n1_postdiv, *n1_postdivby2;
->         int ret;
->
->         DBG("DSI%d", pll_14nm->phy->id);
-> @@ -824,48 +824,46 @@ static int pll_14nm_register(struct dsi_pll_14nm *pll_14nm, struct clk_hw **prov
->                 return ret;
->
->         snprintf(clk_name, 32, "dsi%dn1_postdiv_clk", pll_14nm->phy->id);
-> -       snprintf(parent, 32, "dsi%dvco_clk", pll_14nm->phy->id);
->
->         /* N1 postdiv, bits 0-3 in REG_DSI_14nm_PHY_CMN_CLK_CFG0 */
-> -       hw = pll_14nm_postdiv_register(pll_14nm, clk_name, parent,
-> -                                      CLK_SET_RATE_PARENT, 0);
-> -       if (IS_ERR(hw))
-> -               return PTR_ERR(hw);
-> +       n1_postdiv = pll_14nm_postdiv_register(pll_14nm, clk_name,
-> +                       &pll_14nm->clk_hw, CLK_SET_RATE_PARENT, 0);
-> +       if (IS_ERR(n1_postdiv))
-> +               return PTR_ERR(n1_postdiv);
->
->         snprintf(clk_name, 32, "dsi%dpllbyte", pll_14nm->phy->id);
-> -       snprintf(parent, 32, "dsi%dn1_postdiv_clk", pll_14nm->phy->id);
->
->         /* DSI Byte clock = VCO_CLK / N1 / 8 */
-> -       hw = devm_clk_hw_register_fixed_factor(dev, clk_name, parent,
-> -                                         CLK_SET_RATE_PARENT, 1, 8);
-> +       hw = devm_clk_hw_register_fixed_factor_parent_hw(dev, clk_name,
-> +                       n1_postdiv, CLK_SET_RATE_PARENT, 1, 8);
->         if (IS_ERR(hw))
->                 return PTR_ERR(hw);
->
->         provided_clocks[DSI_BYTE_PLL_CLK] = hw;
->
->         snprintf(clk_name, 32, "dsi%dn1_postdivby2_clk", pll_14nm->phy->id);
-> -       snprintf(parent, 32, "dsi%dn1_postdiv_clk", pll_14nm->phy->id);
->
->         /*
->          * Skip the mux for now, force DSICLK_SEL to 1, Add a /2 divider
->          * on the way. Don't let it set parent.
->          */
-> -       hw = devm_clk_hw_register_fixed_factor(dev, clk_name, parent, 0, 1, 2);
-> -       if (IS_ERR(hw))
-> -               return PTR_ERR(hw);
-> +       n1_postdivby2 = devm_clk_hw_register_fixed_factor_parent_hw(dev,
-> +                       clk_name, n1_postdiv, 0, 1, 2);
-> +       if (IS_ERR(n1_postdivby2))
-> +               return PTR_ERR(n1_postdivby2);
->
->         snprintf(clk_name, 32, "dsi%dpll", pll_14nm->phy->id);
-> -       snprintf(parent, 32, "dsi%dn1_postdivby2_clk", pll_14nm->phy->id);
->
->         /* DSI pixel clock = VCO_CLK / N1 / 2 / N2
->          * This is the output of N2 post-divider, bits 4-7 in
->          * REG_DSI_14nm_PHY_CMN_CLK_CFG0. Don't let it set parent.
->          */
-> -       hw = pll_14nm_postdiv_register(pll_14nm, clk_name, parent, 0, 4);
-> +       hw = pll_14nm_postdiv_register(pll_14nm, clk_name, n1_postdivby2,
-> +                       0, 4);
->         if (IS_ERR(hw))
->                 return PTR_ERR(hw);
->
-> -       provided_clocks[DSI_PIXEL_PLL_CLK]      = hw;
-> +       provided_clocks[DSI_PIXEL_PLL_CLK] = hw;
->
->         return 0;
->  }
 > --
-> 2.36.1
->
-
-
--- 
-With best wishes
-Dmitry
+> Michal Hocko
+> SUSE Labs

@@ -2,52 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFC2E53174B
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:52:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CF93531AD0
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239675AbiEWRKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:10:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34862 "EHLO
+        id S243521AbiEWRmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:42:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239446AbiEWRJY (ORCPT
+        with ESMTP id S242537AbiEWR1r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:09:24 -0400
+        Mon, 23 May 2022 13:27:47 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B65C6CA8D;
-        Mon, 23 May 2022 10:09:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A587CDF5;
+        Mon, 23 May 2022 10:23:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 66583614CB;
-        Mon, 23 May 2022 17:09:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 692D6C385AA;
-        Mon, 23 May 2022 17:09:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4881D61537;
+        Mon, 23 May 2022 17:14:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21BCFC34115;
+        Mon, 23 May 2022 17:14:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653325740;
-        bh=m849EUhZg4nLuzALYZCbDweGsu4jGB9ehoNUTrqXP4c=;
+        s=korg; t=1653326069;
+        bh=hkWZec3xGuxcobIe4ln5URJVnQJ+IW02w5+IMYVFol4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t2rvd0JziAANrhi96VI1vgcX+uTRc0BulyxOUnRYuxgK97A+ey0I4LVTV0+Ho4wix
-         7mOejWX6yc/i6Pft2+ejA43nmv22oiwfw58vBnm8LGK88IrjDZQXF4F3ni4xEXNxj8
-         D0rZMND8sQVwNXx4wB9f/avDfXxTbREIAQqCWfa0=
+        b=YGkFSxYNDgBOOsv4q1UyKOf4LkFrtvWy66OlJu1wixO57li2wbo10bgx5mV7TX8iV
+         N1S3nma0Yo3t1VL1YG4ikZc30Fyx0rTViNub5ArjBT5snJQXRzNlrWpSbJpFWdb1Ht
+         SaN8G03F2WQzJKAICu6zK5gLacLDz2GY7lYMnT7U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Felix Fietkau <nbd@nbd.name>,
-        Johannes Berg <johannes.berg@intel.com>,
+        stable@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
+        Haibo Chen <haibo.chen@nxp.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 28/33] mac80211: fix rx reordering with non explicit / psmp ack policy
+Subject: [PATCH 5.4 50/68] gpio: gpio-vf610: do not touch other bits when set the target bit
 Date:   Mon, 23 May 2022 19:05:17 +0200
-Message-Id: <20220523165752.970359604@linuxfoundation.org>
+Message-Id: <20220523165810.820691111@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165746.957506211@linuxfoundation.org>
-References: <20220523165746.957506211@linuxfoundation.org>
+In-Reply-To: <20220523165802.500642349@linuxfoundation.org>
+References: <20220523165802.500642349@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,36 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Felix Fietkau <nbd@nbd.name>
+From: Haibo Chen <haibo.chen@nxp.com>
 
-[ Upstream commit 5e469ed9764d4722c59562da13120bd2dc6834c5 ]
+[ Upstream commit 9bf3ac466faa83d51a8fe9212131701e58fdef74 ]
 
-When the QoS ack policy was set to non explicit / psmp ack, frames are treated
-as not being part of a BA session, which causes extra latency on reordering.
-Fix this by only bypassing reordering for packets with no-ack policy
+For gpio controller contain register PDDR, when set one target bit,
+current logic will clear all other bits, this is wrong. Use operator
+'|=' to fix it.
 
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
-Link: https://lore.kernel.org/r/20220420105038.36443-1-nbd@nbd.name
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Fixes: 659d8a62311f ("gpio: vf610: add imx7ulp support")
+Reviewed-by: Peng Fan <peng.fan@nxp.com>
+Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/mac80211/rx.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/gpio/gpio-vf610.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/net/mac80211/rx.c b/net/mac80211/rx.c
-index 5a38be9145ff..e60a53c056c0 100644
---- a/net/mac80211/rx.c
-+++ b/net/mac80211/rx.c
-@@ -1204,8 +1204,7 @@ static void ieee80211_rx_reorder_ampdu(struct ieee80211_rx_data *rx,
- 		goto dont_reorder;
+diff --git a/drivers/gpio/gpio-vf610.c b/drivers/gpio/gpio-vf610.c
+index 58776f2d69ff..1ae612c796ee 100644
+--- a/drivers/gpio/gpio-vf610.c
++++ b/drivers/gpio/gpio-vf610.c
+@@ -125,9 +125,13 @@ static int vf610_gpio_direction_output(struct gpio_chip *chip, unsigned gpio,
+ {
+ 	struct vf610_gpio_port *port = gpiochip_get_data(chip);
+ 	unsigned long mask = BIT(gpio);
++	u32 val;
  
- 	/* not part of a BA session */
--	if (ack_policy != IEEE80211_QOS_CTL_ACK_POLICY_BLOCKACK &&
--	    ack_policy != IEEE80211_QOS_CTL_ACK_POLICY_NORMAL)
-+	if (ack_policy == IEEE80211_QOS_CTL_ACK_POLICY_NOACK)
- 		goto dont_reorder;
+-	if (port->sdata && port->sdata->have_paddr)
+-		vf610_gpio_writel(mask, port->gpio_base + GPIO_PDDR);
++	if (port->sdata && port->sdata->have_paddr) {
++		val = vf610_gpio_readl(port->gpio_base + GPIO_PDDR);
++		val |= mask;
++		vf610_gpio_writel(val, port->gpio_base + GPIO_PDDR);
++	}
  
- 	/* new, potentially un-ordered, ampdu frame - process it */
+ 	vf610_gpio_set(chip, gpio, value);
+ 
 -- 
 2.35.1
 

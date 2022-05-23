@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74232530E04
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:42:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97CD5530D7A
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:42:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233848AbiEWKFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 06:05:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48522 "EHLO
+        id S233907AbiEWKGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 06:06:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233793AbiEWKFZ (ORCPT
+        with ESMTP id S233793AbiEWKF5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 06:05:25 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A01F43ECD;
-        Mon, 23 May 2022 03:05:24 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 708351F424C1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1653300323;
-        bh=hyzoYsUfBPMt2w65TtM4E/48BZdlAw/F0S4w7MVe23I=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ibFDRrkcUQuTq/dhq7xF6dFMKOooP2nCjmq4nQveMhwVt/tBvEMtWih+xHGI+SAq+
-         WHXedhOfRhOdAt9Q/e9oC9GW8B5pSgNGhIW5lUVEqv3scktOSCt2ddAfIk9hMmeTFG
-         LyPGgnibzGxDR+xfXpVWykL4oYlC1LvBHZkxEraz4b6JrFNQNjA72R5QjDnSMNMq1u
-         53HSwmSHRNRdln3qn65/+QPFi7oQcvwuj+Zbt7OJbk2lqvZH0o3t76YA4quB8QXUUQ
-         +4vKmvPX3wjO72xocYLIbrMZ65vbfXgoOfqo0eMxvRM8tl/EoVEXLDjO3mBtgEot+2
-         iq9Uc6uLJINyw==
-Message-ID: <29641040-f6f1-a3c1-cad4-96911c8e38a8@collabora.com>
-Date:   Mon, 23 May 2022 12:05:20 +0200
+        Mon, 23 May 2022 06:05:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 74B0D44A11
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 03:05:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653300355;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=o6NjBzDr0abUPkWwfcw8udxm2iTvapM2gAXQlVu3sNM=;
+        b=XyHKwD0qit2gj5bByhoi/vYrvrXcVo0/Y8GwRlqORxjmbT2KWfzuV3m4sEgOze3EeFMa/w
+        15jGSREevkCT0C+ggHl/nB1BcQEEC81hM7JRRb/ManUMu12nMzYkjZ7IjsvycC8IUNbVrk
+        Y3YS03OwgTWGEcO5XXH6GQH+0FQWuwI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-606-Utfr81TKPSSGXRDNN8YdLA-1; Mon, 23 May 2022 06:05:54 -0400
+X-MC-Unique: Utfr81TKPSSGXRDNN8YdLA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DA02F811E75;
+        Mon, 23 May 2022 10:05:53 +0000 (UTC)
+Received: from fedora (unknown [10.40.194.17])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4198B1410DD5;
+        Mon, 23 May 2022 10:05:52 +0000 (UTC)
+Date:   Mon, 23 May 2022 12:05:49 +0200
+From:   Lukas Czerner <lczerner@redhat.com>
+To:     Baokun Li <libaokun1@huawei.com>
+Cc:     linux-ext4@vger.kernel.org, tytso@mit.edu,
+        adilger.kernel@dilger.ca, jack@suse.cz, ritesh.list@gmail.com,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        yebin10@huawei.com, yukuai3@huawei.com
+Subject: Re: [PATCH 2/2] ext4: correct the judgment of BUG in
+ ext4_mb_normalize_request
+Message-ID: <20220523100549.jjzspu64lr4igt3m@fedora>
+References: <20220521134217.312071-1-libaokun1@huawei.com>
+ <20220521134217.312071-3-libaokun1@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v2 4/4] clk: mediatek: mt8183: Add clk mux notifier for
- MFG mux
-Content-Language: en-US
-To:     Chen-Yu Tsai <wenst@chromium.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220523085923.1430470-1-wenst@chromium.org>
- <20220523085923.1430470-5-wenst@chromium.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220523085923.1430470-5-wenst@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220521134217.312071-3-libaokun1@huawei.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,19 +64,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 23/05/22 10:59, Chen-Yu Tsai ha scritto:
-> When the MFG PLL clock, which is upstream of the MFG clock, is changed,
-> the downstream clock and consumers need to be switched away from the PLL
-> over to a stable clock to avoid glitches.
-> 
-> This is done through the use of the newly added clk mux notifier. The
-> notifier is set on the mux itself instead of the upstream PLL, but in
-> practice this works, as the rate change notifitcations are propogated
-> throughout the sub-tree hanging off the PLL. Just before rate changes,
-> the MFG mux is temporarily and transparently switched to the 26 MHz
-> main crystal. After the rate change, the mux is switched back.
-> 
-> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+On Sat, May 21, 2022 at 09:42:17PM +0800, Baokun Li wrote:
+> When either of the "start + size <= ac->ac_o_ex.fe_logical" or
+> "start > ac->ac_o_ex.fe_logical" conditions is met, it indicates
+> that the fe_logical is not in the allocated range.
+> In this case, it should be bug_ON.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+This seems wrong, I think that this condition is testing overflow and
+it's correct as it is. Or am I missing something?
+
+-Lukas
+
+> 
+> Fixes: dfe076c106f6 ("ext4: get rid of code duplication")
+> Signed-off-by: Baokun Li <libaokun1@huawei.com>
+> ---
+>  fs/ext4/mballoc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+> index 32410b79b664..d0fb57970648 100644
+> --- a/fs/ext4/mballoc.c
+> +++ b/fs/ext4/mballoc.c
+> @@ -4190,7 +4190,7 @@ ext4_mb_normalize_request(struct ext4_allocation_context *ac,
+>  	}
+>  	rcu_read_unlock();
+>  
+> -	if (start + size <= ac->ac_o_ex.fe_logical &&
+> +	if (start + size <= ac->ac_o_ex.fe_logical ||
+>  			start > ac->ac_o_ex.fe_logical) {
+>  		ext4_msg(ac->ac_sb, KERN_ERR,
+>  			 "start %lu, size %lu, fe_logical %lu",
+> -- 
+> 2.31.1
+> 
 

@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F281531A3B
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:55:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D54B531CD9
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:57:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239245AbiEWREX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:04:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45378 "EHLO
+        id S242835AbiEWRz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:55:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239199AbiEWREJ (ORCPT
+        with ESMTP id S241445AbiEWRau (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:04:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFECE54FBB;
-        Mon, 23 May 2022 10:04:08 -0700 (PDT)
+        Mon, 23 May 2022 13:30:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E891960D9D;
+        Mon, 23 May 2022 10:26:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 61C4D614BF;
-        Mon, 23 May 2022 17:04:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63C89C385A9;
-        Mon, 23 May 2022 17:04:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 25A9EB81218;
+        Mon, 23 May 2022 17:26:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FE86C385A9;
+        Mon, 23 May 2022 17:26:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653325447;
-        bh=uIm61Ja8CySFdnlS4xGVURLTLLzoNaoSoJAbJKty5Ns=;
+        s=korg; t=1653326783;
+        bh=bfoCqacksBvKVXB6toCt+XCrQuXm+1nXdkvk2XHfhG8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=z++1lF1JMerbS+fYCGBpWQgag9tOUvdkx0gqg50cjDeCdVV5K7JTFKHG9dBzX8Oj3
-         0bbAWlavRomEnxADcuXCdYZmRSKf5xMDlsMJCMpti2BQqCNXZy6KyQKwOkDwW2cy1C
-         gImvhMSwRqhPkcJEFeFBnz+1xsZJBTTC9t97Jxas=
+        b=pYcx4agvR8ivdDoWrNjIEvIj7FS0ErLt8RJ+cOgBIFOhEjewdOQ73tMeZjAFd6lyT
+         hqH3ON/wH/Zga1V6xGw0oNUNvLY7AhDqFEBx25aDvBlIOyWkxY5vrnhc5WuNGhwA31
+         U9zZLFAqUQ6wquN5t9GqlTcFYR+xlJXlGz6oiKTQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 15/25] net/qla3xxx: Fix a test in ql_reset_work()
-Date:   Mon, 23 May 2022 19:03:33 +0200
-Message-Id: <20220523165747.368958980@linuxfoundation.org>
+        syzbot+8606b8a9cc97a63f1c87@syzkaller.appspotmail.com,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.17 057/158] KVM: Free new dirty bitmap if creating a new memslot fails
+Date:   Mon, 23 May 2022 19:03:34 +0200
+Message-Id: <20220523165840.249161905@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165743.398280407@linuxfoundation.org>
-References: <20220523165743.398280407@linuxfoundation.org>
+In-Reply-To: <20220523165830.581652127@linuxfoundation.org>
+References: <20220523165830.581652127@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,48 +56,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Sean Christopherson <seanjc@google.com>
 
-[ Upstream commit 5361448e45fac6fb96738df748229432a62d78b6 ]
+commit c87661f855c3f2023e40ddc364002601ee234367 upstream.
 
-test_bit() tests if one bit is set or not.
-Here the logic seems to check of bit QL_RESET_PER_SCSI (i.e. 4) OR bit
-QL_RESET_START (i.e. 3) is set.
+Fix a goof in kvm_prepare_memory_region() where KVM fails to free the
+new memslot's dirty bitmap during a CREATE action if
+kvm_arch_prepare_memory_region() fails.  The logic is supposed to detect
+if the bitmap was allocated and thus needs to be freed, versus if the
+bitmap was inherited from the old memslot and thus needs to be kept.  If
+there is no old memslot, then obviously the bitmap can't have been
+inherited
 
-In fact, it checks if bit 7 (4 | 3 = 7) is set, that is to say
-QL_ADAPTER_UP.
+The bug was exposed by commit 86931ff7207b ("KVM: x86/mmu: Do not create
+SPTEs for GFNs that exceed host.MAXPHYADDR"), which made it trivally easy
+for syzkaller to trigger failure during kvm_arch_prepare_memory_region(),
+but the bug can be hit other ways too, e.g. due to -ENOMEM when
+allocating x86's memslot metadata.
 
-This looks harmless, because this bit is likely be set, and when the
-ql_reset_work() delayed work is scheduled in ql3xxx_isr() (the only place
-that schedule this work), QL_RESET_START or QL_RESET_PER_SCSI is set.
+The backtrace from kmemleak:
 
-This has been spotted by smatch.
+  __vmalloc_node_range+0xb40/0xbd0 mm/vmalloc.c:3195
+  __vmalloc_node mm/vmalloc.c:3232 [inline]
+  __vmalloc+0x49/0x50 mm/vmalloc.c:3246
+  __vmalloc_array mm/util.c:671 [inline]
+  __vcalloc+0x49/0x70 mm/util.c:694
+  kvm_alloc_dirty_bitmap virt/kvm/kvm_main.c:1319
+  kvm_prepare_memory_region virt/kvm/kvm_main.c:1551
+  kvm_set_memslot+0x1bd/0x690 virt/kvm/kvm_main.c:1782
+  __kvm_set_memory_region+0x689/0x750 virt/kvm/kvm_main.c:1949
+  kvm_set_memory_region virt/kvm/kvm_main.c:1962
+  kvm_vm_ioctl_set_memory_region virt/kvm/kvm_main.c:1974
+  kvm_vm_ioctl+0x377/0x13a0 virt/kvm/kvm_main.c:4528
+  vfs_ioctl fs/ioctl.c:51
+  __do_sys_ioctl fs/ioctl.c:870
+  __se_sys_ioctl fs/ioctl.c:856
+  __x64_sys_ioctl+0xfc/0x140 fs/ioctl.c:856
+  do_syscall_x64 arch/x86/entry/common.c:50
+  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+  entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-Fixes: 5a4faa873782 ("[PATCH] qla3xxx NIC driver")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Link: https://lore.kernel.org/r/80e73e33f390001d9c0140ffa9baddf6466a41a2.1652637337.git.christophe.jaillet@wanadoo.fr
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+And the relevant sequence of KVM events:
+
+  ioctl(3, KVM_CREATE_VM, 0)              = 4
+  ioctl(4, KVM_SET_USER_MEMORY_REGION, {slot=0,
+                                        flags=KVM_MEM_LOG_DIRTY_PAGES,
+                                        guest_phys_addr=0x10000000000000,
+                                        memory_size=4096,
+                                        userspace_addr=0x20fe8000}
+       ) = -1 EINVAL (Invalid argument)
+
+Fixes: 244893fa2859 ("KVM: Dynamically allocate "new" memslots from the get-go")
+Cc: stable@vger.kernel.org
+Reported-by: syzbot+8606b8a9cc97a63f1c87@syzkaller.appspotmail.com
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+Message-Id: <20220518003842.1341782-1-seanjc@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/qlogic/qla3xxx.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ virt/kvm/kvm_main.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/qlogic/qla3xxx.c b/drivers/net/ethernet/qlogic/qla3xxx.c
-index 147effc16316..e62e3a9d5249 100644
---- a/drivers/net/ethernet/qlogic/qla3xxx.c
-+++ b/drivers/net/ethernet/qlogic/qla3xxx.c
-@@ -3625,7 +3625,8 @@ static void ql_reset_work(struct work_struct *work)
- 		qdev->mem_map_registers;
- 	unsigned long hw_flags;
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -1539,7 +1539,7 @@ static int kvm_prepare_memory_region(str
+ 	r = kvm_arch_prepare_memory_region(kvm, old, new, change);
  
--	if (test_bit((QL_RESET_PER_SCSI | QL_RESET_START), &qdev->flags)) {
-+	if (test_bit(QL_RESET_PER_SCSI, &qdev->flags) ||
-+	    test_bit(QL_RESET_START, &qdev->flags)) {
- 		clear_bit(QL_LINK_MASTER, &qdev->flags);
+ 	/* Free the bitmap on failure if it was allocated above. */
+-	if (r && new && new->dirty_bitmap && old && !old->dirty_bitmap)
++	if (r && new && new->dirty_bitmap && (!old || !old->dirty_bitmap))
+ 		kvm_destroy_dirty_bitmap(new);
  
- 		/*
--- 
-2.35.1
-
+ 	return r;
 
 

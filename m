@@ -2,79 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA13B530F08
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:18:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 329FB53102F
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:19:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235483AbiEWMhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 08:37:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50680 "EHLO
+        id S235551AbiEWMiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 08:38:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235584AbiEWMhE (ORCPT
+        with ESMTP id S235525AbiEWMiA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 08:37:04 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF4FC4D240
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 05:37:00 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id h13so7294455pfq.5
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 05:37:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=L18DlrO1XtDATl5hYjR3u+d9RECswhbrU+Pb38Js3ks=;
-        b=JPrsnrHfNbDWW8uJ6kKFgzO5szuJhqQJLtNpQJjh4Q321Oq3Dg2PJSwb344Snwl0aT
-         6XvysX8RCg64WjCOz9hKQCekBRzdVnbvnWZBx2vl3DXsfMe6252Nh/8UA0xydXuCjfqP
-         hqi4H3Vo0ZxSzk6qfBC+lAtshlsEebYPectaMGWkwKMpy2wxiHUF+F3GGuw9mtS5n/5C
-         Om9NqySHY1pJx59ONDkraeOaSRduGCCNMnv/46+11kwCRSfHgKx7ht5oIBpJIa49jrqG
-         bIPVZrHUwUVxzhPBrU+ujxfWluAP7f+yhsnBPpTNa2rq8GcRlJCw9MZ0qGRfGJ2nmu9C
-         faUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=L18DlrO1XtDATl5hYjR3u+d9RECswhbrU+Pb38Js3ks=;
-        b=wuT9/+ZS8s0FNEQYG2c+u40G2EjPQR8uEzL25RxIn3Me4+2tR6Fh6vm1rJQdzGhr7E
-         7raJakecgIt/n8Dw7bBS8lxe87uHATC83G6FYxRh5+XcEakSa0D/S2lAS5o52F6AjFN9
-         7k475Ln1nEOr2m0Rzp2IfM8X7OgazYONX9kWIgUallEPmy47Wv9ylaYJn3tkE0gtcSK2
-         NzpjekdK1u/jgC6ogQtOJ63/WpF8BgQp8FJNTITX8lGqe1uO0grWQgGP8QKjpxUV413+
-         pBRYfz2Q3/2ut0RG0G7HxEe1UEM9y4klEHf3kKObBFOKEoLa3OYIwXGrF2Cu/c0eezrq
-         iXmA==
-X-Gm-Message-State: AOAM532MmpSrfff1yRU56hhzKBYuOpuvgxBHM7c0dETbo7ZHPcrz71U7
-        67AVyOZH2sTbfYQ9PpUr7cizUg==
-X-Google-Smtp-Source: ABdhPJz+Ih+6rif1P5tA46q5pJ1od0Rs4C8Ji7Eb8o9LdISTbXYMMTGTFtnK3wBVca3+wPcuaXSpPQ==
-X-Received: by 2002:a63:2209:0:b0:3ab:113b:9a2b with SMTP id i9-20020a632209000000b003ab113b9a2bmr20357561pgi.235.1653309420117;
-        Mon, 23 May 2022 05:37:00 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id i7-20020a1709026ac700b0015e8d4eb25asm5000680plt.164.2022.05.23.05.36.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 May 2022 05:36:59 -0700 (PDT)
-Message-ID: <25f6703e-9e10-75d9-a893-6df1e6b75254@kernel.dk>
-Date:   Mon, 23 May 2022 06:36:58 -0600
+        Mon, 23 May 2022 08:38:00 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C694B840;
+        Mon, 23 May 2022 05:37:58 -0700 (PDT)
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24NAxWEq017719;
+        Mon, 23 May 2022 12:37:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=qPKi7PxbNdFM6KxEjxyHEhorcc7red8WzM25mM1FXF0=;
+ b=b6+dt3mmSqPsjYfoXCaxOMXF479b6KOn3fKcpXnQKe7ezjS3j/ChM7HZZCslBbpKGIcV
+ EDA3vX6yq+UjUMoJxObVT2hNWALqup+YjeEeZv7780AJwlt1tnPkZ7fAtQWzboT6ihZi
+ 7nqul+gmOvMhaeNW3nLYmBgwfAKba6wWROaSVSPd2dGFx2pd+Hj+is0DFp0W79koMzwo
+ io82Q/XOR/LdYkNF72JtAzbn+Y4EqF9SONNy5VzPswT9gMm1Aj/9lq20XFaiaLP95y01
+ PFp1zjEhV54UgScKMOZ0kCAQRmh2PACX+pzsjg8At31s/MIz+OhxFlI1/fM/C/S1C+5v Hw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g72avah0d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 23 May 2022 12:37:51 +0000
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24NCHXBk010929;
+        Mon, 23 May 2022 12:37:51 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g72avah01-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 23 May 2022 12:37:50 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24NCDLA5029405;
+        Mon, 23 May 2022 12:37:49 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma04ams.nl.ibm.com with ESMTP id 3g6qq9at86-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 23 May 2022 12:37:49 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24NCb0Qv32047508
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 23 May 2022 12:37:00 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E4B15A405B;
+        Mon, 23 May 2022 12:37:46 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 93F29A4054;
+        Mon, 23 May 2022 12:37:46 +0000 (GMT)
+Received: from [9.152.222.246] (unknown [9.152.222.246])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 23 May 2022 12:37:46 +0000 (GMT)
+Message-ID: <f35924c0-4691-3b11-c302-9d79f3e3c1c7@linux.ibm.com>
+Date:   Mon, 23 May 2022 14:37:46 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.0
-Subject: Re: [PATCH -next v5 0/3] support concurrent sync io for bfq on a
- specail occasion
+Subject: Re: [PATCH net] net/smc: fix listen processing for SMC-Rv2
 Content-Language: en-US
-To:     Jan Kara <jack@suse.cz>, "yukuai (C)" <yukuai3@huawei.com>
-Cc:     paolo.valente@linaro.org, tj@kernel.org,
-        linux-block@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
-References: <20220428120837.3737765-1-yukuai3@huawei.com>
- <d50df657-d859-79cf-c292-412eaa383d2c@huawei.com>
- <61b67d5e-829c-8130-7bda-81615d654829@huawei.com>
- <81411289-e13c-20f5-df63-c059babca57a@huawei.com>
- <d5a90a08-1ac6-587a-e900-0436bd45543a@kernel.dk>
- <55919e29-1f22-e8aa-f3d2-08c57d9e1c22@huawei.com>
- <20220523085902.wmxoebyq3crerecr@quack3.lan>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220523085902.wmxoebyq3crerecr@quack3.lan>
+To:     liuyacan@corp.netease.com
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com, ubraun@linux.ibm.com
+References: <76eeb1b0-6e4f-986b-c32f-e7e4de3426a7@linux.ibm.com>
+ <20220523121245.1910773-1-liuyacan@corp.netease.com>
+From:   Karsten Graul <kgraul@linux.ibm.com>
+Organization: IBM Deutschland Research & Development GmbH
+In-Reply-To: <20220523121245.1910773-1-liuyacan@corp.netease.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 2YoJIM-9Qej2PQjwFR3RDMYwiZLlEnrl
+X-Proofpoint-ORIG-GUID: etNE7qNfI6mGmIT2aq6vjuS3_ElzQA5o
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-23_04,2022-05-23_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
+ bulkscore=0 clxscore=1015 spamscore=0 malwarescore=0 adultscore=0
+ lowpriorityscore=0 phishscore=0 impostorscore=0 priorityscore=1501
+ mlxlogscore=977 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205230067
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,50 +97,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/23/22 2:59 AM, Jan Kara wrote:
-> On Mon 23-05-22 09:10:38, yukuai (C) wrote:
->> ? 2022/05/21 20:21, Jens Axboe ??:
->>> On 5/21/22 1:22 AM, yukuai (C) wrote:
->>>> ? 2022/05/14 17:29, yukuai (C) ??:
->>>>> ? 2022/05/05 9:00, yukuai (C) ??:
->>>>>> Hi, Paolo
->>>>>>
->>>>>> Can you take a look at this patchset? It has been quite a long time
->>>>>> since we spotted this problem...
->>>>>>
->>>>>
->>>>> friendly ping ...
->>>> friendly ping ...
+On 23/05/2022 14:12, liuyacan@corp.netease.com wrote:
+>>> From: liuyacan <liuyacan@corp.netease.com>
 >>>
->>> I can't speak for Paolo, but I've mentioned before that the majority
->>> of your messages end up in my spam. That's still the case, in fact
->>> I just marked maybe 10 of them as not spam.
+>>> In the process of checking whether RDMAv2 is available, the current
+>>> implementation first sets ini->smcrv2.ib_dev_v2, and then allocates
+>>> smc buf desc, but the latter may fail. Unfortunately, the caller
+>>> will only check the former. In this case, a NULL pointer reference
+>>> will occur in smc_clc_send_confirm_accept() when accessing
+>>> conn->rmb_desc.
 >>>
->>> You really need to get this issued sorted out, or you will continue
->>> to have patches ignore because folks may simply not see them.
+>>> This patch does two things:
+>>> 1. Use the return code to determine whether V2 is available.
+>>> 2. If the return code is NODEV, continue to check whether V1 is
+>>> available.
 >>>
->> Hi,
+>>> Fixes: e49300a6bf62 ("net/smc: add listen processing for SMC-Rv2")
+>>> Signed-off-by: liuyacan <liuyacan@corp.netease.com>
+>>> ---
 >>
->> Thanks for your notice.
+>> I am not happy with this patch. You are right that this is a problem,
+>> but the fix should be much simpler: set ini->smcrv2.ib_dev_v2 = NULL in
+>> smc_find_rdma_v2_device_serv() after the not_found label, just like it is
+>> done in a similar way for the ISM device in smc_find_ism_v1_device_serv().
 >>
->> Is it just me or do you see someone else's messages from *huawei.com
->> end up in spam? I tried to seek help from our IT support, however, they
->> didn't find anything unusual...
+>> Your patch changes many more things, and beside that you eliminated the calls 
+>> to smc_find_ism_store_rc() completely, which is not correct.
+>>
+>> Since your patch was already applied (btw. 3:20 hours after you submitted it),
+>> please revert it and resend. Thank you.
 > 
-> So actually I have noticed that a lot of (valid) email from huawei.com (not
-> just you) ends up in the spam mailbox. For me direct messages usually pass
-> (likely matching SPF records for originating mail server save the email
-> from going to spam) but messages going through mailing lists are flagged as
-> spam because the emails are missing valid DKIM signature but huawei.com
-> DMARC config says there should be DKIM signature (even direct messages are
-> missing DKIM so this does not seem as a mailing list configuration issue).
-> So this seems as some misconfiguration of the mails on huawei.com side
-> (likely missing DKIM signing of outgoing email).
+> I also have considered this way, one question is that do we need to do more roll 
+> back work before V1 check? 
+> 
+> Specifically, In smc_find_rdma_v2_device_serv(), there are the following steps:
+> 
+> 1. smc_listen_rdma_init()
+>    1.1 smc_conn_create()
+>    1.2 smc_buf_create()   --> may fail
+> 2. smc_listen_rdma_reg()  --> may fail
+> 
+> When later steps fail, Do we need to roll back previous steps?
 
-SPF/DKIM was indeed a problem earlier for yukaui patches, but I don't
-see that anymore. Maybe it's still an issue for some emails, from them
-or Huawei in general?
+That is a good question and I think that is a different problem for another patch.
+smc_listen_rdma_init() maybe should call smc_conn_abort() similar to what smc_listen_ism_init()
+does in this situation. And when smc_listen_rdma_reg() fails ... hmm we need to think about this.
 
--- 
-Jens Axboe
+We will also discuss this here in our team.
 

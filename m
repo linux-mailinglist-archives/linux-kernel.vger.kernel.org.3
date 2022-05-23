@@ -2,110 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F933530CB7
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:40:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96668530DD7
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:42:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232930AbiEWJ2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 05:28:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60686 "EHLO
+        id S233054AbiEWJ3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 05:29:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233200AbiEWJ21 (ORCPT
+        with ESMTP id S232889AbiEWJ3M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 05:28:27 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6515A4755C
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 02:28:24 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1nt4MF-0007Ub-GJ; Mon, 23 May 2022 11:28:11 +0200
-Message-ID: <bc69ee03-1a74-c15d-ec94-da3b987ab8b1@leemhuis.info>
-Date:   Mon, 23 May 2022 11:28:08 +0200
+        Mon, 23 May 2022 05:29:12 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5414927C;
+        Mon, 23 May 2022 02:29:11 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 48DE121A57;
+        Mon, 23 May 2022 09:29:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1653298150; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yKSiy0ipOYVbqRPh0+sMS6w58vGVnmR5krmIKhBhvCo=;
+        b=rhER0KTpLC+kN7FEVjQD6D5ygjKKlG/FidSbAufFle/t6d05K+2srPjx2V5Ec/NWBqGhss
+        lklFclXZMR8sHsK0D1N7g1+tqpbbb3NC9Wuf6obFB/NFdR26vGPNTLq1U2UcvMQ1iRLBrK
+        JiOeSW48sRlLrIuWLgCeycrkMzd8J/g=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1653298150;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yKSiy0ipOYVbqRPh0+sMS6w58vGVnmR5krmIKhBhvCo=;
+        b=00foDO6puATmPZsCtmjAr17KPhXXoPethprIX1ioU1ZZc6K2o0pA+ZbMOs5OQmWH7FPwwt
+        fFvBdQO7vYv8jvDA==
+Received: from quack3.suse.cz (unknown [10.100.224.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id DF7B12C141;
+        Mon, 23 May 2022 09:29:09 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 671CEA0632; Mon, 23 May 2022 11:29:08 +0200 (CEST)
+Date:   Mon, 23 May 2022 11:29:08 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Baokun Li <libaokun1@huawei.com>
+Cc:     linux-ext4@vger.kernel.org, tytso@mit.edu,
+        adilger.kernel@dilger.ca, jack@suse.cz, ritesh.list@gmail.com,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        yebin10@huawei.com, yukuai3@huawei.com,
+        Hulk Robot <hulkci@huawei.com>
+Subject: Re: [PATCH 1/2] ext4: fix bug_on ext4_mb_use_inode_pa
+Message-ID: <20220523092908.2ghn2fvps5dfhyz3@quack3.lan>
+References: <20220521134217.312071-1-libaokun1@huawei.com>
+ <20220521134217.312071-2-libaokun1@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: en-US
-To:     Stefan Wahren <stefan.wahren@i2se.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>
-Cc:     Borislav Petkov <bp@alien8.de>, Minchan Kim <minchan@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Phil Elwell <phil@raspberrypi.com>, regressions@lists.linux.dev
-References: <77d6d498-7dd9-03eb-60f2-d7e682bb1b20@i2se.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: Re: vchiq: Performance regression since 5.18-rc1
-In-Reply-To: <77d6d498-7dd9-03eb-60f2-d7e682bb1b20@i2se.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1653298105;3d2e04a1;
-X-HE-SMSGID: 1nt4MF-0007Ub-GJ
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220521134217.312071-2-libaokun1@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[TLDR: I'm adding this regression report to the list of tracked
-regressions; all text from me you find below is based on a few templates
-paragraphs you might have encountered already already in similar form.]
-
-Hi, this is your Linux kernel regression tracker.
-
-On 22.05.22 01:22, Stefan Wahren wrote:
+On Sat 21-05-22 21:42:16, Baokun Li wrote:
+> Hulk Robot reported a BUG_ON:
+> ==================================================================
+> kernel BUG at fs/ext4/mballoc.c:3211!
+> [...]
+> RIP: 0010:ext4_mb_mark_diskspace_used.cold+0x85/0x136f
+> [...]
+> Call Trace:
+>  ext4_mb_new_blocks+0x9df/0x5d30
+>  ext4_ext_map_blocks+0x1803/0x4d80
+>  ext4_map_blocks+0x3a4/0x1a10
+>  ext4_writepages+0x126d/0x2c30
+>  do_writepages+0x7f/0x1b0
+>  __filemap_fdatawrite_range+0x285/0x3b0
+>  file_write_and_wait_range+0xb1/0x140
+>  ext4_sync_file+0x1aa/0xca0
+>  vfs_fsync_range+0xfb/0x260
+>  do_fsync+0x48/0xa0
+> [...]
+> ==================================================================
 > 
-> while testing the staging/vc04_services/interface/vchiq_arm driver with
-> my Raspberry Pi 3 B+ (multi_v7_defconfig) i noticed a huge performance
-> regression since [ff042f4a9b050895a42cae893cc01fa2ca81b95c] mm:
-> lru_cache_disable: replace work queue synchronization with synchronize_rcu
+> Above issue may happen as follows:
+> -------------------------------------
+> do_fsync
+>  vfs_fsync_range
+>   ext4_sync_file
+>    file_write_and_wait_range
+>     __filemap_fdatawrite_range
+>      do_writepages
+>       ext4_writepages
+>        mpage_map_and_submit_extent
+>         mpage_map_one_extent
+>          ext4_map_blocks
+>           ext4_mb_new_blocks
+>            ext4_mb_normalize_request
+>             >>> start + size <= ac->ac_o_ex.fe_logical
+>            ext4_mb_regular_allocator
+>             ext4_mb_simple_scan_group
+>              ext4_mb_use_best_found
+>               ext4_mb_new_preallocation
+>                ext4_mb_new_inode_pa
+>                 ext4_mb_use_inode_pa
+>                  >>> set ac->ac_b_ex.fe_len <= 0
+>            ext4_mb_mark_diskspace_used
+>             >>> BUG_ON(ac->ac_b_ex.fe_len <= 0);
 > 
-> Usually i run "vchiq_test -f 1" to see the driver is still working [1].
+> we can easily reproduce this problem with the following commands:
+> 	`fallocate -l100M disk`
+> 	`mkfs.ext4 -b 1024 -g 256 disk`
+> 	`mount disk /mnt`
+> 	`fsstress -d /mnt -l 0 -n 1000 -p 1`
 > 
-> Before commit:
+> The size must be smaller than or equal to EXT4_BLOCKS_PER_GROUP.
+> Therefore, "start + size <= ac->ac_o_ex.fe_logical" may occur
+> when the size is truncated. So start should be the start position of
+> the group where ac_o_ex.fe_logical is located after alignment.
+> In addition, when the value of fe_logical or EXT4_BLOCKS_PER_GROUP
+> is very large, the value calculated by start_off is more accurate.
 > 
-> real    0m1,500s
-> user    0m0,068s
-> sys    0m0,846s
-> 
-> After commit:
-> 
-> real    7m11,449s
-> user    0m2,049s
-> sys    0m0,023s
+> Fixes: cd648b8a8fd5 ("ext4: trim allocation requests to group size")
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Baokun Li <libaokun1@huawei.com>
 
-Thanks for the report.
+Looks good. I'd just phrase the comment below a bit differently:
 
-To be sure below issue doesn't fall through the cracks unnoticed, I'm
-adding it to regzbot, my Linux kernel regression tracking bot:
+> +	/*
+> +	 * Because size must be less than or equal to
+> +	 * EXT4_BLOCKS_PER_GROUP, start should be the start position of
+> +	 * the group where ac_o_ex.fe_logical is located after alignment.
+> +	 * In addition, when the value of fe_logical or
+> +	 * EXT4_BLOCKS_PER_GROUP is very large, the value calculated
+> +	 * by start_off is more accurate.
+> +	 */
+> +	start = max(start, round_down(ac->ac_o_ex.fe_logical,
+> +			EXT4_BLOCKS_PER_GROUP(ac->ac_sb)));
+> +
 
-#regzbot ^introduced ff042f4a9b050895a42cae893cc01fa2ca81b95
-#regzbot title mm: chiq_test runs 7 minutes instead of ~ 1 second.
-#regzbot ignore-activity
+Can we make the comment like:
 
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply -- ideally with also
-telling regzbot about it, as explained here:
-https://linux-regtracking.leemhuis.info/tracked-regression/
+	/*
+	 * For tiny groups (smaller than 8MB) the chosen allocation
+	 * alignment may be larger than group size. Make sure the alignment
+	 * does not move allocation to a different group which makes mballoc
+	 * fail assertions later.
+	 */
 
-Reminder for developers: When fixing the issue, add 'Link:' tags
-pointing to the report (the mail this one replied to), as the kernel's
-documentation call for; above page explains why this is important for
-tracked regressions.
+With that feel free to add:
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
+								Honza
+
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

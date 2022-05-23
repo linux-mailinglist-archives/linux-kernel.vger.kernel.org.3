@@ -2,125 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9978531403
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:25:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B65EC531326
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:23:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237093AbiEWOUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 10:20:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47228 "EHLO
+        id S237110AbiEWOU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 10:20:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235152AbiEWOUp (ORCPT
+        with ESMTP id S235987AbiEWOUp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 23 May 2022 10:20:45 -0400
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BAA25A17E;
+Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [IPv6:2a01:4f8:150:2161:1:b009:f23e:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5C75A17A;
         Mon, 23 May 2022 07:20:43 -0700 (PDT)
-Received: from in01.mta.xmission.com ([166.70.13.51]:36252)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nt8vI-00ATIA-DK; Mon, 23 May 2022 08:20:40 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:39108 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nt8vG-0041Du-0k; Mon, 23 May 2022 08:20:39 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Duoming Zhou <duoming@zju.edu.cn>
-Cc:     linux-wireless@vger.kernel.org, amitkarwar@gmail.com,
-        ganapathi017@gmail.com, sharvari.harisangam@nxp.com,
-        huxinming820@gmail.com, kvalo@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gregkh@linuxfoundation.org, rafael@kernel.org
-In-Reply-To: <20220523052810.24767-1-duoming@zju.edu.cn> (Duoming Zhou's
-        message of "Mon, 23 May 2022 13:28:10 +0800")
-References: <20220523052810.24767-1-duoming@zju.edu.cn>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-Date:   Mon, 23 May 2022 09:20:28 -0500
-Message-ID: <87o7zoxrdf.fsf@email.froward.int.ebiederm.org>
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by bmailout3.hostsharing.net (Postfix) with ESMTPS id 4D8E1100D5844;
+        Mon, 23 May 2022 16:20:42 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id 13E602ED3E7; Mon, 23 May 2022 16:20:42 +0200 (CEST)
+Date:   Mon, 23 May 2022 16:20:42 +0200
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Sheng Bi <windy.bi.enflame@gmail.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] PCI: Fix no-op wait after secondary bus reset
+Message-ID: <20220523142042.GA19286@wunner.de>
+References: <20220516165740.6256af51.alex.williamson@redhat.com>
+ <20220518115432.76183-1-windy.bi.enflame@gmail.com>
+ <20220520064148.GA20418@wunner.de>
+ <CAGdb+H2_pX4TzG=sJ8XE6KiyWW9niJQawCbcDN2byxDfybukiA@mail.gmail.com>
+ <20220521124910.GA13556@wunner.de>
+ <CAGdb+H19bfbXM1cPJvhh6gixJbF7Sk=v53d9VpvWY8HEs0mSKg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nt8vG-0041Du-0k;;;mid=<87o7zoxrdf.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX19XL6dIVUh4Rgjy70dRTrylgdC8ofaP27Q=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGdb+H19bfbXM1cPJvhh6gixJbF7Sk=v53d9VpvWY8HEs0mSKg@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Virus: No
-X-Spam-DCC: XMission; sa01 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Duoming Zhou <duoming@zju.edu.cn>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 1795 ms - load_scoreonly_sql: 0.03 (0.0%),
-        signal_user_changed: 3.2 (0.2%), b_tie_ro: 2.1 (0.1%), parse: 0.67
-        (0.0%), extract_message_metadata: 8 (0.5%), get_uri_detail_list: 1.02
-        (0.1%), tests_pri_-1000: 3.8 (0.2%), tests_pri_-950: 1.07 (0.1%),
-        tests_pri_-900: 0.81 (0.0%), tests_pri_-90: 126 (7.0%), check_bayes:
-        125 (6.9%), b_tokenize: 5 (0.3%), b_tok_get_all: 7 (0.4%),
-        b_comp_prob: 1.43 (0.1%), b_tok_touch_all: 109 (6.1%), b_finish: 0.70
-        (0.0%), tests_pri_0: 1260 (70.2%), check_dkim_signature: 0.38 (0.0%),
-        check_dkim_adsp: 1.69 (0.1%), poll_dns_idle: 380 (21.2%),
-        tests_pri_10: 1.76 (0.1%), tests_pri_500: 387 (21.6%), rewrite_mail:
-        0.00 (0.0%)
-Subject: Re: [PATCH v3] mwifiex: fix sleep in atomic context bugs caused by
- dev_coredumpv
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Duoming Zhou <duoming@zju.edu.cn> writes:
+On Sun, May 22, 2022 at 01:37:50AM +0800, Sheng Bi wrote:
+> On Sat, May 21, 2022 at 8:49 PM Lukas Wunner <lukas@wunner.de> wrote:
+> > On Sat, May 21, 2022 at 04:36:10PM +0800, Sheng Bi wrote:
+> > > If so, I also want to align the polling things mentioned in the
+> > > question from Alex, since pci_dev_wait() is also used for reset
+> > > functions other than SBR. To Bjorn, Alex, Lucas, how do you think if
+> > > we need to change the polling in pci_dev_wait() to 20ms intervals, or
+> > > keep binary exponential back-off with probable unexpected extra
+> > > timeout delay.
+> >
+> > The exponential backoff should probably be capped at some point
+> > to avoid excessive wait delays.  I guess the rationale for
+> > exponential backoff is to not poll too frequently.
+> > Capping at 20 msec or 100 msec may be reasonable, i.e.:
+> >
+> > -               delay *= 2;
+> > +               delay = min(delay * 2, 100);
+> 
+> Capping at 20 or 100 msec seems reasonable to me. Btw, since 20 msec
+> is not a long time in these scenarios, how about changing to a fixed
+> 20 msec interval?
 
-> There are sleep in atomic context bugs when uploading device dump
-> data in mwifiex. The root cause is that dev_coredumpv could not
-> be used in atomic contexts, because it calls dev_set_name which
-> include operations that may sleep. The call tree shows execution
-> paths that could lead to bugs:
->
->    (Interrupt context)
-> fw_dump_timer_fn
->   mwifiex_upload_device_dump
->     dev_coredumpv(..., GFP_KERNEL)
->       dev_coredumpm()
->         kzalloc(sizeof(*devcd), gfp); //may sleep
->         dev_set_name
->           kobject_set_name_vargs
->             kvasprintf_const(GFP_KERNEL, ...); //may sleep
->             kstrdup(s, GFP_KERNEL); //may sleep
->
-> In order to let dev_coredumpv support atomic contexts, this patch
-> changes the gfp_t parameter of kvasprintf_const and kstrdup in
-> kobject_set_name_vargs from GFP_KERNEL to GFP_ATOMIC. What's more,
-> In order to mitigate bug, this patch changes the gfp_t parameter
-> of dev_coredumpv from GFP_KERNEL to GFP_ATOMIC.
+The callers of pci_dev_wait() seem to wait for the spec-defined
+delay and only call pci_dev_wait() to allow for an additional period
+that non-compliant devices may need.  That extra delay can be expected
+to be low, which is why it makes sense to start with a short poll interval
+and gradually extend it.  So the algorithm seems to be reasonable and
+I wouldn't recommend changing it to a constant interval unless that
+fixes something which is currently broken.
 
-vmalloc in atomic context?
+Thanks,
 
-Not only does dev_coredumpm set a device name dev_coredumpm creates an
-entire device to hold the device dump.
-
-My sense is that either dev_coredumpm needs to be rebuilt on a
-completely different principle that does not need a device to hold the
-coredump (so that it can be called from interrupt context) or that
-dev_coredumpm should never be called in an context that can not sleep.
-
-
-Looking at fw_dump_timer_fn the only purpose of the timer is to trigger
-a device dump after a certain amount of time.  So I suspect all that is
-needed to fix this issue is to change the type of devdump_timer to
-struct delayed_work and use scheduled_delayed_work instead of mod_timer.
-
-
-Eric
-
-p.s.  I looked at this because there was coredump in the infrastructure
-name, and I do some of the work to keep coredumps working.  Device dump
-seems like a much better term, and I wished the designer of the api had
-used that instead.
-
-
-
+Lukas

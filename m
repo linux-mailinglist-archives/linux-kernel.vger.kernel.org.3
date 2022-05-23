@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34C5053192E
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:54:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBAE3531782
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:53:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240097AbiEWRZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:25:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37688 "EHLO
+        id S239360AbiEWRIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:08:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240686AbiEWRQk (ORCPT
+        with ESMTP id S239551AbiEWRHg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:16:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72150252A8;
-        Mon, 23 May 2022 10:16:23 -0700 (PDT)
+        Mon, 23 May 2022 13:07:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80BFB6B004;
+        Mon, 23 May 2022 10:07:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7FAD3B8120F;
-        Mon, 23 May 2022 17:13:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D18EBC385A9;
-        Mon, 23 May 2022 17:13:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 98D43B811F0;
+        Mon, 23 May 2022 17:07:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0D9BC385A9;
+        Mon, 23 May 2022 17:07:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326005;
-        bh=SwZZ1wBIYlC9EHPI5vWZ3DJXkxhGGuW+aePkTfWxLZ4=;
+        s=korg; t=1653325633;
+        bh=H0R7sOJ74r5n90kpbHhyXe3/tBEaDV75G93ywL8THNo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=J+RKUMKsXpocYWY+mkTzl6qUGpmWScxclvUHPVr3BgzsLrW8Wr9LxR4ouTl+L5Ukd
-         JAWUAw2O5AgCtd5EvyQypDJktE+xpMbqr/gOiSoje3ks4gl2eP3qfAnnSVzqJsrJvv
-         eFG1qeGfygZxxbz/t+b7DivoXYAJU0dV0b2DWslM=
+        b=2OzPIGO5vbBpgWJd6glfM/FoEOCMfQJNo4FPbjffG/4WV+IetQ/t8qMca2yYEpC3n
+         RX+TqLZPnI9mHjAL38N1hrpqig4mgfP1H/ml3OIyeElSu/x6y/sroYhmAVg5RqttsB
+         qGA4G9nr0L8Gr+P4BP2ulbnOGQx7aN60+v5J9ZSY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
-        Zixuan Fu <r33s3n6@gmail.com>, Paolo Abeni <pabeni@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 38/68] net: vmxnet3: fix possible use-after-free bugs in vmxnet3_rq_alloc_rx_buf()
+        stable@vger.kernel.org,
+        syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Schspa Shi <schspa@gmail.com>
+Subject: [PATCH 5.10 01/97] usb: gadget: fix race when gadget driver register via ioctl
 Date:   Mon, 23 May 2022 19:05:05 +0200
-Message-Id: <20220523165808.887724578@linuxfoundation.org>
+Message-Id: <20220523165812.501448044@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165802.500642349@linuxfoundation.org>
-References: <20220523165802.500642349@linuxfoundation.org>
+In-Reply-To: <20220523165812.244140613@linuxfoundation.org>
+References: <20220523165812.244140613@linuxfoundation.org>
 User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -55,93 +58,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zixuan Fu <r33s3n6@gmail.com>
+From: Schspa Shi <schspa@gmail.com>
 
-[ Upstream commit 9e7fef9521e73ca8afd7da9e58c14654b02dfad8 ]
+commit 5f0b5f4d50fa0faa8c76ef9d42a42e8d43f98b44 upstream.
 
-In vmxnet3_rq_alloc_rx_buf(), when dma_map_single() fails, rbi->skb is
-freed immediately. Similarly, in another branch, when dma_map_page() fails,
-rbi->page is also freed. In the two cases, vmxnet3_rq_alloc_rx_buf()
-returns an error to its callers vmxnet3_rq_init() -> vmxnet3_rq_init_all()
--> vmxnet3_activate_dev(). Then vmxnet3_activate_dev() calls
-vmxnet3_rq_cleanup_all() in error handling code, and rbi->skb or rbi->page
-are freed again in vmxnet3_rq_cleanup_all(), causing use-after-free bugs.
+The usb_gadget_register_driver can be called multi time by to
+threads via USB_RAW_IOCTL_RUN ioctl syscall, which will lead
+to multiple registrations.
 
-To fix these possible bugs, rbi->skb and rbi->page should be cleared after
-they are freed.
+Call trace:
+  driver_register+0x220/0x3a0 drivers/base/driver.c:171
+  usb_gadget_register_driver_owner+0xfb/0x1e0
+    drivers/usb/gadget/udc/core.c:1546
+  raw_ioctl_run drivers/usb/gadget/legacy/raw_gadget.c:513 [inline]
+  raw_ioctl+0x1883/0x2730 drivers/usb/gadget/legacy/raw_gadget.c:1220
+  ioctl USB_RAW_IOCTL_RUN
 
-The error log in our fault-injection testing is shown as follows:
+This routine allows two processes to register the same driver instance
+via ioctl syscall. which lead to a race condition.
 
-[   14.319016] BUG: KASAN: use-after-free in consume_skb+0x2f/0x150
-...
-[   14.321586] Call Trace:
-...
-[   14.325357]  consume_skb+0x2f/0x150
-[   14.325671]  vmxnet3_rq_cleanup_all+0x33a/0x4e0 [vmxnet3]
-[   14.326150]  vmxnet3_activate_dev+0xb9d/0x2ca0 [vmxnet3]
-[   14.326616]  vmxnet3_open+0x387/0x470 [vmxnet3]
-...
-[   14.361675] Allocated by task 351:
-...
-[   14.362688]  __netdev_alloc_skb+0x1b3/0x6f0
-[   14.362960]  vmxnet3_rq_alloc_rx_buf+0x1b0/0x8d0 [vmxnet3]
-[   14.363317]  vmxnet3_activate_dev+0x3e3/0x2ca0 [vmxnet3]
-[   14.363661]  vmxnet3_open+0x387/0x470 [vmxnet3]
-...
-[   14.367309]
-[   14.367412] Freed by task 351:
-...
-[   14.368932]  __dev_kfree_skb_any+0xd2/0xe0
-[   14.369193]  vmxnet3_rq_alloc_rx_buf+0x71e/0x8d0 [vmxnet3]
-[   14.369544]  vmxnet3_activate_dev+0x3e3/0x2ca0 [vmxnet3]
-[   14.369883]  vmxnet3_open+0x387/0x470 [vmxnet3]
-[   14.370174]  __dev_open+0x28a/0x420
-[   14.370399]  __dev_change_flags+0x192/0x590
-[   14.370667]  dev_change_flags+0x7a/0x180
-[   14.370919]  do_setlink+0xb28/0x3570
-[   14.371150]  rtnl_newlink+0x1160/0x1740
-[   14.371399]  rtnetlink_rcv_msg+0x5bf/0xa50
-[   14.371661]  netlink_rcv_skb+0x1cd/0x3e0
-[   14.371913]  netlink_unicast+0x5dc/0x840
-[   14.372169]  netlink_sendmsg+0x856/0xc40
-[   14.372420]  ____sys_sendmsg+0x8a7/0x8d0
-[   14.372673]  __sys_sendmsg+0x1c2/0x270
-[   14.372914]  do_syscall_64+0x41/0x90
-[   14.373145]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-...
+Please refer to the following scenarios.
 
-Fixes: 5738a09d58d5a ("vmxnet3: fix checks for dma mapping errors")
-Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-Signed-off-by: Zixuan Fu <r33s3n6@gmail.com>
-Link: https://lore.kernel.org/r/20220514050656.2636588-1-r33s3n6@gmail.com
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+           T1                                  T2
+------------------------------------------------------------------
+usb_gadget_register_driver_owner
+  driver_register                    driver_register
+    driver_find                       driver_find
+    bus_add_driver                    bus_add_driver
+      priv alloced                     <context switch>
+      drv->p = priv;
+      <schedule out>
+      kobject_init_and_add // refcount = 1;
+   //couldn't find an available UDC or it's busy
+   <context switch>
+                                       priv alloced
+                                       drv->priv = priv;
+                                       kobject_init_and_add
+                                         ---> refcount = 1 <------
+                                       // register success
+                                       <context switch>
+===================== another ioctl/process ======================
+                                      driver_register
+                                       driver_find
+                                        k = kset_find_obj()
+                                         ---> refcount = 2 <------
+                                        <context out>
+   driver_unregister
+   // drv->p become T2's priv
+   ---> refcount = 1 <------
+   <context switch>
+                                        kobject_put(k)
+                                         ---> refcount = 0 <------
+                                        return priv->driver;
+                                        --------UAF here----------
+
+There will be UAF in this scenario.
+
+We can fix it by adding a new STATE_DEV_REGISTERING device state to
+avoid double register.
+
+Reported-by: syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com
+Link: https://lore.kernel.org/all/000000000000e66c2805de55b15a@google.com/
+Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
+Signed-off-by: Schspa Shi <schspa@gmail.com>
+Link: https://lore.kernel.org/r/20220508150247.38204-1-schspa@gmail.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/vmxnet3/vmxnet3_drv.c | 2 ++
+ drivers/usb/gadget/legacy/raw_gadget.c |    2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/drivers/net/vmxnet3/vmxnet3_drv.c b/drivers/net/vmxnet3/vmxnet3_drv.c
-index cf090f88dac0..b71a019e9867 100644
---- a/drivers/net/vmxnet3/vmxnet3_drv.c
-+++ b/drivers/net/vmxnet3/vmxnet3_drv.c
-@@ -595,6 +595,7 @@ vmxnet3_rq_alloc_rx_buf(struct vmxnet3_rx_queue *rq, u32 ring_idx,
- 				if (dma_mapping_error(&adapter->pdev->dev,
- 						      rbi->dma_addr)) {
- 					dev_kfree_skb_any(rbi->skb);
-+					rbi->skb = NULL;
- 					rq->stats.rx_buf_alloc_failure++;
- 					break;
- 				}
-@@ -619,6 +620,7 @@ vmxnet3_rq_alloc_rx_buf(struct vmxnet3_rx_queue *rq, u32 ring_idx,
- 				if (dma_mapping_error(&adapter->pdev->dev,
- 						      rbi->dma_addr)) {
- 					put_page(rbi->page);
-+					rbi->page = NULL;
- 					rq->stats.rx_buf_alloc_failure++;
- 					break;
- 				}
--- 
-2.35.1
-
+--- a/drivers/usb/gadget/legacy/raw_gadget.c
++++ b/drivers/usb/gadget/legacy/raw_gadget.c
+@@ -144,6 +144,7 @@ enum dev_state {
+ 	STATE_DEV_INVALID = 0,
+ 	STATE_DEV_OPENED,
+ 	STATE_DEV_INITIALIZED,
++	STATE_DEV_REGISTERING,
+ 	STATE_DEV_RUNNING,
+ 	STATE_DEV_CLOSED,
+ 	STATE_DEV_FAILED
+@@ -507,6 +508,7 @@ static int raw_ioctl_run(struct raw_dev
+ 		ret = -EINVAL;
+ 		goto out_unlock;
+ 	}
++	dev->state = STATE_DEV_REGISTERING;
+ 	spin_unlock_irqrestore(&dev->lock, flags);
+ 
+ 	ret = usb_gadget_probe_driver(&dev->driver);
 
 

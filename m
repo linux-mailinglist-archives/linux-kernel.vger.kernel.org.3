@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED638531B44
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A311531A2B
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:55:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243689AbiEWRmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:42:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38708 "EHLO
+        id S243021AbiEWRlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:41:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242589AbiEWR1r (ORCPT
+        with ESMTP id S242419AbiEWR1n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:27:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D90C482151;
-        Mon, 23 May 2022 10:23:49 -0700 (PDT)
+        Mon, 23 May 2022 13:27:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4285A7CB63;
+        Mon, 23 May 2022 10:23:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 54D2861524;
-        Mon, 23 May 2022 17:14:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34F83C385AA;
-        Mon, 23 May 2022 17:14:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D1883B811FF;
+        Mon, 23 May 2022 17:23:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31C62C385A9;
+        Mon, 23 May 2022 17:23:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326085;
-        bh=RHTqA4UjpxePZjnuT4BtMnZfxrgsfURyE/cXMH/P16M=;
+        s=korg; t=1653326590;
+        bh=Pq5/8Kq/7EMNq8IsfVTN43pOObgrPxSMbuD5x98pawk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yF0ILcXsMeIhWBQSwyQvZ1ZbAEQ+FzyvyMw2lGSdNcveYXqn6hGq0PoD7Tm4nLZLq
-         RvEf8y1+GkFIBZzUVPkhVBz/g5wfntSmZoZ+4AWArvByu3MEhsd9wIZhamBGerATsI
-         KxwG3gZ76w7dkjK/eXIbwFMcNWNUsXNggL1agcBk=
+        b=pbxKrC3FJa38f8KxI7Z286psM3GuHCRGG26mUtYCVFjZsDms+oLsXH+bU1Bs0NCeS
+         ijYyyVnGCT7Rp8yYhwG2XnHVRcaIJqIqLS+3daNDds4cP+jeeUea3dHrHobC0oopfT
+         viws+sKuOqiWfTkrBlndmY5zWU9AHDOhkwUjBmuU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Tomasz=20Mo=C5=84?= <tomasz.mon@camlingroup.com>,
-        Jeff LaBundy <jeff@labundy.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        stable@vger.kernel.org, Avri Altman <avri.altman@wdc.com>,
+        Daejun Park <daejun7.park@samsung.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 11/97] Input: add bounds checking to input_set_capability()
+Subject: [PATCH 5.15 106/132] scsi: ufs: core: Fix referencing invalid rsp field
 Date:   Mon, 23 May 2022 19:05:15 +0200
-Message-Id: <20220523165814.161382050@linuxfoundation.org>
+Message-Id: <20220523165841.056634318@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165812.244140613@linuxfoundation.org>
-References: <20220523165812.244140613@linuxfoundation.org>
+In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
+References: <20220523165823.492309987@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,60 +56,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jeff LaBundy <jeff@labundy.com>
+From: Daejun Park <daejun7.park@samsung.com>
 
-[ Upstream commit 409353cbe9fe48f6bc196114c442b1cff05a39bc ]
+[ Upstream commit d5d92b64408443e113b9742f8f1c35278910dd4d ]
 
-Update input_set_capability() to prevent kernel panic in case the
-event code exceeds the bitmap for the given event type.
+Fix referencing sense data when it is invalid. When the length of the data
+segment is 0, there is no valid information in the rsp field, so
+ufshpb_rsp_upiu() is returned without additional operation.
 
-Suggested-by: Tomasz Moń <tomasz.mon@camlingroup.com>
-Signed-off-by: Jeff LaBundy <jeff@labundy.com>
-Reviewed-by: Tomasz Moń <tomasz.mon@camlingroup.com>
-Link: https://lore.kernel.org/r/20220320032537.545250-1-jeff@labundy.com
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Link: https://lore.kernel.org/r/252651381.41652940482659.JavaMail.epsvc@epcpadp4
+Fixes: 4b5f49079c52 ("scsi: ufs: ufshpb: L2P map management for HPB read")
+Acked-by: Avri Altman <avri.altman@wdc.com>
+Signed-off-by: Daejun Park <daejun7.park@samsung.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/input/input.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ drivers/scsi/ufs/ufshpb.c | 19 +++++++------------
+ 1 file changed, 7 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/input/input.c b/drivers/input/input.c
-index 3cfd2c18eebd..49504dcd5dc6 100644
---- a/drivers/input/input.c
-+++ b/drivers/input/input.c
-@@ -47,6 +47,17 @@ static DEFINE_MUTEX(input_mutex);
+diff --git a/drivers/scsi/ufs/ufshpb.c b/drivers/scsi/ufs/ufshpb.c
+index f7eaf64293a4..14300896c57f 100644
+--- a/drivers/scsi/ufs/ufshpb.c
++++ b/drivers/scsi/ufs/ufshpb.c
+@@ -1257,6 +1257,13 @@ void ufshpb_rsp_upiu(struct ufs_hba *hba, struct ufshcd_lrb *lrbp)
+ 	struct utp_hpb_rsp *rsp_field = &lrbp->ucd_rsp_ptr->hr;
+ 	int data_seg_len;
  
- static const struct input_value input_value_sync = { EV_SYN, SYN_REPORT, 1 };
- 
-+static const unsigned int input_max_code[EV_CNT] = {
-+	[EV_KEY] = KEY_MAX,
-+	[EV_REL] = REL_MAX,
-+	[EV_ABS] = ABS_MAX,
-+	[EV_MSC] = MSC_MAX,
-+	[EV_SW] = SW_MAX,
-+	[EV_LED] = LED_MAX,
-+	[EV_SND] = SND_MAX,
-+	[EV_FF] = FF_MAX,
-+};
++	data_seg_len = be32_to_cpu(lrbp->ucd_rsp_ptr->header.dword_2)
++		& MASK_RSP_UPIU_DATA_SEG_LEN;
 +
- static inline int is_event_supported(unsigned int code,
- 				     unsigned long *bm, unsigned int max)
- {
-@@ -1976,6 +1987,14 @@ EXPORT_SYMBOL(input_get_timestamp);
-  */
- void input_set_capability(struct input_dev *dev, unsigned int type, unsigned int code)
- {
-+	if (type < EV_CNT && input_max_code[type] &&
-+	    code > input_max_code[type]) {
-+		pr_err("%s: invalid code %u for type %u\n", __func__, code,
-+		       type);
-+		dump_stack();
++	/* If data segment length is zero, rsp_field is not valid */
++	if (!data_seg_len)
 +		return;
-+	}
 +
- 	switch (type) {
- 	case EV_KEY:
- 		__set_bit(code, dev->keybit);
+ 	if (unlikely(lrbp->lun != rsp_field->lun)) {
+ 		struct scsi_device *sdev;
+ 		bool found = false;
+@@ -1291,18 +1298,6 @@ void ufshpb_rsp_upiu(struct ufs_hba *hba, struct ufshcd_lrb *lrbp)
+ 		return;
+ 	}
+ 
+-	data_seg_len = be32_to_cpu(lrbp->ucd_rsp_ptr->header.dword_2)
+-		& MASK_RSP_UPIU_DATA_SEG_LEN;
+-
+-	/* To flush remained rsp_list, we queue the map_work task */
+-	if (!data_seg_len) {
+-		if (!ufshpb_is_general_lun(hpb->lun))
+-			return;
+-
+-		ufshpb_kick_map_work(hpb);
+-		return;
+-	}
+-
+ 	BUILD_BUG_ON(sizeof(struct utp_hpb_rsp) != UTP_HPB_RSP_SIZE);
+ 
+ 	if (!ufshpb_is_hpb_rsp_valid(hba, lrbp, rsp_field))
 -- 
 2.35.1
 

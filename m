@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18BB9531804
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:53:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47726531636
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:50:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242034AbiEWR75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:59:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39056 "EHLO
+        id S242663AbiEWSAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 14:00:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240699AbiEWRcb (ORCPT
+        with ESMTP id S240994AbiEWRck (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:32:31 -0400
+        Mon, 23 May 2022 13:32:40 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE94374DCA;
-        Mon, 23 May 2022 10:27:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C3575232;
+        Mon, 23 May 2022 10:27:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 65437B81204;
-        Mon, 23 May 2022 17:27:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBC62C385A9;
-        Mon, 23 May 2022 17:27:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 84EAAB81201;
+        Mon, 23 May 2022 17:27:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7850C385A9;
+        Mon, 23 May 2022 17:27:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326835;
-        bh=m4cwoyy/BQKWuB7tsuReyl/3ZsdpUuEU3bjsJk2tUpE=;
+        s=korg; t=1653326838;
+        bh=f/gxUlTFfj5frVlRI3KJBmQ/F3Zpezwb6EMBb3DBUTw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KpQBwxMcO0y23GRZ8/HK8XVrsm2YZWzFA6z5aijAW4eun5Ykg9b3mMUEP529KI39t
-         5tckJORQUKHn/Adt2AzCXkv0krZkztxqCQ2XSq76y06nd4ZTZ2c7rWRVArSzh0Wm8p
-         8BA/JYb0DCsgnhjdizhI20417e5nPys3gT89oM4c=
+        b=2B2Ms9YcNExZ6Z7GaQMmMq1xQxsGpVHBaBEsuUqsx0ghCGBQFLTO4E9GKqngje8KJ
+         0muF7APF6ia2lu9Zk0lRL/F0tWacjG4LSaI68CLjmEPPWNgWU23pv5DMG12+yXELIS
+         Mp9T6T/3eWMuLbzm2r6EV98Q/pDzOniocwPmJxgk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Youngmin Han <Youngmin.Han@geappliances.com>,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 074/158] pinctrl: mediatek: mt8365: fix IES control pins
-Date:   Mon, 23 May 2022 19:03:51 +0200
-Message-Id: <20220523165843.223365224@linuxfoundation.org>
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 075/158] ALSA: hda - fix unused Realtek function when PM is not enabled
+Date:   Mon, 23 May 2022 19:03:52 +0200
+Message-Id: <20220523165843.404303095@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220523165830.581652127@linuxfoundation.org>
 References: <20220523165830.581652127@linuxfoundation.org>
@@ -57,43 +55,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mattijs Korpershoek <mkorpershoek@baylibre.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit f680058f406863b55ac226d1c157701939c63db4 ]
+[ Upstream commit c3d9ca93f1e3bd3d1adfc4479a12c82fed424c87 ]
 
-IES26 (BIT 16 of IES1_CFG_ADDR) controls the following pads:
+When CONFIG_PM is not enabled, alc_shutup() is not needed,
+so move it inside the #ifdef CONFIG_PM guard.
+Also drop some contiguous #endif / #ifdef CONFIG_PM for simplicity.
 
-- PAD_I2S_DATA_IN (GPIO114)
-- PAD_I2S_LRCK (GPIO115)
-- PAD_I2S_BCK (GPIO116)
+Fixes this build warning:
+sound/pci/hda/patch_realtek.c:886:20: warning: unused function 'alc_shutup'
 
-The pinctrl table is wrong since it lists pins 114 to 112.
-
-Update the table with the correct values.
-
-Fixes: e94d8b6fb83a ("pinctrl: mediatek: add support for mt8365 SoC")
-Reported-by: Youngmin Han <Youngmin.Han@geappliances.com>
-Signed-off-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
-Link: https://lore.kernel.org/r/20220426125714.298907-1-mkorpershoek@baylibre.com
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Fixes: 08c189f2c552 ("ALSA: hda - Use generic parser codes for Realtek driver")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/r/20220430193318.29024-1-rdunlap@infradead.org
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pinctrl/mediatek/pinctrl-mt8365.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/pci/hda/patch_realtek.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/pinctrl/mediatek/pinctrl-mt8365.c b/drivers/pinctrl/mediatek/pinctrl-mt8365.c
-index 79b1fee5a1eb..ddee0db72d26 100644
---- a/drivers/pinctrl/mediatek/pinctrl-mt8365.c
-+++ b/drivers/pinctrl/mediatek/pinctrl-mt8365.c
-@@ -259,7 +259,7 @@ static const struct mtk_pin_ies_smt_set mt8365_ies_set[] = {
- 	MTK_PIN_IES_SMT_SPEC(104, 104, 0x420, 13),
- 	MTK_PIN_IES_SMT_SPEC(105, 109, 0x420, 14),
- 	MTK_PIN_IES_SMT_SPEC(110, 113, 0x420, 15),
--	MTK_PIN_IES_SMT_SPEC(114, 112, 0x420, 16),
-+	MTK_PIN_IES_SMT_SPEC(114, 116, 0x420, 16),
- 	MTK_PIN_IES_SMT_SPEC(117, 119, 0x420, 17),
- 	MTK_PIN_IES_SMT_SPEC(120, 122, 0x420, 18),
- 	MTK_PIN_IES_SMT_SPEC(123, 125, 0x420, 19),
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index 779205bf5862..e38acdbe1a3b 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -937,6 +937,9 @@ static int alc_init(struct hda_codec *codec)
+ 	return 0;
+ }
+ 
++#define alc_free	snd_hda_gen_free
++
++#ifdef CONFIG_PM
+ static inline void alc_shutup(struct hda_codec *codec)
+ {
+ 	struct alc_spec *spec = codec->spec;
+@@ -950,9 +953,6 @@ static inline void alc_shutup(struct hda_codec *codec)
+ 		alc_shutup_pins(codec);
+ }
+ 
+-#define alc_free	snd_hda_gen_free
+-
+-#ifdef CONFIG_PM
+ static void alc_power_eapd(struct hda_codec *codec)
+ {
+ 	alc_auto_setup_eapd(codec, false);
+@@ -966,9 +966,7 @@ static int alc_suspend(struct hda_codec *codec)
+ 		spec->power_hook(codec);
+ 	return 0;
+ }
+-#endif
+ 
+-#ifdef CONFIG_PM
+ static int alc_resume(struct hda_codec *codec)
+ {
+ 	struct alc_spec *spec = codec->spec;
 -- 
 2.35.1
 

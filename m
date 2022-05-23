@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E7365319F7
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:55:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C55FD5317CC
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:53:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241438AbiEWRk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:40:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42412 "EHLO
+        id S243860AbiEWRrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:47:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242228AbiEWR1c (ORCPT
+        with ESMTP id S242312AbiEWR1i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:27:32 -0400
+        Mon, 23 May 2022 13:27:38 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A0AF7C15D;
-        Mon, 23 May 2022 10:22:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13F537CB1C;
+        Mon, 23 May 2022 10:22:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DAAE60916;
-        Mon, 23 May 2022 17:22:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87147C385A9;
-        Mon, 23 May 2022 17:22:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 05394608C0;
+        Mon, 23 May 2022 17:22:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD04BC385A9;
+        Mon, 23 May 2022 17:22:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326568;
-        bh=CjDagl7s1yUewHYXWMFrzcpaB6LIIM2ZSZMxbuBP6VU=;
+        s=korg; t=1653326574;
+        bh=QthLUezj51OHIH/d94GCmVVj5dFJwmK1Ae4LYtY9Z2E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CXsvun6XPw6eSeF5Qx5Tx8Y78+eAqqIuftr5c5fCOR78OEKZQoMfU6ywWaueC+POy
-         ISLN79rQKhtXNAGZ0SuPhX83f4+US/F+CQN21/TLzQXOLh8HeHN7MQp1CpQwoNDl+l
-         6NiDaWlH89A26yC3LcS5pjO8ZwP3xVweaVYUiiJg=
+        b=17Ca0hZWYdtjoPS/C4cVQvWJiiMB9A8qQoBX9J3w+mxQZBYNE4+dHoh63EtuxzWY2
+         xLpldHjw0AcREQ1xCkskunq7237KGyjyDJ7Quc/FTk6wBGJ49M1eHgdJ7BUH7306mX
+         v21b6e+8MTtCNA8I7gzYAm86cLV+U4NOL15Lgimc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Aashay Shringarpure <aashay@google.com>,
+        Yi Chou <yich@google.com>,
+        Shervin Oloumi <enlightened@google.com>,
+        Grant Grundler <grundler@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 122/132] net: stmmac: fix missing pci_disable_device() on error in stmmac_pci_probe()
-Date:   Mon, 23 May 2022 19:05:31 +0200
-Message-Id: <20220523165843.852129969@linuxfoundation.org>
+Subject: [PATCH 5.15 123/132] net: atlantic: fix "frag[0] not initialized"
+Date:   Mon, 23 May 2022 19:05:32 +0200
+Message-Id: <20220523165844.013420895@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
 References: <20220523165823.492309987@linuxfoundation.org>
@@ -56,43 +58,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Grant Grundler <grundler@chromium.org>
 
-[ Upstream commit 0807ce0b010418a191e0e4009803b2d74c3245d5 ]
+[ Upstream commit 62e0ae0f4020250f961cf8d0103a4621be74e077 ]
 
-Switch to using pcim_enable_device() to avoid missing pci_disable_device().
+In aq_ring_rx_clean(), if buff->is_eop is not set AND
+buff->len < AQ_CFG_RX_HDR_SIZE, then hdr_len remains equal to
+buff->len and skb_add_rx_frag(xxx, *0*, ...) is not called.
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Link: https://lore.kernel.org/r/20220510031316.1780409-1-yangyingliang@huawei.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+The loop following this code starts calling skb_add_rx_frag() starting
+with i=1 and thus frag[0] is never initialized. Since i is initialized
+to zero at the top of the primary loop, we can just reference and
+post-increment i instead of hardcoding the 0 when calling
+skb_add_rx_frag() the first time.
+
+Reported-by: Aashay Shringarpure <aashay@google.com>
+Reported-by: Yi Chou <yich@google.com>
+Reported-by: Shervin Oloumi <enlightened@google.com>
+Signed-off-by: Grant Grundler <grundler@chromium.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/stmicro/stmmac/stmmac_pci.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/net/ethernet/aquantia/atlantic/aq_ring.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_pci.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_pci.c
-index fcf17d8a0494..644bb54f5f02 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_pci.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_pci.c
-@@ -181,7 +181,7 @@ static int stmmac_pci_probe(struct pci_dev *pdev,
- 		return -ENOMEM;
+diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_ring.c b/drivers/net/ethernet/aquantia/atlantic/aq_ring.c
+index 72f8751784c3..7cf5a48e9a7d 100644
+--- a/drivers/net/ethernet/aquantia/atlantic/aq_ring.c
++++ b/drivers/net/ethernet/aquantia/atlantic/aq_ring.c
+@@ -445,7 +445,7 @@ int aq_ring_rx_clean(struct aq_ring_s *self,
+ 		       ALIGN(hdr_len, sizeof(long)));
  
- 	/* Enable pci device */
--	ret = pci_enable_device(pdev);
-+	ret = pcim_enable_device(pdev);
- 	if (ret) {
- 		dev_err(&pdev->dev, "%s: ERROR: failed to enable device\n",
- 			__func__);
-@@ -241,8 +241,6 @@ static void stmmac_pci_remove(struct pci_dev *pdev)
- 		pcim_iounmap_regions(pdev, BIT(i));
- 		break;
- 	}
--
--	pci_disable_device(pdev);
- }
+ 		if (buff->len - hdr_len > 0) {
+-			skb_add_rx_frag(skb, 0, buff->rxdata.page,
++			skb_add_rx_frag(skb, i++, buff->rxdata.page,
+ 					buff->rxdata.pg_off + hdr_len,
+ 					buff->len - hdr_len,
+ 					AQ_CFG_RX_FRAME_MAX);
+@@ -454,7 +454,6 @@ int aq_ring_rx_clean(struct aq_ring_s *self,
  
- static int __maybe_unused stmmac_pci_suspend(struct device *dev)
+ 		if (!buff->is_eop) {
+ 			buff_ = buff;
+-			i = 1U;
+ 			do {
+ 				next_ = buff_->next;
+ 				buff_ = &self->buff_ring[next_];
 -- 
 2.35.1
 

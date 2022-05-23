@@ -2,139 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8478B530D91
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:42:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69AE3530D97
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:42:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232799AbiEWJPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 05:15:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59020 "EHLO
+        id S232774AbiEWJOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 05:14:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232732AbiEWJPB (ORCPT
+        with ESMTP id S232732AbiEWJOF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 05:15:01 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8A7B47394;
-        Mon, 23 May 2022 02:15:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653297300; x=1684833300;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rSp8OAS9Z+rAmZ/IeViGc7ucpC+E1jdk1BjrMYZI1Yo=;
-  b=dm6GVQ26uthFwFzm1ArwpxcI7/IsEwoYm5RcdDbxAlxzg8ukNHfs/VoA
-   AGE4A79O4R04Dc9iwkacjdgPis8fxbkxu/Ge/03KHrKzhLwOgPCy9FM2z
-   2yTkCC9GLKrUHP+KOGejpls8/CLfIij8kKKBPAqlkEnuH988tMg7lMNiS
-   PdHSq6iz96AFQ9tX9JHiSRUXtP9C02GedTtKnRzY5v8UxiyYVYpLAF4K3
-   yaE2BloCJLlYRRI11fGl+FD9OvMFA6ROtHvoyJAre9nR2TbdjNVYwV51e
-   UwgBcEcjxjfX/joVXRmoO8HLvJV1J8InZbRkg1k55xP4F/gy2mvss3bdX
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10355"; a="253664520"
-X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
-   d="scan'208";a="253664520"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 02:14:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
-   d="scan'208";a="558557154"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 23 May 2022 02:14:50 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nt49K-00011I-1K;
-        Mon, 23 May 2022 09:14:50 +0000
-Date:   Mon, 23 May 2022 17:13:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Corentin Labbe <clabbe@baylibre.com>, andrew@lunn.ch,
-        broonie@kernel.org, calvin.johnson@oss.nxp.com,
-        davem@davemloft.net, edumazet@google.com, hkallweit1@gmail.com,
-        jernej.skrabec@gmail.com, krzysztof.kozlowski+dt@linaro.org,
-        kuba@kernel.org, lgirdwood@gmail.com, linux@armlinux.org.uk,
-        pabeni@redhat.com, robh+dt@kernel.org, samuel@sholland.org,
-        wens@csie.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        netdev@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>
-Subject: Re: [PATCH v3 2/3] phy: handle optional regulator for PHY
-Message-ID: <202205231735.QGDB1Mcy-lkp@intel.com>
-References: <20220523052807.4044800-3-clabbe@baylibre.com>
+        Mon, 23 May 2022 05:14:05 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E467446B3B;
+        Mon, 23 May 2022 02:14:03 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L6BTk2zSqz4xXg;
+        Mon, 23 May 2022 19:14:02 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1653297242;
+        bh=bAqoIMEuQquPVKkfMuxks/eKt3v5juteOw3qBcvys58=;
+        h=Date:From:To:Cc:Subject:From;
+        b=M4DRqq3qZTNlqaGQoFdIShgUnBPZxKxEgWUf1nYChNxef9tF0SEpH4Fwmvmb5EZ6s
+         RW9zy0seuf7HoYimzNCAgb/2KaF8mka2LoI/VaVvXWBI/b88bXJHnXNjvoutm1TvpY
+         Aw0aCBinpqsdgOa/Ygv2WdVmamN5Ocph9+gJEqhL6tiO69uH03l/WZPtSOzU1pYCGt
+         uZVWLeplsry+V2S8uzyc1AZfY0LUpC6YCP2l6GA0mDxwhfesCDWBemOK2thqoaiSrG
+         6OLuIcB5gcwK9cSvYHE2g83BILDfXy/edwVjgcbdf1sgO+lCmjo5BCxqW6QfsfhQ+c
+         Lx+d29ZCx/t7w==
+Date:   Mon, 23 May 2022 19:14:01 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: linux-next: manual merge of the bitmap tree with Linus' tree
+Message-ID: <20220523191401.2fccbdd6@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220523052807.4044800-3-clabbe@baylibre.com>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/8vnJZJq2krq+Nj4hTh=PJWZ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Corentin,
+--Sig_/8vnJZJq2krq+Nj4hTh=PJWZ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I love your patch! Perhaps something to improve:
+Hi all,
 
-[auto build test WARNING on broonie-regulator/for-next]
-[also build test WARNING on sunxi/sunxi/for-next linus/master v5.18 next-20220520]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Today's linux-next merge of the bitmap tree got a conflict in:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Corentin-Labbe/arm64-add-ethernet-to-orange-pi-3/20220523-133344
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
-config: mips-cu1830-neo_defconfig (https://download.01.org/0day-ci/archive/20220523/202205231735.QGDB1Mcy-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 768a1ca5eccb678947f4155e38a5f5744dcefb56)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/7ae2ab7d1efe8091f6b7ea048a7ac495afba9e46
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Corentin-Labbe/arm64-add-ethernet-to-orange-pi-3/20220523-133344
-        git checkout 7ae2ab7d1efe8091f6b7ea048a7ac495afba9e46
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/net/mdio/
+  arch/x86/kvm/hyperv.c
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+between commit:
 
-All warnings (new ones prefixed by >>):
+  ea8c66fe8d8f ("KVM: x86: hyper-v: fix type of valid_bank_mask")
 
-   In file included from drivers/net/mdio/of_mdio.c:13:
->> include/linux/fwnode_mdio.h:20:5: warning: no previous prototype for function 'fwnode_mdiobus_phy_device_register' [-Wmissing-prototypes]
-   int fwnode_mdiobus_phy_device_register(struct mii_bus *mdio,
-       ^
-   include/linux/fwnode_mdio.h:20:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int fwnode_mdiobus_phy_device_register(struct mii_bus *mdio,
-   ^
-   static 
-   1 warning generated.
+from Linus' tree and commit:
 
+  017a983d0ecf ("KVM: x86: hyper-v: replace bitmap_weight() with hweight64(=
+)")
 
-vim +/fwnode_mdiobus_phy_device_register +20 include/linux/fwnode_mdio.h
+from the bitmap tree.
 
-bc1bee3b87ee48b Calvin Johnson 2021-06-11  10  
-bc1bee3b87ee48b Calvin Johnson 2021-06-11  11  #if IS_ENABLED(CONFIG_FWNODE_MDIO)
-bc1bee3b87ee48b Calvin Johnson 2021-06-11  12  int fwnode_mdiobus_phy_device_register(struct mii_bus *mdio,
-bc1bee3b87ee48b Calvin Johnson 2021-06-11  13  				       struct phy_device *phy,
-bc1bee3b87ee48b Calvin Johnson 2021-06-11  14  				       struct fwnode_handle *child, u32 addr);
-bc1bee3b87ee48b Calvin Johnson 2021-06-11  15  
-bc1bee3b87ee48b Calvin Johnson 2021-06-11  16  int fwnode_mdiobus_register_phy(struct mii_bus *bus,
-bc1bee3b87ee48b Calvin Johnson 2021-06-11  17  				struct fwnode_handle *child, u32 addr);
-bc1bee3b87ee48b Calvin Johnson 2021-06-11  18  
-bc1bee3b87ee48b Calvin Johnson 2021-06-11  19  #else /* CONFIG_FWNODE_MDIO */
-bc1bee3b87ee48b Calvin Johnson 2021-06-11 @20  int fwnode_mdiobus_phy_device_register(struct mii_bus *mdio,
-bc1bee3b87ee48b Calvin Johnson 2021-06-11  21  				       struct phy_device *phy,
-bc1bee3b87ee48b Calvin Johnson 2021-06-11  22  				       struct fwnode_handle *child, u32 addr)
-bc1bee3b87ee48b Calvin Johnson 2021-06-11  23  {
-bc1bee3b87ee48b Calvin Johnson 2021-06-11  24  	return -EINVAL;
-bc1bee3b87ee48b Calvin Johnson 2021-06-11  25  }
-bc1bee3b87ee48b Calvin Johnson 2021-06-11  26  
+I fixed it up (I just used the latter) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/8vnJZJq2krq+Nj4hTh=PJWZ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKLUFkACgkQAVBC80lX
+0GxdMAf+KQJMtqsd9fpEWss5ITLmbWRZ+ui4Z3Z/jibPYF63fHneeX1hM54ZOI+b
+UCYPbfOUwJbn+vCUI/mibD6xfudTW42fd+1bSJssuZLthUl0I5Lgc9bYZnJb0Oq3
+KsCUH8VQD/ZaXyWmTnhOb+CMI2ed0vS+IIc6JfHfV0NN+nyqq7rLnhH5b4I8v8nD
+8ku5s+Hk3oMGXxTgSPiPcNVM2JwYmnJFxEScFGCxz0Cn86TGOst0sgOnZAS4QrBJ
+gB6+eQ/UCI6zOxSHCoTNlboIN2NtY4Zr82rRE/pGD03mY0OFZpgRPpfBav9nYlm0
+S3NeFMH68fcUshx9wooUzpRVnshXpw==
+=3Jks
+-----END PGP SIGNATURE-----
+
+--Sig_/8vnJZJq2krq+Nj4hTh=PJWZ--

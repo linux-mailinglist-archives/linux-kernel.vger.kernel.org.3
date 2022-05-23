@@ -2,274 +2,383 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1887F530C42
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 11:04:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C8EA530D3C
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:41:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232483AbiEWJEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 05:04:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37042 "EHLO
+        id S232527AbiEWJEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 05:04:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232484AbiEWJES (ORCPT
+        with ESMTP id S232475AbiEWJEm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 05:04:18 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFDB444750
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 02:04:16 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id f16so24241008ybk.2
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 02:04:16 -0700 (PDT)
+        Mon, 23 May 2022 05:04:42 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FABA44760;
+        Mon, 23 May 2022 02:04:41 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id bg25so8295005wmb.4;
+        Mon, 23 May 2022 02:04:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=oSDVPuSGPWzT4Hj4nKtTTsSEe/xvbhG9CeVLh39guR4=;
-        b=onm9kd5PObIYeXneYlJSsWfJjZ6o5/pqB5Xxrr1jsi3qN7kDjm5OdFVZy5FHsc/jhx
-         qocsfCWh8437DD0NdHxNOpBkq02GT/HZEDmBcxNotwDv8hdmYsXmBNII++6xE+v72u5j
-         O6PkzTCFVnWTxMOr1SNNTN4l/vplNWloYlqPHl5o1tfzEPwWembicKjz4/CKYhATjz+w
-         yUw/yhKzpN55rm0fUP+dFHj/oEnaYKhJJnZbjdAxapnG6tVyqrlbW7G8rf0ptmqJL+rD
-         9iS3g+YaMg+EEIpQWRhaveXJmpNdjaxlYVzUvEXRXq07x7nu5r7/S0U/ImtOqeFzzvFn
-         sSOw==
+        d=gmail.com; s=20210112;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=u8kDbKUhH6jkjODp8VrSUlBFIiA2YNyQkeo+Pu/y77o=;
+        b=CXkI6vAUWS5v83vb3vw6wXOAf4CGgs7tdL17DVtTDOyo9oQFKSmtsu1yKONKu0Vbo6
+         GhBbmywapERrDdMT+VV7cnvqqDLdTgbZXYx4QBM5ZPBWvDarJ2tDVleInIx4EoQ00TXp
+         X+aXwiPZpphGxXBf6aw6B0DbCc2hCIKgmP+R/HKSLR+Wh2rXdncr4q31bKpJHLM6TA75
+         m92tUuqzpT0wiVfDo1TRItxmLNYrjHp2YxlY6FWINlNM33ZjYm8b8P0Nr7fVtbGwSQBv
+         FUbFpe9LZDCe0kpbopEHik7v89X8zJ/o0HZ5AIAtJrzgVVLMHBp+1t18RiR+/sgbvbNp
+         jjHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=oSDVPuSGPWzT4Hj4nKtTTsSEe/xvbhG9CeVLh39guR4=;
-        b=f9J4AVuVnkC8VU+7eixzTuoRtTRoUxss6V4eH/mePQxkxz0XDeXA0dxLfXC4EPWJwK
-         O1wbuxwiAp4ektWBYDHfwj37894xcwdprdBh/790JnKp1UOXGyg0EIqiOdCDwOO28bu+
-         u9Y35oEVek8T1GbCZVqrF1Tpi4HWOa3OJNuvgSKdFktrLH9+x9AOctHc0Ul2jv2CGvkD
-         bexxUH1kc9KBCZKyJ9+JjsS5oKsdgte3Rf2t6Dffy3A1+goi2+f5MQWip8QeAF9M2ABp
-         umNJpyCKg/c6ONTo7+FerMvaMPPFsj/CzD2A+Z6I+Xg7Fz5QHlBxsT8EieZIJ/GQCnXC
-         ReXA==
-X-Gm-Message-State: AOAM533YY3E5Mdf0OjZtOlW6DAXHZwDKz4ItzIerszFWG9rsRxp8fnrG
-        Ht6EUXeJK1+J294mgnTk2nP0j+HvNl5C/2hqXszoIKqXWZY=
-X-Google-Smtp-Source: ABdhPJyERyb42v86Q0igTiwq/2ftnDKy2vMxTkarhWqKGcmnkJ/5R1AMEGZDjSw5IPQH/KjaRoVrgN6airD21452JzE=
-X-Received: by 2002:a25:4253:0:b0:64d:8e3f:4bd1 with SMTP id
- p80-20020a254253000000b0064d8e3f4bd1mr20881202yba.412.1653296655290; Mon, 23
- May 2022 02:04:15 -0700 (PDT)
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=u8kDbKUhH6jkjODp8VrSUlBFIiA2YNyQkeo+Pu/y77o=;
+        b=M1CrVC7uyUn7+AaMBJK3DoIhyJCo0ZsO+S0GY9Af3CPk0BANfkFDkIWeMGx/Mykpsu
+         ul2cPWsd3hUBL5dhALbmyT1s3dqiCP6OFSf5yFLwGJz7hmdsSNKk3imsLnnJzop3LsV0
+         Z38MQzOW48873/dzj/e3ajoC/gRwYT/bMJ2YUdMR6rswlTAVUMfpGcfwWhtXF37A+3QX
+         n4ufrksECJZHmnsbawZYgbEAo7HWK2L0Xqt51p5lngXYTYmjQa4eWSZk26xTwC/bpx0o
+         ZSyEu4MRF3qVNprkNSmBcEoP5bnK2qPFkUD2alyzQEwGfzCkZNdmz2fs+r+CTyGFQQ5f
+         7/iQ==
+X-Gm-Message-State: AOAM531mVOtas7P1TW0qKyYo3epdV4Hckvaa7Jgs4FsxGTstSI0g2M18
+        BGYOfHjnU6UU8evb2Fr3GinZEcb72LzlYZH6
+X-Google-Smtp-Source: ABdhPJySZaOak7/vdmnO6wswyhWfRs8lR2bDG4mYImn97LZJ54mY2VjQBIbL9N0Wid8ekXaipEqZxA==
+X-Received: by 2002:a05:600c:4f03:b0:394:6499:21c7 with SMTP id l3-20020a05600c4f0300b00394649921c7mr18983081wmq.103.1653296679929;
+        Mon, 23 May 2022 02:04:39 -0700 (PDT)
+Received: from krava (net-93-65-240-241.cust.vodafonedsl.it. [93.65.240.241])
+        by smtp.gmail.com with ESMTPSA id b15-20020a7bc24f000000b0039736892653sm8928281wmj.27.2022.05.23.02.04.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 May 2022 02:04:39 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Mon, 23 May 2022 11:04:36 +0200
+To:     Ravi Bangoria <ravi.bangoria@amd.com>
+Cc:     acme@kernel.org, irogers@google.com, peterz@infradead.org,
+        rrichter@amd.com, mingo@redhat.com, mark.rutland@arm.com,
+        namhyung@kernel.org, tglx@linutronix.de, bp@alien8.de,
+        james.clark@arm.com, leo.yan@linaro.org, kan.liang@linux.intel.com,
+        ak@linux.intel.com, eranian@google.com, like.xu.linux@gmail.com,
+        x86@kernel.org, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sandipan.das@amd.com,
+        ananth.narayan@amd.com, kim.phillips@amd.com,
+        santosh.shukla@amd.com
+Subject: Re: [PATCH v4 2/5] perf header: Parse non-cpu pmu capabilities
+Message-ID: <YotOJL0dJmKUQnlI@krava>
+References: <20220523033945.1612-1-ravi.bangoria@amd.com>
+ <20220523033945.1612-3-ravi.bangoria@amd.com>
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 23 May 2022 14:34:04 +0530
-Message-ID: <CA+G9fYt4+47GzfEYT1nV3dqbGa1YCwFm9XwC668D4PkK4BHFgQ@mail.gmail.com>
-Subject: WARNING: CPU: 2 PID: 3331 at drivers/firmware/raspberrypi.c:63 rpi_firmware_property_list
-To:     open list <linux-kernel@vger.kernel.org>,
-        linux-rpi-kernel@lists.infradead.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        lkft-triage@lists.linaro.org, regressions@lists.linux.dev
-Cc:     Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        rcu <rcu@vger.kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220523033945.1612-3-ravi.bangoria@amd.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following kernel warning was noticed on raspberrypi4 device while
-running LTP controllers with Linus mainline kernel tree.
+On Mon, May 23, 2022 at 09:09:42AM +0530, Ravi Bangoria wrote:
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+SNIP
 
-metadata:
-  git_ref: master
-  git_repo: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-  git_sha: 4b0986a3613c92f4ec1bdc7f60ec66fea135991f
-  git_describe: v5.18
-  kernel_version: 5.18.0
-  kernel-config: https://builds.tuxbuild.com/29XDpgnCMxtWJ6lVJ9M0x3hTNWu/config
-  artifact-location: https://builds.tuxbuild.com/29XDpgnCMxtWJ6lVJ9M0x3hTNWu
-  toolchain: gcc-11
-  System.map: https://builds.tuxbuild.com/29XDpgnCMxtWJ6lVJ9M0x3hTNWu/System.map
-  vmlinux.xz: https://builds.tuxbuild.com/29XDpgnCMxtWJ6lVJ9M0x3hTNWu/vmlinux.xz
+> diff --git a/tools/perf/util/header.c b/tools/perf/util/header.c
+> index a27132e5a5ef..b4505dbb9f4a 100644
+> --- a/tools/perf/util/header.c
+> +++ b/tools/perf/util/header.c
+> @@ -1580,6 +1580,67 @@ static int write_hybrid_cpu_pmu_caps(struct feat_fd *ff,
+>  	return 0;
+>  }
+>  
+> +/*
+> + * File format:
+> + *
+> + * struct {
+> + *	u32 nr_pmus;
+> + *	struct {
+> + *		char pmu_name[];
+> + *		u32 nr_caps;
+> + *		struct {
+> + *			char name[];
+> + *			char value[];
+> + *		} [nr_caps];
+> + *	} [nr_pmus];
+> + * };
+> + */
+> +static int write_pmu_caps(struct feat_fd *ff, struct evlist *evlist __maybe_unused)
+> +{
+> +	struct perf_pmu_caps *caps = NULL;
+> +	struct perf_pmu *pmu = NULL;
+> +	u32 nr_pmus = 0;
+> +	int ret;
+> +
+> +	while ((pmu = perf_pmu__scan(pmu))) {
+> +		if (!pmu->name || !strncmp(pmu->name, "cpu", 3) ||
 
-Steps to reproduce:
-# cd /opt/ltp
-# ./runltp -p -q -f controllers
+should we check for the hybrid names as well?
+there's a helper perf_pmu__is_hybrid,
+aybe you can use that
 
-cgroup_fj_stress_blkio_1_200_one 1 TINFO: Attaching task 7221 to
-/sys/fs/cgroup/blkio/ltp/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1
-cgroup_fj_stress_blkio_1_200_one 1 TINFO: Attaching task 7221 to
-/sys/fs/cgroup/blkio/ltp/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1
-cgroup_fj_stress_blkio_1_200_one 1 TINFO: Attaching task 7221 to
-/sys/fs/cgroup/blkio/ltp/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1
-[ 2442.255887] ------------[ cut here ]------------
-[ 2442.260615] Firmware transaction timeout
-[ 2442.260704] WARNING: CPU: 2 PID: 3331 at
-drivers/firmware/raspberrypi.c:63
-rpi_firmware_property_list+0x1e8/0x270
-[ 2442.275114] Modules linked in: btrfs blake2b_generic libcrc32c
-raid6_pq zstd_compress brcmfmac xhci_pci brcmutil snd_soc_hdmi_codec
-xhci_pci_renesas raspberrypi_cpufreq hci_uart btqca btbcm vc4 cfg80211
-bluetooth cec drm_cma_helper rfkill drm_kms_helper reset_raspberrypi
-clk_raspberrypi crct10dif_ce raspberrypi_hwmon drm pwm_bcm2835
-iproc_rng200 pcie_brcmstb i2c_bcm2835 rng_core bcm2711_thermal fuse
-[ 2442.311148] CPU: 2 PID: 3331 Comm: kworker/2:2 Not tainted 5.18.0 #1
-[ 2442.317599] Hardware name: Raspberry Pi 4 Model B (DT)
-[ 2442.322810] Workqueue: events get_values_poll [raspberrypi_hwmon]
-[ 2442.329007] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[ 2442.336074] pc : rpi_firmware_property_list+0x1e8/0x270
-[ 2442.341381] lr : rpi_firmware_property_list+0x1e8/0x270
-[ 2442.346685] sp : ffff800010d63cc0
-[ 2442.350043] x29: ffff800010d63cc0 x28: 0000000000000000 x27: ffff0000419d0540
-[ 2442.357297] x26: 0000000000000011 x25: ffff80000afdd008 x24: 0000000000001000
-[ 2442.364547] x23: ffff000061ce9300 x22: ffff80000ac330b0 x21: ffff0000419d0500
-[ 2442.371797] x20: 0000000000000010 x19: ffff80000afdd000 x18: ffffffffffffffff
-[ 2442.379046] x17: 0000000000000000 x16: 0000000000000000 x15: ffff800090d63937
-[ 2442.386295] x14: ffff80000a912dd0 x13: 74756f656d697420 x12: 6e6f69746361736e
-[ 2442.393544] x11: ffff80000a8b1ce8 x10: ffff80000a91c178 x9 : ffff80000811d524
-[ 2442.400794] x8 : 00000000ffffefff x7 : ffff80000a909cf8 x6 : 0000000000000001
-[ 2442.408044] x5 : ffff80000a88f000 x4 : ffff80000a88f2c0 x3 : 0000000000000000
-[ 2442.415293] x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff000062921040
-[ 2442.422543] Call trace:
-[ 2442.425020]  rpi_firmware_property_list+0x1e8/0x270
-[ 2442.429973]  rpi_firmware_property+0x7c/0xc0
-[ 2442.434308]  get_values_poll+0x54/0x120 [raspberrypi_hwmon]
-[ 2442.439967]  process_one_work+0x1dc/0x450
-[ 2442.444045]  worker_thread+0x154/0x450
-[ 2442.447850]  kthread+0x100/0x110
-[ 2442.451126]  ret_from_fork+0x10/0x20
-[ 2442.454760] ---[ end trace 0000000000000000 ]---
-[ 2442.471909] hwmon hwmon1: Failed to get throttled (-110)
-[ 2443.499865] raspberrypi-clk soc:firmware:clocks: Failed to change
-fw-clk-arm frequency: -110
-[ 2446.575893] raspberrypi-clk soc:firmware:clocks: Failed to change
-fw-clk-arm frequency: -110
-[ 2450.915855] mmc1: Timeout waiting for hardware cmd interrupt.
-[ 2450.921693] mmc1: sdhci: ============ SDHCI REGISTER DUMP ===========
-[ 2450.928227] mmc1: sdhci: Sys addr:  0x00000008 | Version:  0x00001002
-[ 2450.934763] mmc1: sdhci: Blk size:  0x00007200 | Blk cnt:  0x00000000
-[ 2450.941297] mmc1: sdhci: Argument:  0xaaaa0000 | Trn mode: 0x00000033
-[ 2450.947830] mmc1: sdhci: Present:   0x1fff0000 | Host ctl: 0x00000017
-[ 2450.954362] mmc1: sdhci: Power:     0x0000000f | Blk gap:  0x00000080
-[ 2450.960896] mmc1: sdhci: Wake-up:   0x00000000 | Clock:    0x00000107
-[ 2450.967429] mmc1: sdhci: Timeout:   0x00000000 | Int stat: 0x00000001
-[ 2450.973960] mmc1: sdhci: Int enab:  0x03ff100b | Sig enab: 0x03ff100b
-[ 2450.980493] mmc1: sdhci: ACmd stat: 0x00000000 | Slot int: 0x00000001
-[ 2450.987025] mmc1: sdhci: Caps:      0x45ee6432 | Caps_1:   0x0000a525
-[ 2450.993558] mmc1: sdhci: Cmd:       0x00000d1a | Max curr: 0x00080008
-[ 2451.000091] mmc1: sdhci: Resp[0]:   0x00000900 | Resp[1]:  0x0076b27f
-[ 2451.006624] mmc1: sdhci: Resp[2]:   0x325b5900 | Resp[3]:  0x00000900
-[ 2451.013155] mmc1: sdhci: Host ctl2: 0x0000808c
-[ 2451.017659] mmc1: sdhci: ADMA Err:  0x00000000 | ADMA Ptr: 0xc3400208
-[ 2451.024191] mmc1: sdhci: ============================================
-[ 2452.679889] raspberrypi-clk soc:firmware:clocks: Failed to change
-fw-clk-arm frequency: -110
-[ 2455.763879] raspberrypi-clk soc:firmware:clocks: Failed to change
-fw-clk-arm frequency: -110
-[ 2460.759844] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
-[ 2460.766034] rcu: 1-...!: (1 GPs behind)
-idle=add/1/0x4000000000000000 softirq=481373/481374 fqs=23
-[ 2460.775311] (detected by 3, t=5253 jiffies, g=915057, q=822)
-[ 2460.781141] Task dump for CPU 1:
-[ 2460.784411] task:cgroup_fj_stres state:R  running task     stack:
- 0 pid: 6806 ppid:   501 flags:0x00000200
-[ 2460.794483] Call trace:
-[ 2460.796958]  __switch_to+0x104/0x160
-[ 2460.800595]  0xffff0000403cff00
-[ 2460.803782] rcu: rcu_preempt kthread timer wakeup didn't happen for
-5216 jiffies! g915057 f0x0 RCU_GP_WAIT_FQS(5) ->state=0x402
-[ 2460.815430] rcu: Possible timer handling issue on cpu=0 timer-softirq=161506
-[ 2460.822667] rcu: rcu_preempt kthread starved for 5222 jiffies!
-g915057 f0x0 RCU_GP_WAIT_FQS(5) ->state=0x402 ->cpu=0
-[ 2460.833345] rcu: Unless rcu_preempt kthread gets sufficient CPU
-time, OOM is now expected behavior.
-[ 2460.842606] rcu: RCU grace-period kthread stack dump:
-[ 2460.847726] task:rcu_preempt     state:I stack:    0 pid:   15
-ppid:     2 flags:0x00000008
-[ 2460.856203] Call trace:
-[ 2460.858678]  __switch_to+0x104/0x160
-[ 2460.862305]  __schedule+0x314/0x8ac
-[ 2460.865843]  schedule+0x5c/0xd4
-[ 2460.869028]  schedule_timeout+0xa4/0x1c4
-[ 2460.873010]  rcu_gp_fqs_loop+0x140/0x520
-[ 2460.876998]  rcu_gp_kthread+0x1a8/0x25c
-[ 2460.880891]  kthread+0x100/0x110
-[ 2460.884167]  ret_from_fork+0x10/0x20
-[ 2460.887796] rcu: Stack dump where RCU GP kthread last ran:
-[ 2460.893357] Task dump for CPU 0:
-[ 2460.896624] task:swapper/0       state:R  running task     stack:
- 0 pid:    0 ppid:     0 flags:0x0000000a
-[ 2460.906690] Call trace:
-[ 2460.909165]  __switch_to+0x104/0x160
-[ 2460.912791]  0x0
-[ 2461.159863] mmc1: Timeout waiting for hardware cmd interrupt.
-[ 2461.165699] mmc1: sdhci: ============ SDHCI REGISTER DUMP ===========
-[ 2461.172231] mmc1: sdhci: Sys addr:  0x00000008 | Version:  0x00001002
-[ 2461.178763] mmc1: sdhci: Blk size:  0x00007200 | Blk cnt:  0x00000000
-[ 2461.185294] mmc1: sdhci: Argument:  0xaaaa0000 | Trn mode: 0x00000033
-[ 2461.191826] mmc1: sdhci: Present:   0x1fff0000 | Host ctl: 0x00000017
-[ 2461.198358] mmc1: sdhci: Power:     0x0000000f | Blk gap:  0x00000080
-[ 2461.204887] mmc1: sdhci: Wake-up:   0x00000000 | Clock:    0x00000107
-[ 2461.211419] mmc1: sdhci: Timeout:   0x00000000 | Int stat: 0x00000001
-[ 2461.217951] mmc1: sdhci: Int enab:  0x03ff100b | Sig enab: 0x03ff100b
-[ 2461.224483] mmc1: sdhci: ACmd stat: 0x00000000 | Slot int: 0x00000001
-[ 2461.231013] mmc1: sdhci: Caps:      0x45ee6432 | Caps_1:   0x0000a525
-[ 2461.237543] mmc1: sdhci: Cmd:       0x00000d1a | Max curr: 0x00080008
-[ 2461.244073] mmc1: sdhci: Resp[0]:   0x00000900 | Resp[1]:  0x0076b27f
-[ 2461.250604] mmc1: sdhci: Resp[2]:   0x325b5900 | Resp[3]:  0x00000900
-[ 2461.257135] mmc1: sdhci: Host ctl2: 0x0000808c
-[ 2461.261639] mmc1: sdhci: ADMA Err:  0x00000000 | ADMA Ptr: 0xc3400208
-[ 2461.268169] mmc1: sdhci: ============================================
-[ 2462.019897] raspberrypi-clk soc:firmware:clocks: Failed to change
-fw-clk-arm frequency: -110
-[ 2471.403852] mmc1: Timeout waiting for hardware cmd interrupt.
-[ 2471.409689] mmc1: sdhci: ============ SDHCI REGISTER DUMP ===========
-[ 2471.416219] mmc1: sdhci: Sys addr:  0x00000008 | Version:  0x00001002
-[ 2471.422751] mmc1: sdhci: Blk size:  0x00007200 | Blk cnt:  0x00000000
-[ 2471.429282] mmc1: sdhci: Argument:  0xaaaa0000 | Trn mode: 0x00000033
-[ 2471.435814] mmc1: sdhci: Present:   0x1fff0000 | Host ctl: 0x00000017
-[ 2471.442345] mmc1: sdhci: Power:     0x0000000f | Blk gap:  0x00000080
-[ 2471.448876] mmc1: sdhci: Wake-up:   0x00000000 | Clock:    0x00000107
-[ 2471.455407] mmc1: sdhci: Timeout:   0x00000000 | Int stat: 0x00000001
-[ 2471.461938] mmc1: sdhci: Int enab:  0x03ff100b | Sig enab: 0x03ff100b
-[ 2471.468469] mmc1: sdhci: ACmd stat: 0x00000000 | Slot int: 0x00000001
-[ 2471.474998] mmc1: sdhci: Caps:      0x45ee6432 | Caps_1:   0x0000a525
-[ 2471.481529] mmc1: sdhci: Cmd:       0x00000d1a | Max curr: 0x00080008
-[ 2471.488061] mmc1: sdhci: Resp[0]:   0x00000900 | Resp[1]:  0x0076b27f
-[ 2471.494592] mmc1: sdhci: Resp[2]:   0x325b5900 | Resp[3]:  0x00000900
-[ 2471.501122] mmc1: sdhci: Host ctl2: 0x0000808c
-[ 2471.505624] mmc1: sdhci: ADMA Err:  0x00000000 | ADMA Ptr: 0xc3400208
-[ 2471.512155] mmc1: sdhci: ============================================
-[ 2481.647850] mmc1: Timeout waiting for hardware cmd interrupt.
-[ 2481.653680] mmc1: sdhci: ============ SDHCI REGISTER DUMP ===========
-[ 2481.660211] mmc1: sdhci: Sys addr:  0x00000008 | Version:  0x00001002
-[ 2481.666742] mmc1: sdhci: Blk size:  0x00007200 | Blk cnt:  0x00000000
-[ 2481.673273] mmc1: sdhci: Argument:  0xaaaa0000 | Trn mode: 0x00000033
-[ 2481.679804] mmc1: sdhci: Present:   0x1fff0000 | Host ctl: 0x00000017
-[ 2481.686335] mmc1: sdhci: Power:     0x0000000f | Blk gap:  0x00000080
-[ 2481.692866] mmc1: sdhci: Wake-up:   0x00000000 | Clock:    0x00000107
-[ 2481.699397] mmc1: sdhci: Timeout:   0x00000000 | Int stat: 0x00000001
-[ 2481.705928] mmc1: sdhci: Int enab:  0x03ff100b | Sig enab: 0x03ff100b
-[ 2481.712459] mmc1: sdhci: ACmd stat: 0x00000000 | Slot int: 0x00000001
-[ 2481.718988] mmc1: sdhci: Caps:      0x45ee6432 | Caps_1:   0x0000a525
-[ 2481.725519] mmc1: sdhci: Cmd:       0x00000d1a | Max curr: 0x00080008
-[ 2481.732050] mmc1: sdhci: Resp[0]:   0x00000900 | Resp[1]:  0x0076b27f
-[ 2481.738581] mmc1: sdhci: Resp[2]:   0x325b5900 | Resp[3]:  0x00000900
-[ 2481.745111] mmc1: sdhci: Host ctl2: 0x0000808c
-[ 2481.749613] mmc1: sdhci: ADMA Err:  0x00000000 | ADMA Ptr: 0xc3400208
-[ 2481.756143] mmc1: sdhci: ============================================
-[ 2481.763349] mmc1: card aaaa removed
-[ 2523.923843] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
-[ 2523.930032] rcu: 1-...0: (1 GPs behind)
-idle=add/1/0x4000000000000000 softirq=481373/481374 fqs=3169
-[ 2523.939484] (detected by 3, t=21044 jiffies, g=915057, q=1474)
-[ 2523.945491] Task dump for CPU 1:
-[ 2523.948761] task:cgroup_fj_stres state:R  running task     stack:
- 0 pid: 6806 ppid:   501 flags:0x00000202
-[ 2523.958831] Call trace:
-[ 2523.961307]  __switch_to+0x104/0x160
-[ 2523.964942]  0xffff0000403cff00
+jirka
 
-Full test log,
-https://lkft.validation.linaro.org/scheduler/job/5075973
 
---
-Linaro LKFT
-https://lkft.linaro.org
+> +		    perf_pmu__caps_parse(pmu) <= 0)
+> +			continue;
+> +		nr_pmus++;
+> +	}
+> +
+> +	ret = do_write(ff, &nr_pmus, sizeof(nr_pmus));
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	if (!nr_pmus)
+> +		return 0;
+> +
+> +	while ((pmu = perf_pmu__scan(pmu))) {
+> +		if (!pmu->name || !strncmp(pmu->name, "cpu", 3) || !pmu->nr_caps)
+> +			continue;
+> +
+> +		ret = do_write_string(ff, pmu->name);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		ret = do_write(ff, &pmu->nr_caps, sizeof(pmu->nr_caps));
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		list_for_each_entry(caps, &pmu->caps, list) {
+> +			ret = do_write_string(ff, caps->name);
+> +			if (ret < 0)
+> +				return ret;
+> +
+> +			ret = do_write_string(ff, caps->value);
+> +			if (ret < 0)
+> +				return ret;
+> +		}
+> +	}
+> +	return 0;
+> +}
+> +
+>  static void print_hostname(struct feat_fd *ff, FILE *fp)
+>  {
+>  	fprintf(fp, "# hostname : %s\n", ff->ph->env.hostname);
+> @@ -2209,6 +2270,32 @@ static void print_mem_topology(struct feat_fd *ff, FILE *fp)
+>  	}
+>  }
+>  
+> +static void print_pmu_caps(struct feat_fd *ff, FILE *fp)
+> +{
+> +	struct env_pmu_caps *env_pmu_caps = ff->ph->env.env_pmu_caps;
+> +	int nr_pmus_with_caps = ff->ph->env.nr_pmus_with_caps;
+> +	const char *delimiter = "";
+> +	char **ptr;
+> +	int i;
+> +	u32 j;
+> +
+> +	if (!nr_pmus_with_caps)
+> +		return;
+> +
+> +	for (i = 0; i < nr_pmus_with_caps; i++) {
+> +		fprintf(fp, "# %s pmu capabilities: ", env_pmu_caps[i].pmu_name);
+> +
+> +		ptr = env_pmu_caps[i].pmu_caps;
+> +
+> +		delimiter = "";
+> +		for (j = 0; j < env_pmu_caps[i].nr_caps; j++) {
+> +			fprintf(fp, "%s%s", delimiter, ptr[j]);
+> +			delimiter = ", ";
+> +		}
+> +		fprintf(fp, "\n");
+> +	}
+> +}
+> +
+>  static int __event_process_build_id(struct perf_record_header_build_id *bev,
+>  				    char *filename,
+>  				    struct perf_session *session)
+> @@ -3319,6 +3406,103 @@ static int process_hybrid_cpu_pmu_caps(struct feat_fd *ff,
+>  	return ret;
+>  }
+>  
+> +static int __process_pmu_caps(struct feat_fd *ff, struct env_pmu_caps *env_pmu_caps)
+> +{
+> +	u32 nr_caps = env_pmu_caps->nr_caps;
+> +	int name_size, value_size;
+> +	char *name, *value, *ptr;
+> +	u32 i;
+> +
+> +	env_pmu_caps->pmu_caps = zalloc(sizeof(char *) * nr_caps);
+> +	if (!env_pmu_caps->pmu_caps)
+> +		return -1;
+> +
+> +	for (i = 0; i < nr_caps; i++) {
+> +		name = do_read_string(ff);
+> +		if (!name)
+> +			goto error;
+> +
+> +		value = do_read_string(ff);
+> +		if (!value)
+> +			goto free_name;
+> +
+> +		name_size = strlen(name);
+> +		value_size = strlen(value);
+> +		ptr = zalloc(sizeof(char) * (name_size + value_size + 2));
+> +		if (!ptr)
+> +			goto free_value;
+> +
+> +		memcpy(ptr, name, name_size);
+> +		ptr[name_size] = '=';
+> +		memcpy(ptr + name_size + 1, value, value_size);
+> +		env_pmu_caps->pmu_caps[i] = ptr;
+> +
+> +		free(value);
+> +		free(name);
+> +	}
+> +	return 0;
+> +
+> +free_value:
+> +	free(value);
+> +free_name:
+> +	free(name);
+> +error:
+> +	for (; i > 0; i--)
+> +		free(env_pmu_caps->pmu_caps[i - 1]);
+> +	free(env_pmu_caps->pmu_caps);
+> +	return -1;
+> +}
+> +
+> +static int process_pmu_caps(struct feat_fd *ff, void *data __maybe_unused)
+> +{
+> +	struct env_pmu_caps *env_pmu_caps;
+> +	u32 nr_pmus;
+> +	u32 i, j;
+> +
+> +	ff->ph->env.nr_pmus_with_caps = 0;
+> +	ff->ph->env.env_pmu_caps = NULL;
+> +
+> +	if (do_read_u32(ff, &nr_pmus))
+> +		return -1;
+> +
+> +	if (!nr_pmus)
+> +		return 0;
+> +
+> +	env_pmu_caps = zalloc(sizeof(struct env_pmu_caps) * nr_pmus);
+> +	if (!env_pmu_caps)
+> +		return -ENOMEM;
+> +
+> +	for (i = 0; i < nr_pmus; i++) {
+> +		env_pmu_caps[i].pmu_name = do_read_string(ff);
+> +		if (!env_pmu_caps[i].pmu_name)
+> +			goto error;
+> +
+> +		if (do_read_u32(ff, &env_pmu_caps[i].nr_caps))
+> +			goto free_pmu_name;
+> +
+> +		if (!__process_pmu_caps(ff, &env_pmu_caps[i]))
+> +			continue;
+> +
+> +free_pmu_name:
+> +		free(env_pmu_caps[i].pmu_name);
+> +		goto error;
+> +	}
+> +
+> +	ff->ph->env.nr_pmus_with_caps = nr_pmus;
+> +	ff->ph->env.env_pmu_caps = env_pmu_caps;
+> +	return 0;
+> +
+> +error:
+> +	for (; i > 0; i--) {
+> +		free(env_pmu_caps[i - 1].pmu_name);
+> +		for (j = 0; j < env_pmu_caps[i - 1].nr_caps; j++)
+> +			free(env_pmu_caps[i - 1].pmu_caps[j]);
+> +		free(env_pmu_caps[i - 1].pmu_caps);
+> +	}
+> +	free(env_pmu_caps);
+> +	return -1;
+> +}
+> +
+>  #define FEAT_OPR(n, func, __full_only) \
+>  	[HEADER_##n] = {					\
+>  		.name	    = __stringify(n),			\
+> @@ -3382,6 +3566,7 @@ const struct perf_header_feature_ops feat_ops[HEADER_LAST_FEATURE] = {
+>  	FEAT_OPR(CLOCK_DATA,	clock_data,	false),
+>  	FEAT_OPN(HYBRID_TOPOLOGY,	hybrid_topology,	true),
+>  	FEAT_OPR(HYBRID_CPU_PMU_CAPS,	hybrid_cpu_pmu_caps,	false),
+> +	FEAT_OPR(PMU_CAPS,	pmu_caps,	false),
+>  };
+>  
+>  struct header_print_data {
+> diff --git a/tools/perf/util/header.h b/tools/perf/util/header.h
+> index 0eb4bc29a5a4..e9a067bb8b9e 100644
+> --- a/tools/perf/util/header.h
+> +++ b/tools/perf/util/header.h
+> @@ -47,6 +47,7 @@ enum {
+>  	HEADER_CLOCK_DATA,
+>  	HEADER_HYBRID_TOPOLOGY,
+>  	HEADER_HYBRID_CPU_PMU_CAPS,
+> +	HEADER_PMU_CAPS,
+>  	HEADER_LAST_FEATURE,
+>  	HEADER_FEAT_BITS	= 256,
+>  };
+> diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
+> index 9a1c7e63e663..8d599acb7569 100644
+> --- a/tools/perf/util/pmu.c
+> +++ b/tools/perf/util/pmu.c
+> @@ -1890,16 +1890,22 @@ int perf_pmu__caps_parse(struct perf_pmu *pmu)
+>  	const char *sysfs = sysfs__mountpoint();
+>  	DIR *caps_dir;
+>  	struct dirent *evt_ent;
+> -	int nr_caps = 0;
+> +
+> +	if (pmu->caps_initialized)
+> +		return pmu->nr_caps;
+>  
+>  	if (!sysfs)
+>  		return -1;
+>  
+> +	pmu->nr_caps = 0;
+> +
+>  	snprintf(caps_path, PATH_MAX,
+>  		 "%s" EVENT_SOURCE_DEVICE_PATH "%s/caps", sysfs, pmu->name);
+>  
+> -	if (stat(caps_path, &st) < 0)
+> +	if (stat(caps_path, &st) < 0) {
+> +		pmu->caps_initialized = true;
+>  		return 0;	/* no error if caps does not exist */
+> +	}
+>  
+>  	caps_dir = opendir(caps_path);
+>  	if (!caps_dir)
+> @@ -1926,13 +1932,14 @@ int perf_pmu__caps_parse(struct perf_pmu *pmu)
+>  			continue;
+>  		}
+>  
+> -		nr_caps++;
+> +		pmu->nr_caps++;
+>  		fclose(file);
+>  	}
+>  
+>  	closedir(caps_dir);
+>  
+> -	return nr_caps;
+> +	pmu->caps_initialized = true;
+> +	return pmu->nr_caps;
+>  }
+>  
+>  void perf_pmu__warn_invalid_config(struct perf_pmu *pmu, __u64 config,
+> diff --git a/tools/perf/util/pmu.h b/tools/perf/util/pmu.h
+> index 541889fa9f9c..4b45fd8da5a3 100644
+> --- a/tools/perf/util/pmu.h
+> +++ b/tools/perf/util/pmu.h
+> @@ -46,6 +46,8 @@ struct perf_pmu {
+>  	struct perf_cpu_map *cpus;
+>  	struct list_head format;  /* HEAD struct perf_pmu_format -> list */
+>  	struct list_head aliases; /* HEAD struct perf_pmu_alias -> list */
+> +	bool caps_initialized;
+> +	u32 nr_caps;
+>  	struct list_head caps;    /* HEAD struct perf_pmu_caps -> list */
+>  	struct list_head list;    /* ELEM */
+>  	struct list_head hybrid_list;
+> -- 
+> 2.31.1
+> 

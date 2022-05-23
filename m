@@ -2,112 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E497C531624
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:50:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B442C53167F
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242419AbiEWRpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:45:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39104 "EHLO
+        id S243656AbiEWR5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:57:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242867AbiEWR2H (ORCPT
+        with ESMTP id S241684AbiEWRbC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:28:07 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A38A8CCF6
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 10:24:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653326676; x=1684862676;
-  h=message-id:date:mime-version:from:subject:cc:to:
-   content-transfer-encoding;
-  bh=yYasMBXt5ymnR6k+hI8pCXBx+rUativPdyCsLhPKcWs=;
-  b=XrEUwLZyinpZ2MVn78OKo5Rw4t1qXYDJFr4xiT9k/uPyZGniXs74UmHj
-   ntI81Mk41vYD7PE7z0AcrUWRBggb0b6TLiM9Kmsj5wqLpwk5EP65zA6y0
-   xoss4R04gd1622IjxkVS2emSD2YIZgVNGyR0j0ARlEo0fKZZkrYDhVASy
-   q45E6gqM8CK6pPu9oTVQYebmKCmcgGz8TGmlC3FpzaucsM3K9fhnPkt9a
-   xePPkESCYH2ZeSK/cckA6/XqFiL1RoTzL6OP7jMBYi0FQRvngXw/K9WXX
-   rhzGW5A3oClxDSS0WjRae1+AmRrI70R41AVsOYb1rwFNceaGkJtrs//WE
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="336353721"
-X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
-   d="scan'208";a="336353721"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 10:23:53 -0700
-X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
-   d="scan'208";a="600766882"
-Received: from jvowlesx-mobl.amr.corp.intel.com (HELO [10.251.4.211]) ([10.251.4.211])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 10:23:52 -0700
-Message-ID: <e9abfba4-d178-7ee5-da13-4cd9e07ba331@intel.com>
-Date:   Mon, 23 May 2022 10:23:52 -0700
+        Mon, 23 May 2022 13:31:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1C684663CF
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 10:26:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653326677;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=weOcs0SP0Itwl3y4nqcPRNxrz6fRVorG523c4Uo/pJY=;
+        b=aQ7BjRNhNGMm9fhA/EZUz7pzdSAu9aNjsBbwzpRpu+a9BDDtMegfmnvKGm885XvVcBJdc0
+        1LXpw9YYYgHj0Vei8H25FVCZR/4IheFhJmjFh7+OCD0TnzV9e9/DLKWF1VsyagxNDpEOhL
+        h39SJg0j4y7cD/FDvXUUOv1v5VhhwQ8=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-322-L1kG3ar0O3-tDNQGfbdspw-1; Mon, 23 May 2022 13:24:36 -0400
+X-MC-Unique: L1kG3ar0O3-tDNQGfbdspw-1
+Received: by mail-qk1-f200.google.com with SMTP id b1-20020a05620a118100b006a36dec1b16so4283892qkk.2
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 10:24:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=weOcs0SP0Itwl3y4nqcPRNxrz6fRVorG523c4Uo/pJY=;
+        b=2JuHXmciRb/bof7maqH+TXWUbO3J98SeJuMKMAV3hyJaHG1PA7tiaNE1Oltk9PnGkL
+         ZeajwagfI5z28v4TXtIfwZmFOoRdKBsQXhEF/Ku9b4RsWhb2tb16wfcX/YTbkluhiLff
+         iFjuq4sfWABBkPRV/nP+jzKD9O45Fr+p8LsByYBsvKgRTe/TvW2M4vlCH6PFqxukaDvd
+         /2jW+0sJz3Mv26XXZZXlDzVek3XdXYvbo6THbWt20LBVbgR8fR59LiUsJx9xITVjKKkf
+         5TA2lr/bHL6NsscBfr8orpp8Vdr3y8wWGxQVpZvgCBmVgV8GX6xZAowcP7LFpazVwrG4
+         /1uA==
+X-Gm-Message-State: AOAM5323vDn25G2g/BMgSiabhFgxDNJco2XNK5effy1cTQ2KAYDtuIUC
+        w9Dx5Mwn2p8wjCdtODjfutSDJuf/ZanacLUZx6xmrdM4aqKJFLg1bvGfLU8o7OzpAA/iQjYTd+P
+        HUVRkzU0c5jR2juqKSCiCyVIA
+X-Received: by 2002:a05:620a:24d0:b0:6a0:7ba7:c6d1 with SMTP id m16-20020a05620a24d000b006a07ba7c6d1mr14114472qkn.514.1653326674371;
+        Mon, 23 May 2022 10:24:34 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzXQtTevyabfQaMvNHvSek+aErt4VD34gBz5l7J6nAWY+immtijEMoEu5ekfNWO9oHaiuPBzw==
+X-Received: by 2002:a05:620a:24d0:b0:6a0:7ba7:c6d1 with SMTP id m16-20020a05620a24d000b006a07ba7c6d1mr14114448qkn.514.1653326674117;
+        Mon, 23 May 2022 10:24:34 -0700 (PDT)
+Received: from [192.168.1.86] (pool-173-48-131-43.bstnma.fios.verizon.net. [173.48.131.43])
+        by smtp.gmail.com with ESMTPSA id q186-20020a37a7c3000000b0069fd21d0b09sm4945054qke.0.2022.05.23.10.24.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 May 2022 10:24:33 -0700 (PDT)
+Message-ID: <7bf021df-2755-6937-629f-b3ed9281804d@redhat.com>
+Date:   Mon, 23 May 2022 13:24:32 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: [GIT PULL] x86/sgx for v5.19
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v8 0/4] perf: arm-spe: Decode SPE source and use for perf
+ c2c
 Content-Language: en-US
-Cc:     the arch/x86 maintainers <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ali Saidi <alisaidi@amazon.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, german.gomez@arm.com,
+        benh@kernel.crashing.org, Nick.Forrington@arm.com,
+        alexander.shishkin@linux.intel.com, andrew.kilroy@arm.com,
+        james.clark@arm.com, john.garry@huawei.com,
+        Jiri Olsa <jolsa@kernel.org>, kjain@linux.ibm.com,
+        lihuafei1@huawei.com, mark.rutland@arm.com,
+        mathieu.poirier@linaro.org, mingo@redhat.com, namhyung@kernel.org,
+        peterz@infradead.org, will@kernel.org
+References: <20220517020326.18580-1-alisaidi@amazon.com>
+ <YoQRg1r7HuwiO3bZ@kernel.org> <20220518041630.GD402837@leoy-ThinkPad-X240s>
+ <32e5a3b7-9294-bbd5-0ae4-b5c04eb4e0e6@redhat.com>
+ <20220522061533.GA715382@leoy-ThinkPad-X240s>
+From:   Joe Mario <jmario@redhat.com>
+In-Reply-To: <20220522061533.GA715382@leoy-ThinkPad-X240s>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
 
-It's my first pull request, signing tags and all that jazz.  I hope I didn't
-botch anything too badly.  Here we go:
 
-Please pull a set of x86/sgx patches to fix crashes under SGX memory pressure.
+On 5/22/22 2:15 AM, Leo Yan wrote:
+> Hi Joe,
+> 
+> On Thu, May 19, 2022 at 11:16:53AM -0400, Joe Mario wrote:
+> 
+> [SNIP]
+> 
+>> Last Comment:
+>> There's a row in the Pareto table that has incorrect column alignment.
+>> Look at row 80 below in the truncated snipit of output.  It has an extra field inserted in it at the beginning.
+>> I also show what the corrected output should look like.
+>>
+>> Incorrect row 80:
+>>     71	=================================================
+>>     72	      Shared Cache Line Distribution Pareto      
+>>     73	=================================================
+>>     74	#
+>>     75	# ----- HITM -----    Snoop  ------- Store Refs ------  ------- CL --------                      
+>>     76	# RmtHitm  LclHitm     Peer   L1 Hit  L1 Miss      N/A    Off  Node  PA cnt        Code address
+>>     77	# .......  .......  .......  .......  .......  .......  .....  ....  ......  ..................
+>>     78	#
+>>     79	  -------------------------------------------------------------------------------
+>>     80	      0        0        0     4648        0        0    11572            0x422140
+>>     81	  -------------------------------------------------------------------------------
+>>     82	    0.00%    0.00%    0.00%    0.00%    0.00%   44.47%    0x0   N/A       0            0x400ce8
+>>     83	    0.00%    0.00%   10.26%    0.00%    0.00%    0.00%    0x0   N/A       0            0x400e48
+>>     84	    0.00%    0.00%    0.00%    0.00%    0.00%   55.53%    0x0   N/A       0            0x400e54
+>>     85	    0.00%    0.00%   89.74%    0.00%    0.00%    0.00%    0x8   N/A       0            0x401038
+>>
+>>
+>> Corrected row 80:
+>>     71	=================================================
+>>     72	      Shared Cache Line Distribution Pareto      
+>>     73	=================================================
+>>     74	#
+>>     75	# ----- HITM -----    Snoop  ------- Store Refs -----   ------- CL --------                       
+>>     76	# RmtHitm  LclHitm     Peer   L1 Hit  L1 Miss     N/A     Off  Node  PA cnt        Code address
+>>     77	# .......  .......  .......  .......  .......  ......   .....  ....  ......  ..................
+>>     78	#
+>>     79	  -------------------------------------------------------------------------------
+>>     80	       0        0     4648        0        0    11572            0x422140
+>>     81	  -------------------------------------------------------------------------------
+>>     82	    0.00%    0.00%    0.00%    0.00%    0.00%   44.47%    0x0   N/A       0            0x400ce8
+>>     83	    0.00%    0.00%   10.26%    0.00%    0.00%    0.00%    0x0   N/A       0            0x400e48
+>>     84	    0.00%    0.00%    0.00%    0.00%    0.00%   55.53%    0x0   N/A       0            0x400e54
+>>     85	    0.00%    0.00%   89.74%    0.00%    0.00%    0.00%    0x8   N/A       0            0x401038
+> 
+> Hmm‥.  At my side, I used below command to output pareto view, but I
+> cannot see the conlumn "CL", the conlumn "CL" is only shown for TUI
+> mode but not for the mode "--stdio".  Could you share the method for
+> how to reproduce this issue?
 
----
+Hi Leo:
+I figured out why my output was different than yours.
 
-The following changes since commit 42226c989789d8da4af1de0c31070c96726d990c:
+I did not have the slang-devel rpm installed on the host system.  
 
-  Linux 5.18-rc7 (2022-05-15 18:08:58 -0700)
+In my original perf build, I missed the this output in the build log:
+ > slang not found, disables TUI support. Please install slang-devel, libslang-dev or libslang2-dev
 
-are available in the Git repository at:
+Once I installed slang-devel, rebuilt perf, and then reran my test, the pareto output looked fine.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_sgx_for_v5.19_rc1
+When the TUI support is disabled, it shouldn't corrupt the resulting stdio output.  I don't believe this has anything to do with your commits.  
 
-for you to fetch changes up to e3a3bbe3e99de73043a1d32d36cf4d211dc58c7e:
+Last, it looks like you should update the help text for the display flag options to reflect your new peer option.
+Currently it says:
+   -d, --display <Switch HITM output type>
+                          lcl,rmt
 
-  x86/sgx: Ensure no data in PCMD page after truncate (2022-05-16 15:17:57 -0700)
+But since you added the "peer" display, shouldn't the output for that help text state:
+   -d, --display <Switch HITM output type>
+                          lcl,rmt,peer
 
-----------------------------------------------------------------
-A set of patches to prevent crashes in SGX enclaves under heavy memory
-pressure:
-
-SGX uses normal RAM allocated from special shmem files as backing storage
-when it runs out of SGX memory (EPC).  The code was overly aggressive when
-freeing shmem pages and was inadvertently freeing perfectly good data.
-This resulted in failures in the SGX instructions used to swap data back
-into SGX memory.
-
-This turned out to be really hard to trigger in mainline.  It was
-originally encountered testing the out-of-tree "SGX2" patches, but later
-reproduced on mainline.
-
-Fix the data loss by being more careful about truncating pages out of
-the backing storage and more judiciously setting pages dirty.
-
-----------------------------------------------------------------
-Reinette Chatre (5):
-      x86/sgx: Disconnect backing page references from dirty status
-      x86/sgx: Mark PCMD page as dirty when modifying contents
-      x86/sgx: Obtain backing storage page with enclave mutex held
-      x86/sgx: Fix race between reclaimer and page fault handler
-      x86/sgx: Ensure no data in PCMD page after truncate
-
- arch/x86/kernel/cpu/sgx/encl.c | 113 +++++++++++++++++++++++++++++++++++++----
- arch/x86/kernel/cpu/sgx/encl.h |   2 +-
- arch/x86/kernel/cpu/sgx/main.c |  13 +++--
- 3 files changed, 114 insertions(+), 14 deletions(-)
+Joe
 

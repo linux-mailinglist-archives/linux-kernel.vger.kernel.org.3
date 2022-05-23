@@ -2,103 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9487531AD3
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2339B531844
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:53:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244514AbiEWSQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 14:16:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35250 "EHLO
+        id S244765AbiEWSR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 14:17:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244923AbiEWR6Z (ORCPT
+        with ESMTP id S243587AbiEWSB5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:58:25 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8546BC967C;
-        Mon, 23 May 2022 10:43:48 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id i1so13747251plg.7;
-        Mon, 23 May 2022 10:43:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Ivib7VFlqEFV3T6yOLSuIMwOJhz9nKccU2CcQ8jtcQw=;
-        b=g9OEMUvo8OUmjc5Ds50SsbhUo8Rnvy1iLUnH+CnMJwf80LtJAaoHtYdMGvq2dC62Dj
-         4xGRWWYnkBJu89PYejPPVHM9lhsuUJvgieMqSdcuSOR8rhUhNZw1Y7AoK7ofbyhkLfRk
-         mT74gIQPA5d56ga7dbzwsROs47j7y97Yl3kMe2z0Sji/Uy3poLLL7wXsAy2Yh7nth85C
-         eVLj65RPku/OfQslWAeJJME4ijz9SHL69lDniv32fLUSjGb3AHk/A+TaZblJ8VhWEqeU
-         ym/EPQ//ibn6V+yrHr/KCRwR+Imu84iAmtZQInzv7ExMselfmG7HlUsRyLDKeufNdlNz
-         gFWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Ivib7VFlqEFV3T6yOLSuIMwOJhz9nKccU2CcQ8jtcQw=;
-        b=WDumduW0EDBkMLeWzsLICcEsl8PQk4qMX1Hmy8Ea17hb+9rCpDILbiSgLJ4eD2qFa5
-         aWeeYy7+Ny7Sn4EB/PwsVtH0nWo46X3yYKti4ho4DiYS7gSR1PdLFcOco/Xex3rVPCIH
-         EaMWDL4k7DPTdFtAohM7vG8MPCWWQmgfAexEKtdvwO9Fz8KPJhRZbRBzavSW5JZvSxia
-         VSaPuwC9SeRW9L7LZ687ECT16WtS0OUwUYkly8f4dniyGm42dYQLV5m5CWNg2c4oKT4R
-         tVlSW4O13rdmvoByFXwSfswrqlugmJxru5Fb7Qv84+P8BS/ECPP1TSge0wCUnSMaeslP
-         ON3A==
-X-Gm-Message-State: AOAM530T46tRIuysUHtqPgdp28BWAb+8F07GpgDasY88LhFcX9S5V59r
-        ZlnXU06QLvwohk1OPVzai9o=
-X-Google-Smtp-Source: ABdhPJxry+vi7tKDKvYx5IzGTdMtYy0svSYmvgvtBEb52cUT0Zkqz6+eEKalPNwS00U4U521JrJ3Kw==
-X-Received: by 2002:a17:902:ea04:b0:161:c283:8c0b with SMTP id s4-20020a170902ea0400b00161c2838c0bmr23789737plg.52.1653327825252;
-        Mon, 23 May 2022 10:43:45 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id o13-20020a17090a4b4d00b001df264610c4sm324299pjl.0.2022.05.23.10.43.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 May 2022 10:43:44 -0700 (PDT)
-Message-ID: <7f7c58c2-68a8-7f73-58cb-1d2c229e055d@gmail.com>
-Date:   Mon, 23 May 2022 10:43:42 -0700
+        Mon, 23 May 2022 14:01:57 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DA59DFF48;
+        Mon, 23 May 2022 10:46:51 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:35::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id B981660A;
+        Mon, 23 May 2022 17:46:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net B981660A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1653327965; bh=tKg2U0MvNTJAYNl6IAoyEFljp3YdzFQOTMvhJuCB7vw=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=M8bVJTBgGchdemxpZMG8x4ui4vpVchupoKVbrRx8XiuM24+s4+3VDXEa9zJcDyRm9
+         aKa5VFSNgvNL2YktRd35Qc0+RI5Yx2qsv9yoh8Q+EmfuLI/l1BOYozhH7vAYGhhTO+
+         fTYW5iySlsQ3krhbMQxNcT74AWOhF41Bk/WWY/hADh6aU6Syh41n9TvDTVoHGoZ7/0
+         UQX6pqO+lb75dpi+JBmrb6GVKJLoo2rGyHDYb5cQNRa3JrccCNCtz4/BBfO/NWQylF
+         yjXwHwnquaWSzMFZW83wMQ3Zyt7GWAfBM9Zct1nH/q/zyOry2TaqTQzck1dfg08etg
+         nBi9EfqudA4wg==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        rafael@kernel.org, hdegoede@redhat.com, markgross@kernel.org
+Cc:     lenb@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-doc@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, prarit@redhat.com,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: Re: [PATCH] Documentation: admin-guide: pm: Add Out of Band mode
+In-Reply-To: <20220523172757.2351052-1-srinivas.pandruvada@linux.intel.com>
+References: <20220523172757.2351052-1-srinivas.pandruvada@linux.intel.com>
+Date:   Mon, 23 May 2022 11:46:04 -0600
+Message-ID: <871qwkb0rn.fsf@meer.lwn.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 4.9 00/25] 4.9.316-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220523165743.398280407@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220523165743.398280407@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/23/22 10:03, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.9.316 release.
-> There are 25 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 25 May 2022 16:56:55 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.316-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com> writes:
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+> Update documentation for using the tool to support performance level
+> change via OOB (Out of Band) interface.
+>
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> ---
+>  .../admin-guide/pm/intel-speed-select.rst     | 19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
+>
+> diff --git a/Documentation/admin-guide/pm/intel-speed-select.rst b/Documentation/admin-guide/pm/intel-speed-select.rst
+> index 0a1fbdb54bfe..4146a2da35ea 100644
+> --- a/Documentation/admin-guide/pm/intel-speed-select.rst
+> +++ b/Documentation/admin-guide/pm/intel-speed-select.rst
+> @@ -262,6 +262,25 @@ Which shows that the base frequency now increased from 2600 MHz at performance
+>  level 0 to 2800 MHz at performance level 4. As a result, any workload, which can
+>  use fewer CPUs, can see a boost of 200 MHz compared to performance level 0.
+>  
+> +Changing performance level via BMC Interface
+> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> +
+> +It is possible to change SST-PP level using out of band (OOB) agent (Via some
+> +remote management console, through BMC "Baseboard Management Controller"
+> +interface). This mode is supported from the Sapphire Rapids processor
+> +generation. The kernel and tool change to support this mode is added to Linux
+> +kernel version 5.18. To enable this feature, kernel config
+> +"CONFIG_INTEL_HFI_THERMAL" is required. The minimum version of the tool
+> +is "v1.12" to support this feature, which is part of Linux kernel version 5.18.
+> +
+> +To support such configuration, this tool can be used as a daemon. Add
+> +a command line option --oob::
+> +
+> +# intel-speed-select --oob
+> +
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+This suggests you haven't actually built the documentation with your
+change and verified that you got the result you were after.  Literal
+blocks need to be indented.
+
+Thanks,
+
+jon

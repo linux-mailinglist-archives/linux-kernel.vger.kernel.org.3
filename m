@@ -2,93 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AB8153129B
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:22:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8390531400
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:25:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238087AbiEWPkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 11:40:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44194 "EHLO
+        id S238095AbiEWPlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 11:41:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238041AbiEWPkk (ORCPT
+        with ESMTP id S238114AbiEWPlF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 11:40:40 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93CE630556;
-        Mon, 23 May 2022 08:40:39 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 06B071F94B;
-        Mon, 23 May 2022 15:40:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1653320438; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=q5xW2MKLZ0PrcQXBC+W3LnvI90dAc7ovuM4CkEA4Lvg=;
-        b=Y1LwZxCcd+BtLUakYzp4wzLW0BBUNVSub2UJFXcsFvmVouyrkeG9mDeOh5+EjHDfcpGcBJ
-        JlBiJa+/r2W2Z7+s354N2eRlzj+ee1oG/kBL5VvoHuI3rISJvM8iRZq+sUR/hA7V0Nd9Us
-        OtiB+FSt/599nPDQSa9ZSvr0MOWXvuw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1653320438;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=q5xW2MKLZ0PrcQXBC+W3LnvI90dAc7ovuM4CkEA4Lvg=;
-        b=X3mOtteHh3d677lIh5HDjfJ3KW/llpzhi+JtCZyalPmmFdK+HBkSlqi3EZQRtl4UZKxyL2
-        TyPIdO2w5R1c9jBQ==
-Received: from quack3.suse.cz (unknown [10.100.224.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id D0A3B2C141;
-        Mon, 23 May 2022 15:40:37 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id CFF21A0632; Mon, 23 May 2022 17:40:36 +0200 (CEST)
-Date:   Mon, 23 May 2022 17:40:36 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Julia Lawall <Julia.Lawall@inria.fr>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        kernel-janitors@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] writeback: fix typo in comment
-Message-ID: <20220523154036.uj2lpngyjswgurog@quack3.lan>
-References: <20220521111145.81697-32-Julia.Lawall@inria.fr>
+        Mon, 23 May 2022 11:41:05 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C65BEA;
+        Mon, 23 May 2022 08:41:01 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id h186so14011907pgc.3;
+        Mon, 23 May 2022 08:41:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=0YD67E57Qb/IhZOVhYDq1CM3zL4yutpuxXEgEr4gyrQ=;
+        b=kWjUSzqOOHO+g+CiVUfbBgvcgYAr8bTNivTObbe3srRtBWXtUrKLRfhydDSw9pk+hM
+         fLX3rXbYLfybH4Xt/XJyFh2W9UEtwgSQKe92iTVV5in55zSnR4RLHenZM8u/s32kvfuX
+         uMnSkXA7JIN4QbUGt2n0wgh0WWmxIC9hlp3vzyDFYUp5tgK8GVEwg1xvKMvzUMCYTWgE
+         Cuk/p/TBf5FI74Kcnk7gv7jA4h2mWeg0RAZLFMx+atU1GWHfag+KvebbSWNGUdx/afCz
+         IxDH3PL4qgt4/JJ58o1KmExionsrbvcOjYEJh/ytTeWsyjmmfbXevVN/9FN7sE93i1Fi
+         KCcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=0YD67E57Qb/IhZOVhYDq1CM3zL4yutpuxXEgEr4gyrQ=;
+        b=gAQFxqHCRYw/zw+mRgKJTiBgm+Tj2lDUZU5+wxyqkdxbeBkIJBo1xv8MKtaIbDbjNf
+         GJpFMG7yAMkSASneSbvQ6Wtu7lSz/ElH37NKemrM6SiSkmvhZ6Y3HuTJqnGVxmhnQt6T
+         TIl+3P67KFc6NiH4ernK9+K9c0wkaG7dGJQd6THAej5U/pdd0iWH2BuqczAmbyMJIfwx
+         hnjJJCbG/6zEHmcmVCOgcY7WalsP+TTS+e9tIRQD/3tAAMIZ5dtYACM1wb5JkS9hqcTq
+         iLXf57CYWk9QKmNGt5FaUEJp+WOt+HSMU/XW/0YeVr/CM9PnODgLYtlJiC30NtgKgKk3
+         pIAw==
+X-Gm-Message-State: AOAM531h3qIsnxK5nDet7CSo+RiwuNk35XsD7fmAE1E4dMTAsbE0eXac
+        SbF1nu16wFzG1yc7NRMsqwDJLrvOvJY=
+X-Google-Smtp-Source: ABdhPJzLJrHJyFuqgXp/lCM5wrTiqNtbJRZ7PVsr8F8p99eVQyyOe80gdg1IFmhD0yUgunH1JeMpCg==
+X-Received: by 2002:a63:e24d:0:b0:3fa:1e2e:b992 with SMTP id y13-20020a63e24d000000b003fa1e2eb992mr7889491pgj.595.1653320461383;
+        Mon, 23 May 2022 08:41:01 -0700 (PDT)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id a8-20020a654188000000b003db580384d6sm4890602pgq.60.2022.05.23.08.41.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 May 2022 08:41:00 -0700 (PDT)
+Message-ID: <72c52318-9cf8-1bf1-27f3-001abc164408@gmail.com>
+Date:   Mon, 23 May 2022 08:40:59 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220521111145.81697-32-Julia.Lawall@inria.fr>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v1] MIPS: bmips: Fix compiler warning observed on W=1
+ build
+Content-Language: en-US
+To:     Jim Quinlan <jim2101024@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "open list:BROADCOM BMIPS MIPS ARCHITECTURE" 
+        <linux-mips@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220523121639.16521-1-jim2101024@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220523121639.16521-1-jim2101024@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat 21-05-22 13:10:42, Julia Lawall wrote:
-> Spelling mistake (triple letters) in comment.
-> Detected with the help of Coccinelle.
+
+
+On 5/23/2022 5:16 AM, Jim Quinlan wrote:
+> The function arch_sync_dma_for_cpu_all() was used but was
+> missing a prototype declaration.
 > 
-> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+> Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
+> Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks. I've taken the fix to my tree.
-
-								Honza
-
-
-> diff --git a/fs/fs-writeback.c b/fs/fs-writeback.c
-> index a1074a26e784..a21d8f1a56d1 100644
-> --- a/fs/fs-writeback.c
-> +++ b/fs/fs-writeback.c
-> @@ -738,7 +738,7 @@ EXPORT_SYMBOL_GPL(wbc_attach_and_unlock_inode);
->   * incorrectly attributed).
->   *
->   * To resolve this issue, cgroup writeback detects the majority dirtier of
-> - * an inode and transfers the ownership to it.  To avoid unnnecessary
-> + * an inode and transfers the ownership to it.  To avoid unnecessary
->   * oscillation, the detection mechanism keeps track of history and gives
->   * out the switch verdict only if the foreign usage pattern is stable over
->   * a certain amount of time and/or writeback attempts.
-> 
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Florian

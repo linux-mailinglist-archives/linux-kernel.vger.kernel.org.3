@@ -2,153 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0995530CD6
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:41:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C0CE530E27
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:43:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232957AbiEWJWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 05:22:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45276 "EHLO
+        id S232970AbiEWJXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 05:23:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232871AbiEWJWJ (ORCPT
+        with ESMTP id S232871AbiEWJXK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 05:22:09 -0400
-Received: from andre.telenet-ops.be (andre.telenet-ops.be [IPv6:2a02:1800:120:4::f00:15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB5F220F8
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 02:22:06 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed30:4593:272c:6293:e2cc])
-        by andre.telenet-ops.be with bizsmtp
-        id a9N4270052jQL2A019N4o9; Mon, 23 May 2022 11:22:04 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1nt4GJ-001KLT-L4; Mon, 23 May 2022 11:22:03 +0200
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1nt4GI-003jSU-Ob; Mon, 23 May 2022 11:22:02 +0200
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: [GIT PULL] m68k updates for v5.19
-Date:   Mon, 23 May 2022 11:22:00 +0200
-Message-Id: <20220523092200.889682-1-geert@linux-m68k.org>
-X-Mailer: git-send-email 2.25.1
+        Mon, 23 May 2022 05:23:10 -0400
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA621AF3F
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 02:23:06 -0700 (PDT)
+Received: by mail-yb1-f178.google.com with SMTP id q135so24310655ybg.10
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 02:23:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nSdESsXQYczC4k5qR6EUhoG55XqgQrQ395OHEw3icQs=;
+        b=Pi4LW90U1ShTzGmDT8SQ/xibhk2aC2q6v2wGZ975dtuViGwyrXikIW8b+JdJbC99mf
+         mDcf2tHMSFEeUr7u6c8yBuEL+mXJ/x1lkPQbi3ElWtrxayU2jOaRxCjIYvBBigLpxBqe
+         +ZNJabHY003bTYMx0kOceRcai2d9GfP1wtbnRo0d2YsEv5D2ciRURu/IT1zunA2YPkVQ
+         IaNuekRLYDTCm55r2QVVQO0GBEcFxqj1CbT1yQvr7cT5W3xWBy5qqxkorTCbiyiznYO4
+         BgotvFSYKq8MLuI6EGAJU/0C5oRTS5pHFdqsE4vEwJD+zPOcFXB7N2+7pC8sSAUCq964
+         yLrQ==
+X-Gm-Message-State: AOAM532n+s9B/dc1l2jov+ABJP+AkUpFAbNQQBno5Goma4ce5E1rupoM
+        G0kOn0u0p3peEXvH/7fRE9zR32VFywuoYbRNVCY=
+X-Google-Smtp-Source: ABdhPJyy8YU4QNP8+S3euZ1cip0Al7OTJHjUcN2ZpHTMyltrNjuzU9LvTTPZtV62bLbOXw9bFGPm+tKQq9FLJrOwEKI=
+X-Received: by 2002:a5b:491:0:b0:64a:f42f:6973 with SMTP id
+ n17-20020a5b0491000000b0064af42f6973mr19994401ybp.20.1653297785863; Mon, 23
+ May 2022 02:23:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,SUSPICIOUS_RECIPS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr> <20220512011855.1189653-1-mailhol.vincent@wanadoo.fr>
+In-Reply-To: <20220512011855.1189653-1-mailhol.vincent@wanadoo.fr>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Mon, 23 May 2022 18:22:54 +0900
+Message-ID: <CAMZ6RqL-GBDW1f4=eE_N+jaBjSnD7A8kG_XsNjyvcp94M2Ok3g@mail.gmail.com>
+Subject: Re: [PATCH v4 0/2] x86/asm/bitops: optimize ff{s,z} functions for
+ constant expressions
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, David Howells <dhowells@redhat.com>,
+        Jan Beulich <JBeulich@suse.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-	Hi Linus,
+On Thu. 12 May 2022 at 10:20, Vincent Mailhol
+<mailhol.vincent@wanadoo.fr> wrote:
+> The compilers provide some builtin expression equivalent to the ffs(),
+> __ffs() and ffz() function of the kernel. The kernel uses optimized
+> assembly which produces better code than the builtin
+> functions. However, such assembly code can not be optimized when used
+> on constant expression.
+>
+> This series relies on __builtin_constant_p to select the optimal solution:
+>
+>   * use kernel assembly for non constant expressions
+>
+>   * use compiler's __builtin function for constant expressions.
+>
+> I also think that the fls() and fls64() can be optimized in a similar
+> way, using __builtin_ctz() and __builtin_ctzll() but it is a bit less
+> trivial so I want to focus on this series first. If it get accepted, I
+> will then work on those two additionnal function.
+>
+>
+> ** Statistics **
+>
+> Patch 1/2 optimizes 26.7% of ffs() calls and patch 2/2 optimizes 27.9%
+> of __ffs() and ffz() calls (details of the calculation in each patch).
+>
+>
+> ** Changelog **
+>
+> v3 -> v4:
+>
+>   * (no changes on code, only commit comment was modified)
+>
+>   * Remove note and link to Nick's message in patch 1/2, c.f.:
+>   https://lore.kernel.org/all/CAKwvOdnnDaiJcV1gr9vV+ya-jWxx7+2KJNTDThyFctVDOgt9zQ@mail.gmail.com/
+>
+>   * Add Reviewed-by: Nick Desaulniers <ndesaulniers@google.com> in tag in patch 2/2.
+>
+>
+> v2 -> v3:
+>
+>   * Redacted out the instructions after ret and before next function
+>     in the assembly output.
+>
+>   * Added a note and a link to Nick's message on the constant
+>     propagation missed-optimization in clang:
+>     https://lore.kernel.org/all/CAKwvOdnH_gYv4qRN9pKY7jNTQK95xNeH1w1KZJJmvCkh8xJLBg@mail.gmail.com/
+>
+>   * Fix copy/paste typo in statistics of patch 1/2. Number of
+>     occurences before patches are 1081 and not 3607 (percentage
+>     reduction of 26.7% remains correct)
+>
+>   * Rename the functions as follow:
+>     - __varible_ffs() -> variable___ffs()
+>     - __variable_ffz() -> variable_ffz()
+>
+>   * Add Reviewed-by: Nick Desaulniers <ndesaulniers@google.com> in tag in patch 1/2.
+>
+> Vincent Mailhol (2):
+>   x86/asm/bitops: ffs: use __builtin_ffs to evaluate constant
+>     expressions
+>   x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to evaluate constant
+>     expressions
 
-The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+Hi Thomas, Ingo and Borislav,
 
-  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+Are there any chances for you to pick those two patches during this
+week's merge windows?
+https://lore.kernel.org/all/20220512011855.1189653-2-mailhol.vincent@wanadoo.fr/
+https://lore.kernel.org/all/20220512011855.1189653-3-mailhol.vincent@wanadoo.fr/
 
-are available in the Git repository at:
+Thank you!
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/geert/linux-m68k.git tags/m68k-for-v5.19-tag1
 
-for you to fetch changes up to 30b5e6ef4a32ea4985b99200e06d6660a69f9246:
-
-  m68k: atari: Make Atari ROM port I/O write macros return void (2022-05-22 12:24:14 +0200)
-
-----------------------------------------------------------------
-m68k updates for v5.19
-
-  - Introduce virtual m68k machine based on Android Goldfish devices,
-  - Defconfig updates,
-  - Minor fixes and improvements.
-
-Thanks for pulling!
-
-----------------------------------------------------------------
-Geert Uytterhoeven (3):
-      m68k: defconfig: Update defconfigs for v5.18-rc1
-      m68k: math-emu: Fix dependencies of math emulation support
-      m68k: atari: Make Atari ROM port I/O write macros return void
-
-Julia Lawall (1):
-      m68k: math-emu: Fix typos in comments
-
-Laurent Vivier (4):
-      tty: goldfish: Introduce gf_ioread32()/gf_iowrite32()
-      rtc: goldfish: Use gf_ioread32()/gf_iowrite32()
-      clocksource/drivers: Add a goldfish-timer clocksource
-      m68k: Introduce a virtual m68k machine
-
-Michael Schmitz (1):
-      m68k: Wire up syscall_trace_enter/leave for m68k
-
- arch/m68k/Kbuild                           |   1 +
- arch/m68k/Kconfig.cpu                      |   2 +-
- arch/m68k/Kconfig.machine                  |  17 ++++
- arch/m68k/configs/amiga_defconfig          |   5 +-
- arch/m68k/configs/apollo_defconfig         |   5 +-
- arch/m68k/configs/atari_defconfig          |   5 +-
- arch/m68k/configs/bvme6000_defconfig       |   5 +-
- arch/m68k/configs/hp300_defconfig          |   5 +-
- arch/m68k/configs/mac_defconfig            |   5 +-
- arch/m68k/configs/multi_defconfig          |   5 +-
- arch/m68k/configs/mvme147_defconfig        |   5 +-
- arch/m68k/configs/mvme16x_defconfig        |   5 +-
- arch/m68k/configs/q40_defconfig            |   5 +-
- arch/m68k/configs/sun3_defconfig           |   5 +-
- arch/m68k/configs/sun3x_defconfig          |   5 +-
- arch/m68k/configs/virt_defconfig           |  68 +++++++++++++
- arch/m68k/include/asm/config.h             |   2 +
- arch/m68k/include/asm/io.h                 |   3 +
- arch/m68k/include/asm/irq.h                |   3 +-
- arch/m68k/include/asm/pgtable_mm.h         |   7 ++
- arch/m68k/include/asm/raw_io.h             |   6 +-
- arch/m68k/include/asm/setup.h              |  44 ++++++--
- arch/m68k/include/asm/virt.h               |  25 +++++
- arch/m68k/include/uapi/asm/bootinfo-virt.h |  18 ++++
- arch/m68k/include/uapi/asm/bootinfo.h      |   1 +
- arch/m68k/kernel/Makefile                  |   1 +
- arch/m68k/kernel/entry.S                   |   4 +-
- arch/m68k/kernel/head.S                    |  31 ++++++
- arch/m68k/kernel/ptrace.c                  |   7 --
- arch/m68k/kernel/setup_mm.c                |   7 ++
- arch/m68k/math-emu/fp_arith.c              |   2 +-
- arch/m68k/mm/kmap.c                        |  21 ++--
- arch/m68k/virt/Makefile                    |   6 ++
- arch/m68k/virt/config.c                    | 130 ++++++++++++++++++++++++
- arch/m68k/virt/ints.c                      | 155 +++++++++++++++++++++++++++++
- arch/m68k/virt/platform.c                  |  72 ++++++++++++++
- drivers/clocksource/Kconfig                |   7 ++
- drivers/clocksource/Makefile               |   1 +
- drivers/clocksource/timer-goldfish.c       | 153 ++++++++++++++++++++++++++++
- drivers/rtc/rtc-goldfish.c                 |  44 ++++----
- drivers/tty/goldfish.c                     |  20 ++--
- include/clocksource/timer-goldfish.h       |  31 ++++++
- include/linux/goldfish.h                   |  15 ++-
- 43 files changed, 844 insertions(+), 120 deletions(-)
- create mode 100644 arch/m68k/configs/virt_defconfig
- create mode 100644 arch/m68k/include/asm/virt.h
- create mode 100644 arch/m68k/include/uapi/asm/bootinfo-virt.h
- create mode 100644 arch/m68k/virt/Makefile
- create mode 100644 arch/m68k/virt/config.c
- create mode 100644 arch/m68k/virt/ints.c
- create mode 100644 arch/m68k/virt/platform.c
- create mode 100644 drivers/clocksource/timer-goldfish.c
- create mode 100644 include/clocksource/timer-goldfish.h
-
-Gr{oetje,eeting}s,
-
-						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-							    -- Linus Torvalds
+Yours sincerely,
+Vincent Mailhol

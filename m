@@ -2,158 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF4BC531271
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:22:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F4845313AD
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:24:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238425AbiEWQNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 12:13:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53048 "EHLO
+        id S238456AbiEWQPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 12:15:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238404AbiEWQNb (ORCPT
+        with ESMTP id S238430AbiEWQP3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 12:13:31 -0400
-Received: from smtp-bc09.mail.infomaniak.ch (smtp-bc09.mail.infomaniak.ch [45.157.188.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 735233151C
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:13:29 -0700 (PDT)
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4L6Mng4qkszMqCsj;
-        Mon, 23 May 2022 18:13:27 +0200 (CEST)
-Received: from localhost (unknown [23.97.221.149])
-        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4L6Mnf45hLzlhMCc;
-        Mon, 23 May 2022 18:13:26 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1653322407;
-        bh=XhUEXOgvMyh0yaNnTTP+A90mHJw1pe7rby6geeIj66w=;
-        h=From:To:Cc:Subject:Date:From;
-        b=RJx2Mcv6Igs2Fb+Wk9itfGL7Yrg8wli7MAdBjIK9zfDLJoVpuZOMFCDZq+PCrysRO
-         dwF6QKAo/9PNNHlyXjIIQcb+hgDo6WLr1eBdhfsYstbxxRFddZRe3CL/jTPpUgDcF7
-         yASOe57XCJd9pfCoyY0QyacLLh2DRNl1KPG/wOTo=
-From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Alejandro Colomar <alx.manpages@gmail.com>,
-        John Johansen <john.johansen@canonical.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Paul Moore <paul@paul-moore.com>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: [GIT PULL] Landlock changes for v5.19
-Date:   Mon, 23 May 2022 18:12:45 +0200
-Message-Id: <20220523161245.2451265-1-mic@digikod.net>
+        Mon, 23 May 2022 12:15:29 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E63E65405
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:15:28 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id y13so29147861eje.2
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:15:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tGFnUfATheJcgd6cmDQVYlu9gLXYWRlr8k9P4s/DGYQ=;
+        b=IKmHlc9/5WgvRfW91RixgfNPoqkOopUkLPRDZC6vJFj6T8bRRMmUi83qO2Tal4kN8j
+         lDryajBcl60SVsBNNyNhxreZojGw9vRQykC4IU/uZ9D3SUu5xtRDao+JxQJ6TWl+4jPt
+         aeejXEYDstEVn2kDjbPhtOd/jlcUWAfQN1TooyyiC9pXAB58biywh7WDVneKyXdzvVFP
+         rubJY+qyrF7bjbLXQleiO4LphrbkiecCrhNhT9Dhx7tLPQuwTjCWT8yIuB7NSd03iARA
+         nS1ohli+xGxpE4P1OyGe2eQwohkRF3rF3NAV0UqOez+IawIUAl6PFkkSOgqLhm3fasDj
+         hvCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tGFnUfATheJcgd6cmDQVYlu9gLXYWRlr8k9P4s/DGYQ=;
+        b=7FW1FXzvbsfc3zu2YZPNBb2c/UKrFYVvhdw+9ILH+a9cFUpJj0/jQmyNjlGOq51KSe
+         Vp2BsOkLHyCtTkrvm58WbcJJtNv+MPS2w5bDDR91Mp/Us9W3nhIweXAWowxdpqLwyGbd
+         sTP8xAJ6/1yAk/FX/pMZYJ79KU5w1XSwKXnSv9qetOP2+ZQDZbAfpzkMBOYQbXZSxxni
+         EKDPnVwiZN9NjWP9w9lUHjt0iGBpkRrNzrJcpK9NDnvCEQfhCY+qwxi9F2TTCL9Nt5Ra
+         aKtxHOWS18wzKWsZzxrjOfIXz3ansiXn/F/fJLJCsPWATNd3VDGLL3bK5UL6DfWRR0xy
+         dLeA==
+X-Gm-Message-State: AOAM530yxBoKb01eibjC0eD45QkN0RS1jsaqAdwUrLQef+lRM6FzSXMe
+        qwj20KrIxcc3/S8W+nLP6QsZbA==
+X-Google-Smtp-Source: ABdhPJxKHQ4KaT+LrQ1BMBe4p/nRE/TYR99LwxI7ls1LX1ia2lhZ2Nz6mIM6eBSkHUl/ZyncTSHaTw==
+X-Received: by 2002:a17:907:6d93:b0:6fe:cf1c:cdab with SMTP id sb19-20020a1709076d9300b006fecf1ccdabmr6745653ejc.609.1653322526576;
+        Mon, 23 May 2022 09:15:26 -0700 (PDT)
+Received: from prec5560.lan ([2001:bf7:830:a7fa:f33e:a35d:7618:8a44])
+        by smtp.gmail.com with ESMTPSA id i11-20020a170906264b00b006feed212f50sm950591ejc.184.2022.05.23.09.15.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 May 2022 09:15:25 -0700 (PDT)
+From:   Robert Foss <robert.foss@linaro.org>
+To:     andrzej.hajda@intel.com, narmstrong@baylibre.com,
+        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@linux.ie,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, xji@analogixsemi.com,
+        hsinyi@chromium.org, sam@ravnborg.org, maxime@cerno.tech,
+        tzimmermann@suse.de, jose.exposito89@gmail.com,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>
+Subject: [PATCH v2 1/2] Revert "drm/bridge: anx7625: Use DPI bus type"
+Date:   Mon, 23 May 2022 18:15:19 +0200
+Message-Id: <20220523161520.354687-1-robert.foss@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+This reverts commit a77c2af0994e24ee36c7ffb6dc852770bdf06fb1.
 
-Please pull these Landlock changes for v5.19-rc1 .  These 30 commits
-have been successfully tested in the latest linux-next releases for
-several weeks, and with syzkaller:
-https://github.com/google/syzkaller/pull/3133
+This patch depends on the patches just aplied to the media tree, and will
+not build without them, which leaves drm-misc-next in a broken state.
+Let's revert the two latter patches until rc1 has been branched,
+and rc1 has been backmerged into drm-misc-next.
 
-Regards,
- Mickaël
+Signed-off-by: Robert Foss <robert.foss@linaro.org>
+Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+---
+ drivers/gpu/drm/bridge/analogix/anx7625.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---
-The following changes since commit 672c0c5173427e6b3e2a9bbb7be51ceeec78093a:
+diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+index 0fab2aa47c67..e92eb4a40745 100644
+--- a/drivers/gpu/drm/bridge/analogix/anx7625.c
++++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+@@ -1623,14 +1623,14 @@ static int anx7625_parse_dt(struct device *dev,
+ 
+ 	anx7625_get_swing_setting(dev, pdata);
+ 
+-	pdata->is_dpi = 0; /* default dsi mode */
++	pdata->is_dpi = 1; /* default dpi mode */
+ 	pdata->mipi_host_node = of_graph_get_remote_node(np, 0, 0);
+ 	if (!pdata->mipi_host_node) {
+ 		DRM_DEV_ERROR(dev, "fail to get internal panel.\n");
+ 		return -ENODEV;
+ 	}
+ 
+-	bus_type = 0;
++	bus_type = V4L2_FWNODE_BUS_TYPE_PARALLEL;
+ 	mipi_lanes = MAX_LANES_SUPPORT;
+ 	ep0 = of_graph_get_endpoint_by_regs(np, 0, 0);
+ 	if (ep0) {
+@@ -1641,8 +1641,8 @@ static int anx7625_parse_dt(struct device *dev,
+ 		of_node_put(ep0);
+ 	}
+ 
+-	if (bus_type == V4L2_FWNODE_BUS_TYPE_DPI) /* bus type is DPI */
+-		pdata->is_dpi = 1;
++	if (bus_type == V4L2_FWNODE_BUS_TYPE_PARALLEL) /* bus type is Parallel(DSI) */
++		pdata->is_dpi = 0;
+ 
+ 	pdata->mipi_lanes = mipi_lanes;
+ 	if (pdata->mipi_lanes > MAX_LANES_SUPPORT || pdata->mipi_lanes <= 0)
+-- 
+2.34.1
 
-  Linux 5.18-rc5 (2022-05-01 13:57:58 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/mic/linux.git tags/landlock-5.19-rc1
-
-for you to fetch changes up to 5e469829baa1b1320e843adf3631edef1d6d2cf2:
-
-  landlock: Explain how to support Landlock (2022-05-23 13:28:03 +0200)
-
-----------------------------------------------------------------
-Landlock updates for v5.19-rc1
-
-Important changes:
-* improve the path_rename LSM hook implementations for RENAME_EXCHANGE;
-* fix a too-restrictive filesystem control for a rare corner case;
-* set the nested sandbox limitation to 16 layers;
-* add a new LANDLOCK_ACCESS_FS_REFER access right to properly handle
-  file reparenting (i.e. full rename and link support);
-* add new tests and documentation;
-* format code with clang-format to make it easier to maintain and
-  contribute.
-
-Related patch series:
-* [PATCH v1 0/7] Landlock: Clean up coding style with clang-format
-  https://lore.kernel.org/r/20220506160513.523257-1-mic@digikod.net
-* [PATCH v2 00/10] Minor Landlock fixes and new tests
-  https://lore.kernel.org/r/20220506160820.524344-1-mic@digikod.net
-* [PATCH v3 00/12] Landlock: file linking and renaming support
-  https://lore.kernel.org/r/20220506161102.525323-1-mic@digikod.net
-* [PATCH v2] landlock: Explain how to support Landlock
-  https://lore.kernel.org/r/20220513112743.156414-1-mic@digikod.net
-
-----------------------------------------------------------------
-Mickaël Salaün (30):
-      landlock: Add clang-format exceptions
-      landlock: Format with clang-format
-      selftests/landlock: Add clang-format exceptions
-      selftests/landlock: Normalize array assignment
-      selftests/landlock: Format with clang-format
-      samples/landlock: Add clang-format exceptions
-      samples/landlock: Format with clang-format
-      landlock: Fix landlock_add_rule(2) documentation
-      selftests/landlock: Make tests build with old libc
-      selftests/landlock: Extend tests for minimal valid attribute size
-      selftests/landlock: Add tests for unknown access rights
-      selftests/landlock: Extend access right tests to directories
-      selftests/landlock: Fully test file rename with "remove" access
-      selftests/landlock: Add tests for O_PATH
-      landlock: Change landlock_add_rule(2) argument check ordering
-      landlock: Change landlock_restrict_self(2) check ordering
-      selftests/landlock: Test landlock_create_ruleset(2) argument check ordering
-      landlock: Define access_mask_t to enforce a consistent access mask size
-      landlock: Reduce the maximum number of layers to 16
-      landlock: Create find_rule() from unmask_layers()
-      landlock: Fix same-layer rule unions
-      landlock: Move filesystem helpers and add a new one
-      LSM: Remove double path_rename hook calls for RENAME_EXCHANGE
-      landlock: Add support for file reparenting with LANDLOCK_ACCESS_FS_REFER
-      selftests/landlock: Add 11 new test suites dedicated to file reparenting
-      samples/landlock: Add support for file reparenting
-      landlock: Document LANDLOCK_ACCESS_FS_REFER and ABI versioning
-      landlock: Document good practices about filesystem policies
-      landlock: Add design choices documentation for filesystem access rights
-      landlock: Explain how to support Landlock
-
- Documentation/security/landlock.rst            |   17 +-
- Documentation/userspace-api/landlock.rst       |  180 ++-
- include/linux/lsm_hook_defs.h                  |    2 +-
- include/linux/lsm_hooks.h                      |    1 +
- include/uapi/linux/landlock.h                  |   36 +-
- samples/landlock/sandboxer.c                   |  132 +-
- security/apparmor/lsm.c                        |   30 +-
- security/landlock/cred.c                       |    4 +-
- security/landlock/cred.h                       |    8 +-
- security/landlock/fs.c                         |  815 +++++++++---
- security/landlock/fs.h                         |   11 +-
- security/landlock/limits.h                     |   10 +-
- security/landlock/object.c                     |    6 +-
- security/landlock/object.h                     |    6 +-
- security/landlock/ptrace.c                     |   10 +-
- security/landlock/ruleset.c                    |   84 +-
- security/landlock/ruleset.h                    |   35 +-
- security/landlock/syscalls.c                   |   95 +-
- security/security.c                            |    9 +-
- security/tomoyo/tomoyo.c                       |   11 +-
- tools/testing/selftests/landlock/base_test.c   |  179 ++-
- tools/testing/selftests/landlock/common.h      |   66 +-
- tools/testing/selftests/landlock/fs_test.c     | 1619 +++++++++++++++++++-----
- tools/testing/selftests/landlock/ptrace_test.c |   40 +-
- 24 files changed, 2646 insertions(+), 760 deletions(-)

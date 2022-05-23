@@ -2,122 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70594530D9C
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:42:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 867B5530E25
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:43:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234104AbiEWKal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 06:30:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55284 "EHLO
+        id S233715AbiEWJkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 05:40:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234089AbiEWKa1 (ORCPT
+        with ESMTP id S233516AbiEWJkZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 06:30:27 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 37A014B85F;
-        Mon, 23 May 2022 03:30:21 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1nt5K1-0001dy-01; Mon, 23 May 2022 12:29:57 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 663AEC0311; Mon, 23 May 2022 11:40:05 +0200 (CEST)
-Date:   Mon, 23 May 2022 11:40:05 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: Rewrite `csum_tcpudp_nofold' in plain C
-Message-ID: <20220523094005.GB6296@alpha.franken.de>
-References: <alpine.DEB.2.21.2205222035380.52080@angie.orcam.me.uk>
+        Mon, 23 May 2022 05:40:25 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B0F21E38;
+        Mon, 23 May 2022 02:40:25 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id D30F921A0C;
+        Mon, 23 May 2022 09:40:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1653298823; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OqPhQgD39nH9jn1vWntr2AG2dGogHj/8W1Qt0RQY900=;
+        b=RfqLLS1v44hQwb7YiwnKp5vE+kfJZdBNQwNmaF0gpEKyqyA+vW09tQrkor3A2j1SMkeXxd
+        Ins9UwPNYvCeH+9w7WOHg0obMlKOXNkvm4AqOeB0EJ5nIEb7BCyZUwCt2uQq5iIANLHtsL
+        dv/4+tkgYvxzPae8ce5q96MjPFGMgyo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1653298823;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OqPhQgD39nH9jn1vWntr2AG2dGogHj/8W1Qt0RQY900=;
+        b=hKcyRDSq+Pml8cw64L+F1oI7n3fWsv4K6fl2GLrxFukrR8LRvclg0obUmJxusW/9Pmu/Sn
+        OJ9/4K7s+iOjO8Cw==
+Received: from quack3.suse.cz (unknown [10.100.224.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id B99472C141;
+        Mon, 23 May 2022 09:40:23 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 56D1FA0632; Mon, 23 May 2022 11:40:23 +0200 (CEST)
+Date:   Mon, 23 May 2022 11:40:23 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Baokun Li <libaokun1@huawei.com>
+Cc:     linux-ext4@vger.kernel.org, tytso@mit.edu,
+        adilger.kernel@dilger.ca, jack@suse.cz, ritesh.list@gmail.com,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        yebin10@huawei.com, yukuai3@huawei.com
+Subject: Re: [PATCH 2/2] ext4: correct the judgment of BUG in
+ ext4_mb_normalize_request
+Message-ID: <20220523094023.e3rnile4wh7uiich@quack3.lan>
+References: <20220521134217.312071-1-libaokun1@huawei.com>
+ <20220521134217.312071-3-libaokun1@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2205222035380.52080@angie.orcam.me.uk>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220521134217.312071-3-libaokun1@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 22, 2022 at 09:48:14PM +0100, Maciej W. Rozycki wrote:
-> Recent commit 198688edbf77 ("MIPS: Fix inline asm input/output type 
-> mismatch in checksum.h used with Clang") introduced a code size and 
-> performance regression with 64-bit code emitted for `csum_tcpudp_nofold' 
-> by GCC, caused by a redundant truncation operation produced due to a 
-> data type change made to the variable associated with the inline 
-> assembly's output operand.
+On Sat 21-05-22 21:42:17, Baokun Li wrote:
+> When either of the "start + size <= ac->ac_o_ex.fe_logical" or
+> "start > ac->ac_o_ex.fe_logical" conditions is met, it indicates
+> that the fe_logical is not in the allocated range.
+> In this case, it should be bug_ON.
 > 
-> The intent previously expressed here with operands and constraints for 
-> optimal code was to have the output operand share a register with one 
-> inputs, both of a different integer type each.  This is perfectly valid 
-> with the MIPS psABI where a register can hold integer data of different 
-> types and the assembly code used here makes data stored in the output 
-> register match the data type used with the output operand, however it 
-> has turned out impossible to express this arrangement in source code 
-> such as to satisfy LLVM, apparently due to the compiler's internal 
-> limitations.
-> 
-> There is nothing peculiar about the inline assembly `csum_tcpudp_nofold' 
-> includes however, though it does choose assembly instructions carefully.
-> 
-> Rewrite this piece of assembly in plain C then, using corresponding C 
-> language operations, making GCC produce the same assembly instructions, 
-> possibly shuffled, in the general case and sometimes actually fewer of 
-> them where an input is constant, because the compiler does not have to 
-> reload it to a register (operand constraints could be adjusted for that, 
-> but the plain C approach is cleaner anyway).
-> 
-> Example code size changes are as follows, for a 32-bit configuration:
-> 
->       text       data        bss      total filename
->    5920480    1347236     126592    7394308 vmlinux-old
->    5920480    1347236     126592    7394308 vmlinux-now
->    5919728    1347236     126592    7393556 vmlinux-c
-> 
-> and for a 64-bit configuration:
-> 
->       text       data        bss      total filename
->    6024112    1790828     225728    8040668 vmlinux-old
->    6024128    1790828     225728    8040684 vmlinux-now
->    6023760    1790828     225728    8040316 vmlinux-c
-> 
-> respectively, where "old" is with the commit referred reverted, "now" is 
-> with no change, and "c" is with this change applied.
-> 
-> Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-> ---
-> Hi,
-> 
->  I have visually inspected code produced and verified this change to boot 
-> with TCP networking performing just fine, both with a 32-bit and a 64-bit 
-> configuration.  Sadly with the little endianness only, because in the 
-> course of this verification I have discovered the core card of my Malta 
-> board bit the dust a few days ago, apparently in a permanent manner, and I 
-> have no other big-endian MIPS system available here to try.
-> 
->  The only difference between the two endiannesses is the left-shift 
-> operation on (proto + len) however, which doesn't happen for big-endian 
-> configurations, so the little endianness should in principle provide 
-> enough coverage.
-> 
->  Also I'm leaving it to LLVM folks to verify, however this is plain C, so 
-> it is expected to just work.
-> 
->  Please apply.
-> 
->   Maciej
-> ---
->  arch/mips/include/asm/checksum.h |   71 ++++++++++++++++++---------------------
+> Fixes: dfe076c106f6 ("ext4: get rid of code duplication")
+> Signed-off-by: Baokun Li <libaokun1@huawei.com>
 
-applied to mips-next.
+I think this is actually wrong. The original condition checks whether
+start + size does not overflow the used integer type. Your condition is
+much stronger and I don't think it always has to be true. E.g. allocation
+goal block (start variable) can be pushed to larger values by existing
+preallocation or so.
 
-Thomas.
+								Honza 
 
+
+> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+> index 32410b79b664..d0fb57970648 100644
+> --- a/fs/ext4/mballoc.c
+> +++ b/fs/ext4/mballoc.c
+> @@ -4190,7 +4190,7 @@ ext4_mb_normalize_request(struct ext4_allocation_context *ac,
+>  	}
+>  	rcu_read_unlock();
+>  
+> -	if (start + size <= ac->ac_o_ex.fe_logical &&
+> +	if (start + size <= ac->ac_o_ex.fe_logical ||
+>  			start > ac->ac_o_ex.fe_logical) {
+>  		ext4_msg(ac->ac_sb, KERN_ERR,
+>  			 "start %lu, size %lu, fe_logical %lu",
+> -- 
+> 2.31.1
+> 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

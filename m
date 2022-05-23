@@ -2,72 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0810653095E
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 08:12:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 308C9530B4E
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 11:03:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbiEWGMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 02:12:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43142 "EHLO
+        id S231596AbiEWIFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 04:05:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236374AbiEWGMF (ORCPT
+        with ESMTP id S231562AbiEWIFU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 02:12:05 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7518AE3D;
-        Sun, 22 May 2022 23:12:04 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Mon, 23 May 2022 04:05:20 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7390A12A8E
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 01:05:18 -0700 (PDT)
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 968A71F383;
-        Mon, 23 May 2022 06:05:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1653285913; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=A48QX/vupAuDBBHOJLZZB2SN4uoXt1Za4zzMoiIYE6M=;
-        b=NUPGG7/Cyb8PISM5MQxuSK/EtfR77Nk33xy/KVu+F1Y55Kruti902KJPmGMnxMWEzCwe3Z
-        OojVdGzwPekil0h+LKdnJ2ZLrDrZ8bBpm4rbDCUvVCPQIWwlBM3MS4KkS6CA7NRd/Yse0I
-        ENeLjrrNb+U5ef1j9y7FD0KvuSX5tNo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1653285913;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=A48QX/vupAuDBBHOJLZZB2SN4uoXt1Za4zzMoiIYE6M=;
-        b=AZLHrLi9ozj4GGOxPypKkh9E2+zcGbXAWjfJzhE2IDXmfNR4y7bw0+qvaL5pEATHPz2oHS
-        QXXScIvxSgAQyFCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5C93D13AA5;
-        Mon, 23 May 2022 06:05:12 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 9YIHCBgki2IHdwAAMHmgww
-        (envelope-from <colyli@suse.de>); Mon, 23 May 2022 06:05:12 +0000
-Message-ID: <f1a9c46e-59a6-7b68-fd17-6f2563e24e98@suse.de>
-Date:   Mon, 23 May 2022 14:05:08 +0800
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 0F3A83F1EC
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 06:05:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1653285944;
+        bh=Gc6m3XcjXFZK4IY7snllrwp4xXxt/PdhQGyQJtEizR4=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=dvcNdE11ez702Nsv4FB75AjyX1x5/RXtYrz1zQHN+PCyuaqm6Cco7a5B+4fCjTuvS
+         XIaTT5wiIP1RJRR2qLZ5q4c6HImEUy2jWIX+AMTUXo7Fa04aFv6wdmduN8ZP3MACWP
+         HHeRcR+uvBZcOjHujMGsEvgBnTGQHl66ZbLXolQoPWaLe4R9VZPz3RKr6ZBBCaI8d7
+         t++fuzWuvi8GMpRUlbwFnuJmN9nIcdEdukYaEe4ZZ7ci7/QQVbhWkK5Bitij5C2BaE
+         floF359WPem5lXAIWXhIcLwJFJKhZAOiZCC2vNBgz2l51GEhEiwNcE4Hcz8gtaLpI9
+         dKZtxvGyLGUWw==
+Received: by mail-ed1-f70.google.com with SMTP id n12-20020aa7c44c000000b0042ab2159b3eso9995865edr.8
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 23:05:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Gc6m3XcjXFZK4IY7snllrwp4xXxt/PdhQGyQJtEizR4=;
+        b=X19BMT37al/LuM8j3YyqODL6L3AP6LWlfTAUHUulIyksomBHZ5VaggV+Svs44V8hym
+         VDj4rAlW0J/xuqiU0dh37e78eQv0smOgUefNyS4QE2wqRZMWmLWBen+5+KiRm+aMNYmx
+         YtHtkr6/HlTqIFrD6ZL/I707hNLjVj7vd2Xe++T3FsWXwCU58HWxnkmcF4IydQe57PPg
+         FSMM8hkVUiF15dLb6LFBvz27c1C8h9ive54Sfj1DG8obDVWhvU90F4rgseeD4FXsDaGN
+         +dMTybuaBMLDH4SQiJhAer0a/LPQ9pH+lsZbwi5RVwtCO/YvQFqiZQBNSuB0uIqnx7JN
+         1r0g==
+X-Gm-Message-State: AOAM533iJC0vRM8xXqhBYrxo9Su5wWffp/OhmKuHER3CG7wuGtxM1GwG
+        PrHgJbQx1326PH4K2wsqXw6DJysuJKDS8qrSTOm+IKXy3AyyL0bPcjsASciqhACGAdVkBl1qpvl
+        Ns2MHXjHbbI1o8xnmHJpN7eOjeLczvSTmOecRuHjARg==
+X-Received: by 2002:a05:6402:84c:b0:428:4cc4:8212 with SMTP id b12-20020a056402084c00b004284cc48212mr22595230edz.171.1653285942132;
+        Sun, 22 May 2022 23:05:42 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxkKR2r8E8Xx1iDAMXOgaBNrjjlnaFEXjGXVWac/Tu0AG+RwTJpLHCbpRGuD2/bKTDllS5fTA==
+X-Received: by 2002:a05:6402:84c:b0:428:4cc4:8212 with SMTP id b12-20020a056402084c00b004284cc48212mr22595217edz.171.1653285941934;
+        Sun, 22 May 2022 23:05:41 -0700 (PDT)
+Received: from gollum.fritz.box ([194.191.244.86])
+        by smtp.gmail.com with ESMTPSA id p23-20020a056402155700b0042617ba6389sm7777293edx.19.2022.05.22.23.05.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 May 2022 23:05:41 -0700 (PDT)
+From:   Juerg Haefliger <juerg.haefliger@canonical.com>
+X-Google-Original-From: Juerg Haefliger <juergh@canonical.com>
+To:     linux@armlinux.org.uk, joel@jms.id.au, andrew@aj.id.au,
+        linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org,
+        Juerg Haefliger <juergh@canonical.com>
+Subject: [PATCH] ARM: aspeed: Kconfig: Fix indentation
+Date:   Mon, 23 May 2022 08:05:32 +0200
+Message-Id: <20220523060532.7864-1-juergh@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.1
-Subject: Re: linux-next: build failure after merge of the block tree
-Content-Language: en-US
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-References: <20220523124921.7d6bbf34@canb.auug.org.au>
- <df3ffbac-2f4e-df03-8b29-8e2e4bb69fac@kernel.dk>
-From:   Coly Li <colyli@suse.de>
-In-Reply-To: <df3ffbac-2f4e-df03-8b29-8e2e4bb69fac@kernel.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,40 +78,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/23/22 10:52 AM, Jens Axboe wrote:
-> On 5/22/22 8:49 PM, Stephen Rothwell wrote:
->> Hi all,
->>
->> After merging the block tree, today's linux-next build (x86_64
->> allmodconfig) failed like this:
->>
->> drivers/md/bcache/btree.c: In function 'bch_btree_check':
->> drivers/md/bcache/btree.c:2073:1: error: the frame size of 2184 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]
->>   2073 | }
->>        | ^
->>
->> Caused by commit
->>
->>    c766acd3d78e ("bcache: improve multithreaded bch_btree_check()")
->>
->> struct btree_check_state is very large to put on the stack :-(
->>
->> I have reverted that commit for today.
+The convention for indentation seems to be a single tab. Help text is
+further indented by an additional two whitespaces. Fix the lines that
+violate these rules.
 
-Hi Jens,
+Signed-off-by: Juerg Haefliger <juergh@canonical.com>
+---
+ arch/arm/mach-aspeed/Kconfig | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-> Thanks, I'll drop it. It's not part of the initial request sent to
-> Linus, exactly because it arrived late.
->
-> Coly, I'm dropping this series.
-
-Yes please. Should I re-submit the fixed series to you in later -RC 
-round, or wait for 5.20 merge window?
-
-
-Thanks.
-
-Coly Li
-
-
+diff --git a/arch/arm/mach-aspeed/Kconfig b/arch/arm/mach-aspeed/Kconfig
+index ea96d11b8502..e05997ec2f82 100644
+--- a/arch/arm/mach-aspeed/Kconfig
++++ b/arch/arm/mach-aspeed/Kconfig
+@@ -19,9 +19,9 @@ config MACH_ASPEED_G4
+ 	select PINCTRL_ASPEED_G4
+ 	select FTTMR010_TIMER
+ 	help
+-	 Say yes if you intend to run on an Aspeed ast2400 or similar
+-	 fourth generation BMCs, such as those used by OpenPower Power8
+-	 systems.
++	  Say yes if you intend to run on an Aspeed ast2400 or similar
++	  fourth generation BMCs, such as those used by OpenPower Power8
++	  systems.
+ 
+ config MACH_ASPEED_G5
+ 	bool "Aspeed SoC 5th Generation"
+@@ -29,8 +29,8 @@ config MACH_ASPEED_G5
+ 	select PINCTRL_ASPEED_G5
+ 	select FTTMR010_TIMER
+ 	help
+-	 Say yes if you intend to run on an Aspeed ast2500 or similar
+-	 fifth generation Aspeed BMCs.
++	  Say yes if you intend to run on an Aspeed ast2500 or similar
++	  fifth generation Aspeed BMCs.
+ 
+ config MACH_ASPEED_G6
+ 	bool "Aspeed SoC 6th Generation"
+@@ -40,7 +40,7 @@ config MACH_ASPEED_G6
+ 	select ARM_GIC
+ 	select HAVE_ARM_ARCH_TIMER
+ 	help
+-	 Say yes if you intend to run on an Aspeed ast2600 or similar
+-	 sixth generation Aspeed BMCs.
++	  Say yes if you intend to run on an Aspeed ast2600 or similar
++	  sixth generation Aspeed BMCs.
+ 
+ endif
+-- 
+2.32.0
 

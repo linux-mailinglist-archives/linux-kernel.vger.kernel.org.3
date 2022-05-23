@@ -2,106 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 624F453137D
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:24:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7A4F5314E0
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238740AbiEWQTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 12:19:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41492 "EHLO
+        id S238690AbiEWQWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 12:22:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238666AbiEWQTf (ORCPT
+        with ESMTP id S236520AbiEWQWb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 12:19:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BAD166CAA;
-        Mon, 23 May 2022 09:19:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1E257B81023;
-        Mon, 23 May 2022 16:19:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 515BFC385A9;
-        Mon, 23 May 2022 16:19:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653322769;
-        bh=f7EDB1tZHHZwuHj5NBq247JOSdGsH/WOgFLSR3GIRJ8=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=cOo9iC6hjPhXQnOrApO6acJmmmrSyTtlvc4qA/AW3WIgsvw1i8yXhjQD+tVxD32U9
-         xbrmpbjVggsrJ65S1y1caO3tQS3L/ttaqiJ6S2se7myZM5BY5gFpFrAypNbnw58Oza
-         1iU0ZuP3uutfLhL7s7hKepIFHi8aPTm+U+cgpoAJwE5Op+9qVIv2jHgBhpStM8e/KA
-         puIK79CJNhvogddI1661JIlYXmNdDlKUK/jUC9I5tjiW2j9nKZ7QR03OchX/iRJATk
-         8v7fYstRruUXWQmMJI40wQmeTqMO1ZegiL2FBkP5wzyLyxknqtLTLTV2SzhwIB+fVw
-         7vd9sMRuYmPKg==
-Message-ID: <1e1f7397d516f8b9780b08763f6338cd4ce83506.camel@kernel.org>
-Subject: Re: [PATCH] ceph: fix decoding of client session messages flags
-From:   Jeff Layton <jlayton@kernel.org>
-To:     =?ISO-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>,
-        Xiubo Li <xiubli@redhat.com>, Ilya Dryomov <idryomov@gmail.com>
-Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Mon, 23 May 2022 12:19:27 -0400
-In-Reply-To: <20220523160951.8781-1-lhenriques@suse.de>
-References: <20220523160951.8781-1-lhenriques@suse.de>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.1 (3.44.1-1.fc36) 
+        Mon, 23 May 2022 12:22:31 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA5B5BE7D;
+        Mon, 23 May 2022 09:22:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653322949; x=1684858949;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AgL1ko85PWWvfyTYsuQmaz71teSdVfxl8k4j+ahVxfE=;
+  b=L9LQNrDud0X1e3J51UFsnI413PQlhN5LH8QGXYOyapF+X2SjOo5o++Jm
+   NoHdRMinTK+4aVSH3h09fKaxJ84go95hNYw0seGewz3ZJKz7arzO3DXiA
+   iNPVT6Hl6REEvEOQZbJEXUKrVjCuk998M89L83hit02mtv7EvGD2DOQqf
+   UKw5+LFO6776AjuZup4fIZfvwVgZJ7wUBr2ZWacHcJ8rbAAl18puuOanK
+   yM9OSwc25lxhwxOJI+nV82Uy+rnGVwOcLqgvk5QnotpJ8pDQBmShobniG
+   ixyd1FfpzGsOg6rK2IwJzQTmbBgiX1V3Osz5vtbDVY92xl+vHiL9PBZ6U
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="260878535"
+X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
+   d="scan'208";a="260878535"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 09:22:28 -0700
+X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
+   d="scan'208";a="526013937"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 09:22:26 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ntAp5-000JLd-8Z;
+        Mon, 23 May 2022 19:22:23 +0300
+Date:   Mon, 23 May 2022 19:22:23 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Henning Schild <henning.schild@siemens.com>
+Cc:     Mark Gross <markgross@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, Enrico Weigelt <lkml@metux.net>,
+        Gerd Haeussler <gerd.haeussler.ext@siemens.com>
+Subject: Re: [PATCH v3 3/4] platform/x86: simatic-ipc: drop custom P2SB bar
+ code
+Message-ID: <You0vzJDvuO7A1qv@smile.fi.intel.com>
+References: <20220513083652.974-1-henning.schild@siemens.com>
+ <20220513083652.974-4-henning.schild@siemens.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220513083652.974-4-henning.schild@siemens.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-05-23 at 17:09 +0100, Lu=EDs Henriques wrote:
-> The cephfs kernel client started to show  the message:
->=20
->  ceph: mds0 session blocklisted
->=20
-> when mounting a filesystem.  This is due to the fact that the session
-> messages are being incorrectly decoded: the skip needs to take into
-> account the 'len'.
->=20
-> While there, fixed some whitespaces too.
->=20
-> Fixes: e1c9788cb397 ("ceph: don't rely on error_string to validate blockl=
-isted session.")
-> Signed-off-by: Lu=EDs Henriques <lhenriques@suse.de>
-> ---
->  fs/ceph/mds_client.c | 14 +++++++++-----
->  1 file changed, 9 insertions(+), 5 deletions(-)
->=20
-> diff --git a/fs/ceph/mds_client.c b/fs/ceph/mds_client.c
-> index 00c3de177dd6..1bd3e1bb0fdf 100644
-> --- a/fs/ceph/mds_client.c
-> +++ b/fs/ceph/mds_client.c
-> @@ -3375,13 +3375,17 @@ static void handle_session(struct ceph_mds_sessio=
-n *session,
->  	}
-> =20
->  	if (msg_version >=3D 5) {
-> -		u32 flags;
-> -		/* version >=3D 4, struct_v, struct_cv, len, metric_spec */
-> -	        ceph_decode_skip_n(&p, end, 2 + sizeof(u32) * 2, bad);
-> +		u32 flags, len;
-> +
-> +		/* version >=3D 4 */
-> +		ceph_decode_skip_16(&p, end, bad); /* struct_v, struct_cv */
-> +		ceph_decode_32_safe(&p, end, len, bad); /* len */
-> +		ceph_decode_skip_n(&p, end, len, bad); /* metric_spec */
-> +
->  		/* version >=3D 5, flags   */
-> -                ceph_decode_32_safe(&p, end, flags, bad);
-> +		ceph_decode_32_safe(&p, end, flags, bad);
->  		if (flags & CEPH_SESSION_BLOCKLISTED) {
-> -		        pr_warn("mds%d session blocklisted\n", session->s_mds);
-> +			pr_warn("mds%d session blocklisted\n", session->s_mds);
->  			blocklisted =3D true;
->  		}
->  	}
+On Fri, May 13, 2022 at 10:36:51AM +0200, Henning Schild wrote:
+> The two drivers that used to use this have been switched over to the
+> common P2SB accessor, so this code is not needed any longer.
 
-Good catch! Should we send this to stable too?
+Hans, in order to minimize the risk of not getting this into next cycle, I
+would like to collect your tag (if you have no objection) and then, when I send
+a new version of the P2SB series with this series together, we would everything
+ready to be taken by Lee.
 
-Reviewed-by: Jeff Layton <jlayton@kernel.org>
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

@@ -2,82 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FC235313D9
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:24:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DA75531205
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:21:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237537AbiEWPEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 11:04:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43486 "EHLO
+        id S237506AbiEWPEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 11:04:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237503AbiEWPE1 (ORCPT
+        with ESMTP id S237481AbiEWPEC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 11:04:27 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E76455BD2D
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 08:04:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653318265; x=1684854265;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=8ReV047EYtCbMUXsoUg3vLWxCvg/Zeg6iwFf6J0iLBs=;
-  b=gNOgm1E7GKbcShwHMRdimGfaYaE7ZfawP1DNJ1NbTQzicyU2Dr3AJFAQ
-   54Y48p3V8HxIDt9gj0TLE463a/lryYmDKzBmAmqX88FUygx97fu5Rk/AY
-   fPf8CF8X/AKKE9fwCEscshu9cSFFQvT5W97xtWKo5TMMSERIEdpKa0i0L
-   PsxGoVj8Rp9S0U+Bvy0geV3yigZWah79Ht+RoHh1emkFMs/8uQl1NqXg9
-   ZKtNspodSHLKs2IudCXxfcBF4/Ll1mmcp1V4az2cA9Oyetsqsi+nEZov2
-   2mCwn5NVCODKjf0H1mlu9Cr0855nQScia1GLe2AW8ro57mNRHZ9EgNxNm
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="333893027"
-X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
-   d="scan'208";a="333893027"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 08:03:53 -0700
-X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
-   d="scan'208";a="600691370"
-Received: from jiaqingz-mobl.ccr.corp.intel.com (HELO [10.249.171.16]) ([10.249.171.16])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 08:03:51 -0700
-Message-ID: <a7bbd451-e054-c69c-6e39-e73320878b8f@linux.intel.com>
-Date:   Mon, 23 May 2022 23:03:49 +0800
+        Mon, 23 May 2022 11:04:02 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 312BF5BD2D
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 08:04:01 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id BAF6E219D7;
+        Mon, 23 May 2022 15:03:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1653318239; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=1mQVU5fewB7vBxald/XJiqlST+FKvUluab5kTFo9Wzw=;
+        b=m8OfgMthq80GMFmazW/Bb27rpS9sBHhKdjdMSlOBOdkWvmOYV9UJkgph4tj/cRUk11AQ3o
+        OUadiCA9kHPwBLF5gEUthWCIqQ8FxSrxrIhWsLjnuB+DKECp4f6425vRarMu8lb4S6oEXd
+        OKFbZHQByyAy0JMEuQEbRVmeY1xzgEM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1653318239;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=1mQVU5fewB7vBxald/XJiqlST+FKvUluab5kTFo9Wzw=;
+        b=OCMogn2jd+iz4/FdtvR/p+nqDn8YbFT7UiCzkhB4ij5T0mJDBeiNDqcHYFqvtGB1peIUHT
+        AQZCwDL8RMdWeSDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id ADF5E13AA5;
+        Mon, 23 May 2022 15:03:59 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Sah0Kl+ii2LVCwAAMHmgww
+        (envelope-from <bp@suse.de>); Mon, 23 May 2022 15:03:59 +0000
+Date:   Mon, 23 May 2022 17:03:55 +0200
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] x86/cleanups for 5.19
+Message-ID: <YougA/80bebDPSkh@zn.tnic>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v2] mtd: spi-nor: macronix: Add support for mx66l2g45g
-Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>
-Cc:     linux-mtd@lists.infradead.org,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>, linux-kernel@vger.kernel.org
-References: <20220523143002.1754922-1-jiaqing.zhao@linux.intel.com>
- <fde9bd5a-7161-9222-4719-4279b2416163@linux.intel.com>
- <35d64d702798d437245090ce96ae29a8@walle.cc>
-From:   Jiaqing Zhao <jiaqing.zhao@linux.intel.com>
-In-Reply-To: <35d64d702798d437245090ce96ae29a8@walle.cc>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-05-23 22:59, Michael Walle wrote:
-> Am 2022-05-23 16:33, schrieb Jiaqing Zhao:
->> Use PARSE_SFDP for now as the SNOR_ID3() patch is not merged yet, will
->> switch to it after it is merged.
-> 
-> Fair enough, could you resubmit it with
-> { "mx66l2g45g",  INFO(0xc2201c, 0, 0, 0) PARSE_SFDP },
-> 
-> Looks odd, but is the same as SNOR_ID3(0xc2201c), so we can just
-> switch to the new macro without any more testing. Or Pratyush can
-> replace it inline while committing this patch if the SNOR_ID3()
-> will make it in before.
+Hi Linus,
 
-I'll add a TODO comment in case we forgot it.
+please pull the usual pile of x86 cleanups for 5.19.
 
-> -michael
+Thx.
+
+---
+
+The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+
+  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_cleanups_for_v5.19_rc1
+
+for you to fetch changes up to d936411dc9caeb3edb992e39c33d4d1d81ca8c08:
+
+  x86: Remove empty files (2022-05-20 12:29:26 +0200)
+
+----------------------------------------------------------------
+- Serious sanitization and cleanup of the whole APERF/MPERF and
+frequency invariance code along with removing the need for unnecessary IPIs
+
+- Finally remove a.out support
+
+- The usual trivial cleanups and fixes all over x86
+
+----------------------------------------------------------------
+Borislav Petkov (2):
+      x86: Remove a.out support
+      x86: Remove empty files
+
+Ira Weiny (2):
+      x86/pkeys: Clean up arch_set_user_pkey_access() declaration
+      x86/pkeys: Remove __arch_set_user_pkey_access() declaration
+
+Jiapeng Chong (1):
+      x86/process: Fix kernel-doc warning due to a changed function name
+
+Thomas Gleixner (13):
+      x86/aperfmperf: Dont wake idle CPUs in arch_freq_get_on_cpu()
+      x86/smp: Move APERF/MPERF code where it belongs
+      x86/aperfmperf: Separate AP/BP frequency invariance init
+      x86/aperfmperf: Untangle Intel and AMD frequency invariance init
+      x86/aperfmperf: Put frequency invariance aperf/mperf data into a struct
+      x86/aperfmperf: Restructure arch_scale_freq_tick()
+      x86/aperfmperf: Make parts of the frequency invariance code unconditional
+      x86/aperfmperf: Store aperf/mperf data for cpu frequency reads
+      x86/aperfmperf: Replace aperfmperf_get_khz()
+      x86/aperfmperf: Replace arch_freq_get_on_cpu()
+      x86/aperfmperf: Integrate the fallback code from show_cpuinfo()
+      x86/aperfperf: Make it correct on 32bit and UP kernels
+      x86/prctl: Remove pointless task argument
+
+Xiao Yang (1):
+      x86/speculation: Add missing srbds=off to the mitigations= help text
+
+Yury Norov (2):
+      x86: Replace cpumask_weight() with cpumask_empty() where appropriate
+      x86/mm: Replace nodes_weight() with nodes_empty() where appropriate
+
+ Documentation/admin-guide/kernel-parameters.txt |   1 +
+ MAINTAINERS                                     |   1 -
+ arch/x86/Kconfig                                |   7 -
+ arch/x86/ia32/Makefile                          |   2 -
+ arch/x86/ia32/ia32_aout.c                       | 325 ----------------
+ arch/x86/include/asm/cpu.h                      |   2 +
+ arch/x86/include/asm/fpu/api.h                  |   3 +-
+ arch/x86/include/asm/fpu/internal.h             |   0
+ arch/x86/include/asm/mmx.h                      |   0
+ arch/x86/include/asm/pkeys.h                    |   8 -
+ arch/x86/include/asm/proto.h                    |   3 +-
+ arch/x86/include/asm/topology.h                 |  23 +-
+ arch/x86/kernel/acpi/cppc.c                     |  29 +-
+ arch/x86/kernel/cpu/aperfmperf.c                | 480 +++++++++++++++++++-----
+ arch/x86/kernel/cpu/proc.c                      |  11 +-
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c          |  14 +-
+ arch/x86/kernel/fpu/xstate.c                    |   5 +-
+ arch/x86/kernel/process.c                       |  11 +-
+ arch/x86/kernel/process_32.c                    |   2 +-
+ arch/x86/kernel/process_64.c                    |   4 +-
+ arch/x86/kernel/smpboot.c                       | 358 +-----------------
+ arch/x86/lib/mmx_32.c                           |   0
+ arch/x86/mm/amdtopology.c                       |   2 +-
+ arch/x86/mm/mmio-mod.c                          |   2 +-
+ arch/x86/mm/numa_emulation.c                    |   4 +-
+ arch/x86/platform/uv/uv_nmi.c                   |   2 +-
+ fs/proc/cpuinfo.c                               |   6 +-
+ include/linux/cpufreq.h                         |   1 -
+ 28 files changed, 441 insertions(+), 865 deletions(-)
+ delete mode 100644 arch/x86/ia32/ia32_aout.c
+ delete mode 100644 arch/x86/include/asm/fpu/internal.h
+ delete mode 100644 arch/x86/include/asm/mmx.h
+ delete mode 100644 arch/x86/lib/mmx_32.c
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH
+GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
+(HRB 36809, AG Nürnberg)

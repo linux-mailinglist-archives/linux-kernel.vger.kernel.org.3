@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 619DD53172B
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:52:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4EB2531B72
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244043AbiEWRnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:43:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37534 "EHLO
+        id S239755AbiEWRPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:15:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242623AbiEWR1u (ORCPT
+        with ESMTP id S240515AbiEWRMa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:27:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 879508AE49;
-        Mon, 23 May 2022 10:23:55 -0700 (PDT)
+        Mon, 23 May 2022 13:12:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45BEE62BCA;
+        Mon, 23 May 2022 10:11:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C38E614B8;
-        Mon, 23 May 2022 17:14:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 875C6C385AA;
-        Mon, 23 May 2022 17:14:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 45A7DB811F6;
+        Mon, 23 May 2022 17:10:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AC49C385A9;
+        Mon, 23 May 2022 17:10:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326044;
-        bh=8GWzTs85Pxk1rZUbXj+jCv4NPHgoEoM04ax8K/ETauY=;
+        s=korg; t=1653325832;
+        bh=8HqcDKgm30aIgAcb6f1MOQJAQLF0KAE4hGTUo6ovBM8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MFBHMAjDzopDb+VJwKdTvCE6BfK/nRPVglkwAHc2NfcRyA4J+Rs6rJWPeJXYuNxbe
-         mURwG8pbq9E1/TwZV0ABrROpzfJgzULBhDQsAD3Wz5l96wUoeV9/oewkV+vjf+Y9On
-         v/hLZ/TqJop9cH3dm2Yqq582VgcPG1UBZ80Pfz7Y=
+        b=yErxJKDBn5tLhXHvmsbUU1/69TFu8biRo2oE5Zw1mYevzc8GZx8zX89ggBispOvQa
+         XWlbeDPl59caCnHneiFyCIi6d/o2TarEZT2hzW97yAvYwON50b1Ya+8NKNlCI657lf
+         BX2bUdKZvvXgXXaR1UybAJ52ZLjXH7XasoTluDNQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sasha Neftin <sasha.neftin@intel.com>,
-        Dvora Fuxbrumer <dvorax.fuxbrumer@linux.intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-Subject: [PATCH 5.10 05/97] igc: Remove _I_PHY_ID checking
+        stable@vger.kernel.org,
+        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 25/44] clk: at91: generated: consider range when calculating best rate
 Date:   Mon, 23 May 2022 19:05:09 +0200
-Message-Id: <20220523165813.189873956@linuxfoundation.org>
+Message-Id: <20220523165757.738972522@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165812.244140613@linuxfoundation.org>
-References: <20220523165812.244140613@linuxfoundation.org>
+In-Reply-To: <20220523165752.797318097@linuxfoundation.org>
+References: <20220523165752.797318097@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,77 +57,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sasha Neftin <sasha.neftin@intel.com>
+From: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
 
-commit 7c496de538eebd8212dc2a3c9a468386b264d0d4 upstream.
+[ Upstream commit d0031e6fbed955ff8d5f5bbc8fe7382482559cec ]
 
-i225 devices have only one PHY vendor. There is no point checking
-_I_PHY_ID during the link establishment and auto-negotiation process.
-This patch comes to clean up these pointless checkings.
+clk_generated_best_diff() helps in finding the parent and the divisor to
+compute a rate closest to the required one. However, it doesn't take into
+account the request's range for the new rate. Make sure the new rate
+is within the required range.
 
-Signed-off-by: Sasha Neftin <sasha.neftin@intel.com>
-Tested-by: Dvora Fuxbrumer <dvorax.fuxbrumer@linux.intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Signed-off-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 8a8f4bf0c480 ("clk: at91: clk-generated: create function to find best_diff")
+Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+Link: https://lore.kernel.org/r/20220413071318.244912-1-codrin.ciubotariu@microchip.com
+Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/igc/igc_base.c |   10 +---------
- drivers/net/ethernet/intel/igc/igc_main.c |    3 +--
- drivers/net/ethernet/intel/igc/igc_phy.c  |    6 ++----
- 3 files changed, 4 insertions(+), 15 deletions(-)
+ drivers/clk/at91/clk-generated.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/drivers/net/ethernet/intel/igc/igc_base.c
-+++ b/drivers/net/ethernet/intel/igc/igc_base.c
-@@ -187,15 +187,7 @@ static s32 igc_init_phy_params_base(stru
+diff --git a/drivers/clk/at91/clk-generated.c b/drivers/clk/at91/clk-generated.c
+index ea23002be4de..b397556c34d9 100644
+--- a/drivers/clk/at91/clk-generated.c
++++ b/drivers/clk/at91/clk-generated.c
+@@ -119,6 +119,10 @@ static void clk_generated_best_diff(struct clk_rate_request *req,
+ 		tmp_rate = parent_rate;
+ 	else
+ 		tmp_rate = parent_rate / div;
++
++	if (tmp_rate < req->min_rate || tmp_rate > req->max_rate)
++		return;
++
+ 	tmp_diff = abs(req->rate - tmp_rate);
  
- 	igc_check_for_copper_link(hw);
- 
--	/* Verify phy id and set remaining function pointers */
--	switch (phy->id) {
--	case I225_I_PHY_ID:
--		phy->type	= igc_phy_i225;
--		break;
--	default:
--		ret_val = -IGC_ERR_PHY;
--		goto out;
--	}
-+	phy->type = igc_phy_i225;
- 
- out:
- 	return ret_val;
---- a/drivers/net/ethernet/intel/igc/igc_main.c
-+++ b/drivers/net/ethernet/intel/igc/igc_main.c
-@@ -4189,8 +4189,7 @@ bool igc_has_link(struct igc_adapter *ad
- 		break;
- 	}
- 
--	if (hw->mac.type == igc_i225 &&
--	    hw->phy.id == I225_I_PHY_ID) {
-+	if (hw->mac.type == igc_i225) {
- 		if (!netif_carrier_ok(adapter->netdev)) {
- 			adapter->flags &= ~IGC_FLAG_NEED_LINK_UPDATE;
- 		} else if (!(adapter->flags & IGC_FLAG_NEED_LINK_UPDATE)) {
---- a/drivers/net/ethernet/intel/igc/igc_phy.c
-+++ b/drivers/net/ethernet/intel/igc/igc_phy.c
-@@ -249,8 +249,7 @@ static s32 igc_phy_setup_autoneg(struct
- 			return ret_val;
- 	}
- 
--	if ((phy->autoneg_mask & ADVERTISE_2500_FULL) &&
--	    hw->phy.id == I225_I_PHY_ID) {
-+	if (phy->autoneg_mask & ADVERTISE_2500_FULL) {
- 		/* Read the MULTI GBT AN Control Register - reg 7.32 */
- 		ret_val = phy->ops.read_reg(hw, (STANDARD_AN_REG_MASK <<
- 					    MMD_DEVADDR_SHIFT) |
-@@ -390,8 +389,7 @@ static s32 igc_phy_setup_autoneg(struct
- 		ret_val = phy->ops.write_reg(hw, PHY_1000T_CTRL,
- 					     mii_1000t_ctrl_reg);
- 
--	if ((phy->autoneg_mask & ADVERTISE_2500_FULL) &&
--	    hw->phy.id == I225_I_PHY_ID)
-+	if (phy->autoneg_mask & ADVERTISE_2500_FULL)
- 		ret_val = phy->ops.write_reg(hw,
- 					     (STANDARD_AN_REG_MASK <<
- 					     MMD_DEVADDR_SHIFT) |
+ 	if (*best_diff < 0 || *best_diff > tmp_diff) {
+-- 
+2.35.1
+
 
 

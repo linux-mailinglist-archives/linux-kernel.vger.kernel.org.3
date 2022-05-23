@@ -2,133 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 397285308EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 07:42:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D1FA5308F1
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 07:42:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350496AbiEWFmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 01:42:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42326 "EHLO
+        id S230299AbiEWFmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 01:42:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiEWFmJ (ORCPT
+        with ESMTP id S230258AbiEWFmh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 01:42:09 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE9A1A82F
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 22:42:06 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id d137so23455864ybc.13
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 22:42:06 -0700 (PDT)
+        Mon, 23 May 2022 01:42:37 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A44E222B2;
+        Sun, 22 May 2022 22:42:36 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id q4so12119103plr.11;
+        Sun, 22 May 2022 22:42:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2ce0c2vLV4sUxJ3tplGN0HOr0r8Zisa3HjuO2lTepL0=;
-        b=nU3WHf/uNoLdnh6e/fN3cHwHpncxXIGuGl8npuSPITaRM+jazkeWJRrntmBecWREdD
-         q9LuDuypasKmgTOTX4h8vRDx6Jty7G3x7Z+P3VpHhvfjOOHd3528yyObXNliG2WAmx+X
-         qOJfFVD4QWN/uvDDx0VjkJu79wIqE1d14JE8swaBoe37oDEu/DfwymFViFakVSR4BtLd
-         rCq0XJ6JsgxDYmRP/h+/U4s1NQFnVayTggL2c00aqVu6eoGfgS1KNM5joJCTmC/jtw5y
-         6y8ofgFqk97LCgZtepEeB4HtDSylf+rjwwWo1c7GIiQNX9lL5G62UgrDEPRR/vICZbhm
-         xW/g==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=V+esiB0EBSG8dOJHRbOX36eLypWwW10L3M7nK7Ft+JA=;
+        b=LqWsFoEhEtXJ03wP/CUlkiR2MMLHq9MdzTMrsCEsLAQKdHKeXsVfUj3PsYC9pmAQXR
+         DoUWCY4o8SqL4E1YOw7ASXbHe5nHHyBIqVMHaIHq5y5qnNErHsJj3tI5lekMLR79O52B
+         TBCLlo94cF7d5mzPOHPI4OUL37J/Zq6Bm6LHAG/XKDRuPXXPnuzl8aNEVPUKlZUlKg8v
+         l88you7k8V6dkm9HIB1wErtuBDzTM+e/zpU8KBOkk23R7FdvMxiKMobK8oe/4LmNAbPQ
+         9ssDVfmfmcG71IfTL9NJ6vumoBwbr3bcfjEEV3xcNluHiLnWnoSMFounR8tQrsn1usAW
+         780A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2ce0c2vLV4sUxJ3tplGN0HOr0r8Zisa3HjuO2lTepL0=;
-        b=RmQb5jRL6cXt4EeM5rO2+7ph9uABW78t7N/H8o2gsLz/4E/OVuttbHoSP/98s5ruNO
-         iCSc/TziBFs4oxiW4o56N2qfziimynB0z67IrZoF3bLYgLzuYiGVun6QXzB/s+SHmj6h
-         6aeOEdx2Ih8s/vW65eciVKm8FVTEjGnEEIcX/ob8fbUJMQ6ObWDE4q+ZF6GOhucKeynx
-         vrqWNoTbasmJfpst66FfFtfsJ2WpYAALddvRZSnZtI19HDh/7rs67Yc8GQ6AVvCVq/dp
-         z3aqcXkvJX6qVq7k4l087CDrqspF5ajV9Q0lzPkvDe0i75nVAUv9jl1w29e55J1TFC6b
-         56Wg==
-X-Gm-Message-State: AOAM533EOQH2FmPoMKA5pPnbKhDsgCgVnLjhak0sOfoZxWVsbhTYMJUV
-        tkdk5iuCtJTL21XoTZD+HbQw02mmDMSFGbRFIz5Mbw==
-X-Google-Smtp-Source: ABdhPJwWI9ZKihp7w8I2OHZ6R+V09XAtRCWmqUzL7juIxAFOsmTHJBoFETmaUkRqtUvbFqep1Ij8CGItEmblXxOB1QI=
-X-Received: by 2002:a25:b10c:0:b0:64f:649b:622f with SMTP id
- g12-20020a25b10c000000b0064f649b622fmr12826897ybj.253.1653284525322; Sun, 22
- May 2022 22:42:05 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=V+esiB0EBSG8dOJHRbOX36eLypWwW10L3M7nK7Ft+JA=;
+        b=b8JtE68SuKpU75B9lDX8x8WvvLesfgsdJ6SfJQhLakLeYpsyn+WTULviBw6citMk2M
+         JcQjcsM9f1R8TVgKdZDlpsUoK+ievhEN3T3S/2sb4MxiCG64cvdJga4sCPfDeIV0CYur
+         WkBlj5jEnKuDQmHF3JWWStvZn+aUHWWvN2zkt387frWJ4blXHwtBPAjEPqht7Aht7Zs5
+         VFPsXui7CdNXp0HZFz5tXgcxGODpXX+3ZkHlr3KTkrhy/1wSjpmKqi95ZZ+NZ5F1QcYS
+         BogUSdo5jX1U8+p2ACynJawaOBi7eiPbtdSp2GaHmYEuKjKXUTXouZbgKzR+laBr+Oe0
+         f01A==
+X-Gm-Message-State: AOAM5328U0wEtFMXJBfmo/GhmMhdY3Ggqi+IG4aDpagasQGNewYE5Bnl
+        y+XJcBJZCP33m4Vme0IVGXQ=
+X-Google-Smtp-Source: ABdhPJyyQ+cfxgfexa3htOxvWWsetFYRz47y02NjNOB0aSqzbEXIh5HdyuJt4/n8vLL4FQWN4tGpgg==
+X-Received: by 2002:a17:90a:2809:b0:1df:35ca:2e6a with SMTP id e9-20020a17090a280900b001df35ca2e6amr24493051pjd.8.1653284555278;
+        Sun, 22 May 2022 22:42:35 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:d84e:5dcd:9d68:ebbf])
+        by smtp.gmail.com with ESMTPSA id f2-20020a170902f38200b0015eaa9797e8sm4051485ple.172.2022.05.22.22.42.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 May 2022 22:42:34 -0700 (PDT)
+Date:   Sun, 22 May 2022 22:42:31 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        linux-input@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [RESEND PATCH 1/2] Input: mt6779-keypad - fix hardware code
+ mapping
+Message-ID: <Yosex9/a7OTuC6ZK@google.com>
+References: <20220513151845.2802795-1-mkorpershoek@baylibre.com>
+ <20220513151845.2802795-2-mkorpershoek@baylibre.com>
+ <YoHf6Z4HTfh4Y+bn@google.com>
+ <874k1qkk7n.fsf@baylibre.com>
+ <4a7bcbfb-12da-0e3f-8732-ecc53046a4ff@collabora.com>
 MIME-Version: 1.0
-References: <a3c932d1-a102-ce18-deea-18cbbd05ecab@linaro.org> <20220522195138.35943-1-konrad.dybcio@somainline.org>
-In-Reply-To: <20220522195138.35943-1-konrad.dybcio@somainline.org>
-From:   Amit Pundir <amit.pundir@linaro.org>
-Date:   Mon, 23 May 2022 11:11:29 +0530
-Message-ID: <CAMi1Hd161=vc2eLVsnYVeeU6mNH8Fx8XfiQMUe_K=LbjyetSZw@mail.gmail.com>
-Subject: Re: Removal of qcom,board-id and qcom,msm-id
-To:     krzysztof.kozlowski@linaro.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     agross@kernel.org, arnd@arndb.de, bjorn.andersson@linaro.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, olof@lixom.net, robh@kernel.org,
-        sboyd@kernel.org, Konrad Dybcio <konrad.dybcio@somainline.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4a7bcbfb-12da-0e3f-8732-ecc53046a4ff@collabora.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 23 May 2022 at 01:22, Konrad Dybcio
-<konrad.dybcio@somainline.org> wrote:
->
-> Hi,
->
-> removing these properties will not bring almost any benefit (other than making
-> some checks happy any saving some <200 LoC) and will make the lives of almost
-> all people doing independent development for linux-on-msm harder. There are
-> almost unironically like 3 people outside Linaro and QUIC who have
-> non-vendor-fused development boards AND the sources to rebuild the
-> bootloader on their own. Making it harder to boot is only going to
-> discourage people from developing on these devices, which is already not
-> that pleasant, especially with newer platforms where you have to fight with
-> the oh-so-bright ideas of Android boot chain..
->
-> This only concerns devices released before sm8350, as the new ones will not
-> even boot with these properties present (or at least SONY Sagami, but I
-> doubt it's an isolated case), so other than completing support for older
-> devices, it won't be an issue going forward, anyway. But there are give
-> or take 50 locked down devices in mainline right now, and many more waiting
-> to be upstreamed in various downstream close-to-mainline trees that should
-> not be disregarded just because Qualcomm is far from the best at making
-> their BSP software stack clean.
->
-> One solution is to chainload another, (n+1)-stage bootloader, but this is
-> not ideal, as:
->
-> 1) the stock bootloader can boot Linux just fine on most devices (except
-> for single exceptions, where beloved OEMs didn't implement arm64 booting or
-> something)
->
-> 2) the boot chain on MSM is already 3- or 4- stage and adding to that will
-> only create an unnecessary mess
->
-> 3) the job of kernel people is not to break userspace. If the
-> device can not even exit bootloader after a kernel upgrade, it's a big
-> failure.
->
-> If you *really really really* want these either gone or documented, we can
-> for example use them in the SOCID driver, read the values from DTB and
-> compare against what SMEM has to say and for example print a warning when
-> there are inconsistencies or use it as a fallback when it fails for any
-> reason, such as using a newer SoC on an older kernel, without updates
-> for SOCID read (which are sometimes necessary, which was the case for 8450
-> recently, iirc).
->
-> My stance is to just leave them as is, as moving them anywhere, or removing
-> them at all will cause unnecessary mess and waste time that could have been
-> spent on more glaring issues..
+On Mon, May 16, 2022 at 01:06:43PM +0200, AngeloGioacchino Del Regno wrote:
+> Il 16/05/22 09:30, Mattijs Korpershoek ha scritto:
+> > Hi Dmitry,
+> > 
+> > Thank you for your review,
+> > 
+> > On dim., mai 15, 2022 at 22:23, Dmitry Torokhov <dmitry.torokhov@gmail.com> wrote:
+> > 
+> > > On Fri, May 13, 2022 at 05:18:44PM +0200, Mattijs Korpershoek wrote:
+> > > > In mt6779_keypad_irq_handler(), we
+> > > > 1. Read a hardware code from KPD_MEM1 -> KPD_MEM5
+> > > > 2. Use that hardware code to compute columns/rows for the standard
+> > > >     keyboard matrix.
+> > > > 
+> > > > According to the (non-public) datasheet, the
+> > > > map between the hardware code and the cols/rows is:
+> > > > 
+> > > >          |(0)  |(1)  |(2)
+> > > >      ----*-----*-----*-----
+> > > >          |     |     |
+> > > >          |(9)  |(10) |(11)
+> > > >      ----*-----*-----*-----
+> > > >          |     |     |
+> > > >          |(18) |(19) |(20)
+> > > >      ----*-----*-----*-----
+> > > >          |     |     |
+> > > > 
+> > > > This brings us to another formula:
+> > > > -> row = code / 9;
+> > > > -> col = code % 3;
+> > > 
+> > > What if there are more than 3 columns?
+> > That's not supported, in hardware, according to the datasheet.
+> > 
+> > The datasheet I have states that "The interface of MT6763 only supports
+> > 3*3 single or 2*2 double, but internal ASIC still detects keys in the
+> > manner of 8*8 single, and 3*3 double. The registers and key codes still
+> > follows the legacy naming".
+> > 
+> > Should I add another patch in this series to add that limitation in the
+> > probe? There are no checks done in the probe() right now.
+> > 
+> 
+> I've just checked a downstream kernel for MT6795 and that one looks like
+> being fully compatible with this driver as well... and as far as downstream
+> is concerned, apparently, mt6735, 6739, 6755, 6757, 6758, 6763, 6771, 6775
+> all have the same register layout and the downstream driver for these is
+> always the very same one...
+> 
+> ...so, I don't think that there's currently any SoC that supports more than
+> three columns. Besides, a fast check shows that MT8195 also has the same.
+> At this point, I'd say that assuming that there are 3 columns, nor less, not
+> more, is just fine.
 
-I couldn't have put it better myself. I suggest we document these
-properties, if that is the blocker, and keep them. A lot has changed
-in the last 7 years, we now have dozens of devices booting upstream
-kernel using these properties.
+OK, now that I looked at the datasheet I remember how it came about. The
+programming (register) interface does not really care about how actual
+matrix is organized, and instead has a set of bits representing keys,
+from KEY0 to KEY77, arranged in 5 chunks of 15 bits split into 5 32-bit
+registers. So we simply decided to use register number as row and
+offset in the register as column when encoding our "matrix".
 
-And fwiw, I have not used dtbTool before, if anything I'd rather
-explore dtb overlays.
+This does not match the actual keypad matrix organization, so if we want
+to change this, that's fine, but then we also need to recognize that we
+are skipping bits 16-31, 48-63, and so on, so to get to the right key
+number we need to do something like:
 
-Regards,
-Amit Pundir
+	key = bit_nr / 32 * 16 + bit_nr % 32;
+	row = key / 9;
+	col = key % 9;
 
->
-> Konrad
+I looked at the datasheets I have and they talk about 8x8 single keypad
+matrix, and 3x3 double keypad (with actual matrices either 3x3 or 2x2)
+but I do not actually see this map layout that Mattijs drew  documented
+anywhere though...  I also wonder if there are already existing DTSes in
+the wild that will be rendered invalid by these changes. I wonder if it
+would not be be better to document the existing meaning of row and
+column in the driver?
+
+Thanks.
+
+-- 
+Dmitry

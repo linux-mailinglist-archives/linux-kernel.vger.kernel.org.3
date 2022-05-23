@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B367531BF3
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47E68531C00
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:57:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244996AbiEWR61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:58:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39104 "EHLO
+        id S241891AbiEWRbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:31:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242317AbiEWRcZ (ORCPT
+        with ESMTP id S241686AbiEWRWd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:32:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51D5272E05;
-        Mon, 23 May 2022 10:27:11 -0700 (PDT)
+        Mon, 23 May 2022 13:22:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D11087B9E3;
+        Mon, 23 May 2022 10:19:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1005B608C0;
-        Mon, 23 May 2022 17:27:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BBFAC385AA;
-        Mon, 23 May 2022 17:27:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 77487B81204;
+        Mon, 23 May 2022 17:17:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98226C385A9;
+        Mon, 23 May 2022 17:17:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326828;
-        bh=5bH7H4zGMBgeHEFbaAZv0/6QAQAaX1t2ZSNtFSywXWA=;
+        s=korg; t=1653326243;
+        bh=xhmdDEoKotcUO/7eHbPi3dL9BFugG1l1EDjl/avpqzE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0SSeH+ferziS38n6Uk7cU2wyWyXxnmwoes33aNAVHLEFFBBC4OEdmk24OLC9SRl5s
-         xdiLSJTFuStXtHpZ3i4i/aI3iVIhq8Vk6wwaiJbeem3oHVHx4MsP1C/ppHmR2bxLEu
-         nSia9HtOJKxg2WINtpHY/zJvKwqG/QQfEC4oderQ=
+        b=qn+q4TQGhYrsXPNS0edZtEGcTM86WWHoYSBVr2bYKzix2fmVhgpc5gQgU4EKLMRpu
+         EsjYVA6LTQProwynVZl3bUp7Vc+zdKkUMHsn5RjQdxk6SqDuZyZ1Bi6RU6pZ8sxlDH
+         U11m+oN7bpgEzRDJOcsf2dvDAbf8GKFwxu/wscDg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Howard Chiu <howard_chiu@aspeedtech.com>,
-        Joel Stanley <joel@jms.id.au>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 072/158] ARM: dts: aspeed: Add video engine to g6
-Date:   Mon, 23 May 2022 19:03:49 +0200
-Message-Id: <20220523165842.883024624@linuxfoundation.org>
+        stable@vger.kernel.org, David Gow <davidgow@google.com>,
+        Richard Weinberger <richard@nod.at>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 021/132] um: Cleanup syscall_handler_t definition/cast, fix warning
+Date:   Mon, 23 May 2022 19:03:50 +0200
+Message-Id: <20220523165827.024179835@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165830.581652127@linuxfoundation.org>
-References: <20220523165830.581652127@linuxfoundation.org>
+In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
+References: <20220523165823.492309987@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,43 +55,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Howard Chiu <howard_chiu@aspeedtech.com>
+From: David Gow <davidgow@google.com>
 
-[ Upstream commit 32e62d1beab70d485980013312e747a25c4e13f7 ]
+[ Upstream commit f4f03f299a56ce4d73c5431e0327b3b6cb55ebb9 ]
 
-This node was accidentally removed by commit 645afe73f951 ("ARM: dts:
-aspeed: ast2600: Update XDMA engine node").
+The syscall_handler_t type for x86_64 was defined as 'long (*)(void)',
+but always cast to 'long (*)(long, long, long, long, long, long)' before
+use. This now triggers a warning (see below).
 
-Fixes: 645afe73f951 ("ARM: dts: aspeed: ast2600: Update XDMA engine node")
-Signed-off-by: Howard Chiu <howard_chiu@aspeedtech.com>
-Link: https://lore.kernel.org/r/SG2PR06MB2315C57600A0132FEF40F21EE61E9@SG2PR06MB2315.apcprd06.prod.outlook.com
-Signed-off-by: Joel Stanley <joel@jms.id.au>
+Define syscall_handler_t as the latter instead, and remove the cast.
+This simplifies the code, and fixes the warning.
+
+Warning:
+In file included from ../arch/um/include/asm/processor-generic.h:13
+                 from ../arch/x86/um/asm/processor.h:41
+                 from ../include/linux/rcupdate.h:30
+                 from ../include/linux/rculist.h:11
+                 from ../include/linux/pid.h:5
+                 from ../include/linux/sched.h:14
+                 from ../include/linux/ptrace.h:6
+                 from ../arch/um/kernel/skas/syscall.c:7:
+../arch/um/kernel/skas/syscall.c: In function ‘handle_syscall’:
+../arch/x86/um/shared/sysdep/syscalls_64.h:18:11: warning: cast between incompatible function types from ‘long int (*)(void)’ to ‘long int (*)(long int,  long int,  long int,  long int,  long int,  long int)’ [
+-Wcast-function-type]
+   18 |         (((long (*)(long, long, long, long, long, long)) \
+      |           ^
+../arch/x86/um/asm/ptrace.h:36:62: note: in definition of macro ‘PT_REGS_SET_SYSCALL_RETURN’
+   36 | #define PT_REGS_SET_SYSCALL_RETURN(r, res) (PT_REGS_AX(r) = (res))
+      |                                                              ^~~
+../arch/um/kernel/skas/syscall.c:46:33: note: in expansion of macro ‘EXECUTE_SYSCALL’
+   46 |                                 EXECUTE_SYSCALL(syscall, regs));
+      |                                 ^~~~~~~~~~~~~~~
+
+Signed-off-by: David Gow <davidgow@google.com>
+Signed-off-by: Richard Weinberger <richard@nod.at>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/aspeed-g6.dtsi | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ arch/x86/um/shared/sysdep/syscalls_64.h | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm/boot/dts/aspeed-g6.dtsi b/arch/arm/boot/dts/aspeed-g6.dtsi
-index c32e87fad4dc..aac55b3aeded 100644
---- a/arch/arm/boot/dts/aspeed-g6.dtsi
-+++ b/arch/arm/boot/dts/aspeed-g6.dtsi
-@@ -389,6 +389,16 @@ sbc: secure-boot-controller@1e6f2000 {
- 				reg = <0x1e6f2000 0x1000>;
- 			};
+diff --git a/arch/x86/um/shared/sysdep/syscalls_64.h b/arch/x86/um/shared/sysdep/syscalls_64.h
+index 8a7d5e1da98e..1e6875b4ffd8 100644
+--- a/arch/x86/um/shared/sysdep/syscalls_64.h
++++ b/arch/x86/um/shared/sysdep/syscalls_64.h
+@@ -10,13 +10,12 @@
+ #include <linux/msg.h>
+ #include <linux/shm.h>
  
-+			video: video@1e700000 {
-+				compatible = "aspeed,ast2600-video-engine";
-+				reg = <0x1e700000 0x1000>;
-+				clocks = <&syscon ASPEED_CLK_GATE_VCLK>,
-+					 <&syscon ASPEED_CLK_GATE_ECLK>;
-+				clock-names = "vclk", "eclk";
-+				interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
-+				status = "disabled";
-+			};
-+
- 			gpio0: gpio@1e780000 {
- 				#gpio-cells = <2>;
- 				gpio-controller;
+-typedef long syscall_handler_t(void);
++typedef long syscall_handler_t(long, long, long, long, long, long);
+ 
+ extern syscall_handler_t *sys_call_table[];
+ 
+ #define EXECUTE_SYSCALL(syscall, regs) \
+-	(((long (*)(long, long, long, long, long, long)) \
+-	  (*sys_call_table[syscall]))(UPT_SYSCALL_ARG1(&regs->regs), \
++	(((*sys_call_table[syscall]))(UPT_SYSCALL_ARG1(&regs->regs), \
+ 		 		      UPT_SYSCALL_ARG2(&regs->regs), \
+ 				      UPT_SYSCALL_ARG3(&regs->regs), \
+ 				      UPT_SYSCALL_ARG4(&regs->regs), \
 -- 
 2.35.1
 

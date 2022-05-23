@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C72F531B6F
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37F335319E3
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:55:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239051AbiEWQ56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 12:57:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46904 "EHLO
+        id S238978AbiEWQ5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 12:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239261AbiEWQ4R (ORCPT
+        with ESMTP id S239182AbiEWQ4u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 12:56:17 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam07on2079.outbound.protection.outlook.com [40.107.95.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E43A65F8F
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:56:15 -0700 (PDT)
+        Mon, 23 May 2022 12:56:50 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2087.outbound.protection.outlook.com [40.107.92.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA17633E
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:56:41 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ileNYcI4qLGhV/s0zwWsI7rMfSD1VaQevzOcrXfee/2L9eCXTSHFHMikhC24WLiPdYnrtEx/O11P1dbYivayL0oL6f8IBeow1cMupbIv+RnQC5SuXUDo6JYAzi2O1mZWOM8c2+EJSTghscY/aSw43qnHh9agnhGDB1f+GfaRJ2woh+tVXVQo/6eW47uCxI+s3dtWFXIr1HKg7F8e2fwI8/fKmKc/KVDrw9TRi1PMmlrhLqaf5HQOb1hoxQSwyoPuqkclSBmPBgVI4lR4wur1edhND6sm5sol5gyRKUsQozqUtAYSq31jdLrRuwddrdwlQLLnRZctpMo1/tc5zFzX9g==
+ b=cLrxBFYrmo77BWsaynhVIwQjnRUa8/FVvD6ZiCr4uE5gsPRULLy518jMYzE3gZ/6DoFqIFqpDk2bwmmySTgogmWdaCbGwPfpzuEf81765rIWw3+wUcwoeLaTrrihkN2DGr9355yPahuwT17rQXKIJWo6B5BbLzDT2d/JWLJby6enJVbfXvdL8zpYGxZDDmusMQ01iAK3JIkG9X1vx6kF7mUXVa3ARxr7hgSwuw8preHZmiD/eJNxSDolbZSYSobShfoOmJ2bNp2k5yGjAX1I0fIFw/mqMwptXnUwltvcUwJrDsm/bO8L5jBGjDQ986VhN5O9KOtmq4IFSaeB5Vch1w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2V9pfQ6JcKKCq6e5z6MeS/fN0VcDARhcNY9Rgbrh0Qw=;
- b=ZjRvVXp7nLT5a5INYF2WQSE2zsdgfjKYsr1a0NNqewwnVPeyREGYrKYy+h7B8YN0DDhKUS7J8Nj2PZ4H7CUjsip315IhJ8/PxM5HszARwNehCsd/b4FmQnCjZJDKqgT8/YA2tQ8tTOtU0VZBmdTn2vSmAaOfjx8T3XG+CONjUQkb3uk+AGWAtH7bj5rL218q68yP+v+ZHpyFa2HswJl2q9zkbaXEaHM9n+0Dz0XKq2/r+sVi70Fi+q8bUZz4t0awoUX7sYl5EJzTrhJi+7tnfQ8oYzYyIubyV9BfB4qUJ1JI0Jy414fCW9ogDfmrtxWj7ub1H7u0ZnJcDexIFhy5CA==
+ bh=/TPC45Tr33vkG0ivyCsxJH22/1WUBsKGTw07yU2oNJA=;
+ b=aO6CGjnWtu8IKW+K4h3F5Ol99SgqkK/mYXzAfXTEqS46LZDNeD9ljtSgOUyx9CcbnhOTSYvA2KAQNp3OkjGtnH9nt4oi14t5C+ueTdkjGOWEgnGrtEabqNUtvYoCKHy5Xl4mb2ey/Nj/CEfpDf1Dp64xMxhgDBNkHO6yLGPFyW+4r2w7DRgt/p6iNn3gZcprNqQOD16aWEhX8frrNJd0YGMUlZQL1142CirQehOh6C8vKYYaKzX5WXQTw3MvzOV/qyrG71zoD5r87bn86aTm3S/LNuAWyBynLu6asdBErmp93fkIYX4RRmX2TcNSmEPnLuVpXHdpGxQsUrvdehQxww==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2V9pfQ6JcKKCq6e5z6MeS/fN0VcDARhcNY9Rgbrh0Qw=;
- b=Nm9P/0qxXrS3jtVE5WrpzPSpw36ACrHJdw6l6iaXCEfHjxuvxxyUyaloPJILAJ2SoyW4n01/ksUgDErg9Nzwlzbk9LKg/bZcNQpT6DyjtS9H7YhtKDmbbAgQnyH9oHdA9McISBU2JkVuasXH5X5k4grPYgMb8uhQlhdGMt6SnWs=
-Received: from DM3PR03CA0011.namprd03.prod.outlook.com (2603:10b6:0:50::21) by
- CY4PR1201MB2548.namprd12.prod.outlook.com (2603:10b6:903:d8::18) with
+ bh=/TPC45Tr33vkG0ivyCsxJH22/1WUBsKGTw07yU2oNJA=;
+ b=EH1SlQYIl5V5om25kpPNO3jVwodCv7f2ohohMSC/DnBU6WRybJve/nlIJPfPDhm87PJB4HHhKCVjoq8DAqtSQsTzB7AijriKEy+3MeXYR1l/Ku+ly1hCkcJitOypwxbI7mXtdSZeC3CPKeKLcQwoq3sYRpN2e/tJuG9Wc4ScFvA=
+Received: from DM6PR05CA0055.namprd05.prod.outlook.com (2603:10b6:5:335::24)
+ by MN2PR12MB3069.namprd12.prod.outlook.com (2603:10b6:208:c4::23) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.16; Mon, 23 May
- 2022 16:56:12 +0000
-Received: from DM6NAM11FT022.eop-nam11.prod.protection.outlook.com
- (2603:10b6:0:50:cafe::76) by DM3PR03CA0011.outlook.office365.com
- (2603:10b6:0:50::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.19 via Frontend
- Transport; Mon, 23 May 2022 16:56:12 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.17; Mon, 23 May
+ 2022 16:56:39 +0000
+Received: from DM6NAM11FT010.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:335:cafe::6a) by DM6PR05CA0055.outlook.office365.com
+ (2603:10b6:5:335::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.12 via Frontend
+ Transport; Mon, 23 May 2022 16:56:38 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -47,13 +47,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT022.mail.protection.outlook.com (10.13.172.210) with Microsoft SMTP
+ DM6NAM11FT010.mail.protection.outlook.com (10.13.172.222) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5273.14 via Frontend Transport; Mon, 23 May 2022 16:56:12 +0000
+ 15.20.5273.14 via Frontend Transport; Mon, 23 May 2022 16:56:39 +0000
 Received: from beas.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 23 May
- 2022 11:56:04 -0500
+ 2022 11:56:31 -0500
 From:   Wyes Karny <wyes.karny@amd.com>
 To:     <linux-kernel@vger.kernel.org>
 CC:     <Lewis.Carroll@amd.com>, <Mario.Limonciello@amd.com>,
@@ -68,10 +68,12 @@ CC:     <Lewis.Carroll@amd.com>, <Mario.Limonciello@amd.com>,
         <rafael.j.wysocki@intel.com>, <andrew.cooper3@citrix.com>,
         <jing2.liu@intel.com>, <jmattson@google.com>,
         <pawan.kumar.gupta@linux.intel.com>
-Subject: [PATCH v4 0/3] x86: Prefer MWAIT over HLT on AMD processors
-Date:   Mon, 23 May 2022 22:25:48 +0530
-Message-ID: <cover.7d2ba81d1918bbfd8ae5e6774db8da0502f7ed67.1653324016.git-series.wyes.karny@amd.com>
+Subject: [PATCH v4 1/3] x86: Handle idle=nomwait cmdline properly for x86_idle
+Date:   Mon, 23 May 2022 22:25:49 +0530
+Message-ID: <7e5a66c4d383652c89a0b5ec0f57e0a95902f810.1653324016.git-series.wyes.karny@amd.com>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <cover.7d2ba81d1918bbfd8ae5e6774db8da0502f7ed67.1653324016.git-series.wyes.karny@amd.com>
+References: <cover.7d2ba81d1918bbfd8ae5e6774db8da0502f7ed67.1653324016.git-series.wyes.karny@amd.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -80,24 +82,24 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: bfe738ff-18a6-4232-f703-08da3cdd24a8
-X-MS-TrafficTypeDiagnostic: CY4PR1201MB2548:EE_
-X-Microsoft-Antispam-PRVS: <CY4PR1201MB254897CE3F3879576EECE95D84D49@CY4PR1201MB2548.namprd12.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 343c36a5-7654-42d2-fc97-08da3cdd3466
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3069:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR12MB3069B858C9835B07185EA91C84D49@MN2PR12MB3069.namprd12.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: uUEsHuP3Jtlspd1+6KbjW0XkCUe/2IrexbmiSMV5HGXFjF96JqWN0csG9pbSkOGesTFbL42Lhex+3e23g2IbD967KHmWpPOsQbzAiWK2Y0oIC2nx1IbmXjWI+5p54mgDz2D6WYM34Oj9cw01yGGtpa77B3Hg+fhua4oVVsiSBS9ITU0qct17Hc4vT21xo4gLizNEySc8kVnewJVyu0zkIfHeh/tD8CIYs25FcJCN7kIqHyhGi8uvyAdqF4o/4NWPbCTjTQK3mYOuTbstoGgRVhAughZhC+DuU6kI3JM45HG6xPBpmpyLaulpuAeD4BnxQYGYlslrOi6Qjf3vw4g/TDHxvmW4Cw1OPxkyGqvyIsiju12LKCB4QdThqfbAkcDs95+LPdE/91teGVYWCudN7Q1WPmbwe6/V7o9Q4Aeb2NvhS57wQK/zP+xjH/VLzciLgb/y2pxiEDadH9UPelAtcY+tuC7FfimZ6v/uDkcy2cjjrBR9nMPfP0vqCZjt8adeB6AK8QFTWv7q7ORRBqBsNiSYCNMt/8nNczTx9SnrXWOeF47fNoVkxl2hoWhSUsL9zC58q3Gk9g2Zb0eS7GW1NqBDmMCeARVvwg3MPirgUjQZRNLUoh4osEUwabUBwSNFZnGBe0DRjbIpQl+P37COhWvwfqLJNFYbyyNFrCDDPi2EnBNq7YJRroByFU+wsTY769vDECC1MEBo+ftEP4d3XO3ag9JY7e2fU+pQXZsAoZZ8eQstVfiasI91Vw1FA7aEh+My3TXIgl6RdEUpTxx93zB3iVHnTcYnz87S06wN0ZWTyDHG2BkIRM8DfU2RudQ8K3GcVZYDyhVnpNKJlGYbdw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(86362001)(8676002)(26005)(81166007)(4326008)(6666004)(7696005)(966005)(2906002)(40460700003)(8936002)(83380400001)(508600001)(5660300002)(7416002)(356005)(44832011)(316002)(6916009)(186003)(36756003)(54906003)(16526019)(36860700001)(47076005)(70206006)(82310400005)(70586007)(336012)(426003)(2616005)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: tSNZQiLyF1FQVSYELKepHZCai1WmPIGOXpsySJAOZ3N3rQup0K+Qpm6E7lc1xSX/ZKX+JT2F5LAUCcc2fj6oABOCxiYYIIiIpZMy6kWfqr3Gt0P6RCWjoriIC95xb8Ur/IpGLVk5CJfsMALd6DmovRKSxGVB3bZRMm0zZrC/F5N5lZNv6s2MABHALvUNneLFGh+FKZFLbho1ETGWq3j+ktQKz3n8rZrozMiYlWp0DKRJJiFM7vM3cacyJrKMKltBG+bq8dbEkHR8ck+1nmGPJ5I/e+MTFLSQKuCDKr7mi7QfysiTufQYtXtQvdukefI4H+I0l8hA9jhmGmreRFlqaPU7PQ+sY3xkiKrg1PSNMK3TOKjs6/CNRcSwOYtF/FJ4FSE28I2NNOWs8X6Ik3Fgu5muj4jY55SbGmtELkyA1LUelxrFO8akpBxN5HY3/hH5/6hubifka+SvM11criKwR+8aki9AiTAbIkETt2yN8xix8Wgbca5yxK0R6LMWpP5AoCX4IwG/cvCf30NBO5F26wrt9EYEjiFfyU9iRRMoNVKIbwnXiL4oCeVkCpuCHE5FmVsb99eE29jQWUwaszkKcRebnUU0S1aXawkyEuGmqFTyt1R/UKm+98yR1GuaVLn843mhn31wA7DcuBv+WddM28KKH6+O8ZrFkDiXY+nScMwPJIUVezRyCZjUjlsVxuB41uyTPM+/4nYza4MPNY2Y7g==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(316002)(36756003)(4326008)(8676002)(356005)(6916009)(16526019)(70586007)(186003)(82310400005)(70206006)(81166007)(36860700001)(54906003)(7696005)(44832011)(8936002)(83380400001)(40460700003)(6666004)(2906002)(47076005)(426003)(336012)(86362001)(508600001)(26005)(7416002)(2616005)(5660300002)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2022 16:56:12.5901
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2022 16:56:39.0012
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: bfe738ff-18a6-4232-f703-08da3cdd24a8
+X-MS-Exchange-CrossTenant-Network-Message-Id: 343c36a5-7654-42d2-fc97-08da3cdd3466
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT022.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT010.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1201MB2548
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3069
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -108,153 +110,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a version 4 of the patchset to "Prefer MWAIT over HLT on AMD
-processors"
+When kernel is booted with idle=nomwait do not use MWAIT as the
+default idle state.
 
-The previous versions are:
-v3: https://lore.kernel.org/lkml/cover.fba143c82098dffab6bbf0a2f3c4be8bae07ccf1.1652176835.git-series.wyes.karny@amd.com/
-v2: https://lore.kernel.org/lkml/20220505104856.452311-1-wyes.karny@amd.com/
-v1: https://lore.kernel.org/lkml/20220405130021.557880-1-wyes.karny@amd.com/
+If the user boots the kernel with idle=nomwait, it is a clear
+direction to not use mwait as the default idle state.
+However, the current code does not take this into consideration
+while selecting the default idle state on x86.
 
-Changes between v3 --> v4:
+This patch fixes it by checking for the idle=nomwait boot option in
+prefer_mwait_c1_over_halt().
+
+Also update the documentation around idle=nomwait appropriately.
+
+Signed-off-by: Wyes Karny <wyes.karny@amd.com>
+---
+Changes in v4:
 - Update documentation around idle=nomwait
+- Rename patch subject
 
-Changes between v2 --> v3:
-- Update some text in commit messages
-- Update the documentation around idle=nomwait
-- Remove unnecessary CPUID level check from prefer_mwait_c1_over_halt function
+ Documentation/admin-guide/pm/cpuidle.rst | 15 +++++++++------
+ arch/x86/kernel/process.c                |  6 +++++-
+ 2 files changed, 14 insertions(+), 7 deletions(-)
 
-Background
-==========
-
-Currently in the absence of the cpuidle driver (eg: when global C-States are
-disabled in the BIOS or when cpuidle is driver is not compiled in), the default
-idle state on AMD Zen processors uses the HLT instruction even though there is
-support for MWAIT instruction which is more efficient than HLT.
-
-HPC customers who want to optimize for lower latency are known to disable
-Global C-States in the BIOS. Some vendors allow choosing a BIOS 'performance'
-profile which explicitly disables C-States. In this scenario, the cpuidle
-driver will not be loaded and the kernel will continue with the default idle
-state chosen at boot time. On AMD systems currently the default idle state is
-HLT which has a higher exit latency compared to MWAIT.
-
-The reason for the choice of HLT over MWAIT on AMD systems is:
-
-1. Families prior to 10h didn't support MWAIT
-2. Families 10h-15h supported MWAIT, but not MWAIT C1. Hence it was
-   preferable to use HLT as the default state on these systems.
-
-However, AMD Family 17h onwards supports MWAIT as well as MWAIT C1. And it is
-preferable to use MWAIT as the default idle state on these systems, as it has
-lower exit latencies.
-
-The below table represents the exit latency for HLT and MWAIT on AMD Zen 3
-system. Exit latency is measured by issuing a wakeup (IPI) to other CPU and
-measuring how many clock cycles it took to wakeup.  Each iteration measures 10K
-wakeups by pinning source and destination.
-
-HLT:
-
-25.0000th percentile  :      1900 ns
-50.0000th percentile  :      2000 ns
-75.0000th percentile  :      2300 ns
-90.0000th percentile  :      2500 ns
-95.0000th percentile  :      2600 ns
-99.0000th percentile  :      2800 ns
-99.5000th percentile  :      3000 ns
-99.9000th percentile  :      3400 ns
-99.9500th percentile  :      3600 ns
-99.9900th percentile  :      5900 ns
-  Min latency         :      1700 ns
-  Max latency         :      5900 ns
-Total Samples      9999
-
-MWAIT:
-
-25.0000th percentile  :      1400 ns
-50.0000th percentile  :      1500 ns
-75.0000th percentile  :      1700 ns
-90.0000th percentile  :      1800 ns
-95.0000th percentile  :      1900 ns
-99.0000th percentile  :      2300 ns
-99.5000th percentile  :      2500 ns
-99.9000th percentile  :      3200 ns
-99.9500th percentile  :      3500 ns
-99.9900th percentile  :      4600 ns
-  Min latency         :      1200 ns
-  Max latency         :      4600 ns
-Total Samples      9997
-
-Improvement (99th percentile): 21.74%
-
-Below is another result for context_switch2 micro-benchmark, which brings out
-the impact of improved wakeup latency through increased context-switches per
-second.
-
-Link: https://ozlabs.org/~anton/junkcode/context_switch2.c
-
-with HLT:
--------------------------------
-50.0000th percentile  :  190184
-75.0000th percentile  :  191032
-90.0000th percentile  :  192314
-95.0000th percentile  :  192520
-99.0000th percentile  :  192844
-MIN  :  190148
-MAX  :  192852
-
-with MWAIT:
--------------------------------
-50.0000th percentile  :  277444
-75.0000th percentile  :  278268
-90.0000th percentile  :  278888
-95.0000th percentile  :  279164
-99.0000th percentile  :  280504
-MIN  :  273278
-MAX  :  281410
-
-Improvement(99th percentile): ~ 45.46%
-
-A similar trend is observed on older Zen processors also.
-
-Here we enable MWAIT instruction as the default idle call for AMD Zen
-processors which support MWAIT. We retain the existing behaviour for older
-processors which depend on HLT.
-
-This patchset restores the decision tree that was present in the kernel earlier
-due to Thomas Gleixner's patch: commit 09fd4b4ef5bc ("x86: use cpuid to check
-MWAIT support for C1")
-
-NOTE: This change only impacts the default idle behaviour in the absence of
-cpuidle driver. If the cpuidle driver is present, it controls the processor
-idle behaviour.
-
-Fixes: commit b253149b843f ("sched/idle/x86: Restore mwait_idle() to fix boot hangs, to improve power savings and to improve performance")
-
-Changelog:
-v4:
-- Update documetation around idle=nomwait
-v3:
-- Update documentation around idle=nomwait
-- Remove unnecessary CPUID check from prefer_mwait_c1_over_halt function
-v2:
-- Remove vendor checks, fix idle=nomwait condition, fix documentation
-
-Zhang Rui from Intel confirmed that this patchset has no impact on
-modern Intel processors.
-
-Wyes Karny (3):
-  x86: Handle idle=nomwait cmdline properly for x86_idle
-  x86: Remove vendor checks from prefer_mwait_c1_over_halt
-  x86: Fix comment for X86_FEATURE_ZEN
-
- Documentation/admin-guide/pm/cpuidle.rst | 15 +++++----
- arch/x86/include/asm/cpufeatures.h       |  2 +-
- arch/x86/include/asm/mwait.h             |  1 +-
- arch/x86/kernel/process.c                | 41 ++++++++++++++++++-------
- 4 files changed, 41 insertions(+), 18 deletions(-)
-
-base-commit: 672c0c5173427e6b3e2a9bbb7be51ceeec78093a
+diff --git a/Documentation/admin-guide/pm/cpuidle.rst b/Documentation/admin-guide/pm/cpuidle.rst
+index aec2cd2aaea7..19754beb5a4e 100644
+--- a/Documentation/admin-guide/pm/cpuidle.rst
++++ b/Documentation/admin-guide/pm/cpuidle.rst
+@@ -612,8 +612,8 @@ the ``menu`` governor to be used on the systems that use the ``ladder`` governor
+ by default this way, for example.
+ 
+ The other kernel command line parameters controlling CPU idle time management
+-described below are only relevant for the *x86* architecture and some of
+-them affect Intel processors only.
++described below are only relevant for the *x86* architecture and references
++to ``intel_idle`` affect Intel processors only.
+ 
+ The *x86* architecture support code recognizes three kernel command line
+ options related to CPU idle time management: ``idle=poll``, ``idle=halt``,
+@@ -635,10 +635,13 @@ idle, so it very well may hurt single-thread computations performance as well as
+ energy-efficiency.  Thus using it for performance reasons may not be a good idea
+ at all.]
+ 
+-The ``idle=nomwait`` option disables the ``intel_idle`` driver and causes
+-``acpi_idle`` to be used (as long as all of the information needed by it is
+-there in the system's ACPI tables), but it is not allowed to use the
+-``MWAIT`` instruction of the CPUs to ask the hardware to enter idle states.
++The ``idle=nomwait`` option prevents the use of ``MWAIT`` instruction of
++the CPU to enter idle states. When this option is used, the ``acpi_idle``
++driver will use the ``HLT`` instruction instead of ``MWAIT``. On systems
++running Intel processors, this option disables the ``intel_idle`` driver
++and forces the use of the ``acpi_idle`` driver instead. Note that in either
++case, ``acpi_idle`` driver will function only if all the information needed
++by it is in the system's ACPI tables.
+ 
+ In addition to the architecture-level kernel command line options affecting CPU
+ idle time management, there are parameters affecting individual ``CPUIdle``
+diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+index b370767f5b19..4e0178b066c5 100644
+--- a/arch/x86/kernel/process.c
++++ b/arch/x86/kernel/process.c
+@@ -824,6 +824,10 @@ static void amd_e400_idle(void)
+  */
+ static int prefer_mwait_c1_over_halt(const struct cpuinfo_x86 *c)
+ {
++	/* User has disallowed the use of MWAIT. Fallback to HALT */
++	if (boot_option_idle_override == IDLE_NOMWAIT)
++		return 0;
++
+ 	if (c->x86_vendor != X86_VENDOR_INTEL)
+ 		return 0;
+ 
+@@ -932,7 +936,7 @@ static int __init idle_setup(char *str)
+ 	} else if (!strcmp(str, "nomwait")) {
+ 		/*
+ 		 * If the boot option of "idle=nomwait" is added,
+-		 * it means that mwait will be disabled for CPU C2/C3
++		 * it means that mwait will be disabled for CPU C1/C2/C3
+ 		 * states. In such case it won't touch the variable
+ 		 * of boot_option_idle_override.
+ 		 */
 -- 
 git-series 0.9.1

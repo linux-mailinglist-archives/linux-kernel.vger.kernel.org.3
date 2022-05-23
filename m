@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBFAA531C70
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:57:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1379753185A
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:54:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240276AbiEWRfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:35:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42950 "EHLO
+        id S240123AbiEWRR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:17:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239960AbiEWRZS (ORCPT
+        with ESMTP id S239958AbiEWRN4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:25:18 -0400
+        Mon, 23 May 2022 13:13:56 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CCE48214A;
-        Mon, 23 May 2022 10:20:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 408E26D4EF;
+        Mon, 23 May 2022 10:12:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 82A7AB81217;
-        Mon, 23 May 2022 17:20:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAFBEC385A9;
-        Mon, 23 May 2022 17:20:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 233E8B811FE;
+        Mon, 23 May 2022 17:12:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 834B5C385A9;
+        Mon, 23 May 2022 17:12:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326439;
-        bh=Nqz1vXcg2NL+O3XnHI9CbR4iquIx76mV9E8LxFRKNFA=;
+        s=korg; t=1653325936;
+        bh=z+Jn+M7wh7vmsuLFk1mgAF1yMw1bwX154BNorZBOq6A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JIQoOLXGKg4qb3zxbalN4lHh5TDGHJKhCoZTT+kY1CNiFnDmhrfGXTHdWrGYDMB+Y
-         bClmubh/dA/Yw1e1rW7pRgnYrDE2eTHOE1bSSJzMuLvJubXkXfiQfCSMfaomldP7rR
-         VBr8Q2Me4l9LB3yO0PKPoY7GuVrOYGooHh3jfe9w=
+        b=KHy6gVZqS5ddpki6H3xleJXypJzmI1DqBwUlp+C+9+6Nrh2K34uoaGteMsbld76Lm
+         js+QkN/voeB3ne26vv71WmagzeF2H6aehmcKUfHw83hatkvOiDHqLrrj+m3bYB+/as
+         4uigITQAlxFNjVIxnd9yEYoy1Hx8rMM/XBw38ahI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>,
-        syzbot+8ed8fc4c57e9dcf23ca6@syzkaller.appspotmail.com
-Subject: [PATCH 5.15 074/132] net/sched: act_pedit: sanitize shift argument before usage
+        stable@vger.kernel.org, Lin Yujun <linyujun809@huawei.com>,
+        He Ying <heying24@huawei.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 16/68] ARM: 9191/1: arm/stacktrace, kasan: Silence KASAN warnings in unwind_frame()
 Date:   Mon, 23 May 2022 19:04:43 +0200
-Message-Id: <20220523165835.393328118@linuxfoundation.org>
+Message-Id: <20220523165805.290228687@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
-References: <20220523165823.492309987@linuxfoundation.org>
+In-Reply-To: <20220523165802.500642349@linuxfoundation.org>
+References: <20220523165802.500642349@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,82 +56,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paolo Abeni <pabeni@redhat.com>
+From: linyujun <linyujun809@huawei.com>
 
-[ Upstream commit 4d42d54a7d6aa6d29221d3fd4f2ae9503e94f011 ]
+[ Upstream commit 9be4c88bb7924f68f88cfd47d925c2d046f51a73 ]
 
-syzbot was able to trigger an Out-of-Bound on the pedit action:
+The following KASAN warning is detected by QEMU.
 
-UBSAN: shift-out-of-bounds in net/sched/act_pedit.c:238:43
-shift exponent 1400735974 is too large for 32-bit type 'unsigned int'
-CPU: 0 PID: 3606 Comm: syz-executor151 Not tainted 5.18.0-rc5-syzkaller-00165-g810c2f0a3f86 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- ubsan_epilogue+0xb/0x50 lib/ubsan.c:151
- __ubsan_handle_shift_out_of_bounds.cold+0xb1/0x187 lib/ubsan.c:322
- tcf_pedit_init.cold+0x1a/0x1f net/sched/act_pedit.c:238
- tcf_action_init_1+0x414/0x690 net/sched/act_api.c:1367
- tcf_action_init+0x530/0x8d0 net/sched/act_api.c:1432
- tcf_action_add+0xf9/0x480 net/sched/act_api.c:1956
- tc_ctl_action+0x346/0x470 net/sched/act_api.c:2015
- rtnetlink_rcv_msg+0x413/0xb80 net/core/rtnetlink.c:5993
- netlink_rcv_skb+0x153/0x420 net/netlink/af_netlink.c:2502
- netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
- netlink_unicast+0x543/0x7f0 net/netlink/af_netlink.c:1345
- netlink_sendmsg+0x904/0xe00 net/netlink/af_netlink.c:1921
- sock_sendmsg_nosec net/socket.c:705 [inline]
- sock_sendmsg+0xcf/0x120 net/socket.c:725
- ____sys_sendmsg+0x6e2/0x800 net/socket.c:2413
- ___sys_sendmsg+0xf3/0x170 net/socket.c:2467
- __sys_sendmsg+0xe5/0x1b0 net/socket.c:2496
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7fe36e9e1b59
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffef796fe88 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fe36e9e1b59
-RDX: 0000000000000000 RSI: 0000000020000300 RDI: 0000000000000003
-RBP: 00007fe36e9a5d00 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007fe36e9a5d90
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
+==================================================================
+BUG: KASAN: stack-out-of-bounds in unwind_frame+0x508/0x870
+Read of size 4 at addr c36bba90 by task cat/163
 
-The 'shift' field is not validated, and any value above 31 will
-trigger out-of-bounds. The issue predates the git history, but
-syzbot was able to trigger it only after the commit mentioned in
-the fixes tag, and this change only applies on top of such commit.
+CPU: 1 PID: 163 Comm: cat Not tainted 5.10.0-rc1 #40
+Hardware name: ARM-Versatile Express
+[<c0113fac>] (unwind_backtrace) from [<c010e71c>] (show_stack+0x10/0x14)
+[<c010e71c>] (show_stack) from [<c0b805b4>] (dump_stack+0x98/0xb0)
+[<c0b805b4>] (dump_stack) from [<c0b7d658>] (print_address_description.constprop.0+0x58/0x4bc)
+[<c0b7d658>] (print_address_description.constprop.0) from [<c031435c>] (kasan_report+0x154/0x170)
+[<c031435c>] (kasan_report) from [<c0113c44>] (unwind_frame+0x508/0x870)
+[<c0113c44>] (unwind_frame) from [<c010e298>] (__save_stack_trace+0x110/0x134)
+[<c010e298>] (__save_stack_trace) from [<c01ce0d8>] (stack_trace_save+0x8c/0xb4)
+[<c01ce0d8>] (stack_trace_save) from [<c0313520>] (kasan_set_track+0x38/0x60)
+[<c0313520>] (kasan_set_track) from [<c0314cb8>] (kasan_set_free_info+0x20/0x2c)
+[<c0314cb8>] (kasan_set_free_info) from [<c0313474>] (__kasan_slab_free+0xec/0x120)
+[<c0313474>] (__kasan_slab_free) from [<c0311e20>] (kmem_cache_free+0x7c/0x334)
+[<c0311e20>] (kmem_cache_free) from [<c01c35dc>] (rcu_core+0x390/0xccc)
+[<c01c35dc>] (rcu_core) from [<c01013a8>] (__do_softirq+0x180/0x518)
+[<c01013a8>] (__do_softirq) from [<c0135214>] (irq_exit+0x9c/0xe0)
+[<c0135214>] (irq_exit) from [<c01a40e4>] (__handle_domain_irq+0xb0/0x110)
+[<c01a40e4>] (__handle_domain_irq) from [<c0691248>] (gic_handle_irq+0xa0/0xb8)
+[<c0691248>] (gic_handle_irq) from [<c0100b0c>] (__irq_svc+0x6c/0x94)
+Exception stack(0xc36bb928 to 0xc36bb970)
+b920:                   c36bb9c0 00000000 c0126919 c0101228 c36bb9c0 b76d7730
+b940: c36b8000 c36bb9a0 c3335b00 c01ce0d8 00000003 c36bba3c c36bb940 c36bb978
+b960: c010e298 c011373c 60000013 ffffffff
+[<c0100b0c>] (__irq_svc) from [<c011373c>] (unwind_frame+0x0/0x870)
+[<c011373c>] (unwind_frame) from [<00000000>] (0x0)
 
-Address the issue bounding the 'shift' value to the maximum allowed
-by the relevant operator.
+The buggy address belongs to the page:
+page:(ptrval) refcount:0 mapcount:0 mapping:00000000 index:0x0 pfn:0x636bb
+flags: 0x0()
+raw: 00000000 00000000 ef867764 00000000 00000000 00000000 ffffffff 00000000
+page dumped because: kasan: bad access detected
 
-Reported-and-tested-by: syzbot+8ed8fc4c57e9dcf23ca6@syzkaller.appspotmail.com
-Fixes: 8b796475fd78 ("net/sched: act_pedit: really ensure the skb is writable")
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+addr c36bba90 is located in stack of task cat/163 at offset 48 in frame:
+ stack_trace_save+0x0/0xb4
+
+this frame has 1 object:
+ [32, 48) 'trace'
+
+Memory state around the buggy address:
+ c36bb980: f1 f1 f1 f1 00 04 f2 f2 00 00 f3 f3 00 00 00 00
+ c36bba00: 00 00 00 00 00 00 00 00 00 00 00 00 f1 f1 f1 f1
+>c36bba80: 00 00 f3 f3 00 00 00 00 00 00 00 00 00 00 00 00
+                 ^
+ c36bbb00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ c36bbb80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+==================================================================
+
+There is a same issue on x86 and has been resolved by the commit f7d27c35ddff
+("x86/mm, kasan: Silence KASAN warnings in get_wchan()").
+The solution could be applied to arm architecture too.
+
+Signed-off-by: Lin Yujun <linyujun809@huawei.com>
+Reported-by: He Ying <heying24@huawei.com>
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/sched/act_pedit.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/arm/kernel/stacktrace.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/net/sched/act_pedit.c b/net/sched/act_pedit.c
-index cfadd613644a..1262a84b725f 100644
---- a/net/sched/act_pedit.c
-+++ b/net/sched/act_pedit.c
-@@ -232,6 +232,10 @@ static int tcf_pedit_init(struct net *net, struct nlattr *nla,
- 	for (i = 0; i < p->tcfp_nkeys; ++i) {
- 		u32 cur = p->tcfp_keys[i].off;
+diff --git a/arch/arm/kernel/stacktrace.c b/arch/arm/kernel/stacktrace.c
+index db798eac7431..824774999825 100644
+--- a/arch/arm/kernel/stacktrace.c
++++ b/arch/arm/kernel/stacktrace.c
+@@ -53,17 +53,17 @@ int notrace unwind_frame(struct stackframe *frame)
+ 		return -EINVAL;
  
-+		/* sanitize the shift value for any later use */
-+		p->tcfp_keys[i].shift = min_t(size_t, BITS_PER_TYPE(int) - 1,
-+					      p->tcfp_keys[i].shift);
-+
- 		/* The AT option can read a single byte, we can bound the actual
- 		 * value with uchar max.
- 		 */
+ 	frame->sp = frame->fp;
+-	frame->fp = *(unsigned long *)(fp);
+-	frame->pc = *(unsigned long *)(fp + 4);
++	frame->fp = READ_ONCE_NOCHECK(*(unsigned long *)(fp));
++	frame->pc = READ_ONCE_NOCHECK(*(unsigned long *)(fp + 4));
+ #else
+ 	/* check current frame pointer is within bounds */
+ 	if (fp < low + 12 || fp > high - 4)
+ 		return -EINVAL;
+ 
+ 	/* restore the registers from the stack frame */
+-	frame->fp = *(unsigned long *)(fp - 12);
+-	frame->sp = *(unsigned long *)(fp - 8);
+-	frame->pc = *(unsigned long *)(fp - 4);
++	frame->fp = READ_ONCE_NOCHECK(*(unsigned long *)(fp - 12));
++	frame->sp = READ_ONCE_NOCHECK(*(unsigned long *)(fp - 8));
++	frame->pc = READ_ONCE_NOCHECK(*(unsigned long *)(fp - 4));
+ #endif
+ 
+ 	return 0;
 -- 
 2.35.1
 

@@ -2,170 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34688531ED7
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 00:51:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADC3B531EDD
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 00:51:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231724AbiEWWvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 18:51:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56312 "EHLO
+        id S231742AbiEWWvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 18:51:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbiEWWvO (ORCPT
+        with ESMTP id S231723AbiEWWvu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 18:51:14 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 433361003
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 15:51:12 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id h5so22165352wrb.11
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 15:51:12 -0700 (PDT)
+        Mon, 23 May 2022 18:51:50 -0400
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F076764D05
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 15:51:48 -0700 (PDT)
+Received: by mail-qv1-xf2d.google.com with SMTP id y20so13105524qvx.3
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 15:51:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=tNZwUkKZtlmZ14jNWylohEgLi2zUCj6Z0VWU+7uDZNM=;
-        b=r+jnJOIBusH635WqI8fbwufkzACI9oCjiSIfKUDvHLseBJPHh9vUSZlWtwSH8Sydl+
-         p0/3xnIcp17otnrYR/qZYEtr6fCmmo/gji7kOUYPP6UyvM1lhwAZhAh+PfEezkRw1I+b
-         0l+aqABzU+E1xxYyggSXp2yt3nt7hQt8aIVYsfT0XMAZIcoUsbXMGNq3dYHqcSyQidme
-         Y+uNXLp/WE5SR/6z9aJrefZIBRRQrknYRS8H+rvGVbIqlCI6X3PKndf5zmU9QieV6U0v
-         r4hmfFl33JKtb0OxMQi2LHy5P1cGQYOlOTDCinO58dnFAPIIEWMTyKmgebufRzp65StN
-         2U6g==
+        bh=3vcI1skfMKoqTzgW6PwoPYdHQpeyuuPuHAsg8j4YyY0=;
+        b=SK9Ai50QmK6g6drZEH6TCZVx1ybdkR30gnwYdm8OX2MZCjPFMpadH8tfGN3bx+9Td/
+         JV4EOdx30Sjs+Wg+3M4XzuL+MmICDQvxsjNn2upQIy/Cr3xj68l6ozh5NDZaEZ1s1MhM
+         TP2EZ2UeFyTtIUDrq0OkG13phXlQ3YEFq2qdYhlMDss/hhT0i37Q23MzydGmfgrwxVVD
+         1Ynl64Hw5+VjP6MxxOe8LC+afzQGyF94jDraJmba/Q9zz0VC4aa7Y7boG0hwCN5gTW2x
+         eABDT1He8d4kgRdJTTSaINbiF16ijulZOPa6HhTqFr7VSpwqjfwhDTQs328T9QCkXIj2
+         8nrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=tNZwUkKZtlmZ14jNWylohEgLi2zUCj6Z0VWU+7uDZNM=;
-        b=t+KxhMivCuNwipQpKUkPYqiHibmM6yc39lidK1ljPAlSSnqnWE/rhhW1gwWjC16zB3
-         DBFQfdWpWNgwvLGrx2tX3ZyV4O0v1Jnbm1PKMH7rLtztlQNetuzkXtbIly19vLCK5hMN
-         LPot1Pyo0tma6FnMJgPbDl+liYi7xwU2tTM8egbVky1Nuvk940tzzVXmGNYlTkvuhzAA
-         HWWxZCVLTfIs7g1/4+jjAVDBSGIdKx7RmEYvSHif/xjGxUI1zBHrHZYV+brnlg1Ws8Js
-         WE18kdSpBpcNMFdwnG1flWLQnxY+7TU85dfxJ3CrdHggsv9faSivzvlwV196D67L0Cg2
-         b72w==
-X-Gm-Message-State: AOAM530oXB6ihaT8bAXh+v5wvVdHsoOEojCzPW9Ve4lFuy4uFZdZt+wt
-        PN/Vs7GkWxnK4jfQFdrsebnsZ4N6MDJuW3+lp9KNzQ==
-X-Google-Smtp-Source: ABdhPJwNWihoJDJtk6stNWiKlnvaBN9W1TfY/EaTKT4C/wu5BxD5tfoShvs5v+/05rendS8OylZaKLqH68mkRbWu7qY=
-X-Received: by 2002:a05:6000:1548:b0:20f:c4bb:defd with SMTP id
- 8-20020a056000154800b0020fc4bbdefdmr11656246wry.210.1653346270703; Mon, 23
- May 2022 15:51:10 -0700 (PDT)
+        bh=3vcI1skfMKoqTzgW6PwoPYdHQpeyuuPuHAsg8j4YyY0=;
+        b=G/vSwEGUPvSaZhYJqEmvwhoyvVAJq1qz+1USsjaYE1lenTZHFoXbrlCa6bM2vCbNDH
+         gfsAncltCI+LyKPySO/Fr+R6Y9xZ1dk9S3I1efglWW3xVSfxdxTZ3sEODSk6LuPCBc3t
+         ZcrnVBz1miXGHgpPFFM5KrPdtGDc4J6NjFMHiJl2j0Is1StlO3P9JE5uCpJdpUMErEEh
+         uECkuruLaRsM1+J7d+hVpmtDmiKoO42g0xbqTomz+eHaOrtpGJi464ab1LnHhXb+qo43
+         krNenMqvmWyhPX6SHgLF052zN2C8r4hWTc2YjbDtgJSeRaxP5tnSRgeeknzROFfHN0bT
+         IRgw==
+X-Gm-Message-State: AOAM532dCRd43gW1hL2v8fW62UgA8SAIDLIMgl/8o9pG1v9NvrTekBLO
+        BQ7wIIwoj8QywWKlAx3XhxbE1tIT9A33h5qDMoREYw==
+X-Google-Smtp-Source: ABdhPJwMUeQdsntLd2uLatzH66lXWsSEabtV+kiZYKsXgWX2xbdL3qvvkkPq6NF2azOSQPNRYAvN0l9Dt1B7OzOioVM=
+X-Received: by 2002:ad4:5f4e:0:b0:462:3d31:6faf with SMTP id
+ p14-20020ad45f4e000000b004623d316fafmr5677472qvg.119.1653346308200; Mon, 23
+ May 2022 15:51:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220518223815.809858-1-vaibhav@linux.ibm.com>
- <YoYj4sLJfGke5IGT@dhcp22.suse.cz> <87zgjcg4xs.fsf@vajain21.in.ibm.com> <YodDaFVeU33bu7yQ@dhcp22.suse.cz>
-In-Reply-To: <YodDaFVeU33bu7yQ@dhcp22.suse.cz>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Mon, 23 May 2022 15:50:34 -0700
-Message-ID: <CAJD7tkYwv2LDZeV2F5pxuniw7LCNjBapDCm3WuRhzwTH-jN3PA@mail.gmail.com>
-Subject: Re: [PATCH] memcg: provide reclaim stats via 'memory.reclaim'
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Vaibhav Jain <vaibhav@linux.ibm.com>,
-        Cgroups <cgroups@vger.kernel.org>, linux-doc@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        Shakeel Butt <shakeelb@google.com>
+References: <20220523213837.1016542-1-marijn.suijten@somainline.org> <20220523213837.1016542-9-marijn.suijten@somainline.org>
+In-Reply-To: <20220523213837.1016542-9-marijn.suijten@somainline.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Tue, 24 May 2022 01:51:37 +0300
+Message-ID: <CAA8EJpoPv_J=hpc9ETjngyAxxqJYvSFtJUgu3U3r6n8JNMuJWQ@mail.gmail.com>
+Subject: Re: [PATCH 8/9] drm/msm/dsi_phy_10nm: Replace parent names with
+ clk_hw pointers
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     phone-devel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rajeev Nandan <quic_rajeevny@quicinc.com>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Marek <jonathan@marek.ca>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        Stephen Boyd <swboyd@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 12:29 AM Michal Hocko <mhocko@suse.com> wrote:
+On Tue, 24 May 2022 at 00:38, Marijn Suijten
+<marijn.suijten@somainline.org> wrote:
 >
-> On Fri 20-05-22 10:45:43, Vaibhav Jain wrote:
-> >
-> > Thanks for looking into this patch Michal,
-> >
-> > Michal Hocko <mhocko@suse.com> writes:
-> >
-> > > On Thu 19-05-22 04:08:15, Vaibhav Jain wrote:
-> > >> [1] Provides a way for user-space to trigger proactive reclaim by introducing
-> > >> a write-only memcg file 'memory.reclaim'. However reclaim stats like number
-> > >> of pages scanned and reclaimed is still not directly available to the
-> > >> user-space.
-> > >>
-> > >> This patch proposes to extend [1] to make the memcg file 'memory.reclaim'
-> > >> readable which returns the number of pages scanned / reclaimed during the
-> > >> reclaim process from 'struct vmpressure' associated with each memcg. This should
-> > >> let user-space asses how successful proactive reclaim triggered from memcg
-> > >> 'memory.reclaim' was ?
-> > >>
-> > >> With the patch following command flow is expected:
-> > >>
-> > >>  # echo "1M" > memory.reclaim
-> > >>
-> > >>  # cat memory.reclaim
-> > >>    scanned 76
-> > >>    reclaimed 32
-> > >
-> > > Why cannot you use memory.stat? Sure it would require to iterate over
-> > > the reclaimed hierarchy but the information about scanned and reclaimed
-> > > pages as well as other potentially useful stats is there.
-> >
-> > Agree that "memory.stat" is more suitable for scanned/reclaimed stats as
-> > it already is exposing bunch of other stats.
-> >
-> > The discussion on this patch however seems to have split into two parts:
-> >
-> > 1. Is it a good idea to expose nr_scanned/nr_reclaimed to users-space
-> > and if yes how ?
-> >
-> > IMHO, I think it will be better to expose this info via 'memory.stat' as it
-> > can be useful insight into the reclaim efficiency  and vmpressure.
+> parent_hw pointers are easier to manage and cheaper to use than
+> repeatedly formatting the parent name and subsequently leaving the clk
+> framework to perform lookups based on that name.
 >
-> We already do that with some more metrics
-> pgrefill 9801926
-> pgscan 27329762
-> pgsteal 22715987
-> pgactivate 250691267
-> pgdeactivate 9521843
-> pglazyfree 0
-> pglazyfreed 0
->
-> > 2. Will it be useful to provide feedback to userspace when it writes to
-> > 'memory.reclaim' on how much memory has been reclaimed ?
-> >
-> > IMHO, this will be a useful feeback to userspace to better adjust future
-> > proactive reclaim requests via 'memory.reclaim'
->
-> How precise this information should be? A very simplistic approach would
-> be
-> cp memory.stat stats.before
-> echo $WHATEVER > memory.reclaim
-> cp memory.stat stats.after
->
-> This will obviously contain also activity outside of the explicitly
-> triggered reclaim (racing background/direct reclaim) but isn't that what
-> actually matters? Are there any cases where the only metric you care
-> about is the triggered reclaim in isolation?
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
 
-I think it might be useful to have a dedicated entry in memory.stat
-for proactively reclaimed memory. A case where this would be useful is
-tuning and evaluating userspace proactive reclaimers. For instance, if
-a userspace agent is asking the kernel to reclaim 100M, but it could
-only reclaim 10M, then most probably the proactive reclaimer is not
-using a good methodology to figure out how much memory do we need to
-reclaim.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-IMO this is more useful, and a superset of just reading the last
-reclaim request status through memory.reclaim (read stat before and
-after).
-
-Additionally, things get complicated if the userspace agent is
-multi-threaded. For a cumulative entry in memory.stat, it shouldn't
-matter by a lot as we are looking at the total for all threads
-cumulatively anyway. If we are only reading the memory reclaimed in
-the last request (through memory.reclaim), then we can easily get the
-results of a request that happened on a different thread.
-
+> ---
+>  drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c | 92 ++++++++++------------
+>  1 file changed, 40 insertions(+), 52 deletions(-)
 >
-> --
-> Michal Hocko
-> SUSE Labs
+
+-- 
+With best wishes
+Dmitry

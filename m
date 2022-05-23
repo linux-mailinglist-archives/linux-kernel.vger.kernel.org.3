@@ -2,151 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52D7A530A43
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 10:00:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BD73530A85
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 10:01:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230235AbiEWHjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 03:39:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38884 "EHLO
+        id S229937AbiEWHjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 03:39:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbiEWHjH (ORCPT
+        with ESMTP id S230213AbiEWHjS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 03:39:07 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D818F13DF9;
-        Mon, 23 May 2022 00:39:04 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id w200so12924942pfc.10;
-        Mon, 23 May 2022 00:39:04 -0700 (PDT)
+        Mon, 23 May 2022 03:39:18 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC431A80F
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 00:39:13 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id s5so16141817ljd.10
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 00:39:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=FDKEez4LL/T5vz5sGrr37Im2D5hBP4Hr0638TS/hH4w=;
-        b=qWlHQua1NGt2HLFYqYJKMsocOeNT5XL7JjMoe7VhhejqbWyffuDbiIez8cPfKAxmM9
-         zDzEZFcT2zR4bCq+EWZsWu1QtweEij42nIPNEFCbFcGVcQWCXteZnFWG395yQ+qTUkW7
-         fyPoux3wi9J8M0JJ5ASaZx/VXgyGTNvg6xcuVt59pyFzXc0O5pXG0PlSEONemYH2Q8zI
-         fHZk8/2mkBkogsgh1+hEcGkBr8jlGLOOsNSkS/YQicDZEEkucvUvaO0qY1ckiB4qUmF+
-         p+MyyiacObjIhVqW82sEBPtfXxNe7XF3RPLShb3OKc/hzDIrX/oHw/nzHDqYnWxOHtSN
-         ARZw==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=2o0hO8VxGZyOj9xdhEYgL8kZWVgpy5fzSg0aJgogftY=;
+        b=oTlafLq1Et1sqIk16m6DA+jCJFRlO1codjbSN1yIOqPNsC/hH97jn05NIguWsQsgDv
+         MWeWoI2vv9UbV3FkkFH8LRfKOud/5OOHhGZzSyiaRoZ4yq9pf4d9XglXpLwtFhbwxx3h
+         l/MntMA7PuEhdGnWm9xpPY0CELq4x2ndZJmpM6TyRaFCPZ/8baO/9gBuYiHVSGFPS1jm
+         b3KtJKIKCIsC+aHkFf8PcAu100fKNg2B8/yOoC4Ot+GFOGJuZroHrRLSGC770sv8mRIp
+         QTGJT7iEIsDef/Fmtvyt1PfVDHLqAtEk7gs9OuxZND4nvEsGXsjKCbb7lWb0Matyrg/4
+         l6Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=FDKEez4LL/T5vz5sGrr37Im2D5hBP4Hr0638TS/hH4w=;
-        b=jAq0E6xaiOxYu+DrCX6bwVPp03TEfMWW47RToubd/jJBJGx5BXGhsqO5gH1dV1Em3Q
-         YQacqGneqVE8a3meBbQUzdKzHywA/RR87nz89TbSZBxfAECBIgoxLLfZJrMadlUFIVZq
-         KdqhcKUNzmBPAGeDLIFXJ4hPeMGYTdKBJEZUEGx/uMRqhznUMUtWRKqpv+6k6j0qT49d
-         C0fxMshEoYO2ZE/OWeM8yb2vyp71oyIb3uOf9p5V57nMZ0fh4e1bMWn8FQtGD+HuU/i4
-         oNWasB9vNRQSFlWy9jqWHChKGKwbnz3yYrSj7eVTTBhRELOj4VfhBY1LXHeZGkyhHX0S
-         wRnw==
-X-Gm-Message-State: AOAM5333lIvDZZ+1nwZVS7WRUjdVh10mbRaXk6ODaSkqnozKEPgSQzAG
-        +MqKjtKv59XjNKkioDjlM/o=
-X-Google-Smtp-Source: ABdhPJxFCqI8Rwlcssa1BNjfxrK8HpuSbbIopph7tby9Jp/NcYLy0dbo9U6k2v/Tq/lyxQUdkq/4xA==
-X-Received: by 2002:a63:e017:0:b0:3f2:543b:8402 with SMTP id e23-20020a63e017000000b003f2543b8402mr19085100pgh.209.1653291544335;
-        Mon, 23 May 2022 00:39:04 -0700 (PDT)
-Received: from localhost.localdomain ([203.205.141.21])
-        by smtp.gmail.com with ESMTPSA id d13-20020a170902e14d00b0015e8d4eb204sm4360048pla.78.2022.05.23.00.39.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 00:39:03 -0700 (PDT)
-From:   menglong8.dong@gmail.com
-X-Google-Original-From: imagedong@tencent.com
-To:     ast@kernel.org
-Cc:     daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Menglong Dong <imagedong@tencent.com>,
-        Jiang Biao <benbjiang@tencent.com>,
-        Hao Peng <flyingpeng@tencent.com>
-Subject: [PATCH] bpf: fix probe read error in ___bpf_prog_run()
-Date:   Mon, 23 May 2022 15:37:32 +0800
-Message-Id: <20220523073732.296247-1-imagedong@tencent.com>
-X-Mailer: git-send-email 2.36.1
+        bh=2o0hO8VxGZyOj9xdhEYgL8kZWVgpy5fzSg0aJgogftY=;
+        b=XYElPox5qasVylZoX67jX6baPplDfOrUYimRpQE3/fQrqKwtZNP2QpjDF8gx3/dOzo
+         zeMOASM9Y6KTg+XSB8JbZWYoWBrcNAN9slxktJtHipbZpcbQUN98xNLzb/Z2V5QsidAk
+         lvoXWwDjRo2u4mgzcN0Aiy69bgPbL8y4Y3Of45r7PBm2mMwElbW2vfx+2Z5/pFy/o2At
+         RYqGVfI9atV28I92pMrpw0a6rxrIWUpG9EYelJzvKaTfwe6F5q1cxSxLS9j5fO5Dbq23
+         3QbKLTq4r8k6HBJVZ6T58z56k0qczBmvGBxq5dZg0WG8fpzbjjKf3yBR8EQ9pnCiaf9C
+         t/nQ==
+X-Gm-Message-State: AOAM531ft194lSxjvlycY35In2kfio0MrcJ6yk03VNczDv15vtTKengb
+        zbWkx1YT0E/GuR/MvuB6lWj7Dg==
+X-Google-Smtp-Source: ABdhPJwtbBM2Rwibao4fT7vqqa0BZadmJT0isYqGRbFlzHrWoKbx1K2YaXeJwobANdpRy17mjiYuzA==
+X-Received: by 2002:a2e:9e41:0:b0:253:c37c:378b with SMTP id g1-20020a2e9e41000000b00253c37c378bmr12383846ljk.202.1653291551361;
+        Mon, 23 May 2022 00:39:11 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id u5-20020a2e8545000000b0024f3d1dae7csm1656531ljj.4.2022.05.23.00.39.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 May 2022 00:39:10 -0700 (PDT)
+Message-ID: <d02b042c-7f6e-8d2b-a5eb-c7ac4a0eea7d@linaro.org>
+Date:   Mon, 23 May 2022 09:39:08 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v1 09/19] dt-bindings: reset: add syscon property
+Content-Language: en-US
+To:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
+        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
+        yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, daniel.lezcano@linaro.org,
+        tglx@linutronix.de, wim@linux-watchdog.org, linux@roeck-us.net,
+        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+        olof@lixom.net, jirislaby@kernel.org, shawnguo@kernel.org,
+        bjorn.andersson@linaro.org, geert+renesas@glider.be,
+        marcel.ziswiler@toradex.com, vkoul@kernel.org,
+        biju.das.jz@bp.renesas.com, nobuhiro1.iwamatsu@toshiba.co.jp,
+        robert.hancock@calian.com, j.neuschaefer@gmx.net, lkundrak@v3.sk
+Cc:     soc@kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220522155046.260146-1-tmaimon77@gmail.com>
+ <20220522155046.260146-10-tmaimon77@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220522155046.260146-10-tmaimon77@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Menglong Dong <imagedong@tencent.com>
+On 22/05/2022 17:50, Tomer Maimon wrote:
+> Describe syscon property that handles GCR registers
+> in Nuvoton BMC NPCM reset driver.
 
-I think there is something wrong with BPF_PROBE_MEM in ___bpf_prog_run()
-in big-endian machine. Let's make a test and see what will happen if we
-want to load a 'u16' with BPF_PROBE_MEM.
+Please wrap according to Linux standards:
+https://elixir.bootlin.com/linux/v5.18-rc4/source/Documentation/process/submitting-patches.rst#L586
 
-Let's make the src value '0x0001', the value of dest register will become
-0x0001000000000000, as the value will be loaded to the first 2 byte of
-DST with following code:
+> 
+> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.txt | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.txt b/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.txt
+> index 17b7a6a43a29..cb1613092ee7 100644
+> --- a/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.txt
+> +++ b/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.txt
+> @@ -4,6 +4,7 @@ Required properties:
+>  - compatible : "nuvoton,npcm750-reset" for NPCM7XX BMC
+>  - reg : specifies physical base address and size of the register.
+>  - #reset-cells: must be set to 2
+> +- syscon: a phandle to access GCR registers.
 
-  bpf_probe_read_kernel(&DST, SIZE, (const void *)(long) (SRC + insn->off));
+syscon is not a generic property, so vendor prefix and some descriptive
+name of property.
 
-Obviously, the value in DST is not correct. In fact, we can compare
-BPF_PROBE_MEM with LDX_MEM_H:
+>  
+>  Optional property:
+>  - nuvoton,sw-reset-number - Contains the software reset number to restart the SoC.
+> @@ -16,6 +17,7 @@ Example:
+>  		compatible = "nuvoton,npcm750-reset";
+>  		reg = <0xf0801000 0x70>;
+>  		#reset-cells = <2>;
+> +		syscon = <&gcr>;
+>  		nuvoton,sw-reset-number = <2>;
+>  	};
+>  
 
-  DST = *(SIZE *)(unsigned long) (SRC + insn->off);
 
-If the memory load is done by LDX_MEM_H, the value in DST will be 0x1 now.
-
-And I think this error results in the test case 'test_bpf_sk_storage_map'
-failing:
-
-  test_bpf_sk_storage_map:PASS:bpf_iter_bpf_sk_storage_map__open_and_load 0 nsec
-  test_bpf_sk_storage_map:PASS:socket 0 nsec
-  test_bpf_sk_storage_map:PASS:map_update 0 nsec
-  test_bpf_sk_storage_map:PASS:socket 0 nsec
-  test_bpf_sk_storage_map:PASS:map_update 0 nsec
-  test_bpf_sk_storage_map:PASS:socket 0 nsec
-  test_bpf_sk_storage_map:PASS:map_update 0 nsec
-  test_bpf_sk_storage_map:PASS:attach_iter 0 nsec
-  test_bpf_sk_storage_map:PASS:create_iter 0 nsec
-  test_bpf_sk_storage_map:PASS:read 0 nsec
-  test_bpf_sk_storage_map:FAIL:ipv6_sk_count got 0 expected 3
-  $10/26 bpf_iter/bpf_sk_storage_map:FAIL
-
-The code of the test case is simply, it will load sk->sk_family to the
-register with BPF_PROBE_MEM and check if it is AF_INET6. With this patch,
-now the test case 'bpf_iter' can pass:
-
-  $10  bpf_iter:OK
-
-Reviewed-by: Jiang Biao <benbjiang@tencent.com>
-Reviewed-by: Hao Peng <flyingpeng@tencent.com>
-Signed-off-by: Menglong Dong <imagedong@tencent.com>
----
- kernel/bpf/core.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
-
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 13e9dbeeedf3..09e3f374739a 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -1945,14 +1945,15 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
- 	LDST(W,  u32)
- 	LDST(DW, u64)
- #undef LDST
--#define LDX_PROBE(SIZEOP, SIZE)							\
-+#define LDX_PROBE(SIZEOP, SIZE, TYPE)						\
- 	LDX_PROBE_MEM_##SIZEOP:							\
- 		bpf_probe_read_kernel(&DST, SIZE, (const void *)(long) (SRC + insn->off));	\
-+		DST = *((TYPE *)&DST);						\
- 		CONT;
--	LDX_PROBE(B,  1)
--	LDX_PROBE(H,  2)
--	LDX_PROBE(W,  4)
--	LDX_PROBE(DW, 8)
-+	LDX_PROBE(B,  1, u8)
-+	LDX_PROBE(H,  2, u16)
-+	LDX_PROBE(W,  4, u32)
-+	LDX_PROBE(DW, 8, u64)
- #undef LDX_PROBE
- 
- #define ATOMIC_ALU_OP(BOP, KOP)						\
--- 
-2.36.1
-
+Best regards,
+Krzysztof

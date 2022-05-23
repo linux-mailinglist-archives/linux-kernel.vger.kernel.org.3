@@ -2,45 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB6C3531728
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D015A531CEE
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:57:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240715AbiEWRZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:25:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34330 "EHLO
+        id S242627AbiEWRu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:50:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240666AbiEWRQj (ORCPT
+        with ESMTP id S241645AbiEWR04 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:16:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F6B013DE2;
-        Mon, 23 May 2022 10:16:18 -0700 (PDT)
+        Mon, 23 May 2022 13:26:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B938AE48;
+        Mon, 23 May 2022 10:22:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 32C3D61538;
-        Mon, 23 May 2022 17:15:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41361C385A9;
-        Mon, 23 May 2022 17:15:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B1AC0B80FF4;
+        Mon, 23 May 2022 17:20:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1387DC385AA;
+        Mon, 23 May 2022 17:20:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326133;
-        bh=hfN64kEhFU/FzzVPdDp9ONjzRmOgpNHI4qtV1X1y8BE=;
+        s=korg; t=1653326442;
+        bh=Jp8whgaOG+SNcEazAWN5Wo37zx2wduu0qsJXCRd8VhE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FZXNlYqt4rhlrrRAzVPUy+va1l3B4KKhl5TJZ3+j5IFIXacltEdeXskG28sKBvJ2s
-         mSlLG6KeiduVhfmP01CEV13nUHQMwVJ9NJ+5oqIWkXh5CodGcezyOH/ecO/S6cArOL
-         SzQdQ+pwNLRMUBC9M/3996IakM5cIEYzKO192UhY=
+        b=2MevLPd+6sqJ+DAGx8J3CJjXRwebZFWM7LbJitaNPEjjdC4NAv+NH5W2KbT6mgjmK
+         GFY0o2wNvfyy8BjWUQTTlsTkR6y7VkbL3uufpvmUVkG5hLmdn5fZ9ZkBh0Mxt8ZwFb
+         5p1ADdm54XTLC4FAe5l82GoKbSZEIadpXAfKZTg4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Enrico Scholz <enrico.scholz@sigma-chemnitz.de>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Meena Shanmugam <meenashanmugam@google.com>
-Subject: [PATCH 5.4 24/68] SUNRPC: Dont call connect() more than once on a TCP socket
-Date:   Mon, 23 May 2022 19:04:51 +0200
-Message-Id: <20220523165806.630090168@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
+        Michal Schmidt <mschmidt@redhat.com>,
+        Dave Cain <dcain@redhat.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Sasha Levin <sashal@kernel.org>,
+        Gurucharan <gurucharanx.g@intel.com>
+Subject: [PATCH 5.15 083/132] ice: fix crash when writing timestamp on RX rings
+Date:   Mon, 23 May 2022 19:04:52 +0200
+Message-Id: <20220523165836.880950264@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165802.500642349@linuxfoundation.org>
-References: <20220523165802.500642349@linuxfoundation.org>
+In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
+References: <20220523165823.492309987@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,85 +59,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Meena Shanmugam <meenashanmugam@google.com>
+From: Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+[ Upstream commit 4503cc7fdf9a84cd631b0cb8ecb3c9b1bdbf3594 ]
 
-commit 89f42494f92f448747bd8a7ab1ae8b5d5520577d upstream.
+Do not allow to write timestamps on RX rings if PF is being configured.
+When PF is being configured RX rings can be freed or rebuilt. If at the
+same time timestamps are updated, the kernel will crash by dereferencing
+null RX ring pointer.
 
-Avoid socket state races due to repeated calls to ->connect() using the
-same socket. If connect() returns 0 due to the connection having
-completed, but we are in fact in a closing state, then we may leave the
-XPRT_CONNECTING flag set on the transport.
+PID: 1449   TASK: ff187d28ed658040  CPU: 34  COMMAND: "ice-ptp-0000:51"
+ #0 [ff1966a94a713bb0] machine_kexec at ffffffff9d05a0be
+ #1 [ff1966a94a713c08] __crash_kexec at ffffffff9d192e9d
+ #2 [ff1966a94a713cd0] crash_kexec at ffffffff9d1941bd
+ #3 [ff1966a94a713ce8] oops_end at ffffffff9d01bd54
+ #4 [ff1966a94a713d08] no_context at ffffffff9d06bda4
+ #5 [ff1966a94a713d60] __bad_area_nosemaphore at ffffffff9d06c10c
+ #6 [ff1966a94a713da8] do_page_fault at ffffffff9d06cae4
+ #7 [ff1966a94a713de0] page_fault at ffffffff9da0107e
+    [exception RIP: ice_ptp_update_cached_phctime+91]
+    RIP: ffffffffc076db8b  RSP: ff1966a94a713e98  RFLAGS: 00010246
+    RAX: 16e3db9c6b7ccae4  RBX: ff187d269dd3c180  RCX: ff187d269cd4d018
+    RDX: 0000000000000000  RSI: 0000000000000000  RDI: 0000000000000000
+    RBP: ff187d269cfcc644   R8: ff187d339b9641b0   R9: 0000000000000000
+    R10: 0000000000000002  R11: 0000000000000000  R12: ff187d269cfcc648
+    R13: ffffffff9f128784  R14: ffffffff9d101b70  R15: ff187d269cfcc640
+    ORIG_RAX: ffffffffffffffff  CS: 0010  SS: 0018
+ #8 [ff1966a94a713ea0] ice_ptp_periodic_work at ffffffffc076dbef [ice]
+ #9 [ff1966a94a713ee0] kthread_worker_fn at ffffffff9d101c1b
+ #10 [ff1966a94a713f10] kthread at ffffffff9d101b4d
+ #11 [ff1966a94a713f50] ret_from_fork at ffffffff9da0023f
 
-Reported-by: Enrico Scholz <enrico.scholz@sigma-chemnitz.de>
-Fixes: 3be232f11a3c ("SUNRPC: Prevent immediate close+reconnect")
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
-[meenashanmugam: Fix merge conflict in xs_tcp_setup_socket]
-Signed-off-by: Meena Shanmugam <meenashanmugam@google.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 77a781155a65 ("ice: enable receive hardware timestamping")
+Signed-off-by: Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
+Reviewed-by: Michal Schmidt <mschmidt@redhat.com>
+Tested-by: Dave Cain <dcain@redhat.com>
+Tested-by: Gurucharan <gurucharanx.g@intel.com> (A Contingent worker at Intel)
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Added fallthrough which I missed in 5.10 patch.
+ drivers/net/ethernet/intel/ice/ice_ptp.c | 19 +++++++++++++++----
+ 1 file changed, 15 insertions(+), 4 deletions(-)
 
- include/linux/sunrpc/xprtsock.h |    1 +
- net/sunrpc/xprtsock.c           |   22 ++++++++++++----------
- 2 files changed, 13 insertions(+), 10 deletions(-)
-
---- a/include/linux/sunrpc/xprtsock.h
-+++ b/include/linux/sunrpc/xprtsock.h
-@@ -90,6 +90,7 @@ struct sock_xprt {
- #define XPRT_SOCK_WAKE_WRITE	(5)
- #define XPRT_SOCK_WAKE_PENDING	(6)
- #define XPRT_SOCK_WAKE_DISCONNECT	(7)
-+#define XPRT_SOCK_CONNECT_SENT	(8)
+diff --git a/drivers/net/ethernet/intel/ice/ice_ptp.c b/drivers/net/ethernet/intel/ice/ice_ptp.c
+index ef26ff351b57..9b50e9e6042a 100644
+--- a/drivers/net/ethernet/intel/ice/ice_ptp.c
++++ b/drivers/net/ethernet/intel/ice/ice_ptp.c
+@@ -254,12 +254,19 @@ ice_ptp_read_src_clk_reg(struct ice_pf *pf, struct ptp_system_timestamp *sts)
+  * This function must be called periodically to ensure that the cached value
+  * is never more than 2 seconds old. It must also be called whenever the PHC
+  * time has been changed.
++ *
++ * Return:
++ * * 0 - OK, successfully updated
++ * * -EAGAIN - PF was busy, need to reschedule the update
+  */
+-static void ice_ptp_update_cached_phctime(struct ice_pf *pf)
++static int ice_ptp_update_cached_phctime(struct ice_pf *pf)
+ {
+ 	u64 systime;
+ 	int i;
  
- #endif /* __KERNEL__ */
++	if (test_and_set_bit(ICE_CFG_BUSY, pf->state))
++		return -EAGAIN;
++
+ 	/* Read the current PHC time */
+ 	systime = ice_ptp_read_src_clk_reg(pf, NULL);
  
---- a/net/sunrpc/xprtsock.c
-+++ b/net/sunrpc/xprtsock.c
-@@ -2384,10 +2384,14 @@ static void xs_tcp_setup_socket(struct w
- 	struct rpc_xprt *xprt = &transport->xprt;
- 	int status = -EIO;
+@@ -282,6 +289,9 @@ static void ice_ptp_update_cached_phctime(struct ice_pf *pf)
+ 			WRITE_ONCE(vsi->rx_rings[j]->cached_phctime, systime);
+ 		}
+ 	}
++	clear_bit(ICE_CFG_BUSY, pf->state);
++
++	return 0;
+ }
  
--	if (!sock) {
--		sock = xs_create_sock(xprt, transport,
--				xs_addr(xprt)->sa_family, SOCK_STREAM,
--				IPPROTO_TCP, true);
-+	if (xprt_connected(xprt))
-+		goto out;
-+	if (test_and_clear_bit(XPRT_SOCK_CONNECT_SENT,
-+			       &transport->sock_state) ||
-+	    !sock) {
-+		xs_reset_transport(transport);
-+		sock = xs_create_sock(xprt, transport, xs_addr(xprt)->sa_family,
-+				      SOCK_STREAM, IPPROTO_TCP, true);
- 		if (IS_ERR(sock)) {
- 			status = PTR_ERR(sock);
- 			goto out;
-@@ -2418,6 +2422,8 @@ static void xs_tcp_setup_socket(struct w
- 		break;
- 	case 0:
- 	case -EINPROGRESS:
-+		set_bit(XPRT_SOCK_CONNECT_SENT, &transport->sock_state);
-+		fallthrough;
- 	case -EALREADY:
- 		xprt_unlock_connect(xprt, transport);
+ /**
+@@ -1418,17 +1428,18 @@ static void ice_ptp_periodic_work(struct kthread_work *work)
+ {
+ 	struct ice_ptp *ptp = container_of(work, struct ice_ptp, work.work);
+ 	struct ice_pf *pf = container_of(ptp, struct ice_pf, ptp);
++	int err;
+ 
+ 	if (!test_bit(ICE_FLAG_PTP, pf->flags))
  		return;
-@@ -2469,13 +2475,9 @@ static void xs_connect(struct rpc_xprt *
  
- 	WARN_ON_ONCE(!xprt_lock_connect(xprt, task, transport));
+-	ice_ptp_update_cached_phctime(pf);
++	err = ice_ptp_update_cached_phctime(pf);
  
--	if (transport->sock != NULL && !xprt_connecting(xprt)) {
-+	if (transport->sock != NULL) {
- 		dprintk("RPC:       xs_connect delayed xprt %p for %lu "
--				"seconds\n",
--				xprt, xprt->reestablish_timeout / HZ);
--
--		/* Start by resetting any existing state */
--		xs_reset_transport(transport);
-+			"seconds\n", xprt, xprt->reestablish_timeout / HZ);
+ 	ice_ptp_tx_tstamp_cleanup(&pf->hw, &pf->ptp.port.tx);
  
- 		delay = xprt_reconnect_delay(xprt);
- 		xprt_reconnect_backoff(xprt, XS_TCP_INIT_REEST_TO);
+-	/* Run twice a second */
++	/* Run twice a second or reschedule if phc update failed */
+ 	kthread_queue_delayed_work(ptp->kworker, &ptp->work,
+-				   msecs_to_jiffies(500));
++				   msecs_to_jiffies(err ? 10 : 500));
+ }
+ 
+ /**
+-- 
+2.35.1
+
 
 

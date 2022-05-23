@@ -2,158 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 415EC53147C
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:25:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C17CA531239
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:22:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238532AbiEWQHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 12:07:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37398 "EHLO
+        id S238584AbiEWQJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 12:09:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238387AbiEWQHH (ORCPT
+        with ESMTP id S238387AbiEWQJ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 12:07:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECBBE22BF3
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:06:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 23 May 2022 12:09:26 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 058A163BDB
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:09:26 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8EA35B81192
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 16:06:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1A1EC385AA;
-        Mon, 23 May 2022 16:06:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653322016;
-        bh=qyIyPX6ADZ1zEeCUptE8kITzDG/Coxms3dWlBd9Ao8I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=r/Cq1M528dfKuwMUBnpcrF0W2aVzTWOBDppAGmjEzZvjT34Jpaqi5FCb5rOIJmVrO
-         ZOdDM9d5bDLbI1U/KwtuTJiX8SVfbkp62JwkuGfWg05kyUo0yeIEr2wQuZojxwSGPh
-         qvZHKG0HwTGIlQ9FWTlOekAxZWbYlEhRZRaaA91s=
-Date:   Mon, 23 May 2022 18:06:53 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Zheyu Ma <zheyuma97@gmail.com>
-Cc:     eli.billauer@gmail.com, arnd@arndb.de,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] char: xillybus: Check endpoint type before allocing
-Message-ID: <YouxHY48daZt7J/O@kroah.com>
-References: <Yn9XwHxWsLIJXlHu@kroah.com>
- <20220514114819.2773691-1-zheyuma97@gmail.com>
- <Yn+va5fTsuaFTxVR@kroah.com>
- <CAMhUBj=RMJwn2K+rQC9rQ=QEe5QkiJ29rMd8KzEC8B7vtXo+ug@mail.gmail.com>
- <Yocp+WZ0On9/wObu@kroah.com>
- <CAMhUBj=J5-V_D_kucpiWz6ZdOSSR1N9nRXQxOKgmwRA+LxW17Q@mail.gmail.com>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 98EFF21A64;
+        Mon, 23 May 2022 16:09:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1653322164; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=dEMTXQwCYIQB+I/XBMpNaBLKvwTPXpcNcx1N2ihQ4ew=;
+        b=mV3xFRaN0z027T9GuqQ+a4GgKw+PSyAYlWJY+sL7tOmPBPPuZP2TSqLAmGa6SySabKC/24
+        oUtbWK+BA/CrJdsPNnTVLarM13brEaeYPrbHedWA92Vu8DlP/EUOhzu8zZePLBxapV16UY
+        D+qykR9bM2D9LtZkRxZ0wNJC5AOKjK8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1653322164;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=dEMTXQwCYIQB+I/XBMpNaBLKvwTPXpcNcx1N2ihQ4ew=;
+        b=PjCR99+01pX+q6nE9KnjQr7nDzUakOotkqcRRuixLywZUJu9Rjl7jC/RQ6xNfY8gyYcVOa
+        XxJwknRhprVlRRDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8D7D8139F5;
+        Mon, 23 May 2022 16:09:24 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id OB6AIrSxi2LDKQAAMHmgww
+        (envelope-from <bp@suse.de>); Mon, 23 May 2022 16:09:24 +0000
+Date:   Mon, 23 May 2022 18:09:20 +0200
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] x86/fpu for 5.19
+Message-ID: <YouxsHVKnPPiMckV@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAMhUBj=J5-V_D_kucpiWz6ZdOSSR1N9nRXQxOKgmwRA+LxW17Q@mail.gmail.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 22, 2022 at 01:06:59PM +0800, Zheyu Ma wrote:
-> On Fri, May 20, 2022 at 1:41 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Fri, May 20, 2022 at 11:32:51AM +0800, Zheyu Ma wrote:
-> > > On Sat, May 14, 2022 at 9:32 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> > > >
-> > > > On Sat, May 14, 2022 at 07:48:19PM +0800, Zheyu Ma wrote:
-> > > > > The driver submits bulk urb without checking the endpoint type is
-> > > > > actually bulk.
-> > > > >
-> > > > > [    3.108690] usb 1-1: BOGUS urb xfer, pipe 3 != type 1
-> > > > > [    3.108983] WARNING: CPU: 0 PID: 211 at drivers/usb/core/urb.c:503 usb_submit_urb+0xcd9/0x18b0
-> > > > > [    3.110976] RIP: 0010:usb_submit_urb+0xcd9/0x18b0
-> > > > > [    3.115318] Call Trace:
-> > > > > [    3.115452]  <TASK>
-> > > > > [    3.115570]  try_queue_bulk_in+0x43c/0x6e0 [xillyusb]
-> > > > > [    3.115838]  xillyusb_probe+0x488/0x1230 [xillyusb]
-> > > > >
-> > > > > Add a check in endpoint_alloc() to fix the bug.
-> > > > >
-> > > > > Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
-> > > > > ---
-> > > > > Changes in v2:
-> > > > >     - Check the endpoint type at probe time
-> > > > > ---
-> > > > >  drivers/char/xillybus/xillyusb.c | 27 ++++++++++++++++++++++++++-
-> > > > >  1 file changed, 26 insertions(+), 1 deletion(-)
-> > > > >
-> > > > > diff --git a/drivers/char/xillybus/xillyusb.c b/drivers/char/xillybus/xillyusb.c
-> > > > > index dc3551796e5e..4467f13993ef 100644
-> > > > > --- a/drivers/char/xillybus/xillyusb.c
-> > > > > +++ b/drivers/char/xillybus/xillyusb.c
-> > > > > @@ -167,6 +167,7 @@ struct xillyusb_dev {
-> > > > >       struct device           *dev; /* For dev_err() and such */
-> > > > >       struct kref             kref;
-> > > > >       struct workqueue_struct *workq;
-> > > > > +     struct usb_interface *intf;
-> > > > >
-> > > > >       int error;
-> > > > >       spinlock_t error_lock; /* protect @error */
-> > > > > @@ -475,6 +476,25 @@ static void endpoint_dealloc(struct xillyusb_endpoint *ep)
-> > > > >       kfree(ep);
-> > > > >  }
-> > > > >
-> > > > > +static int xillyusb_check_endpoint(struct xillyusb_dev *xdev, u8 ep_num)
-> > > > > +{
-> > > > > +     struct usb_host_interface *if_desc = xdev->intf->altsetting;
-> > > > > +     int i;
-> > > > > +
-> > > > > +     for (i = 0; i < if_desc->desc.bNumEndpoints; i++) {
-> > > > > +             struct usb_endpoint_descriptor *ep = &if_desc->endpoint[i].desc;
-> > > > > +
-> > > > > +             if (ep->bEndpointAddress != ep_num)
-> > > > > +                     continue;
-> > > > > +
-> > > > > +             if ((usb_pipein(ep_num) && usb_endpoint_is_bulk_in(ep)) ||
-> > > > > +                     (usb_pipeout(ep_num) && usb_endpoint_is_bulk_out(ep)))
-> > > > > +                     return 0;
-> > > > > +     }
-> > > >
-> > > > Why not use the built-in usb core functions that do this for you instead
-> > > > of hand-parsing this?  Look at usb_find_common_endpoints() and related
-> > > > functions, that should make this much easier.
-> > >
-> > > Thanks for your reminder. But in this driver, we have to check not
-> > > only the type and direction of the endpoint, but also the address of
-> > > it. And the endpoint's address is sometimes dynamic. For example,  in
-> > > the function xillyusb_open():
-> > >
-> > > out_ep = endpoint_alloc(xdev, (chan->chan_idx + 2) | USB_DIR_OUT,
-> > > bulk_out_work, BUF_SIZE_ORDER, BUFNUM);
-> > >
-> > > However, usb_find_common_endpoints() can only find the first endpoint
-> > > that satisfies the condition, not on a specific address. I cannot find
-> > > a more suitable built-in core function, please correct me if I'm
-> > > wrong.
-> >
-> > I do not understand the problem here, it looks like your code above that
-> > I responded to doesn't care about specific addresses at all.  It is just
-> > walking all of them and making sure that it is a bulk in/out endpoint.
-> 
-> Please correct me if I'm wrong. I think the driver needs to check if
-> the urb has the correct type before submitting the urb, and this check
-> should be done early.
+Hi Linus,
 
-Yes, very very early, like probe() callback time early.
+please pull a couple of x86/fpu fixes for 5.19.
 
-Not way down here in "do we want to allow open() to work or not" like
-you are currently doing.
+Thx.
 
-If the device does not have the EXACT USB endpoints that you are
-expecting (size, address, direction, type, etc.) at probe time reject
-the device.
+---
 
-That is what the helper functions I pointed you at are for.
+The following changes since commit af2d861d4cd2a4da5137f795ee3509e6f944a25b:
 
-This driver is trying to detect this type of problem _way_ too late.
+  Linux 5.18-rc4 (2022-04-24 14:51:22 -0700)
 
-thanks,
+are available in the Git repository at:
 
-greg k-h
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_fpu_for_v5.19_rc1
+
+for you to fetch changes up to b91c0922bf1ed15b67a6faa404bc64e3ed532ec2:
+
+  x86/fpu: Cleanup variable shadowing (2022-05-02 09:28:31 +0200)
+
+----------------------------------------------------------------
+- Add support for XSAVEC - the Compacted XSTATE saving variant - and
+thus allow for guests to use this compacted XSTATE variant when the
+hypervisor exports that support
+
+- A variable shadowing cleanup
+
+----------------------------------------------------------------
+Thomas Gleixner (2):
+      x86/fpu/xsave: Support XSAVEC in the kernel
+      x86/fpu: Cleanup variable shadowing
+
+ arch/x86/include/asm/cpufeatures.h |  2 +-
+ arch/x86/kernel/fpu/xstate.c       | 60 +++++++++++++++++++++++++-------------
+ arch/x86/kernel/fpu/xstate.h       | 14 +++++----
+ 3 files changed, 49 insertions(+), 27 deletions(-)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH
+GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
+(HRB 36809, AG Nürnberg)

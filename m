@@ -2,113 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6BD7531BA7
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59548531AC0
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239572AbiEWRHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:07:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52504 "EHLO
+        id S239568AbiEWRHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:07:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239475AbiEWRGL (ORCPT
+        with ESMTP id S239416AbiEWRGB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:06:11 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5788B12623
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 10:06:07 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id er5so19909524edb.12
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 10:06:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:user-agent:mime-version:to:cc:subject
-         :references:in-reply-to:content-transfer-encoding;
-        bh=YrY6mURHinjqWwitegOe1ZXjhF0i1u/4+qbA+8XPd74=;
-        b=GijRvlPm8XonYS9Fbp6rhrU21pU3I+fLZ2KjP3FKCwZduOvrl3jK42JkV/R0dbHM9j
-         us2e5hXsLE2CXiyrccPgtu5cTS1KFPZ61ruva8Psu50BKW7PTWjJICNqQvIjhayJ2n0q
-         nW15/AEptBLW17E9sxHVfyfLNX3g0fHZB65Eun2q2rtEqx68UvfBO87bQfkeHdcd2IaK
-         rV4xEXmhoy4wbG67VNExfTqEMm0de/dhoUVmL27CPUZ1YcFZcbaXSwSlLFoLy8z7MxbZ
-         aLVLaFuqtpNfPmE6KYrNB1W4RJ/zqjJ/lPuc6NJ9MT6zI8Z8Xm0MF/TIYrMWqP78cYYR
-         dGtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:user-agent:mime-version:to
-         :cc:subject:references:in-reply-to:content-transfer-encoding;
-        bh=YrY6mURHinjqWwitegOe1ZXjhF0i1u/4+qbA+8XPd74=;
-        b=CypKUCMVwsPi7xMB6g/r94wSrfh+oyOMtAKiLZLWmXYJo5A0+kXbei60VcaJybccho
-         +Op/uKIzIJFeOmmPMUxZkyqpsqUyIJYK/jBINU+A17yqTuqnkoe0+DCvyUJhes6qIo3b
-         FHz1tyLOYGXo8uH2XvPI43jUP16LHV1L39IBiM9JHM5FoQ8Xe3EiJXFDa1eBtL4qd3A6
-         07yvGItnBelVcAv5InJ1hkVj37GHFS5mZQuRg+YCOWY5t/YIhAr1L+mU5SWw/IcDTvne
-         lqk6v249xtbq9BotaLBUnWqBrDgvKj4XBbbfy07CKior5bs+4GxIV1Wt1ZJdqJ6S5K5t
-         s6dQ==
-X-Gm-Message-State: AOAM533Taa58wK8s38vbXyY8Z5cxO+FqJeDAL5T2e114ca3mnhpsSuCl
-        /a4jlezq/NbHLBhdkVn2ySYyQ5on4bI=
-X-Google-Smtp-Source: ABdhPJyH8akOgZUtv9ecBlp4mP28urBRg3c0ruLX+fy6Vpo0h+E4PiDCLRPIKgQ1lO5PefDMAv2MKg==
-X-Received: by 2002:aa7:cb55:0:b0:42a:ac67:892f with SMTP id w21-20020aa7cb55000000b0042aac67892fmr24663651edt.215.1653325565760;
-        Mon, 23 May 2022 10:06:05 -0700 (PDT)
-Received: from [93.172.10.244] (93-172-10-244.bb.netvision.net.il. [93.172.10.244])
-        by smtp.gmail.com with ESMTPSA id f8-20020a1709063f4800b006f4c82c2b12sm6406673ejj.19.2022.05.23.10.06.04
-        (version=TLS1 cipher=AES128-SHA bits=128/128);
-        Mon, 23 May 2022 10:06:05 -0700 (PDT)
-Message-ID: <628BBEEB.9010306@gmail.com>
-Date:   Mon, 23 May 2022 20:05:47 +0300
-From:   Eli Billauer <eli.billauer@gmail.com>
-User-Agent: Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.12) Gecko/20100907 Fedora/3.0.7-1.fc12 Thunderbird/3.0.7
+        Mon, 23 May 2022 13:06:01 -0400
+Received: from mail.parknet.co.jp (mail.parknet.co.jp [210.171.160.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 42869C12
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 10:05:57 -0700 (PDT)
+Received: from ibmpc.myhome.or.jp (server.parknet.ne.jp [210.171.168.39])
+        by mail.parknet.co.jp (Postfix) with ESMTPSA id 51A4A20012BA;
+        Tue, 24 May 2022 02:05:57 +0900 (JST)
+Received: from devron.myhome.or.jp (foobar@devron.myhome.or.jp [192.168.0.3])
+        by ibmpc.myhome.or.jp (8.16.1/8.16.1/Debian-3) with ESMTPS id 24NH5uoE135043
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Tue, 24 May 2022 02:05:57 +0900
+Received: from devron.myhome.or.jp (foobar@localhost [127.0.0.1])
+        by devron.myhome.or.jp (8.16.1/8.16.1/Debian-3) with ESMTPS id 24NH5tK8397956
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Tue, 24 May 2022 02:05:56 +0900
+Received: (from hirofumi@localhost)
+        by devron.myhome.or.jp (8.16.1/8.16.1/Submit) id 24NH5rIE397954;
+        Tue, 24 May 2022 02:05:53 +0900
+From:   OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     Colin Walters <walters@verbum.org>, linux-kernel@vger.kernel.org,
+        Peter Jones <pjones@redhat.com>,
+        Alexander Larsson <alexl@redhat.com>,
+        Alberto Ruiz <aruiz@redhat.com>,
+        Christian Kellner <ckellner@redhat.com>,
+        Lennart Poettering <lennart@poettering.net>,
+        Chung-Chiang Cheng <cccheng@synology.com>
+Subject: Re: [RFC PATCH 2/3] fat: add renameat2 RENAME_EXCHANGE flag support
+References: <20220519092343.2776414-1-javierm@redhat.com>
+        <20220519092343.2776414-3-javierm@redhat.com>
+        <7963aad6-203c-4da4-ba9f-cf716d350121@www.fastmail.com>
+        <6a6ca822-ac6a-8484-0bc8-aaa1dce3d8ef@redhat.com>
+Date:   Tue, 24 May 2022 02:05:53 +0900
+In-Reply-To: <6a6ca822-ac6a-8484-0bc8-aaa1dce3d8ef@redhat.com> (Javier
+        Martinez Canillas's message of "Mon, 23 May 2022 17:34:17 +0200")
+Message-ID: <87a6b8tc0e.fsf@mail.parknet.co.jp>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/29.0.50 (gnu/linux)
 MIME-Version: 1.0
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     Zheyu Ma <zheyuma97@gmail.com>, arnd@arndb.de,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] char: xillybus: Check endpoint type before allocing
-References: <Yn9XwHxWsLIJXlHu@kroah.com> <20220514114819.2773691-1-zheyuma97@gmail.com> <Yn+va5fTsuaFTxVR@kroah.com> <CAMhUBj=RMJwn2K+rQC9rQ=QEe5QkiJ29rMd8KzEC8B7vtXo+ug@mail.gmail.com> <Yocp+WZ0On9/wObu@kroah.com> <CAMhUBj=J5-V_D_kucpiWz6ZdOSSR1N9nRXQxOKgmwRA+LxW17Q@mail.gmail.com> <YouxHY48daZt7J/O@kroah.com>
-In-Reply-To: <YouxHY48daZt7J/O@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/05/22 19:06, Greg KH wrote:
-> If the device does not have the EXACT USB endpoints that you are
-> expecting (size, address, direction, type, etc.) at probe time reject
-> the device.
->    
-This is probably a good time to add some information about XillyUSB.
+Javier Martinez Canillas <javierm@redhat.com> writes:
 
-All XillyUSB devices have EP 1 IN and EP 1 OUT as bulk endpoints.
+>> So assuming we have this, I guess the flow could be:
+>> 
+>> 1. rename_exchange(old, new)
+>> 2. syncfs()
+>>
+>
+> Correct. In fact, Alex pointed me out that I should do sync in the test too
+> before checking that the rename succeeded. I was mostly interested that the
+> logic worked even if only the in-memory representation or page cache was
+> used. But I've added a `sudo sync -f "${MNT_PATH}"` for the next iteration.
+>  
+>> ?  But that's assuming that the implementation of this doesn't e.g. have any "holes" where in theory we could flush an intermediate state.
+>> 
+>
+> Ogawa said that didn't fully review it yet but gave useful feedback that I
+> will also address in the next version. As said, is my first contribution to
+> a filesystem driver so it would be good if people with more experience can
+> let me know if there are holes in the implementation.
 
-On top of that, they *may* have up to 14 additional bulk OUT endpoints, 
-having the addresses EP 2 OUT to EP 15 OUT. The population of endpoint 
-addresses is not necessarily continuous. Any set of OUT endpoint 
-addresses is allowed. The driver doesn't know which of these endpoints 
-are available initially.
+I'm not reading emails about ostree and stuff, so I may not understand
+the issue though. If you are expecting the atomics on disk (not
+in-core), rename exchange can't provide atomics on vfat without non
+standard extension like adding journal or such. And even any syncfs(2)
+can't prevent rename corruption, syncfs(2) can just only minimize the
+race window.
 
-Rather, it works like this: The driver uses the EP 1 IN and OUT 
-endpoints to query the device for a data structure, which contains 
-information on the device's communication channels. The driver sets up 
-device files accordingly, and it also gets informed on which bulk OUT 
-endpoints are present.
+If power failure happened on rename exchange, the file may lost in worst
+case. (If had journal, file can recover to before or after rename
+exchange while journal replay, but as you know vfat can't)
 
-For what it's worth, I think it's fairly safe to assume that if a device 
-returns a legal data structure (which passes a CRC test), it's a 
-XillyUSB device. Either way, it's impossible to verify that all of the 
-device's bulk OUT endpoints are correct before obtaining the data 
-structure from the device. The fact that each device has a different set 
-of communication channels, and that the driver learns about them in 
-run-time is the whole trick with Xillybus and XillyUSB.
-
-And just in case you wonder why there's only one bulk IN endpoint: All 
-inbound communication, control as well as data, is multiplexed into this 
-single endpoint. That's in order to allow the device better control on 
-which communication channel is serviced at any time, with a few 
-microseconds' granularity. The same trick is unfortunately infeasible in 
-the other direction.
-
-I don't have any particular view on how the device should be validated, 
-but I thought this information would be helpful.
-
-Thanks,
-    Eli
+Thanks.
+-- 
+OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>

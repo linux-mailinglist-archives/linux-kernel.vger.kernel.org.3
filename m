@@ -2,484 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A2DF5310D3
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:20:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EA23530F37
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:18:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236073AbiEWNNE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 09:13:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33928 "EHLO
+        id S236002AbiEWNNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 09:13:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236074AbiEWNMY (ORCPT
+        with ESMTP id S235959AbiEWNMg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 09:12:24 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D542F26ADA
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 06:12:21 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 23 May 2022 09:12:36 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2E642BB2C
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 06:12:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 264DE1F907;
-        Mon, 23 May 2022 13:12:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1653311540; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lEmyBXmQ5GC+Lv7M3asABRhLC4NFTXKKfOh+rOIdKJY=;
-        b=lPYOOeOJNX2jPOS76vSY6yce1ZBtSrXuZVB2AKL7AoNZOgBhtGGWKWCH2tYq5kvPjM1YLe
-        AAj24xLNRdZ8cJM2t3o34cVaSMKzeIjJINLWztVuK/oYIBJd5xzhr3HYTCyX0K/05qoerI
-        ah6U6e1IaEfMx025rVgaux8OIXVXl7Y=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1653311540;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lEmyBXmQ5GC+Lv7M3asABRhLC4NFTXKKfOh+rOIdKJY=;
-        b=Zp4LMVnhcv6YTFCs3J9A3anFvo7db9JUkMYfcWdb0u7dFu1CQRVgZXF5YqZ/S+/CTZDgww
-        xKRxiCaBagK6JLAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E107413AA5;
-        Mon, 23 May 2022 13:12:19 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id /WP4NTOIi2IRUwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 23 May 2022 13:12:19 +0000
-Message-ID: <c7f687a8-637c-b119-6e3a-7dacc885b851@suse.cz>
-Date:   Mon, 23 May 2022 15:12:19 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: en-US
-To:     Vasily Averin <vvs@openvz.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     kernel@openvz.org, linux-kernel@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, linux-mm@kvack.org,
-        Shakeel Butt <shakeelb@google.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Matthew Wilcox <willy@infradead.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        David Rientjes <rientjes@google.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Muchun Song <songmuchun@bytedance.com>
-References: <0c73ce5c-3625-6187-820e-1277e168b3bc@openvz.org>
- <a1e54672-d824-3ee1-cb68-9ceaa46fc70f@openvz.org>
-From:   Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH v4] tracing: add 'accounted' entry into output of
- allocation tracepoints
-In-Reply-To: <a1e54672-d824-3ee1-cb68-9ceaa46fc70f@openvz.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        by sin.source.kernel.org (Postfix) with ESMTPS id D11ECCE136A
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 13:12:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B844CC385A9;
+        Mon, 23 May 2022 13:12:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653311551;
+        bh=0fw8Lio2R1KT24divy6cchQMAkg5Ovz0dNaSYiBu9H0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=eNLX/fkTLhC/5eE9Sk91gBQsbDiQOUbZXwLN/TwqM/85LeiT991xO6OgGyBiROfGx
+         V+wQJJCU3vP2dhZ/ccML/vVpKNTzmG+Ktob+TP3b4QxfVv7pvthL8UYNPTF35ahSy0
+         oW09EHTbzyQyeJeXmTfo+DAr0te+Lsy5a06zOOs4p2nYUQ6gx8bi4Iw6ztFae+YBXV
+         WP3NQUYWb4HRR4fBHgsCWVGXMpanSNsJoAPxKZ8U3+X/b39mi5qneGALvsv6wCMXYD
+         3sLgYPwxmbLxiBXy8WpjfAlMUO+1zvQz03y86EGoxjYXGgiBIEzErdeNshHoyRbp3L
+         UUka4Mko88lIA==
+From:   Mark Brown <broonie@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] regulator updates for v5.19
+Date:   Mon, 23 May 2022 14:12:19 +0100
+Message-Id: <20220523131230.B844CC385A9@smtp.kernel.org>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        PP_MIME_FAKE_ASCII_TEXT,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/21/22 20:36, Vasily Averin wrote:
-> Slab caches marked with SLAB_ACCOUNT force accounting for every
-> allocation from this cache even if __GFP_ACCOUNT flag is not passed.
-> Unfortunately, at the moment this flag is not visible in ftrace output,
-> and this makes it difficult to analyze the accounted allocations.
-> 
-> This patch adds boolean "accounted" entry into trace output,
-> and set it to 'true' for calls used __GFP_ACCOUNT flag and
-> for allocations from caches marked with SLAB_ACCOUNT.
-> 
-> Signed-off-by: Vasily Averin <vvs@openvz.org>
-> Acked-by: Shakeel Butt <shakeelb@google.com>
-> ---
-> v4:
->  1) replaced in patch descripion: "accounted" instead of "allocated"
->  2) added "Acked-by" from Shakeel,
->  3) re-addressed to akpm@
-> 
-> v3:
->  1) rework kmem_cache_alloc* tracepoints once again,
->     added struct kmem_cache argument into existing templates,
-> 	thanks to Matthew Wilcox
->  2) updated according trace_* calls
->  3) added boolean "allocated" entry into trace output,
-> 	thanks to Roman
->  4) updated patch subject and description
-> 
-> v2:
->  1) handle kmem_cache_alloc_node(), thanks to Shakeel
->  2) rework kmem_cache_alloc* tracepoints to use cachep instead
->     of current cachep->*size parameters.
->     NB: kmem_cache_alloc_node tracepoint in SLOB cannot use cachep,
->         and therefore it was replaced by kmalloc_node.
-> ---
->  include/trace/events/kmem.h | 38 +++++++++++++++++++++++--------------
->  mm/slab.c                   | 10 +++++-----
->  mm/slab_common.c            |  9 ++++-----
->  mm/slob.c                   |  8 ++++----
->  mm/slub.c                   | 20 +++++++++----------
->  5 files changed, 47 insertions(+), 38 deletions(-)
+The following changes since commit dfd2b37edf7ef469574ef7f36e3a1905ac9ead62:
 
-I'd prefer the slab tree, given the files it touches and expected conflict
-with Hyeonggon Yoo's v3 of kmalloc unification series. BTW the suggested
-split of kmalloc/kmem_cache_alloc tracepoints [1] will be useful if
-implemented, as we won't have to pass NULL kmem_cache pointers from some of
-the kmalloc callers.
-I would add it there after 5.19-rc1 to avoid conflict with kmem.h changes in
-mm-stable, that should be part of mainline before rc1.
+  regulator: dt-bindings: Revise the rt5190a buck/ldo description (2022-04-22 12:37:22 +0100)
 
-Thanks!
+are available in the Git repository at:
 
-[1] https://lore.kernel.org/all/bbb97e3c-e597-dd6e-e213-55bc1779d901@suse.cz/
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git tags/regulator-v5.19
 
-> diff --git a/include/trace/events/kmem.h b/include/trace/events/kmem.h
-> index 71c141804222..5bfeb6f276f1 100644
-> --- a/include/trace/events/kmem.h
-> +++ b/include/trace/events/kmem.h
-> @@ -13,11 +13,12 @@ DECLARE_EVENT_CLASS(kmem_alloc,
->  
->  	TP_PROTO(unsigned long call_site,
->  		 const void *ptr,
-> +		 struct kmem_cache *s,
->  		 size_t bytes_req,
->  		 size_t bytes_alloc,
->  		 gfp_t gfp_flags),
->  
-> -	TP_ARGS(call_site, ptr, bytes_req, bytes_alloc, gfp_flags),
-> +	TP_ARGS(call_site, ptr, s, bytes_req, bytes_alloc, gfp_flags),
->  
->  	TP_STRUCT__entry(
->  		__field(	unsigned long,	call_site	)
-> @@ -25,6 +26,7 @@ DECLARE_EVENT_CLASS(kmem_alloc,
->  		__field(	size_t,		bytes_req	)
->  		__field(	size_t,		bytes_alloc	)
->  		__field(	unsigned long,	gfp_flags	)
-> +		__field(	bool,		accounted	)
->  	),
->  
->  	TP_fast_assign(
-> @@ -33,42 +35,46 @@ DECLARE_EVENT_CLASS(kmem_alloc,
->  		__entry->bytes_req	= bytes_req;
->  		__entry->bytes_alloc	= bytes_alloc;
->  		__entry->gfp_flags	= (__force unsigned long)gfp_flags;
-> +		__entry->accounted	= (gfp_flags & __GFP_ACCOUNT) ||
-> +					  (s && s->flags & SLAB_ACCOUNT);
->  	),
->  
-> -	TP_printk("call_site=%pS ptr=%p bytes_req=%zu bytes_alloc=%zu gfp_flags=%s",
-> +	TP_printk("call_site=%pS ptr=%p bytes_req=%zu bytes_alloc=%zu gfp_flags=%s accounted=%s",
->  		(void *)__entry->call_site,
->  		__entry->ptr,
->  		__entry->bytes_req,
->  		__entry->bytes_alloc,
-> -		show_gfp_flags(__entry->gfp_flags))
-> +		show_gfp_flags(__entry->gfp_flags),
-> +		__entry->accounted ? "true" : "false")
->  );
->  
->  DEFINE_EVENT(kmem_alloc, kmalloc,
->  
-> -	TP_PROTO(unsigned long call_site, const void *ptr,
-> +	TP_PROTO(unsigned long call_site, const void *ptr, struct kmem_cache *s,
->  		 size_t bytes_req, size_t bytes_alloc, gfp_t gfp_flags),
->  
-> -	TP_ARGS(call_site, ptr, bytes_req, bytes_alloc, gfp_flags)
-> +	TP_ARGS(call_site, ptr, s, bytes_req, bytes_alloc, gfp_flags)
->  );
->  
->  DEFINE_EVENT(kmem_alloc, kmem_cache_alloc,
->  
-> -	TP_PROTO(unsigned long call_site, const void *ptr,
-> +	TP_PROTO(unsigned long call_site, const void *ptr, struct kmem_cache *s,
->  		 size_t bytes_req, size_t bytes_alloc, gfp_t gfp_flags),
->  
-> -	TP_ARGS(call_site, ptr, bytes_req, bytes_alloc, gfp_flags)
-> +	TP_ARGS(call_site, ptr, s, bytes_req, bytes_alloc, gfp_flags)
->  );
->  
->  DECLARE_EVENT_CLASS(kmem_alloc_node,
->  
->  	TP_PROTO(unsigned long call_site,
->  		 const void *ptr,
-> +		 struct kmem_cache *s,
->  		 size_t bytes_req,
->  		 size_t bytes_alloc,
->  		 gfp_t gfp_flags,
->  		 int node),
->  
-> -	TP_ARGS(call_site, ptr, bytes_req, bytes_alloc, gfp_flags, node),
-> +	TP_ARGS(call_site, ptr, s, bytes_req, bytes_alloc, gfp_flags, node),
->  
->  	TP_STRUCT__entry(
->  		__field(	unsigned long,	call_site	)
-> @@ -77,6 +83,7 @@ DECLARE_EVENT_CLASS(kmem_alloc_node,
->  		__field(	size_t,		bytes_alloc	)
->  		__field(	unsigned long,	gfp_flags	)
->  		__field(	int,		node		)
-> +		__field(	bool,		accounted	)
->  	),
->  
->  	TP_fast_assign(
-> @@ -86,33 +93,36 @@ DECLARE_EVENT_CLASS(kmem_alloc_node,
->  		__entry->bytes_alloc	= bytes_alloc;
->  		__entry->gfp_flags	= (__force unsigned long)gfp_flags;
->  		__entry->node		= node;
-> +		__entry->accounted	= (gfp_flags & __GFP_ACCOUNT) ||
-> +					  (s && s->flags & SLAB_ACCOUNT);
->  	),
->  
-> -	TP_printk("call_site=%pS ptr=%p bytes_req=%zu bytes_alloc=%zu gfp_flags=%s node=%d",
-> +	TP_printk("call_site=%pS ptr=%p bytes_req=%zu bytes_alloc=%zu gfp_flags=%s node=%d accounted=%s",
->  		(void *)__entry->call_site,
->  		__entry->ptr,
->  		__entry->bytes_req,
->  		__entry->bytes_alloc,
->  		show_gfp_flags(__entry->gfp_flags),
-> -		__entry->node)
-> +		__entry->node,
-> +		__entry->accounted ? "true" : "false")
->  );
->  
->  DEFINE_EVENT(kmem_alloc_node, kmalloc_node,
->  
->  	TP_PROTO(unsigned long call_site, const void *ptr,
-> -		 size_t bytes_req, size_t bytes_alloc,
-> +		 struct kmem_cache *s, size_t bytes_req, size_t bytes_alloc,
->  		 gfp_t gfp_flags, int node),
->  
-> -	TP_ARGS(call_site, ptr, bytes_req, bytes_alloc, gfp_flags, node)
-> +	TP_ARGS(call_site, ptr, s, bytes_req, bytes_alloc, gfp_flags, node)
->  );
->  
->  DEFINE_EVENT(kmem_alloc_node, kmem_cache_alloc_node,
->  
->  	TP_PROTO(unsigned long call_site, const void *ptr,
-> -		 size_t bytes_req, size_t bytes_alloc,
-> +		 struct kmem_cache *s, size_t bytes_req, size_t bytes_alloc,
->  		 gfp_t gfp_flags, int node),
->  
-> -	TP_ARGS(call_site, ptr, bytes_req, bytes_alloc, gfp_flags, node)
-> +	TP_ARGS(call_site, ptr, s, bytes_req, bytes_alloc, gfp_flags, node)
->  );
->  
->  TRACE_EVENT(kfree,
-> diff --git a/mm/slab.c b/mm/slab.c
-> index 0edb474edef1..e5802445c7d6 100644
-> --- a/mm/slab.c
-> +++ b/mm/slab.c
-> @@ -3492,7 +3492,7 @@ void *__kmem_cache_alloc_lru(struct kmem_cache *cachep, struct list_lru *lru,
->  {
->  	void *ret = slab_alloc(cachep, lru, flags, cachep->object_size, _RET_IP_);
->  
-> -	trace_kmem_cache_alloc(_RET_IP_, ret,
-> +	trace_kmem_cache_alloc(_RET_IP_, ret, cachep,
->  			       cachep->object_size, cachep->size, flags);
->  
->  	return ret;
-> @@ -3581,7 +3581,7 @@ kmem_cache_alloc_trace(struct kmem_cache *cachep, gfp_t flags, size_t size)
->  	ret = slab_alloc(cachep, NULL, flags, size, _RET_IP_);
->  
->  	ret = kasan_kmalloc(cachep, ret, size, flags);
-> -	trace_kmalloc(_RET_IP_, ret,
-> +	trace_kmalloc(_RET_IP_, ret, cachep,
->  		      size, cachep->size, flags);
->  	return ret;
->  }
-> @@ -3606,7 +3606,7 @@ void *kmem_cache_alloc_node(struct kmem_cache *cachep, gfp_t flags, int nodeid)
->  {
->  	void *ret = slab_alloc_node(cachep, flags, nodeid, cachep->object_size, _RET_IP_);
->  
-> -	trace_kmem_cache_alloc_node(_RET_IP_, ret,
-> +	trace_kmem_cache_alloc_node(_RET_IP_, ret, cachep,
->  				    cachep->object_size, cachep->size,
->  				    flags, nodeid);
->  
-> @@ -3625,7 +3625,7 @@ void *kmem_cache_alloc_node_trace(struct kmem_cache *cachep,
->  	ret = slab_alloc_node(cachep, flags, nodeid, size, _RET_IP_);
->  
->  	ret = kasan_kmalloc(cachep, ret, size, flags);
-> -	trace_kmalloc_node(_RET_IP_, ret,
-> +	trace_kmalloc_node(_RET_IP_, ret, cachep,
->  			   size, cachep->size,
->  			   flags, nodeid);
->  	return ret;
-> @@ -3708,7 +3708,7 @@ static __always_inline void *__do_kmalloc(size_t size, gfp_t flags,
->  	ret = slab_alloc(cachep, NULL, flags, size, caller);
->  
->  	ret = kasan_kmalloc(cachep, ret, size, flags);
-> -	trace_kmalloc(caller, ret,
-> +	trace_kmalloc(caller, ret, cachep,
->  		      size, cachep->size, flags);
->  
->  	return ret;
-> diff --git a/mm/slab_common.c b/mm/slab_common.c
-> index 2b3206a2c3b5..a345e8600e00 100644
-> --- a/mm/slab_common.c
-> +++ b/mm/slab_common.c
-> @@ -25,13 +25,12 @@
->  #include <asm/page.h>
->  #include <linux/memcontrol.h>
->  
-> -#define CREATE_TRACE_POINTS
-> -#include <trace/events/kmem.h>
-> -
->  #include "internal.h"
-> -
->  #include "slab.h"
->  
-> +#define CREATE_TRACE_POINTS
-> +#include <trace/events/kmem.h>
-> +
->  enum slab_state slab_state;
->  LIST_HEAD(slab_caches);
->  DEFINE_MUTEX(slab_mutex);
-> @@ -967,7 +966,7 @@ EXPORT_SYMBOL(kmalloc_order);
->  void *kmalloc_order_trace(size_t size, gfp_t flags, unsigned int order)
->  {
->  	void *ret = kmalloc_order(size, flags, order);
-> -	trace_kmalloc(_RET_IP_, ret, size, PAGE_SIZE << order, flags);
-> +	trace_kmalloc(_RET_IP_, ret, NULL, size, PAGE_SIZE << order, flags);
->  	return ret;
->  }
->  EXPORT_SYMBOL(kmalloc_order_trace);
-> diff --git a/mm/slob.c b/mm/slob.c
-> index 40ea6e2d4ccd..dbefa0da0dfc 100644
-> --- a/mm/slob.c
-> +++ b/mm/slob.c
-> @@ -505,7 +505,7 @@ __do_kmalloc_node(size_t size, gfp_t gfp, int node, unsigned long caller)
->  		*m = size;
->  		ret = (void *)m + minalign;
->  
-> -		trace_kmalloc_node(caller, ret,
-> +		trace_kmalloc_node(caller, ret, NULL,
->  				   size, size + minalign, gfp, node);
->  	} else {
->  		unsigned int order = get_order(size);
-> @@ -514,7 +514,7 @@ __do_kmalloc_node(size_t size, gfp_t gfp, int node, unsigned long caller)
->  			gfp |= __GFP_COMP;
->  		ret = slob_new_pages(gfp, order, node);
->  
-> -		trace_kmalloc_node(caller, ret,
-> +		trace_kmalloc_node(caller, ret, NULL,
->  				   size, PAGE_SIZE << order, gfp, node);
->  	}
->  
-> @@ -610,12 +610,12 @@ static void *slob_alloc_node(struct kmem_cache *c, gfp_t flags, int node)
->  
->  	if (c->size < PAGE_SIZE) {
->  		b = slob_alloc(c->size, flags, c->align, node, 0);
-> -		trace_kmem_cache_alloc_node(_RET_IP_, b, c->object_size,
-> +		trace_kmem_cache_alloc_node(_RET_IP_, b, NULL, c->object_size,
->  					    SLOB_UNITS(c->size) * SLOB_UNIT,
->  					    flags, node);
->  	} else {
->  		b = slob_new_pages(flags, get_order(c->size), node);
-> -		trace_kmem_cache_alloc_node(_RET_IP_, b, c->object_size,
-> +		trace_kmem_cache_alloc_node(_RET_IP_, b, NULL, c->object_size,
->  					    PAGE_SIZE << get_order(c->size),
->  					    flags, node);
->  	}
-> diff --git a/mm/slub.c b/mm/slub.c
-> index ed5c2c03a47a..9b10591646dd 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -3231,7 +3231,7 @@ void *__kmem_cache_alloc_lru(struct kmem_cache *s, struct list_lru *lru,
->  {
->  	void *ret = slab_alloc(s, lru, gfpflags, _RET_IP_, s->object_size);
->  
-> -	trace_kmem_cache_alloc(_RET_IP_, ret, s->object_size,
-> +	trace_kmem_cache_alloc(_RET_IP_, ret, s, s->object_size,
->  				s->size, gfpflags);
->  
->  	return ret;
-> @@ -3254,7 +3254,7 @@ EXPORT_SYMBOL(kmem_cache_alloc_lru);
->  void *kmem_cache_alloc_trace(struct kmem_cache *s, gfp_t gfpflags, size_t size)
->  {
->  	void *ret = slab_alloc(s, NULL, gfpflags, _RET_IP_, size);
-> -	trace_kmalloc(_RET_IP_, ret, size, s->size, gfpflags);
-> +	trace_kmalloc(_RET_IP_, ret, s, size, s->size, gfpflags);
->  	ret = kasan_kmalloc(s, ret, size, gfpflags);
->  	return ret;
->  }
-> @@ -3266,7 +3266,7 @@ void *kmem_cache_alloc_node(struct kmem_cache *s, gfp_t gfpflags, int node)
->  {
->  	void *ret = slab_alloc_node(s, NULL, gfpflags, node, _RET_IP_, s->object_size);
->  
-> -	trace_kmem_cache_alloc_node(_RET_IP_, ret,
-> +	trace_kmem_cache_alloc_node(_RET_IP_, ret, s,
->  				    s->object_size, s->size, gfpflags, node);
->  
->  	return ret;
-> @@ -3280,7 +3280,7 @@ void *kmem_cache_alloc_node_trace(struct kmem_cache *s,
->  {
->  	void *ret = slab_alloc_node(s, NULL, gfpflags, node, _RET_IP_, size);
->  
-> -	trace_kmalloc_node(_RET_IP_, ret,
-> +	trace_kmalloc_node(_RET_IP_, ret, s,
->  			   size, s->size, gfpflags, node);
->  
->  	ret = kasan_kmalloc(s, ret, size, gfpflags);
-> @@ -4409,7 +4409,7 @@ void *__kmalloc(size_t size, gfp_t flags)
->  
->  	ret = slab_alloc(s, NULL, flags, _RET_IP_, size);
->  
-> -	trace_kmalloc(_RET_IP_, ret, size, s->size, flags);
-> +	trace_kmalloc(_RET_IP_, ret, s, size, s->size, flags);
->  
->  	ret = kasan_kmalloc(s, ret, size, flags);
->  
-> @@ -4443,7 +4443,7 @@ void *__kmalloc_node(size_t size, gfp_t flags, int node)
->  	if (unlikely(size > KMALLOC_MAX_CACHE_SIZE)) {
->  		ret = kmalloc_large_node(size, flags, node);
->  
-> -		trace_kmalloc_node(_RET_IP_, ret,
-> +		trace_kmalloc_node(_RET_IP_, ret, NULL,
->  				   size, PAGE_SIZE << get_order(size),
->  				   flags, node);
->  
-> @@ -4457,7 +4457,7 @@ void *__kmalloc_node(size_t size, gfp_t flags, int node)
->  
->  	ret = slab_alloc_node(s, NULL, flags, node, _RET_IP_, size);
->  
-> -	trace_kmalloc_node(_RET_IP_, ret, size, s->size, flags, node);
-> +	trace_kmalloc_node(_RET_IP_, ret, s, size, s->size, flags, node);
->  
->  	ret = kasan_kmalloc(s, ret, size, flags);
->  
-> @@ -4916,7 +4916,7 @@ void *__kmalloc_track_caller(size_t size, gfp_t gfpflags, unsigned long caller)
->  	ret = slab_alloc(s, NULL, gfpflags, caller, size);
->  
->  	/* Honor the call site pointer we received. */
-> -	trace_kmalloc(caller, ret, size, s->size, gfpflags);
-> +	trace_kmalloc(caller, ret, s, size, s->size, gfpflags);
->  
->  	return ret;
->  }
-> @@ -4932,7 +4932,7 @@ void *__kmalloc_node_track_caller(size_t size, gfp_t gfpflags,
->  	if (unlikely(size > KMALLOC_MAX_CACHE_SIZE)) {
->  		ret = kmalloc_large_node(size, gfpflags, node);
->  
-> -		trace_kmalloc_node(caller, ret,
-> +		trace_kmalloc_node(caller, ret, NULL,
->  				   size, PAGE_SIZE << get_order(size),
->  				   gfpflags, node);
->  
-> @@ -4947,7 +4947,7 @@ void *__kmalloc_node_track_caller(size_t size, gfp_t gfpflags,
->  	ret = slab_alloc_node(s, NULL, gfpflags, node, caller, size);
->  
->  	/* Honor the call site pointer we received. */
-> -	trace_kmalloc_node(caller, ret, size, s->size, gfpflags, node);
-> +	trace_kmalloc_node(caller, ret, s, size, s->size, gfpflags, node);
->  
->  	return ret;
->  }
+for you to fetch changes up to a5b8e4a5ceec0ab6453176bc7f5eceafa78bf8a9:
 
+  Merge remote-tracking branch 'regulator/for-5.19' into regulator-next (2022-05-17 16:59:05 +0100)
+
+----------------------------------------------------------------
+regulator: Updates for v5.19
+
+This is mostly a drivers update including a couple of new drivers but we
+do have some fixes and improvements to the core as well.
+
+ - Make sure we don't log spuriously about uncontrollable regulators.
+ - Don't use delays when we should use sleeps for regulators with
+   larger ramp times.
+ - Support for MediaTek MT6358 and MT6366, Richtek RT5759 and Silicon
+   Mitus SM5703.
+
+----------------------------------------------------------------
+Andy Shevchenko (1):
+      regulator: rpi-panel-attiny: Get rid of duplicate of_node assignment
+
+Brian Norris (2):
+      regulator: core: Rename _regulator_enable_delay()
+      regulator: core: Sleep (not delay) in set_voltage()
+
+ChiYuan Huang (2):
+      regulator: rt5759: Add support for Richtek RT5759 DCDC converter
+      regulator: Add binding for Richtek RT5759 DCDC converter
+
+Johnson Wang (4):
+      regulator: mt6366: Add support for MT6366 regulator
+      regulator: Add BUCK and LDO document for MT6358 and MT6366
+      regulator: Add BUCK and LDO document for MT6358 and MT6366
+      regulator: mt6366: Add support for MT6366 regulator
+
+Konrad Dybcio (1):
+      regulator: qcom_smd: Fix up PM8950 regulator configuration
+
+Krzysztof Kozlowski (7):
+      regulator: dt-bindings: richtek,rt4801: minor comments adjustments
+      regulator: dt-bindings: qcom,rpmh: document h and k ID
+      regulator: dt-bindings: richtek,rt4801: use existing ena_gpiod feature
+      regulator: richtek,rt4801: parse GPIOs per regulator
+      regulator: dt-bindings: qcom,rpmh: update maintainers
+      regulator: dt-bindings: qcom,rpmh: document supplies per variant
+      regulator: dt-bindings: qcom,rpmh: document vdd-l7-bob-supply on PMR735A
+
+Kunihiko Hayashi (2):
+      regulator: uniphier: Clean up clocks, resets, and their names using compatible string
+      regulator: uniphier: Use unevaluatedProperties
+
+Mark Brown (7):
+      regulator: fixed: Remove print on allocation failure
+      regulator: Flag uncontrollable regulators as always_on
+      regulator: Add support for MediaTek PMIC MT6366
+      Add support for MediaTek PMIC MT6366
+      regulator Add Richtek RT5759 buck converter support
+      regulator: dt-bindings: qcom,rpmh: minor cleanups and extend supplies
+      Merge remote-tracking branch 'regulator/for-5.19' into regulator-next
+
+Markuss Broks (3):
+      dt-bindings: regulator: Add bindings for Silicon Mitus SM5703 regulators
+      regulator: sm5703-regulator: Add regulators support for SM5703 MFD
+      regulator: sm5703: Correct reference to the common regulator schema
+
+Miaoqian Lin (2):
+      regulator: pfuze100: Fix refcount leak in pfuze_parse_regulators_dt
+      regulator: scmi: Fix refcount leak in scmi_regulator_probe
+
+Minghao Chi (1):
+      regulator: stm32-vrefbuf: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
+
+Nícolas F. R. A. Prado (1):
+      regulator: mt6315: Enforce regulator-compatible, not name
+
+Per-Daniel Olsson (2):
+      regulator: Add property for I2C level shifter
+      regulator: pca9450: Make I2C Level Translator configurable
+
+Rickard x Andersson (3):
+      regulator: Add property for WDOG_B warm reset
+      regulator: pca9450: Make warm reset on WDOG_B assertion
+      regulator: pca9450: Enable DVS control via PMIC_STBY_REQ
+
+Wei Yongjun (1):
+      regulator: da9121: Fix uninit-value in da9121_assign_chip_model()
+
+Zev Weiss (2):
+      regulator: core: Add error flags to sysfs attributes
+      regulator: core: Fix enable_count imbalance with EXCLUSIVE_GET
+
+ Documentation/ABI/testing/sysfs-class-regulator    |  81 +++++
+ .../bindings/regulator/mt6315-regulator.yaml       |   2 +-
+ .../bindings/regulator/mt6358-regulator.txt        |  22 +-
+ .../bindings/regulator/nxp,pca9450-regulator.yaml  |  11 +
+ .../bindings/regulator/qcom,rpmh-regulator.yaml    | 262 ++++++++++++++-
+ .../regulator/richtek,rt4801-regulator.yaml        |  21 +-
+ .../regulator/richtek,rt5759-regulator.yaml        |  90 +++++
+ .../regulator/siliconmitus,sm5703-regulator.yaml   |  49 +++
+ .../regulator/socionext,uniphier-regulator.yaml    |  57 +++-
+ drivers/regulator/Kconfig                          |  17 +
+ drivers/regulator/Makefile                         |   2 +
+ drivers/regulator/core.c                           |  93 +++++-
+ drivers/regulator/da9121-regulator.c               |   2 +
+ drivers/regulator/fixed.c                          |   5 +-
+ drivers/regulator/mt6358-regulator.c               | 213 +++++++++++-
+ drivers/regulator/pca9450-regulator.c              |  27 +-
+ drivers/regulator/pfuze100-regulator.c             |   2 +
+ drivers/regulator/qcom_smd-regulator.c             |  35 +-
+ drivers/regulator/rpi-panel-attiny-regulator.c     |   1 -
+ drivers/regulator/rt4801-regulator.c               |  49 ++-
+ drivers/regulator/rt5759-regulator.c               | 369 +++++++++++++++++++++
+ drivers/regulator/scmi-regulator.c                 |   2 +-
+ drivers/regulator/sm5703-regulator.c               | 167 ++++++++++
+ drivers/regulator/stm32-vrefbuf.c                  |  30 +-
+ include/linux/regulator/mt6358-regulator.h         |  45 +++
+ include/linux/regulator/pca9450.h                  |   7 +
+ 26 files changed, 1538 insertions(+), 123 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/regulator/richtek,rt5759-regulator.yaml
+ create mode 100644 Documentation/devicetree/bindings/regulator/siliconmitus,sm5703-regulator.yaml
+ create mode 100644 drivers/regulator/rt5759-regulator.c
+ create mode 100644 drivers/regulator/sm5703-regulator.c

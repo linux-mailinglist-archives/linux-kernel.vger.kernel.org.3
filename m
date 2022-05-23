@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8749B531709
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:52:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 020585319A0
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:55:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240776AbiEWR1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:27:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49428 "EHLO
+        id S241786AbiEWRgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:36:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240429AbiEWRRj (ORCPT
+        with ESMTP id S240876AbiEWR0I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:17:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1B4532CA;
-        Mon, 23 May 2022 10:17:31 -0700 (PDT)
+        Mon, 23 May 2022 13:26:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88E9403CD;
+        Mon, 23 May 2022 10:21:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EA875614EB;
-        Mon, 23 May 2022 17:15:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6E96C385A9;
-        Mon, 23 May 2022 17:15:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 73019B8121B;
+        Mon, 23 May 2022 17:21:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7383C385A9;
+        Mon, 23 May 2022 17:21:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326124;
-        bh=VXtcAqn6/M6grVmBFWvrRlt1YfHPvmVTbARNuX4JhIs=;
+        s=korg; t=1653326462;
+        bh=FkQJY2YpFBPSa+N7BK6rVU62t3c0Wequ8vrIz/IzQYQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WBBIo5eXAdIoTob0jt8DTy/pFv4ATL0gSs/AUu14LG2ID3dxIyIbRc3Xhpv1GYLeJ
-         +S4Y2wBxzmZRxixb8psOCG+9gijiqzcrqaqGebhxcoVMTLHTh+kzxaggYJ6PiswntF
-         uGLOQ94oRYnZBRQdtWfyB8HSPoPx0lLE0GWu2jTY=
+        b=OeMBfrkjsIc3f4WRKSRUHObh+H8yAYiR67eQQ5Fsjub/47ogtS1lkoVVB0Qq6Vk+p
+         sxVoh8NLnmVhjSfRxH4eJNPFGBRbA2K7a+0aEq6aSUohQ5c3t+Ti5O1pf4c4FckiAM
+         +vvzcBSocxShSQGBXDRo45m/WCCCzcemIDNvJ2Aw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ondrej Mosnacek <omosnace@redhat.com>,
-        Brian Masney <bmasney@redhat.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Subject: [PATCH 5.4 31/68] crypto: qcom-rng - fix infinite loop on requests not multiple of WORD_SZ
+        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 089/132] NFC: nci: fix sleep in atomic context bugs caused by nci_skb_alloc
 Date:   Mon, 23 May 2022 19:04:58 +0200
-Message-Id: <20220523165807.782143812@linuxfoundation.org>
+Message-Id: <20220523165837.905342926@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165802.500642349@linuxfoundation.org>
-References: <20220523165802.500642349@linuxfoundation.org>
+In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
+References: <20220523165823.492309987@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,40 +56,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ondrej Mosnacek <omosnace@redhat.com>
+From: Duoming Zhou <duoming@zju.edu.cn>
 
-commit 16287397ec5c08aa58db6acf7dbc55470d78087d upstream.
+[ Upstream commit 23dd4581350d4ffa23d58976ec46408f8f4c1e16 ]
 
-The commit referenced in the Fixes tag removed the 'break' from the else
-branch in qcom_rng_read(), causing an infinite loop whenever 'max' is
-not a multiple of WORD_SZ. This can be reproduced e.g. by running:
+There are sleep in atomic context bugs when the request to secure
+element of st-nci is timeout. The root cause is that nci_skb_alloc
+with GFP_KERNEL parameter is called in st_nci_se_wt_timeout which is
+a timer handler. The call paths that could trigger bugs are shown below:
 
-    kcapi-rng -b 67 >/dev/null
+    (interrupt context 1)
+st_nci_se_wt_timeout
+  nci_hci_send_event
+    nci_hci_send_data
+      nci_skb_alloc(..., GFP_KERNEL) //may sleep
 
-There are many ways to fix this without adding back the 'break', but
-they all seem more awkward than simply adding it back, so do just that.
+   (interrupt context 2)
+st_nci_se_wt_timeout
+  nci_hci_send_event
+    nci_hci_send_data
+      nci_send_data
+        nci_queue_tx_data_frags
+          nci_skb_alloc(..., GFP_KERNEL) //may sleep
 
-Tested on a machine with Qualcomm Amberwing processor.
+This patch changes allocation mode of nci_skb_alloc from GFP_KERNEL to
+GFP_ATOMIC in order to prevent atomic context sleeping. The GFP_ATOMIC
+flag makes memory allocation operation could be used in atomic context.
 
-Fixes: a680b1832ced ("crypto: qcom-rng - ensure buffer for generate is completely filled")
-Cc: stable@vger.kernel.org
-Signed-off-by: Ondrej Mosnacek <omosnace@redhat.com>
-Reviewed-by: Brian Masney <bmasney@redhat.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: ed06aeefdac3 ("nfc: st-nci: Rename st21nfcb to st-nci")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Link: https://lore.kernel.org/r/20220517012530.75714-1-duoming@zju.edu.cn
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/crypto/qcom-rng.c |    1 +
- 1 file changed, 1 insertion(+)
+ net/nfc/nci/data.c | 2 +-
+ net/nfc/nci/hci.c  | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
---- a/drivers/crypto/qcom-rng.c
-+++ b/drivers/crypto/qcom-rng.c
-@@ -64,6 +64,7 @@ static int qcom_rng_read(struct qcom_rng
- 		} else {
- 			/* copy only remaining bytes */
- 			memcpy(data, &val, max - currsize);
-+			break;
- 		}
- 	} while (currsize < max);
+diff --git a/net/nfc/nci/data.c b/net/nfc/nci/data.c
+index 6055dc9a82aa..aa5e712adf07 100644
+--- a/net/nfc/nci/data.c
++++ b/net/nfc/nci/data.c
+@@ -118,7 +118,7 @@ static int nci_queue_tx_data_frags(struct nci_dev *ndev,
  
+ 		skb_frag = nci_skb_alloc(ndev,
+ 					 (NCI_DATA_HDR_SIZE + frag_len),
+-					 GFP_KERNEL);
++					 GFP_ATOMIC);
+ 		if (skb_frag == NULL) {
+ 			rc = -ENOMEM;
+ 			goto free_exit;
+diff --git a/net/nfc/nci/hci.c b/net/nfc/nci/hci.c
+index e199912ee1e5..85b808fdcbc3 100644
+--- a/net/nfc/nci/hci.c
++++ b/net/nfc/nci/hci.c
+@@ -153,7 +153,7 @@ static int nci_hci_send_data(struct nci_dev *ndev, u8 pipe,
+ 
+ 	i = 0;
+ 	skb = nci_skb_alloc(ndev, conn_info->max_pkt_payload_len +
+-			    NCI_DATA_HDR_SIZE, GFP_KERNEL);
++			    NCI_DATA_HDR_SIZE, GFP_ATOMIC);
+ 	if (!skb)
+ 		return -ENOMEM;
+ 
+@@ -184,7 +184,7 @@ static int nci_hci_send_data(struct nci_dev *ndev, u8 pipe,
+ 		if (i < data_len) {
+ 			skb = nci_skb_alloc(ndev,
+ 					    conn_info->max_pkt_payload_len +
+-					    NCI_DATA_HDR_SIZE, GFP_KERNEL);
++					    NCI_DATA_HDR_SIZE, GFP_ATOMIC);
+ 			if (!skb)
+ 				return -ENOMEM;
+ 
+-- 
+2.35.1
+
 
 

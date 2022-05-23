@@ -2,107 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 113F0530B96
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 11:03:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DF99530C23
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 11:04:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232285AbiEWIxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 04:53:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42306 "EHLO
+        id S232119AbiEWIyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 04:54:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232265AbiEWIxq (ORCPT
+        with ESMTP id S232165AbiEWIyJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 04:53:46 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B0531219
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 01:53:45 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24N8i6U2034362;
-        Mon, 23 May 2022 08:53:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=qHEO/P2/97grkhG9Dhe6TgBrYYee1RYDI3UjcZGt/CQ=;
- b=Dc+L1A7H3swP2j42tyEO2xaJNJsTPDclLneXABo5BIaOu+27SO/fw5hR70ZxjIIJsUWk
- WdeyJ/g+Hrr7mjMODvO/hKXTUuvyajYY/kDBQ1/ZwVTGyKElKyoDMH3l2QkRqLUs8RLm
- rMJ+z63lIh7ldB55Qyz7VjAlYG/d4XEXdGdo6Hewm9Pnmw4DeC7oKQE9plMdolC1NqAb
- gmHD+3bI8CkEt5Qbnvjcqrx17c+5LVAfJCraKb957wDGv1NjT2HEP2A32RiD+sHkwk15
- NpE647UV49B/qW21ETZemXirECv0yAPFTN9LB7GVKJZySLMxW6fBBx0NDevb0RjBEg1D mw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g7a2dyg8g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 23 May 2022 08:53:31 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24N8m7I5013404;
-        Mon, 23 May 2022 08:53:30 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g7a2dyg7h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 23 May 2022 08:53:30 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24N8GKi6024021;
-        Mon, 23 May 2022 08:53:28 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma04fra.de.ibm.com with ESMTP id 3g6qq9a2sy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 23 May 2022 08:53:27 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24N8dMTK50790694
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 23 May 2022 08:39:22 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7697C11C04C;
-        Mon, 23 May 2022 08:53:25 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F3DC611C04A;
-        Mon, 23 May 2022 08:53:24 +0000 (GMT)
-Received: from li-e979b1cc-23ba-11b2-a85c-dfd230f6cf82 (unknown [9.152.224.205])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 23 May 2022 08:53:24 +0000 (GMT)
-Date:   Mon, 23 May 2022 10:53:23 +0200
-From:   Halil Pasic <pasic@linux.ibm.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     mst@redhat.com, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de,
-        peterz@infradead.org, paulmck@kernel.org, maz@kernel.org,
-        cohuck@redhat.com, eperezma@redhat.com, lulu@redhat.com,
-        sgarzare@redhat.com, xuanzhuo@linux.alibaba.com,
-        Halil Pasic <pasic@linux.ibm.com>
-Subject: Re: [PATCH V5 0/9] rework on the IRQ hardening of virtio
-Message-ID: <20220523105323.58c28d75.pasic@linux.ibm.com>
-In-Reply-To: <20220518035951.94220-1-jasowang@redhat.com>
-References: <20220518035951.94220-1-jasowang@redhat.com>
-Organization: IBM
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        Mon, 23 May 2022 04:54:09 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 133F82458B;
+        Mon, 23 May 2022 01:54:08 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 6B8AB1F40045
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1653296046;
+        bh=5Rz9++MofB5VX7lCcC6PcfJLnooPHyGb9BzFs4NR7Ek=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Rn7uMyAi++FEAgt9YN7b/3tJ3AyEoknlpGFy5UppiR9PQ/BDoqeBZkqbUVnUbAed6
+         NjJy5gaiUIJIZZ8CArLqSbazTfkgLTogGuGIZwwlPqG8yhPt1lcgydXm+5TR23u87R
+         5vo89AurSnCoWq8uiUNwHI6UMCHlh0gp+Tt+KJ3wC7QOXLFCyNK83icA7BI/WAO27q
+         u+xklQ48YrIEK5V3UrEOaFQj9MPaQc2FuXxyOCfJQBEuBMRlUCIvoqsmryN+TJn7UR
+         e+s01xunyBMzTCLytsLirGxbkzT+HAngUpUrFI3LjKqTGqT5/bJRLZ19dv/Nh1SoZG
+         9Tt4jqO/WA/kw==
+Message-ID: <56598535-5aa4-020e-25fd-295416f4d979@collabora.com>
+Date:   Mon, 23 May 2022 10:54:03 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 2QDW4SEeX3Ni7NVnpni7rNqwiC6FkjqX
-X-Proofpoint-GUID: FG_7jviQorBOfAZ6lw_6pmTTrwR5Haon
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-23_03,2022-05-20_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- priorityscore=1501 impostorscore=0 mlxscore=0 adultscore=0 spamscore=0
- mlxlogscore=889 malwarescore=0 suspectscore=0 clxscore=1015 bulkscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205230045
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 1/5] Input: mtk-pmic-keys - Add kerneldoc to driver
+ structures
+Content-Language: en-US
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     matthias.bgg@gmail.com, mkorpershoek@baylibre.com,
+        linux-input@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220520125132.229191-1-angelogioacchino.delregno@collabora.com>
+ <20220520125132.229191-2-angelogioacchino.delregno@collabora.com>
+ <YosOsgPwMGuLk9dv@google.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <YosOsgPwMGuLk9dv@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 18 May 2022 11:59:42 +0800
-Jason Wang <jasowang@redhat.com> wrote:
+Il 23/05/22 06:33, Dmitry Torokhov ha scritto:
+> Hi AngeloGioacchino,
+> 
+> On Fri, May 20, 2022 at 02:51:28PM +0200, AngeloGioacchino Del Regno wrote:
+>> To enhance human readability, add kerneldoc to all driver structs.
+> 
+> I am doubtful that this is useful. The reason is that I believe
+> kerneldoc format is only useful for documenting cross-subsystem APIs.
+> Kerneldoc for driver-private data and functions simply pollutes API
+> docs.
+> 
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> ---
+>>   drivers/input/keyboard/mtk-pmic-keys.c | 30 +++++++++++++++++++++++++-
+>>   1 file changed, 29 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/input/keyboard/mtk-pmic-keys.c b/drivers/input/keyboard/mtk-pmic-keys.c
+>> index c31ab4368388..8e4fa7cd16e6 100644
+>> --- a/drivers/input/keyboard/mtk-pmic-keys.c
+>> +++ b/drivers/input/keyboard/mtk-pmic-keys.c
+>> @@ -34,6 +34,13 @@
+>>   #define MTK_PMIC_HOMEKEY_INDEX	1
+>>   #define MTK_PMIC_MAX_KEY_COUNT	2
+>>   
+>> +/**
+>> + * struct mtk_pmic_keys_regs - PMIC keys per-key registers
+>> + * @deb_reg:             Debounced key status register
+>> + * @deb_mask:            Bitmask of this key in status register
+>> + * @intsel_reg:          Interrupt selector register
+>> + * @intsel_mask:         Bitmask of this key in interrupt selector
+>> + */
+>>   struct mtk_pmic_keys_regs {
+>>   	u32 deb_reg;
+>>   	u32 deb_mask;
+>> @@ -50,6 +57,11 @@ struct mtk_pmic_keys_regs {
+>>   	.intsel_mask		= _intsel_mask,		\
+>>   }
+>>   
+>> +/**
+>> + * struct mtk_pmic_regs - PMIC Keys registers
+>> + * @keys_regs:           Specific key registers
+> 
+> This new description of the structure and of the keys_regs does not add
+> any information for me.
+> 
+>> + * @pmic_rst_reg:        PMIC Keys reset register
+>> + */
+>>   struct mtk_pmic_regs {
+>>   	const struct mtk_pmic_keys_regs keys_regs[MTK_PMIC_MAX_KEY_COUNT];
+>>   	u32 pmic_rst_reg;
+>> @@ -85,15 +97,31 @@ static const struct mtk_pmic_regs mt6358_regs = {
+>>   	.pmic_rst_reg = MT6358_TOP_RST_MISC,
+>>   };
+>>   
+>> +/**
+>> + * struct mtk_pmic_keys_info - PMIC Keys per-key params
+>> + * @keys:                Pointer to main driver structure
+> 
+> That is obvious from the field definition.
+> 
+>> + * @regs:                Register offsets/masks for this key
+> 
+> Ditto.
+> 
+>> + * @keycode:             Key code for this key
+> 
+> Yep.
+> 
+>> + * @irq:                 Keypress or press/release interrupt
+>> + * @irq_r:               Key release interrupt (optional)
+>> + * @wakeup:              Indicates whether to use this key as a wakeup source
+>> + */
+>>   struct mtk_pmic_keys_info {
+>>   	struct mtk_pmic_keys *keys;
+>>   	const struct mtk_pmic_keys_regs *regs;
+>>   	unsigned int keycode;
+>>   	int irq;
+>> -	int irq_r; /* optional: release irq if different */
+>> +	int irq_r;
+>>   	bool wakeup:1;
+>>   };
+>>   
+>> +/**
+>> + * struct mtk_pmic_keys - Main driver structure
+>> + * @input_dev:           Input device pointer
+> 
+> I do not find this helpful.
+> 
+>> + * @dev:                 Device pointer
+> 
+> And neither this.
+> 
+>> + * @regmap:              Regmap handle
+> 
+> Nor this.
+> 
+>> + * @keys:                Per-key parameters
+>> + */
+>>   struct mtk_pmic_keys {
+>>   	struct input_dev *input_dev;
+>>   	struct device *dev;
+>> -- 
+>> 2.35.1
+>>
+> 
+> In the end we ended up with something that now has a chance of
+> introducing warning when someone changes code, for very little benefit,
+> if any at all.
+> 
+> For driver-private data and functions we should rely on expressive
+> variable and function names and only use comments for something that
+> might be unclear or requires additional qualification.
+> 
 
-> Hi All:
+Hello Dmitry,
 
-Sorry for being slow on this one. I'm pretty much under water. Will try
-to get some regression-testing done till tomorrow end of day.
+it's been very helpful for me to see kerneldoc documentation in the various
+drivers across the kernel - helped me understanding what was going on in an
+easier, more immediate way, especially when looking at drivers having some
+kind of "complicated" flow.
+About introducing warnings when someone changes code, I believe that this
+may also be helpful (for a developer) in some *corner* cases, but I agree
+that this is unnecessarily tedious in some others... in the end, it's all
+about personal opinions...
+
+Of course, some of the documentation being obvious is unavoidable when it
+comes to kerneldoc as you either document 'em all, or nothing.
+
+In any case, if you really dislike having this kind of documentation, I can
+drop these commits and eventually add in-line comments to some variables to
+make them perfectly understandable, or I can avoid documenting at all (even
+though I am strongly for documenting things clearly).
 
 Regards,
-Halil
+Angelo
+
+> Thanks.
+> 

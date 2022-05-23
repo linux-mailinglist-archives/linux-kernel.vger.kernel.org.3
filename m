@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A3B1531776
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:53:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05F9653167A
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:51:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242704AbiEWRzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:55:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43710 "EHLO
+        id S240824AbiEWRQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:16:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241094AbiEWR0R (ORCPT
+        with ESMTP id S239715AbiEWRKq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:26:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FFF362122;
-        Mon, 23 May 2022 10:21:23 -0700 (PDT)
+        Mon, 23 May 2022 13:10:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB436D399;
+        Mon, 23 May 2022 10:10:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BE425B81219;
-        Mon, 23 May 2022 17:21:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20811C385A9;
-        Mon, 23 May 2022 17:21:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C59B614CA;
+        Mon, 23 May 2022 17:10:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E1F3C385AA;
+        Mon, 23 May 2022 17:10:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326481;
-        bh=mqkDz9dWwDNFalE5Rbuyg+FfWCGLAoMOK3GmkLsN3a8=;
+        s=korg; t=1653325812;
+        bh=Dwk17qB8Umv7Q1FvMeueRdKSAT9rxi9ymspvcUnMfPU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ab7a5lbBOIzz/IxF7Py7xzHienSE3CdEYITPTIlcFavRdyLd5wEJTLaaMxBLYayxB
-         n0XC4PKQgiwCYgt/Q2gMG2i5DUrdvKOMKSlTt6HDmXQLC/KH0VTG+54ZQ+Wc/7A/dF
-         n25CbPSo/zBAG/KafyUbj7vr0RUtYJGsCwMNlXtg=
+        b=mixgavmLzXX6hC+nqho9PUjW4IPTvpgAqCH44cJPSFlr0gVBRcKtoKYtD7OyA2MMC
+         k0jtuE/GXn5K6TRcR0OZ+klCdijc3AklHTfRTE0l3NOcy2JFJYOKGzlHwdKN3F4Jmm
+         6KtQA4Sdqd05lHbeEZp88IDmnBrZKhd+w3TYY0j8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 094/132] ARM: 9197/1: spectre-bhb: fix loop8 sequence for Thumb2
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Subject: [PATCH 4.19 19/44] mmc: block: Use generic_cmd6_time when modifying INAND_CMD38_ARG_EXT_CSD
 Date:   Mon, 23 May 2022 19:05:03 +0200
-Message-Id: <20220523165838.921730840@linuxfoundation.org>
+Message-Id: <20220523165756.686861232@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
-References: <20220523165823.492309987@linuxfoundation.org>
+In-Reply-To: <20220523165752.797318097@linuxfoundation.org>
+References: <20220523165752.797318097@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +54,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ard Biesheuvel <ardb@kernel.org>
+From: Ulf Hansson <ulf.hansson@linaro.org>
 
-[ Upstream commit 3cfb3019979666bdf33a1010147363cf05e0f17b ]
+commit ad91619aa9d78ab1c6d4a969c3db68bc331ae76c upstream
 
-In Thumb2, 'b . + 4' produces a branch instruction that uses a narrow
-encoding, and so it does not jump to the following instruction as
-expected. So use W(b) instead.
+The INAND_CMD38_ARG_EXT_CSD is a vendor specific EXT_CSD register, which is
+used to prepare an erase/trim operation. However, it doesn't make sense to
+use a timeout of 10 minutes while updating the register, which becomes the
+case when the timeout_ms argument for mmc_switch() is set to zero.
 
-Fixes: 6c7cb60bff7a ("ARM: fix Thumb2 regression with Spectre BHB")
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Instead, let's use the generic_cmd6_time, as that seems like a reasonable
+timeout to use for these cases.
+
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Link: https://lore.kernel.org/r/20200122142747.5690-3-ulf.hansson@linaro.org
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/kernel/entry-armv.S | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/mmc/core/block.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm/kernel/entry-armv.S b/arch/arm/kernel/entry-armv.S
-index 46b697dfa4cf..68261a83b7ad 100644
---- a/arch/arm/kernel/entry-armv.S
-+++ b/arch/arm/kernel/entry-armv.S
-@@ -1038,7 +1038,7 @@ vector_bhb_loop8_\name:
- 
- 	@ bhb workaround
- 	mov	r0, #8
--3:	b	. + 4
-+3:	W(b)	. + 4
- 	subs	r0, r0, #1
- 	bne	3b
- 	dsb
--- 
-2.35.1
-
+--- a/drivers/mmc/core/block.c
++++ b/drivers/mmc/core/block.c
+@@ -1133,7 +1133,7 @@ static void mmc_blk_issue_discard_rq(str
+ 					 arg == MMC_TRIM_ARG ?
+ 					 INAND_CMD38_ARG_TRIM :
+ 					 INAND_CMD38_ARG_ERASE,
+-					 0);
++					 card->ext_csd.generic_cmd6_time);
+ 		}
+ 		if (!err)
+ 			err = mmc_erase(card, from, nr, arg);
+@@ -1175,7 +1175,7 @@ retry:
+ 				 arg == MMC_SECURE_TRIM1_ARG ?
+ 				 INAND_CMD38_ARG_SECTRIM1 :
+ 				 INAND_CMD38_ARG_SECERASE,
+-				 0);
++				 card->ext_csd.generic_cmd6_time);
+ 		if (err)
+ 			goto out_retry;
+ 	}
+@@ -1193,7 +1193,7 @@ retry:
+ 			err = mmc_switch(card, EXT_CSD_CMD_SET_NORMAL,
+ 					 INAND_CMD38_ARG_EXT_CSD,
+ 					 INAND_CMD38_ARG_SECTRIM2,
+-					 0);
++					 card->ext_csd.generic_cmd6_time);
+ 			if (err)
+ 				goto out_retry;
+ 		}
 
 

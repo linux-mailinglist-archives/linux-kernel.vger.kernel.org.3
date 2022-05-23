@@ -2,91 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58C3C531BB5
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65CF95318AE
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:54:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232917AbiEWUXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 16:23:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48902 "EHLO
+        id S232106AbiEWUXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 16:23:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232106AbiEWUXk (ORCPT
+        with ESMTP id S232921AbiEWUXu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 16:23:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4214E0B3;
-        Mon, 23 May 2022 13:23:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E38D614B6;
-        Mon, 23 May 2022 20:23:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45343C385AA;
-        Mon, 23 May 2022 20:23:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653337418;
-        bh=cRmLCYxqZ/oPtyUyAbrJ2vSaCtJhJTaXonVzm1gzzZc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=NKEVA1i2oilfkHiewDOhRCD2VgzU1ad8Meq+dybp0PEy6huQ+sA3jCZFN5B3i1p4d
-         aRYuziRfx0xW0yhhxyrZns9P/1t2w7+H9uU2sxzu80/1JGRsKtt/rm0ybMQ9OLJIWG
-         e8Avm6N7lI1+kCy5871Ae8jJr3GAFOKjB2jGLj4FI4ileAGPymwlmfonXfCTbb9xxC
-         aZsaB4ZlkKHmOhwUJrFihy0GKOaOxUsG34Bz1WdBxHvLAcz3Ms+pc4KtNG+gLpktCx
-         LrLFA9YVBGMML3Tt9+tMZRG+GpwUqWhE4CixX67CBqFQJg1Hv9GvMN/fRR39N5hRFx
-         TO1c31n0Wvamg==
-Date:   Mon, 23 May 2022 13:23:36 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     =?UTF-8?B?TcOlbnMgUnVsbGfDpXJk?= <mans@mansr.com>,
-        Pantelis Antoniou <pantelis.antoniou@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vitaly Bordug <vbordug@ru.mvista.com>,
-        Dan Malek <dan@embeddededge.com>,
-        Joakim Tjernlund <joakim.tjernlund@lumentis.se>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] net: fs_enet: sync rx dma buffer before reading
-Message-ID: <20220523132336.073965a5@kernel.org>
-In-Reply-To: <20220521104430.1212bed5@kernel.org>
-References: <20220519192443.28681-1-mans@mansr.com>
-        <03f24864-9d4d-b4f9-354a-f3b271c0ae66@csgroup.eu>
-        <yw1xmtfc9yaj.fsf@mansr.com>
-        <b11dcb32-5915-c1c8-9f0e-3cfc57b55792@csgroup.eu>
-        <20220520104347.2b1b658a@kernel.org>
-        <d8cc1123-30d2-d65b-84b1-2ffee0d50aab@csgroup.eu>
-        <20220521104430.1212bed5@kernel.org>
+        Mon, 23 May 2022 16:23:50 -0400
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1DDB6C5DB4
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 13:23:48 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 24NKNaH8025942;
+        Mon, 23 May 2022 22:23:36 +0200
+Date:   Mon, 23 May 2022 22:23:36 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kernel Team <kernel-team@fb.com>
+Subject: Re: [GIT PULL] nolibc changes for v5.19
+Message-ID: <20220523202336.GB13032@1wt.eu>
+References: <20220520182428.GA3791250@paulmck-ThinkPad-P17-Gen-1>
+ <CAHk-=wgpAHhPVSqBWb4gYT=CRJzKAZ4inmrL_kcpeNWGkcg3pg@mail.gmail.com>
+ <20220523195605.GA13032@1wt.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220523195605.GA13032@1wt.eu>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 21 May 2022 10:44:30 -0700 Jakub Kicinski wrote:
-> > Well, I say the contrary.
+On Mon, May 23, 2022 at 09:56:05PM +0200, Willy Tarreau wrote:
+> On Mon, May 23, 2022 at 11:42:48AM -0700, Linus Torvalds wrote:
+> > On Fri, May 20, 2022 at 11:24 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+> > >
+> > > This pull request adds a number of library functions and splits this
+> > > library into multiple files.
 > > 
-> > On the mainline the patch may be applied as is, it won't harm.
+> > Well, this is annoying.
 > > 
-> > However, it is gets applied to kernel 4.9 (based on the fixes: tag), it 
-> > will break the driver for at least powerpc 8xx.  
+> > You add the rule to test and install this, and "make help" will list
+> > "nolibc" as a target, but that is not actually true at all.
+> > 
+> > So what's the appropriate way to actually test this pull somehow?
+> > 
+> > I'm guessing it's along the lines of
+> > 
+> >     make ARCH=x86 nolibc_headers
+> > 
+> > in the tools directory, but then I got bored and decided I need to
+> > just continue the merge window.
+> > 
+> > I've pulled this, but it all makes me go "Hmm, I'd have liked to maybe
+> > even build test it".
 > 
-> I see, we should make a note of that in the commit message so it doesn't
-> get sucked into stable.
-> 
-> > I don't know how SWIOTLB works or even what it is, does any of the 
-> > microcontrollers embedding freescale ethernet uses that at all ?  
-> 
-> AFAIU SWIOTLB basically forces the use of bounce buffers even if the
-> device can reach the entire DRAM. I think some people also use it for
-> added security? IDK. I mostly use it to check if I'm using the DMA API
-> "right" :)
+> I did. I must confess I'm embarrassed now because when I added the
+> entries there, exactly in order to reuse what was in place, I found
+> it a bit tricky to launch the tests, but after that I felt OK with
+> it. Now it's been a quite some time now and I don't remember the exact
+> way to trigger the tests there, so it's likely that I didn't leave
+> enough info in the commit messages :-( Let me have a look and figure
+> again how to start the tests.
 
-If what I said makes sense please repost the patch, the current version
-has been dropped from patchwork already.
+So I've figured it again. When you run:
+
+   make tools/help
+
+you get the help of tools/ commands, and:
+
+   make tools/command_<target>
+
+actually runs the <target> target of tools/command.
+
+Here we have:
+
+   make tools/nolibc_headers
+
+which installs only the nolibc headers for the selected architecture
+into tools/include/nolibc/sysroot, and:
+
+   make tools/nolibc_headers_standalone
+
+which does the same in addition with a make headers;make headers_install
+into that directory so that we get a completely usable sysroot.
+
+Finally:
+ 
+   make tools/nolibc_clean
+
+will clean that directory.
+
+I hadn't found any foo_help target for other commands so I assumed it
+was not what users would look like. But if you find it useful I can
+easily add:
+
+   make tools/nolibc_help
+
+to enumerate these commands.
+
+Hoping that clarifies the situation.
+
+Regards,
+Willy

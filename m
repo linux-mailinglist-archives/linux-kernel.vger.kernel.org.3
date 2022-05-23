@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F91153180C
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:53:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F3F053181B
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:53:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242686AbiEWR14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:27:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49356 "EHLO
+        id S242972AbiEWR2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:28:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240106AbiEWRRh (ORCPT
+        with ESMTP id S239605AbiEWRSF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:17:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2539A71D88;
-        Mon, 23 May 2022 10:17:29 -0700 (PDT)
+        Mon, 23 May 2022 13:18:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4998213F60;
+        Mon, 23 May 2022 10:17:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 994D0608C3;
-        Mon, 23 May 2022 17:16:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9810EC385A9;
-        Mon, 23 May 2022 17:16:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B1BFDB81201;
+        Mon, 23 May 2022 17:16:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17783C385A9;
+        Mon, 23 May 2022 17:16:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326198;
-        bh=EH69Z5XiNYzDbxjM0ck1W39n8wl/6fzKXeS4geIBYDA=;
+        s=korg; t=1653326204;
+        bh=SXxfUZXxy9Sp3/Xhlyd1o0WTRjDyDdREmjlFOXUQG7I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=H71RF3+ebAxMuIk+S2R4iDHFFdFzaVIoCZQVoszqUUh3iYIdXN51el85mlvobCvSe
-         lKNCXsxZ4pffyTLxtSSmIJMF6f2IB4E12diU+wBPCDHWCKEe2uUvlK+Aat88C9Xwfu
-         SAJZQEIl6gk6JeonFEpdGqVZUf2Xn6v/m0UKIRow=
+        b=xC52FqfgV84vpigUEyt8NTDK0FHP1bWR+PgXlMBGFLiU5zAXmQmh9lmZMsfW5qdgJ
+         sy0euiiVWPq5lmuc5ahRXEUGuYzpPmmM5mIKF4NNnfZOfjQIPqALI0zBtcaajK/Ucx
+         izHB+rsnuU+7+rsgGPHrML+EP5lcPjA9QmfuKgQ8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Gwendal Grignou <gwendal@chromium.org>
-Subject: [PATCH 5.4 60/68] block: return ELEVATOR_DISCARD_MERGE if possible
-Date:   Mon, 23 May 2022 19:05:27 +0200
-Message-Id: <20220523165812.360622432@linuxfoundation.org>
+        "Ong, Boon Leong" <boon.leong.ong@intel.com>,
+        Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>,
+        Wong Vee Khee <vee.khee.wong@linux.intel.com>,
+        Tan Tee Min <tee.min.tan@linux.intel.com>,
+        "David S. Miller" <davem@davemloft.net>, Ong@vger.kernel.org
+Subject: [PATCH 5.4 61/68] net: stmmac: disable Split Header (SPH) for Intel platforms
+Date:   Mon, 23 May 2022 19:05:28 +0200
+Message-Id: <20220523165812.534588696@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220523165802.500642349@linuxfoundation.org>
 References: <20220523165802.500642349@linuxfoundation.org>
@@ -56,118 +58,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ming Lei <ming.lei@redhat.com>
+From: Tan Tee Min <tee.min.tan@linux.intel.com>
 
-commit 866663b7b52d2da267b28e12eed89ee781b8fed1 upstream.
+commit 47f753c1108e287edb3e27fad8a7511a9d55578e upstream.
 
-When merging one bio to request, if they are discard IO and the queue
-supports multi-range discard, we need to return ELEVATOR_DISCARD_MERGE
-because both block core and related drivers(nvme, virtio-blk) doesn't
-handle mixed discard io merge(traditional IO merge together with
-discard merge) well.
+Based on DesignWare Ethernet QoS datasheet, we are seeing the limitation
+of Split Header (SPH) feature is not supported for Ipv4 fragmented packet.
+This SPH limitation will cause ping failure when the packets size exceed
+the MTU size. For example, the issue happens once the basic ping packet
+size is larger than the configured MTU size and the data is lost inside
+the fragmented packet, replaced by zeros/corrupted values, and leads to
+ping fail.
 
-Fix the issue by returning ELEVATOR_DISCARD_MERGE in this situation,
-so both blk-mq and drivers just need to handle multi-range discard.
+So, disable the Split Header for Intel platforms.
 
-Reported-by: Oleksandr Natalenko <oleksandr@natalenko.name>
-Signed-off-by: Ming Lei <ming.lei@redhat.com>
-Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
-Fixes: 2705dfb20947 ("block: fix discard request merge")
-Link: https://lore.kernel.org/r/20210729034226.1591070-1-ming.lei@redhat.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Gwendal Grignou <gwendal@chromium.org>
+v2: Add fixes tag in commit message.
+
+Fixes: 67afd6d1cfdf("net: stmmac: Add Split Header support and enable it in XGMAC cores")
+Cc: <stable@vger.kernel.org> # 5.10.x
+Suggested-by: Ong, Boon Leong <boon.leong.ong@intel.com>
+Signed-off-by: Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>
+Signed-off-by: Wong Vee Khee <vee.khee.wong@linux.intel.com>
+Signed-off-by: Tan Tee Min <tee.min.tan@linux.intel.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Tan Tee Min <tee.min.tan@linux.intel.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- block/bfq-iosched.c    |    3 +++
- block/blk-merge.c      |   15 ---------------
- block/elevator.c       |    3 +++
- block/mq-deadline.c    |    2 ++
- include/linux/blkdev.h |   16 ++++++++++++++++
- 5 files changed, 24 insertions(+), 15 deletions(-)
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c |    2 +-
+ drivers/net/ethernet/stmicro/stmmac/stmmac_pci.c  |    1 +
+ include/linux/stmmac.h                            |    1 +
+ 3 files changed, 3 insertions(+), 1 deletion(-)
 
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -2251,6 +2251,9 @@ static int bfq_request_merge(struct requ
- 	__rq = bfq_find_rq_fmerge(bfqd, bio, q);
- 	if (__rq && elv_bio_merge_ok(__rq, bio)) {
- 		*req = __rq;
-+
-+		if (blk_discard_mergable(__rq))
-+			return ELEVATOR_DISCARD_MERGE;
- 		return ELEVATOR_FRONT_MERGE;
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -4531,7 +4531,7 @@ int stmmac_dvr_probe(struct device *devi
+ 		dev_info(priv->device, "TSO feature enabled\n");
  	}
  
---- a/block/blk-merge.c
-+++ b/block/blk-merge.c
-@@ -721,21 +721,6 @@ static void blk_account_io_merge(struct
- 		part_stat_unlock();
- 	}
- }
--/*
-- * Two cases of handling DISCARD merge:
-- * If max_discard_segments > 1, the driver takes every bio
-- * as a range and send them to controller together. The ranges
-- * needn't to be contiguous.
-- * Otherwise, the bios/requests will be handled as same as
-- * others which should be contiguous.
-- */
--static inline bool blk_discard_mergable(struct request *req)
--{
--	if (req_op(req) == REQ_OP_DISCARD &&
--	    queue_max_discard_segments(req->q) > 1)
--		return true;
--	return false;
--}
+-	if (priv->dma_cap.sphen) {
++	if (priv->dma_cap.sphen && !priv->plat->sph_disable) {
+ 		ndev->hw_features |= NETIF_F_GRO;
+ 		priv->sph = true;
+ 		dev_info(priv->device, "SPH feature enabled\n");
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_pci.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_pci.c
+@@ -119,6 +119,7 @@ static int intel_mgbe_common_data(struct
+ 	plat->has_gmac4 = 1;
+ 	plat->force_sf_dma_mode = 0;
+ 	plat->tso_en = 1;
++	plat->sph_disable = 1;
  
- static enum elv_merge blk_try_req_merge(struct request *req,
- 					struct request *next)
---- a/block/elevator.c
-+++ b/block/elevator.c
-@@ -337,6 +337,9 @@ enum elv_merge elv_merge(struct request_
- 	__rq = elv_rqhash_find(q, bio->bi_iter.bi_sector);
- 	if (__rq && elv_bio_merge_ok(__rq, bio)) {
- 		*req = __rq;
-+
-+		if (blk_discard_mergable(__rq))
-+			return ELEVATOR_DISCARD_MERGE;
- 		return ELEVATOR_BACK_MERGE;
- 	}
+ 	plat->rx_sched_algorithm = MTL_RX_ALGORITHM_SP;
  
---- a/block/mq-deadline.c
-+++ b/block/mq-deadline.c
-@@ -452,6 +452,8 @@ static int dd_request_merge(struct reque
- 
- 		if (elv_bio_merge_ok(__rq, bio)) {
- 			*rq = __rq;
-+			if (blk_discard_mergable(__rq))
-+				return ELEVATOR_DISCARD_MERGE;
- 			return ELEVATOR_FRONT_MERGE;
- 		}
- 	}
---- a/include/linux/blkdev.h
-+++ b/include/linux/blkdev.h
-@@ -1409,6 +1409,22 @@ static inline int queue_limit_discard_al
- 	return offset << SECTOR_SHIFT;
- }
- 
-+/*
-+ * Two cases of handling DISCARD merge:
-+ * If max_discard_segments > 1, the driver takes every bio
-+ * as a range and send them to controller together. The ranges
-+ * needn't to be contiguous.
-+ * Otherwise, the bios/requests will be handled as same as
-+ * others which should be contiguous.
-+ */
-+static inline bool blk_discard_mergable(struct request *req)
-+{
-+	if (req_op(req) == REQ_OP_DISCARD &&
-+	    queue_max_discard_segments(req->q) > 1)
-+		return true;
-+	return false;
-+}
-+
- static inline int bdev_discard_alignment(struct block_device *bdev)
- {
- 	struct request_queue *q = bdev_get_queue(bdev);
+--- a/include/linux/stmmac.h
++++ b/include/linux/stmmac.h
+@@ -179,5 +179,6 @@ struct plat_stmmacenet_data {
+ 	int mac_port_sel_speed;
+ 	bool en_tx_lpi_clockgating;
+ 	int has_xgmac;
++	bool sph_disable;
+ };
+ #endif
 
 

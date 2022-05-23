@@ -2,141 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BD56530CCB
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:41:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D55E530D4A
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:41:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233414AbiEWJjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 05:39:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36346 "EHLO
+        id S233375AbiEWJjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 05:39:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233207AbiEWJjO (ORCPT
+        with ESMTP id S233443AbiEWJj2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 05:39:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E75A19FA8;
-        Mon, 23 May 2022 02:39:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CE52CB8100E;
-        Mon, 23 May 2022 09:39:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82B0AC385A9;
-        Mon, 23 May 2022 09:39:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653298749;
-        bh=aIcyCgc/p2LLDrwfgKccbx8NoqUUFgJUGse71d3Ph6A=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ThRxU4lXguBLpElKHUAOrgCi0JRy5qGht+sb6hj7xuoDx7P/LaQcOX3edf248xs2H
-         CkjU5JZgxg4DosqkpAXGV/7h2blatfFNEXwbbmEZ5FoiyZY7vyYG//5GAzlakBCoV7
-         H/aw+2EUWsXXy1NGtw8Nr8LcZv6uFUzh7xbrkhmpwg4qH5Meh0Iq9PWyriUAvhzPiO
-         5KGuZGz85XVn6mn7iHtusETXY4O7LfajSYWBLCTFdV1A1fMJZsCSsXCZAHNw9VYw+/
-         pELyvK5GIY65wcUrwgpJoO3i2Aw8aMGDXz+ZJYCiPB0xVXhxfcCzlEgEZDIWzTOajp
-         eW/9knL4UuLZg==
-From:   Christian Brauner <brauner@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] fs idmapped mount updates for v5.19
-Date:   Mon, 23 May 2022 11:38:36 +0200
-Message-Id: <20220523093835.1096673-1-brauner@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Mon, 23 May 2022 05:39:28 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D026A1D332;
+        Mon, 23 May 2022 02:39:23 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24N8Djrk009170;
+        Mon, 23 May 2022 09:39:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ content-transfer-encoding : in-reply-to; s=pp1;
+ bh=BrJWcXd4AnQ8MglkfSsy6FB0RoKeRvUFF/0x6HurJb8=;
+ b=NnKIxAFlNa1KSGVIPHDp+F4mfHcyleO7jHThVplTfPTr517uJNTc100kEfqbpuPkfhkn
+ K+BEzIpxP182iYAkcVrhhMlgHgvzXtmJze5wO7h4BMNGPR0IXlDvqCfouL2w9PgrEdkB
+ dQT4SlTeTJzZ/t1Aes+B61EiTsLSvr9taMkKWKMosdo8ZkCrxNgTpIJi/mxA4H1OIxAo
+ CMMLN8fHhx2TByLwpswfgFN98xZ5eUgTWOYPYvXsozJnWxuzVGto92kR275ir0O5ghWC
+ n/KISv0hWKx+SCz6bFPBBhwgwIa2Uu7N5SQpSc3Wwi+/Wf+ynxqI2pi6etXDA4ft6v7p /w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g79vrgvgd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 23 May 2022 09:39:06 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24N9VmOq017090;
+        Mon, 23 May 2022 09:39:06 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g79vrgvf2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 23 May 2022 09:39:05 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24N9bHk7017993;
+        Mon, 23 May 2022 09:39:03 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 3g6qq92j53-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 23 May 2022 09:39:02 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24N9cDuC32964962
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 23 May 2022 09:38:13 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A5F44A4040;
+        Mon, 23 May 2022 09:38:59 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id ED8B5A404D;
+        Mon, 23 May 2022 09:38:58 +0000 (GMT)
+Received: from osiris (unknown [9.145.75.188])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Mon, 23 May 2022 09:38:58 +0000 (GMT)
+Date:   Mon, 23 May 2022 11:38:57 +0200
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Ilya Leoshkevich <iii@linux.ibm.com>
+Cc:     Julia Lawall <Julia.Lawall@inria.fr>,
+        kernel-janitors@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] s390/bpf: fix typo in comment
+Message-ID: <YotWMfctHQB7bUwZ@osiris>
+References: <20220521111145.81697-84-Julia.Lawall@inria.fr>
+ <63d07a63565b0f059f5b04dbe294dc4f8d4c91fb.camel@linux.ibm.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <63d07a63565b0f059f5b04dbe294dc4f8d4c91fb.camel@linux.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: wg-0PpoGB-_-fI3urHqbj3fN6m6fnZjJ
+X-Proofpoint-GUID: _JVOHFDckDX_VizYDiOfBENcsu1g21R1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-23_03,2022-05-20_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
+ malwarescore=0 spamscore=0 clxscore=1011 priorityscore=1501
+ impostorscore=0 suspectscore=0 lowpriorityscore=0 bulkscore=0 phishscore=0
+ mlxlogscore=953 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205230051
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Linus,
+On Mon, May 23, 2022 at 12:22:13AM +0200, Ilya Leoshkevich wrote:
+> On Sat, 2022-05-21 at 13:11 +0200, Julia Lawall wrote:
+> > Spelling mistake (triple letters) in comment.
+> > Detected with the help of Coccinelle.
+> > 
+> > Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+> > 
+> > ---
+> >  arch/s390/net/bpf_jit_comp.c |    2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+...
+> 
+> Thanks!
+> 
+> Acked-by: Ilya Leoshkevich <iii@linux.ibm.com>
 
-/* Summary */
-This contains two minor updates:
-
-* An update to the idmapping documentation by Rodrigo making it easier to
-  understand that we first introduce several use-cases that fail without
-  idmapped mounts simply to explain how they can be handled with idmapped
-  mounts.
-
-* When changing a mount's idmapping we now hold writers to make it more robust.
-
-  This is similar to turning a mount ro with the difference that in contrast to
-  turning a mount ro changing the idmapping can only ever be done once while a
-  mount can transition between ro and rw as much as it wants.
-
-  The vfs layer itself takes care to retrieve the idmapping of a mount once
-  ensuring that the idmapping used for vfs permission checking is identical to
-  the idmapping passed down to the filesystem. All filesystems with
-  FS_ALLOW_IDMAP raised take the same precautions as the vfs in code-paths that
-  are outside of direct control of the vfs such as ioctl()s.
-
-  However, holding writers makes this more robust and predictable for both the
-  kernel and userspace.
-
-  This is a minor user-visible change. But it is extremely unlikely to matter.
-  The caller must've created a detached mount via OPEN_TREE_CLONE and then
-  handed that O_PATH fd to another process or thread which then must've gotten
-  a writable fd for that mount and started creating files in there while the
-  caller is still changing mount properties. While not impossible it will be an
-  extremely rare corner-case and should in general be considered a bug in the
-  application. Consider making a mount MOUNT_ATTR_NOEXEC or MOUNT_ATTR_NODEV
-  while allowing someone else to perform lookups or exec'ing in parallel by
-  handing them a copy of the OPEN_TREE_CLONE fd or another fd beneath that
-  mount.
-
-  I've pinged all major users of idmapped mounts pointing out this change and
-  none of them have active writers on a mount while still changing mount
-  properties. It would've been strange if they did.
-
-The rest and majority of the work will be coming through the overlayfs tree
-this cycle. In addition to overlayfs this cycle should also see support for
-idmapped mounts on erofs as I've acked a patch to this effect a little while
-ago.
-
-/* Testing */
-All patches are based on v5.18-rc4 and have been sitting in linux-next.
-Because of the patch changing how we set a mount's idmapping we had to remove
-the now invalid test 781bb995a149e ("vfs/idmapped-mounts: remove invalid test")
-from xfstests (see [1]). No build failures or warnings were observed and
-fstests and selftests have seen no regressions.
-
-Link: https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git/commit/?id=781bb995a149e0dae074019e56477855587198cf [1]
-
-/* Conflicts */
-At the time of creating this PR no merge conflicts were reported from
-linux-next and no merge conflicts showed up doing a test-merge with current
-mainline.
-
-The following changes since commit af2d861d4cd2a4da5137f795ee3509e6f944a25b:
-
-  Linux 5.18-rc4 (2022-04-24 14:51:22 -0700)
-
-are available in the Git repository at:
-
-  git@gitolite.kernel.org:pub/scm/linux/kernel/git/brauner/linux tags/fs.idmapped.v5.19
-
-for you to fetch changes up to e1bbcd277a53e08d619ffeec56c5c9287f2bf42f:
-
-  fs: hold writers when changing mount's idmapping (2022-05-12 10:12:00 +0200)
-
-Please consider pulling these changes from the signed fs.idmapped.v5.19 tag.
-
-Thanks!
-Christian
-
-----------------------------------------------------------------
-fs.idmapped.v5.19
-
-----------------------------------------------------------------
-Christian Brauner (1):
-      fs: hold writers when changing mount's idmapping
-
-Rodrigo Campos (1):
-      docs: Add small intro to idmap examples
-
- Documentation/filesystems/idmappings.rst | 5 +++++
- fs/namespace.c                           | 5 +++--
- 2 files changed, 8 insertions(+), 2 deletions(-)
+Applied, thanks!

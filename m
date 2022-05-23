@@ -2,109 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7C6E5318A2
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:54:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85EDF531736
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:52:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239142AbiEWQr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 12:47:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55368 "EHLO
+        id S239145AbiEWQsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 12:48:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238892AbiEWQrw (ORCPT
+        with ESMTP id S238868AbiEWQsN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 12:47:52 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D20A340D7
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:47:51 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id f9so30139628ejc.0
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:47:51 -0700 (PDT)
+        Mon, 23 May 2022 12:48:13 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC4FD61294;
+        Mon, 23 May 2022 09:48:11 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id c10so19918210edr.2;
+        Mon, 23 May 2022 09:48:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MEws4DwjHJownhbfu+ZS9DYpAvJAvD1xJi7PEnph5Es=;
-        b=DVN/LllFu0NRh49fsIEhd3xNw/x+qM841drkPE9Auic6RUQhHEOWbHU3m3h5ND4968
-         Sz8aznj0zITPihHiFfft7uES0P2bx2aP1FABmWIxcxJ6RIoEKpsN7IbvOnYIlFiKYOk8
-         MRcgi6G9XeMhnzg9hDKuj1hUVyFGUz/1fc5P0=
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=Unoh6++mD5ubFFMqdb6CNOYfw22NYZiGhtE26Pq8f2c=;
+        b=DGs9ycE0eagXUg7ksCA83kMtfw2S/VbJRaBViO7ug1R+3FUgZXXSAnbL58a6m7ClJM
+         XzIwGfgrmLLf0KeeDgFfWhkYy22AchMTldIOSHA4mbOQ7WCDc+24Hp6mHWH42ST1Odvp
+         VCnkLykyCsPD7t+Jz3BrmUnoFjEp4Branti5AvLPZxWUdRmIFBRh5Ofp9xfjFIN0uKKc
+         xMTUCq/CAjjEb96C2azXS17cbaxLE6XZyz7KWJDGJ/8ycc5AIev9I2TbM0dbLRX3k6bY
+         skZeYcHvQJH56gozsV/q2aJKjLLPQ8Ok5FGU12OV0lzkavuZUqDld263fSPUaAs7pzhL
+         /qHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MEws4DwjHJownhbfu+ZS9DYpAvJAvD1xJi7PEnph5Es=;
-        b=2XtWtE6W5oMYfwxQE5/HNxS9B1RBUoObUu8kJfWZgCV8z2PXsQ0zlehIwx57JkEtWi
-         Sno7EmuH7dQOCVV2IkOd52CVhzL06lKbJ7YXS2+NP01Em/BIxEqkUXTnrqkr5+gcHzO4
-         3U/4mTpwxv1BqdTvYSTr/RLKb0X74vS3T1HxU+I2XoblFVSHgNh1VnATtMBrEWI0Zswm
-         R5vl2qTSugT9YHVnUvALRLsxHdJ+QoP78l6WqkVo92tF51L3NhEyidMb8Xu7m+UCbfEM
-         l7FozmTkivDwaJ5UPm+pHMKTAeMDBmsJWhvi0JPiRQ2uZoeOZogsc5xY5bcy8S6N9slF
-         aTbg==
-X-Gm-Message-State: AOAM530A51y7hwCfCjPlOyqtfT1kEnd3LsWBjTQMn2GBbs4FESA6NXCe
-        5ecGf7n3oViZoAka2AXHvOFUXdRqmpDUmH1vTCs=
-X-Google-Smtp-Source: ABdhPJxGGgt9e0NWtd3e/L0qhT0m/DeEteZ4GvADZKYl9iVU7YbMWHw6WgQrBZY4tyLztSg6nKQHhQ==
-X-Received: by 2002:a17:906:6985:b0:6fe:988b:d248 with SMTP id i5-20020a170906698500b006fe988bd248mr19086192ejr.226.1653324468939;
-        Mon, 23 May 2022 09:47:48 -0700 (PDT)
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com. [209.85.221.45])
-        by smtp.gmail.com with ESMTPSA id p3-20020a056402074300b0042617ba63a5sm8434965edy.47.2022.05.23.09.47.47
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 May 2022 09:47:47 -0700 (PDT)
-Received: by mail-wr1-f45.google.com with SMTP id t13so3046007wrg.9
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:47:47 -0700 (PDT)
-X-Received: by 2002:a5d:6483:0:b0:20f:d046:6382 with SMTP id
- o3-20020a5d6483000000b0020fd0466382mr8111413wri.342.1653324466491; Mon, 23
- May 2022 09:47:46 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :mime-version:content-disposition;
+        bh=Unoh6++mD5ubFFMqdb6CNOYfw22NYZiGhtE26Pq8f2c=;
+        b=S+egu2KtdLg4e9pjbgB2OQ0ej60yIGcx08KrhccatJ5wNLrIQkMlnwgnJEcMyzawtt
+         FE6F56aS0y0VUwf4SJOIzt4YzMlq1g7UvN4K5isPPx561USwHEe7aWCgx2ioVimjPwYQ
+         neL4HCOR6vVM8Xim5RC/0c763FMG3dmI5IcGvBtz1CIOiusPsQO+2Ys+Pyzg7FxWYoun
+         ooE3Lbj5cyD7KcPsYMtbViJMCFc70K4pT/pLfU+u2YNPKyWOTnvOdSh1CxVATDsqjgEe
+         5IXMcXbWmTEd98tL+fd45cEmgUAt7IaFqrZXvZOon/w/R9vn1Uq4zGn9y8hbt1oaSOXx
+         2P7A==
+X-Gm-Message-State: AOAM530TfU7imjRfLIqp/LEX9UyB/txxwo2eNmIHDI8wteu/6ZBSUDHH
+        nrwmFr2PyBNZRoAOctDoyVI=
+X-Google-Smtp-Source: ABdhPJxzyhFZQ3r+urq+nFrlcMJZj2LjSSJcqiEB54+VOVcqXFOdQtd/Yvs8UIh6jXAPtRV1D572gQ==
+X-Received: by 2002:aa7:cc01:0:b0:42a:402b:b983 with SMTP id q1-20020aa7cc01000000b0042a402bb983mr24744174edt.257.1653324490528;
+        Mon, 23 May 2022 09:48:10 -0700 (PDT)
+Received: from gmail.com (84-236-113-78.pool.digikabel.hu. [84.236.113.78])
+        by smtp.gmail.com with ESMTPSA id w5-20020aa7cb45000000b0042aa7e0f892sm8577847edt.15.2022.05.23.09.48.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 May 2022 09:48:10 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Mon, 23 May 2022 18:48:08 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>
+Subject: [GIT PULL] perf events changes for v5.19
+Message-ID: <You6yGPUttvBcg8s@gmail.com>
 MIME-Version: 1.0
-References: <20220523085745.276-1-gaochao49@huawei.com>
-In-Reply-To: <20220523085745.276-1-gaochao49@huawei.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 23 May 2022 09:47:32 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=VVZo+wsR0yPLvq-8jkZg12+Sw0NM0TkgQLHDCxCiFdGw@mail.gmail.com>
-Message-ID: <CAD=FV=VVZo+wsR0yPLvq-8jkZg12+Sw0NM0TkgQLHDCxCiFdGw@mail.gmail.com>
-Subject: Re: [PATCH -next] drm/panel: Fix build error when CONFIG_DRM_PANEL_SAMSUNG_ATNA33XC20=y
- && CONFIG_DRM_DISPLAY_HELPER=m
-To:     gaochao <gaochao49@huawei.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sean Paul <seanpaul@chromium.org>, zhengbin13@huawei.com,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Linus,
 
-On Mon, May 23, 2022 at 1:58 AM gaochao <gaochao49@huawei.com> wrote:
->
-> If CONFIG_DRM_PANEL_SAMSUNG_ATNA33XC20=y && CONFIG_DRM_DISPLAY_HELPER=m,
-> bulding fails:
->
-> drivers/gpu/drm/panel/panel-samsung-atna33xc20.o: In function `atana33xc20_probe':
-> panel-samsung-atna33xc20.c:(.text+0x744): undefined reference to
->  `drm_panel_dp_aux_backlight'
-> make: *** [vmlinux] Error 1
->
-> Let CONFIG_DRM_PANEL_SAMSUNG_ATNA33XC20 select DRM_DISPLAY_DP_HELPER and
-> CONFIG_DRM_DISPLAY_HELPER to fix this error.
->
-> Fixes: 32ce3b320343 ("drm/panel: atna33xc20: Introduce the Samsung ATNA33XC20 panel")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: gaochao <gaochao49@huawei.com>
+Please pull the latest perf/core git tree from:
 
-I think the author / Signed-off-by are supposed to be real names. Is
-"gaochao" your legal name?
+   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git perf-core-2022-05-23
 
-> ---
->  drivers/gpu/drm/panel/Kconfig | 2 ++
->  1 file changed, 2 insertions(+)
+   # HEAD: bae19fdd7e9e759580ac4693d2df3bc23ab415d7 perf/x86/amd/core: Fix reloading events for SVM
 
-Other than the Signed-off-by / Author issue:
+Perf events changes for this cycle were:
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Platform PMU changes:
+=====================
+
+ - x86/intel:
+    - Add new Intel Alder Lake and Raptor Lake support
+
+ - x86/amd:
+    - AMD Zen4 IBS extensions support
+    - Add AMD PerfMonV2 support
+    - Add AMD Fam19h Branch Sampling support
+
+Generic changes:
+================
+
+ - signal: Deliver SIGTRAP on perf event asynchronously if blocked
+
+   Perf instrumentation can be driven via SIGTRAP, but this causes a problem
+   when SIGTRAP is blocked by a task & terminate the task.
+
+   Allow user-space to request these signals asynchronously (after they get
+   unblocked) & also give the information to the signal handler when this
+   happens:
+
+     " To give user space the ability to clearly distinguish synchronous from
+       asynchronous signals, introduce siginfo_t::si_perf_flags and
+       TRAP_PERF_FLAG_ASYNC (opted for flags in case more binary information is
+       required in future).
+
+       The resolution to the problem is then to (a) no longer force the signal
+       (avoiding the terminations), but (b) tell user space via si_perf_flags
+       if the signal was synchronous or not, so that such signals can be
+       handled differently (e.g. let user space decide to ignore or consider
+       the data imprecise). "
+
+ - Unify/standardize the /sys/devices/cpu/events/* output format.
+
+ - Misc fixes & cleanups.
+
+ Thanks,
+
+	Ingo
+
+------------------>
+Borislav Petkov (1):
+      perf/x86/amd: Run AMD BRS code only on supported hw
+
+Kan Liang (5):
+      perf/x86: Add new Alder Lake and Raptor Lake support
+      perf/x86/msr: Add new Alder Lake and Raptor Lake support
+      perf/x86/cstate: Add new Alder Lake and Raptor Lake support
+      perf/x86/uncore: Clean up uncore_pci_ids[]
+      perf/x86/uncore: Add new Alder Lake and Raptor Lake support
+
+Marco Elver (1):
+      signal: Deliver SIGTRAP on perf event asynchronously if blocked
+
+Peter Zijlstra (1):
+      perf/x86/amd: Fix AMD BRS period adjustment
+
+Ravi Bangoria (6):
+      perf/amd/ibs: Use interrupt regs ip for stack unwinding
+      perf/amd/ibs: Cascade pmu init functions' return value
+      perf/amd/ibs: Use ->is_visible callback for dynamic attributes
+      perf/amd/ibs: Add support for L3 miss filtering
+      perf/amd/ibs: Advertise zen4_ibs_extensions as pmu capability attribute
+      perf/ibs: Fix comment
+
+Sandipan Das (7):
+      x86/cpufeatures: Add PerfMonV2 feature bit
+      x86/msr: Add PerfCntrGlobal* registers
+      perf/x86/amd/core: Detect PerfMonV2 support
+      perf/x86/amd/core: Detect available counters
+      perf/x86/amd/core: Add PerfMonV2 counter control
+      perf/x86/amd/core: Add PerfMonV2 overflow handling
+      perf/x86/amd/core: Fix reloading events for SVM
+
+Stephane Eranian (9):
+      perf/core: Add perf_clear_branch_entry_bitfields() helper
+      x86/cpufeatures: Add AMD Fam19h Branch Sampling feature
+      perf/x86/amd: Add AMD Fam19h Branch Sampling support
+      perf/x86/amd: Add branch-brs helper event for Fam19h BRS
+      perf/x86/amd: Enable branch sampling priv level filtering
+      perf/x86/amd: Add AMD branch sampling period adjustment
+      perf/x86/amd: Make Zen3 branch sampling opt-in
+      ACPI: Add perf low power callback
+      perf/x86/amd: Add idle hooks for branch sampling
+
+Yang Jihong (1):
+      perf/x86: Unify format of events sysfs show
+
+Zucheng Zheng (1):
+      perf/x86/amd: Remove unused variable 'hwc'
+
+
+ arch/arm/kernel/signal.c             |   1 +
+ arch/arm64/kernel/signal.c           |   1 +
+ arch/arm64/kernel/signal32.c         |   1 +
+ arch/m68k/kernel/signal.c            |   1 +
+ arch/sparc/kernel/signal32.c         |   1 +
+ arch/sparc/kernel/signal_64.c        |   1 +
+ arch/x86/events/Kconfig              |   8 +
+ arch/x86/events/amd/Makefile         |   1 +
+ arch/x86/events/amd/brs.c            | 367 +++++++++++++++++++++++++
+ arch/x86/events/amd/core.c           | 505 +++++++++++++++++++++++++++++++++--
+ arch/x86/events/amd/ibs.c            | 209 ++++++++++++---
+ arch/x86/events/core.c               |  12 +-
+ arch/x86/events/intel/core.c         |   2 +
+ arch/x86/events/intel/cstate.c       |   2 +
+ arch/x86/events/intel/lbr.c          |  36 ++-
+ arch/x86/events/intel/uncore.c       |   2 +
+ arch/x86/events/intel/uncore_snb.c   | 454 ++++++++++---------------------
+ arch/x86/events/msr.c                |   2 +
+ arch/x86/events/perf_event.h         | 125 +++++++--
+ arch/x86/include/asm/amd-ibs.h       |   2 +-
+ arch/x86/include/asm/cpufeatures.h   |   3 +-
+ arch/x86/include/asm/msr-index.h     |   9 +
+ arch/x86/include/asm/perf_event.h    |  43 +++
+ arch/x86/kernel/cpu/scattered.c      |   1 +
+ arch/x86/kernel/signal_compat.c      |   2 +
+ drivers/acpi/acpi_pad.c              |   7 +
+ drivers/acpi/processor_idle.c        |   5 +
+ include/linux/compat.h               |   1 +
+ include/linux/perf_event.h           |  22 ++
+ include/linux/sched/signal.h         |   2 +-
+ include/uapi/asm-generic/siginfo.h   |   7 +
+ kernel/events/core.c                 |   4 +-
+ kernel/signal.c                      |  18 +-
+ tools/arch/x86/include/asm/amd-ibs.h |   2 +-
+ 34 files changed, 1445 insertions(+), 414 deletions(-)
+ create mode 100644 arch/x86/events/amd/brs.c

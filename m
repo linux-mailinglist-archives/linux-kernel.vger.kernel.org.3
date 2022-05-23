@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD40E531615
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:50:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A56685317FB
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:53:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239803AbiEWRNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:13:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35464 "EHLO
+        id S241895AbiEWRgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:36:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240068AbiEWRLh (ORCPT
+        with ESMTP id S240841AbiEWR0H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:11:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E0DE0FD;
-        Mon, 23 May 2022 10:11:01 -0700 (PDT)
+        Mon, 23 May 2022 13:26:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 799863BA61;
+        Mon, 23 May 2022 10:21:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 68B60614FE;
-        Mon, 23 May 2022 17:11:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6043CC385A9;
-        Mon, 23 May 2022 17:11:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D78CAB81222;
+        Mon, 23 May 2022 17:20:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A54BC385A9;
+        Mon, 23 May 2022 17:20:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653325860;
-        bh=UnaGk7lT++MCESMYYRcly019jpbFLcXmscxoXEMCt6Q=;
+        s=korg; t=1653326455;
+        bh=fN23NSwamIBlH5sSv/qgeU1vy1uyJnYA3y7f4Xso8kM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mPsQLgqyVPw3tcE44GTP+szSXGe7hmCAiY4KyUsIwcvN3ynANHfAb36YEgK08WQ/j
-         8/E9R+NitrL/J+vt2gqosZw3dILGnIH/1VxClOHYMaupQGUm27F18kvda9N15XzCrg
-         MonTEV0++PYoBN3oqty+en22xLp9rMJ2zx4y434E=
+        b=TqBWe6mxbl+5/A1NTjQxzSBP3T1DMhd/5nN12OTGPcpsZeKymUa21X0T2CzuQULYA
+         QFMNJm6njSgVGa6BcriCOegcFDhkUShtz3GrfCM/XDBpsJMwg1iKzwRrxrRyUjhAbP
+         KWYcW/7oq972BIerOhXf4JzzsrMnSlgwQgVVcSTg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 4.19 11/44] ALSA: wavefront: Proper check of get_user() error
-Date:   Mon, 23 May 2022 19:04:55 +0200
-Message-Id: <20220523165755.384333184@linuxfoundation.org>
+        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 087/132] clk: at91: generated: consider range when calculating best rate
+Date:   Mon, 23 May 2022 19:04:56 +0200
+Message-Id: <20220523165837.503800862@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165752.797318097@linuxfoundation.org>
-References: <20220523165752.797318097@linuxfoundation.org>
+In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
+References: <20220523165823.492309987@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +57,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
 
-commit a34ae6c0660d3b96b0055f68ef74dc9478852245 upstream.
+[ Upstream commit d0031e6fbed955ff8d5f5bbc8fe7382482559cec ]
 
-The antient ISA wavefront driver reads its sample patch data (uploaded
-over an ioctl) via __get_user() with no good reason; likely just for
-some performance optimizations in the past.  Let's change this to the
-standard get_user() and the error check for handling the fault case
-properly.
+clk_generated_best_diff() helps in finding the parent and the divisor to
+compute a rate closest to the required one. However, it doesn't take into
+account the request's range for the new rate. Make sure the new rate
+is within the required range.
 
-Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220510103626.16635-1-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 8a8f4bf0c480 ("clk: at91: clk-generated: create function to find best_diff")
+Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+Link: https://lore.kernel.org/r/20220413071318.244912-1-codrin.ciubotariu@microchip.com
+Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/isa/wavefront/wavefront_synth.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/clk/at91/clk-generated.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/sound/isa/wavefront/wavefront_synth.c
-+++ b/sound/isa/wavefront/wavefront_synth.c
-@@ -1092,7 +1092,8 @@ wavefront_send_sample (snd_wavefront_t *
+diff --git a/drivers/clk/at91/clk-generated.c b/drivers/clk/at91/clk-generated.c
+index b656d25a9767..fe772baeb15f 100644
+--- a/drivers/clk/at91/clk-generated.c
++++ b/drivers/clk/at91/clk-generated.c
+@@ -106,6 +106,10 @@ static void clk_generated_best_diff(struct clk_rate_request *req,
+ 		tmp_rate = parent_rate;
+ 	else
+ 		tmp_rate = parent_rate / div;
++
++	if (tmp_rate < req->min_rate || tmp_rate > req->max_rate)
++		return;
++
+ 	tmp_diff = abs(req->rate - tmp_rate);
  
- 			if (dataptr < data_end) {
- 		
--				__get_user (sample_short, dataptr);
-+				if (get_user(sample_short, dataptr))
-+					return -EFAULT;
- 				dataptr += skip;
- 		
- 				if (data_is_unsigned) { /* GUS ? */
+ 	if (*best_diff < 0 || *best_diff >= tmp_diff) {
+-- 
+2.35.1
+
 
 

@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08DD2530C02
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 11:04:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A977E530BB7
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 11:03:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232395AbiEWJAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 05:00:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54256 "EHLO
+        id S232409AbiEWJAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 05:00:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232405AbiEWI7r (ORCPT
+        with ESMTP id S232420AbiEWI7u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 04:59:47 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C51C040928
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 01:59:46 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id b135so1359705pfb.12
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 01:59:46 -0700 (PDT)
+        Mon, 23 May 2022 04:59:50 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8671240928
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 01:59:49 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id ob14-20020a17090b390e00b001dff2a43f8cso5742447pjb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 01:59:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=wYj0gPoFTJBwWJLt1P9KNSn0ODKjU0wkvs8hBSjSO3U=;
-        b=lUaPQYzSVRFDMwj2RPF+1R9q+pfcZR/5b08tFuDgr31kRQFFXMunwOdCF09PUZb8VH
-         96Re5E3yBwqHOq0b40EpZ3CI9QuM0kvk9vzCNZEZjejN1lNz654tcqwoMzyIbdOCYtEO
-         Y/03XGT3SUMeD9Vu7D4Mty0laSQn6lJCswa3o=
+        bh=RQjXK1tyA9xOYFhndd4nNr3xd4VXsIavQtRl5jsGh4c=;
+        b=meNdqL84O1gmdVv6NUiIDJn815273OPePWQVlLCtG6TSyOYKE4v2G4PfxBLToFL8pO
+         nUY0VM4BReYj05yWLnF2LyruQWkhcyhZ+XwNXzJeHEKBIZLPeU59T/CuMl7NZixuFi09
+         KXxlHmNQ/PJrF206symEyu+7Zq97H8GYXkS+k=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=wYj0gPoFTJBwWJLt1P9KNSn0ODKjU0wkvs8hBSjSO3U=;
-        b=k53f54eJLlBoxh8zNV4lUZEIv90WiHjWBWdulp5C8WoK5DBD6yJBLheIUjIr2LP2pM
-         fZxhYdp3evwgKigAE8yzOJyzJ3aJTGuWq0xM5SC/LDuo9HLm1H5kf4KiEdcyOAJiYSGD
-         YjytmobnJVR6rIMIjs+lEguy5sC2TtsDg9aAmeQXWDYCP3JIUFul+AF/MdT2Ifpom+qw
-         AZu0f8+RDa4v7+UTZa63TjJ1dSknWvZBai13l0A6PZcxGBu4E0+SLF3adGH2LVnBazKx
-         olW+z8uKXPtI9j1rfMMHSGDGTqYbFfB+ywizyTT9Zi0Z5qO2BU2LLJtWHgc+K6AMVIws
-         F/uQ==
-X-Gm-Message-State: AOAM531VVQC3aM2ZkdzlZRCHsVkXcz7AXc1UNi8W5EZZywhwY3dpF+xP
-        9si8eVOMLw52soUWMoMzITWDgA==
-X-Google-Smtp-Source: ABdhPJyB4buwfxnegQsQ1aY4kRiRx+ihTJre7LqvqL8FaxfcZg66cU+10Z3INwywene+LPduhmYoww==
-X-Received: by 2002:a65:64c8:0:b0:3fa:91bf:a5d8 with SMTP id t8-20020a6564c8000000b003fa91bfa5d8mr229545pgv.473.1653296386141;
-        Mon, 23 May 2022 01:59:46 -0700 (PDT)
+        bh=RQjXK1tyA9xOYFhndd4nNr3xd4VXsIavQtRl5jsGh4c=;
+        b=j7ntdWs8z7C6xuRn6Yif1TmUjESiCBdpu2aQGww3bqf/eG1mSyAfnY8SGX2JWuIyLD
+         O7AT1w3alZitSdXMQz+rA43aQZ7QE4oqNKad3idjpALhx/m8QKT0+mhC2gwXIE1/RLY0
+         OicaQT1o/TFMFXcA8AmN7iY4zHtwO6u0UbXb285R4wlKezBUqfPGJKtT/79zarNPxrPk
+         /S6c1J3CK25TpEQfrYZAqRd2CDnX/BBUQaxze3DVNwVvYzz682e2xENcG33o4yshDyix
+         INTyXzhd6iiJd/eILs9Q6YLu7VjJ4zedTAjtd+C6WA4fu+0cmYTtB1bOWKSfzUd2S042
+         qXsQ==
+X-Gm-Message-State: AOAM530igXwUky7+ZvMrejN+xItgshTjnQAJaohjN45D2akvMQ92RggQ
+        hHZsM6qKN2Iko18t+PMqGU3xPA==
+X-Google-Smtp-Source: ABdhPJw7GzZaO7+1ExzM7fCYO6HG981ADv0zp7IOz83yeRMp6UwL1C+HSBrvI/3v7TVTfgTNPEgxRw==
+X-Received: by 2002:a17:90b:4a90:b0:1df:e3af:c6ad with SMTP id lp16-20020a17090b4a9000b001dfe3afc6admr21190655pjb.41.1653296388958;
+        Mon, 23 May 2022 01:59:48 -0700 (PDT)
 Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:1b8:7eae:9793:ff95])
-        by smtp.gmail.com with ESMTPSA id e11-20020a170902cf4b00b0015e8d4eb22csm4524719plg.118.2022.05.23.01.59.43
+        by smtp.gmail.com with ESMTPSA id e11-20020a170902cf4b00b0015e8d4eb22csm4524719plg.118.2022.05.23.01.59.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 01:59:45 -0700 (PDT)
+        Mon, 23 May 2022 01:59:48 -0700 (PDT)
 From:   Chen-Yu Tsai <wenst@chromium.org>
 To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
@@ -59,9 +59,9 @@ Cc:     Chen-Yu Tsai <wenst@chromium.org>,
         linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/4] clk: mediatek: mux: add clk notifier functions
-Date:   Mon, 23 May 2022 16:59:22 +0800
-Message-Id: <20220523085923.1430470-4-wenst@chromium.org>
+Subject: [PATCH v2 4/4] clk: mediatek: mt8183: Add clk mux notifier for MFG mux
+Date:   Mon, 23 May 2022 16:59:23 +0800
+Message-Id: <20220523085923.1430470-5-wenst@chromium.org>
 X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
 In-Reply-To: <20220523085923.1430470-1-wenst@chromium.org>
 References: <20220523085923.1430470-1-wenst@chromium.org>
@@ -77,124 +77,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With device frequency scaling, the mux clock that (indirectly) feeds the
-device selects between a dedicated PLL, and some other stable clocks.
+When the MFG PLL clock, which is upstream of the MFG clock, is changed,
+the downstream clock and consumers need to be switched away from the PLL
+over to a stable clock to avoid glitches.
 
-When a clk rate change is requested, the (normally) upstream PLL is
-reconfigured. It's possible for the clock output of the PLL to become
-unstable during this process.
-
-To avoid causing the device to glitch, the mux should temporarily be
-switched over to another "stable" clock during the PLL rate change.
-This is done with clk notifiers.
-
-This patch adds common functions for notifiers to temporarily and
-transparently reparent mux clocks.
-
-This was loosely based on commit 8adfb08605a9 ("clk: sunxi-ng: mux: Add
-clk notifier functions").
+This is done through the use of the newly added clk mux notifier. The
+notifier is set on the mux itself instead of the upstream PLL, but in
+practice this works, as the rate change notifitcations are propogated
+throughout the sub-tree hanging off the PLL. Just before rate changes,
+the MFG mux is temporarily and transparently switched to the 26 MHz
+main crystal. After the rate change, the mux is switched back.
 
 Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
 ---
- drivers/clk/mediatek/clk-mux.c | 42 ++++++++++++++++++++++++++++++++++
- drivers/clk/mediatek/clk-mux.h | 15 ++++++++++++
- 2 files changed, 57 insertions(+)
+Changes since v1;
+- Moved clk notifier registration into separate function
+- Fixed comment style
 
-diff --git a/drivers/clk/mediatek/clk-mux.c b/drivers/clk/mediatek/clk-mux.c
-index cd5f9fd8cb98..f84a5a753c09 100644
---- a/drivers/clk/mediatek/clk-mux.c
-+++ b/drivers/clk/mediatek/clk-mux.c
-@@ -4,6 +4,7 @@
-  * Author: Owen Chen <owen.chen@mediatek.com>
-  */
+ drivers/clk/mediatek/clk-mt8183.c | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+
+diff --git a/drivers/clk/mediatek/clk-mt8183.c b/drivers/clk/mediatek/clk-mt8183.c
+index b5c17988c337..d66acf2e5e19 100644
+--- a/drivers/clk/mediatek/clk-mt8183.c
++++ b/drivers/clk/mediatek/clk-mt8183.c
+@@ -1188,10 +1188,33 @@ static void clk_mt8183_top_init_early(struct device_node *node)
+ CLK_OF_DECLARE_DRIVER(mt8183_topckgen, "mediatek,mt8183-topckgen",
+ 			clk_mt8183_top_init_early);
  
-+#include <linux/clk.h>
- #include <linux/clk-provider.h>
- #include <linux/compiler_types.h>
- #include <linux/container_of.h>
-@@ -259,4 +260,45 @@ void mtk_clk_unregister_muxes(const struct mtk_mux *muxes, int num,
++/* Register mux notifier for MFG mux */
++static int clk_mt8183_reg_mfg_mux_notifier(struct device *dev, struct clk *clk)
++{
++	struct mtk_mux_nb *mfg_mux_nb;
++	int i;
++
++	mfg_mux_nb = devm_kzalloc(dev, sizeof(*mfg_mux_nb), GFP_KERNEL);
++	if (!mfg_mux_nb)
++		return -ENOMEM;
++
++	for (i = 0; i < ARRAY_SIZE(top_muxes); i++)
++		if (top_muxes[i].id == CLK_TOP_MUX_MFG)
++			break;
++	if (i == ARRAY_SIZE(top_muxes))
++		return -EINVAL;
++
++	mfg_mux_nb->mux = &top_muxes[i];
++	mfg_mux_nb->bypass_index = 0; /* Bypass to 26M crystal */
++
++	return devm_mtk_clk_mux_notifier_register(dev, clk, mfg_mux_nb);
++}
++
+ static int clk_mt8183_top_probe(struct platform_device *pdev)
+ {
+ 	void __iomem *base;
+ 	struct device_node *node = pdev->dev.of_node;
++	int ret;
+ 
+ 	base = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(base))
+@@ -1217,6 +1240,11 @@ static int clk_mt8183_top_probe(struct platform_device *pdev)
+ 	mtk_clk_register_gates(node, top_clks, ARRAY_SIZE(top_clks),
+ 		top_clk_data);
+ 
++	ret = clk_mt8183_reg_mfg_mux_notifier(&pdev->dev,
++					      top_clk_data->hws[CLK_TOP_MUX_MFG]->clk);
++	if (ret)
++		return ret;
++
+ 	return of_clk_add_hw_provider(node, of_clk_hw_onecell_get,
+ 				      top_clk_data);
  }
- EXPORT_SYMBOL_GPL(mtk_clk_unregister_muxes);
- 
-+/*
-+ * This clock notifier is called when the frequency of the of the parent
-+ * PLL clock is to be changed. The idea is to switch the parent to a
-+ * stable clock, such as the main oscillator, while the PLL frequency
-+ * stabilizes.
-+ */
-+static int mtk_clk_mux_notifier_cb(struct notifier_block *nb,
-+				   unsigned long event, void *_data)
-+{
-+	struct clk_notifier_data *data = _data;
-+	struct mtk_mux_nb *mux_nb = to_mtk_mux_nb(nb);
-+	const struct mtk_mux *mux = mux_nb->mux;
-+	struct clk_hw *hw;
-+	int ret = 0;
-+
-+	hw = __clk_get_hw(data->clk);
-+
-+	switch (event) {
-+	case PRE_RATE_CHANGE:
-+		mux_nb->original_index = mux->ops->get_parent(hw);
-+		ret = mux->ops->set_parent(hw, mux_nb->bypass_index);
-+		break;
-+
-+	case POST_RATE_CHANGE:
-+	case ABORT_RATE_CHANGE:
-+		ret = mux->ops->set_parent(hw, mux_nb->original_index);
-+		break;
-+	}
-+
-+	return notifier_from_errno(ret);
-+}
-+
-+int devm_mtk_clk_mux_notifier_register(struct device *dev, struct clk *clk,
-+				       struct mtk_mux_nb *mux_nb)
-+{
-+	mux_nb->nb.notifier_call = mtk_clk_mux_notifier_cb;
-+
-+	return devm_clk_notifier_register(dev, clk, &mux_nb->nb);
-+}
-+EXPORT_SYMBOL_GPL(devm_mtk_clk_mux_notifier_register);
-+
- MODULE_LICENSE("GPL");
-diff --git a/drivers/clk/mediatek/clk-mux.h b/drivers/clk/mediatek/clk-mux.h
-index 6539c58f5d7d..506e91125a3d 100644
---- a/drivers/clk/mediatek/clk-mux.h
-+++ b/drivers/clk/mediatek/clk-mux.h
-@@ -7,12 +7,14 @@
- #ifndef __DRV_CLK_MTK_MUX_H
- #define __DRV_CLK_MTK_MUX_H
- 
-+#include <linux/notifier.h>
- #include <linux/spinlock.h>
- #include <linux/types.h>
- 
- struct clk;
- struct clk_hw_onecell_data;
- struct clk_ops;
-+struct device;
- struct device_node;
- 
- struct mtk_mux {
-@@ -89,4 +91,17 @@ int mtk_clk_register_muxes(const struct mtk_mux *muxes,
- void mtk_clk_unregister_muxes(const struct mtk_mux *muxes, int num,
- 			      struct clk_hw_onecell_data *clk_data);
- 
-+struct mtk_mux_nb {
-+	struct notifier_block	nb;
-+	const struct mtk_mux	*mux;
-+
-+	u8	bypass_index;	/* Which parent to temporarily use */
-+	u8	original_index;	/* Set by notifier callback */
-+};
-+
-+#define to_mtk_mux_nb(_nb)	container_of(_nb, struct mtk_mux_nb, nb)
-+
-+int devm_mtk_clk_mux_notifier_register(struct device *dev, struct clk *clk,
-+				       struct mtk_mux_nb *mux_nb);
-+
- #endif /* __DRV_CLK_MTK_MUX_H */
 -- 
 2.36.1.124.g0e6072fb45-goog
 

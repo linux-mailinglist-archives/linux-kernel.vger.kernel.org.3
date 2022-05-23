@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A02B53176A
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:53:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D106531C50
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:57:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240734AbiEWR34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:29:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49428 "EHLO
+        id S245240AbiEWSMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 14:12:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241122AbiEWRV5 (ORCPT
+        with ESMTP id S241743AbiEWRf4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:21:57 -0400
+        Mon, 23 May 2022 13:35:56 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7290E75200;
-        Mon, 23 May 2022 10:18:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AADEF87A0F;
+        Mon, 23 May 2022 10:29:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D495460B2C;
-        Mon, 23 May 2022 17:16:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2A96C385AA;
-        Mon, 23 May 2022 17:16:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3AFAF61194;
+        Mon, 23 May 2022 17:28:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42406C385A9;
+        Mon, 23 May 2022 17:28:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326217;
-        bh=Jmahjn+knvlSNapX1inMo0lzVlsJsFsC5BvSMtIWq8k=;
+        s=korg; t=1653326912;
+        bh=wkVrRs3ZmXWibR3yswrRvgW92+HWI718OMiomhJwUwg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rGfKFBtgFqaknnU8HAjriHUACLov8OuNy5B0P7e+psa8VqSZOh6SRLI1vXcZW4a3Y
-         wKUwdUYZv32E+bj0F7CcJFXgSl/tsqrj/9sR45YSFHYysIiPsM/lI04um5kZqu+nea
-         K3sr4Vup5Jdl4DTQVQQ259h1K06nUxJzXSe+c8Ss=
+        b=DBLiRQRGPlY1bTnUJNf3mptOGBGNjHk5/ECadAhAr6nMetD1+syA251B+7InjDk76
+         gaK+3qZgcQJ4/Wp0sfd8KzEnYTXsrS0hNZ3hcfwID8cL8KI/ji65Ppo5C08bnC1Njr
+         B5SliDu4C9ZTwPpFZQ4pRD3+8435+KQxczZt1BcM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robert Richter <rrichter@amd.com>,
-        Terry Bowman <terry.bowman@amd.com>,
-        Jean Delvare <jdelvare@suse.de>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Mario Limonciello <Mario.Limonciello@amd.com>
-Subject: [PATCH 5.15 013/132] Watchdog: sp5100_tco: Move timer initialization into function
+        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
+        Lyude Paul <lyude@redhat.com>
+Subject: [PATCH 5.17 065/158] drm/dp/mst: fix a possible memory leak in fetch_monitor_name()
 Date:   Mon, 23 May 2022 19:03:42 +0200
-Message-Id: <20220523165825.809764522@linuxfoundation.org>
+Message-Id: <20220523165841.635430513@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
-References: <20220523165823.492309987@linuxfoundation.org>
+In-Reply-To: <20220523165830.581652127@linuxfoundation.org>
+References: <20220523165830.581652127@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,109 +54,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Terry Bowman <terry.bowman@amd.com>
+From: Hangyu Hua <hbh25y@gmail.com>
 
-commit abd71a948f7aab47ca49d3e7fe6afa6c48c8aae0 upstream.
+commit 6e03b13cc7d9427c2c77feed1549191015615202 upstream.
 
-Refactor driver's timer initialization into new function. This is needed
-inorder to support adding new device layouts while using common timer
-initialization.
+drm_dp_mst_get_edid call kmemdup to create mst_edid. So mst_edid need to be
+freed after use.
 
-Co-developed-by: Robert Richter <rrichter@amd.com>
-Signed-off-by: Robert Richter <rrichter@amd.com>
-Signed-off-by: Terry Bowman <terry.bowman@amd.com>
-Tested-by: Jean Delvare <jdelvare@suse.de>
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Link: https://lore.kernel.org/r/20220202153525.1693378-2-terry.bowman@amd.com
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc: Mario Limonciello <Mario.Limonciello@amd.com>
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+Reviewed-by: Lyude Paul <lyude@redhat.com>
+Signed-off-by: Lyude Paul <lyude@redhat.com>
+Cc: stable@vger.kernel.org
+Link: https://patchwork.freedesktop.org/patch/msgid/20220516032042.13166-1-hbh25y@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/watchdog/sp5100_tco.c |   65 +++++++++++++++++++++++-------------------
- 1 file changed, 36 insertions(+), 29 deletions(-)
+ drivers/gpu/drm/drm_dp_mst_topology.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/watchdog/sp5100_tco.c
-+++ b/drivers/watchdog/sp5100_tco.c
-@@ -215,6 +215,41 @@ static u32 sp5100_tco_read_pm_reg32(u8 i
- 	return val;
+--- a/drivers/gpu/drm/drm_dp_mst_topology.c
++++ b/drivers/gpu/drm/drm_dp_mst_topology.c
+@@ -4852,6 +4852,7 @@ static void fetch_monitor_name(struct dr
+ 
+ 	mst_edid = drm_dp_mst_get_edid(port->connector, mgr, port);
+ 	drm_edid_get_monitor_name(mst_edid, name, namelen);
++	kfree(mst_edid);
  }
  
-+static int sp5100_tco_timer_init(struct sp5100_tco *tco)
-+{
-+	struct watchdog_device *wdd = &tco->wdd;
-+	struct device *dev = wdd->parent;
-+	u32 val;
-+
-+	val = readl(SP5100_WDT_CONTROL(tco->tcobase));
-+	if (val & SP5100_WDT_DISABLED) {
-+		dev_err(dev, "Watchdog hardware is disabled\n");
-+		return -ENODEV;
-+	}
-+
-+	/*
-+	 * Save WatchDogFired status, because WatchDogFired flag is
-+	 * cleared here.
-+	 */
-+	if (val & SP5100_WDT_FIRED)
-+		wdd->bootstatus = WDIOF_CARDRESET;
-+
-+	/* Set watchdog action to reset the system */
-+	val &= ~SP5100_WDT_ACTION_RESET;
-+	writel(val, SP5100_WDT_CONTROL(tco->tcobase));
-+
-+	/* Set a reasonable heartbeat before we stop the timer */
-+	tco_timer_set_timeout(wdd, wdd->timeout);
-+
-+	/*
-+	 * Stop the TCO before we change anything so we don't race with
-+	 * a zeroed timer.
-+	 */
-+	tco_timer_stop(wdd);
-+
-+	return 0;
-+}
-+
- static int sp5100_tco_setupdevice(struct device *dev,
- 				  struct watchdog_device *wdd)
- {
-@@ -340,35 +375,7 @@ static int sp5100_tco_setupdevice(struct
- 	/* Setup the watchdog timer */
- 	tco_timer_enable(tco);
- 
--	val = readl(SP5100_WDT_CONTROL(tco->tcobase));
--	if (val & SP5100_WDT_DISABLED) {
--		dev_err(dev, "Watchdog hardware is disabled\n");
--		ret = -ENODEV;
--		goto unreg_region;
--	}
--
--	/*
--	 * Save WatchDogFired status, because WatchDogFired flag is
--	 * cleared here.
--	 */
--	if (val & SP5100_WDT_FIRED)
--		wdd->bootstatus = WDIOF_CARDRESET;
--	/* Set watchdog action to reset the system */
--	val &= ~SP5100_WDT_ACTION_RESET;
--	writel(val, SP5100_WDT_CONTROL(tco->tcobase));
--
--	/* Set a reasonable heartbeat before we stop the timer */
--	tco_timer_set_timeout(wdd, wdd->timeout);
--
--	/*
--	 * Stop the TCO before we change anything so we don't race with
--	 * a zeroed timer.
--	 */
--	tco_timer_stop(wdd);
--
--	release_region(SP5100_IO_PM_INDEX_REG, SP5100_PM_IOPORTS_SIZE);
--
--	return 0;
-+	ret = sp5100_tco_timer_init(tco);
- 
- unreg_region:
- 	release_region(SP5100_IO_PM_INDEX_REG, SP5100_PM_IOPORTS_SIZE);
+ /**
 
 

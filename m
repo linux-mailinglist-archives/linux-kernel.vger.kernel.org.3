@@ -2,49 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBAE3531782
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:53:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F6AC531861
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:54:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239360AbiEWRIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:08:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59340 "EHLO
+        id S243475AbiEWRiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:38:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239551AbiEWRHg (ORCPT
+        with ESMTP id S241696AbiEWR1F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:07:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80BFB6B004;
-        Mon, 23 May 2022 10:07:16 -0700 (PDT)
+        Mon, 23 May 2022 13:27:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF75373574;
+        Mon, 23 May 2022 10:22:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 98D43B811F0;
-        Mon, 23 May 2022 17:07:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0D9BC385A9;
-        Mon, 23 May 2022 17:07:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 51057B81210;
+        Mon, 23 May 2022 17:21:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F6ECC385A9;
+        Mon, 23 May 2022 17:21:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653325633;
-        bh=H0R7sOJ74r5n90kpbHhyXe3/tBEaDV75G93ywL8THNo=;
+        s=korg; t=1653326488;
+        bh=2QNI6p3DCQnj328K6ybIE7IWGu/SDS5fAgkPESIDXyo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2OzPIGO5vbBpgWJd6glfM/FoEOCMfQJNo4FPbjffG/4WV+IetQ/t8qMca2yYEpC3n
-         RX+TqLZPnI9mHjAL38N1hrpqig4mgfP1H/ml3OIyeElSu/x6y/sroYhmAVg5RqttsB
-         qGA4G9nr0L8Gr+P4BP2ulbnOGQx7aN60+v5J9ZSY=
+        b=jr7xFsRGkFizGD41waYYOZlNvMot2hr3YyV3BaRHoCXR/lotoe1YfLO5WEFEKzdbC
+         p4CDLNLEoGuiDjd70hz0tW0It1pBVjPwN5edrqHxzuVF3KufF5heazlWWOg9Lh9eL6
+         zG2OjNoJVeRJ/bjII3uOQIfpMd6+GJ3g0dnXXIhs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Schspa Shi <schspa@gmail.com>
-Subject: [PATCH 5.10 01/97] usb: gadget: fix race when gadget driver register via ioctl
+        stable@vger.kernel.org, Geliang Tang <geliang.tang@suse.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 096/132] mptcp: reuse __mptcp_make_csum in validate_data_csum
 Date:   Mon, 23 May 2022 19:05:05 +0200
-Message-Id: <20220523165812.501448044@linuxfoundation.org>
+Message-Id: <20220523165839.281588719@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165812.244140613@linuxfoundation.org>
-References: <20220523165812.244140613@linuxfoundation.org>
+In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
+References: <20220523165823.492309987@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -58,92 +56,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Schspa Shi <schspa@gmail.com>
+From: Geliang Tang <geliang.tang@suse.com>
 
-commit 5f0b5f4d50fa0faa8c76ef9d42a42e8d43f98b44 upstream.
+[ Upstream commit 8401e87f5a36d370cbf1e9d4ba602a553ce9324a ]
 
-The usb_gadget_register_driver can be called multi time by to
-threads via USB_RAW_IOCTL_RUN ioctl syscall, which will lead
-to multiple registrations.
+This patch reused __mptcp_make_csum() in validate_data_csum() instead of
+open-coding.
 
-Call trace:
-  driver_register+0x220/0x3a0 drivers/base/driver.c:171
-  usb_gadget_register_driver_owner+0xfb/0x1e0
-    drivers/usb/gadget/udc/core.c:1546
-  raw_ioctl_run drivers/usb/gadget/legacy/raw_gadget.c:513 [inline]
-  raw_ioctl+0x1883/0x2730 drivers/usb/gadget/legacy/raw_gadget.c:1220
-  ioctl USB_RAW_IOCTL_RUN
-
-This routine allows two processes to register the same driver instance
-via ioctl syscall. which lead to a race condition.
-
-Please refer to the following scenarios.
-
-           T1                                  T2
-------------------------------------------------------------------
-usb_gadget_register_driver_owner
-  driver_register                    driver_register
-    driver_find                       driver_find
-    bus_add_driver                    bus_add_driver
-      priv alloced                     <context switch>
-      drv->p = priv;
-      <schedule out>
-      kobject_init_and_add // refcount = 1;
-   //couldn't find an available UDC or it's busy
-   <context switch>
-                                       priv alloced
-                                       drv->priv = priv;
-                                       kobject_init_and_add
-                                         ---> refcount = 1 <------
-                                       // register success
-                                       <context switch>
-===================== another ioctl/process ======================
-                                      driver_register
-                                       driver_find
-                                        k = kset_find_obj()
-                                         ---> refcount = 2 <------
-                                        <context out>
-   driver_unregister
-   // drv->p become T2's priv
-   ---> refcount = 1 <------
-   <context switch>
-                                        kobject_put(k)
-                                         ---> refcount = 0 <------
-                                        return priv->driver;
-                                        --------UAF here----------
-
-There will be UAF in this scenario.
-
-We can fix it by adding a new STATE_DEV_REGISTERING device state to
-avoid double register.
-
-Reported-by: syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com
-Link: https://lore.kernel.org/all/000000000000e66c2805de55b15a@google.com/
-Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
-Signed-off-by: Schspa Shi <schspa@gmail.com>
-Link: https://lore.kernel.org/r/20220508150247.38204-1-schspa@gmail.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Geliang Tang <geliang.tang@suse.com>
+Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/gadget/legacy/raw_gadget.c |    2 ++
- 1 file changed, 2 insertions(+)
+ net/mptcp/subflow.c | 15 ++++++---------
+ 1 file changed, 6 insertions(+), 9 deletions(-)
 
---- a/drivers/usb/gadget/legacy/raw_gadget.c
-+++ b/drivers/usb/gadget/legacy/raw_gadget.c
-@@ -144,6 +144,7 @@ enum dev_state {
- 	STATE_DEV_INVALID = 0,
- 	STATE_DEV_OPENED,
- 	STATE_DEV_INITIALIZED,
-+	STATE_DEV_REGISTERING,
- 	STATE_DEV_RUNNING,
- 	STATE_DEV_CLOSED,
- 	STATE_DEV_FAILED
-@@ -507,6 +508,7 @@ static int raw_ioctl_run(struct raw_dev
- 		ret = -EINVAL;
- 		goto out_unlock;
- 	}
-+	dev->state = STATE_DEV_REGISTERING;
- 	spin_unlock_irqrestore(&dev->lock, flags);
+diff --git a/net/mptcp/subflow.c b/net/mptcp/subflow.c
+index 6172f380dfb7..04afead7316f 100644
+--- a/net/mptcp/subflow.c
++++ b/net/mptcp/subflow.c
+@@ -845,9 +845,8 @@ static enum mapping_status validate_data_csum(struct sock *ssk, struct sk_buff *
+ 					      bool csum_reqd)
+ {
+ 	struct mptcp_subflow_context *subflow = mptcp_subflow_ctx(ssk);
+-	struct csum_pseudo_header header;
+ 	u32 offset, seq, delta;
+-	__wsum csum;
++	u16 csum;
+ 	int len;
  
- 	ret = usb_gadget_probe_driver(&dev->driver);
+ 	if (!csum_reqd)
+@@ -908,13 +907,11 @@ static enum mapping_status validate_data_csum(struct sock *ssk, struct sk_buff *
+ 	 * while the pseudo header requires the original DSS data len,
+ 	 * including that
+ 	 */
+-	header.data_seq = cpu_to_be64(subflow->map_seq);
+-	header.subflow_seq = htonl(subflow->map_subflow_seq);
+-	header.data_len = htons(subflow->map_data_len + subflow->map_data_fin);
+-	header.csum = 0;
+-
+-	csum = csum_partial(&header, sizeof(header), subflow->map_data_csum);
+-	if (unlikely(csum_fold(csum))) {
++	csum = __mptcp_make_csum(subflow->map_seq,
++				 subflow->map_subflow_seq,
++				 subflow->map_data_len + subflow->map_data_fin,
++				 subflow->map_data_csum);
++	if (unlikely(csum)) {
+ 		MPTCP_INC_STATS(sock_net(ssk), MPTCP_MIB_DATACSUMERR);
+ 		subflow->send_mp_fail = 1;
+ 		MPTCP_INC_STATS(sock_net(ssk), MPTCP_MIB_MPFAILTX);
+-- 
+2.35.1
+
 
 

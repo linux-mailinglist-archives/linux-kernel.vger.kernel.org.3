@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6820453167E
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:51:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A71E0531B50
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239370AbiEWRGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:06:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48674 "EHLO
+        id S243289AbiEWR4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:56:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239338AbiEWRFI (ORCPT
+        with ESMTP id S241594AbiEWRa6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:05:08 -0400
+        Mon, 23 May 2022 13:30:58 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0EC969727;
-        Mon, 23 May 2022 10:05:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BB453D4AA;
+        Mon, 23 May 2022 10:26:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 233C2614C7;
-        Mon, 23 May 2022 17:05:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2436BC385A9;
-        Mon, 23 May 2022 17:05:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FEE7611E3;
+        Mon, 23 May 2022 17:26:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7E3BC385A9;
+        Mon, 23 May 2022 17:26:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653325506;
-        bh=uk2ykdRUx9fBVgKlVsNcS69b0DTjULi+nD+Jr/UxuGs=;
+        s=korg; t=1653326777;
+        bh=9Zc0Kphv2aqH1+IbNRUj/srjFNT98FwAZCJBJ81hjug=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OAzgxwysGA/K9T4KiH7kaYKoJHD+so0Gk8mgm5c53QMQWSqB0QgAj9o7dJKgYd9Cm
-         pNkCdvtNbmB5A7wK9zyfVdH7F3kvRkf7VSj+PqlJLiQl/4i3NXEHoHNJZrcvjJZdsR
-         642kCxg1VBXqL8GLgo7U9oas0uTmJjO31na9vOpU=
+        b=tr13yZS+C/ZAva/zTTtphrpAv3rXq5HlgLzM8Pgn7lVEhWcufrhxGbCvvLgNq9QtE
+         oI/p+y6L69jx8+B05FcSwzAwDdbyW2u8Lc9udRbGHCRie1vJGWUM3xvery8hcCTEit
+         6hQKYv2JT3pIR38bjoqC6De9/NRGzk6EA0NZH8aY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
-        Zixuan Fu <r33s3n6@gmail.com>, Paolo Abeni <pabeni@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 14/25] net: vmxnet3: fix possible NULL pointer dereference in vmxnet3_rq_cleanup()
+        stable@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+        Peter Maydell <peter.maydell@linaro.org>,
+        Oliver Upton <oupton@google.com>
+Subject: [PATCH 5.17 055/158] KVM: arm64: vgic-v3: Consistently populate ID_AA64PFR0_EL1.GIC
 Date:   Mon, 23 May 2022 19:03:32 +0200
-Message-Id: <20220523165747.189968038@linuxfoundation.org>
+Message-Id: <20220523165839.913337649@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165743.398280407@linuxfoundation.org>
-References: <20220523165743.398280407@linuxfoundation.org>
+In-Reply-To: <20220523165830.581652127@linuxfoundation.org>
+References: <20220523165830.581652127@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,67 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zixuan Fu <r33s3n6@gmail.com>
+From: Marc Zyngier <maz@kernel.org>
 
-[ Upstream commit edf410cb74dc612fd47ef5be319c5a0bcd6e6ccd ]
+commit 5163373af195f10e0d99a8de3465c4ed36bdc337 upstream.
 
-In vmxnet3_rq_create(), when dma_alloc_coherent() fails,
-vmxnet3_rq_destroy() is called. It sets rq->rx_ring[i].base to NULL. Then
-vmxnet3_rq_create() returns an error to its callers mxnet3_rq_create_all()
--> vmxnet3_change_mtu(). Then vmxnet3_change_mtu() calls
-vmxnet3_force_close() -> dev_close() in error handling code. And the driver
-calls vmxnet3_close() -> vmxnet3_quiesce_dev() -> vmxnet3_rq_cleanup_all()
--> vmxnet3_rq_cleanup(). In vmxnet3_rq_cleanup(),
-rq->rx_ring[ring_idx].base is accessed, but this variable is NULL, causing
-a NULL pointer dereference.
+When adding support for the slightly wonky Apple M1, we had to
+populate ID_AA64PFR0_EL1.GIC==1 to present something to the guest,
+as the HW itself doesn't advertise the feature.
 
-To fix this possible bug, an if statement is added to check whether
-rq->rx_ring[0].base is NULL in vmxnet3_rq_cleanup() and exit early if so.
+However, we gated this on the in-kernel irqchip being created.
+This causes some trouble for QEMU, which snapshots the state of
+the registers before creating a virtual GIC, and then tries to
+restore these registers once the GIC has been created.  Obviously,
+between the two stages, ID_AA64PFR0_EL1.GIC has changed value,
+and the write fails.
 
-The error log in our fault-injection testing is shown as follows:
+The fix is to actually emulate the HW, and always populate the
+field if the HW is capable of it.
 
-[   65.220135] BUG: kernel NULL pointer dereference, address: 0000000000000008
-...
-[   65.222633] RIP: 0010:vmxnet3_rq_cleanup_all+0x396/0x4e0 [vmxnet3]
-...
-[   65.227977] Call Trace:
-...
-[   65.228262]  vmxnet3_quiesce_dev+0x80f/0x8a0 [vmxnet3]
-[   65.228580]  vmxnet3_close+0x2c4/0x3f0 [vmxnet3]
-[   65.228866]  __dev_close_many+0x288/0x350
-[   65.229607]  dev_close_many+0xa4/0x480
-[   65.231124]  dev_close+0x138/0x230
-[   65.231933]  vmxnet3_force_close+0x1f0/0x240 [vmxnet3]
-[   65.232248]  vmxnet3_change_mtu+0x75d/0x920 [vmxnet3]
-...
-
-Fixes: d1a890fa37f27 ("net: VMware virtual Ethernet NIC driver: vmxnet3")
-Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-Signed-off-by: Zixuan Fu <r33s3n6@gmail.com>
-Link: https://lore.kernel.org/r/20220514050711.2636709-1-r33s3n6@gmail.com
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 562e530fd770 ("KVM: arm64: Force ID_AA64PFR0_EL1.GIC=1 when exposing a virtual GICv3")
+Cc: stable@vger.kernel.org
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Reported-by: Peter Maydell <peter.maydell@linaro.org>
+Reviewed-by: Oliver Upton <oupton@google.com>
+Link: https://lore.kernel.org/r/20220503211424.3375263-1-maz@kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/vmxnet3/vmxnet3_drv.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/arm64/kvm/sys_regs.c |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/net/vmxnet3/vmxnet3_drv.c b/drivers/net/vmxnet3/vmxnet3_drv.c
-index b76404d0657e..cce959f281b7 100644
---- a/drivers/net/vmxnet3/vmxnet3_drv.c
-+++ b/drivers/net/vmxnet3/vmxnet3_drv.c
-@@ -1573,6 +1573,10 @@ vmxnet3_rq_cleanup(struct vmxnet3_rx_queue *rq,
- 	u32 i, ring_idx;
- 	struct Vmxnet3_RxDesc *rxd;
- 
-+	/* ring has already been cleaned up */
-+	if (!rq->rx_ring[0].base)
-+		return;
-+
- 	for (ring_idx = 0; ring_idx < 2; ring_idx++) {
- 		for (i = 0; i < rq->rx_ring[ring_idx].size; i++) {
- #ifdef __BIG_ENDIAN_BITFIELD
--- 
-2.35.1
-
+--- a/arch/arm64/kvm/sys_regs.c
++++ b/arch/arm64/kvm/sys_regs.c
+@@ -1080,8 +1080,7 @@ static u64 read_id_reg(const struct kvm_
+ 		val |= FIELD_PREP(ARM64_FEATURE_MASK(ID_AA64PFR0_CSV2), (u64)vcpu->kvm->arch.pfr0_csv2);
+ 		val &= ~ARM64_FEATURE_MASK(ID_AA64PFR0_CSV3);
+ 		val |= FIELD_PREP(ARM64_FEATURE_MASK(ID_AA64PFR0_CSV3), (u64)vcpu->kvm->arch.pfr0_csv3);
+-		if (irqchip_in_kernel(vcpu->kvm) &&
+-		    vcpu->kvm->arch.vgic.vgic_model == KVM_DEV_TYPE_ARM_VGIC_V3) {
++		if (kvm_vgic_global_state.type == VGIC_V3) {
+ 			val &= ~ARM64_FEATURE_MASK(ID_AA64PFR0_GIC);
+ 			val |= FIELD_PREP(ARM64_FEATURE_MASK(ID_AA64PFR0_GIC), 1);
+ 		}
 
 

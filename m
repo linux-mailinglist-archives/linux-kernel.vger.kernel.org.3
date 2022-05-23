@@ -2,104 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03D1B531812
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:53:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8C6553168A
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:51:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232671AbiEWURt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 16:17:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34120 "EHLO
+        id S232818AbiEWUUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 16:20:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbiEWURr (ORCPT
+        with ESMTP id S232696AbiEWUUG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 16:17:47 -0400
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC89AF1D0;
-        Mon, 23 May 2022 13:17:46 -0700 (PDT)
-Received: by mail-ot1-x32b.google.com with SMTP id e11-20020a9d6e0b000000b0060afcbafa80so5380763otr.3;
-        Mon, 23 May 2022 13:17:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9DUh6l8ZBN76lnS45q0wf6jiM8BayaXvjyPIbUUAWTA=;
-        b=R/AES/FlpFR4Wmbz51yvQ/jtXB3RgnmZ9r8MHiSzVwh62L5Oj6rGCFpXrvzOZ6MUoN
-         NJud8DwB0Kq3PwBJnPWnJZND/dRITJBxkz00GFyn0N6HLcOEJ9kMpvPuvXwdaLHio+U0
-         7uWAN8smybjlAD4Rjju8jBi4Sn4I+S5yVIdX4l1eQ2BjJiBUkM6W2V8Pyx3Ui275KdOn
-         Mb1xB9hUOzo2joQecY5CnJNDZsLwImfMrALeAr1cFQkOINceHcBqI92wD3a0D3our4UV
-         qiuvDuNR5kiBFXeqFAofGUaqibsL3JzaGqNLQWzVhnyz07v8/cAKJCim+h1qvvr/0IMa
-         TWqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9DUh6l8ZBN76lnS45q0wf6jiM8BayaXvjyPIbUUAWTA=;
-        b=49VQKrrPmCMRTaYRiq8/ugLho7zveIuuK7l5cGACVh389JuEqWEadoKnssxy0y5iED
-         S2y7i5hndc+eTkAbvvQ3r5MxxnXK7a8Uzw3JDM4+QDphdbjeHFNUjgra1dJH9lLq03Xv
-         8GwrK/j4gF8htKGbU1kqy4cUtjuiRdhGVUxwgtwM9U/d41p4l3f8v9T3i8oUo+z2Qfnc
-         C9FC04MnQ5h59J0jzL1HOYt581UgyOe8KlVZ3JNdYnU/bKpuosC7d+B7XHiA5/duDuIL
-         0z+otiXuo77tRvwg+nHqurnt0dtIs5lzNIuICeIDpbzGTTuflm8LETyCfWpPLcJowiEm
-         Spuw==
-X-Gm-Message-State: AOAM5302qJ1oqhOQmR8YOxVSkkbDltLFNdbjbOQ2GsG6XxLOfBH5gjff
-        1G+XEE2gPKXYR78bg+0jSZJ2av2qH4o2+3UBMrs=
-X-Google-Smtp-Source: ABdhPJwVz/W2po1d5TwSlFiQ3ZLNrMa1hBA0NDPQZsBA4wCrc5SAYByfN9LWffY9S9XDU65c6eFAONAuiF4zTdWNZaE=
-X-Received: by 2002:a9d:6543:0:b0:605:e789:271e with SMTP id
- q3-20020a9d6543000000b00605e789271emr9333863otl.200.1653337065638; Mon, 23
- May 2022 13:17:45 -0700 (PDT)
+        Mon, 23 May 2022 16:20:06 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D96C0BCEA3
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 13:20:05 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 96F871F747;
+        Mon, 23 May 2022 20:20:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1653337204; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=XJCNExi0Kdr0ah2fgcly/f0TPgzz4ig+wetVhpC6XPw=;
+        b=v1HQWTpsWnatXa6J8QZwOeVGjXslQk55RZjF+kVdYiy/6ND4mFsN2jUHSgVlm/Yd82uLL9
+        Lky4u51sYyDIgev6UL7yblzbnC0+vHa02YITHA0d0oCYcelvFOQr8o4CNKQEMw8N4AzbAv
+        cH4B4TjgxdGGRbBjb4lZAe4NEMLEXbY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1653337204;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=XJCNExi0Kdr0ah2fgcly/f0TPgzz4ig+wetVhpC6XPw=;
+        b=sUeFxIubwXtKDF31HEZ+y79SiMTEIl8ISgqCSyB7+AXpYISM1AHFSmEWq31Kmm2y7FHnoZ
+        VNlDlJdfDL52pwBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8A6A4139F5;
+        Mon, 23 May 2022 20:20:04 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id davJIXTsi2LfBgAAMHmgww
+        (envelope-from <bp@suse.de>); Mon, 23 May 2022 20:20:04 +0000
+Date:   Mon, 23 May 2022 22:20:04 +0200
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] x86/vdso for 5.19
+Message-ID: <YovsdAxZsUWxGVl4@zn.tnic>
 MIME-Version: 1.0
-References: <20220521111145.81697-74-Julia.Lawall@inria.fr>
-In-Reply-To: <20220521111145.81697-74-Julia.Lawall@inria.fr>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 23 May 2022 16:17:34 -0400
-Message-ID: <CADnq5_NJq-b4UfF_PpwYc2PV8Nt++cj0RsC=yxkbCfQtJ+meJQ@mail.gmail.com>
-Subject: Re: [PATCH] drm/amdkfd: fix typo in comment
-To:     Julia Lawall <Julia.Lawall@inria.fr>
-Cc:     Felix Kuehling <Felix.Kuehling@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        kernel-janitors@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
+Hi Linus,
 
-Alex
+phew, this is the last one:
 
-On Sat, May 21, 2022 at 7:12 AM Julia Lawall <Julia.Lawall@inria.fr> wrote:
->
-> Spelling mistake (triple letters) in comment.
-> Detected with the help of Coccinelle.
->
-> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
->
-> ---
->  drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
-> index 8b5452a8d330..67abf8dcd30a 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
-> @@ -1621,7 +1621,7 @@ int amdgpu_amdkfd_gpuvm_free_memory_of_gpu(
->
->         mutex_lock(&mem->lock);
->
-> -       /* Unpin MMIO/DOORBELL BO's that were pinnned during allocation */
-> +       /* Unpin MMIO/DOORBELL BO's that were pinned during allocation */
->         if (mem->alloc_flags &
->             (KFD_IOC_ALLOC_MEM_FLAGS_DOORBELL |
->              KFD_IOC_ALLOC_MEM_FLAGS_MMIO_REMAP)) {
->
+please pull a single x86/vdso change for 5.19.
+
+Thx.
+
+---
+
+The following changes since commit c5eb0a61238dd6faf37f58c9ce61c9980aaffd7a:
+
+  Linux 5.18-rc6 (2022-05-08 13:54:17 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_vdso_for_v5.19_rc1
+
+for you to fetch changes up to bf00745e7791fe2ba7941aeead8528075a158bbe:
+
+  x86/vsyscall: Remove CONFIG_LEGACY_VSYSCALL_EMULATE (2022-05-11 20:39:31 +0200)
+
+----------------------------------------------------------------
+- Get rid of CONFIG_LEGACY_VSYSCALL_EMULATE as nothing should be using it anymore
+
+----------------------------------------------------------------
+Andy Lutomirski (1):
+      x86/vsyscall: Remove CONFIG_LEGACY_VSYSCALL_EMULATE
+
+ arch/x86/Kconfig                      | 18 +++---------------
+ arch/x86/entry/vsyscall/vsyscall_64.c |  2 +-
+ 2 files changed, 4 insertions(+), 16 deletions(-)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH
+GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
+(HRB 36809, AG Nürnberg)

@@ -2,63 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBFA5530FEF
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:19:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C816B531021
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:19:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235891AbiEWNFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 09:05:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48506 "EHLO
+        id S235899AbiEWNGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 09:06:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235856AbiEWNFn (ORCPT
+        with ESMTP id S235927AbiEWNGB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 09:05:43 -0400
+        Mon, 23 May 2022 09:06:01 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135DF4992D;
-        Mon, 23 May 2022 06:05:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41FE511C29
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 06:06:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A108361349;
-        Mon, 23 May 2022 13:05:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBB6DC385A9;
-        Mon, 23 May 2022 13:05:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D338361349
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 13:05:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44C3EC385AA
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 13:05:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653311141;
-        bh=bWrL+p+gwqZvG50H6tpkpi47lD1PdQOmcrKzmQSZeBU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AWu9228BkTIzNTsWBSiHPPYtNXOhYhpo/D98nFYLThrLxBvWxCMfQwNpndNN3m7KR
-         HA+q61wF+dJrYwr3/9eyH1ooD6+HEgfi7dtjS7BJPzcS2pJeZs8FyYkEazWmYcPgKh
-         CCI00uz8N1c7dGCDuw9+vjkDByD1ybgzzhn89RgzZxksQzJ449Q2P95G8GK4vFGnmM
-         wAj4h0xF7iQ/LHHAy/dcm6aJQgzXGdYOW24hwBTARFUeiE6uBI+sHf+B3qH48c1yK3
-         WpzVvtTrnK9glwiFOHg1Tu8Pi/zLzsb9mWZAZAoEClOPENxV/6j4VKtjBx2VKSBY4H
-         Ae3USidvIzS6g==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id E4DCC400B1; Mon, 23 May 2022 10:05:37 -0300 (-03)
-Date:   Mon, 23 May 2022 10:05:37 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Sohaib Mohamed <sohaib.amhmd@gmail.com>,
-        Carsten Haitzler <carsten.haitzler@arm.com>,
-        Marco Elver <elver@google.com>,
-        John Garry <john.garry@huawei.com>,
-        Michael Petlan <mpetlan@redhat.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v2 0/8] Make more tests skip rather than fail
-Message-ID: <YouGoc9elnPwV5IM@kernel.org>
-References: <20220518042027.836799-1-irogers@google.com>
+        s=k20201202; t=1653311159;
+        bh=KNZd246A+U2gSpUP4pHbyKW6lW1Ntblp4/fdISMCRws=;
+        h=From:Date:Subject:To:Cc:From;
+        b=L6PNywv5NE4Nj4zo0B9SvMcPQxUKoBGdfedN8KFbjMvQjoV4tqib1c/65JguY0vTK
+         cqPouktSdsrPDKm2LZqXs7k3HpBEt5Ky3jEgkDAYepEF15SbfUHZi8X1CCLkEe2fm9
+         8WUhaRmXLa0C0r8yPlp3CzGSjZloyb3mX8u9519GPk6vyNZAWDIXq9/LAbYGcJG2sM
+         j16fbDGRLG2S+r+rtP2qQov45KLVcfZp3Pu2h9cBaL2uOkB7guRgAZJ4nonElO1Yyv
+         8VEUO1mdlop8JsRpRFbUFuNWNZEasYXKZB/6FilgYpBrf+tOKr2+xv9Hn0VYPN+cSD
+         IRa6ALX8QQMRQ==
+Received: by mail-wm1-f42.google.com with SMTP id 67-20020a1c1946000000b00397382b44f4so5318492wmz.2
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 06:05:59 -0700 (PDT)
+X-Gm-Message-State: AOAM531mqXZ0P09EtT3/Si4KBb08rgmf6PsW0+yubzZ43q7WhcLpVwPr
+        tsutedi877bfPVEM79tIqB0SRnKbxaCLwRDqCMc=
+X-Google-Smtp-Source: ABdhPJyQW0Y4GbMJ69RiNsvCCk0x3R9H3VaMcMUcy7aJ/YDDWCShq3gITIH8Jq72/2EoAStyv28qvLdBiZPpxWqa/X4=
+X-Received: by 2002:a05:600c:19cd:b0:397:4897:8bfd with SMTP id
+ u13-20020a05600c19cd00b0039748978bfdmr6260321wmq.9.1653311157461; Mon, 23 May
+ 2022 06:05:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220518042027.836799-1-irogers@google.com>
-X-Url:  http://acmel.wordpress.com
+Received: by 2002:adf:f344:0:0:0:0:0 with HTTP; Mon, 23 May 2022 06:05:56
+ -0700 (PDT)
+From:   Namjae Jeon <linkinjeon@kernel.org>
+Date:   Mon, 23 May 2022 22:05:56 +0900
+X-Gmail-Original-Message-ID: <CAKYAXd_tOxGD7syqV17YEbpNkcmi3-cNoLz5mKneXyLGbQyjhA@mail.gmail.com>
+Message-ID: <CAKYAXd_tOxGD7syqV17YEbpNkcmi3-cNoLz5mKneXyLGbQyjhA@mail.gmail.com>
+Subject: [GIT PULL] exfat update for 5.19-rc1
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sungjong Seo <sj1557.seo@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -69,46 +62,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, May 17, 2022 at 09:20:19PM -0700, Ian Rogers escreveu:
-> A long standing niggle has been that tests that cannot pass are marked
-> as failing rather than skip.  John Garry mentioned a similar concern
-> in [1]. These changes fix this behavior so that as root, or not, at
-> least the first 10 tests are passing or skipping.
-> 
-> [1] https://lore.kernel.org/lkml/d32376b5-5538-ff00-6620-e74ad4b4abf2@huawei.com/
-> 
-> v2. Updates reviewed-by and acked-by. It addresses review comments
->     from Namhyung Kim <namhyung@kernel.org>. An extra fix is now
->     included for PERF_RECORD_* which can fail as a user because of
->     perf_event_paranoid.
+Hi Linus,
 
-Thanks, applied.
+This is exfat update pull request for v5.19-rc1. I add description of
+this pull request on below. Please pull exfat with following ones.
 
-- Arnaldo
+Thanks!
 
- 
-> Ian Rogers (8):
->   perf test: Skip reason for suites with 1 test
->   perf test: Use skip in vmlinux kallsyms
->   perf test: Use skip in openat syscall
->   perf test: Basic mmap use skip
->   perf test: Parse events tidy terms_test
->   perf test: Parse events tidy evlist_test
->   perf test: Parse events break apart tests
->   perf test: Use skip in PERF_RECORD_*
-> 
->  tools/perf/tests/builtin-test.c            |   6 +-
->  tools/perf/tests/mmap-basic.c              |  18 +-
->  tools/perf/tests/openat-syscall-all-cpus.c |  23 +-
->  tools/perf/tests/openat-syscall.c          |  20 +-
->  tools/perf/tests/parse-events.c            | 492 +++++++++++----------
->  tools/perf/tests/perf-record.c             |  18 +-
->  tools/perf/tests/vmlinux-kallsyms.c        |  12 +-
->  7 files changed, 341 insertions(+), 248 deletions(-)
-> 
-> -- 
-> 2.36.0.550.gb090851708-goog
+The following changes since commit 4b0986a3613c92f4ec1bdc7f60ec66fea135991f:
 
--- 
+  Linux 5.18 (2022-05-22 09:52:31 -1000)
 
-- Arnaldo
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/linkinjeon/exfat.git
+tags/exfat-for-5.19-rc1
+
+for you to fetch changes up to 64ba4b15e5c045f8b746c6da5fc9be9a6b00b61d:
+
+  exfat: check if cluster num is valid (2022-05-23 11:17:30 +0900)
+
+----------------------------------------------------------------
+Description for this pull request:
+ - fix referencing wrong parent directory information during rename.
+ - introduce a sys_tz mount option to use system timezone.
+ - improve performance while zeroing a cluster with dirsync mount option.
+ - fix slab-out-bounds in exat_clear_bitmap() reported from syzbot.
+
+----------------------------------------------------------------
+Chung-Chiang Cheng (1):
+      exfat: introduce mount option 'sys_tz'
+
+Tadeusz Struk (1):
+      exfat: check if cluster num is valid
+
+Yuezhang Mo (3):
+      exfat: fix referencing wrong parent directory information after renaming
+      block: add sync_blockdev_range()
+      exfat: reduce block requests when zeroing a cluster
+
+ block/bdev.c           |  7 +++++++
+ fs/exfat/balloc.c      |  8 ++++++--
+ fs/exfat/exfat_fs.h    |  7 +++++++
+ fs/exfat/fatent.c      | 47 +++++++++++++++++------------------------------
+ fs/exfat/misc.c        | 10 ++++++++--
+ fs/exfat/namei.c       | 27 +--------------------------
+ fs/exfat/super.c       |  9 ++++++++-
+ include/linux/blkdev.h |  1 +
+ 8 files changed, 55 insertions(+), 61 deletions(-)

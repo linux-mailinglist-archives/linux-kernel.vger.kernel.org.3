@@ -2,176 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F6EA53187D
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:54:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7812F531B7A
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238949AbiEWQdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 12:33:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48450 "EHLO
+        id S238962AbiEWQef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 12:34:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238906AbiEWQdM (ORCPT
+        with ESMTP id S238906AbiEWQec (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 12:33:12 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B3D068316
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:33:10 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id z11so4716772pjc.3
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:33:10 -0700 (PDT)
+        Mon, 23 May 2022 12:34:32 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 330AF68316
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:34:31 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id jx22so16541391ejb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:34:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5tDQKdG9kWYVmaajJtTxi2aIE/n1fHAJvs7gBOrSJGE=;
-        b=CAFc6Kb4a5jeMcq2Dm8+NXWFdVfri+0CMXOrtJfbFy8rYFJOVsgzYgP5RkVh8WiCrx
-         LoeKKjGqPpQBUnTPlu/1aVACw7f7JTPh1wQz7tlp4HzgDc/wLR7HAaN3hKjqZSHd3k6U
-         aHvxNB/5PaVPb4M8IMJSEM0G7pBZMsK8JUoJvqFL0APZGh9b8F5iP1O/S6fzrZDBzXxn
-         o4wP59lVv66pYHK4jRKELx9uuYfqz5oEDYK9VRK2mSiaW+N3Nh0BdbwTsxCJnkYSJjjK
-         PW12BXF08oZrEy6WfQYdfHVhb1CS9f9llxXdSukzBvz9l6iQLiil5bWcYN6g+iJp5Q6s
-         X/8g==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=G/XA8ganN6D8SJro5978H4m5Fr+5l+LHKXISgC45i6U=;
+        b=V4gZGewx8jIJhhKQRA3xFN/sZpiyapULO/rXmi27p0MmEibaEgQ8lH/+ejDyKRD2aK
+         JmXLAC7N1DBNvBcq6khSV/szTMTFxbwPoyH9ag/RcgAZaLNvfFa3NkmSZnlOFIpQRGBG
+         HFWAMTzc4Rih6kdSZ+4g38GMRpnnlGT5Wdqqc9FBi+RFYs78DfAuap/qX/8zm5NqMwNf
+         /4H1Fb+2qzFVUINXJzpsdgOq38PEpU6MP0ML/oB1mqpNOYziflnFlyEbbEs4QQo6/+k8
+         e56iow3cMFrFf4soDANOpi2DTNdbdI7R93SpDItrN+4tg+aL6OKiO4E5MZ95N9GZFqWc
+         84IQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=5tDQKdG9kWYVmaajJtTxi2aIE/n1fHAJvs7gBOrSJGE=;
-        b=auAX0n2UPsQ2bb86KSv+4CXWpA8ik3Y77NH47RKMUrCACIoY9Ex7o+g5q2mxXILTiQ
-         8uiek+ofQptpco7gan0TvlKuAOoOAinYoDAcTx+n4jQZhXEndCscDVxHoJ3zAhcvwIVv
-         kW0smb1TICFu2yLN9MYMuHYyRq80c+iVBoSQap949NM/EDS5btf2az2XuZlYMiI97Sda
-         9V5zhP7VZJ6C1VYeFstduu3vGBDllXfXD/IukfeOccCVUlayXvoTNl3u0mJ6R2bh2G0D
-         a1lE515rKIfAnC5oA6LyQxHU1+ADNZ5qiC5id8pviOt2uPUgSz3amhNBBPgzYuQ1NrLk
-         mQlA==
-X-Gm-Message-State: AOAM530rErgA3D7bzgpLJ+/+3tId6dx1DdRKFeJ3u8+uedVX2ojWcf/v
-        SbhsRy2zlzMI28cIa/zLOw1uVDQm5ao=
-X-Google-Smtp-Source: ABdhPJy0Ls1q3U+6SXA1GvTCL9MA14HVQwtc71UoWl6XdWj6+Juk7OWFUyB+iphXKqZQJTySlj/rKA==
-X-Received: by 2002:a17:902:ce84:b0:162:cbe:f39a with SMTP id f4-20020a170902ce8400b001620cbef39amr10584283plg.79.1653323589739;
-        Mon, 23 May 2022 09:33:09 -0700 (PDT)
-Received: from google.com ([2620:15c:211:201:c004:5d89:478f:e308])
-        by smtp.gmail.com with ESMTPSA id y6-20020aa78546000000b0051844f3f637sm4242350pfn.40.2022.05.23.09.33.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 09:33:09 -0700 (PDT)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Mon, 23 May 2022 09:33:07 -0700
-From:   Minchan Kim <minchan@kernel.org>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        John Dias <joaodias@google.com>,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH v4] mm: fix is_pinnable_page against on cma page
-Message-ID: <You3Q/VFaCoS0mC8@google.com>
-References: <f7ff4186-e629-a5da-3f4d-ec629b0c8dd9@nvidia.com>
- <20220512004949.GK1790663@paulmck-ThinkPad-P17-Gen-1>
- <YnxczoehQJ+x6m9Y@google.com>
- <0accce46-fac6-cdfb-db7f-d08396bf9d35@nvidia.com>
- <aafc0954-80df-dceb-03f2-2caea29cbbda@nvidia.com>
- <YnyCqwY4DxcZ/NjM@google.com>
- <20220517140049.GF63055@ziepe.ca>
- <ef901bdb-6117-bad4-2f26-c80df270b86e@nvidia.com>
- <20220517192825.GM63055@ziepe.ca>
- <b6eef200-43d1-7913-21ed-176b05fcb4fe@nvidia.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=G/XA8ganN6D8SJro5978H4m5Fr+5l+LHKXISgC45i6U=;
+        b=2VEqFLBtlBXdhzvLS42w+OHtYh4jJL4yAvJx2SaMy9sTO1vU9bHVnRBw7Md65QTyyg
+         Z2ik/peOh8v32VjysEzx/l/oRMr9hPVPNG7yVKDYMSh11XB2rUnyUz3atDZQec+1obvK
+         7ZRsJS1pC0TdgPtgT7VK/ADOSrFlSnjStaOpMqX+hcOsLmJuQAVyaw/ca27wrBJ5Mjif
+         N5aFHaDd8j3C1Ko1SmnKvBC+T15MKK+r/5wmP+RU1K3LQpuvKR1hABV7RoUwOXqdnkgO
+         mMWfviDHR4iqroIEG7LZQiTCj02AOdsqH2PvdlH8eGAS1TQxIcRZoyYeJ+hczPJF68QV
+         SvzA==
+X-Gm-Message-State: AOAM532TXUC0Dk4lRjef46zYinC07yP20mHauRHkgXFhvuaA/os2rWnY
+        b5alK2DWmSEosmg+WH9/RFwL7WHMDkHI4PMj9OhxGA==
+X-Google-Smtp-Source: ABdhPJw4KEeaBlMeJuRWGPa57xCB7Ewlw+G+TBeTDM2j4L9pKHotAqYYEh2UZdxh5ovyLhk/tMuvzvFu6fcl2j4lkqs=
+X-Received: by 2002:a17:907:3f19:b0:6f5:6b2:9615 with SMTP id
+ hq25-20020a1709073f1900b006f506b29615mr21628853ejc.659.1653323669337; Mon, 23
+ May 2022 09:34:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b6eef200-43d1-7913-21ed-176b05fcb4fe@nvidia.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20220518013140.1467326-1-terry_chen@wistron.corp-partner.google.com>
+ <00e58668-ca30-0048-6cd1-b2dd4ad66d7a@linux.intel.com> <CAMmR3bEeV3CbqG7nmHb17xtju2X37wa590z+TMwXFHnkiJNcqQ@mail.gmail.com>
+In-Reply-To: <CAMmR3bEeV3CbqG7nmHb17xtju2X37wa590z+TMwXFHnkiJNcqQ@mail.gmail.com>
+From:   Curtis Malainey <cujomalainey@google.com>
+Date:   Mon, 23 May 2022 09:34:18 -0700
+Message-ID: <CAOReqxif-+X5_EcR3N8EOx1H=cE3AdOr-Te8aqB4JBx5JrbFTg@mail.gmail.com>
+Subject: Re: [v6] FROMLIST: ASoC: Intel: sof_cs42l42: adding support for ADL
+ configuration and BT offload audio
+To:     Terry Chen <terry_chen@wistron.corp-partner.google.com>
+Cc:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        ALSA development <alsa-devel@alsa-project.org>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Jie Yang <yang.jie@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        "Lu, Brent" <brent.lu@intel.com>,
+        Curtis Malainey <cujomalainey@chromium.org>,
+        Sean Paul <seanpaul@chromium.org>,
+        "Bowman, Casey G" <casey.g.bowman@intel.com>,
+        Mark Hsieh <mark_hsieh@wistron.corp-partner.google.com>,
+        "Gopal, Vamshi Krishna" <vamshi.krishna.gopal@intel.com>,
+        Mac Chiang <mac.chiang@intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 01:12:02PM -0700, John Hubbard wrote:
-> On 5/17/22 12:28, Jason Gunthorpe wrote:
-> > > If you compare this to the snippet above, you'll see that there is
-> > > an extra mov statement, and that one dereferences a pointer from
-> > > %rax:
-> > > 
-> > >      mov    (%rax),%rbx
-> > 
-> > That is the same move as:
-> > 
-> >     mov    0x8(%rdx,%rax,8),%rbx
-> > 
-> > Except that the EA calculation was done in advance and stored in rax.
-> > 
-> > lea isn't a memory reference, it is just computing the pointer value
-> > that 0x8(%rdx,%rax,8) represents. ie the lea computes
-> > 
-> >    %rax = %rdx + %rax*8 + 6
-> > 
-> > Which is then fed into the mov. Maybe it is an optimization to allow
-> > one pipe to do the shr and an other to the EA - IDK, seems like a
-> > random thing for the compiler to do.
-> 
-> Apologies for getting that wrong, and thanks for walking me through the
-> asm.
-> 
-> [...]
-> > 
-> > Paul can correct me, but I understand we do not have a list of allowed
-> > operations that are exempted from the READ_ONCE() requirement. ie it
-> > is not just conditional branching that requires READ_ONCE().
-> > 
-> > This is why READ_ONCE() must always be on the memory load, because the
-> > point is to sanitize away the uncertainty that comes with an unlocked
-> > read of unstable memory contents. READ_ONCE() samples the value in
-> > memory, and removes all tearing, multiload, etc "instability" that may
-> > effect down stream computations. In this way down stream compulations
-> > become reliable.
-> > 
-> > Jason
-> 
-> So then:
-> 
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 0e42038382c1..b404f87e2682 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -482,7 +482,12 @@ unsigned long __get_pfnblock_flags_mask(const struct page *page,
->         word_bitidx = bitidx / BITS_PER_LONG;
->         bitidx &= (BITS_PER_LONG-1);
-> 
-> -       word = bitmap[word_bitidx];
-> +       /*
-> +        * This races, without locks, with set_pageblock_migratetype(). Ensure
-                                                 
-                                             set_pfnblock_flags_mask would be better?
-                          
-> +        * a consistent (non-tearing) read of the memory array, so that results,
+On Tue, May 17, 2022 at 8:34 PM Terry Chen
+<terry_chen@wistron.corp-partner.google.com> wrote:
+>
+> Hi Pierre
+>
+> We upload v7 patch to follow the coding style as other components. Thanks
+>
+> On Wed, May 18, 2022 at 10:02 AM Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com> wrote:
+>>
+>>
+>>
+>> On 5/17/22 20:31, Terry Chen wrote:
+>> > To be able to do  driver data for adl_mx98360a_cs4242 which supports
+>> > two max98360a speaker amplifiers on SSP1 and cs42l42 headphone codec
+>> > on SSP0 running on ADL platform. Also add the capability to machine driver
+>> > of creating DAI Link for BT offload. Although BT offload always uses SSP2
+>> > port but we reserve the flexibility to assign the port number in macro.
+>> >
+>> > Signed-off-by: Terry Chen <terry_chen@wistron.corp-partner.google.com>
+>> > (am from https://patchwork.kernel.org/patch/12845884/)
+>> > (also found at https://lore.kernel.org/r/20220511075522.1764114-1-terry_chen@wistron.corp-partner.google.com)
+>>
+>> not sure what this is about, what's the point of adding information on
+>> the v5 in the v6 patch?
 
-Thanks for proceeding and suggestion, John.
+Hi Terry,
 
-IIUC, the load tearing wouldn't be an issue since [1] fixed the issue. 
+I think Pierre's confusion here is that you used chromeos style guides
+but didn't upload to gerrit, you sent it to ALSA. When sending to ALSA
+you should use the kernel style guides upstream.
 
-The concern in our dicussion was aggressive compiler(e.g., LTO) or code refactoring
-to make the code inline in *future* could potentially cause forcing refetching(i.e.,
-re-read) tie bitmap[word_bitidx].
-
-If so, shouldn't the comment be the one you helped before?
-
-/*
- * Defend against future compiler LTO features, or code refactoring
- * that inlines the above function, by forcing a single read. Because,
- * re-reads of bitmap[word_bitidx] by inlining could cause trouble
- * for whom believe they use a local variable for the value.
- */
-
-[1] e58469bafd05, mm: page_alloc: use word-based accesses for get/set pageblock bitmaps
-
-> +        * even though racy, are not corrupted.
-> +        */
-> +       word = READ_ONCE(bitmap[word_bitidx]);
->         return (word >> bitidx) & mask;
->  }
-> 
-> 
-> thanks,
-> -- 
-> John Hubbard
-> NVIDIA
+>>
+>> >
+>> > ---
+>> >  sound/soc/intel/boards/sof_cs42l42.c          | 92 ++++++++++++++++++-
+>> >  .../intel/common/soc-acpi-intel-adl-match.c   |  7 ++
+>> >  2 files changed, 95 insertions(+), 4 deletions(-)
+>> >
+>> > diff --git a/sound/soc/intel/boards/sof_cs42l42.c b/sound/soc/intel/boards/sof_cs42l42.c
+>> > index ce78c18798876..2efffc7933479 100644
+>> > --- a/sound/soc/intel/boards/sof_cs42l42.c
+>> > +++ b/sound/soc/intel/boards/sof_cs42l42.c
+>> > @@ -41,8 +41,13 @@
+>> >  #define SOF_CS42L42_DAILINK_MASK             (GENMASK(24, 10))
+>> >  #define SOF_CS42L42_DAILINK(link1, link2, link3, link4, link5) \
+>> >       ((((link1) | ((link2) << 3) | ((link3) << 6) | ((link4) << 9) | ((link5) << 12)) << SOF_CS42L42_DAILINK_SHIFT) & SOF_CS42L42_DAILINK_MASK)
+>> > -#define SOF_MAX98357A_SPEAKER_AMP_PRESENT    BIT(25)
+>> > -#define SOF_MAX98360A_SPEAKER_AMP_PRESENT    BIT(26)
+>> > +#define SOF_BT_OFFLOAD_PRESENT                       BIT(25)
+>> > +#define SOF_CS42L42_SSP_BT_SHIFT             26
+>> > +#define SOF_CS42L42_SSP_BT_MASK                      (GENMASK(28, 26))
+>> > +#define SOF_CS42L42_SSP_BT(quirk)    \
+>> > +     (((quirk) << SOF_CS42L42_SSP_BT_SHIFT) & SOF_CS42L42_SSP_BT_MASK)
+>> > +#define SOF_MAX98357A_SPEAKER_AMP_PRESENT    BIT(29)
+>> > +#define SOF_MAX98360A_SPEAKER_AMP_PRESENT    BIT(30)
+>> >
+>> >  enum {
+>> >       LINK_NONE = 0,
+>> > @@ -50,6 +55,7 @@ enum {
+>> >       LINK_SPK = 2,
+>> >       LINK_DMIC = 3,
+>> >       LINK_HDMI = 4,
+>> > +     LINK_BT = 5,
+>> >  };
+>> >
+>> >  /* Default: SSP2 */
+>> > @@ -278,6 +284,13 @@ static struct snd_soc_dai_link_component dmic_component[] = {
+>> >       }
+>> >  };
+>> >
+>> > +static struct snd_soc_dai_link_component dummy_component[] = {
+>> > +     {
+>> > +             .name = "snd-soc-dummy",
+>> > +             .dai_name = "snd-soc-dummy-dai",
+>> > +     }
+>> > +};
+>> > +
+>> >  static int create_spk_amp_dai_links(struct device *dev,
+>> >                                   struct snd_soc_dai_link *links,
+>> >                                   struct snd_soc_dai_link_component *cpus,
+>> > @@ -467,9 +480,56 @@ static int create_hdmi_dai_links(struct device *dev,
+>> >       return -ENOMEM;
+>> >  }
+>> >
+>> > +static int create_bt_offload_dai_links(struct device *dev,
+>> > +                                    struct snd_soc_dai_link *links,
+>> > +                                    struct snd_soc_dai_link_component *cpus,
+>> > +                                    int *id, int ssp_bt)
+>> > +{
+>> > +     int ret = 0;
+>>
+>> either you remove this useless init...
+>>
+>> > +
+>> > +     /* bt offload */
+>> > +     if (!(sof_cs42l42_quirk & SOF_BT_OFFLOAD_PRESENT))
+>> > +             return 0;
+>> > +
+>> > +     links[*id].name = devm_kasprintf(dev, GFP_KERNEL, "SSP%d-BT",
+>> > +                                      ssp_bt);
+>> > +     if (!links[*id].name) {
+>> > +             ret = -ENOMEM;
+>> > +             goto devm_err;
+>> > +     }
+>> > +
+>> > +     links[*id].id = *id;
+>> > +     links[*id].codecs = dummy_component;
+>> > +     links[*id].num_codecs = ARRAY_SIZE(dummy_component);
+>> > +     links[*id].platforms = platform_component;
+>> > +     links[*id].num_platforms = ARRAY_SIZE(platform_component);
+>> > +
+>> > +     links[*id].dpcm_playback = 1;
+>> > +     links[*id].dpcm_capture = 1;
+>> > +     links[*id].no_pcm = 1;
+>> > +     links[*id].cpus = &cpus[*id];
+>> > +     links[*id].num_cpus = 1;
+>> > +
+>> > +     links[*id].cpus->dai_name = devm_kasprintf(dev, GFP_KERNEL,
+>> > +                                                "SSP%d Pin",
+>> > +                                                ssp_bt);
+>> > +     if (!links[*id].cpus->dai_name) {
+>> > +             ret = -ENOMEM;
+>> > +             goto devm_err;
+>> > +     }
+>> > +
+>> > +     (*id)++;
+>> > +
+>> > +     return 0;
+>>
+>> ... or you remove the return 0;
+>>
+>> pick one.
+>>
+>> > +
+>> > +devm_err:
+>> > +     return ret;
+>> > +}
+>> > +
+>>
+>> >       },
+>> > +     {
+>> > +             .id = "10134242",
+>> > +             .drv_name = "adl_mx98360a_cs4242",
+>> > +             .machine_quirk = snd_soc_acpi_codec_list,
+>> > +             .quirk_data = &adl_max98360a_amp,
+>> > +             .sof_tplg_filename = "sof-adl-max98360a-rt5682.tplg",
+>>
+>> No, I've told this before in previous reviews: do not use a topology
+>> name that was designed for a different platform, this is not
+>> maintainable. If the topologies happen to be the same, either generate
+>> them twice or use a symlink.

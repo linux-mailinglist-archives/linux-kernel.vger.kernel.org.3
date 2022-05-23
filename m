@@ -2,140 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90941530878
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 06:41:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8987B53087C
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 06:48:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229539AbiEWEl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 00:41:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42770 "EHLO
+        id S1349241AbiEWErT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 00:47:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229851AbiEWElX (ORCPT
+        with ESMTP id S229948AbiEWErO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 00:41:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B1EBE6345
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 21:41:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653280879;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=08y9EJtcz+7a/JcW5CAQJh1vaSn+lYtCa1y1S5/rUOM=;
-        b=dOTxSxS1WagJmeEityGz2xpT572VJvoCT4WbLvvORnu5BDY6jQISUTPYdIrYH4AYuXUUO8
-        N1LIuyNtz8szUiV6eVVA9lrPQ7kOmH/mYLV9kIs+EiA07gjrG1Xx7WEuGY01ehA8GSKnK+
-        8xTBU9F8TGmXOpQrYvaRAnOwh04x8+w=
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
- [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-354-BZV11lDBMbGupL4Hp6xfDA-1; Mon, 23 May 2022 00:41:18 -0400
-X-MC-Unique: BZV11lDBMbGupL4Hp6xfDA-1
-Received: by mail-lf1-f71.google.com with SMTP id bi27-20020a0565120e9b00b004786caccc7dso1019730lfb.11
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 21:41:17 -0700 (PDT)
+        Mon, 23 May 2022 00:47:14 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47E3426116
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 21:47:13 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id pq9-20020a17090b3d8900b001df622bf81dso12572763pjb.3
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 21:47:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CCd/pDk/Xk+019KXS57x+NXHFX4o0pmZ9eQN5FcIC0o=;
+        b=A+RvI1aM4kHHzoMhgrE6eDXv2Y5GsECvz92Cw+GcuYV4Omq/K7+tDGsEbedIQ8AAyT
+         uQoi+IDyqFU4tThm45EWDbVwoTW/rW4z3LLOv5Kh0BDxXgW3+eU7WOz0TtHQkXndXOz7
+         xDUIXbhHB5Uuge0ymRKxJmCFIKDb4PC9e2CKvKYyu8JcC4s2TFIXUY04kMEntBl7FLHj
+         i3DBSWXF/dUqNQ8Lbj/FcSHvKH3sKtcIS0PhiX/DSP5IXNTs18nt18adQG36+H9LzA7g
+         Zcsm03GKiQ3yVj34ilzz+81sMOP0Cw58YO1s1c5/g7jBcmKB6fFjEgj79SM7BnB+eyEV
+         3w8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=08y9EJtcz+7a/JcW5CAQJh1vaSn+lYtCa1y1S5/rUOM=;
-        b=jKpdboXlB6u/QnmcfTBeGZt0ULwS7eJsQEYM8ADZ2JDlciNzc4CQwwXTYZx86D0tcZ
-         16GXFfyICQ88G0Px0IUDU6jhtrJQ3HokWsMV3jw7pg22qsSh++OGylDBNOAAfLXOU1GI
-         nq6lB5z9f4NhMxuMYdoFF3dkDaXg3P40+/tByMJa3Pg4I1sgUA9tGLwu/j/Q4WiD16xo
-         7YUjh+rDxqh/08+ueeAtIzMyihgxkA2GODvM1tKIM7HrHEXlY0LeeICGSwjjazwkFx0L
-         /P2KsbIIC/WbNt0q1NzV/59qdnJVePubDdU2HX2R/EFe4QCyhDGttQJ89aIoJEclAb6U
-         36Sw==
-X-Gm-Message-State: AOAM530Eb22NeZzSCiC/t0cJ3oDjPkJM1FM94Yt8XNfj8E8mFfCG7fmU
-        2B/46uHsRu7ZaiNMbS/Ziui5661XPZFNkRl3Rf5zfLLJhAwECIfvuYNf+QWMnvhLCa3COAswdr7
-        +Pegpf+dlC7TuVjMvxi2QJl0luFzzxpIBvQMRBMFX
-X-Received: by 2002:a05:6512:1588:b0:477:a556:4ab2 with SMTP id bp8-20020a056512158800b00477a5564ab2mr15008560lfb.376.1653280875765;
-        Sun, 22 May 2022 21:41:15 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxqRetp33JcfidVaUk+iFKExKrB3v7QK7jBSPRLyLJwJHS8cGFd1P5dpWd3xCNGBT0hiuY9YQ5gpi2GOTwnZdI=
-X-Received: by 2002:a05:6512:1588:b0:477:a556:4ab2 with SMTP id
- bp8-20020a056512158800b00477a5564ab2mr15008553lfb.376.1653280875600; Sun, 22
- May 2022 21:41:15 -0700 (PDT)
+        bh=CCd/pDk/Xk+019KXS57x+NXHFX4o0pmZ9eQN5FcIC0o=;
+        b=xRyZ49z5pDb0hLtMa7Yu6PDxgzcUIzzAzxLn2M4b53Ma45XktVwIToFTxcEVjrH+io
+         y8ZBRcvcnOV/s6zbR52mOit8dY0TasqGkGM9TaQfotAZSLBmDrOwW+GC7buMZsEeyX/2
+         +HlX4LcEuCaBO6NMWR7DqVi/w4Uh/+EAl1RBRUTWRmw4FWpSzQ3RsiKgZrMd76TGpFYL
+         VB+DLToIrsgo74fzAyLN00ljKPK+dNd/oAGENIm/t5LS0lbw+LfuWtSQ7tFPqOGHgPYz
+         LPAZRjh48ulUW38ilugM8GlK7F0MLiROOwnuTczKoGKDKDzw4hM5Ywzr/6pQxilJeAq/
+         rOTQ==
+X-Gm-Message-State: AOAM533dd3fJhLu92II0Z5bq6cemKy8PSjlLCGmQdUACSIAYh11XZoS9
+        RjeYxh2mw3JpAmZPxuhkuTGqAYPKn/fUo1GkRA==
+X-Google-Smtp-Source: ABdhPJx09UBUQIVQuiLOg0AIkNHRaZudxp9clBc+IKxU+EMxNYIARbzBbokph4vjmFyZiEHfj8JYRfGsurIpleTJPHY=
+X-Received: by 2002:a17:902:d711:b0:161:f859:bed7 with SMTP id
+ w17-20020a170902d71100b00161f859bed7mr13178025ply.31.1653281232821; Sun, 22
+ May 2022 21:47:12 -0700 (PDT)
 MIME-Version: 1.0
-References: <89ef0ae4c26ac3cfa440c71e97e392dcb328ac1b.1653227924.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <89ef0ae4c26ac3cfa440c71e97e392dcb328ac1b.1653227924.git.christophe.jaillet@wanadoo.fr>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Mon, 23 May 2022 12:41:03 +0800
-Message-ID: <CACGkMEtvgL+MxBmhWZ-Hn-QjfS-MBm7gvLoQHhazOiwrLxxUJA@mail.gmail.com>
-Subject: Re: [PATCH] vhost-vdpa: Fix some error handling path in vhost_vdpa_process_iotlb_msg()
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Gautam Dawar <gautam.dawar@xilinx.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org, kvm <kvm@vger.kernel.org>,
+References: <CAMhUBj=5jD5AjyaF8UmMXAZGFnMEgTruFM2KYL3GGZt-ABcHBQ@mail.gmail.com>
+ <CACGkMEvgtzUXw9v=cMN3=Mqm9YTp_2bKmc4--q2+BREvgVdeLg@mail.gmail.com>
+In-Reply-To: <CACGkMEvgtzUXw9v=cMN3=Mqm9YTp_2bKmc4--q2+BREvgVdeLg@mail.gmail.com>
+From:   Zheyu Ma <zheyuma97@gmail.com>
+Date:   Mon, 23 May 2022 12:47:01 +0800
+Message-ID: <CAMhUBj=rC8ziy5B8cOroeZQW7f+DhsOkCvLWH-L89zx2LZy-Eg@mail.gmail.com>
+Subject: Re: [BUG] vDPA/ifcvf: got a warning when removing the module
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     mst <mst@redhat.com>, Zhu Lingshan <lingshan.zhu@intel.com>,
+        Yongji Xie <xieyongji@bytedance.com>,
+        Eli Cohen <elic@nvidia.com>, Parav Pandit <parav@nvidia.com>,
         virtualization <virtualization@lists.linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 22, 2022 at 9:59 PM Christophe JAILLET
-<christophe.jaillet@wanadoo.fr> wrote:
+On Mon, May 23, 2022 at 12:15 PM Jason Wang <jasowang@redhat.com> wrote:
 >
-> In the error paths introduced by the commit in the Fixes tag, a mutex may
-> be left locked.
-> Add the correct goto instead of a direct return.
+> On Sat, May 21, 2022 at 10:27 PM Zheyu Ma <zheyuma97@gmail.com> wrote:
+> >
+> > Hello,
+> >
+> > I found a bug in the ifcvf driver.
+> > When removing the module, I got the following warning:
+> >
+> > [   14.478123] general protection fault, probably for non-canonical
+> > address 0xdffffc0000000005: 0000 [#1] PREEMPT SMP KASAN PTI
+> > [   14.478701] KASAN: null-ptr-deref in range
+> > [0x0000000000000028-0x000000000000002f]
+> > [   14.479922] RIP: 0010:vdpa_mgmtdev_unregister+0x39/0x150
+> > [   14.484063] Call Trace:
+> > [   14.484186]  <TASK>
+> > [   14.484292]  ? _raw_spin_unlock_irqrestore+0x3d/0x60
+> > [   14.484536]  ifcvf_remove+0x3a/0x50 [ifcvf]
+> > [   14.484743]  pci_device_remove+0x92/0x240
+> >
+> > The reason is that the 'ifcvf_mgmt_dev' is zero which means that
+> > ifcvf_vdpa_dev_add() was not executed.
+> > Since I am not familiar with the driver, I cannot find a proper solution for it.
+> >
 >
-> Fixes: a1468175bb17 ("vhost-vdpa: support ASID based IOTLB API")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
-> WARNING: This patch only fixes the goto vs return mix-up in this function.
-> However, the 2nd hunk looks really spurious to me. I think that the:
-> -               return -EINVAL;
-> +               r = -EINVAL;
-> +               goto unlock;
-> should be done only in the 'if (!iotlb)' block.
+> Looks like the drv data needs to be set in probe(). Could you pleas
+> try to the attached patch? (compile test only).
 
-It should be fine, the error happen if
+This patch works for me, thanks!
 
-1) the batched ASID based request is not equal (the first if)
-2) there's no IOTLB for this ASID (the second if)
+Tested-by: Zheyu Ma <zheyuma97@gmail.com>
 
-But I agree the code could be tweaked to use two different if instead
-of using a or condition here.
-
-Acked-by: Jason Wang <jasowang@redhat.com>
-
->
-> As I don't know this code, I just leave it as-is but draw your attention
-> in case this is another bug lurking.
-> ---
->  drivers/vhost/vdpa.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
-> index 1f1d1c425573..3e86080041fc 100644
-> --- a/drivers/vhost/vdpa.c
-> +++ b/drivers/vhost/vdpa.c
-> @@ -1000,7 +1000,8 @@ static int vhost_vdpa_process_iotlb_msg(struct vhost_dev *dev, u32 asid,
->                 if (!as) {
->                         dev_err(&v->dev, "can't find and alloc asid %d\n",
->                                 asid);
-> -                       return -EINVAL;
-> +                       r = -EINVAL;
-> +                       goto unlock;
->                 }
->                 iotlb = &as->iotlb;
->         } else
-> @@ -1013,7 +1014,8 @@ static int vhost_vdpa_process_iotlb_msg(struct vhost_dev *dev, u32 asid,
->                 }
->                 if (!iotlb)
->                         dev_err(&v->dev, "no iotlb for asid %d\n", asid);
-> -               return -EINVAL;
-> +               r = -EINVAL;
-> +               goto unlock;
->         }
->
->         switch (msg->type) {
-> --
-> 2.34.1
->
-
+Regards,
+Zheyu Ma

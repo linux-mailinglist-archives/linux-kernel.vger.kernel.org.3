@@ -2,73 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70C4A53107E
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:20:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAAD8530FE5
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:19:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235801AbiEWMzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 08:55:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55420 "EHLO
+        id S235748AbiEWMzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 08:55:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235777AbiEWMzE (ORCPT
+        with ESMTP id S235806AbiEWMzN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 08:55:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E1B152E7E;
-        Mon, 23 May 2022 05:55:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 109B2B810AC;
-        Mon, 23 May 2022 12:55:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 912AFC385A9;
-        Mon, 23 May 2022 12:54:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653310499;
-        bh=VL29GRANyhn2Yf22h7xWxr8NCXCPQBgciy3yLY8dyEc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gwou/P4SObZx4pE88EhIO5qDrF33vuU9h8oEaYoy1v1ypY3KKQsuPfCxmZR2LozP6
-         zp1T7rXjl8BVJX7MlMhJbd7P8MSN7O6QlIQs9Ph4fTWlkLApN/sARmBjqDc+JJbJLw
-         a6P3ZkGIbAX7S5JzX8N23PEaYoaphq0KS92U4EhyzwrdZhxFdDYdwYeZgjycMx5tKG
-         PjH9V+cpX93p6BhPwLLE0C+DP62k4+q6EToukbzs9KchPGqynaI9NmPjcdr/HftN5a
-         eQI/rqDnr2pltEfmjMt+gHtV7tNJJVaRlC72fYpA+4p2hrTcmuepey7JTx5da/Sg58
-         pGv7t5MWhFjog==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 1250C400B1; Mon, 23 May 2022 09:54:57 -0300 (-03)
-Date:   Mon, 23 May 2022 09:54:57 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Michael Petlan <mpetlan@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Lv Ruyi <lv.ruyi@zte.com.cn>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH 0/5] perf_counts clean up and perf stat report bug fix
-Message-ID: <YouEIfLIaQjKK08q@kernel.org>
-References: <20220519032005.1273691-1-irogers@google.com>
+        Mon, 23 May 2022 08:55:13 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 606E65372B
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 05:55:11 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-2ff53d86abbso127623207b3.8
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 05:55:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=eDfy6GqpIfaV2D3gJJczHKjLm3vz3xNZVsVwjBEGHAk=;
+        b=XIWqezSV7/NwqmML1vVCi0to8RMc5lNXcUXL3XQPhELyW8dZA2LQAyULwEy2suR0zv
+         4uTa57OMPSrjxlJqoLkarNGhJ1s2VlBJHr5Uohuh1UK6t+KvLBJSqGqaCgIGBe6X6HX8
+         7EHOYuIukYNOkAEzGhpUyQKgCZKhz5RSMLdOGlJ9aY51zDwLPbPeL+Vy6nmgi+bRbXQw
+         3kebQnfjJFdKtMuPHRc7tdKjjPxjL0mvrk9LkQwzKO1nlGQTAJZ0dZ3dc7/K6MeXf6qy
+         uJuqKW2ViFJu/C7jbivSInZuS+x4nvyloC8O9pwsFF9ffZlwoceQ9Trju2vJlwI1h+4O
+         kcyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=eDfy6GqpIfaV2D3gJJczHKjLm3vz3xNZVsVwjBEGHAk=;
+        b=PqOVdgEGOLxhsZCZsq4tPkf72U6x6qRicyzrNfGKH95ip26Ga5vNLQkKqKFmXaH4ap
+         uOdWkvSymdAq8gFf4WNAktWbC1+Ds5t7cm9jkjK/ReSdjmkFNk6XAVLmBcflx+K/jURV
+         z2tODy0hvOSzJLg3Z1OeQaclUjA9gzlZIVEXKOXzG51wEl7+5VTr4pXS8zYFtZWHX17D
+         c2pFDNEnAJHBzUZ0uxBFxhuNEFJsVo537M3F2eP7HGlbSK+lXAw2/IODjKwf5VJf7rAc
+         uW2LINpAgc1MqctvZihtk+bW2gfraWKZeX6irrOmIw/jB1GbwO/X4OAy5t1W+JEbtDvn
+         2Bfw==
+X-Gm-Message-State: AOAM532hx/ve86L+VmtXU6rwRUv6vWhhZJnXy1LPWOZWWGzM3qOK4lU5
+        kBr1+4OWP8o5yKkMjg9qiReRiZ9Hj8wEiixwloO/9Q==
+X-Google-Smtp-Source: ABdhPJzy078pPsAixd7aoHZE4fZKF4ic8N0z/2T9Yw3r8eUBViOKz7NYD0OqMiHkS7D5dBNqQ6QLB2GiEpY/njCXIlo=
+X-Received: by 2002:a81:c07:0:b0:2ff:8a7b:f37c with SMTP id
+ 7-20020a810c07000000b002ff8a7bf37cmr15476962ywm.118.1653310510641; Mon, 23
+ May 2022 05:55:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220519032005.1273691-1-irogers@google.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220506123246.21788-1-yuehaibing@huawei.com> <CACRpkdZUwfVNZyS6RgcupJ+TRUZVM+1_3ABj_-f_3+v+wNE6mg@mail.gmail.com>
+In-Reply-To: <CACRpkdZUwfVNZyS6RgcupJ+TRUZVM+1_3ABj_-f_3+v+wNE6mg@mail.gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 23 May 2022 14:54:59 +0200
+Message-ID: <CACRpkdaKrk+cj9Yvpe3kmR1iJFczi-yckHiKeLGu9F=hRFiU9w@mail.gmail.com>
+Subject: Re: [PATCH v2 -next] drm/display: Fix build error without CONFIG_OF
+To:     YueHaibing <yuehaibing@huawei.com>
+Cc:     airlied@linux.ie, daniel@ffwll.ch, tzimmermann@suse.de,
+        dmitry.baryshkov@linaro.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,40 +68,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, May 18, 2022 at 08:20:00PM -0700, Ian Rogers escreveu:
-> perf_counts takes a CPU map index as an argument, however, there were
-> a few places where this hadn't been cleaned up and the index was
-> called cpu. In part this led to the bug discovered by Michael Petlan in:
-> https://lore.kernel.org/linux-perf-users/CAP-5=fWQR=sCuiSMktvUtcbOLidEpUJLCybVF6=BRvORcDOq+g@mail.gmail.com/
-> 
-> Fix the bug, tidy up more of the arguments passed to perf_counts, add
-> a test to ensure the bug isn't reintroduced and add a helper macro to
-> iterate over just CPU map indices.
+On Mon, May 23, 2022 at 2:46 PM Linus Walleij <linus.walleij@linaro.org> wr=
+ote:
+> On Fri, May 6, 2022 at 2:33 PM YueHaibing <yuehaibing@huawei.com> wrote:
+>
+> > While CONFIG_OF is n but COMPILE_TEST is y, we got this:
+> >
+> > WARNING: unmet direct dependencies detected for DRM_DP_AUX_BUS
+> >   Depends on [n]: HAS_IOMEM [=3Dy] && DRM [=3Dy] && OF [=3Dn]
+> >   Selected by [y]:
+> >   - DRM_MSM [=3Dy] && HAS_IOMEM [=3Dy] && DRM [=3Dy] && (ARCH_QCOM || S=
+OC_IMX5 || COMPILE_TEST [=3Dy]) && COMMON_CLK [=3Dy] && IOMMU_SUPPORT [=3Dy=
+] && (QCOM_OCMEM [=3Dn] || QCOM_OCMEM [=3Dn]=3Dn) && (QCOM_LLCC [=3Dy] || Q=
+COM_LLCC [=3Dy]=3Dn) && (QCOM_COMMAND_DB [=3Dn] || QCOM_COMMAND_DB [=3Dn]=
+=3Dn)
+> >
+> > Make DRM_DP_AUX_BUS depends on OF || COMPILE_TEST to fix this warning.
+> >
+> > Fixes: f5d01644921b ("drm/msm: select DRM_DP_AUX_BUS for the AUX bus su=
+pport")
+> > Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+>
+> Patch applied to the DRM tree.
 
-Applied 2-5 to perf/core. The first is already in 5.18
+Nope, failed:
 
+$ dim push-branch drm-misc-next
+dim: ac890b9eeb9b ("drm/display: Fix build error without CONFIG_OF"):
+Fixes: SHA1 in not pointing at an ancestor:
+dim:     f5d01644921b ("drm/msm: select DRM_DP_AUX_BUS for the AUX bus supp=
+ort")
+dim: ERROR: issues in commits detected, aborting
 
-Thanks,
+I don't know what to do with this, sorry. The other committers are maybe be=
+tter
+with this kind of situations. I think it is designed to stop me from
+shooting myself
+in the foot.
 
-- Arnaldo
- 
-> Ian Rogers (5):
->   perf stat: Fix and validate inputs in stat events
->   perf stat: Add stat record+report test
->   perf cpumap: Add perf_cpu_map__for_each_idx
->   perf bpf_counter: Tidy use of CPU map index
->   perf stat: Make use of index clearer with perf_counts
-> 
->  tools/lib/perf/include/perf/cpumap.h |  3 ++
->  tools/perf/tests/shell/stat.sh       | 13 ++++++
->  tools/perf/util/bpf_counter.c        | 61 ++++++++++++++++------------
->  tools/perf/util/stat-display.c       | 22 +++++-----
->  tools/perf/util/stat.c               | 27 ++++++++----
->  5 files changed, 81 insertions(+), 45 deletions(-)
-> 
-> -- 
-> 2.36.1.124.g0e6072fb45-goog
-
--- 
-
-- Arnaldo
+Yours,
+Linus Walleij

@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46EEF531D0F
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:58:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 444135317B4
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:53:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241972AbiEWRul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:50:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43400 "EHLO
+        id S239694AbiEWRJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:09:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241737AbiEWR1F (ORCPT
+        with ESMTP id S239642AbiEWRJW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:27:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C9D7520E;
-        Mon, 23 May 2022 10:22:11 -0700 (PDT)
+        Mon, 23 May 2022 13:09:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17AB16CF4B;
+        Mon, 23 May 2022 10:08:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D353D60B2C;
-        Mon, 23 May 2022 17:21:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5CAAC385A9;
-        Mon, 23 May 2022 17:21:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F1161614E5;
+        Mon, 23 May 2022 17:08:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED3FBC385A9;
+        Mon, 23 May 2022 17:08:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326472;
-        bh=ReFu1Mc6+Zt9GNQWgQvuhxkurL2O6QAqaRyiafUG/h8=;
+        s=korg; t=1653325714;
+        bh=6jhRKQnWsBNV7uoEmE4x1UeX87wkijtPfVy9slE/kHA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b0DXVB/uLpa4wOuJcI2pgA4Ll/pyMVE3wcr8dJGfnCrhP2WIf0hUmOZfTIR5v7baS
-         1b3Fe9wNNdn5Dcv97qc+l7JhnnqzqjyAfprxSofdhaR9JMS7qlhJS6zN+/jaiO4PRr
-         mX2cgYl5VBJNylwZ8zlT+S1c/quCMti6qIgc/TD8=
+        b=bph8p0ZDg2sVWJWvimWeC9mkSYEdNjZmxR9fUnE+oY1w1HordoEeM5FXo2OFwhjsz
+         iUqh06SjqemRld87wgQKrMSus8dj4xmbcBHyzM7DAvoqJ1ooRJTdVYkM/hvucD9QhU
+         nhuen5wTLbgAPF1PKQIcLifWfftqRI29vii/XKxg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 092/132] net: af_key: add check for pfkey_broadcast in function pfkey_process
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Subject: [PATCH 4.14 12/33] mmc: block: Use generic_cmd6_time when modifying INAND_CMD38_ARG_EXT_CSD
 Date:   Mon, 23 May 2022 19:05:01 +0200
-Message-Id: <20220523165838.564900676@linuxfoundation.org>
+Message-Id: <20220523165749.737323588@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
-References: <20220523165823.492309987@linuxfoundation.org>
+In-Reply-To: <20220523165746.957506211@linuxfoundation.org>
+References: <20220523165746.957506211@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,42 +54,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Ulf Hansson <ulf.hansson@linaro.org>
 
-[ Upstream commit 4dc2a5a8f6754492180741facf2a8787f2c415d7 ]
+commit ad91619aa9d78ab1c6d4a969c3db68bc331ae76c upstream
 
-If skb_clone() returns null pointer, pfkey_broadcast() will
-return error.
-Therefore, it should be better to check the return value of
-pfkey_broadcast() and return error if fails.
+The INAND_CMD38_ARG_EXT_CSD is a vendor specific EXT_CSD register, which is
+used to prepare an erase/trim operation. However, it doesn't make sense to
+use a timeout of 10 minutes while updating the register, which becomes the
+case when the timeout_ms argument for mmc_switch() is set to zero.
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Instead, let's use the generic_cmd6_time, as that seems like a reasonable
+timeout to use for these cases.
+
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Link: https://lore.kernel.org/r/20200122142747.5690-3-ulf.hansson@linaro.org
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/key/af_key.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/mmc/core/block.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/net/key/af_key.c b/net/key/af_key.c
-index fd51db3be91c..92e9d75dba2f 100644
---- a/net/key/af_key.c
-+++ b/net/key/af_key.c
-@@ -2826,8 +2826,10 @@ static int pfkey_process(struct sock *sk, struct sk_buff *skb, const struct sadb
- 	void *ext_hdrs[SADB_EXT_MAX];
- 	int err;
- 
--	pfkey_broadcast(skb_clone(skb, GFP_KERNEL), GFP_KERNEL,
--			BROADCAST_PROMISC_ONLY, NULL, sock_net(sk));
-+	err = pfkey_broadcast(skb_clone(skb, GFP_KERNEL), GFP_KERNEL,
-+			      BROADCAST_PROMISC_ONLY, NULL, sock_net(sk));
-+	if (err)
-+		return err;
- 
- 	memset(ext_hdrs, 0, sizeof(ext_hdrs));
- 	err = parse_exthdrs(skb, hdr, ext_hdrs);
--- 
-2.35.1
-
+--- a/drivers/mmc/core/block.c
++++ b/drivers/mmc/core/block.c
+@@ -1345,7 +1345,7 @@ static void mmc_blk_issue_discard_rq(str
+ 					 arg == MMC_TRIM_ARG ?
+ 					 INAND_CMD38_ARG_TRIM :
+ 					 INAND_CMD38_ARG_ERASE,
+-					 0);
++					 card->ext_csd.generic_cmd6_time);
+ 		}
+ 		if (!err)
+ 			err = mmc_erase(card, from, nr, arg);
+@@ -1387,7 +1387,7 @@ retry:
+ 				 arg == MMC_SECURE_TRIM1_ARG ?
+ 				 INAND_CMD38_ARG_SECTRIM1 :
+ 				 INAND_CMD38_ARG_SECERASE,
+-				 0);
++				 card->ext_csd.generic_cmd6_time);
+ 		if (err)
+ 			goto out_retry;
+ 	}
+@@ -1405,7 +1405,7 @@ retry:
+ 			err = mmc_switch(card, EXT_CSD_CMD_SET_NORMAL,
+ 					 INAND_CMD38_ARG_EXT_CSD,
+ 					 INAND_CMD38_ARG_SECTRIM2,
+-					 0);
++					 card->ext_csd.generic_cmd6_time);
+ 			if (err)
+ 				goto out_retry;
+ 		}
 
 

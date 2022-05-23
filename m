@@ -2,258 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 523A65312F2
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:23:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40BDD531370
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:24:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237121AbiEWOZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 10:25:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34298 "EHLO
+        id S237036AbiEWOZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 10:25:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237117AbiEWOZR (ORCPT
+        with ESMTP id S237080AbiEWOZG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 10:25:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C185A582;
-        Mon, 23 May 2022 07:25:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 17E7AB81100;
-        Mon, 23 May 2022 14:25:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBC4DC385A9;
-        Mon, 23 May 2022 14:25:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653315912;
-        bh=4vLh4ue1tMMosFDoK6263Dar2yYqNCg/G7FWJAgLPp8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=r/qpw7GGCIz7a5LLJurI22VqpnfZPjCvUilv1WtvGhte7xO3Zl4zmE0M9g7GC3NGG
-         rGKDBc6/bHSkH6bE3mKH9G1LtslYjnqyyeptjtibGprZDPkKLueriLMdselH4vnA44
-         LPPPZHvmWc3AsbVqQ+gJNDiGFZYcrF4FJdbdJWrz9UBGg8ML7flJhJAYF7Gm2MCGjb
-         0ng2XYOQ6E4h+M91DkR5eoUZ+Y7dcnO4E0Cz7wEbwAT5sMXOSpRJxBKKhC2Xu1cfYT
-         SKH/4XHglOuFn16JEX3bNahmLeW37KB6Yu8BE2dTtsutcMO/YsOZNrd2p0LAzqiyGu
-         pR5o/ewDnTIMw==
-Received: by mail-ed1-f49.google.com with SMTP id g12so19369632edq.4;
-        Mon, 23 May 2022 07:25:12 -0700 (PDT)
-X-Gm-Message-State: AOAM530XevtgSa9wN2p6npVkyjHN21bseyPwEwAK96QFaZYSIN/AYgaH
-        W23PYC14X9A3+Ze/b8W1mEw0b6oJxgvGLiLT4g==
-X-Google-Smtp-Source: ABdhPJwoOeWMZ55frHI3XEH4l/rWGlWP0SKbPSv8LWz5GQV6XKBYerjQpqXQjeWUQavlCQXH9Ze9HnGb4cM8NySG3R4=
-X-Received: by 2002:a05:6402:1e93:b0:42b:5134:6bf6 with SMTP id
- f19-20020a0564021e9300b0042b51346bf6mr9903039edf.40.1653315911050; Mon, 23
- May 2022 07:25:11 -0700 (PDT)
+        Mon, 23 May 2022 10:25:06 -0400
+Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D927580C8;
+        Mon, 23 May 2022 07:25:02 -0700 (PDT)
+Received: by mail.hallyn.com (Postfix, from userid 1001)
+        id 609E07DD; Mon, 23 May 2022 09:25:00 -0500 (CDT)
+Date:   Mon, 23 May 2022 09:25:00 -0500
+From:   "Serge E. Hallyn" <serge@hallyn.com>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Stefan Berger <stefanb@linux.ibm.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        christian.brauner@ubuntu.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        jpenumak@redhat.com
+Subject: Re: [PATCH v12 13/26] userns: Add pointer to ima_namespace to
+ user_namespace
+Message-ID: <20220523142500.GA1599@mail.hallyn.com>
+References: <20220420140633.753772-1-stefanb@linux.ibm.com>
+ <20220420140633.753772-14-stefanb@linux.ibm.com>
+ <20220522182426.GA24765@mail.hallyn.com>
+ <20220523095932.adr2r26o2obch4r5@wittgenstein>
+ <e1df20d5-a6c9-d30c-3671-46f7a8742bc0@linux.ibm.com>
+ <20220523124159.zsbp2gonh2dum4jm@wittgenstein>
 MIME-Version: 1.0
-References: <20220509133947.20987-1-quic_jinlmao@quicinc.com>
- <20220509133947.20987-9-quic_jinlmao@quicinc.com> <beba5968-3115-3c09-cda6-67095ca55226@arm.com>
-In-Reply-To: <beba5968-3115-3c09-cda6-67095ca55226@arm.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Mon, 23 May 2022 09:24:57 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqK8Z_J2xaOsBM-U4hhHPgQCudd=SGmPqwdipArWmTXJYw@mail.gmail.com>
-Message-ID: <CAL_JsqK8Z_J2xaOsBM-U4hhHPgQCudd=SGmPqwdipArWmTXJYw@mail.gmail.com>
-Subject: Re: [PATCH v7 08/10] dt-bindings: arm: Adds CoreSight TPDA hardware definitions
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mao Jinlong <quic_jinlmao@quicinc.com>
-Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Coresight ML <coresight@lists.linaro.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220523124159.zsbp2gonh2dum4jm@wittgenstein>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 4:44 AM Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
->
-> Cc: Rob Herring
->
+On Mon, May 23, 2022 at 02:41:59PM +0200, Christian Brauner wrote:
+> On Mon, May 23, 2022 at 07:31:29AM -0400, Stefan Berger wrote:
+> > 
+> > 
+> > On 5/23/22 05:59, Christian Brauner wrote:
+> > > On Sun, May 22, 2022 at 01:24:26PM -0500, Serge Hallyn wrote:
+> > > > On Wed, Apr 20, 2022 at 10:06:20AM -0400, Stefan Berger wrote:
+> > > > > Add a pointer to ima_namespace to the user_namespace and initialize
+> > > > > the init_user_ns with a pointer to init_ima_ns. We need a pointer from
+> > > > > the user namespace to its associated IMA namespace since IMA namespaces
+> > > > > are piggybacking on user namespaces.
+> > > > > 
+> > > > > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> > > > > Acked-by: Christian Brauner <brauner@kernel.org>
+> > > > > Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> > > > > 
+> > > > > ---
+> > > > > v11:
+> > > > >   - Added lost A-b from Christian back
+> > > > >   - Added sentence to patch description explaining why we need the pointer
+> > > > > 
+> > > > > v9:
+> > > > >   - Deferred implementation of ima_ns_from_user_ns() to later patch
+> > > > > ---
+> > > > >   include/linux/ima.h            | 2 ++
+> > > > >   include/linux/user_namespace.h | 4 ++++
+> > > > >   kernel/user.c                  | 4 ++++
+> > > > >   3 files changed, 10 insertions(+)
+> > > > > 
+> > > > > diff --git a/include/linux/ima.h b/include/linux/ima.h
+> > > > > index 426b1744215e..fcb60a44e05f 100644
+> > > > > --- a/include/linux/ima.h
+> > > > > +++ b/include/linux/ima.h
+> > > > > @@ -14,6 +14,8 @@
+> > > > >   #include <crypto/hash_info.h>
+> > > > >   struct linux_binprm;
+> > > > > +extern struct ima_namespace init_ima_ns;
+> > > > > +
+> > > > >   #ifdef CONFIG_IMA
+> > > > >   extern enum hash_algo ima_get_current_hash_algo(void);
+> > > > >   extern int ima_bprm_check(struct linux_binprm *bprm);
+> > > > > diff --git a/include/linux/user_namespace.h b/include/linux/user_namespace.h
+> > > > > index 33a4240e6a6f..019e8cf7b633 100644
+> > > > > --- a/include/linux/user_namespace.h
+> > > > > +++ b/include/linux/user_namespace.h
+> > > > > @@ -36,6 +36,7 @@ struct uid_gid_map { /* 64 bytes -- 1 cache line */
+> > > > >   #define USERNS_INIT_FLAGS USERNS_SETGROUPS_ALLOWED
+> > > > >   struct ucounts;
+> > > > > +struct ima_namespace;
+> > > > >   enum ucount_type {
+> > > > >   	UCOUNT_USER_NAMESPACES,
+> > > > > @@ -99,6 +100,9 @@ struct user_namespace {
+> > > > >   #endif
+> > > > >   	struct ucounts		*ucounts;
+> > > > >   	long ucount_max[UCOUNT_COUNTS];
+> > > > > +#ifdef CONFIG_IMA_NS
+> > > > 
+> > > > It's probably worth putting a comment here saying that user_ns does not
+> > > > pin ima_ns.
+> > > > 
+> > > > That the only time the ima_ns will be freed is when user_ns is freed,
+> > > > and only time it will be changed is when user_ns is freed, or during
+> > > > ima_fs_ns_init() (under smp_load_acquire) during a new mount.
+> > > > 
+> > > > > +	struct ima_namespace	*ima_ns;
+> > > > 
+> > > > So, if I create a new user_ns with a new ima_ns, and in there I
+> > > > create a new user_ns again, it looks like ima_ns will be NULL in
+> > > > the new user_ns?  Should it not be set to the parent->ima_ns?
+> > > > (which would cause trouble for the way it's currently being
+> > > > freed...)
+> > > 
+> > > Would also work and wouldn't be difficult to do imho.
+> > 
+> > We previously decide to create an ima_namespace when securityfs is mounted.
+> > This now also applies to nested containers where an IMA namespace is first
+> > configured with the hash and template to use in a particular container and
+> > then activated. If no configuration is done it will inherit the hash and
+> > template from the first ancestor that has been configure when it is
+> > activated. So the same steps and behavior applies to *all* containers, no
+> > difference at any depth of nesting. Besides that, we don't want nested
+> > containers to share policy and logs but keep them isolated from each other,
+> > or do we not?
+> > 
+> > Further, how should it work if we were to apply this even to the first
+> > container? Should it just inherit the &init_ima_namespace and we'd have no
+> > isolation at all? Why would we start treating containers at deeper nesting
+> > levels differently?
+> 
+> Valid points. I understood Serge as suggesting an implementation detail
+> change not a design change but might misunderstand him here.
+> 
+> # Currently
+> 
+> 1. create new userns -> imans set to NULL
+> 2. mount securityfs and configure imans -> set imans to &new_ima_ns
+> 
+> When 2. hasn't been done then we find the relevant imans by walking
+> the userns hierarchy upwards finding the first parent userns that has a
+> non-NULL imans.
 
-Will or will not have any effect...
+Ah, right, thanks Christian.
 
-Please use get_maintainers.pl and send your patches to the right
-lists/maintainers. DT patches only get reviewed if sent to DT list. So
-please resend to the DT list. But before you do, I can tell this
-binding hasn't been tested so fix all the warnings first.
+But so the code - I think where the ima_ns is defined in the user_ns
+struct, needs to make this clear.  Just something like
 
-Rob
+	// Pointer to ima_ns which this user_ns created.  Can be null.
+	// Access checks will walk the userns->parent chain and check
+	// against all active ima_ns's.  Note that when the user_ns is
+	// freed, the ima_ns is guaranteed to be free-able.
+	struct ima_namespace	*ima_ns;
 
->
->
-> On 09/05/2022 14:39, Mao Jinlong wrote:
-> > Adds new coresight-tpda.yaml file describing the bindings required
-> > to define tpda in the device trees.
-> >
-> > Reviewed-by: Mike Leach <mike.leach@linaro.org>
-> > Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
-> > Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
-> > ---
-> >   .../bindings/arm/coresight-tpda.yaml          | 119 ++++++++++++++++++
-> >   MAINTAINERS                                   |   1 +
-> >   2 files changed, 120 insertions(+)
-> >   create mode 100644 Documentation/devicetree/bindings/arm/coresight-tpda.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/arm/coresight-tpda.yaml b/Documentation/devicetree/bindings/arm/coresight-tpda.yaml
-> > new file mode 100644
-> > index 000000000000..4948ac13e7f8
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/arm/coresight-tpda.yaml
-> > @@ -0,0 +1,119 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-> > +# Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/arm/coresight-tpda.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Trace, Profiling and Diagnostics Aggregator - TPDA
-> > +
-> > +description: |
-> > +  TPDAs are responsible for packetization and timestamping of data sets
-> > +  utilizing the MIPI STPv2 packet protocol. Pulling data sets from one or
-> > +  more attached TPDM and pushing the resultant (packetized) data out a
-> > +  master ATB interface. Performing an arbitrated ATB interleaving (funneling)
-> > +  task for free-flowing data from TPDM (i.e. CMB and DSB data set flows).
-> > +
-> > +maintainers:
-> > +  - Mao Jinlong <quic_jinlmao@quicinc.com>
-> > +  - Tao Zhang <quic_taozha@quicinc.com>
-> > +
-> > +properties:
-> > +  $nodename:
-> > +    pattern: "^tpda(@[0-9a-f]+)$"
-> > +  compatible:
-> > +    items:
-> > +      - const: qcom,coresight-tpda
-> > +      - const: arm,primecell
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  clocks:
-> > +    maxItems: 1
-> > +
-> > +  clock-names:
-> > +    items:
-> > +      - const: apb_pclk
-> > +
-> > +  in-ports:
-> > +    type: object
-> > +    description: |
-> > +      Input connections from TPDM to TPDA
-> > +    $ref: /schemas/graph.yaml#/properties/ports
-> > +
->
-> --->8---
-> > +    properties:
-> > +      '#address-cells':
-> > +        const: 1
-> > +
-> > +      '#size-cells':
-> > +        const: 0
-> > +
-> > +    patternProperties:
-> > +      "^port@[0-9a-f]+$":
-> > +        type: object
-> > +        required:
-> > +          - reg
-> > +
-> > +    required:
-> > +      - '#size-cells'
-> > +      - '#address-cells'
->
-> ---8<---
->
-> I believe the above snippet is not needed and is covered by the generic
-> ports.
->
->
-> > +
-> > +  out-ports:
-> > +    type: object
-> > +    description: |
-> > +      Output connections from the TPDA to legacy CoreSight trace bus.
-> > +    $ref: /schemas/graph.yaml#/properties/ports
-> > +
-> > +    properties:
-> > +     port:
-> > +       description:
-> > +         Output connection from the TPDA to legacy CoreSight Trace bus.
-> > +       $ref: /schemas/graph.yaml#/properties/port
-> > +
-> > +required:
-> > +    - compatible
-> > +    - reg
-> > +    - clocks
-> > +    - clock-names
-> > +    - in-ports
-> > +    - out-ports
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  # minimum tpda definition.
-> > +  - |
-> > +    tpda@6004000 {
-> > +       compatible = "qcom,coresight-tpda", "arm,primecell";
-> > +       reg = <0x6004000 0x1000>;
-> > +
-> > +       qcom,tpda-atid = <65>;
-> > +
-> > +       clocks = <&aoss_qmp>;
-> > +       clock-names = "apb_pclk";
-> > +
-> > +       in-ports {
-> > +         #address-cells = <1>;
-> > +         #size-cells = <0>;
-> > +
-> > +        port@0 {
-> > +          reg = <0>;
-> > +          tpda_qdss_0_in_tpdm_dcc: endpoint {
-> > +            remote-endpoint =
-> > +              <&tpdm_dcc_out_tpda_qdss_0>;
-> > +            };
-> > +        };
-> > +      };
-> > +
-> > +       out-ports {
-> > +         port {
-> > +                 tpda_qdss_out_funnel_in0: endpoint {
-> > +                    remote-endpoint =
-> > +                    <&funnel_in0_in_tpda_qdss>;
-> > +                  };
-> > +          };
-> > +       };
-> > +    };
-> > +
-> > +...
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 28d32b3f3f5c..5d2d8c0ee340 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -1978,6 +1978,7 @@ T:      git git://git.kernel.org/pub/scm/linux/kernel/git/coresight/linux.git
-> >   F:  Documentation/ABI/testing/sysfs-bus-coresight-devices-*
-> >   F:  Documentation/devicetree/bindings/arm/coresight-cpu-debug.txt
-> >   F:  Documentation/devicetree/bindings/arm/coresight-cti.yaml
-> > +F:   Documentation/devicetree/bindings/arm/coresight-tpda.yaml
-> >   F:  Documentation/devicetree/bindings/arm/coresight-tpdm.yaml
-> >   F:  Documentation/devicetree/bindings/arm/coresight.txt
-> >   F:  Documentation/devicetree/bindings/arm/ete.yaml
->
-> Otherwise looks good to me.
->
-> Suzuki
+> # Serge's suggestion
+> 
+> 1. create new userns -> imans is set to parent imans
+> 2. mount securityfs and configure imans -> replace parent with &new_ima_ns
+> 
+> So when 2. hasn't been done we don't need to walk the userns hierarchy
+> upwards. We always find the relevant imans directly. Some massaging
+> would be needed in process_measurement() probably but it wouldn't need
+> to change semantics per se.
+> 
+> But I think I misunderstood something in any case. So looking at an
+> example like ima_post_path_mknod(). You seem to not call into
+> ima_must_appraise() if the caller's userns doesn't have an imans
+> enabled. I somehow had thought that the same logic applied as in
+> process_measurement. But if it isn't then it might make sense to keep
+> the current implementation.

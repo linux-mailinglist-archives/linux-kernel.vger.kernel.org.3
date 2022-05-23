@@ -2,184 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B5DA530904
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 07:52:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9256530907
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 07:54:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233500AbiEWFwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 01:52:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43506 "EHLO
+        id S232289AbiEWFyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 01:54:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233606AbiEWFwD (ORCPT
+        with ESMTP id S229515AbiEWFyO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 01:52:03 -0400
-Received: from corp-front08-corp.i.nease.net (corp-front08-corp.i.nease.net [59.111.134.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C45666477;
-        Sun, 22 May 2022 22:51:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=corp.netease.com; s=s210401; h=Received:From:To:Cc:Subject:
-        Date:Message-Id:MIME-Version:Content-Transfer-Encoding; bh=2SdOn
-        bcxJLMl7W/R+ogaGZHqr1mDU28XhhJYQ8UJrNk=; b=gEKAwbDHAIacTe7WgA09w
-        UYcT1iGSlbi/M4fs1l9Dv5uOY2xVYksHxDRjOE+RoEI1YAxlQTQtdZE2co3bG988
-        Qg1vfelL00LAOiYzzmBLP3fWooREYFrHhCCdSjOFQrRW2R257iYhXax+WcoZWxeP
-        ffBw24mYN/mrK7wIZs+7nY=
-Received: from pubt1-k8s74.yq.163.org (unknown [115.238.122.38])
-        by corp-front08-corp.i.nease.net (Coremail) with SMTP id nhDICgB3twPMIItizVBhAA--.44228S2;
-        Mon, 23 May 2022 13:51:09 +0800 (HKT)
-From:   liuyacan@corp.netease.com
-To:     kgraul@linux.ibm.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com
-Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ubraun@linux.ibm.com,
-        liuyacan <liuyacan@corp.netease.com>
-Subject: [PATCH net] net/smc: fix listen processing for SMC-Rv2
-Date:   Mon, 23 May 2022 13:50:56 +0800
-Message-Id: <20220523055056.2078994-1-liuyacan@corp.netease.com>
-X-Mailer: git-send-email 2.20.1
+        Mon, 23 May 2022 01:54:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DEE4A3122C
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 22:54:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653285251;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SyQ0q/1cfv9Dr9N4yrSfFi2vvZn6zBLKl1GWo7CSuOw=;
+        b=I5PjK5BCz7IvbSaXJPnJvRgV7AgmtgQwp4sdD1G1JU8Bj59oxtT3Mnj6d2ofKGNO8fFS49
+        /ZK/3qtc5dg/aPzbwmeey2PwaLGsURTJ/0rJWOqSgkFMtC8O1jOAtuubli8B6ncG1JwIXv
+        cqzi7TXcF5tT1BiIEXQCtmnosqyxDgc=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-528-4wnOw8F3Plyy17JyipZ8zQ-1; Mon, 23 May 2022 01:54:09 -0400
+X-MC-Unique: 4wnOw8F3Plyy17JyipZ8zQ-1
+Received: by mail-ed1-f72.google.com with SMTP id r8-20020a056402018800b00428b43999feso9974613edv.5
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 22:54:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:references
+         :message-id:mime-version:content-transfer-encoding;
+        bh=SyQ0q/1cfv9Dr9N4yrSfFi2vvZn6zBLKl1GWo7CSuOw=;
+        b=JOkF3JaoZYKW8+gtd4e0yZ21Cfysk91PWhMC4h4/Gmf2o5Q0TeKZMF/npJvcJBB3qC
+         H0RGjmopu9H2r7TahaJvnj75aN+u7neMkVGLKjkQOxR+ZIKWTPQKDzni4R3Euu6dO1jz
+         ThEcFwTHpzPVY3B0QcbwQx3OGJIEhQ5s5fuGwSK/ljB6TiKkGrudMqfN95L0kpdB2Z0a
+         jyHIm3HhD5vDdqgN6IqaMHVNhQPq2wfmeixaqcJsRLlSAYSlGqRBCCwK4MsPn9MN7MUh
+         NfMzZ55yyYtw5y21jSE4aRCRs11RWfVGW6raV64nXZo5pZbqrU5JrAEf0VNkhTLvNyQ7
+         QqWg==
+X-Gm-Message-State: AOAM530Z1cESpghY4opfip4Oz05aUrKZ3Lyy9IGaEOLSMpZTm/K/maxB
+        QKGVyVqODKsYVSZcTIQfLfANa69tcK/DXGHqH41IX2KHeBO0aGSv5hzKLef63avtS5QhtmVSKq6
+        1F82rsYriLFk3ZMbIQOMjaUBJ
+X-Received: by 2002:a05:6402:34c2:b0:42b:66d3:7b07 with SMTP id w2-20020a05640234c200b0042b66d37b07mr4193951edc.275.1653285248593;
+        Sun, 22 May 2022 22:54:08 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz1DWjG8FpraJzWe8ZWQtBDbo1n8T4WVu+1eU3YiF9hI1NP7Z7jCEltTqr7+vod4nIwDlJdzA==
+X-Received: by 2002:a05:6402:34c2:b0:42b:66d3:7b07 with SMTP id w2-20020a05640234c200b0042b66d37b07mr4193941edc.275.1653285248330;
+        Sun, 22 May 2022 22:54:08 -0700 (PDT)
+Received: from [127.0.0.1] (93-55-6-57.ip261.fastwebnet.it. [93.55.6.57])
+        by smtp.gmail.com with ESMTPSA id 1-20020a170906100100b006f506ed0b42sm5650794ejm.48.2022.05.22.22.54.07
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 22 May 2022 22:54:07 -0700 (PDT)
+Date:   Mon, 23 May 2022 07:54:01 +0200
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Yury Norov <yury.norov@gmail.com>
+CC:     kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        kvm list <kvm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        X86 ML <x86@kernel.org>, lkft-triage@lists.linaro.org
+Subject: =?US-ASCII?Q?Re=3A_=5Blinux-next=3Amaster_12308/12886=5D_arch/x86/kvm/hyp?= =?US-ASCII?Q?erv=2Ec=3A1983=3A22=3A_warning=3A_sh?= =?US-ASCII?Q?ift_count_=3E=3D_width_of_type?=
+In-Reply-To: <CA+G9fYtaz2MO_-yxwtqQx+Gxm460mr2S++fFCYAqObacEL1X-Q@mail.gmail.com>
+References: <202205201624.A4IhDdYX-lkp@intel.com> <Yoe4WQCV9903aQRP@dev-arch.thelio-3990X> <CA+G9fYtaz2MO_-yxwtqQx+Gxm460mr2S++fFCYAqObacEL1X-Q@mail.gmail.com>
+Message-ID: <3A8C8235-7FC0-4FDF-921A-E53B57096256@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: nhDICgB3twPMIItizVBhAA--.44228S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxuF17KFWUJr4xtF4xWF1kuFg_yoWrJF1fpa
-        1Ykry3CFs5GFs3Grs3tF15Zr4rZw18try8G3srGr1FkwnrtryrtryxXF4j9FZxJFW3t3WI
-        vFW8Ar1fWw15taDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUULYb7IF0VCFI7km07C26c804VAKzcIF0wAFF20E14v26r4j6ryU
-        M7CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2
-        IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84AC
-        jcxK6xIIjxv20xvEc7CjxVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84
-        ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2kK67ZEXf0FJ3sC6x9vy-n0Xa0_Xr1Utr1k
-        JwI_Jr4ln4vE4IxY62xKV4CY8xCE548m6r4UJryUGwAS0I0E0xvYzxvE52x082IY62kv04
-        87Mc804VCqF7xvr2I5Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-        JVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7V
-        AKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2xKxwAKzVCY
-        07xG64k0F24l7I0Y64k_MxkI7II2jI8vz4vEwIxGrwCF04k20xvY0x0EwIxGrwCF72vEw2
-        IIxxk0rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7vE0wC20s026c02F40E14v26r1j6r18
-        MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr4
-        1lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1l
-        IxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4
-        A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0pRp6wAUUUUU=
-X-CM-SenderInfo: 5olx5txfdqquhrush05hwht23hof0z/1tbiBQAPCVt760cBigAAsE
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: liuyacan <liuyacan@corp.netease.com>
+The patch is already merged in 5=2E18=2E
 
-In the process of checking whether RDMAv2 is available, the current
-implementation first sets ini->smcrv2.ib_dev_v2, and then allocates
-smc buf desc, but the latter may fail. Unfortunately, the caller
-will only check the former. In this case, a NULL pointer reference
-will occur in smc_clc_send_confirm_accept() when accessing
-conn->rmb_desc.
+Paolo
 
-This patch does two things:
-1. Use the return code to determine whether V2 is available.
-2. If the return code is NODEV, continue to check whether V1 is
-available.
 
-Fixes: e49300a6bf62 ("net/smc: add listen processing for SMC-Rv2")
-Signed-off-by: liuyacan <liuyacan@corp.netease.com>
----
- net/smc/af_smc.c | 44 +++++++++++++++++++++++++++-----------------
- 1 file changed, 27 insertions(+), 17 deletions(-)
-
-diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
-index 45a24d242..d3de54b70 100644
---- a/net/smc/af_smc.c
-+++ b/net/smc/af_smc.c
-@@ -2093,13 +2093,13 @@ static int smc_listen_rdma_reg(struct smc_sock *new_smc, bool local_first)
- 	return 0;
- }
- 
--static void smc_find_rdma_v2_device_serv(struct smc_sock *new_smc,
--					 struct smc_clc_msg_proposal *pclc,
--					 struct smc_init_info *ini)
-+static int smc_find_rdma_v2_device_serv(struct smc_sock *new_smc,
-+					struct smc_clc_msg_proposal *pclc,
-+					struct smc_init_info *ini)
- {
- 	struct smc_clc_v2_extension *smc_v2_ext;
- 	u8 smcr_version;
--	int rc;
-+	int rc = 0;
- 
- 	if (!(ini->smcr_version & SMC_V2) || !smcr_indicated(ini->smc_type_v2))
- 		goto not_found;
-@@ -2117,26 +2117,31 @@ static void smc_find_rdma_v2_device_serv(struct smc_sock *new_smc,
- 	ini->smcrv2.saddr = new_smc->clcsock->sk->sk_rcv_saddr;
- 	ini->smcrv2.daddr = smc_ib_gid_to_ipv4(smc_v2_ext->roce);
- 	rc = smc_find_rdma_device(new_smc, ini);
--	if (rc) {
--		smc_find_ism_store_rc(rc, ini);
-+	if (rc)
- 		goto not_found;
--	}
-+
- 	if (!ini->smcrv2.uses_gateway)
- 		memcpy(ini->smcrv2.nexthop_mac, pclc->lcl.mac, ETH_ALEN);
- 
- 	smcr_version = ini->smcr_version;
- 	ini->smcr_version = SMC_V2;
- 	rc = smc_listen_rdma_init(new_smc, ini);
--	if (!rc)
--		rc = smc_listen_rdma_reg(new_smc, ini->first_contact_local);
--	if (!rc)
--		return;
--	ini->smcr_version = smcr_version;
--	smc_find_ism_store_rc(rc, ini);
-+	if (rc) {
-+		ini->smcr_version = smcr_version;
-+		goto not_found;
-+	}
-+	rc = smc_listen_rdma_reg(new_smc, ini->first_contact_local);
-+	if (rc) {
-+		ini->smcr_version = smcr_version;
-+		goto not_found;
-+	}
-+	return 0;
- 
- not_found:
-+	rc = rc ?: SMC_CLC_DECL_NOSMCDEV;
- 	ini->smcr_version &= ~SMC_V2;
- 	ini->check_smcrv2 = false;
-+	return rc;
- }
- 
- static int smc_find_rdma_v1_device_serv(struct smc_sock *new_smc,
-@@ -2169,6 +2174,7 @@ static int smc_listen_find_device(struct smc_sock *new_smc,
- 				  struct smc_init_info *ini)
- {
- 	int prfx_rc;
-+	int rc;
- 
- 	/* check for ISM device matching V2 proposed device */
- 	smc_find_ism_v2_device_serv(new_smc, pclc, ini);
-@@ -2196,14 +2202,18 @@ static int smc_listen_find_device(struct smc_sock *new_smc,
- 		return ini->rc ?: SMC_CLC_DECL_NOSMCDDEV;
- 
- 	/* check if RDMA V2 is available */
--	smc_find_rdma_v2_device_serv(new_smc, pclc, ini);
--	if (ini->smcrv2.ib_dev_v2)
-+	rc = smc_find_rdma_v2_device_serv(new_smc, pclc, ini);
-+	if (!rc)
- 		return 0;
- 
-+	/* skip V1 check if V2 is unavailable for non-Device reason */
-+	if (rc != SMC_CLC_DECL_NOSMCDEV &&
-+	    rc != SMC_CLC_DECL_NOSMCRDEV &&
-+	    rc != SMC_CLC_DECL_NOSMCDDEV)
-+		return rc;
-+
- 	/* check if RDMA V1 is available */
- 	if (!prfx_rc) {
--		int rc;
--
- 		rc = smc_find_rdma_v1_device_serv(new_smc, pclc, ini);
- 		smc_find_ism_store_rc(rc, ini);
- 		return (!rc) ? 0 : ini->rc;
--- 
-2.20.1
+Il 23 maggio 2022 07:49:42 CEST, Naresh Kamboju <naresh=2Ekamboju@linaro=
+=2Eorg> ha scritto:
+>On Fri, 20 May 2022 at 21:18, Nathan Chancellor <nathan@kernel=2Eorg> wro=
+te:
+>>
+>> Hi Yury,
+>>
+>> On Fri, May 20, 2022 at 04:24:32PM +0800, kernel test robot wrote:
+>> > tree:   https://git=2Ekernel=2Eorg/pub/scm/linux/kernel/git/next/linu=
+x-next=2Egit master
+>> > head:   21498d01d045c5b95b93e0a0625ae965b4330ebe
+>> > commit: 81db71a60292e9a40ae8f6ef137b17f2aaa15a52 [12308/12886] KVM: x=
+86: hyper-v: replace bitmap_weight() with hweight64()
+>> > config: i386-randconfig-a011 (https://download=2E01=2Eorg/0day-ci/arc=
+hive/20220520/202205201624=2EA4IhDdYX-lkp@intel=2Ecom/config)
+>> > compiler: clang version 15=2E0=2E0 (https://github=2Ecom/llvm/llvm-pr=
+oject e00cbbec06c08dc616a0d52a20f678b8fbd4e304)
+>> > reproduce (this is a W=3D1 build):
+>> >         wget https://raw=2Egithubusercontent=2Ecom/intel/lkp-tests/ma=
+ster/sbin/make=2Ecross -O ~/bin/make=2Ecross
+>> >         chmod +x ~/bin/make=2Ecross
+>> >         # https://git=2Ekernel=2Eorg/pub/scm/linux/kernel/git/next/li=
+nux-next=2Egit/commit/?id=3D81db71a60292e9a40ae8f6ef137b17f2aaa15a52
+>> >         git remote add linux-next https://git=2Ekernel=2Eorg/pub/scm/=
+linux/kernel/git/next/linux-next=2Egit
+>> >         git fetch --no-tags linux-next master
+>> >         git checkout 81db71a60292e9a40ae8f6ef137b17f2aaa15a52
+>> >         # save the config file
+>> >         mkdir build_dir && cp config build_dir/=2Econfig
+>> >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make=2Ecr=
+oss W=3D1 O=3Dbuild_dir ARCH=3Di386 SHELL=3D/bin/bash
+>> >
+>> > If you fix the issue, kindly add following tag as appropriate
+>> > Reported-by: kernel test robot <lkp@intel=2Ecom>
+>> >
+>> > All warnings (new ones prefixed by >>):
+>> >
+>> > >> arch/x86/kvm/hyperv=2Ec:1983:22: warning: shift count >=3D width o=
+f type [-Wshift-count-overflow]
+>> >                    if (hc->var_cnt !=3D hweight64(valid_bank_mask))
+>> >                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>> >    include/asm-generic/bitops/const_hweight=2Eh:29:49: note: expanded=
+ from macro 'hweight64'
+>> >    #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(=
+w) : __arch_hweight64(w))
+>> >                                                    ^~~~~~~~~~~~~~~~~~=
+~~
+>> >    include/asm-generic/bitops/const_hweight=2Eh:21:76: note: expanded=
+ from macro '__const_hweight64'
+>> >    #define __const_hweight64(w) (__const_hweight32(w) + __const_hweig=
+ht32((w) >> 32))
+>> >                                                                      =
+         ^  ~~
+>> >    include/asm-generic/bitops/const_hweight=2Eh:20:49: note: expanded=
+ from macro '__const_hweight32'
+>> >    #define __const_hweight32(w) (__const_hweight16(w) + __const_hweig=
+ht16((w) >> 16))
+>> >                                                    ^
+>> >    note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-l=
+imit=3D0 to see all)
+>> >    include/asm-generic/bitops/const_hweight=2Eh:10:9: note: expanded =
+from macro '__const_hweight8'
+>> >             ((!!((w) & (1ULL << 0))) +     \
+>> >                   ^
+>> >    include/linux/compiler=2Eh:56:47: note: expanded from macro 'if'
+>> >    #define if(cond, =2E=2E=2E) if ( __trace_if_var( !!(cond , ## __VA=
+_ARGS__) ) )
+>> >                                                  ^~~~
+>> >    include/linux/compiler=2Eh:58:52: note: expanded from macro '__tra=
+ce_if_var'
+>> >    #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) =
+: __trace_if_value(cond))
+>> >                                                       ^~~~
+>
+>LKFT build system found these build warnings / errors on Linux next-20220=
+520=2E
+>
+>> I think this is the proper fix, as valid_bank_mask is only assigned u64
+>> values=2E Could you fold it into that patch to clear this warning up?
+>
+>The proposed patch below was tested and it fixed the reported problem on =
+32-bit
+>
+>> Cheers,
+>> Nathan
+>>
+>> diff --git a/arch/x86/kvm/hyperv=2Ec b/arch/x86/kvm/hyperv=2Ec
+>> index b652b856df2b=2E=2Ee2e95a6fccfd 100644
+>> --- a/arch/x86/kvm/hyperv=2Ec
+>> +++ b/arch/x86/kvm/hyperv=2Ec
+>> @@ -1914,7 +1914,7 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu,=
+ struct kvm_hv_hcall *hc)
+>>         struct hv_send_ipi_ex send_ipi_ex;
+>>         struct hv_send_ipi send_ipi;
+>>         DECLARE_BITMAP(vcpu_mask, KVM_MAX_VCPUS);
+>> -       unsigned long valid_bank_mask;
+>> +       u64 valid_bank_mask;
+>>         u64 sparse_banks[KVM_HV_MAX_SPARSE_VCPU_SET_BITS];
+>>         u32 vector;
+>>         bool all_cpus;
+>
+>Reported-by: Linux Kernel Functional Testing <lkft@linaro=2Eorg>
+>Tested-by: Linux Kernel Functional Testing <lkft@linaro=2Eorg>
+>
+>--
+>Linaro LKFT
+>https://lkft=2Elinaro=2Eorg
+>
 

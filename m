@@ -2,237 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E543530A4E
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 10:01:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14E70530A75
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 10:01:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230367AbiEWH1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 03:27:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51442 "EHLO
+        id S230148AbiEWHjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 03:39:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230345AbiEWH0x (ORCPT
+        with ESMTP id S229952AbiEWHjg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 03:26:53 -0400
-Received: from mx0b-002c1b01.pphosted.com (mx0b-002c1b01.pphosted.com [148.163.155.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B019247AD1;
-        Mon, 23 May 2022 00:23:03 -0700 (PDT)
-Received: from pps.filterd (m0127842.ppops.net [127.0.0.1])
-        by mx0b-002c1b01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24MHmCuX022425;
-        Sun, 22 May 2022 23:37:33 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nutanix.com; h=from : to : cc :
- subject : date : message-id : content-type : mime-version;
- s=proofpoint20171006; bh=RBnszdSDMgdIlZM1Mzjru/X5vF4drmy9svjiXjbsUQY=;
- b=uavZXA+uYjGTDzfaPk5z+X1E4e6t0f+C23prjixwb/dTKTxfGgKW4zapOzsLcAs/CTl/
- 8BhcJxTCvkwW1e+KrZ1CjNSvjn1hatYjaBzgI2Ok75zLKif14rMm0XuVp9827tdK73db
- QmEHQk360u1GwsC2oqVL5BRij2AbP5JOxzihnLUvidKvRkl3dcAy/Mnhj5mqonHXxKon
- xVEIGXdxH2WE/2GKkfE02M9jSThac4UbKQDh0nstocX7LxZgNleh4aihznfkyLi52war
- 64vKPpjdqkuizW5TOV55HHZQbaLh1RaveufwCShjXNK3Cqr3/h3PbP+ZOHEza8ivVCQG qQ== 
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2171.outbound.protection.outlook.com [104.47.59.171])
-        by mx0b-002c1b01.pphosted.com (PPS) with ESMTPS id 3g6ydejgwb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 22 May 2022 23:37:33 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iOi+rCxchXsnwoyi3op7HjhN9KAvfcDsUfpoTw7SYGxboNT2HbqNQIjOBF9et3+kLWkUzBfMoSdj049FBoVyJlyUu5GiiOTOy1nM3pSnptrefwyS1sThlzWPD6+Kjqr0iaC76w2ZEeah9/rP8NIrzlYWP+7KqbwEmaA/qI6sekapmQOJcg1B2FsheGZ/U63Tt9FkdcciE73x3XehC2UYkgYD1rdpvQEj1OoSIAhWP2ezvKeRpNFiWS6L/YhaijCV/A90+Mui8zWskG7FgetAqaT4LObSjWw3nY3GDfqTikvl3InKGCu3y76kp9Ckjx+JsvXiPdxtj0qjHGZ18H4k5Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RBnszdSDMgdIlZM1Mzjru/X5vF4drmy9svjiXjbsUQY=;
- b=aZNw2G9U4g0H7MIyt4EVoF5wjdBTAW7gSgIi3LT5Uq9W43QJB/hYQ+BvCy6kD7+CN6BuCvpSqaRRVGjN036JdUU+9sD11X4wA3g+NnOe/BW1IRnv8qogK0Lhv0Coffie8ZxwkK0qniw3x/qrei12HKptAbGj1oWTwJEMLYtU7T+GCK6RrEatgE3qPOjwrSBANJURdC4fjyeMJH+ARoyVWpYhY3avezlm0Qr/79o7xqbwFaeEaLQyOeZninPCAU7fDFs4Fl6QHKnTtAuPEcaNwx1HGHw0T2eIrLU9EfJzj4YlwroX/oXDm4ME4B4bGc1bBqUbaRvN7C7ah5nBE0rJkw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nutanix.com; dmarc=pass action=none header.from=nutanix.com;
- dkim=pass header.d=nutanix.com; arc=none
-Received: from CH0PR02MB8041.namprd02.prod.outlook.com (2603:10b6:610:106::10)
- by DM6PR02MB5945.namprd02.prod.outlook.com (2603:10b6:5:17e::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.15; Mon, 23 May
- 2022 06:37:31 +0000
-Received: from CH0PR02MB8041.namprd02.prod.outlook.com
- ([fe80::34c3:f129:a785:52b3]) by CH0PR02MB8041.namprd02.prod.outlook.com
- ([fe80::34c3:f129:a785:52b3%5]) with mapi id 15.20.5273.022; Mon, 23 May 2022
- 06:37:31 +0000
-From:   Eiichi Tsukata <eiichi.tsukata@nutanix.com>
-To:     rafael@kernel.org, daniel.lezcano@linaro.org, rostedt@goodmis.org,
-        mingo@redhat.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, joao.m.martins@oracle.com,
-        mtosatti@redhat.com
-Cc:     Eiichi Tsukata <eiichi.tsukata@nutanix.com>
-Subject: [PATCH] cpuidle: haltpoll: Add trace points for guest_halt_poll_ns grow/shrink
-Date:   Mon, 23 May 2022 06:35:43 +0000
-Message-Id: <20220523063543.99335-1-eiichi.tsukata@nutanix.com>
-X-Mailer: git-send-email 2.9.3
-Content-Type: text/plain
-X-ClientProxiedBy: PH0PR07CA0063.namprd07.prod.outlook.com
- (2603:10b6:510:f::8) To CH0PR02MB8041.namprd02.prod.outlook.com
- (2603:10b6:610:106::10)
+        Mon, 23 May 2022 03:39:36 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31155B7D7;
+        Mon, 23 May 2022 00:39:34 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L66zT4KDFz4xDK;
+        Mon, 23 May 2022 16:36:04 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1653287766;
+        bh=+0vivFk/Z067mjX8nd9BkvwUKAQ5iry4PW1fq/uku9o=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=SsoTGujOhHXaP3KkRyCCTMa3dTq9WxGjkSXpTPXv15OdMUiGAzZ/Ul13tm019YcwP
+         EDbOZJearfSHoyX0nf5rSPwTiInVNIfQ0JWDI69oMXom9v4yDPlIghkl++m1q3Gf7N
+         ntHvW9hD9WxrFaL+QOEvDn7c4/twwXHGddfKYe6oF+WrrEJKoyxj9LVIb98y56iz3e
+         zFZeT5jMFbwaoYJ+AoChc5RJWnsH86T62DnGx9429MHUZe5Ki9Uj59O8UtUFI5iqtj
+         /HqC1kLH0/UfuooaZYU/vGniCkCx6TAQrZkRSNqiHh+/Xh5lEilZEYnzReHEBCBZMG
+         XNj6oorXpIzGg==
+Date:   Mon, 23 May 2022 16:36:03 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Christoffer Dall <cdall@cs.columbia.edu>,
+        Marc Zyngier <maz@kernel.org>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Oliver Upton <oupton@google.com>, KVM <kvm@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the kvm-arm tree with the arm64
+ tree
+Message-ID: <20220523163603.580fddfa@canb.auug.org.au>
+In-Reply-To: <20220504143529.4060ab27@canb.auug.org.au>
+References: <20220504143529.4060ab27@canb.auug.org.au>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6ec84cbc-829d-404b-d564-08da3c86b677
-X-MS-TrafficTypeDiagnostic: DM6PR02MB5945:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR02MB59458E5E6D0B433ADB57F64C80D49@DM6PR02MB5945.namprd02.prod.outlook.com>
-x-proofpoint-crosstenant: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +NcqijOFYzDIXTiD3t/bwbVK8xfQ40JYiEcmet7OKKT2dO63UukunTEBoS7CycAMirfee7cb/2pKicKnm39t9KCTHBUul4+6l2AryTiAwHxMXdOuIl+SC9eWVpGYAJ8IqgGrIO6RZPgCp739ThiqJHCTswIYM+r+t2nWBrYTZTEjvrGmDWWxitpLdb8taIxFh3jYNOT5p2bT9UxuB6rtKF4qwKnWJL0mzEGvf2CQy4k4OvmRdC2hoAVbWwn9MgBuFsIRAGkkoqv8O5yMOcgrAbZJtoh5U2bEJcbHAxFvFJh+g3ZSz5o05sedd7G2WjT4V90PEgKd2TAPNBgdmQ9J5P1F7mt3E0baZZdoYwWg+V1fQ5Z6/JVnZIEuLHrTsPYcDkFENZFaXbof33lPLSsgnESfTicUo0lmjyTfTIDARsl5gJ9TZNWLJXjMc08nqISp6Qm4dCEXiLgA+yaPTBXfPs87L/Moqo+EgILYFr9WABOkG+5KYN5a8rWR8Ld5sOPpyMiPdrPjKoBWLzc4uXCVHoOWDJTMPvltZRTkxizy6wU38n75IBA+kSluoXzKp6jCmJS3a+r2cGyF4pp8Z9uS5DP11gCOWLFyubmQnSCm5X2z9J7v9VSs4Yyv3pCGnQWyLl0mKXoCJaQhKennj++WFatsU8V5XsWsikV2tEb0+X5dBRwBcQiS+xh6bv47FpeGx1MwPin/uD7cwjdSSb1r4Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR02MB8041.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(5660300002)(36756003)(316002)(44832011)(38350700002)(6666004)(6486002)(508600001)(8676002)(4326008)(83380400001)(8936002)(86362001)(66556008)(186003)(52116002)(38100700002)(26005)(2616005)(66946007)(6506007)(66476007)(1076003)(6512007)(2906002)(107886003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?j+kClSS9u5g8AiZVflNZG4kDeXx1ntiCuLvqQ64TEVnHcTsIIWGXlN6feQGN?=
- =?us-ascii?Q?dBlSg+kSizUUjp+uDk2ze8rBiDKVY0dwnfyCNc7f3hssCxsQJUzdQuR90SeX?=
- =?us-ascii?Q?b1X9vEwsOQ2JOXEcWc8Xizp0zQai/5EGbhOe4+YDncqCn+WXY1vOy0+vMZDE?=
- =?us-ascii?Q?QC3Vs/el6LiLDu5cox2JldtxepjXNCsKy2uoaeuOtuCvrstLFgSV1dC0+sNf?=
- =?us-ascii?Q?XRGgc/xn56gFoQ++5ApqiTwtn9rZWtSj0r0vUE1UrNcFddiw8//7N1CkwTlx?=
- =?us-ascii?Q?vwfu0dZqSXwlsTQzFdmZiWV87sLv96d6QB23L9CaLSnwgf2MFkX5czo9tJWT?=
- =?us-ascii?Q?POcCl/GTYvgxN8dwJr/D980mOsCjOTUzs1oJUlTqC/8mGq7w3jVqSdJk882q?=
- =?us-ascii?Q?LHUfPAIRsfrKiDjgowH5Vlgv1BlWZeMwj95y5fX7HOpHW594umZlL8O0uuju?=
- =?us-ascii?Q?Xi57eNMgK3sBmsj87wzX2wpIR2lkD/W4iMzAcocxPeMdy3AgwtvZNFHK87OA?=
- =?us-ascii?Q?r99YPmzt52Iy5Ek8Eb8Ayl72rCcYwuKT85HbejoTdnoAU7YrH36cbx/7amYJ?=
- =?us-ascii?Q?s0r5RZa+v0OLPrhi8xMCyxJ2FAagg9/stw/et+5lc7eJbWlFBCnDrX0aRAZg?=
- =?us-ascii?Q?E4+7rUkTlTU6PblAeQDya+axQ67YSQwa5qvymuScUIZSKgRigBsQQymCq4LQ?=
- =?us-ascii?Q?4DYoeWQcBX00nimUm8PDNhHvEyrvAwi82b54L+zxovYryKunOukKiTmXiEdy?=
- =?us-ascii?Q?Ff5rzvvBPaiDfjIbRVR3AIPzM1KcmEfBttZ81NPflLU9z86tKOFQWO7XOYIM?=
- =?us-ascii?Q?laXe4fYFrZVRsrUTpBI00J8HJoUeeYgZR0se1uyDd+OpzKhv0LPVLTxGY2tJ?=
- =?us-ascii?Q?jk5QFlE1hKq7/CoMb8jbuDcHAQxxSmkib9khcEKngQyAMLcq7+83Dx0c2nbC?=
- =?us-ascii?Q?aujvkYf9DYWS/6H0uiJOID/ClTEsORXQdzQijEUdCCM/H+hkg1Ls4+R94LOz?=
- =?us-ascii?Q?qt6fgejCrU68wdit8FPbCM/tF0eT+VOygE71RNhVoxNXU24UB3WXxGmNQcOC?=
- =?us-ascii?Q?XKhwcS+I0takoZhFtWynXtjrjCTKvtCbX5NiRB/14qFg4O6h7L606t2OkeA8?=
- =?us-ascii?Q?gWoUsG2NK8UuRleWjcyo+SM1YjwjN/oL7tWiKgHgfQtNnRI+D5Dqlm7banTZ?=
- =?us-ascii?Q?IM+dBIQyyx9uhDETEouSClBU8F3KFro+bQnfwKSl7j+4aQMXNBffVr+Ln4/u?=
- =?us-ascii?Q?VV8pW5XmcizwUBuw2cTXPsnjI5NZRS1EdMPMRUQ5mXR6xGkkIzqGjygB8f75?=
- =?us-ascii?Q?EL2aKpSGY5gWW0v5a2JfHaJ9NVEHlX/4qiRV1RUOh15I1wyE5uBy+YdaYYXe?=
- =?us-ascii?Q?mwQzbgt67uSTZPjm15WaJgreh/F71Pz0VChbOuNFw0on4+ykMdNx+h6P8JUX?=
- =?us-ascii?Q?J1M2Z89o++mALmkdLpzfQ+/1i6woh4qiz4vvaQbMEvwPnIJbgZCgRynpcEU/?=
- =?us-ascii?Q?l4OeB+hSb7nBfs+6M/O1hiWl42VSownpuB0iW5t3SNNLIVKXQPQVsmIuLxBN?=
- =?us-ascii?Q?ygBsy4yQf+3zoLUMAtSJLuOc1xtPlg56A6xNRouQBB9VefFMyVmCOgzBaiFS?=
- =?us-ascii?Q?HrxjlRQJQfvOvfyIVkQ5i5plG6L3I+cWp9oQ0rZdLyDwNzppWaq3q8DCFIGf?=
- =?us-ascii?Q?CTT7TCiKl+p1hV1KQFDGjZMw8u8HIQG5QJ/YxVDvM5twEM0RucI26ZTFtWBG?=
- =?us-ascii?Q?7WxoSZARTgiVbi361bPynDfpveK/TH4=3D?=
-X-OriginatorOrg: nutanix.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6ec84cbc-829d-404b-d564-08da3c86b677
-X-MS-Exchange-CrossTenant-AuthSource: CH0PR02MB8041.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2022 06:37:31.2030
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bb047546-786f-4de1-bd75-24e5b6f79043
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: YhrsOmqm57XSDH81Dl0r5IrnB0MEPh29TGseTQ5z0u6jegfOuwFf63hvIhK55/quehN+VJk87oKRPbg6mM+G001XNN9GrOFyAnP6bxTaOZg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB5945
-X-Proofpoint-ORIG-GUID: 5_2iAuj3b-Q567gwABcfvlw8IgeFYOMB
-X-Proofpoint-GUID: 5_2iAuj3b-Q567gwABcfvlw8IgeFYOMB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-23_01,2022-05-20_02,2022-02-23_01
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/.hrk+MfNx9SbylaWUw_miKR";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add trace points as are implemented in KVM host halt polling.
-This helps tune guest halt polling params.
+--Sig_/.hrk+MfNx9SbylaWUw_miKR
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Eiichi Tsukata <eiichi.tsukata@nutanix.com>
----
- drivers/cpuidle/governors/haltpoll.c |  7 +++++-
- include/trace/events/power.h         | 33 ++++++++++++++++++++++++++++
- 2 files changed, 39 insertions(+), 1 deletion(-)
+Hi all,
 
-diff --git a/drivers/cpuidle/governors/haltpoll.c b/drivers/cpuidle/governors/haltpoll.c
-index cb2a96eafc02..9a6eca41a484 100644
---- a/drivers/cpuidle/governors/haltpoll.c
-+++ b/drivers/cpuidle/governors/haltpoll.c
-@@ -19,6 +19,7 @@
- #include <linux/sched.h>
- #include <linux/module.h>
- #include <linux/kvm_para.h>
-+#include <trace/events/power.h>
- 
- static unsigned int guest_halt_poll_ns __read_mostly = 200000;
- module_param(guest_halt_poll_ns, uint, 0644);
-@@ -77,13 +78,14 @@ static int haltpoll_select(struct cpuidle_driver *drv,
- 
- static void adjust_poll_limit(struct cpuidle_device *dev, u64 block_ns)
- {
--	unsigned int val;
-+	unsigned int val, old;
- 
- 	/* Grow cpu_halt_poll_us if
- 	 * cpu_halt_poll_us < block_ns < guest_halt_poll_us
- 	 */
- 	if (block_ns > dev->poll_limit_ns && block_ns <= guest_halt_poll_ns) {
- 		val = dev->poll_limit_ns * guest_halt_poll_grow;
-+		old = val;
- 
- 		if (val < guest_halt_poll_grow_start)
- 			val = guest_halt_poll_grow_start;
-@@ -91,16 +93,19 @@ static void adjust_poll_limit(struct cpuidle_device *dev, u64 block_ns)
- 			val = guest_halt_poll_ns;
- 
- 		dev->poll_limit_ns = val;
-+		trace_guest_halt_poll_ns_grow(smp_processor_id(), val, old);
- 	} else if (block_ns > guest_halt_poll_ns &&
- 		   guest_halt_poll_allow_shrink) {
- 		unsigned int shrink = guest_halt_poll_shrink;
- 
- 		val = dev->poll_limit_ns;
-+		old = val;
- 		if (shrink == 0)
- 			val = 0;
- 		else
- 			val /= shrink;
- 		dev->poll_limit_ns = val;
-+		trace_guest_halt_poll_ns_shrink(smp_processor_id(), val, old);
- 	}
- }
- 
-diff --git a/include/trace/events/power.h b/include/trace/events/power.h
-index af5018aa9517..db065af9c3c0 100644
---- a/include/trace/events/power.h
-+++ b/include/trace/events/power.h
-@@ -500,6 +500,39 @@ DEFINE_EVENT(dev_pm_qos_request, dev_pm_qos_remove_request,
- 
- 	TP_ARGS(name, type, new_value)
- );
-+
-+TRACE_EVENT(guest_halt_poll_ns,
-+
-+	TP_PROTO(bool grow, unsigned int cpu_id,
-+		 unsigned int new, unsigned int old),
-+
-+	TP_ARGS(grow, cpu_id, new, old),
-+
-+	TP_STRUCT__entry(
-+		__field(bool, grow)
-+		__field(unsigned int, cpu_id)
-+		__field(unsigned int, new)
-+		__field(unsigned int, old)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->grow   = grow;
-+		__entry->cpu_id = cpu_id;
-+		__entry->new    = new;
-+		__entry->old    = old;
-+	),
-+
-+	TP_printk("cpu %u: halt_poll_ns %u (%s %u)",
-+		__entry->cpu_id,
-+		__entry->new,
-+		__entry->grow ? "grow" : "shrink",
-+		__entry->old)
-+);
-+
-+#define trace_guest_halt_poll_ns_grow(cpu_id, new, old) \
-+	trace_guest_halt_poll_ns(true, cpu_id, new, old)
-+#define trace_guest_halt_poll_ns_shrink(cpu_id, new, old) \
-+	trace_guest_halt_poll_ns(false, cpu_id, new, old)
- #endif /* _TRACE_POWER_H */
- 
- /* This part must be outside protection */
--- 
-2.36.1
+On Wed, 4 May 2022 14:35:29 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>
+> Today's linux-next merge of the kvm-arm tree got a conflict in:
+>=20
+>   arch/arm64/kvm/sys_regs.c
+>=20
+> between commit:
+>=20
+>   0b12620fddb8 ("KVM: arm64: Treat ESR_EL2 as a 64-bit register")
+>=20
+> from the arm64 tree and commits:
+>=20
+>   e65197666773 ("KVM: arm64: Wire up CP15 feature registers to their AArc=
+h64 equivalents")
+>   9369bc5c5e35 ("KVM: arm64: Plumb cp10 ID traps through the AArch64 sysr=
+eg handler")
+>=20
+> from the kvm-arm tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> diff --cc arch/arm64/kvm/sys_regs.c
+> index a4ef986adb5e,031d913cd79e..000000000000
+> --- a/arch/arm64/kvm/sys_regs.c
+> +++ b/arch/arm64/kvm/sys_regs.c
+> @@@ -2351,6 -2355,123 +2355,123 @@@ static int kvm_handle_cp_64(struct kv=
+m_
+>   	return 1;
+>   }
+>  =20
+> + static bool emulate_sys_reg(struct kvm_vcpu *vcpu, struct sys_reg_param=
+s *params);
+> +=20
+> + /*
+> +  * The CP10 ID registers are architecturally mapped to AArch64 feature
+> +  * registers. Abuse that fact so we can rely on the AArch64 handler for=
+ accesses
+> +  * from AArch32.
+> +  */
+>  -static bool kvm_esr_cp10_id_to_sys64(u32 esr, struct sys_reg_params *pa=
+rams)
+> ++static bool kvm_esr_cp10_id_to_sys64(u64 esr, struct sys_reg_params *pa=
+rams)
+> + {
+> + 	u8 reg_id =3D (esr >> 10) & 0xf;
+> + 	bool valid;
+> +=20
+> + 	params->is_write =3D ((esr & 1) =3D=3D 0);
+> + 	params->Op0 =3D 3;
+> + 	params->Op1 =3D 0;
+> + 	params->CRn =3D 0;
+> + 	params->CRm =3D 3;
+> +=20
+> + 	/* CP10 ID registers are read-only */
+> + 	valid =3D !params->is_write;
+> +=20
+> + 	switch (reg_id) {
+> + 	/* MVFR0 */
+> + 	case 0b0111:
+> + 		params->Op2 =3D 0;
+> + 		break;
+> + 	/* MVFR1 */
+> + 	case 0b0110:
+> + 		params->Op2 =3D 1;
+> + 		break;
+> + 	/* MVFR2 */
+> + 	case 0b0101:
+> + 		params->Op2 =3D 2;
+> + 		break;
+> + 	default:
+> + 		valid =3D false;
+> + 	}
+> +=20
+> + 	if (valid)
+> + 		return true;
+> +=20
+> + 	kvm_pr_unimpl("Unhandled cp10 register %s: %u\n",
+> + 		      params->is_write ? "write" : "read", reg_id);
+> + 	return false;
+> + }
+> +=20
+> + /**
+> +  * kvm_handle_cp10_id() - Handles a VMRS trap on guest access to a 'Med=
+ia and
+> +  *			  VFP Register' from AArch32.
+> +  * @vcpu: The vCPU pointer
+> +  *
+> +  * MVFR{0-2} are architecturally mapped to the AArch64 MVFR{0-2}_EL1 re=
+gisters.
+> +  * Work out the correct AArch64 system register encoding and reroute to=
+ the
+> +  * AArch64 system register emulation.
+> +  */
+> + int kvm_handle_cp10_id(struct kvm_vcpu *vcpu)
+> + {
+> + 	int Rt =3D kvm_vcpu_sys_get_rt(vcpu);
+>  -	u32 esr =3D kvm_vcpu_get_esr(vcpu);
+> ++	u64 esr =3D kvm_vcpu_get_esr(vcpu);
+> + 	struct sys_reg_params params;
+> +=20
+> + 	/* UNDEF on any unhandled register access */
+> + 	if (!kvm_esr_cp10_id_to_sys64(esr, &params)) {
+> + 		kvm_inject_undefined(vcpu);
+> + 		return 1;
+> + 	}
+> +=20
+> + 	if (emulate_sys_reg(vcpu, &params))
+> + 		vcpu_set_reg(vcpu, Rt, params.regval);
+> +=20
+> + 	return 1;
+> + }
+> +=20
+> + /**
+> +  * kvm_emulate_cp15_id_reg() - Handles an MRC trap on a guest CP15 acce=
+ss where
+> +  *			       CRn=3D0, which corresponds to the AArch32 feature
+> +  *			       registers.
+> +  * @vcpu: the vCPU pointer
+> +  * @params: the system register access parameters.
+> +  *
+> +  * Our cp15 system register tables do not enumerate the AArch32 feature
+> +  * registers. Conveniently, our AArch64 table does, and the AArch32 sys=
+tem
+> +  * register encoding can be trivially remapped into the AArch64 for the=
+ feature
+> +  * registers: Append op0=3D3, leaving op1, CRn, CRm, and op2 the same.
+> +  *
+> +  * According to DDI0487G.b G7.3.1, paragraph "Behavior of VMSAv8-32 32-=
+bit
+> +  * System registers with (coproc=3D0b1111, CRn=3D=3Dc0)", read accesses=
+ from this
+> +  * range are either UNKNOWN or RES0. Rerouting remains architectural as=
+ we
+> +  * treat undefined registers in this range as RAZ.
+> +  */
+> + static int kvm_emulate_cp15_id_reg(struct kvm_vcpu *vcpu,
+> + 				   struct sys_reg_params *params)
+> + {
+> + 	int Rt =3D kvm_vcpu_sys_get_rt(vcpu);
+> +=20
+> + 	/* Treat impossible writes to RO registers as UNDEFINED */
+> + 	if (params->is_write) {
+> + 		unhandled_cp_access(vcpu, params);
+> + 		return 1;
+> + 	}
+> +=20
+> + 	params->Op0 =3D 3;
+> +=20
+> + 	/*
+> + 	 * All registers where CRm > 3 are known to be UNKNOWN/RAZ from AArch3=
+2.
+> + 	 * Avoid conflicting with future expansion of AArch64 feature registers
+> + 	 * and simply treat them as RAZ here.
+> + 	 */
+> + 	if (params->CRm > 3)
+> + 		params->regval =3D 0;
+> + 	else if (!emulate_sys_reg(vcpu, params))
+> + 		return 1;
+> +=20
+> + 	vcpu_set_reg(vcpu, Rt, params->regval);
+> + 	return 1;
+> + }
+> +=20
+>   /**
+>    * kvm_handle_cp_32 -- handles a mrc/mcr trap on a guest CP14/CP15 acce=
+ss
+>    * @vcpu: The VCPU pointer
 
+This is now a conflict between the kvm tree and the arm64 tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/.hrk+MfNx9SbylaWUw_miKR
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKLK1MACgkQAVBC80lX
+0Gykrwf/TE/fMdxVa5FSwNyHf9GknoxlGKakukzHDMxelELHyc+Gf7pyr3lR+Yo8
+bfqsJAPJHPhm0hR0PYdPSSWLA3cIokKv4Lxw3VYsUnuqblPf+l5hSPUAukugW5IL
+OqUbWxOSFfTKtnZpYFk65u7xo+l/ih5k+Hbjp7rsBoWeCahiEeKsgNnAK+YmVydk
+y6juX8p0fY4svYEqwR1WtRZVlG2hsTbYosMTL+cA8SyiYx3qD4f4J9AsslMJR2Kp
+tUPieghcLHlNS5MPRdSzgdzx7rpiuyu4ex3OMmbAfb3r62pdn2oDgVO2UImqEa3G
+3tb2Ulc4HeX/H12ygh/gLVVipgZS+A==
+=PPU8
+-----END PGP SIGNATURE-----
+
+--Sig_/.hrk+MfNx9SbylaWUw_miKR--

@@ -2,163 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94208530B8B
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 11:03:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 171C8530A87
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 10:01:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231550AbiEWILl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 04:11:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38810 "EHLO
+        id S229611AbiEWHYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 03:24:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231906AbiEWILX (ORCPT
+        with ESMTP id S230036AbiEWHXg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 04:11:23 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF2BF6F;
-        Mon, 23 May 2022 01:11:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653293481; x=1684829481;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=22iblQjLmvajfejVT7Ta1hWWhwDRz6x7UvvPJFylOWw=;
-  b=HvqywCByYlsr1lsn6o34/ERkHmr/4JhhXL/HIVyiGtzDXHsJJRJr26aT
-   bryCH0J1k8SVKfjuOQHFFx1FVMB//nbjRuxUPesSRpFZfNVzElv14CkmP
-   J3ZktHYY2sIDS+7PFCbhEMHPRRv4b9LDg8VeYawuSvaXFCP/Iza9+h8Cv
-   yNCKV/9Jkac9Yv/KPUWo0z7jFD7vkm26S86Hz0E9w+JbUcOFw7EOS43U2
-   +hQSR2Ut/4QPcW6IGDthb8fLuGv0SVK9/dlVfGeWklHI1+4sPVnhMzFxx
-   JKe9Bzsft5nxXB0Perq3hlO3w+guf0zRW4le2odzu5I6IBvGmFQ2sqrvg
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10355"; a="272851202"
-X-IronPort-AV: E=Sophos;i="5.91,245,1647327600"; 
-   d="scan'208";a="272851202"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 00:15:27 -0700
-X-IronPort-AV: E=Sophos;i="5.91,245,1647327600"; 
-   d="scan'208";a="600488729"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.56.27])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 00:15:22 -0700
-Message-ID: <210f8557-7735-a83f-7ebb-e8e8dc612b02@intel.com>
-Date:   Mon, 23 May 2022 10:15:17 +0300
-MIME-Version: 1.0
+        Mon, 23 May 2022 03:23:36 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70101.outbound.protection.outlook.com [40.107.7.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C720D393FF;
+        Mon, 23 May 2022 00:15:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QYpE2YvKzE7+Xl6Z8GFynzdwmNeDggM6AsrWVEZ6+pXhH57qSoabFfb0t2zrm9wSYL+nnZmGVYK8YXObUEC/Ef6GTjJudw6TxsaFgNPOR8vWvQAT7q9x+mlko9P8DbzYc/92n5fte9CGZI5NY/haDkzUisQKWNT88bSKFDEF58ROJLcECbneNj7uTx9IVO4nBo0r4yvN4xtt2ynKvsb9DyjgJdS6E95Ivgn74BGB7P+hLUaga0YfMukDjUzMcFha4U8jlq7pOapv7J3Ruxm6Bg3NepUoT/HB/fYeV5lDeHG0A+HUa8M9LaqeqtLa4R9n9m55TOmWufW+ZNh0L8r1kQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=urO4feBUwst4b5ukr9xRts3XVyQOcfU1k+HvlrUH/1A=;
+ b=bsoi7Y+SBfcZBhYVBwbNRZhDezTUihAoPA0C8/o7mDIdd099YBcj1VL1SVnUZ0jxEMHhhRPx99IzEOG43WcaDUe8XwCY7cUcVTYdS8jdS2rv6P+EvQAGDbc8VmXAr+GFUNoKm4VEldmW6VF2Zp+wLJ5fnJrTgPTkNAF13l264A+Nw7ClTx/AtTC9XZmlxtLZoZCoYIfjZGTq7Dq9412B1snKUoGb7CFT4mnB98x3L1uic4NOxomT31Ywy2k3ueBALWWwk3B1yAPT7e1Wd3NbdiMVCW8XeyxiKuKfko7nvXYuKe32iyelw+zBq/jnwN8EFu/hfX1KdbrnylgottG1hA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
+ dkim=pass header.d=nokia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
+ s=selector1-nokia-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=urO4feBUwst4b5ukr9xRts3XVyQOcfU1k+HvlrUH/1A=;
+ b=ngIYzlwtc038bOg/aumC4UlnElm/yentC3lQsERxy61jX8DyR12WfuzfpELnPmhO7dy9XkFBDggiAqQUy1wRtcXsSVubLf0LzcVwqoxueek9SaT5asjEIeuAol5Q/+yH3+Hnjwir2lRovru/UyZ/h2Iz1UC/pLuMsObvYKiCN9A=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nokia.com;
+Received: from AS4PR07MB8658.eurprd07.prod.outlook.com (2603:10a6:20b:4cd::12)
+ by AM4PR07MB3332.eurprd07.prod.outlook.com (2603:10a6:205:a::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.12; Mon, 23 May
+ 2022 07:15:30 +0000
+Received: from AS4PR07MB8658.eurprd07.prod.outlook.com
+ ([fe80::1d35:9369:bda:b3a0]) by AS4PR07MB8658.eurprd07.prod.outlook.com
+ ([fe80::1d35:9369:bda:b3a0%6]) with mapi id 15.20.5293.012; Mon, 23 May 2022
+ 07:15:30 +0000
+Message-ID: <bbb5d2b0-7fbc-0b7d-d58e-355ef1871a1e@nokia.com>
+Date:   Mon, 23 May 2022 09:15:26 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.9.1
-Subject: Re: [PATCH V6 3/5] mmc: debugfs: Add debug fs entry for mmc driver
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] i2c: core: Workaround false-positive LOCKDEP in
+ delete_device
 Content-Language: en-US
-To:     Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>,
-        ulf.hansson@linaro.org, wsa+renesas@sang-engineering.com,
-        shawn.lin@rock-chips.com, yoshihiro.shimoda.uh@renesas.com,
-        digetx@gmail.com, quic_asutoshd@quicinc.com
-Cc:     linux-arm-msm@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_rampraka@quicinc.com,
-        quic_pragalla@quicinc.com, quic_sartgarg@quicinc.com,
-        quic_nitirawa@quicinc.com, quic_sayalil@quicinc.com,
-        Liangliang Lu <quic_luliang@quicinc.com>,
-        "Bao D . Nguyen" <quic_nguyenb@quicinc.com>
-References: <1652857340-6040-1-git-send-email-quic_c_sbhanu@quicinc.com>
- <1652857340-6040-4-git-send-email-quic_c_sbhanu@quicinc.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <1652857340-6040-4-git-send-email-quic_c_sbhanu@quicinc.com>
+To:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220517075518.43613-1-alexander.sverdlin@nokia.com>
+ <Yoi17igIZH7y2Hy0@shikoro>
+From:   Alexander Sverdlin <alexander.sverdlin@nokia.com>
+In-Reply-To: <Yoi17igIZH7y2Hy0@shikoro>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-ClientProxiedBy: AM0PR10CA0041.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:20b:150::21) To AS4PR07MB8658.eurprd07.prod.outlook.com
+ (2603:10a6:20b:4cd::12)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 954ba623-ccba-4c43-e0cb-08da3c8c04c7
+X-MS-TrafficTypeDiagnostic: AM4PR07MB3332:EE_
+X-Microsoft-Antispam-PRVS: <AM4PR07MB3332A6FBD8D2509F6CD97F8F88D49@AM4PR07MB3332.eurprd07.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 4M6ljZiw3HqvVwYYDXrHt8w+G/rTYGNBiAzjnbdRUQHOk8rZjKtSDqfLqSWY8xqKOqFiL3o50oiXIMD+E4IAB+mcN902zz3m8VHJAQq+k35Q5MLg2TD1j7wZ+TyHGPmcWrJ4ZF1/vXbuswkq+kmrfomePS11MeoUHEHfHdZaID/YfC4w4lFTcFFRTUlMneV386f+FuqVE0/vOtPN5HQT8WLFLu1OsxPiZk6/8UneAs5NNIfjXvrS7daBwx4s+o5IwRTWGXqeur7JBJS36PrN+T8nVD8Jtzn6MrSz81V7K72D418pCGO91suNpKTtJ1nUbJ4pBfuKlC9IDE6opeBOyoJLftg3llKfSMacSvnu+xbMoV9efbK1XK5UfcR/j05c7WZhcATwtGC/mW+tOY2oM/A64kvBP02VK0EgZtUX5PAaRXtFQkKyiB0/qfWT8mxoClPYiWJAykqZ6sLSJeoEW1o8e9iEqAQmUdb7Qje+pGYX7/ZG0sEJDsuRGEOu6oKJPFgGA5Vb1kdWHCtrdTo+RmEZxb/gNOlHVIfTRG49r3RI9Gx4x0RCaazUuLZOH9Jkn3EF+J4jFnM2jTZ4X5FZiJmM5aUsgYmUKGCE8EeZqdgJHsITm4A52GOhx8uPvkl1w3iUGlS8sKTW2WM/k2b/Sy6hSW0g5iOdBo9H9prJqvSX88weAK1W8x7pdlxr1FwqMix3v17I0+++u0KQokPxjI0II2kWUl0HqMkokFEB+4OqshME3Ibjky4QWxyF0gpKO3es//EpiUts0duiyL/0fmlKH6bUrv52LIEuQZ4yonnCtT3l8r9BMOUWeEvdadGR
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS4PR07MB8658.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66946007)(52116002)(2616005)(31686004)(82960400001)(83380400001)(66476007)(38100700002)(38350700002)(53546011)(6512007)(8936002)(8676002)(6506007)(5660300002)(66556008)(6486002)(2906002)(26005)(44832011)(508600001)(36756003)(31696002)(86362001)(4744005)(316002)(6666004)(186003)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VGp6ZU93N0laRkJrTkZVSUwvcmwxa015d0RDL3lHcXY1WnQ1ZkJiSXZwY0wv?=
+ =?utf-8?B?aEprSDFHQ0pweXJhMnFsc2N4T3htNHhHTDl4ZXRHd1VQa1F2MHpiUkxCbjNv?=
+ =?utf-8?B?Z3F5ZGQ4OXN1S1RNZm1Qc3R5NkZ3eW9RbG5NMGE1N3IwZ04wYlloQjVXdzJu?=
+ =?utf-8?B?ZlhPUFRMK0g5TjJTRHlRVWg1Tzdhd21RaHhkYmFrLzE0WGVicXhtbGg1b3ZT?=
+ =?utf-8?B?V2Fkb0REMXZjZEhTRkJoK2dJT25JZHFTUVRqaEd1UjMrc3VSdmlscncxN0Yv?=
+ =?utf-8?B?Q2thUW44RmYwL2QrRnphaHNINXU3UXQvQnRCKzdkbVhhU0lSK0tNUXl6aCtn?=
+ =?utf-8?B?clVEMjYveFFPQVUyY1ZLUU9RQlBFQXpyRk92RmxJQkd1aEdubTJYQTNBMGN6?=
+ =?utf-8?B?WUtyNDQxcFBkNVNOb05TUzk3eDFOelBQaXUxSlJ4NnloSGh3RkFka21vYUVh?=
+ =?utf-8?B?V0pHNWVRdjV2aTI4TGZ6bWNjZmFUUU05aUpwUGlKQU5rczlJS0xVcDZSWW1t?=
+ =?utf-8?B?dVNNVml6a2NWcURSRXJZcFM4MnR6Y2tNU3ovNGtDREloaDJQc0s1OWJRN25m?=
+ =?utf-8?B?YklqRFRtd0xJbHNtMXQyOGRWalRzZnVvM2szd2lwU0dzL25nZFdFQzEvWEtk?=
+ =?utf-8?B?dTdMZy92RUM1NnFOb1M3Nmx2Z0pIMUNuLy9HdkxwdWxhUzRjUm01WENCQnUz?=
+ =?utf-8?B?OVo1MXhOajM5eXo5STRteWk3OFh5T2pHZ1NkbWN5N29maUY2cXIxb0JhMW5y?=
+ =?utf-8?B?WmlMSUMwN2F4M1krS0ZVMVVsblloUXE3MU1jUFJTSnlvbnRMdFBQY01yUHZY?=
+ =?utf-8?B?TnJuVHhHR1dQZEtvVndnQjBUUkl1THBVeDlvMlFFVDdCemlKWHRXTnpMNE1L?=
+ =?utf-8?B?a3ZFbUlIZHUxdC9iUWRiWHAxdGsydVVsd2RCTldBMFF2N0p1RS9Sa0MrS1VF?=
+ =?utf-8?B?YkVyZnVYRk5waDR2VFh3VERCMy9tSXVtWEdFTUVQdGYrZEJwaGxXZ0lTa2Vo?=
+ =?utf-8?B?SG5vV3dhdUtwVnkwNmRlZ0Fkd0FaL2Fzc3lSaGR1R1BZcUlzNXgxYVpGbWw5?=
+ =?utf-8?B?WXlIcDU2enpUWVFCU2xpc2VDcnNCQnJuQXRZQU1VVWc4di9uWjBmWm5yaUFG?=
+ =?utf-8?B?emJOaHRSaEFySUJMdjZxVGN6emtKNUgxYllqbDlBckZ4Y3ppeDhkd3ZKZERH?=
+ =?utf-8?B?SFZOL2d0UEhVc0Y5THNDQVUvelM2Yk5YZDJLdDFUODVkNGRsYUZBUUMzdjVW?=
+ =?utf-8?B?aERIL2NzZWNRTFdlQzV2MnAvYWFKS09laEF5NWkxS0ZreFM2bE1hQW45S244?=
+ =?utf-8?B?SzhUQ0gxUVRxUTFzdWtZSkFDWDQ4U0d2UjBHdVU3d0NiS1FpZ2NHUlY1dVl5?=
+ =?utf-8?B?eW9xTlArOXJwMzJIREFVbWVFSjA1MzZxcUUvTjNtWE1GRWE4YkxSYTZ6cXpp?=
+ =?utf-8?B?Z0lWYUNaRWs1ZmpVWVBZZUFtWndlRDR5NGd6aStnakNQR2ROR29CUXJLemdl?=
+ =?utf-8?B?eklYOTJIVzZDRUJDaXk5aFowaktjaHY5bU9RSi85NHZXcjVjRjdHMTVKY1l2?=
+ =?utf-8?B?TGdPUWFwSTI0ZE9sNGFubGdzRVo3dXo0RWIwU3hTT0RaaDAxN0xHckRSSjFV?=
+ =?utf-8?B?UElSbk1LR3RnVVB1N2dFZmN1ZFRLdS82ekgxajJaYS9RbGxZenJOQk9na3Rs?=
+ =?utf-8?B?VTdHM1NYbmxyT2pkSkkzaXZabE1Kc3VtdUtycGhYbHZKelEvOUFoK0huQW5Z?=
+ =?utf-8?B?b3F4R2FCMFBVMytZc0tvc2NPbzVvcmJQWjRtNkZENnA5MlNnT05uTllwM3lh?=
+ =?utf-8?B?Mm9nQXFiVkNNdlNrbFArYkd2VmRsRDgxLzQzWGpOTHBkS3JPOHgyMjM5bVNR?=
+ =?utf-8?B?UWNqRmg5anFGaVpHQlVGNm1NUEVDWmt4dHVjYUFjRGgxNDIyUVN1N0M0VG8z?=
+ =?utf-8?B?aVVyL1czQk94V3QvOWVqQkZSOXBsMGRSR1V0ZVFDUUlYazNCQml3QytzQkZo?=
+ =?utf-8?B?S3l4NW5sdEhhc296OUYyVmFVN0dpSlA1ZFl5d1dDWms4OXlBWC96dWVBa1l0?=
+ =?utf-8?B?cUxVWE16Z2UrL1hYQS9hZ0xINEdhSFN2c1VBcGtIUmpndCtEZEkvUXFJeTBY?=
+ =?utf-8?B?a0RRRm5ZeElnMTltUDZKcWI3UEJVY29aUHZ1TE1NYitMRnh1dzEwdThiWmcx?=
+ =?utf-8?B?enBNUTR6bXAyMmN3Q1pUY3FKTUNQYmllWGdab0xCR3JjTjBHMzNOei9pSW9W?=
+ =?utf-8?B?NGlaSU5uaFo1djh0NlhSS20xUWRtSjBpOWxsMGFRZ29IeGtyMTd0bE9wbGpN?=
+ =?utf-8?B?cWVwRFh3eXZ2ZnRwWGxlYjVpVmpxWWJ1Y2dhM0ZaeXRyU2t6dWtsOWVkQTVO?=
+ =?utf-8?Q?myJQL0StVYalYn08=3D?=
+X-OriginatorOrg: nokia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 954ba623-ccba-4c43-e0cb-08da3c8c04c7
+X-MS-Exchange-CrossTenant-AuthSource: AS4PR07MB8658.eurprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2022 07:15:30.1673
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: u/a0Iewrz1GoeyDQNzFapvYYYVlkuN5of+BVl38Mfj4oZmgilUj7RIMOdn2OBGqccAqr8cgEnj7v6f00SsWGnNmnKw2wuWwN/zqEnOecLJc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM4PR07MB3332
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,FORGED_SPF_HELO,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/05/22 10:02, Shaik Sajida Bhanu wrote:
-> Add debug fs entry to query eMMC and SD card errors statistics
-> 
-> Signed-off-by: Liangliang Lu <quic_luliang@quicinc.com>
-> Signed-off-by: Sayali Lokhande <quic_sayalil@quicinc.com>
-> Signed-off-by: Bao D. Nguyen <quic_nguyenb@quicinc.com>
-> Signed-off-by: Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
+Hello Wolfram,
 
-Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+On 21/05/2022 11:50, Wolfram Sang wrote:
+>> +			/*
+>> +			 * We drop the mutex here, because device unregister
+>> +			 * will take sysfs lock (kn->count) which, as LOCKDEP
+>> +			 * would think, depends on this mutex
+>> +			 */
+> I have to ask: can't lockdep be fixed or the lock somehow be annotated
+> to prevent the false positive?
 
-> ---
->  drivers/mmc/core/debugfs.c | 56 ++++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 56 insertions(+)
-> 
-> diff --git a/drivers/mmc/core/debugfs.c b/drivers/mmc/core/debugfs.c
-> index 3fdbc80..6aa5a60 100644
-> --- a/drivers/mmc/core/debugfs.c
-> +++ b/drivers/mmc/core/debugfs.c
-> @@ -223,6 +223,59 @@ static int mmc_clock_opt_set(void *data, u64 val)
->  DEFINE_DEBUGFS_ATTRIBUTE(mmc_clock_fops, mmc_clock_opt_get, mmc_clock_opt_set,
->  	"%llu\n");
->  
-> +static int mmc_err_stats_show(struct seq_file *file, void *data)
-> +{
-> +	struct mmc_host *host = (struct mmc_host *)file->private;
-> +	const char *desc[MMC_ERR_MAX] = {
-> +		[MMC_ERR_CMD_TIMEOUT] = "Command Timeout Occurred",
-> +		[MMC_ERR_CMD_CRC] = "Command CRC Errors Occurred",
-> +		[MMC_ERR_DAT_TIMEOUT] = "Data Timeout Occurred",
-> +		[MMC_ERR_DAT_CRC] = "Data CRC Errors Occurred",
-> +		[MMC_ERR_AUTO_CMD] = "Auto-Cmd Error Occurred",
-> +		[MMC_ERR_ADMA] = "ADMA Error Occurred",
-> +		[MMC_ERR_TUNING] = "Tuning Error Occurred",
-> +		[MMC_ERR_CMDQ_RED] = "CMDQ RED Errors",
-> +		[MMC_ERR_CMDQ_GCE] = "CMDQ GCE Errors",
-> +		[MMC_ERR_CMDQ_ICCE] = "CMDQ ICCE Errors",
-> +		[MMC_ERR_REQ_TIMEOUT] = "Request Timedout",
-> +		[MMC_ERR_CMDQ_REQ_TIMEOUT] = "CMDQ Request Timedout",
-> +		[MMC_ERR_ICE_CFG] = "ICE Config Errors",
-> +		[MMC_ERR_CTRL_TIMEOUT] = "Controller Timedout errors",
-> +		[MMC_ERR_UNEXPECTED_IRQ] = "Unexpected IRQ errors",
-> +	};
-> +	int i;
-> +
-> +	for (i = 0; i < MMC_ERR_MAX; i++) {
-> +		if (desc[i])
-> +			seq_printf(file, "# %s:\t %d\n",
-> +					desc[i], host->err_stats[i]);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int mmc_err_stats_open(struct inode *inode, struct file *file)
-> +{
-> +	return single_open(file, mmc_err_stats_show, inode->i_private);
-> +}
-> +
-> +static ssize_t mmc_err_stats_write(struct file *filp, const char __user *ubuf,
-> +				   size_t cnt, loff_t *ppos)
-> +{
-> +	struct mmc_host *host = filp->f_mapping->host->i_private;
-> +
-> +	pr_debug("%s: Resetting MMC error statistics\n", __func__);
-> +	memset(host->err_stats, 0, sizeof(host->err_stats));
-> +
-> +	return cnt;
-> +}
-> +
-> +static const struct file_operations mmc_err_stats_fops = {
-> +	.open	= mmc_err_stats_open,
-> +	.read	= seq_read,
-> +	.write	= mmc_err_stats_write,
-> +};
-> +
->  void mmc_add_host_debugfs(struct mmc_host *host)
->  {
->  	struct dentry *root;
-> @@ -236,6 +289,9 @@ void mmc_add_host_debugfs(struct mmc_host *host)
->  	debugfs_create_file_unsafe("clock", S_IRUSR | S_IWUSR, root, host,
->  				   &mmc_clock_fops);
->  
-> +	debugfs_create_file("err_stats", 0600, root, host,
-> +			    &mmc_err_stats_fops);
-> +
->  #ifdef CONFIG_FAIL_MMC_REQUEST
->  	if (fail_request)
->  		setup_fault_attr(&fail_default_attr, fail_request);
+I would be happy to test any other proposal, I personally didn't find other working
+approach until now. This particular patch actually has an advantage of reducing the
+locked region, which makes sense if only userspace_clients is protected by the mutex.
 
+-- 
+Best regards,
+Alexander Sverdlin.

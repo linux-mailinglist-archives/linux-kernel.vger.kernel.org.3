@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7B2D53190B
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:54:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6F6D531A97
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:55:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243577AbiEWSKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 14:10:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35648 "EHLO
+        id S243481AbiEWSI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 14:08:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243273AbiEWRiA (ORCPT
+        with ESMTP id S243568AbiEWRiS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:38:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F6AA8BD12;
-        Mon, 23 May 2022 10:32:16 -0700 (PDT)
+        Mon, 23 May 2022 13:38:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F6BB6E8E4;
+        Mon, 23 May 2022 10:32:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 818B261261;
-        Mon, 23 May 2022 17:31:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88D15C385A9;
-        Mon, 23 May 2022 17:31:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8E5BEB81218;
+        Mon, 23 May 2022 17:31:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBE38C385AA;
+        Mon, 23 May 2022 17:31:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653327062;
-        bh=E0vUSpxPLIELQGfG4YeyedZtqjlmxegQcKpK3CCbthE=;
+        s=korg; t=1653327066;
+        bh=kxOZ5QqWCnpmv5KQaoJ4TOsadG16Vztf+q4rTiMkJ3E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AnxiVdAXZqZUMYWVp5U8psj/GIaYqbsxP9toPrQm/uZtxUQ0ieno1zCjrhRqe6udG
-         XaCWGJr7zr+Tb1G62CwIjgpwPsHtCTD6SzyB2oxTVdlpsPugsaIBlZPepNZd069xxC
-         XXwm45Wies2mR2kAK13I5MNyMQl1hqKPl9385YYA=
+        b=nSRRIbTERNdMxPeLkWXeZDO2DDskToEHFexAVzjg/rJ7jqAMqwk45tETCQgBs0OuS
+         E1OqUxB5cl69cGWixw5KHahh+sm8ImvlpcVEUl7OJZ31I5DThG9muYDWQBQdiLAW+K
+         BjbppH3dI+R25RMmAYD4932CzoX0V7daAm7NlXfg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Nicholas Kazlauskas <Nicholas.Kazlauskas@amd.com>,
-        Pavle Kotarac <Pavle.Kotarac@amd.com>,
-        Eric Yang <Eric.Yang2@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
+        stable@vger.kernel.org, Lina Wang <lina.wang@mediatek.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 145/158] drm/amd/display: undo clearing of z10 related function pointers
-Date:   Mon, 23 May 2022 19:05:02 +0200
-Message-Id: <20220523165854.271190940@linuxfoundation.org>
+Subject: [PATCH 5.17 146/158] net: fix wrong network header length
+Date:   Mon, 23 May 2022 19:05:03 +0200
+Message-Id: <20220523165854.407189203@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220523165830.581652127@linuxfoundation.org>
 References: <20220523165830.581652127@linuxfoundation.org>
@@ -58,40 +55,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Yang <Eric.Yang2@amd.com>
+From: Lina Wang <lina.wang@mediatek.com>
 
-[ Upstream commit 9b9bd3f640640f94272a461b2dfe558f91b322c5 ]
+[ Upstream commit cf3ab8d4a797960b4be20565abb3bcd227b18a68 ]
 
-[Why]
-Z10 and S0i3 have some shared path. Previous code clean up ,
-incorrectly removed these pointers, which breaks s0i3 restore
+When clatd starts with ebpf offloaing, and NETIF_F_GRO_FRAGLIST is enable,
+several skbs are gathered in skb_shinfo(skb)->frag_list. The first skb's
+ipv6 header will be changed to ipv4 after bpf_skb_proto_6_to_4,
+network_header\transport_header\mac_header have been updated as ipv4 acts,
+but other skbs in frag_list didnot update anything, just ipv6 packets.
 
-[How]
-Do not clear the function pointers based on Z10 disable.
+udp_queue_rcv_skb will call skb_segment_list to traverse other skbs in
+frag_list and make sure right udp payload is delivered to user space.
+Unfortunately, other skbs in frag_list who are still ipv6 packets are
+updated like the first skb and will have wrong transport header length.
 
-Reviewed-by: Nicholas Kazlauskas <Nicholas.Kazlauskas@amd.com>
-Acked-by: Pavle Kotarac <Pavle.Kotarac@amd.com>
-Signed-off-by: Eric Yang <Eric.Yang2@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+e.g.before bpf_skb_proto_6_to_4,the first skb and other skbs in frag_list
+has the same network_header(24)& transport_header(64), after
+bpf_skb_proto_6_to_4, ipv6 protocol has been changed to ipv4, the first
+skb's network_header is 44,transport_header is 64, other skbs in frag_list
+didnot change.After skb_segment_list, the other skbs in frag_list has
+different network_header(24) and transport_header(44), so there will be 20
+bytes different from original,that is difference between ipv6 header and
+ipv4 header. Just change transport_header to be the same with original.
+
+Actually, there are two solutions to fix it, one is traversing all skbs
+and changing every skb header in bpf_skb_proto_6_to_4, the other is
+modifying frag_list skb's header in skb_segment_list. Considering
+efficiency, adopt the second one--- when the first skb and other skbs in
+frag_list has different network_header length, restore them to make sure
+right udp payload is delivered to user space.
+
+Signed-off-by: Lina Wang <lina.wang@mediatek.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/display/dc/dcn31/dcn31_init.c | 5 -----
- 1 file changed, 5 deletions(-)
+ net/core/skbuff.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_init.c b/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_init.c
-index d7559e5a99ce..e708f07fe75a 100644
---- a/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_init.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_init.c
-@@ -153,9 +153,4 @@ void dcn31_hw_sequencer_construct(struct dc *dc)
- 		dc->hwss.init_hw = dcn20_fpga_init_hw;
- 		dc->hwseq->funcs.init_pipes = NULL;
- 	}
--	if (dc->debug.disable_z10) {
--		/*hw not support z10 or sw disable it*/
--		dc->hwss.z10_restore = NULL;
--		dc->hwss.z10_save_init = NULL;
--	}
- }
+diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+index 180fa6a26ad4..708cc9b1b176 100644
+--- a/net/core/skbuff.c
++++ b/net/core/skbuff.c
+@@ -3896,7 +3896,7 @@ struct sk_buff *skb_segment_list(struct sk_buff *skb,
+ 	unsigned int delta_len = 0;
+ 	struct sk_buff *tail = NULL;
+ 	struct sk_buff *nskb, *tmp;
+-	int err;
++	int len_diff, err;
+ 
+ 	skb_push(skb, -skb_network_offset(skb) + offset);
+ 
+@@ -3936,9 +3936,11 @@ struct sk_buff *skb_segment_list(struct sk_buff *skb,
+ 		skb_push(nskb, -skb_network_offset(nskb) + offset);
+ 
+ 		skb_release_head_state(nskb);
++		len_diff = skb_network_header_len(nskb) - skb_network_header_len(skb);
+ 		__copy_skb_header(nskb, skb);
+ 
+ 		skb_headers_offset_update(nskb, skb_headroom(nskb) - skb_headroom(skb));
++		nskb->transport_header += len_diff;
+ 		skb_copy_from_linear_data_offset(skb, -tnl_hlen,
+ 						 nskb->data - tnl_hlen,
+ 						 offset + tnl_hlen);
 -- 
 2.35.1
 

@@ -2,116 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65CF95318AE
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:54:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E17FA531733
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:52:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232106AbiEWUXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 16:23:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49070 "EHLO
+        id S232967AbiEWUZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 16:25:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232921AbiEWUXu (ORCPT
+        with ESMTP id S232921AbiEWUZo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 16:23:50 -0400
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1DDB6C5DB4
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 13:23:48 -0700 (PDT)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 24NKNaH8025942;
-        Mon, 23 May 2022 22:23:36 +0200
-Date:   Mon, 23 May 2022 22:23:36 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kernel Team <kernel-team@fb.com>
-Subject: Re: [GIT PULL] nolibc changes for v5.19
-Message-ID: <20220523202336.GB13032@1wt.eu>
-References: <20220520182428.GA3791250@paulmck-ThinkPad-P17-Gen-1>
- <CAHk-=wgpAHhPVSqBWb4gYT=CRJzKAZ4inmrL_kcpeNWGkcg3pg@mail.gmail.com>
- <20220523195605.GA13032@1wt.eu>
+        Mon, 23 May 2022 16:25:44 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1282CC5DB9;
+        Mon, 23 May 2022 13:25:43 -0700 (PDT)
+Received: from sslproxy04.your-server.de ([78.46.152.42])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1ntEcR-0000zc-VY; Mon, 23 May 2022 22:25:36 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy04.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1ntEcR-000GNc-AC; Mon, 23 May 2022 22:25:35 +0200
+Subject: Re: [PATCH] bpf: fix probe read error in ___bpf_prog_run()
+To:     menglong8.dong@gmail.com, ast@kernel.org
+Cc:     andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Menglong Dong <imagedong@tencent.com>,
+        Jiang Biao <benbjiang@tencent.com>,
+        Hao Peng <flyingpeng@tencent.com>
+References: <20220523073732.296247-1-imagedong@tencent.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <abb90d45-e39e-4fdc-9930-17e3f6f87c06@iogearbox.net>
+Date:   Mon, 23 May 2022 22:25:33 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220523195605.GA13032@1wt.eu>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220523073732.296247-1-imagedong@tencent.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.5/26550/Mon May 23 10:05:39 2022)
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 09:56:05PM +0200, Willy Tarreau wrote:
-> On Mon, May 23, 2022 at 11:42:48AM -0700, Linus Torvalds wrote:
-> > On Fri, May 20, 2022 at 11:24 AM Paul E. McKenney <paulmck@kernel.org> wrote:
-> > >
-> > > This pull request adds a number of library functions and splits this
-> > > library into multiple files.
-> > 
-> > Well, this is annoying.
-> > 
-> > You add the rule to test and install this, and "make help" will list
-> > "nolibc" as a target, but that is not actually true at all.
-> > 
-> > So what's the appropriate way to actually test this pull somehow?
-> > 
-> > I'm guessing it's along the lines of
-> > 
-> >     make ARCH=x86 nolibc_headers
-> > 
-> > in the tools directory, but then I got bored and decided I need to
-> > just continue the merge window.
-> > 
-> > I've pulled this, but it all makes me go "Hmm, I'd have liked to maybe
-> > even build test it".
+On 5/23/22 9:37 AM, menglong8.dong@gmail.com wrote:
+> From: Menglong Dong <imagedong@tencent.com>
 > 
-> I did. I must confess I'm embarrassed now because when I added the
-> entries there, exactly in order to reuse what was in place, I found
-> it a bit tricky to launch the tests, but after that I felt OK with
-> it. Now it's been a quite some time now and I don't remember the exact
-> way to trigger the tests there, so it's likely that I didn't leave
-> enough info in the commit messages :-( Let me have a look and figure
-> again how to start the tests.
+> I think there is something wrong with BPF_PROBE_MEM in ___bpf_prog_run()
+> in big-endian machine. Let's make a test and see what will happen if we
+> want to load a 'u16' with BPF_PROBE_MEM.
+> 
+> Let's make the src value '0x0001', the value of dest register will become
+> 0x0001000000000000, as the value will be loaded to the first 2 byte of
+> DST with following code:
+> 
+>    bpf_probe_read_kernel(&DST, SIZE, (const void *)(long) (SRC + insn->off));
+> 
+> Obviously, the value in DST is not correct. In fact, we can compare
+> BPF_PROBE_MEM with LDX_MEM_H:
+> 
+>    DST = *(SIZE *)(unsigned long) (SRC + insn->off);
+> 
+> If the memory load is done by LDX_MEM_H, the value in DST will be 0x1 now.
+> 
+> And I think this error results in the test case 'test_bpf_sk_storage_map'
+> failing:
+> 
+>    test_bpf_sk_storage_map:PASS:bpf_iter_bpf_sk_storage_map__open_and_load 0 nsec
+>    test_bpf_sk_storage_map:PASS:socket 0 nsec
+>    test_bpf_sk_storage_map:PASS:map_update 0 nsec
+>    test_bpf_sk_storage_map:PASS:socket 0 nsec
+>    test_bpf_sk_storage_map:PASS:map_update 0 nsec
+>    test_bpf_sk_storage_map:PASS:socket 0 nsec
+>    test_bpf_sk_storage_map:PASS:map_update 0 nsec
+>    test_bpf_sk_storage_map:PASS:attach_iter 0 nsec
+>    test_bpf_sk_storage_map:PASS:create_iter 0 nsec
+>    test_bpf_sk_storage_map:PASS:read 0 nsec
+>    test_bpf_sk_storage_map:FAIL:ipv6_sk_count got 0 expected 3
+>    $10/26 bpf_iter/bpf_sk_storage_map:FAIL
+> 
+> The code of the test case is simply, it will load sk->sk_family to the
+> register with BPF_PROBE_MEM and check if it is AF_INET6. With this patch,
+> now the test case 'bpf_iter' can pass:
+> 
+>    $10  bpf_iter:OK
+> 
+> Reviewed-by: Jiang Biao <benbjiang@tencent.com>
+> Reviewed-by: Hao Peng <flyingpeng@tencent.com>
+> Signed-off-by: Menglong Dong <imagedong@tencent.com>
+> ---
+>   kernel/bpf/core.c | 11 ++++++-----
+>   1 file changed, 6 insertions(+), 5 deletions(-)
+> 
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index 13e9dbeeedf3..09e3f374739a 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -1945,14 +1945,15 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
+>   	LDST(W,  u32)
+>   	LDST(DW, u64)
+>   #undef LDST
+> -#define LDX_PROBE(SIZEOP, SIZE)							\
+> +#define LDX_PROBE(SIZEOP, SIZE, TYPE)						\
+>   	LDX_PROBE_MEM_##SIZEOP:							\
+>   		bpf_probe_read_kernel(&DST, SIZE, (const void *)(long) (SRC + insn->off));	\
+> +		DST = *((TYPE *)&DST);						\
+>   		CONT;
+> -	LDX_PROBE(B,  1)
+> -	LDX_PROBE(H,  2)
+> -	LDX_PROBE(W,  4)
+> -	LDX_PROBE(DW, 8)
+> +	LDX_PROBE(B,  1, u8)
+> +	LDX_PROBE(H,  2, u16)
+> +	LDX_PROBE(W,  4, u32)
+> +	LDX_PROBE(DW, 8, u64)
 
-So I've figured it again. When you run:
+Completely uncompiled, but maybe just fold it into LDST instead:
 
-   make tools/help
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 9cc91f0f3115..fc5c29243739 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -1948,6 +1948,11 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
+                 CONT;                                                   \
+         LDX_MEM_##SIZEOP:                                               \
+                 DST = *(SIZE *)(unsigned long) (SRC + insn->off);       \
++               CONT;                                                   \
++       LDX_PROBE_MEM_##SIZEOP:                                         \
++               bpf_probe_read_kernel(&DST, sizeof(SIZE),               \
++                                     (const void *)(long)(SRC + insn->off)); \
++               DST = *((SIZE *)&DST);                                  \
+                 CONT;
 
-you get the help of tools/ commands, and:
+         LDST(B,   u8)
+@@ -1955,15 +1960,6 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
+         LDST(W,  u32)
+         LDST(DW, u64)
+  #undef LDST
+-#define LDX_PROBE(SIZEOP, SIZE)                                                        \
+-       LDX_PROBE_MEM_##SIZEOP:                                                 \
+-               bpf_probe_read_kernel(&DST, SIZE, (const void *)(long) (SRC + insn->off));      \
+-               CONT;
+-       LDX_PROBE(B,  1)
+-       LDX_PROBE(H,  2)
+-       LDX_PROBE(W,  4)
+-       LDX_PROBE(DW, 8)
+-#undef LDX_PROBE
 
-   make tools/command_<target>
-
-actually runs the <target> target of tools/command.
-
-Here we have:
-
-   make tools/nolibc_headers
-
-which installs only the nolibc headers for the selected architecture
-into tools/include/nolibc/sysroot, and:
-
-   make tools/nolibc_headers_standalone
-
-which does the same in addition with a make headers;make headers_install
-into that directory so that we get a completely usable sysroot.
-
-Finally:
- 
-   make tools/nolibc_clean
-
-will clean that directory.
-
-I hadn't found any foo_help target for other commands so I assumed it
-was not what users would look like. But if you find it useful I can
-easily add:
-
-   make tools/nolibc_help
-
-to enumerate these commands.
-
-Hoping that clarifies the situation.
-
-Regards,
-Willy
+Thanks,
+Daniel

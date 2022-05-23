@@ -2,155 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A4905310B2
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:20:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBFA5530FEF
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:19:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235906AbiEWNCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 09:02:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45166 "EHLO
+        id S235891AbiEWNFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 09:05:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233492AbiEWNCh (ORCPT
+        with ESMTP id S235856AbiEWNFn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 09:02:37 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 803FD22BD5
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 06:02:36 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id a38so10747783pgl.9
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 06:02:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DDMJSeyEhz3D8bGy5InCdDzKQ32lo+eZUXii2YT076w=;
-        b=SYoS4zFvTiXtdoMfpCOIouQm7bVwMfE6+UlK4HDAtlU3277AH047Ur9x22r05V5pow
-         9DBafu+rDDrqZ4wr7PQ3NaEXstFSubiBcJjb0s+Gukf+htgc0+zHXf3e+IUiL/+nVQR2
-         ZQ4AWIqsVFyttV9JF0c73CazcawkwE5OzrCJllCj7o8MDHd2TCNkThwa0ci/vm1Le2EO
-         ldZvmd6H4kQabjMegLcnFMGx/y11KMsjKXTcTho3xDc2yGkl1E69QHblnYlqSePLtw7Z
-         eqmzYpdyg3V9Qnj8QwKEgp/vWwdLCbltz3g5CK5ZtqheawxjxXWCYi457kfWpHOwPkWo
-         Z7Mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DDMJSeyEhz3D8bGy5InCdDzKQ32lo+eZUXii2YT076w=;
-        b=rRS8reb/SFsIlrXAB6/06ujydIFm1Ef+zSXDl/EIJpLbQQPxNl3GgpvLp5NEcUd4xb
-         uqc27RPALeyQt+zp/Et1iX8q7f7TdC8A/WLw5anGki4ZjXbqJuPttGuTsSK5ScSOF155
-         77JpQ+PNKTcXHN00ePmR/Tg3NhuRAiMmVT9sLXdn7ABPgLg075B2953Wy4k35gG0xT+a
-         GvW624chFvBFsJrrIRY8BC9rVn7gDNXAtyF/xg+eWlLIGtW94rcyih+zNadb9NNxQhgy
-         aGDEvkJIOIXsjLzPhwpjiC8/bkLeF3KJpozMvSNK8RyYf9q9UyGp2YDZ4UUDdYEzMRuJ
-         w/IA==
-X-Gm-Message-State: AOAM532iMgNGtkXYTu8+XfPI6bYQ1/vdpUkl9kPoF0rSuagMLCPHlUQw
-        hu95FJg4GZPZ6udQZSGUgcw=
-X-Google-Smtp-Source: ABdhPJyP+rcgfnE++8labjEMCnSV+ws14gytPrT5o3etY2G6nnehd2OCtnI6uORIs7/BS9FFYiU+1A==
-X-Received: by 2002:a05:6a00:2d0:b0:518:95f8:d00a with SMTP id b16-20020a056a0002d000b0051895f8d00amr7304351pft.8.1653310955804;
-        Mon, 23 May 2022 06:02:35 -0700 (PDT)
-Received: from 167-179-157-192.a7b39d.syd.nbn.aussiebb.net (167-179-157-192.a7b39d.syd.nbn.aussiebb.net. [167.179.157.192])
-        by smtp.gmail.com with ESMTPSA id v22-20020aa78096000000b0050dc76281d0sm7380271pff.170.2022.05.23.06.02.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 06:02:35 -0700 (PDT)
-From:   Jonathan Liu <net147@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     Marek Vasut <marex@denx.de>, Maxime Ripard <maxime@cerno.tech>,
-        Jonathan Liu <net147@gmail.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] drm: bridge: icn6211: Adjust clock phase using SYS_CTRL_1
-Date:   Mon, 23 May 2022 23:01:44 +1000
-Message-Id: <20220523130144.444225-1-net147@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        Mon, 23 May 2022 09:05:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135DF4992D;
+        Mon, 23 May 2022 06:05:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A108361349;
+        Mon, 23 May 2022 13:05:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBB6DC385A9;
+        Mon, 23 May 2022 13:05:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653311141;
+        bh=bWrL+p+gwqZvG50H6tpkpi47lD1PdQOmcrKzmQSZeBU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AWu9228BkTIzNTsWBSiHPPYtNXOhYhpo/D98nFYLThrLxBvWxCMfQwNpndNN3m7KR
+         HA+q61wF+dJrYwr3/9eyH1ooD6+HEgfi7dtjS7BJPzcS2pJeZs8FyYkEazWmYcPgKh
+         CCI00uz8N1c7dGCDuw9+vjkDByD1ybgzzhn89RgzZxksQzJ449Q2P95G8GK4vFGnmM
+         wAj4h0xF7iQ/LHHAy/dcm6aJQgzXGdYOW24hwBTARFUeiE6uBI+sHf+B3qH48c1yK3
+         WpzVvtTrnK9glwiFOHg1Tu8Pi/zLzsb9mWZAZAoEClOPENxV/6j4VKtjBx2VKSBY4H
+         Ae3USidvIzS6g==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id E4DCC400B1; Mon, 23 May 2022 10:05:37 -0300 (-03)
+Date:   Mon, 23 May 2022 10:05:37 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Sohaib Mohamed <sohaib.amhmd@gmail.com>,
+        Carsten Haitzler <carsten.haitzler@arm.com>,
+        Marco Elver <elver@google.com>,
+        John Garry <john.garry@huawei.com>,
+        Michael Petlan <mpetlan@redhat.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v2 0/8] Make more tests skip rather than fail
+Message-ID: <YouGoc9elnPwV5IM@kernel.org>
+References: <20220518042027.836799-1-irogers@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220518042027.836799-1-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The code from [1] sets SYS_CTRL_1 to different values depending on the
-desired clock phase (0, 1/4, 1/2 or 3/4). A clock phase of 0 aligns the
-positive edge of the clock with the pixel data while other values delay
-the clock by a fraction of the clock period. A clock phase of 1/2 aligns
-the negative edge of the clock with the pixel data.
+Em Tue, May 17, 2022 at 09:20:19PM -0700, Ian Rogers escreveu:
+> A long standing niggle has been that tests that cannot pass are marked
+> as failing rather than skip.  John Garry mentioned a similar concern
+> in [1]. These changes fix this behavior so that as root, or not, at
+> least the first 10 tests are passing or skipping.
+> 
+> [1] https://lore.kernel.org/lkml/d32376b5-5538-ff00-6620-e74ad4b4abf2@huawei.com/
+> 
+> v2. Updates reviewed-by and acked-by. It addresses review comments
+>     from Namhyung Kim <namhyung@kernel.org>. An extra fix is now
+>     included for PERF_RECORD_* which can fail as a user because of
+>     perf_event_paranoid.
 
-The driver currently hard codes SYS_CTRL_1 to 0x88 which corresponds to
-aligning the positive edge of the clock with the pixel data. This won't
-work correctly for panels that require aligning the negative edge of the
-clock with the pixel data.
+Thanks, applied.
 
-Adjust the clock phase to 0 if DRM_BUS_FLAG_PIXDATA_DRIVE_POSEDGE is
-present in bus_flags, otherwise adjust the clock phase to 1/2 as
-appropriate for DRM_BUS_FLAG_PIXDATA_DRIVE_NEGEDGE.
+- Arnaldo
 
-[1] https://github.com/tdjastrzebski/ICN6211-Configurator
-
-Signed-off-by: Jonathan Liu <net147@gmail.com>
----
-V2: Use GENMASK and FIELD_PREP macros
----
- drivers/gpu/drm/bridge/chipone-icn6211.c | 18 ++++++++++++++++--
- 1 file changed, 16 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/gpu/drm/bridge/chipone-icn6211.c b/drivers/gpu/drm/bridge/chipone-icn6211.c
-index 47dea657a752..f1538fb5f8a9 100644
---- a/drivers/gpu/drm/bridge/chipone-icn6211.c
-+++ b/drivers/gpu/drm/bridge/chipone-icn6211.c
-@@ -9,6 +9,8 @@
- #include <drm/drm_print.h>
- #include <drm/drm_mipi_dsi.h>
  
-+#include <linux/bitfield.h>
-+#include <linux/bits.h>
- #include <linux/delay.h>
- #include <linux/gpio/consumer.h>
- #include <linux/i2c.h>
-@@ -26,6 +28,11 @@
- #define PD_CTRL(n)		(0x0a + ((n) & 0x3)) /* 0..3 */
- #define RST_CTRL(n)		(0x0e + ((n) & 0x1)) /* 0..1 */
- #define SYS_CTRL(n)		(0x10 + ((n) & 0x7)) /* 0..4 */
-+#define SYS_CTRL_1_CLK_PHASE_MSK	GENMASK(5, 4)
-+#define CLK_PHASE_0			0
-+#define CLK_PHASE_1_4			1
-+#define CLK_PHASE_1_2			2
-+#define CLK_PHASE_3_4			3
- #define RGB_DRV(n)		(0x18 + ((n) & 0x3)) /* 0..3 */
- #define RGB_DLY(n)		(0x1c + ((n) & 0x1)) /* 0..1 */
- #define RGB_TEST_CTRL		0x1e
-@@ -336,7 +343,7 @@ static void chipone_atomic_enable(struct drm_bridge *bridge,
- 	const struct drm_bridge_state *bridge_state;
- 	u16 hfp, hbp, hsync;
- 	u32 bus_flags;
--	u8 pol, id[4];
-+	u8 pol, sys_ctrl_1, id[4];
- 
- 	chipone_readb(icn, VENDOR_ID, id);
- 	chipone_readb(icn, DEVICE_ID_H, id + 1);
-@@ -414,7 +421,14 @@ static void chipone_atomic_enable(struct drm_bridge *bridge,
- 	chipone_configure_pll(icn, mode);
- 
- 	chipone_writeb(icn, SYS_CTRL(0), 0x40);
--	chipone_writeb(icn, SYS_CTRL(1), 0x88);
-+	sys_ctrl_1 = 0x88;
-+
-+	if (bus_flags & DRM_BUS_FLAG_PIXDATA_DRIVE_POSEDGE)
-+		sys_ctrl_1 |= FIELD_PREP(SYS_CTRL_1_CLK_PHASE_MSK, CLK_PHASE_0);
-+	else
-+		sys_ctrl_1 |= FIELD_PREP(SYS_CTRL_1_CLK_PHASE_MSK, CLK_PHASE_1_2);
-+
-+	chipone_writeb(icn, SYS_CTRL(1), sys_ctrl_1);
- 
- 	/* icn6211 specific sequence */
- 	chipone_writeb(icn, MIPI_FORCE_0, 0x20);
+> Ian Rogers (8):
+>   perf test: Skip reason for suites with 1 test
+>   perf test: Use skip in vmlinux kallsyms
+>   perf test: Use skip in openat syscall
+>   perf test: Basic mmap use skip
+>   perf test: Parse events tidy terms_test
+>   perf test: Parse events tidy evlist_test
+>   perf test: Parse events break apart tests
+>   perf test: Use skip in PERF_RECORD_*
+> 
+>  tools/perf/tests/builtin-test.c            |   6 +-
+>  tools/perf/tests/mmap-basic.c              |  18 +-
+>  tools/perf/tests/openat-syscall-all-cpus.c |  23 +-
+>  tools/perf/tests/openat-syscall.c          |  20 +-
+>  tools/perf/tests/parse-events.c            | 492 +++++++++++----------
+>  tools/perf/tests/perf-record.c             |  18 +-
+>  tools/perf/tests/vmlinux-kallsyms.c        |  12 +-
+>  7 files changed, 341 insertions(+), 248 deletions(-)
+> 
+> -- 
+> 2.36.0.550.gb090851708-goog
+
 -- 
-2.36.1
 
+- Arnaldo

@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 020585319A0
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:55:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5BF95319E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:55:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241786AbiEWRgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:36:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42924 "EHLO
+        id S245653AbiEWSIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 14:08:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240876AbiEWR0I (ORCPT
+        with ESMTP id S243722AbiEWRiZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:26:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88E9403CD;
-        Mon, 23 May 2022 10:21:12 -0700 (PDT)
+        Mon, 23 May 2022 13:38:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F4294183;
+        Mon, 23 May 2022 10:32:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 73019B8121B;
-        Mon, 23 May 2022 17:21:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7383C385A9;
-        Mon, 23 May 2022 17:21:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 95DEC611E3;
+        Mon, 23 May 2022 17:32:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9561DC385AA;
+        Mon, 23 May 2022 17:32:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326462;
-        bh=FkQJY2YpFBPSa+N7BK6rVU62t3c0Wequ8vrIz/IzQYQ=;
+        s=korg; t=1653327131;
+        bh=y1xog3J27YTwN0A9xZLgHTReF4/FxWbtCjlVdhy8QJY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OeMBfrkjsIc3f4WRKSRUHObh+H8yAYiR67eQQ5Fsjub/47ogtS1lkoVVB0Qq6Vk+p
-         sxVoh8NLnmVhjSfRxH4eJNPFGBRbA2K7a+0aEq6aSUohQ5c3t+Ti5O1pf4c4FckiAM
-         +vvzcBSocxShSQGBXDRo45m/WCCCzcemIDNvJ2Aw=
+        b=HRnqyKuurbJcvW1RXd5CTC+xtuukQNksB9OzP5ii0PvbyniI+msq8GzEYWp1wXMCO
+         BMz1WzAvVEhZxc3++VlChmWXU0vOUFS/qdBOBQpK4V6fMwHhact82sfB+BCAG5N244
+         Me47EMjLNhvg/HVX1Bn0yBHFSh7jsvbB5YmtWcRk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Mark Pearson <markpearson@lenvo.com>,
+        Hans de Goede <hdegoede@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 089/132] NFC: nci: fix sleep in atomic context bugs caused by nci_skb_alloc
+Subject: [PATCH 5.17 141/158] platform/x86: thinkpad_acpi: Convert btusb DMI list to quirks
 Date:   Mon, 23 May 2022 19:04:58 +0200
-Message-Id: <20220523165837.905342926@linuxfoundation.org>
+Message-Id: <20220523165853.667469365@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
-References: <20220523165823.492309987@linuxfoundation.org>
+In-Reply-To: <20220523165830.581652127@linuxfoundation.org>
+References: <20220523165830.581652127@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,79 +57,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duoming Zhou <duoming@zju.edu.cn>
+From: Mario Limonciello <mario.limonciello@amd.com>
 
-[ Upstream commit 23dd4581350d4ffa23d58976ec46408f8f4c1e16 ]
+[ Upstream commit c25d7f32e3e209462cd82e6e93e66b72dbb2308f ]
 
-There are sleep in atomic context bugs when the request to secure
-element of st-nci is timeout. The root cause is that nci_skb_alloc
-with GFP_KERNEL parameter is called in st_nci_se_wt_timeout which is
-a timer handler. The call paths that could trigger bugs are shown below:
+DMI matching in thinkpad_acpi happens local to a function meaning
+quirks can only match that function.
 
-    (interrupt context 1)
-st_nci_se_wt_timeout
-  nci_hci_send_event
-    nci_hci_send_data
-      nci_skb_alloc(..., GFP_KERNEL) //may sleep
+Future changes to thinkpad_acpi may need to quirk other code, so
+change this to use a quirk infrastructure.
 
-   (interrupt context 2)
-st_nci_se_wt_timeout
-  nci_hci_send_event
-    nci_hci_send_data
-      nci_send_data
-        nci_queue_tx_data_frags
-          nci_skb_alloc(..., GFP_KERNEL) //may sleep
-
-This patch changes allocation mode of nci_skb_alloc from GFP_KERNEL to
-GFP_ATOMIC in order to prevent atomic context sleeping. The GFP_ATOMIC
-flag makes memory allocation operation could be used in atomic context.
-
-Fixes: ed06aeefdac3 ("nfc: st-nci: Rename st21nfcb to st-nci")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Link: https://lore.kernel.org/r/20220517012530.75714-1-duoming@zju.edu.cn
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+Tested-by: Mark Pearson <markpearson@lenvo.com>
+Link: https://lore.kernel.org/r/20220429030501.1909-2-mario.limonciello@amd.com
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/nfc/nci/data.c | 2 +-
- net/nfc/nci/hci.c  | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ drivers/platform/x86/thinkpad_acpi.c | 26 ++++++++++++++++++++++++--
+ 1 file changed, 24 insertions(+), 2 deletions(-)
 
-diff --git a/net/nfc/nci/data.c b/net/nfc/nci/data.c
-index 6055dc9a82aa..aa5e712adf07 100644
---- a/net/nfc/nci/data.c
-+++ b/net/nfc/nci/data.c
-@@ -118,7 +118,7 @@ static int nci_queue_tx_data_frags(struct nci_dev *ndev,
+diff --git a/drivers/platform/x86/thinkpad_acpi.c b/drivers/platform/x86/thinkpad_acpi.c
+index 3fb8cda31eb9..c43586f1cb4b 100644
+--- a/drivers/platform/x86/thinkpad_acpi.c
++++ b/drivers/platform/x86/thinkpad_acpi.c
+@@ -309,6 +309,15 @@ struct ibm_init_struct {
+ 	struct ibm_struct *data;
+ };
  
- 		skb_frag = nci_skb_alloc(ndev,
- 					 (NCI_DATA_HDR_SIZE + frag_len),
--					 GFP_KERNEL);
-+					 GFP_ATOMIC);
- 		if (skb_frag == NULL) {
- 			rc = -ENOMEM;
- 			goto free_exit;
-diff --git a/net/nfc/nci/hci.c b/net/nfc/nci/hci.c
-index e199912ee1e5..85b808fdcbc3 100644
---- a/net/nfc/nci/hci.c
-+++ b/net/nfc/nci/hci.c
-@@ -153,7 +153,7 @@ static int nci_hci_send_data(struct nci_dev *ndev, u8 pipe,
++/* DMI Quirks */
++struct quirk_entry {
++	bool btusb_bug;
++};
++
++static struct quirk_entry quirk_btusb_bug = {
++	.btusb_bug = true,
++};
++
+ static struct {
+ 	u32 bluetooth:1;
+ 	u32 hotkey:1;
+@@ -338,6 +347,7 @@ static struct {
+ 	u32 hotkey_poll_active:1;
+ 	u32 has_adaptive_kbd:1;
+ 	u32 kbd_lang:1;
++	struct quirk_entry *quirks;
+ } tp_features;
  
- 	i = 0;
- 	skb = nci_skb_alloc(ndev, conn_info->max_pkt_payload_len +
--			    NCI_DATA_HDR_SIZE, GFP_KERNEL);
-+			    NCI_DATA_HDR_SIZE, GFP_ATOMIC);
- 	if (!skb)
- 		return -ENOMEM;
+ static struct {
+@@ -4361,9 +4371,10 @@ static void bluetooth_exit(void)
+ 	bluetooth_shutdown();
+ }
  
-@@ -184,7 +184,7 @@ static int nci_hci_send_data(struct nci_dev *ndev, u8 pipe,
- 		if (i < data_len) {
- 			skb = nci_skb_alloc(ndev,
- 					    conn_info->max_pkt_payload_len +
--					    NCI_DATA_HDR_SIZE, GFP_KERNEL);
-+					    NCI_DATA_HDR_SIZE, GFP_ATOMIC);
- 			if (!skb)
- 				return -ENOMEM;
+-static const struct dmi_system_id bt_fwbug_list[] __initconst = {
++static const struct dmi_system_id fwbug_list[] __initconst = {
+ 	{
+ 		.ident = "ThinkPad E485",
++		.driver_data = &quirk_btusb_bug,
+ 		.matches = {
+ 			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+ 			DMI_MATCH(DMI_BOARD_NAME, "20KU"),
+@@ -4371,6 +4382,7 @@ static const struct dmi_system_id bt_fwbug_list[] __initconst = {
+ 	},
+ 	{
+ 		.ident = "ThinkPad E585",
++		.driver_data = &quirk_btusb_bug,
+ 		.matches = {
+ 			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+ 			DMI_MATCH(DMI_BOARD_NAME, "20KV"),
+@@ -4378,6 +4390,7 @@ static const struct dmi_system_id bt_fwbug_list[] __initconst = {
+ 	},
+ 	{
+ 		.ident = "ThinkPad A285 - 20MW",
++		.driver_data = &quirk_btusb_bug,
+ 		.matches = {
+ 			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+ 			DMI_MATCH(DMI_BOARD_NAME, "20MW"),
+@@ -4385,6 +4398,7 @@ static const struct dmi_system_id bt_fwbug_list[] __initconst = {
+ 	},
+ 	{
+ 		.ident = "ThinkPad A285 - 20MX",
++		.driver_data = &quirk_btusb_bug,
+ 		.matches = {
+ 			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+ 			DMI_MATCH(DMI_BOARD_NAME, "20MX"),
+@@ -4392,6 +4406,7 @@ static const struct dmi_system_id bt_fwbug_list[] __initconst = {
+ 	},
+ 	{
+ 		.ident = "ThinkPad A485 - 20MU",
++		.driver_data = &quirk_btusb_bug,
+ 		.matches = {
+ 			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+ 			DMI_MATCH(DMI_BOARD_NAME, "20MU"),
+@@ -4399,6 +4414,7 @@ static const struct dmi_system_id bt_fwbug_list[] __initconst = {
+ 	},
+ 	{
+ 		.ident = "ThinkPad A485 - 20MV",
++		.driver_data = &quirk_btusb_bug,
+ 		.matches = {
+ 			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+ 			DMI_MATCH(DMI_BOARD_NAME, "20MV"),
+@@ -4421,7 +4437,8 @@ static int __init have_bt_fwbug(void)
+ 	 * Some AMD based ThinkPads have a firmware bug that calling
+ 	 * "GBDC" will cause bluetooth on Intel wireless cards blocked
+ 	 */
+-	if (dmi_check_system(bt_fwbug_list) && pci_dev_present(fwbug_cards_ids)) {
++	if (tp_features.quirks && tp_features.quirks->btusb_bug &&
++	    pci_dev_present(fwbug_cards_ids)) {
+ 		vdbg_printk(TPACPI_DBG_INIT | TPACPI_DBG_RFKILL,
+ 			FW_BUG "disable bluetooth subdriver for Intel cards\n");
+ 		return 1;
+@@ -11438,6 +11455,7 @@ static void thinkpad_acpi_module_exit(void)
  
+ static int __init thinkpad_acpi_module_init(void)
+ {
++	const struct dmi_system_id *dmi_id;
+ 	int ret, i;
+ 
+ 	tpacpi_lifecycle = TPACPI_LIFE_INIT;
+@@ -11477,6 +11495,10 @@ static int __init thinkpad_acpi_module_init(void)
+ 		return -ENODEV;
+ 	}
+ 
++	dmi_id = dmi_first_match(fwbug_list);
++	if (dmi_id)
++		tp_features.quirks = dmi_id->driver_data;
++
+ 	/* Device initialization */
+ 	tpacpi_pdev = platform_device_register_simple(TPACPI_DRVR_NAME, -1,
+ 							NULL, 0);
 -- 
 2.35.1
 

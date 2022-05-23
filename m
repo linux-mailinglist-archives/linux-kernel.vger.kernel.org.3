@@ -2,84 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDC455313B1
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:24:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 302C653149E
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:25:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238390AbiEWQRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 12:17:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60916 "EHLO
+        id S238679AbiEWQRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 12:17:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238665AbiEWQQ6 (ORCPT
+        with ESMTP id S238634AbiEWQQq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 12:16:58 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D94365D3D
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:16:51 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id er5so19740042edb.12
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:16:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=G7LMHKesunD0Xjsfifj+i4ChGcHMQrcfYbEuTuPQdfY=;
-        b=aj6E5qsVJYrGiJvSGurWbMCeqmRehL8+I2dJOljymHvfaN/8tZM1uY41O6LWstvuGE
-         K6tFibZ5ifzLAcNKtIapH6gQEeMhnymx1+Bivy/FeBsTD1qK9lJ2MM9O8SPZY+xLNPnZ
-         r2S2qwTO37YLvZamYaYQC5uMgCV+R9PuoP834=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=G7LMHKesunD0Xjsfifj+i4ChGcHMQrcfYbEuTuPQdfY=;
-        b=iqW2ZV40AWNV4Ytgmng/U6PexW3tDRUXgZoqJnOxiZxJvcfSXKCVeJu59D92ZzrQjC
-         9eoc+eI2z0If0/2WRjzq7/O5Uc7rZB8HPe/OBOW6v7ZHvt4GLYD+LG2+R9SaSY8lGjbi
-         /vpY5gO+j0ZEY8ItrJODHibn3nRItAFpv82JeBcAXlBDwRzOjAMPXwI93hlCrnv3l6AW
-         aZtdjbNF9YSwdiN5O/y9BKMM/HL0ROFHa/o6wtISHeTygnHH/JZRmLgCdGv8ad0+e/i+
-         mbejEhR0BBS55w4mBSccW1RN7YQti3XlJD1z+KYE8vxWNfhMEFwE9PVUsCIP/wd6YE0f
-         C/7w==
-X-Gm-Message-State: AOAM530dgSJhq4RsjT2hqTdNHBk/FZ8YVpBWbxuwAIj4FOienYZH17iA
-        2KLOpO1AEykXq+/4zjTWy4iNk5p31O9jHASP
-X-Google-Smtp-Source: ABdhPJwxddh6ZMO8+9mwOf2+NlSlDsLLgJWLqwKAdBTo+Jp4uQ007HiXopkh9kb5ozlFfXz1n7zGvQ==
-X-Received: by 2002:a05:6402:1c0f:b0:42a:e889:c9d0 with SMTP id ck15-20020a0564021c0f00b0042ae889c9d0mr24873053edb.18.1653322609411;
-        Mon, 23 May 2022 09:16:49 -0700 (PDT)
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com. [209.85.128.47])
-        by smtp.gmail.com with ESMTPSA id o16-20020aa7c510000000b0042617ba63b1sm8369144edq.59.2022.05.23.09.16.48
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 May 2022 09:16:48 -0700 (PDT)
-Received: by mail-wm1-f47.google.com with SMTP id i20-20020a05600c355400b0039456976dcaso4679wmq.1
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:16:48 -0700 (PDT)
-X-Received: by 2002:a05:600c:3d8c:b0:394:6097:9994 with SMTP id
- bi12-20020a05600c3d8c00b0039460979994mr20836726wmb.29.1653322607614; Mon, 23
- May 2022 09:16:47 -0700 (PDT)
+        Mon, 23 May 2022 12:16:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4872A6543B;
+        Mon, 23 May 2022 09:16:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F1955B8101B;
+        Mon, 23 May 2022 16:16:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CECFC385A9;
+        Mon, 23 May 2022 16:16:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653322602;
+        bh=xfepUKvQ7sCLevxiv5+hN7CvEb5owQ3Fs6hC8vUBBNM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sjICK09wvrS1+7OIscEQWeasa141fB+xn3ZgGjGq7lUEPFtbGf2/8kbaCYO4QAPsP
+         J/wlOnhuvQFwBRVV+SDgmt2EhDY/IxYbLgq/YTbhIUjI7d6XRi18JIF3xCAESh7diQ
+         vOzs4nJG9aNxPoJEATOHDjnHJbtPd38iGWldzc1lO1wZUZPwG/Z49Teh3ck4EQYMlD
+         iav0fx1iHPoFQLBKlKc+kAHsWKqi8Z7W7syVEWaCzD+7Ju8KzDAPmztKYepllWagLs
+         YH++IXRao9IagEoMO68hUikYn6OmcWvmCZEosWDRzjBGJyup4xdHXU9c32Dq7ke+EM
+         3guKsdcHoe8dQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1ntAjY-00083G-ND; Mon, 23 May 2022 18:16:40 +0200
+Date:   Mon, 23 May 2022 18:16:40 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     frank zago <frank@zago.net>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Wolfram Sang <wsa@kernel.org>, linux-usb@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v5 2/3] gpio: ch341: add GPIO MFD cell driver for the
+ CH341
+Message-ID: <YouzaO6ogxYj40Bp@hovoldconsulting.com>
+References: <20220401023306.79532-1-frank@zago.net>
+ <20220401023306.79532-3-frank@zago.net>
 MIME-Version: 1.0
-References: <20220520143502.v4.1.I71e42c6174f1cec17da3024c9f73ba373263b9b6@changeid>
- <20220520143502.v4.3.I9804fcd5d6c8552ab25f598dd7a3ea71b15b55f0@changeid> <7c1598a9-476d-0115-ab13-11dfa0d89436@linaro.org>
-In-Reply-To: <7c1598a9-476d-0115-ab13-11dfa0d89436@linaro.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 23 May 2022 09:16:34 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=UC+eFZaUiPQNKBMmLmjx21YpH4Yeg3Yz9NiDLXnh+nDg@mail.gmail.com>
-Message-ID: <CAD=FV=UC+eFZaUiPQNKBMmLmjx21YpH4Yeg3Yz9NiDLXnh+nDg@mail.gmail.com>
-Subject: Re: [PATCH v4 3/5] dt-bindings: arm: qcom: Add sc7180 Chromebook
- board bindings
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Alexandru M Stan <amstan@chromium.org>,
-        patches@lists.linux.dev,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Julius Werner <jwerner@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        "Joseph S . Barrera III" <joebar@chromium.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Stephen Boyd <sboyd@codeaurora.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220401023306.79532-3-frank@zago.net>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -88,238 +64,180 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Mar 31, 2022 at 09:33:05PM -0500, frank zago wrote:
+> The GPIO interface offers 16 GPIOs. 6 are read/write, and 10 are
+> read-only.
+> 
+> Signed-off-by: frank zago <frank@zago.net>
+> ---
 
-On Sun, May 22, 2022 at 12:57 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 20/05/2022 23:38, Douglas Anderson wrote:
-> > This copy-pastes compatibles from sc7180-based boards from the device
-> > trees to the yaml file so that `make dtbs_check` will be happy.
-> >
-> > NOTES:
-> > - I make no attempt to try to share an "item" for all sc7180 based
-> >   Chromebooks. Because of the revision matching scheme used by the
-> >   Chromebook bootloader, at times we need a different number of
-> >   revisions listed.
-> > - Some of the odd entries in here (like google,homestar-rev23 or the
-> >   fact that "Google Lazor Limozeen without Touchscreen" changed from
-> >   sku5 to sku6) are not typos but simply reflect reality.
-> > - Many revisions of boards here never actually went to consumers, but
-> >   they are still in use within various companies that were involved in
-> >   Chromebook development. Since Chromebooks are developed with an
-> >   "upstream first" methodology, having these revisions supported with
-> >   upstream Linux is important. Making it easy for Chromebooks to be
-> >   developed with an "upstream first" methodology is valuable to the
-> >   upstream community because it improves the quality of upstream and
-> >   gets Chromebooks supported with vanilla upstream faster.
-> >
-> > One other note here is that, though the bootloader effectively treats
-> > the list of compatibles in a given device tree as unordered, some
-> > people would prefer future boards to list higher-numbered revisions
-> > first in the list. Chromebooks here are not changing and typically
-> > list lower revisions first just to avoid churn.
-> >
-> > Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> > Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
-> > ---
-> >
-> > (no changes since v3)
-> >
-> > Changes in v3:
-> > - Split link to Chromebook boot doc into a separate patch.
-> > - Added a note to desc about revision ordering within a device tree.
-> >
-> > Changes in v2:
-> > - Add link to doc about how Chromebook devicetrees work.
-> > - Use a "description" instead of a comment for each item.
-> > - Use the marketing name instead of the code name where possible.
-> >
-> >  .../devicetree/bindings/arm/qcom.yaml         | 182 +++++++++++++++++-
-> >  1 file changed, 181 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
-> > index 5ac28e11ea7b..01e40ea40724 100644
-> > --- a/Documentation/devicetree/bindings/arm/qcom.yaml
-> > +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
-> > @@ -219,11 +219,191 @@ properties:
-> >                - qcom,ipq8074-hk10-c2
-> >            - const: qcom,ipq8074
-> >
-> > -      - items:
-> > +      - description: Qualcomm Technologies, Inc. SC7180 IDP
-> > +        items:
-> >            - enum:
-> >                - qcom,sc7180-idp
-> >            - const: qcom,sc7180
-> >
-> > +      - description: HP Chromebook x2 11c (rev1 - 2)
-> > +        items:
-> > +          - const: google,coachz-rev1
-> > +          - const: google,coachz-rev2
-> > +          - const: qcom,sc7180
-> > +
-> > +      - description: HP Chromebook x2 11c (newest rev)
-> > +        items:
-> > +          - const: google,coachz
-> > +          - const: qcom,sc7180
-> > +
-> > +      - description: HP Chromebook x2 11c with LTE (rev1 - 2)
-> > +        items:
-> > +          - const: google,coachz-rev1-sku0
-> > +          - const: google,coachz-rev2-sku0
-> > +          - const: qcom,sc7180
-> > +
-> > +      - description: HP Chromebook x2 11c with LTE (newest rev)
-> > +        items:
-> > +          - const: google,coachz-sku0
-> > +          - const: qcom,sc7180
-> > +
-> > +      - description: Lenovo Chromebook Duet 5 13 (rev2)
-> > +        items:
-> > +          - const: google,homestar-rev2
-> > +          - const: google,homestar-rev23
-> > +          - const: qcom,sc7180
-> > +
-> > +      - description: Lenovo Chromebook Duet 5 13 (rev3)
-> > +        items:
-> > +          - const: google,homestar-rev3
-> > +          - const: qcom,sc7180
-> > +
-> > +      - description: Lenovo Chromebook Duet 5 13 (newest rev)
-> > +        items:
-> > +          - const: google,homestar
-> > +          - const: qcom,sc7180
-> > +
-> > +      - description: Acer Chromebook Spin 513 (rev0)
-> > +        items:
-> > +          - const: google,lazor-rev0
-> > +          - const: qcom,sc7180
-> > +
-> > +      - description: Acer Chromebook Spin 513 (rev1 - 2)
-> > +        items:
-> > +          - const: google,lazor-rev1
-> > +          - const: google,lazor-rev2
-> > +          - const: qcom,sc7180
-> > +
-> > +      - description: Acer Chromebook Spin 513 (rev3 - 8)
-> > +        items:
-> > +          - const: google,lazor-rev3
-> > +          - const: google,lazor-rev4
-> > +          - const: google,lazor-rev5
-> > +          - const: google,lazor-rev6
-> > +          - const: google,lazor-rev7
-> > +          - const: google,lazor-rev8
-> > +          - const: qcom,sc7180
-> > +
-> > +      - description: Acer Chromebook Spin 513 (newest rev)
-> > +        items:
-> > +          - const: google,lazor
-> > +          - const: qcom,sc7180
-> > +
-> > +      - description: Acer Chromebook Spin 513 with KB Backlight (rev1 - 2)
-> > +        items:
-> > +          - const: google,lazor-rev1-sku2
-> > +          - const: google,lazor-rev2-sku2
-> > +          - const: qcom,sc7180
-> > +
-> > +      - description: Acer Chromebook Spin 513 with KB Backlight (rev3 - 8)
-> > +        items:
-> > +          - const: google,lazor-rev3-sku2
-> > +          - const: google,lazor-rev4-sku2
-> > +          - const: google,lazor-rev5-sku2
-> > +          - const: google,lazor-rev6-sku2
-> > +          - const: google,lazor-rev7-sku2
-> > +          - const: google,lazor-rev8-sku2
-> > +          - const: qcom,sc7180
-> > +
-> > +      - description: Acer Chromebook Spin 513 with KB Backlight (newest rev)
-> > +        items:
-> > +          - const: google,lazor-sku2
-> > +          - const: qcom,sc7180
-> > +
-> > +      - description: Acer Chromebook Spin 513 with LTE (rev1 - 2)
-> > +        items:
-> > +          - const: google,lazor-rev1-sku0
-> > +          - const: google,lazor-rev2-sku0
-> > +          - const: qcom,sc7180
-> > +
-> > +      - description: Acer Chromebook Spin 513 with LTE (rev3 - 8)
-> > +        items:
-> > +          - const: google,lazor-rev3-sku0
-> > +          - const: google,lazor-rev4-sku0
-> > +          - const: google,lazor-rev5-sku0
-> > +          - const: google,lazor-rev6-sku0
-> > +          - const: google,lazor-rev7-sku0
-> > +          - const: google,lazor-rev8-sku0
-> > +          - const: qcom,sc7180
-> > +
-> > +      - description: Acer Chromebook Spin 513 with LTE (newest rev)
-> > +        items:
-> > +          - const: google,lazor-sku0
-> > +          - const: qcom,sc7180
-> > +
-> > +      - description: Acer Chromebook 511 (rev4 - rev8)
-> > +        items:
-> > +          - const: google,lazor-rev4-sku4
-> > +          - const: google,lazor-rev5-sku4
-> > +          - const: google,lazor-rev6-sku4
-> > +          - const: google,lazor-rev7-sku4
-> > +          - const: google,lazor-rev8-sku4
-> > +          - const: qcom,sc7180
-> > +
-> > +      - description: Acer Chromebook 511 (newest rev)
-> > +        items:
-> > +          - const: google,lazor-sku4
-> > +          - const: qcom,sc7180
-> > +
-> > +      - description: Acer Chromebook 511 without Touchscreen (rev4)
-> > +        items:
-> > +          - const: google,lazor-rev4-sku5
-> > +          - const: qcom,sc7180
-> > +
-> > +      - description: Acer Chromebook 511 without Touchscreen (rev5 - rev8)
-> > +        items:
-> > +          - const: google,lazor-rev5-sku5
-> > +          - const: google,lazor-rev5-sku6
-> > +          - const: google,lazor-rev6-sku6
-> > +          - const: google,lazor-rev7-sku6
-> > +          - const: google,lazor-rev8-sku6
-> > +          - const: qcom,sc7180
-> > +
-> > +      - description: Acer Chromebook 511 without Touchscreen (newest rev)
-> > +        items:
-> > +          - const: google,lazor-sku6
-> > +          - const: qcom,sc7180
-> > +
-> > +      - description: Sharp Dynabook Chromebook C1 (rev1)
-> > +        items:
-> > +          - const: google,pompom-rev1
-> > +          - const: qcom,sc7180
-> > +
-> > +      - description: Sharp Dynabook Chromebook C1 (rev2)
-> > +        items:
-> > +          - const: google,pompom-rev2
->
-> I understand why you do not share "item" (your first notes) for some of
-> boards, but I don't get why "google,pompom-rev1" cannot be combined with
-> "google,pompom-rev2". Do you see any chances to alter the bindings for
-> these two boards?
->
-> The same for other such cases (not newest revision).
+> +struct ch341_gpio {
+> +	struct gpio_chip gpio;
+> +	struct mutex gpio_lock;
+> +	u16 gpio_dir;		/* 1 bit per pin, 0=IN, 1=OUT. */
+> +	u16 gpio_last_read;	/* last GPIO values read */
+> +	u16 gpio_last_written;	/* last GPIO values written */
+> +	union {
+> +		u8 gpio_buf[SEG_SIZE];
+> +		__le16 gpio_buf_status;
+> +	};
+> +
+> +	struct urb *irq_urb;
+> +	struct usb_anchor irq_urb_out;
+> +	u8 irq_buf[CH341_USB_MAX_INTR_SIZE];
+> +	struct irq_chip irq_chip;
+> +
+> +	struct ch341_device *ch341;
+> +};
 
-Yeah, I thought about it when I was writing the file and decided
-against it. I guess it's just a style decision. If we combine these
-two then I guess it raises the question: do we only combine entries
-that list a single revision if they're the same board, or do we have
-one uber entry at the end of the list that combines all
-single-revision sc7180 Chromebooks? ...and in either case, what should
-the description be?
+> +static void ch341_complete_intr_urb(struct urb *urb)
+> +{
+> +	struct ch341_gpio *dev = urb->context;
+> +	int rc;
+> +
+> +	if (urb->status) {
+> +		usb_unanchor_urb(dev->irq_urb);
 
-Personally, though it takes up more lines of code, I prefer the
-simplicity of having each entry here correspond to a single dts file.
+URBs are unanchored by USB core on completion.
 
-Unless you feel really strongly about it, I'd tend to leave the
-decision here to Bjorn.
+> +	} else {
+> +		/*
+> +		 * Data is 8 bytes. Byte 0 might be the length of
+> +		 * significant data, which is 3 more bytes. Bytes 1
+> +		 * and 2, and possibly 3, are the pin status. The byte
+> +		 * order is different than for the GET_STATUS
+> +		 * command. Byte 1 is GPIOs 8 to 15, and byte 2 is
+> +		 * GPIOs 0 to 7.
+> +		 */
+> +
+> +		handle_nested_irq(irq_find_mapping(dev->gpio.irq.domain,
+> +						   CH341_GPIO_INT_LINE));
+> +
+> +		rc = usb_submit_urb(dev->irq_urb, GFP_ATOMIC);
+> +		if (rc)
+> +			usb_unanchor_urb(dev->irq_urb);
+> +	}
+> +}
 
--Doug
+> +static void ch341_gpio_irq_enable(struct irq_data *data)
+> +{
+> +	struct ch341_gpio *dev = irq_data_get_irq_chip_data(data);
+> +	int rc;
+> +
+> +	/*
+> +	 * The URB might have just been unlinked in
+> +	 * ch341_gpio_irq_disable, but the completion handler hasn't
+> +	 * been called yet.
+> +	 */
+> +	if (!usb_wait_anchor_empty_timeout(&dev->irq_urb_out, 5000))
+> +		usb_kill_anchored_urbs(&dev->irq_urb_out);
+> +
+> +	usb_anchor_urb(dev->irq_urb, &dev->irq_urb_out);
+> +	rc = usb_submit_urb(dev->irq_urb, GFP_ATOMIC);
+> +	if (rc)
+> +		usb_unanchor_urb(dev->irq_urb);
+
+This looks confused and broken.
+
+usb_kill_anchored_urbs() can sleep so either calling it is broken or
+using GFP_ATOMIC is unnecessary.
+
+And isn't this function called multiple times when enabling more than
+one irq?!
+
+> +}
+> +
+> +static void ch341_gpio_irq_disable(struct irq_data *data)
+> +{
+> +	struct ch341_gpio *dev = irq_data_get_irq_chip_data(data);
+> +
+> +	usb_unlink_urb(dev->irq_urb);
+
+Same here...
+
+> +}
+> +
+> +static int ch341_gpio_remove(struct platform_device *pdev)
+> +{
+> +	struct ch341_gpio *dev = platform_get_drvdata(pdev);
+> +
+> +	usb_kill_anchored_urbs(&dev->irq_urb_out);
+
+You only have one URB...
+
+And what prevents it from being resubmitted here?
+
+> +	gpiochip_remove(&dev->gpio);
+> +	usb_free_urb(dev->irq_urb);
+> +
+> +	return 0;
+> +}
+> +
+> +static int ch341_gpio_probe(struct platform_device *pdev)
+> +{
+> +	struct ch341_device *ch341 = dev_get_drvdata(pdev->dev.parent);
+> +	struct gpio_irq_chip *girq;
+> +	struct ch341_gpio *dev;
+> +	struct gpio_chip *gpio;
+> +	int rc;
+> +
+> +	dev = devm_kzalloc(&pdev->dev, sizeof(*dev), GFP_KERNEL);
+> +	if (dev == NULL)
+> +		return -ENOMEM;
+> +
+> +	platform_set_drvdata(pdev, dev);
+> +	dev->ch341 = ch341;
+> +	mutex_init(&dev->gpio_lock);
+> +
+> +	gpio = &dev->gpio;
+> +	gpio->label = dev_name(&pdev->dev);
+> +	gpio->parent = &pdev->dev;
+> +	gpio->owner = THIS_MODULE;
+> +	gpio->get_direction = ch341_gpio_get_direction;
+> +	gpio->direction_input = ch341_gpio_direction_input;
+> +	gpio->direction_output = ch341_gpio_direction_output;
+> +	gpio->get = ch341_gpio_get;
+> +	gpio->get_multiple = ch341_gpio_get_multiple;
+> +	gpio->set = ch341_gpio_set;
+> +	gpio->set_multiple = ch341_gpio_set_multiple;
+> +	gpio->base = -1;
+> +	gpio->ngpio = CH341_GPIO_NUM_PINS;
+> +	gpio->can_sleep = true;
+> +
+> +	dev->irq_chip.name = dev_name(&pdev->dev);
+> +	dev->irq_chip.irq_set_type = ch341_gpio_irq_set_type;
+> +	dev->irq_chip.irq_enable = ch341_gpio_irq_enable;
+> +	dev->irq_chip.irq_disable = ch341_gpio_irq_disable;
+> +
+> +	girq = &gpio->irq;
+> +	girq->chip = &dev->irq_chip;
+> +	girq->handler = handle_simple_irq;
+> +	girq->default_type = IRQ_TYPE_NONE;
+> +
+> +	/* Create an URB for handling interrupt */
+> +	dev->irq_urb = usb_alloc_urb(0, GFP_KERNEL);
+> +	if (!dev->irq_urb)
+> +		return dev_err_probe(&pdev->dev, -ENOMEM, "Cannot allocate the int URB\n");
+> +
+> +	usb_fill_int_urb(dev->irq_urb, ch341->usb_dev,
+> +			 usb_rcvintpipe(ch341->usb_dev, ch341->ep_intr),
+> +			 dev->irq_buf, CH341_USB_MAX_INTR_SIZE,
+> +			 ch341_complete_intr_urb, dev, ch341->ep_intr_interval);
+> +
+> +	init_usb_anchor(&dev->irq_urb_out);
+> +
+> +	rc = gpiochip_add_data(gpio, dev);
+> +	if (rc) {
+> +		rc = dev_err_probe(&pdev->dev, rc, "Could not add GPIO\n");
+> +		goto release_urb;
+> +	}
+> +
+> +	return 0;
+> +
+> +release_urb:
+> +	usb_free_urb(dev->irq_urb);
+> +
+> +	return rc;
+> +}
+
+Johan

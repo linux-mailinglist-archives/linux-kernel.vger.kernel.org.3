@@ -2,60 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91BD05308B4
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 07:30:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A3325308C3
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 07:30:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230208AbiEWF0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 01:26:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46210 "EHLO
+        id S1355592AbiEWF0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 01:26:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354238AbiEWF0J (ORCPT
+        with ESMTP id S1355563AbiEWF0K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 01:26:09 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AADCE0F;
-        Sun, 22 May 2022 22:26:05 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id b135so959572pfb.12;
-        Sun, 22 May 2022 22:26:05 -0700 (PDT)
+        Mon, 23 May 2022 01:26:10 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F252C25EB;
+        Sun, 22 May 2022 22:26:07 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id a23-20020a17090acb9700b001df4e9f4870so12656463pju.1;
+        Sun, 22 May 2022 22:26:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=1KbVuW7XSoJDS/I+9egOZ67761pOOMfzmK48C2Bte6s=;
-        b=PDO1ltwCxEDERQBIHyx4r4g1N3u1jliI2hd3dINmAuIcmWY1hRByK+vIHhWkSCOkS6
-         3OcbZQtuCQhx5/HxTzceSahPqDktr8YZaJfdXLEw83cnlWTNWZSAGvNJnU6G/mT+Vhg6
-         y/yD/meUpuhWca5rBY/jeKItZGSjzXH5Zj5at/pDUJV5Z5ExeFc0m+PW7+M4fpYUSdiZ
-         P6Owbzrq+kuao0WwN/SIs+13qZ4o33Ml2IFjeq1eF8FZ4b+xtQPzfvgf62ERgboylu0s
-         1JI7/yTxpRQ0ITxRduHgXBJ3rn6Ir3RZ5gomzT5zn1SEGgvCSAgKUq1Fc+SF4KUc0MYz
-         nSNQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=PLLLntBRKNP/TR5HdmPuN09W5k0TVn71VC7Vx2rA/LU=;
+        b=qoDnotxySoygzG7LDqmRxBz+yEnAjAoyUwB5EeLCCUnfIBo0oIK+1PXtE16UYnFlvE
+         GVfqsI0HyM8P2rZxmc4svDZrb+l99fOuzadugqWvOmStscFC+Ax2CvHgtc+kqUQjOTVb
+         ed42OFT7pW5FNi/yRvcyqhtbLntR1DQsgCLI03nEPnYTLPUULCFeBlVgGcMfYpC+hAMb
+         ZOAVnoclGBt0dw1zcXyIJTuPVcVbU6vhhZy2yfEAgwEOiB36qtPzjLThpYQaGZutCgl9
+         8kvLNcdf+uiWlG2F7V+Jp4HGD5jUYtNm8szMOCRkiXestQHeohSKZ6XVYEN1PVCpfUAZ
+         wxtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=1KbVuW7XSoJDS/I+9egOZ67761pOOMfzmK48C2Bte6s=;
-        b=8ATGp+JjR2UumGzNrNaST/C9JqdTwiBMGyfSBtoGCsKBEv6MEWPPZiykGcYr6Ig3AN
-         ZqFciqyQzLEekWCyVgUqr2wq/ZCf/mtXoDfga4xJefoFkhAVYDBqZ6elsmvcn01x+J7l
-         zm0wYh/WVoJ2qWwsB5AB1i4jo8SZ/bEiK/D1Ulg8uokuGFdnjx0uT5uj19taZ0O3vNg2
-         XfT59s/sqYGbkmRULdYhRgs5Lc/hV8Y2TYkv4J5he/6rr6q/oOH+xkvOZz6w5TTMi0mI
-         8b28cwPsvbHGz5K+nbQdKxLoDfCByLB1yt5AVMIFdpY5UKPPasJG1Cf0Jf2rXUrrM3sX
-         Q3Fw==
-X-Gm-Message-State: AOAM533b3ml+4+dntnuzKTdWwKoZVuNqjmwhlWog8GqJFNxFAEVVo3Yy
-        Gso9QcMOePvz4RQUkKnwQ+s=
-X-Google-Smtp-Source: ABdhPJxMEVyiGL0U4n+8vRcPFSHCqcgT+LNDVchrhOc2LvrfGLbmG6DNgad/j2Ve9slnTtiqf3szaw==
-X-Received: by 2002:a05:6a00:14c8:b0:518:7789:d33b with SMTP id w8-20020a056a0014c800b005187789d33bmr12846585pfu.36.1653283564770;
-        Sun, 22 May 2022 22:26:04 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=PLLLntBRKNP/TR5HdmPuN09W5k0TVn71VC7Vx2rA/LU=;
+        b=c3lxIGg92mwjWnqQy9yTFWmY0ZZLYvUCaSC3cxikWLamAkWF9cPVso4bQvbcq5gcAw
+         B/zVUJGZiqIhqCqTXehc8TqkwTcUXhjDF933wxqE/BmaSYooOitgKM/utv2vGM+xNBlN
+         FGS7TRCCsdtF8B1u60umSCKZ3gK28PWbqMh7x6bFIMjabQJskBgmPuv/FBIdHzdDEeJa
+         ZE2TDnNPqHiuYladiGVNhbLKD0YG6lnroMxPxHtvMjg2+LPUTlKU0EMydG3Rw15G0PRV
+         0kuDWEnxsgW8h4z3aokfvSp7AfTmsqP84HOlZHu4KIu9awu01OfWsm4NQvEu+Nb4x2sm
+         4KWg==
+X-Gm-Message-State: AOAM533hq5lpaYegEctWrZPtabunRF8xx6UFiJA9CW+ghmi400XWG2Zf
+        EeA4Z6vya7FF4hrX7WReYwQ=
+X-Google-Smtp-Source: ABdhPJyMHWgHcFMRk4ZK1dOj5OyOTswPsOPx+ERGze4TRYKvLU4M3Jj8l4qGkzJgLvBMtpDwuCKhsw==
+X-Received: by 2002:a17:903:25cd:b0:162:2250:b04d with SMTP id jc13-20020a17090325cd00b001622250b04dmr4147933plb.12.1653283567458;
+        Sun, 22 May 2022 22:26:07 -0700 (PDT)
 Received: from localhost.localdomain (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id y5-20020a655285000000b003c14af50603sm3871523pgp.27.2022.05.22.22.26.01
+        by smtp.gmail.com with ESMTPSA id y5-20020a655285000000b003c14af50603sm3871523pgp.27.2022.05.22.22.26.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 May 2022 22:26:03 -0700 (PDT)
+        Sun, 22 May 2022 22:26:06 -0700 (PDT)
 From:   Marvin Lin <milkfafa@gmail.com>
 To:     mchehab@kernel.org, linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     openbmc@lists.ozlabs.org, avifishman70@gmail.com,
         tmaimon77@gmail.com, tali.perry1@gmail.com, kwliu@nuvoton.com,
         kflin@nuvoton.com, Marvin Lin <milkfafa@gmail.com>
-Subject: [PATCH v4 0/5] Support Nuvoton NPCM Video Capture/Encode Engine
-Date:   Mon, 23 May 2022 13:25:43 +0800
-Message-Id: <20220523052548.28109-1-milkfafa@gmail.com>
+Subject: [PATCH v4 1/5] arm: dts: Add node for NPCM Video Capture/Encode Engine
+Date:   Mon, 23 May 2022 13:25:44 +0800
+Message-Id: <20220523052548.28109-2-milkfafa@gmail.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220523052548.28109-1-milkfafa@gmail.com>
+References: <20220523052548.28109-1-milkfafa@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -66,50 +69,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series add DTS node, dt-bindings document and drivers for Video
-Capture/Differentiation Engine (VCD) and Encoding Compression Engine (ECE)
-present on Nuvoton NPCM SoCs.
+Add node for Video Capture/Differentiation Engine (VCD) and Encoding
+Compression Engine (ECE) present on Nuvoton NPCM SoCs. Tested with Nuvoton
+NPCM750 evaluation board.
 
-VCD can capture/differentiate video data from digital or analog sources,
-then the ECE will compress the data into HEXTILE format.
+Signed-off-by: Marvin Lin <milkfafa@gmail.com>
+---
+ arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-HEXTILE compressed format is defined in Remote Framebuffer Protocol (RFC
-6143) and is used by VNC features, so we also add a patch to support it.
-
-Changes since v1:
-  - Add Hextile document and locate with vendor formats.
-  - Add video driver entry in MAINTAINERS
-  - Change config name to CONFIG_VIDEO_NPCM_VCD_ECE
-  - Reduce the waiting time after resetting the VCD/ECE module
-  - Correct data types of some variables
-
-Marvin Lin (5):
-  arm: dts: Add node for NPCM Video Capture/Encode Engine
-  dt-bindings: media: Add dt-bindings for NPCM Video Capture/Encode
-    Engine
-  dt-bindings: arm/npcm: Add dt-bindings for Graphics Core Information
-  media: Add HEXTILE compressed format
-  drivers: media: platform: Add NPCM Video Capture/Encode Engine driver
-
- .../bindings/arm/npcm/nuvoton,gfxi.yaml       |   41 +
- .../bindings/media/nuvoton,npcm-video.yaml    |   87 +
- .../media/v4l/pixfmt-reserved.rst             |    7 +
- MAINTAINERS                                   |    9 +
- arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi |   19 +
- drivers/media/platform/Kconfig                |    1 +
- drivers/media/platform/Makefile               |    1 +
- drivers/media/platform/nuvoton/Kconfig        |   12 +
- drivers/media/platform/nuvoton/Makefile       |    2 +
- drivers/media/platform/nuvoton/npcm-video.c   | 2064 +++++++++++++++++
- drivers/media/v4l2-core/v4l2-ioctl.c          |    1 +
- include/uapi/linux/videodev2.h                |    1 +
- 12 files changed, 2245 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/arm/npcm/nuvoton,gfxi.yaml
- create mode 100644 Documentation/devicetree/bindings/media/nuvoton,npcm-video.yaml
- create mode 100644 drivers/media/platform/nuvoton/Kconfig
- create mode 100644 drivers/media/platform/nuvoton/Makefile
- create mode 100644 drivers/media/platform/nuvoton/npcm-video.c
-
+diff --git a/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi b/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi
+index 3696980a3da1..0d2df74974bf 100644
+--- a/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi
++++ b/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi
+@@ -178,6 +178,19 @@
+ 			status = "disabled";
+ 		};
+ 
++		video: video@f0810000 {
++			compatible = "nuvoton,npcm750-video";
++			reg = <0xf0810000 0x10000>, <0xf0820000 0x2000>;
++			reg-names = "vcd", "ece";
++			interrupts = <GIC_SPI 22 IRQ_TYPE_LEVEL_HIGH>;
++			resets = <&rstc NPCM7XX_RESET_IPSRST2 NPCM7XX_RESET_VCD>,
++				 <&rstc NPCM7XX_RESET_IPSRST2 NPCM7XX_RESET_ECE>;
++			reset-names = "vcd", "ece";
++			nuvoton,syscon-gcr = <&gcr>;
++			nuvoton,syscon-gfxi = <&gfxi>;
++			status = "disabled";
++		};
++
+ 		apb {
+ 			#address-cells = <1>;
+ 			#size-cells = <1>;
+@@ -553,6 +566,12 @@
+ 				pinctrl-0 = <&smb15_pins>;
+ 				status = "disabled";
+ 			};
++
++			gfxi: gfxi@e000 {
++				compatible = "nuvoton,npcm750-gfxi", "syscon",
++					     "simple-mfd";
++				reg = <0xe000 0x100>;
++			};
+ 		};
+ 	};
+ 
 -- 
 2.17.1
 

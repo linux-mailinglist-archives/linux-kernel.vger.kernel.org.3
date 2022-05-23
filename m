@@ -2,92 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8042A5313F4
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:24:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C64D531383
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:24:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238541AbiEWQCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 12:02:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50192 "EHLO
+        id S238337AbiEWQAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 12:00:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238522AbiEWQBj (ORCPT
+        with ESMTP id S238319AbiEWQAI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 12:01:39 -0400
-X-Greylist: delayed 37374 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 23 May 2022 09:01:35 PDT
-Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D16E0186D0;
-        Mon, 23 May 2022 09:01:31 -0700 (PDT)
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id 24NG1I0J011245;
-        Tue, 24 May 2022 01:01:18 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 24NG1I0J011245
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1653321678;
-        bh=nzqFcuEyx/MuWRxIhkFKZ05YKWhIDvaI4AOGehk/eQU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=bpM6k/YREumRwR1wV+o7WygPJZgEEa/ctjJYwTEJ2ioa2gRSkcevQOL8I0abhh7Xk
-         G/tWYUOtcRwjNcFKoWRKOzI1nUBzx1Y3ivuoc3ARyHb5v2h3LJB52aWS+NYVksXhHd
-         Bbqrbvr1E7VxpwMgEkxJva53m7AJJUYHJGzXTt7bJ4kPtU6KVhMJPOgUcybTMksFla
-         ix4527FtvqcaoqZIg3ArIW/z0u+0L5GNAs+OTkIB5yJTXG42cT/74FPkwDZWb3EgOT
-         RPc3QAYRPbgCVo/VdPYIx5N+Wrot0PuGrz4Sru6a4/pEVfu6i5w4lH0o98zfzKGO4A
-         izfINEMOoUHJw==
-X-Nifty-SrcIP: [209.85.210.171]
-Received: by mail-pf1-f171.google.com with SMTP id w200so14084353pfc.10;
-        Mon, 23 May 2022 09:01:18 -0700 (PDT)
-X-Gm-Message-State: AOAM531kBuuFzLRS32QQX1pZBecFePtF3LTKuGXfLubjA6/aPlOXC5QH
-        lvc1MbSVSyZ5NisZWR22rfbv1Hy10mjp6bvkzWk=
-X-Google-Smtp-Source: ABdhPJz8T55c2giO315+2kau6VgxZ8KUP01sqeHrFD1N0OM+wHS+FuNhPvqHv8mULyzZO18CHDXB1DoEzgUCF1xv0V4=
-X-Received: by 2002:a65:48c1:0:b0:3fa:74c6:3997 with SMTP id
- o1-20020a6548c1000000b003fa74c63997mr3019714pgs.352.1653321677651; Mon, 23
- May 2022 09:01:17 -0700 (PDT)
+        Mon, 23 May 2022 12:00:08 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89CF561613
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:00:06 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id t13so2859460wrg.9
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:00:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=hH6Sw2227bde22AtOz6RnEi8JLF2ESkvCuMIfkjdakw=;
+        b=knbEVZxZ2aF5sEZ6hHdZJry9hAnHBLawNAQqTVuACzx38StTZTp/evQJ8ZAuv5X4EX
+         p/wrOpEngV6Rqfmr87E7bcXTWww12AI7NaTcUX9l7HGUnAcDSylf4EE3SwZZJr2blmwi
+         VGrxgpDucsV8jcJ38aflo/jzHPM5puC4Ke/BVMzIf4U8Ho3NHsflXn2vaFj3owkoWi8G
+         nDwewEVYPovrzkN8YyRpWU7R1/GloUGapKxc+DSbulyu1uhzxM/vxbF1FstWurAyVNnV
+         CPqRt95dJdjnp3Fx9dxyZd/NLD+2vtLvWqBRshS71Y9+M/ABY92LZCJZ7W4E69YjaWGN
+         h+DQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=hH6Sw2227bde22AtOz6RnEi8JLF2ESkvCuMIfkjdakw=;
+        b=niz1xWmelrA7G73CmyiRHCQ4YeWETKOf2YBYNZrIBpMKGJIku9bfJZW+2NXrwtWV5K
+         0+Adw4BYPF7nDCP5bpl75fWRLqS/bxnM/53eRUQNW0nV3k7U0sqo7gOGaz6VB8rAq2Zj
+         8tb3+MC88la0vSVV7PKMcAtA23LMTtb4LO/i+yBGe8F4VtMB824A2p2yC87cRKQ177u7
+         ag7K6IpSS7MbSWsQNvfpDZqhGSJDRWsUo/WwCiRlN/RSh1k6o6b2Bva/7gw2eIti/+Db
+         ico0EbhlRq4Q7NZ6ZQ1CBXs7mHi0ljPwsEDpc4m82M5yYI8p3CUopb4DzoMopftt7Bxr
+         Pczw==
+X-Gm-Message-State: AOAM5325bPoBqFSuVv2gdKtl+quXTLseOMkoiVZJILf+dLJc7SML62MY
+        ZbLGX+cGlLUHbZHWlbyvbYG4JQ==
+X-Google-Smtp-Source: ABdhPJy88++sam8Rno3SlEnS7UBaPrZKfxINWFCXLRdNktVufOGwdP+w2hrC38lE1yPB3AmwVEiYug==
+X-Received: by 2002:a5d:6b87:0:b0:20d:2c2:b6e2 with SMTP id n7-20020a5d6b87000000b0020d02c2b6e2mr19201048wrx.72.1653321605073;
+        Mon, 23 May 2022 09:00:05 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id s1-20020adf8901000000b0020c547f75easm10169414wrs.101.2022.05.23.09.00.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 May 2022 09:00:04 -0700 (PDT)
+Date:   Mon, 23 May 2022 17:00:02 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     frank zago <frank@zago.net>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Wolfram Sang <wsa@kernel.org>, Johan Hovold <johan@kernel.org>,
+        linux-usb@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v5 3/3] i2c: ch341: add I2C MFD cell driver for the CH341
+Message-ID: <YouvgpvrKbH1Holu@google.com>
+References: <20220401023306.79532-1-frank@zago.net>
+ <20220401023306.79532-4-frank@zago.net>
 MIME-Version: 1.0
-References: <20220523205927.4dbeb49f@canb.auug.org.au>
-In-Reply-To: <20220523205927.4dbeb49f@canb.auug.org.au>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 24 May 2022 00:59:57 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQjc5h-Ffg4Mx0--hs2C35_n_Db2yTiyzmeguH+F0mLaA@mail.gmail.com>
-Message-ID: <CAK7LNAQjc5h-Ffg4Mx0--hs2C35_n_Db2yTiyzmeguH+F0mLaA@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the kbuild tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220401023306.79532-4-frank@zago.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 7:59 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> After merging the kbuild tree, today's linux-next build (sparc64
-> defconfig) failed like this:
->
-> make[3]: *** Deleting file 'arch/sparc/vdso/vclock_gettime.o'
-> scripts/check-local-export: line 36: symbol_types[${name}]: bad array subscript
->
-> Caused by commit
->
->   86e4cdec74f0 ("kbuild: check static EXPORT_SYMBOL* by script instead of modpost")
->
-> I have reverted that commit for today.
->
-> --
-> Cheers,
-> Stephen Rothwell
+On Thu, 31 Mar 2022, frank zago wrote:
 
+> The I2C interface can run at 4 different speeds. This driver currently
+> only offer 100MHz. Tested with a variety of I2C sensors, and the IIO
+> subsystem.
+> 
+> Signed-off-by: frank zago <frank@zago.net>
+> ---
+>  MAINTAINERS                    |   1 +
+>  drivers/i2c/busses/Kconfig     |  10 +
+>  drivers/i2c/busses/Makefile    |   1 +
+>  drivers/i2c/busses/i2c-ch341.c | 331 +++++++++++++++++++++++++++++++++
 
-Thanks.
-I fixed my branch.
-I confirmed a successful build for sparc64 defconfig.
+>  drivers/mfd/ch341-core.c       |   3 +
 
-
-
+And this one in its own patch please.
 
 -- 
-Best Regards
-Masahiro Yamada
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

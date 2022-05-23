@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 673395316F4
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:52:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 423EC53165A
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:50:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241369AbiEWRdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:33:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42254 "EHLO
+        id S244443AbiEWSDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 14:03:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241805AbiEWRWh (ORCPT
+        with ESMTP id S241330AbiEWRfJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:22:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A927CB2A;
-        Mon, 23 May 2022 10:19:32 -0700 (PDT)
+        Mon, 23 May 2022 13:35:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F8998217E;
+        Mon, 23 May 2022 10:28:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 40BD0608C3;
-        Mon, 23 May 2022 17:18:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E984C34115;
-        Mon, 23 May 2022 17:18:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EF7DBB81219;
+        Mon, 23 May 2022 17:28:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F53CC3411D;
+        Mon, 23 May 2022 17:28:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326300;
-        bh=ePzOuHkPVWLQO2EdRyPrDPRZvqX6OPlOfhBbEtZh7Z0=;
+        s=korg; t=1653326899;
+        bh=6/+AtATp5I5eZRQNupUjuNlrDcvNHti0LxiGEAq67F8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MfrOnTv2gjrFffUw7Bi16ax8SipY7JMN6oajkJBwWyn2cqDsrry9VGPWPmHXMl34V
-         R9BREo65lgO6JWhf3CgdYbfKQFbh2x7r3Aj8UfdttweRziKltotQzrxw4zACYhXw/7
-         lgsoCOliHDs3dO2MWuruH0j/ooCLiHXbYCx7XkDA=
+        b=fLUWKHweqyRjr3j3g0sckes1SuFVsKXbXLvUmmsGVBi3ZkW56comfZsdNgxIJ0vYx
+         7QB3zKMX2dtECl7nh5MEfsxeFZeRzqauGXmKxI3OmszJB1SQ8Dkg2ECGDur2tZQERd
+         4MroTt5gdjjFVp3zvhenW1zPwusQ98qI43AbXoAI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jakob Koschel <jakobkoschel@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 039/132] drbd: remove usage of list iterator variable after loop
-Date:   Mon, 23 May 2022 19:04:08 +0200
-Message-Id: <20220523165829.883026196@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 092/158] net: systemport: Fix an error handling path in bcm_sysport_probe()
+Date:   Mon, 23 May 2022 19:04:09 +0200
+Message-Id: <20220523165846.444642721@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
-References: <20220523165823.492309987@linuxfoundation.org>
+In-Reply-To: <20220523165830.581652127@linuxfoundation.org>
+References: <20220523165830.581652127@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,55 +57,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakob Koschel <jakobkoschel@gmail.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-[ Upstream commit 901aeda62efa21f2eae937bccb71b49ae531be06 ]
+[ Upstream commit ef6b1cd11962aec21c58d137006ab122dbc8d6fd ]
 
-In preparation to limit the scope of a list iterator to the list
-traversal loop, use a dedicated pointer to iterate through the list [1].
+if devm_clk_get_optional() fails, we still need to go through the error
+handling path.
 
-Since that variable should not be used past the loop iteration, a
-separate variable is used to 'remember the current location within the
-loop'.
+Add the missing goto.
 
-To either continue iterating from that position or skip the iteration
-(if the previous iteration was complete) list_prepare_entry() is used.
-
-Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
-Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
-Link: https://lore.kernel.org/r/20220331220349.885126-1-jakobkoschel@gmail.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Fixes: 6328a126896ea ("net: systemport: Manage Wake-on-LAN clock")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+Link: https://lore.kernel.org/r/99d70634a81c229885ae9e4ee69b2035749f7edc.1652634040.git.christophe.jaillet@wanadoo.fr
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/block/drbd/drbd_main.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/broadcom/bcmsysport.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/block/drbd/drbd_main.c b/drivers/block/drbd/drbd_main.c
-index 548e0dd53528..6db0333b5b7a 100644
---- a/drivers/block/drbd/drbd_main.c
-+++ b/drivers/block/drbd/drbd_main.c
-@@ -171,7 +171,7 @@ void tl_release(struct drbd_connection *connection, unsigned int barrier_nr,
- 		unsigned int set_size)
- {
- 	struct drbd_request *r;
--	struct drbd_request *req = NULL;
-+	struct drbd_request *req = NULL, *tmp = NULL;
- 	int expect_epoch = 0;
- 	int expect_size = 0;
+diff --git a/drivers/net/ethernet/broadcom/bcmsysport.c b/drivers/net/ethernet/broadcom/bcmsysport.c
+index 60dde29974bf..df51be3cbe06 100644
+--- a/drivers/net/ethernet/broadcom/bcmsysport.c
++++ b/drivers/net/ethernet/broadcom/bcmsysport.c
+@@ -2585,8 +2585,10 @@ static int bcm_sysport_probe(struct platform_device *pdev)
+ 		device_set_wakeup_capable(&pdev->dev, 1);
  
-@@ -225,8 +225,11 @@ void tl_release(struct drbd_connection *connection, unsigned int barrier_nr,
- 	 * to catch requests being barrier-acked "unexpectedly".
- 	 * It usually should find the same req again, or some READ preceding it. */
- 	list_for_each_entry(req, &connection->transfer_log, tl_requests)
--		if (req->epoch == expect_epoch)
-+		if (req->epoch == expect_epoch) {
-+			tmp = req;
- 			break;
-+		}
-+	req = list_prepare_entry(tmp, &connection->transfer_log, tl_requests);
- 	list_for_each_entry_safe_from(req, r, &connection->transfer_log, tl_requests) {
- 		if (req->epoch != expect_epoch)
- 			break;
+ 	priv->wol_clk = devm_clk_get_optional(&pdev->dev, "sw_sysportwol");
+-	if (IS_ERR(priv->wol_clk))
+-		return PTR_ERR(priv->wol_clk);
++	if (IS_ERR(priv->wol_clk)) {
++		ret = PTR_ERR(priv->wol_clk);
++		goto err_deregister_fixed_link;
++	}
+ 
+ 	/* Set the needed headroom once and for all */
+ 	BUILD_BUG_ON(sizeof(struct bcm_tsb) != 8);
 -- 
 2.35.1
 

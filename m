@@ -2,159 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E3745308D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 07:35:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 182D05308DF
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 07:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349120AbiEWFfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 01:35:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59694 "EHLO
+        id S239401AbiEWFhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 01:37:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235790AbiEWFfC (ORCPT
+        with ESMTP id S232226AbiEWFg5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 01:35:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F2E6369;
-        Sun, 22 May 2022 22:35:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3781BB80EEA;
-        Mon, 23 May 2022 05:35:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8566FC385AA;
-        Mon, 23 May 2022 05:34:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653284098;
-        bh=59aObhjNO8Z2LsPLJEv4aHcBY2sHGOp9xKD+PqwFhAw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YUCrrRvA88IECsXfWkp6n3zw/ONyN7raP6WiBgjISWGHfclJomg0wJU3wwXwtf7kc
-         vTdzHa43QK7IblMUR2hZBk0giWK+VpVN565OPfe1eTLjWgKRfwqxtIoDl8LLby0Th2
-         iPlA4qiUIUrvaUvmB/8KEi2Af1roL43YRWk7H4perfo/KvYhdiwrVo4e5qDUAXds4e
-         n10sW7oFjJmrHtnTJl5rYGe6JNO2hjU95DnaZfrzd5Cr7WRq8UhMS45IH6o5J0/Zm7
-         UlcaoEDxyYVzNOpmZviXOjAPg7/KC1PUjvHMPi2Jid6DmW7uZz04xI2Plr+qrZ4XNg
-         v9XNcaeHGMHNw==
-Date:   Mon, 23 May 2022 13:34:55 +0800
-From:   Tzung-Bi Shih <tzungbi@kernel.org>
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     bleung@chromium.org, groeck@chromium.org, robh+dt@kernel.org,
-        chrome-platform@lists.linux.dev, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 5/5] platform/chrome: cros_kbd_led_backlight: support
- EC PWM backend
-Message-ID: <Yosc/6izBDYYKpFC@google.com>
-References: <20220321085547.1162312-1-tzungbi@kernel.org>
- <20220321085547.1162312-6-tzungbi@kernel.org>
- <YobHVST2Nfn+z8n6@google.com>
- <YocewB/lLJhIAuQP@google.com>
- <YoezzzLdVfb0K7Ak@google.com>
+        Mon, 23 May 2022 01:36:57 -0400
+X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 22 May 2022 22:36:56 PDT
+Received: from xppmailspam04.itap.purdue.edu (xppmailspam04.itap.purdue.edu [128.210.5.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4227A1C933
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 22:36:56 -0700 (PDT)
+IronPort-SDR: 7S1kxYPAs/kDDMfSrsekWdS8eTswCq5YAtn2a0PAzktF6gr5pbKmBkw+jRW+JyYYbpfluM2fym
+ aFu5gfbGSnmwZ8uzXljHcl5ucaI6ehbgg=
+X-Ironport-AuthID: liu3101@purdue.edu
+IronPort-Data: =?us-ascii?q?A9a23=3ApY2qUqPJMarjxOrvrR2ml8FynXyQoLVcMsEvi?=
+ =?us-ascii?q?/4bfWQNrUpx1DxWxmcYCmuBOq2IM2T3c95xPYi2px5QsMXRzNI2HXM5pCpnJ?=
+ =?us-ascii?q?55oRWspJjg7wn8dt0p+F+WbJK6+x8lBONTGMu4uSXrQ+kWkPrT79CEuzbySS?=
+ =?us-ascii?q?qfxTuPIJ3kpFwNjTS4gjzNlmvI43t4z2ITpU1vVtIOgudDbNX+kxyVwbjAe5?=
+ =?us-ascii?q?ZWFpU49p//1oj4Z4gEzaKkT7l/TnnUYFrwFIqS1IyeqS4VYBLfiFf7e1r2k8?=
+ =?us-ascii?q?yXU8wp0UoGplbPyc0srRL/OPFTe0SMKC/j62hUb/348yKc2MvYYeHx7sTTRk?=
+ =?us-ascii?q?oAj0shJuLyxVRwtYv/GltMbXkQKCCp5J6BHpOLKLHXj48yey0rKLynlz/l0V?=
+ =?us-ascii?q?hlkPIsU674qR2pVs+QFMjwQY1aOi//vmOC3Texlh8ICKsj3Pd9P4Sg8nWGBV?=
+ =?us-ascii?q?ft2E4reR6jq5MND2GtijM55G/uDNdESbiBibUidbhATaE0bDokywLWhinXlK?=
+ =?us-ascii?q?WUKqVSZtPJqpWPIihRsyrTwPZzYdsHTHZdZmUORp2Tn+WXlA01Kb4XDmWrdq?=
+ =?us-ascii?q?n/81PXSmS7bWZ4JEOHq/PBdhlDOlHcYDwcbVAfmrPS04qJktwmzEGRJvHt3x?=
+ =?us-ascii?q?UQO3BbzFIOlAkfi+CTsUiM0ArK8LcVrsGlh9YKLu251NkBcJtJwQIROWP0eH?=
+ =?us-ascii?q?FTG5XfV9z/dPgGDhZXOIZ6r3urO8WniaXB9wVgqPkfoRSNdizXqTRpaYhjnF?=
+ =?us-ascii?q?r6PG4bt5jH59K2ZL5lncUEDa7svYc4jj81X/HjGhT69/sWPRRVz/hjNUn+oq?=
+ =?us-ascii?q?A51eeZJZaTxswidtK4Gdd3BCADf4xDomODHhAwKJZWMiXfUGLwlBKyz6+uId?=
+ =?us-ascii?q?jDQnDaDGrF9qGr1qi/zId04DDZWYR0B3tw/UTP3cVLQvh1565hUM3+nK6RwZ?=
+ =?us-ascii?q?uqZAsIm16XxFtL7Utjba9NPZt56cwrv1CJnfkeWmmzgjmAjlqYwPZqUa8GxF?=
+ =?us-ascii?q?W1cAqNipBKyRuEAwfooyzo4yGf7W5/21VKk3KCYaXrTTq0KWHOKb/1itfvdi?=
+ =?us-ascii?q?B3I6dpCOo2Hxwg3bQFUSkE76qYSK1wbdSV9Douws9FNevOOZAdqBQkc5zbq6?=
+ =?us-ascii?q?etJU+RYc259z48kJk2AZ3I=3D?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3A/RJRpattgGOoH7bfmqG0oNxA7skDb9V00z?=
+ =?us-ascii?q?EX/kB9WHVpmwKj+vxG+85rtiMc5wx/ZJhNo7u90cq7IU80i6Qa3WB5B97LYO?=
+ =?us-ascii?q?CMggeVxe9Zh7cKuweAJxHD?=
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-AV: E=Sophos;i="5.91,245,1647316800"; 
+   d="scan'208";a="476099845"
+Received: from indy05.cs.purdue.edu ([128.10.130.167])
+  by xppmailspam04.itap.purdue.edu with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 23 May 2022 01:35:51 -0400
+From:   Congyu Liu <liu3101@purdue.edu>
+To:     dvyukov@google.com, andreyknvl@gmail.com
+Cc:     kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        Congyu Liu <liu3101@purdue.edu>
+Subject: [PATCH v2] kcov: update pos before writing pc in trace function
+Date:   Mon, 23 May 2022 05:35:31 +0000
+Message-Id: <20220523053531.1572793-1-liu3101@purdue.edu>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YoezzzLdVfb0K7Ak@google.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 08:29:19AM -0700, Matthias Kaehlcke wrote:
-> On Fri, May 20, 2022 at 12:53:20PM +0800, Tzung-Bi Shih wrote:
-> > On Thu, May 19, 2022 at 03:40:21PM -0700, Matthias Kaehlcke wrote:
-> > > On Mon, Mar 21, 2022 at 04:55:47PM +0800, Tzung-Bi Shih wrote:
-> > > > +struct keyboard_led_private {
-> > > 
-> > > Why 'private', isn't this more a 'cros_ec_kdb_bl' or similar?
-> > 
-> > It is just drvdata.
-> 
-> The data structure represents an instance of the device, as such it
-> is an important part of the driver, drvdata is just a way to attach
-> it to the platform device.
-> 
-> > I would prefer to keep the original prefix "keyboard_led_" if you wouldn't
-> > have strong opinion.
-> 
-> I'm fine with 'keyboard_led', but object to the 'private' part. In the
-> kernel 'private' fields are typically used when a driver consists of a
-> generic part and a device specific part. The driver has a 'private'
-> void* field that points to a device specific data structure about which
-> the generic driver is agnostic. This data structure is only used by the
-> device specific implementation. That isn't the case here, so naming the
-> structure anything 'private' is misleading.
+In __sanitizer_cov_trace_pc(), previously we write pc before updating pos.
+However, some early interrupt code could bypass check_kcov_mode()
+check and invoke __sanitizer_cov_trace_pc(). If such interrupt is raised
+between writing pc and updating pos, the pc could be overitten by the
+recursive __sanitizer_cov_trace_pc().
 
-The struct in the case is device specific.  I don't see a problem to name it
-*private* as there are a lot of more existing examples.
+As suggested by Dmitry, we cold update pos before writing pc to avoid
+such interleaving.
 
-$ grep -R 'struct .*_priv.* {' drivers/
-drivers/pinctrl/bcm/pinctrl-bcm6358.c:struct bcm6358_priv {
+Apply the same change to write_comp_data().
 
-$ grep -R 'struct .*_priv.* {' sound/soc/codecs/
-sound/soc/codecs/rt286.c:struct rt286_priv {
+Signed-off-by: Congyu Liu <liu3101@purdue.edu>
+---
+PATCH v2:
+* Update pos before writing pc as suggested by Dmitry.
 
-I would get rid of the term "private" if it could be confusing.
+PATCH v1:
+https://lore.kernel.org/lkml/20220517210532.1506591-1-liu3101@purdue.edu/
+---
+ kernel/kcov.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-> > > > +static int keyboard_led_init_ec_pwm(struct platform_device *pdev)
-> > > > +{
-> > > > +	struct keyboard_led_private *private = platform_get_drvdata(pdev);
-> > > > +
-> > > > +	private->ec = dev_get_drvdata(pdev->dev.parent);
-> > > > +	if (!private->ec) {
-> > > > +		dev_err(&pdev->dev, "no parent EC device\n");
-> > > > +		return -EINVAL;
-> > > > +	}
-> > > 
-> > > The only thing this 'init' function does is assigning private->ec. Wouldn't
-> > > it be clearer to do this directly in probe() from where callback is called?
-> > > It could be with the condition that the device as a DT node.
-> > 
-> > No.  The probe() isn't aware of the device is from ACPI or OF.
-> 
-> But it could be:
-> 
-> 	if (pdev->dev.of_node)
-> 		kbd_led->ec = dev_get_drvdata(pdev->dev.parent);
+diff --git a/kernel/kcov.c b/kernel/kcov.c
+index b3732b210593..e19c84b02452 100644
+--- a/kernel/kcov.c
++++ b/kernel/kcov.c
+@@ -204,8 +204,16 @@ void notrace __sanitizer_cov_trace_pc(void)
+ 	/* The first 64-bit word is the number of subsequent PCs. */
+ 	pos = READ_ONCE(area[0]) + 1;
+ 	if (likely(pos < t->kcov_size)) {
+-		area[pos] = ip;
++		/* Previously we write pc before updating pos. However, some
++		 * early interrupt code could bypass check_kcov_mode() check
++		 * and invoke __sanitizer_cov_trace_pc(). If such interrupt is
++		 * raised between writing pc and updating pos, the pc could be
++		 * overitten by the recursive __sanitizer_cov_trace_pc().
++		 * Update pos before writing pc to avoid such interleaving.
++		 */
+ 		WRITE_ONCE(area[0], pos);
++		barrier();
++		area[pos] = ip;
+ 	}
+ }
+ EXPORT_SYMBOL(__sanitizer_cov_trace_pc);
+@@ -236,11 +244,13 @@ static void notrace write_comp_data(u64 type, u64 arg1, u64 arg2, u64 ip)
+ 	start_index = 1 + count * KCOV_WORDS_PER_CMP;
+ 	end_pos = (start_index + KCOV_WORDS_PER_CMP) * sizeof(u64);
+ 	if (likely(end_pos <= max_pos)) {
++		/* See comment in __sanitizer_cov_trace_pc(). */
++		WRITE_ONCE(area[0], count + 1);
++		barrier();
+ 		area[start_index] = type;
+ 		area[start_index + 1] = arg1;
+ 		area[start_index + 2] = arg2;
+ 		area[start_index + 3] = ip;
+-		WRITE_ONCE(area[0], count + 1);
+ 	}
+ }
+ 
+-- 
+2.34.1
 
-The 'init' callback isn't only for OF but also ACPI.  I would prefer to keep
-the 'init' function and let probe() have no awareness about them.
-
-> > > Is it actually possible that the keyboard backlight device gets instantiated
-> > > if there is no EC parent?
-> > 
-> > It shouldn't be but just in case.
-> 
-> If this can only occur due to an error in common kernel frameworks then
-> the check should be omitted IMO.
-
-The check is referenced from [1].  I would prefer to keep it instead of
-crashing kernel if anything went wrong.
-
-[1]: https://elixir.bootlin.com/linux/v5.18-rc7/source/drivers/pwm/pwm-cros-ec.c#L244
-
-> 
-> > > > +static const struct keyboard_led_drvdata keyboard_led_drvdata_ec_pwm = {
-> > > > +	.init = keyboard_led_init_ec_pwm_null,
-> > > 
-> > > Is this really needed?
-> > > 
-> > > keyboard_led_probe() checks if .init is assigned before invoking the callback:
-> > > 
-> > > 	if (drvdata->init) {
-> > > 		error = drvdata->init(pdev);
-> > > 
-> > > The whole 'else' branch could be eliminated if .of_match_table of the driver
-> > > only is assigned when CONFIG_CROS_KBD_LED_BACKLIGHT_EC_PWM is set. IMO that
-> > > would preferable over creating 'stubs'.
-> > 
-> > CONFIG_CROS_KBD_LED_BACKLIGHT_EC_PWM and CONFIG_OF are independent.  The stubs
-> > were created to avoid compile errors if CONFIG_OF=y but
-> > CONFIG_CROS_KBD_LED_BACKLIGHT_EC_PWM=n.
-> 
-> Is there functional version of the driver that uses instantiation through the
-> device tree if CONFIG_CROS_KBD_LED_BACKLIGHT_EC_PWM=n? If not .of_match_table
-> should not be assigned.
-
-CONFIG_CROS_KBD_LED_BACKLIGHT_EC_PWM and CONFIG_OF are independent.
-CONFIG_CROS_KBD_LED_BACKLIGHT_EC_PWM is also designed to work with CONFIG_ACPI.

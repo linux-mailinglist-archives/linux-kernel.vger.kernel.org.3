@@ -2,129 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44ECB530908
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 07:56:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6D6D530910
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 07:58:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230442AbiEWF4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 01:56:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34710 "EHLO
+        id S231403AbiEWF6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 01:58:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiEWFz4 (ORCPT
+        with ESMTP id S229912AbiEWF6P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 01:55:56 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F7F1EC4B
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 22:55:54 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 2D4E65C00CB;
-        Mon, 23 May 2022 01:55:52 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Mon, 23 May 2022 01:55:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        tom-fitzhenry.me.uk; h=cc:cc:content-transfer-encoding:date:date
-        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1653285352; x=1653371752; bh=tl
-        oN7t7Um1VK0HgY5UzOFHkfXExj5u5VBpRfGhOZ348=; b=hHhgo+IONCuziFq5ob
-        vPxaIkjTOuBIWILEBP2ecx5SqxZC7tjPA/HsrTA9TbH7TlouR9KKLH0yoQ0vcHoT
-        IvSLXqTIwVuZY6ldqdlB8VpHc3Hign96h0JZUdYyCv/7PTttFDYanmJv7uWnfr+R
-        tfEoTWyr9MzQGPcmmZwQsBHPcmLB6BkaRmcWrcZZVs20/uEUrw0aB4mqg6k/tg0t
-        rRM+tDcgYqNWAX4lTV7g/z8TxDjjdWLq6/I+FFg7zArT61+we6p1m1vmQABhPuXZ
-        hb/bMcK348MysFP8aGpeCFP1DHTqiOGNPvEx8fPPwssfb23DwMt+j+Bs9FWd9t0d
-        tyNQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1653285352; x=1653371752; bh=tloN7t7Um1VK0HgY5UzOFHkfXExj5u5VBpR
-        fGhOZ348=; b=DAs9ltRVIiyqAlrIMpLVyfm7p950SNcoShklX8mrKyOAZsY7HgQ
-        ih9uTUt/fh5pdT1MxDA/ZcSQO0peYH0/AHZwxGROYslLuehdohZyb+MBCAH9l1SG
-        ZOcJJHQAL6oFAi/ORqtXWrtDW0e6h1ydc075KBaSitNk60yvTWcj2C8AOntYxJS3
-        SCn1pftbfGvfInBOegNKfrQ9IoGB1DLFRVtkyltVBLJToDGluRFNPkkuP7ozLXD3
-        8q5jCCGkioAWdSAQMJRof7p4mQlCGZvFjY82h0OtWnbu7z5AEUcHmdCW1I/9pnxM
-        OGECEHIXaCpiTLxTbSL35RxB6PVAP9JvndQ==
-X-ME-Sender: <xms:5yGLYvFYabU4aR4D94t52DS_TBypD7yQfUMV6BLEf90QodWemmJExg>
-    <xme:5yGLYsWA5Sc5Wu8P6QKRIxtWL-g54zMMbJAe8hOMlR-JqJdCgqTTX7t03a49xJvYa
-    T5B-7YeMA3CPSvtkA>
-X-ME-Received: <xmr:5yGLYhIqZbF4K2i9oZQjvMfIQZgfgAMEQ3g187AgItWwLCC1z3oWjBsU9Zwg7tViaQHm83seJq-o8C2v2YrGF1stUNPDtx2LCbs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrieelgddutdduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepvfhomhcuhfhi
-    thiihhgvnhhrhicuoehtohhmsehtohhmqdhfihhtiihhvghnrhihrdhmvgdruhhkqeenuc
-    ggtffrrghtthgvrhhnpeetieffveegleeiffegleeiffejueeuudejtddvvdehudffueeh
-    ueffueelffeuffenucffohhmrghinhepghhighgruggvvhhitggvrdgtohhmpdhpihhnvg
-    eigedrohhrghdpghhithhlrggsrdgtohhmpdhgihhthhhusgdrtghomhenucevlhhushht
-    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehtohhmsehtohhmqdhfih
-    htiihhvghnrhihrdhmvgdruhhk
-X-ME-Proxy: <xmx:5yGLYtGBWhVc2HemBFKKZeorRXEd1iVfZEfWi0818XyZJYaDZHvlTw>
-    <xmx:5yGLYlXQGo-8G6DJoD_JNLYYjqB6CfuPK4tEqoOJGEvZULO9NOKISA>
-    <xmx:5yGLYoOu2Upd8pOpz7zMI64qeDTZE9nsSaY1O6OLBuf9BXu1SEeOHw>
-    <xmx:6CGLYut-MSj4Kipw9j9GxGwLKiMAIA-mv7dTWfjKfCrX4K5crBHFaA>
-Feedback-ID: iefc945ae:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 23 May 2022 01:55:48 -0400 (EDT)
-From:   Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Michael Walle <michael@walle.cc>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     Martijn Braam <martijn@brixit.nl>,
-        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] mtd: spi-nor: gigadevice: add support for gd25lq128e
-Date:   Mon, 23 May 2022 15:55:40 +1000
-Message-Id: <20220523055541.724422-1-tom@tom-fitzhenry.me.uk>
-X-Mailer: git-send-email 2.36.0
+        Mon, 23 May 2022 01:58:15 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5BD72A260
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 22:58:13 -0700 (PDT)
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 4AE5C3F170
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 05:58:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1653285491;
+        bh=5fCLgio4eOhfw1k5CS2PLumAftaAOSFd6efiEZiEJqo=;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version;
+        b=vhhaQz2imbrVUdDwJspFtl7yEoiAZHMkeskuYOFq1f+ALPzZiFGHe6PkZlofxzle4
+         r9MJiACl9cbkbdy+4jYUH3t2Nah6mM77sQaGjXutqm0vrL08wmrCKBKW6InafHOkkr
+         Exwf25SFDn4TSB6qO1MQ/oCHlt6Vh0hXNbRMpO2awYWx95cfYQXZ/omty4cz8O3tho
+         QTIk1tOlkDWxCn2i6kDX4QHDNGzaVCE6GYrF2ih7G01YmTFASmfm51wLJbOTq8BiGo
+         mhrQBflNCt/Z0FE+BB24WP3Y81+qh+La8Czpg/CoMsbp7aQM4Ssv9XM6WgQHixrbMB
+         V/CD9JpyvS/tA==
+Received: by mail-ed1-f69.google.com with SMTP id n7-20020a05640206c700b0042aaeb9d702so9837243edy.19
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 22:58:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=5fCLgio4eOhfw1k5CS2PLumAftaAOSFd6efiEZiEJqo=;
+        b=oDfZhtQ7GzLseNJ88Wgh511YhqgqpLhL2kTsN/jUNWMS0Js2NcgCdLZJOWg3nLL2Bz
+         ey7jME0vM+x+RGgUdFWXo/BqPOc5d9CFf9m0puKEyvgDlC/8VjpcaawqMum9325tV2N9
+         T1n4FHWvP0Xb9LbNHX4zqQlaxKj8mhrbmOEHrez4sGhMYICbwQimn76A+ICHcU4Mlq3l
+         TVv20z3guxcmY/pwV8VZlcVbjjekBb7YJeTuyImOtJGqYcCIqFnsPjlpM9z3J6sJTTLo
+         lM/zlq5Mzn7NMsNV7T4HbeZkA67pSFfVbIgmPDm64ocHJ3FoM97HxmlwMFAe5srtEV1L
+         m+1Q==
+X-Gm-Message-State: AOAM533pLa2FT4TNXkMiFVQjdVV+c/Kg6N+sq9GA6sDKy9OlRbDptULM
+        IYsUwjiR2IqAWmtTMDMjgHJaj8DXdtf9/IHG9lLwl/zFtNeXJZ5ewLkMe4nKjsd9/WdGrf/H8tg
+        J5hNZprkhdNWjIujT/rogh5aqRTHvDHc5bMMEOP2M1w==
+X-Received: by 2002:a17:907:7e84:b0:6fe:cded:7d1f with SMTP id qb4-20020a1709077e8400b006fecded7d1fmr4980119ejc.35.1653285491009;
+        Sun, 22 May 2022 22:58:11 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxfJtcFSbeKmiGpMnperQwR7MKkXvhirZBqreQSPSqS1L8LPlV0rM0x+Qgcxcb9LgCvBNK+zQ==
+X-Received: by 2002:a17:907:7e84:b0:6fe:cded:7d1f with SMTP id qb4-20020a1709077e8400b006fecded7d1fmr4980108ejc.35.1653285490869;
+        Sun, 22 May 2022 22:58:10 -0700 (PDT)
+Received: from gollum.fritz.box ([194.191.244.86])
+        by smtp.gmail.com with ESMTPSA id bf15-20020a0564021a4f00b0042a9fcd7c73sm7782160edb.46.2022.05.22.22.58.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 May 2022 22:58:10 -0700 (PDT)
+From:   Juerg Haefliger <juerg.haefliger@canonical.com>
+X-Google-Original-From: Juerg Haefliger <juergh@canonical.com>
+To:     hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        linux-s390@vger.kernel.org, joe@perches.com
+Cc:     linux-kernel@vger.kernel.org,
+        Juerg Haefliger <juergh@canonical.com>
+Subject: [PATCH 1/2 v2] s390: Kconfig: Fix indentation
+Date:   Mon, 23 May 2022 07:57:35 +0200
+Message-Id: <20220523055735.4538-1-juergh@canonical.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <8d86b87edc9c9fa33b6a18fac8b160ee56e6a07c.camel@perches.com>
+References: <8d86b87edc9c9fa33b6a18fac8b160ee56e6a07c.camel@perches.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The GD25LQ128EWIGR[0] reports an JEDEC id with a different vendor,
-otherwise it seems to fit neatly in the gigadevice list.
+The convention for indentation seems to be a single tab. Help text is
+further indented by an additional two whitespaces. Fix the lines that
+violate these rules.
 
-Tested to work on the Pine64 PinePhone Pro[1].
-
-Attribution: initial version was written by
-Martijn Braam <martijn@brixit.nl> for the Pine64 vendor kernel[2].
-
-Also in use in vendor u-boot builds[3].
-
-0. https://www.gigadevice.com/flash-memory/gd25lq128e/
-1. https://wiki.pine64.org/wiki/PinePhone_Pro
-2. https://gitlab.com/pine64-org/linux/-/merge_requests/29
-3. https://github.com/Tow-Boot/Tow-Boot/blob/b94838dfb8971cdeb841d3922051aaa8e108b085/boards/pine64-pinephonePro/0001-mtd-spi-nor-ids-Add-GigaDevice-GD25LQ128E-entry.patch
-
-Signed-off-by: Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
+Signed-off-by: Juerg Haefliger <juergh@canonical.com>
 ---
- drivers/mtd/spi-nor/gigadevice.c | 4 ++++
- 1 file changed, 4 insertions(+)
+v2:
+  Drop trailing endmenu comments.
 
-diff --git a/drivers/mtd/spi-nor/gigadevice.c b/drivers/mtd/spi-nor/gigadevice.c
-index 33895002eeea..871c9dee11dc 100644
---- a/drivers/mtd/spi-nor/gigadevice.c
-+++ b/drivers/mtd/spi-nor/gigadevice.c
-@@ -56,6 +56,10 @@ static const struct flash_info gigadevice_nor_parts[] = {
- 		FLAGS(SPI_NOR_HAS_LOCK | SPI_NOR_HAS_TB)
- 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
- 			      SPI_NOR_QUAD_READ) },
-+	{ "gd25lq128e", INFO(0x257018, 0, 64 * 1024, 256)
-+		FLAGS(SPI_NOR_HAS_LOCK | SPI_NOR_HAS_TB)
-+		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
-+			      SPI_NOR_QUAD_READ) },
- 	{ "gd25q128", INFO(0xc84018, 0, 64 * 1024, 256)
- 		FLAGS(SPI_NOR_HAS_LOCK | SPI_NOR_HAS_TB)
- 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
+---
+ arch/s390/Kconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
+index e084c72104f8..543e859905df 100644
+--- a/arch/s390/Kconfig
++++ b/arch/s390/Kconfig
+@@ -736,11 +736,11 @@ config VFIO_AP
+ 	depends on S390_AP_IOMMU && VFIO_MDEV && KVM
+ 	depends on ZCRYPT
+ 	help
+-		This driver grants access to Adjunct Processor (AP) devices
+-		via the VFIO mediated device interface.
++	  This driver grants access to Adjunct Processor (AP) devices
++	  via the VFIO mediated device interface.
+ 
+-		To compile this driver as a module, choose M here: the module
+-		will be called vfio_ap.
++	  To compile this driver as a module, choose M here: the module
++	  will be called vfio_ap.
+ 
+ endmenu
+ 
 -- 
-2.36.0
+2.32.0
 

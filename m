@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 523065310C1
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:20:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 024875310E6
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:20:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234701AbiEWLMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 07:12:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57368 "EHLO
+        id S234719AbiEWLNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 07:13:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234549AbiEWLM1 (ORCPT
+        with ESMTP id S234549AbiEWLM6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 07:12:27 -0400
+        Mon, 23 May 2022 07:12:58 -0400
 Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF7771E3E6;
-        Mon, 23 May 2022 04:12:25 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id q4so12768280plr.11;
-        Mon, 23 May 2022 04:12:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F7D841F94;
+        Mon, 23 May 2022 04:12:57 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id m1so12787155plx.3;
+        Mon, 23 May 2022 04:12:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=tvtv+8gGUo5bBgwDT2gc4m2BjX3ye0s9BLu1V3Pf3EA=;
-        b=jkhLW35duY5rNVAmt9T11mn+zYgUU2FHnaT8NmNX6QVSGUMc+vBG5z128l3XGx1yFu
-         yt1Rm+cAWA6wsSLxcZ5r4ARhNdH/C+CnC3snrmANAbRPdKBi2BvMp3CeAyNtRN7P0PZU
-         9PfFQP2AIP5l/WwVIdthKqnYAmvycAytTLQkoU7sG1COJd8P1SNetKzvuFj4GL2rDPud
-         o8Z8oBdaYqU2n6/3yoKuwcZwl8eZYBpywEHLMz0ke25FHzxiJiG4xV0ygjDTtUSzcdiB
-         snG1mqAeZDXQeCCqNZDxZkuFazc+G6ueqLcXRyNBH10+ThAdluNCotcRpwcZIY7JT3IG
-         OXHw==
+        bh=/CO4r6dDcO84oJFTRxSFLeXsxnOUmtVlG/EiTQvijD4=;
+        b=C5g6EhCQs7Zk7Kg5xGiZcIWD51iADIJRb9NPnTh+6QZovpfJ3bu21lFDBUFe6mO2pD
+         iRYK/onK50f87tqpDsGUV9Gj5j6rGXBSgqMZ3JNqpPQMsLtQHDnOVa4yEzNCiY9Nd0V0
+         ZL58Y1gzagnZSK3raehGzwPwCwAp+xktB2qosYa9d84wF9BBTqmN9vy3DqGysyz8ue1Y
+         G2QjzEt0Me1hvJbaECv+RUm44UGjEQN9UcEPgcYFCnzcnajF/IGJoiHK016Vuz3ho2GY
+         HbTi3iaKjdIXfkl1cdHDW/Yq9Ne/0XxDihhWhHvpE2Rhj0lRCbUWULhJ4CYF6xaRRoSy
+         +2aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=tvtv+8gGUo5bBgwDT2gc4m2BjX3ye0s9BLu1V3Pf3EA=;
-        b=JRktLlxRT+7vEleWoIVzWNBm4+qXNntD+XShLVJ0vI9fX4pLtvmhB3qxfquTRGL/W9
-         a9RBcQso7d4968xSIYCzKB4ynLIRgDGd1KK9/yNPrRZn3UFsoyOjq33Qw7wXQ7WN2pnG
-         EPTaJwXKtNbPw+L8aekfcvPT/OwexDuGjf+rxCkJEdY9LPwHgNgtaCqpxSwUamIev4jO
-         ZwF1HOI3YHnbIeZT2z7N6inLlIbiwUH/0BS+c0OO/3neY0WALBLQULxkiER2KSm/qOau
-         4119CdJFj9R7/PV4CwX5xumSvBIwBYgfegILNedtfLVhbSZzVQnN72Ci5w2m4a9zj63M
-         sC2w==
-X-Gm-Message-State: AOAM53315bgpDa9jLdDeftB75UpQo2X4HRaysU4uk5bCELyYvrBQOr4B
-        bSaE5c8ttv6niPf9e3AmtWl5cbBIkcI=
-X-Google-Smtp-Source: ABdhPJxtm3zxWpI5laF+eJKY91zbgrUI0wMHAJEJWXkEDdBDpgPuGuc/hAKPLkLNwqC4H4ffF+68LQ==
-X-Received: by 2002:a17:90a:b88:b0:1df:2b03:20c with SMTP id 8-20020a17090a0b8800b001df2b03020cmr25652487pjr.46.1653304345429;
-        Mon, 23 May 2022 04:12:25 -0700 (PDT)
+        bh=/CO4r6dDcO84oJFTRxSFLeXsxnOUmtVlG/EiTQvijD4=;
+        b=yWw5qV5EBiAMp/NvFdCC5daPCruYVNFVacaoQfmULNKe+E+FFeF8och0c148l+p88r
+         +kCh0oyUY5xJvH8fKdM9Bu1E5x65Fe+gkgYD9IF6pbsLZc/FsLGpl9dDi/DrGvrvNZe3
+         g8v/dVLsE4Qf4MUrbkugGh/NuPswT0e0oumYpXKxToFTGE5/PvbkCaNiEyupfmmU+/OM
+         kEgKnA8xmPyUQnLrThdGK9KWrrxCtNya9fUgykgK8bvQuyASDoEOaMCSdP9Ydo/JQq63
+         mC2P2WH27y/L9HhtNY2LX3xn2QvekK9XrM4TVAxPAv7hQ6ePPocUpwHkylEPiIEJDb5z
+         z+9g==
+X-Gm-Message-State: AOAM531eV+GJoCG3qL4WAniiDIMOw+1M9C9i7NhfX8DYtQ7YCGcBm1ko
+        4jGn/XbuKT3Jjz3rTywNwPLERl0YshI=
+X-Google-Smtp-Source: ABdhPJxZlkcsCc5sqmmbkynirnFlppBgdu1pXZVrmXMLy5DdhvZSHyLu2yZov1/DSBRmu4LIiMrgfA==
+X-Received: by 2002:a17:90a:4417:b0:1ca:a861:3fbf with SMTP id s23-20020a17090a441700b001caa8613fbfmr26286445pjg.80.1653304377269;
+        Mon, 23 May 2022 04:12:57 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id a15-20020a170902eccf00b0016170bb6528sm4897010plh.113.2022.05.23.04.12.24
+        by smtp.gmail.com with ESMTPSA id n89-20020a17090a5ae200b001df6173700dsm6858310pji.49.2022.05.23.04.12.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 04:12:25 -0700 (PDT)
+        Mon, 23 May 2022 04:12:56 -0700 (PDT)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: chi.minghao@zte.com.cn
-To:     thierry.reding@gmail.com
-Cc:     jonathanh@nvidia.com, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+To:     dvhart@infradead.org
+Cc:     andy@infradead.org, tglx@linutronix.de,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] soc/tegra: Avoid leak OF node on error
-Date:   Mon, 23 May 2022 11:12:21 +0000
-Message-Id: <20220523111221.3045-1-chi.minghao@zte.com.cn>
+Subject: [PATCH] x86, olpc: Avoid leak OF node on error
+Date:   Mon, 23 May 2022 11:12:53 +0000
+Message-Id: <20220523111253.3114-1-chi.minghao@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -72,32 +73,30 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Minghao Chi <chi.minghao@zte.com.cn>
 
-The OF node should be put before returning error in tegra_init_soc(),
+The OF node should be put before returning error in xo1_rtc_init(),
 otherwise node's refcount will be leaked.
 
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 ---
- drivers/soc/tegra/fuse/fuse-tegra.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ arch/x86/platform/olpc/olpc-xo1-rtc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/soc/tegra/fuse/fuse-tegra.c b/drivers/soc/tegra/fuse/fuse-tegra.c
-index b0a8405dbdb1..ab3e4dc6dc6e 100644
---- a/drivers/soc/tegra/fuse/fuse-tegra.c
-+++ b/drivers/soc/tegra/fuse/fuse-tegra.c
-@@ -612,11 +612,10 @@ static int __init tegra_init_soc(void)
+diff --git a/arch/x86/platform/olpc/olpc-xo1-rtc.c b/arch/x86/platform/olpc/olpc-xo1-rtc.c
+index 57f210cda761..dc5ac56cd9dd 100644
+--- a/arch/x86/platform/olpc/olpc-xo1-rtc.c
++++ b/arch/x86/platform/olpc/olpc-xo1-rtc.c
+@@ -59,9 +59,9 @@ static int __init xo1_rtc_init(void)
+ 	struct device_node *node;
  
- 	/* make sure we're running on Tegra */
- 	np = of_find_matching_node(NULL, tegra_fuse_match);
-+	of_node_put(np);
- 	if (!np)
+ 	node = of_find_compatible_node(NULL, NULL, "olpc,xo1-rtc");
++	of_node_put(node);
+ 	if (!node)
  		return 0;
+-	of_node_put(node);
  
--	of_node_put(np);
--
- 	soc = tegra_soc_device_register();
- 	if (IS_ERR(soc)) {
- 		pr_err("failed to register SoC device: %ld\n", PTR_ERR(soc));
+ 	pr_info("olpc-xo1-rtc: Initializing OLPC XO-1 RTC\n");
+ 	rdmsrl(MSR_RTC_DOMA_OFFSET, rtc_info.rtc_day_alarm);
 -- 
 2.25.1
 

@@ -2,91 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E713F531073
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:20:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FA42530FEE
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:19:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235375AbiEWMRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 08:17:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59924 "EHLO
+        id S235307AbiEWMSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 08:18:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235357AbiEWMRQ (ORCPT
+        with ESMTP id S235301AbiEWMSJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 08:17:16 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5456125C7B;
-        Mon, 23 May 2022 05:17:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=Qg7esZWEzWeo1cy06uHXjtqSIw4RkI4Og9wGS2CQMWs=; b=rO3ujDMNxUI/nT/C1PVeHBQKde
-        NESBTlwYICi529yJ7nT5Qntrfb0yDUwS8vYUhyHb8eOYkmbyKMtM/HjGATDHkNeWQxMMGjCisNw32
-        ZihIOTX4lHfaZgAEf+Gyjbn4aXEaNb7QgqRAG5rJ2T4iq7bN+3j5e6V89qDXoxUrWnQE=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nt6zY-003yho-He; Mon, 23 May 2022 14:16:56 +0200
-Date:   Mon, 23 May 2022 14:16:56 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-Cc:     michael@amarulasolutions.com, alberto.bianchi@amarulasolutions.com,
-        linux-amarula@amarulasolutions.com, linuxfancy@googlegroups.com,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] net: phy: DP83822: enable rgmii mode if
- phy_interface_is_rgmii
-Message-ID: <Yot7OD8MAQPttmyV@lunn.ch>
-References: <20220520235846.1919954-1-tommaso.merciai@amarulasolutions.com>
- <YokxxlyFTJZ8c+5y@lunn.ch>
- <20220523065754.GJ1589864@tom-ThinkPad-T14s-Gen-2i>
+        Mon, 23 May 2022 08:18:09 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4599219005;
+        Mon, 23 May 2022 05:18:08 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 01C8D1F8BE;
+        Mon, 23 May 2022 12:18:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1653308287; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=B0qnrRinaC3F4JUVaGGq2M9nBMqIOMymX1KLqQ5hWL4=;
+        b=xLv7ViaCFvoX6Zk6EFp59EDHmQurp9hgKcRToy8fIVK920P7wxXZ8qu7PYL6fRnJ8dXU0K
+        +3sJu6bKb56SIiJLyjC6BIj/DJ1v8KutNS7sWS9rU18j0a6FUtqJnk7cPpbExXKLpceveU
+        f3R+vp8UnQmB/oOl3t7ajiQ7mZpzlWI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1653308287;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=B0qnrRinaC3F4JUVaGGq2M9nBMqIOMymX1KLqQ5hWL4=;
+        b=7pz37GRwpYXcWrfrugejAbXMulvvJxbFKRWkjGTSE1VfQTYUoPgAPxSns1dcNNbotSJPGP
+        RVQ1oms0Iw1remDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B5F7013AA5;
+        Mon, 23 May 2022 12:18:06 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id fAz5Kn57i2LiNgAAMHmgww
+        (envelope-from <mliska@suse.cz>); Mon, 23 May 2022 12:18:06 +0000
+Message-ID: <d0e576ab-6121-b7d7-da5b-7750f05ca7f4@suse.cz>
+Date:   Mon, 23 May 2022 14:18:06 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220523065754.GJ1589864@tom-ThinkPad-T14s-Gen-2i>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+From:   =?UTF-8?Q?Martin_Li=c5=a1ka?= <mliska@suse.cz>
+Subject: [PATCH v3] docs/arm64: elf_hwcaps: Unify HWCAP lists as description
+ lists
+To:     akiyks@gmail.com
+Cc:     bagasdotme@gmail.com, catalin.marinas@arm.com, corbet@lwn.net,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mliska@suse.cz, will@kernel.org
+References: <0846c96d-62fa-555f-b0ab-1f5ec33fd5fb@gmail.com>
+Content-Language: en-US
+In-Reply-To: <0846c96d-62fa-555f-b0ab-1f5ec33fd5fb@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 08:57:54AM +0200, Tommaso Merciai wrote:
-> On Sat, May 21, 2022 at 08:39:02PM +0200, Andrew Lunn wrote:
-> > On Sat, May 21, 2022 at 01:58:46AM +0200, Tommaso Merciai wrote:
-> > > RGMII mode can be enable from dp83822 straps, and also writing bit 9
-> > > of register 0x17 - RMII and Status Register (RCSR).
-> > > When phy_interface_is_rgmii rgmii mode must be enabled, same for
-> > > contrary, this prevents malconfigurations of hw straps
-> > > 
-> > > References:
-> > >  - https://www.ti.com/lit/gpn/dp83822i p66
-> > > 
-> > > Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-> > > Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
-> > > Suggested-by: Alberto Bianchi <alberto.bianchi@amarulasolutions.com>
-> > > Tested-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-> > 
-> > Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-> > 
-> > If you want to, you could go further. If bit 9 is clear, bit 5 defines
-> > the mode, either RMII or MII. There are interface modes defined for
-> > these, so you could get bit 5 as well.
-> 
-> Hi Andrew,
-> Thanks for the review and for your time.
-> I'll try to go further, like you suggest :)
+Signed-off-by: Martin Liska <mliska@suse.cz>
+---
+ Documentation/arm64/elf_hwcaps.rst | 23 -----------------------
+ 1 file changed, 23 deletions(-)
 
-Hi Tomaso
+diff --git a/Documentation/arm64/elf_hwcaps.rst b/Documentation/arm64/elf_hwcaps.rst
+index a8f30963e550..1e79044f51a2 100644
+--- a/Documentation/arm64/elf_hwcaps.rst
++++ b/Documentation/arm64/elf_hwcaps.rst
+@@ -171,96 +171,73 @@ HWCAP_PACG
+     Documentation/arm64/pointer-authentication.rst.
+ 
+ HWCAP2_DCPODP
+-
+     Functionality implied by ID_AA64ISAR1_EL1.DPB == 0b0010.
+ 
+ HWCAP2_SVE2
+-
+     Functionality implied by ID_AA64ZFR0_EL1.SVEVer == 0b0001.
+ 
+ HWCAP2_SVEAES
+-
+     Functionality implied by ID_AA64ZFR0_EL1.AES == 0b0001.
+ 
+ HWCAP2_SVEPMULL
+-
+     Functionality implied by ID_AA64ZFR0_EL1.AES == 0b0010.
+ 
+ HWCAP2_SVEBITPERM
+-
+     Functionality implied by ID_AA64ZFR0_EL1.BitPerm == 0b0001.
+ 
+ HWCAP2_SVESHA3
+-
+     Functionality implied by ID_AA64ZFR0_EL1.SHA3 == 0b0001.
+ 
+ HWCAP2_SVESM4
+-
+     Functionality implied by ID_AA64ZFR0_EL1.SM4 == 0b0001.
+ 
+ HWCAP2_FLAGM2
+-
+     Functionality implied by ID_AA64ISAR0_EL1.TS == 0b0010.
+ 
+ HWCAP2_FRINT
+-
+     Functionality implied by ID_AA64ISAR1_EL1.FRINTTS == 0b0001.
+ 
+ HWCAP2_SVEI8MM
+-
+     Functionality implied by ID_AA64ZFR0_EL1.I8MM == 0b0001.
+ 
+ HWCAP2_SVEF32MM
+-
+     Functionality implied by ID_AA64ZFR0_EL1.F32MM == 0b0001.
+ 
+ HWCAP2_SVEF64MM
+-
+     Functionality implied by ID_AA64ZFR0_EL1.F64MM == 0b0001.
+ 
+ HWCAP2_SVEBF16
+-
+     Functionality implied by ID_AA64ZFR0_EL1.BF16 == 0b0001.
+ 
+ HWCAP2_I8MM
+-
+     Functionality implied by ID_AA64ISAR1_EL1.I8MM == 0b0001.
+ 
+ HWCAP2_BF16
+-
+     Functionality implied by ID_AA64ISAR1_EL1.BF16 == 0b0001.
+ 
+ HWCAP2_DGH
+-
+     Functionality implied by ID_AA64ISAR1_EL1.DGH == 0b0001.
+ 
+ HWCAP2_RNG
+-
+     Functionality implied by ID_AA64ISAR0_EL1.RNDR == 0b0001.
+ 
+ HWCAP2_BTI
+-
+     Functionality implied by ID_AA64PFR0_EL1.BT == 0b0001.
+ 
+ HWCAP2_MTE
+-
+     Functionality implied by ID_AA64PFR1_EL1.MTE == 0b0010, as described
+     by Documentation/arm64/memory-tagging-extension.rst.
+ 
+ HWCAP2_ECV
+-
+     Functionality implied by ID_AA64MMFR0_EL1.ECV == 0b0001.
+ 
+ HWCAP2_AFP
+-
+     Functionality implied by ID_AA64MFR1_EL1.AFP == 0b0001.
+ 
+ HWCAP2_RPRES
+-
+     Functionality implied by ID_AA64ISAR2_EL1.RPRES == 0b0001.
+ 
+ HWCAP2_MTE3
+-
+     Functionality implied by ID_AA64PFR1_EL1.MTE == 0b0011, as described
+     by Documentation/arm64/memory-tagging-extension.rst.
+ 
+-- 
+2.36.1
 
-This patch has been accepted, so you will need to submit an
-incremental patch. I also expect net-next to close soon for the merge
-window, so you might want to wait two weeks before submitting.
-
-	Andrew

@@ -2,36 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A669A530E16
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:43:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CF43530DDC
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:42:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233483AbiEWJfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 05:35:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50624 "EHLO
+        id S233364AbiEWJfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 05:35:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233192AbiEWJeG (ORCPT
+        with ESMTP id S233213AbiEWJeG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 23 May 2022 05:34:06 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCC8C29C8E;
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E8249FB4;
         Mon, 23 May 2022 02:34:00 -0700 (PDT)
-X-UUID: 43607d3f40fb49db9c5d990fd21aa7aa-20220523
+X-UUID: 88c1d98db7d74eef9225376991794e0c-20220523
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:759fd0ca-a263-4908-88db-eaa4372a4c84,OB:0,LO
+X-CID-O-INFO: VERSION:1.1.5,REQID:dd5e732a-f3b3-493d-abab-8be1b712eaec,OB:0,LO
         B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
         ON:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:e3f6477a-5ef6-470b-96c9-bdb8ced32786,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:1,EDM:-3,IP:nil,URL:0,File:nil
+X-CID-META: VersionHash:2a19b09,CLOUDID:b9f6477a-5ef6-470b-96c9-bdb8ced32786,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
         ,QS:0,BEC:nil
-X-UUID: 43607d3f40fb49db9c5d990fd21aa7aa-20220523
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+X-UUID: 88c1d98db7d74eef9225376991794e0c-20220523
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
         (envelope-from <rex-bc.chen@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 958953998; Mon, 23 May 2022 17:33:51 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+        with ESMTP id 620443068; Mon, 23 May 2022 17:33:52 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Mon, 23 May 2022 17:33:50 +0800
+ Mon, 23 May 2022 17:33:51 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 23 May 2022 17:33:50 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
  Transport; Mon, 23 May 2022 17:33:50 +0800
@@ -49,9 +52,9 @@ CC:     <p.zabel@pengutronix.de>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         Rex-BC Chen <rex-bc.chen@mediatek.com>
-Subject: [RESEND v8 16/19] arm64: dts: mediatek: Add infra #reset-cells property for MT8195
-Date:   Mon, 23 May 2022 17:33:43 +0800
-Message-ID: <20220523093346.28493-17-rex-bc.chen@mediatek.com>
+Subject: [RESEND v8 17/19] dt-bindings: reset: mediatek: Add infra_ao reset index for MT8186
+Date:   Mon, 23 May 2022 17:33:44 +0800
+Message-ID: <20220523093346.28493-18-rex-bc.chen@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20220523093346.28493-1-rex-bc.chen@mediatek.com>
 References: <20220523093346.28493-1-rex-bc.chen@mediatek.com>
@@ -68,52 +71,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We will use mediatek clock reset as infracfg_ao reset instead of
-ti-syscon. To support this, remove property of ti reset and add
-property of #reset-cells for mediatek clock reset.
+To support reset of infra_ao, add the index of infra_ao reset of
+thermal/svs for MT8186.
 
 Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Acked-by: Rob Herring <robh@kernel.org>
 Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- arch/arm64/boot/dts/mediatek/mt8195.dtsi | 15 ++-------------
- 1 file changed, 2 insertions(+), 13 deletions(-)
+ include/dt-bindings/reset/mt8186-resets.h | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-index b57e620c2c72..db16eba9d475 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-@@ -10,7 +10,6 @@
- #include <dt-bindings/interrupt-controller/irq.h>
- #include <dt-bindings/phy/phy.h>
- #include <dt-bindings/pinctrl/mt8195-pinfunc.h>
--#include <dt-bindings/reset/ti-syscon.h>
+diff --git a/include/dt-bindings/reset/mt8186-resets.h b/include/dt-bindings/reset/mt8186-resets.h
+index 5f850370c42c..2e9029c22f38 100644
+--- a/include/dt-bindings/reset/mt8186-resets.h
++++ b/include/dt-bindings/reset/mt8186-resets.h
+@@ -7,6 +7,7 @@
+ #ifndef _DT_BINDINGS_RESET_CONTROLLER_MT8186
+ #define _DT_BINDINGS_RESET_CONTROLLER_MT8186
  
- / {
- 	compatible = "mediatek,mt8195";
-@@ -292,20 +291,10 @@
- 		};
++/* TOPRGU resets */
+ #define MT8186_TOPRGU_INFRA_SW_RST				0
+ #define MT8186_TOPRGU_MM_SW_RST					1
+ #define MT8186_TOPRGU_MFG_SW_RST				2
+@@ -33,4 +34,8 @@
+ /* MMSYS resets */
+ #define MT8186_MMSYS_SW0_RST_B_DISP_DSI0			19
  
- 		infracfg_ao: syscon@10001000 {
--			compatible = "mediatek,mt8195-infracfg_ao", "syscon", "simple-mfd";
-+			compatible = "mediatek,mt8195-infracfg_ao", "syscon";
- 			reg = <0 0x10001000 0 0x1000>;
- 			#clock-cells = <1>;
--
--			infracfg_rst: reset-controller {
--				compatible = "ti,syscon-reset";
--				#reset-cells = <1>;
--				ti,reset-bits = <
--					0x140 18 0x144 18 0 0 (ASSERT_SET | DEASSERT_SET | STATUS_NONE) /* pcie */
--					0x120 0  0x124 0  0 0 (ASSERT_SET | DEASSERT_SET | STATUS_NONE) /* thermal */
--					0x730 10 0x734 10 0 0 (ASSERT_SET | DEASSERT_SET | STATUS_NONE) /* thermal */
--					0x150 5  0x154 5  0 0 (ASSERT_SET | DEASSERT_SET | STATUS_NONE) /* svs gpu */
--				>;
--			};
-+			#reset-cells = <1>;
- 		};
- 
- 		pericfg: syscon@10003000 {
++/* INFRA resets */
++#define MT8186_INFRA_THERMAL_CTRL_RST			0
++#define MT8186_INFRA_PTP_CTRL_RST				1
++
+ #endif  /* _DT_BINDINGS_RESET_CONTROLLER_MT8186 */
 -- 
 2.18.0
 

@@ -2,150 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07BA55313FB
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:24:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D94B3531384
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:24:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237870AbiEWPZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 11:25:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60660 "EHLO
+        id S237844AbiEWPZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 11:25:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237797AbiEWPZD (ORCPT
+        with ESMTP id S237797AbiEWPZU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 11:25:03 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C85D85DBE4
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 08:25:00 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id r3so10760041ljd.7
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 08:25:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=2w+Ay74cy7OoOg37g3PaLjsP1sHLBt98ivncMEHUTZE=;
-        b=orFcSTvpnjF2Ul0w/eFhjws6UEFRdIdVSVYukzC2tF+nVYSnHFaaxmflPfpw8qz8qF
-         ik6PDz0cc8Oj7SbKnxObem78aoMCd+xjnQdgKZpY6s9du2FQPRFqXEjMx84zUfHaUSK5
-         +5aDtV1uK8iokGkuUohuvW0L7k1LR2OiZl2HdjndCXqss8DzPENH45G9Pn+m8EbPTZWj
-         s+yQdMDgWjXD29XD7VpFK84XPEWt40wdVzAc/6a6ogfXkT3SjLENjQgnwyFLEMwVUB+D
-         l6dZ/senYVrTWPdoKxCU+dfRc+i8YOVwhR0C5kGIt9sZB5w8tkbzjEogHF6UqQKtnniS
-         cVUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=2w+Ay74cy7OoOg37g3PaLjsP1sHLBt98ivncMEHUTZE=;
-        b=YcwSIC00R2xeMQwBroyvFUBe6z6uZYhx2WnLUZ/tkdf1X8qYncTcDX/6i8hCBzQDly
-         i+ergkp9QzyqTZ+2VjafpJ8hhWvqNcCD1CxM+BmGnQ9ttfv5Vujkockt/vXjX43BSiO8
-         rarOzrH1geJ63yTiWwVEpu4La9q3egVAIJNpETgY/lz4+rZVQG5LdiQzVmLeRzDDCPKF
-         hswMShYArFAvOgc3cfU8r+qjsCmlmwbAPM01dca61aJwgRJRRNZUEwclLvfJD9G/FLox
-         SlHd39mRelsFWtO1NoQgIjFRcenGD8BQcv/veWVSZ4vBUw/DX1x9C7djDEpdeZ9Kghw7
-         M0Ig==
-X-Gm-Message-State: AOAM532E/DDgguZ9JbsOE1OnDH2mQpkq+FA6+ZtoMAWlSLU19KvGT+1X
-        pADjgKrUJpwiGmdg7phWkZp0EQ==
-X-Google-Smtp-Source: ABdhPJwQ7LooGvEvT4dpWheOhDWqxQVg6IroKOSOYNqnIDRYboL3316+ca6IHfgol4Aq3EeOYOdhag==
-X-Received: by 2002:a2e:9c43:0:b0:250:a467:414 with SMTP id t3-20020a2e9c43000000b00250a4670414mr13242328ljj.358.1653319498852;
-        Mon, 23 May 2022 08:24:58 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id v4-20020a056512096400b0047255d2119bsm2026580lft.202.2022.05.23.08.24.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 May 2022 08:24:58 -0700 (PDT)
-Message-ID: <4a69902f-a545-23a1-1430-e5ece16997e9@linaro.org>
-Date:   Mon, 23 May 2022 17:24:56 +0200
+        Mon, 23 May 2022 11:25:20 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE4A5DD16;
+        Mon, 23 May 2022 08:25:19 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 3B24A210E3;
+        Mon, 23 May 2022 15:25:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1653319518; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ny3U7T9TPhDthVWzP+Xlh6KkiteRPaSckBn6MYhTDIU=;
+        b=mKN9NwBTUIN9be1aZZzF4LcEKRx8m2Wykw27cuNyAUv73E3U9F/40UzXtB8W4/QKjV+zgd
+        zBMGoVIdmznYx+bO/lmkrpn3sGP8x2Km7Ob71s7HL1aE70G+sjbwLjsIZwnDPIk6OQXEHX
+        a9s/i7kRTNUk/o1voCK0VEHuTZUf4aQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1653319518;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ny3U7T9TPhDthVWzP+Xlh6KkiteRPaSckBn6MYhTDIU=;
+        b=izmLbHLPWF4IU0EhHRLxiFpAoMulTKzNYz9PT/LAHestmYQguQTawM64+qCRl1XhxW2WQE
+        I3K35XnPK4ngMoAg==
+Received: from quack3.suse.cz (unknown [10.100.224.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 0420A2C141;
+        Mon, 23 May 2022 15:25:17 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 162EEA0632; Mon, 23 May 2022 17:25:16 +0200 (CEST)
+Date:   Mon, 23 May 2022 17:25:16 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     "yukuai (C)" <yukuai3@huawei.com>
+Cc:     Jan Kara <jack@suse.cz>, "yukuai (C)" <yukuai3@huawei.com>,
+        paolo.valente@linaro.org, tj@kernel.org,
+        linux-block@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        Jens Axboe <axboe@kernel.dk>
+Subject: Re: [PATCH -next v5 0/3] support concurrent sync io for bfq on a
+ specail occasion
+Message-ID: <20220523152516.7sr247i3bzwhr44w@quack3.lan>
+References: <20220428120837.3737765-1-yukuai3@huawei.com>
+ <d50df657-d859-79cf-c292-412eaa383d2c@huawei.com>
+ <61b67d5e-829c-8130-7bda-81615d654829@huawei.com>
+ <81411289-e13c-20f5-df63-c059babca57a@huawei.com>
+ <d5a90a08-1ac6-587a-e900-0436bd45543a@kernel.dk>
+ <55919e29-1f22-e8aa-f3d2-08c57d9e1c22@huawei.com>
+ <20220523085902.wmxoebyq3crerecr@quack3.lan>
+ <25f6703e-9e10-75d9-a893-6df1e6b75254@kernel.dk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v1 11/19] dt-bindings: reset: npcm: Add support for
- NPCM8XX
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Tomer Maimon <tmaimon77@gmail.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        =?UTF-8?Q?Bj=c3=b6rn_Andersson?= <bjorn.andersson@linaro.org>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Robert Hancock <robert.hancock@calian.com>,
-        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
-        Lubomir Rintel <lkundrak@v3.sk>, arm-soc <soc@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-References: <20220522155046.260146-1-tmaimon77@gmail.com>
- <20220522155046.260146-12-tmaimon77@gmail.com>
- <86cd6a37-70ad-3a90-bc8a-dcd8b41f1175@linaro.org>
- <CAP6Zq1i2Wj4FCA4-eseVoJyMof5=ocFCUcitVquJqYJ4Z3JTYQ@mail.gmail.com>
- <CAMuHMdVCCrKTpNHng2_kKGViuEXf=O3MsfpjjzMusuUcKE6HiA@mail.gmail.com>
- <62562cdf-93e3-f642-5bbd-48329eff33ea@linaro.org>
- <CAMuHMdVFV02t+vbwzEpNbpkSP4M3sGnJpzFMPBw7RkrJ9YvyKw@mail.gmail.com>
- <b60f5fd2-dc48-9375-da1c-ffcfe8292683@linaro.org>
-In-Reply-To: <b60f5fd2-dc48-9375-da1c-ffcfe8292683@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <25f6703e-9e10-75d9-a893-6df1e6b75254@kernel.dk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/05/2022 17:22, Krzysztof Kozlowski wrote:
->> I think you are taking a too-extremist standpoint.
->> The two extremes are:
->>   1. Numbers correspond to hardware numbers, and are easy to look up
->>     in the hardware documentation (e.g. GIC SPI interrupt numbers).
->>      => Use the hardcoded numbers in DTS.
+On Mon 23-05-22 06:36:58, Jens Axboe wrote:
+> On 5/23/22 2:59 AM, Jan Kara wrote:
+> > On Mon 23-05-22 09:10:38, yukuai (C) wrote:
+> >> ? 2022/05/21 20:21, Jens Axboe ??:
+> >>> On 5/21/22 1:22 AM, yukuai (C) wrote:
+> >>>> ? 2022/05/14 17:29, yukuai (C) ??:
+> >>>>> ? 2022/05/05 9:00, yukuai (C) ??:
+> >>>>>> Hi, Paolo
+> >>>>>>
+> >>>>>> Can you take a look at this patchset? It has been quite a long time
+> >>>>>> since we spotted this problem...
+> >>>>>>
+> >>>>>
+> >>>>> friendly ping ...
+> >>>> friendly ping ...
+> >>>
+> >>> I can't speak for Paolo, but I've mentioned before that the majority
+> >>> of your messages end up in my spam. That's still the case, in fact
+> >>> I just marked maybe 10 of them as not spam.
+> >>>
+> >>> You really need to get this issued sorted out, or you will continue
+> >>> to have patches ignore because folks may simply not see them.
+> >>>
+> >> Hi,
+> >>
+> >> Thanks for your notice.
+> >>
+> >> Is it just me or do you see someone else's messages from *huawei.com
+> >> end up in spam? I tried to seek help from our IT support, however, they
+> >> didn't find anything unusual...
+> > 
+> > So actually I have noticed that a lot of (valid) email from huawei.com (not
+> > just you) ends up in the spam mailbox. For me direct messages usually pass
+> > (likely matching SPF records for originating mail server save the email
+> > from going to spam) but messages going through mailing lists are flagged as
+> > spam because the emails are missing valid DKIM signature but huawei.com
+> > DMARC config says there should be DKIM signature (even direct messages are
+> > missing DKIM so this does not seem as a mailing list configuration issue).
+> > So this seems as some misconfiguration of the mails on huawei.com side
+> > (likely missing DKIM signing of outgoing email).
 > 
-> And such numbers (like GIC_SPI interrupt numbers) do not go to bindings.
-> They go to DTS only.
-> 
->>   2. Numbers do not correspond to hardware numbers, so we had to
->>      invent our own definitions and numbers, usually loosely
->>      based on some table in the hardware documentation.
->>      The driver will have to look up the numbers in a data
->>      structure, to know how to program the hardware.
->>      The numbers become part of the DT ABI, and cannot be changed
->>      (header file is append-only).
->>      => Use the binding definitions in DTS.
-> 
-> Correct.
-> 
-> However this patch is some mixture of both approaches.
-> 
-> The same pointed by Arnd:
-> https://lore.kernel.org/linux-devicetree/CAK8P3a0fDJQvGLEtG0fxLkG08Fh9V7LEMPsx4AaS+2Ldo_xWxw@mail.gmail.com/
+> SPF/DKIM was indeed a problem earlier for yukaui patches, but I don't
+> see that anymore. Maybe it's still an issue for some emails, from them
+> or Huawei in general?
 
-...and one more from Arnd:
-https://lore.kernel.org/linux-devicetree/CAK8P3a1APzs74YTcZ=m43G3zrmwJZKcYSTvV5eDDQX-37UY7Tw@mail.gmail.com/
+Hum, for me all emails from Huawei I've received even today fail the DKIM
+check. After some more digging there is interesting inconsistency in DMARC
+configuration for huawei.com domain. There is DMARC record for huawei.com
+like:
 
+huawei.com.		600	IN	TXT	"v=DMARC1;p=none;rua=mailto:dmarc@edm.huawei.com"
 
+which means no DKIM is required but _dmarc.huawei.com has:
 
-Best regards,
-Krzysztof
+_dmarc.huawei.com.	600	IN	TXT	"v=DMARC1;p=quarantine;ruf=mailto:dmarc@huawei.com;rua=mailto:dmarc@huawei.com"
+
+which says that DKIM is required. I guess this inconsistency may be the
+reason why there are problems with DKIM validation for senders from
+huawei.com. Yu Kuai, can you perhaps take this to your IT support to fix
+this? Either make sure huawei.com emails get properly signed with DKIM or
+remove the 'quarantine' record from _dmarc.huawei.com. Thanks!
+
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

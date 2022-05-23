@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05F9653167A
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:51:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D60DB53165F
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:50:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240824AbiEWRQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:16:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34826 "EHLO
+        id S242743AbiEWRzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:55:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239715AbiEWRKq (ORCPT
+        with ESMTP id S241119AbiEWR0S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:10:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB436D399;
-        Mon, 23 May 2022 10:10:24 -0700 (PDT)
+        Mon, 23 May 2022 13:26:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9074B62BFE;
+        Mon, 23 May 2022 10:21:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C59B614CA;
-        Mon, 23 May 2022 17:10:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E1F3C385AA;
-        Mon, 23 May 2022 17:10:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CA4ECB811FE;
+        Mon, 23 May 2022 17:21:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 426FBC385A9;
+        Mon, 23 May 2022 17:21:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653325812;
-        bh=Dwk17qB8Umv7Q1FvMeueRdKSAT9rxi9ymspvcUnMfPU=;
+        s=korg; t=1653326484;
+        bh=0iVyKruOZKZjO3IhGdC9lrTMP16QOLq3mphVI4fNs+A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mixgavmLzXX6hC+nqho9PUjW4IPTvpgAqCH44cJPSFlr0gVBRcKtoKYtD7OyA2MMC
-         k0jtuE/GXn5K6TRcR0OZ+klCdijc3AklHTfRTE0l3NOcy2JFJYOKGzlHwdKN3F4Jmm
-         6KtQA4Sdqd05lHbeEZp88IDmnBrZKhd+w3TYY0j8=
+        b=dom9oQCmldkjKRsjZJdtbQSYXdPssJbQFAek8mhP+AdHCgoluzNgcKtun4yvV1WNo
+         gwmGyJKZXJItavWpwU3/5u58ZL5GARh7sQwD4C+MgdLBG5pX+UkjQ+/CKu2YGupiZB
+         r/5YcwTVZMXsjQzu3HryugU/V9dCp1rdiGDxa1Eo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Subject: [PATCH 4.19 19/44] mmc: block: Use generic_cmd6_time when modifying INAND_CMD38_ARG_EXT_CSD
-Date:   Mon, 23 May 2022 19:05:03 +0200
-Message-Id: <20220523165756.686861232@linuxfoundation.org>
+        stable@vger.kernel.org, Geliang Tang <geliang.tang@suse.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 095/132] mptcp: change the parameter of __mptcp_make_csum
+Date:   Mon, 23 May 2022 19:05:04 +0200
+Message-Id: <20220523165839.111088948@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165752.797318097@linuxfoundation.org>
-References: <20220523165752.797318097@linuxfoundation.org>
+In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
+References: <20220523165823.492309987@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,54 +56,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ulf Hansson <ulf.hansson@linaro.org>
+From: Geliang Tang <geliang.tang@suse.com>
 
-commit ad91619aa9d78ab1c6d4a969c3db68bc331ae76c upstream
+[ Upstream commit c312ee219100e86143a1d3cc10b367bc43a0e0b8 ]
 
-The INAND_CMD38_ARG_EXT_CSD is a vendor specific EXT_CSD register, which is
-used to prepare an erase/trim operation. However, it doesn't make sense to
-use a timeout of 10 minutes while updating the register, which becomes the
-case when the timeout_ms argument for mmc_switch() is set to zero.
+This patch changed the type of the last parameter of __mptcp_make_csum()
+from __sum16 to __wsum. And export this function in protocol.h.
 
-Instead, let's use the generic_cmd6_time, as that seems like a reasonable
-timeout to use for these cases.
-
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-Link: https://lore.kernel.org/r/20200122142747.5690-3-ulf.hansson@linaro.org
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Geliang Tang <geliang.tang@suse.com>
+Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mmc/core/block.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ net/mptcp/options.c  | 8 ++++----
+ net/mptcp/protocol.h | 1 +
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
---- a/drivers/mmc/core/block.c
-+++ b/drivers/mmc/core/block.c
-@@ -1133,7 +1133,7 @@ static void mmc_blk_issue_discard_rq(str
- 					 arg == MMC_TRIM_ARG ?
- 					 INAND_CMD38_ARG_TRIM :
- 					 INAND_CMD38_ARG_ERASE,
--					 0);
-+					 card->ext_csd.generic_cmd6_time);
- 		}
- 		if (!err)
- 			err = mmc_erase(card, from, nr, arg);
-@@ -1175,7 +1175,7 @@ retry:
- 				 arg == MMC_SECURE_TRIM1_ARG ?
- 				 INAND_CMD38_ARG_SECTRIM1 :
- 				 INAND_CMD38_ARG_SECERASE,
--				 0);
-+				 card->ext_csd.generic_cmd6_time);
- 		if (err)
- 			goto out_retry;
- 	}
-@@ -1193,7 +1193,7 @@ retry:
- 			err = mmc_switch(card, EXT_CSD_CMD_SET_NORMAL,
- 					 INAND_CMD38_ARG_EXT_CSD,
- 					 INAND_CMD38_ARG_SECTRIM2,
--					 0);
-+					 card->ext_csd.generic_cmd6_time);
- 			if (err)
- 				goto out_retry;
- 		}
+diff --git a/net/mptcp/options.c b/net/mptcp/options.c
+index e515ba9ccb5d..d158f53d3bc3 100644
+--- a/net/mptcp/options.c
++++ b/net/mptcp/options.c
+@@ -1214,7 +1214,7 @@ static void mptcp_set_rwin(const struct tcp_sock *tp)
+ 		WRITE_ONCE(msk->rcv_wnd_sent, ack_seq);
+ }
+ 
+-static u16 __mptcp_make_csum(u64 data_seq, u32 subflow_seq, u16 data_len, __sum16 sum)
++u16 __mptcp_make_csum(u64 data_seq, u32 subflow_seq, u16 data_len, __wsum sum)
+ {
+ 	struct csum_pseudo_header header;
+ 	__wsum csum;
+@@ -1229,14 +1229,14 @@ static u16 __mptcp_make_csum(u64 data_seq, u32 subflow_seq, u16 data_len, __sum1
+ 	header.data_len = htons(data_len);
+ 	header.csum = 0;
+ 
+-	csum = csum_partial(&header, sizeof(header), ~csum_unfold(sum));
++	csum = csum_partial(&header, sizeof(header), sum);
+ 	return (__force u16)csum_fold(csum);
+ }
+ 
+ static u16 mptcp_make_csum(const struct mptcp_ext *mpext)
+ {
+ 	return __mptcp_make_csum(mpext->data_seq, mpext->subflow_seq, mpext->data_len,
+-				 mpext->csum);
++				 ~csum_unfold(mpext->csum));
+ }
+ 
+ void mptcp_write_options(__be32 *ptr, const struct tcp_sock *tp,
+@@ -1368,7 +1368,7 @@ void mptcp_write_options(__be32 *ptr, const struct tcp_sock *tp,
+ 					   __mptcp_make_csum(opts->data_seq,
+ 							     opts->subflow_seq,
+ 							     opts->data_len,
+-							     opts->csum), ptr);
++							     ~csum_unfold(opts->csum)), ptr);
+ 		} else {
+ 			put_unaligned_be32(opts->data_len << 16 |
+ 					   TCPOPT_NOP << 8 | TCPOPT_NOP, ptr);
+diff --git a/net/mptcp/protocol.h b/net/mptcp/protocol.h
+index 82c5dc4d6b49..6bcdaf01f483 100644
+--- a/net/mptcp/protocol.h
++++ b/net/mptcp/protocol.h
+@@ -718,6 +718,7 @@ void mptcp_token_destroy(struct mptcp_sock *msk);
+ void mptcp_crypto_key_sha(u64 key, u32 *token, u64 *idsn);
+ 
+ void mptcp_crypto_hmac_sha(u64 key1, u64 key2, u8 *msg, int len, void *hmac);
++u16 __mptcp_make_csum(u64 data_seq, u32 subflow_seq, u16 data_len, __wsum sum);
+ 
+ void __init mptcp_pm_init(void);
+ void mptcp_pm_data_init(struct mptcp_sock *msk);
+-- 
+2.35.1
+
 
 

@@ -2,198 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA48353102E
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:19:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DC3E531057
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:19:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235892AbiEWNHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 09:07:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52264 "EHLO
+        id S235904AbiEWNJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 09:09:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235874AbiEWNHT (ORCPT
+        with ESMTP id S235874AbiEWNJE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 09:07:19 -0400
-Received: from smtpout1.mo528.mail-out.ovh.net (smtpout1.mo528.mail-out.ovh.net [46.105.34.251])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3F2C49935;
-        Mon, 23 May 2022 06:07:15 -0700 (PDT)
-Received: from pro2.mail.ovh.net (unknown [10.109.138.188])
-        by mo528.mail-out.ovh.net (Postfix) with ESMTPS id D667410363FD1;
-        Mon, 23 May 2022 15:07:13 +0200 (CEST)
-Received: from [192.168.1.42] (88.161.25.233) by DAG1EX2.emp2.local
- (172.16.2.2) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.9; Mon, 23 May
- 2022 15:07:13 +0200
-Message-ID: <eb043379-bb33-096a-d7b0-f333d00554dd@traphandler.com>
-Date:   Mon, 23 May 2022 15:07:13 +0200
+        Mon, 23 May 2022 09:09:04 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 260A6403C8
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 06:09:04 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id r9-20020a1c4409000000b00397345f2c6fso6571798wma.4
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 06:09:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=AYt2OCenl70qBTG1bp5+SWn59EV0w49jKoa75goSWWY=;
+        b=lwJAnJGfeFSUEJqjO2kTRe9MmYngeLPsGnrRB1YJ6FKTBDoyTxgsSMeeMH6nhjiTYd
+         5JEmHzqnEieO3FaHgDIhLuP6MEE3Byw4zxS+4LdfLaIuXr6jmKKsHhgOcXyUkY9vQMJ9
+         FpQVZ64e8Tt84kbM+SMf3Knx0AupgGyjsQD2v9/7cz5hJ/hzTjTNx+iFxrYef8cC9zYM
+         0DfRIvkLLAuuMoU+EQgWiBNpOgUZPMWieKos6YXT0wzePXj+BGSYQHuF87FccwBknI/t
+         zdBaTBaqTGkfvY2KFvwz0/ka6QRgQySBKm5yu+M0zLZB8mYACpWs60icZEyqcoZVqAaB
+         K/GA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=AYt2OCenl70qBTG1bp5+SWn59EV0w49jKoa75goSWWY=;
+        b=gJg7ACnpQS/57l5XHI/19qVrX2Rmu6heKWSY9QPzahW6L6nmyvslBt3E3i2mju9Piz
+         SfQikJn1EN2CZmt98DkgKfC2dLK4eKeI9pGPLq9LJYuoh4JWiLTOnngofmbkEb7y/BRO
+         9ZRVSWT0U2nmGzWjw2kYRU9gXK5ty6zrXO5m9QxYl0wsbBilCKkNy5PBEzGKFgYGq06k
+         9Cd3rf6/AHCPrvCIvNMWnLFf8/zFcFnmgmYQWrAXy/NyZq/Pv0o/D3EwG4ot7iBnKsK8
+         IsvD16xVoPZKUwFWX8grnLUXtlNqb8JwBe68DnojV5i4AnXb3+wXaxR97c1T/2UOduln
+         yNaA==
+X-Gm-Message-State: AOAM530VPxAjEkp0ltMgXjcEBNVXVOWyZaYDYxe1M0xcb9rG7kP5CdR5
+        gD2nNjLdrZPMx3HzPfH2eQBguw==
+X-Google-Smtp-Source: ABdhPJzabgOnSw9gEuS4K9M1UrtrpdHTjmbZcJTNPiDTnL8aBn5thyA1LChhkh3e0ygAQP2O8aQyeA==
+X-Received: by 2002:a05:600c:384c:b0:397:404a:3ccd with SMTP id s12-20020a05600c384c00b00397404a3ccdmr10289502wmr.114.1653311342737;
+        Mon, 23 May 2022 06:09:02 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id v15-20020adf8b4f000000b0020c5253d8d3sm10068750wra.31.2022.05.23.06.09.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 May 2022 06:09:02 -0700 (PDT)
+Date:   Mon, 23 May 2022 14:09:00 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     gaggery.tsai@intel.com
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Orlando Chamberlain <redecorating@protonmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/1] mfd: intel-lpss: Add support for ADL-P i2c6 and
+ i2c7
+Message-ID: <YouHbLLFZhgLO+N/@google.com>
+References: <20220520193537.26090-1-gaggery.tsai@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 1/3] dt-bindings: leds: Add bindings for the TLC5925
- controller
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-CC:     <linux-leds@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220523084958.2723943-1-jjhiblot@traphandler.com>
- <20220523084958.2723943-2-jjhiblot@traphandler.com>
- <d12a0afc-c040-5615-fc0d-70a5c29bbf0a@linaro.org>
-From:   Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-In-Reply-To: <d12a0afc-c040-5615-fc0d-70a5c29bbf0a@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [88.161.25.233]
-X-ClientProxiedBy: CAS4.emp2.local (172.16.1.4) To DAG1EX2.emp2.local
- (172.16.2.2)
-X-Ovh-Tracer-Id: 9728056670395120091
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrjedugdeftdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfevfhfhjggtgfhisehtjeertddtfeejnecuhfhrohhmpeflvggrnhdqlfgrtghquhgvshcujfhisghlohhtuceojhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmqeenucggtffrrghtthgvrhhnpeeugfevvdeludefkeejleetvdejueduvddtteejfeejvdevheekueefiefhlefgkeenucffohhmrghinhepuggvvhhitggvthhrvggvrdhorhhgnecukfhppedtrddtrddtrddtpdekkedrudeiuddrvdehrddvfeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehprhhovddrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehjjhhhihgslhhothesthhrrghphhgrnhgulhgvrhdrtghomhdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220520193537.26090-1-gaggery.tsai@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 20 May 2022, gaggery.tsai@intel.com wrote:
 
-On 23/05/2022 12:14, Krzysztof Kozlowski wrote:
-> On 23/05/2022 10:49, Jean-Jacques Hiblot wrote:
->> Add bindings documentation for the TLC5925 LED controller.
->>
->> Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-> Thank you for your patch. There is something to discuss/improve.
+> From: Gaggery Tsai <gaggery.tsai@intel.com>
+> 
+> Added 8086:51d8 and 8086:51d9 to the intel_lpss_pci driver. They are
+> Intel Alder Lake-P i2c controllers.
+> 
+> Signed-off-by: Gaggery Tsai <gaggery.tsai@intel.com>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/mfd/intel-lpss-pci.c | 2 ++
+>  1 file changed, 2 insertions(+)
 
-Thanks for the review. I didn't know about dt_binding_check.
+Applied, thanks.
 
-I'll make sure it passes next time.
-
-JJ
-
->> ---
->> devicetree@vger.kernel.org
->>   .../bindings/leds/leds-tlc5925.yaml           | 100 ++++++++++++++++++
->>   1 file changed, 100 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/leds/leds-tlc5925.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/leds/leds-tlc5925.yaml b/Documentation/devicetree/bindings/leds/leds-tlc5925.yaml
->> new file mode 100644
->> index 000000000000..156db599d5a1
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/leds/leds-tlc5925.yaml
-> Filename: vendor,device
-> so "ti,tlc5925-leds.yaml" for example.
->
->
->
->> @@ -0,0 +1,100 @@
->> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/leds/leds-tlc5925.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: LEDs connected to TI TLC5925 controller
->> +
->> +maintainers:
->> +  - Jean-Jacques Hiblot <jjhiblot@traphandler.com>
->> +
->> +description: |
->> +  The TLC5925 is a low-power 16-channel constant-current LED sink driver.
->> +  It is controlled through a SPI interface.
->> +  It is built around a shift register and latches which convert serial
->> +  input data into a parallel output. Several TLC5925 can be chained to
->> +  control more than 16 LEDs with a single chip-select.
->> +  The brightness level cannot be controlled, each LED is either on or off.
->> +
->> +  Each LED is represented as a sub-node of the ti,tlc5925 device.
->> +
->> +properties:
->> +  compatible:
->> +    const: ti,tlc5925
->> +
->> +  shift_register_length:
->> +    maxItems: 1
-> No...
-> 1. Did you test your bindings with dt_binding_check? This fails
-> obviously... please, do not send untested bindings.
->
-> 2. vendor prefix, no underscores, proper type, maxItems look wrong here
->
->> +    description: |
->> +      The length of the shift register. If several TLC5925 are chained,
->> +      shift_register_length should be set to 16 times the number of TLC5925.
->> +      The value must be a multiple of 8.
->> +
->> +  "#address-cells":
->> +    const: 1
->> +
->> +  "#size-cells":
->> +    const: 0
->> +
->> +  output-enable-b-gpios:
->> +    description: |
->> +      GPIO pins to enable/disable the parallel output. They describe the GPIOs
->> +      connected to the OE/ pin of the TLC5925s.
-> maxItems
->
->
->> +
->> +patternProperties:
->> +  "@[a-f0-9]+$":
-> How many LEDs you can have here? Usually it is limited, so the pattern
-> should be narrowed.
->
->> +    type: object
->> +
->> +    $ref: common.yaml#
->> +
->> +    properties:
->> +      reg:
->> +        items:
-> Not correct syntax... I will stop reviewing. There is no point to use
-> reviewers time to do the job of a tool.
->
->
->> +examples:
->> +  - |
->> +    &spi0 {
->> +        leds@2 {
->> +                compatible = "ti,tlc5925";
-> Messed up indentation. 4 spaces for DTS example.
->
->> +                reg = <0x02>;
->> +                spi-max-frequency = <30000000>;
->> +                shift_register_length = <32>;
->> +                output-enable-b-gpios = <&gpio0b 9 GPIO_ACTIVE_HIGH>, <&gpio0b 7 GPIO_ACTIVE_HIGH>;
->> +                #address-cells = <1>;
->> +                #size-cells = <0>;
->> +
->> +                led-satus@0 {
->> +                        reg = <0>;
->> +                        function = LED_FUNCTION_STATUS;
->> +                        color = <LED_COLOR_ID_GREEN>;
->> +                };
->> +
->> +                led-satus@4 {
->> +                        reg = <4>;
->> +                        function = LED_FUNCTION_STATUS;
->> +                        color = <LED_COLOR_ID_RED>;
->> +                };
->> +
->> +                led-alive@24 {
->> +                        reg = <24>;
->> +                        label = "green:alive"
->> +                };
->> +
->> +                led-panic@31 {
->> +                        reg = <31>;
->> +                        label = "red:panic"
->> +                };
->> +        };
->> +    };
->
-> Best regards,
-> Krzysztof
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

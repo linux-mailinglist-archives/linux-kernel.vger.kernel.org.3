@@ -2,137 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97BEA531AB2
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:55:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FF8F53173A
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:52:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238957AbiEWQdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 12:33:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49522 "EHLO
+        id S238857AbiEWQhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 12:37:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238906AbiEWQdw (ORCPT
+        with ESMTP id S238830AbiEWQhg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 12:33:52 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 971E468FBC;
-        Mon, 23 May 2022 09:33:50 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 545DA21A56;
-        Mon, 23 May 2022 16:33:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1653323629; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tNoKiNGrG5iW0aGhUIxZVTdGUlMyrTnQj8c3DQqRnC0=;
-        b=en8UGpPz/Y5jTas0q8lKpEg3Z47jp59uxeCEqWczJ9mPcGZ1RTm6AlbvRy6wjmnO/HNzIw
-        +4AmJy17/yIPkJgEW25O6399LBmr4Auv0VtfENazGIMTRSQdqzlG4DImLeACVYiT9daWq3
-        sHSP7ZN0+4Nj1hHMA4vWQU+udK8SCXw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1653323629;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tNoKiNGrG5iW0aGhUIxZVTdGUlMyrTnQj8c3DQqRnC0=;
-        b=APTqi9Ii3NrXEDU75W/Zkznp1tQo55JCy3IgCHvm6DcK6CKve8cwIBa3bY3nnXNaZ9J3ia
-        x0kXNF1j7dRt6lDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F2990139F5;
-        Mon, 23 May 2022 16:33:48 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id kGllOGy3i2KFNAAAMHmgww
-        (envelope-from <lhenriques@suse.de>); Mon, 23 May 2022 16:33:48 +0000
-Received: from localhost (brahms.olymp [local])
-        by brahms.olymp (OpenSMTPD) with ESMTPA id d67aef96;
-        Mon, 23 May 2022 16:34:26 +0000 (UTC)
-From:   =?utf-8?Q?Lu=C3=ADs_Henriques?= <lhenriques@suse.de>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Xiubo Li <xiubli@redhat.com>, Ilya Dryomov <idryomov@gmail.com>,
-        ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ceph: fix decoding of client session messages flags
-References: <20220523160951.8781-1-lhenriques@suse.de>
-        <1e1f7397d516f8b9780b08763f6338cd4ce83506.camel@kernel.org>
-Date:   Mon, 23 May 2022 17:34:26 +0100
-In-Reply-To: <1e1f7397d516f8b9780b08763f6338cd4ce83506.camel@kernel.org> (Jeff
-        Layton's message of "Mon, 23 May 2022 12:19:27 -0400")
-Message-ID: <87y1ysky25.fsf@brahms.olymp>
+        Mon, 23 May 2022 12:37:36 -0400
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08118692B1
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:37:36 -0700 (PDT)
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-e93bbb54f9so19092469fac.12
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:37:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1BFgijJ7aszTcHHsd9pAmW3cK000ZbrDTFx/ezp+86o=;
+        b=iBr822YvjiANKjvIdeVNyv0eKBOhApGyCRr0cENInFuyGJjZBlYPtAwbSqgXK8UkTU
+         vFQz4fQA4ep8vJ85W6AN/2ggvSYc08Cl0h0eb1HUT1qK28sC8M5OHSoJqgtaDJNYrKIE
+         9ZisYlSwpAQ5ca5+lZ1oNS/kCVv5dLldwMjFkQU/qqpulbu8pgp1x66RQsfzSPeI3IW2
+         xLjWjUeU+PjeUgTlOLdSj+QyINX2MQTQ8NEjTMA079S1Gm1pDlKD0Rn0Hf7uh0osEdp1
+         gefzVbEf1KwMI4nloDqzu+F/ZkkWOhp5uWmEKMfea6hiaGF7ByERIT77dqaLW/eCZQ7O
+         yXgw==
+X-Gm-Message-State: AOAM533YxDcb6TBv1/zD+hpvMy3Wg9CrWINjAgMNTwNDYkPB/qlO+26g
+        pF/Vo8jaWBT5ax5wqRPR4A==
+X-Google-Smtp-Source: ABdhPJxH6VjjfcO3rS/ZYGupFMMZgZ4XKvxr87yQP/XYRk/Gc4l8E4+ud5ESV/RYisRgIJ/UjILnCw==
+X-Received: by 2002:a05:6870:f61a:b0:f1:7484:8eca with SMTP id ek26-20020a056870f61a00b000f174848ecamr12540817oab.107.1653323855185;
+        Mon, 23 May 2022 09:37:35 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id q205-20020acad9d6000000b0032b42772ef9sm1212630oig.50.2022.05.23.09.37.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 May 2022 09:37:34 -0700 (PDT)
+Received: (nullmailer pid 1722010 invoked by uid 1000);
+        Mon, 23 May 2022 16:37:33 -0000
+Date:   Mon, 23 May 2022 11:37:33 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Tanmay Jagdale <tanmay@marvell.com>
+Cc:     will@kernel.org, mark.rutland@arm.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        sgoutham@marvell.com, lcherian@marvell.com, bbhushan2@marvell.com,
+        amitsinght@marvell.com
+Subject: Re: [PATCH] perf/marvell_cn10k: Add MPAM support for TAD PMU
+Message-ID: <20220523163733.GA1712487-robh@kernel.org>
+References: <20220523145738.2750368-1-tanmay@marvell.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220523145738.2750368-1-tanmay@marvell.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jeff Layton <jlayton@kernel.org> writes:
+On Mon, May 23, 2022 at 08:27:38PM +0530, Tanmay Jagdale wrote:
+> The TAD PMU supports following counters that can be filtered by MPAM
+> partition id.
 
-> On Mon, 2022-05-23 at 17:09 +0100, Lu=C3=ADs Henriques wrote:
->> The cephfs kernel client started to show  the message:
->>=20
->>  ceph: mds0 session blocklisted
->>=20
->> when mounting a filesystem.  This is due to the fact that the session
->> messages are being incorrectly decoded: the skip needs to take into
->> account the 'len'.
->>=20
->> While there, fixed some whitespaces too.
->>=20
->> Fixes: e1c9788cb397 ("ceph: don't rely on error_string to validate block=
-listed session.")
->> Signed-off-by: Lu=C3=ADs Henriques <lhenriques@suse.de>
->> ---
->>  fs/ceph/mds_client.c | 14 +++++++++-----
->>  1 file changed, 9 insertions(+), 5 deletions(-)
->>=20
->> diff --git a/fs/ceph/mds_client.c b/fs/ceph/mds_client.c
->> index 00c3de177dd6..1bd3e1bb0fdf 100644
->> --- a/fs/ceph/mds_client.c
->> +++ b/fs/ceph/mds_client.c
->> @@ -3375,13 +3375,17 @@ static void handle_session(struct ceph_mds_sessi=
-on *session,
->>  	}
->>=20=20
->>  	if (msg_version >=3D 5) {
->> -		u32 flags;
->> -		/* version >=3D 4, struct_v, struct_cv, len, metric_spec */
->> -	        ceph_decode_skip_n(&p, end, 2 + sizeof(u32) * 2, bad);
->> +		u32 flags, len;
->> +
->> +		/* version >=3D 4 */
->> +		ceph_decode_skip_16(&p, end, bad); /* struct_v, struct_cv */
->> +		ceph_decode_32_safe(&p, end, len, bad); /* len */
->> +		ceph_decode_skip_n(&p, end, len, bad); /* metric_spec */
->> +
->>  		/* version >=3D 5, flags   */
->> -                ceph_decode_32_safe(&p, end, flags, bad);
->> +		ceph_decode_32_safe(&p, end, flags, bad);
->>  		if (flags & CEPH_SESSION_BLOCKLISTED) {
->> -		        pr_warn("mds%d session blocklisted\n", session->s_mds);
->> +			pr_warn("mds%d session blocklisted\n", session->s_mds);
->>  			blocklisted =3D true;
->>  		}
->>  	}
->
-> Good catch! Should we send this to stable too?
+How are you setting the PARTID? There's no support yet in the kernel to 
+set it. 
 
-Ah, yeah.  I didn't explicitly tagged it as I assumed the 'Fixes:' would
-be enough for that.  But it's probably better to do add the 'Cc: stable'
-too.
+>     - (0x1a) tad_alloc_dtg : Allocations to DTG.
+>     - (0x1b) tad_alloc_ltg : Allocations to LTG.
+>     - (0x1c) tad_alloc_any : Total allocations to DTG/LTG.
+>     - (0x1d) tad_hit_dtg   : DTG hits.
+>     - (0x1e) tad_hit_ltg   : LTG hits.
+>     - (0x1f) tad_hit_any   : Hit in LTG/DTG.
+>     - (0x20) tad_tag_rd    : Total tag reads.
+> 
+> Add a new 'partid' attribute of 16-bits to get the partition id
+> passed from perf tool. This value would be stored in config1 field
+> of perf_event_attr structure.
+> 
+> Example:
+> perf stat -e tad/tad_alloc_any,partid=0x12/ <program>
 
-> Reviewed-by: Jeff Layton <jlayton@kernel.org>
+How would userspace get the 0x12 value?
 
-Cheers,
---=20
-Lu=C3=ADs
+> 
+> - Drop read of TAD_PRF since we don't have to preserve any
+>   bit fields and always write an updated value.
+> - Update register offsets of TAD_PRF and TAD_PFC.
+> 
+> Signed-off-by: Tanmay Jagdale <tanmay@marvell.com>
+> ---
+>  drivers/perf/marvell_cn10k_tad_pmu.c | 23 ++++++++++++++++++-----
+>  1 file changed, 18 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/perf/marvell_cn10k_tad_pmu.c b/drivers/perf/marvell_cn10k_tad_pmu.c
+> index 282d3a071a67..f552e6bffcac 100644
+> --- a/drivers/perf/marvell_cn10k_tad_pmu.c
+> +++ b/drivers/perf/marvell_cn10k_tad_pmu.c
+> @@ -18,10 +18,12 @@
+>  #include <linux/perf_event.h>
+>  #include <linux/platform_device.h>
+>  
+> -#define TAD_PFC_OFFSET		0x0
+> +#define TAD_PFC_OFFSET		0x800
+>  #define TAD_PFC(counter)	(TAD_PFC_OFFSET | (counter << 3))
+> -#define TAD_PRF_OFFSET		0x100
+> +#define TAD_PRF_OFFSET		0x900
+>  #define TAD_PRF(counter)	(TAD_PRF_OFFSET | (counter << 3))
+> +#define TAD_PRF_MATCH_PARTID	(1 << 8)
+> +#define TAD_PRF_PARTID_NS	(1 << 10)
+>  #define TAD_PRF_CNTSEL_MASK	0xFF
+>  #define TAD_MAX_COUNTERS	8
+
+Does this h/w block follow the MPAM specification or just uses PARTID in 
+its own way?
+
+Rob

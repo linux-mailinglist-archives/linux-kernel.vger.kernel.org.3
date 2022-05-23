@@ -2,267 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE8555314E3
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:26:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64B9F5314E5
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:26:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238667AbiEWQX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 12:23:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54696 "EHLO
+        id S238765AbiEWQYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 12:24:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238732AbiEWQXW (ORCPT
+        with ESMTP id S238749AbiEWQXv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 12:23:22 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AB7466C8D
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:23:21 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-30007f11f88so22483677b3.7
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:23:21 -0700 (PDT)
+        Mon, 23 May 2022 12:23:51 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE1868328
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:23:50 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id nk9-20020a17090b194900b001df2fcdc165so18017815pjb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:23:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nLim1rBV6+AKVJAH9v50yJzUF2isQfdwYteSdgF+6Vs=;
-        b=Rj7Zzs8xs5UvFQ8MJ3sGlRfqNPC/zkpKul5GskxWPG9ONhnVQeOiRVlUltzS/FM3rH
-         PrSS/aGrdO0A5qEKYQ5CSW7j9iv+H2Gle6sIiW715lTz85Qm3mfPUwo9ePFopvwobTXC
-         H8oLE2HlR8PhnEqRWHxHul7DGmIK9tFY783J4LlEmKuEwhxjlLmpaPRGbH1pKnvslw8R
-         9noRx8Zmd0tO8J9VbLUZvG4x6JKxh27FpXzY3tbCUsRQtOi3cYGk1NsA5aEDQbwhEU2D
-         QEyccZCS60D8WU1ENMVPiWAb30w+HHvMgSrL7WoEBv1mqUPqbDYUSsbaXZxSTlsKbtRS
-         uImw==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=zjexXrGS7BxPzeGdf9fCf6kgZQFaox1zpS8kJ4DMpls=;
+        b=COW4CzMEUCXsynuc100zu1EoLrCfj0MekuJROwqYmgCFNGXfxSDg+KcKldwTEFn+Sa
+         Ua1T4qgyUJoePe96Y5fhHd8+QlrOg6noSDJhJEmtL7sBm04iHJuYZfoS4DTMaKWbQJHF
+         9jA4ZCZ6VNAvX29zI2pnOre0FcuXIgOuSPvq+yPNrVG7s9mq/PrGv4I4Fpoe+uCyzGRu
+         nNe363HwBbHnmLI+XvTbrNdeqlCytzUorGakLi3iMK3YerH4eRighb5cbRgebA+6LN73
+         u7u4cI/KXIZHTO/qZlyKCPRBozCBGlAASkVFfV1dcvEWMZ9/hWg5seRJFQ5O345pi+/n
+         QFXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nLim1rBV6+AKVJAH9v50yJzUF2isQfdwYteSdgF+6Vs=;
-        b=4TC6XSbFmKirtpBzkifrFrdVNfhmTIclGJWgrLFsNTH+Za7r1J/8HyytZTYkap4ykk
-         9XkWn+/IDjb8wIj9VcX6jjGB122PaFOlbYC806JYcgxg7jdmwbYghi5A6Qw90sFNIo5w
-         0v+tpV1NJZj5Lgf/2gmTcvZ5lQW2ibO5YO5M8f2g/FGa2LmxWkpmIluTdJhtqhFl9vi4
-         PUuA7hrWWRwbyUQP9fURQfRjuLeNAJeY89bhS6X425YjEHDZ3qgE2KDYj3ZrOsr5ePst
-         6Naxp6NRnRoPu/gNNsJKPx5Z87DHqGFG6pFC2jGW+UNoHoxXjREsqL/skg9Y9g8Es4Lj
-         FvOw==
-X-Gm-Message-State: AOAM533cTWA3LDbCohZ1s7rX3eARU9g5dNLrKB/QkOFRCc1SExccK68O
-        0fXe2gU6txBprjDJECbYkYc28WeEi0E1lkukHk+0dQ==
-X-Google-Smtp-Source: ABdhPJyy8xOPmwamiZ1HAKtU35j+W8JvJ6XtUgvqlqGb7nAxoETCnpDJ8leZvt7Nn6K5rj3dIbkMwdnuc0srqM8Xf88=
-X-Received: by 2002:a81:1f09:0:b0:2ff:dd8d:7d56 with SMTP id
- f9-20020a811f09000000b002ffdd8d7d56mr7359819ywf.67.1653323000513; Mon, 23 May
- 2022 09:23:20 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zjexXrGS7BxPzeGdf9fCf6kgZQFaox1zpS8kJ4DMpls=;
+        b=Lh+EcGVU9EXMr2g+on5seki+VzPCX0oRS+FNkR7R3PwwT5Wqk5AnBlMRZJT559wPsH
+         uJvjTMr0XFw+ecduADjdU+4lvR8mGjRKugztXbQ6xPXULg7NOmceQq4cT6Iu/JrNEDpL
+         BeFHI6ACO0J2FhMuBOds56skqaWvgn/9PCQyqkDIYzrZu+uSQqZi+k8Sq3DNRFWDgFHg
+         Zyiv18lbtgEmcIFXjikAun6r31WjEi6OU4VHtUdSbyNlmZaW4JGCF0KXCo1An+qLmlTj
+         J40JlEMhOUQtkPrgARyIb8HDvujDkL14VBxMcUh5PMGKyggAOa9+5yJDkGUiJCMbd/ft
+         bpJA==
+X-Gm-Message-State: AOAM531Jjd/lVpIsPfVc0885s2dOq0AA1HBUHV5DV+B9VYWlrHGnCqo8
+        aFB5Z94woGB7AFDnYnz5bWgMDQ==
+X-Google-Smtp-Source: ABdhPJxiCIrt0CBgMKNVza4j0yYrc/SsaUFLLrGxTaqpj7e5byzn61qU00FPEv9zqJi+LE8Fzw1LSA==
+X-Received: by 2002:a17:902:f708:b0:153:839f:bf2c with SMTP id h8-20020a170902f70800b00153839fbf2cmr23430337plo.113.1653323029921;
+        Mon, 23 May 2022 09:23:49 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id k3-20020aa79983000000b005181133ff2dsm7670428pfh.176.2022.05.23.09.23.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 May 2022 09:23:49 -0700 (PDT)
+Date:   Mon, 23 May 2022 16:23:46 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chenyi Qiang <chenyi.qiang@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Xiaoyao Li <xiaoyao.li@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 2/3] KVM: selftests: Add a test to get/set triple
+ fault event
+Message-ID: <You1Eq6fp8F3YF5Z@google.com>
+References: <20220421072958.16375-1-chenyi.qiang@intel.com>
+ <20220421072958.16375-3-chenyi.qiang@intel.com>
+ <YoVHAIGcFgJit1qp@google.com>
+ <5c5a7597-d6e3-7a05-ead8-659c45aea222@intel.com>
 MIME-Version: 1.0
-References: <20220427160544.40309-1-zhouchengming@bytedance.com>
-In-Reply-To: <20220427160544.40309-1-zhouchengming@bytedance.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Mon, 23 May 2022 18:23:09 +0200
-Message-ID: <CAKfTPtB_Bm=xYdudD6d0PLqm_kZ1bCQ3oQH2NMZ0ZGOqsJ8k9w@mail.gmail.com>
-Subject: Re: [PATCH] sched/fair: optimize and simplify rq leaf_cfs_rq_list
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, linux-kernel@vger.kernel.org,
-        duanxiongchun@bytedance.com, songmuchun@bytedance.com,
-        zhengqi.arch@bytedance.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5c5a7597-d6e3-7a05-ead8-659c45aea222@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 27 Apr 2022 at 18:07, Chengming Zhou
-<zhouchengming@bytedance.com> wrote:
->
-> We notice the rq leaf_cfs_rq_list has two problems when do bugfix
-> backports and some test profiling.
->
-> 1. cfs_rqs under throttled subtree could be added to the list, and
->    make their fully decayed ancestors on the list, even though not needed.
->
-> 2. #1 also make the leaf_cfs_rq_list management complex and error prone,
->    this is the list of related bugfix so far:
->
->    commit 31bc6aeaab1d ("sched/fair: Optimize update_blocked_averages()")
->    commit fe61468b2cbc ("sched/fair: Fix enqueue_task_fair warning")
->    commit b34cb07dde7c ("sched/fair: Fix enqueue_task_fair() warning some more")
->    commit 39f23ce07b93 ("sched/fair: Fix unthrottle_cfs_rq() for leaf_cfs_rq list")
->    commit 0258bdfaff5b ("sched/fair: Fix unfairness caused by missing load decay")
->    commit a7b359fc6a37 ("sched/fair: Correctly insert cfs_rq's to list on unthrottle")
->    commit fdaba61ef8a2 ("sched/fair: Ensure that the CFS parent is added after unthrottling")
->    commit 2630cde26711 ("sched/fair: Add ancestors of unthrottled undecayed cfs_rq")
->
-> commit 31bc6aeaab1d ("sched/fair: Optimize update_blocked_averages()")
-> delete every cfs_rq under throttled subtree from rq->leaf_cfs_rq_list,
-> and delete the throttled_hierarchy() test in update_blocked_averages(),
-> which optimized update_blocked_averages().
->
-> But those later bugfix add cfs_rqs under throttled subtree back to
-> rq->leaf_cfs_rq_list again, with their fully decayed ancestors, for
-> the integrity of rq->leaf_cfs_rq_list.
->
-> This patch takes another method, skip all cfs_rqs under throttled
-> hierarchy when list_add_leaf_cfs_rq(), to completely make cfs_rqs
-> under throttled subtree off the leaf_cfs_rq_list.
->
-> So we don't need to consider throttled related things in
-> enqueue_entity(), unthrottle_cfs_rq() and enqueue_task_fair(),
-> which simplify the code a lot. Also optimize update_blocked_averages()
-> since cfs_rqs under throttled hierarchy and their ancestors
-> won't be on the leaf_cfs_rq_list.
->
-> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-> ---
->  kernel/sched/fair.c | 72 ++++++++++-----------------------------------
->  1 file changed, 16 insertions(+), 56 deletions(-)
->
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 1ad18b5cc1b8..083c3d32c899 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -309,6 +309,8 @@ const struct sched_class fair_sched_class;
->
->  #ifdef CONFIG_FAIR_GROUP_SCHED
->
-> +static inline int throttled_hierarchy(struct cfs_rq *cfs_rq);
-> +
->  /* Walk up scheduling entities hierarchy */
->  #define for_each_sched_entity(se) \
->                 for (; se; se = se->parent)
-> @@ -331,7 +333,7 @@ static inline bool list_add_leaf_cfs_rq(struct cfs_rq *cfs_rq)
->         struct rq *rq = rq_of(cfs_rq);
->         int cpu = cpu_of(rq);
->
-> -       if (cfs_rq->on_list)
-> +       if (cfs_rq->on_list || throttled_hierarchy(cfs_rq))
+On Mon, May 23, 2022, Chenyi Qiang wrote:
+> 
+> 
+> On 5/19/2022 3:20 AM, Sean Christopherson wrote:
+> > On Thu, Apr 21, 2022, Chenyi Qiang wrote:
+> > > +#ifndef __x86_64__
+> > > +# error This test is 64-bit only
+> > 
+> > No need, all of KVM selftests are 64-bit only.
+> > 
+> > > +#endif
+> > > +
+> > > +#define VCPU_ID			0
+> > > +#define ARBITRARY_IO_PORT	0x2000
+> > > +
+> > > +/* The virtual machine object. */
+> > > +static struct kvm_vm *vm;
+> > > +
+> > > +static void l2_guest_code(void)
+> > > +{
+> > > +	/*
+> > > +	 * Generate an exit to L0 userspace, i.e. main(), via I/O to an
+> > > +	 * arbitrary port.
+> > > +	 */
+> > 
+> > I think we can test a "real" triple fault without too much effort by abusing
+> > vcpu->run->request_interrupt_window.  E.g. map the run struct into L2, clear
+> > PIN_BASED_EXT_INTR_MASK in vmcs12, and then in l2_guest_code() do:
+> > 
+> > 	asm volatile("cli");
+> > 
+> > 	run->request_interrupt_window = true;
+> > 
+> 
+> Maybe, A GUEST_SYNC to main() to change the request_interrupt_window also
+> works.
 
-Please move throttled_hierarchy() outside list_add_leaf_cfs_rq()
-because the task will not be added in this case which is quite
-misleading
+Hmm, yes, that should work too.  Feel free to punt on writing this sub-test.  As
+mentioned below, KVM should treat a pending triple fault as a pending "exception",
+i.e. userspace shouldn't see KVM_EXIT_IRQ_WINDOW_OPEN with a pending triple fault,
+and so the test should actually assert that the triple fault occurs in L2.  But I
+can roll that test into the KVM fix if you'd like.
 
-I will continue to check the various corner cases but I haven't seen
-problem so far with your method
+> > 	asm volatile("sti; ud2");
+> > 
+> 
+> How does the "real" triple fault occur here? Through UD2?
 
->                 return rq->tmp_alone_branch == &rq->leaf_cfs_rq_list;
->
->         cfs_rq->on_list = 1;
-> @@ -3242,8 +3244,6 @@ static long calc_group_shares(struct cfs_rq *cfs_rq)
->  }
->  #endif /* CONFIG_SMP */
->
-> -static inline int throttled_hierarchy(struct cfs_rq *cfs_rq);
-> -
->  /*
->   * Recomputes the group entity based on the current state of its group
->   * runqueue.
-> @@ -4356,16 +4356,10 @@ enqueue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
->                 __enqueue_entity(cfs_rq, se);
->         se->on_rq = 1;
->
-> -       /*
-> -        * When bandwidth control is enabled, cfs might have been removed
-> -        * because of a parent been throttled but cfs->nr_running > 1. Try to
-> -        * add it unconditionally.
-> -        */
-> -       if (cfs_rq->nr_running == 1 || cfs_bandwidth_used())
-> +       if (cfs_rq->nr_running == 1) {
->                 list_add_leaf_cfs_rq(cfs_rq);
-> -
-> -       if (cfs_rq->nr_running == 1)
->                 check_enqueue_throttle(cfs_rq);
-> +       }
->  }
->
->  static void __clear_buddies_last(struct sched_entity *se)
-> @@ -4980,11 +4974,18 @@ void unthrottle_cfs_rq(struct cfs_rq *cfs_rq)
->         /* update hierarchical throttle state */
->         walk_tg_tree_from(cfs_rq->tg, tg_nop, tg_unthrottle_up, (void *)rq);
->
-> -       /* Nothing to run but something to decay (on_list)? Complete the branch */
->         if (!cfs_rq->load.weight) {
-> -               if (cfs_rq->on_list)
-> -                       goto unthrottle_throttle;
-> -               return;
-> +               if (!cfs_rq->on_list)
-> +                       return;
-> +               /*
-> +                * Nothing to run but something to decay (on_list)?
-> +                * Complete the branch.
-> +                */
-> +               for_each_sched_entity(se) {
-> +                       if (list_add_leaf_cfs_rq(cfs_rq_of(se)))
-> +                               break;
-> +               }
-> +               goto unthrottle_throttle;
->         }
->
->         task_delta = cfs_rq->h_nr_running;
-> @@ -5022,31 +5023,12 @@ void unthrottle_cfs_rq(struct cfs_rq *cfs_rq)
->                 /* end evaluation on encountering a throttled cfs_rq */
->                 if (cfs_rq_throttled(qcfs_rq))
->                         goto unthrottle_throttle;
-> -
-> -               /*
-> -                * One parent has been throttled and cfs_rq removed from the
-> -                * list. Add it back to not break the leaf list.
-> -                */
-> -               if (throttled_hierarchy(qcfs_rq))
-> -                       list_add_leaf_cfs_rq(qcfs_rq);
->         }
->
->         /* At this point se is NULL and we are at root level*/
->         add_nr_running(rq, task_delta);
->
->  unthrottle_throttle:
-> -       /*
-> -        * The cfs_rq_throttled() breaks in the above iteration can result in
-> -        * incomplete leaf list maintenance, resulting in triggering the
-> -        * assertion below.
-> -        */
-> -       for_each_sched_entity(se) {
-> -               struct cfs_rq *qcfs_rq = cfs_rq_of(se);
-> -
-> -               if (list_add_leaf_cfs_rq(qcfs_rq))
-> -                       break;
-> -       }
-> -
->         assert_list_leaf_cfs_rq(rq);
->
->         /* Determine whether we need to wake up potentially idle CPU: */
-> @@ -5701,13 +5683,6 @@ enqueue_task_fair(struct rq *rq, struct task_struct *p, int flags)
->                 /* end evaluation on encountering a throttled cfs_rq */
->                 if (cfs_rq_throttled(cfs_rq))
->                         goto enqueue_throttle;
-> -
-> -               /*
-> -                * One parent has been throttled and cfs_rq removed from the
-> -                * list. Add it back to not break the leaf list.
-> -                */
-> -               if (throttled_hierarchy(cfs_rq))
-> -                       list_add_leaf_cfs_rq(cfs_rq);
->         }
->
->         /* At this point se is NULL and we are at root level*/
-> @@ -5731,21 +5706,6 @@ enqueue_task_fair(struct rq *rq, struct task_struct *p, int flags)
->                 update_overutilized_status(rq);
->
->  enqueue_throttle:
-> -       if (cfs_bandwidth_used()) {
-> -               /*
-> -                * When bandwidth control is enabled; the cfs_rq_throttled()
-> -                * breaks in the above iteration can result in incomplete
-> -                * leaf list maintenance, resulting in triggering the assertion
-> -                * below.
-> -                */
-> -               for_each_sched_entity(se) {
-> -                       cfs_rq = cfs_rq_of(se);
-> -
-> -                       if (list_add_leaf_cfs_rq(cfs_rq))
-> -                               break;
-> -               }
-> -       }
-> -
->         assert_list_leaf_cfs_rq(rq);
->
->         hrtick_update(rq);
-> --
-> 2.35.2
->
+Yeah.  IIRC, by default L2 doesn't have a valid IDT, so any fault will escalate to
+a triple fault.
+
+> > 	asm volatile("inb %%dx, %%al"
+> > 		     : : [port] "d" (ARBITRARY_IO_PORT) : "rax"); 	
+> > 
+> > The STI shadow will block the IRQ-window VM-Exit until after the ud2, i.e. until
+> > after the triple fault is pending.
+> > 
+> > And then main() can
+> > 
+> >    1. verify it got KVM_EXIT_IRQ_WINDOW_OPEN with a pending triple fault
+> >    2. clear the triple fault and re-enter L1+l2
+> >    3. continue with the existing code, e.g. verify it got KVM_EXIT_IO, stuff a
+> >       pending triple fault, etc...
+> > 
+> > That said, typing that out makes me think we should technically handle/prevent this
+> > in KVM since triple fault / shutdown is kinda sorta just a special exception.

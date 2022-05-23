@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46C78531B3A
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 432E4531BE7
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240346AbiEWRZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:25:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34032 "EHLO
+        id S240069AbiEWRLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:11:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240588AbiEWRQb (ORCPT
+        with ESMTP id S239649AbiEWRKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:16:31 -0400
+        Mon, 23 May 2022 13:10:19 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E89726345;
-        Mon, 23 May 2022 10:15:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28E456CA83;
+        Mon, 23 May 2022 10:09:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CEBB0B81229;
-        Mon, 23 May 2022 17:15:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D2EDC385A9;
-        Mon, 23 May 2022 17:15:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D17E2B811FF;
+        Mon, 23 May 2022 17:09:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35896C385A9;
+        Mon, 23 May 2022 17:09:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326130;
-        bh=43ADYlVSU0bl+oIij0x957OoDs9ZCDv4I1yKzplQidc=;
+        s=korg; t=1653325782;
+        bh=uaVtAjgPGgzXjaW6iUUkGMw3JPgNjOG8AApm91RvokI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zK0Dkypi6mJ0PwCnOQacVGyYABwhR8d/dV+tVPukLVaanm3Pm/IwT6DW7DVUzeQHL
-         nUo+qMAE+xgPa64EbvHMcDhfWnNx6memaARl9NqjHCfQtSZHDnLiLIFHxvkZrhPcsz
-         8KQafUsCUDFP3LkzaZTVKLmszlyfSP5Yn7PFbT74=
+        b=L4xE2yrJVLvdm8qYkMs1gjBJTgveQXtJn1D8LdUAjnq92olGvndxh9FWMu/MNlyMd
+         QxXiUjRn4q5sQdpO2PnmixLhms+GWc2ZANf66fLQdwK1i/RGxy2pH2HT0y3ISGavYo
+         XVcPTKpz0ZykxdfMmkpmrjEeJemRCcgMe08ZHANE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= 
-        <jerome.pouiller@silabs.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
-Subject: [PATCH 5.4 33/68] dma-buf: fix use of DMA_BUF_SET_NAME_{A,B} in userspace
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Subject: [PATCH 4.14 11/33] mmc: core: Specify timeouts for BKOPS and CACHE_FLUSH for eMMC
 Date:   Mon, 23 May 2022 19:05:00 +0200
-Message-Id: <20220523165808.093124227@linuxfoundation.org>
+Message-Id: <20220523165749.400451941@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165802.500642349@linuxfoundation.org>
-References: <20220523165802.500642349@linuxfoundation.org>
+In-Reply-To: <20220523165746.957506211@linuxfoundation.org>
+References: <20220523165746.957506211@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,51 +54,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jérôme Pouiller <jerome.pouiller@silabs.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
 
-commit 7c3e9fcad9c7d8bb5d69a576044fb16b1d2e8a01 upstream.
+commit 24ed3bd01d6a844fd5e8a75f48d0a3d10ed71bf9 upstream
 
-The typedefs u32 and u64 are not available in userspace. Thus user get
-an error he try to use DMA_BUF_SET_NAME_A or DMA_BUF_SET_NAME_B:
+The timeout values used while waiting for a CMD6 for BKOPS or a CACHE_FLUSH
+to complete, are not defined by the eMMC spec. However, a timeout of 10
+minutes as is currently being used, is just silly for both of these cases.
+Instead, let's specify more reasonable timeouts, 120s for BKOPS and 30s for
+CACHE_FLUSH.
 
-    $ gcc -Wall   -c -MMD -c -o ioctls_list.o ioctls_list.c
-    In file included from /usr/include/x86_64-linux-gnu/asm/ioctl.h:1,
-                     from /usr/include/linux/ioctl.h:5,
-                     from /usr/include/asm-generic/ioctls.h:5,
-                     from ioctls_list.c:11:
-    ioctls_list.c:463:29: error: ‘u32’ undeclared here (not in a function)
-      463 |     { "DMA_BUF_SET_NAME_A", DMA_BUF_SET_NAME_A, -1, -1 }, // linux/dma-buf.h
-          |                             ^~~~~~~~~~~~~~~~~~
-    ioctls_list.c:464:29: error: ‘u64’ undeclared here (not in a function)
-      464 |     { "DMA_BUF_SET_NAME_B", DMA_BUF_SET_NAME_B, -1, -1 }, // linux/dma-buf.h
-          |                             ^~~~~~~~~~~~~~~~~~
-
-The issue was initially reported here[1].
-
-[1]: https://github.com/jerome-pouiller/ioctl/pull/14
-
-Signed-off-by: Jérôme Pouiller <jerome.pouiller@silabs.com>
-Reviewed-by: Christian König <christian.koenig@amd.com>
-Fixes: a5bff92eaac4 ("dma-buf: Fix SET_NAME ioctl uapi")
-CC: stable@vger.kernel.org
-Link: https://patchwork.freedesktop.org/patch/msgid/20220517072708.245265-1-Jerome.Pouiller@silabs.com
-Signed-off-by: Christian König <christian.koenig@amd.com>
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Link: https://lore.kernel.org/r/20200122142747.5690-2-ulf.hansson@linaro.org
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/uapi/linux/dma-buf.h |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/mmc/core/mmc_ops.c |    9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
---- a/include/uapi/linux/dma-buf.h
-+++ b/include/uapi/linux/dma-buf.h
-@@ -44,7 +44,7 @@ struct dma_buf_sync {
-  * between them in actual uapi, they're just different numbers.
-  */
- #define DMA_BUF_SET_NAME	_IOW(DMA_BUF_BASE, 1, const char *)
--#define DMA_BUF_SET_NAME_A	_IOW(DMA_BUF_BASE, 1, u32)
--#define DMA_BUF_SET_NAME_B	_IOW(DMA_BUF_BASE, 1, u64)
-+#define DMA_BUF_SET_NAME_A	_IOW(DMA_BUF_BASE, 1, __u32)
-+#define DMA_BUF_SET_NAME_B	_IOW(DMA_BUF_BASE, 1, __u64)
+--- a/drivers/mmc/core/mmc_ops.c
++++ b/drivers/mmc/core/mmc_ops.c
+@@ -23,7 +23,9 @@
+ #include "host.h"
+ #include "mmc_ops.h"
  
- #endif
+-#define MMC_OPS_TIMEOUT_MS	(10 * 60 * 1000) /* 10 minute timeout */
++#define MMC_OPS_TIMEOUT_MS		(10 * 60 * 1000) /* 10min*/
++#define MMC_BKOPS_TIMEOUT_MS		(120 * 1000) /* 120s */
++#define MMC_CACHE_FLUSH_TIMEOUT_MS	(30 * 1000) /* 30s */
+ 
+ static const u8 tuning_blk_pattern_4bit[] = {
+ 	0xff, 0x0f, 0xff, 0x00, 0xff, 0xcc, 0xc3, 0xcc,
+@@ -979,7 +981,7 @@ void mmc_start_bkops(struct mmc_card *ca
+ 
+ 	mmc_claim_host(card->host);
+ 	if (card->ext_csd.raw_bkops_status >= EXT_CSD_BKOPS_LEVEL_2) {
+-		timeout = MMC_OPS_TIMEOUT_MS;
++		timeout = MMC_BKOPS_TIMEOUT_MS;
+ 		use_busy_signal = true;
+ 	} else {
+ 		timeout = 0;
+@@ -1022,7 +1024,8 @@ int mmc_flush_cache(struct mmc_card *car
+ 			(card->ext_csd.cache_size > 0) &&
+ 			(card->ext_csd.cache_ctrl & 1)) {
+ 		err = mmc_switch(card, EXT_CSD_CMD_SET_NORMAL,
+-				EXT_CSD_FLUSH_CACHE, 1, 0);
++				 EXT_CSD_FLUSH_CACHE, 1,
++				 MMC_CACHE_FLUSH_TIMEOUT_MS);
+ 		if (err)
+ 			pr_err("%s: cache flush error %d\n",
+ 					mmc_hostname(card->host), err);
 
 

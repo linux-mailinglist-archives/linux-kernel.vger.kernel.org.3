@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EFF0531C7B
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:57:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EB51531718
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:52:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240533AbiEWRQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:16:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37678 "EHLO
+        id S240353AbiEWRL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:11:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240772AbiEWRMi (ORCPT
+        with ESMTP id S239728AbiEWRK3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:12:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFA526B7EB;
-        Mon, 23 May 2022 10:12:05 -0700 (PDT)
+        Mon, 23 May 2022 13:10:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1DB66B7F8;
+        Mon, 23 May 2022 10:10:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9FDA0B8120C;
-        Mon, 23 May 2022 17:10:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCBE3C34116;
-        Mon, 23 May 2022 17:10:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DE00614CC;
+        Mon, 23 May 2022 17:08:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60EA5C385A9;
+        Mon, 23 May 2022 17:08:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653325854;
-        bh=r+YoF+Jk1Ur3+B15L67bp8ae8bJEZ2yCMEZHlxk8IZY=;
+        s=korg; t=1653325737;
+        bh=1W2LW1qZ7oq6x4+GTpFCSF5m4dT2h7TD7pOzJu6tlbQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CL3obSWXshk2TgfDNmAmArd4MSZPbZe4JVtrchx7ca0ctLWkVfQs+6L5B6ejOFTdP
-         nwqaUgod/OEe6iRUg5P7vThC26eTRYv2TedvwIMLYiTc2lq8n0NlAdyNxTNGkSHpNm
-         Jxq6tozXw4SSp6m9x0TUusgUemWXDMKyjex9tGKs=
+        b=JQj1qBKE0BysRV3ZXof16V06wU+nYt1HDw5lyD8+HAEUb6av/JfDDm+ArEvTBuhsr
+         T6xwgB4sxPCy9bP7PZM025VwJVnCOM8bN68mLoiAajB2U/df62ApZ9xv+BAkmQOyAB
+         DZkUceRBaj1/x5nStamvu8Vy2kCxzNy+Zw+xHjTA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        stable@vger.kernel.org,
+        Himanshu Madhani <himanshu.madhani@oracle.com>,
+        Gleb Chesnokov <Chesnokov.G@raidix.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 31/44] ARM: 9197/1: spectre-bhb: fix loop8 sequence for Thumb2
-Date:   Mon, 23 May 2022 19:05:15 +0200
-Message-Id: <20220523165758.790815379@linuxfoundation.org>
+Subject: [PATCH 4.14 27/33] scsi: qla2xxx: Fix missed DMA unmap for aborted commands
+Date:   Mon, 23 May 2022 19:05:16 +0200
+Message-Id: <20220523165752.843430355@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165752.797318097@linuxfoundation.org>
-References: <20220523165752.797318097@linuxfoundation.org>
+In-Reply-To: <20220523165746.957506211@linuxfoundation.org>
+References: <20220523165746.957506211@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +57,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ard Biesheuvel <ardb@kernel.org>
+From: Gleb Chesnokov <Chesnokov.G@raidix.com>
 
-[ Upstream commit 3cfb3019979666bdf33a1010147363cf05e0f17b ]
+[ Upstream commit 26f9ce53817a8fd84b69a73473a7de852a24c897 ]
 
-In Thumb2, 'b . + 4' produces a branch instruction that uses a narrow
-encoding, and so it does not jump to the following instruction as
-expected. So use W(b) instead.
+Aborting commands that have already been sent to the firmware can
+cause BUG in qlt_free_cmd(): BUG_ON(cmd->sg_mapped)
 
-Fixes: 6c7cb60bff7a ("ARM: fix Thumb2 regression with Spectre BHB")
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+For instance:
+
+ - Command passes rdx_to_xfer state, maps sgl, sends to the firmware
+
+ - Reset occurs, qla2xxx performs ISP error recovery, aborts the command
+
+ - Target stack calls qlt_abort_cmd() and then qlt_free_cmd()
+
+ - BUG_ON(cmd->sg_mapped) in qlt_free_cmd() occurs because sgl was not
+   unmapped
+
+Thus, unmap sgl in qlt_abort_cmd() for commands with the aborted flag set.
+
+Link: https://lore.kernel.org/r/AS8PR10MB4952D545F84B6B1DFD39EC1E9DEE9@AS8PR10MB4952.EURPRD10.PROD.OUTLOOK.COM
+Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
+Signed-off-by: Gleb Chesnokov <Chesnokov.G@raidix.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/kernel/entry-armv.S | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/qla2xxx/qla_target.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/arm/kernel/entry-armv.S b/arch/arm/kernel/entry-armv.S
-index a929b6acb149..d779cd1a3b0c 100644
---- a/arch/arm/kernel/entry-armv.S
-+++ b/arch/arm/kernel/entry-armv.S
-@@ -1067,7 +1067,7 @@ vector_bhb_loop8_\name:
+diff --git a/drivers/scsi/qla2xxx/qla_target.c b/drivers/scsi/qla2xxx/qla_target.c
+index 97a0c2384aee..4b431ca55c96 100644
+--- a/drivers/scsi/qla2xxx/qla_target.c
++++ b/drivers/scsi/qla2xxx/qla_target.c
+@@ -3639,6 +3639,9 @@ int qlt_abort_cmd(struct qla_tgt_cmd *cmd)
  
- 	@ bhb workaround
- 	mov	r0, #8
--3:	b	. + 4
-+3:	W(b)	. + 4
- 	subs	r0, r0, #1
- 	bne	3b
- 	dsb
+ 	spin_lock_irqsave(&cmd->cmd_lock, flags);
+ 	if (cmd->aborted) {
++		if (cmd->sg_mapped)
++			qlt_unmap_sg(vha, cmd);
++
+ 		spin_unlock_irqrestore(&cmd->cmd_lock, flags);
+ 		/*
+ 		 * It's normal to see 2 calls in this path:
 -- 
 2.35.1
 

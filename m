@@ -2,92 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E50A5313C4
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:24:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B4D05313D1
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:24:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237836AbiEWPW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 11:22:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56090 "EHLO
+        id S237787AbiEWPWr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 11:22:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237768AbiEWPWg (ORCPT
+        with ESMTP id S237764AbiEWPWj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 11:22:36 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F59F5DBF6;
-        Mon, 23 May 2022 08:22:32 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id er5so19538969edb.12;
-        Mon, 23 May 2022 08:22:32 -0700 (PDT)
+        Mon, 23 May 2022 11:22:39 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A2B15DBF6
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 08:22:37 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id gg20so14384486pjb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 08:22:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZWj/U+5aRM6YxLxUNdZYeVv9rpkLlT9yI/qdq2zgTLg=;
-        b=FgNOhRxvF7n6Gipa6/PPNIPg5VDHbFny7dCcnzs2l0K68Xdti83DwDmi+AV97zx30Y
-         vTgZVkBYg8WsTEG1CGoCXB+2DRds6QbHc8mazgniMatH/J4WG92yNrutUg4ETIyemwW/
-         wy2NFKG1qJES2535Yb7NkV4i4R+OFK1NdB2ldF157uF/7vpFmrZdRFAVdX0C7YAciWbI
-         q+yA/hXEcZYhcrk0T/jP0Lus9WBQD+R12YQvrLGjGJ5C8pdOw9ZOIE8UTF70mSCJF1G8
-         mB8zuMeSFFncbSpQt+WxOJg6ZkD4KNdeWF5fjA0APGDuTHMcW4IMMs03B36/V1b/u3pD
-         kUuQ==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=alhazuhH7tTd8Xd528vjQZhEVIVEKAWK4HCLXZDJ228=;
+        b=FY+eaeQn0QSUHoJZ1pIFqwwhEngjriob9gD9u/B6V7NGsK628vXfe9OaR7V+ivQcG7
+         oUq06I8eW7HBIntiAx8hVuSzVcI4o08UOO8rnlQzh+q3k/m/WbEVxbdOUyjyOCwOE937
+         A487RWEuR49BgO5YHvoZXJYj8YibiJbikPaMzwoJU6XjJBkkBT4zo6LA0wUkZ+xe+wVv
+         u/5J4TUl1BPNy5wFyQRJj+jpLzLFkAgws5kcfohn0eOOtgmxkfKFRb1vx4U7mxSjIxMa
+         n0m0TkhMSmH3C563bTiPkClwsxB2JnwTw2UxQ027A0jTP2RpKPm9+cBoqaLh2XhDQs3i
+         KbEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZWj/U+5aRM6YxLxUNdZYeVv9rpkLlT9yI/qdq2zgTLg=;
-        b=KcCFKSynKGkk2TY7kxj4Z6tLOmjqOku8c9Dns6pRfLSPRLWMlWjJZfO1+OYDAncTqF
-         aouRad2ovv481SXbxKmuYCZp4stXNttmt2lCvTeAxjLa6DNOKUD8f62pj+vTHtdFu2lM
-         c9E9ahRMa7ReUs/mxBlj/KcZsqh/JSwZ+WYRC30vc/N8wWLRIoiwXC06EvaloYH92ozh
-         OQNCa/cdGMZhfdypWSN4TLycQRjChgXw6ig+9u/YBFwiqI52+HrB3TMV3YdgRt0najEQ
-         wqMzWsZnlRSmoHOrplG7kacYcwu5mqQzWB5PBfvPBjPLCbOgST79cKl8qfOimyaP5ZNY
-         o3Pg==
-X-Gm-Message-State: AOAM532PjCGVTfX/WPjvD+28n/cVR4JMIjNAIHGfzADsYKhews/AHLtD
-        xmJVx7ULzHCFdBnXFLZvE65ElQSeutPHASA1MwI=
-X-Google-Smtp-Source: ABdhPJyURKoo/uqXFQDhgEaNf9F3kV8gtE7FemWSZi9W1OsMdpUpNmBouCeWIKlhY4Enw0z2cbJkIG9CdnTKGpNPhag=
-X-Received: by 2002:aa7:d911:0:b0:42a:af69:e167 with SMTP id
- a17-20020aa7d911000000b0042aaf69e167mr23873693edr.54.1653319351194; Mon, 23
- May 2022 08:22:31 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=alhazuhH7tTd8Xd528vjQZhEVIVEKAWK4HCLXZDJ228=;
+        b=5sPeSgRcGps8hVmD5iuTgO0DGjEP584AzsX8TDd7r0Ru3ts153XtvDE71m1H+pQEuW
+         5E5QN7n+vQU+kuN4sFJpaKM9E80t+aABWE2zandLoauQwLJuw+XQ+4SgyrQXuiFLCvsS
+         bNt5zk28OT+w8mdh0S1TBgyXCKP6exwbEEfjq6ZjhzQWiyx96HecwQKEtnh3mQrUFn1h
+         6fvfC4REpDYZh2Tcthn98QxBpSPYXKbkro8c0rfiGw7hEt8RAtDZAYOBS8jjgNXrLU4z
+         3kidzgZY0HOUGDxme12SisWxIFWAMwjseWeSFahQh8xy8Z8ywyux/T6/5FxAoMZ9QlLt
+         zGTQ==
+X-Gm-Message-State: AOAM533/AmVRUQjfqukzKjAdplZFdZtWg8c7mNczicp0oGQn3zZsfcD+
+        DP/j2GQ84r/mlmyg9paFjwX6Fw==
+X-Google-Smtp-Source: ABdhPJxMnuGcLeXNmgvjCrimkV9tdjgzm2jljb8i5xr1qPYZt2WYeIGCUhIkYo7TSWGZfmskKdgJKg==
+X-Received: by 2002:a17:90b:3884:b0:1df:db8a:1fcf with SMTP id mu4-20020a17090b388400b001dfdb8a1fcfmr24013896pjb.217.1653319356845;
+        Mon, 23 May 2022 08:22:36 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id q22-20020a170902789600b0016230703ca3sm1655647pll.231.2022.05.23.08.22.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 May 2022 08:22:36 -0700 (PDT)
+Date:   Mon, 23 May 2022 15:22:32 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     Andy Lutomirski <luto@kernel.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com
+Subject: Re: [PATCH v6 4/8] KVM: Extend the memslot to support fd-based
+ private memory
+Message-ID: <YoumuHUmgM6TH20S@google.com>
+References: <20220519153713.819591-1-chao.p.peng@linux.intel.com>
+ <20220519153713.819591-5-chao.p.peng@linux.intel.com>
+ <8840b360-cdb2-244c-bfb6-9a0e7306c188@kernel.org>
+ <YofeZps9YXgtP3f1@google.com>
+ <20220523132154.GA947536@chaop.bj.intel.com>
 MIME-Version: 1.0
-References: <20220520181323.00002892@huawei.com> <1653103862-36104-1-git-send-email-lyz_cs@pku.edu.cn>
-In-Reply-To: <1653103862-36104-1-git-send-email-lyz_cs@pku.edu.cn>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 23 May 2022 17:21:54 +0200
-Message-ID: <CAHp75Vc+fubwb0PGqVyDs5Np10ZW06F2REVKK=G26zOKT8gvFQ@mail.gmail.com>
-Subject: Re: [PATCH] hv_netvsc: Fix potential dereference of NULL pointer
-To:     Yongzhi Liu <lyz_cs@pku.edu.cn>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Stanimir Varbanov <svarbanov@mm-sol.com>,
-        "Ivan T. Ivanov" <iivanov@mm-sol.com>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        fuyq@stu.pku.edu.cn
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220523132154.GA947536@chaop.bj.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 21, 2022 at 6:27 AM Yongzhi Liu <lyz_cs@pku.edu.cn> wrote:
->
-> The return value of netvsc_devinfo_get()
-> needs to be checked to avoid use of NULL
-> pointer in case of an allocation failure.
+On Mon, May 23, 2022, Chao Peng wrote:
+> On Fri, May 20, 2022 at 06:31:02PM +0000, Sean Christopherson wrote:
+> > On Fri, May 20, 2022, Andy Lutomirski wrote:
+> > > The alternative would be to have some kind of separate table or bitmap (part
+> > > of the memslot?) that tells KVM whether a GPA should map to the fd.
+> > > 
+> > > What do you all think?
+> > 
+> > My original proposal was to have expolicit shared vs. private memslots, and punch
+> > holes in KVM's memslots on conversion, but due to the way KVM (and userspace)
+> > handle memslot updates, conversions would be painfully slow.  That's how we ended
+> > up with the current propsoal.
+> > 
+> > But a dedicated KVM ioctl() to add/remove shared ranges would be easy to implement
+> > and wouldn't necessarily even need to interact with the memslots.  It could be a
+> > consumer of memslots, e.g. if we wanted to disallow registering regions without an
+> > associated memslot, but I think we'd want to avoid even that because things will
+> > get messy during memslot updates, e.g. if dirty logging is toggled or a shared
+> > memory region is temporarily removed then we wouldn't want to destroy the tracking.
+> 
+> Even we don't tight that to memslots, that info can only be effective
+> for private memslot, right? Setting this ioctl to memory ranges defined
+> in a traditional non-private memslots just makes no sense, I guess we can
+> comment that in the API document.
 
-> Fixes: 0efeea5fb ("hv_netvsc: Add the support of hibernation")
->
-> Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
+Hrm, applying it universally would be funky, e.g. emulated MMIO would need to be
+declared "shared".  But, applying it selectively would arguably be worse, e.g.
+letting userspace map memory into the guest as shared for a region that's registered
+as private...
 
-For the future independently of the subsystem or mailing list, the tag
-block (above) mustn't have lank lines.
+On option to that mess would be to make memory shared by default, and so userspace
+must declare regions that are private.  Then there's no weirdness with emulated MMIO
+or "legacy" memslots.
 
--- 
-With Best Regards,
-Andy Shevchenko
+On page fault, KVM does a lookup to see if the GPA is shared or private.  If the
+GPA is private, but there is no memslot or the memslot doesn't have a private fd,
+KVM exits to userspace.  If there's a memslot with a private fd, the shared/private
+flag is used to resolve the 
+
+And to handle the ioctl(), KVM can use kvm_zap_gfn_range(), which will bump the
+notifier sequence, i.e. force the page fault to retry if the GPA may have been
+(un)registered between checking the type and acquiring mmu_lock.
+
+> > I don't think we'd want to use a bitmap, e.g. for a well-behaved guest, XArray
+> > should be far more efficient.
+> 
+> What about the mis-behaved guest? I don't want to design for the worst
+> case, but people may raise concern on the attack from such guest.
+
+That's why cgroups exist.  E.g. a malicious/broken L1 can similarly abuse nested
+EPT/NPT to generate a large number of shadow page tables.
+
+> > One benefit to explicitly tracking this in KVM is that it might be useful for
+> > software-only protected VMs, e.g. KVM could mark a region in the XArray as "pending"
+> > based on guest hypercalls to share/unshare memory, and then complete the transaction
+> > when userspace invokes the ioctl() to complete the share/unshare.
+> 
+> OK, then this can be another field of states/flags/attributes. Let me
+> dig up certain level of details:
+> 
+> First, introduce below KVM ioctl
+> 
+> KVM_SET_MEMORY_ATTR
+
+Actually, if the semantics are that userspace declares memory as private, then we
+can reuse KVM_MEMORY_ENCRYPT_REG_REGION and KVM_MEMORY_ENCRYPT_UNREG_REGION.  It'd
+be a little gross because we'd need to slightly redefine the semantics for TDX, SNP,
+and software-protected VM types, e.g. the ioctls() currently require a pre-exisitng
+memslot.  But I think it'd work...
+
+I'll think more on this...

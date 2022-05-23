@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB00D531888
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:54:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 736005319FB
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:55:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343979AbiEWSIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 14:08:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42306 "EHLO
+        id S240471AbiEWRM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:12:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243578AbiEWRiS (ORCPT
+        with ESMTP id S239794AbiEWRKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:38:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B42A6B7C2;
-        Mon, 23 May 2022 10:32:31 -0700 (PDT)
+        Mon, 23 May 2022 13:10:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEFBD61600;
+        Mon, 23 May 2022 10:10:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AAA24B811FE;
-        Mon, 23 May 2022 17:31:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B56EC385AA;
-        Mon, 23 May 2022 17:31:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E92C614D9;
+        Mon, 23 May 2022 17:09:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7B82C385A9;
+        Mon, 23 May 2022 17:09:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653327069;
-        bh=m80PVdEZX1lH4vWt6edcuHR6RqQ39qIO0Eig5ttw22Y=;
+        s=korg; t=1653325763;
+        bh=PiyTTuzk8BvQlETdCG7Un53eCs4s+6MlIdFkvzF4AuU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hgMJj3SHumIOJ5vu2MdieIW4Nns6uIwxpPEncdk9VIRlIQe1LzEJiWfB6LGrO0yGD
-         Ir04TLEhMzqk/4jOl/99NozQNvnJWBKrtYdw7gR4NdOUisBdHy04GAW8Ye0gAe59B6
-         My8FqnADKJ6viZofD7FdhXob4EDYFnd4OhTKc+3U=
+        b=wFoG8l9b96ePgc7weohTKdqGVkPrzFFCkZMei7WcXGKX47xdhBkivL9dmF3oBamhm
+         lg4uidMABsJzp32G26lBqNaaw9uqg2lfR6KN+uJmzoACV8Bvv3bp4r5Spcantjdukt
+         hh1bb7ZGrZWvimBWXYG7x13XLa3cCFsTLFgqUxN4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>,
+        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
+        Zixuan Fu <r33s3n6@gmail.com>, Paolo Abeni <pabeni@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 147/158] nl80211: fix locking in nl80211_set_tx_bitrate_mask()
+Subject: [PATCH 4.14 15/33] net: vmxnet3: fix possible NULL pointer dereference in vmxnet3_rq_cleanup()
 Date:   Mon, 23 May 2022 19:05:04 +0200
-Message-Id: <20220523165854.543117070@linuxfoundation.org>
+Message-Id: <20220523165750.507613897@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165830.581652127@linuxfoundation.org>
-References: <20220523165830.581652127@linuxfoundation.org>
+In-Reply-To: <20220523165746.957506211@linuxfoundation.org>
+References: <20220523165746.957506211@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,51 +55,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johannes Berg <johannes.berg@intel.com>
+From: Zixuan Fu <r33s3n6@gmail.com>
 
-[ Upstream commit f971e1887fdb3ab500c9bebf4b98f62d49a20655 ]
+[ Upstream commit edf410cb74dc612fd47ef5be319c5a0bcd6e6ccd ]
 
-This accesses the wdev's chandef etc., so cannot safely
-be used without holding the lock.
+In vmxnet3_rq_create(), when dma_alloc_coherent() fails,
+vmxnet3_rq_destroy() is called. It sets rq->rx_ring[i].base to NULL. Then
+vmxnet3_rq_create() returns an error to its callers mxnet3_rq_create_all()
+-> vmxnet3_change_mtu(). Then vmxnet3_change_mtu() calls
+vmxnet3_force_close() -> dev_close() in error handling code. And the driver
+calls vmxnet3_close() -> vmxnet3_quiesce_dev() -> vmxnet3_rq_cleanup_all()
+-> vmxnet3_rq_cleanup(). In vmxnet3_rq_cleanup(),
+rq->rx_ring[ring_idx].base is accessed, but this variable is NULL, causing
+a NULL pointer dereference.
 
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
-Link: https://lore.kernel.org/r/20220506102136.06b7205419e6.I2a87c05fbd8bc5e565e84d190d4cfd2e92695a90@changeid
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+To fix this possible bug, an if statement is added to check whether
+rq->rx_ring[0].base is NULL in vmxnet3_rq_cleanup() and exit early if so.
+
+The error log in our fault-injection testing is shown as follows:
+
+[   65.220135] BUG: kernel NULL pointer dereference, address: 0000000000000008
+...
+[   65.222633] RIP: 0010:vmxnet3_rq_cleanup_all+0x396/0x4e0 [vmxnet3]
+...
+[   65.227977] Call Trace:
+...
+[   65.228262]  vmxnet3_quiesce_dev+0x80f/0x8a0 [vmxnet3]
+[   65.228580]  vmxnet3_close+0x2c4/0x3f0 [vmxnet3]
+[   65.228866]  __dev_close_many+0x288/0x350
+[   65.229607]  dev_close_many+0xa4/0x480
+[   65.231124]  dev_close+0x138/0x230
+[   65.231933]  vmxnet3_force_close+0x1f0/0x240 [vmxnet3]
+[   65.232248]  vmxnet3_change_mtu+0x75d/0x920 [vmxnet3]
+...
+
+Fixes: d1a890fa37f27 ("net: VMware virtual Ethernet NIC driver: vmxnet3")
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+Signed-off-by: Zixuan Fu <r33s3n6@gmail.com>
+Link: https://lore.kernel.org/r/20220514050711.2636709-1-r33s3n6@gmail.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/wireless/nl80211.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/net/vmxnet3/vmxnet3_drv.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/net/wireless/nl80211.c b/net/wireless/nl80211.c
-index 06a35f1bec23..0c20df052db3 100644
---- a/net/wireless/nl80211.c
-+++ b/net/wireless/nl80211.c
-@@ -11573,18 +11573,23 @@ static int nl80211_set_tx_bitrate_mask(struct sk_buff *skb,
- 	struct cfg80211_bitrate_mask mask;
- 	struct cfg80211_registered_device *rdev = info->user_ptr[0];
- 	struct net_device *dev = info->user_ptr[1];
-+	struct wireless_dev *wdev = dev->ieee80211_ptr;
- 	int err;
+diff --git a/drivers/net/vmxnet3/vmxnet3_drv.c b/drivers/net/vmxnet3/vmxnet3_drv.c
+index 8f536bc2aed8..c6feb7459be6 100644
+--- a/drivers/net/vmxnet3/vmxnet3_drv.c
++++ b/drivers/net/vmxnet3/vmxnet3_drv.c
+@@ -1573,6 +1573,10 @@ vmxnet3_rq_cleanup(struct vmxnet3_rx_queue *rq,
+ 	u32 i, ring_idx;
+ 	struct Vmxnet3_RxDesc *rxd;
  
- 	if (!rdev->ops->set_bitrate_mask)
- 		return -EOPNOTSUPP;
- 
-+	wdev_lock(wdev);
- 	err = nl80211_parse_tx_bitrate_mask(info, info->attrs,
- 					    NL80211_ATTR_TX_RATES, &mask,
- 					    dev, true);
- 	if (err)
--		return err;
-+		goto out;
- 
--	return rdev_set_bitrate_mask(rdev, dev, NULL, &mask);
-+	err = rdev_set_bitrate_mask(rdev, dev, NULL, &mask);
-+out:
-+	wdev_unlock(wdev);
-+	return err;
- }
- 
- static int nl80211_register_mgmt(struct sk_buff *skb, struct genl_info *info)
++	/* ring has already been cleaned up */
++	if (!rq->rx_ring[0].base)
++		return;
++
+ 	for (ring_idx = 0; ring_idx < 2; ring_idx++) {
+ 		for (i = 0; i < rq->rx_ring[ring_idx].size; i++) {
+ #ifdef __BIG_ENDIAN_BITFIELD
 -- 
 2.35.1
 

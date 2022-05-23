@@ -2,74 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8920F531DE1
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 23:36:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B5FB531DEA
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 23:38:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231195AbiEWVgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 17:36:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41356 "EHLO
+        id S229963AbiEWViz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 17:38:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbiEWVgq (ORCPT
+        with ESMTP id S229604AbiEWViv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 17:36:46 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A20603B02A
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 14:36:45 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id v66so19373176oib.3
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 14:36:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=5PXgNGMVQ03wD10HW0ODeUPXFFSUhfWvCLJDJaSifzI=;
-        b=Wc2ud+hfto1tZJNBjYwroz9rvpQaWSVbxAT/ANS+fUZCCyX+TW2QEOeZKDFDpz3AHe
-         nE33PU+TtUoW+FzoEEguzJYZFuoEWmFVdgMuRowf+Dke4pP2NkRlAWZlzqpCuAHxRRaX
-         qhRfBpUjDU+IrNoXmPR+GoEq4SR0z1+uFlm2Dhgj9dQS+70A8bdD/6hvU7ucRggujFp1
-         WezAMAp+4rD6pkGe6cNBxC5LbY1qhZVdG9GLOwx7CYUkiDtpLsAGXg6U9sIKhmQV5Mz3
-         EAZ316uDSmT/Wv/dNOM6fIHPXIK4V9PGKSI/tEqrQBxNG48dXNb4I1oh9IpCGao/I3Fp
-         btdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=5PXgNGMVQ03wD10HW0ODeUPXFFSUhfWvCLJDJaSifzI=;
-        b=wj81F0jcmQHtFPtO3YhKwNoiP35kKgkvT8Fz178ls1EQYG3tkwdvuMcDbciJ9xT/nw
-         DQQXXJQWK/b9Z626PMmfX3dX7tsIik4OI+KU9vfyOR3Hccndaiz0V1iAtXzEkkIxPzgZ
-         ApYjA4gENEzTICwbdAXIUobOhiFv5hfLCJp5cX8gN+g1q2cbbNfO7MBe2tapd4HTRb+K
-         Ovf+wWHvGxzK6IaR8kJNMUPDJI9epyUcHsldsxDvBJ8r5byJcWTkXkniQ4og/CwCp4eQ
-         exAYaAjQHYnDECaCw1w8fGQoFg6c4brQeSLPO771afSYnJXuaP4ieSst7ADPPkWogLrB
-         bPQg==
-X-Gm-Message-State: AOAM530HAnN6zjY4m7c6nUY5Sp/UG1+wpsXzUpFSrAE3GfRsopw5k5Pt
-        CS5WU47w4sfvDNmoFwol9yGrOw==
-X-Google-Smtp-Source: ABdhPJx740sKz+aBf/+ZKsc4vVJLCR1ToRU5oYT2RRenmIb/jss2FeJ78YuP7RoXAOIH7XlM/sHibw==
-X-Received: by 2002:aca:428a:0:b0:326:4b9d:7272 with SMTP id p132-20020aca428a000000b003264b9d7272mr640267oia.30.1653341805002;
-        Mon, 23 May 2022 14:36:45 -0700 (PDT)
-Received: from [192.168.17.16] ([187.192.91.72])
-        by smtp.gmail.com with ESMTPSA id e125-20020aca3783000000b0032b7788af61sm494498oia.41.2022.05.23.14.36.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 May 2022 14:36:44 -0700 (PDT)
-Message-ID: <18a4a99f-e72a-1578-d6e5-8f5bb4ec4897@linaro.org>
-Date:   Mon, 23 May 2022 16:36:39 -0500
+        Mon, 23 May 2022 17:38:51 -0400
+Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [5.144.164.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E63856FB6;
+        Mon, 23 May 2022 14:38:49 -0700 (PDT)
+Received: from Marijn-Arch-PC.localdomain (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id F35032051B;
+        Mon, 23 May 2022 23:38:46 +0200 (CEST)
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     phone-devel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rajeev Nandan <quic_rajeevny@quicinc.com>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Marek <jonathan@marek.ca>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org
+Subject: [PATCH 0/9] drm/msm/dsi_phy: Replace parent names with clk_hw pointers
+Date:   Mon, 23 May 2022 23:38:28 +0200
+Message-Id: <20220523213837.1016542-1-marijn.suijten@somainline.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 5.10 00/97] 5.10.118-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220523165812.244140613@linuxfoundation.org>
-From:   =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
-In-Reply-To: <20220523165812.244140613@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,42 +57,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+As stated in [1] I promised to tackle and send this series.
 
-On 23/05/22 12:05, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.118 release.
-> There are 97 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 25 May 2022 16:56:55 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.118-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+parent_hw pointers are easier to manage and cheaper to use than
+repeatedly formatting the parent name and subsequently leaving the clk
+framework to perform lookups based on that name.
 
-We see a build failure with Perf on x86_64 and i386, with bisection pointing to:
+This series starts out by adding extra constructors for divider, mux and
+fixed-factor clocks that have parent_hw(s) pointer argument(s) instead
+of some DT index or name.  Followed by individual patches performing the
+conversion, one DSI PHY at a time.
 
-> Kan Liang <kan.liang@linux.intel.com>
->      perf regs x86: Fix arch__intr_reg_mask() for the hybrid platform
+dsi_phy_28nm_8960 includes an extra fixup to replace "eternal"
+devm_kzalloc allocations (for the lifetime of the device) with
+stack-local char arrays, like all the other DSI PHY drivers.
 
-The error message is:
+I couldn't help but notice that clock names are wildly varying:
 
-   arch/x86/util/perf_regs.c:13:10: fatal error: ../../../util/pmu-hybrid.h: No such file or directory
-      13 | #include "../../../util/pmu-hybrid.h"
-         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   compilation terminated.
+- Some use underscores in the _clk suffix where others have nothing;
+- Some have an _ after the %d, others have not;
+- Some use a _pll suffix after dsi%d or even _phy_pll suffix.
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Are there any thoughts or feelings towards unifying these?
+Theoretically no clock names are used anywhere in the kernel, and
+everything is based on a phandle + index in DT (I have yet to validate
+this).  Obviously no .name/.fw_name will be updated to not break DT.
 
-Greetings!
+Which, by the way, is there a particular reason for:
 
-Daniel Díaz
-daniel.diaz@linaro.org
+  #define DSI_BYTE_PLL_CLK		0
+  #define DSI_PIXEL_PLL_CLK		1
+
+To not be in the dt-bindings and used in the DT?
+
+And with enough future improvements out of the way, let's round out this
+patch-series by stating that it has been successfully tested on:
+
+- Sony Nile Discovery (Xperia XA2 Ultra): 14nm;
+- Sony Seine PDX201 (Xperia 10II): 14nm;
+- Sony Loire Suzu (Xperia X): 28nm.
+
+And no diff is observed in debugfs's clk_summary.
+
+Unfortunately all other devices in my collection with a 7/10nm DSI PHY
+have a DSC panel which we have yet to get working.
+
+[1]: https://lore.kernel.org/linux-arm-msm/20220502214235.s5plebunh4ttjhge@SoMainline.org/
+
+Marijn Suijten (9):
+  clk: divider: Introduce devm_clk_hw_register_divider_parent_hw()
+  clk: mux: Introduce devm_clk_hw_register_mux_parent_hws()
+  clk: fixed-factor: Introduce *clk_hw_register_fixed_factor_parent_hw()
+  drm/msm/dsi_phy_28nm: Replace parent names with clk_hw pointers
+  drm/msm/dsi_phy_28nm_8960: Replace parent names with clk_hw pointers
+  drm/msm/dsi_phy_28nm_8960: Use stack memory for temporary clock names
+  drm/msm/dsi_phy_14nm: Replace parent names with clk_hw pointers
+  drm/msm/dsi_phy_10nm: Replace parent names with clk_hw pointers
+  drm/msm/dsi_phy_7nm: Replace parent names with clk_hw pointers
+
+ drivers/clk/clk-fixed-factor.c                | 57 ++++++++++--
+ drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c    | 92 ++++++++-----------
+ drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c    | 36 ++++----
+ drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm.c    | 52 +++++------
+ .../gpu/drm/msm/dsi/phy/dsi_phy_28nm_8960.c   | 26 ++----
+ drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c     | 92 +++++++++----------
+ include/linux/clk-provider.h                  | 34 +++++++
+ 7 files changed, 209 insertions(+), 180 deletions(-)
+
+--
+2.36.1

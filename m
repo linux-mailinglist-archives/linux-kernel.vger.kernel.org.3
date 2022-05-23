@@ -2,164 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DE155307D7
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 04:58:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 135735307D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 04:59:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234358AbiEWC6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 22:58:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51304 "EHLO
+        id S1353490AbiEWC7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 22:59:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234201AbiEWC6r (ORCPT
+        with ESMTP id S234201AbiEWC65 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 22:58:47 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4972913FA0;
-        Sun, 22 May 2022 19:58:46 -0700 (PDT)
-X-UUID: c07f7d17411b4733afe8c214dde10fd9-20220523
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:afcd5b5c-626a-4d66-8561-3fc91e978add,OB:0,LO
-        B:20,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:51,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:56
-X-CID-INFO: VERSION:1.1.5,REQID:afcd5b5c-626a-4d66-8561-3fc91e978add,OB:0,LOB:
-        20,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:51,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:56
-X-CID-META: VersionHash:2a19b09,CLOUDID:9411377a-5ef6-470b-96c9-bdb8ced32786,C
-        OID:6b3065758ceb,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,QS:0,BEC:nil
-X-UUID: c07f7d17411b4733afe8c214dde10fd9-20220523
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <jianjun.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 708898458; Mon, 23 May 2022 10:58:39 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Mon, 23 May 2022 10:58:38 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Mon, 23 May 2022 10:58:25 +0800
-Message-ID: <bb24ceafc7b1df1b2a5cd1b3662d9cc7af6fce0d.camel@mediatek.com>
-Subject: Re: [PATCH v9 1/2] dt-bindings: phy: mediatek: Add YAML schema for
- PCIe PHY
-From:   Jianjun Wang <jianjun.wang@mediatek.com>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Chen-Yu Tsai" <wenst@chromium.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-CC:     Wei-Shun Chang <weishunc@google.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <rex-bc.chen@mediatek.com>,
-        <randy.wu@mediatek.com>, <jieyy.yang@mediatek.com>,
-        <chuanjia.liu@mediatek.com>, <qizhong.cheng@mediatek.com>,
-        <jian.yang@mediatek.com>
-Date:   Mon, 23 May 2022 10:58:23 +0800
-In-Reply-To: <79706876349c3670f8831e75f70722f0bca200cb.camel@mediatek.com>
-References: <20220520064920.27313-1-jianjun.wang@mediatek.com>
-         <20220520064920.27313-2-jianjun.wang@mediatek.com>
-         <79706876349c3670f8831e75f70722f0bca200cb.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Sun, 22 May 2022 22:58:57 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D2AA37BD5
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 19:58:55 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id a13so1365719plh.6
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 19:58:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=JYI4hxtQWs8QIvdZkiaIHH+G2sDwWzCIkLUOgnf5B6Q=;
+        b=JhF7LtraRZMNB9EOjvD8+qUU7bFCMUE4ySVunQJvSZndC6TsJGeWQBwbvl+ipSLrQF
+         GICnxUjGL+r7gaqBNke5I4TIfl06jIMNhjsKW/mNffHq94h4itXE1KU4GeTn0zWenBjJ
+         T8BY+dvxw1f2Fndc8hRGjpCoAMon98ILs4MvIv3ycsrvnro3LE/92vJgjxtvKeNynGbm
+         do0r1JxwwUtJ+jo+gkOXJAe7w3atIBfmj6qxmCToi/E7jDAZWhgucjdDBS6UFs+BJxb4
+         rmVP9D5jcFkSjzjNGSMEl0nc+cj1T3sOy6mdx6fY05XVHhD+uYnne95pU8u0ztI9TC3s
+         Xh1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=JYI4hxtQWs8QIvdZkiaIHH+G2sDwWzCIkLUOgnf5B6Q=;
+        b=sl1zvp5jQeABpqb2OG3CEAIwehdEsTz6+5G7x4YqdEvpdU6DsQQo3DY9ynZhE4t/xW
+         Ei7iUGUZ4395SaxtuBEgQxZ/+do0Frd5W1mRFW+aD1bJ2JXYBecnmldWgx2z7tmZ1a/A
+         OsWk41cDkXNuIWvW+HFOBWE6r+YZWQ+Dk8zyNuoCneoi6HjOpDMFFNoOMV3D+mWEPO7s
+         Y1vsLoQ/J8msPb6VMvJp/rmTK5IiEDUVqg34IgwCRLL5heenLG4ntui9M2bXo08u30DC
+         Cvi+Ee0z5/iRCdrEtt6hbZ/TuSNLawG3Q2j1fA0nsNJjsjetWbToK+wsjV1kNjKt30es
+         EKQA==
+X-Gm-Message-State: AOAM532Ly5keYf9eyDvIYsWgAsjFc8fTK5DOpDgNyxbijIhiw9p4AmPa
+        zJlgdEIshZ0ic4rE2NOkwfYq/w==
+X-Google-Smtp-Source: ABdhPJwvmVfdIQ4Kob1VBnYgYAZv7OOxEaDSN2rnRstzDdI4EEH44wEGzuEPJzx1lRN4zWlpSxCRqg==
+X-Received: by 2002:a17:90a:7041:b0:1df:cc3a:10e2 with SMTP id f59-20020a17090a704100b001dfcc3a10e2mr23657280pjk.48.1653274734663;
+        Sun, 22 May 2022 19:58:54 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id n3-20020a170902d2c300b0015e8d4eb277sm3796176plc.193.2022.05.22.19.58.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 22 May 2022 19:58:54 -0700 (PDT)
+Message-ID: <0b1ceba8-fca1-3b47-411b-434c4c46ac45@kernel.dk>
+Date:   Sun, 22 May 2022 20:58:53 -0600
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: linux-next: manual merge of the block tree with the vfs tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Dylan Yudaken <dylany@fb.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220523122827.657f2ab8@canb.auug.org.au>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20220523122827.657f2ab8@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chunfeng,
-
-On Mon, 2022-05-23 at 10:23 +0800, Chunfeng Yun wrote:
-> On Fri, 2022-05-20 at 14:49 +0800, Jianjun Wang wrote:
-> > Add YAML schema documentation for PCIe PHY on MediaTek chipsets.
-> > 
-> > Signed-off-by: Jianjun Wang <jianjun.wang@mediatek.com>
-> > Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
-> > Reviewed-by: AngeloGioacchino Del Regno <
-> > angelogioacchino.delregno@collabora.com>
-> > ---
-> >  .../bindings/phy/mediatek,pcie-phy.yaml       | 75
-> > +++++++++++++++++++
-> >  1 file changed, 75 insertions(+)
-> >  create mode 100644
-> > Documentation/devicetree/bindings/phy/mediatek,pcie-phy.yaml
-> > 
-...snip...
-> > +
-> > +  "#phy-cells":
-> > +    const: 0
-> > +
-> > +  nvmem-cells:
-> > +    maxItems: 7
+On 5/22/22 8:28 PM, Stephen Rothwell wrote:
+> Hi all,
 > 
-> Seems no need 'maxItems', we can get it from items of 'nvmem-cell-
-> names'
-
-Please see the comment by Krzysztof[1], I guess we need to add this
-'maxTems'.
-
-[1]:
-https://lore.kernel.org/lkml/d48c0023-231c-4011-5548-4b260b3fe172@kernel.org/
-
-Thanks.
+> Today's linux-next merge of the block tree got a conflict in:
 > 
-> > +    description:
-> > +      Phandles to nvmem cell that contains the efuse data, if
-> > unspecified,
-> > +      default value is used.
-> > +
-> > +  nvmem-cell-names:
-> > +    items:
-> > +      - const: glb_intr
-> > +      - const: tx_ln0_pmos
-> > +      - const: tx_ln0_nmos
-> > +      - const: rx_ln0
-> > +      - const: tx_ln1_pmos
-> > +      - const: tx_ln1_nmos
-> > +      - const: rx_ln1
-> > +
-> > +  power-domains:
-> > +    maxItems: 1
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - reg-names
-> > +  - "#phy-cells"
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    phy@11e80000 {
-> > +        compatible = "mediatek,mt8195-pcie-phy";
-> > +        #phy-cells = <0>;
-> > +        reg = <0x11e80000 0x10000>;
-> > +        reg-names = "sif";
-> > +        nvmem-cells = <&pciephy_glb_intr>,
-> > +                      <&pciephy_tx_ln0_pmos>,
-> > +                      <&pciephy_tx_ln0_nmos>,
-> > +                      <&pciephy_rx_ln0>,
-> > +                      <&pciephy_tx_ln1_pmos>,
-> > +                      <&pciephy_tx_ln1_nmos>,
-> > +                      <&pciephy_rx_ln1>;
-> > +        nvmem-cell-names = "glb_intr", "tx_ln0_pmos",
-> > +                           "tx_ln0_nmos", "rx_ln0",
-> > +                           "tx_ln1_pmos", "tx_ln1_nmos",
-> > +                           "rx_ln1";
-> > +        power-domains = <&spm 2>;
-> > +    };
+>   fs/io_uring.c
 > 
+> between commit:
 > 
+>   4329490a78b6 ("io_uring_enter(): don't leave f.flags uninitialized")
+> 
+> from the vfs tree and commit:
+> 
+>   3e813c902672 ("io_uring: rework io_uring_enter to simplify return value")
+> 
+> from the block tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+
+Fixup looks good, thanks.
+
+-- 
+Jens Axboe
 

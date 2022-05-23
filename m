@@ -2,134 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33C2A53181F
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:53:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6BD7531BA7
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242882AbiEWRqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:46:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39068 "EHLO
+        id S239572AbiEWRHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:07:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242696AbiEWR14 (ORCPT
+        with ESMTP id S239475AbiEWRGL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:27:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4746C81488;
-        Mon, 23 May 2022 10:24:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 50B47B81215;
-        Mon, 23 May 2022 17:23:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABABFC385AA;
-        Mon, 23 May 2022 17:23:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326625;
-        bh=2OzM6rEcWN/cA/RcLcQIr0U+4Ibha4TEetcG9LyMk2E=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ryCiWfIc/dNovL5I93xWRQpekZn+1/sWEWL+irV/2Kn6yIzuoVNJ9ijLPtYWs7x61
-         cMklXHR/z7HjNymuHorqK/5cZ7GxPudMhPV4XMoFTiy9Is4qfFzWkVgK9Ko2/qKakm
-         tsiN48mrKM1yKET7/6DyXxcx5JIcLHbBl58RyaAY=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Markus Suvanto <markus.suvanto@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        linux-afs@lists.infradead.org,
-        kafs-testing+fedora34_64checkkafs-build-496@auristor.com,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 132/132] afs: Fix afs_getattr() to refetch file status if callback break occurred
-Date:   Mon, 23 May 2022 19:05:41 +0200
-Message-Id: <20220523165845.636166274@linuxfoundation.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
-References: <20220523165823.492309987@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Mon, 23 May 2022 13:06:11 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5788B12623
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 10:06:07 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id er5so19909524edb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 10:06:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:user-agent:mime-version:to:cc:subject
+         :references:in-reply-to:content-transfer-encoding;
+        bh=YrY6mURHinjqWwitegOe1ZXjhF0i1u/4+qbA+8XPd74=;
+        b=GijRvlPm8XonYS9Fbp6rhrU21pU3I+fLZ2KjP3FKCwZduOvrl3jK42JkV/R0dbHM9j
+         us2e5hXsLE2CXiyrccPgtu5cTS1KFPZ61ruva8Psu50BKW7PTWjJICNqQvIjhayJ2n0q
+         nW15/AEptBLW17E9sxHVfyfLNX3g0fHZB65Eun2q2rtEqx68UvfBO87bQfkeHdcd2IaK
+         rV4xEXmhoy4wbG67VNExfTqEMm0de/dhoUVmL27CPUZ1YcFZcbaXSwSlLFoLy8z7MxbZ
+         aLVLaFuqtpNfPmE6KYrNB1W4RJ/zqjJ/lPuc6NJ9MT6zI8Z8Xm0MF/TIYrMWqP78cYYR
+         dGtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:user-agent:mime-version:to
+         :cc:subject:references:in-reply-to:content-transfer-encoding;
+        bh=YrY6mURHinjqWwitegOe1ZXjhF0i1u/4+qbA+8XPd74=;
+        b=CypKUCMVwsPi7xMB6g/r94wSrfh+oyOMtAKiLZLWmXYJo5A0+kXbei60VcaJybccho
+         +Op/uKIzIJFeOmmPMUxZkyqpsqUyIJYK/jBINU+A17yqTuqnkoe0+DCvyUJhes6qIo3b
+         FHz1tyLOYGXo8uH2XvPI43jUP16LHV1L39IBiM9JHM5FoQ8Xe3EiJXFDa1eBtL4qd3A6
+         07yvGItnBelVcAv5InJ1hkVj37GHFS5mZQuRg+YCOWY5t/YIhAr1L+mU5SWw/IcDTvne
+         lqk6v249xtbq9BotaLBUnWqBrDgvKj4XBbbfy07CKior5bs+4GxIV1Wt1ZJdqJ6S5K5t
+         s6dQ==
+X-Gm-Message-State: AOAM533Taa58wK8s38vbXyY8Z5cxO+FqJeDAL5T2e114ca3mnhpsSuCl
+        /a4jlezq/NbHLBhdkVn2ySYyQ5on4bI=
+X-Google-Smtp-Source: ABdhPJyH8akOgZUtv9ecBlp4mP28urBRg3c0ruLX+fy6Vpo0h+E4PiDCLRPIKgQ1lO5PefDMAv2MKg==
+X-Received: by 2002:aa7:cb55:0:b0:42a:ac67:892f with SMTP id w21-20020aa7cb55000000b0042aac67892fmr24663651edt.215.1653325565760;
+        Mon, 23 May 2022 10:06:05 -0700 (PDT)
+Received: from [93.172.10.244] (93-172-10-244.bb.netvision.net.il. [93.172.10.244])
+        by smtp.gmail.com with ESMTPSA id f8-20020a1709063f4800b006f4c82c2b12sm6406673ejj.19.2022.05.23.10.06.04
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Mon, 23 May 2022 10:06:05 -0700 (PDT)
+Message-ID: <628BBEEB.9010306@gmail.com>
+Date:   Mon, 23 May 2022 20:05:47 +0300
+From:   Eli Billauer <eli.billauer@gmail.com>
+User-Agent: Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.12) Gecko/20100907 Fedora/3.0.7-1.fc12 Thunderbird/3.0.7
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     Zheyu Ma <zheyuma97@gmail.com>, arnd@arndb.de,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] char: xillybus: Check endpoint type before allocing
+References: <Yn9XwHxWsLIJXlHu@kroah.com> <20220514114819.2773691-1-zheyuma97@gmail.com> <Yn+va5fTsuaFTxVR@kroah.com> <CAMhUBj=RMJwn2K+rQC9rQ=QEe5QkiJ29rMd8KzEC8B7vtXo+ug@mail.gmail.com> <Yocp+WZ0On9/wObu@kroah.com> <CAMhUBj=J5-V_D_kucpiWz6ZdOSSR1N9nRXQxOKgmwRA+LxW17Q@mail.gmail.com> <YouxHY48daZt7J/O@kroah.com>
+In-Reply-To: <YouxHY48daZt7J/O@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Howells <dhowells@redhat.com>
+On 23/05/22 19:06, Greg KH wrote:
+> If the device does not have the EXACT USB endpoints that you are
+> expecting (size, address, direction, type, etc.) at probe time reject
+> the device.
+>    
+This is probably a good time to add some information about XillyUSB.
 
-[ Upstream commit 2aeb8c86d49967552394d5e723f87454cb53f501 ]
+All XillyUSB devices have EP 1 IN and EP 1 OUT as bulk endpoints.
 
-If a callback break occurs (change notification), afs_getattr() needs to
-issue an FS.FetchStatus RPC operation to update the status of the file
-being examined by the stat-family of system calls.
+On top of that, they *may* have up to 14 additional bulk OUT endpoints, 
+having the addresses EP 2 OUT to EP 15 OUT. The population of endpoint 
+addresses is not necessarily continuous. Any set of OUT endpoint 
+addresses is allowed. The driver doesn't know which of these endpoints 
+are available initially.
 
-Fix afs_getattr() to do this if AFS_VNODE_CB_PROMISED has been cleared
-on a vnode by a callback break.  Skip this if AT_STATX_DONT_SYNC is set.
+Rather, it works like this: The driver uses the EP 1 IN and OUT 
+endpoints to query the device for a data structure, which contains 
+information on the device's communication channels. The driver sets up 
+device files accordingly, and it also gets informed on which bulk OUT 
+endpoints are present.
 
-This can be tested by appending to a file on one AFS client and then
-using "stat -L" to examine its length on a machine running kafs.  This
-can also be watched through tracing on the kafs machine.  The callback
-break is seen:
+For what it's worth, I think it's fairly safe to assume that if a device 
+returns a legal data structure (which passes a CRC test), it's a 
+XillyUSB device. Either way, it's impossible to verify that all of the 
+device's bulk OUT endpoints are correct before obtaining the data 
+structure from the device. The fact that each device has a different set 
+of communication channels, and that the driver learns about them in 
+run-time is the whole trick with Xillybus and XillyUSB.
 
-     kworker/1:1-46      [001] .....   978.910812: afs_cb_call: c=0000005f YFSCB.CallBack
-     kworker/1:1-46      [001] ...1.   978.910829: afs_cb_break: 100058:23b4c:242d2c2 b=2 s=1 break-cb
-     kworker/1:1-46      [001] .....   978.911062: afs_call_done:    c=0000005f ret=0 ab=0 [0000000082994ead]
+And just in case you wonder why there's only one bulk IN endpoint: All 
+inbound communication, control as well as data, is multiplexed into this 
+single endpoint. That's in order to allow the device better control on 
+which communication channel is serviced at any time, with a few 
+microseconds' granularity. The same trick is unfortunately infeasible in 
+the other direction.
 
-And then the stat command generated no traffic if unpatched, but with
-this change a call to fetch the status can be observed:
+I don't have any particular view on how the device should be validated, 
+but I thought this information would be helpful.
 
-            stat-4471    [000] .....   986.744122: afs_make_fs_call: c=000000ab 100058:023b4c:242d2c2 YFS.FetchStatus
-            stat-4471    [000] .....   986.745578: afs_call_done:    c=000000ab ret=0 ab=0 [0000000087fc8c84]
-
-Fixes: 08e0e7c82eea ("[AF_RXRPC]: Make the in-kernel AFS filesystem use AF_RXRPC.")
-Reported-by: Markus Suvanto <markus.suvanto@gmail.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Marc Dionne <marc.dionne@auristor.com>
-cc: linux-afs@lists.infradead.org
-Tested-by: Markus Suvanto <markus.suvanto@gmail.com>
-Tested-by: kafs-testing+fedora34_64checkkafs-build-496@auristor.com
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216010
-Link: https://lore.kernel.org/r/165308359800.162686.14122417881564420962.stgit@warthog.procyon.org.uk/ # v1
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- fs/afs/inode.c | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
-
-diff --git a/fs/afs/inode.c b/fs/afs/inode.c
-index 8fcffea2daf5..a47666ba48f5 100644
---- a/fs/afs/inode.c
-+++ b/fs/afs/inode.c
-@@ -728,10 +728,22 @@ int afs_getattr(struct user_namespace *mnt_userns, const struct path *path,
- {
- 	struct inode *inode = d_inode(path->dentry);
- 	struct afs_vnode *vnode = AFS_FS_I(inode);
--	int seq = 0;
-+	struct key *key;
-+	int ret, seq = 0;
- 
- 	_enter("{ ino=%lu v=%u }", inode->i_ino, inode->i_generation);
- 
-+	if (!(query_flags & AT_STATX_DONT_SYNC) &&
-+	    !test_bit(AFS_VNODE_CB_PROMISED, &vnode->flags)) {
-+		key = afs_request_key(vnode->volume->cell);
-+		if (IS_ERR(key))
-+			return PTR_ERR(key);
-+		ret = afs_validate(vnode, key);
-+		key_put(key);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
- 	do {
- 		read_seqbegin_or_lock(&vnode->cb_lock, &seq);
- 		generic_fillattr(&init_user_ns, inode, stat);
--- 
-2.35.1
-
-
-
+Thanks,
+    Eli

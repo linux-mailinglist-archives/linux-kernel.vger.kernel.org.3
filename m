@@ -2,187 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7645531F52
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 01:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54942531F54
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 01:45:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230349AbiEWXnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 19:43:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57020 "EHLO
+        id S230358AbiEWXo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 19:44:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230217AbiEWXnP (ORCPT
+        with ESMTP id S229666AbiEWXoz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 19:43:15 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40227880F8
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 16:43:13 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id f35so1068067qtb.11
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 16:43:13 -0700 (PDT)
+        Mon, 23 May 2022 19:44:55 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7690F880F8;
+        Mon, 23 May 2022 16:44:54 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id m1so14431189plx.3;
+        Mon, 23 May 2022 16:44:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vo71c+n/wCWfUYChsCch/TOZTAc6RqS7hic8WUvcoIw=;
-        b=b1HZCTlc0FaASasHRCD5Y4kmWzTiLs2LaQl7/CXAt9GX3aDYUTR+mEWyBmw6QyDjt0
-         kqoqMhMB7Pb3sbK/HKSgcZG0lKxupwMeKXRmTekoG+0tSkivdjQZ4FQVz23bKT9fKurd
-         gFH178OzpkErKGL+s0tqPjvX6Q/YMAxaQ0BoEB5n8E3Z34ZOQsdTCMGjsAQxXESXvteq
-         vNVOIS9eoKRtkaVRQ4oz4jZMWxwJHYLdIuxnM3g2JKYoP8Yr+Gx2yzwrrrYIOiQe99ET
-         7UXJKrS42Tnbe12+4yhg0jflTmXsJbahMHsA1CgFxMKNVA/2xzXV1sWrEPEVqWdPse5m
-         iRVQ==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=pDcZJaTRyOHg9w4kEsRf2ua14bTPNjwhSlPe2z4tQPk=;
+        b=CTemy5RVJvKRYgzwSyQkolRT2ww2JNpWblhiywZ240VM/rYlcYZWwuLZ2mgYm9ZBbt
+         sUFV3gAtRxEeJWf4zH8Mff7XREsuIkAVugVgRP9sU2XeiQ1ZTlbCFIx+pGRYO6UmiFfX
+         tHgGHdOcKBcGrbB7aR6DKnckb6aLNlr0VtikD8owymd3x/JF0yIp5VlE9Tin0HvOvTrD
+         IkgZfIyUXN4pthTV3uhJiU6PexhFvvaKLR7jfIsEintpD/feIYaVwxVZ833D8fHbR7zU
+         cvqE8ayRigy0aL8qo9cfJLMT9/DJl8dOjiWXhN9Bb1AEGT7waxhBSR5XX+uZvzBUE+3Q
+         VXXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vo71c+n/wCWfUYChsCch/TOZTAc6RqS7hic8WUvcoIw=;
-        b=m+G/dmh7XOy2l0ZfdkVGkwWUdpethl2/1Mim6deDwZGabcj4pFM8Ub1Qb2VvOF3sEy
-         BN16WNbG9mO9qN+MeHd5By8ikk9HH16TMYtUHE8wIbDOPFh9ih6ZiuyaZwMnwghJp7IC
-         K0WTzx4gZlvZZKeY/UqtBosdox3nr4OatMpmjxyh7Pp89JyZO1Vnd4RnWEWsC1OdPsje
-         i4IHGCGwTbSqpCpGHEbaQdT27EmeNUFK41JSr36gq6G5+TC2zGlobt05m2/i1f+cK68g
-         Pwtpsfz2VONAZtS0NZSyoeF0H+c8piO7Y20EtNSBV0L9J7PkYU/Xm/B/PQgLOpmNN4RI
-         Z27A==
-X-Gm-Message-State: AOAM533Jf49ktHMb/QSxGpLLsIM3RwygXEP0/kET/QrwNAtqTBwQzbRf
-        ik2V050pDmMVcEK69/Bs1vs1VLFpbg1003/Ge5EuCg==
-X-Google-Smtp-Source: ABdhPJzUW9RhiGAZVdELoGYpBS6ZpU1N20WruTBeXfIZLJ+KEXjedEvFNxLgd/OJk3jzcNbkBvu6dH9ebgySiUvx914=
-X-Received: by 2002:ac8:5e54:0:b0:2f3:f4ee:efbd with SMTP id
- i20-20020ac85e54000000b002f3f4eeefbdmr17894617qtx.295.1653349392378; Mon, 23
- May 2022 16:43:12 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :mime-version:content-disposition;
+        bh=pDcZJaTRyOHg9w4kEsRf2ua14bTPNjwhSlPe2z4tQPk=;
+        b=XHqNn/S8mKFoMvoY34aH9U3Qd3wIvjyXX4FLY3isV96GdWgsURmmy/7fRlVVYcPk+Q
+         XEgIROt7ePSGbDu6mxN9OelWccO4PkcOvM9uLetST0oa2DOg9KSa/KOYj/yJIFAeFAG+
+         LoFfIcTd2RhCFyZO8SNv99K643kaT1E855QGIhr/R0BU0s6l28+qCS5PXRb/kSrDrPsV
+         qD/CFEHUGHAW/fpx4WwAkq4OUMSVVR9TKTBt8mPT78w4xDokLPR/V7YnCH96wJWFxM9L
+         3lMYU0LUjgravwlJgMECURnfERRGT3lnrYs2CVREGtjpPKPKyh1KLHhJd9uNVf7OweTJ
+         Fjhg==
+X-Gm-Message-State: AOAM531rxQ6uWmFhAFO6WfXnsCiafIjiN8yisTT+ZvE+BqfXXiGSXsSk
+        LLZ4VVUoT6jgn7VwbxkRee75dSbri4g=
+X-Google-Smtp-Source: ABdhPJzoze2yJLj0jTXZYxl+m+cQH13aKN7jR9tpW0tP0PfQ9eU7hapRL9Txe6WJ7t5gLNVGsQ+/Ug==
+X-Received: by 2002:a17:90a:7349:b0:1dc:9314:8699 with SMTP id j9-20020a17090a734900b001dc93148699mr1512468pjs.184.1653349493776;
+        Mon, 23 May 2022 16:44:53 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::4:aafd])
+        by smtp.gmail.com with ESMTPSA id h9-20020aa786c9000000b0050dc7628196sm7703839pfo.112.2022.05.23.16.44.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 May 2022 16:44:53 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 23 May 2022 13:44:51 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org
+Subject: [GIT PULL] cgroup changes for v5.19-rc1
+Message-ID: <Yowcc/ZOBIIs2JtZ@slm.duckdns.org>
 MIME-Version: 1.0
-References: <20220523213837.1016542-1-marijn.suijten@somainline.org>
-In-Reply-To: <20220523213837.1016542-1-marijn.suijten@somainline.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 24 May 2022 02:43:01 +0300
-Message-ID: <CAA8EJprEjOWRh98V3sprjXZJZMeR25Bz1U3a_uX_KhRbU48srQ@mail.gmail.com>
-Subject: Re: [PATCH 0/9] drm/msm/dsi_phy: Replace parent names with clk_hw pointers
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     phone-devel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rajeev Nandan <quic_rajeevny@quicinc.com>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Marek <jonathan@marek.ca>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello, Linus.
 
-On Tue, 24 May 2022 at 00:38, Marijn Suijten
-<marijn.suijten@somainline.org> wrote:
->
-> As stated in [1] I promised to tackle and send this series.
->
-> parent_hw pointers are easier to manage and cheaper to use than
-> repeatedly formatting the parent name and subsequently leaving the clk
-> framework to perform lookups based on that name.
->
-> This series starts out by adding extra constructors for divider, mux and
-> fixed-factor clocks that have parent_hw(s) pointer argument(s) instead
-> of some DT index or name.  Followed by individual patches performing the
-> conversion, one DSI PHY at a time.
->
-> dsi_phy_28nm_8960 includes an extra fixup to replace "eternal"
-> devm_kzalloc allocations (for the lifetime of the device) with
-> stack-local char arrays, like all the other DSI PHY drivers.
->
-> I couldn't help but notice that clock names are wildly varying:
->
-> - Some use underscores in the _clk suffix where others have nothing;
-> - Some have an _ after the %d, others have not;
-> - Some use a _pll suffix after dsi%d or even _phy_pll suffix.
->
-> Are there any thoughts or feelings towards unifying these?
-> Theoretically no clock names are used anywhere in the kernel, and
-> everything is based on a phandle + index in DT (I have yet to validate
-> this).  Obviously no .name/.fw_name will be updated to not break DT.
+Nothing too interesting. It adds cpu controller selftests and there are a
+couple code cleanup patches.
 
-I'd say, leave them as is. Even if they are historical, we don't have
-a strong pressure to change them.
+Thanks.
 
-Significant number of older platforms still use names to identify the
-clock. And moreover apq8096/msm8960 uses dsi1/dsi2 instead of
-dsi0/dsi1.
+The following changes since commit 281b9d9a4b02229b602a14f7540206b0fbe4134f:
 
-Probably we should call the next cycle "The Cycle of clocks cleaning".
-I can volunteer to take care of 8960/8064/8016/8996, as at least I can
-test them. But if you wish, you (or anybody else of course) can take
-any of these platforms too, just ping me, so that I won't spend time
-duplicating somebody's efforts.
+  Merge branch 'akpm' (patches from Andrew) (2022-04-22 10:10:43 -0700)
 
-> Which, by the way, is there a particular reason for:
->
->   #define DSI_BYTE_PLL_CLK              0
->   #define DSI_PIXEL_PLL_CLK             1
->
-> To not be in the dt-bindings and used in the DT?
+are available in the Git repository at:
 
-Before my restructure of the DSI PHY subsys, each driver defined them
-separately. And the idea of moving them to a dt-bindings header didn't
-come to my mind. Feel free to do so, it looks like a good idea.
-Just as a note, DP PHY also uses 0 for the link clock and 1 for the
-pixel clock. What do you think about having a single header for these
-names?
+  git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git for-5.19
 
->
-> And with enough future improvements out of the way, let's round out this
-> patch-series by stating that it has been successfully tested on:
->
-> - Sony Nile Discovery (Xperia XA2 Ultra): 14nm;
-> - Sony Seine PDX201 (Xperia 10II): 14nm;
-> - Sony Loire Suzu (Xperia X): 28nm.
->
-> And no diff is observed in debugfs's clk_summary.
->
-> Unfortunately all other devices in my collection with a 7/10nm DSI PHY
-> have a DSC panel which we have yet to get working.
+for you to fetch changes up to b154a017c92011d8f71ce804583e5f9c3d90bb9a:
 
-I will test it on RB3 (10nm) and RB5 (7nm) during one of the next few days.
+  cgroup: remove the superfluous judgment (2022-05-19 21:49:45 -1000)
 
->
-> [1]: https://lore.kernel.org/linux-arm-msm/20220502214235.s5plebunh4ttjhge@SoMainline.org/
->
-> Marijn Suijten (9):
->   clk: divider: Introduce devm_clk_hw_register_divider_parent_hw()
->   clk: mux: Introduce devm_clk_hw_register_mux_parent_hws()
->   clk: fixed-factor: Introduce *clk_hw_register_fixed_factor_parent_hw()
->   drm/msm/dsi_phy_28nm: Replace parent names with clk_hw pointers
->   drm/msm/dsi_phy_28nm_8960: Replace parent names with clk_hw pointers
->   drm/msm/dsi_phy_28nm_8960: Use stack memory for temporary clock names
->   drm/msm/dsi_phy_14nm: Replace parent names with clk_hw pointers
->   drm/msm/dsi_phy_10nm: Replace parent names with clk_hw pointers
->   drm/msm/dsi_phy_7nm: Replace parent names with clk_hw pointers
->
->  drivers/clk/clk-fixed-factor.c                | 57 ++++++++++--
->  drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c    | 92 ++++++++-----------
->  drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c    | 36 ++++----
->  drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm.c    | 52 +++++------
->  .../gpu/drm/msm/dsi/phy/dsi_phy_28nm_8960.c   | 26 ++----
->  drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c     | 92 +++++++++----------
->  include/linux/clk-provider.h                  | 34 +++++++
->  7 files changed, 209 insertions(+), 180 deletions(-)
->
-> --
-> 2.36.1
+----------------------------------------------------------------
+David Vernet (9):
+      cgroup: Add new test_cpu.c test suite in cgroup selftests
+      cgroup: Add test_cpucg_stats() testcase to cgroup cpu selftests
+      cgroup: Add test_cpucg_weight_overprovisioned() testcase
+      cgroup: Add test_cpucg_weight_underprovisioned() testcase
+      cgroup: Adding test_cpucg_nested_weight_overprovisioned() testcase
+      cgroup: Add test_cpucg_nested_weight_underprovisioned() testcase
+      cgroup: Add test_cpucg_max() testcase
+      cgroup: Add test_cpucg_max_nested() testcase
+      cgroup: Add config file to cgroup selftest suite
 
+Phil Auld (1):
+      kselftest/cgroup: fix test_stress.sh to use OUTPUT dir
 
+Shida Zhang (1):
+      cgroup: remove the superfluous judgment
+
+Waiman Long (1):
+      kseltest/cgroup: Make test_stress.sh work if run interactively
+
+Xiu Jianfeng (1):
+      cgroup: Make cgroup_debug static
+
+ kernel/cgroup/cgroup-internal.h               |   1 -
+ kernel/cgroup/cgroup.c                        |   4 +-
+ tools/testing/selftests/cgroup/.gitignore     |   1 +
+ tools/testing/selftests/cgroup/Makefile       |   2 +
+ tools/testing/selftests/cgroup/cgroup_util.c  |  12 +
+ tools/testing/selftests/cgroup/cgroup_util.h  |   4 +
+ tools/testing/selftests/cgroup/config         |   8 +
+ tools/testing/selftests/cgroup/test_cpu.c     | 726 ++++++++++++++++++++++++++
+ tools/testing/selftests/cgroup/test_stress.sh |   2 +-
+ 9 files changed, 756 insertions(+), 4 deletions(-)
+ create mode 100644 tools/testing/selftests/cgroup/config
+ create mode 100644 tools/testing/selftests/cgroup/test_cpu.c
 
 -- 
-With best wishes
-Dmitry
+tejun

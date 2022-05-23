@@ -2,204 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CC5C5317C5
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:53:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1427531ADE
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232420AbiEWTjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 15:39:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56608 "EHLO
+        id S231766AbiEWTjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 15:39:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232163AbiEWTj0 (ORCPT
+        with ESMTP id S232222AbiEWTja (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 15:39:26 -0400
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 774E333365
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 12:30:42 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 66D9F3D2F3F;
-        Mon, 23 May 2022 15:30:41 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id zZSMELB1_qKE; Mon, 23 May 2022 15:30:37 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id DD9E13D3052;
-        Mon, 23 May 2022 15:30:37 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com DD9E13D3052
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1653334237;
-        bh=bYIxjle3eayijpoTpp2cDmwXc3QPG+ma+cLeqznHpqs=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=rh17//oVkpDiE2emLdmVCtx5v4pW4vAcdXRcoc2rqNO5sTYI8h/e0DqZaATe0QgXM
-         TylPrPSwt7pKgybRGzEmlfr6Mf5/vkWQSdngH5vVbM2qeUCCJTLI7Af1lm/8wGs4Ps
-         evOMX6UE62l9DktzZFlOhOCJvM75qb8JBaRlfcMPnIExa8LeSyPKs+g2WWh+UJTSTR
-         7oKneQASRg6phouGpBRErpjtQpnRKyA+nE1KE2XLCEJdp1yMf/bznYAC5sg9hACzLF
-         XpY2OS+NdusCBbIYKnpyFCHXUgTpYUz04dTwU4hJ7chFU2Lky2Jb8PosEQFo4GcIg2
-         e45mBsLutaVyw==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id RQyvfg6AOMMU; Mon, 23 May 2022 15:30:37 -0400 (EDT)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id D358F3D304A;
-        Mon, 23 May 2022 15:30:37 -0400 (EDT)
-Date:   Mon, 23 May 2022 15:30:37 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     kernel test robot <oliver.sang@intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        lkp <lkp@lists.01.org>, 0day robot <lkp@intel.com>
-Message-ID: <1454426300.65656.1653334237745.JavaMail.zimbra@efficios.com>
-In-Reply-To: <20220523141434.GA17163@xsang-OptiPlex-9020>
-References: <20220523141434.GA17163@xsang-OptiPlex-9020>
-Subject: Re: [rseq]  3bb11f3f68: kernel-selftests.rseq.make_fail
+        Mon, 23 May 2022 15:39:30 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CACEB17063
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 12:31:25 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id v11so14545409pff.6
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 12:31:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=FKFLi5eR+9ADBi0m67qxvJspJKDBK02KPYVUQgWhwdU=;
+        b=bk2wnF89Qnk1g4FnbKaT/xUuQcZYOE7D1wXYxXO4tsnccW4y0mg+mIIaq97gWYI+JP
+         Rw7MD1/xWR3DylhMcEBn6eBmOctrIp/3qLz8kz57GSuzj6VyFLXJkfGEy1tU6V/bEUYj
+         ey+6dpe0IhzDdBvH1xY7t/MuBDZdLHvsXDw+o=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=FKFLi5eR+9ADBi0m67qxvJspJKDBK02KPYVUQgWhwdU=;
+        b=Yr54W4o7BcENc40aj2maI6Zg9UtULpq+N6sc7UpCMk3uv6fwyKy9yFXVF0PoMxsF/G
+         WFAUsiNo+NB0z/6GVd8E4uMdqy66l9P4XHYw8yN+Gmu+gbfP/zNtM69izzgzfgGeqFSy
+         0giEzW7s9mix4fz1yXwCVl9DWIEzhoKr0kzJSK7xT0E9CGB3+/T1U3893qiBEK/xQXkW
+         Pd6vhDKT8eEY9NSu3odn/bSuM0yFaV0Bc8r3Y7ujt5imZ7wNLglHYLZ5QbiHl/XMzDsm
+         Gz8Q8KsSLLqREM/VyvrnKMVIqiH7i3546N6DvBOu4hHBWDTE1Owi1+wfL/KmrvgNq837
+         lquA==
+X-Gm-Message-State: AOAM533eeFFK9rTUGZxrV26HSQhnDU5EBXqkJWpWzMpRrDBu5b3FRUuw
+        eQGZrJuNknNOmaDJqF0WzsMnfg==
+X-Google-Smtp-Source: ABdhPJzKKYu0Xv/n3Lqd1yoYZi5SWqXwQaobVSCNaZMgB1u7uqTQj93OsbPsO1asNtbmbx3XsvmB6Q==
+X-Received: by 2002:a63:f813:0:b0:3f6:475:6389 with SMTP id n19-20020a63f813000000b003f604756389mr21741558pgh.127.1653334285295;
+        Mon, 23 May 2022 12:31:25 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id t2-20020a170902e84200b001618fee3900sm5587826plg.196.2022.05.23.12.31.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 May 2022 12:31:25 -0700 (PDT)
+Date:   Mon, 23 May 2022 12:31:23 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>, johannes@sipsolutions.net,
+        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+        toke@toke.dk, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH net-next 2/8] wifi: ath9k: silence array-bounds warning
+ on GCC 12
+Message-ID: <202205231229.CF6B8471@keescook>
+References: <20220520194320.2356236-1-kuba@kernel.org>
+ <20220520194320.2356236-3-kuba@kernel.org>
+ <87h75j1iej.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4257 (ZimbraWebClient - FF100 (Linux)/8.8.15_GA_4257)
-Thread-Topic: 3bb11f3f68: kernel-selftests.rseq.make_fail
-Thread-Index: 0Sh53EzkXBVp7zJy4EZOAvI+r5aIEA==
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87h75j1iej.fsf@kernel.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------ On May 23, 2022, at 10:14 AM, kernel test robot oliver.sang@intel.com=
- wrote:
+On Sat, May 21, 2022 at 09:58:28AM +0300, Kalle Valo wrote:
+> + arnd, kees, lkml
+> 
+> Jakub Kicinski <kuba@kernel.org> writes:
+> 
+> > GCC 12 says:
+> >
+> > drivers/net/wireless/ath/ath9k/mac.c: In function ‘ath9k_hw_resettxqueue’:
+> > drivers/net/wireless/ath/ath9k/mac.c:373:22: warning: array subscript
+> > 32 is above array bounds of ‘struct ath9k_tx_queue_info[10]’
+> > [-Warray-bounds]
+> >   373 |         qi = &ah->txq[q];
+> >       |               ~~~~~~~^~~
+> >
+> > I don't know where it got the 32 from, relegate the warning to W=1+.
+> >
+> > Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> > ---
+> > CC: toke@toke.dk
+> > CC: kvalo@kernel.org
+> > CC: linux-wireless@vger.kernel.org
+> > ---
+> >  drivers/net/wireless/ath/ath9k/Makefile | 5 +++++
+> >  1 file changed, 5 insertions(+)
+> >
+> > diff --git a/drivers/net/wireless/ath/ath9k/Makefile b/drivers/net/wireless/ath/ath9k/Makefile
+> > index eff94bcd1f0a..9bdfcee2f448 100644
+> > --- a/drivers/net/wireless/ath/ath9k/Makefile
+> > +++ b/drivers/net/wireless/ath/ath9k/Makefile
+> > @@ -45,6 +45,11 @@ ath9k_hw-y:=	\
+> >  		ar9003_eeprom.o \
+> >  		ar9003_paprd.o
+> >  
+> > +# FIXME: temporarily silence -Warray-bounds on non W=1+ builds
+> > +ifndef KBUILD_EXTRA_WARN
+> > +CFLAGS_mac.o += -Wno-array-bounds
+> > +endif
+> 
+> There are now four wireless drivers which need this hack. Wouldn't it be
+> easier to add -Wno-array-bounds for GCC 12 globally instead of adding
+> the same hack to multiple drivers?
 
-> Greeting,
->=20
-> FYI, we noticed the following commit (built with gcc-11):
->=20
-> commit: 3bb11f3f6872a692759f653f90d10674deb330a4 ("rseq: Remove broken ua=
-pi
-> field layout on 32-bit little endian")
-> https://git.kernel.org/cgit/linux/kernel/git/stable/linux-stable-rc.git
-> linux-5.15.y
->=20
-> in testcase: kernel-selftests
-> version: kernel-selftests-x86_64-8d3977ef-1_20220520
-> with following parameters:
->=20
->=09group: rseq
->=09ucode: 0xec
->=20
-> test-description: The kernel contains a set of "self tests" under the
-> tools/testing/selftests/ directory. These are intended to be small unit t=
-ests
-> to exercise individual code paths in the kernel.
-> test-url: https://www.kernel.org/doc/Documentation/kselftest.txt
->=20
->=20
-> on test machine: 8 threads Intel(R) Core(TM) i7-6700 CPU @ 3.40GHz with 1=
-6G
-> memory
->=20
-> caused below changes (please refer to attached dmesg/kmsg for entire
-> log/backtrace):
+I finally tracked this down to a GCC 12 bug related to -fsanitize=shift:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105679
 
-I suspect this is because commit "rseq: Remove broken uapi field layout on =
-32-bit little endian"
+Basically all the "32" stuff comes from the index being used in a shift,
+and the resulting internal GCC logic blowing up.
 
-needs to have this prior commit cherry-picked as well:
+I was going to do a before/after build with and without -fsanitize=shift
+to see how many of these false positives originate from that bug...
 
-commit 5c105d55a9 ("selftests/rseq: introduce own copy of rseq uapi header"=
-)
-
-Thanks,
-
-Mathieu
-
->=20
->=20
->=20
->=20
-> If you fix the issue, kindly add following tag
-> Reported-by: kernel test robot <oliver.sang@intel.com>
->=20
-> KERNEL SELFTESTS: linux_headers_dir is
-> /usr/src/linux-headers-x86_64-rhel-8.3-kselftests-3bb11f3f6872a692759f653=
-f90d10674deb330a4
-> 2022-05-21 14:37:09 ln -sf /usr/bin/clang
-> 2022-05-21 14:37:09 ln -sf /usr/bin/llc
-> 2022-05-21 14:37:09 sed -i s/default_timeout=3D45/default_timeout=3D300/
-> kselftest/runner.sh
-> 2022-05-21 14:37:09 make -C rseq
-> make: Entering directory
-> '/usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-3bb11f3f6872a692759f6=
-53f90d10674deb330a4/tools/testing/selftests/rseq'
-> gcc -O2 -Wall -g -I./ -I../../../../usr/include/
-> -L/usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-3bb11f3f6872a692759f=
-653f90d10674deb330a4/tools/testing/selftests/rseq
-> -Wl,-rpath=3D./  -shared -fPIC rseq.c -lpthread -o
-> /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-3bb11f3f6872a692759f65=
-3f90d10674deb330a4/tools/testing/selftests/rseq/librseq.so
-> In file included from rseq.c:30:
-> rseq.h: In function =E2=80=98rseq_clear_rseq_cs=E2=80=99:
-> rseq.h:143:20: error: request for member =E2=80=98ptr=E2=80=99 in somethi=
-ng not a structure or
-> union
->  143 |  __rseq_abi.rseq_cs.ptr =3D 0;
->      |                    ^
-> make: *** [Makefile:27:
-> /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-3bb11f3f6872a692759f65=
-3f90d10674deb330a4/tools/testing/selftests/rseq/librseq.so]
-> Error 1
-> make: Leaving directory
-> '/usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-3bb11f3f6872a692759f6=
-53f90d10674deb330a4/tools/testing/selftests/rseq'
-> 2022-05-21 14:37:10 make run_tests -C rseq
-> make: Entering directory
-> '/usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-3bb11f3f6872a692759f6=
-53f90d10674deb330a4/tools/testing/selftests/rseq'
-> gcc -O2 -Wall -g -I./ -I../../../../usr/include/
-> -L/usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-3bb11f3f6872a692759f=
-653f90d10674deb330a4/tools/testing/selftests/rseq
-> -Wl,-rpath=3D./  -shared -fPIC rseq.c -lpthread -o
-> /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-3bb11f3f6872a692759f65=
-3f90d10674deb330a4/tools/testing/selftests/rseq/librseq.so
-> In file included from rseq.c:30:
-> rseq.h: In function =E2=80=98rseq_clear_rseq_cs=E2=80=99:
-> rseq.h:143:20: error: request for member =E2=80=98ptr=E2=80=99 in somethi=
-ng not a structure or
-> union
->  143 |  __rseq_abi.rseq_cs.ptr =3D 0;
->      |                    ^
-> make: *** [Makefile:27:
-> /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-3bb11f3f6872a692759f65=
-3f90d10674deb330a4/tools/testing/selftests/rseq/librseq.so]
-> Error 1
-> make: Leaving directory
-> '/usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-3bb11f3f6872a692759f6=
-53f90d10674deb330a4/tools/testing/selftests/rseq'
->=20
->=20
->=20
-> To reproduce:
->=20
->        git clone https://github.com/intel/lkp-tests.git
->        cd lkp-tests
->        sudo bin/lkp install job.yaml           # job file is attached in =
-this email
->        bin/lkp split-job --compatible job.yaml # generate the yaml file f=
-or lkp run
->        sudo bin/lkp run generated-yaml-file
->=20
->        # if come across any failure that blocks the test,
->        # please remove ~/.lkp and /lkp dir to run from a clean state.
->=20
->=20
->=20
-> --
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
-
---=20
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+-- 
+Kees Cook

@@ -2,49 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DE7B5308A6
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 07:25:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91BD05308B4
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 07:30:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354491AbiEWFYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 01:24:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45296 "EHLO
+        id S230208AbiEWF0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 01:26:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230049AbiEWFYn (ORCPT
+        with ESMTP id S1354238AbiEWF0J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 01:24:43 -0400
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3865215800;
-        Sun, 22 May 2022 22:24:40 -0700 (PDT)
-Received: from [192.168.0.6] (ip5f5aedde.dynamic.kabel-deutschland.de [95.90.237.222])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 4D2C061EA1928;
-        Mon, 23 May 2022 07:24:37 +0200 (CEST)
-Message-ID: <71292e14-fe6c-f475-009d-1ea8cde0ea46@molgen.mpg.de>
-Date:   Mon, 23 May 2022 07:24:36 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [Intel-wired-lan] [PATCH] drivers/net/ethernet/intel: fix typos
- in comments
-Content-Language: en-US
-To:     Julia Lawall <Julia.Lawall@inria.fr>
-Cc:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        intel-wired-lan@lists.osuosl.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>
-References: <20220521111145.81697-50-Julia.Lawall@inria.fr>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <20220521111145.81697-50-Julia.Lawall@inria.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Mon, 23 May 2022 01:26:09 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AADCE0F;
+        Sun, 22 May 2022 22:26:05 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id b135so959572pfb.12;
+        Sun, 22 May 2022 22:26:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=1KbVuW7XSoJDS/I+9egOZ67761pOOMfzmK48C2Bte6s=;
+        b=PDO1ltwCxEDERQBIHyx4r4g1N3u1jliI2hd3dINmAuIcmWY1hRByK+vIHhWkSCOkS6
+         3OcbZQtuCQhx5/HxTzceSahPqDktr8YZaJfdXLEw83cnlWTNWZSAGvNJnU6G/mT+Vhg6
+         y/yD/meUpuhWca5rBY/jeKItZGSjzXH5Zj5at/pDUJV5Z5ExeFc0m+PW7+M4fpYUSdiZ
+         P6Owbzrq+kuao0WwN/SIs+13qZ4o33Ml2IFjeq1eF8FZ4b+xtQPzfvgf62ERgboylu0s
+         1JI7/yTxpRQ0ITxRduHgXBJ3rn6Ir3RZ5gomzT5zn1SEGgvCSAgKUq1Fc+SF4KUc0MYz
+         nSNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=1KbVuW7XSoJDS/I+9egOZ67761pOOMfzmK48C2Bte6s=;
+        b=8ATGp+JjR2UumGzNrNaST/C9JqdTwiBMGyfSBtoGCsKBEv6MEWPPZiykGcYr6Ig3AN
+         ZqFciqyQzLEekWCyVgUqr2wq/ZCf/mtXoDfga4xJefoFkhAVYDBqZ6elsmvcn01x+J7l
+         zm0wYh/WVoJ2qWwsB5AB1i4jo8SZ/bEiK/D1Ulg8uokuGFdnjx0uT5uj19taZ0O3vNg2
+         XfT59s/sqYGbkmRULdYhRgs5Lc/hV8Y2TYkv4J5he/6rr6q/oOH+xkvOZz6w5TTMi0mI
+         8b28cwPsvbHGz5K+nbQdKxLoDfCByLB1yt5AVMIFdpY5UKPPasJG1Cf0Jf2rXUrrM3sX
+         Q3Fw==
+X-Gm-Message-State: AOAM533b3ml+4+dntnuzKTdWwKoZVuNqjmwhlWog8GqJFNxFAEVVo3Yy
+        Gso9QcMOePvz4RQUkKnwQ+s=
+X-Google-Smtp-Source: ABdhPJxMEVyiGL0U4n+8vRcPFSHCqcgT+LNDVchrhOc2LvrfGLbmG6DNgad/j2Ve9slnTtiqf3szaw==
+X-Received: by 2002:a05:6a00:14c8:b0:518:7789:d33b with SMTP id w8-20020a056a0014c800b005187789d33bmr12846585pfu.36.1653283564770;
+        Sun, 22 May 2022 22:26:04 -0700 (PDT)
+Received: from localhost.localdomain (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
+        by smtp.gmail.com with ESMTPSA id y5-20020a655285000000b003c14af50603sm3871523pgp.27.2022.05.22.22.26.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 May 2022 22:26:03 -0700 (PDT)
+From:   Marvin Lin <milkfafa@gmail.com>
+To:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     openbmc@lists.ozlabs.org, avifishman70@gmail.com,
+        tmaimon77@gmail.com, tali.perry1@gmail.com, kwliu@nuvoton.com,
+        kflin@nuvoton.com, Marvin Lin <milkfafa@gmail.com>
+Subject: [PATCH v4 0/5] Support Nuvoton NPCM Video Capture/Encode Engine
+Date:   Mon, 23 May 2022 13:25:43 +0800
+Message-Id: <20220523052548.28109-1-milkfafa@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,74 +66,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Julia,
+This patch series add DTS node, dt-bindings document and drivers for Video
+Capture/Differentiation Engine (VCD) and Encoding Compression Engine (ECE)
+present on Nuvoton NPCM SoCs.
 
+VCD can capture/differentiate video data from digital or analog sources,
+then the ECE will compress the data into HEXTILE format.
 
-Thank you for your patch.
+HEXTILE compressed format is defined in Remote Framebuffer Protocol (RFC
+6143) and is used by VNC features, so we also add a patch to support it.
 
-I noticed, that the maintainer Tony wasn’t in the Cc: list.
+Changes since v1:
+  - Add Hextile document and locate with vendor formats.
+  - Add video driver entry in MAINTAINERS
+  - Change config name to CONFIG_VIDEO_NPCM_VCD_ECE
+  - Reduce the waiting time after resetting the VCD/ECE module
+  - Correct data types of some variables
 
-Am 21.05.22 um 13:11 schrieb Julia Lawall:
-> Spelling mistakes (triple letters) in comments.
-> Detected with the help of Coccinelle.
+Marvin Lin (5):
+  arm: dts: Add node for NPCM Video Capture/Encode Engine
+  dt-bindings: media: Add dt-bindings for NPCM Video Capture/Encode
+    Engine
+  dt-bindings: arm/npcm: Add dt-bindings for Graphics Core Information
+  media: Add HEXTILE compressed format
+  drivers: media: platform: Add NPCM Video Capture/Encode Engine driver
 
-I’d be interested in the script you used.
+ .../bindings/arm/npcm/nuvoton,gfxi.yaml       |   41 +
+ .../bindings/media/nuvoton,npcm-video.yaml    |   87 +
+ .../media/v4l/pixfmt-reserved.rst             |    7 +
+ MAINTAINERS                                   |    9 +
+ arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi |   19 +
+ drivers/media/platform/Kconfig                |    1 +
+ drivers/media/platform/Makefile               |    1 +
+ drivers/media/platform/nuvoton/Kconfig        |   12 +
+ drivers/media/platform/nuvoton/Makefile       |    2 +
+ drivers/media/platform/nuvoton/npcm-video.c   | 2064 +++++++++++++++++
+ drivers/media/v4l2-core/v4l2-ioctl.c          |    1 +
+ include/uapi/linux/videodev2.h                |    1 +
+ 12 files changed, 2245 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/npcm/nuvoton,gfxi.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/nuvoton,npcm-video.yaml
+ create mode 100644 drivers/media/platform/nuvoton/Kconfig
+ create mode 100644 drivers/media/platform/nuvoton/Makefile
+ create mode 100644 drivers/media/platform/nuvoton/npcm-video.c
 
-> 
-> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
-> 
+-- 
+2.17.1
 
-Nit: One unneeded blank line.
-
-> ---
->   drivers/net/ethernet/intel/fm10k/fm10k_mbx.c   |    2 +-
->   drivers/net/ethernet/intel/ice/ice_lib.c       |    2 +-
->   drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c |    2 +-
->   3 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/intel/fm10k/fm10k_mbx.c b/drivers/net/ethernet/intel/fm10k/fm10k_mbx.c
-> index 30ca9ee1900b..f2fba6e1d0f7 100644
-> --- a/drivers/net/ethernet/intel/fm10k/fm10k_mbx.c
-> +++ b/drivers/net/ethernet/intel/fm10k/fm10k_mbx.c
-> @@ -1825,7 +1825,7 @@ static void fm10k_sm_mbx_process_error(struct fm10k_mbx_info *mbx)
->   		fm10k_sm_mbx_connect_reset(mbx);
->   		break;
->   	case FM10K_STATE_CONNECT:
-> -		/* try connnecting at lower version */
-> +		/* try connecting at lower version */
->   		if (mbx->remote) {
->   			while (mbx->local > 1)
->   				mbx->local--;
-> diff --git a/drivers/net/ethernet/intel/ice/ice_lib.c b/drivers/net/ethernet/intel/ice/ice_lib.c
-> index 454e01ae09b9..70961c0343e7 100644
-> --- a/drivers/net/ethernet/intel/ice/ice_lib.c
-> +++ b/drivers/net/ethernet/intel/ice/ice_lib.c
-> @@ -2403,7 +2403,7 @@ static void ice_set_agg_vsi(struct ice_vsi *vsi)
->   				agg_id);
->   			return;
->   		}
-> -		/* aggregator node is created, store the neeeded info */
-> +		/* aggregator node is created, store the needed info */
->   		agg_node->valid = true;
->   		agg_node->agg_id = agg_id;
->   	}
-> diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c
-> index 3e74ab82868b..3f5ef5269bb2 100644
-> --- a/drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c
-> +++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c
-> @@ -77,7 +77,7 @@ static int __ixgbe_enable_sriov(struct ixgbe_adapter *adapter,
->   	IXGBE_WRITE_REG(hw, IXGBE_PFDTXGSWC, IXGBE_PFDTXGSWC_VT_LBEN);
->   	adapter->bridge_mode = BRIDGE_MODE_VEB;
->   
-> -	/* limit trafffic classes based on VFs enabled */
-> +	/* limit traffic classes based on VFs enabled */
->   	if ((adapter->hw.mac.type == ixgbe_mac_82599EB) && (num_vfs < 16)) {
->   		adapter->dcb_cfg.num_tcs.pg_tcs = MAX_TRAFFIC_CLASS;
->   		adapter->dcb_cfg.num_tcs.pfc_tcs = MAX_TRAFFIC_CLASS;
-
-Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
-
-
-Kind regards,
-
-Paul

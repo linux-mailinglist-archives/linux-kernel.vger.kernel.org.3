@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9A90531957
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:54:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 208535319AC
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:55:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238985AbiEWRUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:20:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57932 "EHLO
+        id S240187AbiEWRLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:11:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240853AbiEWRQp (ORCPT
+        with ESMTP id S239647AbiEWRKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:16:45 -0400
+        Mon, 23 May 2022 13:10:19 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A55D669B51;
-        Mon, 23 May 2022 10:16:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 350C26CA8A;
+        Mon, 23 May 2022 10:09:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0FFF2B81204;
-        Mon, 23 May 2022 17:13:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BCB9C385AA;
-        Mon, 23 May 2022 17:13:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 824D4B811F6;
+        Mon, 23 May 2022 17:09:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3A3EC385A9;
+        Mon, 23 May 2022 17:09:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326017;
-        bh=tzRz9+4QZigOteXiZvFEjKVlKA33ZGoT+eMajcfxfmU=;
+        s=korg; t=1653325779;
+        bh=UodYB9RZCKj8YDl/NrPyDzZlEGObUwSATbKP+WigtdM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VTqA5LMN6U1i1EiSrFU/WkqhP8rfHyEKmuIhUwelud1VihtZk47NqvoS1muqikhGM
-         aTy9t1YLUTED6MRV8wPYDl+tZgC/o0epqVVDe5Sz1f/VYOXu5c7SHJMOxUTiqsTrOA
-         JtC8GwzICbJt7lLwrvAr/Lx4Nh5EnhZ+wjUP5Zbo=
+        b=L5RnQaCZNQ2gvFAj4+rLrej47IetSO/y65mwOMhuN4dPnGIQi+cEQ1kpn+Zlsl9al
+         n0GI+8rAjnty0JCdbDJSWTPacFHScP1hVSqryOhS1aTxjW4XBfQ2rrNdOaY+phRiGn
+         N5FcCXF8Jw+huJM+Z0B9o/oq1L3X7ZoriHLrPvvI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 42/68] net/qla3xxx: Fix a test in ql_reset_work()
+Subject: [PATCH 4.14 20/33] ARM: 9196/1: spectre-bhb: enable for Cortex-A15
 Date:   Mon, 23 May 2022 19:05:09 +0200
-Message-Id: <20220523165809.551977508@linuxfoundation.org>
+Message-Id: <20220523165751.433712311@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165802.500642349@linuxfoundation.org>
-References: <20220523165802.500642349@linuxfoundation.org>
+In-Reply-To: <20220523165746.957506211@linuxfoundation.org>
+References: <20220523165746.957506211@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,46 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Ard Biesheuvel <ardb@kernel.org>
 
-[ Upstream commit 5361448e45fac6fb96738df748229432a62d78b6 ]
+[ Upstream commit 0dc14aa94ccd8ba35eb17a0f9b123d1566efd39e ]
 
-test_bit() tests if one bit is set or not.
-Here the logic seems to check of bit QL_RESET_PER_SCSI (i.e. 4) OR bit
-QL_RESET_START (i.e. 3) is set.
+The Spectre-BHB mitigations were inadvertently left disabled for
+Cortex-A15, due to the fact that cpu_v7_bugs_init() is not called in
+that case. So fix that.
 
-In fact, it checks if bit 7 (4 | 3 = 7) is set, that is to say
-QL_ADAPTER_UP.
-
-This looks harmless, because this bit is likely be set, and when the
-ql_reset_work() delayed work is scheduled in ql3xxx_isr() (the only place
-that schedule this work), QL_RESET_START or QL_RESET_PER_SCSI is set.
-
-This has been spotted by smatch.
-
-Fixes: 5a4faa873782 ("[PATCH] qla3xxx NIC driver")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Link: https://lore.kernel.org/r/80e73e33f390001d9c0140ffa9baddf6466a41a2.1652637337.git.christophe.jaillet@wanadoo.fr
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: b9baf5c8c5c3 ("ARM: Spectre-BHB workaround")
+Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/qlogic/qla3xxx.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/arm/mm/proc-v7-bugs.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/ethernet/qlogic/qla3xxx.c b/drivers/net/ethernet/qlogic/qla3xxx.c
-index da2862d59681..5e81cd317a32 100644
---- a/drivers/net/ethernet/qlogic/qla3xxx.c
-+++ b/drivers/net/ethernet/qlogic/qla3xxx.c
-@@ -3629,7 +3629,8 @@ static void ql_reset_work(struct work_struct *work)
- 		qdev->mem_map_registers;
- 	unsigned long hw_flags;
+diff --git a/arch/arm/mm/proc-v7-bugs.c b/arch/arm/mm/proc-v7-bugs.c
+index 1b6e770bc1cd..8b78694d56b8 100644
+--- a/arch/arm/mm/proc-v7-bugs.c
++++ b/arch/arm/mm/proc-v7-bugs.c
+@@ -297,6 +297,7 @@ void cpu_v7_ca15_ibe(void)
+ {
+ 	if (check_spectre_auxcr(this_cpu_ptr(&spectre_warned), BIT(0)))
+ 		cpu_v7_spectre_v2_init();
++	cpu_v7_spectre_bhb_init();
+ }
  
--	if (test_bit((QL_RESET_PER_SCSI | QL_RESET_START), &qdev->flags)) {
-+	if (test_bit(QL_RESET_PER_SCSI, &qdev->flags) ||
-+	    test_bit(QL_RESET_START, &qdev->flags)) {
- 		clear_bit(QL_LINK_MASTER, &qdev->flags);
- 
- 		/*
+ void cpu_v7_bugs_init(void)
 -- 
 2.35.1
 

@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0588B531855
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:53:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9702753176F
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:53:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243241AbiEWRqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:46:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38258 "EHLO
+        id S243298AbiEWRiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:38:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242666AbiEWR1z (ORCPT
+        with ESMTP id S241677AbiEWR1E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:27:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC268720C;
-        Mon, 23 May 2022 10:23:58 -0700 (PDT)
+        Mon, 23 May 2022 13:27:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC5676285;
+        Mon, 23 May 2022 10:22:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E35FA60916;
-        Mon, 23 May 2022 17:23:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA4BCC385AA;
-        Mon, 23 May 2022 17:23:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E8655B81218;
+        Mon, 23 May 2022 17:16:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 428F5C385AA;
+        Mon, 23 May 2022 17:16:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326609;
-        bh=Q6WGn+T2IYOJX+pYvJtK4Xq4x5ALfQD1/9ZqxdvFrkU=;
+        s=korg; t=1653326188;
+        bh=+bwDGyDJKCF8LB9fJwHxTM4vlvD9HScCpYl69iObhuI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uKYcyBmK29pg/AE0n8ybqE7U3LSQW0bJztv6wWkNWLxgXya5M2teKvSYVasggkOYW
-         1o2vlkeXV1NzQ0jf6tZgHbpaOtoDYBR5eB0RKc6e/jcBxFN0emGJQg8F8L/g8cOQKi
-         CiZZypge5odrXy5mbQEHjToRod0qTlV1syBxBr4A=
+        b=XoTkpakr/hBhlmNEyFCpvy9ZgZV13CiTjMwz7g0Sn9U88Rp5lFOdYcFLX6wxNcAfr
+         G501rj22fnrkm18LD7AIQOYAQYLuHGxiiqH6efv2mQATsBnbqfglf4m75AnnBLD7VG
+         gAGv7Lj9LEVfaJZIo380KVwCRyiNAuOq2ckb4ULY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
-        Krishna Kant <krishna.kant@purestorage.com>,
-        Seamus Connor <sconnor@purestorage.com>,
-        Brian Bunker <brian@purestorage.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Martin Willi <martin@strongswan.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 112/132] scsi: scsi_dh_alua: Properly handle the ALUA transitioning state
+Subject: [PATCH 5.10 17/97] crypto: x86/chacha20 - Avoid spurious jumps to other functions
 Date:   Mon, 23 May 2022 19:05:21 +0200
-Message-Id: <20220523165842.085007434@linuxfoundation.org>
+Message-Id: <20220523165815.020280320@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
-References: <20220523165823.492309987@linuxfoundation.org>
+In-Reply-To: <20220523165812.244140613@linuxfoundation.org>
+References: <20220523165812.244140613@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,57 +57,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Brian Bunker <brian@purestorage.com>
+From: Peter Zijlstra <peterz@infradead.org>
 
-[ Upstream commit 6056a92ceb2a7705d61df7ec5370548e96aee258 ]
+[ Upstream commit 4327d168515fd8b5b92fa1efdf1d219fb6514460 ]
 
-The handling of the ALUA transitioning state is currently broken. When a
-target goes into this state, it is expected that the target is allowed to
-stay in this state for the implicit transition timeout without a path
-failure. The handler has this logic, but it gets skipped currently.
+The chacha_Nblock_xor_avx512vl() functions all have their own,
+identical, .LdoneN label, however in one particular spot {2,4} jump to
+the 8 version instead of their own. Resulting in:
 
-When the target transitions, there is in-flight I/O from the initiator. The
-first of these responses from the target will be a unit attention letting
-the initiator know that the ALUA state has changed.  The remaining
-in-flight I/Os, before the initiator finds out that the portal state has
-changed, will return not ready, ALUA state is transitioning. The portal
-state will change to SCSI_ACCESS_STATE_TRANSITIONING. This will lead to all
-new I/O immediately failing the path unexpectedly. The path failure happens
-in less than a second instead of the expected successes until the
-transition timer is exceeded.
+  arch/x86/crypto/chacha-x86_64.o: warning: objtool: chacha_2block_xor_avx512vl() falls through to next function chacha_8block_xor_avx512vl()
+  arch/x86/crypto/chacha-x86_64.o: warning: objtool: chacha_4block_xor_avx512vl() falls through to next function chacha_8block_xor_avx512vl()
 
-Allow I/Os to continue while the path is in the ALUA transitioning
-state. The handler already takes care of a target that stays in the
-transitioning state for too long by changing the state to ALUA state
-standby once the transition timeout is exceeded at which point the path
-will fail.
+Make each function consistently use its own done label.
 
-Link: https://lore.kernel.org/r/CAHZQxy+4sTPz9+pY3=7VJH+CLUJsDct81KtnR2be8ycN5mhqTg@mail.gmail.com
-Reviewed-by: Hannes Reinecke <hare@suse.de>
-Acked-by: Krishna Kant <krishna.kant@purestorage.com>
-Acked-by: Seamus Connor <sconnor@purestorage.com>
-Signed-off-by: Brian Bunker <brian@purestorage.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Martin Willi <martin@strongswan.org>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/device_handler/scsi_dh_alua.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ arch/x86/crypto/chacha-avx512vl-x86_64.S | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/device_handler/scsi_dh_alua.c b/drivers/scsi/device_handler/scsi_dh_alua.c
-index 37d06f993b76..1d9be771f3ee 100644
---- a/drivers/scsi/device_handler/scsi_dh_alua.c
-+++ b/drivers/scsi/device_handler/scsi_dh_alua.c
-@@ -1172,9 +1172,8 @@ static blk_status_t alua_prep_fn(struct scsi_device *sdev, struct request *req)
- 	case SCSI_ACCESS_STATE_OPTIMAL:
- 	case SCSI_ACCESS_STATE_ACTIVE:
- 	case SCSI_ACCESS_STATE_LBA:
--		return BLK_STS_OK;
- 	case SCSI_ACCESS_STATE_TRANSITIONING:
--		return BLK_STS_AGAIN;
-+		return BLK_STS_OK;
- 	default:
- 		req->rq_flags |= RQF_QUIET;
- 		return BLK_STS_IOERR;
+diff --git a/arch/x86/crypto/chacha-avx512vl-x86_64.S b/arch/x86/crypto/chacha-avx512vl-x86_64.S
+index bb193fde123a..8713c16c2501 100644
+--- a/arch/x86/crypto/chacha-avx512vl-x86_64.S
++++ b/arch/x86/crypto/chacha-avx512vl-x86_64.S
+@@ -172,7 +172,7 @@ SYM_FUNC_START(chacha_2block_xor_avx512vl)
+ 	# xor remaining bytes from partial register into output
+ 	mov		%rcx,%rax
+ 	and		$0xf,%rcx
+-	jz		.Ldone8
++	jz		.Ldone2
+ 	mov		%rax,%r9
+ 	and		$~0xf,%r9
+ 
+@@ -438,7 +438,7 @@ SYM_FUNC_START(chacha_4block_xor_avx512vl)
+ 	# xor remaining bytes from partial register into output
+ 	mov		%rcx,%rax
+ 	and		$0xf,%rcx
+-	jz		.Ldone8
++	jz		.Ldone4
+ 	mov		%rax,%r9
+ 	and		$~0xf,%r9
+ 
 -- 
 2.35.1
 

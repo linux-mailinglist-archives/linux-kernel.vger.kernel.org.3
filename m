@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2885553168E
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:51:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00FDD5319E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:55:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241257AbiEWSFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 14:05:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46134 "EHLO
+        id S242455AbiEWSDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 14:03:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241782AbiEWRgD (ORCPT
+        with ESMTP id S241833AbiEWRgI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:36:03 -0400
+        Mon, 23 May 2022 13:36:08 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BCFF90CE8;
-        Mon, 23 May 2022 10:29:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE05635C;
+        Mon, 23 May 2022 10:30:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C0A6960B2C;
-        Mon, 23 May 2022 17:28:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9900C385A9;
-        Mon, 23 May 2022 17:28:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D405D60BD3;
+        Mon, 23 May 2022 17:28:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCC34C385AA;
+        Mon, 23 May 2022 17:28:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326919;
-        bh=2K0Ed2rmG9vLt8EFWi7OhhXbZZ/LsAZmEhrjRjuARM4=;
+        s=korg; t=1653326922;
+        bh=XuJqssLHAYRSvGU8Ajeukhh8M9uJA/q0j2R7aBNCtUg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wYgwDuKlA+TNyRx4dXAXed3Ee8FKQOEEC3saczeCmQ9h0WjpbT9somWEqXucYsi7H
-         P+CDDCYUaCC0ccxyTR83NgE/fRcWHF1EW3p7YEzeHW3sbe683QDxCcjHXpL4Lq7IyE
-         6Lef+SdjJHItiySKX57HYvX1O2I3tdbq/ubyMcfs=
+        b=thowyEjyLECiFPvPpC4ghd4FAWjZzIamHjE1ylrmCWNaCI5WQEDFDNGpmGNsOuYcc
+         TsjEi9Mp5OHJukrmOjdLdkdXVEGnwukPcbtN9a9idXwUgHHpoJvPJuFsupFu6XgmrJ
+         VZjonjdrDdn33aqkMLNxhCDaheoICxRDhnqIQFiE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Charan Teja Kalla <quic_charante@quicinc.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
-Subject: [PATCH 5.17 067/158] dma-buf: ensure unique directory name for dmabuf stats
-Date:   Mon, 23 May 2022 19:03:44 +0200
-Message-Id: <20220523165841.999829287@linuxfoundation.org>
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 068/158] arm64: dts: qcom: sm8250: dont enable rx/tx macro by default
+Date:   Mon, 23 May 2022 19:03:45 +0200
+Message-Id: <20220523165842.172033471@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220523165830.581652127@linuxfoundation.org>
 References: <20220523165830.581652127@linuxfoundation.org>
@@ -55,71 +57,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Charan Teja Kalla <quic_charante@quicinc.com>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-commit 370704e707a5f2d3c9a1d4ed8bd8cd67507d7bb5 upstream.
+[ Upstream commit 18019eb62efb68c9b365acca9c4fcb2e0d459487 ]
 
-The dmabuf file uses get_next_ino()(through dma_buf_getfile() ->
-alloc_anon_inode()) to get an inode number and uses the same as a
-directory name under /sys/kernel/dmabuf/buffers/<ino>. This directory is
-used to collect the dmabuf stats and it is created through
-dma_buf_stats_setup(). At current, failure to create this directory
-entry can make the dma_buf_export() to fail.
+Enabling rxmacro and txmacro nodes by defaults makes Qualcomm RB5 to
+crash and reboot while probing audio devices. Disable these device tree
+nodes by default and enabled them only when necessary (for the
+SM8250-MTP board).
 
-Now, as the get_next_ino() can definitely give a repetitive inode no
-causing the directory entry creation to fail with -EEXIST. This is a
-problem on the systems where dmabuf stats functionality is enabled on
-the production builds can make the dma_buf_export(), though the dmabuf
-memory is allocated successfully, to fail just because it couldn't
-create stats entry.
-
-This issue we are able to see on the snapdragon system within 13 days
-where there already exists a directory with inode no "122602" so
-dma_buf_stats_setup() failed with -EEXIST as it is trying to create
-the same directory entry.
-
-To make the dentry name as unique, use the dmabuf fs specific inode
-which is based on the simple atomic variable increment. There is tmpfs
-subsystem too which relies on its own inode generation rather than
-relying on the get_next_ino() for the same reason of avoiding the
-duplicate inodes[1].
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/patch/?id=e809d5f0b5c912fe981dce738f3283b2010665f0
-
-Signed-off-by: Charan Teja Kalla <quic_charante@quicinc.com>
-Cc: <stable@vger.kernel.org> # 5.15.x+
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reviewed-by: Christian König <christian.koenig@amd.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/1652441296-1986-1-git-send-email-quic_charante@quicinc.com
-Signed-off-by: Christian König <christian.koenig@amd.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 24f52ef0c4bf ("arm64: dts: qcom: sm8250: Add nodes for tx and rx macros with soundwire masters")
+Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220401185814.519653-1-dmitry.baryshkov@linaro.org
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/dma-buf/dma-buf.c |    8 ++++++++
- 1 file changed, 8 insertions(+)
+ arch/arm64/boot/dts/qcom/sm8250-mtp.dts | 12 ++++++++++++
+ arch/arm64/boot/dts/qcom/sm8250.dtsi    |  4 ++++
+ 2 files changed, 16 insertions(+)
 
---- a/drivers/dma-buf/dma-buf.c
-+++ b/drivers/dma-buf/dma-buf.c
-@@ -407,6 +407,7 @@ static inline int is_dma_buf_file(struct
+diff --git a/arch/arm64/boot/dts/qcom/sm8250-mtp.dts b/arch/arm64/boot/dts/qcom/sm8250-mtp.dts
+index fb99cc2827c7..7ab3627cc347 100644
+--- a/arch/arm64/boot/dts/qcom/sm8250-mtp.dts
++++ b/arch/arm64/boot/dts/qcom/sm8250-mtp.dts
+@@ -622,6 +622,10 @@ &qupv3_id_2 {
+ 	status = "okay";
+ };
  
- static struct file *dma_buf_getfile(struct dma_buf *dmabuf, int flags)
- {
-+	static atomic64_t dmabuf_inode = ATOMIC64_INIT(0);
- 	struct file *file;
- 	struct inode *inode = alloc_anon_inode(dma_buf_mnt->mnt_sb);
++&rxmacro {
++	status = "okay";
++};
++
+ &slpi {
+ 	status = "okay";
+ 	firmware-name = "qcom/sm8250/slpi.mbn";
+@@ -773,6 +777,8 @@ right_spkr: wsa8810-left@0,4{
+ };
  
-@@ -416,6 +417,13 @@ static struct file *dma_buf_getfile(stru
- 	inode->i_size = dmabuf->size;
- 	inode_set_bytes(inode, dmabuf->size);
+ &swr1 {
++	status = "okay";
++
+ 	wcd_rx: wcd9380-rx@0,4 {
+ 		compatible = "sdw20217010d00";
+ 		reg = <0 4>;
+@@ -781,6 +787,8 @@ wcd_rx: wcd9380-rx@0,4 {
+ };
  
-+	/*
-+	 * The ->i_ino acquired from get_next_ino() is not unique thus
-+	 * not suitable for using it as dentry name by dmabuf stats.
-+	 * Override ->i_ino with the unique and dmabuffs specific
-+	 * value.
-+	 */
-+	inode->i_ino = atomic64_add_return(1, &dmabuf_inode);
- 	file = alloc_file_pseudo(inode, dma_buf_mnt, "dmabuf",
- 				 flags, &dma_buf_fops);
- 	if (IS_ERR(file))
+ &swr2 {
++	status = "okay";
++
+ 	wcd_tx: wcd9380-tx@0,3 {
+ 		compatible = "sdw20217010d00";
+ 		reg = <0 3>;
+@@ -819,6 +827,10 @@ config {
+ 	};
+ };
+ 
++&txmacro {
++	status = "okay";
++};
++
+ &uart12 {
+ 	status = "okay";
+ };
+diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+index a92230bec1dd..bd212f6c351f 100644
+--- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+@@ -2150,6 +2150,7 @@ rxmacro: rxmacro@3200000 {
+ 			pinctrl-0 = <&rx_swr_active>;
+ 			compatible = "qcom,sm8250-lpass-rx-macro";
+ 			reg = <0 0x3200000 0 0x1000>;
++			status = "disabled";
+ 
+ 			clocks = <&q6afecc LPASS_CLK_ID_TX_CORE_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
+ 				<&q6afecc LPASS_CLK_ID_TX_CORE_NPL_MCLK  LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
+@@ -2168,6 +2169,7 @@ rxmacro: rxmacro@3200000 {
+ 		swr1: soundwire-controller@3210000 {
+ 			reg = <0 0x3210000 0 0x2000>;
+ 			compatible = "qcom,soundwire-v1.5.1";
++			status = "disabled";
+ 			interrupts = <GIC_SPI 298 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&rxmacro>;
+ 			clock-names = "iface";
+@@ -2195,6 +2197,7 @@ txmacro: txmacro@3220000 {
+ 			pinctrl-0 = <&tx_swr_active>;
+ 			compatible = "qcom,sm8250-lpass-tx-macro";
+ 			reg = <0 0x3220000 0 0x1000>;
++			status = "disabled";
+ 
+ 			clocks = <&q6afecc LPASS_CLK_ID_TX_CORE_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
+ 				 <&q6afecc LPASS_CLK_ID_TX_CORE_NPL_MCLK  LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
+@@ -2218,6 +2221,7 @@ swr2: soundwire-controller@3230000 {
+ 			compatible = "qcom,soundwire-v1.5.1";
+ 			interrupts-extended = <&intc GIC_SPI 297 IRQ_TYPE_LEVEL_HIGH>;
+ 			interrupt-names = "core";
++			status = "disabled";
+ 
+ 			clocks = <&txmacro>;
+ 			clock-names = "iface";
+-- 
+2.35.1
+
 
 

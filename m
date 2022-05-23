@@ -2,196 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FC275312CF
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:23:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 318EE5313EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236420AbiEWN2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 09:28:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36110 "EHLO
+        id S236364AbiEWNaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 09:30:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236373AbiEWN2Z (ORCPT
+        with ESMTP id S236300AbiEWN3M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 09:28:25 -0400
-Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net [89.40.174.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A60D53DA5C;
-        Mon, 23 May 2022 06:28:15 -0700 (PDT)
-Received: from [77.244.183.192] (port=63488 helo=[192.168.178.75])
-        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1nt86W-0004R3-V3; Mon, 23 May 2022 15:28:13 +0200
-Message-ID: <30b9a2fe-7f9e-bc85-8ecb-d2137c243c36@lucaceresoli.net>
-Date:   Mon, 23 May 2022 15:28:09 +0200
+        Mon, 23 May 2022 09:29:12 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3557E393FA;
+        Mon, 23 May 2022 06:29:08 -0700 (PDT)
+X-UUID: 0851c2ce6f1e4613afc54bce9409e3cc-20220523
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:11f78a66-a325-4ebe-89d4-afbc2643f1f5,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:2a19b09,CLOUDID:05f93de3-edbf-4bd4-8a34-dfc5f7bb086d,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 0851c2ce6f1e4613afc54bce9409e3cc-20220523
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+        (envelope-from <jiaxin.yu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1221026251; Mon, 23 May 2022 21:29:02 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Mon, 23 May 2022 21:29:00 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 23 May 2022 21:29:00 +0800
+From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
+To:     <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <angelogioacchino.delregno@collabora.com>
+CC:     <aaronyu@google.com>, <matthias.bgg@gmail.com>,
+        <trevor.wu@mediatek.com>, <tzungbi@google.com>,
+        <julianbraha@gmail.com>, <alsa-devel@alsa-project.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Jiaxin Yu <jiaxin.yu@mediatek.com>
+Subject: [PATCH v5 00/20] ASoC: mediatek: Add support for MT8186 SoC
+Date:   Mon, 23 May 2022 21:28:38 +0800
+Message-ID: <20220523132858.22166-1-jiaxin.yu@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 1/2] PCI: dra7xx: Fix link removal on probe error
-Content-Language: it-IT
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>, PCI <linux-pci@vger.kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-omap <linux-omap@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Sekhar Nori <nsekhar@ti.com>,
-        Android Kernel Team <kernel-team@android.com>
-References: <20211214221450.589884-1-luca@lucaceresoli.net>
- <CAL_Jsq+GQTcx1EGKHug2ZcDZufrKM-4k6PB0vQeTCTG42MHzvA@mail.gmail.com>
- <59a23c89-0810-eb28-acd9-7051ac34d438@lucaceresoli.net>
- <4579940c-27dc-733e-4022-ebea4671c839@lucaceresoli.net>
- <CAL_JsqJ5nr6xJoTv3A6UPMMDXhWKcwSEUA3ux3kK8OMWQxdc6w@mail.gmail.com>
- <YnvnNUrsCOUxMu8A@lpieralisi>
- <615718f9-151e-20fb-fcb0-56063ae61ca6@lucaceresoli.net>
- <CAGETcx9r4e9PkUFNZ+vUfqOSO5=e9apmBj0+DyOkKEvc4CnsLQ@mail.gmail.com>
- <ebd3f89b-3487-a610-7583-4ffda01a0dd6@lucaceresoli.net>
- <CAGETcx-GWqV2Teq0ufK2946rtB7Q-5Y=uzLN_kMbZ+57Aq127A@mail.gmail.com>
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-In-Reply-To: <CAGETcx-GWqV2Teq0ufK2946rtB7Q-5Y=uzLN_kMbZ+57Aq127A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Saravana,
+This series of patches adds support for Mediatek AFE of MT8186 Soc.
+Patches are based on broonie tree "for-next" branch.
 
-On 19/05/22 22:25, Saravana Kannan wrote:
-> On Tue, May 17, 2022 at 12:32 AM Luca Ceresoli <luca@lucaceresoli.net> wrote:
->>
->> Hi Saravana,
->>
->> On 14/05/22 05:46, Saravana Kannan wrote:
->>> On Thu, May 12, 2022 at 7:07 AM Luca Ceresoli <luca@lucaceresoli.net> wrote:
->>>>
->>>> Hi Lorenzo,
->>>>
->>>> On 11/05/22 18:41, Lorenzo Pieralisi wrote:
->>>>> On Sat, Jan 15, 2022 at 10:02:00AM -0600, Rob Herring wrote:
->>>>>> +Saravana
->>>>>>
->>>>>> On Tue, Jan 11, 2022 at 4:35 AM Luca Ceresoli <luca@lucaceresoli.net> wrote:
->>>>>>>
->>>>>>> Hi Rob,
->>>>>>>
->>>>>>> On 16/12/21 10:08, Luca Ceresoli wrote:
->>>>>>>> Hi Rob,
->>>>>>>>
->>>>>>>> thanks for the quick feedback!
->>>>>>>>
->>>>>>>> On 14/12/21 23:42, Rob Herring wrote:
->>>>>>>>> On Tue, Dec 14, 2021 at 4:15 PM Luca Ceresoli <luca@lucaceresoli.net> wrote:
->>>>>>>>>>
->>>>>>>>>> If a devm_phy_get() calls fails with phy_count==N (N > 0), then N links
->>>>>>>>>> have already been added by device_link_add() and won't be deleted by
->>>>>>>>>> device_link_del() because the code calls 'return' and not 'goto err_link'.
->>>>>>>>>>
->>>>>>>>>> Fix in a very simple way by doing all the devm_phy_get() calls before all
->>>>>>>>>> the device_link_add() calls.
->>>>>>>>>>
->>>>>>>>>> Fixes: 7a4db656a635 ("PCI: dra7xx: Create functional dependency between PCIe and PHY")
->>>>>>>>>> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
->>>>>>>>>> ---
->>>>>>>>>>  drivers/pci/controller/dwc/pci-dra7xx.c | 2 ++
->>>>>>>>>>  1 file changed, 2 insertions(+)
->>>>>>>>>>
->>>>>>>>>> diff --git a/drivers/pci/controller/dwc/pci-dra7xx.c b/drivers/pci/controller/dwc/pci-dra7xx.c
->>>>>>>>>> index f7f1490e7beb..2ccc53869e13 100644
->>>>>>>>>> --- a/drivers/pci/controller/dwc/pci-dra7xx.c
->>>>>>>>>> +++ b/drivers/pci/controller/dwc/pci-dra7xx.c
->>>>>>>>>> @@ -757,7 +757,9 @@ static int dra7xx_pcie_probe(struct platform_device *pdev)
->>>>>>>>>>                 phy[i] = devm_phy_get(dev, name);
->>>>>>>>>>                 if (IS_ERR(phy[i]))
->>>>>>>>>>                         return PTR_ERR(phy[i]);
->>>>>>>>>> +       }
->>>>>>>>>>
->>>>>>>>>> +       for (i = 0; i < phy_count; i++) {
->>>>>>>>>>                 link[i] = device_link_add(dev, &phy[i]->dev, DL_FLAG_STATELESS);
->>>>>>>>>
->>>>>>>>> I think this should happen automatically now with fw_devlink being
->>>>>>>>> enabled by default. Can you try?
->>>>>>>>
->>>>>>>> Do you mean removal should be done automatically? I think they are not
->>>>>>>> due to the DL_FLAG_STATELESS flag.
->>>>>>>
->>>>>>> I would love to have feedback because, as said, I think my patch is
->>>>>>> correct, but if I'm wrong (which might well be) I have to drop patch 1
->>>>>>> and rewrite patch 2 in a slightly more complex form.
->>>>>>
->>>>>> I mean that why do you need explicit dependency tracking here when
->>>>>> dependencies on a PHY should happen automatically now. IOW, what is
->>>>>> special about this driver and dependency?
->>>>>
->>>>> Any update on this patch ? I think patch 2 can be merged, please
->>>>> let me know if this one can be dropped.
->>>>
->>>> Thanks for the feedback! You would say yes, you can merge patch 2,
->>>> except it probably does not even apply as it is written in a way that is
->>>> based on the changes in patch 1.
->>>>
->>>> I could rewrite patch 2 to not depend on patch 1 of course, but it
->>>> wouldn't make code simpler, perhaps more complex. And moreover the
->>>> hardware that I used to have access to has phy_count==1 so I could never
->>>> test the failing case, and sadly now I have no access to that hardware.
->>>
->>> Hi Luca,
->>>
->>> The fw_devlink code to create device links from consumers to "phys"
->>> suppliers is pretty well exercised. Most/all Android devices running
->>> 5.10+ kernels (including Pixel 6) use fw_devlink=on to be able to boot
->>> properly.
->>>
->>> So I'd be pretty confident in deleting the device_link_add/del() code
->>> in drivers/pci/controller/dwc/pci-dra7xx.c. The device links should
->>> already be there before the probe is even called.
->>>
->>> Also, if you want to check if the device links (even the 1 phy one you
->>> have) are being created, you can look at /sys/class/devlink to see the
->>> list of all device links that are currently present. You can delete
->>> the code and then use this to check too.
->>
->> Thank you for your feedback. Unfortunately as I said I have no access to
->> the hardware, and won't have anymore. I don't think it is a good idea to
->> send a patch that I cannot test on real hardware, especially since it is
->> for a generic hardware that thus might affect others. But I would be
->> glad to review any such patch that might be sent, FWIW.
-> 
-> Just to make sure I'm on the same page. I thought you at least had a
-> device where phy_count = 1. But looks like you are saying you don't?
+Changes since v4:
+  - [v5 07/20]
+    - remove unsusd controls
+  - [v5 09/20]
+    - correct indent error
+  - [v5 10/20]
+  - [v5 13/20]
+  - [v5 14/20]
+    - fix the return value if the value is different from the previous
+      value in mixer controls
+  - [v5 17/20]
+  - [v5 19/20]
+    - correct the compatible name with '_' instead of '-'
+  - [v5 18/20]
+  - [v5 20/20]
+    - correct the yaml after 'pip3 install dtschema --upgrade'
 
-I used to have access to a hardware with phy_count = 1 on a former job,
-but I don't have it anymore and won't have it since I left that job
-position.
+Changes since v3:
+  - [v4 09/18]
+    - remove DEBUG_COEFF debugging code
+  - [v4 10/18]
+    - simplify the logic of the code
+  - [v4 13/18]
+    - split out the MT6366 bits into mt8186-mt6366-commom.c
+    - fix build error of "error: 'struct dev_pm_info' has no member named 'runtime_error'"
+    - fix bug of adda dai driver
+    - add route for pcm interface channel 2.
+  - [v4 15/18]
+  - [v4 17/18]
+    - commonize the configuration of the codec
+    - move MT6366 common bits into mt8186-mt6366-common.c
 
-> If all you want to check is "phys" have device links created for them
-> for whatever random DT device that has a "phys" property, then I can
-> test and confirm that for you on whatever platform I have. But if you
-> want a test specifically for the device that corresponds to the driver
-> you were fixing, then I can't. Let me know.
+Changes since v2:
+  - add a new compatible string "mediatek,mt6366-sound"
+  - modify the log level for simplicity
+  - use dev_err_probe(...) instead of dev_err(...) in dev probe()
+  - optimized the logic of some code
+  - use BIT() and GENMASK() macros to descript the registers
 
-Honestly, I'm afraid I don't have much time to invest in trying to
-recollect all the details and motivations for this patchset. Likely I
-spotted this by code inspection while debugging other issues (I had a
-non-working PCIe device, but it was not the host fault). If you think
-there is little value in these patches, I'm OK in dropping them.
+  Thanks for AngeloGioacchino's careful reviews.
+
+Changes since v1:
+  [v2 01/17]
+    - add a new ID to the existing mt6358 codec driver
+  [v2 03/17]
+    - modify log level in DAPM events
+    - use standard numeric control with name ending in Switch
+    - return 1 when the value changed in mixer control's .get callback
+  [v2 05/17]
+    - ending in Switch to the standard on/off controls
+    - change to "HW Gain 1 Volume" and "HW Gain 2 Volume"
+  [v2 09/17]
+    - return an error in the default case rather than just picking one of
+      the behaviours when do .set_fmt
+    - use the new defines that are _PROVIDER_MASK, _DAIFMT_CBP_CFP and
+      _DAIFMT_CBC_CFC
+  [v2 10/17]
+  [v2 11/17]
+    - the clock and gpio are aplit out into separate  patches
+
+  The source file's GPL comment use c++ style, and the header fils's GPL
+  comment use c style. We have added "Switch" after the names of all the
+  controls that just are simple on/off.
+
+Jiaxin Yu (20):
+  ASoC: mediatek: mt6366: support for mt6366 codec
+  dt-bindings: mediatek: mt6358: add new compatible for using mt6366
+  ASoC: mediatek: mt8186: support audsys clock control
+  ASoC: mediatek: mt8186: support adda in platform driver
+  ASoC: mediatek: mt8186: support hostless in platform driver
+  ASoC: mediatek: mt8186: support hw gain in platform driver
+  ASoC: mediatek: mt8186: support i2s in platform driver
+  ASoC: mediatek: mt8186: support pcm in platform driver
+  ASoC: mediatek: mt8186: support src in platform driver
+  ASoC: mediatek: mt8186: support tdm in platform driver
+  ASoC: mediatek: mt8186: support audio clock control in platform driver
+  ASoC: mediatek: mt8186: support gpio control in platform driver
+  ASoC: mediatek: mt8186: add misc driver and register definitions
+  ASoC: mediatek: mt8186: add platform driver
+  ASoC: mediatek: mt8186: add mt8186-mt6366 common driver
+  dt-bindings: mediatek: mt8186: add audio afe document
+  ASoC: mediatek: mt8186: add machine driver with mt6366, da7219 and
+    max98357
+  dt-bindings: mediatek: mt8186: add mt8186-mt6366-da7219-max98357
+    document
+  ASoC: mediatek: mt8186: add machine driver with mt6366, rt1019 and
+    rt5682s
+  dt-bindings: mediatek: mt8186: add mt8186-mt6366-rt1019-rt5682s
+    document
+
+ .../devicetree/bindings/sound/mt6358.txt      |    4 +-
+ .../bindings/sound/mt8186-afe-pcm.yaml        |  175 +
+ .../sound/mt8186-mt6366-da7219-max98357.yaml  |   75 +
+ .../sound/mt8186-mt6366-rt1019-rt5682s.yaml   |   75 +
+ sound/soc/codecs/mt6358.c                     |    1 +
+ sound/soc/mediatek/Kconfig                    |   44 +
+ sound/soc/mediatek/Makefile                   |    1 +
+ sound/soc/mediatek/mt8186/Makefile            |   22 +
+ sound/soc/mediatek/mt8186/mt8186-afe-clk.c    |  651 ++++
+ sound/soc/mediatek/mt8186/mt8186-afe-clk.h    |  106 +
+ sound/soc/mediatek/mt8186/mt8186-afe-common.h |  235 ++
+ .../soc/mediatek/mt8186/mt8186-afe-control.c  |  261 ++
+ sound/soc/mediatek/mt8186/mt8186-afe-gpio.c   |  244 ++
+ sound/soc/mediatek/mt8186/mt8186-afe-gpio.h   |   19 +
+ sound/soc/mediatek/mt8186/mt8186-afe-pcm.c    | 3009 +++++++++++++++++
+ sound/soc/mediatek/mt8186/mt8186-audsys-clk.c |  150 +
+ sound/soc/mediatek/mt8186/mt8186-audsys-clk.h |   15 +
+ .../soc/mediatek/mt8186/mt8186-audsys-clkid.h |   45 +
+ sound/soc/mediatek/mt8186/mt8186-dai-adda.c   |  873 +++++
+ .../soc/mediatek/mt8186/mt8186-dai-hostless.c |  298 ++
+ .../soc/mediatek/mt8186/mt8186-dai-hw-gain.c  |  236 ++
+ sound/soc/mediatek/mt8186/mt8186-dai-i2s.c    | 1286 +++++++
+ sound/soc/mediatek/mt8186/mt8186-dai-pcm.c    |  423 +++
+ sound/soc/mediatek/mt8186/mt8186-dai-src.c    |  695 ++++
+ sound/soc/mediatek/mt8186/mt8186-dai-tdm.c    |  698 ++++
+ .../mediatek/mt8186/mt8186-interconnection.h  |   69 +
+ .../soc/mediatek/mt8186/mt8186-misc-control.c |  252 ++
+ .../mediatek/mt8186/mt8186-mt6366-common.c    |   59 +
+ .../mediatek/mt8186/mt8186-mt6366-common.h    |   17 +
+ .../mt8186/mt8186-mt6366-da7219-max98357.c    | 1003 ++++++
+ .../mt8186/mt8186-mt6366-rt1019-rt5682s.c     |  979 ++++++
+ sound/soc/mediatek/mt8186/mt8186-reg.h        | 2913 ++++++++++++++++
+ 32 files changed, 14932 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/sound/mt8186-afe-pcm.yaml
+ create mode 100644 Documentation/devicetree/bindings/sound/mt8186-mt6366-da7219-max98357.yaml
+ create mode 100644 Documentation/devicetree/bindings/sound/mt8186-mt6366-rt1019-rt5682s.yaml
+ create mode 100644 sound/soc/mediatek/mt8186/Makefile
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-afe-clk.c
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-afe-clk.h
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-afe-common.h
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-afe-control.c
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-afe-gpio.c
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-afe-gpio.h
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-afe-pcm.c
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-audsys-clk.c
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-audsys-clk.h
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-audsys-clkid.h
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-dai-adda.c
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-dai-hostless.c
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-dai-hw-gain.c
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-dai-i2s.c
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-dai-pcm.c
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-dai-src.c
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-dai-tdm.c
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-interconnection.h
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-misc-control.c
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-mt6366-common.c
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-mt6366-common.h
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-mt6366-da7219-max98357.c
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-reg.h
 
 -- 
-Luca
+2.18.0
+

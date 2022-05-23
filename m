@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 894895319AD
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:55:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1E75531BFD
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:57:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239080AbiEWQnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 12:43:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37288 "EHLO
+        id S239058AbiEWQnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 12:43:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239036AbiEWQmq (ORCPT
+        with ESMTP id S239044AbiEWQms (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 12:42:46 -0400
+        Mon, 23 May 2022 12:42:48 -0400
 Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBE54E38A;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E54DB4E3B2;
         Mon, 23 May 2022 09:42:43 -0700 (PDT)
 Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id 77E875FD06;
-        Mon, 23 May 2022 19:42:41 +0300 (MSK)
+        by mail.sberdevices.ru (Postfix) with ESMTP id 398925FD07;
+        Mon, 23 May 2022 19:42:42 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1653324161;
-        bh=w/y5zGWnbhdYZDEscTtuIwfMTZyMSOtuJte/1COxFRY=;
+        s=mail; t=1653324162;
+        bh=RhiKWh0LFeh4Os0HGNlziOa6mxgE+mjMvOYWM1E4ANg=;
         h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=R88Y2klDr/jzLfIgF1GgppV20nN2WwPkvmuegPEiMrgi74ZtgIBL4DnMXzCcmy6ft
-         RE9bLC571xhw72hFIj601gLmP3TQj3g5EFlZDCQxz7KAGBZ701UjjNA+r6eUIgXUmV
-         wC8UBLILDDzk0SIZL0pA703r9j5+/WhE8R7t8mxKP9L/TSbj3iUj6CgN/UKSESk+zk
-         AkEYmeJ4MfNcYo+6f/YaEqckI660XG75RqbxS2dIpTQJoNxW9MwOSd3K7bIi6fdcO3
-         x5AdDEN0N/+ZdIe6RdUHds9WG80BCuElaRPdMEtwaG570bS2gcwFWAQ6NUtd6DHdG9
-         0lbFdeU/Dcpfw==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        b=I5L8yM5huA3Qj0aTRL08jTqvuz8sJDYIHcT6HRwCduYxtH+95+h80yNJ89lz+nblj
+         qcIUhMQVTlpvTufP1faA2q5Dwl2uVomwPNrQFFH449a5pcGxDAHsj7uFDVwl7qb8kb
+         QOjUQCS1kVkVW5cuLArkd9X17+hb7go0HFwglzbiAJ6LmZEa0c1Fuds9j/jAA/qriv
+         6u7holUyVUoBcYbmsMVQmNvBfuDWpBMyIHe7ZBhSNjeIaiCcgghmSzM5WJBrET0zTP
+         3ib9YFwMj6sp40yVy/8ddqbJ9Q8LoFh4Zc5fuXRi422Ey6aBa6nYJT7HtvTM19PuHu
+         53G9v5fPXQgnA==
+Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru [172.16.1.5])
         by mail.sberdevices.ru (Postfix) with ESMTP;
-        Mon, 23 May 2022 19:42:41 +0300 (MSK)
+        Mon, 23 May 2022 19:42:42 +0300 (MSK)
 From:   Dmitry Rokosov <DDRokosov@sberdevices.ru>
 To:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
         "jic23@kernel.org" <jic23@kernel.org>,
@@ -49,13 +49,13 @@ CC:     "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
         kernel <kernel@sberdevices.ru>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Dmitry Rokosov <DDRokosov@sberdevices.ru>
-Subject: [PATCH v1 3/5] iio:accel:mxc4005: rearrange iio trigger get and
+Subject: [PATCH v1 4/5] iio:chemical:ccs811: rearrange iio trigger get and
  register
-Thread-Topic: [PATCH v1 3/5] iio:accel:mxc4005: rearrange iio trigger get and
- register
-Thread-Index: AQHYbsP/RY3VWwUPpUGH4PpJIfrW1w==
-Date:   Mon, 23 May 2022 16:41:48 +0000
-Message-ID: <20220523164159.11579-4-ddrokosov@sberdevices.ru>
+Thread-Topic: [PATCH v1 4/5] iio:chemical:ccs811: rearrange iio trigger get
+ and register
+Thread-Index: AQHYbsP/79XON26KwUeOeS4tvxocjw==
+Date:   Mon, 23 May 2022 16:41:49 +0000
+Message-ID: <20220523164159.11579-5-ddrokosov@sberdevices.ru>
 References: <20220523164159.11579-1-ddrokosov@sberdevices.ru>
 In-Reply-To: <20220523164159.11579-1-ddrokosov@sberdevices.ru>
 Accept-Language: ru-RU, en-US
@@ -93,30 +93,26 @@ completely incorrect.
 
 Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
 ---
- drivers/iio/accel/mxc4005.c | 4 ++--
+ drivers/iio/chemical/ccs811.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/iio/accel/mxc4005.c b/drivers/iio/accel/mxc4005.c
-index b3afbf064915..df600d2917c0 100644
---- a/drivers/iio/accel/mxc4005.c
-+++ b/drivers/iio/accel/mxc4005.c
-@@ -456,8 +456,6 @@ static int mxc4005_probe(struct i2c_client *client,
+diff --git a/drivers/iio/chemical/ccs811.c b/drivers/iio/chemical/ccs811.c
+index 847194fa1e46..80ef1aa9aae3 100644
+--- a/drivers/iio/chemical/ccs811.c
++++ b/drivers/iio/chemical/ccs811.c
+@@ -499,11 +499,11 @@ static int ccs811_probe(struct i2c_client *client,
 =20
- 		data->dready_trig->ops =3D &mxc4005_trigger_ops;
- 		iio_trigger_set_drvdata(data->dready_trig, indio_dev);
--		indio_dev->trig =3D data->dready_trig;
+ 		data->drdy_trig->ops =3D &ccs811_trigger_ops;
+ 		iio_trigger_set_drvdata(data->drdy_trig, indio_dev);
+-		indio_dev->trig =3D data->drdy_trig;
 -		iio_trigger_get(indio_dev->trig);
- 		ret =3D devm_iio_trigger_register(&client->dev,
- 						data->dready_trig);
- 		if (ret) {
-@@ -465,6 +463,8 @@ static int mxc4005_probe(struct i2c_client *client,
- 				"failed to register trigger\n");
- 			return ret;
- 		}
+ 		ret =3D iio_trigger_register(data->drdy_trig);
+ 		if (ret)
+ 			goto err_poweroff;
 +
-+		indio_dev->trig =3D iio_trigger_get(data->dready_trig);
++		indio_dev->trig =3D iio_trigger_get(data->drdy_trig);
  	}
 =20
- 	return devm_iio_device_register(&client->dev, indio_dev);
+ 	ret =3D iio_triggered_buffer_setup(indio_dev, NULL,
 --=20
 2.36.0

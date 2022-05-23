@@ -2,80 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BDC553125B
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:22:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 738FD531338
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:23:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237592AbiEWPL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 11:11:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57634 "EHLO
+        id S237622AbiEWPMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 11:12:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237581AbiEWPL4 (ORCPT
+        with ESMTP id S237621AbiEWPMY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 11:11:56 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 355F24A3E4
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 08:11:55 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id h5so20702388wrb.11
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 08:11:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=7h/KQt7Gzc3HQkbNCwwgoLtjOZYGEyw/thG38+Y/9pc=;
-        b=yD4Dk5reZabRrlBn67GpBQPnumgx2fGYw9o8ZEO5TCyXqPollokxS0ADfya/iNX4oA
-         DYdpe3Gy0FlgOGMdMRQwDPh6XJXt90IbeQ2+Np20oK3MfGP4gVCaMiRcTRYyP/YcXEc+
-         u1uV2Uzk6Lasp2C5wTRsSyDQhs7UNs1XCs5Y2Na7PVAivClyMsq9QHTHzrGTNSinQ/xx
-         DVeqRC8DTPeCiGcREFR9xd6VhHIsMwIFxmkNxS+/dZSKUK2+WG4cndcJuqjz44yC7DVr
-         j60q5lfpnSCDeLENH7hdGnszpCeHEY31GbegypiJZYyJSy+mdNFZ4XvDZr28F4BUWe4j
-         yfag==
+        Mon, 23 May 2022 11:12:24 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8798155201
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 08:12:21 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id l8-20020a056e021aa800b002cf778c63caso8970179ilv.10
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 08:12:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=7h/KQt7Gzc3HQkbNCwwgoLtjOZYGEyw/thG38+Y/9pc=;
-        b=19tocW8SK2EXrj97LqPYwqjTaLHTHEJUjYWaLIJCD/OE9XoLxUIly8QRx4Q1AOE0E/
-         Ccq0m31g186N44PAvm9ynHoFS9abBb1+CPrdkbvBKIjhsX4pIpPPXvRvGL25DuO+dBwF
-         nvLjhDQsWWVa1m7DV3usw1K/SARR6CKcmwvclmyscXJYRvZ9Fn0oLOJo30/i6CnFzqfX
-         dOS1huzZQbIjfB8/n05cjk+0LeKWdvNkceu/cqaNflfwFTohj2Ele8yKvTC4g8qxSHmc
-         KCKV379kJIOL9/FAo26q7WYpjKkvAViYri7gmuFHOWLK+7f31+/KW5Ckj+qJs5AUrVfX
-         ZOpQ==
-X-Gm-Message-State: AOAM530erWJ0FGRBCuwX7EVSvKqxjppE8lUTaXvoEjcN3MXG9DmJcudC
-        wcj3QEHUdmy8xx6HVY0ewo7oww==
-X-Google-Smtp-Source: ABdhPJxVUeEdhefzEjlzSC8eYKT+NZnwnK0Pe8cKjJGa59wR4aefUSfAV1iaw6NG/VT/vOtL6bXSPg==
-X-Received: by 2002:a05:6000:18aa:b0:20c:7ec0:b804 with SMTP id b10-20020a05600018aa00b0020c7ec0b804mr18431525wri.128.1653318713774;
-        Mon, 23 May 2022 08:11:53 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id q11-20020adfaa4b000000b0020fc6590a12sm5607184wrd.41.2022.05.23.08.11.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 08:11:53 -0700 (PDT)
-Date:   Mon, 23 May 2022 16:11:51 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        chrome-platform@lists.linux.dev,
-        Guenter Roeck <groeck@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Craig Hesling <hesling@chromium.org>,
-        Tom Hughes <tomhughes@chromium.org>,
-        Alexandru M Stan <amstan@chromium.org>,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Benson Leung <bleung@chromium.org>
-Subject: Re: [PATCH v5 1/3] dt-bindings: cros-ec: Fix a typo in description
-Message-ID: <YoukN2uCpL3rmMsQ@google.com>
-References: <20220512013921.164637-1-swboyd@chromium.org>
- <20220512013921.164637-2-swboyd@chromium.org>
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=ssTC97tVmCx0McXfxm8DIw1sGQpAzQtXezYdGClsZzw=;
+        b=uMEsEYygHS2f1WNVjANJAzuMKyxxokdQMJREM2Et4vkVYex/ePRv5cFm7Ogz1mHpNU
+         SMEZsZ0YTRJlwknF8KVfcyH4pjjJOH2zLRmN027/ZU3z1X+mkyG0T0hIYUZl1daaESWT
+         jLyOgdI21Teq3i47NhqaIusPEbGw3lt/uyKoLXUnrUEsu0idf4LhnsBuHiWkJuto2AtK
+         5jj3HFGAuh+1Ej7wkTd4gI9aG2JLdJ+aEynygutOBjEivAJZUhhD/JkjJMbM7AlzWXyX
+         APAC6EA96cPQiORu3yV+t9FGBJNDn0llPyA4c/hakNNDkBswICIwtGAACZtqTcXFxrCt
+         BPKA==
+X-Gm-Message-State: AOAM531PJq4qRFC7p8epP2W85LYvkH36WP2mzX/RSXLOPZhVesimHoBb
+        NrWVDobh8oGlTnFxb8txDXzOUoIwvXt+jsLxbiFuVohwTMrZ
+X-Google-Smtp-Source: ABdhPJzCQUxi07tf/64UklqNftuGBpCacuEfYhUrPQzaeB7hQ7uxFvPB9RPBLZjCetWxT+2gnlVSDvNB+sGP1K7e3tCwXNkKupxS
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220512013921.164637-2-swboyd@chromium.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Received: by 2002:a05:6e02:1352:b0:2d1:6424:60b8 with SMTP id
+ k18-20020a056e02135200b002d1642460b8mr10989334ilr.305.1653318740815; Mon, 23
+ May 2022 08:12:20 -0700 (PDT)
+Date:   Mon, 23 May 2022 08:12:20 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003f33bc05dfaf44fe@google.com>
+Subject: [syzbot] WARNING in inet_csk_get_port
+From:   syzbot <syzbot+015d756bbd1f8b5c8f09@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, dsahern@kernel.org, edumazet@google.com,
+        joannelkoong@gmail.com, kuba@kernel.org, kuniyu@amazon.co.jp,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com,
+        yoshfuji@linux-ipv6.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,32 +56,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 11 May 2022, Stephen Boyd wrote:
+Hello,
 
-> A 's/pf/of/' on rpmsg-name description.
-> 
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> Cc: <devicetree@vger.kernel.org>
-> Cc: <chrome-platform@lists.linux.dev>
-> Cc: Guenter Roeck <groeck@chromium.org>
-> Cc: Douglas Anderson <dianders@chromium.org>
-> Cc: Craig Hesling <hesling@chromium.org>
-> Cc: Tom Hughes <tomhughes@chromium.org>
-> Cc: Alexandru M Stan <amstan@chromium.org>
-> Cc: Tzung-Bi Shih <tzungbi@kernel.org>
-> Cc: Matthias Kaehlcke <mka@chromium.org>
-> Cc: Benson Leung <bleung@chromium.org>
-> Cc: Lee Jones <lee.jones@linaro.org>
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> ---
->  Documentation/devicetree/bindings/mfd/google,cros-ec.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+syzbot found the following issue on:
 
-Applied, thanks.
+HEAD commit:    aa5334b1f968 Merge branch 'add-a-bhash2-table-hashed-by-po..
+git tree:       net-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=151fe7fdf00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=468b6c3a1b5b53f0
+dashboard link: https://syzkaller.appspot.com/bug?extid=015d756bbd1f8b5c8f09
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1336e875f00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1673a38df00000
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+The issue was bisected to:
+
+commit d5a42de8bdbe25081f07b801d8b35f4d75a791f4
+Author: Joanne Koong <joannelkoong@gmail.com>
+Date:   Fri May 20 00:18:33 2022 +0000
+
+    net: Add a second bind table hashed by port and address
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14193ea9f00000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=16193ea9f00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=12193ea9f00000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+015d756bbd1f8b5c8f09@syzkaller.appspotmail.com
+Fixes: d5a42de8bdbe ("net: Add a second bind table hashed by port and address")
+
+nf_conntrack: default automatic helper assignment has been turned off for security reasons and CT-based firewall rule not found. Use the iptables CT target to attach helpers instead.
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 3598 at net/ipv4/inet_connection_sock.c:525 inet_csk_get_port+0x1148/0x1ad0 net/ipv4/inet_connection_sock.c:525
+Modules linked in:
+CPU: 1 PID: 3598 Comm: syz-executor285 Not tainted 5.18.0-rc7-syzkaller-01833-gaa5334b1f968 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:inet_csk_get_port+0x1148/0x1ad0 net/ipv4/inet_connection_sock.c:525
+Code: 07 00 00 48 8b 44 24 28 4c 89 ee 48 8b 78 18 e8 2e d1 fe ff e9 0f ff ff ff e8 f4 59 a6 f9 0f 0b e9 ae fa ff ff e8 e8 59 a6 f9 <0f> 0b e9 de fa ff ff e8 dc 59 a6 f9 e8 a7 ed 9d 01 31 ff 89 c3 89
+RSP: 0018:ffffc90002f4fbf8 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: ffff888022f6a100 RCX: 0000000000000000
+RDX: ffff88801e6fbb00 RSI: ffffffff87d2dff8 RDI: ffff88801e2e06a8
+RBP: ffff88801e2e06a0 R08: 0000000000000001 R09: 0000000000000000
+R10: ffffffff87d2c485 R11: 0000000000000000 R12: 0000000000000000
+R13: ffff888022f6a100 R14: 0000000000000000 R15: ffff88801e2e0000
+FS:  000055555578e300(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00000000005defd8 CR3: 000000001ce0b000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ inet_csk_listen_start+0x13e/0x3c0 net/ipv4/inet_connection_sock.c:1178
+ inet_listen+0x231/0x640 net/ipv4/af_inet.c:228
+ __sys_listen+0x17d/0x250 net/socket.c:1778
+ __do_sys_listen net/socket.c:1787 [inline]
+ __se_sys_listen net/socket.c:1785 [inline]
+ __x64_sys_listen+0x50/0x70 net/socket.c:1785
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f9112cccd09
+Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffca7006048 EFLAGS: 00000246 ORIG_RAX: 0000000000000032
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f9112cccd09
+RDX: ffffffffffffffc0 RSI: 0000000000000000 RDI: 0000000000000004
+RBP: 00007f9112c90eb0 R08: 000000000000001c R09: 000000000000001c
+R10: 0000000020001540 R11: 0000000000000246 R12: 00007f9112c90f40
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

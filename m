@@ -2,105 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 867B5530E25
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:43:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77B8D530D0B
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:41:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233715AbiEWJkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 05:40:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40174 "EHLO
+        id S233722AbiEWJm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 05:42:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233516AbiEWJkZ (ORCPT
+        with ESMTP id S233429AbiEWJk5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 05:40:25 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B0F21E38;
-        Mon, 23 May 2022 02:40:25 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id D30F921A0C;
-        Mon, 23 May 2022 09:40:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1653298823; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OqPhQgD39nH9jn1vWntr2AG2dGogHj/8W1Qt0RQY900=;
-        b=RfqLLS1v44hQwb7YiwnKp5vE+kfJZdBNQwNmaF0gpEKyqyA+vW09tQrkor3A2j1SMkeXxd
-        Ins9UwPNYvCeH+9w7WOHg0obMlKOXNkvm4AqOeB0EJ5nIEb7BCyZUwCt2uQq5iIANLHtsL
-        dv/4+tkgYvxzPae8ce5q96MjPFGMgyo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1653298823;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OqPhQgD39nH9jn1vWntr2AG2dGogHj/8W1Qt0RQY900=;
-        b=hKcyRDSq+Pml8cw64L+F1oI7n3fWsv4K6fl2GLrxFukrR8LRvclg0obUmJxusW/9Pmu/Sn
-        OJ9/4K7s+iOjO8Cw==
-Received: from quack3.suse.cz (unknown [10.100.224.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id B99472C141;
-        Mon, 23 May 2022 09:40:23 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 56D1FA0632; Mon, 23 May 2022 11:40:23 +0200 (CEST)
-Date:   Mon, 23 May 2022 11:40:23 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Baokun Li <libaokun1@huawei.com>
-Cc:     linux-ext4@vger.kernel.org, tytso@mit.edu,
-        adilger.kernel@dilger.ca, jack@suse.cz, ritesh.list@gmail.com,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        yebin10@huawei.com, yukuai3@huawei.com
-Subject: Re: [PATCH 2/2] ext4: correct the judgment of BUG in
- ext4_mb_normalize_request
-Message-ID: <20220523094023.e3rnile4wh7uiich@quack3.lan>
-References: <20220521134217.312071-1-libaokun1@huawei.com>
- <20220521134217.312071-3-libaokun1@huawei.com>
+        Mon, 23 May 2022 05:40:57 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA84F2F01E;
+        Mon, 23 May 2022 02:40:47 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id A46991F42DD9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1653298845;
+        bh=V0M8DYvWpS0+hFL3tgf2bcMHWIfVb8jn4R+BMUFe68g=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=O9ZVdiVM5v1oBXV+1BXIVW0M2VmQ+HfXjC+3XBYXhMWGwaziMJJ0rG9DRsseuYSV9
+         JzSbS7XMPnN3G/5WICA/JK/ENZgqOa62BTrOOrdanpuDbTSi+CvKIkPr8Wf5jPzmF+
+         J/UeZSQk8xU0UnqqOeJkM6uKTVrIY74HR1R0QL7ybH2mdi+l/VoX6myQ23BrhtwIRv
+         jU8cQmVLVfVaAXvL9aG1dZ+WBxMnAUL+sq+U/OdhgFpwSh9dFeElK4o63xCRpwsyzf
+         8lEtJdPgLftM0NesautwPWh+7McBB8olXPES6CyqmP2GL+qmwM/2KuD0gL9v2gvrae
+         iyiQoCHn9GjDA==
+Message-ID: <19f72a58-b80e-f6a8-842f-a924c4b94eeb@collabora.com>
+Date:   Mon, 23 May 2022 14:40:39 +0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220521134217.312071-3-libaokun1@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Cc:     usama.anjum@collabora.com, Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        KERNEL SELFTEST FRAMEWORK <linux-kselftest@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "kernelci@groups.io" <kernelci@groups.io>,
+        Collabora Kernel ML <kernel@collabora.com>
+Subject: Re: [Bug Report] - kselftest build fails if output directory is first
+ level sub-directory
+Content-Language: en-US
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Shuah Khan <shuah@kernel.org>
+References: <c25d7ea7-4f72-4a2b-d8c3-d317e64fcbbb@collabora.com>
+ <CAK7LNATL4nMmKgrjS8meavnpn=HisD30QxuPUKDqtWWgbGcSZw@mail.gmail.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <CAK7LNATL4nMmKgrjS8meavnpn=HisD30QxuPUKDqtWWgbGcSZw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat 21-05-22 21:42:17, Baokun Li wrote:
-> When either of the "start + size <= ac->ac_o_ex.fe_logical" or
-> "start > ac->ac_o_ex.fe_logical" conditions is met, it indicates
-> that the fe_logical is not in the allocated range.
-> In this case, it should be bug_ON.
+On 5/22/22 10:15 PM, Masahiro Yamada wrote:
+> On Sat, May 21, 2022 at 3:44 PM Muhammad Usama Anjum
+> <usama.anjum@collabora.com> wrote:
+>>
+>> Hello,
+>>
+>> kselftest can be built using the kernel's top most Makefile without
+>> using kselftest's Makefile directly. But there is bug in the top most
+>> Makefile. The build fails if the specified output directory is first
+>> level sub-directory. Here is a example to reproduce this bug:
+>>
+>> make kselftest-all O=build
+>>
+>> "The Make is working in a wrong directory, that is why the relative path
+>> does not work." Masahiro Yamada. Feel free to fix it if someone pin the bug.
+>>
+>> It should be noted that the build works in some other combinations:
+>> make kselftest-all (works)
+>> make kselftest-all O=/tmp (works)
+>> make kselftest-all O=build/build2 (works)
+>>
+>> My unsuccessful attempt to fix this bug can be found here:
+>> https://lore.kernel.org/lkml/20220223191016.1658728-1-usama.anjum@collabora.com/
+>>
+>> Thanks,
+>> Muhammad Usama Anjum
 > 
-> Fixes: dfe076c106f6 ("ext4: get rid of code duplication")
-> Signed-off-by: Baokun Li <libaokun1@huawei.com>
-
-I think this is actually wrong. The original condition checks whether
-start + size does not overflow the used integer type. Your condition is
-much stronger and I don't think it always has to be true. E.g. allocation
-goal block (start variable) can be pushed to larger values by existing
-preallocation or so.
-
-								Honza 
-
-
-> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
-> index 32410b79b664..d0fb57970648 100644
-> --- a/fs/ext4/mballoc.c
-> +++ b/fs/ext4/mballoc.c
-> @@ -4190,7 +4190,7 @@ ext4_mb_normalize_request(struct ext4_allocation_context *ac,
->  	}
->  	rcu_read_unlock();
->  
-> -	if (start + size <= ac->ac_o_ex.fe_logical &&
-> +	if (start + size <= ac->ac_o_ex.fe_logical ||
->  			start > ac->ac_o_ex.fe_logical) {
->  		ext4_msg(ac->ac_sb, KERN_ERR,
->  			 "start %lu, size %lu, fe_logical %lu",
-> -- 
-> 2.31.1
 > 
+> This problem starts from the bad design of the kselftest framework.
+> I did some research before. I think I can fix the root cause but
+> currently I do not have enough time to do it.
+> 
+> 
+> KBUILD_ABS_SRCTREE is a user-interface to request
+> Kbuild to use the absolute path.
+> If it is forced in the top Makefile, users have no way to
+> negate it.
+> It is true that using the absolute path is a quick work-around
+> because you do not need to care about the current working directory.
+> 
+> If you insist on it,  just go ahead.  It is just two line changes.
+> Once the issue is fixed in a better way, your patch can be reverted easily.
+Thank you for replying. Lets merge it Shuah?
+
+> 
+> 
+> 
+
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Muhammad Usama Anjum

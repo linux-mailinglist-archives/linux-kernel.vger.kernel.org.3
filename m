@@ -2,215 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75CEF531E80
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 00:19:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B4A1531E83
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 00:19:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbiEWWTF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 18:19:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59424 "EHLO
+        id S231425AbiEWWTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 18:19:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230476AbiEWWTD (ORCPT
+        with ESMTP id S231337AbiEWWTG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 18:19:03 -0400
-Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B66082146;
-        Mon, 23 May 2022 15:19:02 -0700 (PDT)
-Received: by mail-vk1-xa36.google.com with SMTP id x11so7232590vkn.11;
-        Mon, 23 May 2022 15:19:02 -0700 (PDT)
+        Mon, 23 May 2022 18:19:06 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AFC67980A
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 15:19:05 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id u3so13597871qta.8
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 15:19:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=o0jmOLbIBLC81iyA5yzsszbXfVOeW4ty6u6e0iBG1ak=;
-        b=Q6spda00D8K2i1naxwniSrw8jg1W3WVi94CaLo8Km049sMI9f8AA1eDBhxZtAdkn9J
-         yU8aY1JPVSAYtW+gahpiFeo1pZRnoWQF0jZmvQR8N/MDp8BjCQCE2Ve5i4T2eqdGdEfA
-         /DciG7Z78vUq2S9CIFDLeu/5+ZD9h7/wedib4aBvbRbIIqVH+LMmQ7ICqgGO4muXiq1r
-         H1PzwYkmdSEcg9ncZQpIpZlfGAxdm5kFRG/Sa7WNAkE5LuXalwXPMSEje5dnGxNyTIf7
-         gp5ErRSaxDha4ypyd8aV6uMGmVt0D6MpyGm5PYUMr4qBFwEwxdahxUqsrBFIOB/u7uHr
-         Ek+Q==
+        bh=hrKt0QGjGIxbViKst5o/kBBnQcNcG0rcEf/9wT/w/jA=;
+        b=l8CPNUkCVan0AA0UEUaw/R/FXr1o7HdldIZ8tYacWXgGA3HxITRA9Ptz2zYmVgPZES
+         GiAfp0OuHTFdcKLCIMx/lwqK5ZYr+WCG1dO4MEO5jTSPO3uPs7Q/w9qLZMSFn6TvgkFB
+         rm9ILqGKmwi8KtIAdb7G6EevQpMSrFFsGnl/kGfO7TCqA6bnnjGZ9Dm0clFjRMocekhd
+         RHHNz04nRft79ukdZFjdFNrjZAmSByDcs0Rl7PfTx7kRcfH0PmYV+fqgsDIMxgAFYYiW
+         nGvaE27GwsUZ5O/mfVVYHtQ0qWlCXNDvWrJOo/0LVjJ3olSPL6kxEUT6Ee2Z5pZ/f10n
+         Hhgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=o0jmOLbIBLC81iyA5yzsszbXfVOeW4ty6u6e0iBG1ak=;
-        b=6vlPgrjfJPmihx6+sGFlfY9k8BexaLcIA47q7r/YkHTepSbbSFAdQPQP6tJwypAXhs
-         hzkmpDUitbWoGTt/OL8+biiiLI37ktKheuXGJG0pFqFSb/dOXXDzzkGYFYgclMD8+SFl
-         VTdTHf1HyD8UIzRVtI5wtDovmgNclEX6b6fYrarA9yTOKa7hHFgnEaxu0Hph6FQsF+JC
-         k15wMgJtiHQ3yWbhJuE5SbRx3qI4g7aqoeOTDz7CO1NEjf1/VRfvdVJsLtmjTu0Yy03C
-         QE6MUPFUVcQ9/Ua+HxmHNoFej5a+xerMEqXaww8v734aSGUdAXgaOQmhULE/w7IdVE+O
-         DdJA==
-X-Gm-Message-State: AOAM531fOx2U5sWQg7jtef8NdxTqHXhDK3jWheFYC4MAtWjxj/ZSixYA
-        rXBMdKCFlI0Cwe0IwtwwzKvHX8YN3yq6aTuMlBU=
-X-Google-Smtp-Source: ABdhPJwXGAJoIRCLkBVb6nbGLCaOQQ+/QyZqFuWiushHlGc6SCs3JQg4uMgLxbApU6UQAi4K8yn72yjFMuKXWksRjGQ=
-X-Received: by 2002:a1f:ac14:0:b0:34e:c5cc:f97f with SMTP id
- v20-20020a1fac14000000b0034ec5ccf97fmr8856454vke.9.1653344341474; Mon, 23 May
- 2022 15:19:01 -0700 (PDT)
+        bh=hrKt0QGjGIxbViKst5o/kBBnQcNcG0rcEf/9wT/w/jA=;
+        b=szF1KUFyioX+MLmBwRDhnc5HkaTXdRi2tmlA/Vp1vGG1Rm8EHqMVofJzrtKyjBKVta
+         bE+l2VLwGMYTmdg/8VIMwmpJnDx356vbE6vDrPN6bXd/HwnTLlsEh2tN444ge6X6AR/r
+         Ohdqrc18pGIzFNQkMDJ+qhiuCzvSrfbrJRM2vy/9VmgdkOcMB5pV2XQSnxwR1w27ZzqT
+         lIXAxnhEP9aAD0rZ/2IDsgTYP9H3pN9Nf7DFBXpehz81+5bie2WxV5IEr4rKp7H9xPuW
+         +Bbuof/6plFhXkHSrAAqn3+b26u5dgnrbhQzV70YNg6KVEXuslIPy+3WGFi4o91MBMPg
+         saqA==
+X-Gm-Message-State: AOAM5330KbWdrEPhxakdrCmDGg4YytmgwBEBevDeE9HTftKsVRMIBNYL
+        Q7zZNLz9VIg8HtB9Mp62BeaayfeDZZ3jagmjkdTLrQ==
+X-Google-Smtp-Source: ABdhPJyMQu3LizAy6LDaSFSmbEo3l8P/R/AOgG0q0Wcj5hzBlQMwHLqtc721W/6mBYASohpkeMAD6ConZP3Rv0GoEUk=
+X-Received: by 2002:ac8:5e54:0:b0:2f3:f4ee:efbd with SMTP id
+ i20-20020ac85e54000000b002f3f4eeefbdmr17668410qtx.295.1653344344533; Mon, 23
+ May 2022 15:19:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220523212808.603526-1-connoro@google.com>
-In-Reply-To: <20220523212808.603526-1-connoro@google.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 23 May 2022 15:18:50 -0700
-Message-ID: <CAEf4Bzb7RLdNjx8kiHUmv05vB+nF-4PH-FcYynWoKHLUsHR2+Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2] libbpf: also check /sys/kernel/tracing for
- tracefs files
-To:     "Connor O'Brien" <connoro@google.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
+References: <a3c932d1-a102-ce18-deea-18cbbd05ecab@linaro.org>
+ <20220522195138.35943-1-konrad.dybcio@somainline.org> <53d5999b-88ee-24db-fd08-ff9406e2b7b7@linaro.org>
+ <YowBtNkZ678ns4Ob@builder.lan>
+In-Reply-To: <YowBtNkZ678ns4Ob@builder.lan>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Tue, 24 May 2022 01:18:53 +0300
+Message-ID: <CAA8EJprArSF_363FyS+63XfB=ZK657X81u8TJLTRx5AbTYy1ag@mail.gmail.com>
+Subject: Re: Removal of qcom,board-id and qcom,msm-id
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        agross@kernel.org, arnd@arndb.de, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        olof@lixom.net, robh@kernel.org, sboyd@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 2:28 PM Connor O'Brien <connoro@google.com> wrote:
+On Tue, 24 May 2022 at 00:50, Bjorn Andersson
+<bjorn.andersson@linaro.org> wrote:
 >
-> libbpf looks for tracefs files only under debugfs, but tracefs may be
-> mounted even if debugfs is not. When /sys/kernel/debug/tracing is
-> absent, try looking under /sys/kernel/tracing instead.
+> On Mon 23 May 02:21 CDT 2022, Krzysztof Kozlowski wrote:
 >
-> Signed-off-by: Connor O'Brien <connoro@google.com>
-> ---
-> v1->v2: cache result of debugfs check.
+> > On 22/05/2022 21:51, Konrad Dybcio wrote:
+> > I actually wonder why do you need these properties for community work on
+> > such boards? You ship kernel with one concatenated DTB and the
+> > bootloader does not need the board-id/msm-id fields, doesn't it?
+
+You know, this reminds me of an old argument dating 2005-7: why do we
+need to support multi-platform kernels, while we can boot a good plain
+single-mach (or a single-board) kernel on a particular board.
+Supporting msm-id/board-id/pmic-id gives us flexibility. Dropping them
+would remove flexibility.
+
+> > Not mentioning that in the past bootloader was actually not using these
+> > properties at all, because it was the dtbTool who was parsing them. So
+> > in any case either your device works fine without these properties or
+> > you have to use dtbTool, right?
+
+I think it was supposed to be done in an opposite way: to let dtbTool
+process compat strings and generate the properties in question.
+
+> > >
+> > > One solution is to chainload another, (n+1)-stage bootloader, but this is
+> > > not ideal, as:
+> > >
+> > > 1) the stock bootloader can boot Linux just fine on most devices (except
+> > > for single exceptions, where beloved OEMs didn't implement arm64 booting or
+> > > something)
+> > >
+> > > 2) the boot chain on MSM is already 3- or 4- stage and adding to that will
+> > > only create an unnecessary mess
+> > >
+> > > 3) the job of kernel people is not to break userspace. If the
+> > > device can not even exit bootloader after a kernel upgrade, it's a big
+> > > failure.
+> >
+> > The job of kernel people is to follow bindings and since they were
+> > introduced 7 years ago, I would say there was plenty of time for that.
+> >
 >
->  src/libbpf.c | 32 +++++++++++++++++++++++++-------
->  1 file changed, 25 insertions(+), 7 deletions(-)
->
-> diff --git a/src/libbpf.c b/src/libbpf.c
-> index 2262bcd..cc47c52 100644
-> --- a/src/libbpf.c
-> +++ b/src/libbpf.c
-> @@ -9945,10 +9945,22 @@ static void gen_kprobe_legacy_event_name(char *buf, size_t buf_sz,
->                  __sync_fetch_and_add(&index, 1));
->  }
->
-> +static bool debugfs_available(void)
-> +{
-> +       static bool initialized = false, available;
-> +
-> +       if (!initialized) {
-> +               available = !access("/sys/kernel/debug/tracing", F_OK);
-> +               initialized = true;
-> +       }
-> +       return available;
-> +}
+> We're following the bindings and don't pick board-id or msm-id unless
+> there's a particular reason for it - which typically is that the
+> downstream bootloader requires it - we don't use the properties on the
+> kernel side.
 
-so thinking about this caching a bit, I'm not so sure we want to cache
-this decision. Mounting and unmounting of tracefs can happen after BPF
-application starts, so this debugfs_available flag can actually change
-while program is running. On the other hand, we don't do this check
-all that frequently, only during attach/detach, so it might be ok not
-to cache this result at all? WDYT?
-
-> +
->  static int add_kprobe_event_legacy(const char *probe_name, bool retprobe,
->                                    const char *kfunc_name, size_t offset)
->  {
-> -       const char *file = "/sys/kernel/debug/tracing/kprobe_events";
-> +       const char *file = debugfs_available() ? "/sys/kernel/debug/tracing/kprobe_events" :
-> +               "/sys/kernel/tracing/kprobe_events";
-
-reading through this patch, it's now quite hard to see what differs,
-to be honest. While I do like full file path spelled out, now that we
-have two different prefixes it seems better to have prefixes separate.
-How about we do
-
-#define TRACEFS_PFX "/sys/kernel/tracing"
-#define DEBUGFS_PFX "/sys/kernel/debug/tracing"
-
-and then use that to construct strings. Like in the above example
-
-
-const char *file = has_debugfs() ? DEBUGFS_PFX "/kprobe_events" :
-TRACEFS_PFX "/kprobe_events";
-
-and similarly below. That way at least we see clearly the part that's
-not dependent on debugfs/tracefs differences.
+Or unless we have another reason (like handling a single RB3+RB5 image).
+I suspect PmOS might also like shipping a single image for some/all of
+the supported devices. Or we might use that for the qcom-armv8a OE
+machine.
 
 >
->         return append_to_file(file, "%c:%s/%s %s+0x%zx",
->                               retprobe ? 'r' : 'p',
-> @@ -9958,7 +9970,8 @@ static int add_kprobe_event_legacy(const char *probe_name, bool retprobe,
+> > If the dtbTool support for the bindings is there, then there is no
+> > breakage, because you had to use dtbTool before so you have to use now.
+> >
 >
->  static int remove_kprobe_event_legacy(const char *probe_name, bool retprobe)
->  {
-> -       const char *file = "/sys/kernel/debug/tracing/kprobe_events";
-> +       const char *file = debugfs_available() ? "/sys/kernel/debug/tracing/kprobe_events" :
-> +               "/sys/kernel/tracing/kprobe_events";
->
->         return append_to_file(file, "-:%s/%s", retprobe ? "kretprobes" : "kprobes", probe_name);
->  }
-> @@ -9968,7 +9981,8 @@ static int determine_kprobe_perf_type_legacy(const char *probe_name, bool retpro
->         char file[256];
->
->         snprintf(file, sizeof(file),
-> -                "/sys/kernel/debug/tracing/events/%s/%s/id",
-> +                debugfs_available() ? "/sys/kernel/debug/tracing/events/%s/%s/id" :
-> +                "/sys/kernel/tracing/events/%s/%s/id",
->                  retprobe ? "kretprobes" : "kprobes", probe_name);
->
->         return parse_uint_from_file(file, "%d\n");
-> @@ -10144,7 +10158,8 @@ static void gen_uprobe_legacy_event_name(char *buf, size_t buf_sz,
->  static inline int add_uprobe_event_legacy(const char *probe_name, bool retprobe,
->                                           const char *binary_path, size_t offset)
->  {
-> -       const char *file = "/sys/kernel/debug/tracing/uprobe_events";
-> +       const char *file = debugfs_available() ? "/sys/kernel/debug/tracing/uprobe_events" :
-> +               "/sys/kernel/tracing/uprobe_events";
->
->         return append_to_file(file, "%c:%s/%s %s:0x%zx",
->                               retprobe ? 'r' : 'p',
-> @@ -10154,7 +10169,8 @@ static inline int add_uprobe_event_legacy(const char *probe_name, bool retprobe,
->
->  static inline int remove_uprobe_event_legacy(const char *probe_name, bool retprobe)
->  {
-> -       const char *file = "/sys/kernel/debug/tracing/uprobe_events";
-> +       const char *file = debugfs_available() ? "/sys/kernel/debug/tracing/uprobe_events" :
-> +               "/sys/kernel/tracing/uprobe_events";
->
->         return append_to_file(file, "-:%s/%s", retprobe ? "uretprobes" : "uprobes", probe_name);
->  }
-> @@ -10164,7 +10180,8 @@ static int determine_uprobe_perf_type_legacy(const char *probe_name, bool retpro
->         char file[512];
->
->         snprintf(file, sizeof(file),
-> -                "/sys/kernel/debug/tracing/events/%s/%s/id",
-> +                debugfs_available() ? "/sys/kernel/debug/tracing/events/%s/%s/id" :
-> +                "/sys/kernel/tracing/events/%s/%s/id",
+> Among all the platforms I maintain, MSM8916 (db410c) is the only one
+> where I use dtbTool - because it refuses to accept the concatenated
+> dtb.
 
-like here, "events/%s/%s/id" is important to separate, so
-
-snprintf(file, sizeof(file), "%s/events/%s/%s/id",
-         has_debugfs() ? DEBUGFS_PFX : TRACEFS_PFX,
-         retprobe ? "uretprobes" : "uprobes", probe_name);
-
-seems easier to follow?
+It's strange, I have been using concatenated dtb with db410c for ages.
 
 
->                  retprobe ? "uretprobes" : "uprobes", probe_name);
->
->         return parse_uint_from_file(file, "%d\n");
-> @@ -10295,7 +10312,8 @@ static int determine_tracepoint_id(const char *tp_category,
->         int ret;
->
->         ret = snprintf(file, sizeof(file),
-> -                      "/sys/kernel/debug/tracing/events/%s/%s/id",
-> +                      debugfs_available() ? "/sys/kernel/debug/tracing/events/%s/%s/id" :
-> +                      "/sys/kernel/tracing/events/%s/%s/id",
->                        tp_category, tp_name);
->         if (ret < 0)
->                 return -errno;
-> --
-> 2.36.1.124.g0e6072fb45-goog
->
+-- 
+With best wishes
+Dmitry

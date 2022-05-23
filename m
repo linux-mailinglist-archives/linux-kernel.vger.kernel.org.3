@@ -2,146 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 718055308B9
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 07:30:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E505A5308CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 07:32:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355627AbiEWFaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 01:30:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53740 "EHLO
+        id S1355642AbiEWFbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 01:31:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344163AbiEWF36 (ORCPT
+        with ESMTP id S241023AbiEWFbJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 01:29:58 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2071.outbound.protection.outlook.com [40.107.212.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBDD61EC58;
-        Sun, 22 May 2022 22:29:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OhclRcP1da+PtWIHc1ga8DhAia72wEmuSXlpHoq4wHCmzLLPLaCLpoNiJgi5LL1cM67g9NnimELK+cC+wNqPjq1BCiKp1e+2k/9yks3Mcr7EVY+ltKqnRftVaiGpmS1bXuScKVRQahdHfDGTHbDa6IXnL6eFpO8Tpf4ZYKlCV1iK6uVfhNCyA7pxF8UDq7RfsoeIdn13Vf8MPmCS0eh3l1LqZEwCsIhhq00vk+D0l6rZ6fUaGorfwi4+Ks/WildGIAYwvv5DW4iDWvrT4F+DubWyeE2v2yMjVk0tgj9H4/5MHVzeOsLIVnC2+M0OYoU2m53BsPBZ/Fw1pm7YU9xyhg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cc7/ps/V4TgS02Nq5GTwUlKjXNaQu+7G64wmW/2yyOo=;
- b=YJuLLbKMKThQEUvGCmxNMMqYAZYWgvph9WlWGjaYr2+TTbNMeOwXzbNHCSAjM5MS1O5VsEqmmKzwfPzGmvziupJicZ186QWK6pVurYZqulXv7lcCs1Vt86fjAqAzzD1iNjuRrTo9kBn7fORtrp9S56xt1O9zg9SNFfyV6NXdgkjxfZpviiuXSF/F0Fp0aSAWi/XHO7xQOuso37C6Zi77otPc9TXa2lpvnu4RTvWcu2MvFZSu/txWKTt9H7wZAUd1NC5HTEn9Xr3uUIIJImYZ3qxNfS9D15jTim8uQugeo0+CSZx2inYX9u8hoWBvZRjJhpAS4nb5Coe3e0pYDReWNQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cc7/ps/V4TgS02Nq5GTwUlKjXNaQu+7G64wmW/2yyOo=;
- b=uhWQgHiB3eesKYGFmXO3A5iAiMguE2iHOVGg8EiqWuypKs5xHsvC0rh2fLC+46LglVCXL1VGGIFvZisbsWLe99RVwJvrNcuzEmrf3EZx1hs1mUlsI/hDdo5M1poNWTMo8FrDI4pNAdLMOZQdiaEID94wya1FSR/9Qw1RizfLMAzNCKuO+9hijhlSK13swLj9PvtjK7TT7f1KlcjoguSJ0DngYsedJVdY/X5Vv5GxmbQmwNiB3LqVZdWKnMdf+v1vpJzKxRpg2sTcfHIcEtlnO7HEY/KlHc40lLEHSIRj/rfZu3ndAeF+N/VgOcm57Q5TP7q6FyMp+HF8g2kFincVCg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
- by DS7PR12MB5814.namprd12.prod.outlook.com (2603:10b6:8:76::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5273.22; Mon, 23 May 2022 05:29:56 +0000
-Received: from BYAPR12MB3176.namprd12.prod.outlook.com
- ([fe80::59cf:d090:5d26:6e7b]) by BYAPR12MB3176.namprd12.prod.outlook.com
- ([fe80::59cf:d090:5d26:6e7b%5]) with mapi id 15.20.5273.022; Mon, 23 May 2022
- 05:29:55 +0000
-References: <20220521094313.166505-1-usama.anjum@collabora.com>
-User-agent: mu4e 1.6.9; emacs 27.1
-From:   Alistair Popple <apopple@nvidia.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, kernel@collabora.com,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests: vm: add migration to the .gitignore
-Date:   Mon, 23 May 2022 15:28:46 +1000
-In-reply-to: <20220521094313.166505-1-usama.anjum@collabora.com>
-Message-ID: <871qwkizow.fsf@nvdebian.thelocal>
-Content-Type: text/plain
-X-ClientProxiedBy: BYAPR03CA0023.namprd03.prod.outlook.com
- (2603:10b6:a02:a8::36) To BYAPR12MB3176.namprd12.prod.outlook.com
- (2603:10b6:a03:134::26)
+        Mon, 23 May 2022 01:31:09 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CC98B492
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 22:31:07 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 379D71F383;
+        Mon, 23 May 2022 05:31:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1653283865; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=uphm0Y/N5CG4YBHQqvTXWrYN71GenUf/+ErGraqLDVw=;
+        b=oe0ld5c9q1l5HfqybFBHAgBmpX6oV8nAMIA4HoOXTmFMJ77+3cGiMQBN0qk2K42kg1vs2g
+        qEK2g3iFiJQ3xcrOBBkzSMsjO7ZWSWfjFHQtbtfBWdxyl/TKls8B4agxhcTSg/Oa0vUKW2
+        yjrm6zLfrK/fxscwCKTbJCKyry4z0Rs=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 12F2313A5F;
+        Mon, 23 May 2022 05:31:05 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id sVReAxkci2K2bAAAMHmgww
+        (envelope-from <jgross@suse.com>); Mon, 23 May 2022 05:31:05 +0000
+From:   Juergen Gross <jgross@suse.com>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
+        boris.ostrovsky@oracle.com
+Subject: [GIT PULL] xen: branch for v5.19-rc1
+Date:   Mon, 23 May 2022 07:31:04 +0200
+Message-Id: <20220523053104.22814-1-jgross@suse.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e08e9cd7-7a75-4525-2a93-08da3c7d44b2
-X-MS-TrafficTypeDiagnostic: DS7PR12MB5814:EE_
-X-Microsoft-Antispam-PRVS: <DS7PR12MB5814E93EBDC0E7D89C26584DDFD49@DS7PR12MB5814.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0DX/wkcbpFrcEI5D9x2GkbZ9Gn9nCZYvNDGKhei31+iVyxQc0djoTht9niUUQH9UVJwnQ+BS7St2U5YPt6KqC/+5dIFT8TIA9qrfWl3bhHvjb5qpjtjJdkvAXmNFiaKTlbySb9UN2nNALnhAbW9sxN0yS5eGKBKPdbUcgGDfArl5i5WEV3Kw6PMMuBxQBY+xkqAW5lwUhTU7jb/l8ne1QGAMe8390CeD2fJJE0T3Tz0mQsCHsWyZIzYR3GHUShNtCxS9Ed46KHCSozQfn9FaxVJxmHpFaw22pSSBY5mJQG5bYWCRknhIdWuENwon6dc/Enku/6AZZcA+HICJvOPRg4Ah1Ud+q6TsHEHhRa/Ggwo0XgefS/wUfXLYMBx0Itaz0HKGa+xPA8+491NV5uRJsMsCCxm1ijb/MqT02G6Cpd97vQuvpv81Yv36yE6Vjt+xZXWGUh2LJ3U8zdYRXDkLD6TE4hEVKFT7zaxv6s4nii6yD+i9+cnN/PFaQLGLcqd9YFM1LELFvpHfNPhTTC1rrUcuPlKVZoeM0Ohcmmt18W0qz5McD+g5acV2q2UkeDkqHtu9SxInGqnzEZIWidahiGh/Y6uREy6lXXQx3/colFylWwmnZ8Z9gnwLyFCdKL0R0orGTSdQrld2hozmXr4jkyxdw4fo2rQcEpJ2rjdTXAJ3k023sjOBhb5uiETgDz2AnywAHFzm82Wbi7Dc9x9rOg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6512007)(4744005)(5660300002)(38100700002)(6486002)(508600001)(6916009)(54906003)(9686003)(26005)(8936002)(86362001)(6666004)(316002)(6506007)(186003)(66946007)(4326008)(8676002)(83380400001)(66556008)(2906002)(66476007)(142923001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?lhmaNUhKqh4mI2w2kMc0o4jEHvdFDJgVqjVQIj+26x8+NfhsxBM3ymIWop2y?=
- =?us-ascii?Q?+yLJUY0q3GbMB4mfyKIjgI6oyM6a9Ic6E9Z9zkJBfgzEBH99iRRXYa1WDDsc?=
- =?us-ascii?Q?f/XE6MP2Cgg7UX/SSFcLo29qjgMVUvE+f40gwT3mVBBA9XMyEns6CkYp+i2D?=
- =?us-ascii?Q?4DB1yVE5uqxxOSnCFtJtazD2SfnfNPbUU0x3o5nH7HNxX/2s/kU21h0AWZmY?=
- =?us-ascii?Q?4/S6yF/KB70dHV1HA5TqUsS6q/QyHajZaVf7nOPrnVVZFIMiqdT3r3MK9w6e?=
- =?us-ascii?Q?Iy89lfxcG8IW2QZhZt0seDUzVRxb4Oln+5d98xsS+BPLoW2+RsINh3AY5KY5?=
- =?us-ascii?Q?Gmwzgy8yh+CXYbQglUGnjuyEzjiziG72w4o5Orpnv646Hq5/b/nMnYFpfqxr?=
- =?us-ascii?Q?YPUW2OAxiwyCQDE2hRrasomKxNyVHcqky2a5M7Pm9pXz1JB1omEeLb92aIT7?=
- =?us-ascii?Q?OKkZquRGR+vjWyblt725taFo2ECRetFd1DG/T54sqbxqe5I5dwWFalid5T48?=
- =?us-ascii?Q?O9DPCVgiBnIG2y5t3a7Lec/98236/Gb0l12iVFYa+D+1s7LhZ86sfOeRFNNH?=
- =?us-ascii?Q?TDYyH8TYRpNlv8Ul5SWwpcfgQH2B/2OJtIDFbSy+iqAxD8BkzQs1KJX+Ceyb?=
- =?us-ascii?Q?StPCuo6HciikK1+pqvxodW2ZuVUoqBg8FJY3WWO+peXY2aaIUacX+P6qlRfe?=
- =?us-ascii?Q?KrMBTJZQmUGS88KBzLwv/6MtacwuzvI9gghHzCTZ6ukcNTPyPmIZmnFQYmvp?=
- =?us-ascii?Q?F33XCSQawIoFju3woxBbli02M+QuEutH3AUlBc0P1S+md0tW/W+5XmkuCnGz?=
- =?us-ascii?Q?5SCxGL07KRORgo71ynzgUhEEykc8hspkPQ+ugpInm4ipBf63b7Ed1PpYZpSp?=
- =?us-ascii?Q?tWri16bnZ1L/rs9NA+05ZTNjRW5ayuiTW9CCanZLjQwRXSvI3QO0iFcbKpZy?=
- =?us-ascii?Q?xPgJamURN+NmCwb57GeJuK8CocoRg1y9X177i/jgWe2h2pfpNwSZ9+rxEOMr?=
- =?us-ascii?Q?vl8r9U+ct/WSrE9VbUZm5Ckc1p1Kfq+SLqMHPKyji0vBKaiN9enciycMGJ/5?=
- =?us-ascii?Q?R9KGeQ/tA+Zd3GDQE0BUNJHnLWzcEziFoWfVr1G4F8pi/9bmhevwtL3xx69z?=
- =?us-ascii?Q?cM166vxD6CH/EehutWkrDl7fQ3AgJ/FioNpT4LQsfVqPCbrFZGzYafzVcbVX?=
- =?us-ascii?Q?2wF8NvtYTgorK3wbno8RbshZUobrY5q1+5wTGGk45D3bOaPXMbgyy5jZ+HvW?=
- =?us-ascii?Q?l3oQMA6xAvXHw8tKG3tXmnftLbkjPRNdN0f7WNkgxuwchbE6eK/SlF/bc47Z?=
- =?us-ascii?Q?B3n1vkhJ0N/TPKtQNNbd3h/z6b9qscsRwukJPp2GilRHsMjCo/MVPJRFcprD?=
- =?us-ascii?Q?Tmu+gue7AebEGAKUiNnCe9gjiCpcFc4aOH8Gm4a+i7/RYkmtV8ugEJuxZanH?=
- =?us-ascii?Q?hvUjzhUl/P16hkrCmNl2Q4d1NfYQcWOC0+3syA7oPrlMS6GcNNzX3fFizr5T?=
- =?us-ascii?Q?l0Nrn6dEId9+Wng2ZhG5zqBdu7lzWQl58DaFPkAdmh6NO0mxz0DImM3DXCq1?=
- =?us-ascii?Q?VMCH4iT7P2Cd7N+NRggT1JTKgiexwGVKLRCOIY7zmjpCR+hHNhQI/1lVt61T?=
- =?us-ascii?Q?6Z+unWPoEe23TJ0EVpqpTUqemqAXhjChkA0Zrk98vOiBCwLE1ASAvdx0bOrP?=
- =?us-ascii?Q?HjG4VMu0LTJXd+BmNLyuMQOGeblUkSlxfEuCfKvV6Ojw5hJ5NcSnhz5l3S5J?=
- =?us-ascii?Q?dP7y4er24w=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e08e9cd7-7a75-4525-2a93-08da3c7d44b2
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2022 05:29:55.7763
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +YIkYYcNBerHWar/jM3xf+XGhErVJtjZ3BX99xubANgVF0+qIUyfQ6KijuJQ/5B0qXH3kyV1yvMPv6g+pX0PeA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5814
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Linus,
 
-Oh thanks for catching that!
+Please git pull the following tag:
 
-Reviewed-by: Alistair Popple <apopple@nvidia.com>
+ git://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git for-linus-5.19-rc1-tag
 
-Muhammad Usama Anjum <usama.anjum@collabora.com> writes:
+xen: branch for v5.19-rc1
 
-> Add newly added migration test object to .gitignore file.
->
-> Fixes: 0c2d08728470 ("mm: add selftests for migration entries")
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> ---
->  tools/testing/selftests/vm/.gitignore | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/tools/testing/selftests/vm/.gitignore b/tools/testing/selftests/vm/.gitignore
-> index 6c2ac4208c272..31e5eea2a9b90 100644
-> --- a/tools/testing/selftests/vm/.gitignore
-> +++ b/tools/testing/selftests/vm/.gitignore
-> @@ -9,6 +9,7 @@ map_hugetlb
->  map_populate
->  thuge-gen
->  compaction_test
-> +migration
->  mlock2-tests
->  mrelease_test
->  mremap_dontunmap
+It contains:
+
+- a series for the Xen scsifront/scsiback pv drivers to decouple the
+  PV interface from kernel internals
+- a patch to harden the Xen scsifront PV driver against a malicious
+  backend driver
+- a series to simplify Xen PV frontend driver ring page setup
+- a series to support Xen setups with multiple domains created at boot
+  time to tolerate Xenstore coming up late
+- two small cleanup patches
+
+Thanks.
+
+Juergen
+
+ Documentation/ABI/testing/sysfs-driver-xen-blkback |   4 +-
+ .../ABI/testing/sysfs-driver-xen-blkfront          |   2 +-
+ arch/x86/xen/enlighten_pv.c                        |   2 -
+ drivers/block/xen-blkfront.c                       |  57 ++----
+ drivers/char/tpm/xen-tpmfront.c                    |  18 +-
+ drivers/gpu/drm/xen/xen_drm_front.h                |   9 -
+ drivers/gpu/drm/xen/xen_drm_front_evtchnl.c        |  43 ++---
+ drivers/net/xen-netfront.c                         |  85 +++------
+ drivers/pci/xen-pcifront.c                         |  19 +-
+ drivers/scsi/xen-scsifront.c                       | 199 ++++++++++++++-------
+ drivers/usb/host/xen-hcd.c                         |  65 ++-----
+ drivers/xen/gntdev-dmabuf.c                        |  13 +-
+ drivers/xen/grant-table.c                          |  12 +-
+ drivers/xen/xen-front-pgdir-shbuf.c                |  18 +-
+ drivers/xen/xen-scsiback.c                         |  82 ++++++++-
+ drivers/xen/xenbus/xenbus_client.c                 |  82 ++++++---
+ drivers/xen/xenbus/xenbus_probe.c                  |  91 +++++++---
+ include/xen/grant_table.h                          |   2 -
+ include/xen/interface/grant_table.h                | 161 ++++++++++-------
+ include/xen/interface/io/ring.h                    |  19 +-
+ include/xen/interface/io/vscsiif.h                 | 133 +++++++++++++-
+ include/xen/interface/io/xs_wire.h                 |  37 +++-
+ include/xen/xenbus.h                               |   4 +-
+ sound/xen/xen_snd_front_evtchnl.c                  |  44 ++---
+ sound/xen/xen_snd_front_evtchnl.h                  |   9 -
+ 25 files changed, 734 insertions(+), 476 deletions(-)
+
+Juergen Gross (25):
+      xen: update vscsiif.h
+      xen/scsiback: use new command result macros
+      xen/scsifront: use new command result macros
+      xen/scsifront: harden driver against malicious backend
+      xen: update grant_table.h
+      xen/grant-table: never put a reserved grant on the free list
+      xen/blkfront: switch blkfront to use INVALID_GRANT_REF
+      xen/netfront: switch netfront to use INVALID_GRANT_REF
+      xen/scsifront: remove unused GRANT_INVALID_REF definition
+      xen/usb: switch xen-hcd to use INVALID_GRANT_REF
+      xen/drm: switch xen_drm_front to use INVALID_GRANT_REF
+      xen/sound: switch xen_snd_front to use INVALID_GRANT_REF
+      xen/dmabuf: switch gntdev-dmabuf to use INVALID_GRANT_REF
+      xen/shbuf: switch xen-front-pgdir-shbuf to use INVALID_GRANT_REF
+      xen: update ring.h
+      xen/xenbus: add xenbus_setup_ring() service function
+      xen/blkfront: use xenbus_setup_ring() and xenbus_teardown_ring()
+      xen/netfront: use xenbus_setup_ring() and xenbus_teardown_ring()
+      xen/tpmfront: use xenbus_setup_ring() and xenbus_teardown_ring()
+      xen/drmfront: use xenbus_setup_ring() and xenbus_teardown_ring()
+      xen/pcifront: use xenbus_setup_ring() and xenbus_teardown_ring()
+      xen/scsifront: use xenbus_setup_ring() and xenbus_teardown_ring()
+      xen/usbfront: use xenbus_setup_ring() and xenbus_teardown_ring()
+      xen/sndfront: use xenbus_setup_ring() and xenbus_teardown_ring()
+      xen/xenbus: eliminate xenbus_grant_ring()
+
+Luca Miccio (1):
+      xen: add support for initializing xenstore later as HVM domain
+
+Maximilian Heyne (1):
+      x86: xen: remove STACK_FRAME_NON_STANDARD from xen_cpuid
+
+SeongJae Park (1):
+      xen-blk{back,front}: Update contact points for buffer_squeeze_duration_ms and feature_persistent
+
+Stefano Stabellini (1):
+      xen: sync xs_wire.h header with upstream xen

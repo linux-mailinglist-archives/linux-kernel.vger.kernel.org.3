@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C98265317E4
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:53:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 096EF531AE0
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244657AbiEWSGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 14:06:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39386 "EHLO
+        id S241355AbiEWRfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:35:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243565AbiEWRiS (ORCPT
+        with ESMTP id S240489AbiEWRZj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:38:18 -0400
+        Mon, 23 May 2022 13:25:39 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F4471D86;
-        Mon, 23 May 2022 10:32:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9144A11449;
+        Mon, 23 May 2022 10:21:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 40748B81204;
-        Mon, 23 May 2022 17:31:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87B54C385AA;
-        Mon, 23 May 2022 17:31:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D9F22B811FE;
+        Mon, 23 May 2022 17:20:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36C61C34115;
+        Mon, 23 May 2022 17:20:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653327115;
-        bh=dgG/AjxTDAWbTv8PbOERZK7TlvSzG5giHmfTLth98NY=;
+        s=korg; t=1653326445;
+        bh=+Amairj8U8GW1OyfSYV76KxnNpCLyPfmgJ3BR4dJjmo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lLd/5otKO/UI1QRSFjxWvGJx52tUjGfeIGXo9EOdpIXhiiCZVaqrldrOHGHJoWvCY
-         KkSD3JybyxbfktM3V1BM3NM7qXV/Ieo+axNGIc4VtpMJhhiIyeF7NfSHWySeDxoSdI
-         wlBXOkh/WCWHduFAyPtMy3m3vcYfkNQVnFPb/AH0=
+        b=DICNcjAuT4ACAxhg8E2JF0MGUcwmb4L9vFm/9lD/fboQ9iwbCt88EgP49IncDHZGQ
+         VutfaILcQkPOJ8E9mKv6VAM+WTZXoAcQOBy1ToswqUs3pIHLVtZBbQrJqypeehwXtU
+         aImsI6dqXElP5u4r/epTUiHILO/Dcor9Iw/rdSNc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Kieran Frewen <kieran.frewen@morsemicro.com>,
-        Bassem Dawood <bassem@morsemicro.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 136/158] nl80211: validate S1G channel width
+        stable@vger.kernel.org, Paul Greenwalt <paul.greenwalt@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Sasha Levin <sashal@kernel.org>,
+        Gurucharan <gurucharanx.g@intel.com>
+Subject: [PATCH 5.15 084/132] ice: fix possible under reporting of ethtool Tx and Rx statistics
 Date:   Mon, 23 May 2022 19:04:53 +0200
-Message-Id: <20220523165852.870833198@linuxfoundation.org>
+Message-Id: <20220523165837.042443737@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165830.581652127@linuxfoundation.org>
-References: <20220523165830.581652127@linuxfoundation.org>
+In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
+References: <20220523165823.492309987@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,42 +56,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kieran Frewen <kieran.frewen@morsemicro.com>
+From: Paul Greenwalt <paul.greenwalt@intel.com>
 
-[ Upstream commit 5d087aa759eb82b8208411913f6c2158bd85abc0 ]
+[ Upstream commit 31b6298fd8e29effe9ed6b77351ac5969be56ce0 ]
 
-Validate the S1G channel width input by user to ensure it matches
-that of the requested channel
+The hardware statistics counters are not cleared during resets so the
+drivers first access is to initialize the baseline and then subsequent
+reads are for reporting the counters. The statistics counters are read
+during the watchdog subtask when the interface is up. If the baseline
+is not initialized before the interface is up, then there can be a brief
+window in which some traffic can be transmitted/received before the
+initial baseline reading takes place.
 
-Signed-off-by: Kieran Frewen <kieran.frewen@morsemicro.com>
-Signed-off-by: Bassem Dawood <bassem@morsemicro.com>
-Link: https://lore.kernel.org/r/20220420041321.3788789-2-kieran.frewen@morsemicro.com
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Directly initialize ethtool statistics in driver open so the baseline will
+be initialized when the interface is up, and any dropped packets
+incremented before the interface is up won't be reported.
+
+Fixes: 28dc1b86f8ea9 ("ice: ignore dropped packets during init")
+Signed-off-by: Paul Greenwalt <paul.greenwalt@intel.com>
+Tested-by: Gurucharan <gurucharanx.g@intel.com> (A Contingent worker at Intel)
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/wireless/nl80211.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/net/ethernet/intel/ice/ice_main.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/net/wireless/nl80211.c b/net/wireless/nl80211.c
-index dc171ca0d1b1..06a35f1bec23 100644
---- a/net/wireless/nl80211.c
-+++ b/net/wireless/nl80211.c
-@@ -3128,6 +3128,15 @@ int nl80211_parse_chandef(struct cfg80211_registered_device *rdev,
- 	} else if (attrs[NL80211_ATTR_CHANNEL_WIDTH]) {
- 		chandef->width =
- 			nla_get_u32(attrs[NL80211_ATTR_CHANNEL_WIDTH]);
-+		if (chandef->chan->band == NL80211_BAND_S1GHZ) {
-+			/* User input error for channel width doesn't match channel  */
-+			if (chandef->width != ieee80211_s1g_channel_width(chandef->chan)) {
-+				NL_SET_ERR_MSG_ATTR(extack,
-+						    attrs[NL80211_ATTR_CHANNEL_WIDTH],
-+						    "bad channel width");
-+				return -EINVAL;
-+			}
-+		}
- 		if (attrs[NL80211_ATTR_CENTER_FREQ1]) {
- 			chandef->center_freq1 =
- 				nla_get_u32(attrs[NL80211_ATTR_CENTER_FREQ1]);
+diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
+index 27b5c75ce386..188abf36a5b2 100644
+--- a/drivers/net/ethernet/intel/ice/ice_main.c
++++ b/drivers/net/ethernet/intel/ice/ice_main.c
+@@ -5656,9 +5656,10 @@ static int ice_up_complete(struct ice_vsi *vsi)
+ 		netif_carrier_on(vsi->netdev);
+ 	}
+ 
+-	/* clear this now, and the first stats read will be used as baseline */
+-	vsi->stat_offsets_loaded = false;
+-
++	/* Perform an initial read of the statistics registers now to
++	 * set the baseline so counters are ready when interface is up
++	 */
++	ice_update_eth_stats(vsi);
+ 	ice_service_task_schedule(pf);
+ 
+ 	return 0;
 -- 
 2.35.1
 

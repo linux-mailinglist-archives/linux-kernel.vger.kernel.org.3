@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B73F531863
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:54:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03D1B531812
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:53:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232803AbiEWURT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 16:17:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56510 "EHLO
+        id S232671AbiEWURt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 16:17:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232918AbiEWURG (ORCPT
+        with ESMTP id S229889AbiEWURr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 16:17:06 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66C6941AA;
-        Mon, 23 May 2022 13:16:56 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-e5e433d66dso19847230fac.5;
-        Mon, 23 May 2022 13:16:56 -0700 (PDT)
+        Mon, 23 May 2022 16:17:47 -0400
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC89AF1D0;
+        Mon, 23 May 2022 13:17:46 -0700 (PDT)
+Received: by mail-ot1-x32b.google.com with SMTP id e11-20020a9d6e0b000000b0060afcbafa80so5380763otr.3;
+        Mon, 23 May 2022 13:17:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=039/Q2AZDShC4cyR0ddlH/eUG3odzlEnwcuXrDMGe4g=;
-        b=ozdSJJMUIKWXk58MINckgl2jY3Z70UCArhlPG8akBVn45Lo1OKbzhd+iiYTQgxgSov
-         ttTLYVO422DGVP6TIA4i9bUQBs5/7JdzC3dRQG0sXHQi4PlhyOLmRvjkcdy1OJs3F/A6
-         Zj8bx6wJDHfGS6hEHmgv2drWd4mphIk8dTMhCdJ0yi2fh9CCWlyHS1hHK9ZdyqmSpJuy
-         vEbpb+MNTAgOj3yHkpuw8kEJMDHrtlMeBs/ve0ejcAbFRFGGUCDeElzbTxViEoz/z/PZ
-         uhfBKKWWALl1+PfA4XOANV8E4H54v5kXIPBLeUAmsB3yS11kLTm1r84BSI6jXTy7SDXx
-         XGVQ==
+        bh=9DUh6l8ZBN76lnS45q0wf6jiM8BayaXvjyPIbUUAWTA=;
+        b=R/AES/FlpFR4Wmbz51yvQ/jtXB3RgnmZ9r8MHiSzVwh62L5Oj6rGCFpXrvzOZ6MUoN
+         NJud8DwB0Kq3PwBJnPWnJZND/dRITJBxkz00GFyn0N6HLcOEJ9kMpvPuvXwdaLHio+U0
+         7uWAN8smybjlAD4Rjju8jBi4Sn4I+S5yVIdX4l1eQ2BjJiBUkM6W2V8Pyx3Ui275KdOn
+         Mb1xB9hUOzo2joQecY5CnJNDZsLwImfMrALeAr1cFQkOINceHcBqI92wD3a0D3our4UV
+         qiuvDuNR5kiBFXeqFAofGUaqibsL3JzaGqNLQWzVhnyz07v8/cAKJCim+h1qvvr/0IMa
+         TWqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=039/Q2AZDShC4cyR0ddlH/eUG3odzlEnwcuXrDMGe4g=;
-        b=KJnXiwPbhz9bdAnYcbWhxvDtDbhPR1YK/J9E/YXl/i4c94JkoUsHQAFKWgO+LOpT/7
-         R/W+8iav3FtBiS1EdINO6VcXrx5qgCFAqdCeG3rb4ETWbFWFdroYPWhrBfUS2rgDOnyd
-         KBhELMJDB3OWTbrFxE35i3eCOqOHeynzDnEURd5OX8oPRQxMAYbi19LnfyPKArCJhuP5
-         N4TAdaP3uvSoqCII+26SUQo1MCjzIVgGbRVC1cQDQYmwoBb4ouOPoVyTXbzEjROIkVlv
-         jNxELJcONFzhqxHx8mBbnmJ4HDRbq5wYQ473t1mRWaNT3kQm7rge/dr461ZV1V1eu4GO
-         xKgw==
-X-Gm-Message-State: AOAM530l3XfsJanxINypY0pfZ+39iPIeKqMN+JMdFAa0LHmoKlzFjWIV
-        hVnds4IhjsnR28hvUYxTgdzvrvxF48N77m8gtKg=
-X-Google-Smtp-Source: ABdhPJxfyiY9/f8uwqjjKiNK+axja1wE9SKzm/To6uvgNb57tvVlaqYEVifVWkoHs8ZnkdFpD7+KqQu3lp9PzJiBG0M=
-X-Received: by 2002:a05:6870:d683:b0:de:eaa2:3550 with SMTP id
- z3-20020a056870d68300b000deeaa23550mr460362oap.253.1653337015741; Mon, 23 May
- 2022 13:16:55 -0700 (PDT)
+        bh=9DUh6l8ZBN76lnS45q0wf6jiM8BayaXvjyPIbUUAWTA=;
+        b=49VQKrrPmCMRTaYRiq8/ugLho7zveIuuK7l5cGACVh389JuEqWEadoKnssxy0y5iED
+         S2y7i5hndc+eTkAbvvQ3r5MxxnXK7a8Uzw3JDM4+QDphdbjeHFNUjgra1dJH9lLq03Xv
+         8GwrK/j4gF8htKGbU1kqy4cUtjuiRdhGVUxwgtwM9U/d41p4l3f8v9T3i8oUo+z2Qfnc
+         C9FC04MnQ5h59J0jzL1HOYt581UgyOe8KlVZ3JNdYnU/bKpuosC7d+B7XHiA5/duDuIL
+         0z+otiXuo77tRvwg+nHqurnt0dtIs5lzNIuICeIDpbzGTTuflm8LETyCfWpPLcJowiEm
+         Spuw==
+X-Gm-Message-State: AOAM5302qJ1oqhOQmR8YOxVSkkbDltLFNdbjbOQ2GsG6XxLOfBH5gjff
+        1G+XEE2gPKXYR78bg+0jSZJ2av2qH4o2+3UBMrs=
+X-Google-Smtp-Source: ABdhPJwVz/W2po1d5TwSlFiQ3ZLNrMa1hBA0NDPQZsBA4wCrc5SAYByfN9LWffY9S9XDU65c6eFAONAuiF4zTdWNZaE=
+X-Received: by 2002:a9d:6543:0:b0:605:e789:271e with SMTP id
+ q3-20020a9d6543000000b00605e789271emr9333863otl.200.1653337065638; Mon, 23
+ May 2022 13:17:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220521111145.81697-64-Julia.Lawall@inria.fr>
-In-Reply-To: <20220521111145.81697-64-Julia.Lawall@inria.fr>
+References: <20220521111145.81697-74-Julia.Lawall@inria.fr>
+In-Reply-To: <20220521111145.81697-74-Julia.Lawall@inria.fr>
 From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 23 May 2022 16:16:44 -0400
-Message-ID: <CADnq5_POfEC8QgmbhR0UXZfHfYehUkLN8yMTjZ-vjARbpw+hZw@mail.gmail.com>
-Subject: Re: [PATCH] drm/amdgpu/gfx: fix typos in comments
+Date:   Mon, 23 May 2022 16:17:34 -0400
+Message-ID: <CADnq5_NJq-b4UfF_PpwYc2PV8Nt++cj0RsC=yxkbCfQtJ+meJQ@mail.gmail.com>
+Subject: Re: [PATCH] drm/amdkfd: fix typo in comment
 To:     Julia Lawall <Julia.Lawall@inria.fr>
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
+Cc:     Felix Kuehling <Felix.Kuehling@amd.com>,
         David Airlie <airlied@linux.ie>,
         "Pan, Xinhui" <Xinhui.Pan@amd.com>,
         kernel-janitors@vger.kernel.org,
@@ -61,6 +61,7 @@ Cc:     Alex Deucher <alexander.deucher@amd.com>,
         amd-gfx list <amd-gfx@lists.freedesktop.org>,
         Maling list - DRI developers 
         <dri-devel@lists.freedesktop.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
         =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -79,63 +80,26 @@ Alex
 
 On Sat, May 21, 2022 at 7:12 AM Julia Lawall <Julia.Lawall@inria.fr> wrote:
 >
-> Spelling mistakes (triple letters) in comments.
+> Spelling mistake (triple letters) in comment.
 > Detected with the help of Coccinelle.
 >
 > Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 >
 > ---
->  drivers/gpu/drm/amd/amdgpu/gfx_v10_0.c |    2 +-
->  drivers/gpu/drm/amd/amdgpu/gfx_v8_0.c  |    4 ++--
->  drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c  |    2 +-
->  3 files changed, 4 insertions(+), 4 deletions(-)
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/drivers/gpu/drm/amd/amdgpu/gfx_v10_0.c b/drivers/gpu/drm/amd/amdgpu/gfx_v10_0.c
-> index 02754ee86c81..c5f46d264b23 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/gfx_v10_0.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/gfx_v10_0.c
-> @@ -5111,7 +5111,7 @@ static void gfx_v10_0_init_compute_vmid(struct amdgpu_device *adev)
->         mutex_unlock(&adev->srbm_mutex);
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
+> index 8b5452a8d330..67abf8dcd30a 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
+> @@ -1621,7 +1621,7 @@ int amdgpu_amdkfd_gpuvm_free_memory_of_gpu(
 >
->         /* Initialize all compute VMIDs to have no GDS, GWS, or OA
-> -          acccess. These should be enabled by FW for target VMIDs. */
-> +          access. These should be enabled by FW for target VMIDs. */
->         for (i = adev->vm_manager.first_kfd_vmid; i < AMDGPU_NUM_VMID; i++) {
->                 WREG32_SOC15_OFFSET(GC, 0, mmGDS_VMID0_BASE, 2 * i, 0);
->                 WREG32_SOC15_OFFSET(GC, 0, mmGDS_VMID0_SIZE, 2 * i, 0);
-> diff --git a/drivers/gpu/drm/amd/amdgpu/gfx_v8_0.c b/drivers/gpu/drm/amd/amdgpu/gfx_v8_0.c
-> index fb9302910742..7f0b18b0d4c4 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/gfx_v8_0.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/gfx_v8_0.c
-> @@ -3714,7 +3714,7 @@ static void gfx_v8_0_init_compute_vmid(struct amdgpu_device *adev)
->         mutex_unlock(&adev->srbm_mutex);
+>         mutex_lock(&mem->lock);
 >
->         /* Initialize all compute VMIDs to have no GDS, GWS, or OA
-> -          acccess. These should be enabled by FW for target VMIDs. */
-> +          access. These should be enabled by FW for target VMIDs. */
->         for (i = adev->vm_manager.first_kfd_vmid; i < AMDGPU_NUM_VMID; i++) {
->                 WREG32(amdgpu_gds_reg_offset[i].mem_base, 0);
->                 WREG32(amdgpu_gds_reg_offset[i].mem_size, 0);
-> @@ -5815,7 +5815,7 @@ static void gfx_v8_0_update_coarse_grain_clock_gating(struct amdgpu_device *adev
->                 /* wait for RLC_SERDES_CU_MASTER & RLC_SERDES_NONCU_MASTER idle */
->                 gfx_v8_0_wait_for_rlc_serdes(adev);
->
-> -               /* write cmd to Set CGCG Overrride */
-> +               /* write cmd to Set CGCG Override */
->                 gfx_v8_0_send_serdes_cmd(adev, BPM_REG_CGCG_OVERRIDE, SET_BPM_SERDES_CMD);
->
->                 /* wait for RLC_SERDES_CU_MASTER & RLC_SERDES_NONCU_MASTER idle */
-> diff --git a/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c b/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
-> index f12ae6e2359a..5349ca4d19e3 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
-> @@ -2535,7 +2535,7 @@ static void gfx_v9_0_init_compute_vmid(struct amdgpu_device *adev)
->         mutex_unlock(&adev->srbm_mutex);
->
->         /* Initialize all compute VMIDs to have no GDS, GWS, or OA
-> -          acccess. These should be enabled by FW for target VMIDs. */
-> +          access. These should be enabled by FW for target VMIDs. */
->         for (i = adev->vm_manager.first_kfd_vmid; i < AMDGPU_NUM_VMID; i++) {
->                 WREG32_SOC15_OFFSET(GC, 0, mmGDS_VMID0_BASE, 2 * i, 0);
->                 WREG32_SOC15_OFFSET(GC, 0, mmGDS_VMID0_SIZE, 2 * i, 0);
+> -       /* Unpin MMIO/DOORBELL BO's that were pinnned during allocation */
+> +       /* Unpin MMIO/DOORBELL BO's that were pinned during allocation */
+>         if (mem->alloc_flags &
+>             (KFD_IOC_ALLOC_MEM_FLAGS_DOORBELL |
+>              KFD_IOC_ALLOC_MEM_FLAGS_MMIO_REMAP)) {
 >

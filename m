@@ -2,99 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92564530793
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 04:17:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0A6A530798
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 04:21:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244901AbiEWCRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 22:17:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36228 "EHLO
+        id S1351288AbiEWCVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 22:21:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230213AbiEWCRk (ORCPT
+        with ESMTP id S235254AbiEWCVj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 22:17:40 -0400
-Received: from relay4.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9E8F35843
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 19:17:39 -0700 (PDT)
-Received: from omf10.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay08.hostedemail.com (Postfix) with ESMTP id EEE3C20DA1;
-        Mon, 23 May 2022 02:17:37 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf10.hostedemail.com (Postfix) with ESMTPA id D29F832;
-        Mon, 23 May 2022 02:17:30 +0000 (UTC)
-Message-ID: <9ff72e47bf89977efe00df6db6ebbdd7b22a9972.camel@perches.com>
-Subject: Re: [PATCH v7 15/25] scripts: checkpatch: diagnose uses of `%pA` in
- the C side
-From:   Joe Perches <joe@perches.com>
-To:     Miguel Ojeda <ojeda@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Andy Whitcroft <apw@canonical.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Sun, 22 May 2022 19:17:29 -0700
-In-Reply-To: <20220523020209.11810-16-ojeda@kernel.org>
-References: <20220523020209.11810-1-ojeda@kernel.org>
-         <20220523020209.11810-16-ojeda@kernel.org>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Sun, 22 May 2022 22:21:39 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A72A0B874
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 19:21:37 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id r71so12510521pgr.0
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 19:21:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=ftAlGkfVN9yFSMHjqy7cpbDkYMyhHDjfXWpCptFDTFo=;
+        b=5ZfHbADabs94TwJ/7qwTLt2CQFczUjYovL6BMHmANuny7SYgbvOIrrYRILUThJn9sq
+         e5qfNR/l4K6h8svb+auQZgVyvlGygBilUm09/AZMOyp1neoo8ub+9uWPBnDrkD9oLrmn
+         yS3LSDeZZ7st/cOadWljRiZF2y/DrWsTb208bbRC2AnJy2IrM9owWxGPLKv4nbZAZHV0
+         621c5uRoXUUXfg2ALD7+dYqA7R+RLO8yb4dDZCkxDHPNmEvMzlmY8k/V6xyFDqtSl2YD
+         V8396IHfHEulh4iSKKZ+mG9pifb9qGwd49VlcB+22DNVNWqYsJ/litMpU1fxM0PC7RZL
+         BaEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ftAlGkfVN9yFSMHjqy7cpbDkYMyhHDjfXWpCptFDTFo=;
+        b=6QrrEvJJMXX0rZCoUN/UQB52z5Bpjk+qtd9dkh8qVwYMukHu1F4C6ZFCMoEUYdE4Do
+         r44CSfuiyYaunWOhSsih/uizGXLadRJU5VAOs/3ICr4cpFKj7H/ChRYK7l8SB7PlkhlP
+         PwuhpXs1xZdmN9hnutkq33i2uiwLXBUI1d/VIviMVd/YpUKQdUn6mOqvcG9lkVxVco8i
+         Y3PUC/iZNI59SXzMYrasqvRXL0RRrgBE4P2JNtgqyOrOr31uC4T3GT40Ubn1RH8oQYAq
+         LLWPJov9dvI0aWZXQeZ+HaM1mrfUll6mByUZRHqHvk2OZixz8t0M0GhNDILUjlO7Tjf2
+         7SqA==
+X-Gm-Message-State: AOAM533vTZ0wKPmwywoAzo7KWJZjhIbLD3rcfVAl06HeTdF8jccU3Nna
+        aEx9vpdoNDL14Axa6fb2lLTboQ==
+X-Google-Smtp-Source: ABdhPJxRaFpMXHUmAwAQvJOURtMeJdgu+9o6mOi0Xa1VO1LPiywHr+NUZm86xDqsmpq+lh4gOGMk3A==
+X-Received: by 2002:a63:553:0:b0:3f5:f32a:7c54 with SMTP id 80-20020a630553000000b003f5f32a7c54mr17959211pgf.138.1653272497211;
+        Sun, 22 May 2022 19:21:37 -0700 (PDT)
+Received: from [10.71.57.194] ([139.177.225.241])
+        by smtp.gmail.com with ESMTPSA id y12-20020aa7854c000000b0050dc7628195sm5846585pfn.111.2022.05.22.19.21.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 22 May 2022 19:21:36 -0700 (PDT)
+Message-ID: <ed3b33cb-7ff5-4f20-4657-4c8c7a9ba45f@bytedance.com>
+Date:   Mon, 23 May 2022 10:21:26 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: D29F832
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        KHOP_HELO_FCRDNS,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Stat-Signature: q5cg9ndqchhd36mejtbbn66o75x9rtm4
-X-Rspamd-Server: rspamout01
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX18QYM5OZvxC4fQ9IN+Y6ZuuGaSYBekmtIs=
-X-HE-Tag: 1653272250-608368
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.0
+Subject: Re: [External] Re: [PATCH bpf-next v2] selftests/bpf: fix some bugs
+ in map_lookup_percpu_elem testcase
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Yonghong Song <yhs@fb.com>
+Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joanne Koong <joannekoong@fb.com>,
+        Geliang Tang <geliang.tang@suse.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        duanxiongchun@bytedance.com,
+        Muchun Song <songmuchun@bytedance.com>,
+        Dongdong Wang <wangdongdong.6@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        zhouchengming@bytedance.com, Yosry Ahmed <yosryahmed@google.com>
+References: <20220518025053.20492-1-zhoufeng.zf@bytedance.com>
+ <cd5bb286-506b-5cdb-f721-0464a58659db@fb.com>
+ <CAEf4BzaE_WJBQ6xxMy8VmJy3OsPyCCjyRKi_F-CdPLwVVp+7Ng@mail.gmail.com>
+From:   Feng Zhou <zhoufeng.zf@bytedance.com>
+In-Reply-To: <CAEf4BzaE_WJBQ6xxMy8VmJy3OsPyCCjyRKi_F-CdPLwVVp+7Ng@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-05-23 at 04:01 +0200, Miguel Ojeda wrote:
-> The `%pA` format specifier is only intended to be used from Rust.
-> 
-> `checkpatch.pl` already gives a warning for invalid specificers:
-> 
->     WARNING: Invalid vsprintf pointer extension '%pA'
-> 
-> With this change, we introduce an error message with further
-> explanation:
-> 
->     ERROR: '%pA' is only intended to be used from Rust code
-> 
-> Suggested-by: Kees Cook <keescook@chromium.org>
-> Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
-> Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
-> Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
-> Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+在 2022/5/21 上午6:00, Andrii Nakryiko 写道:
+> On Wed, May 18, 2022 at 8:44 AM Yonghong Song <yhs@fb.com> wrote:
+>>
+>>
+>> On 5/17/22 7:50 PM, Feng zhou wrote:
+>>> From: Feng Zhou <zhoufeng.zf@bytedance.com>
+>>>
+>>> comments from Andrii Nakryiko, details in here:
+>>> https://lore.kernel.org/lkml/20220511093854.411-1-zhoufeng.zf@bytedance.com/T/
+>>>
+>>> use /* */ instead of //
+>>> use libbpf_num_possible_cpus() instead of sysconf(_SC_NPROCESSORS_ONLN)
+>>> use 8 bytes for value size
+>>> fix memory leak
+>>> use ASSERT_EQ instead of ASSERT_OK
+>>> add bpf_loop to fetch values on each possible CPU
+>>>
+>>> Fixes: ed7c13776e20c74486b0939a3c1de984c5efb6aa ("selftests/bpf: add test case for bpf_map_lookup_percpu_elem")
+>>> Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
+>> Acked-by: Yonghong Song <yhs@fb.com>
+>
+> I've fixed remaining formatting issues and added my_pid check to avoid
+> accidental interference with other tests/processes. Applied to
+> bpf-next, thanks.
 
-How many developers are required for a trivial patch?
-
-> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-[]
-> @@ -6784,6 +6784,10 @@ sub process {
->  					my $stat_real = get_stat_real($linenr, $lc);
->  					my $ext_type = "Invalid";
->  					my $use = "";
-> +					if ($bad_specifier =~ /pA/) {
-> +						ERROR("VSPRINTF_RUST",
-> +							"'\%pA' is only intended to be used from Rust code\n" . "$here\n$stat_real\n");
-> +					}
->  					if ($bad_specifier =~ /p[Ff]/) {
-
-and this should now use elsif
-
->  						$use = " - use %pS instead";
->  						$use =~ s/pS/ps/ if ($bad_specifier =~ /pf/);
-
+Ok, Thanks.
 

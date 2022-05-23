@@ -2,117 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A400530EE2
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:17:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D7DD530F3E
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:18:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234433AbiEWLDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 07:03:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57880 "EHLO
+        id S234509AbiEWLFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 07:05:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234264AbiEWLDl (ORCPT
+        with ESMTP id S234451AbiEWLFj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 07:03:41 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 50B8423BE8;
-        Mon, 23 May 2022 04:03:40 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B352211FB;
-        Mon, 23 May 2022 04:03:39 -0700 (PDT)
-Received: from [10.57.34.201] (unknown [10.57.34.201])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 575D83F73D;
-        Mon, 23 May 2022 04:03:38 -0700 (PDT)
-Message-ID: <9a9b40eb-be8d-bf8c-39be-e0abb507820f@arm.com>
-Date:   Mon, 23 May 2022 12:03:36 +0100
+        Mon, 23 May 2022 07:05:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA8117E33;
+        Mon, 23 May 2022 04:05:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4726AB80F1A;
+        Mon, 23 May 2022 11:05:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D4DFC385A9;
+        Mon, 23 May 2022 11:05:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653303935;
+        bh=EdLcKfbCVThSAKV/Z0YYk7oUaXDqnxKSmBb3mVYsWUE=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=LAHnKRPIkbkfMVNjbAyfzyBGCdi2KgHR9Hk21uKh5rihEuvZS73c5L0mfGt0ucm7C
+         cueg4jQS56PHv16C855VGL/+3WwpoUBquCXt/dM9L8motbs7R1uZAzh2zvBQ5Z4tNM
+         ehS3+qSQ+H2QZvBJdHf+Rexpb+vkHupp9+p90ctoOrXkv5V0UBeLy7zNpI2WYGj5m8
+         ICzukBSSGbTSVoiy6SRD/xP4usqk3sQEppvYkY04GvA7MTr/O3kezVFU9SI5n7x8KQ
+         n1LoOx7Ete/Rb6ZvfbwaHETb2AY7VCyQdaiRjgwYv6Xza70EnVloWYW5X/zxQOScwN
+         BZA0HmWFceqrw==
+Message-ID: <e4fcdf88a9b35a9f1ca6e75fdf75ad469f824380.camel@kernel.org>
+Subject: Re: [PATCH v2] netfs: Fix gcc-12 warning by embedding vfs inode in
+ netfs_i_context
+From:   Jeff Layton <jlayton@kernel.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     keescook@chromium.org, Jonathan Corbet <corbet@lwn.net>,
+        Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Christian Schoenebeck <linux_oss@crudebyte.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        Xiubo Li <xiubli@redhat.com>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Steve French <smfrench@gmail.com>,
+        William Kucharski <william.kucharski@oracle.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-doc@vger.kernel.org, v9fs-developer@lists.sourceforge.net,
+        linux-afs@lists.infradead.org, ceph-devel@vger.kernel.org,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-fsdevel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 23 May 2022 07:05:31 -0400
+In-Reply-To: <658391.1653302817@warthog.procyon.org.uk>
+References: <1b5daa4695b62795b617049e32c784052deabad4.camel@kernel.org>
+         <165305805651.4094995.7763502506786714216.stgit@warthog.procyon.org.uk>
+         <658391.1653302817@warthog.procyon.org.uk>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1 (3.44.1-1.fc36) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: [PATCH 1/2] dt-bindings: arm: Convert CoreSight bindings to DT
- schema
-To:     Rob Herring <robh@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        "coresight >> Coresight ML" <coresight@lists.linaro.org>
-References: <20220520214416.302127-1-robh@kernel.org>
- <20220520214416.302127-2-robh@kernel.org>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20220520214416.302127-2-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+On Mon, 2022-05-23 at 11:46 +0100, David Howells wrote:
+> Jeff Layton <jlayton@kernel.org> wrote:
+>=20
+> >=20
+> > Note that there are some conflicts between this patch and some of the
+> > patches in the current ceph-client/testing branch. Depending on the
+> > order of merge, one or the other will need to be fixed.
+>=20
+> Do you think it could be taken through the ceph tree?
+>=20
+> David
+>=20
 
-Thanks a lot for converting these to yaml. Some minor comments below.
+Since this touches a lot of non-ceph code, it may be best to just plan
+to merge it ASAP, and we'll just base our merge branch on top of it.
 
-In general, the "clocks" and "clock-names" are optional (e.g, for
-etm4 with system register access).
-
-On 20/05/2022 22:44, Rob Herring wrote:
-> Each CoreSight component has slightly different requirements and
-> nothing applies to every component, so each CoreSight component has its
-> own schema document.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->   .../bindings/arm/arm,coresight-catu.yaml      | 101 +++++
->   .../arm/arm,coresight-dynamic-funnel.yaml     | 126 ++++++
->   .../bindings/arm/arm,coresight-etb10.yaml     |  92 ++++
->   .../bindings/arm/arm,coresight-etm.yaml       | 156 +++++++
->   .../arm/arm,coresight-static-replicator.yaml  |  90 ++++
->   .../bindings/arm/arm,coresight-stm.yaml       | 101 +++++
->   .../bindings/arm/arm,coresight-tmc.yaml       | 132 ++++++
->   .../bindings/arm/arm,coresight-tpiu.yaml      |  91 ++++
->   .../devicetree/bindings/arm/coresight.txt     | 402 ------------------
->   9 files changed, 889 insertions(+), 402 deletions(-)
->   create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-catu.yaml
->   create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-dynamic-funnel.yaml
->   create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-etb10.yaml
->   create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-etm.yaml
->   create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-static-replicator.yaml
->   create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-stm.yaml
->   create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-tmc.yaml
->   create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-tpiu.yaml
->   delete mode 100644 Documentation/devicetree/bindings/arm/coresight.txt
-
-...
-
-> diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-tmc.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-tmc.yaml
-> new file mode 100644
-> index 000000000000..ee1ce47225be
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/arm/arm,coresight-tmc.yaml
-> @@ -0,0 +1,132 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/arm/arm,coresight-tmc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Arm CoreSight Trace Memory Controller
-> +
-
-...
-
-> +  out-ports:
-> +    $ref: /schemas/graph.yaml#/properties/ports
-> +    additionalProperties: false
-> +
-> +    properties:
-> +      port:
-> +        description: AXI Master output connection. Used for ETR and ETF
-> +          configurations.
-
-nit: This is only for ETRs. Never for ETFs.
-
-Suzuki
+Ilya/Xiubo, do you have an opinion here?
+=20
+--=20
+Jeff Layton <jlayton@kernel.org>

@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 373E6531C92
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:57:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CFA4531A84
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:55:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243337AbiEWR4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:56:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42314 "EHLO
+        id S242409AbiEWSNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 14:13:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240950AbiEWR0L (ORCPT
+        with ESMTP id S242996AbiEWRtT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:26:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 708243E5D4;
-        Mon, 23 May 2022 10:21:16 -0700 (PDT)
+        Mon, 23 May 2022 13:49:19 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E63F491579;
+        Mon, 23 May 2022 10:37:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 37A92B81204;
-        Mon, 23 May 2022 17:19:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A788C385A9;
-        Mon, 23 May 2022 17:19:40 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 79F09CE1710;
+        Mon, 23 May 2022 17:29:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87BD9C385A9;
+        Mon, 23 May 2022 17:29:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326380;
-        bh=qnwdIkkYiFCRu6fRjyWwB/vxSHwpyJ8MWSzbKllOeWU=;
+        s=korg; t=1653326972;
+        bh=cQpomFHgV/i5oUPxEHXjmRFaSxhFYv4iq08asYDK0mc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Au/SqaJ9+S2OaCLzbkinyiQ0b4fctDsfPLRCyGk+zW50mbu8k855Yv7DcKiJKBdP9
-         Ym147LEms95JFZa8Cl2xJIzjqdjE3c6zMxdfW4gLcwJowZsfeL7eCmxitEADhJa4Yk
-         qUTqU083fTAqi1a47g35bKvArvR9++/kqxQhJuao=
+        b=dc2XZRVaylU/jL5mpGh619xsezQI9Ky+GJxmWpv+QVi4BVpiUVFjSFJJN7hbhF8zX
+         c+NIdUNfZDqQaIOOC7Fv9lmAoSqvcoUA/pbjdgz8uhQ+g4Cfr0LvfC/kxRqSt018og
+         iRdI/sTjQe5Tp7eOViOGPCd0cRQPi7Go/thdKDTA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jae Hyun Yoo <quic_jaehyoo@quicinc.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Joel Stanley <joel@jms.id.au>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 064/132] ARM: dts: aspeed-g6: fix SPI1/SPI2 quad pin group
+        stable@vger.kernel.org, Kevin Mitchell <kevmitch@arista.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>,
+        Gurucharan <gurucharanx.g@intel.com>
+Subject: [PATCH 5.17 116/158] igb: skip phy status check where unavailable
 Date:   Mon, 23 May 2022 19:04:33 +0200
-Message-Id: <20220523165833.855707916@linuxfoundation.org>
+Message-Id: <20220523165850.125527996@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
-References: <20220523165823.492309987@linuxfoundation.org>
+In-Reply-To: <20220523165830.581652127@linuxfoundation.org>
+References: <20220523165830.581652127@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,43 +57,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
+From: Kevin Mitchell <kevmitch@arista.com>
 
-[ Upstream commit 890362d41b244536ab63591f813393f5fdf59ed7 ]
+[ Upstream commit 942d2ad5d2e0df758a645ddfadffde2795322728 ]
 
-Fix incorrect function mappings in pinctrl_qspi1_default and
-pinctrl_qspi2_default since their function should be SPI1 and
-SPI2 respectively.
+igb_read_phy_reg() will silently return, leaving phy_data untouched, if
+hw->ops.read_reg isn't set. Depending on the uninitialized value of
+phy_data, this led to the phy status check either succeeding immediately
+or looping continuously for 2 seconds before emitting a noisy err-level
+timeout. This message went out to the console even though there was no
+actual problem.
 
-Fixes: f510f04c8c83 ("ARM: dts: aspeed: Add AST2600 pinmux nodes")
-Signed-off-by: Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
-Reviewed-by: Andrew Jeffery <andrew@aj.id.au>
-Link: https://lore.kernel.org/r/20220329173932.2588289-8-quic_jaehyoo@quicinc.com
-Signed-off-by: Joel Stanley <joel@jms.id.au>
+Instead, first check if there is read_reg function pointer. If not,
+proceed without trying to check the phy status register.
+
+Fixes: b72f3f72005d ("igb: When GbE link up, wait for Remote receiver status condition")
+Signed-off-by: Kevin Mitchell <kevmitch@arista.com>
+Tested-by: Gurucharan <gurucharanx.g@intel.com> (A Contingent worker at Intel)
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/intel/igb/igb_main.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi b/arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi
-index 06d60a8540e9..ac07c240419a 100644
---- a/arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi
-+++ b/arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi
-@@ -648,12 +648,12 @@ pinctrl_pwm9g1_default: pwm9g1_default {
- 	};
+diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
+index c1e4ad65b02d..4e0abfe68cfd 100644
+--- a/drivers/net/ethernet/intel/igb/igb_main.c
++++ b/drivers/net/ethernet/intel/igb/igb_main.c
+@@ -5512,7 +5512,8 @@ static void igb_watchdog_task(struct work_struct *work)
+ 				break;
+ 			}
  
- 	pinctrl_qspi1_default: qspi1_default {
--		function = "QSPI1";
-+		function = "SPI1";
- 		groups = "QSPI1";
- 	};
+-			if (adapter->link_speed != SPEED_1000)
++			if (adapter->link_speed != SPEED_1000 ||
++			    !hw->phy.ops.read_reg)
+ 				goto no_wait;
  
- 	pinctrl_qspi2_default: qspi2_default {
--		function = "QSPI2";
-+		function = "SPI2";
- 		groups = "QSPI2";
- 	};
- 
+ 			/* wait for Remote receiver status OK */
 -- 
 2.35.1
 

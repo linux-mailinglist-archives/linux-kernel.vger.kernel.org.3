@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA130531A9D
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:55:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF0DD53174A
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:52:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243953AbiEWRvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:51:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42814 "EHLO
+        id S244737AbiEWSHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 14:07:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241473AbiEWR0r (ORCPT
+        with ESMTP id S243604AbiEWRiV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:26:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83AD574DEC;
-        Mon, 23 May 2022 10:21:54 -0700 (PDT)
+        Mon, 23 May 2022 13:38:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2AFA93987;
+        Mon, 23 May 2022 10:32:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 706DBB81215;
-        Mon, 23 May 2022 17:14:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2701C385A9;
-        Mon, 23 May 2022 17:14:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 43B8A60B2C;
+        Mon, 23 May 2022 17:31:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D012C385A9;
+        Mon, 23 May 2022 17:31:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326057;
-        bh=+WFmj9pEOkElDu91VIYgVARgNcx+u9/+kVf7ayfMqQE=;
+        s=korg; t=1653327095;
+        bh=vck1sxQuINJLtEffACLVYoU+epqqYfT3LqQdONy1Zyc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JkjkbBvrKlPy2GmrgzaIIiUUPibz/LTEkhgbqsqoZL+eqP3LFuKZiK23Javt5ESOJ
-         MF5AljDa4DUAzjbzJSe8zV9rqO2BfkcHQgKgGDnZa5ZwX1zUMywW+eDBXxunm7HgLG
-         /QgoiaCT1RM7rT/PMVvdsUwYK8Nr+S6Fx781DuBE=
+        b=BLmelLSBkj4r3YjAWnFpGBasTUs3Ci6d7JcLLOBaV70DoBhWRudhPuuN2smuRlQ+B
+         zmndt9eOPrfiBhbgQh/KsGJgScWE40IZTXnBWs7VQ9tvIFwUMiAoOEmoSJljebygBi
+         zetz7NPXW0CFfyYqYP0Z0dD18edpJ9jfHbNmcSAk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sasha Neftin <sasha.neftin@intel.com>,
-        Nechama Kraus <nechamax.kraus@linux.intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-Subject: [PATCH 5.10 07/97] igc: Update I226_K device ID
+        stable@vger.kernel.org, Shreyas K K <quic_shrekk@quicinc.com>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        Will Deacon <will@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 154/158] arm64: Enable repeat tlbi workaround on KRYO4XX gold CPUs
 Date:   Mon, 23 May 2022 19:05:11 +0200
-Message-Id: <20220523165813.521480921@linuxfoundation.org>
+Message-Id: <20220523165855.706011979@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165812.244140613@linuxfoundation.org>
-References: <20220523165812.244140613@linuxfoundation.org>
+In-Reply-To: <20220523165830.581652127@linuxfoundation.org>
+References: <20220523165830.581652127@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,32 +55,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sasha Neftin <sasha.neftin@intel.com>
+From: Shreyas K K <quic_shrekk@quicinc.com>
 
-commit 79cc8322b6d82747cb63ea464146c0bf5b5a6bc1 upstream.
+[ Upstream commit 51f559d66527e238f9a5f82027bff499784d4eac ]
 
-The device ID for I226_K was incorrectly assigned, update the device
-ID to the correct one.
+Add KRYO4XX gold/big cores to the list of CPUs that need the
+repeat TLBI workaround. Apply this to the affected
+KRYO4XX cores (rcpe to rfpe).
 
-Fixes: bfa5e98c9de4 ("igc: Add new device ID")
-Signed-off-by: Sasha Neftin <sasha.neftin@intel.com>
-Tested-by: Nechama Kraus <nechamax.kraus@linux.intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Signed-off-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+The variant and revision bits are implementation defined and are
+different from the their Cortex CPU counterparts on which they are
+based on, i.e., (r0p0 to r3p0) is equivalent to (rcpe to rfpe).
+
+Signed-off-by: Shreyas K K <quic_shrekk@quicinc.com>
+Reviewed-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+Link: https://lore.kernel.org/r/20220512110134.12179-1-quic_shrekk@quicinc.com
+Signed-off-by: Will Deacon <will@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/igc/igc_hw.h |    1 +
- 1 file changed, 1 insertion(+)
+ Documentation/arm64/silicon-errata.rst | 3 +++
+ arch/arm64/kernel/cpu_errata.c         | 2 ++
+ 2 files changed, 5 insertions(+)
 
---- a/drivers/net/ethernet/intel/igc/igc_hw.h
-+++ b/drivers/net/ethernet/intel/igc/igc_hw.h
-@@ -22,6 +22,7 @@
- #define IGC_DEV_ID_I220_V			0x15F7
- #define IGC_DEV_ID_I225_K			0x3100
- #define IGC_DEV_ID_I225_K2			0x3101
-+#define IGC_DEV_ID_I226_K			0x3102
- #define IGC_DEV_ID_I225_LMVP			0x5502
- #define IGC_DEV_ID_I225_IT			0x0D9F
- #define IGC_DEV_ID_I226_LM			0x125B
+diff --git a/Documentation/arm64/silicon-errata.rst b/Documentation/arm64/silicon-errata.rst
+index ea281dd75517..29b136849d30 100644
+--- a/Documentation/arm64/silicon-errata.rst
++++ b/Documentation/arm64/silicon-errata.rst
+@@ -189,6 +189,9 @@ stable kernels.
+ +----------------+-----------------+-----------------+-----------------------------+
+ | Qualcomm Tech. | Kryo4xx Silver  | N/A             | ARM64_ERRATUM_1024718       |
+ +----------------+-----------------+-----------------+-----------------------------+
++| Qualcomm Tech. | Kryo4xx Gold    | N/A             | ARM64_ERRATUM_1286807       |
+++----------------+-----------------+-----------------+-----------------------------+
++
+ +----------------+-----------------+-----------------+-----------------------------+
+ | Fujitsu        | A64FX           | E#010001        | FUJITSU_ERRATUM_010001      |
+ +----------------+-----------------+-----------------+-----------------------------+
+diff --git a/arch/arm64/kernel/cpu_errata.c b/arch/arm64/kernel/cpu_errata.c
+index 146fa2e76834..10c865e311a0 100644
+--- a/arch/arm64/kernel/cpu_errata.c
++++ b/arch/arm64/kernel/cpu_errata.c
+@@ -208,6 +208,8 @@ static const struct arm64_cpu_capabilities arm64_repeat_tlbi_list[] = {
+ #ifdef CONFIG_ARM64_ERRATUM_1286807
+ 	{
+ 		ERRATA_MIDR_RANGE(MIDR_CORTEX_A76, 0, 0, 3, 0),
++		/* Kryo4xx Gold (rcpe to rfpe) => (r0p0 to r3p0) */
++		ERRATA_MIDR_RANGE(MIDR_QCOM_KRYO_4XX_GOLD, 0xc, 0xe, 0xf, 0xe),
+ 	},
+ #endif
+ 	{},
+-- 
+2.35.1
+
 
 

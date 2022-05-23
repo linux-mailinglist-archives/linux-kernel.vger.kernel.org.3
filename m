@@ -2,42 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AF995313CD
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:24:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60C76531472
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:25:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236822AbiEWNbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 09:31:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44484 "EHLO
+        id S236531AbiEWNaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 09:30:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236319AbiEWN31 (ORCPT
+        with ESMTP id S236232AbiEWN3Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 09:29:27 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05ED1DCD;
+        Mon, 23 May 2022 09:29:25 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA5D240AA;
         Mon, 23 May 2022 06:29:21 -0700 (PDT)
-X-UUID: 3a0c8fd5ac7d4915b486f35cf2f5ae50-20220523
+X-UUID: a24253252fa84fdb9f51317b073231a3-20220523
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:b97c9bf6-f781-43e3-b08b-07edbd7783e8,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:12fa3de3-edbf-4bd4-8a34-dfc5f7bb086d,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+X-CID-O-INFO: VERSION:1.1.5,REQID:dd463a7f-e09e-4d9a-a651-3189397d4183,OB:0,LO
+        B:0,IP:0,URL:25,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:20
+X-CID-META: VersionHash:2a19b09,CLOUDID:06f24d7a-5ef6-470b-96c9-bdb8ced32786,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
         ,QS:0,BEC:nil
-X-UUID: 3a0c8fd5ac7d4915b486f35cf2f5ae50-20220523
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+X-UUID: a24253252fa84fdb9f51317b073231a3-20220523
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
         (envelope-from <jiaxin.yu@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1552525494; Mon, 23 May 2022 21:29:17 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+        with ESMTP id 1194186212; Mon, 23 May 2022 21:29:18 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
  mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
  15.2.792.15; Mon, 23 May 2022 21:29:16 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 23 May 2022 21:29:15 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 23 May 2022 21:29:14 +0800
+ Transport; Mon, 23 May 2022 21:29:15 +0800
 From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
 To:     <broonie@kernel.org>, <robh+dt@kernel.org>,
         <angelogioacchino.delregno@collabora.com>
@@ -49,10 +46,11 @@ CC:     <aaronyu@google.com>, <matthias.bgg@gmail.com>,
         <linux-mediatek@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Jiaxin Yu <jiaxin.yu@mediatek.com>
-Subject: [PATCH v5 15/20] ASoC: mediatek: mt8186: add mt8186-mt6366 common driver
-Date:   Mon, 23 May 2022 21:28:53 +0800
-Message-ID: <20220523132858.22166-16-jiaxin.yu@mediatek.com>
+        Jiaxin Yu <jiaxin.yu@mediatek.com>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v5 16/20] dt-bindings: mediatek: mt8186: add audio afe document
+Date:   Mon, 23 May 2022 21:28:54 +0800
+Message-ID: <20220523132858.22166-17-jiaxin.yu@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220523132858.22166-1-jiaxin.yu@mediatek.com>
 References: <20220523132858.22166-1-jiaxin.yu@mediatek.com>
@@ -69,104 +67,196 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add mt8186-mt6366 common driver for mt8186 series machine.
+Add mt8186 audio afe document.
 
 Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- .../mediatek/mt8186/mt8186-mt6366-common.c    | 59 +++++++++++++++++++
- .../mediatek/mt8186/mt8186-mt6366-common.h    | 17 ++++++
- 2 files changed, 76 insertions(+)
- create mode 100644 sound/soc/mediatek/mt8186/mt8186-mt6366-common.c
- create mode 100644 sound/soc/mediatek/mt8186/mt8186-mt6366-common.h
+ .../bindings/sound/mt8186-afe-pcm.yaml        | 175 ++++++++++++++++++
+ 1 file changed, 175 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/sound/mt8186-afe-pcm.yaml
 
-diff --git a/sound/soc/mediatek/mt8186/mt8186-mt6366-common.c b/sound/soc/mediatek/mt8186/mt8186-mt6366-common.c
+diff --git a/Documentation/devicetree/bindings/sound/mt8186-afe-pcm.yaml b/Documentation/devicetree/bindings/sound/mt8186-afe-pcm.yaml
 new file mode 100644
-index 000000000000..94e1128e8128
+index 000000000000..88f82d096443
 --- /dev/null
-+++ b/sound/soc/mediatek/mt8186/mt8186-mt6366-common.c
-@@ -0,0 +1,59 @@
-+// SPDX-License-Identifier: GPL-2.0
-+//
-+// mt8186-mt6366-common.c
-+//	--  MT8186 MT6366 ALSA common driver
-+//
-+// Copyright (c) 2022 MediaTek Inc.
-+// Author: Jiaxin Yu <jiaxin.yu@mediatek.com>
-+//
-+#include <sound/soc.h>
++++ b/Documentation/devicetree/bindings/sound/mt8186-afe-pcm.yaml
+@@ -0,0 +1,175 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/sound/mt8186-afe-pcm.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+#include "../../codecs/mt6358.h"
-+#include "../common/mtk-afe-platform-driver.h"
-+#include "mt8186-afe-common.h"
-+#include "mt8186-mt6366-common.h"
++title: Mediatek AFE PCM controller for mt8186
 +
-+int mt8186_mt6366_init(struct snd_soc_pcm_runtime *rtd)
-+{
-+	struct snd_soc_component *cmpnt_afe =
-+		snd_soc_rtdcom_lookup(rtd, AFE_PCM_NAME);
-+	struct snd_soc_component *cmpnt_codec =
-+		asoc_rtd_to_codec(rtd, 0)->component;
-+	struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt_afe);
-+	struct mt8186_afe_private *afe_priv = afe->platform_priv;
-+	struct snd_soc_dapm_context *dapm = &rtd->card->dapm;
-+	int ret;
++maintainers:
++  - Jiaxin Yu <jiaxin.yu@mediatek.com>
 +
-+	/* set mtkaif protocol */
-+	mt6358_set_mtkaif_protocol(cmpnt_codec,
-+				   MT6358_MTKAIF_PROTOCOL_1);
-+	afe_priv->mtkaif_protocol = MT6358_MTKAIF_PROTOCOL_1;
++properties:
++  compatible:
++    const: mediatek,mt8186-sound
 +
-+	ret = snd_soc_dapm_sync(dapm);
-+	if (ret) {
-+		dev_info(rtd->dev, "failed to snd_soc_dapm_sync\n");
-+		return ret;
-+	}
++  reg:
++    maxItems: 1
 +
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(mt8186_mt6366_init);
++  interrupts:
++    maxItems: 1
 +
-+int mt8186_mt6366_card_set_be_link(struct snd_soc_card *card,
-+				   struct snd_soc_dai_link *link,
-+				   struct device_node *node,
-+				   char *link_name)
-+{
-+	int ret;
++  resets:
++    maxItems: 1
 +
-+	if (node && strcmp(link->name, link_name) == 0) {
-+		ret = snd_soc_of_get_dai_link_codecs(card->dev, node, link);
-+		if (ret < 0) {
-+			dev_err_probe(card->dev, ret, "get dai link codecs fail\n");
-+			return ret;
-+		}
-+	}
++  reset-names:
++    const: audiosys
 +
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(mt8186_mt6366_card_set_be_link);
-diff --git a/sound/soc/mediatek/mt8186/mt8186-mt6366-common.h b/sound/soc/mediatek/mt8186/mt8186-mt6366-common.h
-new file mode 100644
-index 000000000000..907d8f5e46b1
---- /dev/null
-+++ b/sound/soc/mediatek/mt8186/mt8186-mt6366-common.h
-@@ -0,0 +1,17 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * mt8186-mt6366-common.h
-+ *
-+ * Copyright (c) 2022 MediaTek Inc.
-+ * Author: Jiaxin Yu <jiaxin.yu@mediatek.com>
-+ */
++  mediatek,apmixedsys:
++    $ref: "/schemas/types.yaml#/definitions/phandle"
++    description: The phandle of the mediatek apmixedsys controller
 +
-+#ifndef _MT8186_MT6366_COMMON_H_
-+#define _MT8186_MT6366_COMMON_H_
++  mediatek,infracfg:
++    $ref: "/schemas/types.yaml#/definitions/phandle"
++    description: The phandle of the mediatek infracfg controller
 +
-+int mt8186_mt6366_init(struct snd_soc_pcm_runtime *rtd);
-+int mt8186_mt6366_card_set_be_link(struct snd_soc_card *card,
-+				   struct snd_soc_dai_link *link,
-+				   struct device_node *node,
-+				   char *link_name);
-+#endif
++  mediatek,topckgen:
++    $ref: "/schemas/types.yaml#/definitions/phandle"
++    description: The phandle of the mediatek topckgen controller
++
++  clocks:
++    items:
++      - description: audio infra sys clock
++      - description: audio infra 26M clock
++      - description: audio top mux
++      - description: audio intbus mux
++      - description: mainpll 136.5M clock
++      - description: faud1 mux
++      - description: apll1 clock
++      - description: faud2 mux
++      - description: apll2 clock
++      - description: audio engen1 mux
++      - description: apll1_d8 22.5792M clock
++      - description: audio engen2 mux
++      - description: apll2_d8 24.576M clock
++      - description: i2s0 mclk mux
++      - description: i2s1 mclk mux
++      - description: i2s2 mclk mux
++      - description: i2s4 mclk mux
++      - description: tdm mclk mux
++      - description: i2s0_mck divider
++      - description: i2s1_mck divider
++      - description: i2s2_mck divider
++      - description: i2s4_mck divider
++      - description: tdm_mck divider
++      - description: audio hires mux
++      - description: 26M clock
++
++  clock-names:
++    items:
++      - const: aud_infra_clk
++      - const: mtkaif_26m_clk
++      - const: top_mux_audio
++      - const: top_mux_audio_int
++      - const: top_mainpll_d2_d4
++      - const: top_mux_aud_1
++      - const: top_apll1_ck
++      - const: top_mux_aud_2
++      - const: top_apll2_ck
++      - const: top_mux_aud_eng1
++      - const: top_apll1_d8
++      - const: top_mux_aud_eng2
++      - const: top_apll2_d8
++      - const: top_i2s0_m_sel
++      - const: top_i2s1_m_sel
++      - const: top_i2s2_m_sel
++      - const: top_i2s4_m_sel
++      - const: top_tdm_m_sel
++      - const: top_apll12_div0
++      - const: top_apll12_div1
++      - const: top_apll12_div2
++      - const: top_apll12_div4
++      - const: top_apll12_div_tdm
++      - const: top_mux_audio_h
++      - const: top_clk26m_clk
++
++required:
++  - compatible
++  - interrupts
++  - resets
++  - reset-names
++  - mediatek,apmixedsys
++  - mediatek,infracfg
++  - mediatek,topckgen
++  - clocks
++  - clock-names
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    afe: mt8186-afe-pcm@11210000 {
++        compatible = "mediatek,mt8186-sound";
++        reg = <0x11210000 0x2000>;
++        interrupts = <GIC_SPI 169 IRQ_TYPE_LEVEL_HIGH>;
++        resets = <&watchdog 17>; //MT8186_TOPRGU_AUDIO_SW_RST
++        reset-names = "audiosys";
++        mediatek,apmixedsys = <&apmixedsys>;
++        mediatek,infracfg = <&infracfg>;
++        mediatek,topckgen = <&topckgen>;
++        clocks = <&infracfg_ao 44>, //CLK_INFRA_AO_AUDIO
++                 <&infracfg_ao 54>, //CLK_INFRA_AO_AUDIO_26M_BCLK
++                 <&topckgen 15>, //CLK_TOP_AUDIO
++                 <&topckgen 16>, //CLK_TOP_AUD_INTBUS
++                 <&topckgen 70>, //CLK_TOP_MAINPLL_D2_D4
++                 <&topckgen 17>, //CLK_TOP_AUD_1
++                 <&apmixedsys 12>, //CLK_APMIXED_APLL1
++                 <&topckgen 18>, //CLK_TOP_AUD_2
++                 <&apmixedsys 13>, //CLK_APMIXED_APLL2
++                 <&topckgen 19>, //CLK_TOP_AUD_ENGEN1
++                 <&topckgen 101>, //CLK_TOP_APLL1_D8
++                 <&topckgen 20>, //CLK_TOP_AUD_ENGEN2
++                 <&topckgen 104>, //CLK_TOP_APLL2_D8
++                 <&topckgen 63>, //CLK_TOP_APLL_I2S0_MCK_SEL
++                 <&topckgen 64>, //CLK_TOP_APLL_I2S1_MCK_SEL
++                 <&topckgen 65>, //CLK_TOP_APLL_I2S2_MCK_SEL
++                 <&topckgen 66>, //CLK_TOP_APLL_I2S4_MCK_SEL
++                 <&topckgen 67>, //CLK_TOP_APLL_TDMOUT_MCK_SEL
++                 <&topckgen 131>, //CLK_TOP_APLL12_CK_DIV0
++                 <&topckgen 132>, //CLK_TOP_APLL12_CK_DIV1
++                 <&topckgen 133>, //CLK_TOP_APLL12_CK_DIV2
++                 <&topckgen 134>, //CLK_TOP_APLL12_CK_DIV4
++                 <&topckgen 135>, //CLK_TOP_APLL12_CK_DIV_TDMOUT_M
++                 <&topckgen 44>, //CLK_TOP_AUDIO_H
++                 <&clk26m>;
++        clock-names = "aud_infra_clk",
++                      "mtkaif_26m_clk",
++                      "top_mux_audio",
++                      "top_mux_audio_int",
++                      "top_mainpll_d2_d4",
++                      "top_mux_aud_1",
++                      "top_apll1_ck",
++                      "top_mux_aud_2",
++                      "top_apll2_ck",
++                      "top_mux_aud_eng1",
++                      "top_apll1_d8",
++                      "top_mux_aud_eng2",
++                      "top_apll2_d8",
++                      "top_i2s0_m_sel",
++                      "top_i2s1_m_sel",
++                      "top_i2s2_m_sel",
++                      "top_i2s4_m_sel",
++                      "top_tdm_m_sel",
++                      "top_apll12_div0",
++                      "top_apll12_div1",
++                      "top_apll12_div2",
++                      "top_apll12_div4",
++                      "top_apll12_div_tdm",
++                      "top_mux_audio_h",
++                      "top_clk26m_clk";
++    };
++
++...
 -- 
 2.18.0
 

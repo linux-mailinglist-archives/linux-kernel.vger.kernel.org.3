@@ -2,156 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 809FE53120B
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:22:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11804531430
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:25:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238581AbiEWQJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 12:09:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44440 "EHLO
+        id S238592AbiEWQKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 12:10:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238408AbiEWQJv (ORCPT
+        with ESMTP id S238589AbiEWQKC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 12:09:51 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7F0D06470D;
-        Mon, 23 May 2022 09:09:50 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 28883139F;
-        Mon, 23 May 2022 09:09:50 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.9.63])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 055253F73D;
-        Mon, 23 May 2022 09:09:43 -0700 (PDT)
-Date:   Mon, 23 May 2022 17:09:39 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Xu Kuohai <xukuohai@huawei.com>, bpf <bpf@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Daniel Kiss <daniel.kiss@arm.com>,
-        Steven Price <steven.price@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Mark Brown <broonie@kernel.org>,
-        Delyan Kratunov <delyank@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: Re: [PATCH bpf-next v5 5/6] bpf, arm64: bpf trampoline for arm64
-Message-ID: <YouxwxJddrz95289@FVFF77S0Q05N>
-References: <20220518131638.3401509-1-xukuohai@huawei.com>
- <20220518131638.3401509-6-xukuohai@huawei.com>
- <CAADnVQJr8Sc5d+XUAY2UnNbZ2TP5OCAQNm3eyTponbMfcpXbkQ@mail.gmail.com>
+        Mon, 23 May 2022 12:10:02 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C1363507
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:10:00 -0700 (PDT)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24NFUGXH022928;
+        Mon, 23 May 2022 16:09:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=GWi2svyv4xiTKuEkdoZOSj7G+LZzUVwd+iYBidPDUGU=;
+ b=ZD0yAXI3NDFafBxw9P2NRSMwV30PmEiX2qNRVPao1IPEKL5HM+tjLqJmnGFvvMR9EaPd
+ CXDdak0pB010MbHT/VSBoXefgESh2dhsBhtm4QTrWk2dltXOccnJYafppEHKEzyvU/Ps
+ AYyifKRXC+6tERA5yq8uMaSaVAvDs/oWhY18ZT9+MCXy/jlOONMm+6cMcHG2ZaBK/mq+
+ QDkE0CsL3ymm6H6SALO+YctA1TzlwK9X65/Vjtu1W6Wg2FSZBfBeqn3SIS8isnrppuX6
+ BanEtEAfv/7gR1oq6kjA1ZC/T3KAieFmiIC6hZbolKUj+fWqbaSTga2PCcKzQiFw/1MK Lg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g8axj3x24-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 23 May 2022 16:09:46 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24NG9jvN005804;
+        Mon, 23 May 2022 16:09:46 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g8axj3x16-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 23 May 2022 16:09:46 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24NFwRmS028633;
+        Mon, 23 May 2022 16:09:43 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma03ams.nl.ibm.com with ESMTP id 3g6qq933jn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 23 May 2022 16:09:43 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24NG9fO246531026
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 23 May 2022 16:09:41 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 74A30A4051;
+        Mon, 23 May 2022 16:09:41 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 32C01A404D;
+        Mon, 23 May 2022 16:09:41 +0000 (GMT)
+Received: from [9.101.4.33] (unknown [9.101.4.33])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 23 May 2022 16:09:41 +0000 (GMT)
+Message-ID: <913bcf4d-dc78-dacb-4891-43a882f50017@linux.ibm.com>
+Date:   Mon, 23 May 2022 18:09:40 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAADnVQJr8Sc5d+XUAY2UnNbZ2TP5OCAQNm3eyTponbMfcpXbkQ@mail.gmail.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.0
+Subject: Re: [PATCH] powerpc/64s: Don't read H_BLOCK_REMOVE characteristics in
+ radix mode
+Content-Language: en-US
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "npiggin@gmail.com" <npiggin@gmail.com>
+Cc:     "aneesh.kumar@linux.ibm.com" <aneesh.kumar@linux.ibm.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220520155721.10211-1-ldufour@linux.ibm.com>
+ <d87cca6d-8cc9-3347-f74a-28f12889cfe1@csgroup.eu>
+From:   Laurent Dufour <ldufour@linux.ibm.com>
+In-Reply-To: <d87cca6d-8cc9-3347-f74a-28f12889cfe1@csgroup.eu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: bWbvRjAI3Z_YOw8z6DsLYMrMT_ea3MZk
+X-Proofpoint-GUID: xMHkeSi2CqnMpaGYbyj0Zg262cyz_h7v
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-23_06,2022-05-23_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
+ mlxscore=0 impostorscore=0 spamscore=0 phishscore=0 suspectscore=0
+ bulkscore=0 priorityscore=1501 malwarescore=0 clxscore=1015
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205230087
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 02:18:20PM -0700, Alexei Starovoitov wrote:
-> On Wed, May 18, 2022 at 6:54 AM Xu Kuohai <xukuohai@huawei.com> wrote:
-> >
-> > Add bpf trampoline support for arm64. Most of the logic is the same as
-> > x86.
-> >
-> > Tested on raspberry pi 4b and qemu with KASLR disabled (avoid long jump),
-> > result:
-> >  #9  /1     bpf_cookie/kprobe:OK
-> >  #9  /2     bpf_cookie/multi_kprobe_link_api:FAIL
-> >  #9  /3     bpf_cookie/multi_kprobe_attach_api:FAIL
-> >  #9  /4     bpf_cookie/uprobe:OK
-> >  #9  /5     bpf_cookie/tracepoint:OK
-> >  #9  /6     bpf_cookie/perf_event:OK
-> >  #9  /7     bpf_cookie/trampoline:OK
-> >  #9  /8     bpf_cookie/lsm:OK
-> >  #9         bpf_cookie:FAIL
-> >  #18 /1     bpf_tcp_ca/dctcp:OK
-> >  #18 /2     bpf_tcp_ca/cubic:OK
-> >  #18 /3     bpf_tcp_ca/invalid_license:OK
-> >  #18 /4     bpf_tcp_ca/dctcp_fallback:OK
-> >  #18 /5     bpf_tcp_ca/rel_setsockopt:OK
-> >  #18        bpf_tcp_ca:OK
-> >  #51 /1     dummy_st_ops/dummy_st_ops_attach:OK
-> >  #51 /2     dummy_st_ops/dummy_init_ret_value:OK
-> >  #51 /3     dummy_st_ops/dummy_init_ptr_arg:OK
-> >  #51 /4     dummy_st_ops/dummy_multiple_args:OK
-> >  #51        dummy_st_ops:OK
-> >  #55        fentry_fexit:OK
-> >  #56        fentry_test:OK
-> >  #57 /1     fexit_bpf2bpf/target_no_callees:OK
-> >  #57 /2     fexit_bpf2bpf/target_yes_callees:OK
-> >  #57 /3     fexit_bpf2bpf/func_replace:OK
-> >  #57 /4     fexit_bpf2bpf/func_replace_verify:OK
-> >  #57 /5     fexit_bpf2bpf/func_sockmap_update:OK
-> >  #57 /6     fexit_bpf2bpf/func_replace_return_code:OK
-> >  #57 /7     fexit_bpf2bpf/func_map_prog_compatibility:OK
-> >  #57 /8     fexit_bpf2bpf/func_replace_multi:OK
-> >  #57 /9     fexit_bpf2bpf/fmod_ret_freplace:OK
-> >  #57        fexit_bpf2bpf:OK
-> >  #58        fexit_sleep:OK
-> >  #59        fexit_stress:OK
-> >  #60        fexit_test:OK
-> >  #67        get_func_args_test:OK
-> >  #68        get_func_ip_test:OK
-> >  #104       modify_return:OK
-> >  #237       xdp_bpf2bpf:OK
-> >
-> > bpf_cookie/multi_kprobe_link_api and bpf_cookie/multi_kprobe_attach_api
-> > failed due to lack of multi_kprobe on arm64.
-> >
-> > Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
-> > Acked-by: Song Liu <songliubraving@fb.com>
+On 20/05/2022, 18:15:39, Christophe Leroy wrote:
 > 
-> Catalin, Will, Mark,
 > 
-> could you please ack this patch that you don't mind us
-> taking this set through bpf-next ?
+> Le 20/05/2022 à 17:57, Laurent Dufour a écrit :
+>> There is no need to read the H_BLOCK_REMOVE characteristics when running in
+>> Radix mode because this hcall is never called.
+>>
+>> Signed-off-by: Laurent Dufour <ldufour@linux.ibm.com>
+>> ---
+>>   arch/powerpc/platforms/pseries/setup.c | 3 ++-
+>>   1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/powerpc/platforms/pseries/setup.c b/arch/powerpc/platforms/pseries/setup.c
+>> index c9fcc30a0365..654d2b999c25 100644
+>> --- a/arch/powerpc/platforms/pseries/setup.c
+>> +++ b/arch/powerpc/platforms/pseries/setup.c
+>> @@ -803,7 +803,8 @@ static void __init pSeries_setup_arch(void)
+>>   
+>>   	pseries_setup_security_mitigations();
+>>   #ifdef CONFIG_PPC_64S_HASH_MMU
+>> -	pseries_lpar_read_hblkrm_characteristics();
+>> +	if (!radix_enabled())
+>> +		pseries_lpar_read_hblkrm_characteristics();
+>>   #endif
+> 
+> As far as I can see the function always exists so the #ifdef can be removed.
 
-This is on my queue of things to review alongside some other ftrace and kprobes
-patches; I'll try to get that out of the way this week.
+You're right, I'll do that in the v2
 
-From a quick glance I'm not too keen on the change to the ftrace trampoline, as
-to get rid of some existing unsoundness I'd really wanted to move that entirely
-away from using regs (and had a sketch for how to handle different op
-handlers). I'd discussed that with Steven and Masami in another thread:
+>>   
+>>   	/* By default, only probe PCI (can be overridden by rtas_pci) */
 
-  https://lore.kernel.org/linux-arm-kernel/YnJUTuOIX9YoJq23@FVFF77S0Q05N/
-
-I'll see if it's possible to make this all work together. It's not entirely
-clear to me how the FTRACE_DIRECT its are supposed to play with dynamically
-allocated trampolines, and we might need to take a step back and reconsider.
-
-Thanks,
-Mark.

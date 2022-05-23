@@ -2,65 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57CEB531826
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:53:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7DDE531B32
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240699AbiEWSez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 14:34:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37592 "EHLO
+        id S241109AbiEWSfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 14:35:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240753AbiEWSeh (ORCPT
+        with ESMTP id S241274AbiEWSfE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 14:34:37 -0400
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 722AF6CF69;
-        Mon, 23 May 2022 11:12:30 -0700 (PDT)
-Received: by mail-pl1-f180.google.com with SMTP id q18so13802279pln.12;
-        Mon, 23 May 2022 11:12:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YcM2V9lJrQoILVWR8hE1O3AxcExnhJbF35MwvFVRNF0=;
-        b=HVcTY5h0SXw5cM3/Ek/o0D5DVjf/WsJlpNVHctMRLPp8t+zDxV01ifHwl3D7cQHWeR
-         zPpMiQGWGXkPCIQsy9ukBrpPfwcl2quH0andP5ZFcqzOaOZD64NMyl1X3nlx3ykj60iH
-         +2mfx5eUW3gRjuaW18Gv5x9Kghrbgf9EetwN4m9CYGg5ebw0ZQLDgE08a7sWv5L4Kyux
-         aSsiJukb8UnAzzUaaV0cL96KzvORKdve6cPhbTPda6ChALkUDN4IFb+ViESD9+feri6u
-         wEHOqAovvpmsnnucdxtXmYYre95Pmu3YGITH8Ke8rRMjTeFiig/FI8OQvWVgsQFB+Ath
-         NzDA==
-X-Gm-Message-State: AOAM532aeeTe0pdigX1wfrhBeL6O7hRa4JXauLVguew4Gvlg+Y9Z1QWC
-        G4FCX5XjoQTZKNxnvXsy8HI=
-X-Google-Smtp-Source: ABdhPJyM/CwxpvBVN9kqgJt3dUJYAsl5xQQzoLnJApp0k9u48+L0bdeBCHhzQQ+qLqqg/d0Knkk4fQ==
-X-Received: by 2002:a17:90a:8807:b0:1df:78c7:c215 with SMTP id s7-20020a17090a880700b001df78c7c215mr247975pjn.234.1653329485047;
-        Mon, 23 May 2022 11:11:25 -0700 (PDT)
-Received: from garbanzo (136-24-173-63.cab.webpass.net. [136.24.173.63])
-        by smtp.gmail.com with ESMTPSA id x3-20020a654143000000b003c14af50610sm5025690pgp.40.2022.05.23.11.11.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 11:11:24 -0700 (PDT)
-Date:   Mon, 23 May 2022 11:11:22 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Pankaj Raghav <p.raghav@samsung.com>
-Cc:     axboe@kernel.dk, hch@lst.de, snitzer@redhat.com,
-        damien.lemoal@opensource.wdc.com, hare@suse.de,
-        Johannes.Thumshirn@wdc.com, linux-nvme@lists.infradead.org,
-        dm-devel@redhat.com, dsterba@suse.com, jiangbo.365@bytedance.com,
-        linux-kernel@vger.kernel.org, gost.dev@samsung.com,
-        linux-block@vger.kernel.org, jaegeuk@kernel.org,
-        Damien Le Moal <damien.lemoal@wdc.com>
-Subject: Re: [PATCH v5 6/7] null_blk: use zone_size_sects_shift for power of
- 2 zoned devices
-Message-ID: <20220523181122.3vjizmsx7a2mpf6z@garbanzo>
-References: <20220523161601.58078-1-p.raghav@samsung.com>
- <CGME20220523161612eucas1p102a76ba431c934230309042521018915@eucas1p1.samsung.com>
- <20220523161601.58078-7-p.raghav@samsung.com>
+        Mon, 23 May 2022 14:35:04 -0400
+Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD41035ABD
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 11:12:51 -0700 (PDT)
+Date:   Mon, 23 May 2022 11:12:12 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1653329538;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=q1YI4UvJq+RWDZGSirVLxbIlT+BTHHqOR7zZ/+4VaG0=;
+        b=UbheU5PmTAzA+/TY4MyvYTNIp3BVm0Hga9iFXmev+TjZfDbs6yzGwrYgzvQJTBTJ9RbmnL
+        NSvFACzXU2soEuy2q7l6WoleteCCASk/eCQ2IgwVnwfkGo303DSDuboNuZ1EDqBRtJKX2J
+        8e88A2HsElu6//96aMDMtFko+gwIiLE=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Dave Chinner <dchinner@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH v3 1/6] mm: memcontrol: introduce mem_cgroup_ino() and
+ mem_cgroup_get_from_ino()
+Message-ID: <YovOfEdoGHClHUK+@carbon>
+References: <20220509183820.573666-1-roman.gushchin@linux.dev>
+ <20220509183820.573666-2-roman.gushchin@linux.dev>
+ <YongvYP26K2hZ3Sf@FVFYT0MHHV2J.usts.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220523161601.58078-7-p.raghav@samsung.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+In-Reply-To: <YongvYP26K2hZ3Sf@FVFYT0MHHV2J.usts.net>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,16 +56,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 06:16:00PM +0200, Pankaj Raghav wrote:
-> Instead of doing is_power_of_2 and ilog2 operation for every IO, cache
-> the zone_size_sects_shift variable and use it for power of 2 zoned
-> devices.
+On Sun, May 22, 2022 at 03:05:33PM +0800, Muchun Song wrote:
+> On Mon, May 09, 2022 at 11:38:15AM -0700, Roman Gushchin wrote:
+> > Shrinker debugfs requires a way to represent memory cgroups without
+> > using full paths, both for displaying information and getting input
+> > from a user.
+> > 
+> > Cgroup inode number is a perfect way, already used by bpf.
+> > 
+> > This commit adds a couple of helper functions which will be used
+> > to handle memcg-aware shrinkers.
+> > 
+> > Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+> > ---
+> >  include/linux/memcontrol.h | 21 +++++++++++++++++++++
+> >  mm/memcontrol.c            | 23 +++++++++++++++++++++++
+> >  2 files changed, 44 insertions(+)
+> > 
+> > diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+> > index fe580cb96683..a6de9e5c1549 100644
+> > --- a/include/linux/memcontrol.h
+> > +++ b/include/linux/memcontrol.h
+> > @@ -831,6 +831,15 @@ static inline unsigned short mem_cgroup_id(struct mem_cgroup *memcg)
+> >  }
+> >  struct mem_cgroup *mem_cgroup_from_id(unsigned short id);
+> >  
+> > +#ifdef CONFIG_SHRINKER_DEBUG
+> > +static inline unsigned long mem_cgroup_ino(struct mem_cgroup *memcg)
+> > +{
+> > +	return memcg ? cgroup_ino(memcg->css.cgroup) : 0;
+> > +}
+> > +
+> > +struct mem_cgroup *mem_cgroup_get_from_ino(unsigned long ino);
+> > +#endif
+> > +
+> >  static inline struct mem_cgroup *mem_cgroup_from_seq(struct seq_file *m)
+> >  {
+> >  	return mem_cgroup_from_css(seq_css(m));
+> > @@ -1324,6 +1333,18 @@ static inline struct mem_cgroup *mem_cgroup_from_id(unsigned short id)
+> >  	return NULL;
+> >  }
+> >  
+> > +#ifdef CONFIG_SHRINKER_DEBUG
+> > +static inline unsigned long mem_cgroup_ino(struct mem_cgroup *memcg)
+> > +{
+> > +	return 0;
+> > +}
+> > +
+> > +static inline struct mem_cgroup *mem_cgroup_get_from_ino(unsigned long ino)
+> > +{
+> > +	return NULL;
+> > +}
+> > +#endif
+> > +
+> >  static inline struct mem_cgroup *mem_cgroup_from_seq(struct seq_file *m)
+> >  {
+> >  	return NULL;
+> > diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> > index 04cea4fa362a..e6472728fa66 100644
+> > --- a/mm/memcontrol.c
+> > +++ b/mm/memcontrol.c
+> > @@ -5018,6 +5018,29 @@ struct mem_cgroup *mem_cgroup_from_id(unsigned short id)
+> >  	return idr_find(&mem_cgroup_idr, id);
+> >  }
+> >  
+> > +#ifdef CONFIG_SHRINKER_DEBUG
+> > +struct mem_cgroup *mem_cgroup_get_from_ino(unsigned long ino)
+> > +{
+> > +	struct cgroup *cgrp;
+> > +	struct cgroup_subsys_state *css;
+> > +	struct mem_cgroup *memcg;
+> > +
+> > +	cgrp = cgroup_get_from_id(ino);
+> > +	if (!cgrp)
+> > +		return ERR_PTR(-ENOENT);
+> > +
+> > +	css = cgroup_get_e_css(cgrp, &memory_cgrp_subsys);
+> > +	if (css)
+> > +		memcg = container_of(css, struct mem_cgroup, css);
+> > +	else
+> > +		memcg = ERR_PTR(-ENOENT);
+> > +
+> > +	cgroup_put(cgrp);
 > 
-> This variable will be set to zero for non power of 2 zoned devices.
-> 
-> Suggested-by: Damien Le Moal <damien.lemoal@wdc.com>
-> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
+> I think it's better to use css_put() here since the refcount is get
+> via cgroup_get_e_css() which returns a css struct.
 
-Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+cgroup_put() is matching cgroup_get_from_id().
 
-  Luis
+The reference grabbed by cgroup_get_e_css() shouldn't be dropped
+because mem_cgroup_get_from_ino() has a "get" semantics.
+
+Thanks!

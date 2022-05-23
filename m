@@ -2,72 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C5CB530CB8
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:40:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0473D530DC3
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:42:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234044AbiEWKYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 06:24:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46706 "EHLO
+        id S234053AbiEWK0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 06:26:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233988AbiEWKYK (ORCPT
+        with ESMTP id S234159AbiEWK0F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 06:24:10 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 577A04A3D2;
-        Mon, 23 May 2022 03:24:09 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0A15811FB;
-        Mon, 23 May 2022 03:24:09 -0700 (PDT)
-Received: from [10.57.82.55] (unknown [10.57.82.55])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4CB9F3F73D;
-        Mon, 23 May 2022 03:24:07 -0700 (PDT)
-Message-ID: <6f1f48e2-a54d-58d6-8946-853cffeb55df@arm.com>
-Date:   Mon, 23 May 2022 11:24:02 +0100
+        Mon, 23 May 2022 06:26:05 -0400
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C58D4F596
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 03:26:02 -0700 (PDT)
+Received: by mail-ej1-x643.google.com with SMTP id gh17so14749881ejc.6
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 03:26:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=uc-cl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=z+uM7vIRKv3KK6/ogXLySxrVBPRCNjdMKIe5V0kgmw8=;
+        b=uUZ6E7FuKmdb0uF9pdrSh9br6/j3jz3vQbwgvFLfJt7Q/UeKhBkRcgUDuJLRLB6+l5
+         /PWS06phmVz8FKOxeechiebTFDx92JBVzWHQAtJRpOG4H8d5edK4l1h9gXvdvLLztfA2
+         qDVe8U4JbWOX9twulcuICkyQSEbYvo6xDXLYaG/hHaMmGqSKvP9eRF8sA0mCkaPvXL3m
+         XEcCv9ec3+hGOf1+IjXREFIk5cmflORgb6Otj42dUYolZBygP9U3Y7EAY079kfSPWkku
+         gpqnWBRO0rj2wSk70Cbn9fIZVJp+4jfAvjP6nHjvGvjARowxgBXqZbYEpTPSbTOaPuNZ
+         t85w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=z+uM7vIRKv3KK6/ogXLySxrVBPRCNjdMKIe5V0kgmw8=;
+        b=wBSKbdgPZgpH78wRh9ChL00uICPdJjwlI5Hi67HP5NhkIIuIfZMPnahZLp81bnMS/s
+         DvZ+Eqd9Euv6YIP0YthHXuFV6eQ6FaEi5v0cDEhoNcHVmIUBDpdR7c5L7tnKcDuB8MLb
+         0wEnsDQt41Nfby21JMNdMEfE5wzy1GBqHsx0v1/Bq5oA/zug2HVIagikfuKG7KDpaYHf
+         N6jjKywWb1vY9B194f1U8qsxnO8wr9fJJ5ScBOPXIOQ2F8YT7dw08qLFBHh/RS737URK
+         B0xLFfwJgTQlMVMkxH5haTuPK404ofdX1Ehn5mkz8OKtVILOL//3iLGpgkFJeGfOKyzL
+         qXLQ==
+X-Gm-Message-State: AOAM530bCmtAynVvYH3CVl3Ww7EsSpvzSGALyVEHTigVDmqTdV9KRUkA
+        FNsdvJik0C7UUqX8fJq6GPodQOX+tiVmQwNlfMB2Uw==
+X-Google-Smtp-Source: ABdhPJyNVa3vaINTOhg+LmR+ZNZDK3vt0POO9PVxqdrRX1/4e6NXY7vOr/6w88J10j7UfBaV7TiPy8MU9k6fZnugY3E=
+X-Received: by 2002:a17:906:f24f:b0:6fe:9b70:6d63 with SMTP id
+ gy15-20020a170906f24f00b006fe9b706d63mr17568754ejb.255.1653301560163; Mon, 23
+ May 2022 03:26:00 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 0/2] dma-mapping, remoteproc: Fix dma_mem leak after
- rproc_shutdown
-Content-Language: en-GB
-To:     Mark-PK Tsai <mark-pk.tsai@mediatek.com>, hch@lst.de
-Cc:     bjorn.andersson@linaro.org, iommu@lists.linux-foundation.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-remoteproc@vger.kernel.org, m.szyprowski@samsung.com,
-        mathieu.poirier@linaro.org, matthias.bgg@gmail.com,
-        yj.chiang@mediatek.com
-References: <20220423174650.GA29219@lst.de>
- <20220523101516.29934-1-mark-pk.tsai@mediatek.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220523101516.29934-1-mark-pk.tsai@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:640c:2cc5:b0:153:d95a:3c5d with HTTP; Mon, 23 May 2022
+ 03:25:59 -0700 (PDT)
+Reply-To: stevebrucefss@gmail.com
+From:   Steve Bruce Financial Service <camila.toledo@uc.cl>
+Date:   Mon, 23 May 2022 13:25:59 +0300
+Message-ID: <CALeUmqNYuV67Hv+1JArHojeFd63EOTd+jQ7Rk1HeXZHB4QjM3w@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=2.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FORGED_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-05-23 11:15, Mark-PK Tsai wrote:
->> Sigh.  In theory drivers should never declare coherent memory like
->> this, and there has been some work to fix remoteproc in that regard.
->>
->> But I guess until that is merged we'll need somthing like this fix.
-> 
-> Hi,
-> 
-> Thanks for your comment.
-> As I didn't see other fix of this issue, should we use this patch
-> before the remoteproc work you mentioned is merged?
-
-TBH I think it would be better "fixed" with a kmemleak_ignore() and a 
-big comment, rather than adding API cruft for something that isn't a 
-real problem. I'm quite sure that no real-world user is unbinding 
-remoteproc drivers frequently enough that leaking a 48-byte allocation 
-each time has any practical significance.
-
-Thanks,
-Robin.
+-- 
+Steve Bruce Financial Service is giving out stress-free loans to new
+applicants at a low interest rate of 2%. If interested, kindly apply
+in person via stevebrucefss@gmail.com or call +1 (815) 771-5090.
+Thanks

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 845E4531A81
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:55:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A882531C34
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:57:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239346AbiEWRFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:05:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47230 "EHLO
+        id S242238AbiEWRxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:53:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239260AbiEWREo (ORCPT
+        with ESMTP id S241359AbiEWRaG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:04:44 -0400
+        Mon, 23 May 2022 13:30:06 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6679262BC5;
-        Mon, 23 May 2022 10:04:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE014199A;
+        Mon, 23 May 2022 10:26:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0FBCDB811E9;
-        Mon, 23 May 2022 17:04:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70933C385A9;
-        Mon, 23 May 2022 17:04:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 84D63B81201;
+        Mon, 23 May 2022 17:25:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFBFCC385A9;
+        Mon, 23 May 2022 17:25:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653325480;
-        bh=KK64IlH3w9eeVXqXAmJOrVOhdQ3ukjaBlyzBvMQ66Vc=;
+        s=korg; t=1653326758;
+        bh=kSQxfRLsKbcGNHqDQ9mWHv2wLSoCgR+sGkZsvK+qVMo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PMlYIsf2mLr9+jZUE/Bohx45SOZuSlPqPkuwcfxzN8PxD+zwC+rSnpFf6MaDvF+nX
-         CO24Bj4uKLUnvhsZZmHpxFay21bmFeomOBlyqwt8DJV8HlGDnucb4jvPcMosnAxj7K
-         i7cjjMwh3Fyn8of4hr6I+l+7StMkFLwfAXl4Ro5o=
+        b=fMh7h7sR5b83wHM4oS8Xwvlno/6hJSdAdpARVRZNHyPIG0Tv9ZxLDnQM4uYs4wN0v
+         ylqrl++g3VagwVnHRf5i/jIW/ps7a6gZ3WUlXDO0gIZHyMRDplOR4rDb0fYP+Ex8yc
+         ZkDqDM3l3YoH8rZapMWtW3RFj9RCEvSNoDo6LeC4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Subject: [PATCH 4.9 07/25] mmc: core: Specify timeouts for BKOPS and CACHE_FLUSH for eMMC
-Date:   Mon, 23 May 2022 19:03:25 +0200
-Message-Id: <20220523165745.966956440@linuxfoundation.org>
+        stable@vger.kernel.org, Norbert Slusarek <nslusarek@gmx.net>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.17 049/158] perf: Fix sys_perf_event_open() race against self
+Date:   Mon, 23 May 2022 19:03:26 +0200
+Message-Id: <20220523165838.783098334@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165743.398280407@linuxfoundation.org>
-References: <20220523165743.398280407@linuxfoundation.org>
+In-Reply-To: <20220523165830.581652127@linuxfoundation.org>
+References: <20220523165830.581652127@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,46 +55,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ulf Hansson <ulf.hansson@linaro.org>
+From: Peter Zijlstra <peterz@infradead.org>
 
-commit 24ed3bd01d6a844fd5e8a75f48d0a3d10ed71bf9 upstream
+commit 3ac6487e584a1eb54071dbe1212e05b884136704 upstream.
 
-The timeout values used while waiting for a CMD6 for BKOPS or a CACHE_FLUSH
-to complete, are not defined by the eMMC spec. However, a timeout of 10
-minutes as is currently being used, is just silly for both of these cases.
-Instead, let's specify more reasonable timeouts, 120s for BKOPS and 30s for
-CACHE_FLUSH.
+Norbert reported that it's possible to race sys_perf_event_open() such
+that the looser ends up in another context from the group leader,
+triggering many WARNs.
 
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-Link: https://lore.kernel.org/r/20200122142747.5690-2-ulf.hansson@linaro.org
-Signed-off-by: Kamal Dasu <kdasu.kdev@gmail.com>
-[kamal: Drop mmc_run_bkops hunk, non-existent]
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+The move_group case checks for races against itself, but the
+!move_group case doesn't, seemingly relying on the previous
+group_leader->ctx == ctx check. However, that check is racy due to not
+holding any locks at that time.
+
+Therefore, re-check the result after acquiring locks and bailing
+if they no longer match.
+
+Additionally, clarify the not_move_group case from the
+move_group-vs-move_group race.
+
+Fixes: f63a8daa5812 ("perf: Fix event->ctx locking")
+Reported-by: Norbert Slusarek <nslusarek@gmx.net>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/mmc/core/core.c |    5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ kernel/events/core.c |   14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
---- a/drivers/mmc/core/core.c
-+++ b/drivers/mmc/core/core.c
-@@ -61,6 +61,8 @@
- /* The max erase timeout, used when host->max_busy_timeout isn't specified */
- #define MMC_ERASE_TIMEOUT_MS	(60 * 1000) /* 60 s */
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -12327,6 +12327,9 @@ SYSCALL_DEFINE5(perf_event_open,
+ 		 * Do not allow to attach to a group in a different task
+ 		 * or CPU context. If we're moving SW events, we'll fix
+ 		 * this up later, so allow that.
++		 *
++		 * Racy, not holding group_leader->ctx->mutex, see comment with
++		 * perf_event_ctx_lock().
+ 		 */
+ 		if (!move_group && group_leader->ctx != ctx)
+ 			goto err_context;
+@@ -12392,6 +12395,7 @@ SYSCALL_DEFINE5(perf_event_open,
+ 			} else {
+ 				perf_event_ctx_unlock(group_leader, gctx);
+ 				move_group = 0;
++				goto not_move_group;
+ 			}
+ 		}
  
-+#define MMC_CACHE_FLUSH_TIMEOUT_MS     (30 * 1000) /* 30s */
+@@ -12408,7 +12412,17 @@ SYSCALL_DEFINE5(perf_event_open,
+ 		}
+ 	} else {
+ 		mutex_lock(&ctx->mutex);
 +
- static const unsigned freqs[] = { 400000, 300000, 200000, 100000 };
++		/*
++		 * Now that we hold ctx->lock, (re)validate group_leader->ctx == ctx,
++		 * see the group_leader && !move_group test earlier.
++		 */
++		if (group_leader && group_leader->ctx != ctx) {
++			err = -EINVAL;
++			goto err_locked;
++		}
+ 	}
++not_move_group:
  
- /*
-@@ -2936,7 +2938,8 @@ int mmc_flush_cache(struct mmc_card *car
- 			(card->ext_csd.cache_size > 0) &&
- 			(card->ext_csd.cache_ctrl & 1)) {
- 		err = mmc_switch(card, EXT_CSD_CMD_SET_NORMAL,
--				EXT_CSD_FLUSH_CACHE, 1, 0);
-+				EXT_CSD_FLUSH_CACHE, 1,
-+				 MMC_CACHE_FLUSH_TIMEOUT_MS);
- 		if (err)
- 			pr_err("%s: cache flush error %d\n",
- 					mmc_hostname(card->host), err);
+ 	if (ctx->task == TASK_TOMBSTONE) {
+ 		err = -ESRCH;
 
 

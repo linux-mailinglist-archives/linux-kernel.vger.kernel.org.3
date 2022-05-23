@@ -2,93 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BE745310CD
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:20:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEE06531082
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:20:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235151AbiEWL5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 07:57:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60596 "EHLO
+        id S234490AbiEWK5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 06:57:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235148AbiEWL51 (ORCPT
+        with ESMTP id S234437AbiEWK5j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 07:57:27 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1B2C5251C;
-        Mon, 23 May 2022 04:57:23 -0700 (PDT)
-Received: from mail-oo1-f46.google.com ([209.85.161.46]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1N17gy-1nhb8l2T6I-012XMt; Mon, 23 May 2022 13:57:21 +0200
-Received: by mail-oo1-f46.google.com with SMTP id f2-20020a4a8f42000000b0035e74942d42so2681036ool.13;
-        Mon, 23 May 2022 04:57:21 -0700 (PDT)
-X-Gm-Message-State: AOAM532YIqqlyrk3mbC67RSmeRmG15pMXndJUdh6ynMuzCJmLtYXDxKq
-        XJZRRBLguVyJBUnvoNrQkA/U9AaTMSXtrZ1jwDE=
-X-Google-Smtp-Source: ABdhPJz25Gt24MhXl+E72qufCOdw4x39awhhvsl+Xnqa65r2iahWrusogj8vUUSxWLBZ/N0deY8KYQbSs9eoO99jFuc=
-X-Received: by 2002:a05:6902:1143:b0:64f:9ab6:691e with SMTP id
- p3-20020a056902114300b0064f9ab6691emr8642845ybu.480.1653303099023; Mon, 23
- May 2022 03:51:39 -0700 (PDT)
+        Mon, 23 May 2022 06:57:39 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48BBD24BD6;
+        Mon, 23 May 2022 03:57:25 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L6Dmt0fkmz4xYY;
+        Mon, 23 May 2022 20:57:17 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1653303438;
+        bh=ipnmT+KYlz54CrCz7ax5U6ihv1QHFR3hGtNaRZQAscM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=qLjCUhTx1VqiGmIQCxQcmy0QDFsmIhShDJUNNkChx+cw4icvfMtjZxikJKre7LIdp
+         kg6UTWVceXsNpMyh/Kuy/BharAe7qHefPsif5GRlMjuAlRPXOanR0g2mj7WHrYOOR0
+         G5ocCT4Md/tYCpvZP8JOoU8xgvRKcm06OoHaK9KYM+QRWjV59/ETEBj+kQIfaO9bU6
+         gg4VZirDXbrUN2j11NeYc4MTGwTtcqeYR6wVT/Qe0dxKyAX/+ooIUYsYZcKCzEsRX2
+         HaprDCtUSBOViAeWqYUf6EsPh5brZ641o2lxXYIyinigrjx5k0W9szHJzjJ8/QG2U5
+         t7UXH0CT6EaBw==
+Date:   Mon, 23 May 2022 20:57:16 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Kees Cook <keescook@chromium.org>,
+        David Howells <dhowells@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the kspp tree with the fscache tree
+Message-ID: <20220523205716.4a641c41@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20220516163310.44842-1-nick.hawkins@hpe.com> <CAK8P3a0914=TM9f1CNcg_PXfHvt6nHDPyrvLp=0KO4hZM2GT5w@mail.gmail.com>
- <DM4PR84MB192761B3970E4934D059C3F188D19@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
-In-Reply-To: <DM4PR84MB192761B3970E4934D059C3F188D19@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 23 May 2022 12:51:22 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1Pvn46kMoAv+HtRAOGDYcL76jPN2Wk-MqyJSPm--0sGQ@mail.gmail.com>
-Message-ID: <CAK8P3a1Pvn46kMoAv+HtRAOGDYcL76jPN2Wk-MqyJSPm--0sGQ@mail.gmail.com>
-Subject: Re: [PATCH v8 0/8] Introduce HPE GXP Architecture
-To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        "Verdun, Jean-Marie" <verdun@hpe.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        Joel Stanley <joel@jms.id.au>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:9PY63lXD/LiNRAm3aMHCQC54S3LsvnAbSYvFl+xG6YXZfXH+xga
- 6spKXnE5J1vAqgHRnvbccWt75G+TU01YfpRh+4QgITPb7WQFU/fRdLlTAketmmjx1uOIDbA
- UHbMYSWqFlZh00QZtCrvictXFJBkpLsmTIfLGgqbY9s1op5ACunJ/QUXD3Q9CtS6+ScOjii
- ty656h5YLqjAiW/sHjiUQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:/sJgCILkmTo=:xx5jLIHQD7Mqh6bNiUR1T+
- Q85BKPvNwu7+zVqGcaZEAIqg2h9SHFk5UCpOcLBt0vKBx0zU1BFT9ZXJ0YT/hO0IYdhllGW9O
- STGZzfc3Af59x7qhV3jhbW4THTkxpgwMA+RTUpIow2c+6+8dVdG11g/hJ1cUBhPUxWFq6zq4I
- muZLuW52F2/Bz11BO2X2S/0CQhKNd1WkLxGPcIAxuuRPMIwRyh+7LNeWTvs47/AG97t3Y3p7U
- jfAg11oAAWMzrTaHjMYdR42805tKjG/cbSzIG3ELyjmtrPmmNexgg6rlbgz/BM6FW+YdTD5KE
- vkxz77wJX7mOTh7G0krZDCMdI4qsT5I0EZP4kd1XNKtv8X7xFuWQo24dt3Prof/OjDrjapBev
- 0oeWzaUGGevMXH1nuRs4hDcqQZXW/2jfCD2yoPW1eHD3ZuMuVqr8LbzyroKuwxJgKvFrWSblu
- 51fOdPwOlJsZzMbi8PqafsdC16YLrmBHdlMJDoc4leMEvt2LQD/QqDKMEb8fN/pvPRww6Vh1f
- 7pc0dl3EGN5YoYiX6nuseNJ15Xu9ixwAyPGZzN2c7JY04xftbtjIuwn1P2LAcqwEnoQtMmczy
- YL0LbdCtTA7e7yJposRc1yxEmhmlpy3CSlCzTvbZ86Plg2e1PQz6w6VN6ue0OYdFTxxgh01It
- UXNYPpJsmhsZFAgsuCMQiWSYltX154i9Lmk6UyUCH6RDiTCrP3Lp0JkUlZDdpQu6FMd0zlH0s
- RU5SMhN/hJoJdcUWt3uC67lRgIObrS7HmMpF+SwvQrVQxAjIsmmIMGPRPKcmeJ7/LtWWc4d86
- 1eght4I0CKgXiyas3xT67sBEnc2WFeiHBnsJx0+7J3T8nSOL3Fg/QCv/BG7dYyQAf8UzvhtZk
- RFbPcUWOXgx/lEMn23QA==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/mHPv+uWcSHFbhN1peCdQU8l";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 3:12 PM Hawkins, Nick <nick.hawkins@hpe.com> wrote:
->
-> We have a talk planned for the North America Open Source Summit (June 20-24)
-> and it would be great if this patch set could be in Linux by then. If it is not possible
-> we can handle that.
+--Sig_/mHPv+uWcSHFbhN1peCdQU8l
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-That's a good enough reason for me, I'll see what I can do, and will
-keep it in the
-arm/late branch until next week. If everything goes well with the soc
-tree and your
-patches, I'll send it on then, otherwise it will have to wait a release.
+Hi all,
 
-      Arnd
+Today's linux-next merge of the kspp tree got a conflict in:
+
+  include/linux/netfs.h
+
+between commit:
+
+  713423282ae1 ("netfs: Fix gcc-12 warning by embedding vfs inode in netfs_=
+i_context")
+
+from the fscache tree and commit:
+
+  3b5eed3c71a2 ("netfs: Eliminate Clang randstruct warning")
+
+from the kspp tree.
+
+I fixed it up (I just used the former) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/mHPv+uWcSHFbhN1peCdQU8l
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKLaIwACgkQAVBC80lX
+0GxJPAgAl0ATBZCiW5HFQtqyWIOy4ArICRqcAVaLJGEhnz0wnexaSqN0PtqA+zWi
+xrt+jPAqydSee2FNGmWjqUtLiO3X+aI2hN/87kx8rZrjCYmCxnEiNVi3Aq88aAcA
+OTAo6tv5diaqG6r96LgkBCUKu3xPfb7eDJB38/UP6WnT/KdcU8d8doOZL8mw6h8P
+5EXlA/rVqJtsl/y8ifxchImACf63afogT2If6Pr7Rb3m04FVZUKLPFosbuk5cI2r
+EMp5/8WkgMLAySWEx83ylfhyISfseMMVk/NrU7xH6kpyFnLq1P8Y0ppv8lF9q8sx
+GTDE4ePXnWLjGlAj859tb0uuT48Z/Q==
+=UZBv
+-----END PGP SIGNATURE-----
+
+--Sig_/mHPv+uWcSHFbhN1peCdQU8l--

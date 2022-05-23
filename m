@@ -2,100 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9792A531291
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:22:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B45DC5314CE
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:26:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236877AbiEWOJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 10:09:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52848 "EHLO
+        id S236889AbiEWOKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 10:10:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236784AbiEWOJD (ORCPT
+        with ESMTP id S231747AbiEWOKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 10:09:03 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B17C43385;
-        Mon, 23 May 2022 07:09:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653314942; x=1684850942;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=CP8ihjKGx/8QsyN9SA++OSx8EsR3YUJySmWvuEJ3E+Y=;
-  b=TlgaClV7hMQLmBeULz/zHdnutwRbU63nMkLIdeAmEOLfWWnwG0BkJJAo
-   aPMrCy1YSRYkKqG8PRZMTXcXM/1GejCP3R+0OxXm9ZGG2SqxOfLgxwATQ
-   irM4xyqvJxiCwSpLS2wunb2jNf0rwCRUy11MSjW+vfkNiJRtUNQMJ6eFE
-   s/kWaXeN4Ym6FX0UhTv5iRFSoA+Z9iUREX0Xz1xc3Bf7OZ1owTAezuQLs
-   xWUxxD6QZIRVyM08VHY5J7rGX2oPbMCH7f64TB0gQAJp/o7vgFh9k6qA5
-   OKUqwfLUqUzxr8p+bxX3NRh1Jz776FhB/TSX2QwnzGmyI2lcpLrgrOi18
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="253109280"
-X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
-   d="scan'208";a="253109280"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 07:09:01 -0700
-X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
-   d="scan'208";a="558660848"
-Received: from tower.bj.intel.com ([10.238.157.62])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 07:08:57 -0700
-From:   Yanfei Xu <yanfei.xu@intel.com>
-To:     pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
-        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, wei.w.wang@intel.com,
-        kan.liang@intel.com
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] KVM: x86: Fix the intel_pt PMI handling wrongly considered from guest
-Date:   Mon, 23 May 2022 22:08:21 +0800
-Message-Id: <20220523140821.1345605-1-yanfei.xu@intel.com>
-X-Mailer: git-send-email 2.32.0
+        Mon, 23 May 2022 10:10:19 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04616590A1;
+        Mon, 23 May 2022 07:10:18 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id gg20so14190024pjb.1;
+        Mon, 23 May 2022 07:10:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=R3RSpzzzY3JZZbYrwfIv8X7HA01iUXqRO11CiRRnNTA=;
+        b=CCaXciB0HrPIfHW4OYFfp8Xu+XcV8jkOLQieBcUvCvw8ktgh5+W7sS5XCmfgoOqJvA
+         FUdVGvohBwrH3OxvN/j1TSAbchsq5yCUjHPRuQcKBR8FVsN2+G2ZamzujfGCBiM4WgB4
+         HhhJ1XuXymf7noXgUUUr6Acs81sv4GIJWCbN/SoEwti9MLDODJT2GGX2JVsB9XWLgA7t
+         usBMPdNt083prkxSZaF6Y1BkfuQPQz0SKOUGTIGPM8YMXmlkw4L1hBjlkIxKT0+6z4U6
+         Awn37ymRsYTm0+R4subOFSdGXLv9ETh+rqKAhZq9/mehFGeO8g27zTnKeDWaa7nCTmlx
+         1Rlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=R3RSpzzzY3JZZbYrwfIv8X7HA01iUXqRO11CiRRnNTA=;
+        b=E8LQJLBklBFfH/MbUgF/Jl+p72kYc9nP6N8KDqvI03qJbNsxAySSVLrB9xa6AGVRJ8
+         AVD1whkyAeFkYa8nB0M+9I+SYY8CwAVA3rtpEspafDnsGdLsfEUa8RNy83vYTfiaMiId
+         e3/M5TeK3pOq40BAbqPBiqiMqxlNdRgjAz5B6YqmVBpWzuakd9NYddju3bPjUkWYrdPf
+         BsfYgbTuDcoq0FxbrrW4F0q/Y/cAPVLY4xiVk0JJiK242zUvpXMEun5wiLeZIlSJO+EG
+         auBpoy8d3XbuOm4DQUjvVxpPv+ya/rPad0VeCtHg95TI9llEQJvuLkyqzZs7xDRkL2ZP
+         Lmog==
+X-Gm-Message-State: AOAM533cpkP0jhyQkPTrp+MCF2GZlw663xj2oGewwR/cEuxgEut+3oo5
+        0Wo+te2PVxFu9fQmZx8dmXcnRFxeUvtH+Q==
+X-Google-Smtp-Source: ABdhPJwnwzZ247rGnWWT561/VOBtHcUhdKJaqnbkD3UvumIf37wGGxc3SxdbdgOwKLJor6GuR3pLNw==
+X-Received: by 2002:a17:902:a517:b0:161:e5f2:9a26 with SMTP id s23-20020a170902a51700b00161e5f29a26mr19611785plq.132.1653315017546;
+        Mon, 23 May 2022 07:10:17 -0700 (PDT)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id jb11-20020a17090b408b00b001dcf9fe5cddsm7225190pjb.38.2022.05.23.07.10.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 May 2022 07:10:17 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] power/reset: arm-versatile: Fix refcount leak in versatile_reboot_probe
+Date:   Mon, 23 May 2022 18:10:09 +0400
+Message-Id: <20220523141009.52965-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When kernel handles the vm-exit caused by external interrupts and NMI,
-it always set a type of kvm_intr_type to handling_intr_from_guest to
-tell if it's dealing an IRQ or NMI. For the PMI scenario, it could be
-IRQ or NMI.
-However the intel_pt PMI certainly is a NMI PMI, hence using
-kvm_handling_nmi_from_guest() to distinguish if the intel_pt PMI comes
-from guest is more appropriate. This modification can avoid the host
-wrongly considered the intel_pt PMI comes from a guest once the host
-intel_pt PMI breaks the handling of vm-exit of external interrupts.
+of_find_matching_node_and_match() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+Add missing of_node_put() to avoid refcount leak.
 
-Fixes: db215756ae59 ("KVM: x86: More precisely identify NMI from guest when handling PMI")
-Signed-off-by: Yanfei Xu <yanfei.xu@intel.com>
+Fixes: 0e545f57b708 ("power: reset: driver for the Versatile syscon reboot")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 ---
-v1->v2:
-1.Fix vmx_handle_intel_pt_intr() directly instead of changing the generic function.
-2.Tune the commit message.
+ drivers/power/reset/arm-versatile-reboot.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-v2->v3:
-Add the NULL pointer check of variable "vcpu".
-
- arch/x86/kvm/vmx/vmx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 610355b9ccce..982df9c000d3 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -7856,7 +7856,7 @@ static unsigned int vmx_handle_intel_pt_intr(void)
- 	struct kvm_vcpu *vcpu = kvm_get_running_vcpu();
+diff --git a/drivers/power/reset/arm-versatile-reboot.c b/drivers/power/reset/arm-versatile-reboot.c
+index 08d0a07b58ef..c7624d7611a7 100644
+--- a/drivers/power/reset/arm-versatile-reboot.c
++++ b/drivers/power/reset/arm-versatile-reboot.c
+@@ -146,6 +146,7 @@ static int __init versatile_reboot_probe(void)
+ 	versatile_reboot_type = (enum versatile_reboot)reboot_id->data;
  
- 	/* '0' on failure so that the !PT case can use a RET0 static call. */
--	if (!kvm_arch_pmi_in_guest(vcpu))
-+	if (!vcpu || !kvm_handling_nmi_from_guest(vcpu))
- 		return 0;
+ 	syscon_regmap = syscon_node_to_regmap(np);
++	of_node_put(np);
+ 	if (IS_ERR(syscon_regmap))
+ 		return PTR_ERR(syscon_regmap);
  
- 	kvm_make_request(KVM_REQ_PMI, vcpu);
 -- 
-2.32.0
+2.25.1
 

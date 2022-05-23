@@ -2,51 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66F94531946
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:54:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF9535319FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:55:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245356AbiEWSRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 14:17:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40850 "EHLO
+        id S245128AbiEWSRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 14:17:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343787AbiEWSIj (ORCPT
+        with ESMTP id S1343809AbiEWSIk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 14:08:39 -0400
+        Mon, 23 May 2022 14:08:40 -0400
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9747C56F89;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9703956757;
         Mon, 23 May 2022 10:51:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653328306; x=1684864306;
-  h=from:to:cc:subject:date:message-id;
-  bh=Y+6FY1VRrESdu7grrMsznG+ZxcJXLgXgUVoTemJ1qdA=;
-  b=YNr/oQN465gxMNoY1590fDXiBChqRcBYlFPukNbps3ABB9u9R2IXJiv3
-   ndf6pQtJl9oclCoq4yQhWIeZEURQix8L+KVN6/whQCtIslig1mG8Ft8Qm
-   QQ6+hNeLASVM+U/qd2wGbDsLwHHg2MQl8Xzqzky9IT5r00APdJeQ8gb7n
-   kqTLctR6T6/v5CJZQF00mBJ4Q3zH9LelhZFdGG1QRZnnBvWFrDIQ2c0wS
-   qojbmIMTdKwE46TOOqWm1b3hUb7jIBGz3Gpv2LOfZT+Tq9sVVdVblrsoK
-   S1DtkV+c8e9+0n8vQxtJXHXtzpqZXT/XdxNBNYepQNi8fK/p3+0DEO1s9
+  t=1653328307; x=1684864307;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uZr5P/6fGVrb/f5Wy8Y9usW4kb9alNg7rTyBMTx9lZg=;
+  b=QmzIs7y/McxjsHdj4Sx6bThXikeIis/i8LcrhE2Y5qKx+VYjp2ntv005
+   TFy5Hj2i39SRFjvS01J49p2oQJkInGVKaBkZkvS4A0L5qcZasuC7mVzfo
+   H6RfDneNP+njpT5Q2JPNLGaoG5qTQ0/Mghrruh9SNSYNciXDR49xRx6P0
+   ZAsperglivIArlazk8lboqP60YIV6GD+7xldBLeab5UT4B8To/cib43k/
+   smeh9XwrF+X+36BnOyoG/gIPLbGqvw3zib33DdQ8hZcbgVqbWWgHhbOVF
+   c0nzF7ZOJ+5QLLvp07CrHk5Dr2BMdm3jVsRxc9+1ZriDpGefNQvEv7m9p
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="270876978"
+X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="270876862"
 X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
-   d="scan'208";a="270876978"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 10:51:45 -0700
+   d="scan'208";a="270876862"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 10:51:16 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
-   d="scan'208";a="558779430"
-Received: from srpawnik.iind.intel.com ([10.99.123.68])
-  by orsmga002.jf.intel.com with ESMTP; 23 May 2022 10:51:42 -0700
-From:   Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
-To:     rafael@kernel.org, srinivas.pandruvada@linux.intel.com,
-        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
-        atenart@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     sumeet.r.pawnikar@intel.com
-Subject: [PATCH v2] thermal: int340x: Add Meteor Lake PCI device id
-Date:   Mon, 23 May 2022 23:18:52 +0530
-Message-Id: <20220523174852.30725-1-sumeet.r.pawnikar@intel.com>
-X-Mailer: git-send-email 2.17.1
+   d="scan'208";a="716816774"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 23 May 2022 10:51:13 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ntCD3-0001KQ-9H;
+        Mon, 23 May 2022 17:51:13 +0000
+Date:   Tue, 24 May 2022 01:50:32 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Taniya Das <quic_tdas@quicinc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     kbuild-all@lists.01.org, Douglas Anderson <dianders@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Taniya Das <quic_tdas@quicinc.com>
+Subject: Re: [PATCH v5] arm64: dts: qcom: sc7280: Add lpasscore & lpassaudio
+ clock controllers
+Message-ID: <202205240130.JscI0RkD-lkp@intel.com>
+References: <20220523100058.26241-1-quic_tdas@quicinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220523100058.26241-1-quic_tdas@quicinc.com>
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -57,42 +70,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Meteor Lake PCI ID for processor thermal device.
+Hi Taniya,
 
-Signed-off-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
-Reviewed-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
-v2: Replaced Signed-off-by with Reviewed-by as per comment from
-    Srinivas Pandruvada
----
- drivers/thermal/intel/int340x_thermal/processor_thermal_device.h | 1 +
- .../thermal/intel/int340x_thermal/processor_thermal_device_pci.c | 1 +
- 2 files changed, 2 insertions(+)
+Thank you for the patch! Yet something to improve:
 
-diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
-index 49932a68abac..7d52fcff4937 100644
---- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
-+++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
-@@ -24,6 +24,7 @@
- #define PCI_DEVICE_ID_INTEL_HSB_THERMAL	0x0A03
- #define PCI_DEVICE_ID_INTEL_ICL_THERMAL	0x8a03
- #define PCI_DEVICE_ID_INTEL_JSL_THERMAL	0x4E03
-+#define PCI_DEVICE_ID_INTEL_MTLP_THERMAL	0x7D03
- #define PCI_DEVICE_ID_INTEL_RPL_THERMAL	0xA71D
- #define PCI_DEVICE_ID_INTEL_SKL_THERMAL	0x1903
- #define PCI_DEVICE_ID_INTEL_TGL_THERMAL	0x9A03
-diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-index ca40b0967cdd..c2dc4c158b9d 100644
---- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-+++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-@@ -358,6 +358,7 @@ static SIMPLE_DEV_PM_OPS(proc_thermal_pci_pm, proc_thermal_pci_suspend,
- 
- static const struct pci_device_id proc_thermal_pci_ids[] = {
- 	{ PCI_DEVICE_DATA(INTEL, ADL_THERMAL, PROC_THERMAL_FEATURE_RAPL | PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_MBOX) },
-+	{ PCI_DEVICE_DATA(INTEL, MTLP_THERMAL, PROC_THERMAL_FEATURE_RAPL | PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_MBOX) },
- 	{ PCI_DEVICE_DATA(INTEL, RPL_THERMAL, PROC_THERMAL_FEATURE_RAPL | PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_MBOX) },
- 	{ },
- };
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on v5.18]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Taniya-Das/arm64-dts-qcom-sc7280-Add-lpasscore-lpassaudio-clock-controllers/20220523-180437
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: arm64-randconfig-r026-20220522 (https://download.01.org/0day-ci/archive/20220524/202205240130.JscI0RkD-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/6a56b4899f4e80f53613ce8e9569e2d1ca46f46a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Taniya-Das/arm64-dts-qcom-sc7280-Add-lpasscore-lpassaudio-clock-controllers/20220523-180437
+        git checkout 6a56b4899f4e80f53613ce8e9569e2d1ca46f46a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r0.dts:17:
+>> arch/arm64/boot/dts/qcom/sc7280.dtsi:11:10: fatal error: dt-bindings/clock/qcom,lpassaudiocc-sc7280.h: No such file or directory
+      11 | #include <dt-bindings/clock/qcom,lpassaudiocc-sc7280.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   compilation terminated.
+
+
+vim +11 arch/arm64/boot/dts/qcom/sc7280.dtsi
+
+  > 11	#include <dt-bindings/clock/qcom,lpassaudiocc-sc7280.h>
+    12	#include <dt-bindings/clock/qcom,lpasscorecc-sc7280.h>
+    13	#include <dt-bindings/clock/qcom,rpmh.h>
+    14	#include <dt-bindings/clock/qcom,videocc-sc7280.h>
+    15	#include <dt-bindings/gpio/gpio.h>
+    16	#include <dt-bindings/interconnect/qcom,osm-l3.h>
+    17	#include <dt-bindings/interconnect/qcom,sc7280.h>
+    18	#include <dt-bindings/interrupt-controller/arm-gic.h>
+    19	#include <dt-bindings/mailbox/qcom-ipcc.h>
+    20	#include <dt-bindings/power/qcom-rpmpd.h>
+    21	#include <dt-bindings/reset/qcom,sdm845-aoss.h>
+    22	#include <dt-bindings/reset/qcom,sdm845-pdc.h>
+    23	#include <dt-bindings/soc/qcom,rpmh-rsc.h>
+    24	#include <dt-bindings/thermal/thermal.h>
+    25	
+
 -- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E6CF531955
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:54:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A02B53176A
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:53:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244636AbiEWSLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 14:11:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38190 "EHLO
+        id S240734AbiEWR34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:29:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242420AbiEWRhi (ORCPT
+        with ESMTP id S241122AbiEWRV5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:37:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD94250020;
-        Mon, 23 May 2022 10:31:23 -0700 (PDT)
+        Mon, 23 May 2022 13:21:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7290E75200;
+        Mon, 23 May 2022 10:18:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2849261117;
-        Mon, 23 May 2022 17:28:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 151E5C385A9;
-        Mon, 23 May 2022 17:28:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D495460B2C;
+        Mon, 23 May 2022 17:16:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2A96C385AA;
+        Mon, 23 May 2022 17:16:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326909;
-        bh=ICOpqBu5adW1yGmT60gbTxzEdRQB8LpjWZum/HlBgtk=;
+        s=korg; t=1653326217;
+        bh=Jmahjn+knvlSNapX1inMo0lzVlsJsFsC5BvSMtIWq8k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zSt6422Zk3PKt6zaocPjQEfarHoRsTvSQDMZmKuS+XlUpPTySt18V83dU5iwQ0U8+
-         +T32kl7SS5iaF2rdDhA4YNsXZznUdCL6Ifv46z27mErfNsKSJ9WjCHf70GimxSf5Hx
-         v/O0ns5C7fn7TDvYOPly3OdygRJ1hU6NbhJEAezc=
+        b=rGfKFBtgFqaknnU8HAjriHUACLov8OuNy5B0P7e+psa8VqSZOh6SRLI1vXcZW4a3Y
+         wKUwdUYZv32E+bj0F7CcJFXgSl/tsqrj/9sR45YSFHYysIiPsM/lI04um5kZqu+nea
+         K3sr4Vup5Jdl4DTQVQQ259h1K06nUxJzXSe+c8Ss=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lucas De Marchi <lucas.demarchi@intel.com>,
-        Anusha Srivatsa <anusha.srivatsa@intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-Subject: [PATCH 5.17 064/158] drm/i915/dmc: Add MMIO range restrictions
-Date:   Mon, 23 May 2022 19:03:41 +0200
-Message-Id: <20220523165841.466221014@linuxfoundation.org>
+        stable@vger.kernel.org, Robert Richter <rrichter@amd.com>,
+        Terry Bowman <terry.bowman@amd.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Mario Limonciello <Mario.Limonciello@amd.com>
+Subject: [PATCH 5.15 013/132] Watchdog: sp5100_tco: Move timer initialization into function
+Date:   Mon, 23 May 2022 19:03:42 +0200
+Message-Id: <20220523165825.809764522@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165830.581652127@linuxfoundation.org>
-References: <20220523165830.581652127@linuxfoundation.org>
+In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
+References: <20220523165823.492309987@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,122 +58,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Anusha Srivatsa <anusha.srivatsa@intel.com>
+From: Terry Bowman <terry.bowman@amd.com>
 
-commit 54395a33718af1c04b5098203335b25382291a16 upstream.
+commit abd71a948f7aab47ca49d3e7fe6afa6c48c8aae0 upstream.
 
-Bspec has added some steps that check forDMC MMIO range before
-programming them
+Refactor driver's timer initialization into new function. This is needed
+inorder to support adding new device layouts while using common timer
+initialization.
 
-v2: Fix for CI
-v3: move register defines to .h (Anusha)
-- Check MMIO restrictions per pipe
-- Add MMIO restricton for v1 dmc header as well (Lucas)
-v4: s/_PICK/_PICK_EVEN and use it only for Pipe DMC scenario.
-- clean up sanity check logic.(Lucas)
-- Add MMIO range for RKL as well.(Anusha)
-v5: Use DISPLAY_VER instead of per platform check (Lucas)
-
-BSpec: 49193
-
-Cc: stable@vger.kernel.org
-Cc: Lucas De Marchi <lucas.demarchi@intel.com>
-Signed-off-by: Anusha Srivatsa <anusha.srivatsa@intel.com>
-Reviewed-by: Lucas De Marchi <lucas.demarchi@intel.com>
-Signed-off-by: Lucas De Marchi <lucas.demarchi@intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220511000847.1068302-1-anusha.srivatsa@intel.com
-(cherry picked from commit 21c47196aec3a93f913a7515e1e7b30e6c54d6c6)
-Signed-off-by: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+Co-developed-by: Robert Richter <rrichter@amd.com>
+Signed-off-by: Robert Richter <rrichter@amd.com>
+Signed-off-by: Terry Bowman <terry.bowman@amd.com>
+Tested-by: Jean Delvare <jdelvare@suse.de>
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Link: https://lore.kernel.org/r/20220202153525.1693378-2-terry.bowman@amd.com
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: Mario Limonciello <Mario.Limonciello@amd.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/i915/display/intel_dmc.c |   44 +++++++++++++++++++++++++++++++
- drivers/gpu/drm/i915/i915_reg.h          |   16 +++++++++++
- 2 files changed, 60 insertions(+)
+ drivers/watchdog/sp5100_tco.c |   65 +++++++++++++++++++++++-------------------
+ 1 file changed, 36 insertions(+), 29 deletions(-)
 
---- a/drivers/gpu/drm/i915/display/intel_dmc.c
-+++ b/drivers/gpu/drm/i915/display/intel_dmc.c
-@@ -367,6 +367,44 @@ static void dmc_set_fw_offset(struct int
- 	}
+--- a/drivers/watchdog/sp5100_tco.c
++++ b/drivers/watchdog/sp5100_tco.c
+@@ -215,6 +215,41 @@ static u32 sp5100_tco_read_pm_reg32(u8 i
+ 	return val;
  }
  
-+static bool dmc_mmio_addr_sanity_check(struct intel_dmc *dmc,
-+				       const u32 *mmioaddr, u32 mmio_count,
-+				       int header_ver, u8 dmc_id)
++static int sp5100_tco_timer_init(struct sp5100_tco *tco)
 +{
-+	struct drm_i915_private *i915 = container_of(dmc, typeof(*i915), dmc);
-+	u32 start_range, end_range;
-+	int i;
++	struct watchdog_device *wdd = &tco->wdd;
++	struct device *dev = wdd->parent;
++	u32 val;
 +
-+	if (dmc_id >= DMC_FW_MAX) {
-+		drm_warn(&i915->drm, "Unsupported firmware id %u\n", dmc_id);
-+		return false;
++	val = readl(SP5100_WDT_CONTROL(tco->tcobase));
++	if (val & SP5100_WDT_DISABLED) {
++		dev_err(dev, "Watchdog hardware is disabled\n");
++		return -ENODEV;
 +	}
 +
-+	if (header_ver == 1) {
-+		start_range = DMC_MMIO_START_RANGE;
-+		end_range = DMC_MMIO_END_RANGE;
-+	} else if (dmc_id == DMC_FW_MAIN) {
-+		start_range = TGL_MAIN_MMIO_START;
-+		end_range = TGL_MAIN_MMIO_END;
-+	} else if (DISPLAY_VER(i915) >= 13) {
-+		start_range = ADLP_PIPE_MMIO_START;
-+		end_range = ADLP_PIPE_MMIO_END;
-+	} else if (DISPLAY_VER(i915) >= 12) {
-+		start_range = TGL_PIPE_MMIO_START(dmc_id);
-+		end_range = TGL_PIPE_MMIO_END(dmc_id);
-+	} else {
-+		drm_warn(&i915->drm, "Unknown mmio range for sanity check");
-+		return false;
-+	}
++	/*
++	 * Save WatchDogFired status, because WatchDogFired flag is
++	 * cleared here.
++	 */
++	if (val & SP5100_WDT_FIRED)
++		wdd->bootstatus = WDIOF_CARDRESET;
 +
-+	for (i = 0; i < mmio_count; i++) {
-+		if (mmioaddr[i] < start_range || mmioaddr[i] > end_range)
-+			return false;
-+	}
++	/* Set watchdog action to reset the system */
++	val &= ~SP5100_WDT_ACTION_RESET;
++	writel(val, SP5100_WDT_CONTROL(tco->tcobase));
 +
-+	return true;
++	/* Set a reasonable heartbeat before we stop the timer */
++	tco_timer_set_timeout(wdd, wdd->timeout);
++
++	/*
++	 * Stop the TCO before we change anything so we don't race with
++	 * a zeroed timer.
++	 */
++	tco_timer_stop(wdd);
++
++	return 0;
 +}
 +
- static u32 parse_dmc_fw_header(struct intel_dmc *dmc,
- 			       const struct intel_dmc_header_base *dmc_header,
- 			       size_t rem_size, u8 dmc_id)
-@@ -436,6 +474,12 @@ static u32 parse_dmc_fw_header(struct in
- 		return 0;
- 	}
+ static int sp5100_tco_setupdevice(struct device *dev,
+ 				  struct watchdog_device *wdd)
+ {
+@@ -340,35 +375,7 @@ static int sp5100_tco_setupdevice(struct
+ 	/* Setup the watchdog timer */
+ 	tco_timer_enable(tco);
  
-+	if (!dmc_mmio_addr_sanity_check(dmc, mmioaddr, mmio_count,
-+					dmc_header->header_ver, dmc_id)) {
-+		drm_err(&i915->drm, "DMC firmware has Wrong MMIO Addresses\n");
-+		return 0;
-+	}
-+
- 	for (i = 0; i < mmio_count; i++) {
- 		dmc_info->mmioaddr[i] = _MMIO(mmioaddr[i]);
- 		dmc_info->mmiodata[i] = mmiodata[i];
---- a/drivers/gpu/drm/i915/i915_reg.h
-+++ b/drivers/gpu/drm/i915/i915_reg.h
-@@ -7938,6 +7938,22 @@ enum {
- /* MMIO address range for DMC program (0x80000 - 0x82FFF) */
- #define DMC_MMIO_START_RANGE	0x80000
- #define DMC_MMIO_END_RANGE	0x8FFFF
-+#define DMC_V1_MMIO_START_RANGE	0x80000
-+#define TGL_MAIN_MMIO_START	0x8F000
-+#define TGL_MAIN_MMIO_END	0x8FFFF
-+#define _TGL_PIPEA_MMIO_START	0x92000
-+#define _TGL_PIPEA_MMIO_END	0x93FFF
-+#define _TGL_PIPEB_MMIO_START	0x96000
-+#define _TGL_PIPEB_MMIO_END	0x97FFF
-+#define ADLP_PIPE_MMIO_START	0x5F000
-+#define ADLP_PIPE_MMIO_END	0x5FFFF
-+
-+#define TGL_PIPE_MMIO_START(dmc_id)	_PICK_EVEN(((dmc_id) - 1), _TGL_PIPEA_MMIO_START,\
-+						_TGL_PIPEB_MMIO_START)
-+
-+#define TGL_PIPE_MMIO_END(dmc_id)	_PICK_EVEN(((dmc_id) - 1), _TGL_PIPEA_MMIO_END,\
-+						_TGL_PIPEB_MMIO_END)
-+
- #define SKL_DMC_DC3_DC5_COUNT	_MMIO(0x80030)
- #define SKL_DMC_DC5_DC6_COUNT	_MMIO(0x8002C)
- #define BXT_DMC_DC3_DC5_COUNT	_MMIO(0x80038)
+-	val = readl(SP5100_WDT_CONTROL(tco->tcobase));
+-	if (val & SP5100_WDT_DISABLED) {
+-		dev_err(dev, "Watchdog hardware is disabled\n");
+-		ret = -ENODEV;
+-		goto unreg_region;
+-	}
+-
+-	/*
+-	 * Save WatchDogFired status, because WatchDogFired flag is
+-	 * cleared here.
+-	 */
+-	if (val & SP5100_WDT_FIRED)
+-		wdd->bootstatus = WDIOF_CARDRESET;
+-	/* Set watchdog action to reset the system */
+-	val &= ~SP5100_WDT_ACTION_RESET;
+-	writel(val, SP5100_WDT_CONTROL(tco->tcobase));
+-
+-	/* Set a reasonable heartbeat before we stop the timer */
+-	tco_timer_set_timeout(wdd, wdd->timeout);
+-
+-	/*
+-	 * Stop the TCO before we change anything so we don't race with
+-	 * a zeroed timer.
+-	 */
+-	tco_timer_stop(wdd);
+-
+-	release_region(SP5100_IO_PM_INDEX_REG, SP5100_PM_IOPORTS_SIZE);
+-
+-	return 0;
++	ret = sp5100_tco_timer_init(tco);
+ 
+ unreg_region:
+ 	release_region(SP5100_IO_PM_INDEX_REG, SP5100_PM_IOPORTS_SIZE);
 
 

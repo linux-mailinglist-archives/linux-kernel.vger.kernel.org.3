@@ -2,126 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6B48530E37
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:43:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E884530E4D
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:43:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233646AbiEWJgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 05:36:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52594 "EHLO
+        id S233529AbiEWJh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 05:37:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233370AbiEWJep (ORCPT
+        with ESMTP id S233414AbiEWJhM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 05:34:45 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DADC4B1F9;
-        Mon, 23 May 2022 02:34:42 -0700 (PDT)
-Received: from zn.tnic (p200300ea974657b3329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9746:57b3:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E65A01EC018C;
-        Mon, 23 May 2022 11:34:36 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1653298477;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=wfztkaByN97ueSWPSqUqhksXQIUMUHKpNYslfU+pPrg=;
-        b=ebzCyRjlW0zFUmL1cfxuMt0O5oJoWih0LGLxXewxEsVV0HwLlSAaeluWxaSLSeO8QNDjlX
-        RcOcKTTgh1zkPPm6FIe+5BQlCC9pN1+LFFgLzn53igTIFT5imcU7xC2Riu5Mj/+AFraVpv
-        uPGo0V8r+Ar0u93K+6/I7bDk6Lzm3r4=
-Date:   Mon, 23 May 2022 11:34:31 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Medad Young <medadyoung@gmail.com>
-Cc:     rric@kernel.org, James Morse <james.morse@arm.com>,
-        tony.luck@intel.com, Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Patrick Venture <venture@google.com>, KWLIU@nuvoton.com,
-        YSCHU@nuvoton.com, JJLIU0@nuvoton.com, KFTING <KFTING@nuvoton.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>, ctcchien@nuvoton.com,
-        linux-edac <linux-edac@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>
-Subject: Re: [PATCH v9 1/3] ARM: dts: nuvoton: Add memory controller node
-Message-ID: <YotVJ+ExcrQshM4A@zn.tnic>
-References: <20220510031056.1657-1-ctcchien@nuvoton.com>
- <20220510031056.1657-2-ctcchien@nuvoton.com>
- <YoUwe6Tj4Uh6ukc8@zn.tnic>
- <CAHpyw9fjThEP4NuU08aNJ_raHpq9-j9KgBb8YuZ_shXTjhm3JA@mail.gmail.com>
- <YoYPGWreQuF9QZzc@zn.tnic>
- <CAHpyw9es-n+bW9SsGBmmr3ghBFk8Q8E6ZTbE42BpU-6p8LfHtw@mail.gmail.com>
- <YoeE8cBhUkF3K44/@zn.tnic>
- <CAHpyw9fAfNf8j++JtLhuudSWj6N1-KAxA_fxEGL998WNVXTPdQ@mail.gmail.com>
+        Mon, 23 May 2022 05:37:12 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D92A014088;
+        Mon, 23 May 2022 02:36:50 -0700 (PDT)
+Received: from mail-yb1-f182.google.com ([209.85.219.182]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1Mi4un-1nO7KQ2abR-00e77y; Mon, 23 May 2022 11:36:47 +0200
+Received: by mail-yb1-f182.google.com with SMTP id x2so24022580ybi.8;
+        Mon, 23 May 2022 02:36:47 -0700 (PDT)
+X-Gm-Message-State: AOAM531/KFI3EEEA5qJ+lfkJMawBRXrxOswi7t61JSInzPAP2Y4ubNBS
+        HCE0nnXGeHfcn12XhU2/CWNHpL2Xf3wqX+OBKSI=
+X-Google-Smtp-Source: ABdhPJxEXe06M3axoRKKPnNA61tQHMjYpX5dyVq4k6tPeRi1tB4KWQG4XjRdw9Dk8Zg5uHNGuRJXRzt1ho0pY/kHoDc=
+X-Received: by 2002:a25:31c2:0:b0:641:660f:230f with SMTP id
+ x185-20020a2531c2000000b00641660f230fmr20782159ybx.472.1653298606323; Mon, 23
+ May 2022 02:36:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHpyw9fAfNf8j++JtLhuudSWj6N1-KAxA_fxEGL998WNVXTPdQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220523020051.141460-1-wangkefeng.wang@huawei.com> <20220523020051.141460-2-wangkefeng.wang@huawei.com>
+In-Reply-To: <20220523020051.141460-2-wangkefeng.wang@huawei.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 23 May 2022 11:36:29 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2cP8Y42C4kCbFSpkcj8cLexinLj=x9m6vvwKJxLvX7yw@mail.gmail.com>
+Message-ID: <CAK8P3a2cP8Y42C4kCbFSpkcj8cLexinLj=x9m6vvwKJxLvX7yw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] asm-generic: Add memory barrier dma_mb()
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     Marco Elver <elver@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:zPIkvDMlXAm1LZNBiHMWj4e04LbhwlYvvCXzJxKLKjrwGZTDN44
+ L9IrERPoIZZklGYgpf1jHh3Qs+XZMXBNkNKKnCr3YL2HOivvyU2TuqJWFKNPWn02zckMJ6Z
+ 9aNQVXKy4kenpvtRzK6F26I75B+Z3fTubxfZ1yHEzPTzWNPS5MR/O4OolEqiWv66qnoPp51
+ RztJQGmaAU1pEF7j9SOOg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:EDywYquYCAY=:7xx0eKix9nIC1tl7Vk6vmA
+ /PRFeXYbdk20nJ+oepw3D8EAg2+2P3A9zEjFFv0oJkdT6eYxQOhY8+P5LhEinbF76XfnzSaA8
+ /2zwkk5BiGXjlihUrkbIrJMsgU7cVrsNi+uotro/D4OOjXekYTlCQlhY3VtPjqPf5hizIh5of
+ xdfQ+ZAcKB3paw7Qk0zNbm0faGyaorYfVpyO2r3WKUnN9NAvTR0HSYzqRBwx+Alb2Sy/684sb
+ 4OfsoFq45RfHDHQ5b0VbjPjhwDeZVpYkjTwnQxvyzmUvzJsYXiKFTdDR71R8AgiDv7FD1MrlH
+ QehUKUa7bjwzt0e0rW9fGr45zWgP3+HVL9crHv1EvSqTLYotX/HACuK/pr9kq1Gg5mHBOI4ov
+ +EOoXRgUkH8DM1WMxlL7dAeE0MKNMR4rRd8WyvhldCVuq1Ui1peFIUA7upeJK/zJZTpQjeSm1
+ ifPA8XoL4cGUEykOCfe8H3p9nybPMfA5kxInR//JyEuyBmCBD28SlNFCj7tZ+5Kwz83UX1E1+
+ 7v2gZaq9h0u1tpbgvPIgjH5NeZ5m1aKk3VeTFn3c2LNt1kPjOgPm4KKXsuE4mYmps/DL1LKpP
+ p1BWoTE9qqTdyl5q8oRTOy1UuXjwbZIx7+oBSbIUH66wrMf1dwN4gmChqykysdxsyf0pGt+d/
+ pnu4X9feKEdJnQvlfyAbIqUbMsdNq+iOYSfO9Xpxc5zy4ySgQ4K+qYdNSTMLVzTFMoz3EqBSo
+ L9yPtUm+OlxGFmdj0JLXPZ2yB+9MGCkeaPFWHA==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 05:06:07PM +0800, Medad Young wrote:
-> I did do "git commit --amend",
-> I beleve the issue is about the mail server I used,
-> I use gmail to send the mail due to the mail server of my company
-> does't support smtp
-> so now I should sign the commit with my gmail account.
+On Mon, May 23, 2022 at 4:00 AM Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
+>
+> The memory barrier dma_mb() is introduced by commit a76a37777f2c
+> ("iommu/arm-smmu-v3: Ensure queue is read after updating prod pointer"),
+> which is used to ensure that prior (both reads and writes) accesses
+> to memory by a CPU are ordered w.r.t. a subsequent MMIO write, this
+> is only defined on arm64, but it is a generic memory barrier, let's
+> add dma_mb() into documentation and include/asm-generic/barrier.h.
+>
+> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> ---
 
-No, you should supply --author too - I had forgotten about that.
+I assume you plan this to get merged through the arm64 tree.
 
-commit 0876b99e4aa2bf7113070c9c0f5d0ade7ad91697 (HEAD -> refs/heads/test)
-Author: Medad CChien <medadyoung@gmail.com>
-Date:   Tue May 10 11:10:54 2022 +0800
-
-    ARM: dts: nuvoton: Add memory controller node
-    
-    ECC must be configured in the BootBlock header.
-    Then, you can read error counts via the EDAC kernel framework.
-    
-    Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
-
-$  git commit --amend --author="Medad CChien <ctcchien@nuvoton.com>"
-[test 5d6cd85171d1] ARM: dts: nuvoton: Add memory controller node
- Author: Medad CChien <ctcchien@nuvoton.com>
- Date: Tue May 10 11:10:54 2022 +0800
- 1 file changed, 7 insertions(+)
-$ git log -p -1
-commit 5d6cd85171d14e67840e672e2f96a16981243424 (HEAD -> refs/heads/test)
-Author: Medad CChien <ctcchien@nuvoton.com>
-Date:   Tue May 10 11:10:54 2022 +0800
-
-    ARM: dts: nuvoton: Add memory controller node
-    
-    ECC must be configured in the BootBlock header.
-    Then, you can read error counts via the EDAC kernel framework.
-    
-    Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
-
-$ git format-patch -1 -o /tmp/
-/tmp/0001-ARM-dts-nuvoton-Add-memory-controller-node.patch
-
-$ head /tmp/0001-ARM-dts-nuvoton-Add-memory-controller-node.patch
-From 5d6cd85171d14e67840e672e2f96a16981243424 Mon Sep 17 00:00:00 2001
-From: Medad CChien <ctcchien@nuvoton.com>
-		    ^^^^^^^^^^^^^^^^^^^^^^
-
-
-Don't hesitate to look at the manpages if a tool doesn't do what you
-expect it to do.
-
-HTH.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Reviewed-by: Arnd Bergmann <arnd@arndb.de> # for asm-generic

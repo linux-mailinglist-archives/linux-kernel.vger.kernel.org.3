@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97B9A531CF0
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:57:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78472531C0C
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:57:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243764AbiEWSOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 14:14:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35178 "EHLO
+        id S242646AbiEWRzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:55:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243874AbiEWRvt (ORCPT
+        with ESMTP id S241116AbiEWR0S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:51:49 -0400
+        Mon, 23 May 2022 13:26:18 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 140C762122;
-        Mon, 23 May 2022 10:38:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E459B5AA4B;
+        Mon, 23 May 2022 10:21:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8BC05611DF;
-        Mon, 23 May 2022 17:29:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B7F5C36AE3;
-        Mon, 23 May 2022 17:29:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 52F4360916;
+        Mon, 23 May 2022 17:19:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E1C4C385A9;
+        Mon, 23 May 2022 17:19:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326951;
-        bh=ReFu1Mc6+Zt9GNQWgQvuhxkurL2O6QAqaRyiafUG/h8=;
+        s=korg; t=1653326364;
+        bh=1YPWRqiatRImRhuaqwicVnhVovt5RkXaCgB9gKfRFLk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=c8yHrZpDzldwFJtO4+LBx5SJOQlg+nSNg+6z4ypPKAM03TkhNPO4oEQM1Tji1K432
-         8kqCJ5HNWIn0VzTYPfO4SXu6ojiQclVFmeoCAXt1wFPQV7r2t38tXt3Tpb7uJgWppB
-         Xsx4pPhU9eIm0AkQAz/P6wNh3oYT/1CL0MdEVsgY=
+        b=XjR0IFPTYdmnrfwYQ0QwA4HEAQOleWK0Hw2dp87gW1hoDXjfwYH0Cyiyb6gfmo7nn
+         2VVllR5912yJTe7yzV5egarwXQEl0HQ29J+gxKBOYoAvvTkUj/7MFnWe3c/XB1tp1g
+         MKOzwk+AL1M2X84qpVzrj4kXbdlB2is6apAlyQQI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 110/158] net: af_key: add check for pfkey_broadcast in function pfkey_process
-Date:   Mon, 23 May 2022 19:04:27 +0200
-Message-Id: <20220523165849.276567989@linuxfoundation.org>
+        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
+        Lyude Paul <lyude@redhat.com>
+Subject: [PATCH 5.15 059/132] drm/dp/mst: fix a possible memory leak in fetch_monitor_name()
+Date:   Mon, 23 May 2022 19:04:28 +0200
+Message-Id: <20220523165833.061532981@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165830.581652127@linuxfoundation.org>
-References: <20220523165830.581652127@linuxfoundation.org>
+In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
+References: <20220523165823.492309987@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,42 +54,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Hangyu Hua <hbh25y@gmail.com>
 
-[ Upstream commit 4dc2a5a8f6754492180741facf2a8787f2c415d7 ]
+commit 6e03b13cc7d9427c2c77feed1549191015615202 upstream.
 
-If skb_clone() returns null pointer, pfkey_broadcast() will
-return error.
-Therefore, it should be better to check the return value of
-pfkey_broadcast() and return error if fails.
+drm_dp_mst_get_edid call kmemdup to create mst_edid. So mst_edid need to be
+freed after use.
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+Reviewed-by: Lyude Paul <lyude@redhat.com>
+Signed-off-by: Lyude Paul <lyude@redhat.com>
+Cc: stable@vger.kernel.org
+Link: https://patchwork.freedesktop.org/patch/msgid/20220516032042.13166-1-hbh25y@gmail.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/key/af_key.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/drm_dp_mst_topology.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/net/key/af_key.c b/net/key/af_key.c
-index fd51db3be91c..92e9d75dba2f 100644
---- a/net/key/af_key.c
-+++ b/net/key/af_key.c
-@@ -2826,8 +2826,10 @@ static int pfkey_process(struct sock *sk, struct sk_buff *skb, const struct sadb
- 	void *ext_hdrs[SADB_EXT_MAX];
- 	int err;
+--- a/drivers/gpu/drm/drm_dp_mst_topology.c
++++ b/drivers/gpu/drm/drm_dp_mst_topology.c
+@@ -4834,6 +4834,7 @@ static void fetch_monitor_name(struct dr
  
--	pfkey_broadcast(skb_clone(skb, GFP_KERNEL), GFP_KERNEL,
--			BROADCAST_PROMISC_ONLY, NULL, sock_net(sk));
-+	err = pfkey_broadcast(skb_clone(skb, GFP_KERNEL), GFP_KERNEL,
-+			      BROADCAST_PROMISC_ONLY, NULL, sock_net(sk));
-+	if (err)
-+		return err;
+ 	mst_edid = drm_dp_mst_get_edid(port->connector, mgr, port);
+ 	drm_edid_get_monitor_name(mst_edid, name, namelen);
++	kfree(mst_edid);
+ }
  
- 	memset(ext_hdrs, 0, sizeof(ext_hdrs));
- 	err = parse_exthdrs(skb, hdr, ext_hdrs);
--- 
-2.35.1
-
+ /**
 
 

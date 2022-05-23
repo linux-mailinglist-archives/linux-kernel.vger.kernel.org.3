@@ -2,49 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2C9D530AED
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 10:02:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09DE6530AF8
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 10:02:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbiEWHdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 03:33:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40014 "EHLO
+        id S230073AbiEWHdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 03:33:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230384AbiEWHch (ORCPT
+        with ESMTP id S230396AbiEWHci (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 03:32:37 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 624696353
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 00:31:52 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nt2XZ-0002vX-IP; Mon, 23 May 2022 09:31:45 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nt2XZ-0042OT-Mz; Mon, 23 May 2022 09:31:44 +0200
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nt2XX-003GZz-Qr; Mon, 23 May 2022 09:31:43 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Mark Brown <broonie@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>
-Subject: [PATCH v1] spi: imx: mx51-ecspi: fix clk polarity and phase configuration for CS > 4
-Date:   Mon, 23 May 2022 09:31:43 +0200
-Message-Id: <20220523073143.778664-1-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+        Mon, 23 May 2022 03:32:38 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26951FF1
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 00:32:04 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id q18so12324798pln.12
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 00:32:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=l6vKoyEya/r3/MqVEEJWzCpNcuuesZvhsyqXin89G20=;
+        b=QkkPzppkGobaBMNtLMjTdS88K0En7cKbJRSLr/uCDJHYpNDsXdoNt7dKWMSOumeJuW
+         2hUbrbUVFiJiun2+NVvuDJghnz5x3AhxhqVZh7ilPtoik3nOgS6EwjLGMR57IVlIsMIS
+         E51jAnuW6i5mKRZ36FgcV6rz2yQXfXyZdbsLWcMk4m3+fvRBa2MD3Dy1nAg1QiRfXSkv
+         ZqsxVjyeUlyzPoEpqYpxtQy5j0L6WE2P3v486BQvYR0FuuXCjYH+CSGEucQ0NFS/aM7K
+         oGOQU/xmKbrDqirJI0e1slSZb2NDdorb53JovJb8o4GRFSKF3iRHzvvfECqhiufy81fH
+         fO9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=l6vKoyEya/r3/MqVEEJWzCpNcuuesZvhsyqXin89G20=;
+        b=VrvP1Ai0BrzRMHrB4PSEWYQu43uoPRhZmXZ1pa72Z4JfcNGEB9Uy11gcCjb2hxf1iQ
+         pKnW1utK2frlngtN1BcHkWARyke2FkbTN920c1eps/lWcCSy3ZG07j1/h/8qLfqs2xyf
+         e9+AI6itd1ONLmP6JPqBQ1Y9kuRdsg9eeB5RvAaeGxAWgvx2uTkTBgizA99/8442rTGO
+         hzqO+KyhFtJJl647VqCBV9eh1VvlWhFuwcjVrCkogCNGacu3P0eRUwWwK01vsh3CzGbS
+         d5dc4Btw4ETaUYd5H2rarYIaIbFmbHyD2JDtrpCN8eDJ3ZN6KRsAEyAAJZxpzfKbovve
+         NJqQ==
+X-Gm-Message-State: AOAM530Yy2K1wciNBWNGM40XLN50BeDZ7Kv4ZFJHG1e9Skv4MVDjAvnE
+        jONcbHt6Ki8xEinmM1J0WV3vNQ==
+X-Google-Smtp-Source: ABdhPJxua26V/dTD9Xrx6ogoO6c0plBdrLo/kP7vn5fAlM3y5vBZrLDMIXXKyZRHMsd33ZQVnFsxyA==
+X-Received: by 2002:a17:902:f710:b0:15f:165f:b50b with SMTP id h16-20020a170902f71000b0015f165fb50bmr22287217plo.158.1653291123694;
+        Mon, 23 May 2022 00:32:03 -0700 (PDT)
+Received: from localhost ([122.162.234.2])
+        by smtp.gmail.com with ESMTPSA id u6-20020a17090341c600b0015e8d4eb2d8sm4322308ple.290.2022.05.23.00.32.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 May 2022 00:32:03 -0700 (PDT)
+Date:   Mon, 23 May 2022 13:02:01 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Meng Li <li.meng@amd.com>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Huang Rui <ray.huang@amd.com>, linux-pm@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Jinzhou Su <Jinzhou.Su@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V7 2/4] cpufreq: amd-pstate: Add test module for
+ amd-pstate driver
+Message-ID: <20220523073201.asdi35v5f43aoaee@vireshk-i7>
+References: <20220522115423.1147282-1-li.meng@amd.com>
+ <20220522115423.1147282-3-li.meng@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220522115423.1147282-3-li.meng@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,94 +81,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix support for boards with more then 4 chip select lines. Other wise if
-CS > 4 is used, we will write trash to the clk configuration register.
+On 22-05-22, 19:54, Meng Li wrote:
+> Add amd-pstate-ut module, which is conceptually out-of-tree module
+> and provides ways for selftests/amd-pstate driver to test various
+> kernel module-related functionality. This module will be expected by
+> some of selftests to be present and loaded.
+> 
+> Signed-off-by: Meng Li <li.meng@amd.com>
+> Acked-by: Huang Rui <ray.huang@amd.com>
+> ---
+>  drivers/cpufreq/Kconfig.x86     |   7 +
+>  drivers/cpufreq/Makefile        |   1 +
+>  drivers/cpufreq/amd-pstate-ut.c | 293 ++++++++++++++++++++++++++++++++
+>  3 files changed, 301 insertions(+)
+>  create mode 100644 drivers/cpufreq/amd-pstate-ut.c
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
- drivers/spi/spi-imx.c | 37 +++++++++++++++++++++++++------------
- 1 file changed, 25 insertions(+), 12 deletions(-)
+I wonder if this should be moved to selftest directories instead ?
 
-diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-index b2dd0a4d2446..2d29b893e9e0 100644
---- a/drivers/spi/spi-imx.c
-+++ b/drivers/spi/spi-imx.c
-@@ -265,6 +265,7 @@ static bool spi_imx_can_dma(struct spi_master *master, struct spi_device *spi,
- #define MX51_ECSPI_CONFIG_SBBCTRL(cs)	(1 << ((cs) +  8))
- #define MX51_ECSPI_CONFIG_SSBPOL(cs)	(1 << ((cs) + 12))
- #define MX51_ECSPI_CONFIG_SCLKCTL(cs)	(1 << ((cs) + 20))
-+#define MX51_ECSPI_MAX_HW_CS		4
- 
- #define MX51_ECSPI_INT		0x10
- #define MX51_ECSPI_INT_TEEN		(1 <<  0)
-@@ -515,6 +516,7 @@ static int mx51_ecspi_prepare_message(struct spi_imx_data *spi_imx,
- 	u32 min_speed_hz = ~0U;
- 	u32 testreg, delay;
- 	u32 cfg = readl(spi_imx->base + MX51_ECSPI_CONFIG);
-+	int chip_select;
- 
- 	/* set Master or Slave mode */
- 	if (spi_imx->slave_mode)
-@@ -528,8 +530,19 @@ static int mx51_ecspi_prepare_message(struct spi_imx_data *spi_imx,
- 	if (spi->mode & SPI_READY)
- 		ctrl |= MX51_ECSPI_CTRL_DRCTL(spi_imx->spi_drctl);
- 
--	/* set chip select to use */
--	ctrl |= MX51_ECSPI_CTRL_CS(spi->chip_select);
-+	if (spi->cs_gpiod) {
-+		chip_select = 0;
-+	} else {
-+		if (spi->chip_select >= MX51_ECSPI_MAX_HW_CS) {
-+			dev_err(spi_imx->dev, "Native chip_select is out of supported range: %i\n",
-+				spi->chip_select);
-+			return -EINVAL;
-+		}
-+
-+		/* set HW chip select to use */
-+		ctrl |= MX51_ECSPI_CTRL_CS(spi->chip_select);
-+		chip_select = spi->chip_select;
-+	}
- 
- 	/*
- 	 * The ctrl register must be written first, with the EN bit set other
-@@ -550,27 +563,27 @@ static int mx51_ecspi_prepare_message(struct spi_imx_data *spi_imx,
- 	 * BURST_LENGTH + 1 bits are received
- 	 */
- 	if (spi_imx->slave_mode && is_imx53_ecspi(spi_imx))
--		cfg &= ~MX51_ECSPI_CONFIG_SBBCTRL(spi->chip_select);
-+		cfg &= ~MX51_ECSPI_CONFIG_SBBCTRL(chip_select);
- 	else
--		cfg |= MX51_ECSPI_CONFIG_SBBCTRL(spi->chip_select);
-+		cfg |= MX51_ECSPI_CONFIG_SBBCTRL(chip_select);
- 
- 	if (spi->mode & SPI_CPHA)
--		cfg |= MX51_ECSPI_CONFIG_SCLKPHA(spi->chip_select);
-+		cfg |= MX51_ECSPI_CONFIG_SCLKPHA(chip_select);
- 	else
--		cfg &= ~MX51_ECSPI_CONFIG_SCLKPHA(spi->chip_select);
-+		cfg &= ~MX51_ECSPI_CONFIG_SCLKPHA(chip_select);
- 
- 	if (spi->mode & SPI_CPOL) {
--		cfg |= MX51_ECSPI_CONFIG_SCLKPOL(spi->chip_select);
--		cfg |= MX51_ECSPI_CONFIG_SCLKCTL(spi->chip_select);
-+		cfg |= MX51_ECSPI_CONFIG_SCLKPOL(chip_select);
-+		cfg |= MX51_ECSPI_CONFIG_SCLKCTL(chip_select);
- 	} else {
--		cfg &= ~MX51_ECSPI_CONFIG_SCLKPOL(spi->chip_select);
--		cfg &= ~MX51_ECSPI_CONFIG_SCLKCTL(spi->chip_select);
-+		cfg &= ~MX51_ECSPI_CONFIG_SCLKPOL(chip_select);
-+		cfg &= ~MX51_ECSPI_CONFIG_SCLKCTL(chip_select);
- 	}
- 
- 	if (spi->mode & SPI_CS_HIGH)
--		cfg |= MX51_ECSPI_CONFIG_SSBPOL(spi->chip_select);
-+		cfg |= MX51_ECSPI_CONFIG_SSBPOL(chip_select);
- 	else
--		cfg &= ~MX51_ECSPI_CONFIG_SSBPOL(spi->chip_select);
-+		cfg &= ~MX51_ECSPI_CONFIG_SSBPOL(chip_select);
- 
- 	writel(cfg, spi_imx->base + MX51_ECSPI_CONFIG);
- 
 -- 
-2.30.2
-
+viresh

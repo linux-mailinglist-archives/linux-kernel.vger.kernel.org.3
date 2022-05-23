@@ -2,124 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1ABA531B6D
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 891FA531757
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:53:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239505AbiEWSrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 14:47:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43450 "EHLO
+        id S243314AbiEWSsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 14:48:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243149AbiEWSrj (ORCPT
+        with ESMTP id S243364AbiEWSrj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 23 May 2022 14:47:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7EBCA25C41
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 11:31:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653330622;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+GHDu8bX018Pj56HhIIQXnjcT5ZvQ3bky+5co5y7CGo=;
-        b=GxdkuVQwAKotC5mXQEw2wmn84Dyt4pwmCpvHYswabV4SVjmATsenFyPekfR+Xt5kIn0FL2
-        TZozsXW79oAsSsvT+8oz7H1iaybe/3TPGw/i7w1tY3MxVp9Eqin24sGNYc7uNIWgmSsJUv
-        ax/2AwFojxR+lbnmRkUgVFYdj2NmqqE=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-133-wif4f0_9N3KDsuLOdT-tTA-1; Mon, 23 May 2022 14:30:21 -0400
-X-MC-Unique: wif4f0_9N3KDsuLOdT-tTA-1
-Received: by mail-qk1-f200.google.com with SMTP id z13-20020a05620a100d00b006a3870a404bso2733250qkj.17
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 11:30:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=+GHDu8bX018Pj56HhIIQXnjcT5ZvQ3bky+5co5y7CGo=;
-        b=bQqd1XuyqXSiNac6xg9lbHK6ygraQqYpVNqkp5r3MK2C4p+TLtXBslaLiMYozSVS/1
-         PlK6SmbTtIIzzjYqgAk8hXl4GynOcsS1XEoPhXQXK8U6eE2mAFRsVWouBkBHZ3vgZaFZ
-         LkaHkdfIiIXCOAsc9UwtHvH8CPjvEPZrrfnaqo9QoDICkyy2woOFmNCem9cJkuCPZ+1A
-         3GFQA+s0arGiqY8eQnJz6SaYEbeZ5axMQJlXh/G91pjSaK8/3P18J5tDxPoawCLb3vmE
-         O9wZcC8srN6Jy9oPzcFkGekHphf0FJBvg1wxXcUNml67fex1Ek95USXymIOt3dzid4nR
-         A2lQ==
-X-Gm-Message-State: AOAM531A15GtM+wLnUTCdJYTtB3sNs2YRxLSZczPp3NiLLH5txSGO4bI
-        Ww2YWv+SzGSmJ3Lp2jWcby9geG59mO2Glnvk9cvF05mKOIJdICuge3joT8BC9Ae7LthVjE7aMra
-        j/t52qeVW3vyU9pL8kzXHez9X
-X-Received: by 2002:a05:620a:29ce:b0:6a0:e9a:f7a2 with SMTP id s14-20020a05620a29ce00b006a00e9af7a2mr14909663qkp.479.1653330620340;
-        Mon, 23 May 2022 11:30:20 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyiHkoWHUvw+vM4ygrqlFJMksFa2jJVr/bYTmHbbZwPGQtQuPfxdNSMdEAKmnGv/bC5IUBo3Q==
-X-Received: by 2002:a05:620a:29ce:b0:6a0:e9a:f7a2 with SMTP id s14-20020a05620a29ce00b006a00e9af7a2mr14909649qkp.479.1653330620095;
-        Mon, 23 May 2022 11:30:20 -0700 (PDT)
-Received: from xps13 (c-98-239-145-235.hsd1.wv.comcast.net. [98.239.145.235])
-        by smtp.gmail.com with ESMTPSA id m201-20020a37a3d2000000b006a34f6a7840sm4630388qke.57.2022.05.23.11.30.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 11:30:19 -0700 (PDT)
-Date:   Mon, 23 May 2022 14:30:18 -0400
-From:   Brian Masney <bmasney@redhat.com>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Todor Tomov <todor.too@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        matti.lehtimaki@gmail.com
-Subject: Re: [RFC PATCH 00/14] CAMSS support for MSM8974
-Message-ID: <YovSurcGlyPW7v9s@xps13>
-References: <20220522162802.208275-1-luca@z3ntu.xyz>
- <638d6986-616f-4a1c-f1d0-82835b000b2a@linaro.org>
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73DF374DFB
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 11:31:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653330692; x=1684866692;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=vsVMhnWUP6CRAWXVvPo3aXNptIH/Cik7O9y+9qYPjwA=;
+  b=bW58AFgABu58BXAwqKGiYd583rIFrS0DFZZd4HmDxCXvVNtQmcGvsLGG
+   fuhJMiSr5rZn0JwlcFgKWLUTEHytKcIkRe7QdEa5K9rmEwbdZJh9Vic82
+   qCP4Oc6tGXKikd0AumbvSly+9BvqaU+qsSEV8no4qjGWGKTSMt8ictuCv
+   6UfteoKPMutdX4WF8dyJi8CE1IvXzXok2GkiKObi0PETU6GFHIM59UyvR
+   Aj1GssXJqYd+eBr/bfDc3SCrlfir4AP6Q62qkLagAOycmKc8Ph4CD9dqI
+   ay4YzpcFvXuakYiXmDu2a1eSDYgiCbUIa6kQ/g1RL8cpjv0fsdNaG6n5G
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="260925090"
+X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
+   d="scan'208";a="260925090"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 11:31:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
+   d="scan'208";a="558795960"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 23 May 2022 11:31:16 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ntCpn-0001M2-Kh;
+        Mon, 23 May 2022 18:31:15 +0000
+Date:   Tue, 24 May 2022 02:31:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bhanuprakash Modem <bhanuprakash.modem@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Jani Nikula <jani.nikula@intel.com>,
+        Arun R Murthy <arun.r.murthy@intel.com>,
+        Harry Wentland <harry.wentland@amd.com>
+Subject: [drm-misc:drm-misc-next 1106/1111]
+ drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:6622:9: error:
+ implicit declaration of function 'crtc_debugfs_init'; did you mean
+ 'amdgpu_debugfs_init'?
+Message-ID: <202205240207.KmDLuSrC-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <638d6986-616f-4a1c-f1d0-82835b000b2a@linaro.org>
-User-Agent: Mutt/2.2.1 (2022-02-19)
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 03:39:53PM +0300, Dmitry Baryshkov wrote:
-> On 22/05/2022 19:27, Luca Weiss wrote:
-> > This RFC series adds support for CAMSS and CCI that are found on
-> > msm8974, including the OV8865 found on the FP2.
-> > 
-> > The only reason it's marked RFC is that CAMSS doesn't behave properly on
-> > this SoC without the last commit which is obviously not upstreamable.
-> > Not sure if this should be a blocker for including most of the other
-> > patches because other than that it seems to work fine and I can get a
-> > picture from the camera sensor. When/if msm8974 gets IOMMU support I
-> > hope this should be resolved and it works without this hack.
-> > 
-> > I think at least the CCI patches could get applied as they're not
-> > dependent on the CAMSS hack?
-> 
-> I'd also vote for the camcc patches to be applied.
-> 
-> As for the camss, I'd suggest to get them verified to work properly with a
-> hacked/non-upstreamable/etc. IOMMU driver if one exists. Otherwise we can
-> easily get into a situation where we merge up code that contains bugs
-> itself.
+tree:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+head:   8e71a4a8156a9f3fa27088dc59e852693713d94f
+commit: 4cd79f614b501e496ee8e4181d528c0cc1cb4e18 [1106/1111] drm/amd/display: Move connector debugfs to drm
+config: alpha-randconfig-r033-20220522 (https://download.01.org/0day-ci/archive/20220524/202205240207.KmDLuSrC-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add drm-misc git://anongit.freedesktop.org/drm/drm-misc
+        git fetch --no-tags drm-misc drm-misc-next
+        git checkout 4cd79f614b501e496ee8e4181d528c0cc1cb4e18
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=alpha SHELL=/bin/bash drivers/gpu/drm/
 
-Last I checked, there's no IOMMU driver for msm8974 that works with an
-upstream kernel at the moment. About 2 years ago, I took a stab at
-attempting to enable IOMMU for the display and ran into some issues that
-I documented at:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-https://lore.kernel.org/lkml/20200109002606.35653-1-masneyb@onstation.org/
+All errors (new ones prefixed by >>):
 
-I'm not familiar with this part of the hardware and haven't had time
-since then to look into this further.
+   drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c: In function 'amdgpu_dm_crtc_late_register':
+>> drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:6622:9: error: implicit declaration of function 'crtc_debugfs_init'; did you mean 'amdgpu_debugfs_init'? [-Werror=implicit-function-declaration]
+    6622 |         crtc_debugfs_init(crtc);
+         |         ^~~~~~~~~~~~~~~~~
+         |         amdgpu_debugfs_init
+   drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c: In function 'amdgpu_dm_commit_planes':
+   drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:9165:27: warning: variable 'abo' set but not used [-Wunused-but-set-variable]
+    9165 |         struct amdgpu_bo *abo;
+         |                           ^~~
+   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/inc/core_types.h:32,
+                    from drivers/gpu/drm/amd/amdgpu/../display/dc/inc/link_enc_cfg.h:33,
+                    from drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:32:
+   At top level:
+   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:129:22: warning: 'SYNAPTICS_DEVICE_ID' defined but not used [-Wunused-const-variable=]
+     129 | static const uint8_t SYNAPTICS_DEVICE_ID[] = "SYNA";
+         |                      ^~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:126:22: warning: 'DP_SINK_DEVICE_STR_ID_2' defined but not used [-Wunused-const-variable=]
+     126 | static const uint8_t DP_SINK_DEVICE_STR_ID_2[] = {7, 1, 8, 7, 5, 0};
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:125:22: warning: 'DP_SINK_DEVICE_STR_ID_1' defined but not used [-Wunused-const-variable=]
+     125 | static const uint8_t DP_SINK_DEVICE_STR_ID_1[] = {7, 1, 8, 7, 3, 0};
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
-Brian
 
+vim +6622 drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c
+
+e7b07ceef2a650 Harry Wentland 2017-08-10  6619  
+e69231c4451ae0 Wayne Lin      2021-03-08  6620  static int amdgpu_dm_crtc_late_register(struct drm_crtc *crtc)
+86bc221918925a Wayne Lin      2021-03-02  6621  {
+86bc221918925a Wayne Lin      2021-03-02 @6622  	crtc_debugfs_init(crtc);
+86bc221918925a Wayne Lin      2021-03-02  6623  
+86bc221918925a Wayne Lin      2021-03-02  6624  	return 0;
+86bc221918925a Wayne Lin      2021-03-02  6625  }
+86bc221918925a Wayne Lin      2021-03-02  6626  
+
+:::::: The code at line 6622 was first introduced by commit
+:::::: 86bc221918925a0bbb49043e3936e898e009b43b drm/amd/display: Support crc on specific region
+
+:::::: TO: Wayne Lin <Wayne.Lin@amd.com>
+:::::: CC: Alex Deucher <alexander.deucher@amd.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

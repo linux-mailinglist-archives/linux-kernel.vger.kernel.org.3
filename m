@@ -2,127 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EA1E531D93
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 23:19:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CAAD531D96
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 23:20:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231566AbiEWVTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 17:19:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60500 "EHLO
+        id S231591AbiEWVUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 17:20:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbiEWVTs (ORCPT
+        with ESMTP id S231585AbiEWVUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 17:19:48 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F958E1BF
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 14:19:48 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-2ff155c239bso162876547b3.2
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 14:19:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oLDY4cmr222gssu19D12pJ5dYihqNZnukAxsU+Y1ejU=;
-        b=TpnIFJb7O/pdBIh8GUMlw6sWMXiJFEVNwuRhxPHn/pS6eG4jN6V0v2RzhCj/pd35EC
-         8lq2QhNInOnvmqq/zm4SEz7YYfPZ5EQYXPjVarG0ekP3j3lvV8K8HIbeyz9ASKnTk4QS
-         LP+4y+UfTGkKM4PdkuW0IVuwO5VawqXUTE5pnWjLtqVgS6nWJtSXnw7D5Hn8VBOA1T5S
-         7G/KKhAAwpio8PNKPqvbIJBJyp4ZV4MJZllDzlxdv5reJbK6keUzJ4cAY6yRl1qIXoUQ
-         CbrS65lral4Fx6CrW683Kz+ekjveuKIrfouYulpG/Z6Fsue+KcdNmeGw6+02Lawm4lhM
-         YS0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oLDY4cmr222gssu19D12pJ5dYihqNZnukAxsU+Y1ejU=;
-        b=HZoBZMBP40Mvmqq9W1WvQgPThKeKp88tpb8ZdvyjaNYrois07ZtAWKkn+W6keEKBIZ
-         9Ve+8oHmyMdvaMCVg8gSn68j/3DHsy0y+k/PDof0anMRs8ec1ZxPTZjmM0PDAQfY5ayF
-         wnYhWw8v+S/K+YcpNlNdmE0nGyTGzP01vmm/XeagFaqYy2v6DXCEj1nqSZL7tvVIsTQw
-         Lb0snbduxdP+c00x2M2tWCvcyKrfEoHFREp1GoU9XiVfsAO14eyXg+AkzWtuT0piV8Ze
-         +DhWHjAIWW9JlZfg6rIBf9J4aqiMYVLDzYMX1ImVwQ3Q17b1ggvzsr3w0ZP9PzibaIl2
-         BQQA==
-X-Gm-Message-State: AOAM533rTrPrZFL4qvFDT1bXmv5WKVg491GBzClJ51aokCXW5CNZoGwp
-        vMxruiVBNZiku7DNgzKtvAm4W34iUjskoeQU+SQ+RQ==
-X-Google-Smtp-Source: ABdhPJxt8kx6z5PYnwwImB38ZeXt2ruBXVuGVWJUKy4FdUXc1K+c+OD39mj78O+sHHvTXJPM1vetIs7qpZw7Y3/ZVsM=
-X-Received: by 2002:a81:2388:0:b0:2ff:a07a:517a with SMTP id
- j130-20020a812388000000b002ffa07a517amr16294486ywj.201.1653340787230; Mon, 23
- May 2022 14:19:47 -0700 (PDT)
+        Mon, 23 May 2022 17:20:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4DAF8E1BF;
+        Mon, 23 May 2022 14:20:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 417D1614F3;
+        Mon, 23 May 2022 21:20:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9675EC385AA;
+        Mon, 23 May 2022 21:20:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653340811;
+        bh=KpVOl6sTTTMSdwMKeBQ+rNG6QFT8GvV9wqoXCWKC1kk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=eC8P8PEp53dbFijkViM2qWXeK78rMsvnAO0hU2RBBD2Ra1HQRn36xyEc2UF1KC6Bp
+         5h6rNjFqoG49w9qIHXM9erZTPLycpSmJtST4D0xooyPV7/v2rQe2JKdALtOQYEBO4s
+         GB9UjIu9kI2tWI9l6uHyf9ZvjFlkPbM3ZMfPl6ACaYy2X7bqYQTQ+z7f+jJiOppRKa
+         yk2u1Dgt6Flexs2nN8qxAi0JHaSq5BP/IqNsnwliChGmVrvos8bQEt605WjvDp9PSv
+         H6bWojryU3Um7u3imUYdv5UflyeLNCkX9i+sw4OVz3dy+93pMwenrEFNACGqq8keyU
+         b/MNyDMlrSUoA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 71AA5F03935;
+        Mon, 23 May 2022 21:20:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220520235138.3140590-1-joshdon@google.com> <20220521100037.GA2578@worktop.programming.kicks-ass.net>
-In-Reply-To: <20220521100037.GA2578@worktop.programming.kicks-ass.net>
-From:   Josh Don <joshdon@google.com>
-Date:   Mon, 23 May 2022 14:19:36 -0700
-Message-ID: <CABk29NuaNSCs-sXsDjkEbnFChRsqUYPWG9VrwS=O88Q1aMzuNA@mail.gmail.com>
-Subject: Re: [PATCH v2] sched/core: add forced idle accounting for cgroups
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Tejun Heo <tj@kernel.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Cruz Zhao <CruzZhao@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v4 bpf-next 0/8] bpf_prog_pack followup
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165334081146.9921.11212774683009494244.git-patchwork-notify@kernel.org>
+Date:   Mon, 23 May 2022 21:20:11 +0000
+References: <20220520235758.1858153-1-song@kernel.org>
+In-Reply-To: <20220520235758.1858153-1-song@kernel.org>
+To:     Song Liu <song@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-mm@kvack.org, ast@kernel.org, daniel@iogearbox.net,
+        peterz@infradead.org, mcgrof@kernel.org,
+        torvalds@linux-foundation.org, rick.p.edgecombe@intel.com,
+        kernel-team@fb.com
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 21, 2022 at 3:00 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Fri, May 20, 2022 at 04:51:38PM -0700, Josh Don wrote:
->
-> > diff --git a/kernel/sched/core_sched.c b/kernel/sched/core_sched.c
-> > index 38a2cec21014..ddef2b8ddf68 100644
-> > --- a/kernel/sched/core_sched.c
-> > +++ b/kernel/sched/core_sched.c
-> > @@ -277,7 +277,11 @@ void __sched_core_account_forceidle(struct rq *rq)
-> >               if (p == rq_i->idle)
-> >                       continue;
-> >
-> > -             __schedstat_add(p->stats.core_forceidle_sum, delta);
-> > +             /*
-> > +              * Note: this will account forceidle to the current cpu, even
-> > +              * if it comes from our SMT sibling.
-> > +              */
-> > +             account_forceidle_time(p, delta);
-> >       }
->
-> AFAICT this is the only caller of that function.
->
-> >  }
-> >
-> > diff --git a/kernel/sched/cputime.c b/kernel/sched/cputime.c
-> > index 78a233d43757..598d1026d629 100644
-> > --- a/kernel/sched/cputime.c
-> > +++ b/kernel/sched/cputime.c
-> > @@ -226,6 +226,17 @@ void account_idle_time(u64 cputime)
-> >               cpustat[CPUTIME_IDLE] += cputime;
-> >  }
-> >
-> > +
-> > +#ifdef CONFIG_SCHED_CORE
-> > +/* Account for forceidle time due to core scheduling. */
-> > +void account_forceidle_time(struct task_struct *p, u64 delta)
-> > +{
-> > +     schedstat_add(p->stats.core_forceidle_sum, delta);
->
-> But then you loose the __, why?
+Hello:
 
-Yea, this is probably better off as __ and a comment on the function
-stating that it requires schedstat is enabled. My original thinking
-was that it would be nice to avoid capturing this requirement here for
-future potential use cases, especially given that the
-schedstat_enabled() check is basically free anyway.
+This series was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-> > +
-> > +     task_group_account_field(p, CPUTIME_FORCEIDLE, delta);
-> > +}
-> > +#endif
+On Fri, 20 May 2022 16:57:50 -0700 you wrote:
+> Changes v3 => v4:
+> 1. Shorten CC list on 4/8, so it is not dropped by the mail list.
+> 
+> Changes v2 => v3:
+> 1. Fix issues reported by kernel test robot <lkp@intel.com>.
+> 
+> Changes v1 => v2:
+> 1. Add WARN to set_vm_flush_reset_perms() on huge pages. (Rick Edgecombe)
+> 2. Simplify select_bpf_prog_pack_size. (Rick Edgecombe)
+> 
+> [...]
+
+Here is the summary with links:
+  - [v4,bpf-next,1/8] bpf: fill new bpf_prog_pack with illegal instructions
+    https://git.kernel.org/bpf/bpf-next/c/d88bb5eed04c
+  - [v4,bpf-next,2/8] x86/alternative: introduce text_poke_set
+    https://git.kernel.org/bpf/bpf-next/c/aadd1b678ebe
+  - [v4,bpf-next,3/8] bpf: introduce bpf_arch_text_invalidate for bpf_prog_pack
+    https://git.kernel.org/bpf/bpf-next/c/fe736565efb7
+  - [v4,bpf-next,4/8] module: introduce module_alloc_huge
+    (no matching commit)
+  - [v4,bpf-next,5/8] bpf: use module_alloc_huge for bpf_prog_pack
+    (no matching commit)
+  - [v4,bpf-next,6/8] vmalloc: WARN for set_vm_flush_reset_perms() on huge pages
+    (no matching commit)
+  - [v4,bpf-next,7/8] vmalloc: introduce huge_vmalloc_supported
+    (no matching commit)
+  - [v4,bpf-next,8/8] bpf: simplify select_bpf_prog_pack_size
+    (no matching commit)
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

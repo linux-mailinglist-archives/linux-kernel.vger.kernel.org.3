@@ -2,45 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69A04530F56
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:18:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5CFA530F79
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:18:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236035AbiEWNMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 09:12:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33922 "EHLO
+        id S236025AbiEWNM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 09:12:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236055AbiEWNMS (ORCPT
+        with ESMTP id S236155AbiEWNMO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 09:12:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FBA52AE3E
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 06:12:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0E8E2B810AC
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 13:12:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DF8FC385AA;
-        Mon, 23 May 2022 13:12:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653311533;
-        bh=V/9AvIndy2K3nYYZ4Y1SppzdBIvXUWiWnGwvGlEgoLs=;
-        h=From:To:Cc:Subject:Date:From;
-        b=oIPbDA9WDHIxFn9oVveegCQw9xHLcvP6DOo+WVujqjHwMMMa998mqDzlFKJ3fnIgI
-         ApSerdrBnhXXOSQtq9YI2ZLPUHy9sZb2KeDLo/Yr7c11q6KAUD3gzmTXuw79KbOs+c
-         LLySzm/JXZmIoWxlS02jWJ96pZp+4GeTPMuOAsclZ0egoyC8gimHh4f5TFPhkbF05Q
-         zk1jx8zSr2ofWiaDntApWEEu1uN83rF2ncNF1jfOr8Rl8iASMJ2jcFRc6tmrSdRoBZ
-         afqk8ZiyLN5YzwpggvcEvXaJ45eaeuKbg+IT5RFtuC8ZzUFzmgIW/QXBj0CFeYfvCN
-         0apixhl6A/EoA==
-From:   Mark Brown <broonie@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [GIT PULL] regmap updates for v5.19
-Date:   Mon, 23 May 2022 14:11:56 +0100
-Message-Id: <20220523131213.5DF8FC385AA@smtp.kernel.org>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Mon, 23 May 2022 09:12:14 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C8812CDCD
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 06:12:07 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id x5-20020a923005000000b002d1a91c4d13so2002828ile.4
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 06:12:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=bb2fBgp8rleyQWFo5k2i1W76jOqpII6fQInRn3aiZCM=;
+        b=rBry863PiNeGBK2UfgxFcVhZet3EVx1MTfCq2Y1wj2GUmVIRCPfh3l0ih2D+eam8Nq
+         TeIT9lF0I1/WyUQh15IiPluo9Ng5G5+4CLKYF67ThePtvN0YhvsfzfGYyyT6m8BrCItg
+         FRccCxGiEMFrYPHUIuQvd68A2rcmblXkrKj7a2P/IHoxFtuWNwCVE9OwLtyqDfGaeQPH
+         RsPD3b28Lhjk6FC+Dl5IPB3aijZeNHwXbW8pQk4fbB5xUBEQyzL6cDdEW0GtZEYON8cF
+         stwIcwFGgJw2JPZpIaQOiMpt5KDXmUi9DdPX9MiP/lBvbYqTyaW3j/PRSOceRZUHTf6Z
+         PVHQ==
+X-Gm-Message-State: AOAM531UyJz7WG7lgJB8KxvrlNqIKKTcA48XJAWtcZNm3ytLTuwS+hEH
+        1j34kHhBxGy58GbEW803G2cH77FCxoluCuk7Q2KO7U5puzwP
+X-Google-Smtp-Source: ABdhPJwe1+FrHSgI6wqF3zuZeASXQ7uUonOys7HC27c2cvFQ8E1uHvOXxfJ1eNSneOwceUOK9uPyMn0SWjXOkjAiWCkmfrKFKcVN
+MIME-Version: 1.0
+X-Received: by 2002:a05:6602:2cca:b0:664:d9c6:3674 with SMTP id
+ j10-20020a0566022cca00b00664d9c63674mr1759652iow.67.1653311526774; Mon, 23
+ May 2022 06:12:06 -0700 (PDT)
+Date:   Mon, 23 May 2022 06:12:06 -0700
+In-Reply-To: <20220523124859.3210-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000041ae3505dfad968c@google.com>
+Subject: Re: [syzbot] general protection fault in ath9k_hif_usb_rx_cb (2)
+From:   syzbot <syzbot+c6dde1f690b60e0b9fbe@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,48 +55,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+Hello,
 
-  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-are available in the Git repository at:
+Reported-and-tested-by: syzbot+c6dde1f690b60e0b9fbe@syzkaller.appspotmail.com
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git tags/regmap-v5.19
+Tested on:
 
-for you to fetch changes up to 5c422f0b970d287efa864b8390a02face404db5d:
+commit:         4b0986a3 Linux 5.18
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=55eba09345624206
+dashboard link: https://syzkaller.appspot.com/bug?extid=c6dde1f690b60e0b9fbe
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=10c01fc3f00000
 
-  regmap: Add missing map->bus check (2022-05-09 12:48:45 +0100)
-
-----------------------------------------------------------------
-regmap: Updates for v5.19
-
-The main change here is Marek's addition of bulk read/write callbacks
-for individual regmaps, we've supported single register operations for a
-while but there's enough hardware out there which can use bulk equivalents
-to make it worthwhile.
-
-----------------------------------------------------------------
-Jeongtae Park (1):
-      regmap: cache: set max_register with reg_stride
-
-Marek Vasut (2):
-      regmap: Add bulk read/write callbacks into regmap_config
-      regmap: Add missing map->bus check
-
-Mark Brown (1):
-      regmap: Custom bulk operations for regmaps
-
-Rikard Falkeborn (1):
-      regmap: Constify static regmap_bus structs
-
- drivers/base/regmap/internal.h       |  4 ++
- drivers/base/regmap/regcache.c       |  4 +-
- drivers/base/regmap/regmap-i3c.c     |  2 +-
- drivers/base/regmap/regmap-sccb.c    |  2 +-
- drivers/base/regmap/regmap-sdw-mbq.c |  2 +-
- drivers/base/regmap/regmap-sdw.c     |  2 +-
- drivers/base/regmap/regmap-slimbus.c |  2 +-
- drivers/base/regmap/regmap-w1.c      |  6 +--
- drivers/base/regmap/regmap.c         | 78 +++++++++++++++++++-----------------
- include/linux/regmap.h               | 12 ++++++
- 10 files changed, 67 insertions(+), 47 deletions(-)
+Note: testing is done by a robot and is best-effort only.

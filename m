@@ -2,281 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3318530717
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 03:21:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11F5453071B
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 03:23:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347634AbiEWBVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 21:21:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52214 "EHLO
+        id S1348756AbiEWBXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 21:23:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345755AbiEWBVo (ORCPT
+        with ESMTP id S236556AbiEWBXf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 21:21:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4BC96A1B1
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 18:21:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653268902;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QeksuAmJWYaEi0TQFOkREQ3m4yGhTUgNwHT42YPdtQw=;
-        b=eH1/Jbnxvnh91FR9buFHVLRLSMg34RXZr0CP9hv0Noz6NQpIruiivAlIUhKp3kGlcHFDxT
-        37Tn1yVm5SDlOGjhDOzkJlw0G4xo/kWj1Ww++xjcpTwNJ0HHfxodyV0jazzxj0Ijs8MivD
-        wy64SPuvqYsCeB1+KJOc506c3YC+5nM=
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com
- [209.85.210.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-567-M-H4xCC3NLixwluha1J_TA-1; Sun, 22 May 2022 21:21:33 -0400
-X-MC-Unique: M-H4xCC3NLixwluha1J_TA-1
-Received: by mail-pf1-f197.google.com with SMTP id 15-20020aa7920f000000b0050cf449957fso5409205pfo.9
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 18:21:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=QeksuAmJWYaEi0TQFOkREQ3m4yGhTUgNwHT42YPdtQw=;
-        b=qOHtW+N2d6/LSvryRUdxMJlT+c1dhO2XxXXKAy6Na1iF0V6xa8Q0+SUU7RB/visR7o
-         EY7SNGz/U44xLzWInpDwzDZqT+Ed5CPKa1CpVimLl1cdkLjmTgKlhn2vEg2WTSknctUU
-         DyNVv/AWFJ4/xvBFHZgE3PfHQRRX7BlKfazJiInwMAURYKpraMg3z294XZPBzv7t4E8y
-         wgSJeb3Qe+NAyTrwHTgA9tp5KmlOUNQAtJiVGMx27KkXfWJAsNoayTWSasUqhT9iViwb
-         JYSwS6H0GDWckXv3mO2wsuVNzhHFhix+WQS6ftvyODNCqGFToA3DSqAPKPKCesjVX9Aa
-         +QPA==
-X-Gm-Message-State: AOAM532r4MQ8rN4I4gByEjDEcga3VsAa73pQ+T77NNk6CXqKGv+aIgBy
-        qNCWOxB4W41xRn9xtIl0aG9/CHb+Rpf7dIQ1dm55OKIeMsb4illbSl5wtiM7V6jBAa/xiL0TVe6
-        a6LODW4Tfk7nziJJY95z3o1JPfbP9qlkAtrcXZcrvcg7WyyZCLRNAQk8rrJqD9GY9rBcA+fwZMQ
-        ==
-X-Received: by 2002:a17:90a:d903:b0:1df:a0da:20f0 with SMTP id c3-20020a17090ad90300b001dfa0da20f0mr23423518pjv.182.1653268892126;
-        Sun, 22 May 2022 18:21:32 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyNU9E4cxJdDWjM4BXDRtnTqV2SL+V24TO114v2WBtj4cxB6iy5/XCHNte78zG0bsganOQmLw==
-X-Received: by 2002:a17:90a:d903:b0:1df:a0da:20f0 with SMTP id c3-20020a17090ad90300b001dfa0da20f0mr23423486pjv.182.1653268891813;
-        Sun, 22 May 2022 18:21:31 -0700 (PDT)
-Received: from [10.72.12.81] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id a15-20020a170902710f00b0015e8d4eb283sm3677403pll.205.2022.05.22.18.21.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 22 May 2022 18:21:31 -0700 (PDT)
-Subject: Re: [PATCH 1/2] netfs: ->cleanup() op is always given a rreq pointer
- now
-To:     Jeff Layton <jlayton@kernel.org>,
-        David Howells <dhowells@redhat.com>
-Cc:     Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        David Wysochanski <dwysocha@redhat.com>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        v9fs-developer@lists.sourceforge.net, ceph-devel@vger.kernel.org,
-        linux-afs@lists.infradead.org, linux-cifs@vger.kernel.org,
-        linux-cachefs@redhat.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <165296980082.3595490.3561111064004493810.stgit@warthog.procyon.org.uk>
- <e5f6fee5518ce8e1b4fc5aa7038de1617a341c2f.camel@kernel.org>
-From:   Xiubo Li <xiubli@redhat.com>
-Message-ID: <72a1cb54-4632-659d-e6ec-2d754ab2fc28@redhat.com>
-Date:   Mon, 23 May 2022 09:21:23 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Sun, 22 May 2022 21:23:35 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82CCCDFA5;
+        Sun, 22 May 2022 18:23:34 -0700 (PDT)
+Received: from kwepemi100026.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L60185yqszgYCD;
+        Mon, 23 May 2022 09:22:04 +0800 (CST)
+Received: from kwepemm600015.china.huawei.com (7.193.23.52) by
+ kwepemi100026.china.huawei.com (7.221.188.60) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 23 May 2022 09:23:32 +0800
+Received: from [10.174.176.52] (10.174.176.52) by
+ kwepemm600015.china.huawei.com (7.193.23.52) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 23 May 2022 09:23:31 +0800
+Message-ID: <6d9ca4b4-95f4-6bd5-33fe-e111a44ad280@huawei.com>
+Date:   Mon, 23 May 2022 09:23:30 +0800
 MIME-Version: 1.0
-In-Reply-To: <e5f6fee5518ce8e1b4fc5aa7038de1617a341c2f.camel@kernel.org>
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.1
+Subject: Re: [PATCH -next] fuse: return the more nuanced writeback error on
+ close()
+To:     Al Viro <viro@zeniv.linux.org.uk>
+CC:     <miklos@szeredi.hu>, <linux-fsdevel@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <liuyongqiang13@huawei.com>,
+        <yi.zhang@huawei.com>, <zhangxiaoxu5@huawei.com>
+References: <20220518145729.2488102-1-chenxiaosong2@huawei.com>
+ <YoUIDcOmfJ5lppu3@zeniv-ca.linux.org.uk>
+From:   "chenxiaosong (A)" <chenxiaosong2@huawei.com>
+In-Reply-To: <YoUIDcOmfJ5lppu3@zeniv-ca.linux.org.uk>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.52]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600015.china.huawei.com (7.193.23.52)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 5/19/22 11:36 PM, Jeff Layton wrote:
-> On Thu, 2022-05-19 at 15:16 +0100, David Howells wrote:
->> As the ->init() netfs op is now used to set up the netfslib I/O request
->> rather than passing stuff in, thereby allowing the netfslib functions to be
->> pointed at directly by the address_space_operations struct, we're always
->> going to be able to pass an I/O request pointer to the cleanup function.
->>
->> Therefore, change the ->cleanup() function to take a pointer to the I/O
->> request rather than taking a pointer to the network filesystem's
->> address_space and a piece of private data.
->>
->> Also, rename ->cleanup() to ->free_request() to match the ->init_request()
->> function.
->>
->> Signed-off-by: David Howells <dhowells@redhat.com>
->> cc: Jeff Layton <jlayton@kernel.org>
->> cc: Steve French <sfrench@samba.org>
->> cc: Dominique Martinet <asmadeus@codewreck.org>
->> cc: Jeff Layton <jlayton@redhat.com>
->> cc: David Wysochanski <dwysocha@redhat.com>
->> cc: Ilya Dryomov <idryomov@gmail.com>
->> cc: v9fs-developer@lists.sourceforge.net
->> cc: ceph-devel@vger.kernel.org
->> cc: linux-afs@lists.infradead.org
->> cc: linux-cifs@vger.kernel.org
->> cc: linux-cachefs@redhat.com
->> cc: linux-fsdevel@vger.kernel.org
->> ---
->>
->>   fs/9p/vfs_addr.c      |   11 +++++------
->>   fs/afs/file.c         |    6 +++---
->>   fs/ceph/addr.c        |    9 ++++-----
->>   fs/netfs/objects.c    |    8 +++++---
->>   include/linux/netfs.h |    4 +++-
->>   5 files changed, 20 insertions(+), 18 deletions(-)
->>
->> diff --git a/fs/9p/vfs_addr.c b/fs/9p/vfs_addr.c
->> index 501128188343..002c482794dc 100644
->> --- a/fs/9p/vfs_addr.c
->> +++ b/fs/9p/vfs_addr.c
->> @@ -66,13 +66,12 @@ static int v9fs_init_request(struct netfs_io_request *rreq, struct file *file)
->>   }
+在 2022/5/18 22:51, Al Viro 写道:
+> On Wed, May 18, 2022 at 10:57:29PM +0800, ChenXiaoSong wrote:
+> 
+>> +	/* return more nuanced writeback errors */
+>>   	if (err)
+>> -		return err;
+>> +		return filemap_check_wb_err(file->f_mapping, 0);
 >>   
->>   /**
->> - * v9fs_req_cleanup - Cleanup request initialized by v9fs_init_request
->> - * @mapping: unused mapping of request to cleanup
->> - * @priv: private data to cleanup, a fid, guaranted non-null.
->> + * v9fs_free_request - Cleanup request initialized by v9fs_init_rreq
->> + * @rreq: The I/O request to clean up
->>    */
->> -static void v9fs_req_cleanup(struct address_space *mapping, void *priv)
->> +static void v9fs_free_request(struct netfs_io_request *rreq)
->>   {
->> -	struct p9_fid *fid = priv;
->> +	struct p9_fid *fid = rreq->netfs_priv;
->>   
->>   	p9_client_clunk(fid);
->>   }
->> @@ -94,9 +93,9 @@ static int v9fs_begin_cache_operation(struct netfs_io_request *rreq)
->>   
->>   const struct netfs_request_ops v9fs_req_ops = {
->>   	.init_request		= v9fs_init_request,
->> +	.free_request		= v9fs_free_request,
->>   	.begin_cache_operation	= v9fs_begin_cache_operation,
->>   	.issue_read		= v9fs_issue_read,
->> -	.cleanup		= v9fs_req_cleanup,
->>   };
->>   
->>   /**
->> diff --git a/fs/afs/file.c b/fs/afs/file.c
->> index 26292a110a8f..b9ca72fbbcf9 100644
->> --- a/fs/afs/file.c
->> +++ b/fs/afs/file.c
->> @@ -383,17 +383,17 @@ static int afs_check_write_begin(struct file *file, loff_t pos, unsigned len,
->>   	return test_bit(AFS_VNODE_DELETED, &vnode->flags) ? -ESTALE : 0;
->>   }
->>   
->> -static void afs_priv_cleanup(struct address_space *mapping, void *netfs_priv)
->> +static void afs_free_request(struct netfs_io_request *rreq)
->>   {
->> -	key_put(netfs_priv);
->> +	key_put(rreq->netfs_priv);
->>   }
->>   
->>   const struct netfs_request_ops afs_req_ops = {
->>   	.init_request		= afs_init_request,
->> +	.free_request		= afs_free_request,
->>   	.begin_cache_operation	= afs_begin_cache_operation,
->>   	.check_write_begin	= afs_check_write_begin,
->>   	.issue_read		= afs_issue_read,
->> -	.cleanup		= afs_priv_cleanup,
->>   };
->>   
->>   int afs_write_inode(struct inode *inode, struct writeback_control *wbc)
->> diff --git a/fs/ceph/addr.c b/fs/ceph/addr.c
->> index b6edcf89a429..ee8c1b099c4f 100644
->> --- a/fs/ceph/addr.c
->> +++ b/fs/ceph/addr.c
->> @@ -392,11 +392,10 @@ static int ceph_init_request(struct netfs_io_request *rreq, struct file *file)
->>   	return 0;
->>   }
->>   
->> -static void ceph_readahead_cleanup(struct address_space *mapping, void *priv)
->> +static void ceph_netfs_free_request(struct netfs_io_request *rreq)
->>   {
->> -	struct inode *inode = mapping->host;
->> -	struct ceph_inode_info *ci = ceph_inode(inode);
->> -	int got = (uintptr_t)priv;
->> +	struct ceph_inode_info *ci = ceph_inode(rreq->inode);
->> +	int got = (uintptr_t)rreq->netfs_priv;
->>   
->>   	if (got)
->>   		ceph_put_cap_refs(ci, got);
->> @@ -404,12 +403,12 @@ static void ceph_readahead_cleanup(struct address_space *mapping, void *priv)
->>   
->>   const struct netfs_request_ops ceph_netfs_ops = {
->>   	.init_request		= ceph_init_request,
->> +	.free_request		= ceph_netfs_free_request,
->>   	.begin_cache_operation	= ceph_begin_cache_operation,
->>   	.issue_read		= ceph_netfs_issue_read,
->>   	.expand_readahead	= ceph_netfs_expand_readahead,
->>   	.clamp_length		= ceph_netfs_clamp_length,
->>   	.check_write_begin	= ceph_netfs_check_write_begin,
->> -	.cleanup		= ceph_readahead_cleanup,
->>   };
->>   
->>   #ifdef CONFIG_CEPH_FSCACHE
->> diff --git a/fs/netfs/objects.c b/fs/netfs/objects.c
->> index e86107b30ba4..d6b8c0cbeb7c 100644
->> --- a/fs/netfs/objects.c
->> +++ b/fs/netfs/objects.c
->> @@ -75,10 +75,10 @@ static void netfs_free_request(struct work_struct *work)
->>   	struct netfs_io_request *rreq =
->>   		container_of(work, struct netfs_io_request, work);
->>   
->> -	netfs_clear_subrequests(rreq, false);
->> -	if (rreq->netfs_priv)
->> -		rreq->netfs_ops->cleanup(rreq->mapping, rreq->netfs_priv);
->>   	trace_netfs_rreq(rreq, netfs_rreq_trace_free);
->> +	netfs_clear_subrequests(rreq, false);
->> +	if (rreq->netfs_ops->free_request)
->> +		rreq->netfs_ops->free_request(rreq);
->>   	if (rreq->cache_resources.ops)
->>   		rreq->cache_resources.ops->end_operation(&rreq->cache_resources);
->>   	kfree(rreq);
->> @@ -140,6 +140,8 @@ static void netfs_free_subrequest(struct netfs_io_subrequest *subreq,
->>   	struct netfs_io_request *rreq = subreq->rreq;
->>   
->>   	trace_netfs_sreq(subreq, netfs_sreq_trace_free);
->> +	if (rreq->netfs_ops->free_subrequest)
->> +		rreq->netfs_ops->free_subrequest(subreq);
->>   	kfree(subreq);
->>   	netfs_stat_d(&netfs_n_rh_sreq);
->>   	netfs_put_request(rreq, was_async, netfs_rreq_trace_put_subreq);
->> diff --git a/include/linux/netfs.h b/include/linux/netfs.h
->> index c7bf1eaf51d5..1970c21b4f80 100644
->> --- a/include/linux/netfs.h
->> +++ b/include/linux/netfs.h
->> @@ -204,7 +204,10 @@ struct netfs_io_request {
->>    */
->>   struct netfs_request_ops {
->>   	int (*init_request)(struct netfs_io_request *rreq, struct file *file);
->> +	void (*free_request)(struct netfs_io_request *rreq);
->> +	void (*free_subrequest)(struct netfs_io_subrequest *rreq);
-> Do we need free_subrequest? It looks like nothing defines it in this
-> series.
-
-If this is needed in future, or shall we do this in 
-netfs_clear_subrequests() ?
-
--- Xiubo
-
->>   	int (*begin_cache_operation)(struct netfs_io_request *rreq);
->> +
->>   	void (*expand_readahead)(struct netfs_io_request *rreq);
->>   	bool (*clamp_length)(struct netfs_io_subrequest *subreq);
->>   	void (*issue_read)(struct netfs_io_subrequest *subreq);
->> @@ -212,7 +215,6 @@ struct netfs_request_ops {
->>   	int (*check_write_begin)(struct file *file, loff_t pos, unsigned len,
->>   				 struct folio *folio, void **_fsdata);
->>   	void (*done)(struct netfs_io_request *rreq);
->> -	void (*cleanup)(struct address_space *mapping, void *netfs_priv);
->>   };
->>   
->>   /*
->>
->>
-
+>>   	err = 0;
+> 
+> As an aside, what the hell is that err = 0 about?  Before or after
+> that patch, that is - "let's make err zero, in case it had somehow
+> magically changed ceased to be so since if (err) bugger_off just above"?
+> 
+> .
+> 
+err = 0 is no longer needed after if (err), I will send v2 patch to 
+remove the redundant code.

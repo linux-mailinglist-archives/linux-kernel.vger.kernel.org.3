@@ -2,70 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B09F4531305
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:23:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C77FC5312EC
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:23:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237730AbiEWPUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 11:20:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48628 "EHLO
+        id S237805AbiEWPVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 11:21:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237681AbiEWPUs (ORCPT
+        with ESMTP id S237717AbiEWPVe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 11:20:48 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515085DA79;
-        Mon, 23 May 2022 08:20:47 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id w200so13983169pfc.10;
-        Mon, 23 May 2022 08:20:47 -0700 (PDT)
+        Mon, 23 May 2022 11:21:34 -0400
+Received: from corp-front08-corp.i.nease.net (corp-front08-corp.i.nease.net [59.111.134.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 152A9286ED;
+        Mon, 23 May 2022 08:21:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=D/Inwr04zz5evYrUoXhEX7FCvYRzx8i5GqA3k3ATkNs=;
-        b=U8EA5fTmJXhERlLZ4BOZWIAaMdCQQGa+myhcNaM9kllBj7/CnKkKIObXyKQa1PNiG7
-         1jnE/Eqygwm8GayKACdjKiZtfFvEZCFuyRFgwEFkQFPJpDGxOV8zPkBb111RAmZC65mV
-         CHQWaLGPLrlX0PGEhi8Gyy21gtZwS+Cb/FVq1htf2/jfpFyYO9BVO2GiGQkypWiQMIcF
-         tkq+JgF0Lc90WOUsv0moDrs9jzyZJfA2WAtsaufMT6c5HJ1bhNWBOMWT/M6xUhwO6rK0
-         xDBXKrX5a6XvlEDPD3ZWCR5V+1wy0fx5N2r4omxifvSgDnk4eidRGni6h1b2ROaAQKbg
-         AP3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=D/Inwr04zz5evYrUoXhEX7FCvYRzx8i5GqA3k3ATkNs=;
-        b=xmN8DbGNSmuW9NpUQwEn631PF7j6CerdcHXm91oS4A/4mQlHC3WuJrIMdq8FnbgevN
-         FXktgT7RLMYWdu8zZKjuJAxrLfp779K/lRpHUc8at6l1UNx0IK2eVu0V6PLkeRanVR22
-         BlK3QGpGgyNzHEr6ScdhxAmLvTyTo6YX75ClRUN5n0n1MM369S884fn/VjaNodwyiq9S
-         4tJybJPE21G3BdqhAgzS99G3kP8TpCM1c8NvXFqkQRjjTyrQCrEDV6HN15BkJ8zJbnh/
-         2VrjlrkhoKi9Mq0XUbikbrnLvAvdMA1yBcJ8TrIcicuhpAm4pdB+u7y9hyVR5eHRmRiD
-         Gy/Q==
-X-Gm-Message-State: AOAM532UizrzVgiAIg8MH9mH0pZXo2CYBd+lSiFwHXEpyuCDVCfNLIl6
-        psRRkoWbDIqYpP44pWnXWjZotbTyVdOYwQ==
-X-Google-Smtp-Source: ABdhPJxvvXJG0l5AKxskSnSV89HBpYiemGVnoAQea8WztiAzfZ/nSLNRoxvgYc0KgSejg1XFfxGELw==
-X-Received: by 2002:a05:6a00:1826:b0:518:4c8b:c5db with SMTP id y38-20020a056a00182600b005184c8bc5dbmr19660600pfa.22.1653319246872;
-        Mon, 23 May 2022 08:20:46 -0700 (PDT)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id a2-20020a1709027e4200b001620db30cd6sm4714465pln.201.2022.05.23.08.20.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 08:20:46 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Russell King <linux@armlinux.org.uk>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Joseph Lo <josephl@nvidia.com>,
-        Stephen Warren <swarren@nvidia.com>,
-        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: tegra: Fix refcount leak in tegra114_gic_cpu_pm_registration
-Date:   Mon, 23 May 2022 19:20:36 +0400
-Message-Id: <20220523152037.16078-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        d=corp.netease.com; s=s210401; h=Received:From:To:Cc:Subject:
+        Date:Message-Id:In-Reply-To:References:MIME-Version:
+        Content-Transfer-Encoding; bh=R3zygWyvjLx8PkoAiXgkSSLytNNRrxTxeZ
+        e8vycXt/8=; b=MsiMme38qLMldGXcrNpZ+HfPCVvoG6s7ic4m0iTDfvm4e/B7ny
+        sFuG7yvO/VIlFg74aXL+7q9VoZb5Rd0v4uRCVcAgIAU6jsX2jo7bttH8+gMlUEzE
+        ZTeVtxobWba7M9JIiO12kP7x7nwQCKDT4NZwjgkF51XkWQBHTKsdc68+o=
+Received: from pubt1-k8s74.yq.163.org (unknown [115.238.122.38])
+        by corp-front08-corp.i.nease.net (Coremail) with SMTP id nhDICgBXlABvpotibIJhAA--.8009S2;
+        Mon, 23 May 2022 23:21:19 +0800 (HKT)
+From:   liuyacan@corp.netease.com
+To:     kgraul@linux.ibm.com
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        liuyacan@corp.netease.com, netdev@vger.kernel.org,
+        pabeni@redhat.com, ubraun@linux.ibm.com
+Subject: Re: [PATCH v2 net] net/smc: postpone sk_refcnt increment in connect()
+Date:   Mon, 23 May 2022 23:21:19 +0800
+Message-Id: <20220523152119.406443-1-liuyacan@corp.netease.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <e0b64b80-90e1-5aed-1ca4-f6d20ebac6b7@linux.ibm.com>
+References: <e0b64b80-90e1-5aed-1ca4-f6d20ebac6b7@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+X-CM-TRANSID: nhDICgBXlABvpotibIJhAA--.8009S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Jw4xuF4xtF47ur4xArWDJwb_yoWkGFcEga
+        9akrykCr4rXFWrJayvkF4rGw43K3yjk348XF4kJr47Jw1rXrWkGrZ8urnaqryxJFWfKrsx
+        Gw4rta4Iy342kjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbEAYjxAI6xCIbckI1I0E57IF64kEYxAxM7AC8VAFwI0_Gr0_Xr1l
+        1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0I
+        I2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0
+        Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84
+        ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2kK67ZEXf0FJ3sC6x9vy-n0Xa0_Xr1Utr1k
+        JwI_Jr4ln4vE4IxY62xKV4CY8xCE548m6r4UJryUGwAa7VCY0VAaVVAqrcv_Jw1UWr13M2
+        AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6s8CjcxG0xyl5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v
+        6xkF7I0E8cxan2IY04v7M4kE6xkIj40Ew7xC0wCjxxvEw4Wlc2IjII80xcxEwVAKI48JMx
+        AIw28IcxkI7VAKI48JMxCjnVAK0II2c7xJMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbVAx
+        MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67
+        AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0
+        cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z2
+        80aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI
+        43ZEXa7VUUna93UUUUU==
+X-CM-SenderInfo: 5olx5txfdqquhrush05hwht23hof0z/1tbiBQAPCVt760qFUgAesL
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,29 +69,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_find_matching_node() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when not need anymore.
-Add missing of_node_put() to avoid refcount leak.
+> >> This is a rather unusual problem that can come up when fallback=true BEFORE smc_connect()
+> >> is called. But nevertheless, it is a problem.
+> >>
+> >> Right now I am not sure if it is okay when we NOT hold a ref to smc->sk during all fallback
+> >> processing. This change also conflicts with a patch that is already on net-next (3aba1030).
+> > 
+> > Do you mean put the ref to smc->sk during all fallback processing unconditionally and remove 
+> > the fallback branch sock_put() in __smc_release()?
+> 
+> What I had in mind was to eventually call sock_put() in __smc_release() even if sk->sk_state == SMC_INIT
+> (currently the extra check in the if() for sk->sk_state != SMC_INIT prevents the sock_put()), but only
+> when it is sure that we actually reached the sock_hold() in smc_connect() before.
+> 
+> But maybe we find out that the sock_hold() is not needed for fallback sockets, I don't know...
 
-Fixes: 7e8b15dbc392 ("ARM: tegra114: Reprogram GIC CPU interface to bypass IRQ on CPU PM entry")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- arch/arm/mach-tegra/irq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I do think the sock_hold()/sock_put() for smc->sk is a bit complicated, Emm, I'm not sure if it 
+can be simplified..
 
-diff --git a/arch/arm/mach-tegra/irq.c b/arch/arm/mach-tegra/irq.c
-index 4e1ee70b2a3f..d51bdd46219e 100644
---- a/arch/arm/mach-tegra/irq.c
-+++ b/arch/arm/mach-tegra/irq.c
-@@ -73,7 +73,7 @@ static void __init tegra114_gic_cpu_pm_registration(void)
- 		return;
- 
- 	tegra_gic_cpu_base = of_iomap(dn, 1);
--
-+	of_node_put(dn);
- 	cpu_pm_register_notifier(&tegra_gic_notifier_block);
- }
- #else
--- 
-2.25.1
+In fact, I'm sure there must be another ref count issue in my environment,but I haven't caught it yet.
 

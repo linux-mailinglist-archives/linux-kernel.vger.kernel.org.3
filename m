@@ -2,113 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E59C4531A67
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:55:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CFA0531835
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:53:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240662AbiEWShE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 14:37:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36970 "EHLO
+        id S242195AbiEWSo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 14:44:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241548AbiEWSf4 (ORCPT
+        with ESMTP id S243931AbiEWSo3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 14:35:56 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA9A315D31D
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 11:15:40 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id r68so4569366oie.12
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 11:15:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=zzofvizuF8zNiK4IN4+SAjhbde0gMJTVr1Nmbjv6AbQ=;
-        b=XLOC+ypgI8cKaE9CDgVvdF8PKbjyzLSoTo3x9MsYzQL2PZAqHEzHlGHIxhtbdbp0mH
-         +huFu7/Vq3CUekJB3lNHifVzr+zBFnIkd/aQ3BCB9TjQlOeuB9BzvB4CREai2swuV9BV
-         Pizs3aRQMv+PwgitC0E2zF3arst/BqNQvGz8k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=zzofvizuF8zNiK4IN4+SAjhbde0gMJTVr1Nmbjv6AbQ=;
-        b=321v795Z4VFtiEL9zE/26mCrTeHByzK9VBP9jb0YcHjyiiM7aCHSY+aeRUto2HXmW3
-         +NDBevYSbZSzx50KLra71Sy3kFq9slITDNkc3jRKvaK8BTMAnlF23QtfR2isN9o0DGwf
-         IM4I74UaZgYjnsa3gOLKpXuyh9jD0QV53gOBrIlbrn1ZrbGqjQIH0b2X0NN86b36IjNm
-         mjSq9ali+Q7y/BceaWxXKl7CojW1sDzR6NIczCixhtWeXL0DpEM+K/qDEHPSun7NFw+E
-         2e94A6g5mDuKnAFqPXXbIViIunTgWk+QA01hg69fgoRiYy+JOIV/gMO3QwxEaWuvyRXM
-         X5ow==
-X-Gm-Message-State: AOAM531Z2bBvUuN102IMux75T9OUFw0918/Lfkyi+FmzCIz2VM6oHPTQ
-        Q4+/8ebTeassMbXjQsWzKgaoLXfOewKjXw==
-X-Google-Smtp-Source: ABdhPJxDOIhMiU07IFlHUIqUQmUxxDSxZUqXiGUN1FyXxfn5p8WiK+DycZ7bCA0CEw1YNOoiiJbylw==
-X-Received: by 2002:a05:6808:ec7:b0:322:2bcc:42c2 with SMTP id q7-20020a0568080ec700b003222bcc42c2mr176401oiv.168.1653329644614;
-        Mon, 23 May 2022 11:14:04 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id g6-20020aca3906000000b00325cda1ffb5sm4294539oia.52.2022.05.23.11.14.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 May 2022 11:14:04 -0700 (PDT)
-Subject: Re: [PATCH v7 04/25] kunit: take `kunit_assert` as `const`
-To:     Daniel Latypov <dlatypov@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220523020209.11810-1-ojeda@kernel.org>
- <20220523020209.11810-5-ojeda@kernel.org>
- <CAGS_qxrW+GpDpD7-jxyGaPtQUzBGTdR7N=_7FRR0KdoJCshAAA@mail.gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <23e4e7b4-bd09-b186-093b-a436ee9cb649@linuxfoundation.org>
-Date:   Mon, 23 May 2022 12:14:02 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Mon, 23 May 2022 14:44:29 -0400
+Received: from condef-04.nifty.com (condef-04.nifty.com [202.248.20.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86E97A005B;
+        Mon, 23 May 2022 11:27:50 -0700 (PDT)
+Received: from conuserg-08.nifty.com ([10.126.8.71])by condef-04.nifty.com with ESMTP id 24NIHJs9012196;
+        Tue, 24 May 2022 03:17:19 +0900
+Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
+        by conuserg-08.nifty.com with ESMTP id 24NIFrRV027961;
+        Tue, 24 May 2022 03:15:53 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 24NIFrRV027961
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1653329753;
+        bh=TFguQGsfBK4SLEoyVpZA3IDbS9toCuPJd055UxlIv6c=;
+        h=From:To:Cc:Subject:Date:From;
+        b=rq3y5P4Hn2OX7VgbbiOSIra6Ou9TkSO4f6p4mMJM+p4Mi0WJdutYUQzNRQISYtx7X
+         /fZo8gNxfUZyrc8yGnpI/dEwvhiuJPd3/lXBdnpSAl/sja1S5A8wbuB7rTkIXZaIIr
+         edPhoSD7YmWgIwvdhvdCFIUAHNwqq6brNe8BI88QgDaMKCzZsyJKoNLVvuWUGSSxJC
+         pfniO6OBmtMRm4PWgR5gkMKo0F7or1EbgD2YbO2Usn3nZ0G+h8y/Bfu6xvjRrpXFjF
+         +gnk90c/7xrBQxhwqofgUh2pkLT/J0trYQCp/HY6bkHkz/6AVpeolaeKNvVtl+UMb/
+         lRDy4nxc+HS5w==
+X-Nifty-SrcIP: [133.32.177.133]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: [PATCH] kbuild: replace $(if A,A,B) with $(or A,B) in scripts/Makefile.modpost
+Date:   Tue, 24 May 2022 03:15:03 +0900
+Message-Id: <20220523181503.1007987-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-In-Reply-To: <CAGS_qxrW+GpDpD7-jxyGaPtQUzBGTdR7N=_7FRR0KdoJCshAAA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/23/22 11:15 AM, Daniel Latypov wrote:
-> On Sun, May 22, 2022 at 7:03 PM Miguel Ojeda <ojeda@kernel.org> wrote:
->>
->> The `kunit_do_failed_assertion` function passes its
->> `struct kunit_assert` argument to `kunit_fail`. This one,
->> in turn, calls its `format` field passing the assert again
->> as a `const` pointer.
->>
->> Therefore, the whole chain may be made `const`.
->>
->> Reviewed-by: Daniel Latypov <dlatypov@google.com>
->> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
->> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
->> ---
->> This is a prerequisite patch, independently submitted at:
->>
->>      https://lore.kernel.org/lkml/20220502093625.GA23225@kernel.org/
-> 
-> FYI, we'd asked Shuah to pick this patch up in her "kunit" branch.
-> It's applied here:
-> https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/commit/?h=kunit&id=7466886b400b1904ce30fa311904849e314a2cf4
-> 
-> It had previously seemed unclear if this series could make it for the
-> 5.19 merge window (but it now looks like there's interest in trying it
-> out early on).
-> 
-> Daniel
-> 
+Similar cleanup to commit 5c8166419acf ("kbuild: replace $(if A,A,B)
+with $(or A,B)").
 
-I am just about send pull request with this patch included.
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
 
-thanks,
--- Shuah
+ scripts/Makefile.modpost | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/scripts/Makefile.modpost b/scripts/Makefile.modpost
+index 7c3899182a4a..911606496341 100644
+--- a/scripts/Makefile.modpost
++++ b/scripts/Makefile.modpost
+@@ -84,7 +84,7 @@ obj := $(KBUILD_EXTMOD)
+ src := $(obj)
+ 
+ # Include the module's Makefile to find KBUILD_EXTRA_SYMBOLS
+-include $(if $(wildcard $(src)/Kbuild), $(src)/Kbuild, $(src)/Makefile)
++include $(or $(wildcard $(src)/Kbuild), $(src)/Makefile)
+ 
+ # modpost option for external modules
+ MODPOST += -e
+-- 
+2.32.0
+

@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 762C053189B
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:54:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 476DC531A1F
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:55:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245375AbiEWSHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 14:07:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42524 "EHLO
+        id S243328AbiEWSKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 14:10:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244197AbiEWRi4 (ORCPT
+        with ESMTP id S243310AbiEWRiI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:38:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD1EA9A997;
-        Mon, 23 May 2022 10:33:26 -0700 (PDT)
+        Mon, 23 May 2022 13:38:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E218DDDD;
+        Mon, 23 May 2022 10:32:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 94552B81221;
-        Mon, 23 May 2022 17:14:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E478FC385A9;
-        Mon, 23 May 2022 17:14:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CF46F611D1;
+        Mon, 23 May 2022 17:32:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7AAAC34115;
+        Mon, 23 May 2022 17:32:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326095;
-        bh=LD/W7uHd1vOMPsmRa4IOtCa8tUX9XnTD7hg00Yjc+7o=;
+        s=korg; t=1653327121;
+        bh=4dfSF32OTFY2vE6VRjsBQCAJkn1HMbzv2NuefqMHs+4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=agjidTwoxWpU5JzjKflnlDv3QvpPvXQjkWUPZ2NZUZ6gpVJ0KxuWCAVPoVarKa7ay
-         4VlWhlUGeJOSeJ+2H+8x3gTbcusU6cBsrrpCpWkJcXab+RtETAtI7R4v/ZTN/Wcym6
-         ciJ0MpUc6A22YeJTQupCp+xKW9lG5q5JiYI2dGMw=
+        b=ImEZTy3W0zylLdE24vcSWKC3n36AqNLtlAcci+FPAx4LH3NNoRY/GRDmSY/jBnQLI
+         HTv0LsxaiSaLFslSXkIWxQMexwN1KatbsiEIB3v8hoSx1SDxZ8GVqEAdwq4ABVCQ8+
+         QWQahC4hwetRMd70xPNPvTI2TUs32Qs3dx/tJEJc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable@kernel.org,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Subject: [PATCH 5.4 28/68] Fix double fget() in vhost_net_set_backend()
+        stable@vger.kernel.org,
+        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 138/158] selftests: add ping test with ping_group_range tuned
 Date:   Mon, 23 May 2022 19:04:55 +0200
-Message-Id: <20220523165807.276439249@linuxfoundation.org>
+Message-Id: <20220523165853.186571152@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165802.500642349@linuxfoundation.org>
-References: <20220523165802.500642349@linuxfoundation.org>
+In-Reply-To: <20220523165830.581652127@linuxfoundation.org>
+References: <20220523165830.581652127@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,69 +57,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Al Viro <viro@zeniv.linux.org.uk>
+From: Nicolas Dichtel <nicolas.dichtel@6wind.com>
 
-commit fb4554c2232e44d595920f4d5c66cf8f7d13f9bc upstream.
+[ Upstream commit e71b7f1f44d3d88c677769c85ef0171caf9fc89f ]
 
-Descriptor table is a shared resource; two fget() on the same descriptor
-may return different struct file references.  get_tap_ptr_ring() is
-called after we'd found (and pinned) the socket we'll be using and it
-tries to find the private tun/tap data structures associated with it.
-Redoing the lookup by the same file descriptor we'd used to get the
-socket is racy - we need to same struct file.
+The 'ping' utility is able to manage two kind of sockets (raw or icmp),
+depending on the sysctl ping_group_range. By default, ping_group_range is
+set to '1 0', which forces ping to use an ip raw socket.
 
-Thanks to Jason for spotting a braino in the original variant of patch -
-I'd missed the use of fd == -1 for disabling backend, and in that case
-we can end up with sock == NULL and sock != oldsock.
+Let's replay the ping tests by allowing 'ping' to use the ip icmp socket.
+After the previous patch, ipv4 tests results are the same with both kinds
+of socket. For ipv6, there are a lot a new failures (the previous patch
+fixes only two cases).
 
-Cc: stable@kernel.org
-Acked-by: Michael S. Tsirkin <mst@redhat.com>
-Signed-off-by: Jason Wang <jasowang@redhat.com>
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+Reviewed-by: David Ahern <dsahern@kernel.org>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/vhost/net.c |   15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
+ tools/testing/selftests/net/fcnal-test.sh | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
---- a/drivers/vhost/net.c
-+++ b/drivers/vhost/net.c
-@@ -1446,13 +1446,9 @@ err:
- 	return ERR_PTR(r);
+diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
+index 3f4c8cfe7aca..7cd9b31d0307 100755
+--- a/tools/testing/selftests/net/fcnal-test.sh
++++ b/tools/testing/selftests/net/fcnal-test.sh
+@@ -810,10 +810,16 @@ ipv4_ping()
+ 	setup
+ 	set_sysctl net.ipv4.raw_l3mdev_accept=1 2>/dev/null
+ 	ipv4_ping_novrf
++	setup
++	set_sysctl net.ipv4.ping_group_range='0 2147483647' 2>/dev/null
++	ipv4_ping_novrf
+ 
+ 	log_subsection "With VRF"
+ 	setup "yes"
+ 	ipv4_ping_vrf
++	setup "yes"
++	set_sysctl net.ipv4.ping_group_range='0 2147483647' 2>/dev/null
++	ipv4_ping_vrf
  }
  
--static struct ptr_ring *get_tap_ptr_ring(int fd)
-+static struct ptr_ring *get_tap_ptr_ring(struct file *file)
- {
- 	struct ptr_ring *ring;
--	struct file *file = fget(fd);
--
--	if (!file)
--		return NULL;
- 	ring = tun_get_tx_ring(file);
- 	if (!IS_ERR(ring))
- 		goto out;
-@@ -1461,7 +1457,6 @@ static struct ptr_ring *get_tap_ptr_ring
- 		goto out;
- 	ring = NULL;
- out:
--	fput(file);
- 	return ring;
+ ################################################################################
+@@ -2348,10 +2354,16 @@ ipv6_ping()
+ 	log_subsection "No VRF"
+ 	setup
+ 	ipv6_ping_novrf
++	setup
++	set_sysctl net.ipv4.ping_group_range='0 2147483647' 2>/dev/null
++	ipv6_ping_novrf
+ 
+ 	log_subsection "With VRF"
+ 	setup "yes"
+ 	ipv6_ping_vrf
++	setup "yes"
++	set_sysctl net.ipv4.ping_group_range='0 2147483647' 2>/dev/null
++	ipv6_ping_vrf
  }
  
-@@ -1548,8 +1543,12 @@ static long vhost_net_set_backend(struct
- 		r = vhost_net_enable_vq(n, vq);
- 		if (r)
- 			goto err_used;
--		if (index == VHOST_NET_VQ_RX)
--			nvq->rx_ring = get_tap_ptr_ring(fd);
-+		if (index == VHOST_NET_VQ_RX) {
-+			if (sock)
-+				nvq->rx_ring = get_tap_ptr_ring(sock->file);
-+			else
-+				nvq->rx_ring = NULL;
-+		}
- 
- 		oldubufs = nvq->ubufs;
- 		nvq->ubufs = ubufs;
+ ################################################################################
+-- 
+2.35.1
+
 
 

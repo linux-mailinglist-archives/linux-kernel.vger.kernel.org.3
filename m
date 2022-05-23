@@ -2,119 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C85C5530DF4
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:42:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F933530CB7
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:40:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232901AbiEWJ2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 05:28:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60582 "EHLO
+        id S232930AbiEWJ2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 05:28:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233119AbiEWJ2L (ORCPT
+        with ESMTP id S233200AbiEWJ21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 05:28:11 -0400
-Received: from mail-m975.mail.163.com (mail-m975.mail.163.com [123.126.97.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 173104755C;
-        Mon, 23 May 2022 02:28:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Subject:From:Message-ID:Date:MIME-Version; bh=8lgLT
-        VHt5fsC5K0SV0wgHt+zhEuifJz0vyvqOUOw1zQ=; b=lmGEh22dqallu5hpjSUMw
-        7l2paGbeCgu94+rNkzWiAWkIT6iIAP2p6XL13zArOlZscjVz8vDpJVpCwT/AaQn+
-        9U7bxbTOwY5dOyxHoE+prRcNW/ypIIu6cVN2JLedXEnvMWnWpg2Nd9nh4boswiNU
-        jDsOYPrjEfNrmqF4C/kQgU=
-Received: from [172.20.109.18] (unknown [116.128.244.169])
-        by smtp5 (Coremail) with SMTP id HdxpCgAXlv2LU4timWBXDw--.1293S2;
-        Mon, 23 May 2022 17:27:40 +0800 (CST)
-Subject: Re: [PATCH] KVM: x86/mmu: optimizing the code in
- mmu_try_to_unsync_pages
-To:     Sean Christopherson <seanjc@google.com>,
-        Yuan Yao <yuan.yao@linux.intel.com>
-Cc:     pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        jmattson@google.com, joro@8bytes.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220520060907.863136-1-luyun_611@163.com>
- <20220520095428.bahy37jxkznqtwx5@yy-desk-7060> <YoeqB2KAN/wsHMpk@google.com>
-From:   Yun Lu <luyun_611@163.com>
-Message-ID: <02b0b2de-2dd1-3a18-a679-0e8199db1530@163.com>
-Date:   Mon, 23 May 2022 17:27:39 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Mon, 23 May 2022 05:28:27 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6515A4755C
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 02:28:24 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nt4MF-0007Ub-GJ; Mon, 23 May 2022 11:28:11 +0200
+Message-ID: <bc69ee03-1a74-c15d-ec94-da3b987ab8b1@leemhuis.info>
+Date:   Mon, 23 May 2022 11:28:08 +0200
 MIME-Version: 1.0
-In-Reply-To: <YoeqB2KAN/wsHMpk@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
 Content-Language: en-US
-X-CM-TRANSID: HdxpCgAXlv2LU4timWBXDw--.1293S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7ur1kur47CFWUJF4kCFy3Jwb_yoW5Jr13pr
-        W8GFs3AF4YqrW3G3s29w1DG3s7urs7tF4UZr98Kas5ZwnF9rnxtry8G3WY9r93JryfGF1S
-        va1Y9FW3uFn3JaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07Ur-B_UUUUU=
-X-Originating-IP: [116.128.244.169]
-X-CM-SenderInfo: pox130jbwriqqrwthudrp/1tbiMhsKzlWBziNRmQAAsc
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+To:     Stefan Wahren <stefan.wahren@i2se.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>
+Cc:     Borislav Petkov <bp@alien8.de>, Minchan Kim <minchan@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Phil Elwell <phil@raspberrypi.com>, regressions@lists.linux.dev
+References: <77d6d498-7dd9-03eb-60f2-d7e682bb1b20@i2se.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+Subject: Re: vchiq: Performance regression since 5.18-rc1
+In-Reply-To: <77d6d498-7dd9-03eb-60f2-d7e682bb1b20@i2se.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1653298105;3d2e04a1;
+X-HE-SMSGID: 1nt4MF-0007Ub-GJ
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/5/20 下午10:47, Sean Christopherson wrote:
+[TLDR: I'm adding this regression report to the list of tracked
+regressions; all text from me you find below is based on a few templates
+paragraphs you might have encountered already already in similar form.]
 
-> On Fri, May 20, 2022, Yuan Yao wrote:
->> On Fri, May 20, 2022 at 02:09:07PM +0800, Yun Lu wrote:
->>> There is no need to check can_unsync and prefetch in the loop
->>> every time, just move this check before the loop.
->>>
->>> Signed-off-by: Yun Lu <luyun@kylinos.cn>
->>> ---
->>>   arch/x86/kvm/mmu/mmu.c | 12 ++++++------
->>>   1 file changed, 6 insertions(+), 6 deletions(-)
->>>
->>> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
->>> index 311e4e1d7870..e51e7735adca 100644
->>> --- a/arch/x86/kvm/mmu/mmu.c
->>> +++ b/arch/x86/kvm/mmu/mmu.c
->>> @@ -2534,6 +2534,12 @@ int mmu_try_to_unsync_pages(struct kvm *kvm, const struct kvm_memory_slot *slot,
->>>   	if (kvm_slot_page_track_is_active(kvm, slot, gfn, KVM_PAGE_TRACK_WRITE))
->>>   		return -EPERM;
->>>
->>> +	if (!can_unsync)
->>> +		return -EPERM;
->>> +
->>> +	if (prefetch)
->>> +		return -EEXIST;
->>> +
->>>   	/*
->>>   	 * The page is not write-tracked, mark existing shadow pages unsync
->>>   	 * unless KVM is synchronizing an unsync SP (can_unsync = false).  In
->>> @@ -2541,15 +2547,9 @@ int mmu_try_to_unsync_pages(struct kvm *kvm, const struct kvm_memory_slot *slot,
->>>   	 * allowing shadow pages to become unsync (writable by the guest).
->>>   	 */
->>>   	for_each_gfn_indirect_valid_sp(kvm, sp, gfn) {
->>> -		if (!can_unsync)
->>> -			return -EPERM;
->>> -
->>>   		if (sp->unsync)
->>>   			continue;
->>>
->>> -		if (prefetch)
->>> -			return -EEXIST;
->>> -
->> Consider the case that for_each_gfn_indirect_valid_sp() loop is
->> not triggered, means the gfn is not MMU page table page:
->>
->> The old behavior when : return 0;
->> The new behavior with this change: returrn -EPERM / -EEXIST;
->>
->> It at least breaks FNAME(sync_page) -> make_spte(prefetch = true, can_unsync = false)
->> which removes PT_WRITABLE_MASK from last level mapping unexpectedly.
-> Yep, the flags should be queried if and only if there's at least one valid, indirect
-> SP for th gfn.  And querying whether there's such a SP is quite expesnive and requires
-> looping over a list, so checking every iteration of the loop is far cheaper.  E.g. each
-> check is a single uop on modern CPUs as both gcc and clang are smart enough to stash
-> the flags in registers so that there's no reload from memory on each loop.  And that
-> also means the CPU can more than likely correctly predict subsequent iterations.
-OK, it's my mistake.  Thanks for your answers.
+Hi, this is your Linux kernel regression tracker.
 
+On 22.05.22 01:22, Stefan Wahren wrote:
+> 
+> while testing the staging/vc04_services/interface/vchiq_arm driver with
+> my Raspberry Pi 3 B+ (multi_v7_defconfig) i noticed a huge performance
+> regression since [ff042f4a9b050895a42cae893cc01fa2ca81b95c] mm:
+> lru_cache_disable: replace work queue synchronization with synchronize_rcu
+> 
+> Usually i run "vchiq_test -f 1" to see the driver is still working [1].
+> 
+> Before commit:
+> 
+> real    0m1,500s
+> user    0m0,068s
+> sys    0m0,846s
+> 
+> After commit:
+> 
+> real    7m11,449s
+> user    0m2,049s
+> sys    0m0,023s
+
+Thanks for the report.
+
+To be sure below issue doesn't fall through the cracks unnoticed, I'm
+adding it to regzbot, my Linux kernel regression tracking bot:
+
+#regzbot ^introduced ff042f4a9b050895a42cae893cc01fa2ca81b95
+#regzbot title mm: chiq_test runs 7 minutes instead of ~ 1 second.
+#regzbot ignore-activity
+
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply -- ideally with also
+telling regzbot about it, as explained here:
+https://linux-regtracking.leemhuis.info/tracked-regression/
+
+Reminder for developers: When fixing the issue, add 'Link:' tags
+pointing to the report (the mail this one replied to), as the kernel's
+documentation call for; above page explains why this is important for
+tracked regressions.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.

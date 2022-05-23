@@ -2,87 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6A5E530AEA
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 10:02:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDA0A530A96
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 10:01:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbiEWHdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 03:33:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47898 "EHLO
+        id S230255AbiEWHd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 03:33:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230261AbiEWHcr (ORCPT
+        with ESMTP id S229814AbiEWHdE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 03:32:47 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 149E4CDB
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 00:32:45 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id p4so22632342lfg.4
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 00:32:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=WM2iSjOLNX4HMYT1KBJ2aGaH1i/fqUVeTTeRZ7BJWqI=;
-        b=xpgnLsJaW+uiXjqcvBRtw1Ox3btq1Zpc6LoTPGuU+r+GEYHXTeZv1y5BsKu6YnI+lV
-         rGii2wxRug/9TVgLd9KhL+MhCvqOKZZd81IFpx4Z1UnUNbLeVTtOKmVWMNWX80qopIpL
-         NbyDgx39jmkQQWv42A3xhY8EOEwFA/bmBAwMyuMUocborhxaNUlNwTtyUWnPh6u/ILa4
-         fFGtP295rUcnHZmb3yhcRw5jXHf/r6OkUeSCP75ebJ0Hdcflz9n7K3c6E04z8+HpYY8v
-         P9xh0fyukxvZ5anO/cG8Woy8w337KFzZbpg0O8xWBLtSuPRYANQ/5O8SIRY9s0ku0Ye6
-         W6Dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=WM2iSjOLNX4HMYT1KBJ2aGaH1i/fqUVeTTeRZ7BJWqI=;
-        b=P1HZPGODHb8af0fhUcPoJPKs3Yc555/AAWhW5Yshfx36woEiNpoP0SUMUlTtaBM/y1
-         3jG7N4k85jXuNTxS3nBacdGx93qgLBzxHN9C+FkwItlhG7J8rscFCvSds3ED+Va3Pfgu
-         rOgYzHrEc7JESKVFYXHA8oYNETM3773X353WOw24TNmohltgRQZTtg96Ps5BMkZS8oIU
-         chl4FbuYQeYHTfRAB569jy3FdFoqAVsccAhBO84rjI+UYzJZbKN4q7tDMpwS3JCXp3VB
-         ExSm9KQXIHhk4jFIikhih+xbUrgph0J5r8hpjQAWkGZrqfOclsCtfiWfpmMBBp2FQdMM
-         kzhQ==
-X-Gm-Message-State: AOAM533B2pvd93jIgvkJqHYzd3o5WjcdcG10dU1i4IaAee2gP+eotZ86
-        dhVnIlja4tTJ1EMUWSjcpxNY9w==
-X-Google-Smtp-Source: ABdhPJxkJ1lbfwE/HFS0yyoqUL4vOqViZG1+sY1vIT/G+AZ35A4VLDbzopZna1vNMRo2bjalfVjU0w==
-X-Received: by 2002:a05:6512:3092:b0:478:786f:9fc0 with SMTP id z18-20020a056512309200b00478786f9fc0mr1502296lfd.562.1653291163402;
-        Mon, 23 May 2022 00:32:43 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id g2-20020a2e9e42000000b0024f3d1daea5sm1666653ljk.45.2022.05.23.00.32.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 May 2022 00:32:42 -0700 (PDT)
-Message-ID: <828749d1-d0a6-7016-c36a-ace0bb72600d@linaro.org>
-Date:   Mon, 23 May 2022 09:32:41 +0200
+        Mon, 23 May 2022 03:33:04 -0400
+Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71BA57651
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 00:33:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1653291180; x=1684827180;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=OcwGBUpAAJiWZ5v/YJ1Btd+c99uDP5yJACtABgy45zE=;
+  b=UeKI+Tgn9KESzV74Ti2PhBM3V69hGRuJQ+cO5Th9WT9h1OKD5/yz+w0d
+   IX2vYQSkAqdV8/C7Zp1KXz878X3/YnmBI9lrwq0RFRdHwQ7EYXoPHlUzZ
+   UeAVwhiDf+sq7GZqXzi4qYEn/I6fO2cT4nkcpAKDjJVGpxRUHbs35Mz/8
+   wfoadrXx2kFcV6vRj4OXx2ipE2myElyFSFLkpw3/1QboBc9LWyssk+Utp
+   V6WZs6FNvsyCfcc2E14AjCp7UdbfySelBTgCtS+SCJyyiJooGvrirbIFJ
+   xCo46oUVAzpF2/PUw/WF/EcTH0IFtqMTkeA1WHak4l1tqTVUrORIh7890
+   w==;
+X-IronPort-AV: E=Sophos;i="5.91,245,1647273600"; 
+   d="scan'208";a="201136177"
+Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 23 May 2022 15:33:00 +0800
+IronPort-SDR: yw7r8hy0uk8CBRdwE6eZ94tiysC5y8+m842PCxdemZvzbsUkjfKHwc7Dvus+K/EKCZ6/AbNdMq
+ BecptYedcZnRDz2V0O7ConBa5XmiaK+zebfWjhUiTQXHjHAGpRW6Re3WPCDbclIi/mUhtmHUDp
+ YNMKwltvOVPBGcuIQQy0MsF/nuWLQ8ZX1flSzqsXfzSLEyCAeqTJbp+tMqk7xkaWUPFbJwJM4/
+ 5nM8TNs6K2iNznFLHXoeLCgxctJZHuH2NjQHRDp2w+rdkyApuSF3OSgmk8uB16KoRNfwOl0R//
+ RVMBiWkD33X63a0oB4eytPxf
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 22 May 2022 23:57:00 -0700
+IronPort-SDR: A06DTfuVJ8gc2oirFFPi69+r1tlfoHZ8rpnxVUCgQiyO6Fl422CQ63UNpYMIWEhSbXfrueB3oV
+ PaQwjx3U/U+76hkBcpftAZ0qEFiaBH1IK8MYe8HcoEVjLeAZh10W1xKinkSKjR+pI17oUzqZUx
+ uo12etVnzJ5f/dp68/cGtWAy8MCryqat/7xj954mb2Hp1OtkOaokS43zceuMCOnFtSBsnhWmFu
+ Cd4IpLDdfNI1TXgWu0gf1ubWi3YnNHWWWIiGRaUkIYVyQr8p3vGk3NN+FbPn6jjxVx2zys9OWE
+ VhM=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 23 May 2022 00:33:00 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4L68F812VJz1SVp7
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 00:33:00 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1653291178; x=1655883179; bh=OcwGBUpAAJiWZ5v/YJ1Btd+c99uDP5yJACt
+        ABgy45zE=; b=KZLz5DNGE1EMHNc36tC3TAUZznz7ftzzJaC+XiqPThzU7wLVAYA
+        WLfUP8He0YrJ1gLCARo0/rcSA1aAH7gEGyIPMYkb7xghe04wZPIdJhQ8Es8KrLsc
+        voIAEVbQJRFEc+Kxs6E1ri4+rWS5+xkrOuLAP3jnkhTo70t8Wbl8uj/UZ/YY+Lgw
+        O3NGzPEeIi8+9CqJe58gWphzlDmDbknR9HbRHwAwEsWnKFPHmcJ5tMuefSKLZ6Iq
+        +s/9fC+dLrW26sIuZuoBl/X7bU4mDN/82cAyOB5T5dTmSEapTUa4mN1TpD3nXx76
+        /vX5OQdlr//R6ve+zl4hlPdx4hHENJ++HSg==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id af63hnJrPK-7 for <linux-kernel@vger.kernel.org>;
+        Mon, 23 May 2022 00:32:58 -0700 (PDT)
+Received: from [10.89.85.73] (c02drav6md6t.dhcp.fujisawa.hgst.com [10.89.85.73])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4L68F40HYpz1Rvlc;
+        Mon, 23 May 2022 00:32:55 -0700 (PDT)
+Message-ID: <2b4426a6-88ac-1bce-ea80-52902897cd0f@opensource.wdc.com>
+Date:   Mon, 23 May 2022 16:32:52 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v1 05/19] dt-bindings: watchdog: npcm: Add npcm845
- compatible string
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.0
+Subject: Re: [PATCH 2/4] dma-iommu: Add iommu_dma_opt_mapping_size()
 Content-Language: en-US
-To:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
-        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, daniel.lezcano@linaro.org,
-        tglx@linutronix.de, wim@linux-watchdog.org, linux@roeck-us.net,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        olof@lixom.net, jirislaby@kernel.org, shawnguo@kernel.org,
-        bjorn.andersson@linaro.org, geert+renesas@glider.be,
-        marcel.ziswiler@toradex.com, vkoul@kernel.org,
-        biju.das.jz@bp.renesas.com, nobuhiro1.iwamatsu@toshiba.co.jp,
-        robert.hancock@calian.com, j.neuschaefer@gmx.net, lkundrak@v3.sk
-Cc:     soc@kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220522155046.260146-1-tmaimon77@gmail.com>
- <20220522155046.260146-6-tmaimon77@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220522155046.260146-6-tmaimon77@gmail.com>
+To:     John Garry <john.garry@huawei.com>, joro@8bytes.org,
+        will@kernel.org, jejb@linux.ibm.com, martin.petersen@oracle.com,
+        hch@lst.de, m.szyprowski@samsung.com, robin.murphy@arm.com
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ide@vger.kernel.org, iommu@lists.linux-foundation.org,
+        linux-scsi@vger.kernel.org, liyihang6@hisilicon.com,
+        chenxiang66@hisilicon.com, thunder.leizhen@huawei.com
+References: <1653035003-70312-1-git-send-email-john.garry@huawei.com>
+ <1653035003-70312-3-git-send-email-john.garry@huawei.com>
+ <250a10e6-40ae-e4e8-ae01-4f7144b089f8@opensource.wdc.com>
+ <655b915c-e8d2-d65b-676a-a51e788f1695@huawei.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <655b915c-e8d2-d65b-676a-a51e788f1695@huawei.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,14 +105,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/05/2022 17:50, Tomer Maimon wrote:
-> Add a compatible string for Nuvoton BMC NPCM845 watchdog.
+On 2022/05/23 16:01, John Garry wrote:
+> On 21/05/2022 00:33, Damien Le Moal wrote:
 > 
-> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> Hi Damien,
+> 
+>>> +unsigned long iova_rcache_range(void)
+>> Why not a size_t return type ?
+> 
+> The IOVA code generally uses unsigned long for size/range while 
+> dam-iommu uses size_t as appropiate, so I'm just sticking to that.
+
+OK.
+
+> 
+>>
+>>> +{
+>>> +	return PAGE_SIZE << (IOVA_RANGE_CACHE_MAX_SIZE - 1);
+>>> +}
+>>> +
+> 
+> Thanks,
+> John
 
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof
+-- 
+Damien Le Moal
+Western Digital Research

@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0112E53078B
+	by mail.lfdr.de (Postfix) with ESMTP id 722AE53078C
 	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 04:07:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352693AbiEWCFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 22:05:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41888 "EHLO
+        id S1353012AbiEWCGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 22:06:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352656AbiEWCFH (ORCPT
+        with ESMTP id S1352799AbiEWCFJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 22:05:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 379C339BAB;
-        Sun, 22 May 2022 19:04:20 -0700 (PDT)
+        Sun, 22 May 2022 22:05:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73EB93A1AA;
+        Sun, 22 May 2022 19:04:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B245860F55;
-        Mon, 23 May 2022 02:04:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F191DC385B8;
-        Mon, 23 May 2022 02:04:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0DEB7B80EA2;
+        Mon, 23 May 2022 02:04:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20BF2C385AA;
+        Mon, 23 May 2022 02:04:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653271459;
-        bh=CsSZhvE3G3qLTKQDekFf99My1SQN56i9We3vBz8ZUzY=;
+        s=k20201202; t=1653271466;
+        bh=yr6GBFC+CA8TjJhtX5Bs8hW/G84cYfpKClrmlLJTT+4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y+ULEu+wDKHLqgGLK4cdE6kb9V+Keq0+mT0wNlb0q8Q3EX2+IAEERRr6U2C5qMdh8
-         nKJ7a93AXjeUuPG/4yXRhLgYWUp6KTc1+CaMyXCnsTFpHVeybMUzljP5xlwNsshhlP
-         T1c15aNE2W4ThpCWSJphXjExUuKQaxosjPIl9I+ZafK1E42bfGXqum8KcNRxajuy3a
-         IKL4+rnkdU2JiY5xN7d4TAB+GckJ3xzNvuyhHjm/EC9QXvHIZK4nVm0m5IR+3Hd1Tj
-         xTLpXfvdT4bMUGTRBoNJ3kVmEww2LZv5EI8qHjfs8OmrYq1b2PkS7w17ZPWADM1NcI
-         uZYOhwNUGXJuQ==
+        b=gSDSZbmFQ1GqFtKqLblwGqtodt2EfkUHqf5cRdK9Yf9o0MxKxyinSbVxBNRPod90t
+         sZbNko7Ghj2mGtRAEcSeOnJiOebPCxaDJo0eXLX2uYGtDH/LCSh4f68MZmac/qvW1l
+         9tRPzPj3KvMtvPmYDai5oQZctbugyKHF98/2Q1YIjA876Z6p5AHQIzwJHAXeCfrev/
+         ZOUBeNIG+bFsUlHbN+cor2lX8i7pOvKThWHWVfpgqyqXPzmAlx1yM0DIlADQTkLfxD
+         YMRZ6TrYXFbuUTFcl1Ruc6oB0sTQCq9QgzW5SmocgKs6I8HXxQdfgiVZp8IA+Y7lh5
+         ZcautORqgdlhQ==
 From:   Miguel Ojeda <ojeda@kernel.org>
 To:     Linus Torvalds <torvalds@linux-foundation.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -40,10 +40,23 @@ Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
         Miguel Ojeda <ojeda@kernel.org>,
         Kees Cook <keescook@chromium.org>,
         Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>
-Subject: [PATCH v7 19/25] scripts: decode_stacktrace: demangle Rust symbols
-Date:   Mon, 23 May 2022 04:01:32 +0200
-Message-Id: <20220523020209.11810-20-ojeda@kernel.org>
+        Finn Behrens <me@kloenk.de>,
+        Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Wu XiangCheng <bobwxc@email.cn>, Gary Guo <gary@garyguo.net>,
+        Boris-Chengbiao Zhou <bobo1239@web.de>,
+        Yuki Okushi <jtitor@2k36.org>, Wei Liu <wei.liu@kernel.org>,
+        Daniel Xu <dxu@dxuuu.xyz>, Julian Merkle <me@jvmerkle.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org
+Subject: [PATCH v7 20/25] docs: add Rust documentation
+Date:   Mon, 23 May 2022 04:01:33 +0200
+Message-Id: <20220523020209.11810-21-ojeda@kernel.org>
 In-Reply-To: <20220523020209.11810-1-ojeda@kernel.org>
 References: <20220523020209.11810-1-ojeda@kernel.org>
 MIME-Version: 1.0
@@ -58,135 +71,897 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Recent versions of both Binutils (`c++filt`) and LLVM (`llvm-cxxfilt`)
-provide Rust v0 mangling support.
+Most of the documentation for Rust is written within the source code
+itself, as it is idiomatic for Rust projects. This applies to both
+the shared infrastructure at `rust/` as well as any other Rust module
+(e.g. drivers) written across the kernel.
+
+However, these documents contain general information that does not
+fit particularly well in the source code, like the Quick Start guide.
+
+It also contains an asset (SVG logo) used for the `rustdoc` target
+and a few other small changes elsewhere in the documentation folder.
 
 Reviewed-by: Kees Cook <keescook@chromium.org>
 Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
 Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
+Co-developed-by: Finn Behrens <me@kloenk.de>
+Signed-off-by: Finn Behrens <me@kloenk.de>
+Co-developed-by: Adam Bratschi-Kaye <ark.email@gmail.com>
+Signed-off-by: Adam Bratschi-Kaye <ark.email@gmail.com>
 Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
 Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
+Co-developed-by: Michael Ellerman <mpe@ellerman.id.au>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Co-developed-by: Sven Van Asbroeck <thesven73@gmail.com>
+Signed-off-by: Sven Van Asbroeck <thesven73@gmail.com>
+Co-developed-by: Wu XiangCheng <bobwxc@email.cn>
+Signed-off-by: Wu XiangCheng <bobwxc@email.cn>
+Co-developed-by: Gary Guo <gary@garyguo.net>
+Signed-off-by: Gary Guo <gary@garyguo.net>
+Co-developed-by: Boris-Chengbiao Zhou <bobo1239@web.de>
+Signed-off-by: Boris-Chengbiao Zhou <bobo1239@web.de>
+Co-developed-by: Yuki Okushi <jtitor@2k36.org>
+Signed-off-by: Yuki Okushi <jtitor@2k36.org>
+Co-developed-by: Wei Liu <wei.liu@kernel.org>
+Signed-off-by: Wei Liu <wei.liu@kernel.org>
+Co-developed-by: Daniel Xu <dxu@dxuuu.xyz>
+Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+Co-developed-by: Julian Merkle <me@jvmerkle.de>
+Signed-off-by: Julian Merkle <me@jvmerkle.de>
 Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 ---
-I would like to use this patch for discussing the demangling topic.
+ Documentation/doc-guide/kernel-doc.rst     |   3 +
+ Documentation/index.rst                    |   1 +
+ Documentation/kbuild/kbuild.rst            |  17 ++
+ Documentation/kbuild/makefiles.rst         |  50 ++++-
+ Documentation/process/changes.rst          |  41 ++++
+ Documentation/rust/arch-support.rst        |  25 +++
+ Documentation/rust/coding-guidelines.rst   | 216 +++++++++++++++++++
+ Documentation/rust/general-information.rst |  79 +++++++
+ Documentation/rust/index.rst               |  22 ++
+ Documentation/rust/quick-start.rst         | 232 +++++++++++++++++++++
+ 10 files changed, 682 insertions(+), 4 deletions(-)
+ create mode 100644 Documentation/rust/arch-support.rst
+ create mode 100644 Documentation/rust/coding-guidelines.rst
+ create mode 100644 Documentation/rust/general-information.rst
+ create mode 100644 Documentation/rust/index.rst
+ create mode 100644 Documentation/rust/quick-start.rst
 
-The last discussion took place in v6:
-
-    https://lore.kernel.org/lkml/20220507052451.12890-18-ojeda@kernel.org/
-
-The following discusses the different approaches we could take.
-
-
-# Leave demangling to userspace
-
-This is the easiest and less invasive approach, the one implemented
-by this patch.
-
-The `decode_stacktrace.sh` script is already needed to map
-the offsets to the source code. Therefore, we could also take
-the chance to demangle the symbols here.
-
-With this approach, we do not need to introduce any change in the
-`vsprintf` machinery and we minimize the risk of breaking user tools.
-
-Note that, if we take this approach, it is likely we want to ask
-for a minimum version of either of the tools (since there may be
-users of the script that do not have recent enough toolchains).
-
-
-# Demangling in kernelspace on-the-fly
-
-That is, at backtrace print time, we demangle the Rust symbols.
-
-The size of the code that would be needed is fairly small; around
-5 KiB using the "official" library (written in Rust), e.g.:
-
-    text    data    bss     dec      hex    filename
-    7799976 1689820 2129920 11619716 b14d84 vmlinux
-    7801111 1693916 2129920 11624947 b161f3 vmlinux + demangling
-
-We can remove a few bits from the official library, e.g. punycode
-support that we do not need (all our identifiers will be ASCII),
-but it does not make a substantial difference.
-
-The official library performs the demangling without requiring
-allocations. However, of course, it will increased our stack usage
-and complexity, specially considering a stack dump may be requested
-in not ideal conditions.
-
-Furthermore, this approach (and the ones below) likely require adding
-a new `%p` specifier (or a new modifier to existing ones) if we do
-not want to affect non-backtrace uses of the `B`/`S` ones. Also,
-it is unclear whether we should write the demangled versions in an
-extra, different line or replace the real symbol -- we could be
-breaking user tools relying on parsing backtraces (e.g. our own
-`decode_stacktrace.sh`). For instance, they could be relying on
-having real symbols there, or may break due to e.g. spaces.
-
-
-# Demangling at compile-time
-
-This implies having kallsyms demangle all the Rust symbols.
-
-The size of this data is around the same order of magnitude of the
-non-demangled ones. However, this is notably more than the demangling
-code (see previous point), e.g. 120 KiB (uncompressed) in a
-small kernel.
-
-This approach also brings the same concerns regarding modifying
-the backtrace printing (see previous point).
-
-
-# Demangling at compile-time and substituting symbols by hashes
-
-One variation of the previous alternative is avoiding the mangled
-names inside the kernel, by hashing them. This would avoid having
-to support "big symbols" and would also reduce the size of the
-kallsyms tables, while still allowing to link modules.
-
-However, if we do not have the real symbols around, then we do not
-have the possibility of providing both the mangled and demangled
-versions in the backtrace, which brings us back to the issues
-related to breaking userspace tools. There are also other places
-other than backtraces using "real" symbols that users may be
-relying on, such as `/proc/*/stack`.
-
-
- scripts/decode_stacktrace.sh | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
-
-diff --git a/scripts/decode_stacktrace.sh b/scripts/decode_stacktrace.sh
-index 5fbad61fe490..f3c7b506d440 100755
---- a/scripts/decode_stacktrace.sh
-+++ b/scripts/decode_stacktrace.sh
-@@ -8,6 +8,14 @@ usage() {
- 	echo "	$0 -r <release> | <vmlinux> [<base path>|auto] [<modules path>]"
- }
+diff --git a/Documentation/doc-guide/kernel-doc.rst b/Documentation/doc-guide/kernel-doc.rst
+index 79aaa55d6bcf..cde7aa67e76f 100644
+--- a/Documentation/doc-guide/kernel-doc.rst
++++ b/Documentation/doc-guide/kernel-doc.rst
+@@ -11,6 +11,9 @@ when it is embedded in source files.
+    reasons. The kernel source contains tens of thousands of kernel-doc
+    comments. Please stick to the style described here.
  
-+# Try to find a Rust demangler
-+if type llvm-cxxfilt >/dev/null 2>&1 ; then
-+	cppfilt=llvm-cxxfilt
-+elif type c++filt >/dev/null 2>&1 ; then
-+	cppfilt=c++filt
-+	cppfilt_opts=-i
-+fi
++.. note:: kernel-doc does not cover Rust code: please see
++   Documentation/rust/general-information.rst instead.
 +
- if [[ $1 == "-r" ]] ; then
- 	vmlinux=""
- 	basepath="auto"
-@@ -169,6 +177,12 @@ parse_symbol() {
- 	# In the case of inlines, move everything to same line
- 	code=${code//$'\n'/' '}
+ The kernel-doc structure is extracted from the comments, and proper
+ `Sphinx C Domain`_ function and type descriptions with anchors are
+ generated from them. The descriptions are filtered for special kernel-doc
+diff --git a/Documentation/index.rst b/Documentation/index.rst
+index 1988c19d9daf..ee639a500278 100644
+--- a/Documentation/index.rst
++++ b/Documentation/index.rst
+@@ -82,6 +82,7 @@ merged much easier.
+    maintainer/index
+    fault-injection/index
+    livepatch/index
++   rust/index
  
-+	# Demangle if the name looks like a Rust symbol and if
-+	# we got a Rust demangler
-+	if [[ $name =~ ^_R && $cppfilt != "" ]] ; then
-+		name=$("$cppfilt" "$cppfilt_opts" "$name")
-+	fi
+ 
+ Kernel API documentation
+diff --git a/Documentation/kbuild/kbuild.rst b/Documentation/kbuild/kbuild.rst
+index ef19b9c13523..08f575e6236c 100644
+--- a/Documentation/kbuild/kbuild.rst
++++ b/Documentation/kbuild/kbuild.rst
+@@ -48,6 +48,10 @@ KCFLAGS
+ -------
+ Additional options to the C compiler (for built-in and modules).
+ 
++KRUSTFLAGS
++----------
++Additional options to the Rust compiler (for built-in and modules).
 +
- 	# Replace old address with pretty line numbers
- 	symbol="$segment$name ($code)"
- }
+ CFLAGS_KERNEL
+ -------------
+ Additional options for $(CC) when used to compile
+@@ -57,6 +61,15 @@ CFLAGS_MODULE
+ -------------
+ Additional module specific options to use for $(CC).
+ 
++RUSTFLAGS_KERNEL
++----------------
++Additional options for $(RUSTC) when used to compile
++code that is compiled as built-in.
++
++RUSTFLAGS_MODULE
++----------------
++Additional module specific options to use for $(RUSTC).
++
+ LDFLAGS_MODULE
+ --------------
+ Additional options used for $(LD) when linking modules.
+@@ -69,6 +82,10 @@ HOSTCXXFLAGS
+ ------------
+ Additional flags to be passed to $(HOSTCXX) when building host programs.
+ 
++HOSTRUSTFLAGS
++-------------
++Additional flags to be passed to $(HOSTRUSTC) when building host programs.
++
+ HOSTLDFLAGS
+ -----------
+ Additional flags to be passed when linking host programs.
+diff --git a/Documentation/kbuild/makefiles.rst b/Documentation/kbuild/makefiles.rst
+index 11a296e52d68..5ea1e72d89c8 100644
+--- a/Documentation/kbuild/makefiles.rst
++++ b/Documentation/kbuild/makefiles.rst
+@@ -29,8 +29,9 @@ This document describes the Linux kernel Makefiles.
+ 	   --- 4.1 Simple Host Program
+ 	   --- 4.2 Composite Host Programs
+ 	   --- 4.3 Using C++ for host programs
+-	   --- 4.4 Controlling compiler options for host programs
+-	   --- 4.5 When host programs are actually built
++	   --- 4.4 Using Rust for host programs
++	   --- 4.5 Controlling compiler options for host programs
++	   --- 4.6 When host programs are actually built
+ 
+ 	=== 5 Userspace Program support
+ 	   --- 5.1 Simple Userspace Program
+@@ -835,7 +836,24 @@ Both possibilities are described in the following.
+ 		qconf-cxxobjs := qconf.o
+ 		qconf-objs    := check.o
+ 
+-4.4 Controlling compiler options for host programs
++4.4 Using Rust for host programs
++--------------------------------
++
++	Kbuild offers support for host programs written in Rust. However,
++	since a Rust toolchain is not mandatory for kernel compilation,
++	it may only be used in scenarios where Rust is required to be
++	available (e.g. when  ``CONFIG_RUST`` is enabled).
++
++	Example::
++
++		hostprogs     := target
++		target-rust   := y
++
++	Kbuild will compile ``target`` using ``target.rs`` as the crate root,
++	located in the same directory as the ``Makefile``. The crate may
++	consist of several source files (see ``samples/rust/hostprogs``).
++
++4.5 Controlling compiler options for host programs
+ --------------------------------------------------
+ 
+ 	When compiling host programs, it is possible to set specific flags.
+@@ -867,7 +885,7 @@ Both possibilities are described in the following.
+ 	When linking qconf, it will be passed the extra option
+ 	"-L$(QTDIR)/lib".
+ 
+-4.5 When host programs are actually built
++4.6 When host programs are actually built
+ -----------------------------------------
+ 
+ 	Kbuild will only build host-programs when they are referenced
+@@ -1181,6 +1199,17 @@ When kbuild executes, the following steps are followed (roughly):
+ 	The first example utilises the trick that a config option expands
+ 	to 'y' when selected.
+ 
++    KBUILD_RUSTFLAGS
++	$(RUSTC) compiler flags
++
++	Default value - see top level Makefile
++	Append or modify as required per architecture.
++
++	Often, the KBUILD_RUSTFLAGS variable depends on the configuration.
++
++	Note that target specification file generation (for ``--target``)
++	is handled in ``scripts/generate_rust_target.rs``.
++
+     KBUILD_AFLAGS_KERNEL
+ 	Assembler options specific for built-in
+ 
+@@ -1208,6 +1237,19 @@ When kbuild executes, the following steps are followed (roughly):
+ 	are used for $(CC).
+ 	From commandline CFLAGS_MODULE shall be used (see kbuild.rst).
+ 
++    KBUILD_RUSTFLAGS_KERNEL
++	$(RUSTC) options specific for built-in
++
++	$(KBUILD_RUSTFLAGS_KERNEL) contains extra Rust compiler flags used to
++	compile resident kernel code.
++
++    KBUILD_RUSTFLAGS_MODULE
++	Options for $(RUSTC) when building modules
++
++	$(KBUILD_RUSTFLAGS_MODULE) is used to add arch-specific options that
++	are used for $(RUSTC).
++	From commandline RUSTFLAGS_MODULE shall be used (see kbuild.rst).
++
+     KBUILD_LDFLAGS_MODULE
+ 	Options for $(LD) when linking modules
+ 
+diff --git a/Documentation/process/changes.rst b/Documentation/process/changes.rst
+index a337e8eabfe1..a886ac497266 100644
+--- a/Documentation/process/changes.rst
++++ b/Documentation/process/changes.rst
+@@ -31,6 +31,8 @@ you probably needn't concern yourself with pcmciautils.
+ ====================== ===============  ========================================
+ GNU C                  5.1              gcc --version
+ Clang/LLVM (optional)  11.0.0           clang --version
++Rust (optional)        1.60.0           rustc --version
++bindgen (optional)     0.56.0           bindgen --version
+ GNU make               3.81             make --version
+ binutils               2.23             ld -v
+ flex                   2.5.35           flex --version
+@@ -78,6 +80,29 @@ kernels. Older releases aren't guaranteed to work, and we may drop workarounds
+ from the kernel that were used to support older versions. Please see additional
+ docs on :ref:`Building Linux with Clang/LLVM <kbuild_llvm>`.
+ 
++Rust (optional)
++---------------
++
++A particular version of the Rust toolchain is required. Newer versions may or
++may not work because the kernel depends on some unstable Rust features, for
++the moment.
++
++Each Rust toolchain comes with several "components", some of which are required
++(like ``rustc``) and some that are optional. The ``rust-src`` component (which
++is optional) needs to be installed to build the kernel. Other components are
++useful for developing.
++
++Please see Documentation/rust/quick-start.rst for instructions on how to
++satisfy the build requirements of Rust support. In particular, the ``Makefile``
++target ``rustavailable`` is useful to check why the Rust toolchain may not
++be detected.
++
++bindgen (optional)
++------------------
++
++``bindgen`` is used to generate the Rust bindings to the C side of the kernel.
++It depends on ``libclang``.
++
+ Make
+ ----
+ 
+@@ -340,6 +365,12 @@ Sphinx
+ Please see :ref:`sphinx_install` in :ref:`Documentation/doc-guide/sphinx.rst <sphinxdoc>`
+ for details about Sphinx requirements.
+ 
++rustdoc
++-------
++
++``rustdoc`` is used to generate the documentation for Rust code. Please see
++Documentation/rust/general-information.rst for more information.
++
+ Getting updated software
+ ========================
+ 
+@@ -356,6 +387,16 @@ Clang/LLVM
+ 
+ - :ref:`Getting LLVM <getting_llvm>`.
+ 
++Rust
++----
++
++- Documentation/rust/quick-start.rst.
++
++bindgen
++-------
++
++- Documentation/rust/quick-start.rst.
++
+ Make
+ ----
+ 
+diff --git a/Documentation/rust/arch-support.rst b/Documentation/rust/arch-support.rst
+new file mode 100644
+index 000000000000..79ebad889720
+--- /dev/null
++++ b/Documentation/rust/arch-support.rst
+@@ -0,0 +1,25 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++Arch Support
++============
++
++Currently, the Rust compiler (``rustc``) uses LLVM for code generation,
++which limits the supported architectures that can be targeted. In addition,
++support for building the kernel with LLVM/Clang varies (please see
++Documentation/kbuild/llvm.rst). This support is needed for ``bindgen``
++which uses ``libclang``.
++
++Below is a general summary of architectures that currently work. Level of
++support corresponds to ``S`` values in the ``MAINTAINERS`` file.
++
++============  ================  ==============================================
++Architecture  Level of support  Constraints
++============  ================  ==============================================
++``arm``       Maintained        ``armv6`` and compatible only,
++                                ``RUST_OPT_LEVEL >= 2``.
++``arm64``     Maintained        None.
++``powerpc``   Maintained        ``ppc64le`` only, ``RUST_OPT_LEVEL < 2``
++                                requires ``CONFIG_THREAD_SHIFT=15``.
++``riscv``     Maintained        ``riscv64`` only.
++``x86``       Maintained        ``x86_64`` only.
++============  ================  ==============================================
+diff --git a/Documentation/rust/coding-guidelines.rst b/Documentation/rust/coding-guidelines.rst
+new file mode 100644
+index 000000000000..aa8ed082613e
+--- /dev/null
++++ b/Documentation/rust/coding-guidelines.rst
+@@ -0,0 +1,216 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++Coding Guidelines
++=================
++
++This document describes how to write Rust code in the kernel.
++
++
++Style & formatting
++------------------
++
++The code should be formatted using ``rustfmt``. In this way, a person
++contributing from time to time to the kernel does not need to learn and
++remember one more style guide. More importantly, reviewers and maintainers
++do not need to spend time pointing out style issues anymore, and thus
++less patch roundtrips may be needed to land a change.
++
++.. note:: Conventions on comments and documentation are not checked by
++  ``rustfmt``. Thus those are still needed to be taken care of.
++
++The default settings of ``rustfmt`` are used. This means the idiomatic Rust
++style is followed. For instance, 4 spaces are used for indentation rather
++than tabs.
++
++It is convenient to instruct editors/IDEs to format while typing,
++when saving or at commit time. However, if for some reason reformatting
++the entire kernel Rust sources is needed at some point, the following can be
++run::
++
++	make LLVM=1 rustfmt
++
++It is also possible to check if everything is formatted (printing a diff
++otherwise), for instance for a CI, with::
++
++	make LLVM=1 rustfmtcheck
++
++Like ``clang-format`` for the rest of the kernel, ``rustfmt`` works on
++individual files, and does not require a kernel configuration. Sometimes it may
++even work with broken code.
++
++
++Comments
++--------
++
++"Normal" comments (i.e. ``//``, rather than code documentation which starts
++with ``///`` or ``//!``) are written in Markdown the same way as documentation
++comments are, even though they will not be rendered. This improves consistency,
++simplifies the rules and allows to move content between the two kinds of
++comments more easily. For instance:
++
++.. code-block:: rust
++
++	// `object` is ready to be handled now.
++	f(object);
++
++Furthermore, just like documentation, comments are capitalized at the beginning
++of a sentence and ended with a period (even if it is a single sentence). This
++includes ``// SAFETY:``, ``// TODO:`` and other "tagged" comments, e.g.:
++
++.. code-block:: rust
++
++	// FIXME: The error should be handled properly.
++
++Comments should not be used for documentation purposes: comments are intended
++for implementation details, not users. This distinction is useful even if the
++reader of the source file is both an implementor and a user of an API. In fact,
++sometimes it is useful to use both comments and documentation at the same time.
++For instance, for a ``TODO`` list or to comment on the documentation itself.
++For the latter case, comments can be inserted in the middle; that is, closer to
++the line of documentation to be commented. For any other case, comments are
++written after the documentation, e.g.:
++
++.. code-block:: rust
++
++	/// Returns a new [`Foo`].
++	///
++	/// # Examples
++	///
++	// TODO: Find a better example.
++	/// ```
++	/// let foo = f(42);
++	/// ```
++	// FIXME: Use fallible approach.
++	pub fn f(x: i32) -> Foo {
++	    // ...
++	}
++
++One special kind of comments are the ``// SAFETY:`` comments. These must appear
++before every ``unsafe`` block, and they explain why the code inside the block is
++correct/sound, i.e. why it cannot trigger undefined behavior in any case, e.g.:
++
++.. code-block:: rust
++
++	// SAFETY: `p` is valid by the safety requirements.
++	unsafe { *p = 0; }
++
++``// SAFETY:`` comments are not to be confused with the ``# Safety`` sections
++in code documentation. ``# Safety`` sections specify the contract that callers
++(for functions) or implementors (for traits) need to abide by. ``// SAFETY:``
++comments show why a call (for functions) or implementation (for traits) actually
++respects the preconditions stated in a ``# Safety`` section or the language
++reference.
++
++
++Code documentation
++------------------
++
++Rust kernel code is not documented like C kernel code (i.e. via kernel-doc).
++Instead, the usual system for documenting Rust code is used: the ``rustdoc``
++tool, which uses Markdown (a lightweight markup language).
++
++To learn Markdown, there are many guides available out there. For instance,
++the one at:
++
++	https://commonmark.org/help/
++
++This is how a well-documented Rust function may look like:
++
++.. code-block:: rust
++
++	/// Returns the contained [`Some`] value, consuming the `self` value,
++	/// without checking that the value is not [`None`].
++	///
++	/// # Safety
++	///
++	/// Calling this method on [`None`] is *[undefined behavior]*.
++	///
++	/// [undefined behavior]: https://doc.rust-lang.org/reference/behavior-considered-undefined.html
++	///
++	/// # Examples
++	///
++	/// ```
++	/// let x = Some("air");
++	/// assert_eq!(unsafe { x.unwrap_unchecked() }, "air");
++	/// ```
++	pub unsafe fn unwrap_unchecked(self) -> T {
++	    match self {
++	        Some(val) => val,
++
++	        // SAFETY: The safety contract must be upheld by the caller.
++	        None => unsafe { hint::unreachable_unchecked() },
++	    }
++	}
++
++This example showcases a few ``rustdoc`` features and some conventions followed
++in the kernel:
++
++  - The first paragraph must be a single sentence briefly describing what
++    the documented item does. Further explanations must go in extra paragraphs.
++
++  - Unsafe functions must document their safety preconditions under
++    a ``# Safety`` section.
++
++  - While not shown here, if a function may panic, the conditions under which
++    that happens must be described under a ``# Panics`` section.
++
++    Please note that panicking should be very rare and used only with a good
++    reason. In almost all cases, a fallible approach should be used, typically
++    returning a ``Result``.
++
++  - If providing examples of usage would help readers, they must be written in
++    a section called ``# Examples``.
++
++  - Rust items (functions, types, constants...) must be linked appropriately
++    (``rustdoc`` will create a link automatically).
++
++  - Any ``unsafe`` block must be preceded by a ``// SAFETY:`` comment
++    describing why the code inside is sound.
++
++    While sometimes the reason might look trivial and therefore unneeded,
++    writing these comments is not just a good way of documenting what has been
++    taken into account, but most importantly, it provides a way to know that
++    there are no *extra* implicit constraints.
++
++To learn more about how to write documentation for Rust and extra features,
++please take a look at the ``rustdoc`` book at:
++
++	https://doc.rust-lang.org/rustdoc/how-to-write-documentation.html
++
++
++Naming
++------
++
++Rust kernel code follows the usual Rust naming conventions:
++
++	https://rust-lang.github.io/api-guidelines/naming.html
++
++When existing C concepts (e.g. macros, functions, objects...) are wrapped into
++a Rust abstraction, a name as close as reasonably possible to the C side should
++be used in order to avoid confusion and to improve readability when switching
++back and forth between the C and Rust sides. For instance, macros such as
++``pr_info`` from C are named the same in the Rust side.
++
++Having said that, casing should be adjusted to follow the Rust naming
++conventions, and namespacing introduced by modules and types should not be
++repeated in the item names. For instance, when wrapping constants like:
++
++.. code-block:: c
++
++	#define GPIO_LINE_DIRECTION_IN	0
++	#define GPIO_LINE_DIRECTION_OUT	1
++
++The equivalent in Rust may look like (ignoring documentation):
++
++.. code-block:: rust
++
++	pub mod gpio {
++	    pub enum LineDirection {
++	        In = bindings::GPIO_LINE_DIRECTION_IN as _,
++	        Out = bindings::GPIO_LINE_DIRECTION_OUT as _,
++	    }
++	}
++
++That is, the equivalent of ``GPIO_LINE_DIRECTION_IN`` would be referred to as
++``gpio::LineDirection::In``. In particular, it should not be named
++``gpio::gpio_line_direction::GPIO_LINE_DIRECTION_IN``.
+diff --git a/Documentation/rust/general-information.rst b/Documentation/rust/general-information.rst
+new file mode 100644
+index 000000000000..49029ee82e55
+--- /dev/null
++++ b/Documentation/rust/general-information.rst
+@@ -0,0 +1,79 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++General Information
++===================
++
++This document contains useful information to know when working with
++the Rust support in the kernel.
++
++
++Code documentation
++------------------
++
++Rust kernel code is documented using ``rustdoc``, its built-in documentation
++generator.
++
++The generated HTML docs include integrated search, linked items (e.g. types,
++functions, constants), source code, etc. They may be read at (TODO: link when
++in mainline and generated alongside the rest of the documentation):
++
++	http://kernel.org/
++
++The docs can also be easily generated and read locally. This is quite fast
++(same order as compiling the code itself) and no special tools or environment
++are needed. This has the added advantage that they will be tailored to
++the particular kernel configuration used. To generate them, use the ``rustdoc``
++target with the same invocation used for compilation, e.g.::
++
++	make LLVM=1 rustdoc
++
++To read the docs locally in your web browser, run e.g.::
++
++	xdg-open rust/doc/kernel/index.html
++
++To learn about how to write the documentation, please see coding-guidelines.rst.
++
++
++Extra lints
++-----------
++
++While ``rustc`` is a very helpful compiler, some extra lints and analyses are
++available via ``clippy``, a Rust linter. To enable it, pass ``CLIPPY=1`` to
++the same invocation used for compilation, e.g.::
++
++	make LLVM=1 CLIPPY=1
++
++Please note that Clippy may change code generation, thus it should not be
++enabled while building a production kernel.
++
++
++Abstractions vs. bindings
++-------------------------
++
++Abstractions are Rust code wrapping kernel functionality from the C side.
++
++In order to use functions and types from the C side, bindings are created.
++Bindings are the declarations for Rust of those functions and types from
++the C side.
++
++For instance, one may write a ``Mutex`` abstraction in Rust which wraps
++a ``struct mutex`` from the C side and calls its functions through the bindings.
++
++Abstractions are not available for all the kernel internal APIs and concepts,
++but it is intended that coverage is expanded as time goes on. "Leaf" modules
++(e.g. drivers) should not use the C bindings directly. Instead, subsystems
++should provide as-safe-as-possible abstractions as needed.
++
++
++Conditional compilation
++-----------------------
++
++Rust code has access to conditional compilation based on the kernel
++configuration:
++
++.. code-block:: rust
++
++	#[cfg(CONFIG_X)]       // Enabled               (`y` or `m`)
++	#[cfg(CONFIG_X="y")]   // Enabled as a built-in (`y`)
++	#[cfg(CONFIG_X="m")]   // Enabled as a module   (`m`)
++	#[cfg(not(CONFIG_X))]  // Disabled
+diff --git a/Documentation/rust/index.rst b/Documentation/rust/index.rst
+new file mode 100644
+index 000000000000..4ae8c66b94fa
+--- /dev/null
++++ b/Documentation/rust/index.rst
+@@ -0,0 +1,22 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++Rust
++====
++
++Documentation related to Rust within the kernel. To start using Rust
++in the kernel, please read the quick-start.rst guide.
++
++.. toctree::
++    :maxdepth: 1
++
++    quick-start
++    general-information
++    coding-guidelines
++    arch-support
++
++.. only::  subproject and html
++
++   Indices
++   =======
++
++   * :ref:`genindex`
+diff --git a/Documentation/rust/quick-start.rst b/Documentation/rust/quick-start.rst
+new file mode 100644
+index 000000000000..13b7744b1e27
+--- /dev/null
++++ b/Documentation/rust/quick-start.rst
+@@ -0,0 +1,232 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++Quick Start
++===========
++
++This document describes how to get started with kernel development in Rust.
++
++
++Requirements: Building
++----------------------
++
++This section explains how to fetch the tools needed for building.
++
++Some of these requirements might be available from Linux distributions
++under names like ``rustc``, ``rust-src``, ``rust-bindgen``, etc. However,
++at the time of writing, they are likely not to be recent enough unless
++the distribution tracks the latest releases.
++
++To easily check whether the requirements are met, the following target
++can be used::
++
++	make LLVM=1 rustavailable
++
++This triggers the same logic used by Kconfig to determine whether
++``RUST_IS_AVAILABLE`` should be enabled; but it also explains why not
++if that is the case.
++
++
++rustc
++*****
++
++A particular version of the Rust compiler is required. Newer versions may or
++may not work because, for the moment, the kernel depends on some unstable
++Rust features.
++
++If ``rustup`` is being used, enter the checked out source code directory
++and run::
++
++	rustup override set $(scripts/min-tool-version.sh rustc)
++
++Otherwise, fetch a standalone installer or install ``rustup`` from:
++
++	https://www.rust-lang.org
++
++
++Rust standard library source
++****************************
++
++The Rust standard library source is required because the build system will
++cross-compile ``core`` and ``alloc``.
++
++If ``rustup`` is being used, run::
++
++	rustup component add rust-src
++
++The components are installed per toolchain, thus upgrading the Rust compiler
++version later on requires re-adding the component.
++
++Otherwise, if a standalone installer is used, the Rust repository may be cloned
++into the installation folder of the toolchain::
++
++	git clone --recurse-submodules \
++		--branch $(scripts/min-tool-version.sh rustc) \
++		https://github.com/rust-lang/rust \
++		$(rustc --print sysroot)/lib/rustlib/src/rust
++
++In this case, upgrading the Rust compiler version later on requires manually
++updating this clone.
++
++
++libclang
++********
++
++``libclang`` (part of LLVM) is used by ``bindgen`` to understand the C code
++in the kernel, which means LLVM needs to be installed; like when the kernel
++is compiled with ``CC=clang`` or ``LLVM=1``.
++
++Linux distributions are likely to have a suitable one available, so it is
++best to check that first.
++
++There are also some binaries for several systems and architectures uploaded at:
++
++	https://releases.llvm.org/download.html
++
++Otherwise, building LLVM takes quite a while, but it is not a complex process:
++
++	https://llvm.org/docs/GettingStarted.html#getting-the-source-code-and-building-llvm
++
++Please see Documentation/kbuild/llvm.rst for more information and further ways
++to fetch pre-built releases and distribution packages.
++
++
++bindgen
++*******
++
++The bindings to the C side of the kernel are generated at build time using
++the ``bindgen`` tool. A particular version is required.
++
++Install it via (note that this will download and build the tool from source)::
++
++	cargo install --locked --version $(scripts/min-tool-version.sh bindgen) bindgen
++
++
++Requirements: Developing
++------------------------
++
++This section explains how to fetch the tools needed for developing. That is,
++they are not needed when just building the kernel.
++
++
++rustfmt
++*******
++
++The ``rustfmt`` tool is used to automatically format all the Rust kernel code,
++including the generated C bindings (for details, please see
++coding-guidelines.rst).
++
++If ``rustup`` is being used, its ``default`` profile already installs the tool,
++thus nothing needs to be done. If another profile is being used, the component
++can be installed manually::
++
++	rustup component add rustfmt
++
++The standalone installers also come with ``rustfmt``.
++
++
++clippy
++******
++
++``clippy`` is a Rust linter. Running it provides extra warnings for Rust code.
++It can be run by passing ``CLIPPY=1`` to ``make`` (for details, please see
++general-information.rst).
++
++If ``rustup`` is being used, its ``default`` profile already installs the tool,
++thus nothing needs to be done. If another profile is being used, the component
++can be installed manually::
++
++	rustup component add clippy
++
++The standalone installers also come with ``clippy``.
++
++
++cargo
++*****
++
++``cargo`` is the Rust native build system. It is currently required to run
++the tests since it is used to build a custom standard library that contains
++the facilities provided by the custom ``alloc`` in the kernel. The tests can
++be run using the ``rusttest`` Make target.
++
++If ``rustup`` is being used, all the profiles already install the tool,
++thus nothing needs to be done.
++
++The standalone installers also come with ``cargo``.
++
++
++rustdoc
++*******
++
++``rustdoc`` is the documentation tool for Rust. It generates pretty HTML
++documentation for Rust code (for details, please see
++general-information.rst).
++
++``rustdoc`` is also used to test the examples provided in documented Rust code
++(called doctests or documentation tests). The ``rusttest`` Make target uses
++this feature.
++
++If ``rustup`` is being used, all the profiles already install the tool,
++thus nothing needs to be done.
++
++The standalone installers also come with ``rustdoc``.
++
++
++rust-analyzer
++*************
++
++The `rust-analyzer <https://rust-analyzer.github.io/>`_ language server can
++be used with many editors to enable syntax highlighting, completion, go to
++definition, and other features.
++
++``rust-analyzer`` needs a configuration file, ``rust-project.json``, which
++can be generated by the ``rust-analyzer`` Make target.
++
++
++Configuration
++-------------
++
++``Rust support`` (``CONFIG_RUST``) needs to be enabled in the ``General setup``
++menu. The option is only shown if a suitable Rust toolchain is found (see
++above), as long as the other requirements are met. In turn, this will make
++visible the rest of options that depend on Rust.
++
++Afterwards, go to::
++
++	Kernel hacking
++	    -> Sample kernel code
++	        -> Rust samples
++
++And enable some sample modules either as built-in or as loadable.
++
++
++Building
++--------
++
++Building a kernel with a complete LLVM toolchain is the best supported setup
++at the moment. That is::
++
++	make LLVM=1
++
++For architectures that do not support a full LLVM toolchain, use::
++
++	make CC=clang
++
++Using GCC also works for some configurations, but it is very experimental at
++the moment.
++
++
++Hacking
++-------
++
++To dive deeper, take a look at the source code of the samples
++at ``samples/rust/``, the Rust support code under ``rust/`` and
++the ``Rust hacking`` menu under ``Kernel hacking``.
++
++If GDB/Binutils is used and Rust symbols are not getting demangled, the reason
++is the toolchain does not support Rust's new v0 mangling scheme yet.
++There are a few ways out:
++
++  - Install a newer release (GDB >= 10.2, Binutils >= 2.36).
++
++  - Some versions of GDB (e.g. vanilla GDB 10.1) are able to use
++    the pre-demangled names embedded in the debug info (``CONFIG_DEBUG_INFO``).
 -- 
 2.36.1
 

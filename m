@@ -2,121 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BDA75309C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 09:05:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91FFE5309A2
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 08:46:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229848AbiEWHEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 03:04:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60792 "EHLO
+        id S229839AbiEWGmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 02:42:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbiEWHEL (ORCPT
+        with ESMTP id S229472AbiEWGmM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 03:04:11 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF5819C14;
-        Sun, 22 May 2022 23:56:54 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Mon, 23 May 2022 02:42:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 296652C675;
+        Sun, 22 May 2022 23:41:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L66sG0b1tz4xD8;
-        Mon, 23 May 2022 16:30:41 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1653287444;
-        bh=xgg1hS9BSFr5BuV1JPPaBTBshDJNljlVHdKXJO5tQ78=;
-        h=Date:From:To:Cc:Subject:From;
-        b=sYnPmLi8oYAqcYCjY6GHNChs5KYvus+P0r4Ha+hu2Qpo4kVIGVj3bhfLVwJn2ECT9
-         PItx4IuEgzjyncJt2ukJrkkvkgo/Fv1BP4r3Sg01O985QC2dDBSVqergEj1J6aeBmX
-         ixUmaX8DtshIG85goiSPBdK6QLcd+4Upjjm8mwLFnhm21hocfXOfWy3xy9rOrqLOqU
-         ah63LfYwt5wNL9w1tP47lwxGiCsdZJRhodfw3bW4nWXtmpm5os/6fD7q7RffpbUVdE
-         GDUC0EEl/UfPdyuTfLneQT6/f8y+tw87u/TO1lbIuDfaV7ECB1+RjP5meIVBOmXYfT
-         GTl8/z/PRXEbg==
-Date:   Mon, 23 May 2022 16:30:40 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Juergen Gross <jgross@suse.com>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Xen Devel <xen-devel@lists.xenproject.org>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Maximilian Heyne <mheyne@amazon.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: linux-next: manual merge of the xen-tip tree with the pm tree
-Message-ID: <20220523163040.6064b190@canb.auug.org.au>
+        by ams.source.kernel.org (Postfix) with ESMTPS id CAF57B80EF5;
+        Mon, 23 May 2022 06:31:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF416C385A9;
+        Mon, 23 May 2022 06:31:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1653287509;
+        bh=OENwoRgzLHLcoN90lXWyFeYPCL70W7UVzXr++rGaYzU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=1QZ7sxf4fQVdnryaaxAxeoKMzG2cFlbm4EUHft6ORNDyzvN8d3Z0sdOdh1picrPSH
+         Y1wWzsJZOCGnZTfMiMOyj/WB4go0KIn/4BGSI8WRtf+nRrZnWLu6GntqbdoJHf9nTa
+         MqCShC8Lte63pYi8QtgLiWPYEK/dFIPO7WzdUoR0=
+Date:   Mon, 23 May 2022 08:31:46 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Duoming Zhou <duoming@zju.edu.cn>
+Cc:     linux-wireless@vger.kernel.org, amitkarwar@gmail.com,
+        ganapathi017@gmail.com, sharvari.harisangam@nxp.com,
+        huxinming820@gmail.com, kvalo@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rafael@kernel.org
+Subject: Re: [PATCH v3] mwifiex: fix sleep in atomic context bugs caused by
+ dev_coredumpv
+Message-ID: <YosqUjCYioGh3kBW@kroah.com>
+References: <20220523052810.24767-1-duoming@zju.edu.cn>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/LHaDpV_gDAUXQ2VrDx=4El=";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220523052810.24767-1-duoming@zju.edu.cn>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/LHaDpV_gDAUXQ2VrDx=4El=
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, May 23, 2022 at 01:28:10PM +0800, Duoming Zhou wrote:
+> There are sleep in atomic context bugs when uploading device dump
+> data in mwifiex. The root cause is that dev_coredumpv could not
+> be used in atomic contexts, because it calls dev_set_name which
+> include operations that may sleep. The call tree shows execution
+> paths that could lead to bugs:
+> 
+>    (Interrupt context)
+> fw_dump_timer_fn
+>   mwifiex_upload_device_dump
+>     dev_coredumpv(..., GFP_KERNEL)
+>       dev_coredumpm()
+>         kzalloc(sizeof(*devcd), gfp); //may sleep
+>         dev_set_name
+>           kobject_set_name_vargs
+>             kvasprintf_const(GFP_KERNEL, ...); //may sleep
+>             kstrdup(s, GFP_KERNEL); //may sleep
+> 
+> In order to let dev_coredumpv support atomic contexts, this patch
+> changes the gfp_t parameter of kvasprintf_const and kstrdup in
+> kobject_set_name_vargs from GFP_KERNEL to GFP_ATOMIC. What's more,
+> In order to mitigate bug, this patch changes the gfp_t parameter
+> of dev_coredumpv from GFP_KERNEL to GFP_ATOMIC.
+> 
+> Fixes: 57670ee882d4 ("mwifiex: device dump support via devcoredump framework")
+> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+> ---
+> Changes in v3:
+>   - Let dev_coredumpv support atomic contexts.
+> 
+>  drivers/net/wireless/marvell/mwifiex/main.c | 2 +-
+>  lib/kobject.c                               | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/net/wireless/marvell/mwifiex/main.c b/drivers/net/wireless/marvell/mwifiex/main.c
+> index ace7371c477..258906920a2 100644
+> --- a/drivers/net/wireless/marvell/mwifiex/main.c
+> +++ b/drivers/net/wireless/marvell/mwifiex/main.c
+> @@ -1116,7 +1116,7 @@ void mwifiex_upload_device_dump(struct mwifiex_adapter *adapter)
+>  	mwifiex_dbg(adapter, MSG,
+>  		    "== mwifiex dump information to /sys/class/devcoredump start\n");
+>  	dev_coredumpv(adapter->dev, adapter->devdump_data, adapter->devdump_len,
+> -		      GFP_KERNEL);
+> +		      GFP_ATOMIC);
+>  	mwifiex_dbg(adapter, MSG,
+>  		    "== mwifiex dump information to /sys/class/devcoredump end\n");
+>  
+> diff --git a/lib/kobject.c b/lib/kobject.c
+> index 5f0e71ab292..7672c54944c 100644
+> --- a/lib/kobject.c
+> +++ b/lib/kobject.c
+> @@ -254,7 +254,7 @@ int kobject_set_name_vargs(struct kobject *kobj, const char *fmt,
+>  	if (kobj->name && !fmt)
+>  		return 0;
+>  
+> -	s = kvasprintf_const(GFP_KERNEL, fmt, vargs);
+> +	s = kvasprintf_const(GFP_ATOMIC, fmt, vargs);
+>  	if (!s)
+>  		return -ENOMEM;
+>  
+> @@ -267,7 +267,7 @@ int kobject_set_name_vargs(struct kobject *kobj, const char *fmt,
+>  	if (strchr(s, '/')) {
+>  		char *t;
+>  
+> -		t = kstrdup(s, GFP_KERNEL);
+> +		t = kstrdup(s, GFP_ATOMIC);
+>  		kfree_const(s);
+>  		if (!t)
+>  			return -ENOMEM;
 
-Hi all,
+Please no, you are hurting the whole kernel because of one odd user.
+Please do not make these calls under atomic context.
 
-Today's linux-next merge of the xen-tip tree got a conflict in:
+thanks,
 
-  arch/x86/xen/enlighten_pv.c
-
-between commit:
-
-  f089ab674cea ("xen/x86: Use do_kernel_power_off()")
-
-from the pm tree and commit:
-
-  1591a65f55bc ("x86: xen: remove STACK_FRAME_NON_STANDARD from xen_cpuid")
-
-from the xen-tip tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc arch/x86/xen/enlighten_pv.c
-index af1f6e886225,ca85d1409917..000000000000
---- a/arch/x86/xen/enlighten_pv.c
-+++ b/arch/x86/xen/enlighten_pv.c
-@@@ -30,8 -30,6 +30,7 @@@
-  #include <linux/pci.h>
-  #include <linux/gfp.h>
-  #include <linux/edd.h>
-- #include <linux/objtool.h>
- +#include <linux/reboot.h>
- =20
-  #include <xen/xen.h>
-  #include <xen/events.h>
-
---Sig_/LHaDpV_gDAUXQ2VrDx=4El=
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKLKhAACgkQAVBC80lX
-0GwP1QgAm4zlmI0lzfyk52XGg8pKpPdKKocChsJEtTH1iwbUUM+owKfGB6L7OMlY
-bRZFmQUgIy581cwpFPqYhi1vOcTkOX3E6npA1fhBdamYar7tCqu4xwq2f1A0rTjZ
-Zb9+lcJZHYcp5nApkqC0Us7UICIrvI0ylGXF3okKtscKsoMLPT1jfqrUGo8UIjyA
-l2jPDtIFntlk5bKhcjH4Bk1igoNW/hX97iPzsgj9KTrtVwQ2ISq5PjptZToaiaS0
-JCE4UGrHdiXjmzaDo7saPc5lEs9cUpvLm1TV+9VHYDfs3/UJvS29BTlCHra02K6e
-j3xKHiad9zTxderG5aSSt88c1YZ3AA==
-=BbA2
------END PGP SIGNATURE-----
-
---Sig_/LHaDpV_gDAUXQ2VrDx=4El=--
+greg k-h

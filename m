@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7545D531B1F
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C24D75318B0
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:54:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244134AbiEWRix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:38:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43398 "EHLO
+        id S240659AbiEWRTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:19:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241965AbiEWR1V (ORCPT
+        with ESMTP id S240563AbiEWRQ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:27:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64BC07980E;
-        Mon, 23 May 2022 10:22:27 -0700 (PDT)
+        Mon, 23 May 2022 13:16:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C92F671D97;
+        Mon, 23 May 2022 10:15:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C235CB81201;
-        Mon, 23 May 2022 17:21:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A80DC385A9;
-        Mon, 23 May 2022 17:21:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8FE17B81217;
+        Mon, 23 May 2022 17:14:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAE73C385A9;
+        Mon, 23 May 2022 17:14:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326507;
-        bh=jMIzHqt1QTdiyQEd3y75sOxgA5an0wZmedRi1HIY8/U=;
+        s=korg; t=1653326066;
+        bh=nWUczX5AkbtAlWDQoWKWiwrApqdIJWmsu7IwsxkK100=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zyaIX/JUoyhzOoykZIY4+aSFe7AbNrcTyoaNRU8jXjzc/dp0irpoi2awiZnDkfph3
-         WItKM7WEoTSC7dmn39MMGmXcRCvsI0xqiEqnTlrujneBqqGm5iDg8FFgt5NlYm9Wgl
-         Q4zO6f0hTB+E9j0QpbYSO+HEn1ZDCP3tYp0/0a/Q=
+        b=JRF+eHhYuGcI0P+pZn/QrDIbRASGl6x7B3/YoakDeuPgCiLLaTUn1Jl85BUJIt/E8
+         COSHyvXaEFzrt2RP2eTzMsXrJKIy4VPr8OPaGbCaYC0dV9t6IIcbMwRTaXg2PxUKdl
+         +aMExkAkceFal2BZRHxmDlviFqUs/3bn2at6DP9g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
+        stable@vger.kernel.org,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 102/132] netfilter: flowtable: pass flowtable to nf_flow_table_iterate()
-Date:   Mon, 23 May 2022 19:05:11 +0200
-Message-Id: <20220523165840.354963658@linuxfoundation.org>
+Subject: [PATCH 5.10 08/97] rtc: fix use-after-free on device removal
+Date:   Mon, 23 May 2022 19:05:12 +0200
+Message-Id: <20220523165813.699743640@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
-References: <20220523165823.492309987@linuxfoundation.org>
+In-Reply-To: <20220523165812.244140613@linuxfoundation.org>
+References: <20220523165812.244140613@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,88 +56,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: Vincent Whitchurch <vincent.whitchurch@axis.com>
 
-[ Upstream commit 217cff36e885627c41a14e803fc44f9cbc945767 ]
+[ Upstream commit c8fa17d9f08a448184f03d352145099b5beb618e ]
 
-The flowtable object is already passed as argument to
-nf_flow_table_iterate(), do use not data pointer to pass flowtable.
+If the irqwork is still scheduled or running while the RTC device is
+removed, a use-after-free occurs in rtc_timer_do_work().  Cleanup the
+timerqueue and ensure the work is stopped to fix this.
 
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+ BUG: KASAN: use-after-free in mutex_lock+0x94/0x110
+ Write of size 8 at addr ffffff801d846338 by task kworker/3:1/41
+
+ Workqueue: events rtc_timer_do_work
+ Call trace:
+  mutex_lock+0x94/0x110
+  rtc_timer_do_work+0xec/0x630
+  process_one_work+0x5fc/0x1344
+  ...
+
+ Allocated by task 551:
+  kmem_cache_alloc_trace+0x384/0x6e0
+  devm_rtc_allocate_device+0xf0/0x574
+  devm_rtc_device_register+0x2c/0x12c
+  ...
+
+ Freed by task 572:
+  kfree+0x114/0x4d0
+  rtc_device_release+0x64/0x80
+  device_release+0x8c/0x1f4
+  kobject_put+0x1c4/0x4b0
+  put_device+0x20/0x30
+  devm_rtc_release_device+0x1c/0x30
+  devm_action_release+0x54/0x90
+  release_nodes+0x124/0x310
+  devres_release_group+0x170/0x240
+  i2c_device_remove+0xd8/0x314
+  ...
+
+ Last potentially related work creation:
+  insert_work+0x5c/0x330
+  queue_work_on+0xcc/0x154
+  rtc_set_time+0x188/0x5bc
+  rtc_dev_ioctl+0x2ac/0xbd0
+  ...
+
+Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Link: https://lore.kernel.org/r/20211210160951.7718-1-vincent.whitchurch@axis.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nf_flow_table_core.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ drivers/rtc/class.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/net/netfilter/nf_flow_table_core.c b/net/netfilter/nf_flow_table_core.c
-index 58f3f77b3eb2..de783c9094d7 100644
---- a/net/netfilter/nf_flow_table_core.c
-+++ b/net/netfilter/nf_flow_table_core.c
-@@ -382,7 +382,8 @@ EXPORT_SYMBOL_GPL(flow_offload_lookup);
- 
- static int
- nf_flow_table_iterate(struct nf_flowtable *flow_table,
--		      void (*iter)(struct flow_offload *flow, void *data),
-+		      void (*iter)(struct nf_flowtable *flowtable,
-+				   struct flow_offload *flow, void *data),
- 		      void *data)
+diff --git a/drivers/rtc/class.c b/drivers/rtc/class.c
+index 7c88d190c51f..625effe6cb65 100644
+--- a/drivers/rtc/class.c
++++ b/drivers/rtc/class.c
+@@ -26,6 +26,15 @@ struct class *rtc_class;
+ static void rtc_device_release(struct device *dev)
  {
- 	struct flow_offload_tuple_rhash *tuplehash;
-@@ -406,7 +407,7 @@ nf_flow_table_iterate(struct nf_flowtable *flow_table,
+ 	struct rtc_device *rtc = to_rtc_device(dev);
++	struct timerqueue_head *head = &rtc->timerqueue;
++	struct timerqueue_node *node;
++
++	mutex_lock(&rtc->ops_lock);
++	while ((node = timerqueue_getnext(head)))
++		timerqueue_del(head, node);
++	mutex_unlock(&rtc->ops_lock);
++
++	cancel_work_sync(&rtc->irqwork);
  
- 		flow = container_of(tuplehash, struct flow_offload, tuplehash[0]);
- 
--		iter(flow, data);
-+		iter(flow_table, flow, data);
- 	}
- 	rhashtable_walk_stop(&hti);
- 	rhashtable_walk_exit(&hti);
-@@ -434,10 +435,9 @@ static bool nf_flow_has_stale_dst(struct flow_offload *flow)
- 	       flow_offload_stale_dst(&flow->tuplehash[FLOW_OFFLOAD_DIR_REPLY].tuple);
- }
- 
--static void nf_flow_offload_gc_step(struct flow_offload *flow, void *data)
-+static void nf_flow_offload_gc_step(struct nf_flowtable *flow_table,
-+				    struct flow_offload *flow, void *data)
- {
--	struct nf_flowtable *flow_table = data;
--
- 	if (nf_flow_has_expired(flow) ||
- 	    nf_ct_is_dying(flow->ct) ||
- 	    nf_flow_has_stale_dst(flow))
-@@ -462,7 +462,7 @@ static void nf_flow_offload_work_gc(struct work_struct *work)
- 	struct nf_flowtable *flow_table;
- 
- 	flow_table = container_of(work, struct nf_flowtable, gc_work.work);
--	nf_flow_table_iterate(flow_table, nf_flow_offload_gc_step, flow_table);
-+	nf_flow_table_iterate(flow_table, nf_flow_offload_gc_step, NULL);
- 	queue_delayed_work(system_power_efficient_wq, &flow_table->gc_work, HZ);
- }
- 
-@@ -578,7 +578,8 @@ int nf_flow_table_init(struct nf_flowtable *flowtable)
- }
- EXPORT_SYMBOL_GPL(nf_flow_table_init);
- 
--static void nf_flow_table_do_cleanup(struct flow_offload *flow, void *data)
-+static void nf_flow_table_do_cleanup(struct nf_flowtable *flow_table,
-+				     struct flow_offload *flow, void *data)
- {
- 	struct net_device *dev = data;
- 
-@@ -620,11 +621,10 @@ void nf_flow_table_free(struct nf_flowtable *flow_table)
- 
- 	cancel_delayed_work_sync(&flow_table->gc_work);
- 	nf_flow_table_iterate(flow_table, nf_flow_table_do_cleanup, NULL);
--	nf_flow_table_iterate(flow_table, nf_flow_offload_gc_step, flow_table);
-+	nf_flow_table_iterate(flow_table, nf_flow_offload_gc_step, NULL);
- 	nf_flow_table_offload_flush(flow_table);
- 	if (nf_flowtable_hw_offload(flow_table))
--		nf_flow_table_iterate(flow_table, nf_flow_offload_gc_step,
--				      flow_table);
-+		nf_flow_table_iterate(flow_table, nf_flow_offload_gc_step, NULL);
- 	rhashtable_destroy(&flow_table->rhashtable);
- }
- EXPORT_SYMBOL_GPL(nf_flow_table_free);
+ 	ida_simple_remove(&rtc_ida, rtc->id);
+ 	kfree(rtc);
 -- 
 2.35.1
 

@@ -2,138 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6D62531D8F
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 23:17:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EA1E531D93
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 23:19:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230523AbiEWVRH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 17:17:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59472 "EHLO
+        id S231566AbiEWVTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 17:19:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231134AbiEWVRF (ORCPT
+        with ESMTP id S229677AbiEWVTs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 17:17:05 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399438D6BE
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 14:17:03 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id w130so19369320oig.0
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 14:17:03 -0700 (PDT)
+        Mon, 23 May 2022 17:19:48 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F958E1BF
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 14:19:48 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-2ff155c239bso162876547b3.2
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 14:19:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=ouJwq3gHVrLljqEkISRPOFruhNDZFLgK1U74Bv7TpaI=;
-        b=YAqNkahEfUPj9vc6tqLhDbZeuyaWlJDxHdPKh1DMGHM3fJBY1Va3Jht/yoDd0UQuPo
-         H12uwHlR7B2fB2zrSh2X9MLPGpCEX7PamXvg7MCRaF6QA4dJKqNDUU1lsOOZ0U30kBcr
-         Zo+b4USLbON/KXZOlqADbGYcMykuwVxTVaLXyohJs1GvzlzYTXNxEwgVCrkLrtejlrpO
-         oj4cjSJ5/5f33hF5/wu5t3M7SrcLqUcrWznUsFIJPtM9DfVVqDrDwUEXrzpbcx+gLgyR
-         rgv9B+EW4V6Kaw8qZlXZ/H0WHbJH8O6qYp7dwt4smrhhxjI+++hnVeooX+GPWzbvdHlM
-         PvFQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oLDY4cmr222gssu19D12pJ5dYihqNZnukAxsU+Y1ejU=;
+        b=TpnIFJb7O/pdBIh8GUMlw6sWMXiJFEVNwuRhxPHn/pS6eG4jN6V0v2RzhCj/pd35EC
+         8lq2QhNInOnvmqq/zm4SEz7YYfPZ5EQYXPjVarG0ekP3j3lvV8K8HIbeyz9ASKnTk4QS
+         LP+4y+UfTGkKM4PdkuW0IVuwO5VawqXUTE5pnWjLtqVgS6nWJtSXnw7D5Hn8VBOA1T5S
+         7G/KKhAAwpio8PNKPqvbIJBJyp4ZV4MJZllDzlxdv5reJbK6keUzJ4cAY6yRl1qIXoUQ
+         CbrS65lral4Fx6CrW683Kz+ekjveuKIrfouYulpG/Z6Fsue+KcdNmeGw6+02Lawm4lhM
+         YS0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :mime-version:content-disposition;
-        bh=ouJwq3gHVrLljqEkISRPOFruhNDZFLgK1U74Bv7TpaI=;
-        b=AVV0aP6FWnLKTrr+vhoQuwv7ctyA/Xn2A/BdAe7HMPp/wtWNh4pa4H8EkIe+8umk0B
-         lofVn9Hk2zhimpR7FpNS7knW1yg4eL5h3bSPYaVfjOE5IRzv8o6PuV/nxTsyrhey6SiC
-         jVwPkIuZTFb0guc3H4WDRBlrnVhgysZqO6Z7l7No1F/LDVykCjL/UQ98BQKAGIJ2RGso
-         e2kpwZbRzC+oPe75TrEVGJA0l81TYJOHr+ukTQgeRrnnkhhyS6yyGzNSfiBTXmsjHqAV
-         elXcdiPlyOgli+1mTFdZ6quGThbJXT2LEcDyK6yTpKt9oYTFoz9dAT+8MLKlAezh12Ob
-         jwuw==
-X-Gm-Message-State: AOAM530I8/qWm60Q9VdVYqhhwj5Zi7AtfAB1+5Ygq3q2xzzJbnUYyGXI
-        Evuxxg2XWfPJPEYw79syBXysGZC+dM7biA==
-X-Google-Smtp-Source: ABdhPJxlDA8sPwDRZaxbYYuRYe9KhgdKw4Zicui3E62nIzBJURs616daR1H2KunOmWyvRqCSvnbWYQ==
-X-Received: by 2002:a05:6808:1283:b0:32a:e09b:5a43 with SMTP id a3-20020a056808128300b0032ae09b5a43mr578031oiw.264.1653340622545;
-        Mon, 23 May 2022 14:17:02 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s71-20020acaa94a000000b0032b7c4ead49sm245387oie.18.2022.05.23.14.17.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 14:17:02 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 23 May 2022 14:17:00 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Wang Kefeng <wangkefeng.wang@huawei.com>
-Cc:     Russell King <linux@armlinux.org.uk>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ARM: 9192/1: amba: fix memory leak in
- amba_device_try_add()
-Message-ID: <20220523211700.GA236401@roeck-us.net>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oLDY4cmr222gssu19D12pJ5dYihqNZnukAxsU+Y1ejU=;
+        b=HZoBZMBP40Mvmqq9W1WvQgPThKeKp88tpb8ZdvyjaNYrois07ZtAWKkn+W6keEKBIZ
+         9Ve+8oHmyMdvaMCVg8gSn68j/3DHsy0y+k/PDof0anMRs8ec1ZxPTZjmM0PDAQfY5ayF
+         wnYhWw8v+S/K+YcpNlNdmE0nGyTGzP01vmm/XeagFaqYy2v6DXCEj1nqSZL7tvVIsTQw
+         Lb0snbduxdP+c00x2M2tWCvcyKrfEoHFREp1GoU9XiVfsAO14eyXg+AkzWtuT0piV8Ze
+         +DhWHjAIWW9JlZfg6rIBf9J4aqiMYVLDzYMX1ImVwQ3Q17b1ggvzsr3w0ZP9PzibaIl2
+         BQQA==
+X-Gm-Message-State: AOAM533rTrPrZFL4qvFDT1bXmv5WKVg491GBzClJ51aokCXW5CNZoGwp
+        vMxruiVBNZiku7DNgzKtvAm4W34iUjskoeQU+SQ+RQ==
+X-Google-Smtp-Source: ABdhPJxt8kx6z5PYnwwImB38ZeXt2ruBXVuGVWJUKy4FdUXc1K+c+OD39mj78O+sHHvTXJPM1vetIs7qpZw7Y3/ZVsM=
+X-Received: by 2002:a81:2388:0:b0:2ff:a07a:517a with SMTP id
+ j130-20020a812388000000b002ffa07a517amr16294486ywj.201.1653340787230; Mon, 23
+ May 2022 14:19:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220520235138.3140590-1-joshdon@google.com> <20220521100037.GA2578@worktop.programming.kicks-ass.net>
+In-Reply-To: <20220521100037.GA2578@worktop.programming.kicks-ass.net>
+From:   Josh Don <joshdon@google.com>
+Date:   Mon, 23 May 2022 14:19:36 -0700
+Message-ID: <CABk29NuaNSCs-sXsDjkEbnFChRsqUYPWG9VrwS=O88Q1aMzuNA@mail.gmail.com>
+Subject: Re: [PATCH v2] sched/core: add forced idle accounting for cgroups
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Tejun Heo <tj@kernel.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Cruz Zhao <CruzZhao@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 07:07:14AM +0100, Wang Kefeng wrote:
-> If amba_device_try_add() return error code (not EPROBE_DEFER),
-> memory leak occurred when amba device fails to read periphid.
-> 
+On Sat, May 21, 2022 at 3:00 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Fri, May 20, 2022 at 04:51:38PM -0700, Josh Don wrote:
+>
+> > diff --git a/kernel/sched/core_sched.c b/kernel/sched/core_sched.c
+> > index 38a2cec21014..ddef2b8ddf68 100644
+> > --- a/kernel/sched/core_sched.c
+> > +++ b/kernel/sched/core_sched.c
+> > @@ -277,7 +277,11 @@ void __sched_core_account_forceidle(struct rq *rq)
+> >               if (p == rq_i->idle)
+> >                       continue;
+> >
+> > -             __schedstat_add(p->stats.core_forceidle_sum, delta);
+> > +             /*
+> > +              * Note: this will account forceidle to the current cpu, even
+> > +              * if it comes from our SMT sibling.
+> > +              */
+> > +             account_forceidle_time(p, delta);
+> >       }
+>
+> AFAICT this is the only caller of that function.
+>
+> >  }
+> >
+> > diff --git a/kernel/sched/cputime.c b/kernel/sched/cputime.c
+> > index 78a233d43757..598d1026d629 100644
+> > --- a/kernel/sched/cputime.c
+> > +++ b/kernel/sched/cputime.c
+> > @@ -226,6 +226,17 @@ void account_idle_time(u64 cputime)
+> >               cpustat[CPUTIME_IDLE] += cputime;
+> >  }
+> >
+> > +
+> > +#ifdef CONFIG_SCHED_CORE
+> > +/* Account for forceidle time due to core scheduling. */
+> > +void account_forceidle_time(struct task_struct *p, u64 delta)
+> > +{
+> > +     schedstat_add(p->stats.core_forceidle_sum, delta);
+>
+> But then you loose the __, why?
 
-This patch results in a refcount underflow.
+Yea, this is probably better off as __ and a comment on the function
+stating that it requires schedstat is enabled. My original thinking
+was that it would be nice to avoid capturing this requirement here for
+future potential use cases, especially given that the
+schedstat_enabled() check is basically free anyway.
 
-NET: Registered PF_NETLINK/PF_ROUTE protocol family
-DMA: preallocated 256 KiB pool for atomic coherent allocations
-platform vga: Fixing up cyclic dependency with bridge
-OF: amba_device_add() failed (-19) for /amba/smc@10100000
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 1 at lib/refcount.c:28 of_platform_bus_create+0x33c/0x3dc
-refcount_t: underflow; use-after-free.
-Modules linked in:
-CPU: 0 PID: 1 Comm: swapper Not tainted 5.18.0-next-20220523 #1
-Hardware name: ARM-Versatile (Device Tree Support)
- unwind_backtrace from show_stack+0x10/0x14
- show_stack from dump_stack_lvl+0x38/0x5c
- dump_stack_lvl from __warn+0xc8/0x1d4
- __warn from warn_slowpath_fmt+0x90/0xc8
- warn_slowpath_fmt from of_platform_bus_create+0x33c/0x3dc
- of_platform_bus_create from of_platform_bus_create+0x1ec/0x3dc
- of_platform_bus_create from of_platform_populate+0x68/0xd8
- of_platform_populate from customize_machine+0x1c/0x30
- customize_machine from do_one_initcall+0x8c/0x2fc
- do_one_initcall from kernel_init_freeable+0x190/0x220
- kernel_init_freeable from kernel_init+0x10/0x108
- kernel_init from ret_from_fork+0x14/0x3c
-
-Guenter
-
----
-# bad: [cc63e8e92cb872081f249ea16e6c460642f3e4fb] Add linux-next specific files for 20220523
-# good: [4b0986a3613c92f4ec1bdc7f60ec66fea135991f] Linux 5.18
-git bisect start 'HEAD' 'v5.18'
-# bad: [a812cac8ff60a3f57d59225eaf668f574fd36a65] Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git
-git bisect bad a812cac8ff60a3f57d59225eaf668f574fd36a65
-# bad: [ad67b5f981704e575b24e3b650653bae607980dc] Merge branch 'for-next' of git://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git
-git bisect bad ad67b5f981704e575b24e3b650653bae607980dc
-# bad: [793dd6392ef951ae61473acfc7e7016ea22c40f4] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
-git bisect bad 793dd6392ef951ae61473acfc7e7016ea22c40f4
-# good: [00ad84f582be91dd03132c133917cc6b62d754e2] Merge branch 'arm/dt' into for-next
-git bisect good 00ad84f582be91dd03132c133917cc6b62d754e2
-# bad: [5c4a49fbe99c7c9b814d677ac99e3efcc43d019a] Merge branch 'for-next/core' of git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux
-git bisect bad 5c4a49fbe99c7c9b814d677ac99e3efcc43d019a
-# good: [33cd6948f953ab47ffa493bac6c0f34feb191e0d] Merge branch 'clang-format' of https://github.com/ojeda/linux.git
-git bisect good 33cd6948f953ab47ffa493bac6c0f34feb191e0d
-# good: [d6fc5db0f82828c74742319cb6c988c4a8aac535] Merge branch 'for-next/kselftest' into for-next/core
-git bisect good d6fc5db0f82828c74742319cb6c988c4a8aac535
-# good: [d7015e50a9ed180dcc3947635bb2b5711c37f48b] perf intel-pt: Add support for emulated ptwrite
-git bisect good d7015e50a9ed180dcc3947635bb2b5711c37f48b
-# good: [5b86b659fa4b3dd45acbdce13f2e94f882a3d125] Merge branch 'for-next' of git://git.infradead.org/users/hch/dma-mapping.git
-git bisect good 5b86b659fa4b3dd45acbdce13f2e94f882a3d125
-# good: [945980a9ba0744038659769e9f04e83e8f6b494b] Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git
-git bisect good 945980a9ba0744038659769e9f04e83e8f6b494b
-# bad: [b6f21d14f1ac1261579b691673a0c823275cbaf8] ARM: 9204/2: module: Add all unwind tables when load module
-git bisect bad b6f21d14f1ac1261579b691673a0c823275cbaf8
-# bad: [c4f486f1e7b34b27ec578494a236061b337d50ae] ARM: 9198/1: spectre-bhb: simplify BPIALL vector macro
-git bisect bad c4f486f1e7b34b27ec578494a236061b337d50ae
-# bad: [7719a68b2fa404fa8af6b0b7119a38c406c74858] ARM: 9192/1: amba: fix memory leak in amba_device_try_add()
-git bisect bad 7719a68b2fa404fa8af6b0b7119a38c406c74858
-# good: [1f44de0f5e309e8699b569b49a8e89ef4e7527c7] ARM: 9193/1: amba: Add amba_read_periphid() helper
-git bisect good 1f44de0f5e309e8699b569b49a8e89ef4e7527c7
-# first bad commit: [7719a68b2fa404fa8af6b0b7119a38c406c74858] ARM: 9192/1: amba: fix memory leak in amba_device_try_add()
-
-
+> > +
+> > +     task_group_account_field(p, CPUTIME_FORCEIDLE, delta);
+> > +}
+> > +#endif

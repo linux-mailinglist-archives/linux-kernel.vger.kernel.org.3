@@ -2,50 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38572530789
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 04:07:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0112E53078B
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 04:07:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352812AbiEWCGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 22:06:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40628 "EHLO
+        id S1352693AbiEWCFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 22:05:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352651AbiEWCFH (ORCPT
+        with ESMTP id S1352656AbiEWCFH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 22 May 2022 22:05:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5FB839B9C;
-        Sun, 22 May 2022 19:04:18 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 379C339BAB;
+        Sun, 22 May 2022 19:04:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6DCFEB80EA4;
-        Mon, 23 May 2022 02:04:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A6D6C34113;
-        Mon, 23 May 2022 02:04:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B245860F55;
+        Mon, 23 May 2022 02:04:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F191DC385B8;
+        Mon, 23 May 2022 02:04:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653271456;
-        bh=r/RrOkadtDbdK1uBCMMOvDB064Bog4lQNJGV/GV3+ts=;
+        s=k20201202; t=1653271459;
+        bh=CsSZhvE3G3qLTKQDekFf99My1SQN56i9We3vBz8ZUzY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lruh8V8bbpIoX+gxeZcvbsYuzfwbmHv75U5j1u5nKcVxsseETPmRmwc488xbsD/Fc
-         5dGEGJqGsIs3vNQS9EKCtPfue4L4me9MjQNplVnMbTY03sxNvChCeaJ+x6Swh9xypG
-         WebVULNkTgKmsddIfi+692utvSYb4hBft4S1Ky8AZqQfrskcqhdEefhIjbxZJ3cnm7
-         AsWzT/IxJMfNaW+ETLnbKdFaWpyAX0eMpvo5sTcqqzG0zf/TAutrT8xShNV07cosVS
-         rLnTb+XqXzcQ/1I+aTKsQ7uewFPEBw10CP//72plVS/lKoPo6U4a/RUJskflyD51Gm
-         QIKEzx8q/0WSw==
+        b=Y+ULEu+wDKHLqgGLK4cdE6kb9V+Keq0+mT0wNlb0q8Q3EX2+IAEERRr6U2C5qMdh8
+         nKJ7a93AXjeUuPG/4yXRhLgYWUp6KTc1+CaMyXCnsTFpHVeybMUzljP5xlwNsshhlP
+         T1c15aNE2W4ThpCWSJphXjExUuKQaxosjPIl9I+ZafK1E42bfGXqum8KcNRxajuy3a
+         IKL4+rnkdU2JiY5xN7d4TAB+GckJ3xzNvuyhHjm/EC9QXvHIZK4nVm0m5IR+3Hd1Tj
+         xTLpXfvdT4bMUGTRBoNJ3kVmEww2LZv5EI8qHjfs8OmrYq1b2PkS7w17ZPWADM1NcI
+         uZYOhwNUGXJuQ==
 From:   Miguel Ojeda <ojeda@kernel.org>
 To:     Linus Torvalds <torvalds@linux-foundation.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jarkko Sakkinen <jarkko@kernel.org>,
         Miguel Ojeda <ojeda@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
         Alex Gaynor <alex.gaynor@gmail.com>,
-        Finn Behrens <me@kloenk.de>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Gary Guo <gary@garyguo.net>,
-        Boris-Chengbiao Zhou <bobo1239@web.de>
-Subject: [PATCH v7 18/25] scripts: add `generate_rust_analyzer.py` scripts
-Date:   Mon, 23 May 2022 04:01:31 +0200
-Message-Id: <20220523020209.11810-19-ojeda@kernel.org>
+        Wedson Almeida Filho <wedsonaf@google.com>
+Subject: [PATCH v7 19/25] scripts: decode_stacktrace: demangle Rust symbols
+Date:   Mon, 23 May 2022 04:01:32 +0200
+Message-Id: <20220523020209.11810-20-ojeda@kernel.org>
 In-Reply-To: <20220523020209.11810-1-ojeda@kernel.org>
 References: <20220523020209.11810-1-ojeda@kernel.org>
 MIME-Version: 1.0
@@ -60,169 +58,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The `generate_rust_analyzer.py` script generates the configuration
-file (`rust-project.json`) for rust-analyzer.
+Recent versions of both Binutils (`c++filt`) and LLVM (`llvm-cxxfilt`)
+provide Rust v0 mangling support.
 
-rust-analyzer is a modular compiler frontend for the Rust language.
-It provides an LSP server which can be used in editors such as
-VS Code, Emacs or Vim.
-
+Reviewed-by: Kees Cook <keescook@chromium.org>
 Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
 Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
-Co-developed-by: Finn Behrens <me@kloenk.de>
-Signed-off-by: Finn Behrens <me@kloenk.de>
 Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
 Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
-Co-developed-by: Gary Guo <gary@garyguo.net>
-Signed-off-by: Gary Guo <gary@garyguo.net>
-Co-developed-by: Boris-Chengbiao Zhou <bobo1239@web.de>
-Signed-off-by: Boris-Chengbiao Zhou <bobo1239@web.de>
 Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 ---
- scripts/generate_rust_analyzer.py | 134 ++++++++++++++++++++++++++++++
- 1 file changed, 134 insertions(+)
- create mode 100755 scripts/generate_rust_analyzer.py
+I would like to use this patch for discussing the demangling topic.
 
-diff --git a/scripts/generate_rust_analyzer.py b/scripts/generate_rust_analyzer.py
-new file mode 100755
-index 000000000000..37c049fb18f2
---- /dev/null
-+++ b/scripts/generate_rust_analyzer.py
-@@ -0,0 +1,134 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+"""generate_rust_analyzer - Generates the `rust-project.json` file for `rust-analyzer`.
-+"""
+The last discussion took place in v6:
+
+    https://lore.kernel.org/lkml/20220507052451.12890-18-ojeda@kernel.org/
+
+The following discusses the different approaches we could take.
+
+
+# Leave demangling to userspace
+
+This is the easiest and less invasive approach, the one implemented
+by this patch.
+
+The `decode_stacktrace.sh` script is already needed to map
+the offsets to the source code. Therefore, we could also take
+the chance to demangle the symbols here.
+
+With this approach, we do not need to introduce any change in the
+`vsprintf` machinery and we minimize the risk of breaking user tools.
+
+Note that, if we take this approach, it is likely we want to ask
+for a minimum version of either of the tools (since there may be
+users of the script that do not have recent enough toolchains).
+
+
+# Demangling in kernelspace on-the-fly
+
+That is, at backtrace print time, we demangle the Rust symbols.
+
+The size of the code that would be needed is fairly small; around
+5 KiB using the "official" library (written in Rust), e.g.:
+
+    text    data    bss     dec      hex    filename
+    7799976 1689820 2129920 11619716 b14d84 vmlinux
+    7801111 1693916 2129920 11624947 b161f3 vmlinux + demangling
+
+We can remove a few bits from the official library, e.g. punycode
+support that we do not need (all our identifiers will be ASCII),
+but it does not make a substantial difference.
+
+The official library performs the demangling without requiring
+allocations. However, of course, it will increased our stack usage
+and complexity, specially considering a stack dump may be requested
+in not ideal conditions.
+
+Furthermore, this approach (and the ones below) likely require adding
+a new `%p` specifier (or a new modifier to existing ones) if we do
+not want to affect non-backtrace uses of the `B`/`S` ones. Also,
+it is unclear whether we should write the demangled versions in an
+extra, different line or replace the real symbol -- we could be
+breaking user tools relying on parsing backtraces (e.g. our own
+`decode_stacktrace.sh`). For instance, they could be relying on
+having real symbols there, or may break due to e.g. spaces.
+
+
+# Demangling at compile-time
+
+This implies having kallsyms demangle all the Rust symbols.
+
+The size of this data is around the same order of magnitude of the
+non-demangled ones. However, this is notably more than the demangling
+code (see previous point), e.g. 120 KiB (uncompressed) in a
+small kernel.
+
+This approach also brings the same concerns regarding modifying
+the backtrace printing (see previous point).
+
+
+# Demangling at compile-time and substituting symbols by hashes
+
+One variation of the previous alternative is avoiding the mangled
+names inside the kernel, by hashing them. This would avoid having
+to support "big symbols" and would also reduce the size of the
+kallsyms tables, while still allowing to link modules.
+
+However, if we do not have the real symbols around, then we do not
+have the possibility of providing both the mangled and demangled
+versions in the backtrace, which brings us back to the issues
+related to breaking userspace tools. There are also other places
+other than backtraces using "real" symbols that users may be
+relying on, such as `/proc/*/stack`.
+
+
+ scripts/decode_stacktrace.sh | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/scripts/decode_stacktrace.sh b/scripts/decode_stacktrace.sh
+index 5fbad61fe490..f3c7b506d440 100755
+--- a/scripts/decode_stacktrace.sh
++++ b/scripts/decode_stacktrace.sh
+@@ -8,6 +8,14 @@ usage() {
+ 	echo "	$0 -r <release> | <vmlinux> [<base path>|auto] [<modules path>]"
+ }
+ 
++# Try to find a Rust demangler
++if type llvm-cxxfilt >/dev/null 2>&1 ; then
++	cppfilt=llvm-cxxfilt
++elif type c++filt >/dev/null 2>&1 ; then
++	cppfilt=c++filt
++	cppfilt_opts=-i
++fi
 +
-+import argparse
-+import json
-+import logging
-+import pathlib
-+import sys
+ if [[ $1 == "-r" ]] ; then
+ 	vmlinux=""
+ 	basepath="auto"
+@@ -169,6 +177,12 @@ parse_symbol() {
+ 	# In the case of inlines, move everything to same line
+ 	code=${code//$'\n'/' '}
+ 
++	# Demangle if the name looks like a Rust symbol and if
++	# we got a Rust demangler
++	if [[ $name =~ ^_R && $cppfilt != "" ]] ; then
++		name=$("$cppfilt" "$cppfilt_opts" "$name")
++	fi
 +
-+def generate_crates(srctree, objtree, sysroot_src):
-+    # Generate the configuration list.
-+    cfg = []
-+    with open(objtree / "include" / "generated" / "rustc_cfg") as fd:
-+        for line in fd:
-+            line = line.replace("--cfg=", "")
-+            line = line.replace("\n", "")
-+            cfg.append(line)
-+
-+    # Now fill the crates list -- dependencies need to come first.
-+    #
-+    # Avoid O(n^2) iterations by keeping a map of indexes.
-+    crates = []
-+    crates_indexes = {}
-+
-+    def append_crate(display_name, root_module, deps, cfg=[], is_workspace_member=True, is_proc_macro=False):
-+        crates_indexes[display_name] = len(crates)
-+        crates.append({
-+            "display_name": display_name,
-+            "root_module": str(root_module),
-+            "is_workspace_member": is_workspace_member,
-+            "is_proc_macro": is_proc_macro,
-+            "deps": [{"crate": crates_indexes[dep], "name": dep} for dep in deps],
-+            "cfg": cfg,
-+            "edition": "2021",
-+            "env": {
-+                "RUST_MODFILE": "This is only for rust-analyzer"
-+            }
-+        })
-+
-+    # First, the ones in `rust/` since they are a bit special.
-+    append_crate(
-+        "core",
-+        sysroot_src / "core" / "src" / "lib.rs",
-+        [],
-+        is_workspace_member=False,
-+    )
-+
-+    append_crate(
-+        "compiler_builtins",
-+        srctree / "rust" / "compiler_builtins.rs",
-+        [],
-+    )
-+
-+    append_crate(
-+        "alloc",
-+        srctree / "rust" / "alloc" / "lib.rs",
-+        ["core", "compiler_builtins"],
-+    )
-+
-+    append_crate(
-+        "macros",
-+        srctree / "rust" / "macros" / "lib.rs",
-+        [],
-+        is_proc_macro=True,
-+    )
-+    crates[-1]["proc_macro_dylib_path"] = "rust/libmacros.so"
-+
-+    append_crate(
-+        "build_error",
-+        srctree / "rust" / "build_error.rs",
-+        ["core", "compiler_builtins"],
-+    )
-+
-+    append_crate(
-+        "kernel",
-+        srctree / "rust" / "kernel" / "lib.rs",
-+        ["core", "alloc", "macros", "build_error"],
-+        cfg=cfg,
-+    )
-+    crates[-1]["env"]["OBJTREE"] = str(objtree.resolve(True))
-+    crates[-1]["source"] = {
-+        "include_dirs": [
-+            str(srctree / "rust" / "kernel"),
-+            str(objtree / "rust")
-+        ],
-+        "exclude_dirs": [],
-+    }
-+
-+    # Then, the rest outside of `rust/`.
-+    #
-+    # We explicitly mention the top-level folders we want to cover.
-+    for folder in ("samples", "drivers"):
-+        for path in (srctree / folder).rglob("*.rs"):
-+            logging.info("Checking %s", path)
-+            name = path.name.replace(".rs", "")
-+
-+            # Skip those that are not crate roots.
-+            if f"{name}.o" not in open(path.parent / "Makefile").read():
-+                continue
-+
-+            logging.info("Adding %s", name)
-+            append_crate(
-+                name,
-+                path,
-+                ["core", "alloc", "kernel"],
-+                cfg=cfg,
-+            )
-+
-+    return crates
-+
-+def main():
-+    parser = argparse.ArgumentParser()
-+    parser.add_argument('--verbose', '-v', action='store_true')
-+    parser.add_argument("srctree", type=pathlib.Path)
-+    parser.add_argument("objtree", type=pathlib.Path)
-+    parser.add_argument("sysroot_src", type=pathlib.Path)
-+    args = parser.parse_args()
-+
-+    logging.basicConfig(
-+        format="[%(asctime)s] [%(levelname)s] %(message)s",
-+        level=logging.INFO if args.verbose else logging.WARNING
-+    )
-+
-+    rust_project = {
-+        "crates": generate_crates(args.srctree, args.objtree, args.sysroot_src),
-+        "sysroot_src": str(args.sysroot_src),
-+    }
-+
-+    json.dump(rust_project, sys.stdout, sort_keys=True, indent=4)
-+
-+if __name__ == "__main__":
-+    main()
+ 	# Replace old address with pretty line numbers
+ 	symbol="$segment$name ($code)"
+ }
 -- 
 2.36.1
 

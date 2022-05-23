@@ -2,97 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DAAD531E39
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 23:52:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D530531E41
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 23:56:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230424AbiEWVwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 17:52:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43618 "EHLO
+        id S230430AbiEWV4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 17:56:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiEWVv6 (ORCPT
+        with ESMTP id S230489AbiEWV4I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 17:51:58 -0400
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000BFB0D34
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 14:51:57 -0700 (PDT)
-Received: by mail-ot1-x333.google.com with SMTP id r3-20020a9d5cc3000000b0060ae1789875so8768321oti.13
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 14:51:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Q8SrzKwXbwxEUVDgvvMve7Yi3txpWp8p+iQJgO5oLAk=;
-        b=iohk/agXfsij0LTxGdU0vY6kpIgx4QqFuvhQEnzmWnnDNBRfp7M+LaYZhlEqiOM+PD
-         5Ofsc/QN1DC5SCtQ8cTlukZabTVMItX/J9cVbGmwqSVtQVsxHaKZnORw2esG2MBxarHq
-         LHaKztBDVV9SBBmVYUc7/xgb0bTh0We+ra5CE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Q8SrzKwXbwxEUVDgvvMve7Yi3txpWp8p+iQJgO5oLAk=;
-        b=LoUBNDY6qqdWFFuDGjRDCtfE/SDfbFcxPjGd4GGs2MzhR2q4nJx9+qtJ8FlCGxmFoJ
-         6YIowM93zW/T298damr7YxxulNpK9OK0IMZOE1BOr/oOABqncNiF/TVPV0UDZvmoVKvt
-         LTBcVm+z6Z7Xz45DUjSt3fpxY4TeN40O5kfGwhqauHN4zwCmqJqqH3D5QuZXYILOHP3y
-         BgjRuMPoymY5HeQSvKAZiZQxXS/xqSYDtGf0Lth4xxnqmwC32b4q4ka3GDeTnK/i35y4
-         rwiAIv5zfFnpJm8+yHgOJBWOEATNCL/I+Wbu0DYzn5llinrBslyHNX9VvEDnZrdODbrq
-         3WcA==
-X-Gm-Message-State: AOAM531MX7b7ovrat/9xsGS6feM3XNbG6Td1YxaxTk+bVipEQxQHijU6
-        IZ8/Q1jmbawpAo/CHNCOS7+QbgFi0DZuvA==
-X-Google-Smtp-Source: ABdhPJyNhF51Ma7p3W0Kn1kJ6C8fHN2MBEcTJ+DteyRQWUjH0Uae0ghwnYBz1xcLgnntfXBMreVMBw==
-X-Received: by 2002:a9d:2f61:0:b0:5e9:4bfb:61cc with SMTP id h88-20020a9d2f61000000b005e94bfb61ccmr9030819otb.355.1653342717048;
-        Mon, 23 May 2022 14:51:57 -0700 (PDT)
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com. [209.85.167.175])
-        by smtp.gmail.com with ESMTPSA id l6-20020a056871068600b000e686d1389esm4400385oao.56.2022.05.23.14.51.54
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 May 2022 14:51:54 -0700 (PDT)
-Received: by mail-oi1-f175.google.com with SMTP id l84so2077063oif.10
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 14:51:54 -0700 (PDT)
-X-Received: by 2002:aca:5e84:0:b0:2ec:9c1d:fc77 with SMTP id
- s126-20020aca5e84000000b002ec9c1dfc77mr600365oib.291.1653342713974; Mon, 23
- May 2022 14:51:53 -0700 (PDT)
+        Mon, 23 May 2022 17:56:08 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3330D5FEA;
+        Mon, 23 May 2022 14:56:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=l55w7vFL87VUFoT4THPFWPLSv0S+CeTc0rHopwPFTiU=; b=dj1oVTMOGNAspE6ON1Wo31A+97
+        X7itrFGIFJj2i8VJFQYyXAf+r0oEiZuPDDzLCt//bbyRURSbgy4AlMNPawOBKwyoV46Ssr/SXKsx9
+        NaWwWRnwbx+1/Oiz9ysLVV+ZkSdP6aYA/m0qSZOyho9Cxddj4GPb5Y/1ZDM4FCimpVg8QGCYeddFY
+        EIZbtrTpEJyPyPWs0fCZhvvxkkb4clGpQELMjKq6CezFzvqL2/uSS+xmlJHtFhMePgsJOjzykFit7
+        B0EhE2Qmu23d8YFX34ORhtIBEwHAO96t9Hm0W0qnVsFKa4B8xZWCLYLBEtXsh0rPvVkjW3H72md/Z
+        NOrukhWg==;
+Received: from 200-161-159-120.dsl.telesp.net.br ([200.161.159.120] helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1ntG1y-00Gn8d-Al; Mon, 23 May 2022 23:56:02 +0200
+Message-ID: <56a8553d-92fe-875b-ad2a-f0354a496599@igalia.com>
+Date:   Mon, 23 May 2022 18:55:43 -0300
 MIME-Version: 1.0
-References: <20220228202532.869740-1-briannorris@chromium.org> <CA+ASDXNSThy7usMKkN22VBq2iyej7sCJ8CAmgnNvxDgZiMbukA@mail.gmail.com>
-In-Reply-To: <CA+ASDXNSThy7usMKkN22VBq2iyej7sCJ8CAmgnNvxDgZiMbukA@mail.gmail.com>
-From:   Brian Norris <briannorris@chromium.org>
-Date:   Mon, 23 May 2022 14:51:42 -0700
-X-Gmail-Original-Message-ID: <CA+ASDXMW14GqJUAogQ0=dVdamhTTGDzcMRv-8Cx-TaXShHxj+A@mail.gmail.com>
-Message-ID: <CA+ASDXMW14GqJUAogQ0=dVdamhTTGDzcMRv-8Cx-TaXShHxj+A@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] drm/bridge: analogix_dp: Self-refresh state
- machine fixes
-To:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Sean Paul <sean@poorly.run>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        Sean Paul <seanpaul@chromium.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        Liu Ying <victor.liu@oss.nxp.com>,
-        Doug Anderson <dianders@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 12/30] parisc: Replace regular spinlock with spin_trylock
+ on panic path
+Content-Language: en-US
+To:     Helge Deller <deller@gmx.de>
+Cc:     linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-13-gpiccoli@igalia.com>
+ <6a7c924a-54a9-c5ea-8a9d-3ea92987b436@gmx.de>
+ <0dda86c0-3a54-8c70-d1e7-18bbb4d41bab@igalia.com>
+ <43de5653-7587-3e8e-274c-b2729649d0fd@gmx.de>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <43de5653-7587-3e8e-274c-b2729649d0fd@gmx.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 3:50 PM Brian Norris <briannorris@chromium.org> wrote:
-> On Mon, Feb 28, 2022 at 12:25 PM Brian Norris <briannorris@chromium.org> wrote:
+On 23/05/2022 18:31, Helge Deller wrote:
+> Hello Guilherme,
+> 
+> On 5/23/22 22:40, Guilherme G. Piccoli wrote:
+>> On 28/04/2022 13:55, Helge Deller wrote:
+>>> [...]
+>>> You may add:
+>>> Acked-by: Helge Deller <deller@gmx.de> # parisc
+>>
+>> Hi Helge, do you think would be possible to still pick this one for
+>> v5.19 or do you prefer to hold for the next release?
+> 
+> Actually, I'd prefer if you push this patch together with the whole
+> series upstream at once. The patch itself makes not much sense without
+> your series...
+> 
+>> I'm working on V2, so if it's merged for 5.19 I won't send it again.
+> 
+> Helge
 
-> Ping for review? Sean, perhaps? (You already reviewed this on the
-> Chromium tracker.)
+Sure Helge, I guess I can do that - will resubmit for V2.
 
-Ping
+But notice the patch is self-contained, as it fixes a current issue in
+the code - the risk for a lockup due to spinlock taking on atomic
+context. It doesn't require the panic refactor to be merged in order to
+achieve its goal...
+
+I agree that such issue is rare to trigger though, so definitely no
+hurry is needed =)
+
+Cheers,
+
+
+Guilherme

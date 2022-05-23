@@ -2,62 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94675530CF1
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:41:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B63E530D08
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:41:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232611AbiEWJF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 05:05:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37966 "EHLO
+        id S232641AbiEWJHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 05:07:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232545AbiEWJFB (ORCPT
+        with ESMTP id S232696AbiEWJGB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 05:05:01 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25BA44A06;
-        Mon, 23 May 2022 02:04:59 -0700 (PDT)
-X-UUID: c8dc2de1ebd74935b4508148fcfac7f8-20220523
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:418d7b93-c536-4c82-9cfa-3fad475047d5,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:5
-X-CID-META: VersionHash:2a19b09,CLOUDID:95a0467a-5ef6-470b-96c9-bdb8ced32786,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:0,BEC:nil
-X-UUID: c8dc2de1ebd74935b4508148fcfac7f8-20220523
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1304516341; Mon, 23 May 2022 17:04:56 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Mon, 23 May 2022 17:04:55 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Mon, 23 May 2022 17:04:54 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Mathias Nyman" <mathias.nyman@intel.com>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Eddie Hung <eddie.hung@mediatek.com>
-Subject: [PATCH 4/4] usb: mtu3: add support controller reset
-Date:   Mon, 23 May 2022 17:04:49 +0800
-Message-ID: <20220523090449.14430-4-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220523090449.14430-1-chunfeng.yun@mediatek.com>
-References: <20220523090449.14430-1-chunfeng.yun@mediatek.com>
+        Mon, 23 May 2022 05:06:01 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0643E2E2;
+        Mon, 23 May 2022 02:05:58 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id E49261F426EC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1653296756;
+        bh=oHX6Oa0zn9w/29wsm4kiFu/0J+uT7hELazl/urkOVls=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ZtLnLgxN9JOdZHJx0bXUekgWwX/E90i174BSK9Gx0h8X26u45N91FSZZyupj3qoAZ
+         ZTppOG2uRkrdGlz5THIUaV0Q0854xONUmU/g8wo0jqA9o1K6Gy0OpqWm1UQPSrCIWE
+         NWKRVq8T7UH4n7lJmCCoA+l9Z8ZbxbMvB+M5LZPUzbFNF5gqoM9C9sYZw3k+h8lGz5
+         hWeTUhhAbn5Lk2p/KbeHtjwYH0BRTw1+QbbQe3i/UojawbQP1pUUtpzX5v0D3ymk8v
+         EBvcHI6D+aYhyZSClqGrmmaL6q7qoxWiH+rlcKVg2w68e/+zM6kiIM80fkdpYynPvc
+         MBfrOjeuK1jVw==
+Message-ID: <be340e39-ffd4-63ec-ec91-ea4f7a475650@collabora.com>
+Date:   Mon, 23 May 2022 11:05:53 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v8 17/19] dt-bindings: reset: mediatek: Add infra_ao reset
+ index for MT8186
+Content-Language: en-US
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, mturquette@baylibre.com,
+        sboyd@kernel.org, matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     p.zabel@pengutronix.de, nfraprado@collabora.com,
+        chun-jie.chen@mediatek.com, wenst@chromium.org,
+        runyang.chen@mediatek.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220523060056.24396-1-rex-bc.chen@mediatek.com>
+ <20220523060056.24396-18-rex-bc.chen@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220523060056.24396-18-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,40 +63,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support controller reset via a reset-controller usually in infracfg,
-it's different with the software reset by IPPC which only used to reset MAC,
-and it will also reset IPPC meanwhile.
+Il 23/05/22 08:00, Rex-BC Chen ha scritto:
+> To support reset of infra_ao, add the index of infra_ao reset of
+> thermal/svs for MT8186.
+> 
+> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> Acked-by: Rob Herring <robh@kernel.org>
+> Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
----
- drivers/usb/mtu3/mtu3_plat.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+Rex, sorry but you've probably misunderstood Nicolas' Tested-by... he has
+tested these on MT8192, so his T-b tag is not applicable to MT8186, MT8195.
 
-diff --git a/drivers/usb/mtu3/mtu3_plat.c b/drivers/usb/mtu3/mtu3_plat.c
-index 4309ed939178..d14494b30064 100644
---- a/drivers/usb/mtu3/mtu3_plat.c
-+++ b/drivers/usb/mtu3/mtu3_plat.c
-@@ -13,6 +13,7 @@
- #include <linux/of_irq.h>
- #include <linux/platform_device.h>
- #include <linux/pm_wakeirq.h>
-+#include <linux/reset.h>
- 
- #include "mtu3.h"
- #include "mtu3_dr.h"
-@@ -345,6 +346,12 @@ static int mtu3_probe(struct platform_device *pdev)
- 		dev_info(dev, "wakeup irq %d\n", ssusb->wakeup_irq);
- 	}
- 
-+	ret = device_reset_optional(dev);
-+	if (ret) {
-+		dev_err_probe(dev, ret, "failed to reset controller\n");
-+		goto comm_exit;
-+	}
-+
- 	ssusb_ip_sw_reset(ssusb);
- 
- 	if (IS_ENABLED(CONFIG_USB_MTU3_HOST))
--- 
-2.18.0
+Anyway:
+
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 

@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0AA4531D27
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:58:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2F34531AAA
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:55:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239921AbiEWRNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:13:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35456 "EHLO
+        id S239978AbiEWRT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:19:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239912AbiEWRL2 (ORCPT
+        with ESMTP id S240678AbiEWRQj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:11:28 -0400
+        Mon, 23 May 2022 13:16:39 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01FE66CA8A;
-        Mon, 23 May 2022 10:10:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2EEF15729;
+        Mon, 23 May 2022 10:16:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B49AA6149F;
-        Mon, 23 May 2022 17:10:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5FCFC385A9;
-        Mon, 23 May 2022 17:10:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E6008614CA;
+        Mon, 23 May 2022 17:13:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3744C385A9;
+        Mon, 23 May 2022 17:13:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653325816;
-        bh=PtTaFhuG/99yQe8PlTPphxsox6m92HMPQPi+TXuU2x4=;
+        s=korg; t=1653326002;
+        bh=amzS8tdbXvXwVohrv+HoHg7A0i5q82gunCd6tiY4OQY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AlZhi7kyA5XB2d5KNZHTWTw20Ty3AR0PLVElgk5jtrKNFr7a+ujmvDP8p2wEYHdh4
-         hraav1bC3sX7SN3Gx/UmMASBjWsnmuNMFWGt6X0xgDGt/2XuNI+OJijbX4dCluUhCV
-         19uHDMxIly5iLNCnJakVpG8nJHfgYlzjiuIT3u/I=
+        b=TDOb9ioZEWVLHngT7eucPAtfcZlA/MbSuIL5xvH4ef4bWr15rXUnSGe+wtC+ymE2z
+         3yjXPAMEhIEPCVXqjqUXmSNdkpv4KYQyf3r9EHpYWPPOspqk7vBLRU+v6i+gpGBE9e
+         BMdLR3lwscydixLh8V70oFIzEZcafi87QP7AojJQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Subject: [PATCH 4.19 20/44] mmc: core: Default to generic_cmd6_time as timeout in __mmc_switch()
+        stable@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>,
+        syzbot+8ed8fc4c57e9dcf23ca6@syzkaller.appspotmail.com
+Subject: [PATCH 5.4 37/68] net/sched: act_pedit: sanitize shift argument before usage
 Date:   Mon, 23 May 2022 19:05:04 +0200
-Message-Id: <20220523165756.859950133@linuxfoundation.org>
+Message-Id: <20220523165808.698375192@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165752.797318097@linuxfoundation.org>
-References: <20220523165752.797318097@linuxfoundation.org>
+In-Reply-To: <20220523165802.500642349@linuxfoundation.org>
+References: <20220523165802.500642349@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,71 +56,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ulf Hansson <ulf.hansson@linaro.org>
+From: Paolo Abeni <pabeni@redhat.com>
 
-commit 533a6cfe08f96a7b5c65e06d20916d552c11b256 upstream
+[ Upstream commit 4d42d54a7d6aa6d29221d3fd4f2ae9503e94f011 ]
 
-All callers of __mmc_switch() should now be specifying a valid timeout for
-the CMD6 command. However, just to be sure, let's print a warning and
-default to use the generic_cmd6_time in case the provided timeout_ms
-argument is zero.
+syzbot was able to trigger an Out-of-Bound on the pedit action:
 
-In this context, let's also simplify some of the corresponding code and
-clarify some related comments.
+UBSAN: shift-out-of-bounds in net/sched/act_pedit.c:238:43
+shift exponent 1400735974 is too large for 32-bit type 'unsigned int'
+CPU: 0 PID: 3606 Comm: syz-executor151 Not tainted 5.18.0-rc5-syzkaller-00165-g810c2f0a3f86 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ ubsan_epilogue+0xb/0x50 lib/ubsan.c:151
+ __ubsan_handle_shift_out_of_bounds.cold+0xb1/0x187 lib/ubsan.c:322
+ tcf_pedit_init.cold+0x1a/0x1f net/sched/act_pedit.c:238
+ tcf_action_init_1+0x414/0x690 net/sched/act_api.c:1367
+ tcf_action_init+0x530/0x8d0 net/sched/act_api.c:1432
+ tcf_action_add+0xf9/0x480 net/sched/act_api.c:1956
+ tc_ctl_action+0x346/0x470 net/sched/act_api.c:2015
+ rtnetlink_rcv_msg+0x413/0xb80 net/core/rtnetlink.c:5993
+ netlink_rcv_skb+0x153/0x420 net/netlink/af_netlink.c:2502
+ netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+ netlink_unicast+0x543/0x7f0 net/netlink/af_netlink.c:1345
+ netlink_sendmsg+0x904/0xe00 net/netlink/af_netlink.c:1921
+ sock_sendmsg_nosec net/socket.c:705 [inline]
+ sock_sendmsg+0xcf/0x120 net/socket.c:725
+ ____sys_sendmsg+0x6e2/0x800 net/socket.c:2413
+ ___sys_sendmsg+0xf3/0x170 net/socket.c:2467
+ __sys_sendmsg+0xe5/0x1b0 net/socket.c:2496
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7fe36e9e1b59
+Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffef796fe88 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fe36e9e1b59
+RDX: 0000000000000000 RSI: 0000000020000300 RDI: 0000000000000003
+RBP: 00007fe36e9a5d00 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007fe36e9a5d90
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
 
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-Link: https://lore.kernel.org/r/20200122142747.5690-4-ulf.hansson@linaro.org
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+The 'shift' field is not validated, and any value above 31 will
+trigger out-of-bounds. The issue predates the git history, but
+syzbot was able to trigger it only after the commit mentioned in
+the fixes tag, and this change only applies on top of such commit.
+
+Address the issue bounding the 'shift' value to the maximum allowed
+by the relevant operator.
+
+Reported-and-tested-by: syzbot+8ed8fc4c57e9dcf23ca6@syzkaller.appspotmail.com
+Fixes: 8b796475fd78 ("net/sched: act_pedit: really ensure the skb is writable")
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mmc/core/mmc_ops.c |   16 +++++++---------
- 1 file changed, 7 insertions(+), 9 deletions(-)
+ net/sched/act_pedit.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/drivers/mmc/core/mmc_ops.c
-+++ b/drivers/mmc/core/mmc_ops.c
-@@ -458,10 +458,6 @@ static int mmc_poll_for_busy(struct mmc_
- 	bool expired = false;
- 	bool busy = false;
+diff --git a/net/sched/act_pedit.c b/net/sched/act_pedit.c
+index 305cb190e997..f095a0fb75c6 100644
+--- a/net/sched/act_pedit.c
++++ b/net/sched/act_pedit.c
+@@ -231,6 +231,10 @@ static int tcf_pedit_init(struct net *net, struct nlattr *nla,
+ 	for (i = 0; i < p->tcfp_nkeys; ++i) {
+ 		u32 cur = p->tcfp_keys[i].off;
  
--	/* We have an unspecified cmd timeout, use the fallback value. */
--	if (!timeout_ms)
--		timeout_ms = MMC_OPS_TIMEOUT_MS;
--
- 	/*
- 	 * In cases when not allowed to poll by using CMD13 or because we aren't
- 	 * capable of polling by using ->card_busy(), then rely on waiting the
-@@ -534,6 +530,12 @@ int __mmc_switch(struct mmc_card *card,
- 
- 	mmc_retune_hold(host);
- 
-+	if (!timeout_ms) {
-+		pr_warn("%s: unspecified timeout for CMD6 - use generic\n",
-+			mmc_hostname(host));
-+		timeout_ms = card->ext_csd.generic_cmd6_time;
-+	}
++		/* sanitize the shift value for any later use */
++		p->tcfp_keys[i].shift = min_t(size_t, BITS_PER_TYPE(int) - 1,
++					      p->tcfp_keys[i].shift);
 +
- 	/*
- 	 * If the cmd timeout and the max_busy_timeout of the host are both
- 	 * specified, let's validate them. A failure means we need to prevent
-@@ -542,7 +544,7 @@ int __mmc_switch(struct mmc_card *card,
- 	 * which also means they are on their own when it comes to deal with the
- 	 * busy timeout.
- 	 */
--	if (!(host->caps & MMC_CAP_NEED_RSP_BUSY) && timeout_ms &&
-+	if (!(host->caps & MMC_CAP_NEED_RSP_BUSY) &&
- 	    host->max_busy_timeout && (timeout_ms > host->max_busy_timeout))
- 		use_r1b_resp = false;
- 
-@@ -554,10 +556,6 @@ int __mmc_switch(struct mmc_card *card,
- 	cmd.flags = MMC_CMD_AC;
- 	if (use_r1b_resp) {
- 		cmd.flags |= MMC_RSP_SPI_R1B | MMC_RSP_R1B;
--		/*
--		 * A busy_timeout of zero means the host can decide to use
--		 * whatever value it finds suitable.
--		 */
- 		cmd.busy_timeout = timeout_ms;
- 	} else {
- 		cmd.flags |= MMC_RSP_SPI_R1 | MMC_RSP_R1;
+ 		/* The AT option can read a single byte, we can bound the actual
+ 		 * value with uchar max.
+ 		 */
+-- 
+2.35.1
+
 
 

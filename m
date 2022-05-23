@@ -2,316 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 903F1530EF8
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:17:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97C5D530FD4
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:19:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235774AbiEWMwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 08:52:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48200 "EHLO
+        id S235782AbiEWMwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 08:52:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235586AbiEWMwF (ORCPT
+        with ESMTP id S235744AbiEWMwd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 08:52:05 -0400
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E38DE3DA7A;
-        Mon, 23 May 2022 05:52:01 -0700 (PDT)
-Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 335121C0004;
-        Mon, 23 May 2022 12:51:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1653310320;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=U+H5xu8nCjdPDFB+rNE/Nv2sAZrPCxc01fLrAUYE1eE=;
-        b=OHjPq6PNsRRavWiImrmtBl5h8WOWbZbQ2kehnB7qEoTtWw47+3pwOl5kMlB+tXm/J4wGRv
-        bZ+YCtkRlq+zIhBsnfhcfcieywN68jOpLfntklbqH651Lm1e56yMYVuEV3IA/uKVomqiS9
-        Mv7d4WfJtTbnsT9Mvy0M3mHLJlxasC0WezQ9riLw1XyLIK5cd4kRY682AX78iTkiB2PXm7
-        f/N5mTQPniOhR6SoS5KuaD7b5Tokf9yznWLvBaH3B6yDmcXAFsyVPRaPOgr4y5O96FQVYt
-        0ceQCUoBTL2ZaRlxtx0PfPzk2fIiGuDdWAQ+dYILBy19/kVw95TrVpUZRbKjjQ==
-Date:   Mon, 23 May 2022 14:51:55 +0200
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Sakari Ailus <sakari.ailus@iki.fi>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v3 3/4] staging: media: Add support for the Allwinner A31
- ISP
-Message-ID: <YouDa3mE9+SkKJg/@aptenodytes>
-References: <20220415153708.637804-1-paul.kocialkowski@bootlin.com>
- <20220415153708.637804-4-paul.kocialkowski@bootlin.com>
- <YmqFQSRBsqs4ghNQ@valkosipuli.retiisi.eu>
- <Ymqk89e+mn/1kLLx@aptenodytes>
- <YmsCJicyzf+Bz98y@valkosipuli.retiisi.eu>
- <YoesXywA4yzBDSwU@aptenodytes>
- <Yop0DGOo1ky2dfnv@pendragon.ideasonboard.com>
+        Mon, 23 May 2022 08:52:33 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E992852E77
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 05:52:31 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id z7so3936129ybf.7
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 05:52:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GenjPe3LrNC6qWAdvbWNOjWJ7IfOHse++vxp3OTgmUQ=;
+        b=secIkysmb5CdxMzyOZgxQo6f+FanOyB5E3cxo6Rxju9Rm/74cgf9sa9rxCZgt49kkJ
+         /eCSmsMF2Ckkp9CaGse5K+Ks+9cDHUInXyd7K6keRi6EzlrWmmoHX4ciHDRvhA9WdfUM
+         JJLtstnYg4I3MNHr9WjaPLhYW3v6AmHSiB2MsW8Z5nl45qTEisxlQ5I+L9+R+anWrPn1
+         VUeClI5k3CT8F2j2BKqF9ueMTo4FkQ8CY8UGrPoToEHCClTVYWRkNv9zzZCDMkULrpXB
+         crtYKI/t+SXysAKpp3CulMjz9xkzo/EUICSzOx2YxpdRVUrM0PAkKnHGzq7SFRXeTDs1
+         vs/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GenjPe3LrNC6qWAdvbWNOjWJ7IfOHse++vxp3OTgmUQ=;
+        b=gARRmGeWHsIxL7Qv4mJV2eMaCUr8iWR3bAmALedc8qQy5AUjUp8GxEChesi+Xpwr/q
+         grVMPZZd9Auzb9td5TIduITWxA3ie9krbAzJotgCNEm/RZ63h+cQPtk4ltgOQuid7iNr
+         w+8VkA7UU/MwnIIuA9Fff4TpGa6J9PpJK2TBCCOQfdZOiBc0rh8BnpS+06Tiwds79hQs
+         A97tLcbc9DtM6+tuxLOs1rnQKt/LxHWFaazdlImPzdg0DFrFKYe6iRV+14WHkCFmR6HA
+         jzm9qeBmI8WWXj+K+bbpKJW14S8cqIHtlxVQE6Eq223E9s5ZfJUFkp3ZLs4hGBsyljjp
+         AKeg==
+X-Gm-Message-State: AOAM530Xra+v9wfPzx7AooM3xLFhgIM9FzN6ShJXIsQmioIxNsTXFu/k
+        N0o9C38TyklGPtcqJG8J7WLeJ6OM3axWb44x2jsnqg==
+X-Google-Smtp-Source: ABdhPJxQsxRY8MZEwvMmwMzw4W5ZnpO9KwDz9+Bps++wbCzQG9LfnVLNbfO2M/6yNd8qAjAnQDwIdvEl7E09uMJLu6U=
+X-Received: by 2002:a25:23d2:0:b0:64e:a1e4:683c with SMTP id
+ j201-20020a2523d2000000b0064ea1e4683cmr22036776ybj.211.1653310351099; Mon, 23
+ May 2022 05:52:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="SXPMYzqIrx+IMC+b"
-Content-Disposition: inline
-In-Reply-To: <Yop0DGOo1ky2dfnv@pendragon.ideasonboard.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220512163534.2572-1-vincent.guittot@linaro.org>
+ <f1f50c52673aa1873b4a4d3b6b15250d4bf390f9.camel@linux.intel.com>
+ <CAKfTPtBEHyP202duKwJi+GVNTMza+L_PuK3hmUxcjKnODOuRjw@mail.gmail.com>
+ <9c0f9158-2d0c-dba9-1505-79ba4e642684@oracle.com> <aa8746fbb27849ee34ddb0ff028d0a1ee064c506.camel@linux.intel.com>
+In-Reply-To: <aa8746fbb27849ee34ddb0ff028d0a1ee064c506.camel@linux.intel.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Mon, 23 May 2022 14:52:19 +0200
+Message-ID: <CAKfTPtAotgr+C1zXyWDSZt59NFX7Twb7gQLMcSv5hm6ywM85+Q@mail.gmail.com>
+Subject: Re: [PATCH v2 0/7] Add latency_nice priority
+To:     Tim Chen <tim.c.chen@linux.intel.com>
+Cc:     Chris Hyser <chris.hyser@oracle.com>, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
+        qais.yousef@arm.com, valentin.schneider@arm.com,
+        patrick.bellasi@matbug.net, David.Laight@aculab.com,
+        pjt@google.com, pavel@ucw.cz, tj@kernel.org, qperret@google.com,
+        joshdon@google.com, len.brown@intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 20 May 2022 at 20:46, Tim Chen <tim.c.chen@linux.intel.com> wrote:
+>
+> On Thu, 2022-05-19 at 14:14 -0400, Chris Hyser wrote:
+> > On 5/19/22 10:16 AM, Vincent Guittot wrote:
+> > > On Fri, 13 May 2022 at 23:44, Tim Chen <tim.c.chen@linux.intel.com> wrote:
+> > > > On Thu, 2022-05-12 at 18:35 +0200, Vincent Guittot wrote:
+> > > > > This patchset restarts the work about adding a latency nice priority to
+> > > > > describe the latency tolerance of cfs tasks.
+> > > > >
+> > > > > The patches [1-4] have been done by Parth:
+> > > > > https://lore.kernel.org/lkml/20200228090755.22829-1-parth@linux.ibm.com/
+> > > > >
+> > > > > I have just rebased and moved the set of latency priority outside the
+> > > > > priority update. I have removed the reviewed tag because the patches
+> > > > > are 2 years old.
+> > > > >
+> > > >
+> > > > Vincent,
+> > > >
+> > > > Thanks for introducing the feature again, which is much needed.  I am trying
+> > > > to look at the problem again from usage point of view. And wonder if
+> > > > there are ways to make the latency_nice knob easier to use.
+> > > >
+> > > > The latency nice value here is relative.  A latency sensitive task
+> > > > may not tell if setting the latency_nice to -5, or to -10 is good enough.
+> > > > It depends on what other tasks are setting their latency_nice value to.
+> > > > What a task does know is what it it doing and its characteristics.
+> > > > For instance for client tasks, we may have categories such as
+> > > >
+> > > > Task Category                                   latency_nice_range
+> > > > -------------                                   ------------------
+> > > > urgent                                          -19 to -16
+> > > > media playback                                  -15 to -11
+> > > > interactive (e.g.pressing key)                  -10 to -6
+> > > > normal                                          -5  to  9
+> > > > background                                       10  to 15
+> > > > opportunistic soaker task (sched_idle class)     16 to  20
+> > > >
+> > > > And we could allow a task to set attribute of which task category applies
+> > > > to it and the OS can set a default latency nice value in its task category.
+> > > > So a task can just declare itself what kind of task it is, and not worry about
+> > > > actually setting a latency nice value which it may not know
+> > > > what is appopriate.
+> > > > If needed, a task could still adjust its latency nice value within the range to
+> > > > differentiate itself in a task category. And we will prevent
+> > > > a task from seeting inappropriate latency nice value out of the right range.
+> > >
+> > > The description above make sense but I'm not sure this should be put
+> > > as part of the interface but more in the documentation to describe how
+> > > system can make use of nice_latency
+> > > > Knowing a task characteristics will also be helpful with other
+> > > > scheduling decisions, like placing a task on a more high performing
+> > > > core in hetero systems.
+> > >
+> > > Ok so you would like a more general interface than an latency
+> > > interface but a way to set some attributes to a task so we can make
+> > > smarter decision
+> >
+> > The original definition of latency nice was as a task attribute describing the latency sensitivity of the task. The fact
+> > that it was mapped to 'nice' values created too much granularity and made it look more like a tuning knob than a
+> > statement about the characteristics of the task as intended.
+> >
+> > > > I think the missing piece here is a way for a task to declare
+> > > > what kind of task it is.  I think that will make things easier.
+> >
+> > A classification of tasks into categories would be useful, but perhaps one level up in a user space tool or a user's
+> > head (ie docs). For any of the categories you describe, there may be a number of per-task attributes beyond latency
+> > sensitivity needed to capture the task characteristics you mention and ideally would be set in specific ways. Say 'nice'
+> > values, oom kill, etc. And others may make sense in the future, like say NUMA sensitivity, etc.
+> >
+> > Basically, a category can map to a bunch of desired default values for various scheduler visible task attributes.
+>
+> Yes.  I think having a default value for each category will make the setting of the attributes
+> consistent and life of a task simpler.
+>
+> Without guidance, one media playback task can set its latency_nice to be -5,
+> and another interactive task doing computation and displaying results to user
+> set its latency_nice to be -6. We would have the interactive task running ahead of the media playback,
+> which is undesired.  Just letting each task set its own latency_nice value will not achieve the
+> desired effect.  We need guidance on what attribute value a certain task category
+> should use (as in documentation that Vincent mentioned).
+>
+> Or let OS set the attribute to some sensible value if it knows the task category.
 
---SXPMYzqIrx+IMC+b
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I'm in favor of documentation that provides guidance rather than the
+OS setting attribute because the values are relative to each others so
+we will always find some exceptions to a default configuration for let
+say media vs user interaction. With a documentation, someone can
+always not follow it if he thinks it doesn't apply to his system
+because of whatever the reason. With the OS setting attributes, this
+exception will have to abuse its category to get the right priority vs
+others
 
-Hi Laurent,
-
-On Sun 22 May 22, 20:34, Laurent Pinchart wrote:
-> Hi Paul,
->=20
-> On Fri, May 20, 2022 at 04:57:35PM +0200, Paul Kocialkowski wrote:
-> > On Fri 29 Apr 22, 00:07, Sakari Ailus wrote:
-> > > On Thu, Apr 28, 2022 at 04:30:11PM +0200, Paul Kocialkowski wrote:
-> > > > Hi Sakari,
-> > > >=20
-> > > > On Thu 28 Apr 22, 15:14, Sakari Ailus wrote:
-> > > > > Hi Paul,
-> > > > >=20
-> > > > > Thanks for the set.
-> > > > >=20
-> > > > > A few comments below.
-> > > >=20
-> > > > Thanks a lot for your review!
-> > >=20
-> > > You're welcome!
-> > >=20
-> > > ...
-> > >=20
-> > > > > I understand this is an online ISP. How do you schedule the video=
- buffer
-> > > > > queues? Say, what happens if it's time to set up buffers for a fr=
-ame and
-> > > > > there's a buffer queued in the parameter queue but not in the ima=
-ge data
-> > > > > queue? Or the other way around?
-> > > >=20
-> > > > The ISP works in a quite atypical way, with a DMA buffer that is us=
-ed to
-> > > > hold upcoming parameters (including buffer addresses) and a bit in =
-a "direct"
-> > > > register to schedule the update of the parameters at next vsync.
-> > > >=20
-> > > > The update (setting the bit) is triggered whenever new parameters a=
-re
-> > > > submitted via the params video device or whenever there's a capture=
- buffer
-> > > > available in the capture video device.
-> > > >=20
-> > > > So you don't particularly need to have one parameter buffer matchin=
-g a capture
-> > > > buffer, the two can be updated independently. Of course, a capture =
-buffer will
-> > > > only be returned after another buffer becomes active.
-> > >=20
-> > > This also means it's not possible to associate a capture buffer to a
-> > > parameter buffer by other means than timing --- which is unreliable. =
-The
-> > > request API would allow that but it's not free of issues either.
-> >=20
-> > Yes the request API seems like a good fit for this. Note that the retur=
-ned
-> > sequence number in dequeued buffers for the capture and meta video devi=
-ces
-> > should match though, so userspace still has a way to know which capture=
-d buffer
-> > used parameters from which meta params buffer.
-> >=20
-> > > Alternatively, I think in this case you could always require the capt=
-ure
-> > > buffer and grab a parameter buffer when it's available. As ISPs are
-> > > generally requiring device specific control software, this shouldn't =
-be a
-> > > problem really.
-> >=20
-> > I think this is pretty much what happens already.
-> >=20
-> > > I wonder what Laurent thinks.
->=20
-> If parameters buffers are optional, I think the request API should be
-> used, otherwise we won't be able to ensure per-frame control. The
-> alternative is to make the parameter buffer mandatory for every frame,
-> even if no parameters have changed. Or maybe that's the case already ?
-
-Currently the parameters are not mandatory (there is a default state set
-by the driver) and queued parameter buffers are applied in the order they
-are submitted.
-
-The request API would make per-frame control possible, but I don't think
-there is a point in making it mandatory. It seems that the situation is very
-similar to what already exists with the rkisp1 driver.
-
-Cheers,
-
-Paul
-
-> > > > I hope this answers your concern!
-> > > >=20
-> > > > [...]
-> > > >=20
-> > > > > > +static int sun6i_isp_tables_setup(struct sun6i_isp_device *isp=
-_dev)
-> > > > > > +{
-> > > > > > +	struct sun6i_isp_tables *tables =3D &isp_dev->tables;
-> > > > > > +	int ret;
-> > > > > > +
-> > > > > > +	/* Sizes are hardcoded for now but actually depend on the pla=
-tform. */
-> > > > >=20
-> > > > > Would it be cleaner to have them defined in a platform-specific w=
-ay, e.g.
-> > > > > in a struct you obtain using device_get_match_data()?
-> > > >=20
-> > > > Absolutely! I didn't do it at this stage since only one platform is=
- supported
-> > > > but we could just as well introduce a variant structure already for=
- the table
-> > > > sizes.
-> > >=20
-> > > I think that would be nice already, especially if you know these are =
-going
-> > > to be different. Otherwise macros could be an option.
-> >=20
-> > Understood!
-> >=20
-> > > ...
-> > >=20
-> > > > > > +	ret =3D v4l2_ctrl_handler_init(&v4l2->ctrl_handler, 0);
-> > > > >=20
-> > > > > I suppose you intend to add controls later on?
-> > > >=20
-> > > > I might be wrong but I thought this was necessary to expose sensor =
-controls
-> > > > registered by subdevs that end up attached to this v4l2 device.
-> > > >=20
-> > > > I doubt the drivers itself will expose controls otherwise.
-> > >=20
-> > > Now that this is an MC-enabled driver, the subdev controls should be
-> > > accessed through the subdev nodes only. Adding them to the video devi=
-ce's
-> > > control handler is quite hackish and not guaranteed to even work (as =
-e.g.
-> > > multiple subdevs can have the same control).
-> >=20
-> > Yes I was wondering what would happen in that case. I'll drop the ctrls
-> > handling in the next iteration then.
-> >=20
-> > Paul
-> >=20
-> > > ...
-> > >=20
-> > > > > > +{
-> > > > > > +	struct sun6i_isp_device *isp_dev =3D video_drvdata(file);
-> > > > > > +	struct video_device *video_dev =3D &isp_dev->capture.video_de=
-v;
-> > > > > > +	struct mutex *lock =3D &isp_dev->capture.lock;
-> > > > > > +	int ret;
-> > > > > > +
-> > > > > > +	if (mutex_lock_interruptible(lock))
-> > > > > > +		return -ERESTARTSYS;
-> > > > > > +
-> > > > > > +	ret =3D v4l2_pipeline_pm_get(&video_dev->entity);
-> > > > >=20
-> > > > > Do you need this?
-> > > > >=20
-> > > > > Drivers should primarily depend on runtime PM, this is only neede=
-d for
-> > > > > compatibility reasons. Instead I'd like to see sensor drivers bei=
-ng moved
-> > > > > to runtime PM.
-> > > >=20
-> > > > Yes it's still needed to support sensor drivers that don't use rpm =
-yet.
-> > >=20
-> > > To that I suggested adding runtime PM support for the affected sensor=
-s.
-> > > This doesn't seem to get done otherwise. E.g. ipu3-cio2 driver does n=
-ot
-> > > call s_power() on sensor subdevs.
-> > >=20
-> > > ...
-> > >=20
-> > > > > > +	ret =3D video_register_device(video_dev, VFL_TYPE_VIDEO, -1);
-> > > > > > +	if (ret) {
-> > > > > > +		v4l2_err(v4l2_dev, "failed to register video device: %d\n",
-> > > > > > +			 ret);
-> > > > > > +		goto error_media_entity;
-> > > > > > +	}
-> > > > > > +
-> > > > > > +	v4l2_info(v4l2_dev, "device %s registered as %s\n", video_dev=
-->name,
-> > > > > > +		  video_device_node_name(video_dev));
-> > > > >=20
-> > > > > This isn't really driver specific. I'd drop it.
-> > > >=20
-> > > > I agree but I see that many drivers are doing it and the informatio=
-n can
-> > > > actually be quite useful at times.
-> > >=20
-> > > You can get that information using media-ctl -e 'entity name'.
-> > >=20
-> > > I guess this could be also added to video_register_device() on debug =
-level.
-> > >=20
-> > > > > > +struct sun6i_isp_params_config_bdnf {
-> > > > > > +	__u8	in_dis_min; // 8
-> > > > > > +	__u8	in_dis_max; // 10
-> > > > >=20
-> > > > > Are these default values or something else? Better documentation =
-was in the
-> > > > > TODO.txt file already.
-> > > >=20
-> > > > Yes that's the default register values, but these comments are and =
-overlook on
-> > > > my side and should be removed.
-> > >=20
-> > > I'm fine leaving these here. Just wondering. Up to you.
->=20
-> --=20
-> Regards,
->=20
-> Laurent Pinchart
-
---=20
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
-
---SXPMYzqIrx+IMC+b
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmKLg2sACgkQ3cLmz3+f
-v9HkdAf/c8WwJ1tDC3vE468r7moIH1vWtbKyBlLkj1iB/T6YtO4tadBef69WudfQ
-mEmB43e4AeciElrjs/y0s0lTvbSatpK2BRUg82vQwm7PKUvgefaNkliZsU2WSOeT
-5hbkDNUX1ckQeZxVbpqO7zleFAa+uupHBmzM9c5/mE6g2mYOB9PSyNvNiZSBJUb7
-eM3IilYNswo+nWdcXWR3KYAgePBArQAEyE9IBmQSPrXeBJVj0Hqsti0Z9ANJjOcx
-ZHa0d9TY6SOb/oRw7gPQGj796ZcfYhXrTCStEPYOh304OXSA790Vvd0O6wgPTio9
-8UxE4fCbngH6y23ie+BH3Kl25imuWw==
-=ZrB9
------END PGP SIGNATURE-----
-
---SXPMYzqIrx+IMC+b--
+>
+> >
+> > Now you could also take the idea in the other direction where you set a "category value" for a task and have the kernel
+> > pick the other attribute defaults like 'nice' that would typically apply to tasks in the category, but I think letting
+> > user space figure stuff out and then set low level kernel task attributes primitives is cleaner.
+>
+> It is cleaner for the OS to give the knob to the user and say, "set it".
+> But users need guidance on what knob value they should use,
+> or even better, they don't need to worry about setting the knob.
+> I think it is easy for the user to set task category correctly, but
+> harder to set the low level knobs.
+>
+> I can see that it is easy to set the latency_nice knob incorrectly.
+> The absolute value of the knob doesn't matter. Only the relative values
+> between tasks do. So we need all the tasks to agree on what latency-nice
+> to use for a task category.
+>
+> Tim
+>
+>
+> >
+> > -chrish
+>

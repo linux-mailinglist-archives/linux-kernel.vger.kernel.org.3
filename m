@@ -2,181 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E94D65313BA
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:24:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6340C531308
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:23:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237902AbiEWPaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 11:30:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44042 "EHLO
+        id S238037AbiEWPbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 11:31:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237865AbiEWPac (ORCPT
+        with ESMTP id S237953AbiEWPbp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 11:30:32 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BDD45FF1F
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 08:30:31 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id br17so13916626lfb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 08:30:30 -0700 (PDT)
+        Mon, 23 May 2022 11:31:45 -0400
+Received: from corp-front10-corp.i.nease.net (corp-front11-corp.i.nease.net [42.186.62.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE8CA27B34;
+        Mon, 23 May 2022 08:31:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=11tx15XOReGzewyuScT08wDXVdYnhOX55HUlYSxbVO4=;
-        b=I/gaifkPbRc3Ya6NQFwpk6ISV+74r16YxnkKExnrHD9IOzX28AQ+kmze2NkWbcajxc
-         rHv5gQJ/FdqRvV/VnJLO1m+Wq65NeJ5loZDsTILiCsV+vsO5PvBRb4dAJgDL0iLSKvoS
-         lwH00d024zvK+H4pvhqXRV1DuSqckrOl1deEwV5NBKp+SsgFonev9Rh5nzfhHu4bVffz
-         kdh7vdf76mU5/m8oAi7lTVKXdn1K0OT5IWwaQgFsqrMT7hl7TBlsM83gxD4/EEXnbVAw
-         1Ekt/995jl2/70M1BYGcUi0EzUGeIq1oLrVv0ObfSdovQG3LLkcYbkm0cZI6SR8aHt6u
-         ph3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=11tx15XOReGzewyuScT08wDXVdYnhOX55HUlYSxbVO4=;
-        b=kEhCdv97m6Ol5XIYQh6Pjgpj0znjgorKpnuyXdQjrHTegzCwhzJH2o8olXQWsiFs35
-         R1JYYesvcCfKNXcSoQtgvqWoWGjFAEihsXJTyV8NlH95i4v0zcEKeKyoeJ4lnyJQL8ov
-         cf+z62WWKTZf5T6pOJZS+OaNs+Ip38TXfm8E6mbYoKclZ+TicqMJJzPvmVHHc8wjD3VN
-         hk8oyTl+RyCs4CdP0Qs8VyKLisqY4ox3IQkZ8vblGqealiqHPtGbm0b42czKjpQ2S0Sw
-         IkCY4O4Ktm5KQcf3br9lDDBVOIhVRDX9G143kphXPp7H9+YvCR05zEjze6BbKTk8iTi3
-         LgIQ==
-X-Gm-Message-State: AOAM532S8+cmJ7nHZQenMz2YSmS76JvBSXGOGVIGQrbreFfYQvnY7vge
-        MxdCcOEBh4HmHbeMHLFCLkBCIQ==
-X-Google-Smtp-Source: ABdhPJyJRlA+mwgV/0/+nj51fLL4x7OsYjBS85WmiP6FyM/mBP3cLnw06RZ5gqPSuvgLQC0gSa9pXQ==
-X-Received: by 2002:a19:7106:0:b0:478:68b5:86d9 with SMTP id m6-20020a197106000000b0047868b586d9mr6052561lfc.417.1653319829319;
-        Mon, 23 May 2022 08:30:29 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id z5-20020a056512308500b0047255d211e9sm1888943lfd.280.2022.05.23.08.30.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 May 2022 08:30:28 -0700 (PDT)
-Message-ID: <4f766cdb-a33b-2470-5b2e-3945c821ce6c@linaro.org>
-Date:   Mon, 23 May 2022 17:30:27 +0200
+        d=corp.netease.com; s=s210401; h=Received:From:To:Cc:Subject:
+        Date:Message-Id:In-Reply-To:References:MIME-Version:
+        Content-Transfer-Encoding; bh=iAKnlov5oGYA0AbpIPgfJSBgZZq4Ax0UhG
+        qj4V4nCIQ=; b=i7QWLHUc8WgkBB71ZkQm8ciazZtcjMHdzgr6WQuJeKFCpg3h9X
+        V848sfEkhRobH/d7sRF/w3h5rbQuJ8mUL3KngUbDKbgp4dOnpdrke4KC+/fXhtRd
+        WbakJYSNFtrFPuOb7b20vovElyV9Hirkzu3PT7S28lmu85yW90JrgwvMU=
+Received: from pubt1-k8s74.yq.163.org (unknown [115.238.122.38])
+        by corp-front11-corp.i.nease.net (Coremail) with SMTP id aYG_CgC3zV_MqItiOosgAA--.4948S2;
+        Mon, 23 May 2022 23:31:24 +0800 (HKT)
+From:   liuyacan@corp.netease.com
+To:     liuyacan@corp.netease.com
+Cc:     davem@davemloft.net, edumazet@google.com, kgraul@linux.ibm.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, ubraun@linux.ibm.com
+Subject: [PATCH v2 net] Revert "net/smc: fix listen processing for SMC-Rv2"
+Date:   Mon, 23 May 2022 23:31:10 +0800
+Message-Id: <20220523153110.474996-1-liuyacan@corp.netease.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20220523150709.306731-1-liuyacan@corp.netease.com>
+References: <20220523150709.306731-1-liuyacan@corp.netease.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 1/3] dt-bindings: leds: Add bindings for the TLC5925
- controller
-Content-Language: en-US
-To:     Jean-Jacques Hiblot <jjhiblot@traphandler.com>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc:     linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220523084958.2723943-1-jjhiblot@traphandler.com>
- <20220523084958.2723943-2-jjhiblot@traphandler.com>
- <d12a0afc-c040-5615-fc0d-70a5c29bbf0a@linaro.org>
- <0e1e417a-6444-ddb5-5c48-c89bd78c5fe8@traphandler.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <0e1e417a-6444-ddb5-5c48-c89bd78c5fe8@traphandler.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: aYG_CgC3zV_MqItiOosgAA--.4948S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxAw4fXw4DuFy8Cry3tw13Arb_yoW5uF47pa
+        1Ykr9xuF4fGF4fGrs5tF13ZF1Yvw18Kry8C3srGr1FkwnFyryrtryIqr4Y9FZxGrW3t3WI
+        vFW8Cr1fWw15taUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUGvb7IF0VACp39vda4lb7IF0VCFI7km07C26c804VAKzcIF0wAF
+        F20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r
+        1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAF
+        wI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2js
+        IE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAawVAFpfBj4fn0lVCY
+        m3Zqqf926ryUJw1UKr1v6r18M2kK6xCIbVAIwIAEc20F6c8GOVW8Jr15Jr4ln4vEIxkG6c
+        02xx0F6c8GOVWUtr18Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCE34x0Y48IcwAq
+        x4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14
+        v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E
+        6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lw4CEc2x0rVAKj4xxMx02cVAKzw
+        CY1x0262kKe7AKxVWUtVW8ZwCY0x0Ix7I2Y4AK64vIr41l42xK82IYc2Ij64vIr41l4x8a
+        64kIII0Yj41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxY624lx2IqxVAqx4xG67AKxVWUJV
+        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAK
+        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F
+        4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY
+        6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUUID7DUUUU
+X-CM-SenderInfo: 5olx5txfdqquhrush05hwht23hof0z/1tbiBQAPCVt760qFUgAgs1
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/05/2022 17:16, Jean-Jacques Hiblot wrote:
-> 
-> On 23/05/2022 12:14, Krzysztof Kozlowski wrote:
->> On 23/05/2022 10:49, Jean-Jacques Hiblot wrote:
->>> Add bindings documentation for the TLC5925 LED controller.
->>>
->>> Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
->> Thank you for your patch. There is something to discuss/improve.
->>
->>> ---
->>> devicetree@vger.kernel.org
->>>   .../bindings/leds/leds-tlc5925.yaml           | 100 ++++++++++++++++++
->>>   1 file changed, 100 insertions(+)
->>>   create mode 100644 Documentation/devicetree/bindings/leds/leds-tlc5925.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/leds/leds-tlc5925.yaml b/Documentation/devicetree/bindings/leds/leds-tlc5925.yaml
->>> new file mode 100644
->>> index 000000000000..156db599d5a1
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/leds/leds-tlc5925.yaml
->> Filename: vendor,device
->> so "ti,tlc5925-leds.yaml" for example.
->>
->>
->>
->>> @@ -0,0 +1,100 @@
->>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/leds/leds-tlc5925.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: LEDs connected to TI TLC5925 controller
->>> +
->>> +maintainers:
->>> +  - Jean-Jacques Hiblot <jjhiblot@traphandler.com>
->>> +
->>> +description: |
->>> +  The TLC5925 is a low-power 16-channel constant-current LED sink driver.
->>> +  It is controlled through a SPI interface.
->>> +  It is built around a shift register and latches which convert serial
->>> +  input data into a parallel output. Several TLC5925 can be chained to
->>> +  control more than 16 LEDs with a single chip-select.
->>> +  The brightness level cannot be controlled, each LED is either on or off.
->>> +
->>> +  Each LED is represented as a sub-node of the ti,tlc5925 device.
->>> +
->>> +properties:
->>> +  compatible:
->>> +    const: ti,tlc5925
->>> +
->>> +  shift_register_length:
->>> +    maxItems: 1
->> No...
->> 1. Did you test your bindings with dt_binding_check? This fails
->> obviously... please, do not send untested bindings.
->>
->> 2. vendor prefix, no underscores, proper type, maxItems look wrong here
->>
->>> +    description: |
->>> +      The length of the shift register. If several TLC5925 are chained,
->>> +      shift_register_length should be set to 16 times the number of TLC5925.
->>> +      The value must be a multiple of 8.
->>> +
->>> +  "#address-cells":
->>> +    const: 1
->>> +
->>> +  "#size-cells":
->>> +    const: 0
->>> +
->>> +  output-enable-b-gpios:
->>> +    description: |
->>> +      GPIO pins to enable/disable the parallel output. They describe the GPIOs
->>> +      connected to the OE/ pin of the TLC5925s.
->> maxItems
-> 
-> There is no limitation in the driver itself. The actual number of items 
-> here really depends on the number of chips and how they are wired.
+From: liuyacan <liuyacan@corp.netease.com>
 
-So you could daisy chain 4 billion of devices? Because by not using any
-limit you claim that 4 billion is doable?
+This reverts commit 5ec8b414b4381e8714731415fc221ef50a4e7b14.
 
-> 
->>
->>
->>> +
->>> +patternProperties:
->>> +  "@[a-f0-9]+$":
->> How many LEDs you can have here? Usually it is limited, so the pattern
->> should be narrowed.
-> 
-> There is no limitation here either. The chips can be chained to augment 
-> the number of LEDs.
-> 
-> The max number of LED is equal to the length of the shift-register.
+Some rollback issue will be fixed in other patches in the future.
 
+Link: https://lore.kernel.org/all/20220523055056.2078994-1-liuyacan@corp.netease.com/
+Signed-off-by: liuyacan <liuyacan@corp.netease.com>
+---
+ net/smc/af_smc.c | 44 +++++++++++++++++---------------------------
+ 1 file changed, 17 insertions(+), 27 deletions(-)
 
+diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
+index d3de54b70..45a24d242 100644
+--- a/net/smc/af_smc.c
++++ b/net/smc/af_smc.c
+@@ -2093,13 +2093,13 @@ static int smc_listen_rdma_reg(struct smc_sock *new_smc, bool local_first)
+ 	return 0;
+ }
+ 
+-static int smc_find_rdma_v2_device_serv(struct smc_sock *new_smc,
+-					struct smc_clc_msg_proposal *pclc,
+-					struct smc_init_info *ini)
++static void smc_find_rdma_v2_device_serv(struct smc_sock *new_smc,
++					 struct smc_clc_msg_proposal *pclc,
++					 struct smc_init_info *ini)
+ {
+ 	struct smc_clc_v2_extension *smc_v2_ext;
+ 	u8 smcr_version;
+-	int rc = 0;
++	int rc;
+ 
+ 	if (!(ini->smcr_version & SMC_V2) || !smcr_indicated(ini->smc_type_v2))
+ 		goto not_found;
+@@ -2117,31 +2117,26 @@ static int smc_find_rdma_v2_device_serv(struct smc_sock *new_smc,
+ 	ini->smcrv2.saddr = new_smc->clcsock->sk->sk_rcv_saddr;
+ 	ini->smcrv2.daddr = smc_ib_gid_to_ipv4(smc_v2_ext->roce);
+ 	rc = smc_find_rdma_device(new_smc, ini);
+-	if (rc)
++	if (rc) {
++		smc_find_ism_store_rc(rc, ini);
+ 		goto not_found;
+-
++	}
+ 	if (!ini->smcrv2.uses_gateway)
+ 		memcpy(ini->smcrv2.nexthop_mac, pclc->lcl.mac, ETH_ALEN);
+ 
+ 	smcr_version = ini->smcr_version;
+ 	ini->smcr_version = SMC_V2;
+ 	rc = smc_listen_rdma_init(new_smc, ini);
+-	if (rc) {
+-		ini->smcr_version = smcr_version;
+-		goto not_found;
+-	}
+-	rc = smc_listen_rdma_reg(new_smc, ini->first_contact_local);
+-	if (rc) {
+-		ini->smcr_version = smcr_version;
+-		goto not_found;
+-	}
+-	return 0;
++	if (!rc)
++		rc = smc_listen_rdma_reg(new_smc, ini->first_contact_local);
++	if (!rc)
++		return;
++	ini->smcr_version = smcr_version;
++	smc_find_ism_store_rc(rc, ini);
+ 
+ not_found:
+-	rc = rc ?: SMC_CLC_DECL_NOSMCDEV;
+ 	ini->smcr_version &= ~SMC_V2;
+ 	ini->check_smcrv2 = false;
+-	return rc;
+ }
+ 
+ static int smc_find_rdma_v1_device_serv(struct smc_sock *new_smc,
+@@ -2174,7 +2169,6 @@ static int smc_listen_find_device(struct smc_sock *new_smc,
+ 				  struct smc_init_info *ini)
+ {
+ 	int prfx_rc;
+-	int rc;
+ 
+ 	/* check for ISM device matching V2 proposed device */
+ 	smc_find_ism_v2_device_serv(new_smc, pclc, ini);
+@@ -2202,18 +2196,14 @@ static int smc_listen_find_device(struct smc_sock *new_smc,
+ 		return ini->rc ?: SMC_CLC_DECL_NOSMCDDEV;
+ 
+ 	/* check if RDMA V2 is available */
+-	rc = smc_find_rdma_v2_device_serv(new_smc, pclc, ini);
+-	if (!rc)
++	smc_find_rdma_v2_device_serv(new_smc, pclc, ini);
++	if (ini->smcrv2.ib_dev_v2)
+ 		return 0;
+ 
+-	/* skip V1 check if V2 is unavailable for non-Device reason */
+-	if (rc != SMC_CLC_DECL_NOSMCDEV &&
+-	    rc != SMC_CLC_DECL_NOSMCRDEV &&
+-	    rc != SMC_CLC_DECL_NOSMCDDEV)
+-		return rc;
+-
+ 	/* check if RDMA V1 is available */
+ 	if (!prfx_rc) {
++		int rc;
++
+ 		rc = smc_find_rdma_v1_device_serv(new_smc, pclc, ini);
+ 		smc_find_ism_store_rc(rc, ini);
+ 		return (!rc) ? 0 : ini->rc;
+-- 
+2.20.1
 
-Best regards,
-Krzysztof

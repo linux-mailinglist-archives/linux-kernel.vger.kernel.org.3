@@ -2,157 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B25A8531A9C
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:55:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E9F0531BAA
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232949AbiEWULy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 16:11:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42460 "EHLO
+        id S232638AbiEWUMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 16:12:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232740AbiEWULY (ORCPT
+        with ESMTP id S232932AbiEWULt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 16:11:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EDE39B497
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 13:11:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653336682;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aeYANgG6QafvRhsuT7XrX05LA9JnznyUmzj/VsLlMdA=;
-        b=Kf+6TbvUMxjf2d0ilZcko+PMsB3sj132OXRhbCVyWXcCzlMzBLQCL+ClM4zHCJV/0qtNPq
-        gZOXmgq7DcsR4YqoDotMXZWwRYc1Tw05XK9ipbEQpkAwA4SB9yKywbBTD34KfWn+rRuuh4
-        3A66S6QgphVx8Ct1r3EwYy0SPddpr+s=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-635-xKYyNI_ePFSsUBh_CprYDQ-1; Mon, 23 May 2022 16:11:11 -0400
-X-MC-Unique: xKYyNI_ePFSsUBh_CprYDQ-1
-Received: by mail-qk1-f199.google.com with SMTP id l26-20020a37f51a000000b006a32d5737d2so9944771qkk.19
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 13:11:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:organization:user-agent:mime-version
-         :content-transfer-encoding;
-        bh=aeYANgG6QafvRhsuT7XrX05LA9JnznyUmzj/VsLlMdA=;
-        b=DK5MupLlZe6HXwLfTLuW3ncBflj7n10R23upj1vaQhsmJrhUHm98H07y5svLSg2x0a
-         agkEZpV2oGO7OHoDFJcx62OYBwg/t+dONhM4CjvGZHtGoUeV689fhj3IKpNlDpestJW3
-         MsFfk20TFRxsXS8CswAktWNLAX2n543c5O05irVyNPld+QFg7warcyD95rbb3Lr8dq/x
-         gJiu/J2UMJmkZ+lygjT2u9DP2EDm8rJx/0KIhUWLKmkzXwV/8TpuZeFMC+YA5APvOh0a
-         3o0qKKu6H7JE14gaTscqtaOK5GP2UFmr/YL5qbqrYA2sXmsVzvhjiRczVKOChKDXwZiD
-         zxSw==
-X-Gm-Message-State: AOAM530E97hCE48awcwwA5Hnne+gzvHpJ+F+SGphGEPtW+RUCtb9be47
-        1CNNElXV6jmoetSxf2svLp1V0CmbsAuQZA4pCPFHUlY49KjZwgzxc8a7GpmOwCC9txZJQTQf8lx
-        +Eb5vmzprUn74B6b/bpI5rGmz
-X-Received: by 2002:a0c:ea34:0:b0:456:319f:f3aa with SMTP id t20-20020a0cea34000000b00456319ff3aamr18692674qvp.18.1653336670109;
-        Mon, 23 May 2022 13:11:10 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzIbD5TagG8AM+h1aWON0DBIBdEu6ADrvmmcaZwyFRUjX0un+O0w38rbCqt0Cq79b62hJyx0w==
-X-Received: by 2002:a0c:ea34:0:b0:456:319f:f3aa with SMTP id t20-20020a0cea34000000b00456319ff3aamr18692652qvp.18.1653336669916;
-        Mon, 23 May 2022 13:11:09 -0700 (PDT)
-Received: from [192.168.8.138] (static-71-184-137-158.bstnma.ftas.verizon.net. [71.184.137.158])
-        by smtp.gmail.com with ESMTPSA id c15-20020ac81e8f000000b002f39b99f69fsm5231205qtm.57.2022.05.23.13.11.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 13:11:09 -0700 (PDT)
-Message-ID: <4212b4d087c68a5c32e92cfe2609221a5ecac71d.camel@redhat.com>
-Subject: Re: [PATCH] drm/nouveau/tegra: remove needless NULL check
-From:   Lyude Paul <lyude@redhat.com>
-To:     Guo Zhengkui <guozhengkui@vivo.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Joerg Roedel <jroedel@suse.de>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        "open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS" 
-        <dri-devel@lists.freedesktop.org>,
-        "open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS" 
-        <nouveau@lists.freedesktop.org>,
-        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Cc:     zhengkui_guo@outlook.com
-Date:   Mon, 23 May 2022 16:11:07 -0400
-In-Reply-To: <20220519072950.128268-1-guozhengkui@vivo.com>
-References: <20220519072950.128268-1-guozhengkui@vivo.com>
-Organization: Red Hat Inc.
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Mon, 23 May 2022 16:11:49 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A08C72FE75;
+        Mon, 23 May 2022 13:11:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=LbEcr7zqhWPFnXoF/KuL5Wkx22JBJ3c2clwbQUl5zn8=; b=YcCYg3bARqXOKkr9KCnYiIVA/O
+        4kCGq1j7NQnK1rCwBYjYcBp79yCaa+veSl2Dx1quLuGeDujO4BSEVcsIJGp+a5QSK2RSosFhG3hjW
+        xMKesUVI3DHJzHAD6RzkDdbXBW7hElXVml8xn3gObBiogi3m/SAMCruazsCZFCQi0CtlYy+m25fRB
+        GdrhCmxTa54gy4NdhbEa5uiYAFKqPXLSZDUoPwg3i3ujBkmThEqmmRcFfV5FH8FYiLnW1rC06isEs
+        gxhmy88B4LOk1iYVg8NmSU4PzSUEtrzQx8JtrCSV1UcEQ9kp/mviuzgA9wrsqNlGmevPCjJQzStwY
+        X8M8EN4Q==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ntEOy-00GVbU-0B; Mon, 23 May 2022 20:11:40 +0000
+Date:   Mon, 23 May 2022 21:11:39 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Xiubo Li <xiubli@redhat.com>
+Cc:     jlayton@kernel.org, idryomov@gmail.com, viro@zeniv.linux.org.uk,
+        vshankar@redhat.com, ceph-devel@vger.kernel.org, arnd@arndb.de,
+        mcgrof@kernel.org, akpm@linux-foundation.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] fs/dcache: add d_compare() helper support
+Message-ID: <YovqeybXUKEmhvsi@casper.infradead.org>
+References: <20220519101847.87907-1-xiubli@redhat.com>
+ <20220519101847.87907-2-xiubli@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220519101847.87907-2-xiubli@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Lyude Paul <lyude@redhat.com>
+On Thu, May 19, 2022 at 06:18:45PM +0800, Xiubo Li wrote:
+> Reviewed-by: Jeff Layton <jlayton@kernel.org>
+> Signed-off-by: Xiubo Li <xiubli@redhat.com>
 
-Will push to the appropriate branch in a moment
+... empty commit message?
 
-On Thu, 2022-05-19 at 15:29 +0800, Guo Zhengkui wrote:
-> There has already been NULL check in clk_prepare_enable() and
-> clk_disable_unprepare(), so remove needless NULL check before
-> calling them.
-> 
-> Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
 > ---
->  drivers/gpu/drm/nouveau/nvkm/engine/device/tegra.c | 14 +++++---------
->  1 file changed, 5 insertions(+), 9 deletions(-)
+>  fs/dcache.c            | 15 +++++++++++++++
+>  include/linux/dcache.h |  2 ++
+>  2 files changed, 17 insertions(+)
 > 
-> diff --git a/drivers/gpu/drm/nouveau/nvkm/engine/device/tegra.c
-> b/drivers/gpu/drm/nouveau/nvkm/engine/device/tegra.c
-> index 2ed528c065fa..ac9e122586bc 100644
-> --- a/drivers/gpu/drm/nouveau/nvkm/engine/device/tegra.c
-> +++ b/drivers/gpu/drm/nouveau/nvkm/engine/device/tegra.c
-> @@ -41,11 +41,9 @@ nvkm_device_tegra_power_up(struct nvkm_device_tegra
-> *tdev)
->         ret = clk_prepare_enable(tdev->clk);
->         if (ret)
->                 goto err_clk;
-> -       if (tdev->clk_ref) {
-> -               ret = clk_prepare_enable(tdev->clk_ref);
-> -               if (ret)
-> -                       goto err_clk_ref;
-> -       }
-> +       ret = clk_prepare_enable(tdev->clk_ref);
-> +       if (ret)
-> +               goto err_clk_ref;
->         ret = clk_prepare_enable(tdev->clk_pwr);
->         if (ret)
->                 goto err_clk_pwr;
-> @@ -70,8 +68,7 @@ nvkm_device_tegra_power_up(struct nvkm_device_tegra *tdev)
->  err_clamp:
->         clk_disable_unprepare(tdev->clk_pwr);
->  err_clk_pwr:
-> -       if (tdev->clk_ref)
-> -               clk_disable_unprepare(tdev->clk_ref);
-> +       clk_disable_unprepare(tdev->clk_ref);
->  err_clk_ref:
->         clk_disable_unprepare(tdev->clk);
->  err_clk:
-> @@ -87,8 +84,7 @@ nvkm_device_tegra_power_down(struct nvkm_device_tegra
-> *tdev)
->         int ret;
->  
->         clk_disable_unprepare(tdev->clk_pwr);
-> -       if (tdev->clk_ref)
-> -               clk_disable_unprepare(tdev->clk_ref);
-> +       clk_disable_unprepare(tdev->clk_ref);
->         clk_disable_unprepare(tdev->clk);
->         udelay(10);
->  
-
--- 
-Cheers,
- Lyude Paul (she/her)
- Software Engineer at Red Hat
-
+> diff --git a/fs/dcache.c b/fs/dcache.c
+> index 93f4f5ee07bf..95a72f92a94b 100644
+> --- a/fs/dcache.c
+> +++ b/fs/dcache.c
+> @@ -2262,6 +2262,21 @@ static inline bool d_same_name(const struct dentry *dentry,
+>  				       name) == 0;
+>  }
+>  
+> +/**
+> + * d_compare - compare dentry name with case-exact name
+> + * @parent: parent dentry
+> + * @dentry: the negative dentry that was passed to the parent's lookup func
+> + * @name:   the case-exact name to be associated with the returned dentry
+> + *
+> + * Return: 0 if names are same, or 1
+> + */
+> +bool d_compare(const struct dentry *parent, const struct dentry *dentry,
+> +	       const struct qstr *name)
+> +{
+> +	return !d_same_name(dentry, parent, name);
+> +}
+> +EXPORT_SYMBOL(d_compare);
+> +
+>  /**
+>   * __d_lookup_rcu - search for a dentry (racy, store-free)
+>   * @parent: parent dentry
+> diff --git a/include/linux/dcache.h b/include/linux/dcache.h
+> index f5bba51480b2..444b2230e5c3 100644
+> --- a/include/linux/dcache.h
+> +++ b/include/linux/dcache.h
+> @@ -233,6 +233,8 @@ extern struct dentry * d_alloc_parallel(struct dentry *, const struct qstr *,
+>  					wait_queue_head_t *);
+>  extern struct dentry * d_splice_alias(struct inode *, struct dentry *);
+>  extern struct dentry * d_add_ci(struct dentry *, struct inode *, struct qstr *);
+> +extern bool d_compare(const struct dentry *parent, const struct dentry *dentry,
+> +		      const struct qstr *name);
+>  extern struct dentry * d_exact_alias(struct dentry *, struct inode *);
+>  extern struct dentry *d_find_any_alias(struct inode *inode);
+>  extern struct dentry * d_obtain_alias(struct inode *);
+> -- 
+> 2.36.0.rc1
+> 

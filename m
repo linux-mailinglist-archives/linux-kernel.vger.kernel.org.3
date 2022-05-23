@@ -2,68 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE1FD531098
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:20:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2001530F6D
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:18:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235775AbiEWMyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 08:54:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53632 "EHLO
+        id S235784AbiEWMyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 08:54:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235732AbiEWMyR (ORCPT
+        with ESMTP id S235764AbiEWMyS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 08:54:17 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBAF34C412
+        Mon, 23 May 2022 08:54:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0614C532F4
         for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 05:54:16 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id gg20so13975463pjb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 05:54:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=I+vGqH+3C1E3CpD3/4I+O6QuVZ7joNauIQKwNIO0kKw=;
-        b=seLJhlqbRbYAeGtnbCF7+eHcU1FPgfpxDnSQ6Lkt70sMtG5iAirhOkuWyyR8QYqkYR
-         ahsTYUKJqZKvhqqgE0068ZprOrAdGyHjSbCnuLpgRwhv7hzXVL9RXZ0QNHPugsEzR+4g
-         WeE+87Wub5gacPpRtSXnFgUJOfrOBU65hpRInaY3AOoIyqLKqpHIB4eTbaCmmbdzpBO7
-         cpLMKLxulmZUVnSSj9MJT5raUx8L+BTgIMZnFvasxdN0AFE1CPPGci3GHJhA7OP8crqW
-         P9or4uhjhUagV5LScIWr4lNj7huwvmHg46i5xakvGs9lxsErulPQtvWiWCaDCMVyRJT6
-         YqFg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653310455;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=POK+VClUkGIpFVtebvY1AJ0GHRBBNCyyP6V/9eIz3lw=;
+        b=M67lY1xvYP+otQyYICoIw0g0o243NT4lcE7PR3t0f/ad1lEE+jm3Yo1O+Jks8hmJgkB8xC
+        a/mmv43IRbUzymPBjBVjb1iQ6AqBs3JdapwcHTKpLO48pR8hhiSnGynmzJfdejd7thidEZ
+        lKtg5uaWrk3b8NQpBkZLe6KiM9N6X1E=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-207-wy1SrYaFPuCrmqnY-WXtKQ-1; Mon, 23 May 2022 08:54:14 -0400
+X-MC-Unique: wy1SrYaFPuCrmqnY-WXtKQ-1
+Received: by mail-ed1-f70.google.com with SMTP id b14-20020a05640202ce00b0042aa312ff51so10638754edx.18
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 05:54:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=I+vGqH+3C1E3CpD3/4I+O6QuVZ7joNauIQKwNIO0kKw=;
-        b=7okXQBTuBrz0MgsDsok2hD2m4lCxeFugumIPTmQERxn1p+Zoys3Yywcxu2GHiAfOZL
-         flePZdVGQxOx/5X/3REXTwkvFJIY46nAB83CkHK5ckhnXZbU9Ue3i3MLTdIxFCiDLOr3
-         daWsuw6BSY81XEY91wc0lCHSkWCyofSNRanKIbQC37iiYkxKHs++jNIZnVkoGKepV4ZC
-         qS+Xt1rw6VQJUk2WCEiwAt4GDkBAa+39vdKKCG5OllzUawIaGSDdFZf8BKexrlUOY9L3
-         uRMO5oGVGGMYdgk8UN8C80kYOP4HerShrWMR/3W1JlYWIxzPdXoYm35ePYTYol4S1ltu
-         enEw==
-X-Gm-Message-State: AOAM533zW886ShBXOiual3Gae1jGV+008+ZNaoWg5M0CZ1d/SOM0rzbg
-        ZO2ej2YNyg7N1+jC3JXNrxOATE5DA81h8WLNf5KOOQ==
-X-Google-Smtp-Source: ABdhPJwMet/Wx069lnchRvkgjhCl6l69HHssjtZOQy/2qmA7Fm6Yx1UPvTaNVLMgv8Z0GzK0SmzM3++Vn5NXejPqCbA=
-X-Received: by 2002:a17:903:1c6:b0:161:9fbc:5a6 with SMTP id
- e6-20020a17090301c600b001619fbc05a6mr22737538plh.65.1653310456152; Mon, 23
- May 2022 05:54:16 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=POK+VClUkGIpFVtebvY1AJ0GHRBBNCyyP6V/9eIz3lw=;
+        b=usvf0bOvC3T6fHXHNL7LiC8eGaWYmtC0B41IHiASwXycaA/+7kkzUlZbNVNsgXbNC3
+         xcRYd28NCXKM7DApCBb1AIHuqus/Y4IkgLzDNVT5lJY2bR4OmWjwDNe54ZFroVJTLadr
+         omSypasyFJDyTc7OHVxsg8FybrycSyqIaBF03GuK+wS/FdFMQA1rLT+MzhAit7XmUhXg
+         Lne1KnxIQ6CLydwXTcyYVHelmnD3Uo9jfdrNVhmX3ShV4FcXFkdUfdhHJQz2nwoUhfH9
+         ErnMSEa32OFhp9+5NvPBW6GDg/fFrjobig+uI59m5WEfXzhmEEjb7Q2Hb2AYHHzxA8Wf
+         xrdw==
+X-Gm-Message-State: AOAM532cudP4jB2kbApVQluCqc+QCnuZoWlSfK6E2r/j90JK3CacRHQU
+        6fOlD9/P0mUGh6q1MnCWczzgphsqjbftR9OpLQXF8Ye0hbQWnwwgrDkpBwvWrJggdOJ7HjNHmY/
+        i1x2G9qWuWyW4u4BVgBANpzIa
+X-Received: by 2002:a17:907:2d26:b0:6fe:deb2:6de with SMTP id gs38-20020a1709072d2600b006fedeb206demr4935086ejc.108.1653310453491;
+        Mon, 23 May 2022 05:54:13 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzdXO0MmncCTtuv2WEIoCzW0TsJeQs6uavBZFtN5Y8kf1AVuCk1/BrVRMSkDIyHPCwiUX4d3Q==
+X-Received: by 2002:a17:907:2d26:b0:6fe:deb2:6de with SMTP id gs38-20020a1709072d2600b006fedeb206demr4935064ejc.108.1653310453217;
+        Mon, 23 May 2022 05:54:13 -0700 (PDT)
+Received: from [192.168.242.1] (5920ab7b.static.cust.trined.nl. [89.32.171.123])
+        by smtp.gmail.com with ESMTPSA id k16-20020a1709067ad000b006fed8dfcf78sm1422446ejo.225.2022.05.23.05.54.12
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 23 May 2022 05:54:12 -0700 (PDT)
+From:   Eelco Chaudron <echaudro@redhat.com>
+To:     Vlad Buslov <vladbu@nvidia.com>,
+        Toms Atteka <cpp.code.lv@gmail.com>
+Cc:     Roi Dayan <roid@nvidia.com>, Ilya Maximets <i.maximets@ovn.org>,
+        Aaron Conole <aconole@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Pravin B Shelar <pshelar@ovn.org>, netdev@vger.kernel.org,
+        dev@openvswitch.org, linux-kernel@vger.kernel.org,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Maor Dickman <maord@nvidia.com>
+Subject: Re: [PATCH net-next v2] net: openvswitch: fix uAPI incompatibility
+ with existing user space
+Date:   Mon, 23 May 2022 14:54:09 +0200
+X-Mailer: MailMate (1.14r5895)
+Message-ID: <CD6F1EAA-7A32-46D2-9806-98CDB98DC537@redhat.com>
+In-Reply-To: <FFBEB52B-FA8C-4989-BDC1-1F3908F024B8@redhat.com>
+References: <20220309222033.3018976-1-i.maximets@ovn.org>
+ <f7ty21hir5v.fsf@redhat.com>
+ <44eeb550-3310-d579-91cc-ec18b59966d2@nvidia.com>
+ <1a185332-3693-2750-fef2-f6938bbc8500@ovn.org> <87k0c171ml.fsf@nvidia.com>
+ <9cc34fbc-3fd6-b529-7a05-554224510452@ovn.org>
+ <4778B505-DBF5-4F57-90AF-87F12C1E0311@redhat.com> <87lev783k8.fsf@nvidia.com>
+ <FFBEB52B-FA8C-4989-BDC1-1F3908F024B8@redhat.com>
 MIME-Version: 1.0
-References: <20220523084615.13510-1-robert.foss@linaro.org> <CAG3jFytkFcmYjj6AHye3imsTDyP1LxHQvAzjswuRBsVVHRTnKg@mail.gmail.com>
-In-Reply-To: <CAG3jFytkFcmYjj6AHye3imsTDyP1LxHQvAzjswuRBsVVHRTnKg@mail.gmail.com>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Mon, 23 May 2022 14:54:04 +0200
-Message-ID: <CAG3jFytGDm29GVAQ5bs7XQ+hMDABd7btggFGN2pASBEzRPE50A@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] Revert "drm/bridge: anx7625: Use DPI bus type"
-To:     andrzej.hajda@intel.com, narmstrong@baylibre.com,
-        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
-        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@linux.ie,
-        daniel@ffwll.ch, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, xji@analogixsemi.com,
-        hsinyi@chromium.org, sam@ravnborg.org, tzimmermann@suse.de,
-        maxime@cerno.tech, jose.exposito89@gmail.com,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,56 +92,181 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These two patches need to be reverted since they were part (3/4 & 4/4)
-of a series, that was partially (1/4 + 2/4) on the linux-media tree.
-These two patches depend on the patches in the media tree, and will
-not build without them, which leaves linux-drm-misc-next in a broken
-state. Let's revert the two latter patches until rc1 has been branched
-and the dependency wont cause issues any more.
 
-On Mon, 23 May 2022 at 14:50, Robert Foss <robert.foss@linaro.org> wrote:
+
+On 17 May 2022, at 13:10, Eelco Chaudron wrote:
+
+> On 12 May 2022, at 12:08, Vlad Buslov wrote:
 >
-> On Mon, 23 May 2022 at 10:46, Robert Foss <robert.foss@linaro.org> wrote:
-> >
-> > This reverts commit a77c2af0994e24ee36c7ffb6dc852770bdf06fb1.
-> > ---
-> >  drivers/gpu/drm/bridge/analogix/anx7625.c | 8 ++++----
-> >  1 file changed, 4 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> > index 01f46d9189c1..53a5da6c49dd 100644
-> > --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-> > +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> > @@ -1623,14 +1623,14 @@ static int anx7625_parse_dt(struct device *dev,
-> >
-> >         anx7625_get_swing_setting(dev, pdata);
-> >
-> > -       pdata->is_dpi = 0; /* default dsi mode */
-> > +       pdata->is_dpi = 1; /* default dpi mode */
-> >         pdata->mipi_host_node = of_graph_get_remote_node(np, 0, 0);
-> >         if (!pdata->mipi_host_node) {
-> >                 DRM_DEV_ERROR(dev, "fail to get internal panel.\n");
-> >                 return -ENODEV;
-> >         }
-> >
-> > -       bus_type = 0;
-> > +       bus_type = V4L2_FWNODE_BUS_TYPE_PARALLEL;
-> >         mipi_lanes = MAX_LANES_SUPPORT;
-> >         ep0 = of_graph_get_endpoint_by_regs(np, 0, 0);
-> >         if (ep0) {
-> > @@ -1640,8 +1640,8 @@ static int anx7625_parse_dt(struct device *dev,
-> >                 mipi_lanes = of_property_count_u32_elems(ep0, "data-lanes");
-> >         }
-> >
-> > -       if (bus_type == V4L2_FWNODE_BUS_TYPE_DPI) /* bus type is DPI */
-> > -               pdata->is_dpi = 1;
-> > +       if (bus_type == V4L2_FWNODE_BUS_TYPE_PARALLEL) /* bus type is Parallel(DSI) */
-> > +               pdata->is_dpi = 0;
-> >
-> >         pdata->mipi_lanes = mipi_lanes;
-> >         if (pdata->mipi_lanes > MAX_LANES_SUPPORT || pdata->mipi_lanes <= 0)
-> > --
-> > 2.34.1
-> >
+>> On Thu 12 May 2022 at 12:19, Eelco Chaudron <echaudro@redhat.com> wrot=
+e:
+>>> On 7 Apr 2022, at 12:22, Ilya Maximets wrote:
+>>>
+>>>> On 4/7/22 10:02, Vlad Buslov wrote:
+>>>>> On Mon 14 Mar 2022 at 20:40, Ilya Maximets <i.maximets@ovn.org> wro=
+te:
+>>>>>> On 3/14/22 19:33, Roi Dayan wrote:
+>>>>>>>
+>>>>>>>
+>>>>>>> On 2022-03-10 8:44 PM, Aaron Conole wrote:
+>>>>>>>> Ilya Maximets <i.maximets@ovn.org> writes:
+>>>>>>>>
+>>>>>>>>> Few years ago OVS user space made a strange choice in the commi=
+t [1]
+>>>>>>>>> to define types only valid for the user space inside the copy o=
+f a
+>>>>>>>>> kernel uAPI header.=C2=A0 '#ifndef __KERNEL__' and another attr=
+ibute was
+>>>>>>>>> added later.
+>>>>>>>>>
+>>>>>>>>> This leads to the inevitable clash between user space and kerne=
+l types
+>>>>>>>>> when the kernel uAPI is extended.=C2=A0 The issue was unveiled =
+with the
+>>>>>>>>> addition of a new type for IPv6 extension header in kernel uAPI=
+=2E
+>>>>>>>>>
+>>>>>>>>> When kernel provides the OVS_KEY_ATTR_IPV6_EXTHDRS attribute to=
+ the
+>>>>>>>>> older user space application, application tries to parse it as
+>>>>>>>>> OVS_KEY_ATTR_PACKET_TYPE and discards the whole netlink message=
+ as
+>>>>>>>>> malformed.=C2=A0 Since OVS_KEY_ATTR_IPV6_EXTHDRS is supplied al=
+ong with
+>>>>>>>>> every IPv6 packet that goes to the user space, IPv6 support is =
+fully
+>>>>>>>>> broken.
+>>>>>>>>>
+>>>>>>>>> Fixing that by bringing these user space attributes to the kern=
+el
+>>>>>>>>> uAPI to avoid the clash.=C2=A0 Strictly speaking this is not th=
+e problem
+>>>>>>>>> of the kernel uAPI, but changing it is the only way to avoid br=
+eakage
+>>>>>>>>> of the older user space applications at this point.
+>>>>>>>>>
+>>>>>>>>> These 2 types are explicitly rejected now since they should not=
+ be
+>>>>>>>>> passed to the kernel.=C2=A0 Additionally, OVS_KEY_ATTR_TUNNEL_I=
+NFO moved
+>>>>>>>>> out from the '#ifdef __KERNEL__' as there is no good reason to =
+hide
+>>>>>>>>> it from the userspace.=C2=A0 And it's also explicitly rejected =
+now, because
+>>>>>>>>> it's for in-kernel use only.
+>>>>>>>>>
+>>>>>>>>> Comments with warnings were added to avoid the problem coming b=
+ack.
+>>>>>>>>>
+>>>>>>>>> (1 << type) converted to (1ULL << type) to avoid integer overfl=
+ow on
+>>>>>>>>> OVS_KEY_ATTR_IPV6_EXTHDRS, since it equals 32 now.
+>>>>>>>>>
+>>>>>>>>> =C2=A0 [1] beb75a40fdc2 ("userspace: Switching of L3 packets in=
+ L2 pipeline")
+>>>>>>>>>
+>>>>>>>>> Fixes: 28a3f0601727 ("net: openvswitch: IPv6: Add IPv6 extensio=
+n header support")
+>>>>>>>>> Link: https://lore.kernel.org/netdev/3adf00c7-fe65-3ef4-b6d7-6d=
+8a0cad8a5f@nvidia.com
+>>>>>>>>> Link: https://github.com/openvswitch/ovs/commit/beb75a40fdc295b=
+fd6521b0068b4cd12f6de507c
+>>>>>>>>> Reported-by: Roi Dayan <roid@nvidia.com>
+>>>>>>>>> Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
+>>>>>>>>> ---
+>>>>>>>>
+>>>>>>>> Acked-by: Aaron Conole <aconole@redhat.com>
+>>>>>>>>
+>>>>>>>
+>>>>>>>
+>>>>>>>
+>>>>>>> I got to check traffic with the fix and I do get some traffic
+>>>>>>> but something is broken. I didn't investigate much but the quick
+>>>>>>> test shows me rules are not offloaded and dumping ovs rules gives=
+
+>>>>>>> error like this
+>>>>>>>
+>>>>>>> recirc_id(0),in_port(enp8s0f0_1),ct_state(-trk),eth(),eth_type(0x=
+86dd),ipv6(frag=3Dno)(bad
+>>>>>>> key length 2, expected -1)(00 00/(bad mask length 2, expected -1)=
+(00 00),
+>>>>>>> packets:2453, bytes:211594, used:0.004s, flags:S., actions:ct,rec=
+irc(0x2)
+>>>>>>
+>>>>>> Such a dump is expected, because kernel parses fields that current=
+
+>>>>>> userspace doesn't understand, and at the same time OVS by design i=
+s
+>>>>>> using kernel provided key/mask while installing datapath rules, II=
+RC.
+>>>>>> It should be possible to make these dumps a bit more friendly thou=
+gh.
+>>>>>>
+>>>>>> For the offloading not working, see my comment in the v2 patch ema=
+il
+>>>>>> I sent (top email of this thread).  In short, it's a problem in us=
+er
+>>>>>> space and it can not be fixed from the kernel side, unless we reve=
+rt
+>>>>>> IPv6 extension header support and never add any new types, which i=
+s
+>>>>>> unreasonable.  I didn't test any actual offloading, but I had a
+>>>>>> successful run of 'make check-offloads' with my quick'n'dirty fix =
+from
+>>>>>> the top email.
+>>>>>
+>>>>> Hi Ilya,
+>>>>>
+>>>>> I can confirm that with latest OvS master IPv6 rules offload still =
+fails
+>>>>> without your pastebin code applied.
+>>>>>
+>>>>>>
+>>>>>> Since we're here:
+>>>>>>
+>>>>>> Toms, do you plan to submit user space patches for this feature?
+>>>>>
+>>>>> I see there is a patch from you that is supposed to fix compatibili=
+ty
+>>>>> issues caused by this change in OvS d96d14b14733 ("openvswitch.h: A=
+lign
+>>>>> uAPI definition with the kernel."), but it doesn't fix offload for =
+me
+>>>>> without pastebin patch.
+>>>>
+>>>> Yes.  OVS commit d96d14b14733 is intended to only fix the uAPI.
+>>>> Issue with offload is an OVS bug that should be fixed separately.
+>>>> The fix will also need to be backported to OVS stable branches.
+>>>>
+>>>>> Do you plan to merge that code into OvS or you
+>>>>> require some help from our side?
+>>>>
+>>>> I could do that, but I don't really have enough time.  So, if you
+>>>> can work on that fix, it would be great.  Note that comments inside
+>>>> the OVS's lib/odp-util.c:parse_key_and_mask_to_match() was blindly
+>>>> copied from the userspace datapath and are incorrect for the general=
+
+>>>> case, so has to be fixed alongside the logic of that function.
+>>>
+>>> Tom or Vlad, are you working on this? Asking, as the release of a ker=
+nel with
+>>> Tom=E2=80=99s =E2=80=9Cnet: openvswitch: IPv6: Add IPv6 extension hea=
+der support=E2=80=9D patch will
+>>> break OVS.
+>>>
+>>> //Eelco
+>>
+>> Hi Eelco,
+>>
+>> My simple fix for OvS was rejected and I don't have time to rework it =
+at
+>> the moment.
 >
-> Signed-off-by: Robert Foss <robert.foss@linaro.org>
+> That=E2=80=99s a pity, Tom do you maybe have time as your patch left OV=
+S in this error state?
+
+Looks like everybody is busy, and as the patched kernel is now available,=
+ let me try to fix this on the OVS side.
+
+//Eelco
+

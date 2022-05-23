@@ -2,55 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 308F2530AE8
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 10:02:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E6845309AE
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 08:56:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229494AbiEWHWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 03:22:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59628 "EHLO
+        id S229623AbiEWGzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 02:55:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbiEWHVu (ORCPT
+        with ESMTP id S229528AbiEWGyy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 03:21:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561B1958F;
-        Mon, 23 May 2022 00:13:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 23 May 2022 02:54:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D93CA54BF2
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 23:52:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653288637;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6or0LDEr8+Nq81Rkj47r4fBHy8teKoRGQNGc1avEiUw=;
+        b=I68yrpQY6wYtrKyB1x4shDgHigNQItPovUo/6bFTrUQ9v24K5iO1EVn3k0zioDHWS1P0Vs
+        6CUaDrHMJDSeeYOgx+NVf9n/GNuJ3h2Mi5tWYASinVs/ekHgwYV6JZbe70tB6R3cv2ELFj
+        m2MDYoOocAXG8fmuBfvUXTA+Hro6ifQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-509-eUJsIwmcNCqspPyOcQzEDw-1; Mon, 23 May 2022 02:50:33 -0400
+X-MC-Unique: eUJsIwmcNCqspPyOcQzEDw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 224F161142;
-        Mon, 23 May 2022 06:50:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 332FBC385A9;
-        Mon, 23 May 2022 06:50:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653288604;
-        bh=411iL9x0GP85sg8ZbapYzqsOrkMY1Ge9NDYVFgFvP2w=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=fbczhh8GP2XBOF2IIVRZ3zKk4jCEzq1se/6+mxUx/yeeoeXQY/eMaHV0Sh6adB3ox
-         u3w81pNtSEcTo6cptdA2mtRHGYe4thUGxG2wt145EZPjS6ooT3Enm2Xg1EGxTWf+yA
-         Uk7y7CxcHPY6/HsNNod4eDzw2MqWWrqj5h3SiiqZeO4NacdaR7stSLy0HD/7nnam1z
-         fGmyLJ9OQC/Zp7I8SdRexheWAUXPPLchZ9FS6jRzKfFjxqwnvnBvh7s/34ch2OJFPW
-         i5lA+OD6vqhw70YK6aMGeRU1xm7aPOxbgK6uKu99NVbH3NSX+CAYwTsKkV3agP+2xC
-         oCVAUhjETV5Ew==
-Date:   Mon, 23 May 2022 08:50:00 +0200 (CEST)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Pavel Machek <pavel@ucw.cz>
-cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Pablo Ceballos <pceballos@google.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>
-Subject: Re: [PATCH] HID: Driver for Google Hangouts Meet Speakermic
-In-Reply-To: <20220522150546.GA8071@localhost>
-Message-ID: <nycvar.YFH.7.76.2205230848490.28985@cbobk.fhfr.pm>
-References: <20220405183953.2094007-1-pceballos@google.com> <nycvar.YFH.7.76.2204210947590.30217@cbobk.fhfr.pm> <CAKdAkRQ7yxFFGJg41UxptxapKiP4bmHsfw7dRNE+LPzs1PRk=A@mail.gmail.com> <nycvar.YFH.7.76.2205121252090.28985@cbobk.fhfr.pm>
- <CAO9JgFwA5ZhwOOY0cU3HpMOV69CTumQ50zEgU6SPNAF0zDbCGg@mail.gmail.com> <Yn2OlQAa9I++N80B@penguin> <CAO-hwJ+Rs=LYseLP7Vvr00vLvm+fTCRdh8pQ-rEduj4izSyiYA@mail.gmail.com> <20220522150546.GA8071@localhost>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 43A08801210;
+        Mon, 23 May 2022 06:50:32 +0000 (UTC)
+Received: from starship (unknown [10.40.192.55])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2C58041047E8;
+        Mon, 23 May 2022 06:50:25 +0000 (UTC)
+Message-ID: <65991ac329a32cf4128400b643d5b5ccf3918cfe.camel@redhat.com>
+Subject: Re: [RFC PATCH v3 02/19] KVM: x86: inhibit APICv/AVIC when the
+ guest and/or host changes apic id/base from the defaults.
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Jim Mattson <jmattson@google.com>
+Cc:     Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        intel-gfx@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
+        linux-kernel@vger.kernel.org, Zhi Wang <zhi.a.wang@intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        intel-gvt-dev@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org
+Date:   Mon, 23 May 2022 09:50:24 +0300
+In-Reply-To: <CALMp9eSVji2CPW1AjFoSbWZ_b-r3y67HyatgdqXEqSyUaD1_BQ@mail.gmail.com>
+References: <20220427200314.276673-1-mlevitsk@redhat.com>
+         <20220427200314.276673-3-mlevitsk@redhat.com> <YoZrG3n5fgMp4LQl@google.com>
+         <e32f6c904c92e9e9efabcc697917a232f5e88881.camel@redhat.com>
+         <CALMp9eSVji2CPW1AjFoSbWZ_b-r3y67HyatgdqXEqSyUaD1_BQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,15 +85,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 22 May 2022, Pavel Machek wrote:
+On Sun, 2022-05-22 at 07:47 -0700, Jim Mattson wrote:
+> On Sun, May 22, 2022 at 2:03 AM Maxim Levitsky <mlevitsk@redhat.com> wrote:
+> > On Thu, 2022-05-19 at 16:06 +0000, Sean Christopherson wrote:
+> > > On Wed, Apr 27, 2022, Maxim Levitsky wrote:
+> > > > Neither of these settings should be changed by the guest and it is
+> > > > a burden to support it in the acceleration code, so just inhibit
+> > > > it instead.
+> > > > 
+> > > > Also add a boolean 'apic_id_changed' to indicate if apic id ever changed.
+> > > > 
+> > > > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> > > > ---
+> > > > +           return;
+> > > > +
+> > > > +   pr_warn_once("APIC ID change is unsupported by KVM");
+> > > 
+> > > It's supported (modulo x2APIC shenanigans), otherwise KVM wouldn't need to disable
+> > > APICv.
+> > 
+> > Here, as I said, it would be nice to see that warning if someone complains.
+> > Fact is that AVIC code was totally broken in this regard, and there are probably more,
+> > so it would be nice to see if anybody complains.
+> > 
+> > If you insist, I'll remove this warning.
+> 
+> This may be fine for a hobbyist, but it's a terrible API in an
+> enterprise environment. To be honest, I have no way of propagating
+> this warning from /var/log/messages on a particular host to a
+> potentially impacted customer. Worse, if they're not the first
+> impacted customer since the last host reboot, there's no warning to
+> propagate. I suppose I could just tell every later customer, "Your VM
+> was scheduled to run on a host that previously reported, 'APIC ID
+> change is unsupported by KVM.' If you notice any unusual behavior,
+> that might be the reason for it," but that isn't going to inspire
+> confidence. I could schedule a drain and reboot of the host, but that
+> defeats the whole point of the "_once" suffix.
 
-> Is that good idea? eBPF is fairly dangerous thing, so I'd preffer
-> basic functionality not depend on it...
+Mostly agree, and I read alrady few discussions about exactly this,
+those warnings are mostly useless, but they are used in the
+cases where we don't have the courage to just exit with KVM_EXIT_INTERNAL_ERROR.
 
-Although I understand the concern, that ship has already sailed long time 
-ago.
+I do not thing though that the warning is completely useless, 
+as we often have the kernel log of the target machine when things go wrong, 
+so *we* can notice it.
+In other words a kernel warning is mostly useless but better that nothing.
 
--- 
-Jiri Kosina
-SUSE Labs
+About KVM_EXIT_WARNING, this is IMHO a very good idea, probably combined
+with some form of taint flag, which could be read by qemu and then shown
+over hmp/qmp interfaces.
+
+Best regards,
+	Maxim levitsky
+
+
+> 
+> I know that there's a long history of doing this in KVM, but I'd like
+> to ask that we:
+> a) stop piling on
+> b) start fixing the existing uses
+> 
+> If KVM cannot emulate a perfectly valid operation, an exit to
+> userspace with KVM_EXIT_INTERNAL_ERROR is warranted. Perhaps for
+> operations that we suspect KVM might get wrong, we should have a new
+> userspace exit: KVM_EXIT_WARNING?
+> 
+> I'm not saying that you should remove the warning. I'm just asking
+> that it be augmented with a direct signal to userspace that KVM may no
+> longer be reliable.
+> 
+
 

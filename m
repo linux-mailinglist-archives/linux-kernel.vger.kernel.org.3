@@ -2,206 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 807A65308FC
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 07:48:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3158B5308FE
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 07:50:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231904AbiEWFsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 01:48:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59318 "EHLO
+        id S229659AbiEWFuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 01:50:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbiEWFsG (ORCPT
+        with ESMTP id S229814AbiEWFt6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 01:48:06 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED8524F37;
-        Sun, 22 May 2022 22:48:02 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L65vz57zfz4xYY;
-        Mon, 23 May 2022 15:47:59 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1653284880;
-        bh=2vbo8dVhOWsS3T/T45k7TXjX4PO3epNeie4gRP2qiWc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=mQIUg7SdDCPN09lVSVL82p7NyxA0OQaQPm5Fm/QDCfblXjoW4L3zhs9xMxFZeYwiq
-         Kko4kGOFwLCn+61kC64ZNxjOuXnnT+ZP9WFElyHZyiqSvjrJgDCDf5DlK233p/gb7Y
-         JCJAspwhfAG5j/or8+l8TisvAwXnHf5xJMHK4GcnlLQQ6RWKEZZSsVlcF+rZ6sPDqV
-         IDhH41SFm6liaovTXQyitYWHgWFi7OfOdNIcvYC2nuo0+FO7ZnbZWJCVOyCk/r5hjG
-         9NV/qZ7lKdTMPU7u7doN9jX04vFpnTnksfETKCyoX3Wmbg8Tt1x7eRKMpIhteBarKw
-         NZmumd989cmlw==
-Date:   Mon, 23 May 2022 15:47:58 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: Re: linux-next: manual merge of the tip tree with the kbuild tree
-Message-ID: <20220523154758.11668628@canb.auug.org.au>
-In-Reply-To: <20220523142431.10ff2f77@canb.auug.org.au>
-References: <20220523142431.10ff2f77@canb.auug.org.au>
+        Mon, 23 May 2022 01:49:58 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB8F2AE0E
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 22:49:54 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id x2so23192992ybi.8
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 22:49:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bwC5QQGi/RwlldZWVkMNteflbAkL+jLDxrVZ/7sdTFs=;
+        b=ZtOkIZ84R1vXKoMYcIcH/R3JHRpOeXFkHN5RMBGubWC93CPtVjTEhpYyfHeLRF7LYf
+         MUX3sN9FsA39zWskA6NoYYNlUrI7YGbLNABvPfwrOv+8wiORZ25kfSsJ6YAnBbRz2Wmc
+         kOKXAJZbgDgSPVafeg0edLj1rpidRLlTsBA3rAORGj1qdvGA7Pvvyy0vS2ulkOFSUig3
+         89w37JS91GDOGBwzinnVdzb+OkBZZRNgpkdumF3RBufn3QcwtNx6rXwZnQyMRDkInrgr
+         Vc8ogNtijt2ayD2Ce6qLVMB68s60ETf6K5Phqb2SnA7PGMJHXDTYAj90uNxFoGehGf7s
+         HICQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bwC5QQGi/RwlldZWVkMNteflbAkL+jLDxrVZ/7sdTFs=;
+        b=Tgv8NWP4WDB+8DVkwj5k79+Ue552Ve5MjiXx3ZSlwaPy/aK5rhOKm7h65JfRATqGNY
+         FJSlDSKoeQnOPWr4uB4CRun6swF/2tNj+TYkdmN7NPmhzijVUuFjwO6Hh/aG93NZq5mo
+         qmQcWku2R2DnHNOQdCWrb4HZcY12oGuzCAsLsaao/h3KsDHVlv5VlSJmKvaim5VzokP8
+         GgaAjpO+Ow830jNVd1HQ+2H2xq1UQRhJSWHhaGhYYME8QXxGCX/8yQiZBDL2mwjKZ7Tk
+         IlKC3+p+gHtYOZ7o52VmZP2u7oevym6BTqZIrji93VHUcsKCgfThue/xqHZ29k3R4b0g
+         bZRA==
+X-Gm-Message-State: AOAM531IKeEeb2G8XfO0gh4v8mAraeBb7yUHCz2oAzoX1odygY9J/zW7
+        4xCYuzd77Tk01cVmAWDxaZRdF5upSvSIlxkcSfQZAQ==
+X-Google-Smtp-Source: ABdhPJw06RNDX+RfVK9zAYMFdvIxjdxqt0oRtTzUPXmnLtm6NJVTSuhbJa4NUsbz8A6skUym4vj01qOjnpNDwY8qlLg=
+X-Received: by 2002:a05:6902:1004:b0:64f:4748:e8be with SMTP id
+ w4-20020a056902100400b0064f4748e8bemr17911740ybt.537.1653284993871; Sun, 22
+ May 2022 22:49:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/r=uakva=tlJuhr8mplG/2nv";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <202205201624.A4IhDdYX-lkp@intel.com> <Yoe4WQCV9903aQRP@dev-arch.thelio-3990X>
+In-Reply-To: <Yoe4WQCV9903aQRP@dev-arch.thelio-3990X>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 23 May 2022 11:19:42 +0530
+Message-ID: <CA+G9fYtaz2MO_-yxwtqQx+Gxm460mr2S++fFCYAqObacEL1X-Q@mail.gmail.com>
+Subject: Re: [linux-next:master 12308/12886] arch/x86/kvm/hyperv.c:1983:22:
+ warning: shift count >= width of type
+To:     Nathan Chancellor <nathan@kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Yury Norov <yury.norov@gmail.com>
+Cc:     kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        kvm list <kvm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        X86 ML <x86@kernel.org>, lkft-triage@lists.linaro.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/r=uakva=tlJuhr8mplG/2nv
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi all,
-
-On Mon, 23 May 2022 14:24:31 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
+On Fri, 20 May 2022 at 21:18, Nathan Chancellor <nathan@kernel.org> wrote:
 >
-> Today's linux-next merge of the tip tree got a conflict in:
->=20
->   scripts/Makefile.build
->=20
-> between commit:
->=20
->   0212301af7bb ("kbuild: do not create *.prelink.o for Clang LTO or IBT")
->=20
-> from the kbuild tree and commit:
->=20
->   753da4179d08 ("objtool: Remove --lto and --vmlinux in favor of --link")
->=20
-> from the tip tree.
->=20
-> I am not sure if I fixed this up correctly, please check the final result
-> when linux-next is released.
->=20
-> I fixed it up (I used the former version) and can carry the fix as
-> necessary. This is now fixed as far as linux-next is concerned, but any
-> non trivial conflicts should be mentioned to your upstream maintainer
-> when your tree is submitted for merging.  You may also want to consider
-> cooperating with the maintainer of the conflicting tree to minimise any
-> particularly complex conflicts.
+> Hi Yury,
+>
+> On Fri, May 20, 2022 at 04:24:32PM +0800, kernel test robot wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> > head:   21498d01d045c5b95b93e0a0625ae965b4330ebe
+> > commit: 81db71a60292e9a40ae8f6ef137b17f2aaa15a52 [12308/12886] KVM: x86: hyper-v: replace bitmap_weight() with hweight64()
+> > config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20220520/202205201624.A4IhDdYX-lkp@intel.com/config)
+> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e00cbbec06c08dc616a0d52a20f678b8fbd4e304)
+> > reproduce (this is a W=1 build):
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=81db71a60292e9a40ae8f6ef137b17f2aaa15a52
+> >         git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+> >         git fetch --no-tags linux-next master
+> >         git checkout 81db71a60292e9a40ae8f6ef137b17f2aaa15a52
+> >         # save the config file
+> >         mkdir build_dir && cp config build_dir/.config
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+> >
+> > If you fix the issue, kindly add following tag as appropriate
+> > Reported-by: kernel test robot <lkp@intel.com>
+> >
+> > All warnings (new ones prefixed by >>):
+> >
+> > >> arch/x86/kvm/hyperv.c:1983:22: warning: shift count >= width of type [-Wshift-count-overflow]
+> >                    if (hc->var_cnt != hweight64(valid_bank_mask))
+> >                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~
+> >    include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+> >    #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+> >                                                    ^~~~~~~~~~~~~~~~~~~~
+> >    include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+> >    #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+> >                                                                               ^  ~~
+> >    include/asm-generic/bitops/const_hweight.h:20:49: note: expanded from macro '__const_hweight32'
+> >    #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+> >                                                    ^
+> >    note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+> >    include/asm-generic/bitops/const_hweight.h:10:9: note: expanded from macro '__const_hweight8'
+> >             ((!!((w) & (1ULL << 0))) +     \
+> >                   ^
+> >    include/linux/compiler.h:56:47: note: expanded from macro 'if'
+> >    #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+> >                                                  ^~~~
+> >    include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+> >    #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+> >                                                       ^~~~
 
-That produced may warnings :-(   so I tried the below resolution instead.
+LKFT build system found these build warnings / errors on Linux next-20220520.
 
---=20
-Cheers,
-Stephen Rothwell
+> I think this is the proper fix, as valid_bank_mask is only assigned u64
+> values. Could you fold it into that patch to clear this warning up?
 
-70023a983b831421d2bac71f46b94bce024a147b
-diff --cc scripts/Makefile.build
-index 48712bfc8740,f89d3fcff39f..cbe9b45e7b7d
---- a/scripts/Makefile.build
-+++ b/scripts/Makefile.build
-@@@ -226,18 -244,23 +230,19 @@@ objtool_args =3D							=09
-  cmd_objtool =3D $(if $(objtool-enabled), ; $(objtool) $(objtool_args) $@)
-  cmd_gen_objtooldep =3D $(if $(objtool-enabled), { echo ; echo '$@: $$(wil=
-dcard $(objtool))' ; } >> $(dot-target).cmd)
- =20
-- endif # CONFIG_STACK_VALIDATION
-+ endif # CONFIG_OBJTOOL
- =20
- -ifneq ($(CONFIG_LTO_CLANG)$(CONFIG_X86_KERNEL_IBT),)
- -
- -# Skip objtool for LLVM bitcode
- -$(obj)/%.o: objtool-enabled :=3D
- -
- -else
- =20
-  # 'OBJECT_FILES_NON_STANDARD :=3D y': skip objtool checking for a directo=
-ry
-  # 'OBJECT_FILES_NON_STANDARD_foo.o :=3D 'y': skip objtool checking for a =
-file
-  # 'OBJECT_FILES_NON_STANDARD_foo.o :=3D 'n': override directory skip for =
-a file
- =20
- -$(obj)/%.o: objtool-enabled =3D $(if $(filter-out y%, \
- -	$(OBJECT_FILES_NON_STANDARD_$(basetarget).o)$(OBJECT_FILES_NON_STANDARD)=
-n),y)
- +is-standard-object =3D $(if $(filter-out y%, $(OBJECT_FILES_NON_STANDARD_=
-$(basetarget).o)$(OBJECT_FILES_NON_STANDARD)n),y)
- =20
- -endif
- +delay-objtool :=3D $(or $(CONFIG_LTO_CLANG),$(CONFIG_X86_KERNEL_IBT))
- +
- +$(obj)/%.o: objtool-enabled =3D $(if $(is-standard-object),$(if $(delay-o=
-bjtool),$(is-single-obj-m),y))
-++$(obj)/%.o: linked-object :=3D y
- =20
-  ifdef CONFIG_TRIM_UNUSED_KSYMS
-  cmd_gen_ksymdeps =3D \
-@@@ -404,24 -464,32 +409,25 @@@ $(obj)/modules.order: $(obj-m) FORC
-  #
-  # Rule to compile a set of .o files into one .a file (with symbol table)
-  #
- -quiet_cmd_ar_lib =3D AR      $@
- -      cmd_ar_lib =3D $(cmd_update_lto_symversions); $(cmd_ar)
- =20
-  $(obj)/lib.a: $(lib-y) FORCE
- -	$(call if_changed,ar_lib)
- -
- -# NOTE:
- -# Do not replace $(filter %.o,^) with $(real-prereqs). When a single obje=
-ct
- -# module is turned into a multi object module, $^ will contain header file
- -# dependencies recorded in the .*.cmd file.
- -ifneq ($(CONFIG_LTO_CLANG)$(CONFIG_X86_KERNEL_IBT),)
- -quiet_cmd_link_multi-m =3D AR [M]  $@
- -cmd_link_multi-m =3D						\
- -	$(cmd_update_lto_symversions);				\
- -	rm -f $@; 						\
- -	$(AR) cDPrsT $@ $(filter %.o,$^)
- -else
- -quiet_cmd_link_multi-m =3D LD [M]  $@
- -      cmd_link_multi-m =3D $(LD) $(ld_flags) -r -o $@ $(filter %.o,$^)
- -endif
- +	$(call if_changed,ar)
- +
- +quiet_cmd_ld_multi_m =3D LD [M]  $@
- +      cmd_ld_multi_m =3D $(LD) $(ld_flags) -r -o $@ @$(patsubst %.o,%.mod=
-,$@) $(cmd_objtool)
- +
- +define rule_ld_multi_m
- +	$(call cmd_and_savecmd,ld_multi_m)
- +	$(call cmd,gen_objtooldep)
- +endef
- =20
- -$(multi-obj-m): FORCE
- -	$(call if_changed,link_multi-m)
- +$(multi-obj-m): objtool-enabled :=3D $(delay-objtool)
- +$(multi-obj-m): part-of-module :=3D y
-++$(multi-obj-m): linked-object :=3D y
- +$(multi-obj-m): %.o: %.mod FORCE
- +	$(call if_changed_rule,ld_multi_m)
-  $(call multi_depend, $(multi-obj-m), .o, -objs -y -m)
- =20
- -targets +=3D $(multi-obj-m)
-  targets :=3D $(filter-out $(PHONY), $(targets))
- =20
-  # Add intermediate targets:
+The proposed patch below was tested and it fixed the reported problem on 32-bit
 
---Sig_/r=uakva=tlJuhr8mplG/2nv
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+> Cheers,
+> Nathan
+>
+> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+> index b652b856df2b..e2e95a6fccfd 100644
+> --- a/arch/x86/kvm/hyperv.c
+> +++ b/arch/x86/kvm/hyperv.c
+> @@ -1914,7 +1914,7 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+>         struct hv_send_ipi_ex send_ipi_ex;
+>         struct hv_send_ipi send_ipi;
+>         DECLARE_BITMAP(vcpu_mask, KVM_MAX_VCPUS);
+> -       unsigned long valid_bank_mask;
+> +       u64 valid_bank_mask;
+>         u64 sparse_banks[KVM_HV_MAX_SPARSE_VCPU_SET_BITS];
+>         u32 vector;
+>         bool all_cpus;
 
------BEGIN PGP SIGNATURE-----
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKLIA4ACgkQAVBC80lX
-0GzgFAf/YsLs4lF4Wy0WQ0L4S1SiJAJ2ZwZkORz6oOL5r+9Dme7ov8fGamHFFD/e
-O5VCjluO06DURxrQKHRtGkinP+NmjyEIX/1NFlVbR924AhEOZGocs302R+63Tfcy
-cbEAjIKY8FVGnZ/kcUr7pC4PqQqW/LgHW/wdKI1RljDlGjWISt9Tj7enhjpQMQnc
-fngP5s0VT3M1CPZwVQt5DeSyer0+mrK/E39orSepVxcgKwiy/eANJMQF+0NgPajN
-tu9B2+yULakxnV0tRTCYKnloMXz0KdGBYwVLdyaU8RCfYDjQSDtZQGy81TChhSB/
-oiu4Rf0uawimFK+bgJRSui6Mc6jYJw==
-=dfAm
------END PGP SIGNATURE-----
-
---Sig_/r=uakva=tlJuhr8mplG/2nv--
+--
+Linaro LKFT
+https://lkft.linaro.org

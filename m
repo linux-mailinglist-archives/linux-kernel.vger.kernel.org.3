@@ -2,154 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0198E5312FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:23:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C69A53145C
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:25:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237553AbiEWPAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 11:00:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37492 "EHLO
+        id S237484AbiEWO5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 10:57:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237427AbiEWPAk (ORCPT
+        with ESMTP id S237417AbiEWO46 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 11:00:40 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47EEB5B8B8;
-        Mon, 23 May 2022 08:00:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=keKJrvyQ/+r75XOnYYRl19FO+VGyiPJcwICfZxDBkqs=; b=O+C3jDB0Vwu4Y/gkTmW/RCmTwy
-        kNqD2emzzlOs/8A7J1xO/TSH5qapt6sCckUwfqeKLJwoCrpUi4pUQfOKCsbI70QtSFMdfNTmFr+H0
-        NXT6Oh9iPuG4hVKz84ZvxHpmEirVLNSMQMza54o3VmB+D23FpdTtf7JnpYZ61zk10z8NLp053Dtmb
-        5G5TvLT8W+VF+imYpIQccZx+LAQHhkmqjWgwAULVFomENEWSpKhN5UeAVPt+Y1vZC04/4FyRoMtUE
-        OHqcld4S4ftUjXzRb6CJS95k+7T+FIlHKMRNj13Qcs75Xk/j3Ix2WaTpEwsP72+2bzr+hEFsSu6v0
-        WUJ5ifAA==;
-Received: from 200-161-159-120.dsl.telesp.net.br ([200.161.159.120] helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1nt9XQ-00GTti-N1; Mon, 23 May 2022 17:00:05 +0200
-Message-ID: <0fac8c71-6f18-d15c-23f5-075dbc45f3f9@igalia.com>
-Date:   Mon, 23 May 2022 11:56:12 -0300
+        Mon, 23 May 2022 10:56:58 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B7475A15C;
+        Mon, 23 May 2022 07:56:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653317814; x=1684853814;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kt7b9LLaTfA52fM3CoAr+iwZKWbwibeMswffviI6OJ8=;
+  b=Pdg6bAQeVYlGzdFKn112u3fXdOhJk8tTOFUo2KbYzSTAFAvdq2s3Ig7h
+   3H+/LI1W/3btpEKnjC1qLKm2SzhoB1DJ3sf3Jv8eGDrIW1rnT9sLViMBs
+   y01Ivkdv6cvc8957ONVjOA9646EQdtL75a0LGEeMgJp1t9o05f7oMEF10
+   78eiWooGgvzWrsSCRS3Y4Mn9cMJjnCbJcbgGCE1kDQTFKRCUxVf+heNhE
+   BswzjXbAX5J8LXdgnp98dAHcnz50FKdcycQHKjvLjkM7pLwSoZXpJlXma
+   DEUohwk02aa04RKP5uNhQiL75h7ubywcqGiDh1WRGKx4Alit0G/zEhsox
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="273363190"
+X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
+   d="scan'208";a="273363190"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 07:56:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
+   d="scan'208";a="663467052"
+Received: from storage2.sh.intel.com (HELO localhost) ([10.67.110.197])
+  by FMSMGA003.fm.intel.com with ESMTP; 23 May 2022 07:56:49 -0700
+Date:   Mon, 23 May 2022 10:56:43 -0400
+From:   Liu Xiaodong <xiaodong.liu@intel.com>
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Harris James R <james.r.harris@intel.com>,
+        io-uring@vger.kernel.org,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, ming.lei@redhat.com,
+        xiaodong.liu@intel.com
+Subject: Re: [PATCH V2 0/1] ubd: add io_uring based userspace block driver
+Message-ID: <20220523145643.GA232396@storage2.sh.intel.com>
+References: <20220518063808.GA168577@storage2.sh.intel.com>
+ <YoTyNVccpIYDpx9q@T590>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 19/30] panic: Add the panic hypervisor notifier list
-Content-Language: en-US
-To:     Scott Branden <scott.branden@broadcom.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Desmond yan <desmond.yan@broadcom.com>
-Cc:     David Gow <davidgow@google.com>, Evan Green <evgreen@chromium.org>,
-        Julius Werner <jwerner@chromium.org>,
-        bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
-        akpm@linux-foundation.org, bhe@redhat.com,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
-        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
-        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
-        halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
-        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
-        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
-        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org, Alexander Gordeev <agordeev@linux.ibm.com>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Brian Norris <computersforpeace@gmail.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dexuan Cui <decui@microsoft.com>,
-        Doug Berger <opendmb@gmail.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Justin Chen <justinpopo6@gmail.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Mihai Carabas <mihai.carabas@oracle.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
-        Shile Zhang <shile.zhang@linux.alibaba.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Wang ShaoBo <bobo.shaobowang@huawei.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        zhenwei pi <pizhenwei@bytedance.com>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-20-gpiccoli@igalia.com> <YoJZVZl/MH0KiE/J@alley>
- <ad082ce7-db50-13bb-3dbb-9b595dfa78be@igalia.com> <YoOpyW1+q+Z5as78@alley>
- <d72b9aab-675c-ac89-b73a-b1de4a0b722d@igalia.com>
- <81878a67-21f1-fee8-1add-f381bc8b05df@broadcom.com>
- <edbaa4fa-561c-6f5e-f2ab-43ae68acaede@igalia.com>
- <d1cc0bee-2a98-0c2e-8796-6fb7fae6b803@broadcom.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <d1cc0bee-2a98-0c2e-8796-6fb7fae6b803@broadcom.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YoTyNVccpIYDpx9q@T590>
+User-Agent: Mutt/1.9.2 (2017-12-15)
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/05/2022 16:20, Scott Branden wrote:
-> [...] 
->> Hi Scott / Desmond, thanks for the detailed answer! Is this adapter
->> designed to run in x86 only or you have other architectures' use cases?
-> The adapter may be used in any PCIe design that supports DMA.
-> So it may be possible to run in arm64 servers.
->>
->> [...]
->> With that said, and given this is a lightweight notifier that ideally
->> should run ASAP, I'd keep this one in the hypervisor list. We can
->> "adjust" the semantic of this list to include lightweight notifiers that
->> reset adapters.
-> Sounds the best to keep system operating as tested today.
->>
->> With that said, Petr has a point - not always such list is going to be
->> called before kdump. So, that makes me think in another idea: what if we
->> have another list, but not on panic path, but instead in the custom
->> crash_shutdown()? Drivers could add callbacks there that must execute
->> before kexec/kdump, no matter what.
-> It may be beneficial for some other drivers but for our use we would 
-> then need to register for the panic path and the crash_shutdown path. 
-> We notify the VK card for 2 purposes: one to stop DMA so memory stop 
-> changing during a kdump.  And also to get the card into a good state so 
-> resets happen cleanly.
+On Wed, May 18, 2022 at 09:18:45PM +0800, Ming Lei wrote:
+> Hello Liu,
+> 
+> On Wed, May 18, 2022 at 02:38:08AM -0400, Liu Xiaodong wrote:
+> > On Tue, May 17, 2022 at 01:53:57PM +0800, Ming Lei wrote:
+> > > Hello Guys,
+> > > 
+> > > ubd driver is one kernel driver for implementing generic userspace block
+> > > device/driver, which delivers io request from ubd block device(/dev/ubdbN) into
+> > > ubd server[1] which is the userspace part of ubd for communicating
+> > > with ubd driver and handling specific io logic by its target module.
+> > > 
+> > > Another thing ubd driver handles is to copy data between user space buffer
+> > > and request/bio's pages, or take zero copy if mm is ready for support it in
+> > > future. ubd driver doesn't handle any IO logic of the specific driver, so
+> > > it is small/simple, and all io logics are done by the target code in ubdserver.
+> > > 
+> > > The above two are main jobs done by ubd driver.
+> > 
+> > Not like UBD which is straightforward and starts from scratch, VDUSE is
+> > embedded in virtio framework. So its implementation is more complicated, but
+> > all virtio frontend utilities can be leveraged.
+> > When considering security/permission issues, feels UBD would be easier to
+> > solve them.
+> 
+> Stefan Hajnoczi and I are discussing related security/permission
+> issues, can you share more details in your case?
 
-Thanks Scott! With that, I guess it's really better to keep this
-notifier in this hypervisor/early list - I'm planning to do that for V2.
-Unless Petr or somebody has strong feelings against that, of course.
+Hi, Ming
+Security/permission things covered by your discussion are more than I've
+considered.
+ 
+> > 
+> > So my questions are:
+> > 1. what do you think about the purpose overlap between UBD and VDUSE?
+> 
+> Sorry, I am not familiar with VDUSE, motivation of ubd is just to make one
+> high performance generic userspace block driver. ubd driver(kernel part) is
+> just responsible for communication and copying data between userspace buffers
+> and kernel io request pages, and the ubdsrv(userspace) target handles io
+> logic.
+> 
+> > 2. Could UBD be implemented with SPDK friendly functionalities? (mainly about
+> > io data mapping, since HW devices in SPDK need to access the mapped data
+> > buffer. Then, in function ubdsrv.c/ubdsrv_init_io_bufs(),
+> > "addr = mmap(,,,,dev->cdev_fd,)",
+> 
+> No, that code is actually for supporting zero copy.
+> 
+> But each request's buffer is allocated by ubdsrv and definitely available for any
+> target, please see loop_handle_io_async() which handles IO from /dev/ubdbN about
+> how to use the buffer. Fro READ, the target code needs to implement READ
+> logic and fill data to the buffer, then the buffer will be copied to
+> kernel io request pages; for WRITE, the target code needs to use the buffer to handle
+> WRITE and the buffer has been updated with kernel io request.
+> 
 
-Cheers,
+Oh, I see. Yes, you are right. Mmapped addr in ubdsrv_init_io_bufs is not
+used yet. Request's buffer is allocated by ubdsrv.
 
 
-Guilherme
+> > SPDK needs to know the PA of "addr".
+> 
+> What is PA? and why?
+
+Physical address. Sorry, I forgot to expand it.
+Previously I've thought Request data buffer is from mmap addr on corresponding
+ubd cdev, then I just thought SPDK need to know the PA of the buffer for
+its backend hardware devices.
+If the request data buffer is allocated by srv process, then it was not
+needed. So maybe SPDK can be efficiently working on your corrent implementation.
+I'll try to draft an SPDK service backend later.
+
+Thanks
+Xiaodong
+
+ 

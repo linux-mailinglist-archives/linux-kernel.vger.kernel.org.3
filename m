@@ -2,83 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44414530BA7
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 11:03:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6077530BE5
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 11:03:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232204AbiEWIro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 04:47:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52288 "EHLO
+        id S232253AbiEWIuc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 04:50:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232177AbiEWIri (ORCPT
+        with ESMTP id S232209AbiEWIuN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 04:47:38 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB1CAE0C4
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 01:47:37 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d22so12472069plr.9
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 01:47:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IEAer1lH79NsmLj4b5VqaXj4C4eVbt1HjEg0g160lbI=;
-        b=RS52x6K8aaLtOUtyjhbX8/n06RZFlA/wnY/b4ugsdTB6rtCdZNckdrk+q+PSnDp/uZ
-         MjG1OsdMd4/vIVIN5q6m7rKNQ/a1CdmZgAQdbJ5gpUkv3ofEKhjnO4mgukUkChGYjA/P
-         uMjO+HEad9Siw0Zm62i+OiFRZDeIHIqhh8Ot1gDONcYgr4ueUcVKSMz4mnKNf6tNg6C3
-         8LAr2AATJlQLUzy3JhVDcvclNIsILd0ntm6IiXWS2XC1viFsYaNp1UDPViaiiXerHJ2b
-         BXe/iGOFtx3mDNvlwCSQFPatzSB8frjs2paelFNTBZZRIuOp6trWVAcZ5pN0+4g12+Tm
-         Ls8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IEAer1lH79NsmLj4b5VqaXj4C4eVbt1HjEg0g160lbI=;
-        b=F7baddthCWQC0g4IzJoTz83IUq5UyI5r6CwBPKAPONQ4ZjBWjU668EdUCblmaH3h7t
-         tu4mGuZbWtF6rDe01k4fG1f1WIdDRqslvR8ZJfMGEyx0L1E/4y7PqwHfs8TaHnMnPc+K
-         EbdzcR2ZGCz8T52Wr2AQb5L9iJ/OZKRF6R6uLGlbyMckIKh7HHHrysjYTx+62mNHpus5
-         UF/fsv0Bjmi8+bhDn4tBbIkcUJ733Rz9dS0322NI95npZqk+pUgY9U9hXFM0jBW8EHgZ
-         Hue05uEWseqggEHsEkJgbEqxcu/uNvOA4kwI0RnDmUPWnE8JdDB9+cQcIqIMo1AMlB0x
-         oWSQ==
-X-Gm-Message-State: AOAM530veuXDHc1lf3CIlusp7WsaxP4NfZ9/6siUr6CD7BGNitrGDgeB
-        YGjS/TL8qDajgZzoFqAf/PRgcSU+kK6dyPUSIEi4lg==
-X-Google-Smtp-Source: ABdhPJzq974GhyP1VI37htI/dS8x/+HyuWBzEzGCeT91yupIDi7F6pNhNwu6DXsKfT1W5hbpCB6kxmFzxG3qbFRdaJY=
-X-Received: by 2002:a17:902:ead4:b0:162:13e1:33f7 with SMTP id
- p20-20020a170902ead400b0016213e133f7mr7949190pld.21.1653295657262; Mon, 23
- May 2022 01:47:37 -0700 (PDT)
+        Mon, 23 May 2022 04:50:13 -0400
+Received: from smtpout1.mo528.mail-out.ovh.net (smtpout1.mo528.mail-out.ovh.net [46.105.34.251])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FDF6472
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 01:50:10 -0700 (PDT)
+Received: from pro2.mail.ovh.net (unknown [10.109.143.120])
+        by mo528.mail-out.ovh.net (Postfix) with ESMTPS id 8F21E10347F4B;
+        Mon, 23 May 2022 10:50:08 +0200 (CEST)
+Received: from localhost.localdomain (88.161.25.233) by DAG1EX2.emp2.local
+ (172.16.2.2) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.9; Mon, 23 May
+ 2022 10:50:08 +0200
+From:   Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+To:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+CC:     <linux-leds@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH 1/3] dt-bindings: leds: Add bindings for the TLC5925 controller
+Date:   Mon, 23 May 2022 10:49:55 +0200
+Message-ID: <20220523084958.2723943-2-jjhiblot@traphandler.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220523084958.2723943-1-jjhiblot@traphandler.com>
+References: <20220523084958.2723943-1-jjhiblot@traphandler.com>
 MIME-Version: 1.0
-References: <20220422084720.959271-1-xji@analogixsemi.com> <20220422084720.959271-4-xji@analogixsemi.com>
- <CAG3jFytWGSUM9mevHewdmEe-hq3JgB74s7_f0fsEQqkXr9VUHg@mail.gmail.com>
- <CAG3jFyvEYbwkdGtiNR-6vFEXTLjcyT_viqp9qeVxFTu0PrJEVA@mail.gmail.com>
- <CAGXv+5E1cCNWD98fMDjC38y2UztZd=PNQ+=G=wrBYfoXkswvHA@mail.gmail.com>
- <20220425091419.GA967110@anxtwsw-Precision-3640-Tower> <CAG3jFyvTim7P_y2G1Br5j3Pwz4KzvRjWgci_qQ3m_YW=3Bog8A@mail.gmail.com>
- <CAKMK7uFHyYTnGtP+vCzo2Uan90DW-QZpPFPn5S9bQ5aPiY=qzA@mail.gmail.com>
- <CAKMK7uHFGsPMZf2SUF4HDXo3XuOLjP3-DLfyp=gB2qpKR964Eg@mail.gmail.com>
- <20220523031324.GA3738288@anxtwsw-Precision-3640-Tower> <CAGXv+5EHghwSV+9Www9RvG74PkC7=AQuwn6sVG=cvCni-iwCyQ@mail.gmail.com>
- <CAG3jFysJLoQ2DMYw0oOfbQM3ifBmAhNLMxjPDEt12jq8sKCcSg@mail.gmail.com>
-In-Reply-To: <CAG3jFysJLoQ2DMYw0oOfbQM3ifBmAhNLMxjPDEt12jq8sKCcSg@mail.gmail.com>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Mon, 23 May 2022 10:47:26 +0200
-Message-ID: <CAG3jFytVe3S4J4NzNVt5xkE-pM7+3e2cuUhe_vv1bETCpkbV=w@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] drm/bridge: anx7625: Use DPI bus type
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     Xin Ji <xji@analogixsemi.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        David Airlie <airlied@linux.ie>, qwen@analogixsemi.com,
-        Jonas Karlman <jonas@kwiboo.se>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        bliang@analogixsemi.com,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SCC_BODY_URI_ONLY,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [88.161.25.233]
+X-ClientProxiedBy: DAG8EX2.emp2.local (172.16.2.82) To DAG1EX2.emp2.local
+ (172.16.2.2)
+X-Ovh-Tracer-Id: 5386305156936645083
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrjedtgddutdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffojghfggfgtghisehtkeertdertddtnecuhfhrohhmpeflvggrnhdqlfgrtghquhgvshcujfhisghlohhtuceojhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmqeenucggtffrrghtthgvrhhnpedttdffveeljeetleeijefhffevtdffleejheejiefgjeeludefvdevjedutdejhfenucffohhmrghinhepuggvvhhitggvthhrvggvrdhorhhgnecukfhppedtrddtrddtrddtpdekkedrudeiuddrvdehrddvfeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehprhhovddrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehjjhhhihgslhhothesthhrrghphhgrnhgulhgvrhdrtghomhdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-https://lore.kernel.org/all/20220523084615.13510-1-robert.foss@linaro.org/
+Add bindings documentation for the TLC5925 LED controller.
+
+Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+---
+devicetree@vger.kernel.org
+ .../bindings/leds/leds-tlc5925.yaml           | 100 ++++++++++++++++++
+ 1 file changed, 100 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/leds/leds-tlc5925.yaml
+
+diff --git a/Documentation/devicetree/bindings/leds/leds-tlc5925.yaml b/Documentation/devicetree/bindings/leds/leds-tlc5925.yaml
+new file mode 100644
+index 000000000000..156db599d5a1
+--- /dev/null
++++ b/Documentation/devicetree/bindings/leds/leds-tlc5925.yaml
+@@ -0,0 +1,100 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/leds/leds-tlc5925.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: LEDs connected to TI TLC5925 controller
++
++maintainers:
++  - Jean-Jacques Hiblot <jjhiblot@traphandler.com>
++
++description: |
++  The TLC5925 is a low-power 16-channel constant-current LED sink driver.
++  It is controlled through a SPI interface.
++  It is built around a shift register and latches which convert serial
++  input data into a parallel output. Several TLC5925 can be chained to
++  control more than 16 LEDs with a single chip-select.
++  The brightness level cannot be controlled, each LED is either on or off.
++
++  Each LED is represented as a sub-node of the ti,tlc5925 device.
++
++properties:
++  compatible:
++    const: ti,tlc5925
++
++  shift_register_length:
++    maxItems: 1
++    description: |
++      The length of the shift register. If several TLC5925 are chained,
++      shift_register_length should be set to 16 times the number of TLC5925.
++      The value must be a multiple of 8.
++
++  "#address-cells":
++    const: 1
++
++  "#size-cells":
++    const: 0
++
++  output-enable-b-gpios:
++    description: |
++      GPIO pins to enable/disable the parallel output. They describe the GPIOs
++      connected to the OE/ pin of the TLC5925s.
++
++patternProperties:
++  "@[a-f0-9]+$":
++    type: object
++
++    $ref: common.yaml#
++
++    properties:
++      reg:
++        items:
++        description: |
++          LED pin number (must be lower than shift_register_length).
++          The furthest LED down the chain has the pin number 0.
++
++    required:
++      - reg
++
++required:
++  - reg
++  - "#address-cells"
++  - "#size-cells"
++  - shift_register_length
++
++examples:
++  - |
++    &spi0 {
++        leds@2 {
++                compatible = "ti,tlc5925";
++                reg = <0x02>;
++                spi-max-frequency = <30000000>;
++                shift_register_length = <32>;
++                output-enable-b-gpios = <&gpio0b 9 GPIO_ACTIVE_HIGH>, <&gpio0b 7 GPIO_ACTIVE_HIGH>;
++                #address-cells = <1>;
++                #size-cells = <0>;
++
++                led-satus@0 {
++                        reg = <0>;
++                        function = LED_FUNCTION_STATUS;
++                        color = <LED_COLOR_ID_GREEN>;
++                };
++
++                led-satus@4 {
++                        reg = <4>;
++                        function = LED_FUNCTION_STATUS;
++                        color = <LED_COLOR_ID_RED>;
++                };
++
++                led-alive@24 {
++                        reg = <24>;
++                        label = "green:alive"
++                };
++
++                led-panic@31 {
++                        reg = <31>;
++                        label = "red:panic"
++                };
++        };
++    };
+-- 
+2.25.1
+

@@ -2,54 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5CE05313CB
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:24:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25494531249
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:22:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237415AbiEWOri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 10:47:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44724 "EHLO
+        id S237396AbiEWOsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 10:48:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237403AbiEWOrg (ORCPT
+        with ESMTP id S237361AbiEWOsv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 10:47:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F098E580ED
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 07:47:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653317253;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=xowbhnWw8S2OkJoKvNZYNUT5Z/TGdflrhWgMmR2yiPk=;
-        b=LNHsVPUzvY2KorBQKsm2stTz8TxokZTgUJh0ZsQA2ZvHlxq4bhX/PcF9ZNXl1JZUTUBnm8
-        e2exemiRleRig0c2GE9hogUl9Su7UMjiE6e5Lqq94J0KH4/9JbxtMFqpnq3hMVAJxGT2fa
-        cNn3E/8WnjMwfjEwoS0LSgLnCBEfyik=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-411-XITpsU5nMYmmQr4sXVnP-g-1; Mon, 23 May 2022 10:47:29 -0400
-X-MC-Unique: XITpsU5nMYmmQr4sXVnP-g-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 23 May 2022 10:48:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63D125535C;
+        Mon, 23 May 2022 07:48:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 70B4B2949BB2;
-        Mon, 23 May 2022 14:47:29 +0000 (UTC)
-Received: from pauld.bos.com (dhcp-17-51.bos.redhat.com [10.18.17.51])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4F4481410DD5;
-        Mon, 23 May 2022 14:47:29 +0000 (UTC)
-From:   Phil Auld <pauld@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Valentin Schneider <vschneid@redhat.com>
-Subject: [PATCH] cpuhp: make target_store() a nop when target == state
-Date:   Mon, 23 May 2022 10:47:28 -0400
-Message-Id: <20220523144728.32414-1-pauld@redhat.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 16360B81142;
+        Mon, 23 May 2022 14:48:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B379EC385AA;
+        Mon, 23 May 2022 14:48:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653317327;
+        bh=JJUowl47ptnLiKQVZlPgElSH7N0NgsCjov8dxq9v10Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fnp8uE3xRSrq1EFCEfPYIoPnop6vaKngaXYjQT0GxqMofZ80GTaY+w1NWy6s6EG5E
+         MFFdsdZtgGFbTy8/CpHirFEs0cE4CseNwRvx26I31rOaPSw6a5XMAof0+u+iLOgIWw
+         uq0CgYlfgeMukSFYf6Tew/f+31f8hdDIzuvdjFp5oMkroBGBF7aZaWCT4zuh+6Dfsn
+         qd4PDUV4O/Ntqz7THtjrEQWe3YrAnGWP0K/+K1Y0Q6eG9U0feVI2/e0wOgT517/nYH
+         Mdu0TAhnGC5n+4b/046SYxHp5IplQlJpcgBIaAWhi1NrX+Mn9pja+YrbmlSxqrrdrw
+         MqPNr/FlloZHA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1nt9MS-0006hx-2D; Mon, 23 May 2022 16:48:44 +0200
+Date:   Mon, 23 May 2022 16:48:44 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, ath11k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC] ath11k: fix netdev open race
+Message-ID: <YouezMIwm3PYxOKY@hovoldconsulting.com>
+References: <20220517103436.15867-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
-Content-type: text/plain
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220517103436.15867-1-johan+linaro@kernel.org>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,52 +62,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-writing the current state back into hotplug/target calls cpu_down()
-which will set cpu dying even when it isn't and then nothing will
-ever clear it. A stress test that reads values and writes them back
-for all cpu device files in sysfs will trigger the BUG() in
-select_fallback_rq once all cpus are marked as dying.
+On Tue, May 17, 2022 at 12:34:36PM +0200, Johan Hovold wrote:
+> Make sure to allocate resources needed before registering the device.
+> 
+> This specifically avoids having a racing open() trigger a BUG_ON() in
+> mod_timer() when ath11k_mac_op_start() is called before the
+> mon_reap_timer as been set up.
+> 
+> Fixes: d5c65159f289 ("ath11k: driver for Qualcomm IEEE 802.11ax devices")
+> Fixes: 840c36fa727a ("ath11k: dp: stop rx pktlog before suspend")
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
 
-kernel/cpu.c::target_store()
-	...
-        if (st->state < target)
-                ret = cpu_up(dev->id, target);
-        else
-                ret = cpu_down(dev->id, target);
+For completeness:
 
-cpu_down() -> cpu_set_state()
-	 bool bringup = st->state < target;
-	 ...
-	 if (cpu_dying(cpu) != !bringup)
-		set_cpu_dying(cpu, !bringup);
+Tested-on: WCN6855 hw2.0 PCI WLAN.HSP.1.1-03125-QCAHSPSWPL_V1_V2_SILICONZ_LITE-3
 
-Make this safe by catching the case where target == state
-and bailing early.
-
-Signed-off-by: Phil Auld <pauld@redhat.com>
----
-
-Yeah, I know... don't do that. But it's still messy.
-
-!< != > 
-
- kernel/cpu.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/kernel/cpu.c b/kernel/cpu.c
-index d0a9aa0b42e8..8a71b1149c60 100644
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -2302,6 +2302,9 @@ static ssize_t target_store(struct device *dev, struct device_attribute *attr,
- 		return -EINVAL;
- #endif
- 
-+	if (target == st->state)
-+		return count;
-+
- 	ret = lock_device_hotplug_sysfs();
- 	if (ret)
- 		return ret;
--- 
-2.18.0
-
+Johan

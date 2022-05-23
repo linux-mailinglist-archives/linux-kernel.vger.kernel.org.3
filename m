@@ -2,168 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B75F653129C
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:22:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9978531403
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:25:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237089AbiEWOTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 10:19:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45672 "EHLO
+        id S237093AbiEWOUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 10:20:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237073AbiEWOTb (ORCPT
+        with ESMTP id S235152AbiEWOUp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 10:19:31 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A27A95A2CE
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 07:19:25 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id g21so4135667qtg.5
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 07:19:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=vWWc2ufu33khGKEV0bBRhozmdSQdZxaeJldqWqBjNU0=;
-        b=Ca4pS9a4zUlNfJS71/xyjcXZwSvHarFm9ArT3ZbYYlDSt9AQPBUQZjo1ap515khvib
-         lfG8oGwjxr5aUzbs9rrcRMb4QDXQxw5TsbNIjQBNXX6PHFaVAZZJL3sUld4GscV8Ustm
-         82oInsvFBsCy9EEB9w642rL77Gr+HYyy/8+6J6svU6js20GxtsJrBfZnr1B0tRCVShSp
-         tc7BSlvWSzkJ8c9fCuULWwENNs6hGAMxL1eq0ns3sjaqUNp7nN4NIocOV4YiRJMJEV3e
-         TYJORsIsv+C5YAoKj9CtvGjaaAnZU4V51d3eDApSMPEejh+mx+r7ChtuUUjEorPYlysD
-         58Mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vWWc2ufu33khGKEV0bBRhozmdSQdZxaeJldqWqBjNU0=;
-        b=04SU+DF2dPs/b876FxWloANP9MpDGBWxHs/XO596+Ky+GWgDtb3kj6KPJ1GIhVWm1h
-         boK5pPPne9Fb8nMCIdSBlihSZF2a1IDnyB9ja2tnu7ZOA51S+l61aKHZDC11G04+oprg
-         CfBtUAAsKxtNAPRMxJhULjmQvAGAHIkFnNUpR7Eqty1BJmZ7vRAweQUIJ4KzAD62aimo
-         niC9OnimaucZN5BGp8eDI1ytqhsFEGBY9Q4e0AKkxOsjTf4VVvcmj2RhSC6Vxd/JmuHu
-         l0P1jRogLPcT2KAACf3PFceIoxnb0xY88r+xAlhqeWZG6nTbUi0YCJKuy8onwDpV6p7p
-         +cIg==
-X-Gm-Message-State: AOAM530BjU+TB1yubcG1unKy6Xg2b1dJbcqjeX1WZhkHc0oIZDi6b2ak
-        KjHgpi6GKgMZ/vH3U4MHLQvORA==
-X-Google-Smtp-Source: ABdhPJwjIWZ/Xu8CISDgPppsp4d9DpRDuyDFiAKBdGorgak+hkFR3g6gfGmV423tCLSN+fnTZB80DQ==
-X-Received: by 2002:ac8:5dcc:0:b0:2f3:d8d2:7cf with SMTP id e12-20020ac85dcc000000b002f3d8d207cfmr16552559qtx.464.1653315564452;
-        Mon, 23 May 2022 07:19:24 -0700 (PDT)
-Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
-        by smtp.gmail.com with ESMTPSA id bc3-20020a05622a1cc300b002f39b99f6a2sm4165754qtb.60.2022.05.23.07.19.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 07:19:24 -0700 (PDT)
-Date:   Mon, 23 May 2022 10:19:22 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Suren Baghdasaryan <surenb@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] sched/psi: Bounds-check state iterator against
- NR_PSI_STATES
-Message-ID: <YouX6g1T7w3FDeM8@cmpxchg.org>
-References: <20220520165826.2140252-1-keescook@chromium.org>
+        Mon, 23 May 2022 10:20:45 -0400
+Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BAA25A17E;
+        Mon, 23 May 2022 07:20:43 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:36252)
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nt8vI-00ATIA-DK; Mon, 23 May 2022 08:20:40 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:39108 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nt8vG-0041Du-0k; Mon, 23 May 2022 08:20:39 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Duoming Zhou <duoming@zju.edu.cn>
+Cc:     linux-wireless@vger.kernel.org, amitkarwar@gmail.com,
+        ganapathi017@gmail.com, sharvari.harisangam@nxp.com,
+        huxinming820@gmail.com, kvalo@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org, rafael@kernel.org
+In-Reply-To: <20220523052810.24767-1-duoming@zju.edu.cn> (Duoming Zhou's
+        message of "Mon, 23 May 2022 13:28:10 +0800")
+References: <20220523052810.24767-1-duoming@zju.edu.cn>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+Date:   Mon, 23 May 2022 09:20:28 -0500
+Message-ID: <87o7zoxrdf.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220520165826.2140252-1-keescook@chromium.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1nt8vG-0041Du-0k;;;mid=<87o7zoxrdf.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX19XL6dIVUh4Rgjy70dRTrylgdC8ofaP27Q=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Virus: No
+X-Spam-DCC: XMission; sa01 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: **;Duoming Zhou <duoming@zju.edu.cn>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 1795 ms - load_scoreonly_sql: 0.03 (0.0%),
+        signal_user_changed: 3.2 (0.2%), b_tie_ro: 2.1 (0.1%), parse: 0.67
+        (0.0%), extract_message_metadata: 8 (0.5%), get_uri_detail_list: 1.02
+        (0.1%), tests_pri_-1000: 3.8 (0.2%), tests_pri_-950: 1.07 (0.1%),
+        tests_pri_-900: 0.81 (0.0%), tests_pri_-90: 126 (7.0%), check_bayes:
+        125 (6.9%), b_tokenize: 5 (0.3%), b_tok_get_all: 7 (0.4%),
+        b_comp_prob: 1.43 (0.1%), b_tok_touch_all: 109 (6.1%), b_finish: 0.70
+        (0.0%), tests_pri_0: 1260 (70.2%), check_dkim_signature: 0.38 (0.0%),
+        check_dkim_adsp: 1.69 (0.1%), poll_dns_idle: 380 (21.2%),
+        tests_pri_10: 1.76 (0.1%), tests_pri_500: 387 (21.6%), rewrite_mail:
+        0.00 (0.0%)
+Subject: Re: [PATCH v3] mwifiex: fix sleep in atomic context bugs caused by
+ dev_coredumpv
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 09:58:26AM -0700, Kees Cook wrote:
-> GCC 12 cannot tell that "t" will be bounded by NR_PSI_STATES, which could
-> lead to walking off the end of the tasks array, which is NR_PSI_STATES in
-> size. Explicitly bounds-check "t" as part of the loop.
-> 
-> In file included from ../kernel/sched/build_utility.c:97:
-> ../kernel/sched/psi.c: In function 'psi_group_change':
-> ../kernel/sched/psi.c:730:38: warning: array subscript 32 is above array bounds of 'unsigned int[5]' [-Warray-bounds]
->   730 |                         groupc->tasks[t]++;
->       |                         ~~~~~~~~~~~~~^~~
-> In file included from ../include/linux/psi.h:6,
->                  from ../kernel/sched/build_utility.c:36:
-> ../include/linux/psi_types.h:84:22: note: while referencing 'tasks'
->    84 |         unsigned int tasks[NR_PSI_TASK_COUNTS];
->       |                      ^~~~~
-> ../kernel/sched/psi.c:730:38: warning: array subscript 32 is above array bounds of 'unsigned int[5]' [-Warray-bounds]
->   730 |                         groupc->tasks[t]++;
->       |                         ~~~~~~~~~~~~~^~~
-> ../include/linux/psi_types.h:84:22: note: while referencing 'tasks'
->    84 |         unsigned int tasks[NR_PSI_TASK_COUNTS];
->       |                      ^~~~~
-> 
-> Cc: Johannes Weiner <hannes@cmpxchg.org>
-> Cc: Suren Baghdasaryan <surenb@google.com>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Juri Lelli <juri.lelli@redhat.com>
-> Cc: Vincent Guittot <vincent.guittot@linaro.org>
-> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Ben Segall <bsegall@google.com>
-> Cc: Mel Gorman <mgorman@suse.de>
-> Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-> Cc: Valentin Schneider <vschneid@redhat.com>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  kernel/sched/psi.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-> index a337f3e35997..827f16a79936 100644
-> --- a/kernel/sched/psi.c
-> +++ b/kernel/sched/psi.c
-> @@ -725,7 +725,7 @@ static void psi_group_change(struct psi_group *group, int cpu,
->  		}
->  	}
->  
-> -	for (t = 0; set; set &= ~(1 << t), t++)
-> +	for (t = 0; set && t < ARRAY_SIZE(groupc->tasks); set &= ~(1 << t), t++)
->  		if (set & (1 << t))
->  			groupc->tasks[t]++;
+Duoming Zhou <duoming@zju.edu.cn> writes:
 
-This is a very hot path, it runs for every nested cgroup on every task
-switch, wakeup and sleep. We should avoid unnecessary instructions and
-branches if we can help it at all.
+> There are sleep in atomic context bugs when uploading device dump
+> data in mwifiex. The root cause is that dev_coredumpv could not
+> be used in atomic contexts, because it calls dev_set_name which
+> include operations that may sleep. The call tree shows execution
+> paths that could lead to bugs:
+>
+>    (Interrupt context)
+> fw_dump_timer_fn
+>   mwifiex_upload_device_dump
+>     dev_coredumpv(..., GFP_KERNEL)
+>       dev_coredumpm()
+>         kzalloc(sizeof(*devcd), gfp); //may sleep
+>         dev_set_name
+>           kobject_set_name_vargs
+>             kvasprintf_const(GFP_KERNEL, ...); //may sleep
+>             kstrdup(s, GFP_KERNEL); //may sleep
+>
+> In order to let dev_coredumpv support atomic contexts, this patch
+> changes the gfp_t parameter of kvasprintf_const and kstrdup in
+> kobject_set_name_vargs from GFP_KERNEL to GFP_ATOMIC. What's more,
+> In order to mitigate bug, this patch changes the gfp_t parameter
+> of dev_coredumpv from GFP_KERNEL to GFP_ATOMIC.
 
-Does the below patch address the warning for you? I can't test it
-myself, because I'm not getting it with gcc version 12.1.0. It's also
-odd that it didn't warn you about the loop over `clear' a few lines
-up, which ostensibly has the same "problem".
+vmalloc in atomic context?
 
----
+Not only does dev_coredumpm set a device name dev_coredumpm creates an
+entire device to hold the device dump.
 
-diff --git a/include/linux/psi_types.h b/include/linux/psi_types.h
-index c7fe7c089718..113861343733 100644
---- a/include/linux/psi_types.h
-+++ b/include/linux/psi_types.h
-@@ -41,6 +41,7 @@ enum psi_task_count {
- #define TSK_RUNNING	(1 << NR_RUNNING)
- #define TSK_ONCPU	(1 << NR_ONCPU)
- #define TSK_MEMSTALL_RUNNING	(1 << NR_MEMSTALL_RUNNING)
-+#define TSK_MASK	((1U << NR_PSI_TASK_COUNTS) - 1)
- 
- /* Resources that workloads could be stalled on */
- enum psi_res {
-diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-index a4fa3aadfcba..fb7fd40af337 100644
---- a/kernel/sched/psi.c
-+++ b/kernel/sched/psi.c
-@@ -804,6 +804,8 @@ void psi_task_change(struct task_struct *task, int clear, int set)
- 	void *iter = NULL;
- 	u64 now;
- 
-+	WARN_ON_ONCE((clear|set) & ~TSK_MASK);
-+
- 	if (!task->pid)
- 		return;
- 
+My sense is that either dev_coredumpm needs to be rebuilt on a
+completely different principle that does not need a device to hold the
+coredump (so that it can be called from interrupt context) or that
+dev_coredumpm should never be called in an context that can not sleep.
+
+
+Looking at fw_dump_timer_fn the only purpose of the timer is to trigger
+a device dump after a certain amount of time.  So I suspect all that is
+needed to fix this issue is to change the type of devdump_timer to
+struct delayed_work and use scheduled_delayed_work instead of mod_timer.
+
+
+Eric
+
+p.s.  I looked at this because there was coredump in the infrastructure
+name, and I do some of the work to keep coredumps working.  Device dump
+seems like a much better term, and I wished the designer of the api had
+used that instead.
+
+
+

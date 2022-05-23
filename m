@@ -2,87 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBF125306FE
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 03:10:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86FAA530705
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 03:12:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244284AbiEWBKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 21:10:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33840 "EHLO
+        id S233184AbiEWBMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 21:12:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242675AbiEWBKo (ORCPT
+        with ESMTP id S233042AbiEWBMm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 21:10:44 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D01E0377DA;
-        Sun, 22 May 2022 18:10:42 -0700 (PDT)
-Received: from kwepemi100024.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4L5zfD6V5WzDqKh;
-        Mon, 23 May 2022 09:05:40 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi100024.china.huawei.com (7.221.188.87) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 23 May 2022 09:10:40 +0800
-Received: from [10.174.176.73] (10.174.176.73) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 23 May 2022 09:10:39 +0800
-Subject: Re: [PATCH -next v5 0/3] support concurrent sync io for bfq on a
- specail occasion
-To:     Jens Axboe <axboe@kernel.dk>, <paolo.valente@linaro.org>
-CC:     <jack@suse.cz>, <tj@kernel.org>, <linux-block@vger.kernel.org>,
-        <cgroups@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <yi.zhang@huawei.com>
-References: <20220428120837.3737765-1-yukuai3@huawei.com>
- <d50df657-d859-79cf-c292-412eaa383d2c@huawei.com>
- <61b67d5e-829c-8130-7bda-81615d654829@huawei.com>
- <81411289-e13c-20f5-df63-c059babca57a@huawei.com>
- <d5a90a08-1ac6-587a-e900-0436bd45543a@kernel.dk>
-From:   "yukuai (C)" <yukuai3@huawei.com>
-Message-ID: <55919e29-1f22-e8aa-f3d2-08c57d9e1c22@huawei.com>
-Date:   Mon, 23 May 2022 09:10:38 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Sun, 22 May 2022 21:12:42 -0400
+Received: from lgeamrelo11.lge.com (lgeamrelo12.lge.com [156.147.23.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C0CED377FA
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 18:12:37 -0700 (PDT)
+Received: from unknown (HELO lgeamrelo01.lge.com) (156.147.1.125)
+        by 156.147.23.52 with ESMTP; 23 May 2022 10:12:36 +0900
+X-Original-SENDERIP: 156.147.1.125
+X-Original-MAILFROM: byungchul.park@lge.com
+Received: from unknown (HELO X58A-UD3R) (10.177.244.38)
+        by 156.147.1.125 with ESMTP; 23 May 2022 10:12:36 +0900
+X-Original-SENDERIP: 10.177.244.38
+X-Original-MAILFROM: byungchul.park@lge.com
+Date:   Mon, 23 May 2022 10:10:45 +0900
+From:   Byungchul Park <byungchul.park@lge.com>
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     tj@kernel.org, torvalds@linux-foundation.org,
+        damien.lemoal@opensource.wdc.com, linux-ide@vger.kernel.org,
+        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        mingo@redhat.com, linux-kernel@vger.kernel.org,
+        peterz@infradead.org, will@kernel.org, tglx@linutronix.de,
+        rostedt@goodmis.org, joel@joelfernandes.org, sashal@kernel.org,
+        daniel.vetter@ffwll.ch, chris@chris-wilson.co.uk,
+        duyuyang@gmail.com, johannes.berg@intel.com, willy@infradead.org,
+        david@fromorbit.com, amir73il@gmail.com,
+        gregkh@linuxfoundation.org, kernel-team@lge.com,
+        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
+        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
+        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
+        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
+        ngupta@vflare.org, linux-block@vger.kernel.org,
+        paolo.valente@linaro.org, josef@toxicpanda.com,
+        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        jack@suse.cz, jack@suse.com, jlayton@kernel.org,
+        dan.j.williams@intel.com, hch@infradead.org, djwong@kernel.org,
+        dri-devel@lists.freedesktop.org, rodrigosiqueiramelo@gmail.com,
+        melissa.srw@gmail.com, hamohammed.sa@gmail.com,
+        42.hyeyoo@gmail.com, mcgrof@kernel.org, holt@sgi.com
+Subject: Re: [REPORT] syscall reboot + umh + firmware fallback
+Message-ID: <20220523011045.GA16721@X58A-UD3R>
+References: <YnzQHWASAxsGL9HW@slm.duckdns.org>
+ <1652354304-17492-1-git-send-email-byungchul.park@lge.com>
+ <Yn0SHhnhB8fyd0jq@mit.edu>
 MIME-Version: 1.0
-In-Reply-To: <d5a90a08-1ac6-587a-e900-0436bd45543a@kernel.dk>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.73]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yn0SHhnhB8fyd0jq@mit.edu>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/05/21 20:21, Jens Axboe 写道:
-> On 5/21/22 1:22 AM, yukuai (C) wrote:
->> 在 2022/05/14 17:29, yukuai (C) 写道:
->>> 在 2022/05/05 9:00, yukuai (C) 写道:
->>>> Hi, Paolo
->>>>
->>>> Can you take a look at this patchset? It has been quite a long time
->>>> since we spotted this problem...
->>>>
->>>
->>> friendly ping ...
->> friendly ping ...
+On Thu, May 12, 2022 at 09:56:46AM -0400, Theodore Ts'o wrote:
+> On Thu, May 12, 2022 at 08:18:24PM +0900, Byungchul Park wrote:
+> > I have a question about this one. Yes, it would never been stuck thanks
+> > to timeout. However, IIUC, timeouts are not supposed to expire in normal
+> > cases. So I thought a timeout expiration means not a normal case so need
+> > to inform it in terms of dependency so as to prevent further expiraton.
+> > That's why I have been trying to track even timeout'ed APIs.
 > 
-> I can't speak for Paolo, but I've mentioned before that the majority
-> of your messages end up in my spam. That's still the case, in fact
-> I just marked maybe 10 of them as not spam.
+> As I beleive I've already pointed out to you previously in ext4 and
+> ocfs2, the jbd2 timeout every five seconds happens **all** the time
+> while the file system is mounted.  Commits more frequently than five
+> seconds is the exception case, at least for desktops/laptop workloads.
+
+Thanks, Ted. It's easy to stop tracking APIs with timeout. I've been
+just afraid that the cases that we want to suppress anyway will be
+skipped.
+
+However, I should stop it if it produces too many false alarms.
+
+> We *don't* get to the timeout only when a userspace process calls
+> fsync(2), or if the journal was incorrectly sized by the system
+> administrator so that it's too small, and the workload has so many
+> file system mutations that we have to prematurely close the
+> transaction ahead of the 5 second timeout.
+
+Yeah... It's how journaling works. Thanks.
+
+> > Do you think DEPT shouldn't track timeout APIs? If I was wrong, I
+> > shouldn't track the timeout APIs any more.
 > 
-> You really need to get this issued sorted out, or you will continue
-> to have patches ignore because folks may simply not see them.
->
-Hi,
+> DEPT tracking timeouts will cause false positives in at least some
+> cases.  At the very least, there needs to be an easy way to suppress
+> these false positives on a per wait/mutex/spinlock basis.
 
-Thanks for your notice.
+The easy way is to stop tracking those that are along with timeout until
+DEPT starts to consider waits/events by timeout functionality itself.
 
-Is it just me or do you see someone else's messages from *huawei.com
-end up in spam? I tried to seek help from our IT support, however, they
-didn't find anything unusual...
+Thanks.
+
+	Byungchul
+> 
+>       	       	    	     	      	   	 - Ted

@@ -2,58 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25494531249
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:22:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 530ED531492
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:25:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237396AbiEWOsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 10:48:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46658 "EHLO
+        id S237412AbiEWOuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 10:50:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237361AbiEWOsv (ORCPT
+        with ESMTP id S237380AbiEWOuD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 10:48:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63D125535C;
-        Mon, 23 May 2022 07:48:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 16360B81142;
-        Mon, 23 May 2022 14:48:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B379EC385AA;
-        Mon, 23 May 2022 14:48:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653317327;
-        bh=JJUowl47ptnLiKQVZlPgElSH7N0NgsCjov8dxq9v10Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fnp8uE3xRSrq1EFCEfPYIoPnop6vaKngaXYjQT0GxqMofZ80GTaY+w1NWy6s6EG5E
-         MFFdsdZtgGFbTy8/CpHirFEs0cE4CseNwRvx26I31rOaPSw6a5XMAof0+u+iLOgIWw
-         uq0CgYlfgeMukSFYf6Tew/f+31f8hdDIzuvdjFp5oMkroBGBF7aZaWCT4zuh+6Dfsn
-         qd4PDUV4O/Ntqz7THtjrEQWe3YrAnGWP0K/+K1Y0Q6eG9U0feVI2/e0wOgT517/nYH
-         Mdu0TAhnGC5n+4b/046SYxHp5IplQlJpcgBIaAWhi1NrX+Mn9pja+YrbmlSxqrrdrw
-         MqPNr/FlloZHA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1nt9MS-0006hx-2D; Mon, 23 May 2022 16:48:44 +0200
-Date:   Mon, 23 May 2022 16:48:44 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, ath11k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC] ath11k: fix netdev open race
-Message-ID: <YouezMIwm3PYxOKY@hovoldconsulting.com>
-References: <20220517103436.15867-1-johan+linaro@kernel.org>
+        Mon, 23 May 2022 10:50:03 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 132FD58E62;
+        Mon, 23 May 2022 07:50:03 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C795E139F;
+        Mon, 23 May 2022 07:50:02 -0700 (PDT)
+Received: from hype-n1-sdp.warwick.arm.com (hype-n1-sdp.warwick.arm.com [10.32.32.32])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 181AD3F70D;
+        Mon, 23 May 2022 07:50:00 -0700 (PDT)
+From:   German Gomez <german.gomez@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org
+Cc:     james.clark@arm.com, leo.yan@linaro.org,
+        German Gomez <german.gomez@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>
+Subject: [RFC PATCH 0/1] perf test cs-etm: Add end-to-end tests for CoreSight decoding
+Date:   Mon, 23 May 2022 15:49:51 +0100
+Message-Id: <20220523144952.364370-1-german.gomez@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220517103436.15867-1-johan+linaro@kernel.org>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,20 +45,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 12:34:36PM +0200, Johan Hovold wrote:
-> Make sure to allocate resources needed before registering the device.
-> 
-> This specifically avoids having a racing open() trigger a BUG_ON() in
-> mod_timer() when ath11k_mac_op_start() is called before the
-> mon_reap_timer as been set up.
-> 
-> Fixes: d5c65159f289 ("ath11k: driver for Qualcomm IEEE 802.11ax devices")
-> Fixes: 840c36fa727a ("ath11k: dp: stop rx pktlog before suspend")
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
+Hi
 
-For completeness:
+While discussing running more tests for CoreSight, we thought it might
+be a good idea to upstream some EndToEnd tests for CoreSight decoding in
+order to lock down the behaviour. I am sending this as RFC to get some
+feedback from the community first.
 
-Tested-on: WCN6855 hw2.0 PCI WLAN.HSP.1.1-03125-QCAHSPSWPL_V1_V2_SILICONZ_LITE-3
+The test relies on pre-geneated perf.data files that are downloaded
+during the test. I'm not sure it's a good idea to commit those files to
+the Linux repository, so they would have to live in an external source
+and be downloaded during the test.
 
-Johan
+For this RFC, the files are stored in a Github repository [1]. As an
+idea, I think we could store them in a new repo in the ARM-software
+namespace. Any hosting suggestions are very welcome.
+
+Thanks,
+German
+
+[1] https://github.com/ARM-software/data/tree/984cde8fb0bb22591e284826a80b338bb79c3655/perf/coresight
+
+German Gomez (1):
+  perf test cs-etm: Add end-to-end tests for CoreSight decoding
+
+ tools/perf/tests/shell/lib/arm_auxtrace.sh    | 21 +++++++
+ .../tests/shell/test_arm_coresight_decoder.sh | 57 +++++++++++++++++++
+ 2 files changed, 78 insertions(+)
+ create mode 100644 tools/perf/tests/shell/lib/arm_auxtrace.sh
+ create mode 100755 tools/perf/tests/shell/test_arm_coresight_decoder.sh
+
+-- 
+2.25.1
+

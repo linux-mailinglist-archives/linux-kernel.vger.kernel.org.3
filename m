@@ -2,137 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C81155314A6
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:25:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E7665313CC
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:24:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238615AbiEWQKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 12:10:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45084 "EHLO
+        id S238611AbiEWQRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 12:17:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238554AbiEWQKR (ORCPT
+        with ESMTP id S238649AbiEWQR1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 12:10:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DEFB264738
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:10:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653322215;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uRKL91EqCGrYR3jhbmoJxjNS6DqoFl91Xh8EB9KpYsw=;
-        b=FeraEF1g+YYYTzXzWdV2CdrvuTx6W9IrB1PPEObu+PDoKrSrQBxB/mOgBz0of859YC/RZA
-        FvDdxeP1m6J+7hWqXaHdtsEq/Cma18zD6CmMrQWT2G8AyqHT/Bdp2Ff+MZbYvoNUn22/uu
-        K81PwAQblR7uwwyB3tk7k6THUnRlj6Q=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-611-CbY9HITmP8S5Dc7eNXS4OA-1; Mon, 23 May 2022 12:10:12 -0400
-X-MC-Unique: CbY9HITmP8S5Dc7eNXS4OA-1
-Received: by mail-qt1-f200.google.com with SMTP id a6-20020ac81086000000b002f65fd83048so11873883qtj.6
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:10:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=uRKL91EqCGrYR3jhbmoJxjNS6DqoFl91Xh8EB9KpYsw=;
-        b=muZZgDuT7A5Hmwl1m3a1WnX5t9OItqC5BfqlBBV8gQRGnS9oYZZKv4f0rYF8xymuph
-         fhN8F5MIzbvumzKDNrPzqlMW/EouNxioWKMx3qPbdRKq6bjoSFP8+mF9nXtKXzWoc9+C
-         H202FqhU9DbCHFqWn1EO+SvHez3QGWjneem6B0QfS95dSOHheIN7pftI7Xff9cSyox8q
-         SVJu2dStf3wkOuPoRBJvz/+fPbQXrYxIaXtSTNAaMPPmRyG/K2LyyMXFHw1YM6jv7Ibz
-         ZW53+TPUJkONMMezewPU37CJ2gj3YeW66y5m8hdJtnWWe0jGn+fkHOO1J4IidRuN8aki
-         wa8w==
-X-Gm-Message-State: AOAM532WMLDkotG0t+BYkLXAGWO6SvujS8kv3Do7VI4AllwX8GuYDiEa
-        uMBgVXxN0MQMULKmR/yZVIVfMyeKsyliT84v9DhNPW4par6obp+L/RUb8V78kB67Jw+LYWpgHX2
-        QozNCwV22QXVnJCmeaynheHqm
-X-Received: by 2002:a05:620a:178d:b0:6a4:61f1:742a with SMTP id ay13-20020a05620a178d00b006a461f1742amr691916qkb.523.1653322212137;
-        Mon, 23 May 2022 09:10:12 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJww1EFdhXdnjSHa1uTotEqVgJ5iYRqKpJaihahEbjr36wXhmpyPJZYwVC3c1eGAq35iKZ0Q1A==
-X-Received: by 2002:a05:620a:178d:b0:6a4:61f1:742a with SMTP id ay13-20020a05620a178d00b006a461f1742amr691896qkb.523.1653322211904;
-        Mon, 23 May 2022 09:10:11 -0700 (PDT)
-Received: from xps13 (c-98-239-145-235.hsd1.wv.comcast.net. [98.239.145.235])
-        by smtp.gmail.com with ESMTPSA id u3-20020a05622a198300b002f92a5a396esm4907505qtc.3.2022.05.23.09.10.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 09:10:11 -0700 (PDT)
-Date:   Mon, 23 May 2022 12:10:10 -0400
-From:   Brian Masney <bmasney@redhat.com>
-To:     Harsh Agarwal <quic_harshq@quicinc.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com
-Subject: Re: [RFC 2/2] usb: dwc3: Refactor PHY logic to support Multiport
- Controller
-Message-ID: <Youx4uztX0RNRVkd@xps13>
-References: <1652963695-10109-1-git-send-email-quic_harshq@quicinc.com>
- <1652963695-10109-3-git-send-email-quic_harshq@quicinc.com>
+        Mon, 23 May 2022 12:17:27 -0400
+Received: from mx1.supremebox.com (mx1-c1.supremebox.com [198.23.53.215])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB39A66684
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:17:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=jilayne.com
+        ; s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=KjSGju59Ich2PK+YmLbZYQHyPrKADu4YlcAeuTKJzsY=; b=Vuzwf6Kty+1GzL54plgo8ujUPA
+        cvuJQiA228sTLSCGqEx9YCy/CphorA+BgZ47Vlf+IVcH8uKd2De5DgTDkY4AnatcvvWtXT8mvsV2N
+        5qk3mKF0N6FKxbJqHdnMY2DHe+acRXg/6rzuPVwmPwm+ImqlEEGurE3uxZGnPqvJ6RSA=;
+Received: from 75-166-140-231.hlrn.qwest.net ([75.166.140.231] helo=[192.168.0.91])
+        by mx1.supremebox.com with esmtpa (Exim 4.92)
+        (envelope-from <opensource@jilayne.com>)
+        id 1ntAeg-0000R8-Tf; Mon, 23 May 2022 16:11:39 +0000
+Message-ID: <97d8beb2-db33-1e50-eadb-6ac8d650f044@jilayne.com>
+Date:   Mon, 23 May 2022 10:11:37 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1652963695-10109-3-git-send-email-quic_harshq@quicinc.com>
-User-Agent: Mutt/2.2.1 (2022-02-19)
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.0
+Subject: Re: [patch 0/9] scripts/spdxcheck: Better statistics and exclude
+ handling
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>, Max Mehl <max.mehl@fsfe.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christoph Hellwig <hch@lst.de>, linux-spdx@vger.kernel.org
+References: <20220516101901.475557433@linutronix.de>
+ <1652706350.kh41opdwg4.2220@fsfe.org> <87zgjhpawr.ffs@tglx>
+ <87wnelpam3.ffs@tglx> <1652775347.3cr9dmk5qv.2220@fsfe.org>
+ <8735h7ltre.ffs@tglx>
+From:   J Lovejoy <opensource@jilayne.com>
+In-Reply-To: <8735h7ltre.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Sender-Ident-agJab5osgicCis: opensource@jilayne.com
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 06:04:55PM +0530, Harsh Agarwal wrote:
-> -	dwc->usb3_generic_phy = devm_phy_get(dev, "usb3-phy");
-> -	if (IS_ERR(dwc->usb3_generic_phy)) {
-> -		ret = PTR_ERR(dwc->usb3_generic_phy);
-> -		if (ret == -ENOSYS || ret == -ENODEV)
-> -			dwc->usb3_generic_phy = NULL;
-> -		else
-> -			return dev_err_probe(dev, ret, "no usb3 phy configured\n");
-> +		if (IS_ERR(dwc->usb2_phy[0])) {
-> +			ret = PTR_ERR(dwc->usb2_phy[0]);
-> +			if (ret == -ENXIO || ret == -ENODEV)
-> +				dwc->usb2_phy[0] = NULL;
-> +			else
-> +				return dev_err_probe(dev, ret, "no usb2 phy configured\n");
-> +		}
-> +
-> +		if (IS_ERR(dwc->usb3_phy[0])) {
-> +			ret = PTR_ERR(dwc->usb3_phy[0]);
-> +			if (ret == -ENXIO || ret == -ENODEV)
-> +				dwc->usb3_phy[0] = NULL;
-> +			else
-> +				return dev_err_probe(dev, ret, "no usb3 phy configured\n");
-> +		}
-> +
-> +		dwc->usb2_generic_phy = devm_phy_get(dev, "usb2-phy");
-> +		if (IS_ERR(dwc->usb2_generic_phy)) {
-> +			ret = PTR_ERR(dwc->usb2_generic_phy);
-> +			if (ret == -ENOSYS || ret == -ENODEV)
-> +				dwc->usb2_generic_phy = NULL;
-> +			else
-> +				return dev_err_probe(dev, ret, "no usb2 phy configured\n");
-> +		}
 
-I know that this block is a copy and paste move from above, but is the
-ENOSYS check really needed? It looks like the phy_get() only returns
--ENODEV.
 
-> @@ -1147,8 +1149,10 @@ struct dwc3 {
->  
->  	struct reset_control	*reset;
->  
-> -	struct usb_phy		*usb2_phy;
-> -	struct usb_phy		*usb3_phy;
-> +	struct usb_phy		**usb2_phy;
-> +	struct usb_phy		**usb3_phy;
-> +	u32			num_hsphy;
-> +	u32			num_ssphy;
+On 5/17/22 3:43 PM, Thomas Gleixner wrote:
+> On Tue, May 17 2022 at 10:25, Max Mehl wrote:
+>> ~ Thomas Gleixner [2022-05-16 20:59 +0200]:
+>>> There is also an argument to be made whether we really need to have SPDX
+>>> identifiers on trivial files:
+>>>
+>>> #include <someheader.h>
+>>> <EOF>
+>>>
+>>> Such files are not copyrightable by any means. So what's the value of
+>>> doubling the line count to add an SPDX identifier? Just to make nice
+>>> statistics?
+>> We agree that such files are not copyrightable. But where is the
+>> threshold? Lines of code? Creativity? Number of used functions? And how
+>> to embed this threshold in tooling? So instead of fuzzy exclusion of
+>> such files in tools like spdxcheck or REUSE, it makes sense to treat
+>> them as every other file with the cost of adding two comment lines.
+>>
+>> This clear-cut rule eases maintaining and growing the effort you and
+>> others did because developers would know exactly what to add to a new
+>> file (license + copyright) without requiring looking up the thresholds
+>> or a manual review by maintainers who can interpret them.
+> Seriously no. I'm outright refusing to add my copyright to a trivial
+> file with one or two includes or a silly comment like '/* empty because */.
+>
+>       There is nothing copyrightable there.
+>
+> I'm not going to make myself a fool just to make tools happy, which can
+> figure out on their own whether there is reasonable content in the vast
+> majority of cases.
+>
+> Also you need some exclude rules in any case. Why?
+>
+>    - How do you tell a tool that a file is generated, e.g. in the kernel
+>      the default configuration files?
+>
+>      Yes, the file content depends on human input to the generator tool,
+>      but I'm looking forward for the explanation how this is
+>      copyrightable especially with multiple people updating this file
+>      over time where some of the updates are just done by invoking the
+>      generator tool itself.
+>
+>    - How do you tell a tool that a file contains licensing documentation?
+>
+>      Go and look what license scanners make out of all the various
+>      license-rules.rst files.
+>
+>    - ....
+>
+>    Do all scanners have to grow heuristics for ignoring the content past
+>    the topmost SPDX License identifier in certain files or for figuring
+>    out what might be generated content?
+>
+> You also might need to add information about binary blobs, which
+> obviously cannot be part of the binary blobs themself.
+>
+> The exclude rules I added are lazy and mostly focussed on spdxcheck, but
+> I'm happy to make them more useful and let them carry information about
+> the nature of the exclude or morph them into a general scanner info
+> which also contains binary blob info and other helpful information. But
+> that needs a larger discussion about the format and rules for such a
+> file.
+>
+> That said, I'm all for clear cut rules, but rules just for the rules
+> sake are almost as bad as no rules at all.
+>
+> As always you have to apply common sense and look at the bigger picture
+> and come up with solutions which are practicable, enforcable and useful
+> for the larger eco-system.
+>
+> Your goal of having SPDX ids and copyright notices in every file of a
+> project is honorable, but impractical for various reasons.
+>
+> See above.
+>
+> Aside of that you cannot replace a full blown license scanner by REUSE
+> even if your project is SPDX and Copyright notice clean at the top level
+> of a file. You still need to verify that there is no other information
+> in a 'clean' file which might be contradicting or supplemental. You
+> cannot add all of this functionality to REUSE or whatever.
+>
+Max, Thomas,
 
-Rename num_hsphy / num_ssphy to num_usb2_phy and num_usb3_phy so this is
-easier to audit.
+I think the discussion here is hitting upon the "inconvenience" of the 
+lack of black/white rules in the law (as to what is copyrightable) 
+versus the convenience of downstream recipients of code who want to be 
+sure they have proper rights (which mixes in the guidance/rules of 
+Reuse, tooling, etc.).
 
-Brian
+I think some rules in terms of files that are clearly not copyrightable 
+can be implemented in various tooling (hopefully, with the guidance of a 
+lawyer steeped in copyright law), and I agree that putting a license (by 
+way of an SPDX identifier or any other way for that matter) on such 
+files is neither a good use of time nor a good idea (from the 
+perspective of being inaccurate as to the need for a license and thus 
+sending the wrong impression). That being said, there will not be a way 
+to make clear cut rules for everything, without involving a judge. 
+Sorry! That's just how the law works (and we actually often don't want 
+black/white lines in the law, actually).
+
+I can see a policy of, "when it's not clear (as to copyrightability), 
+then add a license", though.
+
+Thanks,
+Jilayne
 

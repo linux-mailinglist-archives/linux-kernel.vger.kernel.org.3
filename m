@@ -2,41 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9AA55310BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:20:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7F1C530F7F
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:18:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234970AbiEWLil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 07:38:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50492 "EHLO
+        id S235008AbiEWLj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 07:39:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234883AbiEWLig (ORCPT
+        with ESMTP id S234885AbiEWLj4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 07:38:36 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EB2F743AC2;
-        Mon, 23 May 2022 04:38:35 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A09DD11FB;
-        Mon, 23 May 2022 04:38:35 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.9.63])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 297CE3F73D;
-        Mon, 23 May 2022 04:38:34 -0700 (PDT)
-Date:   Mon, 23 May 2022 12:38:28 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     elver@google.com, catalin.marinas@arm.com, will@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        arnd@arndb.de
-Subject: Re: [PATCH v4 1/2] asm-generic: Add memory barrier dma_mb()
-Message-ID: <YotyNJeTxQMk/eat@FVFF77S0Q05N>
-References: <20220523113126.171714-1-wangkefeng.wang@huawei.com>
- <20220523113126.171714-2-wangkefeng.wang@huawei.com>
+        Mon, 23 May 2022 07:39:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C118E5007F;
+        Mon, 23 May 2022 04:39:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CC9E612AE;
+        Mon, 23 May 2022 11:39:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AB16C385A9;
+        Mon, 23 May 2022 11:39:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653305993;
+        bh=OC1izSFKp6WFdxo7syUD+g/hsAbJtBJQWFtDt3ICR70=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tyZt64kzOKZP6xetGUFTckdxsa62eMafXrgVAbDd//0jkqffQdTCZMoOkEHg6EI9m
+         pLMh8yGUazKznWaEBqRwVD/I8TRxIV5W2R6G9F8NTitjr5klse8+M5rUDRgi/EjeY6
+         AoBxu5RHQn/rNybEWNcRFjSI2KEu/SkXXyKkqV/stZm+iew5EJM4bf4lIPcOfCrCAr
+         OhHF476tob9ywX43CovxJhDAaiJ2VomR6Wq9J3gA0o/r+MLcn9s4w7WyqO3AFpFIGn
+         J1I5P2qxULTfPTL3gssVrOnznMvD9pM3Mx6O6lO5fQ+goiFfnBrWrFjSzFhf1GybYY
+         lGOTAtSdySwsg==
+Date:   Mon, 23 May 2022 12:39:46 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Li Chen <lchen.firstlove@zohomail.com>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-gpio <linux-gpio@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        linux-sunxi <linux-sunxi@lists.linux.dev>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Subject: Re: [PATCH v2 0/4] Add regmap_field helpers for simple bit operations
+Message-ID: <YotygqDAkAXRRo9d@sirena.org.uk>
+References: <180e702a15f.e737e37e45859.3135149506136486394@zohomail.com>
+ <180eeb93909.12110e2de60158.391061173597432851@zohomail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="YPlGNYyWzcAMDZRd"
 Content-Disposition: inline
-In-Reply-To: <20220523113126.171714-2-wangkefeng.wang@huawei.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+In-Reply-To: <180eeb93909.12110e2de60158.391061173597432851@zohomail.com>
+X-Cookie: Sales tax applies.
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -45,84 +69,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 07:31:25PM +0800, Kefeng Wang wrote:
-> The memory barrier dma_mb() is introduced by commit a76a37777f2c
-> ("iommu/arm-smmu-v3: Ensure queue is read after updating prod pointer"),
-> which is used to ensure that prior (both reads and writes) accesses
-> to memory by a CPU are ordered w.r.t. a subsequent MMIO write.
-> 
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de> # for asm-generic
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
 
-FWIW, this looks sane to me so:
+--YPlGNYyWzcAMDZRd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-  Acked-by: Mark Rutland <mark.rutland@arm.com>
+On Sun, May 22, 2022 at 07:22:37PM -0700, Li Chen wrote:
+> From: Li Chen <lchen@ambarella.com>
+>=20
+> This series proposes to add simple bit operations for setting, clearing
+> and testing specific bits with regmap_field.
 
-I'll leave the final say to Will, as I assume this'll go via the arm64 tree and
-he'll be the one picking this.
+Please don't send new patches in reply to old patches or serieses, this
+makes it harder for both people and tools to understand what is going
+on - it can bury things in mailboxes and make it difficult to keep track
+of what current patches are, both for the new patches and the old ones.
 
-Mark.
+--YPlGNYyWzcAMDZRd
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> ---
->  Documentation/memory-barriers.txt | 11 ++++++-----
->  include/asm-generic/barrier.h     |  8 ++++++++
->  2 files changed, 14 insertions(+), 5 deletions(-)
-> 
-> diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
-> index b12df9137e1c..832b5d36e279 100644
-> --- a/Documentation/memory-barriers.txt
-> +++ b/Documentation/memory-barriers.txt
-> @@ -1894,6 +1894,7 @@ There are some more advanced barrier functions:
->  
->   (*) dma_wmb();
->   (*) dma_rmb();
-> + (*) dma_mb();
->  
->       These are for use with consistent memory to guarantee the ordering
->       of writes or reads of shared memory accessible to both the CPU and a
-> @@ -1925,11 +1926,11 @@ There are some more advanced barrier functions:
->       The dma_rmb() allows us guarantee the device has released ownership
->       before we read the data from the descriptor, and the dma_wmb() allows
->       us to guarantee the data is written to the descriptor before the device
-> -     can see it now has ownership.  Note that, when using writel(), a prior
-> -     wmb() is not needed to guarantee that the cache coherent memory writes
-> -     have completed before writing to the MMIO region.  The cheaper
-> -     writel_relaxed() does not provide this guarantee and must not be used
-> -     here.
-> +     can see it now has ownership.  The dma_mb() implies both a dma_rmb() and
-> +     a dma_wmb().  Note that, when using writel(), a prior wmb() is not needed
-> +     to guarantee that the cache coherent memory writes have completed before
-> +     writing to the MMIO region.  The cheaper writel_relaxed() does not provide
-> +     this guarantee and must not be used here.
->  
->       See the subsection "Kernel I/O barrier effects" for more information on
->       relaxed I/O accessors and the Documentation/core-api/dma-api.rst file for
-> diff --git a/include/asm-generic/barrier.h b/include/asm-generic/barrier.h
-> index fd7e8fbaeef1..961f4d88f9ef 100644
-> --- a/include/asm-generic/barrier.h
-> +++ b/include/asm-generic/barrier.h
-> @@ -38,6 +38,10 @@
->  #define wmb()	do { kcsan_wmb(); __wmb(); } while (0)
->  #endif
->  
-> +#ifdef __dma_mb
-> +#define dma_mb()	do { kcsan_mb(); __dma_mb(); } while (0)
-> +#endif
-> +
->  #ifdef __dma_rmb
->  #define dma_rmb()	do { kcsan_rmb(); __dma_rmb(); } while (0)
->  #endif
-> @@ -65,6 +69,10 @@
->  #define wmb()	mb()
->  #endif
->  
-> +#ifndef dma_mb
-> +#define dma_mb()	mb()
-> +#endif
-> +
->  #ifndef dma_rmb
->  #define dma_rmb()	rmb()
->  #endif
-> -- 
-> 2.35.3
-> 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKLcoIACgkQJNaLcl1U
+h9CGAwf6Aqcrn3Y6tb7EafFfurQwr3Crsu8tQbSSTQLVF1sEFNE103GaQAMmGrOV
+/gS9YF2ov9GtVEf8S6GQL/kysxuDAx+9Y1bXsi0FSGksQoXsMiZ8uP74w+1vOf1n
+cCrfT1LyFNFSX9K1dGsTa7PBKTVaSfn+gvpLciODmd/kLZ3r74PanNXwrOJ6d7su
+PzsawtBIRto9stB5SYK976MqqPUGrhIazLZP75ovU8Zv5UdYg/Qgb9aMaVKiAVAW
+6XRa/On++FFX3Ob8jcvfjp8krmplQJ43QvVW1ICd9cT4xAnjMKmYz1w241llIfg3
+cxd6zy8OxcjQlcZXn3XVXkwHnAwU4A==
+=mmNk
+-----END PGP SIGNATURE-----
+
+--YPlGNYyWzcAMDZRd--

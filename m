@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50ABC53192F
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:54:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 100865316A2
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:52:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244498AbiEWSLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 14:11:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38210 "EHLO
+        id S241565AbiEWRdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:33:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242711AbiEWRhp (ORCPT
+        with ESMTP id S242372AbiEWRXB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:37:45 -0400
+        Mon, 23 May 2022 13:23:01 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DAA15BE52;
-        Mon, 23 May 2022 10:31:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C85868023E;
+        Mon, 23 May 2022 10:20:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 299EB611CB;
-        Mon, 23 May 2022 17:28:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 265C8C34116;
-        Mon, 23 May 2022 17:28:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7591B608C0;
+        Mon, 23 May 2022 17:20:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B691C385A9;
+        Mon, 23 May 2022 17:20:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326931;
-        bh=flgFXLXgvcqitHLhOUjyuhNpWRTcqrdXR5m+Cf7zjE4=;
+        s=korg; t=1653326422;
+        bh=tcHeGnF2PoJIpurfi0R4moFcTJ05kj7019N3a7rLRAE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cy+NF8hOOMaSALvU0pnvTijh8pc85ziWAhvRZeUO04WrRLjo+y//xKr/eFZbv2rW/
-         c3GYaeLGq8pfHXCrG+vi9zqMbMwf8S/wcSEM8C2GaaqrChWoj8SNOHcylZ/5ibsmpH
-         hEN4YzLCZ/gdTqkaCuG79VfbaubZDq7QkMJyntEQ=
+        b=QdrYvIwM9MqQvP3TZTFVpEt4Ybci2m9ynrT7vW8KrA+w8+1i4j7FAOcNfGtt4y1/J
+         2aA9vmS52kJgehs6fWCghnkm7G/+v4Yu5H4jXsuaV9iPdAceQmpB1ODCtt9aTCGHtC
+         TnQy0MrsAjoaby7vdMARUG25wxwzaHF7mSslfKLc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yevgeny Kliteynik <kliteyn@nvidia.com>,
-        Alex Vesker <valex@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 104/158] net/mlx5: DR, Ignore modify TTL on RX if device doesnt support it
-Date:   Mon, 23 May 2022 19:04:21 +0200
-Message-Id: <20220523165848.485323933@linuxfoundation.org>
+        stable@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        "Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>
+Subject: [PATCH 5.15 053/132] arm64: paravirt: Use RCU read locks to guard stolen_time
+Date:   Mon, 23 May 2022 19:04:22 +0200
+Message-Id: <20220523165832.034077247@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165830.581652127@linuxfoundation.org>
-References: <20220523165830.581652127@linuxfoundation.org>
+In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
+References: <20220523165823.492309987@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,176 +56,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yevgeny Kliteynik <kliteyn@nvidia.com>
+From: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
 
-[ Upstream commit 785d7ed295513bd3374095304b7034fd65c123b0 ]
+commit 19bef63f951e47dd4ba54810e6f7c7ff9344a3ef upstream.
 
-When modifying TTL, packet's csum has to be recalculated.
-Due to HW issue in ConnectX-5, csum recalculation for modify
-TTL on RX is supported through a work-around that is specifically
-enabled by configuration.
-If the work-around isn't enabled, rather than adding an unsupported
-action the modify TTL action on RX should be ignored.
-Ignoring modify TTL action might result in zero actions, so in such
-cases we will not convert the match STE to modify STE, as it is done
-by FW in DMFS.
+During hotplug, the stolen time data structure is unmapped and memset.
+There is a possibility of the timer IRQ being triggered before memset
+and stolen time is getting updated as part of this timer IRQ handler. This
+causes the below crash in timer handler -
 
-This patch fixes an issue where modify TTL action was ignored both
-on RX and TX instead of only on RX.
+  [ 3457.473139][    C5] Unable to handle kernel paging request at virtual address ffffffc03df05148
+  ...
+  [ 3458.154398][    C5] Call trace:
+  [ 3458.157648][    C5]  para_steal_clock+0x30/0x50
+  [ 3458.162319][    C5]  irqtime_account_process_tick+0x30/0x194
+  [ 3458.168148][    C5]  account_process_tick+0x3c/0x280
+  [ 3458.173274][    C5]  update_process_times+0x5c/0xf4
+  [ 3458.178311][    C5]  tick_sched_timer+0x180/0x384
+  [ 3458.183164][    C5]  __run_hrtimer+0x160/0x57c
+  [ 3458.187744][    C5]  hrtimer_interrupt+0x258/0x684
+  [ 3458.192698][    C5]  arch_timer_handler_virt+0x5c/0xa0
+  [ 3458.198002][    C5]  handle_percpu_devid_irq+0xdc/0x414
+  [ 3458.203385][    C5]  handle_domain_irq+0xa8/0x168
+  [ 3458.208241][    C5]  gic_handle_irq.34493+0x54/0x244
+  [ 3458.213359][    C5]  call_on_irq_stack+0x40/0x70
+  [ 3458.218125][    C5]  do_interrupt_handler+0x60/0x9c
+  [ 3458.223156][    C5]  el1_interrupt+0x34/0x64
+  [ 3458.227560][    C5]  el1h_64_irq_handler+0x1c/0x2c
+  [ 3458.232503][    C5]  el1h_64_irq+0x7c/0x80
+  [ 3458.236736][    C5]  free_vmap_area_noflush+0x108/0x39c
+  [ 3458.242126][    C5]  remove_vm_area+0xbc/0x118
+  [ 3458.246714][    C5]  vm_remove_mappings+0x48/0x2a4
+  [ 3458.251656][    C5]  __vunmap+0x154/0x278
+  [ 3458.255796][    C5]  stolen_time_cpu_down_prepare+0xc0/0xd8
+  [ 3458.261542][    C5]  cpuhp_invoke_callback+0x248/0xc34
+  [ 3458.266842][    C5]  cpuhp_thread_fun+0x1c4/0x248
+  [ 3458.271696][    C5]  smpboot_thread_fn+0x1b0/0x400
+  [ 3458.276638][    C5]  kthread+0x17c/0x1e0
+  [ 3458.280691][    C5]  ret_from_fork+0x10/0x20
 
-Fixes: 4ff725e1d4ad ("net/mlx5: DR, Ignore modify TTL if device doesn't support it")
-Signed-off-by: Yevgeny Kliteynik <kliteyn@nvidia.com>
-Reviewed-by: Alex Vesker <valex@nvidia.com>
-Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+As a fix, introduce rcu lock to update stolen time structure.
+
+Fixes: 75df529bec91 ("arm64: paravirt: Initialize steal time when cpu is online")
+Cc: stable@vger.kernel.org
+Suggested-by: Will Deacon <will@kernel.org>
+Signed-off-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
+Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+Reviewed-by: Srivatsa S. Bhat (VMware) <srivatsa@csail.mit.edu>
+Link: https://lore.kernel.org/r/20220513174654.362169-1-quic_eberman@quicinc.com
+Signed-off-by: Will Deacon <will@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- .../mellanox/mlx5/core/steering/dr_action.c   | 65 +++++++++++++------
- .../mellanox/mlx5/core/steering/dr_ste_v0.c   |  4 +-
- 2 files changed, 48 insertions(+), 21 deletions(-)
+ arch/arm64/kernel/paravirt.c |   29 +++++++++++++++++++++--------
+ 1 file changed, 21 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_action.c b/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_action.c
-index 5d1caf97a8fc..8622af6d6bf8 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_action.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_action.c
-@@ -530,6 +530,37 @@ static int dr_action_handle_cs_recalc(struct mlx5dr_domain *dmn,
+--- a/arch/arm64/kernel/paravirt.c
++++ b/arch/arm64/kernel/paravirt.c
+@@ -35,7 +35,7 @@ static u64 native_steal_clock(int cpu)
+ DEFINE_STATIC_CALL(pv_steal_clock, native_steal_clock);
+ 
+ struct pv_time_stolen_time_region {
+-	struct pvclock_vcpu_stolen_time *kaddr;
++	struct pvclock_vcpu_stolen_time __rcu *kaddr;
+ };
+ 
+ static DEFINE_PER_CPU(struct pv_time_stolen_time_region, stolen_time_region);
+@@ -52,7 +52,9 @@ early_param("no-steal-acc", parse_no_ste
+ /* return stolen time in ns by asking the hypervisor */
+ static u64 para_steal_clock(int cpu)
+ {
++	struct pvclock_vcpu_stolen_time *kaddr = NULL;
+ 	struct pv_time_stolen_time_region *reg;
++	u64 ret = 0;
+ 
+ 	reg = per_cpu_ptr(&stolen_time_region, cpu);
+ 
+@@ -61,28 +63,37 @@ static u64 para_steal_clock(int cpu)
+ 	 * online notification callback runs. Until the callback
+ 	 * has run we just return zero.
+ 	 */
+-	if (!reg->kaddr)
++	rcu_read_lock();
++	kaddr = rcu_dereference(reg->kaddr);
++	if (!kaddr) {
++		rcu_read_unlock();
+ 		return 0;
++	}
+ 
+-	return le64_to_cpu(READ_ONCE(reg->kaddr->stolen_time));
++	ret = le64_to_cpu(READ_ONCE(kaddr->stolen_time));
++	rcu_read_unlock();
++	return ret;
+ }
+ 
+ static int stolen_time_cpu_down_prepare(unsigned int cpu)
+ {
++	struct pvclock_vcpu_stolen_time *kaddr = NULL;
+ 	struct pv_time_stolen_time_region *reg;
+ 
+ 	reg = this_cpu_ptr(&stolen_time_region);
+ 	if (!reg->kaddr)
+ 		return 0;
+ 
+-	memunmap(reg->kaddr);
+-	memset(reg, 0, sizeof(*reg));
++	kaddr = rcu_replace_pointer(reg->kaddr, NULL, true);
++	synchronize_rcu();
++	memunmap(kaddr);
+ 
  	return 0;
  }
  
-+static void dr_action_modify_ttl_adjust(struct mlx5dr_domain *dmn,
-+					struct mlx5dr_ste_actions_attr *attr,
-+					bool rx_rule,
-+					bool *recalc_cs_required)
-+{
-+	*recalc_cs_required = false;
+ static int stolen_time_cpu_online(unsigned int cpu)
+ {
++	struct pvclock_vcpu_stolen_time *kaddr = NULL;
+ 	struct pv_time_stolen_time_region *reg;
+ 	struct arm_smccc_res res;
+ 
+@@ -93,17 +104,19 @@ static int stolen_time_cpu_online(unsign
+ 	if (res.a0 == SMCCC_RET_NOT_SUPPORTED)
+ 		return -EINVAL;
+ 
+-	reg->kaddr = memremap(res.a0,
++	kaddr = memremap(res.a0,
+ 			      sizeof(struct pvclock_vcpu_stolen_time),
+ 			      MEMREMAP_WB);
+ 
++	rcu_assign_pointer(reg->kaddr, kaddr);
 +
-+	/* if device supports csum recalculation - no adjustment needed */
-+	if (mlx5dr_ste_supp_ttl_cs_recalc(&dmn->info.caps))
-+		return;
-+
-+	/* no adjustment needed on TX rules */
-+	if (!rx_rule)
-+		return;
-+
-+	if (!MLX5_CAP_ESW_FLOWTABLE(dmn->mdev, fdb_ipv4_ttl_modify)) {
-+		/* Ignore the modify TTL action.
-+		 * It is always kept as last HW action.
-+		 */
-+		attr->modify_actions--;
-+		return;
-+	}
-+
-+	if (dmn->type == MLX5DR_DOMAIN_TYPE_FDB)
-+		/* Due to a HW bug on some devices, modifying TTL on RX flows
-+		 * will cause an incorrect checksum calculation. In such cases
-+		 * we will use a FW table to recalculate the checksum.
-+		 */
-+		*recalc_cs_required = true;
-+}
-+
- static void dr_action_print_sequence(struct mlx5dr_domain *dmn,
- 				     struct mlx5dr_action *actions[],
- 				     int last_idx)
-@@ -649,8 +680,9 @@ int mlx5dr_actions_build_ste_arr(struct mlx5dr_matcher *matcher,
- 		case DR_ACTION_TYP_MODIFY_HDR:
- 			attr.modify_index = action->rewrite->index;
- 			attr.modify_actions = action->rewrite->num_of_actions;
--			recalc_cs_required = action->rewrite->modify_ttl &&
--					     !mlx5dr_ste_supp_ttl_cs_recalc(&dmn->info.caps);
-+			if (action->rewrite->modify_ttl)
-+				dr_action_modify_ttl_adjust(dmn, &attr, rx_rule,
-+							    &recalc_cs_required);
- 			break;
- 		case DR_ACTION_TYP_L2_TO_TNL_L2:
- 		case DR_ACTION_TYP_L2_TO_TNL_L3:
-@@ -737,12 +769,7 @@ int mlx5dr_actions_build_ste_arr(struct mlx5dr_matcher *matcher,
- 	*new_hw_ste_arr_sz = nic_matcher->num_of_builders;
- 	last_ste = ste_arr + DR_STE_SIZE * (nic_matcher->num_of_builders - 1);
- 
--	/* Due to a HW bug in some devices, modifying TTL on RX flows will
--	 * cause an incorrect checksum calculation. In this case we will
--	 * use a FW table to recalculate.
--	 */
--	if (dmn->type == MLX5DR_DOMAIN_TYPE_FDB &&
--	    rx_rule && recalc_cs_required && dest_action) {
-+	if (recalc_cs_required && dest_action) {
- 		ret = dr_action_handle_cs_recalc(dmn, dest_action, &attr.final_icm_addr);
- 		if (ret) {
- 			mlx5dr_err(dmn,
-@@ -1562,12 +1589,6 @@ dr_action_modify_check_is_ttl_modify(const void *sw_action)
- 	return sw_field == MLX5_ACTION_IN_FIELD_OUT_IP_TTL;
- }
- 
--static bool dr_action_modify_ttl_ignore(struct mlx5dr_domain *dmn)
--{
--	return !mlx5dr_ste_supp_ttl_cs_recalc(&dmn->info.caps) &&
--	       !MLX5_CAP_ESW_FLOWTABLE(dmn->mdev, fdb_ipv4_ttl_modify);
--}
--
- static int dr_actions_convert_modify_header(struct mlx5dr_action *action,
- 					    u32 max_hw_actions,
- 					    u32 num_sw_actions,
-@@ -1579,6 +1600,7 @@ static int dr_actions_convert_modify_header(struct mlx5dr_action *action,
- 	const struct mlx5dr_ste_action_modify_field *hw_dst_action_info;
- 	const struct mlx5dr_ste_action_modify_field *hw_src_action_info;
- 	struct mlx5dr_domain *dmn = action->rewrite->dmn;
-+	__be64 *modify_ttl_sw_action = NULL;
- 	int ret, i, hw_idx = 0;
- 	__be64 *sw_action;
- 	__be64 hw_action;
-@@ -1591,8 +1613,14 @@ static int dr_actions_convert_modify_header(struct mlx5dr_action *action,
- 	action->rewrite->allow_rx = 1;
- 	action->rewrite->allow_tx = 1;
- 
--	for (i = 0; i < num_sw_actions; i++) {
--		sw_action = &sw_actions[i];
-+	for (i = 0; i < num_sw_actions || modify_ttl_sw_action; i++) {
-+		/* modify TTL is handled separately, as a last action */
-+		if (i == num_sw_actions) {
-+			sw_action = modify_ttl_sw_action;
-+			modify_ttl_sw_action = NULL;
-+		} else {
-+			sw_action = &sw_actions[i];
-+		}
- 
- 		ret = dr_action_modify_check_field_limitation(action,
- 							      sw_action);
-@@ -1601,10 +1629,9 @@ static int dr_actions_convert_modify_header(struct mlx5dr_action *action,
- 
- 		if (!(*modify_ttl) &&
- 		    dr_action_modify_check_is_ttl_modify(sw_action)) {
--			if (dr_action_modify_ttl_ignore(dmn))
--				continue;
--
-+			modify_ttl_sw_action = sw_action;
- 			*modify_ttl = true;
-+			continue;
- 		}
- 
- 		/* Convert SW action to HW action */
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_ste_v0.c b/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_ste_v0.c
-index 2d62950f7a29..134c8484c901 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_ste_v0.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_ste_v0.c
-@@ -419,7 +419,7 @@ dr_ste_v0_set_actions_tx(struct mlx5dr_domain *dmn,
- 	 * encapsulation. The reason for that is that we support
- 	 * modify headers for outer headers only
- 	 */
--	if (action_type_set[DR_ACTION_TYP_MODIFY_HDR]) {
-+	if (action_type_set[DR_ACTION_TYP_MODIFY_HDR] && attr->modify_actions) {
- 		dr_ste_v0_set_entry_type(last_ste, DR_STE_TYPE_MODIFY_PKT);
- 		dr_ste_v0_set_rewrite_actions(last_ste,
- 					      attr->modify_actions,
-@@ -511,7 +511,7 @@ dr_ste_v0_set_actions_rx(struct mlx5dr_domain *dmn,
- 		}
+ 	if (!reg->kaddr) {
+ 		pr_warn("Failed to map stolen time data structure\n");
+ 		return -ENOMEM;
  	}
  
--	if (action_type_set[DR_ACTION_TYP_MODIFY_HDR]) {
-+	if (action_type_set[DR_ACTION_TYP_MODIFY_HDR] && attr->modify_actions) {
- 		if (dr_ste_v0_get_entry_type(last_ste) == DR_STE_TYPE_MODIFY_PKT)
- 			dr_ste_v0_arr_init_next(&last_ste,
- 						added_stes,
--- 
-2.35.1
-
+-	if (le32_to_cpu(reg->kaddr->revision) != 0 ||
+-	    le32_to_cpu(reg->kaddr->attributes) != 0) {
++	if (le32_to_cpu(kaddr->revision) != 0 ||
++	    le32_to_cpu(kaddr->attributes) != 0) {
+ 		pr_warn_once("Unexpected revision or attributes in stolen time data\n");
+ 		return -ENXIO;
+ 	}
 
 

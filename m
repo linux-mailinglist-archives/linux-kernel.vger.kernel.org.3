@@ -2,171 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 930C7531F04
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 01:00:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 566E8531F1E
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 01:09:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230419AbiEWXAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 19:00:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45024 "EHLO
+        id S229909AbiEWXJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 19:09:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiEWXAn (ORCPT
+        with ESMTP id S229441AbiEWXI7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 19:00:43 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F6E6A0D24;
-        Mon, 23 May 2022 16:00:42 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-e656032735so20361897fac.0;
-        Mon, 23 May 2022 16:00:42 -0700 (PDT)
+        Mon, 23 May 2022 19:08:59 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45FF970369;
+        Mon, 23 May 2022 16:08:58 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id c1so13916330qkf.13;
+        Mon, 23 May 2022 16:08:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=/hOaZULQrF9LX4munHpY3wVXOQ9nYFe0ZRAvQXZ3vbE=;
-        b=nGUkzijZu5ZFwvP8H84AwlAD1vdzdwA1fp5JhNnOjdcRC+ZxUoP+QYS9XM6GLQeWyk
-         phuU243eWaA6M+lCDpQB8vQdh7UdO47A0ZJYAgW4Um8l1Je80E/ADeEln0UO4XBU06uk
-         on8Kx0QGQnjxiqYAC4W9JuuCImAujkCxhohJ9HwGnvDEXHmXOp51TTJpBA0kMEvDsd2n
-         XjWGc1x9K9Uo2HMgqryiDUOsGi2dZjT+EyH+RDMx5s3Jhl2IKdM5ql4zNVw3Tn+xZBSM
-         iAI+2SAS0zaoEjNKFKND7vIAfWufy9XiIMFFVGaGrZQ9xEsjaYicgVQ/L7iaon8uSMaO
-         GZaA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=RM70btlxkJMcJZU115/sfApSU8coL9mAakE0PyR/h4Y=;
+        b=Z+O4x3cYzdfYcBo+qMsyV+PE4neCzLxUeNKd0uGm+7pOIGn2SvhFHXsWE5j1ADZgFM
+         /9Wn6I+zqKBfX7MCQxKpCMl0c7oafuo4U0o51+RHgfcZHad66+9Vl7LCGHWIMvyZl1T/
+         nHOd3iHn5hTzpKFR+Iv+UyY7KgyOtooAfntO+fJze/d7dZYoqJbbh/1NxwLBJzweXq3u
+         Ewz9nL60KfNVOua+CJkMUQOKZTKdSH9NiCSx8UBFVydJNnMmsaTN9+cn27baIcMVsgG6
+         mDo0hv14ycnGJszVkW27C0aali7KWXzRlgKlPb6Dew+pth3VpCO8lBWUJ/Kob/3XfZSl
+         fOEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=/hOaZULQrF9LX4munHpY3wVXOQ9nYFe0ZRAvQXZ3vbE=;
-        b=pIQ4PQPwPjLzQz4I3efGWVxiSPJBjdCJsArgMdaSSI3G5xIEY3uStlu0NRGOBFWGJr
-         98iyZCWKVrCN/ItyM5bFx1q+EUAM+jjP3cRLEXrxtkHvxYZEZQgosn5tijtb15xFPmu2
-         1ZmZOZZ4I1I80aOtzbroduovcVIf5G3YPyRwy84cVA74ukhb+oiotjycwws6f/cFQf8d
-         EO8li25y8I20kFq82XzpMrZDOqSdP5gAzoJFX+P0l9pCrKjp/BH8vKpAn5d9ntBqzyWj
-         48DsrOhGhaLaVPAXMPNFwQYOcFzSRfzTSYkvRUQLIru5SMGebJKSWDA8173cZaTRsJov
-         cwKg==
-X-Gm-Message-State: AOAM530XpvB3JCIzpbPJje9kRQqlYN/QWrmgM5uej6QmJthTGh/JcALW
-        pDkJ2X94Ym7kKagjTPQY/rA=
-X-Google-Smtp-Source: ABdhPJwFYvmU9t0f1/cxvvqr52oJVOx3ly87DqZ/EmOOoCe4wzWaAPc48YIP+GgJ2Vc9YQqj1/y/lw==
-X-Received: by 2002:a05:6870:15cc:b0:ee:456f:c1e5 with SMTP id k12-20020a05687015cc00b000ee456fc1e5mr788661oad.46.1653346841457;
-        Mon, 23 May 2022 16:00:41 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t5-20020a056871054500b000e686d1386asm4315531oal.4.2022.05.23.16.00.40
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=RM70btlxkJMcJZU115/sfApSU8coL9mAakE0PyR/h4Y=;
+        b=dXp1xMrgNoQfVHvwozjQeQ72dxyhjOpvVlLVgfcnjI8HHsmFbsxxxfhMYod0Q6V+d0
+         u+DqiSCmSC2XAVWf4bgUE9ocN5apcQjVP+E8pV/j4bTdYH1hd5Z8h5+pUDD99c49DEqy
+         0NEt+gvfsJ/3Zhqkq0zg77oex2D40/Scajmox9BdrByYJnoiz6tOo0AChyQCqINavbFy
+         KA4H/t7SievrKuQw4ZUqMZ6C5VMxD8M2QsoJfVrFTIKreUlaioTWJYaZKr3AoIvZUQh2
+         AE8evK1h6ix3O7bROtb55m2i2lKuxOvX+tfnwXXcu8GF6ih2W9Gyn0yCLanh0uF+IXPV
+         Ad3Q==
+X-Gm-Message-State: AOAM531J4YlDXpqTxrdpRpHDfySu5d11/ZrxWOJrfabBOlFoZwLDqcQ0
+        SPL7yz/NtZIjuOjOueREy2s=
+X-Google-Smtp-Source: ABdhPJx93GEPHLMwAQ23oDH+D205VadsPlC8SagMZbgHJWaXPsONy7Omp3isK0Yt4jw+pD2Ik+JUZw==
+X-Received: by 2002:a05:620a:2456:b0:6a3:769a:653e with SMTP id h22-20020a05620a245600b006a3769a653emr5997540qkn.148.1653347337363;
+        Mon, 23 May 2022 16:08:57 -0700 (PDT)
+Received: from jup ([2607:fea8:e2e4:d600::6ece])
+        by smtp.gmail.com with ESMTPSA id c10-20020ac86e8a000000b002f3ef928fbbsm1821926qtv.72.2022.05.23.16.08.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 16:00:40 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 23 May 2022 16:00:39 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-Cc:     Guo Ren <guoren@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christoph Hellwig <hch@lst.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH V9 20/20] riscv: compat: Add COMPAT Kbuild skeletal
- support
-Message-ID: <20220523230039.GA238308@roeck-us.net>
-References: <20220322144003.2357128-1-guoren@kernel.org>
- <CAJF2gTSCcYif4DEpvrJ6d02no3CU_viyE+OkhhjCV3VsGmcT5Q@mail.gmail.com>
- <0ecdb673-b9a8-40af-7dee-2ba7fe739e5f@roeck-us.net>
- <44686961.fMDQidcC6G@diego>
+        Mon, 23 May 2022 16:08:56 -0700 (PDT)
+Date:   Mon, 23 May 2022 19:08:54 -0400
+From:   Michael Mullin <masmullin@gmail.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] bpftool: mmaped fields missing map structure in
+ generated skeletons
+Message-ID: <20220523230854.3hdduizw36huxvxw@jup>
+References: <20220523202649.6iiz4h2wf5ryx3w2@jup>
+ <CAEf4BzaecP2XkzftmH7GeeTfj1E+pv=20=L4ztrxe4-JU7MuUw@mail.gmail.com>
+ <20220523221954.dsqvy55ron4cfdqq@jup>
+ <CAEf4BzY-K8UoT1HhXf=fwdWtY2fdprttUF27Zm6WwSUSRq8ycA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <44686961.fMDQidcC6G@diego>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+In-Reply-To: <CAEf4BzY-K8UoT1HhXf=fwdWtY2fdprttUF27Zm6WwSUSRq8ycA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 12:40:06AM +0200, Heiko Stübner wrote:
-> Hi Guenter,
+On Mon, May 23, 2022 at 03:38:03PM -0700, Andrii Nakryiko wrote:
+> On Mon, May 23, 2022 at 3:19 PM Michael Mullin <masmullin@gmail.com> wrote:
+> >
+> > On Mon, May 23, 2022 at 03:02:31PM -0700, Andrii Nakryiko wrote:
+> > > On Mon, May 23, 2022 at 1:26 PM Michael Mullin <masmullin@gmail.com> wrote:
+> > > >
+> > > > When generating a skeleton which has an mmaped map field, bpftool's
+> > > > output is missing the map structure.  This causes a compile break when
+> > > > the generated skeleton is compiled as the field belongs to the internal
+> > > > struct maps, not directly to the obj.
+> > > >
+> > > > Signed-off-by: Michael Mullin <masmullin@gmail.com>
+> > > > ---
+> > > >  tools/bpf/bpftool/gen.c | 2 +-
+> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
+> > > > index f158dc1c2149..b49293795ba0 100644
+> > > > --- a/tools/bpf/bpftool/gen.c
+> > > > +++ b/tools/bpf/bpftool/gen.c
+> > > > @@ -853,7 +853,7 @@ codegen_maps_skeleton(struct bpf_object *obj, size_t map_cnt, bool mmaped)
+> > > >                         i, bpf_map__name(map), i, ident);
+> > > >                 /* memory-mapped internal maps */
+> > > >                 if (mmaped && is_internal_mmapable_map(map, ident, sizeof(ident))) {
+> > > > -                       printf("\ts->maps[%zu].mmaped = (void **)&obj->%s;\n",
+> > > > +                       printf("\ts->maps[%zu].mmaped = (void **)&obj->maps.%s;\n",
+> > >
+> > > That's not right. maps.my_map is struct bpf_map *, but mmaped is
+> > > supposed to be a blob of memory that is memory-mapped into map.
+> > >
+> > > Can you elaborate on how you trigger that compilation error with a
+> > > small example?
+> >
+> > I have an a very small example on github. I have added some sed fixes to
+> > my Makefile make my sample program compile.
+> > https://github.com/masmullin2000/libbpf-sample/tree/main/c/simple
+> >
+> > https://github.com/masmullin2000/libbpf-sample/tree/02c7f945bf9027daedec04f485a320ba2df28204/c/simple
+> > contains broken code.
 > 
-> Am Montag, 23. Mai 2022, 18:18:47 CEST schrieb Guenter Roeck:
-> > On 5/23/22 08:18, Guo Ren wrote:
-> > > I tested Palmer's branch, it's okay:
-> > > 8810d7feee5a (HEAD -> for-next, palmer/for-next) riscv: Don't output a
-> > > bogus mmu-type on a no MMU kernel
-> > > 
-> > > I also tested linux-next, it's okay:
-> > > 
-> > > rv64_rootfs:
-> > > # uname -a
-> > > Linux buildroot 5.18.0-next-20220523 #7 SMP Mon May 23 11:15:17 EDT
-> > > 2022 riscv64 GNU/Linux
-> > > #
-> > 
-> > That is is ok with one setup doesn't mean it is ok with
-> > all setups. It is not ok with my root file system (from
-> > https://github.com/groeck/linux-build-test/tree/master/rootfs/riscv64),
-> > with qemu v6.2.
+> You are missing -g when calling clang to generate debug info (DWARF
+> and subsequently BTF). When BPF object file doesn't have BTF, we don't
+> generate those bss/data/rodata/etc sections of the skeleton. You
+> should be good just by adding -g.
 > 
-> That is very true that it shouldn't fail on any existing (qemu-)platform,
-> but as I remember also testing Guo's series on both riscv32 and riscv64
-> qemu platforms in the past, I guess it would be really helpful to get more
-> information about the failing platform you're experiencing so that we can
-> find the source of the issue.
-> 
-> As it looks like you both tested the same kernel source, I guess the only
-> differences could be in the qemu-version, kernel config and rootfs.
-> Is your rootfs something you can share or that can be rebuilt easily?
-> 
-I provided a link to my root file system above. The link points to two
-root file systems, for initrd (cpio archive) and for ext2.
-I also mentioned above that I used qemu v6.2. And below I said
 
-> My root file system uses musl.
+Thank you. By using -g, I am also unable to trigger the segfault
+I was trying to fix with the patch
+https://lore.kernel.org/bpf/20220523194917.igkgorco42537arb@jup/T/#u
 
-I attached the buildroot configuration below. The buildroot version,
-if I remember correctly, was 2021.02.
+I am not sure if there would be other ways to trigger the segfault.
 
-Kernel configuration is basically defconfig. However, I do see one
-detail that is possibly special in my configuration.
-
-    # The latest kernel assumes SBI version 0.3, but that doesn't match qemu
-    # at least up to version 6.2 and results in hangup/crashes during reboot
-    # with sifive_u emulations.
-    enable_config "${defconfig}" CONFIG_RISCV_SBI_V01
-
-Hope that helps,
-
-Guenter
-
----
-BR2_riscv=y
-BR2_TOOLCHAIN_BUILDROOT_MUSL=y
-BR2_KERNEL_HEADERS_4_19=y
-BR2_BINUTILS_VERSION_2_32_X=y
-BR2_TARGET_RUN_TESTSCRIPT=y
-BR2_SHUTDOWN_COMMAND_POWEROFF=y
-BR2_SYSTEM_DHCP="eth0"
-BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-BR2_PACKAGE_STRACE=y
-BR2_PACKAGE_I2C_TOOLS=y
-BR2_PACKAGE_PCIUTILS=y
-BR2_PACKAGE_DTC=y
-BR2_PACKAGE_DTC_PROGRAMS=y
-BR2_PACKAGE_IPROUTE2=y
-BR2_TARGET_ROOTFS_BTRFS=y
-BR2_TARGET_ROOTFS_CPIO=y
-BR2_TARGET_ROOTFS_CPIO_GZIP=y
-BR2_TARGET_ROOTFS_EXT2=y
-BR2_TARGET_ROOTFS_EXT2_SIZE="16M"
-BR2_TARGET_ROOTFS_EXT2_GZIP=y
-BR2_TARGET_ROOTFS_ISO_GZIP=y
-BR2_TARGET_ROOTFS_SQUASHFS=y
-# BR2_TARGET_ROOTFS_TAR is not set
-
+> >
+> > I apologize if this is an incorrect way to share external code.  I
+> > haven't found the proper way to share example code from
+> > kernelnewbies.org
+> >
+> > >
+> > > >                                 i, ident);
+> > > >                 }
+> > > >                 i++;
+> > > > --
+> > > > 2.36.1
+> > > >

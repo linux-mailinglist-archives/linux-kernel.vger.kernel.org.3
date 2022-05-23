@@ -2,39 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EE6D531001
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:19:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BE745310CD
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:20:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234301AbiEWKsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 06:48:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32938 "EHLO
+        id S235151AbiEWL5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 07:57:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234283AbiEWKst (ORCPT
+        with ESMTP id S235148AbiEWL51 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 06:48:49 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 831044BFC5
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 03:48:48 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3D0AA11FB;
-        Mon, 23 May 2022 03:48:48 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.9.63])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3C88A3F73D;
-        Mon, 23 May 2022 03:48:47 -0700 (PDT)
-Date:   Mon, 23 May 2022 11:48:43 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, nslusarek@gmx.net,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH] perf: Fix sys_perf_event_open() race against self
-Message-ID: <Yotmi2kM3mm+iPPU@FVFF77S0Q05N>
-References: <20220520183806.GV2578@worktop.programming.kicks-ass.net>
+        Mon, 23 May 2022 07:57:27 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1B2C5251C;
+        Mon, 23 May 2022 04:57:23 -0700 (PDT)
+Received: from mail-oo1-f46.google.com ([209.85.161.46]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1N17gy-1nhb8l2T6I-012XMt; Mon, 23 May 2022 13:57:21 +0200
+Received: by mail-oo1-f46.google.com with SMTP id f2-20020a4a8f42000000b0035e74942d42so2681036ool.13;
+        Mon, 23 May 2022 04:57:21 -0700 (PDT)
+X-Gm-Message-State: AOAM532YIqqlyrk3mbC67RSmeRmG15pMXndJUdh6ynMuzCJmLtYXDxKq
+        XJZRRBLguVyJBUnvoNrQkA/U9AaTMSXtrZ1jwDE=
+X-Google-Smtp-Source: ABdhPJz25Gt24MhXl+E72qufCOdw4x39awhhvsl+Xnqa65r2iahWrusogj8vUUSxWLBZ/N0deY8KYQbSs9eoO99jFuc=
+X-Received: by 2002:a05:6902:1143:b0:64f:9ab6:691e with SMTP id
+ p3-20020a056902114300b0064f9ab6691emr8642845ybu.480.1653303099023; Mon, 23
+ May 2022 03:51:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220520183806.GV2578@worktop.programming.kicks-ass.net>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220516163310.44842-1-nick.hawkins@hpe.com> <CAK8P3a0914=TM9f1CNcg_PXfHvt6nHDPyrvLp=0KO4hZM2GT5w@mail.gmail.com>
+ <DM4PR84MB192761B3970E4934D059C3F188D19@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
+In-Reply-To: <DM4PR84MB192761B3970E4934D059C3F188D19@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 23 May 2022 12:51:22 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1Pvn46kMoAv+HtRAOGDYcL76jPN2Wk-MqyJSPm--0sGQ@mail.gmail.com>
+Message-ID: <CAK8P3a1Pvn46kMoAv+HtRAOGDYcL76jPN2Wk-MqyJSPm--0sGQ@mail.gmail.com>
+Subject: Re: [PATCH v8 0/8] Introduce HPE GXP Architecture
+To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "Verdun, Jean-Marie" <verdun@hpe.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Joel Stanley <joel@jms.id.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:9PY63lXD/LiNRAm3aMHCQC54S3LsvnAbSYvFl+xG6YXZfXH+xga
+ 6spKXnE5J1vAqgHRnvbccWt75G+TU01YfpRh+4QgITPb7WQFU/fRdLlTAketmmjx1uOIDbA
+ UHbMYSWqFlZh00QZtCrvictXFJBkpLsmTIfLGgqbY9s1op5ACunJ/QUXD3Q9CtS6+ScOjii
+ ty656h5YLqjAiW/sHjiUQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:/sJgCILkmTo=:xx5jLIHQD7Mqh6bNiUR1T+
+ Q85BKPvNwu7+zVqGcaZEAIqg2h9SHFk5UCpOcLBt0vKBx0zU1BFT9ZXJ0YT/hO0IYdhllGW9O
+ STGZzfc3Af59x7qhV3jhbW4THTkxpgwMA+RTUpIow2c+6+8dVdG11g/hJ1cUBhPUxWFq6zq4I
+ muZLuW52F2/Bz11BO2X2S/0CQhKNd1WkLxGPcIAxuuRPMIwRyh+7LNeWTvs47/AG97t3Y3p7U
+ jfAg11oAAWMzrTaHjMYdR42805tKjG/cbSzIG3ELyjmtrPmmNexgg6rlbgz/BM6FW+YdTD5KE
+ vkxz77wJX7mOTh7G0krZDCMdI4qsT5I0EZP4kd1XNKtv8X7xFuWQo24dt3Prof/OjDrjapBev
+ 0oeWzaUGGevMXH1nuRs4hDcqQZXW/2jfCD2yoPW1eHD3ZuMuVqr8LbzyroKuwxJgKvFrWSblu
+ 51fOdPwOlJsZzMbi8PqafsdC16YLrmBHdlMJDoc4leMEvt2LQD/QqDKMEb8fN/pvPRww6Vh1f
+ 7pc0dl3EGN5YoYiX6nuseNJ15Xu9ixwAyPGZzN2c7JY04xftbtjIuwn1P2LAcqwEnoQtMmczy
+ YL0LbdCtTA7e7yJposRc1yxEmhmlpy3CSlCzTvbZ86Plg2e1PQz6w6VN6ue0OYdFTxxgh01It
+ UXNYPpJsmhsZFAgsuCMQiWSYltX154i9Lmk6UyUCH6RDiTCrP3Lp0JkUlZDdpQu6FMd0zlH0s
+ RU5SMhN/hJoJdcUWt3uC67lRgIObrS7HmMpF+SwvQrVQxAjIsmmIMGPRPKcmeJ7/LtWWc4d86
+ 1eght4I0CKgXiyas3xT67sBEnc2WFeiHBnsJx0+7J3T8nSOL3Fg/QCv/BG7dYyQAf8UzvhtZk
+ RFbPcUWOXgx/lEMn23QA==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -42,96 +79,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter,
+On Wed, May 18, 2022 at 3:12 PM Hawkins, Nick <nick.hawkins@hpe.com> wrote:
+>
+> We have a talk planned for the North America Open Source Summit (June 20-24)
+> and it would be great if this patch set could be in Linux by then. If it is not possible
+> we can handle that.
 
-On Fri, May 20, 2022 at 08:38:06PM +0200, Peter Zijlstra wrote:
-> 
-> Norbert reported that it's possible to race sys_perf_event_open() such
-> that the looser ends up in another context from the group leader,
-> triggering many WARNs.
+That's a good enough reason for me, I'll see what I can do, and will
+keep it in the
+arm/late branch until next week. If everything goes well with the soc
+tree and your
+patches, I'll send it on then, otherwise it will have to wait a release.
 
-I'm hitting the same with my local arm64 Syzkaller instance, atop v5.18-rc6.
-
-> The move_group case checks for races against itself, but the
-> !move_group case doesn't, seemingly relying on the previous
-> group_leader->ctx == ctx check. However, that check is racy due to not
-> holding any locks at that time.
-> 
-> Therefore, re-check the result after acquiring locks and bailing
-> if they no longer match.
-> 
-> Additionally, clarify the not_move_group case from the
-> move_group-vs-move_group race.
-> 
-> Fixes: f63a8daa5812 ("perf: Fix event->ctx locking")
-> Reported-by: Norbert Slusarek <nslusarek@gmx.net>
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->  kernel/events/core.c |   14 ++++++++++++++
->  1 file changed, 14 insertions(+)
-> 
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -12217,6 +12217,9 @@ SYSCALL_DEFINE5(perf_event_open,
->  		 * Do not allow to attach to a group in a different task
->  		 * or CPU context. If we're moving SW events, we'll fix
->  		 * this up later, so allow that.
-> +		 *
-> +		 * Racy, not holding group_leader->ctx->mutex, see comment with
-> +		 * perf_event_ctx_lock().
->  		 */
->  		if (!move_group && group_leader->ctx != ctx)
->  			goto err_context;
-
-I assume that given we say we're not holding the mutex that this is truly racy,
-and a concurrent write can happen at any time. If that's the case, shouldn't we
-be using *_ONCE() to manipulate perf_event::ctx?
-
-... or could we remove the racy read entirely, and just rely on the later
-check with ctx->mutex held? We can always reach that by chance anyway, so
-there's not a functional need to bail out early, and consistently using the
-later test removes some potential for introducing similar races in future.
-
-FWIW, with this patch as-is applied atop v5.18-rc6, I no longer see the issue
-in testing with the reproducer Syzkaller came up with. That would normally take
-a few seconds, but it now survives several minutes.
-
-For posterity, that reproducer was:
-
-----8<----
-r0 = perf_event_open$cgroup(&(0x7f0000000100)={0x1, 0x80, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, @perf_config_ext}, 0xffffffffffffffff, 0x0, 0xffffffffffffffff, 0x0)
-r1 = dup(r0)
-perf_event_open(&(0x7f00000001c0)={0x0, 0x80, 0x0, 0x0, 0x0, 0x0, 0x0, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, @perf_bp={0x0}}, 0xffffffffffffffff, 0x0, r1, 0x0) (async)
-perf_event_open$cgroup(&(0x7f0000000100)={0x1, 0x80, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x10, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, @perf_bp={0x0, 0x5}, 0x0, 0x0, 0x0, 0x0, 0xfffffffffffffffe, 0x0, 0x0, 0x0, 0x0, 0x0, 0x200000000000000}, 0xffffffffffffffff, 0x0, r1, 0x0)
----->8----
-
-Thanks,
-Mark.
-
-> @@ -12282,6 +12285,7 @@ SYSCALL_DEFINE5(perf_event_open,
->  			} else {
->  				perf_event_ctx_unlock(group_leader, gctx);
->  				move_group = 0;
-> +				goto not_move_group;
->  			}
->  		}
->  
-> @@ -12298,7 +12302,17 @@ SYSCALL_DEFINE5(perf_event_open,
->  		}
->  	} else {
->  		mutex_lock(&ctx->mutex);
-> +
-> +		/*
-> +		 * Now that we hold ctx->lock, (re)validate group_leader->ctx == ctx,
-> +		 * see the group_leader && !move_group test earlier.
-> +		 */
-> +		if (group_leader && group_leader->ctx != ctx) {
-> +			err = -EINVAL;
-> +			goto err_locked;
-> +		}
->  	}
-> +not_move_group:
->  
->  	if (ctx->task == TASK_TOMBSTONE) {
->  		err = -ESRCH;
-> 
+      Arnd

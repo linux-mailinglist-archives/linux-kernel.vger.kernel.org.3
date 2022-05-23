@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B76D531875
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:54:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABE72531BD7
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243097AbiEWSEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 14:04:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37092 "EHLO
+        id S240411AbiEWRQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:16:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241838AbiEWRgI (ORCPT
+        with ESMTP id S240817AbiEWRMl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:36:08 -0400
+        Mon, 23 May 2022 13:12:41 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77DF885EDE;
-        Mon, 23 May 2022 10:30:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93F2D6A417;
+        Mon, 23 May 2022 10:12:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 06583611E3;
-        Mon, 23 May 2022 17:29:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E0A3C385A9;
-        Mon, 23 May 2022 17:29:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 037EF6150E;
+        Mon, 23 May 2022 17:11:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BEAEC385A9;
+        Mon, 23 May 2022 17:11:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326960;
-        bh=7sSSQMWNwve7XPznTlMz+71caWvRUSam/TzSkxT70hs=;
+        s=korg; t=1653325889;
+        bh=ASIjV+pChRoTXWfJg0esXtdUYY+xsNmlwSH37KNsLMM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JsCm3O3nMFHrVDzH2gY9cidg/zahRlyk55Z+0JKh7A0g5WHEGF8Zxq/kqUtxxEDm1
-         Cm1H7mMU8nAHzpTWlb19+y97XR3B9ifQNzm01C/DH8Ju3JOOsSbuRM7DzmzBdSRQP+
-         dQuyXxcAxsXf+0KcJYGYErHstVpkWeeuaoT66cH4=
+        b=uqXft+ra9KMsjAASn8/5UWE+KzoHr1MiAB6Ypu8I20tR8iqWAtZQIlolX/9YH8f86
+         vb9LGasDHzErcbBA5T/e3g98GfmYK1dhSrSbYs7NUy8AhaPULk6yEuxi07wtWT4NAa
+         wOHADDZRNsCLPR5QV3AKaZZKL4faaZ2jsVGImv4U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 113/158] mptcp: fix checksum byte order
-Date:   Mon, 23 May 2022 19:04:30 +0200
-Message-Id: <20220523165849.710903725@linuxfoundation.org>
+Subject: [PATCH 5.4 04/68] rtc: fix use-after-free on device removal
+Date:   Mon, 23 May 2022 19:04:31 +0200
+Message-Id: <20220523165803.290371003@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165830.581652127@linuxfoundation.org>
-References: <20220523165830.581652127@linuxfoundation.org>
+In-Reply-To: <20220523165802.500642349@linuxfoundation.org>
+References: <20220523165802.500642349@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,151 +56,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paolo Abeni <pabeni@redhat.com>
+From: Vincent Whitchurch <vincent.whitchurch@axis.com>
 
-[ Upstream commit ba2c89e0ea74a904d5231643245753d77422e7f5 ]
+[ Upstream commit c8fa17d9f08a448184f03d352145099b5beb618e ]
 
-The MPTCP code typecasts the checksum value to u16 and
-then converts it to big endian while storing the value into
-the MPTCP option.
+If the irqwork is still scheduled or running while the RTC device is
+removed, a use-after-free occurs in rtc_timer_do_work().  Cleanup the
+timerqueue and ensure the work is stopped to fix this.
 
-As a result, the wire encoding for little endian host is
-wrong, and that causes interoperabilty interoperability
-issues with other implementation or host with different endianness.
+ BUG: KASAN: use-after-free in mutex_lock+0x94/0x110
+ Write of size 8 at addr ffffff801d846338 by task kworker/3:1/41
 
-Address the issue writing in the packet the unmodified __sum16 value.
+ Workqueue: events rtc_timer_do_work
+ Call trace:
+  mutex_lock+0x94/0x110
+  rtc_timer_do_work+0xec/0x630
+  process_one_work+0x5fc/0x1344
+  ...
 
-MPTCP checksum is disabled by default, interoperating with systems
-with bad mptcp-level csum encoding should cause fallback to TCP.
+ Allocated by task 551:
+  kmem_cache_alloc_trace+0x384/0x6e0
+  devm_rtc_allocate_device+0xf0/0x574
+  devm_rtc_device_register+0x2c/0x12c
+  ...
 
-Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/275
-Fixes: c5b39e26d003 ("mptcp: send out checksum for DSS")
-Fixes: 390b95a5fb84 ("mptcp: receive checksum for DSS")
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+ Freed by task 572:
+  kfree+0x114/0x4d0
+  rtc_device_release+0x64/0x80
+  device_release+0x8c/0x1f4
+  kobject_put+0x1c4/0x4b0
+  put_device+0x20/0x30
+  devm_rtc_release_device+0x1c/0x30
+  devm_action_release+0x54/0x90
+  release_nodes+0x124/0x310
+  devres_release_group+0x170/0x240
+  i2c_device_remove+0xd8/0x314
+  ...
+
+ Last potentially related work creation:
+  insert_work+0x5c/0x330
+  queue_work_on+0xcc/0x154
+  rtc_set_time+0x188/0x5bc
+  rtc_dev_ioctl+0x2ac/0xbd0
+  ...
+
+Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Link: https://lore.kernel.org/r/20211210160951.7718-1-vincent.whitchurch@axis.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/mptcp/options.c  | 36 ++++++++++++++++++++++++------------
- net/mptcp/protocol.h |  2 +-
- net/mptcp/subflow.c  |  2 +-
- 3 files changed, 26 insertions(+), 14 deletions(-)
+ drivers/rtc/class.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/net/mptcp/options.c b/net/mptcp/options.c
-index 645dd984fef0..9ac75689a99d 100644
---- a/net/mptcp/options.c
-+++ b/net/mptcp/options.c
-@@ -107,7 +107,7 @@ static void mptcp_parse_option(const struct sk_buff *skb,
- 			ptr += 2;
- 		}
- 		if (opsize == TCPOLEN_MPTCP_MPC_ACK_DATA_CSUM) {
--			mp_opt->csum = (__force __sum16)get_unaligned_be16(ptr);
-+			mp_opt->csum = get_unaligned((__force __sum16 *)ptr);
- 			mp_opt->suboptions |= OPTION_MPTCP_CSUMREQD;
- 			ptr += 2;
- 		}
-@@ -221,7 +221,7 @@ static void mptcp_parse_option(const struct sk_buff *skb,
- 
- 			if (opsize == expected_opsize + TCPOLEN_MPTCP_DSS_CHECKSUM) {
- 				mp_opt->suboptions |= OPTION_MPTCP_CSUMREQD;
--				mp_opt->csum = (__force __sum16)get_unaligned_be16(ptr);
-+				mp_opt->csum = get_unaligned((__force __sum16 *)ptr);
- 				ptr += 2;
- 			}
- 
-@@ -1236,7 +1236,7 @@ static void mptcp_set_rwin(const struct tcp_sock *tp)
- 		WRITE_ONCE(msk->rcv_wnd_sent, ack_seq);
- }
- 
--u16 __mptcp_make_csum(u64 data_seq, u32 subflow_seq, u16 data_len, __wsum sum)
-+__sum16 __mptcp_make_csum(u64 data_seq, u32 subflow_seq, u16 data_len, __wsum sum)
+diff --git a/drivers/rtc/class.c b/drivers/rtc/class.c
+index 9458e6d6686a..8b434213bc7a 100644
+--- a/drivers/rtc/class.c
++++ b/drivers/rtc/class.c
+@@ -26,6 +26,15 @@ struct class *rtc_class;
+ static void rtc_device_release(struct device *dev)
  {
- 	struct csum_pseudo_header header;
- 	__wsum csum;
-@@ -1252,15 +1252,25 @@ u16 __mptcp_make_csum(u64 data_seq, u32 subflow_seq, u16 data_len, __wsum sum)
- 	header.csum = 0;
- 
- 	csum = csum_partial(&header, sizeof(header), sum);
--	return (__force u16)csum_fold(csum);
-+	return csum_fold(csum);
- }
- 
--static u16 mptcp_make_csum(const struct mptcp_ext *mpext)
-+static __sum16 mptcp_make_csum(const struct mptcp_ext *mpext)
- {
- 	return __mptcp_make_csum(mpext->data_seq, mpext->subflow_seq, mpext->data_len,
- 				 ~csum_unfold(mpext->csum));
- }
- 
-+static void put_len_csum(u16 len, __sum16 csum, void *data)
-+{
-+	__sum16 *sumptr = data + 2;
-+	__be16 *ptr = data;
+ 	struct rtc_device *rtc = to_rtc_device(dev);
++	struct timerqueue_head *head = &rtc->timerqueue;
++	struct timerqueue_node *node;
 +
-+	put_unaligned_be16(len, ptr);
++	mutex_lock(&rtc->ops_lock);
++	while ((node = timerqueue_getnext(head)))
++		timerqueue_del(head, node);
++	mutex_unlock(&rtc->ops_lock);
 +
-+	put_unaligned(csum, sumptr);
-+}
-+
- void mptcp_write_options(__be32 *ptr, const struct tcp_sock *tp,
- 			 struct mptcp_out_options *opts)
- {
-@@ -1328,8 +1338,9 @@ void mptcp_write_options(__be32 *ptr, const struct tcp_sock *tp,
- 			put_unaligned_be32(mpext->subflow_seq, ptr);
- 			ptr += 1;
- 			if (opts->csum_reqd) {
--				put_unaligned_be32(mpext->data_len << 16 |
--						   mptcp_make_csum(mpext), ptr);
-+				put_len_csum(mpext->data_len,
-+					     mptcp_make_csum(mpext),
-+					     ptr);
- 			} else {
- 				put_unaligned_be32(mpext->data_len << 16 |
- 						   TCPOPT_NOP << 8 | TCPOPT_NOP, ptr);
-@@ -1376,11 +1387,12 @@ void mptcp_write_options(__be32 *ptr, const struct tcp_sock *tp,
- 			goto mp_capable_done;
++	cancel_work_sync(&rtc->irqwork);
  
- 		if (opts->csum_reqd) {
--			put_unaligned_be32(opts->data_len << 16 |
--					   __mptcp_make_csum(opts->data_seq,
--							     opts->subflow_seq,
--							     opts->data_len,
--							     ~csum_unfold(opts->csum)), ptr);
-+			put_len_csum(opts->data_len,
-+				     __mptcp_make_csum(opts->data_seq,
-+						       opts->subflow_seq,
-+						       opts->data_len,
-+						       ~csum_unfold(opts->csum)),
-+				     ptr);
- 		} else {
- 			put_unaligned_be32(opts->data_len << 16 |
- 					   TCPOPT_NOP << 8 | TCPOPT_NOP, ptr);
-diff --git a/net/mptcp/protocol.h b/net/mptcp/protocol.h
-index a1c845eb47bd..aec767ee047a 100644
---- a/net/mptcp/protocol.h
-+++ b/net/mptcp/protocol.h
-@@ -725,7 +725,7 @@ void mptcp_token_destroy(struct mptcp_sock *msk);
- void mptcp_crypto_key_sha(u64 key, u32 *token, u64 *idsn);
- 
- void mptcp_crypto_hmac_sha(u64 key1, u64 key2, u8 *msg, int len, void *hmac);
--u16 __mptcp_make_csum(u64 data_seq, u32 subflow_seq, u16 data_len, __wsum sum);
-+__sum16 __mptcp_make_csum(u64 data_seq, u32 subflow_seq, u16 data_len, __wsum sum);
- 
- void __init mptcp_pm_init(void);
- void mptcp_pm_data_init(struct mptcp_sock *msk);
-diff --git a/net/mptcp/subflow.c b/net/mptcp/subflow.c
-index 1d4d84efe8f5..651f01d13191 100644
---- a/net/mptcp/subflow.c
-+++ b/net/mptcp/subflow.c
-@@ -846,7 +846,7 @@ static enum mapping_status validate_data_csum(struct sock *ssk, struct sk_buff *
- {
- 	struct mptcp_subflow_context *subflow = mptcp_subflow_ctx(ssk);
- 	u32 offset, seq, delta;
--	u16 csum;
-+	__sum16 csum;
- 	int len;
- 
- 	if (!csum_reqd)
+ 	ida_simple_remove(&rtc_ida, rtc->id);
+ 	kfree(rtc);
 -- 
 2.35.1
 

@@ -2,69 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E512531DAA
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 23:23:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4916D531DAC
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 23:25:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231734AbiEWVXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 17:23:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43040 "EHLO
+        id S231166AbiEWVZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 17:25:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231673AbiEWVXd (ORCPT
+        with ESMTP id S229812AbiEWVZG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 17:23:33 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE9949968D
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 14:23:31 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id q18so14189500pln.12
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 14:23:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=IOOCRWVQuYLT3FPHZGft954GFHbqYk00WcogZz6fNSc=;
-        b=DMh172YL0SWz0Py50NQZeLA0sEYKpK55bwc4q7lq9cmOEyKsj0IeAuPX555J3dSUnt
-         zNqMBOs2aqG6l36kV77RKtEUqBPJGkGLWndj0J8qwLHonQIXgZ1omt0uQuv7hzJoPOAv
-         dmIERaPWSV6NjGEh3TmVDBuwzCRhes5t9XX7U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=IOOCRWVQuYLT3FPHZGft954GFHbqYk00WcogZz6fNSc=;
-        b=AC3nCRxg/ntFllZzQsAlENYo6hbbeGI4dDnF71FEybAJ+c70Ih4skpOg/fceStkI6P
-         LqfYYOLz4KFmt55yGxLIdQeQeOolIgokjA7sZKY/yKmhHBGaoNSYhqlbt/mHI7cHbPHy
-         NkLPIzdvHjnrBbA3tINTN2Cf5LZ2uF7kH19gEpXAjAr8e2iUx+MJzW+UG+KCsCmxuk7A
-         EQLMDewOtAq+xRp+UsjysD+f2NEV7z6M4devAKa3O8PWU3S2x5NXaEoGSfAXu/vNbArB
-         /ahonLf/oYECS+QnWpPKBVikGDJtuGDNXxz4HkuEj7f3MyaJZ9nni85fLStWyuxTKVeN
-         wwJQ==
-X-Gm-Message-State: AOAM530VTpjk/pjf4gCUqeCZlYp8BwrANYXhjGaV0Mu46HeVedyLZ51I
-        mBAxhHF1xWCEn16KU6Qk2vP1hw==
-X-Google-Smtp-Source: ABdhPJwf7Nn4MG1Gs9/6Uf4iOuIkG1SRZfDvZje9RX2YSEEoa0x2v9W0UUyha5liZ667CvK0UX7nLg==
-X-Received: by 2002:a17:90b:4a01:b0:1dc:67b8:983f with SMTP id kk1-20020a17090b4a0100b001dc67b8983fmr980579pjb.1.1653341011249;
-        Mon, 23 May 2022 14:23:31 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:64b0:b6b9:c0f3:1cc8])
-        by smtp.gmail.com with ESMTPSA id x2-20020a170902ec8200b0015e8d4eb234sm5545922plg.126.2022.05.23.14.23.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 14:23:30 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        swboyd@chromium.org, mka@chromium.org,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] HID: i2c-hid: elan: Add support for Elan eKTH6915 i2c-hid touchscreens
-Date:   Mon, 23 May 2022 14:23:24 -0700
-Message-Id: <20220523142257.v2.2.I2d3f735a485157eeaa24d60be8a327f98101789d@changeid>
-X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
-In-Reply-To: <20220523142257.v2.1.Iedc61f9ef220a89af6a031200a7850a27a440134@changeid>
-References: <20220523142257.v2.1.Iedc61f9ef220a89af6a031200a7850a27a440134@changeid>
+        Mon, 23 May 2022 17:25:06 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4818568335
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 14:25:05 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ntFXw-0007Ww-4T; Mon, 23 May 2022 23:25:00 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ntFXw-0049Tq-GB; Mon, 23 May 2022 23:24:59 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ntFXt-00BgXU-U7; Mon, 23 May 2022 23:24:57 +0200
+Date:   Mon, 23 May 2022 23:24:57 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Tony Lindgren <tony@atomide.com>, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH 1/2] mfd: twl6030: Make twl6030_exit_irq() return void
+Message-ID: <20220523212457.3cd5f5afwla2ahxi@pengutronix.de>
+References: <20220113101430.12869-1-u.kleine-koenig@pengutronix.de>
+ <20220113101430.12869-2-u.kleine-koenig@pengutronix.de>
+ <Ymq/tVTo2JIEDEQa@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="fqbvmdiboxepjnhz"
+Content-Disposition: inline
+In-Reply-To: <Ymq/tVTo2JIEDEQa@google.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,215 +55,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Like many i2c-hid touchscreen controllers, the Elan eKTH6915 has a
-reset GPIO hooked up to it. According to the datasheet, the way we're
-supposed to turn the touchscreen on is:
 
-1. Turn on the 3.3V supply.
-2. Turn on the IO supply. It's OK if this is hardwired to the 3.3V
-   supply, but if it's not then it must be turned on _after_ the 3.3V
-   supply.
-3. Wait >= 1 ms.
-4. Deassert the reset GPIO (reset GPIO is active low, so there would
-   be a leakage path if this was deasserted _before_ the IO supply).
-5. Wait 300 ms.
+--fqbvmdiboxepjnhz
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Much of the above can be handled by the generic i2c-hid-of driver, but
-the "reset" GPIO is not supported by that driver. Thus we'll do the
-same as we did for Goodix and add a new tiny driver that uses the
-i2c-hid core.
+Hello Lee,
 
-NOTE: support for this new touchscreen could theorically fit into the
-Goodix driver. I've made it a separate driver because the Elan driver
-supports _two_ regulators and it's unclear exactly how that would fit
-in with commit 18eeef46d359 ("HID: i2c-hid: goodix: Tie the reset line
-to true state of the regulator").
+On Thu, Apr 28, 2022 at 05:24:21PM +0100, Lee Jones wrote:
+> On Thu, 13 Jan 2022, Uwe Kleine-K=F6nig wrote:
+>=20
+> > This function returns 0 unconditionally, so there is no benefit in
+> > returning a value at all and make the caller do error checking.
+> >=20
+> > Also the caller (twl_remove()) cannot do anything sensible with an error
+> > code. Passing it up the call stack isn't a good option because the i2c =
+core
+> > ignores error codes (apart from emitting an error message).
+> >=20
+> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> > ---
+> >  drivers/mfd/twl-core.c    | 4 ++--
+> >  drivers/mfd/twl-core.h    | 2 +-
+> >  drivers/mfd/twl6030-irq.c | 3 +--
+> >  3 files changed, 4 insertions(+), 5 deletions(-)
+>=20
+> Applied, thanks.
 
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
-Reviewed-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
----
+I would have expected these to appear in next since you wrote to have
+applied this series. But they have not though your claim to have applied
+them is over three weeks old now?! :-\
 
-Changes in v2:
-- Add descriptor_address to data structure and rename.
+Best regards
+Uwe
 
- drivers/hid/i2c-hid/Kconfig           |  15 +++
- drivers/hid/i2c-hid/Makefile          |   1 +
- drivers/hid/i2c-hid/i2c-hid-of-elan.c | 130 ++++++++++++++++++++++++++
- 3 files changed, 146 insertions(+)
- create mode 100644 drivers/hid/i2c-hid/i2c-hid-of-elan.c
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-diff --git a/drivers/hid/i2c-hid/Kconfig b/drivers/hid/i2c-hid/Kconfig
-index a16c6a69680b..5273ee2bb134 100644
---- a/drivers/hid/i2c-hid/Kconfig
-+++ b/drivers/hid/i2c-hid/Kconfig
-@@ -32,6 +32,21 @@ config I2C_HID_OF
- 	  will be called i2c-hid-of.  It will also build/depend on the
- 	  module i2c-hid.
- 
-+config I2C_HID_OF_ELAN
-+	tristate "Driver for Elan hid-i2c based devices on OF systems"
-+	default n
-+	depends on I2C && INPUT && OF
-+	help
-+	  Say Y here if you want support for Elan i2c devices that use
-+	  the i2c-hid protocol on Open Firmware (Device Tree)-based
-+	  systems.
-+
-+	  If unsure, say N.
-+
-+	  This support is also available as a module.  If so, the module
-+	  will be called i2c-hid-of-elan.  It will also build/depend on
-+	  the module i2c-hid.
-+
- config I2C_HID_OF_GOODIX
- 	tristate "Driver for Goodix hid-i2c based devices on OF systems"
- 	default n
-diff --git a/drivers/hid/i2c-hid/Makefile b/drivers/hid/i2c-hid/Makefile
-index 302545a771f3..55bd5e0f35af 100644
---- a/drivers/hid/i2c-hid/Makefile
-+++ b/drivers/hid/i2c-hid/Makefile
-@@ -10,4 +10,5 @@ i2c-hid-$(CONFIG_DMI)				+= i2c-hid-dmi-quirks.o
- 
- obj-$(CONFIG_I2C_HID_ACPI)			+= i2c-hid-acpi.o
- obj-$(CONFIG_I2C_HID_OF)			+= i2c-hid-of.o
-+obj-$(CONFIG_I2C_HID_OF_ELAN)			+= i2c-hid-of-elan.o
- obj-$(CONFIG_I2C_HID_OF_GOODIX)			+= i2c-hid-of-goodix.o
-diff --git a/drivers/hid/i2c-hid/i2c-hid-of-elan.c b/drivers/hid/i2c-hid/i2c-hid-of-elan.c
-new file mode 100644
-index 000000000000..2d991325e734
---- /dev/null
-+++ b/drivers/hid/i2c-hid/i2c-hid-of-elan.c
-@@ -0,0 +1,130 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Driver for Elan touchscreens that use the i2c-hid protocol.
-+ *
-+ * Copyright 2020 Google LLC
-+ */
-+
-+#include <linux/delay.h>
-+#include <linux/device.h>
-+#include <linux/gpio/consumer.h>
-+#include <linux/i2c.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/pm.h>
-+#include <linux/regulator/consumer.h>
-+
-+#include "i2c-hid.h"
-+
-+struct elan_i2c_hid_chip_data {
-+	unsigned int post_gpio_reset_delay_ms;
-+	unsigned int post_power_delay_ms;
-+	u16 hid_descriptor_address;
-+};
-+
-+struct i2c_hid_of_elan {
-+	struct i2chid_ops ops;
-+
-+	struct regulator *vcc33;
-+	struct regulator *vccio;
-+	struct gpio_desc *reset_gpio;
-+	const struct elan_i2c_hid_chip_data *chip_data;
-+};
-+
-+static int elan_i2c_hid_power_up(struct i2chid_ops *ops)
-+{
-+	struct i2c_hid_of_elan *ihid_elan =
-+		container_of(ops, struct i2c_hid_of_elan, ops);
-+	int ret;
-+
-+	ret = regulator_enable(ihid_elan->vcc33);
-+	if (ret)
-+		return ret;
-+
-+	ret = regulator_enable(ihid_elan->vccio);
-+	if (ret) {
-+		regulator_disable(ihid_elan->vcc33);
-+		return ret;
-+	}
-+
-+	if (ihid_elan->chip_data->post_power_delay_ms)
-+		msleep(ihid_elan->chip_data->post_power_delay_ms);
-+
-+	gpiod_set_value_cansleep(ihid_elan->reset_gpio, 0);
-+	if (ihid_elan->chip_data->post_gpio_reset_delay_ms)
-+		msleep(ihid_elan->chip_data->post_gpio_reset_delay_ms);
-+
-+	return 0;
-+}
-+
-+static void elan_i2c_hid_power_down(struct i2chid_ops *ops)
-+{
-+	struct i2c_hid_of_elan *ihid_elan =
-+		container_of(ops, struct i2c_hid_of_elan, ops);
-+
-+	gpiod_set_value_cansleep(ihid_elan->reset_gpio, 1);
-+	regulator_disable(ihid_elan->vccio);
-+	regulator_disable(ihid_elan->vcc33);
-+}
-+
-+static int i2c_hid_of_elan_probe(struct i2c_client *client,
-+				 const struct i2c_device_id *id)
-+{
-+	struct i2c_hid_of_elan *ihid_elan;
-+
-+	ihid_elan = devm_kzalloc(&client->dev, sizeof(*ihid_elan), GFP_KERNEL);
-+	if (!ihid_elan)
-+		return -ENOMEM;
-+
-+	ihid_elan->ops.power_up = elan_i2c_hid_power_up;
-+	ihid_elan->ops.power_down = elan_i2c_hid_power_down;
-+
-+	/* Start out with reset asserted */
-+	ihid_elan->reset_gpio =
-+		devm_gpiod_get_optional(&client->dev, "reset", GPIOD_OUT_HIGH);
-+	if (IS_ERR(ihid_elan->reset_gpio))
-+		return PTR_ERR(ihid_elan->reset_gpio);
-+
-+	ihid_elan->vccio = devm_regulator_get(&client->dev, "vccio");
-+	if (IS_ERR(ihid_elan->vccio))
-+		return PTR_ERR(ihid_elan->vccio);
-+
-+	ihid_elan->vcc33 = devm_regulator_get(&client->dev, "vcc33");
-+	if (IS_ERR(ihid_elan->vcc33))
-+		return PTR_ERR(ihid_elan->vcc33);
-+
-+	ihid_elan->chip_data = device_get_match_data(&client->dev);
-+
-+	return i2c_hid_core_probe(client, &ihid_elan->ops,
-+				  ihid_elan->chip_data->hid_descriptor_address, 0);
-+}
-+
-+static const struct elan_i2c_hid_chip_data elan_ekth6915_chip_data = {
-+	.post_power_delay_ms = 1,
-+	.post_gpio_reset_delay_ms = 300,
-+	.hid_descriptor_address = 0x0001,
-+};
-+
-+static const struct of_device_id elan_i2c_hid_of_match[] = {
-+	{ .compatible = "elan,ekth6915", .data = &elan_ekth6915_chip_data },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, elan_i2c_hid_of_match);
-+
-+static struct i2c_driver elan_i2c_hid_ts_driver = {
-+	.driver = {
-+		.name	= "i2c_hid_of_elan",
-+		.pm	= &i2c_hid_core_pm,
-+		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
-+		.of_match_table = of_match_ptr(elan_i2c_hid_of_match),
-+	},
-+	.probe		= i2c_hid_of_elan_probe,
-+	.remove		= i2c_hid_core_remove,
-+	.shutdown	= i2c_hid_core_shutdown,
-+};
-+module_i2c_driver(elan_i2c_hid_ts_driver);
-+
-+MODULE_AUTHOR("Douglas Anderson <dianders@chromium.org>");
-+MODULE_DESCRIPTION("Elan i2c-hid touchscreen driver");
-+MODULE_LICENSE("GPL");
--- 
-2.36.1.124.g0e6072fb45-goog
+--fqbvmdiboxepjnhz
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmKL+6YACgkQwfwUeK3K
+7Alx3wf+Pgvhe1l5WLnaEBEGjKDphT/lEXXiucONwPGZm8+iSs3zSCZSsO9+DSMp
+86EA9qc4rFval3zw4YnxxWQRDp1Hp3rAjduP/N6BhEizKdfaPEq4ZyZZwLctt20o
+KAt3oXT07jrpn1ZRH8Np6OBUhVBIUFZaVTVjRZ8LyyxZpqwHq9XqBiPv5f2WB4Tz
+Dv1Fs1UMv7fSDStJyyfryHlMijn1cUGhbh/jm/WG/ODI/VoB6xK/G2+xGcpSO5ec
+ju9iKw5h24KRm6eupEnIjsKryi4+DUYVRtCeZBwCJRtbXnBVAQx4FxRANOmGSz8V
+tVemjWWCMFsc68dNiPPSh7mc7uQmVg==
+=AN+o
+-----END PGP SIGNATURE-----
+
+--fqbvmdiboxepjnhz--

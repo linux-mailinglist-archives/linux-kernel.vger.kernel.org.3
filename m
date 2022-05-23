@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F80C531868
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:54:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55050531B14
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236088AbiEWRZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:25:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58718 "EHLO
+        id S243794AbiEWRmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:42:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240698AbiEWRQk (ORCPT
+        with ESMTP id S242588AbiEWR1r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:16:40 -0400
+        Mon, 23 May 2022 13:27:47 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4856F3BFA8;
-        Mon, 23 May 2022 10:16:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFD0F81487;
+        Mon, 23 May 2022 10:23:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 36EF461337;
-        Mon, 23 May 2022 17:13:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42F29C385AA;
-        Mon, 23 May 2022 17:13:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C0A9614F8;
+        Mon, 23 May 2022 17:13:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 774A7C385A9;
+        Mon, 23 May 2022 17:13:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326011;
-        bh=rxs6VDxjlSlsa8eXEMlrj2IGeSz+cSzxHHDu/XTGxjQ=;
+        s=korg; t=1653326030;
+        bh=2QgOXiM4EQkURd2ae2oBmPeErvRCCOf1ZEFxKoDu+O8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UwkfwNlBI4FPmsmcbjBrnq88Cnnie0rjo7+eIungHwBf+Uf7Zu1qYKqdc0Hsp4hZP
-         oyj8OUC4iqfLkVJfoOCA/KGgXc2UJd6apQ3UMpqIAHCLrHl/G7GyJMJ2RnPXtt2Z7g
-         yhOggqWP8d4jfIcfjVYbAT/kpKaUujliBirzc58c=
+        b=pN3nAQ5RlZ9eD0DFWjWJUAB5tlbPIdZKGZX3k+vclhTBAH4m7227EGZI0rlUDLzho
+         y8/aIDR2AVndDhPf50ed8fiX04EixNpSTGlgwIHI0Qi9XTEGHEeHSJM5Z+FBJ8haXl
+         BrmC1rUIjNB4I+Kmn/fACRNuglP/IYKGmjngKu2E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paul Greenwalt <paul.greenwalt@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Sasha Levin <sashal@kernel.org>,
-        Gurucharan <gurucharanx.g@intel.com>
-Subject: [PATCH 5.4 40/68] ice: fix possible under reporting of ethtool Tx and Rx statistics
+        stable@vger.kernel.org, Minh Yuan <yuanmingbuaa@gmail.com>,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        Denis Efremov <efremov@linux.com>, Willy Tarreau <w@1wt.eu>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.10 03/97] floppy: use a statically allocated error counter
 Date:   Mon, 23 May 2022 19:05:07 +0200
-Message-Id: <20220523165809.213413459@linuxfoundation.org>
+Message-Id: <20220523165812.830412487@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165802.500642349@linuxfoundation.org>
-References: <20220523165802.500642349@linuxfoundation.org>
+In-Reply-To: <20220523165812.244140613@linuxfoundation.org>
+References: <20220523165812.244140613@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,51 +56,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paul Greenwalt <paul.greenwalt@intel.com>
+From: Willy Tarreau <w@1wt.eu>
 
-[ Upstream commit 31b6298fd8e29effe9ed6b77351ac5969be56ce0 ]
+commit f71f01394f742fc4558b3f9f4c7ef4c4cf3b07c8 upstream.
 
-The hardware statistics counters are not cleared during resets so the
-drivers first access is to initialize the baseline and then subsequent
-reads are for reporting the counters. The statistics counters are read
-during the watchdog subtask when the interface is up. If the baseline
-is not initialized before the interface is up, then there can be a brief
-window in which some traffic can be transmitted/received before the
-initial baseline reading takes place.
+Interrupt handler bad_flp_intr() may cause a UAF on the recently freed
+request just to increment the error count.  There's no point keeping
+that one in the request anyway, and since the interrupt handler uses a
+static pointer to the error which cannot be kept in sync with the
+pending request, better make it use a static error counter that's reset
+for each new request.  This reset now happens when entering
+redo_fd_request() for a new request via set_next_request().
 
-Directly initialize ethtool statistics in driver open so the baseline will
-be initialized when the interface is up, and any dropped packets
-incremented before the interface is up won't be reported.
+One initial concern about a single error counter was that errors on one
+floppy drive could be reported on another one, but this problem is not
+real given that the driver uses a single drive at a time, as that
+PC-compatible controllers also have this limitation by using shared
+signals.  As such the error count is always for the "current" drive.
 
-Fixes: 28dc1b86f8ea9 ("ice: ignore dropped packets during init")
-Signed-off-by: Paul Greenwalt <paul.greenwalt@intel.com>
-Tested-by: Gurucharan <gurucharanx.g@intel.com> (A Contingent worker at Intel)
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reported-by: Minh Yuan <yuanmingbuaa@gmail.com>
+Suggested-by: Linus Torvalds <torvalds@linuxfoundation.org>
+Tested-by: Denis Efremov <efremov@linux.com>
+Signed-off-by: Willy Tarreau <w@1wt.eu>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Denis Efremov <efremov@linux.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/ice/ice_main.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/block/floppy.c |   20 +++++++++-----------
+ 1 file changed, 9 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
-index 3eea68f3a526..88750a96cb3f 100644
---- a/drivers/net/ethernet/intel/ice/ice_main.c
-+++ b/drivers/net/ethernet/intel/ice/ice_main.c
-@@ -3561,9 +3561,10 @@ static int ice_up_complete(struct ice_vsi *vsi)
- 		netif_carrier_on(vsi->netdev);
+--- a/drivers/block/floppy.c
++++ b/drivers/block/floppy.c
+@@ -509,8 +509,8 @@ static unsigned long fdc_busy;
+ static DECLARE_WAIT_QUEUE_HEAD(fdc_wait);
+ static DECLARE_WAIT_QUEUE_HEAD(command_done);
+ 
+-/* Errors during formatting are counted here. */
+-static int format_errors;
++/* errors encountered on the current (or last) request */
++static int floppy_errors;
+ 
+ /* Format request descriptor. */
+ static struct format_descr format_req;
+@@ -530,7 +530,6 @@ static struct format_descr format_req;
+ static char *floppy_track_buffer;
+ static int max_buffer_sectors;
+ 
+-static int *errors;
+ typedef void (*done_f)(int);
+ static const struct cont_t {
+ 	void (*interrupt)(void);
+@@ -1455,7 +1454,7 @@ static int interpret_errors(void)
+ 			if (drive_params[current_drive].flags & FTD_MSG)
+ 				DPRINT("Over/Underrun - retrying\n");
+ 			bad = 0;
+-		} else if (*errors >= drive_params[current_drive].max_errors.reporting) {
++		} else if (floppy_errors >= drive_params[current_drive].max_errors.reporting) {
+ 			print_errors();
+ 		}
+ 		if (reply_buffer[ST2] & ST2_WC || reply_buffer[ST2] & ST2_BC)
+@@ -2095,7 +2094,7 @@ static void bad_flp_intr(void)
+ 		if (!next_valid_format(current_drive))
+ 			return;
  	}
+-	err_count = ++(*errors);
++	err_count = ++floppy_errors;
+ 	INFBOUND(write_errors[current_drive].badness, err_count);
+ 	if (err_count > drive_params[current_drive].max_errors.abort)
+ 		cont->done(0);
+@@ -2240,9 +2239,8 @@ static int do_format(int drive, struct f
+ 		return -EINVAL;
+ 	}
+ 	format_req = *tmp_format_req;
+-	format_errors = 0;
+ 	cont = &format_cont;
+-	errors = &format_errors;
++	floppy_errors = 0;
+ 	ret = wait_til_done(redo_format, true);
+ 	if (ret == -EINTR)
+ 		return -EINTR;
+@@ -2721,7 +2719,7 @@ static int make_raw_rw_request(void)
+ 		 */
+ 		if (!direct ||
+ 		    (indirect * 2 > direct * 3 &&
+-		     *errors < drive_params[current_drive].max_errors.read_track &&
++		     floppy_errors < drive_params[current_drive].max_errors.read_track &&
+ 		     ((!probing ||
+ 		       (drive_params[current_drive].read_track & (1 << drive_state[current_drive].probed_format)))))) {
+ 			max_size = blk_rq_sectors(current_req);
+@@ -2846,10 +2844,11 @@ static int set_next_request(void)
+ 	current_req = list_first_entry_or_null(&floppy_reqs, struct request,
+ 					       queuelist);
+ 	if (current_req) {
+-		current_req->error_count = 0;
++		floppy_errors = 0;
+ 		list_del_init(&current_req->queuelist);
++		return 1;
+ 	}
+-	return current_req != NULL;
++	return 0;
+ }
  
--	/* clear this now, and the first stats read will be used as baseline */
--	vsi->stat_offsets_loaded = false;
--
-+	/* Perform an initial read of the statistics registers now to
-+	 * set the baseline so counters are ready when interface is up
-+	 */
-+	ice_update_eth_stats(vsi);
- 	ice_service_task_schedule(pf);
- 
- 	return 0;
--- 
-2.35.1
-
+ /* Starts or continues processing request. Will automatically unlock the
+@@ -2908,7 +2907,6 @@ do_request:
+ 		_floppy = floppy_type + drive_params[current_drive].autodetect[drive_state[current_drive].probed_format];
+ 	} else
+ 		probing = 0;
+-	errors = &(current_req->error_count);
+ 	tmp = make_raw_rw_request();
+ 	if (tmp < 2) {
+ 		request_done(tmp);
 
 

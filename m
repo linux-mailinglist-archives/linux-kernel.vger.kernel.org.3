@@ -2,152 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0D16530C2E
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 11:04:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20703530B93
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 11:03:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232042AbiEWInK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 04:43:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40116 "EHLO
+        id S232065AbiEWInz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 04:43:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231969AbiEWInG (ORCPT
+        with ESMTP id S231969AbiEWInx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 04:43:06 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DEBBFA;
-        Mon, 23 May 2022 01:43:03 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L69nr0cDkz4xDK;
-        Mon, 23 May 2022 18:42:55 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1653295376;
-        bh=aXPebDNLN91z03b5RN6d6nAEkt/4cWPSQfapcTUcIos=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=a1MMDRymvjxs6LOwWrMHgzW/2YJ2C6JS8L7oqoQhCcsGIpLsSo237y4bE3M28liXV
-         80WOBEkYZCDgk5aEhqyVKdnVJ+IzIuKTmZYLAvC/04fZ2JomKp+tyfC0cU9mx86pj2
-         YrkcOvWvw0n+G1FM2XAQOPw3QmZwPDKI7pZ9I7VuHVdREtOZFI8IW3RyEQETVKnbp9
-         z4KrrT8lcVUsNWPXHCDuN7doQof2KWfVh/aKwQd3NUpJnqI+2VajuVB9AlUJErbnUJ
-         hXk/V4VsV30ozhSMPMmn4oYI7XU48Aj5ga/AeH0wwmQKcpHzCUKRv8Qxvjvi0+mx32
-         s2ktec1V1RI5A==
-Date:   Mon, 23 May 2022 18:42:54 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>
-Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the extcon tree with the usb tree
-Message-ID: <20220523184254.4e657cd1@canb.auug.org.au>
-In-Reply-To: <20220426152739.62f6836e@canb.auug.org.au>
-References: <20220426152739.62f6836e@canb.auug.org.au>
+        Mon, 23 May 2022 04:43:53 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D54515A1B
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 01:43:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653295432; x=1684831432;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=yrIx6pomST4Cy/AfAiPlIJCC/mgu8cCMhucs9oiKghY=;
+  b=B3fqS+rxrwJWmOelmOfzwQZfp6FENtLujSdWLlpW9grUHowSnxiqWQfT
+   3RIR4EDB1EHj+upfvb4zPThBbFF6BMC6fPnztsSIlJzisi5amkuVqJj8s
+   xE3utru2khIsOzqg/VLdeiv9+9WBo1lsMb9CdyxmVEBATEXm3J3ZDgHyo
+   Ma6fP7zb4Gv7QM7qjl2huyPWb9skgl7pF5Qj4nNO7Chv/Xp9iQWM09LgX
+   8lPu9XTjBxcuLGHs+8xwhb7pVPmrF21ehzBt61bOWu2kGvl0/P9D6BmVf
+   O3y9WcTQAgU70OZGhLeqQvfbzxaA7z7Zb6n5HcU9uxmbDYRIbdAQC56BR
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10355"; a="336210679"
+X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
+   d="scan'208";a="336210679"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 01:43:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
+   d="scan'208";a="525817497"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 23 May 2022 01:43:50 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nt3fJ-00010A-92;
+        Mon, 23 May 2022 08:43:49 +0000
+Date:   Mon, 23 May 2022 16:43:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: drivers/soc/ixp4xx/ixp4xx-qmgr.c:451:34: warning:
+ 'ixp4xx_qmgr_of_match' defined but not used
+Message-ID: <202205231601.bE28TyYb-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/tPzk1NySu0SgGqug=pEZHG/";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/tPzk1NySu0SgGqug=pEZHG/
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Arnd,
 
-Hi all,
+First bad commit (maybe != root cause):
 
-On Tue, 26 Apr 2022 15:27:39 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> Today's linux-next merge of the extcon tree got a conflict in:
->=20
->   drivers/usb/dwc3/drd.c
->=20
-> between commit:
->=20
->   0f0101719138 ("usb: dwc3: Don't switch OTG -> peripheral if extcon is p=
-resent")
->=20
-> from the usb tree and commit:
->=20
->   88490c7f43c4 ("extcon: Fix extcon_get_extcon_dev() error handling")
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   4b0986a3613c92f4ec1bdc7f60ec66fea135991f
+commit: 7f94b69ece515ac82defa60ef7cba2cf26180216 ARM: ixp4xx: fix compile-testing soc drivers
+date:   10 months ago
+config: i386-buildonly-randconfig-r002-20220523 (https://download.01.org/0day-ci/archive/20220523/202205231601.bE28TyYb-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7f94b69ece515ac82defa60ef7cba2cf26180216
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 7f94b69ece515ac82defa60ef7cba2cf26180216
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/clk/imx/ drivers/irqchip/ drivers/media/platform/ drivers/soc/ixp4xx/
 
-This is now commit
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-  58e4a2d27d32 ("extcon: Fix extcon_get_extcon_dev() error handling")
+All warnings (new ones prefixed by >>):
 
-> from the extcon tree.
->=20
-> I fixed it up (the former moved the code modified by the latter, so I
-> used the former version of this files and added the following merge fix
-> patch) and can carry the fix as necessary. This is now fixed as far as
-> linux-next is concerned, but any non trivial conflicts should be
-> mentioned to your upstream maintainer when your tree is submitted for
-> merging.  You may also want to consider cooperating with the maintainer
-> of the conflicting tree to minimise any particularly complex conflicts.
->=20
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Tue, 26 Apr 2022 15:24:04 +1000
-> Subject: [PATCH] fixup for "usb: dwc3: Don't switch OTG -> peripheral if =
-extcon is present"
->=20
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  drivers/usb/dwc3/core.c | 9 ++-------
->  1 file changed, 2 insertions(+), 7 deletions(-)
->=20
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index 2345a54b848b..950e238c65bf 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -1649,13 +1649,8 @@ static struct extcon_dev *dwc3_get_extcon(struct d=
-wc3 *dwc)
->  	 * This device property is for kernel internal use only and
->  	 * is expected to be set by the glue code.
->  	 */
-> -	if (device_property_read_string(dev, "linux,extcon-name", &name) =3D=3D=
- 0) {
-> -		edev =3D extcon_get_extcon_dev(name);
-> -		if (!edev)
-> -			return ERR_PTR(-EPROBE_DEFER);
-> -
-> -		return edev;
-> -	}
-> +	if (device_property_read_string(dev, "linux,extcon-name", &name) =3D=3D=
- 0)
-> +		return extcon_get_extcon_dev(name);
-> =20
->  	/*
->  	 * Try to get an extcon device from the USB PHY controller's "port"
-> --=20
-> 2.35.1
+>> drivers/soc/ixp4xx/ixp4xx-qmgr.c:451:34: warning: 'ixp4xx_qmgr_of_match' defined but not used [-Wunused-const-variable=]
+     451 | static const struct of_device_id ixp4xx_qmgr_of_match[] = {
+         |                                  ^~~~~~~~~~~~~~~~~~~~
+--
+   drivers/soc/ixp4xx/ixp4xx-npe.c:696:25: note: in expansion of macro 'dev_info'
+     696 |                         dev_info(dev, "NPE%d at 0x%08x-0x%08x not available\n",
+         |                         ^~~~~~~~
+   drivers/soc/ixp4xx/ixp4xx-npe.c:696:54: note: format string is defined here
+     696 |                         dev_info(dev, "NPE%d at 0x%08x-0x%08x not available\n",
+         |                                                   ~~~^
+         |                                                      |
+         |                                                      unsigned int
+         |                                                   %08llx
+   In file included from include/linux/device.h:15,
+                    from include/linux/dma-mapping.h:7,
+                    from drivers/soc/ixp4xx/ixp4xx-npe.c:15:
+   drivers/soc/ixp4xx/ixp4xx-npe.c:696:39: warning: format '%x' expects argument of type 'unsigned int', but argument 5 has type 'resource_size_t' {aka 'long long unsigned int'} [-Wformat=]
+     696 |                         dev_info(dev, "NPE%d at 0x%08x-0x%08x not available\n",
+         |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:19:22: note: in definition of macro 'dev_fmt'
+      19 | #define dev_fmt(fmt) fmt
+         |                      ^~~
+   drivers/soc/ixp4xx/ixp4xx-npe.c:696:25: note: in expansion of macro 'dev_info'
+     696 |                         dev_info(dev, "NPE%d at 0x%08x-0x%08x not available\n",
+         |                         ^~~~~~~~
+   drivers/soc/ixp4xx/ixp4xx-npe.c:696:61: note: format string is defined here
+     696 |                         dev_info(dev, "NPE%d at 0x%08x-0x%08x not available\n",
+         |                                                          ~~~^
+         |                                                             |
+         |                                                             unsigned int
+         |                                                          %08llx
+   In file included from include/linux/device.h:15,
+                    from include/linux/dma-mapping.h:7,
+                    from drivers/soc/ixp4xx/ixp4xx-npe.c:15:
+   drivers/soc/ixp4xx/ixp4xx-npe.c:705:39: warning: format '%x' expects argument of type 'unsigned int', but argument 4 has type 'resource_size_t' {aka 'long long unsigned int'} [-Wformat=]
+     705 |                         dev_info(dev, "NPE%d at 0x%08x-0x%08x does not reset\n",
+         |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:19:22: note: in definition of macro 'dev_fmt'
+      19 | #define dev_fmt(fmt) fmt
+         |                      ^~~
+   drivers/soc/ixp4xx/ixp4xx-npe.c:705:25: note: in expansion of macro 'dev_info'
+     705 |                         dev_info(dev, "NPE%d at 0x%08x-0x%08x does not reset\n",
+         |                         ^~~~~~~~
+   drivers/soc/ixp4xx/ixp4xx-npe.c:705:54: note: format string is defined here
+     705 |                         dev_info(dev, "NPE%d at 0x%08x-0x%08x does not reset\n",
+         |                                                   ~~~^
+         |                                                      |
+         |                                                      unsigned int
+         |                                                   %08llx
+   In file included from include/linux/device.h:15,
+                    from include/linux/dma-mapping.h:7,
+                    from drivers/soc/ixp4xx/ixp4xx-npe.c:15:
+   drivers/soc/ixp4xx/ixp4xx-npe.c:705:39: warning: format '%x' expects argument of type 'unsigned int', but argument 5 has type 'resource_size_t' {aka 'long long unsigned int'} [-Wformat=]
+     705 |                         dev_info(dev, "NPE%d at 0x%08x-0x%08x does not reset\n",
+         |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:19:22: note: in definition of macro 'dev_fmt'
+      19 | #define dev_fmt(fmt) fmt
+         |                      ^~~
+   drivers/soc/ixp4xx/ixp4xx-npe.c:705:25: note: in expansion of macro 'dev_info'
+     705 |                         dev_info(dev, "NPE%d at 0x%08x-0x%08x does not reset\n",
+         |                         ^~~~~~~~
+   drivers/soc/ixp4xx/ixp4xx-npe.c:705:61: note: format string is defined here
+     705 |                         dev_info(dev, "NPE%d at 0x%08x-0x%08x does not reset\n",
+         |                                                          ~~~^
+         |                                                             |
+         |                                                             unsigned int
+         |                                                          %08llx
+   In file included from include/linux/device.h:15,
+                    from include/linux/dma-mapping.h:7,
+                    from drivers/soc/ixp4xx/ixp4xx-npe.c:15:
+   drivers/soc/ixp4xx/ixp4xx-npe.c:710:31: warning: format '%x' expects argument of type 'unsigned int', but argument 4 has type 'resource_size_t' {aka 'long long unsigned int'} [-Wformat=]
+     710 |                 dev_info(dev, "NPE%d at 0x%08x-0x%08x registered\n",
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:19:22: note: in definition of macro 'dev_fmt'
+      19 | #define dev_fmt(fmt) fmt
+         |                      ^~~
+   drivers/soc/ixp4xx/ixp4xx-npe.c:710:17: note: in expansion of macro 'dev_info'
+     710 |                 dev_info(dev, "NPE%d at 0x%08x-0x%08x registered\n",
+         |                 ^~~~~~~~
+   drivers/soc/ixp4xx/ixp4xx-npe.c:710:46: note: format string is defined here
+     710 |                 dev_info(dev, "NPE%d at 0x%08x-0x%08x registered\n",
+         |                                           ~~~^
+         |                                              |
+         |                                              unsigned int
+         |                                           %08llx
+   In file included from include/linux/device.h:15,
+                    from include/linux/dma-mapping.h:7,
+                    from drivers/soc/ixp4xx/ixp4xx-npe.c:15:
+   drivers/soc/ixp4xx/ixp4xx-npe.c:710:31: warning: format '%x' expects argument of type 'unsigned int', but argument 5 has type 'resource_size_t' {aka 'long long unsigned int'} [-Wformat=]
+     710 |                 dev_info(dev, "NPE%d at 0x%08x-0x%08x registered\n",
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:19:22: note: in definition of macro 'dev_fmt'
+      19 | #define dev_fmt(fmt) fmt
+         |                      ^~~
+   drivers/soc/ixp4xx/ixp4xx-npe.c:710:17: note: in expansion of macro 'dev_info'
+     710 |                 dev_info(dev, "NPE%d at 0x%08x-0x%08x registered\n",
+         |                 ^~~~~~~~
+   drivers/soc/ixp4xx/ixp4xx-npe.c:710:53: note: format string is defined here
+     710 |                 dev_info(dev, "NPE%d at 0x%08x-0x%08x registered\n",
+         |                                                  ~~~^
+         |                                                     |
+         |                                                     unsigned int
+         |                                                  %08llx
+   At top level:
+>> drivers/soc/ixp4xx/ixp4xx-npe.c:737:34: warning: 'ixp4xx_npe_of_match' defined but not used [-Wunused-const-variable=]
+     737 | static const struct of_device_id ixp4xx_npe_of_match[] = {
+         |                                  ^~~~~~~~~~~~~~~~~~~
 
-This is now a conflict between the char-misc tree and the usb tree.
 
---=20
-Cheers,
-Stephen Rothwell
+vim +/ixp4xx_qmgr_of_match +451 drivers/soc/ixp4xx/ixp4xx-qmgr.c
 
---Sig_/tPzk1NySu0SgGqug=pEZHG/
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+82a96f5790ac93 arch/arm/mach-ixp4xx/ixp4xx_qmgr.c Krzysztof Halasa 2008-01-01  450  
+9e01a00958405f drivers/soc/ixp4xx/ixp4xx-qmgr.c   Linus Walleij    2019-02-10 @451  static const struct of_device_id ixp4xx_qmgr_of_match[] = {
+9e01a00958405f drivers/soc/ixp4xx/ixp4xx-qmgr.c   Linus Walleij    2019-02-10  452  	{
+9e01a00958405f drivers/soc/ixp4xx/ixp4xx-qmgr.c   Linus Walleij    2019-02-10  453  		.compatible = "intel,ixp4xx-ahb-queue-manager",
+9e01a00958405f drivers/soc/ixp4xx/ixp4xx-qmgr.c   Linus Walleij    2019-02-10  454          },
+9e01a00958405f drivers/soc/ixp4xx/ixp4xx-qmgr.c   Linus Walleij    2019-02-10  455  	{},
+9e01a00958405f drivers/soc/ixp4xx/ixp4xx-qmgr.c   Linus Walleij    2019-02-10  456  };
+9e01a00958405f drivers/soc/ixp4xx/ixp4xx-qmgr.c   Linus Walleij    2019-02-10  457  
 
------BEGIN PGP SIGNATURE-----
+:::::: The code at line 451 was first introduced by commit
+:::::: 9e01a00958405f59e0a85fd16eb4e879e983ea74 soc: ixp4xx: qmgr: Add DT probe code
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKLSQ4ACgkQAVBC80lX
-0GyijAf+OXLV+QcxJzCrVAqiXZoHzNgJLM0TxhwodE58Dq3C7QisiFwnZc1wSwTZ
-GlT9pAUNgW4ktjoHqGDSvQyXBTXElN8huWCKcbpLEaR6os6Qq8wS+xntd2f8GrPI
-28ytxWM7z1LruC/3erxWfQzxbzR1if/4hOFOn85sp4GL8grn2gFforn48HHHdCO0
-YcOc5SAA5ZudyDEjNptjtmH/fi8gnVeAvGiU46d8RG1QpAt8vhnj8dW1eQZ6vcUV
-PomFEqGsLhs08Jo2AQkbyi0X2WZxxavPNVSPNEIxpQFkqCW4uBicOstTCRn7Ei9p
-3BRMYNw+4wkjJGojk8oU2q6sz//spw==
-=5xqb
------END PGP SIGNATURE-----
+:::::: TO: Linus Walleij <linus.walleij@linaro.org>
+:::::: CC: Linus Walleij <linus.walleij@linaro.org>
 
---Sig_/tPzk1NySu0SgGqug=pEZHG/--
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

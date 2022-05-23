@@ -2,102 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E77BD5307D2
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 04:52:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 514F35307D4
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 04:53:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353203AbiEWCwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 22:52:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40456 "EHLO
+        id S1353259AbiEWCxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 22:53:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345712AbiEWCwM (ORCPT
+        with ESMTP id S240967AbiEWCxB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 22:52:12 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F2C1EC48
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 19:52:10 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id v5-20020a17090a7c0500b001df84fa82f8so12390361pjf.5
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 19:52:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=rvYIyk1yb20798ouuDUQxf3Rwf5JHSIlW3fsEoAcKMg=;
-        b=Zc5IjWlWFQ7egKRL58nFYhMlVqHAp88MafypBjzxVXnl1Z+jU3XSfrsqFlmDm6out9
-         NZpOyahDej5a1393DubgBMSzwNDWOe7gP17vAqkUvAls6FOd3AiizK7ec0jSxs2Rj+Zv
-         16NMD/B9srrP4cejxXORlceBPaSD7nYE0tM7D3HrkkgFvj84p6e5gDFWC8OrUD+BbI3A
-         AfwBpxj/SqyIuTYQyq1YVC/iPljmTDVQpBZAvatV8X3kwTtKHC+Vt/xLrDTOm8aFJp+r
-         NNG5KVb7rfvypQr96amiuxqbkRxiu36L2AqCZEdThq5J0SpPI3MctaCeUA1djDnfk43V
-         O87g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=rvYIyk1yb20798ouuDUQxf3Rwf5JHSIlW3fsEoAcKMg=;
-        b=IKj8MnXixCgSOm/b5J3+8IL4D1ufJxjwRUiyoJ0nzJNwBTD2zYOylVJLVFP44N7rOl
-         fbAMDBGLtB+NV7yXL1mFjZgHdqHjl6cWXujGo1jfJvRSyOtynPsGljMKFFVTcEPxHwJr
-         zxLOqt5Zn26zUt+AlFjPP8n3XDyXP3vOOJMacIedi/PiQa03zoYR84ijFiOcCG7ugHWm
-         tpsZWq1/EHWaOUzwU+iA7K6gv1savaAOBKfEVilbXhsFugOWmju3kiZ0dqg3tessP79h
-         4a+svOf33ps9j3cr7zkd4YoDl69CsoQ/6sFG9RC8fI5xxlWTPaNmTp4X34+UXKEjplLC
-         K9JA==
-X-Gm-Message-State: AOAM530Jt9t4yzGwX14LxYJuYA8Bpmyot10x4V9MWbCLLtll4NlCjZtr
-        lbEhe/A0ETKRkpNpAgig+0kWZw==
-X-Google-Smtp-Source: ABdhPJyaBjpk+NdPSFZh+kl+4SogHky0a9Ra0JCghE4MT6zExngfwomvnpjPNjO7cKgxh1Hpn7e8Ng==
-X-Received: by 2002:a17:90b:4b52:b0:1df:c1ef:2cd1 with SMTP id mi18-20020a17090b4b5200b001dfc1ef2cd1mr24154304pjb.130.1653274329849;
-        Sun, 22 May 2022 19:52:09 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 1-20020a170902c10100b0015e8d4eb228sm3809450pli.114.2022.05.22.19.52.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 22 May 2022 19:52:09 -0700 (PDT)
-Message-ID: <df3ffbac-2f4e-df03-8b29-8e2e4bb69fac@kernel.dk>
-Date:   Sun, 22 May 2022 20:52:08 -0600
+        Sun, 22 May 2022 22:53:01 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9414137A3E
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 19:53:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653274380; x=1684810380;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=F71fg+0c4rtIQ1B5kg3uKaHKYbi2n82vhHHmVyMFuq8=;
+  b=GPaWgFyGa8HnDqThJI+DzzTWhoYcA4KpSObZN0R8oI4sn+bjByX87Wh5
+   uSNKjyORyuqm/6WHI0AZXp2lv6+OWIcqD1ZW5WeUKEu10rVvhlY63CCDv
+   gCzZGgAIRaKLQ6dTsLdQrkALRXwvgiFUiq9u23it1vm9AaqNu/gzSSA2P
+   8nKvt/PMWX5JWai1GImBV7jMUN3W8GL73q+7eMxIeinlD7D7qPx4Pzxtm
+   269NnpqPt5CXw8hEOv2LLzzKrts1BkXqQNEjagxT8UnAFDJLYGWH7eWdy
+   jL5tFsdczeONO4DLYMLE88dao5QkEJHAwt393fJ2eAWq5mmCVSBhTYmwU
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10355"; a="333726691"
+X-IronPort-AV: E=Sophos;i="5.91,245,1647327600"; 
+   d="scan'208";a="333726691"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2022 19:53:00 -0700
+X-IronPort-AV: E=Sophos;i="5.91,245,1647327600"; 
+   d="scan'208";a="547687326"
+Received: from avkale-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.2.202])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2022 19:52:56 -0700
+Message-ID: <a4b2571d29accce04f0bd5308e31e557a8034caa.camel@intel.com>
+Subject: Re: [PATCH v6 1/5] x86/tdx: Add TDX Guest attestation interface
+ driver
+From:   Kai Huang <kai.huang@intel.com>
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 23 May 2022 14:52:54 +1200
+In-Reply-To: <aa8d221c-049c-24da-dc41-6d6572e29afb@linux.intel.com>
+References: <20220512221952.3647598-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <20220512221952.3647598-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <1292fe3206bef08304dc1bfe3185a9e6cec690fd.camel@intel.com>
+         <aa8d221c-049c-24da-dc41-6d6572e29afb@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: linux-next: build failure after merge of the block tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Coly Li <colyli@suse.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220523124921.7d6bbf34@canb.auug.org.au>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220523124921.7d6bbf34@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/22/22 8:49 PM, Stephen Rothwell wrote:
-> Hi all,
+On Tue, 2022-05-17 at 07:54 -0700, Sathyanarayanan Kuppuswamy wrote:
+> > > +struct tdx_report_req {
+> > > +	union {
+> > > +		__u8 reportdata[TDX_REPORTDATA_LEN];
+> > > +		__u8 tdreport[TDX_REPORT_LEN];
+> > > +	};
+> > > +};
+> > 
+> > As a userspace ABI, one concern is this doesn't provide any space for future
+> > extension.  But probably it's OK since I don't see any possible additional
+> > input
+> > for now.  And although TDREPORT may have additional information in future
+> > generation of TDX but the spec says the size is 1024 so perhaps this won't
+> > change even in the future.
+> > 
+> > Anyway will leave to others.
 > 
-> After merging the block tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> drivers/md/bcache/btree.c: In function 'bch_btree_check':
-> drivers/md/bcache/btree.c:2073:1: error: the frame size of 2184 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]
->  2073 | }
->       | ^
-> 
-> Caused by commit
-> 
->   c766acd3d78e ("bcache: improve multithreaded bch_btree_check()")
-> 
-> struct btree_check_state is very large to put on the stack :-(
-> 
-> I have reverted that commit for today.
+> IMO, if the spec changes in future we can revisit it.
 
-Thanks, I'll drop it. It's not part of the initial request sent to
-Linus, exactly because it arrived late.
+I don't think the problem is how to revisit _this_ ABI.  The problem is, once it
+is introduced, you cannot break the ABI for the compatibility of supporting the
+userspace software written for old platforms.  So basically you cannot just
+increase the TDX_REPORT_LEN to a larger value.  This means if we have a larger
+than 1024B TDREPORT in future, the old userspace TD attestation software which
+uses this ABI will not work anymore on the new platforms.
 
-Coly, I'm dropping this series.
+If we need to make sure this ABI work for _ANY_ TDX platforms, I think we either
+need to make sure TDREPORT will always be 1024B for _ANY_ TDX platforms, or we
+need to have a flexible ABI which doesn't assume TDREPORT size.
+
+For instance, we might need another IOCTL (or other interfaces such as /sysfs)
+to query the TDREPORT size, and make this IOCTL like below:
+
+	struct tdx_report_req {
+		__u8 reportdata[TDX_REPORTDATA_LEN];
+		__u8 reserved[...];
+		__u8 tdreport[0];
+	};
+
+The actual TDREPORT buffer size is allocated by userspace after it queries the
+TDREPORT size.
 
 -- 
-Jens Axboe
+Thanks,
+-Kai
+
 

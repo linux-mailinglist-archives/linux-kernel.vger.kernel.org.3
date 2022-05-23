@@ -2,68 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1427531ADE
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E50E531680
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:51:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231766AbiEWTjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 15:39:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37674 "EHLO
+        id S232348AbiEWTjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 15:39:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232222AbiEWTja (ORCPT
+        with ESMTP id S232411AbiEWTjf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 15:39:30 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CACEB17063
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 12:31:25 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id v11so14545409pff.6
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 12:31:25 -0700 (PDT)
+        Mon, 23 May 2022 15:39:35 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FD55106A4C
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 12:32:08 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id ev18so14911535pjb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 12:32:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=FKFLi5eR+9ADBi0m67qxvJspJKDBK02KPYVUQgWhwdU=;
-        b=bk2wnF89Qnk1g4FnbKaT/xUuQcZYOE7D1wXYxXO4tsnccW4y0mg+mIIaq97gWYI+JP
-         Rw7MD1/xWR3DylhMcEBn6eBmOctrIp/3qLz8kz57GSuzj6VyFLXJkfGEy1tU6V/bEUYj
-         ey+6dpe0IhzDdBvH1xY7t/MuBDZdLHvsXDw+o=
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1wnCjP5k4eX2zs3WnXnoMhMGUr28/cypjl3o/2Z6tes=;
+        b=f96L1AT0mMjn1RyAtdZVgkH33HDZ3/VSA/ng8TU23JHBipyGveEAF7DkL2d00oCE6H
+         zIMx6xWWYXMx89FXNceFqwrVXxVGbmsTeNwpkhojYLOXsICJ9JOQ1LKjsOgCtbFgOoK2
+         kZqvPnK/6aGbuIab5p6ELE0mTUnLLj4sS8rFM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=FKFLi5eR+9ADBi0m67qxvJspJKDBK02KPYVUQgWhwdU=;
-        b=Yr54W4o7BcENc40aj2maI6Zg9UtULpq+N6sc7UpCMk3uv6fwyKy9yFXVF0PoMxsF/G
-         WFAUsiNo+NB0z/6GVd8E4uMdqy66l9P4XHYw8yN+Gmu+gbfP/zNtM69izzgzfgGeqFSy
-         0giEzW7s9mix4fz1yXwCVl9DWIEzhoKr0kzJSK7xT0E9CGB3+/T1U3893qiBEK/xQXkW
-         Pd6vhDKT8eEY9NSu3odn/bSuM0yFaV0Bc8r3Y7ujt5imZ7wNLglHYLZ5QbiHl/XMzDsm
-         Gz8Q8KsSLLqREM/VyvrnKMVIqiH7i3546N6DvBOu4hHBWDTE1Owi1+wfL/KmrvgNq837
-         lquA==
-X-Gm-Message-State: AOAM533eeFFK9rTUGZxrV26HSQhnDU5EBXqkJWpWzMpRrDBu5b3FRUuw
-        eQGZrJuNknNOmaDJqF0WzsMnfg==
-X-Google-Smtp-Source: ABdhPJzKKYu0Xv/n3Lqd1yoYZi5SWqXwQaobVSCNaZMgB1u7uqTQj93OsbPsO1asNtbmbx3XsvmB6Q==
-X-Received: by 2002:a63:f813:0:b0:3f6:475:6389 with SMTP id n19-20020a63f813000000b003f604756389mr21741558pgh.127.1653334285295;
-        Mon, 23 May 2022 12:31:25 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id t2-20020a170902e84200b001618fee3900sm5587826plg.196.2022.05.23.12.31.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 12:31:25 -0700 (PDT)
-Date:   Mon, 23 May 2022 12:31:23 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Kalle Valo <kvalo@kernel.org>
-Cc:     Jakub Kicinski <kuba@kernel.org>, johannes@sipsolutions.net,
-        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
-        toke@toke.dk, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH net-next 2/8] wifi: ath9k: silence array-bounds warning
- on GCC 12
-Message-ID: <202205231229.CF6B8471@keescook>
-References: <20220520194320.2356236-1-kuba@kernel.org>
- <20220520194320.2356236-3-kuba@kernel.org>
- <87h75j1iej.fsf@kernel.org>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1wnCjP5k4eX2zs3WnXnoMhMGUr28/cypjl3o/2Z6tes=;
+        b=QPU89eK0Py/rmKq4mo6qR8UgrMG5wYOLzCDhq6EGGX4T6wgvRdG7VReBQFhKdMD6c3
+         fRmRjfrf+sXwWU8SIlIUB5M2ksjoXhZWNiazoiRaWnIBHo5XzLlDkd6/F6Wjtf/2eKKs
+         7iqrmcmcJm+ya5YTHScDeXjgn7aC713E2+pWz1XlwVKs2bAm1PrzRC+P3axJYA45F+r+
+         in2r/72OzwFWe5o9HXjdVT1IurDwFknzxQNGvqa/wh4ceS4iODJlA1djshvEL+ImYcqj
+         ae5cJ0Xqi6N6wakIq1w2TDkz6+drvazxbXKrr/aVJTxwkZ5wyDcunuwUwcA+lpPv3DAl
+         MaXw==
+X-Gm-Message-State: AOAM532GhM09q9dPvFYbItQ6sPoA6sdc+dQbIH9AFrEL6VHT6g3lK5yV
+        JYcp1Kj4nBd+aamOZ9mJgsSE3Q==
+X-Google-Smtp-Source: ABdhPJxX6NxzBbaQ+Q2IdSpZVtxZcdeQA8n0q/eIC47fkQbMLtVd2ZTJsqFGaSkDZy+dM6YShA+Ltw==
+X-Received: by 2002:a17:903:1104:b0:15f:bce:1a0c with SMTP id n4-20020a170903110400b0015f0bce1a0cmr23570068plh.149.1653334327861;
+        Mon, 23 May 2022 12:32:07 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:46dd:d5d8:48f6:713e])
+        by smtp.gmail.com with UTF8SMTPSA id p8-20020a637f48000000b003c14af50631sm5138505pgn.73.2022.05.23.12.32.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 May 2022 12:32:07 -0700 (PDT)
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-kernel@vger.kernel.org, Matthias Kaehlcke <mka@chromium.org>
+Subject: [PATCH v2 1/2] arm64: dts: qcom: sc7280: herobrine: Don't disable the keyboard backlight node
+Date:   Mon, 23 May 2022 12:32:03 -0700
+Message-Id: <20220523123157.v2.1.I47ec78581907f7ef024f10bc085f970abf01ec11@changeid>
+X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <87h75j1iej.fsf@kernel.org>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
@@ -74,56 +69,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 21, 2022 at 09:58:28AM +0300, Kalle Valo wrote:
-> + arnd, kees, lkml
-> 
-> Jakub Kicinski <kuba@kernel.org> writes:
-> 
-> > GCC 12 says:
-> >
-> > drivers/net/wireless/ath/ath9k/mac.c: In function ‘ath9k_hw_resettxqueue’:
-> > drivers/net/wireless/ath/ath9k/mac.c:373:22: warning: array subscript
-> > 32 is above array bounds of ‘struct ath9k_tx_queue_info[10]’
-> > [-Warray-bounds]
-> >   373 |         qi = &ah->txq[q];
-> >       |               ~~~~~~~^~~
-> >
-> > I don't know where it got the 32 from, relegate the warning to W=1+.
-> >
-> > Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> > ---
-> > CC: toke@toke.dk
-> > CC: kvalo@kernel.org
-> > CC: linux-wireless@vger.kernel.org
-> > ---
-> >  drivers/net/wireless/ath/ath9k/Makefile | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> >
-> > diff --git a/drivers/net/wireless/ath/ath9k/Makefile b/drivers/net/wireless/ath/ath9k/Makefile
-> > index eff94bcd1f0a..9bdfcee2f448 100644
-> > --- a/drivers/net/wireless/ath/ath9k/Makefile
-> > +++ b/drivers/net/wireless/ath/ath9k/Makefile
-> > @@ -45,6 +45,11 @@ ath9k_hw-y:=	\
-> >  		ar9003_eeprom.o \
-> >  		ar9003_paprd.o
-> >  
-> > +# FIXME: temporarily silence -Warray-bounds on non W=1+ builds
-> > +ifndef KBUILD_EXTRA_WARN
-> > +CFLAGS_mac.o += -Wno-array-bounds
-> > +endif
-> 
-> There are now four wireless drivers which need this hack. Wouldn't it be
-> easier to add -Wno-array-bounds for GCC 12 globally instead of adding
-> the same hack to multiple drivers?
+On herobrine boards the keyboard backlight is controlled through the
+PWM LED driver. Currently both the PWM LED node and the node for the
+keyboard backlight are disabled in sc7280-herobrine.dtsi, which
+requires boards with a backlit keyboard to enable both nodes. There
+are no other PWM LEDs on herobrine boards besides the keyboard
+backlight, delete the 'disabled' status from the keyboard backlight
+node, with that boards only have to enable the 'pwmleds' node for
+keyboard backlight support.
 
-I finally tracked this down to a GCC 12 bug related to -fsanitize=shift:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105679
+Also add a label to the 'pwmleds' node to allow board files to refer to
+it with a phandle.
 
-Basically all the "32" stuff comes from the index being used in a shift,
-and the resulting internal GCC logic blowing up.
+Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+---
 
-I was going to do a before/after build with and without -fsanitize=shift
-to see how many of these false positives originate from that bug...
+(no changes since v1)
 
+ arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
+index 9cb1bc8ed6b5..55b513912e79 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
+@@ -295,11 +295,10 @@ pp1200_wf_cam: pp1200-wf-cam-regulator {
+ 
+ 	/* BOARD-SPECIFIC TOP LEVEL NODES */
+ 
+-	pwmleds {
++	pwmleds: pwmleds {
+ 		compatible = "pwm-leds";
+ 		status = "disabled";
+ 		keyboard_backlight: keyboard-backlight {
+-			status = "disabled";
+ 			label = "cros_ec::kbd_backlight";
+ 			pwms = <&cros_ec_pwm 0>;
+ 			max-brightness = <1023>;
 -- 
-Kees Cook
+2.36.1.124.g0e6072fb45-goog
+

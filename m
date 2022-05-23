@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 598B85316D9
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:52:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3539531C21
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:57:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241469AbiEWRal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:30:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49568 "EHLO
+        id S244911AbiEWSMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 14:12:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241604AbiEWRWa (ORCPT
+        with ESMTP id S242219AbiEWRhZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:22:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A6F7A467;
-        Mon, 23 May 2022 10:19:12 -0700 (PDT)
+        Mon, 23 May 2022 13:37:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B93E040A16;
+        Mon, 23 May 2022 10:31:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DAA08B811F8;
-        Mon, 23 May 2022 17:17:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24187C385AA;
-        Mon, 23 May 2022 17:17:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B5BD2B81205;
+        Mon, 23 May 2022 17:28:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04721C385AA;
+        Mon, 23 May 2022 17:28:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326262;
-        bh=cLb5gKpb3Emt5UyYxqpjSOJ5CM5YoWj2BbF49iH0I7c=;
+        s=korg; t=1653326925;
+        bh=DSR1P9eMEbqr022sQ4Ij9ftumFVsISbPwh2VF5Wpa1A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dtbY772PSwrd6CHw4tyPuFe1WKhefC4l88fZ74CngBitVTz+AGwgoiRLSAPns1ma8
-         HoEAZg83B2VvThjfJCsimbzxaNACxD9gyI7gZ5qQBrMsgSnKmmF/xCd0DlF2azvmWp
-         Ee7IgkYwcWCKhm26svxgYsLvgp713YqOxrFR12GY=
+        b=TO9V08fjKWr/xwUGCk75DkAkjA1uykf1WguxQ1KJkPYPJrcZzkugajDHG52bTM3fn
+         40C8aA5RcFv5yVlUB7qdGQVRJY0UPhFSv0+ExxT83nToXK/dnwqh8tOx17ykDaQXDR
+         K5yVue073/5+5rGZRtvHMp8qmNO3lWT3BBkqrbWU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Terry Bowman <terry.bowman@amd.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jean Delvare <jdelvare@suse.de>, Wolfram Sang <wsa@kernel.org>,
-        Mario Limonciello <Mario.Limonciello@amd.com>
-Subject: [PATCH 5.15 007/132] i2c: piix4: Move SMBus controller base address detect into function
+        stable@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
+        Vladimir Murzin <vladimir.murzin@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Steven Price <steven.price@arm.com>
+Subject: [PATCH 5.17 059/158] arm64: mte: Ensure the cleared tags are visible before setting the PTE
 Date:   Mon, 23 May 2022 19:03:36 +0200
-Message-Id: <20220523165824.793406905@linuxfoundation.org>
+Message-Id: <20220523165840.601102547@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
-References: <20220523165823.492309987@linuxfoundation.org>
+In-Reply-To: <20220523165830.581652127@linuxfoundation.org>
+References: <20220523165830.581652127@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,114 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Terry Bowman <terry.bowman@amd.com>
+From: Catalin Marinas <catalin.marinas@arm.com>
 
-commit 0a59a24e14e9b21dcbb6b8ea41422e2fdfa437fd upstream.
+commit 1d0cb4c8864addc362bae98e8ffa5500c87e1227 upstream.
 
-Move SMBus controller base address detection into function. Refactor
-is in preparation for following MMIO changes.
+As an optimisation, only pages mapped with PROT_MTE in user space have
+the MTE tags zeroed. This is done lazily at the set_pte_at() time via
+mte_sync_tags(). However, this function is missing a barrier and another
+CPU may see the PTE updated before the zeroed tags are visible. Add an
+smp_wmb() barrier if the mapping is Normal Tagged.
 
-Signed-off-by: Terry Bowman <terry.bowman@amd.com>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
-Cc: Mario Limonciello <Mario.Limonciello@amd.com>
+Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+Fixes: 34bfeea4a9e9 ("arm64: mte: Clear the tags when a page is mapped in user-space with PROT_MTE")
+Cc: <stable@vger.kernel.org> # 5.10.x
+Reported-by: Vladimir Murzin <vladimir.murzin@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Reviewed-by: Steven Price <steven.price@arm.com>
+Tested-by: Vladimir Murzin <vladimir.murzin@arm.com>
+Link: https://lore.kernel.org/r/20220517093532.127095-1-catalin.marinas@arm.com
+Signed-off-by: Will Deacon <will@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/i2c/busses/i2c-piix4.c |   69 ++++++++++++++++++++++++++---------------
- 1 file changed, 44 insertions(+), 25 deletions(-)
+ arch/arm64/kernel/mte.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/i2c/busses/i2c-piix4.c
-+++ b/drivers/i2c/busses/i2c-piix4.c
-@@ -282,11 +282,51 @@ static int piix4_setup(struct pci_dev *P
- 	return piix4_smba;
+--- a/arch/arm64/kernel/mte.c
++++ b/arch/arm64/kernel/mte.c
+@@ -76,6 +76,9 @@ void mte_sync_tags(pte_t old_pte, pte_t
+ 			mte_sync_page_tags(page, old_pte, check_swap,
+ 					   pte_is_tagged);
+ 	}
++
++	/* ensure the tags are visible before the PTE is set */
++	smp_wmb();
  }
  
-+static int piix4_setup_sb800_smba(struct pci_dev *PIIX4_dev,
-+				  u8 smb_en,
-+				  u8 aux,
-+				  u8 *smb_en_status,
-+				  unsigned short *piix4_smba)
-+{
-+	u8 smba_en_lo;
-+	u8 smba_en_hi;
-+	int retval;
-+
-+	retval = piix4_sb800_region_request(&PIIX4_dev->dev);
-+	if (retval)
-+		return retval;
-+
-+	outb_p(smb_en, SB800_PIIX4_SMB_IDX);
-+	smba_en_lo = inb_p(SB800_PIIX4_SMB_IDX + 1);
-+	outb_p(smb_en + 1, SB800_PIIX4_SMB_IDX);
-+	smba_en_hi = inb_p(SB800_PIIX4_SMB_IDX + 1);
-+
-+	piix4_sb800_region_release(&PIIX4_dev->dev);
-+
-+	if (!smb_en) {
-+		*smb_en_status = smba_en_lo & 0x10;
-+		*piix4_smba = smba_en_hi << 8;
-+		if (aux)
-+			*piix4_smba |= 0x20;
-+	} else {
-+		*smb_en_status = smba_en_lo & 0x01;
-+		*piix4_smba = ((smba_en_hi << 8) | smba_en_lo) & 0xffe0;
-+	}
-+
-+	if (!*smb_en_status) {
-+		dev_err(&PIIX4_dev->dev,
-+			"SMBus Host Controller not enabled!\n");
-+		return -ENODEV;
-+	}
-+
-+	return 0;
-+}
-+
- static int piix4_setup_sb800(struct pci_dev *PIIX4_dev,
- 			     const struct pci_device_id *id, u8 aux)
- {
- 	unsigned short piix4_smba;
--	u8 smba_en_lo, smba_en_hi, smb_en, smb_en_status, port_sel;
-+	u8 smb_en, smb_en_status, port_sel;
- 	u8 i2ccfg, i2ccfg_offset = 0x10;
- 	int retval;
- 
-@@ -310,33 +350,12 @@ static int piix4_setup_sb800(struct pci_
- 	else
- 		smb_en = (aux) ? 0x28 : 0x2c;
- 
--	retval = piix4_sb800_region_request(&PIIX4_dev->dev);
-+	retval = piix4_setup_sb800_smba(PIIX4_dev, smb_en, aux, &smb_en_status,
-+					&piix4_smba);
-+
- 	if (retval)
- 		return retval;
- 
--	outb_p(smb_en, SB800_PIIX4_SMB_IDX);
--	smba_en_lo = inb_p(SB800_PIIX4_SMB_IDX + 1);
--	outb_p(smb_en + 1, SB800_PIIX4_SMB_IDX);
--	smba_en_hi = inb_p(SB800_PIIX4_SMB_IDX + 1);
--
--	piix4_sb800_region_release(&PIIX4_dev->dev);
--
--	if (!smb_en) {
--		smb_en_status = smba_en_lo & 0x10;
--		piix4_smba = smba_en_hi << 8;
--		if (aux)
--			piix4_smba |= 0x20;
--	} else {
--		smb_en_status = smba_en_lo & 0x01;
--		piix4_smba = ((smba_en_hi << 8) | smba_en_lo) & 0xffe0;
--	}
--
--	if (!smb_en_status) {
--		dev_err(&PIIX4_dev->dev,
--			"SMBus Host Controller not enabled!\n");
--		return -ENODEV;
--	}
--
- 	if (acpi_check_region(piix4_smba, SMBIOSIZE, piix4_driver.name))
- 		return -ENODEV;
- 
+ int memcmp_pages(struct page *page1, struct page *page2)
 
 

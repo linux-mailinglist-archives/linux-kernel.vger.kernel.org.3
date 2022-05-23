@@ -2,167 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E7665313CC
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:24:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF4BC531271
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:22:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238611AbiEWQRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 12:17:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35004 "EHLO
+        id S238425AbiEWQNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 12:13:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238649AbiEWQR1 (ORCPT
+        with ESMTP id S238404AbiEWQNb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 12:17:27 -0400
-Received: from mx1.supremebox.com (mx1-c1.supremebox.com [198.23.53.215])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB39A66684
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:17:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=jilayne.com
-        ; s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=KjSGju59Ich2PK+YmLbZYQHyPrKADu4YlcAeuTKJzsY=; b=Vuzwf6Kty+1GzL54plgo8ujUPA
-        cvuJQiA228sTLSCGqEx9YCy/CphorA+BgZ47Vlf+IVcH8uKd2De5DgTDkY4AnatcvvWtXT8mvsV2N
-        5qk3mKF0N6FKxbJqHdnMY2DHe+acRXg/6rzuPVwmPwm+ImqlEEGurE3uxZGnPqvJ6RSA=;
-Received: from 75-166-140-231.hlrn.qwest.net ([75.166.140.231] helo=[192.168.0.91])
-        by mx1.supremebox.com with esmtpa (Exim 4.92)
-        (envelope-from <opensource@jilayne.com>)
-        id 1ntAeg-0000R8-Tf; Mon, 23 May 2022 16:11:39 +0000
-Message-ID: <97d8beb2-db33-1e50-eadb-6ac8d650f044@jilayne.com>
-Date:   Mon, 23 May 2022 10:11:37 -0600
+        Mon, 23 May 2022 12:13:31 -0400
+Received: from smtp-bc09.mail.infomaniak.ch (smtp-bc09.mail.infomaniak.ch [45.157.188.9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 735233151C
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:13:29 -0700 (PDT)
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4L6Mng4qkszMqCsj;
+        Mon, 23 May 2022 18:13:27 +0200 (CEST)
+Received: from localhost (unknown [23.97.221.149])
+        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4L6Mnf45hLzlhMCc;
+        Mon, 23 May 2022 18:13:26 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1653322407;
+        bh=XhUEXOgvMyh0yaNnTTP+A90mHJw1pe7rby6geeIj66w=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RJx2Mcv6Igs2Fb+Wk9itfGL7Yrg8wli7MAdBjIK9zfDLJoVpuZOMFCDZq+PCrysRO
+         dwF6QKAo/9PNNHlyXjIIQcb+hgDo6WLr1eBdhfsYstbxxRFddZRe3CL/jTPpUgDcF7
+         yASOe57XCJd9pfCoyY0QyacLLh2DRNl1KPG/wOTo=
+From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Alejandro Colomar <alx.manpages@gmail.com>,
+        John Johansen <john.johansen@canonical.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Paul Moore <paul@paul-moore.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: [GIT PULL] Landlock changes for v5.19
+Date:   Mon, 23 May 2022 18:12:45 +0200
+Message-Id: <20220523161245.2451265-1-mic@digikod.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: [patch 0/9] scripts/spdxcheck: Better statistics and exclude
- handling
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>, Max Mehl <max.mehl@fsfe.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christoph Hellwig <hch@lst.de>, linux-spdx@vger.kernel.org
-References: <20220516101901.475557433@linutronix.de>
- <1652706350.kh41opdwg4.2220@fsfe.org> <87zgjhpawr.ffs@tglx>
- <87wnelpam3.ffs@tglx> <1652775347.3cr9dmk5qv.2220@fsfe.org>
- <8735h7ltre.ffs@tglx>
-From:   J Lovejoy <opensource@jilayne.com>
-In-Reply-To: <8735h7ltre.ffs@tglx>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Sender-Ident-agJab5osgicCis: opensource@jilayne.com
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Linus,
 
+Please pull these Landlock changes for v5.19-rc1 .  These 30 commits
+have been successfully tested in the latest linux-next releases for
+several weeks, and with syzkaller:
+https://github.com/google/syzkaller/pull/3133
 
-On 5/17/22 3:43 PM, Thomas Gleixner wrote:
-> On Tue, May 17 2022 at 10:25, Max Mehl wrote:
->> ~ Thomas Gleixner [2022-05-16 20:59 +0200]:
->>> There is also an argument to be made whether we really need to have SPDX
->>> identifiers on trivial files:
->>>
->>> #include <someheader.h>
->>> <EOF>
->>>
->>> Such files are not copyrightable by any means. So what's the value of
->>> doubling the line count to add an SPDX identifier? Just to make nice
->>> statistics?
->> We agree that such files are not copyrightable. But where is the
->> threshold? Lines of code? Creativity? Number of used functions? And how
->> to embed this threshold in tooling? So instead of fuzzy exclusion of
->> such files in tools like spdxcheck or REUSE, it makes sense to treat
->> them as every other file with the cost of adding two comment lines.
->>
->> This clear-cut rule eases maintaining and growing the effort you and
->> others did because developers would know exactly what to add to a new
->> file (license + copyright) without requiring looking up the thresholds
->> or a manual review by maintainers who can interpret them.
-> Seriously no. I'm outright refusing to add my copyright to a trivial
-> file with one or two includes or a silly comment like '/* empty because */.
->
->       There is nothing copyrightable there.
->
-> I'm not going to make myself a fool just to make tools happy, which can
-> figure out on their own whether there is reasonable content in the vast
-> majority of cases.
->
-> Also you need some exclude rules in any case. Why?
->
->    - How do you tell a tool that a file is generated, e.g. in the kernel
->      the default configuration files?
->
->      Yes, the file content depends on human input to the generator tool,
->      but I'm looking forward for the explanation how this is
->      copyrightable especially with multiple people updating this file
->      over time where some of the updates are just done by invoking the
->      generator tool itself.
->
->    - How do you tell a tool that a file contains licensing documentation?
->
->      Go and look what license scanners make out of all the various
->      license-rules.rst files.
->
->    - ....
->
->    Do all scanners have to grow heuristics for ignoring the content past
->    the topmost SPDX License identifier in certain files or for figuring
->    out what might be generated content?
->
-> You also might need to add information about binary blobs, which
-> obviously cannot be part of the binary blobs themself.
->
-> The exclude rules I added are lazy and mostly focussed on spdxcheck, but
-> I'm happy to make them more useful and let them carry information about
-> the nature of the exclude or morph them into a general scanner info
-> which also contains binary blob info and other helpful information. But
-> that needs a larger discussion about the format and rules for such a
-> file.
->
-> That said, I'm all for clear cut rules, but rules just for the rules
-> sake are almost as bad as no rules at all.
->
-> As always you have to apply common sense and look at the bigger picture
-> and come up with solutions which are practicable, enforcable and useful
-> for the larger eco-system.
->
-> Your goal of having SPDX ids and copyright notices in every file of a
-> project is honorable, but impractical for various reasons.
->
-> See above.
->
-> Aside of that you cannot replace a full blown license scanner by REUSE
-> even if your project is SPDX and Copyright notice clean at the top level
-> of a file. You still need to verify that there is no other information
-> in a 'clean' file which might be contradicting or supplemental. You
-> cannot add all of this functionality to REUSE or whatever.
->
-Max, Thomas,
+Regards,
+ Mickaël
 
-I think the discussion here is hitting upon the "inconvenience" of the 
-lack of black/white rules in the law (as to what is copyrightable) 
-versus the convenience of downstream recipients of code who want to be 
-sure they have proper rights (which mixes in the guidance/rules of 
-Reuse, tooling, etc.).
+--
+The following changes since commit 672c0c5173427e6b3e2a9bbb7be51ceeec78093a:
 
-I think some rules in terms of files that are clearly not copyrightable 
-can be implemented in various tooling (hopefully, with the guidance of a 
-lawyer steeped in copyright law), and I agree that putting a license (by 
-way of an SPDX identifier or any other way for that matter) on such 
-files is neither a good use of time nor a good idea (from the 
-perspective of being inaccurate as to the need for a license and thus 
-sending the wrong impression). That being said, there will not be a way 
-to make clear cut rules for everything, without involving a judge. 
-Sorry! That's just how the law works (and we actually often don't want 
-black/white lines in the law, actually).
+  Linux 5.18-rc5 (2022-05-01 13:57:58 -0700)
 
-I can see a policy of, "when it's not clear (as to copyrightability), 
-then add a license", though.
+are available in the Git repository at:
 
-Thanks,
-Jilayne
+  git://git.kernel.org/pub/scm/linux/kernel/git/mic/linux.git tags/landlock-5.19-rc1
 
+for you to fetch changes up to 5e469829baa1b1320e843adf3631edef1d6d2cf2:
+
+  landlock: Explain how to support Landlock (2022-05-23 13:28:03 +0200)
+
+----------------------------------------------------------------
+Landlock updates for v5.19-rc1
+
+Important changes:
+* improve the path_rename LSM hook implementations for RENAME_EXCHANGE;
+* fix a too-restrictive filesystem control for a rare corner case;
+* set the nested sandbox limitation to 16 layers;
+* add a new LANDLOCK_ACCESS_FS_REFER access right to properly handle
+  file reparenting (i.e. full rename and link support);
+* add new tests and documentation;
+* format code with clang-format to make it easier to maintain and
+  contribute.
+
+Related patch series:
+* [PATCH v1 0/7] Landlock: Clean up coding style with clang-format
+  https://lore.kernel.org/r/20220506160513.523257-1-mic@digikod.net
+* [PATCH v2 00/10] Minor Landlock fixes and new tests
+  https://lore.kernel.org/r/20220506160820.524344-1-mic@digikod.net
+* [PATCH v3 00/12] Landlock: file linking and renaming support
+  https://lore.kernel.org/r/20220506161102.525323-1-mic@digikod.net
+* [PATCH v2] landlock: Explain how to support Landlock
+  https://lore.kernel.org/r/20220513112743.156414-1-mic@digikod.net
+
+----------------------------------------------------------------
+Mickaël Salaün (30):
+      landlock: Add clang-format exceptions
+      landlock: Format with clang-format
+      selftests/landlock: Add clang-format exceptions
+      selftests/landlock: Normalize array assignment
+      selftests/landlock: Format with clang-format
+      samples/landlock: Add clang-format exceptions
+      samples/landlock: Format with clang-format
+      landlock: Fix landlock_add_rule(2) documentation
+      selftests/landlock: Make tests build with old libc
+      selftests/landlock: Extend tests for minimal valid attribute size
+      selftests/landlock: Add tests for unknown access rights
+      selftests/landlock: Extend access right tests to directories
+      selftests/landlock: Fully test file rename with "remove" access
+      selftests/landlock: Add tests for O_PATH
+      landlock: Change landlock_add_rule(2) argument check ordering
+      landlock: Change landlock_restrict_self(2) check ordering
+      selftests/landlock: Test landlock_create_ruleset(2) argument check ordering
+      landlock: Define access_mask_t to enforce a consistent access mask size
+      landlock: Reduce the maximum number of layers to 16
+      landlock: Create find_rule() from unmask_layers()
+      landlock: Fix same-layer rule unions
+      landlock: Move filesystem helpers and add a new one
+      LSM: Remove double path_rename hook calls for RENAME_EXCHANGE
+      landlock: Add support for file reparenting with LANDLOCK_ACCESS_FS_REFER
+      selftests/landlock: Add 11 new test suites dedicated to file reparenting
+      samples/landlock: Add support for file reparenting
+      landlock: Document LANDLOCK_ACCESS_FS_REFER and ABI versioning
+      landlock: Document good practices about filesystem policies
+      landlock: Add design choices documentation for filesystem access rights
+      landlock: Explain how to support Landlock
+
+ Documentation/security/landlock.rst            |   17 +-
+ Documentation/userspace-api/landlock.rst       |  180 ++-
+ include/linux/lsm_hook_defs.h                  |    2 +-
+ include/linux/lsm_hooks.h                      |    1 +
+ include/uapi/linux/landlock.h                  |   36 +-
+ samples/landlock/sandboxer.c                   |  132 +-
+ security/apparmor/lsm.c                        |   30 +-
+ security/landlock/cred.c                       |    4 +-
+ security/landlock/cred.h                       |    8 +-
+ security/landlock/fs.c                         |  815 +++++++++---
+ security/landlock/fs.h                         |   11 +-
+ security/landlock/limits.h                     |   10 +-
+ security/landlock/object.c                     |    6 +-
+ security/landlock/object.h                     |    6 +-
+ security/landlock/ptrace.c                     |   10 +-
+ security/landlock/ruleset.c                    |   84 +-
+ security/landlock/ruleset.h                    |   35 +-
+ security/landlock/syscalls.c                   |   95 +-
+ security/security.c                            |    9 +-
+ security/tomoyo/tomoyo.c                       |   11 +-
+ tools/testing/selftests/landlock/base_test.c   |  179 ++-
+ tools/testing/selftests/landlock/common.h      |   66 +-
+ tools/testing/selftests/landlock/fs_test.c     | 1619 +++++++++++++++++++-----
+ tools/testing/selftests/landlock/ptrace_test.c |   40 +-
+ 24 files changed, 2646 insertions(+), 760 deletions(-)

@@ -2,235 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC2975308E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 07:40:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 397285308EE
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 07:42:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354846AbiEWFkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 01:40:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37924 "EHLO
+        id S1350496AbiEWFmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 01:42:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231639AbiEWFkb (ORCPT
+        with ESMTP id S229611AbiEWFmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 01:40:31 -0400
-Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E7342124B;
-        Sun, 22 May 2022 22:40:29 -0700 (PDT)
+        Mon, 23 May 2022 01:42:09 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE9A1A82F
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 22:42:06 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id d137so23455864ybc.13
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 22:42:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=byyefb+qYICK5HXkH39dhHRx9IFMTv8AdQcFgXGNpX4=;
-  b=MiRahVf8HII5RMAtCDoA5do9hpz3tFPrWzgocLmONPoYet4ApHp5eBTG
-   3RD6xHyssEhiRPswcHlZp/Dpz3DCMkDDwFu2oO6nkOLygFyQLdmM5aIUv
-   zXr9qddDJQS7vpvgjjPq4TqR+RHzHb8wrR0kkRP73MUMkqo4Y0bmsM5nE
-   M=;
-Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.91,245,1647298800"; 
-   d="scan'208";a="37556742"
-Received: from 245.122.68.85.rev.sfr.net (HELO hadrien) ([85.68.122.245])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 07:40:28 +0200
-Date:   Mon, 23 May 2022 07:40:27 +0200 (CEST)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-cc:     Julia Lawall <Julia.Lawall@inria.fr>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        intel-wired-lan@lists.osuosl.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [Intel-wired-lan] [PATCH] drivers/net/ethernet/intel: fix typos
- in comments
-In-Reply-To: <71292e14-fe6c-f475-009d-1ea8cde0ea46@molgen.mpg.de>
-Message-ID: <alpine.DEB.2.22.394.2205230736190.2777@hadrien>
-References: <20220521111145.81697-50-Julia.Lawall@inria.fr> <71292e14-fe6c-f475-009d-1ea8cde0ea46@molgen.mpg.de>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2ce0c2vLV4sUxJ3tplGN0HOr0r8Zisa3HjuO2lTepL0=;
+        b=nU3WHf/uNoLdnh6e/fN3cHwHpncxXIGuGl8npuSPITaRM+jazkeWJRrntmBecWREdD
+         q9LuDuypasKmgTOTX4h8vRDx6Jty7G3x7Z+P3VpHhvfjOOHd3528yyObXNliG2WAmx+X
+         qOJfFVD4QWN/uvDDx0VjkJu79wIqE1d14JE8swaBoe37oDEu/DfwymFViFakVSR4BtLd
+         rCq0XJ6JsgxDYmRP/h+/U4s1NQFnVayTggL2c00aqVu6eoGfgS1KNM5joJCTmC/jtw5y
+         6y8ofgFqk97LCgZtepEeB4HtDSylf+rjwwWo1c7GIiQNX9lL5G62UgrDEPRR/vICZbhm
+         xW/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2ce0c2vLV4sUxJ3tplGN0HOr0r8Zisa3HjuO2lTepL0=;
+        b=RmQb5jRL6cXt4EeM5rO2+7ph9uABW78t7N/H8o2gsLz/4E/OVuttbHoSP/98s5ruNO
+         iCSc/TziBFs4oxiW4o56N2qfziimynB0z67IrZoF3bLYgLzuYiGVun6QXzB/s+SHmj6h
+         6aeOEdx2Ih8s/vW65eciVKm8FVTEjGnEEIcX/ob8fbUJMQ6ObWDE4q+ZF6GOhucKeynx
+         vrqWNoTbasmJfpst66FfFtfsJ2WpYAALddvRZSnZtI19HDh/7rs67Yc8GQ6AVvCVq/dp
+         z3aqcXkvJX6qVq7k4l087CDrqspF5ajV9Q0lzPkvDe0i75nVAUv9jl1w29e55J1TFC6b
+         56Wg==
+X-Gm-Message-State: AOAM533EOQH2FmPoMKA5pPnbKhDsgCgVnLjhak0sOfoZxWVsbhTYMJUV
+        tkdk5iuCtJTL21XoTZD+HbQw02mmDMSFGbRFIz5Mbw==
+X-Google-Smtp-Source: ABdhPJwWI9ZKihp7w8I2OHZ6R+V09XAtRCWmqUzL7juIxAFOsmTHJBoFETmaUkRqtUvbFqep1Ij8CGItEmblXxOB1QI=
+X-Received: by 2002:a25:b10c:0:b0:64f:649b:622f with SMTP id
+ g12-20020a25b10c000000b0064f649b622fmr12826897ybj.253.1653284525322; Sun, 22
+ May 2022 22:42:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-969742616-1653284428=:2777"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <a3c932d1-a102-ce18-deea-18cbbd05ecab@linaro.org> <20220522195138.35943-1-konrad.dybcio@somainline.org>
+In-Reply-To: <20220522195138.35943-1-konrad.dybcio@somainline.org>
+From:   Amit Pundir <amit.pundir@linaro.org>
+Date:   Mon, 23 May 2022 11:11:29 +0530
+Message-ID: <CAMi1Hd161=vc2eLVsnYVeeU6mNH8Fx8XfiQMUe_K=LbjyetSZw@mail.gmail.com>
+Subject: Re: Removal of qcom,board-id and qcom,msm-id
+To:     krzysztof.kozlowski@linaro.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     agross@kernel.org, arnd@arndb.de, bjorn.andersson@linaro.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, olof@lixom.net, robh@kernel.org,
+        sboyd@kernel.org, Konrad Dybcio <konrad.dybcio@somainline.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-969742616-1653284428=:2777
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-
-
-
-On Mon, 23 May 2022, Paul Menzel wrote:
-
-> Dear Julia,
+On Mon, 23 May 2022 at 01:22, Konrad Dybcio
+<konrad.dybcio@somainline.org> wrote:
 >
+> Hi,
 >
-> Thank you for your patch.
+> removing these properties will not bring almost any benefit (other than making
+> some checks happy any saving some <200 LoC) and will make the lives of almost
+> all people doing independent development for linux-on-msm harder. There are
+> almost unironically like 3 people outside Linaro and QUIC who have
+> non-vendor-fused development boards AND the sources to rebuild the
+> bootloader on their own. Making it harder to boot is only going to
+> discourage people from developing on these devices, which is already not
+> that pleasant, especially with newer platforms where you have to fight with
+> the oh-so-bright ideas of Android boot chain..
 >
-> I noticed, that the maintainer Tony wasn’t in the Cc: list.
+> This only concerns devices released before sm8350, as the new ones will not
+> even boot with these properties present (or at least SONY Sagami, but I
+> doubt it's an isolated case), so other than completing support for older
+> devices, it won't be an issue going forward, anyway. But there are give
+> or take 50 locked down devices in mainline right now, and many more waiting
+> to be upstreamed in various downstream close-to-mainline trees that should
+> not be disregarded just because Qualcomm is far from the best at making
+> their BSP software stack clean.
+>
+> One solution is to chainload another, (n+1)-stage bootloader, but this is
+> not ideal, as:
+>
+> 1) the stock bootloader can boot Linux just fine on most devices (except
+> for single exceptions, where beloved OEMs didn't implement arm64 booting or
+> something)
+>
+> 2) the boot chain on MSM is already 3- or 4- stage and adding to that will
+> only create an unnecessary mess
+>
+> 3) the job of kernel people is not to break userspace. If the
+> device can not even exit bootloader after a kernel upgrade, it's a big
+> failure.
+>
+> If you *really really really* want these either gone or documented, we can
+> for example use them in the SOCID driver, read the values from DTB and
+> compare against what SMEM has to say and for example print a warning when
+> there are inconsistencies or use it as a fallback when it fails for any
+> reason, such as using a newer SoC on an older kernel, without updates
+> for SOCID read (which are sometimes necessary, which was the case for 8450
+> recently, iirc).
+>
+> My stance is to just leave them as is, as moving them anywhere, or removing
+> them at all will cause unnecessary mess and waste time that could have been
+> spent on more glaring issues..
 
-get_maintainer reports him as a "supporter", and I think that my script
-only takes people listed as "maintainer".
+I couldn't have put it better myself. I suggest we document these
+properties, if that is the blocker, and keep them. A lot has changed
+in the last 7 years, we now have dozens of devices booting upstream
+kernel using these properties.
 
-> Am 21.05.22 um 13:11 schrieb Julia Lawall:
-> > Spelling mistakes (triple letters) in comments.
-> > Detected with the help of Coccinelle.
->
-> I’d be interested in the script you used.
+And fwiw, I have not used dtbTool before, if anything I'd rather
+explore dtb overlays.
 
-Attached.  It should have a pretty low rate of false positives.  Mostly
-things like Eeew and Wheee.
+Regards,
+Amit Pundir
 
 >
-> >
-> > Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
-> >
->
-> Nit: One unneeded blank line.
-
-OK, thanks.
-
-julia
-
-> > ---
-> >   drivers/net/ethernet/intel/fm10k/fm10k_mbx.c   |    2 +-
-> >   drivers/net/ethernet/intel/ice/ice_lib.c       |    2 +-
-> >   drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c |    2 +-
-> >   3 files changed, 3 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/net/ethernet/intel/fm10k/fm10k_mbx.c
-> > b/drivers/net/ethernet/intel/fm10k/fm10k_mbx.c
-> > index 30ca9ee1900b..f2fba6e1d0f7 100644
-> > --- a/drivers/net/ethernet/intel/fm10k/fm10k_mbx.c
-> > +++ b/drivers/net/ethernet/intel/fm10k/fm10k_mbx.c
-> > @@ -1825,7 +1825,7 @@ static void fm10k_sm_mbx_process_error(struct
-> > fm10k_mbx_info *mbx)
-> >   		fm10k_sm_mbx_connect_reset(mbx);
-> >   		break;
-> >   	case FM10K_STATE_CONNECT:
-> > -		/* try connnecting at lower version */
-> > +		/* try connecting at lower version */
-> >   		if (mbx->remote) {
-> >   			while (mbx->local > 1)
-> >   				mbx->local--;
-> > diff --git a/drivers/net/ethernet/intel/ice/ice_lib.c
-> > b/drivers/net/ethernet/intel/ice/ice_lib.c
-> > index 454e01ae09b9..70961c0343e7 100644
-> > --- a/drivers/net/ethernet/intel/ice/ice_lib.c
-> > +++ b/drivers/net/ethernet/intel/ice/ice_lib.c
-> > @@ -2403,7 +2403,7 @@ static void ice_set_agg_vsi(struct ice_vsi *vsi)
-> >   				agg_id);
-> >   			return;
-> >   		}
-> > -		/* aggregator node is created, store the neeeded info */
-> > +		/* aggregator node is created, store the needed info */
-> >   		agg_node->valid = true;
-> >   		agg_node->agg_id = agg_id;
-> >   	}
-> > diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c
-> > b/drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c
-> > index 3e74ab82868b..3f5ef5269bb2 100644
-> > --- a/drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c
-> > +++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c
-> > @@ -77,7 +77,7 @@ static int __ixgbe_enable_sriov(struct ixgbe_adapter
-> > *adapter,
-> >   	IXGBE_WRITE_REG(hw, IXGBE_PFDTXGSWC, IXGBE_PFDTXGSWC_VT_LBEN);
-> >   	adapter->bridge_mode = BRIDGE_MODE_VEB;
-> >   -	/* limit trafffic classes based on VFs enabled */
-> > +	/* limit traffic classes based on VFs enabled */
-> >   	if ((adapter->hw.mac.type == ixgbe_mac_82599EB) && (num_vfs < 16)) {
-> >   		adapter->dcb_cfg.num_tcs.pg_tcs = MAX_TRAFFIC_CLASS;
-> >   		adapter->dcb_cfg.num_tcs.pfc_tcs = MAX_TRAFFIC_CLASS;
->
-> Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
->
->
-> Kind regards,
->
-> Paul
->
---8323329-969742616-1653284428=:2777
-Content-Type: text/plain; charset=US-ASCII; name=threespell.cocci
-Content-Transfer-Encoding: BASE64
-Content-ID: <alpine.DEB.2.22.394.2205230740270.2777@hadrien>
-Content-Description: 
-Content-Disposition: attachment; filename=threespell.cocci
-
-I3NwYXRjaCAtaiA0NCAtLW5vLWluY2x1ZGVzIC0taW5jbHVkZS1oZWFkZXJz
-IC0tdmVyeS1xdWlldA0KDQpAaW5pdGlhbGl6ZTpvY2FtbEANCkBADQoNCmxl
-dCBzZWVuID0gSGFzaHRibC5jcmVhdGUgMTAxDQpsZXQgYnNlZW4gPSBIYXNo
-dGJsLmNyZWF0ZSAxMDENCmxldCBpZHMgPSBIYXNodGJsLmNyZWF0ZSAxMDEN
-CmV4Y2VwdGlvbiBOb3RPSw0KDQpsZXQgb2t3ID0gWyJuZWVkbiI7ImFyZW4i
-OyJpc24iOyJ3YXNuIjsiZG9lc24iOyJkaWRuIjsid2VyZW4iOyJzaG91bGRu
-IjsiY291bGRuIjsid291bGRuIjsiaGFzbiI7ImhhdmVuIjsibGludXgiOyJo
-b3RwbHVnIjsiY3B1IjsiaWZkZWYiOyJpZm5kZWYiOyJlbmRpZiI7InN0cnVj
-dCJdDQoNCmxldCBhZGQgaSA9DQogIChpZiBub3QgKEhhc2h0YmwubWVtIGlk
-cyBpKSB0aGVuIEhhc2h0YmwuYWRkIGlkcyBpICgpKTsNCiAgbGV0IHBpZWNl
-cyA9IFN0ci5zcGxpdCAoU3RyLnJlZ2V4cCAiXyIpIGkgaW4NCiAgTGlzdC5p
-dGVyDQogICAgKGZ1biBpIC0+IGlmIG5vdCAoSGFzaHRibC5tZW0gaWRzIGkp
-IHRoZW4gSGFzaHRibC5hZGQgaWRzIGkgKCkpDQogICAgcGllY2VzOw0KICBm
-YWxzZQ0KDQpsZXQgdm93ZWxzID0gWydhJzsnZSc7J2knOydvJzsndSc7J3kn
-OydBJzsnRSc7J0knOydPJzsnVSc7J1knXQ0KDQpsZXQgaGFzdm93ZWwgcyA9
-DQogIHRyeQ0KICAgIFN0cmluZy5pdGVyDQogICAgICAoZnVuIGMgLT4NCglp
-ZiBMaXN0Lm1lbSBjIHZvd2Vscw0KCXRoZW4gcmFpc2UgTm90T0spDQogICAg
-ICBzOw0KICAgIGZhbHNlDQogIHdpdGggTm90T0sgLT4gdHJ1ZQ0KDQpsZXQg
-aGFzY29uc29uYW50IHMgPQ0KICB0cnkNCiAgICBTdHJpbmcuaXRlcg0KICAg
-ICAgKGZ1biBjIC0+DQoJaWYgbm90KExpc3QubWVtIGMgdm93ZWxzKQ0KCXRo
-ZW4gcmFpc2UgTm90T0spDQogICAgICBzOw0KICAgIGZhbHNlDQogIHdpdGgg
-Tm90T0sgLT4gdHJ1ZQ0KDQpsZXQgb25seV9sZXR0ZXJzIHMgPQ0KICBsZXQg
-aXNsb3dlciBjID0gJ2EnIDw9IGMgJiYgYyA8PSAneicgaW4NCiAgbGV0IGlz
-dXBwZXIgYyA9ICdBJyA8PSBjICYmIGMgPD0gJ1onIGluDQogIHRyeQ0KICAg
-IFN0cmluZy5pdGVyaQ0KICAgICAgKGZ1biBpIGMgLT4NCglsZXQgb2sgPQ0K
-CSAgaWYgaSA9IDANCgkgIHRoZW4gaXNsb3dlciBjIHx8IGlzdXBwZXIgYw0K
-CSAgZWxzZSBpc2xvd2VyIGMgaW4NCglpZiBub3Qgb2sNCgl0aGVuIHJhaXNl
-IE5vdE9LKQ0KICAgICAgczsNCiAgICB0cnVlDQogIHdpdGggTm90T0sgLT4g
-ZmFsc2UNCg0KbGV0IGhhc3RocmVlIHMgPQ0KICBsZXQgbCA9IENvbW1vbi5s
-aXN0X29mX3N0cmluZyBzIGluDQogIGxldCByZWMgbG9vcCA9IGZ1bmN0aW9u
-DQogICAgICBhOjpiOjpjOjpkOjpfIHdoZW4gYSA9IGIgJiYgYiA9IGMgJiYg
-YyA9IGQgLT4gZmFsc2UNCiAgICB8IGE6OmI6OmM6Ol8gd2hlbiBhID0gYiAm
-JiBiID0gYyAtPiB0cnVlDQogICAgfCB4Ojp4cyAtPiBsb29wIHhzDQogICAg
-fCBbXSAtPiBmYWxzZSBpbg0KICBsb29wIGwNCg0KbGV0IGNoZWNrIGJhZCBs
-b2MgcCBjID0NCiAgaWYgbm90KEhhc2h0YmwubWVtIHNlZW4gYykNCiAgdGhl
-bg0KICBiZWdpbg0KICBIYXNodGJsLmFkZCBzZWVuIGMgKCk7DQogIGxldCBw
-aWVjZXMgPSBTdHIuc3BsaXQgKFN0ci5yZWdleHAgIlxcYiIpIGMgaW4NCiAg
-TGlzdC5pdGVyDQogICAgKGZ1biB3b3JkIC0+DQogICAgICBpZiBTdHJpbmcu
-bGVuZ3RoIHdvcmQgPD0gMyB8fCBub3Qob25seV9sZXR0ZXJzIHdvcmQpIHx8
-IEhhc2h0YmwubWVtIGlkcyB3b3JkIHx8IG5vdChoYXN2b3dlbCB3b3JkKSB8
-fCBub3QoaGFzY29uc29uYW50IHdvcmQpDQogICAgICB0aGVuICgpDQogICAg
-ICBlbHNlDQoJbGV0IHdvcmQgPSBTdHJpbmcudW5jYXBpdGFsaXplX2FzY2lp
-IHdvcmQgaW4NCglpZiBMaXN0Lm1lbSB3b3JkIG9rdw0KCXRoZW4gKCkNCgll
-bHNlDQoJbGV0IHJlcyA9DQoJICBpZiBoYXN0aHJlZSB3b3JkIHRoZW4gW3dv
-cmRdIGVsc2UgW10gaW4NCglMaXN0Lml0ZXINCgkgIChmdW4gd2QgLT4NCgkg
-ICAgQ29tbW9uLmhhc2hhZGQgYnNlZW4gd29yZCAobG9jLHdvcmQscCkpDQoJ
-ICByZXMpDQogICAgcGllY2VzDQogIGVuZA0KDQpAaWRlbnRpZmllckANCmlk
-ZW50aWZpZXIgaSA6IHNjcmlwdDpvY2FtbCgpIHsgYWRkIGkgfTsNCkBADQpp
-DQoNCkByMUANCmNvbW1lbnRzIGM7DQpzdGF0ZW1lbnQgUzsNCnBvc2l0aW9u
-IHA7DQpAQA0KDQpTQGNAcA0KDQpAc2NyaXB0Om9jYW1sQA0KYyA8PCByMS5j
-Ow0KcCA8PCByMS5wOw0KQEANCg0KbGV0IGJhZCA9IHJlZiBbXSBpbg0KTGlz
-dC5pdGVyDQooZnVuY3Rpb24gYy0+DQpsZXQgKGNiLGNpLGNhKSA9IGMgaW4N
-Ckxpc3QuaXRlciAoY2hlY2sgYmFkICJiZWZvcmUiIHApIGNiOw0KTGlzdC5p
-dGVyIChjaGVjayBiYWQgIndpdGhpbiIgcCkgY2k7DQpMaXN0Lml0ZXIgKGNo
-ZWNrIGJhZCAiYWZ0ZXIiIHApIGNhKQ0KYw0KDQpAcjJADQpjb21tZW50cyBj
-Ow0KZGVjbGFyYXRpb24gZDsNCnBvc2l0aW9uIHA7DQpAQA0KDQpkQGNAcA0K
-DQpAc2NyaXB0Om9jYW1sQA0KYyA8PCByMi5jOw0KcCA8PCByMi5wOw0KQEAN
-Cg0KbGV0IGJhZCA9IHJlZiBbXSBpbg0KTGlzdC5pdGVyDQooZnVuY3Rpb24g
-Yy0+DQpsZXQgKGNiLGNpLGNhKSA9IGMgaW4NCkxpc3QuaXRlciAoY2hlY2sg
-YmFkICJiZWZvcmUiIHApIGNiOw0KTGlzdC5pdGVyIChjaGVjayBiYWQgIndp
-dGhpbiIgcCkgY2k7DQpMaXN0Lml0ZXIgKGNoZWNrIGJhZCAiYWZ0ZXIiIHAp
-IGNhKQ0KYw0KDQpAZmluYWxpemU6b2NhbWxADQpic2VlbiA8PCBtZXJnZS5i
-c2VlbjsNCkBADQoNCkxpc3QuaXRlcg0KICAoZnVuIGJzZWVuIC0+DQogICAg
-SGFzaHRibC5pdGVyDQogICAgICAoZnVuIHdvcmQgbCAtPg0KCW1hdGNoICFs
-IHdpdGgNCgkgIFsobG9jLHdvcmQscCldIC0+DQoJICAgIENvY2NpbGliLnBy
-aW50X21haW4NCgkgICAgICAoUHJpbnRmLnNwcmludGYgInByb2JsZW0gd2l0
-aCAlcyBjb21tZW50IHdvcmQ6ICVzIiBsb2Mgd29yZCkNCgkgICAgICBwDQoJ
-fCBfIC0+ICgpKQ0KICAgICAgYnNlZW4pDQogIGJzZWVuDQo=
-
---8323329-969742616-1653284428=:2777--
+> Konrad

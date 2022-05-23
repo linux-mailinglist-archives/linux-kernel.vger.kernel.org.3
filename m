@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D58A53184E
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:53:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EE66531D03
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:58:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243437AbiEWR46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:56:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42196 "EHLO
+        id S239486AbiEWRKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:10:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240318AbiEWRZ3 (ORCPT
+        with ESMTP id S239585AbiEWRJW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:25:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3697282168;
-        Mon, 23 May 2022 10:20:52 -0700 (PDT)
+        Mon, 23 May 2022 13:09:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1966C567;
+        Mon, 23 May 2022 10:08:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B4147610E8;
-        Mon, 23 May 2022 17:20:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDE4BC385A9;
-        Mon, 23 May 2022 17:20:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 88CE3B81201;
+        Mon, 23 May 2022 17:08:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9467C385AA;
+        Mon, 23 May 2022 17:08:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326452;
-        bh=VJK7TwURwrK0TLfXEBbhNwto/77OQeC3hI0AX6HaA5Q=;
+        s=korg; t=1653325711;
+        bh=UQmEn963an1N+8324q6nVW42Vd6cGd++y0TYi1GY9Vo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zxT4/8DpmMnJnPp/puMFT5p97iVPSckChdMDo2cJFOOSos+z2b6qLydEO5K8tbxhQ
-         tNuqql1GGy2d+UIQZX4qNdKTci63TkXnybqZyEaWceFElFKMCflC+vgy5V56nP/J2C
-         7RO8ouHQTnNfxu87sVKYE9Urpa8Aewkzmt6/7Uws=
+        b=zH1wukcXiv9gL3bYAdYyWmpGRVslXhf8/o1xzaD4cW9d9yKWJod51f0PgpTiYErLw
+         ZkOnYf1w+1UluNzGqN2taO7IGIAfNwX0bqOILyINy2OC+jd9ZUG5Qf7wn3Jg++HkD3
+         AFt6k8T23xFWZcpCBjZOV4wRx6LmX9mt1SwrfIjI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Michal Wilczynski <michal.wilczynski@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Sasha Levin <sashal@kernel.org>,
-        Gurucharan <gurucharanx.g@intel.com>
-Subject: [PATCH 5.15 086/132] ice: Fix interrupt moderation settings getting cleared
+        stable@vger.kernel.org, Jakob Koschel <jakobkoschel@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 06/33] drbd: remove usage of list iterator variable after loop
 Date:   Mon, 23 May 2022 19:04:55 +0200
-Message-Id: <20220523165837.348246556@linuxfoundation.org>
+Message-Id: <20220523165748.190396884@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
-References: <20220523165823.492309987@linuxfoundation.org>
+In-Reply-To: <20220523165746.957506211@linuxfoundation.org>
+References: <20220523165746.957506211@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,114 +54,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michal Wilczynski <michal.wilczynski@intel.com>
+From: Jakob Koschel <jakobkoschel@gmail.com>
 
-[ Upstream commit bf13502ed5f941b0777b3fd1e24dac5d93f3886c ]
+[ Upstream commit 901aeda62efa21f2eae937bccb71b49ae531be06 ]
 
-Adaptive-rx and Adaptive-tx are interrupt moderation settings
-that can be enabled/disabled using ethtool:
-ethtool -C ethX adaptive-rx on/off adaptive-tx on/off
+In preparation to limit the scope of a list iterator to the list
+traversal loop, use a dedicated pointer to iterate through the list [1].
 
-Unfortunately those settings are getting cleared after
-changing number of queues, or in ethtool world 'channels':
-ethtool -L ethX rx 1 tx 1
+Since that variable should not be used past the loop iteration, a
+separate variable is used to 'remember the current location within the
+loop'.
 
-Clearing was happening due to introduction of bit fields
-in ice_ring_container struct. This way only itr_setting
-bits were rebuilt during ice_vsi_rebuild_set_coalesce().
+To either continue iterating from that position or skip the iteration
+(if the previous iteration was complete) list_prepare_entry() is used.
 
-Introduce an anonymous struct of bitfields and create a
-union to refer to them as a single variable.
-This way variable can be easily saved and restored.
-
-Fixes: 61dc79ced7aa ("ice: Restore interrupt throttle settings after VSI rebuild")
-Signed-off-by: Michal Wilczynski <michal.wilczynski@intel.com>
-Tested-by: Gurucharan <gurucharanx.g@intel.com> (A Contingent worker at Intel)
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
+Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+Link: https://lore.kernel.org/r/20220331220349.885126-1-jakobkoschel@gmail.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/ice/ice_lib.c  | 16 ++++++++--------
- drivers/net/ethernet/intel/ice/ice_txrx.h | 11 ++++++++---
- 2 files changed, 16 insertions(+), 11 deletions(-)
+ drivers/block/drbd/drbd_main.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_lib.c b/drivers/net/ethernet/intel/ice/ice_lib.c
-index 653996e8fd30..4417238b0e64 100644
---- a/drivers/net/ethernet/intel/ice/ice_lib.c
-+++ b/drivers/net/ethernet/intel/ice/ice_lib.c
-@@ -2980,8 +2980,8 @@ ice_vsi_rebuild_get_coalesce(struct ice_vsi *vsi,
- 	ice_for_each_q_vector(vsi, i) {
- 		struct ice_q_vector *q_vector = vsi->q_vectors[i];
+diff --git a/drivers/block/drbd/drbd_main.c b/drivers/block/drbd/drbd_main.c
+index b998e3abca7a..1e02cb60b65b 100644
+--- a/drivers/block/drbd/drbd_main.c
++++ b/drivers/block/drbd/drbd_main.c
+@@ -195,7 +195,7 @@ void tl_release(struct drbd_connection *connection, unsigned int barrier_nr,
+ 		unsigned int set_size)
+ {
+ 	struct drbd_request *r;
+-	struct drbd_request *req = NULL;
++	struct drbd_request *req = NULL, *tmp = NULL;
+ 	int expect_epoch = 0;
+ 	int expect_size = 0;
  
--		coalesce[i].itr_tx = q_vector->tx.itr_setting;
--		coalesce[i].itr_rx = q_vector->rx.itr_setting;
-+		coalesce[i].itr_tx = q_vector->tx.itr_settings;
-+		coalesce[i].itr_rx = q_vector->rx.itr_settings;
- 		coalesce[i].intrl = q_vector->intrl;
- 
- 		if (i < vsi->num_txq)
-@@ -3037,21 +3037,21 @@ ice_vsi_rebuild_set_coalesce(struct ice_vsi *vsi,
- 		 */
- 		if (i < vsi->alloc_rxq && coalesce[i].rx_valid) {
- 			rc = &vsi->q_vectors[i]->rx;
--			rc->itr_setting = coalesce[i].itr_rx;
-+			rc->itr_settings = coalesce[i].itr_rx;
- 			ice_write_itr(rc, rc->itr_setting);
- 		} else if (i < vsi->alloc_rxq) {
- 			rc = &vsi->q_vectors[i]->rx;
--			rc->itr_setting = coalesce[0].itr_rx;
-+			rc->itr_settings = coalesce[0].itr_rx;
- 			ice_write_itr(rc, rc->itr_setting);
- 		}
- 
- 		if (i < vsi->alloc_txq && coalesce[i].tx_valid) {
- 			rc = &vsi->q_vectors[i]->tx;
--			rc->itr_setting = coalesce[i].itr_tx;
-+			rc->itr_settings = coalesce[i].itr_tx;
- 			ice_write_itr(rc, rc->itr_setting);
- 		} else if (i < vsi->alloc_txq) {
- 			rc = &vsi->q_vectors[i]->tx;
--			rc->itr_setting = coalesce[0].itr_tx;
-+			rc->itr_settings = coalesce[0].itr_tx;
- 			ice_write_itr(rc, rc->itr_setting);
- 		}
- 
-@@ -3065,12 +3065,12 @@ ice_vsi_rebuild_set_coalesce(struct ice_vsi *vsi,
- 	for (; i < vsi->num_q_vectors; i++) {
- 		/* transmit */
- 		rc = &vsi->q_vectors[i]->tx;
--		rc->itr_setting = coalesce[0].itr_tx;
-+		rc->itr_settings = coalesce[0].itr_tx;
- 		ice_write_itr(rc, rc->itr_setting);
- 
- 		/* receive */
- 		rc = &vsi->q_vectors[i]->rx;
--		rc->itr_setting = coalesce[0].itr_rx;
-+		rc->itr_settings = coalesce[0].itr_rx;
- 		ice_write_itr(rc, rc->itr_setting);
- 
- 		vsi->q_vectors[i]->intrl = coalesce[0].intrl;
-diff --git a/drivers/net/ethernet/intel/ice/ice_txrx.h b/drivers/net/ethernet/intel/ice/ice_txrx.h
-index 69f78a1c234f..4adc3dff04ba 100644
---- a/drivers/net/ethernet/intel/ice/ice_txrx.h
-+++ b/drivers/net/ethernet/intel/ice/ice_txrx.h
-@@ -345,9 +345,14 @@ struct ice_ring_container {
- 	/* this matches the maximum number of ITR bits, but in usec
- 	 * values, so it is shifted left one bit (bit zero is ignored)
- 	 */
--	u16 itr_setting:13;
--	u16 itr_reserved:2;
--	u16 itr_mode:1;
-+	union {
-+		struct {
-+			u16 itr_setting:13;
-+			u16 itr_reserved:2;
-+			u16 itr_mode:1;
-+		};
-+		u16 itr_settings;
-+	};
- 	enum ice_container_type type;
- };
- 
+@@ -249,8 +249,11 @@ void tl_release(struct drbd_connection *connection, unsigned int barrier_nr,
+ 	 * to catch requests being barrier-acked "unexpectedly".
+ 	 * It usually should find the same req again, or some READ preceding it. */
+ 	list_for_each_entry(req, &connection->transfer_log, tl_requests)
+-		if (req->epoch == expect_epoch)
++		if (req->epoch == expect_epoch) {
++			tmp = req;
+ 			break;
++		}
++	req = list_prepare_entry(tmp, &connection->transfer_log, tl_requests);
+ 	list_for_each_entry_safe_from(req, r, &connection->transfer_log, tl_requests) {
+ 		if (req->epoch != expect_epoch)
+ 			break;
 -- 
 2.35.1
 

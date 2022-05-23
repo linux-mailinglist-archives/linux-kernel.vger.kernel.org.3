@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22B19531724
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71E11531800
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:53:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239615AbiEWRI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:08:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59462 "EHLO
+        id S239857AbiEWRYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:24:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239395AbiEWRHv (ORCPT
+        with ESMTP id S240561AbiEWRQ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:07:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D6A3EA89;
-        Mon, 23 May 2022 10:07:46 -0700 (PDT)
+        Mon, 23 May 2022 13:16:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C162571D95;
+        Mon, 23 May 2022 10:15:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C7C99614CC;
-        Mon, 23 May 2022 17:07:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88197C34115;
-        Mon, 23 May 2022 17:07:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7AE8CB811CC;
+        Mon, 23 May 2022 17:13:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9B86C36AE7;
+        Mon, 23 May 2022 17:13:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653325665;
-        bh=jQ6gt1z8OySJGiK/cfPqJsZiYOhXdGYEOqmvy11hhfc=;
+        s=korg; t=1653325989;
+        bh=V4ztirCZvI7TkmIHEYzWcBUTEshg8t47dAxHMOJ2Es8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HRFMVZkCj3v4uDJ1SBQP3h9Zp405bOukOwUPY94j04jPRLYGpzv+gGuJwyAqR/s8Q
-         zYbMyReHa8+d24xc+tIXdZE4kGkYyx47eO2SQwKjRFBaJkNmnXOc19o5/EiPMuP2oY
-         i4A2bGGn88JEyUDb8dFdYvDH4/k/GRmEV+pSKmDY=
+        b=G9oaFD2f+Cc7ioqIJmk4XVTSpCelnQze+jbpkAkPDUkU5Uje8kjvza7lNQL3njHmi
+         VyNIib60gK5RlqMIntkTX75MiB/FqGpHfrxNcxSWLvwrxWe5u6IMitS+pDtlsri2pI
+         GGuPANI43pa3zv0hoQJfYGC7NhXmhWLGek5BANPo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Tomasz=20Mo=C5=84?= <tomasz.mon@camlingroup.com>,
-        Jeff LaBundy <jeff@labundy.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 03/33] Input: add bounds checking to input_set_capability()
+        Felix Fu <foyjog@gmail.com>, Al Viro <viro@zeniv.linux.org.uk>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Meena Shanmugam <meenashanmugam@google.com>
+Subject: [PATCH 5.4 25/68] SUNRPC: Ensure we flush any closed sockets before xs_xprt_free()
 Date:   Mon, 23 May 2022 19:04:52 +0200
-Message-Id: <20220523165747.639182565@linuxfoundation.org>
+Message-Id: <20220523165806.781218013@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165746.957506211@linuxfoundation.org>
-References: <20220523165746.957506211@linuxfoundation.org>
+In-Reply-To: <20220523165802.500642349@linuxfoundation.org>
+References: <20220523165802.500642349@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,62 +55,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jeff LaBundy <jeff@labundy.com>
+From: Meena Shanmugam <meenashanmugam@google.com>
 
-[ Upstream commit 409353cbe9fe48f6bc196114c442b1cff05a39bc ]
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-Update input_set_capability() to prevent kernel panic in case the
-event code exceeds the bitmap for the given event type.
+commit f00432063db1a0db484e85193eccc6845435b80e upstream.
 
-Suggested-by: Tomasz Moń <tomasz.mon@camlingroup.com>
-Signed-off-by: Jeff LaBundy <jeff@labundy.com>
-Reviewed-by: Tomasz Moń <tomasz.mon@camlingroup.com>
-Link: https://lore.kernel.org/r/20220320032537.545250-1-jeff@labundy.com
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+We must ensure that all sockets are closed before we call xprt_free()
+and release the reference to the net namespace. The problem is that
+calling fput() will defer closing the socket until delayed_fput() gets
+called.
+Let's fix the situation by allowing rpciod and the transport teardown
+code (which runs on the system wq) to call __fput_sync(), and directly
+close the socket.
+
+Reported-by: Felix Fu <foyjog@gmail.com>
+Acked-by: Al Viro <viro@zeniv.linux.org.uk>
+Fixes: a73881c96d73 ("SUNRPC: Fix an Oops in udp_poll()")
+Cc: stable@vger.kernel.org # 5.1.x: 3be232f11a3c: SUNRPC: Prevent immediate close+reconnect
+Cc: stable@vger.kernel.org # 5.1.x: 89f42494f92f: SUNRPC: Don't call connect() more than once on a TCP socket
+Cc: stable@vger.kernel.org # 5.1.x
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+[meenashanmugam: Fix merge conflict in xprt_connect]
+Signed-off-by: Meena Shanmugam <meenashanmugam@google.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/input/input.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ fs/file_table.c       |    1 +
+ net/sunrpc/xprt.c     |    5 +----
+ net/sunrpc/xprtsock.c |   16 +++++++++++++---
+ 3 files changed, 15 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/input/input.c b/drivers/input/input.c
-index cadb368be8ef..f9f3d6261dc5 100644
---- a/drivers/input/input.c
-+++ b/drivers/input/input.c
-@@ -50,6 +50,17 @@ static DEFINE_MUTEX(input_mutex);
+--- a/fs/file_table.c
++++ b/fs/file_table.c
+@@ -375,6 +375,7 @@ void __fput_sync(struct file *file)
+ }
  
- static const struct input_value input_value_sync = { EV_SYN, SYN_REPORT, 1 };
+ EXPORT_SYMBOL(fput);
++EXPORT_SYMBOL(__fput_sync);
  
-+static const unsigned int input_max_code[EV_CNT] = {
-+	[EV_KEY] = KEY_MAX,
-+	[EV_REL] = REL_MAX,
-+	[EV_ABS] = ABS_MAX,
-+	[EV_MSC] = MSC_MAX,
-+	[EV_SW] = SW_MAX,
-+	[EV_LED] = LED_MAX,
-+	[EV_SND] = SND_MAX,
-+	[EV_FF] = FF_MAX,
-+};
-+
- static inline int is_event_supported(unsigned int code,
- 				     unsigned long *bm, unsigned int max)
+ void __init files_init(void)
  {
-@@ -1915,6 +1926,14 @@ EXPORT_SYMBOL(input_free_device);
-  */
- void input_set_capability(struct input_dev *dev, unsigned int type, unsigned int code)
- {
-+	if (type < EV_CNT && input_max_code[type] &&
-+	    code > input_max_code[type]) {
-+		pr_err("%s: invalid code %u for type %u\n", __func__, code,
-+		       type);
-+		dump_stack();
+--- a/net/sunrpc/xprt.c
++++ b/net/sunrpc/xprt.c
+@@ -868,10 +868,7 @@ void xprt_connect(struct rpc_task *task)
+ 	if (!xprt_lock_write(xprt, task))
+ 		return;
+ 
+-	if (test_and_clear_bit(XPRT_CLOSE_WAIT, &xprt->state))
+-		xprt->ops->close(xprt);
+-
+-	if (!xprt_connected(xprt)) {
++	if (!xprt_connected(xprt) && !test_bit(XPRT_CLOSE_WAIT, &xprt->state)) {
+ 		task->tk_rqstp->rq_connect_cookie = xprt->connect_cookie;
+ 		rpc_sleep_on_timeout(&xprt->pending, task, NULL,
+ 				xprt_request_timeout(task->tk_rqstp));
+--- a/net/sunrpc/xprtsock.c
++++ b/net/sunrpc/xprtsock.c
+@@ -989,7 +989,7 @@ static int xs_local_send_request(struct
+ 
+ 	/* Close the stream if the previous transmission was incomplete */
+ 	if (xs_send_request_was_aborted(transport, req)) {
+-		xs_close(xprt);
++		xprt_force_disconnect(xprt);
+ 		return -ENOTCONN;
+ 	}
+ 
+@@ -1027,7 +1027,7 @@ static int xs_local_send_request(struct
+ 			-status);
+ 		/* fall through */
+ 	case -EPIPE:
+-		xs_close(xprt);
++		xprt_force_disconnect(xprt);
+ 		status = -ENOTCONN;
+ 	}
+ 
+@@ -1303,6 +1303,16 @@ static void xs_reset_transport(struct so
+ 
+ 	if (sk == NULL)
+ 		return;
++	/*
++	 * Make sure we're calling this in a context from which it is safe
++	 * to call __fput_sync(). In practice that means rpciod and the
++	 * system workqueue.
++	 */
++	if (!(current->flags & PF_WQ_WORKER)) {
++		WARN_ON_ONCE(1);
++		set_bit(XPRT_CLOSE_WAIT, &xprt->state);
 +		return;
 +	}
-+
- 	switch (type) {
- 	case EV_KEY:
- 		__set_bit(code, dev->keybit);
--- 
-2.35.1
-
+ 
+ 	if (atomic_read(&transport->xprt.swapper))
+ 		sk_clear_memalloc(sk);
+@@ -1326,7 +1336,7 @@ static void xs_reset_transport(struct so
+ 	mutex_unlock(&transport->recv_mutex);
+ 
+ 	trace_rpc_socket_close(xprt, sock);
+-	fput(filp);
++	__fput_sync(filp);
+ 
+ 	xprt_disconnect_done(xprt);
+ }
 
 

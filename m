@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A56685317FB
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:53:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1072531CC0
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:57:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241895AbiEWRgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:36:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43418 "EHLO
+        id S243634AbiEWSFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 14:05:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240841AbiEWR0H (ORCPT
+        with ESMTP id S243101AbiEWRhy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:26:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 799863BA61;
-        Mon, 23 May 2022 10:21:09 -0700 (PDT)
+        Mon, 23 May 2022 13:37:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B837E6A016;
+        Mon, 23 May 2022 10:32:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D78CAB81222;
-        Mon, 23 May 2022 17:20:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A54BC385A9;
-        Mon, 23 May 2022 17:20:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 28D7D6127D;
+        Mon, 23 May 2022 17:32:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3233FC385A9;
+        Mon, 23 May 2022 17:32:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326455;
-        bh=fN23NSwamIBlH5sSv/qgeU1vy1uyJnYA3y7f4Xso8kM=;
+        s=korg; t=1653327124;
+        bh=Y3HnaIdwRzgm8ZRIpbxNDktGkEgObnYgq8LHzhYZ0eI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TqBWe6mxbl+5/A1NTjQxzSBP3T1DMhd/5nN12OTGPcpsZeKymUa21X0T2CzuQULYA
-         QFMNJm6njSgVGa6BcriCOegcFDhkUShtz3GrfCM/XDBpsJMwg1iKzwRrxrRyUjhAbP
-         KWYcW/7oq972BIerOhXf4JzzsrMnSlgwQgVVcSTg=
+        b=NOaXnKwAItDo/wJ+BzJbriqsoo8ruZUAKG02YL90VMqMAqJbenUNkDwx+/GDvZY9V
+         UyJyZ1jmt+wbsTmoDxQpvKZhF7lalv+TwdIAdXd0Yfm9A0cxRRaZCwSdWtGAGNZbTd
+         rzQnNo4FBYk28uTbDoNktM1DPT6HF7gb/Gkh+tww=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+        stable@vger.kernel.org, Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Javier Martinez Canillas <javierm@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 087/132] clk: at91: generated: consider range when calculating best rate
+Subject: [PATCH 5.17 139/158] Revert "fbdev: Make fb_release() return -ENODEV if fbdev was unregistered"
 Date:   Mon, 23 May 2022 19:04:56 +0200
-Message-Id: <20220523165837.503800862@linuxfoundation.org>
+Message-Id: <20220523165853.351893106@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
-References: <20220523165823.492309987@linuxfoundation.org>
+In-Reply-To: <20220523165830.581652127@linuxfoundation.org>
+References: <20220523165830.581652127@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,40 +55,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+From: Javier Martinez Canillas <javierm@redhat.com>
 
-[ Upstream commit d0031e6fbed955ff8d5f5bbc8fe7382482559cec ]
+[ Upstream commit 135332f34ba2662bc1e32b5c612e06a8cc41a053 ]
 
-clk_generated_best_diff() helps in finding the parent and the divisor to
-compute a rate closest to the required one. However, it doesn't take into
-account the request's range for the new rate. Make sure the new rate
-is within the required range.
+This reverts commit aafa025c76dcc7d1a8c8f0bdefcbe4eb480b2f6a. That commit
+attempted to fix a NULL pointer dereference, caused by the struct fb_info
+associated with a framebuffer device to not longer be valid when the file
+descriptor was closed.
 
-Fixes: 8a8f4bf0c480 ("clk: at91: clk-generated: create function to find best_diff")
-Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-Link: https://lore.kernel.org/r/20220413071318.244912-1-codrin.ciubotariu@microchip.com
-Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+The issue was exposed by commit 27599aacbaef ("fbdev: Hot-unplug firmware
+fb devices on forced removal"), which added a new path that goes through
+the struct device removal instead of directly unregistering the fb.
+
+Most fbdev drivers have issues with the fb_info lifetime, because call to
+framebuffer_release() from their driver's .remove callback, rather than
+doing from fbops.fb_destroy callback. This meant that due to this switch,
+the fb_info was now destroyed too early, while references still existed,
+while before it was simply leaked.
+
+The patch we're reverting here reinstated that leak, hence "fixed" the
+regression. But the proper solution is to fix the drivers to not release
+the fb_info too soon.
+
+Suggested-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220504115917.758787-1-javierm@redhat.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/at91/clk-generated.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/video/fbdev/core/fbmem.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/drivers/clk/at91/clk-generated.c b/drivers/clk/at91/clk-generated.c
-index b656d25a9767..fe772baeb15f 100644
---- a/drivers/clk/at91/clk-generated.c
-+++ b/drivers/clk/at91/clk-generated.c
-@@ -106,6 +106,10 @@ static void clk_generated_best_diff(struct clk_rate_request *req,
- 		tmp_rate = parent_rate;
- 	else
- 		tmp_rate = parent_rate / div;
-+
-+	if (tmp_rate < req->min_rate || tmp_rate > req->max_rate)
-+		return;
-+
- 	tmp_diff = abs(req->rate - tmp_rate);
+diff --git a/drivers/video/fbdev/core/fbmem.c b/drivers/video/fbdev/core/fbmem.c
+index 10a9369c9dea..00f0f282e7a1 100644
+--- a/drivers/video/fbdev/core/fbmem.c
++++ b/drivers/video/fbdev/core/fbmem.c
+@@ -1438,10 +1438,7 @@ fb_release(struct inode *inode, struct file *file)
+ __acquires(&info->lock)
+ __releases(&info->lock)
+ {
+-	struct fb_info * const info = file_fb_info(file);
+-
+-	if (!info)
+-		return -ENODEV;
++	struct fb_info * const info = file->private_data;
  
- 	if (*best_diff < 0 || *best_diff >= tmp_diff) {
+ 	lock_fb_info(info);
+ 	if (info->fbops->fb_release)
 -- 
 2.35.1
 

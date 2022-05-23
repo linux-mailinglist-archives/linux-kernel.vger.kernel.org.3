@@ -2,112 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0488530900
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 07:50:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B5DA530904
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 07:52:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233232AbiEWFug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 01:50:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40036 "EHLO
+        id S233500AbiEWFwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 01:52:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232298AbiEWFuT (ORCPT
+        with ESMTP id S233606AbiEWFwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 01:50:19 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA66D2CCB8
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 22:50:17 -0700 (PDT)
-Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220523055015epoutp047cf6261b466c406a2732aa55c9fa2b63~xpfZMrxw91227812278epoutp04T
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 05:50:15 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220523055015epoutp047cf6261b466c406a2732aa55c9fa2b63~xpfZMrxw91227812278epoutp04T
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1653285015;
-        bh=pA/oh00VW5BYtnIAPos+Rl3OXf5h4kl7QqAwkIfF1oA=;
-        h=From:To:In-Reply-To:Subject:Date:References:From;
-        b=Cz/8O4u3/2i6uVnkr3R8kLYex8x9tLropJtwjA255Ledja1ZowHY0Ptolnh4DGPpE
-         ALTsB61ZzKolK86NYRiot9Os267HXFR5Dd9/UOFxv9w3WTcS9d3OyaIWiQXI79Rqcm
-         KUlEszj8v6AmL1ZejcJ1chMhHZMXXMqE+p4hsFD0=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
-        20220523055015epcas2p31401698dcf419c43915aa32487c96d57~xpfYwDQG72228522285epcas2p3-;
-        Mon, 23 May 2022 05:50:15 +0000 (GMT)
-Received: from epsmges2p2.samsung.com (unknown [182.195.36.100]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4L65yW5dQwz4x9QZ; Mon, 23 May
-        2022 05:50:11 +0000 (GMT)
-Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
-        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        82.22.09764.1902B826; Mon, 23 May 2022 14:50:09 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
-        20220523055008epcas2p4b3c935a52b6b362f1bd84a8a57949b3e~xpfTH7w_H0414604146epcas2p4w;
-        Mon, 23 May 2022 05:50:08 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220523055008epsmtrp2b1ee6aa9b949dcc80073bcaa5c24124e~xpfTG7zMY2587425874epsmtrp2b;
-        Mon, 23 May 2022 05:50:08 +0000 (GMT)
-X-AuditID: b6c32a46-79619a8000002624-89-628b20911f9c
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        FA.05.08924.0902B826; Mon, 23 May 2022 14:50:08 +0900 (KST)
-Received: from KORDO040863 (unknown [10.229.8.56]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220523055008epsmtip2ae963e12a700d380b6eb784abdcad9ed~xpfS-wqnw1425914259epsmtip2M;
-        Mon, 23 May 2022 05:50:08 +0000 (GMT)
-From:   "Hoyoung SEO" <hy50.seo@samsung.com>
-To:     "'SEO HOYOUNG'" <hy50.seo@samsung.com>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-In-Reply-To: <20220522171847.66373-1-hy50.seo@samsung.com>
-Subject: RE: [RESEND PATCH v1] scsi: ufs: Change the shutting_down flag
- setting position
-Date:   Mon, 23 May 2022 14:50:08 +0900
-Message-ID: <221501d86e68$f5e613a0$e1b23ae0$@samsung.com>
+        Mon, 23 May 2022 01:52:03 -0400
+Received: from corp-front08-corp.i.nease.net (corp-front08-corp.i.nease.net [59.111.134.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C45666477;
+        Sun, 22 May 2022 22:51:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=corp.netease.com; s=s210401; h=Received:From:To:Cc:Subject:
+        Date:Message-Id:MIME-Version:Content-Transfer-Encoding; bh=2SdOn
+        bcxJLMl7W/R+ogaGZHqr1mDU28XhhJYQ8UJrNk=; b=gEKAwbDHAIacTe7WgA09w
+        UYcT1iGSlbi/M4fs1l9Dv5uOY2xVYksHxDRjOE+RoEI1YAxlQTQtdZE2co3bG988
+        Qg1vfelL00LAOiYzzmBLP3fWooREYFrHhCCdSjOFQrRW2R257iYhXax+WcoZWxeP
+        ffBw24mYN/mrK7wIZs+7nY=
+Received: from pubt1-k8s74.yq.163.org (unknown [115.238.122.38])
+        by corp-front08-corp.i.nease.net (Coremail) with SMTP id nhDICgB3twPMIItizVBhAA--.44228S2;
+        Mon, 23 May 2022 13:51:09 +0800 (HKT)
+From:   liuyacan@corp.netease.com
+To:     kgraul@linux.ibm.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ubraun@linux.ibm.com,
+        liuyacan <liuyacan@corp.netease.com>
+Subject: [PATCH net] net/smc: fix listen processing for SMC-Rv2
+Date:   Mon, 23 May 2022 13:50:56 +0800
+Message-Id: <20220523055056.2078994-1-liuyacan@corp.netease.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 14.0
-Thread-Index: AQHYKRR1NoX3jnWOYKYl5kKfNMG5oQK7eI1prRai7gA=
-Content-Language: ko
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrCKsWRmVeSWpSXmKPExsWy7bCmqe5Ehe4kgyUTRS1WL37AYnF51xw2
-        i+7rO9gcmD36tqxi9Pi8SS6AKSrbJiM1MSW1SCE1Lzk/JTMv3VbJOzjeOd7UzMBQ19DSwlxJ
-        IS8xN9VWycUnQNctMwdoh5JCWWJOKVAoILG4WEnfzqYov7QkVSEjv7jEVim1ICWnwLxArzgx
-        t7g0L10vL7XEytDAwMgUqDAhO+P+8utsBa+FKmZufsLYwHiPv4uRk0NCwETizrVdjF2MXBxC
-        AjsYJX53TWeDcD4xSixasYUVwvnMKHFt4wtmuJb+ScwQiV2MEud2r2aBcJ4zSsw52s8IUsUm
-        oCVxfeJbsA4RgSyJB4/nMoHYnAJWEj2HL4HZwgJREmcuzGUDsVkEVCWaV25iAbF5BSwlFt2c
-        CGULSpyc+QTMZhaQl9j+dg7UFQoSO86+ZoSYbyXxYPoRRogaEYnZnW1g10kInGKXuPh9ORtE
-        g4vEnV3/2CFsYYlXx7dA2VISn9/thaoplvjxZjUTRHMDo8TS9mNQ24wlZj1rB9rAAbRBU2L9
-        Ln0QU0JAWeLILajb+CQ6Dv9lhwjzSnS0CUE0KkmcmXsbKiwhcXB2DkTYQ2LGnrPsExgVZyF5
-        chaSJ2cheWYWwtoFjCyrGMVSC4pz01OLjQqM4JGdnJ+7iRGc/LTcdjBOeftB7xAjEwfjIUYJ
-        DmYlEd7tiR1JQrwpiZVVqUX58UWlOanFhxhNgcE+kVlKNDkfmH7zSuINTSwNTMzMDM2NTA3M
-        lcR5vVI2JAoJpCeWpGanphakFsH0MXFwSjUw7WBdte8av8z7I5veacVN35A8/8gS7doQxpLe
-        t/Z/iuVceSMLkxeZXp9r3WUuduPtJsf7V5SN+OTlsjqSDbU4Gq5EGS7KeBzB1e1qdIc56Wjl
-        RsWWR6mOvfN3iPrtuDjbI8le7LOuq9+hS0tUdzbylaqUNYav3x6U52s6/4X8CY1Nea2nGH8+
-        jW6pvOB8lfnB/1Nh7Nrra+ZbWmit2f7CMG2r8J5Q21ezf59d6qwuqnqRJ92sJ1Y3qVtsrcYr
-        9zKZdx/1rJdoH/719b3ifmNha6YZzw62z9s8T9GL66cC/wWP11r29scXqq36cujatOKYnZsF
-        PaaELLL9XCX6cvU7wW88y88rlK9bncO3jJdPiaU4I9FQi7moOBEAB+fWrwcEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrKLMWRmVeSWpSXmKPExsWy7bCSvO4Ehe4kgw2XzS1WL37AYnF51xw2
-        i+7rO9gcmD36tqxi9Pi8SS6AKYrLJiU1J7MstUjfLoEr4/7y62wFr4UqZm5+wtjAeI+/i5GT
-        Q0LAROJO/yTmLkYuDiGBHYwSh2dNZYZISEj8X9zEBGELS9xvOcIKUfSUUaLh80OwIjYBLYnr
-        E9+C2SICORJLFu2HmtTNKLHt6zQWkASngJVEz+FLYJOEBSIkWr53soLYLAKqEs0rN4HV8ApY
-        Siy6ORHKFpQ4OfMJmM0soC3R+7CVEcKWl9j+dg7UdQoSO86+ZoRYbCXxYPoRqBoRidmdbcwT
-        GIVmIRk1C8moWUhGzULSsoCRZRWjZGpBcW56brFhgVFearlecWJucWleul5yfu4mRnDIa2nt
-        YNyz6oPeIUYmDsZDjBIczEoivNsTO5KEeFMSK6tSi/Lji0pzUosPMUpzsCiJ817oOhkvJJCe
-        WJKanZpakFoEk2Xi4JRqYNIOtOlbPcs2zs3t3jdHGR5zptkrlY+2nErhWHxdIv7ItYJLTBH7
-        de7PriuOuvPQbr1LR9bfp92WJ5UCZ4kpfjtlYOxyKSv9Sd7fa8utOHjNY5gldJrOVYWlf0x1
-        P9gWlr4/sXCOYVzN1h9/1Uwj6xvk1/87LBM851dndHLu7ZoH/e0T7340fM6eyv7v2o+GNUz3
-        pj73eHb2k0WxsFOJxMrjR1WqdG9l9pUeOZEQuy93+0GDKe5rpx4+ekTUyoNnj6fkXt2e43Oa
-        NuioNz0+J/hmgREX5zQutdbaKn2X04tYXc40eX+c1sPUyJj6inOfkrzszdKY65pfTglMY7j9
-        dJXgjceLeq16VvlJnFp4WomlOCPRUIu5qDgRAB/JW2boAgAA
-X-CMS-MailID: 20220523055008epcas2p4b3c935a52b6b362f1bd84a8a57949b3e
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220523053658epcas2p2400c4c92126baa05d5fb4b5d6ed7e274
-References: <CGME20220523053658epcas2p2400c4c92126baa05d5fb4b5d6ed7e274@epcas2p2.samsung.com>
-        <20220522171847.66373-1-hy50.seo@samsung.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: nhDICgB3twPMIItizVBhAA--.44228S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxuF17KFWUJr4xtF4xWF1kuFg_yoWrJF1fpa
+        1Ykry3CFs5GFs3Grs3tF15Zr4rZw18try8G3srGr1FkwnrtryrtryxXF4j9FZxJFW3t3WI
+        vFW8Ar1fWw15taDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUULYb7IF0VCFI7km07C26c804VAKzcIF0wAFF20E14v26r4j6ryU
+        M7CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2
+        IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84AC
+        jcxK6xIIjxv20xvEc7CjxVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84
+        ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2kK67ZEXf0FJ3sC6x9vy-n0Xa0_Xr1Utr1k
+        JwI_Jr4ln4vE4IxY62xKV4CY8xCE548m6r4UJryUGwAS0I0E0xvYzxvE52x082IY62kv04
+        87Mc804VCqF7xvr2I5Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+        JVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7V
+        AKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2xKxwAKzVCY
+        07xG64k0F24l7I0Y64k_MxkI7II2jI8vz4vEwIxGrwCF04k20xvY0x0EwIxGrwCF72vEw2
+        IIxxk0rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7vE0wC20s026c02F40E14v26r1j6r18
+        MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr4
+        1lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1l
+        IxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4
+        A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0pRp6wAUUUUU=
+X-CM-SenderInfo: 5olx5txfdqquhrush05hwht23hof0z/1tbiBQAPCVt760cBigAAsE
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -115,74 +66,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> -----Original Message-----
-> From: SEO HOYOUNG [mailto:hy50.seo@samsung.com]
-> Sent: Monday, May 23, 2022 2:19 AM
-> To: linux-scsi@vger.kernel.org; linux-kernel@vger.kernel.org;
-> alim.akhtar@samsung.com; avri.altman@wdc.com; jejb@linux.ibm.com;
-> martin.petersen@oracle.com; beanhuo@micron.com; asutoshd@codeaurora.org;
-> cang@codeaurora.org; bvanassche@acm.org; bhoon95.kim@samsung.com;
-> kwmad.kim@samsung.com
-> Cc: SEO HOYOUNG
-> Subject: [RESEND PATCH v1] scsi: ufs: Change the shutting_down flag
-> setting position
-> 
-> When System shutdown, will called ufshcd_wl_shutdown().
-> Then the shutting_down falg set to 1 at ufshcd_wl_shutdown().
-> And send to SSU cmd at ufshcd_wl_shutdown()->__ufshcd_wl_suspend()->
-> ufshcd_set_dev_pwr_mode() function.
-> 
-> If occurred fail during send SSU cmd,
-> then will called ufshcd_err_handler for recovery.
-> But already set shutting_down to 1, so ufs driver could not recovery.
-> Then System wait for SSU cmd to be completed and eventaully it will tak
-> Hang.
-> So changed the position where shutting_down is set.
-> 
-> Signed-off-by: SEO HOYOUNG <hy50.seo@samsung.com>
-> ---
->  drivers/scsi/ufs/ufshcd.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c index
-> 1fb3a8b9b03e..65d47cd5afbe 100644
-> --- a/drivers/scsi/ufs/ufshcd.c
-> +++ b/drivers/scsi/ufs/ufshcd.c
-> @@ -9235,10 +9235,6 @@ static void ufshcd_wl_shutdown(struct device *dev)
-> 
->  	hba = shost_priv(sdev->host);
-> 
-> -	down(&hba->host_sem);
-> -	hba->shutting_down = true;
-> -	up(&hba->host_sem);
-> -
->  	/* Turn on everything while shutting down */
->  	ufshcd_rpm_get_sync(hba);
->  	scsi_device_quiesce(sdev);
-> @@ -9248,6 +9244,10 @@ static void ufshcd_wl_shutdown(struct device *dev)
->  		scsi_device_quiesce(sdev);
->  	}
->  	__ufshcd_wl_suspend(hba, UFS_SHUTDOWN_PM);
-> +
-> +	down(&hba->host_sem);
-> +	hba->shutting_down = true;
-> +	up(&hba->host_sem);
->  }
-> 
->  /**
-> --
-> 2.26.0
+From: liuyacan <liuyacan@corp.netease.com>
 
-Hi,
+In the process of checking whether RDMAv2 is available, the current
+implementation first sets ini->smcrv2.ib_dev_v2, and then allocates
+smc buf desc, but the latter may fail. Unfortunately, the caller
+will only check the former. In this case, a NULL pointer reference
+will occur in smc_clc_send_confirm_accept() when accessing
+conn->rmb_desc.
 
-It seems that same patch below this.
-https://lore.kernel.org/lkml/74cade30-6dde-c5f7-e009-b34423d22c12@intel.com/
+This patch does two things:
+1. Use the return code to determine whether V2 is available.
+2. If the return code is NODEV, continue to check whether V1 is
+available.
 
-I think that will occurred error with called __ufshcd_wl_suspend().
+Fixes: e49300a6bf62 ("net/smc: add listen processing for SMC-Rv2")
+Signed-off-by: liuyacan <liuyacan@corp.netease.com>
+---
+ net/smc/af_smc.c | 44 +++++++++++++++++++++++++++-----------------
+ 1 file changed, 27 insertions(+), 17 deletions(-)
 
-So the hba->shutting_down need to set after call __ufshcd_wl_suspend().
-Otherwise, the error_handler cannot operate when an error occurs.
-Please give opinion.
-
-Thanks.
+diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
+index 45a24d242..d3de54b70 100644
+--- a/net/smc/af_smc.c
++++ b/net/smc/af_smc.c
+@@ -2093,13 +2093,13 @@ static int smc_listen_rdma_reg(struct smc_sock *new_smc, bool local_first)
+ 	return 0;
+ }
+ 
+-static void smc_find_rdma_v2_device_serv(struct smc_sock *new_smc,
+-					 struct smc_clc_msg_proposal *pclc,
+-					 struct smc_init_info *ini)
++static int smc_find_rdma_v2_device_serv(struct smc_sock *new_smc,
++					struct smc_clc_msg_proposal *pclc,
++					struct smc_init_info *ini)
+ {
+ 	struct smc_clc_v2_extension *smc_v2_ext;
+ 	u8 smcr_version;
+-	int rc;
++	int rc = 0;
+ 
+ 	if (!(ini->smcr_version & SMC_V2) || !smcr_indicated(ini->smc_type_v2))
+ 		goto not_found;
+@@ -2117,26 +2117,31 @@ static void smc_find_rdma_v2_device_serv(struct smc_sock *new_smc,
+ 	ini->smcrv2.saddr = new_smc->clcsock->sk->sk_rcv_saddr;
+ 	ini->smcrv2.daddr = smc_ib_gid_to_ipv4(smc_v2_ext->roce);
+ 	rc = smc_find_rdma_device(new_smc, ini);
+-	if (rc) {
+-		smc_find_ism_store_rc(rc, ini);
++	if (rc)
+ 		goto not_found;
+-	}
++
+ 	if (!ini->smcrv2.uses_gateway)
+ 		memcpy(ini->smcrv2.nexthop_mac, pclc->lcl.mac, ETH_ALEN);
+ 
+ 	smcr_version = ini->smcr_version;
+ 	ini->smcr_version = SMC_V2;
+ 	rc = smc_listen_rdma_init(new_smc, ini);
+-	if (!rc)
+-		rc = smc_listen_rdma_reg(new_smc, ini->first_contact_local);
+-	if (!rc)
+-		return;
+-	ini->smcr_version = smcr_version;
+-	smc_find_ism_store_rc(rc, ini);
++	if (rc) {
++		ini->smcr_version = smcr_version;
++		goto not_found;
++	}
++	rc = smc_listen_rdma_reg(new_smc, ini->first_contact_local);
++	if (rc) {
++		ini->smcr_version = smcr_version;
++		goto not_found;
++	}
++	return 0;
+ 
+ not_found:
++	rc = rc ?: SMC_CLC_DECL_NOSMCDEV;
+ 	ini->smcr_version &= ~SMC_V2;
+ 	ini->check_smcrv2 = false;
++	return rc;
+ }
+ 
+ static int smc_find_rdma_v1_device_serv(struct smc_sock *new_smc,
+@@ -2169,6 +2174,7 @@ static int smc_listen_find_device(struct smc_sock *new_smc,
+ 				  struct smc_init_info *ini)
+ {
+ 	int prfx_rc;
++	int rc;
+ 
+ 	/* check for ISM device matching V2 proposed device */
+ 	smc_find_ism_v2_device_serv(new_smc, pclc, ini);
+@@ -2196,14 +2202,18 @@ static int smc_listen_find_device(struct smc_sock *new_smc,
+ 		return ini->rc ?: SMC_CLC_DECL_NOSMCDDEV;
+ 
+ 	/* check if RDMA V2 is available */
+-	smc_find_rdma_v2_device_serv(new_smc, pclc, ini);
+-	if (ini->smcrv2.ib_dev_v2)
++	rc = smc_find_rdma_v2_device_serv(new_smc, pclc, ini);
++	if (!rc)
+ 		return 0;
+ 
++	/* skip V1 check if V2 is unavailable for non-Device reason */
++	if (rc != SMC_CLC_DECL_NOSMCDEV &&
++	    rc != SMC_CLC_DECL_NOSMCRDEV &&
++	    rc != SMC_CLC_DECL_NOSMCDDEV)
++		return rc;
++
+ 	/* check if RDMA V1 is available */
+ 	if (!prfx_rc) {
+-		int rc;
+-
+ 		rc = smc_find_rdma_v1_device_serv(new_smc, pclc, ini);
+ 		smc_find_ism_store_rc(rc, ini);
+ 		return (!rc) ? 0 : ini->rc;
+-- 
+2.20.1
 

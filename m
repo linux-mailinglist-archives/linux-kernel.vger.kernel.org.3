@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED641531ABD
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03670531D2C
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:58:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243560AbiEWRiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:38:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43392 "EHLO
+        id S1343877AbiEWSIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 14:08:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241697AbiEWR1F (ORCPT
+        with ESMTP id S243585AbiEWRiS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:27:05 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A7875208;
-        Mon, 23 May 2022 10:22:11 -0700 (PDT)
+        Mon, 23 May 2022 13:38:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 528196EC49;
+        Mon, 23 May 2022 10:32:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6F982CE16D6;
-        Mon, 23 May 2022 17:21:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46315C385A9;
-        Mon, 23 May 2022 17:21:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2FC9AB811F8;
+        Mon, 23 May 2022 17:31:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55FA2C385AA;
+        Mon, 23 May 2022 17:31:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326500;
-        bh=dDgockUMxqkKVjLARpU37Xk0WcVS855EiS8jPh0QiFw=;
+        s=korg; t=1653327088;
+        bh=Eh20xBib3bRTCPbaAVbjeIBlp5HWjm1Ir/G+4BMbClg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Mle3TGWzZlGB03XXrgVTRpISCe1k2deoaUFrzB55W8/8/lRU8kLzW3gCDC1c+Zrsu
-         RZMUvf+YzcXwI+9izb5+VXVU0WGuOs4QGMXwYNCund2Ugy1/w162109/UNwxPfrFK2
-         M3BEe16MAoBySPjl3WzE1gl1VNUWY0+M0SUqpiuY=
+        b=0tsayt+nyaLPV3jp5rnClqTUQspXnFPIrUGaV8FpgkHC8MztAI/QAFzb1c4hbJmEC
+         J1WIqth+8+qMBKimxY7nGOl34K8/60KXpFesbLWPZUnqCV3EeZNUR5kMYoLjiLlPux
+         Qw+ifNhoM+rH46TEMAJe9DiXUGSBAdpctnbjYFaE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kevin Mitchell <kevmitch@arista.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        stable@vger.kernel.org, Aashay Shringarpure <aashay@google.com>,
+        Yi Chou <yich@google.com>,
+        Shervin Oloumi <enlightened@google.com>,
+        Grant Grundler <grundler@chromium.org>,
         "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>,
-        Gurucharan <gurucharanx.g@intel.com>
-Subject: [PATCH 5.15 100/132] igb: skip phy status check where unavailable
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 152/158] net: atlantic: add check for MAX_SKB_FRAGS
 Date:   Mon, 23 May 2022 19:05:09 +0200
-Message-Id: <20220523165840.005997703@linuxfoundation.org>
+Message-Id: <20220523165855.376317577@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
-References: <20220523165823.492309987@linuxfoundation.org>
+In-Reply-To: <20220523165830.581652127@linuxfoundation.org>
+References: <20220523165830.581652127@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,44 +58,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kevin Mitchell <kevmitch@arista.com>
+From: Grant Grundler <grundler@chromium.org>
 
-[ Upstream commit 942d2ad5d2e0df758a645ddfadffde2795322728 ]
+[ Upstream commit 6aecbba12b5c90b26dc062af3b9de8c4b3a2f19f ]
 
-igb_read_phy_reg() will silently return, leaving phy_data untouched, if
-hw->ops.read_reg isn't set. Depending on the uninitialized value of
-phy_data, this led to the phy status check either succeeding immediately
-or looping continuously for 2 seconds before emitting a noisy err-level
-timeout. This message went out to the console even though there was no
-actual problem.
+Enforce that the CPU can not get stuck in an infinite loop.
 
-Instead, first check if there is read_reg function pointer. If not,
-proceed without trying to check the phy status register.
-
-Fixes: b72f3f72005d ("igb: When GbE link up, wait for Remote receiver status condition")
-Signed-off-by: Kevin Mitchell <kevmitch@arista.com>
-Tested-by: Gurucharan <gurucharanx.g@intel.com> (A Contingent worker at Intel)
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Reported-by: Aashay Shringarpure <aashay@google.com>
+Reported-by: Yi Chou <yich@google.com>
+Reported-by: Shervin Oloumi <enlightened@google.com>
+Signed-off-by: Grant Grundler <grundler@chromium.org>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/igb/igb_main.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/aquantia/atlantic/aq_ring.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
-index bf8ef81f6c0e..b88303351484 100644
---- a/drivers/net/ethernet/intel/igb/igb_main.c
-+++ b/drivers/net/ethernet/intel/igb/igb_main.c
-@@ -5505,7 +5505,8 @@ static void igb_watchdog_task(struct work_struct *work)
- 				break;
- 			}
+diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_ring.c b/drivers/net/ethernet/aquantia/atlantic/aq_ring.c
+index bc1952131799..8201ce7adb77 100644
+--- a/drivers/net/ethernet/aquantia/atlantic/aq_ring.c
++++ b/drivers/net/ethernet/aquantia/atlantic/aq_ring.c
+@@ -363,6 +363,7 @@ int aq_ring_rx_clean(struct aq_ring_s *self,
+ 			continue;
  
--			if (adapter->link_speed != SPEED_1000)
-+			if (adapter->link_speed != SPEED_1000 ||
-+			    !hw->phy.ops.read_reg)
- 				goto no_wait;
+ 		if (!buff->is_eop) {
++			unsigned int frag_cnt = 0U;
+ 			buff_ = buff;
+ 			do {
+ 				bool is_rsc_completed = true;
+@@ -371,6 +372,8 @@ int aq_ring_rx_clean(struct aq_ring_s *self,
+ 					err = -EIO;
+ 					goto err_exit;
+ 				}
++
++				frag_cnt++;
+ 				next_ = buff_->next,
+ 				buff_ = &self->buff_ring[next_];
+ 				is_rsc_completed =
+@@ -378,7 +381,8 @@ int aq_ring_rx_clean(struct aq_ring_s *self,
+ 							    next_,
+ 							    self->hw_head);
  
- 			/* wait for Remote receiver status OK */
+-				if (unlikely(!is_rsc_completed)) {
++				if (unlikely(!is_rsc_completed) ||
++						frag_cnt > MAX_SKB_FRAGS) {
+ 					err = 0;
+ 					goto err_exit;
+ 				}
 -- 
 2.35.1
 

@@ -2,127 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7B36531317
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:23:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6BC8531243
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:22:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236766AbiEWOBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 10:01:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33058 "EHLO
+        id S236802AbiEWOCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 10:02:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236960AbiEWOBR (ORCPT
+        with ESMTP id S236759AbiEWOCS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 10:01:17 -0400
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 905902FFD0;
-        Mon, 23 May 2022 07:01:15 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 05F02200013;
-        Mon, 23 May 2022 14:01:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1653314474;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=W1NPvyjhdf9eXZ6AbxiRj9NJrA2YlhQRfNigWpsbM1Q=;
-        b=WKpZpo3Pd2Q2yr+469kQijTpFQwiCoiAhEaoRgJsKXVppSlsKqwNBX1iwpb5iqCq1bLVKJ
-        73tb2iYkXMsTkr/zxbZX9YmNhx5AmU2UfNu3DJ9qivA1jqpOa++4uG7evU5L4FMnZVoswM
-        5KOo7FZtm6b7Jc1BLYvr/vzTbgDcqvm7oqtGpkL7rfOk4riRD3cvgZrRclkY6eHTA3hr0b
-        wRBahEnAJbUYagavquNFEmVmEkdJaGTMrtyLgCQl6JcoMAESTwrsabTBA4ZrEsFVT0O6sH
-        Vtfviho/NTi1qheOibxNIkgdGH+e5sJ+Q2mUVcVemOVwhUAj+Z3iyjhZwQ8G5g==
-Date:   Mon, 23 May 2022 16:00:04 +0200
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] net: ocelot: fix wrong time_after usage
-Message-ID: <20220523160004.6d285609@fixe.home>
-In-Reply-To: <20220521162108.bact3sn4z2yuysdt@skbuf>
-References: <YoeMW+/KGk8VpbED@lunn.ch>
-        <20220520213115.7832-1-paskripkin@gmail.com>
-        <YojvUsJ090H/wfEk@lunn.ch>
-        <20220521162108.bact3sn4z2yuysdt@skbuf>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-pc-linux-gnu)
+        Mon, 23 May 2022 10:02:18 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FE9C5005D
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 07:02:15 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id 10so9741634plj.0
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 07:02:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/uPYvFeZZTkSS8WJjVNbiWQjecsqWmcRfd8xMpRg01E=;
+        b=P3PHrmTAKhkPTFWosISHQujRQUzSuvYr35CbU+SPaqg2lslJhSb5IyhvSw0mzzk9kR
+         82VlQKVbOpAqMmhcG7IX6OeFBEZp+1hl6ojaXwFqjLlN/G0vLW8Mh7DfPebUGmT2oki6
+         SuvLQOxErrRKGAlI4FhXZ27F5tjbsx1XMsJX2M4LoiA03rh+VZvGDVyLCSXgjXdbwmSz
+         bbmNG/+XdAz7/JLXaFY+53DLwEhWI6AkVCxzEEdDlHT9VmAQ8fm9PpyHyQkh0BMcBboR
+         abIYgucvKt8pUeTdldsxwNL2sCrMeEAGZQLVYAkduBTspicz7QzptSqQ34NPk/yyfIND
+         ++tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/uPYvFeZZTkSS8WJjVNbiWQjecsqWmcRfd8xMpRg01E=;
+        b=t0fGtqUb4OQaO9VAxdESEwgn7yh9LvigvAgK3ZjxWz7Cl/PahTkPWCRiaH34nDeSxy
+         YqLGmHrVoMz+7bD8/82WiuUAx50/V9G8KNEzTy7yACs+6cakRxxxRYOH/EhSc5VDrK26
+         4xCRMMAw3ribE50qZm9yCc0XR2Qeh/LtMEXIhkjX0pmUhkIN0p/BveKcfp1I9zTQuKZg
+         HSKIj0UU4FcgN0UdKNdb6S+OZGyXsQvYfERTcM86mA8ic2PysktBeNG60lk63IBXohND
+         47YHHo9BLz+0P2DhXb9GiFCRl77LXlW1FG8WEflof5os539jEDFFeTSUt8eOWL/tOcVK
+         bBjA==
+X-Gm-Message-State: AOAM531JXJ9XLBabShxcUg5bqLaTF+yxyXybhJflsNqH6vJ8xOWRcuWo
+        VRU6IxvpNK3u7IwX+IpsuFk=
+X-Google-Smtp-Source: ABdhPJycRpTQOgsr2QIRd/XkuP5twDc97y3ftQbX8ngGJKEKcSlErTYDksg8GPnzJ06vkOrXGmWP7w==
+X-Received: by 2002:a17:903:32d2:b0:161:d485:613f with SMTP id i18-20020a17090332d200b00161d485613fmr23118997plr.173.1653314534606;
+        Mon, 23 May 2022 07:02:14 -0700 (PDT)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id i5-20020a62c105000000b0050dc7628169sm7203366pfg.67.2022.05.23.07.02.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 May 2022 07:02:14 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] mtd: maps: Fix refcount leak in of_flash_probe_versatile
+Date:   Mon, 23 May 2022 18:02:05 +0400
+Message-Id: <20220523140205.48625-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Sat, 21 May 2022 16:21:09 +0000,
-Vladimir Oltean <vladimir.oltean@nxp.com> a =C3=A9crit :
+of_find_matching_node_and_match() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+Add missing of_node_put() to avoid refcount leak.
 
-> On Sat, May 21, 2022 at 03:55:30PM +0200, Andrew Lunn wrote:
-> > On Sat, May 21, 2022 at 12:31:15AM +0300, Pavel Skripkin wrote: =20
-> > > Accidentally noticed, that this driver is the only user of
-> > > while (time_after(jiffies...)).
-> > >=20
-> > > It looks like typo, because likely this while loop will finish after =
-1st
-> > > iteration, because time_after() returns true when 1st argument _is af=
-ter_
-> > > 2nd one.
-> > >=20
-> > > There is one possible problem with this poll loop: the scheduler coul=
-d put
-> > > the thread to sleep, and it does not get woken up for
-> > > OCELOT_FDMA_CH_SAFE_TIMEOUT_US. During that time, the hardware has do=
-ne
-> > > its thing, but you exit the while loop and return -ETIMEDOUT.
-> > >=20
-> > > Fix it by using sane poll API that avoids all problems described above
-> > >=20
-> > > Fixes: 753a026cfec1 ("net: ocelot: add FDMA support")
-> > > Suggested-by: Andrew Lunn <andrew@lunn.ch>
-> > > Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
-> > > ---
-> > >=20
-> > > I can't say if 0 is a good choise for 5th readx_poll_timeout() argume=
-nt,
-> > > so this patch is build-tested only. =20
-> >  =20
-> > > Testing and suggestions are welcomed! =20
-> >=20
-> > If you had the hardware, i would suggest you profile how often it does
-> > complete on the first iteration. And when it does not complete on the
-> > first iteration, how many more iterations it needs.
-> >=20
-> > Tobias made an interesting observation with the mv88e6xxx switch. He
-> > found that two tight polls was enough 99% of the time. Putting a sleep
-> > in there doubles the time it took to setup the switch. So he ended up
-> > with a hybrid of open coded polling twice, followed by iopoll with a
-> > timer value set.
-> >=20
-> > That was with a heavily used poll function. How often is this function
-> > used? No point in overly optimising this if it is not used much. =20
->=20
-> If you're looking at me, I don't have the hardware to test, sorry.
-> Frame DMA is one of the components NXP removed when building their DSA
-> variants of these switches. But the function is called once or twice per
-> NAPI poll cycle, so it's worth optimizing as much as possible.
->=20
-> Clement, could you please do some testing? The patch that Andrew is
-> talking about is 35da1dfd9484 ("net: dsa: mv88e6xxx: Improve performance
-> of busy bit polling").
+Fixes: b0afd44bc192 ("mtd: physmap_of: add a hook for Versatile write protection")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/mtd/maps/physmap-versatile.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Ok, I'll have to wake up that ocelot board but I'll try to do
-that.
+diff --git a/drivers/mtd/maps/physmap-versatile.c b/drivers/mtd/maps/physmap-versatile.c
+index ad7cd9cfaee0..297a50957356 100644
+--- a/drivers/mtd/maps/physmap-versatile.c
++++ b/drivers/mtd/maps/physmap-versatile.c
+@@ -207,6 +207,7 @@ int of_flash_probe_versatile(struct platform_device *pdev,
+ 
+ 		versatile_flashprot = (enum versatile_flashprot)devid->data;
+ 		rmap = syscon_node_to_regmap(sysnp);
++		of_node_put(sysnp);
+ 		if (IS_ERR(rmap))
+ 			return PTR_ERR(rmap);
+ 
+-- 
+2.25.1
 
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com

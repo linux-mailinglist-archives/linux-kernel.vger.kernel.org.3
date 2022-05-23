@@ -2,64 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D7595306D7
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 02:25:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 713255306DA
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 02:28:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232196AbiEWAZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 20:25:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56066 "EHLO
+        id S232278AbiEWA1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 20:27:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230095AbiEWAZP (ORCPT
+        with ESMTP id S230095AbiEWA1K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 20:25:15 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED18B2E68D
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 17:25:13 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id v71so22758143ybi.4
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 17:25:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EPEgF/LXOvUc67RR+bySpSWPvexzgqgYq6xbV2e96Q0=;
-        b=LrF9SwHl7tirDLy9Fl17YKhCwdvT/sdMh+BXdFnac/urzE5li6mT9hDQAylZMB2RQ6
-         5EIeDdQN97eDsQ+QY7mtLEpf2T8SjUxGVCvP+pWv2K71Pu+AxwzUYHdjxdpZyMWe0cJO
-         zjkWnbIs046qkmrW/32PfIgJoNoGw7YkOZjHs=
+        Sun, 22 May 2022 20:27:10 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E5682F3A0
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 17:27:08 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id b13-20020a92670d000000b002d1a5d6b795so1200009ilc.16
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 17:27:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EPEgF/LXOvUc67RR+bySpSWPvexzgqgYq6xbV2e96Q0=;
-        b=RS+RK7mZ6fUWjKwYrFXbmv6rCYblJtk3hNil53+MxgDvU+dvv/FWFcX+xCccckPkCl
-         94PPP7NG+GooP5NsIJ3IZD3VqJoeIs3L/q+1kBE3s5aYVzU0fXQtW+ICzfcp+XN0YYhK
-         FiM/9aezxURggE6QktQHRPSOwb0DVB8yvE2ctqHIa/OtqaXTA+7SRH7hZLHltnC5LwpR
-         DjnzpFmgy1EXaquiLsx1HNvXwhzIDjX8gZirLpeCqrGSXdCLark1GDaHDyR/KMeGpTdd
-         zzXkW6CRq/Oau9nY+CiUJQu+0RYixuyvrSrZmMqRZ5AM57iTHgt80w0GvwsSQcloAhpJ
-         u5+w==
-X-Gm-Message-State: AOAM531Mf9yWC84Z9my27qj1/+LlFfPEYWl7pZvDlMlf/g91Hfxu8eVy
-        C0TdCTwNH9sSKsawjwEZvDsMQ9R8ZSPSTYPqFuGtTJdsr1ZbRg==
-X-Google-Smtp-Source: ABdhPJz9YlriiYzrcomdHPuHe/kQwXfhX8JPAuGCWnRcd1I35gKmO4GryXm+whVvIG3pkpbHWaY5N27cCY0whNdnqAw=
-X-Received: by 2002:a25:48c7:0:b0:64d:fc43:b23e with SMTP id
- v190-20020a2548c7000000b0064dfc43b23emr20408643yba.62.1653265513235; Sun, 22
- May 2022 17:25:13 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=6AUZk0FmgHvNN9nGJR2UtaRpnmC+2FUe10fEWzV7zU0=;
+        b=uVaJ0h8sPJtJpaWvxLEAetBH5inqFxxPrjXtz6g/NJd6X463RkwLqwRwAgwqRphKQx
+         BulwhJ/3YlZ4pFKFmb/ncG+ymp35IB9pXhxr6YKsAIbt+dluDEDnO/gBouWx4ZIA3uv2
+         UJ/UnyTvHk3hR9r9kwc9QGHallLxVrw/8lVDksKeujjnr7kC+wbSEMCDck9lwBmwMd8J
+         37fX8y5JsMJgxqjOMWcouGfQXto9X0A+Z+wpqSqhfDkNedfbpT5fBbSRyVY/s6Sqf37z
+         10EHFmqxNwcodpTxzyBY4KYORewSsx0DKrI6AcdUNzzv0AnjF+apTpv/FBuYKQTs13oL
+         TDdA==
+X-Gm-Message-State: AOAM530O9UmvuXZ0Cgui7TGwA79ZMqVRzGQ7o9w4FamjauwzBaAi7VRN
+        GB/99nm2UOpuKpEGaOtljMrzZjGV2eEcdJh9gmlxp0s/+nZ8
+X-Google-Smtp-Source: ABdhPJw84ULVYg6LrnJ0//uRQWKtRtwcmoRfWdqdjr2fWwhEN6IqN5JJ+T9kN30lCVmgxoGo97rMAbICtm/AN21t2F9KnavmAsZZ
 MIME-Version: 1.0
-References: <20220511222910.635307-1-dlunev@chromium.org> <20220512082832.v2.2.I692165059274c30b59bed56940b54a573ccb46e4@changeid>
- <YoQfls6hFcP3kCaH@zeniv-ca.linux.org.uk> <YoQihi4OMjJj2Mj0@zeniv-ca.linux.org.uk>
- <CAJfpegtQUP045X5N8ib1rUTKzSj-giih0eL=jC5-MP7aVgyN_g@mail.gmail.com> <CAONX=-do9yvxW2gTak0WGbFVPiLbkM2xH5LReMZkvC-upOUVxg@mail.gmail.com>
-In-Reply-To: <CAONX=-do9yvxW2gTak0WGbFVPiLbkM2xH5LReMZkvC-upOUVxg@mail.gmail.com>
-From:   Daniil Lunev <dlunev@chromium.org>
-Date:   Mon, 23 May 2022 10:25:02 +1000
-Message-ID: <CAONX=-ehh=uGYAi++oV_uS23mp2yZcrUC+7U5H0rRz8q0h6OeQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] FUSE: Retire superblock on force unmount
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>, linux-fsdevel@vger.kernel.org,
-        Christoph Hellwig <hch@infradead.org>,
-        fuse-devel <fuse-devel@lists.sourceforge.net>,
-        "Theodore Ts'o" <tytso@mit.edu>, linux-kernel@vger.kernel.org
+X-Received: by 2002:a05:6638:339f:b0:32e:d7d:54bc with SMTP id
+ h31-20020a056638339f00b0032e0d7d54bcmr9795391jav.260.1653265627276; Sun, 22
+ May 2022 17:27:07 -0700 (PDT)
+Date:   Sun, 22 May 2022 17:27:07 -0700
+In-Reply-To: <20220523000922.2997-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006ee89505dfa2e633@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in corrupted (4)
+From:   syzbot <syzbot+48135e34de22e3a82c99@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,40 +55,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-So, I tried this patchset with open bdi elements during force unmount
-and a random file open [1], and didn't see any major drama with
-force unmounting the node, after re-mounting, read on sysfs node
-returned "no such device", which is expected.
-With private bdi flag patch, unless bdi is unregister on force unmount
-in fuse, it will complain on name collision [2] (because the patch
-actually doesn't do much but unregisters the bdi on unmount, which
-seems to happen ok even if node is busy).
-Let me know if I am missing anything or if there are any other
-concerns, and advise what would be the best way to move this
-forward.
+Hello,
 
-Thanks,
-Daniil.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
+Reported-and-tested-by: syzbot+48135e34de22e3a82c99@syzkaller.appspotmail.com
 
-[1] Python shell
->>> f1 = open('/sys/class/bdi/8:0-fuseblk/read_ahead_kb', 'r')
->>> f2 = open('/media/removable/USB Drive/m1', 'w')
+Tested on:
 
-[2]
-[  149.826508] sysfs: cannot create duplicate filename
-'/devices/virtual/bdi/8:0-fuseblk'
+commit:         4b0986a3 Linux 5.18
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=facb2be252153c68
+dashboard link: https://syzkaller.appspot.com/bug?extid=48135e34de22e3a82c99
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-On Thu, May 19, 2022 at 8:55 AM Daniil Lunev <dlunev@chromium.org> wrote:
->
-> > Yep, messing with the bdi doesn't look good.  Fuse always uses a
-> > private bdi, so it's not even necessary.
->
-> The reason I needed to remove the bdi is name collision - fuse
-> generates a fixed name for its bdi based on the underlying block
-> device. However, those collisions of mine were conducted on a
-> version prior to the private bdi introduction, I am not sure if that
-> is supposed to fix the collision issue. Need to check
->
-> Thanks,
-> Daniil
+Note: no patches were applied.
+Note: testing is done by a robot and is best-effort only.

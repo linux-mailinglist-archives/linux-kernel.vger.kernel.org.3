@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 079F653186E
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:54:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B11D0531732
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:52:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243963AbiEWSSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 14:18:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53234 "EHLO
+        id S243232AbiEWSTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 14:19:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245626AbiEWSSU (ORCPT
+        with ESMTP id S245646AbiEWSSV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 14:18:20 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDCFE583A3;
-        Mon, 23 May 2022 10:56:59 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id v9so8851076lja.12;
-        Mon, 23 May 2022 10:56:59 -0700 (PDT)
+        Mon, 23 May 2022 14:18:21 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AB37532C4;
+        Mon, 23 May 2022 10:57:04 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id p22so26857179lfo.10;
+        Mon, 23 May 2022 10:57:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=rHLHpItlazo+UaJMdlnAGs/zpbzJsdOOF257QRYRuhY=;
-        b=ID1ZtevMyDy5Qbuki5QKrfxdd/wuL0XRHhsoSqPjnc87EuQ5o1lyEh+3xbxqq5Pk67
-         BurmVIrgtSBm+BjR7HYJv9AbSEncu8y0u49Z88Az0CpO6ypYQtN0+p+n2BQsn65jRjAE
-         L5ukMgXs0Erg4gdHkYh8nTxnK4bLfU+nZ3x4erpy26qMiu9XDNu9RiRELSfvGZWzdgWr
-         gs01zwXqGoXcO/tbIOvb9vXklmG9KRsgTPfWttbq8L3/oSqAxpb3pwGY5Kmaifrf17JU
-         lnIJHbD2HNvb15wcfWNi17gjQl7JRLXy7zvdh/Tzk+qVgUWi2H0v3PG2w6Gmu4PPmFs3
-         UN4g==
+        bh=Y6hTyWxvALgSndQqmiLi+9G4p6MJh+4j+g2xm+AL/rQ=;
+        b=Fu1TwoaH71RgsLqaTGIn/HgL6qa17UmpMWrT7+W1uGedTEO6N8eXEpuYqQUxBb+CwN
+         rZZrB8FbohFtveKYHP9kDfVxOorwGzHB0F24zlHvpA/3tHZuZ9p+CadRMUsx2RwizC3I
+         KBHiCcrqzjHd2FXzUNZbb0/DhRoXPIUxuRC1ADLxFblesPKPdIXAMX+SMxCKzrZ3K01R
+         W2b79qIdMbAyYb7oix7yyZJ2SHou9ZVS4qKKz3bysqZxnYF2jRPSLFh7ipdvsGSxRaXo
+         d1VvK72AY89uEfUTSLP7uDMsv3lNndDVblKqBO78AZvIGYjQfMcFAgCpRAP+1VdUJDdU
+         tLTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=rHLHpItlazo+UaJMdlnAGs/zpbzJsdOOF257QRYRuhY=;
-        b=U8omCxwgqg9gbeSSr+UkWhA17vVPtbr6kzTpYvyVQU525TePW2nhPh3qtBXl1+hkZZ
-         vkwepMD521rdkOZSdtwuuwadfHQzuPDtL3ta5kpUiCRODe0e7RxwFzE5qhEFv2tfwpEG
-         gDizwmbztoyo3AlZrZpOxeb3eMzGEUS8fuDvLg5Xrs3V+mvdebVq3JUv6zPYVJFhOxhB
-         rNmCEK6GKWkopSAITvprZes8zkPGL9DI7gfCy8PDZh8ffBBRm9IkMD4AmQuzvvrN7mB1
-         EmiSKVJX8yZwIMZaJwF6VlZbBwMOo20c+aun6yP1dtLDWWnoH5ruHW58cfNICgE7fkc2
-         oZnw==
-X-Gm-Message-State: AOAM530KZB+AhszWKevlNQ24lv9wdvNJNTuhKsPVgd7O51uyl5W2Qqqa
-        VQDZt/sQy1tyPuQkFgCIg7T/kqRhGoluIA==
-X-Google-Smtp-Source: ABdhPJwFqL9k5b+SNLd4yXlVsMG8sMmdmedDo/XTo+YpZX0Ldnk6GS/FKixeOeQfojzsDOrCnBYrIg==
-X-Received: by 2002:a05:651c:509:b0:253:e965:65c6 with SMTP id o9-20020a05651c050900b00253e96565c6mr4384049ljp.264.1653328473707;
-        Mon, 23 May 2022 10:54:33 -0700 (PDT)
+        bh=Y6hTyWxvALgSndQqmiLi+9G4p6MJh+4j+g2xm+AL/rQ=;
+        b=aHtPUZRjbjDx9lLasX5PrMFxaXzvcnKNoPawRy1+eotJLlSHr8kBJVXJrIkH0LsHQp
+         DKa/ZjXza9dNHhnVoo/OK5pHeoBs43OYPOaAkT8lIo9LMX2eMxA4bNB65L3NaM9tJxuO
+         j1ktyTKB1L9A1Pl1DDsxSb+aL6285GETjdXWf0eT0Vd8BD/lRlqzFZXE1MfQoilhRHco
+         Q6BYoWeAqB0Tqi8cqD1zo8SLMVAZiNu9R6vKfZndk49kG5mS6rwX8x8HhijpFNhD7S7w
+         HY6GsPIdF64VVaqA6cyDqRuTRnkbMXyEIBEwzkw4WcORHAKVb2tyVnwVzGs/UOVP7WuF
+         BFXQ==
+X-Gm-Message-State: AOAM530beW2gd3sMQ9STnGBFLfP8kphRbMkcV03shlkGnCGFEXdCOWtn
+        ct8oItquUZkN9p0UnwTNp5PGPrLG75GIeg==
+X-Google-Smtp-Source: ABdhPJwlQfWKJMMo2GI0V8Kr9PKoZOkUjLp8pP3qdVXld1DvET00FoOeOJ6WqinAdDVAjjQKdQXQdw==
+X-Received: by 2002:a19:5f13:0:b0:477:b3a2:30b8 with SMTP id t19-20020a195f13000000b00477b3a230b8mr17035659lfb.683.1653328476133;
+        Mon, 23 May 2022 10:54:36 -0700 (PDT)
 Received: from nergzd-desktop.localdomain ([194.39.226.133])
-        by smtp.gmail.com with ESMTPSA id x9-20020a056512078900b0047255d211f9sm2087743lfr.296.2022.05.23.10.54.32
+        by smtp.gmail.com with ESMTPSA id x9-20020a056512078900b0047255d211f9sm2087743lfr.296.2022.05.23.10.54.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 10:54:33 -0700 (PDT)
+        Mon, 23 May 2022 10:54:35 -0700 (PDT)
 From:   Markuss Broks <markuss.broks@gmail.com>
 To:     linux-kernel@vger.kernel.org, jic23@kernel.org
 Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
@@ -65,9 +65,9 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
         Liam Girdwood <lgirdwood@gmail.com>,
         Mark Brown <broonie@kernel.org>, linux-iio@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: [PATCH 2/5] proximity: vl53l0x: Prefer pre-initialized interrupt flags
-Date:   Mon, 23 May 2022 20:53:41 +0300
-Message-Id: <20220523175344.5845-3-markuss.broks@gmail.com>
+Subject: [PATCH 3/5] proximity: vl53l0x: Handle the VDD regulator
+Date:   Mon, 23 May 2022 20:53:42 +0300
+Message-Id: <20220523175344.5845-4-markuss.broks@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220523175344.5845-1-markuss.broks@gmail.com>
 References: <20220523175344.5845-1-markuss.broks@gmail.com>
@@ -83,45 +83,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On some boards interrupt type might be different than falling edge,
-like hardcoded in driver. Leave interrupt flags as they were pre-configured
-from the device-tree. If they're not provided, default to falling edge
-interrupts.
+Handle the regulator supplying the VDD pin of VL53L0X.
 
 Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
 ---
- drivers/iio/proximity/vl53l0x-i2c.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/iio/proximity/vl53l0x-i2c.c | 37 +++++++++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
 diff --git a/drivers/iio/proximity/vl53l0x-i2c.c b/drivers/iio/proximity/vl53l0x-i2c.c
-index 661a79ea200d..12a3e2eff464 100644
+index 12a3e2eff464..8581a873919f 100644
 --- a/drivers/iio/proximity/vl53l0x-i2c.c
 +++ b/drivers/iio/proximity/vl53l0x-i2c.c
-@@ -16,6 +16,7 @@
+@@ -43,6 +43,7 @@
+ struct vl53l0x_data {
+ 	struct i2c_client *client;
+ 	struct completion completion;
++	struct regulator *vdd_supply;
+ };
  
- #include <linux/delay.h>
- #include <linux/i2c.h>
-+#include <linux/irq.h>
- #include <linux/interrupt.h>
- #include <linux/module.h>
+ static irqreturn_t vl53l0x_handle_irq(int irq, void *priv)
+@@ -192,10 +193,31 @@ static const struct iio_info vl53l0x_info = {
+ 	.read_raw = vl53l0x_read_raw,
+ };
  
-@@ -57,11 +58,15 @@ static irqreturn_t vl53l0x_handle_irq(int irq, void *priv)
- static int vl53l0x_configure_irq(struct i2c_client *client,
- 				 struct iio_dev *indio_dev)
- {
-+	int irq_flags = irq_get_trigger_type(client->irq);
- 	struct vl53l0x_data *data = iio_priv(indio_dev);
- 	int ret;
- 
-+	if (!irq_flags)
-+		irq_flags = IRQF_TRIGGER_FALLING;
++static void vl53l0x_power_off(void *_data)
++{
++	struct vl53l0x_data *data = _data;
 +
- 	ret = devm_request_irq(&client->dev, client->irq, vl53l0x_handle_irq,
--			IRQF_TRIGGER_FALLING, indio_dev->name, indio_dev);
-+			irq_flags, indio_dev->name, indio_dev);
- 	if (ret) {
- 		dev_err(&client->dev, "devm_request_irq error: %d\n", ret);
- 		return ret;
++	regulator_disable(data->vdd_supply);
++}
++
++static int vl53l0x_power_on(struct vl53l0x_data *data)
++{
++	int ret;
++
++	ret = regulator_enable(data->vdd_supply);
++	if (ret)
++		return ret;
++
++	usleep_range(3200, 5000);
++
++	return 0;
++}
++
+ static int vl53l0x_probe(struct i2c_client *client)
+ {
+ 	struct vl53l0x_data *data;
+ 	struct iio_dev *indio_dev;
++	int error;
+ 
+ 	indio_dev = devm_iio_device_alloc(&client->dev, sizeof(*data));
+ 	if (!indio_dev)
+@@ -210,6 +232,21 @@ static int vl53l0x_probe(struct i2c_client *client)
+ 				     I2C_FUNC_SMBUS_BYTE_DATA))
+ 		return -EOPNOTSUPP;
+ 
++	data->vdd_supply = devm_regulator_get_optional(&client->dev, "vdd");
++	if (IS_ERR(data->vdd_supply))
++		return dev_err_probe(&client->dev, PTR_ERR(data->vdd_supply),
++				     "Unable to get VDD regulator\n");
++
++	error = vl53l0x_power_on(data);
++	if (error)
++		return dev_err_probe(&client->dev, error,
++				     "Failed to power on the chip\n");
++
++	error = devm_add_action_or_reset(&client->dev, vl53l0x_power_off, data);
++	if (error)
++		return dev_err_probe(&client->dev, error,
++				     "Failed to install poweroff action\n");
++
+ 	indio_dev->name = "vl53l0x";
+ 	indio_dev->info = &vl53l0x_info;
+ 	indio_dev->channels = vl53l0x_channels;
 -- 
 2.36.1
 

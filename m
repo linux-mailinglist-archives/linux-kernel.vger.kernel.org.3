@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60398531652
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:50:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 066AB5319AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:55:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243691AbiEWSFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 14:05:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38180 "EHLO
+        id S243852AbiEWRi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:38:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242402AbiEWRhi (ORCPT
+        with ESMTP id S241694AbiEWR1F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:37:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3848050057;
-        Mon, 23 May 2022 10:31:25 -0700 (PDT)
+        Mon, 23 May 2022 13:27:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C71C88A045;
+        Mon, 23 May 2022 10:22:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F0E561262;
-        Mon, 23 May 2022 17:31:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CB72C385AA;
-        Mon, 23 May 2022 17:31:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8B5D4B8121A;
+        Mon, 23 May 2022 17:21:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D03B1C385AA;
+        Mon, 23 May 2022 17:21:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653327079;
-        bh=di/0u1pfyt5gJ4peynH3b3jQYS0oAszZJH+iUQ2G0Ic=;
+        s=korg; t=1653326494;
+        bh=Kc4i3TPZ58l7L+TwB9CQDQPQ0+tmBK4JCr259LvbiJg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D6CIGSFRN37/XJNA9UXCfnwhn8Fh2TO1Jnk9aZ4s8JT2DC6PnSgwFbtuLReASxCs4
-         mhHREU2fE7dTRPKVISBZ+LjSekk0aI45PTvnBg3NbV5Rv72FbY0PImXlvElbNyzk8+
-         /iBvc8RajCoGPd/H5wD/cTtLqpQVH+w1Kt5bBZrw=
+        b=PTljDQPUPdg7wXPHuBnzIDsqufTsbFn4daIm46RvaxIbMtoTFpNIVZaxDVeQ+SK3z
+         PYZ8ZDFCoPoRsdrkeIwmgwspfMAv2692RLbmIs5CqQ4OWTYCidvfVFB2PjqGyKfKJL
+         RKEYKUWbcxFOo8H1LWPUMQHfkqTXV7Vqsm2vGNvg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Aashay Shringarpure <aashay@google.com>,
-        Yi Chou <yich@google.com>,
-        Shervin Oloumi <enlightened@google.com>,
-        Grant Grundler <grundler@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 150/158] net: atlantic: fix "frag[0] not initialized"
+Subject: [PATCH 5.15 098/132] mptcp: strict local address ID selection
 Date:   Mon, 23 May 2022 19:05:07 +0200
-Message-Id: <20220523165855.043512482@linuxfoundation.org>
+Message-Id: <20220523165839.636049226@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165830.581652127@linuxfoundation.org>
-References: <20220523165830.581652127@linuxfoundation.org>
+In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
+References: <20220523165823.492309987@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,51 +56,222 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Grant Grundler <grundler@chromium.org>
+From: Paolo Abeni <pabeni@redhat.com>
 
-[ Upstream commit 62e0ae0f4020250f961cf8d0103a4621be74e077 ]
+[ Upstream commit 4cf86ae84c718333928fd2d43168a1e359a28329 ]
 
-In aq_ring_rx_clean(), if buff->is_eop is not set AND
-buff->len < AQ_CFG_RX_HDR_SIZE, then hdr_len remains equal to
-buff->len and skb_add_rx_frag(xxx, *0*, ...) is not called.
+The address ID selection for MPJ subflows created in response
+to incoming ADD_ADDR option is currently unreliable: it happens
+at MPJ socket creation time, when the local address could be
+unknown.
 
-The loop following this code starts calling skb_add_rx_frag() starting
-with i=1 and thus frag[0] is never initialized. Since i is initialized
-to zero at the top of the primary loop, we can just reference and
-post-increment i instead of hardcoding the 0 when calling
-skb_add_rx_frag() the first time.
+Additionally, if the no local endpoint is available for the local
+address, a new dummy endpoint is created, confusing the user-land.
 
-Reported-by: Aashay Shringarpure <aashay@google.com>
-Reported-by: Yi Chou <yich@google.com>
-Reported-by: Shervin Oloumi <enlightened@google.com>
-Signed-off-by: Grant Grundler <grundler@chromium.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+This change refactor the code to move the address ID selection inside
+the rebuild_header() helper, when the local address eventually
+selected by the route lookup is finally known. If the address used
+is not mapped by any endpoint - and thus can't be advertised/removed
+pick the id 0 instead of allocate a new endpoint.
+
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/aquantia/atlantic/aq_ring.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ net/mptcp/pm_netlink.c | 13 --------
+ net/mptcp/protocol.c   |  3 ++
+ net/mptcp/protocol.h   |  3 +-
+ net/mptcp/subflow.c    | 67 ++++++++++++++++++++++++++++++++++++------
+ 4 files changed, 63 insertions(+), 23 deletions(-)
 
-diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_ring.c b/drivers/net/ethernet/aquantia/atlantic/aq_ring.c
-index 77e76c9efd32..440423b0e8ea 100644
---- a/drivers/net/ethernet/aquantia/atlantic/aq_ring.c
-+++ b/drivers/net/ethernet/aquantia/atlantic/aq_ring.c
-@@ -446,7 +446,7 @@ int aq_ring_rx_clean(struct aq_ring_s *self,
- 		       ALIGN(hdr_len, sizeof(long)));
+diff --git a/net/mptcp/pm_netlink.c b/net/mptcp/pm_netlink.c
+index cf0f700f46dd..e6b95d1cba70 100644
+--- a/net/mptcp/pm_netlink.c
++++ b/net/mptcp/pm_netlink.c
+@@ -86,16 +86,6 @@ static bool addresses_equal(const struct mptcp_addr_info *a,
+ 	return a->port == b->port;
+ }
  
- 		if (buff->len - hdr_len > 0) {
--			skb_add_rx_frag(skb, 0, buff->rxdata.page,
-+			skb_add_rx_frag(skb, i++, buff->rxdata.page,
- 					buff->rxdata.pg_off + hdr_len,
- 					buff->len - hdr_len,
- 					AQ_CFG_RX_FRAME_MAX);
-@@ -455,7 +455,6 @@ int aq_ring_rx_clean(struct aq_ring_s *self,
+-static bool address_zero(const struct mptcp_addr_info *addr)
+-{
+-	struct mptcp_addr_info zero;
+-
+-	memset(&zero, 0, sizeof(zero));
+-	zero.family = addr->family;
+-
+-	return addresses_equal(addr, &zero, true);
+-}
+-
+ static void local_address(const struct sock_common *skc,
+ 			  struct mptcp_addr_info *addr)
+ {
+@@ -954,9 +944,6 @@ int mptcp_pm_nl_get_local_id(struct mptcp_sock *msk, struct sock_common *skc)
+ 	if (addresses_equal(&msk_local, &skc_local, false))
+ 		return 0;
  
- 		if (!buff->is_eop) {
- 			buff_ = buff;
--			i = 1U;
- 			do {
- 				next_ = buff_->next;
- 				buff_ = &self->buff_ring[next_];
+-	if (address_zero(&skc_local))
+-		return 0;
+-
+ 	pernet = net_generic(sock_net((struct sock *)msk), pm_nl_pernet_id);
+ 
+ 	rcu_read_lock();
+diff --git a/net/mptcp/protocol.c b/net/mptcp/protocol.c
+index d6def23b8cba..c293742fc461 100644
+--- a/net/mptcp/protocol.c
++++ b/net/mptcp/protocol.c
+@@ -115,6 +115,9 @@ static int __mptcp_socket_create(struct mptcp_sock *msk)
+ 	list_add(&subflow->node, &msk->conn_list);
+ 	sock_hold(ssock->sk);
+ 	subflow->request_mptcp = 1;
++
++	/* This is the first subflow, always with id 0 */
++	subflow->local_id_valid = 1;
+ 	mptcp_sock_graft(msk->first, sk->sk_socket);
+ 
+ 	return 0;
+diff --git a/net/mptcp/protocol.h b/net/mptcp/protocol.h
+index 72a259a74b57..8d70e491139a 100644
+--- a/net/mptcp/protocol.h
++++ b/net/mptcp/protocol.h
+@@ -436,7 +436,8 @@ struct mptcp_subflow_context {
+ 		rx_eof : 1,
+ 		can_ack : 1,        /* only after processing the remote a key */
+ 		disposable : 1,	    /* ctx can be free at ulp release time */
+-		stale : 1;	    /* unable to snd/rcv data, do not use for xmit */
++		stale : 1,	    /* unable to snd/rcv data, do not use for xmit */
++		local_id_valid : 1; /* local_id is correctly initialized */
+ 	enum mptcp_data_avail data_avail;
+ 	u32	remote_nonce;
+ 	u64	thmac;
+diff --git a/net/mptcp/subflow.c b/net/mptcp/subflow.c
+index 9c7deffe7cb6..204dfb82f697 100644
+--- a/net/mptcp/subflow.c
++++ b/net/mptcp/subflow.c
+@@ -483,6 +483,51 @@ static void subflow_finish_connect(struct sock *sk, const struct sk_buff *skb)
+ 	mptcp_subflow_reset(sk);
+ }
+ 
++static void subflow_set_local_id(struct mptcp_subflow_context *subflow, int local_id)
++{
++	subflow->local_id = local_id;
++	subflow->local_id_valid = 1;
++}
++
++static int subflow_chk_local_id(struct sock *sk)
++{
++	struct mptcp_subflow_context *subflow = mptcp_subflow_ctx(sk);
++	struct mptcp_sock *msk = mptcp_sk(subflow->conn);
++	int err;
++
++	if (likely(subflow->local_id_valid))
++		return 0;
++
++	err = mptcp_pm_get_local_id(msk, (struct sock_common *)sk);
++	if (err < 0)
++		return err;
++
++	subflow_set_local_id(subflow, err);
++	return 0;
++}
++
++static int subflow_rebuild_header(struct sock *sk)
++{
++	int err = subflow_chk_local_id(sk);
++
++	if (unlikely(err < 0))
++		return err;
++
++	return inet_sk_rebuild_header(sk);
++}
++
++#if IS_ENABLED(CONFIG_MPTCP_IPV6)
++static int subflow_v6_rebuild_header(struct sock *sk)
++{
++	int err = subflow_chk_local_id(sk);
++
++	if (unlikely(err < 0))
++		return err;
++
++	return inet6_sk_rebuild_header(sk);
++}
++#endif
++
+ struct request_sock_ops mptcp_subflow_request_sock_ops;
+ EXPORT_SYMBOL_GPL(mptcp_subflow_request_sock_ops);
+ static struct tcp_request_sock_ops subflow_request_sock_ipv4_ops;
+@@ -1402,13 +1447,8 @@ int __mptcp_subflow_connect(struct sock *sk, const struct mptcp_addr_info *loc,
+ 		get_random_bytes(&subflow->local_nonce, sizeof(u32));
+ 	} while (!subflow->local_nonce);
+ 
+-	if (!local_id) {
+-		err = mptcp_pm_get_local_id(msk, (struct sock_common *)ssk);
+-		if (err < 0)
+-			goto failed;
+-
+-		local_id = err;
+-	}
++	if (local_id)
++		subflow_set_local_id(subflow, local_id);
+ 
+ 	mptcp_pm_get_flags_and_ifindex_by_id(sock_net(sk), local_id,
+ 					     &flags, &ifindex);
+@@ -1431,7 +1471,6 @@ int __mptcp_subflow_connect(struct sock *sk, const struct mptcp_addr_info *loc,
+ 	pr_debug("msk=%p remote_token=%u local_id=%d remote_id=%d", msk,
+ 		 remote_token, local_id, remote_id);
+ 	subflow->remote_token = remote_token;
+-	subflow->local_id = local_id;
+ 	subflow->remote_id = remote_id;
+ 	subflow->request_join = 1;
+ 	subflow->request_bkup = !!(flags & MPTCP_PM_ADDR_FLAG_BACKUP);
+@@ -1734,15 +1773,22 @@ static void subflow_ulp_clone(const struct request_sock *req,
+ 		new_ctx->token = subflow_req->token;
+ 		new_ctx->ssn_offset = subflow_req->ssn_offset;
+ 		new_ctx->idsn = subflow_req->idsn;
++
++		/* this is the first subflow, id is always 0 */
++		new_ctx->local_id_valid = 1;
+ 	} else if (subflow_req->mp_join) {
+ 		new_ctx->ssn_offset = subflow_req->ssn_offset;
+ 		new_ctx->mp_join = 1;
+ 		new_ctx->fully_established = 1;
+ 		new_ctx->backup = subflow_req->backup;
+-		new_ctx->local_id = subflow_req->local_id;
+ 		new_ctx->remote_id = subflow_req->remote_id;
+ 		new_ctx->token = subflow_req->token;
+ 		new_ctx->thmac = subflow_req->thmac;
++
++		/* the subflow req id is valid, fetched via subflow_check_req()
++		 * and subflow_token_join_request()
++		 */
++		subflow_set_local_id(new_ctx, subflow_req->local_id);
+ 	}
+ }
+ 
+@@ -1795,6 +1841,7 @@ void __init mptcp_subflow_init(void)
+ 	subflow_specific.conn_request = subflow_v4_conn_request;
+ 	subflow_specific.syn_recv_sock = subflow_syn_recv_sock;
+ 	subflow_specific.sk_rx_dst_set = subflow_finish_connect;
++	subflow_specific.rebuild_header = subflow_rebuild_header;
+ 
+ 	tcp_prot_override = tcp_prot;
+ 	tcp_prot_override.release_cb = tcp_release_cb_override;
+@@ -1807,6 +1854,7 @@ void __init mptcp_subflow_init(void)
+ 	subflow_v6_specific.conn_request = subflow_v6_conn_request;
+ 	subflow_v6_specific.syn_recv_sock = subflow_syn_recv_sock;
+ 	subflow_v6_specific.sk_rx_dst_set = subflow_finish_connect;
++	subflow_v6_specific.rebuild_header = subflow_v6_rebuild_header;
+ 
+ 	subflow_v6m_specific = subflow_v6_specific;
+ 	subflow_v6m_specific.queue_xmit = ipv4_specific.queue_xmit;
+@@ -1814,6 +1862,7 @@ void __init mptcp_subflow_init(void)
+ 	subflow_v6m_specific.net_header_len = ipv4_specific.net_header_len;
+ 	subflow_v6m_specific.mtu_reduced = ipv4_specific.mtu_reduced;
+ 	subflow_v6m_specific.net_frag_header_len = 0;
++	subflow_v6m_specific.rebuild_header = subflow_rebuild_header;
+ 
+ 	tcpv6_prot_override = tcpv6_prot;
+ 	tcpv6_prot_override.release_cb = tcp_release_cb_override;
 -- 
 2.35.1
 

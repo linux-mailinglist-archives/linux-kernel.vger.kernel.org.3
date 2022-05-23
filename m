@@ -2,89 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B578530EDE
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:17:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62B4053100C
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 15:19:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234956AbiEWLek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 07:34:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41328 "EHLO
+        id S234981AbiEWLfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 07:35:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234962AbiEWLee (ORCPT
+        with ESMTP id S234962AbiEWLe5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 07:34:34 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A0D0750005
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 04:34:22 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 66AFA11FB;
-        Mon, 23 May 2022 04:34:20 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.9.63])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 405B23F73D;
-        Mon, 23 May 2022 04:34:18 -0700 (PDT)
-Date:   Mon, 23 May 2022 12:34:15 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     andrey.konovalov@linux.dev
-Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Subject: Re: [PATCH 2/2] arm64: stacktrace: use non-atomic __set_bit
-Message-ID: <YotxNzMfMdqw0uY2@FVFF77S0Q05N>
-References: <697e015e22ea78b021c2546f390ad5d773f3af86.1653177005.git.andreyknvl@google.com>
- <a584e95f613d59c7ff45686c2805deb63bd61442.1653177005.git.andreyknvl@google.com>
+        Mon, 23 May 2022 07:34:57 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F4250061
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 04:34:38 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id j10so1584370lfe.12
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 04:34:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=slD5U1ZLnnag5uUVMq6zG3O9jXp6ALF6Xo5AefMCVo0=;
+        b=IuRH6f/Obr2igym8Ti8sMm17ajhPbUTDUiE9pRzlr+h4rTfNFOullaOn8biUcCT8zi
+         3fNxPioOwEhs99nNTnPwlC/c37Z808CFcYI8VQidEbjL5fRtQWlIzrsrH9kEyiagjZwf
+         3x23eUWPptUQ8yjPDkJyxwLluUM9TAaWaJVd4BbX03WKz4/axhvCeoZF45+1mSk86tRT
+         GuZ0NcHgTKsyiXsM6QZHuW9RVx5BDo9nHHbGD6RoVkpyhOSG9m8OZhP6wgN+77BLF1Nr
+         tGcnhNoB2DqFfpVGNlfRKhjH0icCTWQc3jeEMs9sxtRe5Y2Ju5WR0NNx1KwE/sk8R3pZ
+         aTTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=slD5U1ZLnnag5uUVMq6zG3O9jXp6ALF6Xo5AefMCVo0=;
+        b=IjwVtXMgolAqdZ4EerH4MvVRX/HqJCm89hgBWDhuN/ZKdWFJg2r+UIqb69yWnR4g2J
+         tukzzxURFuVaTS0CmohgU8s7s7QsGf1pO76t9KnWgfTcZB4bdyvwfG+cJ0triQ4cfUTG
+         1CjmWXi28UvldK24VXvw4ecYt2LxYTuKAqFltU03oaEa9CVjAaR6PnFo/YoqENL+IWqg
+         2Y/wvo47bqou1WEtzXpjRxVcSqENghbEgVBlyf4wRV1ckh8xxqObUWfkWBzqQkOhFN8c
+         RGO9aPhoAEEF53z14QUYb8GlWzyl4rWXPLu0bmSQE6Fv3DGpAaxBMb2R5J0XnFtTNnuS
+         afdA==
+X-Gm-Message-State: AOAM531H+OvHyEJfz1Rr9omkxGLdXnqpyuSvJaMvbpfEsDFj9cZt9/JG
+        fAgS5umUUYWP6Oo6DyK/OvVY1WGhIthrL4roQWwr5A==
+X-Google-Smtp-Source: ABdhPJyufZJzKrPyGHXvClU64clAc39hLWJmhquE5y3mgrP5ttLdjp0w7qfRQXK3RMJusjaqeQt9hMbByNRsDo5gNLQ=
+X-Received: by 2002:a05:6512:1588:b0:477:a556:4ab2 with SMTP id
+ bp8-20020a056512158800b00477a5564ab2mr15901781lfb.376.1653305675107; Mon, 23
+ May 2022 04:34:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a584e95f613d59c7ff45686c2805deb63bd61442.1653177005.git.andreyknvl@google.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <00000000000032992d05d370f75f@google.com> <20211219023540.1638-1-hdanton@sina.com>
+ <Yb6zKVoxuD3lQMA/@casper.infradead.org> <20211221090804.1810-1-hdanton@sina.com>
+ <20211222022527.1880-1-hdanton@sina.com> <YcKrHc11B/2tcfRS@mit.edu>
+ <CACT4Y+YHxkL5aAgd4wXPe-J+RG6_VBcPs=e8QpRM8=3KJe+GCg@mail.gmail.com> <YogL6MCdYVrqGcRf@mit.edu>
+In-Reply-To: <YogL6MCdYVrqGcRf@mit.edu>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Mon, 23 May 2022 13:34:23 +0200
+Message-ID: <CACT4Y+ZHCawp__HvJAFPXp+z6XdiVEgwrh8dvDR+cDfQywr20w@mail.gmail.com>
+Subject: Re: [syzbot] INFO: task hung in jbd2_journal_commit_transaction (3)
+To:     "Theodore Ts'o" <tytso@mit.edu>
+Cc:     Hillf Danton <hdanton@sina.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        syzbot <syzbot+9c3fb12e9128b6e1d7eb@syzkaller.appspotmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com,
+        syzkaller <syzkaller@googlegroups.com>,
+        Aleksandr Nogikh <nogikh@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 22, 2022 at 01:50:59AM +0200, andrey.konovalov@linux.dev wrote:
-> From: Andrey Konovalov <andreyknvl@google.com>
-> 
-> Use the non-atomic version of set_bit() in arch/arm64/kernel/stacktrace.c,
-> as there is no concurrent accesses to frame->prev_type.
-> 
-> This speeds up stack trace collection and improves the boot time of
-> Generic KASAN by 2-5%.
-> 
-> Suggested-by: Mark Rutland <mark.rutland@arm.com>
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+On Fri, 20 May 2022 at 23:45, Theodore Ts'o <tytso@mit.edu> wrote:
+> > Hi Ted,
+> >
+> > Reviving this old thread re syzkaller using SCHED_FIFO.
+> >
+> > It's a bit hard to restrict what the fuzzer can do if we give it
+> > sched_setattr() and friends syscalls. We could remove them from the
+> > fuzzer entirely, but it's probably suboptimal as well.
+> >
+> > I see that setting up SCHED_FIFO is guarded by CAP_SYS_NICE:
+> > https://elixir.bootlin.com/linux/v5.18-rc7/source/kernel/sched/core.c#L7264
+> >
+> > And I see we drop CAP_SYS_NICE from the fuzzer process since 2019
+> > (after a similar discussion):
+> > https://github.com/google/syzkaller/commit/f3ad68446455a
+> >
+> > The latest C reproducer contains: ....
+>
+> For this particular report, there *was* no C reproducer.  There was
+> only a syz reproducer:
 
-Acked-by: Mark Rutland <mark.rutland@arm.com>
+Yes, but the same logic should have been used. I just showed the
+excerpt from the C reproducer b/c maybe there is something wrong with
+that CAP_SYS_NICE logic.
 
-Mark.
+> > syzbot found the following issue on:
+> >
+> > HEAD commit:    5472f14a3742 Merge tag 'for_linus' of git://git.kernel.org..
+> > git tree:       upstream
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=11132113b00000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=e3bdfd29b408d1b6
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=9c3fb12e9128b6e1d7eb
+> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14559113b00000
+>
+> So let me ask a counter question.  I thought syzbot tries to create a
+> minimal reproducer?  So if the sched_setattr is a no-op, and is
+> returning EPERM, why wasn't the sched_setattr line removed from the
+> syz repro?
 
-> ---
->  arch/arm64/kernel/stacktrace.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
-> index 33e96ae4b15f..03593d451b0a 100644
-> --- a/arch/arm64/kernel/stacktrace.c
-> +++ b/arch/arm64/kernel/stacktrace.c
-> @@ -103,7 +103,7 @@ static int notrace unwind_frame(struct task_struct *tsk,
->  		if (fp <= frame->prev_fp)
->  			return -EINVAL;
->  	} else {
-> -		set_bit(frame->prev_type, frame->stacks_done);
-> +		__set_bit(frame->prev_type, frame->stacks_done);
->  	}
->  
->  	/*
-> -- 
-> 2.25.1
-> 
+Two most common reasons would be (1) flaky reproduction, then each
+minimization step can falsely decide that something is needed to
+reproduce the bug b/c when we remove it, the crash does not reproduce;
+(2) previously order/number of syscalls affected what syscalls are
+executed concurrently to provoke races, so removing one syscall could
+affect how subsequent syscalls are collided (this is not the case
+anymore, but was the case when this bug was reported).
+
+
+> As a side note, since in many cases running a reproducer can be
+> painful, would it be possible for the syzkiller dashboard to provide
+> the output of running "strace -f" while the reproducer is running?
+>
+> That would also especially help since even when there is a C
+> reproducer, trying to understand what it is doing from reading the
+> syzbot-generated C source code is often non-trivial, and strace does a
+> much better job decoding what the !@#?@ the reproducer.  Another
+> advantage of using strace is that it will also show us the return code
+> from the system call, which would very quickly confirm whether the
+> sched_setattr() was actually returning EPERM or not --- and it will
+> decode the system call arguments in a way that I often wished would be
+> included as comments in the syzbot-generated reproducer.
+>
+> Providing the strace output could significantly reduce the amount of
+> upstream developer toil, and might therefore improve upstream
+> developer engagement with syzkaller.
+
++Aleksandr added this feature recently.
+
+Console output will contain strace output for reproducers (when the
+run under strace reproduced the same kernel crash as w/o strace).
+
+Here is a recently reported bug:
+https://syzkaller.appspot.com/bug?id=53c9bd2ca0e16936e45ff1333a22b838d91da0a2
+
+"log" link for the reproducer crash shows:
+https://syzkaller.appspot.com/text?tag=CrashLog&x=14f791aef00000
+...
+
+[   26.757008][ T3179] 8021q: adding VLAN 0 to HW filter on device bond0
+[   26.766878][ T3179] eql: remember to turn off Van-Jacobson
+compression on your slave devices
+Starting sshd: OK
+Warning: Permanently added '10.128.0.110' (ECDSA) to the list of known hosts.
+execve("./syz-executor1865045535", ["./syz-executor1865045535"],
+0x7ffdc91edf40 /* 10 vars */) = 0
+brk(NULL)                               = 0x555557248000
+brk(0x555557248c40)                     = 0x555557248c40
+arch_prctl(ARCH_SET_FS, 0x555557248300) = 0
+uname({sysname="Linux", nodename="syzkaller", ...}) = 0
+readlink("/proc/self/exe", "/root/syz-executor1865045535", 4096) = 28
+brk(0x555557269c40)                     = 0x555557269c40
+brk(0x55555726a000)                     = 0x55555726a000
+mprotect(0x7f37f8ecc000, 16384, PROT_READ) = 0
+mmap(0x1ffff000, 4096, PROT_NONE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS,
+-1, 0) = 0x1ffff000
+mmap(0x20000000, 16777216, PROT_READ|PROT_WRITE|PROT_EXEC,
+MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x20000000
+mmap(0x21000000, 4096, PROT_NONE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS,
+-1, 0) = 0x21000000
+socket(AF_NETLINK, SOCK_RAW, NETLINK_NETFILTER) = 3
+syzkaller login: [   58.834018][ T3600] ------------[ cut here ]------------
+[   58.839772][ T3600] WARNING: CPU: 0 PID: 3600 at
+net/netfilter/nfnetlink.c:703 nfnetlink_unbind+0x357/0x3b0
+[   58.849856][ T3600] Modules linked in:
+...
+
+
+The same is available in the report emails, e.g.:
+https://lore.kernel.org/all/000000000000ff239c05df391402@google.com/
+...
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=14f791aef00000
+...

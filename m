@@ -2,262 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C1B1531254
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:22:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6199F5312DF
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:23:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236880AbiEWODm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 10:03:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41360 "EHLO
+        id S236847AbiEWOEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 10:04:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236856AbiEWOD3 (ORCPT
+        with ESMTP id S236838AbiEWOER (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 10:03:29 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F9F92FFD0
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 07:03:28 -0700 (PDT)
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id D85FF3F20A
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 14:03:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1653314603;
-        bh=aOj42UXk0Ccs38iFr56+sEgB8yBY01wKBE08wxks5M0=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=ItgSZuvr43XhlL7ZCB+buCWUpn+UiC7TUJPohsUU5I5Vdld2xUH4X6wXcSPUO3OG9
-         bIT0PF2wYA6SiNjQSu6/Pyb/RWaHwDttD1wZDAYXoWoa4fKX4HVKryrXp3aZUcarV2
-         REG8j6ECU2AsBILec5xz0eNhRFvDts9o5XDXdusY54h0On5MXMCgcHfJ/pc80BWLJF
-         TAPDw3/x++4OTf9OKaeC6wABxdoXo051pM5icVvWpKTr3DOU0EfaJgmBw6icdVGsyb
-         UyjQUniqDjnastmIX4eqKGn/1DZjLHmmdKBkqTitX2TKHcCg9yClZ27oyYhcydp7/o
-         GAEKEH4snTipA==
-Received: by mail-ej1-f71.google.com with SMTP id r13-20020a170906c28d00b006fec5bcd396so1314690ejz.22
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 07:03:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aOj42UXk0Ccs38iFr56+sEgB8yBY01wKBE08wxks5M0=;
-        b=kNvdn8z/JipOBrPCW5yn8ipJD6FoC7ds8YX40tAPN380r6GDSYkI1KgLUrX7p+jPYY
-         JGTMFY3XrGKmjLKIgPzNINqPFukAn3iOH2m/1mAoOH2JTsfY7+FbGZJuT9wrjK62bXio
-         xsKGVkgST5scOzCEbQmQ3y2L5oXPlA/bb9GwwElzbd+E1+Id2sjNs9yR0jy2roJ1/zb5
-         8y4i++UdhGK8IINjeFOll6hZdNTpViNqzLjgc/pi3/RA9RuQTlUgJYJU4VnqNOXCQ6WX
-         ahNCyl7kKHZy58RXxAUHsDtcSq3XrzMrDYnc4Bl+cv/7Y07Dc8oREg4OkzEgBp8P8Yp6
-         eJVg==
-X-Gm-Message-State: AOAM531Z9Tujf/nGT9HQ8EeFApTPa2X+Il0bUhifavZ96hXUCo7kLemP
-        hb8/V1mt3gckw27PJzv9jmL0Fl28BveekWboYrG0HL6OxirEO51jgL1J856DO4/kQhr8CE97+T0
-        Jg6gNsWM/JA+PvbmObLRAsOhStp33jFx2uAWxlsr9cLE2XCOsDZMZCmCf0A==
-X-Received: by 2002:a17:907:1c92:b0:6fa:51d2:4005 with SMTP id nb18-20020a1709071c9200b006fa51d24005mr19963051ejc.307.1653314602937;
-        Mon, 23 May 2022 07:03:22 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwMUulBF+KUWazrL3APRAArBepILptP1NGvpb+ZHVwY9pwmFhOGMhnKWNYfpURzv+5M15VeBDVoqJWSq72IkZc=
-X-Received: by 2002:a17:907:1c92:b0:6fa:51d2:4005 with SMTP id
- nb18-20020a1709071c9200b006fa51d24005mr19963013ejc.307.1653314602632; Mon, 23
- May 2022 07:03:22 -0700 (PDT)
+        Mon, 23 May 2022 10:04:17 -0400
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D1357B38
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 07:04:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1653314657;
+  x=1684850657;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=jmA5B4dvI7xazBJLNO/gm5LrfVmN7fBAWkoDxCERPj0=;
+  b=nFfhcKRuauPGR709FMVVvQrz6iRxxuYZq352HpQ6+s6C6M6FnklSOu6m
+   MATn6LKJyBxMYj7qGlAohBALa1nDNQG5XzMx2Y40axkocXPll/U2HoOyR
+   s5Lg5t4akJaYrv9jICwmt/jK57JkwSd6/IsxHin6N87zKkyOaCBTjeXdg
+   WtHIxv6SUXU8q9jLxi0DFoSlrdhwzcAHNfNNWRp5Extm1tRgAptS145ix
+   JKJtTpyAaSDACM3sC1P6CD0Ecrg+Ec8v2Fmx4AgQvciQl0ryShGNDxz0J
+   jJiqaopA4jI9wjAJs5IAxyWqiyZcwUmJ4Zd0ryntygJcl4xbMkvIp0nRS
+   Q==;
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     <richard@nod.at>, <anton.ivanov@cambridgegreys.com>,
+        <johannes@sipsolutions.net>
+CC:     <kernel@axis.com>, <x86@kernel.org>,
+        <linux-um@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>
+Subject: [PATCH] um: Fix out-of-bounds read in LDT setup
+Date:   Mon, 23 May 2022 16:04:03 +0200
+Message-ID: <20220523140403.2361040-1-vincent.whitchurch@axis.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220511192921.2223629-1-heiko@sntech.de> <20220511192921.2223629-9-heiko@sntech.de>
-In-Reply-To: <20220511192921.2223629-9-heiko@sntech.de>
-From:   Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Date:   Mon, 23 May 2022 16:03:10 +0200
-Message-ID: <CA+zEjCuckDpweE9YEep26ZcX3xqh8QszXNq8BY-hPpQkQnRdjQ@mail.gmail.com>
-Subject: Re: [PATCH 08/12] riscv: Fix accessing pfn bits in PTEs for non-32bit variants
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, wefu@redhat.com,
-        liush@allwinnertech.com, guoren@kernel.org, atishp@atishpatra.org,
-        anup@brainfault.org, drew@beagleboard.org, hch@lst.de,
-        arnd@arndb.de, wens@csie.org, maxime@cerno.tech,
-        gfavor@ventanamicro.com, andrea.mondelli@huawei.com,
-        behrensj@mit.edu, xinhaoqu@huawei.com, mick@ics.forth.gr,
-        allen.baum@esperantotech.com, jscheid@ventanamicro.com,
-        rtrauben@gmail.com, samuel@sholland.org, cmuellner@linux.com,
-        philipp.tomsich@vrull.eu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Heiko,
+syscall_stub_data() expects the data_count parameter to be the number of
+longs, not bytes.
 
-On Wed, May 11, 2022 at 9:31 PM Heiko Stuebner <heiko@sntech.de> wrote:
->
-> On rv32 the PFN part of PTEs is defined to use bits [xlen-1:10]
-> while on rv64 it is defined to use bits [53:10], leaving [63:54]
-> as reserved.
->
-> With upcoming optional extensions like svpbmt these previously
-> reserved bits will get used so simply right-shifting the PTE
-> to get the PFN won't be enough.
->
-> So introduce a _PAGE_PFN_MASK constant to mask the correct bits
-> for both rv32 and rv64 before shifting.
->
-> Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-> Reviewed-by: Philipp Tomsich <philipp.tomsich@vrull.eu>
-> ---
->  arch/riscv/include/asm/pgtable-32.h   |  8 ++++++++
->  arch/riscv/include/asm/pgtable-64.h   | 14 +++++++++++---
->  arch/riscv/include/asm/pgtable-bits.h |  6 ------
->  arch/riscv/include/asm/pgtable.h      |  8 +++++---
->  4 files changed, 24 insertions(+), 12 deletions(-)
->
-> diff --git a/arch/riscv/include/asm/pgtable-32.h b/arch/riscv/include/asm/pgtable-32.h
-> index 5b2e79e5bfa5..e266a4fe7f43 100644
-> --- a/arch/riscv/include/asm/pgtable-32.h
-> +++ b/arch/riscv/include/asm/pgtable-32.h
-> @@ -7,6 +7,7 @@
->  #define _ASM_RISCV_PGTABLE_32_H
->
->  #include <asm-generic/pgtable-nopmd.h>
-> +#include <linux/bits.h>
->  #include <linux/const.h>
->
->  /* Size of region mapped by a page global directory */
-> @@ -16,4 +17,11 @@
->
->  #define MAX_POSSIBLE_PHYSMEM_BITS 34
->
-> +/*
-> + * rv32 PTE format:
-> + * | XLEN-1  10 | 9             8 | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0
-> + *       PFN      reserved for SW   D   A   G   U   X   W   R   V
-> + */
-> +#define _PAGE_PFN_MASK  GENMASK(31, 10)
-> +
->  #endif /* _ASM_RISCV_PGTABLE_32_H */
-> diff --git a/arch/riscv/include/asm/pgtable-64.h b/arch/riscv/include/asm/pgtable-64.h
-> index 7e246e9f8d70..15f3ad5aee4f 100644
-> --- a/arch/riscv/include/asm/pgtable-64.h
-> +++ b/arch/riscv/include/asm/pgtable-64.h
-> @@ -6,6 +6,7 @@
->  #ifndef _ASM_RISCV_PGTABLE_64_H
->  #define _ASM_RISCV_PGTABLE_64_H
->
-> +#include <linux/bits.h>
->  #include <linux/const.h>
->
->  extern bool pgtable_l4_enabled;
-> @@ -65,6 +66,13 @@ typedef struct {
->
->  #define PTRS_PER_PMD    (PAGE_SIZE / sizeof(pmd_t))
->
-> +/*
-> + * rv64 PTE format:
-> + * | 63 | 62 61 | 60 54 | 53  10 | 9             8 | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0
-> + *   N      MT     RSV    PFN      reserved for SW   D   A   G   U   X   W   R   V
-> + */
-> +#define _PAGE_PFN_MASK  GENMASK(53, 10)
-> +
->  static inline int pud_present(pud_t pud)
->  {
->         return (pud_val(pud) & _PAGE_PRESENT);
-> @@ -108,12 +116,12 @@ static inline unsigned long _pud_pfn(pud_t pud)
->
->  static inline pmd_t *pud_pgtable(pud_t pud)
->  {
-> -       return (pmd_t *)pfn_to_virt(pud_val(pud) >> _PAGE_PFN_SHIFT);
-> +       return (pmd_t *)pfn_to_virt(__page_val_to_pfn(pud_val(pud)));
->  }
->
->  static inline struct page *pud_page(pud_t pud)
->  {
-> -       return pfn_to_page(pud_val(pud) >> _PAGE_PFN_SHIFT);
-> +       return pfn_to_page(__page_val_to_pfn(pud_val(pud)));
->  }
->
->  #define mm_p4d_folded  mm_p4d_folded
-> @@ -143,7 +151,7 @@ static inline pmd_t pfn_pmd(unsigned long pfn, pgprot_t prot)
->
->  static inline unsigned long _pmd_pfn(pmd_t pmd)
->  {
-> -       return pmd_val(pmd) >> _PAGE_PFN_SHIFT;
-> +       return __page_val_to_pfn(pmd_val(pmd));
->  }
->
->  #define mk_pmd(page, prot)    pfn_pmd(page_to_pfn(page), prot)
-> diff --git a/arch/riscv/include/asm/pgtable-bits.h b/arch/riscv/include/asm/pgtable-bits.h
-> index a6b0c89824c2..e571fa954afc 100644
-> --- a/arch/riscv/include/asm/pgtable-bits.h
-> +++ b/arch/riscv/include/asm/pgtable-bits.h
-> @@ -6,12 +6,6 @@
->  #ifndef _ASM_RISCV_PGTABLE_BITS_H
->  #define _ASM_RISCV_PGTABLE_BITS_H
->
-> -/*
-> - * PTE format:
-> - * | XLEN-1  10 | 9             8 | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0
-> - *       PFN      reserved for SW   D   A   G   U   X   W   R   V
-> - */
-> -
->  #define _PAGE_ACCESSED_OFFSET 6
->
->  #define _PAGE_PRESENT   (1 << 0)
-> diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
-> index 046b44225623..faba543e2b08 100644
-> --- a/arch/riscv/include/asm/pgtable.h
-> +++ b/arch/riscv/include/asm/pgtable.h
-> @@ -108,6 +108,8 @@
->  #include <asm/tlbflush.h>
->  #include <linux/mm_types.h>
->
-> +#define __page_val_to_pfn(_val)  (((_val) & _PAGE_PFN_MASK) >> _PAGE_PFN_SHIFT)
-> +
->  #ifdef CONFIG_64BIT
->  #include <asm/pgtable-64.h>
->  #else
-> @@ -261,12 +263,12 @@ static inline unsigned long _pgd_pfn(pgd_t pgd)
->
->  static inline struct page *pmd_page(pmd_t pmd)
->  {
-> -       return pfn_to_page(pmd_val(pmd) >> _PAGE_PFN_SHIFT);
-> +       return pfn_to_page(__page_val_to_pfn(pmd_val(pmd)));
->  }
->
->  static inline unsigned long pmd_page_vaddr(pmd_t pmd)
->  {
-> -       return (unsigned long)pfn_to_virt(pmd_val(pmd) >> _PAGE_PFN_SHIFT);
-> +       return (unsigned long)pfn_to_virt(__page_val_to_pfn(pmd_val(pmd)));
->  }
->
->  static inline pte_t pmd_pte(pmd_t pmd)
-> @@ -282,7 +284,7 @@ static inline pte_t pud_pte(pud_t pud)
->  /* Yields the page frame number (PFN) of a page table entry */
->  static inline unsigned long pte_pfn(pte_t pte)
->  {
-> -       return (pte_val(pte) >> _PAGE_PFN_SHIFT);
-> +       return __page_val_to_pfn(pte_val(pte));
->  }
->
->  #define pte_page(x)     pfn_to_page(pte_pfn(x))
-> --
-> 2.35.1
->
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+ ==================================================================
+ BUG: KASAN: stack-out-of-bounds in syscall_stub_data+0x70/0xe0
+ Read of size 128 at addr 000000006411f6f0 by task swapper/1
 
-I had this weird bug and it took some time to figure out that _pgd_pfn
-is missing the "& _PAGE_PFN_MASK" here.
+ CPU: 0 PID: 1 Comm: swapper Not tainted 5.18.0+ #18
+ Call Trace:
+  show_stack.cold+0x166/0x2a7
+  __dump_stack+0x3a/0x43
+  dump_stack_lvl+0x1f/0x27
+  print_report.cold+0xdb/0xf81
+  kasan_report+0x119/0x1f0
+  kasan_check_range+0x3a3/0x440
+  memcpy+0x52/0x140
+  syscall_stub_data+0x70/0xe0
+  write_ldt_entry+0xac/0x190
+  init_new_ldt+0x515/0x960
+  init_new_context+0x2c4/0x4d0
+  mm_init.constprop.0+0x5ed/0x760
+  mm_alloc+0x118/0x170
+  0x60033f48
+  do_one_initcall+0x1d7/0x860
+  0x60003e7b
+  kernel_init+0x6e/0x3d4
+  new_thread_handler+0x1e7/0x2c0
 
-And then I grepped _PAGE_PFN_SHIFT and saw that _pud_pfn, p4d_pgtable,
-__pmd_to_phys and stage2_pte_page_vaddr are also missing this mask. I
-agree that we need something similar to your helper __page_val_to_pfn
-(even if __page prefix is a bit weird to me) but I think we should go
-further: forbid the use of _PAGE_PFN_SHIFT and contain this in a
-single function that should be used to access the pfn minus the upper
-bits, that would avoid future oversights.
+ The buggy address belongs to stack of task swapper/1
+  and is located at offset 64 in frame:
+  init_new_ldt+0x0/0x960
 
-I can come up with something if needs be, up to you!
+ This frame has 2 objects:
+  [32, 40) 'addr'
+  [64, 80) 'desc'
+ ==================================================================
 
-Thanks,
+Fixes: 858259cf7d1c443c83 ("uml: maintain own LDT entries")
+Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+---
+ arch/x86/um/ldt.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Alex
+diff --git a/arch/x86/um/ldt.c b/arch/x86/um/ldt.c
+index 3ee234b6234d..255a44dd415a 100644
+--- a/arch/x86/um/ldt.c
++++ b/arch/x86/um/ldt.c
+@@ -23,9 +23,11 @@ static long write_ldt_entry(struct mm_id *mm_idp, int func,
+ {
+ 	long res;
+ 	void *stub_addr;
++
++	BUILD_BUG_ON(sizeof(*desc) % sizeof(long));
++
+ 	res = syscall_stub_data(mm_idp, (unsigned long *)desc,
+-				(sizeof(*desc) + sizeof(long) - 1) &
+-				    ~(sizeof(long) - 1),
++				sizeof(*desc) / sizeof(long),
+ 				addr, &stub_addr);
+ 	if (!res) {
+ 		unsigned long args[] = { func,
+-- 
+2.34.1
+

@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C87C75317B2
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:53:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE90D5316AC
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:52:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241804AbiEWRbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:31:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42196 "EHLO
+        id S239635AbiEWRKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:10:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241793AbiEWRWh (ORCPT
+        with ESMTP id S239524AbiEWRJ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:22:37 -0400
+        Mon, 23 May 2022 13:09:29 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 057197CB10;
-        Mon, 23 May 2022 10:19:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8273E4EA07;
+        Mon, 23 May 2022 10:09:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 00EFDB811FE;
-        Mon, 23 May 2022 17:13:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32C3EC385AA;
-        Mon, 23 May 2022 17:13:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5FCD0B811F6;
+        Mon, 23 May 2022 17:09:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD06DC385A9;
+        Mon, 23 May 2022 17:09:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653325995;
-        bh=Z6/7f7HNKOU9oPu3ojflFpWYnzcyZfoFiGG0zJfOUSQ=;
+        s=korg; t=1653325750;
+        bh=cKXq3/EbTX8YVQiuqecQn9SX4Ky7zX2DwSuQqg0oBr0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ai3jJBH9JbJrFnmJp3c4PnfKXmqwZip4vt35xosMGBpKbES1wfuO/lroFj73eYlXU
-         AHWRyrFHv5PFz/trYGwmTTfe1Pozz15DzvgeM/QcXRujWEBjJnEv2XpAJpYIHGf+St
-         rrOflOUXg2azjwanzZPIgmPHquQ3FYvt4D7sbSvY=
+        b=jxg88mqbLUpQ16rUg0IM4Ac3GchGfiA1jn6ysy5QI9Ng4iwgwXbblM9WNPGPBO5/e
+         wIUkSMU67wOBi8fmU3ZA/g8CrRIJccsm4EJbwNX2MfIN6QkSDq5nfCOU0MdLM8onFT
+         +DdAd6dg4wjZgrwdEG3JNLEtd8ew9wkkHLIHmhtg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jae Hyun Yoo <quic_jaehyoo@quicinc.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Joel Stanley <joel@jms.id.au>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 35/68] ARM: dts: aspeed-g6: fix SPI1/SPI2 quad pin group
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Subject: [PATCH 4.14 13/33] mmc: core: Default to generic_cmd6_time as timeout in __mmc_switch()
 Date:   Mon, 23 May 2022 19:05:02 +0200
-Message-Id: <20220523165808.400971223@linuxfoundation.org>
+Message-Id: <20220523165750.023556838@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165802.500642349@linuxfoundation.org>
-References: <20220523165802.500642349@linuxfoundation.org>
+In-Reply-To: <20220523165746.957506211@linuxfoundation.org>
+References: <20220523165746.957506211@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,45 +54,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
 
-[ Upstream commit 890362d41b244536ab63591f813393f5fdf59ed7 ]
+commit 533a6cfe08f96a7b5c65e06d20916d552c11b256 upstream
 
-Fix incorrect function mappings in pinctrl_qspi1_default and
-pinctrl_qspi2_default since their function should be SPI1 and
-SPI2 respectively.
+All callers of __mmc_switch() should now be specifying a valid timeout for
+the CMD6 command. However, just to be sure, let's print a warning and
+default to use the generic_cmd6_time in case the provided timeout_ms
+argument is zero.
 
-Fixes: f510f04c8c83 ("ARM: dts: aspeed: Add AST2600 pinmux nodes")
-Signed-off-by: Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
-Reviewed-by: Andrew Jeffery <andrew@aj.id.au>
-Link: https://lore.kernel.org/r/20220329173932.2588289-8-quic_jaehyoo@quicinc.com
-Signed-off-by: Joel Stanley <joel@jms.id.au>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+In this context, let's also simplify some of the corresponding code and
+clarify some related comments.
+
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Link: https://lore.kernel.org/r/20200122142747.5690-4-ulf.hansson@linaro.org
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/mmc/core/mmc_ops.c |   18 ++++++++----------
+ 1 file changed, 8 insertions(+), 10 deletions(-)
 
-diff --git a/arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi b/arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi
-index 4792b3d9459d..ac723fe898c7 100644
---- a/arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi
-+++ b/arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi
-@@ -648,12 +648,12 @@ pinctrl_pwm9g1_default: pwm9g1_default {
- 	};
+--- a/drivers/mmc/core/mmc_ops.c
++++ b/drivers/mmc/core/mmc_ops.c
+@@ -458,10 +458,6 @@ static int mmc_poll_for_busy(struct mmc_
+ 	bool expired = false;
+ 	bool busy = false;
  
- 	pinctrl_qspi1_default: qspi1_default {
--		function = "QSPI1";
-+		function = "SPI1";
- 		groups = "QSPI1";
- 	};
+-	/* We have an unspecified cmd timeout, use the fallback value. */
+-	if (!timeout_ms)
+-		timeout_ms = MMC_OPS_TIMEOUT_MS;
+-
+ 	/*
+ 	 * In cases when not allowed to poll by using CMD13 or because we aren't
+ 	 * capable of polling by using ->card_busy(), then rely on waiting the
+@@ -534,14 +530,20 @@ int __mmc_switch(struct mmc_card *card,
  
- 	pinctrl_qspi2_default: qspi2_default {
--		function = "QSPI2";
-+		function = "SPI2";
- 		groups = "QSPI2";
- 	};
+ 	mmc_retune_hold(host);
  
--- 
-2.35.1
-
++	if (!timeout_ms) {
++		pr_warn("%s: unspecified timeout for CMD6 - use generic\n",
++			mmc_hostname(host));
++		timeout_ms = card->ext_csd.generic_cmd6_time;
++	}
++
+ 	/*
+ 	 * If the cmd timeout and the max_busy_timeout of the host are both
+ 	 * specified, let's validate them. A failure means we need to prevent
+ 	 * the host from doing hw busy detection, which is done by converting
+ 	 * to a R1 response instead of a R1B.
+ 	 */
+-	if (timeout_ms && host->max_busy_timeout &&
+-		(timeout_ms > host->max_busy_timeout))
++	if (host->max_busy_timeout &&
++	    (timeout_ms > host->max_busy_timeout))
+ 		use_r1b_resp = false;
+ 
+ 	cmd.opcode = MMC_SWITCH;
+@@ -552,10 +554,6 @@ int __mmc_switch(struct mmc_card *card,
+ 	cmd.flags = MMC_CMD_AC;
+ 	if (use_r1b_resp) {
+ 		cmd.flags |= MMC_RSP_SPI_R1B | MMC_RSP_R1B;
+-		/*
+-		 * A busy_timeout of zero means the host can decide to use
+-		 * whatever value it finds suitable.
+-		 */
+ 		cmd.busy_timeout = timeout_ms;
+ 	} else {
+ 		cmd.flags |= MMC_RSP_SPI_R1 | MMC_RSP_R1;
 
 

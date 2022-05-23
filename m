@@ -2,131 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F48B530CAC
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:40:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6B48530E37
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 12:43:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233514AbiEWJfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 05:35:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50798 "EHLO
+        id S233646AbiEWJgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 05:36:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233224AbiEWJeG (ORCPT
+        with ESMTP id S233370AbiEWJep (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 05:34:06 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E671A805;
-        Mon, 23 May 2022 02:34:01 -0700 (PDT)
-X-UUID: 07fedeffbf384544933d20e8741460c3-20220523
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:3028fad3-5124-42d1-b933-15cf205bef24,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:-5
-X-CID-META: VersionHash:2a19b09,CLOUDID:b0f6477a-5ef6-470b-96c9-bdb8ced32786,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:0,BEC:nil
-X-UUID: 07fedeffbf384544933d20e8741460c3-20220523
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 310604445; Mon, 23 May 2022 17:33:52 +0800
-Received: from MTKMBS07N2.mediatek.inc (172.21.101.141) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Mon, 23 May 2022 17:33:51 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 23 May 2022 17:33:50 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 23 May 2022 17:33:50 +0800
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <matthias.bgg@gmail.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <p.zabel@pengutronix.de>,
-        <angelogioacchino.delregno@collabora.com>,
-        <nfraprado@collabora.com>, <chun-jie.chen@mediatek.com>,
-        <wenst@chromium.org>, <runyang.chen@mediatek.com>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>
-Subject: [RESEND v8 19/19] clk: mediatek: reset: Add infra_ao reset support for MT8186
-Date:   Mon, 23 May 2022 17:33:46 +0800
-Message-ID: <20220523093346.28493-20-rex-bc.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220523093346.28493-1-rex-bc.chen@mediatek.com>
-References: <20220523093346.28493-1-rex-bc.chen@mediatek.com>
+        Mon, 23 May 2022 05:34:45 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DADC4B1F9;
+        Mon, 23 May 2022 02:34:42 -0700 (PDT)
+Received: from zn.tnic (p200300ea974657b3329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9746:57b3:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E65A01EC018C;
+        Mon, 23 May 2022 11:34:36 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1653298477;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=wfztkaByN97ueSWPSqUqhksXQIUMUHKpNYslfU+pPrg=;
+        b=ebzCyRjlW0zFUmL1cfxuMt0O5oJoWih0LGLxXewxEsVV0HwLlSAaeluWxaSLSeO8QNDjlX
+        RcOcKTTgh1zkPPm6FIe+5BQlCC9pN1+LFFgLzn53igTIFT5imcU7xC2Riu5Mj/+AFraVpv
+        uPGo0V8r+Ar0u93K+6/I7bDk6Lzm3r4=
+Date:   Mon, 23 May 2022 11:34:31 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Medad Young <medadyoung@gmail.com>
+Cc:     rric@kernel.org, James Morse <james.morse@arm.com>,
+        tony.luck@intel.com, Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Patrick Venture <venture@google.com>, KWLIU@nuvoton.com,
+        YSCHU@nuvoton.com, JJLIU0@nuvoton.com, KFTING <KFTING@nuvoton.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>, ctcchien@nuvoton.com,
+        linux-edac <linux-edac@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>
+Subject: Re: [PATCH v9 1/3] ARM: dts: nuvoton: Add memory controller node
+Message-ID: <YotVJ+ExcrQshM4A@zn.tnic>
+References: <20220510031056.1657-1-ctcchien@nuvoton.com>
+ <20220510031056.1657-2-ctcchien@nuvoton.com>
+ <YoUwe6Tj4Uh6ukc8@zn.tnic>
+ <CAHpyw9fjThEP4NuU08aNJ_raHpq9-j9KgBb8YuZ_shXTjhm3JA@mail.gmail.com>
+ <YoYPGWreQuF9QZzc@zn.tnic>
+ <CAHpyw9es-n+bW9SsGBmmr3ghBFk8Q8E6ZTbE42BpU-6p8LfHtw@mail.gmail.com>
+ <YoeE8cBhUkF3K44/@zn.tnic>
+ <CAHpyw9fAfNf8j++JtLhuudSWj6N1-KAxA_fxEGL998WNVXTPdQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAHpyw9fAfNf8j++JtLhuudSWj6N1-KAxA_fxEGL998WNVXTPdQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The infra_ao reset is needed for MT8186.
-- Add mtk_clk_rst_desc for MT8186.
-- Add register reset controller function for MT8186 infra_ao.
-- Add infra_ao_idx_map for MT8186.
+On Mon, May 23, 2022 at 05:06:07PM +0800, Medad Young wrote:
+> I did do "git commit --amend",
+> I beleve the issue is about the mail server I used,
+> I use gmail to send the mail due to the mail server of my company
+> does't support smtp
+> so now I should sign the commit with my gmail account.
 
-Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/clk/mediatek/clk-mt8186-infra_ao.c | 23 ++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+No, you should supply --author too - I had forgotten about that.
 
-diff --git a/drivers/clk/mediatek/clk-mt8186-infra_ao.c b/drivers/clk/mediatek/clk-mt8186-infra_ao.c
-index 2a7adc25abaa..df2a6bd1aefa 100644
---- a/drivers/clk/mediatek/clk-mt8186-infra_ao.c
-+++ b/drivers/clk/mediatek/clk-mt8186-infra_ao.c
-@@ -6,6 +6,7 @@
- #include <linux/clk-provider.h>
- #include <linux/platform_device.h>
- #include <dt-bindings/clock/mt8186-clk.h>
-+#include <dt-bindings/reset/mt8186-resets.h>
- 
- #include "clk-gate.h"
- #include "clk-mtk.h"
-@@ -191,9 +192,31 @@ static const struct mtk_gate infra_ao_clks[] = {
- 	GATE_INFRA_AO3(CLK_INFRA_AO_FLASHIF_66M, "infra_ao_flashif_66m", "top_axi", 29),
- };
- 
-+static u16 infra_ao_rst_ofs[] = {
-+	INFRA_RST0_SET_OFFSET,
-+	INFRA_RST1_SET_OFFSET,
-+	INFRA_RST2_SET_OFFSET,
-+	INFRA_RST3_SET_OFFSET,
-+	INFRA_RST4_SET_OFFSET,
-+};
-+
-+static u16 infra_ao_idx_map[] = {
-+	[MT8186_INFRA_THERMAL_CTRL_RST] = 0 * RST_NR_PER_BANK + 0,
-+	[MT8186_INFRA_PTP_CTRL_RST] = 1 * RST_NR_PER_BANK + 0,
-+};
-+
-+static struct mtk_clk_rst_desc infra_ao_rst_desc = {
-+	.version = MTK_RST_SET_CLR,
-+	.rst_bank_ofs = infra_ao_rst_ofs,
-+	.rst_bank_nr = ARRAY_SIZE(infra_ao_rst_ofs),
-+	.rst_idx_map = infra_ao_idx_map,
-+	.rst_idx_map_nr = ARRAY_SIZE(infra_ao_idx_map),
-+};
-+
- static const struct mtk_clk_desc infra_ao_desc = {
- 	.clks = infra_ao_clks,
- 	.num_clks = ARRAY_SIZE(infra_ao_clks),
-+	.rst_desc = &infra_ao_rst_desc,
- };
- 
- static const struct of_device_id of_match_clk_mt8186_infra_ao[] = {
+commit 0876b99e4aa2bf7113070c9c0f5d0ade7ad91697 (HEAD -> refs/heads/test)
+Author: Medad CChien <medadyoung@gmail.com>
+Date:   Tue May 10 11:10:54 2022 +0800
+
+    ARM: dts: nuvoton: Add memory controller node
+    
+    ECC must be configured in the BootBlock header.
+    Then, you can read error counts via the EDAC kernel framework.
+    
+    Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
+
+$  git commit --amend --author="Medad CChien <ctcchien@nuvoton.com>"
+[test 5d6cd85171d1] ARM: dts: nuvoton: Add memory controller node
+ Author: Medad CChien <ctcchien@nuvoton.com>
+ Date: Tue May 10 11:10:54 2022 +0800
+ 1 file changed, 7 insertions(+)
+$ git log -p -1
+commit 5d6cd85171d14e67840e672e2f96a16981243424 (HEAD -> refs/heads/test)
+Author: Medad CChien <ctcchien@nuvoton.com>
+Date:   Tue May 10 11:10:54 2022 +0800
+
+    ARM: dts: nuvoton: Add memory controller node
+    
+    ECC must be configured in the BootBlock header.
+    Then, you can read error counts via the EDAC kernel framework.
+    
+    Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
+
+$ git format-patch -1 -o /tmp/
+/tmp/0001-ARM-dts-nuvoton-Add-memory-controller-node.patch
+
+$ head /tmp/0001-ARM-dts-nuvoton-Add-memory-controller-node.patch
+From 5d6cd85171d14e67840e672e2f96a16981243424 Mon Sep 17 00:00:00 2001
+From: Medad CChien <ctcchien@nuvoton.com>
+		    ^^^^^^^^^^^^^^^^^^^^^^
+
+
+Don't hesitate to look at the manpages if a tool doesn't do what you
+expect it to do.
+
+HTH.
+
 -- 
-2.18.0
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette

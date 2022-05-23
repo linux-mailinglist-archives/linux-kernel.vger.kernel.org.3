@@ -2,131 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AE925312EB
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:23:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9098B53141D
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:25:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238751AbiEWQSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 12:18:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36078 "EHLO
+        id S238843AbiEWQS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 12:18:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238769AbiEWQRt (ORCPT
+        with ESMTP id S238756AbiEWQSG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 12:17:49 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15E0A66AFB
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:17:39 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id j21so13889245pga.13
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:17:39 -0700 (PDT)
+        Mon, 23 May 2022 12:18:06 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E775001F;
+        Mon, 23 May 2022 09:17:59 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id c2so13563514plh.2;
+        Mon, 23 May 2022 09:17:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=eNbcOsis/KpOazxwoapGqmAzQvleW1ZvCZVss5TACNY=;
-        b=PvlTBp13muG1TUI68g94aTQ/FiuK9qHmMCLEhGVjZ0ZOVhN6vz5vhhS+wmUP4+Lno7
-         7IlNEdS8L46cr3LPygXWejIC2R5nVJHYFz2RQibrrPusEsaLKGvIB9h6v7KfX7A7i0kB
-         v+P2h1gE9IKmT0G5rBzwpuio2B55DiAPk8drqySZQ6ng/a9/tF4skaP1vmmzJ5HO8Eae
-         PxGQp8Gqh3zX4GFCTSCnZ/kLWXYyzDQ0QstOp7r3CfZjsMSi22A3To/WeaVSCKJ0a/sA
-         PopRzqh3tQ/XAtcJTZ/asZNoRcRGEGNwG+tcYnQThEJqQPzA4Ro2opqfmf1ZUxg77Xkw
-         zo6A==
+         :content-disposition:in-reply-to;
+        bh=XscYd2XthDWYUhAkxOPgE7MyEYQIXOYcrsFO2Eyz8Ag=;
+        b=Ki7jD0kLG6A9jqBBRwOmAbgHs0YQEKbXmx6QN+gwUBEyb1ZJYbe0yDwlxp69FhjUtX
+         qsk6JRwaHKF/LdvjW02F1oQkQ3EO8a8sybq4xvqzTFZustbTvuMALd3Tp3zYkYSe9QiB
+         CYdSSNUMnTaQQWR7sXpox7RUL/FhsZ9xYoUAAsthkKLyRmkaOrNM8YInpISw61yB8jes
+         iPVNQMygQbILNZoj4k5QKM2PTdrG3i/l6+Hv24SlCqYc4+6lNm4QWn8U/YiJfYegJDL8
+         yOW7DGQXrfNNIbRLSIXEGXh3pgyWIfooUG6qyZGFshjMWk3DGk6sJyFzp6xgRBkxE6ql
+         ORKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=eNbcOsis/KpOazxwoapGqmAzQvleW1ZvCZVss5TACNY=;
-        b=jZpdC9nHBj4EdHG51MiyT+tDa2K3omtb+Dd+WJLR96VvC/roNcMWX9p0EaLn914n4v
-         PwBQQz+G5i3y25ucALvygq8NYqXYZpLfZdmv1rrBKFlsSIbrnit6PLDUs59j0rx2JDaq
-         U35vi/lBcdfUB+gOZOjTuVZB2aW4719v/CcQq+1OFejjyxroIEnR/DnBLCvpOTLjH+tY
-         AHim8Lcq7qynhdqMIPVNASZjyAstApeF0gRSdccO6T82nO2d/Vn5qMpZUvFEjLDdn5tO
-         oG+tawVO0nRuDoT1VpbVl9Yvt42A4t2gKxy+8nLYrjzC0q2PW3+THtvo7TZCqz3qnVSI
-         rP2w==
-X-Gm-Message-State: AOAM530TfWCsR9HPWRWf5jM7gvZoqv74gmQhdR1z2cDU8ezfQh+2VQfD
-        Yu1AzASoht572icoFH2UxeAGmQ==
-X-Google-Smtp-Source: ABdhPJxjulk6DvCNQRz3GNKlx5A5+lWZ+jpdQDxApa+oqiYCn513L8CGqWxpc26B7Dlc/KO80E966g==
-X-Received: by 2002:a05:6a00:1511:b0:510:30d1:e8fd with SMTP id q17-20020a056a00151100b0051030d1e8fdmr24535196pfu.37.1653322658336;
-        Mon, 23 May 2022 09:17:38 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id e18-20020a170902f11200b00162017529easm5297369plb.167.2022.05.23.09.17.37
+         :mime-version:content-disposition:in-reply-to;
+        bh=XscYd2XthDWYUhAkxOPgE7MyEYQIXOYcrsFO2Eyz8Ag=;
+        b=OjS6z/lf51rj8hlBi01WydhOo3zAcY9dX95p/J+PP2iIcQbYMF8aPFX+Oel8G+DT4m
+         t4isjcUzvGhmn2ox29luW9dxe8QFxvfTSq0Hng6o2lPC6xKdB/YujSczApB8A7sndnfI
+         sIGvUMgYr0ybVU/spJ8B+PQxSRSyD4aq0zwkQfukOxtwXqgJL7BK/YoANiy25z6eXUJv
+         vcT9BmAmUNE8hEylAvhEmWbc6zZoQyZjL6ntj9wmGAkZDtephmszu+75ec9xy63EZZJs
+         /9QDQZmt3vXSvmWC6B/w0dE/E9gNtz9chVChTa+ScrVep8niC9jlVRWZEsqo1ZYXYWjV
+         DYOw==
+X-Gm-Message-State: AOAM533zKKNJ2NzSEYj+sTGOXrHhRv87kiSOSz1y2cRZUEQL6UwM4R4e
+        27ZRzt2la9YuKajdMglwokc=
+X-Google-Smtp-Source: ABdhPJx1UvRPNtRDvXoFm4s4GFCfRU43KQsGhriUzOMYUgwZZJJ8O6kkqdWzCkCAWMgpP43D1W2s0g==
+X-Received: by 2002:a17:903:11c7:b0:154:b936:d1d4 with SMTP id q7-20020a17090311c700b00154b936d1d4mr23608030plh.78.1653322678114;
+        Mon, 23 May 2022 09:17:58 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:d84e:5dcd:9d68:ebbf])
+        by smtp.gmail.com with ESMTPSA id w4-20020a654104000000b003fa95b940bdsm595341pgp.88.2022.05.23.09.17.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 09:17:37 -0700 (PDT)
-Date:   Mon, 23 May 2022 16:17:34 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     shaoqin.huang@intel.com
-Cc:     pbonzini@redhat.com, Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: x86/mmu: Check every prev_roots in
- __kvm_mmu_free_obsolete_roots()
-Message-ID: <YouznrVYM7H5IoMK@google.com>
-References: <20220523010948.2018342-1-shaoqin.huang@intel.com>
+        Mon, 23 May 2022 09:17:57 -0700 (PDT)
+Date:   Mon, 23 May 2022 09:17:54 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     matthias.bgg@gmail.com, mkorpershoek@baylibre.com,
+        linux-input@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/5] Input: mtk-pmic-keys - Add kerneldoc to driver
+ structures
+Message-ID: <YouzshxT6bjxiRqr@google.com>
+References: <20220520125132.229191-1-angelogioacchino.delregno@collabora.com>
+ <20220520125132.229191-2-angelogioacchino.delregno@collabora.com>
+ <YosOsgPwMGuLk9dv@google.com>
+ <56598535-5aa4-020e-25fd-295416f4d979@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220523010948.2018342-1-shaoqin.huang@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <56598535-5aa4-020e-25fd-295416f4d979@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 22, 2022, shaoqin.huang@intel.com wrote:
-> From: Shaoqin Huang <shaoqin.huang@intel.com>
+On Mon, May 23, 2022 at 10:54:03AM +0200, AngeloGioacchino Del Regno wrote:
+> Il 23/05/22 06:33, Dmitry Torokhov ha scritto:
+> > Hi AngeloGioacchino,
+> > 
+> > On Fri, May 20, 2022 at 02:51:28PM +0200, AngeloGioacchino Del Regno wrote:
+> > > To enhance human readability, add kerneldoc to all driver structs.
+> > 
+> > I am doubtful that this is useful. The reason is that I believe
+> > kerneldoc format is only useful for documenting cross-subsystem APIs.
+> > Kerneldoc for driver-private data and functions simply pollutes API
+> > docs.
+> > 
+> > > 
+> > > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> > > ---
+> > >   drivers/input/keyboard/mtk-pmic-keys.c | 30 +++++++++++++++++++++++++-
+> > >   1 file changed, 29 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/input/keyboard/mtk-pmic-keys.c b/drivers/input/keyboard/mtk-pmic-keys.c
+> > > index c31ab4368388..8e4fa7cd16e6 100644
+> > > --- a/drivers/input/keyboard/mtk-pmic-keys.c
+> > > +++ b/drivers/input/keyboard/mtk-pmic-keys.c
+> > > @@ -34,6 +34,13 @@
+> > >   #define MTK_PMIC_HOMEKEY_INDEX	1
+> > >   #define MTK_PMIC_MAX_KEY_COUNT	2
+> > > +/**
+> > > + * struct mtk_pmic_keys_regs - PMIC keys per-key registers
+> > > + * @deb_reg:             Debounced key status register
+> > > + * @deb_mask:            Bitmask of this key in status register
+> > > + * @intsel_reg:          Interrupt selector register
+> > > + * @intsel_mask:         Bitmask of this key in interrupt selector
+> > > + */
+> > >   struct mtk_pmic_keys_regs {
+> > >   	u32 deb_reg;
+> > >   	u32 deb_mask;
+> > > @@ -50,6 +57,11 @@ struct mtk_pmic_keys_regs {
+> > >   	.intsel_mask		= _intsel_mask,		\
+> > >   }
+> > > +/**
+> > > + * struct mtk_pmic_regs - PMIC Keys registers
+> > > + * @keys_regs:           Specific key registers
+> > 
+> > This new description of the structure and of the keys_regs does not add
+> > any information for me.
+> > 
+> > > + * @pmic_rst_reg:        PMIC Keys reset register
+> > > + */
+> > >   struct mtk_pmic_regs {
+> > >   	const struct mtk_pmic_keys_regs keys_regs[MTK_PMIC_MAX_KEY_COUNT];
+> > >   	u32 pmic_rst_reg;
+> > > @@ -85,15 +97,31 @@ static const struct mtk_pmic_regs mt6358_regs = {
+> > >   	.pmic_rst_reg = MT6358_TOP_RST_MISC,
+> > >   };
+> > > +/**
+> > > + * struct mtk_pmic_keys_info - PMIC Keys per-key params
+> > > + * @keys:                Pointer to main driver structure
+> > 
+> > That is obvious from the field definition.
+> > 
+> > > + * @regs:                Register offsets/masks for this key
+> > 
+> > Ditto.
+> > 
+> > > + * @keycode:             Key code for this key
+> > 
+> > Yep.
+> > 
+> > > + * @irq:                 Keypress or press/release interrupt
+> > > + * @irq_r:               Key release interrupt (optional)
+> > > + * @wakeup:              Indicates whether to use this key as a wakeup source
+> > > + */
+> > >   struct mtk_pmic_keys_info {
+> > >   	struct mtk_pmic_keys *keys;
+> > >   	const struct mtk_pmic_keys_regs *regs;
+> > >   	unsigned int keycode;
+> > >   	int irq;
+> > > -	int irq_r; /* optional: release irq if different */
+> > > +	int irq_r;
+> > >   	bool wakeup:1;
+> > >   };
+> > > +/**
+> > > + * struct mtk_pmic_keys - Main driver structure
+> > > + * @input_dev:           Input device pointer
+> > 
+> > I do not find this helpful.
+> > 
+> > > + * @dev:                 Device pointer
+> > 
+> > And neither this.
+> > 
+> > > + * @regmap:              Regmap handle
+> > 
+> > Nor this.
+> > 
+> > > + * @keys:                Per-key parameters
+> > > + */
+> > >   struct mtk_pmic_keys {
+> > >   	struct input_dev *input_dev;
+> > >   	struct device *dev;
+> > > -- 
+> > > 2.35.1
+> > > 
+> > 
+> > In the end we ended up with something that now has a chance of
+> > introducing warning when someone changes code, for very little benefit,
+> > if any at all.
+> > 
+> > For driver-private data and functions we should rely on expressive
+> > variable and function names and only use comments for something that
+> > might be unclear or requires additional qualification.
+> > 
 > 
-> Iterate every prev_roots and only zap obsoleted roots.
-
-Better would be something like:
-
-  When freeing obsolete previous roots, check prev_roots as intended, not
-  the current root.
-
-Ugh, my bad.  This escaped into v5.18 :-(
-
-Fixes: 527d5cd7eece ("KVM: x86/mmu: Zap only obsolete roots if a root shadow page is zapped")
-Cc: stable@vger.kernel.org
-
+> Hello Dmitry,
 > 
-> Signed-off-by: Shaoqin Huang <shaoqin.huang@intel.com>
-> ---
->  arch/x86/kvm/mmu/mmu.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> it's been very helpful for me to see kerneldoc documentation in the various
+> drivers across the kernel - helped me understanding what was going on in an
+> easier, more immediate way, especially when looking at drivers having some
+> kind of "complicated" flow.
+> About introducing warnings when someone changes code, I believe that this
+> may also be helpful (for a developer) in some *corner* cases, but I agree
+> that this is unnecessarily tedious in some others... in the end, it's all
+> about personal opinions...
 > 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 45e1573f8f1d..22803916a609 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -5168,7 +5168,7 @@ static void __kvm_mmu_free_obsolete_roots(struct kvm *kvm, struct kvm_mmu *mmu)
->  		roots_to_free |= KVM_MMU_ROOT_CURRENT;
->  
->  	for (i = 0; i < KVM_MMU_NUM_PREV_ROOTS; i++) {
-> -		if (is_obsolete_root(kvm, mmu->root.hpa))
-> +		if (is_obsolete_root(kvm, mmu->prev_roots.hpa))
-
-My version is bad, but at least it compiles ;-)
-
-arch/x86/kvm/mmu/mmu.c: In function ‘__kvm_mmu_free_obsolete_roots’:
-arch/x86/kvm/mmu/mmu.c:5182:58: error: ‘(struct kvm_mmu_root_info *)&mmu->prev_roots’ is a pointer; did you mean to use ‘->’?
- 5182 |                 if (is_obsolete_root(kvm, mmu->prev_roots.hpa))
-      |                                                          ^
-      |                                                          ->
-
-
-		if (is_obsolete_root(kvm, mmu->prev_roots[i].hpa))
-		
->  			roots_to_free |= KVM_MMU_ROOT_PREVIOUS(i);
->  	}
->  
-> -- 
-> 2.30.2
+> Of course, some of the documentation being obvious is unavoidable when it
+> comes to kerneldoc as you either document 'em all, or nothing.
 > 
+> In any case, if you really dislike having this kind of documentation, I can
+> drop these commits and eventually add in-line comments to some variables to
+> make them perfectly understandable, or I can avoid documenting at all (even
+> though I am strongly for documenting things clearly).
+
+I might be mistaken, but I think what you appreciated is not presence of
+comments particularly in kerneldoc format (you did not generate htmldocs
+or something to study the drivers internal API disconnected from the
+code, did you?) but rather the fact that some drivers have been
+well-commented.
+
+To be clear, I am all for adding meaningful comments to the drivers
+structures and code, but kerneldoc is too rigid and adds too much noise.
+As I mentioned "this is a pointer to an input device" description might
+be OK when looking at HTML docs on the web or elsewhere, but really does
+not add anything when you see "struct input_dev *input_dev;" a few lines
+below.  So my preference would be to add free-form comments to places
+where intent is not clear. For example the original comment to "irq_r"
+was pretty good IMO - it called out some irregularity and explained what
+it is. We could definitely add comment to "irq" as well to tell that we
+expect it to fire on both press and release.
+
+Thanks.
+
+-- 
+Dmitry

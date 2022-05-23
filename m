@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1A8F531BB9
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87F4B531896
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:54:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243682AbiEWRiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:38:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43388 "EHLO
+        id S240391AbiEWRMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:12:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241735AbiEWR1F (ORCPT
+        with ESMTP id S239547AbiEWRKI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:27:05 -0400
+        Mon, 23 May 2022 13:10:08 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E7C975200;
-        Mon, 23 May 2022 10:22:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C6B6C553;
+        Mon, 23 May 2022 10:09:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E55061149;
-        Mon, 23 May 2022 17:21:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96A84C385A9;
-        Mon, 23 May 2022 17:21:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D698614CE;
+        Mon, 23 May 2022 17:09:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63B02C385A9;
+        Mon, 23 May 2022 17:09:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653326491;
-        bh=b1f3Xs/RdsG4s/2l3MGwmQkavIui4Nkfu8c/7GVi37E=;
+        s=korg; t=1653325772;
+        bh=z4dNxt/amUl9rRBPcT7kg7wnq1N98gWZo4V9yFbD8ag=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ssi+FhIjAkuhXZzVCT2HFfNJ5TSsVPknWN5kYpnbx7rI7vrIbSQHw57ECxee00lje
-         e0yZuOWsHQvvY2ChT0h/Oih/LEGd3VeiQTSHJePviOkMg1+C48aMYW3Icu1T5EJHWP
-         8ndljjV82m0lpekL7QJP/1ZtLhtEI5E2VSa1SPrw=
+        b=0thNiHppGVwtrs+rOFvqsOnQp6SFwoLsakx7V3jxFkUYIAx8tBYUGsdhTFT45FNIw
+         JYYB1jA/u6HJwGr5fpWJTFXJYBSBdhKRwsMcn6Xp/sOnSXUciTBsbu99Ma+flJN90z
+         M4ov+oVBtBndT9L4B1+n4CTKAnEk0ycE38MHcZT4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 097/132] mptcp: fix checksum byte order
-Date:   Mon, 23 May 2022 19:05:06 +0200
-Message-Id: <20220523165839.452698115@linuxfoundation.org>
+Subject: [PATCH 4.14 18/33] NFC: nci: fix sleep in atomic context bugs caused by nci_skb_alloc
+Date:   Mon, 23 May 2022 19:05:07 +0200
+Message-Id: <20220523165751.029587860@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
-References: <20220523165823.492309987@linuxfoundation.org>
+In-Reply-To: <20220523165746.957506211@linuxfoundation.org>
+References: <20220523165746.957506211@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,151 +56,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paolo Abeni <pabeni@redhat.com>
+From: Duoming Zhou <duoming@zju.edu.cn>
 
-[ Upstream commit ba2c89e0ea74a904d5231643245753d77422e7f5 ]
+[ Upstream commit 23dd4581350d4ffa23d58976ec46408f8f4c1e16 ]
 
-The MPTCP code typecasts the checksum value to u16 and
-then converts it to big endian while storing the value into
-the MPTCP option.
+There are sleep in atomic context bugs when the request to secure
+element of st-nci is timeout. The root cause is that nci_skb_alloc
+with GFP_KERNEL parameter is called in st_nci_se_wt_timeout which is
+a timer handler. The call paths that could trigger bugs are shown below:
 
-As a result, the wire encoding for little endian host is
-wrong, and that causes interoperabilty interoperability
-issues with other implementation or host with different endianness.
+    (interrupt context 1)
+st_nci_se_wt_timeout
+  nci_hci_send_event
+    nci_hci_send_data
+      nci_skb_alloc(..., GFP_KERNEL) //may sleep
 
-Address the issue writing in the packet the unmodified __sum16 value.
+   (interrupt context 2)
+st_nci_se_wt_timeout
+  nci_hci_send_event
+    nci_hci_send_data
+      nci_send_data
+        nci_queue_tx_data_frags
+          nci_skb_alloc(..., GFP_KERNEL) //may sleep
 
-MPTCP checksum is disabled by default, interoperating with systems
-with bad mptcp-level csum encoding should cause fallback to TCP.
+This patch changes allocation mode of nci_skb_alloc from GFP_KERNEL to
+GFP_ATOMIC in order to prevent atomic context sleeping. The GFP_ATOMIC
+flag makes memory allocation operation could be used in atomic context.
 
-Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/275
-Fixes: c5b39e26d003 ("mptcp: send out checksum for DSS")
-Fixes: 390b95a5fb84 ("mptcp: receive checksum for DSS")
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: ed06aeefdac3 ("nfc: st-nci: Rename st21nfcb to st-nci")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Link: https://lore.kernel.org/r/20220517012530.75714-1-duoming@zju.edu.cn
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/mptcp/options.c  | 36 ++++++++++++++++++++++++------------
- net/mptcp/protocol.h |  2 +-
- net/mptcp/subflow.c  |  2 +-
- 3 files changed, 26 insertions(+), 14 deletions(-)
+ net/nfc/nci/data.c | 2 +-
+ net/nfc/nci/hci.c  | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/net/mptcp/options.c b/net/mptcp/options.c
-index d158f53d3bc3..193f0fcce8d8 100644
---- a/net/mptcp/options.c
-+++ b/net/mptcp/options.c
-@@ -107,7 +107,7 @@ static void mptcp_parse_option(const struct sk_buff *skb,
- 			ptr += 2;
- 		}
- 		if (opsize == TCPOLEN_MPTCP_MPC_ACK_DATA_CSUM) {
--			mp_opt->csum = (__force __sum16)get_unaligned_be16(ptr);
-+			mp_opt->csum = get_unaligned((__force __sum16 *)ptr);
- 			mp_opt->suboptions |= OPTION_MPTCP_CSUMREQD;
- 			ptr += 2;
- 		}
-@@ -221,7 +221,7 @@ static void mptcp_parse_option(const struct sk_buff *skb,
+diff --git a/net/nfc/nci/data.c b/net/nfc/nci/data.c
+index 5405d073804c..9e3f9460f14f 100644
+--- a/net/nfc/nci/data.c
++++ b/net/nfc/nci/data.c
+@@ -130,7 +130,7 @@ static int nci_queue_tx_data_frags(struct nci_dev *ndev,
  
- 			if (opsize == expected_opsize + TCPOLEN_MPTCP_DSS_CHECKSUM) {
- 				mp_opt->suboptions |= OPTION_MPTCP_CSUMREQD;
--				mp_opt->csum = (__force __sum16)get_unaligned_be16(ptr);
-+				mp_opt->csum = get_unaligned((__force __sum16 *)ptr);
- 				ptr += 2;
- 			}
+ 		skb_frag = nci_skb_alloc(ndev,
+ 					 (NCI_DATA_HDR_SIZE + frag_len),
+-					 GFP_KERNEL);
++					 GFP_ATOMIC);
+ 		if (skb_frag == NULL) {
+ 			rc = -ENOMEM;
+ 			goto free_exit;
+diff --git a/net/nfc/nci/hci.c b/net/nfc/nci/hci.c
+index c972c212e7ca..e5c5cff33236 100644
+--- a/net/nfc/nci/hci.c
++++ b/net/nfc/nci/hci.c
+@@ -165,7 +165,7 @@ static int nci_hci_send_data(struct nci_dev *ndev, u8 pipe,
  
-@@ -1214,7 +1214,7 @@ static void mptcp_set_rwin(const struct tcp_sock *tp)
- 		WRITE_ONCE(msk->rcv_wnd_sent, ack_seq);
- }
+ 	i = 0;
+ 	skb = nci_skb_alloc(ndev, conn_info->max_pkt_payload_len +
+-			    NCI_DATA_HDR_SIZE, GFP_KERNEL);
++			    NCI_DATA_HDR_SIZE, GFP_ATOMIC);
+ 	if (!skb)
+ 		return -ENOMEM;
  
--u16 __mptcp_make_csum(u64 data_seq, u32 subflow_seq, u16 data_len, __wsum sum)
-+__sum16 __mptcp_make_csum(u64 data_seq, u32 subflow_seq, u16 data_len, __wsum sum)
- {
- 	struct csum_pseudo_header header;
- 	__wsum csum;
-@@ -1230,15 +1230,25 @@ u16 __mptcp_make_csum(u64 data_seq, u32 subflow_seq, u16 data_len, __wsum sum)
- 	header.csum = 0;
+@@ -198,7 +198,7 @@ static int nci_hci_send_data(struct nci_dev *ndev, u8 pipe,
+ 		if (i < data_len) {
+ 			skb = nci_skb_alloc(ndev,
+ 					    conn_info->max_pkt_payload_len +
+-					    NCI_DATA_HDR_SIZE, GFP_KERNEL);
++					    NCI_DATA_HDR_SIZE, GFP_ATOMIC);
+ 			if (!skb)
+ 				return -ENOMEM;
  
- 	csum = csum_partial(&header, sizeof(header), sum);
--	return (__force u16)csum_fold(csum);
-+	return csum_fold(csum);
- }
- 
--static u16 mptcp_make_csum(const struct mptcp_ext *mpext)
-+static __sum16 mptcp_make_csum(const struct mptcp_ext *mpext)
- {
- 	return __mptcp_make_csum(mpext->data_seq, mpext->subflow_seq, mpext->data_len,
- 				 ~csum_unfold(mpext->csum));
- }
- 
-+static void put_len_csum(u16 len, __sum16 csum, void *data)
-+{
-+	__sum16 *sumptr = data + 2;
-+	__be16 *ptr = data;
-+
-+	put_unaligned_be16(len, ptr);
-+
-+	put_unaligned(csum, sumptr);
-+}
-+
- void mptcp_write_options(__be32 *ptr, const struct tcp_sock *tp,
- 			 struct mptcp_out_options *opts)
- {
-@@ -1315,8 +1325,9 @@ void mptcp_write_options(__be32 *ptr, const struct tcp_sock *tp,
- 			put_unaligned_be32(mpext->subflow_seq, ptr);
- 			ptr += 1;
- 			if (opts->csum_reqd) {
--				put_unaligned_be32(mpext->data_len << 16 |
--						   mptcp_make_csum(mpext), ptr);
-+				put_len_csum(mpext->data_len,
-+					     mptcp_make_csum(mpext),
-+					     ptr);
- 			} else {
- 				put_unaligned_be32(mpext->data_len << 16 |
- 						   TCPOPT_NOP << 8 | TCPOPT_NOP, ptr);
-@@ -1364,11 +1375,12 @@ void mptcp_write_options(__be32 *ptr, const struct tcp_sock *tp,
- 			goto mp_capable_done;
- 
- 		if (opts->csum_reqd) {
--			put_unaligned_be32(opts->data_len << 16 |
--					   __mptcp_make_csum(opts->data_seq,
--							     opts->subflow_seq,
--							     opts->data_len,
--							     ~csum_unfold(opts->csum)), ptr);
-+			put_len_csum(opts->data_len,
-+				     __mptcp_make_csum(opts->data_seq,
-+						       opts->subflow_seq,
-+						       opts->data_len,
-+						       ~csum_unfold(opts->csum)),
-+				     ptr);
- 		} else {
- 			put_unaligned_be32(opts->data_len << 16 |
- 					   TCPOPT_NOP << 8 | TCPOPT_NOP, ptr);
-diff --git a/net/mptcp/protocol.h b/net/mptcp/protocol.h
-index 6bcdaf01f483..72a259a74b57 100644
---- a/net/mptcp/protocol.h
-+++ b/net/mptcp/protocol.h
-@@ -718,7 +718,7 @@ void mptcp_token_destroy(struct mptcp_sock *msk);
- void mptcp_crypto_key_sha(u64 key, u32 *token, u64 *idsn);
- 
- void mptcp_crypto_hmac_sha(u64 key1, u64 key2, u8 *msg, int len, void *hmac);
--u16 __mptcp_make_csum(u64 data_seq, u32 subflow_seq, u16 data_len, __wsum sum);
-+__sum16 __mptcp_make_csum(u64 data_seq, u32 subflow_seq, u16 data_len, __wsum sum);
- 
- void __init mptcp_pm_init(void);
- void mptcp_pm_data_init(struct mptcp_sock *msk);
-diff --git a/net/mptcp/subflow.c b/net/mptcp/subflow.c
-index 04afead7316f..9c7deffe7cb6 100644
---- a/net/mptcp/subflow.c
-+++ b/net/mptcp/subflow.c
-@@ -846,7 +846,7 @@ static enum mapping_status validate_data_csum(struct sock *ssk, struct sk_buff *
- {
- 	struct mptcp_subflow_context *subflow = mptcp_subflow_ctx(ssk);
- 	u32 offset, seq, delta;
--	u16 csum;
-+	__sum16 csum;
- 	int len;
- 
- 	if (!csum_reqd)
 -- 
 2.35.1
 

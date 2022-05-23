@@ -2,216 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A842531F58
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 01:47:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5036531F5A
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 01:48:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230369AbiEWXrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 19:47:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37512 "EHLO
+        id S231131AbiEWXsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 19:48:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiEWXri (ORCPT
+        with ESMTP id S229504AbiEWXsM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 19:47:38 -0400
-Received: from na01-obe.outbound.protection.outlook.com (unknown [52.101.57.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2383939CA;
-        Mon, 23 May 2022 16:47:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Wn1YEpZL9Q0wal+D9AUOpYJwqYahGwYed5Wcp8Cp0NkhQ29mUL6AHrsWTSHkrvvVIQeycR+bKANcFCJnTV9ovY1HUWqoy21WZqt8mfucEG9qv7ofqQZXjeXkBjm929iC9vDn+HSZEw/P+J9OQ/mc2FmZdxvYT5jyx8ClW63brXNV97/Nrb1UoeHoO0b0y1NMunpwMVCsuhXDfu9FvjxrOxjoRR1saBJfCyygL3sQ7RZHYhYO7bYt6wAygHrWp4yEstYQTIP7/zBRVhW6HaH4Qb7Xhq6xm4BX+sAgHN6Kb885nuD9f6j3daenuDbRLD/VDDX+YPirjQPAPH7ADFmyWg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fK37Bd2nDbzpmkZ5wBjAHY0TnNKUjXJwJEj9YpgzQ04=;
- b=kq3V5smyXRczV0/egoj2lAamxYaSUVsDD3tywzcAz2UmkD18/qkdYNySSoWnbYcWYOdYYCh1uGircj9vxbBMGxj4TaMNSu/5zYAPGk5Obwhc3zeCka/LPdGyU+V91OLZxbLLmTTmA54vwYJYnaTGJitq2zoVNjdAgSy+XNQ61rJJDmzYMwDTS07Nrcm0z6FU2SuxEMmEbadqCqui1AWU+JDhmhmRQhkrPcVrNM026jCiMQgl5E6To41DgOG+mKIRfRBvqY2j+a7/ofKSFeHPq+eXWWzZwgRWJrFXdi5Cn1NTJBv52Bd6MibqQ6QTegYBi/PitB6EBN/JIctCheS3dg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fK37Bd2nDbzpmkZ5wBjAHY0TnNKUjXJwJEj9YpgzQ04=;
- b=bufTXmFo/R73zaDipS5n1RwEdH7Rufadk53m377URGX5DS670OzOgazibUUd3QFYTS+4Mxk1cq6U5+4ym9tZx1o+uDeuuSiXEzRzBfZH6KIMJRKD0yCFGuTb4b/bOocaYxYGDCFcKTh+ryhzaYjDBQYHnPGsCvykLsae5n1pCqc=
-Received: from PH0PR21MB3025.namprd21.prod.outlook.com (2603:10b6:510:d2::21)
- by DM4PR21MB3561.namprd21.prod.outlook.com (2603:10b6:8:a3::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.7; Mon, 23 May
- 2022 23:47:30 +0000
-Received: from PH0PR21MB3025.namprd21.prod.outlook.com
- ([fe80::3506:defe:c88a:8580]) by PH0PR21MB3025.namprd21.prod.outlook.com
- ([fe80::3506:defe:c88a:8580%9]) with mapi id 15.20.5314.003; Mon, 23 May 2022
- 23:47:30 +0000
-From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-To:     Vit Kabele <vit.kabele@sysgo.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        "rudolf.marek@sysgo.com" <rudolf.marek@sysgo.com>,
-        "vit@kabele.me" <vit@kabele.me>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>
-Subject: RE: Hyper-V: Question about initializing hypercall interface
-Thread-Topic: Hyper-V: Question about initializing hypercall interface
-Thread-Index: AQHYa4MwWanTnVIk7UuhrK9xZH8gba0tJDAw
-Date:   Mon, 23 May 2022 23:47:30 +0000
-Message-ID: <PH0PR21MB302564FA43E1402AD13CC706D7D49@PH0PR21MB3025.namprd21.prod.outlook.com>
-References: <YoZB/+EYDDfowVbs@czspare1-lap.sysgo.cz>
-In-Reply-To: <YoZB/+EYDDfowVbs@czspare1-lap.sysgo.cz>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=a183a278-57b8-4083-92f6-f2cb48c3bf56;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-05-23T23:34:12Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ec12557f-3fee-4007-c7c8-08da3d1699be
-x-ms-traffictypediagnostic: DM4PR21MB3561:EE_
-x-microsoft-antispam-prvs: <DM4PR21MB356110200AD9F3297699E062D7D49@DM4PR21MB3561.namprd21.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: QWjCvJIgg5RmekfVlb9ZvMbQ2jkfR7WLyicCiudNDcM2GdC44a6dI/w4ZISdQvm8Ki3je2rZFh6ZFRgJD4wT6zExXuzKCHaxb/ejvixYrkafIlw55uwCOrDXk4F05NEn6VDl0IfsMYxBrw+di5YYAgzp/iXQ58D4RYNUI7YDnmC9rOEtoS3uosfEWWFyTigZxlwRMKZvokN+suyq6+/0hesSUlmgQeBMpGrqpnn49Xvc2UmlTtGvYDN3AqpjjI2tJl2w42AT3fv0m9Ua5WhgXDCNpZ3+mhLvsHIpSAjWdj/RdOP2oJ/3qPp6DBG75JtENdxw7GjeuwgwOZU+i34dtu1ZwesVjzynFSs3HGZi6/esMNhFVqzEO3M0xEJ+r5ylwEZz8hIA1twzN25xWjzYeX1kspYAD5aFz1qbJbJhHhZHmMeKB3UVYtUnqGiYJ7CFDwV7midIsXBdQGKIQm0OeN2IyVZQ3dnXBLEwVzHNN04TjThkdm6xlOoaPv4srHjl46k3zNd/K1KASt85EUv4zuQ6RAKIsoXsqxc3UNshwn20tSkL5qicVQ0Fn1/Yz+MrNoPSq9yByAasvpLDqzaKsJlNlrGEDkfXkRUt23dFIzRYWId2wISwK+VlRTyOO/L3q3feAVAzQIZL4VJ3p0TSs4wkXJfA5MONM8qJdRgFP7jIfVeXg51vSgtK7p+gkUjP3s58GXRfNp8UvqJDQ0+kYJJs6EoG4PkWbFMhijvIW/7RSMFHqEGoRbd5gj8uAU19dPPeAY583FtNcStO0A+wdR/uoFTsrEpsMuinN7UQkZvP+lfgNED7e/VSQpHk3RORxMnzuJacD9ioVV8p4RYMcw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR21MB3025.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(451199009)(55016003)(33656002)(122000001)(54906003)(8990500004)(38100700002)(110136005)(6506007)(82960400001)(82950400001)(7696005)(316002)(86362001)(508600001)(4326008)(8676002)(76116006)(66946007)(66556008)(66476007)(66446008)(64756008)(38070700005)(966005)(26005)(9686003)(83380400001)(52536014)(10290500003)(8936002)(2906002)(5660300002)(71200400001)(186003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?4GTK6fmYe7Xv6ls0vZV5K+OsOkxDeMzaBvCnkfcIrdlPWdwLw0lg2Qk/ZaJL?=
- =?us-ascii?Q?pbg+yE1Us6nWhdE7DzMzYXO0xv7Vuv/RfCwweavh+1Am3xtPSdElXFNdzGqC?=
- =?us-ascii?Q?u7N8Vgk5LRCe3//xsuJSB/spTYBXe0YI+PdcB6/DLK/p8+DDLsmgjE26O5Sv?=
- =?us-ascii?Q?2Qx9jIAm4AtzMFbP797rRcRuiuJg7XZAub257WY8flEhjDrv8h66Belu2rY/?=
- =?us-ascii?Q?gZljaluNYA0xM71Df3tMP0/IJt4BYzln4e5T/dwVU4MmVcWS74/J2jE8QGYl?=
- =?us-ascii?Q?i5ABpkeGkE897H/sKHZTobs3mqZh73qv1l+LzWSudc4KBdd0GBmgd9RCZ5IS?=
- =?us-ascii?Q?HPYMURUmHS8vOx9W6T5nv4UAr5YKZP6oA5DutJGZwzlTTfmD7umXat9Znbpk?=
- =?us-ascii?Q?in06l4wpiAJwqot3Bap9acWq+OBYUoL2TTKCIHvoVQYl6nD/DCuYmqzyZvBt?=
- =?us-ascii?Q?hQfrUqkDadHYMz7PxyiXgRmr4a87/1SCfyYNpGnyd7Kzmz1QodZsH5h83Fum?=
- =?us-ascii?Q?SRIM2egr7RG1R2QTuDs7ZQMPqawSpdSqZTgccRJlbYlGR2Qah9bbSHqvgj5L?=
- =?us-ascii?Q?VMCwkCcOLx+sREOzhgrFCypodGNvyuQUoL77lZAovfmZUpp8ZWvLRc07JKYh?=
- =?us-ascii?Q?VqquTFreUYD0YRo5ouoLqUPp6Bn/scqw7YdL8CcjSWTwt7fIpPjzSvy5wq1v?=
- =?us-ascii?Q?XXoyayaT0LOUWQAPWup2Nyr6FWhdVm83Ugk1/AmBEO0j6wazaSKcHcdxUP31?=
- =?us-ascii?Q?O6c81bH4VJjsOXqYtu+rMCoyMXGhDQpPqREL+MurReorfxuG10AVXhHdu+Ku?=
- =?us-ascii?Q?RwVgEPtXQnXM/XLXnbI0IybHdO/6aUiFRAqZpRxkN56i27BPmI89v4tBiLIm?=
- =?us-ascii?Q?gHcEeCR2hNIeNgTg9Svs6VCBHpkGYP+rxUIo1oz2DaVGpOmMvLehTwObZntO?=
- =?us-ascii?Q?wfwmrKeUaNvOxTMA96HhhUPu8KtdNzhpXiP1vp8IpwIWKr2vuaeY5wXkXPrN?=
- =?us-ascii?Q?crJD8sTPDUJVtf8NpX2CUoixlGsWUEAwD4wgnvhp2hdQxxiV+ib8FlVI6tcE?=
- =?us-ascii?Q?o6KPAcUVOKhKXYlXa+gyiXFDZPPQYFEAKuCCzhMZagUgKZGsObxo0S63ZeC5?=
- =?us-ascii?Q?9Qvt0NhIr5hjgRi/F85+O1ToZy2jrLzciOHN/9wfVfkIyHaJf8VTPZitaGd8?=
- =?us-ascii?Q?qrch1Q1k4YXAuXESs21gJkalTbiWoSqLF4l/3CCtEf/cDBnBDQLi7pW+Z1gw?=
- =?us-ascii?Q?/H8aOqxRWTGZukqWJeu6I7MaVBdIQ/Nsj5A4z3HSSNyQo5kH/eL4jjGNvqXS?=
- =?us-ascii?Q?J3ljE+ONYi34ySrsnL66yHPWqn/sOEC54jkqJTqYeVbExfigIVZ1SBCVkEqM?=
- =?us-ascii?Q?1SOyB811pe4AbVT3wl8j67gLiKNusgPogPX77YMlNqbnXOQgx/mMcct6Mr4I?=
- =?us-ascii?Q?CdCrkr+MeC67Hs8YRXarOueiufkrLOUCGLZIzE+196Pcw5wXfl1QLPSN9DIm?=
- =?us-ascii?Q?UO7Nsa1IT/4u5IQAybE8cBRF331vwVgD6cqbaBkq3iY+mTJ6Uc/9Y4oF9cc2?=
- =?us-ascii?Q?5ntSkSD+GGMO/FBEU1KfU1s6Y4qRhgg60mViQ3TktROl/ApMPaTtrU/gezU0?=
- =?us-ascii?Q?2o3ukFzq0A6q1PKFMI9bZXCqt+xbiXpxrE+3jcf06mM54H0v11oZAFE1kvPi?=
- =?us-ascii?Q?MxKS74OJZQGFN5Db/AcWXLajUHWCvn03mO+LD3zt4CxHsnsDe/Pb3byMALZg?=
- =?us-ascii?Q?WAu5Z5rff6vmC273CxHyzwfB2RapRNw=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 23 May 2022 19:48:12 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B53579809C
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 16:48:11 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id p190so1246190ybg.4
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 16:48:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hLnCOlwmEe9NEE7pP9bpPGm0HdQ0c/SBPdjwSjUiwTo=;
+        b=RpgWvfIAvMzf2LknHmFIcMjGlQ1aZMPf/pcm0cuxtsYYxp4CnxoYhjB5FIT09/DXKO
+         y6zrl8PUcLhNeT40CMpqW9jDrjJoa0b8YguhNuPwxeQ16d7NpdgXU5uNy9kCmbjnYu7J
+         UhELvnQ9/LSbbEjguES0M8xzjlxipdko/0B9YdAnwfO+crP3JiAVJdMbglnHjj++gEDv
+         mhznV45Ac3LskL+DLf4MtOCl4K7j1M2DJ/nX+wBOJUeuQFBSVB1z9HtvCpMIoJOew+C3
+         wB8h8yhjo9YpJ3iJSrC5l+q0NtvQS6lB9jteMJQ+Qw4zIqgdH+ZL8wI9DL17PXvkLDCx
+         dkQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hLnCOlwmEe9NEE7pP9bpPGm0HdQ0c/SBPdjwSjUiwTo=;
+        b=ansBKARk+f+F0c9Gf17iyOtbSEcYB+85fumJOra1VraHdBTZcrHcUlt9itwOQMv9H7
+         7SxCy1qKSPcVzQkIfGcHP0wgzeWyRdsp6X8Vt7k9/reXpmEtv3OFpqEX4kthzXJcqXNW
+         riKFHQiCBUsQwUN/WQ2BW/XsZXcBFLUl+EX1KFvLYgaB+zNSE7FjH3HXtJXvl5H0CyhK
+         mhjfQxRX8yv2PxuEhQLEY+ywDskDaHCzS+FgkFCqBD4VXXcjydu1jtyTMn8lO3V7B7xh
+         XmBwjikA5uboWHqVuDQc2aGV2Zj4ugh20ktThPrhAioGfpyGaw8x9J7Au3eBXnnPKdYq
+         twhQ==
+X-Gm-Message-State: AOAM533PmrZyoHNdz6aUTwlKtQNeRnBntDoSHHoIVOkin3WXJLzXjeMj
+        IBU52RblNiWd6RXAq+vDxpdBKzjQ/8tD6R9fGOkVqg==
+X-Google-Smtp-Source: ABdhPJwZk4j6Z6engUDcaYdCSCf8o3mQI38wmtACL8Gf2nq08ZhoY/1r0ialwifcm/5NPfR/6M6QgpGX81Njt4scDsQ=
+X-Received: by 2002:a05:6902:1102:b0:64f:37a3:6b9e with SMTP id
+ o2-20020a056902110200b0064f37a36b9emr22657246ybu.21.1653349690748; Mon, 23
+ May 2022 16:48:10 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR21MB3025.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ec12557f-3fee-4007-c7c8-08da3d1699be
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 May 2022 23:47:30.4025
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: yrm3aPLTfX24HxkzeIGHGrXQ6EZri8QFwf1IX5KSLxbe1bnKio7IPyQdrVmtK2weE7j+CnuzzY4fDNdPjcaHp/dcqrP94gzHlcS5c5VL6wo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR21MB3561
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <cover.1651774250.git.isaku.yamahata@intel.com> <eb5d2891a3ff55d88545221c588ba87e4c811878.1651774250.git.isaku.yamahata@intel.com>
+In-Reply-To: <eb5d2891a3ff55d88545221c588ba87e4c811878.1651774250.git.isaku.yamahata@intel.com>
+From:   Sagi Shahar <sagis@google.com>
+Date:   Mon, 23 May 2022 16:47:59 -0700
+Message-ID: <CAAhR5DFWo6KjBO_0QtT71S2ZmKc-kAo6Kqcwc2M4-kFc-PkmyA@mail.gmail.com>
+Subject: Re: [RFC PATCH v6 006/104] KVM: TDX: Detect CPU feature on kernel
+ module initialization
+To:     "Yamahata, Isaku" <isaku.yamahata@intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Sean Christopherson <seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vit Kabele <vit.kabele@sysgo.com> Sent: Thursday, May 19, 2022 6:11 A=
-M
->=20
-> Hello,
->=20
-> I'm playing with the Hyper-V interface described in the documentation
-> here [1] (version 6.0b) and I noticed inconsistency between the
-> document and the actual code in arch/x86/hyperv/hv_init.c.
->=20
-> Section 3.13 Establishing the Hypercall Interface states:
->=20
-> > 5. The guest checks the Enable Hypercall Page bit. If it is set, the
-> > interface is already active, and steps 6 and 7 should be omitted.
-> > 6.  The guest finds a page within its GPA space, preferably one that
-> > is not occupied by RAM, MMIO, and so on. If the page is occupied, the
-> > guest should avoid using the underlying page for other purposes.
-> > 7.  The guest writes a new value to the Hypercall MSR
-> > (HV_X64_MSR_HYPERCALL) that includes the GPA from step 6 and sets the
-> > Enable Hypercall Page bit to enable the interface.
->=20
-> Yet the code in hv_init.c seems to skip the step 5. and performs the
-> steps 6. and 7. unconditionally. Snippet below.
->=20
-> ```
-> rdmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
-> hypercall_msr.enable =3D 1;
->=20
-> if (hv_root_partition) {
->         ...
-> } else {
->     hypercall_msr.guest_physical_address =3D vmalloc_to_pfn(hv_hypercall_=
-pg);
->     wrmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
-> }
-> ```
->=20
-> 1/ I thought that the specification is written in a way that allows
-> hypervisor to locate the hypercall page on its own (for whatever reason)
-> and just announce the location to the guest by setting the Enable bit in
-> the MSR on initial read. A guest should then not attempt to remap the
-> page (point 5. above), but instead create kernel mapping to the page
-> reported by the hypervisor.
+On Thu, May 5, 2022 at 11:15 AM <isaku.yamahata@intel.com> wrote:
+>
+> From: Isaku Yamahata <isaku.yamahata@intel.com>
+>
+> TDX requires several initialization steps for KVM to create guest TDs.
+> Detect CPU feature, enable VMX (TDX is based on VMX), detect TDX module
+> availability, and initialize TDX module.  This patch implements the first
+> step to detect CPU feature.  Because VMX isn't enabled yet by VMXON
+> instruction on KVM kernel module initialization, defer further
+> initialization step until VMX is enabled by hardware_enable callback.
+>
+> Introduce a module parameter, enable_tdx, to explicitly enable TDX KVM
+> support.  It's off by default to keep same behavior for those who don't use
+> TDX.  Implement CPU feature detection at KVM kernel module initialization
+> as hardware_setup callback to check if CPU feature is available and get
+> some CPU parameters.
+>
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> ---
+>  arch/x86/include/asm/tdx.h  |  2 ++
+>  arch/x86/kvm/Makefile       |  1 +
+>  arch/x86/kvm/vmx/main.c     | 18 ++++++++++++++++-
+>  arch/x86/kvm/vmx/tdx.c      | 39 +++++++++++++++++++++++++++++++++++++
+>  arch/x86/kvm/vmx/x86_ops.h  |  6 ++++++
+>  arch/x86/virt/vmx/tdx/tdx.c |  3 ++-
+>  6 files changed, 67 insertions(+), 2 deletions(-)
+>  create mode 100644 arch/x86/kvm/vmx/tdx.c
+>
+> diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
+> index 513b9ce9a870..f8f459e28254 100644
+> --- a/arch/x86/include/asm/tdx.h
+> +++ b/arch/x86/include/asm/tdx.h
+> @@ -91,11 +91,13 @@ static inline long tdx_kvm_hypercall(unsigned int nr, unsigned long p1,
+>  #endif /* CONFIG_INTEL_TDX_GUEST && CONFIG_KVM_GUEST */
+>
+>  #ifdef CONFIG_INTEL_TDX_HOST
+> +bool __seamrr_enabled(void);
+>  void tdx_detect_cpu(struct cpuinfo_x86 *c);
+>  int tdx_detect(void);
+>  int tdx_init(void);
+>  bool platform_has_tdx(void);
+>  #else
+> +static inline bool __seamrr_enabled(void) { return false; }
+>  static inline void tdx_detect_cpu(struct cpuinfo_x86 *c) { }
+>  static inline int tdx_detect(void) { return -ENODEV; }
+>  static inline int tdx_init(void) { return -ENODEV; }
+> diff --git a/arch/x86/kvm/Makefile b/arch/x86/kvm/Makefile
+> index ee4d0999f20f..e2c05195cb95 100644
+> --- a/arch/x86/kvm/Makefile
+> +++ b/arch/x86/kvm/Makefile
+> @@ -24,6 +24,7 @@ kvm-$(CONFIG_KVM_XEN) += xen.o
+>  kvm-intel-y            += vmx/vmx.o vmx/vmenter.o vmx/pmu_intel.o vmx/vmcs12.o \
+>                            vmx/evmcs.o vmx/nested.o vmx/posted_intr.o vmx/main.o
+>  kvm-intel-$(CONFIG_X86_SGX_KVM)        += vmx/sgx.o
+> +kvm-intel-$(CONFIG_INTEL_TDX_HOST)     += vmx/tdx.o
+>
+>  kvm-amd-y              += svm/svm.o svm/vmenter.o svm/pmu.o svm/nested.o svm/avic.o svm/sev.o
+>
+> diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
+> index 636768f5b985..fabf5f22c94f 100644
+> --- a/arch/x86/kvm/vmx/main.c
+> +++ b/arch/x86/kvm/vmx/main.c
+> @@ -6,6 +6,22 @@
+>  #include "nested.h"
+>  #include "pmu.h"
+>
+> +static bool __read_mostly enable_tdx = IS_ENABLED(CONFIG_INTEL_TDX_HOST);
+> +module_param_named(tdx, enable_tdx, bool, 0444);
+> +
+> +static __init int vt_hardware_setup(void)
+> +{
+> +       int ret;
+> +
+> +       ret = vmx_hardware_setup();
+> +       if (ret)
+> +               return ret;
+> +
+> +       enable_tdx = enable_tdx && !tdx_hardware_setup(&vt_x86_ops);
+> +
+> +       return 0;
+> +}
+> +
+>  struct kvm_x86_ops vt_x86_ops __initdata = {
+>         .name = "kvm_intel",
+>
+> @@ -147,7 +163,7 @@ struct kvm_x86_ops vt_x86_ops __initdata = {
+>  struct kvm_x86_init_ops vt_init_ops __initdata = {
+>         .cpu_has_kvm_support = vmx_cpu_has_kvm_support,
+>         .disabled_by_bios = vmx_disabled_by_bios,
+> -       .hardware_setup = vmx_hardware_setup,
+> +       .hardware_setup = vt_hardware_setup,
+>         .handle_intel_pt_intr = NULL,
+>
+>         .runtime_ops = &vt_x86_ops,
+> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
+> new file mode 100644
+> index 000000000000..9e26e3fa60ee
+> --- /dev/null
+> +++ b/arch/x86/kvm/vmx/tdx.c
+> @@ -0,0 +1,39 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <linux/cpu.h>
+> +
+> +#include <asm/tdx.h>
+> +
+> +#include "capabilities.h"
+> +#include "x86_ops.h"
+> +
+> +#undef pr_fmt
+> +#define pr_fmt(fmt) "tdx: " fmt
+> +
+> +static u64 hkid_mask __ro_after_init;
+> +static u8 hkid_start_pos __ro_after_init;
+> +
+> +int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops)
+> +{
+> +       u32 max_pa;
+> +
+> +       if (!enable_ept) {
+> +               pr_warn("Cannot enable TDX with EPT disabled\n");
+> +               return -EINVAL;
+> +       }
+> +
+> +       if (!platform_has_tdx()) {
+> +               if (__seamrr_enabled())
+> +                       pr_warn("Cannot enable TDX with SEAMRR disabled\n");
 
-Arguably, the TLFS is a bit unclear here, but the first paragraph
-in Section 3.13 makes clear that the guest must select the location
-for the hypercall page.  I'm certain that the hypervisor can not
-pick the location and just inform the guest.  The intent of Step 5 is
-to handle the case where the guest might have already set up
-the hypercall page.
+So if we fail for another reason (e.g. tdx_keyid_sufficient returns
+false) we are going to fail silently and disable TDX without any log
+saying what happened. This will make it difficult to debug TDX
+initialization issues.
 
->=20
-> 2/ The Lock bit (bit 1) is ignored in the Linux implementation. If the
-> hypervisor starts with Lock bit set, the init function allocates the
-> hv_hypercall_pg and writes the value to the MSR, then:
->         a/ If the hypervisor ignores the write, the MSR remains unchanged=
-,
->                 but the global variable is already set. Attempt to do a
->                 hypercall ends with call to undefined memory, because the=
- code
->                 in hv_do_hypercall() checks the global variable against N=
-ULL,
->                 which will pass.
->         b/ The hypervisor injects #GP, in which case the guest crashes.
-
-I would need to confirm with the Hyper-V team, but I think the Lock
-bit would only be set *after* the guest OS has provided a guest page
-to be used as the hypercall page.
-
-There is code in Linux to clear the MSR and disable the hypercall
-page when doing a kexec or kdump.   This is done so that the new
-kernel can start "fresh" and establish its own hypercall page. That
-kexec/kdump code does not check the Lock bit, and I'm not sure of
-the implications if the Lock bit were found to be set in such a case.
-
-I'll check with the Hyper-V team to get clarity on the handling
-of the Lock bit in the case of trying to disable the hypercall page.
-
-Michael =20
-
->=20
-> Do I understand the specification correctly? If yes, then the issues
-> here are real issues. If my understanding is wrong, what do I miss?
->=20
+> +               return -ENODEV;
+> +       }
+> +
+> +       if (WARN_ON_ONCE(x86_ops->tlb_remote_flush))
+> +               return -EIO;
+> +
+> +       max_pa = cpuid_eax(0x80000008) & 0xff;
+> +       hkid_start_pos = boot_cpu_data.x86_phys_bits;
+> +       hkid_mask = GENMASK_ULL(max_pa - 1, hkid_start_pos);
+> +       pr_info("hkid start pos %d mask 0x%llx\n", hkid_start_pos, hkid_mask);
+> +
+> +       return 0;
+> +}
+> diff --git a/arch/x86/kvm/vmx/x86_ops.h b/arch/x86/kvm/vmx/x86_ops.h
+> index 1d5dff7c0d96..7a885dc84183 100644
+> --- a/arch/x86/kvm/vmx/x86_ops.h
+> +++ b/arch/x86/kvm/vmx/x86_ops.h
+> @@ -122,4 +122,10 @@ void vmx_cancel_hv_timer(struct kvm_vcpu *vcpu);
+>  #endif
+>  void vmx_setup_mce(struct kvm_vcpu *vcpu);
+>
+> +#ifdef CONFIG_INTEL_TDX_HOST
+> +int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops);
+> +#else
+> +static inline int tdx_hardware_setup(struct kvm_x86_ops *x86_ops) { return 0; }
+> +#endif
+> +
+>  #endif /* __KVM_X86_VMX_X86_OPS_H */
+> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
+> index b6c82e64ad54..e8044114079d 100644
+> --- a/arch/x86/virt/vmx/tdx/tdx.c
+> +++ b/arch/x86/virt/vmx/tdx/tdx.c
+> @@ -126,10 +126,11 @@ static int __init tdx_host_setup(char *s)
+>  }
+>  __setup("tdx_host=", tdx_host_setup);
+>
+> -static bool __seamrr_enabled(void)
+> +bool __seamrr_enabled(void)
+>  {
+>         return (seamrr_mask & SEAMRR_ENABLED_BITS) == SEAMRR_ENABLED_BITS;
+>  }
+> +EXPORT_SYMBOL_GPL(__seamrr_enabled);
+>
+>  static void detect_seam_bsp(struct cpuinfo_x86 *c)
+>  {
 > --
-> Best regards,
-> Vit Kabele
->=20
-> [1]: https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/t=
-lfs/tlfs
+> 2.25.1
+>
+
+Sagi

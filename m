@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44EB1531AAB
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:55:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46EEF531D0F
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:58:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240531AbiEWRYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:24:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37834 "EHLO
+        id S241972AbiEWRul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:50:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240562AbiEWRQ3 (ORCPT
+        with ESMTP id S241737AbiEWR1F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:16:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C109171D92;
-        Mon, 23 May 2022 10:15:45 -0700 (PDT)
+        Mon, 23 May 2022 13:27:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C9D7520E;
+        Mon, 23 May 2022 10:22:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9D955B81210;
-        Mon, 23 May 2022 17:13:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E28ADC385AA;
-        Mon, 23 May 2022 17:13:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D353D60B2C;
+        Mon, 23 May 2022 17:21:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5CAAC385A9;
+        Mon, 23 May 2022 17:21:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653325992;
-        bh=JPZQFf+Z10UugVERxncmE+0Y4M/PuyKVWD8ZnKhZ/7c=;
+        s=korg; t=1653326472;
+        bh=ReFu1Mc6+Zt9GNQWgQvuhxkurL2O6QAqaRyiafUG/h8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gtSisNXbXP+Ybh9zYC8swmQhzdj7pTjKT+ktisAN5bcHfbweL4qia0FDlBcK+We3R
-         4QE/pRq9yphcyn2ynnSfMHQ0ShZvK3R1gzioA2yh6GzAOV5BffYLfDFjRnkWHQWmsJ
-         qDcEboebZYJG+AG56L3gqOS6Cd+ns5YE4vq1yTgY=
+        b=b0DXVB/uLpa4wOuJcI2pgA4Ll/pyMVE3wcr8dJGfnCrhP2WIf0hUmOZfTIR5v7baS
+         1b3Fe9wNNdn5Dcv97qc+l7JhnnqzqjyAfprxSofdhaR9JMS7qlhJS6zN+/jaiO4PRr
+         mX2cgYl5VBJNylwZ8zlT+S1c/quCMti6qIgc/TD8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jae Hyun Yoo <quic_jaehyoo@quicinc.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Joel Stanley <joel@jms.id.au>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 34/68] ARM: dts: aspeed-g6: remove FWQSPID group in pinctrl dtsi
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 092/132] net: af_key: add check for pfkey_broadcast in function pfkey_process
 Date:   Mon, 23 May 2022 19:05:01 +0200
-Message-Id: <20220523165808.266598660@linuxfoundation.org>
+Message-Id: <20220523165838.564900676@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165802.500642349@linuxfoundation.org>
-References: <20220523165802.500642349@linuxfoundation.org>
+In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
+References: <20220523165823.492309987@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit efddaa397cceefb61476e383c26fafd1f8ab6356 ]
+[ Upstream commit 4dc2a5a8f6754492180741facf2a8787f2c415d7 ]
 
-FWSPIDQ2 and FWSPIDQ3 are not part of FWSPI18 interface so remove
-FWQSPID group in pinctrl dtsi. These pins must be used with the
-FWSPI pins that are dedicated for boot SPI interface which provides
-same 3.3v logic level.
+If skb_clone() returns null pointer, pfkey_broadcast() will
+return error.
+Therefore, it should be better to check the return value of
+pfkey_broadcast() and return error if fails.
 
-Fixes: 2f6edb6bcb2f ("ARM: dts: aspeed: Fix AST2600 quad spi group")
-Signed-off-by: Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
-Reviewed-by: Andrew Jeffery <andrew@aj.id.au>
-Link: https://lore.kernel.org/r/20220329173932.2588289-2-quic_jaehyoo@quicinc.com
-Signed-off-by: Joel Stanley <joel@jms.id.au>
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi | 5 -----
- 1 file changed, 5 deletions(-)
+ net/key/af_key.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi b/arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi
-index f310f4d3bcc7..4792b3d9459d 100644
---- a/arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi
-+++ b/arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi
-@@ -117,11 +117,6 @@ pinctrl_fwspid_default: fwspid_default {
- 		groups = "FWSPID";
- 	};
+diff --git a/net/key/af_key.c b/net/key/af_key.c
+index fd51db3be91c..92e9d75dba2f 100644
+--- a/net/key/af_key.c
++++ b/net/key/af_key.c
+@@ -2826,8 +2826,10 @@ static int pfkey_process(struct sock *sk, struct sk_buff *skb, const struct sadb
+ 	void *ext_hdrs[SADB_EXT_MAX];
+ 	int err;
  
--	pinctrl_fwqspid_default: fwqspid_default {
--		function = "FWSPID";
--		groups = "FWQSPID";
--	};
--
- 	pinctrl_fwspiwp_default: fwspiwp_default {
- 		function = "FWSPIWP";
- 		groups = "FWSPIWP";
+-	pfkey_broadcast(skb_clone(skb, GFP_KERNEL), GFP_KERNEL,
+-			BROADCAST_PROMISC_ONLY, NULL, sock_net(sk));
++	err = pfkey_broadcast(skb_clone(skb, GFP_KERNEL), GFP_KERNEL,
++			      BROADCAST_PROMISC_ONLY, NULL, sock_net(sk));
++	if (err)
++		return err;
+ 
+ 	memset(ext_hdrs, 0, sizeof(ext_hdrs));
+ 	err = parse_exthdrs(skb, hdr, ext_hdrs);
 -- 
 2.35.1
 

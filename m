@@ -2,241 +2,290 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCDA4531F70
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 01:54:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77781531F77
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 01:55:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231582AbiEWXx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 19:53:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51164 "EHLO
+        id S231646AbiEWXzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 19:55:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230408AbiEWXxy (ORCPT
+        with ESMTP id S229567AbiEWXzO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 19:53:54 -0400
-Received: from mx0b-002c1b01.pphosted.com (mx0b-002c1b01.pphosted.com [148.163.155.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF61B45067;
-        Mon, 23 May 2022 16:53:53 -0700 (PDT)
-Received: from pps.filterd (m0127841.ppops.net [127.0.0.1])
-        by mx0b-002c1b01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24NMBfTg017246;
-        Mon, 23 May 2022 16:53:45 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nutanix.com; h=from : to : cc :
- subject : date : message-id : content-type : mime-version;
- s=proofpoint20171006; bh=c6RSa6RU4tc7g6H4/qRzt3WFMLwVimVTKgJFckLNlyY=;
- b=BDKklnCDNGQ5G+0/jKC+zGrgkIJY0WP1RYnu/U+rsERDFq4j0x8pjzDDjlcq5wPb5zLJ
- qHQQJi2+Eh6hiwUkY9ocg/RJuWDbV/vi/Nt3D1ZODDs0lV9AQX+zXq2Cea6xbKSqDsLS
- 1Tz4/RMPcTesc9DuXyjlRSTyTLWiwcVDfG2B8h5bG/ToDd32O0bgGCz92b/3LCiZGaDd
- ezbhcmIqShcbc7fvnTxFJESdLAfFDMummWARyiaPO6B059T83Khj8+sjDryjgK90dE3S
- MBWZeGirELXkp56m3Obj7SI7jaj+JI5WtH7UifD3n6Awe4dz3DwV1LOff/1CFKKF9g8E dA== 
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2173.outbound.protection.outlook.com [104.47.59.173])
-        by mx0b-002c1b01.pphosted.com (PPS) with ESMTPS id 3g6wm8vj18-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 23 May 2022 16:53:44 -0700
+        Mon, 23 May 2022 19:55:14 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 375C253E30;
+        Mon, 23 May 2022 16:55:13 -0700 (PDT)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24NMiBf0009700;
+        Mon, 23 May 2022 23:54:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=iYDKCdbHOgcCBiIQxLpumkSHcWtQlp/pvSVdwC+ByKM=;
+ b=lMgAGZPx+MbMkm18s4+VpA/7McyjSs1VB/PG9KxwRAtfzvd1LhfoNl5fUNUBZeniW+ud
+ 4NxaISuVqaZaom3xMcGnmPh9C3Xo2b6GISg6tzEYw8l03MJ6wf8ATXKvPjR/HdLdPD2P
+ JC/K2lzUmRQqCmO4lTbSNw01H3iuV3em21dy51kpGR1E9FuQv+LLYe5hUusEMOZ5d9Cd
+ U2XDIthhQ3eVEllPy59HzcUXXYYG9yruW2kldZg+aXyk+0Wq5jilF6+XXJ5bCp6N45m5
+ JJyj2If5qJzMVWRQawLbIKHz8AcodVvY1dFmPtWBXa1phsC0O2NtN7oUUJbtBzyjNaub kQ== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3g6pp04uqd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 23 May 2022 23:54:54 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 24NNkRdt010379;
+        Mon, 23 May 2022 23:54:52 GMT
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2175.outbound.protection.outlook.com [104.47.56.175])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3g6ph7s3sa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 23 May 2022 23:54:52 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=neKzLr2Z3XP1HDVvqgAdH6ABLwUEGDinkichIRxo3wLcKTALD449/oebuPUjmI/qzGfEUavVmU/IP37HwCB1OV2PNbuJmqbLBQ8ECkUa/eXh5QFk5JeXjO+YsxzwQS8hpG6lpNF+JDdkFuGpyJtPVY37k1UEUhXujRPc3l2n4SSvKrGyFc4cMvVA6kTDZorslVnhV8ZzAv3dXqj9G70c/SwPAspYAapibFUYXEf+GyBljjQCwRWk0abhmz5fc3+ggKTwsiO0g7fLhVRZS5UMV+icDd7j+XmiJa7xGlitbYrnj93efpNOFkLDPi+rI3SsHlNQYkpGC3rEjnEpepxb5A==
+ b=SQhJ7MqCM5sRTpXyVvVQihXA1V38Dn5TMfEYqm9ZXGU+BZzJQJKYwoUVRUXM0ktIXIRj+ZybmpG+tGVfEn7pV4uhqCfpAHz+0uUh3v4fWzdm+Lz5XHvilz97Gk4mqe8FObf3ZlKOfMn3FQspn0U/Ky40CLLR5WirXlrEwR8dJVjbBiTiaQPjrz+ph2FpovNtUYUjq4mntXNyKLin6Z73kneGbQsvhi92tmvbsuib7+aPQfG5HNVZ78lhn2gHdoHr6m1uFFeMhZ+BM7NkyNRMYNqFEvRwzFt1Zd/lPScvoxDnjn95/61VcExI3DGOVz+p0Bj88XbseYqMfbjTPFKocw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=c6RSa6RU4tc7g6H4/qRzt3WFMLwVimVTKgJFckLNlyY=;
- b=juFMcI1+xLF+KchlGOdJGdKsWzsRAWYecpw2u81Y3LqGkqV9k+WH5fsQlJ2CUxJjmLejTdnFRUfKlI/dt3kxEacLVznHMNoTxkpSYJ7biEEuWiSYQ3MnJnNHDfAu8eoLLfulQT8Zwoi2ZClLJQ+Z8uEjWejept2RRiOg4ASBJqrpsOXiDQeD4jzn2EQh92Hp7weq6GHOz6qDaLb6bt6Q+8kTp1YGnesuQCL+lcJqOXtgHi8cfOfF0whVBs8Bh+JU/Awg+gtJYnUVp9IvtkuJ5PydIT8jiHFhTKuPfJ/5cJWz/GdRJtCQKT4w/Q3OgDW1whfHO3ZC1RJGTcyqnWZpfA==
+ bh=iYDKCdbHOgcCBiIQxLpumkSHcWtQlp/pvSVdwC+ByKM=;
+ b=gTBpItgu2hVgElgwnHdCWqnUPCf/EYKzcv4ta1K2H9rgiET8gfqeJhNetmyVbLi9vxVrmxCm6X9e0772dC5Rac3r5Z9UzOWxccNDvJ/eRmkgyZAdQ3cdmBRxgrYbtMwqia/c7ICIU+fUuarUEVFGnydoPgNQ6GKexHKZHn1p3T0+ilm6/0wFRXoeqWXVYQ/K3DLjZlPdmZsGzg04lFArCtL3Gs1XmtMc9DfnzHDKUwKSHD8mH9gcvMbz8PLnEf0K0625uBk0hbwVzOJf7qTi7iPIDmW3qO/GiKqNK9b5MHWZZZmbSletB4p2SeuWLWS4oW8zrLrgyuamp8/cmEMAwA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nutanix.com; dmarc=pass action=none header.from=nutanix.com;
- dkim=pass header.d=nutanix.com; arc=none
-Received: from CH0PR02MB8041.namprd02.prod.outlook.com (2603:10b6:610:106::10)
- by BN8PR02MB5891.namprd02.prod.outlook.com (2603:10b6:408:b8::27) with
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iYDKCdbHOgcCBiIQxLpumkSHcWtQlp/pvSVdwC+ByKM=;
+ b=TTQgETCeGrBZRsfsfYe0Zon+jfLaGgAqllQAsWCGZtcCFcscclpHVYWWBYPpCReHg22IrZN6XvDq9ILNeHtu6SBBpxdpFE4LEcJiHesx2kG5EhMLY2tMxB+lZTI+n+vvGATynRHN/8jb/9jo26b87UH1DLWdVdLkRNujWnqNrBc=
+Received: from BYAPR10MB3287.namprd10.prod.outlook.com (2603:10b6:a03:15c::11)
+ by MWHPR10MB1856.namprd10.prod.outlook.com (2603:10b6:300:10e::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.14; Mon, 23 May
- 2022 23:53:43 +0000
-Received: from CH0PR02MB8041.namprd02.prod.outlook.com
- ([fe80::34c3:f129:a785:52b3]) by CH0PR02MB8041.namprd02.prod.outlook.com
- ([fe80::34c3:f129:a785:52b3%5]) with mapi id 15.20.5273.023; Mon, 23 May 2022
- 23:53:42 +0000
-From:   Eiichi Tsukata <eiichi.tsukata@nutanix.com>
-To:     rafael@kernel.org, daniel.lezcano@linaro.org, rostedt@goodmis.org,
-        mingo@redhat.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, joao.m.martins@oracle.com,
-        mtosatti@redhat.com
-Cc:     Eiichi Tsukata <eiichi.tsukata@nutanix.com>
-Subject: [PATCH v2] cpuidle: haltpoll: Add trace points for guest_halt_poll_ns grow/shrink
-Date:   Mon, 23 May 2022 23:53:32 +0000
-Message-Id: <20220523235332.162966-1-eiichi.tsukata@nutanix.com>
-X-Mailer: git-send-email 2.9.3
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR03CA0377.namprd03.prod.outlook.com
- (2603:10b6:a03:3a1::22) To CH0PR02MB8041.namprd02.prod.outlook.com
- (2603:10b6:610:106::10)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.18; Mon, 23 May
+ 2022 23:54:50 +0000
+Received: from BYAPR10MB3287.namprd10.prod.outlook.com
+ ([fe80::c89:e3f5:ea4a:8d30]) by BYAPR10MB3287.namprd10.prod.outlook.com
+ ([fe80::c89:e3f5:ea4a:8d30%2]) with mapi id 15.20.5273.023; Mon, 23 May 2022
+ 23:54:49 +0000
+Message-ID: <4de97962-cf7e-c334-5874-ba739270c705@oracle.com>
+Date:   Mon, 23 May 2022 16:54:32 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 1/4] vdpa: Add stop operation
+Content-Language: en-US
+To:     Eugenio Perez Martin <eperezma@redhat.com>
+Cc:     virtualization <virtualization@lists.linux-foundation.org>,
+        Jason Wang <jasowang@redhat.com>,
+        kvm list <kvm@vger.kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Longpeng <longpeng2@huawei.com>,
+        Zhu Lingshan <lingshan.zhu@intel.com>,
+        Martin Petrus Hubertus Habets <martinh@xilinx.com>,
+        Harpreet Singh Anand <hanand@xilinx.com>, dinang@xilinx.com,
+        Eli Cohen <elic@nvidia.com>,
+        Laurent Vivier <lvivier@redhat.com>, pabloc@xilinx.com,
+        "Dawar, Gautam" <gautam.dawar@amd.com>,
+        Xie Yongji <xieyongji@bytedance.com>, habetsm.xilinx@gmail.com,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        tanuj.kamde@amd.com, Wu Zongyong <wuzongyong@linux.alibaba.com>,
+        martinpo@xilinx.com, Cindy Lu <lulu@redhat.com>,
+        ecree.xilinx@gmail.com, Parav Pandit <parav@nvidia.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Zhang Min <zhang.min9@zte.com.cn>
+References: <20220520172325.980884-1-eperezma@redhat.com>
+ <20220520172325.980884-2-eperezma@redhat.com>
+ <79089dc4-07c4-369b-826c-1c6e12edcaff@oracle.com>
+ <CAJaqyWd3BqZfmJv+eBYOGRwNz3OhNKjvHPiFOafSjzAnRMA_tQ@mail.gmail.com>
+From:   Si-Wei Liu <si-wei.liu@oracle.com>
+Organization: Oracle Corporation
+In-Reply-To: <CAJaqyWd3BqZfmJv+eBYOGRwNz3OhNKjvHPiFOafSjzAnRMA_tQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR1PR80CA0003.lamprd80.prod.outlook.com
+ (2603:10d6:200:21::13) To BYAPR10MB3287.namprd10.prod.outlook.com
+ (2603:10b6:a03:15c::11)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5c63f468-62f9-4568-5174-08da3d17778d
-X-MS-TrafficTypeDiagnostic: BN8PR02MB5891:EE_
-X-Microsoft-Antispam-PRVS: <BN8PR02MB5891B7574E84C2736C9002E480D49@BN8PR02MB5891.namprd02.prod.outlook.com>
-x-proofpoint-crosstenant: true
+X-MS-Office365-Filtering-Correlation-Id: d46f06e7-1c5b-40da-90d8-08da3d179f70
+X-MS-TrafficTypeDiagnostic: MWHPR10MB1856:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR10MB1856F4C448B16AC7F48CAF50B1D49@MWHPR10MB1856.namprd10.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1+b3SQu126NvYJoe9WOGAl/JUquDCRWHg5DKHutJlw4rcMlU2RaOci4EhTzStxJkPOnY2QlVrhePr3VDF6yQdRDGn41gwZS4rAuAqws0PHJVvu+1Db/uDJKVQyuqn6z/nZQGKF0LQVKcqM4o9Xd07bcpU/kEN0dOWwjJX3V7aLuDpQ+dSur5TgfG5hWug0QM9o3bi8LXKdt4vwt8fhE1aSFGcoQve43z4l2+rYHkRFPVtjMxcQwslsy3WbSztXgIrtCLSSFChfWzQvo8g+/sxRFBwKw0g3E36iF3Pyn45P6FBieOOBcL2dRDRXHiBgyf7oypSL5AYbGt+6EME6JR87fJp4o6Y+FVIwyPMKx74IHzlMWruvEAnR+b2gjklFgsHdhLKJtT0VoMbyT5G9dceBxf+r1gT88oC68vEdU1UHRpqY+USef9kwpP+7UWmrIyCWXir3AY8ES3gX6SANeIzNC6EKlCYY96US2ret6BHveIigiZKoqoxtAIMyy8GDGv7oEkyUhpKVLybL6KNeB/wPO1WndqMzulkkI1HWUfcklMdnU4m6xAF4Zy1X5Ct0KH7muDnLGKV0HBsynaLryfXsLeD7/VfrjkaDTLyjBeM/UT3j+2FcyX2xmB9wkyfvj3543KPmyYRRuOVPhnHF9Ketd9VB+X/CBB20fAXrFIBMd2HR2ZJMGOZo7FhCiKC6bH0WHHYcV12JqvzAHWqIFR4Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR02MB8041.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(8676002)(1076003)(66946007)(66556008)(66476007)(8936002)(316002)(26005)(4326008)(107886003)(83380400001)(5660300002)(6486002)(44832011)(186003)(86362001)(508600001)(2616005)(36756003)(2906002)(6512007)(38100700002)(38350700002)(52116002)(6666004)(6506007);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: jhmdrJX04bistXXC8l49pbUQvpPpxIyvUYBiU21tYuvQBLVB9vUjX+WkthVeRT18IQ2hxxFMwvfvvkMcZ6j0tbWxzAlrZ8byiQQZcF0NrWGWfMQ1RBH6tL1MR3tSq93PhyLYpBNaaicBKPRSBEj0qZGKoG1lAQ6ev5wzWRUEzRUr3OaFml1SARgENN8Bwb8EOA3hlnrU6xdq3KBxGd1GY5LPhNbT3NRumuBbE7XecgViVcO/CyWTQ3J3YOLTbdrAqLAKAYXoygAxU9+QcBHbXdu6m2gGHkMJD/DOQUMyQiABOYKVaoQVRT2JN7Y0ou5JY4OGP8zufqiD/a9Gtt9/omDPrVnyMeZANH9JkmZxQb8jUuQxgJOjQvYR3S7kjZ6dic/8EzpxTXvHIEzcOoWWGJpx9dJBDm0fNOBx5TIGaMr8XTMaNZJ9ucCY/IJRYKisGoNs9pAMgWjg0UcLgCEOCPwlt6nxnCHQrrcYce0e3PZBVoTSj7/VWhXI1WLlUyuNt7IyE+ud6rKRKL9NwA1azm6SHYXdN3nvRbt+rxnRl9bMhdSvfUIeqwG40AEpR3+wx64hUOqgWEjklFQ42itudIOxUmA8C7mcfnjlj+0fI1tDws7Q6gl8ONfrD9u22A4RAGgkHY3mRpTrEbslStlYPm0inHTAjzqpiPrAcQK3YoJJ5hv8/I+M8o3CChT6WZbe3ngC6DScPd+XZi1HmwAxsXBP4AWTIF/Y9maz2HXU6EkDpzwIDkHcZAJ+K8qPHoTu
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB3287.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(66476007)(86362001)(31696002)(4326008)(66556008)(8676002)(66946007)(2906002)(8936002)(5660300002)(316002)(26005)(6512007)(31686004)(7416002)(2616005)(53546011)(38100700002)(508600001)(54906003)(6506007)(6916009)(6666004)(36916002)(66574015)(36756003)(83380400001)(6486002)(186003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?DXCKOPA/T/ziaZY7plCnSuSYSZaI+RWmb3rWuvV7uMfCnb/DzAb2D3CLStAg?=
- =?us-ascii?Q?SgCOBveFBOnB4FHI4hW8tKQL4nh2vi4Coin7A7pt0iXlxYYOsZyjVtdQ3IeY?=
- =?us-ascii?Q?KCDjKbO+C/IFDRpmSCTQYjPWmXcid16RQvfQm9dyBlQWJo8P153YGdI9pFGv?=
- =?us-ascii?Q?K7sb5DTN14JjzwzoK62OJdUQzqsNrY0Z2Ex51VCPhJNZEuLyTBMN9zHCKUty?=
- =?us-ascii?Q?VPUpPMSHfngKL7RUzCfZzD8co1XbPZD/Y83bPZRMDsgfIDGytSotmy3UBP3a?=
- =?us-ascii?Q?t1D8AVFZDXY49RPRDwc9ZO5iGdYzxMS98JwOKduOMXf2K0f8aOccaNIIbJI3?=
- =?us-ascii?Q?oo+zvUasspqhQN7ZK/eoQAczPDuzDZ0wZqDT3W3G05Tq3qTNM27pb95ywW8N?=
- =?us-ascii?Q?iTMz8ndhAnxDjuh7SDd4eKbsew9cC5MlnbfqPPO99CEZfHyNsi0HO1jd3q0C?=
- =?us-ascii?Q?havL7Zh6/y8+UB7Folk3cmvmMOT6EK+t4hHKaxZUDBk7Jybc3lKzyVv0tG6C?=
- =?us-ascii?Q?z1etLiWz10PaaiWIkq2d3/p+21G7iAhDKmbkbeH0A/JJbBoPkul+w2Dqzcf/?=
- =?us-ascii?Q?5x6Gf+OHqbVQc6067K+8kVHD1S3O055nrfKKeI9qD/pvrIRM9TraU94+PoY5?=
- =?us-ascii?Q?i0nDUkKcTSghANJp6EwYKCXMb82Lygu41D9ViVpxx+oN4BqdNyW8QxXBYPRN?=
- =?us-ascii?Q?pQDrZzxmgrTT/n5HJiACbxaOFpejGf+rvuO+KyWTGR6LBA6LrubfVfZ1XhRk?=
- =?us-ascii?Q?bn13yPWhYECBzIWMA/hAEmS6L7T62qcFdEn9Rd4TmD6b5FVIqdb8OY0hfT6P?=
- =?us-ascii?Q?j/wuNDl4jU2lYsbWgV+ijWunRPpNpe7yPwjkQKMA1g6KXnVRmATEeUR7xQQq?=
- =?us-ascii?Q?yjojTGRvukPuYHno1N6JwQSbghPxAgL5uEaIaeBRv/hl95VwXPCEVUEY0xLi?=
- =?us-ascii?Q?3iluNpmUSoE+rJH59iMfK+94ZfVo1sE7XgvYpP/40f0bVe0lk+fN/IqViEqB?=
- =?us-ascii?Q?a0qcEyv9QjU9PPznHpYkhtGnU5RD7uHmEWRiPEm2UhCti7I8TDCyMQ3i9FSr?=
- =?us-ascii?Q?Hmy+nQDgY8cTgcg8vR3+nP2S+oOxQdiEqYjpDMF2JRYBeNpCmkkFQ/dAA5JY?=
- =?us-ascii?Q?qNt8EjfbuOkAvQDLFoii09jF1jHoC9r5Z4hA4HcLeux8AunY8GGCIC50Z+9D?=
- =?us-ascii?Q?M5B46Rhp/TqDavPaYcpaCIloAPU4X1uLDxT1LaqpcUtl8Oz2E/3XJ/EK68oo?=
- =?us-ascii?Q?X9bUZC9/5MUsX0U/1txidYPXoFfR7PXbPYMbCDK2i4skp8UHZE5oTlmwxbnt?=
- =?us-ascii?Q?RjFmeVnem7XcDTNRWfngRumw0qH/BLWOYuX4D48AF/x49sI4qjWoMChWjVm0?=
- =?us-ascii?Q?hwxW7c76qXNhLi4GUPzU8RKOGUxfriatp92NOkmrsJNG9wVW8+MFzNxZFEJo?=
- =?us-ascii?Q?JARYXq+f+Kob238HArID5JeR6T76pD2lshFRbTIjdUI0i0UNihVVoC032J4S?=
- =?us-ascii?Q?jCcCvwVQGPpBaYQX2binzdvL1HTVvot7kdnMOO8ILkFnO+vTlC+wtKlVhsfZ?=
- =?us-ascii?Q?qo+ZsLwGBEHkRjBOL5VQQmytuQ/DpGHLwX6gtA3nsv/mufzAS7/rKgCUmI/0?=
- =?us-ascii?Q?6cJiIEYRBm4KEuEXF8MHBeU1JJQnY+GMfuXXxEUwSF+/U713aisSaunbdqJg?=
- =?us-ascii?Q?ScpoI/DtWrbGJSS9TqkOXi1+BX+EQBc0gCrRbwisbxDT4fcJcYRMAjoUIGZ1?=
- =?us-ascii?Q?7iCa2iLtwA0C3lDhxymq2k9fYFsvRBk=3D?=
-X-OriginatorOrg: nutanix.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5c63f468-62f9-4568-5174-08da3d17778d
-X-MS-Exchange-CrossTenant-AuthSource: CH0PR02MB8041.namprd02.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VEFaVWNEYmdmN2FWT2lrbDNoWEpETmdkc3l4UGJJazdOM0JjMEFxT3lVMjBk?=
+ =?utf-8?B?ekFqNHd4U3k4THVyUjF6ck1xYXc5NnlLQlNRdlM4L2s3b3VLK0FZekpvUFNG?=
+ =?utf-8?B?ak5FUEhIOWtEVlJMNUQ1L3VFQmpFTEZVWThHc042SDdlMWxUbHJnWVFzNEtQ?=
+ =?utf-8?B?dmFDVmZUajZSbStFMkczS0JYdHFOOEplYnBib3piNlVzVHAzKzFjNVhydDln?=
+ =?utf-8?B?R09pY0lmRmNoVU1yZnhkVUx3N2JSVzdxaFlDUlo5em9pVnpMRlN1NW1sZ0FP?=
+ =?utf-8?B?K2RYQmpFdnZybENKcUcxOEdBQTREZitSd1RXdVBNRXRlNEtETG4wb2xIeU1k?=
+ =?utf-8?B?SlJuS3BGVUhhLzVpczNUZGN4QVU1MnZIZ3ZEYmJ0Y1JVb3hvTldrdHJaTFBU?=
+ =?utf-8?B?OW0vczAzQVhORnBtR1pKaXJPRCtFazVXZkM4b3NJcDA4Z1oyMEhJRzhyWGE2?=
+ =?utf-8?B?N0ZBV0xtY2pUZk9VN0w5bkpMVHRvQ1VSS0V0Ym84cUhMSlYzNEtkVzdiQ21z?=
+ =?utf-8?B?ZnhZTEJBZ2l1TEtxNkNGWFRPUWNOeVAza2xiS091dktSSVhxU0hPcWdleUVK?=
+ =?utf-8?B?UHhaT0pKT2dJcDMvNjNvMnFWaVN4VGRMZ3k3eXlKWjdvZTV1cEx1c3IyTWts?=
+ =?utf-8?B?OTU5WFBBSThmYTEwNUU1SkpKRFFyT0FxK0d6clFtd0ZoWXVVNy9vbUsvMWZm?=
+ =?utf-8?B?WVBtbCtRQ0orOXFDS0NqbHlKNWZCM2NTZ2t1SzcxdWtMK3puYXRlT3lqRmdl?=
+ =?utf-8?B?WnFYRjA1ZldJaWMzSHEzT242NnZJRG5XeWVldElZNXFFbXF5bkxnTnk2MXZM?=
+ =?utf-8?B?QjkvWEh6QTNLOVV1dlgxYUFheis3Ny9pQXE0N2FHUGFLUHJ3aDdRMk1SMkJx?=
+ =?utf-8?B?N0RMOUd2VUVvYWR3N3BLOGU0TXlYMm9zL3RVR0FFcmpZaEdNSlNhTW8rbEtG?=
+ =?utf-8?B?M29GVnVFOEE2aTIrL1ZaK2RBS253Um4xOUpIc2NSSGZ4NW5jclFMd0xSazd6?=
+ =?utf-8?B?SGpicGZyTTJUcm1wblRNZFFtbmpyRVNwZE9YejNPZUZSTzRiRlArclExeVha?=
+ =?utf-8?B?M3ZQMGRmVEhZeDROQ0FBRENBbkRkN1lIQnhzbm0zYVVjM0hnNHd1SzlROTRE?=
+ =?utf-8?B?UHBGWUxXdjlRNG8yMXU2ZmhnK1NUMCt1cUtUc3NkK2JUc3NIbkxwQi8zZ3Fj?=
+ =?utf-8?B?Y3NyNFEwL2g0R3F3N2Q2UzR4TmtuQ2N4OUgxcmhhVmFPdnRCc3hCODVxbmhi?=
+ =?utf-8?B?VDY0QjcvUmZ5MFFpcFNidHhYWm1wb0VnWHlqNldvWHJGREdzS0ljaHdGQnJt?=
+ =?utf-8?B?VCtVK2ZFSlE5YjgwN0txOWpCcUgrZFM5R29icmZ0TGxDR0lJR1V5Z0tiYlBa?=
+ =?utf-8?B?ZzkxK1hpdUFtOHduVzVmVXQzRnlQYytJTUxlTndXclVKTVpuVlRyZ3Q0cFhX?=
+ =?utf-8?B?Skd6Q0FET2ZOaUNJRmJEUTR0STM0ZmpJN08yaDBKc2NKMjRSQ1ZWRWxYaTZD?=
+ =?utf-8?B?TytzSEhZMlExdU5LVGVDZWtXeVZuNzRXTGdKN2F0OFRTS0NwM2pMbXFRVmkx?=
+ =?utf-8?B?T1FIZzFsT0FGU2VSaWNKRUlibmZ0NmtGNkNmL2EzVThpY3dJcEFib0VQRTVH?=
+ =?utf-8?B?akFMT1dpSnF2NmpFMzZMTzZPNnVxUmRuV2xsQUMva25LaTVmUzZtdUE1bi81?=
+ =?utf-8?B?YlJtR0djWEEySmtZdlltRHo2eXN2WCtDVzVTc3ZvT2hjT1E4Nkxzdkx1ZjRS?=
+ =?utf-8?B?b2UrRUhlNkRYWEFnQTJOdEhhSXpObVJraFZ0aEtZTUFXWndTUVoxOHdxUUx1?=
+ =?utf-8?B?cjJ3Y2VHbWw0WnU0OXJRWkVUcUc3dG91WUhsSXlOWkQ0RzlnN0hPTzk4NWJM?=
+ =?utf-8?B?dlVJMS8yUUhtN054eDVpaGZtbVlhNlphdTBycEVGUXJWcS95Wkc1RWowSjRU?=
+ =?utf-8?B?Mk56MDhyNEUrYUpYcTJYRG8rSjZIQS9sTmI2TDBqRDNaREN6UzVaU0NSd3Fm?=
+ =?utf-8?B?aDRGNkJDdFROZjVCTG5MaUc3T0g3TnNvTmxHbkRZS1hPN2Q4V2lSWjdoSldl?=
+ =?utf-8?B?NFBGc2RucDZrckJIQzY0a3UzRmNTOGV6eDNKa2lPdnVFVUNidm52b1VsSDFE?=
+ =?utf-8?B?MUFjaGhxR1BrMmdqajdRTWxRT3F1b1FZbDhIdytSUlRYKzA3bWNhNzdOaFJw?=
+ =?utf-8?B?U3dFSCtBaFBmcHBLZHA4a29Gam9UUWVXcE52ZzNqdld3Q2JPNnE0b0ZNUnE5?=
+ =?utf-8?B?Y2lQd1Zid241YkdZZHErYzFCbUh3YjJZM3pkd1JuSXplYWQ1cTlEbFNRR252?=
+ =?utf-8?B?WG5WY0JxVis0T3JuTTBlTlNLeWY2Q1hMUTZRTituZjVWV3VZL0YzV2tnMnJ1?=
+ =?utf-8?Q?Dw5+k2lF+JicxRZw=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d46f06e7-1c5b-40da-90d8-08da3d179f70
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB3287.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2022 23:53:42.7357
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2022 23:54:49.7655
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bb047546-786f-4de1-bd75-24e5b6f79043
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JQwMkVVuc8s63+Xa1ESTTBAnLTdQsQ3tcha2LLYKaiMrmQTgm4MO7PGj6uL7/5LeiMdTKE6JD/ZCChcHAoqE9lUJo3quwVUx31OymmJX7f4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR02MB5891
-X-Proofpoint-ORIG-GUID: kUxYqlZdpUbll1kyc3Ms-WwKqBsgzode
-X-Proofpoint-GUID: kUxYqlZdpUbll1kyc3Ms-WwKqBsgzode
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-23_10,2022-05-23_01,2022-02-23_01
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: tlC579FdndJSVgP39NI/qcl/ULz++kezBfgFUnurWEmtdcLvyIeg/emqaog2UnG3Lb4LhCP+FdiizK5RZsnHvQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR10MB1856
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.874
+ definitions=2022-05-23_10:2022-05-23,2022-05-23 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 adultscore=0
+ malwarescore=0 spamscore=0 suspectscore=0 bulkscore=0 phishscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205230122
+X-Proofpoint-ORIG-GUID: TM6HVkkxWgrjXOodyohUzvZPQ2NKCYFS
+X-Proofpoint-GUID: TM6HVkkxWgrjXOodyohUzvZPQ2NKCYFS
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add trace points as are implemented in KVM host halt polling.
-This helps tune guest halt polling params.
 
-Signed-off-by: Eiichi Tsukata <eiichi.tsukata@nutanix.com>
----
- drivers/cpuidle/governors/haltpoll.c | 15 ++++++++-----
- include/trace/events/power.h         | 33 ++++++++++++++++++++++++++++
- 2 files changed, 43 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/cpuidle/governors/haltpoll.c b/drivers/cpuidle/governors/haltpoll.c
-index cb2a96eafc02..a5b6ad32956c 100644
---- a/drivers/cpuidle/governors/haltpoll.c
-+++ b/drivers/cpuidle/governors/haltpoll.c
-@@ -19,6 +19,7 @@
- #include <linux/sched.h>
- #include <linux/module.h>
- #include <linux/kvm_para.h>
-+#include <trace/events/power.h>
- 
- static unsigned int guest_halt_poll_ns __read_mostly = 200000;
- module_param(guest_halt_poll_ns, uint, 0644);
-@@ -77,13 +78,16 @@ static int haltpoll_select(struct cpuidle_driver *drv,
- 
- static void adjust_poll_limit(struct cpuidle_device *dev, u64 block_ns)
- {
--	unsigned int val;
-+	unsigned int val, old;
- 
--	/* Grow cpu_halt_poll_us if
--	 * cpu_halt_poll_us < block_ns < guest_halt_poll_us
-+	val = dev->poll_limit_ns;
-+	old = val;
-+
-+	/* Grow poll_limit_ns if
-+	 * poll_limit_ns < block_ns < guest_halt_poll_ns
- 	 */
- 	if (block_ns > dev->poll_limit_ns && block_ns <= guest_halt_poll_ns) {
--		val = dev->poll_limit_ns * guest_halt_poll_grow;
-+		val *= guest_halt_poll_grow;
- 
- 		if (val < guest_halt_poll_grow_start)
- 			val = guest_halt_poll_grow_start;
-@@ -91,16 +95,17 @@ static void adjust_poll_limit(struct cpuidle_device *dev, u64 block_ns)
- 			val = guest_halt_poll_ns;
- 
- 		dev->poll_limit_ns = val;
-+		trace_guest_halt_poll_ns_grow(smp_processor_id(), val, old);
- 	} else if (block_ns > guest_halt_poll_ns &&
- 		   guest_halt_poll_allow_shrink) {
- 		unsigned int shrink = guest_halt_poll_shrink;
- 
--		val = dev->poll_limit_ns;
- 		if (shrink == 0)
- 			val = 0;
- 		else
- 			val /= shrink;
- 		dev->poll_limit_ns = val;
-+		trace_guest_halt_poll_ns_shrink(smp_processor_id(), val, old);
- 	}
- }
- 
-diff --git a/include/trace/events/power.h b/include/trace/events/power.h
-index af5018aa9517..db065af9c3c0 100644
---- a/include/trace/events/power.h
-+++ b/include/trace/events/power.h
-@@ -500,6 +500,39 @@ DEFINE_EVENT(dev_pm_qos_request, dev_pm_qos_remove_request,
- 
- 	TP_ARGS(name, type, new_value)
- );
-+
-+TRACE_EVENT(guest_halt_poll_ns,
-+
-+	TP_PROTO(bool grow, unsigned int cpu_id,
-+		 unsigned int new, unsigned int old),
-+
-+	TP_ARGS(grow, cpu_id, new, old),
-+
-+	TP_STRUCT__entry(
-+		__field(bool, grow)
-+		__field(unsigned int, cpu_id)
-+		__field(unsigned int, new)
-+		__field(unsigned int, old)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->grow   = grow;
-+		__entry->cpu_id = cpu_id;
-+		__entry->new    = new;
-+		__entry->old    = old;
-+	),
-+
-+	TP_printk("cpu %u: halt_poll_ns %u (%s %u)",
-+		__entry->cpu_id,
-+		__entry->new,
-+		__entry->grow ? "grow" : "shrink",
-+		__entry->old)
-+);
-+
-+#define trace_guest_halt_poll_ns_grow(cpu_id, new, old) \
-+	trace_guest_halt_poll_ns(true, cpu_id, new, old)
-+#define trace_guest_halt_poll_ns_shrink(cpu_id, new, old) \
-+	trace_guest_halt_poll_ns(false, cpu_id, new, old)
- #endif /* _TRACE_POWER_H */
- 
- /* This part must be outside protection */
--- 
-2.36.1
+On 5/23/2022 12:20 PM, Eugenio Perez Martin wrote:
+> On Sat, May 21, 2022 at 12:13 PM Si-Wei Liu <si-wei.liu@oracle.com> wrote:
+>>
+>>
+>> On 5/20/2022 10:23 AM, Eugenio Pérez wrote:
+>>> This operation is optional: It it's not implemented, backend feature bit
+>>> will not be exposed.
+>>>
+>>> Signed-off-by: Eugenio Pérez <eperezma@redhat.com>
+>>> ---
+>>>    include/linux/vdpa.h | 6 ++++++
+>>>    1 file changed, 6 insertions(+)
+>>>
+>>> diff --git a/include/linux/vdpa.h b/include/linux/vdpa.h
+>>> index 15af802d41c4..ddfebc4e1e01 100644
+>>> --- a/include/linux/vdpa.h
+>>> +++ b/include/linux/vdpa.h
+>>> @@ -215,6 +215,11 @@ struct vdpa_map_file {
+>>>     * @reset:                  Reset device
+>>>     *                          @vdev: vdpa device
+>>>     *                          Returns integer: success (0) or error (< 0)
+>>> + * @stop:                    Stop or resume the device (optional, but it must
+>>> + *                           be implemented if require device stop)
+>>> + *                           @vdev: vdpa device
+>>> + *                           @stop: stop (true), not stop (false)
+>>> + *                           Returns integer: success (0) or error (< 0)
+>> Is this uAPI meant to address all use cases described in the full blown
+>> _F_STOP virtio spec proposal, such as:
+>>
+>> --------------%<--------------
+>>
+>> ...... the device MUST finish any in flight
+>> operations after the driver writes STOP.  Depending on the device, it
+>> can do it
+>> in many ways as long as the driver can recover its normal operation if it
+>> resumes the device without the need of resetting it:
+>>
+>> - Drain and wait for the completion of all pending requests until a
+>>     convenient avail descriptor. Ignore any other posterior descriptor.
+>> - Return a device-specific failure for these descriptors, so the driver
+>>     can choose to retry or to cancel them.
+>> - Mark them as done even if they are not, if the kind of device can
+>>     assume to lose them.
+>> --------------%<--------------
+>>
+> Right, this is totally underspecified in this series.
+>
+> I'll expand on it in the next version, but that text proposed to
+> virtio-comment was complicated and misleading. I find better to get
+> the previous version description. Would the next description work?
+>
+> ```
+> After the return of ioctl, the device MUST finish any pending operations like
+> in flight requests. It must also preserve all the necessary state (the
+> virtqueue vring base plus the possible device specific states)
+Hmmm, "possible device specific states" is a bit vague. Does it require 
+the device to save any device internal state that is not defined in the 
+virtio spec - such as any failed in-flight requests to resubmit upon 
+resume? Or you would lean on SVQ to intercept it in depth and save it 
+with some other means? I think network device also has internal state 
+such as flow steering state that needs bookkeeping as well.
+
+A follow-up question is what is the use of the `stop` argument of false, 
+does it require the device to support resume? I seem to recall this is 
+something to abandon in favor of device reset plus setting queue 
+base/addr after. Or it's just a optional feature that may be device 
+specific (if one can do so in simple way).
+
+-Siwei
+
+>   that is required
+> for restoring in the future.
+>
+> In the future, we will provide features similar to VHOST_USER_GET_INFLIGHT_FD
+> so the device can save pending operations.
+> ```
+>
+> Thanks for pointing it out!
+>
+>
+>
+>
+>
+>> E.g. do I assume correctly all in flight requests are flushed after
+>> return from this uAPI call? Or some of pending requests may be subject
+>> to loss or failure? How does the caller/user specify these various
+>> options (if there are) for device stop?
+>>
+>> BTW, it would be nice to add the corresponding support to vdpa_sim_blk
+>> as well to demo the stop handling. To just show it on vdpa-sim-net IMHO
+>> is perhaps not so convincing.
+>>
+>> -Siwei
+>>
+>>>     * @get_config_size:                Get the size of the configuration space includes
+>>>     *                          fields that are conditional on feature bits.
+>>>     *                          @vdev: vdpa device
+>>> @@ -316,6 +321,7 @@ struct vdpa_config_ops {
+>>>        u8 (*get_status)(struct vdpa_device *vdev);
+>>>        void (*set_status)(struct vdpa_device *vdev, u8 status);
+>>>        int (*reset)(struct vdpa_device *vdev);
+>>> +     int (*stop)(struct vdpa_device *vdev, bool stop);
+>>>        size_t (*get_config_size)(struct vdpa_device *vdev);
+>>>        void (*get_config)(struct vdpa_device *vdev, unsigned int offset,
+>>>                           void *buf, unsigned int len);
 

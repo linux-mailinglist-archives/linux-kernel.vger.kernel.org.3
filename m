@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA1F9531B10
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55FF0531B40
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239653AbiEWRK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 13:10:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37724 "EHLO
+        id S240247AbiEWRUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:20:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239648AbiEWRJn (ORCPT
+        with ESMTP id S240930AbiEWRQt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:09:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E836BFE8;
-        Mon, 23 May 2022 10:09:25 -0700 (PDT)
+        Mon, 23 May 2022 13:16:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB9C6B642;
+        Mon, 23 May 2022 10:16:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 26C37B81200;
-        Mon, 23 May 2022 17:09:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 699C6C385A9;
-        Mon, 23 May 2022 17:09:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF525614CC;
+        Mon, 23 May 2022 17:13:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D6B4C34116;
+        Mon, 23 May 2022 17:13:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653325759;
-        bh=trDlW+62lCKeAXjNiRC432sZJoG+X0NQj468+iBtg6I=;
+        s=korg; t=1653325999;
+        bh=eGrDYHXmFsVRcikTzncgPsM+vtr5k2y/DS+DjMqwsuQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oajscJdgJEHgiaJFvTCuYKJK6ucoIqFrwYrHbFZDhN/00ei6ZMw82CgPlp6IPTMSb
-         H8zV/jEQdKsHJ017qqnP7Q6t/X5ibAcBpVjGst2omNCuDSNIDMqGVGRxM2ZCQcfzre
-         gF0zFRlOg14YMgBXevvaGvrSLLB4t0nCuxPGjMgU=
+        b=xZuBSwddFeUd5Q30VC71nv+s/PdcigPKbPZIS/ENIu8fNd1WokqM+Zoxp88ekqINe
+         TGbzAlMrPyYHNu24WFQXsUk4qQ1AUbJE4x/Q95YEZBgidh5uhzrLnGuA5Enn5pGGzq
+         ajEORzZjz3MkLysfyVFdlhtq8wkZflEyJRExx+5s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
-        Zixuan Fu <r33s3n6@gmail.com>, Paolo Abeni <pabeni@redhat.com>,
+        stable@vger.kernel.org, Harini Katakam <harini.katakam@xilinx.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 14/33] net: vmxnet3: fix possible use-after-free bugs in vmxnet3_rq_alloc_rx_buf()
+Subject: [PATCH 5.4 36/68] net: macb: Increment rx bd head after allocating skb and buffer
 Date:   Mon, 23 May 2022 19:05:03 +0200
-Message-Id: <20220523165750.365570327@linuxfoundation.org>
+Message-Id: <20220523165808.545233035@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165746.957506211@linuxfoundation.org>
-References: <20220523165746.957506211@linuxfoundation.org>
+In-Reply-To: <20220523165802.500642349@linuxfoundation.org>
+References: <20220523165802.500642349@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,91 +58,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zixuan Fu <r33s3n6@gmail.com>
+From: Harini Katakam <harini.katakam@xilinx.com>
 
-[ Upstream commit 9e7fef9521e73ca8afd7da9e58c14654b02dfad8 ]
+[ Upstream commit 9500acc631dbb8b73166e25700e656b11f6007b6 ]
 
-In vmxnet3_rq_alloc_rx_buf(), when dma_map_single() fails, rbi->skb is
-freed immediately. Similarly, in another branch, when dma_map_page() fails,
-rbi->page is also freed. In the two cases, vmxnet3_rq_alloc_rx_buf()
-returns an error to its callers vmxnet3_rq_init() -> vmxnet3_rq_init_all()
--> vmxnet3_activate_dev(). Then vmxnet3_activate_dev() calls
-vmxnet3_rq_cleanup_all() in error handling code, and rbi->skb or rbi->page
-are freed again in vmxnet3_rq_cleanup_all(), causing use-after-free bugs.
+In gem_rx_refill rx_prepared_head is incremented at the beginning of
+the while loop preparing the skb and data buffers. If the skb or data
+buffer allocation fails, this BD will be unusable BDs until the head
+loops back to the same BD (and obviously buffer allocation succeeds).
+In the unlikely event that there's a string of allocation failures,
+there will be an equal number of unusable BDs and an inconsistent RX
+BD chain. Hence increment the head at the end of the while loop to be
+clean.
 
-To fix these possible bugs, rbi->skb and rbi->page should be cleared after
-they are freed.
-
-The error log in our fault-injection testing is shown as follows:
-
-[   14.319016] BUG: KASAN: use-after-free in consume_skb+0x2f/0x150
-...
-[   14.321586] Call Trace:
-...
-[   14.325357]  consume_skb+0x2f/0x150
-[   14.325671]  vmxnet3_rq_cleanup_all+0x33a/0x4e0 [vmxnet3]
-[   14.326150]  vmxnet3_activate_dev+0xb9d/0x2ca0 [vmxnet3]
-[   14.326616]  vmxnet3_open+0x387/0x470 [vmxnet3]
-...
-[   14.361675] Allocated by task 351:
-...
-[   14.362688]  __netdev_alloc_skb+0x1b3/0x6f0
-[   14.362960]  vmxnet3_rq_alloc_rx_buf+0x1b0/0x8d0 [vmxnet3]
-[   14.363317]  vmxnet3_activate_dev+0x3e3/0x2ca0 [vmxnet3]
-[   14.363661]  vmxnet3_open+0x387/0x470 [vmxnet3]
-...
-[   14.367309]
-[   14.367412] Freed by task 351:
-...
-[   14.368932]  __dev_kfree_skb_any+0xd2/0xe0
-[   14.369193]  vmxnet3_rq_alloc_rx_buf+0x71e/0x8d0 [vmxnet3]
-[   14.369544]  vmxnet3_activate_dev+0x3e3/0x2ca0 [vmxnet3]
-[   14.369883]  vmxnet3_open+0x387/0x470 [vmxnet3]
-[   14.370174]  __dev_open+0x28a/0x420
-[   14.370399]  __dev_change_flags+0x192/0x590
-[   14.370667]  dev_change_flags+0x7a/0x180
-[   14.370919]  do_setlink+0xb28/0x3570
-[   14.371150]  rtnl_newlink+0x1160/0x1740
-[   14.371399]  rtnetlink_rcv_msg+0x5bf/0xa50
-[   14.371661]  netlink_rcv_skb+0x1cd/0x3e0
-[   14.371913]  netlink_unicast+0x5dc/0x840
-[   14.372169]  netlink_sendmsg+0x856/0xc40
-[   14.372420]  ____sys_sendmsg+0x8a7/0x8d0
-[   14.372673]  __sys_sendmsg+0x1c2/0x270
-[   14.372914]  do_syscall_64+0x41/0x90
-[   14.373145]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-...
-
-Fixes: 5738a09d58d5a ("vmxnet3: fix checks for dma mapping errors")
-Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-Signed-off-by: Zixuan Fu <r33s3n6@gmail.com>
-Link: https://lore.kernel.org/r/20220514050656.2636588-1-r33s3n6@gmail.com
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Fixes: 4df95131ea80 ("net/macb: change RX path for GEM")
+Signed-off-by: Harini Katakam <harini.katakam@xilinx.com>
+Signed-off-by: Michal Simek <michal.simek@xilinx.com>
+Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Link: https://lore.kernel.org/r/20220512171900.32593-1-harini.katakam@xilinx.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/vmxnet3/vmxnet3_drv.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/net/ethernet/cadence/macb_main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/vmxnet3/vmxnet3_drv.c b/drivers/net/vmxnet3/vmxnet3_drv.c
-index 98fc34ea78ff..8f536bc2aed8 100644
---- a/drivers/net/vmxnet3/vmxnet3_drv.c
-+++ b/drivers/net/vmxnet3/vmxnet3_drv.c
-@@ -595,6 +595,7 @@ vmxnet3_rq_alloc_rx_buf(struct vmxnet3_rx_queue *rq, u32 ring_idx,
- 				if (dma_mapping_error(&adapter->pdev->dev,
- 						      rbi->dma_addr)) {
- 					dev_kfree_skb_any(rbi->skb);
-+					rbi->skb = NULL;
- 					rq->stats.rx_buf_alloc_failure++;
- 					break;
- 				}
-@@ -619,6 +620,7 @@ vmxnet3_rq_alloc_rx_buf(struct vmxnet3_rx_queue *rq, u32 ring_idx,
- 				if (dma_mapping_error(&adapter->pdev->dev,
- 						      rbi->dma_addr)) {
- 					put_page(rbi->page);
-+					rbi->page = NULL;
- 					rq->stats.rx_buf_alloc_failure++;
- 					break;
- 				}
+diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
+index 002a374f197b..78219a9943a7 100644
+--- a/drivers/net/ethernet/cadence/macb_main.c
++++ b/drivers/net/ethernet/cadence/macb_main.c
+@@ -927,7 +927,6 @@ static void gem_rx_refill(struct macb_queue *queue)
+ 		/* Make hw descriptor updates visible to CPU */
+ 		rmb();
+ 
+-		queue->rx_prepared_head++;
+ 		desc = macb_rx_desc(queue, entry);
+ 
+ 		if (!queue->rx_skbuff[entry]) {
+@@ -966,6 +965,7 @@ static void gem_rx_refill(struct macb_queue *queue)
+ 			dma_wmb();
+ 			desc->addr &= ~MACB_BIT(RX_USED);
+ 		}
++		queue->rx_prepared_head++;
+ 	}
+ 
+ 	/* Make descriptor updates visible to hardware */
 -- 
 2.35.1
 

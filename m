@@ -2,62 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01DF25307C1
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 04:42:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C2B55307C9
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 04:45:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353107AbiEWCms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 22:42:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50370 "EHLO
+        id S240903AbiEWCpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 22:45:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353070AbiEWCmk (ORCPT
+        with ESMTP id S234211AbiEWCpR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 22:42:40 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2D4377CB
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 19:42:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653273753; x=1684809753;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=TqjUYBj3xQpANT+99CewSw6nfFUz70d/qo8dv6oPqz0=;
-  b=ZuLnVAUTe5McWc9XfaaK301qy/Qq96/Z1J/YK3eZ2KL6UMzk7wfsYBs3
-   MaRnBBrRi/fSB95yUe4qAdPuS1Vcom8iLtPcPI+XQKC/FZ6ZdehCGa0L3
-   8pzGezIGh5kL3wr0ZHzbg+dAl9WoxqK/vYtaverTnL5fQblpWrKpxWblH
-   ciX6aoHmkQktZPpsAFL0TDdZO+c16v2Oj3xJrqRAbAZMF5GqSf9mTtua1
-   JhwPecyTstYOZ7hj8bep0YZnjadFAy65sIBzSMBGHhJOy8cHsePiR32fs
-   EJxQmoL76lktK/Va1rApxy7ZiR9Itvz+TChF8VUgf8LXrBhwPI1aIWh90
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10355"; a="359476666"
-X-IronPort-AV: E=Sophos;i="5.91,245,1647327600"; 
-   d="scan'208";a="359476666"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2022 19:42:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,245,1647327600"; 
-   d="scan'208";a="744475767"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 22 May 2022 19:42:31 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nsy1e-0000pS-JY;
-        Mon, 23 May 2022 02:42:30 +0000
-Date:   Mon, 23 May 2022 10:42:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [tomoyo-tomoyo-test1:master 1/1] drivers/staging/wfx/bh.c:298:2:
- warning: call to __warn_flushing_systemwide_wq declared with 'warning'
- attribute: Please avoid flushing system-wide workqueues.
-Message-ID: <202205231025.i4fdy5M0-lkp@intel.com>
+        Sun, 22 May 2022 22:45:17 -0400
+Received: from lgeamrelo11.lge.com (lgeamrelo12.lge.com [156.147.23.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EC4152E09E
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 19:45:13 -0700 (PDT)
+Received: from unknown (HELO lgemrelse6q.lge.com) (156.147.1.121)
+        by 156.147.23.52 with ESMTP; 23 May 2022 11:45:12 +0900
+X-Original-SENDERIP: 156.147.1.121
+X-Original-MAILFROM: byungchul.park@lge.com
+Received: from unknown (HELO X58A-UD3R) (10.177.244.38)
+        by 156.147.1.121 with ESMTP; 23 May 2022 11:45:12 +0900
+X-Original-SENDERIP: 10.177.244.38
+X-Original-MAILFROM: byungchul.park@lge.com
+Date:   Mon, 23 May 2022 11:43:21 +0900
+From:   Byungchul Park <byungchul.park@lge.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, torvalds@linux-foundation.org,
+        damien.lemoal@opensource.wdc.com, linux-ide@vger.kernel.org,
+        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        mingo@redhat.com, linux-kernel@vger.kernel.org,
+        peterz@infradead.org, will@kernel.org, tglx@linutronix.de,
+        rostedt@goodmis.org, joel@joelfernandes.org, sashal@kernel.org,
+        daniel.vetter@ffwll.ch, chris@chris-wilson.co.uk,
+        duyuyang@gmail.com, johannes.berg@intel.com, tj@kernel.org,
+        tytso@mit.edu, willy@infradead.org, david@fromorbit.com,
+        amir73il@gmail.com, gregkh@linuxfoundation.org,
+        kernel-team@lge.com, linux-mm@kvack.org, akpm@linux-foundation.org,
+        mhocko@kernel.org, minchan@kernel.org, hannes@cmpxchg.org,
+        vdavydov.dev@gmail.com, sj@kernel.org, jglisse@redhat.com,
+        dennis@kernel.org, cl@linux.com, penberg@kernel.org,
+        rientjes@google.com, vbabka@suse.cz, ngupta@vflare.org,
+        linux-block@vger.kernel.org, paolo.valente@linaro.org,
+        josef@toxicpanda.com, linux-fsdevel@vger.kernel.org,
+        viro@zeniv.linux.org.uk, jack@suse.cz, jack@suse.com,
+        jlayton@kernel.org, dan.j.williams@intel.com, hch@infradead.org,
+        djwong@kernel.org, dri-devel@lists.freedesktop.org,
+        airlied@linux.ie, rodrigosiqueiramelo@gmail.com,
+        melissa.srw@gmail.com, hamohammed.sa@gmail.com
+Subject: Re: [PATCH RFC v6 00/21] DEPT(Dependency Tracker)
+Message-ID: <20220523024321.GB16721@X58A-UD3R>
+References: <CAHk-=whnPePcffsNQM+YSHMGttLXvpf8LbBQ8P7HEdqFXaV7Lg@mail.gmail.com>
+ <1651795895-8641-1-git-send-email-byungchul.park@lge.com>
+ <YnYd0hd+yTvVQxm5@hyeyoo>
+ <20220509001637.GA6047@X58A-UD3R>
+ <YnpJ9Mtf+pjx4JYm@hyeyoo>
+ <20220510233929.GB18445@X58A-UD3R>
+ <YnuKQ9UIhk9WYoz7@hyeyoo>
+ <YoYXvsgVJwwaWrrZ@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <YoYXvsgVJwwaWrrZ@arm.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,100 +72,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.osdn.net/gitroot/tomoyo/tomoyo-test1.git master
-head:   84baad17cb8286b6b53b675f8c3d7343ee6a990c
-commit: 84baad17cb8286b6b53b675f8c3d7343ee6a990c [1/1] workqueue: Wrap flush_workqueue() using a macro
-config: hexagon-randconfig-r045-20220522 (https://download.01.org/0day-ci/archive/20220523/202205231025.i4fdy5M0-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 768a1ca5eccb678947f4155e38a5f5744dcefb56)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add tomoyo-tomoyo-test1 git://git.osdn.net/gitroot/tomoyo/tomoyo-test1.git
-        git fetch --no-tags tomoyo-tomoyo-test1 master
-        git checkout 84baad17cb8286b6b53b675f8c3d7343ee6a990c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/infiniband/core/ drivers/input/mouse/ drivers/staging/wfx/
+On Thu, May 19, 2022 at 11:11:10AM +0100, Catalin Marinas wrote:
+> On Wed, May 11, 2022 at 07:04:51PM +0900, Hyeonggon Yoo wrote:
+> > On Wed, May 11, 2022 at 08:39:29AM +0900, Byungchul Park wrote:
+> > > On Tue, May 10, 2022 at 08:18:12PM +0900, Hyeonggon Yoo wrote:
+> > > > On Mon, May 09, 2022 at 09:16:37AM +0900, Byungchul Park wrote:
+> > > > > CASE 1.
+> > > > > 
+> > > > >    lock L with depth n
+> > > > >    lock_nested L' with depth n + 1
+> > > > >    ...
+> > > > >    unlock L'
+> > > > >    unlock L
+> > > > > 
+> > > > > This case is allowed by Lockdep.
+> > > > > This case is allowed by DEPT cuz it's not a deadlock.
+> > > > > 
+> > > > > CASE 2.
+> > > > > 
+> > > > >    lock L with depth n
+> > > > >    lock A
+> > > > >    lock_nested L' with depth n + 1
+> > > > >    ...
+> > > > >    unlock L'
+> > > > >    unlock A
+> > > > >    unlock L
+> > > > > 
+> > > > > This case is allowed by Lockdep.
+> > > > > This case is *NOT* allowed by DEPT cuz it's a *DEADLOCK*.
+> > > > 
+> > > > Yeah, in previous threads we discussed this [1]
+> > > > 
+> > > > And the case was:
+> > > > 	scan_mutex -> object_lock -> kmemleak_lock -> object_lock
+> > > > And dept reported:
+> > > > 	object_lock -> kmemleak_lock, kmemleak_lock -> object_lock as
+> > > > 	deadlock.
+> > > > 
+> > > > But IIUC - What DEPT reported happens only under scan_mutex and it
+> > > > is not simple just not to take them because the object can be
+> > > > removed from the list and freed while scanning via kmemleak_free()
+> > > > without kmemleak_lock and object_lock.
+> 
+> The above kmemleak sequence shouldn't deadlock since those locks, even
+> if taken in a different order, are serialised by scan_mutex. For various
+> reasons, trying to reduce the latency, I ended up with some
+> fine-grained, per-object locking.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+I understand why you introduced the fine-grained lock. However, the
+different order should be avoided anyway. As Steven said, Lockdep also
+should've detected this case, say, this would have been detected if
+Lockdep worked correctly.
 
-All warnings (new ones prefixed by >>):
+It's not a technical issue to make a tool skip the reversed order when
+it's already protected by another lock. Because each lock has its own
+purpose as you explained, no body knows if the cases might arise that
+use kmemleak_lock and object_lock only w/o holding scan_mutex someday.
 
->> drivers/staging/wfx/bh.c:298:2: warning: call to __warn_flushing_systemwide_wq declared with 'warning' attribute: Please avoid flushing system-wide workqueues. [-Wattribute-warning]
-           flush_workqueue(system_highpri_wq);
-           ^
-   include/linux/workqueue.h:695:3: note: expanded from macro 'flush_workqueue'
-                   __warn_flushing_systemwide_wq();                        \
-                   ^
-   1 warning generated.
---
->> drivers/staging/wfx/hif_tx.c:76:3: warning: call to __warn_flushing_systemwide_wq declared with 'warning' attribute: Please avoid flushing system-wide workqueues. [-Wattribute-warning]
-                   flush_workqueue(system_highpri_wq);
-                   ^
-   include/linux/workqueue.h:695:3: note: expanded from macro 'flush_workqueue'
-                   __warn_flushing_systemwide_wq();                        \
-                   ^
-   1 warning generated.
---
->> drivers/input/mouse/psmouse-smbus.c:320:2: warning: call to __warn_flushing_systemwide_wq declared with 'warning' attribute: Please avoid flushing system-wide workqueues. [-Wattribute-warning]
-           flush_scheduled_work();
-           ^
-   include/linux/workqueue.h:705:32: note: expanded from macro 'flush_scheduled_work'
-   #define flush_scheduled_work() flush_workqueue(system_wq)
-                                  ^
-   include/linux/workqueue.h:695:3: note: expanded from macro 'flush_workqueue'
-                   __warn_flushing_systemwide_wq();                        \
-                   ^
-   1 warning generated.
---
->> drivers/infiniband/core/device.c:2857:2: warning: call to __warn_flushing_systemwide_wq declared with 'warning' attribute: Please avoid flushing system-wide workqueues. [-Wattribute-warning]
-           flush_workqueue(system_unbound_wq);
-           ^
-   include/linux/workqueue.h:695:3: note: expanded from macro 'flush_workqueue'
-                   __warn_flushing_systemwide_wq();                        \
-                   ^
-   1 warning generated.
+I'm wondering how other folks think this case should be handled tho.
 
+> For object allocation (rbtree modification) and tree search, we use
+> kmemleak_lock. During scanning (which can take minutes under
+> scan_mutex), we want to prevent (a) long latencies and (b) freeing the
+> object being scanned. We release the locks regularly for (a) and hold
+> the object->lock for (b).
+> 
+> In another thread Byungchul mentioned:
+> 
+> |    context X			context Y
+> | 
+> |    lock mutex A		lock mutex A
+> |    lock B			lock C
+> |    lock C			lock B
+> |    unlock C			unlock B
+> |    unlock B			unlock C
+> |    unlock mutex A		unlock mutex A
+> | 
+> | In my opinion, lock B and lock C are unnecessary if they are always
+> | along with lock mutex A. Or we should keep correct lock order across all
+> | the code.
+> 
+> If these are the only two places, yes, locks B and C would be
+> unnecessary. But we have those locks acquired (not nested) on the
+> allocation path (kmemleak_lock) and freeing path (object->lock). We
+> don't want to block those paths while scan_mutex is held.
+> 
+> That said, we may be able to use a single kmemleak_lock for everything.
+> The object freeing path may be affected slightly during scanning but the
+> code does release it every MAX_SCAN_SIZE bytes. It may even get slightly
+> faster as we'd hammer a single lock (I'll do some benchmarks).
+> 
+> But from a correctness perspective, I think the DEPT tool should be
+> improved a bit to detect when such out of order locking is serialised by
+> an enclosing lock/mutex.
 
-vim +/warning +298 drivers/staging/wfx/bh.c
+Again, I don't think this is a technical issue.
 
-b0998f0c040daf Jérôme Pouiller 2019-09-19  285  
-f545b23d477552 Jérôme Pouiller 2022-01-13  286  /* If IRQ is not available, this function allow to manually poll the control register and simulate
-f545b23d477552 Jérôme Pouiller 2022-01-13  287   * an IRQ ahen an event happened.
-57aa557f110d9f Jérôme Pouiller 2020-05-05  288   *
-f545b23d477552 Jérôme Pouiller 2022-01-13  289   * Note that the device has a bug: If an IRQ raise while host read control register, the IRQ is
-f545b23d477552 Jérôme Pouiller 2022-01-13  290   * lost. So, use this function carefully (only duing device initialisation).
-57aa557f110d9f Jérôme Pouiller 2020-05-05  291   */
-57aa557f110d9f Jérôme Pouiller 2020-05-05  292  void wfx_bh_poll_irq(struct wfx_dev *wdev)
-57aa557f110d9f Jérôme Pouiller 2020-05-05  293  {
-57aa557f110d9f Jérôme Pouiller 2020-05-05  294  	ktime_t now, start;
-57aa557f110d9f Jérôme Pouiller 2020-05-05  295  	u32 reg;
-57aa557f110d9f Jérôme Pouiller 2020-05-05  296  
-f00dc1d789e1ca Jérôme Pouiller 2020-05-05  297  	WARN(!wdev->poll_irq, "unexpected IRQ polling can mask IRQ");
-c86176d51340d5 Jérôme Pouiller 2022-02-25 @298  	flush_workqueue(system_highpri_wq);
-57aa557f110d9f Jérôme Pouiller 2020-05-05  299  	start = ktime_get();
-57aa557f110d9f Jérôme Pouiller 2020-05-05  300  	for (;;) {
-c1d193c5058e72 Jérôme Pouiller 2022-01-13  301  		wfx_control_reg_read(wdev, &reg);
-57aa557f110d9f Jérôme Pouiller 2020-05-05  302  		now = ktime_get();
-57aa557f110d9f Jérôme Pouiller 2020-05-05  303  		if (reg & 0xFFF)
-57aa557f110d9f Jérôme Pouiller 2020-05-05  304  			break;
-57aa557f110d9f Jérôme Pouiller 2020-05-05  305  		if (ktime_after(now, ktime_add_ms(start, 1000))) {
-57aa557f110d9f Jérôme Pouiller 2020-05-05  306  			dev_err(wdev->dev, "time out while polling control register\n");
-57aa557f110d9f Jérôme Pouiller 2020-05-05  307  			return;
-57aa557f110d9f Jérôme Pouiller 2020-05-05  308  		}
-57aa557f110d9f Jérôme Pouiller 2020-05-05  309  		udelay(200);
-57aa557f110d9f Jérôme Pouiller 2020-05-05  310  	}
-57aa557f110d9f Jérôme Pouiller 2020-05-05  311  	wfx_bh_request_rx(wdev);
-57aa557f110d9f Jérôme Pouiller 2020-05-05  312  }
-57aa557f110d9f Jérôme Pouiller 2020-05-05  313  
-
-:::::: The code at line 298 was first introduced by commit
-:::::: c86176d51340d5ee29afffce63d79c4ece5d96bb staging: wfx: ensure HIF request has been sent before polling
-
-:::::: TO: Jérôme Pouiller <jerome.pouiller@silabs.com>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+	Byungchul
+> 
+> -- 
+> Catalin

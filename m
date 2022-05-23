@@ -2,66 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28E17530BF3
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 11:04:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A361530B73
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 11:03:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231883AbiEWIc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 04:32:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57260 "EHLO
+        id S231939AbiEWId7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 04:33:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231909AbiEWIcW (ORCPT
+        with ESMTP id S231942AbiEWIdx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 04:32:22 -0400
-Received: from mail-qk1-x743.google.com (mail-qk1-x743.google.com [IPv6:2607:f8b0:4864:20::743])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B1BEE07
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 01:32:20 -0700 (PDT)
-Received: by mail-qk1-x743.google.com with SMTP id 190so5723818qkj.8
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 01:32:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=WZ+H1qUyPNp2nmiWLS7sS86h9kl7Ug3kEyKLMvWcNxA=;
-        b=bpoiUnULw3VjVRJiuHwveSWpGQOc1pxsu+apiCKpHiZKq/C7tXqy7FHP2QRlF2yiDT
-         ZHkR5wwwCD8afQtRX/wpmbBOFtyZEH5wZxCTErhiLi51wUKafBxICQeInDVjz3vxYbSt
-         zCFBulz3o7DtrHD5ClAk3/B7fBKv2V9L3DLt+6dkl9+vSAn2f8n+AmQPWnlBPxTZwhuF
-         nVKGN1O2PQf4TqJ2YHQEme02jb6hepfvq4wfURN7xOZudLTbB7IQxIwJ6fRKoW30V5ik
-         ihTWpkImSsV7lz2kRz3IJU0Zc7YZaHLtu417GPxC8IMdb+NUysp+U/ksrwS5eot1CEJ3
-         TpjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=WZ+H1qUyPNp2nmiWLS7sS86h9kl7Ug3kEyKLMvWcNxA=;
-        b=WCmpmdLAIWl6bQ3JFIHa3kX9hsoEoVJsYUIlkh92dPY/QHDy2uEQEOTXdKZ7U19LQA
-         RaPCBvX2sL0ZiT607iPktXf8iZmaKkw2u/ih/HTY4vgUKasaL4M72r5daZlFsBwH3gDL
-         JXKkKntD28/MZsM/IlUSzkLCd8hZ325epiUgGd5FjxRwB3oPAR6rU6LBElS+oYMWHELo
-         jvFDxhArQq0AJBBInVlzw33dncr4oswe5bQQGZY8hn1GgdAyJTS3cUo+ZUVZb5zrNZbG
-         Hp41Q7jabpV7AYvRIfpxVtJVLYt5sOejWhFYdUW/kcOPcpHaHegTaIWsPzs3DeEcv2OH
-         3X3A==
-X-Gm-Message-State: AOAM532a9T9QevwHT0+F3KORMOZO4EOsqW2DDDhmzIA5Uco4vi81cm8+
-        pj67FouHg3aHDt3NXQwf5csBXkIVSpjiwWnvB6Y=
-X-Google-Smtp-Source: ABdhPJxHzcF+LfQrzVhGJWngaGHQOhhEGsvowWWDlA8cj9+2b2jeLT4kgEMdln2TTq+kouNEiJ/7rSbLBzWPZbLNS8M=
-X-Received: by 2002:a37:8946:0:b0:6a3:6f23:d6fd with SMTP id
- l67-20020a378946000000b006a36f23d6fdmr4783816qkd.766.1653294739212; Mon, 23
- May 2022 01:32:19 -0700 (PDT)
+        Mon, 23 May 2022 04:33:53 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D82937025;
+        Mon, 23 May 2022 01:33:51 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 67EE91F383;
+        Mon, 23 May 2022 08:33:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1653294830; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HGRKxMXzRmZxPbqeCp3nH/JisTTafTR7VNUx1nyPrA0=;
+        b=Fw4PPATbwIAM/+syB+5pNwbui6zzq48ItTTCRJoCdZxsq1oeLi5HUjJKkrHQrYOXiy6R17
+        +bqvRSVTHw/Y39VQRaeeBUmpmR9qt0hE+UyJ/+X1a4TgPBvLPcIIB0sxPok9Tx4Bv0fXn6
+        kTeFy5M9c1ROaqtzP+uCIdCFqncmFrs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1653294830;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HGRKxMXzRmZxPbqeCp3nH/JisTTafTR7VNUx1nyPrA0=;
+        b=w1UJ/lv2rM4pTCF88m3xyXaSpKqwbsTOVq4QJVvJSftW4VhvLptpMJJebYswy7a/fb5RBS
+        BC3ow6030YTwz3Dw==
+Received: from lion.mk-sys.cz (unknown [10.100.200.14])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 4FA872C141;
+        Mon, 23 May 2022 08:33:50 +0000 (UTC)
+Received: by lion.mk-sys.cz (Postfix, from userid 1000)
+        id E652760294; Mon, 23 May 2022 10:33:49 +0200 (CEST)
+Date:   Mon, 23 May 2022 10:33:49 +0200
+From:   Michal Kubecek <mkubecek@suse.cz>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     steffen.klassert@secunet.com, herbert@gondor.apana.org.au,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: REGRESSION (?) (Re: [PATCH] net: af_key: add check for
+ pfkey_broadcast in function pfkey_process)
+Message-ID: <20220523083349.zzgdmoq2bzstxla6@lion.mk-sys.cz>
+References: <20220517094231.414168-1-jiasheng@iscas.ac.cn>
+ <20220523022438.ofhehjievu2alj3h@lion.mk-sys.cz>
 MIME-Version: 1.0
-Received: by 2002:ad4:5be1:0:0:0:0:0 with HTTP; Mon, 23 May 2022 01:32:18
- -0700 (PDT)
-From:   Kee Wang <keewang6@gmail.com>
-Date:   Mon, 23 May 2022 05:32:18 -0300
-Message-ID: <CA+LVnoz6+c1MZ8WtfJNJP4sK5cA1jGFtC55hzq=bE8bLpgX=DA@mail.gmail.com>
-Subject: Good day my friend
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="r6vmbsg4u3vtaqzd"
+Content-Disposition: inline
+In-Reply-To: <20220523022438.ofhehjievu2alj3h@lion.mk-sys.cz>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I have sent several emails to you but no response from you. I hope
-you're good? Please reply any time you got this message to enable us
-proceed with further discussion
+
+--r6vmbsg4u3vtaqzd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Mon, May 23, 2022 at 04:24:38AM +0200, Michal Kubecek wrote:
+> After upgrading from 5.18-rc7 to 5.18 final, my racoon daemon refuses to
+> start because it cannot find some algorithms (it says "aes"). I have not
+> finished the debugging completely but this patch, mainline commit
+> 4dc2a5a8f675 ("net: af_key: add check for pfkey_broadcast in function
+> pfkey_process"), seems to be the most promising candidate.
+
+Tested now, reverting commit 4dc2a5a8f675 ("net: af_key: add check for
+pfkey_broadcast in function pfkey_process") seems to fix the issue,
+after rebuilding the af_key module with this commit reverted and
+reloading it, racoon daemon starts and works and /proc/crypto shows
+algrorithms it did not without the revert.
+
+We might get away with changing the test to
+
+	if (err && err != -ESRCH)
+		return err;
+
+but I'm not sure if bailing up on failed notification broadcast is
+really what we want. Also, most other calling sites of pfkey_broadcast()
+do not check the return value either so if we want to add the check, it
+should probably be done more consistently. So for now, a revert is IMHO
+more appropriate.
+
+Michal
+
+--r6vmbsg4u3vtaqzd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCAAdFiEEWN3j3bieVmp26mKO538sG/LRdpUFAmKLRuIACgkQ538sG/LR
+dpWMpwgA0INRLLZ4ZINyjhZoeu1j1yh4Mwtsb/aGEW3OB2E+pZHsWwqDwoq++1vH
+um5qLGrN6mrKIi9X3LhVKuXry2RGNW8rbTUaXihcg0JFl72XAXySQUwEh13Rn7D9
+MgvSq4MznjNLuvfFBEWvkNaYbZ6NTVtlG2thTKi4GfftwsYsDWVQisCI4z2ZZ0Pn
+Pd1j8thJreCJSNxoK8ylNyNkCAzLksItEivKz/UM+Y7HMpkI3nYZJLVAUVYZQKO6
+97qCnqcMriy3XpDz6IVn6nVUHfGay8bmlfet67IOCrxYghyR47Wy147LP8+tVzrb
+O46GqysFnczjK0px39AqsMrgUkp9sQ==
+=ZgNq
+-----END PGP SIGNATURE-----
+
+--r6vmbsg4u3vtaqzd--

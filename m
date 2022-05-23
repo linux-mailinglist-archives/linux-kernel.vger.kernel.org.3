@@ -2,116 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63662531CB9
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:57:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37F7D531CBE
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:57:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233466AbiEWUuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 16:50:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38322 "EHLO
+        id S231324AbiEWUwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 16:52:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230007AbiEWUuN (ORCPT
+        with ESMTP id S233522AbiEWUuy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 16:50:13 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7551B7093A;
-        Mon, 23 May 2022 13:50:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=MWvG6nn3a+gK5OQ89UpHcVMgSWbGiApDZs43xBQyuAQ=; b=jZ5RgpQGKwUBBbA0ZdHQ3ge2qv
-        JhwcNDKoPemRk3s77IzW6EO20sjiH1DhUcQ13atArXRcjCq0UM02GOejd3Q5xBsgEugT/I+hhy26g
-        4Kp9xy0YpjBsbEAuJddwANSqj37eNk6MehElmYHZpY+r2ZMG1vaI7/wkpjX3+xH/NYxJmJIondBxy
-        +L7c2izCVNz9zitq/KvvNVVHICfXgJqfGbyRzpjzJ7bubMHZhDrfYYFQCgURue0HEBat23MdvOREc
-        3z+1BAGrSOmTcM4wcSbOnvWlt1BKGcar/IW/Rcxxp0HY1QQwDxgmUoJQtCuEiZZ0jCSqL0x6HUy2v
-        oOGiBiMw==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ntEzs-00GXI2-R3; Mon, 23 May 2022 20:49:49 +0000
-Message-ID: <f99153be-2636-60a3-2630-c592cc230b53@infradead.org>
-Date:   Mon, 23 May 2022 13:49:38 -0700
+        Mon, 23 May 2022 16:50:54 -0400
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB7A470930
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 13:50:53 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 24NKohSS027055;
+        Mon, 23 May 2022 22:50:43 +0200
+Date:   Mon, 23 May 2022 22:50:43 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kernel Team <kernel-team@fb.com>
+Subject: Re: [GIT PULL] nolibc changes for v5.19
+Message-ID: <20220523205043.GA25949@1wt.eu>
+References: <20220520182428.GA3791250@paulmck-ThinkPad-P17-Gen-1>
+ <CAHk-=wgpAHhPVSqBWb4gYT=CRJzKAZ4inmrL_kcpeNWGkcg3pg@mail.gmail.com>
+ <20220523195605.GA13032@1wt.eu>
+ <20220523202336.GB13032@1wt.eu>
+ <CAHk-=wiX8P8atcx9at_N=-8pjU-d5cG509E=oZHfsVb1R41RZQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [RFC 2/6] PM: Hibernate: Add option to disable disk offset
- randomization
-Content-Language: en-US
-To:     Vivek Kumar <quic_vivekuma@quicinc.com>, corbet@lwn.net,
-        catalin.marinas@arm.com, will@kernel.org, tglx@linutronix.de,
-        maz@kernel.org, axboe@kernel.dk, rafael@kernel.org,
-        akpm@linux-foundation.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-block@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-mm@kvack.org
-Cc:     len.brown@intel.com, pavel@ucw.cz, paulmck@kernel.org, bp@suse.de,
-        keescook@chromium.org, songmuchun@bytedance.com,
-        damien.lemoal@opensource.wdc.com, pasha.tatashin@soleen.com,
-        tabba@google.com, ardb@kernel.org, tsoni@quicinc.com,
-        quic_psodagud@quicinc.com, quic_svaddagi@quicinc.com,
-        Prasanna Kumar <quic_kprasan@quicinc.com>
-References: <1652860121-24092-1-git-send-email-quic_vivekuma@quicinc.com>
- <1652860121-24092-3-git-send-email-quic_vivekuma@quicinc.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <1652860121-24092-3-git-send-email-quic_vivekuma@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wiX8P8atcx9at_N=-8pjU-d5cG509E=oZHfsVb1R41RZQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5/18/22 00:48, Vivek Kumar wrote:
-> Add a kernel parameter to disable the disk offset randomization
-> for SSD devices in which such feature is available at the
-> firmware level. This is helpful in improving hibernation
-> resume time.
+On Mon, May 23, 2022 at 01:30:37PM -0700, Linus Torvalds wrote:
+> On Mon, May 23, 2022 at 1:23 PM Willy Tarreau <w@1wt.eu> wrote:
+> >
+> > So I've figured it again. When you run:
+> >
+> >    make tools/help
+> >
+> > you get the help of tools/ commands, [..]
 > 
-> Signed-off-by: Vivek Kumar <quic_vivekuma@quicinc.com>
-> Signed-off-by: Prasanna Kumar <quic_kprasan@quicinc.com>
-> ---
->  Documentation/admin-guide/kernel-parameters.txt | 11 +++++++++++
->  kernel/power/swap.c                             |  9 +++++++++
->  2 files changed, 20 insertions(+)
+> You speak the words, but you don't actually look at what it does.
 > 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index 666ade9..06b4f10 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -5192,6 +5192,17 @@
->  			Useful for devices that are detected asynchronously
->  			(e.g. USB and MMC devices).
->  
-> +	noswap_randomize
-> +			Kernel uses random disk offsets to help with wear-levelling
+> Try it.
 
-			                                             wear-leveling
+Why are you saying this ? I've figured the commands by trying
+each of them.
 
-> +			of SSD devices, while saving the hibernation snapshot image to
-> +			disk. Use this parameter to disable this feature for SSD
-> +			devices in scenarios when, such randomization is addressed at
+> Yes,  "make tools/help" works. Yes, it lists targets, and talks about
+> how you can use the "<tool>_install" target.
+> 
+> But none of that then matches the rest of what you write.
+> 
+> You talk about nolibc_headers". That's not something that is actually
+> listed in the help at all.
 
-			               no comma  ^
+I agree. I initially added the few of them there and figured I was
+polluting the "make tools/help" output with only nolibc-specific stuff.
+I had a look at other comamnds that took arguments and found some that
+would also take a few arguments that were not mentioned at the top level
+so I concluded that it was the "expected" way to use them there.
 
-> +			the firmware level and hibenration image is not re-generated
+> So please, can you read your own email message as somebody who doesn't
+> actually know the code, and try the commands you talk about, and see
+> the disconnect here?
 
-			                       hibernation
+That's exactly what I'm trying to do and I'm sorry if that doesn't work.
+The simple fact that it doesn't work tells me I need to revisit the
+approach but I need some hints about it.  Please be more specific.  I
+tried to get as close as possible to what I found in order to apply the
+principle of least surprise.  Do you want me to create a "noblic_install"
+target maybe, even if the equivalent one doesn't exist for half of the
+other commands ? If that's it, that can be done as well.
 
-> +			frequently.
-> +			(Useful for improving hibernation resume time as snapshot pages
-> +			are available in disk serially and can be read in bigger chunks
-> +			without seeking)
-> +
->  	retain_initrd	[RAM] Keep initrd memory after extraction
->  
->  	rfkill.default_state=
-
-
--- 
-~Randy
+Confused,
+Willy

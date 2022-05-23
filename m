@@ -2,98 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81146530AD7
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 10:01:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6765B530A9D
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 10:01:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231344AbiEWHuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 03:50:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42686 "EHLO
+        id S229960AbiEWHYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 03:24:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231331AbiEWHuR (ORCPT
+        with ESMTP id S229682AbiEWHXV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 03:50:17 -0400
-Received: from xppmailspam11.itap.purdue.edu (xppmailspam11.itap.purdue.edu [128.210.1.215])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5C096356
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 00:50:04 -0700 (PDT)
-IronPort-SDR: nnbxmAp3WC2w9hxp4UzB735Hd5mv9U4/fEVDZqIBp1zykMV6eu9D2T+Z0TZmNWhqWva1O872n1
- qEDrSkFFmUof2e5AvFAqgO4Fm64vuOOOY=
-X-Ironport-AuthID: liu3101@purdue.edu
-IronPort-Data: =?us-ascii?q?A9a23=3ASeMQq6MmfktlJivvrR2Nl8FynXyQoLVcMsEvi?=
- =?us-ascii?q?/4bfWQNrUolhmEEyjMYWG+CaPyKN2Hwfoh+OYnlp0wBuJSExtI1QHM5pCpnJ?=
- =?us-ascii?q?55oRWspJjg7wn8dt0p+F+WbJK6+x8lBONTGMu4uSXrQ+kWkPrT79CEuzbySS?=
- =?us-ascii?q?qfxTuPIJ3kpFwNjTS4gjzNlmvI43t4z2ITpU1vVtIOgudDbNX+kxyVwbjAe5?=
- =?us-ascii?q?ZWFpU49p//1oj4Z4gEzaKkT7l/TnnUYFrwFIqS1IyeqS4VYBLfiFf7e1r2k8?=
- =?us-ascii?q?yXU8wp0UoGplbPyc0srRL/OPFTe0SMKC/j62hUb/348yKc2MvYYeHx7sTTRk?=
- =?us-ascii?q?oAj0shJuLyxVRwtYv/GltMbXkQKCCp5J6BHpOLKLHXj48yey0rKLynlz/l0V?=
- =?us-ascii?q?hlkPIsU674qR2pVs+QFMjwQY1aOi//vmOC3Texlh8ICKsj3Pd9P4Sg8nWGBV?=
- =?us-ascii?q?ft2E4reR6jq5MND2GtijM55G/uDNdESbiBibUidbhATaE0bDokywLWhinXlK?=
- =?us-ascii?q?WUKqVSZtPJqpWPIihRsyrTwPZzYdsHTHZdZmUORp2Tn+WXlA01Kb4XDmWrdq?=
- =?us-ascii?q?n/81PXSmS7bWZ4JEOHq/PBdhlDOlHcYDwcbVAfmrPS04qJktwmzEGRJvHt3x?=
- =?us-ascii?q?UQO3BbzFIOlAkfi+CTsUiM0ArK8LcVrsGlh9YKLu251NkBcJtJwQIROWP0eH?=
- =?us-ascii?q?FTG5XfV9z/dPgGDhZXOIZ6r3urO8WniaXB9wVgqPkfoRSNdizXqTRpaYhjnF?=
- =?us-ascii?q?r6PG4bt5jH59K2ZL5lncUEDa7svYc4jj81X/HjGhT69/sWPRRVz/hjNUn+oq?=
- =?us-ascii?q?A51eeZJZaTxswidtK4Gdd3BCADf4xDomODHhAwKJZWMiXfUGLwlBKyz6+uId?=
- =?us-ascii?q?jDQnDaDGrF9qW/2oCb/Jdk4DDZWYR0B3tw/UTP3cVLQvh1565hUM3+nK6RwZ?=
- =?us-ascii?q?uqZAsIm16XxFtL7Utjba9NPZt56cwrv1DtpflKd03zFn08rnaQ+ItGca8nEJ?=
- =?us-ascii?q?XMbD6tg5CC7S+cUzfkgwSVW7WDaXpn9ihiqz5KRY3maTboKKlyTdvt/56SBy?=
- =?us-ascii?q?C3R8tBCJ46Jxg9ZXenWfCba68gQIEoMIHx9Aor5w+RTd/PYe1I/MHk8EfPMz?=
- =?us-ascii?q?PUsd5ENokj/vo8k5Vm8XENJkAe5jmaBMRiQZm1uLr7jQP5CQbsAFXREFT6VN?=
- =?us-ascii?q?7ILOO5DNJsiSqY=3D?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AT6cH8q4Ny7Mp8E7PBwPXwHDXdLJyesId70?=
- =?us-ascii?q?hD6qkRc3Nom6Oj5rmTdZggpGfJYXMqNk3I+urtBED/ewK7yXcd2+B4VotKNz?=
- =?us-ascii?q?OKhILHFutfxLqn5DH8FiXi/qp00Kt6buxYANn9ZGIbse/KpC61Dtsp3dHC2q?=
- =?us-ascii?q?Ghnvq29QYPcShaL4Zt8gpwFw7eOEh/XhNHCpoyHIed4M0vnUvERV0nKuO2G3?=
- =?us-ascii?q?QMQuCGiNXOlJf3CCR2ZSIP2U2ogS6k4KPzVzmfxAp2aUIq/Z4StU/IjgHw+6?=
- =?us-ascii?q?3miPe/xnbnpgjuxqUTv9f9x9NfDIi3htcYMTXwmm+TBbhcZw=3D=3D?=
-X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-AV: E=Sophos;i="5.91,245,1647316800"; 
-   d="scan'208";a="463330401"
-Received: from indy05.cs.purdue.edu ([128.10.130.167])
-  by xppmailspam11.itap.purdue.edu with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 23 May 2022 02:30:58 -0400
-From:   Congyu Liu <liu3101@purdue.edu>
-To:     dvyukov@google.com, andreyknvl@gmail.com, rostedt@goodmis.org,
-        mingo@redhat.com
-Cc:     kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        Congyu Liu <liu3101@purdue.edu>
-Subject: [PATCH] tracing: disable kcov on trace_preemptirq.c
-Date:   Mon, 23 May 2022 06:30:33 +0000
-Message-Id: <20220523063033.1778974-1-liu3101@purdue.edu>
-X-Mailer: git-send-email 2.34.1
+        Mon, 23 May 2022 03:23:21 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47E95140D2
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 00:14:50 -0700 (PDT)
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 4A5C83F1FF
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 06:30:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1653287449;
+        bh=C4unRTV41Zt0Ep2OyMd9Pp0aJxn+OBEIvDBNhczjUyA=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=Nn76aX3CMRS26du2tqi4+uu5k2toSssJb57j/OFFmQuNKlfs2ffw67VnHy4m3JF3Z
+         lnl67MZd+bqntWCuHt9k8mZbRThilUlIZSRLgs5BAQAWbPeDGJ3NvM1FZBYgkQ6E9L
+         6EhGixl015e1MVxrDFyhg2qJ7u4+x/BIyuWz4kvEA5UzIj7gvnHY6kUuhn5jEWfyUH
+         VYdxRa3CyWe93S14XD4vcCbNRcJZVfs95Za3JK2DpEg/4xp2qAA8SsYwL8kBIxoOe4
+         IlzaVLLK3aYPSVXVCJ4BtfT5ZRjvx/hHPEe1GRvKmQjS9j9khTa0VgGxnauH2tcUPz
+         tNKBRiy7nwbrg==
+Received: by mail-ej1-f69.google.com with SMTP id oz9-20020a1709077d8900b006f3d9488090so5446424ejc.6
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 23:30:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=C4unRTV41Zt0Ep2OyMd9Pp0aJxn+OBEIvDBNhczjUyA=;
+        b=TBPLQgSVHGlp2oSwmqg6yd+zMbYZ8z6TptZGrwMOPRORfQvDWA8l+oOb04G102t0ed
+         UshikI4NzWm6Yluxtf4aUoCZXjqcCxo8Ci9VG3UTFC/eLZNwVMKmOzQWkCuJgRl3iMU9
+         sXi4XP6rdYikLvZP1Ryh1dGwPDDDFOsAh+GYWZ2K0hZEwTmFMGs7M6hgBbIXPE66CXi3
+         k/kZwR23+Wy6sWkHDO54q8OIlNhVOKTTMWuk7tRBoIDCo5qZuzK0HmAXUxZCVdLhQZ5N
+         o9H+iRlJYOcTHg0cABOT5+a3/tz3Rncb69js4gpcjyc+Tv6q2DRfwq13sNjbgcMe1qqv
+         riFA==
+X-Gm-Message-State: AOAM533XAG9U9BqNudzTCNv99e3pSPkpnTUPRGgW25GgU7GyjgGWuFsG
+        +17IJTzSP+ISC9ZctcGfIQI1VL8TDRL+swJNQ7oOtuS1D8KHb2293ec9cWisov8YRHZt34rzIEb
+        7poULMWBpeM/9JNENVC824th23ms5lZc4hPfzMjQqTA==
+X-Received: by 2002:a17:907:a428:b0:6fa:9253:6f88 with SMTP id sg40-20020a170907a42800b006fa92536f88mr19086674ejc.518.1653287449044;
+        Sun, 22 May 2022 23:30:49 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyz5H5Dw8ITnQEI3JZXa1Lb+5tIXG5TbEd0PyYgZOvxcLOU1BT1mcXRA/Ezr8NdgUKeIjlWmA==
+X-Received: by 2002:a17:907:a428:b0:6fa:9253:6f88 with SMTP id sg40-20020a170907a42800b006fa92536f88mr19086659ejc.518.1653287448847;
+        Sun, 22 May 2022 23:30:48 -0700 (PDT)
+Received: from gollum.fritz.box ([194.191.244.86])
+        by smtp.gmail.com with ESMTPSA id g6-20020a056402114600b0042617ba6396sm7737934edw.32.2022.05.22.23.30.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 May 2022 23:30:48 -0700 (PDT)
+From:   Juerg Haefliger <juerg.haefliger@canonical.com>
+X-Google-Original-From: Juerg Haefliger <juergh@canonical.com>
+To:     tony@atomide.com, linux@armlinux.org.uk,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org,
+        Juerg Haefliger <juergh@canonical.com>
+Subject: [PATCH] ARM: omap2: Kconfig: Fix indentation
+Date:   Mon, 23 May 2022 08:30:40 +0200
+Message-Id: <20220523063040.10991-1-juergh@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Functions in trace_preemptirq.c could be invoked from early interrupt
-code that bypasses kcov trace function's in_task() check. Disable kcov
-on this file to reduce random code coverage.
+The convention for indentation seems to be a single tab. Help text is
+further indented by an additional two whitespaces. Fix the lines that
+violate these rules.
 
-Signed-off-by: Congyu Liu <liu3101@purdue.edu>
+While at it, remove an extra empty line.
+
+Signed-off-by: Juerg Haefliger <juergh@canonical.com>
 ---
- kernel/trace/Makefile | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/arm/mach-omap2/Kconfig | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/kernel/trace/Makefile b/kernel/trace/Makefile
-index d77cd8032213..0d261774d6f3 100644
---- a/kernel/trace/Makefile
-+++ b/kernel/trace/Makefile
-@@ -31,6 +31,10 @@ ifdef CONFIG_GCOV_PROFILE_FTRACE
- GCOV_PROFILE := y
- endif
+diff --git a/arch/arm/mach-omap2/Kconfig b/arch/arm/mach-omap2/Kconfig
+index 02c253de9b6e..596918fd103c 100644
+--- a/arch/arm/mach-omap2/Kconfig
++++ b/arch/arm/mach-omap2/Kconfig
+@@ -122,7 +122,6 @@ config ARCH_OMAP2PLUS
+ config OMAP_INTERCONNECT_BARRIER
+ 	bool
+ 	select ARM_HEAVY_MB
+-	
  
-+# Functions in this file could be invoked from early interrupt
-+# code and produce random code coverage.
-+KCOV_INSTRUMENT_trace_preemptirq.o := n
-+
- CFLAGS_bpf_trace.o := -I$(src)
+ if ARCH_OMAP2PLUS
  
- CFLAGS_trace_benchmark.o := -I$(src)
+@@ -192,10 +191,10 @@ config MACH_OMAP2_TUSB6010
+ 	default y if MACH_NOKIA_N8X0
+ 
+ config MACH_NOKIA_N810
+-       bool
++	bool
+ 
+ config MACH_NOKIA_N810_WIMAX
+-       bool
++	bool
+ 
+ config MACH_NOKIA_N8X0
+ 	bool "Nokia N800/N810"
 -- 
-2.34.1
+2.32.0
 

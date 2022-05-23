@@ -2,160 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47BD85318E4
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:54:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 105955318A4
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:54:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242574AbiEWSaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 14:30:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54212 "EHLO
+        id S243438AbiEWS2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 14:28:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241348AbiEWSaA (ORCPT
+        with ESMTP id S244199AbiEWS14 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 14:30:00 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC7013FD52
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 11:04:25 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id t2so9167586qkb.12
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 11:04:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CJ4hCZhKAdwYtZTJlQiUAiJtEDoVXgbNXkSB87RTpgE=;
-        b=ZsrlKqbxp0gzWhNS8Yo54hieo0JeXRDymm8LiMaSiNsnVZ8d6vRpYISeaNhDzahYBU
-         hbv754gvFj1bedUixgENoivGZT7Sg70gHpP0yloaBa5L4CLm3C1TYhi1WiVh2g4JSjSk
-         nGuQJ6qj3w5Guj2/vkmkqrKNbZIUHDj1S+0jw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CJ4hCZhKAdwYtZTJlQiUAiJtEDoVXgbNXkSB87RTpgE=;
-        b=g5jEAHo+I+e00O2V8J/PlW8Fxb6PqDKmFIKEWcSO0ItK9mxGzksq7bhAtwG0ObKo6t
-         1LSNUM4O7hpDrJX/NUrV4PF4EUgZPDBiUKrS8ajZds1s2bo4C4d+a7ItGTCbIWLiDUyD
-         yxfoR03GsK82l2XqXX4ENTEk2ohtPIW9kOxnMaCXAsV6vynqmPM8e4KZQRWIFIbNGKAL
-         /igywqRKStyLMaoqx4EP9cn8MQiASukx6oscjrJTY6dRoBSB9u8a7twyFCh21HGEVCAV
-         LGnxViSDTIWAyhqBF0j140Wfx2UocJk0n3hrh+uN2cHdFVV5jjDfQFuGbwHCO4aA0UCn
-         9q+w==
-X-Gm-Message-State: AOAM532ib/5uzFo25l73N66HBXB3DjXAjWoEdqPFkpPriMTdDUR1Zb8E
-        VaIACljjjoVr6eybdHrF9EI2N2/p4gTm4g==
-X-Google-Smtp-Source: ABdhPJydQm7W16LpSU5u7avzYtIANISgno+bjJttP4L4pPBO7BV3W+5eqiV0rlux9PctEGq+gwKg1w==
-X-Received: by 2002:a05:620a:1a06:b0:6a3:7562:8ad9 with SMTP id bk6-20020a05620a1a0600b006a375628ad9mr5448731qkb.714.1653329044252;
-        Mon, 23 May 2022 11:04:04 -0700 (PDT)
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
-        by smtp.gmail.com with ESMTPSA id w7-20020ac857c7000000b002f9303ce545sm4298696qta.39.2022.05.23.11.04.03
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 May 2022 11:04:04 -0700 (PDT)
-Received: by mail-yb1-f172.google.com with SMTP id a3so26839013ybg.5
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 11:04:03 -0700 (PDT)
-X-Received: by 2002:a9d:58c3:0:b0:605:9fa7:f5b6 with SMTP id
- s3-20020a9d58c3000000b006059fa7f5b6mr9077073oth.230.1653328563293; Mon, 23
- May 2022 10:56:03 -0700 (PDT)
+        Mon, 23 May 2022 14:27:56 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB5413C355;
+        Mon, 23 May 2022 11:03:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653329014; x=1684865014;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=AAirzVQ1LHT4q1Vz0Dd+gXv6Ma1E8XYPflgQ8RPZTuY=;
+  b=CW29qTdcVhJv6pH6rb5oe8A9s9XiSi9CSVFCpWPumc85c9m729tMy+FM
+   O6N+WFSQ6PpNNwDfmoeu/YRK85oF993QyVEGwb+AIitsMx5hW1ghMqN8O
+   z2aW/OADrvGt3MXZ55n6N4wRni6o130Ijh6dUW97R1hJw+zfJM5b7MbBA
+   6icjHK1idVNv3HtS3ZyS7+kLM1p8GfjqJ7mV+eZxkzUw6nuzpslb/ZOmj
+   g47G1cZPFqm2RGpelJqqdOkfu3NPiBwIFPp6DfH40IU47tl+c3HHN687J
+   thSbqs0S3Tx+gXZCZqPLUejZJq8ekzH7sCctsZoBoFGGUmLXxBYTtksfE
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="253808334"
+X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
+   d="scan'208";a="253808334"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 10:56:33 -0700
+X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
+   d="scan'208";a="572224825"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.56.27])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 10:56:29 -0700
+Message-ID: <46470b7f-377b-5192-60c6-8dac2fdd196e@intel.com>
+Date:   Mon, 23 May 2022 20:56:23 +0300
 MIME-Version: 1.0
-References: <20220523052810.24767-1-duoming@zju.edu.cn>
-In-Reply-To: <20220523052810.24767-1-duoming@zju.edu.cn>
-From:   Brian Norris <briannorris@chromium.org>
-Date:   Mon, 23 May 2022 10:55:49 -0700
-X-Gmail-Original-Message-ID: <CA+ASDXNqYPknYUQ9D3JQBx0S__-0dTQZGg_+aoJJOt7y7japNA@mail.gmail.com>
-Message-ID: <CA+ASDXNqYPknYUQ9D3JQBx0S__-0dTQZGg_+aoJJOt7y7japNA@mail.gmail.com>
-Subject: Re: [PATCH v3] mwifiex: fix sleep in atomic context bugs caused by dev_coredumpv
-To:     Duoming Zhou <duoming@zju.edu.cn>
-Cc:     linux-wireless <linux-wireless@vger.kernel.org>,
-        amit karwar <amitkarwar@gmail.com>,
-        Ganapathi Bhat <ganapathi017@gmail.com>,
-        Sharvari Harisangam <sharvari.harisangam@nxp.com>,
-        Xinming Hu <huxinming820@gmail.com>, kvalo@kernel.org,
-        "David S. Miller" <davem@davemloft.net>, edumazet@google.com,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "<netdev@vger.kernel.org>" <netdev@vger.kernel.org>,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Johannes Berg <johannes@sipsolutions.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.9.1
+Subject: Re: [PATCH V2 5/6] perf kvm report: Add guest_code support
+Content-Language: en-US
+To:     Andi Kleen <ak@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>, Leo Yan <leo.yan@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        kvm@vger.kernel.org
+References: <20220517131011.6117-1-adrian.hunter@intel.com>
+ <20220517131011.6117-6-adrian.hunter@intel.com>
+ <2ff19ce9-98e3-7867-9762-ffae049f1d9b@linux.intel.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <2ff19ce9-98e3-7867-9762-ffae049f1d9b@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ Johannes (you should check MAINTAINERS; devcoredump has a specified
-maintainer)
+On 23/05/22 18:54, Andi Kleen wrote:
+> 
+> On 5/17/2022 6:10 AM, Adrian Hunter wrote:
+>> Add an option to indicate that guest code can be found in the hypervisor
+>> process
+> 
+> Sorry for harping on this, but is it correct that this assumes that the code is still at the original location at decode time?
 
-On Sun, May 22, 2022 at 10:29 PM Duoming Zhou <duoming@zju.edu.cn> wrote:
->
-> There are sleep in atomic context bugs when uploading device dump
-> data in mwifiex. The root cause is that dev_coredumpv could not
-> be used in atomic contexts, because it calls dev_set_name which
-> include operations that may sleep. The call tree shows execution
-> paths that could lead to bugs:
->
->    (Interrupt context)
-> fw_dump_timer_fn
->   mwifiex_upload_device_dump
->     dev_coredumpv(..., GFP_KERNEL)
->       dev_coredumpm()
->         kzalloc(sizeof(*devcd), gfp); //may sleep
->         dev_set_name
->           kobject_set_name_vargs
->             kvasprintf_const(GFP_KERNEL, ...); //may sleep
->             kstrdup(s, GFP_KERNEL); //may sleep
+No, at decode time, the code is found in the hypervisor dso.
 
-I was only half paying attention to this patch earlier, but I realize
-one source of my confusion: you're blaming the fix wrong. This piece
-of code was only added for mwifiex's USB support; the SDIO/PCIe
-support is totally fine, as we perform the dump from a worker, not a
-timer. So, you have the Fixes tag wrong.
+> 
+> If yes we need some warnings for this, something like:
+> 
+> This only works when the code is still available in the riginal memory location at decode time. This is typically the case for kernel code (unless modules are unloaded). 
 
-> In order to let dev_coredumpv support atomic contexts, this patch
-> changes the gfp_t parameter of kvasprintf_const and kstrdup in
-> kobject_set_name_vargs from GFP_KERNEL to GFP_ATOMIC. What's more,
-> In order to mitigate bug, this patch changes the gfp_t parameter
-> of dev_coredumpv from GFP_KERNEL to GFP_ATOMIC.
->
-> Fixes: 57670ee882d4 ("mwifiex: device dump support via devcoredump framework")
+In this scenario, the VM does not have a kernel.
 
-That's wrong. Should be:
+Note, there is an existing method to trace a guest kernel as described here:
 
-Fixes: f5ecd02a8b20 mwifiex: device dump support for usb interface
+	https://www.man7.org/linux/man-pages/man1/perf-intel-pt.1.html#TRACING_VIRTUAL_MACHINES
 
-> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-> ---
-> Changes in v3:
->   - Let dev_coredumpv support atomic contexts.
->
->  drivers/net/wireless/marvell/mwifiex/main.c | 2 +-
->  lib/kobject.c                               | 4 ++--
+For user programs it only works as long as there is no memory pressure which might cause the memory to be reused.
 
-You almost definitely want to split this in two. One to fix
-devcoredump to _really_ support the gfp arg (or else to drop it), and
-one to start using it appropriately in mwifiex.
+In this scenario, there are also no user programs in the VM, only functions from the hypervisor.
 
->  2 files changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/net/wireless/marvell/mwifiex/main.c b/drivers/net/wireless/marvell/mwifiex/main.c
-> index ace7371c477..258906920a2 100644
-> --- a/drivers/net/wireless/marvell/mwifiex/main.c
-> +++ b/drivers/net/wireless/marvell/mwifiex/main.c
-> @@ -1116,7 +1116,7 @@ void mwifiex_upload_device_dump(struct mwifiex_adapter *adapter)
->         mwifiex_dbg(adapter, MSG,
->                     "== mwifiex dump information to /sys/class/devcoredump start\n");
->         dev_coredumpv(adapter->dev, adapter->devdump_data, adapter->devdump_len,
-> -                     GFP_KERNEL);
-> +                     GFP_ATOMIC);
+For dynamically generated (JITed) code it might be rather unreliable unless the hypervisor is SIGSTOPed during decoding.
+> 
 
-As noted above, PCIe and SDIO support is working just fine. Seems a
-bit much to force it to be GFP_ATOMIC in those cases.
 
-Maybe you also need a gfp arg for mwifiex_upload_device_dump()?
 
-Brian
-
->         mwifiex_dbg(adapter, MSG,
->                     "== mwifiex dump information to /sys/class/devcoredump end\n");
->

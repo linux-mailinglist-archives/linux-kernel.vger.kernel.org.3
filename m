@@ -2,100 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B8D15307F7
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 05:10:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 065C25307FB
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 05:13:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354286AbiEWDKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 22 May 2022 23:10:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40316 "EHLO
+        id S229870AbiEWDNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 22 May 2022 23:13:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354226AbiEWDKC (ORCPT
+        with ESMTP id S1354682AbiEWDNi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 22 May 2022 23:10:02 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F7633EAF;
-        Sun, 22 May 2022 20:10:01 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 22CEC5C0097;
-        Sun, 22 May 2022 23:09:58 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Sun, 22 May 2022 23:09:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1653275398; x=
-        1653361798; bh=dDu98oTe18z7O2jWYV61FHk7bMxBVeuTHkFzuRc4l2I=; b=A
-        5rzXkf8VEbFuqG3COPwI5cO7JvJl0Xb2zetemlbHxHZzCxZ7U3lay1YkU0JqXIOM
-        BTdSBel30BYkVTnyyoTLf+Y5xAZT/oKCqMFnQJ7/WUCp4eeam/PZBTkM29MuMF6i
-        ++oVd2bkY8cIgZz3YMnXUfElHH7lbd7sgv3vVmQyzngycFGJV74L5Lp3QHM293kV
-        XByYOPcxt5LNBe2smN9nvz5+gY7KxBUUN3IdNoHkcfR1QmYZd1mejLby2T8lXagS
-        /7Hpos7Z8PaYFbRPtdMB+m9+DVXuxOOolKbtroRt2o8tMkxzAZU8DLrhd6W/rq4n
-        z8hKDHWZMeWWSw6nSfGjw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:date:feedback-id:feedback-id:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
-        :x-me-sender:x-sasl-enc; s=fm1; t=1653275398; x=1653361798; bh=d
-        Du98oTe18z7O2jWYV61FHk7bMxBVeuTHkFzuRc4l2I=; b=MU3HsbdjJ0hb6k3X1
-        LBWxRam/mxTlamL5bIIPM887s1egKMIyLTCvzV3vybwoNDLb4uyeQLp+/aZTnqOl
-        vShHR5wETK4QT1+oVU1a/UCYlnikEM6yvARMzAhoxbEgLzC4tE+wHvSotNYvSob8
-        OfMLs95sxYz5KR0bLGrd95gGcRWRFhmqBb2D2dpOLLfUQ1BSOulqRbBCCDHPpKwR
-        L5JbFf+nWPz+Y0bsnZ1bMjdkbugWN4yyvhSls2NKp/cZwRvftEijAz74euWSqkZv
-        SeZF1j8TDyQAi15/4mLa8tCA+pMx8rcircBU2u5z4b05lbsXSaxgLVi5ZPSNHYZr
-        7U48g==
-X-ME-Sender: <xms:BPuKYrr4h0gxSVKHH5LnKOIViMR_VGxf6FPaGS_127DQdWgcJY1OqA>
-    <xme:BPuKYlofyurnw-KLoLB2qOBUo-aL6OaeSxdckJ1nsqAAYRL7JvswIN58dXbP-A-o0
-    5YE-KsjVYHH9tiWew>
-X-ME-Received: <xmr:BPuKYoONknr2C9jonBwCPPrjShOxEn1XuVOt8DaPWanpjaEnKTToSOGyVq_m0ckbkxRF3g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrieelgdeijecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefuvfhfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghmuhgv
-    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
-    frrghtthgvrhhnpefgveffteelheffjeeukedvkedviedtheevgeefkeehueeiieeuteeu
-    gfettdeggeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:BPuKYu5eMS_3MKDfGedw-8ujJYx_Q7jy3fm7zmTWFKgU3qWuQSX3qg>
-    <xmx:BPuKYq4D-5bwa52F8tF0jAyVBfYLoUvFg6auJ6GmcrT-pu0dllRpBA>
-    <xmx:BPuKYmiBfZfoVyPapko0TgZCIvcJzhfwAZfLbb4LFTCuVUD0ukA7KQ>
-    <xmx:BvuKYpRc03d5pSiEO0zWQi2M3ZJyooJVpJlmw0MQK1grF9sDjmt6bw>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 22 May 2022 23:09:55 -0400 (EDT)
-Subject: Re: [PATCH v2 1/4] regmap: provide regmap_field helpers for simple
- bit operations
-To:     Li Chen <lchen.firstlove@zohomail.com>,
-        Mark Brown <broonie@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-gpio <linux-gpio@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        linux-sunxi <linux-sunxi@lists.linux.dev>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, Chen-Yu Tsai <wens@csie.org>,
+        Sun, 22 May 2022 23:13:38 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2092.outbound.protection.outlook.com [40.107.243.92])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C6E214D3C
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 20:13:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=i00uL/mGpqrdXLDsOdJdihvnKvklHjahQkcTsk1UWx5clsnsxsf9ilxWzeDj4wOjyofdvJjUpXCjPUb+N/SPxyOJBUrUk0hOZbTvDMmHct/NLS1sWw20UmmJa1AbsOMkYCRmCAr83yKnK5eXxJazlGfLkOgIzrQ8aUAw0dQTFeTDIhttXH+Qp9eQnX00TTFN0qzQvYz+TYI5aLj0pXoz1InF/C0TuY3Qx2UPG22lg4RXomujau8qnLntcW+ABw3Z2WBwtORxw5BmA7sRzB1ivLnE/QrPmhyPUJ2iYFFX4EG42yD44X1jmdYses66H+inV5e/YHVvBXr1HyhxJWofQQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IVgVqV+8V7u/IE3PKYXbRhUyczjUR7wIKYXe/v5q6ao=;
+ b=lYVr1UeOPjOOsmgUypoDQPZh2Xv9EhoidvGKBaan/Cp2M1+S1/ooM6GYYXt1kyA0LP5NZgHn30Pqp5/QnufNYrFjkBgu14cXIokWfhLwxxhu35sAk5kPiw5Ks814Rp/mOsmYp5VgXPFPqynp+Egyaa/mr9bmk7n6PS8yLFsiNC6B3P0tmhQlKd8tKAtYHSkQrCz9GSyzlxBJZs4Nh1nK708EOC2tQhRXTure8jpHTLeYH1Q+S9rc/XA6IubH0Bqr+xFMeSGZ62L1M0l0VIqnfYscWEHQzySerdhW2f27H16cau2eOVSrw6i+wTPndqlk/cU2eWFD91k3WNQeXsknMg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=analogixsemi.com; dmarc=pass action=none
+ header.from=analogixsemi.com; dkim=pass header.d=analogixsemi.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=Analogixsemi.onmicrosoft.com; s=selector2-Analogixsemi-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IVgVqV+8V7u/IE3PKYXbRhUyczjUR7wIKYXe/v5q6ao=;
+ b=c6Tjm+FGFGoeiqNzz86uuy7phnUorclID+V8wyoFQQYzz6p0gWWp8yQ+jTYoeAe4zQqXobkT2sdXWYuMJKZsyJIEJSbhURCSjCxRiodvN9ud1rHBm78bUpckvPCA5SvxA6DvAjjYTErpDvTVSWW8T1jnl2DdTxjXylDjkRtHzgM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=analogixsemi.com;
+Received: from BY5PR04MB6739.namprd04.prod.outlook.com (2603:10b6:a03:229::8)
+ by DM5PR0401MB3509.namprd04.prod.outlook.com (2603:10b6:4:78::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.22; Mon, 23 May
+ 2022 03:13:33 +0000
+Received: from BY5PR04MB6739.namprd04.prod.outlook.com
+ ([fe80::ec96:5112:c2d5:9377]) by BY5PR04MB6739.namprd04.prod.outlook.com
+ ([fe80::ec96:5112:c2d5:9377%6]) with mapi id 15.20.5273.022; Mon, 23 May 2022
+ 03:13:33 +0000
+Date:   Mon, 23 May 2022 11:13:24 +0800
+From:   Xin Ji <xji@analogixsemi.com>
+To:     Daniel Vetter <daniel@ffwll.ch>
+Cc:     Robert Foss <robert.foss@linaro.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        David Airlie <airlied@linux.ie>, qwen@analogixsemi.com,
+        Jonas Karlman <jonas@kwiboo.se>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-References: <180e702a15f.e737e37e45859.3135149506136486394@zohomail.com>
- <180eeb93909.12110e2de60158.391061173597432851@zohomail.com>
- <180eeba3811.f7218bc260169.7323954027713751119@zohomail.com>
-From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <e96cb553-1ac7-dbd7-3086-b623511471c5@sholland.org>
-Date:   Sun, 22 May 2022 22:09:55 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Chen-Yu Tsai <wenst@chromium.org>, bliang@analogixsemi.com,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+Subject: Re: [PATCH v2 4/4] drm/bridge: anx7625: Use DPI bus type
+Message-ID: <20220523031324.GA3738288@anxtwsw-Precision-3640-Tower>
+References: <20220422084720.959271-1-xji@analogixsemi.com>
+ <20220422084720.959271-4-xji@analogixsemi.com>
+ <CAG3jFytWGSUM9mevHewdmEe-hq3JgB74s7_f0fsEQqkXr9VUHg@mail.gmail.com>
+ <CAG3jFyvEYbwkdGtiNR-6vFEXTLjcyT_viqp9qeVxFTu0PrJEVA@mail.gmail.com>
+ <CAGXv+5E1cCNWD98fMDjC38y2UztZd=PNQ+=G=wrBYfoXkswvHA@mail.gmail.com>
+ <20220425091419.GA967110@anxtwsw-Precision-3640-Tower>
+ <CAG3jFyvTim7P_y2G1Br5j3Pwz4KzvRjWgci_qQ3m_YW=3Bog8A@mail.gmail.com>
+ <CAKMK7uFHyYTnGtP+vCzo2Uan90DW-QZpPFPn5S9bQ5aPiY=qzA@mail.gmail.com>
+ <CAKMK7uHFGsPMZf2SUF4HDXo3XuOLjP3-DLfyp=gB2qpKR964Eg@mail.gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKMK7uHFGsPMZf2SUF4HDXo3XuOLjP3-DLfyp=gB2qpKR964Eg@mail.gmail.com>
+X-ClientProxiedBy: HK2PR02CA0157.apcprd02.prod.outlook.com
+ (2603:1096:201:1f::17) To BY5PR04MB6739.namprd04.prod.outlook.com
+ (2603:10b6:a03:229::8)
 MIME-Version: 1.0
-In-Reply-To: <180eeba3811.f7218bc260169.7323954027713751119@zohomail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 803b5aed-5a6e-49de-00fb-08da3c6a3824
+X-MS-TrafficTypeDiagnostic: DM5PR0401MB3509:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR0401MB35099280EC06708F923C34EBC7D49@DM5PR0401MB3509.namprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1/ChsbRHF5ImFL/t+mjmqGWZiJuW33CZFjCMBOH9iS00H9elrXmP3u/wHcfpVvK0p1LfI2ODsuzUwzVZBVxwXcZH0VYonVLtg7VKICkO+Rxxv4MVk070XBRozjtcaEqq72vt8kGZUfC+sB9CS4acCc/ZnAAzVohGeSRkYgI38iqw4ntRFKrBlPYLB4ANTAbd+H0/fC31O/X1yg1AxxXQQysFOUNELFYxMFSkpOLvMsTQ8JgcNad3mWBb/PeZTpP/JZ8dsAHrqJxQJygW5Gt5aQotSWU4d8U4v9B1vxMPqcd+Ycbxo6R59Bv8I9+eRZkqcRniObcLTt1LNiWBDEvEsxr0Jgwlj66PMiUg3UpJjqHMITqW1o/Et7K66dbJU8IgfNZ80Nh2NeuZgRZNAlYrd3UXFRv2aR7ApbR0i1a8JW0THth6uT3RQEo2f+0QXgntTFA/CX3ykLsMr7cHBRgsu1q5jHqy4mZaQqw50XrrNIu1ROomqvfRALkxVe1UUAcd1ornhQ5aBrdOt+/BSxm8stk6mnxVJA5qHVvjW1zJX75KpEAKUYjZeOa2WByazDCWf5nyMVfrfC9q2kgc8IO2jag+DuyZTDWJVNEdoRX8D4tzLDAZEGzARyTl1BjojVV525e3kAGRq296UTgIgLlEoiAwz2rPJXWZQ1m4xHIsCY4JYEX+soOsGul9FCMoHhAd9k9Jqpwyr7O48ejNztjVzJGqYmMpdxDQ/HcCZsQfY0wwEQF22UulaL0IOKQ37/qxyf54mfevo3mE2PiePqrZLYhjdRypskV1TwrJMZ42maQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR04MB6739.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(7416002)(8936002)(33656002)(66946007)(4326008)(5660300002)(83380400001)(86362001)(316002)(33716001)(8676002)(66556008)(66476007)(6916009)(2906002)(54906003)(38350700002)(9686003)(6506007)(26005)(966005)(6512007)(6666004)(6486002)(45080400002)(55236004)(53546011)(52116002)(186003)(1076003)(38100700002)(508600001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PIVf0o0XhooShCnitK4RpeZHwr9AgDe831lWB+dVyuLWGgBJbAMvqNNArIuW?=
+ =?us-ascii?Q?0cKPHurJpAgpGe8k3cjxg+C6R56gqdqMTwnwHg+pu1LISLWD0w0JLv99s0td?=
+ =?us-ascii?Q?UvtDQAy7PeFLG2vCGdIPr0m19dnRpALvsdEQ0a+dtmjEAbgX8zakJPt4q4Gt?=
+ =?us-ascii?Q?T/2GMGiSntHLCDI6HfvFix8GMd3UUujwN+IuQMKy5PXedDogW0GGRNnpZ8Ca?=
+ =?us-ascii?Q?PotSYPggSw7fTCmfqolRIw4q/VCsb3YdQw+h+uhuSBHeLxBQ+0CncL+Gs1zt?=
+ =?us-ascii?Q?3oOczqRqs3zt0vKnNcVm15DyAcgCgVfj4EskskSpgn9o6UK60qg5GZ1ReqVD?=
+ =?us-ascii?Q?PSdvj0q0utCmrJPzLp1byXpCqjJPYC8pBqA+KQZtJ3WLpO6IQd29igjTvskA?=
+ =?us-ascii?Q?/9f5JcbHopopGqQWtIItqagrCpY0Nnk5bm/EkvGrhyCOO2JPDCWDS5rUrjRo?=
+ =?us-ascii?Q?g0SEdw7XVZwoi/XlaOsZUc+N3ujoj47xOKs4zfk0ZQjhSggno5L8p3scNwR1?=
+ =?us-ascii?Q?aM936Cls9WGy6bSPp2JSBKhiuBwH0JXdXAeoO3mv8qA4uB9Yt1TZX7vRm6+u?=
+ =?us-ascii?Q?ZeEdYLH60KrBAf66RDUGgBfXZP/geuxahleeE1j3jPVA345AoBpt9O/XLaW1?=
+ =?us-ascii?Q?sScr511JJ1s3JR8+6WBb34y/KnQ7ZiyklQvvReEjamGR9Ku5hb+at0sGafXo?=
+ =?us-ascii?Q?dFjk8KOh3FW4YgeY4EtxlfW98sI1UTyujBhACH5wZ358oKTClpGLNX4lcuPy?=
+ =?us-ascii?Q?bk66yrKK+6W/RESiGTBVzgMnxZSQqPiryh3WBDfUtVC8dortOfpPbXYLdzBb?=
+ =?us-ascii?Q?0njD+4P0wd8JuC5hORU1WPSfTwEQozbB/q351NEQ36vNou4gvbVJQyqj5eoV?=
+ =?us-ascii?Q?6zEfy/yvbFiuPiKV2a6Z1I7TDXEpceKNgtEbhMz/pd4f4WVus8prqSlAcKWR?=
+ =?us-ascii?Q?xMIY09q6LwbWiZFMqtyaiq54NTdnmA8CVgFSLi4JHDmW0+uwGVKro3knk4aR?=
+ =?us-ascii?Q?xU+tAP+FcEbhvy+3N4icaAk/OpPbj08sHOD4yv7CAIHUBP1TBac5UYMalZj4?=
+ =?us-ascii?Q?ToaTHorOtN65DIo2BizzCotNsD77+6ZUstpXd3TUFAp4fWvVtiLbG1XwFhkv?=
+ =?us-ascii?Q?50B8nj8kM7DJL+ddK1HOJlVM2bHUJbs+gk9vaxGlsGD2s9q4JOVIssXpj+UG?=
+ =?us-ascii?Q?ixfD17cgwzjDgvVwVE+6uU2Ztb0fbZoSjxKmrgwG8uhNiSBzeIhKb3h6tkl6?=
+ =?us-ascii?Q?oU7OJXt4Rlb0dDZdBdc8d+JsLYDK5P1798PP6S7SyV3VaDUDwzRbtdaBWc2l?=
+ =?us-ascii?Q?m8hao8TA4L+iZ1uoqLtE9lQaZ/Fv4OWRAnwF8GYmNIQbAKFDoc6k3cmhLxMI?=
+ =?us-ascii?Q?BUg5bVs7x1EYzx24r3UYUC1/VkD0MlSMzqjvXq/9MGR7G6wWwokyG/9PydhU?=
+ =?us-ascii?Q?wE/8hvg22GMdw0WMfn6F0dpRzm/HPBipTeoVUc4l8MPcniEtjVRBlFwddbbJ?=
+ =?us-ascii?Q?isyk0KJAdE5jxxB9tRwysiOESVVa9BtYdwCFMgL3m0vSQ0Yr8bVsvCq9pBL+?=
+ =?us-ascii?Q?3+QLRKcZiCwz7VBkXj2zYVyDt7sIFjinNmm9MrxqflKCYo/P71E8AVRRXlnD?=
+ =?us-ascii?Q?6gDNtCZzmu24g4TOLNPD8ynFWkKkt9AoAlbYZjOBGsYS8bdWN1KnGM1D2a7g?=
+ =?us-ascii?Q?/Ct1Wg+GTgVXhbqoTiDvrbNAqR8l0gdiRHxhpl7lz4hpYj0L1J3AOPBhzMCv?=
+ =?us-ascii?Q?xNG6KoHjJw=3D=3D?=
+X-OriginatorOrg: analogixsemi.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 803b5aed-5a6e-49de-00fb-08da3c6a3824
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR04MB6739.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2022 03:13:33.6960
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: b099b0b4-f26c-4cf5-9a0f-d5be9acab205
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 47C/ln+CwoClgbEtS+F7lsSAlPDjjrRKjHrqJqY3B1wD5h/J2xvdkXH/eGRZUYHYsSCtujSSUv2wysi3DIx08g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR0401MB3509
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -103,120 +131,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Sat, May 21, 2022 at 06:28:42PM +0200, Daniel Vetter wrote:
+> On Sat, 21 May 2022 at 18:07, Daniel Vetter <daniel@ffwll.ch> wrote:
+> >
+> > On Tue, 17 May 2022 at 18:09, Robert Foss <robert.foss@linaro.org> wrote:
+> > >
+> > > On Mon, 25 Apr 2022 at 11:14, Xin Ji <xji@analogixsemi.com> wrote:
+> > > >
+> > > > On Mon, Apr 25, 2022 at 04:24:50PM +0800, Chen-Yu Tsai wrote:
+> > > > > On Fri, Apr 22, 2022 at 10:13 PM Robert Foss <robert.foss@linaro.org> wrote:
+> > > > > >
+> > > > > > On Fri, 22 Apr 2022 at 16:01, Robert Foss <robert.foss@linaro.org> wrote:
+> > > > > > >
+> > > > > > > On Fri, 22 Apr 2022 at 10:49, Xin Ji <xji@analogixsemi.com> wrote:
+> > > > > > > >
+> > > > > > > > As V4L2_FWNODE_BUS_TYPE_PARALLEL not properly descript for DPI
+> > > > > > > > interface, this patch use new defined V4L2_FWNODE_BUS_TYPE_DPI for it.
+> > > > > > > >
+> > > > > > > > Fixes: fd0310b6fe7d ("drm/bridge: anx7625: add MIPI DPI input feature")
+> > > > > > > > Signed-off-by: Xin Ji <xji@analogixsemi.com>
+> > > > > > > > ---
+> > > > > > > >  drivers/gpu/drm/bridge/analogix/anx7625.c | 8 ++++----
+> > > > > > > >  1 file changed, 4 insertions(+), 4 deletions(-)
+> > > > > > > >
+> > > > > > > > diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > > > > > > > index 376da01243a3..71df977e8f53 100644
+> > > > > > > > --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > > > > > > > +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > > > > > > > @@ -1623,14 +1623,14 @@ static int anx7625_parse_dt(struct device *dev,
+> > > > > > > >
+> > > > > > > >         anx7625_get_swing_setting(dev, pdata);
+> > > > > > > >
+> > > > > > > > -       pdata->is_dpi = 1; /* default dpi mode */
+> > > > > > > > +       pdata->is_dpi = 0; /* default dsi mode */
+> > > > > > > >         pdata->mipi_host_node = of_graph_get_remote_node(np, 0, 0);
+> > > > > > > >         if (!pdata->mipi_host_node) {
+> > > > > > > >                 DRM_DEV_ERROR(dev, "fail to get internal panel.\n");
+> > > > > > > >                 return -ENODEV;
+> > > > > > > >         }
+> > > > > > > >
+> > > > > > > > -       bus_type = V4L2_FWNODE_BUS_TYPE_PARALLEL;
+> > > > > > > > +       bus_type = 0;
+> > > > > > > >         mipi_lanes = MAX_LANES_SUPPORT;
+> > > > > > > >         ep0 = of_graph_get_endpoint_by_regs(np, 0, 0);
+> > > > > > > >         if (ep0) {
+> > > > > > > > @@ -1640,8 +1640,8 @@ static int anx7625_parse_dt(struct device *dev,
+> > > > > > > >                 mipi_lanes = of_property_count_u32_elems(ep0, "data-lanes");
+> > > > > > > >         }
+> > > > > > > >
+> > > > > > > > -       if (bus_type == V4L2_FWNODE_BUS_TYPE_PARALLEL) /* bus type is Parallel(DSI) */
+> > > > > > > > -               pdata->is_dpi = 0;
+> > > > > > > > +       if (bus_type == V4L2_FWNODE_BUS_TYPE_DPI) /* bus type is DPI */
+> > > > > > > > +               pdata->is_dpi = 1;
+> > > > > > > >
+> > > > > > > >         pdata->mipi_lanes = mipi_lanes;
+> > > > > > > >         if (pdata->mipi_lanes > MAX_LANES_SUPPORT || pdata->mipi_lanes <= 0)
+> > > > > > >
+> > > > > > > Reviewed-by: Robert Foss <robert.foss@linaro.org>
+> > > > > >
+> > > > > > Acked-by: Robert Foss <robert.foss@linaro.org>
+> > > > >
+> > > > > Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+> > > > >
+> > > > > Confirmed this fixes the display on Juniper (Acer Chromebook Spin 311) on
+> > > > > mainline (next-20220422).
+> > > > >
+> > > > > Xin, in the future, please send the whole series to all recipients of
+> > > > > all patches listed by get_maintainers.pl, not just the recipients of
+> > > > > each patch. In the case of this series, they should have been sent
+> > > > > to all of the mailing lists (media, devicetree, dri-devel) so that
+> > > > > everyone has the same, full view of the patches.
+> > > > Hi ChenYu, OK, I'll send to all media, devicetree, dri-devel next time.
+> > > > Thanks,
+> > > > Xin
+> > > > >
+> > > > > ChenYu
+> > >
+> > > Applied 3/4 + 4/4 to drm-misc-next.
+> >
+> > This patch doesn't even compile. Can you pls fix this up asap? Also
+> > pls compile-test before pushing ...
+> 
+> Marek says the prerequisite landed through linux-media, and that's why
+> it compilers on linux-next but not in drm-misc-next.
+> 
+> Don't do that.
+> 
+> Instead:
+> - merge all patches through one branch, with the foreign patches acked
+> for that merge patch
+> - wait until you can backmerge all the dependencies
+> - do a topic branch
+> 
+> This probably needs to be reverted here and instead merged through
+> linux-media. Or you wait until -rc1 and then apply it to
+> drm-misc-next.
+> -Daniel
+Hi Daniel, I use git send-email to upstream patch and automatically
+generated reviewer list, so patch 1/4 and 2/4 send to linux-media, and
+these 2 patches already merged in linux-media.
 
-On 5/22/22 9:23 PM, Li Chen wrote:
-> From: Li Chen <lchen@ambarella.com>
-> 
-> We have set/clear/test operations for regmap, but not for regmap_field yet.
-> So let's introduce regmap_field helpers too.
-> 
-> In many instances regmap_field_update_bits() is used for simple bit setting
-> and clearing. In these cases the last argument is redundant and we can
-> hide it with a static inline function.
-> 
-> This adds three new helpers for simple bit operations: set_bits,
-> clear_bits and test_bits (the last one defined as a regular function).
-> 
-> Signed-off-by: Li Chen <lchen@ambarella.com>
-> ---
->  drivers/base/regmap/regmap.c | 22 +++++++++++++++++++++
->  include/linux/regmap.h       | 37 ++++++++++++++++++++++++++++++++++++
->  2 files changed, 59 insertions(+)
-> 
-> diff --git a/drivers/base/regmap/regmap.c b/drivers/base/regmap/regmap.c
-> index 5e12f7cb5147..a37d6041b7bd 100644
-> --- a/drivers/base/regmap/regmap.c
-> +++ b/drivers/base/regmap/regmap.c
-> @@ -2208,6 +2208,28 @@ int regmap_field_update_bits_base(struct regmap_field *field,
->  }
->  EXPORT_SYMBOL_GPL(regmap_field_update_bits_base);
->  
-> +/**
-> + * regmap_field_test_bits() - Check if all specified bits are set in a
-> + *                            register field.
-> + *
-> + * @field: Register field to operate on
-> + * @bits: Bits to test
-> + *
-> + * Returns -1 if the underlying regmap_field_read() fails, 0 if at least one of the
-> + * tested bits is not set and 1 if all tested bits are set.
-> + */
-> +int regmap_field_test_bits(struct regmap_field *field, unsigned int bits)
-> +{
-> +	unsigned int val, ret;
-> +
-> +	ret = regmap_field_read(field, &val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return (val & bits) == bits;
-> +}
-> +EXPORT_SYMBOL_GPL(regmap_field_test_bits);
-> +
->  /**
->   * regmap_fields_update_bits_base() - Perform a read/modify/write cycle a
->   *                                    register field with port ID
-> diff --git a/include/linux/regmap.h b/include/linux/regmap.h
-> index de81a94d7b30..10b410734d9e 100644
-> --- a/include/linux/regmap.h
-> +++ b/include/linux/regmap.h
-> @@ -1324,6 +1324,22 @@ static inline int regmap_field_update_bits(struct regmap_field *field,
->  					     NULL, false, false);
->  }
->  
-> +static inline int regmap_field_set_bits(struct regmap_field *field,
-> +					unsigned int bits)
-> +{
-> +	return regmap_field_update_bits_base(field, bits, 0, NULL, false,
-> +					     false);
-> +}
-> +
-> +static inline int regmap_field_clear_bits(struct regmap_field *field,
-> +					  unsigned int bits)
-> +{
-> +	return regmap_field_update_bits_base(field, bits, bits, NULL, false,
-> +					     false);
-
-The contents of these two functions are swapped when compared to their names.
-
-Regards,
-Samuel
-
-> +}
-> +
-> +int regmap_field_test_bits(struct regmap_field *field, unsigned int bits);
-> +
->  static inline int
->  regmap_field_force_update_bits(struct regmap_field *field,
->  			       unsigned int mask, unsigned int val)
-> @@ -1757,6 +1773,27 @@ regmap_field_force_update_bits(struct regmap_field *field,
->  	return -EINVAL;
->  }
->  
-> +static inline int regmap_field_set_bits(struct regmap_field *field,
-> +					unsigned int bits)
-> +{
-> +	WARN_ONCE(1, "regmap API is disabled");
-> +	return -EINVAL;
-> +}
-> +
-> +static inline int regmap_field_clear_bits(struct regmap_field *field,
-> +					  unsigned int bits)
-> +{
-> +	WARN_ONCE(1, "regmap API is disabled");
-> +	return -EINVAL;
-> +}
-> +
-> +static inline int regmap_field_test_bits(struct regmap_field *field,
-> +					 unsigned int bits)
-> +{
-> +	WARN_ONCE(1, "regmap API is disabled");
-> +	return -EINVAL;
-> +}
-> +
->  static inline int regmap_fields_write(struct regmap_field *field,
->  				      unsigned int id, unsigned int val)
->  {
-> 
-
+Thanks,
+Xin
+> -- 
+> Daniel Vetter
+> Software Engineer, Intel Corporation
+> https://nam10.safelinks.protection.outlook.com/?url=http%3A%2F%2Fblog.ffwll.ch%2F&amp;data=05%7C01%7Cxji%40analogixsemi.com%7C80ac2fb262a5407ded4208da3b46ff62%7Cb099b0b4f26c4cf59a0fd5be9acab205%7C0%7C0%7C637887473373535347%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=lYWBVSLPiHKN%2BYnyWqgeM5cgH17OjxpXGVQ1kt2bZrU%3D&amp;reserved=0

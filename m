@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEE1153170F
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:52:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DDA9531B9D
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 22:56:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243010AbiEWSJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 14:09:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39730 "EHLO
+        id S244069AbiEWRnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 13:43:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243512AbiEWRiQ (ORCPT
+        with ESMTP id S242619AbiEWR1t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 13:38:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F3D36D97B;
-        Mon, 23 May 2022 10:32:29 -0700 (PDT)
+        Mon, 23 May 2022 13:27:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FEA1814A8;
+        Mon, 23 May 2022 10:23:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 22AFAB81235;
-        Mon, 23 May 2022 17:31:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7595BC34115;
-        Mon, 23 May 2022 17:31:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F24C861523;
+        Mon, 23 May 2022 17:13:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0989C385A9;
+        Mon, 23 May 2022 17:13:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653327075;
-        bh=CjDagl7s1yUewHYXWMFrzcpaB6LIIM2ZSZMxbuBP6VU=;
+        s=korg; t=1653326008;
+        bh=EzwhwizX+Oc7mpCro2d+6Hzgld2XnK+PrPAtrQpl7UI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DTMlqamM/o+hCbv7QNHEp9C+uP8ySCVx4P+oP4DOxIKGPWXhqFXOPFAjOR/HDEA33
-         tPMRQBGCo6hBBYQGIIaS23h/8YgJaQNkKxTL0pjvumBAaLdB1mRAFxE6FR4V0VToee
-         QI86aiV75IsY7Iy2X8hOmstZe5+Tri77DhIQ/QLc=
+        b=HsuZBP40IhysrV0wMcmitjvUQBzN8v0Sth7bKJToMTJWodCtn7hVeIuMBBWkxbuGp
+         zfCYWNcrhTj0l+Qs04ioakKWXBmnqbKJNk6m/J+8oDEnaDWELxJAX7fCUnHx5FlPLW
+         dIUal5wYggovoNJvEfyHcJUJWT48TY4JotAmpGDg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
+        Zixuan Fu <r33s3n6@gmail.com>, Paolo Abeni <pabeni@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 149/158] net: stmmac: fix missing pci_disable_device() on error in stmmac_pci_probe()
+Subject: [PATCH 5.4 39/68] net: vmxnet3: fix possible NULL pointer dereference in vmxnet3_rq_cleanup()
 Date:   Mon, 23 May 2022 19:05:06 +0200
-Message-Id: <20220523165854.831016577@linuxfoundation.org>
+Message-Id: <20220523165809.048498932@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523165830.581652127@linuxfoundation.org>
-References: <20220523165830.581652127@linuxfoundation.org>
+In-Reply-To: <20220523165802.500642349@linuxfoundation.org>
+References: <20220523165802.500642349@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,43 +55,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Zixuan Fu <r33s3n6@gmail.com>
 
-[ Upstream commit 0807ce0b010418a191e0e4009803b2d74c3245d5 ]
+[ Upstream commit edf410cb74dc612fd47ef5be319c5a0bcd6e6ccd ]
 
-Switch to using pcim_enable_device() to avoid missing pci_disable_device().
+In vmxnet3_rq_create(), when dma_alloc_coherent() fails,
+vmxnet3_rq_destroy() is called. It sets rq->rx_ring[i].base to NULL. Then
+vmxnet3_rq_create() returns an error to its callers mxnet3_rq_create_all()
+-> vmxnet3_change_mtu(). Then vmxnet3_change_mtu() calls
+vmxnet3_force_close() -> dev_close() in error handling code. And the driver
+calls vmxnet3_close() -> vmxnet3_quiesce_dev() -> vmxnet3_rq_cleanup_all()
+-> vmxnet3_rq_cleanup(). In vmxnet3_rq_cleanup(),
+rq->rx_ring[ring_idx].base is accessed, but this variable is NULL, causing
+a NULL pointer dereference.
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Link: https://lore.kernel.org/r/20220510031316.1780409-1-yangyingliang@huawei.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+To fix this possible bug, an if statement is added to check whether
+rq->rx_ring[0].base is NULL in vmxnet3_rq_cleanup() and exit early if so.
+
+The error log in our fault-injection testing is shown as follows:
+
+[   65.220135] BUG: kernel NULL pointer dereference, address: 0000000000000008
+...
+[   65.222633] RIP: 0010:vmxnet3_rq_cleanup_all+0x396/0x4e0 [vmxnet3]
+...
+[   65.227977] Call Trace:
+...
+[   65.228262]  vmxnet3_quiesce_dev+0x80f/0x8a0 [vmxnet3]
+[   65.228580]  vmxnet3_close+0x2c4/0x3f0 [vmxnet3]
+[   65.228866]  __dev_close_many+0x288/0x350
+[   65.229607]  dev_close_many+0xa4/0x480
+[   65.231124]  dev_close+0x138/0x230
+[   65.231933]  vmxnet3_force_close+0x1f0/0x240 [vmxnet3]
+[   65.232248]  vmxnet3_change_mtu+0x75d/0x920 [vmxnet3]
+...
+
+Fixes: d1a890fa37f27 ("net: VMware virtual Ethernet NIC driver: vmxnet3")
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+Signed-off-by: Zixuan Fu <r33s3n6@gmail.com>
+Link: https://lore.kernel.org/r/20220514050711.2636709-1-r33s3n6@gmail.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/stmicro/stmmac/stmmac_pci.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/net/vmxnet3/vmxnet3_drv.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_pci.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_pci.c
-index fcf17d8a0494..644bb54f5f02 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_pci.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_pci.c
-@@ -181,7 +181,7 @@ static int stmmac_pci_probe(struct pci_dev *pdev,
- 		return -ENOMEM;
+diff --git a/drivers/net/vmxnet3/vmxnet3_drv.c b/drivers/net/vmxnet3/vmxnet3_drv.c
+index b71a019e9867..609f65530b9b 100644
+--- a/drivers/net/vmxnet3/vmxnet3_drv.c
++++ b/drivers/net/vmxnet3/vmxnet3_drv.c
+@@ -1586,6 +1586,10 @@ vmxnet3_rq_cleanup(struct vmxnet3_rx_queue *rq,
+ 	u32 i, ring_idx;
+ 	struct Vmxnet3_RxDesc *rxd;
  
- 	/* Enable pci device */
--	ret = pci_enable_device(pdev);
-+	ret = pcim_enable_device(pdev);
- 	if (ret) {
- 		dev_err(&pdev->dev, "%s: ERROR: failed to enable device\n",
- 			__func__);
-@@ -241,8 +241,6 @@ static void stmmac_pci_remove(struct pci_dev *pdev)
- 		pcim_iounmap_regions(pdev, BIT(i));
- 		break;
- 	}
--
--	pci_disable_device(pdev);
- }
- 
- static int __maybe_unused stmmac_pci_suspend(struct device *dev)
++	/* ring has already been cleaned up */
++	if (!rq->rx_ring[0].base)
++		return;
++
+ 	for (ring_idx = 0; ring_idx < 2; ring_idx++) {
+ 		for (i = 0; i < rq->rx_ring[ring_idx].size; i++) {
+ #ifdef __BIG_ENDIAN_BITFIELD
 -- 
 2.35.1
 

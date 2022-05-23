@@ -2,247 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6E46531447
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:25:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B15E531409
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 18:25:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238703AbiEWQTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 12:19:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39916 "EHLO
+        id S238723AbiEWQTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 12:19:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238666AbiEWQTA (ORCPT
+        with ESMTP id S238699AbiEWQT3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 12:19:00 -0400
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 943DC6622C;
-        Mon, 23 May 2022 09:18:51 -0700 (PDT)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-e93bbb54f9so19029520fac.12;
-        Mon, 23 May 2022 09:18:51 -0700 (PDT)
+        Mon, 23 May 2022 12:19:29 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1F267D05
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:19:18 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id wh22so29771120ejb.7
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:19:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=hQcgMTFMJYnyHnemQfKiYLe9sphIr8EWIxdDBht7rsM=;
-        b=dieU2w40td4lVVuMYpChFlJijG4d/mRbTWuTkfLJO+rd5dTHUvtF90DCLbRWn9VOrL
-         mX//C2UJB8sj+RRFEC7+9H6TeuH3ZkjwcV6Ys77lSzWNLiwcaAveA6r1ER9SXwQFWx40
-         8A8C6ttPUP15uYrXIkcPpWNJN6BalKyF700rzIrWCaW0mpgkmLMRKgx3ijlQYI10tpQ0
-         ECnQfMulZuNzDQ1dJ7D76v52tei6kEqGPhmr6vo0EACV7xKUsISIOIiGG/K+gr5eJqej
-         4vUBViwvjS/DYwYy9utos9soLpsGYqRI8C4FF24KynA4nL2nCTrF7Jy+JbkOixmA9hYF
-         9NNw==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rYw/iw5eqrvTTFbNpKOcnoOJ2Kv/wRzV7gaeDkDmyZQ=;
+        b=KDH1oST/AiaJHfrLYMayk+iaWXCj9iTxFERlgdeUB03jl/+nfweM5fzOIq8/qjW08r
+         3Fj9imjyG3zRV9STnTobKyogHyXmWveRTF4GF4xagV61AHpplVxFI5Y6xaMHgxAaykhW
+         ws3hZc9n0E3Ro2t3IZkwttto2+eI3UteEWiaM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=hQcgMTFMJYnyHnemQfKiYLe9sphIr8EWIxdDBht7rsM=;
-        b=eAb/itcx0EhK3WXHwyjCc9IiuMWtUaqCLpipMKnRCmYzZ77ZWJPHJGR/SbT3W5ALH4
-         gTJANFdra6z1PyRSaQN3Gv23gFAMM81S1VutJQyfWbdA6+Wmxs29AQOO/0OIXtjZPYPx
-         fjfvL1rtPnoeVXMgIhHLgomdok0vHB0zGjFFA2ixOL/HmzgC8a5DfCNVqBOqaVeYbT0m
-         kAKvPyt8tfiQ8s4D9GqVkJyA//KTLifLt3u7/CLfDoIGtmUWJgzG/MT1e8TE+TeJ3RHg
-         ySwxsAuthBzR++zgGSip+eR0LygEoGU/c4CwoDcbZlmycvsmsvWV3A7Y1xREXK97V75q
-         pf6g==
-X-Gm-Message-State: AOAM532ViHxr1dt9soeUkDNz1F+IFg6rOnUc3+vINQzb9Eotz38Aul2M
-        tv77YPCw5Q7M7dSibNThrwL+O7+DxeeCyA==
-X-Google-Smtp-Source: ABdhPJzEeMLEErIRmEqmOqh6pwlmTVu5iDNzBHUXaHlkhoYmpIg+hOdekbZa4kGCcVymO31EtbGIsw==
-X-Received: by 2002:a05:6870:659e:b0:f1:8d7a:9f36 with SMTP id fp30-20020a056870659e00b000f18d7a9f36mr12120928oab.217.1653322730772;
-        Mon, 23 May 2022 09:18:50 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i1-20020a9d6501000000b0060ae002cd3bsm4053518otl.55.2022.05.23.09.18.47
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rYw/iw5eqrvTTFbNpKOcnoOJ2Kv/wRzV7gaeDkDmyZQ=;
+        b=Qwr+Wq3p7s5lYL//kpYGFy/1Xr/Sin7CDPNkO40qS0QgeYOpUc/OVv7OYBIi1qJ3em
+         DDI9/fdZEJwFvD5ru+T+3csY47sPvESbLYTssi4L3HX/9EauWEFxyU9+BhjKGOwlKbRV
+         2NNvOR4LvV5H98Ux7PDXmAX8hrkkHRwn2Twe3rYCTiyvPJKLHlU+Ob56HkJg319DbsnZ
+         KxW6oG+RPLp512YLHrHEqpu8PEHV/921z1kH+OXOkFyB5zTXcz7CFypNnq31Sbfyr3N9
+         wBKz28mRWXXWbK+r/p7znjvTUBhlUCrGgRn9BQ6GerKVlvB05t5PO6NR1yR9p1ssrvAW
+         E6pQ==
+X-Gm-Message-State: AOAM531SKOig2nuwjamlToPQTCQ5e5FJYJbTUGCWnC69uCP4wlPgxrNU
+        OCY8C12v8viL8sCv17kjWxVCSwnK8N3h6vJa
+X-Google-Smtp-Source: ABdhPJxuHkZbeSp2gdtttvR9hql81s5ykp64PKQLJPQqmVtYj/ReTM8N5fvxeA8bLV+X2d5BrLdRPw==
+X-Received: by 2002:a17:906:c14c:b0:6f4:6e30:9ace with SMTP id dp12-20020a170906c14c00b006f46e309acemr20105551ejc.678.1653322757542;
+        Mon, 23 May 2022 09:19:17 -0700 (PDT)
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com. [209.85.221.53])
+        by smtp.gmail.com with ESMTPSA id my44-20020a1709065a6c00b006f3ef214de4sm5811289ejc.74.2022.05.23.09.19.16
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 May 2022 09:18:49 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <0ecdb673-b9a8-40af-7dee-2ba7fe739e5f@roeck-us.net>
-Date:   Mon, 23 May 2022 09:18:47 -0700
+        Mon, 23 May 2022 09:19:17 -0700 (PDT)
+Received: by mail-wr1-f53.google.com with SMTP id k30so22099367wrd.5
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 09:19:16 -0700 (PDT)
+X-Received: by 2002:a05:6000:1548:b0:20f:c4e3:637a with SMTP id
+ 8-20020a056000154800b0020fc4e3637amr10495998wry.513.1653322756477; Mon, 23
+ May 2022 09:19:16 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Content-Language: en-US
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christoph Hellwig <hch@lst.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
-        Guo Ren <guoren@linux.alibaba.com>
-References: <20220322144003.2357128-1-guoren@kernel.org>
- <20220322144003.2357128-21-guoren@kernel.org>
- <20220523054550.GA1511899@roeck-us.net>
- <CAJF2gTSCcYif4DEpvrJ6d02no3CU_viyE+OkhhjCV3VsGmcT5Q@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH V9 20/20] riscv: compat: Add COMPAT Kbuild skeletal
- support
-In-Reply-To: <CAJF2gTSCcYif4DEpvrJ6d02no3CU_viyE+OkhhjCV3VsGmcT5Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220520143502.v4.1.I71e42c6174f1cec17da3024c9f73ba373263b9b6@changeid>
+ <20220520143502.v4.5.Ie8713bc0377672ed8dd71189e66fc0b77226fb85@changeid> <a2bcac04-23ad-d1ae-84f1-924c4dbad42b@linaro.org>
+In-Reply-To: <a2bcac04-23ad-d1ae-84f1-924c4dbad42b@linaro.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 23 May 2022 09:19:03 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WgYbD9GN_wiR29ikZMzEjKUSZGH588+nnyd3O-dNgChQ@mail.gmail.com>
+Message-ID: <CAD=FV=WgYbD9GN_wiR29ikZMzEjKUSZGH588+nnyd3O-dNgChQ@mail.gmail.com>
+Subject: Re: [PATCH v4 5/5] dt-bindings: arm: qcom: Add more sc7180 Chromebook
+ board bindings
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Alexandru M Stan <amstan@chromium.org>,
+        patches@lists.linux.dev,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Julius Werner <jwerner@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        "Joseph S . Barrera III" <joebar@chromium.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Stephen Boyd <sboyd@codeaurora.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/23/22 08:18, Guo Ren wrote:
-> I tested Palmer's branch, it's okay:
-> 8810d7feee5a (HEAD -> for-next, palmer/for-next) riscv: Don't output a
-> bogus mmu-type on a no MMU kernel
-> 
-> I also tested linux-next, it's okay:
-> 
-> rv64_rootfs:
-> # uname -a
-> Linux buildroot 5.18.0-next-20220523 #7 SMP Mon May 23 11:15:17 EDT
-> 2022 riscv64 GNU/Linux
-> #
+Hi,
 
-That is is ok with one setup doesn't mean it is ok with
-all setups. It is not ok with my root file system (from
-https://github.com/groeck/linux-build-test/tree/master/rootfs/riscv64),
-with qemu v6.2.
+On Sun, May 22, 2022 at 1:01 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 20/05/2022 23:38, Douglas Anderson wrote:
+> > This adds board bindings for boards that are downstream but not quite
+> > upstream yet.
+> >
+> > Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> > Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+> > ---
+> > Normally this bindings doc would go together in the same series that
+> > adds the device trees. In this case, Joe has been sending patches
+> > supporting these Chromebooks. His most recent posting is:
+> >
+> > https://lore.kernel.org/r/20220510154406.v5.1.Id769ddc5dbf570ccb511db96da59f97d08f75a9c@changeid/
+> >
+> > If he were to add this patch to the end of his v6, however, it would
+> > make things a bit more complicated simply becuase it would cause
+> > conflicts with all the other patches in this series. ...so steady
+> > state it would be correct to keep it in the series with the device
+> > tree files, but for this one time I think it makes sense to keep all
+> > the Chromebook board bindings patches together.
+> >
+> > (no changes since v2)
+> >
+> > Changes in v2:
+> > - Use a "description" instead of a comment for each item.
+> > - Use the marketing name instead of the code name where possible.
+> >
+> >  .../devicetree/bindings/arm/qcom.yaml         | 92 +++++++++++++++++++
+> >  1 file changed, 92 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+> > index 3d150d1a93cd..277faf59db57 100644
+> > --- a/Documentation/devicetree/bindings/arm/qcom.yaml
+> > +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+> > @@ -263,6 +263,16 @@ properties:
+> >            - const: google,homestar
+> >            - const: qcom,sc7180
+> >
+> > +      - description: Google Kingoftown (rev0)
+> > +        items:
+> > +          - const: google,kingoftown-rev0
+> > +          - const: qcom,sc7180
+> > +
+> > +      - description: Google Kingoftown (newest rev)
+> > +        items:
+> > +          - const: google,kingoftown
+> > +          - const: qcom,sc7180
+> > +
+> >        - description: Acer Chromebook Spin 513 (rev0)
+> >          items:
+> >            - const: google,lazor-rev0
+> > @@ -364,6 +374,48 @@ properties:
+> >            - const: google,lazor-sku6
+> >            - const: qcom,sc7180
+> >
+> > +      - description: Google Mrbland with AUO panel (rev0)
+> > +        items:
+> > +          - const: google,mrbland-rev0-sku0
+> > +          - const: qcom,sc7180
+> > +
+> > +      - description: Google Mrbland with AUO panel (newest rev)
+> > +        items:
+> > +          - const: google,mrbland-sku1536
+> > +          - const: qcom,sc7180
+> > +
+> > +      - description: Google Mrbland with BOE panel (rev0)
+> > +        items:
+> > +          - const: google,mrbland-rev0-sku16
+>
+> Similar question to patch #3, this could be:
+>
+>
+> +      - description: Google Mrbland
+> +        items:
+> +          - enum:
+> +              - google,mrbland-rev0-sku0     # AUO panel (rev0)
+> +              - google,mrbland-rev0-sku16    # BOE panel (rev0)
+> +          - const: qcom,sc7180
+>
+> and the file gets smaller and easier to read.
 
-> #
-> #
-> # ls /lib
-> ld-uClibc-1.0.39.so  libatomic.so.1       libgcc_s.so
-> ld-uClibc.so.0       libatomic.so.1.2.0   libgcc_s.so.1
-> ld-uClibc.so.1       libc.so.0            libuClibc-1.0.39.so
-> libatomic.so         libc.so.1            modules
-> 
+Ah, I guess this answers the question of the description that I asked
+in the previous patch. Of course, this goes opposite of the feedback I
+got from Stephen in previous versions of the patch where he requested
+that I use "description" instead of comments for things. ;-)
 
-My root file system uses musl.
+In any case, for now I'll hold off waiting for other opinions here
+since I still feel that the "one entry per dts" is easier to read /
+reason about.
 
-Guenter
-
-> rv32_rootfs:
-> buildroot login: root
-> # uname -a
-> Linux buildroot 5.18.0-next-20220523 #7 SMP Mon May 23 11:15:17 EDT
-> 2022 riscv64 GNU/Linux
-> # ls /lib
-> ld-linux-riscv32-ilp32d.so.1  libm.so.6
-> libanl.so.1                   libnss_dns.so.2
-> libatomic.so                  libnss_files.so.2
-> libatomic.so.1                libpthread.so.0
-> libatomic.so.1.2.0            libresolv.so.2
-> libc.so.6                     librt.so.1
-> libcrypt.so.1                 libthread_db.so.1
-> libdl.so.2                    libutil.so.1
-> libgcc_s.so                   modules
-> libgcc_s.so.1
-> 
-> Here is my qemu version:
-> commit 19f13a92cef8405052e0f73d5289f9e15474dad3 (HEAD ->
-> riscv-to-apply.next, alistair/riscv-to-apply.next)
-> Author: Tsukasa OI <research_trasio@irq.a4lg.com>
-> Date:   Sun May 15 11:56:11 2022 +0900
-> 
->      target/riscv: Move/refactor ISA extension checks
-> 
->      We should separate "check" and "configure" steps as possible.
->      This commit separates both steps except vector/Zfinx-related checks.
-> 
->      Signed-off-by: Tsukasa OI <research_trasio@irq.a4lg.com>
->      Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
->      Message-Id:
-> <c3145fa37a529484cf3047c8cb9841e9effad4b0.1652583332.git.research_trasio@irq.a4lg.com>
->      Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
-> 
-> On Mon, May 23, 2022 at 1:45 PM Guenter Roeck <linux@roeck-us.net> wrote:
->>
->> On Tue, Mar 22, 2022 at 10:40:03PM +0800, guoren@kernel.org wrote:
->>> From: Guo Ren <guoren@linux.alibaba.com>
->>>
->>> Adds initial skeletal COMPAT Kbuild (Running 32bit U-mode on
->>> 64bit S-mode) support.
->>>   - Setup kconfig & dummy functions for compiling.
->>>   - Implement compat_start_thread by the way.
->>>
->>> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
->>> Signed-off-by: Guo Ren <guoren@kernel.org>
->>> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
->>> Tested-by: Heiko Stuebner <heiko@sntech.de>
->>> Cc: Palmer Dabbelt <palmer@dabbelt.com>
->>
->> With this patch in linux-next, all my riscv64 emulations crash.
->>
->> [   11.600082] Run /sbin/init as init process
->> [   11.628561] init[1]: unhandled signal 11 code 0x1 at 0x0000000000000000 in libc.so[ffffff8ad39000+a4000]
->> [   11.629398] CPU: 0 PID: 1 Comm: init Not tainted 5.18.0-rc7-next-20220520 #1
->> [   11.629462] Hardware name: riscv-virtio,qemu (DT)
->> [   11.629546] epc : 00ffffff8ada1100 ra : 00ffffff8ada13c8 sp : 00ffffffc58199f0
->> [   11.629586]  gp : 00ffffff8ad39000 tp : 00ffffff8ade0998 t0 : ffffffffffffffff
->> [   11.629598]  t1 : 00ffffffc5819fd0 t2 : 0000000000000000 s0 : 00ffffff8ade0cc0
->> [   11.629610]  s1 : 00ffffff8ade0cc0 a0 : 0000000000000000 a1 : 00ffffffc5819a00
->> [   11.629622]  a2 : 0000000000000001 a3 : 000000000000001e a4 : 00ffffffc5819b00
->> [   11.629634]  a5 : 00ffffffc5819b00 a6 : 0000000000000000 a7 : 0000000000000000
->> [   11.629645]  s2 : 00ffffff8ade0ac8 s3 : 00ffffff8ade0ec8 s4 : 00ffffff8ade0728
->> [   11.629656]  s5 : 00ffffff8ade0a90 s6 : 0000000000000000 s7 : 00ffffffc5819e40
->> [   11.629667]  s8 : 00ffffff8ade0ca0 s9 : 00ffffff8addba50 s10: 0000000000000000
->> [   11.629678]  s11: 0000000000000000 t3 : 0000000000000002 t4 : 0000000000000001
->> [   11.629688]  t5 : 0000000000020000 t6 : ffffffffffffffff
->> [   11.629699] status: 0000000000004020 badaddr: 0000000000000000 cause: 000000000000000d
->> [   11.633421] Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
->> [   11.633664] CPU: 0 PID: 1 Comm: init Not tainted 5.18.0-rc7-next-20220520 #1
->> [   11.633784] Hardware name: riscv-virtio,qemu (DT)
->> [   11.633881] Call Trace:
->> [   11.633960] [<ffffffff80005e72>] dump_backtrace+0x1c/0x24
->> [   11.634162] [<ffffffff809aa9ec>] show_stack+0x2c/0x38
->> [   11.634274] [<ffffffff809b8482>] dump_stack_lvl+0x60/0x8e
->> [   11.634386] [<ffffffff809b84c4>] dump_stack+0x14/0x1c
->> [   11.634491] [<ffffffff809aaca0>] panic+0x116/0x2e2
->> [   11.634596] [<ffffffff80015540>] do_exit+0x7ce/0x7d4
->> [   11.634707] [<ffffffff80015666>] do_group_exit+0x24/0x7c
->> [   11.634817] [<ffffffff80022294>] get_signal+0x7ee/0x830
->> [   11.634924] [<ffffffff800051c0>] do_notify_resume+0x6c/0x41c
->> [   11.635037] [<ffffffff80003ad4>] ret_from_exception+0x0/0x10
->>
->> Guenter
->>
->> ---
->> # bad: [18ecd30af1a8402c162cca1bd58771c0e5be7815] Add linux-next specific files for 20220520
->> # good: [42226c989789d8da4af1de0c31070c96726d990c] Linux 5.18-rc7
->> git bisect start 'HEAD' 'v5.18-rc7'
->> # bad: [f9b63740b666dd9887eb0282d21b5f65bb0cadd0] Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git
->> git bisect bad f9b63740b666dd9887eb0282d21b5f65bb0cadd0
->> # bad: [7db97132097c5973ff77466d0ee681650af653de] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux
->> git bisect bad 7db97132097c5973ff77466d0ee681650af653de
->> # good: [2b7d17d4b7c1ff40f58b0d32be40fc0bb6c582fb] soc: document merges
->> git bisect good 2b7d17d4b7c1ff40f58b0d32be40fc0bb6c582fb
->> # good: [69c9668f853fdd409bb8abbb37d615785510b29a] Merge branch 'clk-next' of git://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git
->> git bisect good 69c9668f853fdd409bb8abbb37d615785510b29a
->> # bad: [1577f290aa0d4c5b29c03c46ef52e4952a21bfbb] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git
->> git bisect bad 1577f290aa0d4c5b29c03c46ef52e4952a21bfbb
->> # good: [34f0971f8ca73d7e5502b4cf299788a9402120f7] powerpc/powernv/flash: Check OPAL flash calls exist before using
->> git bisect good 34f0971f8ca73d7e5502b4cf299788a9402120f7
->> # good: [0349d7dfc70a26b3facd8ca97de34980d4b60954] Merge branch 'mips-next' of git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git
->> git bisect good 0349d7dfc70a26b3facd8ca97de34980d4b60954
->> # bad: [20bfb54d3b121699674c17a854c5ebc7a8f97d81] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git
->> git bisect bad 20bfb54d3b121699674c17a854c5ebc7a8f97d81
->> # bad: [9be8459298eadb39b9fe9974b890239e9c123107] riscv: compat: Add COMPAT Kbuild skeletal support
->> git bisect bad 9be8459298eadb39b9fe9974b890239e9c123107
->> # good: [01abdfeac81b5f56062d0a78f2cdc805db937a75] riscv: compat: Support TASK_SIZE for compat mode
->> git bisect good 01abdfeac81b5f56062d0a78f2cdc805db937a75
->> # good: [f4b395e6f1a588ed6c9a30474e58cf6b27b65783] riscv: compat: Add hw capability check for elf
->> git bisect good f4b395e6f1a588ed6c9a30474e58cf6b27b65783
->> # good: [3092eb45637573c5e435fbf5eaf9516316e5f9c6] riscv: compat: vdso: Add setup additional pages implementation
->> git bisect good 3092eb45637573c5e435fbf5eaf9516316e5f9c6
->> # good: [4608c159594fb40a5101357d4f614fdde9ce1fdb] riscv: compat: ptrace: Add compat_arch_ptrace implement
->> git bisect good 4608c159594fb40a5101357d4f614fdde9ce1fdb
->> # first bad commit: [9be8459298eadb39b9fe9974b890239e9c123107] riscv: compat: Add COMPAT Kbuild skeletal support
-> 
-> 
-> 
-
+-Doug

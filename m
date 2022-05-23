@@ -2,208 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9256530907
-	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 07:54:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44ECB530908
+	for <lists+linux-kernel@lfdr.de>; Mon, 23 May 2022 07:56:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232289AbiEWFyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 01:54:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54160 "EHLO
+        id S230442AbiEWF4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 01:56:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiEWFyO (ORCPT
+        with ESMTP id S229515AbiEWFz4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 01:54:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DEE4A3122C
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 22:54:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653285251;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SyQ0q/1cfv9Dr9N4yrSfFi2vvZn6zBLKl1GWo7CSuOw=;
-        b=I5PjK5BCz7IvbSaXJPnJvRgV7AgmtgQwp4sdD1G1JU8Bj59oxtT3Mnj6d2ofKGNO8fFS49
-        /ZK/3qtc5dg/aPzbwmeey2PwaLGsURTJ/0rJWOqSgkFMtC8O1jOAtuubli8B6ncG1JwIXv
-        cqzi7TXcF5tT1BiIEXQCtmnosqyxDgc=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-528-4wnOw8F3Plyy17JyipZ8zQ-1; Mon, 23 May 2022 01:54:09 -0400
-X-MC-Unique: 4wnOw8F3Plyy17JyipZ8zQ-1
-Received: by mail-ed1-f72.google.com with SMTP id r8-20020a056402018800b00428b43999feso9974613edv.5
-        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 22:54:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:references
-         :message-id:mime-version:content-transfer-encoding;
-        bh=SyQ0q/1cfv9Dr9N4yrSfFi2vvZn6zBLKl1GWo7CSuOw=;
-        b=JOkF3JaoZYKW8+gtd4e0yZ21Cfysk91PWhMC4h4/Gmf2o5Q0TeKZMF/npJvcJBB3qC
-         H0RGjmopu9H2r7TahaJvnj75aN+u7neMkVGLKjkQOxR+ZIKWTPQKDzni4R3Euu6dO1jz
-         ThEcFwTHpzPVY3B0QcbwQx3OGJIEhQ5s5fuGwSK/ljB6TiKkGrudMqfN95L0kpdB2Z0a
-         jyHIm3HhD5vDdqgN6IqaMHVNhQPq2wfmeixaqcJsRLlSAYSlGqRBCCwK4MsPn9MN7MUh
-         NfMzZ55yyYtw5y21jSE4aRCRs11RWfVGW6raV64nXZo5pZbqrU5JrAEf0VNkhTLvNyQ7
-         QqWg==
-X-Gm-Message-State: AOAM530Z1cESpghY4opfip4Oz05aUrKZ3Lyy9IGaEOLSMpZTm/K/maxB
-        QKGVyVqODKsYVSZcTIQfLfANa69tcK/DXGHqH41IX2KHeBO0aGSv5hzKLef63avtS5QhtmVSKq6
-        1F82rsYriLFk3ZMbIQOMjaUBJ
-X-Received: by 2002:a05:6402:34c2:b0:42b:66d3:7b07 with SMTP id w2-20020a05640234c200b0042b66d37b07mr4193951edc.275.1653285248593;
-        Sun, 22 May 2022 22:54:08 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz1DWjG8FpraJzWe8ZWQtBDbo1n8T4WVu+1eU3YiF9hI1NP7Z7jCEltTqr7+vod4nIwDlJdzA==
-X-Received: by 2002:a05:6402:34c2:b0:42b:66d3:7b07 with SMTP id w2-20020a05640234c200b0042b66d37b07mr4193941edc.275.1653285248330;
-        Sun, 22 May 2022 22:54:08 -0700 (PDT)
-Received: from [127.0.0.1] (93-55-6-57.ip261.fastwebnet.it. [93.55.6.57])
-        by smtp.gmail.com with ESMTPSA id 1-20020a170906100100b006f506ed0b42sm5650794ejm.48.2022.05.22.22.54.07
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 22 May 2022 22:54:07 -0700 (PDT)
-Date:   Mon, 23 May 2022 07:54:01 +0200
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Yury Norov <yury.norov@gmail.com>
-CC:     kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        kvm list <kvm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        X86 ML <x86@kernel.org>, lkft-triage@lists.linaro.org
-Subject: =?US-ASCII?Q?Re=3A_=5Blinux-next=3Amaster_12308/12886=5D_arch/x86/kvm/hyp?= =?US-ASCII?Q?erv=2Ec=3A1983=3A22=3A_warning=3A_sh?= =?US-ASCII?Q?ift_count_=3E=3D_width_of_type?=
-In-Reply-To: <CA+G9fYtaz2MO_-yxwtqQx+Gxm460mr2S++fFCYAqObacEL1X-Q@mail.gmail.com>
-References: <202205201624.A4IhDdYX-lkp@intel.com> <Yoe4WQCV9903aQRP@dev-arch.thelio-3990X> <CA+G9fYtaz2MO_-yxwtqQx+Gxm460mr2S++fFCYAqObacEL1X-Q@mail.gmail.com>
-Message-ID: <3A8C8235-7FC0-4FDF-921A-E53B57096256@redhat.com>
+        Mon, 23 May 2022 01:55:56 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F7F1EC4B
+        for <linux-kernel@vger.kernel.org>; Sun, 22 May 2022 22:55:54 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 2D4E65C00CB;
+        Mon, 23 May 2022 01:55:52 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Mon, 23 May 2022 01:55:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        tom-fitzhenry.me.uk; h=cc:cc:content-transfer-encoding:date:date
+        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1653285352; x=1653371752; bh=tl
+        oN7t7Um1VK0HgY5UzOFHkfXExj5u5VBpRfGhOZ348=; b=hHhgo+IONCuziFq5ob
+        vPxaIkjTOuBIWILEBP2ecx5SqxZC7tjPA/HsrTA9TbH7TlouR9KKLH0yoQ0vcHoT
+        IvSLXqTIwVuZY6ldqdlB8VpHc3Hign96h0JZUdYyCv/7PTttFDYanmJv7uWnfr+R
+        tfEoTWyr9MzQGPcmmZwQsBHPcmLB6BkaRmcWrcZZVs20/uEUrw0aB4mqg6k/tg0t
+        rRM+tDcgYqNWAX4lTV7g/z8TxDjjdWLq6/I+FFg7zArT61+we6p1m1vmQABhPuXZ
+        hb/bMcK348MysFP8aGpeCFP1DHTqiOGNPvEx8fPPwssfb23DwMt+j+Bs9FWd9t0d
+        tyNQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1653285352; x=1653371752; bh=tloN7t7Um1VK0HgY5UzOFHkfXExj5u5VBpR
+        fGhOZ348=; b=DAs9ltRVIiyqAlrIMpLVyfm7p950SNcoShklX8mrKyOAZsY7HgQ
+        ih9uTUt/fh5pdT1MxDA/ZcSQO0peYH0/AHZwxGROYslLuehdohZyb+MBCAH9l1SG
+        ZOcJJHQAL6oFAi/ORqtXWrtDW0e6h1ydc075KBaSitNk60yvTWcj2C8AOntYxJS3
+        SCn1pftbfGvfInBOegNKfrQ9IoGB1DLFRVtkyltVBLJToDGluRFNPkkuP7ozLXD3
+        8q5jCCGkioAWdSAQMJRof7p4mQlCGZvFjY82h0OtWnbu7z5AEUcHmdCW1I/9pnxM
+        OGECEHIXaCpiTLxTbSL35RxB6PVAP9JvndQ==
+X-ME-Sender: <xms:5yGLYvFYabU4aR4D94t52DS_TBypD7yQfUMV6BLEf90QodWemmJExg>
+    <xme:5yGLYsWA5Sc5Wu8P6QKRIxtWL-g54zMMbJAe8hOMlR-JqJdCgqTTX7t03a49xJvYa
+    T5B-7YeMA3CPSvtkA>
+X-ME-Received: <xmr:5yGLYhIqZbF4K2i9oZQjvMfIQZgfgAMEQ3g187AgItWwLCC1z3oWjBsU9Zwg7tViaQHm83seJq-o8C2v2YrGF1stUNPDtx2LCbs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrieelgddutdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepvfhomhcuhfhi
+    thiihhgvnhhrhicuoehtohhmsehtohhmqdhfihhtiihhvghnrhihrdhmvgdruhhkqeenuc
+    ggtffrrghtthgvrhhnpeetieffveegleeiffegleeiffejueeuudejtddvvdehudffueeh
+    ueffueelffeuffenucffohhmrghinhepghhighgruggvvhhitggvrdgtohhmpdhpihhnvg
+    eigedrohhrghdpghhithhlrggsrdgtohhmpdhgihhthhhusgdrtghomhenucevlhhushht
+    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehtohhmsehtohhmqdhfih
+    htiihhvghnrhihrdhmvgdruhhk
+X-ME-Proxy: <xmx:5yGLYtGBWhVc2HemBFKKZeorRXEd1iVfZEfWi0818XyZJYaDZHvlTw>
+    <xmx:5yGLYlXQGo-8G6DJoD_JNLYYjqB6CfuPK4tEqoOJGEvZULO9NOKISA>
+    <xmx:5yGLYoOu2Upd8pOpz7zMI64qeDTZE9nsSaY1O6OLBuf9BXu1SEeOHw>
+    <xmx:6CGLYut-MSj4Kipw9j9GxGwLKiMAIA-mv7dTWfjKfCrX4K5crBHFaA>
+Feedback-ID: iefc945ae:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 23 May 2022 01:55:48 -0400 (EDT)
+From:   Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Michael Walle <michael@walle.cc>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     Martijn Braam <martijn@brixit.nl>,
+        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] mtd: spi-nor: gigadevice: add support for gd25lq128e
+Date:   Mon, 23 May 2022 15:55:40 +1000
+Message-Id: <20220523055541.724422-1-tom@tom-fitzhenry.me.uk>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The patch is already merged in 5=2E18=2E
+The GD25LQ128EWIGR[0] reports an JEDEC id with a different vendor,
+otherwise it seems to fit neatly in the gigadevice list.
 
-Paolo
+Tested to work on the Pine64 PinePhone Pro[1].
 
+Attribution: initial version was written by
+Martijn Braam <martijn@brixit.nl> for the Pine64 vendor kernel[2].
 
-Il 23 maggio 2022 07:49:42 CEST, Naresh Kamboju <naresh=2Ekamboju@linaro=
-=2Eorg> ha scritto:
->On Fri, 20 May 2022 at 21:18, Nathan Chancellor <nathan@kernel=2Eorg> wro=
-te:
->>
->> Hi Yury,
->>
->> On Fri, May 20, 2022 at 04:24:32PM +0800, kernel test robot wrote:
->> > tree:   https://git=2Ekernel=2Eorg/pub/scm/linux/kernel/git/next/linu=
-x-next=2Egit master
->> > head:   21498d01d045c5b95b93e0a0625ae965b4330ebe
->> > commit: 81db71a60292e9a40ae8f6ef137b17f2aaa15a52 [12308/12886] KVM: x=
-86: hyper-v: replace bitmap_weight() with hweight64()
->> > config: i386-randconfig-a011 (https://download=2E01=2Eorg/0day-ci/arc=
-hive/20220520/202205201624=2EA4IhDdYX-lkp@intel=2Ecom/config)
->> > compiler: clang version 15=2E0=2E0 (https://github=2Ecom/llvm/llvm-pr=
-oject e00cbbec06c08dc616a0d52a20f678b8fbd4e304)
->> > reproduce (this is a W=3D1 build):
->> >         wget https://raw=2Egithubusercontent=2Ecom/intel/lkp-tests/ma=
-ster/sbin/make=2Ecross -O ~/bin/make=2Ecross
->> >         chmod +x ~/bin/make=2Ecross
->> >         # https://git=2Ekernel=2Eorg/pub/scm/linux/kernel/git/next/li=
-nux-next=2Egit/commit/?id=3D81db71a60292e9a40ae8f6ef137b17f2aaa15a52
->> >         git remote add linux-next https://git=2Ekernel=2Eorg/pub/scm/=
-linux/kernel/git/next/linux-next=2Egit
->> >         git fetch --no-tags linux-next master
->> >         git checkout 81db71a60292e9a40ae8f6ef137b17f2aaa15a52
->> >         # save the config file
->> >         mkdir build_dir && cp config build_dir/=2Econfig
->> >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make=2Ecr=
-oss W=3D1 O=3Dbuild_dir ARCH=3Di386 SHELL=3D/bin/bash
->> >
->> > If you fix the issue, kindly add following tag as appropriate
->> > Reported-by: kernel test robot <lkp@intel=2Ecom>
->> >
->> > All warnings (new ones prefixed by >>):
->> >
->> > >> arch/x86/kvm/hyperv=2Ec:1983:22: warning: shift count >=3D width o=
-f type [-Wshift-count-overflow]
->> >                    if (hc->var_cnt !=3D hweight64(valid_bank_mask))
->> >                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~
->> >    include/asm-generic/bitops/const_hweight=2Eh:29:49: note: expanded=
- from macro 'hweight64'
->> >    #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(=
-w) : __arch_hweight64(w))
->> >                                                    ^~~~~~~~~~~~~~~~~~=
-~~
->> >    include/asm-generic/bitops/const_hweight=2Eh:21:76: note: expanded=
- from macro '__const_hweight64'
->> >    #define __const_hweight64(w) (__const_hweight32(w) + __const_hweig=
-ht32((w) >> 32))
->> >                                                                      =
-         ^  ~~
->> >    include/asm-generic/bitops/const_hweight=2Eh:20:49: note: expanded=
- from macro '__const_hweight32'
->> >    #define __const_hweight32(w) (__const_hweight16(w) + __const_hweig=
-ht16((w) >> 16))
->> >                                                    ^
->> >    note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-l=
-imit=3D0 to see all)
->> >    include/asm-generic/bitops/const_hweight=2Eh:10:9: note: expanded =
-from macro '__const_hweight8'
->> >             ((!!((w) & (1ULL << 0))) +     \
->> >                   ^
->> >    include/linux/compiler=2Eh:56:47: note: expanded from macro 'if'
->> >    #define if(cond, =2E=2E=2E) if ( __trace_if_var( !!(cond , ## __VA=
-_ARGS__) ) )
->> >                                                  ^~~~
->> >    include/linux/compiler=2Eh:58:52: note: expanded from macro '__tra=
-ce_if_var'
->> >    #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) =
-: __trace_if_value(cond))
->> >                                                       ^~~~
->
->LKFT build system found these build warnings / errors on Linux next-20220=
-520=2E
->
->> I think this is the proper fix, as valid_bank_mask is only assigned u64
->> values=2E Could you fold it into that patch to clear this warning up?
->
->The proposed patch below was tested and it fixed the reported problem on =
-32-bit
->
->> Cheers,
->> Nathan
->>
->> diff --git a/arch/x86/kvm/hyperv=2Ec b/arch/x86/kvm/hyperv=2Ec
->> index b652b856df2b=2E=2Ee2e95a6fccfd 100644
->> --- a/arch/x86/kvm/hyperv=2Ec
->> +++ b/arch/x86/kvm/hyperv=2Ec
->> @@ -1914,7 +1914,7 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu,=
- struct kvm_hv_hcall *hc)
->>         struct hv_send_ipi_ex send_ipi_ex;
->>         struct hv_send_ipi send_ipi;
->>         DECLARE_BITMAP(vcpu_mask, KVM_MAX_VCPUS);
->> -       unsigned long valid_bank_mask;
->> +       u64 valid_bank_mask;
->>         u64 sparse_banks[KVM_HV_MAX_SPARSE_VCPU_SET_BITS];
->>         u32 vector;
->>         bool all_cpus;
->
->Reported-by: Linux Kernel Functional Testing <lkft@linaro=2Eorg>
->Tested-by: Linux Kernel Functional Testing <lkft@linaro=2Eorg>
->
->--
->Linaro LKFT
->https://lkft=2Elinaro=2Eorg
->
+Also in use in vendor u-boot builds[3].
+
+0. https://www.gigadevice.com/flash-memory/gd25lq128e/
+1. https://wiki.pine64.org/wiki/PinePhone_Pro
+2. https://gitlab.com/pine64-org/linux/-/merge_requests/29
+3. https://github.com/Tow-Boot/Tow-Boot/blob/b94838dfb8971cdeb841d3922051aaa8e108b085/boards/pine64-pinephonePro/0001-mtd-spi-nor-ids-Add-GigaDevice-GD25LQ128E-entry.patch
+
+Signed-off-by: Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
+---
+ drivers/mtd/spi-nor/gigadevice.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/mtd/spi-nor/gigadevice.c b/drivers/mtd/spi-nor/gigadevice.c
+index 33895002eeea..871c9dee11dc 100644
+--- a/drivers/mtd/spi-nor/gigadevice.c
++++ b/drivers/mtd/spi-nor/gigadevice.c
+@@ -56,6 +56,10 @@ static const struct flash_info gigadevice_nor_parts[] = {
+ 		FLAGS(SPI_NOR_HAS_LOCK | SPI_NOR_HAS_TB)
+ 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
+ 			      SPI_NOR_QUAD_READ) },
++	{ "gd25lq128e", INFO(0x257018, 0, 64 * 1024, 256)
++		FLAGS(SPI_NOR_HAS_LOCK | SPI_NOR_HAS_TB)
++		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
++			      SPI_NOR_QUAD_READ) },
+ 	{ "gd25q128", INFO(0xc84018, 0, 64 * 1024, 256)
+ 		FLAGS(SPI_NOR_HAS_LOCK | SPI_NOR_HAS_TB)
+ 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
+-- 
+2.36.0
 

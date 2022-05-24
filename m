@@ -2,57 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C80DF53212E
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 04:52:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93964532112
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 04:41:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233944AbiEXCwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 22:52:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34724 "EHLO
+        id S233382AbiEXClS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 22:41:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233845AbiEXCvX (ORCPT
+        with ESMTP id S232880AbiEXClO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 22:51:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75B016405
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 19:51:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1FEA8B8173D
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 02:51:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BFE66C385AA;
-        Tue, 24 May 2022 02:51:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653360676;
-        bh=LrLp2Pv0n0WxOn3HuZnUaMssSCyw1lzAux4xkMwalsE=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=hpsB2h2HMPEJ2IY7u/WXAiqM4fqjgJiQzXwL9QLHFQ/g4q8gJvTkmnqcvE5H5GhyP
-         +wLqbEC1QPs94JBC9/rEMHvxRW7YNyHaj2Pd2DjhXaazufwI+6BUMdDGoHQGtESbOh
-         Pjc0ZJWZTtCzpXvTq4R0/UBDXkHOP/vRfqA4TsqktT+4ovtFqcgayp6BNQkLIIqnGJ
-         KBL8bmZgg+Owa0Hr0+mw6nGM7wvCvx5fz+jV02hFHVdOQijgxJ4kKtq6p+DMCs6N89
-         JdOrPQF7nrkIKEQWR9bexy2v2VK2VMUQQ9pSySfoQewsi+zSJbjVN+tAExqGKKGB3L
-         XwADEKKtUWgrA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AE0FBF03948;
-        Tue, 24 May 2022 02:51:16 +0000 (UTC)
-Subject: Re: [GIT PULL] x86/vdso for 5.19
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YovsdAxZsUWxGVl4@zn.tnic>
-References: <YovsdAxZsUWxGVl4@zn.tnic>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YovsdAxZsUWxGVl4@zn.tnic>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_vdso_for_v5.19_rc1
-X-PR-Tracked-Commit-Id: bf00745e7791fe2ba7941aeead8528075a158bbe
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: d6ecaa0024485effd065124fe774de2e22095f2d
-Message-Id: <165336067670.14181.4271534404795006950.pr-tracker-bot@kernel.org>
-Date:   Tue, 24 May 2022 02:51:16 +0000
-To:     Borislav Petkov <bp@suse.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        Mon, 23 May 2022 22:41:14 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA8FD100
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 19:41:13 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L6dht0mTlzjWyy;
+        Tue, 24 May 2022 10:40:14 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 24 May 2022 10:41:11 +0800
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 24 May 2022 10:41:11 +0800
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     <linux@armlinux.org.uk>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <robh@kernel.org>, Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH] amba: fix refcount underflow if amba_device_add() fails
+Date:   Tue, 24 May 2022 10:51:39 +0800
+Message-ID: <20220524025139.40212-1-wangkefeng.wang@huawei.com>
+X-Mailer: git-send-email 2.35.3
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,15 +51,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Mon, 23 May 2022 22:20:04 +0200:
+"ARM: 9192/1: amba: fix memory leak in amba_device_try_add()" leads
+to a refcount underflow if amba_device_add() fails, which called by
+of_amba_device_create(), the of_amba_device_create() already exists
+the error handling, so amba_put_device() only need to be added into
+amba_deferred_retry().
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_vdso_for_v5.19_rc1
+Reported-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+---
+ drivers/amba/bus.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/d6ecaa0024485effd065124fe774de2e22095f2d
-
-Thank you!
-
+diff --git a/drivers/amba/bus.c b/drivers/amba/bus.c
+index 0e3ed5eb367b..0cb20324da16 100644
+--- a/drivers/amba/bus.c
++++ b/drivers/amba/bus.c
+@@ -493,13 +493,8 @@ static int amba_device_try_add(struct amba_device *dev, struct resource *parent)
+ 		goto skip_probe;
+ 
+ 	ret = amba_read_periphid(dev);
+-	if (ret) {
+-		if (ret != -EPROBE_DEFER) {
+-			amba_device_put(dev);
+-			goto err_out;
+-		}
++	if (ret)
+ 		goto err_release;
+-	}
+ 
+ skip_probe:
+ 	ret = device_add(&dev->dev);
+@@ -546,6 +541,7 @@ static int amba_deferred_retry(void)
+ 			continue;
+ 
+ 		list_del_init(&ddev->node);
++		amba_device_put(ddev->dev);
+ 		kfree(ddev);
+ 	}
+ 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.35.3
+

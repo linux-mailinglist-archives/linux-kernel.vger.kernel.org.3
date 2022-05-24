@@ -2,156 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7398C532068
+	by mail.lfdr.de (Postfix) with ESMTP id BF1DC532069
 	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 03:51:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232785AbiEXBvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 21:51:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42832 "EHLO
+        id S232836AbiEXBvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 21:51:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232810AbiEXBvG (ORCPT
+        with ESMTP id S232814AbiEXBvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 21:51:06 -0400
-Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E9225EC;
-        Mon, 23 May 2022 18:51:03 -0700 (PDT)
-Subject: Re: [BUG report] security_inode_alloc return -ENOMEM let xfs shutdown
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1653357061;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Dl0EsjA6NUDFxuLGWyeMwYfd4upJhhv0gDz56c+Kwu0=;
-        b=bE/bThUc4PDM4een2pnM+lwby+oovl6glOteyDepMuHtp/5gXKfY3vgcVJVQMs2nKIqgvl
-        0WOwuUV7a6CvuAd5OX6dEpeMxJDQIQgHPMcKw7wHto/bSFStGNLoGDSAwDbeYrcvzpXZID
-        +zoXls1clwcmEFhh64Y+RLz1ePw7/2Y=
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     liuzhengyuan <liuzhengyuan@kylinos.cn>,
-        =?UTF-8?B?6IOh5rW3?= <huhai@kylinos.cn>, zhangshida@kylinos.cn,
-        darrick.wong@oracle.com, linux-xfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <5a3a9cdc-33c3-4196-b8f7-bfec485eae5b@linux.dev>
- <20220523232009.GW1098723@dread.disaster.area>
- <a05dfccc-33ff-4857-b68d-ddd64cae11d0@linux.dev>
- <20220524012806.GY1098723@dread.disaster.area>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Jackie Liu <liu.yun@linux.dev>
-Message-ID: <c529696b-0782-812a-195c-3bbf1fa51d96@linux.dev>
-Date:   Tue, 24 May 2022 09:50:53 +0800
+        Mon, 23 May 2022 21:51:13 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EDA017061;
+        Mon, 23 May 2022 18:51:11 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L6cXp2hSrzQkKB;
+        Tue, 24 May 2022 09:48:10 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 24 May 2022 09:51:09 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 24 May 2022 09:51:08 +0800
+Subject: Re: [PATCH -next v3 3/6] nbd: don't clear 'NBD_CMD_INFLIGHT' flag if
+ request is not completed
+From:   Yu Kuai <yukuai3@huawei.com>
+To:     Josef Bacik <josef@toxicpanda.com>
+CC:     <axboe@kernel.dk>, <ming.lei@redhat.com>,
+        <linux-block@vger.kernel.org>, <nbd@other.debian.org>,
+        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
+References: <20220521073749.3146892-1-yukuai3@huawei.com>
+ <20220521073749.3146892-4-yukuai3@huawei.com>
+ <YouWXEcyoBNUXLb7@localhost.localdomain>
+ <6a549193-909b-6f6e-532b-99cd2898ad80@huawei.com>
+Message-ID: <ee5ee5f2-74ea-cac1-00e1-0645c04893ee@huawei.com>
+Date:   Tue, 24 May 2022 09:51:08 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20220524012806.GY1098723@dread.disaster.area>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+In-Reply-To: <6a549193-909b-6f6e-532b-99cd2898ad80@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2022/5/24 上午9:28, Dave Chinner 写道:
-> On Tue, May 24, 2022 at 08:52:30AM +0800, Jackie Liu wrote:
->> 在 2022/5/24 上午7:20, Dave Chinner 写道:
->>> On Mon, May 23, 2022 at 04:51:50PM +0800, Jackie Liu wrote:
->>> Yup, that's a shutdown with a dirty transaction because memory
->>> allocation failed in the middle of a transaction. XFS can not
->>> tolerate memory allocation failure within the scope of a dirty
->>> transactions and, in practice, this almost never happens. Indeed,
->>> I've never seen this allocation from security_inode_alloc():
+在 2022/05/24 9:07, Yu Kuai 写道:
+> 在 2022/05/23 22:12, Josef Bacik 写道:
+>> On Sat, May 21, 2022 at 03:37:46PM +0800, Yu Kuai wrote:
+>>> Otherwise io will hung because request will only be completed if the
+>>> cmd has the flag 'NBD_CMD_INFLIGHT'.
 >>>
->>> int lsm_inode_alloc(struct inode *inode)
->>> {
->>>           if (!lsm_inode_cache) {
->>>                   inode->i_security = NULL;
->>>                   return 0;
->>>           }
+>>> Fixes: 07175cb1baf4 ("nbd: make sure request completion won't 
+>>> concurrent")
+>>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+>>> ---
+>>>   drivers/block/nbd.c | 18 ++++++++++++++----
+>>>   1 file changed, 14 insertions(+), 4 deletions(-)
 >>>
->>>>>>>>     inode->i_security = kmem_cache_zalloc(lsm_inode_cache, GFP_NOFS);
->>>           if (inode->i_security == NULL)
->>>                   return -ENOMEM;
->>>           return 0;
->>> }
->>>
->>> fail in all my OOM testing. Hence, to me, this is a theoretical
->>> failure as I've never, ever seen this allocation fail in production
->>> or test systems, even when driving them hard into OOM with excessive
->>> inode allocation and triggering the OOM killer repeatedly until the
->>> system kills init....
->>>
->>> Hence I don't think there's anything we need to change here right
->>> now. If users start hitting this, then we're going to have add new
->>> memalloc_nofail_save/restore() functionality to XFS transaction
->>> contexts. But until then, I don't think we need to worry about
->>> syzkaller intentionally hitting this shutdown.
+>>> diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
+>>> index 2ee1e376d5c4..a0d0910dae2a 100644
+>>> --- a/drivers/block/nbd.c
+>>> +++ b/drivers/block/nbd.c
+>>> @@ -403,13 +403,14 @@ static enum blk_eh_timer_return 
+>>> nbd_xmit_timeout(struct request *req,
+>>>       if (!mutex_trylock(&cmd->lock))
+>>>           return BLK_EH_RESET_TIMER;
+>>> -    if (!__test_and_clear_bit(NBD_CMD_INFLIGHT, &cmd->flags)) {
+>>> +    if (!test_bit(NBD_CMD_INFLIGHT, &cmd->flags)) {
+>>>           mutex_unlock(&cmd->lock);
+>>>           return BLK_EH_DONE;
+>>>       }
+>>>       if (!refcount_inc_not_zero(&nbd->config_refs)) {
+>>>           cmd->status = BLK_STS_TIMEOUT;
+>>> +        __clear_bit(NBD_CMD_INFLIGHT, &cmd->flags);
+>>>           mutex_unlock(&cmd->lock);
+>>>           goto done;
+>>>       }
+>>> @@ -478,6 +479,7 @@ static enum blk_eh_timer_return 
+>>> nbd_xmit_timeout(struct request *req,
+>>>       dev_err_ratelimited(nbd_to_dev(nbd), "Connection timed out\n");
+>>>       set_bit(NBD_RT_TIMEDOUT, &config->runtime_flags);
+>>>       cmd->status = BLK_STS_IOERR;
+>>> +    __clear_bit(NBD_CMD_INFLIGHT, &cmd->flags);
+>>>       mutex_unlock(&cmd->lock);
+>>>       sock_shutdown(nbd);
+>>>       nbd_config_put(nbd);
+>>> @@ -745,7 +747,7 @@ static struct nbd_cmd *nbd_handle_reply(struct 
+>>> nbd_device *nbd, int index,
+>>>       cmd = blk_mq_rq_to_pdu(req);
+>>>       mutex_lock(&cmd->lock);
+>>> -    if (!__test_and_clear_bit(NBD_CMD_INFLIGHT, &cmd->flags)) {
+>>> +    if (!test_bit(NBD_CMD_INFLIGHT, &cmd->flags)) {
+>>>           dev_err(disk_to_dev(nbd->disk), "Suspicious reply %d 
+>>> (status %u flags %lu)",
+>>>               tag, cmd->status, cmd->flags);
+>>>           ret = -ENOENT;
+>>> @@ -854,8 +856,16 @@ static void recv_work(struct work_struct *work)
+>>>           }
+>>>           rq = blk_mq_rq_from_pdu(cmd);
+>>> -        if (likely(!blk_should_fake_timeout(rq->q)))
+>>> -            blk_mq_complete_request(rq);
+>>> +        if (likely(!blk_should_fake_timeout(rq->q))) {
+>>> +            bool complete;
+>>> +
+>>> +            mutex_lock(&cmd->lock);
+>>> +            complete = __test_and_clear_bit(NBD_CMD_INFLIGHT,
+>>> +                            &cmd->flags);
+>>> +            mutex_unlock(&cmd->lock);
+>>> +            if (complete)
+>>> +                blk_mq_complete_request(rq);
+>>> +        }
 >>
->> Thanks Dave.
->>
->>    In the actual test, the x86 or arm64 device test will trigger this error
->> more easily when FAILSLAB is turned on. After our internal discussion, we
->> can try again through such a patch. Anyway, thank you for your reply.
+>> I'd rather this be handled in nbd_handle_reply.  We should return with it
+>> cleared if it's ready to be completed.  Thanks,
+> Hi,
 > 
-> What kernel is the patch against? It doesn't match a current TOT
-> kernel...
+> Thanks for your advice, I'll do that in next version. I'll still have to
+> hold the lock to set the bit again in case blk_should_fake_timeout()
+> pass...
 
-It's linux-4.19.y with LSM security patch, but as long as the LSM 
-framework is added, this problem can be repeated.
+Hi, Josef
 
-> 
->>
->> diff --git a/fs/xfs/xfs_icache.c b/fs/xfs/xfs_icache.c
->> index ceee27b70384..360304409c0c 100644
->> --- a/fs/xfs/xfs_icache.c
->> +++ b/fs/xfs/xfs_icache.c
->> @@ -435,6 +435,7 @@ xfs_iget_cache_hit(
->>                                  wake_up_bit(&ip->i_flags, __XFS_INEW_BIT);
->>                          ASSERT(ip->i_flags & XFS_IRECLAIMABLE);
->>                          trace_xfs_iget_reclaim_fail(ip);
->> +                       error = -EAGAIN;
->>                          goto out_error;
->>                  }
-> 
-> Ok, I can see what you are suggesting here - it might work if we get
-> it right. :)
-> 
-> We don't actually want (or need) an unconditional retry. This will
-> turn persistent memory allocation failure into a CPU burning
-> livelock rather than -ENOMEM being returned. It might work for a
-> one-off memory failure, but it's not viable for long term failure as
-> tends to happen when the system goes deep into OOM territory.
+I just found out that this way is problematic:
+t1:			t2:
+recv_work
+  nbd_handle_reply
+   __clear_bit
+			nbd_xmit_timeout
+			 test_bit(NBD_CMD_INFLIGHT, &cmd->flags) -> fail
+			 return BLK_EH_DONE -> rq can't complete
+  blk_should_fake_timeout -> true
+  __set_bit
 
-In my opinion, if it causes the filesystem to be shutdown, it's better 
-to let it try again and again.
+__clear_bit and then __set_bit from recv_work leaves a window, and
+concurrent nbd_xmit_timeout() may lead to that request can't be
+completed through both timeout and recv_work().
 
-> 
-> It also ignores the fact that we can return ENOMEM without
-> consequences from this path if we are not in a transaction - any
-> pathwalk lookup can have ENOMEM safely returned to it, and that will
-> propagate the error to userspace. Same with bulkstat lookups, etc.
-> So we still want them to fail with ENOMEM, not retry indefinitely.
-> 
-> Likely what we want to do is add conditions to the xfs_iget() lookup
-> tail to detect ENOMEM when tp != NULL. IN that case, we can then run
-> memalloc_retry_wait(GFP_NOFS) before retrying the lookup. That's in
-> line with what we do in other places that cannot tolerate allocation
-> failure (e.g. kmem_alloc(), xfs_buf_alloc_pages()) so it may make
-> sense to do the same thing here....
+Do you think it's ok to keep the current implementation with some
+comments to explain the above scenario?
 
-Do you have any patch suggestions? I have a test environment here to verify.
-
---
-BR, Jackie Liu
-
-> 
-> Cheers,
-> 
-> Dave.
-> 
+Thanks,
+Kuai

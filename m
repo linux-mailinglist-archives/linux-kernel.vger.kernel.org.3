@@ -2,169 +2,307 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37C52532BAD
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 15:52:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C437C532BB3
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 15:53:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231342AbiEXNvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 09:51:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45028 "EHLO
+        id S236372AbiEXNxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 09:53:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237992AbiEXNvl (ORCPT
+        with ESMTP id S230467AbiEXNw7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 09:51:41 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2059.outbound.protection.outlook.com [40.107.223.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637263E5E2;
-        Tue, 24 May 2022 06:51:39 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PemnHfgfGSbE+WhoihWAXmznAdupXYtYl/rCsq0xb0ShvKRTaUercTEtI4EdBFW7LCKoNemF6WEsJxRpUpkhh3I0XZO7jr21KzcmB3dgKWuWE8ANgIYHpZTgEEBMsolvMU/DOQRieLh8ieX4JAcBQBgRoWa2fuOcknod/QIu9jlHAy1f73DmSh9LmSuJeetcTvlyTquaQxRZtbk9u+HPCk3+i9lkyc8PouZ/x7Z11Vfxi1EWyLJWqPO9OR7zEasn4gBUkrf2+tv10iKIntNnprcdLTZrh7kUkJQecWHGjV1/6CCxubhxVJHi6zJI7c+31XmjrPAVdiS5QdZVK5dfNQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PukwRsX+JmHD5N09748MoeymA2Y6G3XhM6DZ5iNnnEM=;
- b=QzK1AheutntMBIJL5s3Y5g3vRvGxEUTLDx2YkJeVv+DneSoxyk7TT0EFi64Ia+v8kz5ysGLOtiQUdFzup75IthtNlU8cS3Y8Fk0KQbwm6vdoJecIKIUftzozqokivhUyqKSgyty7AbCpBy/TyYwUL+tRISLMFXFrHbDwIzsLINOTFmbiFzv7ktti0+R59zPvEHg93uAR4tpJb6jMA5XPO9dwf3G8WNyU2Mn1/9QpHzIowJRAcDR6RzP5/YOTkOMyC2QQohiAhBc5I63Pvo9xlk7q4id2M4vUESUsuzlLuzGDDky3216RilU6EUA8HCRvoA5koZLnSiYjv1pBXp/AMw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PukwRsX+JmHD5N09748MoeymA2Y6G3XhM6DZ5iNnnEM=;
- b=V/m7KrEihlMqVLI+NoveTpGDmPBGLpz7xi64GAmpp0TZ2gA3kUYJ9hXTxBnZvuWv7sgrxK9/fX3+eFzzzsEhnRuvO9FwvgEo9QRpuwP4S+EKxBTlmejEFFm4qDHLyTwec9YKU5wSDvu+P+4mFld8PzcM0tkRKjubWIXXXE02I2TR6/ZtQy84VK0ajOCitQV38kPqc0iFLeFOtwEUgy5Xyg+s8/aVr/8WR4DS+dZf7EHw51LYsQD06mU15o6g4FscW93imBPXiJ7xyYQlrqGQ5o1a6wtaMMrs4h8u0trQ2q1Ivz3twe5P4QWnSkmalW5PIH3aB34varTVm/5dJbxkLg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by CY4PR12MB1895.namprd12.prod.outlook.com (2603:10b6:903:11c::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.14; Tue, 24 May
- 2022 13:51:36 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::2484:51da:d56f:f1a5]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::2484:51da:d56f:f1a5%7]) with mapi id 15.20.5293.013; Tue, 24 May 2022
- 13:51:36 +0000
-Date:   Tue, 24 May 2022 10:51:35 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>
-Cc:     iommu@lists.linux-foundation.org,
-        LKML <linux-kernel@vger.kernel.org>, dmaengine@vger.kernel.org,
-        Joerg Roedel <joro@8bytes.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Christoph Hellwig <hch@infradead.org>, vkoul@kernel.org,
-        robin.murphy@arm.com, will@kernel.org, Yi Liu <yi.l.liu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        Raj Ashok <ashok.raj@intel.com>,
-        Eric Auger <eric.auger@redhat.com>
-Subject: Re: [PATCH v4 3/6] iommu/vt-d: Implement domain ops for
- attach_dev_pasid
-Message-ID: <20220524135135.GV1343366@nvidia.com>
-References: <20220518182120.1136715-1-jacob.jun.pan@linux.intel.com>
- <20220518182120.1136715-4-jacob.jun.pan@linux.intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220518182120.1136715-4-jacob.jun.pan@linux.intel.com>
-X-ClientProxiedBy: BL1PR13CA0226.namprd13.prod.outlook.com
- (2603:10b6:208:2bf::21) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Tue, 24 May 2022 09:52:59 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57B068A32F
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 06:52:57 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id u27so24996142wru.8
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 06:52:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BYC1tIsAjiq1cBKpe9O8OQgijyZp38kdmJuYTBXJuLg=;
+        b=D0c5KaQWwqZx7KqTeU12Kg8rmuImfcrejKebtAJx08mLaBjPZqMogK/3Z+j4WjBMhe
+         Y8OXJLwEyBxcm/bnd+eyk9CuuTwP5gsdlg+7XemeoLCBmQO5+N9Ns+ytfbSWhFUIUSZH
+         BID28EumYJ/UOXlxYuKGN6VcyNm5mrtQ5LDFAAccyF/f8yWAtfS5VaP+27umL9+bnFE/
+         NQwlS/HYIEzfAPkjFGVs/1h2cAs5EoPDHFaweAogrR4FFavpURDq5iJPiMTdcyBrq8bW
+         jcREIayYSMBsapnVrJtEqc42Dvl+FlVHP0JJAnWgVUzKo4i266f8joFFK9/RAztxSZcO
+         owTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BYC1tIsAjiq1cBKpe9O8OQgijyZp38kdmJuYTBXJuLg=;
+        b=poBM7MTthPihedmC9MqKIelkfRG7prSeLWodTesgYregwYUR/QvPLRMM3UcOhNN22U
+         /QZIUZHYJ96iZ+CkPeCrxXVDsd9E5busiD0DY4L7AbkgEXfePE/IHRIBMXhjiCohLUKS
+         n5cjU45lnwtzsXkHjA0lJkz6WTASnScJc60RUE4dNjA6gSeSnsecc5CfALp3nOgFH3wN
+         UnyS/ZB6kNnZRDP9J0U4t5rS1v3yn11D+ERy3OYzZptrOFA73b2bLgU0a7YLIWrb8093
+         bwPm6HBK1EF9YLt4EL7VutbAmFuhslReMy/p/4p3codYhHzulzMww0idXqoMeVjtTa/s
+         TcCg==
+X-Gm-Message-State: AOAM531m1ZZCIzjK9wGtrtj5VdatJtRWVOViF39LorzZcUhv/+Y46gQH
+        d+ByTVudasKrWldL71E3+lY=
+X-Google-Smtp-Source: ABdhPJx3GOqmRRS4uwNy8z0N/+6oBX6gnvCmSAvLiOsTq+RHHfFHKYw85t+5mILf159laLfP29jJ3Q==
+X-Received: by 2002:adf:e849:0:b0:20d:129c:6a2d with SMTP id d9-20020adfe849000000b0020d129c6a2dmr22650587wrn.533.1653400375642;
+        Tue, 24 May 2022 06:52:55 -0700 (PDT)
+Received: from orangepi3.mydomain.example ([195.234.74.2])
+        by smtp.gmail.com with ESMTPSA id w24-20020a7bc758000000b0039747cf8354sm2325870wmk.39.2022.05.24.06.52.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 May 2022 06:52:55 -0700 (PDT)
+From:   Roman Stratiienko <r.stratiienko@gmail.com>
+X-Google-Original-From: Roman Stratiienko <roman.o.stratiienko@globallogic.com>
+To:     mripard@kernel.org, wens@csie.org, jernej.skrabec@gmail.com,
+        airlied@linux.ie, daniel@ffwll.ch, samuel@sholland.org,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, megi@xff.cz
+Cc:     Roman Stratiienko <roman.o.stratiienko@globallogic.com>
+Subject: [PATCH] drm/sun4i: Fix blend registers corruption for DE2.0/DE3.0
+Date:   Tue, 24 May 2022 13:52:49 +0000
+Message-Id: <20220524135249.49993-1-roman.o.stratiienko@globallogic.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c2182ff5-ab2b-4dad-7ec5-08da3d8c84e5
-X-MS-TrafficTypeDiagnostic: CY4PR12MB1895:EE_
-X-Microsoft-Antispam-PRVS: <CY4PR12MB1895E609772DD560160D105EC2D79@CY4PR12MB1895.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: VyPC5abRbMSayTdAiWn+WpLfxMcDFVqhWDQ/CaP7H6+b+te89OC0YSHXDInvLDsjtnYPcAFtMCXbRw42+wpw9y8EBmT6IGhhkzjcXSAtxMC1oslSD/SmqVkQij0aR7FBzmA6tu4GO+lsapgvlt/U9381c53jlX1VGhk6cmycCFnUA8XjtMCWnSXq0mslpAgRQ30dclOCV8wYnDlYLni7NNqrQcXpVkQqcYmu9iiMe/ueaJdRGkGmDo8w4hJnrFpuxm3o51HlQ8+xlB6j0EAEMsByhF+ygOE/rBjf2cH7I904ieOgPRrvUzGGdqOxXlOgcRzzFrGMjw6SBo01JS/z22tOpdUQfXHqWSgCUxu3RFbqWmr6pJB3VJRzVTTxWhOVouA+0BwA6KlGgrUUjPIHEfIZyPZIatUdVgV5UcaycoB/LdJQ9VvMqBJI5B2rJ2/pWQ0cRo8BIS7FGXbRWp8NvckkrI5eNMWewgDrPCLJt2+qJo4wL47YyatQ0Azqp+UYJ+ArkT4AGMiiERno5oH4HYAl2vsWsin7huc3Hmxf1H//a8VraCRe8wtWfJT5H5NBdE5mviHU3sP8e+wptGw/q8tnAl3n0551IbEd1wsv4gNXFyGcsUO8yVdmS6MXhk1ILsu9FK+LjBkoHXAXAranog==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8936002)(5660300002)(7416002)(186003)(2616005)(1076003)(8676002)(66946007)(66476007)(4326008)(316002)(86362001)(54906003)(6916009)(26005)(6506007)(66556008)(508600001)(38100700002)(6512007)(6486002)(2906002)(83380400001)(33656002)(36756003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?S/JLbNVvpNfQw7mLQags8Fw4hujfISGf/a1rs4PJle13k1d1rtXuUOlg2IPz?=
- =?us-ascii?Q?+XtLkmx/DOhFSE73P19pxH/RzOsSDEbXgzSE/lLNQoEqQsd3mr4U7fcHc/HA?=
- =?us-ascii?Q?b/syUhxHKSdmDeYBdK5cel6e33uAJLHEa21dR8MnrkM1dbScnp8Yrk1u+WYI?=
- =?us-ascii?Q?Sy0K8cIP3vhLpd5dIcOJRVClqBy0fJosRMlQul0nEIKHzCjjnZmbmbx+0g2Q?=
- =?us-ascii?Q?L5ke7RkRwVb0dalb08j3GspLiKn1jyZT/oWYIQcSBYgxtI0CP57VH7Y13Zm9?=
- =?us-ascii?Q?5F77CDhDMcs6Wp15r9jH3fVtDgWu3gDqguj8l0NhkOQT9OKOMJGp2A4uXkT/?=
- =?us-ascii?Q?JpgBGOfBVd3PSsGXCwUcuWGsiGcVSCbDI+cqwz+DuLhoohHKG1pQEac2+kmM?=
- =?us-ascii?Q?QwW5974WJZzQB5AJ6fE9Du21vq2HgWPMcoKubZzZ8HxA16/5BXUTkiBY1YjH?=
- =?us-ascii?Q?TirbLOfPYfxmfMC+Lh+YNPEoTfIBBtfoQsXIHR5QFnwLpZhx0IEyoEdjhtRf?=
- =?us-ascii?Q?PO4sCv2nKo1QelLVAvDzZ+lCnpN6H6SSikUAVXQ9Anj31vCnEDIX36Lm9FpL?=
- =?us-ascii?Q?wkiYT7+A2SNkAWuAozQXisGH5eW6rrhMG2fc4pTa6EnVXCQF9O39b27yhIG7?=
- =?us-ascii?Q?j3XDw67nD0NsGkqYtqwnpv9v/xGIIjCkBmurWnXvvcsSzMNpFBoqD8fpvlgX?=
- =?us-ascii?Q?XY/CYbWEf9QNH6X6/zubpywFyNBV4KNLE7ygwA+WTBxK1ijRiM4e6V2j6N2o?=
- =?us-ascii?Q?w9SfPdTT8yyKBnoGVk00Dv+B6+rItZWzZ6R0Hh4CftmXbYLvsMgWi7H7hb4I?=
- =?us-ascii?Q?V9yZPWUgD5Prv/CrbzTDquoslxgG6vwkxuUWqUzFdPMO8bzxjr+i4xvz8/2w?=
- =?us-ascii?Q?KBNPmMUsk0vMQCT3IJ8KtMxW8Zj5+aJy5bbCh1ufWM2ro3w48RMntfIrXCma?=
- =?us-ascii?Q?TsTbQeLfu0ciNVPVm+mfpXBs7nU9eE8e+8+GqDxwdkJ5KS08PDGCgAH5eVDH?=
- =?us-ascii?Q?U6V4Nfw+LaAJdHzSVKcryF3L8Hu5gvQLcYf1/W3p7Nq8Dq1PfFBjlHvcd0Dg?=
- =?us-ascii?Q?UYhN65vejDGrDAuDfsxIj+3FjFnRXipdWtpZNIPM+MjzDoset7pfWkf4dmUY?=
- =?us-ascii?Q?QW04mPG6aWm/RAJ5wT4tPQeIzXbXVm3y+gfEUZQBj9CVY2BZ6woSvV6Z5YoP?=
- =?us-ascii?Q?+jegd+apZ+dzibk/8zdJEHKscfZytE55SgborcbAUjKX2kCQRsuiEpTuFK/N?=
- =?us-ascii?Q?XYLhtuTsl8R8yzAnRf22ejaKYeKUavbNKQZqDIb3hoK1nckwB6NZJ9AE1FYz?=
- =?us-ascii?Q?czV4gEdx3YBkojQ+rnAJV8rA8yw+gfyzffgC0tujGagodvO8jf7rO/EaLAZE?=
- =?us-ascii?Q?xG/BreYbc+nR8D5CtnXZj/T3eAPs3o0AYtYVmTmjpSjpd8W4/FP7HFiPwd0U?=
- =?us-ascii?Q?nEXwTfpgJywYC8ukYsiwpYkhLWZCC0IBNea5hbnTKFFTX1l5XjOGE6UPyBE9?=
- =?us-ascii?Q?SOPaMTNBK9gq0qHkwvJ2Nqu/X4dzbkeqJZnCtDV6VP3v8G/CF9RXPFAyjlNM?=
- =?us-ascii?Q?Cb4vIqs8/NjPStEtSweEolK4/2dobge0ti/IndmyzT1Bd4VJQuc2poPz5kgE?=
- =?us-ascii?Q?YdOrS7peTjhhDc2UKfpgDsXOIeBQ1Dr704r/lVuGWLuRn06iLwCOp3jZW0db?=
- =?us-ascii?Q?lPiTa5z3oTueo6Makqn2T6iec1zcXD8WQKj+4Jx+htxDYtz3wyQNA0datvz0?=
- =?us-ascii?Q?yREQOwQjGQ=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c2182ff5-ab2b-4dad-7ec5-08da3d8c84e5
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2022 13:51:36.2257
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: YW6G9xCXolCFq0qVg4WUZ1uHjpNz38E89SPDqFPnhkkF6UJNjLiuv5v45K7C0wmS
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1895
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 11:21:17AM -0700, Jacob Pan wrote:
-> On VT-d platforms with scalable mode enabled, devices issue DMA requests
-> with PASID need to attach PASIDs to given IOMMU domains. The attach
-> operation involves the following:
-> - Programming the PASID into the device's PASID table
-> - Tracking device domain and the PASID relationship
-> - Managing IOTLB and device TLB invalidations
-> 
-> This patch add attach_dev_pasid functions to the default domain ops which
-> is used by DMA and identity domain types. It could be extended to support
-> other domain types whenever necessary.
-> 
-> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-> Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
->  drivers/iommu/intel/iommu.c | 72 +++++++++++++++++++++++++++++++++++--
->  1 file changed, 70 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-> index 1c2c92b657c7..75615c105fdf 100644
-> +++ b/drivers/iommu/intel/iommu.c
-> @@ -1556,12 +1556,18 @@ static void __iommu_flush_dev_iotlb(struct device_domain_info *info,
->  				    u64 addr, unsigned int mask)
->  {
->  	u16 sid, qdep;
-> +	ioasid_t pasid;
->  
->  	if (!info || !info->ats_enabled)
->  		return;
->  
->  	sid = info->bus << 8 | info->devfn;
->  	qdep = info->ats_qdep;
-> +	pasid = iommu_get_pasid_from_domain(info->dev, &info->domain->domain);
+Corruption happens when plane zpos is updated
 
-No, a simgple domain can be attached to multiple pasids, all need to
-be flushed.
+Example scenario:
 
-This whole API isn't suitable.
+Initial frame blender state:
+    PLANE_ZPOS = {0, 1, 2, 3}
+    BLD_ROUTE  = {0, 1, 2, 0}
+    BLD_EN     = {1, 1, 1, 0}
 
-Jason
+New frame commit (Only ZPOS has been changed):
+
+    PLANE_ZPOS = {0->2, 1->0, 2->1, 3}
+
+Expected results after plane state update:
+                Z0 Z1 Z2 Z3
+    BLD_ROUTE = {1, 2, 0, 0}
+    BLD_EN    = {1, 1, 1, 0}
+
+What is currently happening:
+
+1. sun8i_vi_layer_enable(enabled=true, zpos=2, old_zpos=0):
+    BLD_ROUTE = {1->0, 1, 2->0, 0}
+    BLD_EN    = {1->0, 1, 1->1, 0}
+
+2. sun8i_ui_layer_enable(enabled=true, zpos=0, old_zpos=1):
+    BLD_ROUTE = {0->1, 1->0, 0, 0}
+    BLD_EN    = {0->1, 1->0, 1, 0}
+
+3. sun8i_ui_layer_enable(enabled=true, zpos=1, old_zpos=2):
+    BLD_ROUTE = {1, 0->2, 0->0, 0}
+    BLD_EN    = {1, 0->2, 1->0, 0}
+
+After updating of all the planes we are ending up with BLD_EN[2]=0,
+which makes this channel disabled.
+
+To fix this issue, clear BLEND registers before updating the planes
+and do not clear the old state while processing every plane.
+
+Signed-off-by: Roman Stratiienko <roman.o.stratiienko@globallogic.com>
+---
+ drivers/gpu/drm/sun4i/sun8i_mixer.c    | 16 +++++++++++++++
+ drivers/gpu/drm/sun4i/sun8i_ui_layer.c | 28 ++++----------------------
+ drivers/gpu/drm/sun4i/sun8i_vi_layer.c | 28 ++++----------------------
+ 3 files changed, 24 insertions(+), 48 deletions(-)
+
+diff --git a/drivers/gpu/drm/sun4i/sun8i_mixer.c b/drivers/gpu/drm/sun4i/sun8i_mixer.c
+index f5e8aeaa3cdf..004377a000fc 100644
+--- a/drivers/gpu/drm/sun4i/sun8i_mixer.c
++++ b/drivers/gpu/drm/sun4i/sun8i_mixer.c
+@@ -248,6 +248,21 @@ int sun8i_mixer_drm_format_to_hw(u32 format, u32 *hw_format)
+ 	return -EINVAL;
+ }
+ 
++static void sun8i_atomic_begin(struct sunxi_engine *engine,
++			       struct drm_crtc_state *old_state)
++{
++	struct sun8i_mixer *mixer = engine_to_sun8i_mixer(engine);
++	u32 bld_base = sun8i_blender_base(mixer);
++
++	regmap_write(engine->regs,
++		     SUN8I_MIXER_BLEND_PIPE_CTL(bld_base),
++		     0);
++
++	regmap_write(engine->regs,
++		     SUN8I_MIXER_BLEND_ROUTE(bld_base),
++		     0);
++}
++
+ static void sun8i_mixer_commit(struct sunxi_engine *engine)
+ {
+ 	DRM_DEBUG_DRIVER("Committing changes\n");
+@@ -299,6 +314,7 @@ static struct drm_plane **sun8i_layers_init(struct drm_device *drm,
+ }
+ 
+ static const struct sunxi_engine_ops sun8i_engine_ops = {
++	.atomic_begin	= sun8i_atomic_begin,
+ 	.commit		= sun8i_mixer_commit,
+ 	.layers_init	= sun8i_layers_init,
+ };
+diff --git a/drivers/gpu/drm/sun4i/sun8i_ui_layer.c b/drivers/gpu/drm/sun4i/sun8i_ui_layer.c
+index 7845c2a53a7f..b294a882626a 100644
+--- a/drivers/gpu/drm/sun4i/sun8i_ui_layer.c
++++ b/drivers/gpu/drm/sun4i/sun8i_ui_layer.c
+@@ -24,8 +24,7 @@
+ #include "sun8i_ui_scaler.h"
+ 
+ static void sun8i_ui_layer_enable(struct sun8i_mixer *mixer, int channel,
+-				  int overlay, bool enable, unsigned int zpos,
+-				  unsigned int old_zpos)
++				  int overlay, bool enable, unsigned int zpos)
+ {
+ 	u32 val, bld_base, ch_base;
+ 
+@@ -44,18 +43,6 @@ static void sun8i_ui_layer_enable(struct sun8i_mixer *mixer, int channel,
+ 			   SUN8I_MIXER_CHAN_UI_LAYER_ATTR(ch_base, overlay),
+ 			   SUN8I_MIXER_CHAN_UI_LAYER_ATTR_EN, val);
+ 
+-	if (!enable || zpos != old_zpos) {
+-		regmap_update_bits(mixer->engine.regs,
+-				   SUN8I_MIXER_BLEND_PIPE_CTL(bld_base),
+-				   SUN8I_MIXER_BLEND_PIPE_CTL_EN(old_zpos),
+-				   0);
+-
+-		regmap_update_bits(mixer->engine.regs,
+-				   SUN8I_MIXER_BLEND_ROUTE(bld_base),
+-				   SUN8I_MIXER_BLEND_ROUTE_PIPE_MSK(old_zpos),
+-				   0);
+-	}
+-
+ 	if (enable) {
+ 		val = SUN8I_MIXER_BLEND_PIPE_CTL_EN(zpos);
+ 
+@@ -291,31 +278,24 @@ static int sun8i_ui_layer_atomic_check(struct drm_plane *plane,
+ static void sun8i_ui_layer_atomic_disable(struct drm_plane *plane,
+ 					  struct drm_atomic_state *state)
+ {
+-	struct drm_plane_state *old_state = drm_atomic_get_old_plane_state(state,
+-									   plane);
+ 	struct sun8i_ui_layer *layer = plane_to_sun8i_ui_layer(plane);
+-	unsigned int old_zpos = old_state->normalized_zpos;
+ 	struct sun8i_mixer *mixer = layer->mixer;
+ 
+-	sun8i_ui_layer_enable(mixer, layer->channel, layer->overlay, false, 0,
+-			      old_zpos);
++	sun8i_ui_layer_enable(mixer, layer->channel, layer->overlay, false, 0);
+ }
+ 
+ static void sun8i_ui_layer_atomic_update(struct drm_plane *plane,
+ 					 struct drm_atomic_state *state)
+ {
+-	struct drm_plane_state *old_state = drm_atomic_get_old_plane_state(state,
+-									   plane);
+ 	struct drm_plane_state *new_state = drm_atomic_get_new_plane_state(state,
+ 									   plane);
+ 	struct sun8i_ui_layer *layer = plane_to_sun8i_ui_layer(plane);
+ 	unsigned int zpos = new_state->normalized_zpos;
+-	unsigned int old_zpos = old_state->normalized_zpos;
+ 	struct sun8i_mixer *mixer = layer->mixer;
+ 
+ 	if (!new_state->visible) {
+ 		sun8i_ui_layer_enable(mixer, layer->channel,
+-				      layer->overlay, false, 0, old_zpos);
++				      layer->overlay, false, 0);
+ 		return;
+ 	}
+ 
+@@ -328,7 +308,7 @@ static void sun8i_ui_layer_atomic_update(struct drm_plane *plane,
+ 	sun8i_ui_layer_update_buffer(mixer, layer->channel,
+ 				     layer->overlay, plane);
+ 	sun8i_ui_layer_enable(mixer, layer->channel, layer->overlay,
+-			      true, zpos, old_zpos);
++			      true, zpos);
+ }
+ 
+ static const struct drm_plane_helper_funcs sun8i_ui_layer_helper_funcs = {
+diff --git a/drivers/gpu/drm/sun4i/sun8i_vi_layer.c b/drivers/gpu/drm/sun4i/sun8i_vi_layer.c
+index bb7c43036dfa..4653244b2fd8 100644
+--- a/drivers/gpu/drm/sun4i/sun8i_vi_layer.c
++++ b/drivers/gpu/drm/sun4i/sun8i_vi_layer.c
+@@ -18,8 +18,7 @@
+ #include "sun8i_vi_scaler.h"
+ 
+ static void sun8i_vi_layer_enable(struct sun8i_mixer *mixer, int channel,
+-				  int overlay, bool enable, unsigned int zpos,
+-				  unsigned int old_zpos)
++				  int overlay, bool enable, unsigned int zpos)
+ {
+ 	u32 val, bld_base, ch_base;
+ 
+@@ -38,18 +37,6 @@ static void sun8i_vi_layer_enable(struct sun8i_mixer *mixer, int channel,
+ 			   SUN8I_MIXER_CHAN_VI_LAYER_ATTR(ch_base, overlay),
+ 			   SUN8I_MIXER_CHAN_VI_LAYER_ATTR_EN, val);
+ 
+-	if (!enable || zpos != old_zpos) {
+-		regmap_update_bits(mixer->engine.regs,
+-				   SUN8I_MIXER_BLEND_PIPE_CTL(bld_base),
+-				   SUN8I_MIXER_BLEND_PIPE_CTL_EN(old_zpos),
+-				   0);
+-
+-		regmap_update_bits(mixer->engine.regs,
+-				   SUN8I_MIXER_BLEND_ROUTE(bld_base),
+-				   SUN8I_MIXER_BLEND_ROUTE_PIPE_MSK(old_zpos),
+-				   0);
+-	}
+-
+ 	if (enable) {
+ 		val = SUN8I_MIXER_BLEND_PIPE_CTL_EN(zpos);
+ 
+@@ -395,31 +382,24 @@ static int sun8i_vi_layer_atomic_check(struct drm_plane *plane,
+ static void sun8i_vi_layer_atomic_disable(struct drm_plane *plane,
+ 					  struct drm_atomic_state *state)
+ {
+-	struct drm_plane_state *old_state = drm_atomic_get_old_plane_state(state,
+-									   plane);
+ 	struct sun8i_vi_layer *layer = plane_to_sun8i_vi_layer(plane);
+-	unsigned int old_zpos = old_state->normalized_zpos;
+ 	struct sun8i_mixer *mixer = layer->mixer;
+ 
+-	sun8i_vi_layer_enable(mixer, layer->channel, layer->overlay, false, 0,
+-			      old_zpos);
++	sun8i_vi_layer_enable(mixer, layer->channel, layer->overlay, false, 0);
+ }
+ 
+ static void sun8i_vi_layer_atomic_update(struct drm_plane *plane,
+ 					 struct drm_atomic_state *state)
+ {
+-	struct drm_plane_state *old_state = drm_atomic_get_old_plane_state(state,
+-									   plane);
+ 	struct drm_plane_state *new_state = drm_atomic_get_new_plane_state(state,
+ 									   plane);
+ 	struct sun8i_vi_layer *layer = plane_to_sun8i_vi_layer(plane);
+ 	unsigned int zpos = new_state->normalized_zpos;
+-	unsigned int old_zpos = old_state->normalized_zpos;
+ 	struct sun8i_mixer *mixer = layer->mixer;
+ 
+ 	if (!new_state->visible) {
+ 		sun8i_vi_layer_enable(mixer, layer->channel,
+-				      layer->overlay, false, 0, old_zpos);
++				      layer->overlay, false, 0);
+ 		return;
+ 	}
+ 
+@@ -432,7 +412,7 @@ static void sun8i_vi_layer_atomic_update(struct drm_plane *plane,
+ 	sun8i_vi_layer_update_buffer(mixer, layer->channel,
+ 				     layer->overlay, plane);
+ 	sun8i_vi_layer_enable(mixer, layer->channel, layer->overlay,
+-			      true, zpos, old_zpos);
++			      true, zpos);
+ }
+ 
+ static const struct drm_plane_helper_funcs sun8i_vi_layer_helper_funcs = {
+-- 
+2.30.2
+

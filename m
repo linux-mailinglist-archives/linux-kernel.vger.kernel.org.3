@@ -2,51 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3A72533318
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 23:44:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6AF053331A
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 23:44:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235018AbiEXVoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 17:44:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58930 "EHLO
+        id S241951AbiEXVoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 17:44:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232887AbiEXVoA (ORCPT
+        with ESMTP id S235193AbiEXVog (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 17:44:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 862E67CDFD;
-        Tue, 24 May 2022 14:43:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 172BE6177E;
-        Tue, 24 May 2022 21:43:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39328C34100;
-        Tue, 24 May 2022 21:43:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653428638;
-        bh=pk0sDBNvdlwJrrfflBf7nAqss/iUtPV4Fv51aafyOjM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=IyV6K52Us5WXrhJD9okiGheCfOjZTydDt2eib5m8dLJXlPQW4fAFv2FpE1a8zYrUD
-         n1nomQmTtsNKNLfy9uOHCdgAvHzHGncBUrEyON2R/UvYYLYe1tOER+jOFMMfC9kVeD
-         cl4vJtek0ZMMsTT0WyMtrbLKlx295/vYuIWK2AqiRC2ydk2cLdsWSANyTfblNu1Ra0
-         +EYl9mHpAOnwggy1jwiS+SMXz7siEv7nobzglBvObqzc4EEq1nfOWszFLQ9BrOUZHC
-         zmCAhkcrNTJA7XPkisj3gWKpImU1Fkl+wli9+zI7a09ROJP5zwxEzC0+Lpvd0zt2Hf
-         PMVbq2/reJeBQ==
-Date:   Tue, 24 May 2022 16:43:56 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the pci tree
-Message-ID: <20220524214356.GA275586@bhelgaas>
+        Tue, 24 May 2022 17:44:36 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E24487DE3F
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 14:44:35 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id c22so17377802pgu.2
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 14:44:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=tdwGjLIYtWqSmu4a56WsblDf3vmkiiXdBBRqZtk4IQA=;
+        b=CuE1tQFSmFVJONeZAL2ThFeB1vwnSfXzq20k9Ovt4tQxLU7TJ23JFm4sQVvfgfOHpO
+         Sa+5HkQjHK3IdvBheLqRfLW1kI03jDepbgOkcxI9o+lvYjSXo2zrKOUfAI3T+u4CxO+b
+         i6o/oSBBJ0Jnzvgq8zHo2W6K+MEnlXla0lLQ8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tdwGjLIYtWqSmu4a56WsblDf3vmkiiXdBBRqZtk4IQA=;
+        b=WaesDF9kKZvVNl3Vfj7vJEQWsoWygclS04kMtykpzwgs0NCA9JWuJ6XNM67plpEIUP
+         Jo1WaG43zdjm13HNsxcyMpYZRo4CeU8ujgSJFgV3B6Zw7KX1+eN7c3BZ1DQPkOW8U4pY
+         xgyIMUVAbS76ZuOF0ZuXLjf4ed/9mjiwywpbVBkOCrL6v6ho2GyiOiV7sAelmazd39+C
+         wJxqm3rEyec8EhQbIEYXquG0GEhGdUkkMwcObf3RHxUpPYJQz0evQBMAI8MCKhU0LZrC
+         +SKAQyutxt44VfSd7iPQegeer7KkEPcXjhCrEmJK2I7kr779g6PfFLyFUTbqr6w/E8la
+         GWlw==
+X-Gm-Message-State: AOAM533Dw9HKTXriFGxM9rC2Q/SHRp1tJe8/8sWg7T4YBiXDz6JScsVD
+        JxFlQidVP/nT0n9WVI5wnoZKeA==
+X-Google-Smtp-Source: ABdhPJyJSoSMADvSLYVlL/2kUNvKx6n1UYhKgAQ/pEqNXyseFU7Q4J/kE1GmzKPcau1xYFh10SCG7g==
+X-Received: by 2002:a05:6a00:a8b:b0:4cd:6030:4df3 with SMTP id b11-20020a056a000a8b00b004cd60304df3mr30432733pfl.40.1653428675455;
+        Tue, 24 May 2022 14:44:35 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:4d83:f549:9abd:427])
+        by smtp.gmail.com with UTF8SMTPSA id e4-20020a170902e0c400b00161947ecc82sm387777pla.199.2022.05.24.14.44.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 May 2022 14:44:35 -0700 (PDT)
+Date:   Tue, 24 May 2022 14:44:33 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     bleung@chromium.org, groeck@chromium.org, robh+dt@kernel.org,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v4 5/5] platform/chrome: cros_kbd_led_backlight: support
+ EC PWM backend
+Message-ID: <Yo1RwaTYUtWWfdDg@google.com>
+References: <20220523090822.3035189-1-tzungbi@kernel.org>
+ <20220523090822.3035189-6-tzungbi@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220525070723.426cbfd4@canb.auug.org.au>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220523090822.3035189-6-tzungbi@kernel.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,21 +70,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 07:07:23AM +1000, Stephen Rothwell wrote:
-> Hi all,
+On Mon, May 23, 2022 at 05:08:22PM +0800, Tzung-Bi Shih wrote:
+> EC PWM backend uses EC_CMD_PWM_SET_KEYBOARD_BACKLIGHT and
+> EC_CMD_PWM_GET_KEYBOARD_BACKLIGHT for setting and getting the brightness
+> respectively.
 > 
-> Commits
-> 
->   5db490f54497 ("dt-bindings: PCI: qcom: Add schema for sc7280 chipset")
->   ee485c61f0e5 ("dt-bindings: PCI: qcom: Specify reg-names explicitly")
->   3d49f91acbcc ("dt-bindings: PCI: qcom: Do not require resets on msm8996 platforms")
->   e93dde4b6768 ("dt-bindings: PCI: qcom: Convert to YAML")
->   ed5e8fe0db30 ("PCI: qcom: Fix unbalanced PHY init on probe errors")
->   f36120778857 ("PCI: qcom: Fix runtime PM imbalance on probe errors")
->   53063d1437e5 ("PCI: qcom: Fix pipe clock imbalance")
->   5945b7056322 ("PCI: qcom: Add SM8150 SoC support")
->   ddd0cc4df5a1 ("dt-bindings: pci: qcom: Document PCIe bindings for SM8150 SoC")
-> 
-> are missing a Signed-off-by from their committer.
+> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
 
-Sorry, fixed.
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+Tested-by: Matthias Kaehlcke <mka@chromium.org>

@@ -2,194 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95D38532A3C
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 14:18:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AA9D532A44
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 14:22:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237277AbiEXMSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 08:18:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57558 "EHLO
+        id S237294AbiEXMTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 08:19:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233509AbiEXMSp (ORCPT
+        with ESMTP id S234334AbiEXMTa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 08:18:45 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 294288DDDB;
-        Tue, 24 May 2022 05:18:43 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 759CF1F43F10
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1653394722;
-        bh=qL2zwEVTGyHx3qjDE2gF4fhdtuxKIJOmdMC0x5/fTok=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=JQ/tsavMoWUhJC7+r53CgL89tt+wgN9dKsUbLNgReY5V8a7Aos7c1EZ0Ox8KLUmuK
-         rjA/ZAdXfjCML/ZzbOeElopTUlqZPg08pOCyFDmDmCSeUEZ6/jlF29jltWhcAU7031
-         wxobtSG5g4sh+pudjAra1pOPwbYlU87ccTtoJ9UhDVJgj6YR8z/REy/IVbhXBn4klo
-         /Sz2022c8TNJD85AY5pdw6JEndg0FnTxWRvwXfScGpAxifmFt6CxSTR6YD6CzTVuEv
-         4x41a+rizq6hS0r8kFj9cx9XrFLdW2dytM6cSpE9hS2QaC7S0CyZpya/Pm8V3DtMiS
-         DI8bm98tL04Vg==
-Message-ID: <8d1411a7-0714-1667-ffd4-3de99732b1a3@collabora.com>
-Date:   Tue, 24 May 2022 14:18:38 +0200
+        Tue, 24 May 2022 08:19:30 -0400
+Received: from outbound-smtp51.blacknight.com (outbound-smtp51.blacknight.com [46.22.136.235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0288F9346A
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 05:19:27 -0700 (PDT)
+Received: from mail.blacknight.com (pemlinmail02.blacknight.ie [81.17.254.11])
+        by outbound-smtp51.blacknight.com (Postfix) with ESMTPS id 9EE3EFB80F
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 13:19:26 +0100 (IST)
+Received: (qmail 8447 invoked from network); 24 May 2022 12:19:26 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 24 May 2022 12:19:26 -0000
+Date:   Tue, 24 May 2022 13:19:24 +0100
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>
+Subject: Re: [PATCH 5/6] mm/page_alloc: Protect PCP lists with a spinlock
+Message-ID: <20220524121924.GZ3441@techsingularity.net>
+References: <20220509130805.20335-1-mgorman@techsingularity.net>
+ <20220509130805.20335-6-mgorman@techsingularity.net>
+ <554f4cdf-e4d9-f547-d3bb-1bcc1c9eb1@google.com>
+ <20220524121224.GY3441@techsingularity.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] dt-bindings: mailbox: mtk-gce: Convert txt to json-schema
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        robh+dt@kernel.org
-Cc:     jassisinghbrar@gmail.com, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, houlong.wei@mediatek.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20220519101806.18097-1-angelogioacchino.delregno@collabora.com>
- <45e78390-5f91-7ac7-45d8-5796bc608234@linaro.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <45e78390-5f91-7ac7-45d8-5796bc608234@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <20220524121224.GY3441@techsingularity.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 20/05/22 10:15, Krzysztof Kozlowski ha scritto:
-> On 19/05/2022 12:18, AngeloGioacchino Del Regno wrote:
->> Convert the mtk-gce documentation from freeform text format to a
->> json-schema.
->>
->> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->> ---
->>   .../bindings/mailbox/mediatek,gce-mbox.yaml   | 114 ++++++++++++++++++
->>   .../devicetree/bindings/mailbox/mtk-gce.txt   |  82 -------------
->>   2 files changed, 114 insertions(+), 82 deletions(-)
->>   create mode 100644 Documentation/devicetree/bindings/mailbox/mediatek,gce-mbox.yaml
->>   delete mode 100644 Documentation/devicetree/bindings/mailbox/mtk-gce.txt
->>
->> diff --git a/Documentation/devicetree/bindings/mailbox/mediatek,gce-mbox.yaml b/Documentation/devicetree/bindings/mailbox/mediatek,gce-mbox.yaml
->> new file mode 100644
->> index 000000000000..750391b4038c
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/mailbox/mediatek,gce-mbox.yaml
->> @@ -0,0 +1,114 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/mailbox/mediatek,gce-mbox.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: MediaTek Global Command Engine (GCE) mailbox
->> +
->> +maintainers:
->> +  - Houlong Wei <houlong.wei@mediatek.com>
->> +
->> +description: |
->> +  The Global Command Engine (GCE) is used to help read/write registers
->> +  with critical time limitation, such as updating display configuration
->> +  during the vblank.
->> +  The GCE can be used to implement the Command Queue (CMDQ) driver.
+On Tue, May 24, 2022 at 01:12:24PM +0100, Mel Gorman wrote:
+> On Sat, May 21, 2022 at 07:49:10PM -0700, Hugh Dickins wrote:
+> > On Mon, 9 May 2022, Mel Gorman wrote:
+> > 
+> > > Currently the PCP lists are protected by using local_lock_irqsave to
+> > > prevent migration and IRQ reentrancy but this is inconvenient. Remote
+> > > draining of the lists is impossible and a workqueue is required and
+> > > every task allocation/free must disable then enable interrupts which is
+> > > expensive.
+> > > 
+> > > As preparation for dealing with both of those problems, protect the
+> > > lists with a spinlock. The IRQ-unsafe version of the lock is used
+> > > because IRQs are already disabled by local_lock_irqsave. spin_trylock
+> > > is used in preparation for a time when local_lock could be used instead
+> > > of lock_lock_irqsave.
+> > 
+> > 8c580f60a145 ("mm/page_alloc: protect PCP lists with a spinlock")
+> > in next-20220520: I haven't looked up whether that comes from a
+> > stable or unstable suburb of akpm's tree.
+> > 
+> > Mel, the VM_BUG_ON(in_hardirq()) which this adds to free_unref_page_list() 
+> > is not valid.  I have no appreciation of how important it is to the whole
+> > scheme, but as it stands, it crashes; and when I change it to a warning
+> > 
 > 
-> Mention the headers in description.
+> Thanks Hugh. Sorry for the delay in responding, I was offline for a few
+> days. The context where free_unref_page_list is called from IRQ context
+> is safe and the VM_BUG_ON can be removed.
 > 
 
-   Values for properties used by the GCE, such as sub-system IDs, thread
+Version that has a more appropriate baseline, it'll cause a collision
+later in the series but it's trivially resolved.
 
-   priority and event IDs are defined in 'dt-bindings/gce/<chip>-gce.h'.
+--8<--
+mm/page_alloc: Protect PCP lists with a spinlock -fix
 
-Would that be enough, or should I list all of the headers?
+Hugh Dickins reported the following problem;
 
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - mediatek,mt6779-gce
->> +      - mediatek,mt8173-gce
->> +      - mediatek,mt8183-gce
->> +      - mediatek,mt8186-gce
->> +      - mediatek,mt8192-gce
->> +      - mediatek,mt8195-gce
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  interrupts:
->> +    maxItems: 1
->> +
->> +  clocks:
->> +    maxItems: 1
->> +
->> +  clock-names:
->> +    items:
->> +      - const: gce
->> +
->> +  '#mbox-cells':
->> +    description: |
->> +      The first cell describes the mailbox channel, which is the GCE Thread ID;
->> +      The second cell describes the priority of the GCE thread.
->> +    const: 2
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - interrupts
->> +  - clocks
->> +  - clock-names
->> +  - '#mbox-cells'
->> +
->> +additionalProperties: false
->> +
->> +allOf:
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          enum:
->> +            - mediatek,mt8195-gce
->> +    then:
->> +      properties:
->> +        clocks:
->> +          maxItems: 2
-> 
-> Are you sure this works on mt8195-gce?
-> 
+[  256.167040] WARNING: CPU: 0 PID: 9842 at mm/page_alloc.c:3478 free_unref_page_list+0x92/0x343
+[  256.170031] CPU: 0 PID: 9842 Comm: cc1 Not tainted 5.18.0-rc7-n20 #3
+[  256.171285] Hardware name: LENOVO 20HQS0EG02/20HQS0EG02, BIOS N1MET54W (1.39 ) 04/16/2019
+[  256.172555] RIP: 0010:free_unref_page_list+0x92/0x343
+[  256.173820] Code: ff ff 49 8b 44 24 08 4d 89 e0 4c 8d 60 f8 eb b6 48 8b 03 48 39 c3 0f 84 af 02 00 00 65 8b 05 72 7f df 7e a9 00 00 0f 00 74 02 <0f> 0b 9c 41 5d fa 41 0f ba e5 09 73 05 e8 1f 0a f9 ff e8 46 90 7b
+[  256.175289] RSP: 0018:ffff88803ec07c80 EFLAGS: 00010006
+[  256.176683] RAX: 0000000080010000 RBX: ffff88803ec07cf8 RCX: 000000000000002c
+[  256.178122] RDX: 0000000000000000 RSI: ffff88803ec29d28 RDI: 0000000000000040
+[  256.179580] RBP: ffff88803ec07cc0 R08: ffff88803ec07cf0 R09: 00000000000a401d
+[  256.181031] R10: 0000000000000000 R11: ffff8880101891b8 R12: ffff88803f6dd600
+[  256.182501] R13: ffff88803ec07cf8 R14: 000000000000000f R15: 0000000000000000
+[  256.183957] FS:  00007ffff7fcfac0(0000) GS:ffff88803ec00000(0000) knlGS:0000000000000000
+[  256.185419] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  256.186911] CR2: 0000555555710cdc CR3: 00000000240b4004 CR4: 00000000003706f0
+[  256.188395] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[  256.189888] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[  256.191390] Call Trace:
+[  256.192844]  <IRQ>
+[  256.194253]  ? __mem_cgroup_uncharge_list+0x4e/0x57
+[  256.195715]  release_pages+0x26f/0x27e
+[  256.197150]  ? list_add_tail+0x39/0x39
+[  256.198603]  pagevec_lru_move_fn+0x95/0xa4
 
-Thanks for that, I've just rechecked the driver and.. no, that won't
-work for MT8195: it's just one clock there (like the others) and the
-clock names aren't even enforced, as the driver is always taking the
-clock at index 0.
+The VM_BUG_ON was added as preparing for a time when the PCP was an IRQ-unsafe
+lock. The fundamental limitation is that free_unref_page_list() cannot be called
+with the PCP lock held when an IRQ is delivered. At the moment, this is impossible
+and even if PCP was an IRQ-unsafe lock, free_unref_page_list is not called from
+page allocator context in an unsafe manner. Remove the VM_BUG_ON.
 
-I got confused because the driver uses a slightly different kind of
-logic when probing on SoCs with multiple mailboxes, specifically:
-  - For single mailbox, having a clock with name "gce" is enforced
-    as it's grabbing it with devm_clk_get(dev, clk_name), where the
-    clock name is declared in a string called "clk_name";
-  - For multiple mailboxes, it's looking for an of_alias, declared
-    in an array of strings called "clk_names" and getting the clock
-    with of_clk_get(node, 0).
+This is a fix to the mmotm patch
+mm-page_alloc-protect-pcp-lists-with-a-spinlock.patch
 
+Reported-by: Hugh Dickins <hughd@google.com>
+Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
 
-So there comes my confusion, recapping:
-
-static const char * const clk_name = "gce";
-                  <- this is a clock name
-static const char * const clk_names[] = { "gce0", "gce1" }; <- OF alias names
-
-
-At this point, I think that the best idea would be to fix this issue
-first... luckily there's no MT8195 devicetree upstream yet, so I would
-technically not be breaking any ABI by changing it to be the same as
-the others.
-
-Easier explanation: plan is to change the driver such that we won't
-need anything different from the others in this schema.
-
-New version coming soon, then....
-
-Regards,
-Angelo
-
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index e3a6aa97ad7a..52e7fe681483 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -3535,8 +3535,6 @@ void free_unref_page_list(struct list_head *list)
+ 	if (list_empty(list))
+ 		return;
+ 
+-	VM_BUG_ON(in_hardirq());
+-
+ 	local_lock_irqsave(&pagesets.lock, flags);
+ 
+ 	page = lru_to_page(list);

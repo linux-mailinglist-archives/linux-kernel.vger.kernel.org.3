@@ -2,120 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08E52532B91
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 15:46:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F084532B98
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 15:49:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237937AbiEXNpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 09:45:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33248 "EHLO
+        id S237938AbiEXNsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 09:48:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237928AbiEXNpx (ORCPT
+        with ESMTP id S235103AbiEXNs2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 09:45:53 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8EE4D954A5;
-        Tue, 24 May 2022 06:45:52 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4CAA61FB;
-        Tue, 24 May 2022 06:45:52 -0700 (PDT)
-Received: from [10.1.36.137] (e127744.cambridge.arm.com [10.1.36.137])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8D7653F70D;
-        Tue, 24 May 2022 06:45:48 -0700 (PDT)
-Subject: Re: [RFC PATCH 0/1] perf test cs-etm: Add end-to-end tests for
- CoreSight decoding
-To:     Ian Rogers <irogers@google.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        james.clark@arm.com, leo.yan@linaro.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>
-References: <20220523144952.364370-1-german.gomez@arm.com>
- <Yovo33Qh7eE7pTn1@kernel.org>
- <CAP-5=fVKcL5icCEaRRZT8Lh02=OsptJtaAk9JojwHNdyqcjvkw@mail.gmail.com>
-From:   German Gomez <german.gomez@arm.com>
-Message-ID: <6274f80b-a430-5392-8a28-e86541f57c05@arm.com>
-Date:   Tue, 24 May 2022 14:45:37 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 24 May 2022 09:48:28 -0400
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E59954B5;
+        Tue, 24 May 2022 06:48:27 -0700 (PDT)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-f1d2ea701dso22268050fac.10;
+        Tue, 24 May 2022 06:48:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=HIJN4WlvQ8QM86SidPISiFp+9klwdRDZuztIBtO9yCQ=;
+        b=YkXTtDAHpRJOG4saAljaWG223jRutpWQfbqUDddF6sa4OEFbCIq8RjrXaskO35VdcA
+         bIO/6k6zUjc6FQoqmSj62PcpXAyofVM4scxxRGQ77x6soGoz+cfZmGWocukZjMzQvjZ2
+         lokEZtX4LYp3K/pNPmpIiZG5EYqa7g3aBofdcj4kXFGWBhwNn4am9MYPNu8XyT7s9zB2
+         5vvoJScxS1QDJLKFqiL1Ehd4dB+9XPGk1DjOOPiGfYfluv+mY0tnGkCuhQ9BNrkExw+7
+         9Ed6AcX3Bn7KDWzY8eD51cF9UURBxx9e4sQIAlmfJhzuiNum9Kt7z9kYSkP4D7MdKULv
+         4npg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=HIJN4WlvQ8QM86SidPISiFp+9klwdRDZuztIBtO9yCQ=;
+        b=bAvuETGbUvgJUx/r4NqrF059etCgD23oN4hXql5wnV86WIkfMtMo8w6hqf5OVATnLu
+         8PNYCArW6n2Zo8Z9SrsaZZ1ggY0xz6mVSqscnGpOWr5qh50vd67/HkHEVqQ7cReRnIcD
+         XiYLq0lumhzMUYirX+yfaFyDo8iz6far15uzxgGE2B07j1YVli+JjdFMFMLR0qJLRZe5
+         fbe/ko9lJOErCPv+oi1S5Z6fBwcz511t/X9Xv9h2uGu2o6rSr/x5IAD3qGfIhjdKFZlJ
+         Z+r6L7YNvD01hRKZu12vvtjLYyr4mT51lkwG9lvYtQ2WflimXiPxzVVI+xRKpeSR9yN6
+         XVlg==
+X-Gm-Message-State: AOAM530zwHwRVsCcHV2G5oZe/9F2DY3Ft3VvSYqDsuDtT81GdML4+7tS
+        mo4OdzEtnAkdu8m/v4BKUjY=
+X-Google-Smtp-Source: ABdhPJxUSG7pAcNVWyh+QKZTZ7LFUcm+tqCLRf/HjZrS14Tenfn2U0zmK3ijgdVUn8Ifmzjgi4IP0g==
+X-Received: by 2002:a05:6870:9686:b0:f1:8905:3210 with SMTP id o6-20020a056870968600b000f189053210mr2458651oaq.61.1653400107093;
+        Tue, 24 May 2022 06:48:27 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m2-20020a4aab82000000b0035eb4e5a6bbsm5460752oon.17.2022.05.24.06.48.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 May 2022 06:48:26 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 24 May 2022 06:48:25 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Sibi Sankar <quic_sibis@quicinc.com>
+Cc:     bjorn.andersson@linaro.org, mani@kernel.org,
+        jassisinghbrar@gmail.com, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, agross@kernel.org,
+        Prasad Sodagudi <quic_psodagud@quicinc.com>
+Subject: Re: [PATCH v3] mailbox: qcom-ipcc: Log the pending interrupt during
+ resume
+Message-ID: <20220524134825.GA4188122@roeck-us.net>
+References: <1652784180-10142-1-git-send-email-quic_sibis@quicinc.com>
 MIME-Version: 1.0
-In-Reply-To: <CAP-5=fVKcL5icCEaRRZT8Lh02=OsptJtaAk9JojwHNdyqcjvkw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1652784180-10142-1-git-send-email-quic_sibis@quicinc.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ian, Arnaldo, thanks a lot for your feedback
+On Tue, May 17, 2022 at 04:13:00PM +0530, Sibi Sankar wrote:
+> From: Prasad Sodagudi <quic_psodagud@quicinc.com>
+> 
+> Enable logging of the pending interrupt that triggered device wakeup. This
+> logging information helps to debug IRQs that cause periodic device wakeups
+> by printing the detailed information of pending IPCC interrupts.
+> 
+> Scenario: Device wakeup caused by Modem crash
+> Logs:
+> qcom-ipcc mailbox: virq: 182 triggered client-id: 2; signal-id: 2
+> 
+> >From the IPCC bindings it can further be understood that the client here is
+> IPCC_CLIENT_MPSS and the signal was IPCC_MPROC_SIGNAL_SMP2P.
+> 
+> Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+> Signed-off-by: Prasad Sodagudi <quic_psodagud@quicinc.com>
+> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+> ---
+> 
+> V3:
+>  * Use pm_sleep_ptr and convert info to dbg [Mani]
 
-On 23/05/2022 22:29, Ian Rogers wrote:
-> On Mon, May 23, 2022 at 1:05 PM Arnaldo Carvalho de Melo
-> <acme@kernel.org> wrote:
->> Em Mon, May 23, 2022 at 03:49:51PM +0100, German Gomez escreveu:
->>> Hi
->>>
->>> While discussing running more tests for CoreSight, we thought it might
->>> be a good idea to upstream some EndToEnd tests for CoreSight decoding in
->>> order to lock down the behaviour. I am sending this as RFC to get some
->>> feedback from the community first.
->>>
->>> The test relies on pre-geneated perf.data files that are downloaded
->>> during the test. I'm not sure it's a good idea to commit those files to
->>> the Linux repository, so they would have to live in an external source
->>> and be downloaded during the test.
->> That is ok, but please cache it locally, so that from the second 'perf
->> test' run onwards one doesn´t have to incur in the download delay and
->> also be able to run the tests while not connected.
+Unfortunately, this results in
 
-Agreed, I will keep this in mind.
+drivers/mailbox/qcom-ipcc.c:258:12: error: 'qcom_ipcc_pm_resume' defined but not used
 
-> I have some continuous tests running that don't have internet access.
-> Could we have an environment variable to give a path to an already
-> downloaded version? I may be able to fake having a cached downloaded
-> version. Where would such a download live?
+on builds with PM disabled, as seen in next-20220524.
 
-Yes sure, download location could be (in order of priority) $PERF_TEST_AUXTRACE_DECODER > $XDG_CACHE_HOME > ~/.cache. I can add a mechanism to override the download step if needed.
+Guenter
 
-Also I think it would make sense for it to be generic/extensible for SPE and PT as well.
-
-Imho best location for Arm files at the moment is github/ARM-software, since we already kind of use it for perf work (the pmu json files, for example). We also have gitlab.arm.com but I'm not very familiar with that one, or if it can be used at all.
-
-Thanks,
-German
-
->
-> Thanks,
-> Ian
->
->> - Arnaldo
->>
->>> For this RFC, the files are stored in a Github repository [1]. As an
->>> idea, I think we could store them in a new repo in the ARM-software
->>> namespace. Any hosting suggestions are very welcome.
->>>
->>> Thanks,
->>> German
->>>
->>> [1] https://github.com/ARM-software/data/tree/984cde8fb0bb22591e284826a80b338bb79c3655/perf/coresight
->>>
->>> German Gomez (1):
->>>   perf test cs-etm: Add end-to-end tests for CoreSight decoding
->>>
->>>  tools/perf/tests/shell/lib/arm_auxtrace.sh    | 21 +++++++
->>>  .../tests/shell/test_arm_coresight_decoder.sh | 57 +++++++++++++++++++
->>>  2 files changed, 78 insertions(+)
->>>  create mode 100644 tools/perf/tests/shell/lib/arm_auxtrace.sh
->>>  create mode 100755 tools/perf/tests/shell/test_arm_coresight_decoder.sh
->>>
->>> --
->>> 2.25.1
->> --
->>
->> - Arnaldo
+>  * Fixup commit message
+> 
+> V2:
+>  * Fix build error when ipcc is a module [Kernel Test Bot]
+> 
+>  drivers/mailbox/qcom-ipcc.c | 23 +++++++++++++++++++++++
+>  1 file changed, 23 insertions(+)
+> 
+> diff --git a/drivers/mailbox/qcom-ipcc.c b/drivers/mailbox/qcom-ipcc.c
+> index c5d963222014..5a42bc2a1083 100644
+> --- a/drivers/mailbox/qcom-ipcc.c
+> +++ b/drivers/mailbox/qcom-ipcc.c
+> @@ -254,6 +254,24 @@ static int qcom_ipcc_setup_mbox(struct qcom_ipcc *ipcc,
+>  	return devm_mbox_controller_register(dev, mbox);
+>  }
+>  
+> +static int qcom_ipcc_pm_resume(struct device *dev)
+> +{
+> +	struct qcom_ipcc *ipcc = dev_get_drvdata(dev);
+> +	u32 hwirq;
+> +	int virq;
+> +
+> +	hwirq = readl(ipcc->base + IPCC_REG_RECV_ID);
+> +	if (hwirq == IPCC_NO_PENDING_IRQ)
+> +		return 0;
+> +
+> +	virq = irq_find_mapping(ipcc->irq_domain, hwirq);
+> +
+> +	dev_dbg(dev, "virq: %d triggered client-id: %ld; signal-id: %ld\n", virq,
+> +		FIELD_GET(IPCC_CLIENT_ID_MASK, hwirq), FIELD_GET(IPCC_SIGNAL_ID_MASK, hwirq));
+> +
+> +	return 0;
+> +}
+> +
+>  static int qcom_ipcc_probe(struct platform_device *pdev)
+>  {
+>  	struct qcom_ipcc *ipcc;
+> @@ -324,6 +342,10 @@ static const struct of_device_id qcom_ipcc_of_match[] = {
+>  };
+>  MODULE_DEVICE_TABLE(of, qcom_ipcc_of_match);
+>  
+> +static const struct dev_pm_ops qcom_ipcc_dev_pm_ops = {
+> +	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(NULL, qcom_ipcc_pm_resume)
+> +};
+> +
+>  static struct platform_driver qcom_ipcc_driver = {
+>  	.probe = qcom_ipcc_probe,
+>  	.remove = qcom_ipcc_remove,
+> @@ -331,6 +353,7 @@ static struct platform_driver qcom_ipcc_driver = {
+>  		.name = "qcom-ipcc",
+>  		.of_match_table = qcom_ipcc_of_match,
+>  		.suppress_bind_attrs = true,
+> +		.pm = pm_sleep_ptr(&qcom_ipcc_dev_pm_ops),
+>  	},
+>  };
+>  
+> -- 
+> 2.7.4
+> 

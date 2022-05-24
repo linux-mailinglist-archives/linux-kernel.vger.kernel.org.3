@@ -2,82 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EE33532F54
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 18:59:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29E02532F55
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 18:59:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239747AbiEXQ7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 12:59:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45124 "EHLO
+        id S239774AbiEXQ7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 12:59:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239766AbiEXQ7I (ORCPT
+        with ESMTP id S239789AbiEXQ7Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 12:59:08 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC00703F2
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 09:59:07 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id j6so16931444pfe.13
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 09:59:07 -0700 (PDT)
+        Tue, 24 May 2022 12:59:24 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AFA07C179
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 09:59:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=H/DtubZRV7+ZvAxCcXKcVcJC6FOQ/XSxjh1i8plYq8E=;
-        b=IEuiV1KeWuIAcNcCISdUIiHcWWP1KJRAs3fa0pHMvO5vMyfyBqrfLsRT/rZjpslM4r
-         SVnnvlDGHlmn5HQ1Neyg18m/enu3+pQtgY1uk5KUJgNHUD/8GW8R+vL/kD6bOdTJM9eG
-         QrEILSJ22hzajUE3DsSFNteYaE3cKCjFEtvLTFicOtkLK1iRoK3jLMFX+cyaZtIkY+JH
-         tc734EMQg5ghsGwZzA+0f3tgUQdHaqOMFccoF9wHKkideIM2R47mwvp5f76R/wbKLEuX
-         EvOqvZZhGN8duC6fI1LkDQNGZhrRFWyb2kRt2tTDsrbrCf0tRXwmvPzWT94mMU5QtB72
-         950w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=H/DtubZRV7+ZvAxCcXKcVcJC6FOQ/XSxjh1i8plYq8E=;
-        b=CccE5Jp6CMpxcN7S10JYhx5z4LMeL+6MaYYKlYgfQWczWQ9mQVTUtjFDa6q7ZNljZK
-         mditN9eHKzPQd3pzX7bUgnjioiYj9HOzManEwPiq0wZSJWKRZUIRCaPzddFw3nMXdban
-         3Ktr56RWHSb77cDdN5ykkva2lRCRMC6VYk7FZx5x0q1tj7MzGzKmiSe4cNJ84haOiAaB
-         IC4oLuf2vSbGubhZgbYLXTplALI8Oid/PbYyknoTHvpUcwjhWDlCDXMrWdP3ZQ1kl7QL
-         xpu+YUpTscC2PFu1GFgxeR0Rx29knSECRFNZwYhf7tpFe33uejcORTeSi7klfxjFFgaz
-         xWMw==
-X-Gm-Message-State: AOAM531581rh2mfUEOTewmDqk4TEjKNhP6TIgzI3coGWmNQn5fxCpjVi
-        apQRBBo362I+DBhCLykfMqI=
-X-Google-Smtp-Source: ABdhPJw0xiqNUbqGmI1l6crxfJjDQWf95J/3+y1s+hIoflR3DM1A6OaKu1llWGqfdCzhZnql5UlTtQ==
-X-Received: by 2002:a05:6a00:1411:b0:4fd:e594:fac0 with SMTP id l17-20020a056a00141100b004fde594fac0mr29249931pfu.79.1653411546988;
-        Tue, 24 May 2022 09:59:06 -0700 (PDT)
-Received: from google.com ([2620:15c:211:201:20f:8bc7:9098:371f])
-        by smtp.gmail.com with ESMTPSA id h11-20020a65518b000000b003c644b2180asm6894498pgq.77.2022.05.24.09.59.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 May 2022 09:59:06 -0700 (PDT)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Tue, 24 May 2022 09:59:04 -0700
-From:   Minchan Kim <minchan@kernel.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        John Dias <joaodias@google.com>,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH v4] mm: fix is_pinnable_page against on cma page
-Message-ID: <Yo0O2EDhfZ66SJur@google.com>
-References: <ef901bdb-6117-bad4-2f26-c80df270b86e@nvidia.com>
- <20220517192825.GM63055@ziepe.ca>
- <b6eef200-43d1-7913-21ed-176b05fcb4fe@nvidia.com>
- <You3Q/VFaCoS0mC8@google.com>
- <bcb95d6b-4507-8836-cf17-7c3cd179a3da@nvidia.com>
- <YoxqSud9fvNXqo89@google.com>
- <20220524141937.GA2661880@ziepe.ca>
- <Yoz9H95uXbjoKwdC@google.com>
- <20220524154831.GC2661880@ziepe.ca>
- <20220524163728.GO1790663@paulmck-ThinkPad-P17-Gen-1>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1653411560; x=1684947560;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=G8zqKzbAC43VBmVdOb+NPWZaQn7ZOrqgIiOJCocAtuM=;
+  b=QNPOxklweYtOQRoMk/zHqQUropfckaz3MuVuWe/CH1SJqwPNOj0KfZMN
+   hjKk1sYxO50q/RELxJ2/qEJLE9C/qHAt8N768cUHfD85hCcEGrX2sxnhL
+   yzI2qPpC9bj5+o2Y3b1Vum8CooopOky0zqxMBODAWW7VI5wgv3sw1WWem
+   w=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 24 May 2022 09:59:19 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 09:59:19 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 24 May 2022 09:59:19 -0700
+Received: from qian (10.80.80.8) by nalasex01a.na.qualcomm.com (10.47.209.196)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 24 May
+ 2022 09:59:17 -0700
+Date:   Tue, 24 May 2022 12:59:15 -0400
+From:   Qian Cai <quic_qiancai@quicinc.com>
+To:     Zi Yan <ziy@nvidia.com>
+CC:     David Hildenbrand <david@redhat.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>,
+        <virtualization@lists.linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Eric Ren <renzhengeek@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Oscar Salvador" <osalvador@suse.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v11 0/6] Use pageblock_order for cma and
+ alloc_contig_range alignment.
+Message-ID: <Yo0O4+tutrBd2fpB@qian>
+References: <0E75B247-8150-48A3-83AE-56C586030006@nvidia.com>
+ <YoavU/+NfQIzQiDF@qian>
+ <F6598450-EFE0-4EA9-912B-A727DE1F8185@nvidia.com>
+ <Yod71OhUa3VWWPCG@qian>
+ <48D48FDC-B8DD-41C9-B56A-EBD7314883AB@nvidia.com>
+ <A03D6267-5945-4A6A-9C55-5F3DDDB35CC2@nvidia.com>
+ <Yofu5wUgov+2eVCE@qian>
+ <C1636974-A315-4E0A-81C2-845878429920@nvidia.com>
+ <YognDJT8C/o1Mt+y@qian>
+ <FB2C38FF-1AF3-4A8D-94C0-AE5014E5592E@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20220524163728.GO1790663@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+In-Reply-To: <FB2C38FF-1AF3-4A8D-94C0-AE5014E5592E@nvidia.com>
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,90 +81,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 09:37:28AM -0700, Paul E. McKenney wrote:
-> On Tue, May 24, 2022 at 12:48:31PM -0300, Jason Gunthorpe wrote:
-> > On Tue, May 24, 2022 at 08:43:27AM -0700, Minchan Kim wrote:
-> > > On Tue, May 24, 2022 at 11:19:37AM -0300, Jason Gunthorpe wrote:
-> > > > On Mon, May 23, 2022 at 10:16:58PM -0700, Minchan Kim wrote:
-> > > > > On Mon, May 23, 2022 at 07:55:25PM -0700, John Hubbard wrote:
-> > > > > > On 5/23/22 09:33, Minchan Kim wrote:
-> > > > > > ...
-> > > > > > > > So then:
-> > > > > > > > 
-> > > > > > > > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> > > > > > > > index 0e42038382c1..b404f87e2682 100644
-> > > > > > > > +++ b/mm/page_alloc.c
-> > > > > > > > @@ -482,7 +482,12 @@ unsigned long __get_pfnblock_flags_mask(const struct page *page,
-> > > > > > > >          word_bitidx = bitidx / BITS_PER_LONG;
-> > > > > > > >          bitidx &= (BITS_PER_LONG-1);
-> > > > > > > > 
-> > > > > > > > -       word = bitmap[word_bitidx];
-> > > > > > > > +       /*
-> > > > > > > > +        * This races, without locks, with set_pageblock_migratetype(). Ensure
-> > > > > > >                                               set_pfnblock_flags_mask would be better?
-> > > > > > > > +        * a consistent (non-tearing) read of the memory array, so that results,
-> > > > > > > 
-> > > > > > > Thanks for proceeding and suggestion, John.
-> > > > > > > 
-> > > > > > > IIUC, the load tearing wouldn't be an issue since [1] fixed the issue.
-> > > > > > 
-> > > > > > Did it? [1] fixed something, but I'm not sure we can claim that that
-> > > > > > code is now safe against tearing in all possible cases, especially given
-> > > > > > the recent discussion here. Specifically, having this code do a read,
-> > > > > > then follow that up with calculations, seems correct. Anything else is
-> > > > > 
-> > > > > The load tearing you are trying to explain in the comment would be
-> > > > > solved by [1] since the bits will always align on a word and accessing
-> > > > > word size based on word aligned address is always atomic so there is
-> > > > > no load tearing problem IIUC.
-> > > > 
-> > > > That is not technically true. It is exactly the sort of thing
-> > > > READ_ONCE is intended to guard against.
-> > > 
-> > > Oh, does word access based on the aligned address still happen
-> > > load tearing? 
-> > > 
-> > > I just referred to
-> > > https://elixir.bootlin.com/linux/latest/source/Documentation/memory-barriers.txt#L1759
-> > 
-> > I read that as saying load tearing is technically allowed but doesn't
-> > happen in gcc, and so must use the _ONCE macros.
+On Sun, May 22, 2022 at 12:54:04PM -0400, Zi Yan wrote:
+> Can you try the patch below on top of linux-next to see if it fixes the infinite loop issue?
+> Thanks.
 > 
-> This is in fact the intent, except...
-> 
-> And as that passage goes on to state, there really are compilers (such
-> as GCC) that tear stores of constants to machine aligned/sized locations.
-> 
-> In short, use of the _ONCE() macros can save you a lot of pain.
+> 1. split_free_page() change is irrelevant but to make the code more robust.
+> 2. using set_migratetype_isolate() in isolate_single_pageblock() is to properly mark the pageblock
+> MIGRATE_ISOLATE.
+> 3. setting to-be-migrated page's pageblock to MIGRATE_ISOLATE is to avoid a possible race
+> that another thread might take the free page after migration.
+> 4. off-by-one fix and no retry if free page is not found after migration like I added before.
 
-Thanks for the correction, Jason and Paul
-
-> 
-> > > I didn't say it doesn't refetch the value without the READ_ONCE.
-> > > 
-> > > What I am saying is READ_ONCE(bitmap_word_bitidx] prevents "refetching"
-> > > issue rather than "tearing" issue in specific __get_pfnblock_flags_mask
-> > > context because I though there is no load-tearing issue there since
-> > > bitmap is word-aligned/accessed. No?
-> > 
-> > It does both. AFAIK our memory model has no guarentees on what naked C
-> > statements will do. Tearing, multi-load, etc - it is all technically
-> > permitted. Use the proper accessors.
-
-Seems like there was some misunderstanding here.
-
-I didn't mean not to use READ_ONCE for the bitmap but wanted to have
-more concrete comment. Since you guys corrected "even though word-alinged
-access could be wrong without READ_ONCE", I would keep the comment John
-suggested.
-
-> 
-> I am with Jason on this one.
-> 
-> In fact, I believe that any naked C-language access to mutable shared
-> variables should have a comment stating why the compiler cannot mangle
-> that access.
-
-Agreed.
-
-Thanks!
+Cool. I'll be running it this week and report back next week.

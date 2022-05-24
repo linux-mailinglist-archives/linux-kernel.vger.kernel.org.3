@@ -2,113 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D452D53328F
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 22:44:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DF76533288
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 22:41:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241520AbiEXUoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 16:44:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41904 "EHLO
+        id S241605AbiEXUlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 16:41:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238638AbiEXUoW (ORCPT
+        with ESMTP id S241590AbiEXUle (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 16:44:22 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B019712E6
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 13:44:20 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id br17so20484793lfb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 13:44:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=huOMfVzBuyOiVvdK/MBgTa5e2DlFi34FRjwinoAWhQw=;
-        b=Leyfu+q2cQs4X+VAh9p7WyspRKKN9AajJaaq7iBUfrbCZulu0O4xpeTE64b8HnVfG8
-         j/21YiT8ew0xb5w01SCrsWNkESNi62Og5SzruUCLHoUEkglIUoB4dCF1/rMrQUFEVFqL
-         zI2gv8ybJRlKj051tfrHUr+1fF000YOYKH2XO1pp2yI+OMvZTee/FlRkkfu9QNPnI8Dv
-         +ifzCPUHnbEoPVNJffqxyJRbUXQenKiIbmUQyMegTUxdBQkJdjn+5pIgCnAwW138HSic
-         mfrUEeFSwJEFxT91eV2+vK8MmB1H6ek/Fhh6EehALQIfVbWZUjW4al+SabsE1u/vw2hw
-         1sBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=huOMfVzBuyOiVvdK/MBgTa5e2DlFi34FRjwinoAWhQw=;
-        b=vro2LFnVqJM0v2UN9RfbcAtaSpclfJZEkQWuboC7AyGjlf/yi6w+nEGmO46LRNq3Ls
-         UyD+LHNuwX7LTrukpf81a0+6yxjJ3Sn8JLg5+53qN1h5rpU+KjnUp18OEkR7piH7frEc
-         oh5eLSsgGhQ/0pe0v6iAVklgKz3dVaPS+leqXADCUbHIk80YOZPS8uMh5fqpzqeWzuEv
-         PgggVHk8agRNkZ545EsS78+3O5sZ3guVrfpYIh9ILF5iGfm5jx+4egk2E2+cxsPw9SZt
-         Uqsbohx54OoXje9bMSFllj/Ufr0WjSSff26b5vcJZaxd2Zwv/57HW2ifPHCNmKLKUDVp
-         yyxA==
-X-Gm-Message-State: AOAM530mOBJI+nxG52f502ssQJmRq1bCv/voKTbkyOAzvhw4Xi19TL9X
-        9XHPoRMOdIuptUPLSe40UIJ7n7Spzlb4G08loS/XfQ==
-X-Google-Smtp-Source: ABdhPJy6wop+fJ1n1TfLcrlKDthzTmtCj1Moa3LBd4CNE7whT6h8sZrF+BORjFxjY5h93F1+C9hs16t8wpGpStygs7s=
-X-Received: by 2002:a05:6512:ace:b0:478:9af3:d9cb with SMTP id
- n14-20020a0565120ace00b004789af3d9cbmr1122823lfu.103.1653425058264; Tue, 24
- May 2022 13:44:18 -0700 (PDT)
+        Tue, 24 May 2022 16:41:34 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAB6F48305;
+        Tue, 24 May 2022 13:41:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653424893; x=1684960893;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=yIv8vgMmqMTj4IZXd8vqbLx0EuYjS2FZ1lkgJF4zRYM=;
+  b=NC1M3e2lwy0Ok9y9tSkyG22C6TRNER5cCUkUMK6ROof4fj6NslCFuUxS
+   c5pwk2E+UxzHlMtkyAb7udHg2LFYRcrK0wpeGQAhGBnicF52uvioP6PBq
+   cOMeiboXwt6EjlJdMVVrXlFw8/d42H3RcQfIySK1msTCavETU8OH0octZ
+   rgDuCqzddqQnVW255sS4X6JubMYaGU9HIpgmUze4RDEFQdSWoB4mtU+6N
+   5GwCF95vm+Iw4zoCGE2QjcwOkBY5pdGxqefCObE++kWykquhHWC0sEd1N
+   ELm++9xWw3TZBHIWsUrKKSlrKSULIkjtIjH6+rCc1nR9zW35Sv+XjvFgt
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10357"; a="273757095"
+X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
+   d="scan'208";a="273757095"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 13:41:33 -0700
+X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
+   d="scan'208";a="745385856"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.198.157])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 13:41:32 -0700
+Date:   Tue, 24 May 2022 13:45:26 -0700
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     iommu@lists.linux-foundation.org,
+        LKML <linux-kernel@vger.kernel.org>, dmaengine@vger.kernel.org,
+        Joerg Roedel <joro@8bytes.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Christoph Hellwig <hch@infradead.org>, vkoul@kernel.org,
+        robin.murphy@arm.com, will@kernel.org, Yi Liu <yi.l.liu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        Raj Ashok <ashok.raj@intel.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH v4 3/6] iommu/vt-d: Implement domain ops for
+ attach_dev_pasid
+Message-ID: <20220524134526.409519ac@jacob-builder>
+In-Reply-To: <20220524180241.GY1343366@nvidia.com>
+References: <20220518182120.1136715-1-jacob.jun.pan@linux.intel.com>
+        <20220518182120.1136715-4-jacob.jun.pan@linux.intel.com>
+        <20220524135135.GV1343366@nvidia.com>
+        <20220524091235.6dddfab4@jacob-builder>
+        <20220524180241.GY1343366@nvidia.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220523164626.858340-1-masahiroy@kernel.org> <20220523164626.858340-2-masahiroy@kernel.org>
-In-Reply-To: <20220523164626.858340-2-masahiroy@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 24 May 2022 13:44:07 -0700
-Message-ID: <CAKwvOd=fZ=V52fOc47O1=0wy36b8q_LO54J0099_GkouzH0SZA@mail.gmail.com>
-Subject: Re: [PATCH 2/5] modpost: remove the unused argument of check_sec_ref()
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michal Marek <michal.lkml@markovi.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 9:48 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> check_sec_ref() does not use the first parameter 'mod'.
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Hi Jason,
 
-Perhaps we could enable some -W flags for scripts/mod/?
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+On Tue, 24 May 2022 15:02:41 -0300, Jason Gunthorpe <jgg@nvidia.com> wrote:
 
-> ---
->
->  scripts/mod/modpost.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
->
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index 845bc438ca49..843c64eebe8b 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -1883,8 +1883,7 @@ static void section_rel(const char *modname, struct elf_info *elf,
->   * to find all references to a section that reference a section that will
->   * be discarded and warns about it.
->   **/
-> -static void check_sec_ref(struct module *mod, const char *modname,
-> -                         struct elf_info *elf)
-> +static void check_sec_ref(const char *modname, struct elf_info *elf)
->  {
->         int i;
->         Elf_Shdr *sechdrs = elf->sechdrs;
-> @@ -2069,7 +2068,7 @@ static void read_symbols(const char *modname)
->                                              sym_get_data(&info, sym));
->         }
->
-> -       check_sec_ref(mod, modname, &info);
-> +       check_sec_ref(modname, &info);
->
->         if (!mod->is_vmlinux) {
->                 version = get_modinfo(&info, "version");
-> --
-> 2.32.0
->
+> On Tue, May 24, 2022 at 09:12:35AM -0700, Jacob Pan wrote:
+> > Hi Jason,
+> > 
+> > On Tue, 24 May 2022 10:51:35 -0300, Jason Gunthorpe <jgg@nvidia.com>
+> > wrote: 
+> > > On Wed, May 18, 2022 at 11:21:17AM -0700, Jacob Pan wrote:  
+> > > > On VT-d platforms with scalable mode enabled, devices issue DMA
+> > > > requests with PASID need to attach PASIDs to given IOMMU domains.
+> > > > The attach operation involves the following:
+> > > > - Programming the PASID into the device's PASID table
+> > > > - Tracking device domain and the PASID relationship
+> > > > - Managing IOTLB and device TLB invalidations
+> > > > 
+> > > > This patch add attach_dev_pasid functions to the default domain ops
+> > > > which is used by DMA and identity domain types. It could be
+> > > > extended to support other domain types whenever necessary.
+> > > > 
+> > > > Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+> > > > Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> > > >  drivers/iommu/intel/iommu.c | 72
+> > > > +++++++++++++++++++++++++++++++++++-- 1 file changed, 70
+> > > > insertions(+), 2 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/iommu/intel/iommu.c
+> > > > b/drivers/iommu/intel/iommu.c index 1c2c92b657c7..75615c105fdf
+> > > > 100644 +++ b/drivers/iommu/intel/iommu.c
+> > > > @@ -1556,12 +1556,18 @@ static void __iommu_flush_dev_iotlb(struct
+> > > > device_domain_info *info, u64 addr, unsigned int mask)
+> > > >  {
+> > > >  	u16 sid, qdep;
+> > > > +	ioasid_t pasid;
+> > > >  
+> > > >  	if (!info || !info->ats_enabled)
+> > > >  		return;
+> > > >  
+> > > >  	sid = info->bus << 8 | info->devfn;
+> > > >  	qdep = info->ats_qdep;
+> > > > +	pasid = iommu_get_pasid_from_domain(info->dev,
+> > > > &info->domain->domain);    
+> > > 
+> > > No, a simgple domain can be attached to multiple pasids, all need to
+> > > be flushed.
+> > >   
+> > Here is device TLB flush, why would I want to flush PASIDs other than my
+> > own device attached?  
+> 
+> Again, a domain can be attached to multiple PASID's *on the same
+> device*
+> 
+> The idea that there is only one PASID per domain per device is not
+> right.
+> 
+Got you, I was under the impression that there is no use case yet for
+multiple PASIDs per device-domain based on our early discussion.
+https://lore.kernel.org/lkml/20220315142216.GV11336@nvidia.com/
 
+Perhaps I misunderstood. I will make the API more future proof and search
+through the pasid_array xa for *all* domain-device matches. Like you
+suggested earlier, may need to retrieve the xa in the first place and use
+xas_for_each to get a faster search.
 
--- 
 Thanks,
-~Nick Desaulniers
+
+Jacob

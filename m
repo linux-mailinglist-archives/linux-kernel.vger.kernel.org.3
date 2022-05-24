@@ -2,88 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CAEA53338A
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 00:30:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9ACA53338C
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 00:31:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242240AbiEXWaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 18:30:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50296 "EHLO
+        id S242281AbiEXWbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 18:31:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242222AbiEXWaB (ORCPT
+        with ESMTP id S242278AbiEXWbB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 18:30:01 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA09635855
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 15:30:00 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id ck4so33873591ejb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 15:30:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UoL8UouejxI345jMXPVubIHv74eQbvQqgzHXEHWV0Bw=;
-        b=bVAfAmfQZrFwKusE/UDZf5VLi4/7Q4AYN/Crlhf+AalFHGbJ39jaE09Y65EIvpnsY/
-         SzrEHsXxPp7TYD2nPlsE1UzawIHmWgEcBDL6yhGt0BJuX7PzHtjD3qHoKKb6ObTW2aYA
-         1IGjY3efPWV/VlRFnXm8r2LOneJc03/SwsCjA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UoL8UouejxI345jMXPVubIHv74eQbvQqgzHXEHWV0Bw=;
-        b=jHiI8jDCEttrMZ4fQvP9MJJGrQF6Ba/yE6IsZUYwTkmOy2ijlEZtc3ZZD/e18fMDMk
-         V/XeAYcoMcwkMccxQb0GUXVkHkFR/QG181RmGX2IpYFT789s5k1vtyIylLIwisrOX0ET
-         7pUFeq/v8jYgaFZDrbPngwfyr3AKw4AkHPbWEgdefTeWu39bMZ7kkJoGaaAdd0K4mdaD
-         RIYX+82e4sKOmCQFilUWl1JW2OaDMMVwqxJbNSZAZFvE5zkq0Q+0hvWBJK/8XcqN9UTi
-         PnDKguIMauEBOxCy5qyTso/4EQn22Il0DHXMzqHHctFyN2UBQcLM5T3QJDxNFKlAO2iq
-         GymQ==
-X-Gm-Message-State: AOAM532qKuFfLYaaTgiX7BXINqed6I0YGwYe/fS5vZtT6j6ylSZGhMTx
-        qFa2WXcS4UkGfI9a1WfhHzp4/RmM1ZKkQO7D
-X-Google-Smtp-Source: ABdhPJypvZxCEF4hRkp9vpQAVizYhnaZg1kuw6MNdE4eyOchTm+JZvaXjobXChSLm6HMUo2IdtSCfg==
-X-Received: by 2002:a17:906:a186:b0:6fe:8a06:849b with SMTP id s6-20020a170906a18600b006fe8a06849bmr26223142ejy.635.1653431398974;
-        Tue, 24 May 2022 15:29:58 -0700 (PDT)
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com. [209.85.128.46])
-        by smtp.gmail.com with ESMTPSA id zd20-20020a17090698d400b006fe960c5c5asm6339652ejb.126.2022.05.24.15.29.58
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 May 2022 15:29:58 -0700 (PDT)
-Received: by mail-wm1-f46.google.com with SMTP id o29-20020a05600c511d00b00397697f172dso318779wms.0
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 15:29:58 -0700 (PDT)
-X-Received: by 2002:a7b:cb91:0:b0:397:3225:244 with SMTP id
- m17-20020a7bcb91000000b0039732250244mr5664550wmi.68.1653431397793; Tue, 24
- May 2022 15:29:57 -0700 (PDT)
+        Tue, 24 May 2022 18:31:01 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46694366BD
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 15:30:59 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id ADA11221D4;
+        Wed, 25 May 2022 00:30:50 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1653431456;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lhGQ7tI7wUakb4EC0eKrtQPP0/Pvguw0Yv+MToZjl2E=;
+        b=AkCfXPN7d5TXu1LEgNEP3517qTQIuyfHqvMT91ZTbkKaH6rNMxHCcV/2yKKm6zSKCeSMRj
+        IlubmWCkPfKRzqlldBgBuvH0jUa6gCoXlz9EUZdBhhcYVNM7iYuzPnErdIRGhh7O0govft
+        p6mbpfi1z7FNnPVFdDReNeE9+nAeNsc=
 MIME-Version: 1.0
-References: <nycvar.YFH.7.76.2205241107530.28985@cbobk.fhfr.pm>
-In-Reply-To: <nycvar.YFH.7.76.2205241107530.28985@cbobk.fhfr.pm>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 24 May 2022 15:29:41 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wh91nMR037ps4B=AUOEemZVr_UKDdUmpSTpYGtV2909kw@mail.gmail.com>
-Message-ID: <CAHk-=wh91nMR037ps4B=AUOEemZVr_UKDdUmpSTpYGtV2909kw@mail.gmail.com>
-Subject: Re: [GIT PULL] HID for 5.19
-To:     Jiri Kosina <jikos@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Wed, 25 May 2022 00:30:50 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
+Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Martijn Braam <martijn@brixit.nl>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mtd: spi-nor: gigadevice: add support for gd25lq128e
+In-Reply-To: <28d3925a-983a-fcb8-19af-6e6baf892d53@tom-fitzhenry.me.uk>
+References: <20220523055541.724422-1-tom@tom-fitzhenry.me.uk>
+ <65339d49135ffb578b5cd5ae459cea8a@walle.cc>
+ <28d3925a-983a-fcb8-19af-6e6baf892d53@tom-fitzhenry.me.uk>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <10c2bc96821e9a907e54ef1675dc4c60@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 2:11 AM Jiri Kosina <jikos@kernel.org> wrote:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git tags/for-linus-2022052401
+Am 2022-05-24 22:50, schrieb Tom Fitzhenry:
+> On 23/5/22 18:03, Michael Walle wrote:
+>> According to JEP106BC the vendor code 0x25 is Tristar. I'm
+>> not sure what is going on here.
+> 
+> Nor I! The board schematic[0] reports the use of GD25LQ128EWIGR
+> (vendor Gigadevices), but indeed the chip itself reports vendor
+> Tristar.
+> 
+> I will ask the community/vendor about this discrepancy.
 
-I've pulled this as you can tell from the pr-tracker-bot reply, but
-please improve your merge messages.
+Yes that would be great. Could also be one of the other
+25h vendors, usually the continuation code is just ignored.
+I'd bet it some china SPI flash.
 
-Some of them are fine (eg that uclogic merge has explanation of what
-it does), but others really only say "Merge branch xyz into for-linus"
-with no actual information about what the branch does.
+I don't think it is a Gigadevice because the datasheet says its ID
+is c86018.
 
-Please?
+>> This flash supports SFDP, please provide an SFDP dump, see [1].
+> 
+> I will include this in my v2 patch. For posterity, here's the dump:
+> 
+> $ xxd -p /sys/bus/spi/devices/spi0.0/spi-nor/sfdp
+> 53464450060101ff00060110300000ff9d05010380000002ffffffffffff
+> ffffffffffffffffffffffffffffffffffffe520f9ffffffff0744eb086b
+> 083b80bbfeffffffffff00ffffff44eb0c200f5210d800ff234ac90082d8
+> 11c7cccd68467a757a75f7a2d55c4a422cfff030c080ffffffffffffffff
+> ffffffffffffffff501950169cf9c0648fecffff
+> $ md5sum /sys/bus/spi/devices/spi0.0/spi-nor/sfdp
+> de4d6be54e479d60859b0ca8a0ee9216  
+> /sys/bus/spi/devices/spi0.0/spi-nor/sfdp
+> $ cat /sys/bus/spi/devices/spi0.0/spi-nor/jedec_id
+> 257018
+> $ cat /sys/bus/spi/devices/spi0.0/spi-nor/partname
+> gd25lq128e
+> $ cat /sys/bus/spi/devices/spi0.0/spi-nor/manufacturer
+> gigadevice
 
-                  Linus
+Thanks.
+
+> I have attached the parsed sfdp, according to
+> https://github.com/petris/sfdp-parser
+> 
+>> Did you test locking?
+> 
+> No. The datasheet mentions Status Register locking, but I will look
+> into how to adequately test this.
+
+Or just drop the locking flags for now if you like.
+
+>> As this flash supports SFDP, please use SNOR_ID3(0x257018)
+>> and drop both the INFO() and the NO_SFDP_FLAGS(). You'll
+>> need my SNOR_ID3() patches [2].
+> 
+> SGTM, will do.
+
+If you don't find the vendor and don't need locking, there is
+also a generic SFDP flash driver [1]. You could give it a try
+and add a Tested-by there.
+
+-michael
+
+[1] 
+https://lore.kernel.org/linux-mtd/20220513133520.3945820-1-michael@walle.cc/

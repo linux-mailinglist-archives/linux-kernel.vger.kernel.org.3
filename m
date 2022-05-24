@@ -2,98 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BB8D532382
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 08:53:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA2435323B5
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 09:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234311AbiEXGxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 02:53:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37896 "EHLO
+        id S234427AbiEXHKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 03:10:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbiEXGxp (ORCPT
+        with ESMTP id S229886AbiEXHKH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 02:53:45 -0400
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B1F184A14;
-        Mon, 23 May 2022 23:53:44 -0700 (PDT)
-Received: by mail-il1-x132.google.com with SMTP id t13so4392537ilm.9;
-        Mon, 23 May 2022 23:53:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=1LOOK5eaUWqnI53NP5MJqFE5NFaX42KOH7g8Jj1sqQw=;
-        b=ZHMM8sUAT9TASkfd+Ti9J3EoyI6VZ/9R5zjTUbs/t0bN1xQzNDop6DQaHWSLNiYSyj
-         y9zvBXxvzc3UHDpY6YIAPW9TYv+/NALQqNmwSar7s7bKRvLsLi5q7M3bHWB5mLa0oMO8
-         vTdVz65oGsVlp4VgdjM5Cq68awx7zaWT78R69J48sPTY//KZ72ahgMqx/2rGMXKYRuk1
-         seOBCRNJzPZbZIUIwQyc5m+fonrxkSGW1IaY0rjU+NQ55wvVruoqwiMkWV8shsi1sWzk
-         o5CE/S2Bc62gbARaERJH+3Vk/162IajLVnBOE3aqCTfrbYfGZMmlYpN8NDKo4hZ/XGau
-         avAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=1LOOK5eaUWqnI53NP5MJqFE5NFaX42KOH7g8Jj1sqQw=;
-        b=yev1uv0Fhm4SpUCifUt5wWwRSxDCFDdkb/g3KmPamQjFPYcI6TdwbQU/e6OT91TzA2
-         46A39X/bM3hq0yQXHxvXOFJiHZmkbzXo06Tz7b1VAE/Apb+Nfw+G4DTTQuz3TNcw4YqE
-         S3+UC2pYgGD7zpKPY/47zxGFrTEfYekswz1H/nGr86zX8lukaYmfUezxMVj6ZhOaq/Tv
-         1INVBufkF57Up8UHtrjJWGkVfiEhbePip3AqUxWV4j3z6I71hELI2IzNEyda/b8c7PYz
-         ppHiocBElp9f9RRI7ydxKruall+6YWQ9HjPQrwfAJITV+GJd4FBboBPV/Hg/nbPYcG6x
-         Y3/Q==
-X-Gm-Message-State: AOAM530VbwbCUvulz47yWknvIn+Ffa7VdUwfrcVQpi4CVZehxxbcfcT1
-        SNmhS/SJzyQxyv6iwEUTV3A+T2n+qQxIgOTouEM=
-X-Google-Smtp-Source: ABdhPJynTUdbvpklBINUlsc1/KShLCTZH+W6kPo9ma0vLoRiInjY7ag+TbSr/+2Hg1QWyhbE+YyHWQ==
-X-Received: by 2002:a92:c5d1:0:b0:2bd:fdca:18a8 with SMTP id s17-20020a92c5d1000000b002bdfdca18a8mr7448505ilt.320.1653375223385;
-        Mon, 23 May 2022 23:53:43 -0700 (PDT)
-Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
-        by smtp.gmail.com with ESMTPSA id 15-20020a92180f000000b002d1cb55be3bsm148084ily.29.2022.05.23.23.53.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 23:53:42 -0700 (PDT)
-Message-ID: <628c80f6.1c69fb81.3c569.06f2@mx.google.com>
-Date:   Mon, 23 May 2022 23:53:42 -0700 (PDT)
-X-Google-Original-Date: Tue, 24 May 2022 06:53:41 GMT
-From:   Fox Chen <foxhlchen@gmail.com>
-In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
-Subject: RE: [PATCH 5.15 000/132] 5.15.42-rc1 review
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Fox Chen <foxhlchen@gmail.com>
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 24 May 2022 03:10:07 -0400
+Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC4C885ED2
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 00:10:05 -0700 (PDT)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed30:4593:272c:6293:e2cc])
+        by baptiste.telenet-ops.be with bizsmtp
+        id aXA22700g2jQL2A01XA20k; Tue, 24 May 2022 09:10:03 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1ntOg6-001Rds-Ij; Tue, 24 May 2022 09:10:02 +0200
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1ntORN-0046tw-LZ; Tue, 24 May 2022 08:54:49 +0200
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+To:     Ard Biesheuvel <ardb@kernel.org>,
+        Javier Martinez Canillas <javierm@redhat.com>
+Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: [PATCH] efi: EFI_DISABLE_RUNTIME should depend on EFI
+Date:   Tue, 24 May 2022 08:54:48 +0200
+Message-Id: <c7ccee444dbc50a61a703cabeffe28e73de4cda7.1653375268.git.geert@linux-m68k.org>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 23 May 2022 19:03:29 +0200, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> This is the start of the stable review cycle for the 5.15.42 release.
-> There are 132 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 25 May 2022 16:56:55 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.42-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+The EFI_DISABLE_RUNTIME config option controls the use of Extensible
+Firmware Interface (EFI) runtime services, which matters only if EFI
+support is enabled.
 
-5.15.42-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
-                
-Tested-by: Fox Chen <foxhlchen@gmail.com>
+Hence add a dependency on EFI, to prevent asking the user about this
+control knob when configuring a kernel with EFI support.
+
+Fixes: a031651ff2144a3d ("efi: Allow to enable EFI runtime services by default on RT")
+Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+---
+ drivers/firmware/efi/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/firmware/efi/Kconfig b/drivers/firmware/efi/Kconfig
+index 4720ba98cec312e7..ff6e7bfa8355cfc2 100644
+--- a/drivers/firmware/efi/Kconfig
++++ b/drivers/firmware/efi/Kconfig
+@@ -299,6 +299,7 @@ config EFI_CUSTOM_SSDT_OVERLAYS
+ 
+ config EFI_DISABLE_RUNTIME
+ 	bool "Disable EFI runtime services support by default"
++	depends on EFI
+ 	default y if PREEMPT_RT
+ 	help
+ 	  Allow to disable the EFI runtime services support by default. This can
+-- 
+2.25.1
 

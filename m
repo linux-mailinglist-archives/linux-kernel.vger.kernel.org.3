@@ -2,116 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9CFE5331A7
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 21:16:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EDDA5331B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 21:20:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240607AbiEXTQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 15:16:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33542 "EHLO
+        id S240766AbiEXTUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 15:20:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240944AbiEXTQP (ORCPT
+        with ESMTP id S229555AbiEXTUS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 15:16:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 891321AF3A
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 12:16:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 24B5561689
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 19:16:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65363C34100;
-        Tue, 24 May 2022 19:16:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653419773;
-        bh=06nCL2c2PiPt0PsecxZ31pddqC8bXfmheV3FL2D5PZs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SwfihDtiDV3fR7kLlkAmf7p9cSuWJs6bQaulxfTe0csocglVq71KIqPMSbIkEOeU5
-         uv+PPNPD4f4dOjDUlb8lPPGskjl6zLYZEMubyzZtiCs9xr/lzoXkT7QQkXwcFu/36W
-         lR8ZIfsELXwakoqLHqKMulTjpZGDU/ZrTN+FuLT4MMy6CR1d+ZbPiDtkYl2trQxYbB
-         oVO4Kh+bT+EUwc1pPjrhQhqwe5R1Ep3a/BnADZSDg1WjxAL0tYHBxOsfC8zVRmXaK1
-         MIrkOO4UEG4gLTu8T+87ey7fZmErcaxoJkpfYwPzMiz38Y2So9fTHzYBJACftpnYBl
-         APB5tj9C1fThw==
-Received: by pali.im (Postfix)
-        id 9498C9ED; Tue, 24 May 2022 21:16:10 +0200 (CEST)
-Date:   Tue, 24 May 2022 21:16:10 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Segher Boessenkool <segher@kernel.crashing.org>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] powerpc: e500: Fix compilation with gcc e500 compiler
-Message-ID: <20220524191610.hnodzz2j7mlgthey@pali>
-References: <20220524093939.30927-1-pali@kernel.org>
- <20220524175955.GI25951@gate.crashing.org>
- <20220524181255.bmszzxmbwzv7zed7@pali>
- <20220524185247.GK25951@gate.crashing.org>
+        Tue, 24 May 2022 15:20:18 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5637A64BC4
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 12:20:17 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id p10so8461400wrg.12
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 12:20:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=message-id:subject:from:reply-to:to:cc:date:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=Mt9M1gkKLEXdm19V1RfAKfuaLVzEHPQcfZI5XRLDbh4=;
+        b=PrABYHIthafLbtt2NStkcGUWnO5SCbjjjzTw21Pbth452TR7xqAeVPv2Y/HhOHJLdj
+         EpRuW5CpzFyZ7BX+aS9dw18F/oSjjR6J+KKWAwPrlAgHGqYFwgQo+cAvAydT1oryibWi
+         Ld6RlTGccTEhtPCnJzrHPB+sc4fQMHBT3LqhzGh9jI2HOVl+IMLxm8VD2WcFoO6SgEES
+         0kJqd+r5yZWUT5jNJ2qKkIy1nGiVtk6JllvWclX8Pj6imU5ZXSSQccIWBtCNTG0yfTwG
+         /SGpdubZZttf64U6cmG3+enqXA8CtJZf9NOSLJ8Blu7OKxo12GDTNzd43BSY5CbjMKDJ
+         EQ1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:reply-to:to:cc:date
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=Mt9M1gkKLEXdm19V1RfAKfuaLVzEHPQcfZI5XRLDbh4=;
+        b=C169WRaH4TAJkDFK3ACU9wRIEk7bRnsx3UPUZ078rwe0v+kEjESJgMqHuISAqdLojU
+         1Ss79J37upHS/oRHCy7Cx2pLFb/MR8B+y7AlGWthMNcx5joc3ZDK+/L/FW0sSjHAzx3Q
+         A1ZTrA0daRnWgLBcMtLoXg7mMji80IsQmBKId9rHo4gL26cZulg/IiIcffCtOXXo/AQd
+         kOGtzDk2T50Wa+F7M2++YqAwJ2N6/0nVifq7RwdX6R1GTSHlP66sY+nfipD+UMCxkqq4
+         JajD/6gJiVX0tCcsByQpJkvt1Xkp4eZ1JweCI9uV8ozsDLKHcXUSNVE36SmqxDU3G9Rq
+         Fxng==
+X-Gm-Message-State: AOAM533N+gTeLy7KpUy0OAvJ4OPTUYAfspiBC4czAvWAYq5ANSxYQOr8
+        NXeTCLQzQ2UnHmtoce7unss=
+X-Google-Smtp-Source: ABdhPJycIU8EUWa6sk6j8pSnaz8LvsntfLNkERrRa89WZqkB7pk10YjIdZwAi5wZTQSkZIxIr2USWg==
+X-Received: by 2002:a5d:4948:0:b0:20e:58f8:f4ce with SMTP id r8-20020a5d4948000000b0020e58f8f4cemr25040149wrs.229.1653420015848;
+        Tue, 24 May 2022 12:20:15 -0700 (PDT)
+Received: from mars.fritz.box ([2a02:8070:bb0:8700:3e7c:3fff:fe20:2cae])
+        by smtp.gmail.com with ESMTPSA id m8-20020a056000024800b0020fdc90aeabsm213865wrz.82.2022.05.24.12.20.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 May 2022 12:20:15 -0700 (PDT)
+Message-ID: <48b49de3712267780916b665d3b2a3323e6f10ce.camel@googlemail.com>
+Subject: [PATCH] mtd: spi-nor: atmel: Add at25ql641 support
+From:   Christoph Fritz <chf.fritz@googlemail.com>
+Reply-To: chf.fritz@googlemail.com
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Michael Walle <michael@walle.cc>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        ClaudiuBeznea <claudiu.beznea@microchip.com>,
+        linux-mtd@lists.infradead.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Tue, 24 May 2022 21:20:13 +0200
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220524185247.GK25951@gate.crashing.org>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tuesday 24 May 2022 13:52:47 Segher Boessenkool wrote:
-> On Tue, May 24, 2022 at 08:12:55PM +0200, Pali Rohár wrote:
-> > On Tuesday 24 May 2022 12:59:55 Segher Boessenkool wrote:
-> > > On Tue, May 24, 2022 at 11:39:39AM +0200, Pali Rohár wrote:
-> > > > gcc e500 compiler does not support -mcpu=powerpc option. When it is
-> > > > specified then gcc throws compile error:
-> > > > 
-> > > >   gcc: error: unrecognized argument in option ‘-mcpu=powerpc’
-> > > >   gcc: note: valid arguments to ‘-mcpu=’ are: 8540 8548 native
-> > > 
-> > > What?  Are you using some modified version of GCC, perhaps?
-> > 
-> > Hello! I'm using official gcc version, no special modification.
-> > 
-> > > No version of GCC that isn't hamstrung can have this output.
-> > 
-> > gcc for e500 cores has really this output when you pass -mcpu=powerpc.
-> > 
-> > Upstream gcc dropped support for e500 cores during development of
-> > version 9.
-> 
-> This isn't true.  The SPE instruction extension is no longer supported
-> (because it wasn't maintained).  Everything else still works.
->
-> > But you can still compile and install gcc 8.5.0 (last version
-> > of gcc 8) which has this full e500 support.
-> > 
-> > Really, you can easily try it. Debian 10 (Buster) has gcc 8.3.0 in its
-> > default installation and also provides packages with cross compilers.
-> > Just run 'sudo apt install gcc-powerpc-linux-gnuspe' on desktop amd64
-> > version of Debian 10, it will install e500 cross compiler.
-> > 
-> > -mcpu=8540 specify e500v1 and -mcpu=8548 specify e500v2
-> 
-> Aha.  Right, because this config forces -mspe it requires one of these
-> CPUs.
-> 
-> You can use a powerpc-linux compiler instead, and everything will just
-> work.  These CPUs are still supported, in all of GCC 9 .. GCC 12 :-)
-> 
-> 
-> Segher
+This patch adds AT25QL641 to the list of supported nor flashs.
 
-Ok. I can use different "generic" powerpc compiler (It should work fine
-as you said, as it has also -mcpu=8540 option). But I think that
-compilation of kernel should be supported also by that gcc 8.5.0 e500
-compiler.
+Signed-off-by: Christoph Fritz <chf.fritz@googlemail.com>
+---
+ drivers/mtd/spi-nor/atmel.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-It is really annoying if for compiling kernel is needed different
-compiler than for compiling rest of the system (userspace and
-bootloader). And for user applications it should be really used e500
-SPE-capable compiler due to performance reasons.
+diff --git a/drivers/mtd/spi-nor/atmel.c b/drivers/mtd/spi-nor/atmel.c
+index 656dd80a0be7..dfbc12071093 100644
+--- a/drivers/mtd/spi-nor/atmel.c
++++ b/drivers/mtd/spi-nor/atmel.c
+@@ -186,6 +186,8 @@ static const struct flash_info atmel_nor_parts[] = {
+ 		.fixups = &atmel_nor_global_protection_fixups },
+ 	{ "at25sl321",	INFO(0x1f4216, 0, 64 * 1024, 64)
+ 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ) },
++	{ "at25ql641",	INFO(0x1f4317, 0, 64 * 1024, 128)
++		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ) },
+ 	{ "at26f004",   INFO(0x1f0400, 0, 64 * 1024,  8)
+ 		NO_SFDP_FLAGS(SECT_4K) },
+ 	{ "at26df081a", INFO(0x1f4501, 0, 64 * 1024, 16)
+-- 
+2.30.2
+
+

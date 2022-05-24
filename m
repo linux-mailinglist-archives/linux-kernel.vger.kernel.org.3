@@ -2,160 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 341F8532156
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 05:04:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EF3853215F
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 05:04:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233995AbiEXC7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 22:59:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54034 "EHLO
+        id S233051AbiEXDDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 23:03:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232036AbiEXC7w (ORCPT
+        with ESMTP id S232986AbiEXDDH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 22:59:52 -0400
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3E859CF12;
-        Mon, 23 May 2022 19:59:49 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R341e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=guangguan.wang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VEG.hal_1653361186;
-Received: from 30.43.105.196(mailfrom:guangguan.wang@linux.alibaba.com fp:SMTPD_---0VEG.hal_1653361186)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 24 May 2022 10:59:47 +0800
-Message-ID: <45a19f8b-1b64-3459-c28c-aebab4fd8f1e@linux.alibaba.com>
-Date:   Tue, 24 May 2022 10:59:46 +0800
+        Mon, 23 May 2022 23:03:07 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53E389CF35;
+        Mon, 23 May 2022 20:02:56 -0700 (PDT)
+X-UUID: 83d60a8da88542c1912ccf4f1b894b26-20220524
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:a2c89178-509a-4d1f-b0e6-3b9f279a5dc0,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:51,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:56
+X-CID-INFO: VERSION:1.1.5,REQID:a2c89178-509a-4d1f-b0e6-3b9f279a5dc0,OB:0,LOB:
+        0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:51,FILE:0,RULE:Release_Ham,ACTIO
+        N:release,TS:56
+X-CID-META: VersionHash:2a19b09,CLOUDID:b354607a-5ef6-470b-96c9-bdb8ced32786,C
+        OID:90cd12a4af7b,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:0,BEC:nil
+X-UUID: 83d60a8da88542c1912ccf4f1b894b26-20220524
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1262230492; Tue, 24 May 2022 11:02:46 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Tue, 24 May 2022 11:02:44 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Tue, 24 May 2022 11:02:44 +0800
+Message-ID: <45e49226ddbe44a5205f015c4c80e49239c5d9aa.camel@mediatek.com>
+Subject: Re: [PATCH 1/4] dt-bindings: usb: mtk-xhci: add support 'resets'
+ property
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Eddie Hung <eddie.hung@mediatek.com>
+Date:   Tue, 24 May 2022 11:02:43 +0800
+In-Reply-To: <40eb8f7ed5b5d6dc3aeb5b82e04986049a2e47f3.camel@mediatek.com>
+References: <20220523090449.14430-1-chunfeng.yun@mediatek.com>
+         <40eb8f7ed5b5d6dc3aeb5b82e04986049a2e47f3.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: [PATCH net-next v2] net/smc: align the connect behaviour with TCP
-Content-Language: en-US
-To:     Karsten Graul <kgraul@linux.ibm.com>, davem@davemloft.net,
-        kuba@kernel.org, pabeni@redhat.com
-Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220513022453.7256-1-guangguan.wang@linux.alibaba.com>
- <3f0405e7-d92b-e8d0-cc61-b25a11644264@linux.ibm.com>
-From:   Guangguan Wang <guangguan.wang@linux.alibaba.com>
-In-Reply-To: <3f0405e7-d92b-e8d0-cc61-b25a11644264@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-13.2 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,T_SPF_TEMPERROR,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Rex-BC,
 
-
-On 2022/5/23 20:24, Karsten Graul wrote:
-> On 13/05/2022 04:24, Guangguan Wang wrote:
->> Connect with O_NONBLOCK will not be completed immediately
->> and returns -EINPROGRESS. It is possible to use selector/poll
->> for completion by selecting the socket for writing. After select
->> indicates writability, a second connect function call will return
->> 0 to indicate connected successfully as TCP does, but smc returns
->> -EISCONN. Use socket state for smc to indicate connect state, which
->> can help smc aligning the connect behaviour with TCP.
->>
->> Signed-off-by: Guangguan Wang <guangguan.wang@linux.alibaba.com>
->> Acked-by: Karsten Graul <kgraul@linux.ibm.com>
->> ---
->>  net/smc/af_smc.c | 50 ++++++++++++++++++++++++++++++++++++++++++++----
->>  1 file changed, 46 insertions(+), 4 deletions(-)
->>
->> diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
->> index fce16b9d6e1a..5f70642a8044 100644
->> --- a/net/smc/af_smc.c
->> +++ b/net/smc/af_smc.c
->> @@ -1544,9 +1544,29 @@ static int smc_connect(struct socket *sock, struct sockaddr *addr,
->>  		goto out_err;
->>  
->>  	lock_sock(sk);
->> +	switch (sock->state) {
->> +	default:
->> +		rc = -EINVAL;
->> +		goto out;
->> +	case SS_CONNECTED:
->> +		rc = sk->sk_state == SMC_ACTIVE ? -EISCONN : -EINVAL;
->> +		goto out;
->> +	case SS_CONNECTING:
->> +		if (sk->sk_state == SMC_ACTIVE)
->> +			goto connected;
+On Mon, 2022-05-23 at 18:41 +0800, Rex-BC Chen wrote:
+> On Mon, 2022-05-23 at 17:04 +0800, Chunfeng Yun wrote:
+> > Add 'resets' property to support IP reset usually by top pericfg.
+> > 
+> > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> > ---
+> >  Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml | 3
+> > +++
+> >  1 file changed, 3 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtk-
+> > xhci.yaml b/Documentation/devicetree/bindings/usb/mediatek,mtk-
+> > xhci.yaml
+> > index 084d7135b2d9..892718459d25 100644
+> > --- a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
+> > +++ b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
+> > @@ -113,6 +113,9 @@ properties:
+> >    vbus-supply:
+> >      description: Regulator of USB VBUS5v
+> >  
+> > +  resets:
+> > +    maxItems: 1
+> > +
+> >    usb3-lpm-capable: true
+> >  
+> >    usb2-lpm-disable: true
 > 
-> I stumbled over this when thinking about the fallback processing. If for whatever reason
-> fallback==true during smc_connect(), the "if (smc->use_fallback)" below would set sock->state
-> to e.g. SS_CONNECTED. But in the fallback case sk_state keeps SMC_INIT. So during the next call
-> the SS_CONNECTING case above would break because sk_state in NOT SMC_ACTIVE, and we would end
-> up calling kernel_connect() again. Which seems to be no problem when kernel_connect() returns 
-> -EISCONN and we return this to the caller. But is this how it should work, or does it work by chance?
+> Hello Chunfeng,
+> 
+> Which soc we will use this reset?
+This is common for all SoCs, can use it if there is a reset controller
+driver supported.
+
+> I am upstreaming another series for system clock reset.
+That's good
+> I think you should add how to use for this series base on [1].
+Currently I test it on mt8195 based on ti-syscon reset driver, luckly
+this is transparent for our usb controller drivers;
+
+I could add patches to use this 'resets' property on mt8195/8186 if the
+below series are applied.
+
+Thanks
+
+> 
+> [1]: 
+> 
+https://lore.kernel.org/linux-clk/5067ec46-7a82-6b7b-5b07-3102cfaefbf6@collabora.com/T/#m5b6abb9bd2109e4ed9a1a3eeee6e7976892cb8c2
+> 
+> BRs,
+> Rex
 > 
 
-Since the sk_state keeps SMC_INIT and does not correctly indicate the state of clcsock, it should end
-up calling kernel_connect() again to get the actual connection state of clcsock.
-
-And I'm sorry there is a problem that if sock->state==SS_CONNECTED and sk_state==SMC_INIT, further call
-of smc_connect will return -EINVAL where -EISCONN is preferred. 
-The steps to reproduce:
-1）switch fallback before connect, such as setsockopt TCP_FASTOPEN
-2）connect with noblocking and returns -EINPROGRESS. (sock->state changes to SS_CONNECTING)
-3) end up calling connect with noblocking again and returns 0. (kernel_connect() returns 0 and sock->state changes to
-   SS_CONNECTED but sk->sk_state stays SMC_INIT)
-4) call connect again, maybe by mistake, will return -EINVAL, but -EISCONN is preferred.
-
-What do you think about if we synchronize the sk_state to SMC_ACTIVE instead of keeping SMC_INIT when clcsock
-connected successfully in fallback case described above.
-
-...
-if (smc->use_fallback) {
-	sock->state = rc ? SS_CONNECTING : SS_CONNECTED;
-	if (!rc)
-		sk->sk_state = SMC_ACTIVE;    /* synchronize sk_state from SMC_INIT to SMC_ACTIVE */
-	goto out;
-}
-...
-
->> +		break;
->> +	case SS_UNCONNECTED:
->> +		sock->state = SS_CONNECTING;
->> +		break;
->> +	}
->> +
->>  	switch (sk->sk_state) {
->>  	default:
->>  		goto out;
->> +	case SMC_CLOSED:
->> +		rc = sock_error(sk) ? : -ECONNABORTED;
->> +		sock->state = SS_UNCONNECTED;
->> +		goto out;
->>  	case SMC_ACTIVE:
->>  		rc = -EISCONN;
->>  		goto out;
->> @@ -1565,20 +1585,24 @@ static int smc_connect(struct socket *sock, struct sockaddr *addr,
->>  		goto out;
->>  
->>  	sock_hold(&smc->sk); /* sock put in passive closing */
->> -	if (smc->use_fallback)
->> +	if (smc->use_fallback) {
->> +		sock->state = rc ? SS_CONNECTING : SS_CONNECTED;
->>  		goto out;
->> +	}
->>  	if (flags & O_NONBLOCK) {
->>  		if (queue_work(smc_hs_wq, &smc->connect_work))
->>  			smc->connect_nonblock = 1;
->>  		rc = -EINPROGRESS;
->> +		goto out;
->>  	} else {
->>  		rc = __smc_connect(smc);
->>  		if (rc < 0)
->>  			goto out;
->> -		else
->> -			rc = 0; /* success cases including fallback */
->>  	}
->>  
->> +connected:
->> +	rc = 0;
->> +	sock->state = SS_CONNECTED;
->>  out:
->>  	release_sock(sk);
->>  out_err:

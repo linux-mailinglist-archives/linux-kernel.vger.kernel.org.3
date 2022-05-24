@@ -2,152 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2A955323F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 09:22:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13CD05323F9
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 09:22:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235148AbiEXHWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 03:22:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58726 "EHLO
+        id S235168AbiEXHWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 03:22:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbiEXHWL (ORCPT
+        with ESMTP id S235152AbiEXHWO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 03:22:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72F9868305;
-        Tue, 24 May 2022 00:22:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0DDA061554;
-        Tue, 24 May 2022 07:22:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFF89C385AA;
-        Tue, 24 May 2022 07:22:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653376929;
-        bh=JuLXRJsUYyT+aAnxt3kzSeplRAxtuhdEB5InII5VG+U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=q9+iy9pjSipFy99mAL8Ub74cT+tARNvauwU80QfyDRYFLsQvvXqX72q4+4PgnUop7
-         Gn7054YAJwJkdHwVFpf0NajqVMbfDH7rE4VZGQkWraOoum9ubMDA5FVFgeT4/Ege6P
-         R7SeyTGvGACGt1JSVVMFHLtE7D/h8rhgaCaGzW9riIHWUF7/i9nVZ4UVhb29PaS491
-         Q8Nkh4fYOCr/PyIlTBiJDbrekoKAoHS9eomuO4XuhzpoHuBfRg1bLD/IUZQMQznfft
-         kQ+eRUzK8Fknhko3h7+XDoRC5hbXB2X2tKzb5fqaoQRsxz0NQaCRKVF/8A4q3PoFFX
-         Gv/iHmakUfPPA==
-Date:   Tue, 24 May 2022 10:22:00 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Song Liu <song@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-mm@kvack.org, ast@kernel.org, daniel@iogearbox.net,
-        peterz@infradead.org, mcgrof@kernel.org,
-        torvalds@linux-foundation.org, rick.p.edgecombe@intel.com,
-        kernel-team@fb.com
-Subject: Re: [PATCH v4 bpf-next 5/8] bpf: use module_alloc_huge for
- bpf_prog_pack
-Message-ID: <YoyHmGoEN7kQSw3N@kernel.org>
-References: <20220520235758.1858153-1-song@kernel.org>
- <20220520235758.1858153-6-song@kernel.org>
+        Tue, 24 May 2022 03:22:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 52EFA68FBF
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 00:22:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653376933;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cGpRKfeqQD5xtli8NfArxAht9/xTK9Q3vgrY1z7EGsQ=;
+        b=St4HcUyEm6Et3cpA/3k8GxaB58M62ZkIDuFLQoAU1a+jpNrNeQrxbZsBGiN6+7XiAiVYJC
+        ghpUFJTb41LI2RMJr68dzseqVXVLAhdEVnHnKI97tQtbOMmQfdXiIVBC9oF/t2rwL3Cp8A
+        NejRP9mBbkwuITEn5izU1wIeMkNRbqM=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-411-3MBe5_j4OOOfYiJny23A1w-1; Tue, 24 May 2022 03:22:11 -0400
+X-MC-Unique: 3MBe5_j4OOOfYiJny23A1w-1
+Received: by mail-wm1-f70.google.com with SMTP id l16-20020a05600c1d1000b003974df9b91cso872301wms.8
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 00:22:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=cGpRKfeqQD5xtli8NfArxAht9/xTK9Q3vgrY1z7EGsQ=;
+        b=NlEW2Zgd/LwTqZXiE1XbbV9aRPHmiGpPb/LuabrkGWIvRbRSIzhjOPZ/EC9o8O3qf6
+         8wNTCChdcs82AitglfNTxzfwRpvLtJiyGQPTtoq1hq8M2GExaYwiAn7MH+1eoqNVcosD
+         SzK1ndMLc7xzl8k71F5m9HoB+kqfimRK9JuqghAicAzIfAaxGqNxlIktIGbnqeCfhBTB
+         egnTCLIzIL9PMTMzmy0ZlOnvlpmiD0Sd47JlPi1+zQzNxSAzqHA4cnQBavXtOrwYjDg0
+         7Qvze9mb204GuSyoNWvb75eqpRr3wyPxM0GRrYEc74pGz0bA5377yqCulsYHw8IzM3zt
+         gTuQ==
+X-Gm-Message-State: AOAM531+cN32FU+v7KOLIzXaHcCZ7URpM/MqoD8bLpLVy8iHh7lukK4F
+        uvd1ib0vznNxoetF55/TdGCBAv40UiuktUjgJnsB+BTJ6brSHNNuPh76mi7rDoZ94BqAGJ/cSRM
+        JbIMfAmTdGGcDWpmSwn1qBM/O
+X-Received: by 2002:adf:f2cb:0:b0:20f:d291:7064 with SMTP id d11-20020adff2cb000000b0020fd2917064mr9675528wrp.319.1653376929867;
+        Tue, 24 May 2022 00:22:09 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwcmsxx6H53W1/fydQLyoNgRCIIqy+M82z+0WVSUrKl9Ph2oPwoPovgb6FKlTBu3g1EoNZa7g==
+X-Received: by 2002:adf:f2cb:0:b0:20f:d291:7064 with SMTP id d11-20020adff2cb000000b0020fd2917064mr9675508wrp.319.1653376929652;
+        Tue, 24 May 2022 00:22:09 -0700 (PDT)
+Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id n12-20020a05600c500c00b003973b9d0447sm1294064wmr.36.2022.05.24.00.22.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 May 2022 00:22:09 -0700 (PDT)
+Message-ID: <f8a95dcd-4a9f-ddd2-b322-96720f666b37@redhat.com>
+Date:   Tue, 24 May 2022 09:22:07 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220520235758.1858153-6-song@kernel.org>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] efi: EFI_DISABLE_RUNTIME should depend on EFI
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <c7ccee444dbc50a61a703cabeffe28e73de4cda7.1653375268.git.geert@linux-m68k.org>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <c7ccee444dbc50a61a703cabeffe28e73de4cda7.1653375268.git.geert@linux-m68k.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 04:57:55PM -0700, Song Liu wrote:
-> Use module_alloc_huge for bpf_prog_pack so that BPF programs sit on
-> PMD_SIZE pages. This benefits system performance by reducing iTLB miss
-> rate. Benchmark of a real web service workload shows this change gives
-> another ~0.2% performance boost on top of PAGE_SIZE bpf_prog_pack
-> (which improve system throughput by ~0.5%).
-> 
-> Also, remove set_vm_flush_reset_perms() from alloc_new_pack() and use
-> set_memory_[nx|rw] in bpf_prog_pack_free(). This is because
-> VM_FLUSH_RESET_PERMS does not work with huge pages yet. [1]
-> 
-> [1] https://lore.kernel.org/bpf/aeeeaf0b7ec63fdba55d4834d2f524d8bf05b71b.camel@intel.com/
-> Suggested-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> Signed-off-by: Song Liu <song@kernel.org>
+Hello Geert,
+
+On 5/24/22 08:54, Geert Uytterhoeven wrote:
+> The EFI_DISABLE_RUNTIME config option controls the use of Extensible
+> Firmware Interface (EFI) runtime services, which matters only if EFI
+> support is enabled.
+>
+
+Indeed. Sorry for forgetting that dependency when adding the symbol.
+ 
+> Hence add a dependency on EFI, to prevent asking the user about this
+> control knob when configuring a kernel with EFI support.
+>
+
+I think you wanted to write here "without EFI support" ?
+ 
+> Fixes: a031651ff2144a3d ("efi: Allow to enable EFI runtime services by default on RT")
+> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
 > ---
->  kernel/bpf/core.c | 12 +++++++-----
->  1 file changed, 7 insertions(+), 5 deletions(-)
-> 
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index cacd8684c3c4..b64d91fcb0ba 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -857,7 +857,7 @@ static size_t select_bpf_prog_pack_size(void)
->  	void *ptr;
->  
->  	size = BPF_HPAGE_SIZE * num_online_nodes();
-> -	ptr = module_alloc(size);
-> +	ptr = module_alloc_huge(size);
->  
->  	/* Test whether we can get huge pages. If not just use PAGE_SIZE
->  	 * packs.
-> @@ -881,7 +881,7 @@ static struct bpf_prog_pack *alloc_new_pack(bpf_jit_fill_hole_t bpf_fill_ill_ins
->  		       GFP_KERNEL);
->  	if (!pack)
->  		return NULL;
-> -	pack->ptr = module_alloc(bpf_prog_pack_size);
-> +	pack->ptr = module_alloc_huge(bpf_prog_pack_size);
->  	if (!pack->ptr) {
->  		kfree(pack);
->  		return NULL;
-> @@ -890,7 +890,6 @@ static struct bpf_prog_pack *alloc_new_pack(bpf_jit_fill_hole_t bpf_fill_ill_ins
->  	bitmap_zero(pack->bitmap, bpf_prog_pack_size / BPF_PROG_CHUNK_SIZE);
->  	list_add_tail(&pack->list, &pack_list);
->  
-> -	set_vm_flush_reset_perms(pack->ptr);
->  	set_memory_ro((unsigned long)pack->ptr, bpf_prog_pack_size / PAGE_SIZE);
->  	set_memory_x((unsigned long)pack->ptr, bpf_prog_pack_size / PAGE_SIZE);
->  	return pack;
-> @@ -909,10 +908,9 @@ static void *bpf_prog_pack_alloc(u32 size, bpf_jit_fill_hole_t bpf_fill_ill_insn
->  
->  	if (size > bpf_prog_pack_size) {
->  		size = round_up(size, PAGE_SIZE);
-> -		ptr = module_alloc(size);
-> +		ptr = module_alloc_huge(size);
->  		if (ptr) {
->  			bpf_fill_ill_insns(ptr, size);
-> -			set_vm_flush_reset_perms(ptr);
->  			set_memory_ro((unsigned long)ptr, size / PAGE_SIZE);
->  			set_memory_x((unsigned long)ptr, size / PAGE_SIZE);
->  		}
-> @@ -949,6 +947,8 @@ static void bpf_prog_pack_free(struct bpf_binary_header *hdr)
->  
->  	mutex_lock(&pack_mutex);
->  	if (hdr->size > bpf_prog_pack_size) {
-> +		set_memory_nx((unsigned long)hdr, hdr->size / PAGE_SIZE);
-> +		set_memory_rw((unsigned long)hdr, hdr->size / PAGE_SIZE);
 
-set_memory_{nx,rw} can fail. Please take care of error handling.
-
->  		module_memfree(hdr);
->  		goto out;
->  	}
-> @@ -975,6 +975,8 @@ static void bpf_prog_pack_free(struct bpf_binary_header *hdr)
->  	if (bitmap_find_next_zero_area(pack->bitmap, bpf_prog_chunk_count(), 0,
->  				       bpf_prog_chunk_count(), 0) == 0) {
->  		list_del(&pack->list);
-> +		set_memory_nx((unsigned long)pack->ptr, bpf_prog_pack_size / PAGE_SIZE);
-> +		set_memory_rw((unsigned long)pack->ptr, bpf_prog_pack_size / PAGE_SIZE);
-
-ditto.
-
->  		module_memfree(pack->ptr);
->  		kfree(pack);
->  	}
-> -- 
-> 2.30.2
-> 
-> 
+Acked-by: Javier Martinez Canillas <javierm@redhat.com>
 
 -- 
-Sincerely yours,
-Mike.
+Best regards,
+
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
+

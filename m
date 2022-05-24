@@ -2,98 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E23D5532C22
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 16:23:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABFF1532C24
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 16:23:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238151AbiEXOW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 10:22:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44212 "EHLO
+        id S238142AbiEXOWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 10:22:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236990AbiEXOWz (ORCPT
+        with ESMTP id S236990AbiEXOWj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 10:22:55 -0400
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A8862237
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 07:22:53 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: hector@marcansoft.com)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 684124228E;
-        Tue, 24 May 2022 14:22:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1653402171; bh=YeoPwINgF/K0Y1Y2RiM2xpjnuyhOyxS+KRYgH/Qk2Ng=;
-        h=From:To:Cc:Subject:Date;
-        b=Ybg3YcRtKyfMcYJvL+qv5KD8h6BYyPG31xTox/HctaoDPATqjeU8Vvry6cyahTcrx
-         FRMRfT+Y4YTZUduP5CtYem1pra+k63BOPP/lqDvpMd8/7bfm6+8vHMissaKcqV6lKx
-         wi5VckpbOsTAT3wOKtL0hhTK5yvgiBevPhMoPw3JrdAoQ0mOoVHeWdZ41QeGkZuYmN
-         4xHQ6R1+DIcu5meo0SYkgtclWrGTLtUu8rjwCnzqwhhENiOzC2k1Rf4CZZYeGZacpt
-         I4biLY0BXxFXYbEWWHZSQYfb9DQoLcqWreWq3qjK5J/tflLv43Qw9idrKTgQ0P0okI
-         UA2SuuuI3RVvA==
-From:   Hector Martin <marcan@marcan.st>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Marc Zyngier <maz@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
-        Hector Martin <marcan@marcan.st>
-Subject: [PATCH] pinctrl: apple: Use a raw spinlock for the regmap
-Date:   Tue, 24 May 2022 23:22:06 +0900
-Message-Id: <20220524142206.18833-1-marcan@marcan.st>
-X-Mailer: git-send-email 2.35.1
+        Tue, 24 May 2022 10:22:39 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D521C6129F
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 07:22:36 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id c12so23248644eds.10
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 07:22:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=szeredi.hu; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dpp6s5Zi/XJNt6DJKKuRultWYl0hGR26KOE7MDNzls8=;
+        b=q2PjA/mFw5U9/q0PkfQSizJWNDtWdEMi7NOpm376PeBzer03NUq9Ds3dpxh2DFqT4m
+         cHThbPjm7gxF4WtvK08ERO48+BNoBoeWngyiWyqHrLLUAWpd0s2hLmxB75565Jjci9yo
+         pV3BqYaioSKvYGF8aOaSu2nSUfI4OcWmNwDPs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dpp6s5Zi/XJNt6DJKKuRultWYl0hGR26KOE7MDNzls8=;
+        b=T0BoJc1BKPTwiJTZZwHnWxyZU9JGfw6YLBYr9uJ8pZJcJzyORAN3ldWMObCaUTmXBf
+         zp4XyjfO+NSbnsCq0J3KbxK7GoQVrtELlcSTnwpMltuxtQs3i3sVjuphXDtOpMQzdFgX
+         69aZv27TDVdlXOXyge01XSI23I71nTtrouK6HLVzp9hZDU1srT+xOryyFURGU0j/gelV
+         f8lt44FdDfVqrVG8vp8weyDb6Ha0cvxGJp2nB9rubuJtGe31PLL+UFYBdhr1NdwWeoqE
+         HNo6IY/3Bx5nL/L0oUM3luVafGd4PrsH6iUMgHkRxBL8ixMqmVUS8JPm1BYxhoYV9mkt
+         jOuw==
+X-Gm-Message-State: AOAM533Dza9Czn5MgIbMlxuzLjFVW32cY3A6qXg+0I4IIW+Ytn/wk9Go
+        2yQ82KmmR/8ghlDvSazo/LJ+OJncdrZXmlkm+O/6DQ==
+X-Google-Smtp-Source: ABdhPJzmdWWQRoST5Zc2QmtMYgiZBOR2l1Rgxy+KY0u/Hl4Ouf/YXrXvsQ+f/S6AA/W+ECg1YFMiih3ynm7WdjZmGcg=
+X-Received: by 2002:aa7:cdd2:0:b0:42b:aeb2:bc99 with SMTP id
+ h18-20020aa7cdd2000000b0042baeb2bc99mr526437edw.382.1653402155432; Tue, 24
+ May 2022 07:22:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220511222910.635307-1-dlunev@chromium.org> <20220512082832.v2.2.I692165059274c30b59bed56940b54a573ccb46e4@changeid>
+ <YoQfls6hFcP3kCaH@zeniv-ca.linux.org.uk> <YoQihi4OMjJj2Mj0@zeniv-ca.linux.org.uk>
+ <CAJfpegtQUP045X5N8ib1rUTKzSj-giih0eL=jC5-MP7aVgyN_g@mail.gmail.com>
+ <CAONX=-do9yvxW2gTak0WGbFVPiLbkM2xH5LReMZkvC-upOUVxg@mail.gmail.com> <CAONX=-ehh=uGYAi++oV_uS23mp2yZcrUC+7U5H0rRz8q0h6OeQ@mail.gmail.com>
+In-Reply-To: <CAONX=-ehh=uGYAi++oV_uS23mp2yZcrUC+7U5H0rRz8q0h6OeQ@mail.gmail.com>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Tue, 24 May 2022 16:22:24 +0200
+Message-ID: <CAJfpegsPjFMCG-WHbvREZXzHPUd1R2Qa83maiTJbWSua9Kz=hg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] FUSE: Retire superblock on force unmount
+To:     Daniil Lunev <dlunev@chromium.org>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>, linux-fsdevel@vger.kernel.org,
+        Christoph Hellwig <hch@infradead.org>,
+        fuse-devel <fuse-devel@lists.sourceforge.net>,
+        "Theodore Ts'o" <tytso@mit.edu>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The irqchip ops are called with a raw spinlock held, so the subsequent
-regmap usage cannot use a plain spinlock.
+On Mon, 23 May 2022 at 02:25, Daniil Lunev <dlunev@chromium.org> wrote:
+>
+> So, I tried this patchset with open bdi elements during force unmount
+> and a random file open [1], and didn't see any major drama with
+> force unmounting the node, after re-mounting, read on sysfs node
+> returned "no such device", which is expected.
+> With private bdi flag patch, unless bdi is unregister on force unmount
+> in fuse, it will complain on name collision [2] (because the patch
+> actually doesn't do much but unregisters the bdi on unmount, which
+> seems to happen ok even if node is busy).
 
-spi-hid-apple-of spi0.0: spihid_apple_of_probe:74
+Calling bdi_unregister() might be okay, and that should fix this.  I'm
+not familiar enough with that part to say for sure.
 
-=============================
-[ BUG: Invalid wait context ]
-5.18.0-asahi-00176-g0fa3ab03bdea #1337 Not tainted
------------------------------
-kworker/u20:3/86 is trying to lock:
-ffff8000166b5018 (pinctrl_apple_gpio:462:(&regmap_config)->lock){....}-{3:3}, at: regmap_lock_spinlock+0x18/0x30
-other info that might help us debug this:
-context-{5:5}
-7 locks held by kworker/u20:3/86:
- #0: ffff800017725d48 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_one_work+0x1c8/0x670
- #1: ffff80001e33bdd0 (deferred_probe_work){+.+.}-{0:0}, at: process_one_work+0x1c8/0x670
- #2: ffff800017d629a0 (&dev->mutex){....}-{4:4}, at: __device_attach+0x30/0x17c
- #3: ffff80002414e618 (&ctlr->add_lock){+.+.}-{4:4}, at: spi_add_device+0x40/0x80
- #4: ffff800024116990 (&dev->mutex){....}-{4:4}, at: __device_attach+0x30/0x17c
- #5: ffff800022d4be58 (request_class){+.+.}-{4:4}, at: __setup_irq+0xa8/0x720
- #6: ffff800022d4bcc8 (lock_class){....}-{2:2}, at: __setup_irq+0xcc/0x720
+But freeing sb->s_bdi while the superblock is active looks problematic.
 
-Fixes: a0f160ffcb83 ("pinctrl: add pinctrl/GPIO driver for Apple SoCs")
-Signed-off-by: Hector Martin <marcan@marcan.st>
----
- drivers/pinctrl/pinctrl-apple-gpio.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/pinctrl/pinctrl-apple-gpio.c b/drivers/pinctrl/pinctrl-apple-gpio.c
-index 3a33731b8cdb..b02dad2b2f69 100644
---- a/drivers/pinctrl/pinctrl-apple-gpio.c
-+++ b/drivers/pinctrl/pinctrl-apple-gpio.c
-@@ -72,6 +72,7 @@ struct regmap_config regmap_config = {
- 	.max_register = 512 * sizeof(u32),
- 	.num_reg_defaults_raw = 512,
- 	.use_relaxed_mmio = true,
-+	.use_raw_spinlock = true,
- };
- 
- /* No locking needed to mask/unmask IRQs as the interrupt mode is per pin-register. */
--- 
-2.35.1
-
+Thanks,
+Miklos

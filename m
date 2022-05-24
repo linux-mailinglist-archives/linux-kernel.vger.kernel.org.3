@@ -2,84 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F30465321A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 05:37:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B36A453219F
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 05:37:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233152AbiEXDgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 23:36:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56732 "EHLO
+        id S233678AbiEXDhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 23:37:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230190AbiEXDgI (ORCPT
+        with ESMTP id S231338AbiEXDhG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 23:36:08 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 607C5D53
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 20:36:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653363363; x=1684899363;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ViMx7kYiUc2GfffEZdsU7jW+Xl12T7oj5pNftkb4D4o=;
-  b=NfTlVGZXEooHGLTR2HkaAvj1KY3A3NoV20LjCFdf8gQngA5jmy6y3TuT
-   5XIiMFMOQ9O1+5FBv4j+tIkvRqpn6bvnErA6O3Fgv/2b9aFpAT11/6Hux
-   XkUucJkw//bKv1LkankWiQjwio0zC9LyjbcIN7EsowgTpKA201X2mcFH8
-   ePraKvzPo235FHpNV0x4rlx+qA8tfDn/Cd1QnIsZ18bN07Agu2AkBten1
-   yYw7agGRolcvt2IiEu6QL9tJ052f3q1+V1asYVHp6Zdn18eIPK8ERprqT
-   mYzDzZgpMYtNUU+mAueJRY99+KrShP4qXn3XrnFlHcEGzaCTr0v0Zk4nd
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="253295123"
-X-IronPort-AV: E=Sophos;i="5.91,247,1647327600"; 
-   d="scan'208";a="253295123"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 20:35:55 -0700
-X-IronPort-AV: E=Sophos;i="5.91,247,1647327600"; 
-   d="scan'208";a="548287336"
-Received: from jiaqingz-mobl.ccr.corp.intel.com (HELO [10.249.169.113]) ([10.249.169.113])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 20:35:53 -0700
-Message-ID: <91183d9f-a4a2-b237-b097-2ba546f9308c@linux.intel.com>
-Date:   Tue, 24 May 2022 11:35:50 +0800
+        Mon, 23 May 2022 23:37:06 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC74DFE4
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 20:37:03 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id n10so32670994ejk.5
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 20:37:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Yd71Rv+tVnuY+muzKaWvbV3tc5unX+qwJ1+3JmIpPjU=;
+        b=eMFmyAB7yihZkrnGNaZ2Dxy1FDj6QVJhHppSroNTbRLwDs9BRmeWEeTTXbaN+y43X9
+         o5sW5Y9GsjzOZyy3aw67NlkQhD+vmKJAoeSkujojaQOZVhP/qTlvmZAdoAksgaxdE9GV
+         lLR1WjIV+ve3p99mzCAL9ixCf3/b53+DUupCg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Yd71Rv+tVnuY+muzKaWvbV3tc5unX+qwJ1+3JmIpPjU=;
+        b=z4E7kAb6EXtj9xRK9bJj6lwMBHGpifHh+c6unXI1Pn4KolP4Ui6+NfKkjD+hUlrLqW
+         W64go5DLBOxcjTLZokPDCmgsp8Zy6g1BquBfqYRLZSzd9z+17tILGUrlssejQgmELTq8
+         7u2TIH3TruKolBVAj3o+OlGQhOuYqPgcy7+GG6YQ61D43IuZfH050HPbNLgYhhVue6ra
+         +X2ZqqW3MMQBEXZVUwTwVAtuWF65QL1oTuBMNNbcPJBAtgXMjRFi6xV2R+G9VqAD2p+S
+         ou2BqppfEW9x9DSUGAfyxxFGpEdU39qeMJhjWGCN5OVUJpNoIIi5ASY3Nkz43e3NXnOZ
+         wJ6g==
+X-Gm-Message-State: AOAM531UCnOdfQUT41xj0pkQf8Vk1iwja8u7Lkg2O6YvSEzSCYlhrffu
+        iuTR0MRs0d8NTON1h3ONM/q6xvUEDCwqAA9KGaA=
+X-Google-Smtp-Source: ABdhPJwmB2ynGWPl8lQv/mqCz1tHOf/Mt3/9F+n/Tvu6A7kV9rZ2TWhgQiv98jJFb1cYzYLo+DglPg==
+X-Received: by 2002:a17:906:9749:b0:6f5:6cd:5bd9 with SMTP id o9-20020a170906974900b006f506cd5bd9mr23434373ejy.523.1653363421585;
+        Mon, 23 May 2022 20:37:01 -0700 (PDT)
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com. [209.85.128.47])
+        by smtp.gmail.com with ESMTPSA id cq3-20020a056402220300b0042617ba63c2sm9003054edb.76.2022.05.23.20.37.00
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 May 2022 20:37:00 -0700 (PDT)
+Received: by mail-wm1-f47.google.com with SMTP id c9-20020a7bc009000000b0039750ec5774so621332wmb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 20:37:00 -0700 (PDT)
+X-Received: by 2002:a7b:cb91:0:b0:397:3225:244 with SMTP id
+ m17-20020a7bcb91000000b0039732250244mr1803290wmi.68.1653363420446; Mon, 23
+ May 2022 20:37:00 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v3] mtd: spi-nor: macronix: Add support for mx66l2g45g
-Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>
-Cc:     linux-mtd@lists.infradead.org,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>, linux-kernel@vger.kernel.org
-References: <20220523150334.1758649-1-jiaqing.zhao@linux.intel.com>
- <e310ab2100f459346ae6cfa77c9ada19@walle.cc>
-From:   Jiaqing Zhao <jiaqing.zhao@linux.intel.com>
-In-Reply-To: <e310ab2100f459346ae6cfa77c9ada19@walle.cc>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <e9abfba4-d178-7ee5-da13-4cd9e07ba331@intel.com>
+In-Reply-To: <e9abfba4-d178-7ee5-da13-4cd9e07ba331@intel.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 23 May 2022 20:36:44 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjKem5Q6y2Ye+M8176mvmkRELBzrDUSZNvTea7RR-CD7A@mail.gmail.com>
+Message-ID: <CAHk-=wjKem5Q6y2Ye+M8176mvmkRELBzrDUSZNvTea7RR-CD7A@mail.gmail.com>
+Subject: Re: [GIT PULL] x86/sgx for v5.19
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     "the arch/x86 maintainers" <x86@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-05-24 01:04, Michael Walle wrote:
-> Am 2022-05-23 17:03, schrieb Jiaqing Zhao:
->> Macronix mx66l2g45g is a 3V, 2Gbit (256MB) NOR flash that supports
->> x1, x2, and x4 operation modes.
->>
->> Tested read/write/erase with Aspeed AST2600 BMC SoC operating in x2
->> mode at 50MHz, using Aspeed spi-mem driver.
->>
->> Signed-off-by: Jiaqing Zhao <jiaqing.zhao@linux.intel.com>
-> 
-> Reviewed-by: Michael Walle <michael@walle.cc>
-> 
-> # is this picked up by b4? link goes to the sfdp dump
+On Mon, May 23, 2022 at 10:23 AM Dave Hansen <dave.hansen@intel.com> wrote:
+>
+> It's my first pull request, signing tags and all that jazz.  I hope I didn't
+> botch anything too badly.
 
-May I ask what do you mean by "is this picked up by b4?"
+Looks all fine to me,
 
-> Link: https://lore.kernel.org/r/2b859cff-2403-0526-f3ae-749920b3fd8b@linux.intel.com
-> 
-> -michael
+                Linus

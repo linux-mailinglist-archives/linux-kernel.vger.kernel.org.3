@@ -2,137 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72CF55332E8
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 23:19:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26F295332E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 23:20:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241886AbiEXVTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 17:19:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46310 "EHLO
+        id S241893AbiEXVUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 17:20:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235550AbiEXVT3 (ORCPT
+        with ESMTP id S235550AbiEXVT7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 17:19:29 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F7156F93
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 14:19:28 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id s198-20020a6b2ccf000000b0065e4872af2dso9411806ios.21
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 14:19:28 -0700 (PDT)
+        Tue, 24 May 2022 17:19:59 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7EA56FB4
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 14:19:58 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id y199so17507703pfb.9
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 14:19:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AOOnQwX8FlMZPsRjdPt59x3rx2ygNvknjVlpR0iASV4=;
+        b=YrTSwufLEZ1P7/fW0b/k6bLAK/RaBs/rYT5zdNK+AgXQ3AfBxedshAwy/hCIaDeMum
+         63fAA5CXnCSlev0yz8w5zJhf+Gl71NBw+ln88+tJe9F2OdZrlckhk6isvq37z+mtIAoB
+         GUUiprEZGCRYxZ3TKbhuCuaR+TCfnqGX+28hhCbYWCcA6wXWnx6tF0Ds0/yuAfu93c0U
+         q9DKy/Dv2xD/oY1wOHTn8NdmF8uUp1br3r5riHE3BXs4JB+s8yMumemO0L0OoONBZGZk
+         tiXTLgZUthwGvfGbljEKg/3YXIK/Tdn9WwXImLUgH03uoTJYhEk7NjuNRtYWoQCs8KrE
+         rvgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=wg+dhb4Sbt4LYM+C0ecpnWu6QVgFH/3cQ/wS9ie879w=;
-        b=hm0FT4DIusk/8SX3cRK6C2bV9By9+UsorDh46xknLGlItmxVekwEvn1agbWEqkDdLV
-         Es/iKTvmFJKA92LeqHP0jzeUnw2BXG0V4KqR4MyHB7hZkENsG0LIs6mvR4NI4zPhjm3o
-         lFHWDeVcr7Y13TW1zS//t+0wNB2TmYQqZd+/Xq7pEvZiJUvKNHN67PxO0ydLEeriS/1S
-         gjVXBLNt4teKin6MVXnNMtCwKw/+G8A3LWu3wOu4kO1ASerU+H5lHFbsgbY9ep3NJ/N7
-         UKqOfA6Fn2YeoxuBqZxNyX9aHvVRbzqezqhrBPUJNB+pyZvxGfhWb9AWIKyqimOkCNHy
-         jjOA==
-X-Gm-Message-State: AOAM533hKFJqt600rOrJxcf2dBZf+3qmV1+5hRQl2CjBxIK3EmDz1J9s
-        9JbBiAGXVR7Z/6FJm0/VuTNHcxz9FxIOfSwCMoPeaIe2us5a
-X-Google-Smtp-Source: ABdhPJzO/J9UZT0CA4+FQ5CUbrwD+1WF2GLwg7LCkZPrxk61gqrW/MRloM29RYON3uBNiIVWny3XfQgI77wtUOGz3KiF6SxyJZcw
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AOOnQwX8FlMZPsRjdPt59x3rx2ygNvknjVlpR0iASV4=;
+        b=p4PADm7oXy4G7MkTFy9Gq/3HtommQgyg0C9RKUDevSLqEhquqejVd0WQfpxLdZ+lA0
+         hfcA0VLpw/ccJfZyg6wqONRN61t/426/rb1Vym8BOM8tQyZ5Qr8+xvMZSZ1YGB8Mba4+
+         Tpwha2s0Zbu+O9nzdL3IHFxRNZL7ntjGUfcjcwZAwZWrhHkuejRk4508xuVoFdedeYXN
+         sEhEOhfUnpI/NRWyKVCq3NGRaYBWZkfCOJSM4xDi59XTuihFucliXeTi8md5qhuUgJ4p
+         oPAtIE4BunQ4TjZR9aaFA716PaBTRE7oyhiLMHNnMJ+zR4lAQUBPP6epZ6lilHdJ6fC8
+         gqag==
+X-Gm-Message-State: AOAM5328gDwzhRmL8SzYvExNg3J5PtL6GCl6nKxk/tdIiKLRpTysHr3a
+        ZCNDBEI7cSIbt8xNPn81Q8n47pX1ccdHsw==
+X-Google-Smtp-Source: ABdhPJxSAPU1ORTbLoGjyN5yxspHkTvKVWS0vgFiLp2ZZwtBNnGRSmXsVQw8Qg6e72inntA8VWn4fQ==
+X-Received: by 2002:a05:6a00:170c:b0:510:865f:bf34 with SMTP id h12-20020a056a00170c00b00510865fbf34mr30397811pfc.60.1653427197677;
+        Tue, 24 May 2022 14:19:57 -0700 (PDT)
+Received: from daolu.ba.rivosinc.com ([66.220.2.162])
+        by smtp.gmail.com with ESMTPSA id a4-20020a62d404000000b0050dc7628181sm9833817pfh.91.2022.05.24.14.19.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 May 2022 14:19:57 -0700 (PDT)
+From:   Dao Lu <daolu@rivosinc.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Dao Lu <daolu@rivosinc.com>, Heiko Stuebner <heiko@sntech.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atishp@atishpatra.org>,
+        Anup Patel <anup@brainfault.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Rob Herring <robh@kernel.org>,
+        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
+        Qinglin Pan <panqinglin2020@iscas.ac.cn>,
+        Tsukasa OI <research_trasio@irq.a4lg.com>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        linux-riscv@lists.infradead.org (open list:RISC-V ARCHITECTURE)
+Subject: [PATCH v2] arch/riscv: add Zihintpause support
+Date:   Tue, 24 May 2022 14:19:50 -0700
+Message-Id: <20220524211954.1936117-1-daolu@rivosinc.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:329b:b0:32e:d7c1:c30 with SMTP id
- f27-20020a056638329b00b0032ed7c10c30mr4706630jav.19.1653427167973; Tue, 24
- May 2022 14:19:27 -0700 (PDT)
-Date:   Tue, 24 May 2022 14:19:27 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000259ba05dfc883a0@google.com>
-Subject: [syzbot] memory leak in tty_init_dev (2)
-From:   syzbot <syzbot+5e1694f5b0869a691915@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Implement support for the ZiHintPause extension.
 
-syzbot found the following issue on:
+The PAUSE instruction is a HINT that indicates the current hart’s rate of
+instruction retirement should be temporarily reduced or paused.
 
-HEAD commit:    3d7285a335ed Merge tag 'v5.18-p2' of git://git.kernel.org/..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1590d0e6f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=50f4d49cdcacc43c
-dashboard link: https://syzkaller.appspot.com/bug?extid=5e1694f5b0869a691915
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17647111f00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10ad531df00000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5e1694f5b0869a691915@syzkaller.appspotmail.com
-
-BUG: memory leak
-unreferenced object 0xffff88810da76400 (size 1024):
-  comm "syz-executor299", pid 3683, jiffies 4294957001 (age 29.640s)
-  hex dump (first 32 bytes):
-    01 54 00 00 01 00 00 00 00 00 00 00 00 00 00 00  .T..............
-    40 95 0d 04 81 88 ff ff 00 fc c4 84 ff ff ff ff  @...............
-  backtrace:
-    [<ffffffff825ee96c>] kmalloc include/linux/slab.h:581 [inline]
-    [<ffffffff825ee96c>] kzalloc include/linux/slab.h:714 [inline]
-    [<ffffffff825ee96c>] alloc_tty_struct+0x3c/0x2f0 drivers/tty/tty_io.c:3091
-    [<ffffffff825eec40>] tty_init_dev.part.0+0x20/0x2f0 drivers/tty/tty_io.c:1412
-    [<ffffffff825eef50>] tty_init_dev+0x40/0x60 drivers/tty/tty_io.c:1409
-    [<ffffffff825fd949>] ptmx_open drivers/tty/pty.c:834 [inline]
-    [<ffffffff825fd949>] ptmx_open+0xd9/0x210 drivers/tty/pty.c:800
-    [<ffffffff815c628d>] chrdev_open+0x10d/0x340 fs/char_dev.c:414
-    [<ffffffff815b4c46>] do_dentry_open+0x1e6/0x650 fs/open.c:824
-    [<ffffffff815db101>] do_open fs/namei.c:3476 [inline]
-    [<ffffffff815db101>] path_openat+0x18a1/0x1e70 fs/namei.c:3609
-    [<ffffffff815dddd1>] do_filp_open+0xc1/0x1b0 fs/namei.c:3636
-    [<ffffffff815b841d>] do_sys_openat2+0xed/0x260 fs/open.c:1213
-    [<ffffffff815b8e6f>] do_sys_open fs/open.c:1229 [inline]
-    [<ffffffff815b8e6f>] __do_sys_openat fs/open.c:1245 [inline]
-    [<ffffffff815b8e6f>] __se_sys_openat fs/open.c:1240 [inline]
-    [<ffffffff815b8e6f>] __x64_sys_openat+0x7f/0xe0 fs/open.c:1240
-    [<ffffffff84565f05>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84565f05>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-BUG: memory leak
-unreferenced object 0xffff888109c1ce00 (size 512):
-  comm "syz-executor299", pid 3683, jiffies 4294957001 (age 29.640s)
-  hex dump (first 32 bytes):
-    50 ce c1 09 81 88 ff ff e0 ff ff ff 0f 00 00 00  P...............
-    10 ce c1 09 81 88 ff ff 10 ce c1 09 81 88 ff ff  ................
-  backtrace:
-    [<ffffffff825fdb42>] kmalloc include/linux/slab.h:581 [inline]
-    [<ffffffff825fdb42>] pty_common_install+0x72/0x3d0 drivers/tty/pty.c:382
-    [<ffffffff825eec7b>] tty_driver_install_tty drivers/tty/tty_io.c:1307 [inline]
-    [<ffffffff825eec7b>] tty_init_dev.part.0+0x5b/0x2f0 drivers/tty/tty_io.c:1419
-    [<ffffffff825eef50>] tty_init_dev+0x40/0x60 drivers/tty/tty_io.c:1409
-    [<ffffffff825fd949>] ptmx_open drivers/tty/pty.c:834 [inline]
-    [<ffffffff825fd949>] ptmx_open+0xd9/0x210 drivers/tty/pty.c:800
-    [<ffffffff815c628d>] chrdev_open+0x10d/0x340 fs/char_dev.c:414
-    [<ffffffff815b4c46>] do_dentry_open+0x1e6/0x650 fs/open.c:824
-    [<ffffffff815db101>] do_open fs/namei.c:3476 [inline]
-    [<ffffffff815db101>] path_openat+0x18a1/0x1e70 fs/namei.c:3609
-    [<ffffffff815dddd1>] do_filp_open+0xc1/0x1b0 fs/namei.c:3636
-    [<ffffffff815b841d>] do_sys_openat2+0xed/0x260 fs/open.c:1213
-    [<ffffffff815b8e6f>] do_sys_open fs/open.c:1229 [inline]
-    [<ffffffff815b8e6f>] __do_sys_openat fs/open.c:1245 [inline]
-    [<ffffffff815b8e6f>] __se_sys_openat fs/open.c:1240 [inline]
-    [<ffffffff815b8e6f>] __x64_sys_openat+0x7f/0xe0 fs/open.c:1240
-    [<ffffffff84565f05>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84565f05>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-
-
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+Tested-by: Heiko Stuebner <heiko@sntech.de>
+Signed-off-by: Dao Lu <daolu@rivosinc.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+v1 -> v2:
+ Remove the usage of static branch, use PAUSE if toolchain supports it
+
+ arch/riscv/Makefile                     | 4 ++++
+ arch/riscv/include/asm/hwcap.h          | 1 +
+ arch/riscv/include/asm/vdso/processor.h | 8 +++++++-
+ arch/riscv/kernel/cpu.c                 | 1 +
+ arch/riscv/kernel/cpufeature.c          | 2 ++
+ 5 files changed, 15 insertions(+), 1 deletion(-)
+
+diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+index 7d81102cffd4..900a8fda1a2d 100644
+--- a/arch/riscv/Makefile
++++ b/arch/riscv/Makefile
+@@ -56,6 +56,10 @@ riscv-march-$(CONFIG_RISCV_ISA_C)	:= $(riscv-march-y)c
+ toolchain-need-zicsr-zifencei := $(call cc-option-yn, -march=$(riscv-march-y)_zicsr_zifencei)
+ riscv-march-$(toolchain-need-zicsr-zifencei) := $(riscv-march-y)_zicsr_zifencei
+ 
++# Check if the toolchain supports Zihintpause extension
++toolchain-supports-zihintpause := $(call cc-option-yn, -march=$(riscv-march-y)_zihintpause)
++riscv-march-$(toolchain-supports-zihintpause) := $(riscv-march-y)_zihintpause
++
+ KBUILD_CFLAGS += -march=$(subst fd,,$(riscv-march-y))
+ KBUILD_AFLAGS += -march=$(riscv-march-y)
+ 
+diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
+index 0734e42f74f2..caa9ee5459b4 100644
+--- a/arch/riscv/include/asm/hwcap.h
++++ b/arch/riscv/include/asm/hwcap.h
+@@ -52,6 +52,7 @@ extern unsigned long elf_hwcap;
+  */
+ enum riscv_isa_ext_id {
+ 	RISCV_ISA_EXT_SSCOFPMF = RISCV_ISA_EXT_BASE,
++	RISCV_ISA_EXT_ZIHINTPAUSE,
+ 	RISCV_ISA_EXT_ID_MAX = RISCV_ISA_EXT_MAX,
+ };
+ 
+diff --git a/arch/riscv/include/asm/vdso/processor.h b/arch/riscv/include/asm/vdso/processor.h
+index 134388cbaaa1..4de911a25051 100644
+--- a/arch/riscv/include/asm/vdso/processor.h
++++ b/arch/riscv/include/asm/vdso/processor.h
+@@ -8,7 +8,13 @@
+ 
+ static inline void cpu_relax(void)
+ {
+-#ifdef __riscv_muldiv
++#ifdef __riscv_zihintpause
++	/*
++	 * Reduce instruction retirement.
++	 * This assumes the PC changes.
++	 */
++	__asm__ __volatile__ ("pause");
++#elif __riscv_muldiv
+ 	int dummy;
+ 	/* In lieu of a halt instruction, induce a long-latency stall. */
+ 	__asm__ __volatile__ ("div %0, %0, zero" : "=r" (dummy));
+diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
+index ccb617791e56..89e563e9c4cc 100644
+--- a/arch/riscv/kernel/cpu.c
++++ b/arch/riscv/kernel/cpu.c
+@@ -88,6 +88,7 @@ int riscv_of_parent_hartid(struct device_node *node)
+  */
+ static struct riscv_isa_ext_data isa_ext_arr[] = {
+ 	__RISCV_ISA_EXT_DATA(sscofpmf, RISCV_ISA_EXT_SSCOFPMF),
++	__RISCV_ISA_EXT_DATA(zihintpause, RISCV_ISA_EXT_ZIHINTPAUSE),
+ 	__RISCV_ISA_EXT_DATA("", RISCV_ISA_EXT_MAX),
+ };
+ 
+diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+index 1b2d42d7f589..37ff06682ae6 100644
+--- a/arch/riscv/kernel/cpufeature.c
++++ b/arch/riscv/kernel/cpufeature.c
+@@ -25,6 +25,7 @@ static DECLARE_BITMAP(riscv_isa, RISCV_ISA_EXT_MAX) __read_mostly;
+ __ro_after_init DEFINE_STATIC_KEY_FALSE(cpu_hwcap_fpu);
+ #endif
+ 
++
+ /**
+  * riscv_isa_extension_base() - Get base extension word
+  *
+@@ -192,6 +193,7 @@ void __init riscv_fill_hwcap(void)
+ 				set_bit(*ext - 'a', this_isa);
+ 			} else {
+ 				SET_ISA_EXT_MAP("sscofpmf", RISCV_ISA_EXT_SSCOFPMF);
++				SET_ISA_EXT_MAP("zihintpause", RISCV_ISA_EXT_ZIHINTPAUSE);
+ 			}
+ #undef SET_ISA_EXT_MAP
+ 		}
+-- 
+2.36.0
+

@@ -2,105 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83A4C532CA1
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 16:54:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 270EF532CA7
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 16:55:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238429AbiEXOyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 10:54:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40666 "EHLO
+        id S238450AbiEXOz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 10:55:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237325AbiEXOyB (ORCPT
+        with ESMTP id S238442AbiEXOyS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 10:54:01 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB7A56EC46
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 07:53:59 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L6xyK0pg3zhYTq;
-        Tue, 24 May 2022 22:52:57 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 24 May 2022 22:53:55 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 24 May 2022 22:53:55 +0800
-Message-ID: <f9bbfe38-ce1d-b4c4-6acf-4b81e6587e2d@huawei.com>
-Date:   Tue, 24 May 2022 22:53:54 +0800
+        Tue, 24 May 2022 10:54:18 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B27C96EC46;
+        Tue, 24 May 2022 07:54:17 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id 2319D1F43080
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1653404055;
+        bh=k5OX95HbBLW6/3MZt89HO8rM2fIhljz076cqcrPbFY4=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=ffLtEKY/+PRMFgmAMbqx0/a2UvN/vMNfFgJXa+cEo/BPwpnHmDE2bIjCYczbxSzf/
+         BgietX5cA+fGX47/j5O1cKWMd8KXNRu7Q+B+2biR8mLX2AyBJRnPjkQ9S/xY/iwT89
+         BHCYna7nJVKjZD/lmHnM1/JXOWyJSg+OT3Q655fCshARxlN2ZBXn6BtXq0/Bdf7D1d
+         +vNx+iRiqLCrAx6uV3HjZmQsjjiNqJY4L70BB4B+Fu+SMcvnyE9x1NgJVAvXQ+f4N/
+         aIs9+zlh6mjG6QoUnivk783/1p2vSyQXyf+aC6pFfMXlDwiLmIq7VDtEshIz1P82Ep
+         st3W6daIQ9zxw==
+Message-ID: <170151f7-9d46-6b01-e281-0f675a3b523f@collabora.com>
+Date:   Tue, 24 May 2022 19:54:07 +0500
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v3 4/6] mm: ioremap: Add arch_ioremap/iounmap()
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Cc:     usama.anjum@collabora.com,
+        Chung-Chiang Cheng <cccheng@synology.com>,
+        Lennart Poettering <lennart@poettering.net>,
+        Colin Walters <walters@verbum.org>,
+        Peter Jones <pjones@redhat.com>,
+        Alexander Larsson <alexl@redhat.com>,
+        Alberto Ruiz <aruiz@redhat.com>,
+        Christian Kellner <ckellner@redhat.com>,
+        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] selftests/filesystems: add a vfat RENAME_EXCHANGE
+ test
 Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>
-CC:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        "Christoph Hellwig" <hch@infradead.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>
-References: <20220519082552.117736-1-wangkefeng.wang@huawei.com>
- <20220519082552.117736-5-wangkefeng.wang@huawei.com>
- <CAK8P3a1DbNY6NzcwzjVFvd9yw6L3YBHQos_hmE=nG=6cuv1DAg@mail.gmail.com>
- <4c848b48-6ddf-664a-6296-d85ab49a694d@huawei.com>
- <CAK8P3a19S8CFxJKQo_8UXSKA0L8J40DsjL+u649oDhqUPHSW7A@mail.gmail.com>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <CAK8P3a19S8CFxJKQo_8UXSKA0L8J40DsjL+u649oDhqUPHSW7A@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org
+References: <20220524073604.247790-1-javierm@redhat.com>
+ <20220524073604.247790-4-javierm@redhat.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <20220524073604.247790-4-javierm@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 5/24/22 12:36 PM, Javier Martinez Canillas wrote:
+> diff --git a/tools/testing/selftests/filesystems/fat/Makefile b/tools/testing/selftests/filesystems/fat/Makefile
+> new file mode 100644
+> index 000000000000..93ee73c16828
+> --- /dev/null
+> +++ b/tools/testing/selftests/filesystems/fat/Makefile
+> @@ -0,0 +1,7 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +TEST_PROGS := run_fat_tests.sh
+> +TEST_GEN_PROGS_EXTENDED := rename_exchange
+Please create a .gitignore file and add rename_exchange to it.
 
-On 2022/5/24 22:47, Arnd Bergmann wrote:
-> On Tue, May 24, 2022 at 4:32 PM Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
->> On 2022/5/24 20:37, Arnd Bergmann wrote:
->>> On Thu, May 19, 2022 at 10:25 AM Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
->>>> Add special hook for architecture to verify or setup addr, size
->>>> or prot when ioremap() or iounmap(), which will make the generic
->>>> ioremap more useful.
->>>>
->>>>     arch_ioremap() return a pointer,
->>>>       - IS_ERR means return an error
->>>>       - NULL means continue to remap
->>>>       - a non-NULL, non-IS_ERR pointer is directly returned
->>>>     arch_iounmap() return a int value,
->>>>       - 0 means continue to vunmap
->>>>       - error code means skip vunmap and return directly
->>>>
->>>> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
->>> I don't really like interfaces that mix error pointers and NULL pointer
->>> returns.
->>>
->>> Would it be possible to have a special error code other than NULL
->>> for the fallback case?
->> I don't find a good error code, maybe  ENOTSUPP, any better suggestion?
-> I had another look at the resulting arm64 function, and it appears that
-> you never actually return a non-error pointer here. If I didn't miss anything,
-> I think the best way would be to change the return type to just indicate
-> success or an error code, and drop the case of returning the actual result,
-> and changing the function name accordingly.
->
-> Would that work, or do you actually require returning an __iomem
-> token from somewhere else?
+> +CFLAGS += -O2 -g -Wall -I../../../../usr/include/
+Build may fail if kernel on which this test is being build has old
+headers. Always use $(KHDR_INCLUDES) instead of
+"-I../../../../usr/include/" to use the kernel headers from the kernel
+source instead of the natively installed headers.
 
-Christoph  suggested in the first version,
-
-https://lore.kernel.org/linux-arm-kernel/Ymq2uX%2FY15HlIpo7@infradead.org/
-
->         Arnd
->
-> .
+-- 
+Muhammad Usama Anjum

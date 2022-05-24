@@ -2,112 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87D6A532868
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 13:00:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ACEA532870
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 13:00:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236470AbiEXLAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 07:00:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52402 "EHLO
+        id S236478AbiEXLAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 07:00:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236463AbiEXLAH (ORCPT
+        with ESMTP id S236459AbiEXLAj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 07:00:07 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A1EA68FD46
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 04:00:05 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5CDBA1FB;
-        Tue, 24 May 2022 04:00:05 -0700 (PDT)
-Received: from bogus (unknown [10.57.66.158])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D79833F73D;
-        Tue, 24 May 2022 04:00:01 -0700 (PDT)
-Date:   Tue, 24 May 2022 11:59:53 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Gavin Shan <gshan@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        rafael@kernel.org, Jonathan.Cameron@huawei.com, drjones@redhat.com,
-        zhenyzha@redhat.com, shan.gavin@gmail.com
-Subject: Re: [PATCH] arch_topology: Limit threads to one specific cluster
-Message-ID: <20220524105953.uhpgly4qkbvc2ayz@bogus>
-References: <20220524081212.1363105-1-gshan@redhat.com>
- <20220524085157.o3ie6hjy3tg5of5y@bogus>
- <7cc4eef4-bdb6-bd53-450b-f2348f722cf5@redhat.com>
+        Tue, 24 May 2022 07:00:39 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 490F48DDFB
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 04:00:38 -0700 (PDT)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24OAMfUe011417;
+        Tue, 24 May 2022 11:00:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=l1ypN9taGE14tYRN2P3CTjdOnlwFHQ8jvCb3saYBbPs=;
+ b=WVSD8S7RmEZshz/nsv0J3ZQVrszo6I2bJsnTLhBO78bIAjR+kix0mfSRBOt3BGlMX+L5
+ /TH0rs6HuH2C3nH6qSXOxhIhS1qghtiU3pv6J8qd/uEdHpfwwkPEtE2oBvqNL8RzqXID
+ GL4bKoiNsGKsEkTykD//yIpKcRq92Of5IngAw/brFpluhP9OblKKktb0EaPf4PzECmDX
+ K2FivHEPDhascGx3FugISEvnaFX7WT1cM0tk1hLAh9b7zp1Hj8OdfM1v1FLzXmlCcIqp
+ pvmXqj2tcSfO3dFZpQ7z2/FstmStqrm9TyoS7ja0ojVzRvdt+kVZ+rd9rNBbdHUQil+6 mQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g8wjbrnku-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 May 2022 11:00:22 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24OArLlr003404;
+        Tue, 24 May 2022 11:00:21 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g8wjbrnjr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 May 2022 11:00:21 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24OAwDDX014510;
+        Tue, 24 May 2022 11:00:19 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 3g6qbjcahv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 May 2022 11:00:19 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24OB0Haw48759118
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 24 May 2022 11:00:17 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1979C4204B;
+        Tue, 24 May 2022 11:00:17 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CC10042042;
+        Tue, 24 May 2022 11:00:14 +0000 (GMT)
+Received: from [9.109.198.201] (unknown [9.109.198.201])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 24 May 2022 11:00:14 +0000 (GMT)
+Message-ID: <59170f18-1356-1140-70e3-30cb627f00bc@linux.vnet.ibm.com>
+Date:   Tue, 24 May 2022 16:30:13 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7cc4eef4-bdb6-bd53-450b-f2348f722cf5@redhat.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [RFC PATCH 4/4] objtool/powerpc: Add --mcount specific
+ implementation
+Content-Language: en-US
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "mbenes@suse.cz" <mbenes@suse.cz>, "aik@ozlabs.ru" <aik@ozlabs.ru>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "naveen.n.rao@linux.vnet.ibm.com" <naveen.n.rao@linux.vnet.ibm.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        Sathvika Vasireddy <sv@linux.ibm.com>
+References: <20220523175548.922671-1-sv@linux.ibm.com>
+ <20220523175548.922671-5-sv@linux.ibm.com>
+ <6be5c941-07b0-64d5-7f36-fe5770fb5244@csgroup.eu>
+From:   Sathvika Vasireddy <sv@linux.vnet.ibm.com>
+In-Reply-To: <6be5c941-07b0-64d5-7f36-fe5770fb5244@csgroup.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: pYfqGtsuBBWosW0OwsrrNaUoak1WyouL
+X-Proofpoint-GUID: VNLL2SE_JACZnBwHMb2QGiKHjV3pcto3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-24_06,2022-05-23_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
+ spamscore=0 lowpriorityscore=0 priorityscore=1501 suspectscore=0
+ mlxlogscore=999 impostorscore=0 phishscore=0 adultscore=0 bulkscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205240053
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 05:05:22PM +0800, Gavin Shan wrote:
-> Hi Sudeep,
-> 
-> On 5/24/22 4:51 PM, Sudeep Holla wrote:
-> > On Tue, May 24, 2022 at 04:12:12PM +0800, Gavin Shan wrote:
-> > > The sibling information for one particular CPU is updated after ACPI
-> > > PPTT table is parsed. struct cpu_topology::thread_sibling tracks the
-> > > the CPUs in same core. However, cluster isn't considered when it's
-> > > populated. In this case, multiple threads belonging to different
-> > > clusters can be put together through the sibling information. It
-> > > eventually leads to unexpected warning from sched subsystem.
-> > > 
-> > > For example, the following warning is observed in a VM where we have
-> > > 2 sockets, 4 clusters, 8 cores and 16 threads and the CPU topology
-> > > is populated as below.
-> > > 
-> > >     CPU  Socket-ID  Cluster-ID  Core-ID  Thread-ID
-> > >     ----------------------------------------------
-> > >      0      0          0          0        0
-> > >      1      0          0          0        1
-> > >      2      0          0          1        0
-> > >      3      0          0          1        1
-> > >      4      0          1          0        0
-> > >      5      0          1          0        1
-> > >      6      0          1          1        0
-> > >      7      0          1          1        1
-> > >      8      1          0          0        0
-> > >      9      1          0          0        1
-> > >     10      1          0          1        0
-> > >     11      1          0          1        1
-> > >     12      1          1          0        0
-> > >     13      1          1          0        1
-> > >     14      1          1          1        0
-> > >     15      1          1          1        1
-> > > 
-> > >    [    0.592181] CPU: All CPU(s) started at EL1
-> > >    [    0.593766] alternatives: patching kernel code
-> > >    [    0.595890] BUG: arch topology borken
-> > >    [    0.597210]      the SMT domain not a subset of the CLS domain
-> > >    [    0.599286]      child=0-1,4-5    sd=0-3
-> > > 
-> > >    # cat /sys/devices/system/cpu/cpu0/topology/cluster_cpus_list
-> > >    0-3
-> > >    # cat /sys/devices/system/cpu/cpu0/topology/thread_siblings_list
-> > >    0-1,4-5
-> > > 
-> > > This fixes the issue by limiting threads to one specific cluster.
-> > > With this applied, the unexpected warning disappears in the VM.
-> > > 
-> > 
-> > I have similar fix but as part of bigger series[1] to get DT support in
-> > line with ACPI.
-> > 
-> 
-> Your patch resolves the issue I have. So please ignore mine. Sorry
 
-Thanks for that.
-
-> for the noise.
+On 24/05/22 15:05, Christophe Leroy wrote:
 >
+> Le 23/05/2022 à 19:55, Sathvika Vasireddy a écrit :
+>> This patch enables objtool --mcount on powerpc, and
+>> adds implementation specific to powerpc.
+>>
+>> Signed-off-by: Sathvika Vasireddy <sv@linux.ibm.com>
+>> ---
+>>    arch/powerpc/Kconfig                |  1 +
+>>    tools/objtool/arch/powerpc/decode.c | 14 ++++++++++++++
+>>    tools/objtool/check.c               | 12 +++++++-----
+>>    tools/objtool/elf.c                 | 13 +++++++++++++
+>>    tools/objtool/include/objtool/elf.h |  1 +
+>>    5 files changed, 36 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+>> index 732a3f91ee5e..3373d44a1298 100644
+>> --- a/arch/powerpc/Kconfig
+>> +++ b/arch/powerpc/Kconfig
+>> @@ -233,6 +233,7 @@ config PPC
+>>    	select HAVE_NMI				if PERF_EVENTS || (PPC64 && PPC_BOOK3S)
+>>    	select HAVE_OPTPROBES
+>>    	select HAVE_OBJTOOL			if PPC64
+>> +	select HAVE_OBJTOOL_MCOUNT		if HAVE_OBJTOOL
+>>    	select HAVE_PERF_EVENTS
+>>    	select HAVE_PERF_EVENTS_NMI		if PPC64
+>>    	select HAVE_PERF_REGS
+>> diff --git a/tools/objtool/arch/powerpc/decode.c b/tools/objtool/arch/powerpc/decode.c
+>> index e3b77a6ce357..ad3d79fffac2 100644
+>> --- a/tools/objtool/arch/powerpc/decode.c
+>> +++ b/tools/objtool/arch/powerpc/decode.c
+>> @@ -40,12 +40,26 @@ int arch_decode_instruction(struct objtool_file *file, const struct section *sec
+>>    			    struct list_head *ops_list)
+>>    {
+>>    	u32 insn;
+>> +	unsigned int opcode;
+>>    
+>>    	*immediate = 0;
+>>    	memcpy(&insn, sec->data->d_buf+offset, 4);
+>>    	*len = 4;
+>>    	*type = INSN_OTHER;
+>>    
+>> +	opcode = (insn >> 26);
+> You dont need the brackets here.
+>
+>> +
+>> +	switch (opcode) {
+>> +	case 18: /* bl */
+>> +		if ((insn & 3) == 1) {
+>> +			*type = INSN_CALL;
+>> +			*immediate = insn & 0x3fffffc;
+>> +			if (*immediate & 0x2000000)
+>> +				*immediate -= 0x4000000;
+>> +		}
+>> +		break;
+>> +	}
+>> +
+>>    	return 0;
+>>    }
+>>    
+>> diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+>> index 056302d58e23..fd8bad092f89 100644
+>> --- a/tools/objtool/check.c
+>> +++ b/tools/objtool/check.c
+>> @@ -832,7 +832,7 @@ static int create_mcount_loc_sections(struct objtool_file *file)
+>>    
+>>    		if (elf_add_reloc_to_insn(file->elf, sec,
+>>    					  idx * sizeof(unsigned long),
+>> -					  R_X86_64_64,
+>> +					  elf_reloc_type_long(file->elf),
+>>    					  insn->sec, insn->offset))
+>>    			return -1;
+>>    
+>> @@ -2183,7 +2183,7 @@ static int classify_symbols(struct objtool_file *file)
+>>    			if (arch_is_retpoline(func))
+>>    				func->retpoline_thunk = true;
+>>    
+>> -			if (!strcmp(func->name, "__fentry__"))
+>> +			if ((!strcmp(func->name, "__fentry__")) || (!strcmp(func->name, "_mcount")))
+>>    				func->fentry = true;
+>>    
+>>    			if (is_profiling_func(func->name))
+>> @@ -2259,9 +2259,11 @@ static int decode_sections(struct objtool_file *file)
+>>    	 * Must be before add_jump_destinations(), which depends on 'func'
+>>    	 * being set for alternatives, to enable proper sibling call detection.
+>>    	 */
+>> -	ret = add_special_section_alts(file);
+>> -	if (ret)
+>> -		return ret;
+>> +	if (opts.stackval || opts.orc || opts.uaccess || opts.noinstr) {
+>> +		ret = add_special_section_alts(file);
+>> +		if (ret)
+>> +			return ret;
+>> +	}
+> I think this change should be a patch by itself, it's not related to
+> powerpc.
+Makes sense. I'll make this a separate patch in the next revision.
+>
+>>    
+>>    	ret = add_jump_destinations(file);
+>>    	if (ret)
+>> diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
+>> index c25e957c1e52..95763060d551 100644
+>> --- a/tools/objtool/elf.c
+>> +++ b/tools/objtool/elf.c
+>> @@ -793,6 +793,19 @@ elf_create_section_symbol(struct elf *elf, struct section *sec)
+>>    	return sym;
+>>    }
+>>    
+>> +int elf_reloc_type_long(struct elf *elf)
+> Not sure it's a good name, because for 32 bits we have to use 'int'.
+Sure, I'll rename it to elf_reloc_type() or some such.
+>
+>> +{
+>> +	switch (elf->ehdr.e_machine) {
+>> +	case EM_X86_64:
+>> +		return R_X86_64_64;
+>> +	case EM_PPC64:
+>> +		return R_PPC64_ADDR64;
+>> +	default:
+>> +		WARN("unknown machine...");
+>> +		exit(-1);
+>> +	}
+>> +}
+> Wouldn't it be better to make that function arch specific ?
 
-No worries, definitely not noise.
+This is so that we can support cross architecture builds.
 
--- 
-Regards,
-Sudeep
+
+Thanks for reviewing!
+
+- Sathvika
+
+

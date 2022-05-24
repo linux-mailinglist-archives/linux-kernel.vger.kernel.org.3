@@ -2,208 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26ABE531FFB
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 02:52:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D2DF531FFF
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 02:53:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232480AbiEXAwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 20:52:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36300 "EHLO
+        id S232513AbiEXAxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 20:53:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230228AbiEXAwn (ORCPT
+        with ESMTP id S230228AbiEXAxO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 20:52:43 -0400
-Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA76282171;
-        Mon, 23 May 2022 17:52:41 -0700 (PDT)
-Subject: Re: [BUG report] security_inode_alloc return -ENOMEM let xfs shutdown
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1653353559;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hCV/Ckq4O2p5W7X5GbGmk3OnCZmzZP8cdc12qMa4RpE=;
-        b=fGNbOgTxC4upz17i5ocFOaBCDksXlvNQWxSSmfGoCNhpqtA2ew8ixNjPqOk2vV/LZP6zCI
-        Ni+xuWtp0EftBPtJ+OlDKVnLVOIWBslgIZj2FkByTPYiRQgFeT2NovY6ixhJYEtEMTljRo
-        upsPEpWbXCA4ywl267RZ3D1qjWyvrAQ=
-To:     Dave Chinner <david@fromorbit.com>,
-        liuzhengyuan <liuzhengyuan@kylinos.cn>,
-        =?UTF-8?B?6IOh5rW3?= <huhai@kylinos.cn>, zhangshida@kylinos.cn
-Cc:     darrick.wong@oracle.com, linux-xfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <5a3a9cdc-33c3-4196-b8f7-bfec485eae5b@linux.dev>
- <20220523232009.GW1098723@dread.disaster.area>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Jackie Liu <liu.yun@linux.dev>
-Message-ID: <a05dfccc-33ff-4857-b68d-ddd64cae11d0@linux.dev>
-Date:   Tue, 24 May 2022 08:52:30 +0800
+        Mon, 23 May 2022 20:53:14 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2826A8217D
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 17:53:13 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id f35so1154760qtb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 17:53:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=x4jbl/h/9IkQPtvCa68VGCFyvxT/KOdRev2otsqHtfM=;
+        b=CLD8VfehPsBJZKAJX5SPjbU2o9Q0pXOcAnEDp/JCvbkisTN6aYTXXFyQR9tQD56GBx
+         aRURvpzT0qMlj0TBitxFWqDDvCT7U90MMnkPOH7LbK07zbOfHREkSn8Li4gc75TrIKyc
+         4uuiItRFMVlt6QQAOggQDGe1AiKerD3SvjRiu1ENyYtAh/rfWdUH/ZJsQT2ThcD8PAv6
+         MpBn3JnnKsqLEd+RT++NjvLR95c5HM9CWQ14xRsasQpZu9B/Kr/L3k4fd7DFsj3y950S
+         k2CC+P/CT3/lw9ZSnEFMFi9WjEGj+g0wqyyOnP98XBItvA/gQpr2iamhbFL0JA0bVPw5
+         pL+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=x4jbl/h/9IkQPtvCa68VGCFyvxT/KOdRev2otsqHtfM=;
+        b=u/9TThafvyCAzeJvUPVckQvm0yx4zNzT/BKqABchxGyShT6rS06fY5k83ZZkrjQiFH
+         Zg0kBhiLMcU8v81Wclq5tqB6ersuGHLxLfm9TT4xsIClps3pRLMmf7eEkV0CcMFprlVw
+         aN+8bAe2eyz1OYFHe+ci1gNjmjdzvbpJOIJoNoUSrsLGYoqfPd168PE2BcWWiJCI4tJW
+         PYLAxdAihNYmnNt/trGIKzWZTSFOCtCtEhEp4rIJeceHXAlpZORuhS7gjZ9WHkeNN1Vf
+         LMp2+KwLo/8DSmSSz32rdj+9ks36nQ49jjcI+5s3YZ2oe3RyQxSyV7dV0Dru1nP6eIWE
+         r4NA==
+X-Gm-Message-State: AOAM530p5TAx4dS/82CLv33ssTwBKwxNKrkR+VPGCCPF2pzwTKK350hH
+        0f3k3wAAotpcGFr73XapM10SYrHxgdPbUrmmVhofvg==
+X-Google-Smtp-Source: ABdhPJyGEys6JfQRUYrN7pDaX/KGucRDwfhBe/O+mHLPshN0j3kd0anhBzJgJBbI6ZnFCsm3UfNhDzfmz09/ZuJ3224=
+X-Received: by 2002:ac8:7d86:0:b0:2f3:c523:19a2 with SMTP id
+ c6-20020ac87d86000000b002f3c52319a2mr18366810qtd.566.1653353592069; Mon, 23
+ May 2022 17:53:12 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220523232009.GW1098723@dread.disaster.area>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220520012133.1217211-1-yosryahmed@google.com>
+ <20220520012133.1217211-4-yosryahmed@google.com> <YodGI73xq8aIBrNM@slm.duckdns.org>
+ <CAJD7tkbvMcMWESMcWi6TtdCKLr6keBNGgZTnqcHZvBrPa1qWPw@mail.gmail.com>
+ <YodNLpxut+Zddnre@slm.duckdns.org> <73fd9853-5dab-8b59-24a0-74c0a6cae88e@fb.com>
+ <YofFli6UCX4J5YnU@slm.duckdns.org> <CA+khW7gjWVKrwCgDD-4ZdCf5CMcA4-YL0bLm6aWM74+qNQ4c0A@mail.gmail.com>
+ <CAJD7tkaJQjfSy+YARFRkqQ8m7OGJHO9v91mSk-cFeo9Z5UVJKg@mail.gmail.com>
+ <20220520221919.jnqgv52k4ajlgzcl@MBP-98dd607d3435.dhcp.thefacebook.com>
+ <Yogc0Kb5ZVDaQ0oU@slm.duckdns.org> <5b301151-0a65-df43-3a3a-6d57e10cfc2d@fb.com>
+ <CA+khW7gGrwTrDsfWp7wj=QaCg01FNj381a1QLs1ThsjAkW85eQ@mail.gmail.com> <CAEf4BzbaHeyaHK1sChPMF=L4aQsaBGNtU+R3veqCOFz0A+svEA@mail.gmail.com>
+In-Reply-To: <CAEf4BzbaHeyaHK1sChPMF=L4aQsaBGNtU+R3veqCOFz0A+svEA@mail.gmail.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Mon, 23 May 2022 17:53:00 -0700
+Message-ID: <CA+khW7h-fgo+X=OUxAWDe2sPMyWDXUmp574Kq_J884j9whoBfw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 3/5] bpf: Introduce cgroup iter
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Yonghong Song <yhs@fb.com>, Tejun Heo <tj@kernel.org>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Michal Hocko <mhocko@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Cgroups <cgroups@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, May 23, 2022 at 4:58 PM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Fri, May 20, 2022 at 7:35 PM Hao Luo <haoluo@google.com> wrote:
+> >
+> > On Fri, May 20, 2022 at 5:59 PM Yonghong Song <yhs@fb.com> wrote:
+> > > On 5/20/22 3:57 PM, Tejun Heo wrote:
+> > > > Hello,
+> > > >
+> > > > On Fri, May 20, 2022 at 03:19:19PM -0700, Alexei Starovoitov wrote:
+> > > >> We have bpf_map iterator that walks all bpf maps.
+> > > >> When map iterator is parametrized with map_fd the iterator walks
+> > > >> all elements of that map.
+> > > >> cgroup iterator should have similar semantics.
+> > > >> When non-parameterized it will walk all cgroups and their descendent
+> > > >> depth first way. I believe that's what Yonghong is proposing.
+> > > >> When parametrized it will start from that particular cgroup and
+> > > >> walk all descendant of that cgroup only.
+> > > >> The bpf prog can stop the iteration right away with ret 1.
+> > > >> Maybe we can add two parameters. One -> cgroup_fd to use and another ->
+> > > >> the order of iteration css_for_each_descendant_pre vs _post.
+> > > >> wdyt?
+> > > >
+> > > > Sounds perfectly reasonable to me.
+> > >
+> > > This works for me too. Thanks!
+> > >
+> >
+> > This sounds good to me. Thanks. Let's try to do it in the next iteration.
+>
+> Can we, in addition to descendant_pre and descendant_post walk
+> algorithms also add the one that does ascendants walk (i.e., start
+> from specified cgroup and walk up to the root cgroup)? I don't have
+> specific example, but it seems natural to include it for "cgroup
+> iterator" in general. Hopefully it won't add much code to the
+> implementation.
 
+Yep. Sounds reasonable and doable. It's just adding a flag to specify
+traversal order, like:
 
-ÔÚ 2022/5/24 ÉÏÎç7:20, Dave Chinner Ð´µÀ:
-> On Mon, May 23, 2022 at 04:51:50PM +0800, Jackie Liu wrote:
->> Hello Maintainer and developer.
->>
->>     Syzkaller report an filesystem shutdown for me, It's very easy to
->> trigger and also exists on the latest kernel version 5.18-rc7.
-> 
-> Shutdown is a perfectly reasonable way to handle a failure that we
-> can't recover cleanly from.
-> 
->> dmesg shows:
->>
->> [  285.725893] FAULT_INJECTION: forcing a failure.
->>                 name failslab, interval 1, probability 0, space 0, times 0
->> [  285.729625] CPU: 7 PID: 18034 Comm: syz-executor Not tainted 4.19.90-43+
->> #7
->> [  285.731420] Source Version: b62cabdd86181d386998660ebf34ca653addd6c9
->> [  285.733051] Hardware name: QEMU KVM Virtual Machine, BIOS 0.0.0
->> 02/06/2015
->> [  285.734796] Call trace:
->> [  285.735614]  dump_backtrace+0x0/0x3e0
->> [  285.736609]  show_stack+0x2c/0x38
->> [  285.737525]  dump_stack+0x164/0x1fc
->> [  285.738489]  should_fail+0x5c0/0x688
->> [  285.739555]  __should_failslab+0x118/0x180
->> [  285.740725]  should_failslab+0x2c/0x78
->> [  285.741808]  kmem_cache_alloc_trace+0x270/0x410
->> [  285.743120]  security_inode_alloc+0x100/0x1a8
->> [  285.744356]  inode_init_always+0x48c/0xa28
->> [  285.745524]  xfs_iget_cache_hit+0x9c0/0x2f28
->> [  285.746739]  xfs_iget+0x33c/0x9e0
->> [  285.747708]  xfs_ialloc+0x218/0x11c0
->> [  285.748752]  xfs_dir_ialloc+0xe8/0x480
->> [  285.749832]  xfs_create+0x5bc/0x1220
->> [  285.750871]  xfs_generic_create+0x42c/0x568
->> [  285.752053]  xfs_vn_mknod+0x48/0x58
->> [  285.753067]  xfs_vn_create+0x40/0x50
->> [  285.754106]  lookup_open+0x960/0x1580
->> [  285.755176]  do_last+0xd44/0x2180
->> [  285.756149]  path_openat+0x1a0/0x6d0
->> [  285.757187]  do_filp_open+0x14c/0x208
->> [  285.758245]  do_sys_open+0x340/0x470
->> [  285.759289]  __arm64_sys_openat+0x98/0xd8
->> [  285.760438]  el0_svc_common+0x230/0x3f0
->> [  285.761541]  el0_svc_handler+0x144/0x1a8
->> [  285.762674]  el0_svc+0x8/0x1b0
->> [  285.763737] security_inode_alloc:796
->> [  285.764733] inode_init_always:202
->> [  285.765669] xfs_create:1213
->> [  285.766485] XFS (dm-0): Internal error xfs_trans_cancel at line 1046 of
->> file fs/xfs/xfs_trans.c.  Caller xfs_create+0x700/0x1220
->> [  285.769503] CPU: 7 PID: 18034 Comm: syz-executor Not tainted 4.19.90-43+
->> #7
->> [  285.771275] Source Version: b62cabdd86181d386998660ebf34ca653addd6c9
->> [  285.772892] Hardware name: QEMU KVM Virtual Machine, BIOS 0.0.0
->> 02/06/2015
->> [  285.774625] Call trace:
->> [  285.775335]  dump_backtrace+0x0/0x3e0
->> [  285.776324]  show_stack+0x2c/0x38
->> [  285.777236]  dump_stack+0x164/0x1fc
->> [  285.778188]  xfs_error_report+0xdc/0xe0
->> [  285.779292]  xfs_trans_cancel+0x490/0x878
->> [  285.780439]  xfs_create+0x700/0x1220
->> [  285.781477]  xfs_generic_create+0x42c/0x568
->> [  285.782673]  xfs_vn_mknod+0x48/0x58
->> [  285.783687]  xfs_vn_create+0x40/0x50
->> [  285.784724]  lookup_open+0x960/0x1580
->> [  285.785782]  do_last+0xd44/0x2180
->> [  285.786760]  path_openat+0x1a0/0x6d0
->> [  285.787791]  do_filp_open+0x14c/0x208
->> [  285.788844]  do_sys_open+0x340/0x470
->> [  285.789880]  __arm64_sys_openat+0x98/0xd8
->> [  285.791039]  el0_svc_common+0x230/0x3f0
->> [  285.792139]  el0_svc_handler+0x144/0x1a8
->> [  285.793260]  el0_svc+0x8/0x1b0
->> [  285.794283] XFS (dm-0): xfs_do_force_shutdown(0x8) called from line 1047
->> of file fs/xfs/xfs_trans.c.  Return address = 00000000a4a366b9
->> [  285.816187] XFS (dm-0): Corruption of in-memory data detected. Shutting
->> down filesystem
->> [  285.818476] XFS (dm-0): Please umount the filesystem and rectify the
->> problem(s)
-> 
-> Yup, that's a shutdown with a dirty transaction because memory
-> allocation failed in the middle of a transaction. XFS can not
-> tolerate memory allocation failure within the scope of a dirty
-> transactions and, in practice, this almost never happens. Indeed,
-> I've never seen this allocation from security_inode_alloc():
-> 
-> int lsm_inode_alloc(struct inode *inode)
-> {
->          if (!lsm_inode_cache) {
->                  inode->i_security = NULL;
->                  return 0;
->          }
-> 
->>>>>>    inode->i_security = kmem_cache_zalloc(lsm_inode_cache, GFP_NOFS);
->          if (inode->i_security == NULL)
->                  return -ENOMEM;
->          return 0;
-> }
-> 
-> fail in all my OOM testing. Hence, to me, this is a theoretical
-> failure as I've never, ever seen this allocation fail in production
-> or test systems, even when driving them hard into OOM with excessive
-> inode allocation and triggering the OOM killer repeatedly until the
-> system kills init....
-> 
-> Hence I don't think there's anything we need to change here right
-> now. If users start hitting this, then we're going to have add new
-> memalloc_nofail_save/restore() functionality to XFS transaction
-> contexts. But until then, I don't think we need to worry about
-> syzkaller intentionally hitting this shutdown.
+{
+  WALK_DESCENDANT_PRE,
+  WALK_DESCENDANT_POST,
+  WALK_PARENT_UP,
+};
 
-Thanks Dave.
-
-   In the actual test, the x86 or arm64 device test will trigger this 
-error more easily when FAILSLAB is turned on. After our internal 
-discussion, we can try again through such a patch. Anyway, thank you for 
-your reply.
-
-diff --git a/fs/xfs/xfs_icache.c b/fs/xfs/xfs_icache.c
-index ceee27b70384..360304409c0c 100644
---- a/fs/xfs/xfs_icache.c
-+++ b/fs/xfs/xfs_icache.c
-@@ -435,6 +435,7 @@ xfs_iget_cache_hit(
-                                 wake_up_bit(&ip->i_flags, __XFS_INEW_BIT);
-                         ASSERT(ip->i_flags & XFS_IRECLAIMABLE);
-                         trace_xfs_iget_reclaim_fail(ip);
-+                       error = -EAGAIN;
-                         goto out_error;
-                 }
-
-@@ -503,7 +504,7 @@ xfs_iget_cache_miss(
-
-         ip = xfs_inode_alloc(mp, ino);
-         if (!ip)
--               return -ENOMEM;
-+               return -EAGAIN;
-
-         error = xfs_iread(mp, tp, ip, flags);
-         if (error)
-
-
---
-BR, Jackie Liu
-
-> 
-> Cheers,
-> 
-> Dave.
-> 
+In bpf_iter's seq_next(), change the algorithm to yield the parent of
+the current cgroup.

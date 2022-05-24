@@ -2,92 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D2DF531FFF
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 02:53:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61A39532004
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 02:56:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232513AbiEXAxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 20:53:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37544 "EHLO
+        id S232103AbiEXA4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 20:56:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230228AbiEXAxO (ORCPT
+        with ESMTP id S229726AbiEXA4U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 20:53:14 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2826A8217D
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 17:53:13 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id f35so1154760qtb.11
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 17:53:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=x4jbl/h/9IkQPtvCa68VGCFyvxT/KOdRev2otsqHtfM=;
-        b=CLD8VfehPsBJZKAJX5SPjbU2o9Q0pXOcAnEDp/JCvbkisTN6aYTXXFyQR9tQD56GBx
-         aRURvpzT0qMlj0TBitxFWqDDvCT7U90MMnkPOH7LbK07zbOfHREkSn8Li4gc75TrIKyc
-         4uuiItRFMVlt6QQAOggQDGe1AiKerD3SvjRiu1ENyYtAh/rfWdUH/ZJsQT2ThcD8PAv6
-         MpBn3JnnKsqLEd+RT++NjvLR95c5HM9CWQ14xRsasQpZu9B/Kr/L3k4fd7DFsj3y950S
-         k2CC+P/CT3/lw9ZSnEFMFi9WjEGj+g0wqyyOnP98XBItvA/gQpr2iamhbFL0JA0bVPw5
-         pL+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=x4jbl/h/9IkQPtvCa68VGCFyvxT/KOdRev2otsqHtfM=;
-        b=u/9TThafvyCAzeJvUPVckQvm0yx4zNzT/BKqABchxGyShT6rS06fY5k83ZZkrjQiFH
-         Zg0kBhiLMcU8v81Wclq5tqB6ersuGHLxLfm9TT4xsIClps3pRLMmf7eEkV0CcMFprlVw
-         aN+8bAe2eyz1OYFHe+ci1gNjmjdzvbpJOIJoNoUSrsLGYoqfPd168PE2BcWWiJCI4tJW
-         PYLAxdAihNYmnNt/trGIKzWZTSFOCtCtEhEp4rIJeceHXAlpZORuhS7gjZ9WHkeNN1Vf
-         LMp2+KwLo/8DSmSSz32rdj+9ks36nQ49jjcI+5s3YZ2oe3RyQxSyV7dV0Dru1nP6eIWE
-         r4NA==
-X-Gm-Message-State: AOAM530p5TAx4dS/82CLv33ssTwBKwxNKrkR+VPGCCPF2pzwTKK350hH
-        0f3k3wAAotpcGFr73XapM10SYrHxgdPbUrmmVhofvg==
-X-Google-Smtp-Source: ABdhPJyGEys6JfQRUYrN7pDaX/KGucRDwfhBe/O+mHLPshN0j3kd0anhBzJgJBbI6ZnFCsm3UfNhDzfmz09/ZuJ3224=
-X-Received: by 2002:ac8:7d86:0:b0:2f3:c523:19a2 with SMTP id
- c6-20020ac87d86000000b002f3c52319a2mr18366810qtd.566.1653353592069; Mon, 23
- May 2022 17:53:12 -0700 (PDT)
+        Mon, 23 May 2022 20:56:20 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646D6E7B;
+        Mon, 23 May 2022 17:56:16 -0700 (PDT)
+Received: from kwepemi100015.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4L6bMB163Yz1JCDp;
+        Tue, 24 May 2022 08:54:46 +0800 (CST)
+Received: from kwepemm600018.china.huawei.com (7.193.23.140) by
+ kwepemi100015.china.huawei.com (7.221.188.125) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 24 May 2022 08:56:14 +0800
+Received: from [10.174.176.88] (10.174.176.88) by
+ kwepemm600018.china.huawei.com (7.193.23.140) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 24 May 2022 08:56:13 +0800
+Message-ID: <db28d6cf-fa87-8647-29cb-0122e26fa8aa@huawei.com>
+Date:   Tue, 24 May 2022 08:56:13 +0800
 MIME-Version: 1.0
-References: <20220520012133.1217211-1-yosryahmed@google.com>
- <20220520012133.1217211-4-yosryahmed@google.com> <YodGI73xq8aIBrNM@slm.duckdns.org>
- <CAJD7tkbvMcMWESMcWi6TtdCKLr6keBNGgZTnqcHZvBrPa1qWPw@mail.gmail.com>
- <YodNLpxut+Zddnre@slm.duckdns.org> <73fd9853-5dab-8b59-24a0-74c0a6cae88e@fb.com>
- <YofFli6UCX4J5YnU@slm.duckdns.org> <CA+khW7gjWVKrwCgDD-4ZdCf5CMcA4-YL0bLm6aWM74+qNQ4c0A@mail.gmail.com>
- <CAJD7tkaJQjfSy+YARFRkqQ8m7OGJHO9v91mSk-cFeo9Z5UVJKg@mail.gmail.com>
- <20220520221919.jnqgv52k4ajlgzcl@MBP-98dd607d3435.dhcp.thefacebook.com>
- <Yogc0Kb5ZVDaQ0oU@slm.duckdns.org> <5b301151-0a65-df43-3a3a-6d57e10cfc2d@fb.com>
- <CA+khW7gGrwTrDsfWp7wj=QaCg01FNj381a1QLs1ThsjAkW85eQ@mail.gmail.com> <CAEf4BzbaHeyaHK1sChPMF=L4aQsaBGNtU+R3veqCOFz0A+svEA@mail.gmail.com>
-In-Reply-To: <CAEf4BzbaHeyaHK1sChPMF=L4aQsaBGNtU+R3veqCOFz0A+svEA@mail.gmail.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Mon, 23 May 2022 17:53:00 -0700
-Message-ID: <CA+khW7h-fgo+X=OUxAWDe2sPMyWDXUmp574Kq_J884j9whoBfw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 3/5] bpf: Introduce cgroup iter
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Yonghong Song <yhs@fb.com>, Tejun Heo <tj@kernel.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Michal Hocko <mhocko@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH -next] crypto: Fix build error when CRYPTO_BLAKE2S_X86=m
+ && CRYPTO_ALGAPI2=m && CONFIG_CRYPTO_MANAGER_EXTRA_TESTS=y
+From:   "gaochao (L)" <gaochao49@huawei.com>
+To:     <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <dave.hansen@linux.intel.com>, <x86@kernel.org>
+CC:     <hpa@zytor.com>, <ebiggers@google.com>,
+        <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <zhengbin13@huawei.com>
+References: <20220517033630.1182-1-gaochao49@huawei.com>
+In-Reply-To: <20220517033630.1182-1-gaochao49@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.88]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600018.china.huawei.com (7.193.23.140)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,51 +57,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 4:58 PM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Fri, May 20, 2022 at 7:35 PM Hao Luo <haoluo@google.com> wrote:
-> >
-> > On Fri, May 20, 2022 at 5:59 PM Yonghong Song <yhs@fb.com> wrote:
-> > > On 5/20/22 3:57 PM, Tejun Heo wrote:
-> > > > Hello,
-> > > >
-> > > > On Fri, May 20, 2022 at 03:19:19PM -0700, Alexei Starovoitov wrote:
-> > > >> We have bpf_map iterator that walks all bpf maps.
-> > > >> When map iterator is parametrized with map_fd the iterator walks
-> > > >> all elements of that map.
-> > > >> cgroup iterator should have similar semantics.
-> > > >> When non-parameterized it will walk all cgroups and their descendent
-> > > >> depth first way. I believe that's what Yonghong is proposing.
-> > > >> When parametrized it will start from that particular cgroup and
-> > > >> walk all descendant of that cgroup only.
-> > > >> The bpf prog can stop the iteration right away with ret 1.
-> > > >> Maybe we can add two parameters. One -> cgroup_fd to use and another ->
-> > > >> the order of iteration css_for_each_descendant_pre vs _post.
-> > > >> wdyt?
-> > > >
-> > > > Sounds perfectly reasonable to me.
-> > >
-> > > This works for me too. Thanks!
-> > >
-> >
-> > This sounds good to me. Thanks. Let's try to do it in the next iteration.
->
-> Can we, in addition to descendant_pre and descendant_post walk
-> algorithms also add the one that does ascendants walk (i.e., start
-> from specified cgroup and walk up to the root cgroup)? I don't have
-> specific example, but it seems natural to include it for "cgroup
-> iterator" in general. Hopefully it won't add much code to the
-> implementation.
+friendly ping 
 
-Yep. Sounds reasonable and doable. It's just adding a flag to specify
-traversal order, like:
-
-{
-  WALK_DESCENDANT_PRE,
-  WALK_DESCENDANT_POST,
-  WALK_PARENT_UP,
-};
-
-In bpf_iter's seq_next(), change the algorithm to yield the parent of
-the current cgroup.
+在 2022/5/17 11:36, gaochao 写道:
+> If CRYPTO=m, CRYPTO_ALGAPI=m, CRYPTO_ALGAPI2=m, CRYPTO_BLAKE2S_X86=m,
+> CONFIG_CRYPTO_MANAGER_EXTRA_TESTS=y
+> bulding fails:
+> 
+> arch/x86/crypto/blake2s-glue.o: In function `blake2s_compress':
+> (.text+0x5a): undefined reference to `crypto_simd_disabled_for_test'
+> make: *** [vmlinux] Error 1
+> 
+> When CRYPTO_MANAGER_EXTRA_TESTS=y, blake2s_compress will call
+> crypto_simd_disabled_for_test.
+> When CRYPTO_ALGAPI2=m, crypto_algapi build as a module,
+> but if CONFIG_CRYPTO_BLAKE2S_X86=m at the same time,
+> libblake2s-x86_64.o build with obj-y, this will accuse the above error.
+> 
+> To fix this error:
+> 1 Choose CRYPTO_ALGAPI2 for CRYPTO_BLAKE2S_X86
+> when CRYPTO_MANAGER_EXTRA_TESTS=y.
+> 2 build libblake2s-x86_64.o as a module when CONFIG_CRYPTO_BLAKE2S_X86=y
+> 
+> Fixes: 8fc5f2ad896b ("crypto: testmgr - Move crypto_simd_disabled_for_test out")
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: gaochao <gaochao49@huawei.com>
+> ---
+>  arch/x86/crypto/Makefile | 2 +-
+>  crypto/Kconfig           | 1 +
+>  2 files changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/crypto/Makefile b/arch/x86/crypto/Makefile
+> index 2831685adf6f..54b2469fa49a 100644
+> --- a/arch/x86/crypto/Makefile
+> +++ b/arch/x86/crypto/Makefile
+> @@ -63,7 +63,7 @@ sha512-ssse3-y := sha512-ssse3-asm.o sha512-avx-asm.o sha512-avx2-asm.o sha512_s
+> 
+>  obj-$(CONFIG_CRYPTO_BLAKE2S_X86) += blake2s-x86_64.o
+>  blake2s-x86_64-y := blake2s-shash.o
+> -obj-$(if $(CONFIG_CRYPTO_BLAKE2S_X86),y) += libblake2s-x86_64.o
+> +obj-$(CONFIG_CRYPTO_BLAKE2S_X86) += libblake2s-x86_64.o
+>  libblake2s-x86_64-y := blake2s-core.o blake2s-glue.o
+> 
+>  obj-$(CONFIG_CRYPTO_GHASH_CLMUL_NI_INTEL) += ghash-clmulni-intel.o
+> diff --git a/crypto/Kconfig b/crypto/Kconfig
+> index 19197469cfab..e61598f8f8c5 100644
+> --- a/crypto/Kconfig
+> +++ b/crypto/Kconfig
+> @@ -714,6 +714,7 @@ config CRYPTO_BLAKE2S_X86
+>  	depends on X86 && 64BIT
+>  	select CRYPTO_LIB_BLAKE2S_GENERIC
+>  	select CRYPTO_ARCH_HAVE_LIB_BLAKE2S
+> +	select CRYPTO_ALGAPI2 if CRYPTO_MANAGER_EXTRA_TESTS
+> 
+>  config CRYPTO_CRCT10DIF
+>  	tristate "CRCT10DIF algorithm"
+> --
+> 2.17.1
+> 
+> .

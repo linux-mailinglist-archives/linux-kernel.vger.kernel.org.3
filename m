@@ -2,79 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 623975320AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 04:08:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CDF35320B5
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 04:09:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233194AbiEXCHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 22:07:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44660 "EHLO
+        id S233188AbiEXCI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 22:08:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233191AbiEXCHR (ORCPT
+        with ESMTP id S229888AbiEXCIy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 22:07:17 -0400
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 303C97C173;
-        Mon, 23 May 2022 19:07:13 -0700 (PDT)
-Received: by mail-ot1-f42.google.com with SMTP id c15-20020a9d684f000000b0060b097c71ecso4394022oto.10;
-        Mon, 23 May 2022 19:07:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=avW4K7LcQhKBy63mDTEwp3yorTkoVIJO+916OJZVwwM=;
-        b=zUg3eeKpzpF6XOFjlK/0HGG3I1NWZuwrgD8j4y4YE20X/W8iiZaT9vGlSXtJP2tooi
-         Qr+61ai7ahk724vc94Ts67nkrRcBiJ7gcWkOZZFQbNj2WzvWETsN5CfDScgLUMBmnuci
-         EaI5Biif68rigxP2ZXZKA1zHUjVS9WrYNN6V3UZxqXnswt1lPfM0LIO/g7c81KuvDuAD
-         5BsB7ez7TYnc3gkjbOzs+M+7Yf8S94FTrEhd0kjOg3MX2v948WW4iD9mIF6rP3jisnCQ
-         ft5Xargs4C3P8n7kjUjeQrFfiLOzYG8c8qpRogh8WyOSLLmiIxi6v/ga6mc2TUZhvdUV
-         QtSQ==
-X-Gm-Message-State: AOAM533QBeAjZdhfCq0nDJAOqCoLXvfI5d/o26ZGcpmbU/mXHaq1BEHG
-        2SRKLERuABjfFWDFhTPoMFJgtwdbFQ==
-X-Google-Smtp-Source: ABdhPJznrLWgCsmGMJ6jUb47IejHe4ZA03bJM03kOnz6E2td6t6bAdxfAMXXb7V7rn4u4RRUaO1h/A==
-X-Received: by 2002:a9d:4c09:0:b0:60b:1bec:89ba with SMTP id l9-20020a9d4c09000000b0060b1bec89bamr2033343otf.281.1653358032320;
-        Mon, 23 May 2022 19:07:12 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id v132-20020aca618a000000b00325cda1ffabsm4565426oib.42.2022.05.23.19.07.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 19:07:11 -0700 (PDT)
-Received: (nullmailer pid 2607989 invoked by uid 1000);
-        Tue, 24 May 2022 02:07:10 -0000
-Date:   Mon, 23 May 2022 21:07:10 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Taniya Das <quic_tdas@quicinc.com>
-Cc:     linux-soc@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [PATCH v2 2/3] dt-bindings: clock: Add support for external
- MCLKs for LPASS on SC7280
-Message-ID: <20220524020710.GA2607925-robh@kernel.org>
-References: <20220523092314.14252-1-quic_tdas@quicinc.com>
- <20220523092314.14252-3-quic_tdas@quicinc.com>
+        Mon, 23 May 2022 22:08:54 -0400
+Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 8E0D692D3C;
+        Mon, 23 May 2022 19:08:50 -0700 (PDT)
+Received: by ajax-webmail-mail-app2 (Coremail) ; Tue, 24 May 2022 10:08:39
+ +0800 (GMT+08:00)
+X-Originating-IP: [124.236.130.193]
+Date:   Tue, 24 May 2022 10:08:39 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   duoming@zju.edu.cn
+To:     "Kalle Valo" <kvalo@kernel.org>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        linux-wireless@vger.kernel.org, amitkarwar@gmail.com,
+        ganapathi017@gmail.com, sharvari.harisangam@nxp.com,
+        huxinming820@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
+        rafael@kernel.org
+Subject: Re: [PATCH v3] mwifiex: fix sleep in atomic context bugs caused by
+ dev_coredumpv
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
+In-Reply-To: <87ee0kyzvc.fsf@kernel.org>
+References: <20220523052810.24767-1-duoming@zju.edu.cn>
+ <87o7zoxrdf.fsf@email.froward.int.ebiederm.org>
+ <6a270950.2c659.180f1a46e8c.Coremail.duoming@zju.edu.cn>
+ <87ee0kyzvc.fsf@kernel.org>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220523092314.14252-3-quic_tdas@quicinc.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Message-ID: <50aec6d7.2d054.180f3d2cbc0.Coremail.duoming@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: by_KCgBXX4snPoxidv+nAA--.8746W
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgoAAVZdtZ1wFwAAsN
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 23 May 2022 14:53:13 +0530, Taniya Das wrote:
-> Support external mclk to interface external MI2S clocks for SC7280.
-> 
-> Fixes: 57405b795504 ("dt-bindings: clock: Add YAML schemas for LPASS clocks on SC7280").
-> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
-> ---
->  include/dt-bindings/clock/qcom,lpasscorecc-sc7280.h | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-
-Acked-by: Rob Herring <robh@kernel.org>
+CkhlbGxvLAoKT24gTW9uLCAyMyBNYXkgMjAyMiAxOTozMTozNSArMDMwMCBLYWxsZSBWYWxvIHdy
+b3RlOgoKPiA+PiA+IFRoZXJlIGFyZSBzbGVlcCBpbiBhdG9taWMgY29udGV4dCBidWdzIHdoZW4g
+dXBsb2FkaW5nIGRldmljZSBkdW1wCj4gPj4gPiBkYXRhIGluIG13aWZpZXguIFRoZSByb290IGNh
+dXNlIGlzIHRoYXQgZGV2X2NvcmVkdW1wdiBjb3VsZCBub3QKPiA+PiA+IGJlIHVzZWQgaW4gYXRv
+bWljIGNvbnRleHRzLCBiZWNhdXNlIGl0IGNhbGxzIGRldl9zZXRfbmFtZSB3aGljaAo+ID4+ID4g
+aW5jbHVkZSBvcGVyYXRpb25zIHRoYXQgbWF5IHNsZWVwLiBUaGUgY2FsbCB0cmVlIHNob3dzIGV4
+ZWN1dGlvbgo+ID4+ID4gcGF0aHMgdGhhdCBjb3VsZCBsZWFkIHRvIGJ1Z3M6Cj4gPj4gPgo+ID4+
+ID4gICAgKEludGVycnVwdCBjb250ZXh0KQo+ID4+ID4gZndfZHVtcF90aW1lcl9mbgo+ID4+ID4g
+ICBtd2lmaWV4X3VwbG9hZF9kZXZpY2VfZHVtcAo+ID4+ID4gICAgIGRldl9jb3JlZHVtcHYoLi4u
+LCBHRlBfS0VSTkVMKQo+ID4+ID4gICAgICAgZGV2X2NvcmVkdW1wbSgpCj4gPj4gPiAgICAgICAg
+IGt6YWxsb2Moc2l6ZW9mKCpkZXZjZCksIGdmcCk7IC8vbWF5IHNsZWVwCj4gPj4gPiAgICAgICAg
+IGRldl9zZXRfbmFtZQo+ID4+ID4gICAgICAgICAgIGtvYmplY3Rfc2V0X25hbWVfdmFyZ3MKPiA+
+PiA+ICAgICAgICAgICAgIGt2YXNwcmludGZfY29uc3QoR0ZQX0tFUk5FTCwgLi4uKTsgLy9tYXkg
+c2xlZXAKPiA+PiA+ICAgICAgICAgICAgIGtzdHJkdXAocywgR0ZQX0tFUk5FTCk7IC8vbWF5IHNs
+ZWVwCj4gPj4gPgo+ID4+ID4gSW4gb3JkZXIgdG8gbGV0IGRldl9jb3JlZHVtcHYgc3VwcG9ydCBh
+dG9taWMgY29udGV4dHMsIHRoaXMgcGF0Y2gKPiA+PiA+IGNoYW5nZXMgdGhlIGdmcF90IHBhcmFt
+ZXRlciBvZiBrdmFzcHJpbnRmX2NvbnN0IGFuZCBrc3RyZHVwIGluCj4gPj4gPiBrb2JqZWN0X3Nl
+dF9uYW1lX3ZhcmdzIGZyb20gR0ZQX0tFUk5FTCB0byBHRlBfQVRPTUlDLiBXaGF0J3MgbW9yZSwK
+PiA+PiA+IEluIG9yZGVyIHRvIG1pdGlnYXRlIGJ1ZywgdGhpcyBwYXRjaCBjaGFuZ2VzIHRoZSBn
+ZnBfdCBwYXJhbWV0ZXIKPiA+PiA+IG9mIGRldl9jb3JlZHVtcHYgZnJvbSBHRlBfS0VSTkVMIHRv
+IEdGUF9BVE9NSUMuCj4gPj4gCj4gPj4gdm1hbGxvYyBpbiBhdG9taWMgY29udGV4dD8KPiA+PiAK
+PiA+PiBOb3Qgb25seSBkb2VzIGRldl9jb3JlZHVtcG0gc2V0IGEgZGV2aWNlIG5hbWUgZGV2X2Nv
+cmVkdW1wbSBjcmVhdGVzIGFuCj4gPj4gZW50aXJlIGRldmljZSB0byBob2xkIHRoZSBkZXZpY2Ug
+ZHVtcC4KPiA+PiAKPiA+PiBNeSBzZW5zZSBpcyB0aGF0IGVpdGhlciBkZXZfY29yZWR1bXBtIG5l
+ZWRzIHRvIGJlIHJlYnVpbHQgb24gYQo+ID4+IGNvbXBsZXRlbHkgZGlmZmVyZW50IHByaW5jaXBs
+ZSB0aGF0IGRvZXMgbm90IG5lZWQgYSBkZXZpY2UgdG8gaG9sZCB0aGUKPiA+PiBjb3JlZHVtcCAo
+c28gdGhhdCBpdCBjYW4gYmUgY2FsbGVkIGZyb20gaW50ZXJydXB0IGNvbnRleHQpIG9yIHRoYXQK
+PiA+PiBkZXZfY29yZWR1bXBtIHNob3VsZCBuZXZlciBiZSBjYWxsZWQgaW4gYW4gY29udGV4dCB0
+aGF0IGNhbiBub3Qgc2xlZXAuCj4gPgo+ID4gVGhlIGZvbGxvd2luZyBzb2x1dGlvbiByZW1vdmVz
+IHRoZSBnZnBfdCBwYXJhbWV0ZXIgb2YgZGV2X2NvcmVkdW1wdigpLCAKPiA+IGRldl9jb3JlZHVt
+cG0oKSBhbmQgZGV2X2NvcmVkdW1wc2coKSBhbmQgY2hhbmdlIHRoZSBnZnBfdCBwYXJhbWV0ZXIg
+b2YgCj4gPiBremFsbG9jKCkgaW4gZGV2X2NvcmVkdW1wbSgpIHRvIEdGUF9LRVJORUwsIGluIG9y
+ZGVyIHRvIHNob3cgdGhhdCB0aGVzZSAKPiA+IGZ1bmN0aW9ucyBjYW4gbm90IGJlIHVzZWQgaW4g
+YXRvbWljIGNvbnRleHQuCj4gPgo+ID4gV2hhdCdzIG1vcmUsIEkgbW92ZSB0aGUgb3BlcmF0aW9u
+cyB0aGF0IG1heSBzbGVlcCBpbnRvIGEgd29yayBpdGVtIGFuZCB1c2UKPiA+IHNjaGVkdWxlX3dv
+cmsoKSB0byBjYWxsIGEga2VybmVsIHRocmVhZCB0byBkbyB0aGUgb3BlcmF0aW9ucyB0aGF0IG1h
+eSBzbGVlcC4KPiA+Cj4gCj4gWy4uLl0KPiAKPiA+IC0tLSBhL2RyaXZlcnMvbmV0L3dpcmVsZXNz
+L21hcnZlbGwvbXdpZmlleC9pbml0LmMKPiA+ICsrKyBiL2RyaXZlcnMvbmV0L3dpcmVsZXNzL21h
+cnZlbGwvbXdpZmlleC9pbml0LmMKPiA+IEBAIC02MywxMSArNjMsMTkgQEAgc3RhdGljIHZvaWQg
+d2FrZXVwX3RpbWVyX2ZuKHN0cnVjdCB0aW1lcl9saXN0ICp0KQo+ID4gIAkJYWRhcHRlci0+aWZf
+b3BzLmNhcmRfcmVzZXQoYWRhcHRlcik7Cj4gPiAgfQo+ID4gIAo+ID4gK3N0YXRpYyB2b2lkIGZ3
+X2R1bXBfd29yayhzdHJ1Y3Qgd29ya19zdHJ1Y3QgKndvcmspCj4gPiArewo+ID4gKwlzdHJ1Y3Qg
+bXdpZmlleF9hZGFwdGVyICphZGFwdGVyID0KPiA+ICsJCWNvbnRhaW5lcl9vZih3b3JrLCBzdHJ1
+Y3QgbXdpZmlleF9hZGFwdGVyLCBkZXZkdW1wX3dvcmspOwo+ID4gKwo+ID4gKwltd2lmaWV4X3Vw
+bG9hZF9kZXZpY2VfZHVtcChhZGFwdGVyKTsKPiA+ICt9Cj4gPiArCj4gPiAgc3RhdGljIHZvaWQg
+ZndfZHVtcF90aW1lcl9mbihzdHJ1Y3QgdGltZXJfbGlzdCAqdCkKPiA+ICB7Cj4gPiAgCXN0cnVj
+dCBtd2lmaWV4X2FkYXB0ZXIgKmFkYXB0ZXIgPSBmcm9tX3RpbWVyKGFkYXB0ZXIsIHQsIGRldmR1
+bXBfdGltZXIpOwo+ID4gIAo+ID4gLQltd2lmaWV4X3VwbG9hZF9kZXZpY2VfZHVtcChhZGFwdGVy
+KTsKPiA+ICsJc2NoZWR1bGVfd29yaygmYWRhcHRlci0+ZGV2ZHVtcF93b3JrKTsKPiA+ICB9Cj4g
+PiAgCj4gPiAgLyoKPiA+IEBAIC0zMjEsNiArMzI5LDcgQEAgc3RhdGljIHZvaWQgbXdpZmlleF9p
+bml0X2FkYXB0ZXIoc3RydWN0IG13aWZpZXhfYWRhcHRlciAqYWRhcHRlcikKPiA+ICAJYWRhcHRl
+ci0+YWN0aXZlX3NjYW5fdHJpZ2dlcmVkID0gZmFsc2U7Cj4gPiAgCXRpbWVyX3NldHVwKCZhZGFw
+dGVyLT53YWtldXBfdGltZXIsIHdha2V1cF90aW1lcl9mbiwgMCk7Cj4gPiAgCWFkYXB0ZXItPmRl
+dmR1bXBfbGVuID0gMDsKPiA+ICsJSU5JVF9XT1JLKCZhZGFwdGVyLT5kZXZkdW1wX3dvcmssIGZ3
+X2R1bXBfd29yayk7Cj4gPiAgCXRpbWVyX3NldHVwKCZhZGFwdGVyLT5kZXZkdW1wX3RpbWVyLCBm
+d19kdW1wX3RpbWVyX2ZuLCAwKTsKPiA+ICB9Cj4gPiAgCj4gPiBAQCAtNDAxLDYgKzQxMCw3IEBA
+IG13aWZpZXhfYWRhcHRlcl9jbGVhbnVwKHN0cnVjdCBtd2lmaWV4X2FkYXB0ZXIgKmFkYXB0ZXIp
+Cj4gPiAgewo+ID4gIAlkZWxfdGltZXIoJmFkYXB0ZXItPndha2V1cF90aW1lcik7Cj4gPiAgCWRl
+bF90aW1lcl9zeW5jKCZhZGFwdGVyLT5kZXZkdW1wX3RpbWVyKTsKPiA+ICsJY2FuY2VsX3dvcmtf
+c3luYygmYWRhcHRlci0+ZGV2ZHVtcF93b3JrKTsKPiA+ICAJbXdpZmlleF9jYW5jZWxfYWxsX3Bl
+bmRpbmdfY21kKGFkYXB0ZXIpOwo+ID4gIAl3YWtlX3VwX2ludGVycnVwdGlibGUoJmFkYXB0ZXIt
+PmNtZF93YWl0X3Eud2FpdCk7Cj4gPiAgCXdha2VfdXBfaW50ZXJydXB0aWJsZSgmYWRhcHRlci0+
+aHNfYWN0aXZhdGVfd2FpdF9xKTsKPiAKPiBJbiB0aGlzIHBhdGNoIHBsZWFzZSBvbmx5IGRvIHRo
+ZSBBUEkgY2hhbmdlIGluIG13aWZpZXguIFRoZSBjaGFuZ2UgdG8KPiB1c2luZyBhIHdvcmtxdWV1
+ZSBuZWVkcyB0byBiZSBpbiBzZXBhcmF0ZSBwYXRjaCBzbyBpdCBjYW4gYmUgcHJvcGVybHkKPiB0
+ZXN0ZWQuIEkgZG9uJ3Qgd2FudCBhIGNoYW5nZSBsaWtlIHRoYXQgZ29pbmcgdG8gdGhlIGtlcm5l
+bCB3aXRob3V0Cj4gdGVzdGluZyBvbiBhIHJlYWwgZGV2aWNlLgoKVGhhbmsgeW91IGZvciB5b3Vy
+IHN1Z2dlc3Rpb25zISBJIHdpbGwgb25seSBkbyB0aGUgQVBJIGNoYW5nZSBpbiBtd2lmaWVzIGFu
+ZAprZWVwIG90aGVyIHBsYWNlcyB0aGF0IGNhbGwgZGV2X2NvcmVkdW1wdiByZW1haW4gdW5jaGFu
+Z2VkLiBJIHdpbGwgdGVzdCB0aGUKbmV3IHNlcGFyYXRlIHBhdGNoZXMgb24gcmVhbCBNYXJ2ZWxs
+IHdpZmkgY2hpcCB0aGVzZSBkYXlzLgoKQmVzdCByZWdhcmRzLApEdW9taW5nIFpob3U=

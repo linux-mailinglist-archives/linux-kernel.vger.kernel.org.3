@@ -2,73 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B2AB532629
+	by mail.lfdr.de (Postfix) with ESMTP id 29EC5532628
 	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 11:13:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235140AbiEXJMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 05:12:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36752 "EHLO
+        id S235195AbiEXJNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 05:13:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiEXJMR (ORCPT
+        with ESMTP id S231261AbiEXJNF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 05:12:17 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289C6880D6
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 02:12:15 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id nk9-20020a17090b194900b001df2fcdc165so1578655pjb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 02:12:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=X6glWX1RQ8uRjJqaJDVLY30UlqwzIVTxXstx+jpZgLk=;
-        b=S7H7xSvgjuUsFHYKGgmdW01HGi7PyLkfNBDblTzLz6Rl5YaGGDjazsez1QC+TR2BUB
-         x+NGZ6DaZNwY4JFAySeW8AQCxxXSuwKrpcOxsS/Jp+5f4ZkTktBIW4eyoM653ms0ZPG4
-         xaPj0m/dJfFuSYZ/ObMRUgeCFH6kchyEIX+9ZSocxR6YPiAs3HYKAvDlf2HEDd6ksE3k
-         aAGBIJ/UL3ovDdIvJldoDk37rPffqyZXFvzi7eJJhiBUjN54jKphrKrATvki6vnFII1g
-         kmuqlPqU4UpTgDVVNVkLM6qyszF4nzwy7i53F2C6w3uzBsACLivasXI0eA1WHZ6k3w/E
-         J9dQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=X6glWX1RQ8uRjJqaJDVLY30UlqwzIVTxXstx+jpZgLk=;
-        b=KryuFKrct9jkVQKwHdsKN9gPV8eCTmTVcRAXUhf95atpjcUeKmk1n8bPB3JGR8WDwN
-         DQP6rp4wvzVzk7F91UgNO27Ar+/LNOokPR2e+PkhqMu4p+vUquTIlFhJce1pj18aHF4R
-         I24uRpX66YnIBIK8tgjXdjFIZWKiqTpJQK5tUQ7TdDe/umTYtosHc4hD04NCPDXU9J1l
-         3R2a7nkOHx0arHeRfxk1fC6CBsOUDSez8ASYxmuiMtHzSxiT/vcO7FN70DbFTLFNrHys
-         mbEIXe6B7x/0uicy+grlX12L/OamS5rKr9Q5rDqn6kFRRWDCCtnRJl0TBdH5j0mCCpBu
-         Kyag==
-X-Gm-Message-State: AOAM5329SI+l8p/ezo8q8yd4n77J+jfM9IH0meB9ycCPh4/vdFGtpjrc
-        Al8hqVV+Ti0SdjT+W0ReampvWA==
-X-Google-Smtp-Source: ABdhPJz4/nXto+Zz8WAcGpFvdBWmIfPOl6WmGXBvfGPyYxQ1oNUNlAAq77lKoctlIysT84Fut+J2Vg==
-X-Received: by 2002:a17:90b:4fc6:b0:1e0:6535:c7a1 with SMTP id qa6-20020a17090b4fc600b001e06535c7a1mr3660500pjb.168.1653383534540;
-        Tue, 24 May 2022 02:12:14 -0700 (PDT)
-Received: from localhost ([2408:8207:18da:2310:f940:af17:c2f5:8656])
-        by smtp.gmail.com with ESMTPSA id f24-20020a17090aa79800b001d792761e2esm1163347pjq.47.2022.05.24.02.12.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 May 2022 02:12:14 -0700 (PDT)
-Date:   Tue, 24 May 2022 17:12:08 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Dave Chinner <dchinner@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: Re: [PATCH v3 3/6] mm: shrinkers: provide shrinkers with names
-Message-ID: <YoyhaOF91dIl1McL@FVFYT0MHHV2J.googleapis.com>
-References: <20220509183820.573666-1-roman.gushchin@linux.dev>
- <20220509183820.573666-4-roman.gushchin@linux.dev>
- <YooZqOc7MBX0m/oJ@FVFYT0MHHV2J.usts.net>
- <YowFXoh9awP3LuBf@carbon>
+        Tue, 24 May 2022 05:13:05 -0400
+Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120081.outbound.protection.outlook.com [40.107.12.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69DFA8E182
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 02:13:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AL9AgL6G9gpbVknapW8mIHyKgYXWT5AaiL80/UtjaGZbZIyHKWZi00GU1T5geHN4NH7zPHBXnPigWd7AQ2DdJuejv6iEa/c+Zdz7O35T8ZmaiV0SD+7LAff38MuoKXFrHjoMWqgZRXtTTtmCFg217LCjERbfauT0dHcEZDjf/5cAJywpAJ2S2SK7IFwSxAb4rZz4vp0Vy1cLaJnxSC7NRBBgmXdXG7PV3SBabtV8Phic45EnKmPzFKVWKFO7vN2P1oZDK+wImAQ1aTRZyLuic4mavmdxBWQqMbdxGxh9ajYD3uMknFcX6b2igEuZLC5JLCZjOfu/rUic+Idi6S+dvQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=j2BojYEfjRmDeW+ZDbG2c2hVwTTkcICILvA9GpaG/Jc=;
+ b=XpCD8Tnul6+FqVhU9cHu7U6ZccAdI6JT23ysmTu+XQnOQsY37Kb2kTEavh8QAe4ODg7aisCvVMP6sTU49ER/w6rEFsTnNGOWprZHE7yioACH/Bg3Jwu5ivNSgGqY1fM27phDLYSQPo+mwfna2NPSvmONBBXNSu2Jvv7JZ7qg94AIRuqYJOiDpCpAzTm/VJzSvMt8vIhvPpvA4FtqTfWnX2NQdk9N4gqW/L8u9GtPu4ZXL/M5qNEz5A5G7+TrdDvDbOhO3Zgl09B1Dyiuttziv+gZdtTF/qDu7+4eECLdYEvgYjh7X5EShMm3TDO8vs/8WaORukPM8CQ4+DTikVBSUw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by MR1P264MB3153.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:3a::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.14; Tue, 24 May
+ 2022 09:13:01 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::b15e:862f:adf7:5356]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::b15e:862f:adf7:5356%5]) with mapi id 15.20.5273.023; Tue, 24 May 2022
+ 09:13:01 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Sathvika Vasireddy <sv@linux.ibm.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "mbenes@suse.cz" <mbenes@suse.cz>, "aik@ozlabs.ru" <aik@ozlabs.ru>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "naveen.n.rao@linux.vnet.ibm.com" <naveen.n.rao@linux.vnet.ibm.com>
+Subject: Re: [RFC PATCH 3/4] objtool/powerpc: Enable objtool to be built on
+ ppc
+Thread-Topic: [RFC PATCH 3/4] objtool/powerpc: Enable objtool to be built on
+ ppc
+Thread-Index: AQHYbs5oW4G4eChZ9keNzjZGbSmP8a0tv1AA
+Date:   Tue, 24 May 2022 09:13:01 +0000
+Message-ID: <005ffe8a-166e-d3bb-4e42-0ece6f5aada7@csgroup.eu>
+References: <20220523175548.922671-1-sv@linux.ibm.com>
+ <20220523175548.922671-4-sv@linux.ibm.com>
+In-Reply-To: <20220523175548.922671-4-sv@linux.ibm.com>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 07061eb3-543b-426c-c708-08da3d659a66
+x-ms-traffictypediagnostic: MR1P264MB3153:EE_
+x-microsoft-antispam-prvs: <MR1P264MB3153F2E19B3FD302DABA7221EDD79@MR1P264MB3153.FRAP264.PROD.OUTLOOK.COM>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: hUFdRKRH9GBTSOw9GMaP61ZtUwFUieawHvMW25hN4TcCteQJIA5tzMxM9im0gaW71Nvc1quHV+YDR6FNld+aKp9gtFoD79Y8dhY6feDHtQVPmYhhwD2ZQOvdO62BjWV3eDVHiiFzhYb4HoiM502gOC9NbNyMQ5IG1R+YyStR94oXXn5F+/JEiJuT96/3/JJfngkqRXeikbH9rcBWOXrAqtdwCBxqAu3bVDmjU0mepODMPDqOXknYdMYoNtXG5lDWrg39bL1s5foHmOWR+qeHbScQ2LxaGEBXxDow+l0UURdunsOs01LDvQ5V5diz67TQaDqX3p/LW5ue7g+E0RYoGa9jg44Kj8l/HI5cwGj7dC8dIHucOiqNEWtGJY4lMfLUfkr65NQIQyBAMKnoGcXt6Di3hd275gUu30V86fcGTcu9WH64XFSzh0WxrDY0IWcgkEKs7Q6eNnQb8ZuJuCM/nUvK1Se1AATuRHpp8T9jyyQKz0byHMdJnPRudfGDooRZW80g/O630yhOxfLpSZEetZhd/f3hqSmMQcj343MtLbvFZD6IsOpixJkWfyKSV4UDsAn1RxfkGf3cOEclnLd7GKJyfUh2Q0oMK/+OEqrym4Mu/8zH0LSKbBOYz9VawhK/zUDoNGYpQSp9llx7//mMeqYfm3dZW5NAmOjZwg7OcOFSZ6glYRPwgfYawdjR+voHuqrplBUgszPYGVKwbIzCHidrlfGTLk8kN28qaANgMcqGrZa+BO1Y2B9/OnVy05mvRylqjWMH9+EnugrnIGMn/w==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(76116006)(4326008)(66946007)(6512007)(8676002)(91956017)(86362001)(66556008)(26005)(66476007)(64756008)(31696002)(66446008)(66574015)(122000001)(6506007)(71200400001)(31686004)(36756003)(316002)(508600001)(38100700002)(6486002)(7416002)(54906003)(38070700005)(8936002)(5660300002)(83380400001)(44832011)(186003)(110136005)(2906002)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VGpiTFNiaXdPSEZxV3NGTXZhdXJVZzNVM2xkWmFaWk9DQ3d1WnF5cFFadlZZ?=
+ =?utf-8?B?bHBETXlWakRxSThVaXVZbXpEc1NHb0dQVVNqSUhMcW13Rmd1cldvc2h2aXly?=
+ =?utf-8?B?QnNPL2NYVFBCQ1BPL055M1hEUXNhUDIrbHp2TGxicDNUazVpMGpKcE1pOERW?=
+ =?utf-8?B?NHdqZWljckpEamlpVTEvY2QvVU5Cc3BWbGF6bmdmQ0hPU0hiTSs5K0VWTmVx?=
+ =?utf-8?B?TnJUWS9UanFXeU9qVHh1NUJlZUpQaDVCWklCZWdFV1g2NEpzai9GK3Y2S0lK?=
+ =?utf-8?B?MXVQTnh1RERBbHVVL0NJa0Y3ZU9vUkNLekxIRURiRjU5R2M4RlVHc080MWZH?=
+ =?utf-8?B?ODBWSzJxL1ZyMEtkcDVkQVVQdmxQQmFRQmhEcUxDSGh5MlFKYlAyTllxRmYv?=
+ =?utf-8?B?K0lSYVFWdG5uVzExc3JDRUZaYk1EM2tMVVNpTU5WZEhUbGJIYkZNNEFDcjZs?=
+ =?utf-8?B?T0lHRlgyQ0hMbldwblU4YWpieWpKMmIxNUllQTlyRWN5ak84aTlITGZ3WlI5?=
+ =?utf-8?B?MkdjcEI4RWZweWRIWUVJWUw2WjJ6MXlCWkoxQjU0dkNuaUMzd21PNVVOMTNS?=
+ =?utf-8?B?M3BNdzNUZVhxaml0R005TEtySXNRT25YcHIxVDNxTHFQRWI4OWRrMmorYXcy?=
+ =?utf-8?B?M3UzU1dmUUE0MVJ4M0lnOTFJVzB0YVNEMUtWK2xvNk1kcjBibG5pd1VxaTRC?=
+ =?utf-8?B?NEZweDViaGdtQ3pocXNZOEhoM1JyckltZVJpZmZ0RlM1R3loWE5Id1BKeUp5?=
+ =?utf-8?B?YzNlTDNQWWJRMmZPbVEyMVE3Z1Fxc3JyQU5hN2VieEhUM0RQWUliamFuZnVq?=
+ =?utf-8?B?ZHRkNHFDMjJYVjJqZTlNRXpGR1d0OGFrNnBrd0dlaWtmOHdWa24vQ2Z0UWJr?=
+ =?utf-8?B?QWNuN25ENmxVVjBCa05aSTQ4KzUzdHU2Qld0aVdMQThZMGhrbng0U3VtRzNU?=
+ =?utf-8?B?VWdVOXpvdE1YUDNsU0o3eCtJdXQ5cmlUcWZ5eWlBZ0p5bDhUNU9Cc0NNSGVU?=
+ =?utf-8?B?N3FyeGFEaW1NMXROWVZmQkRlZk1BMFhpdW9UUWo4RTdTckQvRmpMTHhxZk9m?=
+ =?utf-8?B?d0lhVnd6d2tDNTlPa0hqQ0p0NmVPNWg2a3dtZDdiYTdCTlo4elZ2a2ptblJv?=
+ =?utf-8?B?L1ZUa2tZU2l5UXBqbmtmUGpQRmFhSjdkendBaDk0MGNEOXg5Ky9meHV4WjlW?=
+ =?utf-8?B?RGJzVkpFUS9ja09XRHRoejRvVzNsK1l1OEMxcEovNXp0cC80UVdHS3lCQkw1?=
+ =?utf-8?B?cW04Q3dhclBCZHozUnBuWWpnOXhMWE5zMUNwWUtDSkxFSHE3dFdLOHlndUYr?=
+ =?utf-8?B?ZHNBK3NjK3N4NWRlenloWnRGMlBUclpGWTVYQS83VTVGWGFQUlYwRGprQUdR?=
+ =?utf-8?B?eGxPd04xV3ByenZpaVU4REhLL1paUkVWWHM3ZWNKWXhnMFRDRFd1RjNIdXhB?=
+ =?utf-8?B?bHJIcEo3RmxtTlQwa21GZHA5OXJmWWo4ZlRKL2VXYUFpbXVHRWxnQWVOanBK?=
+ =?utf-8?B?dExhYXZoWnNZWHdBNDAzREM0N09FNExjQjVtcUE4Tlh0bDRyRDdwNVBUcm5i?=
+ =?utf-8?B?bjhnZy9yU0sxTFVka3ZkWDFqcTFoK1NaL2tnU3ArcEhkTTVPdzh3d1Jza2Ix?=
+ =?utf-8?B?alc0U1V0MUJxamJmbmI0RjRSOWJMTVFRdzJuUWRDS1VudEVTVytRSVVZY1h1?=
+ =?utf-8?B?cHkzaDFRbmJNanFYR1EzVEtlY0poUklMb0l6VlRNdGI1UXpjazJXc2FhZ3dE?=
+ =?utf-8?B?a0ttYWpkaHBURGJub2kzQ2lmQTNjd1IwVHgxSnNXbENOMzAvVnEySjdUWm9M?=
+ =?utf-8?B?TVBnaTJhYkxlOFpMOThJUkhhQW9iN2ZtS3hyREVMTVJnbkVCSzYzeXIwc05n?=
+ =?utf-8?B?OURtcUc2UXRXNThRNExEQ3ZPSTFCSXpxMTRlZmlYeC9UWVdxZDBIRDRiQUtp?=
+ =?utf-8?B?QlVCN1VrY3U3dnRSTjI0aEhOY2hrYWx5WFVjcUMvVE4rR0xLSHU2eWhGbGsv?=
+ =?utf-8?B?OHpuUVVCZTBUVFBKL25DcmpPaUxmNUpWN2xaQmMvN0U4ZUFjenNGQ05MTlIz?=
+ =?utf-8?B?bVVzMFdnTWo3TTlkTmg3Vjhnd3N2M2Q2Ym1DVUFmMkxvWmRDekR6NEttNTlp?=
+ =?utf-8?B?dHVYQWtrbk9vNFJ4WFRteGJiTTdpMHJLbkpkUFNSazVrc2ZRZmpTTW93NTVG?=
+ =?utf-8?B?VnJodnhlQzJENlJ0UklhdXVKbElxaHJaZmJxbzM2RXVZbnFtUCt2MUROdCtT?=
+ =?utf-8?B?YW0zMDhWTTc3USthZTIrVzJMVzZSRXhNNWRXcG9lZko3OXF3S2ZjUEtTY2to?=
+ =?utf-8?B?VGxqOVhFU203Q0ZIOE5NaUJRWXdqNlNOWGR6YXUrOG8zMEVOcE9JMyszYUxO?=
+ =?utf-8?Q?wvPLelwd2Drz7h/wJMj43KcnuARYmgY8rg0GX?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <412905EB1B2FB94ABC5328768C247C96@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YowFXoh9awP3LuBf@carbon>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 07061eb3-543b-426c-c708-08da3d659a66
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 May 2022 09:13:01.7452
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: wd3h0bhvO/QpAIBE/ydE142ePkbphzoRh/eSM7ymvhUDOmXsuecF6B7c+tsnOXRH7LCCVZ55qkpZDGO5p42Nskpk3wruoeLeGSmFqdLLF1k=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB3153
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,762 +136,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 03:06:22PM -0700, Roman Gushchin wrote:
-> On Sun, May 22, 2022 at 07:08:24PM +0800, Muchun Song wrote:
-> > On Mon, May 09, 2022 at 11:38:17AM -0700, Roman Gushchin wrote:
-> > > Currently shrinkers are anonymous objects. For debugging purposes they
-> > > can be identified by count/scan function names, but it's not always
-> > > useful: e.g. for superblock's shrinkers it's nice to have at least
-> > > an idea of to which superblock the shrinker belongs.
-> > > 
-> > > This commit adds names to shrinkers. register_shrinker() and
-> > > prealloc_shrinker() functions are extended to take a format and
-> > > arguments to master a name.
-> > > 
-> > > In some cases it's not possible to determine a good name at the time
-> > > when a shrinker is allocated. For such cases shrinker_debugfs_rename()
-> > > is provided.
-> > > 
-> > > After this change the shrinker debugfs directory looks like:
-> > >   $ cd /sys/kernel/debug/shrinker/
-> > >   $ ls
-> > >     dqcache-16          sb-hugetlbfs-17  sb-rootfs-2      sb-tmpfs-50
-> > >     kfree_rcu-0         sb-hugetlbfs-33  sb-securityfs-6  sb-tracefs-13
-> > >     sb-aio-20           sb-iomem-12      sb-selinuxfs-22  sb-xfs:vda1-36
-> > >     sb-anon_inodefs-15  sb-mqueue-21     sb-sockfs-8      sb-zsmalloc-19
-> > >     sb-bdev-3           sb-nsfs-4        sb-sysfs-26      shadow-18
-> > >     sb-bpf-32           sb-pipefs-14     sb-tmpfs-1       thp_deferred_split-10
-> > >     sb-btrfs:vda2-24    sb-proc-25       sb-tmpfs-27      thp_zero-9
-> > >     sb-cgroup2-30       sb-proc-39       sb-tmpfs-29      xfs_buf-37
-> > >     sb-configfs-23      sb-proc-41       sb-tmpfs-35      xfs_inodegc-38
-> > >     sb-dax-11           sb-proc-45       sb-tmpfs-40      zspool-34
-> > >     sb-debugfs-7        sb-proc-46       sb-tmpfs-42
-> > >     sb-devpts-28        sb-proc-47       sb-tmpfs-43
-> > >     sb-devtmpfs-5       sb-pstore-31     sb-tmpfs-44
-> > > 
-> > > Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
-> > > ---
-> > >  arch/x86/kvm/mmu/mmu.c                        |  2 +-
-> > >  drivers/android/binder_alloc.c                |  2 +-
-> > >  drivers/gpu/drm/i915/gem/i915_gem_shrinker.c  |  3 +-
-> > >  drivers/gpu/drm/msm/msm_gem_shrinker.c        |  2 +-
-> > >  .../gpu/drm/panfrost/panfrost_gem_shrinker.c  |  2 +-
-> > >  drivers/gpu/drm/ttm/ttm_pool.c                |  2 +-
-> > >  drivers/md/bcache/btree.c                     |  2 +-
-> > >  drivers/md/dm-bufio.c                         |  2 +-
-> > >  drivers/md/dm-zoned-metadata.c                |  2 +-
-> > >  drivers/md/raid5.c                            |  2 +-
-> > >  drivers/misc/vmw_balloon.c                    |  2 +-
-> > >  drivers/virtio/virtio_balloon.c               |  2 +-
-> > >  drivers/xen/xenbus/xenbus_probe_backend.c     |  2 +-
-> > >  fs/btrfs/super.c                              |  2 +
-> > >  fs/erofs/utils.c                              |  2 +-
-> > >  fs/ext4/extents_status.c                      |  3 +-
-> > >  fs/f2fs/super.c                               |  2 +-
-> > >  fs/gfs2/glock.c                               |  2 +-
-> > >  fs/gfs2/main.c                                |  2 +-
-> > >  fs/jbd2/journal.c                             |  2 +-
-> > >  fs/mbcache.c                                  |  2 +-
-> > >  fs/nfs/nfs42xattr.c                           |  7 ++-
-> > >  fs/nfs/super.c                                |  2 +-
-> > >  fs/nfsd/filecache.c                           |  2 +-
-> > >  fs/nfsd/nfscache.c                            |  2 +-
-> > >  fs/quota/dquot.c                              |  2 +-
-> > >  fs/super.c                                    |  6 +-
-> > >  fs/ubifs/super.c                              |  2 +-
-> > >  fs/xfs/xfs_buf.c                              |  2 +-
-> > >  fs/xfs/xfs_icache.c                           |  2 +-
-> > >  fs/xfs/xfs_qm.c                               |  2 +-
-> > >  include/linux/shrinker.h                      | 12 +++-
-> > >  kernel/rcu/tree.c                             |  2 +-
-> > >  mm/huge_memory.c                              |  4 +-
-> > >  mm/shrinker_debug.c                           | 45 +++++++++++++-
-> > >  mm/vmscan.c                                   | 58 ++++++++++++++++++-
-> > >  mm/workingset.c                               |  2 +-
-> > >  mm/zsmalloc.c                                 |  2 +-
-> > >  net/sunrpc/auth.c                             |  2 +-
-> > >  39 files changed, 154 insertions(+), 46 deletions(-)
-> > > 
-> > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > > index c623019929a7..8cfabdd63406 100644
-> > > --- a/arch/x86/kvm/mmu/mmu.c
-> > > +++ b/arch/x86/kvm/mmu/mmu.c
-> > > @@ -6283,7 +6283,7 @@ int kvm_mmu_vendor_module_init(void)
-> > >  	if (percpu_counter_init(&kvm_total_used_mmu_pages, 0, GFP_KERNEL))
-> > >  		goto out;
-> > >  
-> > > -	ret = register_shrinker(&mmu_shrinker);
-> > > +	ret = register_shrinker(&mmu_shrinker, "mmu");
-> > >  	if (ret)
-> > >  		goto out;
-> > >  
-> > > diff --git a/drivers/android/binder_alloc.c b/drivers/android/binder_alloc.c
-> > > index 2ac1008a5f39..951343c41ba8 100644
-> > > --- a/drivers/android/binder_alloc.c
-> > > +++ b/drivers/android/binder_alloc.c
-> > > @@ -1084,7 +1084,7 @@ int binder_alloc_shrinker_init(void)
-> > >  	int ret = list_lru_init(&binder_alloc_lru);
-> > >  
-> > >  	if (ret == 0) {
-> > > -		ret = register_shrinker(&binder_shrinker);
-> > > +		ret = register_shrinker(&binder_shrinker, "binder");
-> > >  		if (ret)
-> > >  			list_lru_destroy(&binder_alloc_lru);
-> > >  	}
-> > > diff --git a/drivers/gpu/drm/i915/gem/i915_gem_shrinker.c b/drivers/gpu/drm/i915/gem/i915_gem_shrinker.c
-> > > index 6a6ff98a8746..85524ef92ea4 100644
-> > > --- a/drivers/gpu/drm/i915/gem/i915_gem_shrinker.c
-> > > +++ b/drivers/gpu/drm/i915/gem/i915_gem_shrinker.c
-> > > @@ -426,7 +426,8 @@ void i915_gem_driver_register__shrinker(struct drm_i915_private *i915)
-> > >  	i915->mm.shrinker.count_objects = i915_gem_shrinker_count;
-> > >  	i915->mm.shrinker.seeks = DEFAULT_SEEKS;
-> > >  	i915->mm.shrinker.batch = 4096;
-> > > -	drm_WARN_ON(&i915->drm, register_shrinker(&i915->mm.shrinker));
-> > > +	drm_WARN_ON(&i915->drm, register_shrinker(&i915->mm.shrinker,
-> > > +						  "drm_i915_gem"));
-> > >  
-> > >  	i915->mm.oom_notifier.notifier_call = i915_gem_shrinker_oom;
-> > >  	drm_WARN_ON(&i915->drm, register_oom_notifier(&i915->mm.oom_notifier));
-> > > diff --git a/drivers/gpu/drm/msm/msm_gem_shrinker.c b/drivers/gpu/drm/msm/msm_gem_shrinker.c
-> > > index 086dacf2f26a..2d3cf4f13dfd 100644
-> > > --- a/drivers/gpu/drm/msm/msm_gem_shrinker.c
-> > > +++ b/drivers/gpu/drm/msm/msm_gem_shrinker.c
-> > > @@ -221,7 +221,7 @@ void msm_gem_shrinker_init(struct drm_device *dev)
-> > >  	priv->shrinker.count_objects = msm_gem_shrinker_count;
-> > >  	priv->shrinker.scan_objects = msm_gem_shrinker_scan;
-> > >  	priv->shrinker.seeks = DEFAULT_SEEKS;
-> > > -	WARN_ON(register_shrinker(&priv->shrinker));
-> > > +	WARN_ON(register_shrinker(&priv->shrinker, "drm_msm_gem"));
-> > >  
-> > >  	priv->vmap_notifier.notifier_call = msm_gem_shrinker_vmap;
-> > >  	WARN_ON(register_vmap_purge_notifier(&priv->vmap_notifier));
-> > > diff --git a/drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c b/drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c
-> > > index 77e7cb6d1ae3..0d028266ee9e 100644
-> > > --- a/drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c
-> > > +++ b/drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c
-> > > @@ -103,7 +103,7 @@ void panfrost_gem_shrinker_init(struct drm_device *dev)
-> > >  	pfdev->shrinker.count_objects = panfrost_gem_shrinker_count;
-> > >  	pfdev->shrinker.scan_objects = panfrost_gem_shrinker_scan;
-> > >  	pfdev->shrinker.seeks = DEFAULT_SEEKS;
-> > > -	WARN_ON(register_shrinker(&pfdev->shrinker));
-> > > +	WARN_ON(register_shrinker(&pfdev->shrinker, "drm_panfrost"));
-> > >  }
-> > >  
-> > >  /**
-> > > diff --git a/drivers/gpu/drm/ttm/ttm_pool.c b/drivers/gpu/drm/ttm/ttm_pool.c
-> > > index 1bba0a0ed3f9..b8b41d242197 100644
-> > > --- a/drivers/gpu/drm/ttm/ttm_pool.c
-> > > +++ b/drivers/gpu/drm/ttm/ttm_pool.c
-> > > @@ -722,7 +722,7 @@ int ttm_pool_mgr_init(unsigned long num_pages)
-> > >  	mm_shrinker.count_objects = ttm_pool_shrinker_count;
-> > >  	mm_shrinker.scan_objects = ttm_pool_shrinker_scan;
-> > >  	mm_shrinker.seeks = 1;
-> > > -	return register_shrinker(&mm_shrinker);
-> > > +	return register_shrinker(&mm_shrinker, "drm_ttm_pool");
-> > >  }
-> > >  
-> > >  /**
-> > > diff --git a/drivers/md/bcache/btree.c b/drivers/md/bcache/btree.c
-> > > index ad9f16689419..c1f734ab86b3 100644
-> > > --- a/drivers/md/bcache/btree.c
-> > > +++ b/drivers/md/bcache/btree.c
-> > > @@ -812,7 +812,7 @@ int bch_btree_cache_alloc(struct cache_set *c)
-> > >  	c->shrink.seeks = 4;
-> > >  	c->shrink.batch = c->btree_pages * 2;
-> > >  
-> > > -	if (register_shrinker(&c->shrink))
-> > > +	if (register_shrinker(&c->shrink, "btree"))
-> > >  		pr_warn("bcache: %s: could not register shrinker\n",
-> > >  				__func__);
-> > >  
-> > > diff --git a/drivers/md/dm-bufio.c b/drivers/md/dm-bufio.c
-> > > index 5ffa1dcf84cf..bcc95898c341 100644
-> > > --- a/drivers/md/dm-bufio.c
-> > > +++ b/drivers/md/dm-bufio.c
-> > > @@ -1806,7 +1806,7 @@ struct dm_bufio_client *dm_bufio_client_create(struct block_device *bdev, unsign
-> > >  	c->shrinker.scan_objects = dm_bufio_shrink_scan;
-> > >  	c->shrinker.seeks = 1;
-> > >  	c->shrinker.batch = 0;
-> > > -	r = register_shrinker(&c->shrinker);
-> > > +	r = register_shrinker(&c->shrinker, "dm_bufio");
-> > >  	if (r)
-> > >  		goto bad;
-> > >  
-> > > diff --git a/drivers/md/dm-zoned-metadata.c b/drivers/md/dm-zoned-metadata.c
-> > > index d1ea66114d14..05f2fd12066b 100644
-> > > --- a/drivers/md/dm-zoned-metadata.c
-> > > +++ b/drivers/md/dm-zoned-metadata.c
-> > > @@ -2944,7 +2944,7 @@ int dmz_ctr_metadata(struct dmz_dev *dev, int num_dev,
-> > >  	zmd->mblk_shrinker.seeks = DEFAULT_SEEKS;
-> > >  
-> > >  	/* Metadata cache shrinker */
-> > > -	ret = register_shrinker(&zmd->mblk_shrinker);
-> > > +	ret = register_shrinker(&zmd->mblk_shrinker, "md_meta");
-> > >  	if (ret) {
-> > >  		dmz_zmd_err(zmd, "Register metadata cache shrinker failed");
-> > >  		goto err;
-> > > diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
-> > > index 59f91e392a2a..34ddebd3aff7 100644
-> > > --- a/drivers/md/raid5.c
-> > > +++ b/drivers/md/raid5.c
-> > > @@ -7383,7 +7383,7 @@ static struct r5conf *setup_conf(struct mddev *mddev)
-> > >  	conf->shrinker.count_objects = raid5_cache_count;
-> > >  	conf->shrinker.batch = 128;
-> > >  	conf->shrinker.flags = 0;
-> > > -	if (register_shrinker(&conf->shrinker)) {
-> > > +	if (register_shrinker(&conf->shrinker, "md-%s", mdname(mddev))) {
-> > >  		pr_warn("md/raid:%s: couldn't register shrinker.\n",
-> > >  			mdname(mddev));
-> > >  		goto abort;
-> > > diff --git a/drivers/misc/vmw_balloon.c b/drivers/misc/vmw_balloon.c
-> > > index f1d8ba6d4857..6c9ddf1187dd 100644
-> > > --- a/drivers/misc/vmw_balloon.c
-> > > +++ b/drivers/misc/vmw_balloon.c
-> > > @@ -1587,7 +1587,7 @@ static int vmballoon_register_shrinker(struct vmballoon *b)
-> > >  	b->shrinker.count_objects = vmballoon_shrinker_count;
-> > >  	b->shrinker.seeks = DEFAULT_SEEKS;
-> > >  
-> > > -	r = register_shrinker(&b->shrinker);
-> > > +	r = register_shrinker(&b->shrinker, "vmw_balloon");
-> > >  
-> > >  	if (r == 0)
-> > >  		b->shrinker_registered = true;
-> > > diff --git a/drivers/virtio/virtio_balloon.c b/drivers/virtio/virtio_balloon.c
-> > > index f4c34a2a6b8e..093e06e19d0e 100644
-> > > --- a/drivers/virtio/virtio_balloon.c
-> > > +++ b/drivers/virtio/virtio_balloon.c
-> > > @@ -875,7 +875,7 @@ static int virtio_balloon_register_shrinker(struct virtio_balloon *vb)
-> > >  	vb->shrinker.count_objects = virtio_balloon_shrinker_count;
-> > >  	vb->shrinker.seeks = DEFAULT_SEEKS;
-> > >  
-> > > -	return register_shrinker(&vb->shrinker);
-> > > +	return register_shrinker(&vb->shrinker, "virtio_valloon");
-> > >  }
-> > >  
-> > >  static int virtballoon_probe(struct virtio_device *vdev)
-> > > diff --git a/drivers/xen/xenbus/xenbus_probe_backend.c b/drivers/xen/xenbus/xenbus_probe_backend.c
-> > > index 5abded97e1a7..a6c5e344017d 100644
-> > > --- a/drivers/xen/xenbus/xenbus_probe_backend.c
-> > > +++ b/drivers/xen/xenbus/xenbus_probe_backend.c
-> > > @@ -305,7 +305,7 @@ static int __init xenbus_probe_backend_init(void)
-> > >  
-> > >  	register_xenstore_notifier(&xenstore_notifier);
-> > >  
-> > > -	if (register_shrinker(&backend_memory_shrinker))
-> > > +	if (register_shrinker(&backend_memory_shrinker, "xen_backend"))
-> > >  		pr_warn("shrinker registration failed\n");
-> > >  
-> > >  	return 0;
-> > > diff --git a/fs/btrfs/super.c b/fs/btrfs/super.c
-> > > index 206f44005c52..062dbd8071e2 100644
-> > > --- a/fs/btrfs/super.c
-> > > +++ b/fs/btrfs/super.c
-> > > @@ -1790,6 +1790,8 @@ static struct dentry *btrfs_mount_root(struct file_system_type *fs_type,
-> > >  			error = -EBUSY;
-> > >  	} else {
-> > >  		snprintf(s->s_id, sizeof(s->s_id), "%pg", bdev);
-> > > +		shrinker_debugfs_rename(&s->s_shrink, "sb-%s:%s", fs_type->name,
-> > > +					s->s_id);
-> > >  		btrfs_sb(s)->bdev_holder = fs_type;
-> > >  		if (!strstr(crc32c_impl(), "generic"))
-> > >  			set_bit(BTRFS_FS_CSUM_IMPL_FAST, &fs_info->flags);
-> > > diff --git a/fs/erofs/utils.c b/fs/erofs/utils.c
-> > > index ec9a1d780dc1..67eb64fadd4f 100644
-> > > --- a/fs/erofs/utils.c
-> > > +++ b/fs/erofs/utils.c
-> > > @@ -282,7 +282,7 @@ static struct shrinker erofs_shrinker_info = {
-> > >  
-> > >  int __init erofs_init_shrinker(void)
-> > >  {
-> > > -	return register_shrinker(&erofs_shrinker_info);
-> > > +	return register_shrinker(&erofs_shrinker_info, "erofs");
-> > >  }
-> > >  
-> > >  void erofs_exit_shrinker(void)
-> > > diff --git a/fs/ext4/extents_status.c b/fs/ext4/extents_status.c
-> > > index 9a3a8996aacf..a7aa79d580e5 100644
-> > > --- a/fs/ext4/extents_status.c
-> > > +++ b/fs/ext4/extents_status.c
-> > > @@ -1650,11 +1650,10 @@ int ext4_es_register_shrinker(struct ext4_sb_info *sbi)
-> > >  	err = percpu_counter_init(&sbi->s_es_stats.es_stats_shk_cnt, 0, GFP_KERNEL);
-> > >  	if (err)
-> > >  		goto err3;
-> > > -
-> > >  	sbi->s_es_shrinker.scan_objects = ext4_es_scan;
-> > >  	sbi->s_es_shrinker.count_objects = ext4_es_count;
-> > >  	sbi->s_es_shrinker.seeks = DEFAULT_SEEKS;
-> > > -	err = register_shrinker(&sbi->s_es_shrinker);
-> > > +	err = register_shrinker(&sbi->s_es_shrinker, "ext4_es");
-> > >  	if (err)
-> > >  		goto err4;
-> > >  
-> > > diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
-> > > index 4368f90571bd..2fc40a1635f3 100644
-> > > --- a/fs/f2fs/super.c
-> > > +++ b/fs/f2fs/super.c
-> > > @@ -4579,7 +4579,7 @@ static int __init init_f2fs_fs(void)
-> > >  	err = f2fs_init_sysfs();
-> > >  	if (err)
-> > >  		goto free_garbage_collection_cache;
-> > > -	err = register_shrinker(&f2fs_shrinker_info);
-> > > +	err = register_shrinker(&f2fs_shrinker_info, "f2fs");
-> > >  	if (err)
-> > >  		goto free_sysfs;
-> > >  	err = register_filesystem(&f2fs_fs_type);
-> > > diff --git a/fs/gfs2/glock.c b/fs/gfs2/glock.c
-> > > index 26169cedcefc..791c23d9f7e7 100644
-> > > --- a/fs/gfs2/glock.c
-> > > +++ b/fs/gfs2/glock.c
-> > > @@ -2549,7 +2549,7 @@ int __init gfs2_glock_init(void)
-> > >  		return -ENOMEM;
-> > >  	}
-> > >  
-> > > -	ret = register_shrinker(&glock_shrinker);
-> > > +	ret = register_shrinker(&glock_shrinker, "gfs2_glock");
-> > >  	if (ret) {
-> > >  		destroy_workqueue(gfs2_delete_workqueue);
-> > >  		destroy_workqueue(glock_workqueue);
-> > > diff --git a/fs/gfs2/main.c b/fs/gfs2/main.c
-> > > index 28d0eb23e18e..dde981b78488 100644
-> > > --- a/fs/gfs2/main.c
-> > > +++ b/fs/gfs2/main.c
-> > > @@ -150,7 +150,7 @@ static int __init init_gfs2_fs(void)
-> > >  	if (!gfs2_trans_cachep)
-> > >  		goto fail_cachep8;
-> > >  
-> > > -	error = register_shrinker(&gfs2_qd_shrinker);
-> > > +	error = register_shrinker(&gfs2_qd_shrinker, "gfs2_qd");
-> > >  	if (error)
-> > >  		goto fail_shrinker;
-> > >  
-> > > diff --git a/fs/jbd2/journal.c b/fs/jbd2/journal.c
-> > > index c0cbeeaec2d1..e7786445ecc1 100644
-> > > --- a/fs/jbd2/journal.c
-> > > +++ b/fs/jbd2/journal.c
-> > > @@ -1418,7 +1418,7 @@ static journal_t *journal_init_common(struct block_device *bdev,
-> > >  	if (percpu_counter_init(&journal->j_checkpoint_jh_count, 0, GFP_KERNEL))
-> > >  		goto err_cleanup;
-> > >  
-> > > -	if (register_shrinker(&journal->j_shrinker)) {
-> > > +	if (register_shrinker(&journal->j_shrinker, "jbd2_journal")) {
-> > >  		percpu_counter_destroy(&journal->j_checkpoint_jh_count);
-> > >  		goto err_cleanup;
-> > >  	}
-> > > diff --git a/fs/mbcache.c b/fs/mbcache.c
-> > > index 97c54d3a2227..379dc5b0b6ad 100644
-> > > --- a/fs/mbcache.c
-> > > +++ b/fs/mbcache.c
-> > > @@ -367,7 +367,7 @@ struct mb_cache *mb_cache_create(int bucket_bits)
-> > >  	cache->c_shrink.count_objects = mb_cache_count;
-> > >  	cache->c_shrink.scan_objects = mb_cache_scan;
-> > >  	cache->c_shrink.seeks = DEFAULT_SEEKS;
-> > > -	if (register_shrinker(&cache->c_shrink)) {
-> > > +	if (register_shrinker(&cache->c_shrink, "mb_cache")) {
-> > >  		kfree(cache->c_hash);
-> > >  		kfree(cache);
-> > >  		goto err_out;
-> > > diff --git a/fs/nfs/nfs42xattr.c b/fs/nfs/nfs42xattr.c
-> > > index e7b34f7e0614..147b8a2f2dc6 100644
-> > > --- a/fs/nfs/nfs42xattr.c
-> > > +++ b/fs/nfs/nfs42xattr.c
-> > > @@ -1017,15 +1017,16 @@ int __init nfs4_xattr_cache_init(void)
-> > >  	if (ret)
-> > >  		goto out2;
-> > >  
-> > > -	ret = register_shrinker(&nfs4_xattr_cache_shrinker);
-> > > +	ret = register_shrinker(&nfs4_xattr_cache_shrinker, "nfs_xattr_cache");
-> > >  	if (ret)
-> > >  		goto out1;
-> > >  
-> > > -	ret = register_shrinker(&nfs4_xattr_entry_shrinker);
-> > > +	ret = register_shrinker(&nfs4_xattr_entry_shrinker, "nfs_xattr_entry");
-> > >  	if (ret)
-> > >  		goto out;
-> > >  
-> > > -	ret = register_shrinker(&nfs4_xattr_large_entry_shrinker);
-> > > +	ret = register_shrinker(&nfs4_xattr_large_entry_shrinker,
-> > > +				"nfs_xattr_large_entry");
-> > >  	if (!ret)
-> > >  		return 0;
-> > >  
-> > > diff --git a/fs/nfs/super.c b/fs/nfs/super.c
-> > > index 6ab5eeb000dc..c7a2aef911f1 100644
-> > > --- a/fs/nfs/super.c
-> > > +++ b/fs/nfs/super.c
-> > > @@ -149,7 +149,7 @@ int __init register_nfs_fs(void)
-> > >  	ret = nfs_register_sysctl();
-> > >  	if (ret < 0)
-> > >  		goto error_2;
-> > > -	ret = register_shrinker(&acl_shrinker);
-> > > +	ret = register_shrinker(&acl_shrinker, "nfs_acl");
-> > >  	if (ret < 0)
-> > >  		goto error_3;
-> > >  #ifdef CONFIG_NFS_V4_2
-> > > diff --git a/fs/nfsd/filecache.c b/fs/nfsd/filecache.c
-> > > index 2c1b027774d4..9c2879a3c3c0 100644
-> > > --- a/fs/nfsd/filecache.c
-> > > +++ b/fs/nfsd/filecache.c
-> > > @@ -666,7 +666,7 @@ nfsd_file_cache_init(void)
-> > >  		goto out_err;
-> > >  	}
-> > >  
-> > > -	ret = register_shrinker(&nfsd_file_shrinker);
-> > > +	ret = register_shrinker(&nfsd_file_shrinker, "nfsd_filecache");
-> > >  	if (ret) {
-> > >  		pr_err("nfsd: failed to register nfsd_file_shrinker: %d\n", ret);
-> > >  		goto out_lru;
-> > > diff --git a/fs/nfsd/nfscache.c b/fs/nfsd/nfscache.c
-> > > index 0b3f12aa37ff..f1cfb06d0be5 100644
-> > > --- a/fs/nfsd/nfscache.c
-> > > +++ b/fs/nfsd/nfscache.c
-> > > @@ -176,7 +176,7 @@ int nfsd_reply_cache_init(struct nfsd_net *nn)
-> > >  	nn->nfsd_reply_cache_shrinker.scan_objects = nfsd_reply_cache_scan;
-> > >  	nn->nfsd_reply_cache_shrinker.count_objects = nfsd_reply_cache_count;
-> > >  	nn->nfsd_reply_cache_shrinker.seeks = 1;
-> > > -	status = register_shrinker(&nn->nfsd_reply_cache_shrinker);
-> > > +	status = register_shrinker(&nn->nfsd_reply_cache_shrinker, "nfsd_reply");
-> > >  	if (status)
-> > >  		goto out_stats_destroy;
-> > >  
-> > > diff --git a/fs/quota/dquot.c b/fs/quota/dquot.c
-> > > index a74aef99bd3d..854d2b1d0914 100644
-> > > --- a/fs/quota/dquot.c
-> > > +++ b/fs/quota/dquot.c
-> > > @@ -2985,7 +2985,7 @@ static int __init dquot_init(void)
-> > >  	pr_info("VFS: Dquot-cache hash table entries: %ld (order %ld,"
-> > >  		" %ld bytes)\n", nr_hash, order, (PAGE_SIZE << order));
-> > >  
-> > > -	if (register_shrinker(&dqcache_shrinker))
-> > > +	if (register_shrinker(&dqcache_shrinker, "dqcache"))
-> > >  		panic("Cannot register dquot shrinker");
-> > >  
-> > >  	return 0;
-> > > diff --git a/fs/super.c b/fs/super.c
-> > > index 60f57c7bc0a6..4fca6657f442 100644
-> > > --- a/fs/super.c
-> > > +++ b/fs/super.c
-> > > @@ -265,7 +265,7 @@ static struct super_block *alloc_super(struct file_system_type *type, int flags,
-> > >  	s->s_shrink.count_objects = super_cache_count;
-> > >  	s->s_shrink.batch = 1024;
-> > >  	s->s_shrink.flags = SHRINKER_NUMA_AWARE | SHRINKER_MEMCG_AWARE;
-> > > -	if (prealloc_shrinker(&s->s_shrink))
-> > > +	if (prealloc_shrinker(&s->s_shrink, "sb-%s", type->name))
-> > >  		goto fail;
-> > >  	if (list_lru_init_memcg(&s->s_dentry_lru, &s->s_shrink))
-> > >  		goto fail;
-> > > @@ -1288,6 +1288,8 @@ int get_tree_bdev(struct fs_context *fc,
-> > >  	} else {
-> > >  		s->s_mode = mode;
-> > >  		snprintf(s->s_id, sizeof(s->s_id), "%pg", bdev);
-> > > +		shrinker_debugfs_rename(&s->s_shrink, "sb-%s:%s",
-> > > +					fc->fs_type->name, s->s_id);
-> > >  		sb_set_blocksize(s, block_size(bdev));
-> > >  		error = fill_super(s, fc);
-> > >  		if (error) {
-> > > @@ -1363,6 +1365,8 @@ struct dentry *mount_bdev(struct file_system_type *fs_type,
-> > >  	} else {
-> > >  		s->s_mode = mode;
-> > >  		snprintf(s->s_id, sizeof(s->s_id), "%pg", bdev);
-> > > +		shrinker_debugfs_rename(&s->s_shrink, "sb-%s:%s",
-> > > +					fs_type->name, s->s_id);
-> > >  		sb_set_blocksize(s, block_size(bdev));
-> > >  		error = fill_super(s, data, flags & SB_SILENT ? 1 : 0);
-> > >  		if (error) {
-> > > diff --git a/fs/ubifs/super.c b/fs/ubifs/super.c
-> > > index bad67455215f..a3663d201f64 100644
-> > > --- a/fs/ubifs/super.c
-> > > +++ b/fs/ubifs/super.c
-> > > @@ -2430,7 +2430,7 @@ static int __init ubifs_init(void)
-> > >  	if (!ubifs_inode_slab)
-> > >  		return -ENOMEM;
-> > >  
-> > > -	err = register_shrinker(&ubifs_shrinker_info);
-> > > +	err = register_shrinker(&ubifs_shrinker_info, "ubifs");
-> > >  	if (err)
-> > >  		goto out_slab;
-> > >  
-> > > diff --git a/fs/xfs/xfs_buf.c b/fs/xfs/xfs_buf.c
-> > > index e1afb9e503e1..5645e92df0c9 100644
-> > > --- a/fs/xfs/xfs_buf.c
-> > > +++ b/fs/xfs/xfs_buf.c
-> > > @@ -1986,7 +1986,7 @@ xfs_alloc_buftarg(
-> > >  	btp->bt_shrinker.scan_objects = xfs_buftarg_shrink_scan;
-> > >  	btp->bt_shrinker.seeks = DEFAULT_SEEKS;
-> > >  	btp->bt_shrinker.flags = SHRINKER_NUMA_AWARE;
-> > > -	if (register_shrinker(&btp->bt_shrinker))
-> > > +	if (register_shrinker(&btp->bt_shrinker, "xfs_buf"))
-> > >  		goto error_pcpu;
-> > >  	return btp;
-> > >  
-> > > diff --git a/fs/xfs/xfs_icache.c b/fs/xfs/xfs_icache.c
-> > > index bffd6eb0b298..d0c4e74ff763 100644
-> > > --- a/fs/xfs/xfs_icache.c
-> > > +++ b/fs/xfs/xfs_icache.c
-> > > @@ -2198,5 +2198,5 @@ xfs_inodegc_register_shrinker(
-> > >  	shrink->flags = SHRINKER_NONSLAB;
-> > >  	shrink->batch = XFS_INODEGC_SHRINKER_BATCH;
-> > >  
-> > > -	return register_shrinker(shrink);
-> > > +	return register_shrinker(shrink, "xfs_inodegc");
-> > >  }
-> > > diff --git a/fs/xfs/xfs_qm.c b/fs/xfs/xfs_qm.c
-> > > index f165d1a3de1d..93ded9e81f49 100644
-> > > --- a/fs/xfs/xfs_qm.c
-> > > +++ b/fs/xfs/xfs_qm.c
-> > > @@ -686,7 +686,7 @@ xfs_qm_init_quotainfo(
-> > >  	qinf->qi_shrinker.seeks = DEFAULT_SEEKS;
-> > >  	qinf->qi_shrinker.flags = SHRINKER_NUMA_AWARE;
-> > >  
-> > > -	error = register_shrinker(&qinf->qi_shrinker);
-> > > +	error = register_shrinker(&qinf->qi_shrinker, "xfs_qm");
-> > >  	if (error)
-> > >  		goto out_free_inos;
-> > >  
-> > > diff --git a/include/linux/shrinker.h b/include/linux/shrinker.h
-> > > index 2ced8149c513..64416f3e0a1f 100644
-> > > --- a/include/linux/shrinker.h
-> > > +++ b/include/linux/shrinker.h
-> > > @@ -75,6 +75,7 @@ struct shrinker {
-> > >  #endif
-> > >  #ifdef CONFIG_SHRINKER_DEBUG
-> > >  	int debugfs_id;
-> > > +	const char *name;
-> > >  	struct dentry *debugfs_entry;
-> > >  #endif
-> > >  	/* objs pending delete, per node */
-> > > @@ -92,9 +93,9 @@ struct shrinker {
-> > >   */
-> > >  #define SHRINKER_NONSLAB	(1 << 3)
-> > >  
-> > > -extern int prealloc_shrinker(struct shrinker *shrinker);
-> > > +extern int prealloc_shrinker(struct shrinker *shrinker, const char *fmt, ...);
-> > >  extern void register_shrinker_prepared(struct shrinker *shrinker);
-> > > -extern int register_shrinker(struct shrinker *shrinker);
-> > > +extern int register_shrinker(struct shrinker *shrinker, const char *fmt, ...);
-> > >  extern void unregister_shrinker(struct shrinker *shrinker);
-> > >  extern void free_prealloced_shrinker(struct shrinker *shrinker);
-> > >  extern void synchronize_shrinkers(void);
-> > > @@ -102,6 +103,8 @@ extern void synchronize_shrinkers(void);
-> > >  #ifdef CONFIG_SHRINKER_DEBUG
-> > >  extern int shrinker_debugfs_add(struct shrinker *shrinker);
-> > >  extern void shrinker_debugfs_remove(struct shrinker *shrinker);
-> > > +extern int shrinker_debugfs_rename(struct shrinker *shrinker,
-> > > +				   const char *fmt, ...);
-> > >  #else /* CONFIG_SHRINKER_DEBUG */
-> > >  static inline int shrinker_debugfs_add(struct shrinker *shrinker)
-> > >  {
-> > > @@ -110,5 +113,10 @@ static inline int shrinker_debugfs_add(struct shrinker *shrinker)
-> > >  static inline void shrinker_debugfs_remove(struct shrinker *shrinker)
-> > >  {
-> > >  }
-> > > +static inline int shrinker_debugfs_rename(struct shrinker *shrinker,
-> > > +					  const char *fmt, ...)
-> > > +{
-> > > +	return 0;
-> > > +}
-> > >  #endif /* CONFIG_SHRINKER_DEBUG */
-> > >  #endif /* _LINUX_SHRINKER_H */
-> > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> > > index 5c587e00811c..b4c66916bea9 100644
-> > > --- a/kernel/rcu/tree.c
-> > > +++ b/kernel/rcu/tree.c
-> > > @@ -4978,7 +4978,7 @@ static void __init kfree_rcu_batch_init(void)
-> > >  		INIT_DELAYED_WORK(&krcp->page_cache_work, fill_page_cache_func);
-> > >  		krcp->initialized = true;
-> > >  	}
-> > > -	if (register_shrinker(&kfree_rcu_shrinker))
-> > > +	if (register_shrinker(&kfree_rcu_shrinker, "kfree_rcu"))
-> > >  		pr_err("Failed to register kfree_rcu() shrinker!\n");
-> > >  }
-> > >  
-> > > diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-> > > index fa6a1623976a..a40df19c0e38 100644
-> > > --- a/mm/huge_memory.c
-> > > +++ b/mm/huge_memory.c
-> > > @@ -423,10 +423,10 @@ static int __init hugepage_init(void)
-> > >  	if (err)
-> > >  		goto err_slab;
-> > >  
-> > > -	err = register_shrinker(&huge_zero_page_shrinker);
-> > > +	err = register_shrinker(&huge_zero_page_shrinker, "thp_zero");
-> > >  	if (err)
-> > >  		goto err_hzp_shrinker;
-> > > -	err = register_shrinker(&deferred_split_shrinker);
-> > > +	err = register_shrinker(&deferred_split_shrinker, "thp_deferred_split");
-> > >  	if (err)
-> > >  		goto err_split_shrinker;
-> > >  
-> > > diff --git a/mm/shrinker_debug.c b/mm/shrinker_debug.c
-> > > index fd1f805a581a..28b1c1ab60ef 100644
-> > > --- a/mm/shrinker_debug.c
-> > > +++ b/mm/shrinker_debug.c
-> > > @@ -104,7 +104,7 @@ DEFINE_SHOW_ATTRIBUTE(shrinker_debugfs_count);
-> > >  int shrinker_debugfs_add(struct shrinker *shrinker)
-> > >  {
-> > >  	struct dentry *entry;
-> > > -	char buf[16];
-> > > +	char buf[128];
-> > >  	int id;
-> > >  
-> > >  	lockdep_assert_held(&shrinker_rwsem);
-> > > @@ -118,7 +118,7 @@ int shrinker_debugfs_add(struct shrinker *shrinker)
-> > >  		return id;
-> > >  	shrinker->debugfs_id = id;
-> > >  
-> > > -	snprintf(buf, sizeof(buf), "%d", id);
-> > > +	snprintf(buf, sizeof(buf), "%s-%d", shrinker->name, id);
-> > >  
-> > >  	/* create debugfs entry */
-> > >  	entry = debugfs_create_dir(buf, shrinker_debugfs_root);
-> > > @@ -133,10 +133,51 @@ int shrinker_debugfs_add(struct shrinker *shrinker)
-> > >  	return 0;
-> > >  }
-> > >  
-> > > +int shrinker_debugfs_rename(struct shrinker *shrinker, const char *fmt, ...)
-> > > +{
-> > > +	struct dentry *entry;
-> > > +	char buf[128];
-> > > +	const char *old;
-> > > +	va_list ap;
-> > > +	int ret = 0;
-> > > +
-> > > +	down_write(&shrinker_rwsem);
-> > > +
-> > > +	old = shrinker->name;
-> > > +
-> > > +	va_start(ap, fmt);
-> > > +	shrinker->name = kvasprintf_const(GFP_KERNEL, fmt, ap);
-> > > +	va_end(ap);
-> > > +	if (!shrinker->name) {
-> > > +		shrinker->name = old;
-> > > +		ret = -ENOMEM;
-> > 
-> > Seems we could move those 6 lines out of shrinker_rwsem.  I know
-> > this function is not in a hot path, but it it better to improve
-> > it if it is easy, right?
-> 
-> Not sure if it worth it, but ok, it's indeed easy.
-> 
-> > 
-> > > +	} else if (shrinker->debugfs_entry) {
-> > > +		snprintf(buf, sizeof(buf), "%s-%d", shrinker->name,
-> > > +			 shrinker->debugfs_id);
-> > > +
-> > > +		entry = debugfs_rename(shrinker_debugfs_root,
-> > > +				       shrinker->debugfs_entry,
-> > > +				       shrinker_debugfs_root, buf);
-> > > +		if (IS_ERR(entry))
-> > > +			ret = PTR_ERR(entry);
-> > > +		else
-> > > +			shrinker->debugfs_entry = entry;
-> > > +
-> > > +		kfree_const(old);
-> > > +	}
-> > > +
-> > > +	up_write(&shrinker_rwsem);
-> > > +
-> > > +	return ret;
-> > > +}
-> > > +EXPORT_SYMBOL(shrinker_debugfs_rename);
-> > > +
-> > >  void shrinker_debugfs_remove(struct shrinker *shrinker)
-> > >  {
-> > >  	lockdep_assert_held(&shrinker_rwsem);
-> > >  
-> > > +	kfree_const(shrinker->name);
-> > > +
-> > >  	if (!shrinker->debugfs_entry)
-> > >  		return;
-> > >  
-> > > diff --git a/mm/vmscan.c b/mm/vmscan.c
-> > > index 024f7056b98c..42bae0fd0442 100644
-> > > --- a/mm/vmscan.c
-> > > +++ b/mm/vmscan.c
-> > > @@ -613,7 +613,7 @@ static unsigned long lruvec_lru_size(struct lruvec *lruvec, enum lru_list lru,
-> > >  /*
-> > >   * Add a shrinker callback to be called from the vm.
-> > >   */
-> > > -int prealloc_shrinker(struct shrinker *shrinker)
-> > > +static int __prealloc_shrinker(struct shrinker *shrinker)
-> > >  {
-> > >  	unsigned int size;
-> > >  	int err;
-> > > @@ -637,8 +637,36 @@ int prealloc_shrinker(struct shrinker *shrinker)
-> > >  	return 0;
-> > >  }
-> > >  
-> > > +#ifdef CONFIG_SHRINKER_DEBUG
-> > > +int prealloc_shrinker(struct shrinker *shrinker, const char *fmt, ...)
-> > > +{
-> > > +	va_list ap;
-> > > +	int err;
-> > > +
-> > > +	va_start(ap, fmt);
-> > > +	shrinker->name = kvasprintf_const(GFP_KERNEL, fmt, ap);
-> > > +	va_end(ap);
-> > > +	if (!shrinker->name)
-> > > +		return -ENOMEM;
-> > > +
-> > > +	err = __prealloc_shrinker(shrinker);
-> > > +	if (err)
-> > > +		kfree_const(shrinker->name);
-> > > +
-> > > +	return err;
-> > > +}
-> > > +#else
-> > > +int prealloc_shrinker(struct shrinker *shrinker, const char *fmt, ...)
-> > > +{
-> > > +	return __prealloc_shrinker(shrinker);
-> > > +}
-> > > +#endif
-> > > +
-> > >  void free_prealloced_shrinker(struct shrinker *shrinker)
-> > >  {
-> > > +#ifdef CONFIG_SHRINKER_DEBUG
-> > > +	kfree_const(shrinker->name);
-> > > +#endif
-> > >  	if (shrinker->flags & SHRINKER_MEMCG_AWARE) {
-> > >  		down_write(&shrinker_rwsem);
-> > >  		unregister_memcg_shrinker(shrinker);
-> > > @@ -659,15 +687,39 @@ void register_shrinker_prepared(struct shrinker *shrinker)
-> > >  	up_write(&shrinker_rwsem);
-> > >  }
-> > >  
-> > > -int register_shrinker(struct shrinker *shrinker)
-> > > +static int __register_shrinker(struct shrinker *shrinker)
-> > >  {
-> > > -	int err = prealloc_shrinker(shrinker);
-> > > +	int err = __prealloc_shrinker(shrinker);
-> > >  
-> > >  	if (err)
-> > >  		return err;
-> > >  	register_shrinker_prepared(shrinker);
-> > >  	return 0;
-> > >  }
-> > > +
-> > > +#ifdef CONFIG_SHRINKER_DEBUG
-> > > +int register_shrinker(struct shrinker *shrinker, const char *fmt, ...)
-> > > +{
-> > > +	va_list ap;
-> > > +	int err;
-> > > +
-> > > +	va_start(ap, fmt);
-> > > +	shrinker->name = kvasprintf_const(GFP_KERNEL, fmt, ap);
-> > > +	va_end(ap);
-> > > +	if (!shrinker->name)
-> > > +		return -ENOMEM;
-> > > +
-> > 
-> > How about moving those initialization of name into shrinker_debugfs_add()?
-> > Then maybe we could hide handling to "name" from vmscan.c.
-> 
-> shrinker_debugfs_add() can be delayed up to the moment when debugfs is
-> initialized. Some shrinkers are registered earlier. So it's not (easily)
-> possible.
->
-
-You are right. I just tried it and then I gave up.
-It it not easy as you said.
-
-Thanks.
-
+DQoNCkxlIDIzLzA1LzIwMjIgw6AgMTk6NTUsIFNhdGh2aWthIFZhc2lyZWRkeSBhIMOpY3JpdMKg
+Og0KPiBUaGlzIHBhdGNoIGFkZHMgW3N0dWJdIGltcGxlbWVudGF0aW9ucyBmb3IgcmVxdWlyZWQN
+Cj4gZnVuY3Rpb25zLCBpbm9yZGVyIHRvIGVuYWJsZSBvYmp0b29sIGJ1aWxkIG9uIHBvd2VycGMu
+DQoNClNob3VsZCB3ZSBwdXQgc29tZSBleGl0KCkgb3IgYWJvcnQoKSBpbiB0aGUgc3R1YnMgdGhh
+dCBhcmUgbm90IHN1cHBvc2VkIA0KdG8gYmUgdXNlZCBhdCBhbGwgPw0KDQo+IA0KPiBTaWduZWQt
+b2ZmLWJ5OiBTYXRodmlrYSBWYXNpcmVkZHkgPHN2QGxpbnV4LmlibS5jb20+DQo+IC0tLQ0KPiAg
+IGFyY2gvcG93ZXJwYy9LY29uZmlnICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAxICsNCj4g
+ICB0b29scy9vYmp0b29sL2FyY2gvcG93ZXJwYy9CdWlsZCAgICAgICAgICAgICAgfCAgMiArDQo+
+ICAgdG9vbHMvb2JqdG9vbC9hcmNoL3Bvd2VycGMvZGVjb2RlLmMgICAgICAgICAgIHwgNzMgKysr
+KysrKysrKysrKysrKysrKw0KPiAgIC4uLi9hcmNoL3Bvd2VycGMvaW5jbHVkZS9hcmNoL2NmaV9y
+ZWdzLmggICAgICB8IDExICsrKw0KPiAgIHRvb2xzL29ianRvb2wvYXJjaC9wb3dlcnBjL2luY2x1
+ZGUvYXJjaC9lbGYuaCB8ICA4ICsrDQo+ICAgLi4uL2FyY2gvcG93ZXJwYy9pbmNsdWRlL2FyY2gv
+ZW5kaWFubmVzcy5oICAgIHwgIDkgKysrDQo+ICAgLi4uL2FyY2gvcG93ZXJwYy9pbmNsdWRlL2Fy
+Y2gvc3BlY2lhbC5oICAgICAgIHwgMjEgKysrKysrDQo+ICAgdG9vbHMvb2JqdG9vbC9hcmNoL3Bv
+d2VycGMvc3BlY2lhbC5jICAgICAgICAgIHwgMTkgKysrKysNCj4gICA4IGZpbGVzIGNoYW5nZWQs
+IDE0NCBpbnNlcnRpb25zKCspDQo+ICAgY3JlYXRlIG1vZGUgMTAwNjQ0IHRvb2xzL29ianRvb2wv
+YXJjaC9wb3dlcnBjL0J1aWxkDQo+ICAgY3JlYXRlIG1vZGUgMTAwNjQ0IHRvb2xzL29ianRvb2wv
+YXJjaC9wb3dlcnBjL2RlY29kZS5jDQo+ICAgY3JlYXRlIG1vZGUgMTAwNjQ0IHRvb2xzL29ianRv
+b2wvYXJjaC9wb3dlcnBjL2luY2x1ZGUvYXJjaC9jZmlfcmVncy5oDQo+ICAgY3JlYXRlIG1vZGUg
+MTAwNjQ0IHRvb2xzL29ianRvb2wvYXJjaC9wb3dlcnBjL2luY2x1ZGUvYXJjaC9lbGYuaA0KPiAg
+IGNyZWF0ZSBtb2RlIDEwMDY0NCB0b29scy9vYmp0b29sL2FyY2gvcG93ZXJwYy9pbmNsdWRlL2Fy
+Y2gvZW5kaWFubmVzcy5oDQo+ICAgY3JlYXRlIG1vZGUgMTAwNjQ0IHRvb2xzL29ianRvb2wvYXJj
+aC9wb3dlcnBjL2luY2x1ZGUvYXJjaC9zcGVjaWFsLmgNCj4gICBjcmVhdGUgbW9kZSAxMDA2NDQg
+dG9vbHMvb2JqdG9vbC9hcmNoL3Bvd2VycGMvc3BlY2lhbC5jDQo+IA0KPiBkaWZmIC0tZ2l0IGEv
+YXJjaC9wb3dlcnBjL0tjb25maWcgYi9hcmNoL3Bvd2VycGMvS2NvbmZpZw0KPiBpbmRleCAxNzRl
+ZGFiYjc0ZmEuLjczMmEzZjkxZWU1ZSAxMDA2NDQNCj4gLS0tIGEvYXJjaC9wb3dlcnBjL0tjb25m
+aWcNCj4gKysrIGIvYXJjaC9wb3dlcnBjL0tjb25maWcNCj4gQEAgLTIzMiw2ICsyMzIsNyBAQCBj
+b25maWcgUFBDDQo+ICAgCXNlbGVjdCBIQVZFX01PRF9BUkNIX1NQRUNJRklDDQo+ICAgCXNlbGVj
+dCBIQVZFX05NSQkJCQlpZiBQRVJGX0VWRU5UUyB8fCAoUFBDNjQgJiYgUFBDX0JPT0szUykNCj4g
+ICAJc2VsZWN0IEhBVkVfT1BUUFJPQkVTDQo+ICsJc2VsZWN0IEhBVkVfT0JKVE9PTAkJCWlmIFBQ
+QzY0DQo+ICAgCXNlbGVjdCBIQVZFX1BFUkZfRVZFTlRTDQo+ICAgCXNlbGVjdCBIQVZFX1BFUkZf
+RVZFTlRTX05NSQkJaWYgUFBDNjQNCj4gICAJc2VsZWN0IEhBVkVfUEVSRl9SRUdTDQo+IGRpZmYg
+LS1naXQgYS90b29scy9vYmp0b29sL2FyY2gvcG93ZXJwYy9CdWlsZCBiL3Rvb2xzL29ianRvb2wv
+YXJjaC9wb3dlcnBjL0J1aWxkDQo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0DQo+IGluZGV4IDAwMDAw
+MDAwMDAwMC4uZDI0ZDU2MzZhNWI4DQo+IC0tLSAvZGV2L251bGwNCj4gKysrIGIvdG9vbHMvb2Jq
+dG9vbC9hcmNoL3Bvd2VycGMvQnVpbGQNCj4gQEAgLTAsMCArMSwyIEBADQo+ICtvYmp0b29sLXkg
+Kz0gZGVjb2RlLm8NCj4gK29ianRvb2wteSArPSBzcGVjaWFsLm8NCj4gZGlmZiAtLWdpdCBhL3Rv
+b2xzL29ianRvb2wvYXJjaC9wb3dlcnBjL2RlY29kZS5jIGIvdG9vbHMvb2JqdG9vbC9hcmNoL3Bv
+d2VycGMvZGVjb2RlLmMNCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4gaW5kZXggMDAwMDAwMDAw
+MDAwLi5lM2I3N2E2Y2UzNTcNCj4gLS0tIC9kZXYvbnVsbA0KPiArKysgYi90b29scy9vYmp0b29s
+L2FyY2gvcG93ZXJwYy9kZWNvZGUuYw0KPiBAQCAtMCwwICsxLDczIEBADQo+ICsvLyBTUERYLUxp
+Y2Vuc2UtSWRlbnRpZmllcjogR1BMLTIuMC1vci1sYXRlcg0KPiArDQo+ICsjaW5jbHVkZSA8c3Rk
+aW8uaD4NCj4gKyNpbmNsdWRlIDxzdGRsaWIuaD4NCj4gKyNpbmNsdWRlIDxvYmp0b29sL2NoZWNr
+Lmg+DQo+ICsjaW5jbHVkZSA8b2JqdG9vbC9lbGYuaD4NCj4gKyNpbmNsdWRlIDxvYmp0b29sL2Fy
+Y2guaD4NCj4gKyNpbmNsdWRlIDxvYmp0b29sL3dhcm4uaD4NCj4gKyNpbmNsdWRlIDxvYmp0b29s
+L2J1aWx0aW4uaD4NCj4gKw0KPiArdW5zaWduZWQgbG9uZyBhcmNoX2Rlc3RfcmVsb2Nfb2Zmc2V0
+KGludCBhZGRlbmQpDQo+ICt7DQo+ICsJcmV0dXJuIGFkZGVuZDsNCj4gK30NCj4gKw0KPiArYm9v
+bCBhcmNoX2NhbGxlZV9zYXZlZF9yZWcodW5zaWduZWQgY2hhciByZWcpDQo+ICt7DQo+ICsJcmV0
+dXJuIGZhbHNlOw0KPiArfQ0KPiArDQo+ICtpbnQgYXJjaF9kZWNvZGVfaGludF9yZWcodTggc3Bf
+cmVnLCBpbnQgKmJhc2UpDQo+ICt7DQo+ICsJcmV0dXJuIDA7DQo+ICt9DQo+ICsNCj4gK2NvbnN0
+IGNoYXIgKmFyY2hfbm9wX2luc24oaW50IGxlbikNCj4gK3sNCj4gKwlyZXR1cm4gTlVMTDsNCj4g
+K30NCj4gKw0KPiArY29uc3QgY2hhciAqYXJjaF9yZXRfaW5zbihpbnQgbGVuKQ0KPiArew0KPiAr
+CXJldHVybiBOVUxMOw0KPiArfQ0KPiArDQo+ICtpbnQgYXJjaF9kZWNvZGVfaW5zdHJ1Y3Rpb24o
+c3RydWN0IG9ianRvb2xfZmlsZSAqZmlsZSwgY29uc3Qgc3RydWN0IHNlY3Rpb24gKnNlYywNCj4g
+KwkJCSAgICB1bnNpZ25lZCBsb25nIG9mZnNldCwgdW5zaWduZWQgaW50IG1heGxlbiwNCj4gKwkJ
+CSAgICB1bnNpZ25lZCBpbnQgKmxlbiwgZW51bSBpbnNuX3R5cGUgKnR5cGUsDQo+ICsJCQkgICAg
+dW5zaWduZWQgbG9uZyAqaW1tZWRpYXRlLA0KPiArCQkJICAgIHN0cnVjdCBsaXN0X2hlYWQgKm9w
+c19saXN0KQ0KPiArew0KPiArCXUzMiBpbnNuOw0KPiArDQo+ICsJKmltbWVkaWF0ZSA9IDA7DQo+
+ICsJbWVtY3B5KCZpbnNuLCBzZWMtPmRhdGEtPmRfYnVmK29mZnNldCwgNCk7DQo+ICsJKmxlbiA9
+IDQ7DQo+ICsJKnR5cGUgPSBJTlNOX09USEVSOw0KPiArDQo+ICsJcmV0dXJuIDA7DQo+ICt9DQo+
+ICsNCj4gK3Vuc2lnbmVkIGxvbmcgYXJjaF9qdW1wX2Rlc3RpbmF0aW9uKHN0cnVjdCBpbnN0cnVj
+dGlvbiAqaW5zbikNCj4gK3sNCj4gKwlyZXR1cm4gaW5zbi0+b2Zmc2V0ICsgIGluc24tPmltbWVk
+aWF0ZTsNCj4gK30NCj4gKw0KPiArdm9pZCBhcmNoX2luaXRpYWxfZnVuY19jZmlfc3RhdGUoc3Ry
+dWN0IGNmaV9pbml0X3N0YXRlICpzdGF0ZSkNCj4gK3sNCj4gKwlpbnQgaTsNCj4gKw0KPiArCWZv
+ciAoaSA9IDA7IGkgPCBDRklfTlVNX1JFR1M7IGkrKykgew0KPiArCQlzdGF0ZS0+cmVnc1tpXS5i
+YXNlID0gQ0ZJX1VOREVGSU5FRDsNCj4gKwkJc3RhdGUtPnJlZ3NbaV0ub2Zmc2V0ID0gMDsNCj4g
+Kwl9DQo+ICsNCj4gKwkvKiBpbml0aWFsIENGQSAoY2FsbCBmcmFtZSBhZGRyZXNzKSAqLw0KPiAr
+CXN0YXRlLT5jZmEuYmFzZSA9IENGSV9TUDsNCj4gKwlzdGF0ZS0+Y2ZhLm9mZnNldCA9IDA7DQo+
+ICsNCj4gKwkvKiBpbml0aWFsIExSIChyZXR1cm4gYWRkcmVzcykgKi8NCj4gKwlzdGF0ZS0+cmVn
+c1tDRklfUkFdLmJhc2UgPSBDRklfQ0ZBOw0KPiArCXN0YXRlLT5yZWdzW0NGSV9SQV0ub2Zmc2V0
+ID0gMDsNCj4gK30NCj4gZGlmZiAtLWdpdCBhL3Rvb2xzL29ianRvb2wvYXJjaC9wb3dlcnBjL2lu
+Y2x1ZGUvYXJjaC9jZmlfcmVncy5oIGIvdG9vbHMvb2JqdG9vbC9hcmNoL3Bvd2VycGMvaW5jbHVk
+ZS9hcmNoL2NmaV9yZWdzLmgNCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4gaW5kZXggMDAwMDAw
+MDAwMDAwLi41OTYzOGViZWFmYzgNCj4gLS0tIC9kZXYvbnVsbA0KPiArKysgYi90b29scy9vYmp0
+b29sL2FyY2gvcG93ZXJwYy9pbmNsdWRlL2FyY2gvY2ZpX3JlZ3MuaA0KPiBAQCAtMCwwICsxLDEx
+IEBADQo+ICsvKiBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjogR1BMLTIuMC1vci1sYXRlciAqLw0K
+PiArDQo+ICsjaWZuZGVmIF9PQkpUT09MX0NGSV9SRUdTX0gNCj4gKyNkZWZpbmUgX09CSlRPT0xf
+Q0ZJX1JFR1NfSA0KPiArDQo+ICsjZGVmaW5lIENGSV9CUCAxDQo+ICsjZGVmaW5lIENGSV9TUCBD
+RklfQlANCj4gKyNkZWZpbmUgQ0ZJX1JBIDMyDQo+ICsjZGVmaW5lIENGSV9OVU1fUkVHUyAzMw0K
+PiArDQo+ICsjZW5kaWYNCj4gZGlmZiAtLWdpdCBhL3Rvb2xzL29ianRvb2wvYXJjaC9wb3dlcnBj
+L2luY2x1ZGUvYXJjaC9lbGYuaCBiL3Rvb2xzL29ianRvb2wvYXJjaC9wb3dlcnBjL2luY2x1ZGUv
+YXJjaC9lbGYuaA0KPiBuZXcgZmlsZSBtb2RlIDEwMDY0NA0KPiBpbmRleCAwMDAwMDAwMDAwMDAu
+LjNjOGViYjdkMmE2Yg0KPiAtLS0gL2Rldi9udWxsDQo+ICsrKyBiL3Rvb2xzL29ianRvb2wvYXJj
+aC9wb3dlcnBjL2luY2x1ZGUvYXJjaC9lbGYuaA0KPiBAQCAtMCwwICsxLDggQEANCj4gKy8qIFNQ
+RFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wLW9yLWxhdGVyICovDQo+ICsNCj4gKyNpZm5k
+ZWYgX09CSlRPT0xfQVJDSF9FTEYNCj4gKyNkZWZpbmUgX09CSlRPT0xfQVJDSF9FTEYNCj4gKw0K
+PiArI2RlZmluZSBSX05PTkUgUl9QUENfTk9ORQ0KPiArDQo+ICsjZW5kaWYgLyogX09CSlRPT0xf
+QVJDSF9FTEYgKi8NCj4gZGlmZiAtLWdpdCBhL3Rvb2xzL29ianRvb2wvYXJjaC9wb3dlcnBjL2lu
+Y2x1ZGUvYXJjaC9lbmRpYW5uZXNzLmggYi90b29scy9vYmp0b29sL2FyY2gvcG93ZXJwYy9pbmNs
+dWRlL2FyY2gvZW5kaWFubmVzcy5oDQo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0DQo+IGluZGV4IDAw
+MDAwMDAwMDAwMC4uN2MzNjI1MjdkYTIwDQo+IC0tLSAvZGV2L251bGwNCj4gKysrIGIvdG9vbHMv
+b2JqdG9vbC9hcmNoL3Bvd2VycGMvaW5jbHVkZS9hcmNoL2VuZGlhbm5lc3MuaA0KPiBAQCAtMCww
+ICsxLDkgQEANCj4gKy8qIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wLW9yLWxhdGVy
+ICovDQo+ICsjaWZuZGVmIF9BUkNIX0VORElBTk5FU1NfSA0KPiArI2RlZmluZSBfQVJDSF9FTkRJ
+QU5ORVNTX0gNCj4gKw0KPiArI2luY2x1ZGUgPGVuZGlhbi5oPg0KPiArDQo+ICsjZGVmaW5lIF9f
+VEFSR0VUX0JZVEVfT1JERVIgX19MSVRUTEVfRU5ESUFODQo+ICsNCj4gKyNlbmRpZiAvKiBfQVJD
+SF9FTkRJQU5ORVNTX0ggKi8NCj4gZGlmZiAtLWdpdCBhL3Rvb2xzL29ianRvb2wvYXJjaC9wb3dl
+cnBjL2luY2x1ZGUvYXJjaC9zcGVjaWFsLmggYi90b29scy9vYmp0b29sL2FyY2gvcG93ZXJwYy9p
+bmNsdWRlL2FyY2gvc3BlY2lhbC5oDQo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0DQo+IGluZGV4IDAw
+MDAwMDAwMDAwMC4uZmZlZjlhZGE3MTMzDQo+IC0tLSAvZGV2L251bGwNCj4gKysrIGIvdG9vbHMv
+b2JqdG9vbC9hcmNoL3Bvd2VycGMvaW5jbHVkZS9hcmNoL3NwZWNpYWwuaA0KPiBAQCAtMCwwICsx
+LDIxIEBADQo+ICsvKiBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjogR1BMLTIuMC1vci1sYXRlciAq
+Lw0KPiArI2lmbmRlZiBfUFBDX0FSQ0hfU1BFQ0lBTF9IDQo+ICsjZGVmaW5lIF9QUENfQVJDSF9T
+UEVDSUFMX0gNCj4gKw0KPiArI2RlZmluZSBFWF9FTlRSWV9TSVpFIDgNCj4gKyNkZWZpbmUgRVhf
+T1JJR19PRkZTRVQgMA0KPiArI2RlZmluZSBFWF9ORVdfT0ZGU0VUIDQNCj4gKw0KPiArI2RlZmlu
+ZSBKVU1QX0VOVFJZX1NJWkUgMTYNCj4gKyNkZWZpbmUgSlVNUF9PUklHX09GRlNFVCAwDQo+ICsj
+ZGVmaW5lIEpVTVBfTkVXX09GRlNFVCA0DQo+ICsjZGVmaW5lIEpVTVBfS0VZX09GRlNFVCA4DQo+
+ICsNCj4gKyNkZWZpbmUgQUxUX0VOVFJZX1NJWkUgMTINCj4gKyNkZWZpbmUgQUxUX09SSUdfT0ZG
+U0VUIDANCj4gKyNkZWZpbmUgQUxUX05FV19PRkZTRVQgNA0KPiArI2RlZmluZSBBTFRfRkVBVFVS
+RV9PRkZTRVQgOA0KPiArI2RlZmluZSBBTFRfT1JJR19MRU5fT0ZGU0VUIDEwDQo+ICsjZGVmaW5l
+IEFMVF9ORVdfTEVOX09GRlNFVCAxMQ0KPiArDQo+ICsjZW5kaWYgLyogX1BQQ19BUkNIX1NQRUNJ
+QUxfSCAqLw0KPiBkaWZmIC0tZ2l0IGEvdG9vbHMvb2JqdG9vbC9hcmNoL3Bvd2VycGMvc3BlY2lh
+bC5jIGIvdG9vbHMvb2JqdG9vbC9hcmNoL3Bvd2VycGMvc3BlY2lhbC5jDQo+IG5ldyBmaWxlIG1v
+ZGUgMTAwNjQ0DQo+IGluZGV4IDAwMDAwMDAwMDAwMC4uZTNlNzVjYmFiODU4DQo+IC0tLSAvZGV2
+L251bGwNCj4gKysrIGIvdG9vbHMvb2JqdG9vbC9hcmNoL3Bvd2VycGMvc3BlY2lhbC5jDQo+IEBA
+IC0wLDAgKzEsMTkgQEANCj4gKy8vIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wLW9y
+LWxhdGVyDQo+ICsjaW5jbHVkZSA8c3RyaW5nLmg+DQo+ICsNCj4gKyNpbmNsdWRlIDxvYmp0b29s
+L3NwZWNpYWwuaD4NCj4gKyNpbmNsdWRlIDxvYmp0b29sL2J1aWx0aW4uaD4NCj4gKw0KPiArDQo+
+ICtib29sIGFyY2hfc3VwcG9ydF9hbHRfcmVsb2NhdGlvbihzdHJ1Y3Qgc3BlY2lhbF9hbHQgKnNw
+ZWNpYWxfYWx0LA0KPiArCQkJCSBzdHJ1Y3QgaW5zdHJ1Y3Rpb24gKmluc24sDQo+ICsJCQkJIHN0
+cnVjdCByZWxvYyAqcmVsb2MpDQo+ICt7DQo+ICsJcmV0dXJuIGZhbHNlOw0KPiArfQ0KPiArDQo+
+ICtzdHJ1Y3QgcmVsb2MgKmFyY2hfZmluZF9zd2l0Y2hfdGFibGUoc3RydWN0IG9ianRvb2xfZmls
+ZSAqZmlsZSwNCj4gKwkJCQkgICAgc3RydWN0IGluc3RydWN0aW9uICppbnNuKQ0KPiArew0KPiAr
+CXJldHVybiBOVUxMOw0KPiArfQ==

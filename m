@@ -2,87 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 146FA532095
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 04:05:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38D00532093
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 04:05:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232991AbiEXCDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 22:03:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37608 "EHLO
+        id S233002AbiEXCDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 22:03:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbiEXCDN (ORCPT
+        with ESMTP id S229537AbiEXCDu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 22:03:13 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C64707CDC3
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 19:03:11 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L6csJ459PzjX0c;
-        Tue, 24 May 2022 10:02:28 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 24 May 2022 10:03:10 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 24 May 2022 10:03:09 +0800
-Message-ID: <c89a11b3-99e6-edbe-ae23-36038b7e3a07@huawei.com>
-Date:   Tue, 24 May 2022 10:03:09 +0800
+        Mon, 23 May 2022 22:03:50 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2116C7CDC3
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 19:03:49 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id i187so26299946ybg.6
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 19:03:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=TaVPaezuXUUrJn/l8xmCpgZkWa6d5zHyRlmrXLhO/ck=;
+        b=uIzHBbGmscqYkk5YohOM8OsjUsXU8fDOwAUtDVPHA75xpn1q6C3X2uZ488g+tzU7zw
+         jVGPPboOxNeROw31pFhfbwxrc3Hw1JRhkvzrvpNBgRt6tOzuixn6zDxKmgKNUuv0wVKC
+         N1LmkUIMPO04+Ji/RnvHBypLFs00fUferBOBIMmVHJAIedsN4WFvzaSV6A73nbU92fnZ
+         KVx3egFCMlWJHy0PLiaMRRhz/zxq9NgD/Ic0G2Gu/vujlyOTcwJwlWaDeJP4jY/OmmeC
+         vlctrc4fY60S78dMlfRUn61/Wjl84AQxoTGEBHs4lc9Z9/ZogxzhAF0Pwp7PoLBW+RDA
+         mL/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=TaVPaezuXUUrJn/l8xmCpgZkWa6d5zHyRlmrXLhO/ck=;
+        b=O3PYuyICVSuTvr3LJW4Nhcni18hDzQIha10rdsYg7Fk7hjzeq3sMz9W5SKesM13qZ6
+         dDnoVBc+dOC1RC6ehG1WicPHVVgS58fSsPZl/zYQuiAXQ66bazYLmhibX50mVYPv3alO
+         +qF+xwXK8YSLhU9htT3ftm8UEmdC1Zm7wBhsyuKvibRbvYS3iBahLy0AuV0Wnyo0JMX+
+         CwjVytLAs+ikzyMocszhIjLr95n6oCsd1r+Jcqx+MJmc9gmqLtt1Gil4HJdCKmF0a9FN
+         MoX0b2aJBSiJeq8ohEs4NXwDxEyRpcYRe7XIQdf9YHBoDp/jYCIcR8mpDkZZibSlddJo
+         nDNg==
+X-Gm-Message-State: AOAM532I+Wi3vyvNt1EBrxWV1izEWHYX7SCluYNDLZpRyCDfg6FgUkvf
+        Q5S7zEIxcjuCG3j1OU6qUO7JMZ2pJo29MtpfgJGgYQ==
+X-Google-Smtp-Source: ABdhPJxvU6BMoSSQay1UgirokJ2A1InFgZ6SALJbt1MZYS+enKWNWgg8+Fs8vfal1/J9ful/7aNSZi7MHchdhXspUWY=
+X-Received: by 2002:a25:814a:0:b0:64f:f06c:cf6d with SMTP id
+ j10-20020a25814a000000b0064ff06ccf6dmr6315456ybm.88.1653357828191; Mon, 23
+ May 2022 19:03:48 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v3 1/6] ARM: mm: kill unused runtime hook arch_iounmap()
-Content-Language: en-US
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Russell King <linux@armlinux.org.uk>
-CC:     <will@kernel.org>, <akpm@linux-foundation.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <hch@infradead.org>, <arnd@arndb.de>, <anshuman.khandual@arm.com>
-References: <20220519082552.117736-1-wangkefeng.wang@huawei.com>
- <20220519082552.117736-2-wangkefeng.wang@huawei.com>
- <Yoezpw2AE5GT6CyP@arm.com>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <Yoezpw2AE5GT6CyP@arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220523165830.581652127@linuxfoundation.org>
+In-Reply-To: <20220523165830.581652127@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 24 May 2022 07:33:36 +0530
+Message-ID: <CA+G9fYvc+fogFhRpy4r04A6ch4t58S3i8BnPdz5oCj_yuOf86A@mail.gmail.com>
+Subject: Re: [PATCH 5.17 000/158] 5.17.10-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 23 May 2022 at 22:35, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.17.10 release.
+> There are 158 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 25 May 2022 16:56:55 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.17.10-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.17.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-On 2022/5/20 23:28, Catalin Marinas wrote:
-> Hi Russell,
->
-> On Thu, May 19, 2022 at 04:25:47PM +0800, Kefeng Wang wrote:
->> Since the following commits,
->>
->> v5.4
->>    commit 59d3ae9a5bf6 ("ARM: remove Intel iop33x and iop13xx support")
->> v5.11
->>    commit 3e3f354bc383 ("ARM: remove ebsa110 platform")
->>
->> The runtime hook arch_iounmap() on ARM is useless, kill arch_iounmap()
->> and __iounmap(), and the naming of arch_iounmap will be used in
->> GENERIC_IOREMAP with the later patch.
->>
->> Cc: Russell King <linux@armlinux.org.uk>
->> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-> Probably too late for this merging window but are you ok for this patch
-> to go in via the arm64 tree (together with the rest of the series)?
->
-> Alternatively it could go into your patch system and hopefully land in
-> 5.19 so that we can take the rest for 5.20.
-Russell, should I send it to patch system or let Catalin take it?
->
-> Thanks.
->
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
+
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 5.17.10-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.17.y
+* git commit: 389f9b0047fd0c936414cad5400875652b2711ef
+* git describe: v5.17.9-159-g389f9b0047fd
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.17.y/build/v5.17=
+.9-159-g389f9b0047fd
+
+## Test Regressions (compared to v5.17.8-115-g3f3287e39741)
+No test regressions found.
+
+## Metric Regressions (compared to v5.17.8-115-g3f3287e39741)
+No metric regressions found.
+
+## Test Fixes (compared to v5.17.8-115-g3f3287e39741)
+No test fixes found.
+
+## Metric Fixes (compared to v5.17.8-115-g3f3287e39741)
+No metric fixes found.
+
+## Test result summary
+total: 102240, pass: 86820, fail: 722, skip: 13738, xfail: 960
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 296 total, 293 passed, 3 failed
+* arm64: 47 total, 47 passed, 0 failed
+* i386: 44 total, 40 passed, 4 failed
+* mips: 41 total, 38 passed, 3 failed
+* parisc: 14 total, 14 passed, 0 failed
+* powerpc: 59 total, 56 passed, 3 failed
+* riscv: 27 total, 27 passed, 0 failed
+* s390: 26 total, 23 passed, 3 failed
+* sh: 26 total, 24 passed, 2 failed
+* sparc: 14 total, 14 passed, 0 failed
+* x86_64: 47 total, 46 passed, 1 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* prep-inline
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

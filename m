@@ -2,57 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DDA553222C
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 06:28:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4310532228
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 06:28:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233598AbiEXE2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 00:28:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55556 "EHLO
+        id S234244AbiEXE1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 00:27:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234254AbiEXE2B (ORCPT
+        with ESMTP id S234631AbiEXE12 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 00:28:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 185308A336;
-        Mon, 23 May 2022 21:27:33 -0700 (PDT)
+        Tue, 24 May 2022 00:27:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F126166FAE
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 21:27:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 95BBAB817B2;
-        Tue, 24 May 2022 04:27:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 41C42C36AEA;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 351FF61405
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 04:27:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 91522C34118;
         Tue, 24 May 2022 04:27:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1653366443;
-        bh=wGU1NlPmkMketE/d9nvWkPz/u9JtPngoB6P0IXt6r8g=;
+        bh=AOurxq/KkW8QV/IxoaDYTbraMvBD2jeoxgvtrfaR6cE=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=HJq9eirnHmYMJPp0Wo5X3WMobQ849VQur+dQ8vk7pKidF3oBCoChVGVZb7FtPtOg/
-         Ev1a1MuwAApGRCFviET3RIczvANUs9f+5iUT/J7ldUUlX6k0PYfHDyZ+OngA4pQwKs
-         a1844hwdQvXMJblCe/VoaOARvYWfMaUyuFGBe4g7aNAfpOouY/W5b5NS4oklHtQi+6
-         4oYAx0ciEJ16lNz+RKXTiChY61xbqC/tsHd92fa6lHrZf2DCaG7fsjazOa/Iizai46
-         X4UEJwohqxM9qH9AfffR1VpZ1o4pyVc+yULM4xROszQDaPXhtodF2W/hNbcLXsNReU
-         zyOpmIVpZmzhg==
+        b=iUSO6cjnJPPUc1gcUaQDTadb+AdfhvIMzun7jiUMT7vc3SOOtFZuYRhzOpgQz1bki
+         ba12keVo7iCEJbleRHgVMQCj6llc7NF4wCD3f3q30Dj0qeIGholJJBJKWWDoYFGcel
+         1lMlYBbxtUbKyAkF4YMIv0KpNm0osR2sow9+AKUHpowNotCHTyRL/zrh5jaH6Y/+sC
+         dP0ASugX5IVA2qZUao/4YG6t5ZBcO+ihUVdwONTpjIUugwmkc/IkLyS8yHVtqrlg6Y
+         w3Upr4TJhR/ujFhJS5h39+yRtyTtFI5GyWxXNGFASSkTl+eR5JQpmY6zG/UQxnDqUl
+         PZjZ+pbfF6BKw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2F141F03938;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7F96EF03947;
         Tue, 24 May 2022 04:27:23 +0000 (UTC)
-Subject: Re: [GIT PULL] s390 updates for 5.19 merge window
+Subject: Re: [GIT PULL] arm64 updates for 5.19-rc1
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Yot+xzLZETNTxNo+@osiris>
-References: <Yot+xzLZETNTxNo+@osiris>
+In-Reply-To: <20220523163913.43175-1-catalin.marinas@arm.com>
+References: <20220523163913.43175-1-catalin.marinas@arm.com>
 X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Yot+xzLZETNTxNo+@osiris>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-5.19-1
-X-PR-Tracked-Commit-Id: 94d3477897481b92874654455e263e0b1728acb5
+X-PR-Tracked-Message-Id: <20220523163913.43175-1-catalin.marinas@arm.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux tags/arm64-upstream
+X-PR-Tracked-Commit-Id: 0616ea3f1b93a99264d84f3d002ae117f6526b62
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 95fbef17e8253775876a08ec2011d3665b86a55f
-Message-Id: <165336644318.29742.3782868753205190590.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: 143a6252e1b8ab424b4b293512a97cca7295c182
+Message-Id: <165336644351.29742.5407006194895261676.pr-tracker-bot@kernel.org>
 Date:   Tue, 24 May 2022 04:27:23 +0000
-To:     Heiko Carstens <hca@linux.ibm.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -63,12 +65,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Mon, 23 May 2022 14:32:07 +0200:
+The pull request you sent on Mon, 23 May 2022 17:39:13 +0100:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-5.19-1
+> git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux tags/arm64-upstream
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/95fbef17e8253775876a08ec2011d3665b86a55f
+https://git.kernel.org/torvalds/c/143a6252e1b8ab424b4b293512a97cca7295c182
 
 Thank you!
 

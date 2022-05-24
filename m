@@ -2,58 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA48553308D
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 20:38:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BF9753308E
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 20:38:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240382AbiEXSiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 14:38:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47570 "EHLO
+        id S240390AbiEXSiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 14:38:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231317AbiEXSiJ (ORCPT
+        with ESMTP id S240384AbiEXSiU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 14:38:09 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34BC858385
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 11:38:08 -0700 (PDT)
+        Tue, 24 May 2022 14:38:20 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D72B5C35F
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 11:38:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653417488; x=1684953488;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=jHbxqZNH00JHfTyuQdrRe/C0CtwETbMmiayieq7h5jU=;
-  b=I2yRpk2qWa9Kzg63Oj1TlAMoy4PchApeIZ4Bxpq293rY1p5nmzUn0ja5
-   cHepdlUP+eAQhc7Wfib31OWgX3UxQJJc6lW7aUiMlxtVUeU35OjOZRWVz
-   Nukb49lE5VRBKWvJFW6Rvpt9Zs/K9MB9s7+BY1WNg1bThE9EK8afImGlo
-   1D6QW/5gAj4WVJeP6LtH3xp/BvTGr3Sbf8ToAflKmKdB72iR2VUdKUgzk
-   dCNnjpHdeZqqzRQRZ5f0t+Rvws1CUVms13ZraLLc1eloN6zVfixYS9L0u
-   C3AZxEHC/iQ27BDUATPUtE5napZcdNwNDp26bgvVoxN2kORcpL/V9725I
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10357"; a="255685761"
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="255685761"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 11:38:07 -0700
-X-ExtLoop1: 1
+  t=1653417499; x=1684953499;
+  h=message-id:date:subject:to:references:from:in-reply-to:
+   content-transfer-encoding:mime-version;
+  bh=kfK6OXCR7jWUt9GNpo3L5KOc22K57rT0JhZoLNVkZ9s=;
+  b=jmEtG4gNoqocDG5r9ezMrM1HnhYaeJI/ffMfz9PGddJh8Eq1HB55Ve3W
+   11KfTDBsZJjKqt6h2SSz+7jdGhpiLVXLjseTWhz98ZRpYU9X5/jElMChP
+   E8Asd1WrvV9L9Na6AZ8IYcTwkaQebuSeGmSHhkec6gRFPXFhRMW4YSp2D
+   945h+4YT/7Luy/yeHQLpK65qE2NFqoPrnlWrF+8ZvtbBSMy8lH8M+5nfM
+   kWO745U5fC7+9cmEyN+Q+rang6Ghtt4IQgHVCZwkHaTATY6xTWAGBcA2F
+   dIug9N4XE8DjOGhVqxZYhqlNnDrSVS4lhQKjzNmzhgSVVD/yUZfTCshTj
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10357"; a="261231428"
 X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="745347155"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 24 May 2022 11:38:06 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ntZPx-0002LW-Ro;
-        Tue, 24 May 2022 18:38:05 +0000
-Date:   Wed, 25 May 2022 02:37:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [axboe-block:io_uring-5.19 6/6] fs/io_uring.c:8094:24: error:
- implicit declaration of function 'io_shutdown_prep'; did you mean
- 'io_shutdown'?
-Message-ID: <202205250249.52umWlWD-lkp@intel.com>
+   d="scan'208";a="261231428"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 11:38:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
+   d="scan'208";a="608792557"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by orsmga001.jf.intel.com with ESMTP; 24 May 2022 11:38:18 -0700
+Received: from orsmsx609.amr.corp.intel.com (10.22.229.22) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Tue, 24 May 2022 11:38:18 -0700
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX609.amr.corp.intel.com (10.22.229.22) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Tue, 24 May 2022 11:38:17 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Tue, 24 May 2022 11:38:17 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.106)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Tue, 24 May 2022 11:38:17 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=i0gnFpdOSz+f3NnSJi200yopxax9ZMMMbyc4gtqnysAjrvIOU0zcK5TlnWFjbfP5AYZmItvzkEihG1wRy02iFXnKTGFWCVWgRfEvlSlUZVVWIAilXPZBXYlz+2EtOvCN4Ds2/nChwuiBrl9//cax2TBcXDOLnr79xNHHu67ZjDnw7ve0XDz1DI+z9ahiGsXzvRI9k/lRNtc6T6BduJyZPzwZyUmrbS76ntnOrHN1mLkB/OuR0PjgAmYFwcPkW2FvUEVBtPQNphCui+Xaio8bMluMP+BEVmnjzrj44pNeuOuiruLRXcVYgXqaSDJRlMbPBRFzi9xCZkUIDYvg1UuyFw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=b5fp4wO6VLc2NQrvZ8pd3d0VAfRRRHGFNARx6KepIVE=;
+ b=FZC22IpuI09NczyZ71uT8i7lbfG/T1yHqqm2fshvjTyrJR5uofAKWwfDvpZMOvkmmV3x6c7D7Zp+n9GFLlQOFAp3ID6WRMt3N0NJkIQ/6NOXsiiHMTL+BcuSuiRNExJGqpbI9F1m+0Pr8g4y5KxHqaXOhiR999jGvZK7rrUQsYctuYneiXmZ5qokXFWzVAg3HaT6SOurJ2D3X47sH3OIPc54ktAk/io/TbcyiQ4Zg5cjmvWx5do+sTKNm7WJ7p8nw5bQU4o+nIVMvkIJPMur0x3rCUa8g3PN8oboMenEGNRb4j1ntaOZXdGO/Vbun0mgd0SdHztrXmU2l3h6ecDPGw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from BN0PR11MB5744.namprd11.prod.outlook.com (2603:10b6:408:166::16)
+ by DM4PR11MB5374.namprd11.prod.outlook.com (2603:10b6:5:395::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.14; Tue, 24 May
+ 2022 18:38:15 +0000
+Received: from BN0PR11MB5744.namprd11.prod.outlook.com
+ ([fe80::5459:7151:e684:6525]) by BN0PR11MB5744.namprd11.prod.outlook.com
+ ([fe80::5459:7151:e684:6525%2]) with mapi id 15.20.5293.013; Tue, 24 May 2022
+ 18:38:15 +0000
+Message-ID: <a88900f6-da2f-d641-fb6d-7952b60cf200@intel.com>
+Date:   Tue, 24 May 2022 11:38:10 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.9.0
+Subject: Re: [PATCH] x86/resctrl: Fix to restore to original value when
+ re-enabling hardware prefetch register
+Content-Language: en-US
+To:     Kohei Tarumizu <tarumizu.kohei@fujitsu.com>,
+        <fenghua.yu@intel.com>, <tglx@linutronix.de>, <mingo@redhat.com>,
+        <bp@alien8.de>, <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        <hpa@zytor.com>, <linux-kernel@vger.kernel.org>
+References: <20220518045517.2066518-1-tarumizu.kohei@fujitsu.com>
+From:   Reinette Chatre <reinette.chatre@intel.com>
+In-Reply-To: <20220518045517.2066518-1-tarumizu.kohei@fujitsu.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MW4P222CA0022.NAMP222.PROD.OUTLOOK.COM
+ (2603:10b6:303:114::27) To BN0PR11MB5744.namprd11.prod.outlook.com
+ (2603:10b6:408:166::16)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b2aab1f7-b9d2-485b-6a0b-08da3db49010
+X-MS-TrafficTypeDiagnostic: DM4PR11MB5374:EE_
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-Microsoft-Antispam-PRVS: <DM4PR11MB5374EA156F8BDCEA62E73901F8D79@DM4PR11MB5374.namprd11.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 79yFWmhFXJPkeQu1URP4AvhxrRkDJGR0s1tzNwIQLKI9TqIhCkEb8HOYqL+ZcGOpwF1ut4EPtdU5hpmDyFu5NV/MHAYAUYfBnT+rITSJhvPnznunnIbloq92oGrqW3LzlFLGDoCPzFya1/Gi8RRU4et5HYwO7SRz1k5Y2hM1e2xSDf1ripG8+iubSXKcteCgfSqfit6Ys4DFvgfQS9l9EAz1qJ8AIDt2hoKPoVyHvdvhMmryguRLg3TJZSHY+6uthfkkDkGVExQcTq323YWKs+K5VS/JMD7EwpC9TDo7NzabG9Wj/hO6PUkhchrsUb4n8LUjwLwZgrUvc1SfmS1Aj6XNBguUNJyMgaHXs1vK28zWxqaUY12PACQYNlCnXijzdP7W8xHDIJJdHkNKiGlZ8wU8nTi6fDBGVpKxpwwLZ4/JtVH3BDNxv+uEzP6ckvO7aU6THYHSIQexflFRUc2jrYsX5cy9o6GqaTyscg8zmEcLu2L1bmLauW14jstzzWmuYHUXP0aXRpnSHgguejlwydcYGXaLN2N+kLvY95g2k/GsnA1OrMb879dAEp7chwV5XhstZS0vqEdDwhR3YS3h7b771kGi8Pp9vI5eb5+r0f0oxQd7eUs3GeFFYJxQj0fwggqPkacnZLxWjhzs76HTkPfMunBWg1hUA+pRXtaJixhzUuDejUbRo9xwf++gP3mYtx/+QukHbgRsUNHzWiDFg9Tv5q5MXu0QCWpgj9XLQz8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR11MB5744.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(83380400001)(508600001)(6666004)(82960400001)(2906002)(5660300002)(6486002)(4744005)(2616005)(38100700002)(44832011)(53546011)(316002)(26005)(66946007)(31696002)(66556008)(66476007)(8676002)(8936002)(6512007)(86362001)(31686004)(36756003)(6506007)(186003)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WXAxU3NRVHFEUldiTlR3VHFqa1I2a2ZWUjdVeU90NFl3bUluMjQwZ3RyYzdQ?=
+ =?utf-8?B?QVV1YXRvZ0xqR013ZXl0QVVYVHpSSVdhNEJremVEOEdRdWNYN3l1dnpwUkov?=
+ =?utf-8?B?WVVqR3lSWVl0OXk0Qk42N1A4ZDZFZEhwZ2dIdG1DVGk5aEY5MjcyUnU2RXF6?=
+ =?utf-8?B?b1hhN1ZQcDJZekdjcjVEZW4zSDRZaURxTmMvb3ExaldWdkRneFJDVkwzcFZ0?=
+ =?utf-8?B?YnZkc2ZTQ3ovYWEyNTc4cFJjUWJPTGk4bkhtcGZCeFFIdEN3ZkR2dWtIbzB0?=
+ =?utf-8?B?c004bngyQkQzNWdTa1dacTNPL3FWdkRyWUxWWmEzUlgyd0FoYUg5eUdkNDBW?=
+ =?utf-8?B?YkJocnd4VlhCbkJOWXkwd1ViVHE3SkZVbjBBYUZkK3o5eGJyN0tTblBvQ1Bn?=
+ =?utf-8?B?SDZldlYwQUxtMUNacEErOHFyUDV3cEZaZkozTzgrNmdVeDgxazM1L2xJc0tr?=
+ =?utf-8?B?c1MzY2Ivc2k5dURvK2Nnd0w4dzVWS2Zyc0t4azE0T1FuOVREQUo5NGwzMWJ0?=
+ =?utf-8?B?TzduNzBYV0psbXQ5VzhHSjdYNC8wcHlTczdVMlhFeGFNL01pK2g1Smg1aC81?=
+ =?utf-8?B?M05GRHhhRWRRV09WaW9GSUxNVTBCU2p3amhqY0V2Q2ZzUlhuR1RQU0l4WWt3?=
+ =?utf-8?B?bndrTnFvMHU5S1NGVENna1dvRHhJQlNRVFVSVndFTWRaUjVSbFJvVDE3R0hY?=
+ =?utf-8?B?cEczSzhmZ3krWThuQkxZU1AvM0ZHN3FGeW9MaGJ1c3RIVGdNY1dlVnFKTUlB?=
+ =?utf-8?B?SFFJMlJwaDUyZ2F6STJUR2NhaFN1NFpaeUhqbFovOG9VSGlQWi9pelZ0UnMz?=
+ =?utf-8?B?dkdwUmdQZjhEQnlQKys0eXVsYmRqT3U4VTdlNzl1ZU9SK0dsN0I1R0tUaDYr?=
+ =?utf-8?B?Ry9CdURlZlEra05UYi9wU3J6Mmp2dS90U1RuY2VjWkthTFI0N1ZHUmxpcVpC?=
+ =?utf-8?B?NFZDWWtzK1VTSERnMjhhazFEZ2JSZkg3YXgrdWsyY0VOcUN2dFhDSEpKY2VI?=
+ =?utf-8?B?TTIxZXBDanBLdnRBTC9LeXN3RWdDMFlhMlFHWUVVSzhLVGdhY3BzTVNZbjlH?=
+ =?utf-8?B?djZUamZvUjhZeTNRRXpIMnp3emJwd3ZSNzdzOTlpaTdEV0ZOZk5UU1NzQ0Zy?=
+ =?utf-8?B?NjVsd1VzRFhaT0RMZXRvR0FwLzBvNWJNK2svM3NmbmVTNlFEdng1TUV0T0FZ?=
+ =?utf-8?B?K3FKZ05rRHI1QXUvTlF3TlFnUFkyeitTQWM5azlYZkhOZkV4YnBDakpUMlhW?=
+ =?utf-8?B?enZXYmRzckhEbHVBTXFudy9vZktMOWdFT2ZzdlMzZitQald5R2tIdlRZNjRK?=
+ =?utf-8?B?ZkVzZnZiKzlEZ09DMTd4ZTNsQ2hPNHVQZXhoYlh4b1V3WnZKelpuTlBmcDRZ?=
+ =?utf-8?B?bXU0bGxnVzQrM3k0OFJxU2pJQmVGekYxZlB0SEtwdmovVUdUM25ZK3NzbmYw?=
+ =?utf-8?B?czFKaklQSHRtRFVRQkRtWlE4S0ZCdVpvc1RraStUNDZhQktSekp4dy9iYTdF?=
+ =?utf-8?B?WWJxYTZ5ZFhSNm5VS3FWTWhkL2NJYndZVDMrUjUvdXRXOUZwSVBvMnV0Yk8z?=
+ =?utf-8?B?NG40VTh1RnZFQTJxa1dQU25rRDVWTWRDY2IzYjlid0xoRTJCdWp2aU40WkNW?=
+ =?utf-8?B?enRkNmNZa0VCVkJhd3UvZHVnU3ZzSTB0SjdnV1MvTGtKSGd5cGg2Tjh5T0Np?=
+ =?utf-8?B?eFpKUU9qLzk5Q3FadFJ3TTlzNzNMUllmS01taGRjSUp6VmtMRHk5azUvSmpm?=
+ =?utf-8?B?akx1a3MzcmEyQ0ZDZWZId1pMM0hTdlJHUU9WQ2x2TmxsSkMvMWdKQ1kvNWVS?=
+ =?utf-8?B?bDJEdzFjOVI1UTJaTkcyd1JMZGthd2Yxa212bEVlSDA4YUNqM1JWcElBZXhh?=
+ =?utf-8?B?YWl1Wmd1TmJSeWJhTkVNckhEb093cWpmUDVWZGdNNS8xWUV4L2FVSFRXMnhE?=
+ =?utf-8?B?RXZ4L1ZKOUFXMEluM0ZTTWRkbnlQeW9nUElUYXMyNng0OHhmamFiaTI2ZUlL?=
+ =?utf-8?B?LzBySXpGeDhrRnYxbzJvcXlNT2ZJdGlZYVhxOTA3Qlh5eWNFbENwbGJtQllu?=
+ =?utf-8?B?SXBiM01oUTdORFFtY3N1cVdFc2xhdkxxNzdjSEJObC9CMXpmS0FPK295cHZj?=
+ =?utf-8?B?SjV6QngzblJLSGNjMm96bVhCVEVYcGpGV3orUmJYRk1wUlRqWmVXWDJUZXJz?=
+ =?utf-8?B?SURIZWtpQlIrbDdNU0U2RmFtVm93MVBKUkt3RVlMVWNMeG9IUC8vWEJ3R3JE?=
+ =?utf-8?B?TWUxS3BwbWs2aHVqUk9QMmNxbHUvb3F4akJyeVRNV1JhMmxDOEFaSlNyRXB5?=
+ =?utf-8?B?cmRCVXQvdTBxZlQyZm1BMEVwZCtjQmtTNUxGc0xBUkVvZjNlU0N2SlZvSFlW?=
+ =?utf-8?Q?ce8EDVIHZ+WWv6eY=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: b2aab1f7-b9d2-485b-6a0b-08da3db49010
+X-MS-Exchange-CrossTenant-AuthSource: BN0PR11MB5744.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2022 18:38:15.3466
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /LMtCMU9NyrGvO6vmrUeUFzxYh6FDDx9R2Xh+YMlJpxVcj2ZcIjKP2SyFQnxV16RFx4/6Xq8WB/VAWBJdrL/7Hb0uP8F/JvpkmIktSiCIsA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5374
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-8.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,146 +168,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git io_uring-5.19
-head:   7bab837b2b5435e37dfef64a1bff983855f24567
-commit: 7bab837b2b5435e37dfef64a1bff983855f24567 [6/6] io_uring: move shutdown under the general net section
-config: s390-randconfig-r044-20220524 (https://download.01.org/0day-ci/archive/20220525/202205250249.52umWlWD-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git/commit/?id=7bab837b2b5435e37dfef64a1bff983855f24567
-        git remote add axboe-block https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git
-        git fetch --no-tags axboe-block io_uring-5.19
-        git checkout 7bab837b2b5435e37dfef64a1bff983855f24567
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   fs/io_uring.c: In function '__io_submit_flush_completions':
-   fs/io_uring.c:3152:40: warning: variable 'prev' set but not used [-Wunused-but-set-variable]
-    3152 |         struct io_wq_work_node *node, *prev;
-         |                                        ^~~~
-   fs/io_uring.c: In function 'io_req_prep':
->> fs/io_uring.c:8094:24: error: implicit declaration of function 'io_shutdown_prep'; did you mean 'io_shutdown'? [-Werror=implicit-function-declaration]
-    8094 |                 return io_shutdown_prep(req, sqe);
-         |                        ^~~~~~~~~~~~~~~~
-         |                        io_shutdown
-   cc1: some warnings being treated as errors
 
 
-vim +8094 fs/io_uring.c
+On 5/17/2022 9:55 PM, Kohei Tarumizu wrote:
+> The current pseudo_lock.c code overwrites the value of the
+> MSR_MISC_FEATURE_CONTROL to 0 even if the original value is not 0.
+> Therefore, modify it to save and restore the original values.
+> 
+> Fixes: 018961ae5579 ("x86/intel_rdt: Pseudo-lock region creation/removal core")
+> Fixes: 443810fe6160 ("x86/intel_rdt: Create debugfs files for pseudo-locking testing")
+> Fixes: 8a2fc0e1bc0c ("x86/intel_rdt: More precise L2 hit/miss measurements")
+> Signed-off-by: Kohei Tarumizu <tarumizu.kohei@fujitsu.com>
+> ---
 
-5262f567987d3c3 Jens Axboe      2019-09-17  8028  
-bfe76559833d5d7 Pavel Begunkov  2020-09-30  8029  static int io_req_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
-f67676d160c6ee2 Jens Axboe      2019-12-02  8030  {
-d625c6ee4975000 Jens Axboe      2019-12-17  8031  	switch (req->opcode) {
-e781573e2fb1b75 Jens Axboe      2019-12-17  8032  	case IORING_OP_NOP:
-2bb04df7c2af9da Stefan Roesch   2022-04-26  8033  		return io_nop_prep(req, sqe);
-f67676d160c6ee2 Jens Axboe      2019-12-02  8034  	case IORING_OP_READV:
-f67676d160c6ee2 Jens Axboe      2019-12-02  8035  	case IORING_OP_READ_FIXED:
-3a6820f2bb8a079 Jens Axboe      2019-12-22  8036  	case IORING_OP_READ:
-f67676d160c6ee2 Jens Axboe      2019-12-02  8037  	case IORING_OP_WRITEV:
-f67676d160c6ee2 Jens Axboe      2019-12-02  8038  	case IORING_OP_WRITE_FIXED:
-3a6820f2bb8a079 Jens Axboe      2019-12-22  8039  	case IORING_OP_WRITE:
-584b0180f0f4d67 Jens Axboe      2022-03-29  8040  		return io_prep_rw(req, sqe);
-0969e783e3a8913 Jens Axboe      2019-12-17  8041  	case IORING_OP_POLL_ADD:
-bfe76559833d5d7 Pavel Begunkov  2020-09-30  8042  		return io_poll_add_prep(req, sqe);
-0969e783e3a8913 Jens Axboe      2019-12-17  8043  	case IORING_OP_POLL_REMOVE:
-c62b646db817106 Jens Axboe      2022-05-23  8044  		return io_poll_remove_prep(req, sqe);
-8ed8d3c3bc32bf5 Jens Axboe      2019-12-16  8045  	case IORING_OP_FSYNC:
-1155c76a248364d Pavel Begunkov  2021-02-18  8046  		return io_fsync_prep(req, sqe);
-8ed8d3c3bc32bf5 Jens Axboe      2019-12-16  8047  	case IORING_OP_SYNC_FILE_RANGE:
-1155c76a248364d Pavel Begunkov  2021-02-18  8048  		return io_sfr_prep(req, sqe);
-03b1230ca12a12e Jens Axboe      2019-12-02  8049  	case IORING_OP_SENDMSG:
-fddafacee287b31 Jens Axboe      2020-01-04  8050  	case IORING_OP_SEND:
-bfe76559833d5d7 Pavel Begunkov  2020-09-30  8051  		return io_sendmsg_prep(req, sqe);
-03b1230ca12a12e Jens Axboe      2019-12-02  8052  	case IORING_OP_RECVMSG:
-fddafacee287b31 Jens Axboe      2020-01-04  8053  	case IORING_OP_RECV:
-bfe76559833d5d7 Pavel Begunkov  2020-09-30  8054  		return io_recvmsg_prep(req, sqe);
-f499a021ea8c9f7 Jens Axboe      2019-12-02  8055  	case IORING_OP_CONNECT:
-bfe76559833d5d7 Pavel Begunkov  2020-09-30  8056  		return io_connect_prep(req, sqe);
-2d28390aff87923 Jens Axboe      2019-12-04  8057  	case IORING_OP_TIMEOUT:
-a0dd627730ba9c1 Jens Axboe      2022-05-23  8058  		return io_timeout_prep(req, sqe);
-b29472ee7b53784 Jens Axboe      2019-12-17  8059  	case IORING_OP_TIMEOUT_REMOVE:
-bfe76559833d5d7 Pavel Begunkov  2020-09-30  8060  		return io_timeout_remove_prep(req, sqe);
-fbf23849b1724d3 Jens Axboe      2019-12-17  8061  	case IORING_OP_ASYNC_CANCEL:
-bfe76559833d5d7 Pavel Begunkov  2020-09-30  8062  		return io_async_cancel_prep(req, sqe);
-2d28390aff87923 Jens Axboe      2019-12-04  8063  	case IORING_OP_LINK_TIMEOUT:
-a0dd627730ba9c1 Jens Axboe      2022-05-23  8064  		return io_link_timeout_prep(req, sqe);
-8ed8d3c3bc32bf5 Jens Axboe      2019-12-16  8065  	case IORING_OP_ACCEPT:
-bfe76559833d5d7 Pavel Begunkov  2020-09-30  8066  		return io_accept_prep(req, sqe);
-d63d1b5edb7b832 Jens Axboe      2019-12-10  8067  	case IORING_OP_FALLOCATE:
-bfe76559833d5d7 Pavel Begunkov  2020-09-30  8068  		return io_fallocate_prep(req, sqe);
-15b71abe7b52df2 Jens Axboe      2019-12-11  8069  	case IORING_OP_OPENAT:
-bfe76559833d5d7 Pavel Begunkov  2020-09-30  8070  		return io_openat_prep(req, sqe);
-b5dba59e0cf7e2c Jens Axboe      2019-12-11  8071  	case IORING_OP_CLOSE:
-bfe76559833d5d7 Pavel Begunkov  2020-09-30  8072  		return io_close_prep(req, sqe);
-05f3fb3c5397524 Jens Axboe      2019-12-09  8073  	case IORING_OP_FILES_UPDATE:
-c62b646db817106 Jens Axboe      2022-05-23  8074  		return io_files_update_prep(req, sqe);
-eddc7ef52a6b37b Jens Axboe      2019-12-13  8075  	case IORING_OP_STATX:
-bfe76559833d5d7 Pavel Begunkov  2020-09-30  8076  		return io_statx_prep(req, sqe);
-4840e418c2fc533 Jens Axboe      2019-12-25  8077  	case IORING_OP_FADVISE:
-bfe76559833d5d7 Pavel Begunkov  2020-09-30  8078  		return io_fadvise_prep(req, sqe);
-c1ca757bd6f4632 Jens Axboe      2019-12-25  8079  	case IORING_OP_MADVISE:
-bfe76559833d5d7 Pavel Begunkov  2020-09-30  8080  		return io_madvise_prep(req, sqe);
-cebdb98617ae3e8 Jens Axboe      2020-01-08  8081  	case IORING_OP_OPENAT2:
-bfe76559833d5d7 Pavel Begunkov  2020-09-30  8082  		return io_openat2_prep(req, sqe);
-3e4827b05d2ac2d Jens Axboe      2020-01-08  8083  	case IORING_OP_EPOLL_CTL:
-bfe76559833d5d7 Pavel Begunkov  2020-09-30  8084  		return io_epoll_ctl_prep(req, sqe);
-7d67af2c0134025 Pavel Begunkov  2020-02-24  8085  	case IORING_OP_SPLICE:
-bfe76559833d5d7 Pavel Begunkov  2020-09-30  8086  		return io_splice_prep(req, sqe);
-ddf0322db79c598 Jens Axboe      2020-02-23  8087  	case IORING_OP_PROVIDE_BUFFERS:
-bfe76559833d5d7 Pavel Begunkov  2020-09-30  8088  		return io_provide_buffers_prep(req, sqe);
-067524e914cb23e Jens Axboe      2020-03-02  8089  	case IORING_OP_REMOVE_BUFFERS:
-bfe76559833d5d7 Pavel Begunkov  2020-09-30  8090  		return io_remove_buffers_prep(req, sqe);
-f2a8d5c7a218b9c Pavel Begunkov  2020-05-17  8091  	case IORING_OP_TEE:
-bfe76559833d5d7 Pavel Begunkov  2020-09-30  8092  		return io_tee_prep(req, sqe);
-36f4fa6886a8126 Jens Axboe      2020-09-05  8093  	case IORING_OP_SHUTDOWN:
-36f4fa6886a8126 Jens Axboe      2020-09-05 @8094  		return io_shutdown_prep(req, sqe);
-80a261fd0032789 Jens Axboe      2020-09-28  8095  	case IORING_OP_RENAMEAT:
-80a261fd0032789 Jens Axboe      2020-09-28  8096  		return io_renameat_prep(req, sqe);
-14a1143b68ee2e4 Jens Axboe      2020-09-28  8097  	case IORING_OP_UNLINKAT:
-14a1143b68ee2e4 Jens Axboe      2020-09-28  8098  		return io_unlinkat_prep(req, sqe);
-e34a02dc40c95d1 Dmitry Kadashev 2021-07-08  8099  	case IORING_OP_MKDIRAT:
-e34a02dc40c95d1 Dmitry Kadashev 2021-07-08  8100  		return io_mkdirat_prep(req, sqe);
-7a8721f84fcb3b2 Dmitry Kadashev 2021-07-08  8101  	case IORING_OP_SYMLINKAT:
-7a8721f84fcb3b2 Dmitry Kadashev 2021-07-08  8102  		return io_symlinkat_prep(req, sqe);
-cf30da90bc3a269 Dmitry Kadashev 2021-07-08  8103  	case IORING_OP_LINKAT:
-cf30da90bc3a269 Dmitry Kadashev 2021-07-08  8104  		return io_linkat_prep(req, sqe);
-4f57f06ce2186c3 Jens Axboe      2022-03-10  8105  	case IORING_OP_MSG_RING:
-4f57f06ce2186c3 Jens Axboe      2022-03-10  8106  		return io_msg_ring_prep(req, sqe);
-e9621e2bec80fe6 Stefan Roesch   2022-03-23  8107  	case IORING_OP_FSETXATTR:
-e9621e2bec80fe6 Stefan Roesch   2022-03-23  8108  		return io_fsetxattr_prep(req, sqe);
-e9621e2bec80fe6 Stefan Roesch   2022-03-23  8109  	case IORING_OP_SETXATTR:
-e9621e2bec80fe6 Stefan Roesch   2022-03-23  8110  		return io_setxattr_prep(req, sqe);
-a56834e0fafe0ad Stefan Roesch   2022-03-23  8111  	case IORING_OP_FGETXATTR:
-a56834e0fafe0ad Stefan Roesch   2022-03-23  8112  		return io_fgetxattr_prep(req, sqe);
-a56834e0fafe0ad Stefan Roesch   2022-03-23  8113  	case IORING_OP_GETXATTR:
-a56834e0fafe0ad Stefan Roesch   2022-03-23  8114  		return io_getxattr_prep(req, sqe);
-1374e08e2d44863 Jens Axboe      2022-04-12  8115  	case IORING_OP_SOCKET:
-1374e08e2d44863 Jens Axboe      2022-04-12  8116  		return io_socket_prep(req, sqe);
-ee692a21e9bf835 Jens Axboe      2022-05-11  8117  	case IORING_OP_URING_CMD:
-ee692a21e9bf835 Jens Axboe      2022-05-11  8118  		return io_uring_cmd_prep(req, sqe);
-bfe76559833d5d7 Pavel Begunkov  2020-09-30  8119  	}
-bfe76559833d5d7 Pavel Begunkov  2020-09-30  8120  
-e781573e2fb1b75 Jens Axboe      2019-12-17  8121  	printk_once(KERN_WARNING "io_uring: unhandled opcode %d\n",
-e781573e2fb1b75 Jens Axboe      2019-12-17  8122  			req->opcode);
-bfe76559833d5d7 Pavel Begunkov  2020-09-30  8123  	return -EINVAL;
-f67676d160c6ee2 Jens Axboe      2019-12-02  8124  }
-f67676d160c6ee2 Jens Axboe      2019-12-02  8125  
+Thank you very much for catching this.
 
-:::::: The code at line 8094 was first introduced by commit
-:::::: 36f4fa6886a81266d7c82b1c90a65205e73a7c85 io_uring: add support for shutdown(2)
+Acked-by: Reinette Chatre <reinette.chatre@intel.com>
 
-:::::: TO: Jens Axboe <axboe@kernel.dk>
-:::::: CC: Jens Axboe <axboe@kernel.dk>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Reinette

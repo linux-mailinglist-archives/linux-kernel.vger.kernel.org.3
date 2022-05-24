@@ -2,194 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 101FC5332E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 23:17:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72CF55332E8
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 23:19:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241879AbiEXVRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 17:17:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45652 "EHLO
+        id S241886AbiEXVTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 17:19:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235550AbiEXVRm (ORCPT
+        with ESMTP id S235550AbiEXVT3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 17:17:42 -0400
-Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [5.144.164.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80EA656F90
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 14:17:41 -0700 (PDT)
-Received: from [10.1.250.9] (riviera.nat.ds.pw.edu.pl [194.29.137.1])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 632B73F6BE;
-        Tue, 24 May 2022 23:39:54 +0200 (CEST)
-Message-ID: <37267214-5edb-add6-c601-6df93043a2b3@somainline.org>
-Date:   Tue, 24 May 2022 23:17:39 +0200
+        Tue, 24 May 2022 17:19:29 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F7156F93
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 14:19:28 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id s198-20020a6b2ccf000000b0065e4872af2dso9411806ios.21
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 14:19:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=wg+dhb4Sbt4LYM+C0ecpnWu6QVgFH/3cQ/wS9ie879w=;
+        b=hm0FT4DIusk/8SX3cRK6C2bV9By9+UsorDh46xknLGlItmxVekwEvn1agbWEqkDdLV
+         Es/iKTvmFJKA92LeqHP0jzeUnw2BXG0V4KqR4MyHB7hZkENsG0LIs6mvR4NI4zPhjm3o
+         lFHWDeVcr7Y13TW1zS//t+0wNB2TmYQqZd+/Xq7pEvZiJUvKNHN67PxO0ydLEeriS/1S
+         gjVXBLNt4teKin6MVXnNMtCwKw/+G8A3LWu3wOu4kO1ASerU+H5lHFbsgbY9ep3NJ/N7
+         UKqOfA6Fn2YeoxuBqZxNyX9aHvVRbzqezqhrBPUJNB+pyZvxGfhWb9AWIKyqimOkCNHy
+         jjOA==
+X-Gm-Message-State: AOAM533hKFJqt600rOrJxcf2dBZf+3qmV1+5hRQl2CjBxIK3EmDz1J9s
+        9JbBiAGXVR7Z/6FJm0/VuTNHcxz9FxIOfSwCMoPeaIe2us5a
+X-Google-Smtp-Source: ABdhPJzO/J9UZT0CA4+FQ5CUbrwD+1WF2GLwg7LCkZPrxk61gqrW/MRloM29RYON3uBNiIVWny3XfQgI77wtUOGz3KiF6SxyJZcw
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.1
-Subject: Re: [PATCH 1/7] remoteproc: qcom: pas: Fixup the elf class for SM8450
- remoteprocs
-To:     Sibi Sankar <quic_sibis@quicinc.com>, bjorn.andersson@linaro.org
-Cc:     agross@kernel.org, mathieu.poirier@linaro.org,
-        dmitry.baryshkov@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yogesh Lal <quic_ylal@quicinc.com>
-References: <1653398017-28426-1-git-send-email-quic_sibis@quicinc.com>
- <1653398017-28426-2-git-send-email-quic_sibis@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <1653398017-28426-2-git-send-email-quic_sibis@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:329b:b0:32e:d7c1:c30 with SMTP id
+ f27-20020a056638329b00b0032ed7c10c30mr4706630jav.19.1653427167973; Tue, 24
+ May 2022 14:19:27 -0700 (PDT)
+Date:   Tue, 24 May 2022 14:19:27 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000000259ba05dfc883a0@google.com>
+Subject: [syzbot] memory leak in tty_init_dev (2)
+From:   syzbot <syzbot+5e1694f5b0869a691915@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
-On 24/05/2022 15:13, Sibi Sankar wrote:
-> From: Yogesh Lal <quic_ylal@quicinc.com>
->
-> The coredumps for the ADSP,CDSP and MPSS subsystems will be 64 bit from
-> SM8450 SoCs onward. Update the elf class as elf64 accordingly.
+syzbot found the following issue on:
 
-Hi,
+HEAD commit:    3d7285a335ed Merge tag 'v5.18-p2' of git://git.kernel.org/..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1590d0e6f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=50f4d49cdcacc43c
+dashboard link: https://syzkaller.appspot.com/bug?extid=5e1694f5b0869a691915
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17647111f00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10ad531df00000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+5e1694f5b0869a691915@syzkaller.appspotmail.com
+
+BUG: memory leak
+unreferenced object 0xffff88810da76400 (size 1024):
+  comm "syz-executor299", pid 3683, jiffies 4294957001 (age 29.640s)
+  hex dump (first 32 bytes):
+    01 54 00 00 01 00 00 00 00 00 00 00 00 00 00 00  .T..............
+    40 95 0d 04 81 88 ff ff 00 fc c4 84 ff ff ff ff  @...............
+  backtrace:
+    [<ffffffff825ee96c>] kmalloc include/linux/slab.h:581 [inline]
+    [<ffffffff825ee96c>] kzalloc include/linux/slab.h:714 [inline]
+    [<ffffffff825ee96c>] alloc_tty_struct+0x3c/0x2f0 drivers/tty/tty_io.c:3091
+    [<ffffffff825eec40>] tty_init_dev.part.0+0x20/0x2f0 drivers/tty/tty_io.c:1412
+    [<ffffffff825eef50>] tty_init_dev+0x40/0x60 drivers/tty/tty_io.c:1409
+    [<ffffffff825fd949>] ptmx_open drivers/tty/pty.c:834 [inline]
+    [<ffffffff825fd949>] ptmx_open+0xd9/0x210 drivers/tty/pty.c:800
+    [<ffffffff815c628d>] chrdev_open+0x10d/0x340 fs/char_dev.c:414
+    [<ffffffff815b4c46>] do_dentry_open+0x1e6/0x650 fs/open.c:824
+    [<ffffffff815db101>] do_open fs/namei.c:3476 [inline]
+    [<ffffffff815db101>] path_openat+0x18a1/0x1e70 fs/namei.c:3609
+    [<ffffffff815dddd1>] do_filp_open+0xc1/0x1b0 fs/namei.c:3636
+    [<ffffffff815b841d>] do_sys_openat2+0xed/0x260 fs/open.c:1213
+    [<ffffffff815b8e6f>] do_sys_open fs/open.c:1229 [inline]
+    [<ffffffff815b8e6f>] __do_sys_openat fs/open.c:1245 [inline]
+    [<ffffffff815b8e6f>] __se_sys_openat fs/open.c:1240 [inline]
+    [<ffffffff815b8e6f>] __x64_sys_openat+0x7f/0xe0 fs/open.c:1240
+    [<ffffffff84565f05>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff84565f05>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+BUG: memory leak
+unreferenced object 0xffff888109c1ce00 (size 512):
+  comm "syz-executor299", pid 3683, jiffies 4294957001 (age 29.640s)
+  hex dump (first 32 bytes):
+    50 ce c1 09 81 88 ff ff e0 ff ff ff 0f 00 00 00  P...............
+    10 ce c1 09 81 88 ff ff 10 ce c1 09 81 88 ff ff  ................
+  backtrace:
+    [<ffffffff825fdb42>] kmalloc include/linux/slab.h:581 [inline]
+    [<ffffffff825fdb42>] pty_common_install+0x72/0x3d0 drivers/tty/pty.c:382
+    [<ffffffff825eec7b>] tty_driver_install_tty drivers/tty/tty_io.c:1307 [inline]
+    [<ffffffff825eec7b>] tty_init_dev.part.0+0x5b/0x2f0 drivers/tty/tty_io.c:1419
+    [<ffffffff825eef50>] tty_init_dev+0x40/0x60 drivers/tty/tty_io.c:1409
+    [<ffffffff825fd949>] ptmx_open drivers/tty/pty.c:834 [inline]
+    [<ffffffff825fd949>] ptmx_open+0xd9/0x210 drivers/tty/pty.c:800
+    [<ffffffff815c628d>] chrdev_open+0x10d/0x340 fs/char_dev.c:414
+    [<ffffffff815b4c46>] do_dentry_open+0x1e6/0x650 fs/open.c:824
+    [<ffffffff815db101>] do_open fs/namei.c:3476 [inline]
+    [<ffffffff815db101>] path_openat+0x18a1/0x1e70 fs/namei.c:3609
+    [<ffffffff815dddd1>] do_filp_open+0xc1/0x1b0 fs/namei.c:3636
+    [<ffffffff815b841d>] do_sys_openat2+0xed/0x260 fs/open.c:1213
+    [<ffffffff815b8e6f>] do_sys_open fs/open.c:1229 [inline]
+    [<ffffffff815b8e6f>] __do_sys_openat fs/open.c:1245 [inline]
+    [<ffffffff815b8e6f>] __se_sys_openat fs/open.c:1240 [inline]
+    [<ffffffff815b8e6f>] __x64_sys_openat+0x7f/0xe0 fs/open.c:1240
+    [<ffffffff84565f05>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff84565f05>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
 
 
-the "will be" got me thinking, whether you meant that SM8450 is the 
-first SoC that features 64-bit coredumps, or it is going to come in a 
-firmware update, but it was 32-bit in an earlier version.
 
-If the latter is true, did the consumer-release BSP for hardware vendors 
-include that change? Otherwise it may differ between devices, as some 
-vendors are known not to update their firmwares very often if at all.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-
-Konrad
-
->
-> Fixes: 5cef9b48458d ("remoteproc: qcom: pas: Add SM8450 remoteproc support")
-> Signed-off-by: Yogesh Lal <quic_ylal@quicinc.com>
-> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
-> ---
->   drivers/remoteproc/qcom_q6v5_pas.c | 68 +++++++++++++++++++++++++++++++++++---
->   1 file changed, 64 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
-> index 6ae39c5653b1..8ce68d0bb1bc 100644
-> --- a/drivers/remoteproc/qcom_q6v5_pas.c
-> +++ b/drivers/remoteproc/qcom_q6v5_pas.c
-> @@ -34,6 +34,7 @@ struct adsp_data {
->   	const char *firmware_name;
->   	int pas_id;
->   	unsigned int minidump_id;
-> +	bool uses_elf64;
->   	bool has_aggre2_clk;
->   	bool auto_boot;
->   
-> @@ -450,7 +451,11 @@ static int adsp_probe(struct platform_device *pdev)
->   	}
->   
->   	rproc->auto_boot = desc->auto_boot;
-> -	rproc_coredump_set_elf_info(rproc, ELFCLASS32, EM_NONE);
-> +
-> +	if (desc->uses_elf64)
-> +		rproc_coredump_set_elf_info(rproc, ELFCLASS64, EM_NONE);
-> +	else
-> +		rproc_coredump_set_elf_info(rproc, ELFCLASS32, EM_NONE);
->   
->   	adsp = (struct qcom_adsp *)rproc->priv;
->   	adsp->dev = &pdev->dev;
-> @@ -617,6 +622,24 @@ static const struct adsp_data sm8350_adsp_resource = {
->   	.ssctl_id = 0x14,
->   };
->   
-> +static const struct adsp_data sm8450_adsp_resource = {
-> +	.crash_reason_smem = 423,
-> +	.firmware_name = "adsp.mdt",
-> +	.pas_id = 1,
-> +	.uses_elf64 = true,
-> +	.has_aggre2_clk = false,
-> +	.auto_boot = true,
-> +	.proxy_pd_names = (char*[]){
-> +		"lcx",
-> +		"lmx",
-> +		NULL
-> +	},
-> +	.load_state = "adsp",
-> +	.ssr_name = "lpass",
-> +	.sysmon_name = "adsp",
-> +	.ssctl_id = 0x14,
-> +};
-> +
->   static const struct adsp_data msm8996_adsp_resource = {
->   		.crash_reason_smem = 423,
->   		.firmware_name = "adsp.mdt",
-> @@ -751,6 +774,24 @@ static const struct adsp_data sm8350_cdsp_resource = {
->   	.ssctl_id = 0x17,
->   };
->   
-> +static const struct adsp_data sm8450_cdsp_resource = {
-> +	.crash_reason_smem = 601,
-> +	.firmware_name = "cdsp.mdt",
-> +	.pas_id = 18,
-> +	.uses_elf64 = true,
-> +	.has_aggre2_clk = false,
-> +	.auto_boot = true,
-> +	.proxy_pd_names = (char*[]){
-> +		"cx",
-> +		"mxc",
-> +		NULL
-> +	},
-> +	.load_state = "cdsp",
-> +	.ssr_name = "cdsp",
-> +	.sysmon_name = "cdsp",
-> +	.ssctl_id = 0x17,
-> +};
-> +
->   static const struct adsp_data mpss_resource_init = {
->   	.crash_reason_smem = 421,
->   	.firmware_name = "modem.mdt",
-> @@ -785,6 +826,25 @@ static const struct adsp_data sc8180x_mpss_resource = {
->   	.ssctl_id = 0x12,
->   };
->   
-> +static const struct adsp_data sm8450_mpss_resource = {
-> +	.crash_reason_smem = 421,
-> +	.firmware_name = "modem.mdt",
-> +	.pas_id = 4,
-> +	.minidump_id = 3,
-> +	.uses_elf64 = true,
-> +	.has_aggre2_clk = false,
-> +	.auto_boot = false,
-> +	.proxy_pd_names = (char*[]){
-> +		"cx",
-> +		"mss",
-> +		NULL
-> +	},
-> +	.load_state = "modem",
-> +	.ssr_name = "mpss",
-> +	.sysmon_name = "modem",
-> +	.ssctl_id = 0x12,
-> +};
-> +
->   static const struct adsp_data slpi_resource_init = {
->   		.crash_reason_smem = 424,
->   		.firmware_name = "slpi.mdt",
-> @@ -913,10 +973,10 @@ static const struct of_device_id adsp_of_match[] = {
->   	{ .compatible = "qcom,sm8350-cdsp-pas", .data = &sm8350_cdsp_resource},
->   	{ .compatible = "qcom,sm8350-slpi-pas", .data = &sm8350_slpi_resource},
->   	{ .compatible = "qcom,sm8350-mpss-pas", .data = &mpss_resource_init},
-> -	{ .compatible = "qcom,sm8450-adsp-pas", .data = &sm8350_adsp_resource},
-> -	{ .compatible = "qcom,sm8450-cdsp-pas", .data = &sm8350_cdsp_resource},
-> +	{ .compatible = "qcom,sm8450-adsp-pas", .data = &sm8450_adsp_resource},
-> +	{ .compatible = "qcom,sm8450-cdsp-pas", .data = &sm8450_cdsp_resource},
->   	{ .compatible = "qcom,sm8450-slpi-pas", .data = &sm8350_slpi_resource},
-> -	{ .compatible = "qcom,sm8450-mpss-pas", .data = &mpss_resource_init},
-> +	{ .compatible = "qcom,sm8450-mpss-pas", .data = &sm8450_mpss_resource},
->   	{ },
->   };
->   MODULE_DEVICE_TABLE(of, adsp_of_match);
->
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

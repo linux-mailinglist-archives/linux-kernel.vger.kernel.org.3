@@ -2,86 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7AE053325F
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 22:22:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74689533261
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 22:23:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241059AbiEXUWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 16:22:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35732 "EHLO
+        id S241278AbiEXUXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 16:23:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234228AbiEXUWg (ORCPT
+        with ESMTP id S241126AbiEXUXD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 16:22:36 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCA5F54BC3
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 13:22:34 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id z25so4706978pfr.1
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 13:22:34 -0700 (PDT)
+        Tue, 24 May 2022 16:23:03 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E51CC5D5E6
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 13:23:01 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-2fee010f509so194016147b3.11
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 13:23:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=YUnVxa5pnWd8D3oQLkMmXCsz6an77MCtCR1yPtv/LsQ=;
-        b=VSYu/WzfHyNKrcVPPaxgRUerwl88cq5BG0EKH4DrtupwYUlU8DEcGjsDzAizLKW2Qt
-         Le6afW2RDgD/ZQ2H87iYUqm7AjSq0acsYfxJ3NwWSWp5/B8TkjNrubmA6StzF2yl2c30
-         gLeLi4cktX2vCJGBi3ZXJC8vVhiakpEeT3Q0O4dX1EsczAPYVxcMz0JZANKldm284Ndj
-         wi8HRuAzvK0C3BqyFhMdsXlblK9pb/TzDvFopEHEWz50TrWSIq2o06x5lB3fbgPHArgI
-         8rmfpApZ1rz+nMfUBzLSUXlTf4HLS7SHuw+b191b/2mmWeMJSHpPUMjVAoT0u44Rb29M
-         cO+w==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Jkbsj8ZwrUi7OObfgCh/4Ar2JNwqZvHZHWjqqEl/+jU=;
+        b=DcF4IOeyC1v9Z+v2nErxKz1G/LVvOm7gwchisLgHi3xQICx+mu9q8u8QSxLDgwtJL7
+         OASbpLKso3Ab2vBCILTtKzTqwplcynpS/nLv+j0EXAJg+k273y2lNWN6MgWpwZ332kia
+         F6krBjU4uSNwOq/li1dfZwgb3BT/NJtcAV6p818t1T1R3QLXyQ+vECn3AUXir0V0tr98
+         nINilkpN2pFDLxd8/0NwlHmAzpA/xM2X532i3r7+gAyzrDoXYSALN0p0Yq8IBDWZFNWz
+         YSKW79yB9lklVhZ27eh3a8dhXhyCyJ9vS5G6xa56h5Qht+nUE1h/9n3qQ2RJ4z0Po9MI
+         RnZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YUnVxa5pnWd8D3oQLkMmXCsz6an77MCtCR1yPtv/LsQ=;
-        b=LLcar6m1a1INbcUrqngNhGXFc6pdhpXjWhhOnN9fiams4nlas/ZbJCI6x8b9XbDmNj
-         mr1ifloTKZPSJRXoG4kaD3PpW/lPw7rk5zZA2Tn3CNQpguzLAS0FWKYa6AJ4r8Khdsd8
-         i2G0c3nZlG3uEmld+pGG/kxnvCvq6aBhDpLvlS4ZDOxwkyZfdrcmbILRPMknbJCzUISs
-         51NVs9W1J1WyKdLw46ydTdgICB8d0PVaUs4jMr1zPsXBEOFj+CLuv7YQgJ4mScGCH9KP
-         0GgfkPO+UTYdhwfXb8tGSBCpo59lL5oI1mRqsMoCRoFLMNthLGQ1/wGnv+TBuh2Xq3h5
-         uceQ==
-X-Gm-Message-State: AOAM532ParoDpGibBcmvU1SEPVihFHAuyhh6Mt3qLvFJPbeLSTOGfuRY
-        DsBeC3ZO880fYxcb+wOT/N4pbQ==
-X-Google-Smtp-Source: ABdhPJzEzSBOJ49SjfPAIvrDv96S6UMkcFYGOSpHrtGFcUUoN1+ex5IU8zKRocw1wS2WuYmbveO09g==
-X-Received: by 2002:a63:4387:0:b0:3c6:9490:4e4b with SMTP id q129-20020a634387000000b003c694904e4bmr25290534pga.438.1653423754123;
-        Tue, 24 May 2022 13:22:34 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id h186-20020a62dec3000000b0050dc7628191sm9847289pfg.107.2022.05.24.13.22.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 May 2022 13:22:33 -0700 (PDT)
-Date:   Tue, 24 May 2022 20:22:30 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, vbabka@suse.cz,
-        akpm@linux-foundation.org, willy@infradead.org
-Subject: Re: Is _PAGE_PROTNONE set only for user mappings?
-Message-ID: <Yo0+huWaiIDmac7Z@google.com>
-References: <20220506051940.156952-1-42.hyeyoo@gmail.com>
- <56f89895-601e-44c9-bda4-5fae6782e27e@amd.com>
- <YnpTHMvOO/pLJQ+l@hyeyoo>
- <5fe161cb-6c55-6c4d-c208-16c77e115d3f@amd.com>
- <8c2735ac-0335-6e2a-8341-8266d5d13c30@intel.com>
- <YntHrTX12TGp35aF@hyeyoo>
- <20220512103748.GH3441@techsingularity.net>
- <Yn3tssUR8w8mC1DJ@hyeyoo>
- <3f2f7c09-ddf3-6052-9860-8554a4ff2798@intel.com>
- <Yom0hiDXuCuY4OUP@n2.us-central1-a.c.spheric-algebra-350919.internal>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Jkbsj8ZwrUi7OObfgCh/4Ar2JNwqZvHZHWjqqEl/+jU=;
+        b=m6ds9jvJc0AUNNWODwnHoWS9Jvs2On1IvYewPEpDwbiHPFfE7XDDqYOfhePsL2r1z6
+         hVV2gJ8fVti3V2iu7e9xo6DMzpWHeFR1sJlGNR7mRCDVnu1L4VsldTO+gf+wv3Fg+nFL
+         id7hwN0WOpSERWvLNAICKbB8Vvod/lk2sSsISN+aYLG/y3HS78nZ9UCB8fbETE8jYo+E
+         SOGAN42VmEMKBzQAcZn7TDjAl8OqQqKx9TS6nIQC8zNvK9MIAaAOFv9ZHKaRTAQ6wU5p
+         Ch2dauKLvTjElcCRI9/Wo2SMVGioR5EF+DLZmMVFlmmruVYmwEMLO2bZ6+5XfQWPj2pM
+         eS1g==
+X-Gm-Message-State: AOAM5303YacJnsK7Bt+Aowz1xX+Py9NBtnH2Mwc/71JH4wJcL4p2Marn
+        qR/QZOq8VZHIBUgJOFHSmEdX+uqeb39+nF7AX5XBKQ==
+X-Google-Smtp-Source: ABdhPJxI0LRDxxcWqCGKYs6WhpYtvmy2F8jbSAxNaFVcE1AEGhn5zSjLp5nioTc3NHXvpgAlkAFCwNktgzjS4b6u/ak=
+X-Received: by 2002:a81:b401:0:b0:300:2e86:e7e5 with SMTP id
+ h1-20020a81b401000000b003002e86e7e5mr4238965ywi.467.1653423780877; Tue, 24
+ May 2022 13:23:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yom0hiDXuCuY4OUP@n2.us-central1-a.c.spheric-algebra-350919.internal>
+References: <4740526.31r3eYUQgx@natalenko.name> <4bd84c983e77486fbc94dfa2a167afaa@AcuMS.aculab.com>
+ <CADVnQykt1Lz0m1gfEckHhDLy66xhJvO0F2Z1-yQ=Mgi7gBY5RQ@mail.gmail.com>
+In-Reply-To: <CADVnQykt1Lz0m1gfEckHhDLy66xhJvO0F2Z1-yQ=Mgi7gBY5RQ@mail.gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Tue, 24 May 2022 13:22:49 -0700
+Message-ID: <CANn89iKsJ53GKJyKGLLvn_NhY_oe5TzHLGRtRttZpHaUOVmiBw@mail.gmail.com>
+Subject: Re: [RFC] tcp_bbr2: use correct 64-bit division
+To:     Neal Cardwell <ncardwell@google.com>
+Cc:     David Laight <David.Laight@aculab.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Yuchung Cheng <ycheng@google.com>,
+        Yousuk Seung <ysseung@google.com>,
+        Soheil Hassas Yeganeh <soheil@google.com>,
+        Adithya Abraham Philip <abrahamphilip@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Konstantin Demin <rockdrilla@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -93,34 +80,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 22, 2022, Hyeonggon Yoo wrote:
-> On Mon, May 16, 2022 at 07:04:32AM -0700, Dave Hansen wrote:
-> > I was thinking of something more along the lines of taking the
-> > set_memory.c code and ensuring that it never sets (or even observes)
-> > _PAGE_BIT_GLOBAL on a _PAGE_USER mapping.
-> 
-> Yeah that would be a bit more explicit solution.
-> 
-> > There was also a question of
-> > if set_memory.c is ever used on userspace mappings.  It would be good to
-> > validate whether it's possible in-tree today and if not, enforce that
-> > _PAGE_USER PTEs should never even be observed with set_memory.c.
-> 
-> Simply adding dump_stack() tells me my kernel on my machine does not use
-> set_memory.c for userspace mappings but Hmm I'll take a look.
+On Tue, May 24, 2022 at 1:06 PM Neal Cardwell <ncardwell@google.com> wrote:
+>
+> On Tue, May 24, 2022 at 4:01 AM David Laight <David.Laight@aculab.com> wrote:
+> >
+> > From: Oleksandr Natalenko
+> > > Sent: 22 May 2022 23:30
+> > > To: Neal Cardwell <ncardwell@google.com>
+> > >
+> > > Hello Neal.
+> > >
+> > > It was reported to me [1] by Konstantin (in Cc) that BBRv2 code suffers from integer division issue on
+> > > 32 bit systems.
+> >
+> > Do any of these divisions ever actually have 64bit operands?
+> > Even on x86-64 64bit divide is significantly slower than 32bit divide.
+> >
+> > It is quite clear that x * 8 / 1000 is the same as x / (1000 / 8).
+> > So promoting to 64bit cannot be needed.
+> >
+> >         David
+>
+> The sk->sk_pacing_rate can definitely be bigger than 32 bits if the
+> network path can support more than 34 Gbit/sec  (a pacing rate of 2^32
+> bytes per sec is roughly 34 Gibt/sec). This definitely happens.
+>
+> So  this one seems reasonable to me (and is only in debug code, so the
+> performance is probably fine):
+> -                (u64)sk->sk_pacing_rate * 8 / 1000,
+> +                div_u64((u64)sk->sk_pacing_rate * 8, 1000),
+>
+> For the other two I agree we should rework them to avoid the 64-bit
+> divide, since we don't need it.
+>
+> There is similar logic in mainline Linux in tcp_tso_autosize(), which
+> is currently using "unsigned long" for bytes.
+>
 
-vc_slow_virt_to_phys() uses lookup_address_in_pgd() with user mappings, but that
-code is all but guaranteed to be buggy, e.g. doesn't guard against concurrent
-modifications to user mappings.
+Not sure I follow.
 
-show_fault_oops() can also call into lookup_address_in_pgd() with a user mapping,
-though at that point the kernel has bigger problems since it's executing from user
-memory.
+sk_pacing_rate is also 'unsigned long'
 
-And up until commits 44187235cbcc ("KVM: x86/mmu: fix potential races when walking
-host page table") and 643d95aac59a ("Revert "x86/mm: Introduce lookup_address_in_mm()""),
-KVM had a similar bug.
+So tcp_tso_autosize() is correct on 32bit and 64bit arches.
+There is no forced 64bit operation there.
 
-Generally speaking, set_memory.c is not equipped to play nice with user mappings.
-It mostly "works", but there are races galore.  IMO, hardening set_memory.c to scream
-if it's handed a user address or encounters _PAGE_USER PTEs would be a very good thing.
+
+> Eric, what do you advise?
+>
+> thanks,
+> neal

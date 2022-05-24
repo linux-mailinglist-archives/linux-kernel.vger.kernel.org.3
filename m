@@ -2,309 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38876532337
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 08:29:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D9E15322DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 08:09:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234297AbiEXG2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 02:28:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49804 "EHLO
+        id S234749AbiEXGJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 02:09:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235078AbiEXG2n (ORCPT
+        with ESMTP id S234732AbiEXGJi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 02:28:43 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1658895DCB
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 23:28:36 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id nk9-20020a17090b194900b001df2fcdc165so1254618pjb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 23:28:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=2hYwGkjhBJyJx1MvqMBFvObYccg6CgYmwL5qHdR4ZiM=;
-        b=GFMb6tk3YXF6rCtekI1Z960E9oVS5AdQHpWxVIVmq5MXcaqETUL8TVzU1uUNBFKyo/
-         /PfpUkia6P9oSanDlllyDyuTZtZfeHRXRPQweEyxDm/QpQlRpxxXslqEhTiCj+QvJ6tW
-         lbKHpdbI5+Izjs/Lkfjl/AhUWX6g8UPf14bJps3dLRI2XDn499bnbeEz6NROkbiMSA+z
-         N2rJHhmjTqd1HSnTND3D3F4eQWYTpm7WEb5KcGeoN1yG30KwPM+v8Nhl9NDVbh5R6Hzt
-         hFhD4dv4h7vobCU/eAw/H7JNVRdgdBkPfyMFeHZIIAJOl5iqYlOSkrCt3LeNoerW6Zpr
-         kpqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=2hYwGkjhBJyJx1MvqMBFvObYccg6CgYmwL5qHdR4ZiM=;
-        b=XhpVMwBRze7iKvVywxYnz959oiqQmroTM9gCeHw+hCNUM/zZNjYXo+h+YIJUVorgIl
-         StgQUy8pT71jCLi91lovGZ6IjrnrbfCJD2L2N0c/97NsUMN/ylPAcRdF3UC4qr4ebDZU
-         atL2Y7THBvuXIJDZlwhoMioKjhJy/leRiI2e9gb2+n5Q/aZrr+hBPSJ3ebDuwHUlPQUN
-         hbDTeY3cqw6so+TqOJWGSbApdP3tO00PUpP02Byk6UMZrppA8/A7kHsINNG/upZbEyhZ
-         sogVsuYbRbqvVKJOGaqQo6JYm+lbcF0Hvj54qM9H0U+5rPaNNH7IpZ2FND/TrquTx/6z
-         vmdA==
-X-Gm-Message-State: AOAM532EIAdHmLsXn6+6TSpAcJBXs9iWlRWJ+RPI+K38u6fI6iT/6WGY
-        ck0mrDncGNdrkASe6/Y2im6VuQ==
-X-Google-Smtp-Source: ABdhPJyNK37mlb293mGVMDlTbFm6VQ+rWibO81tqDEaLbEmDCctCXVD1f61mgaBCRozNBaSHZMSkfQ==
-X-Received: by 2002:a17:902:bb90:b0:158:a031:2ff2 with SMTP id m16-20020a170902bb9000b00158a0312ff2mr25960427pls.117.1653373715289;
-        Mon, 23 May 2022 23:28:35 -0700 (PDT)
-Received: from FVFYT0MHHV2J.bytedance.net ([2408:8207:18da:2310:f940:af17:c2f5:8656])
-        by smtp.gmail.com with ESMTPSA id h5-20020a170902f54500b0016168e90f2dsm6254455plf.219.2022.05.23.23.28.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 23:28:35 -0700 (PDT)
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     hannes@cmpxchg.org, mhocko@kernel.org, roman.gushchin@linux.dev,
-        shakeelb@google.com
-Cc:     cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
-        longman@redhat.com, Muchun Song <songmuchun@bytedance.com>
-Subject: [PATCH v4 11/11] mm: lru: use lruvec lock to serialize memcg changes
-Date:   Tue, 24 May 2022 14:05:51 +0800
-Message-Id: <20220524060551.80037-12-songmuchun@bytedance.com>
-X-Mailer: git-send-email 2.32.1 (Apple Git-133)
-In-Reply-To: <20220524060551.80037-1-songmuchun@bytedance.com>
-References: <20220524060551.80037-1-songmuchun@bytedance.com>
+        Tue, 24 May 2022 02:09:38 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9805A6A438;
+        Mon, 23 May 2022 23:09:37 -0700 (PDT)
+Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L6kKd6wN7zjWvr;
+        Tue, 24 May 2022 14:08:53 +0800 (CST)
+Received: from [10.174.177.174] (10.174.177.174) by
+ dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 24 May 2022 14:09:35 +0800
+Message-ID: <371b06da-e3e4-f717-234c-bfb32d323b5f@huawei.com>
+Date:   Tue, 24 May 2022 14:09:35 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+From:   Baokun Li <libaokun1@huawei.com>
+Subject: Re: [PATCH 2/2] ext4: correct the judgment of BUG in
+ ext4_mb_normalize_request
+To:     Ritesh Harjani <ritesh.list@gmail.com>
+CC:     <linux-ext4@vger.kernel.org>, <tytso@mit.edu>,
+        <adilger.kernel@dilger.ca>, <jack@suse.cz>,
+        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
+        <yebin10@huawei.com>, <yukuai3@huawei.com>
+References: <20220521134217.312071-1-libaokun1@huawei.com>
+ <20220521134217.312071-3-libaokun1@huawei.com>
+ <20220523200844.fal3pmp7epid3rvv@riteshh-domain>
+In-Reply-To: <20220523200844.fal3pmp7epid3rvv@riteshh-domain>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.174.177.174]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500020.china.huawei.com (7.185.36.88)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As described by commit fc574c23558c ("mm/swap.c: serialize memcg
-changes in pagevec_lru_move_fn"), TestClearPageLRU() aims to
-serialize mem_cgroup_move_account() during pagevec_lru_move_fn().
-Now folio_lruvec_lock*() has the ability to detect whether page
-memcg has been changed. So we can use lruvec lock to serialize
-mem_cgroup_move_account() during pagevec_lru_move_fn(). This
-change is a partial revert of the commit fc574c23558c ("mm/swap.c:
-serialize memcg changes in pagevec_lru_move_fn").
+在 2022/5/24 4:08, Ritesh Harjani 写道:
+> On 22/05/21 09:42PM, Baokun Li wrote:
+>> When either of the "start + size <= ac->ac_o_ex.fe_logical" or
+>> "start > ac->ac_o_ex.fe_logical" conditions is met, it indicates
+>> that the fe_logical is not in the allocated range.
+> Sounds about right to me based on the logic in ext4_mb_use_inode_pa().
+> We try to allocate/preallocate such that ac->ac_o_ex.fe_logical should fall
+> within the preallocated range. So if our start or start + size doesn't include
+> fe_logical then it is a bug in the ext4_mb_normalize_request() logic.
+Yes, exactly.
+> But should we be so harsh to hit a bug_on() or make it warn_on()?
+I don't think hit a bug_on() is a problem. BUG_ON is not triggered here 
+and will be triggered later.
+> Also did you run any fs tests with this change.
+Yes, I ran xfstests on ext3 and ext4 and found no problems.
+> Since it looks like this
+> logic existed since mballoc was introduced.
+>
+Yes, on our coverage report, those lines of code never seem to get there.
 
-And pagevec_lru_move_fn() is more hot compare with
-mem_cgroup_move_account(), removing an atomic operation would be
-an optimization. Also this change would not dirty cacheline for a
-page which isn't on the LRU.
+>> In this case, it should be bug_ON.
+>>
+>> Fixes: dfe076c106f6 ("ext4: get rid of code duplication")
+> No, there is no issue with this patch. It correctly just removes the duplicate
+> logic.
+Okay, I'm going to remove this tag.
+>> Signed-off-by: Baokun Li<libaokun1@huawei.com>
+>> ---
+>>   fs/ext4/mballoc.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+>> index 32410b79b664..d0fb57970648 100644
+>> --- a/fs/ext4/mballoc.c
+>> +++ b/fs/ext4/mballoc.c
+>> @@ -4190,7 +4190,7 @@ ext4_mb_normalize_request(struct ext4_allocation_context *ac,
+>>   	}
+>>   	rcu_read_unlock();
+>>
+>> -	if (start + size <= ac->ac_o_ex.fe_logical &&
+>> +	if (start + size <= ac->ac_o_ex.fe_logical ||
+>>   			start > ac->ac_o_ex.fe_logical) {
+>>   		ext4_msg(ac->ac_sb, KERN_ERR,
+>>   			 "start %lu, size %lu, fe_logical %lu",
+>> --
+>> 2.31.1
+>>
+> .
 
-Signed-off-by: Muchun Song <songmuchun@bytedance.com>
----
- mm/memcontrol.c | 31 +++++++++++++++++++++++++++++++
- mm/swap.c       | 45 ++++++++++++++-------------------------------
- mm/vmscan.c     |  9 ++++-----
- 3 files changed, 49 insertions(+), 36 deletions(-)
-
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 1a35f7fde3ed..7b6d9c308d91 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -1331,12 +1331,38 @@ struct lruvec *folio_lruvec_lock(struct folio *folio)
- 	lruvec = folio_lruvec(folio);
- 	spin_lock(&lruvec->lru_lock);
- 
-+	/*
-+	 * The memcg of the page can be changed by any the following routines:
-+	 *
-+	 * 1) mem_cgroup_move_account() or
-+	 * 2) memcg_reparent_objcgs()
-+	 *
-+	 * The possible bad scenario would like:
-+	 *
-+	 * CPU0:                CPU1:                CPU2:
-+	 * lruvec = folio_lruvec()
-+	 *
-+	 *                      if (!isolate_lru_page())
-+	 *                              mem_cgroup_move_account()
-+	 *
-+	 *                                           memcg_reparent_objcgs()
-+	 *
-+	 * spin_lock(&lruvec->lru_lock)
-+	 *                ^^^^^^
-+	 *              wrong lock
-+	 *
-+	 * Either CPU1 or CPU2 can change page memcg, so we need to check
-+	 * whether page memcg is changed, if so, we should reacquire the
-+	 * new lruvec lock.
-+	 */
- 	if (unlikely(lruvec_memcg(lruvec) != folio_memcg(folio))) {
- 		spin_unlock(&lruvec->lru_lock);
- 		goto retry;
- 	}
- 
- 	/*
-+	 * When we reach here, it means that the folio_memcg(folio) is stable.
-+	 *
- 	 * Preemption is disabled in the internal of spin_lock, which can serve
- 	 * as RCU read-side critical sections.
- 	 */
-@@ -1367,6 +1393,7 @@ struct lruvec *folio_lruvec_lock_irq(struct folio *folio)
- 	lruvec = folio_lruvec(folio);
- 	spin_lock_irq(&lruvec->lru_lock);
- 
-+	/* See the comments in folio_lruvec_lock(). */
- 	if (unlikely(lruvec_memcg(lruvec) != folio_memcg(folio))) {
- 		spin_unlock_irq(&lruvec->lru_lock);
- 		goto retry;
-@@ -1402,6 +1429,7 @@ struct lruvec *folio_lruvec_lock_irqsave(struct folio *folio,
- 	lruvec = folio_lruvec(folio);
- 	spin_lock_irqsave(&lruvec->lru_lock, *flags);
- 
-+	/* See the comments in folio_lruvec_lock(). */
- 	if (unlikely(lruvec_memcg(lruvec) != folio_memcg(folio))) {
- 		spin_unlock_irqrestore(&lruvec->lru_lock, *flags);
- 		goto retry;
-@@ -5751,7 +5779,10 @@ static int mem_cgroup_move_account(struct page *page,
- 	obj_cgroup_put(rcu_dereference(from->objcg));
- 	rcu_read_unlock();
- 
-+	/* See the comments in folio_lruvec_lock(). */
-+	spin_lock(&from_vec->lru_lock);
- 	folio->memcg_data = (unsigned long)rcu_access_pointer(to->objcg);
-+	spin_unlock(&from_vec->lru_lock);
- 
- 	__folio_memcg_unlock(from);
- 
-diff --git a/mm/swap.c b/mm/swap.c
-index 9680f2fc48b1..984b100e84e4 100644
---- a/mm/swap.c
-+++ b/mm/swap.c
-@@ -199,14 +199,8 @@ static void pagevec_lru_move_fn(struct pagevec *pvec,
- 		struct page *page = pvec->pages[i];
- 		struct folio *folio = page_folio(page);
- 
--		/* block memcg migration during page moving between lru */
--		if (!TestClearPageLRU(page))
--			continue;
--
- 		lruvec = folio_lruvec_relock_irqsave(folio, lruvec, &flags);
- 		(*move_fn)(page, lruvec);
--
--		SetPageLRU(page);
- 	}
- 	if (lruvec)
- 		unlock_page_lruvec_irqrestore(lruvec, flags);
-@@ -218,7 +212,7 @@ static void pagevec_move_tail_fn(struct page *page, struct lruvec *lruvec)
- {
- 	struct folio *folio = page_folio(page);
- 
--	if (!folio_test_unevictable(folio)) {
-+	if (folio_test_lru(folio) && !folio_test_unevictable(folio)) {
- 		lruvec_del_folio(lruvec, folio);
- 		folio_clear_active(folio);
- 		lruvec_add_folio_tail(lruvec, folio);
-@@ -313,7 +307,8 @@ void lru_note_cost_folio(struct folio *folio)
- 
- static void __folio_activate(struct folio *folio, struct lruvec *lruvec)
- {
--	if (!folio_test_active(folio) && !folio_test_unevictable(folio)) {
-+	if (folio_test_lru(folio) && !folio_test_active(folio) &&
-+	    !folio_test_unevictable(folio)) {
- 		long nr_pages = folio_nr_pages(folio);
- 
- 		lruvec_del_folio(lruvec, folio);
-@@ -370,12 +365,9 @@ static void folio_activate(struct folio *folio)
- {
- 	struct lruvec *lruvec;
- 
--	if (folio_test_clear_lru(folio)) {
--		lruvec = folio_lruvec_lock_irq(folio);
--		__folio_activate(folio, lruvec);
--		unlock_page_lruvec_irq(lruvec);
--		folio_set_lru(folio);
--	}
-+	lruvec = folio_lruvec_lock_irq(folio);
-+	__folio_activate(folio, lruvec);
-+	unlock_page_lruvec_irq(lruvec);
- }
- #endif
- 
-@@ -518,6 +510,9 @@ static void lru_deactivate_file_fn(struct page *page, struct lruvec *lruvec)
- 	bool active = PageActive(page);
- 	int nr_pages = thp_nr_pages(page);
- 
-+	if (!PageLRU(page))
-+		return;
-+
- 	if (PageUnevictable(page))
- 		return;
- 
-@@ -555,7 +550,7 @@ static void lru_deactivate_file_fn(struct page *page, struct lruvec *lruvec)
- 
- static void lru_deactivate_fn(struct page *page, struct lruvec *lruvec)
- {
--	if (PageActive(page) && !PageUnevictable(page)) {
-+	if (PageLRU(page) && PageActive(page) && !PageUnevictable(page)) {
- 		int nr_pages = thp_nr_pages(page);
- 
- 		del_page_from_lru_list(page, lruvec);
-@@ -571,7 +566,7 @@ static void lru_deactivate_fn(struct page *page, struct lruvec *lruvec)
- 
- static void lru_lazyfree_fn(struct page *page, struct lruvec *lruvec)
- {
--	if (PageAnon(page) && PageSwapBacked(page) &&
-+	if (PageLRU(page) && PageAnon(page) && PageSwapBacked(page) &&
- 	    !PageSwapCache(page) && !PageUnevictable(page)) {
- 		int nr_pages = thp_nr_pages(page);
- 
-@@ -1006,8 +1001,9 @@ void __pagevec_release(struct pagevec *pvec)
- }
- EXPORT_SYMBOL(__pagevec_release);
- 
--static void __pagevec_lru_add_fn(struct folio *folio, struct lruvec *lruvec)
-+static void __pagevec_lru_add_fn(struct page *page, struct lruvec *lruvec)
- {
-+	struct folio *folio = page_folio(page);
- 	int was_unevictable = folio_test_clear_unevictable(folio);
- 	long nr_pages = folio_nr_pages(folio);
- 
-@@ -1053,20 +1049,7 @@ static void __pagevec_lru_add_fn(struct folio *folio, struct lruvec *lruvec)
-  */
- void __pagevec_lru_add(struct pagevec *pvec)
- {
--	int i;
--	struct lruvec *lruvec = NULL;
--	unsigned long flags = 0;
--
--	for (i = 0; i < pagevec_count(pvec); i++) {
--		struct folio *folio = page_folio(pvec->pages[i]);
--
--		lruvec = folio_lruvec_relock_irqsave(folio, lruvec, &flags);
--		__pagevec_lru_add_fn(folio, lruvec);
--	}
--	if (lruvec)
--		unlock_page_lruvec_irqrestore(lruvec, flags);
--	release_pages(pvec->pages, pvec->nr);
--	pagevec_reinit(pvec);
-+	pagevec_lru_move_fn(pvec, __pagevec_lru_add_fn);
- }
- 
- /**
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index 6c9e2eafc8f9..ec1272ca5ead 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -4793,18 +4793,17 @@ void check_move_unevictable_pages(struct pagevec *pvec)
- 		nr_pages = thp_nr_pages(page);
- 		pgscanned += nr_pages;
- 
--		/* block memcg migration during page moving between lru */
--		if (!TestClearPageLRU(page))
-+		lruvec = folio_lruvec_relock_irq(folio, lruvec);
-+
-+		if (!PageLRU(page) || !PageUnevictable(page))
- 			continue;
- 
--		lruvec = folio_lruvec_relock_irq(folio, lruvec);
--		if (page_evictable(page) && PageUnevictable(page)) {
-+		if (page_evictable(page)) {
- 			del_page_from_lru_list(page, lruvec);
- 			ClearPageUnevictable(page);
- 			add_page_to_lru_list(page, lruvec);
- 			pgrescued += nr_pages;
- 		}
--		SetPageLRU(page);
- 	}
- 
- 	if (lruvec) {
 -- 
-2.11.0
+With Best Regards,
+Baokun Li
 

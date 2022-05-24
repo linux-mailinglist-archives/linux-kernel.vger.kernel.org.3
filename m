@@ -2,104 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 479F75332A7
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 22:53:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02F3C5332A9
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 22:53:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241604AbiEXUx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 16:53:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60160 "EHLO
+        id S241762AbiEXUxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 16:53:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235839AbiEXUx0 (ORCPT
+        with ESMTP id S241671AbiEXUxv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 16:53:26 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27ECD77F27
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 13:53:25 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id g7so2935041lja.3
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 13:53:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bW5/8lI4JjFQ6Xag2meN8L4VITbIpxKq0yUGICqVrIc=;
-        b=WpvrEVmuTl2Kx5iqizXnztaJbRV6fnt43A0sf4YpzEgTzyvZ1jmLsw+fd6x4j/a5jl
-         ef9kOPZKrEXxbXKlOmkFFkqVl7qePJXkW7sSjczqRVU9eaK23gdLP0JzNRYvjPBeCGKX
-         50WAFccP6NrcY5s62BPW6EYi2JkzEq+oR9WH8GtAEN+UR6hNMHnarAv14tJGOAamIjU/
-         PPYIVS0QGSEcwQCslNS5imW4VKB/fVCyYLQFfNtMGuqhk9Rgu7dw2kuCJqw0tMwuqmbG
-         c9NemwHFdhnEzrKcWgeVh28uM39rBtJb2f+QyxtTKr/hEETDVVbwwEcJZugMGnPgPqR8
-         LKsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bW5/8lI4JjFQ6Xag2meN8L4VITbIpxKq0yUGICqVrIc=;
-        b=OgoPK74ZrYt4HHWEWEDR0CsWnAa816ayGt+WZEwugPLAz8MGPOaD6DkeHRk5okL3NA
-         6ub1ABGTNjlb+q+WerNJxzJzVqb7wnSwJVPqXVRno35PVI23ZMSo0z0JPicHPOW9XbyU
-         b/ZlUoRFkwPcPJwFq8aCgt7QJ5AikASaDFWZmc0ZLwSJ9jtpEjUgSAQK7z2EN+qcN/fS
-         0M+2UMaVvUJ+upezlNnkiWyw8VJFOYcyacSY8iWUu7n48Wu7ry2IpRJF5bXlLd9Oky9V
-         KrN6vhdSW5R3Ei1lT/BqS9Aaws9zLWx+n5e9jBoS0Rxw/RlK3fET+dMv41bpPcFwKe1N
-         DFCg==
-X-Gm-Message-State: AOAM530lR88Cjg/j/Hhk2bmi9bBcm7oVjgBFcJ6SIorArsGBthAlciS+
-        FFqwsX2QLKLyXossvRB/oURV9r4hJBf8pET7vOU9aA==
-X-Google-Smtp-Source: ABdhPJxk2brImsvQXheQLXj2NVwibLAuU32WQRqqGWEA2q1mzgCJ9lYctHlJTOcDFEPuy9bwxBxyAT2QBckrxuuAKwg=
-X-Received: by 2002:a2e:98c3:0:b0:253:e0e1:20 with SMTP id s3-20020a2e98c3000000b00253e0e10020mr11709312ljj.26.1653425603309;
- Tue, 24 May 2022 13:53:23 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220523181503.1007987-1-masahiroy@kernel.org>
-In-Reply-To: <20220523181503.1007987-1-masahiroy@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 24 May 2022 13:53:12 -0700
-Message-ID: <CAKwvOdmrcmaR7vUP73UXCLaibqJ0-tiJUTL=tZQTY8buL3NwqQ@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: replace $(if A,A,B) with $(or A,B) in scripts/Makefile.modpost
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nicolas Schier <nicolas@fjasle.eu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 24 May 2022 16:53:51 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB391719C6;
+        Tue, 24 May 2022 13:53:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 2C66ECE1D61;
+        Tue, 24 May 2022 20:53:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8AB63C34100;
+        Tue, 24 May 2022 20:53:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653425627;
+        bh=dGCERO7mHLWk8NHpeP7MAGHw4wAGAvs4eK9K6Atkh7k=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=cS0ni5CEwuQBFdAGYOzjpRXOzxZJ4+IvETT7alUKOViTq2vzWHpz0RGj9KYcNWvTq
+         6VoxVdPTF9hGXWvV2DAMsCtzS8bueO+7vPIzJ7YwG5l+qnrJz3jTSD/yQxX2nw/ZQe
+         HZSd+CIaVzgdYHTmuNwR+C8NaSOeiyzbmBZlwKyqO3tgCq6RCQ1DgwsN1hIvRCtP3u
+         sMBILjdoKx/bGj7IrzTu6VQKP4y4xQi9C77MUYr35wmA3zu0DR6xLS9n4Fs6/0qPW7
+         5pRbJaPlh735OAqut4DcyDZo50LDQiUjv5O4nJ34IwcAuMdhucIsB6UUOohGEEDWWc
+         zyMKjDqmJ8AWA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 731A9E8DD61;
+        Tue, 24 May 2022 20:53:47 +0000 (UTC)
+Subject: Re: [GIT PULL] integrity subsystem updates for v5.19
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <223e46039b44b2f31814be02a3c2b75e84af3823.camel@linux.ibm.com>
+References: <223e46039b44b2f31814be02a3c2b75e84af3823.camel@linux.ibm.com>
+X-PR-Tracked-List-Id: <linux-integrity.vger.kernel.org>
+X-PR-Tracked-Message-Id: <223e46039b44b2f31814be02a3c2b75e84af3823.camel@linux.ibm.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v5.19
+X-PR-Tracked-Commit-Id: 048ae41bb0806cde340f4e5d5030398037ab0be8
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 0350785b0a092c99c5ddd2ace0260dbe7b3f919f
+Message-Id: <165342562746.19576.15003303284276169248.pr-tracker-bot@kernel.org>
+Date:   Tue, 24 May 2022 20:53:47 +0000
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 11:16 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> Similar cleanup to commit 5c8166419acf ("kbuild: replace $(if A,A,B)
-> with $(or A,B)").
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+The pull request you sent on Tue, 24 May 2022 16:46:10 -0400:
 
-Thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v5.19
 
-> ---
->
->  scripts/Makefile.modpost | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/scripts/Makefile.modpost b/scripts/Makefile.modpost
-> index 7c3899182a4a..911606496341 100644
-> --- a/scripts/Makefile.modpost
-> +++ b/scripts/Makefile.modpost
-> @@ -84,7 +84,7 @@ obj := $(KBUILD_EXTMOD)
->  src := $(obj)
->
->  # Include the module's Makefile to find KBUILD_EXTRA_SYMBOLS
-> -include $(if $(wildcard $(src)/Kbuild), $(src)/Kbuild, $(src)/Makefile)
-> +include $(or $(wildcard $(src)/Kbuild), $(src)/Makefile)
->
->  # modpost option for external modules
->  MODPOST += -e
-> --
-> 2.32.0
->
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/0350785b0a092c99c5ddd2ace0260dbe7b3f919f
 
+Thank you!
 
 -- 
-Thanks,
-~Nick Desaulniers
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

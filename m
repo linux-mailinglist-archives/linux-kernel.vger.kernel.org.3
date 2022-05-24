@@ -2,265 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C08053210F
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 04:37:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BA0E532113
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 04:41:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233355AbiEXCh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 22:37:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43122 "EHLO
+        id S232838AbiEXClN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 22:41:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231534AbiEXChZ (ORCPT
+        with ESMTP id S233382AbiEXClG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 22:37:25 -0400
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8566CF7E
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 19:37:22 -0700 (PDT)
-Received: by mail-wm1-f49.google.com with SMTP id 67-20020a1c1946000000b00397382b44f4so590123wmz.2
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 19:37:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8uWutP2YOFrjBdurNftIGVdgFUUFQM3uSeuB90bcTRs=;
-        b=NShkgZR7MCR0RorSkO0OUidRWnPEeC1q61lLhkWXkJX8lOp/WmDYl9zbjwrUU8mhLQ
-         useZYlYfUMF6xVcalSEQsB+0DMZc/P1qCrKnKNLu32COc5UsLaFNVS4NWVu9J4eWJovx
-         QPnDWIs/TEQWODmz/xFIez6CN9BBNc4n1+mTVVLLOjvoVuxzz48eyFnhYBJsLFtSPsw1
-         m56yVMSjdjV04L6BEQT7wb6o8ZR0449O44CtYWvjrzlm/vt1dbxmcJjTE1Q6B3Dq+PXR
-         BJglVCKqZvVr/A8DJdA+sBh8NxaE1KSeHfFZnhIopCC+Lvb3n39sbwuddHIviw7mN2x/
-         UDQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8uWutP2YOFrjBdurNftIGVdgFUUFQM3uSeuB90bcTRs=;
-        b=JiXEbTBIqE/DwbZVQ7eikiXJODxqYaWAZBbJW9ex902MKF2Z0ImxMEw6MXMixW6VlF
-         M2rIPMYvcmRkKJG4kIDT9/pxLSnZl6QIN/wvgtqJZpPixPArmAregrr8Okb7r93IxPBH
-         G6njpEUrbyrznSKpPvbseoRiwvpufrdC88CVT9f2JfVJIu84+j1hxcsWWtBj6RDv7NAj
-         EQnJ1DWaOHt9KZnCKvO4L/ZeURNreCECS2HRoJq4Bw4dY+vAQxS8p4EmLuLMd96NgpUd
-         2UvKhGVb8/k7WXtHRqGvf6yd5HzLcgb+2vE0gYcxCAe6jVyIR5L3QS1ZkGdbjMZZA/xG
-         4nqw==
-X-Gm-Message-State: AOAM5334sELD41r05mR68tChaPV7wkdluxuMhbUtCSVkmGbnVoj663u/
-        pXM0QTKzlScAv/r5vkziD5pETRHjD5SWpIh0EegQeg==
-X-Google-Smtp-Source: ABdhPJwZcB5p1b3+HZehFBLkyJ0T35cqZjiFv+4bsEySazpWP8MGU4Em/ORpvChUzXrPXTCckzfcmE6qzulT9wT/TUw=
-X-Received: by 2002:a05:600c:1910:b0:394:8517:496e with SMTP id
- j16-20020a05600c191000b003948517496emr1666240wmq.24.1653359780494; Mon, 23
- May 2022 19:36:20 -0700 (PDT)
+        Mon, 23 May 2022 22:41:06 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F341FB46;
+        Mon, 23 May 2022 19:41:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653360063; x=1684896063;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lTs7Zyfz3kf22iAirsP5H5EozMNgDf/N+TMetMeGLo0=;
+  b=mkQcv3U6vi6UJWMyrA4IqlKlBiWrvpMiki3UKKJBIuw/3vD+1HaVw+/e
+   Zm+mJjkb6GaXRdry4ar9xw0imYxSrExfX3s/rh6Emd5NxOxexrp/4oQIS
+   f1S4JXUruPZ4zijZlkPRNJI24I977tj/PpyDXqi9hpzm3TMXAkL3DAu5u
+   H9RW6sQzIN4mN42Sni5aPyTCCQMxkU0sOdavwqWLtGEH8XCOhCPSFQmkS
+   i4tEnJ6T4QsWZkah+GEFQnByWf/EPMJhlFNd4c6HMpkA0L4c0bieD35ag
+   14A44gMCen0A8jVclK05XKwLP6LJeUxzJT26L3fEoDm3q+Ptw7HsucoaO
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="336467709"
+X-IronPort-AV: E=Sophos;i="5.91,247,1647327600"; 
+   d="scan'208";a="336467709"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 19:41:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,247,1647327600"; 
+   d="scan'208";a="629681386"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 23 May 2022 19:40:59 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ntKTi-0001eu-Jk;
+        Tue, 24 May 2022 02:40:58 +0000
+Date:   Tue, 24 May 2022 10:40:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Pankaj Raghav <p.raghav@samsung.com>, axboe@kernel.dk, hch@lst.de,
+        snitzer@redhat.com, damien.lemoal@opensource.wdc.com, hare@suse.de,
+        Johannes.Thumshirn@wdc.com
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-nvme@lists.infradead.org, dm-devel@redhat.com,
+        dsterba@suse.com, jiangbo.365@bytedance.com,
+        linux-kernel@vger.kernel.org, gost.dev@samsung.com,
+        linux-block@vger.kernel.org, jaegeuk@kernel.org,
+        Pankaj Raghav <p.raghav@samsung.com>,
+        Luis Chamberlain <mcgrof@kernel.org>
+Subject: Re: [PATCH v5 5/7] null_blk: allow non power of 2 zoned devices
+Message-ID: <202205241034.izkLMTcH-lkp@intel.com>
+References: <20220523161601.58078-6-p.raghav@samsung.com>
 MIME-Version: 1.0
-References: <20220520012133.1217211-1-yosryahmed@google.com>
- <20220520012133.1217211-6-yosryahmed@google.com> <926b21ee-58e8-18b1-3d60-148d02f1c17a@fb.com>
- <CAJD7tka1HLqyyomPN=a+RW9Z0S9TrNLhbc+tYDwEgDa1rwYggw@mail.gmail.com> <CAEf4BzaSadEhRDgLXtsAoezJEF0WqqBBJq5rXRapq_8ABb-s+w@mail.gmail.com>
-In-Reply-To: <CAEf4BzaSadEhRDgLXtsAoezJEF0WqqBBJq5rXRapq_8ABb-s+w@mail.gmail.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Mon, 23 May 2022 19:35:44 -0700
-Message-ID: <CAJD7tka8zyKhuTAcLJVq9CY6dm47crR1xOArMHFHC0N4LeX+5g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 5/5] bpf: add a selftest for cgroup
- hierarchical stats collection
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Yonghong Song <yhs@fb.com>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Michal Hocko <mhocko@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220523161601.58078-6-p.raghav@samsung.com>
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 5:01 PM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Fri, May 20, 2022 at 9:19 AM Yosry Ahmed <yosryahmed@google.com> wrote:
-> >
-> > On Fri, May 20, 2022 at 9:09 AM Yonghong Song <yhs@fb.com> wrote:
-> > >
-> > >
-> > >
-> > > On 5/19/22 6:21 PM, Yosry Ahmed wrote:
-> > > > Add a selftest that tests the whole workflow for collecting,
-> > > > aggregating, and display cgroup hierarchical stats.
-> > > >
-> > > > TL;DR:
-> > > > - Whenever reclaim happens, vmscan_start and vmscan_end update
-> > > >    per-cgroup percpu readings, and tell rstat which (cgroup, cpu) pairs
-> > > >    have updates.
-> > > > - When userspace tries to read the stats, vmscan_dump calls rstat to flush
-> > > >    the stats.
-> > > > - rstat calls vmscan_flush once for every (cgroup, cpu) pair that has
-> > > >    updates, vmscan_flush aggregates cpu readings and propagates updates
-> > > >    to parents.
-> > > >
-> > > > Detailed explanation:
-> > > > - The test loads tracing bpf programs, vmscan_start and vmscan_end, to
-> > > >    measure the latency of cgroup reclaim. Per-cgroup ratings are stored in
-> > > >    percpu maps for efficiency. When a cgroup reading is updated on a cpu,
-> > > >    cgroup_rstat_updated(cgroup, cpu) is called to add the cgroup to the
-> > > >    rstat updated tree on that cpu.
-> > > >
-> > > > - A cgroup_iter program, vmscan_dump, is loaded and pinned to a file, for
-> > > >    each cgroup. Reading this file invokes the program, which calls
-> > > >    cgroup_rstat_flush(cgroup) to ask rstat to propagate the updates for all
-> > > >    cpus and cgroups that have updates in this cgroup's subtree. Afterwards,
-> > > >    the stats are exposed to the user.
-> > > >
-> > > > - An ftrace program, vmscan_flush, is also loaded and attached to
-> > > >    bpf_rstat_flush. When rstat flushing is ongoing, vmscan_flush is invoked
-> > > >    once for each (cgroup, cpu) pair that has updates. cgroups are popped
-> > > >    from the rstat tree in a bottom-up fashion, so calls will always be
-> > > >    made for cgroups that have updates before their parents. The program
-> > > >    aggregates percpu readings to a total per-cgroup reading, and also
-> > > >    propagates them to the parent cgroup. After rstat flushing is over, all
-> > > >    cgroups will have correct updated hierarchical readings (including all
-> > > >    cpus and all their descendants).
-> > > >
-> > > > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> > > > ---
-> > > >   .../test_cgroup_hierarchical_stats.c          | 339 ++++++++++++++++++
-> > > >   tools/testing/selftests/bpf/progs/bpf_iter.h  |   7 +
-> > > >   .../selftests/bpf/progs/cgroup_vmscan.c       | 221 ++++++++++++
-> > > >   3 files changed, 567 insertions(+)
-> > > >   create mode 100644 tools/testing/selftests/bpf/prog_tests/test_cgroup_hierarchical_stats.c
-> > > >   create mode 100644 tools/testing/selftests/bpf/progs/cgroup_vmscan.c
-> > > >
-> > > > diff --git a/tools/testing/selftests/bpf/prog_tests/test_cgroup_hierarchical_stats.c b/tools/testing/selftests/bpf/prog_tests/test_cgroup_hierarchical_stats.c
-> > > > new file mode 100644
-> > > > index 000000000000..e560c1f6291f
-> > > > --- /dev/null
-> > > > +++ b/tools/testing/selftests/bpf/prog_tests/test_cgroup_hierarchical_stats.c
-> > > > @@ -0,0 +1,339 @@
-> > > > +// SPDX-License-Identifier: GPL-2.0-only
-> > > > +/*
-> > > > + * Functions to manage eBPF programs attached to cgroup subsystems
-> > > > + *
-> > > > + * Copyright 2022 Google LLC.
-> > > > + */
-> > > > +#include <errno.h>
-> > > > +#include <sys/types.h>
-> > > > +#include <sys/mount.h>
-> > > > +#include <sys/stat.h>
-> > > > +#include <unistd.h>
-> > > > +
-> > > > +#include <bpf/libbpf.h>
-> > > > +#include <bpf/bpf.h>
-> > > > +#include <test_progs.h>
-> > > > +
-> > > > +#include "cgroup_helpers.h"
-> > > > +#include "cgroup_vmscan.skel.h"
-> > > > +
-> > > > +#define PAGE_SIZE 4096
-> > > > +#define MB(x) (x << 20)
-> > > > +
-> > > > +#define BPFFS_ROOT "/sys/fs/bpf/"
-> > > > +#define BPFFS_VMSCAN BPFFS_ROOT"vmscan/"
-> > > > +
-> > > > +#define CG_ROOT_NAME "root"
-> > > > +#define CG_ROOT_ID 1
-> > > > +
-> > > > +#define CGROUP_PATH(p, n) {.name = #n, .path = #p"/"#n}
-> > > > +
-> > > > +static struct {
-> > > > +     const char *name, *path;
-> > > > +     unsigned long long id;
-> > > > +     int fd;
-> > > > +} cgroups[] = {
-> > > > +     CGROUP_PATH(/, test),
-> > > > +     CGROUP_PATH(/test, child1),
-> > > > +     CGROUP_PATH(/test, child2),
-> > > > +     CGROUP_PATH(/test/child1, child1_1),
-> > > > +     CGROUP_PATH(/test/child1, child1_2),
-> > > > +     CGROUP_PATH(/test/child2, child2_1),
-> > > > +     CGROUP_PATH(/test/child2, child2_2),
-> > > > +};
-> > > > +
-> > > > +#define N_CGROUPS ARRAY_SIZE(cgroups)
-> > > > +#define N_NON_LEAF_CGROUPS 3
-> > > > +
-> > > > +bool mounted_bpffs;
-> > > > +static int duration;
-> > > > +
-> > > > +static int read_from_file(const char *path, char *buf, size_t size)
-> > > > +{
-> > > > +     int fd, len;
-> > > > +
-> > > > +     fd = open(path, O_RDONLY);
-> > > > +     if (fd < 0) {
-> > > > +             log_err("Open %s", path);
-> > > > +             return -errno;
-> > > > +     }
-> > > > +     len = read(fd, buf, size);
-> > > > +     if (len < 0)
-> > > > +             log_err("Read %s", path);
-> > > > +     else
-> > > > +             buf[len] = 0;
-> > > > +     close(fd);
-> > > > +     return len < 0 ? -errno : 0;
-> > > > +}
-> > > > +
-> > > > +static int setup_bpffs(void)
-> > > > +{
-> > > > +     int err;
-> > > > +
-> > > > +     /* Mount bpffs */
-> > > > +     err = mount("bpf", BPFFS_ROOT, "bpf", 0, NULL);
-> > > > +     mounted_bpffs = !err;
-> > > > +     if (CHECK(err && errno != EBUSY, "mount bpffs",
-> > >
-> > > Please use ASSERT_* macros instead of CHECK.
-> > > There are similar instances below as well.
-> >
-> > CHECK is more flexible in providing a parameterized failure message,
-> > but I guess we ideally shouldn't see those a lot anyway. Will change
-> > them to ASSERTs in the next version.
->
-> The idea with ASSERT_xxx() is that you express semantically meaningful
-> assertion/condition/check and the macro provides helpful and
-> meaningful information for you. E.g., ASSERT_EQ(bla, 123, "bla_value")
-> will emit something along the lines: "unexpected value of 'bla_value':
-> 345, expected 123". It provides useful info when check fails without
-> requiring to type all the extra format strings and parameters.
->
-> And also CHECK() has an inverted condition which is extremely
-> confusing. We don't use CHECK() for new code anymore.
+Hi Pankaj,
 
-I agree with this point. Especially that my test had some ASSERTs and
-some CHECKs so the if conditions ended up being confusing. I am
-changing them all to ASSERTs in the next version. Thanks for the
-insights!
+Thank you for the patch! Yet something to improve:
 
->
-> >
-> > >
-> > > > +           "failed to mount bpffs at %s (%s)\n", BPFFS_ROOT,
-> > > > +           strerror(errno)))
-> > > > +             return err;
-> > > > +
-> > > > +     /* Create a directory to contain stat files in bpffs */
-> > > > +     err = mkdir(BPFFS_VMSCAN, 0755);
-> > > > +     CHECK(err, "mkdir bpffs", "failed to mkdir %s (%s)\n",
-> > > > +           BPFFS_VMSCAN, strerror(errno));
-> > > > +     return err;
-> > > > +}
-> > > > +
->
-> [...]
+[auto build test ERROR on axboe-block/for-next]
+[also build test ERROR on device-mapper-dm/for-next linus/master hch-configfs/for-next v5.18 next-20220523]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Pankaj-Raghav/block-make-blkdev_nr_zones-and-blk_queue_zone_no-generic-for-npo2-zsze/20220524-011616
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+config: hexagon-randconfig-r045-20220523 (https://download.01.org/0day-ci/archive/20220524/202205241034.izkLMTcH-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 10c9ecce9f6096e18222a331c5e7d085bd813f75)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/3d3c81da0adbd40eb0d2125327b7e227582b2a37
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Pankaj-Raghav/block-make-blkdev_nr_zones-and-blk_queue_zone_no-generic-for-npo2-zsze/20220524-011616
+        git checkout 3d3c81da0adbd40eb0d2125327b7e227582b2a37
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "__hexagon_umoddi3" [drivers/block/null_blk/null_blk.ko] undefined!
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

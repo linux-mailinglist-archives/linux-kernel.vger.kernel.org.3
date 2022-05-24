@@ -2,162 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28ADE532A63
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 14:31:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C42D532A5A
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 14:31:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237181AbiEXM3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 08:29:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43688 "EHLO
+        id S237336AbiEXMai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 08:30:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236314AbiEXM3n (ORCPT
+        with ESMTP id S237304AbiEXMah (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 08:29:43 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2068.outbound.protection.outlook.com [40.107.243.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B074B93981;
-        Tue, 24 May 2022 05:29:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CFTU1yGC5hMGgi5FER4LxwnRNwHlzoXLdo6h7UjJPMJYqe/CotEPpdCGeI57RphpP11MHNGBuzOfIOSO40kwQauRS/QSJxgbg47n1nCW00HZvX4cBR18VSdjkNJi/2k73a+htNotmD6QdAesizsniJQyZlASWKMlHPrjouvMYoeb394mIdc5FezEeF6geX2JIVasOOT1PxHowJi+Mrf+tdUSEonNTC+Sgx8bEqqkxaduZz4RorbFFNsINcOO6D0Fc3gjmIIel76pUozfwkfCt75rTnBxcVN6jeocd7LUZk9HB4FsUB9/45x9zrnHKoplDkoFnoDLXUpu7744him2Gg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=u0GtVYoPr6JYD3zk0GBLaGrLFaKWmxjG0vq/8l70OHk=;
- b=erG4PfKZbgUa9jRf/HzIyv5N9DqRZEiriSL2foylzxDIJzmeNr+AdpkyjC1Iftxn3R/Dv4fhGZ3BLYRvuiQn37oto3QJC7YEdSjTdacXn6r7w9VJIs4g69aH+Ib1UpRxVKcozjHQJCtVH6nySjHOjKh3c/QwSwuaYaWzWVbdmDCIbrhpo6sxhRWfrSA6ab/XLfzNkAD/yEN5rBDVaLvIS+MNqf58Ib2a4tVmN4CDvXK8zwfBtHLPYkzOI4ilhjKLuEmEj7Ls3QNZvKr7lxYY2ITBtk5zRDKrbU//PcrdEgZmHzZfG5JJG5XHE5LmXgTo3M4HgpPX/Y8EN6IdleNzbA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=u0GtVYoPr6JYD3zk0GBLaGrLFaKWmxjG0vq/8l70OHk=;
- b=sY5vtR3ntn8BJ6JrPQ9ofukfQ6eb1qpxOo0W6R6IwLfjsImCDC8DzlIH2FugB4h4xeXGKue4Tm2qrDLV3oSpeFqSl6D2bMwFPTCi7R6TbtzjTwT9yiFXAQ5srtAtK6SN9Rf1ymcDZvVFer5wmEhVU/N9KFQSa/ehe7wjvKGm1O9TNBfZvo072Na2CXu3FXyqfF8nIYg/4PErvguxUwsq4kq6GEjPdlCNqOAKnVZA5f6c8rbkGMJJLWD9TjFO7yQS3zlNvXSG0WMpq1tRDc3afBFUMG/oBmo9uH3cMuDR0TGAsvsjTKc9ARcRi0zaAsoG+hvtlTONlXUtCHrpQy8DJQ==
-Received: from DM6PR12MB4074.namprd12.prod.outlook.com (2603:10b6:5:218::11)
- by MN2PR12MB4157.namprd12.prod.outlook.com (2603:10b6:208:1db::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.22; Tue, 24 May
- 2022 12:29:41 +0000
-Received: from DM6PR12MB4074.namprd12.prod.outlook.com
- ([fe80::511d:9ad5:184d:31]) by DM6PR12MB4074.namprd12.prod.outlook.com
- ([fe80::511d:9ad5:184d:31%7]) with mapi id 15.20.5273.023; Tue, 24 May 2022
- 12:29:41 +0000
-From:   Michael Shych <michaelsh@nvidia.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Vadim Pasternak <vadimp@nvidia.com>
-CC:     "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] platform/mellanox: Spelling s/platfom/platform/
-Thread-Topic: [PATCH] platform/mellanox: Spelling s/platfom/platform/
-Thread-Index: AQHYbz4YvuP45suigEKI3qCuIQeSXK0t9OhQ
-Date:   Tue, 24 May 2022 12:29:40 +0000
-Message-ID: <DM6PR12MB4074E6EB06A72AE8DBA99C4AD4D79@DM6PR12MB4074.namprd12.prod.outlook.com>
-References: <9c8edde31e271311b7832d7677fe84aba917da8d.1653376503.git.geert@linux-m68k.org>
-In-Reply-To: <9c8edde31e271311b7832d7677fe84aba917da8d.1653376503.git.geert@linux-m68k.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 2ad18290-0210-48cf-3756-08da3d81134f
-x-ms-traffictypediagnostic: MN2PR12MB4157:EE_
-x-microsoft-antispam-prvs: <MN2PR12MB415700EDB6B118CEBCCCD274D4D79@MN2PR12MB4157.namprd12.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: zVGK5qeGXaFwGS7tuTP76WXrRs+tTHleWa155SMl6z1ODlGW8jIedxQiEFCKHHEyK4JX79EdTo+H6FeLY7NGJFZMu/Tlb4w0sjM4z9txxJFQA6+KwGytykvls7GNfsy4nXk1EGQEve8PnGfkss9Xunz/69lS4Q+XdFfgO/tnk+s8UVG89X8LdmmomPNsCRgrq2EZs1CO0vd0giQjTY/OMwCwUvbWiqZ9OZzHpTpxeE0nJj4NgTsHTHh1RSiFHm9nwgRoeplwmpPxL4STcMFhU/h4TZqQdMTR3V5jJ6g5TAot1/QcMG39TkV9ACa5AswkRlJr9x40ItkzEugVZkT7Ok+pmG6CdYnJgSGJWJ8ni+UcrlOGwV68bjqDVKOWUXNbx0A2KYDwBggSuPGpw35drTJOrMOeMaA0Ui0Aw3SU+DB847+XPxbfSivEc7zOCk7tfZSn+yTdpvvYbj21jvJ3edh47WqiixponWRchhzfU5tQ4+Wv67e04falCQQ/pTm5uCR5XuRQNW0+jH1zzV2WFSghsjeIU5No3w/jUk6vKWMHY94Hb2rErnmU6tjY+d+bkcy5AWDAQys6YXca7O/cQ8pkDmjlBVh5XFnDCa1qB+tDCFwthEAAR1TDbhz0tV/FOWZMTx3SGJfB7L6lt2Ls/nQPuKpp12UfyS+1mPrrZkWPoPzoJVC5WPgvySFWrC8L8hMTgV4KxgMZjk+X1auX0g==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4074.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(54906003)(316002)(6636002)(110136005)(5660300002)(26005)(8676002)(66446008)(66476007)(86362001)(4326008)(64756008)(66946007)(66556008)(76116006)(38100700002)(53546011)(6506007)(7696005)(55016003)(122000001)(508600001)(52536014)(9686003)(38070700005)(2906002)(186003)(8936002)(83380400001)(33656002)(71200400001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?vNPBtuVWRCHSKLYBqGQVSn+NcytrKYA5sJSEMlAXQNJgJnSHCj03oonKHCE1?=
- =?us-ascii?Q?4+8F/n54yAWrE4sUafZ5tr8cJn7qGrTUXSetgG93Zy0lvXlSbkasM0ACBwE5?=
- =?us-ascii?Q?Cfo8cK2UYs0mjyWf/un6LiU9S1IYqWOrwnyS+0hv3LdTURaMEBQ/qXZwCNEp?=
- =?us-ascii?Q?MC1mn6UKyFVPXR+eLlsAwvqmjasDsM1NUjDwLwSOvweLZopcdBiTxYenVuIj?=
- =?us-ascii?Q?ecJTPnIr4pKJisaUkXN0JkdJ84iiU6mdAmPQxhNiOt7SvaARsJzgkzR6Pnvc?=
- =?us-ascii?Q?0vnV/CH1XgA8mFMrarJARBfUPD3Yxdt++uZiEyxn/20Y7m02iybXd3+7vagW?=
- =?us-ascii?Q?8FM/kEKkclIxORMT8sKXewF1ZXVN7WwPGDiN8Ar08rDfyv0Sl8uvDpeO0Mw6?=
- =?us-ascii?Q?+KYKsVlDAvPszvaxQPd97GhfErzeuiyEJX6XSdNNA2DCqF3KDJQa7lSq6quw?=
- =?us-ascii?Q?CbK3+RTz0M8Vp0BEXeyjCNMS7z034DoWpG3ELJNoDXmwX9fNSbB5KczLoPKj?=
- =?us-ascii?Q?Ql93dG8hwK2IhAJQixExc3TfBO3lqNeLA+0mBjkTMh+cMN0rS4SV8wGuCGjv?=
- =?us-ascii?Q?CUYrirR+eXnSQuv2+feG5MrQqeyasSAyXokfVN3Z/A1Rz83vMrpgri68H+E/?=
- =?us-ascii?Q?qz4bFBggFIo/UX5fwO6SvDNCBwktAWoWGqgpK3vBRbD7YODCoGgEqfwBJvtW?=
- =?us-ascii?Q?0lmFca2sHmnMKE7QO6shlHnTmvg22GgTiEhiQ1cN9AovJv/5IvpyY67YlBfT?=
- =?us-ascii?Q?h34cxdua3MJiZAEEj4xJHBfasQqTMRyTV+v85nYJSCpstlflD9t1jA5uJjAE?=
- =?us-ascii?Q?KG8mRPcrFVcaIqjop7k+/oNBD2BGcEPwx6/9hKxV9J1BswCptryXwx3xmFNm?=
- =?us-ascii?Q?Th2kIu+Nuy1orRLZiCC4T01stcmnmVpHv8BrB68QUMBq3iO77Qbdnhl0HdCR?=
- =?us-ascii?Q?Or1diTQAVZiHSN7vbFu6ePKsgpdKWd8tN/ES1ej18nQoGyhoBr83OBK6bwUm?=
- =?us-ascii?Q?GSW14HzfNrpPv6XiyiSWJ5324IxToW10WXwU1KeHBzshJ3ApMSmFHvB2X4cM?=
- =?us-ascii?Q?1kP0GnYhQWa6a8yiAt/02Z1GWfMwmCuYQQvbWQmhiRW7jhhwnV4VWo+f/dnC?=
- =?us-ascii?Q?ii2Ce5W2UyGA/bdWP0KqTsYDfFzkUcIuzWapZ+jhIYKUn+EpLuEKJv1+xbC9?=
- =?us-ascii?Q?xYMkLC6tt1DKVdKOBBJhN+17qIi8w126SkqSYcSbc4xV+UGIkwICUg4vRjZI?=
- =?us-ascii?Q?ee2z7kdphNtj65UyA1E3ARUxUCS0EDwUtXqloupwwpHTB+RCwaE2zmU0pdjX?=
- =?us-ascii?Q?hGlKzC4Mcp/h0WpYxu0OwHXy71Y3QbdslOBZ+r1f2IOKixovJQ9ZG8WiG4aF?=
- =?us-ascii?Q?y+NHJEGGjxBUMvHos7PIaphtAlTYiTXbfW9M869SgVhrARCL6NXmauXb0YeX?=
- =?us-ascii?Q?WDa7xAX1LL2kEtEqrD2aAGkUOindoYqYGn4Gwyd9gxGzgcwCLPtHkj3NPhFF?=
- =?us-ascii?Q?CODF9nVNDlBAf+6JZi2SthQXDOwVBRWwlyeO32YmspKBIEjthGd0RfdfuW0I?=
- =?us-ascii?Q?7MmCRw1vm8SeLi1DxnisPRB+CGJDwwPhm0qC4Bl1aJ/SEBWTcNiYMuguako0?=
- =?us-ascii?Q?Tr2HoFHe/m/I0D3siv41Vb2lz13szPwhVHpJZpQBnosAcZBCJQditWCcxhFl?=
- =?us-ascii?Q?0fNneoqHL/0HPCltgNKgPxJa7iUioRXscx6QyQssiiNlGEhTJPmkh1pVAAOB?=
- =?us-ascii?Q?46SXu5tz6g=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 24 May 2022 08:30:37 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1296393981;
+        Tue, 24 May 2022 05:30:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653395435; x=1684931435;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QesgYJtIYpO+DLyYwVVFn+Dd5yDLs1Cg8cnWq0AHJy4=;
+  b=kl5jbeps4TByGf8RdP2CJ+dJ/DRSjyJxwo/WnD0oUMhD06Tz7kYk6rH7
+   utcIX7hL2IzzZJnIjicpIsf9LMmQ/XtCX0b5Z4vI9cupi1XYVCURK1oVX
+   RszUpatFvTyvakpFwxxTYIrj8XvjPdzw3EMWHwN5HG7sR7Uha12V6Ia9N
+   LAfZ6APXv5ofNPWk//xYzrcT0xh2/D0WZaL2XuilTiHtJj4NVKMbMoWvd
+   /rMQHHBk2qrQQB7HK7HbN/foznqQX35dXAS/iJYdGXgw5tNbzOtoD7jJh
+   0STGK8WpNO1b4hFj2L5ACAMgTbfHYevOWz3e/qf4aBDTp1XZLkymIZKTV
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="273512409"
+X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
+   d="scan'208";a="273512409"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 05:30:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
+   d="scan'208";a="663892709"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 24 May 2022 05:30:31 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ntTgF-00021e-6N;
+        Tue, 24 May 2022 12:30:31 +0000
+Date:   Tue, 24 May 2022 20:29:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Muchun Song <songmuchun@bytedance.com>, hannes@cmpxchg.org,
+        mhocko@kernel.org, roman.gushchin@linux.dev, shakeelb@google.com
+Cc:     kbuild-all@lists.01.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        duanxiongchun@bytedance.com, longman@redhat.com,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [PATCH v4 09/11] mm: memcontrol: use obj_cgroup APIs to charge
+ the LRU pages
+Message-ID: <202205242030.FAaW4e04-lkp@intel.com>
+References: <20220524060551.80037-10-songmuchun@bytedance.com>
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4074.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2ad18290-0210-48cf-3756-08da3d81134f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 May 2022 12:29:40.9911
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: B7TtMCYQFzekRnEGOZxkbtraJ3xdOSB6dkQzYV3FZMuGxff15t8XaOVgs2wZ9VxZiyPLp+UuMGns3vecNGf8Cg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4157
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220524060551.80037-10-songmuchun@bytedance.com>
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Muchun,
 
-> -----Original Message-----
-> From: Geert Uytterhoeven <geert@linux-m68k.org>
-> Sent: Tuesday, May 24, 2022 10:16 AM
-> To: Michael Shych <michaelsh@nvidia.com>; Hans de Goede
-> <hdegoede@redhat.com>; Mark Gross <markgross@kernel.org>; Vadim
-> Pasternak <vadimp@nvidia.com>
-> Cc: platform-driver-x86@vger.kernel.org; linux-kernel@vger.kernel.org;
-> Geert Uytterhoeven <geert@linux-m68k.org>
-> Subject: [PATCH] platform/mellanox: Spelling s/platfom/platform/
->=20
-> Fix a misspelling of the word "platform".
->=20
-> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Acked-by: Michael Shych <michaelsh@nvidia.com>
+Thank you for the patch! Yet something to improve:
 
-> ---
->  drivers/platform/mellanox/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/platform/mellanox/Kconfig
-> b/drivers/platform/mellanox/Kconfig
-> index 72df4b8f4dd8b5a0..09c7829e95c4b037 100644
-> --- a/drivers/platform/mellanox/Kconfig
-> +++ b/drivers/platform/mellanox/Kconfig
-> @@ -85,7 +85,7 @@ config NVSW_SN2201
->  	depends on I2C
->  	depends on REGMAP_I2C
->  	help
-> -	  This driver provides support for the Nvidia SN2201 platfom.
-> +	  This driver provides support for the Nvidia SN2201 platform.
->  	  The SN2201 is a highly integrated for one rack unit system with
->  	  L3 management switches. It has 48 x 1Gbps RJ45 + 4 x 100G QSFP28
->  	  ports in a compact 1RU form factor. The system also including a
-> --
-> 2.25.1
+[auto build test ERROR on 4b0986a3613c92f4ec1bdc7f60ec66fea135991f]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Muchun-Song/Use-obj_cgroup-APIs-to-charge-the-LRU-pages/20220524-143056
+base:   4b0986a3613c92f4ec1bdc7f60ec66fea135991f
+config: x86_64-randconfig-m001 (https://download.01.org/0day-ci/archive/20220524/202205242030.FAaW4e04-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/bec0ae12106e0cf12dd4e0e21eb0754b99be0ba2
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Muchun-Song/Use-obj_cgroup-APIs-to-charge-the-LRU-pages/20220524-143056
+        git checkout bec0ae12106e0cf12dd4e0e21eb0754b99be0ba2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   mm/memcontrol.c: In function 'charge_memcg':
+>> mm/memcontrol.c:6826:17: error: implicit declaration of function '__get_obj_cgroup_from_memcg'; did you mean 'get_mem_cgroup_from_mm'? [-Werror=implicit-function-declaration]
+    6826 |         objcg = __get_obj_cgroup_from_memcg(memcg);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                 get_mem_cgroup_from_mm
+   mm/memcontrol.c:6826:15: warning: assignment to 'struct obj_cgroup *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+    6826 |         objcg = __get_obj_cgroup_from_memcg(memcg);
+         |               ^
+   cc1: some warnings being treated as errors
+
+
+vim +6826 mm/memcontrol.c
+
+  6818	
+  6819	static int charge_memcg(struct folio *folio, struct mem_cgroup *memcg,
+  6820				gfp_t gfp)
+  6821	{
+  6822		struct obj_cgroup *objcg;
+  6823		long nr_pages = folio_nr_pages(folio);
+  6824		int ret = 0;
+  6825	
+> 6826		objcg = __get_obj_cgroup_from_memcg(memcg);
+  6827		/* Do not account at the root objcg level. */
+  6828		if (!obj_cgroup_is_root(objcg))
+  6829			ret = try_charge(memcg, gfp, nr_pages);
+  6830		if (ret)
+  6831			goto out;
+  6832	
+  6833		obj_cgroup_get(objcg);
+  6834		commit_charge(folio, objcg);
+  6835	
+  6836		local_irq_disable();
+  6837		mem_cgroup_charge_statistics(memcg, nr_pages);
+  6838		memcg_check_events(memcg, folio_nid(folio));
+  6839		local_irq_enable();
+  6840	out:
+  6841		obj_cgroup_put(objcg);
+  6842		return ret;
+  6843	}
+  6844	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

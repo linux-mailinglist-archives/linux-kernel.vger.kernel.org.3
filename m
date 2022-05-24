@@ -2,102 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 072C2532523
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 10:19:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 580A4532527
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 10:22:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232239AbiEXITT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 04:19:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55322 "EHLO
+        id S232375AbiEXIWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 04:22:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231723AbiEXITP (ORCPT
+        with ESMTP id S231690AbiEXIWm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 04:19:15 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B2685DA10;
-        Tue, 24 May 2022 01:19:13 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: usama.anjum)
-        with ESMTPSA id CFF4E1F4384F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1653380351;
-        bh=UZRJ19uBktgKUYeBwlR0l4U9RP2hctsCuHcpTxjnTXA=;
-        h=Date:From:Subject:Cc:To:From;
-        b=CbA4VvBAHV85P+I6KMpuhAjzbA838pt0kGkBQ3b+M9djB/wWFUdQzqdLShR1DeN9J
-         bxOn+13LEEpi1W1q+A6IVIElcCAry+j4bNfDJA1P58fa+6i8pE8XpXiuTeWfGlujMp
-         NTW/FXoSxMmEk8m1cqzwHC+eNYk4YN3tfaw0NkiHYzWvmlYn8MMx040gCeAapRbt0B
-         1W1wmvqtVc8dZoebQDNhLh8lFtPsPcjbXM4V8YTZeb6lFp00Ek3krDjf7IqrrVU/UQ
-         p97m3p7aL2tgO9WLsrlowIpDUtZDoUcoyCDjNB+KJIP6w8+MLbbw3VPF5s7zmSDCaM
-         Oflm2Gc6iXTXw==
-Message-ID: <5099dc39-c6d9-115a-855b-6aa98d17eb4b@collabora.com>
-Date:   Tue, 24 May 2022 13:18:55 +0500
+        Tue, 24 May 2022 04:22:42 -0400
+X-Greylist: delayed 51355 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 24 May 2022 01:22:40 PDT
+Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34DEB6D1B8;
+        Tue, 24 May 2022 01:22:38 -0700 (PDT)
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177]) (authenticated)
+        by conssluserg-06.nifty.com with ESMTP id 24O8M68k006098;
+        Tue, 24 May 2022 17:22:06 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 24O8M68k006098
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1653380526;
+        bh=q6za3m9RvzaPHhFEyPx6fRCSS/LSE+ziJO/OmsbOCfU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Dl4+r03MQKiOYWwkQd6/wGRucqQOHUjMMP1K09kq9aDCZdWfaAVzjAixKYMEBzeDf
+         VXUFTEtIrRdwbhgbm1bXfrunAYFEfkpyHrIyVnRaIKB6BUipVsA3LtAOcMvEj2Klw5
+         9lZNCmy3vO5Uf8zoX1sBvCQ7arLqs8T40s2a7m3kgwdxv8h+a1wYM5gqo2d7OE44u3
+         pWz7tx6XVmKNpxzoQYmH/CRxuBlsjUBYEd70DqwlkiwB3Nemb9RJb0q8kLc4JMmsy4
+         /3KSe+gncDh6z8ZwD2qaoRysEMq+wPnT8nN1FHyYmNrMTCpaDvDPrZ1HgYcDKA0fvS
+         bmCd27m/fkaiw==
+X-Nifty-SrcIP: [209.85.210.177]
+Received: by mail-pf1-f177.google.com with SMTP id h13so9553008pfq.5;
+        Tue, 24 May 2022 01:22:06 -0700 (PDT)
+X-Gm-Message-State: AOAM53391RVzmNfnsdzrtR9XT3EIN0gha+5NOhJV/LvuSIhT7QuGadBE
+        rXj7VZY+4E7Erkvs0LndnddIx3AVLgYWLZx+53c=
+X-Google-Smtp-Source: ABdhPJy/EXBCdolgpL2fr/ku8aEoHDny91aiZJzwlxFQUWE7v6lP7QfKeByb4K/TLGui8Li/7KWEbwkpmOaJDujAqEQ=
+X-Received: by 2002:a63:9043:0:b0:3f9:6c36:3de3 with SMTP id
+ a64-20020a639043000000b003f96c363de3mr15921286pge.616.1653380525571; Tue, 24
+ May 2022 01:22:05 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-Subject: [RFC] EADDRINUSE from bind() on application restart after killing
-Cc:     usama.anjum@collabora.com,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Language: en-US
-To:     Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "open list:NETWORKING [TCP]" <netdev@vger.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220523200222.711011-1-keescook@chromium.org>
+In-Reply-To: <20220523200222.711011-1-keescook@chromium.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 24 May 2022 17:20:45 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASWUH-ZYU76Xj3YPc1na6ALo0dULSR0UNWe=_L9GcVXjQ@mail.gmail.com>
+Message-ID: <CAK7LNASWUH-ZYU76Xj3YPc1na6ALo0dULSR0UNWe=_L9GcVXjQ@mail.gmail.com>
+Subject: Re: [PATCH] gcc-plugins: Require utsrelease.h before scripts target
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        kernel test robot <lkp@intel.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, May 24, 2022 at 5:02 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> The "utsrelease.h" target was in parallel with the "scripts" target,
+> which meant -j1 or unlucky parallel builds from a distclean state would
+> fail to build the GCC plugins.
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: https://lore.kernel.org/linux-mm/202205230239.EZxeZ3Fv-lkp@intel.com
+> Reported-by: Guenter Roeck <linux@roeck-us.net>
+> Link: https://lore.kernel.org/lkml/YouX6g1T7w3FDeM8@cmpxchg.org
+> Fixes: 61f60bac8c05 ("gcc-plugins: Change all version strings match kernel")
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: linux-kbuild@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  Makefile                     | 2 +-
+>  scripts/gcc-plugins/Makefile | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/Makefile b/Makefile
+> index 91c91fcf3c24..c04420d5aa3d 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -1175,7 +1175,7 @@ include/config/kernel.release: FORCE
+>  # Carefully list dependencies so we do not try to build scripts twice
+>  # in parallel
+>  PHONY += scripts
+> -scripts: scripts_basic scripts_dtc
+> +scripts: include/generated/utsrelease.h scripts_basic scripts_dtc
+>         $(Q)$(MAKE) $(build)=$(@)
+>
+>  # Things we need to do before we recursively start building the kernel
+> diff --git a/scripts/gcc-plugins/Makefile b/scripts/gcc-plugins/Makefile
+> index 6f0aecad5d67..c29334669a16 100644
+> --- a/scripts/gcc-plugins/Makefile
+> +++ b/scripts/gcc-plugins/Makefile
+> @@ -64,5 +64,5 @@ $(foreach m, $(notdir $(plugin-multi)), $(eval $(obj)/$m: $(addprefix $(obj)/, $
+>  quiet_cmd_plugin_cxx_o_c = HOSTCXX $@
+>        cmd_plugin_cxx_o_c = $(HOSTCXX) $(plugin_cxxflags) -c -o $@ $<
+>
+> -$(plugin-objs): $(obj)/%.o: $(src)/%.c FORCE
+> +$(plugin-objs): $(obj)/%.o: $(src)/%.c $(objdir)/include/generated/utsrelease.h FORCE
 
-We have a set of processes which talk with each other through a local
-TCP socket. If the process(es) are killed (through SIGKILL) and
-restarted at once, the bind() fails with EADDRINUSE error. This error
-only appears if application is restarted at once without waiting for 60
-seconds or more. It seems that there is some timeout of 60 seconds for
-which the previous TCP connection remains alive waiting to get closed
-completely. In that duration if we try to connect again, we get the error.
 
-We are able to avoid this error by adding SO_REUSEADDR attribute to the
-socket in a hack. But this hack cannot be added to the application
-process as we don't own it.
+This change is unneeded.
 
-I've looked at the TCP connection states after killing processes in
-different ways. The TCP connection ends up in 2 different states with
-timeouts:
+The header dependencies are automatically generated
+by the -MMD option.
 
-(1) Timeout associated with FIN_WAIT_1 state which is set through
-`tcp_fin_timeout` in procfs (60 seconds by default)
+     plugin_cxxflags = -Wp,-MMD,$(depfile) $(KBUILD_HOSTCXXFLAGS) -fPIC \
 
-(2) Timeout associated with TIME_WAIT state which cannot be changed. It
-seems like this timeout has come from RFC 1337.
 
-The timeout in (1) can be changed. Timeout in (2) cannot be changed. It
-also doesn't seem feasible to change the timeout of TIME_WAIT state as
-the RFC mentions several hazards. But we are talking about a local TCP
-connection where maybe those hazards aren't applicable directly? Is it
-possible to change timeout for TIME_WAIT state for only local
-connections without any hazards?
 
-We have tested a hack where we replace timeout of TIME_WAIT state from a
-value in procfs for local connections. This solves our problem and
-application starts to work without any modifications to it.
 
-The question is that what can be the best possible solution here? Any
-thoughts will be very helpful.
 
-Regards,
+
+>         $(call if_changed_dep,plugin_cxx_o_c)
+> --
+> 2.32.0
+>
+
 
 -- 
-Muhammad Usama Anjum
+Best Regards
+Masahiro Yamada

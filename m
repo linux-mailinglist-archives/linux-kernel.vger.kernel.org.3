@@ -2,123 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D458D532869
+	by mail.lfdr.de (Postfix) with ESMTP id 87D6A532868
 	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 13:00:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236453AbiEXLAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 07:00:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52260 "EHLO
+        id S236470AbiEXLAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 07:00:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233493AbiEXK76 (ORCPT
+        with ESMTP id S236463AbiEXLAH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 06:59:58 -0400
-Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FF76FA39;
-        Tue, 24 May 2022 03:59:57 -0700 (PDT)
-Received: by mail-ua1-x92d.google.com with SMTP id k13so3578976uad.0;
-        Tue, 24 May 2022 03:59:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OyNGMzB8eRzvXkgcGkGr6qv15WPNXqDuFiVrIoJC1xE=;
-        b=hl+MbcoLRG5p6f0tyPfx9hEebKnCInbyfKFlgIhrxiMaZxGo75slJlOpukMI+qmtY4
-         vKs6XkrY6enhD9LKHO5yaO5a0YSYrFD8s/80jGcTSCC7zmgoGrXDXaJNVa4gpvJ/DQvk
-         DB0DDXIkGH3Oc5mRDsPmISjVD6gCQ0S2fZXivHEKGv/ccLLdlQ6CoX/2cASy2OKUOMoi
-         z0LF9lDmcO39Z7WoVQTxyPUk0SMPgoo4VZj0YbXMDaGNwyLLQvqIc1xH5UNs8Gt8TJPw
-         PImI4UvFCmWNvCjQbvPp0d0c802Bq6aHQpZ4xcpuupIgfwrXENlxhvuCQjAywT2pxv/A
-         3cWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OyNGMzB8eRzvXkgcGkGr6qv15WPNXqDuFiVrIoJC1xE=;
-        b=0XnFRP9du1+hNVfTPdU+uei3hKlS+DHjOKZqSLxDwqZfuAw5BVTMg2VbyA1IW9Ex7M
-         dSyg62ZljkKGnmsX01TofECUFHE4fxUA9FU4GPjebegxclDu2RCvktYaXD5hTwy5IXWC
-         8027Pwt9VJCikJvHnxpyx1qmAfYJTO37Hov2lmyuxpJX6zZ9X1v9Sbt04h5cTJtA31ml
-         ReZCLJQjKidbpgsL5mPeRfB4ebijXaodedbP2H+t0v1H6vbEX2/8fFhB/8EVcbvpKrhD
-         5lyZ6EV86QqOVsGwKWGlZ+gRsfmI/AqslB+gWK3wRwxI66Pu6W8k9kwfDIYhg1ANpor2
-         k8kQ==
-X-Gm-Message-State: AOAM530m1N4+gQpfgZ5I3B0W3hlITLYxFgTg++2JSmtCSUJvunndMhAZ
-        qL0Knt1xDGmSje8kaa6bMGIAp6D1pujVvdtPEWg8tfAl8IC9t/RH
-X-Google-Smtp-Source: ABdhPJzjHep8EeU03Bdx8UMpAopw7ydL9VNQPgVLtJw/4rEwY7HBf0Z0i+/xdekLJoG+9rVYRDr7nM0cHPOyFMNEYeg=
-X-Received: by 2002:ab0:6999:0:b0:368:a1e8:74c9 with SMTP id
- t25-20020ab06999000000b00368a1e874c9mr8496825uaq.21.1653389996991; Tue, 24
- May 2022 03:59:56 -0700 (PDT)
+        Tue, 24 May 2022 07:00:07 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A1EA68FD46
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 04:00:05 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5CDBA1FB;
+        Tue, 24 May 2022 04:00:05 -0700 (PDT)
+Received: from bogus (unknown [10.57.66.158])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D79833F73D;
+        Tue, 24 May 2022 04:00:01 -0700 (PDT)
+Date:   Tue, 24 May 2022 11:59:53 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Gavin Shan <gshan@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        rafael@kernel.org, Jonathan.Cameron@huawei.com, drjones@redhat.com,
+        zhenyzha@redhat.com, shan.gavin@gmail.com
+Subject: Re: [PATCH] arch_topology: Limit threads to one specific cluster
+Message-ID: <20220524105953.uhpgly4qkbvc2ayz@bogus>
+References: <20220524081212.1363105-1-gshan@redhat.com>
+ <20220524085157.o3ie6hjy3tg5of5y@bogus>
+ <7cc4eef4-bdb6-bd53-450b-f2348f722cf5@redhat.com>
 MIME-Version: 1.0
-References: <20220518092619.1269111-1-chenhuacai@loongson.cn>
- <20220518092619.1269111-10-chenhuacai@loongson.cn> <14f922495a09898017e4db3baed5b434acadac12.camel@xry111.site>
-In-Reply-To: <14f922495a09898017e4db3baed5b434acadac12.camel@xry111.site>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Tue, 24 May 2022 18:59:50 +0800
-Message-ID: <CAAhV-H4BHUTshe2w-KnJ3hLveaFWRJihyDwnOnAbSYWDV_18LA@mail.gmail.com>
-Subject: Re: [PATCH V11 09/22] LoongArch: Add boot and setup routines
-To:     Xi Ruoyao <xry111@xry111.site>, lichao@loongson.cn
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7cc4eef4-bdb6-bd53-450b-f2348f722cf5@redhat.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Ruoyao,
+On Tue, May 24, 2022 at 05:05:22PM +0800, Gavin Shan wrote:
+> Hi Sudeep,
+> 
+> On 5/24/22 4:51 PM, Sudeep Holla wrote:
+> > On Tue, May 24, 2022 at 04:12:12PM +0800, Gavin Shan wrote:
+> > > The sibling information for one particular CPU is updated after ACPI
+> > > PPTT table is parsed. struct cpu_topology::thread_sibling tracks the
+> > > the CPUs in same core. However, cluster isn't considered when it's
+> > > populated. In this case, multiple threads belonging to different
+> > > clusters can be put together through the sibling information. It
+> > > eventually leads to unexpected warning from sched subsystem.
+> > > 
+> > > For example, the following warning is observed in a VM where we have
+> > > 2 sockets, 4 clusters, 8 cores and 16 threads and the CPU topology
+> > > is populated as below.
+> > > 
+> > >     CPU  Socket-ID  Cluster-ID  Core-ID  Thread-ID
+> > >     ----------------------------------------------
+> > >      0      0          0          0        0
+> > >      1      0          0          0        1
+> > >      2      0          0          1        0
+> > >      3      0          0          1        1
+> > >      4      0          1          0        0
+> > >      5      0          1          0        1
+> > >      6      0          1          1        0
+> > >      7      0          1          1        1
+> > >      8      1          0          0        0
+> > >      9      1          0          0        1
+> > >     10      1          0          1        0
+> > >     11      1          0          1        1
+> > >     12      1          1          0        0
+> > >     13      1          1          0        1
+> > >     14      1          1          1        0
+> > >     15      1          1          1        1
+> > > 
+> > >    [    0.592181] CPU: All CPU(s) started at EL1
+> > >    [    0.593766] alternatives: patching kernel code
+> > >    [    0.595890] BUG: arch topology borken
+> > >    [    0.597210]      the SMT domain not a subset of the CLS domain
+> > >    [    0.599286]      child=0-1,4-5    sd=0-3
+> > > 
+> > >    # cat /sys/devices/system/cpu/cpu0/topology/cluster_cpus_list
+> > >    0-3
+> > >    # cat /sys/devices/system/cpu/cpu0/topology/thread_siblings_list
+> > >    0-1,4-5
+> > > 
+> > > This fixes the issue by limiting threads to one specific cluster.
+> > > With this applied, the unexpected warning disappears in the VM.
+> > > 
+> > 
+> > I have similar fix but as part of bigger series[1] to get DT support in
+> > line with ACPI.
+> > 
+> 
+> Your patch resolves the issue I have. So please ignore mine. Sorry
 
-On Tue, May 24, 2022 at 4:27 PM Xi Ruoyao <xry111@xry111.site> wrote:
->
-> On Wed, 2022-05-18 at 17:26 +0800, Huacai Chen wrote:
-> > Currently an existing interface between the kernel and the bootloader
-> > is  implemented. Kernel gets 2 values from the bootloader, passed in
-> > registers a0 and a1; a0 is an "EFI boot flag" distinguishing UEFI and
-> > non-UEFI firmware, while a1 is a pointer to an FDT with systable,
-> > memmap, cmdline and initrd information.
->
-> If I understand this correctly, we can:
->
-> - set a0 to 0
-> - set a1 a pointer (virtual address or physical address?) to the FDT
-> with these information
->
-> in the bootloader before invoking the kernel, then it will be possible
-> to boot this kernel w/o firmware update?
-Unfortunately, there is no released firmware for you since we recently
-changed the interface again and again. :(
-You can contact with Li Chao (lichao@loongson.cn), I think he can
-provide help as much as possible (at least provide temporary firmwares
-for developers).
-We will also provide qemu-system and virtual machine's firmware as
-soon as possible.
+Thanks for that.
 
-Huacai
-
+> for the noise.
 >
-> I'd prefer to receive a firmware update anyway, but we need an
-> alternative if some vendor just say "no way, our customized distro works
-> fine and you should use it".  (I'm not accusing LoongArch: such annoying
-> behavior is common among vendors of all architectures, and even worse
-> with x86 because they often say "just use Windoge".)
-> --
-> Xi Ruoyao <xry111@xry111.site>
-> School of Aerospace Science and Technology, Xidian University
+
+No worries, definitely not noise.
+
+-- 
+Regards,
+Sudeep

@@ -2,99 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 414C9533355
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 00:12:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67052533358
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 00:13:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240379AbiEXWMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 18:12:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51638 "EHLO
+        id S239776AbiEXWNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 18:13:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238914AbiEXWMm (ORCPT
+        with ESMTP id S238106AbiEXWNn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 18:12:42 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D0D5DD27
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 15:12:40 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id gg20so18045022pjb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 15:12:40 -0700 (PDT)
+        Tue, 24 May 2022 18:13:43 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9D95DD26
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 15:13:42 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-2ff7b90e635so130966617b3.5
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 15:13:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=u8CD/oP1dRwpstmWmx4PFVLSC5EU/3DeFLUGGUSnZB0=;
-        b=jLj+T7+1Hfq7NpU3hWA1j/dqSqZGIxKK2h7MRyu+Xdp3NbnM6i3JiEOdS9voRiJYBK
-         dI57J846prVWNRcRGFP0bCLmKv6S5ZV+Szzn8qS9yQuBtkat0pvdelOHYF8RvpWlmCaP
-         ZWJwz+M+SNRKzqA5LAQlIr9lRe+1YYbHfy1+0=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KHIJKfxgTwjjvyeenG8PqcpEQiKi1RaY8gq052ZcCvA=;
+        b=T6hMuCVEX+qbOyFR89d+IsjkmG2gLaJBxFErHe2gyjpChqhEV06irPnesumPglEbfQ
+         9RzraS+IIv/IhS0qu2Eb0eQBfqdVIF0RlpIoeWoDmLfii1Sv2YC4SF3LbnRSukQZ9qzz
+         pJeqxph4Qi7c2sNv99au5tIQWl0ozkKlnmd0V0WGFX7sQ3dOwTkeZMU1khTXPmPQHJUl
+         tZRACg67zb7w/EkNZGLYl1lNsBDGe92KUIKcc3T5erYvU9J/dpKPz0/i2XHRBRlFK4A3
+         /sJCr+ROTjxFyDkrFfp0KBpEqKnWDuU4RBCUt/jU889SHRV3NrZrFAXMFOer49lqOH/N
+         eGBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=u8CD/oP1dRwpstmWmx4PFVLSC5EU/3DeFLUGGUSnZB0=;
-        b=s15p8d/nT50wQWO4+0j055EbjqdnGNg4URZ3NxdqibLkkiyu4mgLVll6ruOSfHNaO1
-         UwQMxK7mWKa5WaFyf+KugQtKrPySZHe89lYbPDCRrojVNtLJfyZLsfjRMWMPmvF0dkYD
-         PBe6478GAxhidNYELUgQtWH8vxNvhv89SYjpCS9KS0NRLzoJfvIyIeWN6tSQribEchOX
-         wTuw9qbsdU7cBjyIuIsScR8BRG2F3J8xLfc+4pRBW7v3Vpp6O18zsg+eAd1/nKxG1FYN
-         gTfX00dZTaIXdjy9yXyQ6UZwiqt/5cFFvNCdSju/Gbjd7IA6BDxinCgCFIjZ6WAaiuzJ
-         8qvA==
-X-Gm-Message-State: AOAM533exPpEUslwAgAyc1RB82RuO6f7XLTpYjRxv/TGvQdiGphEFqiF
-        rF7dqvOTUoXVUmWwBbXgfL/cIA==
-X-Google-Smtp-Source: ABdhPJylZSxgbbxQTXu74nYTjl6enFdemPoZ3wjsjlyZ3DSDQI0D9YnLX2MmUg34d1UzfDnnWFjv9A==
-X-Received: by 2002:a17:90b:4a90:b0:1df:e3af:c6ad with SMTP id lp16-20020a17090b4a9000b001dfe3afc6admr6734751pjb.41.1653430360054;
-        Tue, 24 May 2022 15:12:40 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:4d83:f549:9abd:427])
-        by smtp.gmail.com with UTF8SMTPSA id ji3-20020a170903324300b0015e8d4eb25csm1831169plb.166.2022.05.24.15.12.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 May 2022 15:12:39 -0700 (PDT)
-Date:   Tue, 24 May 2022 15:12:38 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Subject: Re: [PATCH v17 2/5] usb: dwc3: core: Host wake up support from
- system suspend
-Message-ID: <Yo1YVi2/k1Iu1ovl@google.com>
-References: <1653387228-28110-1-git-send-email-quic_kriskura@quicinc.com>
- <1653387228-28110-3-git-send-email-quic_kriskura@quicinc.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KHIJKfxgTwjjvyeenG8PqcpEQiKi1RaY8gq052ZcCvA=;
+        b=TcWw3X1qVsAogeWCj2Rp8Mgcfqj1jPez4RfIp5Kop98gceUzDREZ/bJ0PVjymO2S2+
+         ppGUpBrH5CZtL8lPGPWXcR/Dnj4OE5VAgy+Wz5PXqTYXjA3Ts1aTboCJ0PSgJYR93ujy
+         d1R72ugebASgfAMqfYlx+AAzxTcRQJGx1ppbLFDWApqWtTDFZZ4WLEBH1JK9THPj9O5E
+         M8Nb8XRocENU9/AonNgG8DPYFyYuvwQMQlRjWtNfUmyGmjKCj/z7IjVqYwsNZGNi5O0C
+         GgyxWWtxcudZt/+LLJ//eqkgM1UaSvtdICdpHsfozn8qFC2+4gCCSY5c9sUbSKpFguMo
+         hbww==
+X-Gm-Message-State: AOAM53139uu47R40MM4EZjnx5TCLHiWx0L9FsssWP7T72gkPx3vUkQXg
+        bH5M2z9dMfc4cssVkDMsM6uo/0rbkXJeAzGYhk3VBw==
+X-Google-Smtp-Source: ABdhPJyPc88P2qZG0MlVyVyfq8FoXxqbvtwhO8/rX8P/8ABbhE+AGmGT7ZRg5cLCPMPFGBCy5w823/y9Oc1NWeiO0uU=
+X-Received: by 2002:a81:b401:0:b0:300:2e86:e7e5 with SMTP id
+ h1-20020a81b401000000b003002e86e7e5mr4631478ywi.467.1653430421051; Tue, 24
+ May 2022 15:13:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1653387228-28110-3-git-send-email-quic_kriskura@quicinc.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <5099dc39-c6d9-115a-855b-6aa98d17eb4b@collabora.com>
+In-Reply-To: <5099dc39-c6d9-115a-855b-6aa98d17eb4b@collabora.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Tue, 24 May 2022 15:13:29 -0700
+Message-ID: <CANn89i+R9RgmD=AQ4vX1Vb_SQAj4c3fi7-ZtQz-inYY4Sq4CMQ@mail.gmail.com>
+Subject: Re: [RFC] EADDRINUSE from bind() on application restart after killing
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "open list:NETWORKING [TCP]" <netdev@vger.kernel.org>,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 03:43:45PM +0530, Krishna Kurapati wrote:
-> From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> 
-> Check wakeup-source property for dwc3 core node to set the
-> wakeup capability. Drop the device_init_wakeup call from
-> runtime suspend and resume.
-> 
-> If the dwc3 is wakeup capable, don't power down the USB PHY(s).
-> The glue drivers are expected to take care of configuring the
-> additional wakeup settings if needed based on the dwc3 wakeup
-> capability status. In some SOC designs, powering off the PHY is
-> resulting in higher leakage, so this patch save power on such boards.
-> 
-> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+On Tue, May 24, 2022 at 1:19 AM Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+>
+> Hello,
+>
+> We have a set of processes which talk with each other through a local
+> TCP socket. If the process(es) are killed (through SIGKILL) and
+> restarted at once, the bind() fails with EADDRINUSE error. This error
+> only appears if application is restarted at once without waiting for 60
+> seconds or more. It seems that there is some timeout of 60 seconds for
+> which the previous TCP connection remains alive waiting to get closed
+> completely. In that duration if we try to connect again, we get the error.
+>
+> We are able to avoid this error by adding SO_REUSEADDR attribute to the
+> socket in a hack. But this hack cannot be added to the application
+> process as we don't own it.
+>
+> I've looked at the TCP connection states after killing processes in
+> different ways. The TCP connection ends up in 2 different states with
+> timeouts:
+>
+> (1) Timeout associated with FIN_WAIT_1 state which is set through
+> `tcp_fin_timeout` in procfs (60 seconds by default)
+>
+> (2) Timeout associated with TIME_WAIT state which cannot be changed. It
+> seems like this timeout has come from RFC 1337.
+>
+> The timeout in (1) can be changed. Timeout in (2) cannot be changed. It
+> also doesn't seem feasible to change the timeout of TIME_WAIT state as
+> the RFC mentions several hazards. But we are talking about a local TCP
+> connection where maybe those hazards aren't applicable directly? Is it
+> possible to change timeout for TIME_WAIT state for only local
+> connections without any hazards?
+>
+> We have tested a hack where we replace timeout of TIME_WAIT state from a
+> value in procfs for local connections. This solves our problem and
+> application starts to work without any modifications to it.
+>
+> The question is that what can be the best possible solution here? Any
+> thoughts will be very helpful.
+>
 
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+One solution would be to extend TCP diag to support killing TIME_WAIT sockets.
+(This has been raised recently anyway)
+
+Then you could zap all sockets, before re-starting your program.
+
+ss -K -ta src :listen_port
+
+Untested patch:
+
+diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+index 9984d23a7f3e1353d2e1fc9053d98c77268c577e..1b7bde889096aa800b2994c64a3a68edf3b62434
+100644
+--- a/net/ipv4/tcp.c
++++ b/net/ipv4/tcp.c
+@@ -4519,6 +4519,15 @@ int tcp_abort(struct sock *sk, int err)
+                        local_bh_enable();
+                        return 0;
+                }
++               if (sk->sk_state == TCP_TIME_WAIT) {
++                       struct inet_timewait_sock *tw = inet_twsk(sk);
++
++                       refcount_inc(&tw->tw_refcnt);
++                       local_bh_disable();
++                       inet_twsk_deschedule_put(tw);
++                       local_bh_enable();
++                       return 0;
++               }
+                return -EOPNOTSUPP;
+        }

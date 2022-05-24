@@ -2,150 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E713C532B1F
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 15:20:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80B5C532B2F
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 15:22:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237740AbiEXNUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 09:20:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46402 "EHLO
+        id S237757AbiEXNVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 09:21:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237722AbiEXNUH (ORCPT
+        with ESMTP id S237746AbiEXNVi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 09:20:07 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED6D980A9
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 06:20:06 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id y199so16408032pfb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 06:20:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=pm+h7FgyVcw6FPu3neF0tg9OqCxJcsWM13fqLtMUno0=;
-        b=UXHnnKdtJR4P3hgd5fy87XVQuGpu+aVdjYst1hUquXXNO6dN72wfptvsmsBQ2vc3n7
-         yhVIW7t0z1QEn6Fe3GSOTOd6F40orO3V9x4ReJXaD9/lyEVZTi/EXHdWqUqoAEETVetm
-         jMTZNDFGNv/yK7d14Alt+JIDFL09lXrAeYjzFOxljiYwX8b46+h5LKCPwy8QNWM8P4Rg
-         +Py8A2R0Ob9Rs6M6tI1raCbtUrFQEFZRh4h6cZch3ypIn65VUKdYm1F2yk9Vcq3twX5J
-         gShHWl6Lt6R9U/6eP3N77qWekZrvmU42r501kslBgworqEx0+HsGPyp3L202yXMKMXR0
-         ZUGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=pm+h7FgyVcw6FPu3neF0tg9OqCxJcsWM13fqLtMUno0=;
-        b=MQFSRY/jH9dykZKpKTm95j6h4iNjsGGCKMearXQq0qBgcmTK+3ozOMHrRUCSUT8YIp
-         pxdec1z1K7hshwPWOs7gLCJHTn4Fc9glVzj3mBvLHCVKtvYugtDELmkF130tfIZydAmz
-         c3mCKZHbCjxzx/zkUdyK3XNHGmsHS+yo5bQ5m41aybx6/mYFf5gzc8B0aC4V+kQrx3Iw
-         M1AvetGCtRbCFEpt+rTnxEKKqxy8vEFDYyTjJqU4HWjp1mF0oyVeVBHTJuXxpiR3uXB+
-         HL5wUYGGP9la1Y6VY4/dMhNQiovqbWWUjPillKY5YqisZROOGTM6ff6hDOkBD379mPng
-         yHLw==
-X-Gm-Message-State: AOAM5301BnSLt3DNG59rH6AaKlRRgIgIpTRhiIDfEyecx7YTP7rHUElv
-        w+CSmka/jaf9QgiOTgUUKSY2
-X-Google-Smtp-Source: ABdhPJzejR8mK2jCqzKVM5D8tPWy+Bu4JMl9VEjAKH1ffnsi36QNt8JkxUSKliUpKMYN3iLUUFgz4Q==
-X-Received: by 2002:a62:5c3:0:b0:50d:4274:4e9d with SMTP id 186-20020a6205c3000000b0050d42744e9dmr28513554pff.54.1653398406431;
-        Tue, 24 May 2022 06:20:06 -0700 (PDT)
-Received: from thinkpad ([59.92.99.145])
-        by smtp.gmail.com with ESMTPSA id k22-20020a17090a591600b001cd4989ff62sm1703763pji.41.2022.05.24.06.20.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 May 2022 06:20:06 -0700 (PDT)
-Date:   Tue, 24 May 2022 18:49:59 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Frank Li <Frank.Li@nxp.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 23/26] dmaengine: dw-edma: Bypass dma-ranges mapping
- for the local setup
-Message-ID: <20220524131959.GA5745@thinkpad>
-References: <20220503225104.12108-1-Sergey.Semin@baikalelectronics.ru>
- <20220503225104.12108-24-Sergey.Semin@baikalelectronics.ru>
+        Tue, 24 May 2022 09:21:38 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E274819C35;
+        Tue, 24 May 2022 06:21:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653398497; x=1684934497;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BFliaCv+cB0PXbv3YekuYdrRznvm76kroRO4soD7CkE=;
+  b=KBkjTpswLxKWjYjgsyjJaZdzLDyK5nUav6G2PYxRLLlf4ZZpfL9oL43S
+   JIq8VQ78qnFyzeTIG7PzoZ6yrwj0HcfeSpTZq2BiiO/TPCFP0AS0QlFp1
+   vT+5gu9TL4/hz+4+2zJYwJBfr72cqgDgOA4OV6Kz0vLLpbmgxWIS0vSVB
+   tfA7su2U4LtGEylq3dDndujtDlM3JKYg+XJfsy3FodJ74+AJy73x36BmV
+   SJeDofi2aoTPY+05Sa0+OXI9oF8s5/FZ5gaJqGvD1U9Zii26YTXysV0M6
+   ocB1IbMvyCyTQaKVBNzrPQhsVhCX7B1TDupbcwALwzQjWN/mdTHwEdKLj
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="298847583"
+X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
+   d="scan'208";a="298847583"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 06:21:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
+   d="scan'208";a="641935455"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 24 May 2022 06:21:34 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ntUTe-00025e-17;
+        Tue, 24 May 2022 13:21:34 +0000
+Date:   Tue, 24 May 2022 21:20:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Miles Chen <miles.chen@mediatek.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/7] clk: mediatek: mt6779: use mtk_clk_simple_probe
+ to simplify driver
+Message-ID: <202205242129.DezL7Tp0-lkp@intel.com>
+References: <20220524083843.9994-5-miles.chen@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220503225104.12108-24-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220524083843.9994-5-miles.chen@mediatek.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 01:51:01AM +0300, Serge Semin wrote:
-> DW eDMA doesn't perform any translation of the traffic generated on the
-> CPU/Application side. It just generates read/write AXI-bus requests with
-> the specified addresses. But in case if the dma-ranges DT-property is
-> specified for a platform device node, Linux will use it to map the CPU
-> memory regions into the DMAable bus ranges. This isn't what we want for
-> the eDMA embedded into the locally accessed DW PCIe Root Port and
-> End-point. In order to work that around let's set the chan_dma_dev flag
-> for each DW eDMA channel thus forcing the client drivers to getting a
-> custom dma-ranges-less parental device for the mappings.
-> 
-> Note it will only work for the client drivers using the
-> dmaengine_get_dma_device() method to get the parental DMA device.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> 
-> ---
-> 
-> Changelog v2:
-> - Fix the comment a bit to being clearer. (@Manivannan)
-> ---
->  drivers/dma/dw-edma/dw-edma-core.c | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
-> 
-> diff --git a/drivers/dma/dw-edma/dw-edma-core.c b/drivers/dma/dw-edma/dw-edma-core.c
-> index 6a8282eaebaf..908607785401 100644
-> --- a/drivers/dma/dw-edma/dw-edma-core.c
-> +++ b/drivers/dma/dw-edma/dw-edma-core.c
-> @@ -716,6 +716,21 @@ static int dw_edma_alloc_chan_resources(struct dma_chan *dchan)
->  	if (chan->status != EDMA_ST_IDLE)
->  		return -EBUSY;
->  
-> +	/* Bypass the dma-ranges based memory regions mapping for the eDMA
-> +	 * controlled from the CPU/Application side since in that case
-> +	 * the local memory address is left untranslated.
-> +	 */
-> +	if (chan->dw->chip->flags & DW_EDMA_CHIP_LOCAL) {
-> +		dchan->dev->chan_dma_dev = true;
-> +
-> +		dchan->dev->device.dma_coherent = chan->dw->chip->dev->dma_coherent;
+Hi Miles,
 
-I happen to test this series on Qcom ARM32 machine and it errors out during the
-compilation due to "dma_coherent" not available on !SWIOTLB ARM32 configs.
+Thank you for the patch! Yet something to improve:
 
-Thanks,
-Mani
+[auto build test ERROR on clk/clk-next]
+[also build test ERROR on next-20220524]
+[cannot apply to v5.18]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-> +		dma_coerce_mask_and_coherent(&dchan->dev->device,
-> +					     dma_get_mask(chan->dw->chip->dev));
-> +		dchan->dev->device.dma_parms = chan->dw->chip->dev->dma_parms;
-> +	} else {
-> +		dchan->dev->chan_dma_dev = false;
-> +	}
-> +
->  	pm_runtime_get(chan->dw->chip->dev);
->  
->  	return 0;
-> -- 
-> 2.35.1
-> 
+url:    https://github.com/intel-lab-lkp/linux/commits/Miles-Chen/clk-mediatek-mt2701-use-mtk_clk_simple_probe-to-simplify-driver/20220524-173952
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
+config: arm-randconfig-r014-20220524 (https://download.01.org/0day-ci/archive/20220524/202205242129.DezL7Tp0-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 10c9ecce9f6096e18222a331c5e7d085bd813f75)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/22d101bc8621971e234c34276dce52c37b82b498
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Miles-Chen/clk-mediatek-mt2701-use-mtk_clk_simple_probe-to-simplify-driver/20220524-173952
+        git checkout 22d101bc8621971e234c34276dce52c37b82b498
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+ERROR: modpost: missing MODULE_LICENSE() in drivers/clk/imx/clk-imxrt1050.o
+ERROR: modpost: "vmf_insert_pfn" [drivers/gpu/drm/drm_shmem_helper.ko] undefined!
+>> ERROR: modpost: "mtk_clk_simple_remove" [drivers/clk/mediatek/clk-mt6779-aud.ko] undefined!
+>> ERROR: modpost: "mtk_clk_simple_probe" [drivers/clk/mediatek/clk-mt6779-aud.ko] undefined!
+>> ERROR: modpost: "mtk_clk_simple_remove" [drivers/clk/mediatek/clk-mt6779-vdec.ko] undefined!
+>> ERROR: modpost: "mtk_clk_simple_probe" [drivers/clk/mediatek/clk-mt6779-vdec.ko] undefined!
+>> ERROR: modpost: "mtk_clk_simple_remove" [drivers/clk/mediatek/clk-mt6779-cam.ko] undefined!
+>> ERROR: modpost: "mtk_clk_simple_probe" [drivers/clk/mediatek/clk-mt6779-cam.ko] undefined!
+>> ERROR: modpost: "mtk_clk_simple_remove" [drivers/clk/mediatek/clk-mt6779-ipe.ko] undefined!
+>> ERROR: modpost: "mtk_clk_simple_probe" [drivers/clk/mediatek/clk-mt6779-ipe.ko] undefined!
+ERROR: modpost: "imx_clk_hw_pfd" [drivers/clk/imx/clk-imxrt1050.ko] undefined!
+WARNING: modpost: suppressed 1 unresolved symbol warnings because there were too many)
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for DRM_GEM_SHMEM_HELPER
+   Depends on HAS_IOMEM && DRM && MMU
+   Selected by
+   - DRM_SSD130X && HAS_IOMEM && DRM
 
 -- 
-மணிவண்ணன் சதாசிவம்
+0-DAY CI Kernel Test Service
+https://01.org/lkp

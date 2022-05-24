@@ -2,149 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A5385332FE
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 23:36:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3A72533318
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 23:44:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241927AbiEXVgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 17:36:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43750 "EHLO
+        id S235018AbiEXVoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 17:44:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbiEXVgT (ORCPT
+        with ESMTP id S232887AbiEXVoA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 17:36:19 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9791E02C;
-        Tue, 24 May 2022 14:36:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653428178; x=1684964178;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9jK8G9ag+81bcO5Ko8qhZ3SN8Fupy/S9GkA/3mPTsOI=;
-  b=deIq+mwioW3JsB9+Y80mOQ9R9K/hsTy/+1HQG0F1AXZBSBPrhcdumWYL
-   KTncHMQJvCLZpyfBHK5StZ8OLFZVHQPgWa9a2UrSU869+3N0IEsaq/dR8
-   J2XAzX3HQZ9dbCQKj02+4pHUeu2YZWg2NCtbx9DfQXpNwUWzLYgTEhRlM
-   SJiO1Hmh55l5hHBCNA//7pAwMFQRe9uWzO9kD3h2kJh/3og0TOuxf0r7A
-   tudBezPqqK0KC3u2Y6IzG1Ry4ZXhhaPCy+bmMcW/iY4fZsEOmIojWDM02
-   IfvMFEIZ/26yoXKkIQm56NXBJ+1/bkS/LXgdOzouodN9mWDEYN3TJSxUz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10357"; a="273382969"
-X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="273382969"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 14:36:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="745404583"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 24 May 2022 14:36:12 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ntcCJ-0002T6-UI;
-        Tue, 24 May 2022 21:36:11 +0000
-Date:   Wed, 25 May 2022 05:36:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hans Schultz <schultz.hans@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        netdev@vger.kernel.org,
-        Hans Schultz <schultz.hans+netdev@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH V3 net-next 3/4] net: dsa: mv88e6xxx: mac-auth/MAB
- implementation
-Message-ID: <202205250511.beuDDi9L-lkp@intel.com>
-References: <20220524152144.40527-4-schultz.hans+netdev@gmail.com>
+        Tue, 24 May 2022 17:44:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 862E67CDFD;
+        Tue, 24 May 2022 14:43:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 172BE6177E;
+        Tue, 24 May 2022 21:43:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39328C34100;
+        Tue, 24 May 2022 21:43:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653428638;
+        bh=pk0sDBNvdlwJrrfflBf7nAqss/iUtPV4Fv51aafyOjM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=IyV6K52Us5WXrhJD9okiGheCfOjZTydDt2eib5m8dLJXlPQW4fAFv2FpE1a8zYrUD
+         n1nomQmTtsNKNLfy9uOHCdgAvHzHGncBUrEyON2R/UvYYLYe1tOER+jOFMMfC9kVeD
+         cl4vJtek0ZMMsTT0WyMtrbLKlx295/vYuIWK2AqiRC2ydk2cLdsWSANyTfblNu1Ra0
+         +EYl9mHpAOnwggy1jwiS+SMXz7siEv7nobzglBvObqzc4EEq1nfOWszFLQ9BrOUZHC
+         zmCAhkcrNTJA7XPkisj3gWKpImU1Fkl+wli9+zI7a09ROJP5zwxEzC0+Lpvd0zt2Hf
+         PMVbq2/reJeBQ==
+Date:   Tue, 24 May 2022 16:43:56 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Signed-off-by missing for commit in the pci tree
+Message-ID: <20220524214356.GA275586@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220524152144.40527-4-schultz.hans+netdev@gmail.com>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220525070723.426cbfd4@canb.auug.org.au>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hans,
+On Wed, May 25, 2022 at 07:07:23AM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Commits
+> 
+>   5db490f54497 ("dt-bindings: PCI: qcom: Add schema for sc7280 chipset")
+>   ee485c61f0e5 ("dt-bindings: PCI: qcom: Specify reg-names explicitly")
+>   3d49f91acbcc ("dt-bindings: PCI: qcom: Do not require resets on msm8996 platforms")
+>   e93dde4b6768 ("dt-bindings: PCI: qcom: Convert to YAML")
+>   ed5e8fe0db30 ("PCI: qcom: Fix unbalanced PHY init on probe errors")
+>   f36120778857 ("PCI: qcom: Fix runtime PM imbalance on probe errors")
+>   53063d1437e5 ("PCI: qcom: Fix pipe clock imbalance")
+>   5945b7056322 ("PCI: qcom: Add SM8150 SoC support")
+>   ddd0cc4df5a1 ("dt-bindings: pci: qcom: Document PCIe bindings for SM8150 SoC")
+> 
+> are missing a Signed-off-by from their committer.
 
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on net-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Hans-Schultz/Extend-locked-port-feature-with-FDB-locked-flag-MAC-Auth-MAB/20220524-232455
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 677fb7525331375ba2f90f4bc94a80b9b6e697a3
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220525/202205250511.beuDDi9L-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 10c9ecce9f6096e18222a331c5e7d085bd813f75)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/5c2d731ec7670b3eb06906c64d66c6098c588a6a
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Hans-Schultz/Extend-locked-port-feature-with-FDB-locked-flag-MAC-Auth-MAB/20220524-232455
-        git checkout 5c2d731ec7670b3eb06906c64d66c6098c588a6a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/dsa/mv88e6xxx/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/net/dsa/mv88e6xxx/chip.c:2754:6: warning: variable 'err' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (!locked_found) {
-               ^~~~~~~~~~~~~
-   drivers/net/dsa/mv88e6xxx/chip.c:2759:9: note: uninitialized use occurs here
-           return err;
-                  ^~~
-   drivers/net/dsa/mv88e6xxx/chip.c:2754:2: note: remove the 'if' if its condition is always true
-           if (!locked_found) {
-           ^~~~~~~~~~~~~~~~~~~
-   drivers/net/dsa/mv88e6xxx/chip.c:2749:9: note: initialize the variable 'err' to silence this warning
-           int err;
-                  ^
-                   = 0
-   1 warning generated.
-
-
-vim +2754 drivers/net/dsa/mv88e6xxx/chip.c
-
-  2742	
-  2743	static int mv88e6xxx_port_fdb_del(struct dsa_switch *ds, int port,
-  2744					  const unsigned char *addr, u16 vid,
-  2745					  struct dsa_db db)
-  2746	{
-  2747		struct mv88e6xxx_chip *chip = ds->priv;
-  2748		bool locked_found = false;
-  2749		int err;
-  2750	
-  2751		if (mv88e6xxx_port_is_locked(chip, port, true))
-  2752			locked_found = mv88e6xxx_atu_locked_entry_find_purge(ds, port, addr, vid);
-  2753	
-> 2754		if (!locked_found) {
-  2755			mv88e6xxx_reg_lock(chip);
-  2756			err = mv88e6xxx_port_db_load_purge(chip, port, addr, vid, 0);
-  2757			mv88e6xxx_reg_unlock(chip);
-  2758		}
-  2759		return err;
-  2760	}
-  2761	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Sorry, fixed.

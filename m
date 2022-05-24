@@ -2,178 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4047532472
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 09:52:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E455532477
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 09:53:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235418AbiEXHw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 03:52:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54008 "EHLO
+        id S235431AbiEXHx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 03:53:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234533AbiEXHwN (ORCPT
+        with ESMTP id S234533AbiEXHxU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 03:52:13 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACBA64D9DB
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 00:52:11 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id t6so24474856wra.4
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 00:52:11 -0700 (PDT)
+        Tue, 24 May 2022 03:53:20 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB90C7B9E4
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 00:53:18 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id h186so15683404pgc.3
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 00:53:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
-         :subject:content-transfer-encoding;
-        bh=ZievVmUMWc6umqr7g2H0yqBs8jCp0deglZh3Bm0R8so=;
-        b=pmsjgkxBZTWTO2Qvqk6mGnxvdOhUEsWtwG2ASLUXBGUOGM+hjjoCR5GrwkVsw44hez
-         9cYc+CsEQN1Y/ZvBxTaRm98p9EnvWboAOSd4E36bo9U1JaALTr7sgPWhYZwVOL8lcxlU
-         3eScL/J/Y3Gv0p3hpZzQb3DdhyzCEZZixBlH6raHE93SHJ9YIRhXI2jM5GPB9iIPY2NB
-         jF9RPBUXQsPrtt6mXhs8yChJT7kGJjBOjI7WUPv/VxuZ+BWD2DClSPyfvcaDYaVwOfL+
-         dqkiJR7SDXXBvbrzMJCb3QPT9liaG3Snun8pFhZ+7eatupVCLw6YTqnl0dO37rC+FOXX
-         93Kw==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eiZIvmjlq4QeFIkkCBIsaFu9qrW8HKQ32EBz63sX0gk=;
+        b=hGrF7CkKfpFYe6aHe2iDQSDrl/tVNbvFRkSCMm/hzl5jDM0K/88xLhm5dxzms0zbyB
+         hgp9gNpbzepFG0tj7oonecWGfLd1lyl35IVjXZrQ8etTn5jesVau0qEf73mqVofh9bKK
+         8MWW1zyOkQPDWU4jAXp2BBVtjczZNwfPiOX66SD1TMOvNLQDB7etlDiD0Jcecvfn9mzJ
+         er9jJITjI7fdXxgrlWDzX+DhLp+VsKveGt4sY5xui+4q7U668xZSS8rrMlfjpHSx6y2d
+         5cjcYaSC7P9dDWgi1jZ62Sp/yYrmeqy4mNq79lyzx8sbS9PoBaw4JWi+4lNy3Vcewclp
+         mQWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:from:subject:content-transfer-encoding;
-        bh=ZievVmUMWc6umqr7g2H0yqBs8jCp0deglZh3Bm0R8so=;
-        b=Agps+g6zNINQdvfdgCIZGqw+cIiDQg+ywdYGK+6Ble9/SAcKlqztjBUXHLSPDWAd4h
-         tYZxkvD8lONibAM19PMOYSTfBPjXz+LRIwqSTnmo9aTyEdSdrQNcVDt38vHtev9xwCCQ
-         EkZO7GafUAiOgna65wbNB1N4VIpdmlfVAEewNcr3u31rITYq5r+dJ1tfnt3r6UL+QMOR
-         AuvruZ8ZG9l495tHDsWx4By8+JUPc5SM6Z+O4dChy0gzjWz/X0XkZuZQ8YDlc+VIeXYc
-         wr6qfKOVReEw6V3fcL7Qck84N96VBHQlgzaP1o+gHgSrJ/pm5/tzyMcnvB0K8YDwQt0N
-         JWAQ==
-X-Gm-Message-State: AOAM531QZfHOrZV9UtXzQzAyNFrZHB6RuWws+QjL10ig2R42cRlycKRX
-        VWSEbTMI7b3rWibipkqgB9wFRA==
-X-Google-Smtp-Source: ABdhPJzafefRm9s70fbcZEESgenG3tdQpzR1qGn1FHZecrTZ3Y3KqVR+Lj3z5UBhsgDtA3BJxkPknQ==
-X-Received: by 2002:adf:dc8d:0:b0:20d:bfd:2018 with SMTP id r13-20020adfdc8d000000b0020d0bfd2018mr21804447wrj.540.1653378730056;
-        Tue, 24 May 2022 00:52:10 -0700 (PDT)
-Received: from [192.168.1.41] (static-176-182-171-101.ncc.abo.bbox.fr. [176.182.171.101])
-        by smtp.googlemail.com with ESMTPSA id z1-20020adfc001000000b0020e5b2afb3bsm12180120wre.23.2022.05.24.00.52.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 May 2022 00:52:09 -0700 (PDT)
-Message-ID: <b5a83e54-1ee1-f910-4be4-bc3bf1015243@linaro.org>
-Date:   Tue, 24 May 2022 09:52:08 +0200
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eiZIvmjlq4QeFIkkCBIsaFu9qrW8HKQ32EBz63sX0gk=;
+        b=543N3dRUevdH6Hrc6vLmHbd8n993kn1/ShRnqGDRqrrs3gZFsvjMW+P7pJttZ25Lut
+         YZYIf17FOCRp/WNFCuZWIj3Ndj/H+oaNWDvCjynMemYoP4lEmv5dKE0nB4TXG8BGkIgE
+         dShb9I3pegx+BINXUvzxijZtnd2A1BNpycHSAzms00roV6YRlNTKkdcN/pnlCd5sXQ6B
+         4fWhOK795v6Xsmx6mIkpvS6srq0xgyBc58Bw+FCg1N+h9jx6iEGrSa7Bj00jxvDvIvZH
+         MUBgtRh11DuBDdd5FCtWPtmbiezRSV1dwRaOg7qLdVO3a3wNEiZ20Gn2AOTGiXls6TKb
+         FHzw==
+X-Gm-Message-State: AOAM5329NK5zzuc4XUKdrc0AmkRTEbrIqNjQBblbL8fb4v8yriernJxB
+        SMzyE11VHqxsLiAJEtPE2NHddQ==
+X-Google-Smtp-Source: ABdhPJzUtKUdexd9Tp2iM4xdRy5IxMyuXpPxIVsYKH8m90zuTKxWmR7x3JukHf2NaL1XCKyqWxJhuA==
+X-Received: by 2002:a05:6a00:be1:b0:518:86d3:4f93 with SMTP id x33-20020a056a000be100b0051886d34f93mr14573872pfu.35.1653378798151;
+        Tue, 24 May 2022 00:53:18 -0700 (PDT)
+Received: from C02F52LSML85.bytedance.net ([139.177.225.241])
+        by smtp.gmail.com with ESMTPSA id m3-20020a62a203000000b00518327b7d23sm8682136pff.46.2022.05.24.00.53.12
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 24 May 2022 00:53:17 -0700 (PDT)
+From:   Feng zhou <zhoufeng.zf@bytedance.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
+        songmuchun@bytedance.com, wangdongdong.6@bytedance.com,
+        cong.wang@bytedance.com, zhouchengming@bytedance.com,
+        zhoufeng.zf@bytedance.com
+Subject: [PATCH v2 0/2] Optimize performance of update hash-map when free is zero
+Date:   Tue, 24 May 2022 15:53:04 +0800
+Message-Id: <20220524075306.32306-1-zhoufeng.zf@bytedance.com>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [GIT PULL] timer drivers for v5.19-rc1
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Feng Zhou <zhoufeng.zf@bytedance.com>
 
-Hi Thomas,
+We encountered bad case on big system with 96 CPUs that
+alloc_htab_elem() would last for 1ms. The reason is that after the
+prealloc hashtab has no free elems, when trying to update, it will still
+grab spin_locks of all cpus. If there are multiple update users, the
+competition is very serious.
 
-sorry for this late PR, please consider pulling:
+0001: Add is_empty to check whether the free list is empty or not before taking
+the lock.
+0002: Add benchmark to reproduce this worst case.
 
+Changelog:
+v1->v2: Addressed comments from Alexei Starovoitov.
+- add a benchmark to reproduce the issue.
+- Adjust the code format that avoid adding indent.
+some details in here:
+https://lore.kernel.org/all/877ac441-045b-1844-6938-fcaee5eee7f2@bytedance.com/T/
 
-The following changes since commit 317f29c14d0cca09952f1022491454b23455ebcb:
+Feng Zhou (2):
+  bpf: avoid grabbing spin_locks of all cpus when no free elems
+  selftest/bpf/benchs: Add bpf_map benchmark
 
-   timers: Provide a better debugobjects hint for delayed works 
-(2022-05-14 17:40:36 +0200)
-
-are available in the Git repository at:
-
-   https://git.linaro.org/people/daniel.lezcano/linux.git 
-tags/timers-v5.19-rc1
-
-for you to fetch changes up to 9c04a8ff03def4df3f81219ffbe1ec9b44ff5348:
-
-   clocksource/drivers/oxnas-rps: Fix irq_of_parse_and_map() return 
-value (2022-05-24 09:16:29 +0200)
-
-----------------------------------------------------------------
-- Add Mediatek MT8186 DT bindings (Allen-KH Cheng)
-
-- Remove dead code corresponding of the IXP4xx board removal (Linus
-   Walleij)
-
-- Add CLOCK_EVT_FEAT_C3STOP flag for the RISC-V SBI timer (Samuel
-   Holland)
-
-- Do not return an error if there are multiple definitions of the
-   sp804 timers in the DT (Andre Przywara)
-
-- Add the missing SPDX identifier (Thomas Gleixner)
-
-- Remove an unncessary NULL check as it is done right before at probe
-   time for the timer-ti-dm (Dan Carpenter)
-
-- Fix the irq_of_parse_and_map() return code check on onexas-nps
-   (Krzysztof Kozlowski)
-
-----------------------------------------------------------------
-Allen-KH Cheng (1):
-       dt-bindings: timer: Add compatible for Mediatek MT8186
-
-Andre Przywara (1):
-       clocksource/drivers/sp804: Avoid error on multiple instances
-
-Dan Carpenter (1):
-       clocksource/drivers/timer-ti-dm: Remove unnecessary NULL check
-
-Krzysztof Kozlowski (1):
-       clocksource/drivers/oxnas-rps: Fix irq_of_parse_and_map() return 
-value
-
-Linus Walleij (1):
-       clocksource/drivers/ixp4xx: Drop boardfile probe path
-
-Samuel Holland (1):
-       clocksource/drivers/riscv: Events are stopped during CPU suspend
-
-Thomas Gleixner (10):
-       clocksource/drivers/bcm_kona: Convert to SPDX identifier
-       clocksource/drivers/jcore: Convert to SPDX identifier
-       clocksource/drivers/mips-gic-timer: Convert to SPDX identifier
-       clocksource/drivers/armada-370-xp: Convert to SPDX identifier
-       clocksource/drivers/digicolor: Convert to SPDX identifier
-       clocksource/drivers/lpc32xx: Convert to SPDX identifier
-       clocksource/drivers/orion: Convert to SPDX identifier
-       clocksource/drivers/pistachio: Convert to SPDX identifier
-       clocksource/drivers/timer-sun4i: Convert to SPDX identifier
-       clocksource/drivers/timer-sun5i: Convert to SPDX identifier
-
-  .../bindings/timer/mediatek,mtk-timer.txt          |  1 +
-  drivers/clocksource/Kconfig                        |  2 +-
-  drivers/clocksource/bcm_kona_timer.c               | 14 ++----------
-  drivers/clocksource/jcore-pit.c                    |  5 +----
-  drivers/clocksource/mips-gic-timer.c               |  9 ++------
-  drivers/clocksource/timer-armada-370-xp.c          |  5 +----
-  drivers/clocksource/timer-digicolor.c              |  5 +----
-  drivers/clocksource/timer-ixp4xx.c                 | 25 
-----------------------
-  drivers/clocksource/timer-lpc32xx.c                |  6 +-----
-  drivers/clocksource/timer-orion.c                  |  5 +----
-  drivers/clocksource/timer-oxnas-rps.c              |  2 +-
-  drivers/clocksource/timer-pistachio.c              |  5 +----
-  drivers/clocksource/timer-riscv.c                  |  2 +-
-  drivers/clocksource/timer-sp804.c                  | 10 ++++-----
-  drivers/clocksource/timer-sun4i.c                  |  5 +----
-  drivers/clocksource/timer-sun5i.c                  |  5 +----
-  drivers/clocksource/timer-ti-dm.c                  |  3 +--
-  include/linux/platform_data/timer-ixp4xx.h         | 11 ----------
-  18 files changed, 22 insertions(+), 98 deletions(-)
-  delete mode 100644 include/linux/platform_data/timer-ixp4xx.h
+ kernel/bpf/percpu_freelist.c                  | 28 ++++++-
+ kernel/bpf/percpu_freelist.h                  |  1 +
+ tools/testing/selftests/bpf/Makefile          |  4 +-
+ tools/testing/selftests/bpf/bench.c           |  2 +
+ .../selftests/bpf/benchs/bench_bpf_map.c      | 78 +++++++++++++++++++
+ .../selftests/bpf/benchs/run_bench_bpf_map.sh | 10 +++
+ .../selftests/bpf/progs/bpf_map_bench.c       | 27 +++++++
+ 7 files changed, 146 insertions(+), 4 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/benchs/bench_bpf_map.c
+ create mode 100755 tools/testing/selftests/bpf/benchs/run_bench_bpf_map.sh
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_map_bench.c
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.20.1
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog

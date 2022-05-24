@@ -2,53 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 546F1533060
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 20:25:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FA45533065
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 20:26:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240324AbiEXSZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 14:25:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49456 "EHLO
+        id S240334AbiEXS0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 14:26:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232847AbiEXSZ2 (ORCPT
+        with ESMTP id S231477AbiEXS0V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 14:25:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D4BC8A303
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 11:25:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 24 May 2022 14:26:21 -0400
+Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [5.144.164.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD581D0D6;
+        Tue, 24 May 2022 11:26:16 -0700 (PDT)
+Received: from SoMainline.org (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0608F6157A
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 18:25:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 200AAC34100;
-        Tue, 24 May 2022 18:25:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653416725;
-        bh=IsSqmCDUURr9/5xQZSxVskm0kP7w7Lk6OXH98DkMxv4=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=IRVqMZMQYCBDCqMfRZHNB4oBMjtiMmAOnh2oO2C3JU3X6R3KV4Eoc7nxv6wY2I5zE
-         KWpsOjPpSv2/PsIotxxsSodb80eyhiv2ruoXAN9ZoS8XYdWmbbHt+1khksFF0oByGd
-         ES+3MycjpJXHEgHOEVJRdoUmbWJEe5XHtUSPku79MBb02/bGgjHS2zrrmA5SeMdmCW
-         llgH5TQzJnesP0StWWrAnVpWDKElevgGxahS88yFGkfjyPvkPJeBERiusVBp500GxJ
-         3kPMg5pV4BykiFDsWEwPzyTyCUBbl5OSfSb+Onrx0yNWFeiTWwwa/BMA6xF3Zso5Vw
-         Jo0qji14Bp7xg==
-From:   Mark Brown <broonie@kernel.org>
-To:     alsa-devel@alsa-project.org, ssabakar@amd.com
-Cc:     Vijendar.Mukunda@amd.com, Sunil-kumar.Dommati@amd.com,
-        AjitKumar.Pandey@amd.com, linux-kernel@vger.kernel.org,
-        Basavaraj.Hiregoudar@amd.com, tiwai@suse.com, lkp@intel.com,
-        ajitkumar.pandey@amd.com, lgirdwood@gmail.com, perex@perex.cz
-In-Reply-To: <20220523112956.3087604-1-ssabakar@amd.com>
-References: <20220523112956.3087604-1-ssabakar@amd.com>
-Subject: Re: [PATCH] ASoC: SOF: amd: Fixed Build error
-Message-Id: <165341672284.1497256.4768954734853451749.b4-ty@kernel.org>
-Date:   Tue, 24 May 2022 19:25:22 +0100
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 6177A2058D;
+        Tue, 24 May 2022 20:26:15 +0200 (CEST)
+Date:   Tue, 24 May 2022 20:26:14 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Pavel Machek <pavel@ucw.cz>, Richard Purdie <rpurdie@rpsys.net>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/2] leds: Add driver for Qualcomm LPG
+Message-ID: <20220524182614.rwqjcmglc6jawbxq@SoMainline.org>
+References: <20170323055435.29197-1-bjorn.andersson@linaro.org>
+ <20220523163038.GA9124@duo.ucw.cz>
+ <CAOCOHw7N9EHcxSSe6n8828oy2fh6xNxRYf9OUXkY4SQh6gtVLw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOCOHw7N9EHcxSSe6n8828oy2fh6xNxRYf9OUXkY4SQh6gtVLw@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,43 +47,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 23 May 2022 16:59:53 +0530, Syed Saba kareem wrote:
-> Add linux/module.h in acp-pci.c to solve the below dependency
+On 2022-05-24 10:02:51, Bjorn Andersson wrote:
+[..]
+> > I'd really like to see the patch fixing the pattern interface (or
+> > disabling it). I don't want to push the tree to Linus with that bug.
+> >
 > 
-> All error/warnings (new ones prefixed by >>):
+> Please find a proposed update to lpg_pattern_set() and the documentation at:
+> https://lore.kernel.org/linux-arm-msm/20220523233719.1496297-1-bjorn.andersson@linaro.org/T/#u
 > 
-> >> sound/soc/amd/acp/acp-pci.c:148:1: warning: data definition has no type or storage class
-> 148 | MODULE_DEVICE_TABLE(pci, acp_pci_ids);
-> | ^~~~~~~~~~~~~~~~~~~
-> >> sound/soc/amd/acp/acp-pci.c:148:1: error: type defaults to 'int' in declaration of 'MODULE_DEVICE_TABLE' [-Werror=implicit-int]
-> ...
-> 
-> [...]
+> @Marijn, would love to get your input on this proposal.
 
-Applied to
+Thanks, it looks good from a first observation but I'll test out the
+implementation later.  Meanwhile, curious to your progress on processing
+the last review :)
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-
-Thanks!
-
-[1/1] ASoC: SOF: amd: Fixed Build error
-      commit: 803a1f7272797faa15a7879cdc70f9adaf3fdcba
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+- Marijn

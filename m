@@ -2,151 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEBEE532632
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 11:16:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B502D532637
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 11:18:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235255AbiEXJQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 05:16:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43414 "EHLO
+        id S235268AbiEXJSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 05:18:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235224AbiEXJQi (ORCPT
+        with ESMTP id S233643AbiEXJSB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 05:16:38 -0400
-Received: from m12-16.163.com (m12-16.163.com [220.181.12.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BBA831D314;
-        Tue, 24 May 2022 02:16:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Message-ID:Date:MIME-Version:Subject:From; bh=6bHKB
-        N/3QBi7HzN/vwEopZXo21vzzru1+xafDO7zm/8=; b=L7Q/+yfYROd3FnDLltavy
-        zVXjGu/4+M1TvU/HFo0Kxipslob/GjEvc4qu9bv5toD1N8hbvys54EP1BwB9yGfu
-        6cmneO10AQFXUby3pKbx9+JQkp+CxEUeejCv0FEfUtqJFupl/EzUJLs7jvx/4la0
-        2UE0pmtRUcWcw6aMN2qKas=
-Received: from [192.168.3.102] (unknown [218.201.129.20])
-        by smtp12 (Coremail) with SMTP id EMCowABnTDU8ooxiXDX+BA--.128S2;
-        Tue, 24 May 2022 17:15:43 +0800 (CST)
-Message-ID: <12833b83-59a9-a808-4d62-60658df8d628@163.com>
-Date:   Tue, 24 May 2022 17:15:40 +0800
+        Tue, 24 May 2022 05:18:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A3545DA6D
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 02:18:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CD77361645
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 09:17:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAFC4C385AA;
+        Tue, 24 May 2022 09:17:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653383879;
+        bh=OMRg6RS0dHTmt7O6aXgEAUU1MxtYjlSj/o98QizTVSk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CdVy/Horm/2348ZsqmIqO3ZZwr8Q5XnwBEGbP3TmKDNF2SG1/Lp9Efk5nvaSs50dX
+         RNTTjlBp4I1JkQX5H7zMFw2QRgxv+H+CUK8vx+fXd7mfvAeZwYsno7ONj7vevq04xM
+         OmIOnhUIQhlGpBdttDDPbAJaxKT+rnHfW39YY0t9R6dIB2CdkmlPjqlWIgKggVfm58
+         v+MC/w7Feim2uuBMCwMtp/laNkb1uJpFGxJdVzdDy7NlqBIv52airCe3ILY6CyqQy0
+         XpTpDPDxlhs0PAqMoRDxJ1oQa3J1CIhKO+trVm1EER4/eGJ00dPSTJQ9TcUtXg7xU8
+         XIoPN4eYASFOA==
+Received: by pali.im (Postfix)
+        id 2A20D9ED; Tue, 24 May 2022 11:17:56 +0200 (CEST)
+Date:   Tue, 24 May 2022 11:17:56 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Tyrel Datwyler <tyreld@linux.ibm.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH] powerpc/pci: Add config option for using OF 'reg' for
+ PCI domain
+Message-ID: <20220524091756.gur2phuonjz5tuhm@pali>
+References: <20220504175718.29011-1-pali@kernel.org>
+ <8ffa0287-de5e-4308-07d8-204ac2e7f63a@csgroup.eu>
+ <20220505093132.45ehu6pdfzmvt2xw@pali>
+ <2cfb2cd8-3bad-3c66-b8ee-918d615f7719@linux.ibm.com>
+ <20220505223302.2ydcssvdgoyqv7e5@pali>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v4 0/2] ARM: sun8i-r40: Enable usb otg support
-Content-Language: en-US
-To:     Icenowy Zheng <icenowy@aosc.io>, linux-sunxi@lists.linux.dev
-Cc:     Andre Przywara <andre.przywara@arm.com>,
-        Evgeny Boger <boger@wirenboard.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20220518101706.26869-1-qianfanguijin@163.com>
- <a50307f826e8e5f4218bd2bfde23add8a26af0dc.camel@aosc.io>
-From:   qianfan <qianfanguijin@163.com>
-In-Reply-To: <a50307f826e8e5f4218bd2bfde23add8a26af0dc.camel@aosc.io>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: EMCowABnTDU8ooxiXDX+BA--.128S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxCw43GFy5WFW7trWfWw4kJFb_yoW5Cw1kpF
-        W7XFZ7Gw1ktw1Syay3ua4UW3y3Z3yrXayjyFn3tFy8Ar13ur1DAanrKr95KasxWr13Zw47
-        Kwn5Jwn3Kr1YgF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jONVkUUUUU=
-X-Originating-IP: [218.201.129.20]
-X-CM-SenderInfo: htld0w5dqj3xxmlqqiywtou0bp/xtbBzh8L7WI0UkpUyQAAsk
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220505223302.2ydcssvdgoyqv7e5@pali>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Friday 06 May 2022 00:33:02 Pali Rohár wrote:
+> On Thursday 05 May 2022 15:10:01 Tyrel Datwyler wrote:
+> > On 5/5/22 02:31, Pali Rohár wrote:
+> > > Hello!
+> > > 
+> > > On Thursday 05 May 2022 07:16:40 Christophe Leroy wrote:
+> > >> Le 04/05/2022 à 19:57, Pali Rohár a écrit :
+> > >>> Since commit 63a72284b159 ("powerpc/pci: Assign fixed PHB number based on
+> > >>> device-tree properties"), powerpc kernel always fallback to PCI domain
+> > >>> assignment from OF / Device Tree 'reg' property of the PCI controller.
+> > >>>
+> > >>> PCI code for other Linux architectures use increasing assignment of the PCI
+> > >>> domain for individual controllers (assign the first free number), like it
+> > >>> was also for powerpc prior mentioned commit.
+> > >>>
+> > >>> Upgrading powerpc kernels from LTS 4.4 version (which does not contain
+> > >>> mentioned commit) to new LTS versions brings a regression in domain
+> > >>> assignment.
+> > >>
+> > >> Can you elaborate why it is a regression ?
+> > >>63a72284b159
+> > >> That commit says 'no functionnal changes', I'm having hard time 
+> > >> understanding how a nochange can be a regression.
+> > > 
+> > > It is not 'no functional change'. That commit completely changed PCI
+> > > domain assignment in a way that is incompatible with other architectures
+> > > and also incompatible with the way how it was done prior that commit.
+> > 
+> > I agree that the "no functional change" statement is incorrect. However, for
+> > most powerpc platforms it ended up being simply a cosmetic behavior change. As
+> > far as I can tell there is nothing requiring domain ids to increase montonically
+> > from zero or that each architecture is required to use the same domain numbering
+> > scheme.
+> 
+> That is truth. But it looks really suspicious why domains are not
+> assigned monotonically. Some scripts / applications are using PCI
+> location (domain:bus:dev:func) for remembering PCI device and domain
+> change can cause issue for config files. And some (older) applications
+> expects existence of domain zero. In systems without hot plug support
+> with small number of domains (e.g. 3) it means that there are always
+> domains 0, 1 and 2.
+> 
+> > Its hard to call this a true regression unless it actually broke
+> > something. The commit in question has been in the kernel since 4.8 which was
+> > released over 5 1/2 years ago.
+> 
+> I agree, it really depends on how you look at it.
+> 
+> The important is that lot of people are using LTS versions and are doing
+> upgrades when LTS support is dropped. Which for 4.4 now happened. So not
+> all smaller or "cosmetic" changes could be detected until longer LTS
+> period pass.
+> 
+> > With all that said looking closer at the code in question I think it is fair to
+> > assume that the author only intended this change for powernv and pseries
+> > platforms and not every powerpc platform. That change was done to make
+> > persistent naming easier to manage in userspace.
+> 
+> I agree that this behavior change may be useful in some situations and I
+> do not object this need.
+> 
+> > Your change defaults back to
+> > the old behavior which will now break both powernv and pseries platforms with
+> > regard to hotplugging and persistent naming.
+> 
+> I was aware of it, that change could cause issues. And that is why I
+> added config option for choosing behavior. So users would be able to
+> choose what they need.
+> 
+> > We could properly limit it to powernv and pseries by using ibm,fw-phb-id instead
+> > of reg property in the look up that follows a failed ibm,opal-phbid lookup. I
+> > think this is acceptable as long as no other powerpc platforms have started
+> > using this behavior for persistent naming.
+> 
+> And what about setting that new config option to enabled by default for
+> those series?
+> 
+> Or is there issue with introduction of the new config option?
 
+PING? Any opinion?
 
-在 2022/5/23 21:11, Icenowy Zheng 写道:
-> 在 2022-05-18星期三的 18:17 +0800，qianfanguijin@163.com写道：
->> From: qianfan Zhao <qianfanguijin@163.com>
->>
->> History:
->> =======
->>
->> v4(2022-05-18):
->> - Enable both musb and OHCI/EHCI support
->>
->> Tests:
->> ======
->>
->> All test cases were tested on bananapi-m2-ultra.
->>
->> 1. USB DEVICE(ping test)
->>
->> Enable usb gadget rndis network, ping m2u on ubuntu host:
-> Interestingly musb previous totally fail when I initially work on R40.
-> Maybe some phy-sun4i-usb patches fixed it by accident?
-Hi, could you please try this patch again?
->
->> ➜  ~ ping 192.168.200.2
->> PING 192.168.200.2 (192.168.200.2) 56(84) bytes of data.
->> 64 bytes from 192.168.200.2: icmp_seq=1 ttl=64 time=0.544 ms
->> 64 bytes from 192.168.200.2: icmp_seq=2 ttl=64 time=0.269 ms
->> 64 bytes from 192.168.200.2: icmp_seq=3 ttl=64 time=0.300 ms
->> 64 bytes from 192.168.200.2: icmp_seq=4 ttl=64 time=0.295 ms
->> 64 bytes from 192.168.200.2: icmp_seq=5 ttl=64 time=0.283 ms
->> 64 bytes from 192.168.200.2: icmp_seq=6 ttl=64 time=0.226 ms
->> 64 bytes from 192.168.200.2: icmp_seq=7 ttl=64 time=0.246 ms
->> 64 bytes from 192.168.200.2: icmp_seq=8 ttl=64 time=0.204 ms
->> 64 bytes from 192.168.200.2: icmp_seq=9 ttl=64 time=0.302 ms
->> 64 bytes from 192.168.200.2: icmp_seq=10 ttl=64 time=0.249 ms
->> 64 bytes from 192.168.200.2: icmp_seq=11 ttl=64 time=0.459 ms
->> 64 bytes from 192.168.200.2: icmp_seq=12 ttl=64 time=0.232 ms
->> 64 bytes from 192.168.200.2: icmp_seq=13 ttl=64 time=0.275 ms
->> 64 bytes from 192.168.200.2: icmp_seq=14 ttl=64 time=0.243 ms
->>
->> 2. USB HOST(OHCI)
->>
->> Connect an usb serial port on OTG port, nex t is the kernel log:
->>
->> [   27.824137] usb 2-1: new full-speed USB device number 2 using
->> ohci-platform
->> [   28.865504] cdc_acm 2-1:1.0: ttyACM0: USB ACM device
->> [   29.565509] cdc_acm 2-1:1.2: ttyACM1: USB ACM device
->>
->> 3. USB HOST(EHCI)
->>
->> Connect an usb storage on OTG port, next is the kernel log:
->>
->> [   17.754147] usb 1-1: new high-speed USB device number 2 using
->> ehci-platform
->> [   17.955995] usb-storage 1-1:1.0: USB Mass Storage device detected
->> [   18.024497] scsi host1: usb-storage 1-1:1.0
->> [   19.035091] scsi 1:0:0:0: Direct-Access     General  USB Flash
->> Disk   1.0  PQ: 0 ANSI: 2
->> [   19.049717] sd 1:0:0:0: [sda] 7831552 512-byte logical blocks:
->> (4.01 GB/3.73 GiB)
->> [   19.060873] sd 1:0:0:0: [sda] Write Protect is off
->> [   19.071018] sd 1:0:0:0: [sda] No Caching mode page found
->> [   19.076437] sd 1:0:0:0: [sda] Assuming drive cache: write through
->> [   19.093566]  sda: sda1
->> [   19.103492] sd 1:0:0:0: [sda] Attached SCSI removable disk
->>
->> issues:
->> =======
->>
->> The system power often turned off when I plugged an usb device into
->> the OTG port.
->> It's not clear why.
->>
->> qianfan Zhao (2):
->>    ARM: dts: sun8i-r40: Add USB0_OTG/HOST support
->>    ARM: dts: bananapi-m2-ultra: Enable USB0_OTG and HOST support
->>
->>   .../boot/dts/sun8i-r40-bananapi-m2-ultra.dts  | 39
->> +++++++++++++++++++
->>   arch/arm/boot/dts/sun8i-r40.dtsi              | 34 ++++++++++++++++
->>   2 files changed, 73 insertions(+)
->>
-
+> One of the point is that it is really a good idea to have similar/same
+> behavior for all linux platforms. And if it cannot be enabled by default
+> (for backward compatibility) add at least some option, so new platforms
+> can start using it or users can decide to switch behavior.
+> 
+> > -Tyrel
+> > 
+> > > For example, prior that commit on P2020 RDB board were PCI domains 0, 1 and 2.
+> > > 
+> > > $ lspci
+> > > 0000:00:00.0 PCI bridge: Freescale Semiconductor Inc P2020E (rev 21)
+> > > 0000:01:00.0 USB controller: Texas Instruments TUSB73x0 SuperSpeed USB 3.0 xHCI Host Controller (rev 02)
+> > > 0001:02:00.0 PCI bridge: Freescale Semiconductor Inc P2020E (rev 21)
+> > > 0001:03:00.0 Network controller: Qualcomm Atheros AR93xx Wireless Network Adapter (rev 01)
+> > > 0002:04:00.0 PCI bridge: Freescale Semiconductor Inc P2020E (rev 21)
+> > > 0002:05:00.0 Network controller: Qualcomm Atheros QCA986x/988x 802.11ac Wireless Network Adapter
+> > > 
+> > > After that commit on P2020 RDB board are PCI domains 0x8000, 0x9000 and 0xa000.
+> > > 
+> > > $ lspci
+> > > 8000:00:00.0 PCI bridge: Freescale Semiconductor Inc P2020E (rev 21)
+> > > 8000:01:00.0 USB controller: Texas Instruments TUSB73x0 SuperSpeed USB 3.0 xHCI Host Controller (rev 02)
+> > > 9000:02:00.0 PCI bridge: Freescale Semiconductor Inc P2020E (rev 21)
+> > > 9000:03:00.0 Network controller: Qualcomm Atheros AR93xx Wireless Network Adapter (rev 01)
+> > > a000:04:00.0 PCI bridge: Freescale Semiconductor Inc P2020E (rev 21)
+> > > a000:05:00.0 Network controller: Qualcomm Atheros QCA986x/988x 802.11ac Wireless Network Adapter
+> > > 
+> > > It is somehow strange that PCI domains are not indexed one by one and
+> > > also that there is no domain 0
+> > > 
+> > > With my patch when CONFIG_PPC_PCI_DOMAIN_FROM_OF_REG is not set, then
+> > > previous behavior used and PCI domains are again 0, 1 and 2.
+> > > 
+> > >> Usually we don't commit regressions to mainline ...
+> > >>
+> > >>
+> > >>>
+> > >>> Fix this issue by introducing a new option CONFIG_PPC_PCI_DOMAIN_FROM_OF_REG
+> > >>> When this options is disabled then powerpc kernel would assign PCI domains
+> > >>> in the similar way like it is doing kernel for other architectures and also
+> > >>> how it was done prior that commit.
+> > >>
+> > >> You don't define CONFIG_PPC_PCI_DOMAIN_FROM_OF_REG on by default, it 
+> > >> means this commit will change the behaviour. Is that expected ?
+> > >>
+> > >> Is that really worth a user selectable option ? Is the user able to 
+> > >> decide what he needs ?
+> > > 
+> > > Well, I hope that maintainers of that code answer to these questions.
+> > > 
+> > > In any case, I think that it could be a user selectable option as in
+> > > that commit is explained that in some situation is makes sense to do
+> > > PCI domain numbering based on DT reg.
+> > > 
+> > > But as I pointed above, upgrading from 4.4 TLS kernel to some new TLS
+> > > kernel brings above regression, so I think that there should be a way to
+> > > disable this behavior.
+> > > 
+> > > In my opinion, for people who are upgrading from 4.4 TLS kernel, this
+> > > option should be turned off by default (= do not change behavior). For
+> > > people who want same behaviour on powerpc as on other platforms, also it
+> > > should be turned off by default.
+> > > 
+> > >>>
+> > >>> Fixes: 63a72284b159 ("powerpc/pci: Assign fixed PHB number based on device-tree properties")
+> > >>
+> > >> Is that really a fix ? What is the problem really ?
+> > > 
+> > > Problem is that PCI domains were changed in a way that is not compatible
+> > > neither with version prior that commit and neither with how other linux
+> > > platforms assign PCI domains for controllers.
+> > > 
+> > >>> Signed-off-by: Pali Rohár <pali@kernel.org>
+> > >>> ---
+> > >>>   arch/powerpc/Kconfig             | 10 ++++++++++
+> > >>>   arch/powerpc/kernel/pci-common.c |  4 ++--
+> > >>>   2 files changed, 12 insertions(+), 2 deletions(-)
+> > >>>
+> > >>> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+> > >>> index 174edabb74fa..4dd3e3acddda 100644
+> > >>> --- a/arch/powerpc/Kconfig
+> > >>> +++ b/arch/powerpc/Kconfig
+> > >>> @@ -375,6 +375,16 @@ config PPC_OF_PLATFORM_PCI
+> > >>>   	depends on PCI
+> > >>>   	depends on PPC64 # not supported on 32 bits yet
+> > >>>   
+> > >>> +config PPC_PCI_DOMAIN_FROM_OF_REG
+> > >>> +	bool "Use OF reg property for PCI domain"
+> > >>> +	depends on PCI
+> > >>
+> > >> Should it depend on PPC_OF_PLATFORM_PCI instead ?
+> > > 
+> > > No, PPC_OF_PLATFORM_PCI has line "depends on PPC64 # not supported on 32
+> > > bits yet". But it is already used also for e.g. P2020 which is 32-bit
+> > > platform.
+> > > 
+> > >>> +	help
+> > >>> +	  By default PCI domain for host bridge during its registration is
+> > >>> +	  chosen as the lowest unused PCI domain number.
+> > >>> +
+> > >>> +	  When this option is enabled then PCI domain is determined from
+> > >>> +	  the OF / Device Tree 'reg' property.
+> > >>> +
+> > >>>   config ARCH_SUPPORTS_UPROBES
+> > >>>   	def_bool y
+> > >>>   
+> > >>> diff --git a/arch/powerpc/kernel/pci-common.c b/arch/powerpc/kernel/pci-common.c
+> > >>> index 8bc9cf62cd93..8cb6fc5302ae 100644
+> > >>> --- a/arch/powerpc/kernel/pci-common.c
+> > >>> +++ b/arch/powerpc/kernel/pci-common.c
+> > >>> @@ -74,7 +74,6 @@ void __init set_pci_dma_ops(const struct dma_map_ops *dma_ops)
+> > >>>   static int get_phb_number(struct device_node *dn)
+> > >>>   {
+> > >>>   	int ret, phb_id = -1;
+> > >>> -	u32 prop_32;
+> > >>>   	u64 prop;
+> > >>>   
+> > >>>   	/*
+> > >>> @@ -83,7 +82,8 @@ static int get_phb_number(struct device_node *dn)
+> > >>>   	 * reading "ibm,opal-phbid", only present in OPAL environment.
+> > >>>   	 */
+> > >>>   	ret = of_property_read_u64(dn, "ibm,opal-phbid", &prop);
+> > >>
+> > >> This looks like very specific, it is not reflected in the commit log.
+> > > 
+> > > I have not changed nor touched this "ibm,opal-phbid" setting. And it was
+> > > not also touched in that mentioned patch. I see that no DTS file in
+> > > kernel use this option (so probably only DTS files supplied by
+> > > bootloader use it). So I thought that there is not reason to mention in
+> > > commit message.
+> > > 
+> > > But if you think so, I can add some info to commit message about it.
+> > > 
+> > >>> -	if (ret) {
+> > >>> +	if (ret && IS_ENABLED(CONFIG_PPC_PCI_DOMAIN_FROM_OF_REG)) {
+> > >>> +		u32 prop_32;
+> > >>>   		ret = of_property_read_u32_index(dn, "reg", 1, &prop_32);
+> > >>>   		prop = prop_32;
+> > >>>   	}
+> > 

@@ -2,67 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 422CF532B17
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 15:20:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BBE0532B21
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 15:20:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233710AbiEXNSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 09:18:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44216 "EHLO
+        id S237715AbiEXNUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 09:20:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234146AbiEXNSW (ORCPT
+        with ESMTP id S235487AbiEXNUC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 09:18:22 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5093C972B6
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 06:18:21 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4L6vs11Rxvz9t9d;
-        Tue, 24 May 2022 15:18:13 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id fk1vbvlNobkz; Tue, 24 May 2022 15:18:13 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4L6vrx6zRKz9t9f;
-        Tue, 24 May 2022 15:18:09 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id DBF4D8B78C;
-        Tue, 24 May 2022 15:18:09 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id MDZFVzOvTcNG; Tue, 24 May 2022 15:18:09 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.203.153])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 281A48B779;
-        Tue, 24 May 2022 15:18:09 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 24ODI0Pl4109106
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Tue, 24 May 2022 15:18:00 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 24ODI0aQ4109105;
-        Tue, 24 May 2022 15:18:00 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>, peterz@infradead.org,
-        aik@ozlabs.ru, sv@linux.ibm.com, rostedt@goodmis.org,
-        jpoimboe@redhat.com, naveen.n.rao@linux.vnet.ibm.com,
-        mbenes@suse.cz
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [RFC PATCH v2 7/7] objtool/powerpc: Add --mcount specific implementation
-Date:   Tue, 24 May 2022 15:17:47 +0200
-Message-Id: <6ab54c456e6763b520ea2ee1c705aaec0015a5d4.1653398233.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <cover.1653398233.git.christophe.leroy@csgroup.eu>
-References: <cover.1653398233.git.christophe.leroy@csgroup.eu>
+        Tue, 24 May 2022 09:20:02 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 495D198095;
+        Tue, 24 May 2022 06:20:01 -0700 (PDT)
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24OCjcAb029586;
+        Tue, 24 May 2022 13:19:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=qZODpqFwVOu9imLO2DLb89vkcW+eAv0FCCFk93WM9fQ=;
+ b=raCpb/Wvwimv+0qs58BtbqK29AbF0EbRuF+oRdpZtLs4XGYlbn1b711MbZu2xR5Deai7
+ HjXFfHg9+0j+So74CmMyp52dIZdkY1wHv2PRD1a66Oc8fs4BWDGv/IuOmNn2JT5Zgf5+
+ fFK2NE/ypHwENKE365U38WDeZH6BbROAt7C++stztTGyp83Za5kq1Ur49apAwyPBPLMC
+ jHWcLTnoK8v6YXtgYSYgu2tgLrYfk8SNW7n5Of9/emwVrPtjYYqX2wp87CLk3jgPPUXF
+ rPmgdlF5UYYwiUX9vCrSoGcGxMxsxXIvnJ5go0/QHxyAlLrc5PIVwFzRuaY9cN48UsVF kw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g8yna8shk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 May 2022 13:19:31 +0000
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24OD7aif027682;
+        Tue, 24 May 2022 13:19:31 GMT
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g8yna8sha-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 May 2022 13:19:31 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24ODIuH6012350;
+        Tue, 24 May 2022 13:19:30 GMT
+Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
+        by ppma03wdc.us.ibm.com with ESMTP id 3g6qq9r4fv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 May 2022 13:19:30 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24ODJTas24576346
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 24 May 2022 13:19:29 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2080978063;
+        Tue, 24 May 2022 13:19:29 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9DF7878067;
+        Tue, 24 May 2022 13:19:26 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue, 24 May 2022 13:19:26 +0000 (GMT)
+Message-ID: <e1c3941e-80d4-f8f2-774e-01bd89fd474a@linux.ibm.com>
+Date:   Tue, 24 May 2022 09:19:26 -0400
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1653398265; l=4495; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=gb2Go7BRzqF5cnEvT4VmueTHHrvWKKfQkE/YPHqKWig=; b=B6lzUqJXvN7ZLODHflfvwh8lcGqttMmdTdDzGcqx/5J4dShgnyb/CEJ7BrMZq0ehMEkMWtqvzrDN zPv8l/SJDpYUaKZnuPx15SiHWJsVouUJLAIvg3MYc20G7c35MuPT
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v12 23/26] ima: Show owning user namespace's uid and gid
+ when displaying policy
+Content-Language: en-US
+To:     "Serge E. Hallyn" <serge@hallyn.com>
+Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        christian.brauner@ubuntu.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        jpenumak@redhat.com
+References: <20220420140633.753772-1-stefanb@linux.ibm.com>
+ <20220420140633.753772-24-stefanb@linux.ibm.com>
+ <20220522175452.GB24519@mail.hallyn.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20220522175452.GB24519@mail.hallyn.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: rtUV8HzU-sn-srON6l5ot-o0FFSQ1kLt
+X-Proofpoint-ORIG-GUID: ksryRKuSnqf6b1Ga2LNHDakXKDApaO99
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-24_07,2022-05-23_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ lowpriorityscore=0 adultscore=0 spamscore=0 phishscore=0 mlxlogscore=999
+ malwarescore=0 clxscore=1015 mlxscore=0 priorityscore=1501 bulkscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205240066
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,139 +104,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sathvika Vasireddy <sv@linux.ibm.com>
 
-This patch enables objtool --mcount on powerpc, and
-adds implementation specific to powerpc.
 
-Signed-off-by: Sathvika Vasireddy <sv@linux.ibm.com>
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- arch/powerpc/Kconfig                |  1 +
- tools/objtool/arch/powerpc/decode.c | 14 ++++++++++++++
- tools/objtool/check.c               | 12 +++++++-----
- tools/objtool/elf.c                 | 15 +++++++++++++++
- tools/objtool/include/objtool/elf.h |  1 +
- 5 files changed, 38 insertions(+), 5 deletions(-)
+On 5/22/22 13:54, Serge E. Hallyn wrote:
+> On Wed, Apr 20, 2022 at 10:06:30AM -0400, Stefan Berger wrote:
+>> Show the uid and gid values relative to the user namespace that is
+>> currently active. The effect of this changes is that when one displays
+> 
+> When you say "is currently active", in my mind it's not clear whether you
+> mean in the process which opened the seq_file, or is active in the ima_ns,
+> or the reader (which might I guess be differenet still).  The code of
+> course does make it clear.  Can you change it to say "the user namespace
+> which opened the policy_show file" or something like that?
+> 
+> Also, s/The effect of this changes/The effect of this change/.
+> 
+>> the policy from the user namespace that originally set the policy,
+>> the same uid and gid values are shown in the policy as those that were
+>> used when the policy was set.
+>>
+>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+>> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+>>
+> 
+> Reviewed-by: Serge Hallyn <serge@hallyn.com>
 
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index 7c01229dd2e3..5ef8bf8eb202 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -233,6 +233,7 @@ config PPC
- 	select HAVE_NMI				if PERF_EVENTS || (PPC64 && PPC_BOOK3S)
- 	select HAVE_OPTPROBES
- 	select HAVE_OBJTOOL
-+	select HAVE_OBJTOOL_MCOUNT		if HAVE_OBJTOOL
- 	select HAVE_PERF_EVENTS
- 	select HAVE_PERF_EVENTS_NMI		if PPC64
- 	select HAVE_PERF_REGS
-diff --git a/tools/objtool/arch/powerpc/decode.c b/tools/objtool/arch/powerpc/decode.c
-index eb1542d155fe..048bb4cd2838 100644
---- a/tools/objtool/arch/powerpc/decode.c
-+++ b/tools/objtool/arch/powerpc/decode.c
-@@ -41,12 +41,26 @@ int arch_decode_instruction(struct objtool_file *file, const struct section *sec
- 			    struct list_head *ops_list)
- {
- 	u32 insn;
-+	unsigned int opcode;
- 
- 	*immediate = 0;
- 	insn = bswap_if_needed(file->elf, *(u32 *)(sec->data->d_buf + offset));
- 	*len = 4;
- 	*type = INSN_OTHER;
- 
-+	opcode = (insn >> 26);
-+
-+	switch (opcode) {
-+	case 18: /* bl */
-+		if ((insn & 3) == 1) {
-+			*type = INSN_CALL;
-+			*immediate = insn & 0x3fffffc;
-+			if (*immediate & 0x2000000)
-+				*immediate -= 0x4000000;
-+		}
-+		break;
-+	}
-+
- 	return 0;
- }
- 
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 7f0dc504dd92..70be5a72e838 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -834,7 +834,7 @@ static int create_mcount_loc_sections(struct objtool_file *file)
- 		memset(loc, 0, size);
- 
- 		if (elf_add_reloc_to_insn(file->elf, sec, idx,
--					  R_X86_64_64,
-+					  elf_reloc_type_long(file->elf),
- 					  insn->sec, insn->offset))
- 			return -1;
- 
-@@ -2185,7 +2185,7 @@ static int classify_symbols(struct objtool_file *file)
- 			if (arch_is_retpoline(func))
- 				func->retpoline_thunk = true;
- 
--			if (!strcmp(func->name, "__fentry__"))
-+			if ((!strcmp(func->name, "__fentry__")) || (!strcmp(func->name, "_mcount")))
- 				func->fentry = true;
- 
- 			if (is_profiling_func(func->name))
-@@ -2261,9 +2261,11 @@ static int decode_sections(struct objtool_file *file)
- 	 * Must be before add_jump_destinations(), which depends on 'func'
- 	 * being set for alternatives, to enable proper sibling call detection.
- 	 */
--	ret = add_special_section_alts(file);
--	if (ret)
--		return ret;
-+	if (opts.stackval || opts.orc || opts.uaccess || opts.noinstr) {
-+		ret = add_special_section_alts(file);
-+		if (ret)
-+			return ret;
-+	}
- 
- 	ret = add_jump_destinations(file);
- 	if (ret)
-diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
-index 63218f5799c2..34b1c6817a5e 100644
---- a/tools/objtool/elf.c
-+++ b/tools/objtool/elf.c
-@@ -793,6 +793,21 @@ elf_create_section_symbol(struct elf *elf, struct section *sec)
- 	return sym;
- }
- 
-+int elf_reloc_type_long(struct elf *elf)
-+{
-+	switch (elf->ehdr.e_machine) {
-+	case EM_X86_64:
-+		return R_X86_64_64;
-+	case EM_PPC64:
-+		return R_PPC64_ADDR64;
-+	case EM_PPC:
-+		return R_PPC_ADDR32;
-+	default:
-+		WARN("unknown machine...");
-+		exit(-1);
-+	}
-+}
-+
- int elf_add_reloc_to_insn(struct elf *elf, struct section *sec,
- 			  unsigned long offset, unsigned int type,
- 			  struct section *insn_sec, unsigned long insn_off)
-diff --git a/tools/objtool/include/objtool/elf.h b/tools/objtool/include/objtool/elf.h
-index c720c4476828..d10f4701715b 100644
---- a/tools/objtool/include/objtool/elf.h
-+++ b/tools/objtool/include/objtool/elf.h
-@@ -152,6 +152,7 @@ static inline int elf_class_size(struct elf *elf)
- struct elf *elf_open_read(const char *name, int flags);
- struct section *elf_create_section(struct elf *elf, const char *name, unsigned int sh_flags, size_t entsize, int nr);
- 
-+int elf_reloc_type_long(struct elf *elf);
- int elf_add_reloc(struct elf *elf, struct section *sec, unsigned long offset,
- 		  unsigned int type, struct symbol *sym, s64 addend);
- int elf_add_reloc_to_insn(struct elf *elf, struct section *sec,
--- 
-2.35.3
+I modified the  text above now to state:
 
+Show the uid and gid values relative to the user namespace that opened
+the IMA policy file. The effect of this change is that when one displays
+the policy from the user namespace that originally set the policy,
+the same uid and gid values are shown in the policy as those that were
+used when the policy was set.
+
+Thanks.
+    Stefan
+> 
+>> ---
+>> v9:
+>>    - use seq_user_ns and from_k{g,u}id_munged()
+>> ---
+>>   security/integrity/ima/ima_policy.c | 19 +++++++++++++------
+>>   1 file changed, 13 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+>> index eb10d895923d..4f8c50ddb777 100644
+>> --- a/security/integrity/ima/ima_policy.c
+>> +++ b/security/integrity/ima/ima_policy.c
+>> @@ -2018,6 +2018,7 @@ static void ima_policy_show_appraise_algos(struct seq_file *m,
+>>   
+>>   int ima_policy_show(struct seq_file *m, void *v)
+>>   {
+>> +	struct user_namespace *user_ns = seq_user_ns(m);
+>>   	struct ima_rule_entry *entry = v;
+>>   	int i;
+>>   	char tbuf[64] = {0,};
+>> @@ -2103,7 +2104,8 @@ int ima_policy_show(struct seq_file *m, void *v)
+>>   	}
+>>   
+>>   	if (entry->flags & IMA_UID) {
+>> -		snprintf(tbuf, sizeof(tbuf), "%d", __kuid_val(entry->uid));
+>> +		snprintf(tbuf, sizeof(tbuf),
+>> +			 "%d", from_kuid_munged(user_ns, entry->uid));
+>>   		if (entry->uid_op == &uid_gt)
+>>   			seq_printf(m, pt(Opt_uid_gt), tbuf);
+>>   		else if (entry->uid_op == &uid_lt)
+>> @@ -2114,7 +2116,8 @@ int ima_policy_show(struct seq_file *m, void *v)
+>>   	}
+>>   
+>>   	if (entry->flags & IMA_EUID) {
+>> -		snprintf(tbuf, sizeof(tbuf), "%d", __kuid_val(entry->uid));
+>> +		snprintf(tbuf, sizeof(tbuf),
+>> +			 "%d", from_kuid_munged(user_ns, entry->uid));
+>>   		if (entry->uid_op == &uid_gt)
+>>   			seq_printf(m, pt(Opt_euid_gt), tbuf);
+>>   		else if (entry->uid_op == &uid_lt)
+>> @@ -2125,7 +2128,8 @@ int ima_policy_show(struct seq_file *m, void *v)
+>>   	}
+>>   
+>>   	if (entry->flags & IMA_GID) {
+>> -		snprintf(tbuf, sizeof(tbuf), "%d", __kgid_val(entry->gid));
+>> +		snprintf(tbuf, sizeof(tbuf),
+>> +			 "%d", from_kgid_munged(user_ns, entry->gid));
+>>   		if (entry->gid_op == &gid_gt)
+>>   			seq_printf(m, pt(Opt_gid_gt), tbuf);
+>>   		else if (entry->gid_op == &gid_lt)
+>> @@ -2136,7 +2140,8 @@ int ima_policy_show(struct seq_file *m, void *v)
+>>   	}
+>>   
+>>   	if (entry->flags & IMA_EGID) {
+>> -		snprintf(tbuf, sizeof(tbuf), "%d", __kgid_val(entry->gid));
+>> +		snprintf(tbuf, sizeof(tbuf),
+>> +			 "%d", from_kgid_munged(user_ns, entry->gid));
+>>   		if (entry->gid_op == &gid_gt)
+>>   			seq_printf(m, pt(Opt_egid_gt), tbuf);
+>>   		else if (entry->gid_op == &gid_lt)
+>> @@ -2147,7 +2152,8 @@ int ima_policy_show(struct seq_file *m, void *v)
+>>   	}
+>>   
+>>   	if (entry->flags & IMA_FOWNER) {
+>> -		snprintf(tbuf, sizeof(tbuf), "%d", __kuid_val(entry->fowner));
+>> +		snprintf(tbuf, sizeof(tbuf),
+>> +			 "%d", from_kuid_munged(user_ns, entry->fowner));
+>>   		if (entry->fowner_op == &uid_gt)
+>>   			seq_printf(m, pt(Opt_fowner_gt), tbuf);
+>>   		else if (entry->fowner_op == &uid_lt)
+>> @@ -2158,7 +2164,8 @@ int ima_policy_show(struct seq_file *m, void *v)
+>>   	}
+>>   
+>>   	if (entry->flags & IMA_FGROUP) {
+>> -		snprintf(tbuf, sizeof(tbuf), "%d", __kgid_val(entry->fgroup));
+>> +		snprintf(tbuf, sizeof(tbuf),
+>> +			 "%d", from_kgid_munged(user_ns, entry->fgroup));
+>>   		if (entry->fgroup_op == &gid_gt)
+>>   			seq_printf(m, pt(Opt_fgroup_gt), tbuf);
+>>   		else if (entry->fgroup_op == &gid_lt)
+>> -- 
+>> 2.34.1

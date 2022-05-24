@@ -2,77 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC064532AC3
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 15:03:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A7C1532ACF
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 15:07:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237533AbiEXNDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 09:03:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48802 "EHLO
+        id S237547AbiEXNFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 09:05:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231294AbiEXNDQ (ORCPT
+        with ESMTP id S231294AbiEXNFN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 09:03:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 77374644E2
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 06:03:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653397391;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VuA+hQIP5NuMWzKci8Ce7ATCFxGvl8XcBeLDZ4SQZrw=;
-        b=Xb+D9eUA/cAvD2E4+VfGAFE004kxNmi85GWwlATNQZmtCYYwOPXk8a4/bUwftWi4sneb9B
-        cnDALIKT9LGSoLXv7hHgolR3Fn3bv7jJG+nYCBrL+BO/SztBRQR6eulXA4OLic9DNQXDjR
-        kTcDwRgzryvhIFgW3d20KKcKKTFkwjE=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-444-CLSOGblpOlahh7p4EKebVg-1; Tue, 24 May 2022 09:03:10 -0400
-X-MC-Unique: CLSOGblpOlahh7p4EKebVg-1
-Received: by mail-wm1-f72.google.com with SMTP id k35-20020a05600c1ca300b003946a9764baso1273771wms.1
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 06:03:10 -0700 (PDT)
+        Tue, 24 May 2022 09:05:13 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FDCE6338A
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 06:05:12 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-30007f11f88so49255017b3.7
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 06:05:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=To11RlxqH6GZH9FPXLaskPjRkQ4yZEZUtKkrlfgzx5k=;
+        b=SrW38l8zVhjzS5d1qhwscRSJD9CHrJ94L1YtUj2PSUrek8Q4I7M76lx9Tjp9YCIPin
+         VnJpGJySVKfX9k4N75W/rAbbLF/042yIyXfK8RYxmqDIiIRyiAORoTWxM6TFGHrFrJmw
+         tIJNmxS3MirfiFwahPq+Vpf9QSgaRKQ55w+ZNdrQfZEL+V6j+cnx6wJibhAXS4/CvwFF
+         sVIx2a3XAHdN57woOVQkznef6tZO2/slDq8dQch0zZw3DhjIHCZVDRzkfmmTPLTXIeEL
+         QBWka+mgfr1UEvo9+bEv7bYB2GH9yYBoTniOR8ixJ7/hJNQijQczQBTPjM67QqbmVrjs
+         qJQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=VuA+hQIP5NuMWzKci8Ce7ATCFxGvl8XcBeLDZ4SQZrw=;
-        b=1RcAi6gRZeEo8dVB9RDW4B0eFiJPpEWS46Oq48Xd8JPWKpsFaKjSntoikeIyeH8u6G
-         y4ff3SRYRDnWYaTO+E/x0DCQonRiusnJ7bXH9ip0VeouZx47MwmszqqtAQEuV4GodjLH
-         6YMrZxWnE2U41yutAJKj+F39mkYXgkZHlN/S5kIniPgZUNYgC8WuX5/IX8YUEJabhKtX
-         9IKaVnuDUTPn68Ldf11Sy9CuZzrf/ezzz9a7DJ6Wa/ZtHJZLGueztFFo7C2WpoppVruI
-         J5nvpRJuXV7o9cb6tryAyzYRTa9rOOzuTbxmBZNhEdbhCGzLL29+k/v6JAzI+TSp05mo
-         lJkg==
-X-Gm-Message-State: AOAM530m8fJ/t1WEXMhvjScc8kOe8f49mfND9vRmBbEgnlQv7PbflsBV
-        yvRAT8AMXEa7YnhXnKeAZBUXA/jG85W7+P+BojqU9SBZ/n0nBV0nl/LSCri6e5ZM2kaKse67Q5Z
-        4jU65wFcaugXMeswxnAJNh22y
-X-Received: by 2002:a05:6000:184d:b0:20f:e9a0:dad6 with SMTP id c13-20020a056000184d00b0020fe9a0dad6mr5473137wri.317.1653397388921;
-        Tue, 24 May 2022 06:03:08 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy6FGiz36BIprlRrTIAV1mNT8gxPmWO8Z7EZuutiOcqaDrFguXdDtGyDfOJNR44VniSl70yKQ==
-X-Received: by 2002:a05:6000:184d:b0:20f:e9a0:dad6 with SMTP id c13-20020a056000184d00b0020fe9a0dad6mr5473116wri.317.1653397388723;
-        Tue, 24 May 2022 06:03:08 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-112-184.dyn.eolo.it. [146.241.112.184])
-        by smtp.gmail.com with ESMTPSA id g17-20020adfbc91000000b0020e6c51f070sm12972975wrh.112.2022.05.24.06.03.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 May 2022 06:03:08 -0700 (PDT)
-Message-ID: <6dc4367dc75d3f7baf9f61e2691045066b3716e1.camel@redhat.com>
-Subject: Re: [PATCH] r8152: Return true/false (not 1/0) from bool functions
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        davem@davemloft.net
-Cc:     edumazet@google.com, kuba@kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-Date:   Tue, 24 May 2022 15:03:07 +0200
-In-Reply-To: <20220524093733.9537-1-jiapeng.chong@linux.alibaba.com>
-References: <20220524093733.9537-1-jiapeng.chong@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=To11RlxqH6GZH9FPXLaskPjRkQ4yZEZUtKkrlfgzx5k=;
+        b=DNkwTEQvXD6+NKuskTxrzjWWNN7KhdGxCtNRxCyjZyFJfLEzYMhsz9Ltvqx9hNwIEP
+         vKenvMMYsQUlu5FI05vtglQJfj02tMjfikH79Me38IIsFCTtkWhn8zmp699wcSAOl+s9
+         cuAvaOgfn8rCZ+3z2Tu0FjDF6AMPX0/bUVE8fUr5uehDJ5u6waBSIyXyecQOBOYI7xsz
+         5/gvndnV6FVqQhi4Z37PDPtQbzP06Vz6KN40lQdlAcCFCI9tfpMk+cym3/2bZJvVRWwm
+         BWD68H7n1JCDDQeW4FGjG/xm3BHaGcow+nkZ0XBcmO4vfbzNPytKabmYajlF/pRnQ6I+
+         HspA==
+X-Gm-Message-State: AOAM530VDDqGG9ky8FRF/h5O7TEACBzYLJOVwkBemayLTJ4PfkqWD50X
+        kA1B0zJK/GSaec51LEMwKHf7br2vZKP3yBA+1Fi7eA==
+X-Google-Smtp-Source: ABdhPJywoisxT8mLcMdZ7yPKHGZUw3cETrNIIeg59RUrd4PF3W8NNkIwn9gPARS0L/KBaowMI2wfHaK7Kv3Fgmey1ds=
+X-Received: by 2002:a81:442:0:b0:300:2add:cd21 with SMTP id
+ 63-20020a810442000000b003002addcd21mr2720910ywe.189.1653397511146; Tue, 24
+ May 2022 06:05:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220523165743.398280407@linuxfoundation.org>
+In-Reply-To: <20220523165743.398280407@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 24 May 2022 18:35:00 +0530
+Message-ID: <CA+G9fYv_TYDmJZg8__NqAw-QDWo0jx-=4DwXG6N2xES2qP=iKA@mail.gmail.com>
+Subject: Re: [PATCH 4.9 00/25] 4.9.316-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,49 +71,154 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-05-24 at 17:37 +0800, Jiapeng Chong wrote:
-> Return statements in functions returning bool should use true/false
-> instead of 1/0.
-> 
-> Clean the following coccicheck warning:
-> 
-> ./drivers/net/usb/r8152.c:9579:10-11: WARNING: return of 0/1 in function
-> 'rtl8152_supports_lenovo_macpassthru' with return type bool.
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> ---
->  drivers/net/usb/r8152.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-> index 7389d6ef8569..7b7704b4b500 100644
-> --- a/drivers/net/usb/r8152.c
-> +++ b/drivers/net/usb/r8152.c
-> @@ -9576,15 +9576,15 @@ static bool rtl8152_supports_lenovo_macpassthru(struct usb_device *udev)
->  		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2:
->  		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN3:
->  		case DEVICE_ID_THINKPAD_USB_C_DONGLE:
-> -			return 1;
-> +			return true;
->  		}
->  	} else if (vendor_id == VENDOR_ID_REALTEK && parent_vendor_id == VENDOR_ID_LENOVO) {
->  		switch (product_id) {
->  		case 0x8153:
-> -			return 1;
-> +			return true;
->  		}
->  	}
-> -	return 0;
-> +	return false;
->  }
->  
->  static int rtl8152_probe(struct usb_interface *intf,
+On Mon, 23 May 2022 at 22:33, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.9.316 release.
+> There are 25 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 25 May 2022 16:56:55 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.9.316-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.9.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-This looks like net-next material, and net-next is currently closed,
-please resubmit in ~2weeks specifying the target tree in the subj.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Thanks
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Paolo
+## Build
+* kernel: 4.9.316-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-4.9.y
+* git commit: be4ec3e3faa1cfbe1ee62a6f6dc29c1b341a90f0
+* git describe: v4.9.315-26-gbe4ec3e3faa1
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.9.y/build/v4.9.3=
+15-26-gbe4ec3e3faa1
 
+## Test Regressions (compared to v4.9.315)
+No test regressions found.
+
+## Metric Regressions (compared to v4.9.315)
+No metric regressions found.
+
+## Test Fixes (compared to v4.9.315)
+No test fixes found.
+
+## Metric Fixes (compared to v4.9.315)
+No metric fixes found.
+
+## Test result summary
+total: 72713, pass: 57877, fail: 683, skip: 11880, xfail: 2273
+
+## Build Summary
+* arm: 238 total, 238 passed, 0 failed
+* arm64: 32 total, 32 passed, 0 failed
+* i386: 18 total, 18 passed, 0 failed
+* mips: 22 total, 22 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 31 total, 31 passed, 0 failed
+
+## Test suites summary
+* fwts
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kvm-unit-tests
+* libhugetlbfs
+* linux-log-parser
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

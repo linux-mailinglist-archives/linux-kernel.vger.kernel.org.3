@@ -2,90 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDCCC532424
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 09:33:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7F0B532428
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 09:34:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235215AbiEXHdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 03:33:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52572 "EHLO
+        id S235302AbiEXHec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 03:34:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbiEXHdK (ORCPT
+        with ESMTP id S235294AbiEXHeY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 03:33:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AD93562A20
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 00:33:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653377587;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nc0quxO4J16P5xk58WIaztMrbbSvqm8aAXmU1D9eYJ4=;
-        b=BHyqGHdvfWqzkK/ZYuVxUeDIaeKeuQ7EqtVIwd+soCjy39JXWZSZuOZjAGJHW550pK8CoU
-        jVnRf1LrIndGIP+4s1Ssj5iZVe5xaX0KCfiGifspD25vpmZ2VbMC6NnieW7pe+JFU6hqAx
-        SOLiKTsz+lrJSwX+ziowj+FQsoFz0K8=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-318-K3Ji-fIDPzmFBedbps6Z3A-1; Tue, 24 May 2022 03:33:06 -0400
-X-MC-Unique: K3Ji-fIDPzmFBedbps6Z3A-1
-Received: by mail-qv1-f72.google.com with SMTP id n20-20020a0cc194000000b00461e72ac689so12735160qvh.9
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 00:33:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=nc0quxO4J16P5xk58WIaztMrbbSvqm8aAXmU1D9eYJ4=;
-        b=5F1kdtBDTPmmZuEPMrn+5Z9Gr30u5iLHSYZFcdFnSSb9T4Hew8IvTkL14qRK5riBWR
-         QiKh+N41T3leRzNnfmTKrRy/oIFsd+MW5vkMYrquR4793MTeNwfxenqIizEqxkcqnEoe
-         ixe27wM5Pdtjxcs1/V+QRz4hI8c14xqgVIGR4tWUJC4ZsK81LeLGak3nVHmiuwnXV+y4
-         t+aiRmUyHb/kGDtQwJhnP1a+WjGAPhCReZcnLrLa9js9uAO1V4/nQH1eoG13E7lm3LIS
-         3g6v3xuLlbL/JVTwYIEVpgp1syYpptcrZtAnD+W4R7n+X633SrYCuy6OoN0RdnayO+x6
-         IuJQ==
-X-Gm-Message-State: AOAM530IknzVCD5qqsYCncTPWwDLh/t8BPZORYSoYF1keQVHPsA6r0dm
-        CGvu1VzE0XfoXi3Ft1YO7dz1NUqFDr9IizyEfaWKF38owaGCDdDWeRbw/wu9GChY3Em67Hberde
-        CDF5H2NkUjLKrQMgSqiIf56TA
-X-Received: by 2002:a05:6214:29ed:b0:462:12c7:e525 with SMTP id jv13-20020a05621429ed00b0046212c7e525mr14337040qvb.103.1653377585611;
-        Tue, 24 May 2022 00:33:05 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxpE9SJiGYXMMYBtv5GJ5wp83RMZiYPAjWM+XCwHFqeq/+El/4WVAF+CheI3qT9ZUG1nbeKrQ==
-X-Received: by 2002:a05:6214:29ed:b0:462:12c7:e525 with SMTP id jv13-20020a05621429ed00b0046212c7e525mr14337012qvb.103.1653377585290;
-        Tue, 24 May 2022 00:33:05 -0700 (PDT)
-Received: from sgarzare-redhat (host-87-12-25-16.business.telecomitalia.it. [87.12.25.16])
-        by smtp.gmail.com with ESMTPSA id m24-20020ae9e018000000b006a37710ef89sm4011426qkk.115.2022.05.24.00.33.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 May 2022 00:33:04 -0700 (PDT)
-Date:   Tue, 24 May 2022 09:32:56 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>
-Subject: Re: [RFC PATCH v1 0/8] virtio/vsock: experimental zerocopy receive
-Message-ID: <20220524073256.fpaknbcm7w5trata@sgarzare-redhat>
-References: <7cdcb1e1-7c97-c054-19cf-5caeacae981d@sberdevices.ru>
- <20220517151404.vqse5tampdsaaeji@sgarzare-redhat>
- <413d821f-3893-befa-7009-2f87ef51af7a@sberdevices.ru>
- <20220519074208.q2bmytl2dphtjgse@sgarzare-redhat>
- <27f906a8-181f-e6d8-f5a1-035604a2decb@sberdevices.ru>
+        Tue, 24 May 2022 03:34:24 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B1F062A20;
+        Tue, 24 May 2022 00:34:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1653377663; x=1684913663;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Xf83HbWSewZOtUqxluU9V0XX91cw1noJDgM/vmgA17I=;
+  b=aNlNa7890SlpyEtINVyO7Qy7kBo7jgZMmQ5nVds5tV2ijdy8nZF2kDiV
+   1GZN6I95RvykA1aJd4CNoq/0r3uptroBAGzh4IJLyDFQjGjpz0imAgQg6
+   sClPihsT/EjY9t6asPoU7x87zUbzFjo3p2NZIPGbO7EnSxxBIun0A0Hwq
+   4=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 24 May 2022 00:34:23 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 00:34:21 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 24 May 2022 00:34:20 -0700
+Received: from [10.239.133.9] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 24 May
+ 2022 00:34:16 -0700
+Message-ID: <e253eff9-7eb2-e8ec-d27b-4727e853b07a@quicinc.com>
+Date:   Tue, 24 May 2022 15:34:15 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <27f906a8-181f-e6d8-f5a1-035604a2decb@sberdevices.ru>
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v7 08/10] dt-bindings: arm: Adds CoreSight TPDA hardware
+ definitions
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+CC:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Coresight ML <coresight@lists.linaro.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+References: <20220509133947.20987-1-quic_jinlmao@quicinc.com>
+ <20220509133947.20987-9-quic_jinlmao@quicinc.com>
+ <beba5968-3115-3c09-cda6-67095ca55226@arm.com>
+ <CAL_JsqK8Z_J2xaOsBM-U4hhHPgQCudd=SGmPqwdipArWmTXJYw@mail.gmail.com>
+From:   Jinlong Mao <quic_jinlmao@quicinc.com>
+In-Reply-To: <CAL_JsqK8Z_J2xaOsBM-U4hhHPgQCudd=SGmPqwdipArWmTXJYw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,227 +85,181 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 11:09:11AM +0000, Arseniy Krasnov wrote:
->Hello Stefano,
->
->On 19.05.2022 10:42, Stefano Garzarella wrote:
->> On Wed, May 18, 2022 at 11:04:30AM +0000, Arseniy Krasnov wrote:
->>> Hello Stefano,
->>>
->>> On 17.05.2022 18:14, Stefano Garzarella wrote:
->>>> Hi Arseniy,
->>>>
->>>> On Thu, May 12, 2022 at 05:04:11AM +0000, Arseniy Krasnov wrote:
->>>>>                              INTRODUCTION
->>>>>
->>>>>     Hello, this is experimental implementation of virtio vsock zerocopy
->>>>> receive. It was inspired by TCP zerocopy receive by Eric Dumazet. This API uses
->>>>> same idea: call 'mmap()' on socket's descriptor, then every 'getsockopt()' will
->>>>> fill provided vma area with pages of virtio RX buffers. After received data was
->>>>> processed by user, pages must be freed by 'madvise()'  call with MADV_DONTNEED
->>>>> flag set(if user won't call 'madvise()', next 'getsockopt()' will fail).
->>>>
->>>> Sounds cool, but maybe we would need some socket/net experts here for review.
->>>
->>> Yes, that would be great
->>>
->>>>
->>>> Could we do something similar for the sending path as well?
->>>
->>> Here are thoughts about zerocopy transmission:
->>>
->>> I tried to implement this feature in the following way: user creates
->>> some page aligned buffer, then during tx packet allocation instead of
->>> creating data buffer with 'kmalloc()', i tried to add user's buffer
->>> to virtio queue. But found problem: as kernel virtio API uses virtual
->>> addresses to add new buffers, in the deep of virtio subsystem
->>> 'virt_to_phys()' is called to get physical address of buffer, so user's
->>> virtual address won't be translated correctly to physical address(in
->>> theory, i can perform page walk for such user's va, get physical address
->>> and pass some "fake" virtual address to virtio API in order to make
->>> 'virt_to_phys()' return valid physical address(but i think this is ugly).
+Thanks Rob and Suzuki for the review.
+
+I will fix the warning and update in next version.
+
+On 5/23/2022 10:24 PM, Rob Herring wrote:
+> On Mon, May 23, 2022 at 4:44 AM Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
+>> Cc: Rob Herring
 >>
->> And maybe we should also pin the pages to prevent them from being replaced.
->>
->> I think we should do something similar to what we do in vhost-vdpa.
->> Take a look at vhost_vdpa_pa_map() in drivers/vhost/vdpa.c
+> Will or will not have any effect...
 >
->Hm, ok. I'll read about vdpa...
+> Please use get_maintainers.pl and send your patches to the right
+> lists/maintainers. DT patches only get reviewed if sent to DT list. So
+> please resend to the DT list. But before you do, I can tell this
+> binding hasn't been tested so fix all the warnings first.
+>
+> Rob
 >
 >>
+>> On 09/05/2022 14:39, Mao Jinlong wrote:
+>>> Adds new coresight-tpda.yaml file describing the bindings required
+>>> to define tpda in the device trees.
 >>>
+>>> Reviewed-by: Mike Leach <mike.leach@linaro.org>
+>>> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+>>> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
+>>> ---
+>>>    .../bindings/arm/coresight-tpda.yaml          | 119 ++++++++++++++++++
+>>>    MAINTAINERS                                   |   1 +
+>>>    2 files changed, 120 insertions(+)
+>>>    create mode 100644 Documentation/devicetree/bindings/arm/coresight-tpda.yaml
 >>>
->>> If we are talking about 'mmap()' way, i think we can do the following:
->>> user calls 'mmap()' on socket, kernel fills newly created mapping with
->>> allocated pages(all pages have rw permissions). Now user can use pages
->>> of this mapping(e.g. fill it with data). Finally, to start transmission,
->>> user calls 'getsockopt()' or some 'ioctl()' and kernel processes data of
->>> this mapping. Also as this call will return immediately(e.g. it is
->>> asynchronous), some completion logic must be implemented. For example
->>> use same way as MSG_ZEROCOPY uses - poll error queue of socket to get
->>> message that pages could be reused, or don't allow user to work with
->>> these pages: unmap it, perform transmission and finally free pages.
->>> To start new transmission user need to call 'mmap()' again.
->>>
->>>                            OR
->>>
->>> I think there is another unusual way for zerocopy tx: let's use 'vmsplice()'
->>> /'splice()'. In this approach to transmit something, user does the following
->>> steps:
->>> 1) Creates pipe.
->>> 2) Calls 'vmsplice(SPLICE_F_GIFT)' on this pipe, insert data pages to it.
->>>   SPLICE_F_GIFT allows user to forget about allocated pages - kernel will
->>>   free it.
->>> 3) Calls 'splice(SPLICE_F_MOVE)' from pipe to socket. SPLICE_F_MOVE will
->>>   move pages from pipe to socket(e.g. in special socket callback we got
->>>   set of pipe's pages as input argument and all pages will be inserted
->>>   to virtio queue).
->>>
->>> But as SPLICE_F_MOVE support is disabled, it must be repaired first.
+>>> diff --git a/Documentation/devicetree/bindings/arm/coresight-tpda.yaml b/Documentation/devicetree/bindings/arm/coresight-tpda.yaml
+>>> new file mode 100644
+>>> index 000000000000..4948ac13e7f8
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/arm/coresight-tpda.yaml
+>>> @@ -0,0 +1,119 @@
+>>> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
+>>> +# Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/arm/coresight-tpda.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: Trace, Profiling and Diagnostics Aggregator - TPDA
+>>> +
+>>> +description: |
+>>> +  TPDAs are responsible for packetization and timestamping of data sets
+>>> +  utilizing the MIPI STPv2 packet protocol. Pulling data sets from one or
+>>> +  more attached TPDM and pushing the resultant (packetized) data out a
+>>> +  master ATB interface. Performing an arbitrated ATB interleaving (funneling)
+>>> +  task for free-flowing data from TPDM (i.e. CMB and DSB data set flows).
+>>> +
+>>> +maintainers:
+>>> +  - Mao Jinlong <quic_jinlmao@quicinc.com>
+>>> +  - Tao Zhang <quic_taozha@quicinc.com>
+>>> +
+>>> +properties:
+>>> +  $nodename:
+>>> +    pattern: "^tpda(@[0-9a-f]+)$"
+>>> +  compatible:
+>>> +    items:
+>>> +      - const: qcom,coresight-tpda
+>>> +      - const: arm,primecell
+>>> +
+>>> +  reg:
+>>> +    maxItems: 1
+>>> +
+>>> +  clocks:
+>>> +    maxItems: 1
+>>> +
+>>> +  clock-names:
+>>> +    items:
+>>> +      - const: apb_pclk
+>>> +
+>>> +  in-ports:
+>>> +    type: object
+>>> +    description: |
+>>> +      Input connections from TPDM to TPDA
+>>> +    $ref: /schemas/graph.yaml#/properties/ports
+>>> +
+>> --->8---
+>>> +    properties:
+>>> +      '#address-cells':
+>>> +        const: 1
+>>> +
+>>> +      '#size-cells':
+>>> +        const: 0
+>>> +
+>>> +    patternProperties:
+>>> +      "^port@[0-9a-f]+$":
+>>> +        type: object
+>>> +        required:
+>>> +          - reg
+>>> +
+>>> +    required:
+>>> +      - '#size-cells'
+>>> +      - '#address-cells'
+>> ---8<---
 >>
->> Splice seems interesting, but it would be nice If we do something similar to TCP. IIUC they use a flag for send(2):
+>> I believe the above snippet is not needed and is covered by the generic
+>> ports.
 >>
->>     send(fd, buf, sizeof(buf), MSG_ZEROCOPY);
 >>
->
->Yes, but in this way i think:
->1) What is 'buf'? It can't be user's address, since this buffer must be inserted to tx queue.
->   E.g. it must be allocated by kernel and then returned to user for tx purposes. In TCP
->   case, 'buf' is user's address(of course page aligned) because TCP logic uses sk_buff which
->   allows to use such memory as data buffer.
-
-IIUC we can pin that buffer like we do in vhost-vdpa, and use it in the 
-VQ.
-
->2) To wait tx process is done(e.g. pages can be used again), such 
->API(send + MSG_ZEROCOPY),
->   uses socket's error queue - poll events that tx is finished. So same 
->   way must be
->   implemented for virtio vsock.
-
-Yeah, I think so.
-
->
->>  
->>>
->>>>
->>>>>
->>>>>                                 DETAILS
->>>>>
->>>>>     Here is how mapping with mapped pages looks exactly: first page mapping
->>>>> contains array of trimmed virtio vsock packet headers (in contains only length
->>>>> of data on the corresponding page and 'flags' field):
->>>>>
->>>>>     struct virtio_vsock_usr_hdr {
->>>>>         uint32_t length;
->>>>>         uint32_t flags;
->>>>>     };
->>>>>
->>>>> Field  'length' allows user to know exact size of payload within each sequence
->>>>> of pages and 'flags' allows user to handle SOCK_SEQPACKET flags(such as message
->>>>> bounds or record bounds). All other pages are data pages from RX queue.
->>>>>
->>>>>             Page 0      Page 1      Page N
->>>>>
->>>>>     [ hdr1 .. hdrN ][ data ] .. [ data ]
->>>>>           |        |       ^           ^
->>>>>           |        |       |           |
->>>>>           |        *-------------------*
->>>>>           |                |
->>>>>           |                |
->>>>>           *----------------*
->>>>>
->>>>>     Of course, single header could represent array of pages (when packet's
->>>>> buffer is bigger than one page).So here is example of detailed mapping layout
->>>>> for some set of packages. Lets consider that we have the following sequence  of
->>>>> packages: 56 bytes, 4096 bytes and 8200 bytes. All pages: 0,1,2,3,4 and 5 will
->>>>> be inserted to user's vma(vma is large enough).
->>>>>
->>>>>     Page 0: [[ hdr0 ][ hdr 1 ][ hdr 2 ][ hdr 3 ] ... ]
->>>>>     Page 1: [ 56 ]
->>>>>     Page 2: [ 4096 ]
->>>>>     Page 3: [ 4096 ]
->>>>>     Page 4: [ 4096 ]
->>>>>     Page 5: [ 8 ]
->>>>>
->>>>>     Page 0 contains only array of headers:
->>>>>     'hdr0' has 56 in length field.
->>>>>     'hdr1' has 4096 in length field.
->>>>>     'hdr2' has 8200 in length field.
->>>>>     'hdr3' has 0 in length field(this is end of data marker).
->>>>>
->>>>>     Page 1 corresponds to 'hdr0' and has only 56 bytes of data.
->>>>>     Page 2 corresponds to 'hdr1' and filled with data.
->>>>>     Page 3 corresponds to 'hdr2' and filled with data.
->>>>>     Page 4 corresponds to 'hdr2' and filled with data.
->>>>>     Page 5 corresponds to 'hdr2' and has only 8 bytes of data.
->>>>>
->>>>>     This patchset also changes packets allocation way: today implementation
->>>>> uses only 'kmalloc()' to create data buffer. Problem happens when we try to map
->>>>> such buffers to user's vma - kernel forbids to map slab pages to user's vma(as
->>>>> pages of "not large" 'kmalloc()' allocations are marked with PageSlab flag and
->>>>> "not large" could be bigger than one page). So to avoid this, data buffers now
->>>>> allocated using 'alloc_pages()' call.
->>>>>
->>>>>                                   TESTS
->>>>>
->>>>>     This patchset updates 'vsock_test' utility: two tests for new feature
->>>>> were added. First test covers invalid cases. Second checks valid transmission
->>>>> case.
->>>>
->>>> Thanks for adding the test!
->>>>
->>>>>
->>>>>                                BENCHMARKING
->>>>>
->>>>>     For benchmakring I've added small utility 'rx_zerocopy'. It works in
->>>>> client/server mode. When client connects to server, server starts sending exact
->>>>> amount of data to client(amount is set as input argument).Client reads data and
->>>>> waits for next portion of it. Client works in two modes: copy and zero-copy. In
->>>>> copy mode client uses 'read()' call while in zerocopy mode sequence of 'mmap()'
->>>>> /'getsockopt()'/'madvise()' are used. Smaller amount of time for transmission
->>>>> is better. For server, we can set size of tx buffer and for client we can set
->>>>> size of rx buffer or rx mapping size(in zerocopy mode). Usage of this utility
->>>>> is quiet simple:
->>>>>
->>>>> For client mode:
->>>>>
->>>>> ./rx_zerocopy --mode client [--zerocopy] [--rx]
->>>>>
->>>>> For server mode:
->>>>>
->>>>> ./rx_zerocopy --mode server [--mb] [--tx]
->>>>>
->>>>> [--mb] sets number of megabytes to transfer.
->>>>> [--rx] sets size of receive buffer/mapping in pages.
->>>>> [--tx] sets size of transmit buffer in pages.
->>>>>
->>>>> I checked for transmission of 4000mb of data. Here are some results:
->>>>>
->>>>>                           size of rx/tx buffers in pages
->>>>>               *---------------------------------------------------*
->>>>>               |    8   |    32    |    64   |   256    |   512    |
->>>>> *--------------*--------*----------*---------*----------*----------*
->>>>> |   zerocopy   |   24   |   10.6   |  12.2   |   23.6   |    21    | secs to
->>>>> *--------------*---------------------------------------------------- process
->>>>> | non-zerocopy |   13   |   16.4   |  24.7   |   27.2   |   23.9   | 4000 mb
->>>>> *--------------*----------------------------------------------------
->>>>>
->>>>> I think, that results are not so impressive, but at least it is not worse than
->>>>> copy mode and there is no need to allocate memory for processing date.
->>>>
->>>> Why is it twice as slow in the first column?
->>>
->>> May be this is because memory copying for small buffers is very fast... i'll
->>> analyze it deeply.
+>>> +
+>>> +  out-ports:
+>>> +    type: object
+>>> +    description: |
+>>> +      Output connections from the TPDA to legacy CoreSight trace bus.
+>>> +    $ref: /schemas/graph.yaml#/properties/ports
+>>> +
+>>> +    properties:
+>>> +     port:
+>>> +       description:
+>>> +         Output connection from the TPDA to legacy CoreSight Trace bus.
+>>> +       $ref: /schemas/graph.yaml#/properties/port
+>>> +
+>>> +required:
+>>> +    - compatible
+>>> +    - reg
+>>> +    - clocks
+>>> +    - clock-names
+>>> +    - in-ports
+>>> +    - out-ports
+>>> +
+>>> +additionalProperties: false
+>>> +
+>>> +examples:
+>>> +  # minimum tpda definition.
+>>> +  - |
+>>> +    tpda@6004000 {
+>>> +       compatible = "qcom,coresight-tpda", "arm,primecell";
+>>> +       reg = <0x6004000 0x1000>;
+>>> +
+>>> +       qcom,tpda-atid = <65>;
+>>> +
+>>> +       clocks = <&aoss_qmp>;
+>>> +       clock-names = "apb_pclk";
+>>> +
+>>> +       in-ports {
+>>> +         #address-cells = <1>;
+>>> +         #size-cells = <0>;
+>>> +
+>>> +        port@0 {
+>>> +          reg = <0>;
+>>> +          tpda_qdss_0_in_tpdm_dcc: endpoint {
+>>> +            remote-endpoint =
+>>> +              <&tpdm_dcc_out_tpda_qdss_0>;
+>>> +            };
+>>> +        };
+>>> +      };
+>>> +
+>>> +       out-ports {
+>>> +         port {
+>>> +                 tpda_qdss_out_funnel_in0: endpoint {
+>>> +                    remote-endpoint =
+>>> +                    <&funnel_in0_in_tpda_qdss>;
+>>> +                  };
+>>> +          };
+>>> +       };
+>>> +    };
+>>> +
+>>> +...
+>>> diff --git a/MAINTAINERS b/MAINTAINERS
+>>> index 28d32b3f3f5c..5d2d8c0ee340 100644
+>>> --- a/MAINTAINERS
+>>> +++ b/MAINTAINERS
+>>> @@ -1978,6 +1978,7 @@ T:      git git://git.kernel.org/pub/scm/linux/kernel/git/coresight/linux.git
+>>>    F:  Documentation/ABI/testing/sysfs-bus-coresight-devices-*
+>>>    F:  Documentation/devicetree/bindings/arm/coresight-cpu-debug.txt
+>>>    F:  Documentation/devicetree/bindings/arm/coresight-cti.yaml
+>>> +F:   Documentation/devicetree/bindings/arm/coresight-tpda.yaml
+>>>    F:  Documentation/devicetree/bindings/arm/coresight-tpdm.yaml
+>>>    F:  Documentation/devicetree/bindings/arm/coresight.txt
+>>>    F:  Documentation/devicetree/bindings/arm/ete.yaml
+>> Otherwise looks good to me.
 >>
->> Maybe I misunderstood, by small buffers here what do you mean?
->>
->> I thought 8 was the number of pages, so 32KB buffers.
->
->Yes, 8 is size in pages. Anyway, i need to check it more deeply.
-
-Okay, thanks!
-
-Stefano
-
+>> Suzuki

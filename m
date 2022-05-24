@@ -2,70 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20DB45333E6
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 01:28:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D961B5333ED
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 01:30:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242637AbiEXX2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 19:28:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58416 "EHLO
+        id S242654AbiEXXaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 19:30:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231741AbiEXX22 (ORCPT
+        with ESMTP id S231741AbiEXXaE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 19:28:28 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42159377C8
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 16:28:27 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id j6so17720129pfe.13
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 16:28:27 -0700 (PDT)
+        Tue, 24 May 2022 19:30:04 -0400
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39777377C8;
+        Tue, 24 May 2022 16:30:02 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id 2so10040738iou.5;
+        Tue, 24 May 2022 16:30:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=fqBMuhHrx4UOoXhRLSuxGa/UGjLKCHhTuR3mJ3R2ZwY=;
-        b=JGmlcBggKq+pEAmQcRltp2+AtkVq5JNjau0NP+jVffAM3WGXEUHP+3H1SNK5Jmc78y
-         katXpprmCnQ+1hg+EGcKu5QMcGj5NsDt7ZUfOtWTcc6xZI4tgEZvfAdDElhzrLRY+yK3
-         O3WXoqR6fAT7VxGvnX3rede4M/zX1YGGfXEmZON1JLRWrQrwXcg8KMjS0fHWIRgAy4Gw
-         V2Z+YjcYI2jPSbI/iRo9lrpDmhm9/oBaFkTb3RELvk/cYtSQ9XWJcTVOIyhELP23Vz95
-         OF46uWUW5P2jmbYmuQ3VGaGmi7MFX7N6vJKGkV2kgcwi1Nm027oalVVp0e51dF4LpLlx
-         61JQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SWo+xqDM08+qEGv9DZGrSSOnKr+Gp8sn94xTo1Uky0E=;
+        b=Goep18DWb6PBCJrMTtE4URNqHUXeS0E+bdZB4L+k55Yqd13BdTMAz69Jn5hF/kZbkw
+         4W8ghCktd4gEjzs1oq/GIPZaODjhJ6vyVvpBI81Sz07kPdxgX4tsFrL7UvnUDKVlBPSY
+         bEXvH8pUhhIyIDhlTp/rnpzyltslnVmVZAT1gFr3Wd5d2cTqfGSEY0cG1HI5gGaOMOIh
+         ITpuh+IixooD4xgfuo3j82JF4q4zrUJHMUANqtbiZeD3fCL+YyIEYHp/O9Zv7Va2h9YX
+         XxB2Or1V/TFspr+g5+AqgAKcMypddPCVFlr1myAj21PSVhHV9qoG/FqT6Zx1LSHZ1OVz
+         hLXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fqBMuhHrx4UOoXhRLSuxGa/UGjLKCHhTuR3mJ3R2ZwY=;
-        b=30yfZiTFvL/Ppoof95eZxvAqdwBY8SBzPxL/i79Smoh0yJ3up+H7hDNQqp9NQBMrsS
-         UXHOCEGdKqyxegza0B+kfjK+qual3A0mbRVOLmY+GWTLGO7FIOs0aYBUzDv4cI8FQoNr
-         VMeDtAybVemsweJU371WwW2p2Jn3i5mHS7sHlezyymH9DZg2Qd8QAg2Rxiinh73wkPbP
-         tkVKW0CPii+AsZEoczc3QyqMg0DYYtwgvxDAqSmqJ6p1ESydP9OJWRWDaReg4kr7PTV9
-         wPglRSw2b79pP376QWNIHi7MbFTyE54pssl+S+uWasoTbBTtAOPExQGstkhkjv1psYqW
-         OggQ==
-X-Gm-Message-State: AOAM531QHPvoasumUyvSXVfPQW/Khbj/eoJtG84ViY/M3BXVRwEZrtV1
-        69b9HW0ElHzD4tkFTBvUJXbK3Q==
-X-Google-Smtp-Source: ABdhPJwSlQCwnTZZpCmCaeDuJJh3cqRaXuaIMrZ2CsrKOCI91svuNsa7opFbxvUOKVisocymZ6r/VA==
-X-Received: by 2002:a63:5fcf:0:b0:3f6:298d:e2ea with SMTP id t198-20020a635fcf000000b003f6298de2eamr26753832pgb.561.1653434906513;
-        Tue, 24 May 2022 16:28:26 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id y76-20020a62ce4f000000b004fa743ba3f9sm10020111pfg.2.2022.05.24.16.28.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 May 2022 16:28:26 -0700 (PDT)
-Date:   Tue, 24 May 2022 23:28:22 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Lei Wang <lei4.wang@intel.com>
-Cc:     pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        jmattson@google.com, joro@8bytes.org, chenyi.qiang@intel.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 6/8] KVM: MMU: Add support for PKS emulation
-Message-ID: <Yo1qFh8+0AVvwvd5@google.com>
-References: <20220424101557.134102-1-lei4.wang@intel.com>
- <20220424101557.134102-7-lei4.wang@intel.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SWo+xqDM08+qEGv9DZGrSSOnKr+Gp8sn94xTo1Uky0E=;
+        b=Wmwok0f1NbGPZXTIWc2kUMet1azxrSPdFtgtPGj/QcBILHWlRjZV4Y6bp9CP8B9rRo
+         ANFM1bp0qEIS0byF22q4h+3IIT0GL/UBR3fy6PvPdU4XnGW78u+nKlMVpVIUWryWU5fj
+         keSWd7sapja1vHFEnxpHiKXaBpMYj7B2Lh24/IhSaesUKqH/k2XTiKR48bzM+VQSC883
+         p//X0aQ475qrnsSTSS8O93i9S0dZhw9oOyqi5P5vrWY6P3tOp9XKEk3oPHvjn+eifFQl
+         O9oov/uhwKADrIO2XKgaVryvT7HGfVgQWj18+JJonIFDXgyGgZyGbN7Ur0eyI2QIP0QB
+         Y0jA==
+X-Gm-Message-State: AOAM531Pq5WvL26QxP3hc2aAEERMHZHBm0R6p/jaaMj6rQOc9ptvANhe
+        /oJZa1MD07HCH9hcFc6H/jKF3m1Pqy+auaIkSog=
+X-Google-Smtp-Source: ABdhPJyGKSLjdEimuoKNOtuP93bYx4DVK3ftxYDEWPHqnqZO3YIoEgjG31EFeH9P4RfA4BW+yANYN9BphrUKOUlGy6E=
+X-Received: by 2002:a05:6638:3894:b0:32e:ef72:be9d with SMTP id
+ b20-20020a056638389400b0032eef72be9dmr2269117jav.145.1653435001631; Tue, 24
+ May 2022 16:30:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220424101557.134102-7-lei4.wang@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+References: <20220524075306.32306-1-zhoufeng.zf@bytedance.com> <20220524075306.32306-3-zhoufeng.zf@bytedance.com>
+In-Reply-To: <20220524075306.32306-3-zhoufeng.zf@bytedance.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 24 May 2022 16:29:50 -0700
+Message-ID: <CAEf4BzbPrfFe-3TGf=jJxrp9DT6Z1JaEDhWCd3wTYOPsihUmkA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] selftest/bpf/benchs: Add bpf_map benchmark
+To:     Feng zhou <zhoufeng.zf@bytedance.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        duanxiongchun@bytedance.com,
+        Muchun Song <songmuchun@bytedance.com>,
+        Dongdong Wang <wangdongdong.6@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        zhouchengming@bytedance.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,183 +77,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 24, 2022, Lei Wang wrote:
-> @@ -454,10 +455,11 @@ struct kvm_mmu {
->  	u8 permissions[16];
->  
->  	/*
-> -	* The pkru_mask indicates if protection key checks are needed.  It
-> -	* consists of 16 domains indexed by page fault error code bits [4:1],
-> -	* with PFEC.RSVD replaced by ACC_USER_MASK from the page tables.
-> -	* Each domain has 2 bits which are ANDed with AD and WD from PKRU.
-> +	* The pkr_mask indicates if protection key checks are needed.
-> +	* It consists of 16 domains indexed by page fault error code
-> +	* bits[4:1] with PFEC.RSVD replaced by ACC_USER_MASK from the
-> +	* page tables. Each domain has 2 bits which are ANDed with AD
-> +	* and WD from PKRU/PKRS.
+On Tue, May 24, 2022 at 12:53 AM Feng zhou <zhoufeng.zf@bytedance.com> wrote:
+>
+> From: Feng Zhou <zhoufeng.zf@bytedance.com>
+>
+> Add benchmark for hash_map to reproduce the worst case
+> that non-stop update when map's free is zero.
+>
+> Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
+> ---
+>  tools/testing/selftests/bpf/Makefile          |  4 +-
+>  tools/testing/selftests/bpf/bench.c           |  2 +
+>  .../selftests/bpf/benchs/bench_bpf_map.c      | 78 +++++++++++++++++++
+>  .../selftests/bpf/benchs/run_bench_bpf_map.sh | 10 +++
+>  .../selftests/bpf/progs/bpf_map_bench.c       | 27 +++++++
+>  5 files changed, 120 insertions(+), 1 deletion(-)
+>  create mode 100644 tools/testing/selftests/bpf/benchs/bench_bpf_map.c
+>  create mode 100755 tools/testing/selftests/bpf/benchs/run_bench_bpf_map.sh
+>  create mode 100644 tools/testing/selftests/bpf/progs/bpf_map_bench.c
+>
 
-Same comments, align and wrap closer to 80 please.
+[...]
 
->  	*/
->  	u32 pkr_mask;
->  
-> diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
-> index cea03053a153..6963c641e6ce 100644
-> --- a/arch/x86/kvm/mmu.h
-> +++ b/arch/x86/kvm/mmu.h
-> @@ -45,7 +45,8 @@
->  #define PT32E_ROOT_LEVEL 3
->  
->  #define KVM_MMU_CR4_ROLE_BITS (X86_CR4_PSE | X86_CR4_PAE | X86_CR4_LA57 | \
-> -			       X86_CR4_SMEP | X86_CR4_SMAP | X86_CR4_PKE)
-> +			       X86_CR4_SMEP | X86_CR4_SMAP | X86_CR4_PKE | \
-> +			       X86_CR4_PKS)
->  
->  #define KVM_MMU_CR0_ROLE_BITS (X86_CR0_PG | X86_CR0_WP)
->  #define KVM_MMU_EFER_ROLE_BITS (EFER_LME | EFER_NX)
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 6d3276986102..a6cbc22d3312 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -209,6 +209,7 @@ BUILD_MMU_ROLE_REGS_ACCESSOR(cr4, smep, X86_CR4_SMEP);
->  BUILD_MMU_ROLE_REGS_ACCESSOR(cr4, smap, X86_CR4_SMAP);
->  BUILD_MMU_ROLE_REGS_ACCESSOR(cr4, pke, X86_CR4_PKE);
->  BUILD_MMU_ROLE_REGS_ACCESSOR(cr4, la57, X86_CR4_LA57);
-> +BUILD_MMU_ROLE_REGS_ACCESSOR(cr4, pks, X86_CR4_PKS);
->  BUILD_MMU_ROLE_REGS_ACCESSOR(efer, nx, EFER_NX);
->  BUILD_MMU_ROLE_REGS_ACCESSOR(efer, lma, EFER_LMA);
->  
-> @@ -231,6 +232,7 @@ BUILD_MMU_ROLE_ACCESSOR(ext,  cr4, smep);
->  BUILD_MMU_ROLE_ACCESSOR(ext,  cr4, smap);
->  BUILD_MMU_ROLE_ACCESSOR(ext,  cr4, pke);
->  BUILD_MMU_ROLE_ACCESSOR(ext,  cr4, la57);
-> +BUILD_MMU_ROLE_ACCESSOR(ext,  cr4, pks);
->  BUILD_MMU_ROLE_ACCESSOR(base, efer, nx);
->  
->  static struct kvm_mmu_role_regs vcpu_to_role_regs(struct kvm_vcpu *vcpu)
-> @@ -4608,37 +4610,58 @@ static void update_permission_bitmask(struct kvm_mmu *mmu, bool ept)
->  }
->  
->  /*
-
-...
-
-> + * Protection Key Rights (PKR) is an additional mechanism by which data accesses
-> + * with 4-level or 5-level paging (EFER.LMA=1) may be disabled based on the
-> + * Protection Key Rights Userspace (PRKU) or Protection Key Rights Supervisor
-> + * (PKRS) registers.  The Protection Key (PK) used for an access is a 4-bit
-> + * value specified in bits 62:59 of the leaf PTE used to translate the address.
-> + *
-> + * PKRU and PKRS are 32-bit registers, with 16 2-bit entries consisting of an
-> + * access-disable (AD) and write-disable (WD) bit.  The PK from the leaf PTE is
-> + * used to index the approriate PKR (see below), e.g. PK=1 would consume bits
-
-s/approriate/appropriate
-
-> + * 3:2 (bit 3 == write-disable, bit 2 == access-disable).
-> + *
-> + * The PK register (PKRU vs. PKRS) indexed by the PK depends on the type of
-> + * _address_ (not access type!).  For a user-mode address, PKRU is used; for a
-> + * supervisor-mode address, PKRS is used.  An address is supervisor-mode if the
-> + * U/S flag (bit 2) is 0 in at least one of the paging-structure entries, i.e.
-> + * an address is user-mode if the U/S flag is 1 in _all_ entries.  Again, this
-> + * is the address type, not the the access type, e.g. a supervisor-mode _access_
-
-Double "the the" can be a single "the".
-
-> + * will consume PKRU if the _address_ is a user-mode address.
-> + *
-> + * As alluded to above, PKR checks are only performed for data accesses; code
-> + * fetches are not subject to PKR checks.  Terminal page faults (!PRESENT or
-> + * PFEC.RSVD=1) are also not subject to PKR checks.
-> + *
-> + * PKR write-disable checks for superivsor-mode _accesses_ are performed if and
-> + * only if CR0.WP=1 (though access-disable checks still apply).
-> + *
-> + * In summary, PKR checks are based on (a) EFER.LMA, (b) CR4.PKE or CR4.PKS,
-> + * (c) CR0.WP, (d) the PK in the leaf PTE, (e) two bits from the corresponding
-> + * PKR{S,U} entry, (f) the access type (derived from the other PFEC bits), and
-> + * (g) the address type (retrieved from the paging-structure entries).
-> + *
-> + * To avoid conditional branches in permission_fault(), the PKR bitmask caches
-> + * the above inputs, except for (e) the PKR{S,U} entry.  The FETCH, USER, and
-> + * WRITE bits of the PFEC and the effective value of the paging-structures' U/S
-> + * bit (slotted into the PFEC.RSVD position, bit 3) are used to index into the
-> + * PKR bitmask (similar to the 4-bit Protection Key itself).  The two bits of
-> + * the PKR bitmask "entry" are then extracted and ANDed with the two bits of
-> + * the PKR{S,U} register corresponding to the address type and protection key.
-> + *
-> + * E.g. for all values where PFEC.FETCH=1, the corresponding pkr_bitmask bits
-> + * will be 00b, thus masking away the AD and WD bits from the PKR{S,U} register
-> + * to suppress PKR checks on code fetches.
-> + */
->  static void update_pkr_bitmask(struct kvm_mmu *mmu)
->  {
->  	unsigned bit;
->  	bool wp;
-> -
-
-Please keep this newline, i.e. after the declaration of the cr4 booleans.  That
-helps isolate the clearing of mmu->pkr_mask, which makes the functional affect of
-the earlier return more obvious.
-
-Ah, and use reverse fir tree for the variable declarations, i.e.
-
-	bool cr4_pke = is_cr4_pke(mmu);
-	bool cr4_pks = is_cr4_pks(mmu);
-	unsigned bit;
-	bool wp;
-
-	mmu->pkr_mask = 0;
-
-	if (!cr4_pke && !cr4_pks)
-		return;
-
-> +	bool cr4_pke = is_cr4_pke(mmu);
-> +	bool cr4_pks = is_cr4_pks(mmu);
->  	mmu->pkr_mask = 0;
->  
-> -	if (!is_cr4_pke(mmu))
-> +	if (!cr4_pke && !cr4_pks)
->  		return;
->  
->  	wp = is_cr0_wp(mmu);
-  
-
-  ...
-
-> @@ -6482,14 +6509,22 @@ u32 kvm_mmu_pkr_bits(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
->  		     unsigned pte_access, unsigned pte_pkey, unsigned int pfec)
->  {
->  	u32 pkr_bits, offset;
-> +	u32 pkr;
->  
->  	/*
-> -	* PKRU defines 32 bits, there are 16 domains and 2
-> -	* attribute bits per domain in pkru.  pte_pkey is the
-> -	* index of the protection domain, so pte_pkey * 2 is
-> -	* is the index of the first bit for the domain.
-> +	* PKRU and PKRS both define 32 bits. There are 16 domains
-> +	* and 2 attribute bits per domain in them. pte_key is the
-> +	* index of the protection domain, so pte_pkey * 2 is the
-> +	* index of the first bit for the domain. The use of PKRU
-> +	* versus PKRS is selected by the address type, as determined
-> +	* by the U/S bit in the paging-structure entries.
-
-
-Align and wrap closer to 80 please.
-
->  	*/
-> -	pkr_bits = (vcpu->arch.pkru >> (pte_pkey * 2)) & 3;
-> +	if (pte_access & PT_USER_MASK)
-> +		pkr = is_cr4_pke(mmu) ? vcpu->arch.pkru : 0;
-> +	else
-> +		pkr = is_cr4_pks(mmu) ? kvm_read_pkrs(vcpu) : 0;
+> +static void setup(void)
+> +{
+> +       struct bpf_link *link;
+> +       int map_fd, i, max_entries;
 > +
-> +	pkr_bits = (pkr >> pte_pkey * 2) & 3;
->  
->  	/* clear present bit, replace PFEC.RSVD with ACC_USER_MASK. */
->  	offset = (pfec & ~1) + ((pte_access & PT_USER_MASK)
-> -- 
-> 2.25.1
-> 
+> +       setup_libbpf();
+> +
+> +       ctx.skel = bpf_map_bench__open_and_load();
+> +       if (!ctx.skel) {
+> +               fprintf(stderr, "failed to open skeleton\n");
+> +               exit(1);
+> +       }
+> +
+> +       link = bpf_program__attach(ctx.skel->progs.benchmark);
+> +       if (!link) {
+> +               fprintf(stderr, "failed to attach program!\n");
+> +               exit(1);
+> +       }
+> +
+> +       //fill hash_map
+
+don't use C++ comments
+
+> +       map_fd = bpf_map__fd(ctx.skel->maps.hash_map_bench);
+> +       max_entries = bpf_map__max_entries(ctx.skel->maps.hash_map_bench);
+> +       for (i = 0; i < max_entries; i++)
+> +               bpf_map_update_elem(map_fd, &i, &i, BPF_ANY);
+> +}
+> +
+> +const struct bench bench_bpf_map = {
+> +       .name = "bpf-map",
+
+this is too generic name, it's testing one particular scenario, so
+call this out in the name. bpf-hashmap-full-update or something (same
+for all the relevant function and file names)
+
+
+> +       .validate = validate,
+> +       .setup = setup,
+> +       .producer_thread = producer,
+> +       .consumer_thread = consumer,
+> +       .measure = measure,
+> +       .report_progress = ops_report_progress,
+> +       .report_final = ops_report_final,
+> +};
+> diff --git a/tools/testing/selftests/bpf/benchs/run_bench_bpf_map.sh b/tools/testing/selftests/bpf/benchs/run_bench_bpf_map.sh
+> new file mode 100755
+> index 000000000000..d7cc969e4f85
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/benchs/run_bench_bpf_map.sh
+> @@ -0,0 +1,10 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +source ./benchs/run_common.sh
+> +
+> +set -eufo pipefail
+> +
+> +nr_threads=`expr $(cat /proc/cpuinfo | grep "processor"| wc -l) - 1`
+> +summary=$($RUN_BENCH -p $nr_threads bpf-map)
+> +printf "$summary"
+> diff --git a/tools/testing/selftests/bpf/progs/bpf_map_bench.c b/tools/testing/selftests/bpf/progs/bpf_map_bench.c
+> new file mode 100644
+> index 000000000000..655366e6e0f4
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/bpf_map_bench.c
+> @@ -0,0 +1,27 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) 2022 Bytedance */
+> +
+> +#include "vmlinux.h"
+> +#include <bpf/bpf_helpers.h>
+> +#include "bpf_misc.h"
+> +
+> +char _license[] SEC("license") = "GPL";
+> +
+> +#define MAX_ENTRIES 1000
+> +
+> +struct {
+> +       __uint(type, BPF_MAP_TYPE_HASH);
+> +       __type(key, u32);
+> +       __type(value, u64);
+> +       __uint(max_entries, MAX_ENTRIES);
+> +} hash_map_bench SEC(".maps");
+> +
+> +SEC("fentry/" SYS_PREFIX "sys_getpgid")
+> +int benchmark(void *ctx)
+> +{
+> +       u32 key = bpf_get_prandom_u32();
+> +       u64 init_val = 1;
+> +
+> +       bpf_map_update_elem(&hash_map_bench, &key, &init_val, BPF_ANY);
+> +       return 0;
+> +}
+> --
+> 2.20.1
+>

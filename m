@@ -2,274 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13C0D5326C0
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 11:47:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEB9E5326D6
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 11:51:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235856AbiEXJqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 05:46:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38334 "EHLO
+        id S235946AbiEXJvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 05:51:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231445AbiEXJqp (ORCPT
+        with ESMTP id S235917AbiEXJv0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 05:46:45 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDC482CDD7
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 02:46:43 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id br17so17589546lfb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 02:46:43 -0700 (PDT)
+        Tue, 24 May 2022 05:51:26 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam08on2048.outbound.protection.outlook.com [40.107.100.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E95511CB1F;
+        Tue, 24 May 2022 02:51:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XLQRo+I+QQrQN77vLsaOQYcaPUU74xzpfHNko76ha7CtR1uNQTkYFcrQj2YGy/Qh4t1LdBgAsx0wL3De28PPnuMY+OJ84HaFQGpeTk25dmA0DQi8oWKCCRMTiJrd995e7feX6BirOM6BpOdIV5py9ieDCeNm5cc4B/rNQSpApRD9VSdadMTFStyfr3k5L6i7tY35nDobCrrTUTErqOjgiViJxIXxvePeXddiHDIqT/t7iwJ0+NEPhAgq3yhjOxtwDOSZQ6J/H5K0E/XKn8AESV3/ogHbWGaffgya1Dv0ArQfgnLx408uI66wrVlq+94hM/obVqQfUhBJCmL8Zeryrg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=25CbHyWvTpz2Vorks8wDWpAgL5sf+mITmGtznSu/K8o=;
+ b=KKIOOVhPUJGK0Cf/CanLJG7G3qB4OgkfiwfjFGOi8Bo7FNkDIP1RR37BZfUQtRTcWRXf7Lg9YdGt7Q7srOdUfawWke8/vz7XEGaO+UD2Aiu1or1rDb+uUiPXVQekfy9t2RokadWPbtjhKuanmRiAymsfQO4QtrF1bqeUFXMtBr+SsEdJ56t8lOR0a4ePvjMd0c5Kfc7WxsZ4+Tte3sXEm9oSqYCByrgZSOso0UX3+ZNFOWOv7fBJdtCrRyO7BAXNPA1Hlf/H+VXp+sFEses15vUoSmu/uszJ2BojJ0wjsonuOBYvdv6cisJRg2qEKTBYk997p0NCbflL3AFo9hRCuA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=IMbxClHWPS03PbbitBq3EQjBaeTdpKNatYW1zH8rzVo=;
-        b=YHoPt3HgNPBuYbbTNSRtINqeAZgMQZGvk+Za2ftRzKkNR9F9TWpSdCLuDANiVg4Ha5
-         HlebbofUvH/fLuZbeMQf0JsfDkjNoZfqiR56opCYbjizHVYfPHHBXmbNXPMFRW+AuNlo
-         xgaP/P2zVxyM8M0vuMHEdVM6b1ZV4L773kW3vlt7onYfpkCLa8yHzER9NeB0QxlTS6/m
-         VwIDL8qnKLc/t2L1mpbtzn7Vv5VTcPDN6XE/LizsVC9VoIdYRqe7kuoMgnEC3PWyVvtk
-         zj2TohBH9rkF2xAPJzaRBkQSyqluadvDmaDntru1tLs9PrsNVrd9JyKqeiIZpjP3FSCA
-         fzVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=IMbxClHWPS03PbbitBq3EQjBaeTdpKNatYW1zH8rzVo=;
-        b=LrTvDSy/BuTyKs7tgpGaeGl3NgsY2vLRXbPxIcWaJWcX1x+DWU9kVI/l2FhdpJUi5g
-         z64CjUBfvKeeF77x2KgIc+t/X6wtUHvV4WV0jPpwJRBFhOoTCcTn+L7BLvyf433wzdAO
-         1smbNd+Z2jKTr3aWYW4+mBE2j+Q9KatIS/uRBUFO/XP9EbJyYBxcB5jzygaTYp9A+If/
-         B8pe4PHotJj/fQUlA5veJRshOsNJT9yVujpGfhtvs8DCWPs+k1U0NdhlbhBoeEdC7A2L
-         t6sxj8VJQ/xY6b6VOCcgFP8hx+jtQyQQjFb7gEGTAIxqhAcuDx+AawOADN/2tQdzhoJD
-         9A3A==
-X-Gm-Message-State: AOAM532sy48iZNl5pmMTPqfiQotscInrSeL+6p7kC8hOvRD4waXohZlp
-        1HZlYoHGasw89UAvI9yd85YJTsRwK4G+bA==
-X-Google-Smtp-Source: ABdhPJxYev9XNLxFP7wwILeL72uQun1SCV/fVs8X5/P+XotqeyeO0wiY2eMv6f5dNGdPO9WpfO3cZA==
-X-Received: by 2002:a05:6512:12c6:b0:477:990f:f56e with SMTP id p6-20020a05651212c600b00477990ff56emr18743357lfg.249.1653385602190;
-        Tue, 24 May 2022 02:46:42 -0700 (PDT)
-Received: from [172.20.68.48] ([91.221.145.6])
-        by smtp.gmail.com with ESMTPSA id q17-20020ac25111000000b0047861cba7bdsm1613359lfb.53.2022.05.24.02.46.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 May 2022 02:46:41 -0700 (PDT)
-Message-ID: <cbaf3536-d89d-08cf-1f47-d298ee11a80e@linaro.org>
-Date:   Tue, 24 May 2022 11:46:39 +0200
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=25CbHyWvTpz2Vorks8wDWpAgL5sf+mITmGtznSu/K8o=;
+ b=NkNAYg22Z/CLv1FLHqFfd5jbFUemCOF4BMyWiIM9XIQxkBV9IHqCT+TxoEqjHrjfmZP73pnDi8hI0IPZ/mwRxo4FUt2AK6VQ1Q2f25TNhntoldu3TtO42BBhtChbwzfYRT3XQaibfZ0fXK07wYEbAN83Acm21/+rdQGsC8kUtCg=
+Received: from SN4PR0501CA0130.namprd05.prod.outlook.com
+ (2603:10b6:803:42::47) by MWHPR02MB2542.namprd02.prod.outlook.com
+ (2603:10b6:300:44::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13; Tue, 24 May
+ 2022 09:51:19 +0000
+Received: from SN1NAM02FT0030.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:803:42:cafe::26) by SN4PR0501CA0130.outlook.office365.com
+ (2603:10b6:803:42::47) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.7 via Frontend
+ Transport; Tue, 24 May 2022 09:51:19 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com; pr=C
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ SN1NAM02FT0030.mail.protection.outlook.com (10.97.5.194) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5273.14 via Frontend Transport; Tue, 24 May 2022 09:51:19 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Tue, 24 May 2022 02:51:03 -0700
+Received: from smtp.xilinx.com (172.19.127.95) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Tue, 24 May 2022 02:51:03 -0700
+Envelope-to: git@xilinx.com,
+ mdf@kernel.org,
+ hao.wu@intel.com,
+ yilun.xu@intel.com,
+ trix@redhat.com,
+ gregkh@linuxfoundation.org,
+ linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org,
+ linux-fpga@vger.kernel.org
+Received: from [10.140.6.60] (port=58200 helo=xhdnavam40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <nava.manne@xilinx.com>)
+        id 1ntR8u-0005Sf-CC; Tue, 24 May 2022 02:47:56 -0700
+From:   Nava kishore Manne <nava.manne@xilinx.com>
+To:     <michal.simek@xilinx.com>, <mdf@kernel.org>, <hao.wu@intel.com>,
+        <yilun.xu@intel.com>, <trix@redhat.com>,
+        <gregkh@linuxfoundation.org>, <ronak.jain@xilinx.com>,
+        <abhyuday.godhasara@xilinx.com>, <rajan.vaja@xilinx.com>,
+        <nava.manne@xilinx.com>, <lakshmi.sai.krishna.potthuri@xilinx.com>,
+        <piyush.mehta@xilinx.com>, <harsha.harsha@xilinx.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-fpga@vger.kernel.org>,
+        <git@xilinx.com>
+Subject: [PATCH 0/3]Adds status interface for zynqmp-fpga
+Date:   Tue, 24 May 2022 15:17:42 +0530
+Message-ID: <20220524094745.287002-1-nava.manne@xilinx.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH V2 1/2] bindings: fsl-imx-sdma: Document 'HDMI Audio'
- transfer
-Content-Language: en-US
-To:     Joy Zou <joy.zou@nxp.com>, vkoul@kernel.org
-Cc:     shengjiu.wang@nxp.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, dmaengine@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20220524080337.1322240-1-joy.zou@nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220524080337.1322240-1-joy.zou@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: a8ea0c78-aad6-4c0a-ca2a-08da3d6af3e7
+X-MS-TrafficTypeDiagnostic: MWHPR02MB2542:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR02MB25422890B1B6189C19DDAF18C2D79@MWHPR02MB2542.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 8NI5rgcr07A1qabU/iMH0xsxuRKQWcTY5rNugn4LicME6eZHfX6dcacvp8o1qQjaNkQwo8f/eCMeUDvlgA32uHO4btvQFmiK/5vCdXfVKcRNaFYG7Z0SXOJI/UI1j+Ktc+disA7EQXLV4BuBPeXNkFBplC09AxcFEvy3HNq8vKQDUuXYxBmKBDjGmugpBMH4tL1xkI+ccf6tfnpWfJ6zILR6nGPUDgLfkuO5vN5EdUNaxtB1Ltysu39ChI4nS6t7K+43whq5dDDqaBWfTfWQD/Upa8tYsl4bYZx7hscsEvmRCndelEqellm8DL6Nju5rVSjdCbDYCi6TSMD30UlgOoieJJWhvBqfDr/WLSYBSMiZFRe45Lu3FAPGgr9kENEXQgAP4H+mlgcvmSsd7idy4z1BfMOEpfCosfxlTLQcvOkr5xaYcqpu33rsn1e5DBkttmIBa1FkELe23z9KMmuO06EvedbRyz8nITa/Rlo/wY8YvEVaCJGPe/vMzORJ+dr02NwkIrtaFt3V/KSScpzN1vA+oiPoPUuZlb6JhvPcPocMGaPF565aQt05IRBIzj6YRe5swRn7naj9jMdyCM0LRHCg0ss4S6iH+59aMPx118wPY3pmfFrkfh8XjTDvO9ypovu8UDiiLX+CVNiNDVKRV4NhZ8BKNx6xlNB4ZySh3Ptsg9SCD91Zsmc12lGEkyr0eznslpBrUn/Q6NtMBxxE/zYSm3UcdIhKyBg8/E3DpbL5mewTdv5ldIVNiXxl9oKCrMbZvmTONdLL5oS88A4uSoHuqnKaUlh67nw4a65L9ifDHLsFrYgSIhoii3sMRpdrvbIkfvd86J7jZXlUcm2Uw2TQSZiPtkkinSxu9eLk6o8=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(426003)(7696005)(26005)(5660300002)(40460700003)(336012)(186003)(83380400001)(966005)(8936002)(9786002)(921005)(2906002)(6666004)(47076005)(7636003)(356005)(4744005)(2616005)(110136005)(508600001)(8676002)(70586007)(70206006)(36860700001)(36756003)(82310400005)(1076003)(6636002)(316002)(102446001)(83996005)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2022 09:51:19.3447
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a8ea0c78-aad6-4c0a-ca2a-08da3d6af3e7
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0030.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR02MB2542
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/05/2022 10:03, Joy Zou wrote:
-> Add HDMI Audio transfer type.
-> 
-> convert the sdma bindings txt into yaml in v2.
-> 
-> Signed-off-by: Joy Zou <joy.zou@nxp.com>
-> ---
-> Changes since v1:
-> convert the sdma bindings txt into yaml in v2.
-> ---
->  .../devicetree/bindings/dma/fsl-imx-sdma.yaml | 135 ++++++++++++++++++
+Adds status interface for zynqmp-fpga, It's a read only
+interface which allows the user to get the PL status.
 
-There is no conversion here, only new file...
+This patch series also update the below status values for
+fpga-manager.
+ -Device Initialization error.
+ -Device internal signal error.
+ -All I/Os are placed in High-Z state.
+ -Device start-up sequence error.
+ -Firmware error.
 
->  1 file changed, 135 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/dma/fsl-imx-sdma.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/dma/fsl-imx-sdma.yaml b/Documentation/devicetree/bindings/dma/fsl-imx-sdma.yaml
-> new file mode 100644
-> index 000000000000..5b4f7a09a395
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/dma/fsl-imx-sdma.yaml
+For more details refer the ug570.
+https://docs.xilinx.com/v/u/en-US/ug570-ultrascale-configuration
 
-Filename: fsl,imx-sdma.yaml
+Nava kishore Manne (3):
+  fpga: mgr: Update the status for fpga-manager
+  firmware: xilinx: Add pm api function for PL readback
+  fpga: zynqmp-fpga: Adds status interface
 
-> @@ -0,0 +1,135 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/dma/fsl-imx-sdma.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Freescale Smart Direct Memory Access (SDMA) Controller for i.MX
-> +
-> +maintainers:
-> +  - Vinod Koul <vkoul@kernel.org>
+ drivers/firmware/xilinx/zynqmp.c     | 33 ++++++++++++++++++
+ drivers/fpga/fpga-mgr.c              | 13 +++++++
+ drivers/fpga/zynqmp-fpga.c           | 52 ++++++++++++++++++++++++++++
+ include/linux/firmware/xlnx-zynqmp.h | 14 ++++++++
+ include/linux/fpga/fpga-mgr.h        |  6 ++++
+ 5 files changed, 118 insertions(+)
 
-This should not be subsystem maintainer but someone closer to the actual
-device.
+-- 
+2.25.1
 
-> +
-> +allOf:
-> +  - $ref: "dma-controller.yaml#"
-> +
-> +# Everything else is described in the common file
-
-Skip the comment please.
-
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - fsl,imx25-sdma
-> +          - fsl,imx31-sdma
-> +          - fsl,imx31-to1-sdma
-> +          - fsl,imx31-to2-sdma
-> +          - fsl,imx35-to1-sdma
-> +          - fsl,imx35-to2-sdma
-> +          - fsl,imx51-sdma
-> +          - fsl,imx53-sdma
-> +          - fsl,imx6q-sdma
-> +          - fsl,imx7d-sdma
-> +          - fsl,imx6sx-sdma
-> +          - fsl,imx6ul-sdma
-> +          - fsl,imx8mm-sdma
-> +          - fsl,imx8mn-sdma
-> +          - fsl,imx8mp-sdma
-> +      - enum:
-> +          - fsl,imx35-sdma
-> +          - fsl,imx8mq-sdma
-
-No, fallback cannot be variable. I doubt that
-fsl,imx25-sdma+fsl,imx8mq-sdma makes any sense!
-
-Additionally, this does not match existing DTS. Please run `make
-dtbs_check`.
-
-> +
-> +  reg:
-> +    description: Should contain SDMA registers location and length
-
-Skip description. Uou need to add maxItems
-
-> +
-> +  interrupts:
-> +    description: Should contain SDMA interrupt
-
-Skip description. Uou need to add maxItems
-
-
-> +
-> +  fsl,sdma-ram-script-name:
-> +    $ref: /schemas/types.yaml#/definitions/string
-> +    description: Should contain the full path of SDMA RAM scripts firmware.
-> +
-> +  "#dma-cells":
-> +    const: 3
-> +    description: |
-> +      The first cell: request/event ID
-> +
-> +      The second cell: peripheral types ID
-> +        enum:
-> +          - MCU domain SSI: 0
-> +          - Shared SSI: 1
-> +          - MMC: 2
-> +          - SDHC: 3
-> +          - MCU domain UART: 4
-> +          - Shared UART: 5
-> +          - FIRI: 6
-> +          - MCU domain CSPI: 7
-> +          - Shared CSPI: 8
-> +          - SIM: 9
-> +          - ATA: 10
-> +          - CCM: 11
-> +          - External peripheral: 12
-> +          - Memory Stick Host Controller: 13
-> +          - Shared Memory Stick Host Controller: 14
-> +          - DSP: 15
-> +          - Memory: 16
-> +          - FIFO type Memory: 17
-> +          - SPDIF: 18
-> +          - IPU Memory: 19
-> +          - ASRC: 20
-> +          - ESAI: 21
-> +          - SSI Dual FIFO: 22
-> +              description: needs firmware more than ver 2> +          - Shared ASRC: 23
-> +          - SAI: 24
-> +          - HDMI Audio: 25
-> +
-> +       The third cell: transfer priority ID
-> +         enum:
-> +           - High: 0
-> +           - Medium: 1
-> +           - Low: 2
-> +
-> +  gpr:
-> +    description: The phandle to the General Purpose Register (GPR) node
-
-type/ref needed
-
-> +
-> +  fsl,sdma-event-remap:
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> +    description: |
-> +      Register bits of sdma event remap, the format is <reg shift val>.
-> +      - reg: the GPR register offset
-> +      - shift: the bit position inside the GPR register
-> +      - val: the value of the bit (0 or 1)
-
-Need maxItems or items with description.
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - fsl,sdma-ram-script-name
-> +  - "#dma-cells"
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    sdma: dma-controller@83fb0000 {
-> +      compatible = "fsl,imx51-sdma", "fsl,imx35-sdma";
-> +      reg = <0x83fb0000 0x4000>;
-> +      interrupts = <6>;
-> +      #dma-cells = <3>;
-> +      fsl,sdma-ram-script-name = "sdma-imx51.bin";
-> +    };
-> +
-> +#DMA clients connected to the i.MX SDMA controller must use the format
-> +#described in the dma-controller.yaml file.
-> +  - |
-> +    ssi2: ssi@70014000 {
-
-Skip consumer example, it's obvious.
-
-> +      compatible = "fsl,imx51-ssi", "fsl,imx21-ssi";
-> +      reg = <0x70014000 0x4000>;
-> +      interrupts = <30>;
-> +      clocks = <&clks 49>;
-> +      dmas = <&sdma 24 1 0>,
-> +             <&sdma 25 1 0>;
-> +      dma-names = "rx", "tx";
-> +      fsl,fifo-depth = <15>;
-> +    };
-> +
-> +...
-
-
-Best regards,
-Krzysztof

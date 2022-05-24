@@ -2,116 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 244D15321B7
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 05:47:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 829785321B9
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 05:48:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233693AbiEXDrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 23:47:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47790 "EHLO
+        id S234013AbiEXDsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 23:48:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231964AbiEXDre (ORCPT
+        with ESMTP id S229484AbiEXDse (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 23:47:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 691636C0FB;
-        Mon, 23 May 2022 20:47:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E75F16135A;
-        Tue, 24 May 2022 03:47:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A376C34116;
-        Tue, 24 May 2022 03:47:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653364050;
-        bh=8tcF8bQShGWFWzNCMNh0zMWba2CPnkK1xQA6jsfKgwc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=qLORkRcpbE/mbh+ysON84YFTBjvE4CAdwfvauETluzQN0DmkJovSQoyg3eTrQVETs
-         k1RvQrazR8W/5DZSg5ER2PzL1nsIxCMm9+aEj0rU5J9ukvjSUpbvoaKbbxDr7c/hNW
-         y739Kei6YXg2uvV4uHyF/+JRg26q9WKRalEinQWuSX30d2lgQnPsimRn+0ivSUmfy0
-         bW8jwJ2yndHBoFtKovyN3ZN7meicNoCQ/F+8sUwaN0TPxEpf1Ha1VvzsE3w7C6ZFJN
-         h+ji7OdLUvXDrazOFO9CWDpVkqxb7Gtexn86Ls70R6ID8AM+0c5OhStubcRAo7Tfpe
-         Bo+LGMkl2/BYg==
-Received: by mail-vs1-f43.google.com with SMTP id c26so16980670vsl.6;
-        Mon, 23 May 2022 20:47:30 -0700 (PDT)
-X-Gm-Message-State: AOAM531UhgyBcdhhyv58SotF5LTE2QridM20dF8BpqYy/Nh8QiibZUrg
-        1CDliJqLHhFHXyiGkpMdgqfoh79WkGT9FlhmGVc=
-X-Google-Smtp-Source: ABdhPJw4KEDQ2Km2rsvHXF7AwDdVRTcBE2+Ke1X9TBBuXKa6wieavAx7ke+avjUJaTk0EZOXe2ax2Fv2zBYBZ9lzvfA=
-X-Received: by 2002:a67:e1c4:0:b0:335:cdc4:395f with SMTP id
- p4-20020a67e1c4000000b00335cdc4395fmr9637977vsl.71.1653364049315; Mon, 23 May
- 2022 20:47:29 -0700 (PDT)
+        Mon, 23 May 2022 23:48:34 -0400
+Received: from relay3.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E2C26C0FB
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 20:48:30 -0700 (PDT)
+Received: from omf18.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay12.hostedemail.com (Postfix) with ESMTP id 8940C12122F;
+        Tue, 24 May 2022 03:48:26 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf18.hostedemail.com (Postfix) with ESMTPA id 1286133;
+        Tue, 24 May 2022 03:48:24 +0000 (UTC)
+Message-ID: <059725f837c8a869cc2358d2850f6776b05a9fe2.camel@perches.com>
+Subject: Re: [PATCH V2] octeon_ep: Remove unnecessary cast
+From:   Joe Perches <joe@perches.com>
+To:     Haowen Bai <baihaowen@meizu.com>
+Cc:     aayarekar@marvell.com, davem@davemloft.net, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, vburru@marvell.com
+Date:   Mon, 23 May 2022 20:48:23 -0700
+In-Reply-To: <1653362915-22831-1-git-send-email-baihaowen@meizu.com>
+References: <53b4a92efb83d893230f47ae9988282f3875b355.camel@perches.com>
+         <1653362915-22831-1-git-send-email-baihaowen@meizu.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-References: <1c4e81eda5f9651f581f1554629d334f1afda841.1653227039.git.christophe.jaillet@wanadoo.fr>
- <CAAhV-H73Gj-KDjLuqCtasX5dtBRTHe_8s51wR1mrd=_rBF_XZA@mail.gmail.com>
-In-Reply-To: <CAAhV-H73Gj-KDjLuqCtasX5dtBRTHe_8s51wR1mrd=_rBF_XZA@mail.gmail.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Tue, 24 May 2022 11:47:23 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4Z4Ujif3UcSeSUMdT6SR0hVQnLCCzdGhg27mrtW4OvnQ@mail.gmail.com>
-Message-ID: <CAAhV-H4Z4Ujif3UcSeSUMdT6SR0hVQnLCCzdGhg27mrtW4OvnQ@mail.gmail.com>
-Subject: Re: [PATCH] irqchip/loongson-liointc: Fix an error handling path in liointc_init()
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     dan.carpenter@oracle.com, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org,
-        "open list:MIPS" <linux-mips@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 1286133
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        KHOP_HELO_FCRDNS,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
         autolearn_force=no version=3.4.6
+X-Stat-Signature: nbi59nttrgdusdhc88kjjkmud95f4jgs
+X-Rspamd-Server: rspamout05
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+zKR9n5HX/Xvgk3N8wPQegGzzObIC9pgQ=
+X-HE-Tag: 1653364104-300972
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Christophe,
+On Tue, 2022-05-24 at 11:28 +0800, Haowen Bai wrote:
+> ./drivers/net/ethernet/marvell/octeon_ep/octep_rx.c:161:18-40: WARNING:
+> casting value returned by memory allocation function to (struct
+> octep_rx_buffer *) is useless.
+[]
+> diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_rx.c b/drivers/net/ethernet/marvell/octeon_ep/octep_rx.c
+[]
+> @@ -158,8 +158,7 @@ static int octep_setup_oq(struct octep_device *oct, int q_no)
+>  		goto desc_dma_alloc_err;
+>  	}
+>  
+> -	oq->buff_info = (struct octep_rx_buffer *)
+> -			vzalloc(oq->max_count * OCTEP_OQ_RECVBUF_SIZE);
+> +	oq->buff_info = vcalloc(oq->max_count, OCTEP_OQ_RECVBUF_SIZE);
 
-On Tue, May 24, 2022 at 10:50 AM Huacai Chen <chenhuacai@kernel.org> wrote:
->
-> Hi, Christophe,
->
-> On Sun, May 22, 2022 at 9:44 PM Christophe JAILLET
-> <christophe.jaillet@wanadoo.fr> wrote:
-> >
-> > If a of_property_match_string() call fails, we still need to release some
-> > resources.
-> > Add the corresponding goto instead of a direct return.
-> Your patch is correct, but 807e93d0ecbb hasn't been upstream, I don't
-> know how to handle it.
->
-> Huacai
-> >
-> > Fixes: 807e93d0ecbb ("irqchip/loongson-liointc: Add ACPI init support")
-> > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> > ---
-> >  drivers/irqchip/irq-loongson-liointc.c | 6 ++++--
-> >  1 file changed, 4 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/irq-loongson-liointc.c
-> > index ff3cb5b05710..2227b702a81d 100644
-> > --- a/drivers/irqchip/irq-loongson-liointc.c
-> > +++ b/drivers/irqchip/irq-loongson-liointc.c
-> > @@ -185,8 +185,10 @@ static int liointc_init(phys_addr_t addr, unsigned long size, int revision,
-> >                         int index = of_property_match_string(node,
-> >                                         "reg-names", core_reg_names[i]);
-> >
-> > -                       if (index < 0)
-> > -                               return -EINVAL;
-> > +                       if (index < 0) {
-> > +                               err = -EINVAL;
-> > +                               goto out_iounmap;
-> > +                       }
-Just goto out_iounmap is OK, because it returns -EINVAL at last.
-I've squash your patch to the original one and add a Co-developed-by:,
-not sure it is the best solution. Thanks.
+trivia:
 
-Huacai
-> >
-> >                         priv->core_isr[i] = of_iomap(node, index);
-> >                 }
-> > --
-> > 2.34.1
-> >
+Perhaps better to remove the used once #define OCTEP_OQ_RECVBUF_SIZE
+and use the more obvious
+
+	oq->buff_info = vcalloc(oq->max_count, sizeof(struct octep_rx_buffer));
+
+though I believe the vcalloc may be better as kvcalloc as max_count isn't
+particularly high and struct octep_rx_buffer is small.
+
+Maybe:
+---
+ drivers/net/ethernet/marvell/octeon_ep/octep_rx.c | 8 ++++----
+ drivers/net/ethernet/marvell/octeon_ep/octep_rx.h | 2 --
+ 2 files changed, 4 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_rx.c b/drivers/net/ethernet/marvell/octeon_ep/octep_rx.c
+index d9ae0937d17a8..d6a0da61db449 100644
+--- a/drivers/net/ethernet/marvell/octeon_ep/octep_rx.c
++++ b/drivers/net/ethernet/marvell/octeon_ep/octep_rx.c
+@@ -158,8 +158,8 @@ static int octep_setup_oq(struct octep_device *oct, int q_no)
+ 		goto desc_dma_alloc_err;
+ 	}
+ 
+-	oq->buff_info = (struct octep_rx_buffer *)
+-			vzalloc(oq->max_count * OCTEP_OQ_RECVBUF_SIZE);
++	oq->buff_info = kvcalloc(oq->max_count, sizeof(struct octep_rx_buffer),
++				 GFP_KERNEL);
+ 	if (unlikely(!oq->buff_info)) {
+ 		dev_err(&oct->pdev->dev,
+ 			"Failed to allocate buffer info for OQ-%d\n", q_no);
+@@ -176,7 +176,7 @@ static int octep_setup_oq(struct octep_device *oct, int q_no)
+ 	return 0;
+ 
+ oq_fill_buff_err:
+-	vfree(oq->buff_info);
++	kvfree(oq->buff_info);
+ 	oq->buff_info = NULL;
+ buf_list_err:
+ 	dma_free_coherent(oq->dev, desc_ring_size,
+@@ -230,7 +230,7 @@ static int octep_free_oq(struct octep_oq *oq)
+ 
+ 	octep_oq_free_ring_buffers(oq);
+ 
+-	vfree(oq->buff_info);
++	kvfree(oq->buff_info);
+ 
+ 	if (oq->desc_ring)
+ 		dma_free_coherent(oq->dev,
+diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_rx.h b/drivers/net/ethernet/marvell/octeon_ep/octep_rx.h
+index 782a24f27f3e0..34a32d95cd4b3 100644
+--- a/drivers/net/ethernet/marvell/octeon_ep/octep_rx.h
++++ b/drivers/net/ethernet/marvell/octeon_ep/octep_rx.h
+@@ -67,8 +67,6 @@ struct octep_rx_buffer {
+ 	u64 len;
+ };
+ 
+-#define OCTEP_OQ_RECVBUF_SIZE    (sizeof(struct octep_rx_buffer))
+-
+ /* Output Queue statistics. Each output queue has four stats fields. */
+ struct octep_oq_stats {
+ 	/* Number of packets received from the Device. */
+
+

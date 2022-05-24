@@ -2,97 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE353532F9E
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 19:28:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BF58532FA1
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 19:28:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239613AbiEXR2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 13:28:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40432 "EHLO
+        id S239945AbiEXR2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 13:28:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238246AbiEXR2C (ORCPT
+        with ESMTP id S239834AbiEXR2R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 13:28:02 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEBC27DE23
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 10:28:01 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d22so16410388plr.9
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 10:28:01 -0700 (PDT)
+        Tue, 24 May 2022 13:28:17 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFFBF7DE3A
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 10:28:14 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id ck4so32477341ejb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 10:28:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TQSXOGBPTe2uw0qPjIIRPCO+MsJXruCMk2fBLAYYqXA=;
-        b=SMLKrRvgc/KrH7nqdtcAGv/w6WVgHYGDMTNxXymT+PIT3qI9xE5xRuDvStKpTZbMXt
-         zLx0qqGhh9+Xe0u49z7OgT/yzgZzmY/7hM3YveAoRyOyiPXVxyENFk012ZMHkgdO6iF4
-         dclSnc56WA7bYzd6iCQrGr4sVbgqKdh2Mjf130eX4fsZuNq7X7RiwjlXJUoDIM2uQZAr
-         8Hl7xzfeCJ/KE/pX2xXckAHsN01i2+4TTP7o28H+XBzQXC+/1xhSzJ/lmvBQwfgFiPH0
-         +jtlFOfItgDT0bITZgkfDDJXiapu+Z1f6PLIbGnS0TDbauiK37mByB0WywIgAaSA1amA
-         Sgig==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=veu2FPBaI/1DFm4PUFxv9FNq6rpu8nFudiGrwlmGHSM=;
+        b=gZ/XlZBlp4L8IWxs+qoqoVja1YNbIPorTCnCOL3ZtY+iokMWUUaD/qbXxH3FqDY/YK
+         z2IDTP/hvjBYIrG/x3QYmaEeEdyDEheyjvJt2gpG0KV6gQqa1jEST15Jwb+iJG0rGBzz
+         m+ASNmvLNq/1DpUjSDcrb5XeLLw7XO5AXyVgLdNcBCc1RkQ3tE4hDjk0tLb1Ypw2fogP
+         R+Tv/EsU8qKhc2QDewyp6Z4H3wsn3SKJisGTmtnW7PZHcz4DlbCAKqtws7mOWNIYhTEm
+         BphQU5c9xe4GllqpbcDeUDcjVlbjlQuWZ7VTVoGjrCnwhMAPaWbEgDRVa4dx1fS87N9X
+         r5gQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=TQSXOGBPTe2uw0qPjIIRPCO+MsJXruCMk2fBLAYYqXA=;
-        b=ZZiJ8m/ZZjcaS50HV/YZcWuna1OxoGp1ftWJjyDiO4nlBBKnPHNyt3J/Q0fSynNxKs
-         eMu4wKJl2L7ZkWathpo6R3/iSZfkAlWjZNgnrguvtcNmnV0rMBkOEKxEvLwzXx6z5UNi
-         dLNjT1JtN/jEsAtLMaAA1m7Mkr6hDZ5ucXwGCOhzPS093YZtB4HocSMfRZyOkrpiWaz2
-         p3qJdjuEodLedr1TookviRBqEHagVv3NAsDHF/5YVxC0EhoIlk4Ph7uO6QFzFYIc9eXA
-         bQj4rFp0w9VosdA7P6mFMRB66h11w4l/qxum8uO85QBwXIKt8PzQf8ZzF/q56r9Czhm5
-         9tsA==
-X-Gm-Message-State: AOAM531/hTM8LruNtlTDtH78nAcFZWnOxyd6a+3IXzoK09JyBnrKLfFL
-        rEwqnePy9p3DPATn2rqspgo=
-X-Google-Smtp-Source: ABdhPJxtyLUP5CjnATo5cBrld/MCmrqLC9oAQT9qim9Xt8yHRxK3xMyYy+Qp/XMm3N4d1auSj+NHOg==
-X-Received: by 2002:a17:90b:1e4f:b0:1e0:b91:39ef with SMTP id pi15-20020a17090b1e4f00b001e00b9139efmr5532443pjb.51.1653413281244;
-        Tue, 24 May 2022 10:28:01 -0700 (PDT)
-Received: from ubuntu.localdomain ([103.230.148.185])
-        by smtp.gmail.com with ESMTPSA id m17-20020a170902db1100b0016144a84c31sm7573894plx.119.2022.05.24.10.27.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 May 2022 10:28:00 -0700 (PDT)
-From:   Gautam Menghani <gautammenghani201@gmail.com>
-To:     akpm@linux-foundation.org
-Cc:     Gautam Menghani <gautammenghani201@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        skhan@linuxfoundation.org
-Subject: [PATCH] include/linux/mm: Initialize an int variable to prevent returning garbage value
-Date:   Tue, 24 May 2022 10:27:55 -0700
-Message-Id: <20220524172755.11892-1-gautammenghani201@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        bh=veu2FPBaI/1DFm4PUFxv9FNq6rpu8nFudiGrwlmGHSM=;
+        b=B6egIG12Ku/wAXF+J5tOfjn8VvguRQDM2lzpCQKwhuhrxoHtd7wPKJhIrPhHSw7pTl
+         Us2d1ijYU/SxeeaTQbPs9zfNECE4nvpYpCc7sa80eRU5CT2nQCD9rzokszCj0RX9tEGY
+         nvz/zKXjJ5JGTrjjPFl8iVhfarynRY+Fy776lwrffRvKGIDfDCUwWmfeXzkmn9Q21OnQ
+         AokThSp5kwHfWEWcrjf5/3NavySRNPQs97Uc82kqWfARs2LJJXpe7q5gdSVHL02lRPkT
+         TjI8ae1vE0NOEKeZ565zoV8T6VR20lWxiSk0kO9x1hV5QtOIoCWp5J8U+KN1y3IP5PvY
+         bqlw==
+X-Gm-Message-State: AOAM533tC6AeGcAx9GqvbYUjDQC2YN02biEKdpyUbWhjyP9ESNbfo+lT
+        bJrFHJsj4Brtt6YI1DOBSWQo0A==
+X-Google-Smtp-Source: ABdhPJzNuf50ko0QWScaW7JCNXkoXZrgS/sd+uO6LY8fdrjSymVBWa5CO/EMaNYqNM1M5FqG8Jxnlw==
+X-Received: by 2002:a17:906:350f:b0:6fe:a264:2cd1 with SMTP id r15-20020a170906350f00b006fea2642cd1mr20654456eja.735.1653413293370;
+        Tue, 24 May 2022 10:28:13 -0700 (PDT)
+Received: from [192.168.0.177] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id d3-20020a170907272300b006f3ef214e53sm7308396ejl.185.2022.05.24.10.28.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 May 2022 10:28:12 -0700 (PDT)
+Message-ID: <014a6c1c-2795-f066-f103-9a97afc35da7@linaro.org>
+Date:   Tue, 24 May 2022 19:28:10 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v5 1/6] dt-bindings: remoteproc: Add Xilinx RPU subsystem
+ bindings
+Content-Language: en-US
+To:     Tanmay Shah <tanmay.shah@xilinx.com>, bjorn.andersson@linaro.org,
+        mathieu.poirier@linaro.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        michal.simek@xilinx.com
+Cc:     linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20220518194426.3784095-1-tanmay.shah@xilinx.com>
+ <20220518194426.3784095-2-tanmay.shah@xilinx.com>
+ <45fea4a1-387f-9684-a90b-58b695b54172@linaro.org>
+ <c97d61b0-8a38-5054-d5f1-bc7c5e7bcf61@xilinx.com>
+ <1b117e49-28d0-da75-68ee-c2fcef9fc9a9@linaro.org>
+ <c7b248f4-9ec1-2ae8-c7e3-55f37592f56e@xilinx.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <c7b248f4-9ec1-2ae8-c7e3-55f37592f56e@xilinx.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Initialize the variable 'ret' to prevent garbage value from being
-returned. This Fixes the clang scan warning: Undefined or garbage value
-returned to caller [core.uninitialized.UndefReturn]
-        return ret;
+On 24/05/2022 17:43, Tanmay Shah wrote:
+> With this, I will add 'maxItems: 8' in sram and memory-region properties.
+> 
+> If everything else looks good on schema in this revision, could you 
+> please also review next (dts) patch in this series?
+> 
+> If that looks good, can I get your 'rb' on that?
+> 
+> so we can reduce scope of reviews for next revisions?
 
-Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
----
- include/linux/mm.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+There is no need to resend after receiving a tag, so the amount of
+reviews/versions won't change.
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 9f44254af8ce..f437bd81d6a4 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -1700,7 +1700,7 @@ static inline int arch_make_page_accessible(struct page *page)
- #ifndef HAVE_ARCH_MAKE_FOLIO_ACCESSIBLE
- static inline int arch_make_folio_accessible(struct folio *folio)
- {
--	int ret;
-+	int ret = 0;
- 	long i, nr = folio_nr_pages(folio);
- 
- 	for (i = 0; i < nr; i++) {
--- 
-2.25.1
 
+Best regards,
+Krzysztof

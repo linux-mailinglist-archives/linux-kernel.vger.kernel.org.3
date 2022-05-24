@@ -2,52 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6663F532F76
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 19:09:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13608532F79
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 19:10:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239865AbiEXRJG convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 24 May 2022 13:09:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33244 "EHLO
+        id S239873AbiEXRKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 13:10:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232618AbiEXRJD (ORCPT
+        with ESMTP id S232618AbiEXRKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 13:09:03 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 016C17CB25
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 10:09:01 -0700 (PDT)
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24OAH8R5012220
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 10:09:01 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3g6udnt5j0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 10:09:01 -0700
-Received: from twshared5413.23.frc3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Tue, 24 May 2022 10:08:59 -0700
-Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
-        id 8F680809F036; Tue, 24 May 2022 10:08:43 -0700 (PDT)
-From:   Song Liu <song@kernel.org>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <mingo@redhat.com>, <rostedt@goodmis.org>, <kernel-team@fb.com>,
-        Song Liu <song@kernel.org>, <stable@vger.kernel.org>
-Subject: [PATCH v2] ftrace: clean up hash direct_functions on register failures
-Date:   Tue, 24 May 2022 10:08:39 -0700
-Message-ID: <20220524170839.900849-1-song@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        Tue, 24 May 2022 13:10:19 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 740BB6EC52
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 10:10:18 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id f35so2543636qtb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 10:10:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=K0lOhhH0mvNxRbFwcsFwHWcmEkc9RJmnRgYMbyOeEIg=;
+        b=ASCmvpRwySC2A/4kgnbYkTbzsTCfVOHLYkxqk4wBhEaqTgrlppWVKMBo/dVcb7TFpr
+         9CO/lF2KwPzR9QIfcIhpF+Ytj/zfODYY6SXLPC5UEpPP8skDe1P/UIjXJaSHGLX9hDvo
+         cTHQ9aVMbhh4acWRWfiYRy4JynbN2NLe7Dx9afwrks3XrqrQT9TeLRn8kCSlfEitCFFM
+         okSFMH7iRS2fjm4wEjspZtJwzMu7V8NMKaoRfxe8g9ixwmFXvnaOZjH5YUYrS3BJtxVO
+         jh9rUFlHFD3goZhZzX4RGMAmoRky1r/jcBujRdsBDkDqvpM9e32V0wU80QA2vv6I4tN7
+         J5VQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=K0lOhhH0mvNxRbFwcsFwHWcmEkc9RJmnRgYMbyOeEIg=;
+        b=S3PsuD+lCE8LOZhzMppHawb2VhPTaSRSkDqhKMy3WAp8M3SaNDPWSVjb9g3Kmki5yv
+         uDUPeR7CZGn/W6k5u92hS1MBELfS3KL+ii0OpwhbmwX3jTM0iYDTe61rhVQywFxitRgF
+         pew6QGvQUl02QkH0qMhl3tAm2+B33WUayOvmCaVyF0tlyzfQL3yndztmmeVH7BubxpK+
+         SQRkPZBcm5JWXQfJb0910mlVH/Zm8chPd0nBaGXkCSkhxeLf4IR9vLGrOff9AJn/I5De
+         Cz0EwexWeI0MFy+BreNjBJNqp3u7M4P2NUHlk4G//2U/Ld/wqppapoiKLS050P1Mr08l
+         /oFQ==
+X-Gm-Message-State: AOAM5321xyzL3/zBk290B3b3seJwPk6k+jnXQntrggIeyYty8RDWZ8ET
+        AIKPgSfYc9aSZW9qRQYGXPBbc0Svln2iY4ZA2Wc=
+X-Google-Smtp-Source: ABdhPJyu8FyqAwJOeb8JJ04T7vWaRZryoWw321zFV3X1e7US8He114AqH57+0drNSh/v7P27LvLYGDwv7ostcABjs50=
+X-Received: by 2002:a05:622a:5c8:b0:2f9:1e09:2c41 with SMTP id
+ d8-20020a05622a05c800b002f91e092c41mr15206484qtb.284.1653412217342; Tue, 24
+ May 2022 10:10:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: xggThYLr5QR0TecQukcMmL_qpXPQ-qJe
-X-Proofpoint-ORIG-GUID: xggThYLr5QR0TecQukcMmL_qpXPQ-qJe
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-24_08,2022-05-23_01,2022-02-23_01
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20220524135249.49993-1-roman.o.stratiienko@globallogic.com>
+ <CAGphcd=wTPnTqNxP+TQ8YCDsT=7EUVssAKDpG2J_G=R-7N=YKQ@mail.gmail.com> <2629819.mvXUDI8C0e@kista>
+In-Reply-To: <2629819.mvXUDI8C0e@kista>
+From:   Roman Stratiienko <r.stratiienko@gmail.com>
+Date:   Tue, 24 May 2022 20:10:06 +0300
+Message-ID: <CAGphcdn=7r1p217m0DczgYZeGV+STe9PAAAuMjb0qXq2cteEwg@mail.gmail.com>
+Subject: Re: Re: [PATCH] drm/sun4i: Fix blend registers corruption for DE2.0/DE3.0
+To:     =?UTF-8?Q?Jernej_=C5=A0krabec?= <jernej.skrabec@gmail.com>
+Cc:     mripard@kernel.org, wens@csie.org, airlied@linux.ie,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Samuel Holland <samuel@sholland.org>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, megi@xff.cz
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,101 +72,337 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We see the following GPF when register_ftrace_direct fails:
+Please draft a test for the zpos issue you're mentioning.
 
-[ ] general protection fault, probably for non-canonical address \
-  0x200000000000010: 0000 [#1] PREEMPT SMP DEBUG_PAGEALLOC PTI
-[...]
-[ ] RIP: 0010:ftrace_find_rec_direct+0x53/0x70
-[ ] Code: 48 c1 e0 03 48 03 42 08 48 8b 10 31 c0 48 85 d2 74 [...]
-[ ] RSP: 0018:ffffc9000138bc10 EFLAGS: 00010206
-[ ] RAX: 0000000000000000 RBX: ffffffff813e0df0 RCX: 000000000000003b
-[ ] RDX: 0200000000000000 RSI: 000000000000000c RDI: ffffffff813e0df0
-[ ] RBP: ffffffffa00a3000 R08: ffffffff81180ce0 R09: 0000000000000001
-[ ] R10: ffffc9000138bc18 R11: 0000000000000001 R12: ffffffff813e0df0
-[ ] R13: ffffffff813e0df0 R14: ffff888171b56400 R15: 0000000000000000
-[ ] FS:  00007fa9420c7780(0000) GS:ffff888ff6a00000(0000) knlGS:000000000
-[ ] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[ ] CR2: 000000000770d000 CR3: 0000000107d50003 CR4: 0000000000370ee0
-[ ] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[ ] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[ ] Call Trace:
-[ ]  <TASK>
-[ ]  register_ftrace_direct+0x54/0x290
-[ ]  ? render_sigset_t+0xa0/0xa0
-[ ]  bpf_trampoline_update+0x3f5/0x4a0
-[ ]  ? 0xffffffffa00a3000
-[ ]  bpf_trampoline_link_prog+0xa9/0x140
-[ ]  bpf_tracing_prog_attach+0x1dc/0x450
-[ ]  bpf_raw_tracepoint_open+0x9a/0x1e0
-[ ]  ? find_held_lock+0x2d/0x90
-[ ]  ? lock_release+0x150/0x430
-[ ]  __sys_bpf+0xbd6/0x2700
-[ ]  ? lock_is_held_type+0xd8/0x130
-[ ]  __x64_sys_bpf+0x1c/0x20
-[ ]  do_syscall_64+0x3a/0x80
-[ ]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[ ] RIP: 0033:0x7fa9421defa9
-[ ] Code: 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 9 f8 [...]
-[ ] RSP: 002b:00007ffed743bd78 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-[ ] RAX: ffffffffffffffda RBX: 00000000069d2480 RCX: 00007fa9421defa9
-[ ] RDX: 0000000000000078 RSI: 00007ffed743bd80 RDI: 0000000000000011
-[ ] RBP: 00007ffed743be00 R08: 0000000000bb7270 R09: 0000000000000000
-[ ] R10: 00000000069da210 R11: 0000000000000246 R12: 0000000000000001
-[ ] R13: 00007ffed743c4b0 R14: 00000000069d2480 R15: 0000000000000001
-[ ]  </TASK>
-[ ] Modules linked in: klp_vm(OK)
-[ ] ---[ end trace 0000000000000000 ]---
+It's very easy to do with kmsxx using python wrapper.
 
-One way to trigger this is:
-  1. load a livepatch that patches kernel function xxx;
-  2. run bpftrace -e 'kfunc:xxx {}', this will fail (expected for now);
-  3. repeat #2 => gpf.
+Or explain steps to reproduce here, I will write it by myself.
 
-This is because the entry is added to direct_functions, but not removed.
-Fix this by remove the entry from direct_functions when
-register_ftrace_direct fails.
+Thanks.
+Regards
+Roman
 
-Also remove the last trailing space from ftrace.c, so we don't have to
-worry about it anymore.
-
-Cc: stable@vger.kernel.org
-Fixes: 763e34e74bb7 ("ftrace: Add register_ftrace_direct()")
-Signed-off-by: Song Liu <song@kernel.org>
----
- kernel/trace/ftrace.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index 4557023295c2..fa6de95a4e4e 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -4448,7 +4448,7 @@ int ftrace_func_mapper_add_ip(struct ftrace_func_mapper *mapper,
-  * @ip: The instruction pointer address to remove the data from
-  *
-  * Returns the data if it is found, otherwise NULL.
-- * Note, if the data pointer is used as the data itself, (see 
-+ * Note, if the data pointer is used as the data itself, (see
-  * ftrace_func_mapper_find_ip(), then the return value may be meaningless,
-  * if the data pointer was set to zero.
-  */
-@@ -5151,8 +5151,6 @@ int register_ftrace_direct(unsigned long ip, unsigned long addr)
- 		goto out_unlock;
- 
- 	ret = ftrace_set_filter_ip(&direct_ops, ip, 0, 0);
--	if (ret)
--		remove_hash_entry(direct_functions, entry);
- 
- 	if (!ret && !(direct_ops.flags & FTRACE_OPS_FL_ENABLED)) {
- 		ret = register_ftrace_function(&direct_ops);
-@@ -5161,6 +5159,7 @@ int register_ftrace_direct(unsigned long ip, unsigned long addr)
- 	}
- 
- 	if (ret) {
-+		remove_hash_entry(direct_functions, entry);
- 		kfree(entry);
- 		if (!direct->count) {
- 			list_del_rcu(&direct->next);
--- 
-2.30.2
-
+=D0=B2=D1=82, 24 =D0=BC=D0=B0=D1=8F 2022 =D0=B3. =D0=B2 19:21, Jernej =C5=
+=A0krabec <jernej.skrabec@gmail.com>:
+>
+> Dne torek, 24. maj 2022 ob 17:31:13 CEST je Roman Stratiienko napisal(a):
+> > NAK for this. Further testing showed such an approach is not reliable
+> > due to .atomic_update() callback called only in case planes have some
+> > changes.
+>
+> Additionally, I think it would be better to fix underlaying zpos issue fi=
+rst
+> (attempted many times) and then worry about blending.
+>
+> Best regards,
+> Jernej
+>
+> >
+> > =D0=B2=D1=82, 24 =D0=BC=D0=B0=D1=8F 2022 =D0=B3. =D0=B2 16:52, Roman St=
+ratiienko <r.stratiienko@gmail.com>:
+> > >
+> > > Corruption happens when plane zpos is updated
+> > >
+> > > Example scenario:
+> > >
+> > > Initial frame blender state:
+> > >     PLANE_ZPOS =3D {0, 1, 2, 3}
+> > >     BLD_ROUTE  =3D {0, 1, 2, 0}
+> > >     BLD_EN     =3D {1, 1, 1, 0}
+> > >
+> > > New frame commit (Only ZPOS has been changed):
+> > >
+> > >     PLANE_ZPOS =3D {0->2, 1->0, 2->1, 3}
+> > >
+> > > Expected results after plane state update:
+> > >                 Z0 Z1 Z2 Z3
+> > >     BLD_ROUTE =3D {1, 2, 0, 0}
+> > >     BLD_EN    =3D {1, 1, 1, 0}
+> > >
+> > > What is currently happening:
+> > >
+> > > 1. sun8i_vi_layer_enable(enabled=3Dtrue, zpos=3D2, old_zpos=3D0):
+> > >     BLD_ROUTE =3D {1->0, 1, 2->0, 0}
+> > >     BLD_EN    =3D {1->0, 1, 1->1, 0}
+> > >
+> > > 2. sun8i_ui_layer_enable(enabled=3Dtrue, zpos=3D0, old_zpos=3D1):
+> > >     BLD_ROUTE =3D {0->1, 1->0, 0, 0}
+> > >     BLD_EN    =3D {0->1, 1->0, 1, 0}
+> > >
+> > > 3. sun8i_ui_layer_enable(enabled=3Dtrue, zpos=3D1, old_zpos=3D2):
+> > >     BLD_ROUTE =3D {1, 0->2, 0->0, 0}
+> > >     BLD_EN    =3D {1, 0->2, 1->0, 0}
+> > >
+> > > After updating of all the planes we are ending up with BLD_EN[2]=3D0,
+> > > which makes this channel disabled.
+> > >
+> > > To fix this issue, clear BLEND registers before updating the planes
+> > > and do not clear the old state while processing every plane.
+> > >
+> > > Signed-off-by: Roman Stratiienko <roman.o.stratiienko@globallogic.com=
+>
+> > > ---
+> > >  drivers/gpu/drm/sun4i/sun8i_mixer.c    | 16 +++++++++++++++
+> > >  drivers/gpu/drm/sun4i/sun8i_ui_layer.c | 28 ++++--------------------=
+--
+> > >  drivers/gpu/drm/sun4i/sun8i_vi_layer.c | 28 ++++--------------------=
+--
+> > >  3 files changed, 24 insertions(+), 48 deletions(-)
+> > >
+> > > diff --git a/drivers/gpu/drm/sun4i/sun8i_mixer.c b/drivers/gpu/drm/su=
+n4i/
+> sun8i_mixer.c
+> > > index f5e8aeaa3cdf..004377a000fc 100644
+> > > --- a/drivers/gpu/drm/sun4i/sun8i_mixer.c
+> > > +++ b/drivers/gpu/drm/sun4i/sun8i_mixer.c
+> > > @@ -248,6 +248,21 @@ int sun8i_mixer_drm_format_to_hw(u32 format, u32
+> *hw_format)
+> > >         return -EINVAL;
+> > >  }
+> > >
+> > > +static void sun8i_atomic_begin(struct sunxi_engine *engine,
+> > > +                              struct drm_crtc_state *old_state)
+> > > +{
+> > > +       struct sun8i_mixer *mixer =3D engine_to_sun8i_mixer(engine);
+> > > +       u32 bld_base =3D sun8i_blender_base(mixer);
+> > > +
+> > > +       regmap_write(engine->regs,
+> > > +                    SUN8I_MIXER_BLEND_PIPE_CTL(bld_base),
+> > > +                    0);
+> > > +
+> > > +       regmap_write(engine->regs,
+> > > +                    SUN8I_MIXER_BLEND_ROUTE(bld_base),
+> > > +                    0);
+> > > +}
+> > > +
+> > >  static void sun8i_mixer_commit(struct sunxi_engine *engine)
+> > >  {
+> > >         DRM_DEBUG_DRIVER("Committing changes\n");
+> > > @@ -299,6 +314,7 @@ static struct drm_plane **sun8i_layers_init(struc=
+t
+> drm_device *drm,
+> > >  }
+> > >
+> > >  static const struct sunxi_engine_ops sun8i_engine_ops =3D {
+> > > +       .atomic_begin   =3D sun8i_atomic_begin,
+> > >         .commit         =3D sun8i_mixer_commit,
+> > >         .layers_init    =3D sun8i_layers_init,
+> > >  };
+> > > diff --git a/drivers/gpu/drm/sun4i/sun8i_ui_layer.c b/drivers/gpu/drm=
+/
+> sun4i/sun8i_ui_layer.c
+> > > index 7845c2a53a7f..b294a882626a 100644
+> > > --- a/drivers/gpu/drm/sun4i/sun8i_ui_layer.c
+> > > +++ b/drivers/gpu/drm/sun4i/sun8i_ui_layer.c
+> > > @@ -24,8 +24,7 @@
+> > >  #include "sun8i_ui_scaler.h"
+> > >
+> > >  static void sun8i_ui_layer_enable(struct sun8i_mixer *mixer, int cha=
+nnel,
+> > > -                                 int overlay, bool enable, unsigned =
+int
+> zpos,
+> > > -                                 unsigned int old_zpos)
+> > > +                                 int overlay, bool enable, unsigned =
+int
+> zpos)
+> > >  {
+> > >         u32 val, bld_base, ch_base;
+> > >
+> > > @@ -44,18 +43,6 @@ static void sun8i_ui_layer_enable(struct sun8i_mix=
+er
+> *mixer, int channel,
+> > >                            SUN8I_MIXER_CHAN_UI_LAYER_ATTR(ch_base,
+> overlay),
+> > >                            SUN8I_MIXER_CHAN_UI_LAYER_ATTR_EN, val);
+> > >
+> > > -       if (!enable || zpos !=3D old_zpos) {
+> > > -               regmap_update_bits(mixer->engine.regs,
+> > > -                                  SUN8I_MIXER_BLEND_PIPE_CTL(bld_bas=
+e),
+> > > -
+> SUN8I_MIXER_BLEND_PIPE_CTL_EN(old_zpos),
+> > > -                                  0);
+> > > -
+> > > -               regmap_update_bits(mixer->engine.regs,
+> > > -                                  SUN8I_MIXER_BLEND_ROUTE(bld_base),
+> > > -
+> SUN8I_MIXER_BLEND_ROUTE_PIPE_MSK(old_zpos),
+> > > -                                  0);
+> > > -       }
+> > > -
+> > >         if (enable) {
+> > >                 val =3D SUN8I_MIXER_BLEND_PIPE_CTL_EN(zpos);
+> > >
+> > > @@ -291,31 +278,24 @@ static int sun8i_ui_layer_atomic_check(struct
+> drm_plane *plane,
+> > >  static void sun8i_ui_layer_atomic_disable(struct drm_plane *plane,
+> > >                                           struct drm_atomic_state *st=
+ate)
+> > >  {
+> > > -       struct drm_plane_state *old_state =3D
+> drm_atomic_get_old_plane_state(state,
+> > > -
+> plane);
+> > >         struct sun8i_ui_layer *layer =3D plane_to_sun8i_ui_layer(plan=
+e);
+> > > -       unsigned int old_zpos =3D old_state->normalized_zpos;
+> > >         struct sun8i_mixer *mixer =3D layer->mixer;
+> > >
+> > > -       sun8i_ui_layer_enable(mixer, layer->channel, layer->overlay,
+> false, 0,
+> > > -                             old_zpos);
+> > > +       sun8i_ui_layer_enable(mixer, layer->channel, layer->overlay,
+> false, 0);
+> > >  }
+> > >
+> > >  static void sun8i_ui_layer_atomic_update(struct drm_plane *plane,
+> > >                                          struct drm_atomic_state *sta=
+te)
+> > >  {
+> > > -       struct drm_plane_state *old_state =3D
+> drm_atomic_get_old_plane_state(state,
+> > > -
+> plane);
+> > >         struct drm_plane_state *new_state =3D
+> drm_atomic_get_new_plane_state(state,
+> > >
+> plane);
+> > >         struct sun8i_ui_layer *layer =3D plane_to_sun8i_ui_layer(plan=
+e);
+> > >         unsigned int zpos =3D new_state->normalized_zpos;
+> > > -       unsigned int old_zpos =3D old_state->normalized_zpos;
+> > >         struct sun8i_mixer *mixer =3D layer->mixer;
+> > >
+> > >         if (!new_state->visible) {
+> > >                 sun8i_ui_layer_enable(mixer, layer->channel,
+> > > -                                     layer->overlay, false, 0, old_z=
+pos);
+> > > +                                     layer->overlay, false, 0);
+> > >                 return;
+> > >         }
+> > >
+> > > @@ -328,7 +308,7 @@ static void sun8i_ui_layer_atomic_update(struct
+> drm_plane *plane,
+> > >         sun8i_ui_layer_update_buffer(mixer, layer->channel,
+> > >                                      layer->overlay, plane);
+> > >         sun8i_ui_layer_enable(mixer, layer->channel, layer->overlay,
+> > > -                             true, zpos, old_zpos);
+> > > +                             true, zpos);
+> > >  }
+> > >
+> > >  static const struct drm_plane_helper_funcs sun8i_ui_layer_helper_fun=
+cs =3D
+> {
+> > > diff --git a/drivers/gpu/drm/sun4i/sun8i_vi_layer.c b/drivers/gpu/drm=
+/
+> sun4i/sun8i_vi_layer.c
+> > > index bb7c43036dfa..4653244b2fd8 100644
+> > > --- a/drivers/gpu/drm/sun4i/sun8i_vi_layer.c
+> > > +++ b/drivers/gpu/drm/sun4i/sun8i_vi_layer.c
+> > > @@ -18,8 +18,7 @@
+> > >  #include "sun8i_vi_scaler.h"
+> > >
+> > >  static void sun8i_vi_layer_enable(struct sun8i_mixer *mixer, int cha=
+nnel,
+> > > -                                 int overlay, bool enable, unsigned =
+int
+> zpos,
+> > > -                                 unsigned int old_zpos)
+> > > +                                 int overlay, bool enable, unsigned =
+int
+> zpos)
+> > >  {
+> > >         u32 val, bld_base, ch_base;
+> > >
+> > > @@ -38,18 +37,6 @@ static void sun8i_vi_layer_enable(struct sun8i_mix=
+er
+> *mixer, int channel,
+> > >                            SUN8I_MIXER_CHAN_VI_LAYER_ATTR(ch_base,
+> overlay),
+> > >                            SUN8I_MIXER_CHAN_VI_LAYER_ATTR_EN, val);
+> > >
+> > > -       if (!enable || zpos !=3D old_zpos) {
+> > > -               regmap_update_bits(mixer->engine.regs,
+> > > -                                  SUN8I_MIXER_BLEND_PIPE_CTL(bld_bas=
+e),
+> > > -
+> SUN8I_MIXER_BLEND_PIPE_CTL_EN(old_zpos),
+> > > -                                  0);
+> > > -
+> > > -               regmap_update_bits(mixer->engine.regs,
+> > > -                                  SUN8I_MIXER_BLEND_ROUTE(bld_base),
+> > > -
+> SUN8I_MIXER_BLEND_ROUTE_PIPE_MSK(old_zpos),
+> > > -                                  0);
+> > > -       }
+> > > -
+> > >         if (enable) {
+> > >                 val =3D SUN8I_MIXER_BLEND_PIPE_CTL_EN(zpos);
+> > >
+> > > @@ -395,31 +382,24 @@ static int sun8i_vi_layer_atomic_check(struct
+> drm_plane *plane,
+> > >  static void sun8i_vi_layer_atomic_disable(struct drm_plane *plane,
+> > >                                           struct drm_atomic_state *st=
+ate)
+> > >  {
+> > > -       struct drm_plane_state *old_state =3D
+> drm_atomic_get_old_plane_state(state,
+> > > -
+> plane);
+> > >         struct sun8i_vi_layer *layer =3D plane_to_sun8i_vi_layer(plan=
+e);
+> > > -       unsigned int old_zpos =3D old_state->normalized_zpos;
+> > >         struct sun8i_mixer *mixer =3D layer->mixer;
+> > >
+> > > -       sun8i_vi_layer_enable(mixer, layer->channel, layer->overlay,
+> false, 0,
+> > > -                             old_zpos);
+> > > +       sun8i_vi_layer_enable(mixer, layer->channel, layer->overlay,
+> false, 0);
+> > >  }
+> > >
+> > >  static void sun8i_vi_layer_atomic_update(struct drm_plane *plane,
+> > >                                          struct drm_atomic_state *sta=
+te)
+> > >  {
+> > > -       struct drm_plane_state *old_state =3D
+> drm_atomic_get_old_plane_state(state,
+> > > -
+> plane);
+> > >         struct drm_plane_state *new_state =3D
+> drm_atomic_get_new_plane_state(state,
+> > >
+> plane);
+> > >         struct sun8i_vi_layer *layer =3D plane_to_sun8i_vi_layer(plan=
+e);
+> > >         unsigned int zpos =3D new_state->normalized_zpos;
+> > > -       unsigned int old_zpos =3D old_state->normalized_zpos;
+> > >         struct sun8i_mixer *mixer =3D layer->mixer;
+> > >
+> > >         if (!new_state->visible) {
+> > >                 sun8i_vi_layer_enable(mixer, layer->channel,
+> > > -                                     layer->overlay, false, 0, old_z=
+pos);
+> > > +                                     layer->overlay, false, 0);
+> > >                 return;
+> > >         }
+> > >
+> > > @@ -432,7 +412,7 @@ static void sun8i_vi_layer_atomic_update(struct
+> drm_plane *plane,
+> > >         sun8i_vi_layer_update_buffer(mixer, layer->channel,
+> > >                                      layer->overlay, plane);
+> > >         sun8i_vi_layer_enable(mixer, layer->channel, layer->overlay,
+> > > -                             true, zpos, old_zpos);
+> > > +                             true, zpos);
+> > >  }
+> > >
+> > >  static const struct drm_plane_helper_funcs sun8i_vi_layer_helper_fun=
+cs =3D
+> {
+> > > --
+> > > 2.30.2
+> > >
+> >
+>
+>

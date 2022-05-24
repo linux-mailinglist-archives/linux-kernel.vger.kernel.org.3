@@ -2,47 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 733B15326BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 11:46:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13C0D5326C0
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 11:47:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235845AbiEXJoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 05:44:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34776 "EHLO
+        id S235856AbiEXJqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 05:46:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231863AbiEXJow (ORCPT
+        with ESMTP id S231445AbiEXJqp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 05:44:52 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6239752E5F;
-        Tue, 24 May 2022 02:44:51 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EDF9D1FB;
-        Tue, 24 May 2022 02:44:50 -0700 (PDT)
-Received: from e126130.arm.com (unknown [10.57.82.248])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 4C7313F73D;
-        Tue, 24 May 2022 02:44:44 -0700 (PDT)
-From:   Douglas RAILLARD <douglas.raillard@arm.com>
-To:     bpf@vger.kernel.org
-Cc:     beata.michalska@arm.com,
-        Douglas Raillard <douglas.raillard@arm.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH v3] libbpf: Fix determine_ptr_size() guessing
-Date:   Tue, 24 May 2022 10:44:47 +0100
-Message-Id: <20220524094447.332186-1-douglas.raillard@arm.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 24 May 2022 05:46:45 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDC482CDD7
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 02:46:43 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id br17so17589546lfb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 02:46:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=IMbxClHWPS03PbbitBq3EQjBaeTdpKNatYW1zH8rzVo=;
+        b=YHoPt3HgNPBuYbbTNSRtINqeAZgMQZGvk+Za2ftRzKkNR9F9TWpSdCLuDANiVg4Ha5
+         HlebbofUvH/fLuZbeMQf0JsfDkjNoZfqiR56opCYbjizHVYfPHHBXmbNXPMFRW+AuNlo
+         xgaP/P2zVxyM8M0vuMHEdVM6b1ZV4L773kW3vlt7onYfpkCLa8yHzER9NeB0QxlTS6/m
+         VwIDL8qnKLc/t2L1mpbtzn7Vv5VTcPDN6XE/LizsVC9VoIdYRqe7kuoMgnEC3PWyVvtk
+         zj2TohBH9rkF2xAPJzaRBkQSyqluadvDmaDntru1tLs9PrsNVrd9JyKqeiIZpjP3FSCA
+         fzVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=IMbxClHWPS03PbbitBq3EQjBaeTdpKNatYW1zH8rzVo=;
+        b=LrTvDSy/BuTyKs7tgpGaeGl3NgsY2vLRXbPxIcWaJWcX1x+DWU9kVI/l2FhdpJUi5g
+         z64CjUBfvKeeF77x2KgIc+t/X6wtUHvV4WV0jPpwJRBFhOoTCcTn+L7BLvyf433wzdAO
+         1smbNd+Z2jKTr3aWYW4+mBE2j+Q9KatIS/uRBUFO/XP9EbJyYBxcB5jzygaTYp9A+If/
+         B8pe4PHotJj/fQUlA5veJRshOsNJT9yVujpGfhtvs8DCWPs+k1U0NdhlbhBoeEdC7A2L
+         t6sxj8VJQ/xY6b6VOCcgFP8hx+jtQyQQjFb7gEGTAIxqhAcuDx+AawOADN/2tQdzhoJD
+         9A3A==
+X-Gm-Message-State: AOAM532sy48iZNl5pmMTPqfiQotscInrSeL+6p7kC8hOvRD4waXohZlp
+        1HZlYoHGasw89UAvI9yd85YJTsRwK4G+bA==
+X-Google-Smtp-Source: ABdhPJxYev9XNLxFP7wwILeL72uQun1SCV/fVs8X5/P+XotqeyeO0wiY2eMv6f5dNGdPO9WpfO3cZA==
+X-Received: by 2002:a05:6512:12c6:b0:477:990f:f56e with SMTP id p6-20020a05651212c600b00477990ff56emr18743357lfg.249.1653385602190;
+        Tue, 24 May 2022 02:46:42 -0700 (PDT)
+Received: from [172.20.68.48] ([91.221.145.6])
+        by smtp.gmail.com with ESMTPSA id q17-20020ac25111000000b0047861cba7bdsm1613359lfb.53.2022.05.24.02.46.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 May 2022 02:46:41 -0700 (PDT)
+Message-ID: <cbaf3536-d89d-08cf-1f47-d298ee11a80e@linaro.org>
+Date:   Tue, 24 May 2022 11:46:39 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH V2 1/2] bindings: fsl-imx-sdma: Document 'HDMI Audio'
+ transfer
+Content-Language: en-US
+To:     Joy Zou <joy.zou@nxp.com>, vkoul@kernel.org
+Cc:     shengjiu.wang@nxp.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20220524080337.1322240-1-joy.zou@nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220524080337.1322240-1-joy.zou@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -51,86 +79,197 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Douglas Raillard <douglas.raillard@arm.com>
+On 24/05/2022 10:03, Joy Zou wrote:
+> Add HDMI Audio transfer type.
+> 
+> convert the sdma bindings txt into yaml in v2.
+> 
+> Signed-off-by: Joy Zou <joy.zou@nxp.com>
+> ---
+> Changes since v1:
+> convert the sdma bindings txt into yaml in v2.
+> ---
+>  .../devicetree/bindings/dma/fsl-imx-sdma.yaml | 135 ++++++++++++++++++
 
-One strategy employed by libbpf to guess the pointer size is by finding
-the size of "unsigned long" type. This is achieved by looking for a type
-of with the expected name and checking its size.
+There is no conversion here, only new file...
 
-Unfortunately, the C syntax is friendlier to humans than to computers
-as there is some variety in how such a type can be named. Specifically,
-gcc and clang do not use the same names for integer types in debug info:
+>  1 file changed, 135 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/dma/fsl-imx-sdma.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/dma/fsl-imx-sdma.yaml b/Documentation/devicetree/bindings/dma/fsl-imx-sdma.yaml
+> new file mode 100644
+> index 000000000000..5b4f7a09a395
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/dma/fsl-imx-sdma.yaml
 
-    - clang uses "unsigned long"
-    - gcc uses "long unsigned int"
+Filename: fsl,imx-sdma.yaml
 
-Lookup all the names for such a type so that libbpf can hope to find the
-information it wants.
+> @@ -0,0 +1,135 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/dma/fsl-imx-sdma.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Freescale Smart Direct Memory Access (SDMA) Controller for i.MX
+> +
+> +maintainers:
+> +  - Vinod Koul <vkoul@kernel.org>
 
-Acked-by: Yonghong Song <yhs@fb.com> 
-Signed-off-by: Douglas Raillard <douglas.raillard@arm.com>
----
- tools/lib/bpf/btf.c | 29 +++++++++++++++++++++--------
- 1 file changed, 21 insertions(+), 8 deletions(-)
+This should not be subsystem maintainer but someone closer to the actual
+device.
 
- CHANGELOG
-    v2:
-        * Added missing case for "long"
-    v3:
-        * Refactor a bit to use a table
-        * Provide the type names used by gcc and clang in commit msg
+> +
+> +allOf:
+> +  - $ref: "dma-controller.yaml#"
+> +
+> +# Everything else is described in the common file
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index 1383e26c5d1f..65c492a6807f 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -470,12 +470,25 @@ const struct btf_type *btf__type_by_id(const struct btf *btf, __u32 type_id)
- 	return btf_type_by_id((struct btf *)btf, type_id);
- }
- 
-+static const char * const long_aliases[] = {
-+	"long",
-+	"long int",
-+	"int long",
-+	"unsigned long",
-+	"long unsigned",
-+	"unsigned long int",
-+	"unsigned int long",
-+	"long unsigned int",
-+	"long int unsigned",
-+	"int unsigned long",
-+	"int long unsigned",
-+};
-+
- static int determine_ptr_size(const struct btf *btf)
- {
- 	const struct btf_type *t;
- 	const char *name;
--	int i, n;
--
-+	int i, j, n;
- 	if (btf->base_btf && btf->base_btf->ptr_sz > 0)
- 		return btf->base_btf->ptr_sz;
- 
-@@ -489,12 +502,12 @@ static int determine_ptr_size(const struct btf *btf)
- 		if (!name)
- 			continue;
- 
--		if (strcmp(name, "long int") == 0 ||
--		    strcmp(name, "long unsigned int") == 0) {
--			if (t->size != 4 && t->size != 8)
--				continue;
--			return t->size;
--		}
-+		if (t->size != 4 && t->size != 8)
-+			continue;
-+
-+		for (j = 0; j < ARRAY_SIZE(long_aliases); j++)
-+			if (!strcmp(name, long_aliases[j]))
-+				return t->size;
- 	}
- 
- 	return -1;
--- 
-2.25.1
+Skip the comment please.
 
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - fsl,imx25-sdma
+> +          - fsl,imx31-sdma
+> +          - fsl,imx31-to1-sdma
+> +          - fsl,imx31-to2-sdma
+> +          - fsl,imx35-to1-sdma
+> +          - fsl,imx35-to2-sdma
+> +          - fsl,imx51-sdma
+> +          - fsl,imx53-sdma
+> +          - fsl,imx6q-sdma
+> +          - fsl,imx7d-sdma
+> +          - fsl,imx6sx-sdma
+> +          - fsl,imx6ul-sdma
+> +          - fsl,imx8mm-sdma
+> +          - fsl,imx8mn-sdma
+> +          - fsl,imx8mp-sdma
+> +      - enum:
+> +          - fsl,imx35-sdma
+> +          - fsl,imx8mq-sdma
+
+No, fallback cannot be variable. I doubt that
+fsl,imx25-sdma+fsl,imx8mq-sdma makes any sense!
+
+Additionally, this does not match existing DTS. Please run `make
+dtbs_check`.
+
+> +
+> +  reg:
+> +    description: Should contain SDMA registers location and length
+
+Skip description. Uou need to add maxItems
+
+> +
+> +  interrupts:
+> +    description: Should contain SDMA interrupt
+
+Skip description. Uou need to add maxItems
+
+
+> +
+> +  fsl,sdma-ram-script-name:
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    description: Should contain the full path of SDMA RAM scripts firmware.
+> +
+> +  "#dma-cells":
+> +    const: 3
+> +    description: |
+> +      The first cell: request/event ID
+> +
+> +      The second cell: peripheral types ID
+> +        enum:
+> +          - MCU domain SSI: 0
+> +          - Shared SSI: 1
+> +          - MMC: 2
+> +          - SDHC: 3
+> +          - MCU domain UART: 4
+> +          - Shared UART: 5
+> +          - FIRI: 6
+> +          - MCU domain CSPI: 7
+> +          - Shared CSPI: 8
+> +          - SIM: 9
+> +          - ATA: 10
+> +          - CCM: 11
+> +          - External peripheral: 12
+> +          - Memory Stick Host Controller: 13
+> +          - Shared Memory Stick Host Controller: 14
+> +          - DSP: 15
+> +          - Memory: 16
+> +          - FIFO type Memory: 17
+> +          - SPDIF: 18
+> +          - IPU Memory: 19
+> +          - ASRC: 20
+> +          - ESAI: 21
+> +          - SSI Dual FIFO: 22
+> +              description: needs firmware more than ver 2> +          - Shared ASRC: 23
+> +          - SAI: 24
+> +          - HDMI Audio: 25
+> +
+> +       The third cell: transfer priority ID
+> +         enum:
+> +           - High: 0
+> +           - Medium: 1
+> +           - Low: 2
+> +
+> +  gpr:
+> +    description: The phandle to the General Purpose Register (GPR) node
+
+type/ref needed
+
+> +
+> +  fsl,sdma-event-remap:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +    description: |
+> +      Register bits of sdma event remap, the format is <reg shift val>.
+> +      - reg: the GPR register offset
+> +      - shift: the bit position inside the GPR register
+> +      - val: the value of the bit (0 or 1)
+
+Need maxItems or items with description.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - fsl,sdma-ram-script-name
+> +  - "#dma-cells"
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    sdma: dma-controller@83fb0000 {
+> +      compatible = "fsl,imx51-sdma", "fsl,imx35-sdma";
+> +      reg = <0x83fb0000 0x4000>;
+> +      interrupts = <6>;
+> +      #dma-cells = <3>;
+> +      fsl,sdma-ram-script-name = "sdma-imx51.bin";
+> +    };
+> +
+> +#DMA clients connected to the i.MX SDMA controller must use the format
+> +#described in the dma-controller.yaml file.
+> +  - |
+> +    ssi2: ssi@70014000 {
+
+Skip consumer example, it's obvious.
+
+> +      compatible = "fsl,imx51-ssi", "fsl,imx21-ssi";
+> +      reg = <0x70014000 0x4000>;
+> +      interrupts = <30>;
+> +      clocks = <&clks 49>;
+> +      dmas = <&sdma 24 1 0>,
+> +             <&sdma 25 1 0>;
+> +      dma-names = "rx", "tx";
+> +      fsl,fifo-depth = <15>;
+> +    };
+> +
+> +...
+
+
+Best regards,
+Krzysztof

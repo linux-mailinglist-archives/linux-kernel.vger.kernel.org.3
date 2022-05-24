@@ -2,227 +2,327 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FBA3532295
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 07:43:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 168E953229C
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 07:48:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234558AbiEXFnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 01:43:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33122 "EHLO
+        id S234572AbiEXFsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 01:48:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233496AbiEXFnh (ORCPT
+        with ESMTP id S231663AbiEXFsn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 01:43:37 -0400
-Received: from na01-obe.outbound.protection.outlook.com (mail-centralusazon11021019.outbound.protection.outlook.com [52.101.62.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D928939CE;
-        Mon, 23 May 2022 22:43:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=d4aYYvDgeCbOyiUTdmN2p0nIOsnYS5v3vdGdt91BQo1018oVFZ9Gienys5P60EucRVA/teGyeBMQw+A2hRlkJl5iuZweyix0TIRt+kKsTAgb7UwTS4HZWkITrz+wO7OfNPy7/kGxnL62cf8JMA7MuX4PVUZuoUbL2SzS12Rnsqfdsui/AdTtyG0IHEhQxMK6ORs17chhBpKNrvutjJGrnxDsUY1bBAgLlLXiK5yNtaxwEqIpDIZRlSIpd7ouYIhj3v2XpayP8JoMooAhx4ftkhppqAWsuXdJm94wkYaXtCrgrmnNqBemC4sEX+7T/DwJ8J6a9RCI/HkdsELzaTIwZw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VyFE+hUZlshAFbvhEy1fUvUmSw2p4GiUXhs7uM8NIMA=;
- b=VFM5JAJ355D73wfZrXn5B/z+DA+actjjHi5p9Ie66a9oZ565xk/vu6Owaqcvn/06I4/QJlCkz4JaEFe+sdaip1AqxQL7iLaUd8Pszl6CnuRPMHXeGVzosPFmhEO6dB91M6EkqP3PNm7gCQeJ00tThp1IPvpLfNndXESkUJYbvh7UH3oC5c235dSSU2RIFw5jFf4xqY8QVUbpeeZqvorolTfRDf89o6j9QvZkEE7ajNc6aLN//wqTMuutlt/VgPHGAbFSVbR52B8efBxekjmfHPNc3nk7lNLU6ZvnHg45g0mzXstfeLjWDqpelux+MdXXSVz23Y1TPnwjhQIuP/Kjgw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VyFE+hUZlshAFbvhEy1fUvUmSw2p4GiUXhs7uM8NIMA=;
- b=VWnVS8026Z8nTkOju3uWfDr1E9VY3goI7vgxDhZZdqMAiH8ByFVv5gfckNHjxBYh4lsb9B/SE/wkpkp3+b1hevBsEIWQkdvqrWxefopubrl31TIuZndccBUN4jEUblyuonFtPYrC3UCL2Mv4D3PX3cPCfv25dtVtxNoTlltWCns=
-Received: from PH0PR21MB3025.namprd21.prod.outlook.com (2603:10b6:510:d2::21)
- by DM4PR21MB3706.namprd21.prod.outlook.com (2603:10b6:8:a1::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.3; Tue, 24 May
- 2022 05:43:34 +0000
-Received: from PH0PR21MB3025.namprd21.prod.outlook.com
- ([fe80::3506:defe:c88a:8580]) by PH0PR21MB3025.namprd21.prod.outlook.com
- ([fe80::3506:defe:c88a:8580%9]) with mapi id 15.20.5314.003; Tue, 24 May 2022
- 05:43:34 +0000
-From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Vit Kabele <vit.kabele@sysgo.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        "rudolf.marek@sysgo.com" <rudolf.marek@sysgo.com>,
-        "vit@kabele.me" <vit@kabele.me>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>
-Subject: RE: Hyper-V: Question about initializing hypercall interface
-Thread-Topic: Hyper-V: Question about initializing hypercall interface
-Thread-Index: AQHYa4MwWanTnVIk7UuhrK9xZH8gba0tJDAwgABmYHA=
-Date:   Tue, 24 May 2022 05:43:33 +0000
-Message-ID: <PH0PR21MB3025E5A04CBFE8BE3C4C51C4D7D79@PH0PR21MB3025.namprd21.prod.outlook.com>
-References: <YoZB/+EYDDfowVbs@czspare1-lap.sysgo.cz>
- <PH0PR21MB302564FA43E1402AD13CC706D7D49@PH0PR21MB3025.namprd21.prod.outlook.com>
-In-Reply-To: <PH0PR21MB302564FA43E1402AD13CC706D7D49@PH0PR21MB3025.namprd21.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=a183a278-57b8-4083-92f6-f2cb48c3bf56;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-05-23T23:34:12Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d428c1c2-d5f1-4c9d-8f2f-08da3d485766
-x-ms-traffictypediagnostic: DM4PR21MB3706:EE_
-x-microsoft-antispam-prvs: <DM4PR21MB3706AA5F313B5275AE56DCF8D7D79@DM4PR21MB3706.namprd21.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ODPBsYCgdEJCSoV0qBbtNM+XiziT+/dEek/wPQYxZRuYzDrVMgOCwdB7FZlQoJ/tyIj+42OydQN7wKitWwKQ2aJtLpqLYOBPIkd/HT4aiOfxxzSs3qH9fcX1S/NzlJrH4Kw96taK9AFpv/mssmIcpm7Rs+Ij2GHVO7vXsBTDPpBA1a8gxIzjHHus4MuIJH9l4USoEYyV4rfgAycnAPmYlh2rfQk5aU3IsaTEohG/cFcYQRsam/hFebK4vH1ChiROVZEXL4XxIUbrZhkNTHFcI/so//56dz7jygTgwB9Eeis7dwAJgf3VgEa0Rk72Oh2xazDu0/ncsBBx/6Gw7OvEBH60lpcHggKxi3NTeM7UidgMFAwCEWXnXZmdaooHgpS1twC0C6TzXzyYL16jA6WdoAgYWXDrNzxFBUTcvjXEuABcAnee3GezBfcFulJKNnBJw7I2DNjRUJzKa9Y3a9IblvijSVM7Bf2hY2Km4gnLHsj9ri2ZtgPi1gCMHBhe7W/89cyZbTU/FG3p/GHJ2JR/1Tiv0SNTr3woSIDEGy0CX8ZPxG8lXIw0KWiF0L/IcbB3lZnrP0tKMF9owBhxN8ioq5Pwy0LPYnhDW458s47pCHLJLGC/2+ebI9E4A9L2EZJ/WI8GU9m066thKkbo01UzEvjSzroK6pVGCrz3/jd00ZltzXCuCWheupcK0yL0n4eh1zDXS4Ewk4ISVWU+ElfKKJBRnyo8xHN3w3ZVcj3XlYljuqxJUMYvYTqGF5yMGJZg
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR21MB3025.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(451199009)(186003)(8676002)(52536014)(38070700005)(64756008)(76116006)(8990500004)(54906003)(66476007)(38100700002)(66556008)(66946007)(66446008)(9686003)(71200400001)(26005)(6506007)(7696005)(4326008)(33656002)(82960400001)(5660300002)(110136005)(82950400001)(86362001)(122000001)(316002)(10290500003)(83380400001)(2906002)(8936002)(508600001)(55016003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?6e2mqg4qeJh+L2JK0cJ4QvU9T8yuGeH4W1B2EJWFMrf5myL8hg1k6X7JhpmX?=
- =?us-ascii?Q?1yyU9ysh7NZ0PIff/pMT2jyVX+aOO9syJKdT1XwybVpVyQpNrkcM6QSIANFc?=
- =?us-ascii?Q?OnITDGv1KauycWP/LwFm1M/4FWjhKfA+SfmbbrhA2IKAvzJARE2uHljvE25x?=
- =?us-ascii?Q?wuRDps1GzF6tEbRLLCBo6j+MM60sZyG2eQaI+ONNuLL8Ubhp5giphQ+Tmhwd?=
- =?us-ascii?Q?igXtDh0DWcD7nI3FIOou80JudGQ/jn+XNiyDA/0QRkvpnuy1Tq1s1p+clKkV?=
- =?us-ascii?Q?/QpzbUZ5ijrkrpoyY4ZlUq5reY7t/lkLbgbaRAl47Z+dWyvBwC6XzXQS/HBN?=
- =?us-ascii?Q?GB2aYnmEe6NVH5zOhdGn1HOMC1Iq88tjzb89xjtGl2RfX4o+xT3T/VDxDbWq?=
- =?us-ascii?Q?Ziit6WSUyp2R/UXl4ZHdOuJiq7naxjaS/ApySoDZFQuRwRwXdvdtBUnkOaoX?=
- =?us-ascii?Q?O8HoV373gw/SIA95KUVoyhXnR8GxQsbWZNQbyYKtZx8bHLqqGIebDBb8rBPA?=
- =?us-ascii?Q?EW9gGibeE6oNdEQvZ0m1uDEw0tfsDPZFShdCNkU8/dLVO5wJFpICZmBbBrZW?=
- =?us-ascii?Q?rxgYjwq/S59wBURjgTtoezlL+NSC47bQjDUbhvr3Mq4VI2Q30R/D7ITfh0UP?=
- =?us-ascii?Q?sxaPrDW7Th1j42ESRb2/WEqWxlScMePU3K9MomhWzjNRFREWId9JpcA0nbT7?=
- =?us-ascii?Q?F7UKSUkwXM0q1jO5qvpQD/TSnhlw1buJLssuBCUfMyKON56wrjqqonXVAidW?=
- =?us-ascii?Q?cpqxnO0cvvXGcBneOz4iUfKguOxojGS09w+MpfOSOPW66ykA/sXoLn2c/KLh?=
- =?us-ascii?Q?Zlay9Kr0C6keP6WuN28f4o2Nh95lE8cubdLqECEr/j+zqG0sUtmZj7wEQ2W3?=
- =?us-ascii?Q?N1WoEriGm4+f0XBPVnQv0UOPJ2z0nSYQFa3e+8/pv8KMF7USNd8OSjjHpFoL?=
- =?us-ascii?Q?RtZjHnO8KMhYKqGK7xHsFrxye22beI/Bj4jtOEljHmc3/AAIjhNxbCFQKyHu?=
- =?us-ascii?Q?hK5LG8PmthoXNuisvt93ovLjFkqXj0oa53fmjxoFaxHWmF8+ik46NmAPxJhA?=
- =?us-ascii?Q?nfsb5oZxlN7YSwRJuyZ+fZqNMqRp/3fCYUW+K4KTfvO/MASYBzoN7YyBFoUP?=
- =?us-ascii?Q?V7EoDesib7Kbdgv8HIZqvDLkEChnJuv+5m2ZAzWjkmcEA1epHT+GpzuC/H7c?=
- =?us-ascii?Q?uVvAjXbfztt9hNCTInKr4WsOHThqrtJOhDMHLT1ln4HlfftuWED3XhLaFkR/?=
- =?us-ascii?Q?zXxcJcohbnYEq9hAZk0VvbMrIb6Q3xVuwOxoz7COBI+lwNG9FuYwSy9hFTB1?=
- =?us-ascii?Q?3vbW+LE0kvbUFDrHtnycmntlIbbMY5iuWh6tSqRVGlUOBz3OLVIxkakMW8Rn?=
- =?us-ascii?Q?e+0LeduRoimlTydP8k+b4uTBMxOPOyLm61Qd7L51HgeXOiykY+Hhov/BAn81?=
- =?us-ascii?Q?UKTo9N8KpYT+sUwhqoQ1JKND87QClhka/X7paprZmi92wLnmU9vkqhH/BnFZ?=
- =?us-ascii?Q?gu7vpLjM2ozXWSIqTdq48RhlmQf1ppxMsJ/5nFdSoGPvz5mRc40nFzIvDY7g?=
- =?us-ascii?Q?hmF4UwU/LysffZlFz0cZb/tUahtSm+kJ5Umd2WrRWOy7T2VKWlP6jL01W6Ym?=
- =?us-ascii?Q?9vMj09wtD5/UC09gQ2+/geZuKau6EkIxoRpi87ddgStjUlGrXwr19dnav6d6?=
- =?us-ascii?Q?VL+qBo+vyFgXNl2aDoegRH0B4/4TacsXWHp4xQLqKBcNhwhsaHjJTkIBZ51s?=
- =?us-ascii?Q?mojVpy8noYiyoQCmS7jFFwVDPD1NCWM=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 24 May 2022 01:48:43 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC8B55487;
+        Mon, 23 May 2022 22:48:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1653371322; x=1684907322;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ICDQEeff55Q5ppoKsc2WzqCAuVZf3QAJdDgf/74KjG8=;
+  b=oL1HkXI+o7Uc1b1DxCu6qt1nMiz6fqjagk3R4TC8jaW+oHznRnP7v3Fi
+   FjTsy9oxXLfGHrcsnLdzmAkkawLp9aL0UNmxjqD2aPUg6IIla/rHIfdja
+   FrJlyl9mY6+Xmfsgf23OnAbeuzMH3Wqd+W4aVaimBMnlt8EiDRTZh8IE6
+   0=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 23 May 2022 22:48:42 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 22:48:41 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 23 May 2022 22:48:41 -0700
+Received: from [10.216.49.5] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 23 May
+ 2022 22:48:35 -0700
+Message-ID: <fb990092-e855-3421-3996-d481fb6b08ef@quicinc.com>
+Date:   Tue, 24 May 2022 11:18:31 +0530
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR21MB3025.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d428c1c2-d5f1-4c9d-8f2f-08da3d485766
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 May 2022 05:43:33.9000
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 1yV3c/ooy4yduSBf+qfD70dmqIqRA5IbJ3szzMx1kYqYGdybpNGIgUetgaKhS9/XeQ7c1U6WjXIQOxxz8hn1mEKYIjNycnt0MYqYAi0+qjA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR21MB3706
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH V6 2/5] mmc: sdhci: Capture eMMC and SD card errors
+Content-Language: en-US
+To:     Adrian Hunter <adrian.hunter@intel.com>, <ulf.hansson@linaro.org>,
+        <wsa+renesas@sang-engineering.com>, <shawn.lin@rock-chips.com>,
+        <yoshihiro.shimoda.uh@renesas.com>, <digetx@gmail.com>,
+        <quic_asutoshd@quicinc.com>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_rampraka@quicinc.com>,
+        <quic_pragalla@quicinc.com>, <quic_sartgarg@quicinc.com>,
+        <quic_nitirawa@quicinc.com>, <quic_sayalil@quicinc.com>,
+        Liangliang Lu <quic_luliang@quicinc.com>,
+        "Bao D . Nguyen" <quic_nguyenb@quicinc.com>
+References: <1652857340-6040-1-git-send-email-quic_c_sbhanu@quicinc.com>
+ <1652857340-6040-3-git-send-email-quic_c_sbhanu@quicinc.com>
+ <2fe7d7a1-b6ab-3268-3a9b-20d79086eec6@intel.com>
+From:   "Sajida Bhanu (Temp)" <quic_c_sbhanu@quicinc.com>
+In-Reply-To: <2fe7d7a1-b6ab-3268-3a9b-20d79086eec6@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Kelley (LINUX) <mikelley@microsoft.com> Sent: Monday, May 23,=
- 2022 4:48 PM
->=20
-> From: Vit Kabele <vit.kabele@sysgo.com> Sent: Thursday, May 19, 2022 6:11=
- AM
-> >
-> > Hello,
-> >
-> > I'm playing with the Hyper-V interface described in the documentation
-> > here [1] (version 6.0b) and I noticed inconsistency between the
-> > document and the actual code in arch/x86/hyperv/hv_init.c.
-> >
-> > Section 3.13 Establishing the Hypercall Interface states:
-> >
-> > > 5. The guest checks the Enable Hypercall Page bit. If it is set, the
-> > > interface is already active, and steps 6 and 7 should be omitted.
-> > > 6.  The guest finds a page within its GPA space, preferably one that
-> > > is not occupied by RAM, MMIO, and so on. If the page is occupied, the
-> > > guest should avoid using the underlying page for other purposes.
-> > > 7.  The guest writes a new value to the Hypercall MSR
-> > > (HV_X64_MSR_HYPERCALL) that includes the GPA from step 6 and sets the
-> > > Enable Hypercall Page bit to enable the interface.
-> >
-> > Yet the code in hv_init.c seems to skip the step 5. and performs the
-> > steps 6. and 7. unconditionally. Snippet below.
-> >
-> > ```
-> > rdmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
-> > hypercall_msr.enable =3D 1;
-> >
-> > if (hv_root_partition) {
-> >         ...
-> > } else {
-> >     hypercall_msr.guest_physical_address =3D vmalloc_to_pfn(hv_hypercal=
-l_pg);
-> >     wrmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
-> > }
-> > ```
-> >
-> > 1/ I thought that the specification is written in a way that allows
-> > hypervisor to locate the hypercall page on its own (for whatever reason=
-)
-> > and just announce the location to the guest by setting the Enable bit i=
-n
-> > the MSR on initial read. A guest should then not attempt to remap the
-> > page (point 5. above), but instead create kernel mapping to the page
-> > reported by the hypervisor.
->=20
-> Arguably, the TLFS is a bit unclear here, but the first paragraph
-> in Section 3.13 makes clear that the guest must select the location
-> for the hypercall page.  I'm certain that the hypervisor can not
-> pick the location and just inform the guest.  The intent of Step 5 is
-> to handle the case where the guest might have already set up
-> the hypercall page.
->=20
-> >
-> > 2/ The Lock bit (bit 1) is ignored in the Linux implementation. If the
-> > hypervisor starts with Lock bit set, the init function allocates the
-> > hv_hypercall_pg and writes the value to the MSR, then:
-> >         a/ If the hypervisor ignores the write, the MSR remains unchang=
-ed,
-> >                 but the global variable is already set. Attempt to do a
-> >                 hypercall ends with call to undefined memory, because t=
-he code
-> >                 in hv_do_hypercall() checks the global variable against=
- NULL,
-> >                 which will pass.
-> >         b/ The hypervisor injects #GP, in which case the guest crashes.
->=20
-> I would need to confirm with the Hyper-V team, but I think the Lock
-> bit would only be set *after* the guest OS has provided a guest page
-> to be used as the hypercall page.
->=20
-> There is code in Linux to clear the MSR and disable the hypercall
-> page when doing a kexec or kdump.   This is done so that the new
-> kernel can start "fresh" and establish its own hypercall page. That
-> kexec/kdump code does not check the Lock bit, and I'm not sure of
-> the implications if the Lock bit were found to be set in such a case.
->=20
-> I'll check with the Hyper-V team to get clarity on the handling
-> of the Lock bit in the case of trying to disable the hypercall page.
->=20
-> Michael
+Hi Adrain,
 
-The Hyper-V team clarified that the Locked bit is never set by
-the hypervisor.  The bit is there for the guest to set if it chooses.
-The TLFS is indeed not clear on this point.
+Thank You for the review.
 
-Michael
+Please find the inline comments.
 
->=20
-> >
-> > Do I understand the specification correctly? If yes, then the issues
-> > here are real issues. If my understanding is wrong, what do I miss?
-> >
-> > --
-> > Best regards,
-> > Vit Kabele
+Thanks,
+
+Sajida
+
+On 5/23/2022 12:44 PM, Adrian Hunter wrote:
+> On 18/05/22 10:02, Shaik Sajida Bhanu wrote:
+>> Add changes to capture eMMC and SD card errors.
+>> This is useful for debug and testing.
+>>
+>> Signed-off-by: Liangliang Lu <quic_luliang@quicinc.com>
+>> Signed-off-by: Sayali Lokhande <quic_sayalil@quicinc.com>
+>> Signed-off-by: Bao D. Nguyen <quic_nguyenb@quicinc.com>
+>> Signed-off-by: Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
+> Misplaced blank line (see below) and seems to need to be
+Sure will address
+> re-based on Ulf's next branch:
+>
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git next
+>
+> Otherwise:
+>
+> Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+>
+>> ---
+>>   drivers/mmc/host/sdhci.c | 59 ++++++++++++++++++++++++++++++++++++------------
+>>   drivers/mmc/host/sdhci.h |  3 +++
+>>   include/linux/mmc/mmc.h  |  6 +++++
+>>   3 files changed, 53 insertions(+), 15 deletions(-)
+>>
+>> diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c
+>> index 7728f26..bd4372c 100644
+>> --- a/drivers/mmc/host/sdhci.c
+>> +++ b/drivers/mmc/host/sdhci.c
+>> @@ -224,6 +224,7 @@ void sdhci_reset(struct sdhci_host *host, u8 mask)
+>>   		if (timedout) {
+>>   			pr_err("%s: Reset 0x%x never completed.\n",
+>>   				mmc_hostname(host->mmc), (int)mask);
+>> +			sdhci_err_stats_inc(host, CTRL_TIMEOUT);
+>>   			sdhci_dumpregs(host);
+>>   			return;
+>>   		}
+>> @@ -1719,6 +1720,7 @@ static bool sdhci_send_command_retry(struct sdhci_host *host,
+>>   		if (!timeout--) {
+>>   			pr_err("%s: Controller never released inhibit bit(s).\n",
+>>   			       mmc_hostname(host->mmc));
+>> +			sdhci_err_stats_inc(host, CTRL_TIMEOUT);
+>>   			sdhci_dumpregs(host);
+>>   			cmd->error = -EIO;
+>>   			return false;
+>> @@ -1968,6 +1970,7 @@ void sdhci_enable_clk(struct sdhci_host *host, u16 clk)
+>>   		if (timedout) {
+>>   			pr_err("%s: Internal clock never stabilised.\n",
+>>   			       mmc_hostname(host->mmc));
+>> +			sdhci_err_stats_inc(host, CTRL_TIMEOUT);
+>>   			sdhci_dumpregs(host);
+>>   			return;
+>>   		}
+>> @@ -1990,6 +1993,7 @@ void sdhci_enable_clk(struct sdhci_host *host, u16 clk)
+>>   			if (timedout) {
+>>   				pr_err("%s: PLL clock never stabilised.\n",
+>>   				       mmc_hostname(host->mmc));
+>> +				sdhci_err_stats_inc(host, CTRL_TIMEOUT);
+>>   				sdhci_dumpregs(host);
+>>   				return;
+>>   			}
+>> @@ -3145,6 +3149,7 @@ static void sdhci_timeout_timer(struct timer_list *t)
+>>   	if (host->cmd && !sdhci_data_line_cmd(host->cmd)) {
+>>   		pr_err("%s: Timeout waiting for hardware cmd interrupt.\n",
+>>   		       mmc_hostname(host->mmc));
+>> +		sdhci_err_stats_inc(host, REQ_TIMEOUT);
+>>   		sdhci_dumpregs(host);
+>>   
+>>   		host->cmd->error = -ETIMEDOUT;
+>> @@ -3167,6 +3172,7 @@ static void sdhci_timeout_data_timer(struct timer_list *t)
+>>   	    (host->cmd && sdhci_data_line_cmd(host->cmd))) {
+>>   		pr_err("%s: Timeout waiting for hardware interrupt.\n",
+>>   		       mmc_hostname(host->mmc));
+>> +		sdhci_err_stats_inc(host, REQ_TIMEOUT);
+>>   		sdhci_dumpregs(host);
+>>   
+>>   		if (host->data) {
+>> @@ -3218,17 +3224,21 @@ static void sdhci_cmd_irq(struct sdhci_host *host, u32 intmask, u32 *intmask_p)
+>>   			return;
+>>   		pr_err("%s: Got command interrupt 0x%08x even though no command operation was in progress.\n",
+>>   		       mmc_hostname(host->mmc), (unsigned)intmask);
+>> +		sdhci_err_stats_inc(host, UNEXPECTED_IRQ);
+>>   		sdhci_dumpregs(host);
+>>   		return;
+>>   	}
+>>   
+>>   	if (intmask & (SDHCI_INT_TIMEOUT | SDHCI_INT_CRC |
+>>   		       SDHCI_INT_END_BIT | SDHCI_INT_INDEX)) {
+>> -		if (intmask & SDHCI_INT_TIMEOUT)
+>> +		if (intmask & SDHCI_INT_TIMEOUT) {
+>>   			host->cmd->error = -ETIMEDOUT;
+>> -		else
+>> +			sdhci_err_stats_inc(host, CMD_TIMEOUT);
+>> +		} else {
+>>   			host->cmd->error = -EILSEQ;
+>> -
+>> +			if (!mmc_op_tuning(host->cmd->opcode))
+>> +				sdhci_err_stats_inc(host, CMD_CRC);
+>> +		}
+>>   		/* Treat data command CRC error the same as data CRC error */
+>>   		if (host->cmd->data &&
+>>   		    (intmask & (SDHCI_INT_CRC | SDHCI_INT_TIMEOUT)) ==
+>> @@ -3249,6 +3259,8 @@ static void sdhci_cmd_irq(struct sdhci_host *host, u32 intmask, u32 *intmask_p)
+>>   		int err = (auto_cmd_status & SDHCI_AUTO_CMD_TIMEOUT) ?
+>>   			  -ETIMEDOUT :
+>>   			  -EILSEQ;
+> Blank line better here
+>
+>> +		sdhci_err_stats_inc(host, AUTO_CMD);
+>> +
+> This makes double blank line
+>
+>>   
+>>   		if (mrq->sbc && (host->flags & SDHCI_AUTO_CMD23)) {
+>>   			mrq->sbc->error = err;
+>> @@ -3326,6 +3338,7 @@ static void sdhci_data_irq(struct sdhci_host *host, u32 intmask)
+>>   			if (intmask & SDHCI_INT_DATA_TIMEOUT) {
+>>   				host->data_cmd = NULL;
+>>   				data_cmd->error = -ETIMEDOUT;
+>> +				sdhci_err_stats_inc(host, CMD_TIMEOUT);
+>>   				__sdhci_finish_mrq(host, data_cmd->mrq);
+>>   				return;
+>>   			}
+>> @@ -3354,23 +3367,30 @@ static void sdhci_data_irq(struct sdhci_host *host, u32 intmask)
+>>   
+>>   		pr_err("%s: Got data interrupt 0x%08x even though no data operation was in progress.\n",
+>>   		       mmc_hostname(host->mmc), (unsigned)intmask);
+>> +		sdhci_err_stats_inc(host, UNEXPECTED_IRQ);
+>>   		sdhci_dumpregs(host);
+>>   
+>>   		return;
+>>   	}
+>>   
+>> -	if (intmask & SDHCI_INT_DATA_TIMEOUT)
+>> +	if (intmask & SDHCI_INT_DATA_TIMEOUT) {
+>>   		host->data->error = -ETIMEDOUT;
+>> -	else if (intmask & SDHCI_INT_DATA_END_BIT)
+>> +		sdhci_err_stats_inc(host, DAT_TIMEOUT);
+>> +	} else if (intmask & SDHCI_INT_DATA_END_BIT) {
+>>   		host->data->error = -EILSEQ;
+>> -	else if ((intmask & SDHCI_INT_DATA_CRC) &&
+>> +		if (!mmc_op_tuning(SDHCI_GET_CMD(sdhci_readw(host, SDHCI_COMMAND))))
+>> +			sdhci_err_stats_inc(host, DAT_CRC);
+>> +	} else if ((intmask & SDHCI_INT_DATA_CRC) &&
+>>   		SDHCI_GET_CMD(sdhci_readw(host, SDHCI_COMMAND))
+>> -			!= MMC_BUS_TEST_R)
+>> +			!= MMC_BUS_TEST_R) {
+>>   		host->data->error = -EILSEQ;
+>> -	else if (intmask & SDHCI_INT_ADMA_ERROR) {
+>> +		if (!mmc_op_tuning(SDHCI_GET_CMD(sdhci_readw(host, SDHCI_COMMAND))))
+>> +			sdhci_err_stats_inc(host, DAT_CRC);
+>> +	} else if (intmask & SDHCI_INT_ADMA_ERROR) {
+>>   		pr_err("%s: ADMA error: 0x%08x\n", mmc_hostname(host->mmc),
+>>   		       intmask);
+>>   		sdhci_adma_show_error(host);
+>> +		sdhci_err_stats_inc(host, ADMA);
+>>   		host->data->error = -EIO;
+>>   		if (host->ops->adma_workaround)
+>>   			host->ops->adma_workaround(host, intmask);
+>> @@ -3568,6 +3588,7 @@ static irqreturn_t sdhci_irq(int irq, void *dev_id)
+>>   	if (unexpected) {
+>>   		pr_err("%s: Unexpected interrupt 0x%08x.\n",
+>>   			   mmc_hostname(host->mmc), unexpected);
+>> +		sdhci_err_stats_inc(host, UNEXPECTED_IRQ);
+>>   		sdhci_dumpregs(host);
+>>   	}
+>>   
+>> @@ -3889,20 +3910,27 @@ bool sdhci_cqe_irq(struct sdhci_host *host, u32 intmask, int *cmd_error,
+>>   	if (!host->cqe_on)
+>>   		return false;
+>>   
+>> -	if (intmask & (SDHCI_INT_INDEX | SDHCI_INT_END_BIT | SDHCI_INT_CRC))
+>> +	if (intmask & (SDHCI_INT_INDEX | SDHCI_INT_END_BIT | SDHCI_INT_CRC)) {
+>>   		*cmd_error = -EILSEQ;
+>> -	else if (intmask & SDHCI_INT_TIMEOUT)
+>> +		if (!mmc_op_tuning(host->cmd->opcode))
+>> +			sdhci_err_stats_inc(host, CMD_CRC);
+>> +	} else if (intmask & SDHCI_INT_TIMEOUT) {
+>>   		*cmd_error = -ETIMEDOUT;
+>> -	else
+>> +		sdhci_err_stats_inc(host, CMD_TIMEOUT);
+>> +	} else
+>>   		*cmd_error = 0;
+>>   
+>> -	if (intmask & (SDHCI_INT_DATA_END_BIT | SDHCI_INT_DATA_CRC))
+>> +	if (intmask & (SDHCI_INT_DATA_END_BIT | SDHCI_INT_DATA_CRC)) {
+>>   		*data_error = -EILSEQ;
+>> -	else if (intmask & SDHCI_INT_DATA_TIMEOUT)
+>> +		if (!mmc_op_tuning(host->cmd->opcode))
+>> +			sdhci_err_stats_inc(host, DAT_CRC);
+>> +	} else if (intmask & SDHCI_INT_DATA_TIMEOUT) {
+>>   		*data_error = -ETIMEDOUT;
+>> -	else if (intmask & SDHCI_INT_ADMA_ERROR)
+>> +		sdhci_err_stats_inc(host, DAT_TIMEOUT);
+>> +	} else if (intmask & SDHCI_INT_ADMA_ERROR) {
+>>   		*data_error = -EIO;
+>> -	else
+>> +		sdhci_err_stats_inc(host, ADMA);
+>> +	} else
+>>   		*data_error = 0;
+>>   
+>>   	/* Clear selected interrupts. */
+>> @@ -3918,6 +3946,7 @@ bool sdhci_cqe_irq(struct sdhci_host *host, u32 intmask, int *cmd_error,
+>>   		sdhci_writel(host, intmask, SDHCI_INT_STATUS);
+>>   		pr_err("%s: CQE: Unexpected interrupt 0x%08x.\n",
+>>   		       mmc_hostname(host->mmc), intmask);
+>> +		sdhci_err_stats_inc(host, UNEXPECTED_IRQ);
+>>   		sdhci_dumpregs(host);
+>>   	}
+>>   
+>> diff --git a/drivers/mmc/host/sdhci.h b/drivers/mmc/host/sdhci.h
+>> index 6c689be..2c02ded 100644
+>> --- a/drivers/mmc/host/sdhci.h
+>> +++ b/drivers/mmc/host/sdhci.h
+>> @@ -356,6 +356,9 @@ struct sdhci_adma2_64_desc {
+>>    */
+>>   #define MMC_CMD_TRANSFER_TIME	(10 * NSEC_PER_MSEC) /* max 10 ms */
+>>   
+>> +#define sdhci_err_stats_inc(host, err_name) \
+>> +	mmc_debugfs_err_stats_inc((host)->mmc, MMC_ERR_##err_name)
+>> +
+>>   enum sdhci_cookie {
+>>   	COOKIE_UNMAPPED,
+>>   	COOKIE_PRE_MAPPED,	/* mapped by sdhci_pre_req() */
+>> diff --git a/include/linux/mmc/mmc.h b/include/linux/mmc/mmc.h
+>> index d9a65c6..9c50bc4 100644
+>> --- a/include/linux/mmc/mmc.h
+>> +++ b/include/linux/mmc/mmc.h
+>> @@ -99,6 +99,12 @@ static inline bool mmc_op_multi(u32 opcode)
+>>   	       opcode == MMC_READ_MULTIPLE_BLOCK;
+>>   }
+>>   
+>> +static inline bool mmc_op_tuning(u32 opcode)
+>> +{
+>> +	return opcode == MMC_SEND_TUNING_BLOCK ||
+>> +			opcode == MMC_SEND_TUNING_BLOCK_HS200;
+>> +}
+>> +
+>>   /*
+>>    * MMC_SWITCH argument format:
+>>    *

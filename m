@@ -2,151 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 467755331A6
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 21:14:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9CFE5331A7
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 21:16:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240705AbiEXTOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 15:14:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60142 "EHLO
+        id S240607AbiEXTQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 15:16:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240795AbiEXTOT (ORCPT
+        with ESMTP id S240944AbiEXTQP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 15:14:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA1125F8F1
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 12:14:14 -0700 (PDT)
+        Tue, 24 May 2022 15:16:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 891321AF3A
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 12:16:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5C0B2B81806
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 19:14:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAEC7C34118;
-        Tue, 24 May 2022 19:14:08 +0000 (UTC)
-Date:   Tue, 24 May 2022 20:14:04 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Barry Song <21cnbao@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Will Deacon <will@kernel.org>, Linux-MM <linux-mm@kvack.org>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        hanchuanhua <hanchuanhua@oppo.com>,
-        =?utf-8?B?5byg6K+X5piOKFNpbW9uIFpoYW5nKQ==?= 
-        <zhangshiming@oppo.com>, =?utf-8?B?6YOt5YGl?= <guojian@oppo.com>,
-        Barry Song <v-songbaohua@oppo.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Hugh Dickins <hughd@google.com>, Shaohua Li <shli@kernel.org>,
-        Rik van Riel <riel@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Steven Price <steven.price@arm.com>
-Subject: Re: [PATCH] arm64: enable THP_SWAP for arm64
-Message-ID: <Yo0ufMHXPL5mJ5t6@arm.com>
-References: <20220524071403.128644-1-21cnbao@gmail.com>
- <YoyTWaDmSiBUkaeg@arm.com>
- <CAGsJ_4xPFkc6Kn2G5pPPk8XJ4iZV=atzan=Quq6Ljc_5vr1fnA@mail.gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 24B5561689
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 19:16:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65363C34100;
+        Tue, 24 May 2022 19:16:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653419773;
+        bh=06nCL2c2PiPt0PsecxZ31pddqC8bXfmheV3FL2D5PZs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SwfihDtiDV3fR7kLlkAmf7p9cSuWJs6bQaulxfTe0csocglVq71KIqPMSbIkEOeU5
+         uv+PPNPD4f4dOjDUlb8lPPGskjl6zLYZEMubyzZtiCs9xr/lzoXkT7QQkXwcFu/36W
+         lR8ZIfsELXwakoqLHqKMulTjpZGDU/ZrTN+FuLT4MMy6CR1d+ZbPiDtkYl2trQxYbB
+         oVO4Kh+bT+EUwc1pPjrhQhqwe5R1Ep3a/BnADZSDg1WjxAL0tYHBxOsfC8zVRmXaK1
+         MIrkOO4UEG4gLTu8T+87ey7fZmErcaxoJkpfYwPzMiz38Y2So9fTHzYBJACftpnYBl
+         APB5tj9C1fThw==
+Received: by pali.im (Postfix)
+        id 9498C9ED; Tue, 24 May 2022 21:16:10 +0200 (CEST)
+Date:   Tue, 24 May 2022 21:16:10 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Segher Boessenkool <segher@kernel.crashing.org>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] powerpc: e500: Fix compilation with gcc e500 compiler
+Message-ID: <20220524191610.hnodzz2j7mlgthey@pali>
+References: <20220524093939.30927-1-pali@kernel.org>
+ <20220524175955.GI25951@gate.crashing.org>
+ <20220524181255.bmszzxmbwzv7zed7@pali>
+ <20220524185247.GK25951@gate.crashing.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAGsJ_4xPFkc6Kn2G5pPPk8XJ4iZV=atzan=Quq6Ljc_5vr1fnA@mail.gmail.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220524185247.GK25951@gate.crashing.org>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 10:05:35PM +1200, Barry Song wrote:
-> On Tue, May 24, 2022 at 8:12 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
-> > On Tue, May 24, 2022 at 07:14:03PM +1200, Barry Song wrote:
-> > > diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> > > index d550f5acfaf3..8e3771c56fbf 100644
-> > > --- a/arch/arm64/Kconfig
-> > > +++ b/arch/arm64/Kconfig
-> > > @@ -98,6 +98,7 @@ config ARM64
-> > >       select ARCH_WANT_HUGE_PMD_SHARE if ARM64_4K_PAGES || (ARM64_16K_PAGES && !ARM64_VA_BITS_36)
-> > >       select ARCH_WANT_LD_ORPHAN_WARN
-> > >       select ARCH_WANTS_NO_INSTR
-> > > +     select ARCH_WANTS_THP_SWAP if ARM64_4K_PAGES
-> >
-> > I'm not opposed to this but I think it would break pages mapped with
-> > PROT_MTE. We have an assumption in mte_sync_tags() that compound pages
-> > are not swapped out (or in). With MTE, we store the tags in a slab
+On Tuesday 24 May 2022 13:52:47 Segher Boessenkool wrote:
+> On Tue, May 24, 2022 at 08:12:55PM +0200, Pali Rohár wrote:
+> > On Tuesday 24 May 2022 12:59:55 Segher Boessenkool wrote:
+> > > On Tue, May 24, 2022 at 11:39:39AM +0200, Pali Rohár wrote:
+> > > > gcc e500 compiler does not support -mcpu=powerpc option. When it is
+> > > > specified then gcc throws compile error:
+> > > > 
+> > > >   gcc: error: unrecognized argument in option ‘-mcpu=powerpc’
+> > > >   gcc: note: valid arguments to ‘-mcpu=’ are: 8540 8548 native
+> > > 
+> > > What?  Are you using some modified version of GCC, perhaps?
+> > 
+> > Hello! I'm using official gcc version, no special modification.
+> > 
+> > > No version of GCC that isn't hamstrung can have this output.
+> > 
+> > gcc for e500 cores has really this output when you pass -mcpu=powerpc.
+> > 
+> > Upstream gcc dropped support for e500 cores during development of
+> > version 9.
 > 
-> I assume you mean mte_sync_tags() require that THP is not swapped as a whole,
-> as without THP_SWP, THP is still swapping after being splitted. MTE doesn't stop
-> THP from swapping through a couple of splitted pages, does it?
-
-That's correct, split THP page are swapped out/in just fine.
-
-> > object (128-bytes per swapped page) and restore them when pages are
-> > swapped in. At some point we may teach the core swap code about such
-> > metadata but in the meantime that was the easiest way.
+> This isn't true.  The SPE instruction extension is no longer supported
+> (because it wasn't maintained).  Everything else still works.
+>
+> > But you can still compile and install gcc 8.5.0 (last version
+> > of gcc 8) which has this full e500 support.
+> > 
+> > Really, you can easily try it. Debian 10 (Buster) has gcc 8.3.0 in its
+> > default installation and also provides packages with cross compilers.
+> > Just run 'sudo apt install gcc-powerpc-linux-gnuspe' on desktop amd64
+> > version of Debian 10, it will install e500 cross compiler.
+> > 
+> > -mcpu=8540 specify e500v1 and -mcpu=8548 specify e500v2
 > 
-> If my previous assumption is true,  the easiest way to enable THP_SWP
-> for this moment might be always letting mm fallback to the splitting
-> way for MTE hardware. For this moment, I care about THP_SWP more as
-> none of my hardware has MTE.
+> Aha.  Right, because this config forces -mspe it requires one of these
+> CPUs.
 > 
-> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-> index 45c358538f13..d55a2a3e41a9 100644
-> --- a/arch/arm64/include/asm/pgtable.h
-> +++ b/arch/arm64/include/asm/pgtable.h
-> @@ -44,6 +44,8 @@
->         __flush_tlb_range(vma, addr, end, PUD_SIZE, false, 1)
->  #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
+> You can use a powerpc-linux compiler instead, and everything will just
+> work.  These CPUs are still supported, in all of GCC 9 .. GCC 12 :-)
 > 
-> +#define arch_thp_swp_supported !system_supports_mte
-> +
->  /*
->   * Outside of a few very special situations (e.g. hibernation), we always
->   * use broadcast TLB invalidation instructions, therefore a spurious page
-> diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
-> index 2999190adc22..064b6b03df9e 100644
-> --- a/include/linux/huge_mm.h
-> +++ b/include/linux/huge_mm.h
-> @@ -447,4 +447,16 @@ static inline int split_folio_to_list(struct folio *folio,
->         return split_huge_page_to_list(&folio->page, list);
->  }
 > 
-> +/*
-> + * archs that select ARCH_WANTS_THP_SWAP but don't support THP_SWP due to
-> + * limitations in the implementation like arm64 MTE can override this to
-> + * false
-> + */
-> +#ifndef arch_thp_swp_supported
-> +static inline bool arch_thp_swp_supported(void)
-> +{
-> +       return true;
-> +}
-> +#endif
-> +
->  #endif /* _LINUX_HUGE_MM_H */
-> diff --git a/mm/swap_slots.c b/mm/swap_slots.c
-> index 2b5531840583..dde685836328 100644
-> --- a/mm/swap_slots.c
-> +++ b/mm/swap_slots.c
-> @@ -309,7 +309,7 @@ swp_entry_t get_swap_page(struct page *page)
->         entry.val = 0;
-> 
->         if (PageTransHuge(page)) {
-> -               if (IS_ENABLED(CONFIG_THP_SWAP))
-> +               if (IS_ENABLED(CONFIG_THP_SWAP) && arch_thp_swp_supported())
->                         get_swap_pages(1, &entry, HPAGE_PMD_NR);
->                 goto out;
+> Segher
 
-I think this should work and with your other proposal it would be
-limited to MTE pages:
+Ok. I can use different "generic" powerpc compiler (It should work fine
+as you said, as it has also -mcpu=8540 option). But I think that
+compilation of kernel should be supported also by that gcc 8.5.0 e500
+compiler.
 
-#define arch_thp_swp_supported(page)	(!test_bit(PG_mte_tagged, &page->flags))
-
-Are THP pages loaded from swap as a whole or are they split? IIRC the
-splitting still happens but after the swapping out finishes. Even if
-they are loaded as 4K pages, we still have the mte_save_tags() that only
-understands small pages currently, so rejecting THP pages is probably
-best.
-
--- 
-Catalin
+It is really annoying if for compiling kernel is needed different
+compiler than for compiling rest of the system (userspace and
+bootloader). And for user applications it should be really used e500
+SPE-capable compiler due to performance reasons.

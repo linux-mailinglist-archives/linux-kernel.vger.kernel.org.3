@@ -2,100 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1879C5321D9
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 06:03:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCA1E5321E1
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 06:06:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234126AbiEXEDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 00:03:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44884 "EHLO
+        id S234205AbiEXEG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 00:06:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234119AbiEXEDM (ORCPT
+        with ESMTP id S234147AbiEXEGD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 00:03:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5232A7091F;
-        Mon, 23 May 2022 21:03:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C79976137A;
-        Tue, 24 May 2022 04:03:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32FCFC385AA;
-        Tue, 24 May 2022 04:03:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653364988;
-        bh=3chKRr/tcJf7V0ZhM12uWINmUPbaPhX99jsnzK4PsQ4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=FWVVjlZh7TF6EkoTlVCE1awKjVx24DMcPqMerJX80FQ6htXzc3BAjqlDhF7j6MA7c
-         OvoufoxysvpHjxIGafoj1h7a/IYGAay+KQ35M45KflnAea1b20jzMMBH7bs28pVUjS
-         8XGXb7QryJa5DRgeJD8/AX+tuRutrkwgYIoFsJq7gcclNfA7dFj0BvQ982AJnNDPai
-         e2yVKdGFTOwB52W8OlgGU8DY5WkYD7/A0KoPi3YrLhgjFX9k4Ylh2Mv+GAvI4wVs7e
-         uoLZiSFV9C0ZVQ0Ohr1slm2vnSEdFifbHz7XgH97lSWM8LPtUteCbA1rwWaBl+h0eo
-         yBtiNWL2/BIqg==
-Received: by mail-vs1-f53.google.com with SMTP id j7so16272277vsj.7;
-        Mon, 23 May 2022 21:03:08 -0700 (PDT)
-X-Gm-Message-State: AOAM531FiJKAHaEZHliuMQyOhhrtnXAPg95S+1D4QYwlFb3uNN/jrwlD
-        pBrcjHoZ7NH6URH3WzoRrmllX9K8dwdgfmlQzEI=
-X-Google-Smtp-Source: ABdhPJy7G/Lr/eV1C1hixtJcpmksdrWm3lrB8tKfo2lAmUa2XNsxlPJrJzy4ti0q9eeiYft3r+HmuwHLrjotRU5bVHc=
-X-Received: by 2002:a67:f58f:0:b0:335:d1e6:d5d3 with SMTP id
- i15-20020a67f58f000000b00335d1e6d5d3mr9647693vso.16.1653364987161; Mon, 23
- May 2022 21:03:07 -0700 (PDT)
+        Tue, 24 May 2022 00:06:03 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AFB0FC3
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 21:06:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653365162; x=1684901162;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=+lVLC8RWWcqIC4/EMic05YTHTWRUR1/pJEHgpEVRa0c=;
+  b=jfuRoJWTvRGMkCmeZOZC9LdAD0eFukzrI31i+TgyYwRbJrB9H8pVhrr9
+   +nzOz++Wij6Z0VCkkyR4DO5OKVFtxZrKZtLE2ZkJ8YlznQa1Dl4vZ4NcR
+   FqLPB6SUHPDuNRzAPRVUC//0Nbq40rRgfGZD0mzVWumzZt/VooDar7c4g
+   2mdC7THOmySOPEzvJGocWOZ8UMkxWEFrl3uoTzIj2MBx4QCE4vhvFRgCd
+   ejRRYB2eu8dG3pU19KMFQ+RU1NNJvcihIyXst/WxesGxSelZ43lDN9TY6
+   okf3Jh80lGUW4x7l+RtMTN1L5hzGSqKXBFQBFDDuRkYamEhlgcSxOK1zK
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="336479185"
+X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
+   d="scan'208";a="336479185"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 21:05:56 -0700
+X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
+   d="scan'208";a="526242024"
+Received: from jwosulli-mobl1.ger.corp.intel.com (HELO skuppusw-desk1.home) ([10.212.165.122])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 21:05:54 -0700
+From:   Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v7 0/5] Add TDX Guest Attestation support
+Date:   Mon, 23 May 2022 21:05:12 -0700
+Message-Id: <20220524040517.703581-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <1653360644-28872-1-git-send-email-baihaowen@meizu.com> <CAAhV-H7Xw-LPdHg1mVF1aZ67RQACBP0kans+moZ3GaRb5PF6VA@mail.gmail.com>
-In-Reply-To: <CAAhV-H7Xw-LPdHg1mVF1aZ67RQACBP0kans+moZ3GaRb5PF6VA@mail.gmail.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Tue, 24 May 2022 12:03:00 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4Qcj9y6opY3WMTbE8myo77fYRb8Z42C+MPYuScz8N67g@mail.gmail.com>
-Message-ID: <CAAhV-H4Qcj9y6opY3WMTbE8myo77fYRb8Z42C+MPYuScz8N67g@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: take size of pointed value, not pointer
-To:     Haowen Bai <baihaowen@meizu.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 11:06 AM Huacai Chen <chenhuacai@kernel.org> wrote:
->
-> Hi, Haowen,
->
-> On Tue, May 24, 2022 at 10:52 AM Haowen Bai <baihaowen@meizu.com> wrote:
-> >
-> > Sizeof a pointer-typed expression returns the size of the pointer, not
-> > that of the pointed data.
-> Your patch is correct, but the original patch hasn't been upstream, I don't
-> know how to handle it.
-I've squash your patch to the original one and add a Co-developed-by:,
-not sure it is the best solution. Thanks.
+Hi All,
 
->
-> >
-> > Signed-off-by: Haowen Bai <baihaowen@meizu.com>
-> > ---
-> >  arch/loongarch/kernel/efi.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/arch/loongarch/kernel/efi.c b/arch/loongarch/kernel/efi.c
-> > index f9fdeb1ae358..f0e5d0feffc2 100644
-> > --- a/arch/loongarch/kernel/efi.c
-> > +++ b/arch/loongarch/kernel/efi.c
-> > @@ -180,7 +180,7 @@ void __init efi_init(void)
-> >         if (!efi_system_table)
-> >                 return;
-> >
-> > -       efi_systab = (efi_system_table_t *)early_memremap_ro(efi_system_table, sizeof(efi_systab));
-> > +       efi_systab = (efi_system_table_t *)early_memremap_ro(efi_system_table, sizeof(*efi_systab));
-> >         if (!efi_systab) {
-> >                 pr_err("Can't find EFI system table.\n");
-> >                 return;
-> > --
-> > 2.7.4
-> >
+Intel's Trust Domain Extensions (TDX) protect guest VMs from malicious
+hosts and some physical attacks. VM guest with TDX support is called
+as TD Guest.
+
+In TD Guest, the attestation process is used to verify the 
+trustworthiness of TD guest to the 3rd party servers. Such attestation
+process is required by 3rd party servers before sending sensitive
+information to TD guests. One usage example is to get encryption keys
+from the key server for mounting the encrypted rootfs or secondary drive.
+    
+Following patches add the attestation support to TDX guest which
+includes attestation user interface driver and related hypercall support.
+
+Any distribution enabling TDX is also expected to need attestation. So
+enable it by default with TDX guest support. The compiled size is
+quite small (~500 bytes).
+
+Changes since v6:
+ * Fixed race between wait_for_completion_*() and
+   quote_callback_handler() in tdx_get_quote() when user terminates the
+   request.
+ * Fixed commit log and comments.
+
+Changes since v5:
+ * Added support for parallel GetQuote requests.
+ * Add noalias variants of set_memory_*crypted() functions to
+   changes page attribute without touching direct map.
+ * Made set_memory_*crypted() functions vmalloc address compatible.
+ * Use vmap()/set_memory_*crypted() functions to share/unshare
+   memory without touching the direct map.
+ * Add support to let driver handle the memory cleanup for the
+   early termination of user requests.
+ * Removed unused headers in attest.c
+ * Fixed commit log and comments as per review comments.
+
+Changes since v4:
+ * Removed platform driver model in attestation driver and used
+   miscdevice and initcall approach.
+ * Since dma_alloc*() APIs require a valid device reference,
+   replaced it with __get_free_pages() and set_memory_decrypted()
+   for quote memory allocation.
+ * Removed tdx_mcall_tdreport() and moved TDG.MR.REPORT TDCALL code
+   to tdx_get_report().
+ * Used kmalloc() for TDREPORT memory allocation instead of
+   get_zeroed_page().
+ * Returned -EINVAL in default case of tdx_attest_ioctl().
+ * Added struct tdx_report_req to explicitly mention the
+   TDX_CMD_GET_REPORT IOCTL argument.
+ * Removed tdx_get_quote_hypercall() and moved hypercall code to
+   attestation driver itself.
+ * Removed GetQuote timeout support (since it is not defined in
+   spec)
+ * Added support to check for spurious callback interrupt in GetQuote
+   request.
+ * Fixed commit log and comments as per review suggestions.
+   
+
+Changes since v3:
+ * Moved the attestation driver from platform/x86 to arch/x86/coco/tdx/ and
+   renamed intel_tdx_attest.c to attest.c.
+ * Dropped CONFIG_INTEL_TDX_ATTESTATION and added support to compile
+   attestation changes with CONFIG_INTEL_TDX_GUEST option.
+ * Merged patch titled "x86/tdx: Add tdx_mcall_tdreport() API support" and
+   "platform/x86: intel_tdx_attest: Add TDX Guest attestation interface" into
+   a single patch.
+ * Moved GetQuote IOCTL support changes from patch titled "platform/x86:
+   intel_tdx_attest: Add TDX Guest attestation interface driver" to a
+   separate patch.
+ * Removed 8K size restriction when requesting quote, and added support
+   to let userspace decide the quote size.
+ * Added support to allow attestation agent configure quote generation
+   timeout value.
+ * Fixed commit log and comments as per review comments.
+
+Changes since v2:
+ * As per Han's suggestion, modified the attestation driver to use
+   platform device driver model.
+ * Modified tdx_hcall_get_quote() and tdx_mcall_tdreport() APIs to
+   return TDCALL error code instead of generic error info (like -EIO).
+ * Removed attestation test app patch from this series to simplify
+   the patchset and review process. Test app patches will be submitted
+   once attestation support patches are merged.
+ * Since patches titled "x86/tdx: Add SetupEventNotifyInterrupt TDX
+   hypercall support" and "x86/tdx: Add TDX Guest event notify
+   interrupt vector support" are related, combining them into a
+   single patch.
+
+Changes since v1:
+ * Moved test driver from "tools/tdx/attest/tdx-attest-test.c" to
+   "tools/arch/x86/tdx/attest/tdx-attest-test.c" as per Hans review
+   suggestion.
+ * Minor commit log and comment fixes in patches titled
+   "x86/tdx: Add tdx_mcall_tdreport() API support" and "x86/tdx:
+   Add tdx_hcall_get_quote() API support"
+ * Extended tdx_hcall_get_quote() API to accept GPA length as argument
+   to accomodate latest TDQUOTE TDVMCALL related specification update.
+ * Added support for tdx_setup_ev_notify_handler() and
+   tdx_remove_ev_notify_handler() in patch titled "x86/tdx: Add TDX
+   Guest event notify interrupt vector support"
+
+
+Kuppuswamy Sathyanarayanan (5):
+  x86/tdx: Add TDX Guest attestation interface driver
+  x86/tdx: Add TDX Guest event notify interrupt support
+  x86/mm: Make tdx_enc_status_changed() vmalloc address compatible
+  x86/mm: Add noalias variants of set_memory_*crypted() functions
+  x86/tdx: Add Quote generation support
+
+ arch/x86/coco/tdx/Makefile         |   2 +-
+ arch/x86/coco/tdx/attest.c         | 432 +++++++++++++++++++++++++++++
+ arch/x86/coco/tdx/tdx.c            |  84 +++++-
+ arch/x86/include/asm/hardirq.h     |   3 +
+ arch/x86/include/asm/idtentry.h    |   4 +
+ arch/x86/include/asm/irq_vectors.h |   7 +-
+ arch/x86/include/asm/set_memory.h  |   2 +
+ arch/x86/include/asm/tdx.h         |   4 +
+ arch/x86/include/uapi/asm/tdx.h    |  87 ++++++
+ arch/x86/kernel/irq.c              |   7 +
+ arch/x86/mm/pat/set_memory.c       |  26 +-
+ 11 files changed, 648 insertions(+), 10 deletions(-)
+ create mode 100644 arch/x86/coco/tdx/attest.c
+ create mode 100644 arch/x86/include/uapi/asm/tdx.h
+
+-- 
+2.25.1
+

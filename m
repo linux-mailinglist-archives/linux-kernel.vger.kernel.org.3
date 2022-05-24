@@ -2,74 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5D2E5328FF
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 13:30:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D0925328FA
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 13:29:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235853AbiEXL3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 07:29:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50892 "EHLO
+        id S236632AbiEXL3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 07:29:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236638AbiEXL3g (ORCPT
+        with ESMTP id S231845AbiEXL3V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 07:29:36 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD815880C1
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 04:29:34 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id v8so28376214lfd.8
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 04:29:34 -0700 (PDT)
+        Tue, 24 May 2022 07:29:21 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6146287A33
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 04:29:20 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id r71so16125897pgr.0
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 04:29:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=3emZod9jR3q6gCFyPwhXNHJRJq7F+FIV2jGAwBzwi58=;
-        b=PnUGqZ1pyposeXIbHLumD+wEv3S0Cs1Wpjjwnkxvb7fzp2T735cLUxZ+diQBX72rOj
-         mC+thfNM/6t90Vvel23DzqlzhPsVg3meCoI7/MhhGAOJiAlr+oUDgEtRBOnzNnivmbmr
-         zy8xa8X+cAtOOo/0gEqv1UpSdxgqPfs+zN7mZPfS2rJNbJ3tijxU5Z2yHMIzTaIAAn9t
-         VjTNPFK0t6Hsx3jj7T7eqNhW7lDK0pcFFzOe+dr0KGLpS02wjGhTkdvBS0gtl25dKQ17
-         zR4lAbnSbNtBAc2r00xrsEWHMGw6j+ZSjrbwMoWY0cJX5/Qjz4L6CCuSe0yjcjaZBt/p
-         lvMw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=IldGxKJY6LO3UJ6O+XkKSV+I8U/lySrgG1o7l9jJtsQ=;
+        b=K3AP1mzKBkpP2s1wvEPgKcIXDy+J8uuf3OY/9pZ0vetpdQO3QCTQ9d2xR3ESFGL5Qk
+         8NbxT4ovJqlKJO3B8XqM0FJpYywxafJPGDDKR11ruaJRCaihuty47AZ9UJfIXHN7W8Z2
+         bj3v+r8WAwDgaTpEvzxOIOmF/Du+xMo/K2OAwpo4R8pydlYQPicRILJORFTi7sP8Ma4N
+         2XpY2kP3VX3vorDulh8I+r9kE1nsY7Ce4uThY0R6NgOyR+QgPhnSsSojzQiCOClqFYE8
+         Ug0uAt3iReyy+5/WtabDKt/HSQXKuZW480T56peAMB69YQLTBLYCAtv6m74kUcVSR+83
+         l9bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=3emZod9jR3q6gCFyPwhXNHJRJq7F+FIV2jGAwBzwi58=;
-        b=Ivo4xl8qInNSFyMLQTczp333vWe1lOXyo0v/PEcsDCgtpYnUqfEn4RAiyg/WKJm5NH
-         lIdhsfhL4yWxuSwf1xEEuPoJulMdoogj12TASPyiPyhjjNbO6dQU2jDlNXBLbzoUBu6M
-         J3FYsIZCGgzY4MczJanYuqsgwVWnC4ShSsO/2v1nyL4XRYR2asmhdu12BbHSbK0NI24w
-         YjmBLAHaPEq65ilxwJZ+aLTCKViJLTDfmXKehMNbE2XMlmRsbl6Sv5BSw7n5P5ZJsQCM
-         BJYb/vMurHveE01+lfpf5HQ1a1d3YibvKKOVlcX0jjkp/VJr3CcEC2p7mx7Z/5fF+Nka
-         STQA==
-X-Gm-Message-State: AOAM532K8t+t8jwbuW6kvwkY831jQDZGC8nsHIB0ZKnVmIBQ/rCo0JQf
-        O+EFDAc6XJNRfBSI77pR3pIpjg==
-X-Google-Smtp-Source: ABdhPJxOJolQvOT14QtdpEQ2d2/n0h6xMUoAUUyC7pPRF3QAELSY8PwJkQeSwOq0216GCHYbyanDHg==
-X-Received: by 2002:ac2:550f:0:b0:477:bc6e:9bcc with SMTP id j15-20020ac2550f000000b00477bc6e9bccmr19354559lfk.279.1653391773176;
-        Tue, 24 May 2022 04:29:33 -0700 (PDT)
-Received: from [172.20.68.48] ([91.221.145.6])
-        by smtp.gmail.com with ESMTPSA id b4-20020a056512218400b0047255d21177sm2486692lft.166.2022.05.24.04.29.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 May 2022 04:29:32 -0700 (PDT)
-Message-ID: <2f49aa26-23f7-833c-b01d-9dfb2603603c@linaro.org>
-Date:   Tue, 24 May 2022 13:28:24 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=IldGxKJY6LO3UJ6O+XkKSV+I8U/lySrgG1o7l9jJtsQ=;
+        b=oCRMvZAwqN+9KdHksBHD6TQXiutjBZ/lzVzWhQwlMW/wnwactZR+AwM7Ytz6R4YxcW
+         KNbPXcd0xrkzL1cX7z9QT4F3rc+W0UhHLLftBPVRA9UgmcHc9pUAlodVKwDWPW7I/D3f
+         dlUtGH1+oQoExN4l+xyW4SxKtFk47n4rxHLEH3OR6VrDMv+oaxQd91aswgAWjUP/cHQN
+         5O02SPfpmMrDk7fgjykq4eIwUXUC3w0VyVirvQ4rSUA9DqHV9d2vpLTCvTbkD55eWAVI
+         4siS4+LHjm9tk5Xlquw5Z6XodAZW35+HsCUA+iVfmSxEWK9mTbojHqq+sBuVEOpMnWdM
+         p3jg==
+X-Gm-Message-State: AOAM531bbvkz1ucLeVspmqZX4K0Esl8DEVuxW/dJVBtsgtkxW5q8Egz2
+        QW2q4tEjsZFcDRbEfCnjOxaV/g==
+X-Google-Smtp-Source: ABdhPJyeS3sWXHou4lfADPXNoFZTAcSSX9pCVQTrStY0/TIhBtQVG89ziKHFF7D93bNi9LgC0lAaSw==
+X-Received: by 2002:aa7:960d:0:b0:518:7139:f85c with SMTP id q13-20020aa7960d000000b005187139f85cmr20365589pfg.40.1653391759901;
+        Tue, 24 May 2022 04:29:19 -0700 (PDT)
+Received: from localhost ([122.162.234.2])
+        by smtp.gmail.com with ESMTPSA id iz19-20020a170902ef9300b0016214b6318bsm5399367plb.128.2022.05.24.04.29.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 May 2022 04:29:19 -0700 (PDT)
+Date:   Tue, 24 May 2022 16:59:17 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Schspa Shi <schspa@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v3] cpufreq: fix race on cpufreq online
+Message-ID: <20220524112917.apcvvvblksg7jdu4@vireshk-i7>
+References: <20220511043515.fn2gz6q3kcpdai5p@vireshk-i7>
+ <CAMA88TpefB=rnqea2u1zEvNUJNE_kdj4mYito7SGCuMj-o071Q@mail.gmail.com>
+ <20220511122114.wccgyur6g3qs6fps@vireshk-i7>
+ <CAJZ5v0gN_yDFpvCXRXv8rN-i3TugCi-HKpBKK2z4eWU0Zm1GUg@mail.gmail.com>
+ <CAJZ5v0id+7vkqMQEyVRe29oF_dRtzZ0EhoYUn8=yzeENDeABJw@mail.gmail.com>
+ <20220512065623.q4aa6y52pst3zpxu@vireshk-i7>
+ <CAJZ5v0jeYiZ6esdxnJbOyDztNqOAbjcjxmpca3JTFWRh+cwdBw@mail.gmail.com>
+ <20220513042705.nbnd6vccuiu6lb7a@vireshk-i7>
+ <20220524111456.hw4qugsvt4bm7reh@vireshk-i7>
+ <CAJZ5v0i_qpcaUwdZY=KR_e=HC6MZUw2aDGL=hxgo866dF1zwOA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] dt-bindings: input: use generic node names
-Content-Language: en-US
-To:     Andreas Kemnade <andreas@kemnade.info>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jeff LaBundy <jeff@labundy.com>, linux-input@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220524093136.7980-1-krzysztof.kozlowski@linaro.org>
- <20220524131152.3d749a9d@aktux>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220524131152.3d749a9d@aktux>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0i_qpcaUwdZY=KR_e=HC6MZUw2aDGL=hxgo866dF1zwOA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,42 +80,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/05/2022 13:11, Andreas Kemnade wrote:
-> Hi,
-> 
-> On Tue, 24 May 2022 11:31:36 +0200
-> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-> 
->> diff --git a/Documentation/devicetree/bindings/input/gpio-keys.yaml b/Documentation/devicetree/bindings/input/gpio-keys.yaml
->> index 7fe1966ea28a..93f601c58984 100644
->> --- a/Documentation/devicetree/bindings/input/gpio-keys.yaml
->> +++ b/Documentation/devicetree/bindings/input/gpio-keys.yaml
->> @@ -127,13 +127,13 @@ examples:
->>          compatible = "gpio-keys";
->>          autorepeat;
->>  
->> -        up {
->> +        key-up {
->>              label = "GPIO Key UP";
->>              linux,code = <103>;
->>              gpios = <&gpio1 0 1>;
->>          };
->>  
->> -        down {
->> +        key-down {
->>              label = "GPIO Key DOWN";
->>              linux,code = <108>;
->>              interrupts = <1 IRQ_TYPE_EDGE_FALLING>;
-> hmm, what about changing
-> patternProperties:
->   ".*":
-> 
-> to enforce this format instead of allowing anything?
+On 24-05-22, 13:22, Rafael J. Wysocki wrote:
+> On Tue, May 24, 2022 at 1:15 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> >
+> > On 13-05-22, 09:57, Viresh Kumar wrote:
+> > > On 12-05-22, 12:49, Rafael J. Wysocki wrote:
+> > > > > > Moreover, I'm not sure why the locking dance in store() is necessary.
+> > > > >
+> > > > > commit fdd320da84c6 ("cpufreq: Lock CPU online/offline in cpufreq_register_driver()")
+> > > >
+> > > > I get that, but I'm wondering if locking CPU hotplug from store() is
+> > > > needed at all.  I mean, if we are in store(), we are holding an active
+> > > > reference to the policy kobject, so the policy cannot go away until we
+> > > > are done anyway.  Thus it should be sufficient to use the policy rwsem
+> > > > for synchronization.
+> > >
+> > > I think after the current patchset is applied and we have the inactive
+> > > policy check in store(), we won't required the dance after all.
+> >
+> > I was writing a patch for this and then thought maybe look at mails
+> > around this time, when you sent the patch, and found the reason why we
+> > need the locking dance :)
+> >
+> > https://lore.kernel.org/lkml/20150729091136.GN7557@n2100.arm.linux.org.uk/
 
-It will cause a lot, a lot of warnings, so first these would need to be
-fixed in every DTS. That's also doable, might help if these gpio-keys
-bindings need any other object like property.
+Actually no, this is for the lock in cpufreq_driver_register().
 
+> Well, again, if we are in store(), we are holding a reference to the
+> policy kobject, so this is not initialization time.
 
-Best regards,
-Krzysztof
+This is the commit which made the change.
+
+commit 4f750c930822 ("cpufreq: Synchronize the cpufreq store_*() routines with CPU hotplug")
+
+-- 
+viresh

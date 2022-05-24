@@ -2,121 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71FEB5323CB
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 09:13:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CBC45323D0
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 09:14:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234409AbiEXHNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 03:13:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44276 "EHLO
+        id S234875AbiEXHOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 03:14:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232812AbiEXHNq (ORCPT
+        with ESMTP id S234869AbiEXHOd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 03:13:46 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 442EE3B02E
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 00:13:45 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id rs12so21668356ejb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 00:13:45 -0700 (PDT)
+        Tue, 24 May 2022 03:14:33 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 527DC5D5DF
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 00:14:31 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id t28so8018879pga.6
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 00:14:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=malat-biz.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=eunu73/8rviOeHUzBMMB6FIOIz37GALKRdpDRhaNFC0=;
-        b=z+alSYku/zecfz4dsYeNtbJLpLWjCHXWWjA3QK+XPcKBlpmeNZBmH/5/fvsx2SR9ng
-         uWNNkIri6AlIvZrnsE5YfJ/5MiC/krGK/33Waum1Lkwn0u9CrsjmGdhEv8cmMW1qau2e
-         ueoBmn/oQpKn6uYPa4Rfyh9ZWr0lHIrR5aYXi1wIO5NdSaxYGjJJztPMIHNWX5OpsWQh
-         +LGfYGZ7/csDux8l6avPyC0i6uNoNwzdPL71AjNZHZUOU/P/1qxcnpjWRbGoEGExClLr
-         GFUhaatl5OBjomy4aatrZQxqb9xGAcalTWOBz9Dkdp8ZNFG1FtENIKbf55rbn6HKqoQt
-         WHEw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gRlOyFznhqcllB5R0D5wOECWdS1nzdOx8oGhDl9tP3I=;
+        b=e10b0unVP47GYKpHeoWY60Db5sK3pGatfUwGHps+Me004JE+XQ5wgt4pHfqTY0Q4zU
+         yguGhsmf1gqh1n29RHqLOW8rRvYlrZmToK/pRVG8c79mNZ/jo9PhBzypdgoow+L0WfrL
+         I9NTBGOzqEvkU59WTaIvPczHJVJZe6J25I0R7+cKxXKAUZDAcP/SD+1228HF4MoK4+l9
+         VDYuvLO3JuCtTqzWMSJMQip6LjGAWRgi1cacdJOUNZC0SCwwzh2fjp0gK+Icu3Y6z7fn
+         udWDWZtQSVM2fOE7n2MyfM9pS/ytyGjJhC74EKgLtHpH5TuSO4dY0hJVRRnwpTb4sqjZ
+         hteA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=eunu73/8rviOeHUzBMMB6FIOIz37GALKRdpDRhaNFC0=;
-        b=T4zXaPipFmN/drA39cvVfIP+Hyo+6h7cKuul7a+5cq7u+E00lT6hiRQMrJsKq5O5nR
-         pOZfrO9+Cc7YXRfw8oLuNYucCNo2sn9ah46EJCYbjLp/7+tK7mthYqVnJTL6xAtWkmu2
-         5ENYPvMABIRP7UDmZCUrfG/MrNZIsbChFP2Opq2eJytlrWn25I3W0ftCn1H79akZ1mqL
-         KCp50Os/2Yc2jC/Bzckr451jwG3RovumZlTnGjrtjq3/QpEImvpypIruoQEbvP5FL281
-         R92mwu1EUCNRImM3jEJUZmg6WdpOrHl8Su/b5wXLktwdvrkK6TZHucT1CkdgtAIO1enD
-         JXpA==
-X-Gm-Message-State: AOAM531uKBnOG68d53Vk5y8snjgMiDz11oBIKJLzRsn3TX0ChwJ/ju5b
-        G8Sx6Bjfsfr6Kg+QWgZS7t6RBA==
-X-Google-Smtp-Source: ABdhPJyxpBX7gEiMHY622uqEJnEc+74EkHsDKkKTLnzD3C0VLXIHvwms/bjENrYL/Aah+zTlqZeh0g==
-X-Received: by 2002:a17:907:6e22:b0:6fe:b668:101 with SMTP id sd34-20020a1709076e2200b006feb6680101mr15613909ejc.247.1653376423765;
-        Tue, 24 May 2022 00:13:43 -0700 (PDT)
-Received: from ntb.petris.klfree.czf ([2a02:8070:d483:ed00:4bcc:154f:5c11:5870])
-        by smtp.gmail.com with ESMTPSA id ee46-20020a056402292e00b0042617ba63aesm9193489edb.56.2022.05.24.00.13.42
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gRlOyFznhqcllB5R0D5wOECWdS1nzdOx8oGhDl9tP3I=;
+        b=svB2U0zTyOsTfzVa+bBem2fZb+t5gojcNAw7FXlgZA32N2hgmq0Ny5Tbn1BjjAJfVL
+         OMBda0MweCWh/X6hF7C5Ced/L7QcIb96RWqdw/SbIPqoSxBROaXgMU2qiV4TRgd5B/uJ
+         ui+/zXtH6pUrpFZjp5ZggQVPzPlT7CyqxLe3bdtstZ8EhYiI71rEwTIdSNjLrmieu/0V
+         QkczbmAW6giv2rgGSFhpj2CZy26HI/bPw45/Z36uOMjKpU0ERKK9aRPu2UM6O8J5qqzR
+         AYMgXlpLecLd3q/yt9RZHU7cPDtvOSI/xUi5DtTyOEkGWeAqINIOqClGWDOPSYy43buV
+         zPQA==
+X-Gm-Message-State: AOAM533Z6Z28m/evNgI1H9ceE1FaKsjrGAxfcpzpCIpDTMNgoHGd2JVn
+        uAvTLQL1ENzFRGzgXylXoLw=
+X-Google-Smtp-Source: ABdhPJytRlr+IksNgpeuSKGSxDWVOSNwYOw84XYIQw8jPCJ2dU57bjALquJylUj+j/5CJllp5ajmYQ==
+X-Received: by 2002:a63:1953:0:b0:3c6:e5e:9190 with SMTP id 19-20020a631953000000b003c60e5e9190mr23049687pgz.286.1653376470773;
+        Tue, 24 May 2022 00:14:30 -0700 (PDT)
+Received: from localhost.localdomain (47-72-206-164.dsl.dyn.ihug.co.nz. [47.72.206.164])
+        by smtp.gmail.com with ESMTPSA id f7-20020a170902ce8700b001621c48d6c2sm4409018plg.221.2022.05.24.00.14.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 May 2022 00:13:43 -0700 (PDT)
-Date:   Tue, 24 May 2022 09:13:41 +0200
-From:   Petr Malat <oss@malat.biz>
-To:     David Laight <David.Laight@aculab.com>
-Cc:     "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        Joern Engel <joern@lazybastard.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH] mtd: phram: Map RAM using memremap instead of ioremap
-Message-ID: <YoyFpbhLB1E+8ilr@ntb.petris.klfree.czf>
-References: <20220523142825.3144904-1-oss@malat.biz>
- <3cab9a7f4ed34ca0b742a62c2bdc3bce@AcuMS.aculab.com>
- <Youn9AmqY6/EExDw@ntb.petris.klfree.czf>
- <e33f91a3eacc4aa3a08e6465fef9265c@AcuMS.aculab.com>
+        Tue, 24 May 2022 00:14:30 -0700 (PDT)
+From:   Barry Song <21cnbao@gmail.com>
+To:     akpm@linux-foundation.org, catalin.marinas@arm.com,
+        will@kernel.org, linux-mm@kvack.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        hanchuanhua@oppo.com, zhangshiming@oppo.com, guojian@oppo.com,
+        Barry Song <v-songbaohua@oppo.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Hugh Dickins <hughd@google.com>, Shaohua Li <shli@kernel.org>,
+        Rik van Riel <riel@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>
+Subject: [PATCH] arm64: enable THP_SWAP for arm64
+Date:   Tue, 24 May 2022 19:14:03 +1200
+Message-Id: <20220524071403.128644-1-21cnbao@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e33f91a3eacc4aa3a08e6465fef9265c@AcuMS.aculab.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 04:09:20PM +0000, David Laight wrote:
-> From: Petr Malat
-> > Sent: 23 May 2022 16:28
-> > On Mon, May 23, 2022 at 02:51:41PM +0000, David Laight wrote:
-> > > From: Petr Malat
-> > > > Sent: 23 May 2022 15:28
-> > > >
-> > > > One can't use memcpy on memory obtained by ioremap, because IO memory
-> > > > may have different alignment and size access restriction than the system
-> > > > memory. Use memremap as phram driver operates on RAM.
-> > >
-> > > Does that actually help?
-> > > The memcpy() is still likely to issue unaligned accesses
-> > > that the hardware can't handle.
-> > 
-> > Yes, it solves the issue. Memcpy can cause unaligned access only on
-> > platforms, which can handle it. And on ARM64 it's handled only for
-> > RAM and not for a device memory (__pgprot(PROT_DEVICE_*)).
-> 
-> Does mapping it as memory cause it to be cached?
-> So the hardware only sees cache line reads (which are aligned)
-> and the cpu support for misaligned memory accesses then
-> stop the faults?
-Yes, this is controlled by the MEMREMAP_WB flag, which sets up
-a mapping, which "matches the default mapping for System RAM on
-the architecture. This is usually a read-allocate write-back cache.
+From: Barry Song <v-songbaohua@oppo.com>
 
-> On x86 (which I know a lot more about) memcpy() has a nasty
-> habit of getting implemented as 'rep movsb' relying on the
-> cpu to speed it up.
-> But that doesn't happen for uncached addresses - so you get
-> very slow byte copies.
-> OTOH misaligned PCIe transfers generate TLP that have the
-> correct byte enables for the end words.
-> Provided the PCIe target isn't broken they are fine.
-With memremap one should get the same behavior and performance
-as with the system memory and it seems to be a good choice for
-"Physical system RAM" MTD driver, but if one uses it for actual
-IO memory, he should use ioremam, memcpy_toio and memcpy_fromio.
-Using these prevents the crash on arm64 as well, but could lead
-to a performance degradation on some platforms.
+THP_SWAP has been proved to improve the swap throughput significantly
+on x86_64 according to commit bd4c82c22c367e ("mm, THP, swap: delay
+splitting THP after swapped out").
+As long as arm64 uses 4K page size, it is quite similar with x86_64
+by having 2MB PMD THP. So we are going to get similar improvement.
+For other page sizes such as 16KB and 64KB, PMD might be too large.
+Negative side effects such as IO latency might be a problem. Thus,
+we can only safely enable the counterpart of X86_64.
 
-If you think there could be users using the driver for a real IO
-mem, I can provide both behaviors and let the user choose with an
-option.
-  Petr
+Cc: "Huang, Ying" <ying.huang@intel.com>
+Cc: Minchan Kim <minchan@kernel.org>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Hugh Dickins <hughd@google.com>
+Cc: Shaohua Li <shli@kernel.org>
+Cc: Rik van Riel <riel@redhat.com>
+Cc: Andrea Arcangeli <aarcange@redhat.com>
+Signed-off-by: Barry Song <v-songbaohua@oppo.com>
+---
+ arch/arm64/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index d550f5acfaf3..8e3771c56fbf 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -98,6 +98,7 @@ config ARM64
+ 	select ARCH_WANT_HUGE_PMD_SHARE if ARM64_4K_PAGES || (ARM64_16K_PAGES && !ARM64_VA_BITS_36)
+ 	select ARCH_WANT_LD_ORPHAN_WARN
+ 	select ARCH_WANTS_NO_INSTR
++	select ARCH_WANTS_THP_SWAP if ARM64_4K_PAGES
+ 	select ARCH_HAS_UBSAN_SANITIZE_ALL
+ 	select ARM_AMBA
+ 	select ARM_ARCH_TIMER
+-- 
+2.25.1
+

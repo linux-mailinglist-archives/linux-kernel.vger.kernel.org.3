@@ -2,43 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3731532437
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 09:38:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8455B53243B
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 09:39:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235344AbiEXHiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 03:38:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33632 "EHLO
+        id S235366AbiEXHiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 03:38:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234802AbiEXHhz (ORCPT
+        with ESMTP id S233963AbiEXHit (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 03:37:55 -0400
-Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF5D6D4F6
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 00:37:54 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed30:4593:272c:6293:e2cc])
-        by michel.telenet-ops.be with bizsmtp
-        id aXdt270012jQL2A06XdtYc; Tue, 24 May 2022 09:37:53 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1ntP72-001RqZ-JU; Tue, 24 May 2022 09:37:52 +0200
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1ntP72-005tgW-4a; Tue, 24 May 2022 09:37:52 +0200
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-To:     Ard Biesheuvel <ardb@kernel.org>,
-        Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: [PATCH v2] efi: EFI_DISABLE_RUNTIME should depend on EFI
-Date:   Tue, 24 May 2022 09:37:51 +0200
-Message-Id: <ea51a17e00a10f3ab25d94b9a5885eb9142aa12b.1653377840.git.geert@linux-m68k.org>
-X-Mailer: git-send-email 2.25.1
+        Tue, 24 May 2022 03:38:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5C1F47354E
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 00:38:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653377927;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QCtPBPIHWWlpZdcdcmo4GB76JsscfPLgLkNx5XoQuuw=;
+        b=LBQb0TPEoda+nwdbxeXe1xRpXu4WMM4IbEpoVeHP2cvulleveJE08KvTQQefngOUaQR895
+        UtGOjZgq7RquDA7f0ImjruUk24Z6rtLLi+r6NHXMJMqLdA5JYigfSZ8GOd0EDAUfQEnkew
+        MfOSeHW5IXC0GShFz1RnmDlttqfRs+c=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-551-6IW179jbNeqrrToU4B6hJg-1; Tue, 24 May 2022 03:38:46 -0400
+X-MC-Unique: 6IW179jbNeqrrToU4B6hJg-1
+Received: by mail-qv1-f72.google.com with SMTP id e3-20020a056214110300b0045abb0e1760so12754862qvs.3
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 00:38:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=QCtPBPIHWWlpZdcdcmo4GB76JsscfPLgLkNx5XoQuuw=;
+        b=QBbO/RygkL/rCNC7wzEqCtose8R0oAetWPSzTFcR/U/jlCXO+KnbkQSMwKR3D7K0rs
+         CWm2b0ELjD0CBjEClgHap/OCUcA1PJMx4OtbtjSV96xU/z9tLeT4+EriLpZxEqpQyDSe
+         6nT1oNYMo5CvZO5TLfXeNA5mj4rjRIVtnPIPlSKjbStmImJ8xHKAesQDj65vDHvXmaGR
+         VduH6e2AP5MwJ/RUnTO9x9uDupDmtgTPHTQjPsWbYFehQRwcxxwLyKAE8y3wOu2mjkSu
+         vymwsqO9A1XE4I8TUqYH1eo0q+4OB/ctm5noIAf8WJQcf6s6K5kb7Mo5pACX+PsGkP4D
+         s82w==
+X-Gm-Message-State: AOAM532QKrHGXE0Ymn+uRiqE6ANKj1GoXxmSVrWYw82fPDSXuaq5aZ3L
+        TE+D80MFAMmoKDdYfdDaL+ey8qNl950+9gkT+mpgZNmB4U9EVJSnuhh8Ut+GJqP4yGOCyBM3KT9
+        6c3bAqWMa+p1n2gy1bgZw/8cAduW9BzpA7EClFGiL
+X-Received: by 2002:a37:9e0f:0:b0:6a3:4918:d394 with SMTP id h15-20020a379e0f000000b006a34918d394mr12573667qke.764.1653377925444;
+        Tue, 24 May 2022 00:38:45 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyvLEC8WBeNxcj+5w81KoZxubVUBIj37yxEkBbiqOwDtiJ3FFUSRbB81+1KXQwyuvsiABHVbamICnl8FbeYvDM=
+X-Received: by 2002:a37:9e0f:0:b0:6a3:4918:d394 with SMTP id
+ h15-20020a379e0f000000b006a34918d394mr12573649qke.764.1653377925205; Tue, 24
+ May 2022 00:38:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220520172325.980884-1-eperezma@redhat.com> <20220520172325.980884-2-eperezma@redhat.com>
+ <79089dc4-07c4-369b-826c-1c6e12edcaff@oracle.com> <CAJaqyWd3BqZfmJv+eBYOGRwNz3OhNKjvHPiFOafSjzAnRMA_tQ@mail.gmail.com>
+ <4de97962-cf7e-c334-5874-ba739270c705@oracle.com> <9f68802c-2692-7321-f916-670ee0abfc40@oracle.com>
+In-Reply-To: <9f68802c-2692-7321-f916-670ee0abfc40@oracle.com>
+From:   Eugenio Perez Martin <eperezma@redhat.com>
+Date:   Tue, 24 May 2022 09:38:09 +0200
+Message-ID: <CAJaqyWfoBXfr1Njb4=ZyrKtR1PAzUS+kzs55CzHff9C1jGDk2w@mail.gmail.com>
+Subject: Re: [PATCH 1/4] vdpa: Add stop operation
+To:     Si-Wei Liu <si-wei.liu@oracle.com>
+Cc:     virtualization <virtualization@lists.linux-foundation.org>,
+        Jason Wang <jasowang@redhat.com>,
+        kvm list <kvm@vger.kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Longpeng <longpeng2@huawei.com>,
+        Zhu Lingshan <lingshan.zhu@intel.com>,
+        Martin Petrus Hubertus Habets <martinh@xilinx.com>,
+        Harpreet Singh Anand <hanand@xilinx.com>, dinang@xilinx.com,
+        Eli Cohen <elic@nvidia.com>,
+        Laurent Vivier <lvivier@redhat.com>, pabloc@xilinx.com,
+        "Dawar, Gautam" <gautam.dawar@amd.com>,
+        Xie Yongji <xieyongji@bytedance.com>, habetsm.xilinx@gmail.com,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        tanuj.kamde@amd.com, Wu Zongyong <wuzongyong@linux.alibaba.com>,
+        martinpo@xilinx.com, Cindy Lu <lulu@redhat.com>,
+        ecree.xilinx@gmail.com, Parav Pandit <parav@nvidia.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Zhang Min <zhang.min9@zte.com.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,36 +94,164 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The EFI_DISABLE_RUNTIME config option controls the use of Extensible
-Firmware Interface (EFI) runtime services, which matters only if EFI
-support is enabled.
+On Tue, May 24, 2022 at 2:01 AM Si-Wei Liu <si-wei.liu@oracle.com> wrote:
+>
+>
+>
+> On 5/23/2022 4:54 PM, Si-Wei Liu wrote:
+> >
+> >
+> > On 5/23/2022 12:20 PM, Eugenio Perez Martin wrote:
+> >> On Sat, May 21, 2022 at 12:13 PM Si-Wei Liu <si-wei.liu@oracle.com>
+> >> wrote:
+> >>>
+> >>>
+> >>> On 5/20/2022 10:23 AM, Eugenio P=C3=A9rez wrote:
+> >>>> This operation is optional: It it's not implemented, backend
+> >>>> feature bit
+> >>>> will not be exposed.
+> >>>>
+> >>>> Signed-off-by: Eugenio P=C3=A9rez <eperezma@redhat.com>
+> >>>> ---
+> >>>>    include/linux/vdpa.h | 6 ++++++
+> >>>>    1 file changed, 6 insertions(+)
+> >>>>
+> >>>> diff --git a/include/linux/vdpa.h b/include/linux/vdpa.h
+> >>>> index 15af802d41c4..ddfebc4e1e01 100644
+> >>>> --- a/include/linux/vdpa.h
+> >>>> +++ b/include/linux/vdpa.h
+> >>>> @@ -215,6 +215,11 @@ struct vdpa_map_file {
+> >>>>     * @reset:                  Reset device
+> >>>>     *                          @vdev: vdpa device
+> >>>>     *                          Returns integer: success (0) or
+> >>>> error (< 0)
+> >>>> + * @stop:                    Stop or resume the device (optional,
+> >>>> but it must
+> >>>> + *                           be implemented if require device stop)
+> >>>> + *                           @vdev: vdpa device
+> >>>> + *                           @stop: stop (true), not stop (false)
+> >>>> + *                           Returns integer: success (0) or error
+> >>>> (< 0)
+> >>> Is this uAPI meant to address all use cases described in the full blo=
+wn
+> >>> _F_STOP virtio spec proposal, such as:
+> >>>
+> >>> --------------%<--------------
+> >>>
+> >>> ...... the device MUST finish any in flight
+> >>> operations after the driver writes STOP.  Depending on the device, it
+> >>> can do it
+> >>> in many ways as long as the driver can recover its normal operation
+> >>> if it
+> >>> resumes the device without the need of resetting it:
+> >>>
+> >>> - Drain and wait for the completion of all pending requests until a
+> >>>     convenient avail descriptor. Ignore any other posterior descripto=
+r.
+> >>> - Return a device-specific failure for these descriptors, so the driv=
+er
+> >>>     can choose to retry or to cancel them.
+> >>> - Mark them as done even if they are not, if the kind of device can
+> >>>     assume to lose them.
+> >>> --------------%<--------------
+> >>>
+> >> Right, this is totally underspecified in this series.
+> >>
+> >> I'll expand on it in the next version, but that text proposed to
+> >> virtio-comment was complicated and misleading. I find better to get
+> >> the previous version description. Would the next description work?
+> >>
+> >> ```
+> >> After the return of ioctl, the device MUST finish any pending
+> >> operations like
+> >> in flight requests. It must also preserve all the necessary state (the
+> >> virtqueue vring base plus the possible device specific states)
+> > Hmmm, "possible device specific states" is a bit vague. Does it
+> > require the device to save any device internal state that is not
+> > defined in the virtio spec - such as any failed in-flight requests to
+> > resubmit upon resume?
 
-Hence add a dependency on EFI, to prevent asking the user about this
-control knob when configuring a kernel without EFI support.
+I'd let that be device-specific. For example, the net simulator
+doesn't need to store them, since it cannot stop while processing
+buffers. Other net devices can also decide to simply drop or re-submit
+tx frames.
 
-Fixes: a031651ff2144a3d ("efi: Allow to enable EFI runtime services by default on RT")
-Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Acked-by: Javier Martinez Canillas <javierm@redhat.com>
----
-v2:
-  - Add Acked-by,
-  - Fix typo s/with/without/.
----
- drivers/firmware/efi/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+I can check for the block simulator if that's possible too. For
+hardware vdpa block devices, this should be combined with the future
+"get inflight buffers" call for sure.
 
-diff --git a/drivers/firmware/efi/Kconfig b/drivers/firmware/efi/Kconfig
-index 4720ba98cec312e7..ff6e7bfa8355cfc2 100644
---- a/drivers/firmware/efi/Kconfig
-+++ b/drivers/firmware/efi/Kconfig
-@@ -299,6 +299,7 @@ config EFI_CUSTOM_SSDT_OVERLAYS
- 
- config EFI_DISABLE_RUNTIME
- 	bool "Disable EFI runtime services support by default"
-+	depends on EFI
- 	default y if PREEMPT_RT
- 	help
- 	  Allow to disable the EFI runtime services support by default. This can
--- 
-2.25.1
+> > Or you would lean on SVQ to intercept it in
+> > depth and save it with some other means? I think network device also
+> > has internal state such as flow steering state that needs bookkeeping
+> > as well.
+
+Yes, for state set by the control vq a permanent SVQ is used only for
+the cvq. For other things like config space vdpa already presents an
+emulated one to the guest, so we're safe in that regard.
+
+> Noted that I understand you may introduce additional feature call
+> similar to VHOST_USER_GET_INFLIGHT_FD for (failed) in-flight request,
+> but since that's is a get interface, I assume the actual state
+> preserving should still take place in this STOP call.
+>
+
+Right. I'll add all of this to the proposal.
+
+Thanks!
+
+> -Siwei
+>
+> >
+> > A follow-up question is what is the use of the `stop` argument of
+> > false, does it require the device to support resume? I seem to recall
+> > this is something to abandon in favor of device reset plus setting
+> > queue base/addr after. Or it's just a optional feature that may be
+> > device specific (if one can do so in simple way).
+> >
+> > -Siwei
+> >
+> >>   that is required
+> >> for restoring in the future.
+> >>
+> >> In the future, we will provide features similar to
+> >> VHOST_USER_GET_INFLIGHT_FD
+> >> so the device can save pending operations.
+> >> ```
+> >>
+> >> Thanks for pointing it out!
+> >>
+> >>
+> >>
+> >>
+> >>
+> >>> E.g. do I assume correctly all in flight requests are flushed after
+> >>> return from this uAPI call? Or some of pending requests may be subjec=
+t
+> >>> to loss or failure? How does the caller/user specify these various
+> >>> options (if there are) for device stop?
+> >>>
+> >>> BTW, it would be nice to add the corresponding support to vdpa_sim_bl=
+k
+> >>> as well to demo the stop handling. To just show it on vdpa-sim-net IM=
+HO
+> >>> is perhaps not so convincing.
+> >>>
+> >>> -Siwei
+> >>>
+> >>>>     * @get_config_size: Get the size of the configuration space
+> >>>> includes
+> >>>>     *                          fields that are conditional on
+> >>>> feature bits.
+> >>>>     *                          @vdev: vdpa device
+> >>>> @@ -316,6 +321,7 @@ struct vdpa_config_ops {
+> >>>>        u8 (*get_status)(struct vdpa_device *vdev);
+> >>>>        void (*set_status)(struct vdpa_device *vdev, u8 status);
+> >>>>        int (*reset)(struct vdpa_device *vdev);
+> >>>> +     int (*stop)(struct vdpa_device *vdev, bool stop);
+> >>>>        size_t (*get_config_size)(struct vdpa_device *vdev);
+> >>>>        void (*get_config)(struct vdpa_device *vdev, unsigned int
+> >>>> offset,
+> >>>>                           void *buf, unsigned int len);
+> >
+>
 

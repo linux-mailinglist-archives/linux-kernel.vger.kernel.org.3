@@ -2,145 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67052533358
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 00:13:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8058533360
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 00:14:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239776AbiEXWNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 18:13:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52600 "EHLO
+        id S242088AbiEXWOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 18:14:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238106AbiEXWNn (ORCPT
+        with ESMTP id S238980AbiEXWOi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 18:13:43 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9D95DD26
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 15:13:42 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-2ff7b90e635so130966617b3.5
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 15:13:42 -0700 (PDT)
+        Tue, 24 May 2022 18:14:38 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C949A5E15D
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 15:14:37 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id n23so24869916edy.0
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 15:14:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=KHIJKfxgTwjjvyeenG8PqcpEQiKi1RaY8gq052ZcCvA=;
-        b=T6hMuCVEX+qbOyFR89d+IsjkmG2gLaJBxFErHe2gyjpChqhEV06irPnesumPglEbfQ
-         9RzraS+IIv/IhS0qu2Eb0eQBfqdVIF0RlpIoeWoDmLfii1Sv2YC4SF3LbnRSukQZ9qzz
-         pJeqxph4Qi7c2sNv99au5tIQWl0ozkKlnmd0V0WGFX7sQ3dOwTkeZMU1khTXPmPQHJUl
-         tZRACg67zb7w/EkNZGLYl1lNsBDGe92KUIKcc3T5erYvU9J/dpKPz0/i2XHRBRlFK4A3
-         /sJCr+ROTjxFyDkrFfp0KBpEqKnWDuU4RBCUt/jU889SHRV3NrZrFAXMFOer49lqOH/N
-         eGBg==
+        bh=y+elu8HOIJCNzoXwM8a/Ht/vnqA4Rhu06lefXdgtds4=;
+        b=NxzeGiHg0tvynMPU1vS1YvYZfw2jxq+By5KuaQiOGvVfhyOWodNcpbpFHt4+Pm6Tc7
+         aqRwbLogqbuN8srCynyYLcrzgASJp8eqO8R1YtEq0cQXqb2UlIO+Q1woO+6TXoJsrXOa
+         q+i6QwErpQZbWY5Vq5HLuD+yUYvBhPOmxiX6Q=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=KHIJKfxgTwjjvyeenG8PqcpEQiKi1RaY8gq052ZcCvA=;
-        b=TcWw3X1qVsAogeWCj2Rp8Mgcfqj1jPez4RfIp5Kop98gceUzDREZ/bJ0PVjymO2S2+
-         ppGUpBrH5CZtL8lPGPWXcR/Dnj4OE5VAgy+Wz5PXqTYXjA3Ts1aTboCJ0PSgJYR93ujy
-         d1R72ugebASgfAMqfYlx+AAzxTcRQJGx1ppbLFDWApqWtTDFZZ4WLEBH1JK9THPj9O5E
-         M8Nb8XRocENU9/AonNgG8DPYFyYuvwQMQlRjWtNfUmyGmjKCj/z7IjVqYwsNZGNi5O0C
-         GgyxWWtxcudZt/+LLJ//eqkgM1UaSvtdICdpHsfozn8qFC2+4gCCSY5c9sUbSKpFguMo
-         hbww==
-X-Gm-Message-State: AOAM53139uu47R40MM4EZjnx5TCLHiWx0L9FsssWP7T72gkPx3vUkQXg
-        bH5M2z9dMfc4cssVkDMsM6uo/0rbkXJeAzGYhk3VBw==
-X-Google-Smtp-Source: ABdhPJyPc88P2qZG0MlVyVyfq8FoXxqbvtwhO8/rX8P/8ABbhE+AGmGT7ZRg5cLCPMPFGBCy5w823/y9Oc1NWeiO0uU=
-X-Received: by 2002:a81:b401:0:b0:300:2e86:e7e5 with SMTP id
- h1-20020a81b401000000b003002e86e7e5mr4631478ywi.467.1653430421051; Tue, 24
- May 2022 15:13:41 -0700 (PDT)
+        bh=y+elu8HOIJCNzoXwM8a/Ht/vnqA4Rhu06lefXdgtds4=;
+        b=q69krTxzoAeQQOtQbK0FIhtV09wGnbZiz6nw4rknws6WX8jWzKNTyjmdWIKgDysz16
+         dTUus7wbPQ9O9ue2NknLcoad3PZe/p6odM5hK8RANJnb/kyfMbG57L+MvBBotHozc3DY
+         z5UoFAoJxh8WuQHrYXNwWDNQLb/J2JjP6mkJCQuLnRg6ukavhiD2OUlhu+jnWclQjBh/
+         2I2KiypV4qE7WnEiwcwjI4kRyb0pn7NhkbGySAXSN79mbidH3AOWM9aR1MnXV0R9QmXO
+         YH9wzU/VZpYssvqGrjvVSCsohsp8KNBHFkZKEgBAxVWldG9RWBJCMRK1gPYmXYJHf2gB
+         44ag==
+X-Gm-Message-State: AOAM532S0RNdDON7as1UMqsRMWZZcmZZOn59e/GulEVcNCVHWgtttI6Q
+        A47PAO9v0EccADMbTbyJpcWst23udaVuORcwP/s=
+X-Google-Smtp-Source: ABdhPJyt2I9ZdmZUVy0LuuRBzsHwfFHpbfrmO3AR86Aq4ZjvZJW6A+Vp0yFjpAOEfdY0VXd+362+Fw==
+X-Received: by 2002:a05:6402:144b:b0:42a:c86e:7ac8 with SMTP id d11-20020a056402144b00b0042ac86e7ac8mr31405812edx.175.1653430476018;
+        Tue, 24 May 2022 15:14:36 -0700 (PDT)
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com. [209.85.221.46])
+        by smtp.gmail.com with ESMTPSA id f3-20020a1709063f4300b006f3ef214e6esm7576100ejj.212.2022.05.24.15.14.34
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 May 2022 15:14:34 -0700 (PDT)
+Received: by mail-wr1-f46.google.com with SMTP id m20so16498635wrb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 15:14:34 -0700 (PDT)
+X-Received: by 2002:a5d:6483:0:b0:20f:d046:6382 with SMTP id
+ o3-20020a5d6483000000b0020fd0466382mr13173466wri.342.1653430473511; Tue, 24
+ May 2022 15:14:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <5099dc39-c6d9-115a-855b-6aa98d17eb4b@collabora.com>
-In-Reply-To: <5099dc39-c6d9-115a-855b-6aa98d17eb4b@collabora.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 24 May 2022 15:13:29 -0700
-Message-ID: <CANn89i+R9RgmD=AQ4vX1Vb_SQAj4c3fi7-ZtQz-inYY4Sq4CMQ@mail.gmail.com>
-Subject: Re: [RFC] EADDRINUSE from bind() on application restart after killing
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "open list:NETWORKING [TCP]" <netdev@vger.kernel.org>,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        open list <linux-kernel@vger.kernel.org>
+References: <20220524134840.1.I80072b8815ac08c12af8f379a33cc2d83693dc51@changeid>
+ <311a23c9-e31d-e20d-8ba9-80d3197e8d1d@somainline.org>
+In-Reply-To: <311a23c9-e31d-e20d-8ba9-80d3197e8d1d@somainline.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 24 May 2022 15:14:21 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WKgPWxEL+mhb9cCGOLObJEPtX_sHLQ1z3rz3usDG1m+Q@mail.gmail.com>
+Message-ID: <CAD=FV=WKgPWxEL+mhb9cCGOLObJEPtX_sHLQ1z3rz3usDG1m+Q@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: qcom: sc7280: Add touchscreen to villager
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 1:19 AM Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
->
-> Hello,
->
-> We have a set of processes which talk with each other through a local
-> TCP socket. If the process(es) are killed (through SIGKILL) and
-> restarted at once, the bind() fails with EADDRINUSE error. This error
-> only appears if application is restarted at once without waiting for 60
-> seconds or more. It seems that there is some timeout of 60 seconds for
-> which the previous TCP connection remains alive waiting to get closed
-> completely. In that duration if we try to connect again, we get the error.
->
-> We are able to avoid this error by adding SO_REUSEADDR attribute to the
-> socket in a hack. But this hack cannot be added to the application
-> process as we don't own it.
->
-> I've looked at the TCP connection states after killing processes in
-> different ways. The TCP connection ends up in 2 different states with
-> timeouts:
->
-> (1) Timeout associated with FIN_WAIT_1 state which is set through
-> `tcp_fin_timeout` in procfs (60 seconds by default)
->
-> (2) Timeout associated with TIME_WAIT state which cannot be changed. It
-> seems like this timeout has come from RFC 1337.
->
-> The timeout in (1) can be changed. Timeout in (2) cannot be changed. It
-> also doesn't seem feasible to change the timeout of TIME_WAIT state as
-> the RFC mentions several hazards. But we are talking about a local TCP
-> connection where maybe those hazards aren't applicable directly? Is it
-> possible to change timeout for TIME_WAIT state for only local
-> connections without any hazards?
->
-> We have tested a hack where we replace timeout of TIME_WAIT state from a
-> value in procfs for local connections. This solves our problem and
-> application starts to work without any modifications to it.
->
-> The question is that what can be the best possible solution here? Any
-> thoughts will be very helpful.
->
+Hi,
 
-One solution would be to extend TCP diag to support killing TIME_WAIT sockets.
-(This has been raised recently anyway)
+On Tue, May 24, 2022 at 2:13 PM Konrad Dybcio
+<konrad.dybcio@somainline.org> wrote:
+>
+>
+> On 24/05/2022 22:48, Douglas Anderson wrote:
+> > This adds the touchscreen to the sc7280-herobrine-villager device
+> > tree. Note that the touchscreen on villager actually uses the reset
+> > line and thus we use the more specific "elan,ekth6915" compatible
+> > which allows us to specify the reset.
+> >
+> > The fact that villager's touchscreen uses the reset line can be
+> > contrasted against the touchscreen for CRD/herobrine-r1. On those
+> > boards, even though the touchscreen goes to the display, it's not
+> > hooked up to anything there.
+> >
+> > In order to keep the line parked on herobrine/CRD, we'll move the
+> > pullup from the qcard.dtsi file to the specific boards. This allows us
+> > to disable the pullup in the villager device tree since the pin is an
+> > output.
+> >
+> > Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> > ---
+> > This uses bindings introduced in the patch ("dt-bindings: HID:
+> > i2c-hid: elan: Introduce bindings for Elan eKTH6915") [1].
+> >
+> > [1] https://lore.kernel.org/r/20220523142257.v2.1.Iedc61f9ef220a89af6a031200a7850a27a440134@changeid
+> >
+> >   .../boot/dts/qcom/sc7280-herobrine-crd.dts    | 11 ++++++++
+> >   .../qcom/sc7280-herobrine-herobrine-r1.dts    | 11 ++++++++
+> >   .../dts/qcom/sc7280-herobrine-villager-r0.dts | 25 +++++++++++++++++++
+> >   arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi    |  1 -
+> >   4 files changed, 47 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
+> > index a4ac33c4fd59..b79d84d7870a 100644
+> > --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
+> > +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
+> > @@ -134,6 +134,17 @@ &sdhc_2 {
+> >       status = "okay";
+> >   };
+> >
+> > +/* PINCTRL - ADDITIONS TO NODES IN PARENT DEVICE TREE FILES */
+>
+> Please drop this line, this isn't msm-3.4. It's immediately obvious that
+> if a pin is referenced by a label and it is not defined in this file
+> (because otherwise it wouldn't be both defined and referenced here..),
+> it comes from a previously included device tree.
 
-Then you could zap all sockets, before re-starting your program.
+In general these headings specify a change in sort ordering. Without
+them then either we intersperse pinctrl overrides with other stuff,
+which IMO is overall worse or people have no idea why the sort
+ordering changes.
 
-ss -K -ta src :listen_port
 
-Untested patch:
+> > @@ -604,7 +604,6 @@ ts_int_conn: ts-int-conn {
+> >       ts_rst_conn: ts-rst-conn {
+> >               pins = "gpio54";
+> >               function = "gpio";
+> > -             bias-pull-up;
+>
+> If you overwrite it where it should be overwritten, wouldn't it make
+> more sense to leave bias-pull-up here as a default configuration for
+> boards that don't have a peculiar routed-but-NC line?
 
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index 9984d23a7f3e1353d2e1fc9053d98c77268c577e..1b7bde889096aa800b2994c64a3a68edf3b62434
-100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -4519,6 +4519,15 @@ int tcp_abort(struct sock *sk, int err)
-                        local_bh_enable();
-                        return 0;
-                }
-+               if (sk->sk_state == TCP_TIME_WAIT) {
-+                       struct inet_timewait_sock *tw = inet_twsk(sk);
-+
-+                       refcount_inc(&tw->tw_refcnt);
-+                       local_bh_disable();
-+                       inet_twsk_deschedule_put(tw);
-+                       local_bh_enable();
-+                       return 0;
-+               }
-                return -EOPNOTSUPP;
-        }
+Yeah, it'd be nice.  ...but because of the way "bias" is specified in
+the device tree it means an ugly "/delete-property" in places that
+actually route the line. I believe that, style wise, the preference is
+to avoid delete-property and move the bias toward board files in cases
+like this. Bjorn can feel free to override me if he disagrees.
+
+-Doug

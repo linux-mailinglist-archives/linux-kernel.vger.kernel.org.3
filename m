@@ -2,119 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F35C532CFC
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 17:12:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A6DC532D00
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 17:12:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238770AbiEXPLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 11:11:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44532 "EHLO
+        id S237888AbiEXPMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 11:12:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238749AbiEXPLL (ORCPT
+        with ESMTP id S238872AbiEXPMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 11:11:11 -0400
-Received: from qproxy3-pub.mail.unifiedlayer.com (qproxy3-pub.mail.unifiedlayer.com [67.222.38.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B7E61112
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 08:11:09 -0700 (PDT)
-Received: from gproxy3-pub.mail.unifiedlayer.com (gproxy3-pub.mail.unifiedlayer.com [69.89.30.42])
-        by qproxy3.mail.unifiedlayer.com (Postfix) with ESMTP id 60E2D802C88E
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 15:11:08 +0000 (UTC)
-Received: from cmgw14.mail.unifiedlayer.com (unknown [10.0.90.129])
-        by progateway5.mail.pro1.eigbox.com (Postfix) with ESMTP id E2B2910041C87
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 15:11:06 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id tWBenUVuIhWk0tWBen9C00; Tue, 24 May 2022 15:11:06 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=IrfbzJzg c=1 sm=1 tr=0 ts=628cf58a
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=oZkIemNP1mAA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=/4PRRCzIYmFovzhV9h91jXS4xUn5BMOY30gBdRrVzRs=; b=hRCJXRYpd5MReNV4G+p88cv/lI
-        mFV2ukjc8I4m8EqhEKaGCYS1U1r0Nly2arsg6Qd5sHHabKToj45evN5Kh8xx0N8JyzMlotz9BF+3R
-        nxsXMHZodD4/c3NVJ+EMns5YBOaaPVp6S9KjJQ5mReK1oL13RdXaTYcfw0/SQSySdrILq7R/BKqUj
-        idVKeyHXp7yLIFnShNeF1cWa142xEFtapmwK95o5ll8BtSTh1uT1ANBxCjuEPevr5Ecm679LiYpjo
-        YwjpHBXLNb7CI3anzaFfxRwjG8K/FfCkTJelcJR2OgwfDlVaCN1Zu8QQ9v1PHzms/FVdMD1t9pGSZ
-        uxOsstCQ==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:52054 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <re@w6rz.net>)
-        id 1ntWBd-002RZH-GV; Tue, 24 May 2022 09:11:05 -0600
-Subject: Re: [PATCH 5.15 000/132] 5.15.42-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220523165823.492309987@linuxfoundation.org>
-In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <b650a007-66f4-2d6e-b40d-c14eadb8e7b1@w6rz.net>
-Date:   Tue, 24 May 2022 08:11:03 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 24 May 2022 11:12:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B98F3D4BB
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 08:12:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653405121;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ofqhF7B0Lhr9XDJpCI5NspBe7jXyy3A5iExBePEO86M=;
+        b=hWN9iqCPVXBmCJ0YMMvLsB3VW+sjxTObcrcS642M4fkbZxk1Mhm7HkRuD13H5SUnLZ77EO
+        qcIp5IRj0ktw9Jv7FvbtyjKClEt4JRcA4twu6KjY6aQ+UEpSnshUVAntCmJUzvsaB+K0Gm
+        iTYop9+vHW+dz9Hh5BpIDEKeM6TEwww=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-368-ORQeLfTsMK6bE3vVpY43bw-1; Tue, 24 May 2022 11:11:54 -0400
+X-MC-Unique: ORQeLfTsMK6bE3vVpY43bw-1
+Received: by mail-wr1-f69.google.com with SMTP id e17-20020adfe391000000b0020e64e7dd15so4399432wrm.4
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 08:11:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=ofqhF7B0Lhr9XDJpCI5NspBe7jXyy3A5iExBePEO86M=;
+        b=RTMX77vBkxYYgKlsGyM8qeVkCpGdkHtFkjlMoTfePhPaZmFxlNUhxeL9p9zb81lGl+
+         tIvKkvWEwftZeYqunHJ8AMe2A0EdzcBx8fDAJSIUjEaJG+H40pTeb6XxMowbKTp+8DUB
+         X4XAAWQNCF1b5jHmOvyNRnMnyy4RRexM8A3hh2BC2OkWg3okqPCaBaWAV1ehJYjtsHyy
+         eOqsz0bEOYHyW78ZsnYdEowDgbxAz9++CgqAfG3XCkm0vOVZ2McCbX5yDNxaQtVXhsNg
+         8XBYV6Q5QSLrfig3XxzoiNKMrxzjJRQgw0O/vzEXndBv/YwMrbh1A8peLuecp4HG7FcO
+         59eQ==
+X-Gm-Message-State: AOAM530ShI+wZ9rka/df3f6ltZRbNR26aZ1q+Mo4k2yGQ22Z0OMthMM1
+        tlJnSqz59EIyig6EF9ZLvSqtamQMcA2ZM+i+tcnHkv+wnA82nzzRHjdqL+SVLNzG/YySz0E1X00
+        Bdwlp6REB0Rn7rhXb/5Vwg2x+
+X-Received: by 2002:a05:600c:354a:b0:394:8fa4:73bc with SMTP id i10-20020a05600c354a00b003948fa473bcmr4204448wmq.37.1653405112862;
+        Tue, 24 May 2022 08:11:52 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzN72fmnvYSWbgO8JmvvLE5huJ+2BUFJSTipvlRfySv+pMVULvp/Gj0OiXV+/iI8xQuds0lrA==
+X-Received: by 2002:a05:600c:354a:b0:394:8fa4:73bc with SMTP id i10-20020a05600c354a00b003948fa473bcmr4204425wmq.37.1653405112626;
+        Tue, 24 May 2022 08:11:52 -0700 (PDT)
+Received: from vschneid.remote.csb ([185.11.37.247])
+        by smtp.gmail.com with ESMTPSA id m6-20020adfa3c6000000b0020fc4cd81f6sm10619841wrb.60.2022.05.24.08.11.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 May 2022 08:11:52 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Phil Auld <pauld@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH] cpuhp: make target_store() a nop when target == state
+In-Reply-To: <20220523144728.32414-1-pauld@redhat.com>
+References: <20220523144728.32414-1-pauld@redhat.com>
+Date:   Tue, 24 May 2022 16:11:51 +0100
+Message-ID: <xhsmh35gzj77s.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1ntWBd-002RZH-GV
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:52054
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 2
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/23/22 10:03 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.42 release.
-> There are 132 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 23/05/22 10:47, Phil Auld wrote:
+> writing the current state back into hotplug/target calls cpu_down()
+> which will set cpu dying even when it isn't and then nothing will
+> ever clear it. A stress test that reads values and writes them back
+> for all cpu device files in sysfs will trigger the BUG() in
+> select_fallback_rq once all cpus are marked as dying.
 >
-> Responses should be made by Wed, 25 May 2022 16:56:55 +0000.
-> Anything received after that time might be too late.
+> kernel/cpu.c::target_store()
+> 	...
+>         if (st->state < target)
+>                 ret = cpu_up(dev->id, target);
+>         else
+>                 ret = cpu_down(dev->id, target);
 >
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.42-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
+> cpu_down() -> cpu_set_state()
+> 	 bool bringup = st->state < target;
+> 	 ...
+> 	 if (cpu_dying(cpu) != !bringup)
+> 		set_cpu_dying(cpu, !bringup);
 >
-> thanks,
+> Make this safe by catching the case where target == state
+> and bailing early.
 >
-> greg k-h
+> Signed-off-by: Phil Auld <pauld@redhat.com>
+> ---
+>
+> Yeah, I know... don't do that. But it's still messy.
+>
+> !< != > 
+>
+>  kernel/cpu.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/kernel/cpu.c b/kernel/cpu.c
+> index d0a9aa0b42e8..8a71b1149c60 100644
+> --- a/kernel/cpu.c
+> +++ b/kernel/cpu.c
+> @@ -2302,6 +2302,9 @@ static ssize_t target_store(struct device *dev, struct device_attribute *attr,
+>  		return -EINVAL;
+>  #endif
+>  
+> +	if (target == st->state)
+> +		return count;
+> +
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+The current checks are against static boundaries, this has to compare
+against st->state - AFAICT this could race with another hotplug operation
+to the same CPU, e.g.
 
-Tested-by: Ron Economos <re@w6rz.net>
+  CPU42.cpuhp_state
+    ->state  == CPUHP_AP_SCHED_STARTING
+    ->target == CPUHP_ONLINE
+
+  <write CPUHP_ONLINE via sysfs, OK because current state != CPUHP_ONLINE>
+
+  CPU42.cpuhp_state == CPUHP_ONLINE
+  
+  <issues ensue>
+
+
+_cpu_up() has:
+
+	/*
+	 * The caller of cpu_up() might have raced with another
+	 * caller. Nothing to do.
+	 */
+	if (st->state >= target)
+		goto out;
+
+Looks like we want an equivalent in _cpu_down(), what do you think?
+
+>  	ret = lock_device_hotplug_sysfs();
+>  	if (ret)
+>  		return ret;
+> -- 
+> 2.18.0
 

@@ -2,91 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A2FB53332A
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 00:01:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4A96533330
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 00:03:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241998AbiEXWBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 18:01:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54106 "EHLO
+        id S242016AbiEXWDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 18:03:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242005AbiEXWBB (ORCPT
+        with ESMTP id S242004AbiEXWDQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 18:01:01 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E5787355D
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 15:01:00 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id rs12so26301845ejb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 15:01:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2VzUpvq1TKMkoLi0+DTKi478LS2776TPp3B2qvzGUXc=;
-        b=BJH7ptQma4+xzUDxx9dLH6FM508FrlBjT+qYB1j6ms+Y6tjxh2KR7toa4+JMY/VIav
-         6hv2NAEnLjFil5Gtvt1mUhXeBLRFmhtvbSJFZZy1cPXvZYKrvEHRLKW+yP3fYYJLYIOO
-         gzwGIQTV2F0iTNHmiU71U1QblHNBY4/2gXubM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2VzUpvq1TKMkoLi0+DTKi478LS2776TPp3B2qvzGUXc=;
-        b=fnYHmEmtsJVoLnewrdTWBWUOPgmdrE1bNz+ijsDQ5PvS9+TTsCsVEyxXNfEZPAshUA
-         yJ0nHWo3V5FpJ53nI9lFjjPg7pIGpWy11vW/uNJWHR0HM1RU2wkg8mXZNh9bgNvQaLXS
-         lOf3sjgLFas617idoyVG7i27sVvcvL5u7dqCbxncocZ/JrOYIjrWGpwkPneCbzl7coLj
-         zxmTVf70FVXKJtYSGwW2hQyW6iLk8dohH/IQXP1H1EgBsSpWoVsoWiL0t5+rt0O/mg92
-         +g3tGsRL3e2UZ2moiKRxEhKanWflAx2XW7zcJpYv7hdSwxQdlser88GvUqmlW6epEUDZ
-         gSSw==
-X-Gm-Message-State: AOAM532Dkoyq/4E+LXALWM/UQzzO1pGF5LFnLfPLsITcs93bDJW++FCS
-        c7HPZC2PRlPq4+S7Xl/b4E2xM5RGEM3kpCDu
-X-Google-Smtp-Source: ABdhPJwt4GM26ILHyZ2QiOBxae2HDjxAC1qQB24dzfkaIK2tlFuFd2N0ygb6ixWf3fRIa0FD9ffoqQ==
-X-Received: by 2002:a17:907:62a6:b0:6ef:8118:d3e2 with SMTP id nd38-20020a17090762a600b006ef8118d3e2mr25817866ejc.605.1653429658586;
-        Tue, 24 May 2022 15:00:58 -0700 (PDT)
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com. [209.85.128.43])
-        by smtp.gmail.com with ESMTPSA id d2-20020a50cd42000000b0042bc54296a1sm256147edj.91.2022.05.24.15.00.57
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 May 2022 15:00:57 -0700 (PDT)
-Received: by mail-wm1-f43.google.com with SMTP id m32-20020a05600c3b2000b0039756bb41f2so2235131wms.3
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 15:00:57 -0700 (PDT)
-X-Received: by 2002:a05:600c:3d18:b0:397:6531:b585 with SMTP id
- bh24-20020a05600c3d1800b003976531b585mr2314036wmb.38.1653429657300; Tue, 24
- May 2022 15:00:57 -0700 (PDT)
+        Tue, 24 May 2022 18:03:16 -0400
+Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [IPv6:2001:4b7a:2000:18::163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4DA76620D;
+        Tue, 24 May 2022 15:03:15 -0700 (PDT)
+Received: from SoMainline.org (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 36B4520596;
+        Wed, 25 May 2022 00:03:13 +0200 (CEST)
+Date:   Wed, 25 May 2022 00:03:12 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     phone-devel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rajeev Nandan <quic_rajeevny@quicinc.com>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Marek <jonathan@marek.ca>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org
+Subject: Re: [PATCH 0/9] drm/msm/dsi_phy: Replace parent names with clk_hw
+ pointers
+Message-ID: <20220524220312.jrdkolu7eoxtcyju@SoMainline.org>
+Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        phone-devel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rajeev Nandan <quic_rajeevny@quicinc.com>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Jonathan Marek <jonathan@marek.ca>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org
+References: <20220523213837.1016542-1-marijn.suijten@somainline.org>
+ <CAA8EJprEjOWRh98V3sprjXZJZMeR25Bz1U3a_uX_KhRbU48srQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220523121836.27442-1-ulf.hansson@linaro.org>
-In-Reply-To: <20220523121836.27442-1-ulf.hansson@linaro.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 24 May 2022 15:00:41 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiYh33UCe_sKvLWYY-ptPL6=T4m60b8vCX_t=qvmmOWWg@mail.gmail.com>
-Message-ID: <CAHk-=wiYh33UCe_sKvLWYY-ptPL6=T4m60b8vCX_t=qvmmOWWg@mail.gmail.com>
-Subject: Re: [GIT PULL] MMC updates for v5.19
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     linux-mmc@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAA8EJprEjOWRh98V3sprjXZJZMeR25Bz1U3a_uX_KhRbU48srQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 5:18 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git tags/mmc-v5.19
+On 2022-05-24 02:43:01, Dmitry Baryshkov wrote:
+> Hi,
+> 
+> On Tue, 24 May 2022 at 00:38, Marijn Suijten
+> <marijn.suijten@somainline.org> wrote:
+> >
+> > As stated in [1] I promised to tackle and send this series.
+> >
+> > parent_hw pointers are easier to manage and cheaper to use than
+> > repeatedly formatting the parent name and subsequently leaving the clk
+> > framework to perform lookups based on that name.
+> >
+> > This series starts out by adding extra constructors for divider, mux and
+> > fixed-factor clocks that have parent_hw(s) pointer argument(s) instead
+> > of some DT index or name.  Followed by individual patches performing the
+> > conversion, one DSI PHY at a time.
+> >
+> > dsi_phy_28nm_8960 includes an extra fixup to replace "eternal"
+> > devm_kzalloc allocations (for the lifetime of the device) with
+> > stack-local char arrays, like all the other DSI PHY drivers.
+> >
+> > I couldn't help but notice that clock names are wildly varying:
+> >
+> > - Some use underscores in the _clk suffix where others have nothing;
+> > - Some have an _ after the %d, others have not;
+> > - Some use a _pll suffix after dsi%d or even _phy_pll suffix.
+> >
+> > Are there any thoughts or feelings towards unifying these?
+> > Theoretically no clock names are used anywhere in the kernel, and
+> > everything is based on a phandle + index in DT (I have yet to validate
+> > this).  Obviously no .name/.fw_name will be updated to not break DT.
+> 
+> I'd say, leave them as is. Even if they are historical, we don't have
+> a strong pressure to change them.
 
-Please stop doing the horrible undocumented merges.
+Leave them as it is, or - as suggested below - clean them up?
 
-You have three merge commits that have *no* documentation. They say
-"Merge branch 'fixes' into next", and that's it.
+> Significant number of older platforms still use names to identify the
+> clock. And moreover apq8096/msm8960 uses dsi1/dsi2 instead of
+> dsi0/dsi1.
+> 
+> Probably we should call the next cycle "The Cycle of clocks cleaning".
+> I can volunteer to take care of 8960/8064/8016/8996, as at least I can
+> test them. But if you wish, you (or anybody else of course) can take
+> any of these platforms too, just ping me, so that I won't spend time
+> duplicating somebody's efforts.
 
-If you can't be bothered to explain why and what a merge does, then
-just don't do it.
+We can at least clean up the names of clocks that are not "exported" by
+the drivers.  However, we should also convert all other clk drivers to
+utilize DT to define clk dependencies instead of depending on global
+names, and already got quite some platforms tackled.  At that point we
+can just convert all names (give or take the often discussed "backwards
+compatbility" between the kernel and some ancient DT someone may still
+be running on their device).
 
-It really is that simple.
+I don't own any device for the SoCs you mentioned, all good from my
+side if you take them.  We should probably note down all clock drivers
+that still need conversion and split them across devs with physical
+access, then I can check what I still have lying around here as well.
 
-I've pulled this, but I really want to stop seeing bad merges.
+> > Which, by the way, is there a particular reason for:
+> >
+> >   #define DSI_BYTE_PLL_CLK              0
+> >   #define DSI_PIXEL_PLL_CLK             1
+> >
+> > To not be in the dt-bindings and used in the DT?
+> 
+> Before my restructure of the DSI PHY subsys, each driver defined them
+> separately. And the idea of moving them to a dt-bindings header didn't
+> come to my mind. Feel free to do so, it looks like a good idea.
+> Just as a note, DP PHY also uses 0 for the link clock and 1 for the
+> pixel clock. What do you think about having a single header for these
+> names?
 
-                    Linus
+No worries, it's already much better to have them defined once :), now
+we can just go one step further and move it to dt-bindings.  Great to
+clean up the "magic constant indices" for the DP PHY as well
+(phy-qcom-qmp.c is the only one defining these clocks, right?) and I
+think we're fine having them in one header, pending someone suggesting a
+name as I have no idea what to call it nor where to put it.  Under
+dt-bindings/clock most likely, but what common name would we choose?
+Something including qcom and mdss?
+
+> 
+> >
+> > And with enough future improvements out of the way, let's round out this
+> > patch-series by stating that it has been successfully tested on:
+> >
+> > - Sony Nile Discovery (Xperia XA2 Ultra): 14nm;
+> > - Sony Seine PDX201 (Xperia 10II): 14nm;
+> > - Sony Loire Suzu (Xperia X): 28nm.
+> >
+> > And no diff is observed in debugfs's clk_summary.
+> >
+> > Unfortunately all other devices in my collection with a 7/10nm DSI PHY
+> > have a DSC panel which we have yet to get working.
+> 
+> I will test it on RB3 (10nm) and RB5 (7nm) during one of the next few days.
+
+Lovely, thanks a ton - also for reviewing this so quickly!
+
+- Marijn

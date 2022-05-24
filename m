@@ -2,73 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5069A533037
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 20:12:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 013BA53303B
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 20:13:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240296AbiEXSM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 14:12:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56204 "EHLO
+        id S240265AbiEXSNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 14:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240241AbiEXSMB (ORCPT
+        with ESMTP id S240317AbiEXSNJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 14:12:01 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6169606F9;
-        Tue, 24 May 2022 11:12:00 -0700 (PDT)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24OHnlBZ024134;
-        Tue, 24 May 2022 18:11:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=Y88LhOs828No2W/gspVvrN1GuqbQd9SVe0gokG2Lir0=;
- b=tWjvPI/zYsSwbUDmm+3g3hk3oU0+3xTVwgsabGjDkga38jsu2t0fHJKptwq+56tiGvge
- 2ry0bsR1JOOr3ZfSaz+S4sYBHOnIneuSrm3b5NK4ErTcUKKnJ6v9YUzyz/1gefNEcadJ
- Q7p5dPrUnWfe0JvN4quMpsgc8EBYUVmYAE6yczexIR//eBE+x6rcZKQ4LTsuMMZGBAiC
- 2Uuo/c9aEs9S7akQ5F9MFJAd/hVDEUNn+c2OuT2F9ls9/2bJEPLCoWZvkalhDvrMAxux
- uFICwsbshsMJzl/fhTug8Zqoi2pOR4QoG4OcecF3pYnPDZJd3l5HgEDeRMZCtzQ7OY6h xw== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3g93tbr3gn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 24 May 2022 18:11:50 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 24OHoItP016357;
-        Tue, 24 May 2022 18:11:49 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3g93x50s6e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 24 May 2022 18:11:49 +0000
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 24OIAvnC039045;
-        Tue, 24 May 2022 18:11:48 GMT
-Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3g93x50s3r-10;
-        Tue, 24 May 2022 18:11:48 +0000
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Julia Lawall <Julia.Lawall@inria.fr>,
-        "K. Y. Srinivasan" <kys@microsoft.com>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dexuan Cui <decui@microsoft.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Wei Liu <wei.liu@kernel.org>, linux-hyperv@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>
-Subject: Re: [PATCH] scsi: storvsc: fix typo in comment
-Date:   Tue, 24 May 2022 14:11:42 -0400
-Message-Id: <165341587529.22286.16208036407094767293.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220521111145.81697-12-Julia.Lawall@inria.fr>
-References: <20220521111145.81697-12-Julia.Lawall@inria.fr>
+        Tue, 24 May 2022 14:13:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55CBF9CF01
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 11:12:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E5EA2614E0
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 18:12:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D58FC34100;
+        Tue, 24 May 2022 18:12:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653415978;
+        bh=KKmMzhfMf2IUd80WmWmo3TqKi63TjvQ6ruuivE274NE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JKhfeDp24SV7L2MG5nT3JiaoEWk7MC6y/f25RRCQNNA885YCRwhNSQOAK1HuTXtMW
+         x0gruMGOJwK1JtKvfnjDrCJ/LP6hd6kgiXO5VJZFMdP6L6i/+oPA4Ng6Cs+IWDUvqJ
+         CLVizSwmt5oIdFUAsr/HuShZ5fOeRIxjBqfneZLqcDuOFcRkK5COjRxxL7jBda/+1N
+         /XCx46wQhIhZYtXatGNW4c7JWCgsBTRIxygEoM6vfYnbN68D2viVOqshKshd5o4Hjv
+         5bBJcgS/QTh3RCLrQrR5Xtxafl3bR1M98AllZHWSE62zLXaBTGnKNf1cxd1BJDXcUL
+         B5Mn4Vast99tA==
+Received: by pali.im (Postfix)
+        id 37C6F9ED; Tue, 24 May 2022 20:12:55 +0200 (CEST)
+Date:   Tue, 24 May 2022 20:12:55 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Segher Boessenkool <segher@kernel.crashing.org>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] powerpc: e500: Fix compilation with gcc e500 compiler
+Message-ID: <20220524181255.bmszzxmbwzv7zed7@pali>
+References: <20220524093939.30927-1-pali@kernel.org>
+ <20220524175955.GI25951@gate.crashing.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: ws_kJOuBhbqcOwfGA_gInFEpgvlxfw3g
-X-Proofpoint-ORIG-GUID: ws_kJOuBhbqcOwfGA_gInFEpgvlxfw3g
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220524175955.GI25951@gate.crashing.org>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,17 +61,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 21 May 2022 13:10:22 +0200, Julia Lawall wrote:
-
-> Spelling mistake (triple letters) in comment.
-> Detected with the help of Coccinelle.
+On Tuesday 24 May 2022 12:59:55 Segher Boessenkool wrote:
+> Hi!
 > 
+> On Tue, May 24, 2022 at 11:39:39AM +0200, Pali Rohár wrote:
+> > gcc e500 compiler does not support -mcpu=powerpc option. When it is
+> > specified then gcc throws compile error:
+> > 
+> >   gcc: error: unrecognized argument in option ‘-mcpu=powerpc’
+> >   gcc: note: valid arguments to ‘-mcpu=’ are: 8540 8548 native
 > 
+> What?  Are you using some modified version of GCC, perhaps?
 
-Applied to 5.19/scsi-queue, thanks!
+Hello! I'm using official gcc version, no special modification.
 
-[1/1] scsi: storvsc: fix typo in comment
-      https://git.kernel.org/mkp/scsi/c/5445e08e1159
+> No version of GCC that isn't hamstrung can have this output.
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+gcc for e500 cores has really this output when you pass -mcpu=powerpc.
+
+Upstream gcc dropped support for e500 cores during development of
+version 9. But you can still compile and install gcc 8.5.0 (last version
+of gcc 8) which has this full e500 support.
+
+Really, you can easily try it. Debian 10 (Buster) has gcc 8.3.0 in its
+default installation and also provides packages with cross compilers.
+Just run 'sudo apt install gcc-powerpc-linux-gnuspe' on desktop amd64
+version of Debian 10, it will install e500 cross compiler.
+
+-mcpu=8540 specify e500v1 and -mcpu=8548 specify e500v2

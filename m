@@ -2,159 +2,367 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F197B533392
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 00:32:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D24053338F
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 00:32:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242370AbiEXWci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 18:32:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56274 "EHLO
+        id S242331AbiEXWcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 18:32:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242361AbiEXWcc (ORCPT
+        with ESMTP id S242333AbiEXWcE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 18:32:32 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC086762B2
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 15:32:29 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id z15so3838625wrg.11
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 15:32:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/hjeyXIou+bR7sgCBUUS9KBiw7ITkpAtyGQPK8WkjHQ=;
-        b=E47CS0uk7HJ3B0+amVIKreQyHTGL6Id/MNM0NxjP7X6opvCgl1WcdBa5SnwKc3EDWw
-         V2RSBPZ5PBv0+cdx0NAoNLXYDyjDup9mou8/UiOBU++4DVMVZrHzrWd+ZVhZFW2K8uMW
-         p9b4jxU7DGV0i8n8hpbveKXjRPZjF7JZfelsg33lCxe6KvbM/3Kw2gy36RExYeMQcSnp
-         QyMMPOr6T3TA59Xk7ew90wKydoDBGM28Fu7tgOmM6JcjUpxvmSbhb9njgSwtUUkrwV/Z
-         SDvlO42njKkIejaVhIiCDGW4sF9Mf28i9mQR4sp9xyvJ2C1xtsrbm5Tfz8hGqHkzJQq/
-         IEHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/hjeyXIou+bR7sgCBUUS9KBiw7ITkpAtyGQPK8WkjHQ=;
-        b=OGXXmwGdnWdyjOJJJ2JGCu/fS9sDy+JqFp5aiiDnuXvDQ3zcDg4QBf3wPPD/QK414g
-         N/BgsHtelCL1BeXdyM+rj5Lj7aAlkswUuJAyH/KLgBljZBJVE2vtzQEzMt0ZAA4Me/9X
-         0cfqfuEdwg7QqOO6Smb+u8SWJVnNQCFR2A6NvzumQgdgVtOok9yZDUjQPU+DjJiZIyaC
-         lVsVwvAPv5/GSdiMJwjXf9BMYh4UUnznk5IjcdBsRTpV404zujD8WhxGCTaxtakQpCCG
-         w8RsPuYA6ewu1013mxl4+j5nGGSTRV4BgCFAXnyXfYJzxSu9GLS9kNLFKIomwRby7k3T
-         G6Eg==
-X-Gm-Message-State: AOAM533WdgkjoAPrnWQadDVC2cZO55/85Pf0/QSQMdrXelo2zoqFqjZ1
-        B95h19wfJDVqeiABQ/niIlq08cGIIPA7cXy4hKUPeg==
-X-Google-Smtp-Source: ABdhPJxT4ExN63oIrXSw4yucGOE3FdTxLSSWhIsKQP4q3l+uXQdQtcsiB0ShXvD15pANNDgeH4cCwpElZhKEPpNgNxo=
-X-Received: by 2002:adf:fb05:0:b0:20a:e113:8f3f with SMTP id
- c5-20020adffb05000000b0020ae1138f3fmr25324902wrr.534.1653431548193; Tue, 24
- May 2022 15:32:28 -0700 (PDT)
+        Tue, 24 May 2022 18:32:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A420362CC3
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 15:32:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0015C617DA
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 22:32:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8038C34100;
+        Tue, 24 May 2022 22:32:00 +0000 (UTC)
+Date:   Tue, 24 May 2022 18:31:59 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Linyu Yuan <quic_linyyuan@quicinc.com>
+Cc:     Ingo Molnar <mingo@redhat.com>, <linux-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>
+Subject: Re: [PATCH 1/2] tracing/probes: auto generate events name when
+ create a group of events
+Message-ID: <20220524183159.21bac428@gandalf.local.home>
+In-Reply-To: <1651397651-30454-2-git-send-email-quic_linyyuan@quicinc.com>
+References: <1651397651-30454-1-git-send-email-quic_linyyuan@quicinc.com>
+        <1651397651-30454-2-git-send-email-quic_linyyuan@quicinc.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220429201131.3397875-1-yosryahmed@google.com>
- <20220429201131.3397875-2-yosryahmed@google.com> <87ilqoi77b.wl-maz@kernel.org>
- <CAJD7tkY7JF25XXUFq2mGroetMkfo-2zGOaQC94pjZE3D42+oaw@mail.gmail.com>
- <Yn2TGJ4vZ/fst+CY@cmpxchg.org> <Yn2YYl98Vhh/UL0w@google.com>
- <Yn5+OtZSSUZZgTQj@cmpxchg.org> <Yn6DeEGLyR4Q0cDp@google.com>
- <CALvZod6nERq4j=L0V+pc-rd5+QKi4yb_23tWV-1MF53xL5KE6Q@mail.gmail.com>
- <CAJD7tka-5+XRkthNV4qCg8woPCpjcwynQoRBame-3GP1L8y+WQ@mail.gmail.com> <YoeoLJNQTam5fJSu@cmpxchg.org>
-In-Reply-To: <YoeoLJNQTam5fJSu@cmpxchg.org>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Tue, 24 May 2022 15:31:52 -0700
-Message-ID: <CAJD7tkYjcmwBeUx-=MTQeUf78uqFDvfpy7OuKy4OvoS7HiVO1Q@mail.gmail.com>
-Subject: Re: [PATCH v4 1/4] mm: add NR_SECONDARY_PAGETABLE to count secondary
- page table uses.
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Shakeel Butt <shakeelb@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Marc Zyngier <maz@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Oliver Upton <oupton@google.com>,
-        Cgroups <cgroups@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        kvm@vger.kernel.org, Linux-MM <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 7:39 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
->
-> On Thu, May 19, 2022 at 06:56:54PM -0700, Yosry Ahmed wrote:
-> > On Fri, May 13, 2022 at 10:14 AM Shakeel Butt <shakeelb@google.com> wrote:
-> > >
-> > > On Fri, May 13, 2022 at 9:12 AM Sean Christopherson <seanjc@google.com> wrote:
-> > > >
-> > > [...]
-> > > >
-> > > > It was mostly an honest question, I too am trying to understand what userspace
-> > > > wants to do with this information.  I was/am also trying to understand the benefits
-> > > > of doing the tracking through page_state and not a dedicated KVM stat.  E.g. KVM
-> > > > already has specific stats for the number of leaf pages mapped into a VM, why not
-> > > > do the same for non-leaf pages?
-> > >
-> > > Let me answer why a more general stat is useful and the potential
-> > > userspace reaction:
-> > >
-> > > For a memory type which is significant enough, it is useful to expose
-> > > it in the general interfaces, so that the general data/stat collection
-> > > infra can collect them instead of having workload dependent stat
-> > > collectors. In addition, not necessarily that stat has to have a
-> > > userspace reaction in an online fashion. We do collect stats for
-> > > offline analysis which greatly influence the priority order of
-> > > optimization workitems.
-> > >
-> > > Next the question is do we really need a separate stat item
-> > > (secondary_pagetable instead of just plain pagetable) exposed in the
-> > > stable API? To me secondary_pagetable is general (not kvm specific)
-> > > enough and can be significant, so having a separate dedicated stat
-> > > should be ok. Though I am ok with lump it with pagetable stat for now
-> > > but we do want it to be accounted somewhere.
-> >
-> > Any thoughts on this? Johannes?
->
-> I agree that this memory should show up in vmstat/memory.stat in some
-> form or another.
->
-> The arguments on whether this should be part of NR_PAGETABLE or a
-> separate entry seem a bit vague to me. I was hoping somebody more
-> familiar with KVM could provide a better picture of memory consumption
-> in that area.
->
-> Sean had mentioned that these allocations already get tracked through
-> GFP_KERNEL_ACCOUNT. That's good, but if they are significant enough to
-> track, they should be represented in memory.stat in some form. Sean
-> also pointed out though that those allocations tend to scale rather
-> differently than the page tables, so it probably makes sense to keep
-> those two things separate at least.
->
-> Any thoughts on putting shadow page tables and iommu page tables into
-> the existing NR_PAGETABLE item? If not, what are the cons?
->
-> And creating (maybe later) a separate NR_VIRT for the other
-> GPF_KERNEL_ACCOUNT allocations in kvm?
 
-I agree with Sean that a NR_VIRT stat would be inaccurate by omission,
-unless we account for all KVM allocations under this stat. This might
-be an unnecessary burden according to what Sean said, as most other
-allocations scale linearly with the number of vCPUs or the memory
-assigned to the VM.
+[ Adding Masami (kprobe maintainer) and Tom (dynamic event maintainer) ]
 
-I don't have enough context to say whether we should piggyback KVM MMU
-pages to the existing NR_PAGETABLE item, but from a high level it
-seems like it would be more helpful if they are a separate stat.
-Anyway, I am willing to go with whatever Sean thinks is best.
+On Sun, 1 May 2022 17:34:10 +0800
+Linyu Yuan <quic_linyyuan@quicinc.com> wrote:
+
+> change traceprobe_parse_event_name() and return GRP/EVENT types,
+> TP_ENAME_GROUP_EVENT means user input GRP/EVENT format,
+> TP_ENAME_EVENT means user only input EVENT format,
+> TP_ENAME_GROUP means user only input GRP/ format,
+> 
+> it allow no event name input when create a group of events,
+> and will auto generate event name according second argument.
+
+Sorry, but I can't understand the above. Can you reword it, and perhaps
+include an example of what this patch does.
+
+After reading the code, I guess you are trying to make it so that you can
+leave out the event name and only have the group name, if you add the slash.
+
+ echo 'p:group/  schedule' > kprobe_events
+
+And that will create a kprobe "schedule" event under the "group" system?
+
+Also, for some reason, patch 2 of the series never came to me. But it is in
+my LKML folder :-/
+
+> 
+> Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+> ---
+>  Documentation/trace/kprobetrace.rst  |  8 ++++----
+>  Documentation/trace/uprobetracer.rst |  8 ++++----
+>  kernel/trace/trace_dynevent.c        |  2 +-
+>  kernel/trace/trace_eprobe.c          | 19 +++++++++++--------
+>  kernel/trace/trace_kprobe.c          | 18 +++++++++++-------
+>  kernel/trace/trace_probe.c           |  9 ++++++++-
+>  kernel/trace/trace_probe.h           |  4 ++++
+>  kernel/trace/trace_uprobe.c          | 14 +++++++++-----
+>  8 files changed, 52 insertions(+), 30 deletions(-)
+> 
+> diff --git a/Documentation/trace/kprobetrace.rst b/Documentation/trace/kprobetrace.rst
+> index b175d88..4274cc6 100644
+> --- a/Documentation/trace/kprobetrace.rst
+> +++ b/Documentation/trace/kprobetrace.rst
+> @@ -28,10 +28,10 @@ Synopsis of kprobe_events
+>  -------------------------
+>  ::
+>  
+> -  p[:[GRP/]EVENT] [MOD:]SYM[+offs]|MEMADDR [FETCHARGS]	: Set a probe
+> -  r[MAXACTIVE][:[GRP/]EVENT] [MOD:]SYM[+0] [FETCHARGS]	: Set a return probe
+> -  p:[GRP/]EVENT] [MOD:]SYM[+0]%return [FETCHARGS]	: Set a return probe
+> -  -:[GRP/]EVENT						: Clear a probe
+> +  p[:[GRP/][EVENT]] [MOD:]SYM[+offs]|MEMADDR [FETCHARGS]	: Set a probe
+> +  r[MAXACTIVE][:[GRP/][EVENT]] [MOD:]SYM[+0] [FETCHARGS]	: Set a return probe
+> +  p[:[GRP/][EVENT]] [MOD:]SYM[+0]%return [FETCHARGS]	: Set a return probe
+> +  -:[GRP/][EVENT]						: Clear a probe
+>  
+>   GRP		: Group name. If omitted, use "kprobes" for it.
+>   EVENT		: Event name. If omitted, the event name is generated
+> diff --git a/Documentation/trace/uprobetracer.rst b/Documentation/trace/uprobetracer.rst
+> index a8e5938..3a1797d7 100644
+> --- a/Documentation/trace/uprobetracer.rst
+> +++ b/Documentation/trace/uprobetracer.rst
+> @@ -26,10 +26,10 @@ Synopsis of uprobe_tracer
+>  -------------------------
+>  ::
+>  
+> -  p[:[GRP/]EVENT] PATH:OFFSET [FETCHARGS] : Set a uprobe
+> -  r[:[GRP/]EVENT] PATH:OFFSET [FETCHARGS] : Set a return uprobe (uretprobe)
+> -  p[:[GRP/]EVENT] PATH:OFFSET%return [FETCHARGS] : Set a return uprobe (uretprobe)
+> -  -:[GRP/]EVENT                           : Clear uprobe or uretprobe event
+> +  p[:[GRP/][EVENT]] PATH:OFFSET [FETCHARGS] : Set a uprobe
+> +  r[:[GRP/][EVENT]] PATH:OFFSET [FETCHARGS] : Set a return uprobe (uretprobe)
+> +  p[:[GRP/][EVENT]] PATH:OFFSET%return [FETCHARGS] : Set a return uprobe (uretprobe)
+> +  -:[GRP/][EVENT]                           : Clear uprobe or uretprobe event
+>  
+>    GRP           : Group name. If omitted, "uprobes" is the default value.
+>    EVENT         : Event name. If omitted, the event name is generated based
+> diff --git a/kernel/trace/trace_dynevent.c b/kernel/trace/trace_dynevent.c
+> index e34e8182..033248d 100644
+> --- a/kernel/trace/trace_dynevent.c
+> +++ b/kernel/trace/trace_dynevent.c
+> @@ -101,7 +101,7 @@ int dyn_event_release(const char *raw_command, struct dyn_event_operations *type
+>  		event = p + 1;
+>  		*p = '\0';
+>  	}
+> -	if (event[0] == '\0') {
+> +	if (!system && event[0] == '\0') {
+>  		ret = -EINVAL;
+>  		goto out;
+>  	}
+> diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
+> index 7d44785..b16e067 100644
+> --- a/kernel/trace/trace_eprobe.c
+> +++ b/kernel/trace/trace_eprobe.c
+> @@ -125,6 +125,7 @@ static bool eprobe_dyn_event_match(const char *system, const char *event,
+>  	 * We match the following:
+>  	 *  event only			- match all eprobes with event name
+>  	 *  system and event only	- match all system/event probes
+> +	 *  system only			- match all system probes
+>  	 *
+>  	 * The below has the above satisfied with more arguments:
+>  	 *
+> @@ -143,7 +144,7 @@ static bool eprobe_dyn_event_match(const char *system, const char *event,
+>  		return false;
+>  
+>  	/* Must match the event name */
+> -	if (strcmp(trace_probe_name(&ep->tp), event) != 0)
+> +	if (event[0] != '\0' && strcmp(trace_probe_name(&ep->tp), event) != 0)
+>  		return false;
+>  
+>  	/* No arguments match all */
+> @@ -848,7 +849,7 @@ static int __trace_eprobe_create(int argc, const char *argv[])
+>  {
+>  	/*
+>  	 * Argument syntax:
+> -	 *      e[:[GRP/]ENAME] SYSTEM.EVENT [FETCHARGS]
+> +	 *      e[:[GRP/][ENAME]] SYSTEM.EVENT [FETCHARGS]
+>  	 * Fetch args:
+>  	 *  <name>=$<field>[:TYPE]
+>  	 */
+> @@ -858,6 +859,7 @@ static int __trace_eprobe_create(int argc, const char *argv[])
+>  	struct trace_eprobe *ep = NULL;
+>  	char buf1[MAX_EVENT_NAME_LEN];
+>  	char buf2[MAX_EVENT_NAME_LEN];
+> +	char grp_buf[MAX_EVENT_NAME_LEN];
+>  	int ret = 0;
+>  	int i;
+>  
+> @@ -866,14 +868,16 @@ static int __trace_eprobe_create(int argc, const char *argv[])
+>  
+>  	trace_probe_log_init("event_probe", argc, argv);
+>  
+> +	ret = TP_ENAME_EMPTTY;
+
+EMPTY is spelled wrong.
+
+>  	event = strchr(&argv[0][1], ':');
+>  	if (event) {
+>  		event++;
+> -		ret = traceprobe_parse_event_name(&event, &group, buf1,
+> +		ret = traceprobe_parse_event_name(&event, &group, grp_buf,
+>  						  event - argv[0]);
+> -		if (ret)
+> +		if (ret < 0)
+>  			goto parse_error;
+> -	} else {
+> +	}
+
+add space.
+
+> +	if (ret == TP_ENAME_EMPTTY || ret == TP_ENAME_GROUP) {
+>  		strscpy(buf1, argv[1], MAX_EVENT_NAME_LEN);
+>  		sanitize_event_name(buf1);
+>  		event = buf1;
+
+I'd like to see Masami's and Tom's comments on this one.
+
+-- Steve
+
+> @@ -882,9 +886,8 @@ static int __trace_eprobe_create(int argc, const char *argv[])
+>  		goto parse_error;
+>  
+>  	sys_event = argv[1];
+> -	ret = traceprobe_parse_event_name(&sys_event, &sys_name, buf2,
+> -					  sys_event - argv[1]);
+> -	if (ret || !sys_name)
+> +	ret = traceprobe_parse_event_name(&sys_event, &sys_name, buf2, 0);
+> +	if (ret != TP_ENAME_GROUP_EVENT)
+>  		goto parse_error;
+>  	if (!is_good_name(sys_event) || !is_good_name(sys_name))
+>  		goto parse_error;
+> diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
+> index 47cebef..2cd8ef9 100644
+> --- a/kernel/trace/trace_kprobe.c
+> +++ b/kernel/trace/trace_kprobe.c
+> @@ -163,7 +163,8 @@ static bool trace_kprobe_match(const char *system, const char *event,
+>  {
+>  	struct trace_kprobe *tk = to_trace_kprobe(ev);
+>  
+> -	return strcmp(trace_probe_name(&tk->tp), event) == 0 &&
+> +	return (event[0] == '\0' ||
+> +		strcmp(trace_probe_name(&tk->tp), event) == 0) &&
+>  	    (!system || strcmp(trace_probe_group_name(&tk->tp), system) == 0) &&
+>  	    trace_kprobe_match_command_head(tk, argc, argv);
+>  }
+> @@ -708,11 +709,11 @@ static int __trace_kprobe_create(int argc, const char *argv[])
+>  	/*
+>  	 * Argument syntax:
+>  	 *  - Add kprobe:
+> -	 *      p[:[GRP/]EVENT] [MOD:]KSYM[+OFFS]|KADDR [FETCHARGS]
+> +	 *      p[:[GRP/][EVENT]] [MOD:]KSYM[+OFFS]|KADDR [FETCHARGS]
+>  	 *  - Add kretprobe:
+> -	 *      r[MAXACTIVE][:[GRP/]EVENT] [MOD:]KSYM[+0] [FETCHARGS]
+> +	 *      r[MAXACTIVE][:[GRP/][EVENT]] [MOD:]KSYM[+0] [FETCHARGS]
+>  	 *    Or
+> -	 *      p:[GRP/]EVENT] [MOD:]KSYM[+0]%return [FETCHARGS]
+> +	 *      p[:[GRP/][EVENT]] [MOD:]KSYM[+0]%return [FETCHARGS]
+>  	 *
+>  	 * Fetch args:
+>  	 *  $retval	: fetch return value
+> @@ -739,6 +740,7 @@ static int __trace_kprobe_create(int argc, const char *argv[])
+>  	long offset = 0;
+>  	void *addr = NULL;
+>  	char buf[MAX_EVENT_NAME_LEN];
+> +	char grp_buf[MAX_EVENT_NAME_LEN];
+>  	unsigned int flags = TPARG_FL_KERNEL;
+>  
+>  	switch (argv[0][0]) {
+> @@ -832,12 +834,14 @@ static int __trace_kprobe_create(int argc, const char *argv[])
+>  	}
+>  
+>  	trace_probe_log_set_index(0);
+> +	ret = TP_ENAME_EMPTTY;
+>  	if (event) {
+> -		ret = traceprobe_parse_event_name(&event, &group, buf,
+> +		ret = traceprobe_parse_event_name(&event, &group, grp_buf,
+>  						  event - argv[0]);
+> -		if (ret)
+> +		if (ret < 0)
+>  			goto parse_error;
+> -	} else {
+> +	}
+> +	if (ret == TP_ENAME_EMPTTY || ret == TP_ENAME_GROUP) {
+>  		/* Make a new event name */
+>  		if (symbol)
+>  			snprintf(buf, MAX_EVENT_NAME_LEN, "%c_%s_%ld",
+> diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
+> index 80863c6..7fd50ab 100644
+> --- a/kernel/trace/trace_probe.c
+> +++ b/kernel/trace/trace_probe.c
+> @@ -257,6 +257,9 @@ int traceprobe_parse_event_name(const char **pevent, const char **pgroup,
+>  	}
+>  	len = strlen(event);
+>  	if (len == 0) {
+> +		if (slash)
+> +			return TP_ENAME_GROUP;
+> +
+>  		trace_probe_log_err(offset, NO_EVENT_NAME);
+>  		return -EINVAL;
+>  	} else if (len > MAX_EVENT_NAME_LEN) {
+> @@ -267,7 +270,11 @@ int traceprobe_parse_event_name(const char **pevent, const char **pgroup,
+>  		trace_probe_log_err(offset, BAD_EVENT_NAME);
+>  		return -EINVAL;
+>  	}
+> -	return 0;
+> +
+> +	if (slash)
+> +		return TP_ENAME_GROUP_EVENT;
+> +
+> +	return TP_ENAME_EVENT;
+>  }
+>  
+>  #define PARAM_MAX_STACK (THREAD_SIZE / sizeof(unsigned long))
+> diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
+> index 92cc149..d726769 100644
+> --- a/kernel/trace/trace_probe.h
+> +++ b/kernel/trace/trace_probe.h
+> @@ -364,6 +364,10 @@ extern void traceprobe_free_probe_arg(struct probe_arg *arg);
+>  extern int traceprobe_split_symbol_offset(char *symbol, long *offset);
+>  int traceprobe_parse_event_name(const char **pevent, const char **pgroup,
+>  				char *buf, int offset);
+> +#define TP_ENAME_GROUP_EVENT	0
+> +#define TP_ENAME_EVENT		1
+> +#define TP_ENAME_GROUP		2
+> +#define TP_ENAME_EMPTTY		3
+>  
+>  enum probe_print_type {
+>  	PROBE_PRINT_NORMAL,
+> diff --git a/kernel/trace/trace_uprobe.c b/kernel/trace/trace_uprobe.c
+> index 9711589..a935c08 100644
+> --- a/kernel/trace/trace_uprobe.c
+> +++ b/kernel/trace/trace_uprobe.c
+> @@ -312,7 +312,8 @@ static bool trace_uprobe_match(const char *system, const char *event,
+>  {
+>  	struct trace_uprobe *tu = to_trace_uprobe(ev);
+>  
+> -	return strcmp(trace_probe_name(&tu->tp), event) == 0 &&
+> +	return (event[0] == '\0' ||
+> +		strcmp(trace_probe_name(&tu->tp), event) == 0) &&
+>  	   (!system || strcmp(trace_probe_group_name(&tu->tp), system) == 0) &&
+>  	   trace_uprobe_match_command_head(tu, argc, argv);
+>  }
+> @@ -532,7 +533,7 @@ static int register_trace_uprobe(struct trace_uprobe *tu)
+>  
+>  /*
+>   * Argument syntax:
+> - *  - Add uprobe: p|r[:[GRP/]EVENT] PATH:OFFSET[%return][(REF)] [FETCHARGS]
+> + *  - Add uprobe: p|r[:[GRP/][EVENT]] PATH:OFFSET[%return][(REF)] [FETCHARGS]
+>   */
+>  static int __trace_uprobe_create(int argc, const char **argv)
+>  {
+> @@ -540,6 +541,7 @@ static int __trace_uprobe_create(int argc, const char **argv)
+>  	const char *event = NULL, *group = UPROBE_EVENT_SYSTEM;
+>  	char *arg, *filename, *rctr, *rctr_end, *tmp;
+>  	char buf[MAX_EVENT_NAME_LEN];
+> +	char grp_buf[MAX_EVENT_NAME_LEN];
+>  	enum probe_print_type ptype;
+>  	struct path path;
+>  	unsigned long offset, ref_ctr_offset;
+> @@ -644,12 +646,14 @@ static int __trace_uprobe_create(int argc, const char **argv)
+>  
+>  	/* setup a probe */
+>  	trace_probe_log_set_index(0);
+> +	ret = TP_ENAME_EMPTTY;
+>  	if (event) {
+> -		ret = traceprobe_parse_event_name(&event, &group, buf,
+> +		ret = traceprobe_parse_event_name(&event, &group, grp_buf,
+>  						  event - argv[0]);
+> -		if (ret)
+> +		if (ret < 0)
+>  			goto fail_address_parse;
+> -	} else {
+> +	}
+> +	if (ret == TP_ENAME_EMPTTY || ret == TP_ENAME_GROUP) {
+>  		char *tail;
+>  		char *ptr;
+>  
+

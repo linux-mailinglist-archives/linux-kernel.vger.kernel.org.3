@@ -2,76 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B17EF5324FF
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 10:12:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B61BD532500
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 10:12:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231449AbiEXIMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 04:12:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42396 "EHLO
+        id S231573AbiEXIM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 04:12:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231481AbiEXIMK (ORCPT
+        with ESMTP id S231636AbiEXIMV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 04:12:10 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15562FFE5
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 01:12:07 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R711e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=alimailimapcm10staff010182156082;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0VEHD8XS_1653379916;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VEHD8XS_1653379916)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 24 May 2022 16:12:04 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     alexander.deucher@amd.com
-Cc:     christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
-        daniel@ffwll.ch, Likun.Gao@amd.com, flora.cui@amd.com,
-        yifan1.zhang@amd.com, luben.tuikov@amd.com,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] drm/amdgpu/discovery: make amdgpu_discovery_get_mall_info static
-Date:   Tue, 24 May 2022 16:11:54 +0800
-Message-Id: <20220524081154.35061-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Tue, 24 May 2022 04:12:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0830660BBB
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 01:12:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ED0CE6153B
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 08:12:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6214CC385AA;
+        Tue, 24 May 2022 08:12:13 +0000 (UTC)
+Date:   Tue, 24 May 2022 09:12:09 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Barry Song <21cnbao@gmail.com>
+Cc:     akpm@linux-foundation.org, will@kernel.org, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        hanchuanhua@oppo.com, zhangshiming@oppo.com, guojian@oppo.com,
+        Barry Song <v-songbaohua@oppo.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Hugh Dickins <hughd@google.com>, Shaohua Li <shli@kernel.org>,
+        Rik van Riel <riel@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Steven Price <steven.price@arm.com>
+Subject: Re: [PATCH] arm64: enable THP_SWAP for arm64
+Message-ID: <YoyTWaDmSiBUkaeg@arm.com>
+References: <20220524071403.128644-1-21cnbao@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220524071403.128644-1-21cnbao@gmail.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This symbol is not used outside of amdgpu_discovery.c, so marks it static.
+On Tue, May 24, 2022 at 07:14:03PM +1200, Barry Song wrote:
+> From: Barry Song <v-songbaohua@oppo.com>
+> 
+> THP_SWAP has been proved to improve the swap throughput significantly
+> on x86_64 according to commit bd4c82c22c367e ("mm, THP, swap: delay
+> splitting THP after swapped out").
+> As long as arm64 uses 4K page size, it is quite similar with x86_64
+> by having 2MB PMD THP. So we are going to get similar improvement.
+> For other page sizes such as 16KB and 64KB, PMD might be too large.
+> Negative side effects such as IO latency might be a problem. Thus,
+> we can only safely enable the counterpart of X86_64.
+> 
+> Cc: "Huang, Ying" <ying.huang@intel.com>
+> Cc: Minchan Kim <minchan@kernel.org>
+> Cc: Johannes Weiner <hannes@cmpxchg.org>
+> Cc: Hugh Dickins <hughd@google.com>
+> Cc: Shaohua Li <shli@kernel.org>
+> Cc: Rik van Riel <riel@redhat.com>
+> Cc: Andrea Arcangeli <aarcange@redhat.com>
+> Signed-off-by: Barry Song <v-songbaohua@oppo.com>
+> ---
+>  arch/arm64/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index d550f5acfaf3..8e3771c56fbf 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -98,6 +98,7 @@ config ARM64
+>  	select ARCH_WANT_HUGE_PMD_SHARE if ARM64_4K_PAGES || (ARM64_16K_PAGES && !ARM64_VA_BITS_36)
+>  	select ARCH_WANT_LD_ORPHAN_WARN
+>  	select ARCH_WANTS_NO_INSTR
+> +	select ARCH_WANTS_THP_SWAP if ARM64_4K_PAGES
 
-Fixes the following w1 warning:
+I'm not opposed to this but I think it would break pages mapped with
+PROT_MTE. We have an assumption in mte_sync_tags() that compound pages
+are not swapped out (or in). With MTE, we store the tags in a slab
+object (128-bytes per swapped page) and restore them when pages are
+swapped in. At some point we may teach the core swap code about such
+metadata but in the meantime that was the easiest way.
 
-drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c:1364:5: warning: no
-previous prototype for ‘amdgpu_discovery_get_mall_info’
-[-Wmissing-prototypes].
-
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c
-index 881570dced41..16cdfb30b013 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c
-@@ -1361,7 +1361,7 @@ union mall_info {
- 	struct mall_info_v1_0 v1;
- };
- 
--int amdgpu_discovery_get_mall_info(struct amdgpu_device *adev)
-+static int amdgpu_discovery_get_mall_info(struct amdgpu_device *adev)
- {
- 	struct binary_header *bhdr;
- 	union mall_info *mall_info;
 -- 
-2.20.1.7.g153144c
-
+Catalin

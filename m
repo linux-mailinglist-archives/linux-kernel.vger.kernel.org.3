@@ -2,176 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29511532CBC
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 16:57:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 127AE532CB9
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 16:57:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236131AbiEXO5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 10:57:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50270 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238562AbiEXO5r (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S238556AbiEXO5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 24 May 2022 10:57:47 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C97B954011;
-        Tue, 24 May 2022 07:57:46 -0700 (PDT)
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24OEgHxc014966;
-        Tue, 24 May 2022 14:57:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=29pST3gjXSTrS26v72BbeghZM9snaNLlt+14xpqeLd0=;
- b=lvnSoKnqSxaHtGZNv768VSXnFNTmyZZIffG2YxL4knuDDqwzLtU2a69tFd/pRloPlraV
- ygG8XBD0Tgh70gO0LlslQqyRsLT98AXBlbNl7sXJowE2l5NoVybeiZD9QH394M5tN1eJ
- +fC2zMjFc6wDOPM+KE+cAsHd3xbypVssueZMRPa0wz+za1KZOa+UtBE4xeVuxr1s7eAH
- OYzX6s/w20TuG+JgxiFA9eW/beeYYG5sm76JU/4gdYsf+w1ZMJLczaZJkSRP98tvBLsf
- 7UqSnlYLzUoHDt2vZINpfieUNnpU1CU7bdzkZgvQTbzFqQtF/mWjulGO0ux0KxjdcniC TA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g91bt89ts-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 May 2022 14:57:18 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24OEgQL6015588;
-        Tue, 24 May 2022 14:57:17 GMT
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g91bt89t9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 May 2022 14:57:17 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24OEjCFx023245;
-        Tue, 24 May 2022 14:57:16 GMT
-Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
-        by ppma05wdc.us.ibm.com with ESMTP id 3g6qqa0qxe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 May 2022 14:57:16 +0000
-Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24OEvExh27656644
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 24 May 2022 14:57:14 GMT
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D2A05136053;
-        Tue, 24 May 2022 14:57:14 +0000 (GMT)
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A3A71136051;
-        Tue, 24 May 2022 14:57:13 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue, 24 May 2022 14:57:13 +0000 (GMT)
-Message-ID: <81730e47-21f4-b678-6585-f21e57620a60@linux.ibm.com>
-Date:   Tue, 24 May 2022 10:57:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49834 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238486AbiEXO5n (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 24 May 2022 10:57:43 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B05635267;
+        Tue, 24 May 2022 07:57:40 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id j25so1670491wrb.6;
+        Tue, 24 May 2022 07:57:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8QCXWE8pHcx/LPFOM0jnsp7YMG7xupSlYpQdCSFNUHw=;
+        b=XU4G4jEKkCzsqX+M6RhH9F1TCMT0asu3D+KLqRNZfWNgVR3Wf/7Alp0e5T6HCNh6Vh
+         dBc1UBuoA83+xqkYyILM4dx9Ji9q8Mxqv1NyjByaxPpmVsX+MWO1uqPW5XmP5KSmCJep
+         URkMiksoRfX8IjBrTXJefT2GuEGX1gF89kQXmSH9uV7EI996f8Fe69hhl2D5WY5cIDtS
+         jyZdGzmlTgLSUdrp3dQ9AA+7XIsjPsHZS03ag+dKBJ++Rd2Z2vWPzM/CyPF190MxlpDu
+         q8834SNZa0HKzU7aijqOdl1sKEfhiqRx5B3y1ZWXrdr87O/PIgV30hMFrJkaEBRYxxDh
+         gsrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8QCXWE8pHcx/LPFOM0jnsp7YMG7xupSlYpQdCSFNUHw=;
+        b=8PfYYHpu2Rhg+3N2iprD/NpipYe2Bs8211ZoiWBGgE+fyBmkGhCCTyaCLsevfMWiqg
+         ucwumZbDRmYqLmxNBxynos2AwlUMxzWiWF6meakxGrngbSdrN64O7OgxgX7ZPKRajoZD
+         oIgI7n3k3xtQ0MCjmpUwm+D286cWVMwKyN3kJE3yQJSjPHRLy/4k1/IcP540j0zx3fMy
+         VaaZm8krbEgUYf2C9ZrqfaWJIpiKKGJgTwC3pc8fyA4ZzJq3h1QYPXiFF7cvX4Adc36g
+         ZJejozRyTxKt9NvwH0izJROfpWl8M9w+TEchuwacyYrQtyM58RbPyqTsr3m4HdUHSQV+
+         yG7A==
+X-Gm-Message-State: AOAM5303O3PXpmiGTNjMmw147RnPKVVNzcqC2wgb0pPj03VauMDNbFkI
+        JHaRoXxjqKMeLSF012fHrk6fYXXrn4RN999Mxx89OAwBY5Y=
+X-Google-Smtp-Source: ABdhPJysZ2H+hEScT6iz94cgUKE3RmyT0gSy6SbonGVwdaIBdcNtxyO4YfpOfg4amI95k5hZykP/nC4Z+b5/pRjd6zc=
+X-Received: by 2002:adf:fb0d:0:b0:20d:97e:17ce with SMTP id
+ c13-20020adffb0d000000b0020d097e17cemr24151626wrr.585.1653404258483; Tue, 24
+ May 2022 07:57:38 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v12 03/26] ima: Define ima_namespace struct and start
- moving variables into it
-Content-Language: en-US
-To:     "Serge E. Hallyn" <serge@hallyn.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        christian.brauner@ubuntu.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        jpenumak@redhat.com, Christian Brauner <brauner@kernel.org>
-References: <20220420140633.753772-1-stefanb@linux.ibm.com>
- <20220420140633.753772-4-stefanb@linux.ibm.com>
- <20220521023351.GA9107@mail.hallyn.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20220521023351.GA9107@mail.hallyn.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: IWXhtstDlKf4et679hp_5cgQyunjeAIG
-X-Proofpoint-GUID: 5PGx_nncF4HZMk5TgLnDKWSpD6YDy_Gr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-24_07,2022-05-23_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=845
- bulkscore=0 adultscore=0 priorityscore=1501 impostorscore=0 clxscore=1015
- mlxscore=0 spamscore=0 suspectscore=0 lowpriorityscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2205240074
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20210728010632.2633470-1-robdclark@gmail.com> <20210728010632.2633470-13-robdclark@gmail.com>
+ <84e03c5f-a3af-6592-d19a-a2f5d20b92fb@linux.intel.com> <CAJs_Fx6Nc337LPNh=p2GT2d2yDTdLWH934o4Cof3urDGhUJB6A@mail.gmail.com>
+ <904ae104-1c30-d130-129f-ccae381261d5@linux.intel.com>
+In-Reply-To: <904ae104-1c30-d130-129f-ccae381261d5@linux.intel.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Tue, 24 May 2022 07:57:26 -0700
+Message-ID: <CAF6AEGuVhXuX63Od+kcJ0QtfAZ2-wqZsN0KOuEzKbivJdouzog@mail.gmail.com>
+Subject: Re: [PATCH v4 12/13] drm/msm: Utilize gpu scheduler priorities
+To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc:     Rob Clark <robdclark@chromium.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        Jonathan Marek <jonathan@marek.ca>,
+        David Airlie <airlied@linux.ie>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        Sharat Masetty <smasetty@codeaurora.org>,
+        Akhil P Oommen <akhilpo@codeaurora.org>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
+        <linux-arm-msm@vger.kernel.org>, Sean Paul <sean@poorly.run>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, May 24, 2022 at 6:45 AM Tvrtko Ursulin
+<tvrtko.ursulin@linux.intel.com> wrote:
+>
+> On 23/05/2022 23:53, Rob Clark wrote:
+> >
+> > btw, one fun (but unrelated) issue I'm hitting with scheduler... I'm
+> > trying to add an igt test to stress shrinker/eviction, similar to the
+> > existing tests/i915/gem_shrink.c.  But we hit an unfortunate
+> > combination of circumstances:
+> > 1. Pinning memory happens in the synchronous part of the submit ioctl,
+> > before enqueuing the job for the kthread to handle.
+> > 2. The first run_job() callback incurs a slight delay (~1.5ms) while
+> > resuming the GPU
+> > 3. Because of that delay, userspace has a chance to queue up enough
+> > more jobs to require locking/pinning more than the available system
+> > RAM..
+>
+> Is that one or multiple threads submitting jobs?
 
+In this case multiple.. but I think it could also happen with a single
+thread (provided it didn't stall on a fence, directly or indirectly,
+from an earlier submit), because of how resume and actual job
+submission happens from scheduler kthread.
 
-On 5/20/22 22:33, Serge E. Hallyn wrote:
+> > I'm not sure if we want a way to prevent userspace from getting *too*
+> > far ahead of the kthread.  Or maybe at some point the shrinker should
+> > sleep on non-idle buffers?
+>
+> On the direct reclaim path when invoked from the submit ioctl? In i915
+> we only shrink idle objects on direct reclaim and leave active ones for
+> the swapper. It depends on how your locking looks like whether you could
+> do them, whether there would be coupling of locks and fs-reclaim context.
 
->> diff --git a/security/integrity/ima/ima_queue_keys.c b/security/integrity/ima/ima_queue_keys.c
->> index 93056c03bf5a..e366a21dd8be 100644
->> --- a/security/integrity/ima/ima_queue_keys.c
->> +++ b/security/integrity/ima/ima_queue_keys.c
->> @@ -10,6 +10,7 @@
->>   
->>   #include <linux/user_namespace.h>
->>   #include <linux/workqueue.h>
->> +#include <linux/ima.h>
->>   #include <keys/asymmetric-type.h>
->>   #include "ima.h"
->>   
->> @@ -42,7 +43,7 @@ static bool timer_expired;
->>   static void ima_keys_handler(struct work_struct *work)
->>   {
->>   	timer_expired = true;
->> -	ima_process_queued_keys();
->> +	ima_process_queued_keys(&init_ima_ns);
->>   }
->>   
->>   /*
->> @@ -130,11 +131,15 @@ bool ima_queue_key(struct key *keyring, const void *payload,
->>    * This function sets ima_process_keys to true and processes queued keys.
->>    * From here on keys will be processed right away (not queued).
->>    */
->> -void ima_process_queued_keys(void)
->> +void ima_process_queued_keys(struct ima_namespace *ns)
->>   {
->>   	struct ima_key_entry *entry, *tmp;
->>   	bool process = false;
->>   
->> +	/* only applies to init_ima_ns */
-> 
-> Hm, yes, it seems to, but it should be unreachable with
-> ns != &init_ima_ns, ever, right?
-> 
-> So it seems better to either not have this hunk at all, (both
-> here and at ima_keys_handler()) or to actually have a BUG_ON.
-> 
-> Or am I completely misreading the situation?
+I think the locking is more or less ok, although lockdep is unhappy
+about one thing[1] which is I think a false warning (ie. not
+recognizing that we'd already successfully acquired the obj lock via
+trylock).  We can already reclaim idle bo's in this path.  But the
+problem with a bunch of submits queued up in the scheduler, is that
+they are already considered pinned and active.  So at some point we
+need to sleep (hopefully interruptabley) until they are no longer
+active, ie. to throttle userspace trying to shove in more submits
+until some of the enqueued ones have a chance to run and complete.
 
-No, you are right. This function is only calledwith ns = &init_ima_ns at 
-the moment. How about changing it to this here?
+BR,
+-R
 
-if (WARN_ON(ns != &init_ima_ns))
-         return;
+[1] https://gitlab.freedesktop.org/drm/msm/-/issues/14
 
-
-
-> 
->> +	if (ns != &init_ima_ns)
->> +		return;
->> +
->>   	if (ima_process_keys)
->>   		return;
->>   
->> @@ -159,7 +164,7 @@ void ima_process_queued_keys(void)
->>   
->>   	list_for_each_entry_safe(entry, tmp, &ima_keys, list) {
->>   		if (!timer_expired)
->> -			process_buffer_measurement(&init_user_ns, NULL,
->> +			process_buffer_measurement(ns, &init_user_ns, NULL,
->>   						   entry->payload,
->>   						   entry->payload_len,
->>   						   entry->keyring_name,
->> -- 
->> 2.34.1
+> Regards,
+>
+> Tvrtko
+>
+> > BR,
+> > -R
+> >
+> >>
+> >> Regards,
+> >>
+> >> Tvrtko
+> >>
+> >>> + */
+> >>> +static inline int msm_gpu_convert_priority(struct msm_gpu *gpu, int prio,
+> >>> +             unsigned *ring_nr, enum drm_sched_priority *sched_prio)
+> >>> +{
+> >>> +     unsigned rn, sp;
+> >>> +
+> >>> +     rn = div_u64_rem(prio, NR_SCHED_PRIORITIES, &sp);
+> >>> +
+> >>> +     /* invert sched priority to map to higher-numeric-is-higher-
+> >>> +      * priority convention
+> >>> +      */
+> >>> +     sp = NR_SCHED_PRIORITIES - sp - 1;
+> >>> +
+> >>> +     if (rn >= gpu->nr_rings)
+> >>> +             return -EINVAL;
+> >>> +
+> >>> +     *ring_nr = rn;
+> >>> +     *sched_prio = sp;
+> >>> +
+> >>> +     return 0;
+> >>> +}
+> >>> +
+> >>>    /**
+> >>>     * A submitqueue is associated with a gl context or vk queue (or equiv)
+> >>>     * in userspace.
+> >>> @@ -257,7 +310,8 @@ struct msm_gpu_perfcntr {
+> >>>     * @id:        userspace id for the submitqueue, unique within the drm_file
+> >>>     * @flags:     userspace flags for the submitqueue, specified at creation
+> >>>     *             (currently unusued)
+> >>> - * @prio:      the submitqueue priority
+> >>> + * @ring_nr:   the ringbuffer used by this submitqueue, which is determined
+> >>> + *             by the submitqueue's priority
+> >>>     * @faults:    the number of GPU hangs associated with this submitqueue
+> >>>     * @ctx:       the per-drm_file context associated with the submitqueue (ie.
+> >>>     *             which set of pgtables do submits jobs associated with the
+> >>> @@ -272,7 +326,7 @@ struct msm_gpu_perfcntr {
+> >>>    struct msm_gpu_submitqueue {
+> >>>        int id;
+> >>>        u32 flags;
+> >>> -     u32 prio;
+> >>> +     u32 ring_nr;
+> >>>        int faults;
+> >>>        struct msm_file_private *ctx;
+> >>>        struct list_head node;
+> >>> diff --git a/drivers/gpu/drm/msm/msm_submitqueue.c b/drivers/gpu/drm/msm/msm_submitqueue.c
+> >>> index 682ba2a7c0ec..32a55d81b58b 100644
+> >>> --- a/drivers/gpu/drm/msm/msm_submitqueue.c
+> >>> +++ b/drivers/gpu/drm/msm/msm_submitqueue.c
+> >>> @@ -68,6 +68,8 @@ int msm_submitqueue_create(struct drm_device *drm, struct msm_file_private *ctx,
+> >>>        struct msm_gpu_submitqueue *queue;
+> >>>        struct msm_ringbuffer *ring;
+> >>>        struct drm_gpu_scheduler *sched;
+> >>> +     enum drm_sched_priority sched_prio;
+> >>> +     unsigned ring_nr;
+> >>>        int ret;
+> >>>
+> >>>        if (!ctx)
+> >>> @@ -76,8 +78,9 @@ int msm_submitqueue_create(struct drm_device *drm, struct msm_file_private *ctx,
+> >>>        if (!priv->gpu)
+> >>>                return -ENODEV;
+> >>>
+> >>> -     if (prio >= priv->gpu->nr_rings)
+> >>> -             return -EINVAL;
+> >>> +     ret = msm_gpu_convert_priority(priv->gpu, prio, &ring_nr, &sched_prio);
+> >>> +     if (ret)
+> >>> +             return ret;
+> >>>
+> >>>        queue = kzalloc(sizeof(*queue), GFP_KERNEL);
+> >>>
+> >>> @@ -86,24 +89,13 @@ int msm_submitqueue_create(struct drm_device *drm, struct msm_file_private *ctx,
+> >>>
+> >>>        kref_init(&queue->ref);
+> >>>        queue->flags = flags;
+> >>> -     queue->prio = prio;
+> >>> +     queue->ring_nr = ring_nr;
+> >>>
+> >>> -     ring = priv->gpu->rb[prio];
+> >>> +     ring = priv->gpu->rb[ring_nr];
+> >>>        sched = &ring->sched;
+> >>>
+> >>> -     /*
+> >>> -      * TODO we can allow more priorities than we have ringbuffers by
+> >>> -      * mapping:
+> >>> -      *
+> >>> -      *    ring = prio / 3;
+> >>> -      *    ent_prio = DRM_SCHED_PRIORITY_MIN + (prio % 3);
+> >>> -      *
+> >>> -      * Probably avoid using DRM_SCHED_PRIORITY_KERNEL as that is
+> >>> -      * treated specially in places.
+> >>> -      */
+> >>>        ret = drm_sched_entity_init(&queue->entity,
+> >>> -                     DRM_SCHED_PRIORITY_NORMAL,
+> >>> -                     &sched, 1, NULL);
+> >>> +                     sched_prio, &sched, 1, NULL);
+> >>>        if (ret) {
+> >>>                kfree(queue);
+> >>>                return ret;
+> >>> @@ -134,16 +126,19 @@ int msm_submitqueue_create(struct drm_device *drm, struct msm_file_private *ctx,
+> >>>    int msm_submitqueue_init(struct drm_device *drm, struct msm_file_private *ctx)
+> >>>    {
+> >>>        struct msm_drm_private *priv = drm->dev_private;
+> >>> -     int default_prio;
+> >>> +     int default_prio, max_priority;
+> >>>
+> >>>        if (!priv->gpu)
+> >>>                return -ENODEV;
+> >>>
+> >>> +     max_priority = (priv->gpu->nr_rings * NR_SCHED_PRIORITIES) - 1;
+> >>> +
+> >>>        /*
+> >>> -      * Select priority 2 as the "default priority" unless nr_rings is less
+> >>> -      * than 2 and then pick the lowest priority
+> >>> +      * Pick a medium priority level as default.  Lower numeric value is
+> >>> +      * higher priority, so round-up to pick a priority that is not higher
+> >>> +      * than the middle priority level.
+> >>>         */
+> >>> -     default_prio = clamp_t(uint32_t, 2, 0, priv->gpu->nr_rings - 1);
+> >>> +     default_prio = DIV_ROUND_UP(max_priority, 2);
+> >>>
+> >>>        INIT_LIST_HEAD(&ctx->submitqueues);
+> >>>
+> >>> diff --git a/include/uapi/drm/msm_drm.h b/include/uapi/drm/msm_drm.h
+> >>> index f075851021c3..6b8fffc28a50 100644
+> >>> --- a/include/uapi/drm/msm_drm.h
+> >>> +++ b/include/uapi/drm/msm_drm.h
+> >>> @@ -73,11 +73,19 @@ struct drm_msm_timespec {
+> >>>    #define MSM_PARAM_MAX_FREQ   0x04
+> >>>    #define MSM_PARAM_TIMESTAMP  0x05
+> >>>    #define MSM_PARAM_GMEM_BASE  0x06
+> >>> -#define MSM_PARAM_NR_RINGS   0x07
+> >>> +#define MSM_PARAM_PRIORITIES 0x07  /* The # of priority levels */
+> >>>    #define MSM_PARAM_PP_PGTABLE 0x08  /* => 1 for per-process pagetables, else 0 */
+> >>>    #define MSM_PARAM_FAULTS     0x09
+> >>>    #define MSM_PARAM_SUSPENDS   0x0a
+> >>>
+> >>> +/* For backwards compat.  The original support for preemption was based on
+> >>> + * a single ring per priority level so # of priority levels equals the #
+> >>> + * of rings.  With drm/scheduler providing additional levels of priority,
+> >>> + * the number of priorities is greater than the # of rings.  The param is
+> >>> + * renamed to better reflect this.
+> >>> + */
+> >>> +#define MSM_PARAM_NR_RINGS   MSM_PARAM_PRIORITIES
+> >>> +
+> >>>    struct drm_msm_param {
+> >>>        __u32 pipe;           /* in, MSM_PIPE_x */
+> >>>        __u32 param;          /* in, MSM_PARAM_x */
+> >>> @@ -304,6 +312,10 @@ struct drm_msm_gem_madvise {
+> >>>
+> >>>    #define MSM_SUBMITQUEUE_FLAGS (0)
+> >>>
+> >>> +/*
+> >>> + * The submitqueue priority should be between 0 and MSM_PARAM_PRIORITIES-1,
+> >>> + * a lower numeric value is higher priority.
+> >>> + */
+> >>>    struct drm_msm_submitqueue {
+> >>>        __u32 flags;   /* in, MSM_SUBMITQUEUE_x */
+> >>>        __u32 prio;    /* in, Priority level */
